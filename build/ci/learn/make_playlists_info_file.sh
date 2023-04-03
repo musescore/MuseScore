@@ -19,31 +19,30 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-S3_KEY=""
-S3_SECRET=""
-S3_URL="s3://convertor.musescore.org"
 ARTIFACTS_DIR=build.artifacts
-ARTIFACT_PATH=""
+
+YOUTUBE_API_KEY=""
+YOUTUBE_PLAYLIST_ID=""
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --s3_key) S3_KEY="$2"; shift ;;
-        --s3_secret) S3_SECRET="$2"; shift ;;
-        --artifact) ARTIFACT_PATH="$2"; shift ;;
+        --youtube_api_key) YOUTUBE_API_KEY="$2"; shift ;;
+        --youtube_playlist_id) YOUTUBE_PLAYLIST_ID="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
 done
 
-sudo bash ./build/ci/tools/s3_install.sh --s3_key ${S3_KEY} --s3_secret ${S3_SECRET}
+echo "=== Make json file ==="
 
-if [ -z "$ARTIFACT_PATH" ]; then 
-    ARTIFACT_NAME=$(cat $ARTIFACTS_DIR/env/artifact_name.env)
-    ARTIFACT_PATH=$ARTIFACTS_DIR/$ARTIFACT_NAME
-fi
+json=$(jq -n --argjson default [] \
+             '$ARGS.named')
 
-ARTIFACT_NAME=$(basename $ARTIFACT_PATH)
+mkdir -p $ARTIFACTS_DIR
+echo $json > $ARTIFACTS_DIR/playlist.json
+cat $ARTIFACTS_DIR/playlist.json
 
-echo "=== Publish to S3 ==="
+echo "=== Make playlist for YouTube ==="
 
-s3cmd put --acl-public --guess-mime-type "$ARTIFACT_PATH" "$S3_URL/$ARTIFACT_NAME"
+HERE="$(cd "$(dirname "$0")" && pwd)"
+python3 $HERE/make_youtube_playlist_info.py ${YOUTUBE_API_KEY} ${YOUTUBE_PLAYLIST_ID} ${ARTIFACTS_DIR}/playlist.json

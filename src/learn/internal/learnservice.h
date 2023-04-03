@@ -47,14 +47,9 @@ public:
     Playlist advancedPlaylist() const override;
     async::Channel<Playlist> advancedPlaylistChanged() const override;
 
-    void openVideo(const QString& videoId) const override;
-
 private:
     void th_requestPlaylist(const QUrl& playlistUrl, std::function<void(RetVal<Playlist>)> callBack) const;
 
-    void openUrl(const QUrl& url) const;
-
-    QStringList parsePlaylistItemsIds(const QJsonDocument& playlistDoc) const;
     Playlist parsePlaylist(const QJsonDocument& playlistDoc) const;
 
     Playlist m_startedPlaylist;

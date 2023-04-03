@@ -28,19 +28,15 @@ namespace mu::learn {
 class LearnConfiguration : public ILearnConfiguration
 {
 public:
+    void init();
+
     network::RequestHeaders headers() const override;
 
     QUrl startedPlaylistUrl() const override;
     QUrl advancedPlaylistUrl() const override;
 
-    QUrl videosInfoUrl(const QStringList& videosIds) const override;
-    QUrl videoOpenUrl(const QString& videoId) const override;
-
 private:
-    QString apiRootUrl() const;
-
-    QString playlistItemsParams(const QString& playlistId) const;
-    QString videosParams(const QStringList& videosIds) const;
+    bool isTestingMode() const;
 };
 }
 

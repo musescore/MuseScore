@@ -27,15 +27,15 @@
 
 namespace mu::learn {
 struct PlaylistItem {
-    QString videoId;
     QString title;
     QString author;
+    QString url;
     QString thumbnailUrl;
     int durationSecs = 0;
 
     bool operator==(const PlaylistItem& other) const
     {
-        return videoId == other.videoId;
+        return url == other.url;
     }
 };
 
