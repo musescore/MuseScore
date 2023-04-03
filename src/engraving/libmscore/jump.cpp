@@ -23,6 +23,7 @@
 #include "jump.h"
 
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "types/typesconv.h"
 
 #include "measure.h"
@@ -128,20 +129,7 @@ void Jump::layout()
 
 void Jump::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "jumpTo") {
-            _jumpTo = e.readText();
-        } else if (tag == "playUntil") {
-            _playUntil = e.readText();
-        } else if (tag == "continueAt") {
-            _continueAt = e.readText();
-        } else if (tag == "playRepeats") {
-            _playRepeats = e.readBool();
-        } else if (!TextBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

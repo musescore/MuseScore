@@ -28,7 +28,7 @@
 
 #include "engravingitemrw.h"
 #include "propertyrw.h"
-#include "groupsrw.h"
+#include "tread.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -91,7 +91,7 @@ void TimeSigRW::read(TimeSig* s, XmlReader& e, ReadContext& ctx)
             denominatorString = e.readText();
         } else if (tag == "Groups") {
             Groups groups;
-            GroupsRW::read(&groups, e, ctx);
+            TRead::read(&groups, e, ctx);
             s->setGroups(groups);
         } else if (PropertyRW::readStyledProperty(s, tag, e, ctx)) {
         } else if (!EngravingItemRW::readProperties(s, e, ctx)) {

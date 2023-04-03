@@ -24,7 +24,7 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
-#include "rw/400/keysigrw.h"
+#include "rw/400/tread.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
 
@@ -477,7 +477,7 @@ void KeySig::write(XmlWriter& xml) const
 
 void KeySig::read(XmlReader& e)
 {
-    rw400::KeySigRW::read(this, e, *e.context());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
