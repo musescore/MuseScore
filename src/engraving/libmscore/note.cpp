@@ -31,7 +31,7 @@
 
 #include "draw/types/brush.h"
 #include "rw/xml.h"
-#include "rw/400/noterw.h"
+#include "rw/400/tread.h"
 #include "translation.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
@@ -1541,7 +1541,7 @@ void Note::write(XmlWriter& xml) const
 
 void Note::read(XmlReader& e)
 {
-    rw400::NoteRW::read(this, e, *e.context());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
@@ -1637,7 +1637,7 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
 
 bool Note::readProperties(XmlReader& e)
 {
-    return rw400::NoteRW::readProperties(this, e, *e.context());
+    return rw400::TRead::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------

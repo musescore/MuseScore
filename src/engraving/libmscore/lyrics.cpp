@@ -23,7 +23,7 @@
 #include "lyrics.h"
 
 #include "rw/xml.h"
-#include "rw/400/lyricsrw.h"
+#include "rw/400/tread.h"
 
 #include "translation.h"
 #include "types/translatablestring.h"
@@ -109,12 +109,12 @@ void Lyrics::write(XmlWriter& xml) const
 
 void Lyrics::read(XmlReader& e)
 {
-    rw400::LyricsRW::read(this, e, *e.context());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 bool Lyrics::readProperties(XmlReader& e)
 {
-    return rw400::LyricsRW::readProperties(this, e, *e.context());
+    return rw400::TRead::readProperties(this, e, *e.context());
 }
 
 TranslatableString Lyrics::subtypeUserName() const

@@ -29,12 +29,9 @@
 
 #include "../xmlreader.h"
 
-#include "symbolrw.h"
-#include "imagerw.h"
-#include "notedotrw.h"
 #include "propertyrw.h"
-#include "chordrestrw.h"
 #include "engravingitemrw.h"
+#include "tread.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -46,7 +43,7 @@ void RestRW::read(Rest* r, XmlReader& e, ReadContext& ctx)
         if (tag == "Symbol") {
             Symbol* s = new Symbol(r);
             s->setTrack(r->track());
-            SymbolRW::read(s, e, ctx);
+            TRead::read(s, e, ctx);
             r->add(s);
         } else if (tag == "Image") {
             if (MScore::noImages) {
@@ -54,15 +51,15 @@ void RestRW::read(Rest* r, XmlReader& e, ReadContext& ctx)
             } else {
                 Image* image = new Image(r);
                 image->setTrack(r->track());
-                ImageRW::read(image, e, ctx);
+                TRead::read(image, e, ctx);
                 r->add(image);
             }
         } else if (tag == "NoteDot") {
             NoteDot* dot = Factory::createNoteDot(r);
-            NoteDotRW::read(dot, e, ctx);
+            TRead::read(dot, e, ctx);
             r->add(dot);
         } else if (PropertyRW::readStyledProperty(r, tag, e, ctx)) {
-        } else if (ChordRestRW::readProperties(r, e, ctx)) {
+        } else if (TRead::readProperties(r, e, ctx)) {
         } else {
             e.unknown();
         }
@@ -71,5 +68,5 @@ void RestRW::read(Rest* r, XmlReader& e, ReadContext& ctx)
 
 bool RestRW::readProperties(Rest* r, XmlReader& xml, ReadContext& ctx)
 {
-    return ChordRestRW::readProperties(r, xml, ctx);
+    return TRead::readProperties(r, xml, ctx);
 }

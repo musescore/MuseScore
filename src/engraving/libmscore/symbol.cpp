@@ -25,8 +25,7 @@
 #include "draw/fontmetrics.h"
 #include "iengravingfont.h"
 #include "rw/xml.h"
-#include "rw/400/symbolrw.h"
-#include "rw/400/fsymbolrw.h"
+#include "rw/400/tread.h"
 #include "types/symnames.h"
 
 #include "image.h"
@@ -141,7 +140,7 @@ void Symbol::write(XmlWriter& xml) const
 
 void Symbol::read(XmlReader& e)
 {
-    rw400::SymbolRW::read(this, e, *e.context());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
@@ -246,7 +245,7 @@ void FSymbol::write(XmlWriter& xml) const
 
 void FSymbol::read(XmlReader& e)
 {
-    rw400::FSymbolRW::read(this, e, *e.context());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 void FSymbol::layout()

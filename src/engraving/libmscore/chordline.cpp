@@ -23,7 +23,7 @@
 #include "chordline.h"
 
 #include "rw/xml.h"
-#include "rw/400/chordlinerw.h"
+#include "rw/400/tread.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -186,7 +186,7 @@ void ChordLine::layout()
 
 void ChordLine::read(XmlReader& e)
 {
-    rw400::ChordLineRW::read(this, e, *e.context());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

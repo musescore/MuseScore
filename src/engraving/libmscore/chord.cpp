@@ -30,7 +30,7 @@
 
 #include "style/style.h"
 #include "rw/xml.h"
-#include "rw/400/chordrw.h"
+#include "rw/400/tread.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -1289,12 +1289,12 @@ void Chord::write(XmlWriter& xml) const
 
 void Chord::read(XmlReader& e)
 {
-    rw400::ChordRW::read(this, e, *e.context());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 bool Chord::readProperties(XmlReader& e)
 {
-    return rw400::ChordRW::readProperties(this, e, *e.context());
+    return rw400::TRead::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------

@@ -23,7 +23,7 @@
 #include "breath.h"
 
 #include "rw/xml.h"
-#include "rw/400/breathrw.h"
+#include "rw/400/tread.h"
 #include "types/symnames.h"
 
 #include "measure.h"
@@ -113,7 +113,7 @@ void Breath::write(XmlWriter& xml) const
 
 void Breath::read(XmlReader& e)
 {
-    rw400::BreathRW::read(this, e, *e.context());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
