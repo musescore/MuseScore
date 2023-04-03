@@ -28,7 +28,7 @@
 
 #include "iengravingfont.h"
 #include "rw/xml.h"
-#include "rw/400/arpeggiorw.h"
+#include "rw/400/tread.h"
 #include "types/typesconv.h"
 
 #include "accidental.h"
@@ -102,7 +102,7 @@ void Arpeggio::write(XmlWriter& xml) const
 
 void Arpeggio::read(XmlReader& e)
 {
-    rw400::ArpeggioRW::read(this, e, *e.context());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

@@ -23,6 +23,7 @@
 
 #include "draw/fontmetrics.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 
 #include "box.h"
 #include "factory.h"
@@ -98,21 +99,9 @@ void TBox::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
 void TBox::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "Text") {
-            m_text->read(e);
-        } else if (Box::readProperties(e)) {
-        } else {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

@@ -25,6 +25,7 @@
 #include <cmath>
 
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 
 #include "actionicon.h"
 #include "factory.h"
@@ -231,16 +232,7 @@ void Box::writeProperties(XmlWriter& xml) const
 
 void Box::read(XmlReader& e)
 {
-    _leftMargin      = 0.0;
-    _rightMargin     = 0.0;
-    _topMargin       = 0.0;
-    _bottomMargin    = 0.0;
-    _boxHeight       = Spatium(0);       // override default set in constructor
-    _boxWidth        = Spatium(0);
-    MeasureBase::read(e);
-    if (score()->mscVersion() < 302) {
-        _isAutoSizeEnabled = false;     // disable auto-size for older scores by default.
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

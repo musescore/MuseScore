@@ -90,7 +90,6 @@ protected:
     MeasureBase(const MeasureBase&);
 
     Fraction _len  { Fraction(0, 1) };    ///< actual length of measure
-    void cleanupLayoutBreaks(bool undo);
 
 public:
 
@@ -136,6 +135,8 @@ public:
     void undoSetPageBreak(bool v) { undoSetBreak(v, LayoutBreakType::PAGE); }
     void undoSetSectionBreak(bool v) { undoSetBreak(v, LayoutBreakType::SECTION); }
     void undoSetNoBreak(bool v) { undoSetBreak(v, LayoutBreakType::NOBREAK); }
+
+    void cleanupLayoutBreaks(bool undo);
 
     virtual void moveTicks(const Fraction& diff) { setTick(tick() + diff); }
 

@@ -56,10 +56,22 @@
 #include "../../libmscore/mmrestrange.h"
 #include "../../libmscore/systemdivider.h"
 #include "../../libmscore/actionicon.h"
+#include "../../libmscore/arpeggio.h"
+#include "../../libmscore/articulation.h"
+#include "../../libmscore/audio.h"
+#include "../../libmscore/bagpembell.h"
+#include "../../libmscore/barline.h"
+#include "../../libmscore/chord.h"
+#include "../../libmscore/bend.h"
+#include "../../libmscore/box.h"
+#include "../../libmscore/textframe.h"
+#include "../../libmscore/layoutbreak.h"
+#include "../../libmscore/stafftypechange.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
 
+#include "readcontext.h"
 #include "textbaserw.h"
 #include "propertyrw.h"
 #include "engravingitemrw.h"
@@ -93,9 +105,18 @@ void TRead::read(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
     } else if (try_read<FiguredBass>(el, xml, ctx)) {
     } else if (try_read<Marker>(el, xml, ctx)) {
     } else if (try_read<Jump>(el, xml, ctx)) {
+    } else if (try_read<HBox>(el, xml, ctx)) {
+    } else if (try_read<VBox>(el, xml, ctx)) {
+    } else if (try_read<TBox>(el, xml, ctx)) {
+    } else if (try_read<FBox>(el, xml, ctx)) {
     } else {
         UNREACHABLE;
     }
+}
+
+void TRead::read(MeasureBase* b, XmlReader& xml, ReadContext& ctx)
+{
+    TRead::read(static_cast<EngravingItem*>(b), xml, ctx);
 }
 
 void TRead::read(TextBase* t, XmlReader& xml, ReadContext& ctx)
@@ -887,4 +908,356 @@ void TRead::read(ActionIcon* i, XmlReader& e, ReadContext&)
             e.unknown();
         }
     }
+}
+
+void TRead::read(Arpeggio* a, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "subtype") {
+            a->setArpeggioType(TConv::fromXml(e.readAsciiText(), ArpeggioType::NORMAL));
+        } else if (tag == "userLen1") {
+            a->setUserLen1(e.readDouble() * a->spatium());
+        } else if (tag == "userLen2") {
+            a->setUserLen2(e.readDouble() * a->spatium());
+        } else if (tag == "span") {
+            a->setSpan(e.readInt());
+        } else if (tag == "play") {
+            a->setPlayArpeggio(e.readBool());
+        } else if (tag == "timeStretch") {
+            a->setStretch(e.readDouble());
+        } else if (!EngravingItemRW::readProperties(a, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(Articulation* a, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        if (!readProperties(a, xml, ctx)) {
+            xml.unknown();
+        }
+    }
+}
+
+bool TRead::readProperties(Articulation* a, XmlReader& xml, ReadContext& ctx)
+{
+    const AsciiStringView tag(xml.name());
+
+    if (tag == "subtype") {
+        AsciiStringView s = xml.readAsciiText();
+        ArticulationTextType textType = TConv::fromXml(s, ArticulationTextType::NO_TEXT);
+        if (textType != ArticulationTextType::NO_TEXT) {
+            a->setTextType(textType);
+        } else {
+            SymId id = SymNames::symIdByName(s);
+            if (id == SymId::noSym) {
+                id = compat::Read206::articulationNames2SymId206(s); // compatibility hack for "old" 3.0 scores
+            }
+            if (id == SymId::noSym || s == "ornamentMordentInverted") {   // SMuFL < 1.30
+                id = SymId::ornamentMordent;
+            }
+
+            //! TODO Should be replaced with `ctx.mscoreVersion()`
+            //! But at the moment, `ctx` is not set everywhere
+            String programVersion = a->score()->mscoreVersion();
+            if (!programVersion.isEmpty() && programVersion < u"3.6") {
+                if (id == SymId::noSym || s == "ornamentMordent") {   // SMuFL < 1.30 and MuseScore < 3.6
+                    id = SymId::ornamentShortTrill;
+                }
+            }
+            a->setSymId(id);
+        }
+    } else if (tag == "channel") {
+        a->setChannelName(xml.attribute("name"));
+        xml.readNext();
+    } else if (PropertyRW::readProperty(a, tag, xml, ctx, Pid::ARTICULATION_ANCHOR)) {
+    } else if (tag == "direction") {
+        PropertyRW::readProperty(a, xml, ctx, Pid::DIRECTION);
+    } else if (tag == "ornamentStyle") {
+        PropertyRW::readProperty(a, xml, ctx, Pid::ORNAMENT_STYLE);
+    } else if (tag == "play") {
+        a->setPlayArticulation(xml.readBool());
+    } else if (tag == "offset") {
+        if (a->score()->mscVersion() >= 400) {
+            EngravingItemRW::readProperties(a, xml, ctx);
+        } else {
+            xml.skipCurrentElement();       // ignore manual layout in older scores
+        }
+    } else if (EngravingItemRW::readProperties(a, xml, ctx)) {
+    } else {
+        return false;
+    }
+    return true;
+}
+
+void TRead::read(Audio* a, XmlReader& e, ReadContext&)
+{
+    while (e.readNextStartElement()) {
+        if (e.name() == "path") {
+            a->setPath(e.readText());
+        } else {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(BagpipeEmbellishment* b, XmlReader& e, ReadContext&)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "subtype") {
+            b->setEmbelType(TConv::fromXml(e.readAsciiText(), EmbellishmentType(0)));
+        } else {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
+{
+    b->resetProperty(Pid::BARLINE_SPAN);
+    b->resetProperty(Pid::BARLINE_SPAN_FROM);
+    b->resetProperty(Pid::BARLINE_SPAN_TO);
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "subtype") {
+            b->setBarLineType(TConv::fromXml(e.readAsciiText(), BarLineType::NORMAL));
+        } else if (tag == "span") {
+            b->setSpanStaff(e.readBool());
+        } else if (tag == "spanFromOffset") {
+            b->setSpanFrom(e.readInt());
+        } else if (tag == "spanToOffset") {
+            b->setSpanTo(e.readInt());
+        } else if (tag == "Articulation") {
+            Articulation* a = Factory::createArticulation(b->score()->dummy()->chord());
+            TRead::read(a, e, ctx);
+            b->add(a);
+        } else if (tag == "Symbol") {
+            Symbol* s = Factory::createSymbol(b);
+            s->setTrack(b->track());
+            SymbolRW::read(s, e, ctx);
+            b->add(s);
+        } else if (tag == "Image") {
+            if (MScore::noImages) {
+                e.skipCurrentElement();
+            } else {
+                Image* image = Factory::createImage(b);
+                image->setTrack(b->track());
+                TRead::read(image, e, ctx);
+                b->add(image);
+            }
+        } else if (!EngravingItemRW::readProperties(b, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(Bend* b, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+
+        if (PropertyRW::readStyledProperty(b, tag, e, ctx)) {
+        } else if (tag == "point") {
+            PitchValue pv;
+            pv.time    = e.intAttribute("time");
+            pv.pitch   = e.intAttribute("pitch");
+            pv.vibrato = e.intAttribute("vibrato");
+            b->addPoint(pv);
+            e.readNext();
+        } else if (tag == "play") {
+            b->setPlayBend(e.readBool());
+        } else if (!EngravingItemRW::readProperties(b, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(Box* b, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        if (!readProperties(b, e, ctx)) {
+            e.unknown();
+        }
+    }
+
+    if (b->score()->mscVersion() < 302) {
+        b->setAutoSizeEnabled(false);    // disable auto-size for older scores by default.
+    }
+}
+
+void TRead::read(HBox* b, XmlReader& xml, ReadContext& ctx)
+{
+    TRead::read(static_cast<Box*>(b), xml, ctx);
+}
+
+void TRead::read(VBox* b, XmlReader& xml, ReadContext& ctx)
+{
+    TRead::read(static_cast<Box*>(b), xml, ctx);
+}
+
+void TRead::read(FBox* b, XmlReader& xml, ReadContext& ctx)
+{
+    TRead::read(static_cast<Box*>(b), xml, ctx);
+}
+
+void TRead::read(TBox* b, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "Text") {
+            b->text()->read(e);
+        } else if (TRead::readProperties(static_cast<Box*>(b), e, ctx)) {
+        } else {
+            e.unknown();
+        }
+    }
+}
+
+bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
+{
+    const AsciiStringView tag(e.name());
+    if (tag == "height") {
+        b->setBoxHeight(Spatium(e.readDouble()));
+    } else if (tag == "width") {
+        b->setBoxWidth(Spatium(e.readDouble()));
+    } else if (tag == "topGap") {
+        double gap = e.readDouble();
+        b->setTopGap(Millimetre(gap));
+        if (b->score()->mscVersion() >= 206) {
+            b->setTopGap(Millimetre(gap * b->score()->spatium()));
+        }
+        b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
+    } else if (tag == "bottomGap") {
+        double gap = e.readDouble();
+        b->setBottomGap(Millimetre(gap));
+        if (b->score()->mscVersion() >= 206) {
+            b->setBottomGap(Millimetre(gap * b->score()->spatium()));
+        }
+        b->setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
+    } else if (tag == "leftMargin") {
+        b->setLeftMargin(e.readDouble());
+    } else if (tag == "rightMargin") {
+        b->setRightMargin(e.readDouble());
+    } else if (tag == "topMargin") {
+        b->setTopMargin(e.readDouble());
+    } else if (tag == "bottomMargin") {
+        b->setBottomMargin(e.readDouble());
+    } else if (tag == "boxAutoSize") {
+        b->setAutoSizeEnabled(e.readBool());
+    } else if (tag == "Text") {
+        Text* t;
+        if (b->isTBox()) {
+            t = toTBox(b)->text();
+            t->read(e);
+        } else {
+            t = Factory::createText(b);
+            t->read(e);
+            if (t->empty()) {
+                LOGD("read empty text");
+            } else {
+                b->add(t);
+            }
+        }
+    } else if (tag == "Symbol") {
+        Symbol* s = new Symbol(b);
+        TRead::read(s, e, ctx);
+        b->add(s);
+    } else if (tag == "Image") {
+        if (MScore::noImages) {
+            e.skipCurrentElement();
+        } else {
+            Image* image = new Image(b);
+            image->setTrack(ctx.track());
+            TRead::read(image, e, ctx);
+            b->add(image);
+        }
+    } else if (tag == "FretDiagram") {
+        FretDiagram* f = Factory::createFretDiagram(b->score()->dummy()->segment());
+        f->read(e);
+        //! TODO Looks like a bug.
+        //! The FretDiagram parent must be Segment
+        //! there is a method: `Segment* segment() const { return toSegment(parent()); }`,
+        //! but when we add it to Box, the parent will be rewritten.
+        b->add(f);
+    } else if (tag == "HBox") {
+        // m_parent is used here (rather than system()) because explicit parent isn't set for this object
+        // until it is fully read. m_parent is nonetheless valid and using it here matches MU3 behavior.
+        // If we do not set the parent of this new box correctly, it will cause a crash on read()
+        // because it needs access to the system it is being added to. (c.r. issue #14643)
+        if (b->parent() && b->parent()->isSystem()) {
+            HBox* hb = new HBox(toSystem(b->parent()));
+            hb->read(e);
+            //! TODO Looks like a bug.
+            //! The HBox parent must be System
+            //! there is a method: `System* system() const { return (System*)parent(); }`,
+            //! but when we add it to Box, the parent will be rewritten.
+            b->add(hb);
+        }
+    } else if (tag == "VBox") {
+        if (b->parent() && b->parent()->isSystem()) {
+            VBox* vb = new VBox(toSystem(b->parent()));
+            vb->read(e);
+            //! TODO Looks like a bug.
+            //! The VBox parent must be System
+            //! there is a method: `System* system() const { return (System*)parent(); }`,
+            //! but when we add it to Box, the parent will be rewritten.
+            b->add(vb);
+        }
+    } else if (TRead::readProperties(static_cast<MeasureBase*>(b), e, ctx)) {
+    } else {
+        return false;
+    }
+    return true;
+}
+
+bool TRead::readProperties(MeasureBase* b, XmlReader& e, ReadContext& ctx)
+{
+    const AsciiStringView tag(e.name());
+    if (tag == "LayoutBreak") {
+        LayoutBreak* lb = Factory::createLayoutBreak(b);
+        lb->read(e);
+        bool doAdd = true;
+        switch (lb->layoutBreakType()) {
+        case LayoutBreakType::LINE:
+            if (b->lineBreak()) {
+                doAdd = false;
+            }
+            break;
+        case LayoutBreakType::PAGE:
+            if (b->pageBreak()) {
+                doAdd = false;
+            }
+            break;
+        case LayoutBreakType::SECTION:
+            if (b->sectionBreak()) {
+                doAdd = false;
+            }
+            break;
+        case LayoutBreakType::NOBREAK:
+            if (b->noBreak()) {
+                doAdd = false;
+            }
+            break;
+        }
+        if (doAdd) {
+            b->add(lb);
+            b->cleanupLayoutBreaks(false);
+        } else {
+            delete lb;
+        }
+    } else if (tag == "StaffTypeChange") {
+        StaffTypeChange* stc = Factory::createStaffTypeChange(b);
+        stc->setTrack(e.context()->track());
+        stc->setParent(b);
+        stc->read(e);
+        b->add(stc);
+    } else if (EngravingItemRW::readProperties(b, e, ctx)) {
+    } else {
+        return false;
+    }
+    return true;
 }

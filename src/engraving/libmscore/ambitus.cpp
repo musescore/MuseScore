@@ -25,8 +25,10 @@
 #include "translation.h"
 
 #include "draw/types/pen.h"
-#include "rw/206/read206.h"
+
 #include "rw/xml.h"
+#include "rw/206/read206.h"
+#include "rw/400/tread.h"
 
 #include "accidental.h"
 #include "chord.h"
@@ -290,17 +292,9 @@ void Ambitus::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
 void Ambitus::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
