@@ -23,7 +23,7 @@ echo "Setup MacOS build environment"
 trap 'echo Setup failed; exit 1' ERR
 SKIP_ERR_FLAG=true
 
-export MACOSX_DEPLOYMENT_TARGET=10.14
+export MACOSX_DEPLOYMENT_TARGET=10.15
 
 QT5_COMPAT="ON"
 
