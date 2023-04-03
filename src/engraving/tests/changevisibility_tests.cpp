@@ -197,11 +197,11 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_RestWithDot)
     EXPECT_FALSE(dot->visible());
 }
 
-TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_GraceNotes)
+TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_IgnoredElements)
 {
     ASSERT_TRUE(m_score);
 
-    // [GIVEN] Note with attached grace notes
+    // [GIVEN] Note with attached grace notes, lyrics and slur
     Chord* chord = findChord(1200);
     ASSERT_TRUE(chord);
 
@@ -215,8 +215,21 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_GraceNotes)
     // [WHEN] Hide the note
     m_score->undoChangeVisible(note, false);
 
-    // [THEN] The note is hidden, but the grace notes are still visible
+    // [THEN] The note is hidden, but the grace notes, lyrics and slur are still visible
     EXPECT_FALSE(note->visible());
+
+    const std::unordered_set<ElementType> IGNORED_TYPES {
+        ElementType::CHORD,
+        ElementType::SLUR,
+        ElementType::LYRICS,
+    };
+
+    for (EngravingObject* child : chord->scanChildren()) {
+        if (mu::contains(IGNORED_TYPES, child->type())) {
+            EngravingItem* item = toEngravingItem(child);
+            EXPECT_TRUE(item->visible());
+        }
+    }
 
     for (const Chord* graceNote : graceNotes) {
         EXPECT_TRUE(graceNote->visible());
@@ -227,6 +240,13 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_GraceNotes)
 
     // [THEN] Everything is visible
     EXPECT_TRUE(note->visible());
+
+    for (EngravingObject* child : chord->scanChildren()) {
+        if (mu::contains(IGNORED_TYPES, child->type())) {
+            EngravingItem* item = toEngravingItem(child);
+            EXPECT_TRUE(item->visible());
+        }
+    }
 
     for (const Chord* graceNote : graceNotes) {
         EXPECT_TRUE(graceNote->visible());

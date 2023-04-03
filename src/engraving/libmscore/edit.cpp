@@ -5310,43 +5310,6 @@ static bool chordHasVisibleNote(const Chord* chord)
     return false;
 }
 
-static bool beamHasVisibleNote(const Beam* beam)
-{
-    for (const EngravingItem* item : beam->elements()) {
-        if (!item->isChord()) {
-            continue;
-        }
-
-        if (chordHasVisibleNote(toChord(item))) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-static void undoSetChordChildrenVisible(Chord* chord, bool visible, std::function<bool(const EngravingItem*)> childAccepted)
-{
-    static const std::unordered_set<ElementType> ignoredTypes {
-        ElementType::LEDGER_LINE,
-    };
-
-    for (EngravingObject* child : chord->scanChildren()) {
-        if (!child->isEngravingItem()) {
-            continue;
-        }
-
-        if (mu::contains(ignoredTypes, child->type())) {
-            continue;
-        }
-
-        EngravingItem* item = toEngravingItem(child);
-        if (childAccepted(item)) {
-            item->undoChangeProperty(Pid::VISIBLE, visible);
-        }
-    }
-}
-
 static void undoChangeNoteVisibility(Note* note, bool visible)
 {
     note->undoChangeProperty(Pid::VISIBLE, visible);
@@ -5359,45 +5322,59 @@ static void undoChangeNoteVisibility(Note* note, bool visible)
         note->accidental()->undoChangeProperty(Pid::VISIBLE, visible);
     }
 
-    Chord* chord = note->chord();
-    Beam* beam = chord->beam();
+    Chord* noteChord = note->chord();
+    Beam* beam = noteChord->beam();
+    std::vector<Chord*> chords;
 
-    bool chordHasVisibleNote_ = visible || chordHasVisibleNote(chord);
+    bool chordHasVisibleNote_ = visible || chordHasVisibleNote(noteChord);
+    bool beamHasVisibleNote_ = chordHasVisibleNote_;
 
     if (beam) {
-        undoSetChordChildrenVisible(chord, chordHasVisibleNote_, [](const EngravingItem* item) {
-            static const std::unordered_set<ElementType> ignoredTypes {
-                ElementType::STEM,
-                ElementType::BEAM,
-                ElementType::NOTE,
-                ElementType::CHORD,
-            };
+        for (EngravingItem* item : beam->elements()) {
+            if (!item->isChord()) {
+                continue;
+            }
 
-            return !mu::contains(ignoredTypes, item->type());
-        });
+            Chord* chord = toChord(item);
+            chords.push_back(chord);
+
+            if (!beamHasVisibleNote_ && chord != noteChord) {
+                beamHasVisibleNote_ = chordHasVisibleNote(chord);
+            }
+        }
     } else {
-        undoSetChordChildrenVisible(chord, chordHasVisibleNote_, [](const EngravingItem* item) {
-            return item->type() != ElementType::NOTE && item->type() != ElementType::CHORD;
-        });
-
-        return;
+        chords.push_back(noteChord);
     }
 
-    bool beamHasVisibleNote_ = chordHasVisibleNote_ || beamHasVisibleNote(beam);
+    static const std::unordered_set<ElementType> IGNORED_TYPES {
+        ElementType::NOTE,
+        ElementType::LYRICS,
+        ElementType::SLUR,
+        ElementType::CHORD, // grace notes
+        ElementType::LEDGER_LINE, // temporary objects, impossible to change visibility
+    };
 
-    for (EngravingItem* item : beam->elements()) {
-        if (!item->isChord()) {
-            continue;
+    for (Chord* chord : chords) {
+        if (chord != noteChord) {
+            chordHasVisibleNote_ = chordHasVisibleNote(chord);
         }
 
-        undoSetChordChildrenVisible(toChord(item), beamHasVisibleNote_, [](const EngravingItem* item) {
-            static const std::unordered_set<ElementType> acceptedTypes {
-                ElementType::STEM,
-                ElementType::BEAM,
-            };
+        for (EngravingObject* child : chord->scanChildren()) {
+            ElementType type = child->type();
 
-            return mu::contains(acceptedTypes, item->type());
-        });
+            if (mu::contains(IGNORED_TYPES, type)) {
+                continue;
+            }
+
+            if (beam) {
+                if (type == ElementType::STEM || type == ElementType::BEAM) {
+                    child->undoChangeProperty(Pid::VISIBLE, beamHasVisibleNote_);
+                    continue;
+                }
+            }
+
+            child->undoChangeProperty(Pid::VISIBLE, chordHasVisibleNote_);
+        }
     }
 }
 
