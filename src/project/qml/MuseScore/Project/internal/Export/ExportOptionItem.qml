@@ -27,7 +27,6 @@ import MuseScore.UiComponents 1.0
 ColumnLayout {
     id: root
 
-    property int labelWidth: 72
     property alias text: label.text
 
     width: Math.min(implicitWidth, parent.width)
@@ -35,7 +34,7 @@ ColumnLayout {
 
     StyledTextLabel {
         id: label
-        Layout.preferredWidth: root.labelWidth
+        Layout.fillWidth: true
         horizontalAlignment: Text.AlignLeft
     }
 }
