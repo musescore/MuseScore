@@ -80,6 +80,9 @@
 #include "../../libmscore/stemslash.h"
 #include "../../libmscore/hook.h"
 #include "../../libmscore/tremolo.h"
+#include "../../libmscore/clef.h"
+#include "../../libmscore/glissando.h"
+#include "../../libmscore/line.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -565,36 +568,36 @@ void TRead::read(FiguredBass* b, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Fermata* f, XmlReader& e, ReadContext& ctx)
 {
-    auto readProperties = [](Fermata* f, XmlReader& e, ReadContext& ctx)
-    {
-        const AsciiStringView tag(e.name());
-
-        if (tag == "subtype") {
-            AsciiStringView s = e.readAsciiText();
-            SymId id = SymNames::symIdByName(s);
-            f->setSymId(id);
-        } else if (tag == "play") {
-            f->setPlay(e.readBool());
-        } else if (tag == "timeStretch") {
-            f->setTimeStretch(e.readDouble());
-        } else if (tag == "offset") {
-            if (f->score()->mscVersion() > 114) {
-                EngravingItemRW::readProperties(f, e, ctx);
-            } else {
-                e.skipCurrentElement();       // ignore manual layout in older scores
-            }
-        } else if (EngravingItemRW::readProperties(f, e, ctx)) {
-        } else {
-            return false;
-        }
-        return true;
-    };
-
     while (e.readNextStartElement()) {
         if (!readProperties(f, e, ctx)) {
             e.unknown();
         }
     }
+}
+
+bool TRead::readProperties(Fermata* f, XmlReader& e, ReadContext& ctx)
+{
+    const AsciiStringView tag(e.name());
+
+    if (tag == "subtype") {
+        AsciiStringView s = e.readAsciiText();
+        SymId id = SymNames::symIdByName(s);
+        f->setSymId(id);
+    } else if (tag == "play") {
+        f->setPlay(e.readBool());
+    } else if (tag == "timeStretch") {
+        f->setTimeStretch(e.readDouble());
+    } else if (tag == "offset") {
+        if (f->score()->mscVersion() > 114) {
+            EngravingItemRW::readProperties(f, e, ctx);
+        } else {
+            e.skipCurrentElement();       // ignore manual layout in older scores
+        }
+    } else if (EngravingItemRW::readProperties(f, e, ctx)) {
+    } else {
+        return false;
+    }
+    return true;
 }
 
 void TRead::read(Image* img, XmlReader& e, ReadContext& ctx)
@@ -1659,10 +1662,63 @@ void TRead::read(ChordLine* l, XmlReader& e, ReadContext& ctx)
     }
 }
 
+void TRead::read(Clef* c, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "concertClefType") {
+            c->setConcertClef(TConv::fromXml(e.readAsciiText(), ClefType::G));
+        } else if (tag == "transposingClefType") {
+            c->setTransposingClef(TConv::fromXml(e.readAsciiText(), ClefType::G));
+        } else if (tag == "showCourtesyClef") {
+            c->setShowCourtesy(e.readInt());
+        } else if (tag == "forInstrumentChange") {
+            c->setForInstrumentChange(e.readBool());
+        } else if (!EngravingItemRW::readProperties(c, e, ctx)) {
+            e.unknown();
+        }
+    }
+
+    if (c->clefType() == ClefType::INVALID) {
+        c->setClefType(ClefType::G);
+    }
+}
+
 void TRead::read(Fingering* f, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         if (!TextBaseRW::readProperties(f, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
+{
+    g->eraseSpannerSegments();
+
+    if (g->score()->mscVersion() < 301) {
+        ctx.addSpanner(e.intAttribute("id", -1), g);
+    }
+
+    g->setShowText(false);
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag = e.name();
+        if (tag == "text") {
+            g->setShowText(true);
+            PropertyRW::readProperty(g, e, ctx, Pid::GLISS_TEXT);
+        } else if (tag == "subtype") {
+            g->setGlissandoType(TConv::fromXml(e.readAsciiText(), GlissandoType::STRAIGHT));
+        } else if (tag == "glissandoStyle") {
+            PropertyRW::readProperty(g, e, ctx, Pid::GLISS_STYLE);
+        } else if (tag == "easeInSpin") {
+            g->setEaseIn(e.readInt());
+        } else if (tag == "easeOutSpin") {
+            g->setEaseOut(e.readInt());
+        } else if (tag == "play") {
+            g->setPlayGlissando(e.readBool());
+        } else if (PropertyRW::readStyledProperty(g, tag, e, ctx)) {
+        } else if (!TRead::readProperties(static_cast<SLine*>(g), e, ctx)) {
             e.unknown();
         }
     }
@@ -1849,6 +1905,60 @@ void TRead::read(NoteDot* d, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+}
+
+bool TRead::readProperties(SLine* l, XmlReader& e, ReadContext& ctx)
+{
+    const AsciiStringView tag(e.name());
+
+    if (tag == "tick2") {                  // obsolete
+        if (l->tick() == Fraction(-1, 1)) {   // not necessarily set (for first note of score?) #30151
+            l->setTick(ctx.tick());
+        }
+        l->setTick2(Fraction::fromTicks(e.readInt()));
+    } else if (tag == "tick") {           // obsolete
+        l->setTick(Fraction::fromTicks(e.readInt()));
+    } else if (tag == "ticks") {
+        l->setTicks(Fraction::fromTicks(e.readInt()));
+    } else if (tag == "Segment") {
+        LineSegment* ls = l->createLineSegment(l->score()->dummy()->system());
+        ls->setTrack(l->track());     // needed in read to get the right staff mag
+        ls->read(e);
+        l->add(ls);
+        ls->setVisible(l->visible());
+    } else if (tag == "length") {
+        l->setLen(e.readDouble());
+    } else if (tag == "diagonal") {
+        l->setDiagonal(e.readInt());
+    } else if (tag == "anchor") {
+        l->setAnchor(SLine::Anchor(e.readInt()));
+    } else if (tag == "lineWidth") {
+        l->setLineWidth(Millimetre(e.readDouble() * l->spatium()));
+    } else if (PropertyRW::readProperty(l, tag, e, ctx, Pid::LINE_STYLE)) {
+    } else if (tag == "dashLineLength") {
+        l->setDashLineLen(e.readDouble());
+    } else if (tag == "dashGapLength") {
+        l->setDashGapLen(e.readDouble());
+    } else if (tag == "lineColor") {
+        l->setLineColor(e.readColor());
+    } else if (tag == "color") {
+        l->setLineColor(e.readColor());
+    } else if (!readProperties(static_cast<Spanner*>(l), e, ctx)) {
+        return false;
+    }
+    return true;
+}
+
+bool TRead::readProperties(Spanner* s, XmlReader& e, ReadContext& ctx)
+{
+    const AsciiStringView tag(e.name());
+    if (ctx.pasteMode()) {
+        if (tag == "ticks_f") {
+            s->setTicks(e.readFraction());
+            return true;
+        }
+    }
+    return EngravingItemRW::readProperties(s, e, ctx);
 }
 
 void TRead::read(Stem* s, XmlReader& e, ReadContext& ctx)

@@ -27,6 +27,7 @@
 #include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "style/textstyle.h"
 
 #include "chord.h"
@@ -1095,42 +1096,9 @@ void FiguredBass::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
 void FiguredBass::read(XmlReader& e)
 {
-    String normalizedText;
-    int idx = 0;
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "ticks") {
-            setTicks(e.readFraction());
-        } else if (tag == "onNote") {
-            setOnNote(e.readInt() != 0l);
-        } else if (tag == "FiguredBassItem") {
-            FiguredBassItem* pItem = new FiguredBassItem(this, idx++);
-            pItem->setTrack(track());
-            pItem->setParent(this);
-            pItem->read(e);
-            m_items.push_back(pItem);
-            // add item normalized text
-            if (!normalizedText.isEmpty()) {
-                normalizedText.append('\n');
-            }
-            normalizedText.append(pItem->normalizedText());
-        }
-//            else if (tag == "style")
-//                  setStyledPropertyListIdx(e.readElementText());
-        else if (!TextBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    // if items could be parsed set normalized text
-    if (m_items.size() > 0) {
-        setXmlText(normalizedText);          // this is the text to show while editing
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
