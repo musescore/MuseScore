@@ -75,6 +75,7 @@ class ChordLine;
 class Clef;
 class Fingering;
 class Glissando;
+class GradualTempoChange;
 class Hook;
 class Lyrics;
 class MeasureBase;
@@ -84,6 +85,7 @@ class SLine;
 class Spanner;
 class Stem;
 class StemSlash;
+class TextLineBase;
 class Tremolo;
 class TremoloBar;
 }
@@ -146,6 +148,7 @@ public:
     static void read(FiguredBass* b, XmlReader& xml, ReadContext& ctx);
     static void read(Fingering* f, XmlReader& xml, ReadContext& ctx);
     static void read(Glissando* g, XmlReader& xml, ReadContext& ctx);
+    static void read(GradualTempoChange* c, XmlReader& xml, ReadContext& ctx);
     static void read(Hook* h, XmlReader& xml, ReadContext& ctx);
     static void read(Lyrics* l, XmlReader& xml, ReadContext& ctx);
     static void read(Note* n, XmlReader& xml, ReadContext& ctx);
@@ -169,6 +172,7 @@ public:
     static bool readProperties(SLine* l, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Spanner* s, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Stem* s, XmlReader& e, ReadContext& ctx);
+    static bool readProperties(TextLineBase* b, XmlReader& e, ReadContext& ctx);
 };
 }
 

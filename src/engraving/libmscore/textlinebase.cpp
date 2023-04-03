@@ -574,6 +574,11 @@ static constexpr std::array<Pid, 26> TextLineBasePropertyId = { {
     Pid::END_TEXT_OFFSET,
 } };
 
+const std::array<Pid, 26>& TextLineBase::textLineBasePropertyIds()
+{
+    return TextLineBasePropertyId;
+}
+
 //---------------------------------------------------------
 //   propertyDelegate
 //---------------------------------------------------------
