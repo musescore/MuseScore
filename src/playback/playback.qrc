@@ -5,6 +5,7 @@
         <file>qml/MuseScore/Playback/internal/MeasureAndBeatFields.qml</file>
         <file>qml/MuseScore/Playback/internal/TempoSlider.qml</file>
         <file>qml/MuseScore/Playback/MixerPanel.qml</file>
+        <file>qml/MuseScore/Playback/internal/MixerPanelToolbar.qml</file>
         <file>qml/MuseScore/Playback/internal/MixerPanelSection.qml</file>
         <file>qml/MuseScore/Playback/internal/MixerBalanceSection.qml</file>
         <file>qml/MuseScore/Playback/internal/MixerVolumeSection.qml</file>

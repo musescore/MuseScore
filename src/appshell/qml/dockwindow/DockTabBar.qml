@@ -41,6 +41,8 @@ Rectangle {
     property NavigationPanel navigationPanel: null
     readonly property string currentItemNavigationName: tabs.currentItem && tabs.currentItem.navigation ? tabs.currentItem.navigation.name : ""
 
+    property alias currentToolbarComponent: toolbarLoader.sourceComponent
+
     signal tabClicked(int index)
     signal handleContextMenuItemRequested(string itemId)
 
@@ -130,7 +132,18 @@ Rectangle {
         cursorShape: Qt.SizeAllCursor
     }
 
+    Loader {
+        id: toolbarLoader
+
+        anchors.top: parent.top
+        anchors.left: tabs.right
+        anchors.right: parent.right
+        anchors.bottom: bottomSeparatorContainer.top
+    }
+
     Item {
+        id: bottomSeparatorContainer
+
         anchors.left: tabs.right
         anchors.right: parent.right
         anchors.bottom: parent.bottom

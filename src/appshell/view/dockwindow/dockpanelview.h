@@ -25,9 +25,9 @@
 
 #include "internal/dockbase.h"
 
-#include "framework/uicomponents/view/qmllistproperty.h"
-
 #include "uicomponents/view/abstractmenumodel.h"
+
+class QQmlComponent;
 
 namespace mu::uicomponents {
 class AbstractMenuModel;
@@ -43,6 +43,7 @@ class DockPanelView : public DockBase
     Q_PROPERTY(
         mu::uicomponents::AbstractMenuModel
         * contextMenuModel READ contextMenuModel WRITE setContextMenuModel NOTIFY contextMenuModelChanged)
+    Q_PROPERTY(QQmlComponent * toolbarComponent READ toolbarComponent WRITE setToolbarComponent NOTIFY toolbarComponentChanged)
 
 public:
     explicit DockPanelView(QQuickItem* parent = nullptr);
@@ -51,6 +52,7 @@ public:
     QString groupName() const;
     QObject* navigationSection() const;
     uicomponents::AbstractMenuModel* contextMenuModel() const;
+    QQmlComponent* toolbarComponent() const;
 
     bool isTabAllowed(const DockPanelView* tab) const;
     void addPanelAsTab(DockPanelView* tab);
@@ -60,11 +62,13 @@ public slots:
     void setGroupName(const QString& name);
     void setNavigationSection(QObject* newNavigation);
     void setContextMenuModel(uicomponents::AbstractMenuModel* model);
+    void setToolbarComponent(QQmlComponent* component);
 
 signals:
     void groupNameChanged();
     void navigationSectionChanged();
     void contextMenuModelChanged();
+    void toolbarComponentChanged();
 
 private:
     void componentComplete() override;
@@ -74,6 +78,8 @@ private:
 
     class DockPanelMenuModel;
     DockPanelMenuModel* m_menuModel = nullptr;
+
+    QQmlComponent* m_toolbarComponent = nullptr;
 };
 }
 
