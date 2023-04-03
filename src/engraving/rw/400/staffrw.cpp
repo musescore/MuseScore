@@ -79,7 +79,7 @@ void StaffRW::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                 }
             } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
                 MeasureBase* mb = toMeasureBase(Factory::createItemByName(tag, ctx.dummy()));
-                TRead::read(mb, e, ctx);
+                TRead::readItem(mb, e, ctx);
                 mb->setTick(ctx.tick());
                 score->measures()->add(mb);
             } else if (tag == "tick") {

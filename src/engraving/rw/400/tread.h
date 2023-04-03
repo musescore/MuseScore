@@ -33,7 +33,6 @@ class StaffTextBase;
 class Dynamic;
 class Harmony;
 class FretDiagram;
-class TremoloBar;
 class Sticking;
 class SystemText;
 class PlayTechAnnotation;
@@ -65,7 +64,24 @@ class HBox;
 class VBox;
 class FBox;
 class TBox;
+class Bracket;
+class Breath;
+class Symbol;
+class BSymbol;
+class FSymbol;
+class Chord;
+class ChordRest;
+class ChordLine;
+class Fingering;
+class Hook;
+class Lyrics;
 class MeasureBase;
+class Note;
+class NoteDot;
+class Stem;
+class StemSlash;
+class Tremolo;
+class TremoloBar;
 }
 
 namespace mu::engraving::rw400 {
@@ -74,8 +90,10 @@ class TRead
 public:
     TRead() = default;
 
-    static void read(EngravingItem* el, XmlReader& xml, ReadContext& ctx);  // factory
-    static void read(MeasureBase* b, XmlReader& xml, ReadContext& ctx);     // factory
+    // factory
+    static void readItem(EngravingItem* el, XmlReader& xml, ReadContext& ctx);
+
+    // types
 
     static void read(TextBase* t, XmlReader& xml, ReadContext& ctx);
     static void read(TempoText* t, XmlReader& xml, ReadContext& ctx);
@@ -84,7 +102,6 @@ public:
     static void read(Dynamic* d, XmlReader& xml, ReadContext& ctx);
     static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
     static void read(FretDiagram* d, XmlReader& xml, ReadContext& ctx);
-    static void read(TremoloBar* b, XmlReader& xml, ReadContext& ctx);
     static void read(Sticking* s, XmlReader& xml, ReadContext& ctx);
     static void read(SystemText* t, XmlReader& xml, ReadContext& ctx);
     static void read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx);
@@ -116,12 +133,33 @@ public:
     static void read(VBox* b, XmlReader& xml, ReadContext& ctx);
     static void read(FBox* b, XmlReader& xml, ReadContext& ctx);
     static void read(TBox* b, XmlReader& xml, ReadContext& ctx);
+    static void read(Bracket* b, XmlReader& xml, ReadContext& ctx);
+    static void read(Breath* b, XmlReader& xml, ReadContext& ctx);
+    static void read(Symbol* sym, XmlReader& xml, ReadContext& ctx);
+    static void read(FSymbol* sym, XmlReader& xml, ReadContext& ctx);
+    static void read(Chord* ch, XmlReader& xml, ReadContext& ctx);
+    static void read(ChordLine* l, XmlReader& xml, ReadContext& ctx);
+    static void read(Fingering* f, XmlReader& xml, ReadContext& ctx);
+    static void read(Hook* h, XmlReader& xml, ReadContext& ctx);
+    static void read(Lyrics* l, XmlReader& xml, ReadContext& ctx);
+    static void read(Note* n, XmlReader& xml, ReadContext& ctx);
+    static void read(NoteDot* d, XmlReader& xml, ReadContext& ctx);
+    static void read(Stem* s, XmlReader& xml, ReadContext& ctx);
+    static void read(StemSlash* s, XmlReader& xml, ReadContext& ctx);
+    static void read(Tremolo* t, XmlReader& xml, ReadContext& ctx);
+    static void read(TremoloBar* b, XmlReader& xml, ReadContext& ctx);
 
     // temp compat
     static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Articulation* a, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Box* b, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(MeasureBase* b, XmlReader& xml, ReadContext& ctx);
+    static bool readProperties(BSymbol* sym, XmlReader& xml, ReadContext& ctx);
+    static bool readProperties(Chord* ch, XmlReader& xml, ReadContext& ctx);
+    static bool readProperties(ChordRest* ch, XmlReader& xml, ReadContext& ctx);
+    static bool readProperties(Lyrics* l, XmlReader& xml, ReadContext& ctx);
+    static bool readProperties(Note* n, XmlReader& xml, ReadContext& ctx);
+    static bool readProperties(Stem* s, XmlReader& e, ReadContext& ctx);
 };
 }
 

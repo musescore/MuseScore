@@ -24,6 +24,7 @@
 
 #include "draw/types/brush.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "types/typesconv.h"
 
 #include "bracketItem.h"
@@ -601,15 +602,6 @@ void Bracket::write(XmlWriter& xml) const
 
 void Bracket::read(XmlReader& e)
 {
-    _bi = Factory::createBracketItem(score()->dummy());
-    _bi->setBracketType(TConv::fromXml(e.asciiAttribute("type"), BracketType::NORMAL));
-
-    while (e.readNextStartElement()) {
-        if (e.name() == "level") {
-            _bi->setColumn(e.readInt());
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 }

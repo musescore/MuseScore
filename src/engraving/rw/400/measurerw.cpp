@@ -59,18 +59,14 @@
 #include "../libmscore/tempotext.h"
 #include "../libmscore/image.h"
 
-#include "barlinerw.h"
 #include "locationrw.h"
-#include "chordrw.h"
 #include "mmrestrw.h"
 #include "restrw.h"
-#include "breathrw.h"
 #include "measurerepeatrw.h"
 #include "clefrw.h"
 #include "timesigrw.h"
 #include "keysigrw.h"
 #include "tread.h"
-#include "symbolrw.h"
 
 #include "log.h"
 
@@ -128,7 +124,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
         } else if (tag == "Marker" || tag == "Jump") {
             EngravingItem* el = Factory::createItemByName(tag, measure);
             el->setTrack(ctx.track());
-            TRead::read(el, e, ctx);
+            TRead::readItem(el, e, ctx);
             if (el->systemFlag() && el->isTopSystemObject()) {
                 el->setTrack(0); // original system object always goes on top
             }
@@ -245,7 +241,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "BarLine") {
             BarLine* barLine = Factory::createBarLine(ctx.dummy()->segment());
             barLine->setTrack(ctx.track());
-            BarLineRW::read(barLine, e, ctx);
+            TRead::read(barLine, e, ctx);
             //
             //  StartRepeatBarLine: at rtick == 0, always BarLineType::START_REPEAT
             //  BarLine:            in the middle of a measure, has no semantic
@@ -279,7 +275,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "Chord") {
             Chord* chord = Factory::createChord(ctx.dummy()->segment());
             chord->setTrack(ctx.track());
-            ChordRW::read(chord, e, ctx);
+            TRead::read(chord, e, ctx);
             if (startingBeam) {
                 startingBeam->add(chord);         // also calls chord->setBeam(startingBeam)
                 startingBeam = nullptr;
@@ -347,7 +343,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             Breath* breath = Factory::createBreath(segment);
             breath->setTrack(ctx.track());
             breath->setPlacement(breath->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
-            BreathRW::read(breath, e, ctx);
+            TRead::read(breath, e, ctx);
             segment->add(breath);
         } else if (tag == "Spanner") {
             Spanner::readSpanner(e, measure, ctx.track());
@@ -493,7 +489,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             Symbol* el = Factory::createSymbol(segment);
 
             el->setTrack(ctx.track());
-            SymbolRW::read(el, e, ctx);
+            TRead::read(el, e, ctx);
             if (el->systemFlag() && el->isTopSystemObject()) {
                 el->setTrack(0); // original system object always goes on top
             }
@@ -536,7 +532,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             EngravingItem* el = Factory::createItemByName(tag, segment);
 
             el->setTrack(ctx.track());
-            TRead::read(el, e, ctx);
+            TRead::readItem(el, e, ctx);
             if (el->systemFlag() && el->isTopSystemObject()) {
                 el->setTrack(0); // original system object always goes on top
             }

@@ -23,7 +23,7 @@
 #include "notedot.h"
 
 #include "rw/xml.h"
-#include "rw/400/notedotrw.h"
+#include "rw/400/tread.h"
 
 #include "chord.h"
 #include "note.h"
@@ -94,7 +94,7 @@ EngravingItem* NoteDot::elementBase() const
 
 void NoteDot::read(XmlReader& e)
 {
-    rw400::NoteDotRW::read(this, e, *e.context());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

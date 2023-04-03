@@ -29,7 +29,7 @@
 #include "draw/types/transform.h"
 #include "draw/svgrenderer.h"
 #include "rw/xml.h"
-#include "rw/400/imagerw.h"
+#include "rw/400/tread.h"
 
 #include "imageStore.h"
 #include "masterscore.h"
@@ -345,7 +345,7 @@ void Image::write(XmlWriter& xml) const
 
 void Image::read(XmlReader& e)
 {
-    rw400::ImageRW::read(this, e, *e.context());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 bool Image::load()
