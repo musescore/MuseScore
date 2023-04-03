@@ -125,6 +125,8 @@ public:
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
 
+    static const std::array<Pid, 26>& textLineBasePropertyIds();
+
 protected:
     friend class TextLineBaseSegment;
 };

@@ -82,7 +82,9 @@
 #include "../../libmscore/tremolo.h"
 #include "../../libmscore/clef.h"
 #include "../../libmscore/glissando.h"
+#include "../../libmscore/gradualtempochange.h"
 #include "../../libmscore/line.h"
+#include "../../libmscore/textlinebase.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -1724,6 +1726,34 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
     }
 }
 
+void TRead::read(GradualTempoChange* c, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+
+        if (PropertyRW::readProperty(c, tag, xml, ctx, Pid::LINE_WIDTH)) {
+            c->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
+            continue;
+        }
+
+        if (PropertyRW::readProperty(c, tag, xml, ctx, Pid::TEMPO_CHANGE_TYPE)) {
+            continue;
+        }
+
+        if (PropertyRW::readProperty(c, tag, xml, ctx, Pid::TEMPO_EASING_METHOD)) {
+            continue;
+        }
+
+        if (PropertyRW::readProperty(c, tag, xml, ctx, Pid::TEMPO_CHANGE_FACTOR)) {
+            continue;
+        }
+
+        if (!readProperties(static_cast<TextLineBase*>(c), xml, ctx)) {
+            xml.unknown();
+        }
+    }
+}
+
 void TRead::read(Hook* h, XmlReader& xml, ReadContext& ctx)
 {
     TRead::read(static_cast<Symbol*>(h), xml, ctx);
@@ -2022,4 +2052,16 @@ void TRead::read(Tremolo* t, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+}
+
+bool TRead::readProperties(TextLineBase* b, XmlReader& e, ReadContext& ctx)
+{
+    const AsciiStringView tag(e.name());
+    for (Pid i : TextLineBase::textLineBasePropertyIds()) {
+        if (PropertyRW::readProperty(b, tag, e, ctx, i)) {
+            b->setPropertyFlags(i, PropertyFlags::UNSTYLED);
+            return true;
+        }
+    }
+    return readProperties(static_cast<SLine*>(b), e, ctx);
 }
