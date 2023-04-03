@@ -55,7 +55,8 @@ bool DockFrameModel::eventFilter(QObject* watched, QEvent* event)
         return QObject::eventFilter(watched, event);
     }
 
-    if (propertyChangeEvent->propertyName() == CONTEXT_MENU_MODEL_PROPERTY) {
+    if (propertyChangeEvent->propertyName() == CONTEXT_MENU_MODEL_PROPERTY
+        || propertyChangeEvent->propertyName() == TOOLBAR_COMPONENT_PROPERTY) {
         emit tabsChanged();
 
         if (watched == currentDockWidget()) {
@@ -87,6 +88,7 @@ QVariantList DockFrameModel::tabs() const
         QVariantMap tab;
         tab["title"] = dock->title();
         tab[CONTEXT_MENU_MODEL_PROPERTY] = dock->property(CONTEXT_MENU_MODEL_PROPERTY);
+        tab[TOOLBAR_COMPONENT_PROPERTY] = dock->property(TOOLBAR_COMPONENT_PROPERTY);
 
         result << tab;
     }
@@ -224,6 +226,11 @@ QString DockFrameModel::currentDockUniqueName() const
 QVariant DockFrameModel::currentDockContextMenuModel() const
 {
     return currentDockProperty(CONTEXT_MENU_MODEL_PROPERTY);
+}
+
+QVariant DockFrameModel::currentDockToolbarComponent() const
+{
+    return currentDockProperty(TOOLBAR_COMPONENT_PROPERTY);
 }
 
 bool DockFrameModel::highlightingVisible() const

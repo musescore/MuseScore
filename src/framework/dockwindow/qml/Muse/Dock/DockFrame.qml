@@ -116,6 +116,8 @@ Rectangle {
         tabsModel: frameModel.tabs
         currentIndex: Boolean(root.frameCpp) && root.frameCpp.currentIndex >= 0 ? root.frameCpp.currentIndex : 0
 
+        currentToolbarComponent: frameModel.currentDockToolbarComponent
+
         navigationPanel: navPanel
 
         function setCurrentDockWidget(index: int) {

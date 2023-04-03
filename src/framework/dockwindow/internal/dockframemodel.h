@@ -47,6 +47,7 @@ class DockFrameModel : public QObject, public muse::Injectable
     Q_PROPERTY(QObject * navigationSection READ navigationSection NOTIFY navigationSectionChanged)
     Q_PROPERTY(QString currentDockUniqueName READ currentDockUniqueName NOTIFY currentDockChanged)
     Q_PROPERTY(QVariant currentDockContextMenuModel READ currentDockContextMenuModel NOTIFY currentDockChanged)
+    Q_PROPERTY(QVariant currentDockToolbarComponent READ currentDockToolbarComponent NOTIFY currentDockChanged)
 
     Q_PROPERTY(bool highlightingVisible READ highlightingVisible NOTIFY highlightingVisibleChanged)
     Q_PROPERTY(QRect highlightingRect READ highlightingRect NOTIFY highlightingVisibleChanged)
@@ -65,6 +66,7 @@ public:
     QObject* navigationSection() const;
     QString currentDockUniqueName() const;
     QVariant currentDockContextMenuModel() const;
+    QVariant currentDockToolbarComponent() const;
 
     bool highlightingVisible() const;
     QRect highlightingRect() const;

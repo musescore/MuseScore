@@ -34,6 +34,10 @@ ColumnLayout {
     id: root
 
     property alias contextMenuModel: contextMenuModel
+    property Component toolbarComponent: MixerPanelToolbar {
+        navigation.section: root.navigationSection
+        navigation.order: 1
+    }
 
     property NavigationSection navigationSection: null
     property NavigationPanel navigationPanel: mixerPanelModel.count > 0 ? mixerPanelModel.get(0).channelItem.panel : null // first panel
