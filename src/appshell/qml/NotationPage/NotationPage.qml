@@ -328,6 +328,7 @@ DockPage {
 
                 Component.onCompleted: {
                     mixerPanel.contextMenuModel = contextMenuModel
+                    mixerPanel.toolbarComponent = toolbarComponent
                 }
 
                 onResizeRequested: function(newWidth, newHeight) {

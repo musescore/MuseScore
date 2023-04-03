@@ -164,6 +164,7 @@ DockPanelView::~DockPanelView()
 
     dockWidget->setProperty(DOCK_PANEL_PROPERTY, QVariant::fromValue(nullptr));
     dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(nullptr));
+    dockWidget->setProperty(TOOLBAR_COMPONENT_PROPERTY, QVariant::fromValue(nullptr));
 }
 
 QString DockPanelView::groupName() const
@@ -194,10 +195,17 @@ void DockPanelView::componentComplete()
 
     dockWidget->setProperty(DOCK_PANEL_PROPERTY, QVariant::fromValue(this));
     dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(m_menuModel));
+    dockWidget->setProperty(TOOLBAR_COMPONENT_PROPERTY, QVariant::fromValue(m_toolbarComponent));
 
     connect(m_menuModel, &AbstractMenuModel::itemsChanged, [dockWidget, this]() {
         if (dockWidget) {
             dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(m_menuModel));
+        }
+    });
+
+    connect(this, &DockPanelView::toolbarComponentChanged, this, [this, dockWidget]() {
+        if (dockWidget) {
+            dockWidget->setProperty(TOOLBAR_COMPONENT_PROPERTY, QVariant::fromValue(m_toolbarComponent));
         }
     });
 }
@@ -222,6 +230,11 @@ AbstractMenuModel* DockPanelView::contextMenuModel() const
     return m_menuModel->customMenuModel();
 }
 
+QQmlComponent* DockPanelView::toolbarComponent() const
+{
+    return m_toolbarComponent;
+}
+
 void DockPanelView::setContextMenuModel(AbstractMenuModel* model)
 {
     if (m_menuModel->customMenuModel() == model) {
@@ -231,6 +244,16 @@ void DockPanelView::setContextMenuModel(AbstractMenuModel* model)
     m_menuModel->setCustomMenuModel(model);
     m_menuModel->load();
     emit contextMenuModelChanged();
+}
+
+void DockPanelView::setToolbarComponent(QQmlComponent* component)
+{
+    if (m_toolbarComponent == component) {
+        return;
+    }
+
+    m_toolbarComponent = component;
+    emit toolbarComponentChanged();
 }
 
 bool DockPanelView::isTabAllowed(const DockPanelView* tab) const
