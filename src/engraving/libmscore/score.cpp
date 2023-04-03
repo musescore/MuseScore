@@ -701,7 +701,13 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                     if (tt->isRelative()) {
                         tt->updateRelative();
                     }
-                    tempomap()->setTempo(tt->segment()->tick().ticks(), tt->tempo());
+
+                    int ticks = tt->segment()->tick().ticks();
+                    BeatsPerSecond tempo = tt->isRestorePrevious()
+                            ? tempomap()->tempo(ticks)
+                            : tt->tempo();
+                            
+                    tempomap()->setTempo(ticks, tempo);
                 }
             }
             if (stretch != 0.0 && stretch != 1.0) {
