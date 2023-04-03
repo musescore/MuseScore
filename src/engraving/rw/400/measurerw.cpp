@@ -63,9 +63,7 @@
 #include "mmrestrw.h"
 #include "restrw.h"
 #include "measurerepeatrw.h"
-#include "clefrw.h"
 #include "timesigrw.h"
-#include "keysigrw.h"
 #include "tread.h"
 
 #include "log.h"
@@ -384,7 +382,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             segment = measure->getSegment(header ? SegmentType::HeaderClef : SegmentType::Clef, ctx.tick());
             Clef* clef = Factory::createClef(segment);
             clef->setTrack(ctx.track());
-            ClefRW::read(clef, e, ctx);
+            TRead::read(clef, e, ctx);
             clef->setGenerated(false);
 
             segment->add(clef);
@@ -418,7 +416,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "KeySig") {
             KeySig* ks = Factory::createKeySig(ctx.dummy()->segment());
             ks->setTrack(ctx.track());
-            KeySigRW::read(ks, e, ctx);
+            TRead::read(ks, e, ctx);
             Fraction curTick = ctx.tick();
             // if key sig not at beginning of measure => courtesy key sig
             bool courtesySig = (curTick == measure->endTick());
