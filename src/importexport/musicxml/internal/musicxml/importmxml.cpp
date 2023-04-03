@@ -83,6 +83,7 @@ Err importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* d
     for (const Part* part : score->parts()) {
         for (const auto& pair : part->instruments()) {
             pair.second->updateInstrumentId();
+            pair.second->updateNamesForAccidentals();
         }
     }
 

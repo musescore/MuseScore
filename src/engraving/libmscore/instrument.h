@@ -66,6 +66,8 @@ public:
     void setPos(int p) { _pos = p; }
     String name() const { return _name; }
     void setName(const String& n) { _name = n; }
+
+    void xmlReplaceAccidentals();
 };
 
 //---------------------------------------------------------
@@ -425,6 +427,7 @@ public:
     void setIsPrimary(bool isPrimary);
 
     void updateInstrumentId();
+    void updateNamesForAccidentals();
 
     bool singleNoteDynamics() const { return _singleNoteDynamics; }
     void setSingleNoteDynamics(bool val) { _singleNoteDynamics = val; }
