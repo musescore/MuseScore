@@ -63,10 +63,17 @@ TempoText::TempoText(Segment* parent)
     : TextBase(ElementType::TEMPO_TEXT, parent, TextStyleType::TEMPO, ElementFlag::SYSTEM | ElementFlag::ON_STAFF)
 {
     initElementStyle(&tempoStyle);
-    _tempo      = 2.0;        // propertyDefault(P_TEMPO).toDouble();
-    _followText = false;
-    _relative   = 1.0;
-    _isRelative = false;
+    _tempoTextType  = TempoTextType::NORMAL;
+    _tempo          = 2.0;        // propertyDefault(P_TEMPO).toDouble();
+    _followText     = false;
+    _relative       = 1.0;
+    _isRelative     = false;
+}
+
+void TempoText::setTempoTextType(TempoTextType ttt)
+{
+    _tempoTextType = ttt;
+    score()->setUpTempoMapLater();
 }
 
 double TempoText::tempoBpm() const
