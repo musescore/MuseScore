@@ -60,16 +60,6 @@ void LearnPageModel::load()
     });
 }
 
-void LearnPageModel::openVideo(const QString& videoId) const
-{
-    learnService()->openVideo(videoId);
-}
-
-void LearnPageModel::openUrl(const QString& url) const
-{
-    interactive()->openUrl(QUrl(url));
-}
-
 void LearnPageModel::setSearchText(const QString& text)
 {
     if (m_searchText == text) {
@@ -150,9 +140,9 @@ QVariantList LearnPageModel::playlistToVariantList(const Playlist& playlist) con
 
     for (const PlaylistItem& item : playlist) {
         QVariantMap itemObj;
-        itemObj["videoId"] = item.videoId;
         itemObj["title"] = item.title;
         itemObj["author"] = item.author;
+        itemObj["url"] = item.url;
         itemObj["thumbnailUrl"] = item.thumbnailUrl;
         itemObj["duration"] = formatDuration(item.durationSecs);
 

@@ -210,10 +210,6 @@ FocusScope {
 
             backgroundColor: root.color
             sideMargin: prv.sideMargin
-
-            onRequestOpenVideo: function(videoId) {
-                pageModel.openVideo(videoId)
-            }
         }
 
 
@@ -231,10 +227,6 @@ FocusScope {
 
             backgroundColor: root.color
             sideMargin: prv.sideMargin
-
-            onRequestOpenVideo: function(videoId) {
-                pageModel.openVideo(videoId)
-            }
         }
         */
 
@@ -256,10 +248,6 @@ FocusScope {
             navigation.accessible.name: qsTrc("learn", "Classes") + navigation.directionInfo
 
             sideMargin: prv.sideMargin
-
-            onRequestOpenOrganizationUrl: {
-                pageModel.openUrl(author.organizationUrl)
-            }
         }
     }
 }

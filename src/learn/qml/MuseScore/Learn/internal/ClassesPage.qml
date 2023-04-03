@@ -36,13 +36,10 @@ FocusScope {
     property string authorDescription: ""
     property string authorOrganizationName: ""
     property string authorAvatarUrl: ""
+    property string authorArganizationUrl: ""
 
     property alias navigation: navPanel
     property int sideMargin: 46
-
-    signal requestOpenVideo(string videoId)
-
-    signal requestOpenOrganizationUrl()
 
     NavigationPanel {
         id: navPanel
@@ -197,7 +194,7 @@ FocusScope {
                 }
 
                 onClicked: {
-                    root.requestOpenOrganizationUrl()
+                    api.launcher.openUrl(root.authorArganizationUrl)
                 }
             }
         }
