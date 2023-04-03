@@ -56,7 +56,7 @@ void MacOSPlatformTheme::stopListening()
 
 bool MacOSPlatformTheme::isFollowSystemThemeAvailable() const
 {
-    // Supported from macOS 10.14, which is our minimum supported version
+    // Supported from macOS 10.14, while our minimum supported version is 10.15
     return true;
 }
 
