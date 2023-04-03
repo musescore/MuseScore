@@ -23,7 +23,7 @@
 #include "bend.h"
 
 #include "rw/xml.h"
-#include "rw/400/bendrw.h"
+#include "rw/400/tread.h"
 
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
@@ -375,7 +375,7 @@ void Bend::write(XmlWriter& xml) const
 
 void Bend::read(XmlReader& e)
 {
-    rw400::BendRW::read(this, e, *e.context());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

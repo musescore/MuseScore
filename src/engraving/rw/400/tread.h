@@ -44,7 +44,6 @@ class FiguredBass;
 class Fermata;
 class Image;
 class Tuplet;
-class Beam;
 class Ambitus;
 class Accidental;
 class Marker;
@@ -54,6 +53,19 @@ class MeasureNumberBase;
 class MMRestRange;
 class SystemDivider;
 class ActionIcon;
+class Arpeggio;
+class Articulation;
+class Audio;
+class BagpipeEmbellishment;
+class BarLine;
+class Beam;
+class Bend;
+class Box;
+class HBox;
+class VBox;
+class FBox;
+class TBox;
+class MeasureBase;
 }
 
 namespace mu::engraving::rw400 {
@@ -62,13 +74,13 @@ class TRead
 public:
     TRead() = default;
 
-    static void read(EngravingItem* el, XmlReader& xml, ReadContext& ctx); // factory
+    static void read(EngravingItem* el, XmlReader& xml, ReadContext& ctx);  // factory
+    static void read(MeasureBase* b, XmlReader& xml, ReadContext& ctx);     // factory
 
     static void read(TextBase* t, XmlReader& xml, ReadContext& ctx);
     static void read(TempoText* t, XmlReader& xml, ReadContext& ctx);
     static void read(StaffText* t, XmlReader& xml, ReadContext& ctx);
     static void read(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
-    static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
     static void read(Dynamic* d, XmlReader& xml, ReadContext& ctx);
     static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
     static void read(FretDiagram* d, XmlReader& xml, ReadContext& ctx);
@@ -83,7 +95,6 @@ public:
     static void read(Fermata* f, XmlReader& xml, ReadContext& ctx);
     static void read(Image* i, XmlReader& xml, ReadContext& ctx);
     static void read(Tuplet* t, XmlReader& xml, ReadContext& ctx);
-    static void read(Beam* b, XmlReader& xml, ReadContext& ctx);
     static void read(Ambitus* a, XmlReader& xml, ReadContext& ctx);
     static void read(Accidental* a, XmlReader& xml, ReadContext& ctx);
     static void read(Marker* m, XmlReader& xml, ReadContext& ctx);
@@ -93,6 +104,24 @@ public:
     static void read(MMRestRange* r, XmlReader& xml, ReadContext& ctx);
     static void read(SystemDivider* d, XmlReader& xml, ReadContext& ctx);
     static void read(ActionIcon* i, XmlReader& xml, ReadContext& ctx);
+    static void read(Arpeggio* a, XmlReader& xml, ReadContext& ctx);
+    static void read(Articulation* a, XmlReader& xml, ReadContext& ctx);
+    static void read(Audio* a, XmlReader& xml, ReadContext& ctx);
+    static void read(BagpipeEmbellishment* b, XmlReader& xml, ReadContext& ctx);
+    static void read(BarLine* l, XmlReader& xml, ReadContext& ctx);
+    static void read(Beam* b, XmlReader& xml, ReadContext& ctx);
+    static void read(Bend* b, XmlReader& xml, ReadContext& ctx);
+    static void read(Box* b, XmlReader& xml, ReadContext& ctx);
+    static void read(HBox* b, XmlReader& xml, ReadContext& ctx);
+    static void read(VBox* b, XmlReader& xml, ReadContext& ctx);
+    static void read(FBox* b, XmlReader& xml, ReadContext& ctx);
+    static void read(TBox* b, XmlReader& xml, ReadContext& ctx);
+
+    // temp compat
+    static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
+    static bool readProperties(Articulation* a, XmlReader& xml, ReadContext& ctx);
+    static bool readProperties(Box* b, XmlReader& xml, ReadContext& ctx);
+    static bool readProperties(MeasureBase* b, XmlReader& xml, ReadContext& ctx);
 };
 }
 

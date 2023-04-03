@@ -25,7 +25,7 @@
 #include "draw/fontmetrics.h"
 #include "rw/206/read206.h"
 #include "rw/xml.h"
-#include "rw/400/articulationrw.h"
+#include "rw/400/tread.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
 #include "types/translatablestring.h"
@@ -151,12 +151,12 @@ void Articulation::setUp(bool val)
 
 void Articulation::read(XmlReader& e)
 {
-    rw400::ArticulationRW::read(this, e, *e.context());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 bool Articulation::readProperties(XmlReader& e)
 {
-    return rw400::ArticulationRW::readProperties(this, e, *e.context());
+    return rw400::TRead::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------
