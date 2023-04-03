@@ -95,8 +95,8 @@ private:
 };
 } //namespace mu::notation
 
-#endif // MU_NOTATION_HARPPEDALPOPUPMODEL_H
-
 #ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::notation::HarpPedalPopupModel::Position)
 #endif
+
+#endif // MU_NOTATION_HARPPEDALPOPUPMODEL_H
