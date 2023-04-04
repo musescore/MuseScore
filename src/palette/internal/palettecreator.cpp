@@ -1492,6 +1492,12 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
         sp->appendElement(item, pair.second, 1.3)->yoffset = 0.4;
     }
 
+    auto aTempoTxt = makeElement<TempoText>(gpaletteScore);
+    aTempoTxt->setFollowText(false);
+    aTempoTxt->setXmlText("a tempo");
+    aTempoTxt->setRestorePrevious();
+    sp->appendElement(aTempoTxt, "a tempo", 1.3);
+
     auto stxt = makeElement<SystemText>(gpaletteScore);
     stxt->setTextStyleType(TextStyleType::TEMPO);
     stxt->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Swing")));
