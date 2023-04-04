@@ -102,6 +102,7 @@
 #include "../../libmscore/system.h"
 #include "../../libmscore/textline.h"
 #include "../../libmscore/trill.h"
+#include "../../libmscore/vibrato.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -2908,6 +2909,22 @@ void TRead::read(Trill* t, XmlReader& e, ReadContext& ctx)
         } else if (tag == "play") {
             t->setPlayArticulation(e.readBool());
         } else if (!readProperties(static_cast<SLine*>(t), e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(Vibrato* v, XmlReader& e, ReadContext&)
+{
+    v->eraseSpannerSegments();
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "subtype") {
+            v->setVibratoType(TConv::fromXml(e.readAsciiText(), VibratoType::GUITAR_VIBRATO));
+        } else if (tag == "play") {
+            v->setPlayArticulation(e.readBool());
+        } else if (!readProperties(static_cast<SLine*>(v), e, *e.context())) {
             e.unknown();
         }
     }

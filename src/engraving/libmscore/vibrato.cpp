@@ -25,6 +25,7 @@
 
 #include "types/typesconv.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "iengravingfont.h"
 
 #include "score.h"
@@ -239,18 +240,7 @@ void Vibrato::write(XmlWriter& xml) const
 
 void Vibrato::read(XmlReader& e)
 {
-    eraseSpannerSegments();
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "subtype") {
-            setVibratoType(TConv::fromXml(e.readAsciiText(), VibratoType::GUITAR_VIBRATO));
-        } else if (tag == "play") {
-            setPlayArticulation(e.readBool());
-        } else if (!SLine::readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

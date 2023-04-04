@@ -24,6 +24,7 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "style/textstyle.h"
 #include "types/typesconv.h"
 
@@ -854,15 +855,7 @@ void Tuplet::write(XmlWriter& xml) const
 
 void Tuplet::read(XmlReader& e)
 {
-    _id = e.intAttribute("id", 0);
-    while (e.readNextStartElement()) {
-        if (readProperties(e)) {
-        } else {
-            e.unknown();
-        }
-    }
-    Fraction f = _baseLen.fraction() * _ratio.denominator();
-    setTicks(f.reduced());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

@@ -39,7 +39,6 @@ class InstrumentChange;
 class FiguredBass;
 class Fermata;
 class Image;
-class Tuplet;
 class Ambitus;
 class Accidental;
 class Jump;
@@ -108,6 +107,8 @@ class TimeSig;
 class Tremolo;
 class TremoloBar;
 class Trill;
+class Tuplet;
+class Vibrato;
 }
 
 namespace mu::engraving::rw400 {
@@ -130,7 +131,6 @@ public:
     static void read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx);
     static void read(RehearsalMark* m, XmlReader& xml, ReadContext& ctx);
     static void read(Image* i, XmlReader& xml, ReadContext& ctx);
-    static void read(Tuplet* t, XmlReader& xml, ReadContext& ctx);
     static void read(Ambitus* a, XmlReader& xml, ReadContext& ctx);
     static void read(Accidental* a, XmlReader& xml, ReadContext& ctx);
     static void read(Jump* j, XmlReader& xml, ReadContext& ctx);
@@ -199,6 +199,8 @@ public:
     static void read(Tremolo* t, XmlReader& xml, ReadContext& ctx);
     static void read(TremoloBar* b, XmlReader& xml, ReadContext& ctx);
     static void read(Trill* t, XmlReader& xml, ReadContext& ctx);
+    static void read(Tuplet* t, XmlReader& xml, ReadContext& ctx);
+    static void read(Vibrato* v, XmlReader& xml, ReadContext& ctx);
 
     // temp compat
     static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
