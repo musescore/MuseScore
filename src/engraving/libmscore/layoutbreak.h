@@ -70,6 +70,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
+    void layout0();
+
 protected:
     void added() override;
     void removed() override;
@@ -81,7 +83,7 @@ private:
     LayoutBreak(const LayoutBreak&);
 
     void draw(mu::draw::Painter*) const override;
-    void layout0();
+
     void spatiumChanged(double oldValue, double newValue) override;
 
     double lw;

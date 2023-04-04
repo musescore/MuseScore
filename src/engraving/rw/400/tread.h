@@ -80,6 +80,7 @@ class Groups;
 class Hairpin;
 class Hook;
 class KeySig;
+class LayoutBreak;
 class Lyrics;
 class MeasureBase;
 class Note;
@@ -156,6 +157,7 @@ public:
     static void read(Hook* h, XmlReader& xml, ReadContext& ctx);
     static void read(InstrumentChange* c, XmlReader& xml, ReadContext& ctx);
     static void read(KeySig* s, XmlReader& xml, ReadContext& ctx);
+    static void read(LayoutBreak* b, XmlReader& xml, ReadContext& ctx);
     static void read(Lyrics* l, XmlReader& xml, ReadContext& ctx);
     static void read(Note* n, XmlReader& xml, ReadContext& ctx);
     static void read(NoteDot* d, XmlReader& xml, ReadContext& ctx);
