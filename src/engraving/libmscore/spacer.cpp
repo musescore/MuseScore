@@ -24,6 +24,7 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 
 #include "measure.h"
 #include "score.h"
@@ -208,17 +209,7 @@ void Spacer::write(XmlWriter& xml) const
 
 void Spacer::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "subtype") {
-            _spacerType = SpacerType(e.readInt());
-        } else if (tag == "space") {
-            _gap = e.readDouble() * spatium();
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    layout0();
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

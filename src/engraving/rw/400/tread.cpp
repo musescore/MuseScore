@@ -96,6 +96,7 @@
 #include "../../libmscore/rest.h"
 #include "../../libmscore/slur.h"
 #include "../../libmscore/slurtie.h"
+#include "../../libmscore/spacer.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -2489,6 +2490,21 @@ bool TRead::readProperties(Spanner* s, XmlReader& e, ReadContext& ctx)
         }
     }
     return EngravingItemRW::readProperties(s, e, ctx);
+}
+
+void TRead::read(Spacer* s, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "subtype") {
+            s->setSpacerType(SpacerType(e.readInt()));
+        } else if (tag == "space") {
+            s->setGap(Millimetre(e.readDouble() * s->spatium()));
+        } else if (!EngravingItemRW::readProperties(s, e, ctx)) {
+            e.unknown();
+        }
+    }
+    s->layout0();
 }
 
 void TRead::read(Stem* s, XmlReader& e, ReadContext& ctx)
