@@ -102,6 +102,7 @@ class Stem;
 class StemSlash;
 class System;
 class SystemDivider;
+class TextLine;
 class TextLineBase;
 class TimeSig;
 class Tremolo;
@@ -191,6 +192,8 @@ public:
     static void read(StemSlash* s, XmlReader& xml, ReadContext& ctx);
     static void read(System* s, XmlReader& xml, ReadContext& ctx);
     static void read(SystemDivider* d, XmlReader& xml, ReadContext& ctx);
+    static void read(TextLine* l, XmlReader& xml, ReadContext& ctx);
+    static void read(TextLineBase* b, XmlReader& xml, ReadContext& ctx);
     static void read(TimeSig* s, XmlReader& xml, ReadContext& ctx);
     static void read(Tremolo* t, XmlReader& xml, ReadContext& ctx);
     static void read(TremoloBar* b, XmlReader& xml, ReadContext& ctx);
