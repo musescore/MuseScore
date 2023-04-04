@@ -103,6 +103,7 @@
 #include "../../libmscore/textline.h"
 #include "../../libmscore/trill.h"
 #include "../../libmscore/vibrato.h"
+#include "../../libmscore/volta.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -2928,4 +2929,34 @@ void TRead::read(Vibrato* v, XmlReader& e, ReadContext&)
             e.unknown();
         }
     }
+}
+
+void TRead::read(Volta* v, XmlReader& e, ReadContext& ctx)
+{
+    v->eraseSpannerSegments();
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "endings") {
+            v->setEndings(TConv::fromXml(e.readText(), std::vector<int>()));
+        } else if (PropertyRW::readStyledProperty(v, tag, e, ctx)) {
+        } else if (!readProperties(v, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
+bool TRead::readProperties(Volta* v, XmlReader& e, ReadContext& ctx)
+{
+    if (!readProperties(static_cast<TextLineBase*>(v), e, ctx)) {
+        return false;
+    }
+
+    if (v->anchor() != Volta::VOLTA_ANCHOR) {
+        // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
+        LOGW("Correcting volta anchor type from %d to %d", int(v->anchor()), int(Volta::VOLTA_ANCHOR));
+        v->setAnchor(Volta::VOLTA_ANCHOR);
+    }
+
+    return true;
 }

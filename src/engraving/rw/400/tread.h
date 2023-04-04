@@ -109,6 +109,7 @@ class TremoloBar;
 class Trill;
 class Tuplet;
 class Vibrato;
+class Volta;
 }
 
 namespace mu::engraving::rw400 {
@@ -201,6 +202,7 @@ public:
     static void read(Trill* t, XmlReader& xml, ReadContext& ctx);
     static void read(Tuplet* t, XmlReader& xml, ReadContext& ctx);
     static void read(Vibrato* v, XmlReader& xml, ReadContext& ctx);
+    static void read(Volta* v, XmlReader& xml, ReadContext& ctx);
 
     // temp compat
     static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
@@ -223,6 +225,7 @@ public:
     static bool readProperties(Stem* s, XmlReader& e, ReadContext& ctx);
     static bool readProperties(TextBase* t, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(TextLineBase* b, XmlReader& e, ReadContext& ctx);
+    static bool readProperties(Volta* v, XmlReader& e, ReadContext& ctx);
 };
 }
 
