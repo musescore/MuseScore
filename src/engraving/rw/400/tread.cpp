@@ -88,6 +88,8 @@
 #include "../../libmscore/groups.h"
 #include "../../libmscore/hairpin.h"
 #include "../../libmscore/keysig.h"
+#include "../../libmscore/layoutbreak.h"
+#include "../../libmscore/ledgerline.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -2005,6 +2007,31 @@ void TRead::read(LayoutBreak* b, XmlReader& e, ReadContext& ctx)
         }
     }
     b->layout0();
+}
+
+void TRead::read(LedgerLine* l, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        if (!readProperties(l, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
+bool TRead::readProperties(LedgerLine* l, XmlReader& e, ReadContext&)
+{
+    const AsciiStringView tag(e.name());
+
+    if (tag == "lineWidth") {
+        l->setLineWidth(e.readDouble() * l->spatium());
+    } else if (tag == "lineLen") {
+        l->setLen(e.readDouble() * l->spatium());
+    } else if (tag == "vertical") {
+        l->setVertical(e.readInt());
+    } else {
+        return false;
+    }
+    return true;
 }
 
 void TRead::read(Lyrics* l, XmlReader& e, ReadContext& ctx)
