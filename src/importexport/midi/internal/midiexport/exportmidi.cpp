@@ -305,20 +305,6 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                     if (event.isMuted()) {
                         continue;
                     }
-                    if (event.discard() == staffIdx + 1 && event.velo() > 0) {
-                        // turn note off so we can restrike it in another track
-                        track.insert(m_pauseMap.addPauseTicks(i->first), MidiEvent(ME_NOTEON, channel,
-                                                                                   event.pitch(), 0));
-                    }
-
-                    if (event.getOriginatingStaff() != staffIdx) {
-                        continue;
-                    }
-
-                    if (event.discard() && event.velo() == 0) {
-                        // ignore noteoff but restrike noteon
-                        continue;
-                    }
 
                     if (!exportRPNs && event.type() == ME_CONTROLLER && event.portamento()) {
                         // ignore portamento control events if exportRPN isn't switched on

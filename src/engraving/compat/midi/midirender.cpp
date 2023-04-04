@@ -201,7 +201,6 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
     }
 
     NPlayEvent ev(ME_NOTEON, params.channel, params.pitch, params.velo);
-    ev.setOriginatingStaff(params.staffIdx);
     ev.setTuning(note->tuning());
     ev.setNote(note);
     ev.setEffect(params.effect);
@@ -486,7 +485,6 @@ static void collectProgramChanges(EventMap* events, Measure const* m, const Staf
                     for (MidiCoreEvent event : nel->events) {
                         event.setChannel(channel);
                         NPlayEvent e1(event);
-                        e1.setOriginatingStaff(firstStaffIdx);
                         if (e1.dataA() == CTRL_PROGRAM) {
                             events->insert(std::pair<int, NPlayEvent>(tick.ticks() - 1, e1));
                         } else {
@@ -544,7 +542,6 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
     int onTime = h->tick().ticks() + tickOffset;
     int offTime = onTime + duration.ticks();
 
-    ev.setOriginatingStaff(staffIdx);
     ev.setTuning(0.0);
 
     //add play events
@@ -961,7 +958,6 @@ void MidiRenderer::doRenderSpanners(EventMap* events, Spanner* s, uint32_t chann
         } else {
             event = NPlayEvent(ME_CONTROLLER, static_cast<uint8_t>(channel), CTRL_SUSTAIN, 0);
         }
-        event.setOriginatingStaff(pe.second.second);
         event.setEffect(effect);
         events->insert(std::pair<int, NPlayEvent>(pe.first, event));
     }
@@ -1151,7 +1147,6 @@ void MidiRenderer::renderScore(EventMap* events, const Context& ctx)
     for (const Staff* st : score->staves()) {
         renderStaff(events, st, pitchWheelRender);
     }
-    events->fixupMIDI();
 
     // create sustain pedal events
     renderSpanners(events, pitchWheelRender);

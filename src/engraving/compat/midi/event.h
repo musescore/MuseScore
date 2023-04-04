@@ -84,10 +84,6 @@ public:
     void setEffect(MidiInstrumentEffect effect) { _effect = effect; }
     MidiInstrumentEffect effect() const { return _effect; }
 
-    int getOriginatingStaff() const { return _origin; }
-    void setOriginatingStaff(int i) { _origin = i; }
-    void setDiscard(int d) { _discard = d; }
-    int discard() const { return _discard; }
     bool isMuted() const;
     void setPortamento(bool p) { _portamento = p; }
     bool portamento() const
@@ -102,8 +98,6 @@ private:
 
     const Note* _note = nullptr;
     const Harmony* _harmony = nullptr;
-    int _origin = -1;
-    int _discard = 0;
     bool _portamento = false;
     MidiInstrumentEffect _effect = MidiInstrumentEffect::NONE;
 };
@@ -182,7 +176,6 @@ class EventMap : public std::multimap<int, NPlayEvent>
 
     int _highestChannel = 15;
 public:
-    void fixupMIDI();
     void registerChannel(int c)
     {
         if (c > _highestChannel) {
