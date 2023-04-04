@@ -106,6 +106,8 @@ public:
     void fixArticulations(PointF& pt, Chord* c, double up, bool stemSide);
     void computeUp();
 
+    void setSourceStemArrangement(int v) { _sourceStemArrangement = v; }
+
     SlurSegment* frontSegment() { return toSlurSegment(Spanner::frontSegment()); }
     const SlurSegment* frontSegment() const { return toSlurSegment(Spanner::frontSegment()); }
     SlurSegment* backSegment() { return toSlurSegment(Spanner::backSegment()); }

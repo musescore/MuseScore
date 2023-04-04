@@ -94,6 +94,8 @@
 #include "../../libmscore/measurerepeat.h"
 #include "../../libmscore/mmrest.h"
 #include "../../libmscore/rest.h"
+#include "../../libmscore/slur.h"
+#include "../../libmscore/slurtie.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -2404,6 +2406,77 @@ bool TRead::readProperties(SLine* l, XmlReader& e, ReadContext& ctx)
         return false;
     }
     return true;
+}
+
+void TRead::read(Slur* s, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        if (!readProperties(s, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
+bool TRead::readProperties(Slur* s, XmlReader& e, ReadContext& ctx)
+{
+    const AsciiStringView tag(e.name());
+    if (tag == "stemArr") {
+        s->setSourceStemArrangement(e.readInt());
+        return true;
+    }
+    return readProperties(static_cast<SlurTie*>(s), e, ctx);
+}
+
+void TRead::read(SlurTie* s, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        if (!readProperties(s, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
+bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
+{
+    const AsciiStringView tag(e.name());
+
+    if (PropertyRW::readProperty(s, tag, e, ctx, Pid::SLUR_DIRECTION)) {
+    } else if (tag == "lineType") {
+        s->setStyleType(static_cast<SlurStyleType>(e.readInt()));
+    } else if (tag == "SlurSegment" || tag == "TieSegment") {
+        const int idx = e.intAttribute("no", 0);
+        const int n = int(s->spannerSegments().size());
+        for (int i = n; i < idx; ++i) {
+            s->add(s->newSlurTieSegment(s->score()->dummy()->system()));
+        }
+        SlurTieSegment* sts = s->newSlurTieSegment(s->score()->dummy()->system());
+        TRead::read(sts, e, ctx);
+        s->add(sts);
+    } else if (!readProperties(static_cast<Spanner*>(s), e, ctx)) {
+        return false;
+    }
+    return true;
+}
+
+void TRead::read(SlurTieSegment* s, XmlReader& e, ReadContext& ctx)
+{
+    double _spatium = s->score()->spatium();
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (s->score()->mscVersion() < 400 && (tag == "o1" || tag == "o2" || tag == "o3" || tag == "o4")) {
+            e.skipCurrentElement(); // Ignore slur user offsets from pre-4.0
+        } else if (tag == "o1") {
+            s->ups(Grip::START).off = e.readPoint() * _spatium;
+        } else if (tag == "o2") {
+            s->ups(Grip::BEZIER1).off = e.readPoint() * _spatium;
+        } else if (tag == "o3") {
+            s->ups(Grip::BEZIER2).off = e.readPoint() * _spatium;
+        } else if (tag == "o4") {
+            s->ups(Grip::END).off = e.readPoint() * _spatium;
+        } else if (!EngravingItemRW::readProperties(s, e, ctx)) {
+            e.unknown();
+        }
+    }
 }
 
 bool TRead::readProperties(Spanner* s, XmlReader& e, ReadContext& ctx)

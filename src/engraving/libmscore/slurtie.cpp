@@ -23,6 +23,7 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 
 #include "chord.h"
 #include "mscoreview.h"
@@ -372,23 +373,7 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
 
 void SlurTieSegment::read(XmlReader& e)
 {
-    double _spatium = score()->spatium();
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (score()->mscVersion() < 400 && (tag == "o1" || tag == "o2" || tag == "o3" || tag == "o4")) {
-            e.skipCurrentElement(); // Ignore slur user offsets from pre-4.0
-        } else if (tag == "o1") {
-            ups(Grip::START).off = e.readPoint() * _spatium;
-        } else if (tag == "o2") {
-            ups(Grip::BEZIER1).off = e.readPoint() * _spatium;
-        } else if (tag == "o3") {
-            ups(Grip::BEZIER2).off = e.readPoint() * _spatium;
-        } else if (tag == "o4") {
-            ups(Grip::END).off = e.readPoint() * _spatium;
-        } else if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

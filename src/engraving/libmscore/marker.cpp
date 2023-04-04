@@ -23,6 +23,7 @@
 #include "marker.h"
 
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "types/typesconv.h"
 
 #include "measure.h"
@@ -167,19 +168,7 @@ void Marker::layout()
 
 void Marker::read(XmlReader& e)
 {
-    MarkerType mt = MarkerType::SEGNO;
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "label") {
-            AsciiStringView s(e.readAsciiText());
-            setLabel(String::fromAscii(s.ascii()));
-            mt = TConv::fromXml(s, MarkerType::USER);
-        } else if (!TextBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    setMarkerType(mt);
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
