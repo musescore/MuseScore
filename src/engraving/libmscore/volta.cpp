@@ -26,6 +26,7 @@
 #include <vector>
 
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "types/typesconv.h"
 
 #include "changeMap.h"
@@ -156,18 +157,7 @@ String Volta::text() const
 
 void Volta::read(XmlReader& e)
 {
-    eraseSpannerSegments();
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "endings") {
-            String s = e.readText();
-            _endings = TConv::fromXml(s, std::vector<int>());
-        } else if (readStyledProperty(e, tag)) {
-        } else if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
