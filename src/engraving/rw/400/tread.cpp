@@ -100,6 +100,7 @@
 #include "../../libmscore/stafftype.h"
 #include "../../libmscore/stafftypechange.h"
 #include "../../libmscore/system.h"
+#include "../../libmscore/textline.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -2648,6 +2649,29 @@ void TRead::read(System* s, XmlReader& e, ReadContext& ctx)
             TRead::read(sd, e, ctx);
             s->add(sd);
         } else {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(TextLine* l, XmlReader& e, ReadContext& ctx)
+{
+    bool system =  e.intAttribute("system", 0) == 1;
+    l->setSystemFlag(system);
+    l->initStyle();
+    TRead::read(static_cast<TextLineBase*>(l), e, ctx);
+}
+
+void TRead::read(TextLineBase* b, XmlReader& e, ReadContext& ctx)
+{
+    b->eraseSpannerSegments();
+
+    if (b->score()->mscVersion() < 301) {
+        ctx.addSpanner(e.intAttribute("id", -1), b);
+    }
+
+    while (e.readNextStartElement()) {
+        if (!readProperties(b, e, ctx)) {
             e.unknown();
         }
     }

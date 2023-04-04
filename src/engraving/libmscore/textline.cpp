@@ -22,6 +22,7 @@
 #include "textline.h"
 
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 
 #include "score.h"
 #include "system.h"
@@ -209,10 +210,7 @@ void TextLine::write(XmlWriter& xml) const
 
 void TextLine::read(XmlReader& e)
 {
-    bool system =  e.intAttribute("system", 0) == 1;
-    setSystemFlag(system);
-    initStyle();
-    TextLineBase::read(e);
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
