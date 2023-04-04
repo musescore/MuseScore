@@ -26,6 +26,8 @@
 
 #include "../../libmscore/score.h"
 #include "../../libmscore/factory.h"
+#include "../../libmscore/linkedobjects.h"
+#include "../../libmscore/mscore.h"
 
 #include "../../libmscore/tempotext.h"
 #include "../../libmscore/stafftext.h"
@@ -109,8 +111,6 @@
 #include "../206/read206.h"
 
 #include "readcontext.h"
-#include "propertyrw.h"
-#include "engravingitemrw.h"
 
 #include "log.h"
 
@@ -146,6 +146,182 @@ void TRead::readItem(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
     } else {
         UNREACHABLE;
     }
+}
+
+bool TRead::readProperty(EngravingItem* item, const AsciiStringView& tag, XmlReader& xml, ReadContext& ctx, Pid pid)
+{
+    if (tag == propertyName(pid)) {
+        readProperty(item, xml, ctx, pid);
+        return true;
+    }
+    return false;
+}
+
+void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, Pid pid)
+{
+    PropertyValue v = mu::engraving::readProperty(pid, xml);
+    switch (propertyType(pid)) {
+    case P_TYPE::MILLIMETRE: //! NOTE type mm, but stored in xml as spatium
+        v = v.value<Spatium>().toMM(ctx.spatium());
+        break;
+    case P_TYPE::POINT:
+        if (item->offsetIsSpatiumDependent()) {
+            v = v.value<PointF>() * ctx.spatium();
+        } else {
+            v = v.value<PointF>() * DPMM;
+        }
+        break;
+    default:
+        break;
+    }
+
+    item->setProperty(pid, v);
+    if (item->isStyled(pid)) {
+        item->setPropertyFlags(pid, PropertyFlags::UNSTYLED);
+    }
+}
+
+bool TRead::readStyledProperty(EngravingItem* item, const AsciiStringView& tag, XmlReader& xml, ReadContext& ctx)
+{
+    for (const StyledProperty& spp : *item->styledProperties()) {
+        if (readProperty(item, tag, xml, ctx, spp.pid)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& ctx)
+{
+    const AsciiStringView tag(e.name());
+
+    if (TRead::readProperty(item, tag, e, ctx, Pid::SIZE_SPATIUM_DEPENDENT)) {
+    } else if (TRead::readProperty(item, tag, e, ctx, Pid::OFFSET)) {
+    } else if (TRead::readProperty(item, tag, e, ctx, Pid::MIN_DISTANCE)) {
+    } else if (TRead::readProperty(item, tag, e, ctx, Pid::AUTOPLACE)) {
+    } else if (tag == "track") {
+        item->setTrack(e.readInt() + ctx.trackOffset());
+    } else if (tag == "color") {
+        item->setColor(e.readColor());
+    } else if (tag == "visible") {
+        item->setVisible(e.readInt());
+    } else if (tag == "selected") { // obsolete
+        e.readInt();
+    } else if ((tag == "linked") || (tag == "linkedMain")) {
+        Staff* s = item->staff();
+        if (!s) {
+            s = ctx.score()->staff(ctx.track() / VOICES);
+            if (!s) {
+                LOGW("EngravingItem::readProperties: linked element's staff not found (%s)", item->typeName());
+                e.skipCurrentElement();
+                return true;
+            }
+        }
+        if (tag == "linkedMain") {
+            item->setLinks(new LinkedObjects(item->score()));
+            item->links()->push_back(item);
+
+            ctx.addLink(s, item->links(), ctx.location(true));
+
+            e.readNext();
+        } else {
+            Staff* ls = s->links() ? toStaff(s->links()->mainElement()) : nullptr;
+            bool linkedIsMaster = ls ? ls->score()->isMaster() : false;
+            Location loc = ctx.location(true);
+            if (ls) {
+                loc.setStaff(static_cast<int>(ls->idx()));
+            }
+            Location mainLoc = Location::relative();
+            bool locationRead = false;
+            int localIndexDiff = 0;
+            while (e.readNextStartElement()) {
+                const AsciiStringView ntag(e.name());
+
+                if (ntag == "score") {
+                    String val(e.readText());
+                    if (val == "same") {
+                        linkedIsMaster = item->score()->isMaster();
+                    }
+                } else if (ntag == "location") {
+                    mainLoc.read(e);
+                    mainLoc.toAbsolute(loc);
+                    locationRead = true;
+                } else if (ntag == "indexDiff") {
+                    localIndexDiff = e.readInt();
+                } else {
+                    e.unknown();
+                }
+            }
+            if (!locationRead) {
+                mainLoc = loc;
+            }
+            LinkedObjects* link = ctx.getLink(linkedIsMaster, mainLoc, localIndexDiff);
+            if (link) {
+                EngravingObject* linked = link->mainElement();
+                if (linked->type() == item->type()) {
+                    item->linkTo(linked);
+                } else {
+                    LOGW("EngravingItem::readProperties: linked elements have different types: %s, %s. Input file corrupted?",
+                         item->typeName(), linked->typeName());
+                }
+            }
+            if (!item->links()) {
+                LOGW("EngravingItem::readProperties: could not link %s at staff %d", item->typeName(), mainLoc.staff() + 1);
+            }
+        }
+    } else if (tag == "lid") {
+        if (ctx.mscVersion() >= 301) {
+            e.skipCurrentElement();
+            return true;
+        }
+        int id = e.readInt();
+        item->setLinks(mu::value(ctx.linkIds(), id, nullptr));
+        if (!item->links()) {
+            if (!ctx.isMasterScore()) {       // DEBUG
+                LOGD("---link %d not found (%zu)", id, ctx.linkIds().size());
+            }
+            item->setLinks(new LinkedObjects(item->score(), id));
+            ctx.linkIds().insert({ id, item->links() });
+        }
+#ifndef NDEBUG
+        else {
+            for (EngravingObject* eee : *item->links()) {
+                EngravingItem* ee = static_cast<EngravingItem*>(eee);
+                if (ee->type() != item->type()) {
+                    ASSERT_X(String(u"link %1(%2) type mismatch %3 linked to %4")
+                             .arg(String::fromAscii(ee->typeName()))
+                             .arg(id)
+                             .arg(String::fromAscii(ee->typeName()), String::fromAscii(item->typeName())));
+                }
+            }
+        }
+#endif
+        assert(!item->links()->contains(item));
+        item->links()->push_back(item);
+    } else if (tag == "tick") {
+        int val = e.readInt();
+        if (val >= 0) {
+            ctx.setTick(Fraction::fromTicks(ctx.fileDivision(val)));             // obsolete
+        }
+    } else if (tag == "pos") {           // obsolete
+        TRead::readProperty(item, e, ctx, Pid::OFFSET);
+    } else if (tag == "voice") {
+        item->setVoice(e.readInt());
+    } else if (tag == "tag") {
+        String val(e.readText());
+        for (int i = 1; i < MAX_TAGS; i++) {
+            if (ctx.score()->layerTags()[i] == val) {
+                item->setTag(1 << i);
+                break;
+            }
+        }
+    } else if (TRead::readProperty(item, tag, e, ctx, Pid::PLACEMENT)) {
+    } else if (tag == "z") {
+        item->setZ(e.readInt());
+    } else {
+        return false;
+    }
+    return true;
 }
 
 void TRead::read(TextBase* t, XmlReader& xml, ReadContext& ctx)
@@ -334,12 +510,12 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
         } else if (tag == "rightParen") {
             h->setRightParen(true);
             e.readNext();
-        } else if (PropertyRW::readProperty(h, tag, e, ctx, Pid::POS_ABOVE)) {
-        } else if (PropertyRW::readProperty(h, tag, e, ctx, Pid::HARMONY_TYPE)) {
-        } else if (PropertyRW::readProperty(h, tag, e, ctx, Pid::PLAY)) {
-        } else if (PropertyRW::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICE_LITERAL)) {
-        } else if (PropertyRW::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICING)) {
-        } else if (PropertyRW::readProperty(h, tag, e, ctx, Pid::HARMONY_DURATION)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::POS_ABOVE)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_TYPE)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::PLAY)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICE_LITERAL)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICING)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_DURATION)) {
         } else if (!readProperties(static_cast<TextBase*>(h), e, ctx)) {
             e.unknown();
         }
@@ -391,7 +567,7 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
                     int fret = e.readInt();
 
                     d->setBarre(start, end, fret);
-                } else if (!EngravingItemRW::readProperties(d, e, ctx)) {
+                } else if (!readItemProperties(d, e, ctx)) {
                     e.unknown();
                 }
             }
@@ -399,17 +575,17 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
         }
         // Check for new properties
         else if (tag == "showNut") {
-            PropertyRW::readProperty(d, e, ctx, Pid::FRET_NUT);
+            TRead::readProperty(d, e, ctx, Pid::FRET_NUT);
         } else if (tag == "orientation") {
-            PropertyRW::readProperty(d, e, ctx, Pid::ORIENTATION);
+            TRead::readProperty(d, e, ctx, Pid::ORIENTATION);
         }
         // Then read the rest if there is no new format diagram (compatibility read)
         else if (tag == "strings") {
-            PropertyRW::readProperty(d, e, ctx, Pid::FRET_STRINGS);
+            TRead::readProperty(d, e, ctx, Pid::FRET_STRINGS);
         } else if (tag == "frets") {
-            PropertyRW::readProperty(d, e, ctx, Pid::FRET_FRETS);
+            TRead::readProperty(d, e, ctx, Pid::FRET_FRETS);
         } else if (tag == "fretOffset") {
-            PropertyRW::readProperty(d, e, ctx, Pid::FRET_OFFSET);
+            TRead::readProperty(d, e, ctx, Pid::FRET_OFFSET);
         } else if (tag == "string") {
             int no = e.intAttribute("no");
             while (e.readNextStartElement()) {
@@ -428,12 +604,12 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
         } else if (tag == "barre") {
             hasBarre = e.readBool();
         } else if (tag == "mag") {
-            PropertyRW::readProperty(d, e, ctx, Pid::MAG);
+            TRead::readProperty(d, e, ctx, Pid::MAG);
         } else if (tag == "Harmony") {
             Harmony* h = new Harmony(d->score()->dummy()->segment());
             read(h, e, ctx);
             d->add(h);
-        } else if (!EngravingItemRW::readProperties(d, e, ctx)) {
+        } else if (!readItemProperties(d, e, ctx)) {
             e.unknown();
         }
     }
@@ -464,10 +640,10 @@ void TRead::read(TremoloBar* b, XmlReader& e, ReadContext& ctx)
             e.readNext();
         } else if (tag == "mag") {
             b->setUserMag(e.readDouble(0.1, 10.0));
-        } else if (PropertyRW::readStyledProperty(b, tag, e, ctx)) {
+        } else if (TRead::readStyledProperty(b, tag, e, ctx)) {
         } else if (tag == "play") {
             b->setPlay(e.readInt());
-        } else if (PropertyRW::readProperty(b, tag, e, ctx, Pid::LINE_WIDTH)) {
+        } else if (TRead::readProperty(b, tag, e, ctx, Pid::LINE_WIDTH)) {
         } else {
             e.unknown();
         }
@@ -489,7 +665,7 @@ void TRead::read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx)
     while (xml.readNextStartElement()) {
         const AsciiStringView tag(xml.name());
 
-        if (PropertyRW::readProperty(a, tag, xml, ctx, Pid::PLAY_TECH_TYPE)) {
+        if (TRead::readProperty(a, tag, xml, ctx, Pid::PLAY_TECH_TYPE)) {
             continue;
         }
 
@@ -694,7 +870,7 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
             subtype = e.readInt();
         } else if (tag == "forInstrumentChange") {
             s->setForInstrumentChange(e.readBool());
-        } else if (!EngravingItemRW::readProperties(s, e, ctx)) {
+        } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
         }
     }
@@ -719,7 +895,7 @@ void TRead::read(StaffState* s, XmlReader& e, ReadContext& ctx)
             Instrument i;
             i.read(e, nullptr);
             s->setInstrument(std::move(i));
-        } else if (!EngravingItemRW::readProperties(s, e, ctx)) {
+        } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
         }
     }
@@ -782,11 +958,11 @@ bool TRead::readProperties(Fermata* f, XmlReader& e, ReadContext& ctx)
         f->setTimeStretch(e.readDouble());
     } else if (tag == "offset") {
         if (f->score()->mscVersion() > 114) {
-            EngravingItemRW::readProperties(f, e, ctx);
+            readItemProperties(f, e, ctx);
         } else {
             e.skipCurrentElement();       // ignore manual layout in older scores
         }
-    } else if (EngravingItemRW::readProperties(f, e, ctx)) {
+    } else if (readItemProperties(f, e, ctx)) {
     } else {
         return false;
     }
@@ -805,11 +981,11 @@ void TRead::read(Image* img, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "autoScale") {
-            PropertyRW::readProperty(img, e, ctx, Pid::AUTOSCALE);
+            TRead::readProperty(img, e, ctx, Pid::AUTOSCALE);
         } else if (tag == "size") {
-            PropertyRW::readProperty(img, e, ctx, Pid::SIZE);
+            TRead::readProperty(img, e, ctx, Pid::SIZE);
         } else if (tag == "lockAspectRatio") {
-            PropertyRW::readProperty(img, e, ctx, Pid::LOCK_ASPECT_RATIO);
+            TRead::readProperty(img, e, ctx, Pid::LOCK_ASPECT_RATIO);
         } else if (tag == "sizeIsSpatium") {
             // setting this using the property Pid::SIZE_IS_SPATIUM breaks, because the
             // property setter attempts to maintain a constant size. If we're reading, we
@@ -842,7 +1018,7 @@ void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
 
-        if (PropertyRW::readStyledProperty(t, tag, e, ctx)) {
+        if (TRead::readStyledProperty(t, tag, e, ctx)) {
         } else if (tag == "bold") { //important that these properties are read after number is created
             bool val = e.readInt();
             if (number) {
@@ -899,7 +1075,7 @@ void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
             for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN }) {
                 t->setPropertyFlags(p, number->propertyFlags(p));
             }
-        } else if (!EngravingItemRW::readProperties(t, e, ctx)) {
+        } else if (!readItemProperties(t, e, ctx)) {
             e.unknown();
         }
     }
@@ -921,10 +1097,10 @@ void TRead::read(Beam* b, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "StemDirection") {
-            PropertyRW::readProperty(b, e, ctx, Pid::STEM_DIRECTION);
+            TRead::readProperty(b, e, ctx, Pid::STEM_DIRECTION);
         } else if (tag == "distribute") {
             e.skipCurrentElement(); // obsolete
-        } else if (PropertyRW::readStyledProperty(b, tag, e, ctx)) {
+        } else if (TRead::readStyledProperty(b, tag, e, ctx)) {
         } else if (tag == "growLeft") {
             b->setGrowLeft(e.readDouble());
         } else if (tag == "growRight") {
@@ -951,7 +1127,7 @@ void TRead::read(Beam* b, XmlReader& e, ReadContext& ctx)
             e.skipCurrentElement();
         } else if (tag == "y1" || tag == "y2") { // obsolete
             e.skipCurrentElement();
-        } else if (!EngravingItemRW::readProperties(b, e, ctx)) {
+        } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }
     }
@@ -962,15 +1138,15 @@ void TRead::read(Ambitus* a, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "head") {
-            PropertyRW::readProperty(a, e, ctx, Pid::HEAD_GROUP);
+            TRead::readProperty(a, e, ctx, Pid::HEAD_GROUP);
         } else if (tag == "headType") {
-            PropertyRW::readProperty(a, e, ctx, Pid::HEAD_TYPE);
+            TRead::readProperty(a, e, ctx, Pid::HEAD_TYPE);
         } else if (tag == "mirror") {
-            PropertyRW::readProperty(a, e, ctx, Pid::MIRROR_HEAD);
+            TRead::readProperty(a, e, ctx, Pid::MIRROR_HEAD);
         } else if (tag == "hasLine") {
             a->setHasLine(e.readInt());
         } else if (tag == "lineWidth") {
-            PropertyRW::readProperty(a, e, ctx, Pid::LINE_WIDTH_SPATIUM);
+            TRead::readProperty(a, e, ctx, Pid::LINE_WIDTH_SPATIUM);
         } else if (tag == "topPitch") {
             a->setTopPitch(e.readInt(), false);
         } else if (tag == "bottomPitch") {
@@ -1003,7 +1179,7 @@ void TRead::read(Ambitus* a, XmlReader& e, ReadContext& ctx)
                     e.skipCurrentElement();
                 }
             }
-        } else if (EngravingItemRW::readProperties(a, e, ctx)) {
+        } else if (readItemProperties(a, e, ctx)) {
         } else {
             e.unknown();
         }
@@ -1025,7 +1201,7 @@ void TRead::read(Accidental* a, XmlReader& e, ReadContext& ctx)
             a->setRole(TConv::fromXml(e.readAsciiText(), AccidentalRole::AUTO));
         } else if (tag == "small") {
             a->setSmall(e.readInt());
-        } else if (EngravingItemRW::readProperties(a, e, ctx)) {
+        } else if (readItemProperties(a, e, ctx)) {
         } else {
             e.unknown();
         }
@@ -1083,7 +1259,7 @@ void TRead::read(MeasureNumberBase* b, XmlReader& xml, ReadContext& ctx)
 
 bool TRead::readProperties(MeasureNumberBase* n, XmlReader& xml, ReadContext& ctx)
 {
-    if (PropertyRW::readProperty(n, xml.name(), xml, ctx, Pid::HPLACEMENT)) {
+    if (TRead::readProperty(n, xml.name(), xml, ctx, Pid::HPLACEMENT)) {
         return true;
     } else {
         return readProperties(static_cast<TextBase*>(n), xml, ctx);
@@ -1141,7 +1317,7 @@ void TRead::read(Arpeggio* a, XmlReader& e, ReadContext& ctx)
             a->setPlayArpeggio(e.readBool());
         } else if (tag == "timeStretch") {
             a->setStretch(e.readDouble());
-        } else if (!EngravingItemRW::readProperties(a, e, ctx)) {
+        } else if (!readItemProperties(a, e, ctx)) {
             e.unknown();
         }
     }
@@ -1187,20 +1363,20 @@ bool TRead::readProperties(Articulation* a, XmlReader& xml, ReadContext& ctx)
     } else if (tag == "channel") {
         a->setChannelName(xml.attribute("name"));
         xml.readNext();
-    } else if (PropertyRW::readProperty(a, tag, xml, ctx, Pid::ARTICULATION_ANCHOR)) {
+    } else if (TRead::readProperty(a, tag, xml, ctx, Pid::ARTICULATION_ANCHOR)) {
     } else if (tag == "direction") {
-        PropertyRW::readProperty(a, xml, ctx, Pid::DIRECTION);
+        TRead::readProperty(a, xml, ctx, Pid::DIRECTION);
     } else if (tag == "ornamentStyle") {
-        PropertyRW::readProperty(a, xml, ctx, Pid::ORNAMENT_STYLE);
+        TRead::readProperty(a, xml, ctx, Pid::ORNAMENT_STYLE);
     } else if (tag == "play") {
         a->setPlayArticulation(xml.readBool());
     } else if (tag == "offset") {
         if (a->score()->mscVersion() >= 400) {
-            EngravingItemRW::readProperties(a, xml, ctx);
+            readItemProperties(a, xml, ctx);
         } else {
             xml.skipCurrentElement();       // ignore manual layout in older scores
         }
-    } else if (EngravingItemRW::readProperties(a, xml, ctx)) {
+    } else if (readItemProperties(a, xml, ctx)) {
     } else {
         return false;
     }
@@ -1264,7 +1440,7 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
                 TRead::read(image, e, ctx);
                 b->add(image);
             }
-        } else if (!EngravingItemRW::readProperties(b, e, ctx)) {
+        } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }
     }
@@ -1275,7 +1451,7 @@ void TRead::read(Bend* b, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
 
-        if (PropertyRW::readStyledProperty(b, tag, e, ctx)) {
+        if (TRead::readStyledProperty(b, tag, e, ctx)) {
         } else if (tag == "point") {
             PitchValue pv;
             pv.time    = e.intAttribute("time");
@@ -1285,7 +1461,7 @@ void TRead::read(Bend* b, XmlReader& e, ReadContext& ctx)
             e.readNext();
         } else if (tag == "play") {
             b->setPlayBend(e.readBool());
-        } else if (!EngravingItemRW::readProperties(b, e, ctx)) {
+        } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }
     }
@@ -1470,7 +1646,7 @@ bool TRead::readProperties(MeasureBase* b, XmlReader& e, ReadContext& ctx)
         stc->setParent(b);
         stc->read(e);
         b->add(stc);
-    } else if (EngravingItemRW::readProperties(b, e, ctx)) {
+    } else if (readItemProperties(b, e, ctx)) {
     } else {
         return false;
     }
@@ -1485,7 +1661,7 @@ void TRead::read(Bracket* b, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         if (e.name() == "level") {
             bi->setColumn(e.readInt());
-        } else if (!EngravingItemRW::readProperties(b, e, ctx)) {
+        } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }
     }
@@ -1516,7 +1692,7 @@ void TRead::read(Breath* b, XmlReader& e, ReadContext& ctx)
             b->setSymId(SymNames::symIdByName(e.readAsciiText()));
         } else if (tag == "pause") {
             b->setPause(e.readDouble());
-        } else if (!EngravingItemRW::readProperties(b, e, ctx)) {
+        } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }
     }
@@ -1526,7 +1702,7 @@ bool TRead::readProperties(BSymbol* sym, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag = e.name();
 
-    if (EngravingItemRW::readProperties(sym, e, ctx)) {
+    if (readItemProperties(sym, e, ctx)) {
         return true;
     } else if (tag == "systemFlag") {
         sym->setSystemFlag(e.readInt());
@@ -1690,7 +1866,7 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         StemSlash* ss = Factory::createStemSlash(ch);
         TRead::read(ss, e, ctx);
         ch->add(ss);
-    } else if (PropertyRW::readProperty(ch, tag, e, ctx, Pid::STEM_DIRECTION)) {
+    } else if (TRead::readProperty(ch, tag, e, ctx, Pid::STEM_DIRECTION)) {
     } else if (tag == "noStem") {
         ch->setNoStem(e.readInt());
     } else if (tag == "Arpeggio") {
@@ -1798,7 +1974,7 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
     }
 //      else if (tag == "offset")
 //            DurationElement::readProperties(e);
-    else if (!EngravingItemRW::readProperties(ch, e, ctx)) {
+    else if (!readItemProperties(ch, e, ctx)) {
         return false;
     }
     return true;
@@ -1862,7 +2038,7 @@ void TRead::read(ChordLine* l, XmlReader& e, ReadContext& ctx)
             l->setLengthY(e.readInt());
         } else if (tag == "offset" && l->score()->mscVersion() < 400) { // default positions has changed in 4.0 so ignore previous offset
             e.skipCurrentElement();
-        } else if (!EngravingItemRW::readProperties(l, e, ctx)) {
+        } else if (!readItemProperties(l, e, ctx)) {
             e.unknown();
         }
     }
@@ -1880,7 +2056,7 @@ void TRead::read(Clef* c, XmlReader& e, ReadContext& ctx)
             c->setShowCourtesy(e.readInt());
         } else if (tag == "forInstrumentChange") {
             c->setForInstrumentChange(e.readBool());
-        } else if (!EngravingItemRW::readProperties(c, e, ctx)) {
+        } else if (!readItemProperties(c, e, ctx)) {
             e.unknown();
         }
     }
@@ -1912,18 +2088,18 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
         const AsciiStringView tag = e.name();
         if (tag == "text") {
             g->setShowText(true);
-            PropertyRW::readProperty(g, e, ctx, Pid::GLISS_TEXT);
+            TRead::readProperty(g, e, ctx, Pid::GLISS_TEXT);
         } else if (tag == "subtype") {
             g->setGlissandoType(TConv::fromXml(e.readAsciiText(), GlissandoType::STRAIGHT));
         } else if (tag == "glissandoStyle") {
-            PropertyRW::readProperty(g, e, ctx, Pid::GLISS_STYLE);
+            TRead::readProperty(g, e, ctx, Pid::GLISS_STYLE);
         } else if (tag == "easeInSpin") {
             g->setEaseIn(e.readInt());
         } else if (tag == "easeOutSpin") {
             g->setEaseOut(e.readInt());
         } else if (tag == "play") {
             g->setPlayGlissando(e.readBool());
-        } else if (PropertyRW::readStyledProperty(g, tag, e, ctx)) {
+        } else if (TRead::readStyledProperty(g, tag, e, ctx)) {
         } else if (!TRead::readProperties(static_cast<SLine*>(g), e, ctx)) {
             e.unknown();
         }
@@ -1935,20 +2111,20 @@ void TRead::read(GradualTempoChange* c, XmlReader& xml, ReadContext& ctx)
     while (xml.readNextStartElement()) {
         const AsciiStringView tag(xml.name());
 
-        if (PropertyRW::readProperty(c, tag, xml, ctx, Pid::LINE_WIDTH)) {
+        if (TRead::readProperty(c, tag, xml, ctx, Pid::LINE_WIDTH)) {
             c->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
             continue;
         }
 
-        if (PropertyRW::readProperty(c, tag, xml, ctx, Pid::TEMPO_CHANGE_TYPE)) {
+        if (TRead::readProperty(c, tag, xml, ctx, Pid::TEMPO_CHANGE_TYPE)) {
             continue;
         }
 
-        if (PropertyRW::readProperty(c, tag, xml, ctx, Pid::TEMPO_EASING_METHOD)) {
+        if (TRead::readProperty(c, tag, xml, ctx, Pid::TEMPO_EASING_METHOD)) {
             continue;
         }
 
-        if (PropertyRW::readProperty(c, tag, xml, ctx, Pid::TEMPO_CHANGE_FACTOR)) {
+        if (TRead::readProperty(c, tag, xml, ctx, Pid::TEMPO_CHANGE_FACTOR)) {
             continue;
         }
 
@@ -1982,7 +2158,7 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             h->setHairpinType(HairpinType(e.readInt()));
-        } else if (PropertyRW::readStyledProperty(h, tag, e, ctx)) {
+        } else if (TRead::readStyledProperty(h, tag, e, ctx)) {
         } else if (tag == "hairpinCircledTip") {
             h->setHairpinCircledTip(e.readInt());
         } else if (tag == "veloChange") {
@@ -2018,17 +2194,17 @@ void TRead::read(LayoutBreak* b, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            PropertyRW::readProperty(b, e, ctx, Pid::LAYOUT_BREAK);
+            TRead::readProperty(b, e, ctx, Pid::LAYOUT_BREAK);
         } else if (tag == "pause") {
-            PropertyRW::readProperty(b, e, ctx, Pid::PAUSE);
+            TRead::readProperty(b, e, ctx, Pid::PAUSE);
         } else if (tag == "startWithLongNames") {
-            PropertyRW::readProperty(b, e, ctx, Pid::START_WITH_LONG_NAMES);
+            TRead::readProperty(b, e, ctx, Pid::START_WITH_LONG_NAMES);
         } else if (tag == "startWithMeasureOne") {
-            PropertyRW::readProperty(b, e, ctx, Pid::START_WITH_MEASURE_ONE);
+            TRead::readProperty(b, e, ctx, Pid::START_WITH_MEASURE_ONE);
         } else if (tag == "firstSystemIndentation"
                    || tag == "firstSystemIdentation" /* pre-4.0 typo */) {
-            PropertyRW::readProperty(b, e, ctx, Pid::FIRST_SYSTEM_INDENTATION);
-        } else if (!EngravingItemRW::readProperties(b, e, ctx)) {
+            TRead::readProperty(b, e, ctx, Pid::FIRST_SYSTEM_INDENTATION);
+        } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }
     }
@@ -2066,7 +2242,7 @@ void TRead::read(LetRing* r, XmlReader& e, ReadContext& ctx)
         ctx.addSpanner(e.intAttribute("id", -1), r);
     }
     while (e.readNextStartElement()) {
-        if (PropertyRW::readProperty(r, e.name(), e, ctx, Pid::LINE_WIDTH)) {
+        if (TRead::readProperty(r, e.name(), e, ctx, Pid::LINE_WIDTH)) {
             r->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
         } else if (!readProperties(static_cast<TextLineBase*>(r), e, ctx)) {
             e.unknown();
@@ -2127,7 +2303,7 @@ bool TRead::readProperties(Lyrics* l, XmlReader& e, ReadContext& ctx)
         l->setTicks(e.readFraction());     // will fall back to reading integer ticks on older scores
     } else if (tag == "ticks_f") {
         l->setTicks(e.readFraction());
-    } else if (PropertyRW::readProperty(l, tag, e, ctx, Pid::PLACEMENT)) {
+    } else if (TRead::readProperty(l, tag, e, ctx, Pid::PLACEMENT)) {
     } else if (!readProperties(static_cast<TextBase*>(l), e, ctx)) {
         return false;
     }
@@ -2168,7 +2344,7 @@ void TRead::read(MMRest* r, XmlReader& e, ReadContext& ctx)
             NoteDot* dot = Factory::createNoteDot(r);
             TRead::read(dot, e, ctx);
             r->add(dot);
-        } else if (PropertyRW::readStyledProperty(r, tag, e, ctx)) {
+        } else if (TRead::readStyledProperty(r, tag, e, ctx)) {
         } else if (readProperties(r, e, ctx)) {
         } else {
             e.unknown();
@@ -2227,17 +2403,17 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
     } else if (tag == "small") {
         n->setSmall(e.readInt());
     } else if (tag == "mirror") {
-        PropertyRW::readProperty(n, e, ctx, Pid::MIRROR_HEAD);
+        TRead::readProperty(n, e, ctx, Pid::MIRROR_HEAD);
     } else if (tag == "dotPosition") {
-        PropertyRW::readProperty(n, e, ctx, Pid::DOT_POSITION);
+        TRead::readProperty(n, e, ctx, Pid::DOT_POSITION);
     } else if (tag == "fixed") {
         n->setFixed(e.readBool());
     } else if (tag == "fixedLine") {
         n->setFixedLine(e.readInt());
     } else if (tag == "headScheme") {
-        PropertyRW::readProperty(n, e, ctx, Pid::HEAD_SCHEME);
+        TRead::readProperty(n, e, ctx, Pid::HEAD_SCHEME);
     } else if (tag == "head") {
-        PropertyRW::readProperty(n, e, ctx, Pid::HEAD_GROUP);
+        TRead::readProperty(n, e, ctx, Pid::HEAD_GROUP);
     } else if (tag == "velocity") {
         n->setUserVelocity(e.readInt());
     } else if (tag == "play") {
@@ -2253,9 +2429,9 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
     } else if (tag == "dead") {
         n->setDeadNote(e.readInt());
     } else if (tag == "headType") {
-        PropertyRW::readProperty(n, e, ctx, Pid::HEAD_TYPE);
+        TRead::readProperty(n, e, ctx, Pid::HEAD_TYPE);
     } else if (tag == "veloType") {
-        PropertyRW::readProperty(n, e, ctx, Pid::VELO_TYPE);
+        TRead::readProperty(n, e, ctx, Pid::VELO_TYPE);
     } else if (tag == "line") {
         n->setLine(e.readInt());
     } else if (tag == "Fingering") {
@@ -2303,13 +2479,13 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
             n->chord()->setPlayEventType(PlayEventType::User);
         }
     } else if (tag == "offset") {
-        EngravingItemRW::readProperties(n, e, ctx);
+        readItemProperties(n, e, ctx);
     } else if (tag == "ChordLine" && n->chord()) {
         ChordLine* cl = Factory::createChordLine(n->chord());
         cl->setNote(n);
         TRead::read(cl, e, ctx);
         n->chord()->add(cl);
-    } else if (EngravingItemRW::readProperties(n, e, ctx)) {
+    } else if (readItemProperties(n, e, ctx)) {
     } else {
         return false;
     }
@@ -2323,7 +2499,7 @@ void TRead::read(NoteDot* d, XmlReader& e, ReadContext& ctx)
             e.readText();
         } else if (e.name() == "subtype") {     // obsolete
             e.readText();
-        } else if (!EngravingItemRW::readProperties(d, e, ctx)) {
+        } else if (!readItemProperties(d, e, ctx)) {
             e.unknown();
         }
     }
@@ -2351,7 +2527,7 @@ void TRead::read(Rest* r, XmlReader& e, ReadContext& ctx)
             NoteDot* dot = Factory::createNoteDot(r);
             TRead::read(dot, e, ctx);
             r->add(dot);
-        } else if (PropertyRW::readStyledProperty(r, tag, e, ctx)) {
+        } else if (TRead::readStyledProperty(r, tag, e, ctx)) {
         } else if (TRead::readProperties(r, e, ctx)) {
         } else {
             e.unknown();
@@ -2401,7 +2577,7 @@ bool TRead::readProperties(SLine* l, XmlReader& e, ReadContext& ctx)
         l->setAnchor(SLine::Anchor(e.readInt()));
     } else if (tag == "lineWidth") {
         l->setLineWidth(Millimetre(e.readDouble() * l->spatium()));
-    } else if (PropertyRW::readProperty(l, tag, e, ctx, Pid::LINE_STYLE)) {
+    } else if (TRead::readProperty(l, tag, e, ctx, Pid::LINE_STYLE)) {
     } else if (tag == "dashLineLength") {
         l->setDashLineLen(e.readDouble());
     } else if (tag == "dashGapLength") {
@@ -2448,7 +2624,7 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
 
-    if (PropertyRW::readProperty(s, tag, e, ctx, Pid::SLUR_DIRECTION)) {
+    if (TRead::readProperty(s, tag, e, ctx, Pid::SLUR_DIRECTION)) {
     } else if (tag == "lineType") {
         s->setStyleType(static_cast<SlurStyleType>(e.readInt()));
     } else if (tag == "SlurSegment" || tag == "TieSegment") {
@@ -2481,7 +2657,7 @@ void TRead::read(SlurTieSegment* s, XmlReader& e, ReadContext& ctx)
             s->ups(Grip::BEZIER2).off = e.readPoint() * _spatium;
         } else if (tag == "o4") {
             s->ups(Grip::END).off = e.readPoint() * _spatium;
-        } else if (!EngravingItemRW::readProperties(s, e, ctx)) {
+        } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
         }
     }
@@ -2496,7 +2672,7 @@ bool TRead::readProperties(Spanner* s, XmlReader& e, ReadContext& ctx)
             return true;
         }
     }
-    return EngravingItemRW::readProperties(s, e, ctx);
+    return readItemProperties(s, e, ctx);
 }
 
 void TRead::read(Spacer* s, XmlReader& e, ReadContext& ctx)
@@ -2507,7 +2683,7 @@ void TRead::read(Spacer* s, XmlReader& e, ReadContext& ctx)
             s->setSpacerType(SpacerType(e.readInt()));
         } else if (tag == "space") {
             s->setGap(Millimetre(e.readDouble() * s->spatium()));
-        } else if (!EngravingItemRW::readProperties(s, e, ctx)) {
+        } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
         }
     }
@@ -2610,7 +2786,7 @@ void TRead::read(StaffTypeChange* c, XmlReader& e, ReadContext& ctx)
             TRead::read(st, e, ctx);
             // Measure::add() will replace this with a pointer to a copy in the staff
             c->setStaffType(st, true);
-        } else if (!EngravingItemRW::readProperties(c, e, ctx)) {
+        } else if (!readItemProperties(c, e, ctx)) {
             e.unknown();
         }
     }
@@ -2629,18 +2805,22 @@ bool TRead::readProperties(Stem* s, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
 
-    if (PropertyRW::readProperty(s, tag, e, ctx, Pid::USER_LEN)) {
-    } else if (PropertyRW::readStyledProperty(s, tag, e, ctx)) {
-    } else if (EngravingItemRW::readProperties(s, e, ctx)) {
+    if (TRead::readProperty(s, tag, e, ctx, Pid::USER_LEN)) {
+    } else if (TRead::readStyledProperty(s, tag, e, ctx)) {
+    } else if (readItemProperties(s, e, ctx)) {
     } else {
         return false;
     }
     return true;
 }
 
-void TRead::read(StemSlash* s, XmlReader& xml, ReadContext& ctx)
+void TRead::read(StemSlash* s, XmlReader& e, ReadContext& ctx)
 {
-    EngravingItemRW::read(s, xml, ctx);
+    while (e.readNextStartElement()) {
+        if (!readItemProperties(s, e, ctx)) {
+            e.unknown();
+        }
+    }
 }
 
 void TRead::read(System* s, XmlReader& e, ReadContext& ctx)
@@ -2740,8 +2920,8 @@ void TRead::read(TimeSig* s, XmlReader& e, ReadContext& ctx)
             Groups groups;
             TRead::read(&groups, e, ctx);
             s->setGroups(groups);
-        } else if (PropertyRW::readStyledProperty(s, tag, e, ctx)) {
-        } else if (!EngravingItemRW::readProperties(s, e, ctx)) {
+        } else if (TRead::readStyledProperty(s, tag, e, ctx)) {
+        } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
         }
     }
@@ -2798,8 +2978,8 @@ void TRead::read(Tremolo* t, XmlReader& e, ReadContext& ctx)
                 }
             }
             t->setBeamFragment(f);
-        } else if (PropertyRW::readStyledProperty(t, tag, e, ctx)) {
-        } else if (!EngravingItemRW::readProperties(t, e, ctx)) {
+        } else if (TRead::readStyledProperty(t, tag, e, ctx)) {
+        } else if (!readItemProperties(t, e, ctx)) {
             e.unknown();
         }
     }
@@ -2825,7 +3005,7 @@ bool TRead::readProperties(TextBase* t, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
     for (Pid i : TextBasePropertyId) {
-        if (PropertyRW::readProperty(t, tag, e, ctx, i)) {
+        if (TRead::readProperty(t, tag, e, ctx, i)) {
             return true;
         }
     }
@@ -2874,7 +3054,7 @@ bool TRead::readProperties(TextBase* t, XmlReader& e, ReadContext& ctx)
         if (t->isStyled(Pid::FONT_STYLE)) {
             t->setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
         }
-    } else if (!EngravingItemRW::readProperties(t, e, ctx)) {
+    } else if (!readItemProperties(t, e, ctx)) {
         return false;
     }
     return true;
@@ -2884,7 +3064,7 @@ bool TRead::readProperties(TextLineBase* b, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
     for (Pid i : TextLineBase::textLineBasePropertyIds()) {
-        if (PropertyRW::readProperty(b, tag, e, ctx, i)) {
+        if (TRead::readProperty(b, tag, e, ctx, i)) {
             b->setPropertyFlags(i, PropertyFlags::UNSTYLED);
             return true;
         }
@@ -2939,7 +3119,7 @@ void TRead::read(Volta* v, XmlReader& e, ReadContext& ctx)
         const AsciiStringView tag(e.name());
         if (tag == "endings") {
             v->setEndings(TConv::fromXml(e.readText(), std::vector<int>()));
-        } else if (PropertyRW::readStyledProperty(v, tag, e, ctx)) {
+        } else if (TRead::readStyledProperty(v, tag, e, ctx)) {
         } else if (!readProperties(v, e, ctx)) {
             e.unknown();
         }
