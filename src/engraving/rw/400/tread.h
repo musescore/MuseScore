@@ -81,6 +81,7 @@ class Hairpin;
 class Hook;
 class KeySig;
 class LayoutBreak;
+class LedgerLine;
 class Lyrics;
 class MeasureBase;
 class Note;
@@ -158,6 +159,7 @@ public:
     static void read(InstrumentChange* c, XmlReader& xml, ReadContext& ctx);
     static void read(KeySig* s, XmlReader& xml, ReadContext& ctx);
     static void read(LayoutBreak* b, XmlReader& xml, ReadContext& ctx);
+    static void read(LedgerLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(Lyrics* l, XmlReader& xml, ReadContext& ctx);
     static void read(Note* n, XmlReader& xml, ReadContext& ctx);
     static void read(NoteDot* d, XmlReader& xml, ReadContext& ctx);
@@ -175,6 +177,7 @@ public:
     static bool readProperties(Chord* ch, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(ChordRest* ch, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Fermata* f, XmlReader& e, ReadContext& ctx);
+    static bool readProperties(LedgerLine* l, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Lyrics* l, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Note* n, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(SLine* l, XmlReader& xml, ReadContext& ctx);
