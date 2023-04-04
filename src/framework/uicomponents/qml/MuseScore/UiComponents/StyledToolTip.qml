@@ -37,6 +37,9 @@ StyledPopupView {
 
     openPolicy: PopupView.NoActivateFocus
 
+    //! NOTE: No navigation needed for tooltip
+    navigationSection: null
+
     function calculateSize() {
         contentWidth = Math.min(content.implicitWidth, 300 - margins * 2)
         contentHeight = content.implicitHeight
