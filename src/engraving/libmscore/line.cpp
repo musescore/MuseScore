@@ -27,6 +27,7 @@
 #include "containers.h"
 
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 
 #include "barline.h"
 #include "chord.h"
@@ -1386,44 +1387,7 @@ void SLine::writeProperties(XmlWriter& xml) const
 
 bool SLine::readProperties(XmlReader& e)
 {
-    const AsciiStringView tag(e.name());
-
-    if (tag == "tick2") {                  // obsolete
-        if (tick() == Fraction(-1, 1)) {   // not necessarily set (for first note of score?) #30151
-            setTick(e.context()->tick());
-        }
-        setTick2(Fraction::fromTicks(e.readInt()));
-    } else if (tag == "tick") {           // obsolete
-        setTick(Fraction::fromTicks(e.readInt()));
-    } else if (tag == "ticks") {
-        setTicks(Fraction::fromTicks(e.readInt()));
-    } else if (tag == "Segment") {
-        LineSegment* ls = createLineSegment(score()->dummy()->system());
-        ls->setTrack(track());     // needed in read to get the right staff mag
-        ls->read(e);
-        add(ls);
-        ls->setVisible(visible());
-    } else if (tag == "length") {
-        setLen(e.readDouble());
-    } else if (tag == "diagonal") {
-        setDiagonal(e.readInt());
-    } else if (tag == "anchor") {
-        setAnchor(Anchor(e.readInt()));
-    } else if (tag == "lineWidth") {
-        _lineWidth = e.readDouble() * spatium();
-    } else if (readProperty(tag, e, Pid::LINE_STYLE)) {
-    } else if (tag == "dashLineLength") {
-        _dashLineLen = e.readDouble();
-    } else if (tag == "dashGapLength") {
-        _dashGapLen = e.readDouble();
-    } else if (tag == "lineColor") {
-        _lineColor = e.readColor();
-    } else if (tag == "color") {
-        _lineColor = e.readColor();
-    } else if (!Spanner::readProperties(e)) {
-        return false;
-    }
-    return true;
+    return rw400::TRead::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------
@@ -1473,17 +1437,7 @@ void SLine::write(XmlWriter& xml) const
 
 void SLine::read(XmlReader& e)
 {
-    eraseSpannerSegments();
-
-    if (score()->mscVersion() < 301) {
-        e.context()->addSpanner(e.intAttribute("id", -1), this);
-    }
-
-    while (e.readNextStartElement()) {
-        if (!SLine::readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

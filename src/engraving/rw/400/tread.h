@@ -165,6 +165,7 @@ public:
     static void read(Lyrics* l, XmlReader& xml, ReadContext& ctx);
     static void read(Note* n, XmlReader& xml, ReadContext& ctx);
     static void read(NoteDot* d, XmlReader& xml, ReadContext& ctx);
+    static void read(SLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(Stem* s, XmlReader& xml, ReadContext& ctx);
     static void read(StemSlash* s, XmlReader& xml, ReadContext& ctx);
     static void read(Tremolo* t, XmlReader& xml, ReadContext& ctx);
