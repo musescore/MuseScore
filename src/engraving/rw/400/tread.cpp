@@ -90,6 +90,7 @@
 #include "../../libmscore/keysig.h"
 #include "../../libmscore/layoutbreak.h"
 #include "../../libmscore/ledgerline.h"
+#include "../../libmscore/letring.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -2032,6 +2033,20 @@ bool TRead::readProperties(LedgerLine* l, XmlReader& e, ReadContext&)
         return false;
     }
     return true;
+}
+
+void TRead::read(LetRing* r, XmlReader& e, ReadContext& ctx)
+{
+    if (r->score()->mscVersion() < 301) {
+        ctx.addSpanner(e.intAttribute("id", -1), r);
+    }
+    while (e.readNextStartElement()) {
+        if (PropertyRW::readProperty(r, e.name(), e, ctx, Pid::LINE_WIDTH)) {
+            r->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
+        } else if (!readProperties(static_cast<TextLineBase*>(r), e, ctx)) {
+            e.unknown();
+        }
+    }
 }
 
 void TRead::read(Lyrics* l, XmlReader& e, ReadContext& ctx)

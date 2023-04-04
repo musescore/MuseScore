@@ -82,6 +82,7 @@ class Hook;
 class KeySig;
 class LayoutBreak;
 class LedgerLine;
+class LetRing;
 class Lyrics;
 class MeasureBase;
 class Note;
@@ -160,6 +161,7 @@ public:
     static void read(KeySig* s, XmlReader& xml, ReadContext& ctx);
     static void read(LayoutBreak* b, XmlReader& xml, ReadContext& ctx);
     static void read(LedgerLine* l, XmlReader& xml, ReadContext& ctx);
+    static void read(LetRing* r, XmlReader& xml, ReadContext& ctx);
     static void read(Lyrics* l, XmlReader& xml, ReadContext& ctx);
     static void read(Note* n, XmlReader& xml, ReadContext& ctx);
     static void read(NoteDot* d, XmlReader& xml, ReadContext& ctx);
