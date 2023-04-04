@@ -33,6 +33,9 @@ StaffTreeItem::StaffTreeItem(IMasterNotationPtr masterNotation, INotationPtr not
         if (!m_isInited) {
             return;
         }
+        if (isVisible && !this->parentItem()->isVisible()) {
+            this->parentItem()->setIsVisible(true, false);
+        }
 
         this->notation()->parts()->setStaffVisible(id(), isVisible);
     });
