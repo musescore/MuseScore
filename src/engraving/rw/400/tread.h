@@ -83,15 +83,21 @@ class KeySig;
 class LayoutBreak;
 class LedgerLine;
 class LetRing;
+class Location;
 class Lyrics;
 class MeasureBase;
+class MeasureNumber;
+class MeasureRepeat;
+class MMRest;
 class Note;
 class NoteDot;
+class Rest;
 class SLine;
 class Spanner;
 class Stem;
 class StemSlash;
 class TextLineBase;
+class TimeSig;
 class Tremolo;
 class TremoloBar;
 }
@@ -125,8 +131,6 @@ public:
     static void read(Accidental* a, XmlReader& xml, ReadContext& ctx);
     static void read(Marker* m, XmlReader& xml, ReadContext& ctx);
     static void read(Jump* j, XmlReader& xml, ReadContext& ctx);
-    static void read(MeasureNumber* n, XmlReader& xml, ReadContext& ctx);
-    static void read(MeasureNumberBase* b, XmlReader& xml, ReadContext& ctx);
     static void read(MMRestRange* r, XmlReader& xml, ReadContext& ctx);
     static void read(SystemDivider* d, XmlReader& xml, ReadContext& ctx);
     static void read(ActionIcon* i, XmlReader& xml, ReadContext& ctx);
@@ -162,12 +166,19 @@ public:
     static void read(LayoutBreak* b, XmlReader& xml, ReadContext& ctx);
     static void read(LedgerLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(LetRing* r, XmlReader& xml, ReadContext& ctx);
+    static void read(Location* l, XmlReader& xml, ReadContext& ctx);
     static void read(Lyrics* l, XmlReader& xml, ReadContext& ctx);
+    static void read(MeasureNumber* n, XmlReader& xml, ReadContext& ctx);
+    static void read(MeasureNumberBase* b, XmlReader& xml, ReadContext& ctx);
+    static void read(MeasureRepeat* r, XmlReader& xml, ReadContext& ctx);
+    static void read(MMRest* r, XmlReader& xml, ReadContext& ctx);
     static void read(Note* n, XmlReader& xml, ReadContext& ctx);
     static void read(NoteDot* d, XmlReader& xml, ReadContext& ctx);
+    static void read(Rest* r, XmlReader& xml, ReadContext& ctx);
     static void read(SLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(Stem* s, XmlReader& xml, ReadContext& ctx);
     static void read(StemSlash* s, XmlReader& xml, ReadContext& ctx);
+    static void read(TimeSig* s, XmlReader& xml, ReadContext& ctx);
     static void read(Tremolo* t, XmlReader& xml, ReadContext& ctx);
     static void read(TremoloBar* b, XmlReader& xml, ReadContext& ctx);
 
@@ -182,10 +193,13 @@ public:
     static bool readProperties(Fermata* f, XmlReader& e, ReadContext& ctx);
     static bool readProperties(LedgerLine* l, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Lyrics* l, XmlReader& xml, ReadContext& ctx);
+    static bool readProperties(MMRest* r, XmlReader& xml, ReadContext& ctx);
+    static bool readProperties(MeasureNumberBase* r, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Note* n, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(SLine* l, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Spanner* s, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Stem* s, XmlReader& e, ReadContext& ctx);
+    static bool readProperties(TextBase* t, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(TextLineBase* b, XmlReader& e, ReadContext& ctx);
 };
 }

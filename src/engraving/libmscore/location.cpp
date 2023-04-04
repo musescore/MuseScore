@@ -23,7 +23,7 @@
 #include "location.h"
 
 #include "rw/xml.h"
-#include "rw/400/locationrw.h"
+#include "rw/400/tread.h"
 
 #include "chord.h"
 #include "engravingitem.h"
@@ -86,7 +86,7 @@ void Location::write(XmlWriter& xml) const
 
 void Location::read(XmlReader& e)
 {
-    rw400::LocationRW::read(this, e, *e.context());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

@@ -24,7 +24,7 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
-#include "rw/400/mmrestrw.h"
+#include "rw/400/tread.h"
 
 #include "measure.h"
 #include "score.h"
@@ -236,7 +236,7 @@ void MMRest::writeProperties(XmlWriter& xml) const
 
 bool MMRest::readProperties(XmlReader& xml)
 {
-    return rw400::MMRestRW::readProperties(this, xml, *xml.context());
+    return rw400::TRead::readProperties(this, xml, *xml.context());
 }
 
 //---------------------------------------------------------

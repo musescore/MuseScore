@@ -30,6 +30,7 @@
 #include "translation.h"
 
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 
 #include "actionicon.h"
 #include "articulation.h"
@@ -950,32 +951,7 @@ void Rest::write(XmlWriter& xml) const
 
 void Rest::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "Symbol") {
-            Symbol* s = new Symbol(this);
-            s->setTrack(track());
-            s->read(e);
-            add(s);
-        } else if (tag == "Image") {
-            if (MScore::noImages) {
-                e.skipCurrentElement();
-            } else {
-                Image* image = new Image(this);
-                image->setTrack(track());
-                image->read(e);
-                add(image);
-            }
-        } else if (tag == "NoteDot") {
-            NoteDot* dot = Factory::createNoteDot(this);
-            dot->read(e);
-            add(dot);
-        } else if (readStyledProperty(e, tag)) {
-        } else if (readProperties(e)) {
-        } else {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
