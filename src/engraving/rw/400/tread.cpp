@@ -99,6 +99,7 @@
 #include "../../libmscore/spacer.h"
 #include "../../libmscore/stafftype.h"
 #include "../../libmscore/stafftypechange.h"
+#include "../../libmscore/system.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -2636,6 +2637,20 @@ bool TRead::readProperties(Stem* s, XmlReader& e, ReadContext& ctx)
 void TRead::read(StemSlash* s, XmlReader& xml, ReadContext& ctx)
 {
     EngravingItemRW::read(s, xml, ctx);
+}
+
+void TRead::read(System* s, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "SystemDivider") {
+            SystemDivider* sd = new SystemDivider(s);
+            TRead::read(sd, e, ctx);
+            s->add(sd);
+        } else {
+            e.unknown();
+        }
+    }
 }
 
 void TRead::read(TimeSig* s, XmlReader& e, ReadContext& ctx)
