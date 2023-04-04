@@ -97,6 +97,8 @@
 #include "../../libmscore/slur.h"
 #include "../../libmscore/slurtie.h"
 #include "../../libmscore/spacer.h"
+#include "../../libmscore/stafftype.h"
+#include "../../libmscore/stafftypechange.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -2505,6 +2507,108 @@ void TRead::read(Spacer* s, XmlReader& e, ReadContext& ctx)
         }
     }
     s->layout0();
+}
+
+void TRead::read(StaffType* t, XmlReader& e, ReadContext&)
+{
+    t->setGroup(TConv::fromXml(e.asciiAttribute("group"), StaffGroup::STANDARD));
+
+    if (t->group() == StaffGroup::TAB) {
+        t->setGenKeysig(false);
+    }
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "name") {
+            t->setXmlName(e.readText());
+        } else if (tag == "lines") {
+            t->setLines(e.readInt());
+        } else if (tag == "lineDistance") {
+            t->setLineDistance(Spatium(e.readDouble()));
+        } else if (tag == "yoffset") {
+            t->setYoffset(Spatium(e.readDouble()));
+        } else if (tag == "mag") {
+            t->setUserMag(e.readDouble());
+        } else if (tag == "small") {
+            t->setSmall(e.readBool());
+        } else if (tag == "stepOffset") {
+            t->setStepOffset(e.readInt());
+        } else if (tag == "clef") {
+            t->setGenClef(e.readInt());
+        } else if ((tag == "slashStyle") || (tag == "stemless")) {
+            bool val = e.readInt() != 0;
+            t->setStemless(val);
+            t->setShowBackTied(!val);        // for compatibility with 2.0.2 scores where this prop
+        }                                 // was lacking and controlled by "slashStyle" instead
+        else if (tag == "barlines") {
+            t->setShowBarlines(e.readInt());
+        } else if (tag == "timesig") {
+            t->setGenTimesig(e.readInt());
+        } else if (tag == "noteheadScheme") {
+            t->setNoteHeadScheme(TConv::fromXml(e.readAsciiText(), NoteHeadScheme::HEAD_NORMAL));
+        } else if (tag == "keysig") {
+            t->setGenKeysig(e.readInt());
+        } else if (tag == "ledgerlines") {
+            t->setShowLedgerLines(e.readInt());
+        } else if (tag == "invisible") {
+            t->setInvisible(e.readInt());
+        } else if (tag == "color") {
+            t->setColor(e.readColor());
+        } else if (tag == "durations") {
+            t->setGenDurations(e.readBool());
+        } else if (tag == "durationFontName") {
+            t->setDurationFontName(e.readText());
+        } else if (tag == "durationFontSize") {
+            t->setDurationFontSize(e.readDouble());
+        } else if (tag == "durationFontY") {
+            t->setDurationFontUserY(e.readDouble());
+        } else if (tag == "fretFontName") {
+            t->setFretFontName(e.readText());
+        } else if (tag == "fretFontSize") {
+            t->setFretFontSize(e.readDouble());
+        } else if (tag == "fretFontY") {
+            t->setFretFontUserY(e.readDouble());
+        } else if (tag == "symbolRepeat") {
+            t->setSymbolRepeat((TablatureSymbolRepeat)e.readInt());
+        } else if (tag == "linesThrough") {
+            t->setLinesThrough(e.readBool());
+        } else if (tag == "minimStyle") {
+            t->setMinimStyle((TablatureMinimStyle)e.readInt());
+        } else if (tag == "onLines") {
+            t->setOnLines(e.readBool());
+        } else if (tag == "showRests") {
+            t->setShowRests(e.readBool());
+        } else if (tag == "stemsDown") {
+            t->setStemsDown(e.readBool());
+        } else if (tag == "stemsThrough") {
+            t->setStemsThrough(e.readBool());
+        } else if (tag == "upsideDown") {
+            t->setUpsideDown(e.readBool());
+        } else if (tag == "showTabFingering") {
+            t->setShowTabFingering(e.readBool());
+        } else if (tag == "useNumbers") {
+            t->setUseNumbers(e.readBool());
+        } else if (tag == "showBackTied") {           // must be after reading "slashStyle"/"stemless" prop, as in older
+            t->setShowBackTied(e.readBool());            // scores, this prop was lacking and controlled by "slashStyle"
+        } else {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(StaffTypeChange* c, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "StaffType") {
+            StaffType* st = new StaffType();
+            TRead::read(st, e, ctx);
+            // Measure::add() will replace this with a pointer to a copy in the staff
+            c->setStaffType(st, true);
+        } else if (!EngravingItemRW::readProperties(c, e, ctx)) {
+            e.unknown();
+        }
+    }
 }
 
 void TRead::read(Stem* s, XmlReader& e, ReadContext& ctx)
