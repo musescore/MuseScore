@@ -22,6 +22,7 @@
 
 #include "stafftypechange.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "score.h"
 #include "measure.h"
 #include "system.h"
@@ -80,17 +81,7 @@ void StaffTypeChange::write(XmlWriter& xml) const
 
 void StaffTypeChange::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "StaffType") {
-            StaffType* st = new StaffType();
-            st->read(e);
-            // Measure::add() will replace this with a pointer to a copy in the staff
-            setStaffType(st, true);
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 void StaffTypeChange::setStaffType(StaffType* st, bool owned)
