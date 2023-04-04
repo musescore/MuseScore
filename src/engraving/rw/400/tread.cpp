@@ -1985,6 +1985,28 @@ void TRead::read(Hook* h, XmlReader& xml, ReadContext& ctx)
     TRead::read(static_cast<Symbol*>(h), xml, ctx);
 }
 
+void TRead::read(LayoutBreak* b, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "subtype") {
+            PropertyRW::readProperty(b, e, ctx, Pid::LAYOUT_BREAK);
+        } else if (tag == "pause") {
+            PropertyRW::readProperty(b, e, ctx, Pid::PAUSE);
+        } else if (tag == "startWithLongNames") {
+            PropertyRW::readProperty(b, e, ctx, Pid::START_WITH_LONG_NAMES);
+        } else if (tag == "startWithMeasureOne") {
+            PropertyRW::readProperty(b, e, ctx, Pid::START_WITH_MEASURE_ONE);
+        } else if (tag == "firstSystemIndentation"
+                   || tag == "firstSystemIdentation" /* pre-4.0 typo */) {
+            PropertyRW::readProperty(b, e, ctx, Pid::FIRST_SYSTEM_INDENTATION);
+        } else if (!EngravingItemRW::readProperties(b, e, ctx)) {
+            e.unknown();
+        }
+    }
+    b->layout0();
+}
+
 void TRead::read(Lyrics* l, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
