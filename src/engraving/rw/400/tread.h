@@ -96,6 +96,7 @@ class Slur;
 class SlurTie;
 class SlurTieSegment;
 class Spanner;
+class Spacer;
 class Stem;
 class StemSlash;
 class TextLineBase;
@@ -181,6 +182,7 @@ public:
     static void read(Slur* s, XmlReader& xml, ReadContext& ctx);
     static void read(SlurTie* s, XmlReader& xml, ReadContext& ctx);
     static void read(SlurTieSegment* s, XmlReader& xml, ReadContext& ctx);
+    static void read(Spacer* s, XmlReader& xml, ReadContext& ctx);
     static void read(Stem* s, XmlReader& xml, ReadContext& ctx);
     static void read(StemSlash* s, XmlReader& xml, ReadContext& ctx);
     static void read(TimeSig* s, XmlReader& xml, ReadContext& ctx);

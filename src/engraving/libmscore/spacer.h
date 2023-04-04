@@ -55,8 +55,6 @@ class Spacer final : public EngravingItem
     Spacer(Measure* parent);
     Spacer(const Spacer&);
 
-    void layout0();
-
 public:
 
     Spacer* clone() const override { return new Spacer(*this); }
@@ -87,6 +85,8 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
+
+    void layout0();
 };
 } // namespace mu::engraving
 #endif
