@@ -30,7 +30,7 @@
 #include "iengravingfont.h"
 
 #include "rw/xml.h"
-#include "rw/400/textbaserw.h"
+#include "rw/400/tread.h"
 
 #include "style/defaultstyle.h"
 #include "style/textstyle.h"
@@ -2273,11 +2273,7 @@ void TextBase::write(XmlWriter& xml) const
 
 void TextBase::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
@@ -2309,7 +2305,7 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
 
 bool TextBase::readProperties(XmlReader& e)
 {
-    return rw400::TextBaseRW::readProperties(this, e, *e.context());
+    return rw400::TRead::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------

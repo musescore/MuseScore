@@ -23,6 +23,7 @@
 #include "measurenumberbase.h"
 
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 
 #include "measure.h"
 #include "score.h"
@@ -97,6 +98,11 @@ PropertyValue MeasureNumberBase::propertyDefault(Pid id) const
     default:
         return TextBase::propertyDefault(id);
     }
+}
+
+void MeasureNumberBase::read(XmlReader& xml)
+{
+    rw400::TRead::read(this, xml, *xml.context());
 }
 
 //---------------------------------------------------------

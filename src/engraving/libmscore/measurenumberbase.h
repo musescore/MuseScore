@@ -43,6 +43,7 @@ public:
     bool setProperty(Pid id, const PropertyValue& val) override;
     PropertyValue propertyDefault(Pid id) const override;
 
+    void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;
 
     void layout() override;

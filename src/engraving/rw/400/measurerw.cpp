@@ -59,11 +59,6 @@
 #include "../libmscore/tempotext.h"
 #include "../libmscore/image.h"
 
-#include "locationrw.h"
-#include "mmrestrw.h"
-#include "restrw.h"
-#include "measurerepeatrw.h"
-#include "timesigrw.h"
 #include "tread.h"
 
 #include "log.h"
@@ -231,7 +226,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
 
         if (tag == "location") {
             Location loc = Location::relative();
-            LocationRW::read(&loc, e, ctx);
+            TRead::read(&loc, e, ctx);
             ctx.setLocation(loc);
         } else if (tag == "tick") {             // obsolete?
             LOGD() << "read midi tick";
@@ -306,7 +301,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                 MMRest* mmr = Factory::createMMRest(segment);
                 mmr->setTrack(ctx.track());
                 mmr->setParent(segment);
-                MMRestRW::read(mmr, e, ctx);
+                TRead::read(mmr, e, ctx);
                 segment->add(mmr);
                 ctx.incTick(mmr->actualTicks());
             } else {
@@ -315,7 +310,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                 rest->setDurationType(DurationType::V_MEASURE);
                 rest->setTicks(measure->timesig() / timeStretch);
                 rest->setTrack(ctx.track());
-                RestRW::read(rest, e, ctx);
+                TRead::read(rest, e, ctx);
                 if (startingBeam) {
                     startingBeam->add(rest); // also calls rest->setBeam(startingBeam)
                     startingBeam = nullptr;
@@ -350,7 +345,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
             MeasureRepeat* mr = Factory::createMeasureRepeat(segment);
             mr->setTrack(ctx.track());
-            MeasureRepeatRW::read(mr, e, ctx);
+            TRead::read(mr, e, ctx);
             if (!mr->numMeasures()) {
                 mr->setNumMeasures(1); // 3.x doesn't have any other possibilities
             }
@@ -389,7 +384,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "TimeSig") {
             TimeSig* ts = Factory::createTimeSig(ctx.dummy()->segment());
             ts->setTrack(ctx.track());
-            TimeSigRW::read(ts, e, ctx);
+            TRead::read(ts, e, ctx);
             // if time sig not at beginning of measure => courtesy time sig
             Fraction currTick = ctx.tick();
             bool courtesySig = (currTick > measure->tick());

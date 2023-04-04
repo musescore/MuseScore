@@ -93,18 +93,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/propertyrw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/engravingitemrw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/engravingitemrw.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/locationrw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/locationrw.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/textbaserw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/textbaserw.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/mmrestrw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/mmrestrw.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/restrw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/restrw.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/measurerepeatrw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/measurerepeatrw.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/timesigrw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/timesigrw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/tread.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/tread.h
 
