@@ -23,6 +23,7 @@
 #include "textedit.h"
 
 #include "mscoreview.h"
+#include "navigate.h"
 #include "score.h"
 #include "iengravingfont.h"
 #include "types/symnames.h"
@@ -189,10 +190,10 @@ void TextBase::endEdit(EditData& ed)
 
         commitText();
         if (isLyrics()) {
-            Lyrics* prevLyrics = toLyrics(this)->prevLyrics();
-            if (prevLyrics) {
-                prevLyrics->setRemoveInvalidSegments();
-                prevLyrics->layout();
+            Lyrics* prev = prevLyrics(toLyrics(this));
+            if (prev) {
+                prev->setRemoveInvalidSegments();
+                prev->layout();
             }
         }
         return;

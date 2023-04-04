@@ -25,9 +25,11 @@
 
 namespace mu::engraving {
 class ChordRest;
+class Lyrics;
 
 extern int pitch2y(int pitch, int enh, int clefOffset, int key, int& prefix, const char* tversatz);
 extern ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace = false, bool skipMeasureRepeatRests = true);
 extern ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace = false, bool skipMeasureRepeatRests = true);
+extern Lyrics* prevLyrics(const Lyrics* lyrics);
 } // namespace mu::engraving
 #endif

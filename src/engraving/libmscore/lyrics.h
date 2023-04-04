@@ -81,7 +81,6 @@ public:
     Segment* segment() const { return toSegment(explicitParent()->explicitParent()); }
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()->explicitParent()); }
     ChordRest* chordRest() const { return toChordRest(explicitParent()); }
-    Lyrics* prevLyrics() const;
 
     void layout() override;
     void layout2(int);

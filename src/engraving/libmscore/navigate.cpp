@@ -973,18 +973,18 @@ EngravingItem* Score::prevElement()
 //    - currently used to determine the first lyric of a melisma
 //---------------------------------------------------------
 
-Lyrics* Lyrics::prevLyrics() const
+Lyrics* prevLyrics(const Lyrics* lyrics)
 {
-    track_idx_t currTrack = track();
-    Segment* seg = segment();
+    track_idx_t currTrack = lyrics->track();
+    Segment* seg = lyrics->segment();
     if (!seg) {
         return nullptr;
     }
-    PropertyFlags pFlags = propertyFlags(mu::engraving::Pid::PLACEMENT);
+    PropertyFlags pFlags = lyrics->propertyFlags(mu::engraving::Pid::PLACEMENT);
     Segment* prevSegment = seg;
     while ((prevSegment = prevSegment->prev1(mu::engraving::SegmentType::ChordRest))) {
         EngravingItem* el = prevSegment->element(currTrack);
-        Lyrics* prevLyrics = el && el->isChord() ? toChordRest(el)->lyrics(no(), placement()) : nullptr;
+        Lyrics* prevLyrics = el && el->isChord() ? toChordRest(el)->lyrics(lyrics->no(), lyrics->placement()) : nullptr;
         if (prevLyrics) {
             return prevLyrics;
         }

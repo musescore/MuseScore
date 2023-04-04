@@ -29,6 +29,7 @@
 
 #include "measure.h"
 #include "mscoreview.h"
+#include "navigate.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -548,7 +549,7 @@ void Lyrics::removeFromScore()
         delete _separator;
         _separator = 0;
     }
-    Lyrics* prev = prevLyrics();
+    Lyrics* prev = prevLyrics(this);
     if (prev) {
         // check to make sure we haven't created an invalid segment by deleting this lyric
         prev->setRemoveInvalidSegments();
@@ -602,6 +603,11 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
         }
 
         _ticks = v.value<Fraction>();
+        if (_ticks <= Fraction(0, 1)) {
+            // if no ticks, we have to relayout in order to remove invalid melisma segments
+            setRemoveInvalidSegments();
+            layout();
+        }
         break;
     case Pid::VERSE:
         _no = v.toInt();
