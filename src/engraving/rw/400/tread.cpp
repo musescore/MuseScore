@@ -2227,6 +2227,21 @@ void TRead::read(NoteDot* d, XmlReader& e, ReadContext& ctx)
     }
 }
 
+void TRead::read(SLine* l, XmlReader& e, ReadContext& ctx)
+{
+    l->eraseSpannerSegments();
+
+    if (l->score()->mscVersion() < 301) {
+        ctx.addSpanner(e.intAttribute("id", -1), l);
+    }
+
+    while (e.readNextStartElement()) {
+        if (!readProperties(l, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
 bool TRead::readProperties(SLine* l, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
