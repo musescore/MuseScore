@@ -89,10 +89,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/readcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/writecontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/writecontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/propertyrw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/propertyrw.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/engravingitemrw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/engravingitemrw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/tread.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/tread.h
 
