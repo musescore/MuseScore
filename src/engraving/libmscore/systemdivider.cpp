@@ -22,6 +22,7 @@
 
 #include "systemdivider.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "types/symnames.h"
 
 #include "score.h"
@@ -111,17 +112,6 @@ void SystemDivider::write(XmlWriter& xml) const
 
 void SystemDivider::read(XmlReader& e)
 {
-    if (e.attribute("type") == "left") {
-        _dividerType = SystemDivider::Type::LEFT;
-        SymId sym = SymNames::symIdByName(score()->styleSt(Sid::dividerLeftSym));
-        setSym(sym, score()->engravingFont());
-        setOffset(PointF(score()->styleD(Sid::dividerLeftX), score()->styleD(Sid::dividerLeftY)));
-    } else {
-        _dividerType = SystemDivider::Type::RIGHT;
-        SymId sym = SymNames::symIdByName(score()->styleSt(Sid::dividerRightSym));
-        setSym(sym, score()->engravingFont());
-        setOffset(PointF(score()->styleD(Sid::dividerRightX), score()->styleD(Sid::dividerRightY)));
-    }
-    Symbol::read(e);
+    rw400::TRead::read(this, e, *e.context());
 }
 } // namespace mu::engraving

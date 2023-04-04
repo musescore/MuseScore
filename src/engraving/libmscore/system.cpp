@@ -30,6 +30,7 @@
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "layout/layoutcontext.h"
 #include "realfn.h"
 
@@ -1544,16 +1545,7 @@ void System::write(XmlWriter& xml) const
 
 void System::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "SystemDivider") {
-            SystemDivider* sd = new SystemDivider(this);
-            sd->read(e);
-            add(sd);
-        } else {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
