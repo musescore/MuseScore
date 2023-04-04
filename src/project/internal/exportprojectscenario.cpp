@@ -23,8 +23,6 @@
 
 #include "exportprojectscenario.h"
 
-#include "async/async.h"
-
 #include "translation.h"
 #include "defer.h"
 #include "log.h"
@@ -58,7 +56,8 @@ mu::RetVal<mu::io::path_t> ExportProjectScenario::askExportPath(const INotationP
     // types in the save dialog and therefore we can put the file dialog in charge of
     // asking the user whether an existing file should be overridden. Otherwise, we
     // will take care of that ourselves.
-    bool isCreatingOnlyOneFile = this->isCreatingOnlyOneFile(notations, unitType);
+    size_t fileCount = exportFileCount(notations, unitType);
+    bool isCreatingOnlyOneFile = fileCount == 1;
     bool isExportingOnlyOneScore = notations.size() == 1;
 
     if (unitType == INotationWriter::UnitType::MULTI_PART && !isExportingOnlyOneScore) {
@@ -97,14 +96,14 @@ mu::RetVal<mu::io::path_t> ExportProjectScenario::askExportPath(const INotationP
 bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
                                          INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
 {
-    m_currentSuffix = io::suffix(destinationPath);
-    m_currentWriter = writers()->writer(m_currentSuffix);
+    std::string suffix = io::suffix(destinationPath);
+    INotationWriterPtr writer = writers()->writer(suffix);
 
-    if (!m_currentWriter) {
+    if (!writer) {
         return false;
     }
 
-    IF_ASSERT_FAILED(m_currentWriter->supportsUnitType(unitType)) {
+    IF_ASSERT_FAILED(writer->supportsUnitType(unitType)) {
         return false;
     }
 
@@ -120,78 +119,96 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
     std::vector<ViewMode> viewModes = this->viewModes(notations);
     setViewModes(notations, ViewMode::PAGE);
 
+    Progress* writerProgress = writer->progress();
+    size_t fileCount = exportFileCount(notations, unitType);
+    size_t currentFileNum = 0;
+
+    if (writerProgress) {
+        showExportProgress(isAudioExport(suffix));
+        m_exportProgress.started.notify();
+
+        writerProgress->progressChanged.onReceive(this, [this, &currentFileNum, fileCount](int64_t current, int64_t total,
+                                                                                           const std::string& status) {
+            m_exportProgress.progressChanged.send(currentFileNum * total + current, fileCount * total, status);
+        });
+
+        m_exportProgress.finished.onReceive(this, [writer](const ProgressResult& res) {
+            if (res.ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+                writer->abort();
+            }
+        });
+    }
+
     DEFER {
         // Restore view modes
         setViewModes(notations, viewModes);
-    };
 
-    bool isCreatingOnlyOneFile = this->isCreatingOnlyOneFile(notations, unitType);
+        if (writerProgress) {
+            m_exportProgress.finished.send(make_ok());
+            writerProgress->progressChanged.resetOnReceive(this);
+            m_exportProgress.finished.resetOnReceive(this);
+        }
+    };
 
     // If isCreatingOnlyOneFile, the save dialog has already asked whether to replace
     // any existing files. If the user cancels, the filepath will be empty, so we would
     // not reach this point. But if we do, existing files should be overridden.
+    bool isCreatingOnlyOneFile = fileCount == 1;
     m_fileConflictPolicy = isCreatingOnlyOneFile ? FileConflictPolicy::ReplaceAll : FileConflictPolicy::Undefined;
+
+    INotationWriter::Options options {
+        { INotationWriter::OptionKey::UNIT_TYPE, Val(unitType) },
+        { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
+    };
 
     switch (unitType) {
     case INotationWriter::UnitType::PER_PAGE: {
         for (INotationPtr notation : notations) {
-            for (size_t page = 0; page < notation->elements()->msScore()->pages().size(); page++) {
-                INotationWriter::Options options {
-                    { INotationWriter::OptionKey::UNIT_TYPE, Val(unitType) },
-                    { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(page)) },
-                    { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND,
-                      Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
-                };
+            size_t pageCount = notation->elements()->msScore()->pages().size();
+            bool isMain = isMainNotation(notation);
+
+            for (size_t page = 0; page < pageCount; ++page) {
+                options[INotationWriter::OptionKey::PAGE_NUMBER] = Val(static_cast<int>(page));
 
                 io::path_t definitivePath = isCreatingOnlyOneFile
                                             ? destinationPath
-                                            : completeExportPath(destinationPath, notation, isMainNotation(notation),
+                                            : completeExportPath(destinationPath, notation, isMain,
                                                                  static_cast<int>(page));
 
-                auto exportFunction = [this, notation, options](QIODevice& destinationDevice) {
-                        showExportProgressIfNeed();
-                        return m_currentWriter->write(notation, destinationDevice, options);
+                auto exportFunction = [writer, notation, options](QIODevice& destinationDevice) {
+                        return writer->write(notation, destinationDevice, options);
                     };
 
                 Ret ret = doExportLoop(definitivePath, exportFunction);
                 if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
                     return false;
                 }
+
+                ++currentFileNum;
             }
         }
     } break;
     case INotationWriter::UnitType::PER_PART: {
         for (INotationPtr notation : notations) {
-            INotationWriter::Options options {
-                { INotationWriter::OptionKey::UNIT_TYPE, Val(unitType) },
-                { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND,
-                  Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
-            };
-
             io::path_t definitivePath = isCreatingOnlyOneFile
                                         ? destinationPath
                                         : completeExportPath(destinationPath, notation, isMainNotation(notation));
 
-            auto exportFunction = [this, notation, options](QIODevice& destinationDevice) {
-                    showExportProgressIfNeed();
-                    return m_currentWriter->write(notation, destinationDevice, options);
+            auto exportFunction = [writer, notation, options](QIODevice& destinationDevice) {
+                    return writer->write(notation, destinationDevice, options);
                 };
 
             Ret ret = doExportLoop(definitivePath, exportFunction);
             if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
                 return false;
             }
+
+            ++currentFileNum;
         }
     } break;
     case INotationWriter::UnitType::MULTI_PART: {
-        INotationWriter::Options options {
-            { INotationWriter::OptionKey::UNIT_TYPE, Val(unitType) },
-            { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
-        };
-
-        auto exportFunction = [this, notations, options](QIODevice& destinationDevice) {
-                showExportProgressIfNeed();
-                return m_currentWriter->writeList(notations, destinationDevice, options);
+        auto exportFunction = [writer, notations, options](QIODevice& destinationDevice) {
+                return writer->writeList(notations, destinationDevice, options);
             };
 
         Ret ret = doExportLoop(destinationPath, exportFunction);
@@ -208,30 +225,25 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
     return true;
 }
 
-Progress ExportProjectScenario::progress() const
-{
-    return m_currentWriter ? m_currentWriter->progress() : Progress();
-}
-
-void ExportProjectScenario::abort()
-{
-    if (m_currentWriter) {
-        m_currentWriter->abort();
-    }
-}
-
-bool ExportProjectScenario::isCreatingOnlyOneFile(const INotationPtrList& notations, INotationWriter::UnitType unitType) const
+size_t ExportProjectScenario::exportFileCount(const INotationPtrList& notations, INotationWriter::UnitType unitType) const
 {
     switch (unitType) {
-    case INotationWriter::UnitType::PER_PAGE:
-        return notations.size() == 1 && notations.front()->elements()->pages().size() == 1;
+    case INotationWriter::UnitType::PER_PAGE: {
+        size_t count = 0;
+
+        for (INotationPtr notation : notations) {
+            count += notation->elements()->pages().size();
+        }
+
+        return count;
+    };
     case INotationWriter::UnitType::PER_PART:
-        return notations.size() == 1;
+        return notations.size();
     case INotationWriter::UnitType::MULTI_PART:
-        return true;
+        return 1;
     }
 
-    return false;
+    return 0;
 }
 
 bool ExportProjectScenario::isMainNotation(INotationPtr notation) const
@@ -350,18 +362,13 @@ mu::Ret ExportProjectScenario::doExportLoop(const io::path_t& scorePath, std::fu
     return make_ok();
 }
 
-void ExportProjectScenario::showExportProgressIfNeed() const
+void ExportProjectScenario::showExportProgress(bool isAudioExport) const
 {
-    if (m_currentWriter && m_currentWriter->supportsProgressNotifications()) {
-        async::Async::call(this, [this]() {
-            UriQuery query("musescore://project/export/progress");
+    std::string title = isAudioExport ? trc("project/export", "Exporting audio…") : trc("project/export", "Exporting…");
 
-            if (isAudioExport(m_currentSuffix)) {
-                query.addParam("title", Val(trc("project/export", "Exporting audio…")));
-            }
-
-            interactive()->open(query);
-        });
+    Ret ret = interactive()->showProgress(title, &m_exportProgress);
+    if (!ret) {
+        LOGE() << ret.toString();
     }
 }
 

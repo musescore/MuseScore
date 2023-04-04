@@ -31,6 +31,10 @@ StyledDialogView {
     property alias title: titleLabel.text
     property var progress: undefined
 
+    modal: true
+    frameless: true
+    closeOnEscape: false
+
     contentWidth: content.width
     contentHeight: content.height
 
@@ -51,7 +55,11 @@ StyledDialogView {
     ColumnLayout {
         id: content
 
-        width: Math.max(childrenRect.width, 500)
+        readonly property int defaultWidth: 320
+        readonly property int defaultHeight: progressStatusLabel.visible ? 140 : 120
+
+        width: Math.max(childrenRect.width, content.defaultWidth)
+        height: Math.max(childrenRect.height, content.defaultHeight)
 
         spacing: 16
 

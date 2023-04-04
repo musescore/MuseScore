@@ -41,6 +41,8 @@
 #include "pluginterfaces/vst/ivstmidicontrollers.h"
 
 #include "framework/midi/miditypes.h"
+#include "io/path.h"
+#include "log.h"
 
 namespace mu::vst {
 class VstPlugin;
@@ -79,12 +81,6 @@ using ParamsMapping = std::unordered_map<ControllIdx, PluginParamId>;
 static const std::string VST3_PACKAGE_EXTENSION = "vst3";
 static const std::string VST3_PACKAGE_FILTER = "*." + VST3_PACKAGE_EXTENSION;
 
-enum class VstPluginType {
-    Undefined,
-    Instrument,
-    Fx
-};
-
 /// @see https://steinbergmedia.github.io/vst3_doc/vstinterfaces/namespaceSteinberg_1_1Vst_1_1PlugType.html
 namespace PluginCategory {
 static constexpr std::string_view Analyzer { "Analyzer" };
@@ -120,6 +116,20 @@ using VstMemoryStream = Steinberg::MemoryStream;
 using VstBufferStream = Steinberg::Vst::BufferStream;
 
 namespace PluginEditorViewType = Steinberg::Vst::ViewType;
+
+inline PluginModulePtr createModule(const io::path_t& path)
+{
+    std::string errorString;
+    PluginModulePtr result = nullptr;
+
+    try {
+        result = PluginModule::create(path.toStdString(), errorString);
+    }  catch (...) {
+        LOGE() << "Unable to load a new VST Module, error string: " << errorString;
+    }
+
+    return result;
+}
 }
 
 template<>

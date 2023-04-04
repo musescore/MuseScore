@@ -22,8 +22,6 @@
 
 #include "vstconfigurationstub.h"
 
-#include "log.h"
-
 using namespace mu::vst;
 
 mu::io::paths_t VstConfigurationStub::userVstDirectories() const
@@ -39,9 +37,4 @@ mu::async::Channel<mu::io::paths_t> VstConfigurationStub::userVstDirectoriesChan
 {
     static mu::async::Channel<mu::io::paths_t> stub;
     return stub;
-}
-
-mu::io::path_t VstConfigurationStub::knownPluginsDir() const
-{
-    return mu::io::path_t();
 }

@@ -36,7 +36,7 @@ mu::Ret DiagnosticFilesWriter::writeDiagnosticFiles(const path_t& destinationPat
 
     static const std::vector<std::string> DIRS_TO_WRITE {
         "logs",
-        "vst",
+        "audio_plugins",
         "plugins",
         "workspaces",
     };

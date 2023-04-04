@@ -105,7 +105,10 @@ void VstPlugin::load()
 
         for (const ClassInfo& classInfo : factory.classInfos()) {
             if (classInfo.category() != kVstAudioEffectClass) {
-                LOGI() << "Non-audio plugins are not supported";
+                continue;
+            }
+
+            if (classInfo.name() != m_resourceId) {
                 continue;
             }
 

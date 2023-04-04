@@ -53,10 +53,6 @@ public:
                       INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                       bool openDestinationFolderOnExport = false) const override;
 
-    framework::Progress progress() const override;
-
-    void abort() override;
-
 private:
     enum class FileConflictPolicy {
         Undefined,
@@ -64,7 +60,7 @@ private:
         ReplaceAll
     };
 
-    bool isCreatingOnlyOneFile(const notation::INotationPtrList& notations, INotationWriter::UnitType unitType) const;
+    size_t exportFileCount(const notation::INotationPtrList& notations, INotationWriter::UnitType unitType) const;
 
     bool isMainNotation(notation::INotationPtr notation) const;
 
@@ -75,7 +71,7 @@ private:
 
     Ret doExportLoop(const io::path_t& path, std::function<Ret(QIODevice&)> exportFunction) const;
 
-    void showExportProgressIfNeed() const;
+    void showExportProgress(bool isAudioExport) const;
 
     void openFolder(const io::path_t& path) const;
 
@@ -84,8 +80,7 @@ private:
     void setViewModes(const notation::INotationPtrList& notations, notation::ViewMode viewMode) const;
 
     mutable FileConflictPolicy m_fileConflictPolicy = FileConflictPolicy::Undefined;
-    mutable INotationWriterPtr m_currentWriter;
-    mutable std::string m_currentSuffix;
+    mutable framework::Progress m_exportProgress;
 };
 }
 

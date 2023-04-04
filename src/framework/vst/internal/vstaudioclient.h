@@ -35,7 +35,7 @@ public:
     VstAudioClient() = default;
     ~VstAudioClient();
 
-    void init(VstPluginType&& type, VstPluginPtr plugin, audio::audioch_t&& audioChannelsCount = 2);
+    void init(audio::AudioPluginType type, VstPluginPtr plugin, audio::audioch_t&& audioChannelsCount = 2);
 
     bool handleEvent(const VstEvent& event);
     bool handleParamChange(const PluginParamInfo& param);
@@ -91,7 +91,7 @@ private:
 
     bool m_needUnprepareProcessData = false;
 
-    VstPluginType m_type = VstPluginType::Undefined;
+    audio::AudioPluginType m_type = audio::AudioPluginType::Undefined;
     audio::audioch_t m_audioChannelsCount = 0;
 };
 }

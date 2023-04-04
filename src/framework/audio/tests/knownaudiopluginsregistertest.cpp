@@ -47,7 +47,7 @@ protected:
         m_knownPlugins->setfileSystem(m_fileSystem);
         m_knownPlugins->setconfiguration(m_configuration);
 
-        m_knownAudioPluginsDir = "/test/some dir/audio plugins";
+        m_knownAudioPluginsDir = "/test/some dir/audio_plugins";
         ON_CALL(*m_configuration, knownAudioPluginsDir())
         .WillByDefault(Return(m_knownAudioPluginsDir));
     }
@@ -113,18 +113,16 @@ protected:
         disabledPluginInfo.path = "/some/path/to/vst/plugin/CCC.vst3";
         disabledPluginInfo.meta.id = "CCC";
         disabledPluginInfo.meta.type = AudioResourceType::VstPlugin;
-        disabledPluginInfo.meta.vendor = "Some vendor";
         disabledPluginInfo.enabled = false;
         disabledPluginInfo.meta.attributes = { { audio::CATEGORIES_ATTRIBUTE, u"Instrument|Synth" },
             { audio::PLAYBACK_SETUP_DATA_ATTRIBUTE, mpe::GENERIC_SETUP_DATA_STRING } };
         disabledPluginInfo.errorCode = -1;
         plugins.push_back(disabledPluginInfo);
 
-        paths_t infoPaths {
-            m_knownAudioPluginsDir + "/AAA.json",
-            m_knownAudioPluginsDir + "/BBB.json",
-            m_knownAudioPluginsDir + "/CCC.json",
-        };
+        paths_t infoPaths;
+        for (const AudioPluginInfo& info : plugins) {
+            infoPaths.push_back(pluginInfoPath(info.meta.vendor, info.meta.id));
+        }
 
         ON_CALL(*m_fileSystem, scanFiles(m_knownAudioPluginsDir, std::vector<std::string> { "*.json" }, ScanMode::FilesInCurrentDir))
         .WillByDefault(Return(mu::RetVal<paths_t>::make_ok({ infoPaths })));
@@ -137,6 +135,19 @@ protected:
         }
 
         return plugins;
+    }
+
+    io::path_t pluginInfoPath(const AudioResourceVendor& vendor, const AudioResourceId& resourceId) const
+    {
+        io::path_t fileName;
+
+        if (vendor.empty()) {
+            fileName = io::escapeFileName(resourceId);
+        } else {
+            fileName = io::escapeFileName(vendor + "_" + resourceId);
+        }
+
+        return m_knownAudioPluginsDir + "/" + fileName + ".json";
     }
 
     std::shared_ptr<KnownAudioPluginsRegister> m_knownPlugins;
@@ -163,8 +174,8 @@ TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
     // [GIVEN] All known plugins
     std::vector<AudioPluginInfo> expectedPluginInfoList = setupTestData();
 
-    // [WHEN] Init the register
-    m_knownPlugins->init();
+    // [WHEN] Load the info
+    m_knownPlugins->load();
 
     // [WHEN] Request the info
     std::vector<AudioPluginInfo> actualPluginInfoList = m_knownPlugins->pluginInfoList();
@@ -185,7 +196,7 @@ TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
     // [GIVEN] New plugin for registration
     AudioPluginInfo newPluginInfo;
     newPluginInfo.type = AudioPluginType::Instrument;
-    newPluginInfo.meta.id = "new_plugin";
+    newPluginInfo.meta.id = "new/plugin";
     newPluginInfo.meta.type = AudioResourceType::VstPlugin;
     newPluginInfo.path = "/path/to/new/plugin/plugin.vst";
     newPluginInfo.enabled = true;
@@ -193,7 +204,7 @@ TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
 
     // [THEN] The plugin will be written to the corresponding file
     mu::ByteArray expectedNewPluginData = pluginInfoToJson(newPluginInfo);
-    EXPECT_CALL(*m_fileSystem, writeFile(m_knownAudioPluginsDir + "/" + newPluginInfo.meta.id + ".json", expectedNewPluginData))
+    EXPECT_CALL(*m_fileSystem, writeFile(pluginInfoPath(newPluginInfo.meta.vendor, newPluginInfo.meta.id), expectedNewPluginData))
     .WillOnce(Return(mu::make_ok()));
 
     // [WHEN] Register it
@@ -214,7 +225,7 @@ TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
     // [WHEN] Unregister the first plugin in the list
     AudioPluginInfo unregisteredPlugin = mu::takeFirst(expectedPluginInfoList);
 
-    EXPECT_CALL(*m_fileSystem, remove(m_knownAudioPluginsDir + "/" + unregisteredPlugin.meta.id + ".json", false))
+    EXPECT_CALL(*m_fileSystem, remove(pluginInfoPath(unregisteredPlugin.meta.vendor, unregisteredPlugin.meta.id), false))
     .WillOnce(Return(mu::make_ok()));
 
     ret = m_knownPlugins->unregisterPlugin(unregisteredPlugin.meta.id);

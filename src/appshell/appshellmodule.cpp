@@ -184,13 +184,21 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<WindowDropArea>("MuseScore.Ui", 1, 0, "WindowDropArea");
 }
 
-void AppShellModule::onPreInit(const framework::IApplication::RunMode&)
+void AppShellModule::onPreInit(const framework::IApplication::RunMode& mode)
 {
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
     s_applicationActionController->preInit();
 }
 
-void AppShellModule::onInit(const IApplication::RunMode&)
+void AppShellModule::onInit(const IApplication::RunMode& mode)
 {
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
     DockSetup::onInit();
 
     s_appShellConfiguration->init();
@@ -203,8 +211,12 @@ void AppShellModule::onInit(const IApplication::RunMode&)
 #endif
 }
 
-void AppShellModule::onAllInited(const framework::IApplication::RunMode&)
+void AppShellModule::onAllInited(const framework::IApplication::RunMode& mode)
 {
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
     //! NOTE: process QEvent::FileOpen as early as possible if it was postponed
 #ifdef Q_OS_MACOS
     qApp->processEvents();

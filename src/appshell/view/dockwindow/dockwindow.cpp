@@ -191,10 +191,6 @@ void DockWindow::init()
             savePageState(page->objectName());
         }
     });
-
-    Async::call(this, [this]() {
-        startupScenario()->run();
-    });
 }
 
 void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
