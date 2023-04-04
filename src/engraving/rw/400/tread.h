@@ -107,6 +107,7 @@ class TextLineBase;
 class TimeSig;
 class Tremolo;
 class TremoloBar;
+class Trill;
 }
 
 namespace mu::engraving::rw400 {
@@ -197,6 +198,7 @@ public:
     static void read(TimeSig* s, XmlReader& xml, ReadContext& ctx);
     static void read(Tremolo* t, XmlReader& xml, ReadContext& ctx);
     static void read(TremoloBar* b, XmlReader& xml, ReadContext& ctx);
+    static void read(Trill* t, XmlReader& xml, ReadContext& ctx);
 
     // temp compat
     static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);

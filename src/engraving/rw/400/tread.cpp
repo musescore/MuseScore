@@ -101,6 +101,7 @@
 #include "../../libmscore/stafftypechange.h"
 #include "../../libmscore/system.h"
 #include "../../libmscore/textline.h"
+#include "../../libmscore/trill.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -2887,4 +2888,27 @@ bool TRead::readProperties(TextLineBase* b, XmlReader& e, ReadContext& ctx)
         }
     }
     return readProperties(static_cast<SLine*>(b), e, ctx);
+}
+
+void TRead::read(Trill* t, XmlReader& e, ReadContext& ctx)
+{
+    t->eraseSpannerSegments();
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "subtype") {
+            t->setTrillType(TConv::fromXml(e.readAsciiText(), TrillType::TRILL_LINE));
+        } else if (tag == "Accidental") {
+            Accidental* accidental = Factory::createAccidental(t);
+            TRead::read(accidental, e, ctx);
+            accidental->setParent(t);
+            t->setAccidental(accidental);
+        } else if (tag == "ornamentStyle") {
+            t->readProperty(e, Pid::ORNAMENT_STYLE);
+        } else if (tag == "play") {
+            t->setPlayArticulation(e.readBool());
+        } else if (!readProperties(static_cast<SLine*>(t), e, ctx)) {
+            e.unknown();
+        }
+    }
 }
