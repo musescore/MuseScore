@@ -108,6 +108,7 @@
 #include "../../libmscore/volta.h"
 #include "../../libmscore/tie.h"
 #include "../../libmscore/ottava.h"
+#include "../../libmscore/pedal.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -144,6 +145,7 @@ void TRead::readItem(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
     } else if (try_read<Jump>(el, xml, ctx)) {
     } else if (try_read<Marker>(el, xml, ctx)) {
     } else if (try_read<PlayTechAnnotation>(el, xml, ctx)) {
+    } else if (try_read<Pedal>(el, xml, ctx)) {
     } else if (try_read<Ottava>(el, xml, ctx)) {
     } else if (try_read<RehearsalMark>(el, xml, ctx)) {
     } else if (try_read<Slur>(el, xml, ctx)) {
@@ -2561,6 +2563,20 @@ bool TRead::readProperties(Ottava* o, XmlReader& e, ReadContext& ctx)
         return false;
     }
     return true;
+}
+
+void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
+{
+    if (p->score()->mscVersion() < 301) {
+        ctx.addSpanner(e.intAttribute("id", -1), p);
+    }
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (readStyledProperty(p, tag, e, ctx)) {
+        } else if (!readProperties(static_cast<TextLineBase*>(p), e, ctx)) {
+            e.unknown();
+        }
+    }
 }
 
 void TRead::read(Rest* r, XmlReader& e, ReadContext& ctx)

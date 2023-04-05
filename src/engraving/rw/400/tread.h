@@ -90,6 +90,7 @@ class MMRest;
 class Note;
 class NoteDot;
 class Ottava;
+class Pedal;
 class Rest;
 class SLine;
 class Slur;
@@ -135,7 +136,6 @@ public:
     static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
     static void read(FretDiagram* d, XmlReader& xml, ReadContext& ctx);
     static void read(SystemText* t, XmlReader& xml, ReadContext& ctx);
-    static void read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx);
     static void read(RehearsalMark* m, XmlReader& xml, ReadContext& ctx);
     static void read(Image* i, XmlReader& xml, ReadContext& ctx);
     static void read(Ambitus* a, XmlReader& xml, ReadContext& ctx);
@@ -185,6 +185,8 @@ public:
     static void read(Note* n, XmlReader& xml, ReadContext& ctx);
     static void read(NoteDot* d, XmlReader& xml, ReadContext& ctx);
     static void read(Ottava* o, XmlReader& xml, ReadContext& ctx);
+    static void read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx);
+    static void read(Pedal* p, XmlReader& xml, ReadContext& ctx);
     static void read(Rest* r, XmlReader& xml, ReadContext& ctx);
     static void read(SLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(Slur* s, XmlReader& xml, ReadContext& ctx);
