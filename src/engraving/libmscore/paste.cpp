@@ -24,6 +24,7 @@
 
 #include "imimedata.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "types/typesconv.h"
 
 #include "articulation.h"
@@ -102,6 +103,8 @@ static void transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick
 bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale)
 {
     assert(dst->isChordRestType());
+
+    ReadContext& ctx = *e.context();
 
     std::vector<Harmony*> pastedHarmony;
     std::vector<Chord*> graceNotes;
@@ -206,7 +209,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                     Measure* measure = tick2measure(tick);
                     tuplet = Factory::createTuplet(measure);
                     tuplet->setTrack(e.context()->track());
-                    tuplet->read(e);
+                    rw400::TRead::read(tuplet, e, ctx);
                     if (doScale) {
                         tuplet->setTicks(tuplet->ticks() * scale);
                         tuplet->setBaseLen(tuplet->baseLen().fraction() * scale);
@@ -246,7 +249,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                 } else if (tag == "Chord" || tag == "Rest" || tag == "MeasureRepeat") {
                     ChordRest* cr = toChordRest(Factory::createItemByName(tag, this->dummy()));
                     cr->setTrack(e.context()->track());
-                    cr->read(e);
+                    rw400::TRead::readItem(cr, e, ctx);
                     cr->setSelected(false);
                     Fraction tick = doScale ? (e.context()->tick() - dstTick) * scale + dstTick : e.context()->tick();
                     // no paste into local time signature
@@ -360,7 +363,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                     Segment* seg = m->undoGetSegment(SegmentType::ChordRest, tick);
                     Harmony* harmony = Factory::createHarmony(seg);
                     harmony->setTrack(e.context()->track());
-                    harmony->read(e);
+                    rw400::TRead::read(harmony, e, ctx);
                     harmony->setTrack(e.context()->track());
 
                     Part* partDest = staff(e.context()->track() / VOICES)->part();
@@ -402,7 +405,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                     if (el->isFermata()) {
                         el->setPlacement(el->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
                     }
-                    el->read(e);
+                    rw400::TRead::readItem(el, e, ctx);
 
                     Fraction tick = doScale ? (e.context()->tick() - dstTick) * scale + dstTick : e.context()->tick();
                     Measure* m = tick2measure(tick);
@@ -780,6 +783,9 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
 {
     e.context()->setScore(this);
     e.context()->setPasteMode(true);   // ensure the reader is in paste mode
+
+    ReadContext& ctx = *e.context();
+
     Segment* currSegm = dst->segment();
     Fraction destTick = Fraction(0, 1);                // the tick and track to place the pasted element at
     track_idx_t destTrack = 0;
@@ -907,7 +913,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
 
                     if (tag == "Articulation") {
                         Articulation* el = Factory::createArticulation(cr);
-                        el->read(e);
+                        rw400::TRead::read(el, e, ctx);
                         el->setTrack(destTrack);
                         el->setParent(cr);
                         if (!el->isFermata() && cr->isRest()) {
@@ -917,7 +923,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         }
                     } else if (tag == "StaffText" || tag == "PlayTechAnnotation" || tag == "Sticking") {
                         EngravingItem* el = Factory::createItemByName(tag, this->dummy());
-                        el->read(e);
+                        rw400::TRead::readItem(el, e, ctx);
                         el->setTrack(destTrack);
                         el->setParent(currSegm);
                         if (el->isSticking() && cr->isRest()) {

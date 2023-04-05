@@ -29,6 +29,8 @@
 #include "measure.h"
 #include "score.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -129,6 +131,7 @@ void Jump::layout()
 
 void Jump::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

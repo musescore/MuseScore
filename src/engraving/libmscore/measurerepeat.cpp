@@ -31,6 +31,8 @@
 #include "score.h"
 #include "staff.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -238,6 +240,7 @@ void MeasureRepeat::write(XmlWriter& xml) const
 
 void MeasureRepeat::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

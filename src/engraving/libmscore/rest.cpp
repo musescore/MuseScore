@@ -951,6 +951,7 @@ void Rest::write(XmlWriter& xml) const
 
 void Rest::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

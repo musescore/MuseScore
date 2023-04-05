@@ -89,6 +89,7 @@ void ActionIcon::write(XmlWriter& xml) const
 
 void ActionIcon::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

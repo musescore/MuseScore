@@ -1545,6 +1545,7 @@ void System::write(XmlWriter& xml) const
 
 void System::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

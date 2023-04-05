@@ -74,6 +74,7 @@ LineSegment::LineSegment(const LineSegment& s)
 
 bool LineSegment::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     const AsciiStringView tag(e.name());
     if (tag == "subtype") {
         setSpannerSegmentType(SpannerSegmentType(e.readInt()));
@@ -98,6 +99,7 @@ bool LineSegment::readProperties(XmlReader& e)
 
 void LineSegment::read(XmlReader& e)
 {
+    UNREACHABLE;
     while (e.readNextStartElement()) {
         readProperties(e);
     }
@@ -1387,6 +1389,7 @@ void SLine::writeProperties(XmlWriter& xml) const
 
 bool SLine::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     return rw400::TRead::readProperties(this, e, *e.context());
 }
 
@@ -1437,6 +1440,7 @@ void SLine::write(XmlWriter& xml) const
 
 void SLine::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

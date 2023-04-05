@@ -41,6 +41,8 @@
 #include "segment.h"
 #include "staff.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace mu::engraving {
@@ -102,6 +104,7 @@ void Arpeggio::write(XmlWriter& xml) const
 
 void Arpeggio::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

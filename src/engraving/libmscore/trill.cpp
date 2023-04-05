@@ -404,6 +404,7 @@ void Trill::write(XmlWriter& xml) const
 
 void Trill::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

@@ -585,7 +585,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             }
             startingBeam = beam;
         } else if (tag == "Segment" && segment) {
-            segment->read(e);
+            rw400::TRead::read(segment, e, ctx);
         } else if (tag == "Ambitus") {
             segment = measure->getSegment(SegmentType::Ambitus, ctx.tick());
             Ambitus* range = Factory::createAmbitus(segment);

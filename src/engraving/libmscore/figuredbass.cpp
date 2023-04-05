@@ -472,6 +472,7 @@ void FiguredBassItem::write(XmlWriter& xml) const
 
 void FiguredBassItem::read(XmlReader& e)
 {
+    UNREACHABLE;
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
 
@@ -1098,6 +1099,7 @@ void FiguredBass::write(XmlWriter& xml) const
 
 void FiguredBass::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

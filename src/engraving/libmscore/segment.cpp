@@ -970,6 +970,7 @@ void Segment::write(XmlWriter& xml) const
 
 void Segment::read(XmlReader& e)
 {
+    UNREACHABLE;
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
 

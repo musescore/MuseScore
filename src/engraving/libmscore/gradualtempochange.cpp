@@ -107,6 +107,7 @@ GradualTempoChange* GradualTempoChange::clone() const
 
 void GradualTempoChange::read(XmlReader& xml)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, xml, *xml.context());
 }
 

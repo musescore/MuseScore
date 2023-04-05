@@ -25,6 +25,8 @@
 #include "types/typesconv.h"
 #include "score.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -54,6 +56,7 @@ Text::Text(EngravingItem* parent, TextStyleType tid)
 
 void Text::read(XmlReader& e)
 {
+    UNREACHABLE;
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "style") {

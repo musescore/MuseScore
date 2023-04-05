@@ -31,6 +31,8 @@
 #include "score.h"
 #include "staff.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace mu::engraving {
@@ -94,6 +96,7 @@ EngravingItem* NoteDot::elementBase() const
 
 void NoteDot::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

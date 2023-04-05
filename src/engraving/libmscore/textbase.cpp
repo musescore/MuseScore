@@ -2273,6 +2273,7 @@ void TextBase::write(XmlWriter& xml) const
 
 void TextBase::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 
@@ -2305,6 +2306,7 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
 
 bool TextBase::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     return rw400::TRead::readProperties(this, e, *e.context());
 }
 

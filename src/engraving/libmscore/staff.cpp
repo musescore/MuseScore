@@ -840,6 +840,7 @@ void Staff::write(XmlWriter& xml) const
 
 void Staff::read(XmlReader& e)
 {
+    UNREACHABLE;
     while (e.readNextStartElement()) {
         if (!readProperties(e)) {
             e.unknown();

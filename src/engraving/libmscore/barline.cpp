@@ -812,6 +812,7 @@ void BarLine::write(XmlWriter& xml) const
 
 void BarLine::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

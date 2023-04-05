@@ -31,6 +31,8 @@
 #include "staff.h"
 #include "system.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace mu::engraving {
@@ -147,6 +149,7 @@ void LedgerLine::writeProperties(XmlWriter& xml) const
 
 bool LedgerLine::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     return rw400::TRead::readProperties(this, e, *e.context());
 }
 }

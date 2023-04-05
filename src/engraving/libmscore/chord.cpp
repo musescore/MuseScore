@@ -1289,11 +1289,13 @@ void Chord::write(XmlWriter& xml) const
 
 void Chord::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 
 bool Chord::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     return rw400::TRead::readProperties(this, e, *e.context());
 }
 

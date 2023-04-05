@@ -501,6 +501,7 @@ void Glissando::write(XmlWriter& xml) const
 
 void Glissando::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

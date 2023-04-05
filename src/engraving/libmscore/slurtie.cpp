@@ -373,6 +373,7 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
 
 void SlurTieSegment::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 
@@ -455,6 +456,7 @@ void SlurTie::writeProperties(XmlWriter& xml) const
 
 bool SlurTie::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     const AsciiStringView tag(e.name());
 
     if (readProperty(tag, e, Pid::SLUR_DIRECTION)) {
@@ -481,6 +483,7 @@ bool SlurTie::readProperties(XmlReader& e)
 
 void SlurTie::read(XmlReader& e)
 {
+    UNREACHABLE;
     Spanner::read(e);
 }
 

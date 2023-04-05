@@ -157,6 +157,7 @@ String Volta::text() const
 
 void Volta::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 
@@ -166,6 +167,7 @@ void Volta::read(XmlReader& e)
 
 bool Volta::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     if (!TextLineBase::readProperties(e)) {
         return false;
     }

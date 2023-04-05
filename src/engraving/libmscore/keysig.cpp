@@ -477,6 +477,7 @@ void KeySig::write(XmlWriter& xml) const
 
 void KeySig::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

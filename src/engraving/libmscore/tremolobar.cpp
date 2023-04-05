@@ -28,6 +28,8 @@
 
 #include "score.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -134,6 +136,7 @@ void TremoloBar::write(XmlWriter& xml) const
 
 void TremoloBar::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

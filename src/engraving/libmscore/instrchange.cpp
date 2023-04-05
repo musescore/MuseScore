@@ -35,6 +35,8 @@
 #include "staff.h"
 #include "undo.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace mu::engraving {
@@ -209,6 +211,7 @@ void InstrumentChange::write(XmlWriter& xml) const
 
 void InstrumentChange::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

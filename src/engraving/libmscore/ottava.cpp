@@ -308,6 +308,7 @@ void Ottava::write(XmlWriter& xml) const
 
 void Ottava::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 
@@ -317,6 +318,7 @@ void Ottava::read(XmlReader& e)
 
 bool Ottava::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     const AsciiStringView tag(e.name());
     if (tag == "subtype") {
         String s = e.readText();

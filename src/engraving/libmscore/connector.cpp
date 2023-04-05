@@ -412,7 +412,6 @@ bool ConnectorInfoReader::read()
                 return false;
             }
             _connector->setTrack(_currentLoc.track());
-            //_connector->read(e);
             rw400::TRead::readItem(_connector, e, *e.context());
         }
     }

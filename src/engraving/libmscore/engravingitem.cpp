@@ -909,6 +909,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
 
 bool EngravingItem::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     return rw400::TRead::readItemProperties(this, e, *e.context());
 }
 
@@ -929,6 +930,7 @@ void EngravingItem::write(XmlWriter& xml) const
 
 void EngravingItem::read(XmlReader& e)
 {
+    UNREACHABLE;
     while (e.readNextStartElement()) {
         if (!readProperties(e)) {
             e.unknown();

@@ -1479,6 +1479,7 @@ void Slur::write(XmlWriter& xml) const
 
 bool Slur::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     const AsciiStringView tag(e.name());
     if (tag == "stemArr") {
         _sourceStemArrangement = e.readInt();

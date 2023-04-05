@@ -77,6 +77,7 @@ void StaffState::write(XmlWriter& xml) const
 
 void StaffState::read(XmlReader& e)
 {
+    UNREACHABLE;
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {

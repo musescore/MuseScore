@@ -27,6 +27,8 @@
 #include "measure.h"
 #include "score.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -97,6 +99,7 @@ PropertyValue MMRestRange::propertyDefault(Pid id) const
 
 bool MMRestRange::readProperties(XmlReader& xml)
 {
+    UNREACHABLE;
     if (readProperty(xml.name(), xml, Pid::MMREST_RANGE_BRACKET_TYPE)) {
         return true;
     } else {

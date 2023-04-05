@@ -34,6 +34,7 @@
 #include "libmscore/text.h"
 
 #include "staffrw.h"
+#include "tread.h"
 
 #include "log.h"
 
@@ -194,7 +195,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
                    || (tag == "Slur")
                    || (tag == "Pedal")) {
             Spanner* s = toSpanner(Factory::createItemByName(tag, score->dummy()));
-            s->read(e);
+            rw400::TRead::readItem(s, e, ctx);
             score->addSpanner(s);
         } else if (tag == "Excerpt") {
             // Since version 400, the Excerpts are stored in a separate file

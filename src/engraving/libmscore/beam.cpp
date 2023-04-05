@@ -1309,6 +1309,7 @@ void Beam::write(XmlWriter& xml) const
 
 void Beam::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

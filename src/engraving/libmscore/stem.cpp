@@ -36,6 +36,8 @@
 #include "stafftype.h"
 #include "tremolo.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::draw;
 using namespace mu::engraving;
@@ -231,11 +233,13 @@ void Stem::write(XmlWriter& xml) const
 
 void Stem::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 
 bool Stem::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     return rw400::TRead::readProperties(this, e, *e.context());
 }
 

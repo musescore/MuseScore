@@ -33,6 +33,8 @@
 #include "score.h"
 #include "staff.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::draw;
 using namespace mu::engraving;
@@ -375,6 +377,7 @@ void Bend::write(XmlWriter& xml) const
 
 void Bend::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

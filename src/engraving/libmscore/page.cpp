@@ -36,6 +36,8 @@
 #include "accessibility/accessibleitem.h"
 #endif
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -554,6 +556,7 @@ void Page::write(XmlWriter& xml) const
 
 void Page::read(XmlReader& e)
 {
+    UNREACHABLE;
     while (e.readNextStartElement()) {
         if (e.name() == "System") {
             System* system = Factory::createSystem(score()->dummy()->page());

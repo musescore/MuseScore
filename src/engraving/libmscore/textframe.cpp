@@ -101,6 +101,7 @@ void TBox::write(XmlWriter& xml) const
 
 void TBox::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

@@ -77,6 +77,7 @@ void BSymbol::writeProperties(XmlWriter& xml) const
 
 bool BSymbol::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     return rw400::TRead::readProperties(this, e, *e.context());
 }
 
