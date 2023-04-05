@@ -29,6 +29,8 @@
 #include "measure.h"
 #include "score.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::draw;
 using namespace mu::engraving;
@@ -209,6 +211,7 @@ void Spacer::write(XmlWriter& xml) const
 
 void Spacer::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

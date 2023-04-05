@@ -28,6 +28,8 @@
 #include "system.h"
 #include "staff.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -81,6 +83,7 @@ void StaffTypeChange::write(XmlWriter& xml) const
 
 void StaffTypeChange::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

@@ -28,6 +28,8 @@
 #include "score.h"
 #include "system.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -112,6 +114,7 @@ void SystemDivider::write(XmlWriter& xml) const
 
 void SystemDivider::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 } // namespace mu::engraving

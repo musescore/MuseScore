@@ -25,6 +25,8 @@
 #include "rw/xml.h"
 #include "segment.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -71,6 +73,7 @@ void PlayTechAnnotation::write(XmlWriter& writer) const
 
 void PlayTechAnnotation::read(XmlReader& reader)
 {
+    UNREACHABLE;
     while (reader.readNextStartElement()) {
         const AsciiStringView tag(reader.name());
 

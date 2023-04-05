@@ -627,6 +627,7 @@ void MeasureBase::writeProperties(XmlWriter& xml) const
 
 bool MeasureBase::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     const AsciiStringView tag(e.name());
     if (tag == "LayoutBreak") {
         LayoutBreak* lb = Factory::createLayoutBreak(this);

@@ -28,6 +28,8 @@
 #include "system.h"
 #include "undo.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace mu::engraving {
@@ -210,6 +212,7 @@ void TextLine::write(XmlWriter& xml) const
 
 void TextLine::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

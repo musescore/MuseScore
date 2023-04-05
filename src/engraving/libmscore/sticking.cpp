@@ -26,6 +26,8 @@
 
 #include "segment.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace mu::engraving {
@@ -68,6 +70,7 @@ void Sticking::write(XmlWriter& xml) const
 
 void Sticking::read(XmlReader& e)
 {
+    UNREACHABLE;
     TextBase::read(e);
 }
 

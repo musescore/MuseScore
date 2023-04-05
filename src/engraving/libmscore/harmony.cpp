@@ -354,6 +354,7 @@ void Harmony::write(XmlWriter& xml) const
 
 void Harmony::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

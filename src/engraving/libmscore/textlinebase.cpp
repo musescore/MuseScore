@@ -625,6 +625,7 @@ void TextLineBase::write(XmlWriter& xml) const
 
 void TextLineBase::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 
@@ -657,6 +658,7 @@ void TextLineBase::writeProperties(XmlWriter& xml) const
 
 bool TextLineBase::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     const AsciiStringView tag(e.name());
     for (Pid i : TextLineBasePropertyId) {
         if (readProperty(tag, e, i)) {

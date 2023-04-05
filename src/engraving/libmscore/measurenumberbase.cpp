@@ -29,6 +29,8 @@
 #include "score.h"
 #include "staff.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -102,6 +104,7 @@ PropertyValue MeasureNumberBase::propertyDefault(Pid id) const
 
 void MeasureNumberBase::read(XmlReader& xml)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, xml, *xml.context());
 }
 
@@ -111,6 +114,7 @@ void MeasureNumberBase::read(XmlReader& xml)
 
 bool MeasureNumberBase::readProperties(XmlReader& xml)
 {
+    UNREACHABLE;
     if (readProperty(xml.name(), xml, Pid::HPLACEMENT)) {
         return true;
     } else {

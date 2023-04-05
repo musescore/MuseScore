@@ -240,6 +240,7 @@ void Vibrato::write(XmlWriter& xml) const
 
 void Vibrato::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

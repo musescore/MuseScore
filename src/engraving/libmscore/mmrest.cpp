@@ -31,6 +31,8 @@
 #include "undo.h"
 #include "utils.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -236,6 +238,7 @@ void MMRest::writeProperties(XmlWriter& xml) const
 
 bool MMRest::readProperties(XmlReader& xml)
 {
+    UNREACHABLE;
     return rw400::TRead::readProperties(this, xml, *xml.context());
 }
 

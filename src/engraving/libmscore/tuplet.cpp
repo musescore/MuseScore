@@ -855,6 +855,7 @@ void Tuplet::write(XmlWriter& xml) const
 
 void Tuplet::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 
@@ -864,6 +865,7 @@ void Tuplet::read(XmlReader& e)
 
 bool Tuplet::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     const AsciiStringView tag(e.name());
 
     if (readStyledProperty(e, tag)) {

@@ -780,6 +780,7 @@ void FretDiagram::writeNew(XmlWriter& xml) const
 
 void FretDiagram::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

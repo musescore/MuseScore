@@ -1541,6 +1541,7 @@ void Note::write(XmlWriter& xml) const
 
 void Note::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 
@@ -1637,6 +1638,7 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
 
 bool Note::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     return rw400::TRead::readProperties(this, e, *e.context());
 }
 

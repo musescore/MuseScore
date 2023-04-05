@@ -102,11 +102,13 @@ void StaffTextBase::clear()
 
 void StaffTextBase::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 
 bool StaffTextBase::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     return rw400::TRead::readProperties(this, e, *e.context());
 }
 

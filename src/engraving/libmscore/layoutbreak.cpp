@@ -104,6 +104,7 @@ void LayoutBreak::write(XmlWriter& xml) const
 
 void LayoutBreak::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

@@ -345,6 +345,7 @@ void Image::write(XmlWriter& xml) const
 
 void Image::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

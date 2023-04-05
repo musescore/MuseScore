@@ -294,6 +294,7 @@ void Ambitus::write(XmlWriter& xml) const
 
 void Ambitus::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 
@@ -303,6 +304,7 @@ void Ambitus::read(XmlReader& e)
 
 bool Ambitus::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     const AsciiStringView tag(e.name());
     if (tag == "head") {
         readProperty(e, Pid::HEAD_GROUP);

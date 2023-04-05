@@ -30,6 +30,8 @@
 #include "score.h"
 #include "system.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace mu::engraving {
@@ -126,6 +128,7 @@ Pedal::Pedal(EngravingItem* parent)
 
 void Pedal::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

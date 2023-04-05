@@ -70,6 +70,7 @@ Fermata::Fermata(EngravingItem* parent)
 
 void Fermata::read(XmlReader& e)
 {
+    UNREACHABLE;
     while (e.readNextStartElement()) {
         if (!readProperties(e)) {
             e.unknown();

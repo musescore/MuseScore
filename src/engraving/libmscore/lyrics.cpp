@@ -109,11 +109,13 @@ void Lyrics::write(XmlWriter& xml) const
 
 void Lyrics::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 
 bool Lyrics::readProperties(XmlReader& e)
 {
+    UNREACHABLE;
     return rw400::TRead::readProperties(this, e, *e.context());
 }
 

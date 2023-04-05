@@ -602,6 +602,7 @@ void Bracket::write(XmlWriter& xml) const
 
 void Bracket::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 }

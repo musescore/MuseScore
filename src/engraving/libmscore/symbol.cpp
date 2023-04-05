@@ -140,6 +140,7 @@ void Symbol::write(XmlWriter& xml) const
 
 void Symbol::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 
@@ -245,6 +246,7 @@ void FSymbol::write(XmlWriter& xml) const
 
 void FSymbol::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

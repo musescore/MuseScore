@@ -29,6 +29,7 @@
 #include "iengravingfont.h"
 
 #include "score.h"
+#include "log.h"
 
 using namespace mu;
 
@@ -84,6 +85,7 @@ void BagpipeEmbellishment::write(XmlWriter& xml) const
 
 void BagpipeEmbellishment::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

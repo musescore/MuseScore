@@ -35,6 +35,8 @@
 #include "segment.h"
 #include "tempotext.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -89,6 +91,7 @@ void TempoText::write(XmlWriter& xml) const
 
 void TempoText::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

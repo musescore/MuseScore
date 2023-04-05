@@ -32,6 +32,8 @@
 #include "stafftype.h"
 #include "system.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -129,6 +131,7 @@ PalmMute::PalmMute(EngravingItem* parent)
 
 void PalmMute::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 

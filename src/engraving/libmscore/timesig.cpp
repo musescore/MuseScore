@@ -176,6 +176,7 @@ void TimeSig::write(XmlWriter& xml) const
 
 void TimeSig::read(XmlReader& e)
 {
+    UNREACHABLE;
     rw400::TRead::read(this, e, *e.context());
 }
 
