@@ -23,6 +23,7 @@
 #include "ottava.h"
 
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 
 #include "score.h"
 #include "staff.h"
@@ -307,16 +308,7 @@ void Ottava::write(XmlWriter& xml) const
 
 void Ottava::read(XmlReader& e)
 {
-    eraseSpannerSegments();
-    if (score()->mscVersion() < 301) {
-        e.context()->addSpanner(e.intAttribute("id", -1), this);
-    }
-    while (e.readNextStartElement()) {
-        readProperties(e);
-    }
-    if (_ottavaType != OttavaType::OTTAVA_8VA || _numbersOnly != propertyDefault(Pid::NUMBERS_ONLY).toBool()) {
-        styleChanged();
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

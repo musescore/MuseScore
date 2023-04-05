@@ -106,6 +106,8 @@
 #include "../../libmscore/trill.h"
 #include "../../libmscore/vibrato.h"
 #include "../../libmscore/volta.h"
+#include "../../libmscore/tie.h"
+#include "../../libmscore/ottava.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -131,18 +133,24 @@ static bool try_read(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
 void TRead::readItem(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
 {
     if (try_read<Sticking>(el, xml, ctx)) {
-    } else if (try_read<SystemText>(el, xml, ctx)) {
-    } else if (try_read<PlayTechAnnotation>(el, xml, ctx)) {
-    } else if (try_read<RehearsalMark>(el, xml, ctx)) {
-    } else if (try_read<InstrumentChange>(el, xml, ctx)) {
-    } else if (try_read<StaffState>(el, xml, ctx)) {
-    } else if (try_read<FiguredBass>(el, xml, ctx)) {
-    } else if (try_read<Marker>(el, xml, ctx)) {
-    } else if (try_read<Jump>(el, xml, ctx)) {
     } else if (try_read<HBox>(el, xml, ctx)) {
     } else if (try_read<VBox>(el, xml, ctx)) {
     } else if (try_read<TBox>(el, xml, ctx)) {
     } else if (try_read<FBox>(el, xml, ctx)) {
+    } else if (try_read<FiguredBass>(el, xml, ctx)) {
+    } else if (try_read<Glissando>(el, xml, ctx)) {
+    } else if (try_read<Hairpin>(el, xml, ctx)) {
+    } else if (try_read<InstrumentChange>(el, xml, ctx)) {
+    } else if (try_read<Jump>(el, xml, ctx)) {
+    } else if (try_read<Marker>(el, xml, ctx)) {
+    } else if (try_read<PlayTechAnnotation>(el, xml, ctx)) {
+    } else if (try_read<Ottava>(el, xml, ctx)) {
+    } else if (try_read<RehearsalMark>(el, xml, ctx)) {
+    } else if (try_read<Slur>(el, xml, ctx)) {
+    } else if (try_read<StaffState>(el, xml, ctx)) {
+    } else if (try_read<SystemText>(el, xml, ctx)) {
+    } else if (try_read<Tie>(el, xml, ctx)) {
+    } else if (try_read<Volta>(el, xml, ctx)) {
     } else {
         UNREACHABLE;
     }
@@ -2506,6 +2514,55 @@ void TRead::read(NoteDot* d, XmlReader& e, ReadContext& ctx)
     }
 }
 
+void TRead::read(Ottava* o, XmlReader& e, ReadContext& ctx)
+{
+    o->eraseSpannerSegments();
+    if (o->score()->mscVersion() < 301) {
+        ctx.addSpanner(e.intAttribute("id", -1), o);
+    }
+    while (e.readNextStartElement()) {
+        readProperties(o, e, ctx);
+    }
+    if (o->ottavaType() != OttavaType::OTTAVA_8VA || o->numbersOnly() != o->propertyDefault(Pid::NUMBERS_ONLY).toBool()) {
+        o->styleChanged();
+    }
+}
+
+bool TRead::readProperties(Ottava* o, XmlReader& e, ReadContext& ctx)
+{
+    const AsciiStringView tag(e.name());
+    if (tag == "subtype") {
+        String s = e.readText();
+        bool ok;
+        int idx = s.toInt(&ok);
+        if (!ok) {
+            o->setOttavaType(OttavaType::OTTAVA_8VA);
+            for (OttavaDefault d : ottavaDefault) {
+                if (s == d.name) {
+                    o->setOttavaType(d.type);
+                    break;
+                }
+            }
+        } else if (o->score()->mscVersion() <= 114) {
+            //subtype are now in a different order...
+            if (idx == 1) {
+                idx = 2;
+            } else if (idx == 2) {
+                idx = 1;
+            }
+            o->setOttavaType(OttavaType(idx));
+        } else {
+            o->setOttavaType(OttavaType(idx));
+        }
+    } else if (readStyledProperty(o, tag, e, ctx)) {
+        return true;
+    } else if (!readProperties(static_cast<TextLineBase*>(o), e, ctx)) {
+        e.unknown();
+        return false;
+    }
+    return true;
+}
+
 void TRead::read(Rest* r, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
@@ -2859,6 +2916,11 @@ void TRead::read(TextLineBase* b, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+}
+
+void TRead::read(Tie* t, XmlReader& xml, ReadContext& ctx)
+{
+    TRead::read(static_cast<SlurTie*>(t), xml, ctx);
 }
 
 void TRead::read(TimeSig* s, XmlReader& e, ReadContext& ctx)
