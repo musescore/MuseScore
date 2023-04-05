@@ -266,7 +266,7 @@ MuseScore {
             anchors.bottomMargin: 10
             width: 40
             minimumValue: 1;
-            maximumValue: curScore.ntracks/4
+            maximumValue: Boolean(curScore) ? curScore.ntracks/4 : 0
             value: staffSelection();
             horizontalAlignment: Text.AlignHCenter
         }
@@ -410,6 +410,10 @@ MuseScore {
     *******************************************/
 
     function staffSelection() {
+        if (!Boolean(curScore)) {
+            return 0
+        }
+
         var elem=curScore.selection.elements;
         if (elem.length==0) return 1;
         var track=elem[0].track;
@@ -418,6 +422,10 @@ MuseScore {
     }
 
     function voiceSelection() {
+        if (!Boolean(curScore)) {
+            return 0
+        }
+
         var elem=curScore.selection.elements;
         if (elem.length==0) return 1;
         var track=elem[0].track;
@@ -425,6 +433,10 @@ MuseScore {
     }
 
     function verseSelection() {
+        if (!Boolean(curScore)) {
+            return 0
+        }
+
         var elem=curScore.selection.elements;
         if (elem.length==0) return 1;
         var verse=elem[0].verse;
@@ -433,6 +445,10 @@ MuseScore {
     }
 
     function setTextCursor() {
+        if (!Boolean(curScore)) {
+            return
+        }
+
         var elem=curScore.selection.elements;
         if (elem.length==0) return;
         var verse=elem[0].verse;
