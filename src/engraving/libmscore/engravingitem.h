@@ -324,6 +324,10 @@ public:
 
     virtual int subtype() const { return -1; }                    // for select gui
 
+    // Index to a set of properties if the same element type can represent
+    // different set of properties
+    virtual int propset() const { return subtype(); }
+
     virtual void draw(mu::draw::Painter*) const {}
     void drawAt(mu::draw::Painter* p, const PointF& pt) const { p->translate(pt); draw(p); p->translate(-pt); }
 
