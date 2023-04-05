@@ -151,6 +151,7 @@ void TRead::readItem(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
     } else if (try_read<Slur>(el, xml, ctx)) {
     } else if (try_read<StaffState>(el, xml, ctx)) {
     } else if (try_read<SystemText>(el, xml, ctx)) {
+    } else if (try_read<TextLine>(el, xml, ctx)) {
     } else if (try_read<Tie>(el, xml, ctx)) {
     } else if (try_read<Volta>(el, xml, ctx)) {
     } else {
