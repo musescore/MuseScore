@@ -24,6 +24,8 @@
 
 #include "types/texttypes.h"
 
+#include "libmscore/tempotext.h"
+
 #include "log.h"
 
 using namespace mu::inspector;
@@ -109,6 +111,11 @@ static QMap<mu::engraving::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODE
 
 static QMap<mu::engraving::LayoutBreakType, InspectorModelType> LAYOUT_BREAK_ELEMENT_MODEL_TYPES = {
     { mu::engraving::LayoutBreakType::SECTION, InspectorModelType::TYPE_SECTIONBREAK }
+};
+
+static QMap<mu::engraving::TempoTextType, InspectorModelType> TEMPO_TEXT_ELEMENT_MODEL_TYPES = {
+    { mu::engraving::TempoTextType::NORMAL, InspectorModelType::TYPE_TEMPO },
+    { mu::engraving::TempoTextType::RESTORE_PREVIOUS, InspectorModelType::TYPE_TEMPO_RESTORE_PREVIOUS },
 };
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository,

@@ -95,7 +95,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
     case InspectorModelType::TYPE_FERMATA:
         return new FermataSettingsModel(parent, repository);
     case InspectorModelType::TYPE_TEMPO:
-        return new TempoSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_TEMPO_RESTORE_PREVIOUS:
+        return new TempoSettingsModel(parent, repository, modelType);
     case InspectorModelType::TYPE_GLISSANDO:
         return new GlissandoSettingsModel(parent, repository);
     case InspectorModelType::TYPE_BARLINE:
