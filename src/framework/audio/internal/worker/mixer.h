@@ -68,7 +68,7 @@ public:
 
 private:
     void mixOutputFromChannel(float* outBuffer, float* inBuffer, unsigned int samplesCount);
-    void completeOutput(float* buffer, const samples_t& samplesPerChannel);
+    void completeOutput(float* buffer, samples_t samplesPerChannel);
     void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
 
     std::vector<float> m_writeCacheBuff;
