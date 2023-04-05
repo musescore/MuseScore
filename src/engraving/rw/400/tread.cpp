@@ -109,6 +109,7 @@
 #include "../../libmscore/tie.h"
 #include "../../libmscore/ottava.h"
 #include "../../libmscore/pedal.h"
+#include "../../libmscore/palmmute.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -140,10 +141,13 @@ void TRead::readItem(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
     } else if (try_read<FBox>(el, xml, ctx)) {
     } else if (try_read<FiguredBass>(el, xml, ctx)) {
     } else if (try_read<Glissando>(el, xml, ctx)) {
+    } else if (try_read<GradualTempoChange>(el, xml, ctx)) {
     } else if (try_read<Hairpin>(el, xml, ctx)) {
     } else if (try_read<InstrumentChange>(el, xml, ctx)) {
     } else if (try_read<Jump>(el, xml, ctx)) {
+    } else if (try_read<LetRing>(el, xml, ctx)) {
     } else if (try_read<Marker>(el, xml, ctx)) {
+    } else if (try_read<PalmMute>(el, xml, ctx)) {
     } else if (try_read<PlayTechAnnotation>(el, xml, ctx)) {
     } else if (try_read<Pedal>(el, xml, ctx)) {
     } else if (try_read<Ottava>(el, xml, ctx)) {
@@ -153,6 +157,7 @@ void TRead::readItem(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
     } else if (try_read<SystemText>(el, xml, ctx)) {
     } else if (try_read<TextLine>(el, xml, ctx)) {
     } else if (try_read<Tie>(el, xml, ctx)) {
+    } else if (try_read<Trill>(el, xml, ctx)) {
     } else if (try_read<Volta>(el, xml, ctx)) {
     } else {
         UNREACHABLE;
@@ -2564,6 +2569,20 @@ bool TRead::readProperties(Ottava* o, XmlReader& e, ReadContext& ctx)
         return false;
     }
     return true;
+}
+
+void TRead::read(PalmMute* p, XmlReader& e, ReadContext& ctx)
+{
+    if (p->score()->mscVersion() < 301) {
+        ctx.addSpanner(e.intAttribute("id", -1), p);
+    }
+    while (e.readNextStartElement()) {
+        if (readProperty(p, e.name(), e, ctx, Pid::LINE_WIDTH)) {
+            p->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
+        } else if (!readProperties(static_cast<TextLineBase*>(p), e, *e.context())) {
+            e.unknown();
+        }
+    }
 }
 
 void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
