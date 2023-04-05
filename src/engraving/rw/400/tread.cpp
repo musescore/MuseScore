@@ -159,14 +159,15 @@ bool TRead::readProperty(EngravingItem* item, const AsciiStringView& tag, XmlRea
 
 void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, Pid pid)
 {
+    double spatium = ctx.score() ? ctx.spatium() : item->spatium();
     PropertyValue v = mu::engraving::readProperty(pid, xml);
     switch (propertyType(pid)) {
     case P_TYPE::MILLIMETRE: //! NOTE type mm, but stored in xml as spatium
-        v = v.value<Spatium>().toMM(ctx.spatium());
+        v = v.value<Spatium>().toMM(spatium);
         break;
     case P_TYPE::POINT:
         if (item->offsetIsSpatiumDependent()) {
-            v = v.value<PointF>() * ctx.spatium();
+            v = v.value<PointF>() * spatium;
         } else {
             v = v.value<PointF>() * DPMM;
         }
