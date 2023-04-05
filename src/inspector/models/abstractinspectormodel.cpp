@@ -190,13 +190,18 @@ InspectorModelType AbstractInspectorModel::modelType() const
 InspectorModelType AbstractInspectorModel::modelTypeByElementKey(const ElementKey& elementKey)
 {
     if (elementKey.type == mu::engraving::ElementType::HAIRPIN || elementKey.type == mu::engraving::ElementType::HAIRPIN_SEGMENT) {
-        return HAIRPIN_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::HairpinType>(elementKey.subtype),
+        return HAIRPIN_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::HairpinType>(elementKey.propset),
                                                  InspectorModelType::TYPE_UNDEFINED);
     }
 
     if (elementKey.type == mu::engraving::ElementType::LAYOUT_BREAK) {
-        return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::LayoutBreakType>(elementKey.subtype),
+        return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::LayoutBreakType>(elementKey.propset),
                                                       InspectorModelType::TYPE_UNDEFINED);
+    }
+
+    if (elementKey.type == mu::engraving::ElementType::TEMPO_TEXT) {
+        return TEMPO_TEXT_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::TempoTextType>(elementKey.propset),
+                                                    InspectorModelType::TYPE_UNDEFINED);
     }
 
     return NOTATION_ELEMENT_MODEL_TYPES.value(elementKey.type, InspectorModelType::TYPE_UNDEFINED);
