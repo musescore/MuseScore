@@ -51,6 +51,8 @@ public:
 
     TempoText* clone() const override { return new TempoText(*this); }
 
+    virtual int propset() const override;
+
     Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
 
@@ -92,7 +94,7 @@ protected:
 
     void updateScore();
     void updateTempo();
-    
+
     TempoTextType _tempoTextType;
     BeatsPerSecond _tempo;             // beats per second
     bool _followText;         // parse text to determine tempo
