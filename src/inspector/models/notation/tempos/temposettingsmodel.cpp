@@ -27,18 +27,26 @@
 
 using namespace mu::inspector;
 
-TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryService* repository)
+TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryService* repository, InspectorModelType modelType)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(InspectorModelType::TYPE_TEMPO);
-    setTitle(qtrc("inspector", "Tempo"));
+    Q_ASSERT(modelType == InspectorModelType::TYPE_TEMPO || modelType == InspectorModelType::TYPE_TEMPO_RESTORE_PREVIOUS);
+
+    setModelType(modelType);
+
+    if (modelType == InspectorModelType::TYPE_TEMPO) {
+        setTitle(qtrc("inspector", "Tempo"));
+    } else {
+        setTitle(qtrc("inspector", "Restore previous tempo (a tempo)"));
+    }
+
     setIcon(ui::IconCode::Code::METRONOME);
     createProperties();
 }
 
 void TempoSettingsModel::createProperties()
 {
-    m_isDefaultTempoForced
+    m_isFollowText
         = buildPropertyItem(mu::engraving::Pid::TEMPO_FOLLOW_TEXT, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
@@ -55,19 +63,19 @@ void TempoSettingsModel::requestElements()
 
 void TempoSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_isDefaultTempoForced);
+    loadPropertyItem(m_isFollowText);
     loadPropertyItem(m_tempo, formatDoubleFunc);
 }
 
 void TempoSettingsModel::resetProperties()
 {
-    m_isDefaultTempoForced->resetToDefault();
+    m_isFollowText->resetToDefault();
     m_tempo->resetToDefault();
 }
 
-PropertyItem* TempoSettingsModel::isDefaultTempoForced() const
+PropertyItem* TempoSettingsModel::isFollowText() const
 {
-    return m_isDefaultTempoForced;
+    return m_isFollowText;
 }
 
 PropertyItem* TempoSettingsModel::tempo() const

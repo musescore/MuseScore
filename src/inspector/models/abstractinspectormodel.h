@@ -77,6 +77,7 @@ public:
         TYPE_HOOK,
         TYPE_FERMATA,
         TYPE_TEMPO,
+        TYPE_TEMPO_RESTORE_PREVIOUS,
         TYPE_GLISSANDO,
         TYPE_BARLINE,
         TYPE_BREATH,
