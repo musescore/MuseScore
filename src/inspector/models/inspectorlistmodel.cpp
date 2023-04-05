@@ -98,7 +98,7 @@ void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem
         ElementKeySet newElementKeySet;
 
         for (const mu::engraving::EngravingItem* element : selectedElementList) {
-            newElementKeySet << ElementKey(element->type(), element->subtype());
+            newElementKeySet << ElementKey(element->type(), element->propset());
         }
 
         buildModelsForSelectedElements(newElementKeySet, selectionState == SelectionState::RANGE, selectedElementList);

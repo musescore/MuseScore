@@ -33,18 +33,18 @@ namespace mu::inspector {
 struct ElementKey
 {
     mu::engraving::ElementType type = mu::engraving::ElementType::INVALID;
-    int subtype = -1;
+    int propset = -1;
 
     ElementKey() = default;
 
-    ElementKey(mu::engraving::ElementType type, int subtype = -1)
-        : type(type), subtype(subtype)
+    ElementKey(mu::engraving::ElementType type, int propset = -1)
+        : type(type), propset(propset)
     {
     }
 
     bool operator==(const ElementKey& key) const
     {
-        return type == key.type && subtype == key.subtype;
+        return type == key.type && propset == key.propset;
     }
 
     bool operator!=(const ElementKey& key) const
@@ -58,8 +58,8 @@ using ElementKeySet = QSet<ElementKey>;
 
 inline uint qHash(const ElementKey& key)
 {
-    QString subtypePart = key.subtype >= 0 ? QString::number(key.subtype) : "";
-    return qHash(QString::number(static_cast<int>(key.type)) + subtypePart);
+    QString propsetPart = key.propset >= 0 ? QString::number(key.propset) : "";
+    return qHash(QString::number(static_cast<int>(key.type)) + propsetPart);
 }
 
 class CommonTypes
