@@ -64,6 +64,7 @@
         <file>qml/MuseScore/Inspector/notation/lines/VibratoSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/tempos/TempoSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/tempos/TempoRestorePreviousSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/jumps/JumpSettings.qml</file>
