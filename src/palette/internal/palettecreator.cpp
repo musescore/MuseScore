@@ -1497,7 +1497,7 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
     }
 
     auto aTempoTxt = makeElement<TempoText>(gpaletteScore);
-    aTempoTxt->setFollowText(false);
+    aTempoTxt->setFollowText(true);
     aTempoTxt->setXmlText("a tempo");
     aTempoTxt->setRestorePrevious();
     sp->appendElement(aTempoTxt, "a tempo", 1.3);
