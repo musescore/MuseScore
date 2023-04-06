@@ -38,7 +38,7 @@
 
 using namespace mu::engraving;
 
-static const String HARPDIAGRAM_DATA_DIR("harpdiagrams_data/");
+static const String HARPDIAGRAM_DATA_DIR(u"harpdiagrams_data/");
 
 class Engraving_HarpDiagramTests : public ::testing::Test
 {
@@ -75,9 +75,9 @@ TEST_F(Engraving_HarpDiagramTests, harpdiagram)
 
 TEST_F(Engraving_HarpDiagramTests, textdiagrams)
 {
-    const String initFile(HARPDIAGRAM_DATA_DIR + "harpdiagram-blank.mscx");
-    const String ref(HARPDIAGRAM_DATA_DIR + "textdiagram01.mscx");
-    const String write("textdiagram-test01.mscx");
+    const String initFile(HARPDIAGRAM_DATA_DIR + u"harpdiagram-blank.mscx");
+    const String ref(HARPDIAGRAM_DATA_DIR + u"textdiagram01.mscx");
+    const String write(u"textdiagram-test01.mscx");
 
     MasterScore* score = ScoreRW::readScore(initFile);
     EXPECT_TRUE(score);
@@ -176,8 +176,8 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams)
 // Add text diagram between two, see if text updates.  Then test undo.
 TEST_F(Engraving_HarpDiagramTests, textdiagrams2)
 {
-    const String initFile(HARPDIAGRAM_DATA_DIR + "textdiagram02.mscx");
-    const String writeFile("textdiagram-test02.mscx");
+    const String initFile(HARPDIAGRAM_DATA_DIR + u"textdiagram02.mscx");
+    const String writeFile(u"textdiagram-test02.mscx");
 
     MasterScore* score = ScoreRW::readScore(initFile);
     EXPECT_TRUE(score);
@@ -222,7 +222,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams2)
 
 TEST_F(Engraving_HarpDiagramTests, testmap)
 {
-    const String initFile(HARPDIAGRAM_DATA_DIR + "textdiagram02.mscx");
+    const String initFile(HARPDIAGRAM_DATA_DIR + u"textdiagram02.mscx");
 
     MasterScore* score = ScoreRW::readScore(initFile);
     EXPECT_TRUE(score);
