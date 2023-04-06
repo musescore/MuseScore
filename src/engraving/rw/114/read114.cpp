@@ -415,7 +415,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, EngravingItem*)
         e.readText();
     } else if (tag == "systemFlag") {
         e.readText();
-    } else if (!rw400::TRead::readProperties(t, e, *e.context())) {
+    } else if (!rw400::TRead::readTextProperties(t, e, *e.context())) {
         return false;
     }
     t->setOffset(PointF());       // ignore user offsets
@@ -590,7 +590,7 @@ static void readAccidental(Accidental* a, XmlReader& e)
             a->setSmall(e.readInt());
         } else if (tag == "offset") {
             e.skipCurrentElement();       // ignore manual layout in older scores
-        } else if (a->EngravingItem::readProperties(e)) {
+        } else if (TRead::readItemProperties(a, e, *e.context())) {
         } else {
             e.unknown();
         }
@@ -1036,7 +1036,7 @@ static void readTremolo(Tremolo* tremolo, XmlReader& e)
                 break;
             }
             tremolo->setTremoloType(st);
-        } else if (!tremolo->EngravingItem::readProperties(e)) {
+        } else if (!TRead::readItemProperties(tremolo, e, *e.context())) {
             e.unknown();
         }
     }
@@ -1601,7 +1601,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                         break;
                     }
                     barLine->setBarLineType(t);
-                } else if (!barLine->EngravingItem::readProperties(e)) {
+                } else if (!TRead::readItemProperties(barLine, e, ctx)) {
                     e.unknown();
                 }
             }
@@ -2025,7 +2025,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                     j->setPlayRepeats(e.readBool());
                 } else if (t == "subtype") {
                     e.readInt();
-                } else if (!j->TextBase::readProperties(e)) {
+                } else if (!TRead::readTextProperties(j, e, ctx)) {
                     e.unknown();
                 }
             }
@@ -2041,7 +2041,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                     AsciiStringView s(e.readAsciiText());
                     a->setLabel(String::fromAscii(s.ascii()));
                     mt = TConv::fromXml(s, MarkerType::USER);
-                } else if (!a->TextBase::readProperties(e)) {
+                } else if (!TRead::readTextProperties(a, e, ctx)) {
                     e.unknown();
                 }
             }
@@ -2147,7 +2147,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             // set tick to previous measure
             m->setTick(ctx.lastMeasure()->tick());
             ctx.setTick(ctx.lastMeasure()->tick());
-        } else if (m->MeasureBase::readProperties(e)) {
+        } else if (TRead::readProperties(static_cast<MeasureBase*>(m), e, ctx)) {
         } else {
             e.unknown();
         }

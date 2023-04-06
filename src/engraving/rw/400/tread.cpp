@@ -156,11 +156,13 @@ void TRead::readItem(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
     } else if (try_read<Jump>(el, xml, ctx)) {
     } else if (try_read<LetRing>(el, xml, ctx)) {
     } else if (try_read<Marker>(el, xml, ctx)) {
+    } else if (try_read<MeasureNumber>(el, xml, ctx)) {
     } else if (try_read<MeasureRepeat>(el, xml, ctx)) {
+    } else if (try_read<Note>(el, xml, ctx)) {
+    } else if (try_read<Ottava>(el, xml, ctx)) {
     } else if (try_read<PalmMute>(el, xml, ctx)) {
     } else if (try_read<PlayTechAnnotation>(el, xml, ctx)) {
     } else if (try_read<Pedal>(el, xml, ctx)) {
-    } else if (try_read<Ottava>(el, xml, ctx)) {
     } else if (try_read<RehearsalMark>(el, xml, ctx)) {
     } else if (try_read<Rest>(el, xml, ctx)) {
     } else if (try_read<Slur>(el, xml, ctx)) {
@@ -224,8 +226,13 @@ bool TRead::readStyledProperty(EngravingItem* item, const AsciiStringView& tag, 
     return false;
 }
 
-bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& ctx)
+bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext&)
 {
+    //! NOTE The context from the reader and the passed one may differ,
+    //! here we need to use it from the reader.
+    //! This requires additional research.
+    ReadContext& ctx = *e.context();
+
     const AsciiStringView tag(e.name());
 
     if (TRead::readProperty(item, tag, e, ctx, Pid::SIZE_SPATIUM_DEPENDENT)) {
@@ -948,7 +955,7 @@ void TRead::read(FiguredBass* b, XmlReader& e, ReadContext& ctx)
             FiguredBassItem* pItem = b->createItem(idx++);
             pItem->setTrack(b->track());
             pItem->setParent(b);
-            pItem->read(e);
+            TRead::read(pItem, e, ctx);
             b->appendItem(pItem);
             // add item normalized text
             if (!normalizedText.isEmpty()) {
@@ -965,6 +972,32 @@ void TRead::read(FiguredBass* b, XmlReader& e, ReadContext& ctx)
     // if items could be parsed set normalized text
     if (b->items().size() > 0) {
         b->setXmlText(normalizedText);          // this is the text to show while editing
+    }
+}
+
+void TRead::read(FiguredBassItem* i, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+
+        if (tag == "brackets") {
+            i->setParenth1((FiguredBassItem::Parenthesis)e.intAttribute("b0"));
+            i->setParenth2((FiguredBassItem::Parenthesis)e.intAttribute("b1"));
+            i->setParenth3((FiguredBassItem::Parenthesis)e.intAttribute("b2"));
+            i->setParenth4((FiguredBassItem::Parenthesis)e.intAttribute("b3"));
+            i->setParenth5((FiguredBassItem::Parenthesis)e.intAttribute("b4"));
+            e.readNext();
+        } else if (tag == "prefix") {
+            i->setPrefix((FiguredBassItem::Modifier)(e.readInt()));
+        } else if (tag == "digit") {
+            i->setDigit(e.readInt());
+        } else if (tag == "suffix") {
+            i->setSuffix((FiguredBassItem::Modifier)(e.readInt()));
+        } else if (tag == "continuationLine") {
+            i->setContLine((FiguredBassItem::ContLine)(e.readInt()));
+        } else if (!readItemProperties(i, e, ctx)) {
+            e.unknown();
+        }
     }
 }
 
@@ -1101,7 +1134,7 @@ void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
             number->setComposition(true);
             number->setParent(t);
             Tuplet::resetNumberProperty(number);
-            number->read(e);
+            TRead::read(number, e, ctx);
             number->setVisible(t->visible());         //?? override saved property
             number->setTrack(t->track());
             // move property flags from _number back to tuplet
@@ -1521,9 +1554,27 @@ void TRead::read(Box* b, XmlReader& e, ReadContext& ctx)
     }
 }
 
-void TRead::read(HBox* b, XmlReader& xml, ReadContext& ctx)
+void TRead::read(HBox* b, XmlReader& e, ReadContext& ctx)
 {
-    TRead::read(static_cast<Box*>(b), xml, ctx);
+    while (e.readNextStartElement()) {
+        if (!readProperties(b, e, ctx)) {
+            e.unknown();
+        }
+    }
+    if (b->score()->mscVersion() < 302) {
+        b->setAutoSizeEnabled(false);    // disable auto-size for older scores by default.
+    }
+}
+
+bool TRead::readProperties(HBox* b, XmlReader& e, ReadContext& ctx)
+{
+    const AsciiStringView tag(e.name());
+    if (readProperty(b, tag, e, ctx, Pid::CREATE_SYSTEM_HEADER)) {
+    } else if (readProperties(static_cast<Box*>(b), e, ctx)) {
+    } else {
+        return false;
+    }
+    return true;
 }
 
 void TRead::read(VBox* b, XmlReader& xml, ReadContext& ctx)
@@ -1541,12 +1592,20 @@ void TRead::read(TBox* b, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "Text") {
-            b->text()->read(e);
+            TRead::read(b->text(), e, ctx);
         } else if (TRead::readProperties(static_cast<Box*>(b), e, ctx)) {
         } else {
             e.unknown();
         }
     }
+}
+
+bool TRead::readBoxProperties(Box* b, XmlReader& e, ReadContext& ctx)
+{
+    if (b->isHBox()) {
+        return readProperties(dynamic_cast<HBox*>(b), e, ctx);
+    }
+    return readProperties(b, e, ctx);
 }
 
 bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
@@ -1584,10 +1643,10 @@ bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
         Text* t;
         if (b->isTBox()) {
             t = toTBox(b)->text();
-            t->read(e);
+            TRead::read(t, e, ctx);
         } else {
             t = Factory::createText(b);
-            t->read(e);
+            TRead::read(t, e, ctx);
             if (t->empty()) {
                 LOGD("read empty text");
             } else {
@@ -1609,7 +1668,7 @@ bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
         }
     } else if (tag == "FretDiagram") {
         FretDiagram* f = Factory::createFretDiagram(b->score()->dummy()->segment());
-        f->read(e);
+        TRead::read(f, e, ctx);
         //! TODO Looks like a bug.
         //! The FretDiagram parent must be Segment
         //! there is a method: `Segment* segment() const { return toSegment(parent()); }`,
@@ -1622,7 +1681,7 @@ bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
         // because it needs access to the system it is being added to. (c.r. issue #14643)
         if (b->parent() && b->parent()->isSystem()) {
             HBox* hb = new HBox(toSystem(b->parent()));
-            hb->read(e);
+            TRead::read(hb, e, ctx);
             //! TODO Looks like a bug.
             //! The HBox parent must be System
             //! there is a method: `System* system() const { return (System*)parent(); }`,
@@ -1632,7 +1691,7 @@ bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
     } else if (tag == "VBox") {
         if (b->parent() && b->parent()->isSystem()) {
             VBox* vb = new VBox(toSystem(b->parent()));
-            vb->read(e);
+            TRead::read(vb, e, ctx);
             //! TODO Looks like a bug.
             //! The VBox parent must be System
             //! there is a method: `System* system() const { return (System*)parent(); }`,
@@ -1651,7 +1710,7 @@ bool TRead::readProperties(MeasureBase* b, XmlReader& e, ReadContext& ctx)
     const AsciiStringView tag(e.name());
     if (tag == "LayoutBreak") {
         LayoutBreak* lb = Factory::createLayoutBreak(b);
-        lb->read(e);
+        TRead::read(lb, e, ctx);
         bool doAdd = true;
         switch (lb->layoutBreakType()) {
         case LayoutBreakType::LINE:
@@ -1685,7 +1744,7 @@ bool TRead::readProperties(MeasureBase* b, XmlReader& e, ReadContext& ctx)
         StaffTypeChange* stc = Factory::createStaffTypeChange(b);
         stc->setTrack(e.context()->track());
         stc->setParent(b);
-        stc->read(e);
+        TRead::read(stc, e, ctx);
         b->add(stc);
     } else if (readItemProperties(b, e, ctx)) {
     } else {
@@ -2658,7 +2717,7 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
     }
 }
 
-bool TRead::readProperties(Part* p, XmlReader& e, ReadContext&)
+bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
     if (tag == "id") {
@@ -2666,7 +2725,7 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext&)
     } else if (tag == "Staff") {
         Staff* staff = Factory::createStaff(p);
         p->score()->appendStaff(staff);
-        staff->read(e);
+        TRead::read(staff, e, ctx);
     } else if (tag == "Instrument") {
         Instrument* instr = new Instrument;
         instr->read(e, p);
@@ -2783,7 +2842,7 @@ bool TRead::readProperties(SLine* l, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Segment") {
         LineSegment* ls = l->createLineSegment(l->score()->dummy()->system());
         ls->setTrack(l->track());     // needed in read to get the right staff mag
-        ls->read(e);
+        TRead::read(ls, e, ctx);
         l->add(ls);
         ls->setVisible(l->visible());
     } else if (tag == "length") {
@@ -3155,6 +3214,22 @@ void TRead::read(System* s, XmlReader& e, ReadContext& ctx)
     }
 }
 
+void TRead::read(Text* t, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "style") {
+            TextStyleType s = TConv::fromXml(e.readAsciiText(), TextStyleType::DEFAULT);
+            if (TextStyleType::TUPLET == s) {  // ugly hack for compatibility
+                continue;
+            }
+            t->initTextStyleType(s);
+        } else if (!readProperties(static_cast<TextBase*>(t), e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
 void TRead::read(TextLine* l, XmlReader& e, ReadContext& ctx)
 {
     bool system =  e.intAttribute("system", 0) == 1;
@@ -3323,6 +3398,14 @@ static constexpr std::array<Pid, 18> TextBasePropertyId { {
     Pid::FRAME_BG_COLOR,
     Pid::ALIGN,
 } };
+
+bool TRead::readTextProperties(TextBase* t, XmlReader& xml, ReadContext& ctx)
+{
+    if (t->isStaffTextBase()) {
+        return readProperties(dynamic_cast<StaffTextBase*>(t), xml, ctx);
+    }
+    return readProperties(t, xml, ctx);
+}
 
 bool TRead::readProperties(TextBase* t, XmlReader& e, ReadContext& ctx)
 {

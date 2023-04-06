@@ -473,7 +473,7 @@ void Read206::readAccidental206(Accidental* a, XmlReader& e)
             }
         } else if (tag == "small") {
             a->setSmall(e.readInt());
-        } else if (a->EngravingItem::readProperties(e)) {
+        } else if (TRead::readItemProperties(a, e, *e.context())) {
         } else {
             e.unknown();
         }
@@ -1125,8 +1125,8 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
             adjustPlacement(sp);
         }
     } else if (tag == "offset") {
-        note->EngravingItem::readProperties(e);
-    } else if (note->EngravingItem::readProperties(e)) {
+        TRead::readItemProperties(note, e, ctx);
+    } else if (TRead::readItemProperties(note, e, ctx)) {
     } else {
         return false;
     }
@@ -1247,7 +1247,7 @@ static bool readTextProperties206(XmlReader& e, ReadContext& ctx, TextBase* t)
             t->ryoffset() += .5 * ctx.spatium();           // HACK: bbox is different in 2.x
         }
         adjustPlacement(t);
-    } else if (!rw400::TRead::readProperties(t, e, ctx)) {
+    } else if (!rw400::TRead::readTextProperties(t, e, *e.context())) {
         return false;
     }
     return true;
@@ -1507,7 +1507,7 @@ bool Read206::readDurationProperties206(XmlReader& e, ReadContext& ctx, Duration
             }
         }
         return true;
-    } else if (de->EngravingItem::readProperties(e)) {
+    } else if (TRead::readItemProperties(de, e, ctx)) {
         return true;
     }
     return false;
@@ -2478,7 +2478,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                     } else {
                         bl->add(el);
                     }
-                } else if (!bl->EngravingItem::readProperties(e)) {
+                } else if (!TRead::readItemProperties(bl, e, ctx)) {
                     e.unknown();
                 }
             }
@@ -3001,7 +3001,7 @@ static void readBox(Box* b, XmlReader& e, ReadContext& ctx)
                     b->add(t);
                 }
             }
-        } else if (!rw400::TRead::readProperties(b, e, ctx)) {
+        } else if (!rw400::TRead::readBoxProperties(b, e, *e.context())) {
             e.unknown();
         }
     }
