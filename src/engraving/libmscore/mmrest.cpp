@@ -236,12 +236,6 @@ void MMRest::writeProperties(XmlWriter& xml) const
     writeProperty(xml, Pid::MMREST_NUMBER_VISIBLE);
 }
 
-bool MMRest::readProperties(XmlReader& xml)
-{
-    UNREACHABLE;
-    return rw400::TRead::readProperties(this, xml, *xml.context());
-}
-
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------

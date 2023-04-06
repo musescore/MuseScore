@@ -250,12 +250,6 @@ Accidental::Accidental(EngravingItem* parent)
 {
 }
 
-void Accidental::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------

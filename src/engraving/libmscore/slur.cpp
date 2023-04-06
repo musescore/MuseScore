@@ -1474,21 +1474,6 @@ void Slur::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Slur::readProperties(XmlReader& e)
-{
-    UNREACHABLE;
-    const AsciiStringView tag(e.name());
-    if (tag == "stemArr") {
-        _sourceStemArrangement = e.readInt();
-        return true;
-    }
-    return SlurTie::readProperties(e);
-}
-
-//---------------------------------------------------------
 //   directionMixture
 //---------------------------------------------------------
 

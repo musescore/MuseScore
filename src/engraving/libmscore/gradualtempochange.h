@@ -38,7 +38,6 @@ public:
 
     GradualTempoChange* clone() const override;
 
-    void read(XmlReader& reader) override;
     void write(XmlWriter& writer) const override;
 
     LineSegment* createLineSegment(System* parent) override;

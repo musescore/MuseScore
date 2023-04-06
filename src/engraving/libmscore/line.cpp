@@ -69,43 +69,6 @@ LineSegment::LineSegment(const LineSegment& s)
 }
 
 //---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool LineSegment::readProperties(XmlReader& e)
-{
-    UNREACHABLE;
-    const AsciiStringView tag(e.name());
-    if (tag == "subtype") {
-        setSpannerSegmentType(SpannerSegmentType(e.readInt()));
-    } else if (tag == "off2") {
-        setUserOff2(e.readPoint() * score()->spatium());
-    }
-/*      else if (tag == "pos") {
-            setOffset(PointF());
-            e.readNext();
-            }
-      */
-    else if (!SpannerSegment::readProperties(e)) {
-        e.unknown();
-        return false;
-    }
-    return true;
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void LineSegment::read(XmlReader& e)
-{
-    UNREACHABLE;
-    while (e.readNextStartElement()) {
-        readProperties(e);
-    }
-}
-
-//---------------------------------------------------------
 //   gripsPositions
 //---------------------------------------------------------
 
@@ -1384,16 +1347,6 @@ void SLine::writeProperties(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool SLine::readProperties(XmlReader& e)
-{
-    UNREACHABLE;
-    return rw400::TRead::readProperties(this, e, *e.context());
-}
-
-//---------------------------------------------------------
 //   setLen
 //    used to create an element suitable for palette
 //---------------------------------------------------------
@@ -1432,16 +1385,6 @@ void SLine::write(XmlWriter& xml) const
     xml.startElement(this);
     SLine::writeProperties(xml);
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void SLine::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

@@ -87,12 +87,6 @@ void ActionIcon::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void ActionIcon::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 void ActionIcon::layout()
 {
     FontMetrics fontMetrics(m_iconFont);

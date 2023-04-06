@@ -138,12 +138,6 @@ void Symbol::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void Symbol::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   Symbol::getProperty
 //---------------------------------------------------------
@@ -242,12 +236,6 @@ void FSymbol::write(XmlWriter& xml) const
     xml.tag("code",     _code);
     BSymbol::writeProperties(xml);
     xml.endElement();
-}
-
-void FSymbol::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
 }
 
 void FSymbol::layout()

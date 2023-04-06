@@ -197,7 +197,6 @@ public:
     void setHarmonyType(HarmonyType val);
 
     void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
     void afterRead();
     String harmonyName() const;
     void render();

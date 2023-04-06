@@ -292,69 +292,6 @@ void Ambitus::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void Ambitus::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Ambitus::readProperties(XmlReader& e)
-{
-    UNREACHABLE;
-    const AsciiStringView tag(e.name());
-    if (tag == "head") {
-        readProperty(e, Pid::HEAD_GROUP);
-    } else if (tag == "headType") {
-        readProperty(e, Pid::HEAD_TYPE);
-    } else if (tag == "mirror") {
-        readProperty(e, Pid::MIRROR_HEAD);
-    } else if (tag == "hasLine") {
-        setHasLine(e.readInt());
-    } else if (tag == "lineWidth") {
-        readProperty(e, Pid::LINE_WIDTH_SPATIUM);
-    } else if (tag == "topPitch") {
-        _topPitch = e.readInt();
-    } else if (tag == "bottomPitch") {
-        _bottomPitch = e.readInt();
-    } else if (tag == "topTpc") {
-        _topTpc = e.readInt();
-    } else if (tag == "bottomTpc") {
-        _bottomTpc = e.readInt();
-    } else if (tag == "topAccidental") {
-        while (e.readNextStartElement()) {
-            if (e.name() == "Accidental") {
-                if (score()->mscVersion() < 301) {
-                    compat::Read206::readAccidental206(_topAccid, e);
-                } else {
-                    _topAccid->read(e);
-                }
-            } else {
-                e.skipCurrentElement();
-            }
-        }
-    } else if (tag == "bottomAccidental") {
-        while (e.readNextStartElement()) {
-            if (e.name() == "Accidental") {
-                if (score()->mscVersion() < 301) {
-                    compat::Read206::readAccidental206(_bottomAccid, e);
-                } else {
-                    _bottomAccid->read(e);
-                }
-            } else {
-                e.skipCurrentElement();
-            }
-        }
-    } else if (EngravingItem::readProperties(e)) {
-    } else {
-        return false;
-    }
-    return true;
-}
-
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------

@@ -102,12 +102,6 @@ void Arpeggio::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void Arpeggio::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   symbolLine
 //    construct a string of symbols approximating width w

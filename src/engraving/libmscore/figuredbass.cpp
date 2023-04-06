@@ -467,37 +467,6 @@ void FiguredBassItem::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   FiguredBassItem read()
-//---------------------------------------------------------
-
-void FiguredBassItem::read(XmlReader& e)
-{
-    UNREACHABLE;
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-
-        if (tag == "brackets") {
-            parenth[0] = (Parenthesis)e.intAttribute("b0");
-            parenth[1] = (Parenthesis)e.intAttribute("b1");
-            parenth[2] = (Parenthesis)e.intAttribute("b2");
-            parenth[3] = (Parenthesis)e.intAttribute("b3");
-            parenth[4] = (Parenthesis)e.intAttribute("b4");
-            e.readNext();
-        } else if (tag == "prefix") {
-            _prefix = (Modifier)(e.readInt());
-        } else if (tag == "digit") {
-            _digit = e.readInt();
-        } else if (tag == "suffix") {
-            _suffix = (Modifier)(e.readInt());
-        } else if (tag == "continuationLine") {
-            _contLine = (ContLine)(e.readInt());
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   FiguredBassItem layout()
 //    creates the display text (set as element text) and computes
 //    the horiz. offset needed to align the right part as well as the vert. offset
@@ -1095,12 +1064,6 @@ void FiguredBass::write(XmlWriter& xml) const
         EngravingItem::writeProperties(xml);
     }
     xml.endElement();
-}
-
-void FiguredBass::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

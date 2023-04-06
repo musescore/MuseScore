@@ -111,12 +111,6 @@ void Breath::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void Breath::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   mag
 //---------------------------------------------------------

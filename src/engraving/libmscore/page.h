@@ -73,7 +73,6 @@ public:
     System* system(int idx) { return _systems[idx]; }
 
     void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
 
     void appendSystem(System* s);
 

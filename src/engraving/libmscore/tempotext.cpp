@@ -85,16 +85,6 @@ void TempoText::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void TempoText::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 double TempoText::tempoBpm() const
 {
     //! NOTE: find tempo in format " = 180"

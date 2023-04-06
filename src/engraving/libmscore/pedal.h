@@ -69,7 +69,6 @@ public:
 
     Pedal* clone() const override { return new Pedal(*this); }
 
-    void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
     LineSegment* createLineSegment(System* parent) override;

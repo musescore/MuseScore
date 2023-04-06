@@ -339,16 +339,6 @@ void Image::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Image::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 bool Image::load()
 {
     // once all paths are read, load img or retrieve it from store

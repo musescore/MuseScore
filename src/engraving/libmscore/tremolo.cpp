@@ -771,16 +771,6 @@ void Tremolo::setUserModified(DirectionV d, bool val)
     }
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Tremolo::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 TDuration Tremolo::durationType() const
 {
     return _durationType;

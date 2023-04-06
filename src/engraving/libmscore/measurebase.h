@@ -143,7 +143,6 @@ public:
     virtual void add(EngravingItem*) override;
     virtual void remove(EngravingItem*) override;
     virtual void writeProperties(XmlWriter&) const override;
-    virtual bool readProperties(XmlReader&) override;
 
     Fraction tick() const override;
     void setTick(const Fraction& f);

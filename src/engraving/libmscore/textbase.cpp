@@ -2268,16 +2268,6 @@ void TextBase::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void TextBase::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
-//---------------------------------------------------------
 //   writeProperties
 //---------------------------------------------------------
 
@@ -2302,12 +2292,6 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
     if (writeText) {
         xml.writeXml(u"text", xmlText());
     }
-}
-
-bool TextBase::readProperties(XmlReader& e)
-{
-    UNREACHABLE;
-    return rw400::TRead::readTextProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------

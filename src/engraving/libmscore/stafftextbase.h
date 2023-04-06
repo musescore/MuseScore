@@ -58,8 +58,6 @@ public:
     void clear();
 
     virtual void write(XmlWriter& xml) const override;
-    virtual void read(XmlReader&) override;
-    virtual bool readProperties(XmlReader&) override;
 
     Segment* segment() const;
     String channelName(voice_idx_t voice) const { return _channelNames[voice]; }

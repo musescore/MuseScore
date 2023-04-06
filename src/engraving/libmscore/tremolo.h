@@ -111,7 +111,6 @@ public:
     void layout() override;
     void layout2();
     void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
 
     Chord* chord1() const { return _chord1; }
     Chord* chord2() const { return _chord2; }

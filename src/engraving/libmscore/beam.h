@@ -156,7 +156,6 @@ public:
     Fraction ticks() const;
 
     void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     void reset() override;

@@ -775,16 +775,6 @@ void FretDiagram::writeNew(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void FretDiagram::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
-//---------------------------------------------------------
 //   setDot
 //    take a fret value of 0 to mean remove the dot, except with add
 //    where we actually need to pass a fret val.

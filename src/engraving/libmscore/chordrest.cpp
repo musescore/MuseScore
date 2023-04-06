@@ -194,12 +194,6 @@ void ChordRest::writeProperties(XmlWriter& xml) const
     }
 }
 
-bool ChordRest::readProperties(XmlReader& e)
-{
-    UNREACHABLE;
-    return rw400::TRead::readProperties(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   ChordRest::readAddConnector
 //---------------------------------------------------------

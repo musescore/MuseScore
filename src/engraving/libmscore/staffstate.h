@@ -71,7 +71,6 @@ public:
     EngravingItem* drop(EditData&) override;
 
     void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
 
     Instrument* instrument() const { return _instrument; }
     void setInstrument(const Instrument* i) { *_instrument = *i; }

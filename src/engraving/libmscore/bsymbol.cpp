@@ -75,12 +75,6 @@ void BSymbol::writeProperties(XmlWriter& xml) const
     EngravingItem::writeProperties(xml);
 }
 
-bool BSymbol::readProperties(XmlReader& e)
-{
-    UNREACHABLE;
-    return rw400::TRead::readProperties(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   add
 //---------------------------------------------------------

@@ -411,11 +411,9 @@ public:
     void setPrimed(bool primed) { _primed = primed; }
 
     virtual void write(XmlWriter& xml) const override;
-    virtual void read(XmlReader&) override;
     virtual void writeProperties(XmlWriter& xml) const override { writeProperties(xml, true, true); }
     void writeProperties(XmlWriter& xml, bool writeText) const { writeProperties(xml, writeText, true); }
     void writeProperties(XmlWriter&, bool, bool) const;
-    bool readProperties(XmlReader&) override;
 
     virtual void paste(EditData& ed, const String& txt);
 

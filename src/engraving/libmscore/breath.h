@@ -71,7 +71,6 @@ public:
     void draw(mu::draw::Painter*) const override;
     void layout() override;
     void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
     mu::PointF pagePos() const override;        ///< position in page coordinates
 
     PropertyValue getProperty(Pid propertyId) const override;

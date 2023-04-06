@@ -126,16 +126,6 @@ PalmMute::PalmMute(EngravingItem* parent)
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void PalmMute::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
-//---------------------------------------------------------
 //   write
 //
 //   The removal of this function is potentially a temporary

@@ -59,7 +59,6 @@ public:
 
     LetRing* clone() const override { return new LetRing(*this); }
 
-    void read(XmlReader&) override;
 //      virtual void write(XmlWriter& xml) const override;
     LineSegment* createLineSegment(System* parent) override;
 

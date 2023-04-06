@@ -151,7 +151,6 @@ public:
     }
 
     void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

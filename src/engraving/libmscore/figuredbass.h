@@ -172,7 +172,6 @@ public:
 
     void              draw(mu::draw::Painter* painter) const override;
     void              layout() override;
-    void              read(XmlReader&) override;
     void              write(XmlWriter& xml) const override;
 
     // read / write MusicXML
@@ -284,7 +283,6 @@ public:
 
     void draw(mu::draw::Painter* painter) const override;
     void layout() override;
-    void read(XmlReader&) override;
     void setSelected(bool f) override;
     void setVisible(bool f) override;
     void startEdit(EditData&) override;

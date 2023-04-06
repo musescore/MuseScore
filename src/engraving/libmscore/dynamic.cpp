@@ -250,12 +250,6 @@ void Dynamic::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void Dynamic::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------

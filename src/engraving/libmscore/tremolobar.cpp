@@ -134,12 +134,6 @@ void TremoloBar::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void TremoloBar::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------

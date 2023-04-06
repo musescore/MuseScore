@@ -83,12 +83,6 @@ void BagpipeEmbellishment::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void BagpipeEmbellishment::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   BEDrawingDataX
 //      BagpipeEmbellishment drawing data in the x direction

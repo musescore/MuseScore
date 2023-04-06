@@ -71,7 +71,7 @@ public:
     void setNext(LedgerLine* l) { _next = l; }
 
     void writeProperties(XmlWriter& xml) const override;
-    bool readProperties(XmlReader&) override;
+
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 };
 } // namespace mu::engraving

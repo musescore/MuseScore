@@ -152,36 +152,6 @@ String Volta::text() const
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Volta::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Volta::readProperties(XmlReader& e)
-{
-    UNREACHABLE;
-    if (!TextLineBase::readProperties(e)) {
-        return false;
-    }
-
-    if (anchor() != VOLTA_ANCHOR) {
-        // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
-        LOGW("Correcting volta anchor type from %d to %d", int(anchor()), int(VOLTA_ANCHOR));
-        setAnchor(VOLTA_ANCHOR);
-    }
-
-    return true;
-}
-
-//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 

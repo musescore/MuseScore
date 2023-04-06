@@ -94,12 +94,6 @@ EngravingItem* NoteDot::elementBase() const
     return parentItem();
 }
 
-void NoteDot::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
