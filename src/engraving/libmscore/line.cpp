@@ -28,7 +28,6 @@
 
 #include "rw/xml.h"
 
-
 #include "barline.h"
 #include "chord.h"
 #include "lyrics.h"

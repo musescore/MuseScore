@@ -24,7 +24,6 @@
 
 #include "rw/xml.h"
 
-
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
 #include "draw/fontmetrics.h"

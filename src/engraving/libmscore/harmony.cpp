@@ -32,7 +32,6 @@
 #include "rw/400/writecontext.h"
 #include "rw/xml.h"
 
-
 #include "chordlist.h"
 #include "fret.h"
 #include "linkedobjects.h"

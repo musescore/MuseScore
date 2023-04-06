@@ -29,7 +29,6 @@
 #include "draw/types/pen.h"
 #include "rw/xml.h"
 
-
 #include "chord.h"
 #include "factory.h"
 #include "harmony.h"

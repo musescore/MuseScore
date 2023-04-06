@@ -31,7 +31,6 @@
 
 #include "rw/xml.h"
 
-
 #include "actionicon.h"
 #include "articulation.h"
 #include "chord.h"

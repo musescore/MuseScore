@@ -70,7 +70,7 @@ TEST_F(Engraving_Compat114Tests, articulations) {
 }
 
 TEST_F(Engraving_Compat114Tests, chord_symbol) {
-    //compat("chord_symbol");
+    compat("chord_symbol");
 }
 
 TEST_F(Engraving_Compat114Tests, clef_missing_first) {

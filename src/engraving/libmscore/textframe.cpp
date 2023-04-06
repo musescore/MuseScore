@@ -24,7 +24,6 @@
 #include "draw/fontmetrics.h"
 #include "rw/xml.h"
 
-
 #include "box.h"
 #include "factory.h"
 #include "mscore.h"
