@@ -78,6 +78,8 @@ class Glissando;
 class GradualTempoChange;
 class Groups;
 
+class HarpPedalDiagram;
+
 class Hairpin;
 class Harmony;
 class HarmonicMark;
@@ -220,6 +222,7 @@ public:
 
     static void read(Hairpin* h, XmlReader& xml, ReadContext& ctx);
     static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
+    static void read(HarpPedalDiagram* h, XmlReader& xml, ReadContext& ctx);
     static void read(HarmonicMark* h, XmlReader& xml, ReadContext& ctx);
     static void read(Hook* h, XmlReader& xml, ReadContext& ctx);
 

@@ -52,8 +52,6 @@ class HarpPedalDiagram final : public TextBase
 
     bool _isDiagram = true;
 
-    void setPlayablePitches();
-
 public:
     HarpPedalDiagram(Segment* parent);
     HarpPedalDiagram(const HarpPedalDiagram& h);
@@ -65,9 +63,6 @@ public:
     Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
     void layout() override;
-
-    void read(XmlReader&) override;
-    void write(XmlWriter& xml) const override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
@@ -83,6 +78,8 @@ public:
     void setPedalState(std::array<PedalPosition, 7> state);
 
     void setPedal(HarpStringType harpString, PedalPosition pedal);
+
+    void setPlayablePitches();
 
     String createDiagramText();
     void updateDiagramText();

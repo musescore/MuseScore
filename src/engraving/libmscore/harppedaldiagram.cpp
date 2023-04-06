@@ -23,7 +23,7 @@
 #include "harppedaldiagram.h"
 #include "log.h"
 #include "part.h"
-#include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "score.h"
 #include "segment.h"
 #include "translation.h"
@@ -251,49 +251,6 @@ void HarpPedalDiagram::updateDiagramText()
 bool HarpPedalDiagram::isPitchPlayable(int pitch)
 {
     return _playablePitches.find(pitch % 12) != _playablePitches.cend();
-}
-
-void HarpPedalDiagram::read(XmlReader& xml)
-{
-    while (xml.readNextStartElement()) {
-        const AsciiStringView tag = xml.name();
-        if (tag == "isDiagram") {
-            setIsDiagram(xml.readBool());
-        } else if (tag == "pedalState") {
-            while (xml.readNextStartElement()) {
-                const AsciiStringView stringTag = xml.name();
-                if (stringTag == "string") {
-                    HarpStringType str = HarpStringType(xml.intAttribute("name"));
-                    PedalPosition pos = PedalPosition(xml.readInt());
-                    setPedal(str, pos);
-                } else {
-                    xml.unknown();
-                }
-            }
-            setPlayablePitches();
-        } else if (!TextBase::readProperties(xml)) {
-            xml.unknown();
-        }
-    }
-}
-
-void HarpPedalDiagram::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    writeProperty(xml, Pid::HARP_IS_DIAGRAM);
-
-    // Write vector of harp strings.  Order is always D, C, B, E, F, G, A
-    xml.startElement("pedalState");
-    for (int idx = 0; idx < _pedalState.size(); idx++) {
-        xml.tag("string", { { "name", idx } }, static_cast<int>(_pedalState[idx]));
-    }
-    xml.endElement();
-
-    TextBase::writeProperties(xml);
-    xml.endElement();
 }
 
 PropertyValue HarpPedalDiagram::getProperty(Pid propertyId) const
