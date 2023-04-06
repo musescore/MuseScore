@@ -177,9 +177,10 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
     samples_t processedSamplesCount = m_audioSource->process(buffer, samplesPerChannel);
 
     if (processedSamplesCount == 0 || m_params.muted) {
-        std::fill(buffer, buffer + samplesPerChannel * audioChannelsCount(), 0.f);
+        unsigned int channelsCount = audioChannelsCount();
+        std::fill(buffer, buffer + samplesPerChannel * channelsCount, 0.f);
 
-        for (audioch_t audioChNum = 0; audioChNum < audioChannelsCount(); ++audioChNum) {
+        for (audioch_t audioChNum = 0; audioChNum < channelsCount; ++audioChNum) {
             notifyAboutAudioSignalChanges(audioChNum, 0.f);
         }
 
@@ -200,15 +201,17 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
 
 void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount) const
 {
+    unsigned int channelsCount = audioChannelsCount();
+    float volume = dsp::linearFromDecibels(m_params.volume);
     float totalSquaredSum = 0.f;
 
-    for (audioch_t audioChNum = 0; audioChNum < audioChannelsCount(); ++audioChNum) {
+    for (audioch_t audioChNum = 0; audioChNum < channelsCount; ++audioChNum) {
         float singleChannelSquaredSum = 0.f;
 
-        gain_t totalGain = dsp::balanceGain(m_params.balance, audioChNum) * dsp::linearFromDecibels(m_params.volume);
+        gain_t totalGain = dsp::balanceGain(m_params.balance, audioChNum) * volume;
 
         for (unsigned int s = 0; s < samplesCount; ++s) {
-            int idx = s * audioChannelsCount() + audioChNum;
+            int idx = s * channelsCount + audioChNum;
 
             float resultSample = buffer[idx] * totalGain;
             buffer[idx] = resultSample;
@@ -227,8 +230,8 @@ void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount) cons
         return;
     }
 
-    float totalRms = dsp::samplesRootMeanSquare(totalSquaredSum, samplesCount * audioChannelsCount());
-    m_compressor->process(totalRms, buffer, audioChannelsCount(), samplesCount);
+    float totalRms = dsp::samplesRootMeanSquare(totalSquaredSum, samplesCount * channelsCount);
+    m_compressor->process(totalRms, buffer, channelsCount, samplesCount);
 }
 
 void MixerChannel::notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const
