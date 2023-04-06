@@ -1166,7 +1166,7 @@ EngravingItem* EngravingItem::readMimeData(Score* score, const ByteArray& data, 
 
     EngravingItem* el = Factory::createItem(type, score->dummy(), false);
     if (el) {
-        el->read(e);
+        rw400::TRead::readItem(el, e, *e.context());
     }
 
     return el;

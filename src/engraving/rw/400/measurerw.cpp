@@ -195,7 +195,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
             TRead::read(range, e, ctx);
             range->setTrack(ctx.track());
             measure->add(range);
-        } else if (measure->MeasureBase::readProperties(e)) {
+        } else if (TRead::readProperties(static_cast<MeasureBase*>(measure), e, ctx)) {
         } else {
             e.unknown();
         }

@@ -38,7 +38,6 @@ class FretDiagram;
 class Sticking;
 class SystemText;
 class RehearsalMark;
-class FiguredBass;
 class Fermata;
 class Image;
 class Ambitus;
@@ -66,6 +65,8 @@ class Chord;
 class ChordRest;
 class ChordLine;
 class Clef;
+class FiguredBass;
+class FiguredBassItem;
 class Fingering;
 class Glissando;
 class GradualTempoChange;
@@ -113,6 +114,7 @@ class Stem;
 class StemSlash;
 class System;
 class SystemDivider;
+class Text;
 class TextLine;
 class TextLineBase;
 class Tie;
@@ -170,6 +172,7 @@ public:
     static void read(Clef* c, XmlReader& xml, ReadContext& ctx);
     static void read(Fermata* f, XmlReader& xml, ReadContext& ctx);
     static void read(FiguredBass* b, XmlReader& xml, ReadContext& ctx);
+    static void read(FiguredBassItem* i, XmlReader& xml, ReadContext& ctx);
     static void read(Fingering* f, XmlReader& xml, ReadContext& ctx);
     static void read(Glissando* g, XmlReader& xml, ReadContext& ctx);
     static void read(GradualTempoChange* c, XmlReader& xml, ReadContext& ctx);
@@ -214,6 +217,7 @@ public:
     static void read(StemSlash* s, XmlReader& xml, ReadContext& ctx);
     static void read(System* s, XmlReader& xml, ReadContext& ctx);
     static void read(SystemDivider* d, XmlReader& xml, ReadContext& ctx);
+    static void read(Text* t, XmlReader& xml, ReadContext& ctx);
     static void read(TextLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(TextLineBase* b, XmlReader& xml, ReadContext& ctx);
     static void read(Tie* t, XmlReader& xml, ReadContext& ctx);
@@ -232,10 +236,11 @@ public:
     static bool readStyledProperty(EngravingItem* item, const AsciiStringView& tag, XmlReader& xml, ReadContext& ctx);
 
     static bool readItemProperties(EngravingItem* item, XmlReader& xml, ReadContext& ctx);
+    static bool readBoxProperties(Box* b, XmlReader& xml, ReadContext& ctx);
+    static bool readTextProperties(TextBase* t, XmlReader& xml, ReadContext& ctx);
 
     static bool readProperties(Ambitus* a, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Articulation* a, XmlReader& xml, ReadContext& ctx);
-    static bool readProperties(Box* b, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(BSymbol* sym, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Chord* ch, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(ChordRest* ch, XmlReader& xml, ReadContext& ctx);
@@ -255,11 +260,17 @@ public:
     static bool readProperties(SlurTie* s, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Spanner* s, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Staff* s, XmlReader& e, ReadContext& ctx);
-    static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Stem* s, XmlReader& e, ReadContext& ctx);
-    static bool readProperties(TextBase* t, XmlReader& xml, ReadContext& ctx);
+
     static bool readProperties(TextLineBase* b, XmlReader& e, ReadContext& ctx);
     static bool readProperties(Volta* v, XmlReader& e, ReadContext& ctx);
+
+private:
+    static bool readProperties(Box* b, XmlReader& xml, ReadContext& ctx);
+    static bool readProperties(HBox* b, XmlReader& xml, ReadContext& ctx);
+
+    static bool readProperties(TextBase* t, XmlReader& xml, ReadContext& ctx);
+    static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
 };
 }
 

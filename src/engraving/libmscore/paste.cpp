@@ -425,7 +425,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                     }
                     Segment* segment = m->undoGetSegment(SegmentType::Clef, tick);
                     Clef* clef = Factory::createClef(segment);
-                    clef->read(e);
+                    rw400::TRead::read(clef, e, ctx);
                     clef->setTrack(e.context()->track());
                     clef->setParent(segment);
                     undoChangeElement(segment->element(e.context()->track()), clef);
@@ -439,13 +439,13 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                     Breath* breath = Factory::createBreath(segment);
                     breath->setTrack(e.context()->track());
                     breath->setPlacement(breath->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
-                    breath->read(e);
+                    rw400::TRead::read(breath, e, ctx);
                     breath->setParent(segment);
                     undoChangeElement(segment->element(e.context()->track()), breath);
                 } else if (tag == "Beam") {
                     Beam* beam = Factory::createBeam(this->dummy()->system());
                     beam->setTrack(e.context()->track());
-                    beam->read(e);
+                    rw400::TRead::read(beam, e, ctx);
                     beam->resetExplicitParent();
                     if (startingBeam) {
                         LOGD("The read beam was not used");
@@ -849,7 +849,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                     if (tag == "Harmony") {
                         Harmony* el = Factory::createHarmony(harmSegm);
                         el->setTrack(trackZeroVoice(destTrack));
-                        el->read(e);
+                        rw400::TRead::read(el, e, ctx);
                         el->setTrack(trackZeroVoice(destTrack));
                         // transpose
                         Part* partDest = staff(track2staff(destTrack))->part();
@@ -865,7 +865,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                     } else {
                         FretDiagram* el = Factory::createFretDiagram(harmSegm);
                         el->setTrack(trackZeroVoice(destTrack));
-                        el->read(e);
+                        rw400::TRead::read(el, e, ctx);
                         el->setTrack(trackZeroVoice(destTrack));
                         el->setParent(harmSegm);
                         undoAddElement(el);
@@ -878,14 +878,14 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                     }
                     Dynamic* d = Factory::createDynamic(destCR->segment());
                     d->setTrack(destTrack);
-                    d->read(e);
+                    rw400::TRead::read(d, e, ctx);
                     d->setTrack(destTrack);
                     d->setParent(destCR->segment());
                     undoAddElement(d);
                 } else if (tag == "HairPin") {
                     Hairpin* h = Factory::createHairpin(this->dummy()->segment());
                     h->setTrack(destTrack);
-                    h->read(e);
+                    rw400::TRead::read(h, e, ctx);
                     h->setTrack(destTrack);
                     h->setTrack2(destTrack);
                     h->setTick(destTick);
@@ -937,7 +937,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         Fraction ticks;
                         FiguredBass* el = Factory::createFiguredBass(currSegm);
                         el->setTrack(destTrack);
-                        el->read(e);
+                        rw400::TRead::read(el, e, ctx);
                         el->setTrack(destTrack);
                         // if f.b. is off-note, we have to locate a place before currSegm
                         // where an on-note f.b. element could (potentially) be
@@ -1035,7 +1035,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         }
                         Lyrics* el = Factory::createLyrics(cr);
                         el->setTrack(destTrack);
-                        el->read(e);
+                        rw400::TRead::read(el, e, ctx);
                         el->setTrack(destTrack);
                         el->setParent(cr);
                         undoAddElement(el);
