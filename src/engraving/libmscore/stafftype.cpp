@@ -27,7 +27,7 @@
 #include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
 #include "rw/xml.h"
-#include "rw/400/tread.h"
+
 #include "types/typesconv.h"
 
 #include "chord.h"
@@ -374,15 +374,6 @@ void StaffType::write(XmlWriter& xml) const
         }
     }
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void StaffType::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

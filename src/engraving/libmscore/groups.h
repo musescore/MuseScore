@@ -49,7 +49,6 @@ public:
     void addNode(const GroupNode& n) { m_nodes.push_back(n); }
 
     void write(XmlWriter&) const;
-    void read(XmlReader&);
 
     BeamMode beamMode(int tick, DurationType d) const;
     void addStop(int pos, DurationType d, BeamMode bm);

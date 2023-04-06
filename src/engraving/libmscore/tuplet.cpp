@@ -24,7 +24,7 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
-#include "rw/400/tread.h"
+
 #include "style/textstyle.h"
 #include "types/typesconv.h"
 

@@ -193,7 +193,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                     }
                 } else if (tag == "location") {
                     Location loc = Location::relative();
-                    loc.read(e);
+                    rw400::TRead::read(&loc, e, *e.context());
                     e.context()->setLocation(loc);
                 } else if (tag == "Tuplet") {
                     Tuplet* oldTuplet = tuplet;

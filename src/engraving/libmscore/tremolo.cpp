@@ -26,7 +26,7 @@
 #include "draw/types/pen.h"
 #include "draw/types/transform.h"
 #include "rw/xml.h"
-#include "rw/400/tread.h"
+
 #include "style/style.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"

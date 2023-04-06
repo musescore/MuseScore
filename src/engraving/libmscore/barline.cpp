@@ -25,7 +25,7 @@
 #include "draw/fontmetrics.h"
 #include "draw/types/font.h"
 #include "rw/xml.h"
-#include "rw/400/tread.h"
+
 #include "translation.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"

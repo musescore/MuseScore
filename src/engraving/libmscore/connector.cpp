@@ -429,7 +429,7 @@ void ConnectorInfoReader::readEndpointLocation(Location& l)
         const AsciiStringView tag(e.name());
         if (tag == "location") {
             l = Location::relative();
-            l.read(e);
+            rw400::TRead::read(&l, e, *e.context());
         } else {
             e.unknown();
         }

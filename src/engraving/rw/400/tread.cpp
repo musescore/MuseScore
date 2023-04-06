@@ -283,7 +283,7 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext&)
                         linkedIsMaster = item->score()->isMaster();
                     }
                 } else if (ntag == "location") {
-                    mainLoc.read(e);
+                    TRead::read(&mainLoc, e, *e.context());
                     mainLoc.toAbsolute(loc);
                     locationRead = true;
                 } else if (ntag == "indexDiff") {
