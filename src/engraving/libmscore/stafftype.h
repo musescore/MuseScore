@@ -326,7 +326,6 @@ public:
     double spatium(Score*) const;
 
     void write(XmlWriter& xml) const;
-    void read(XmlReader&);
 
     void setStemless(bool val) { _stemless = val; }
     bool stemless() const { return _stemless; }

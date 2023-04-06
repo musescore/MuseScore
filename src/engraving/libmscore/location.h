@@ -70,7 +70,6 @@ public:
     void toRelative(const Location& ref);
 
     void write(XmlWriter& xml) const;
-    void read(XmlReader& e);
 
     bool isAbsolute() const { return !_rel; }
     bool isRelative() const { return _rel; }

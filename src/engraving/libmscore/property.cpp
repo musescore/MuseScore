@@ -25,6 +25,7 @@
 #include "translation.h"
 
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "style/style.h"
 #include "types/typesconv.h"
 
@@ -556,7 +557,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(int(0));
     case P_TYPE::GROUPS: {
         Groups g;
-        g.read(e);
+        rw400::TRead::read(&g, e, *e.context());
         return PropertyValue::fromValue(g.nodes());
     }
     case P_TYPE::DURATION_TYPE_WITH_DOTS:
