@@ -25,7 +25,6 @@
 #include "translation.h"
 #include "rw/xml.h"
 
-
 #include "keysig.h"
 #include "measure.h"
 #include "mscore.h"

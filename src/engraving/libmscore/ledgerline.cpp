@@ -24,7 +24,6 @@
 
 #include "rw/xml.h"
 
-
 #include "chord.h"
 #include "measure.h"
 #include "score.h"

@@ -176,6 +176,7 @@ void TRead::readItem(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
     } else if (try_read<Tie>(el, xml, ctx)) {
     } else if (try_read<TremoloBar>(el, xml, ctx)) {
     } else if (try_read<Trill>(el, xml, ctx)) {
+    } else if (try_read<Vibrato>(el, xml, ctx)) {
     } else if (try_read<Volta>(el, xml, ctx)) {
     } else {
         UNREACHABLE;

@@ -30,7 +30,6 @@
 #include "draw/svgrenderer.h"
 #include "rw/xml.h"
 
-
 #include "imageStore.h"
 #include "masterscore.h"
 #include "mscore.h"

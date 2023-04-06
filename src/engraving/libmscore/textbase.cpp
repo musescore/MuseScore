@@ -31,7 +31,6 @@
 
 #include "rw/xml.h"
 
-
 #include "style/defaultstyle.h"
 #include "style/textstyle.h"
 

@@ -23,7 +23,6 @@
 
 #include "rw/xml.h"
 
-
 #include "score.h"
 #include "system.h"
 #include "undo.h"

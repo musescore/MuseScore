@@ -32,7 +32,6 @@
 #include "draw/types/brush.h"
 #include "rw/xml.h"
 
-
 #include "actionicon.h"
 #include "chord.h"
 #include "groups.h"

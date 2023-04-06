@@ -26,7 +26,6 @@
 
 #include "rw/xml.h"
 
-
 #include "actionicon.h"
 #include "factory.h"
 #include "fret.h"
