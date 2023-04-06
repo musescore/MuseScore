@@ -97,16 +97,6 @@ PropertyValue MMRestRange::propertyDefault(Pid id) const
     }
 }
 
-bool MMRestRange::readProperties(XmlReader& xml)
-{
-    UNREACHABLE;
-    if (readProperty(xml.name(), xml, Pid::MMREST_RANGE_BRACKET_TYPE)) {
-        return true;
-    } else {
-        return MeasureNumberBase::readProperties(xml);
-    }
-}
-
 //---------------------------------------------------------
 //   setXmlText
 ///   This is reimplemented from TextBase::setXmlText to take care of the brackets

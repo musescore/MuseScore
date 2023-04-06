@@ -191,7 +191,6 @@ public:
 
     virtual void setScore(Score* s) override;
 
-    bool readProperties(XmlReader&) override;
     void writeProperties(XmlWriter&) const override;
 
     void writeSpannerStart(XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction frac = { -1, 1 }) const;

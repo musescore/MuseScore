@@ -69,7 +69,6 @@ public:
 
     void draw(mu::draw::Painter*) const override;
     void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
     void layout() override;
 
     PropertyValue getProperty(Pid) const override;
@@ -102,7 +101,6 @@ public:
 
     void draw(mu::draw::Painter*) const override;
     void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
     void layout() override;
 
     double baseLine() const override { return 0.0; }

@@ -65,7 +65,6 @@ public:
 
     PalmMute* clone() const override { return new PalmMute(*this); }
 
-    void read(XmlReader&) override;
 //      virtual void write(XmlWriter& xml) const override;
 
     LineSegment* createLineSegment(System* parent) override;

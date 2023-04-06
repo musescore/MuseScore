@@ -71,22 +71,6 @@ void PlayTechAnnotation::write(XmlWriter& writer) const
     writer.endElement();
 }
 
-void PlayTechAnnotation::read(XmlReader& reader)
-{
-    UNREACHABLE;
-    while (reader.readNextStartElement()) {
-        const AsciiStringView tag(reader.name());
-
-        if (readProperty(tag, reader, Pid::PLAY_TECH_TYPE)) {
-            continue;
-        }
-
-        if (!StaffTextBase::readProperties(reader)) {
-            reader.unknown();
-        }
-    }
-}
-
 PropertyValue PlayTechAnnotation::getProperty(Pid id) const
 {
     switch (id) {

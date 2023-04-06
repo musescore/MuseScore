@@ -36,7 +36,7 @@ class Text final : public TextBase
 public:
 
     Text* clone() const override { return new Text(*this); }
-    void read(XmlReader&) override;
+
     PropertyValue propertyDefault(Pid id) const override;
 
     static String readXmlText(XmlReader& r, Score* score);

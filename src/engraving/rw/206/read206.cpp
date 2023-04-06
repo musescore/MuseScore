@@ -765,7 +765,7 @@ void Read206::readPart206(Part* part, XmlReader& e, ReadContext& ctx)
             Staff* staff = Factory::createStaff(part);
             ctx.appendStaff(staff);
             readStaff(staff, e);
-        } else if (part->readProperties(e)) {
+        } else if (TRead::readProperties(part, e, ctx)) {
         } else {
             e.unknown();
         }
@@ -2133,7 +2133,7 @@ void Read206::readTrill206(XmlReader& e, Trill* t)
             t->readProperty(e, Pid::ORNAMENT_STYLE);
         } else if (tag == "play") {
             t->setPlayArticulation(e.readBool());
-        } else if (!t->SLine::readProperties(e)) {
+        } else if (!TRead::readProperties(static_cast<SLine*>(t), e, *e.context())) {
             e.unknown();
         }
     }
@@ -2345,7 +2345,7 @@ static bool readSlurTieProperties(XmlReader& e, ReadContext& ctx, SlurTie* st)
         SlurTieSegment* s = st->newSlurTieSegment(ctx.dummy()->system());
         rw400::TRead::read(s, e, ctx);
         st->add(s);
-    } else if (!st->EngravingItem::readProperties(e)) {
+    } else if (!TRead::readItemProperties(st, e, ctx)) {
         return false;
     }
     return true;

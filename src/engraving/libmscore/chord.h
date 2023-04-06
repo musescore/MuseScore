@@ -197,8 +197,7 @@ public:
     double noteHeadWidth() const;
 
     void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
-    bool readProperties(XmlReader&) override;
+
     EngravingItem* drop(EditData&) override;
 
     void setColor(const mu::draw::Color& c) override;

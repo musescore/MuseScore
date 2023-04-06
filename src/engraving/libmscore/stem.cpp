@@ -231,18 +231,6 @@ void Stem::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void Stem::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
-bool Stem::readProperties(XmlReader& e)
-{
-    UNREACHABLE;
-    return rw400::TRead::readProperties(this, e, *e.context());
-}
-
 std::vector<mu::PointF> Stem::gripsPositions(const EditData&) const
 {
     return { pagePos() + m_line.p2() };

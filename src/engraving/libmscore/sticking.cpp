@@ -64,16 +64,6 @@ void Sticking::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Sticking::read(XmlReader& e)
-{
-    UNREACHABLE;
-    TextBase::read(e);
-}
-
 bool Sticking::isEditAllowed(EditData& ed) const
 {
     if (isTextNavigationKey(ed.key, ed.modifiers)) {

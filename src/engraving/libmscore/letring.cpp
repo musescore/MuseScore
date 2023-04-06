@@ -102,16 +102,6 @@ LetRing::LetRing(EngravingItem* parent)
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void LetRing::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
-//---------------------------------------------------------
 //   write
 //
 //   The removal of this function is potentially a temporary

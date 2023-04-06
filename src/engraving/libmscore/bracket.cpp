@@ -594,15 +594,4 @@ void Bracket::write(XmlWriter& xml) const
         xml.endElement();
     }
 }
-
-//---------------------------------------------------------
-//   Bracket::read
-//    used only for palettes
-//---------------------------------------------------------
-
-void Bracket::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
 }

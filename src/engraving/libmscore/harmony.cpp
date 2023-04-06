@@ -348,16 +348,6 @@ void Harmony::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Harmony::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 void Harmony::afterRead()
 {
     // TODO: now that we can render arbitrary chords,

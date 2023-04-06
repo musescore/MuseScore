@@ -102,26 +102,6 @@ PropertyValue MeasureNumberBase::propertyDefault(Pid id) const
     }
 }
 
-void MeasureNumberBase::read(XmlReader& xml)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, xml, *xml.context());
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool MeasureNumberBase::readProperties(XmlReader& xml)
-{
-    UNREACHABLE;
-    if (readProperty(xml.name(), xml, Pid::HPLACEMENT)) {
-        return true;
-    } else {
-        return TextBase::readProperties(xml);
-    }
-}
-
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------

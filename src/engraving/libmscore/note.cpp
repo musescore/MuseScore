@@ -1535,16 +1535,6 @@ void Note::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   Note::read
-//---------------------------------------------------------
-
-void Note::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
 {
     // ensure sane values:
@@ -1630,16 +1620,6 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
     if (_leftParenthesis && _rightParenthesis) {
         _hasHeadParentheses = true;
     }
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Note::readProperties(XmlReader& e)
-{
-    UNREACHABLE;
-    return rw400::TRead::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------

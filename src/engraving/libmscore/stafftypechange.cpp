@@ -77,16 +77,6 @@ void StaffTypeChange::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void StaffTypeChange::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 void StaffTypeChange::setStaffType(StaffType* st, bool owned)
 {
     if (m_staffType && m_ownsStaffType) {

@@ -965,28 +965,6 @@ void Segment::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Segment::read(XmlReader& e)
-{
-    UNREACHABLE;
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-
-        if (tag == "subtype") {
-            e.skipCurrentElement();
-        } else if (tag == "leadingSpace") {
-            _extraLeadingSpace = Spatium(e.readDouble());
-        } else if (tag == "trailingSpace") {          // obsolete
-            e.readDouble();
-        } else {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

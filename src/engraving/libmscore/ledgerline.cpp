@@ -142,14 +142,4 @@ void LedgerLine::writeProperties(XmlWriter& xml) const
         xml.tag("vertical", m_vertical);
     }
 }
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool LedgerLine::readProperties(XmlReader& e)
-{
-    UNREACHABLE;
-    return rw400::TRead::readProperties(this, e, *e.context());
-}
 }

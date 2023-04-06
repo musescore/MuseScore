@@ -2017,12 +2017,6 @@ void Measure::write(XmlWriter& xml, staff_idx_t staff, bool writeSystemElements,
     rw400::MeasureRW::writeMeasure(this, xml, staff, writeSystemElements, forceTimeSig);
 }
 
-void Measure::read(XmlReader& xml)
-{
-    ReadContext ctx(score());
-    rw400::MeasureRW::readMeasure(this, xml, ctx, 0);
-}
-
 //---------------------------------------------------------
 //   Measure::readAddConnector
 //---------------------------------------------------------

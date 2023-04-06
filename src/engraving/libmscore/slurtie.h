@@ -133,7 +133,6 @@ public:
     std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
 
     void writeSlur(XmlWriter& xml, int no) const;
-    void read(XmlReader&) override;
     virtual void drawEditMode(mu::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
     virtual void computeBezier(mu::PointF so = mu::PointF()) = 0;
 };
@@ -172,10 +171,7 @@ public:
     virtual void layout2(const mu::PointF, int, struct UP&) {}
     virtual bool contains(const mu::PointF&) const { return false; }    // not selectable
 
-    void read(XmlReader&) override;
-
     void writeProperties(XmlWriter& xml) const override;
-    bool readProperties(XmlReader&) override;
 
     SlurStyleType styleType() const { return _styleType; }
     void setStyleType(SlurStyleType type) { _styleType = type; }

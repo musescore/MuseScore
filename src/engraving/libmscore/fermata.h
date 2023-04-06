@@ -70,9 +70,7 @@ public:
 
     void layout() override;
 
-    void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
-    bool readProperties(XmlReader&) override;
 
     std::vector<mu::LineF> dragAnchorLines() const override;
 

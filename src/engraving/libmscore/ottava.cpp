@@ -303,56 +303,6 @@ void Ottava::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Ottava::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Ottava::readProperties(XmlReader& e)
-{
-    UNREACHABLE;
-    const AsciiStringView tag(e.name());
-    if (tag == "subtype") {
-        String s = e.readText();
-        bool ok;
-        int idx = s.toInt(&ok);
-        if (!ok) {
-            _ottavaType = OttavaType::OTTAVA_8VA;
-            for (OttavaDefault d : ottavaDefault) {
-                if (s == d.name) {
-                    _ottavaType = d.type;
-                    break;
-                }
-            }
-        } else if (score()->mscVersion() <= 114) {
-            //subtype are now in a different order...
-            if (idx == 1) {
-                idx = 2;
-            } else if (idx == 2) {
-                idx = 1;
-            }
-            _ottavaType = OttavaType(idx);
-        } else {
-            _ottavaType = OttavaType(idx);
-        }
-    } else if (readStyledProperty(e, tag)) {
-        return true;
-    } else if (!TextLineBase::readProperties(e)) {
-        e.unknown();
-        return false;
-    }
-    return true;
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

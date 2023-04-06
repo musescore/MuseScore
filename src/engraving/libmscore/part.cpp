@@ -144,62 +144,6 @@ Part* Part::masterPart()
 }
 
 //---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Part::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-    if (tag == "id") {
-        _id = e.readInt();
-    } else if (tag == "Staff") {
-        Staff* staff = Factory::createStaff(this);
-        score()->appendStaff(staff);
-        staff->read(e);
-    } else if (tag == "Instrument") {
-        Instrument* instr = new Instrument;
-        instr->read(e, this);
-        setInstrument(instr, Fraction(-1, 1));
-    } else if (tag == "name") {
-        instrument()->setLongName(e.readText());
-    } else if (tag == "color") {
-        _color = e.readInt();
-    } else if (tag == "shortName") {
-        instrument()->setShortName(e.readText());
-    } else if (tag == "trackName") {
-        _partName = e.readText();
-    } else if (tag == "show") {
-        _show = e.readInt();
-    } else if (tag == "soloist") {
-        _soloist = e.readInt();
-    } else if (tag == "preferSharpFlat") {
-        _preferSharpFlat
-            =e.readText() == "sharps" ? PreferSharpFlat::SHARPS : PreferSharpFlat::FLATS;
-    } else {
-        return false;
-    }
-    return true;
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Part::read(XmlReader& e)
-{
-    _id = e.intAttribute("id", 0);
-
-    while (e.readNextStartElement()) {
-        if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
-    if (_partName.isEmpty()) {
-        _partName = instrument()->trackName();
-    }
-}
-
-//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 

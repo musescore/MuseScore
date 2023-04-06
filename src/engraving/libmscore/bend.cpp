@@ -375,12 +375,6 @@ void Bend::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void Bend::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------

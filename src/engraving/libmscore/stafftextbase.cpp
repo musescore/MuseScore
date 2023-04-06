@@ -100,18 +100,6 @@ void StaffTextBase::clear()
     clearAeolusStops();
 }
 
-void StaffTextBase::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
-bool StaffTextBase::readProperties(XmlReader& e)
-{
-    UNREACHABLE;
-    return rw400::TRead::readTextProperties(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   clearAeolusStops
 //---------------------------------------------------------

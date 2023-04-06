@@ -94,7 +94,6 @@ public:
     virtual void add(EngravingItem*) override;
     virtual void remove(EngravingItem*) override;
 
-    void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
     SymId getSymbol(DurationType type, int line, int lines);

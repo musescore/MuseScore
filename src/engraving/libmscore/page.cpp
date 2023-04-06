@@ -551,24 +551,6 @@ void Page::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Page::read(XmlReader& e)
-{
-    UNREACHABLE;
-    while (e.readNextStartElement()) {
-        if (e.name() == "System") {
-            System* system = Factory::createSystem(score()->dummy()->page());
-            score()->systems().push_back(system);
-            system->read(e);
-        } else {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   elements
 //---------------------------------------------------------
 

@@ -185,7 +185,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
             }
         } else if (tag == "Part") {
             Part* part = new Part(score);
-            part->read(e);
+            TRead::read(part, e, ctx);
             score->appendPart(part);
         } else if ((tag == "HairPin")
                    || (tag == "Ottava")

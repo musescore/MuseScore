@@ -151,18 +151,6 @@ void Articulation::setUp(bool val)
     }
 }
 
-void Articulation::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
-bool Articulation::readProperties(XmlReader& e)
-{
-    UNREACHABLE;
-    return rw400::TRead::readProperties(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------

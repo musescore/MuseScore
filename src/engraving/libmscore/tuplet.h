@@ -128,9 +128,7 @@ public:
     void layout() override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    void read(XmlReader&) override;
     void write(XmlWriter&) const override;
-    bool readProperties(XmlReader&) override;
 
     void reset() override;
 

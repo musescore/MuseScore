@@ -209,12 +209,6 @@ void InstrumentChange::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void InstrumentChange::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------

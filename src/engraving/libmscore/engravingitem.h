@@ -332,10 +332,7 @@ public:
     void drawAt(mu::draw::Painter* p, const PointF& pt) const { p->translate(pt); draw(p); p->translate(-pt); }
 
     virtual void writeProperties(XmlWriter& xml) const;
-    virtual bool readProperties(XmlReader&);
-
     virtual void write(XmlWriter&) const;
-    virtual void read(XmlReader&);
 
 //       virtual ElementGroup getElementGroup() { return SingleElementGroup(this); }
     virtual std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> /*isDragged*/)

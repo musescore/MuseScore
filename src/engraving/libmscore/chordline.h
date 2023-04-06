@@ -84,7 +84,6 @@ public:
 
     const TranslatableString& chordLineTypeName() const;
 
-    void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
     void layout() override;
     void draw(mu::draw::Painter*) const override;

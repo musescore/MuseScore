@@ -499,12 +499,6 @@ void Glissando::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void Glissando::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   STATIC FUNCTIONS: guessInitialNote
 //

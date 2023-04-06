@@ -620,16 +620,6 @@ void TextLineBase::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void TextLineBase::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
-//---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------
 
@@ -650,23 +640,6 @@ void TextLineBase::writeProperties(XmlWriter& xml) const
         }
     }
     SLine::writeProperties(xml);
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool TextLineBase::readProperties(XmlReader& e)
-{
-    UNREACHABLE;
-    const AsciiStringView tag(e.name());
-    for (Pid i : TextLineBasePropertyId) {
-        if (readProperty(tag, e, i)) {
-            setPropertyFlags(i, PropertyFlags::UNSTYLED);
-            return true;
-        }
-    }
-    return SLine::readProperties(e);
 }
 
 //---------------------------------------------------------

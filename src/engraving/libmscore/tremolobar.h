@@ -55,7 +55,6 @@ public:
     void draw(mu::draw::Painter*) const override;
 
     void write(XmlWriter&) const override;
-    void read(XmlReader& e) override;
 
     PitchValues& points() { return m_points; }
     const PitchValues& points() const { return m_points; }

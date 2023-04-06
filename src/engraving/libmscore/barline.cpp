@@ -810,12 +810,6 @@ void BarLine::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void BarLine::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   acceptDrop
 //---------------------------------------------------------

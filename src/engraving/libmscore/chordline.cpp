@@ -184,12 +184,6 @@ void ChordLine::layout()
     }
 }
 
-void ChordLine::read(XmlReader& e)
-{
-    UNREACHABLE;
-    rw400::TRead::read(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
