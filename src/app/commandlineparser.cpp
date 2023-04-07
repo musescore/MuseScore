@@ -324,6 +324,7 @@ void CommandLineParser::parse(int argc, char** argv)
     }
 
     // Video
+#ifdef MUE_BUILD_VIDEOEXPORT_MODULE
     if (m_parser.isSet("score-video")) {
         m_runMode = IApplication::RunMode::ConsoleApp;
         m_converterTask.type = ConvertType::ExportScoreVideo;
@@ -358,6 +359,7 @@ void CommandLineParser::parse(int argc, char** argv)
             m_options.exportVideo.trailingSec = doubleValue("ts");
         }
     }
+#endif
 
     if (m_parser.isSet("F") || m_parser.isSet("R")) {
         m_options.app.revertToFactorySettings = true;
