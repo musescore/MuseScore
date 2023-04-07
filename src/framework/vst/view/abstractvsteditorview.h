@@ -28,7 +28,6 @@
 
 #include "modularity/ioc.h"
 #include "ivstpluginsregister.h"
-#include "ui/iuiconfiguration.h"
 
 class QWidget;
 
@@ -43,7 +42,6 @@ class AbstractVstEditorView : public uicomponents::TopLevelDialog, public Steinb
     Q_PROPERTY(QString resourceId READ resourceId WRITE setResourceId NOTIFY resourceIdChanged)
 
     INJECT(vst, IVstPluginsRegister, pluginsRegister)
-    INJECT(vst, ui::IUiConfiguration, uiConfig)
 
 public:
     AbstractVstEditorView(QWidget* parent = nullptr);
@@ -70,7 +68,7 @@ protected:
 private:
     void attachView(VstPluginPtr pluginPtr);
 
-    void setupWindowGeometry();
+    void updateViewGeometry();
     void moveViewToMainWindowCenter();
 
     void showEvent(QShowEvent* ev) override;
@@ -87,8 +85,6 @@ private:
     audio::TrackId m_trackId = -1;
     QString m_resourceId;
     audio::AudioFxChainOrder m_chainOrder = -1;
-
-    double m_scalingFactor = 0.0;
 };
 }
 
