@@ -33,6 +33,10 @@ if (MUE_BUILD_AUTOBOT_MODULE)
     add_subdirectory(autobot)
 endif()
 
+if (MUE_BUILD_BRAILLE_MODULE)
+    add_subdirectory(braille)
+endif()
+
 if (MUE_BUILD_CLOUD_MODULE)
     add_subdirectory(cloud)
 endif()
