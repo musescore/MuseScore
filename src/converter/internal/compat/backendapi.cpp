@@ -217,15 +217,18 @@ RetVal<project::INotationProjectPtr> BackendApi::openProject(const io::path_t& p
         return make_ret(Ret::Code::InternalError);
     }
 
-    INotationPtr notation = notationProject->masterNotation()->notation();
+    IMasterNotationPtr masterNotation = notationProject->masterNotation();
+    if (!masterNotation) {
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    INotationPtr notation = masterNotation->notation();
     if (!notation) {
         return make_ret(Ret::Code::InternalError);
     }
 
-    notation->setViewMode(ViewMode::PAGE);
-    for (IExcerptNotationPtr excerpt : notationProject->masterNotation()->excerpts().val) {
-        excerpt->notation()->setViewMode(ViewMode::PAGE);
-    }
+    switchToPageView(masterNotation);
+    renderExcerptsContents(masterNotation);
 
     return RetVal<INotationProjectPtr>::make_ok(notationProject);
 }
@@ -736,6 +739,26 @@ Ret BackendApi::applyTranspose(const INotationPtr notation, const std::string& o
     }
 
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
+}
+
+void BackendApi::switchToPageView(IMasterNotationPtr masterNotation)
+{
+    //! NOTE: All operations must be done in page view mode
+    masterNotation->notation()->setViewMode(ViewMode::PAGE);
+    for (IExcerptNotationPtr excerpt : masterNotation->excerpts().val) {
+        excerpt->notation()->setViewMode(ViewMode::PAGE);
+    }
+}
+
+void BackendApi::renderExcerptsContents(IMasterNotationPtr masterNotation)
+{
+    //! NOTE: Due to optimization, only the master score is layouted
+    //!       Let's layout all the scores of the excerpts
+    for (IExcerptNotationPtr excerpt : masterNotation->excerpts().val) {
+        Score* score = excerpt->notation()->elements()->msScore();
+        score->setLayoutAll();
+        score->update();
+    }
 }
 
 Ret BackendApi::updateSource(const io::path_t& in, const std::string& newSource, bool forceMode)
