@@ -1054,6 +1054,8 @@ public:
     void cmdCreateTuplet(ChordRest*, Tuplet*);
     void removeAudio();
 
+    bool autoLayoutEnabled() const;
+
     void doLayout();
     void doLayoutRange(const Fraction& st, const Fraction& et);
 

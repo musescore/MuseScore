@@ -576,7 +576,10 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
 
     QJsonArray partsArray;
     QJsonArray partsNamesArray;
-    for (IExcerptNotationPtr e : masterNotation->excerpts().val) {
+
+    ExcerptNotationList excerpts = allExcerpts(masterNotation);
+
+    for (IExcerptNotationPtr e : excerpts) {
         QJsonValue partNameVal(e->name());
         partsNamesArray.append(partNameVal);
 
@@ -756,9 +759,31 @@ void BackendApi::renderExcerptsContents(IMasterNotationPtr masterNotation)
     //!       Let's layout all the scores of the excerpts
     for (IExcerptNotationPtr excerpt : masterNotation->excerpts().val) {
         Score* score = excerpt->notation()->elements()->msScore();
-        score->setLayoutAll();
-        score->update();
+        if (!score->autoLayoutEnabled()) {
+            score->doLayout();
+        }
     }
+}
+
+ExcerptNotationList BackendApi::allExcerpts(notation::IMasterNotationPtr masterNotation)
+{
+    initPotentialExcerpts(masterNotation);
+
+    ExcerptNotationList excerpts = masterNotation->excerpts().val;
+    ExcerptNotationList potentialExcerpts = masterNotation->potentialExcerpts();
+    excerpts.insert(excerpts.end(), potentialExcerpts.begin(), potentialExcerpts.end());
+
+    masterNotation->sortExcerpts(excerpts);
+
+    return excerpts;
+}
+
+void BackendApi::initPotentialExcerpts(notation::IMasterNotationPtr masterNotation)
+{
+    ExcerptNotationList potentialExcerpts = masterNotation->potentialExcerpts();
+
+    masterNotation->initExcerpts(potentialExcerpts);
+    renderExcerptsContents(masterNotation);
 }
 
 Ret BackendApi::updateSource(const io::path_t& in, const std::string& newSource, bool forceMode)
