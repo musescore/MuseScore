@@ -37,6 +37,14 @@
 #include "../../libmscore/arpeggio.h"
 #include "../../libmscore/articulation.h"
 
+#include "../../libmscore/bagpembell.h"
+#include "../../libmscore/barline.h"
+#include "../../libmscore/beam.h"
+#include "../../libmscore/bend.h"
+#include "../../libmscore/box.h"
+#include "../../libmscore/bracket.h"
+#include "../../libmscore/breath.h"
+
 #include "../xmlwriter.h"
 #include "writecontext.h"
 
@@ -276,5 +284,12 @@ void TWrite::write(Articulation* a, XmlWriter& xml, WriteContext& ctx)
         writeProperty(a, xml, spp.pid);
     }
     writeItemProperties(a, xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(BagpipeEmbellishment* b, XmlWriter& xml, WriteContext&)
+{
+    xml.startElement(this);
+    xml.tag("subtype", TConv::toXml(b->embelType()));
     xml.endElement();
 }
