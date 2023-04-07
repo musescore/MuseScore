@@ -230,3 +230,25 @@ void TWrite::write(Ambitus* a, XmlWriter& xml, WriteContext& ctx)
     writeItemProperties(a, xml, ctx);
     xml.endElement();
 }
+
+void TWrite::write(Arpeggio* a, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(a)) {
+        return;
+    }
+    xml.startElement(a);
+    writeItemProperties(a, xml, ctx);
+    writeProperty(a, xml, Pid::ARPEGGIO_TYPE);
+    if (a->userLen1() != 0.0) {
+        xml.tag("userLen1", a->userLen1() / a->spatium());
+    }
+    if (a->userLen2() != 0.0) {
+        xml.tag("userLen2", a->userLen2() / a->spatium());
+    }
+    if (a->span() != 1) {
+        xml.tag("span", a->span());
+    }
+    writeProperty(a, xml, Pid::PLAY);
+    writeProperty(a, xml, Pid::TIME_STRETCH);
+    xml.endElement();
+}
