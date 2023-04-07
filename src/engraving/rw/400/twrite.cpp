@@ -32,6 +32,7 @@
 #include "../../libmscore/staff.h"
 
 #include "../../libmscore/accidental.h"
+#include "../../libmscore/actionicon.h"
 
 #include "../xmlwriter.h"
 #include "writecontext.h"
@@ -188,5 +189,15 @@ void TWrite::write(Accidental* a, XmlWriter& xml, WriteContext& ctx)
     writeProperty(a, xml, Pid::SMALL);
     writeProperty(a, xml, Pid::ACCIDENTAL_TYPE);
     writeItemProperties(a, xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(ActionIcon* a, XmlWriter& xml, WriteContext&)
+{
+    xml.startElement(a);
+    xml.tag("subtype", int(a->actionType()));
+    if (!a->actionCode().empty()) {
+        xml.tag("action", String::fromStdString(a->actionCode()));
+    }
     xml.endElement();
 }

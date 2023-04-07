@@ -29,6 +29,7 @@ class XmlWriter;
 class WriteContext;
 class EngravingItem;
 class Accidental;
+class ActionIcon;
 }
 
 namespace mu::engraving::rw400 {
@@ -38,6 +39,7 @@ public:
     TWrite() = default;
 
     static void write(Accidental* a, XmlWriter& xml, WriteContext& ctx);
+    static void write(ActionIcon* a, XmlWriter& xml, WriteContext& ctx);
 
     static void writeProperty(EngravingItem* item, XmlWriter& xml, Pid pid);
 
