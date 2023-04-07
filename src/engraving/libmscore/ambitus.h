@@ -28,6 +28,7 @@
 #include "pitchspelling.h"
 
 #include "types/types.h"
+#include "types/dimension.h"
 
 namespace mu::engraving {
 class Accidental;
@@ -64,6 +65,13 @@ class Ambitus final : public EngravingItem
 
 public:
     ~Ambitus();
+
+    static constexpr NoteHeadGroup NOTEHEADGROUP_DEFAULT = NoteHeadGroup::HEAD_NORMAL;
+    static constexpr NoteHeadType NOTEHEADTYPE_DEFAULT = NoteHeadType::HEAD_AUTO;
+    static constexpr DirectionH DIR_DEFAULT = DirectionH::AUTO;
+    static constexpr bool HASLINE_DEFAULT = true;
+    static const Spatium LINEWIDTH_DEFAULT;
+    static constexpr double LINEOFFSET_DEFAULT = 0.8;               // the distance between notehead and line
 
     Ambitus* clone() const override { return new Ambitus(*this); }
 

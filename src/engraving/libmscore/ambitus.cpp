@@ -46,13 +46,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static const NoteHeadGroup NOTEHEADGROUP_DEFAULT = NoteHeadGroup::HEAD_NORMAL;
-static const NoteHeadType NOTEHEADTYPE_DEFAULT  = NoteHeadType::HEAD_AUTO;
-static const DirectionH DIR_DEFAULT     = DirectionH::AUTO;
-static const bool HASLINE_DEFAULT         = true;
-static const Spatium LINEWIDTH_DEFAULT(0.12);
-static const double LINEOFFSET_DEFAULT      = 0.8;               // the distance between notehead and line
-
+const Spatium Ambitus::LINEWIDTH_DEFAULT = Spatium(0.12);
 //---------------------------------------------------------
 //   Ambitus
 //---------------------------------------------------------

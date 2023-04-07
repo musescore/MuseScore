@@ -33,6 +33,9 @@
 
 #include "../../libmscore/accidental.h"
 #include "../../libmscore/actionicon.h"
+#include "../../libmscore/ambitus.h"
+#include "../../libmscore/arpeggio.h"
+#include "../../libmscore/articulation.h"
 
 #include "../xmlwriter.h"
 #include "writecontext.h"
@@ -199,5 +202,31 @@ void TWrite::write(ActionIcon* a, XmlWriter& xml, WriteContext&)
     if (!a->actionCode().empty()) {
         xml.tag("action", String::fromStdString(a->actionCode()));
     }
+    xml.endElement();
+}
+
+void TWrite::write(Ambitus* a, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(a);
+    xml.tagProperty(Pid::HEAD_GROUP, int(a->noteHeadGroup()), int(Ambitus::NOTEHEADGROUP_DEFAULT));
+    xml.tagProperty(Pid::HEAD_TYPE,  int(a->noteHeadType()),  int(Ambitus::NOTEHEADTYPE_DEFAULT));
+    xml.tagProperty(Pid::MIRROR_HEAD, int(a->direction()),    int(Ambitus::DIR_DEFAULT));
+    xml.tag("hasLine",    a->hasLine(), true);
+    xml.tagProperty(Pid::LINE_WIDTH_SPATIUM, a->lineWidth(), Ambitus::LINEWIDTH_DEFAULT);
+    xml.tag("topPitch",   a->topPitch());
+    xml.tag("topTpc",     a->topTpc());
+    xml.tag("bottomPitch", a->bottomPitch());
+    xml.tag("bottomTpc",  a->bottomTpc());
+    if (a->topAccidental()->accidentalType() != AccidentalType::NONE) {
+        xml.startElement("topAccidental");
+        a->topAccidental()->write(xml);
+        xml.endElement();
+    }
+    if (a->bottomAccidental()->accidentalType() != AccidentalType::NONE) {
+        xml.startElement("bottomAccidental");
+        a->bottomAccidental()->write(xml);
+        xml.endElement();
+    }
+    writeItemProperties(a, xml, ctx);
     xml.endElement();
 }
