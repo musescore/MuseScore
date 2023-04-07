@@ -2373,6 +2373,11 @@ const std::array<Item<ArticulationTextType>, 3> ARTICULATIONTEXT_TYPES = { {
     { ArticulationTextType::POP,    "Pop",      TranslatableString("engraving/sym", "Pop") }
 } };
 
+AsciiStringView TConv::toXml(ArticulationTextType v)
+{
+    return findXmlTagByType<ArticulationTextType>(ARTICULATIONTEXT_TYPES, v);
+}
+
 ArticulationTextType TConv::fromXml(const AsciiStringView& tag, ArticulationTextType def)
 {
     auto it = std::find_if(ARTICULATIONTEXT_TYPES.cbegin(), ARTICULATIONTEXT_TYPES.cend(), [tag](const Item<ArticulationTextType>& i) {

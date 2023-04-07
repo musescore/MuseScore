@@ -252,3 +252,29 @@ void TWrite::write(Arpeggio* a, XmlWriter& xml, WriteContext& ctx)
     writeProperty(a, xml, Pid::TIME_STRETCH);
     xml.endElement();
 }
+
+void TWrite::write(Articulation* a, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(a)) {
+        return;
+    }
+    xml.startElement(a);
+    if (!a->channelName().isEmpty()) {
+        xml.tag("channe", { { "name", a->channelName() } });
+    }
+
+    writeProperty(a, xml, Pid::DIRECTION);
+    if (a->textType() != ArticulationTextType::NO_TEXT) {
+        xml.tag("subtype", TConv::toXml(a->textType()));
+    } else {
+        xml.tag("subtype", SymNames::nameForSymId(a->symId()));
+    }
+
+    writeProperty(a, xml, Pid::PLAY);
+    writeProperty(a, xml, Pid::ORNAMENT_STYLE);
+    for (const StyledProperty& spp : *a->styledProperties()) {
+        writeProperty(a, xml, spp.pid);
+    }
+    writeItemProperties(a, xml, ctx);
+    xml.endElement();
+}
