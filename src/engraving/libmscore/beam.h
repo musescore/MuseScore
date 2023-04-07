@@ -245,6 +245,7 @@ public:
 
     const std::vector<TremAnchor>& tremAnchors() const { return _tremAnchors; }
 
+    const std::vector<BeamFragment*>& beamFragments() const { return fragments; }
     void addBeamFragment(BeamFragment* f) { fragments.push_back(f); }
 
 private:

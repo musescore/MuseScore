@@ -309,3 +309,40 @@ void TWrite::write(BarLine* b, XmlWriter& xml, WriteContext& ctx)
     writeItemProperties(b, xml, ctx);
     xml.endElement();
 }
+
+void TWrite::write(Beam* b, XmlWriter& xml, WriteContext& ctx)
+{
+    if (b->elements().empty()) {
+        return;
+    }
+    xml.startElement(b);
+    writeItemProperties(b, xml, ctx);
+
+    writeProperty(b, xml, Pid::STEM_DIRECTION);
+    writeProperty(b, xml, Pid::BEAM_NO_SLOPE);
+    writeProperty(b, xml, Pid::GROW_LEFT);
+    writeProperty(b, xml, Pid::GROW_RIGHT);
+
+    int idx = (b->beamDirection() == DirectionV::AUTO || b->beamDirection() == DirectionV::DOWN) ? 0 : 1;
+    if (b->userModified()) {
+        double _spatium = b->spatium();
+        for (BeamFragment* f : b->beamFragments()) {
+            xml.startElement("Fragment");
+            xml.tag("y1", f->py1[idx] / _spatium);
+            xml.tag("y2", f->py2[idx] / _spatium);
+            xml.endElement();
+        }
+    }
+
+    // this info is used for regression testing
+    // l1/l2 is the beam position of the layout engine
+    if (MScore::testMode) {
+        double spatium8 = b->spatium() * .125;
+        for (BeamFragment* f : b->beamFragments()) {
+            xml.tag("l1", int(lrint(f->py1[idx] / spatium8)));
+            xml.tag("l2", int(lrint(f->py2[idx] / spatium8)));
+        }
+    }
+
+    xml.endElement();
+}
