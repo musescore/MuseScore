@@ -35,6 +35,7 @@ class Arpeggio;
 class Articulation;
 
 class BagpipeEmbellishment;
+class BarLine;
 }
 
 namespace mu::engraving::rw400 {
@@ -50,6 +51,7 @@ public:
     static void write(Articulation* a, XmlWriter& xml, WriteContext& ctx);
 
     static void write(BagpipeEmbellishment* b, XmlWriter& xml, WriteContext& ctx);
+    static void write(BarLine* b, XmlWriter& xml, WriteContext& ctx);
 
     static void writeProperty(EngravingItem* item, XmlWriter& xml, Pid pid);
 

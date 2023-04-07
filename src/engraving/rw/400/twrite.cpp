@@ -289,7 +289,23 @@ void TWrite::write(Articulation* a, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(BagpipeEmbellishment* b, XmlWriter& xml, WriteContext&)
 {
-    xml.startElement(this);
+    xml.startElement(b);
     xml.tag("subtype", TConv::toXml(b->embelType()));
+    xml.endElement();
+}
+
+void TWrite::write(BarLine* b, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(b);
+
+    writeProperty(b, xml, Pid::BARLINE_TYPE);
+    writeProperty(b, xml, Pid::BARLINE_SPAN);
+    writeProperty(b, xml, Pid::BARLINE_SPAN_FROM);
+    writeProperty(b, xml, Pid::BARLINE_SPAN_TO);
+
+    for (const EngravingItem* e : *b->el()) {
+        e->write(xml);
+    }
+    writeItemProperties(b, xml, ctx);
     xml.endElement();
 }
