@@ -67,7 +67,7 @@ Column {
     }
 
     SpinBoxPropertyView {
-        titleText: qsTrc("inspector", "Specific tempo")
+        titleText: qsTrc("inspector", "Tempo")
         propertyItem: root.model ? root.model.tempo : null
         enabled: root.model ? !root.model.isEmpty && setSpecificTempoCheckBox.checked : false
 
