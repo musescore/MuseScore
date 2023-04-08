@@ -44,6 +44,9 @@ Column {
     }
 
     CheckBox {
+        // Same as CheckBoxPropertyView, except that this view shows
+        // the negation of the boolean model property
+
         id: setSpecificTempoCheckBox
         property PropertyItem followText: root.model ? root.model.followText : null
 
