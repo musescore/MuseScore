@@ -71,7 +71,7 @@ Column {
         propertyItem: root.model ? root.model.tempo : null
         enabled: root.model ? !root.model.isEmpty && setSpecificTempoCheckBox.checked : false
 
-        measureUnitsSymbol: qsTrc("inspector", " BPM")
+        measureUnitsSymbol: qsTrc("inspector", "BPM")
 
         navigationName: "Override"
         navigationPanel: root.navigationPanel
