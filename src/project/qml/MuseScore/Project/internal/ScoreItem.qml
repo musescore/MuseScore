@@ -163,6 +163,18 @@ FocusScope {
                 color: "#08000000"
                 cornerRadius: scoreRect.radius + glowRadius
             }
+
+            MouseArea {
+                id: mouseArea
+
+                anchors.fill: parent
+
+                hoverEnabled: true
+
+                onClicked: {
+                    root.clicked()
+                }
+            }
         }
 
         Column {
@@ -181,6 +193,24 @@ FocusScope {
                 width: parent.width
 
                 font: ui.theme.largeBodyFont
+
+                MouseArea {
+                    anchors.fill: parent
+
+                    hoverEnabled: true
+
+                    onHoveredChanged: {
+                        if (root.isAdd || root.isNoResultFound) {
+                            return
+                        }
+
+                        if (containsMouse) {
+                            ui.tooltip.show(timeSinceModified, root.path, "", "", QmlToolTip.FileToolTip)
+                        } else {
+                            ui.tooltip.hide(timeSinceModified)
+                        }
+                    }
+                }
             }
 
             StyledTextLabel {
@@ -311,30 +341,6 @@ FocusScope {
 
                 // Prevent image from looking pixelated on low-res screens
                 mipmap: true
-            }
-        }
-    }
-
-    MouseArea {
-        id: mouseArea
-
-        anchors.fill: parent
-
-        hoverEnabled: true
-
-        onClicked: {
-            root.clicked()
-        }
-
-        onHoveredChanged: {
-            if (root.isAdd || root.isNoResultFound) {
-                return
-            }
-
-            if (containsMouse) {
-                ui.tooltip.show(timeSinceModified, root.path, "", "", QmlToolTip.FileToolTip)
-            } else {
-                ui.tooltip.hide(timeSinceModified)
             }
         }
     }
