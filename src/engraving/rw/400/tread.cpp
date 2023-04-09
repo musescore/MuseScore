@@ -142,10 +142,23 @@ void TRead::readItem(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
     } else if (try_read<VBox>(el, xml, ctx)) {
     } else if (try_read<TBox>(el, xml, ctx)) {
     } else if (try_read<FBox>(el, xml, ctx)) {
+    } else if (try_read<Accidental>(el, xml, ctx)) {
+    } else if (try_read<ActionIcon>(el, xml, ctx)) {
+    } else if (try_read<Ambitus>(el, xml, ctx)) {
+    } else if (try_read<Arpeggio>(el, xml, ctx)) {
+    } else if (try_read<Articulation>(el, xml, ctx)) {
+    } else if (try_read<BagpipeEmbellishment>(el, xml, ctx)) {
+    } else if (try_read<BarLine>(el, xml, ctx)) {
+    } else if (try_read<Bend>(el, xml, ctx)) {
+    } else if (try_read<Bracket>(el, xml, ctx)) {
+    } else if (try_read<Breath>(el, xml, ctx)) {
     } else if (try_read<Chord>(el, xml, ctx)) {
+    } else if (try_read<ChordLine>(el, xml, ctx)) {
+    } else if (try_read<Clef>(el, xml, ctx)) {
     } else if (try_read<Dynamic>(el, xml, ctx)) {
     } else if (try_read<Fermata>(el, xml, ctx)) {
     } else if (try_read<FiguredBass>(el, xml, ctx)) {
+    } else if (try_read<Fingering>(el, xml, ctx)) {
     } else if (try_read<FretDiagram>(el, xml, ctx)) {
     } else if (try_read<Glissando>(el, xml, ctx)) {
     } else if (try_read<GradualTempoChange>(el, xml, ctx)) {
@@ -154,6 +167,8 @@ void TRead::readItem(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
     } else if (try_read<Image>(el, xml, ctx)) {
     } else if (try_read<InstrumentChange>(el, xml, ctx)) {
     } else if (try_read<Jump>(el, xml, ctx)) {
+    } else if (try_read<KeySig>(el, xml, ctx)) {
+    } else if (try_read<LayoutBreak>(el, xml, ctx)) {
     } else if (try_read<LetRing>(el, xml, ctx)) {
     } else if (try_read<Marker>(el, xml, ctx)) {
     } else if (try_read<MeasureNumber>(el, xml, ctx)) {
@@ -166,19 +181,24 @@ void TRead::readItem(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
     } else if (try_read<RehearsalMark>(el, xml, ctx)) {
     } else if (try_read<Rest>(el, xml, ctx)) {
     } else if (try_read<Slur>(el, xml, ctx)) {
+    } else if (try_read<Spacer>(el, xml, ctx)) {
     } else if (try_read<StaffState>(el, xml, ctx)) {
     } else if (try_read<StaffText>(el, xml, ctx)) {
+    } else if (try_read<StaffTypeChange>(el, xml, ctx)) {
     } else if (try_read<Symbol>(el, xml, ctx)) {
     } else if (try_read<SystemText>(el, xml, ctx)) {
     } else if (try_read<Text>(el, xml, ctx)) {
     } else if (try_read<TextLine>(el, xml, ctx)) {
     } else if (try_read<TempoText>(el, xml, ctx)) {
     } else if (try_read<Tie>(el, xml, ctx)) {
+    } else if (try_read<TimeSig>(el, xml, ctx)) {
+    } else if (try_read<Tremolo>(el, xml, ctx)) {
     } else if (try_read<TremoloBar>(el, xml, ctx)) {
     } else if (try_read<Trill>(el, xml, ctx)) {
     } else if (try_read<Vibrato>(el, xml, ctx)) {
     } else if (try_read<Volta>(el, xml, ctx)) {
     } else {
+        LOGE("Unhandled element type %s", el->typeName());
         UNREACHABLE;
     }
 }
