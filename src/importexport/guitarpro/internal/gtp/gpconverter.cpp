@@ -181,7 +181,6 @@ static GPBeat::HarmonicMarkType harmonicTypeNoteToBeat(GPNote::Harmonic::Type t)
         return types[t];
     }
 
-    //LOGE() << "wrong harmonic type"; TODO: fix
     return GPBeat::HarmonicMarkType::None;
 }
 
@@ -199,7 +198,6 @@ static GPConverter::LineImportType harmonicMarkToImportType(GPBeat::HarmonicMark
         return types[t];
     }
 
-    //LOGE() << "wrong harmonic type"; TODO: fix
     return GPConverter::LineImportType::NONE;
 }
 
