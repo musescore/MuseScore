@@ -61,11 +61,21 @@ public:
     static void write(BarLine* b, XmlWriter& xml, WriteContext& ctx);
     static void write(Beam* b, XmlWriter& xml, WriteContext& ctx);
     static void write(Bend* b, XmlWriter& xml, WriteContext& ctx);
+    static void write(Box* b, XmlWriter& xml, WriteContext& ctx);
+    static void write(HBox* b, XmlWriter& xml, WriteContext& ctx);
+    static void write(VBox* b, XmlWriter& xml, WriteContext& ctx);
+    static void write(FBox* b, XmlWriter& xml, WriteContext& ctx);
+    static void write(TBox* b, XmlWriter& xml, WriteContext& ctx);
 
     static void writeProperty(EngravingItem* item, XmlWriter& xml, Pid pid);
     static void writeStyledProperties(EngravingItem* item, XmlWriter& xml);
 
     static void writeItemProperties(EngravingItem* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeBoxProperties(Box* b, XmlWriter& xml, WriteContext& ctx);
+
+private:
+    static void writeProperties(Box* b, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(HBox* b, XmlWriter& xml, WriteContext& ctx);
 };
 }
 
