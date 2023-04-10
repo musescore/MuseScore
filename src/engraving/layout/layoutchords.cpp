@@ -1492,6 +1492,10 @@ void LayoutChords::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Cho
 
 void LayoutChords::resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Segment* segment, staff_idx_t staffIdx, bool considerBeams)
 {
+    if (rests.empty()) {
+        return;
+    }
+
     Fraction tick = segment->tick();
     Staff* staff = score->staff(staffIdx);
     double spatium = staff->spatium(tick);

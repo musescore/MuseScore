@@ -46,7 +46,24 @@
 #include "../../libmscore/bracket.h"
 #include "../../libmscore/breath.h"
 
+#include "../../libmscore/chord.h"
+#include "../../libmscore/chordline.h"
+#include "../../libmscore/chordrest.h"
+#include "../../libmscore/clef.h"
+
+#include "../../libmscore/hook.h"
+
+#include "../../libmscore/lyrics.h"
+
+#include "../../libmscore/note.h"
+
+#include "../../libmscore/slur.h"
+#include "../../libmscore/stem.h"
+#include "../../libmscore/stemslash.h"
+
 #include "../../libmscore/text.h"
+#include "../../libmscore/chordtextlinebase.h"
+#include "../../libmscore/tremolo.h"
 
 #include "../xmlwriter.h"
 #include "writecontext.h"
@@ -56,7 +73,7 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
 
-void TWrite::writeProperty(EngravingItem* item, XmlWriter& xml, Pid pid)
+void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid)
 {
     if (item->isStyled(pid)) {
         return;
@@ -110,14 +127,14 @@ void TWrite::writeProperty(EngravingItem* item, XmlWriter& xml, Pid pid)
     xml.tagProperty(pid, p, d);
 }
 
-void TWrite::writeStyledProperties(EngravingItem* item, XmlWriter& xml)
+void TWrite::writeStyledProperties(const EngravingItem* item, XmlWriter& xml)
 {
     for (const StyledProperty& spp : *item->styledProperties()) {
         writeProperty(item, xml, spp.pid);
     }
 }
 
-void TWrite::writeItemProperties(EngravingItem* item, XmlWriter& xml, WriteContext&)
+void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext&)
 {
     WriteContext& ctx = *xml.context();
 
@@ -271,7 +288,7 @@ void TWrite::write(Arpeggio* a, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(Articulation* a, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Articulation* a, XmlWriter& xml, WriteContext& ctx)
 {
     if (!ctx.canWrite(a)) {
         return;
@@ -426,4 +443,183 @@ void TWrite::write(TBox* b, XmlWriter& xml, WriteContext& ctx)
     writeProperties(static_cast<Box*>(b), xml, ctx);
     b->text()->write(xml);
     xml.endElement();
+}
+
+void TWrite::write(Bracket* b, XmlWriter& xml, WriteContext& ctx)
+{
+    bool isStartTag = false;
+    switch (b->bracketItem()->bracketType()) {
+    case BracketType::BRACE:
+    case BracketType::SQUARE:
+    case BracketType::LINE:
+    {
+        xml.startElement(b, { { "type", TConv::toXml(b->bracketItem()->bracketType()) } });
+        isStartTag = true;
+    }
+    break;
+    case BracketType::NORMAL:
+        xml.startElement(b);
+        isStartTag = true;
+        break;
+    case BracketType::NO_BRACKET:
+        break;
+    }
+
+    if (isStartTag) {
+        if (b->bracketItem()->column()) {
+            xml.tag("level", static_cast<int>(b->bracketItem()->column()));
+        }
+
+        writeItemProperties(b, xml, ctx);
+
+        xml.endElement();
+    }
+}
+
+void TWrite::write(Breath* b, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(b)) {
+        return;
+    }
+    xml.startElement(b);
+    writeProperty(b, xml, Pid::SYMBOL);
+    writeProperty(b, xml, Pid::PAUSE);
+    writeItemProperties(b, xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(Chord* c, XmlWriter& xml, WriteContext& ctx)
+{
+    for (Chord* c : c->graceNotes()) {
+        write(c, xml, ctx);
+    }
+    writeChordRestBeam(c, xml, ctx);
+    xml.startElement(c);
+    writeProperties(static_cast<ChordRest*>(c), xml, ctx);
+    for (const Articulation* a : c->articulations()) {
+        write(a, xml, ctx);
+    }
+    switch (c->noteType()) {
+    case NoteType::NORMAL:
+        break;
+    case NoteType::ACCIACCATURA:
+        xml.tag("acciaccatura");
+        break;
+    case NoteType::APPOGGIATURA:
+        xml.tag("appoggiatura");
+        break;
+    case NoteType::GRACE4:
+        xml.tag("grace4");
+        break;
+    case NoteType::GRACE16:
+        xml.tag("grace16");
+        break;
+    case NoteType::GRACE32:
+        xml.tag("grace32");
+        break;
+    case NoteType::GRACE8_AFTER:
+        xml.tag("grace8after");
+        break;
+    case NoteType::GRACE16_AFTER:
+        xml.tag("grace16after");
+        break;
+    case NoteType::GRACE32_AFTER:
+        xml.tag("grace32after");
+        break;
+    default:
+        break;
+    }
+
+    if (c->noStem()) {
+        xml.tag("noStem", c->noStem());
+    } else if (c->stem() && (c->stem()->isUserModified() || (c->stem()->userLength() != 0.0))) {
+        c->stem()->write(xml);
+    }
+    if (c->hook() && c->hook()->isUserModified()) {
+        c->hook()->write(xml);
+    }
+    if (c->stemSlash() && c->stemSlash()->isUserModified()) {
+        c->stemSlash()->write(xml);
+    }
+    writeProperty(c, xml, Pid::STEM_DIRECTION);
+    for (Note* n : c->notes()) {
+        n->write(xml);
+    }
+    if (c->arpeggio()) {
+        write(c->arpeggio(), xml, ctx);
+    }
+    if (c->tremolo() && c->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
+        c->tremolo()->write(xml);
+    }
+    for (EngravingItem* e : c->el()) {
+        if (e->isChordLine() && toChordLine(e)->note()) { // this is now written by Note
+            continue;
+        }
+        e->write(xml);
+    }
+    xml.endElement();
+}
+
+void TWrite::writeChordRestBeam(const ChordRest* c, XmlWriter& xml, WriteContext& ctx)
+{
+    Beam* b = c->beam();
+    if (b && b->elements().front() == c && (MScore::testMode || !b->generated())) {
+        write(b, xml, ctx);
+    }
+}
+
+void TWrite::writeProperties(ChordRest* c, XmlWriter& xml, WriteContext& ctx)
+{
+    writeItemProperties(c, xml, ctx);
+
+    //
+    // BeamMode default:
+    //    REST  - BeamMode::NONE
+    //    CHORD - BeamMode::AUTO
+    //
+    if ((c->isRest() && c->beamMode() != BeamMode::NONE) || (c->isChord() && c->beamMode() != BeamMode::AUTO)) {
+        xml.tag("BeamMode", TConv::toXml(c->beamMode()));
+    }
+    writeProperty(c, xml, Pid::SMALL);
+    if (c->actualDurationType().dots()) {
+        xml.tag("dots", c->actualDurationType().dots());
+    }
+    writeProperty(c, xml, Pid::STAFF_MOVE);
+
+    if (c->actualDurationType().isValid()) {
+        xml.tag("durationType", TConv::toXml(c->actualDurationType().type()));
+    }
+
+    if (!c->ticks().isZero() && (!c->actualDurationType().fraction().isValid()
+                                 || (c->actualDurationType().fraction() != c->ticks()))) {
+        xml.tagFraction("duration", c->ticks());
+        //xml.tagE("duration z=\"%d\" n=\"%d\"", ticks().numerator(), ticks().denominator());
+    }
+
+    for (Lyrics* lyrics : c->lyrics()) {
+        lyrics->write(xml);
+    }
+
+    const int curTick = ctx.curTick().ticks();
+
+    if (!c->isGrace()) {
+        Fraction t(c->globalTicks());
+        if (c->staff()) {
+            t /= c->staff()->timeStretch(ctx.curTick());
+        }
+        ctx.incCurTick(t);
+    }
+
+    for (auto i : c->score()->spannerMap().findOverlapping(curTick - 1, curTick + 1)) {
+        Spanner* s = i.value;
+        if (s->generated() || !s->isSlur() || toSlur(s)->broken() || !ctx.canWrite(s)) {
+            continue;
+        }
+
+        if (s->startElement() == c) {
+            s->writeSpannerStart(xml, c, c->track());
+        } else if (s->endElement() == c) {
+            s->writeSpannerEnd(xml, c, c->track());
+        }
+    }
 }

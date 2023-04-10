@@ -43,6 +43,15 @@ class HBox;
 class VBox;
 class FBox;
 class TBox;
+class Bracket;
+class Breath;
+
+class Chord;
+class ChordRest;
+class ChordLine;
+class Clef;
+
+class DurationElement;
 }
 
 namespace mu::engraving::rw400 {
@@ -55,7 +64,7 @@ public:
     static void write(ActionIcon* a, XmlWriter& xml, WriteContext& ctx);
     static void write(Ambitus* a, XmlWriter& xml, WriteContext& ctx);
     static void write(Arpeggio* a, XmlWriter& xml, WriteContext& ctx);
-    static void write(Articulation* a, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Articulation* a, XmlWriter& xml, WriteContext& ctx);
 
     static void write(BagpipeEmbellishment* b, XmlWriter& xml, WriteContext& ctx);
     static void write(BarLine* b, XmlWriter& xml, WriteContext& ctx);
@@ -66,16 +75,23 @@ public:
     static void write(VBox* b, XmlWriter& xml, WriteContext& ctx);
     static void write(FBox* b, XmlWriter& xml, WriteContext& ctx);
     static void write(TBox* b, XmlWriter& xml, WriteContext& ctx);
+    static void write(Bracket* b, XmlWriter& xml, WriteContext& ctx);
+    static void write(Breath* b, XmlWriter& xml, WriteContext& ctx);
 
-    static void writeProperty(EngravingItem* item, XmlWriter& xml, Pid pid);
-    static void writeStyledProperties(EngravingItem* item, XmlWriter& xml);
+    static void write(Chord* c, XmlWriter& xml, WriteContext& ctx);
 
-    static void writeItemProperties(EngravingItem* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
+    static void writeStyledProperties(const EngravingItem* item, XmlWriter& xml);
+
+    static void writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx);
     static void writeBoxProperties(Box* b, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperties(Box* b, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(HBox* b, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(ChordRest* c, XmlWriter& xml, WriteContext& ctx);
+
+    static void writeChordRestBeam(const ChordRest* c, XmlWriter& xml, WriteContext& ctx);
 };
 }
 
