@@ -165,10 +165,12 @@ void AbstractVstEditorView::updateViewGeometry()
         return;
     }
 
+#ifdef Q_OS_WIN
     FUnknownPtr<IPluginContentScaleHandler> scalingHandler(m_view);
     if (scalingHandler) {
         scalingHandler->setContentScaleFactor(screen()->devicePixelRatio());
     }
+#endif
 
     ViewRect size;
     m_view->getSize(&size);
