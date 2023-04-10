@@ -2612,6 +2612,9 @@ void Chord::layoutTablature()
         bb.unite(_tabDur->bbox().translated(_tabDur->pos()));
     }
     setbbox(bb);
+    if (_stemSlash) {
+        _stemSlash->layout();
+    }
 }
 
 //---------------------------------------------------------
