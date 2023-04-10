@@ -455,7 +455,7 @@ bool GuitarPro5::readMixChange(Measure* measure)
     if (reverb >= 0) {
         readChar();
     }
-    //LOGD("read reverb: %d", reverb);
+
     if (phase >= 0) {
         readChar();
     }
@@ -593,7 +593,6 @@ bool GuitarPro5::readTracks()
         ch->setReverb(channelDefaults[midiChannel].reverb);
         staff->part()->setMidiChannel(midiChannel, midiPort);
 
-        //LOGD("default2: %d", channelDefaults[i].reverb);
         // missing: phase, tremolo
     }
     skip(version == 500 ? 2 : 1);
@@ -633,7 +632,6 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
             if (!(((bar == (measures - 1)) && (staffIdx == (staves - 1))))) {
                 /*int a = */
                 readChar();
-                // LOGD("    ======skip %02x", a);
             }
         }
         if (bar == 1 && !mixChange) {
