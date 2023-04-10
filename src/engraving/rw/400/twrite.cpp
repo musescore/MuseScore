@@ -107,6 +107,13 @@ void TWrite::writeProperty(EngravingItem* item, XmlWriter& xml, Pid pid)
     xml.tagProperty(pid, p, d);
 }
 
+void TWrite::writeStyledProperties(EngravingItem* item, XmlWriter& xml)
+{
+    for (const StyledProperty& spp : *item->styledProperties()) {
+        writeProperty(item, xml, spp.pid);
+    }
+}
+
 void TWrite::writeItemProperties(EngravingItem* item, XmlWriter& xml, WriteContext&)
 {
     WriteContext& ctx = *xml.context();
@@ -344,5 +351,17 @@ void TWrite::write(Beam* b, XmlWriter& xml, WriteContext& ctx)
         }
     }
 
+    xml.endElement();
+}
+
+void TWrite::write(Bend* b, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(b);
+    for (const PitchValue& v : b->points()) {
+        xml.tag("point", { { "time", v.time }, { "pitch", v.pitch }, { "vibrato", v.vibrato } });
+    }
+    writeStyledProperties(b, xml);
+    writeProperty(b, xml, Pid::PLAY);
+    writeItemProperties(b, xml, ctx);
     xml.endElement();
 }

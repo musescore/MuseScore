@@ -37,6 +37,12 @@ class Articulation;
 class BagpipeEmbellishment;
 class BarLine;
 class Beam;
+class Bend;
+class Box;
+class HBox;
+class VBox;
+class FBox;
+class TBox;
 }
 
 namespace mu::engraving::rw400 {
@@ -54,8 +60,10 @@ public:
     static void write(BagpipeEmbellishment* b, XmlWriter& xml, WriteContext& ctx);
     static void write(BarLine* b, XmlWriter& xml, WriteContext& ctx);
     static void write(Beam* b, XmlWriter& xml, WriteContext& ctx);
+    static void write(Bend* b, XmlWriter& xml, WriteContext& ctx);
 
     static void writeProperty(EngravingItem* item, XmlWriter& xml, Pid pid);
+    static void writeStyledProperties(EngravingItem* item, XmlWriter& xml);
 
     static void writeItemProperties(EngravingItem* item, XmlWriter& xml, WriteContext& ctx);
 };

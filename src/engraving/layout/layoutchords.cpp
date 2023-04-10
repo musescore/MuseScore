@@ -1499,7 +1499,7 @@ void LayoutChords::resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Se
     int lines = staff->lines(tick);
     const double minRestToRestClearance = 0.35 * spatium;
 
-    for (int i = 0; i < rests.size() - 1; ++i) {
+    for (size_t i = 0; i < rests.size() - 1; ++i) {
         Rest* rest1 = rests[i];
         if (!rest1->visible() || !rest1->autoplace()) {
             continue;
