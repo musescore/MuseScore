@@ -1094,40 +1094,44 @@ bool RemoveElement::isFiltered(UndoCommand::Filter f, const EngravingItem* targe
 //   InsertPart
 //---------------------------------------------------------
 
-InsertPart::InsertPart(Part* p, int i)
+InsertPart::InsertPart(Part* p, size_t targetPartIdx)
 {
-    part = p;
-    idx  = i;
+    m_part = p;
+    m_targetPartIdx = targetPartIdx;
 }
 
 void InsertPart::undo(EditData*)
 {
-    part->score()->removePart(part);
+    m_part->score()->removePart(m_part);
 }
 
 void InsertPart::redo(EditData*)
 {
-    part->score()->insertPart(part, idx);
+    m_part->score()->insertPart(m_part, m_targetPartIdx);
 }
 
 //---------------------------------------------------------
 //   RemovePart
 //---------------------------------------------------------
 
-RemovePart::RemovePart(Part* p, staff_idx_t i)
+RemovePart::RemovePart(Part* p, size_t partIdx)
 {
-    part = p;
-    idx  = i;
+    m_part = p;
+    m_partIdx = partIdx;
+
+    if (m_partIdx == mu::nidx) {
+        m_partIdx = mu::indexOf(m_part->score()->parts(), m_part);
+    }
 }
 
 void RemovePart::undo(EditData*)
 {
-    part->score()->insertPart(part, idx);
+    m_part->score()->insertPart(m_part, m_partIdx);
 }
 
 void RemovePart::redo(EditData*)
 {
-    part->score()->removePart(part);
+    m_part->score()->removePart(m_part);
 }
 
 //---------------------------------------------------------
