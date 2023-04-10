@@ -107,7 +107,7 @@ static void sort(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
 }
 
 const String TextBase::UNDEFINED_FONT_FAMILY = String(u"Undefined");
-const int TextBase::UNDEFINED_FONT_SIZE = -1;
+const double TextBase::UNDEFINED_FONT_SIZE = -1.0;
 
 //---------------------------------------------------------
 //   operator==

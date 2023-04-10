@@ -479,7 +479,7 @@ public:
     virtual void initElementStyle(const ElementStyle*) override;
 
     static const String UNDEFINED_FONT_FAMILY;
-    static const int UNDEFINED_FONT_SIZE;
+    static const double UNDEFINED_FONT_SIZE;
 
     bool bold() const { return fontStyle() & FontStyle::Bold; }
     bool italic() const { return fontStyle() & FontStyle::Italic; }
