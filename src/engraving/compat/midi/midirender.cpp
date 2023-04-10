@@ -792,6 +792,10 @@ void MidiRenderer::renderStaff(EventMap* events, const Staff* staff, PitchWheelR
                 lastMeasure = m;
                 collectMeasureEvents(events, lastMeasure, staff, tickOffset, pitchWheelRenderer);
             }
+
+            if (m == rs->lastMeasure()) {
+                break;
+            }
         }
     }
 }
