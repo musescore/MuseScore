@@ -180,6 +180,24 @@ set(MODULE_SRC
     # fx
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/allpassdispersion.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/allpassmodulateddelay.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/circularsamplebuffer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/iirbiquadfilter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/ivndecorrelation.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/ivndecorrelation.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbfilters.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbmatrices.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/sampledelay.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_neon.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_scalar.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_sse2.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/smoothlinearvalue.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/sparsefirfilter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/vectorops.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbprocessor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbprocessor.h
 
     # Synthesizers
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/soundmapping.h
