@@ -455,7 +455,7 @@ void ReverbProcessor::setParameter(int32_t index, float newValue)
 }
 
 bool ReverbProcessor::setFormat(int32_t numInputChannels, int32_t numOutputChannels, double sampleRate,
-                                    int32_t maximumBlockSize)
+                                int32_t maximumBlockSize)
 {
     // format check
     if (numInputChannels != numOutputChannels) {
@@ -737,7 +737,7 @@ void ReverbProcessor::Processor::allocateParameters(int num)
 }
 
 void ReverbProcessor::Processor::setupParameter(int index, const std::string& name,
-                                                    std::pair<float, float> valueRange, float initialValue)
+                                                std::pair<float, float> valueRange, float initialValue)
 {
     if (index >= static_cast<int>(_param.size())) {
         _param.resize(index + 1);
@@ -749,7 +749,7 @@ void ReverbProcessor::Processor::setupParameter(int index, const std::string& na
 }
 
 bool ReverbProcessor::Processor::setFormat(int32_t numInputChannels, int32_t numOutputChannels, double sampleRate,
-                                               int32_t maximumBlockSize)
+                                           int32_t maximumBlockSize)
 {
     assert(sampleRate > 0.0);
     _sampleRate = sampleRate;

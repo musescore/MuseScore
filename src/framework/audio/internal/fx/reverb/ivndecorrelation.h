@@ -47,7 +47,7 @@ public:
         m_filter.clearImpulses();
         for (int i = 0; i < 15; ++i) {
             m_filter.appendImpulse(int(ivn15_ms[sequence_number][i] * 0.001f * samplerate + 0.5f),
-                                  ivn15_gn[sequence_number][i]);
+                                   ivn15_gn[sequence_number][i]);
         }
     }
 
