@@ -42,8 +42,11 @@
 #include "../../libmscore/beam.h"
 #include "../../libmscore/bend.h"
 #include "../../libmscore/box.h"
+#include "../../libmscore/textframe.h"
 #include "../../libmscore/bracket.h"
 #include "../../libmscore/breath.h"
+
+#include "../../libmscore/text.h"
 
 #include "../xmlwriter.h"
 #include "writecontext.h"
@@ -363,5 +366,64 @@ void TWrite::write(Bend* b, XmlWriter& xml, WriteContext& ctx)
     writeStyledProperties(b, xml);
     writeProperty(b, xml, Pid::PLAY);
     writeItemProperties(b, xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(Box* b, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(b);
+    writeBoxProperties(b, xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::writeBoxProperties(Box* b, XmlWriter& xml, WriteContext& ctx)
+{
+    if (b->isHBox()) {
+        return writeProperties(dynamic_cast<HBox*>(b), xml, ctx);
+    }
+    return writeProperties(b, xml, ctx);
+}
+
+void TWrite::writeProperties(Box* b, XmlWriter& xml, WriteContext& ctx)
+{
+    for (Pid id : {
+        Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
+        Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE }) {
+        writeProperty(b, xml, id);
+    }
+    writeItemProperties(b, xml, ctx);
+    for (const EngravingItem* e : b->el()) {
+        e->write(xml);
+    }
+}
+
+void TWrite::write(HBox* b, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(b);
+    writeProperties(b, xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::writeProperties(HBox* b, XmlWriter& xml, WriteContext& ctx)
+{
+    writeProperty(b, xml, Pid::CREATE_SYSTEM_HEADER);
+    writeProperties(static_cast<Box*>(b), xml, ctx);
+}
+
+void TWrite::write(VBox* b, XmlWriter& xml, WriteContext& ctx)
+{
+    write(static_cast<Box*>(b), xml, ctx);
+}
+
+void TWrite::write(FBox* b, XmlWriter& xml, WriteContext& ctx)
+{
+    write(static_cast<Box*>(b), xml, ctx);
+}
+
+void TWrite::write(TBox* b, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(b);
+    writeProperties(static_cast<Box*>(b), xml, ctx);
+    b->text()->write(xml);
     xml.endElement();
 }
