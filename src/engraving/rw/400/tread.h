@@ -142,7 +142,6 @@ public:
     static void read(TempoText* t, XmlReader& xml, ReadContext& ctx);
     static void read(Dynamic* d, XmlReader& xml, ReadContext& ctx);
     static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
-    static void read(FretDiagram* d, XmlReader& xml, ReadContext& ctx);
     static void read(SystemText* t, XmlReader& xml, ReadContext& ctx);
     static void read(RehearsalMark* m, XmlReader& xml, ReadContext& ctx);
     static void read(Image* i, XmlReader& xml, ReadContext& ctx);
@@ -174,6 +173,7 @@ public:
     static void read(FiguredBass* b, XmlReader& xml, ReadContext& ctx);
     static void read(FiguredBassItem* i, XmlReader& xml, ReadContext& ctx);
     static void read(Fingering* f, XmlReader& xml, ReadContext& ctx);
+    static void read(FretDiagram* d, XmlReader& xml, ReadContext& ctx);
     static void read(Glissando* g, XmlReader& xml, ReadContext& ctx);
     static void read(GradualTempoChange* c, XmlReader& xml, ReadContext& ctx);
     static void read(Groups* g, XmlReader& xml, ReadContext& ctx);

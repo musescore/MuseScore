@@ -796,3 +796,179 @@ void TWrite::write(const Fingering* f, XmlWriter& xml, WriteContext& ctx)
     writeProperties(static_cast<const TextBase*>(f), xml, ctx, true);
     xml.endElement();
 }
+
+void TWrite::write(const FretDiagram* f, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(f)) {
+        return;
+    }
+    xml.startElement(f);
+
+    static const std::array<Pid, 8> pids { {
+        Pid::MIN_DISTANCE,
+        Pid::FRET_OFFSET,
+        Pid::FRET_FRETS,
+        Pid::FRET_STRINGS,
+        Pid::FRET_NUT,
+        Pid::MAG,
+        Pid::FRET_NUM_POS,
+        Pid::ORIENTATION
+    } };
+
+    // Write properties first and only once
+    for (Pid p : pids) {
+        writeProperty(f, xml, p);
+    }
+    writeItemProperties(f, xml, ctx);
+
+    if (f->harmony()) {
+        f->harmony()->write(xml);
+    }
+
+    // Lowercase f indicates new writing format
+    // TODO: in the next score format version (4) use only write new + props and discard
+    // the compatibility writing.
+    xml.startElement("fretDiagram");
+    // writeNew
+    {
+        //    This is the important one for 3.1+
+        //---------------------------------------------------------
+        for (int i = 0; i < f->strings(); ++i) {
+            FretItem::Marker m = f->marker(i);
+            std::vector<FretItem::Dot> allDots = f->dot(i);
+
+            bool dotExists = false;
+            for (auto const& d : allDots) {
+                if (d.exists()) {
+                    dotExists = true;
+                    break;
+                }
+            }
+
+            // Only write a string if we have anything to write
+            if (!dotExists && !m.exists()) {
+                continue;
+            }
+
+            // Start the string writing
+            xml.startElement("string", { { "no", i } });
+
+            // Write marker
+            if (m.exists()) {
+                xml.tag("marker", FretItem::markerTypeToName(m.mtype));
+            }
+
+            // Write any dots
+            for (auto const& d : allDots) {
+                if (d.exists()) {
+                    // TODO: write fingering
+                    xml.tag("dot", { { "fret", d.fret } }, FretItem::dotTypeToName(d.dtype));
+                }
+            }
+
+            xml.endElement();
+        }
+
+        for (int fi = 1; fi <= f->frets(); ++fi) {
+            FretItem::Barre b = f->barre(fi);
+            if (!b.exists()) {
+                continue;
+            }
+
+            xml.tag("barre", { { "start", b.startString }, { "end", b.endString } }, fi);
+        }
+    }
+    xml.endElement();
+
+    // writeOld
+    {
+        int lowestDotFret = -1;
+        int furthestLeftLowestDot = -1;
+
+        // Do some checks for details needed for checking whether to add barres
+        for (int i = 0; i < f->strings(); ++i) {
+            std::vector<FretItem::Dot> allDots = f->dot(i);
+
+            bool dotExists = false;
+            for (auto const& d : allDots) {
+                if (d.exists()) {
+                    dotExists = true;
+                    break;
+                }
+            }
+
+            if (!dotExists) {
+                continue;
+            }
+
+            for (auto const& d : allDots) {
+                if (d.exists()) {
+                    if (d.fret < lowestDotFret || lowestDotFret == -1) {
+                        lowestDotFret = d.fret;
+                        furthestLeftLowestDot = i;
+                    } else if (d.fret == lowestDotFret && (i < furthestLeftLowestDot || furthestLeftLowestDot == -1)) {
+                        furthestLeftLowestDot = i;
+                    }
+                }
+            }
+        }
+
+        // The old system writes a barre as a bool, which causes no problems in any way, not at all.
+        // So, only write that if the barre is on the lowest fret with a dot,
+        // and there are no other dots on its fret, and it goes all the way to the right.
+        int barreStartString = -1;
+        int barreFret = -1;
+        for (auto const& i : f->barres()) {
+            FretItem::Barre b = i.second;
+            if (b.exists()) {
+                int fret = i.first;
+                if (fret <= lowestDotFret && b.endString == -1 && !(fret == lowestDotFret && b.startString > furthestLeftLowestDot)) {
+                    barreStartString = b.startString;
+                    barreFret = fret;
+                    break;
+                }
+            }
+        }
+
+        for (int i = 0; i < f->strings(); ++i) {
+            FretItem::Marker m = f->marker(i);
+            std::vector<FretItem::Dot> allDots = f->dot(i);
+
+            bool dotExists = false;
+            for (auto const& d : allDots) {
+                if (d.exists()) {
+                    dotExists = true;
+                    break;
+                }
+            }
+
+            if (!dotExists && !m.exists() && i != barreStartString) {
+                continue;
+            }
+
+            xml.startElement("string", { { "no", i } });
+
+            if (m.exists()) {
+                xml.tag("marker", FretItem::markerToChar(m.mtype).unicode());
+            }
+
+            for (auto const& d : allDots) {
+                if (d.exists() && !(i == barreStartString && d.fret == barreFret)) {
+                    xml.tag("dot", d.fret);
+                }
+            }
+
+            // Add dot so barre will display in pre-3.1
+            if (barreStartString == i) {
+                xml.tag("dot", barreFret);
+            }
+
+            xml.endElement();
+        }
+
+        if (barreFret > 0) {
+            xml.tag("barre", 1);
+        }
+    }
+    xml.endElement();
+}
