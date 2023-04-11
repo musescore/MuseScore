@@ -35,6 +35,10 @@ PopupViewCloseController::PopupViewCloseController(QObject* parent)
 void PopupViewCloseController::init()
 {
     connect(qApp, &QApplication::applicationStateChanged, this, &PopupViewCloseController::onApplicationStateChanged);
+
+    interactiveProvider()->currentUriAboutToBeChanged().onNotify(this, [this]() {
+        notifyAboutClose();
+    });
 }
 
 bool PopupViewCloseController::active() const

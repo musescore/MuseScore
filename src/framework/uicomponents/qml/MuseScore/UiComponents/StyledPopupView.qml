@@ -53,7 +53,9 @@ PopupView {
     y: root.parent.height
 
     onOpened: {
-        content.navigationSection.requestActive()
+        if (content.navigationSection) {
+            content.navigationSection.requestActive()
+        }
     }
 
     onClosed: {
