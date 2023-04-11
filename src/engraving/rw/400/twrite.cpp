@@ -761,7 +761,7 @@ void TWrite::write(const FiguredBass* f, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(const FiguredBassItem* f, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const FiguredBassItem* f, XmlWriter& xml, WriteContext&)
 {
     xml.startElement("FiguredBassItem", f);
     xml.tag("brackets", {
@@ -784,5 +784,15 @@ void TWrite::write(const FiguredBassItem* f, XmlWriter& xml, WriteContext& ctx)
     if (f->contLine() != FiguredBassItem::ContLine::NONE) {
         xml.tag("continuationLine", int(f->contLine()));
     }
+    xml.endElement();
+}
+
+void TWrite::write(const Fingering* f, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(f)) {
+        return;
+    }
+    xml.startElement(f);
+    writeProperties(static_cast<const TextBase*>(f), xml, ctx, true);
     xml.endElement();
 }

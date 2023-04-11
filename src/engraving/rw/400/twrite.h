@@ -96,6 +96,7 @@ public:
     static void write(const Fermata* f, XmlWriter& xml, WriteContext& ctx);
     static void write(const FiguredBass* f, XmlWriter& xml, WriteContext& ctx);
     static void write(const FiguredBassItem* f, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Fingering* f, XmlWriter& xml, WriteContext& ctx);
 
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
     static void writeStyledProperties(const EngravingItem* item, XmlWriter& xml);
