@@ -23,6 +23,7 @@
 
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
+#include "../../style/textstyle.h"
 
 #include "../../libmscore/score.h"
 #include "../../libmscore/masterscore.h"
@@ -51,6 +52,8 @@
 #include "../../libmscore/chordrest.h"
 #include "../../libmscore/clef.h"
 
+#include "../../libmscore/dynamic.h"
+
 #include "../../libmscore/hook.h"
 
 #include "../../libmscore/lyrics.h"
@@ -62,6 +65,7 @@
 #include "../../libmscore/stemslash.h"
 
 #include "../../libmscore/text.h"
+#include "../../libmscore/textbase.h"
 #include "../../libmscore/chordtextlinebase.h"
 #include "../../libmscore/tremolo.h"
 
@@ -488,14 +492,14 @@ void TWrite::write(Breath* b, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(Chord* c, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Chord* c, XmlWriter& xml, WriteContext& ctx)
 {
     for (Chord* ch : c->graceNotes()) {
         write(ch, xml, ctx);
     }
     writeChordRestBeam(c, xml, ctx);
     xml.startElement(c);
-    writeProperties(static_cast<ChordRest*>(c), xml, ctx);
+    writeProperties(static_cast<const ChordRest*>(c), xml, ctx);
     for (const Articulation* a : c->articulations()) {
         write(a, xml, ctx);
     }
@@ -568,7 +572,7 @@ void TWrite::writeChordRestBeam(const ChordRest* c, XmlWriter& xml, WriteContext
     }
 }
 
-void TWrite::writeProperties(ChordRest* c, XmlWriter& xml, WriteContext& ctx)
+void TWrite::writeProperties(const ChordRest* c, XmlWriter& xml, WriteContext& ctx)
 {
     writeItemProperties(c, xml, ctx);
 
@@ -624,7 +628,7 @@ void TWrite::writeProperties(ChordRest* c, XmlWriter& xml, WriteContext& ctx)
     }
 }
 
-void TWrite::write(ChordLine* c, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const ChordLine* c, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(c);
     writeProperty(c, xml, Pid::CHORD_LINE_TYPE);
@@ -646,7 +650,7 @@ void TWrite::write(ChordLine* c, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(Clef* c, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Clef* c, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(c);
     writeProperty(c, xml, Pid::CLEF_TYPE_CONCERT);
@@ -659,4 +663,46 @@ void TWrite::write(Clef* c, XmlWriter& xml, WriteContext& ctx)
     }
     writeItemProperties(c, xml, ctx);
     xml.endElement();
+}
+
+void TWrite::write(const Dynamic* d, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(d)) {
+        return;
+    }
+    xml.startElement(d);
+    writeProperty(d, xml, Pid::DYNAMIC_TYPE);
+    writeProperty(d, xml, Pid::VELOCITY);
+    writeProperty(d, xml, Pid::DYNAMIC_RANGE);
+
+    if (d->isVelocityChangeAvailable()) {
+        writeProperty(d, xml, Pid::VELO_CHANGE);
+        writeProperty(d, xml, Pid::VELO_CHANGE_SPEED);
+    }
+
+    writeProperties(static_cast<const TextBase*>(d), xml, ctx, d->dynamicType() == DynamicType::OTHER);
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const TextBase* t, XmlWriter& xml, WriteContext& ctx, bool writeText)
+{
+    writeItemProperties(t, xml, ctx);
+    writeProperty(t, xml, Pid::TEXT_STYLE);
+
+    for (const StyledProperty& spp : *t->styledProperties()) {
+        if (!t->isStyled(spp.pid)) {
+            writeProperty(t, xml, spp.pid);
+        }
+    }
+    for (const auto& spp : *textStyle(t->textStyleType())) {
+        if (t->isStyled(spp.pid)
+            || (spp.pid == Pid::FONT_SIZE && t->getProperty(spp.pid).toDouble() == TextBase::UNDEFINED_FONT_SIZE)
+            || (spp.pid == Pid::FONT_FACE && t->getProperty(spp.pid).value<String>() == TextBase::UNDEFINED_FONT_FAMILY)) {
+            continue;
+        }
+        writeProperty(t, xml, spp.pid);
+    }
+    if (writeText) {
+        xml.writeXml(u"text", t->xmlText());
+    }
 }

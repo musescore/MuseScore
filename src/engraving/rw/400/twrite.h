@@ -52,6 +52,9 @@ class ChordLine;
 class Clef;
 
 class DurationElement;
+class Dynamic;
+
+class TextBase;
 }
 
 namespace mu::engraving::rw400 {
@@ -78,9 +81,11 @@ public:
     static void write(Bracket* b, XmlWriter& xml, WriteContext& ctx);
     static void write(Breath* b, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(Chord* c, XmlWriter& xml, WriteContext& ctx);
-    static void write(ChordLine* c, XmlWriter& xml, WriteContext& ctx);
-    static void write(Clef* c, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Chord* c, XmlWriter& xml, WriteContext& ctx);
+    static void write(const ChordLine* c, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Clef* c, XmlWriter& xml, WriteContext& ctx);
+
+    static void write(const Dynamic* d, XmlWriter& xml, WriteContext& ctx);
 
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
     static void writeStyledProperties(const EngravingItem* item, XmlWriter& xml);
@@ -91,9 +96,11 @@ public:
 private:
     static void writeProperties(Box* b, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(HBox* b, XmlWriter& xml, WriteContext& ctx);
-    static void writeProperties(ChordRest* c, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const ChordRest* c, XmlWriter& xml, WriteContext& ctx);
 
     static void writeChordRestBeam(const ChordRest* c, XmlWriter& xml, WriteContext& ctx);
+
+    static void writeProperties(const TextBase* t, XmlWriter& xml, WriteContext& ctx, bool writeText);
 };
 }
 
