@@ -164,6 +164,7 @@ public:
 
     void layout1();
     void layout() override;
+    void layoutIfNeed();
 
     PointF chordBeamAnchor(const ChordRest* chord, BeamTremoloLayout::ChordBeamAnchorType anchorType) const;
     double chordBeamAnchorY(const ChordRest* chord) const;

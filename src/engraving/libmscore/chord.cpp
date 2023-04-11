@@ -1077,6 +1077,11 @@ void Chord::computeUp()
                 // necessary because this beam was never laid out before, so its position isn't known
                 // and the first chord would calculate wrong stem direction
                 _beam->layout();
+            } else {
+                // otherwise we can use stale layout data; the only reason we would need to lay out here is if
+                // it's literally never been laid out before which due to the insane nature of our layout system
+                // is actually a possible thing
+                _beam->layoutIfNeed();
             }
             PointF base = _beam->pagePos();
             Note* baseNote = _up ? downNote() : upNote();

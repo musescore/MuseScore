@@ -494,6 +494,18 @@ void Beam::layout()
     }
 }
 
+//---------------------------------------------------------
+//   layoutIfNeed
+//   check to see if the layout info is valid, and if not, layout
+//---------------------------------------------------------
+
+void Beam::layoutIfNeed()
+{
+    if (!_layoutInfo.isValid()) {
+        layout();
+    }
+}
+
 PointF Beam::chordBeamAnchor(const ChordRest* chord, BeamTremoloLayout::ChordBeamAnchorType anchorType) const
 {
     return _layoutInfo.chordBeamAnchor(chord, anchorType);
