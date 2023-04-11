@@ -54,6 +54,12 @@ class Clef;
 class DurationElement;
 class Dynamic;
 
+class Fermata;
+class FiguredBass;
+class FiguredBassItem;
+class Fingering;
+class FretDiagram;
+
 class TextBase;
 }
 
@@ -86,6 +92,8 @@ public:
     static void write(const Clef* c, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Dynamic* d, XmlWriter& xml, WriteContext& ctx);
+
+    static void write(const Fermata* f, XmlWriter& xml, WriteContext& ctx);
 
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
     static void writeStyledProperties(const EngravingItem* item, XmlWriter& xml);
