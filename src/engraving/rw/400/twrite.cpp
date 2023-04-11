@@ -490,8 +490,8 @@ void TWrite::write(Breath* b, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(Chord* c, XmlWriter& xml, WriteContext& ctx)
 {
-    for (Chord* c : c->graceNotes()) {
-        write(c, xml, ctx);
+    for (Chord* ch : c->graceNotes()) {
+        write(ch, xml, ctx);
     }
     writeChordRestBeam(c, xml, ctx);
     xml.startElement(c);
