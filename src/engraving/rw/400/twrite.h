@@ -125,6 +125,7 @@ public:
     static void write(const Hook* h, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Image* i, XmlWriter& xml, WriteContext& ctx);
+    static void write(const InstrumentChange* i, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);

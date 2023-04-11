@@ -1305,3 +1305,14 @@ void TWrite::write(const Image* img, XmlWriter& xml, WriteContext& ctx)
 
     xml.endElement();
 }
+
+void TWrite::write(const InstrumentChange* ich, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(ich);
+    ich->instrument()->write(xml, ich->part());
+    if (ich->init()) {
+        xml.tag("init", ich->init());
+    }
+    writeProperties(static_cast<const TextBase*>(ich), xml, ctx, true);
+    xml.endElement();
+}
