@@ -623,3 +623,25 @@ void TWrite::writeProperties(ChordRest* c, XmlWriter& xml, WriteContext& ctx)
         }
     }
 }
+
+void TWrite::write(ChordLine* c, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(c);
+    writeProperty(c, xml, Pid::CHORD_LINE_TYPE);
+    writeProperty(c, xml, Pid::CHORD_LINE_STRAIGHT);
+    writeProperty(c, xml, Pid::CHORD_LINE_WAVY);
+    xml.tag("lengthX", c->lengthX(), 0.0);
+    xml.tag("lengthY", c->lengthY(), 0.0);
+    writeItemProperties(c, xml, ctx);
+    if (c->modified()) {
+        const draw::PainterPath& path = c->path();
+        size_t n = path.elementCount();
+        xml.startElement("Path");
+        for (size_t i = 0; i < n; ++i) {
+            const PainterPath::Element& e = path.elementAt(i);
+            xml.tag("Element", { { "type", int(e.type) }, { "x", e.x }, { "y", e.y } });
+        }
+        xml.endElement();
+    }
+    xml.endElement();
+}
