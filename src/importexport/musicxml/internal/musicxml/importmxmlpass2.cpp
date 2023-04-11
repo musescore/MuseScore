@@ -1342,7 +1342,7 @@ static void handleSpannerStop(SLine* cur_sp, track_idx_t track2, const Fraction&
 //---------------------------------------------------------
 
 MusicXMLParserPass2::MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1, MxmlLogger* logger)
-    : _divs(0), _score(score), _pass1(pass1), _logger(logger)
+    : _divs(0), _score(score), _pass1(pass1), _logger(logger), _tempoLineManager(score)
 {
     // nothing
 }
@@ -2161,6 +2161,18 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
     measure->setRepeatStart(false);
     measure->setRepeatEnd(false);
 
+    // Check to see if any guessed gradual tempo lines are too long
+    if (_tempoLineManager.lineInProgress() && ++_tempoLineManager.measureSpan > 16) {
+        // at this point we've searched for 16 measures and not found a tempo change, so we'll give up on
+        // this tempo change line
+        _tempoLineManager.stopTempoLine(); // stop the line
+        GradualTempoChange* gtc = _tempoLineManager.finishedGTC();
+        gtc->setTick2(gtc->tick()); // zero-length line
+        gtc->setProperty(Pid::TEMPO_CHANGE_FACTOR, 1.0); // no tempo change
+        measure->add(gtc);
+        _tempoLineManager.added();
+    }
+
     Fraction mTime;   // current time stamp within measure
     Fraction prevTime;   // time stamp within measure previous chord
     Chord* prevChord = 0;         // previous chord
@@ -2177,11 +2189,12 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
     QMap<Note*, int> alterMap;
 
     while (_e.readNextStartElement()) {
+        _tempoLineManager.setCurrentTick(time + mTime);
         if (_e.name() == "attributes") {
             attributes(partId, measure, time + mTime);
         } else if (_e.name() == "direction") {
             MusicXMLParserDirection dir(_e, _score, _pass1, *this, _logger);
-            dir.direction(partId, measure, time + mTime, _divs, _spanners);
+            dir.direction(partId, measure, time + mTime, _divs, _spanners, _tempoLineManager);
         } else if (_e.name() == "figured-bass") {
             FiguredBass* fb = figuredBass();
             if (fb) {
@@ -2636,6 +2649,25 @@ static Fraction calcTicks(const QString& text, int divs, MxmlLogger* logger, con
     return dura;
 }
 
+TempoInformation getTempoInformationFromString(QString txt)
+{
+    txt = txt.toLower();
+    for (TempoInformation t : tempoInformation) {
+        if (txt == t.text) {
+            return t;
+        }
+    }
+    return TempoInformation("", 0.0);
+}
+
+void TempoLineManager::added()
+{
+    // the finished tempo change line has been added to the score, so we can get rid of our pointer
+    // for use in the next tempo change line
+    _finishedGTC = nullptr;
+    _finishedGTCtype = GradualTempoChangeType::Undefined;
+}
+
 //---------------------------------------------------------
 //   direction
 //---------------------------------------------------------
@@ -2648,7 +2680,8 @@ void MusicXMLParserDirection::direction(const QString& partId,
                                         Measure* measure,
                                         const Fraction& tick,
                                         const int divisions,
-                                        MusicXmlSpannerMap& spanners)
+                                        MusicXmlSpannerMap& spanners,
+                                        TempoLineManager& tempoLine)
 {
     //LOGD("direction tick %s", qPrintable(tick.print()));
 
@@ -2669,7 +2702,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "direction-type") {
-            directionType(starts, stops);
+            directionType(starts, stops, tempoLine);
         } else if (_e.name() == "offset") {
             _offset = calcTicks(_e.readElementText(), divisions, _logger, &_e);
         } else if (_e.name() == "sound") {
@@ -2687,9 +2720,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
             skipLogCurrElem();
         }
     }
-
+    tempoLine.justAdded = false;
     handleRepeats(measure, track);
-
+    // save the gradual tempo change that was just finished, if any
+    GradualTempoChange* gtc = tempoLine.finishedGTC();
+    if (gtc) {
+        gtc->setTrack(track);
+    }
     // fix for Sibelius 7.1.3 (direct export) which creates metronomes without <sound tempo="..."/>:
     // if necessary, use the value calculated by metronome()
     // note: no floating point comparisons with 0 ...
@@ -2702,16 +2739,86 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
     // create text if any text was found
 
-    if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
+    if (_wordsText != "" || _rehearsalText != "" || _metroText != "" || _tempoText != "") {
         TextBase* t = 0;
         if (_tpoSound > 0.1) {
             if (canAddTempoText(_score->tempomap(), tick.ticks())) {
                 _tpoSound /= 60;
                 t = Factory::createTempoText(_score->dummy()->segment());
-                t->setXmlText(_wordsText + _metroText);
+                t->setXmlText(_tempoText + _metroText);
                 ((TempoText*)t)->setTempo(_tpoSound);
                 ((TempoText*)t)->setFollowText(true);
                 _score->setTempo(tick, _tpoSound);
+                if (gtc) {
+                    float originalTempo = _score->tempo(gtc->tick()).val;
+                    double stretchedTempo = _tpoSound / originalTempo;
+                    if ((stretchedTempo < 1.0) == (gtc->tempoChangeFactor() < 1.0)) {
+                        // we only want to stretch the tempo as long as it's going in the same direction
+                        // i.e. q=120 rall___ q=240 should not make rall suddenly speed up
+                        gtc->setProperty(Pid::TEMPO_CHANGE_FACTOR, stretchedTempo);
+                    }
+                    _score->addElement(gtc);
+                    tempoLine.added(); // clear finishedGTC in the manager, we're done with it
+                    gtc = nullptr;
+                }
+            }
+        } else if (_tempoText != "") {
+            // TEMPO TEXT INFERENCE
+            // if we have a tempo text without a metronome, we can infer the bpm etc by the text
+            if (canAddTempoText(_score->tempomap(), tick.ticks())) {
+                TempoInformation ti = getTempoInformationFromString(_tempoText);
+                if (ti.text != "") {
+                    // we have a tempo text without a metronome. use the musescore default bpm
+                    t = Factory::createTempoText(_score->dummy()->segment());
+                    t->setXmlText(_tempoText);
+                    ((TempoText*)t)->setFollowText(false);
+                    double tempo = ti.changeTo;
+                    if (ti.isTempo1) {
+                        if (tempoLine.currentTick() > Fraction()) {
+                            tempo = _score->tempo(Fraction(0, 1)).val;
+                        } else {
+                            tempo = 2.0; // tempo 1 at the very beginning of the score?? q=120 i guess
+                        }
+                        ((TempoText*)t)->setTempo(tempo);
+                    } else if (ti.isRelative) {
+                        // set relative tempo based on current tempo on this tick
+                        tempo = _score->tempo(tempoLine.currentTick()).val;
+                        tempo *= ti.changeTo;
+                        ((TempoText*)t)->setTempo(tempo);
+                    } else if (ti.isAtempo) {
+                        if (gtc) {
+                            // a gradual tempo line just ended, so we use its saved "before" tempo
+                            tempo = _score->tempo(gtc->tick()).val;
+                        } else if (tick > Fraction()) {
+                            // no gradual tempo line, so we use the current tempo
+                            tempo = _score->tempo(tempoLine.currentTick()).val;
+                        } else {
+                            // there is an 'a tempo' marking as the first tempo of a score. mysterious!
+                            // for now, I'm just going to default tempo 120bpm
+                            tempo = 2.0;
+                            ((TempoText*)t)->setFollowText(true); // maybe?
+                        }
+                        ((TempoText*)t)->setTempo(tempo);
+                    } else {
+                        // this is just a straight up bpm we will apply here
+                        tempo /= 60.0;
+                        ((TempoText*)t)->setTempo(tempo);
+                    }
+                    _score->setTempo(tick, tempo);
+                    if (gtc) {
+                        if (!ti.isAtempo) {
+                            float stretchedTempo = tempo / _score->tempo(gtc->tick()).val;
+                            if ((stretchedTempo < 1.0) == (gtc->tempoChangeFactor() < 1.0)) {
+                                // we only want to stretch the tempo as long as it's going in the same direction
+                                // i.e. q=120 rall___ q=240 should not make rall suddenly speed up
+                                gtc->setProperty(Pid::TEMPO_CHANGE_FACTOR, stretchedTempo);
+                            }
+                        }
+                        _score->addElement(gtc);
+                        tempoLine.added(); // clear finishedGTC in the manager, we're done with it
+                        gtc = nullptr;
+                    }
+                }
             }
         } else {
             if (_wordsText != "" || _metroText != "") {
@@ -2761,6 +2868,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
             addElemOffset(t, track, placement, measure, tick + _offset);
         }
+    }
+
+    if (gtc) {
+        // tempo line ended without a tempo text, just add
+        _score->addElement(gtc);
+        tempoLine.added();
+        gtc = nullptr;
     }
 
     // do dynamics
@@ -2830,6 +2944,63 @@ void MusicXMLParserDirection::direction(const QString& partId,
     }
 }
 
+GradualTempoChangeType getTempoChangeTypeFromString(QString txt)
+{
+    txt = txt.toLower();
+    if (txt == "accel." || txt == "accel" || txt == "accelerando") {
+        return GradualTempoChangeType::Accelerando;
+    } else if (txt == "allarg." || txt == "allarg" || txt == "allargando") {
+        return GradualTempoChangeType::Allargando;
+    } else if (txt == "calando") {
+        return GradualTempoChangeType::Calando;
+    } else if (txt == "lent." || txt == "lent" || txt == "lentando") {
+        return GradualTempoChangeType::Lentando;
+    } else if (txt == "morendo") {
+        return GradualTempoChangeType::Morendo;
+    } else if (txt == "precipitando") {
+        return GradualTempoChangeType::Precipitando;
+    } else if (txt == "rall." || txt == "rall" || txt == "rallentando") {
+        return GradualTempoChangeType::Rallentando;
+    } else if (txt == "rit." || txt == "rit" || txt == "ritardando" || txt == "tardando") {
+        return GradualTempoChangeType::Ritardando;
+    } else if (txt == "smorz" || txt == "smorz." || txt == "smorzando") {
+        return GradualTempoChangeType::Smorzando;
+    } else if (txt == "stringendo") {
+        return GradualTempoChangeType::Stringendo;
+    } else {
+        return GradualTempoChangeType::Undefined;
+    }
+}
+
+void TempoLineManager::startTempoLine(QString text)
+{
+    if (_lineInProgress) {
+        // have to stop the previous line before starting a new one
+        stopTempoLine();
+    }
+    _tempoText = text;
+    _lineInProgress = true;
+    LOGD("Starting new tempo line \"%s\" at tick %d/%d", qPrintable(_tempoText), _currentTick.numerator(), _currentTick.denominator());
+    _gradualTempoChange = Factory::createGradualTempoChange(_score->dummy()->segment());
+    _gradualTempoChange->setTick(_currentTick);
+    _gradualTempoChange->setBeginText(_tempoText);
+    measureSpan = 0;
+}
+
+void TempoLineManager::stopTempoLine()
+{
+    if (!_lineInProgress) {
+        // no line currently happening
+        return;
+    }
+    _lineInProgress = false;
+    LOGD("Ending tempo line \"%s\" at tick %d/%d", qPrintable(_tempoText), _currentTick.numerator(), _currentTick.denominator());
+    _gradualTempoChange->setTick2(_currentTick);
+    _gradualTempoChange->setTempoChangeType(getTempoChangeTypeFromString(_tempoText));
+    _finishedGTC = _gradualTempoChange;
+    _gradualTempoChange = nullptr;
+}
+
 //---------------------------------------------------------
 //   directionType
 //---------------------------------------------------------
@@ -2838,8 +3009,8 @@ void MusicXMLParserDirection::direction(const QString& partId,
  Parse the /score-partwise/part/measure/direction/direction-type node.
  */
 
-void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
-                                            QList<MusicXmlSpannerDesc>& stops)
+void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops,
+                                            TempoLineManager& tempoLine)
 {
     while (_e.readNextStartElement()) {
         _defaultY = _e.attributes().value("default-y").toDouble(&_hasDefaultY) * -0.1;
@@ -2856,9 +3027,29 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
         QString type = _e.attributes().value("type").toString();
         if (_e.name() == "metronome") {
             _metroText = metronome(_tpoMetro);
+            // if necessary, stop any tempo lines that are happening
+            tempoLine.stopTempoLine();
         } else if (_e.name() == "words") {
-            _enclosure      = _e.attributes().value("enclosure").toString();
-            _wordsText += xmlpass2::nextPartOfFormattedString(_e);
+            _enclosure = _e.attributes().value("enclosure").toString();
+            QString txt = xmlpass2::nextPartOfFormattedString(_e);
+            QString plainText = QString(txt);
+            plainText = plainText.remove(QRegExp("<[^>]*>")).trimmed();
+            TempoInformation tempoInfo = getTempoInformationFromString(plainText);
+            GradualTempoChangeType gradType = getTempoChangeTypeFromString(plainText);
+            if (gradType != GradualTempoChangeType::Undefined) {
+                // start new gradual tempo line
+                tempoLine.startTempoLine(plainText);
+                tempoLine.bpsBeforeLine = _score->tempo(tempoLine.currentTick()).val;
+                tempoLine.justAdded = true;
+            } else if (tempoInfo.text != "") {
+                // if necessary, stop any tempo lines that are happening
+                LOGD("Tempo text %s found", qPrintable(plainText));
+                tempoLine.stopTempoLine(); // if there is a tempo line active, end it
+                _tempoText = plainText;
+                _wordsText = ""; // wordsText is for staff text, not tempo
+            } else {
+                _wordsText += txt; // not tempo-related, use staff text
+            }
         } else if (_e.name() == "rehearsal") {
             _enclosure      = _e.attributes().value("enclosure").toString();
             if (_enclosure == "") {
@@ -2874,7 +3065,23 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
         } else if (_e.name() == "bracket") {
             bracket(type, n, starts, stops);
         } else if (_e.name() == "dashes") {
-            dashes(type, n, starts, stops);
+            GradualTempoChange* gtc = nullptr;
+            if (type == "start" && tempoLine.justAdded) {
+                // this is a dashed line that most likely should connect to a gradual tempo change
+                // note that this only works if the gradual tempo text words element comes first in the xml, i.e.
+                // <direction placement='above' system='only-top'>
+                //   <direction-type>
+                //     <words font-weight = 'bold'>Rit.</words>
+                //     </direction-type>
+                //   <direction-type>
+                //     <dashes type = 'start' number = '1'/>
+                //     </direction-type>
+                //   </direction>
+                tempoLine.stopTempoLine();
+                gtc = tempoLine.finishedGTC();
+                tempoLine.added();
+            }
+            dashes(type, n, starts, stops, gtc);
         } else if (_e.name() == "wedge") {
             wedge(type, n, starts, stops);
         } else if (_e.name() == "coda") {
@@ -3163,19 +3370,25 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
  Parse the /score-partwise/part/measure/direction/direction-type/dashes node.
  */
 
-void MusicXMLParserDirection::dashes(const QString& type, const int number,
-                                     QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops)
+void MusicXMLParserDirection::dashes(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts,
+                                     QList<MusicXmlSpannerDesc>& stops, GradualTempoChange* gtc)
 {
     const auto& spdesc = _pass2.getSpanner({ ElementType::HAIRPIN, number });
     if (type == "start") {
-        auto b = spdesc._isStopped ? toTextLine(spdesc._sp) : Factory::createTextLine(_score->dummy());
-        // if (placement == "") placement = "above";  // TODO ? set default
+        ElementType et = ElementType::INVALID;
+        TextLineBase* b = nullptr;
+        if (gtc) {
+            b = toTextLineBase(gtc);
+        } else {
+            b = spdesc._isStopped ? toTextLine(spdesc._sp) : Factory::createTextLine(_score->dummy());
+            // if (placement == "") placement = "above";  // TODO ? set default
 
-        // hack: combine with a previous words element
-        if (!_wordsText.isEmpty()) {
-            // TextLine supports only limited formatting, remove all (compatible with 1.3)
-            b->setBeginText(MScoreTextToMXML::toPlainText(_wordsText));
-            _wordsText = "";
+            // hack: combine with a previous words element
+            if (!_wordsText.isEmpty()) {
+                // TextLine supports only limited formatting, remove all (compatible with 1.3)
+                b->setBeginText(MScoreTextToMXML::toPlainText(_wordsText));
+                _wordsText = "";
+            }
         }
 
         b->setBeginHookType(HookType::NONE);

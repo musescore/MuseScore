@@ -198,6 +198,37 @@ using HairpinsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerSet = std::set<Spanner*>;
 
+class TempoLineManager
+{
+public:
+    void stopTempoLine();
+    void startTempoLine(QString text);
+    void added();
+
+    void setCurrentTick(Fraction t) { _currentTick = t; }
+    Fraction currentTick() const { return _currentTick; }
+    bool lineInProgress() const { return _lineInProgress; }
+
+    GradualTempoChange* finishedGTC() const { return _finishedGTC; }
+    GradualTempoChangeType finishedGTCtype() const { return _finishedGTCtype; }
+
+    TempoLineManager(Score* score)
+        : _score(score) {}
+
+    double bpsBeforeLine = 0.0;
+    int measureSpan = 0;
+    bool justAdded = false;
+
+private:
+    QString _tempoText;
+    GradualTempoChangeType _finishedGTCtype = GradualTempoChangeType::Undefined;
+    bool _lineInProgress = false;
+    Fraction _currentTick = Fraction();
+    GradualTempoChange* _gradualTempoChange = nullptr;
+    GradualTempoChange* _finishedGTC = nullptr;
+    Score* const _score;
+};
+
 //---------------------------------------------------------
 //   MusicXMLParserNotations
 //---------------------------------------------------------
@@ -334,6 +365,7 @@ private:
     BracketsStack _brackets;
     OttavasStack _ottavas;                ///< Current ottavas
     HairpinsStack _hairpins;              ///< Current hairpins
+    TempoLineManager _tempoLineManager;           ///< Current gradual tempo change line
     MusicXmlExtendedSpannerDesc _dummyNewMusicXmlSpannerDesc;
 
     Glissando* _glissandi[MAX_NUMBER_LEVEL][2];     ///< Current slides ([0]) / glissandi ([1])
@@ -360,6 +392,60 @@ private:
     std::vector<int> _measureRepeatCount;
 };
 
+struct TempoInformation
+{
+    QString text;
+    double changeTo;
+    bool isTempo1 = false;
+    bool isRelative = false;
+    bool isAtempo = false;
+    TempoInformation(QString text, double changeTo, bool isTempo1 = false, bool isRelative = false, bool isAtempo = false)
+        : text(text), changeTo(changeTo), isTempo1(isTempo1), isRelative(isRelative), isAtempo(isAtempo) {}
+};
+
+static std::vector<TempoInformation> tempoInformation = {
+    // return to tempo at start
+    TempoInformation("tempo 1", 0.0, true),
+    TempoInformation("tempo i", 0.0, true),
+    TempoInformation("tempo 1o", 0.0, true),
+    TempoInformation("tempo io", 0.0, true),
+    TempoInformation("tempo 1\u00B0", 0.0, true),
+    TempoInformation("tempo i\u00B0", 0.0, true),
+    TempoInformation("primo tempo", 0.0, true),
+    TempoInformation("au mouvement", 0.0, true),
+    TempoInformation("tempo primo", 0.0, true),
+
+    // return to pre-gradual-change tempo
+    TempoInformation("a tempo", 0.0, false, false, true),
+
+    // change tempo by relative amount
+    TempoInformation("mosso", 1.05, false, true),
+    TempoInformation("meno mosso", 0.9, false, true),
+    TempoInformation("piu mosso", 1.1, false, true),
+    TempoInformation("pi\u00F9 mosso", 1.1, false, true),
+    TempoInformation("riten.", 0.9, false, true),
+    TempoInformation("riten", 0.9, false, true),
+    TempoInformation("ritenuto", 0.9, false, true),
+    TempoInformation("stretto", 1.15, false, true),
+    TempoInformation("slower", 0.9, false, true),
+    TempoInformation("faster", 1.1, false, true),
+
+    // change to absolute tempo (values for current palette tempo objects)
+    TempoInformation("grave", 35.0),
+    TempoInformation("largo", 50.0),
+    TempoInformation("lento", 52.5),
+    TempoInformation("larghetto", 63.0),
+    TempoInformation("adagio", 71.0),
+    TempoInformation("andante", 92.0),
+    TempoInformation("andantino", 94.0),
+    TempoInformation("moderato", 114.0),
+    TempoInformation("allegretto", 116.0),
+    TempoInformation("allegro", 144.0),
+    TempoInformation("vivace", 172.0),
+    TempoInformation("presto", 187.0),
+    TempoInformation("prestissimo", 200.0)
+};
+
 //---------------------------------------------------------
 //   MusicXMLParserDirection
 //---------------------------------------------------------
@@ -369,7 +455,8 @@ class MusicXMLParserDirection
 public:
     MusicXMLParserDirection(QXmlStreamReader& e, Score* score, const MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2,
                             MxmlLogger* logger);
-    void direction(const QString& partId, Measure* measure, const Fraction& tick, const int divisions, MusicXmlSpannerMap& spanners);
+    void direction(const QString& partId, Measure* measure, const Fraction& tick, const int divisions, MusicXmlSpannerMap& spanners,
+                   TempoLineManager& tempoLine);
 
 private:
     QXmlStreamReader& _e;
@@ -381,7 +468,8 @@ private:
     QStringList _dynamicsList;
     QString _enclosure;
     QString _wordsText;
-    QString _metroText;
+    QString _metroText;     // specific metronome markings
+    QString _tempoText;     // non-metronome tempo (such as 'Andante')
     QString _rehearsalText;
     QString _dynaVelocity;
     QString _tempo;
@@ -391,6 +479,7 @@ private:
     QString _sndDalsegno;
     QString _sndSegno;
     QString _sndFine;
+
     bool _hasDefaultY;
     qreal _defaultY;
     bool _coda;
@@ -400,16 +489,18 @@ private:
     QList<EngravingItem*> _elems;
     Fraction _offset;
 
-    void directionType(QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
+    void directionType(QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops, TempoLineManager& tempoLine);
     void bracket(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
     void octaveShift(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
     void pedal(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
-    void dashes(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
+    void dashes(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops,
+                GradualTempoChange* gtc = nullptr);
     void wedge(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
     QString metronome(double& r);
     void sound();
     void dynamics();
     void handleRepeats(Measure* measure, const track_idx_t track);
+    double getMetronomeForTempo(QString plainText) const;
     void skipLogCurrElem();
 };
 } // namespace Ms
