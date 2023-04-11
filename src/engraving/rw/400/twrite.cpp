@@ -63,6 +63,8 @@
 #include "../../libmscore/gradualtempochange.h"
 #include "../../libmscore/groups.h"
 
+#include "../../libmscore/hairpin.h"
+#include "../../libmscore/harmony.h"
 #include "../../libmscore/hook.h"
 
 #include "../../libmscore/lyrics.h"
@@ -1099,5 +1101,31 @@ void TWrite::write(const Groups* g, XmlWriter& xml, WriteContext&)
     for (const GroupNode& n : g->nodes()) {
         xml.tag("Node", { { "pos", n.pos }, { "action", n.action } });
     }
+    xml.endElement();
+}
+
+void TWrite::write(const Hairpin* h, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(h)) {
+        return;
+    }
+    xml.startElement(h);
+    xml.tag("subtype", int(h->hairpinType()));
+    writeProperty(h, xml, Pid::VELO_CHANGE);
+    writeProperty(h, xml, Pid::HAIRPIN_CIRCLEDTIP);
+    writeProperty(h, xml, Pid::DYNAMIC_RANGE);
+//      writeProperty(xml, Pid::BEGIN_TEXT);
+    writeProperty(h, xml, Pid::END_TEXT);
+//      writeProperty(xml, Pid::CONTINUE_TEXT);
+    writeProperty(h, xml, Pid::LINE_VISIBLE);
+    writeProperty(h, xml, Pid::SINGLE_NOTE_DYNAMICS);
+    writeProperty(h, xml, Pid::VELO_CHANGE_METHOD);
+
+    for (const StyledProperty& spp : *h->styledProperties()) {
+        if (!h->isStyled(spp.pid)) {
+            writeProperty(h, xml, spp.pid);
+        }
+    }
+    writeProperties(static_cast<const SLine*>(h), xml, ctx);
     xml.endElement();
 }

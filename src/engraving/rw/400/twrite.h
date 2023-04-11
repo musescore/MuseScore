@@ -64,6 +64,10 @@ class Glissando;
 class GradualTempoChange;
 class Groups;
 
+class Hairpin;
+class Harmony;
+class Hook;
+
 class SLine;
 class Spanner;
 class TextLineBase;
@@ -109,14 +113,17 @@ public:
 
     static void write(const Glissando* g, XmlWriter& xml, WriteContext& ctx);
     static void write(const GradualTempoChange* g, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Groups* g, XmlWriter& xml, WriteContext& ctx);
 
+    static void write(const Hairpin* h, XmlWriter& xml, WriteContext& ctx);
+
+private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
     static void writeStyledProperties(const EngravingItem* item, XmlWriter& xml);
 
     static void writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx);
     static void writeBoxProperties(Box* b, XmlWriter& xml, WriteContext& ctx);
 
-private:
     static void writeProperties(Box* b, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(HBox* b, XmlWriter& xml, WriteContext& ctx);
 
