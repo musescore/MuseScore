@@ -1217,3 +1217,22 @@ void TWrite::write(const Harmony* h, XmlWriter& xml, WriteContext& ctx)
     }
     xml.endElement();
 }
+
+void TWrite::write(const Hook* h, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(h);
+    xml.tag("name", SymNames::nameForSymId(h->sym()));
+    if (h->scoreFont()) {
+        xml.tag("font", h->scoreFont()->name());
+    }
+    writeProperties(static_cast<const BSymbol*>(h), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const BSymbol* s, XmlWriter& xml, WriteContext& ctx)
+{
+    for (const EngravingItem* e : s->leafs()) {
+        e->write(xml);
+    }
+    writeItemProperties(s, xml, ctx);
+}
