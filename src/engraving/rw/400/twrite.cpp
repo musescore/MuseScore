@@ -59,6 +59,10 @@
 #include "../../libmscore/fingering.h"
 #include "../../libmscore/fret.h"
 
+#include "../../libmscore/glissando.h"
+#include "../../libmscore/gradualtempochange.h"
+#include "../../libmscore/groups.h"
+
 #include "../../libmscore/hook.h"
 
 #include "../../libmscore/lyrics.h"
@@ -971,4 +975,99 @@ void TWrite::write(const FretDiagram* f, XmlWriter& xml, WriteContext& ctx)
         }
     }
     xml.endElement();
+}
+
+void TWrite::write(const Glissando* g, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(g)) {
+        return;
+    }
+    xml.startElement(g);
+    if (g->showText() && !g->text().isEmpty()) {
+        xml.tag("text", g->text());
+    }
+
+    for (auto id : { Pid::GLISS_TYPE, Pid::PLAY, Pid::GLISS_STYLE, Pid::GLISS_EASEIN, Pid::GLISS_EASEOUT }) {
+        writeProperty(g, xml, id);
+    }
+    for (const StyledProperty& spp : *g->styledProperties()) {
+        writeProperty(g, xml, spp.pid);
+    }
+
+    writeProperties(static_cast<const SLine*>(g), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const SLine* l, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!l->endElement()) {
+        ((Spanner*)l)->computeEndElement();                    // HACK
+        if (!l->endElement()) {
+            xml.tagFraction("ticks", l->ticks());
+        }
+    }
+    writeProperties(static_cast<const Spanner*>(l), xml, ctx);
+    if (l->diagonal()) {
+        xml.tag("diagonal", l->diagonal());
+    }
+    writeProperty(l, xml, Pid::LINE_WIDTH);
+    writeProperty(l, xml, Pid::LINE_STYLE);
+    writeProperty(l, xml, Pid::COLOR);
+    writeProperty(l, xml, Pid::ANCHOR);
+    writeProperty(l, xml, Pid::DASH_LINE_LEN);
+    writeProperty(l, xml, Pid::DASH_GAP_LEN);
+
+    if (l->score()->isPaletteScore()) {
+        // when used as icon
+        if (!l->spannerSegments().empty()) {
+            const LineSegment* s = l->frontSegment();
+            xml.tag("length", s->pos2().x());
+        } else {
+            xml.tag("length", l->spatium() * 4);
+        }
+        return;
+    }
+    //
+    // check if user has modified the default layout
+    //
+    bool modified = false;
+    for (const SpannerSegment* seg : l->spannerSegments()) {
+        if (!seg->autoplace() || !seg->visible()
+            || (seg->propertyFlags(Pid::MIN_DISTANCE) == PropertyFlags::UNSTYLED
+                || seg->getProperty(Pid::MIN_DISTANCE) != seg->propertyDefault(Pid::MIN_DISTANCE))
+            || (!seg->isStyled(Pid::OFFSET) && (!seg->offset().isNull() || !seg->userOff2().isNull()))) {
+            modified = true;
+            break;
+        }
+    }
+    if (!modified) {
+        return;
+    }
+
+    //
+    // write user modified layout and other segment properties
+    //
+    double _spatium = l->score()->spatium();
+    for (const SpannerSegment* seg : l->spannerSegments()) {
+        xml.startElement("Segment", seg);
+        xml.tag("subtype", int(seg->spannerSegmentType()));
+        // TODO:
+        // NOSTYLE offset written in EngravingItem::writeProperties,
+        // so we probably don't need to duplicate it here
+        // see https://musescore.org/en/node/286848
+        //if (seg->propertyFlags(Pid::OFFSET) & PropertyFlags::UNSTYLED)
+        xml.tagPoint("offset", seg->offset() / _spatium);
+        xml.tagPoint("off2", seg->userOff2() / _spatium);
+        writeProperty(seg, xml, Pid::MIN_DISTANCE);
+        writeItemProperties(seg, xml, ctx);
+        xml.endElement();
+    }
+}
+
+void TWrite::writeProperties(const Spanner* s, XmlWriter& xml, WriteContext& ctx)
+{
+    if (ctx.clipboardmode()) {
+        xml.tagFraction("ticks_f", s->ticks());
+    }
+    writeItemProperties(s, xml, ctx);
 }

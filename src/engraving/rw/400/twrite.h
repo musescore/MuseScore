@@ -60,6 +60,13 @@ class FiguredBassItem;
 class Fingering;
 class FretDiagram;
 
+class Glissando;
+class GradualTempoChange;
+class Groups;
+
+class SLine;
+class Spanner;
+
 class TextBase;
 }
 
@@ -99,6 +106,8 @@ public:
     static void write(const Fingering* f, XmlWriter& xml, WriteContext& ctx);
     static void write(const FretDiagram* f, XmlWriter& xml, WriteContext& ctx);
 
+    static void write(const Glissando* g, XmlWriter& xml, WriteContext& ctx);
+
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
     static void writeStyledProperties(const EngravingItem* item, XmlWriter& xml);
 
@@ -113,6 +122,8 @@ private:
     static void writeChordRestBeam(const ChordRest* c, XmlWriter& xml, WriteContext& ctx);
 
     static void writeProperties(const TextBase* t, XmlWriter& xml, WriteContext& ctx, bool writeText);
+    static void writeProperties(const SLine* l, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const Spanner* s, XmlWriter& xml, WriteContext& ctx);
 };
 }
 
