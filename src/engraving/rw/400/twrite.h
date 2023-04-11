@@ -72,6 +72,8 @@ class SLine;
 class Spanner;
 class TextLineBase;
 
+class BSymbol;
+
 class TextBase;
 }
 
@@ -117,6 +119,7 @@ public:
 
     static void write(const Hairpin* h, XmlWriter& xml, WriteContext& ctx);
     static void write(const Harmony* h, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Hook* h, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
@@ -136,6 +139,8 @@ private:
     static void writeProperties(const SLine* l, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const Spanner* s, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const TextLineBase* l, XmlWriter& xml, WriteContext& ctx);
+
+    static void writeProperties(const BSymbol* s, XmlWriter& xml, WriteContext& ctx);
 };
 }
 

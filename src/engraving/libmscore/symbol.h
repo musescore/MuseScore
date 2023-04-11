@@ -63,6 +63,7 @@ public:
 
     void setSym(SymId s, const std::shared_ptr<IEngravingFont>& sf = nullptr) { _sym  = s; _scoreFont = sf; }
     SymId sym() const { return _sym; }
+    const std::shared_ptr<IEngravingFont>& scoreFont() const { return _scoreFont; }
     mu::AsciiStringView symName() const;
 
     String accessibleInfo() const override;
