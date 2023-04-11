@@ -53,6 +53,8 @@ using TrackId = int32_t;
 using TrackIdList = std::vector<TrackId>;
 using TrackName = std::string;
 
+using aux_channel_idx_t = uint8_t;
+
 using PlaybackData = std::variant<mpe::PlaybackData, io::IODevice*>;
 using PlaybackSetupData = mpe::PlaybackSetupData;
 
@@ -286,7 +288,7 @@ struct AuxSendParams {
     }
 };
 
-using AuxSendsParams = std::map<TrackId, AuxSendParams>;
+using AuxSendsParams = std::vector<AuxSendParams>;
 
 struct AudioOutputParams {
     AudioFxChain fxChain;

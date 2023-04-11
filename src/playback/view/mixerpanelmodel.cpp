@@ -57,12 +57,20 @@ void MixerPanelModel::load(const QVariant& navigationSection, int navigationPane
     m_navigationPanelOrderStart = navigationPanelOrderStart;
     m_currentTrackSequenceId = sequenceId;
 
-    controller()->trackAdded().onReceive(
-        this, [this](const TrackId trackId, const engraving::InstrumentTrackId instrumentTrackId) {
+    controller()->trackAdded().onReceive(this, [this](const TrackId trackId) {
+        const TrackIdList& auxTrackIdList = controller()->auxTrackIdList();
+        if (mu::contains(auxTrackIdList, trackId)) {
+            NOT_IMPLEMENTED;
+            return;
+        }
+
+        const IPlaybackController::InstrumentTrackIdMap& instrumentTracks = controller()->instrumentTrackIdMap();
+        InstrumentTrackId instrumentTrackId = mu::key(instrumentTracks, trackId);
+
         addItem(trackId, instrumentTrackId);
     });
 
-    controller()->trackRemoved().onReceive(this, [this](const TrackId trackId, const engraving::InstrumentTrackId) {
+    controller()->trackRemoved().onReceive(this, [this](const TrackId trackId) {
         removeItem(trackId);
     });
 

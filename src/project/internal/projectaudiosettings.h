@@ -41,6 +41,10 @@ public:
     audio::AudioOutputParams masterAudioOutputParams() const override;
     void setMasterAudioOutputParams(const audio::AudioOutputParams& params) override;
 
+    bool containsAuxOutputParams(audio::aux_channel_idx_t index) const override;
+    audio::AudioOutputParams auxOutputParams(audio::aux_channel_idx_t index) const override;
+    void setAuxOutputParams(audio::aux_channel_idx_t index, const audio::AudioOutputParams& params) override;
+
     audio::AudioInputParams trackInputParams(const engraving::InstrumentTrackId& partId) const override;
     void setTrackInputParams(const engraving::InstrumentTrackId& partId, const audio::AudioInputParams& params) override;
 
@@ -85,7 +89,7 @@ private:
     QJsonObject soloMuteStateToJson(const SoloMuteState& state) const;
     QJsonObject fxChainToJson(const audio::AudioFxChain& fxChain) const;
     QJsonObject fxParamsToJson(const audio::AudioFxParams& fxParams) const;
-    QJsonObject auxSendsToJson(const audio::AuxSendsParams& auxSends) const;
+    QJsonArray auxSendsToJson(const audio::AuxSendsParams& auxSends) const;
     QJsonObject auxSendParamsToJson(const audio::AuxSendParams& auxParams) const;
     QJsonObject resourceMetaToJson(const audio::AudioResourceMeta& meta) const;
     QJsonObject unitConfigToJson(const audio::AudioUnitConfig& config) const;
@@ -97,11 +101,13 @@ private:
     QString sourceTypeToString(const audio::AudioSourceType& type) const;
     QString resourceTypeToString(const audio::AudioResourceType& type) const;
 
+    QJsonObject buildAuxObject(const audio::AudioOutputParams& params) const;
     QJsonObject buildTrackObject(const engraving::InstrumentTrackId& id) const;
 
     void setNeedSave(bool needSave);
 
     audio::AudioOutputParams m_masterOutputParams;
+    std::map<audio::aux_channel_idx_t, audio::AudioOutputParams> m_auxOutputParams;
 
     std::unordered_map<engraving::InstrumentTrackId, audio::AudioInputParams> m_trackInputParamsMap;
     std::unordered_map<engraving::InstrumentTrackId, audio::AudioOutputParams> m_trackOutputParamsMap;
