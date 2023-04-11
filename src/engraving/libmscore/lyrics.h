@@ -55,12 +55,14 @@ private:
                               ///< (melisma)
     LyricsSyllabic _syllabic;
     LyricsLine* _separator;
+    bool _removeInvalidSegments = false;
 
     friend class Factory;
     Lyrics(ChordRest* parent);
     Lyrics(const Lyrics&);
 
     bool isMelisma() const;
+    void removeInvalidSegments();
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
 protected:
@@ -103,6 +105,7 @@ public:
     void setTicks(const Fraction& tick) { _ticks = tick; }
     Fraction endTick() const;
     void removeFromScore();
+    void setRemoveInvalidSegments() { _removeInvalidSegments = true; }
 
     using EngravingObject::undoChangeProperty;
     void paste(EditData& ed, const String& txt) override;

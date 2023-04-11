@@ -29,6 +29,7 @@
 
 #include "measure.h"
 #include "mscoreview.h"
+#include "navigate.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -159,11 +160,11 @@ bool Lyrics::isMelisma() const
 
     // hyphenated?
     // if so, it is a melisma only if there is no lyric in same verse on next CR
-    if (_syllabic == LyricsSyllabic::BEGIN || _syllabic == LyricsSyllabic::MIDDLE) {
+    if (_separator && (_syllabic == LyricsSyllabic::BEGIN || _syllabic == LyricsSyllabic::MIDDLE)) {
         // find next CR on same track and check for existence of lyric in same verse
-        ChordRest* cr  = chordRest();
+        ChordRest* cr = chordRest();
         if (cr) {
-            Segment* s     = cr->segment()->next1();
+            Segment* s = cr->segment()->next1();
             ChordRest* ncr = s ? s->nextChordRest(cr->track()) : 0;
             if (ncr && !ncr->lyrics(_no, placement())) {
                 return true;
@@ -251,6 +252,33 @@ void Lyrics::layout()
         styleChanged();
     }
 
+    ChordRest* cr = chordRest();
+    if (_removeInvalidSegments) {
+        removeInvalidSegments();
+    } else if (_ticks > Fraction(0, 1) || _syllabic == LyricsSyllabic::BEGIN || _syllabic == LyricsSyllabic::MIDDLE) {
+        if (!_separator) {
+            _separator = new LyricsLine(score()->dummy());
+            _separator->setTick(cr->tick());
+            score()->addUnmanagedSpanner(_separator);
+        }
+        _separator->setParent(this);
+        _separator->setTick(cr->tick());
+        // HACK separator should have non-zero length to get its layout
+        // always triggered. A proper ticks length will be set later on the
+        // separator layout.
+        _separator->setTicks(Fraction::fromTicks(1));
+        _separator->setTrack(track());
+        _separator->setTrack2(track());
+        _separator->setVisible(visible());
+        // bbox().setWidth(bbox().width());  // ??
+    } else {
+        if (_separator) {
+            _separator->removeUnmanaged();
+            delete _separator;
+            _separator = 0;
+        }
+    }
+
     if (isMelisma() || hasNumber) {
         // use the melisma style alignment setting
         if (isStyled(Pid::ALIGN)) {
@@ -288,8 +316,6 @@ void Lyrics::layout()
         }
     }
 
-    ChordRest* cr = chordRest();
-
     if (align() == AlignH::HCENTER) {
         //
         // center under notehead, not origin
@@ -304,30 +330,6 @@ void Lyrics::layout()
     }
 
     setPosX(x);
-
-    if (_ticks > Fraction(0, 1) || _syllabic == LyricsSyllabic::BEGIN || _syllabic == LyricsSyllabic::MIDDLE) {
-        if (!_separator) {
-            _separator = new LyricsLine(score()->dummy());
-            _separator->setTick(cr->tick());
-            score()->addUnmanagedSpanner(_separator);
-        }
-        _separator->setParent(this);
-        _separator->setTick(cr->tick());
-        // HACK separator should have non-zero length to get its layout
-        // always triggered. A proper ticks length will be set later on the
-        // separator layout.
-        _separator->setTicks(Fraction::fromTicks(1));
-        _separator->setTrack(track());
-        _separator->setTrack2(track());
-        _separator->setVisible(visible());
-        // bbox().setWidth(bbox().width());  // ??
-    } else {
-        if (_separator) {
-            _separator->removeUnmanaged();
-            delete _separator;
-            _separator = 0;
-        }
-    }
 
     if (_ticks.isNotZero()) {
         // set melisma end
@@ -547,6 +549,11 @@ void Lyrics::removeFromScore()
         delete _separator;
         _separator = 0;
     }
+    Lyrics* prev = prevLyrics(this);
+    if (prev) {
+        // check to make sure we haven't created an invalid segment by deleting this lyric
+        prev->setRemoveInvalidSegments();
+    }
 }
 
 //---------------------------------------------------------
@@ -596,6 +603,11 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
         }
 
         _ticks = v.value<Fraction>();
+        if (_ticks <= Fraction(0, 1)) {
+            // if no ticks, we have to relayout in order to remove invalid melisma segments
+            setRemoveInvalidSegments();
+            layout();
+        }
         break;
     case Pid::VERSE:
         _no = v.toInt();
@@ -710,5 +722,28 @@ KerningType Lyrics::doComputeKerningType(const EngravingItem* nextItem) const
         return KerningType::NON_KERNING;
     }
     return KerningType::KERNING;
+}
+
+//---------------------------------------------------------
+//   removeInvalidSegments
+//
+// Remove lyric-final melisma lines and reset the alignment of the lyric
+//---------------------------------------------------------
+
+void Lyrics::removeInvalidSegments()
+{
+    _removeInvalidSegments = false;
+    if (_separator && isMelisma() && _ticks < _separator->startCR()->ticks()) {
+        setTicks(Fraction(0, 1));
+        _separator->removeUnmanaged();
+        delete _separator;
+        _separator = nullptr;
+        setAlign(propertyDefault(Pid::ALIGN).value<Align>());
+        if (_syllabic == LyricsSyllabic::BEGIN || _syllabic == LyricsSyllabic::SINGLE) {
+            _syllabic = LyricsSyllabic::SINGLE;
+        } else {
+            _syllabic = LyricsSyllabic::END;
+        }
+    }
 }
 }
