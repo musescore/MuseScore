@@ -73,14 +73,34 @@ RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, IAudioSourcePtr
     return result;
 }
 
-Ret Mixer::removeChannel(const TrackId id)
+RetVal<MixerChannelPtr> Mixer::addAuxChannel(const TrackId trackId)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    auto search = m_trackChannels.find(id);
+    m_auxChannels.emplace(trackId, std::make_shared<MixerChannel>(trackId, m_sampleRate));
+
+    RetVal<MixerChannelPtr> result;
+    result.val = m_auxChannels[trackId];
+    result.ret = make_ret(Ret::Code::Ok);
+
+    return result;
+}
+
+Ret Mixer::removeChannel(const TrackId trackId)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    auto search = m_trackChannels.find(trackId);
 
     if (search != m_trackChannels.end() && search->second) {
-        m_trackChannels.erase(id);
+        m_trackChannels.erase(trackId);
+        return make_ret(Ret::Code::Ok);
+    }
+
+    search = m_auxChannels.find(trackId);
+
+    if (search != m_auxChannels.end() && search->second) {
+        m_auxChannels.erase(trackId);
         return make_ret(Ret::Code::Ok);
     }
 
@@ -135,7 +155,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
 
     for (const auto& pair : m_trackChannels) {
         MixerChannelPtr channel = pair.second;
-        std::future<std::vector<float> > future = TaskScheduler::instance()->submit([this, outBufferSize, samplesPerChannel,
+        std::future<std::vector<float> > future = TaskScheduler::instance()->submit([outBufferSize, samplesPerChannel,
                                                                                      channel]() -> std::vector<float> {
             thread_local std::vector<float> buffer(outBufferSize, 0.f);
             thread_local std::vector<float> silent_buffer(outBufferSize, 0.f);

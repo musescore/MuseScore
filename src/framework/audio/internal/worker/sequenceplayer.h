@@ -50,7 +50,8 @@ public:
     async::Channel<PlaybackStatus> playbackStatusChanged() const override;
 
 private:
-    TracksMap tracks() const;
+    void setAllTracksActive(bool active);
+    void seekAllTracks(const msecs_t newPositionMsecs);
 
     IGetTracks* m_getTracks = nullptr;
     IClockPtr m_clock = nullptr;

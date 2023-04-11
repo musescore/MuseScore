@@ -43,6 +43,12 @@ MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const 
     setSampleRate(sampleRate);
 }
 
+MixerChannel::MixerChannel(const TrackId trackId, const unsigned int sampleRate)
+    : MixerChannel(trackId, nullptr, sampleRate)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+}
+
 const AudioOutputParams& MixerChannel::outputParams() const
 {
     return m_params;
@@ -111,33 +117,25 @@ bool MixerChannel::isActive() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_audioSource) {
-        return false;
-    }
-
-    return m_audioSource->isActive();
+    return m_audioSource ? m_audioSource->isActive() : true;
 }
 
 void MixerChannel::setIsActive(bool arg)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_audioSource) {
-        return;
+    if (m_audioSource) {
+        m_audioSource->setIsActive(arg);
     }
-
-    m_audioSource->setIsActive(arg);
 }
 
 void MixerChannel::setSampleRate(unsigned int sampleRate)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_audioSource) {
-        return;
+    if (m_audioSource) {
+        m_audioSource->setSampleRate(sampleRate);
     }
-
-    m_audioSource->setSampleRate(sampleRate);
 
     for (IFxProcessorPtr fx : m_fxProcessors) {
         fx->setSampleRate(sampleRate);
@@ -148,33 +146,25 @@ unsigned int MixerChannel::audioChannelsCount() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_audioSource) {
-        return 0;
-    }
-
-    return m_audioSource->audioChannelsCount();
+    return m_audioSource ? m_audioSource->audioChannelsCount() : 0;
 }
 
 async::Channel<unsigned int> MixerChannel::audioChannelsCountChanged() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_audioSource) {
-        return {};
-    }
-
-    return m_audioSource->audioChannelsCountChanged();
+    return m_audioSource ? m_audioSource->audioChannelsCountChanged() : async::Channel<unsigned int>();
 }
 
 samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_audioSource) {
-        return 0;
-    }
+    samples_t processedSamplesCount = samplesPerChannel;
 
-    samples_t processedSamplesCount = m_audioSource->process(buffer, samplesPerChannel);
+    if (m_audioSource) {
+        processedSamplesCount = m_audioSource->process(buffer, samplesPerChannel);
+    }
 
     if (processedSamplesCount == 0 || m_params.muted) {
         unsigned int channelsCount = audioChannelsCount();
