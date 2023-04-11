@@ -21,6 +21,7 @@
 set(MODULE audio)
 
 include(GetPlatformInfo)
+
 if (OS_IS_WIN)
     set(DRIVER_SRC
         #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.cpp
@@ -190,9 +191,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbmatrices.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/sampledelay.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_neon.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_scalar.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_sse2.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/smoothlinearvalue.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/sparsefirfilter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/vectorops.h
@@ -259,6 +257,20 @@ if (MUE_ENABLE_AUDIO_EXPORT)
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/flac flac)
 
     set(MODULE_LINK ${MODULE_LINK} lame opusenc flac)
+endif()
+
+if (ARCH_IS_X86_64)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_sse2.h
+        )
+elseif (ARCH_IS_AARCH64)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_neon.h
+        )
+else ()
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_scalar.h
+        )
 endif()
 
 if (OS_IS_MAC)

@@ -65,10 +65,10 @@ struct float_x4
     /// enables assignments like: float_x4 a = {1.f, 2.f, 3.f, 4.f};
     __finl float_x4(float v0, float v1, float v2, float v3)
     {
-        s = { v0, v1, v2, v3 };
+        s = _mm_setr_ps(v0, v1, v2, v3);
     }
 
-#if __clang__
+#if defined(__clang__) || defined(__GNUC__)
 private:
     // this helper class allows writing to the single registers for clang
     // __mm128 is a built-in type -> we can't return a float& reference.
@@ -105,7 +105,7 @@ public:
         return s[n];
     }
 
-#elif _MSC_VER
+#elif defined(_MSC_VER)
     // on msvc returning a ref to a sub-register is possible
     __finl float& operator[](int n)
     {
