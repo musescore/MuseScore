@@ -645,3 +645,18 @@ void TWrite::write(ChordLine* c, XmlWriter& xml, WriteContext& ctx)
     }
     xml.endElement();
 }
+
+void TWrite::write(Clef* c, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(c);
+    writeProperty(c, xml, Pid::CLEF_TYPE_CONCERT);
+    writeProperty(c, xml, Pid::CLEF_TYPE_TRANSPOSING);
+    if (!c->showCourtesy()) {
+        xml.tag("showCourtesyClef", c->showCourtesy());
+    }
+    if (c->forInstrumentChange()) {
+        xml.tag("forInstrumentChange", c->forInstrumentChange());
+    }
+    writeItemProperties(c, xml, ctx);
+    xml.endElement();
+}

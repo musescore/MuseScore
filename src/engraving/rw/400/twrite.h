@@ -80,6 +80,7 @@ public:
 
     static void write(Chord* c, XmlWriter& xml, WriteContext& ctx);
     static void write(ChordLine* c, XmlWriter& xml, WriteContext& ctx);
+    static void write(Clef* c, XmlWriter& xml, WriteContext& ctx);
 
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
     static void writeStyledProperties(const EngravingItem* item, XmlWriter& xml);
