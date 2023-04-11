@@ -54,6 +54,11 @@
 
 #include "../../libmscore/dynamic.h"
 
+#include "../../libmscore/fermata.h"
+#include "../../libmscore/figuredbass.h"
+#include "../../libmscore/fingering.h"
+#include "../../libmscore/fret.h"
+
 #include "../../libmscore/hook.h"
 
 #include "../../libmscore/lyrics.h"
@@ -705,4 +710,22 @@ void TWrite::writeProperties(const TextBase* t, XmlWriter& xml, WriteContext& ct
     if (writeText) {
         xml.writeXml(u"text", t->xmlText());
     }
+}
+
+void TWrite::write(const Fermata* f, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(f)) {
+        return;
+    }
+
+    xml.startElement(f);
+    xml.tag("subtype", SymNames::nameForSymId(f->symId()));
+    writeProperty(f, xml, Pid::TIME_STRETCH);
+    writeProperty(f, xml, Pid::PLAY);
+    writeProperty(f, xml, Pid::MIN_DISTANCE);
+    if (!f->isStyled(Pid::OFFSET)) {
+        writeProperty(f, xml, Pid::OFFSET);
+    }
+    writeItemProperties(f, xml, ctx);
+    xml.endElement();
 }
