@@ -77,7 +77,7 @@ private:
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
     std::vector<IFxProcessorPtr> m_masterFxProcessors = {};
 
-    std::map<TrackId, MixerChannelPtr> m_mixerChannels = {};
+    std::map<TrackId, MixerChannelPtr> m_trackChannels = {};
     dsp::LimiterPtr m_limiter = nullptr;
 
     std::set<IClockPtr> m_clocks;

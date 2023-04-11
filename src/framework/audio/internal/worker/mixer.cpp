@@ -65,9 +65,9 @@ RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, IAudioSourcePtr
         return result;
     }
 
-    m_mixerChannels.emplace(trackId, std::make_shared<MixerChannel>(trackId, std::move(source), m_sampleRate));
+    m_trackChannels.emplace(trackId, std::make_shared<MixerChannel>(trackId, std::move(source), m_sampleRate));
 
-    result.val = m_mixerChannels[trackId];
+    result.val = m_trackChannels[trackId];
     result.ret = make_ret(Ret::Code::Ok);
 
     return result;
@@ -77,10 +77,10 @@ Ret Mixer::removeChannel(const TrackId id)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    auto search = m_mixerChannels.find(id);
+    auto search = m_trackChannels.find(id);
 
-    if (search != m_mixerChannels.end() && search->second) {
-        m_mixerChannels.erase(id);
+    if (search != m_trackChannels.end() && search->second) {
+        m_trackChannels.erase(id);
         return make_ret(Ret::Code::Ok);
     }
 
@@ -102,7 +102,7 @@ void Mixer::setSampleRate(unsigned int sampleRate)
 
     AbstractAudioSource::setSampleRate(sampleRate);
 
-    for (auto& channel : m_mixerChannels) {
+    for (auto& channel : m_trackChannels) {
         channel.second->setSampleRate(sampleRate);
     }
 }
@@ -133,7 +133,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
 
     std::vector<std::future<std::vector<float> > > futureList;
 
-    for (const auto& pair : m_mixerChannels) {
+    for (const auto& pair : m_trackChannels) {
         MixerChannelPtr channel = pair.second;
         std::future<std::vector<float> > future = TaskScheduler::instance()->submit([this, outBufferSize, samplesPerChannel,
                                                                                      channel]() -> std::vector<float> {
@@ -182,7 +182,7 @@ void Mixer::setIsActive(bool arg)
 
     AbstractAudioSource::setIsActive(arg);
 
-    for (const auto& channel : m_mixerChannels) {
+    for (const auto& channel : m_trackChannels) {
         channel.second->setIsActive(arg);
     }
 }
