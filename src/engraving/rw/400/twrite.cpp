@@ -1092,3 +1092,12 @@ void TWrite::writeProperties(const TextLineBase* l, XmlWriter& xml, WriteContext
     }
     writeProperties(static_cast<const SLine*>(l), xml, ctx);
 }
+
+void TWrite::write(const Groups* g, XmlWriter& xml, WriteContext&)
+{
+    xml.startElement("Groups");
+    for (const GroupNode& n : g->nodes()) {
+        xml.tag("Node", { { "pos", n.pos }, { "action", n.action } });
+    }
+    xml.endElement();
+}
