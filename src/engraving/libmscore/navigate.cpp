@@ -980,7 +980,6 @@ Lyrics* prevLyrics(const Lyrics* lyrics)
     if (!seg) {
         return nullptr;
     }
-    PropertyFlags pFlags = lyrics->propertyFlags(mu::engraving::Pid::PLACEMENT);
     Segment* prevSegment = seg;
     while ((prevSegment = prevSegment->prev1(mu::engraving::SegmentType::ChordRest))) {
         EngravingItem* el = prevSegment->element(currTrack);
