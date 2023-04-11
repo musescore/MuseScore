@@ -58,7 +58,6 @@ private slots:
     void clicked(QTreeWidgetItem*, int);
 
     void changeEvent(QEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
 
 private:

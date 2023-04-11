@@ -25,6 +25,7 @@
 #include <QWindow>
 #include <QTimer>
 #include <QKeyEvent>
+#include <QScreen>
 
 #include "vsttypes.h"
 #include "internal/vstplugin.h"
@@ -54,7 +55,6 @@ AbstractVstEditorView::AbstractVstEditorView(QWidget* parent)
     : TopLevelDialog(parent)
 {
     setAttribute(Qt::WA_NativeWindow);
-    m_scalingFactor = uiConfig()->guiScaling();
 }
 
 AbstractVstEditorView::~AbstractVstEditorView()
@@ -81,13 +81,24 @@ tresult AbstractVstEditorView::resizeView(IPlugView* view, ViewRect* newSize)
 {
     view->checkSizeConstraint(newSize);
 
+    QScreen* screen = this->screen();
+    QSize availableSize = screen->availableSize();
+
+    int newWidth = newSize->getWidth();
+    int newHeight = newSize->getHeight();
+
     //! NOTE: newSize already includes the UI scaling on Windows, so we have to remove it before setting the fixed size.
     //! Otherwise, the user will get an extremely large window and won't be able to resize it
 #ifdef Q_OS_WIN
-    setFixedSize(newSize->getWidth() / m_scalingFactor, newSize->getHeight() / m_scalingFactor);
-#else
-    setFixedSize(newSize->getWidth(), newSize->getHeight());
+    qreal scaling = screen->devicePixelRatio();
+    newWidth = newWidth / scaling;
+    newHeight = newHeight / scaling;
 #endif
+
+    newWidth = std::min(newWidth, availableSize.width());
+    newHeight = std::min(newHeight, availableSize.height());
+
+    setFixedSize(newWidth, newHeight);
 
     view->onSize(newSize);
 
@@ -138,24 +149,33 @@ void AbstractVstEditorView::attachView(VstPluginPtr pluginPtr)
         return;
     }
 
-    FUnknownPtr<IPluginContentScaleHandler> scalingHandler(m_view);
-    if (scalingHandler) {
-        scalingHandler->setContentScaleFactor(m_scalingFactor);
-    }
+    connect(windowHandle(), &QWindow::screenChanged, this, [this](QScreen*) {
+        updateViewGeometry();
+    });
 
     QTimer::singleShot(0, [this]() {
-        setupWindowGeometry();
+        updateViewGeometry();
+        moveViewToMainWindowCenter();
     });
 }
 
-void AbstractVstEditorView::setupWindowGeometry()
+void AbstractVstEditorView::updateViewGeometry()
 {
+    IF_ASSERT_FAILED(m_view) {
+        return;
+    }
+
+#ifdef Q_OS_WIN
+    FUnknownPtr<IPluginContentScaleHandler> scalingHandler(m_view);
+    if (scalingHandler) {
+        scalingHandler->setContentScaleFactor(screen()->devicePixelRatio());
+    }
+#endif
+
     ViewRect size;
     m_view->getSize(&size);
 
     resizeView(m_view, &size);
-
-    moveViewToMainWindowCenter();
 }
 
 void AbstractVstEditorView::moveViewToMainWindowCenter()
@@ -221,6 +241,7 @@ void AbstractVstEditorView::setTrackId(int newTrackId)
     if (m_trackId == newTrackId) {
         return;
     }
+
     m_trackId = newTrackId;
     emit trackIdChanged();
 
@@ -239,6 +260,7 @@ void AbstractVstEditorView::setResourceId(const QString& newResourceId)
     if (m_resourceId == newResourceId) {
         return;
     }
+
     m_resourceId = newResourceId;
     emit resourceIdChanged();
 

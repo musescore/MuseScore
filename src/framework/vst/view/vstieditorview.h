@@ -41,4 +41,4 @@ private:
 
 Q_DECLARE_METATYPE(mu::vst::VstiEditorView)
 
-#endif // VSTIEDITORVIEW_H
+#endif // MU_VST_VSTIEDITORVIEW_H

@@ -72,5 +72,14 @@ bool TopLevelDialog::event(QEvent* e)
     }
 #endif
 
+    if (e->type() == QEvent::ShortcutOverride) {
+        if (QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(e)) {
+            if (keyEvent->key() == Qt::Key_Escape && keyEvent->modifiers() == Qt::NoModifier) {
+                close();
+                return true;
+            }
+        }
+    }
+
     return QDialog::event(e);
 }
