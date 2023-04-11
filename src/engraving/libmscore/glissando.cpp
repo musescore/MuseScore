@@ -83,6 +83,11 @@ GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
 
 void GlissandoSegment::layout()
 {
+    if (pos2().x() <= 0) {
+        setbbox(RectF());
+        return;
+    }
+
     if (staff()) {
         setMag(staff()->staffMag(tick()));
     }
@@ -99,6 +104,11 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;
     using namespace mu::draw;
+
+    if (pos2().x() <= 0) {
+        return;
+    }
+
     painter->save();
     double _spatium = spatium();
 
