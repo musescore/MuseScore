@@ -729,3 +729,60 @@ void TWrite::write(const Fermata* f, XmlWriter& xml, WriteContext& ctx)
     writeItemProperties(f, xml, ctx);
     xml.endElement();
 }
+
+void TWrite::write(const FiguredBass* f, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(f)) {
+        return;
+    }
+
+    xml.startElement(f);
+    if (!f->onNote()) {
+        xml.tag("onNote", f->onNote());
+    }
+    if (f->ticks().isNotZero()) {
+        xml.tagFraction("ticks", f->ticks());
+    }
+    // if unparseable items, write full text data
+    if (f->items().size() < 1) {
+        writeProperties(static_cast<const TextBase*>(f), xml, ctx, true);
+    } else {
+//            if (textStyleType() != StyledPropertyListIdx::FIGURED_BASS)
+//                  // if all items parsed and not unstiled, we simply have a special style: write it
+//                  xml.tag("style", textStyle().name());
+        for (FiguredBassItem* item : f->items()) {
+            write(item, xml, ctx);
+        }
+        for (const StyledProperty& spp : *f->styledProperties()) {
+            writeProperty(f, xml, spp.pid);
+        }
+        writeItemProperties(f, xml, ctx);
+    }
+    xml.endElement();
+}
+
+void TWrite::write(const FiguredBassItem* f, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement("FiguredBassItem", f);
+    xml.tag("brackets", {
+        { "b0", int(f->parenth1()) },
+        { "b1", int(f->parenth2()) },
+        { "b2", int(f->parenth3()) },
+        { "b3", int(f->parenth4()) },
+        { "b4", int(f->parenth5()) }
+    });
+
+    if (f->prefix() != FiguredBassItem::Modifier::NONE) {
+        xml.tag("prefix", int(f->prefix()));
+    }
+    if (f->digit() != FBIDigitNone) {
+        xml.tag("digit", f->digit());
+    }
+    if (f->suffix() != FiguredBassItem::Modifier::NONE) {
+        xml.tag("suffix", int(f->suffix()));
+    }
+    if (f->contLine() != FiguredBassItem::ContLine::NONE) {
+        xml.tag("continuationLine", int(f->contLine()));
+    }
+    xml.endElement();
+}
