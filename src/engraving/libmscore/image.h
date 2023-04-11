@@ -84,6 +84,7 @@ public:
     void setStorePath(const String& p) { _storePath = p; }
     String linkPath() const { return _linkPath; }
     void setLinkPath(const String& p) { _linkPath = p; }
+    bool linkIsValid() const { return _linkIsValid; }
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

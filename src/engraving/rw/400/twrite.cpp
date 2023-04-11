@@ -21,9 +21,12 @@
  */
 #include "twrite.h"
 
+#include "global/io/fileinfo.h"
+
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
 #include "../../style/textstyle.h"
+#include "../../infrastructure/ifileinfoprovider.h"
 
 #include "../../libmscore/score.h"
 #include "../../libmscore/masterscore.h"
@@ -68,6 +71,10 @@
 #include "../../libmscore/hairpin.h"
 #include "../../libmscore/harmony.h"
 #include "../../libmscore/hook.h"
+
+#include "../../libmscore/image.h"
+#include "../../libmscore/imageStore.h"
+#include "../../libmscore/instrchange.h"
 
 #include "../../libmscore/lyrics.h"
 
@@ -1235,4 +1242,66 @@ void TWrite::writeProperties(const BSymbol* s, XmlWriter& xml, WriteContext& ctx
         e->write(xml);
     }
     writeItemProperties(s, xml, ctx);
+}
+
+void TWrite::write(const Image* img, XmlWriter& xml, WriteContext& ctx)
+{
+    // attempt to convert the _linkPath to a path relative to the score
+    //
+    // TODO : on Save As, score()->fileInfo() still contains the old path and fname
+    //          if the Save As path is different, image relative path will be wrong!
+    //
+    String relativeFilePath;
+    if (!img->linkPath().isEmpty() && img->linkIsValid()) {
+        io::FileInfo fi(img->linkPath());
+        // score()->fileInfo()->canonicalPath() would be better
+        // but we are saving under a temp file name and the 'final' file
+        // might not exist yet, so canonicalFilePath() may return only "/"
+        // OTOH, the score 'final' file name is practically always canonical, at this point
+        String scorePath = img->score()->masterScore()->fileInfo()->absoluteDirPath().toString();
+        String imgFPath  = fi.canonicalFilePath();
+        // if imgFPath is in (or below) the directory of scorePath
+        if (imgFPath.startsWith(scorePath, mu::CaseSensitive)) {
+            // relative img path is the part exceeding scorePath
+            imgFPath.remove(0, scorePath.size());
+            if (imgFPath.startsWith(u'/')) {
+                imgFPath.remove(0, 1);
+            }
+            relativeFilePath = imgFPath;
+        }
+        // try 1 level up
+        else {
+            // reduce scorePath by one path level
+            fi = io::FileInfo(scorePath);
+            scorePath = fi.path();
+            // if imgFPath is in (or below) the directory up the score directory
+            if (imgFPath.startsWith(scorePath, mu::CaseSensitive)) {
+                // relative img path is the part exceeding new scorePath plus "../"
+                imgFPath.remove(0, scorePath.size());
+                if (!imgFPath.startsWith(u'/')) {
+                    imgFPath.prepend(u'/');
+                }
+                imgFPath.prepend(u"..");
+                relativeFilePath = imgFPath;
+            }
+        }
+    }
+    // if no match, use full _linkPath
+    if (relativeFilePath.isEmpty()) {
+        relativeFilePath = img->linkPath();
+    }
+
+    xml.startElement(img);
+    writeProperties(static_cast<const BSymbol*>(img), xml, ctx);
+    // keep old "path" tag, for backward compatibility and because it is used elsewhere
+    // (for instance by Box:read(), Measure:read(), Note:read(), ...)
+    xml.tag("path", img->storeItem() ? img->storeItem()->hashName() : relativeFilePath);
+    xml.tag("linkPath", relativeFilePath);
+
+    writeProperty(img, xml, Pid::AUTOSCALE);
+    writeProperty(img, xml, Pid::SIZE);
+    writeProperty(img, xml, Pid::LOCK_ASPECT_RATIO);
+    writeProperty(img, xml, Pid::SIZE_IS_SPATIUM);
+
+    xml.endElement();
 }
