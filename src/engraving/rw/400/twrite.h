@@ -116,6 +116,7 @@ public:
     static void write(const Groups* g, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Hairpin* h, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Harmony* h, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);

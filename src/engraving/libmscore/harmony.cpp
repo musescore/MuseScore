@@ -1944,7 +1944,7 @@ const std::vector<HDegree>& Harmony::degreeList() const
 //   parsedForm
 //---------------------------------------------------------
 
-const ParsedChord* Harmony::parsedForm()
+const ParsedChord* Harmony::parsedForm() const
 {
     if (!_parsedForm) {
         ChordList* cl = score()->chordList();

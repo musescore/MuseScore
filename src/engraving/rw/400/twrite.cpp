@@ -31,6 +31,8 @@
 #include "../../libmscore/linkedobjects.h"
 #include "../../libmscore/mscore.h"
 #include "../../libmscore/staff.h"
+#include "../../libmscore/part.h"
+#include "../../libmscore/utils.h"
 
 #include "../../libmscore/accidental.h"
 #include "../../libmscore/actionicon.h"
@@ -1127,5 +1129,91 @@ void TWrite::write(const Hairpin* h, XmlWriter& xml, WriteContext& ctx)
         }
     }
     writeProperties(static_cast<const SLine*>(h), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const Harmony* h, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(h)) {
+        return;
+    }
+    xml.startElement(h);
+    writeProperty(h, xml, Pid::HARMONY_TYPE);
+    writeProperty(h, xml, Pid::PLAY);
+    if (h->leftParen()) {
+        xml.tag("leftParen");
+    }
+    if (h->rootTpc() != Tpc::TPC_INVALID || h->baseTpc() != Tpc::TPC_INVALID) {
+        int rRootTpc = h->rootTpc();
+        int rBaseTpc = h->baseTpc();
+        if (h->staff()) {
+            // parent can be a fret diagram
+            Segment* segment = h->getParentSeg();
+            Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
+            const Interval& interval = h->part()->instrument(tick)->transpose();
+            if (ctx.clipboardmode() && !h->score()->styleB(Sid::concertPitch) && interval.chromatic) {
+                rRootTpc = transposeTpc(h->rootTpc(), interval, true);
+                rBaseTpc = transposeTpc(h->baseTpc(), interval, true);
+            }
+        }
+        if (rRootTpc != Tpc::TPC_INVALID) {
+            xml.tag("root", rRootTpc);
+            if (h->rootCase() != NoteCaseType::CAPITAL) {
+                xml.tag("rootCase", static_cast<int>(h->rootCase()));
+            }
+        }
+        if (h->id() > 0) {
+            xml.tag("extension", h->id());
+        }
+        // parser uses leading "=" as a hidden specifier for minor
+        // this may or may not currently be incorporated into _textName
+        String writeName = h->hTextName();
+        if (h->parsedForm() && h->parsedForm()->name().startsWith(u'=') && !writeName.startsWith(u'=')) {
+            writeName = u"=" + writeName;
+        }
+        if (!writeName.isEmpty()) {
+            xml.tag("name", writeName);
+        }
+
+        if (rBaseTpc != Tpc::TPC_INVALID) {
+            xml.tag("base", rBaseTpc);
+            if (h->baseCase() != NoteCaseType::CAPITAL) {
+                xml.tag("baseCase", static_cast<int>(h->baseCase()));
+            }
+        }
+        for (const HDegree& hd : h->degreeList()) {
+            HDegreeType tp = hd.type();
+            if (tp == HDegreeType::ADD || tp == HDegreeType::ALTER || tp == HDegreeType::SUBTRACT) {
+                xml.startElement("degree");
+                xml.tag("degree-value", hd.value());
+                xml.tag("degree-alter", hd.alter());
+                switch (tp) {
+                case HDegreeType::ADD:
+                    xml.tag("degree-type", "add");
+                    break;
+                case HDegreeType::ALTER:
+                    xml.tag("degree-type", "alter");
+                    break;
+                case HDegreeType::SUBTRACT:
+                    xml.tag("degree-type", "subtract");
+                    break;
+                default:
+                    break;
+                }
+                xml.endElement();
+            }
+        }
+    } else {
+        xml.tag("name", h->hTextName());
+    }
+    if (!h->hFunction().isEmpty()) {
+        xml.tag("function", h->hFunction());
+    }
+    writeProperties(static_cast<const TextBase*>(h), xml, ctx, false);
+    //Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION
+    //written by the above function call because they are part of element style
+    if (h->rightParen()) {
+        xml.tag("rightParen");
+    }
     xml.endElement();
 }
