@@ -1071,3 +1071,24 @@ void TWrite::writeProperties(const Spanner* s, XmlWriter& xml, WriteContext& ctx
     }
     writeItemProperties(s, xml, ctx);
 }
+
+void TWrite::write(const GradualTempoChange* g, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(g);
+    writeProperty(g, xml, Pid::TEMPO_CHANGE_TYPE);
+    writeProperty(g, xml, Pid::TEMPO_EASING_METHOD);
+    writeProperty(g, xml, Pid::TEMPO_CHANGE_FACTOR);
+    writeProperty(g, xml, Pid::PLACEMENT);
+    writeProperties(static_cast<const TextLineBase*>(g), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const TextLineBase* l, XmlWriter& xml, WriteContext& ctx)
+{
+    for (Pid pid : TextLineBase::textLineBasePropertyIds()) {
+        if (!l->isStyled(pid)) {
+            writeProperty(l, xml, pid);
+        }
+    }
+    writeProperties(static_cast<const SLine*>(l), xml, ctx);
+}

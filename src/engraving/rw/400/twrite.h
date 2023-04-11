@@ -66,6 +66,7 @@ class Groups;
 
 class SLine;
 class Spanner;
+class TextLineBase;
 
 class TextBase;
 }
@@ -107,6 +108,7 @@ public:
     static void write(const FretDiagram* f, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Glissando* g, XmlWriter& xml, WriteContext& ctx);
+    static void write(const GradualTempoChange* g, XmlWriter& xml, WriteContext& ctx);
 
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
     static void writeStyledProperties(const EngravingItem* item, XmlWriter& xml);
@@ -117,13 +119,15 @@ public:
 private:
     static void writeProperties(Box* b, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(HBox* b, XmlWriter& xml, WriteContext& ctx);
-    static void writeProperties(const ChordRest* c, XmlWriter& xml, WriteContext& ctx);
 
+    static void writeProperties(const ChordRest* c, XmlWriter& xml, WriteContext& ctx);
     static void writeChordRestBeam(const ChordRest* c, XmlWriter& xml, WriteContext& ctx);
 
     static void writeProperties(const TextBase* t, XmlWriter& xml, WriteContext& ctx, bool writeText);
+
     static void writeProperties(const SLine* l, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const Spanner* s, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const TextLineBase* l, XmlWriter& xml, WriteContext& ctx);
 };
 }
 
