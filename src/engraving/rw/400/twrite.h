@@ -97,6 +97,12 @@ class NoteLine;
 
 class Ottava;
 
+class Page;
+class PalmMute;
+class Part;
+class Pedal;
+class PlayTechAnnotation;
+
 class Rest;
 
 class SLine;
@@ -178,6 +184,8 @@ public:
     static void write(const NoteLine* n, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Ottava* o, XmlWriter& xml, WriteContext& ctx);
+
+    static void write(const Page* p, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
