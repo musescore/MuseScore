@@ -95,6 +95,8 @@ class NoteEvent;
 class NoteDot;
 class NoteLine;
 
+class Ottava;
+
 class Rest;
 
 class SLine;
@@ -174,6 +176,8 @@ public:
     static void write(const NoteEvent* n, XmlWriter& xml, WriteContext& ctx);
     static void write(const NoteDot* n, XmlWriter& xml, WriteContext& ctx);
     static void write(const NoteLine* n, XmlWriter& xml, WriteContext& ctx);
+
+    static void write(const Ottava* o, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
