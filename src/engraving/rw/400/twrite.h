@@ -115,6 +115,7 @@ class Spacer;
 class StaffState;
 class StaffText;
 class StaffTextBase;
+class StaffType;
 class StaffTypeChange;
 class Stem;
 class StemSlash;
@@ -210,11 +211,12 @@ public:
     static void write(const RehearsalMark* r, XmlWriter& xml, WriteContext& ctx);
     static void write(const Rest* r, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const Segment* s, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Slur* s, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Segment* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Slur* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Spacer* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StaffState* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StaffText* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const StaffType* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StaffTypeChange* item, XmlWriter& xml, WriteContext& ctx);
 
 private:
