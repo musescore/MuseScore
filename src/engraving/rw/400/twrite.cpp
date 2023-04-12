@@ -1401,3 +1401,18 @@ void TWrite::write(const LetRing* l, XmlWriter& xml, WriteContext& ctx)
     writeProperties(static_cast<const TextLineBase*>(l), xml, ctx);
     xml.endElement();
 }
+
+void TWrite::write(const Location* l, XmlWriter& xml, WriteContext&)
+{
+    static constexpr Location relDefaults = Location::relative();
+
+    assert(l->isRelative());
+    xml.startElement("location");
+    xml.tag("staves", l->staff(), relDefaults.staff());
+    xml.tag("voices", l->voice(), relDefaults.voice());
+    xml.tag("measures", l->measure(), relDefaults.measure());
+    xml.tagFraction("fractions", l->frac().reduced(), relDefaults.frac());
+    xml.tag("grace", l->graceIndex(), relDefaults.graceIndex());
+    xml.tag("notes", l->note(), relDefaults.note());
+    xml.endElement();
+}
