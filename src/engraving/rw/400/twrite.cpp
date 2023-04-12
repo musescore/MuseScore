@@ -1560,3 +1560,10 @@ void TWrite::write(const NoteEvent* n, XmlWriter& xml, WriteContext&)
     xml.tag("len", n->len(), NoteEvent::NOTE_LENGTH);
     xml.endElement();
 }
+
+void TWrite::write(const NoteDot* n, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(n);
+    writeItemProperties(n, xml, ctx);
+    xml.endElement();
+}
