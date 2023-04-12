@@ -1952,3 +1952,13 @@ void TWrite::write(const StemSlash* item, XmlWriter& xml, WriteContext& ctx)
     writeItemProperties(item, xml, ctx);
     xml.endElement();
 }
+
+void TWrite::write(const Sticking* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
+    xml.endElement();
+}
