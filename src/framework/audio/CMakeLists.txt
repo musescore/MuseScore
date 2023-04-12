@@ -183,6 +183,8 @@ set(MODULE_SRC
     # fx
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/musefxresolver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/musefxresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/allpassdispersion.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/allpassmodulateddelay.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/circularsamplebuffer.h

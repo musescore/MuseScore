@@ -103,6 +103,7 @@ enum class AudioResourceType {
     Undefined = -1,
     FluidSoundfont,
     VstPlugin,
+    MusePlugin,
     MuseSamplerSoundPack,
     SoundTrack,
 };
@@ -157,6 +158,19 @@ struct AudioResourceMeta {
 using AudioResourceMetaList = std::vector<AudioResourceMeta>;
 using AudioResourceMetaSet = std::set<AudioResourceMeta>;
 
+static const AudioResourceId MUSE_REVERB_ID("Muse Reverb");
+
+inline AudioResourceMeta makeReverbMeta()
+{
+    AudioResourceMeta meta;
+    meta.id = MUSE_REVERB_ID;
+    meta.type = AudioResourceType::MusePlugin;
+    meta.vendor = "Muse";
+    meta.hasNativeEditorSupport = true;
+
+    return meta;
+}
+
 enum class AudioPluginType {
     Undefined = -1,
     Instrument,
@@ -189,7 +203,8 @@ inline AudioPluginType audioPluginTypeFromCategoriesString(const std::string& ca
 
 enum class AudioFxType {
     Undefined = -1,
-    VstFx
+    VstFx,
+    MuseFx,
 };
 
 enum class AudioFxCategory {
@@ -218,8 +233,14 @@ struct AudioFxParams {
     {
         switch (resourceMeta.type) {
         case AudioResourceType::VstPlugin: return AudioFxType::VstFx;
-        default: return AudioFxType::Undefined;
+        case AudioResourceType::MusePlugin: return AudioFxType::MuseFx;
+        case AudioResourceType::FluidSoundfont:
+        case AudioResourceType::MuseSamplerSoundPack:
+        case AudioResourceType::SoundTrack:
+        case AudioResourceType::Undefined: break;
         }
+
+        return AudioFxType::Undefined;
     }
 
     AudioFxCategories categories;
