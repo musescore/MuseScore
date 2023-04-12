@@ -1651,3 +1651,28 @@ void TWrite::write(const Part* p, XmlWriter& xml, WriteContext&)
 
     xml.endElement();
 }
+
+void TWrite::write(const Pedal* p, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(p)) {
+        return;
+    }
+    xml.startElement(p);
+
+    for (auto i : {
+        Pid::END_HOOK_TYPE,
+        Pid::BEGIN_TEXT,
+        Pid::CONTINUE_TEXT,
+        Pid::END_TEXT,
+        Pid::LINE_VISIBLE,
+        Pid::BEGIN_HOOK_TYPE
+    }) {
+        writeProperty(p, xml, i);
+    }
+    for (const StyledProperty& spp : *p->styledProperties()) {
+        writeProperty(p, xml, spp.pid);
+    }
+
+    writeProperties(static_cast<const SLine*>(p), xml, ctx);
+    xml.endElement();
+}
