@@ -1471,3 +1471,13 @@ void TWrite::writeProperties(const Rest* r, XmlWriter& xml, WriteContext& ctx)
 {
     writeProperties(static_cast<const ChordRest*>(r), xml, ctx);
 }
+
+void TWrite::write(const MMRest* m, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement("Rest"); // for compatibility, see also Measure::readVoice()
+    writeProperties(static_cast<const ChordRest*>(m), xml, ctx);
+    writeProperty(m, xml, Pid::MMREST_NUMBER_POS);
+    writeProperty(m, xml, Pid::MMREST_NUMBER_VISIBLE);
+    m->el().write(xml);
+    xml.endElement();
+}

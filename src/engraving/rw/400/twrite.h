@@ -157,6 +157,7 @@ public:
     static void write(const Marker* m, XmlWriter& xml, WriteContext& ctx);
     static void write(const MeasureNumber* m, XmlWriter& xml, WriteContext& ctx);
     static void write(const MeasureRepeat* m, XmlWriter& xml, WriteContext& ctx);
+    static void write(const MMRest* m, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
