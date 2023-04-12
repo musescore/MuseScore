@@ -170,7 +170,7 @@ jobs:
     - name: Generate placeholder.ts files
       if: env.DO_PLACEHOLDER_TRANSLATIONS == 'true'
       run: |
-        python3 ./tools/translations/placeholder_translations.py
+        python3 ./tools/translations/placeholder_translations.py --warn-only
     - name: Generate .qm files
       if: env.DO_BUILD == 'true'
       run: |

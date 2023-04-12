@@ -3385,7 +3385,8 @@ String Note::accessibleInfo() const
         int on = _playEvents[0].ontime();
         int off = _playEvents[0].offtime();
         if (on != 0 || off != NoteEvent::NOTE_LENGTH) {
-            onofftime = mtrc("engraving", " (on %1‰ off %2‰)").arg(on, off);
+            //: Note-on and note-off times relative to note duration, expressed in thousandths (per mille)
+            onofftime = u" " + mtrc("engraving", "(on %1‰ off %2‰)").arg(on, off);
         }
     }
 
