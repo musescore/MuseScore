@@ -112,6 +112,7 @@
 #include "../../libmscore/spacer.h"
 #include "../../libmscore/staffstate.h"
 #include "../../libmscore/stafftext.h"
+#include "../../libmscore/stafftype.h"
 #include "../../libmscore/stafftypechange.h"
 #include "../../libmscore/stem.h"
 #include "../../libmscore/stemslash.h"
@@ -1734,34 +1735,34 @@ void TWrite::write(const Rest* r, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(const Segment* s, XmlWriter& xml, WriteContext&)
+void TWrite::write(const Segment* item, XmlWriter& xml, WriteContext&)
 {
-    if (s->written()) {
+    if (item->written()) {
         return;
     }
-    s->setWritten(true);
-    if (s->extraLeadingSpace().isZero()) {
+    item->setWritten(true);
+    if (item->extraLeadingSpace().isZero()) {
         return;
     }
-    xml.startElement(s);
-    xml.tag("leadingSpace", s->extraLeadingSpace().val());
+    xml.startElement(item);
+    xml.tag("leadingSpace", item->extraLeadingSpace().val());
     xml.endElement();
 }
 
-void TWrite::write(const Slur* s, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Slur* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (s->broken()) {
+    if (item->broken()) {
         LOGD("broken slur not written");
         return;
     }
-    if (!ctx.canWrite(s)) {
+    if (!ctx.canWrite(item)) {
         return;
     }
-    xml.startElement(s);
+    xml.startElement(item);
     if (ctx.clipboardmode()) {
-        xml.tag("stemArr", Slur::calcStemArrangement(s->startElement(), s->endElement()));
+        xml.tag("stemArr", Slur::calcStemArrangement(item->startElement(), item->endElement()));
     }
-    writeProperties(static_cast<const SlurTie*>(s), xml, ctx);
+    writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
     xml.endElement();
 }
 
@@ -1844,11 +1845,93 @@ void TWrite::write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
+void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement("StaffType", { { "group", TConv::toXml(item->group()) } });
+    if (!item->xmlName().isEmpty()) {
+        xml.tag("name", item->xmlName());
+    }
+    if (item->lines() != 5) {
+        xml.tag("lines", item->lines());
+    }
+    if (item->lineDistance().val() != 1.0) {
+        xml.tag("lineDistance", item->lineDistance().val());
+    }
+    if (item->yoffset().val() != 0.0) {
+        xml.tag("yoffset", item->yoffset().val());
+    }
+    if (item->userMag() != 1.0) {
+        xml.tag("mag", item->userMag());
+    }
+    if (item->isSmall()) {
+        xml.tag("small", item->isSmall());
+    }
+    if (item->stepOffset()) {
+        xml.tag("stepOffset", item->stepOffset());
+    }
+    if (!item->genClef()) {
+        xml.tag("clef", item->genClef());
+    }
+    if (item->stemless()) {
+        xml.tag("slashStyle", item->stemless());     // for backwards compatibility
+        xml.tag("stemless", item->stemless());
+    }
+    if (!item->showBarlines()) {
+        xml.tag("barlines", item->showBarlines());
+    }
+    if (!item->genTimesig()) {
+        xml.tag("timesig", item->genTimesig());
+    }
+    if (item->invisible()) {
+        xml.tag("invisible", item->invisible());
+    }
+    if (item->color() != engravingConfiguration()->defaultColor()) {
+        xml.tag("color", item->color().toString().c_str());
+    }
+    if (item->group() == StaffGroup::STANDARD) {
+        xml.tag("noteheadScheme", TConv::toXml(item->noteHeadScheme()), TConv::toXml(NoteHeadScheme::HEAD_NORMAL));
+    }
+    if (item->group() == StaffGroup::STANDARD || item->group() == StaffGroup::PERCUSSION) {
+        if (!item->genKeysig()) {
+            xml.tag("keysig", item->genKeysig());
+        }
+        if (!item->showLedgerLines()) {
+            xml.tag("ledgerlines", item->showLedgerLines());
+        }
+    } else {
+        xml.tag("durations",        item->genDurations());
+        xml.tag("durationFontName", item->durationFontName());     // write font names anyway for backward compatibility
+        xml.tag("durationFontSize", item->durationFontSize());
+        xml.tag("durationFontY",    item->durationFontUserY());
+        xml.tag("fretFontName",     item->fretFontName());
+        xml.tag("fretFontSize",     item->fretFontSize());
+        xml.tag("fretFontY",        item->fretFontUserY());
+        if (item->symRepeat() != TablatureSymbolRepeat::NEVER) {
+            xml.tag("symbolRepeat", int(item->symRepeat()));
+        }
+        xml.tag("linesThrough",     item->linesThrough());
+        xml.tag("minimStyle",       int(item->minimStyle()));
+        xml.tag("onLines",          item->onLines());
+        xml.tag("showRests",        item->showRests());
+        xml.tag("stemsDown",        item->stemsDown());
+        xml.tag("stemsThrough",     item->stemThrough());
+        xml.tag("upsideDown",       item->upsideDown());
+        xml.tag("showTabFingering", item->showTabFingering(), false);
+        xml.tag("useNumbers",       item->useNumbers());
+        // only output "showBackTied" if different from !"stemless"
+        // to match the behaviour in 2.0.2 scores (or older)
+        if (item->showBackTied() != !item->stemless()) {
+            xml.tag("showBackTied",  item->showBackTied());
+        }
+    }
+    xml.endElement();
+}
+
 void TWrite::write(const StaffTypeChange* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
     if (item->staffType()) {
-        item->staffType()->write(xml);
+        write(item->staffType(), xml, ctx);
     }
     writeItemProperties(item, xml, ctx);
     xml.endElement();
