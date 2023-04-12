@@ -75,6 +75,12 @@ class Jump;
 
 class KeySig;
 
+class LayoutBreak;
+class LedgerLine;
+class LetRing;
+class Location;
+class Lyrics;
+
 class SLine;
 class Spanner;
 class TextLineBase;
@@ -134,6 +140,8 @@ public:
     static void write(const Jump* j, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const KeySig* k, XmlWriter& xml, WriteContext& ctx);
+
+    static void write(const LayoutBreak* l, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);

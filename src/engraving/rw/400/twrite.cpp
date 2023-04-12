@@ -80,6 +80,10 @@
 
 #include "../../libmscore/keysig.h"
 
+#include "../../libmscore/layoutbreak.h"
+#include "../../libmscore/ledgerline.h"
+#include "../../libmscore/letring.h"
+#include "../../libmscore/location.h"
 #include "../../libmscore/lyrics.h"
 
 #include "../../libmscore/note.h"
@@ -1361,5 +1365,18 @@ void TWrite::write(const KeySig* k, XmlWriter& xml, WriteContext& ctx)
     if (k->forInstrumentChange()) {
         xml.tag("forInstrumentChange", true);
     }
+    xml.endElement();
+}
+
+void TWrite::write(const LayoutBreak* l, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(l);
+    writeItemProperties(l, xml, ctx);
+
+    for (auto id :
+         { Pid::LAYOUT_BREAK, Pid::PAUSE, Pid::START_WITH_LONG_NAMES, Pid::START_WITH_MEASURE_ONE, Pid::FIRST_SYSTEM_INDENTATION }) {
+        writeProperty(l, xml, id);
+    }
+
     xml.endElement();
 }
