@@ -1775,3 +1775,12 @@ void TWrite::writeProperties(const SlurTie* s, XmlWriter& xml, WriteContext& ctx
     writeProperty(s, xml, Pid::SLUR_DIRECTION);
     writeProperty(s, xml, Pid::SLUR_STYLE_TYPE);
 }
+
+void TWrite::write(const Spacer* s, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(s);
+    xml.tag("subtype", int(s->spacerType()));
+    writeItemProperties(s, xml, ctx);
+    xml.tag("space", s->gap().val() / s->spatium());
+    xml.endElement();
+}
