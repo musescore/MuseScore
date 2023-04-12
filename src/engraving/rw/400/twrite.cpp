@@ -1945,3 +1945,10 @@ void TWrite::write(const Stem* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::LINE_WIDTH);
     xml.endElement();
 }
+
+void TWrite::write(const StemSlash* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeItemProperties(item, xml, ctx);
+    xml.endElement();
+}
