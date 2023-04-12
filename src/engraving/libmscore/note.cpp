@@ -62,6 +62,7 @@
 #include "spanner.h"
 #include "staff.h"
 #include "stafftype.h"
+#include "stretchedbend.h"
 #include "stringdata.h"
 #include "tie.h"
 #include "tremolo.h"
@@ -2422,7 +2423,7 @@ void Note::layout2()
             if (f->layoutType() == ElementType::NOTE) {
                 f->layout();
             }
-        } else {
+        } else if (!e->isStretchedBend()) {
             e->setMag(mag());
             e->layout();
         }
@@ -3914,7 +3915,7 @@ Shape Note::shape() const
     }
     for (auto e : _el) {
         if (e->addToSkyline()) {
-            if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
+            if (e->isStretchedBend() || e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
                 continue;
             }
             shape.add(e->bbox().translated(e->pos()), e);
