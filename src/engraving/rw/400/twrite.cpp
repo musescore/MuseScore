@@ -1391,3 +1391,13 @@ void TWrite::write(const LedgerLine* l, XmlWriter& xml, WriteContext&)
     }
     xml.endElement();
 }
+
+void TWrite::write(const LetRing* l, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(l)) {
+        return;
+    }
+    xml.startElement(l);
+    writeProperties(static_cast<const TextLineBase*>(l), xml, ctx);
+    xml.endElement();
+}

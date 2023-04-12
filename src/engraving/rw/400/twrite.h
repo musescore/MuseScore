@@ -143,6 +143,7 @@ public:
 
     static void write(const LayoutBreak* l, XmlWriter& xml, WriteContext& ctx);
     static void write(const LedgerLine* l, XmlWriter& xml, WriteContext& ctx);
+    static void write(const LetRing* l, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
