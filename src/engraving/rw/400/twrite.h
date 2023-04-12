@@ -193,6 +193,7 @@ public:
     static void write(const PlayTechAnnotation* p, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const RehearsalMark* r, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Rest* r, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
