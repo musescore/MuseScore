@@ -1610,3 +1610,13 @@ void TWrite::write(const Page* p, XmlWriter& xml, WriteContext&)
     }
     xml.endElement();
 }
+
+void TWrite::write(const PalmMute* p, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(p)) {
+        return;
+    }
+    xml.startElement(p);
+    writeProperties(static_cast<const TextLineBase*>(p), xml, ctx);
+    xml.endElement();
+}

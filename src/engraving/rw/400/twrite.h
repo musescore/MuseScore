@@ -186,6 +186,7 @@ public:
     static void write(const Ottava* o, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Page* p, XmlWriter& xml, WriteContext& ctx);
+    static void write(const PalmMute* p, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
