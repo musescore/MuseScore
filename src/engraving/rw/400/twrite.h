@@ -106,9 +106,22 @@ class PlayTechAnnotation;
 class RehearsalMark;
 class Rest;
 
+class Segment;
+class Slur;
 class SLine;
 class Spanner;
+class Spacer;
+class StaffState;
+class StaffText;
+class StaffTypeChange;
+class Stem;
+class StemSlash;
+class Sticking;
+class Symbol;
 class BSymbol;
+class System;
+class SystemDivider;
+class SystemText;
 
 class TextLineBase;
 class TextBase;
@@ -194,6 +207,8 @@ public:
 
     static void write(const RehearsalMark* r, XmlWriter& xml, WriteContext& ctx);
     static void write(const Rest* r, XmlWriter& xml, WriteContext& ctx);
+
+    static void write(const Segment* s, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
