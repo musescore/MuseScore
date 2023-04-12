@@ -171,6 +171,7 @@ public:
     static void write(const MMRestRange* m, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Note* n, XmlWriter& xml, WriteContext& ctx);
+    static void write(const NoteEvent* n, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);

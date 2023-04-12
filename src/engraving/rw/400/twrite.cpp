@@ -1526,7 +1526,7 @@ void TWrite::write(const Note* n, XmlWriter& xml, WriteContext& ctx)
     if ((n->chord() == 0 || n->chord()->playEventType() != PlayEventType::Auto) && !n->playEvents().empty()) {
         xml.startElement("Events");
         for (const NoteEvent& e : n->playEvents()) {
-            e.write(xml);
+            write(&e, xml, ctx);
         }
         xml.endElement();
     }
@@ -1549,5 +1549,14 @@ void TWrite::write(const Note* n, XmlWriter& xml, WriteContext& ctx)
         }
     }
 
+    xml.endElement();
+}
+
+void TWrite::write(const NoteEvent* n, XmlWriter& xml, WriteContext&)
+{
+    xml.startElement("Event");
+    xml.tag("pitch", n->pitch(), 0);
+    xml.tag("ontime", n->ontime(), 0);
+    xml.tag("len", n->len(), NoteEvent::NOTE_LENGTH);
     xml.endElement();
 }
