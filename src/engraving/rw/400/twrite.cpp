@@ -1447,3 +1447,13 @@ void TWrite::write(const Marker* m, XmlWriter& xml, WriteContext& ctx)
     xml.tag("label", m->label());
     xml.endElement();
 }
+
+void TWrite::write(const MeasureNumber* m, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(m)) {
+        return;
+    }
+    xml.startElement(m);
+    writeProperties(static_cast<const TextBase*>(m), xml, ctx, true);
+    xml.endElement();
+}
