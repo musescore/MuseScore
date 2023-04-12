@@ -1380,3 +1380,14 @@ void TWrite::write(const LayoutBreak* l, XmlWriter& xml, WriteContext& ctx)
 
     xml.endElement();
 }
+
+void TWrite::write(const LedgerLine* l, XmlWriter& xml, WriteContext&)
+{
+    xml.startElement(l);
+    xml.tag("lineWidth", l->width() / l->spatium());
+    xml.tag("lineLen", l->len() / l->spatium());
+    if (!l->vertical()) {
+        xml.tag("vertical", l->vertical());
+    }
+    xml.endElement();
+}
