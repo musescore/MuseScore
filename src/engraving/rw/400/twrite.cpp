@@ -1676,3 +1676,11 @@ void TWrite::write(const Pedal* p, XmlWriter& xml, WriteContext& ctx)
     writeProperties(static_cast<const SLine*>(p), xml, ctx);
     xml.endElement();
 }
+
+void TWrite::write(const PlayTechAnnotation* p, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(p);
+    writeProperty(p, xml, Pid::PLAY_TECH_TYPE);
+    writeProperties(static_cast<const TextBase*>(p), xml, ctx, true);
+    xml.endElement();
+}
