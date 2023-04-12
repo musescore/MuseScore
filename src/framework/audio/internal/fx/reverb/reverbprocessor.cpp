@@ -232,7 +232,8 @@ struct ReverbProcessor::impl
     int modCounter = 0;
 };
 
-ReverbProcessor::ReverbProcessor()
+ReverbProcessor::ReverbProcessor(const AudioFxParams& params, audioch_t audioChannelsCount)
+    : m_params(params)
 {
     d = simd::aligned_new<impl>(64);
 
@@ -285,11 +286,78 @@ ReverbProcessor::ReverbProcessor()
     setParameter(Params::Quality, getParameter(Params::Quality));
     setParameter(Params::PreDelayMs, getParameter(Params::PreDelayMs));
     setParameter(Params::FeedbackTop, getParameter(Params::FeedbackTop));
+
+    setFormat(audioChannelsCount, 44100.0 /*sampleRate*/, 512 /*maximumBlockSize*/);
 }
 
 ReverbProcessor::~ReverbProcessor()
 {
     simd::aligned_delete(d);
+    deleteSignalBuffers();
+}
+
+AudioFxType ReverbProcessor::type() const
+{
+    return AudioFxType::MuseFx;
+}
+
+const AudioFxParams& ReverbProcessor::params() const
+{
+    return m_params;
+}
+
+async::Channel<audio::AudioFxParams> ReverbProcessor::paramsChanged() const
+{
+    return m_paramsChanged;
+}
+
+void ReverbProcessor::setSampleRate(unsigned int sampleRate)
+{
+    if (m_processor._sampleRate == sampleRate) {
+        return;
+    }
+
+    setFormat(m_processor._audioChannelsCount, sampleRate, m_processor._blockSize);
+}
+
+bool ReverbProcessor::active() const
+{
+    return m_params.active;
+}
+
+void ReverbProcessor::setActive(bool active)
+{
+    m_params.active = active;
+}
+
+void ReverbProcessor::process(float* buffer, unsigned int sampleCount)
+{
+    if (m_processor._blockSize != static_cast<int>(sampleCount)) {
+        setFormat(m_processor._audioChannelsCount, m_processor._sampleRate, sampleCount);
+    }
+
+    for (samples_t sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
+        for (audioch_t audioChannelIndex = 0; audioChannelIndex < m_processor._audioChannelsCount; ++audioChannelIndex) {
+            m_signalBuffers[audioChannelIndex][sampleIndex] = buffer[sampleIndex * m_processor._audioChannelsCount + audioChannelIndex];
+        }
+    }
+
+    switch (m_delays) {
+    case 24: _processLines<24>(m_signalBuffers, sampleCount);
+        break;
+    case 16: _processLines<16>(m_signalBuffers, sampleCount);
+        break;
+    case 12: _processLines<12>(m_signalBuffers, sampleCount);
+        break;
+    default: _processLines<8>(m_signalBuffers, sampleCount);
+        break;
+    }
+
+    for (samples_t sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
+        for (audioch_t audioChannelIndex = 0; audioChannelIndex < m_processor._audioChannelsCount; ++audioChannelIndex) {
+            buffer[sampleIndex * m_processor._audioChannelsCount + audioChannelIndex] = m_signalBuffers[audioChannelIndex][sampleIndex];
+        }
+    }
 }
 
 void ReverbProcessor::getParameterInfo(int32_t index, ParameterInfo& info)
@@ -454,19 +522,28 @@ void ReverbProcessor::setParameter(int32_t index, float newValue)
     }
 }
 
-bool ReverbProcessor::setFormat(int32_t numInputChannels, int32_t numOutputChannels, double sampleRate,
-                                int32_t maximumBlockSize)
+bool ReverbProcessor::setFormat(audioch_t audioChannelsCount, double sampleRate, int32_t maximumBlockSize)
 {
-    // format check
-    if (numInputChannels != numOutputChannels) {
-        return false;
-    }
-    if (numInputChannels <= 0 || numInputChannels > 2) {
+    IF_ASSERT_FAILED(audioChannelsCount > 0 && audioChannelsCount <= 2) {
         return false;
     }
 
+    if (m_signalBuffers) {
+        if (audioChannelsCount > m_processor._audioChannelsCount
+            || maximumBlockSize > m_processor._blockSize) {
+            deleteSignalBuffers();
+        }
+    }
+
     // Store base information
-    m_processor.setFormat(numInputChannels, numOutputChannels, sampleRate, maximumBlockSize);
+    m_processor.setFormat(audioChannelsCount, sampleRate, maximumBlockSize);
+
+    if (!m_signalBuffers) {
+        m_signalBuffers = new float*[m_processor._audioChannelsCount];
+        for (audioch_t i = 0; i < m_processor._audioChannelsCount; ++i) {
+            m_signalBuffers[i] = new float[maximumBlockSize];
+        }
+    }
 
     d->work_buffer.setSize(2, maximumBlockSize);
     d->er_buffer.setSize(2, maximumBlockSize);
@@ -518,6 +595,16 @@ bool ReverbProcessor::setFormat(int32_t numInputChannels, int32_t numOutputChann
     return true;
 }
 
+void ReverbProcessor::deleteSignalBuffers()
+{
+    for (audioch_t i = 0; i < m_processor._audioChannelsCount; ++i) {
+        delete[] m_signalBuffers[i];
+    }
+
+    delete[] m_signalBuffers;
+    m_signalBuffers = nullptr;
+}
+
 void ReverbProcessor::reset()
 {
     d->disp_ap.reset();
@@ -545,20 +632,6 @@ void ReverbProcessor::reset()
     d->er_gain_smooth.setToTarget();
 }
 
-void ReverbProcessor::process(float** signalPtr, int32_t numSamples)
-{
-    switch (m_delays) {
-    case 24: _processLines<24>(signalPtr, numSamples);
-        break;
-    case 16: _processLines<16>(signalPtr, numSamples);
-        break;
-    case 12: _processLines<12>(signalPtr, numSamples);
-        break;
-    default: _processLines<8>(signalPtr, numSamples);
-        break;
-    }
-}
-
 template<int num_lines>
 void ReverbProcessor::_processLines(float** signalPtr, int32_t numSamples)
 {
@@ -572,8 +645,8 @@ void ReverbProcessor::_processLines(float** signalPtr, int32_t numSamples)
     auto** late_ptr = d->late_buffer.getPtrs();
 
     // handle mono by using the same buffer twice
-    float* signal_in[] = { signalPtr[0], m_processor._numInputChannels == 2 ? signalPtr[1] : signalPtr[0] };
-    float* signal_out[] = { signalPtr[0], m_processor._numOutputChannels == 2 ? signalPtr[1] : signalPtr[0] };
+    float* signal_in[] = { signalPtr[0], m_processor._audioChannelsCount == 2 ? signalPtr[1] : signalPtr[0] };
+    float* signal_out[] = { signalPtr[0], m_processor._audioChannelsCount == 2 ? signalPtr[1] : signalPtr[0] };
 
     // pre-delay, dispersion and velvet-input
     d->work_buffer.assignSamples(0, signal_in[0]);
@@ -748,14 +821,12 @@ void ReverbProcessor::Processor::setupParameter(int index, const std::string& na
     _param[index].currentValue = initialValue;
 }
 
-bool ReverbProcessor::Processor::setFormat(int32_t numInputChannels, int32_t numOutputChannels, double sampleRate,
-                                           int32_t maximumBlockSize)
+bool ReverbProcessor::Processor::setFormat(audioch_t audioChannelsCount, double sampleRate, int32_t maximumBlockSize)
 {
     assert(sampleRate > 0.0);
     _sampleRate = sampleRate;
     _sampleT = 1.0 / _sampleRate;
-    _numInputChannels = numInputChannels;
-    _numOutputChannels = numOutputChannels;
+    _audioChannelsCount = audioChannelsCount;
     _blockSize = maximumBlockSize;
     return true;
 }

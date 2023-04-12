@@ -22,17 +22,18 @@
 
 #include "musefxresolver.h"
 
+#include "reverb/reverbprocessor.h"
+
 #include "log.h"
 
 using namespace mu::audio;
 using namespace mu::audio::fx;
 
 namespace mu::audio::fx {
-IFxProcessorPtr createFxProcessor(const AudioResourceId& resourceId)
+IFxProcessorPtr createFxProcessor(const AudioFxParams& fxParams)
 {
-    if (resourceId == MUSE_REVERB_ID) {
-        NOT_IMPLEMENTED;
-        return nullptr;
+    if (fxParams.resourceMeta.id == MUSE_REVERB_ID) {
+        return std::make_shared<ReverbProcessor>(fxParams);
     }
 
     return nullptr;
@@ -49,10 +50,10 @@ AudioResourceMetaList MuseFxResolver::resolveResources() const
 
 IFxProcessorPtr MuseFxResolver::createMasterFx(const AudioFxParams& fxParams) const
 {
-    return createFxProcessor(fxParams.resourceMeta.id);
+    return createFxProcessor(fxParams);
 }
 
 IFxProcessorPtr MuseFxResolver::createTrackFx(const TrackId, const AudioFxParams& fxParams) const
 {
-    return createFxProcessor(fxParams.resourceMeta.id);
+    return createFxProcessor(fxParams);
 }
