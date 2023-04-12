@@ -224,30 +224,31 @@ public:
     static void write(const Symbol* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const System* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const SystemDivider* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const SystemText* item, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
     static void writeStyledProperties(const EngravingItem* item, XmlWriter& xml);
 
     static void writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx);
-    static void writeBoxProperties(const Box* b, XmlWriter& xml, WriteContext& ctx);
+    static void writeBoxProperties(const Box* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void writeProperties(const Box* b, XmlWriter& xml, WriteContext& ctx);
-    static void writeProperties(const HBox* b, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const HBox* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void writeProperties(const ChordRest* c, XmlWriter& xml, WriteContext& ctx);
-    static void writeChordRestBeam(const ChordRest* c, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const ChordRest* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeChordRestBeam(const ChordRest* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void writeProperties(const Rest* r, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const Rest* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const StaffTextBase* s, XmlWriter& xml, WriteContext& ctx);
-    static void writeProperties(const SlurTie* s, XmlWriter& xml, WriteContext& ctx);
-    static void writeProperties(const SLine* l, XmlWriter& xml, WriteContext& ctx);
-    static void writeProperties(const Spanner* s, XmlWriter& xml, WriteContext& ctx);
-    static void writeProperties(const BSymbol* s, XmlWriter& xml, WriteContext& ctx);
+    static void write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const SlurTie* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const SLine* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const Spanner* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const BSymbol* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void writeProperties(const TextLineBase* l, XmlWriter& xml, WriteContext& ctx);
-    static void writeProperties(const TextBase* t, XmlWriter& xml, WriteContext& ctx, bool writeText);
+    static void writeProperties(const TextLineBase* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const TextBase* item, XmlWriter& xml, WriteContext& ctx, bool writeText);
 };
 }
 
