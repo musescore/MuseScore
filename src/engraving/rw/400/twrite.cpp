@@ -1795,3 +1795,51 @@ void TWrite::write(const StaffState* s, XmlWriter& xml, WriteContext& ctx)
     writeItemProperties(s, xml, ctx);
     xml.endElement();
 }
+
+void TWrite::write(const StaffText* s, XmlWriter& xml, WriteContext& ctx)
+{
+    write(static_cast<const StaffTextBase*>(s), xml, ctx);
+}
+
+void TWrite::write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+
+    for (const ChannelActions& s : item->channelActions()) {
+        int channel = s.channel;
+        for (const String& name : s.midiActionNames) {
+            xml.tag("MidiAction", { { "channel", channel }, { "name", name } });
+        }
+    }
+    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+        if (!item->channelName(voice).isEmpty()) {
+            xml.tag("channelSwitch", { { "voice", voice }, { "name", item->channelName(voice) } });
+        }
+    }
+    if (item->setAeolusStops()) {
+        for (int i = 0; i < 4; ++i) {
+            xml.tag("aeolus", { { "group", i } }, item->aeolusStop(i));
+        }
+    }
+    if (item->swing()) {
+        DurationType swingUnit;
+        if (item->swingParameters().swingUnit == Constants::division / 2) {
+            swingUnit = DurationType::V_EIGHTH;
+        } else if (item->swingParameters().swingUnit == Constants::division / 4) {
+            swingUnit = DurationType::V_16TH;
+        } else {
+            swingUnit = DurationType::V_ZERO;
+        }
+        int swingRatio = item->swingParameters().swingRatio;
+        xml.tag("swing", { { "unit", TConv::toXml(swingUnit) }, { "ratio", swingRatio } });
+    }
+    if (item->capo() != 0) {
+        xml.tag("capo", { { "fretId", item->capo() } });
+    }
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
+
+    xml.endElement();
+}
