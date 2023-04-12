@@ -1936,3 +1936,12 @@ void TWrite::write(const StaffTypeChange* item, XmlWriter& xml, WriteContext& ct
     writeItemProperties(item, xml, ctx);
     xml.endElement();
 }
+
+void TWrite::write(const Stem* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeItemProperties(item, xml, ctx);
+    writeProperty(item, xml, Pid::USER_LEN);
+    writeProperty(item, xml, Pid::LINE_WIDTH);
+    xml.endElement();
+}
