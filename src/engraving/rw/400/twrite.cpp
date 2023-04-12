@@ -1697,3 +1697,29 @@ void TWrite::write(const RehearsalMark* r, XmlWriter& xml, WriteContext& ctx)
     writeProperties(static_cast<const TextBase*>(r), xml, ctx, true);
     xml.endElement();
 }
+
+void TWrite::write(const Rest* r, XmlWriter& xml, WriteContext& ctx)
+{
+    if (r->isGap()) {
+        return;
+    }
+    writeChordRestBeam(r, xml, ctx);
+    xml.startElement(r);
+    writeStyledProperties(r, xml);
+    writeProperties(static_cast<const ChordRest*>(r), xml, ctx);
+    r->el().write(xml);
+    bool write_dots = false;
+    for (NoteDot* dot : r->dotList()) {
+        if (!dot->offset().isNull() || !dot->visible() || dot->color() != engravingConfiguration()->defaultColor()
+            || dot->visible() != r->visible()) {
+            write_dots = true;
+            break;
+        }
+    }
+    if (write_dots) {
+        for (NoteDot* dot: r->dotList()) {
+            write(dot, xml, ctx);
+        }
+    }
+    xml.endElement();
+}
