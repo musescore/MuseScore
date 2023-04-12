@@ -1975,14 +1975,21 @@ void TWrite::write(const Symbol* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(const System* item, XmlWriter& xml, WriteContext&)
+void TWrite::write(const System* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
     if (item->systemDividerLeft() && item->systemDividerLeft()->isUserModified()) {
-        item->systemDividerLeft()->write(xml);
+        write(item->systemDividerLeft(), xml, ctx);
     }
     if (item->systemDividerRight() && item->systemDividerRight()->isUserModified()) {
-        item->systemDividerRight()->write(xml);
+        write(item->systemDividerRight(), xml, ctx);
     }
+    xml.endElement();
+}
+
+void TWrite::write(const SystemDivider* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item, { { "type", (item->dividerType() == SystemDivider::Type::LEFT ? "left" : "right") } });
+    writeProperties(static_cast<const BSymbol*>(item), xml, ctx);
     xml.endElement();
 }
