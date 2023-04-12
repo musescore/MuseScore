@@ -71,6 +71,8 @@ class Hook;
 class Image;
 class InstrumentChange;
 
+class Jump;
+
 class SLine;
 class Spanner;
 class TextLineBase;
@@ -126,6 +128,8 @@ public:
 
     static void write(const Image* i, XmlWriter& xml, WriteContext& ctx);
     static void write(const InstrumentChange* i, XmlWriter& xml, WriteContext& ctx);
+
+    static void write(const Jump* j, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
