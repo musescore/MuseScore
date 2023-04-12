@@ -107,10 +107,20 @@
 #include "../../libmscore/rehearsalmark.h"
 #include "../../libmscore/rest.h"
 
+#include "../../libmscore/segment.h"
 #include "../../libmscore/slur.h"
+#include "../../libmscore/spacer.h"
+#include "../../libmscore/staffstate.h"
+#include "../../libmscore/stafftext.h"
+#include "../../libmscore/stafftypechange.h"
 #include "../../libmscore/stem.h"
 #include "../../libmscore/stemslash.h"
+#include "../../libmscore/sticking.h"
+#include "../../libmscore/symbol.h"
+#include "../../libmscore/bsymbol.h"
 #include "../../libmscore/system.h"
+#include "../../libmscore/systemdivider.h"
+#include "../../libmscore/systemtext.h"
 
 #include "../../libmscore/tie.h"
 #include "../../libmscore/text.h"
@@ -1721,5 +1731,19 @@ void TWrite::write(const Rest* r, XmlWriter& xml, WriteContext& ctx)
             write(dot, xml, ctx);
         }
     }
+    xml.endElement();
+}
+
+void TWrite::write(const Segment* s, XmlWriter& xml, WriteContext&)
+{
+    if (s->written()) {
+        return;
+    }
+    s->setWritten(true);
+    if (s->extraLeadingSpace().isZero()) {
+        return;
+    }
+    xml.startElement(s);
+    xml.tag("leadingSpace", s->extraLeadingSpace().val());
     xml.endElement();
 }
