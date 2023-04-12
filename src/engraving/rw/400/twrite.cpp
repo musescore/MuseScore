@@ -1620,3 +1620,34 @@ void TWrite::write(const PalmMute* p, XmlWriter& xml, WriteContext& ctx)
     writeProperties(static_cast<const TextLineBase*>(p), xml, ctx);
     xml.endElement();
 }
+
+void TWrite::write(const Part* p, XmlWriter& xml, WriteContext&)
+{
+    xml.startElement(p, { { "id", p->id().toUint64() } });
+
+    for (const Staff* staff : p->staves()) {
+        staff->write(xml);
+    }
+
+    if (!p->show()) {
+        xml.tag("show", p->show());
+    }
+
+    if (p->soloist()) {
+        xml.tag("soloist", p->soloist());
+    }
+
+    xml.tag("trackName", p->partName());
+
+    if (p->color() != Part::DEFAULT_COLOR) {
+        xml.tag("color", p->color());
+    }
+
+    if (p->preferSharpFlat() != PreferSharpFlat::DEFAULT) {
+        xml.tag("preferSharpFlat", p->preferSharpFlat() == PreferSharpFlat::SHARPS ? "sharps" : "flats");
+    }
+
+    p->instrument()->write(xml, p);
+
+    xml.endElement();
+}
