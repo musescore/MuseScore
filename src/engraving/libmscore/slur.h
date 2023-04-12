@@ -122,6 +122,8 @@ public:
     const StemFloated& stemFloated() const { return _stemFloated; }
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
+
+    static int calcStemArrangement(EngravingItem* start, EngravingItem* end);
 };
 } // namespace mu::engraving
 #endif
