@@ -1567,3 +1567,13 @@ void TWrite::write(const NoteDot* n, XmlWriter& xml, WriteContext& ctx)
     writeItemProperties(n, xml, ctx);
     xml.endElement();
 }
+
+void TWrite::write(const NoteLine* n, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(n)) {
+        return;
+    }
+    xml.startElement(n);
+    writeProperties(static_cast<const TextLineBase*>(n), xml, ctx);
+    xml.endElement();
+}
