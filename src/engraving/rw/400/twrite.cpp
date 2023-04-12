@@ -93,11 +93,14 @@
 #include "../../libmscore/mmrestrange.h"
 
 #include "../../libmscore/note.h"
+#include "../../libmscore/notedot.h"
+#include "../../libmscore/noteline.h"
 
 #include "../../libmscore/slur.h"
 #include "../../libmscore/stem.h"
 #include "../../libmscore/stemslash.h"
 
+#include "../../libmscore/tie.h"
 #include "../../libmscore/text.h"
 #include "../../libmscore/textbase.h"
 #include "../../libmscore/chordtextlinebase.h"
@@ -1479,5 +1482,72 @@ void TWrite::write(const MMRest* m, XmlWriter& xml, WriteContext& ctx)
     writeProperty(m, xml, Pid::MMREST_NUMBER_POS);
     writeProperty(m, xml, Pid::MMREST_NUMBER_VISIBLE);
     m->el().write(xml);
+    xml.endElement();
+}
+
+void TWrite::write(const MMRestRange* m, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(m)) {
+        return;
+    }
+    xml.startElement(m);
+    writeProperties(static_cast<const TextBase*>(m), xml, ctx, true);
+    xml.endElement();
+}
+
+void TWrite::write(const Note* n, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(n);
+    writeItemProperties(n, xml, ctx);
+
+    if (n->accidental()) {
+        write(n->accidental(), xml, ctx);
+    }
+    n->el().write(xml);
+    bool write_dots = false;
+    for (NoteDot* dot : n->dots()) {
+        if (!dot->offset().isNull() || !dot->visible() || dot->color() != engravingConfiguration()->defaultColor()
+            || dot->visible() != n->visible()) {
+            write_dots = true;
+            break;
+        }
+    }
+    if (write_dots) {
+        for (NoteDot* dot : n->dots()) {
+            dot->write(xml);
+        }
+    }
+    if (n->tieFor()) {
+        n->tieFor()->writeSpannerStart(xml, n, n->track());
+    }
+    if (n->tieBack()) {
+        n->tieBack()->writeSpannerEnd(xml, n, n->track());
+    }
+    if ((n->chord() == 0 || n->chord()->playEventType() != PlayEventType::Auto) && !n->playEvents().empty()) {
+        xml.startElement("Events");
+        for (const NoteEvent& e : n->playEvents()) {
+            e.write(xml);
+        }
+        xml.endElement();
+    }
+    for (Pid id : { Pid::PITCH, Pid::TPC1, Pid::TPC2, Pid::SMALL, Pid::MIRROR_HEAD, Pid::DOT_POSITION,
+                    Pid::HEAD_SCHEME, Pid::HEAD_GROUP, Pid::USER_VELOCITY, Pid::PLAY, Pid::TUNING, Pid::FRET, Pid::STRING,
+                    Pid::GHOST, Pid::DEAD, Pid::HEAD_TYPE, Pid::FIXED, Pid::FIXED_LINE }) {
+        writeProperty(n, xml, id);
+    }
+
+    for (Spanner* e : n->spannerFor()) {
+        e->writeSpannerStart(xml, n, n->track());
+    }
+    for (Spanner* e : n->spannerBack()) {
+        e->writeSpannerEnd(xml, n, n->track());
+    }
+
+    for (EngravingItem* e : n->chord()->el()) {
+        if (e->isChordLine() && toChordLine(e)->note() && toChordLine(e)->note() == n) {
+            toChordLine(e)->write(xml);
+        }
+    }
+
     xml.endElement();
 }

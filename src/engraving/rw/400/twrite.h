@@ -24,6 +24,9 @@
 
 #include "../../libmscore/property.h"
 
+#include "global/modularity/ioc.h"
+#include "../../iengravingconfiguration.h"
+
 namespace mu::engraving {
 class XmlWriter;
 class WriteContext;
@@ -87,6 +90,11 @@ class MeasureRepeat;
 class MMRest;
 class MMRestRange;
 
+class Note;
+class NoteEvent;
+class NoteDot;
+class NoteLine;
+
 class Rest;
 
 class SLine;
@@ -100,6 +108,8 @@ class TextBase;
 namespace mu::engraving::rw400 {
 class TWrite
 {
+    INJECT_STATIC(engraving, IEngravingConfiguration, engravingConfiguration)
+
 public:
     TWrite() = default;
 
@@ -158,6 +168,9 @@ public:
     static void write(const MeasureNumber* m, XmlWriter& xml, WriteContext& ctx);
     static void write(const MeasureRepeat* m, XmlWriter& xml, WriteContext& ctx);
     static void write(const MMRest* m, XmlWriter& xml, WriteContext& ctx);
+    static void write(const MMRestRange* m, XmlWriter& xml, WriteContext& ctx);
+
+    static void write(const Note* n, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
