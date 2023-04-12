@@ -96,6 +96,8 @@
 #include "../../libmscore/notedot.h"
 #include "../../libmscore/noteline.h"
 
+#include "../../libmscore/ottava.h"
+
 #include "../../libmscore/slur.h"
 #include "../../libmscore/stem.h"
 #include "../../libmscore/stemslash.h"
@@ -1575,5 +1577,20 @@ void TWrite::write(const NoteLine* n, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(n);
     writeProperties(static_cast<const TextLineBase*>(n), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const Ottava* o, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(o)) {
+        return;
+    }
+    xml.startElement(o);
+    writeProperty(o, xml, Pid::OTTAVA_TYPE);
+    writeProperty(o, xml, Pid::PLACEMENT);
+    writeProperty(o, xml, Pid::NUMBERS_ONLY);
+//      for (const StyledProperty& spp : *styledProperties())
+//            writeProperty(xml, spp.pid);
+    writeProperties(static_cast<const TextLineBase*>(o), xml, ctx);
     xml.endElement();
 }
