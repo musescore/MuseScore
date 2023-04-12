@@ -1416,3 +1416,20 @@ void TWrite::write(const Location* l, XmlWriter& xml, WriteContext&)
     xml.tag("notes", l->note(), relDefaults.note());
     xml.endElement();
 }
+
+void TWrite::write(const Lyrics* l, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(l)) {
+        return;
+    }
+    xml.startElement(l);
+    writeProperty(l, xml, Pid::VERSE);
+    if (l->syllabic() != LyricsSyllabic::SINGLE) {
+        xml.tag("syllabic", TConv::toXml(l->syllabic()));
+    }
+    xml.tag("ticks", l->ticks().ticks(), 0);   // pre-3.1 compatibility: write integer ticks under <ticks> tag
+    writeProperty(l, xml, Pid::LYRIC_TICKS);
+
+    writeProperties(static_cast<const TextBase*>(l), xml, ctx, true);
+    xml.endElement();
+}
