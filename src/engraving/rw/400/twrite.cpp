@@ -76,6 +76,8 @@
 #include "../../libmscore/imageStore.h"
 #include "../../libmscore/instrchange.h"
 
+#include "../../libmscore/jump.h"
+
 #include "../../libmscore/lyrics.h"
 
 #include "../../libmscore/note.h"
@@ -1314,5 +1316,16 @@ void TWrite::write(const InstrumentChange* ich, XmlWriter& xml, WriteContext& ct
         xml.tag("init", ich->init());
     }
     writeProperties(static_cast<const TextBase*>(ich), xml, ctx, true);
+    xml.endElement();
+}
+
+void TWrite::write(const Jump* j, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(j);
+    writeProperties(static_cast<const TextBase*>(j), xml, ctx, true);
+    xml.tag("jumpTo", j->jumpTo());
+    xml.tag("playUntil", j->playUntil());
+    xml.tag("continueAt", j->continueAt());
+    writeProperty(j, xml, Pid::PLAY_REPEATS);
     xml.endElement();
 }
