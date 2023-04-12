@@ -23,6 +23,7 @@
 
 #include "global/io/fileinfo.h"
 
+#include "../../iengravingfont.h"
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
 #include "../../style/textstyle.h"
@@ -283,7 +284,7 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
     }
 }
 
-void TWrite::write(Accidental* a, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Accidental* a, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(a);
     writeProperty(a, xml, Pid::ACCIDENTAL_BRACKET);
@@ -294,7 +295,7 @@ void TWrite::write(Accidental* a, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(ActionIcon* a, XmlWriter& xml, WriteContext&)
+void TWrite::write(const ActionIcon* a, XmlWriter& xml, WriteContext&)
 {
     xml.startElement(a);
     xml.tag("subtype", int(a->actionType()));
@@ -304,7 +305,7 @@ void TWrite::write(ActionIcon* a, XmlWriter& xml, WriteContext&)
     xml.endElement();
 }
 
-void TWrite::write(Ambitus* a, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Ambitus* a, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(a);
     xml.tagProperty(Pid::HEAD_GROUP, int(a->noteHeadGroup()), int(Ambitus::NOTEHEADGROUP_DEFAULT));
@@ -330,7 +331,7 @@ void TWrite::write(Ambitus* a, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(Arpeggio* a, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Arpeggio* a, XmlWriter& xml, WriteContext& ctx)
 {
     if (!ctx.canWrite(a)) {
         return;
@@ -378,14 +379,14 @@ void TWrite::write(const Articulation* a, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(BagpipeEmbellishment* b, XmlWriter& xml, WriteContext&)
+void TWrite::write(const BagpipeEmbellishment* b, XmlWriter& xml, WriteContext&)
 {
     xml.startElement(b);
     xml.tag("subtype", TConv::toXml(b->embelType()));
     xml.endElement();
 }
 
-void TWrite::write(BarLine* b, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const BarLine* b, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(b);
 
@@ -401,7 +402,7 @@ void TWrite::write(BarLine* b, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(Beam* b, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Beam* b, XmlWriter& xml, WriteContext& ctx)
 {
     if (b->elements().empty()) {
         return;
@@ -438,7 +439,7 @@ void TWrite::write(Beam* b, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(Bend* b, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Bend* b, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(b);
     for (const PitchValue& v : b->points()) {
@@ -450,22 +451,22 @@ void TWrite::write(Bend* b, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(Box* b, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Box* b, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(b);
     writeBoxProperties(b, xml, ctx);
     xml.endElement();
 }
 
-void TWrite::writeBoxProperties(Box* b, XmlWriter& xml, WriteContext& ctx)
+void TWrite::writeBoxProperties(const Box* b, XmlWriter& xml, WriteContext& ctx)
 {
     if (b->isHBox()) {
-        return writeProperties(dynamic_cast<HBox*>(b), xml, ctx);
+        return writeProperties(dynamic_cast<const HBox*>(b), xml, ctx);
     }
     return writeProperties(b, xml, ctx);
 }
 
-void TWrite::writeProperties(Box* b, XmlWriter& xml, WriteContext& ctx)
+void TWrite::writeProperties(const Box* b, XmlWriter& xml, WriteContext& ctx)
 {
     for (Pid id : {
         Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
@@ -478,38 +479,38 @@ void TWrite::writeProperties(Box* b, XmlWriter& xml, WriteContext& ctx)
     }
 }
 
-void TWrite::write(HBox* b, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const HBox* b, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(b);
     writeProperties(b, xml, ctx);
     xml.endElement();
 }
 
-void TWrite::writeProperties(HBox* b, XmlWriter& xml, WriteContext& ctx)
+void TWrite::writeProperties(const HBox* b, XmlWriter& xml, WriteContext& ctx)
 {
     writeProperty(b, xml, Pid::CREATE_SYSTEM_HEADER);
-    writeProperties(static_cast<Box*>(b), xml, ctx);
+    writeProperties(static_cast<const Box*>(b), xml, ctx);
 }
 
-void TWrite::write(VBox* b, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const VBox* b, XmlWriter& xml, WriteContext& ctx)
 {
-    write(static_cast<Box*>(b), xml, ctx);
+    write(static_cast<const Box*>(b), xml, ctx);
 }
 
-void TWrite::write(FBox* b, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const FBox* b, XmlWriter& xml, WriteContext& ctx)
 {
-    write(static_cast<Box*>(b), xml, ctx);
+    write(static_cast<const Box*>(b), xml, ctx);
 }
 
-void TWrite::write(TBox* b, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const TBox* b, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(b);
-    writeProperties(static_cast<Box*>(b), xml, ctx);
+    writeProperties(static_cast<const Box*>(b), xml, ctx);
     b->text()->write(xml);
     xml.endElement();
 }
 
-void TWrite::write(Bracket* b, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Bracket* b, XmlWriter& xml, WriteContext& ctx)
 {
     bool isStartTag = false;
     switch (b->bracketItem()->bracketType()) {
@@ -540,7 +541,7 @@ void TWrite::write(Bracket* b, XmlWriter& xml, WriteContext& ctx)
     }
 }
 
-void TWrite::write(Breath* b, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Breath* b, XmlWriter& xml, WriteContext& ctx)
 {
     if (!ctx.canWrite(b)) {
         return;
@@ -1601,77 +1602,77 @@ void TWrite::write(const NoteLine* n, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(const Ottava* o, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Ottava* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (!ctx.canWrite(o)) {
+    if (!ctx.canWrite(item)) {
         return;
     }
-    xml.startElement(o);
-    writeProperty(o, xml, Pid::OTTAVA_TYPE);
-    writeProperty(o, xml, Pid::PLACEMENT);
-    writeProperty(o, xml, Pid::NUMBERS_ONLY);
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::OTTAVA_TYPE);
+    writeProperty(item, xml, Pid::PLACEMENT);
+    writeProperty(item, xml, Pid::NUMBERS_ONLY);
 //      for (const StyledProperty& spp : *styledProperties())
 //            writeProperty(xml, spp.pid);
-    writeProperties(static_cast<const TextLineBase*>(o), xml, ctx);
+    writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
 
-void TWrite::write(const Page* p, XmlWriter& xml, WriteContext&)
+void TWrite::write(const Page* item, XmlWriter& xml, WriteContext&)
 {
-    xml.startElement(p);
-    for (System* system : p->systems()) {
+    xml.startElement(item);
+    for (System* system : item->systems()) {
         system->write(xml);
     }
     xml.endElement();
 }
 
-void TWrite::write(const PalmMute* p, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const PalmMute* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (!ctx.canWrite(p)) {
+    if (!ctx.canWrite(item)) {
         return;
     }
-    xml.startElement(p);
-    writeProperties(static_cast<const TextLineBase*>(p), xml, ctx);
+    xml.startElement(item);
+    writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
 
-void TWrite::write(const Part* p, XmlWriter& xml, WriteContext&)
+void TWrite::write(const Part* item, XmlWriter& xml, WriteContext&)
 {
-    xml.startElement(p, { { "id", p->id().toUint64() } });
+    xml.startElement(item, { { "id", item->id().toUint64() } });
 
-    for (const Staff* staff : p->staves()) {
+    for (const Staff* staff : item->staves()) {
         staff->write(xml);
     }
 
-    if (!p->show()) {
-        xml.tag("show", p->show());
+    if (!item->show()) {
+        xml.tag("show", item->show());
     }
 
-    if (p->soloist()) {
-        xml.tag("soloist", p->soloist());
+    if (item->soloist()) {
+        xml.tag("soloist", item->soloist());
     }
 
-    xml.tag("trackName", p->partName());
+    xml.tag("trackName", item->partName());
 
-    if (p->color() != Part::DEFAULT_COLOR) {
-        xml.tag("color", p->color());
+    if (item->color() != Part::DEFAULT_COLOR) {
+        xml.tag("color", item->color());
     }
 
-    if (p->preferSharpFlat() != PreferSharpFlat::DEFAULT) {
-        xml.tag("preferSharpFlat", p->preferSharpFlat() == PreferSharpFlat::SHARPS ? "sharps" : "flats");
+    if (item->preferSharpFlat() != PreferSharpFlat::DEFAULT) {
+        xml.tag("preferSharpFlat", item->preferSharpFlat() == PreferSharpFlat::SHARPS ? "sharps" : "flats");
     }
 
-    p->instrument()->write(xml, p);
+    item->instrument()->write(xml, item);
 
     xml.endElement();
 }
 
-void TWrite::write(const Pedal* p, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Pedal* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (!ctx.canWrite(p)) {
+    if (!ctx.canWrite(item)) {
         return;
     }
-    xml.startElement(p);
+    xml.startElement(item);
 
     for (auto i : {
         Pid::END_HOOK_TYPE,
@@ -1681,54 +1682,54 @@ void TWrite::write(const Pedal* p, XmlWriter& xml, WriteContext& ctx)
         Pid::LINE_VISIBLE,
         Pid::BEGIN_HOOK_TYPE
     }) {
-        writeProperty(p, xml, i);
+        writeProperty(item, xml, i);
     }
-    for (const StyledProperty& spp : *p->styledProperties()) {
-        writeProperty(p, xml, spp.pid);
+    for (const StyledProperty& spp : *item->styledProperties()) {
+        writeProperty(item, xml, spp.pid);
     }
 
-    writeProperties(static_cast<const SLine*>(p), xml, ctx);
+    writeProperties(static_cast<const SLine*>(item), xml, ctx);
     xml.endElement();
 }
 
-void TWrite::write(const PlayTechAnnotation* p, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const PlayTechAnnotation* item, XmlWriter& xml, WriteContext& ctx)
 {
-    xml.startElement(p);
-    writeProperty(p, xml, Pid::PLAY_TECH_TYPE);
-    writeProperties(static_cast<const TextBase*>(p), xml, ctx, true);
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::PLAY_TECH_TYPE);
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
 
-void TWrite::write(const RehearsalMark* r, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const RehearsalMark* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (!ctx.canWrite(r)) {
+    if (!ctx.canWrite(item)) {
         return;
     }
-    xml.startElement(r);
-    writeProperties(static_cast<const TextBase*>(r), xml, ctx, true);
+    xml.startElement(item);
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
 
-void TWrite::write(const Rest* r, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Rest* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (r->isGap()) {
+    if (item->isGap()) {
         return;
     }
-    writeChordRestBeam(r, xml, ctx);
-    xml.startElement(r);
-    writeStyledProperties(r, xml);
-    writeProperties(static_cast<const ChordRest*>(r), xml, ctx);
-    r->el().write(xml);
+    writeChordRestBeam(item, xml, ctx);
+    xml.startElement(item);
+    writeStyledProperties(item, xml);
+    writeProperties(static_cast<const ChordRest*>(item), xml, ctx);
+    item->el().write(xml);
     bool write_dots = false;
-    for (NoteDot* dot : r->dotList()) {
+    for (NoteDot* dot : item->dotList()) {
         if (!dot->offset().isNull() || !dot->visible() || dot->color() != engravingConfiguration()->defaultColor()
-            || dot->visible() != r->visible()) {
+            || dot->visible() != item->visible()) {
             write_dots = true;
             break;
         }
     }
     if (write_dots) {
-        for (NoteDot* dot: r->dotList()) {
+        for (NoteDot* dot: item->dotList()) {
             write(dot, xml, ctx);
         }
     }
@@ -1845,7 +1846,7 @@ void TWrite::write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext&)
 {
     xml.startElement("StaffType", { { "group", TConv::toXml(item->group()) } });
     if (!item->xmlName().isEmpty()) {
@@ -1960,5 +1961,16 @@ void TWrite::write(const Sticking* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
+    xml.endElement();
+}
+
+void TWrite::write(const Symbol* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    xml.tag("name", SymNames::nameForSymId(item->sym()));
+    if (item->scoreFont()) {
+        xml.tag("font", item->scoreFont()->name());
+    }
+    writeProperties(static_cast<const BSymbol*>(item), xml, ctx);
     xml.endElement();
 }
