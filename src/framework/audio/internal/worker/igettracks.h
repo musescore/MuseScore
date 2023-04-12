@@ -35,7 +35,7 @@ public:
     virtual ~IGetTracks() = default;
 
     virtual TrackPtr track(const TrackId id) const = 0;
-    virtual TracksMap allTracks() const = 0;
+    virtual const TracksMap& allTracks() const = 0;
 
     virtual async::Channel<TrackPtr> trackAboutToBeAdded() const = 0;
     virtual async::Channel<TrackPtr> trackAboutToBeRemoved() const = 0;

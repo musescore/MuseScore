@@ -45,6 +45,7 @@ using volume_db_t = float;
 using volume_dbfs_t = float;
 using gain_t = float;
 using balance_t = float;
+using audio_signal_amount_t = float;
 
 using TrackSequenceId = int32_t;
 using TrackSequenceIdList = std::vector<TrackSequenceId>;
@@ -255,17 +256,31 @@ struct AudioFxParams {
 
 using AudioFxChain = std::map<AudioFxChainOrder, AudioFxParams>;
 
+struct AuxSendParams {
+    audio_signal_amount_t signalAmount = 0.f; // [0; 1]
+    bool active = false;
+
+    bool operator ==(const AuxSendParams& other) const
+    {
+        return RealIsEqual(signalAmount, other.signalAmount) && active == other.active;
+    }
+};
+
+using AuxSendsParams = std::map<TrackId, AuxSendParams>;
+
 struct AudioOutputParams {
     AudioFxChain fxChain;
     volume_db_t volume = 0.f;
     balance_t balance = 0.f;
+    AuxSendsParams auxSends;
     bool muted = false;
 
     bool operator ==(const AudioOutputParams& other) const
     {
         return fxChain == other.fxChain
-               && volume == other.volume
-               && balance == other.balance
+               && RealIsEqual(volume, other.volume)
+               && RealIsEqual(balance, other.balance)
+               && auxSends == other.auxSends
                && muted == other.muted;
     }
 };
