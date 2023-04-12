@@ -173,6 +173,7 @@ public:
     static void write(const Note* n, XmlWriter& xml, WriteContext& ctx);
     static void write(const NoteEvent* n, XmlWriter& xml, WriteContext& ctx);
     static void write(const NoteDot* n, XmlWriter& xml, WriteContext& ctx);
+    static void write(const NoteLine* n, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
