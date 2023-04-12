@@ -1776,29 +1776,29 @@ void TWrite::writeProperties(const SlurTie* s, XmlWriter& xml, WriteContext& ctx
     writeProperty(s, xml, Pid::SLUR_STYLE_TYPE);
 }
 
-void TWrite::write(const Spacer* s, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const Spacer* item, XmlWriter& xml, WriteContext& ctx)
 {
-    xml.startElement(s);
-    xml.tag("subtype", int(s->spacerType()));
-    writeItemProperties(s, xml, ctx);
-    xml.tag("space", s->gap().val() / s->spatium());
+    xml.startElement(item);
+    xml.tag("subtype", int(item->spacerType()));
+    writeItemProperties(item, xml, ctx);
+    xml.tag("space", item->gap().val() / item->spatium());
     xml.endElement();
 }
 
-void TWrite::write(const StaffState* s, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const StaffState* item, XmlWriter& xml, WriteContext& ctx)
 {
-    xml.startElement(s);
-    xml.tag("subtype", int(s->staffStateType()));
-    if (s->staffStateType() == StaffStateType::INSTRUMENT) {
-        s->instrument()->write(xml, nullptr);
+    xml.startElement(item);
+    xml.tag("subtype", int(item->staffStateType()));
+    if (item->staffStateType() == StaffStateType::INSTRUMENT) {
+        item->instrument()->write(xml, nullptr);
     }
-    writeItemProperties(s, xml, ctx);
+    writeItemProperties(item, xml, ctx);
     xml.endElement();
 }
 
-void TWrite::write(const StaffText* s, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const StaffText* item, XmlWriter& xml, WriteContext& ctx)
 {
-    write(static_cast<const StaffTextBase*>(s), xml, ctx);
+    write(static_cast<const StaffTextBase*>(item), xml, ctx);
 }
 
 void TWrite::write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
@@ -1841,5 +1841,15 @@ void TWrite::write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
     }
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
 
+    xml.endElement();
+}
+
+void TWrite::write(const StaffTypeChange* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    if (item->staffType()) {
+        item->staffType()->write(xml);
+    }
+    writeItemProperties(item, xml, ctx);
     xml.endElement();
 }

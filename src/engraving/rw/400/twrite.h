@@ -212,9 +212,10 @@ public:
 
     static void write(const Segment* s, XmlWriter& xml, WriteContext& ctx);
     static void write(const Slur* s, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Spacer* s, XmlWriter& xml, WriteContext& ctx);
-    static void write(const StaffState* s, XmlWriter& xml, WriteContext& ctx);
-    static void write(const StaffText* s, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Spacer* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const StaffState* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const StaffText* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const StaffTypeChange* item, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
