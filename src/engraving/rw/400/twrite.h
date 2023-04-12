@@ -83,17 +83,17 @@ class Lyrics;
 
 class Marker;
 class MeasureNumber;
-class MeasureNumberBase;
 class MeasureRepeat;
 class MMRest;
 class MMRestRange;
 
+class Rest;
+
 class SLine;
 class Spanner;
-class TextLineBase;
-
 class BSymbol;
 
+class TextLineBase;
 class TextBase;
 }
 
@@ -156,6 +156,7 @@ public:
 
     static void write(const Marker* m, XmlWriter& xml, WriteContext& ctx);
     static void write(const MeasureNumber* m, XmlWriter& xml, WriteContext& ctx);
+    static void write(const MeasureRepeat* m, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
@@ -170,13 +171,14 @@ private:
     static void writeProperties(const ChordRest* c, XmlWriter& xml, WriteContext& ctx);
     static void writeChordRestBeam(const ChordRest* c, XmlWriter& xml, WriteContext& ctx);
 
-    static void writeProperties(const TextBase* t, XmlWriter& xml, WriteContext& ctx, bool writeText);
+    static void writeProperties(const Rest* r, XmlWriter& xml, WriteContext& ctx);
 
     static void writeProperties(const SLine* l, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const Spanner* s, XmlWriter& xml, WriteContext& ctx);
-    static void writeProperties(const TextLineBase* l, XmlWriter& xml, WriteContext& ctx);
-
     static void writeProperties(const BSymbol* s, XmlWriter& xml, WriteContext& ctx);
+
+    static void writeProperties(const TextLineBase* l, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const TextBase* t, XmlWriter& xml, WriteContext& ctx, bool writeText);
 };
 }
 

@@ -1457,3 +1457,17 @@ void TWrite::write(const MeasureNumber* m, XmlWriter& xml, WriteContext& ctx)
     writeProperties(static_cast<const TextBase*>(m), xml, ctx, true);
     xml.endElement();
 }
+
+void TWrite::write(const MeasureRepeat* m, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(m);
+    writeProperty(m, xml, Pid::SUBTYPE);
+    writeProperties(static_cast<const Rest*>(m), xml, ctx);
+    m->el().write(xml);
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const Rest* r, XmlWriter& xml, WriteContext& ctx)
+{
+    writeProperties(static_cast<const ChordRest*>(r), xml, ctx);
+}
