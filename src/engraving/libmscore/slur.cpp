@@ -1463,7 +1463,7 @@ Slur::Slur(EngravingItem* parent)
 //   calcStemArrangement
 //---------------------------------------------------------
 
-int calcStemArrangement(EngravingItem* start, EngravingItem* end)
+int Slur::calcStemArrangement(EngravingItem* start, EngravingItem* end)
 {
     return (start && start->isChord() && toChord(start)->stem() && toChord(start)->stem()->up() ? 2 : 0)
            + (end && end->isChord() && toChord(end)->stem() && toChord(end)->stem()->up() ? 4 : 0);

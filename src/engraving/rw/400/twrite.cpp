@@ -1747,3 +1747,31 @@ void TWrite::write(const Segment* s, XmlWriter& xml, WriteContext&)
     xml.tag("leadingSpace", s->extraLeadingSpace().val());
     xml.endElement();
 }
+
+void TWrite::write(const Slur* s, XmlWriter& xml, WriteContext& ctx)
+{
+    if (s->broken()) {
+        LOGD("broken slur not written");
+        return;
+    }
+    if (!ctx.canWrite(s)) {
+        return;
+    }
+    xml.startElement(s);
+    if (ctx.clipboardmode()) {
+        xml.tag("stemArr", Slur::calcStemArrangement(s->startElement(), s->endElement()));
+    }
+    writeProperties(static_cast<const SlurTie*>(s), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const SlurTie* s, XmlWriter& xml, WriteContext& ctx)
+{
+    writeProperties(static_cast<const Spanner*>(s), xml, ctx);
+    int idx = 0;
+    for (const SpannerSegment* ss : s->spannerSegments()) {
+        ((SlurTieSegment*)ss)->writeSlur(xml, idx++);
+    }
+    writeProperty(s, xml, Pid::SLUR_DIRECTION);
+    writeProperty(s, xml, Pid::SLUR_STYLE_TYPE);
+}

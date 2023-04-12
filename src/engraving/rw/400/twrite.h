@@ -108,6 +108,7 @@ class Rest;
 
 class Segment;
 class Slur;
+class SlurTie;
 class SLine;
 class Spanner;
 class Spacer;
@@ -209,6 +210,7 @@ public:
     static void write(const Rest* r, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Segment* s, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Slur* s, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
@@ -225,6 +227,7 @@ private:
 
     static void writeProperties(const Rest* r, XmlWriter& xml, WriteContext& ctx);
 
+    static void writeProperties(const SlurTie* s, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const SLine* l, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const Spanner* s, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const BSymbol* s, XmlWriter& xml, WriteContext& ctx);
