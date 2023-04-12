@@ -78,6 +78,8 @@
 
 #include "../../libmscore/jump.h"
 
+#include "../../libmscore/keysig.h"
+
 #include "../../libmscore/lyrics.h"
 
 #include "../../libmscore/note.h"
@@ -1327,5 +1329,37 @@ void TWrite::write(const Jump* j, XmlWriter& xml, WriteContext& ctx)
     xml.tag("playUntil", j->playUntil());
     xml.tag("continueAt", j->continueAt());
     writeProperty(j, xml, Pid::PLAY_REPEATS);
+    xml.endElement();
+}
+
+void TWrite::write(const KeySig* k, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(k);
+    writeItemProperties(k, xml, ctx);
+    if (k->isAtonal()) {
+        xml.tag("custom", 1);
+    } else if (k->isCustom()) {
+        xml.tag("accidental", int(k->key()));
+        xml.tag("custom", 1);
+        for (const CustDef& cd : k->customKeyDefs()) {
+            xml.startElement("CustDef");
+            xml.tag("sym", SymNames::nameForSymId(cd.sym));
+            xml.tag("def", { { "degree", cd.degree }, { "xAlt", cd.xAlt }, { "octAlt", cd.octAlt } });
+            xml.endElement();
+        }
+    } else {
+        xml.tag("accidental", int(k->key()));
+    }
+
+    if (k->mode() != KeyMode::UNKNOWN) {
+        xml.tag("mode", TConv::toXml(k->mode()));
+    }
+
+    if (!k->showCourtesy()) {
+        xml.tag("showCourtesySig", k->showCourtesy());
+    }
+    if (k->forInstrumentChange()) {
+        xml.tag("forInstrumentChange", true);
+    }
     xml.endElement();
 }
