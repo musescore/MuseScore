@@ -71,6 +71,7 @@ public:
     void write(XmlWriter&) const override;
     //@ returns the key of the key signature (from -7 (flats) to +7 (sharps) )
     Key key() const { return _sig.key(); }
+    const std::vector<CustDef>& customKeyDefs() const { return _sig.customKeyDefs(); }
     bool isCustom() const { return _sig.custom(); }
     bool isAtonal() const { return _sig.isAtonal(); }
     bool isChange() const;
