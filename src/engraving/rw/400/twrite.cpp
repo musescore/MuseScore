@@ -98,9 +98,16 @@
 
 #include "../../libmscore/ottava.h"
 
+#include "../../libmscore/page.h"
+#include "../../libmscore/palmmute.h"
+#include "../../libmscore/part.h"
+#include "../../libmscore/pedal.h"
+#include "../../libmscore/playtechannotation.h"
+
 #include "../../libmscore/slur.h"
 #include "../../libmscore/stem.h"
 #include "../../libmscore/stemslash.h"
+#include "../../libmscore/system.h"
 
 #include "../../libmscore/tie.h"
 #include "../../libmscore/text.h"
@@ -1592,5 +1599,14 @@ void TWrite::write(const Ottava* o, XmlWriter& xml, WriteContext& ctx)
 //      for (const StyledProperty& spp : *styledProperties())
 //            writeProperty(xml, spp.pid);
     writeProperties(static_cast<const TextLineBase*>(o), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const Page* p, XmlWriter& xml, WriteContext&)
+{
+    xml.startElement(p);
+    for (System* system : p->systems()) {
+        system->write(xml);
+    }
     xml.endElement();
 }
