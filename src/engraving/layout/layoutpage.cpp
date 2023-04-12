@@ -309,8 +309,10 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                                     t->layout();
                                 }
                             }
-                            // Fingering on top of cross-staff beams must be laid out here
+                            // Fingering and articulations on top of cross-staff beams must be laid out here
                             if (c->beam() && (c->beam()->cross() || c->staffMove() != 0)) {
+                                c->layoutArticulations();
+                                c->layoutArticulations2(true);
                                 for (Note* note : c->notes()) {
                                     for (EngravingItem* e : note->el()) {
                                         if (!e || !e->isFingering()) {

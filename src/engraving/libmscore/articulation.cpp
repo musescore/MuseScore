@@ -30,6 +30,8 @@
 #include "types/typesconv.h"
 #include "types/translatablestring.h"
 
+#include "beam.h"
+#include "chord.h"
 #include "chordrest.h"
 #include "masterscore.h"
 #include "measure.h"
@@ -784,6 +786,16 @@ void Articulation::styleChanged()
     if (isGolpeThumb) {
         setAnchor(ArticulationAnchor::BOTTOM_STAFF);
     }
+}
+
+bool Articulation::isOnCrossBeamSide() const
+{
+    ChordRest* cr = chordRest();
+    if (!cr || !cr->isChord()) {
+        return false;
+    }
+    Chord* chord = toChord(cr);
+    return chord->beam() && (chord->beam()->cross() || chord->staffMove() != 0) && (up() == chord->up());
 }
 
 struct ArticulationGroup

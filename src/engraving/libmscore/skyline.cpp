@@ -48,46 +48,57 @@ static const double MINIMUM_Y = -1000000.0;
 #define DP(...)
 #endif
 
-//--------------------------------------------------------
-// findSpan
-// used for correct handling of cross-staff skyline items
-//--------------------------------------------------------
-
-int findSpan(const ShapeElement& r)
-{
-    if (!r.toItem) {
-        return 0;
-    }
-    int span = 0;
-    if (r.toItem->isArpeggio()) {
-        // cross-staff arpeggios
-        span = toArpeggio(r.toItem)->span() - 1; // for some reason, Arpeggio::_span is 1-indexed
-    } else if (r.toItem->isStem()) {
-        // cross-staff stems
-        Chord* chord = toStem(r.toItem)->chord();
-        if (chord && chord->beam() && chord->beam()->cross()) {
-            span = chord->up() ? -1 : 1;
-        }
-    }
-    return span;
-}
-
 //---------------------------------------------------------
 //   add
 //---------------------------------------------------------
 
 void Skyline::add(const ShapeElement& r)
 {
-    int span = findSpan(r);
-    _north.add(r.x(), r.top(), r.width(), span);
-    _south.add(r.x(), r.bottom(), r.width(), span);
+    const EngravingItem* item = r.toItem;
+    bool crossSouth = false;
+    bool crossNorth = false;
+    if (item && item->isStem()) {
+        Chord* chord = toStem(item)->chord();
+        if (chord) {
+            Beam* beam = chord->beam();
+            if (beam && beam->cross()) {
+                int thisStaffMove = chord->staffMove();
+                if (thisStaffMove < 0) {
+                    crossNorth = true;
+                } else if (thisStaffMove > 0) {
+                    crossSouth = true;
+                }
+                for (ChordRest* element : beam->elements()) {
+                    int staffMove = element->staffMove();
+                    if (staffMove < thisStaffMove) {
+                        crossNorth = true;
+                    }
+                    if (staffMove > thisStaffMove) {
+                        crossSouth = true;
+                    }
+                }
+            }
+        }
+    }
+    if (item && item->isArpeggio()) {
+        const Arpeggio* arpeggio = toArpeggio(item);
+        if (arpeggio->span() > 1) {
+            crossSouth = true;
+        }
+    }
+    if (!crossNorth) {
+        _north.add(r.x(), r.top(), r.width());
+    }
+    if (!crossSouth) {
+        _south.add(r.x(), r.bottom(), r.width());
+    }
 }
 
 //---------------------------------------------------------
 //   insert
 //---------------------------------------------------------
 
-SkylineLine::SegIter SkylineLine::insert(SegIter i, double x, double y, double w, int span)
+SkylineLine::SegIter SkylineLine::insert(SegIter i, double x, double y, double w)
 {
     const double xr = x + w;
     // Only x coordinate change is handled here as width change gets handled
@@ -95,16 +106,16 @@ SkylineLine::SegIter SkylineLine::insert(SegIter i, double x, double y, double w
     if (i != seg.end() && xr > i->x) {
         i->x = xr;
     }
-    return seg.emplace(i, x, y, w, span);
+    return seg.emplace(i, x, y, w);
 }
 
 //---------------------------------------------------------
 //   append
 //---------------------------------------------------------
 
-void SkylineLine::append(double x, double y, double w, int span)
+void SkylineLine::append(double x, double y, double w)
 {
-    seg.emplace_back(x, y, w, span);
+    seg.emplace_back(x, y, w);
 }
 
 //---------------------------------------------------------
@@ -138,11 +149,10 @@ void SkylineLine::add(const Shape& s)
 
 void SkylineLine::add(const ShapeElement& r)
 {
-    int span = findSpan(r);
     if (north) {
-        add(r.x(), r.top(), r.width(), span);
+        add(r.x(), r.top(), r.width());
     } else {
-        add(r.x(), r.bottom(), r.width(), span);
+        add(r.x(), r.bottom(), r.width());
     }
 }
 
@@ -153,7 +163,7 @@ void Skyline::add(const Shape& s)
     }
 }
 
-void SkylineLine::add(double x, double y, double w, int span)
+void SkylineLine::add(double x, double y, double w)
 {
 //      assert(w >= 0.0);
     if (x < 0.0) {
@@ -189,7 +199,7 @@ void SkylineLine::add(double x, double y, double w, int span)
             if (w1 > 0.0000001) {
                 i->w = w1;
                 ++i;
-                i = insert(i, x, y, w2, span);
+                i = insert(i, x, y, w2);
                 DP("       A w1 %f w2 %f\n", w1, w2);
             } else {
                 i->w = w2;
@@ -199,7 +209,7 @@ void SkylineLine::add(double x, double y, double w, int span)
             if (w3 > 0.0000001) {
                 ++i;
                 DP("       C w3 %f\n", w3);
-                insert(i, x + w2, cy, w3, span);
+                insert(i, x + w2, cy, w3);
             }
             return;
         } else if ((x <= cx) && ((x + w) >= (cx + i->w))) {                 // F
@@ -209,7 +219,7 @@ void SkylineLine::add(double x, double y, double w, int span)
             double w1 = x + w - cx;
             i->w    -= w1;
             DP("    add(C) cx %f y %f w %f w1 %f\n", cx, y, w1, i->w);
-            insert(i, cx, y, w1, span);
+            insert(i, cx, y, w1);
             return;
         } else {                                                        // D
             double w1 = x - cx;
@@ -219,7 +229,7 @@ void SkylineLine::add(double x, double y, double w, int span)
                 cx  += w1;
                 DP("    add(D) %f %f\n", y, w2);
                 ++i;
-                i = insert(i, cx, y, w2, span);
+                i = insert(i, cx, y, w2);
             }
         }
         cx += i->w;
@@ -228,12 +238,12 @@ void SkylineLine::add(double x, double y, double w, int span)
         if (x > cx) {
             double cy = north ? MAXIMUM_Y : MINIMUM_Y;
             DP("    append1 %f %f\n", cy, x - cx);
-            append(cx, cy, x - cx, span);
+            append(cx, cy, x - cx);
         }
         DP("    append2 %f %f\n", y, w);
-        append(x, y, w, span);
+        append(x, y, w);
     } else if (x + w > cx) {
-        append(cx, y, x + w - cx, span);
+        append(cx, y, x + w - cx);
     }
 }
 
@@ -266,9 +276,6 @@ double SkylineLine::minDistance(const SkylineLine& sl) const
     double x2 = 0.0;
     auto k   = sl.begin();
     for (auto i = begin(); i != end(); ++i) {
-        if (i->staffSpan > 0) {
-            continue; // don't add this to the distance because it crosses to the next staff
-        }
         while (k != sl.end() && (x2 + k->w) < x1) {
             x2 += k->w;
             ++k;
@@ -277,8 +284,7 @@ double SkylineLine::minDistance(const SkylineLine& sl) const
             break;
         }
         for (;;) {
-            if ((x1 + i->w > x2) && (x1 < x2 + k->w) && k->staffSpan >= 0) {
-                // (staffSpan: don't add lower north skyline object if it crosses into our staff)
+            if ((x1 + i->w > x2) && (x1 < x2 + k->w)) {
                 dist = std::max(dist, i->y - k->y);
             }
             if (x2 + k->w < x1 + i->w) {
