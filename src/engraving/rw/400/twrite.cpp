@@ -104,6 +104,9 @@
 #include "../../libmscore/pedal.h"
 #include "../../libmscore/playtechannotation.h"
 
+#include "../../libmscore/rehearsalmark.h"
+#include "../../libmscore/rest.h"
+
 #include "../../libmscore/slur.h"
 #include "../../libmscore/stem.h"
 #include "../../libmscore/stemslash.h"
@@ -1682,5 +1685,15 @@ void TWrite::write(const PlayTechAnnotation* p, XmlWriter& xml, WriteContext& ct
     xml.startElement(p);
     writeProperty(p, xml, Pid::PLAY_TECH_TYPE);
     writeProperties(static_cast<const TextBase*>(p), xml, ctx, true);
+    xml.endElement();
+}
+
+void TWrite::write(const RehearsalMark* r, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(r)) {
+        return;
+    }
+    xml.startElement(r);
+    writeProperties(static_cast<const TextBase*>(r), xml, ctx, true);
     xml.endElement();
 }
