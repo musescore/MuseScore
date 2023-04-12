@@ -1974,3 +1974,15 @@ void TWrite::write(const Symbol* item, XmlWriter& xml, WriteContext& ctx)
     writeProperties(static_cast<const BSymbol*>(item), xml, ctx);
     xml.endElement();
 }
+
+void TWrite::write(const System* item, XmlWriter& xml, WriteContext&)
+{
+    xml.startElement(item);
+    if (item->systemDividerLeft() && item->systemDividerLeft()->isUserModified()) {
+        item->systemDividerLeft()->write(xml);
+    }
+    if (item->systemDividerRight() && item->systemDividerRight()->isUserModified()) {
+        item->systemDividerRight()->write(xml);
+    }
+    xml.endElement();
+}
