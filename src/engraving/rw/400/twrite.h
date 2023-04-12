@@ -81,6 +81,13 @@ class LetRing;
 class Location;
 class Lyrics;
 
+class Marker;
+class MeasureNumber;
+class MeasureNumberBase;
+class MeasureRepeat;
+class MMRest;
+class MMRestRange;
+
 class SLine;
 class Spanner;
 class TextLineBase;
@@ -146,6 +153,8 @@ public:
     static void write(const LetRing* l, XmlWriter& xml, WriteContext& ctx);
     static void write(const Location* l, XmlWriter& xml, WriteContext& ctx);
     static void write(const Lyrics* l, XmlWriter& xml, WriteContext& ctx);
+
+    static void write(const Marker* m, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);

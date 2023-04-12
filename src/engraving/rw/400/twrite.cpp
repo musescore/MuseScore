@@ -86,6 +86,12 @@
 #include "../../libmscore/location.h"
 #include "../../libmscore/lyrics.h"
 
+#include "../../libmscore/marker.h"
+#include "../../libmscore/measurenumber.h"
+#include "../../libmscore/measurerepeat.h"
+#include "../../libmscore/mmrest.h"
+#include "../../libmscore/mmrestrange.h"
+
 #include "../../libmscore/note.h"
 
 #include "../../libmscore/slur.h"
@@ -1431,5 +1437,13 @@ void TWrite::write(const Lyrics* l, XmlWriter& xml, WriteContext& ctx)
     writeProperty(l, xml, Pid::LYRIC_TICKS);
 
     writeProperties(static_cast<const TextBase*>(l), xml, ctx, true);
+    xml.endElement();
+}
+
+void TWrite::write(const Marker* m, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(m);
+    writeProperties(static_cast<const TextBase*>(m), xml, ctx, true);
+    xml.tag("label", m->label());
     xml.endElement();
 }
