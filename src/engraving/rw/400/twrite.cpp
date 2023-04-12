@@ -1784,3 +1784,14 @@ void TWrite::write(const Spacer* s, XmlWriter& xml, WriteContext& ctx)
     xml.tag("space", s->gap().val() / s->spatium());
     xml.endElement();
 }
+
+void TWrite::write(const StaffState* s, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(s);
+    xml.tag("subtype", int(s->staffStateType()));
+    if (s->staffStateType() == StaffStateType::INSTRUMENT) {
+        s->instrument()->write(xml, nullptr);
+    }
+    writeItemProperties(s, xml, ctx);
+    xml.endElement();
+}
