@@ -220,6 +220,7 @@ public:
     static void write(const StaffTypeChange* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Stem* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StemSlash* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Sticking* item, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
