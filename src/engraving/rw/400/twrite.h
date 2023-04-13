@@ -241,6 +241,7 @@ public:
     static void write(const SystemText* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const TempoText* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Text* item, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
