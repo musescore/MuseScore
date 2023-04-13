@@ -2183,3 +2183,11 @@ void TWrite::write(const Vibrato* item, XmlWriter& xml, WriteContext& ctx)
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
     xml.endElement();
 }
+
+void TWrite::write(const Volta* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
+    xml.tag("endings", TConv::toXml(item->endings()));
+    xml.endElement();
+}
