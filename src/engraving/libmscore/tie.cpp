@@ -343,7 +343,7 @@ void TieSegment::computeBezier(PointF shoulderOffset)
     PointF start;
     start = t.map(start);
 
-    double minH = std::abs(3.0 * w);
+    double minH = std::abs(2 * w);
     int nbShapes = 15;
     const CubicBezier b(tieStart, ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
     for (int i = 1; i <= nbShapes; i++) {
