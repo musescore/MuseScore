@@ -31,6 +31,7 @@ class TempoText;
 class StaffText;
 class StaffTextBase;
 class Dynamic;
+class Expression;
 class Harmony;
 class FretDiagram;
 class TremoloBar;
@@ -69,6 +70,7 @@ public:
     static void read(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
     static void read(Dynamic* d, XmlReader& xml, ReadContext& ctx);
+    static void read(Expression* expr, XmlReader& xml, ReadContext& ctx);
     static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
     static void read(FretDiagram* d, XmlReader& xml, ReadContext& ctx);
     static void read(TremoloBar* b, XmlReader& xml, ReadContext& ctx);

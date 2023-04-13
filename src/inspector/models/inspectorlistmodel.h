@@ -58,7 +58,8 @@ private:
                         notation::SelectionState selectionState = notation::SelectionState::NONE);
 
     void buildModelsForEmptySelection();
-    void buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection);
+    void buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection,
+                                        const QList<engraving::EngravingItem*>& selectedElementList);
 
     void createModelsBySectionType(const QList<InspectorSectionType>& sectionTypeList, const ElementKeySet& selectedElementKeySet = {});
     void removeUnusedModels(const ElementKeySet& newElementKeySet, bool isRangeSelection,

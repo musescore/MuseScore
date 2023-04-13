@@ -40,6 +40,7 @@
 #include "chordline.h"
 #include "deadslapped.h"
 #include "dynamic.h"
+#include "expression.h"
 #include "fermata.h"
 #include "figuredbass.h"
 #include "fingering.h"
@@ -155,6 +156,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::CHORDLINE:         return new ChordLine(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::ACCIDENTAL:        return new Accidental(parent);
     case ElementType::DYNAMIC:           return new Dynamic(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::EXPRESSION:        return new Expression(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::TEXT:              return new Text(parent);
     case ElementType::MEASURE_NUMBER:    return new MeasureNumber(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
     case ElementType::MMREST_RANGE:      return new MMRestRange(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
@@ -505,6 +507,13 @@ StaffText* Factory::createStaffText(Segment * parent, TextStyleType textStyleTyp
     staffText->setAccessibleEnabled(isAccessibleEnabled);
 
     return staffText;
+}
+
+Expression* Factory::createExpression(Segment* parent, bool isAccessibleEnabled)
+{
+    Expression* expression = new Expression(parent);
+    expression->setAccessibleEnabled(isAccessibleEnabled);
+    return expression;
 }
 
 CREATE_ITEM_IMPL(RehearsalMark, ElementType::REHEARSAL_MARK, Segment, isAccessibleEnabled)

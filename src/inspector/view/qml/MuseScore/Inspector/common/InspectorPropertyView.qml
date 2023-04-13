@@ -100,6 +100,7 @@ Column {
 
             active: visible
             sourceComponent: root.isStyled ? menuButtonComponent : resetButtonComponent
+            Layout.alignment: Qt.AlignRight
 
             Component {
                 id: resetButtonComponent

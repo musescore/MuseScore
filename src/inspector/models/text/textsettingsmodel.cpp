@@ -148,6 +148,7 @@ void TextSettingsModel::loadProperties()
 
     updateFramePropertiesAvailability();
     updateStaffPropertiesAvailability();
+    updateIsDynamicSpecificSettings();
 }
 
 void TextSettingsModel::resetProperties()
@@ -316,6 +317,11 @@ bool TextSettingsModel::isSpecialCharactersInsertionAvailable() const
     return m_isSpecialCharactersInsertionAvailable;
 }
 
+bool TextSettingsModel::isDynamicSpecificSettings() const
+{
+    return m_isDynamicSpecificSettings;
+}
+
 void TextSettingsModel::setAreStaffTextPropertiesAvailable(bool areStaffTextPropertiesAvailable)
 {
     if (m_areStaffTextPropertiesAvailable == areStaffTextPropertiesAvailable) {
@@ -334,6 +340,16 @@ void TextSettingsModel::setIsSpecialCharactersInsertionAvailable(bool isSpecialC
 
     m_isSpecialCharactersInsertionAvailable = isSpecialCharactersInsertionAvailable;
     emit isSpecialCharactersInsertionAvailableChanged(m_isSpecialCharactersInsertionAvailable);
+}
+
+void TextSettingsModel::setIsDynamicSpecificSettings(bool isOnlyDynamics)
+{
+    if (isOnlyDynamics == m_isDynamicSpecificSettings) {
+        return;
+    }
+
+    m_isDynamicSpecificSettings = isOnlyDynamics;
+    emit isDynamicSpecificSettingsChanged(m_isDynamicSpecificSettings);
 }
 
 void TextSettingsModel::updateFramePropertiesAvailability()
@@ -355,6 +371,18 @@ void TextSettingsModel::updateStaffPropertiesAvailability()
                        == TextTypes::TextType::TEXT_TYPE_STAFF;
 
     setAreStaffTextPropertiesAvailable(isAvailable && !m_textType->isUndefined());
+}
+
+void TextSettingsModel::updateIsDynamicSpecificSettings()
+{
+    bool isOnlyDynamic = true;
+    for (EngravingItem* item : m_elementList) {
+        if (!item->isDynamic()) {
+            isOnlyDynamic = false;
+            break;
+        }
+    }
+    setIsDynamicSpecificSettings(isOnlyDynamic);
 }
 
 bool TextSettingsModel::isTextEditingStarted() const

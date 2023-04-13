@@ -31,6 +31,7 @@
 #include "../../libmscore/stafftext.h"
 #include "../../libmscore/stafftextbase.h"
 #include "../../libmscore/dynamic.h"
+#include "../../libmscore/expression.h"
 #include "../../libmscore/harmony.h"
 #include "../../libmscore/chordlist.h"
 #include "../../libmscore/fret.h"
@@ -85,6 +86,45 @@ void TRead::read(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
 {
     if (try_read<Sticking>(el, xml, ctx)) {
     } else if (try_read<SystemText>(el, xml, ctx)) {
+    } else if (try_read<Expression>(el, xml, ctx)) {
+    } else if (try_read<HBox>(el, xml, ctx)) {
+    } else if (try_read<VBox>(el, xml, ctx)) {
+    } else if (try_read<TBox>(el, xml, ctx)) {
+    } else if (try_read<FBox>(el, xml, ctx)) {
+    } else if (try_read<Accidental>(el, xml, ctx)) {
+    } else if (try_read<ActionIcon>(el, xml, ctx)) {
+    } else if (try_read<Ambitus>(el, xml, ctx)) {
+    } else if (try_read<Arpeggio>(el, xml, ctx)) {
+    } else if (try_read<Articulation>(el, xml, ctx)) {
+    } else if (try_read<BagpipeEmbellishment>(el, xml, ctx)) {
+    } else if (try_read<BarLine>(el, xml, ctx)) {
+    } else if (try_read<Bend>(el, xml, ctx)) {
+    } else if (try_read<Bracket>(el, xml, ctx)) {
+    } else if (try_read<Breath>(el, xml, ctx)) {
+    } else if (try_read<Chord>(el, xml, ctx)) {
+    } else if (try_read<ChordLine>(el, xml, ctx)) {
+    } else if (try_read<Clef>(el, xml, ctx)) {
+    } else if (try_read<Dynamic>(el, xml, ctx)) {
+    } else if (try_read<Fermata>(el, xml, ctx)) {
+    } else if (try_read<FiguredBass>(el, xml, ctx)) {
+    } else if (try_read<Fingering>(el, xml, ctx)) {
+    } else if (try_read<FretDiagram>(el, xml, ctx)) {
+    } else if (try_read<Glissando>(el, xml, ctx)) {
+    } else if (try_read<GradualTempoChange>(el, xml, ctx)) {
+    } else if (try_read<Hairpin>(el, xml, ctx)) {
+    } else if (try_read<Harmony>(el, xml, ctx)) {
+    } else if (try_read<Image>(el, xml, ctx)) {
+    } else if (try_read<InstrumentChange>(el, xml, ctx)) {
+    } else if (try_read<Jump>(el, xml, ctx)) {
+    } else if (try_read<KeySig>(el, xml, ctx)) {
+    } else if (try_read<LayoutBreak>(el, xml, ctx)) {
+    } else if (try_read<LetRing>(el, xml, ctx)) {
+    } else if (try_read<Marker>(el, xml, ctx)) {
+    } else if (try_read<MeasureNumber>(el, xml, ctx)) {
+    } else if (try_read<MeasureRepeat>(el, xml, ctx)) {
+    } else if (try_read<Note>(el, xml, ctx)) {
+    } else if (try_read<Ottava>(el, xml, ctx)) {
+    } else if (try_read<PalmMute>(el, xml, ctx)) {
     } else if (try_read<PlayTechAnnotation>(el, xml, ctx)) {
     } else if (try_read<RehearsalMark>(el, xml, ctx)) {
     } else if (try_read<InstrumentChange>(el, xml, ctx)) {
@@ -224,7 +264,26 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
         } else if (tag == "veloChangeSpeed") {
             d->setVelChangeSpeed(TConv::fromXml(e.readAsciiText(), DynamicSpeed::NORMAL));
         } else if (!TextBaseRW::readProperties(d, e, ctx)) {
+        } else if (tag == "avoidBarLines") {
+            readProperty(d, e, ctx, Pid::AVOID_BARLINES);
+        } else if (tag == "dynamicsSize") {
+            readProperty(d, e, ctx, Pid::DYNAMICS_SIZE);
+        } else if (tag == "centerOnNotehead") {
+            readProperty(d, e, ctx, Pid::CENTER_ON_NOTEHEAD);
+        } else if (!readProperties(static_cast<TextBase*>(d), e, ctx)) {
             e.unknown();
+        }
+    }
+}
+
+void TRead::read(Expression* expr, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag = xml.name();
+        if (tag == "snapToDynamics") {
+            readProperty(expr, xml, ctx, Pid::SNAP_TO_DYNAMICS);
+        } else if (!readProperties(static_cast<TextBase*>(expr), xml, ctx)) {
+            xml.unknown();
         }
     }
 }

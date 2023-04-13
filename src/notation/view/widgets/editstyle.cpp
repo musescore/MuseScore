@@ -535,6 +535,11 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::dynamicsPosAbove,        false, dynamicsPosAbove,           resetDynamicsPosAbove },
         { StyleId::dynamicsPosBelow,        false, dynamicsPosBelow,           resetDynamicsPosBelow },
         { StyleId::dynamicsMinDistance,     false, dynamicsMinDistance,        resetDynamicsMinDistance },
+        { StyleId::avoidBarLines,           false, avoidBarLines,              resetAvoidBarLines },
+        { StyleId::snapToDynamics,          false, snapExpression,             resetSnapExpression },
+        { StyleId::dynamicsSize,            true,  dynamicsSize,               resetDynamicsSize },
+        { StyleId::dynamicsOverrideFont,    false, dynamicsOverrideFont,       0 },
+        { StyleId::dynamicsFont,            false, dynamicsFont,               0 },
 
         { StyleId::tempoPlacement,          false, tempoTextPlacement,          resetTempoTextPlacement },
         { StyleId::tempoPosAbove,           false, tempoTextPosAbove,           resetTempoTextPosAbove },
@@ -698,9 +703,10 @@ EditStyle::EditStyle(QWidget* parent)
     tupletBracketType->addItem(qtrc("notation/editstyle", "None", "no tuplet bracket type"), int(TupletBracketType::SHOW_NO_BRACKET));
 
     musicalSymbolFont->clear();
-
+    dynamicsFont->clear();
     for (auto i : engravingFonts()->fonts()) {
         musicalSymbolFont->addItem(QString::fromStdString(i->name()), QString::fromStdString(i->name()));
+        dynamicsFont->addItem(QString::fromStdString(i->name()), QString::fromStdString(i->name()));
     }
 
     static const SymId ids[] = {
@@ -750,6 +756,20 @@ EditStyle::EditStyle(QWidget* parent)
     beamsPage->setMinimumSize(224, 280);
     beamsPage->setResizeMode(QQuickWidget::SizeRootObjectToView);
     groupBox_beams->layout()->addWidget(beamsPage);
+
+    // ====================================================
+    // Rests (QML)
+    // ====================================================
+
+    QQuickWidget* dynamicsAlignmentSelector = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
+                                                               /*parent*/ groupBox_DynamicsAlignment);
+    dynamicsAlignmentSelector->setObjectName("dynamicsAlignmentSelector_QQuickWidget");
+    dynamicsAlignmentSelector->setSource(
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/DynamicsAlignmentSelector.qml")));
+    dynamicsAlignmentSelector->setMinimumSize(childrenRect().size());
+    dynamicsAlignmentSelector->setMinimumWidth(240);
+    dynamicsAlignmentSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    groupBox_DynamicsAlignment->layout()->addWidget(dynamicsAlignmentSelector);
 
     // ====================================================
     // Figured Bass
@@ -879,7 +899,7 @@ EditStyle::EditStyle(QWidget* parent)
     Score* score = globalContext()->currentNotation()->elements()->msScore();
 
     textStyles->clear();
-    for (TextStyleType textStyleType : allTextStyles()) {
+    for (TextStyleType textStyleType : editableTextStyles()) {
         QListWidgetItem* item = new QListWidgetItem(score->getTextStyleUserName(textStyleType).qTranslated());
         item->setData(Qt::UserRole, int(textStyleType));
         textStyles->addItem(item);
@@ -1339,6 +1359,8 @@ EditStyle::EditStylePage EditStyle::pageForElement(EngravingItem* e)
         return &EditStyle::PageLyrics;
     case ElementType::DYNAMIC:
         return &EditStyle::PageDynamics;
+    case ElementType::EXPRESSION:
+        return &EditStyle::PageExpression;
     case ElementType::REHEARSAL_MARK:
         return &EditStyle::PageRehearsalMarks;
     case ElementType::FIGURED_BASS:
@@ -1775,6 +1797,17 @@ void EditStyle::setValues()
         }
         ++idx;
     }
+
+    QString dynFont(styleValue(StyleId::dynamicsFont).value<String>());
+    idx = 0;
+    for (const auto& i : engravingFonts()->fonts()) {
+        if (QString::fromStdString(i->name()).toLower() == dynFont.toLower()) {
+            dynamicsFont->setCurrentIndex(idx);
+            break;
+        }
+        ++idx;
+    }
+
     musicalTextFont->blockSignals(true);
     musicalTextFont->clear();
     // CAUTION: the second element, the itemdata, is a font family name!
@@ -2062,15 +2095,20 @@ void EditStyle::valueChanged(int i)
     StyleId idx       = (StyleId)i;
     PropertyValue val  = getValue(idx);
     bool setValue = false;
-    if (idx == StyleId::MusicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
-        IEngravingFontPtr scoreFont = engravingFonts()->fontByName(val.value<String>().toStdString());
-        if (scoreFont) {
-            for (auto j : scoreFont->engravingDefaults()) {
-                setStyleValue(j.first, j.second);
-            }
+    if (idx == StyleId::MusicalSymbolFont) {
+        bool dynamicsOverrideFont = getValue(StyleId::dynamicsOverrideFont).toBool();
+        if (!dynamicsOverrideFont) {
+            setStyleValue(StyleId::dynamicsFont, val); // Match dynamics font
         }
-
-        setValue = true;
+        if (optimizeStyleCheckbox->isChecked()) {
+            IEngravingFontPtr scoreFont = engravingFonts()->fontByName(val.value<String>().toStdString());
+            if (scoreFont) {
+                for (auto j : scoreFont->engravingDefaults()) {
+                    setStyleValue(j.first, j.second);
+                }
+            }
+            setValue = true;
+        }
     }
 
     setStyleValue(idx, val);

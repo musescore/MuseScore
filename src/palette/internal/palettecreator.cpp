@@ -44,6 +44,7 @@
 #include "libmscore/clef.h"
 #include "libmscore/drumset.h"
 #include "libmscore/dynamic.h"
+#include "libmscore/expression.h"
 #include "libmscore/fermata.h"
 #include "libmscore/fingering.h"
 #include "libmscore/fret.h"
@@ -105,6 +106,7 @@ MAKE_ELEMENT(Hairpin, score->dummy()->segment())
 MAKE_ELEMENT(SystemText, score->dummy()->segment())
 MAKE_ELEMENT(TempoText, score->dummy()->segment())
 MAKE_ELEMENT(StaffText, score->dummy()->segment())
+MAKE_ELEMENT(Expression, score->dummy()->segment())
 MAKE_ELEMENT(PlayTechAnnotation, score->dummy()->segment())
 MAKE_ELEMENT(RehearsalMark, score->dummy()->segment())
 
@@ -1521,11 +1523,10 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     systemTextLine->setEndHookType(HookType::HOOK_90);
     sp->appendElement(systemTextLine, QT_TRANSLATE_NOOP("palette", "System text line"));
 
-    auto expressionText = makeElement<StaffText>(gpaletteScore);
+    auto expressionText = makeElement<Expression>(gpaletteScore);
     expressionText->setTextStyleType(TextStyleType::EXPRESSION);
-    expressionText->setXmlText(QT_TRANSLATE_NOOP("palette", "Expression"));
+    expressionText->setXmlText(QT_TRANSLATE_NOOP("palette", "expression"));
     expressionText->setPlacement(PlacementV::BELOW);
-    expressionText->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
     sp->appendElement(expressionText, QT_TRANSLATE_NOOP("palette", "Expression text"))->setElementTranslated(true);
 
     auto is = makeElement<InstrumentChange>(gpaletteScore);

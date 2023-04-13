@@ -47,12 +47,14 @@ InspectorListModel::InspectorListModel(QObject* parent)
     });
 }
 
-void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection)
+void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection,
+                                                        const QList<mu::engraving::EngravingItem*>& selectedElementList)
 {
     removeUnusedModels(selectedElementKeySet, isRangeSelection);
 
     InspectorSectionTypeSet buildingSectionTypeSet = AbstractInspectorModel::sectionTypesByElementKeys(selectedElementKeySet,
-                                                                                                       isRangeSelection);
+                                                                                                       isRangeSelection,
+                                                                                                       selectedElementList);
 
     createModelsBySectionType(buildingSectionTypeSet.values(), selectedElementKeySet);
 
@@ -90,7 +92,7 @@ void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem
             newElementKeySet << ElementKey(element->type(), element->subtype());
         }
 
-        buildModelsForSelectedElements(newElementKeySet, selectionState == SelectionState::RANGE);
+        buildModelsForSelectedElements(newElementKeySet, selectionState == SelectionState::RANGE, selectedElementList);
     }
 
     m_repository->updateElementList(selectedElementList, selectionState);

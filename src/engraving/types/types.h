@@ -96,6 +96,7 @@ enum class ElementType {
     FERMATA,
     CHORDLINE,
     DYNAMIC,
+    EXPRESSION,
     BEAM,
     BEAM_SEGMENT,
     HOOK,

@@ -640,10 +640,15 @@ enum class Sid {
 
     autoplaceHairpinDynamicsDistance,
 
+    dynamicsOverrideFont,
+    dynamicsFont,
+    dynamicsSize,
     dynamicsPlacement,
     dynamicsPosAbove,
     dynamicsPosBelow,
-
+    avoidBarLines,
+    snapToDynamics,
+    centerOnNotehead,
     dynamicsMinDistance,
     autoplaceVerticalAlignRange,
 
@@ -887,6 +892,7 @@ enum class Sid {
     expressionFrameRound,
     expressionFrameFgColor,
     expressionFrameBgColor,
+    expressionMinDistance,
 
     tempoFontFace,
     tempoFontSize,

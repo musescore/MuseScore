@@ -797,10 +797,18 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     draw::Font::Type fontType = draw::Font::Type::Unknown;
     if (format.fontFamily() == "ScoreText") {
         if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA) {
-            family
-                = String::fromStdString(engravingFonts()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont).toStdString())->family());
+            std::string fontName = engravingFonts()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont).toStdString())->family();
+            family = String::fromStdString(fontName);
             fontType = draw::Font::Type::MusicSymbol;
-            // to keep desired size ratio (based on 20pt symbol size to 10pt text size)
+            if (t->isDynamic()) {
+                m = DYNAMICS_DEFAULT_FONT_SIZE * t->getProperty(Pid::DYNAMICS_SIZE).toDouble();
+                if (t->score()->styleB(Sid::dynamicsOverrideFont)) {
+                    std::string fontName = engravingFonts()->fontByName(t->score()->styleSt(Sid::dynamicsFont).toStdString())->family();
+                    family = String::fromStdString(fontName);
+                }
+            }
+            // We use a default font size of 10pt for historical reasons,
+            // but Smufl standard is 20pt so multiply x2 here.
             m *= 2;
         } else if (t->isTempoText()) {
             family = t->score()->styleSt(Sid::MusicalTextFont);
@@ -972,19 +980,19 @@ void TextBlock::layout(TextBase* t)
     _lineSpacing *= t->textLineSpacing();
 
     double rx = 0;
-    switch (t->align().horizontal) {
-    case AlignH::LEFT:
-        rx = -_bbox.left();
-        break;
-    case AlignH::HCENTER:
+    AlignH alignH = t->align().horizontal;
+    bool dynamicAlwaysCentered = t->isDynamic() && !t->getProperty(Pid::CENTER_ON_NOTEHEAD).toBool();
+
+    if (alignH == AlignH::HCENTER || dynamicAlwaysCentered) {
         rx = (layoutWidth - (_bbox.left() + _bbox.right())) * .5;
-        break;
-    case AlignH::RIGHT:
+    } else if (alignH == AlignH::LEFT) {
+        rx = -_bbox.left();
+    } else if (alignH == AlignH::RIGHT) {
         rx = layoutWidth - _bbox.right();
-        break;
     }
 
     rx += lm;
+
     for (TextFragment& f : _fragments) {
         f.pos.rx() += rx;
     }
@@ -1840,7 +1848,7 @@ bool TextBase::prepareFormat(const String& token, CharFormat& format)
 //---------------------------------------------------------
 void TextBase::prepareFormat(const String& token, TextCursor& cursor)
 {
-    if (prepareFormat(token, *cursor.format())) {
+    if (prepareFormat(token, *cursor.format()) && cursor.format()->fontFamily() != propertyDefault(Pid::FONT_FACE).value<String>()) {
         setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
     }
 }
@@ -2436,9 +2444,6 @@ void TextBase::setXmlText(const String& s)
 
 void TextBase::checkCustomFormatting(const String& s)
 {
-    if (s.contains(u"<font face")) {
-        setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
-    }
     if (s.contains(u"<font size")) {
         setPropertyFlags(Pid::FONT_SIZE, PropertyFlags::UNSTYLED);
     }

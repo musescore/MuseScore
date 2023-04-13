@@ -230,7 +230,7 @@ bool Shape::clearsVertically(const Shape& a) const
 
 double Shape::left() const
 {
-    double dist = 0.0;
+    double dist = 10000.0;
     for (const ShapeElement& r : *this) {
         if (r.height() != 0.0 && !(r.toItem && r.toItem->isTextBase()) && r.left() < dist) {
             // if (r.left() < dist)
@@ -247,7 +247,7 @@ double Shape::left() const
 
 double Shape::right() const
 {
-    double dist = 0.0;
+    double dist = -10000.0;
     for (const RectF& r : *this) {
         if (r.right() > dist) {
             dist = r.right();
