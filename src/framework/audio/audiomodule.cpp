@@ -49,6 +49,7 @@
 #include "internal/synthesizers/synthresolver.h"
 
 #include "internal/fx/fxresolver.h"
+#include "internal/fx/musefxresolver.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -149,6 +150,11 @@ void AudioModule::registerResources()
 void AudioModule::registerUiTypes()
 {
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(audio_QML_IMPORT);
+}
+
+void AudioModule::resolveImports()
+{
+    s_fxResolver->registerResolver(AudioFxType::MuseFx, std::make_shared<MuseFxResolver>());
 }
 
 void AudioModule::onInit(const framework::IApplication::RunMode& mode)

@@ -83,6 +83,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaudiooutput.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/ifxresolver.h
+    ${CMAKE_CURRENT_LIST_DIR}/abstractfxresolver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/abstractfxresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/iplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
@@ -181,6 +183,8 @@ set(MODULE_SRC
     # fx
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/musefxresolver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/musefxresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/allpassdispersion.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/allpassmodulateddelay.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/circularsamplebuffer.h

@@ -28,10 +28,26 @@
 #include <utility>
 #include <vector>
 
+#include "audio/ifxprocessor.h"
+
 namespace mu::audio::fx {
-class ReverbProcessor
+class ReverbProcessor : public IFxProcessor
 {
 public:
+    ReverbProcessor(const audio::AudioFxParams& params, audioch_t audioChannelsCount = 2);
+    ~ReverbProcessor() override;
+
+    AudioFxType type() const override;
+    const AudioFxParams& params() const override;
+    async::Channel<audio::AudioFxParams> paramsChanged() const override;
+    void setSampleRate(unsigned int sampleRate) override;
+
+    bool active() const override;
+    void setActive(bool active) override;
+
+    void process(float* buffer, unsigned int sampleCount) override;
+
+private:
     enum Params
     {
         Quality,
@@ -73,23 +89,18 @@ public:
         std::pair<float, float> range;
     };
 
-    ReverbProcessor();
-
-    ~ReverbProcessor();
-
     void getParameterInfo(int32_t index, ParameterInfo& info);
 
     float getParameter(int32_t index);
 
     void setParameter(int32_t index, float newValue);
 
-    bool setFormat(int32_t numInputChannels, int32_t numOutputChannels, double sampleRate, int32_t maximumBlockSize);
+    bool setFormat(audioch_t audioChannelsCount, double sampleRate, int32_t maximumBlockSize);
+
+    void deleteSignalBuffers();
 
     void reset();
 
-    void process(float** signalPtr, int32_t numSamples);
-
-private:
     // Base Processor data
     struct Processor
     {
@@ -103,13 +114,12 @@ private:
 
         void allocateParameters(int num);
         void setupParameter(int index, const std::string& name, std::pair<float, float> valueRange, float initialValue);
-        bool setFormat(int32_t numInputChannels, int32_t numOutputChannels, double sampleRate, int32_t maximumBlockSize);
+        bool setFormat(audioch_t audioChannelsCount, double sampleRate, int32_t maximumBlockSize);
 
-        int _numInputChannels = 2;
-        int _numOutputChannels = 2;
-        double _sampleRate = 44100.0;
-        double _sampleT = 1.0 / _sampleRate;
-        int _blockSize = 512;
+        audioch_t _audioChannelsCount = 0;
+        double _sampleRate = 0.0;
+        double _sampleT = 0.0;
+        int _blockSize = 0;
     };
     Processor m_processor;
 
@@ -129,6 +139,11 @@ private:
     float m_erToLateGain = 0.f;
 
     int m_delays = 16;
+
+    AudioFxParams m_params;
+    async::Channel<audio::AudioFxParams> m_paramsChanged;
+
+    float** m_signalBuffers = nullptr;
 };
 }
 
