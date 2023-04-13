@@ -126,8 +126,22 @@ class System;
 class SystemDivider;
 class SystemText;
 
-class TextLineBase;
+class TempoText;
+class Text;
 class TextBase;
+class TextLine;
+class TextLineBase;
+class Tie;
+class TimeSig;
+class Tremolo;
+class TremoloBar;
+class Trill;
+class Tuplet;
+
+class Vibrato;
+class Volta;
+
+class WhammyBar;
 }
 
 namespace mu::engraving::rw400 {
@@ -225,6 +239,8 @@ public:
     static void write(const System* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const SystemDivider* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const SystemText* item, XmlWriter& xml, WriteContext& ctx);
+
+    static void write(const TempoText* item, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
