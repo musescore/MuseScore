@@ -2048,3 +2048,10 @@ void TWrite::write(const TextLine* item, XmlWriter& xml, WriteContext& ctx)
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
+
+void TWrite::write(const Tie* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
+    xml.endElement();
+}
