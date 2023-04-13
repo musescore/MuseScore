@@ -2141,3 +2141,30 @@ void TWrite::write(const Trill* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.endElement();
 }
+
+void TWrite::write(const Tuplet* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeItemProperties(item, xml, ctx);
+
+    writeProperty(item, xml, Pid::NORMAL_NOTES);
+    writeProperty(item, xml, Pid::ACTUAL_NOTES);
+    writeProperty(item, xml, Pid::P1);
+    writeProperty(item, xml, Pid::P2);
+
+    xml.tag("baseNote", TConv::toXml(item->baseLen().type()));
+    if (int dots = item->baseLen().dots()) {
+        xml.tag("baseDots", dots);
+    }
+
+    if (item->number()) {
+        xml.startElement("Number", item->number());
+        writeProperty(item->number(), xml, Pid::TEXT_STYLE);
+        writeProperty(item->number(), xml, Pid::TEXT);
+        xml.endElement();
+    }
+
+    writeStyledProperties(item, xml);
+
+    xml.endElement();
+}
