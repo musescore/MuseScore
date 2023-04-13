@@ -28,7 +28,6 @@ static constexpr int DEFAULT_CLOSE_INTERVAL = 500;
 static constexpr int FILETOOLTIP_OPEN_INTERVAL = 500;
 static constexpr int FILETOOLTIP_CLOSE_INTERVAL = 100;
 
-
 using namespace mu::ui;
 
 QmlToolTip::QmlToolTip(QObject* parent)
@@ -42,7 +41,8 @@ QmlToolTip::QmlToolTip(QObject* parent)
     qApp->installEventFilter(this);
 }
 
-void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& description, const QString& shortcut, const ToolTipType& toolTipType)
+void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& description, const QString& shortcut,
+                      const ToolTipType& toolTipType)
 {
     if (item == m_item) {
         m_closeTimer.stop();

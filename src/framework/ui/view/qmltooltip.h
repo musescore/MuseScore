@@ -41,7 +41,8 @@ public:
 
     Q_ENUM(ToolTipType)
 
-    Q_INVOKABLE void show(QQuickItem* item, const QString& title, const QString& description = "", const QString& shortcut = "", const ToolTipType& toolTipType = Default);
+    Q_INVOKABLE void show(QQuickItem* item, const QString& title, const QString& description = "", const QString& shortcut = "",
+                          const ToolTipType& toolTipType = Default);
     Q_INVOKABLE void hide(QQuickItem* item, bool force = false);
 
 private slots:
@@ -49,7 +50,8 @@ private slots:
     void doHide();
 
 signals:
-    void showToolTip(QQuickItem* item, const QString& title, const QString& description, const QString& shortcut, const ToolTipType& toolTipType);
+    void showToolTip(QQuickItem* item, const QString& title, const QString& description, const QString& shortcut,
+                     const ToolTipType& toolTipType);
     void hideToolTip();
 
 private:
