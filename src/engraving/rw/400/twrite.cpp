@@ -2168,3 +2168,18 @@ void TWrite::write(const Tuplet* item, XmlWriter& xml, WriteContext& ctx)
 
     xml.endElement();
 }
+
+void TWrite::write(const Vibrato* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    xml.tag("subtype", TConv::toXml(item->vibratoType()));
+    writeProperty(item, xml, Pid::PLAY);
+    for (const StyledProperty& spp : *item->styledProperties()) {
+        writeProperty(item, xml, spp.pid);
+    }
+    writeProperties(static_cast<const SLine*>(item), xml, ctx);
+    xml.endElement();
+}
