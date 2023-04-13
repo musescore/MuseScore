@@ -615,6 +615,7 @@ MeasureBase* MeasureBase::prevMM() const
 
 void MeasureBase::writeProperties(XmlWriter& xml) const
 {
+    UNREACHABLE;
     EngravingItem::writeProperties(xml);
     for (const EngravingItem* e : el()) {
         e->write(xml);

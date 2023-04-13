@@ -817,6 +817,7 @@ bool EngravingItem::hitShapeIntersects(const RectF& rr) const
 
 void EngravingItem::writeProperties(XmlWriter& xml) const
 {
+    UNREACHABLE;
     bool autoplaceEnabled = score()->styleB(Sid::autoplaceEnabled);
     if (!autoplaceEnabled) {
         score()->setStyleValue(Sid::autoplaceEnabled, true);
@@ -909,6 +910,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
 
 void EngravingItem::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     writeProperties(xml);
     xml.endElement();

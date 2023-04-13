@@ -56,6 +56,7 @@ Sticking::Sticking(Segment* parent)
 
 void Sticking::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         return;
     }

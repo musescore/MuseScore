@@ -256,6 +256,7 @@ Accidental::Accidental(EngravingItem* parent)
 
 void Accidental::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     writeProperty(xml, Pid::ACCIDENTAL_BRACKET);
     writeProperty(xml, Pid::ACCIDENTAL_ROLE);

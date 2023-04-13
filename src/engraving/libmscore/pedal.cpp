@@ -127,6 +127,7 @@ Pedal::Pedal(EngravingItem* parent)
 
 void Pedal::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         return;
     }

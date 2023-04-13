@@ -199,6 +199,7 @@ std::vector<Clef*> InstrumentChange::clefs() const
 
 void InstrumentChange::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     _instrument->write(xml, part());
     if (_init) {

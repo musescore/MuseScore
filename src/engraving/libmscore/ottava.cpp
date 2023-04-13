@@ -288,6 +288,7 @@ LineSegment* Ottava::createLineSegment(System* parent)
 
 void Ottava::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         return;
     }

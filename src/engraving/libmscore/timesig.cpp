@@ -149,6 +149,7 @@ void TimeSig::setDenominatorString(const String& a)
 
 void TimeSig::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     writeProperty(xml, Pid::TIMESIG_TYPE);
     EngravingItem::writeProperties(xml);

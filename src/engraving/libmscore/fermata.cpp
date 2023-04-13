@@ -70,6 +70,7 @@ Fermata::Fermata(EngravingItem* parent)
 
 void Fermata::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         LOGD("%s not written", typeName());
         return;

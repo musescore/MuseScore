@@ -597,6 +597,7 @@ static const std::array<Pid, 8> pids { {
 
 void FretDiagram::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         return;
     }

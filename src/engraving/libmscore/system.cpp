@@ -1529,6 +1529,7 @@ SysStaff* System::staff(size_t staffIdx) const
 
 void System::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     if (_systemDividerLeft && _systemDividerLeft->isUserModified()) {
         _systemDividerLeft->write(xml);

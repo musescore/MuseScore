@@ -445,6 +445,7 @@ void KeySig::setKey(Key key)
 
 void KeySig::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     EngravingItem::writeProperties(xml);
     if (_sig.isAtonal()) {

@@ -2258,6 +2258,7 @@ void TextBase::select(EditData& editData, SelectTextType type)
 
 void TextBase::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         return;
     }
@@ -2272,6 +2273,7 @@ void TextBase::write(XmlWriter& xml) const
 
 void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle*/) const
 {
+    UNREACHABLE;
     EngravingItem::writeProperties(xml);
     writeProperty(xml, Pid::TEXT_STYLE);
 

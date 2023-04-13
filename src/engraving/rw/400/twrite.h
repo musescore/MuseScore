@@ -152,65 +152,69 @@ class TWrite
 public:
     TWrite() = default;
 
-    static void writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx); //factory
+    static void writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const Accidental* a, XmlWriter& xml, WriteContext& ctx);
-    static void write(const ActionIcon* a, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Ambitus* a, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Arpeggio* a, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Articulation* a, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Accidental* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const ActionIcon* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Ambitus* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Arpeggio* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Articulation* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const BagpipeEmbellishment* b, XmlWriter& xml, WriteContext& ctx);
-    static void write(const BarLine* b, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Beam* b, XmlWriter& xml, WriteContext& ctx);
-    static void write(const HBox* b, XmlWriter& xml, WriteContext& ctx);
-    static void write(const VBox* b, XmlWriter& xml, WriteContext& ctx);
-    static void write(const FBox* b, XmlWriter& xml, WriteContext& ctx);
-    static void write(const TBox* b, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Bracket* b, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Breath* b, XmlWriter& xml, WriteContext& ctx);
+    static void write(const BagpipeEmbellishment* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const BarLine* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Beam* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Bend* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Box* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const HBox* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const VBox* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const FBox* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const TBox* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Bracket* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Breath* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const Chord* c, XmlWriter& xml, WriteContext& ctx);
-    static void write(const ChordLine* c, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Clef* c, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Chord* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const ChordLine* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Clef* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const Dynamic* d, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const Fermata* f, XmlWriter& xml, WriteContext& ctx);
-    static void write(const FiguredBass* f, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Fingering* f, XmlWriter& xml, WriteContext& ctx);
-    static void write(const FretDiagram* f, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Fermata* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const FiguredBass* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const FiguredBassItem* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Fingering* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const Glissando* g, XmlWriter& xml, WriteContext& ctx);
-    static void write(const GradualTempoChange* g, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Glissando* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const GradualTempoChange* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Groups* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const Hairpin* h, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Harmony* h, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Hook* h, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Harmony* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Hook* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const Image* i, XmlWriter& xml, WriteContext& ctx);
-    static void write(const InstrumentChange* i, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Image* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const InstrumentChange* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const Jump* j, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Jump* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const KeySig* k, XmlWriter& xml, WriteContext& ctx);
+    static void write(const KeySig* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const LayoutBreak* l, XmlWriter& xml, WriteContext& ctx);
-    static void write(const LedgerLine* l, XmlWriter& xml, WriteContext& ctx);
-    static void write(const LetRing* l, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Location* l, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Lyrics* l, XmlWriter& xml, WriteContext& ctx);
+    static void write(const LayoutBreak* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const LedgerLine* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const LetRing* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Location* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Lyrics* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const Marker* m, XmlWriter& xml, WriteContext& ctx);
-    static void write(const MeasureNumber* m, XmlWriter& xml, WriteContext& ctx);
-    static void write(const MeasureRepeat* m, XmlWriter& xml, WriteContext& ctx);
-    static void write(const MMRest* m, XmlWriter& xml, WriteContext& ctx);
-    static void write(const MMRestRange* m, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Marker* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const MeasureNumber* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const MeasureRepeat* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const MMRest* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const MMRestRange* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const Note* n, XmlWriter& xml, WriteContext& ctx);
-    static void write(const NoteEvent* n, XmlWriter& xml, WriteContext& ctx);
-    static void write(const NoteDot* n, XmlWriter& xml, WriteContext& ctx);
-    static void write(const NoteLine* n, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Note* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const NoteEvent* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const NoteDot* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const NoteLine* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Ottava* item, XmlWriter& xml, WriteContext& ctx);
 

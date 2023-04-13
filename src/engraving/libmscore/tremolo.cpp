@@ -724,6 +724,7 @@ bool Tremolo::crossStaffBeamBetween() const
 
 void Tremolo::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         return;
     }

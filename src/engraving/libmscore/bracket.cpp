@@ -566,6 +566,7 @@ void Bracket::setSelected(bool f)
 
 void Bracket::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     bool isStartTag = false;
     switch (_bi->bracketType()) {
     case BracketType::BRACE:

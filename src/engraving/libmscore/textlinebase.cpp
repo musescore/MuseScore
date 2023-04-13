@@ -611,6 +611,7 @@ TextLineBase::TextLineBase(const ElementType& type, EngravingItem* parent, Eleme
 
 void TextLineBase::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         return;
     }
@@ -634,6 +635,7 @@ void TextLineBase::spatiumChanged(double /*ov*/, double /*nv*/)
 
 void TextLineBase::writeProperties(XmlWriter& xml) const
 {
+    UNREACHABLE;
     for (Pid pid : TextLineBasePropertyId) {
         if (!isStyled(pid)) {
             writeProperty(xml, pid);

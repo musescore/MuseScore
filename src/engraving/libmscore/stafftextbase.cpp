@@ -51,6 +51,7 @@ StaffTextBase::StaffTextBase(const ElementType& type, Segment* parent, TextStyle
 
 void StaffTextBase::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         return;
     }

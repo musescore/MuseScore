@@ -197,6 +197,7 @@ std::vector<mu::PointF> Spacer::gripsPositions(const EditData&) const
 
 void Spacer::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     xml.tag("subtype", int(_spacerType));
     EngravingItem::writeProperties(xml);

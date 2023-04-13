@@ -107,6 +107,7 @@ GradualTempoChange* GradualTempoChange::clone() const
 
 void GradualTempoChange::write(XmlWriter& writer) const
 {
+    UNREACHABLE;
     writer.startElement(this);
     writeProperty(writer, Pid::TEMPO_CHANGE_TYPE);
     writeProperty(writer, Pid::TEMPO_EASING_METHOD);

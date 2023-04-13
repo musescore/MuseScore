@@ -190,6 +190,7 @@ void ChordLine::layout()
 
 void ChordLine::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     writeProperty(xml, Pid::CHORD_LINE_TYPE);
     writeProperty(xml, Pid::CHORD_LINE_STRAIGHT);

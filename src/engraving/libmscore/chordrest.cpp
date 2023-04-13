@@ -140,6 +140,7 @@ ChordRest::~ChordRest()
 
 void ChordRest::writeProperties(XmlWriter& xml) const
 {
+    UNREACHABLE;
     DurationElement::writeProperties(xml);
 
     //

@@ -92,6 +92,7 @@ void TBox::layout()
 
 void TBox::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     Box::writeProperties(xml);
     m_text->write(xml);

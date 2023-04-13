@@ -296,6 +296,7 @@ void Clef::setSmall(bool val)
 
 void Clef::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     writeProperty(xml, Pid::CLEF_TYPE_CONCERT);
     writeProperty(xml, Pid::CLEF_TYPE_TRANSPOSING);

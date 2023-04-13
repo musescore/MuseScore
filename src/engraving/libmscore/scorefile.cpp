@@ -29,6 +29,7 @@
 
 #include "compat/writescorehook.h"
 #include "rw/xml.h"
+#include "rw/400/twrite.h"
 #include "rw/400/writecontext.h"
 #include "rw/400/staffrw.h"
 
@@ -228,7 +229,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     masterScore()->checkMidiMapping();
     for (const Part* part : _parts) {
         if (!selectionOnly || ((staffIdx(part) >= staffStart) && (staffEnd >= staffIdx(part) + part->nstaves()))) {
-            part->write(xml);
+            rw400::TWrite::write(part, xml, *xml.context());
         }
     }
 

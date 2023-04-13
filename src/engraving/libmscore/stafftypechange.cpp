@@ -69,6 +69,7 @@ StaffTypeChange::~StaffTypeChange()
 
 void StaffTypeChange::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     if (m_staffType) {
         m_staffType->write(xml);

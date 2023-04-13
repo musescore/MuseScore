@@ -123,6 +123,7 @@ void TremoloBar::draw(mu::draw::Painter* painter) const
 
 void TremoloBar::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     writeProperty(xml, Pid::MAG);
     writeProperty(xml, Pid::LINE_WIDTH);

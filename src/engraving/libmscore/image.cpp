@@ -278,6 +278,7 @@ double Image::imageWidth() const
 
 void Image::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     // attempt to convert the _linkPath to a path relative to the score
     //
     // TODO : on Save As, score()->fileInfo() still contains the old path and fname

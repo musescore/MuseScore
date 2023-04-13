@@ -1282,6 +1282,7 @@ void SLine::layout()
 
 void SLine::writeProperties(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!endElement()) {
         ((Spanner*)this)->computeEndElement();                    // HACK
         if (!endElement()) {
@@ -1381,6 +1382,7 @@ const mu::RectF& SLine::bbox() const
 
 void SLine::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     SLine::writeProperties(xml);
     xml.endElement();

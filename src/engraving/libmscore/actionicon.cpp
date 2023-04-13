@@ -78,6 +78,7 @@ void ActionIcon::setFontSize(double size)
 
 void ActionIcon::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     xml.tag("subtype", int(m_actionType));
     if (!m_actionCode.empty()) {

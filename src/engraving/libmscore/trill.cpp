@@ -383,6 +383,7 @@ LineSegment* Trill::createLineSegment(System* parent)
 
 void Trill::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         return;
     }

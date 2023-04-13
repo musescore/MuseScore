@@ -430,6 +430,7 @@ SlurTie::~SlurTie()
 
 void SlurTie::writeProperties(XmlWriter& xml) const
 {
+    UNREACHABLE;
     Spanner::writeProperties(xml);
     int idx = 0;
     for (const SpannerSegment* ss : spannerSegments()) {

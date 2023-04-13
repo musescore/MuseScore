@@ -952,6 +952,7 @@ void Segment::swapElements(track_idx_t i1, track_idx_t i2)
 
 void Segment::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (written()) {
         return;
     }

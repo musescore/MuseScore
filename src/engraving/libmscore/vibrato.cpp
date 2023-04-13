@@ -221,6 +221,7 @@ LineSegment* Vibrato::createLineSegment(System* parent)
 
 void Vibrato::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         return;
     }

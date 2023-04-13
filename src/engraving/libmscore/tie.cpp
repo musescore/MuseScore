@@ -1013,6 +1013,7 @@ Tie::Tie(EngravingItem* parent)
 
 void Tie::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     SlurTie::writeProperties(xml);
     xml.endElement();

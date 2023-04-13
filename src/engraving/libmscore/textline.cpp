@@ -190,6 +190,7 @@ void TextLine::initStyle()
 
 void TextLine::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         return;
     }

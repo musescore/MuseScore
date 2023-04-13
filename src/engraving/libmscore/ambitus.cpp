@@ -261,6 +261,7 @@ void Ambitus::setBottomTpc(int val, bool applyLogic)
 
 void Ambitus::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     xml.tagProperty(Pid::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
     xml.tagProperty(Pid::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));

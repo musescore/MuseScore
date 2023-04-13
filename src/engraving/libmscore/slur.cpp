@@ -1475,6 +1475,7 @@ int Slur::calcStemArrangement(EngravingItem* start, EngravingItem* end)
 
 void Slur::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (broken()) {
         LOGD("broken slur not written");
         return;

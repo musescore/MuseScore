@@ -796,6 +796,7 @@ Fraction BarLine::playTick() const
 
 void BarLine::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
 
     writeProperty(xml, Pid::BARLINE_TYPE);

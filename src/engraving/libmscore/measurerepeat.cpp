@@ -227,6 +227,7 @@ Shape MeasureRepeat::shape() const
 
 void MeasureRepeat::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     writeProperty(xml, Pid::SUBTYPE);
     Rest::writeProperties(xml);

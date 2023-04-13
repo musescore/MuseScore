@@ -78,6 +78,7 @@ noteList BagpipeEmbellishment::getNoteList() const
 
 void BagpipeEmbellishment::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     xml.tag("subtype", TConv::toXml(_embelType));
     xml.endElement();

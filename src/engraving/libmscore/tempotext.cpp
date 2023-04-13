@@ -76,6 +76,7 @@ TempoText::TempoText(Segment* parent)
 
 void TempoText::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     xml.tag("tempo", TConv::toXml(_tempo));
     if (_followText) {

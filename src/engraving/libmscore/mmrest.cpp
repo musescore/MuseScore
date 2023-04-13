@@ -222,6 +222,7 @@ RectF MMRest::numberRect() const
 
 void MMRest::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement("Rest"); // for compatibility, see also Measure::readVoice()
     writeProperties(xml);
     el().write(xml);
@@ -230,6 +231,7 @@ void MMRest::write(XmlWriter& xml) const
 
 void MMRest::writeProperties(XmlWriter& xml) const
 {
+    UNREACHABLE;
     ChordRest::writeProperties(xml);
     writeProperty(xml, Pid::MMREST_NUMBER_POS);
     writeProperty(xml, Pid::MMREST_NUMBER_VISIBLE);
