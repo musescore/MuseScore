@@ -2021,3 +2021,13 @@ void TWrite::write(const TempoText* item, XmlWriter& xml, WriteContext& ctx)
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
+
+void TWrite::write(const Text* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
+    xml.endElement();
+}
