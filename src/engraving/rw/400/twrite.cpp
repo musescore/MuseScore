@@ -124,11 +124,23 @@
 #include "../../libmscore/systemdivider.h"
 #include "../../libmscore/systemtext.h"
 
-#include "../../libmscore/tie.h"
+#include "../../libmscore/tempotext.h"
 #include "../../libmscore/text.h"
 #include "../../libmscore/textbase.h"
+#include "../../libmscore/textline.h"
+#include "../../libmscore/textlinebase.h"
 #include "../../libmscore/chordtextlinebase.h"
+#include "../../libmscore/tie.h"
+#include "../../libmscore/timesig.h"
 #include "../../libmscore/tremolo.h"
+#include "../../libmscore/tremolobar.h"
+#include "../../libmscore/trill.h"
+#include "../../libmscore/tuplet.h"
+
+#include "../../libmscore/vibrato.h"
+#include "../../libmscore/volta.h"
+
+#include "../../libmscore/whammybar.h"
 
 #include "../xmlwriter.h"
 #include "writecontext.h"
@@ -1997,4 +2009,15 @@ void TWrite::write(const SystemDivider* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::write(const SystemText* item, XmlWriter& xml, WriteContext& ctx)
 {
     write(static_cast<const StaffTextBase*>(item), xml, ctx);
+}
+
+void TWrite::write(const TempoText* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    xml.tag("tempo", TConv::toXml(item->tempo()));
+    if (item->followText()) {
+        xml.tag("followText", item->followText());
+    }
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
+    xml.endElement();
 }
