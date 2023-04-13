@@ -142,7 +142,7 @@ Column {
                         result.push({ title: qsTrc("inspector", "Reset"), enabled: root.isModified, icon: IconCode.UNDO, id: "reset" })
 
                         if (root.isModified) {
-                            result.push({ title: qsTrc("inspector", "Save as default style for this score"), enabled: true, icon: IconCode.SAVE, id: "save" })
+                            result.push({ title: qsTrc("inspector", "Save as default style for this score"), enabled: !root.propertyItem.isUndefined, icon: IconCode.SAVE, id: "save" })
                         } else {
                             result.push({ title: qsTrc("inspector", "This is set as the default style for this score"), enabled: false, icon: IconCode.TICK_RIGHT_ANGLE })
                         }
