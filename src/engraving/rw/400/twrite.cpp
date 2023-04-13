@@ -2124,3 +2124,20 @@ void TWrite::write(const TremoloBar* item, XmlWriter& xml, WriteContext&)
     }
     xml.endElement();
 }
+
+void TWrite::write(const Trill* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    xml.tag("subtype", TConv::toXml(item->trillType()));
+    writeProperty(item, xml, Pid::PLAY);
+    writeProperty(item, xml, Pid::ORNAMENT_STYLE);
+    writeProperty(item, xml, Pid::PLACEMENT);
+    writeProperties(static_cast<const SLine*>(item), xml, ctx);
+    if (item->accidental()) {
+        write(item->accidental(), xml, ctx);
+    }
+    xml.endElement();
+}
