@@ -150,6 +150,7 @@ public:
     void setStyle(TremoloStyle v) { _style = v; }
     void setBeamDirection(DirectionV v);
     void setBeamFragment(const BeamFragment& bf) { _beamFragment = bf; }
+    const BeamFragment& beamFragment() const { return _beamFragment; }
 
     double defaultStemLengthStart();
     double defaultStemLengthEnd();

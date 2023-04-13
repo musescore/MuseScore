@@ -2078,3 +2078,37 @@ void TWrite::write(const TimeSig* item, XmlWriter& xml, WriteContext& ctx)
 
     xml.endElement();
 }
+
+void TWrite::write(const Tremolo* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::TREMOLO_TYPE);
+    writeProperty(item, xml, Pid::TREMOLO_STYLE);
+    writeItemProperties(item, xml, ctx);
+    if (!item->twoNotes()) {
+        xml.endElement();
+        return;
+    }
+    // write manual adjustments to file
+    int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
+    if (item->userModified()) {
+        double _spatium = item->spatium();
+
+        xml.startElement("Fragment");
+        xml.tag("y1", item->beamFragment().py1[idx] / _spatium);
+        xml.tag("y2", item->beamFragment().py2[idx] / _spatium);
+        xml.endElement();
+    }
+
+    // this info is used for regression testing
+    // l1/l2 is the beam position of the layout engine
+    if (MScore::testMode) {
+        double spatium8 = item->spatium() * .125;
+        xml.tag("l1", int(lrint(item->beamFragment().py1[idx] / spatium8)));
+        xml.tag("l2", int(lrint(item->beamFragment().py2[idx] / spatium8)));
+    }
+    xml.endElement();
+}
