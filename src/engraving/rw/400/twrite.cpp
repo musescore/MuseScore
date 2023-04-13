@@ -2055,3 +2055,26 @@ void TWrite::write(const Tie* item, XmlWriter& xml, WriteContext& ctx)
     writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
     xml.endElement();
 }
+
+void TWrite::write(const TimeSig* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::TIMESIG_TYPE);
+    writeItemProperties(item, xml, ctx);
+
+    xml.tag("sigN", item->numerator());
+    xml.tag("sigD", item->denominator());
+    if (item->stretch() != Fraction(1, 1)) {
+        xml.tag("stretchN", item->stretch().numerator());
+        xml.tag("stretchD", item->stretch().denominator());
+    }
+    writeProperty(item, xml, Pid::NUMERATOR_STRING);
+    writeProperty(item, xml, Pid::DENOMINATOR_STRING);
+    if (!item->groups().empty()) {
+        write(&item->groups(), xml, ctx);
+    }
+    writeProperty(item, xml, Pid::SHOW_COURTESY);
+    writeProperty(item, xml, Pid::SCALE);
+
+    xml.endElement();
+}
