@@ -66,7 +66,7 @@ StyledPopupView {
         var globPos = mapToItem(notationView, Qt.point(root.x, root.y))
         if (globPos.y < 0) {
             setOpensUpward(false)
-            root.y = harpModel.staffPos.y + harpModel.staffHeight
+            root.y = harpModel.staffPos.y + harpModel.staffPos.height + 10
         }
 
         // not enough room below stave to open so open above

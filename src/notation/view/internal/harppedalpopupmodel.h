@@ -41,8 +41,7 @@ class HarpPedalPopupModel : public AbstractElementPopupModel
         QVector<mu::notation::HarpPedalPopupModel::Position> pedalState READ pedalState WRITE setDiagramPedalState NOTIFY pedalStateChanged)
     Q_PROPERTY(QPointF pos READ pos CONSTANT)
     Q_PROPERTY(QPointF size READ size CONSTANT)
-    Q_PROPERTY(QPointF staffPos READ staffPos CONSTANT)
-    Q_PROPERTY(double staffHeight READ staffHeight CONSTANT)
+    Q_PROPERTY(QRectF staffPos READ staffPos CONSTANT)
     Q_PROPERTY(bool belowStave READ belowStave CONSTANT)
 
 public:
@@ -63,9 +62,7 @@ public:
 
     QPointF size() const;
 
-    QPointF staffPos() const;
-
-    double staffHeight() const;
+    QRectF staffPos() const;
 
     bool belowStave() const;
 

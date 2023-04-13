@@ -22,6 +22,7 @@
 
 #include "harppedalpopupmodel.h"
 #include "log.h"
+#include "libmscore/stafflines.h"
 
 using namespace mu::notation;
 
@@ -116,25 +117,28 @@ bool HarpPedalPopupModel::belowStave() const
     return false;
 }
 
-QPointF HarpPedalPopupModel::staffPos() const
+QRectF HarpPedalPopupModel::staffPos() const
 {
+    // Just need top & bottom y.  Don't need x pos
     Measure* measure = m_diagram->measure();
-    if (measure) {
-        RectF measureRect = measure->canvasBoundingRect();
-        PointF pos = PointF(measureRect.topLeft().x(), measureRect.topLeft().y());
-        return fromLogical(pos).toQPointF();
+    auto harpIdxList = m_diagram->part()->staveIdxList();
+    std::list<engraving::StaffLines*> staves;
+    for (auto idx : harpIdxList) {
+        staves.push_back(measure->staffLines(idx));
     }
-    return QPointF();
-}
 
-double HarpPedalPopupModel::staffHeight() const
-{
-    Measure* measure = m_diagram->measure();
-    if (measure) {
-        RectF measureRect = fromLogical(measure->canvasBoundingRect());
-        return measureRect.bottomLeft().y() - measureRect.topLeft().y();
+    if (staves.size() > 0) {
+        engraving::StaffLines* topStaff = staves.front();
+        engraving::StaffLines* bottomStaff = staves.back();
+        RectF staffRect
+            = RectF(measure->canvasBoundingRect().x(),
+                    topStaff->canvasBoundingRect().y(),
+                    measure->canvasBoundingRect().width(),
+                    bottomStaff->canvasBoundingRect().bottomLeft().y() - topStaff->canvasBoundingRect().topLeft().y());
+
+        return fromLogical(staffRect).toQRectF();
     }
-    return 0;
+    return QRectF();
 }
 
 QVector<HarpPedalPopupModel::Position> HarpPedalPopupModel::pedalState() const
