@@ -253,6 +253,8 @@ public:
     static void write(const Vibrato* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Volta* item, XmlWriter& xml, WriteContext& ctx);
 
+    static void write(const WhammyBar* item, XmlWriter& xml, WriteContext& ctx);
+
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
     static void writeStyledProperties(const EngravingItem* item, XmlWriter& xml);
