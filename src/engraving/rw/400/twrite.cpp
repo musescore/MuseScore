@@ -2031,3 +2031,20 @@ void TWrite::write(const Text* item, XmlWriter& xml, WriteContext& ctx)
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
+
+void TWrite::write(const TextLine* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    if (item->systemFlag()) {
+        xml.startElement(item, { { "system", "1" } });
+    } else {
+        xml.startElement(item);
+    }
+    // other styled properties are included in TextLineBase pids list
+    writeProperty(item, xml, Pid::PLACEMENT);
+    writeProperty(item, xml, Pid::OFFSET);
+    writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
+    xml.endElement();
+}
