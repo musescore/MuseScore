@@ -4413,8 +4413,8 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
     bool ignorePrev = !prevMeas || prevMeas->system() != system() || !prevMeasEnd
                       || (prevMeasEnd->segmentType() & SegmentType::BarLineType && segment->segmentType() & SegmentType::BarLineType);
     if (!ignorePrev) {
-        qDebug() << prevMeasEnd->subTypeName() << segment->subTypeName();
         x = prevMeasEnd->minHorizontalCollidingDistance(segment);
+        x -= prevMeas->width() - prevMeasEnd->x();
     }
 
     // If that doesn't succeed (e.g. first bar) then just use left-margins
