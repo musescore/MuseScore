@@ -2191,3 +2191,13 @@ void TWrite::write(const Volta* item, XmlWriter& xml, WriteContext& ctx)
     xml.tag("endings", TConv::toXml(item->endings()));
     xml.endElement();
 }
+
+void TWrite::write(const WhammyBar* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
+    xml.endElement();
+}
