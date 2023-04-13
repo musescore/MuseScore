@@ -4121,7 +4121,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
         // skipped in computeMinWidth() -- the only way this would be an issue here is
         // if this method was called specifically with the invisible segment specified
         // which I'm pretty sure doesn't happen at this point. still...
-        if (!s->enabled() || !s->visible() || s->allElementsInvisible() || s->isRightAligned()) {
+        if (!s->enabled() || !s->visible() || s->allElementsInvisible() || (s->isRightAligned() && s != firstEnabled())) {
             s->setWidth(0);
             s = s->next();
             continue;
@@ -4348,7 +4348,7 @@ void Measure::spaceRightAlignedSegments()
     for (Segment* raSegment : rightAlignedSegments) {
         // 1) right-align the segment against the following ones
         double minDistAfter = arbitraryLowReal;
-        for (Segment* seg = raSegment->nextActive(); seg; seg = seg->nextActive()) {
+        for (Segment* seg = raSegment->next(); seg; seg = seg->next()) {
             double xDiff = seg->x() - raSegment->x();
             double minDist = raSegment->minHorizontalCollidingDistance(seg);
             minDistAfter = std::max(minDistAfter, minDist - xDiff);
@@ -4409,12 +4409,16 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
 
     // First, try to compute first segment x-position by padding against end barline of previous measure
     Measure* prevMeas = (prev() && prev()->isMeasure() && prev()->system() == system()) ? toMeasure(prev()) : nullptr;
-    Segment* prevMeasEnd = prevMeas ? prevMeas->last() : nullptr;
-    if (prevMeasEnd && prevMeasEnd->isEndBarLineType()
-        && !(segment->isBeginBarLineType() || segment->isStartRepeatBarLineType() || segment->isBarLineType())) {
-        x = prevMeasEnd->minHorizontalCollidingDistance(segment) - prevMeasEnd->minRight();
+    Segment* prevMeasEnd = prevMeas ? prevMeas->lastEnabled() : nullptr;
+    bool ignorePrev = !prevMeas || prevMeas->system() != system() || !prevMeasEnd
+                      || (prevMeasEnd->segmentType() & SegmentType::BarLineType && segment->segmentType() & SegmentType::BarLineType);
+    if (!ignorePrev) {
+        qDebug() << prevMeasEnd->subTypeName() << segment->subTypeName();
+        x = prevMeasEnd->minHorizontalCollidingDistance(segment);
     }
-    if (x <= 0) { // If that doesn't succeed (e.g. first bar) then just use left-margins
+
+    // If that doesn't succeed (e.g. first bar) then just use left-margins
+    if (x <= 0) {
         x = segment->minLeft(ls);
         if (segment->isChordRestType()) {
             x += score()->styleMM(segment->hasAccidentals() ? Sid::barAccidentalDistance : Sid::barNoteDistance);
@@ -4426,10 +4430,13 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
             x = std::max(x, score()->styleMM(Sid::timesigLeftMargin).val());
         }
     }
-    if (prevMeas && prevMeas->repeatEnd() && segment->isStartRepeatBarLineType() && (prevMeas->system() == system())) {
-        // The start-repeat should overlap the end-repeat of the previous measure
+
+    // Special case: the start-repeat should overlap the end-repeat of the previous measure
+    bool prevIsEndRepeat = prevMeas && prevMeas->repeatEnd() && prevMeasEnd && prevMeasEnd->isEndBarLineType();
+    if (prevIsEndRepeat && segment->isStartRepeatBarLineType() && (prevMeas->system() == system())) {
         x -= score()->styleMM(Sid::endBarWidth);
     }
+
     // Do a final check of chord distances (invisible items may in some cases elude the 2 previous steps)
     if (segment->isChordRestType()) {
         double barNoteDist = score()->styleMM(Sid::barNoteDistance).val();

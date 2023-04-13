@@ -4870,6 +4870,11 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
         } else {
             st = SegmentType::HeaderClef;
         }
+    } else if (e->rtick() == Fraction(0, 1)) {
+        Measure* curMeasure = e->findMeasure();
+        if (curMeasure && curMeasure->prevMeasure()) {
+            moveClef = true;
+        }
     } else if (e->isClef()) {
         Clef* clef = toClef(e);
         if (clef->segment()->isHeaderClefType()) {
