@@ -247,6 +247,7 @@ public:
     static void write(const TimeSig* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Tremolo* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const TremoloBar* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Trill* item, XmlWriter& xml, WriteContext& ctx);
 
 private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
