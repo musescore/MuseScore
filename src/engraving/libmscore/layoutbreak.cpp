@@ -86,6 +86,7 @@ void LayoutBreak::setParent(MeasureBase* parent)
 
 void LayoutBreak::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     EngravingItem::writeProperties(xml);
 

@@ -756,6 +756,7 @@ Fraction Staff::currentKeyTick(const Fraction& tick) const
 
 void Staff::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this, { { "id", idx() + 1 } });
 
     if (links()) {

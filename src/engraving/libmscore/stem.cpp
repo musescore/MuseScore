@@ -224,6 +224,7 @@ void Stem::draw(mu::draw::Painter* painter) const
 
 void Stem::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     EngravingItem::writeProperties(xml);
     writeProperty(xml, Pid::USER_LEN);

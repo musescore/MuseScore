@@ -82,6 +82,7 @@ void Arpeggio::setHeight(double h)
 
 void Arpeggio::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         return;
     }

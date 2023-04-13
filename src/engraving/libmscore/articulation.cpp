@@ -159,6 +159,7 @@ void Articulation::setUp(bool val)
 
 void Articulation::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         return;
     }

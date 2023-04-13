@@ -1221,6 +1221,7 @@ Note* Chord::selectedNote() const
 
 void Chord::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     for (Chord* c : _graceNotes) {
         c->write(xml);
     }

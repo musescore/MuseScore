@@ -131,6 +131,7 @@ void Jump::layout()
 
 void Jump::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     TextBase::writeProperties(xml);
     xml.tag("jumpTo", _jumpTo);

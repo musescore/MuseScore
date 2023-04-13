@@ -920,6 +920,7 @@ void Rest::remove(EngravingItem* e)
 
 void Rest::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (m_gap) {
         return;
     }

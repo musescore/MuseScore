@@ -1279,6 +1279,7 @@ void Beam::spatiumChanged(double oldValue, double newValue)
 
 void Beam::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (_elements.empty()) {
         return;
     }

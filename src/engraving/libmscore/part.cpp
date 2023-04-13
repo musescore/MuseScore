@@ -149,6 +149,7 @@ Part* Part::masterPart()
 
 void Part::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this, { { "id", _id.toUint64() } });
 
     for (const Staff* staff : _staves) {

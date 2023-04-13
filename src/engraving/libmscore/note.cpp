@@ -1481,6 +1481,7 @@ void Note::draw(mu::draw::Painter* painter) const
 
 void Note::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     EngravingItem::writeProperties(xml);
 

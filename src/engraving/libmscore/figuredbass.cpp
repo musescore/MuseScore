@@ -447,6 +447,7 @@ String FiguredBassItem::normalizedText() const
 
 void FiguredBassItem::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement("FiguredBassItem", this);
     xml.tag("brackets", { { "b0", int(parenth[0]) }, { "b1", int(parenth[1]) },  { "b2", int(parenth[2]) }, { "b3", int(parenth[3]) },
                 { "b4", int(parenth[4]) } });
@@ -1038,6 +1039,7 @@ Sid FiguredBass::getPropertyStyle(Pid id) const
 
 void FiguredBass::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         return;
     }

@@ -65,6 +65,7 @@ void PlayTechAnnotation::layout()
 
 void PlayTechAnnotation::write(XmlWriter& writer) const
 {
+    UNREACHABLE;
     writer.startElement(this);
     writeProperty(writer, Pid::PLAY_TECH_TYPE);
     StaffTextBase::writeProperties(writer);

@@ -129,6 +129,7 @@ void Symbol::draw(mu::draw::Painter* painter) const
 
 void Symbol::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     xml.tag("name", SymNames::nameForSymId(_sym));
     if (_scoreFont) {
@@ -230,6 +231,7 @@ void FSymbol::draw(mu::draw::Painter* painter) const
 
 void FSymbol::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     xml.tag("font",     _font.family());
     xml.tag("fontsize", _font.pointSizeF());

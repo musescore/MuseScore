@@ -103,6 +103,7 @@ mu::RectF SystemDivider::drag(EditData& ed)
 
 void SystemDivider::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this, { { "type", (dividerType() == SystemDivider::Type::LEFT ? "left" : "right") } });
     writeProperties(xml);
     xml.endElement();

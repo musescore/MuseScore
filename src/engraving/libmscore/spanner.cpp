@@ -1472,6 +1472,7 @@ static Fraction fraction(const XmlWriter& xml, const EngravingItem* current, con
 
 void Spanner::writeProperties(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (xml.context()->clipboardmode()) {
         xml.tagFraction("ticks_f", ticks());
     }

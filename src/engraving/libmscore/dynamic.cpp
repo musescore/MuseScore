@@ -233,6 +233,7 @@ bool Dynamic::isVelocityChangeAvailable() const
 
 void Dynamic::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     if (!xml.context()->canWrite(this)) {
         return;
     }

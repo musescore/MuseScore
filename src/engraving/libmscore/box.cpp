@@ -203,6 +203,7 @@ std::vector<PointF> VBox::gripsPositions(const EditData&) const
 
 void Box::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     writeProperties(xml);
     xml.endElement();
@@ -214,6 +215,7 @@ void Box::write(XmlWriter& xml) const
 
 void Box::writeProperties(XmlWriter& xml) const
 {
+    UNREACHABLE;
     for (Pid id : {
             Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
             Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE }) {
@@ -575,6 +577,7 @@ bool HBox::isMovable() const
 
 void HBox::writeProperties(XmlWriter& xml) const
 {
+    UNREACHABLE;
     writeProperty(xml, Pid::CREATE_SYSTEM_HEADER);
     Box::writeProperties(xml);
 }

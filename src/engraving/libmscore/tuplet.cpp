@@ -824,6 +824,7 @@ void Tuplet::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 
 void Tuplet::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     xml.startElement(this);
     EngravingItem::writeProperties(xml);
 
