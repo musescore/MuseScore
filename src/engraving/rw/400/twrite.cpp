@@ -2112,3 +2112,15 @@ void TWrite::write(const Tremolo* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.endElement();
 }
+
+void TWrite::write(const TremoloBar* item, XmlWriter& xml, WriteContext&)
+{
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::MAG);
+    writeProperty(item, xml, Pid::LINE_WIDTH);
+    writeProperty(item, xml, Pid::PLAY);
+    for (const PitchValue& v : item->points()) {
+        xml.tag("point", { { "time", v.time }, { "pitch", v.pitch }, { "vibrato", v.vibrato } });
+    }
+    xml.endElement();
+}
