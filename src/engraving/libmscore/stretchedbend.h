@@ -39,7 +39,9 @@ public:
     StretchedBend* clone() const override { return new StretchedBend(*this); }
 
     void layout() override;
+    void layoutStretched();
     void draw(mu::draw::Painter*) const override;
+    bool stretchedMode() const { return m_stretchedMode; }
 
     static void prepareBends(std::vector<StretchedBend*>& bends);
     static void layoutBends(const std::vector<Segment*>& sl);
@@ -57,6 +59,7 @@ private:
     void layoutDraw(const bool layoutMode, mu::draw::Painter* painter = nullptr) const; /// loop for both layout and draw logic
     void preLayout();
     void postLayout();
+    void doLayout();
 
     void setupPainter(mu::draw::Painter* painter) const;
     void fillArrows();
@@ -64,6 +67,8 @@ private:
     double bendHeight(int bendIdx) const;
 
     bool m_reduntant = false; // marks that the bend was 'glued' to neighbour and is now unnecessary
+
+    bool m_stretchedMode = false; // layout with fixed size or stretched to next segment
 
     enum class BendSegmentType {
         NO_TYPE = -1,

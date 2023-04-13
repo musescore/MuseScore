@@ -847,7 +847,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
             for (Note* note : c->notes()) {
                 for (EngravingItem* item : note->el()) {
                     if (item && item->isStretchedBend()) {
-                        toStretchedBend(item)->layout();
+                        toStretchedBend(item)->layoutStretched();
                     }
                 }
             }

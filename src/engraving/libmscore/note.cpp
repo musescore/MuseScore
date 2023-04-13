@@ -2423,7 +2423,7 @@ void Note::layout2()
             if (f->layoutType() == ElementType::NOTE) {
                 f->layout();
             }
-        } else if (!e->isStretchedBend()) {
+        } else {
             e->setMag(mag());
             e->layout();
         }
@@ -3915,7 +3915,7 @@ Shape Note::shape() const
     }
     for (auto e : _el) {
         if (e->addToSkyline()) {
-            if (e->isStretchedBend() || e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
+            if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
                 continue;
             }
             shape.add(e->bbox().translated(e->pos()), e);
