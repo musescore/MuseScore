@@ -2532,7 +2532,7 @@ const TextStyle* textStyle(Tid idx)
 Tid textStyleFromName(const QString& name)
       {
       for (const auto& s : textStyles) {
-            if (s.name == name)
+            if (QString::compare(s.name, name, Qt::CaseInsensitive) == 0)
                   return s.tid;
             }
       if (name == "Technique")                  // compatibility
