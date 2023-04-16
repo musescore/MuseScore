@@ -39,6 +39,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafflines.h"
+#include "libmscore/stretchedbend.h"
 #include "libmscore/system.h"
 #include "libmscore/tie.h"
 #include "libmscore/tremolo.h"
@@ -831,7 +832,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     }
 
     //-------------------------------------------------------------
-    // layout articulations and fingering
+    // layout articulations, fingering and stretched bends
     //-------------------------------------------------------------
 
     for (Segment* s : sl) {
@@ -843,6 +844,13 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
             c->layoutArticulations();
             c->layoutArticulations2();
             LayoutChords::layoutChordBaseFingering(c, system);
+            for (Note* note : c->notes()) {
+                for (EngravingItem* item : note->el()) {
+                    if (item && item->isStretchedBend()) {
+                        toStretchedBend(item)->layoutStretched();
+                    }
+                }
+            }
         }
     }
 

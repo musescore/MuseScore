@@ -62,6 +62,7 @@
 #include "spanner.h"
 #include "staff.h"
 #include "stafftype.h"
+#include "stretchedbend.h"
 #include "stringdata.h"
 #include "tie.h"
 #include "tremolo.h"

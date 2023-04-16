@@ -205,11 +205,18 @@ void StretchedBend::stretchSegments()
     }
 
     /// find end of the whole bend
-    double bendEnd = pos().x() + m_spatium * 6;
+    double bendEnd = m_stretchedMode ? nextSegmentX() : m_spatium * 6;
 
     for (BendSegment& seg : m_bendSegments) {
         if (seg.type != BendSegmentType::LINE_UP) {
             seg.dest.rx() = bendEnd;
+        }
+    }
+
+    for (BendSegment& seg : m_bendSegments) {
+        if (seg.src.x() > seg.dest.x()) {
+            m_bendSegments.clear();
+            return;
         }
     }
 
@@ -233,6 +240,26 @@ void StretchedBend::stretchSegments()
 //---------------------------------------------------------
 
 void StretchedBend::layout()
+{
+    m_stretchedMode = false;
+    doLayout();
+}
+
+//---------------------------------------------------------
+//   layoutStretched
+//---------------------------------------------------------
+
+void StretchedBend::layoutStretched()
+{
+    m_stretchedMode = true;
+    doLayout();
+}
+
+//---------------------------------------------------------
+//   doLayout
+//---------------------------------------------------------
+
+void StretchedBend::doLayout()
 {
     preLayout();
     layoutDraw(true);
