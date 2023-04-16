@@ -2718,7 +2718,6 @@ void TLayout::layout(Harmony* item, LayoutContext& ctx)
     //      setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
 
     layout1(item, ctx);
-    item->setPos(calculateBoundingRect(item, ctx));
 }
 
 void TLayout::layout1(Harmony* item, LayoutContext& ctx)
@@ -2731,13 +2730,14 @@ void TLayout::layout1(Harmony* item, LayoutContext& ctx)
         item->textBlockList().push_back(TextBlock());
     }
 
-    calculateBoundingRect(item, ctx);
+    auto positionPoint = calculateBoundingRect(item, ctx);
 
     if (item->hasFrame()) {
         item->layoutFrame();
     }
 
     ctx.addRefresh(item->canvasBoundingRect());
+    item->setPos(positionPoint);
 }
 
 PointF TLayout::calculateBoundingRect(Harmony* item, LayoutContext& ctx)
