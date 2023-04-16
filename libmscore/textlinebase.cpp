@@ -113,7 +113,7 @@ void TextLineBaseSegment::draw(QPainter* painter) const
       QVector<qreal> dashDotted    = { 3.0, 3.0, 0.01, 2.99 };
       QVector<qreal> dashDotDotted = { 3.0, 3.0, 0.01, 2.99, 0.01, 2.99 };
       QVector<qreal> customDashes  = { tl->dashLineLen(), tl->dashGapLen() };
-  
+
       switch (tl->lineStyle()) {
             case Qt::DashLine:
                 pen.setDashPattern(dashed);
@@ -135,8 +135,9 @@ void TextLineBaseSegment::draw(QPainter* painter) const
                   break;
             }
 
-      //Draw lines      
+      //Draw lines
       if (twoLines) {   // hairpins
+            pen.setCapStyle(Qt::FlatCap);
             painter->setPen(pen);
             painter->drawLines(&points[0], 1);
             painter->drawLines(&points[2], 1);
