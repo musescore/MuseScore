@@ -29,6 +29,7 @@ using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::framework;
 using namespace mu::async;
+using namespace mu::io;
 
 void SoundFontRepository::init()
 {
@@ -48,7 +49,7 @@ void SoundFontRepository::loadSoundFontPaths()
     io::paths_t dirs = configuration()->soundFontDirectories();
 
     for (const io::path_t& dir : dirs) {
-        RetVal<io::paths_t> soundFonts = fileSystem()->scanFiles(dir, filters);
+        RetVal<io::paths_t> soundFonts = fileSystem()->scanFiles(dir, filters, ScanMode::FilesAndSymLinksInCurrentDirAndSubdirs);
         if (!soundFonts.ret) {
             LOGE() << soundFonts.ret.toString();
             continue;
