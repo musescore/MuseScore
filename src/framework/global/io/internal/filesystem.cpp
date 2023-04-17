@@ -247,16 +247,20 @@ RetVal<io::paths_t> FileSystem::scanFiles(const io::path_t& rootDir, const std::
     }
 
     QDirIterator::IteratorFlags flags = QDirIterator::NoIteratorFlags;
-    QDir::Filters filters = QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Readable;
+    QDir::Filters filters = QDir::NoDotAndDotDot | QDir::Readable;
 
     switch (mode) {
     case ScanMode::FilesInCurrentDir:
-        filters |= QDir::Files;
+        filters |= QDir::Files | QDir::NoSymLinks;
         break;
     case ScanMode::FilesAndFoldersInCurrentDir:
-        filters |= QDir::Files | QDir::Dirs;
+        filters |= QDir::Files | QDir::Dirs | QDir::NoSymLinks;
         break;
     case ScanMode::FilesInCurrentDirAndSubdirs:
+        flags |= QDirIterator::Subdirectories;
+        filters |= QDir::Files | QDir::NoSymLinks;
+        break;
+    case ScanMode::FilesAndSymLinksInCurrentDirAndSubdirs:
         flags |= QDirIterator::Subdirectories;
         filters |= QDir::Files;
         break;
