@@ -156,7 +156,6 @@ public:
     Fraction ticks() const;
 
     void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     void reset() override;
@@ -165,6 +164,7 @@ public:
 
     void layout1();
     void layout() override;
+    void layoutIfNeed();
 
     PointF chordBeamAnchor(const ChordRest* chord, BeamTremoloLayout::ChordBeamAnchorType anchorType) const;
     double chordBeamAnchorY(const ChordRest* chord) const;
@@ -246,6 +246,7 @@ public:
 
     const std::vector<TremAnchor>& tremAnchors() const { return _tremAnchors; }
 
+    const std::vector<BeamFragment*>& beamFragments() const { return fragments; }
     void addBeamFragment(BeamFragment* f) { fragments.push_back(f); }
 
 private:

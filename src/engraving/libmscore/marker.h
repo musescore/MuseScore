@@ -55,7 +55,6 @@ public:
     Measure* measure() const { return (Measure*)explicitParent(); }
 
     void layout() override;
-    void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
     String label() const { return _label; }

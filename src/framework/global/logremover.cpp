@@ -44,7 +44,7 @@ void LogRemover::removeLogs(const io::path_t& logsDir, int olderThanDays, const 
     io::paths_t toRemoveFiles;
     for (const io::path_t& file : files) {
         Date date = parseDate(file.toString());
-        if (!date.isNull()) {
+        if (date.isNull()) {
             continue;
         }
 

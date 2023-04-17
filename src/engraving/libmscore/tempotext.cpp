@@ -27,13 +27,15 @@
 #include "containers.h"
 #include "translation.h"
 #include "rw/xml.h"
-#include "rw/400/tread.h"
+
 #include "types/typesconv.h"
 #include "types/constants.h"
 
 #include "score.h"
 #include "segment.h"
 #include "tempotext.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -81,15 +83,6 @@ void TempoText::write(XmlWriter& xml) const
     }
     TextBase::writeProperties(xml);
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void TempoText::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 double TempoText::tempoBpm() const

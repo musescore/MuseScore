@@ -622,58 +622,6 @@ void MeasureBase::writeProperties(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool MeasureBase::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-    if (tag == "LayoutBreak") {
-        LayoutBreak* lb = Factory::createLayoutBreak(this);
-        lb->read(e);
-        bool doAdd = true;
-        switch (lb->layoutBreakType()) {
-        case LayoutBreakType::LINE:
-            if (lineBreak()) {
-                doAdd = false;
-            }
-            break;
-        case LayoutBreakType::PAGE:
-            if (pageBreak()) {
-                doAdd = false;
-            }
-            break;
-        case LayoutBreakType::SECTION:
-            if (sectionBreak()) {
-                doAdd = false;
-            }
-            break;
-        case LayoutBreakType::NOBREAK:
-            if (noBreak()) {
-                doAdd = false;
-            }
-            break;
-        }
-        if (doAdd) {
-            add(lb);
-            cleanupLayoutBreaks(false);
-        } else {
-            delete lb;
-        }
-    } else if (tag == "StaffTypeChange") {
-        StaffTypeChange* stc = Factory::createStaffTypeChange(this);
-        stc->setTrack(e.context()->track());
-        stc->setParent(this);
-        stc->read(e);
-        add(stc);
-    } else if (EngravingItem::readProperties(e)) {
-    } else {
-        return false;
-    }
-    return true;
-}
-
-//---------------------------------------------------------
 //   index
 //---------------------------------------------------------
 

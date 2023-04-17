@@ -143,6 +143,7 @@ public:
     void setSymId(SymId id);
     int subtype() const override;
     void setTextType(ArticulationTextType textType);
+    ArticulationTextType textType() const { return m_textType; }
     TranslatableString typeUserName() const override;
     String translatedTypeUserName() const override;
     String articulationName() const;    // type-name of articulation; used for midi rendering
@@ -151,9 +152,7 @@ public:
     void layout() override;
     bool layoutCloseToNote() const;
 
-    void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
-    bool readProperties(XmlReader&) override;
 
     std::vector<mu::LineF> dragAnchorLines() const override;
 
@@ -201,6 +200,8 @@ public:
     void doAutoplace();
 
     void styleChanged() override;
+
+    bool isOnCrossBeamSide() const;
 };
 } // namespace mu::engraving
 

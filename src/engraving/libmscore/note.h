@@ -416,8 +416,6 @@ public:
 
     void draw(mu::draw::Painter*) const override;
 
-    void read(XmlReader&) override;
-    bool readProperties(XmlReader&) override;
     void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
     void setupAfterRead(const Fraction& tick, bool pasteMode);
     void write(XmlWriter&) const override;

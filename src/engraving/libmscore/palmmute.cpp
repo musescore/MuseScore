@@ -31,6 +31,8 @@
 #include "stafftype.h"
 #include "system.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -120,24 +122,6 @@ PalmMute::PalmMute(EngravingItem* parent)
     resetProperty(Pid::CONTINUE_TEXT);
     resetProperty(Pid::END_TEXT_PLACE);
     resetProperty(Pid::END_TEXT);
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void PalmMute::read(XmlReader& e)
-{
-    if (score()->mscVersion() < 301) {
-        e.context()->addSpanner(e.intAttribute("id", -1), this);
-    }
-    while (e.readNextStartElement()) {
-        if (readProperty(e.name(), e, Pid::LINE_WIDTH)) {
-            setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
-        } else if (!TextLineBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------

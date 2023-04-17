@@ -38,6 +38,7 @@ class MixerChannel : public ITrackAudioOutput, public async::Asyncable
 
 public:
     explicit MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate);
+    explicit MixerChannel(const TrackId trackId, const unsigned int sampleRate);
 
     const AudioOutputParams& outputParams() const override;
     void applyOutputParams(const AudioOutputParams& requiredParams) override;

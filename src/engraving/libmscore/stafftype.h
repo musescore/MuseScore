@@ -293,6 +293,7 @@ public:
     bool operator==(const StaffType&) const;
 
     StaffGroup group() const { return _group; }
+    void setGroup(StaffGroup g) { _group = g; }
     StaffTypes type() const;
     const String& name() const { return _name; }
     const String& xmlName() const { return _xmlName; }
@@ -325,7 +326,6 @@ public:
     double spatium(Score*) const;
 
     void write(XmlWriter& xml) const;
-    void read(XmlReader&);
 
     void setStemless(bool val) { _stemless = val; }
     bool stemless() const { return _stemless; }

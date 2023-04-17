@@ -24,6 +24,7 @@
 
 #include "rw/400/writecontext.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "types/typesconv.h"
 
 #include "engravingitem.h"
@@ -411,7 +412,7 @@ bool ConnectorInfoReader::read()
                 return false;
             }
             _connector->setTrack(_currentLoc.track());
-            _connector->read(e);
+            rw400::TRead::readItem(_connector, e, *e.context());
         }
     }
     return true;
@@ -428,7 +429,7 @@ void ConnectorInfoReader::readEndpointLocation(Location& l)
         const AsciiStringView tag(e.name());
         if (tag == "location") {
             l = Location::relative();
-            l.read(e);
+            rw400::TRead::read(&l, e, *e.context());
         } else {
             e.unknown();
         }

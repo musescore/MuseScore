@@ -120,7 +120,6 @@ public:
 
     void undoSetSmall(bool val);
 
-    void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
     PropertyValue getProperty(Pid propertyId) const override;

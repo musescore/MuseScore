@@ -57,8 +57,6 @@ std::pair<int, std::unique_ptr<GPTrack> > GP6DomBuilder::createGPTrack(XmlDomNod
             readLyrics(trackChildNode, track.get());
         } else if (sUnusedNodes.find(nodeName) != sUnusedNodes.end()) {
             // these nodes are not used (see comment to the sUnusedNodes variable)
-        } else {
-            LOGW() << "unknown GP track tag" << nodeName << "\n";
         }
 
         trackChildNode = trackChildNode.nextSibling();

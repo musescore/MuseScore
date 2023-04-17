@@ -30,6 +30,8 @@
 #include "staff.h"
 #include "system.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace mu::engraving {
@@ -90,7 +92,7 @@ void LedgerLine::layout()
         movePosY(staffType()->yoffset().val() * spatium());
     }
 
-    if (vertical) {
+    if (m_vertical) {
         bbox().setRect(-w2, 0, w2, _len);
     } else {
         bbox().setRect(0, -w2, _len, w2);
@@ -109,7 +111,7 @@ void LedgerLine::draw(mu::draw::Painter* painter) const
         return;
     }
     painter->setPen(Pen(curColor(), _width, PenStyle::SolidLine, PenCapStyle::FlatCap));
-    if (vertical) {
+    if (m_vertical) {
         painter->drawLine(LineF(0.0, 0.0, 0.0, _len));
     } else {
         painter->drawLine(LineF(0.0, 0.0, _len, 0.0));
@@ -135,28 +137,8 @@ void LedgerLine::writeProperties(XmlWriter& xml) const
 {
     xml.tag("lineWidth", _width / spatium());
     xml.tag("lineLen", _len / spatium());
-    if (!vertical) {
-        xml.tag("vertical", vertical);
+    if (!m_vertical) {
+        xml.tag("vertical", m_vertical);
     }
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool LedgerLine::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-
-    if (tag == "lineWidth") {
-        _width = e.readDouble() * spatium();
-    } else if (tag == "lineLen") {
-        _len = e.readDouble() * spatium();
-    } else if (tag == "vertical") {
-        vertical = e.readInt();
-    } else {
-        return false;
-    }
-    return true;
 }
 }

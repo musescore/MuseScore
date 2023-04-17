@@ -101,6 +101,8 @@
 #include "../compat/readchordlisthook.h"
 #include "../compat/readstyle.h"
 
+#include "../400/tread.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -108,7 +110,7 @@ using namespace mu::engraving;
 using namespace mu::engraving::rw400;
 using namespace mu::engraving::compat;
 
-static void readText206(XmlReader& e, const ReadContext& ctx, TextBase* t, EngravingItem* be);
+static void readText206(XmlReader& e, ReadContext& ctx, TextBase* t, EngravingItem* be);
 
 //---------------------------------------------------------
 //   excessTextStyles206
@@ -471,7 +473,7 @@ void Read206::readAccidental206(Accidental* a, XmlReader& e)
             }
         } else if (tag == "small") {
             a->setSmall(e.readInt());
-        } else if (a->EngravingItem::readProperties(e)) {
+        } else if (TRead::readItemProperties(a, e, *e.context())) {
         } else {
             e.unknown();
         }
@@ -733,7 +735,7 @@ static void readStaff(Staff* staff, XmlReader& e)
             staff->setBarLineTo(e.intAttribute("to", 0));
             int span     = e.readInt();
             staff->setBarLineSpan(span - 1);
-        } else if (staff->readProperties(e)) {
+        } else if (rw400::TRead::readProperties(staff, e, *e.context())) {
         } else {
             e.unknown();
         }
@@ -763,7 +765,7 @@ void Read206::readPart206(Part* part, XmlReader& e, ReadContext& ctx)
             Staff* staff = Factory::createStaff(part);
             ctx.appendStaff(staff);
             readStaff(staff, e);
-        } else if (part->readProperties(e)) {
+        } else if (TRead::readProperties(part, e, ctx)) {
         } else {
             e.unknown();
         }
@@ -782,7 +784,7 @@ static void readAmbitus(Ambitus* ambitus, XmlReader& e)
             ambitus->setNoteHeadGroup(Read206::convertHeadGroup(e.readInt()));
         } else if (tag == "headType") {
             ambitus->setNoteHeadType(convertHeadType(e.readInt()));
-        } else if (ambitus->readProperties(e)) {
+        } else if (rw400::TRead::readProperties(ambitus, e, *e.context())) {
         } else {
             e.unknown();
         }
@@ -965,7 +967,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Accidental") {
         Accidental* a = Factory::createAccidental(note);
         a->setTrack(note->track());
-        a->read(e);
+        rw400::TRead::read(a, e, ctx);
         note->add(a);
     } else if (tag == "Tie") {
         Tie* tie = Factory::createTie(note);
@@ -1014,7 +1016,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Symbol") {
         Symbol* s = new Symbol(note);
         s->setTrack(note->track());
-        s->read(e);
+        rw400::TRead::read(s, e, ctx);
         note->add(s);
     } else if (tag == "Image") {
         if (MScore::noImages) {
@@ -1022,17 +1024,17 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
         } else {
             Image* image = new Image(note);
             image->setTrack(note->track());
-            image->read(e);
+            rw400::TRead::read(image, e, ctx);
             note->add(image);
         }
     } else if (tag == "Bend") {
         Bend* b = Factory::createBend(note);
         b->setTrack(note->track());
-        b->read(e);
+        rw400::TRead::read(b, e, ctx);
         note->add(b);
     } else if (tag == "NoteDot") {
         NoteDot* dot = Factory::createNoteDot(note);
-        dot->read(e);
+        rw400::TRead::read(dot, e, ctx);
         note->add(dot);
     } else if (tag == "Events") {
         note->playEvents().clear();        // remove default event
@@ -1107,7 +1109,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
             delete placeholder;
         }
         sp->setTrack(note->track());
-        sp->read(e);
+        rw400::TRead::readItem(sp, e, ctx);
         Staff* staff = note->staff();
         // DISABLE pasting of glissandi into staves with other linked staves
         // because the glissando is not properly cloned into the linked staves
@@ -1123,8 +1125,8 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
             adjustPlacement(sp);
         }
     } else if (tag == "offset") {
-        note->EngravingItem::readProperties(e);
-    } else if (note->EngravingItem::readProperties(e)) {
+        TRead::readItemProperties(note, e, ctx);
+    } else if (TRead::readItemProperties(note, e, ctx)) {
     } else {
         return false;
     }
@@ -1200,7 +1202,7 @@ static bool readTextPropertyStyle206(String xmlTag, const XmlReader& e, TextBase
 //   readTextProperties206
 //---------------------------------------------------------
 
-static bool readTextProperties206(XmlReader& e, const ReadContext& ctx, TextBase* t)
+static bool readTextProperties206(XmlReader& e, ReadContext& ctx, TextBase* t)
 {
     const AsciiStringView tag(e.name());
     if (tag == "style") {
@@ -1245,7 +1247,7 @@ static bool readTextProperties206(XmlReader& e, const ReadContext& ctx, TextBase
             t->ryoffset() += .5 * ctx.spatium();           // HACK: bbox is different in 2.x
         }
         adjustPlacement(t);
-    } else if (!t->readProperties(e)) {
+    } else if (!rw400::TRead::readTextProperties(t, e, *e.context())) {
         return false;
     }
     return true;
@@ -1328,7 +1330,7 @@ void TextReaderContext206::copyProperties(XmlReader& original, XmlReader& derive
 //   readText206
 //---------------------------------------------------------
 
-static void readText206(XmlReader& e, const ReadContext& ctx, TextBase* t, EngravingItem* be)
+static void readText206(XmlReader& e, ReadContext& ctx, TextBase* t, EngravingItem* be)
 {
     TextReaderContext206 tctx(e);
     readTextPropertyStyle206(tctx.tag(), e, t, be);
@@ -1343,7 +1345,7 @@ static void readText206(XmlReader& e, const ReadContext& ctx, TextBase* t, Engra
 //   read
 //---------------------------------------------------------
 
-static void readTempoText(TempoText* t, XmlReader& e, const ReadContext& ctx)
+static void readTempoText(TempoText* t, XmlReader& e, ReadContext& ctx)
 {
     TextReaderContext206 tctx(e);
     readTextPropertyStyle206(tctx.tag(), e, t, t);
@@ -1370,7 +1372,7 @@ static void readTempoText(TempoText* t, XmlReader& e, const ReadContext& ctx)
 //   readMarker
 //---------------------------------------------------------
 
-static void readMarker(Marker* m, XmlReader& e, const ReadContext& ctx)
+static void readMarker(Marker* m, XmlReader& e, ReadContext& ctx)
 {
     TextReaderContext206 tctx(e);
     readTextPropertyStyle206(tctx.tag(), e, m, m);
@@ -1393,7 +1395,7 @@ static void readMarker(Marker* m, XmlReader& e, const ReadContext& ctx)
 //   readDynamic
 //---------------------------------------------------------
 
-static void readDynamic(Dynamic* d, XmlReader& e, const ReadContext& ctx)
+static void readDynamic(Dynamic* d, XmlReader& e, ReadContext& ctx)
 {
     TextReaderContext206 tctx(e);
     readTextPropertyStyle206(tctx.tag(), e, d, d);
@@ -1415,7 +1417,7 @@ static void readDynamic(Dynamic* d, XmlReader& e, const ReadContext& ctx)
 //   readTuplet
 //---------------------------------------------------------
 
-static void readTuplet206(Tuplet* tuplet, XmlReader& e, const ReadContext& ctx)
+static void readTuplet206(Tuplet* tuplet, XmlReader& e, ReadContext& ctx)
 {
     tuplet->setId(e.intAttribute("id", 0));
     while (e.readNextStartElement()) {
@@ -1447,7 +1449,7 @@ static void readTuplet206(Tuplet* tuplet, XmlReader& e, const ReadContext& ctx)
 //   readLyrics
 //---------------------------------------------------------
 
-static void readLyrics(Lyrics* lyrics, XmlReader& e, const ReadContext& ctx)
+static void readLyrics(Lyrics* lyrics, XmlReader& e, ReadContext& ctx)
 {
     int iEndTick = 0;               // used for backward compatibility
     Text* _verseNumber = 0;
@@ -1464,7 +1466,7 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e, const ReadContext& ctx)
             _verseNumber->setParent(lyrics);
         } else if (tag == "style") {
             e.readText();          // ignore style
-        } else if (!lyrics->readProperties(e)) {
+        } else if (!rw400::TRead::readProperties(lyrics, e, ctx)) {
             e.unknown();
         }
     }
@@ -1490,7 +1492,7 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e, const ReadContext& ctx)
     }
 }
 
-bool Read206::readDurationProperties206(XmlReader& e, const ReadContext& ctx, DurationElement* de)
+bool Read206::readDurationProperties206(XmlReader& e, ReadContext& ctx, DurationElement* de)
 {
     if (e.name() == "Tuplet") {
         int i = e.readInt();
@@ -1505,13 +1507,13 @@ bool Read206::readDurationProperties206(XmlReader& e, const ReadContext& ctx, Du
             }
         }
         return true;
-    } else if (de->EngravingItem::readProperties(e)) {
+    } else if (TRead::readItemProperties(de, e, ctx)) {
         return true;
     }
     return false;
 }
 
-bool Read206::readTupletProperties206(XmlReader& e, const ReadContext& ctx, Tuplet* de)
+bool Read206::readTupletProperties206(XmlReader& e, ReadContext& ctx, Tuplet* de)
 {
     const AsciiStringView tag(e.name());
 
@@ -1716,7 +1718,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
         } else {
             Image* image = new Image(ch);
             image->setTrack(ctx.track());
-            image->read(e);
+            rw400::TRead::read(image, e, ctx);
             ch->add(image);
         }
     } else if (!readDurationProperties206(e, ctx, ch)) {
@@ -1738,11 +1740,11 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
     } else if (readChordRestProperties206(e, ctx, ch)) {
     } else if (tag == "Stem") {
         Stem* s = Factory::createStem(ch);
-        s->read(e);
+        rw400::TRead::read(s, e, ctx);
         ch->add(s);
     } else if (tag == "Hook") {
         Hook* hook = new Hook(ch);
-        hook->read(e);
+        rw400::TRead::read(hook, e, ctx);
         ch->add(hook);
     } else if (tag == "appoggiatura") {
         ch->setNoteType(NoteType::APPOGGIATURA);
@@ -1770,7 +1772,7 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
         e.readNext();
     } else if (tag == "StemSlash") {
         StemSlash* ss = Factory::createStemSlash(ch);
-        ss->read(e);
+        rw400::TRead::read(ss, e, ctx);
         ch->add(ss);
     } else if (ch->readProperty(tag, e, Pid::STEM_DIRECTION)) {
     } else if (tag == "noStem") {
@@ -1778,7 +1780,7 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
     } else if (tag == "Arpeggio") {
         Arpeggio* arpeggio = Factory::createArpeggio(ch);
         arpeggio->setTrack(ch->track());
-        arpeggio->read(e);
+        rw400::TRead::read(arpeggio, e, ctx);
         arpeggio->setParent(ch);
         ch->add(arpeggio);
     }
@@ -1792,7 +1794,7 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
         // the suitable initial note
         Note* finalNote = ch->upNote();
         Glissando* gliss = Factory::createGlissando(ctx.dummy());
-        gliss->read(e);
+        rw400::TRead::read(gliss, e, ctx);
         gliss->setAnchor(Spanner::Anchor::NOTE);
         gliss->setStartElement(nullptr);
         gliss->setEndElement(nullptr);
@@ -1805,14 +1807,14 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
     } else if (tag == "Tremolo") {
         Tremolo* tremolo = Factory::createTremolo(ch);
         tremolo->setTrack(ch->track());
-        tremolo->read(e);
+        rw400::TRead::read(tremolo, e, ctx);
         tremolo->setParent(ch);
         tremolo->setDurationType(ch->durationType());
         ch->setTremolo(tremolo);
     } else if (tag == "tickOffset") {     // obsolete
     } else if (tag == "ChordLine") {
         ChordLine* cl = Factory::createChordLine(ch);
-        cl->read(e);
+        rw400::TRead::read(cl, e, ctx);
         PointF o = cl->offset();
         cl->setOffset(0.0, 0.0);
         ch->add(cl);
@@ -1932,7 +1934,7 @@ static void readChord(Chord* chord, XmlReader& e, ReadContext& ctx)
                 const AsciiStringView t(e.name());
                 if (t == "subtype") {              // obsolete
                     e.skipCurrentElement();
-                } else if (!stem->readProperties(e)) {
+                } else if (!rw400::TRead::readProperties(stem, e, ctx)) {
                     e.unknown();
                 }
             }
@@ -1968,7 +1970,7 @@ static void readRest(Rest* rest, XmlReader& e, ReadContext& ctx)
 //   readTextLineProperties
 //---------------------------------------------------------
 
-static bool readTextLineProperties(XmlReader& e, const ReadContext& ctx, TextLineBase* tl)
+static bool readTextLineProperties(XmlReader& e, ReadContext& ctx, TextLineBase* tl)
 {
     const AsciiStringView tag(e.name());
 
@@ -1995,7 +1997,7 @@ static bool readTextLineProperties(XmlReader& e, const ReadContext& ctx, TextLin
         tl->setBeginHookType(e.readInt() == 0 ? HookType::HOOK_90 : HookType::HOOK_45);
     } else if (tag == "endHookType") {
         tl->setEndHookType(e.readInt() == 0 ? HookType::HOOK_90 : HookType::HOOK_45);
-    } else if (tl->readProperties(e)) {
+    } else if (rw400::TRead::readProperties(tl, e, ctx)) {
         return true;
     }
     return true;
@@ -2005,7 +2007,7 @@ static bool readTextLineProperties(XmlReader& e, const ReadContext& ctx, TextLin
 //   readVolta206
 //---------------------------------------------------------
 
-static void readVolta206(XmlReader& e, const ReadContext& ctx, Volta* volta)
+static void readVolta206(XmlReader& e, ReadContext& ctx, Volta* volta)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -2030,7 +2032,7 @@ static void readVolta206(XmlReader& e, const ReadContext& ctx, Volta* volta)
 //   readPedal
 //---------------------------------------------------------
 
-static void readPedal(XmlReader& e, const ReadContext& ctx, Pedal* pedal)
+static void readPedal(XmlReader& e, ReadContext& ctx, Pedal* pedal)
 {
     while (e.readNextStartElement()) {
         if (!readTextLineProperties(e, ctx, pedal)) {
@@ -2044,7 +2046,7 @@ static void readPedal(XmlReader& e, const ReadContext& ctx, Pedal* pedal)
 //   readOttava
 //---------------------------------------------------------
 
-static void readOttava(XmlReader& e, const ReadContext& ctx, Ottava* ottava)
+static void readOttava(XmlReader& e, ReadContext& ctx, Ottava* ottava)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -2074,7 +2076,7 @@ static void readOttava(XmlReader& e, const ReadContext& ctx, Ottava* ottava)
     adjustPlacement(ottava);
 }
 
-void Read206::readHairpin206(XmlReader& e, const ReadContext& ctx, Hairpin* h)
+void Read206::readHairpin206(XmlReader& e, ReadContext& ctx, Hairpin* h)
 {
     bool useText = false;
     while (e.readNextStartElement()) {
@@ -2131,14 +2133,14 @@ void Read206::readTrill206(XmlReader& e, Trill* t)
             t->readProperty(e, Pid::ORNAMENT_STYLE);
         } else if (tag == "play") {
             t->setPlayArticulation(e.readBool());
-        } else if (!t->SLine::readProperties(e)) {
+        } else if (!TRead::readProperties(static_cast<SLine*>(t), e, *e.context())) {
             e.unknown();
         }
     }
     adjustPlacement(t);
 }
 
-void Read206::readTextLine206(XmlReader& e, const ReadContext& ctx, TextLineBase* tlb)
+void Read206::readTextLine206(XmlReader& e, ReadContext& ctx, TextLineBase* tlb)
 {
     while (e.readNextStartElement()) {
         if (!readTextLineProperties(e, ctx, tlb)) {
@@ -2180,7 +2182,7 @@ static void setFermataPlacement(EngravingItem* el, ArticulationAnchor anchor, Di
     }
 }
 
-EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, const ReadContext& ctx)
+EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, ReadContext& ctx)
 {
     EngravingItem* el = nullptr;
     SymId sym = SymId::fermataAbove;            // default -- backward compatibility (no type = ufermata in 1.2)
@@ -2189,6 +2191,17 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
     track_idx_t track = parent->track();
     double timeStretch = 0.0;
     bool useDefaultPlacement = true;
+
+    auto readProperties = [](EngravingItem* el, XmlReader& e, ReadContext& ctx)
+    {
+        if (el->isFermata()) {
+            return rw400::TRead::readProperties(dynamic_cast<Fermata*>(el), e, ctx);
+        } else if (el->isArticulation()) {
+            return rw400::TRead::readProperties(dynamic_cast<Articulation*>(el), e, ctx);
+        }
+        UNREACHABLE;
+        return false;
+    };
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -2277,14 +2290,14 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
             if (!el || el->isFermata()) {
                 anchor = ArticulationAnchor(e.readInt());
             } else {
-                el->readProperties(e);
+                readProperties(el, e, ctx);
             }
         } else if (tag == "direction") {
             useDefaultPlacement = false;
             if (!el || el->isFermata()) {
                 direction = TConv::fromXml(e.readAsciiText(), DirectionV::AUTO);
             } else {
-                el->readProperties(e);
+                readProperties(el, e, ctx);
             }
         } else if (tag == "timeStretch") {
             timeStretch = e.readDouble();
@@ -2292,7 +2305,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
             if (!el) {
                 LOGD("not handled <%s>", tag.ascii());
             }
-            if (!el || !el->readProperties(e)) {
+            if (!el || !readProperties(el, e, ctx)) {
                 e.unknown();
             }
         }
@@ -2321,7 +2334,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
 //   readSlurTieProperties
 //---------------------------------------------------------
 
-static bool readSlurTieProperties(XmlReader& e, const ReadContext& ctx, SlurTie* st)
+static bool readSlurTieProperties(XmlReader& e, ReadContext& ctx, SlurTie* st)
 {
     const AsciiStringView tag(e.name());
 
@@ -2330,9 +2343,9 @@ static bool readSlurTieProperties(XmlReader& e, const ReadContext& ctx, SlurTie*
         st->setStyleType(static_cast<SlurStyleType>(e.readInt()));
     } else if (tag == "SlurSegment") {
         SlurTieSegment* s = st->newSlurTieSegment(ctx.dummy()->system());
-        s->read(e);
+        rw400::TRead::read(s, e, ctx);
         st->add(s);
-    } else if (!st->EngravingItem::readProperties(e)) {
+    } else if (!TRead::readItemProperties(st, e, ctx)) {
         return false;
     }
     return true;
@@ -2465,7 +2478,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                     } else {
                         bl->add(el);
                     }
-                } else if (!bl->EngravingItem::readProperties(e)) {
+                } else if (!TRead::readItemProperties(bl, e, ctx)) {
                     e.unknown();
                 }
             }
@@ -2520,7 +2533,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 MMRest* mmr = Factory::createMMRest(segment);
                 mmr->setParent(segment);
                 mmr->setTrack(ctx.track());
-                mmr->read(e);
+                rw400::TRead::read(mmr, e, ctx);
                 segment->add(mmr);
                 lastTick = ctx.tick();
                 ctx.incTick(mmr->actualTicks());
@@ -2546,7 +2559,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             breath->setTrack(ctx.track());
             breath->setPlacement(PlacementV::ABOVE);
             Fraction tick = ctx.tick();
-            breath->read(e);
+            rw400::TRead::read(breath, e, ctx);
             // older scores placed the breath segment right after the chord to which it applies
             // rather than before the next chordrest segment with an element for the staff
             // result would be layout too far left if there are other segments due to notes in other staves
@@ -2650,7 +2663,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
         } else if (tag == "Clef") {
             Clef* clef = Factory::createClef(ctx.dummy()->segment());
             clef->setTrack(ctx.track());
-            clef->read(e);
+            rw400::TRead::read(clef, e, ctx);
             clef->setGenerated(false);
             if (ctx.tick().isZero()) {
                 if (ctx.staff(staffIdx)->clef(Fraction(0, 1)) != clef->clefType()) {
@@ -2711,7 +2724,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
         } else if (tag == "TimeSig") {
             TimeSig* ts = Factory::createTimeSig(ctx.dummy()->segment());
             ts->setTrack(ctx.track());
-            ts->read(e);
+            rw400::TRead::read(ts, e, ctx);
             // if time sig not at beginning of measure => courtesy time sig
             Fraction currTick = ctx.tick();
             bool courtesySig = (currTick > m->tick());
@@ -2738,7 +2751,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
         } else if (tag == "KeySig") {
             KeySig* ks = Factory::createKeySig(ctx.dummy()->segment());
             ks->setTrack(ctx.track());
-            ks->read(e);
+            rw400::TRead::read(ks, e, ctx);
             Fraction curTick = ctx.tick();
             // if key sig not at beginning of measure => courtesy key sig
             bool courtesySig = (curTick == m->endTick());
@@ -2808,7 +2821,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             // hack - needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure
             el->setTrack(ctx.track());
-            el->read(e);
+            rw400::TRead::readItem(el, e, ctx);
             if (el->staff() && (el->isHarmony() || el->isFretDiagram() || el->isInstrumentChange())) {
                 adjustPlacement(el);
             }
@@ -2831,7 +2844,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 EngravingItem* markerEl = toEngravingItem(ma);
                 m->add(markerEl);
             } else {
-                el->read(e);
+                rw400::TRead::readItem(el, e, ctx);
                 m->add(el);
             }
         } else if (tag == "Image") {
@@ -2841,7 +2854,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
                 EngravingItem* el = Factory::createItemByName(tag, segment);
                 el->setTrack(ctx.track());
-                el->read(e);
+                rw400::TRead::readItem(el, e, ctx);
                 segment->add(el);
             }
         }
@@ -2902,12 +2915,12 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
         } else if (tag == "Beam") {
             Beam* beam = Factory::createBeam(ctx.dummy()->system());
             beam->setTrack(ctx.track());
-            beam->read(e);
+            rw400::TRead::read(beam, e, ctx);
             beam->resetExplicitParent();
             ctx.addBeam(beam);
         } else if (tag == "Segment") {
             if (segment) {
-                segment->read(e);
+                rw400::TRead::read(segment, e, ctx);
             } else {
                 e.unknown();
             }
@@ -2919,7 +2932,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             m->setNoText(noText->staffIdx(), noText);
         } else if (tag == "SystemDivider") {
             SystemDivider* sd = new SystemDivider(ctx.dummy()->system());
-            sd->read(e);
+            rw400::TRead::read(sd, e, ctx);
             m->add(sd);
         } else if (tag == "Ambitus") {
             segment = m->getSegment(SegmentType::Ambitus, ctx.tick());
@@ -2933,7 +2946,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             // set tick to previous measure
             m->setTick(ctx.lastMeasure()->tick());
             ctx.setTick(ctx.lastMeasure()->tick());
-        } else if (m->MeasureBase::readProperties(e)) {
+        } else if (rw400::TRead::readProperties(static_cast<MeasureBase*>(m), e, ctx)) {
         } else {
             e.unknown();
         }
@@ -2946,7 +2959,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
 //   readBox
 //---------------------------------------------------------
 
-static void readBox(Box* b, XmlReader& e, const ReadContext& ctx)
+static void readBox(Box* b, XmlReader& e, ReadContext& ctx)
 {
     b->setLeftMargin(0.0);
     b->setRightMargin(0.0);
@@ -2966,12 +2979,12 @@ static void readBox(Box* b, XmlReader& e, const ReadContext& ctx)
         const AsciiStringView tag(e.name());
         if (tag == "HBox") {
             HBox* hb = Factory::createHBox(b->system());
-            hb->read(e);
+            rw400::TRead::read(hb, e, ctx);
             b->add(hb);
             keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (tag == "VBox") {
             VBox* vb = Factory::createVBox(b->system());
-            vb->read(e);
+            rw400::TRead::read(vb, e, ctx);
             b->add(vb);
             keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (tag == "Text") {
@@ -2988,7 +3001,7 @@ static void readBox(Box* b, XmlReader& e, const ReadContext& ctx)
                     b->add(t);
                 }
             }
-        } else if (!b->readProperties(e)) {
+        } else if (!rw400::TRead::readBoxProperties(b, e, *e.context())) {
             e.unknown();
         }
     }

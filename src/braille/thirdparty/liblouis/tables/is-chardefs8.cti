@@ -1,0 +1,293 @@
+# liblouis: Character definitions for Icelandic tables
+#
+#  Copyright (C) 2009 INIB (Iceland National Institute for the Blind)
+#
+#  This file is part of liblouis.
+#
+#  liblouis is free software: you can redistribute it and/or modify it
+#  under the terms of the GNU Lesser General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  liblouis is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+#  Lesser General Public License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public
+#  License along with liblouis. If not, see
+#  <http://www.gnu.org/licenses/>.
+#
+#-------------------------------------------------------------------------------
+#
+#  This computer braille table is based on the IceBraille standard, v1.0.
+#  Version 2010-09-02
+#  Birkir Gunnarsson, birkir@midstod.is
+#  Special thanks to Ben Van Popel for help with drafting the standard.
+#-------------------------------------------------------------------------------
+
+#                   48-34578           \x0000 &#0;    <control> [NULL]
+#                   48-178             \x0001 &#1;    <control> [START OF HEADING]
+#                   48-1278            \x0002 &#2;    <control> [START OF TEXT]
+#                   48-1478            \x0003 &#3;    <control> [END OF TEXT]
+#                   48-14578           \x0004 &#4;    <control> [END OF TRANSMISSION]
+#                   48-1578            \x0005 &#5;    <control> [ENQUIRY]
+#                   48-12478           \x0006 &#6;    <control> [ACKNOWLEDGE]
+#                   48-124578          \x0007 &#7;    <control> [BELL]
+#                   48-12578           \x0008 &#8;    <control> [BACKSPACE]
+#                   48-2478            \x0009 &#9;    <control> [CHARACTER TABULATION]
+#                   48-24578           \x000A &#10;   <control> [LINE FEED (LF)]
+#                   48-1378            \x000B &#11;   <control> [LINE TABULATION]
+#                   48-12378           \x000C &#12;   <control> [FORM FEED (FF)]
+#                   48-13478           \x000D &#13;   <control> [CARRIAGE RETURN (CR)]
+#                   48-134578          \x000E &#14;   <control> [SHIFT OUT]
+#                   48-13578           \x000F &#15;   <control> [SHIFT IN]
+#                   48-123478          \x0010 &#16;   <control> [DATA LINK ESCAPE]
+#                   48-1234578         \x0011 &#17;   <control> [DEVICE CONTROL ONE]
+#                   48-123578          \x0012 &#18;   <control> [DEVICE CONTROL TWO]
+#                   48-23478           \x0013 &#19;   <control> [DEVICE CONTROL THREE]
+#                   48-234578          \x0014 &#20;   <control> [DEVICE CONTROL FOUR]
+#                   48-13678           \x0015 &#21;   <control> [NEGATIVE ACKNOWLEDGE]
+#                   48-123678          \x0016 &#22;   <control> [SYNCHRONOUS IDLE]
+#                   48-245678          \x0017 &#23;   <control> [END OF TRANSMISSION BLOCK]
+#                   48-134678          \x0018 &#24;   <control> [CANCEL]
+#                   48-1345678         \x0019 &#25;   <control> [END OF MEDIUM]
+#                   48-135678          \x001A &#26;   <control> [SUBSTITUTE]
+#                   48-1235678         \x001B &#27;   <control> [ESCAPE]
+#                   48-3478            \x001C &#28;   <control> [INFORMATION SEPARATOR FOUR]
+#                   48-2345678         \x001D &#29;   <control> [INFORMATION SEPARATOR THREE]
+#                   48-234678          \x001E &#30;   <control> [INFORMATION SEPARATOR TWO]
+#                   48-45678           \x001F &#31;   <control> [INFORMATION SEPARATOR ONE]
+
+space        \s     0               \x0020 &#32;   SPACE
+punctuation  !      2357               \x0021 &#33;   EXCLAMATION MARK
+punctuation  "      56               \x0022 &#34;   QUOTATION MARK
+sign         #      3456            \x0023 &#35;   NUMBER SIGN
+sign         $      14578              \x0024 &#36;   DOLLAR SIGN
+sign         %      46          \x0025 &#37;   PERCENT SIGN
+sign         &      123468           \x0026 &#38;   AMPERSAND
+punctuation  '      5               \x0027 &#39;   APOSTROPHE APOSTROPHE-QUOTE
+punctuation  (      236             \x0028 &#40;   LEFT PARENTHESIS
+punctuation  )      356             \x0029 &#41;   RIGHT PARENTHESIS
+sign         *      35              \x002A &#42;   ASTERISK
+math         +      235             \x002B &#43;   PLUS SIGN
+punctuation  ,      2               \x002C &#44;   COMMA
+punctuation  -      36              \x002D &#45;   HYPHEN-MINUS
+punctuation  .      3               \x002E &#46;   FULL STOP PERIOD
+punctuation  /      34             \x002F &#47;   SOLIDUS SLASH
+include digits8Dots.uti
+punctuation  :      25              \x003A &#58;   COLON
+punctuation  ;      23              \x003B &#59;   SEMICOLON
+math         <      358              \x003C &#60;   LESS-THAN SIGN
+math         =      2356            \x003D &#61;   EQUALS SIGN
+math         >      267              \x003E &#62;   GREATER-THAN SIGN
+punctuation  ?      26              \x003F &#63;   QUESTION MARK
+sign         @      123456            \x0040 &#64;   COMMERCIAL AT
+uppercase    A      17              \x0041 &#65;   LATIN CAPITAL LETTER A
+uppercase    B      127             \x0042 &#66;   LATIN CAPITAL LETTER B
+uppercase    C      147             \x0043 &#67;   LATIN CAPITAL LETTER C
+uppercase    D      1457            \x0044 &#68;   LATIN CAPITAL LETTER D
+uppercase    E      157             \x0045 &#69;   LATIN CAPITAL LETTER E
+uppercase    F      1247            \x0046 &#70;   LATIN CAPITAL LETTER F
+uppercase    G      12457           \x0047 &#71;   LATIN CAPITAL LETTER G
+uppercase    H      1257            \x0048 &#72;   LATIN CAPITAL LETTER H
+uppercase    I      247             \x0049 &#73;   LATIN CAPITAL LETTER I
+uppercase    J      2457            \x004A &#74;   LATIN CAPITAL LETTER J
+uppercase    K      137             \x004B &#75;   LATIN CAPITAL LETTER K
+uppercase    L      1237            \x004C &#76;   LATIN CAPITAL LETTER L
+uppercase    M      1347            \x004D &#77;   LATIN CAPITAL LETTER M
+uppercase    N      13457           \x004E &#78;   LATIN CAPITAL LETTER N
+uppercase    O      1357            \x004F &#79;   LATIN CAPITAL LETTER O
+uppercase    P      12347           \x0050 &#80;   LATIN CAPITAL LETTER P
+uppercase    Q      123457          \x0051 &#81;   LATIN CAPITAL LETTER Q
+uppercase    R      12357           \x0052 &#82;   LATIN CAPITAL LETTER R
+uppercase    S      2347            \x0053 &#83;   LATIN CAPITAL LETTER S
+uppercase    T      23457           \x0054 &#84;   LATIN CAPITAL LETTER T
+uppercase    U      1367            \x0055 &#85;   LATIN CAPITAL LETTER U
+uppercase    V      12367           \x0056 &#86;   LATIN CAPITAL LETTER V
+uppercase    W      24567           \x0057 &#87;   LATIN CAPITAL LETTER W
+uppercase    X      13467           \x0058 &#88;   LATIN CAPITAL LETTER X
+uppercase    Y      134567          \x0059 &#89;   LATIN CAPITAL LETTER Y
+uppercase    Z      13567           \x005A &#90;   LATIN CAPITAL LETTER Z
+punctuation  [      12356          \x005B &#91;   LEFT SQUARE BRACKET
+sign         \\     347             \x005C &#92;   REVERSE SOLIDUS
+punctuation  ]      23456          \x005D &#93;   RIGHT SQUARE BRACKET
+sign         ^      346           \x005E &#94;   CIRCUMFLEX ACCENT / Caret
+sign         _      3678            \x005F &#95;   LOW LINE
+sign         `      4             \x0060 &#96;   GRAVE ACCENT
+lowercase    a      1               \x0061 &#97;   LATIN SMALL LETTER A
+lowercase    b      12              \x0062 &#97;   LATIN SMALL LETTER B
+lowercase    c      14              \x0063 &#97;   LATIN SMALL LETTER C
+lowercase    d      145             \x0064 &#97;   LATIN SMALL LETTER D
+lowercase    e      15              \x0065 &#97;   LATIN SMALL LETTER E
+lowercase    f      124             \x0066 &#97;   LATIN SMALL LETTER F
+lowercase    g      1245            \x0067 &#97;   LATIN SMALL LETTER G
+lowercase    h      125             \x0068 &#97;   LATIN SMALL LETTER H
+lowercase    i      24              \x0069 &#97;   LATIN SMALL LETTER I
+lowercase    j      245             \x006A &#97;   LATIN SMALL LETTER J
+lowercase    k      13              \x006B &#97;   LATIN SMALL LETTER K
+lowercase    l      123             \x006C &#97;   LATIN SMALL LETTER L
+lowercase    m      134             \x006D &#97;   LATIN SMALL LETTER M
+lowercase    n      1345            \x006E &#97;   LATIN SMALL LETTER N
+lowercase    o      135             \x006F &#111;  LATIN SMALL LETTER O
+lowercase    p      1234            \x0070 &#112;  LATIN SMALL LETTER P
+lowercase    q      12345           \x0071 &#113;  LATIN SMALL LETTER Q
+lowercase    r      1235            \x0072 &#114;  LATIN SMALL LETTER R
+lowercase    s      234             \x0073 &#115;  LATIN SMALL LETTER S
+lowercase    t      2345            \x0074 &#116;  LATIN SMALL LETTER T
+lowercase    u      136             \x0075 &#117;  LATIN SMALL LETTER U
+lowercase    v      1236            \x0076 &#118;  LATIN SMALL LETTER V
+lowercase    w      2456            \x0077 &#119;  LATIN SMALL LETTER W
+lowercase    x      1346            \x0078 &#120;  LATIN SMALL LETTER X
+lowercase    y      13456           \x0079 &#121;  LATIN SMALL LETTER Y
+lowercase    z      1356            \x007A &#122;  LATIN SMALL LETTER Z
+punctuation  {      123567           \x007B &#123;  LEFT CURLY BRACKET
+sign         |      456              \x007C &#124;  VERTICAL LINE
+punctuation  }      234568           \x007D &#125;  RIGHT CURLY BRACKET
+sign         ~      45            \x007E &#126;  TILDE
+sign         \x007F 7             \x007F &#127;  [DELETE]
+
+# Between here and the commented out part, I am using Windows 1252 numbering, the commented out section does not seem to match
+# however the unicode should match the symbols described
+sign 		 \x20AC 1578				\x20AC &128 	[Euros]
+sign         \x0192 58             \x0192 &#131;  [florin]
+sign         \x2026 6             \x2026 &#133;  [elipsis]
+sign         \x2020 2358             \x2020  &#134;  [Single Dagger]
+sign         \x2021 23578             \x2021  &#135;  [Double Dagger]
+sign         \x2030 4678             \x2030  &#137;  [Per Mil]
+sign         \x0152 13578             \x0152  &#140;  [OE]
+punctuation  \x201C 237             \x201C  &#147;  [Open Double Quote]
+punctuation  \x201D 458             \x201D  &#148;  [Close Double Quote]
+sign         \x2022 37             \x2022  &#149;  [Bullet]
+sign         \x2013 368             \x2013  &#150;  [en-dash]
+sign         \x2014 367             \x2014  &#151;  [em-dash]
+sign         \x2122 234578             \x2122  &#153;  [Trademark]
+
+#                   457             \x0080 &#128;  <control>
+#                   8               \x0081 &#129;  <control>
+#                   3678            \x0082 &#130;  <control> [BREAK PERMITTED HERE]
+#                   78              \x0083 &#131;  <control> [NO BREAK HERE]
+#                   1268            \x0084 &#132;  <control>
+#                   238             \x0085 &#133;  <control> [NEXT LINE (NEL)]
+#                   1248            \x0086 &#134;  <control> [START OF SELECTED AREA]
+#                   12458           \x0087 &#135;  <control> [END OF SELECTED AREA]
+#                   378             \x0088 &#136;  <control> [CHARACTER TABULATION SET]
+#                   248             \x0089 &#137;  <control> [CHARACTER TABULATION WITH JUSTIFICATION]
+#                   678             \x008A &#138;  <control> [LINE TABULATION SET]
+#                   27              \x008B &#139;  <control> [PARTIAL LINE FORWARD]
+#                   237             \x008C &#140;  <control> [PARTIAL LINE BACKWARD]
+#                   257             \x008D &#141;  <control> [REVERSE LINE FEED]
+#                   12567           \x008E &#142;  <control> [SINGLE SHIFT TWO]
+#                   12467           \x008F &#143;  <control> [SINGLE SHIFT THREE]
+#                   124678          \x0090 &#144;  <control> [DEVICE CONTROL STRING]
+#                   23567           \x0091 &#145;  <control> [PRIVATE USE ONE]
+#                   2367            \x0092 &#146;  <control> [PRIVATE USE TWO]
+#                   138             \x0093 &#147;  <control> [SET TRANSMIT STATE]
+#                   1238            \x0094 &#148;  <control> [CANCEL CHARACTER]
+#                   278             \x0095 &#149;  <control> [MESSAGE WAITING]
+#                   2378            \x0096 &#150;  <control> [START OF GUARDED AREA]
+#                   13568           \x0097 &#151;  <control> [END OF GUARDED AREA]
+#                   2578            \x0098 &#152;  <control> [START OF STRING]
+#                   1245678         \x0099 &#153;  <control>
+#                   2678            \x009A &#154;  <control> [SINGLE CHARACTER INTRODUCER]
+#                   123458          \x009B &#155;  <control> [CONTROL SEQUENCE INTRODUCER]
+#                   67              \x009C &#156;  <control> [STRING TERMINATOR]
+#                   124567          \x009D &#157;  <control> [OPERATING SYSTEM COMMAND]
+#                   235678          \x009E &#158;  <control> [PRIVACY MESSAGE]
+#                   12345678        \x009F &#159;  <control> [APPLICATION PROGRAM COMMAND]
+space        \x00a0 0               \x00A0 &#160;  NO-BREAK SPACE
+punctuation  ¡      3568             \x00A1 &#161;  INVERTED EXCLAMATION MARK
+sign         ¢      2578              \x00A2 &#162;  CENT SIGN
+sign         £      123478             \x00A3 &#163;  POUND SIGN
+sign         ¤      134678            \x00A4 &#164;  CURRENCY SIGN
+sign         ¥      1345678             \x00A5 &#165;  YEN SIGN
+sign         ¦      3478             \x00A6 &#166;  BROKEN BAR
+sign         §      2348             \x00A7 &#167;  SECTION SIGN
+sign         ¨      578              \x00A8 &#168;  DIAERESIS
+sign         ©      1478          \x00A9 &#169;  COPYRIGHT SIGN
+sign         ª      234678            \x00AA &#170;  FEMININE ORDINAL INDICATOR
+punctuation  «      57            \x00AB &#171;  LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
+sign         ¬      34567           \x00AC &#172;  NOT SIGN
+sign         ­      378             \x00AD &#173;  SOFT HYPHEN
+sign         ®      123578           \x00AE &#174;  REGISTERED SIGN
+sign         ¯      23567             \x00AF &#175;  MACRON
+sign         °      256            \x00B0 &#176;  DEGREE SIGN
+math         ±      123458           \x00B1 &#177;  PLUS-MINUS SIGN
+sign         ²      238             \x00B2 &#178;  SUPERSCRIPT TWO
+sign         ³      258             \x00B3 &#179;  SUPERSCRIPT THREE
+sign         ´      468             \x00B4 &#180;  ACUTE ACCENT
+sign         µ      23678            \x00B5 &#181;  MICRO SIGN
+sign         ¶      345678            \x00B6 &#182;  PILCROW SIGN
+sign         ·      38              \x00B7 &#183;  MIDDLE DOT
+sign         ¸      245678              \x00B8 &#184;  CEDILLA
+sign         ¹      28              \x00B9 &#185;  SUPERSCRIPT ONE
+sign         º      12345678            \x00BA &#186;  MASCULINE ORDINAL INDICATOR
+punctuation  »      567            \x00BB &#187;  RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
+math         ¼      13458            \x00BC &#188;  VULGAR FRACTION ONE QUARTER
+math         ½      458           \x00BD &#189;  VULGAR FRACTION ONE HALF
+math         ¾      34568           \x00BE &#190;  VULGAR FRACTION THREE QUARTERS
+punctuation  ¿      67              \x00BF &#191;  INVERTED QUESTION MARK
+uppercase    À      13678           \x00C0 &#192;  LATIN CAPITAL LETTER A WITH GRAVE
+uppercase    Á      167              \x00C1 &#193;  LATIN CAPITAL LETTER A WITH ACUTE #IA
+uppercase    Â      1678             \x00C2 &#194;  LATIN CAPITAL LETTER A WITH CIRCUMFLEX
+uppercase    Ã      14678            \x00C3 &#195;  LATIN CAPITAL LETTER A WITH TILDE
+uppercase    Ä      34578             \x00C4 &#196;  LATIN CAPITAL LETTER A WITH DIAERESIS
+uppercase    Å      1235678           \x00C5 &#197;  LATIN CAPITAL LETTER A WITH RING ABOVE
+uppercase    Æ      3457              \x00C6 &#198;  LATIN CAPITAL LETTER AE #IA
+uppercase    Ç      125678          \x00C7 &#199;  LATIN CAPITAL LETTER C WITH CEDILLA
+uppercase    È      478            \x00C8 &#200;  LATIN CAPITAL LETTER E WITH GRAVE
+uppercase    É      23467         \x00C9 &#201;  LATIN CAPITAL LETTER E WITH ACUTE #IA
+uppercase    Ê      1234567            \x00CA &#202;  LATIN CAPITAL LETTER E WITH CIRCUMFLEX
+uppercase    Ë      35678            \x00CB &#203;  LATIN CAPITAL LETTER E WITH DIAERESIS
+uppercase    Ì      15678              \x00CC &#204;  LATIN CAPITAL LETTER I WITH GRAVE
+uppercase    Í      1267             \x00CD &#205;  LATIN CAPITAL LETTER I WITH ACUTE #IA
+uppercase    Î      1467            \x00CE &#206;  LATIN CAPITAL LETTER I WITH CIRCUMFLEX
+uppercase    Ï      12678           \x00CF &#207;  LATIN CAPITAL LETTER I WITH DIAERESIS
+uppercase    Ð      1567            \x00D0 &#208;  LATIN CAPITAL LETTER ETH #IA
+uppercase    Ñ      1245678            \x00D1 &#209;  LATIN CAPITAL LETTER N WITH TILDE
+uppercase    Ò      124678             \x00D2 &#210;  LATIN CAPITAL LETTER O WITH GRAVE
+uppercase    Ó      14567            \x00D3 &#211;  LATIN CAPITAL LETTER O WITH ACUTE #IA
+uppercase    Ô      34678           \x00D4 &#212;  LATIN CAPITAL LETTER O WITH CIRCUMFLEX
+uppercase    Õ      145678             \x00D5 &#213;  LATIN CAPITAL LETTER O WITH TILDE
+uppercase    Ö      2467             \x00D6 &#214;  LATIN CAPITAL LETTER O WITH DIAERESIS #IA
+math         ×      13468            \x00D7 &#215;  MULTIPLICATION SIGN
+uppercase    Ø      24678            \x00D8 &#216;  LATIN CAPITAL LETTER O WITH STROKE
+uppercase    Ù      234567           \x00D9 &#217;  LATIN CAPITAL LETTER U WITH GRAVE
+uppercase    Ú      124567             \x00DA &#218;  LATIN CAPITAL LETTER U WITH ACUTE #IA
+uppercase    Û      348            \x00DB &#219;  LATIN CAPITAL LETTER U WITH CIRCUMFLEX
+uppercase    Ü      12567            \x00DC &#220;  LATIN CAPITAL LETTER U WITH DIAERESIS
+uppercase    Ý      123467            \x00DD &#221;  LATIN CAPITAL LETTER Y WITH ACUTE #IA
+uppercase    Þ      12467            \x00DE &#222;  LATIN CAPITAL LETTER THORN #IA
+lowercase    ß      23468           \x00DF &#223;  LATIN SMALL LETTER SHARP S
+lowercase    à      1378          \x00E0 &#224;  LATIN SMALL LETTER A WITH GRAVE
+lowercase    á      16             \x00E1 &#225;  LATIN SMALL LETTER A WITH ACUTE #IA
+lowercase    â      168            \x00E2 &#226;  LATIN SMALL LETTER A WITH CIRCUMFLEX
+lowercase    ã      1468           \x00E3 &#227;  LATIN SMALL LETTER A WITH TILDE
+lowercase    ä      3458            \x00E4 &#228;  LATIN SMALL LETTER A WITH DIAERESIS
+lowercase    å      123568          \x00E5 &#229;  LATIN SMALL LETTER A WITH RING ABOVE
+lowercase    æ      345             \x00E6 &#230;  LATIN SMALL LETTER AE #IA
+lowercase    ç      1348         \x00E7 &#231;  LATIN SMALL LETTER C WITH CEDILLA
+lowercase    è      23568           \x00E8 &#232;  LATIN SMALL LETTER E WITH GRAVE
+lowercase    é      2346         \x00E9 &#233;  LATIN SMALL LETTER E WITH ACUTE #IA
+lowercase    ê      1268           \x00EA &#234;  LATIN SMALL LETTER E WITH CIRCUMFLEX
+lowercase    ë      138           \x00EB &#235;  LATIN SMALL LETTER E WITH DIAERESIS
+lowercase    ì      1568             \x00EC &#236;  LATIN SMALL LETTER I WITH GRAVE
+lowercase    í      126            \x00ED &#237;  LATIN SMALL LETTER I WITH ACUTE #IA
+lowercase    î      24578           \x00EE &#238;  LATIN SMALL LETTER I WITH CIRCUMFLEX
+lowercase    ï      12568          \x00EF &#239;  LATIN SMALL LETTER I WITH DIAERESIS
+lowercase    ð      156           \x00F0 &#240;  LATIN SMALL LETTER ETH
+lowercase    ñ      124568           \x00F1 &#241;  LATIN SMALL LETTER N WITH TILDE
+lowercase    ò      12468            \x00F2 &#242;  LATIN SMALL LETTER O WITH GRAVE
+lowercase    ó      1456           \x00F3 &#243;  LATIN SMALL LETTER O WITH ACUTE #IA
+lowercase    ô      3468          \x00F4 &#244;  LATIN SMALL LETTER O WITH CIRCUMFLEX
+lowercase    õ      14568            \x00F5 &#245;  LATIN SMALL LETTER O WITH TILDE
+lowercase    ö      246            \x00F6 &#246;  LATIN SMALL LETTER O WITH DIAERESIS
+math         ÷      1256          \x00F7 &#247;  DIVISION SIGN
+lowercase    ø      2468           \x00F8 &#248;  LATIN SMALL LETTER O WITH STROKE
+lowercase    ù      2368          \x00F9 &#249;  LATIN SMALL LETTER U WITH GRAVE
+lowercase    ú      12456            \x00FA &#250;  LATIN SMALL LETTER U WITH ACUTE #IA
+lowercase    û      12348           \x00FB &#251;  LATIN SMALL LETTER U WITH CIRCUMFLEX
+lowercase    ü      12568           \x00FC &#252;  LATIN SMALL LETTER U WITH DIAERESIS
+lowercase    ý      12346           \x00FD &#253;  LATIN SMALL LETTER Y WITH ACUTE #IA
+lowercase    þ      1246           \x00FE &#254;  LATIN SMALL LETTER THORN #IA
+lowercase    ÿ      234568          \x00FF &#255;  LATIN SMALL LETTER Y WITH DIAERESIS

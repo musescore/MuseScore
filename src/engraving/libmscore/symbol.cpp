@@ -25,8 +25,7 @@
 #include "draw/fontmetrics.h"
 #include "iengravingfont.h"
 #include "rw/xml.h"
-#include "rw/400/symbolrw.h"
-#include "rw/400/fsymbolrw.h"
+
 #include "types/symnames.h"
 
 #include "image.h"
@@ -139,11 +138,6 @@ void Symbol::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void Symbol::read(XmlReader& e)
-{
-    rw400::SymbolRW::read(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   Symbol::getProperty
 //---------------------------------------------------------
@@ -242,11 +236,6 @@ void FSymbol::write(XmlWriter& xml) const
     xml.tag("code",     _code);
     BSymbol::writeProperties(xml);
     xml.endElement();
-}
-
-void FSymbol::read(XmlReader& e)
-{
-    rw400::FSymbolRW::read(this, e, *e.context());
 }
 
 void FSymbol::layout()

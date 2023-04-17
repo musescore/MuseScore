@@ -71,7 +71,6 @@ public:
     TextLine* clone() const override { return new TextLine(*this); }
 
     void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
 
     void initStyle();
 

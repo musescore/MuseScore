@@ -26,6 +26,7 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
+
 #include "style/style.h"
 
 #include "factory.h"
@@ -574,6 +575,11 @@ static constexpr std::array<Pid, 26> TextLineBasePropertyId = { {
     Pid::END_TEXT_OFFSET,
 } };
 
+const std::array<Pid, 26>& TextLineBase::textLineBasePropertyIds()
+{
+    return TextLineBasePropertyId;
+}
+
 //---------------------------------------------------------
 //   propertyDelegate
 //---------------------------------------------------------
@@ -614,25 +620,6 @@ void TextLineBase::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void TextLineBase::read(XmlReader& e)
-{
-    eraseSpannerSegments();
-
-    if (score()->mscVersion() < 301) {
-        e.context()->addSpanner(e.intAttribute("id", -1), this);
-    }
-
-    while (e.readNextStartElement()) {
-        if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------
 
@@ -653,22 +640,6 @@ void TextLineBase::writeProperties(XmlWriter& xml) const
         }
     }
     SLine::writeProperties(xml);
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool TextLineBase::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-    for (Pid i : TextLineBasePropertyId) {
-        if (readProperty(tag, e, i)) {
-            setPropertyFlags(i, PropertyFlags::UNSTYLED);
-            return true;
-        }
-    }
-    return SLine::readProperties(e);
 }
 
 //---------------------------------------------------------

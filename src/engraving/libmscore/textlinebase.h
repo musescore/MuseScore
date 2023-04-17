@@ -115,15 +115,15 @@ public:
     TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
 
     void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
 
     void writeProperties(XmlWriter& xml) const override;
-    bool readProperties(XmlReader& node) override;
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
+
+    static const std::array<Pid, 26>& textLineBasePropertyIds();
 
 protected:
     friend class TextLineBaseSegment;

@@ -25,6 +25,7 @@
 #include "draw/fontmetrics.h"
 #include "draw/types/font.h"
 #include "rw/xml.h"
+
 #include "translation.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
@@ -807,50 +808,6 @@ void BarLine::write(XmlWriter& xml) const
     }
     EngravingItem::writeProperties(xml);
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void BarLine::read(XmlReader& e)
-{
-    resetProperty(Pid::BARLINE_SPAN);
-    resetProperty(Pid::BARLINE_SPAN_FROM);
-    resetProperty(Pid::BARLINE_SPAN_TO);
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "subtype") {
-            setBarLineType(TConv::fromXml(e.readAsciiText(), BarLineType::NORMAL));
-        } else if (tag == "span") {
-            _spanStaff  = e.readBool();
-        } else if (tag == "spanFromOffset") {
-            _spanFrom = e.readInt();
-        } else if (tag == "spanToOffset") {
-            _spanTo = e.readInt();
-        } else if (tag == "Articulation") {
-            Articulation* a = Factory::createArticulation(score()->dummy()->chord());
-            a->read(e);
-            add(a);
-        } else if (tag == "Symbol") {
-            Symbol* s = new Symbol(this);
-            s->setTrack(track());
-            s->read(e);
-            add(s);
-        } else if (tag == "Image") {
-            if (MScore::noImages) {
-                e.skipCurrentElement();
-            } else {
-                Image* image = new Image(this);
-                image->setTrack(track());
-                image->read(e);
-                add(image);
-            }
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------

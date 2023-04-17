@@ -30,6 +30,7 @@
 #include "engraving/compat/writescorehook.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
 #include "engraving/rw/xml.h"
+#include "engraving/rw/400/tread.h"
 #include "engraving/libmscore/factory.h"
 
 #include "log.h"
@@ -123,7 +124,7 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     XmlReader e(buffer.data());
     e.readNextStartElement();
     element = Factory::createItemByName(e.name(), element->score()->dummy());
-    element->read(e);
+    rw400::TRead::readItem(element, e, *e.context());
     return element;
 }
 

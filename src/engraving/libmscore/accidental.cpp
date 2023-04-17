@@ -24,7 +24,7 @@
 
 #include "iengravingfont.h"
 #include "rw/xml.h"
-#include "rw/400/accidentalrw.h"
+
 #include "types/symnames.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
@@ -248,11 +248,6 @@ AccidentalVal sym2accidentalVal(SymId id)
 Accidental::Accidental(EngravingItem* parent)
     : EngravingItem(ElementType::ACCIDENTAL, parent, ElementFlag::MOVABLE)
 {
-}
-
-void Accidental::read(XmlReader& e)
-{
-    rw400::AccidentalRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

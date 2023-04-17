@@ -44,9 +44,6 @@ void GP67DomBuilder::buildGPDomModel(XmlDomElement* domElem)
         auto iter = nodeMap.find(node.nodeName());
         if (iter != nodeMap.end()) {
             *(iter->second) = node;
-        } else {
-            String nodeName = node.nodeName();
-            LOGW() << "unknown node " << nodeName << "\n";
         }
     };
 
@@ -107,9 +104,8 @@ void GP67DomBuilder::buildGPScore(XmlDomNode* scoreNode)
             score->setMultiVoice(currentNode.toElement().text().toInt());
         } else if (sUnusedNodes.find(nodeName) != sUnusedNodes.end()) {
             // Ignored nodes, which specify unused specifics (e.g. default layout, footers e.t.c.)
-        } else {
-            LOGW() << "unknown GP score info tag: " << nodeName << "\n";
         }
+
         currentNode = currentNode.nextSibling();
     }
     _gpDom->addGPScore(std::move(score));
@@ -130,9 +126,8 @@ void GP67DomBuilder::buildGPMasterTracks(XmlDomNode* masterTrack)
             String tracks = currentNode.toElement().text();
             size_t tracksCount = tracks.split(u' ').size();
             masterTracks->setTracksCount(tracksCount);
-        } else {
-            LOGW() << "unknown GP MasterTracks tag: " << nodeName << "\n";
         }
+
         currentNode = currentNode.nextSibling();
     }
 
@@ -380,8 +375,6 @@ std::unique_ptr<GPMasterBar> GP67DomBuilder::createGPMasterBar(XmlDomNode* maste
             masterBar->setFreeTime(true);
         } else if (sUnused.find(nodeName) != sUnused.end()) {
             // Ignored
-        } else {
-            LOGW() << "unknown GP MasterBar tag: " << nodeName << "\n";
         }
 
         innerNode = innerNode.nextSibling();
@@ -459,9 +452,8 @@ std::pair<int, std::unique_ptr<GPBar> > GP67DomBuilder::createGPBar(XmlDomNode* 
                 _voices.erase(idx);
                 bar->addGPVoice(std::move(voice));
             }
-        } else {
-            LOGW() << "unknown GP Bar tag: " << nodeName << "\n";
         }
+
         innerNode = innerNode.nextSibling();
     }
 
@@ -678,8 +670,6 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(XmlDomNode
             readBeatXProperties(innerNode, beat.get());
         } else if (sUnused.find(nodeName) != sUnused.end()) {
             // Ignored nodes
-        } else {
-            LOGW() << "unknown GP Beat Tag " << nodeName << "\n";
         }
 
         innerNode = innerNode.nextSibling();
@@ -791,8 +781,6 @@ std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(XmlDomNode
             note->setTrillFret(innerNode.toElement().text().toInt());
         } else if (nodeName == "Ornament") {
             note->setOrnament(ornamentType(innerNode.toElement().text()));
-        } else {
-            //LOGD() << "unknown GP Note Tag" << nodeName << "\n";
         }
 
         innerNode = innerNode.nextSibling();
@@ -837,8 +825,6 @@ std::pair<int, std::shared_ptr<GPRhythm> > GP67DomBuilder::createGPRhythm(XmlDom
             int num = innerNode.attribute("num").toInt();
             int denom = innerNode.attribute("den").toInt();
             rhythm->setTuplet({ num, denom });
-        } else {
-            //LOGD() << "unknown GP Rhytms tag" << nodeName << "\n";
         }
 
         innerNode = innerNode.nextSibling();
@@ -993,9 +979,8 @@ void GP67DomBuilder::readNoteProperties(XmlDomNode* propertiesNode, GPNote* note
             }
         } else if (propertyName == "ShowStringNumber") {
             note->setShowStringNumber(true);
-        } else {
-            //LOGD() << "unknown GP Note Property tag" << propertyName << "\n";
         }
+
         propertyNode = propertyNode.nextSibling();
     }
 
@@ -1202,9 +1187,6 @@ void GP67DomBuilder::readBeatProperties(const XmlDomNode& propertiesNode, GPBeat
 //        } else if (propertyName == u"WhammyBarMiddleValue") {
 //        } else if (propertyName == u"WhammyBarOriginValue") {
 //        }
-        else {
-            //LOGD() << "unknown GP Beat property info tag: " << propertyName << "\n";
-        }
 
         propertyNode = propertyNode.nextSibling();
     }
@@ -1233,8 +1215,6 @@ void GP67DomBuilder::readTrackProperties(XmlDomNode* propertiesNode, GPTrack* tr
             property.tunning.swap(tunning);
         } else if (propertyName == u"DiagramCollection" || propertyName == u"DiagramWorkingSet") {
             readDiagram(propertyNode.firstChild(), track);
-        } else {
-            //LOGD() << "unknown GP trackProperty info tag: " << propertyName << "\n";
         }
 
         propertyNode = propertyNode.nextSibling();

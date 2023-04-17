@@ -44,7 +44,8 @@ static const std::map<AudioResourceType, QString> RESOURCE_TYPE_MAP = {
     { AudioResourceType::Undefined, "undefined" },
     { AudioResourceType::MuseSamplerSoundPack, "muse_sampler_sound_pack" },
     { AudioResourceType::FluidSoundfont, "fluid_soundfont" },
-    { AudioResourceType::VstPlugin, "vst_plugin" }
+    { AudioResourceType::VstPlugin, "vst_plugin" },
+    { AudioResourceType::MusePlugin, "muse_plugin" },
 };
 
 AudioOutputParams ProjectAudioSettings::masterAudioOutputParams() const
@@ -266,6 +267,7 @@ AudioOutputParams ProjectAudioSettings::outputParamsFromJson(const QJsonObject& 
     result.fxChain = fxChainFromJson(object.value("fxChain").toObject());
     result.balance = object.value("balance").toVariant().toFloat();
     result.volume = object.value("volumeDb").toVariant().toFloat();
+    result.auxSends = auxSendsFromJson(object.value("auxSends").toObject());
 
     return result;
 }
@@ -298,6 +300,27 @@ AudioFxParams ProjectAudioSettings::fxParamsFromJson(const QJsonObject& object) 
     result.chainOrder = static_cast<AudioFxChainOrder>(object.value("chainOrder").toInt());
     result.resourceMeta = resourceMetaFromJson(object.value("resourceMeta").toObject());
     result.configuration = unitConfigFromJson(object.value("unitConfiguration").toObject());
+
+    return result;
+}
+
+AuxSendsParams ProjectAudioSettings::auxSendsFromJson(const QJsonObject& object) const
+{
+    AuxSendsParams result;
+
+    for (const QString& key : object.keys()) {
+        AuxSendParams params = auxSendParamsFromJson(object.value(key).toObject());
+        result.emplace(static_cast<TrackId>(key.toInt()), std::move(params));
+    }
+
+    return result;
+}
+
+AuxSendParams ProjectAudioSettings::auxSendParamsFromJson(const QJsonObject& object) const
+{
+    AuxSendParams result;
+    result.signalAmount = object.value("signalAmount").toVariant().toFloat();
+    result.active = object.value("active").toBool();
 
     return result;
 }
@@ -352,6 +375,7 @@ QJsonObject ProjectAudioSettings::outputParamsToJson(const audio::AudioOutputPar
     result.insert("fxChain", fxChainToJson(params.fxChain));
     result.insert("balance", params.balance);
     result.insert("volumeDb", params.volume);
+    result.insert("auxSends", auxSendsToJson(params.auxSends));
 
     return result;
 }
@@ -372,6 +396,26 @@ QJsonObject ProjectAudioSettings::fxChainToJson(const audio::AudioFxChain& fxCha
     for (const auto& pair : fxChain) {
         result.insert(QString::number(static_cast<int>(pair.first)), fxParamsToJson(pair.second));
     }
+
+    return result;
+}
+
+QJsonObject ProjectAudioSettings::auxSendsToJson(const audio::AuxSendsParams& auxSends) const
+{
+    QJsonObject result;
+
+    for (const auto& pair : auxSends) {
+        result.insert(QString::number(static_cast<int>(pair.first)), auxSendParamsToJson(pair.second));
+    }
+
+    return result;
+}
+
+QJsonObject ProjectAudioSettings::auxSendParamsToJson(const audio::AuxSendParams& auxParams) const
+{
+    QJsonObject result;
+    result.insert("active", auxParams.active);
+    result.insert("signalAmount", auxParams.signalAmount);
 
     return result;
 }

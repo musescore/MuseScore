@@ -23,13 +23,14 @@
 #include "notedot.h"
 
 #include "rw/xml.h"
-#include "rw/400/notedotrw.h"
 
 #include "chord.h"
 #include "note.h"
 #include "rest.h"
 #include "score.h"
 #include "staff.h"
+
+#include "log.h"
 
 using namespace mu;
 
@@ -90,11 +91,6 @@ void NoteDot::layout()
 EngravingItem* NoteDot::elementBase() const
 {
     return parentItem();
-}
-
-void NoteDot::read(XmlReader& e)
-{
-    rw400::NoteDotRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

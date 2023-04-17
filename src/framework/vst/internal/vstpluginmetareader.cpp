@@ -31,20 +31,6 @@ using namespace mu::audio;
 using namespace mu::vst;
 
 namespace mu::vst {
-static PluginModulePtr createModule(const io::path_t& pluginPath)
-{
-    std::string errorString;
-    PluginModulePtr result = nullptr;
-
-    try {
-        result = PluginModule::create(pluginPath.toStdString(), errorString);
-    }  catch (...) {
-        LOGE() << "Unable to load a new VST Module, error string: " << errorString;
-    }
-
-    return result;
-}
-
 static bool hasNativeEditorSupport()
 {
 #ifdef Q_OS_LINUX
@@ -62,7 +48,7 @@ bool VstPluginMetaReader::canReadMeta(const io::path_t& pluginPath) const
     return io::suffix(pluginPath) == VST3_PACKAGE_EXTENSION;
 }
 
-mu::RetVal<AudioResourceMeta> VstPluginMetaReader::readMeta(const io::path_t& pluginPath) const
+mu::RetVal<AudioResourceMetaList> VstPluginMetaReader::readMeta(const io::path_t& pluginPath) const
 {
     PluginModulePtr module = createModule(pluginPath);
     if (!module) {
@@ -70,21 +56,22 @@ mu::RetVal<AudioResourceMeta> VstPluginMetaReader::readMeta(const io::path_t& pl
     }
 
     const auto& factory = module->getFactory();
+    AudioResourceMetaList result;
 
-    for (auto& classInfo : factory.classInfos()) {
+    for (const ClassInfo& classInfo : factory.classInfos()) {
         if (classInfo.category() != kVstAudioEffectClass) {
             continue;
         }
 
         audio::AudioResourceMeta meta;
-        meta.id = io::completeBasename(pluginPath).toStdString();
+        meta.id = classInfo.name();
         meta.type = audio::AudioResourceType::VstPlugin;
         meta.attributes.insert({ audio::CATEGORIES_ATTRIBUTE, String::fromStdString(classInfo.subCategoriesString()) });
-        meta.vendor = factory.info().vendor();
+        meta.vendor = classInfo.vendor();
         meta.hasNativeEditorSupport = hasNativeEditorSupport();
 
-        return RetVal<AudioResourceMeta>::make_ok(meta);
+        result.push_back(meta);
     }
 
-    return make_ret(Ret::Code::UnknownError);
+    return RetVal<AudioResourceMetaList>::make_ok(result);
 }

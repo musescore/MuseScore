@@ -29,7 +29,6 @@
 #include "draw/types/transform.h"
 #include "draw/svgrenderer.h"
 #include "rw/xml.h"
-#include "rw/400/imagerw.h"
 
 #include "imageStore.h"
 #include "masterscore.h"
@@ -337,15 +336,6 @@ void Image::write(XmlWriter& xml) const
     writeProperty(xml, Pid::SIZE_IS_SPATIUM);
 
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Image::read(XmlReader& e)
-{
-    rw400::ImageRW::read(this, e, *e.context());
 }
 
 bool Image::load()

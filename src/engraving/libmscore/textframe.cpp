@@ -99,23 +99,6 @@ void TBox::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void TBox::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "Text") {
-            m_text->read(e);
-        } else if (Box::readProperties(e)) {
-        } else {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   drop
 //---------------------------------------------------------
 

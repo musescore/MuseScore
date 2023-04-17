@@ -23,7 +23,7 @@
 #include "timesig.h"
 
 #include "rw/xml.h"
-#include "rw/400/timesigrw.h"
+
 #include "style/style.h"
 #include "translation.h"
 #include "iengravingfont.h"
@@ -168,15 +168,6 @@ void TimeSig::write(XmlWriter& xml) const
     writeProperty(xml, Pid::SCALE);
 
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   TimeSig::read
-//---------------------------------------------------------
-
-void TimeSig::read(XmlReader& e)
-{
-    rw400::TimeSigRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

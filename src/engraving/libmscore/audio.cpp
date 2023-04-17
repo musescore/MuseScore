@@ -22,36 +22,19 @@
 
 #include "audio.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 
 using namespace mu;
 
 namespace mu::engraving {
-//---------------------------------------------------------
-//   Audio
-//---------------------------------------------------------
-
 Audio::Audio()
 {
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
 void Audio::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        if (e.name() == "path") {
-            _path = e.readText();
-        } else {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
 
 void Audio::write(XmlWriter& xml) const
 {

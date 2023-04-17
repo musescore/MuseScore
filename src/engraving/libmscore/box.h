@@ -69,8 +69,7 @@ public:
     virtual void write(XmlWriter&) const override;
     virtual void write(XmlWriter& xml, staff_idx_t, bool, bool) const override { write(xml); }
     virtual void writeProperties(XmlWriter&) const override;
-    virtual bool readProperties(XmlReader&) override;
-    virtual void read(XmlReader&) override;
+
     virtual bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;
     virtual void add(EngravingItem* e) override;
@@ -129,7 +128,6 @@ public:
 
     void layout() override;
     void writeProperties(XmlWriter&) const override;
-    bool readProperties(XmlReader&) override;
 
     mu::RectF drag(EditData&) override;
     void layout2();

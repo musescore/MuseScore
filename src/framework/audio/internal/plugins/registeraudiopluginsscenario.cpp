@@ -24,6 +24,7 @@
 
 #include <QApplication>
 
+#include "audioerrors.h"
 #include "translation.h"
 #include "log.h"
 
@@ -39,6 +40,11 @@ void RegisterAudioPluginsScenario::init()
             m_aborted = true;
         }
     });
+
+    Ret ret = knownPluginsRegister()->load();
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
 }
 
 mu::Ret RegisterAudioPluginsScenario::registerNewPlugins()
@@ -57,17 +63,18 @@ mu::Ret RegisterAudioPluginsScenario::registerNewPlugins()
         }
     }
 
+    if (newPluginPaths.empty()) {
+        return make_ok();
+    }
+
     processPluginsRegistration(newPluginPaths);
 
-    return make_ok();
+    Ret ret = knownPluginsRegister()->load();
+    return ret;
 }
 
 void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t& pluginPaths)
 {
-    if (pluginPaths.empty()) {
-        return;
-    }
-
     Ret ret = interactive()->showProgress(mu::trc("audio", "Scanning audio plugins"), &m_progress);
     if (!ret) {
         LOGE() << ret.toString();
@@ -87,7 +94,7 @@ void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t&
         const io::path_t& pluginPath = pluginPaths[i];
         std::string pluginPathStr = pluginPath.toStdString();
 
-        m_progress.progressChanged.send(i, pluginCount, pluginPathStr);
+        m_progress.progressChanged.send(i, pluginCount, io::filename(pluginPath).toStdString());
         qApp->processEvents();
 
         int code = process()->execute(appPath, { "--register-audio-plugin", pluginPathStr });
@@ -113,23 +120,29 @@ mu::Ret RegisterAudioPluginsScenario::registerPlugin(const io::path_t& pluginPat
 
     IAudioPluginMetaReaderPtr reader = metaReader(pluginPath);
     if (!reader) {
-        return make_ret(Ret::Code::UnknownError);
+        return make_ret(audio::Err::UnknownPluginType);
     }
 
-    RetVal<AudioResourceMeta> meta = reader->readMeta(pluginPath);
-    if (!meta.ret) {
-        LOGE() << meta.ret.toString();
-        return meta.ret;
+    RetVal<AudioResourceMetaList> metaList = reader->readMeta(pluginPath);
+    if (!metaList.ret) {
+        LOGE() << metaList.ret.toString();
+        return metaList.ret;
     }
 
-    AudioPluginInfo info;
-    info.type = audioPluginTypeFromCategoriesString(meta.val.attributeVal(audio::CATEGORIES_ATTRIBUTE).toStdString());
-    info.meta = meta.val;
-    info.path = pluginPath;
-    info.enabled = true;
+    for (const AudioResourceMeta& meta : metaList.val) {
+        AudioPluginInfo info;
+        info.type = audioPluginTypeFromCategoriesString(meta.attributeVal(audio::CATEGORIES_ATTRIBUTE).toStdString());
+        info.meta = meta;
+        info.path = pluginPath;
+        info.enabled = true;
 
-    Ret ret = knownPluginsRegister()->registerPlugin(info);
-    return ret;
+        Ret ret = knownPluginsRegister()->registerPlugin(info);
+        if (!ret) {
+            return ret;
+        }
+    }
+
+    return make_ok();
 }
 
 mu::Ret RegisterAudioPluginsScenario::registerFailedPlugin(const io::path_t& pluginPath, int failCode)

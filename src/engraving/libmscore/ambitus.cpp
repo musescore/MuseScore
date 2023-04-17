@@ -25,8 +25,9 @@
 #include "translation.h"
 
 #include "draw/types/pen.h"
-#include "rw/206/read206.h"
+
 #include "rw/xml.h"
+#include "rw/206/read206.h"
 
 #include "accidental.h"
 #include "chord.h"
@@ -45,13 +46,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static const NoteHeadGroup NOTEHEADGROUP_DEFAULT = NoteHeadGroup::HEAD_NORMAL;
-static const NoteHeadType NOTEHEADTYPE_DEFAULT  = NoteHeadType::HEAD_AUTO;
-static const DirectionH DIR_DEFAULT     = DirectionH::AUTO;
-static const bool HASLINE_DEFAULT         = true;
-static const Spatium LINEWIDTH_DEFAULT(0.12);
-static const double LINEOFFSET_DEFAULT      = 0.8;               // the distance between notehead and line
-
+const Spatium Ambitus::LINEWIDTH_DEFAULT = Spatium(0.12);
 //---------------------------------------------------------
 //   Ambitus
 //---------------------------------------------------------
@@ -288,75 +283,6 @@ void Ambitus::write(XmlWriter& xml) const
     }
     EngravingItem::writeProperties(xml);
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Ambitus::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Ambitus::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-    if (tag == "head") {
-        readProperty(e, Pid::HEAD_GROUP);
-    } else if (tag == "headType") {
-        readProperty(e, Pid::HEAD_TYPE);
-    } else if (tag == "mirror") {
-        readProperty(e, Pid::MIRROR_HEAD);
-    } else if (tag == "hasLine") {
-        setHasLine(e.readInt());
-    } else if (tag == "lineWidth") {
-        readProperty(e, Pid::LINE_WIDTH_SPATIUM);
-    } else if (tag == "topPitch") {
-        _topPitch = e.readInt();
-    } else if (tag == "bottomPitch") {
-        _bottomPitch = e.readInt();
-    } else if (tag == "topTpc") {
-        _topTpc = e.readInt();
-    } else if (tag == "bottomTpc") {
-        _bottomTpc = e.readInt();
-    } else if (tag == "topAccidental") {
-        while (e.readNextStartElement()) {
-            if (e.name() == "Accidental") {
-                if (score()->mscVersion() < 301) {
-                    compat::Read206::readAccidental206(_topAccid, e);
-                } else {
-                    _topAccid->read(e);
-                }
-            } else {
-                e.skipCurrentElement();
-            }
-        }
-    } else if (tag == "bottomAccidental") {
-        while (e.readNextStartElement()) {
-            if (e.name() == "Accidental") {
-                if (score()->mscVersion() < 301) {
-                    compat::Read206::readAccidental206(_bottomAccid, e);
-                } else {
-                    _bottomAccid->read(e);
-                }
-            } else {
-                e.skipCurrentElement();
-            }
-        }
-    } else if (EngravingItem::readProperties(e)) {
-    } else {
-        return false;
-    }
-    return true;
 }
 
 //---------------------------------------------------------

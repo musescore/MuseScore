@@ -748,7 +748,7 @@ void Spanner::computeEndElement()
         if (endCR() && !endCR()->measure()->isMMRest() && !systemFlag()) {
             ChordRest* cr = endCR();
             Fraction nticks = cr->tick() + cr->actualTicks() - _tick;
-            if ((_ticks - nticks).isNotZero()) {
+            if ((_ticks - nticks) > Fraction(0, 1)) {
                 LOGD("%s ticks changed, %d -> %d", typeName(), _ticks.ticks(), nticks.ticks());
                 setTicks(nticks);
                 if (isOttava()) {
@@ -1464,22 +1464,6 @@ static Fraction fraction(const XmlWriter& xml, const EngravingItem* current, con
         }
     }
     return tick;
-}
-
-//---------------------------------------------------------
-//   Spanner::readProperties
-//---------------------------------------------------------
-
-bool Spanner::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-    if (e.context()->pasteMode()) {
-        if (tag == "ticks_f") {
-            setTicks(e.readFraction());
-            return true;
-        }
-    }
-    return EngravingItem::readProperties(e);
 }
 
 //---------------------------------------------------------

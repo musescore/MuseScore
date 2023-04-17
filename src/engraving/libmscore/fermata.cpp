@@ -65,48 +65,6 @@ Fermata::Fermata(EngravingItem* parent)
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Fermata::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Fermata::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-
-    if (tag == "subtype") {
-        AsciiStringView s = e.readAsciiText();
-        SymId id = SymNames::symIdByName(s);
-        setSymId(id);
-    } else if (tag == "play") {
-        setPlay(e.readBool());
-    } else if (tag == "timeStretch") {
-        _timeStretch = e.readDouble();
-    } else if (tag == "offset") {
-        if (score()->mscVersion() > 114) {
-            EngravingItem::readProperties(e);
-        } else {
-            e.skipCurrentElement();       // ignore manual layout in older scores
-        }
-    } else if (EngravingItem::readProperties(e)) {
-    } else {
-        return false;
-    }
-    return true;
-}
-
-//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 

@@ -38,6 +38,7 @@ NICE-TO-HAVE TODO:
 #include "draw/types/pen.h"
 #include "style/style.h"
 #include "rw/xml.h"
+
 #include "types/typesconv.h"
 #include "iengravingfont.h"
 
@@ -82,6 +83,11 @@ GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
 
 void GlissandoSegment::layout()
 {
+    if (pos2().x() <= 0) {
+        setbbox(RectF());
+        return;
+    }
+
     if (staff()) {
         setMag(staff()->staffMag(tick()));
     }
@@ -98,6 +104,11 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;
     using namespace mu::draw;
+
+    if (pos2().x() <= 0) {
+        return;
+    }
+
     painter->save();
     double _spatium = spatium();
 
@@ -496,41 +507,6 @@ void Glissando::write(XmlWriter& xml) const
 
     SLine::writeProperties(xml);
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Glissando::read(XmlReader& e)
-{
-    eraseSpannerSegments();
-
-    if (score()->mscVersion() < 301) {
-        e.context()->addSpanner(e.intAttribute("id", -1), this);
-    }
-
-    _showText = false;
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag = e.name();
-        if (tag == "text") {
-            _showText = true;
-            readProperty(e, Pid::GLISS_TEXT);
-        } else if (tag == "subtype") {
-            _glissandoType = TConv::fromXml(e.readAsciiText(), GlissandoType::STRAIGHT);
-        } else if (tag == "glissandoStyle") {
-            readProperty(e, Pid::GLISS_STYLE);
-        } else if (tag == "easeInSpin") {
-            _easeIn = e.readInt();
-        } else if (tag == "easeOutSpin") {
-            _easeOut = e.readInt();
-        } else if (tag == "play") {
-            setPlayGlissando(e.readBool());
-        } else if (readStyledProperty(e, tag)) {
-        } else if (!SLine::readProperties(e)) {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------

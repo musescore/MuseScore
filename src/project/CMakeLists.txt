@@ -116,8 +116,6 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/view/exportdialogmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/exportdialogmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/exportprogressmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/exportprogressmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/recentprojectsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/recentprojectsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/newscoremodel.cpp

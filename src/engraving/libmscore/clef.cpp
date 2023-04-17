@@ -30,7 +30,7 @@
 #include "translation.h"
 
 #include "rw/xml.h"
-#include "rw/400/clefrw.h"
+
 #include "types/typesconv.h"
 
 #include "ambitus.h"
@@ -288,11 +288,6 @@ void Clef::setSmall(bool val)
     if (val != m_isSmall) {
         m_isSmall = val;
     }
-}
-
-void Clef::read(XmlReader& e)
-{
-    rw400::ClefRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

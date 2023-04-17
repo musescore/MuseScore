@@ -23,7 +23,6 @@
 #include "bend.h"
 
 #include "rw/xml.h"
-#include "rw/400/bendrw.h"
 
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
@@ -32,6 +31,8 @@
 #include "note.h"
 #include "score.h"
 #include "staff.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -371,11 +372,6 @@ void Bend::write(XmlWriter& xml) const
     writeProperty(xml, Pid::PLAY);
     EngravingItem::writeProperties(xml);
     xml.endElement();
-}
-
-void Bend::read(XmlReader& e)
-{
-    rw400::BendRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

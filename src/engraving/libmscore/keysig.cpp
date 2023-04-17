@@ -24,7 +24,7 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
-#include "rw/400/keysigrw.h"
+
 #include "types/symnames.h"
 #include "types/typesconv.h"
 
@@ -473,11 +473,6 @@ void KeySig::write(XmlWriter& xml) const
         xml.tag("forInstrumentChange", true);
     }
     xml.endElement();
-}
-
-void KeySig::read(XmlReader& e)
-{
-    rw400::KeySigRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

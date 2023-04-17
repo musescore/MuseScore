@@ -27,6 +27,7 @@
 #include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
 #include "rw/xml.h"
+
 #include "types/typesconv.h"
 
 #include "chord.h"
@@ -373,98 +374,6 @@ void StaffType::write(XmlWriter& xml) const
         }
     }
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void StaffType::read(XmlReader& e)
-{
-    AsciiStringView group = e.asciiAttribute("group");
-    _group = TConv::fromXml(group, StaffGroup::STANDARD);
-
-    if (_group == StaffGroup::TAB) {
-        setGenKeysig(false);
-    }
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "name") {
-            setXmlName(e.readText());
-        } else if (tag == "lines") {
-            setLines(e.readInt());
-        } else if (tag == "lineDistance") {
-            setLineDistance(Spatium(e.readDouble()));
-        } else if (tag == "yoffset") {
-            _yoffset = Spatium(e.readDouble());
-        } else if (tag == "mag") {
-            _userMag = e.readDouble();
-        } else if (tag == "small") {
-            _small = e.readBool();
-        } else if (tag == "stepOffset") {
-            _stepOffset = e.readInt();
-        } else if (tag == "clef") {
-            setGenClef(e.readInt());
-        } else if ((tag == "slashStyle") || (tag == "stemless")) {
-            bool val = e.readInt() != 0;
-            setStemless(val);
-            setShowBackTied(!val);        // for compatibility with 2.0.2 scores where this prop
-        }                                 // was lacking and controlled by "slashStyle" instead
-        else if (tag == "barlines") {
-            setShowBarlines(e.readInt());
-        } else if (tag == "timesig") {
-            setGenTimesig(e.readInt());
-        } else if (tag == "noteheadScheme") {
-            setNoteHeadScheme(TConv::fromXml(e.readAsciiText(), NoteHeadScheme::HEAD_NORMAL));
-        } else if (tag == "keysig") {
-            _genKeysig = e.readInt();
-        } else if (tag == "ledgerlines") {
-            _showLedgerLines = e.readInt();
-        } else if (tag == "invisible") {
-            _invisible = e.readInt();
-        } else if (tag == "color") {
-            _color = e.readColor();
-        } else if (tag == "durations") {
-            setGenDurations(e.readBool());
-        } else if (tag == "durationFontName") {
-            setDurationFontName(e.readText());
-        } else if (tag == "durationFontSize") {
-            setDurationFontSize(e.readDouble());
-        } else if (tag == "durationFontY") {
-            setDurationFontUserY(e.readDouble());
-        } else if (tag == "fretFontName") {
-            setFretFontName(e.readText());
-        } else if (tag == "fretFontSize") {
-            setFretFontSize(e.readDouble());
-        } else if (tag == "fretFontY") {
-            setFretFontUserY(e.readDouble());
-        } else if (tag == "symbolRepeat") {
-            setSymbolRepeat((TablatureSymbolRepeat)e.readInt());
-        } else if (tag == "linesThrough") {
-            setLinesThrough(e.readBool());
-        } else if (tag == "minimStyle") {
-            setMinimStyle((TablatureMinimStyle)e.readInt());
-        } else if (tag == "onLines") {
-            setOnLines(e.readBool());
-        } else if (tag == "showRests") {
-            setShowRests(e.readBool());
-        } else if (tag == "stemsDown") {
-            setStemsDown(e.readBool());
-        } else if (tag == "stemsThrough") {
-            setStemsThrough(e.readBool());
-        } else if (tag == "upsideDown") {
-            setUpsideDown(e.readBool());
-        } else if (tag == "showTabFingering") {
-            setShowTabFingering(e.readBool());
-        } else if (tag == "useNumbers") {
-            setUseNumbers(e.readBool());
-        } else if (tag == "showBackTied") {           // must be after reading "slashStyle"/"stemless" prop, as in older
-            setShowBackTied(e.readBool());            // scores, this prop was lacking and controlled by "slashStyle"
-        } else {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------

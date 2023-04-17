@@ -113,7 +113,11 @@ void PlaybackModule::onInit(const framework::IApplication::RunMode& mode)
     s_playbackUiActions->init();
 }
 
-void PlaybackModule::onAllInited(const framework::IApplication::RunMode& /*mode*/)
+void PlaybackModule::onAllInited(const framework::IApplication::RunMode& mode)
 {
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
     s_soundProfileRepo->refresh();
 }

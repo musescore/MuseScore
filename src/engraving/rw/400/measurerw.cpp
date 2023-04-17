@@ -59,18 +59,7 @@
 #include "../libmscore/tempotext.h"
 #include "../libmscore/image.h"
 
-#include "barlinerw.h"
-#include "locationrw.h"
-#include "chordrw.h"
-#include "mmrestrw.h"
-#include "restrw.h"
-#include "breathrw.h"
-#include "measurerepeatrw.h"
-#include "clefrw.h"
-#include "timesigrw.h"
-#include "keysigrw.h"
 #include "tread.h"
-#include "symbolrw.h"
 
 #include "log.h"
 
@@ -128,7 +117,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
         } else if (tag == "Marker" || tag == "Jump") {
             EngravingItem* el = Factory::createItemByName(tag, measure);
             el->setTrack(ctx.track());
-            TRead::read(el, e, ctx);
+            TRead::readItem(el, e, ctx);
             if (el->systemFlag() && el->isTopSystemObject()) {
                 el->setTrack(0); // original system object always goes on top
             }
@@ -206,7 +195,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
             TRead::read(range, e, ctx);
             range->setTrack(ctx.track());
             measure->add(range);
-        } else if (measure->MeasureBase::readProperties(e)) {
+        } else if (TRead::readProperties(static_cast<MeasureBase*>(measure), e, ctx)) {
         } else {
             e.unknown();
         }
@@ -237,7 +226,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
 
         if (tag == "location") {
             Location loc = Location::relative();
-            LocationRW::read(&loc, e, ctx);
+            TRead::read(&loc, e, ctx);
             ctx.setLocation(loc);
         } else if (tag == "tick") {             // obsolete?
             LOGD() << "read midi tick";
@@ -245,7 +234,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "BarLine") {
             BarLine* barLine = Factory::createBarLine(ctx.dummy()->segment());
             barLine->setTrack(ctx.track());
-            BarLineRW::read(barLine, e, ctx);
+            TRead::read(barLine, e, ctx);
             //
             //  StartRepeatBarLine: at rtick == 0, always BarLineType::START_REPEAT
             //  BarLine:            in the middle of a measure, has no semantic
@@ -279,7 +268,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "Chord") {
             Chord* chord = Factory::createChord(ctx.dummy()->segment());
             chord->setTrack(ctx.track());
-            ChordRW::read(chord, e, ctx);
+            TRead::read(chord, e, ctx);
             if (startingBeam) {
                 startingBeam->add(chord);         // also calls chord->setBeam(startingBeam)
                 startingBeam = nullptr;
@@ -312,7 +301,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                 MMRest* mmr = Factory::createMMRest(segment);
                 mmr->setTrack(ctx.track());
                 mmr->setParent(segment);
-                MMRestRW::read(mmr, e, ctx);
+                TRead::read(mmr, e, ctx);
                 segment->add(mmr);
                 ctx.incTick(mmr->actualTicks());
             } else {
@@ -321,7 +310,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                 rest->setDurationType(DurationType::V_MEASURE);
                 rest->setTicks(measure->timesig() / timeStretch);
                 rest->setTrack(ctx.track());
-                RestRW::read(rest, e, ctx);
+                TRead::read(rest, e, ctx);
                 if (startingBeam) {
                     startingBeam->add(rest); // also calls rest->setBeam(startingBeam)
                     startingBeam = nullptr;
@@ -347,7 +336,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             Breath* breath = Factory::createBreath(segment);
             breath->setTrack(ctx.track());
             breath->setPlacement(breath->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
-            BreathRW::read(breath, e, ctx);
+            TRead::read(breath, e, ctx);
             segment->add(breath);
         } else if (tag == "Spanner") {
             Spanner::readSpanner(e, measure, ctx.track());
@@ -356,7 +345,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
             MeasureRepeat* mr = Factory::createMeasureRepeat(segment);
             mr->setTrack(ctx.track());
-            MeasureRepeatRW::read(mr, e, ctx);
+            TRead::read(mr, e, ctx);
             if (!mr->numMeasures()) {
                 mr->setNumMeasures(1); // 3.x doesn't have any other possibilities
             }
@@ -388,14 +377,14 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             segment = measure->getSegment(header ? SegmentType::HeaderClef : SegmentType::Clef, ctx.tick());
             Clef* clef = Factory::createClef(segment);
             clef->setTrack(ctx.track());
-            ClefRW::read(clef, e, ctx);
+            TRead::read(clef, e, ctx);
             clef->setGenerated(false);
 
             segment->add(clef);
         } else if (tag == "TimeSig") {
             TimeSig* ts = Factory::createTimeSig(ctx.dummy()->segment());
             ts->setTrack(ctx.track());
-            TimeSigRW::read(ts, e, ctx);
+            TRead::read(ts, e, ctx);
             // if time sig not at beginning of measure => courtesy time sig
             Fraction currTick = ctx.tick();
             bool courtesySig = (currTick > measure->tick());
@@ -422,7 +411,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "KeySig") {
             KeySig* ks = Factory::createKeySig(ctx.dummy()->segment());
             ks->setTrack(ctx.track());
-            KeySigRW::read(ks, e, ctx);
+            TRead::read(ks, e, ctx);
             Fraction curTick = ctx.tick();
             // if key sig not at beginning of measure => courtesy key sig
             bool courtesySig = (curTick == measure->endTick());
@@ -493,7 +482,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             Symbol* el = Factory::createSymbol(segment);
 
             el->setTrack(ctx.track());
-            SymbolRW::read(el, e, ctx);
+            TRead::read(el, e, ctx);
             if (el->systemFlag() && el->isTopSystemObject()) {
                 el->setTrack(0); // original system object always goes on top
             }
@@ -536,7 +525,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             EngravingItem* el = Factory::createItemByName(tag, segment);
 
             el->setTrack(ctx.track());
-            TRead::read(el, e, ctx);
+            TRead::readItem(el, e, ctx);
             if (el->systemFlag() && el->isTopSystemObject()) {
                 el->setTrack(0); // original system object always goes on top
             }
@@ -596,7 +585,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             }
             startingBeam = beam;
         } else if (tag == "Segment" && segment) {
-            segment->read(e);
+            rw400::TRead::read(segment, e, ctx);
         } else if (tag == "Ambitus") {
             segment = measure->getSegment(SegmentType::Ambitus, ctx.tick());
             Ambitus* range = Factory::createAmbitus(segment);

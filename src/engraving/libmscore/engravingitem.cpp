@@ -38,9 +38,9 @@
 #include "iengravingfont.h"
 #include "style/style.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "rw/400/writecontext.h"
 #include "types/typesconv.h"
-#include "rw/400/engravingitemrw.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -904,152 +904,6 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool EngravingItem::readProperties(XmlReader& e)
-{
-    return rw400::EngravingItemRW::readProperties(this, e, *e.context());
-
-    if (0) {
-        const AsciiStringView tag(e.name());
-
-        if (readProperty(tag, e, Pid::SIZE_SPATIUM_DEPENDENT)) {
-        } else if (readProperty(tag, e, Pid::OFFSET)) {
-        } else if (readProperty(tag, e, Pid::MIN_DISTANCE)) {
-        } else if (readProperty(tag, e, Pid::AUTOPLACE)) {
-        } else if (tag == "track") {
-            setTrack(e.readInt() + e.context()->trackOffset());
-        } else if (tag == "color") {
-            setColor(e.readColor());
-        } else if (tag == "visible") {
-            setVisible(e.readInt());
-        } else if (tag == "selected") { // obsolete
-            e.readInt();
-        } else if ((tag == "linked") || (tag == "linkedMain")) {
-            ReadContext* ctx = e.context();
-            IF_ASSERT_FAILED(ctx) {
-                return false;
-            }
-
-            Staff* s = staff();
-            if (!s) {
-                s = score()->staff(e.context()->track() / VOICES);
-                if (!s) {
-                    LOGW("EngravingItem::readProperties: linked element's staff not found (%s)", typeName());
-                    e.skipCurrentElement();
-                    return true;
-                }
-            }
-            if (tag == "linkedMain") {
-                _links = new LinkedObjects(score());
-                _links->push_back(this);
-
-                ctx->addLink(s, _links, e.context()->location(true));
-
-                e.readNext();
-            } else {
-                Staff* ls = s->links() ? toStaff(s->links()->mainElement()) : nullptr;
-                bool linkedIsMaster = ls ? ls->score()->isMaster() : false;
-                Location loc = e.context()->location(true);
-                if (ls) {
-                    loc.setStaff(static_cast<int>(ls->idx()));
-                }
-                Location mainLoc = Location::relative();
-                bool locationRead = false;
-                int localIndexDiff = 0;
-                while (e.readNextStartElement()) {
-                    const AsciiStringView ntag(e.name());
-
-                    if (ntag == "score") {
-                        String val(e.readText());
-                        if (val == "same") {
-                            linkedIsMaster = score()->isMaster();
-                        }
-                    } else if (ntag == "location") {
-                        mainLoc.read(e);
-                        mainLoc.toAbsolute(loc);
-                        locationRead = true;
-                    } else if (ntag == "indexDiff") {
-                        localIndexDiff = e.readInt();
-                    } else {
-                        e.unknown();
-                    }
-                }
-                if (!locationRead) {
-                    mainLoc = loc;
-                }
-                LinkedObjects* link = ctx->getLink(linkedIsMaster, mainLoc, localIndexDiff);
-                if (link) {
-                    EngravingObject* linked = link->mainElement();
-                    if (linked->type() == type()) {
-                        linkTo(linked);
-                    } else {
-                        LOGW("EngravingItem::readProperties: linked elements have different types: %s, %s. Input file corrupted?",
-                             typeName(), linked->typeName());
-                    }
-                }
-                if (!_links) {
-                    LOGW("EngravingItem::readProperties: could not link %s at staff %d", typeName(), mainLoc.staff() + 1);
-                }
-            }
-        } else if (tag == "lid") {
-            if (score()->mscVersion() >= 301) {
-                e.skipCurrentElement();
-                return true;
-            }
-            int id = e.readInt();
-            _links = mu::value(e.context()->linkIds(), id, nullptr);
-            if (!_links) {
-                if (!score()->isMaster()) {   // DEBUG
-                    LOGD("---link %d not found (%zu)", id, e.context()->linkIds().size());
-                }
-                _links = new LinkedObjects(score(), id);
-                e.context()->linkIds().insert({ id, _links });
-            }
-#ifndef NDEBUG
-            else {
-                for (EngravingObject* eee : *_links) {
-                    EngravingItem* ee = static_cast<EngravingItem*>(eee);
-                    if (ee->type() != type()) {
-                        ASSERT_X(String(u"link %1(%2) type mismatch %3 linked to %4")
-                                 .arg(String::fromAscii(ee->typeName()))
-                                 .arg(id)
-                                 .arg(String::fromAscii(ee->typeName()), String::fromAscii(typeName())));
-                    }
-                }
-            }
-#endif
-            assert(!_links->contains(this));
-            _links->push_back(this);
-        } else if (tag == "tick") {
-            int val = e.readInt();
-            if (val >= 0) {
-                e.context()->setTick(Fraction::fromTicks(score()->fileDivision(val)));         // obsolete
-            }
-        } else if (tag == "pos") {       // obsolete
-            readProperty(e, Pid::OFFSET);
-        } else if (tag == "voice") {
-            setVoice(e.readInt());
-        } else if (tag == "tag") {
-            String val(e.readText());
-            for (int i = 1; i < MAX_TAGS; i++) {
-                if (score()->layerTags()[i] == val) {
-                    _tag = 1 << i;
-                    break;
-                }
-            }
-        } else if (readProperty(tag, e, Pid::PLACEMENT)) {
-        } else if (tag == "z") {
-            setZ(e.readInt());
-        } else {
-            return false;
-        }
-        return true;
-    }
-}
-
-//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -1058,19 +912,6 @@ void EngravingItem::write(XmlWriter& xml) const
     xml.startElement(this);
     writeProperties(xml);
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void EngravingItem::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -1301,7 +1142,7 @@ EngravingItem* EngravingItem::readMimeData(Score* score, const ByteArray& data, 
 
     EngravingItem* el = Factory::createItem(type, score->dummy(), false);
     if (el) {
-        el->read(e);
+        rw400::TRead::readItem(el, e, *e.context());
     }
 
     return el;

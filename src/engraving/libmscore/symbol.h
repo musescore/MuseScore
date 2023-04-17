@@ -63,13 +63,13 @@ public:
 
     void setSym(SymId s, const std::shared_ptr<IEngravingFont>& sf = nullptr) { _sym  = s; _scoreFont = sf; }
     SymId sym() const { return _sym; }
+    const std::shared_ptr<IEngravingFont>& scoreFont() const { return _scoreFont; }
     mu::AsciiStringView symName() const;
 
     String accessibleInfo() const override;
 
     void draw(mu::draw::Painter*) const override;
     void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
     void layout() override;
 
     PropertyValue getProperty(Pid) const override;
@@ -102,7 +102,6 @@ public:
 
     void draw(mu::draw::Painter*) const override;
     void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
     void layout() override;
 
     double baseLine() const override { return 0.0; }

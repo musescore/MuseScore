@@ -179,7 +179,7 @@ void Excerpt::removePart(const ID& id)
         return;
     }
 
-    excerptScore()->undoRemovePart(excerptScore()->parts().at(index));
+    excerptScore()->undoRemovePart(excerptScore()->parts().at(index), index);
 }
 
 size_t Excerpt::nstaves() const

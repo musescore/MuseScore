@@ -26,7 +26,6 @@
 
 #include "containers.h"
 #include "rw/xml.h"
-#include "rw/400/bsymbolrw.h"
 
 #include "factory.h"
 #include "measure.h"
@@ -73,11 +72,6 @@ void BSymbol::writeProperties(XmlWriter& xml) const
         e->write(xml);
     }
     EngravingItem::writeProperties(xml);
-}
-
-bool BSymbol::readProperties(XmlReader& e)
-{
-    return rw400::BSymbolRW::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------

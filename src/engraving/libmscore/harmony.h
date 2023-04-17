@@ -94,7 +94,7 @@ class Harmony final : public TextBase
     String _function;          // numeric representation of root for RNA or Nashville
     String _userName;          // name as typed by user if applicable
     String _textName;          // name recognized from chord list, read from score file, or constructed from imported source
-    ParsedChord* _parsedForm;   // parsed form of chord
+    mutable ParsedChord* _parsedForm;   // parsed form of chord
     bool _isMisspelled = false; // show spell check warning
     HarmonyType _harmonyType;   // used to control rendering, transposition, export, etc.
     double _harmonyHeight;       // used for calculating the height is frame while editing.
@@ -140,7 +140,9 @@ public:
     bool play() const { return _play; }
 
     void setBaseCase(NoteCaseType c) { _baseCase = c; }
+    NoteCaseType baseCase() const { return _baseCase; }
     void setRootCase(NoteCaseType c) { _rootCase = c; }
+    NoteCaseType rootCase() const { return _rootCase; }
 
     bool leftParen() const { return _leftParen; }
     bool rightParen() const { return _rightParen; }
@@ -192,12 +194,11 @@ public:
     HDegree degree(int i) const;
     void clearDegrees();
     const std::vector<HDegree>& degreeList() const;
-    const ParsedChord* parsedForm();
+    const ParsedChord* parsedForm() const;
     HarmonyType harmonyType() const { return _harmonyType; }
     void setHarmonyType(HarmonyType val);
 
     void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
     void afterRead();
     String harmonyName() const;
     void render();

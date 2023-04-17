@@ -30,7 +30,6 @@
 #include "iengravingfont.h"
 
 #include "rw/xml.h"
-#include "rw/400/textbaserw.h"
 
 #include "style/defaultstyle.h"
 #include "style/textstyle.h"
@@ -108,7 +107,7 @@ static void sort(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
 }
 
 const String TextBase::UNDEFINED_FONT_FAMILY = String(u"Undefined");
-const int TextBase::UNDEFINED_FONT_SIZE = -1;
+const double TextBase::UNDEFINED_FONT_SIZE = -1.0;
 
 //---------------------------------------------------------
 //   operator==
@@ -2268,19 +2267,6 @@ void TextBase::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void TextBase::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   writeProperties
 //---------------------------------------------------------
 
@@ -2305,11 +2291,6 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
     if (writeText) {
         xml.writeXml(u"text", xmlText());
     }
-}
-
-bool TextBase::readProperties(XmlReader& e)
-{
-    return rw400::TextBaseRW::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------

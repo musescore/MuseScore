@@ -90,7 +90,6 @@ protected:
     MeasureBase(const MeasureBase&);
 
     Fraction _len  { Fraction(0, 1) };    ///< actual length of measure
-    void cleanupLayoutBreaks(bool undo);
 
 public:
 
@@ -137,12 +136,13 @@ public:
     void undoSetSectionBreak(bool v) { undoSetBreak(v, LayoutBreakType::SECTION); }
     void undoSetNoBreak(bool v) { undoSetBreak(v, LayoutBreakType::NOBREAK); }
 
+    void cleanupLayoutBreaks(bool undo);
+
     virtual void moveTicks(const Fraction& diff) { setTick(tick() + diff); }
 
     virtual void add(EngravingItem*) override;
     virtual void remove(EngravingItem*) override;
     virtual void writeProperties(XmlWriter&) const override;
-    virtual bool readProperties(XmlReader&) override;
 
     Fraction tick() const override;
     void setTick(const Fraction& f);

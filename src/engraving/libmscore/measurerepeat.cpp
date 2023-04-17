@@ -24,12 +24,14 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
-#include "rw/400/measurerepeatrw.h"
+
 #include "translation.h"
 
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -230,15 +232,6 @@ void MeasureRepeat::write(XmlWriter& xml) const
     Rest::writeProperties(xml);
     el().write(xml);
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void MeasureRepeat::read(XmlReader& e)
-{
-    rw400::MeasureRepeatRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

@@ -31,7 +31,7 @@ class AudioPluginMetaReaderMock : public IAudioPluginMetaReader
 {
 public:
     MOCK_METHOD(bool, canReadMeta, (const io::path_t&), (const, override));
-    MOCK_METHOD(RetVal<AudioResourceMeta>, readMeta, (const io::path_t&), (const, override));
+    MOCK_METHOD(RetVal<AudioResourceMetaList>, readMeta, (const io::path_t&), (const, override));
 };
 }
 

@@ -24,9 +24,10 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
-#include "rw/400/tread.h"
 
 #include "score.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -130,11 +131,6 @@ void TremoloBar::write(XmlWriter& xml) const
         xml.tag("point", { { "time", v.time }, { "pitch", v.pitch }, { "vibrato", v.vibrato } });
     }
     xml.endElement();
-}
-
-void TremoloBar::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

@@ -21,17 +21,9 @@
 
 # For maximum AppImage compatibility, build on the oldest Linux distribution
 # that still receives security updates from its manufacturer.
+
 echo "Setup Linux build environment"
 trap 'echo Setup failed; exit 1' ERR
-
-GCC_VERSION="10"
-while [[ "$#" -gt 0 ]]; do
-    case $1 in
-        -g|--gcc_version) GCC_VERSION="$2"; shift ;;
-    esac
-    shift
-done
-
 
 df -h .
 
@@ -143,16 +135,17 @@ echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
 ##########################################################################
 
 # COMPILER
-sudo apt-get install -y --no-install-recommends "g++-${GCC_VERSION}"
+gcc_version="10"
+sudo apt-get install -y --no-install-recommends "g++-${gcc_version}"
 sudo update-alternatives \
-  --install /usr/bin/gcc gcc "/usr/bin/gcc-${GCC_VERSION}" 40 \
-  --slave /usr/bin/g++ g++ "/usr/bin/g++-${GCC_VERSION}"
+  --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
+  --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
 
-echo export CC="/usr/bin/gcc-${GCC_VERSION}" >> ${ENV_FILE}
-echo export CXX="/usr/bin/g++-${GCC_VERSION}" >> ${ENV_FILE}
+echo export CC="/usr/bin/gcc-${gcc_version}" >> ${ENV_FILE}
+echo export CXX="/usr/bin/g++-${gcc_version}" >> ${ENV_FILE}
 
-gcc-${GCC_VERSION} --version
-g++-${GCC_VERSION} --version
+gcc-${gcc_version} --version
+g++-${gcc_version} --version
 
 # CMAKE
 # Get newer CMake (only used cached version if it is the same)

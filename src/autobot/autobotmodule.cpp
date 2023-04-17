@@ -118,8 +118,12 @@ void AutobotModule::registerUiTypes()
     qmlRegisterType<TestCaseRunModel>("MuseScore.Autobot", 1, 0, "TestCaseRunModel");
 }
 
-void AutobotModule::onInit(const framework::IApplication::RunMode&)
+void AutobotModule::onInit(const framework::IApplication::RunMode& mode)
 {
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
     s_autobot->init();
     s_actionsController->init();
 

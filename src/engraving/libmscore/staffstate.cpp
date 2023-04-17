@@ -72,24 +72,6 @@ void StaffState::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void StaffState::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "subtype") {
-            _staffStateType = StaffStateType(e.readInt());
-        } else if (tag == "Instrument") {
-            _instrument->read(e, nullptr);
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 

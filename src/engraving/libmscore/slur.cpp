@@ -1081,7 +1081,7 @@ void Slur::slurPos(SlurPos* sp)
 
     double __up = _up ? -1.0 : 1.0;
     double hw1 = note1 ? note1->tabHeadWidth(stt) : scr->width() * scr->mag();        // if stt == 0, tabHeadWidth()
-    double hw2 = note2 ? note2->tabHeadWidth(stt) : ecr->width() * scr->mag();        // defaults to headWidth()
+    double hw2 = note2 ? note2->tabHeadWidth(stt) : ecr->width() * ecr->mag();        // defaults to headWidth()
     PointF pt;
     switch (sa1) {
     case SlurAnchor::STEM:                //sc can't be null
@@ -1237,8 +1237,15 @@ void Slur::slurPos(SlurPos* sp)
 
                 // if stem and slur are both up
                 // we need to clear stem horizontally
+                double stemOffsetMag = stemOffsetX * sc->intrinsicMag();
                 if (sc->up() && _up) {
-                    po.rx() = hw1 + _spatium * .3;
+                    // stems in tab staves come from the middle of the head, which means it's much easier
+                    // to just subtract an offset from the notehead center (which po already is)
+                    if (useTablature) {
+                        po.rx() += stemOffsetMag * _spatium;
+                    } else {
+                        po.rx() = hw1 + _spatium * stemOffsetMag;
+                    }
                 }
 
                 //
@@ -1364,8 +1371,18 @@ void Slur::slurPos(SlurPos* sp)
 
                     // if stem and slur are both down,
                     // we need to clear stem horizontally
+                    double stemOffsetMag = stemOffsetX * ec->intrinsicMag();
                     if (!ec->up() && !_up) {
-                        po.rx() = -_spatium * .3 + note2->x();
+                        // stems in tab staves come from the middle of the head, which means it's much easier
+                        // to just subtract an offset from the notehead center (which po already is)
+                        if (useTablature) {
+                            po.rx() -= stemOffsetMag * _spatium;
+                        } else {
+                            po.rx() = -_spatium * stemOffsetMag + note2->x();
+                        }
+                    } else if (useTablature && _up && ec->up()) {
+                        // same as above
+                        po.rx() -= _spatium * stemOffsetMag;
                     }
 
                     //
@@ -1446,7 +1463,7 @@ Slur::Slur(EngravingItem* parent)
 //   calcStemArrangement
 //---------------------------------------------------------
 
-int calcStemArrangement(EngravingItem* start, EngravingItem* end)
+int Slur::calcStemArrangement(EngravingItem* start, EngravingItem* end)
 {
     return (start && start->isChord() && toChord(start)->stem() && toChord(start)->stem()->up() ? 2 : 0)
            + (end && end->isChord() && toChord(end)->stem() && toChord(end)->stem()->up() ? 4 : 0);
@@ -1471,20 +1488,6 @@ void Slur::write(XmlWriter& xml) const
     }
     SlurTie::writeProperties(xml);
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Slur::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-    if (tag == "stemArr") {
-        _sourceStemArrangement = e.readInt();
-        return true;
-    }
-    return SlurTie::readProperties(e);
 }
 
 //---------------------------------------------------------

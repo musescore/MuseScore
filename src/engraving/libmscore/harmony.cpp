@@ -31,7 +31,6 @@
 #include "draw/types/pen.h"
 #include "rw/400/writecontext.h"
 #include "rw/xml.h"
-#include "rw/400/tread.h"
 
 #include "chordlist.h"
 #include "fret.h"
@@ -346,15 +345,6 @@ void Harmony::write(XmlWriter& xml) const
         xml.tag("rightParen");
     }
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Harmony::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 void Harmony::afterRead()
@@ -1954,7 +1944,7 @@ const std::vector<HDegree>& Harmony::degreeList() const
 //   parsedForm
 //---------------------------------------------------------
 
-const ParsedChord* Harmony::parsedForm()
+const ParsedChord* Harmony::parsedForm() const
 {
     if (!_parsedForm) {
         ChordList* cl = score()->chordList();

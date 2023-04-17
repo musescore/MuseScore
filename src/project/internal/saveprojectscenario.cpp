@@ -277,7 +277,7 @@ bool SaveProjectScenario::warnBeforeSavingToExistingPubliclyVisibleCloudProject(
     IInteractive::Result result = interactive()->warning(
         trc("project/save", "Publish changes online?"),
         trc("project/save", "Your saved changes will be publicly visible. We will also "
-                            "need to generate a new MP3 for public playback. "),
+                            "need to generate a new MP3 for public playback."),
         buttons, int(IInteractive::Button::Ok));
 
     return result.standardButton() == IInteractive::Button::Ok;

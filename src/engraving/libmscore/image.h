@@ -58,7 +58,6 @@ public:
     Image* clone() const override { return new Image(*this); }
 
     void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
     bool load(); // after set paths
     bool load(const io::path_t& s);
     bool loadFromData(const io::path_t& name, const mu::ByteArray&);
@@ -85,6 +84,7 @@ public:
     void setStorePath(const String& p) { _storePath = p; }
     String linkPath() const { return _linkPath; }
     void setLinkPath(const String& p) { _linkPath = p; }
+    bool linkIsValid() const { return _linkIsValid; }
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

@@ -22,7 +22,7 @@
 #include "dynamic.h"
 
 #include "rw/xml.h"
-#include "rw/400/tread.h"
+
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
@@ -248,11 +248,6 @@ void Dynamic::write(XmlWriter& xml) const
 
     TextBase::writeProperties(xml, dynamicType() == DynamicType::OTHER);
     xml.endElement();
-}
-
-void Dynamic::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

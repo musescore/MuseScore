@@ -845,6 +845,13 @@ void NotationActionController::putTuplet(int tupletCount)
     options.ratio.setNumerator(tupletCount);
     options.ratio.setDenominator(2);
     options.autoBaseLen = true;
+    // get the bracket type from score style settings
+    if (INotationStylePtr style = currentNotationStyle()) {
+        int bracketType = style->styleValue(StyleId::tupletBracketType).toInt();
+        options.bracketType = static_cast<TupletBracketType>(bracketType);
+        int numberType = style->styleValue(StyleId::tupletNumberType).toInt();
+        options.numberType = static_cast<TupletNumberType>(numberType);
+    }
 
     putTuplet(options);
 }

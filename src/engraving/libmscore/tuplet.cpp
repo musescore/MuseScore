@@ -24,6 +24,7 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
+
 #include "style/textstyle.h"
 #include "types/typesconv.h"
 
@@ -846,94 +847,6 @@ void Tuplet::write(XmlWriter& xml) const
     writeStyledProperties(xml);
 
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Tuplet::read(XmlReader& e)
-{
-    _id = e.intAttribute("id", 0);
-    while (e.readNextStartElement()) {
-        if (readProperties(e)) {
-        } else {
-            e.unknown();
-        }
-    }
-    Fraction f = _baseLen.fraction() * _ratio.denominator();
-    setTicks(f.reduced());
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Tuplet::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-
-    if (readStyledProperty(e, tag)) {
-    } else if (tag == "bold") { //important that these properties are read after number is created
-        bool val = e.readInt();
-        if (_number) {
-            _number->setBold(val);
-        }
-        if (isStyled(Pid::FONT_STYLE)) {
-            setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
-        }
-    } else if (tag == "italic") {
-        bool val = e.readInt();
-        if (_number) {
-            _number->setItalic(val);
-        }
-        if (isStyled(Pid::FONT_STYLE)) {
-            setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
-        }
-    } else if (tag == "underline") {
-        bool val = e.readInt();
-        if (_number) {
-            _number->setUnderline(val);
-        }
-        if (isStyled(Pid::FONT_STYLE)) {
-            setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
-        }
-    } else if (tag == "strike") {
-        bool val = e.readInt();
-        if (_number) {
-            _number->setStrike(val);
-        }
-        if (isStyled(Pid::FONT_STYLE)) {
-            setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
-        }
-    } else if (tag == "normalNotes") {
-        _ratio.setDenominator(e.readInt());
-    } else if (tag == "actualNotes") {
-        _ratio.setNumerator(e.readInt());
-    } else if (tag == "p1") {
-        _p1 = e.readPoint() * score()->spatium();
-    } else if (tag == "p2") {
-        _p2 = e.readPoint() * score()->spatium();
-    } else if (tag == "baseNote") {
-        _baseLen = TDuration(TConv::fromXml(e.readAsciiText(), DurationType::V_INVALID));
-    } else if (tag == "baseDots") {
-        _baseLen.setDots(e.readInt());
-    } else if (tag == "Number") {
-        _number = Factory::createText(this, TextStyleType::TUPLET);
-        _number->setComposition(true);
-        _number->setParent(this);
-        resetNumberProperty();
-        _number->read(e);
-        _number->setVisible(visible());         //?? override saved property
-        _number->setTrack(track());
-        // move property flags from _number back to tuplet
-        for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN }) {
-            setPropertyFlags(p, _number->propertyFlags(p));
-        }
-    } else if (!DurationElement::readProperties(e)) {
-        return false;
-    }
-    return true;
 }
 
 //---------------------------------------------------------

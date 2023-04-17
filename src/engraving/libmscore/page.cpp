@@ -36,6 +36,8 @@
 #include "accessibility/accessibleitem.h"
 #endif
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -546,23 +548,6 @@ void Page::write(XmlWriter& xml) const
         system->write(xml);
     }
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Page::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        if (e.name() == "System") {
-            System* system = Factory::createSystem(score()->dummy()->page());
-            score()->systems().push_back(system);
-            system->read(e);
-        } else {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------

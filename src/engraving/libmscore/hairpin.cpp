@@ -29,6 +29,7 @@
 #include "draw/types/pen.h"
 #include "draw/types/transform.h"
 #include "rw/xml.h"
+
 #include "types/typesconv.h"
 
 #include "dynamic.h"
@@ -39,6 +40,8 @@
 #include "staff.h"
 #include "system.h"
 #include "text.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -742,43 +745,6 @@ void Hairpin::write(XmlWriter& xml) const
     }
     SLine::writeProperties(xml);
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Hairpin::read(XmlReader& e)
-{
-    eraseSpannerSegments();
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "subtype") {
-            setHairpinType(HairpinType(e.readInt()));
-        } else if (readStyledProperty(e, tag)) {
-        } else if (tag == "hairpinCircledTip") {
-            _hairpinCircledTip = e.readInt();
-        } else if (tag == "veloChange") {
-            _veloChange = e.readInt();
-        } else if (tag == "dynType") {
-            _dynRange = TConv::fromXml(e.readAsciiText(), DynamicRange::STAFF);
-        } else if (tag == "useTextLine") {        // obsolete
-            e.readInt();
-            if (hairpinType() == HairpinType::CRESC_HAIRPIN) {
-                setHairpinType(HairpinType::CRESC_LINE);
-            } else if (hairpinType() == HairpinType::DECRESC_HAIRPIN) {
-                setHairpinType(HairpinType::DECRESC_LINE);
-            }
-        } else if (tag == "singleNoteDynamics") {
-            _singleNoteDynamics = e.readBool();
-        } else if (tag == "veloChangeMethod") {
-            _veloChangeMethod = TConv::fromXml(e.readAsciiText(), ChangeMethod::NORMAL);
-        } else if (!TextLineBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    styleChanged();
 }
 
 //---------------------------------------------------------

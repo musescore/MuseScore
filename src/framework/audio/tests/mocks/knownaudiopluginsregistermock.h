@@ -30,6 +30,8 @@ namespace mu::audio {
 class KnownAudioPluginsRegisterMock : public IKnownAudioPluginsRegister
 {
 public:
+    MOCK_METHOD(Ret, load, (), (override));
+
     MOCK_METHOD(std::vector<AudioPluginInfo>, pluginInfoList, (PluginInfoAccepted), (const, override));
     MOCK_METHOD(const io::path_t&, pluginPath, (const AudioResourceId&), (const, override));
 

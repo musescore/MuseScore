@@ -95,7 +95,7 @@ public:
     virtual Segment* segment() const { return (Segment*)explicitParent(); }
 
     virtual void writeProperties(XmlWriter& xml) const override;
-    virtual bool readProperties(XmlReader&) override;
+
     virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
 
     void setBeamMode(BeamMode m) { _beamMode = m; }

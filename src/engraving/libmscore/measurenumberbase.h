@@ -43,8 +43,6 @@ public:
     bool setProperty(Pid id, const PropertyValue& val) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    bool readProperties(XmlReader&) override;
-
     void layout() override;
     Measure* measure() const { return toMeasure(explicitParent()); }
 

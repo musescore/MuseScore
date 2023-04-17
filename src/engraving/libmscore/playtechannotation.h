@@ -42,7 +42,6 @@ public:
 
 private:
     void write(XmlWriter& writer) const override;
-    void read(XmlReader& reader) override;
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue& val) override;

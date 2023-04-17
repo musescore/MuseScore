@@ -44,7 +44,6 @@ public:
     TempoText* clone() const override { return new TempoText(*this); }
 
     void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
 
     Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }

@@ -74,6 +74,8 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/undo.h"
 
+#include "engraving/rw/400/tread.h"
+
 #include "masternotation.h"
 #include "scorecallbacks.h"
 #include "notationnoteinput.h"
@@ -1241,7 +1243,7 @@ void NotationInteraction::startDrop(const QByteArray& edata)
         }
         m_dropData.ed.dropElement = el;
         m_dropData.ed.dropElement->setParent(0);
-        m_dropData.ed.dropElement->read(e);
+        rw400::TRead::readItem(m_dropData.ed.dropElement, e, *e.context());
         m_dropData.ed.dropElement->layout();
     }
 }
@@ -1691,7 +1693,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             PointF dragOffset;
             mu::engraving::ElementType type = mu::engraving::EngravingItem::readType(e, &dragOffset, &duration);
             mu::engraving::Spanner* spanner = static_cast<mu::engraving::Spanner*>(engraving::Factory::createItem(type, score->dummy()));
-            spanner->read(e);
+            rw400::TRead::readItem(spanner, e, *e.context());
             spanner->styleChanged();
             score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
         } else {
@@ -1733,7 +1735,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 for (staff_idx_t i = sel.staffStart(); i < sel.staffEnd(); ++i) {
                     mu::engraving::XmlReader n(a);
                     StaffTypeChange* stc = engraving::Factory::createStaffTypeChange(measure);
-                    stc->read(n);
+                    rw400::TRead::read(stc, n, *n.context());
                     stc->styleChanged(); // update to local style
 
                     score->cmdAddStaffTypeChange(measure, i, stc);
@@ -1945,7 +1947,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         ElementType type = EngravingItem::readType(n, &dragOffset, &duration);
         dropData->dropElement = engraving::Factory::createItem(type, score->dummy());
 
-        dropData->dropElement->read(n);
+        rw400::TRead::readItem(dropData->dropElement, n, *n.context());
         dropData->dropElement->styleChanged();       // update to local style
 
         mu::engraving::EngravingItem* el = target->drop(*dropData);

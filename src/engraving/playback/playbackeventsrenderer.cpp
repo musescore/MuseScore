@@ -125,7 +125,7 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
     timestamp_t eventTimestamp = timestampFromTicks(score, positionTick + ticksPositionOffset);
     PlaybackEventList& events = result[eventTimestamp];
 
-    int durationTicks = realized.getActualDuration(positionTick).ticks();
+    int durationTicks = realized.getActualDuration(positionTick + ticksPositionOffset).ticks();
     BeatsPerSecond bps = score->tempomap()->tempo(positionTick);
     duration_t duration = durationFromTicks(bps.val, durationTicks);
 

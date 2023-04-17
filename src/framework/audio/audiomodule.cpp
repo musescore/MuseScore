@@ -49,6 +49,7 @@
 #include "internal/synthesizers/synthresolver.h"
 
 #include "internal/fx/fxresolver.h"
+#include "internal/fx/musefxresolver.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -123,7 +124,6 @@ void AudioModule::registerExports()
     s_synthResolver = std::make_shared<SynthResolver>();
     s_playbackFacade = std::make_shared<Playback>();
     s_soundFontRepository = std::make_shared<SoundFontRepository>();
-    s_knownAudioPluginsRegister = std::make_shared<KnownAudioPluginsRegister>();
     s_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>();
 
     ioc()->registerExport<IAudioConfiguration>(moduleName(), s_audioConfiguration);
@@ -136,7 +136,7 @@ void AudioModule::registerExports()
 
     ioc()->registerExport<ISoundFontRepository>(moduleName(), s_soundFontRepository);
 
-    ioc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), s_knownAudioPluginsRegister);
+    ioc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), std::make_shared<KnownAudioPluginsRegister>());
     ioc()->registerExport<IAudioPluginsScannerRegister>(moduleName(), std::make_shared<AudioPluginsScannerRegister>());
     ioc()->registerExport<IAudioPluginMetaReaderRegister>(moduleName(), std::make_shared<AudioPluginMetaReaderRegister>());
     ioc()->registerExport<IRegisterAudioPluginsScenario>(moduleName(), s_registerAudioPluginsScenario);
@@ -150,6 +150,11 @@ void AudioModule::registerResources()
 void AudioModule::registerUiTypes()
 {
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(audio_QML_IMPORT);
+}
+
+void AudioModule::resolveImports()
+{
+    s_fxResolver->registerResolver(AudioFxType::MuseFx, std::make_shared<MuseFxResolver>());
 }
 
 void AudioModule::onInit(const framework::IApplication::RunMode& mode)
@@ -187,7 +192,6 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
     // Init configuration
     s_audioConfiguration->init();
     s_soundFontRepository->init();
-    s_knownAudioPluginsRegister->init();
     s_registerAudioPluginsScenario->init();
 
     s_audioBuffer->init(s_audioConfiguration->audioChannelsCount(),
@@ -205,6 +209,15 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
         for (const io::path_t& p : paths) {
             pr->reg("soundfonts", p);
         }
+        pr->reg("audio_plugins", s_audioConfiguration->knownAudioPluginsDir());
+    }
+}
+
+void AudioModule::onDelayedInit()
+{
+    Ret ret = s_registerAudioPluginsScenario->registerNewPlugins();
+    if (!ret) {
+        LOGE() << ret.toString();
     }
 }
 

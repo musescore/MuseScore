@@ -411,11 +411,9 @@ public:
     void setPrimed(bool primed) { _primed = primed; }
 
     virtual void write(XmlWriter& xml) const override;
-    virtual void read(XmlReader&) override;
     virtual void writeProperties(XmlWriter& xml) const override { writeProperties(xml, true, true); }
     void writeProperties(XmlWriter& xml, bool writeText) const { writeProperties(xml, writeText, true); }
     void writeProperties(XmlWriter&, bool, bool) const;
-    bool readProperties(XmlReader&) override;
 
     virtual void paste(EditData& ed, const String& txt);
 
@@ -481,7 +479,7 @@ public:
     virtual void initElementStyle(const ElementStyle*) override;
 
     static const String UNDEFINED_FONT_FAMILY;
-    static const int UNDEFINED_FONT_SIZE;
+    static const double UNDEFINED_FONT_SIZE;
 
     bool bold() const { return fontStyle() & FontStyle::Bold; }
     bool italic() const { return fontStyle() & FontStyle::Italic; }

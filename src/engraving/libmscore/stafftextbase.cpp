@@ -23,7 +23,7 @@
 #include "stafftextbase.h"
 
 #include "rw/xml.h"
-#include "rw/400/tread.h"
+
 #include "types/typesconv.h"
 
 #include "segment.h"
@@ -69,7 +69,7 @@ void StaffTextBase::write(XmlWriter& xml) const
     }
     if (_setAeolusStops) {
         for (int i = 0; i < 4; ++i) {
-            xml.tag("aeolus", { { "group", i } }, aeolusStops[i]);
+            xml.tag("aeolus", { { "group", i } }, m_aeolusStops[i]);
         }
     }
     if (swing()) {
@@ -100,16 +100,6 @@ void StaffTextBase::clear()
     clearAeolusStops();
 }
 
-void StaffTextBase::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
-}
-
-bool StaffTextBase::readProperties(XmlReader& e)
-{
-    return rw400::TRead::readProperties(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   clearAeolusStops
 //---------------------------------------------------------
@@ -117,7 +107,7 @@ bool StaffTextBase::readProperties(XmlReader& e)
 void StaffTextBase::clearAeolusStops()
 {
     for (int i = 0; i < 4; ++i) {
-        aeolusStops[i] = 0;
+        m_aeolusStops[i] = 0;
     }
 }
 
@@ -128,15 +118,15 @@ void StaffTextBase::clearAeolusStops()
 void StaffTextBase::setAeolusStop(int group, int idx, bool val)
 {
     if (val) {
-        aeolusStops[group] |= (1 << idx);
+        m_aeolusStops[group] |= (1 << idx);
     } else {
-        aeolusStops[group] &= ~(1 << idx);
+        m_aeolusStops[group] &= ~(1 << idx);
     }
 }
 
 void StaffTextBase::setAeolusStop(int group, int val)
 {
-    aeolusStops[group] = val;
+    m_aeolusStops[group] = val;
 }
 
 //---------------------------------------------------------
@@ -145,7 +135,12 @@ void StaffTextBase::setAeolusStop(int group, int val)
 
 bool StaffTextBase::getAeolusStop(int group, int idx) const
 {
-    return aeolusStops[group] & (1 << idx);
+    return m_aeolusStops[group] & (1 << idx);
+}
+
+int StaffTextBase::aeolusStop(int group) const
+{
+    return m_aeolusStops[group];
 }
 
 //---------------------------------------------------------

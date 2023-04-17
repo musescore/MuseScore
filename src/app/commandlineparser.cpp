@@ -96,6 +96,7 @@ void CommandLineParser::init()
     m_parser.addOption(QCommandLineOption({ "S", "style" }, "Load style file", "style"));
 
     // Video export
+#ifdef MUE_BUILD_VIDEOEXPORT_MODULE
     m_parser.addOption(QCommandLineOption("score-video", "Generate video for the given score and export it to file"));
 // not implemented
 //    m_parser.addOption(QCommandLineOption("view-mode",
@@ -108,6 +109,7 @@ void CommandLineParser::init()
     m_parser.addOption(QCommandLineOption("fps", "Frame per second [60, 30, 24]", "24"));
     m_parser.addOption(QCommandLineOption("ls", "Pause before playback in seconds (3.0)", "3.0"));
     m_parser.addOption(QCommandLineOption("ts", "Pause before end of video in seconds (3.0)", "3.0"));
+#endif
 
     m_parser.addOption(QCommandLineOption("gp-linked", "create tabulature linked staves for guitar pro"));
     m_parser.addOption(QCommandLineOption("gp-experimental", "experimental features for guitar pro import"));
@@ -322,6 +324,7 @@ void CommandLineParser::parse(int argc, char** argv)
     }
 
     // Video
+#ifdef MUE_BUILD_VIDEOEXPORT_MODULE
     if (m_parser.isSet("score-video")) {
         m_runMode = IApplication::RunMode::ConsoleApp;
         m_converterTask.type = ConvertType::ExportScoreVideo;
@@ -356,6 +359,7 @@ void CommandLineParser::parse(int argc, char** argv)
             m_options.exportVideo.trailingSec = doubleValue("ts");
         }
     }
+#endif
 
     if (m_parser.isSet("F") || m_parser.isSet("R")) {
         m_options.app.revertToFactorySettings = true;

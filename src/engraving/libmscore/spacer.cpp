@@ -28,6 +28,8 @@
 #include "measure.h"
 #include "score.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::draw;
 using namespace mu::engraving;
@@ -200,25 +202,6 @@ void Spacer::write(XmlWriter& xml) const
     EngravingItem::writeProperties(xml);
     xml.tag("space", _gap.val() / spatium());
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Spacer::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "subtype") {
-            _spacerType = SpacerType(e.readInt());
-        } else if (tag == "space") {
-            _gap = e.readDouble() * spatium();
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    layout0();
 }
 
 //---------------------------------------------------------

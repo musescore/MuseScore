@@ -24,7 +24,7 @@
 #include <cmath>
 
 #include "rw/xml.h"
-#include "rw/400/stemrw.h"
+
 #include "draw/types/brush.h"
 
 #include "beam.h"
@@ -35,6 +35,8 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "tremolo.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -227,16 +229,6 @@ void Stem::write(XmlWriter& xml) const
     writeProperty(xml, Pid::USER_LEN);
     writeProperty(xml, Pid::LINE_WIDTH);
     xml.endElement();
-}
-
-void Stem::read(XmlReader& e)
-{
-    rw400::StemRW::read(this, e, *e.context());
-}
-
-bool Stem::readProperties(XmlReader& e)
-{
-    return rw400::StemRW::readProperties(this, e, *e.context());
 }
 
 std::vector<mu::PointF> Stem::gripsPositions(const EditData&) const

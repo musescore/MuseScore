@@ -494,6 +494,18 @@ void Beam::layout()
     }
 }
 
+//---------------------------------------------------------
+//   layoutIfNeed
+//   check to see if the layout info is valid, and if not, layout
+//---------------------------------------------------------
+
+void Beam::layoutIfNeed()
+{
+    if (!_layoutInfo.isValid()) {
+        layout();
+    }
+}
+
 PointF Beam::chordBeamAnchor(const ChordRest* chord, BeamTremoloLayout::ChordBeamAnchorType anchorType) const
 {
     return _layoutInfo.chordBeamAnchor(chord, anchorType);
@@ -1300,55 +1312,6 @@ void Beam::write(XmlWriter& xml) const
     }
 
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Beam::read(XmlReader& e)
-{
-    if (score()->mscVersion() < 301) {
-        _id = e.intAttribute("id");
-    }
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "StemDirection") {
-            readProperty(e, Pid::STEM_DIRECTION);
-        } else if (tag == "distribute") {
-            e.skipCurrentElement(); // obsolete
-        } else if (readStyledProperty(e, tag)) {
-        } else if (tag == "growLeft") {
-            setGrowLeft(e.readDouble());
-        } else if (tag == "growRight") {
-            setGrowRight(e.readDouble());
-        } else if (tag == "Fragment") {
-            BeamFragment* f = new BeamFragment;
-            int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-            _userModified[idx] = true;
-            double _spatium = spatium();
-            while (e.readNextStartElement()) {
-                const AsciiStringView tag1(e.name());
-                if (tag1 == "y1") {
-                    f->py1[idx] = e.readDouble() * _spatium;
-                } else if (tag1 == "y2") {
-                    f->py2[idx] = e.readDouble() * _spatium;
-                } else {
-                    e.unknown();
-                }
-            }
-            fragments.push_back(f);
-        } else if (tag == "l1" || tag == "l2") {      // ignore
-            e.skipCurrentElement();
-        } else if (tag == "subtype") {          // obsolete
-            e.skipCurrentElement();
-        } else if (tag == "y1" || tag == "y2") { // obsolete
-            e.skipCurrentElement();
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------

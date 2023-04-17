@@ -98,13 +98,14 @@ public:
     Slur* clone() const override { return new Slur(*this); }
 
     void write(XmlWriter& xml) const override;
-    bool readProperties(XmlReader&) override;
     void layout() override;
     SpannerSegment* layoutSystem(System*) override;
     void setTrack(track_idx_t val) override;
     void slurPos(SlurPos*) override;
     void fixArticulations(PointF& pt, Chord* c, double up, bool stemSide);
     void computeUp();
+
+    void setSourceStemArrangement(int v) { _sourceStemArrangement = v; }
 
     SlurSegment* frontSegment() { return toSlurSegment(Spanner::frontSegment()); }
     const SlurSegment* frontSegment() const { return toSlurSegment(Spanner::frontSegment()); }
@@ -121,6 +122,8 @@ public:
     const StemFloated& stemFloated() const { return _stemFloated; }
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
+
+    static int calcStemArrangement(EngravingItem* start, EngravingItem* end);
 };
 } // namespace mu::engraving
 #endif

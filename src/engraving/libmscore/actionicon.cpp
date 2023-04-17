@@ -86,20 +86,6 @@ void ActionIcon::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-void ActionIcon::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "action") {
-            m_actionCode = e.readText().toStdString();
-        } else if (tag == "subtype") {
-            m_actionType = static_cast<ActionIconType>(e.readInt());
-        } else {
-            e.unknown();
-        }
-    }
-}
-
 void ActionIcon::layout()
 {
     FontMetrics fontMetrics(m_iconFont);

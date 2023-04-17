@@ -30,6 +30,7 @@
 #include "libmscore/staff.h"
 
 #include "measurerw.h"
+#include "tread.h"
 
 #include "log.h"
 
@@ -78,7 +79,7 @@ void StaffRW::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                 }
             } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
                 MeasureBase* mb = toMeasureBase(Factory::createItemByName(tag, ctx.dummy()));
-                mb->read(e);
+                TRead::readItem(mb, e, ctx);
                 mb->setTick(ctx.tick());
                 score->measures()->add(mb);
             } else if (tag == "tick") {

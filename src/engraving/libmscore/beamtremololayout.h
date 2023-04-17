@@ -56,6 +56,7 @@ public:
     PointF chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const;
     int getMaxSlope() const;
     void extendStem(Chord* chord, double addition);
+    bool isValid() const { return !(m_beamType == BeamType::INVALID); }
 
 private:
     enum class BeamType {

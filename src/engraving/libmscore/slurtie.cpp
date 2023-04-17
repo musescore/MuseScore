@@ -367,31 +367,6 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
 }
 
 //---------------------------------------------------------
-//   readSegment
-//---------------------------------------------------------
-
-void SlurTieSegment::read(XmlReader& e)
-{
-    double _spatium = score()->spatium();
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (score()->mscVersion() < 400 && (tag == "o1" || tag == "o2" || tag == "o3" || tag == "o4")) {
-            e.skipCurrentElement(); // Ignore slur user offsets from pre-4.0
-        } else if (tag == "o1") {
-            ups(Grip::START).off = e.readPoint() * _spatium;
-        } else if (tag == "o2") {
-            ups(Grip::BEZIER1).off = e.readPoint() * _spatium;
-        } else if (tag == "o3") {
-            ups(Grip::BEZIER2).off = e.readPoint() * _spatium;
-        } else if (tag == "o4") {
-            ups(Grip::END).off = e.readPoint() * _spatium;
-        } else if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   drawEditMode
 //---------------------------------------------------------
 
@@ -462,41 +437,6 @@ void SlurTie::writeProperties(XmlWriter& xml) const
     }
     writeProperty(xml, Pid::SLUR_DIRECTION);
     writeProperty(xml, Pid::SLUR_STYLE_TYPE);
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool SlurTie::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-
-    if (readProperty(tag, e, Pid::SLUR_DIRECTION)) {
-    } else if (tag == "lineType") {
-        _styleType = static_cast<SlurStyleType>(e.readInt());
-    } else if (tag == "SlurSegment" || tag == "TieSegment") {
-        const int idx = e.intAttribute("no", 0);
-        const int n = int(spannerSegments().size());
-        for (int i = n; i < idx; ++i) {
-            add(newSlurTieSegment(score()->dummy()->system()));
-        }
-        SlurTieSegment* s = newSlurTieSegment(score()->dummy()->system());
-        s->read(e);
-        add(s);
-    } else if (!Spanner::readProperties(e)) {
-        return false;
-    }
-    return true;
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void SlurTie::read(XmlReader& e)
-{
-    Spanner::read(e);
 }
 
 //---------------------------------------------------------

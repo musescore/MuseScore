@@ -85,7 +85,6 @@ public:
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 
-    void read(XmlReader& e) override;
     void write(XmlWriter& xml) const override;
     void reset() override;
 

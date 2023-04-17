@@ -22,8 +22,11 @@
 
 #include "text.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "types/typesconv.h"
 #include "score.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -49,26 +52,6 @@ Text::Text(EngravingItem* parent, TextStyleType tid)
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Text::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "style") {
-            TextStyleType s = TConv::fromXml(e.readAsciiText(), TextStyleType::DEFAULT);
-            if (TextStyleType::TUPLET == s) {  // ugly hack for compatibility
-                continue;
-            }
-            initTextStyleType(s);
-        } else if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
@@ -85,7 +68,7 @@ engraving::PropertyValue Text::propertyDefault(Pid id) const
 String Text::readXmlText(XmlReader& r, Score* score)
 {
     Text t(score->dummy());
-    t.read(r);
+    rw400::TRead::read(&t, r, *r.context());
     return t.xmlText();
 }
 }

@@ -22,10 +22,13 @@
 
 #include "stafftypechange.h"
 #include "rw/xml.h"
+
 #include "score.h"
 #include "measure.h"
 #include "system.h"
 #include "staff.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -72,25 +75,6 @@ void StaffTypeChange::write(XmlWriter& xml) const
     }
     EngravingItem::writeProperties(xml);
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void StaffTypeChange::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "StaffType") {
-            StaffType* st = new StaffType();
-            st->read(e);
-            // Measure::add() will replace this with a pointer to a copy in the staff
-            setStaffType(st, true);
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
 }
 
 void StaffTypeChange::setStaffType(StaffType* st, bool owned)

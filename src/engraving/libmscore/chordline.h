@@ -49,8 +49,8 @@ private:
     bool _wavy = false;
 
     ChordLineType _chordLineType = ChordLineType::NOTYPE;
-    draw::PainterPath path;
-    bool modified = false;
+    draw::PainterPath m_path;
+    bool m_modified = false;
     double _lengthX = 0.0;
     double _lengthY = 0.0;
     Note* _note = nullptr;
@@ -78,13 +78,16 @@ public:
     bool isWavy() const { return _wavy; }
     void setWavy(bool wavy) { _wavy =  wavy; }
     void setLengthX(double length) { _lengthX = length; }
+    double lengthX() const { return _lengthX; }
     void setLengthY(double length) { _lengthY = length; }
-    void setPath(const draw::PainterPath& p) { path = p; }
-    void setModified(bool m) { modified = m; }
+    double lengthY() const { return _lengthY; }
+    void setPath(const draw::PainterPath& p) { m_path = p; }
+    const draw::PainterPath& path() const { return m_path; }
+    void setModified(bool m) { m_modified = m; }
+    bool modified() const { return m_modified; }
 
     const TranslatableString& chordLineTypeName() const;
 
-    void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
     void layout() override;
     void draw(mu::draw::Painter*) const override;
@@ -99,7 +102,7 @@ public:
     PropertyValue propertyDefault(Pid) const override;
 
     bool needStartEditingAfterSelecting() const override { return true; }
-    int gripsCount() const override { return _straight ? 1 : static_cast<int>(path.elementCount()); }
+    int gripsCount() const override { return _straight ? 1 : static_cast<int>(m_path.elementCount()); }
     Grip initialEditModeGrip() const override { return Grip(gripsCount() - 1); }
     Grip defaultGrip() const override { return initialEditModeGrip(); }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;

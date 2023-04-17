@@ -65,18 +65,18 @@ public:
     //---------------------------------------------------------
     Err read(Score* score, XmlReader& e, ReadInOutData* out) override;
 
-    static EngravingItem* readArticulation(EngravingItem*, XmlReader&, const ReadContext& ctx);
+    static EngravingItem* readArticulation(EngravingItem*, XmlReader&, ReadContext& ctx);
     static void readAccidental206(Accidental*, XmlReader&);
     static void readTextStyle206(MStyle* style, XmlReader& e, std::map<String, std::map<Sid, PropertyValue> >& excessStyles);
-    static void readTextLine206(XmlReader& e, const ReadContext& ctx, TextLineBase* tlb);
+    static void readTextLine206(XmlReader& e, ReadContext& ctx, TextLineBase* tlb);
     static void readTrill206(XmlReader& e, Trill* t);
-    static void readHairpin206(XmlReader& e, const ReadContext& ctx, Hairpin* h);
+    static void readHairpin206(XmlReader& e, ReadContext& ctx, Hairpin* h);
     static void readSlur206(XmlReader& e, ReadContext& ctx, Slur* s);
     static void readTie206(XmlReader& e, ReadContext& ctx, Tie* t);
 
     static bool readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx);
-    static bool readDurationProperties206(XmlReader& e, const ReadContext& ctx, DurationElement* de);
-    static bool readTupletProperties206(XmlReader& e, const ReadContext& ctx, Tuplet* t);
+    static bool readDurationProperties206(XmlReader& e, ReadContext& ctx, DurationElement* de);
+    static bool readTupletProperties206(XmlReader& e, ReadContext& ctx, Tuplet* t);
     static bool readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRest* cr);
     static bool readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch);
 

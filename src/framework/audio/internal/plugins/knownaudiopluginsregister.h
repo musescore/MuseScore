@@ -36,7 +36,7 @@ class KnownAudioPluginsRegister : public IKnownAudioPluginsRegister
     INJECT(audio, io::IFileSystem, fileSystem)
 
 public:
-    void init();
+    Ret load() override;
 
     std::vector<AudioPluginInfo> pluginInfoList(PluginInfoAccepted accepted = PluginInfoAccepted()) const override;
     const io::path_t& pluginPath(const AudioResourceId& resourceId) const override;
@@ -48,7 +48,7 @@ public:
     Ret unregisterPlugin(const AudioResourceId& resourceId) override;
 
 private:
-    mu::io::path_t pluginInfoPath(const AudioResourceId& resourceId) const;
+    mu::io::path_t pluginInfoPath(const AudioResourceVendor& vendor, const AudioResourceId& resourceId) const;
 
     std::unordered_map<AudioResourceId, AudioPluginInfo> m_pluginInfoMap;
     std::set<io::path_t> m_pluginPaths;

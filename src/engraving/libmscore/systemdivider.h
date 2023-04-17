@@ -53,7 +53,6 @@ public:
     mu::RectF drag(EditData&) override;
 
     void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
 
     void layout() override;
 

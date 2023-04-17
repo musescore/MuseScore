@@ -26,7 +26,7 @@
 #include "draw/types/pen.h"
 #include "draw/types/transform.h"
 #include "rw/xml.h"
-#include "rw/400/tremolorw.h"
+
 #include "style/style.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
@@ -769,15 +769,6 @@ void Tremolo::setUserModified(DirectionV d, bool val)
         _userModified[1] = val;
         break;
     }
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Tremolo::read(XmlReader& e)
-{
-    rw400::TremoloRW::read(this, e, *e.context());
 }
 
 TDuration Tremolo::durationType() const

@@ -129,8 +129,6 @@ public:
     int pitchShift() const;
 
     void write(XmlWriter& xml) const override;
-    void read(XmlReader& de) override;
-    bool readProperties(XmlReader& e) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

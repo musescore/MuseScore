@@ -26,6 +26,8 @@
 
 #include "segment.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace mu::engraving {
@@ -60,15 +62,6 @@ void Sticking::write(XmlWriter& xml) const
     xml.startElement(this);
     TextBase::writeProperties(xml);
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Sticking::read(XmlReader& e)
-{
-    TextBase::read(e);
 }
 
 bool Sticking::isEditAllowed(EditData& ed) const

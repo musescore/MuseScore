@@ -160,8 +160,12 @@ void UiModule::registerUiTypes()
     modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(ui_QML_IMPORT);
 }
 
-void UiModule::onPreInit(const framework::IApplication::RunMode&)
+void UiModule::onPreInit(const framework::IApplication::RunMode& mode)
 {
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
     s_configuration->initSettings();
 }
 

@@ -74,6 +74,8 @@ private:
     SoloMuteState soloMuteStateFromJson(const QJsonObject& object) const;
     audio::AudioFxChain fxChainFromJson(const QJsonObject& fxChainObject) const;
     audio::AudioFxParams fxParamsFromJson(const QJsonObject& object) const;
+    audio::AuxSendsParams auxSendsFromJson(const QJsonObject& object) const;
+    audio::AuxSendParams auxSendParamsFromJson(const QJsonObject& object) const;
     audio::AudioResourceMeta resourceMetaFromJson(const QJsonObject& object) const;
     audio::AudioUnitConfig unitConfigFromJson(const QJsonObject& object) const;
     audio::AudioResourceAttributes attributesFromJson(const QJsonObject& object) const;
@@ -83,6 +85,8 @@ private:
     QJsonObject soloMuteStateToJson(const SoloMuteState& state) const;
     QJsonObject fxChainToJson(const audio::AudioFxChain& fxChain) const;
     QJsonObject fxParamsToJson(const audio::AudioFxParams& fxParams) const;
+    QJsonObject auxSendsToJson(const audio::AuxSendsParams& auxSends) const;
+    QJsonObject auxSendParamsToJson(const audio::AuxSendParams& auxParams) const;
     QJsonObject resourceMetaToJson(const audio::AudioResourceMeta& meta) const;
     QJsonObject unitConfigToJson(const audio::AudioUnitConfig& config) const;
     QJsonObject attributesToJson(const audio::AudioResourceAttributes& attributes) const;

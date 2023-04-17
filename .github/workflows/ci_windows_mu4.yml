@@ -157,7 +157,7 @@ jobs:
       if: env.DO_PLACEHOLDER_TRANSLATIONS == 'true'
       shell: bash
       run: |
-        python3 -X utf8 ./tools/translations/placeholder_translations.py
+        python3 -X utf8 ./tools/translations/placeholder_translations.py --warn-only
     - name: Generate .qm files
       if: env.DO_BUILD == 'true'
       shell: bash

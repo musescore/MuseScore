@@ -30,7 +30,7 @@ class VstPluginMetaReader : public audio::IAudioPluginMetaReader
 {
 public:
     bool canReadMeta(const io::path_t& pluginPath) const override;
-    RetVal<audio::AudioResourceMeta> readMeta(const io::path_t& pluginPath) const override;
+    RetVal<audio::AudioResourceMetaList> readMeta(const io::path_t& pluginPath) const override;
 };
 }
 

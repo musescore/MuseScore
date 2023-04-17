@@ -24,10 +24,12 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
+
 #include "types/typesconv.h"
 #include "iengravingfont.h"
 
 #include "score.h"
+#include "log.h"
 
 using namespace mu;
 
@@ -79,22 +81,6 @@ void BagpipeEmbellishment::write(XmlWriter& xml) const
     xml.startElement(this);
     xml.tag("subtype", TConv::toXml(_embelType));
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void BagpipeEmbellishment::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "subtype") {
-            _embelType = TConv::fromXml(e.readAsciiText(), EmbellishmentType(0));
-        } else {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------

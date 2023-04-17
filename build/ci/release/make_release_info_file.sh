@@ -39,7 +39,7 @@ done
 echo "=== Get release info ==="
 
 RELEASE_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest"
-if [ -z "$RELEASE_TAG" ]; then RELEASE_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}"; fi
+if [ ! -z "$RELEASE_TAG" ]; then RELEASE_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}"; fi
 
 RELEASE_INFO=$(curl \
   -H "Accept: application/vnd.github+json" \

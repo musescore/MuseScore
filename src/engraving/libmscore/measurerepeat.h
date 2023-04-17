@@ -58,7 +58,6 @@ public:
     Fraction ticks() const override;
     Fraction actualTicks() const { return Rest::ticks(); }
 
-    void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
     PropertyValue propertyDefault(Pid) const override;

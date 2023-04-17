@@ -22,10 +22,13 @@
 
 #include "systemdivider.h"
 #include "rw/xml.h"
+
 #include "types/symnames.h"
 
 #include "score.h"
 #include "system.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -103,25 +106,5 @@ void SystemDivider::write(XmlWriter& xml) const
     xml.startElement(this, { { "type", (dividerType() == SystemDivider::Type::LEFT ? "left" : "right") } });
     writeProperties(xml);
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void SystemDivider::read(XmlReader& e)
-{
-    if (e.attribute("type") == "left") {
-        _dividerType = SystemDivider::Type::LEFT;
-        SymId sym = SymNames::symIdByName(score()->styleSt(Sid::dividerLeftSym));
-        setSym(sym, score()->engravingFont());
-        setOffset(PointF(score()->styleD(Sid::dividerLeftX), score()->styleD(Sid::dividerLeftY)));
-    } else {
-        _dividerType = SystemDivider::Type::RIGHT;
-        SymId sym = SymNames::symIdByName(score()->styleSt(Sid::dividerRightSym));
-        setSym(sym, score()->engravingFont());
-        setOffset(PointF(score()->styleD(Sid::dividerRightX), score()->styleD(Sid::dividerRightY)));
-    }
-    Symbol::read(e);
 }
 } // namespace mu::engraving

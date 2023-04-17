@@ -90,7 +90,6 @@ public:
 
     void layout() override;
     void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
 
     // property/style methods
     PropertyValue getProperty(Pid propertyId) const override;

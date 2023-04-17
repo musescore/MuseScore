@@ -26,6 +26,7 @@
 
 #include "types/typesconv.h"
 #include "rw/xml.h"
+
 #include "iengravingfont.h"
 
 #include "accidental.h"
@@ -395,32 +396,6 @@ void Trill::write(XmlWriter& xml) const
         _accidental->write(xml);
     }
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   Trill::read
-//---------------------------------------------------------
-
-void Trill::read(XmlReader& e)
-{
-    eraseSpannerSegments();
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "subtype") {
-            setTrillType(TConv::fromXml(e.readAsciiText(), TrillType::TRILL_LINE));
-        } else if (tag == "Accidental") {
-            _accidental = Factory::createAccidental(this);
-            _accidental->read(e);
-            _accidental->setParent(this);
-        } else if (tag == "ornamentStyle") {
-            readProperty(e, Pid::ORNAMENT_STYLE);
-        } else if (tag == "play") {
-            setPlayArticulation(e.readBool());
-        } else if (!SLine::readProperties(e)) {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------

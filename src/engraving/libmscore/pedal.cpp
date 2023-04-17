@@ -29,6 +29,8 @@
 #include "score.h"
 #include "system.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace mu::engraving {
@@ -117,24 +119,6 @@ Pedal::Pedal(EngravingItem* parent)
 
     resetProperty(Pid::BEGIN_TEXT_PLACE);
     resetProperty(Pid::LINE_VISIBLE);
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Pedal::read(XmlReader& e)
-{
-    if (score()->mscVersion() < 301) {
-        e.context()->addSpanner(e.intAttribute("id", -1), this);
-    }
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (readStyledProperty(e, tag)) {
-        } else if (!TextLineBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------

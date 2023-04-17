@@ -23,7 +23,6 @@
 #include "groups.h"
 
 #include "rw/xml.h"
-#include "rw/400/groupsrw.h"
 
 #include "chordrest.h"
 #include "durationtype.h"
@@ -248,15 +247,6 @@ void Groups::write(XmlWriter& xml) const
         xml.tag("Node", { { "pos", n.pos }, { "action", n.action } });
     }
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Groups::read(XmlReader& e)
-{
-    rw400::GroupsRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

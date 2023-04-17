@@ -31,7 +31,7 @@
 
 #include "draw/types/brush.h"
 #include "rw/xml.h"
-#include "rw/400/noterw.h"
+
 #include "translation.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
@@ -1535,15 +1535,6 @@ void Note::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   Note::read
-//---------------------------------------------------------
-
-void Note::read(XmlReader& e)
-{
-    rw400::NoteRW::read(this, e, *e.context());
-}
-
 void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
 {
     // ensure sane values:
@@ -1629,15 +1620,6 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
     if (_leftParenthesis && _rightParenthesis) {
         _hasHeadParentheses = true;
     }
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Note::readProperties(XmlReader& e)
-{
-    return rw400::NoteRW::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------
@@ -3403,7 +3385,8 @@ String Note::accessibleInfo() const
         int on = _playEvents[0].ontime();
         int off = _playEvents[0].offtime();
         if (on != 0 || off != NoteEvent::NOTE_LENGTH) {
-            onofftime = mtrc("engraving", " (on %1‰ off %2‰)").arg(on, off);
+            //: Note-on and note-off times relative to note duration, expressed in thousandths (per mille)
+            onofftime = u" " + mtrc("engraving", "(on %1‰ off %2‰)").arg(on, off);
         }
     }
 

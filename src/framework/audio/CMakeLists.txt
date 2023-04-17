@@ -21,6 +21,7 @@
 set(MODULE audio)
 
 include(GetPlatformInfo)
+
 if (OS_IS_WIN)
     set(DRIVER_SRC
         #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.cpp
@@ -82,6 +83,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaudiooutput.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/ifxresolver.h
+    ${CMAKE_CURRENT_LIST_DIR}/abstractfxresolver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/abstractfxresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/iplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
@@ -180,6 +183,23 @@ set(MODULE_SRC
     # fx
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/musefxresolver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/musefxresolver.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/allpassdispersion.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/allpassmodulateddelay.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/circularsamplebuffer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/iirbiquadfilter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/ivndecorrelation.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/ivndecorrelation.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbfilters.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbmatrices.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/sampledelay.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/smoothlinearvalue.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/sparsefirfilter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/vectorops.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbprocessor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbprocessor.h
 
     # Synthesizers
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/soundmapping.h
@@ -241,6 +261,20 @@ if (MUE_ENABLE_AUDIO_EXPORT)
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/flac flac)
 
     set(MODULE_LINK ${MODULE_LINK} lame opusenc flac)
+endif()
+
+if (ARCH_IS_X86_64)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_sse2.h
+        )
+elseif (ARCH_IS_AARCH64)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_neon.h
+        )
+else ()
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_scalar.h
+        )
 endif()
 
 if (OS_IS_MAC)

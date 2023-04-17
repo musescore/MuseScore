@@ -66,11 +66,14 @@ QScreen* DialogView::resolveScreen() const
 
 void DialogView::updateGeometry()
 {
-    QScreen* screen = resolveScreen();
+    const QScreen* screen = resolveScreen();
     QRect anchorRect = screen->availableGeometry();
 
-    QRect referenceRect = mainWindow()->qWindow()->geometry();
-    if (referenceRect.isEmpty()) {
+    const QWindow* qMainWindow = mainWindow()->qWindow();
+    bool mainWindowVisible = qMainWindow->isVisible();
+    QRect referenceRect = qMainWindow->geometry();
+
+    if (referenceRect.isEmpty() || !mainWindowVisible) {
         referenceRect = anchorRect;
     }
 

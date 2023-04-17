@@ -30,7 +30,6 @@
 
 #include "style/style.h"
 #include "rw/xml.h"
-#include "rw/400/chordrw.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -1078,6 +1077,11 @@ void Chord::computeUp()
                 // necessary because this beam was never laid out before, so its position isn't known
                 // and the first chord would calculate wrong stem direction
                 _beam->layout();
+            } else {
+                // otherwise we can use stale layout data; the only reason we would need to lay out here is if
+                // it's literally never been laid out before which due to the insane nature of our layout system
+                // is actually a possible thing
+                _beam->layoutIfNeed();
             }
             PointF base = _beam->pagePos();
             Note* baseNote = _up ? downNote() : upNote();
@@ -1285,16 +1289,6 @@ void Chord::write(XmlWriter& xml) const
         e->write(xml);
     }
     xml.endElement();
-}
-
-void Chord::read(XmlReader& e)
-{
-    rw400::ChordRW::read(this, e, *e.context());
-}
-
-bool Chord::readProperties(XmlReader& e)
-{
-    return rw400::ChordRW::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------
@@ -1677,41 +1671,42 @@ double Chord::calcDefaultStemLength()
     }
 
     double finalStemLength = (chordHeight / 4.0 * _spatium) + ((stemLength / 4.0 * _spatium) * intrinsicMag());
-
-    // when the chord's magnitude is < 1, the stem length with mag can find itself below the middle line.
-    // in those cases, we have to add the extra amount to it to bring it to a minimum.
+    double extraLength = 0.;
     Note* startNote = _up ? downNote() : upNote();
-    double upValue = _up ? -1. : 1.;
-    double stemStart = startNote->pos().y();
-    double stemEndMag = stemStart + (finalStemLength * upValue);
-    double topLine = 0.0;
-    lineDistance *= _spatium;
-    double bottomLine = lineDistance * (staffLineCount - 1.0);
-    double target = 0.0;
-    double midLine = middleLine / 4.0 * lineDistance;
-    if (RealIsEqualOrMore(lineDistance / _spatium, 1.0)) {
-        // need to extend to middle line, or to opposite line if staff is < 2sp tall
-        if (bottomLine < 2 * _spatium) {
-            target = _up ? topLine : bottomLine;
+    if (!startNote->fixed()) {
+        // when the chord's magnitude is < 1, the stem length with mag can find itself below the middle line.
+        // in those cases, we have to add the extra amount to it to bring it to a minimum.
+        double upValue = _up ? -1. : 1.;
+        double stemStart = startNote->pos().y();
+        double stemEndMag = stemStart + (finalStemLength * upValue);
+        double topLine = 0.0;
+        lineDistance *= _spatium;
+        double bottomLine = lineDistance * (staffLineCount - 1.0);
+        double target = 0.0;
+        double midLine = middleLine / 4.0 * lineDistance;
+        if (RealIsEqualOrMore(lineDistance / _spatium, 1.0)) {
+            // need to extend to middle line, or to opposite line if staff is < 2sp tall
+            if (bottomLine < 2 * _spatium) {
+                target = _up ? topLine : bottomLine;
+            } else {
+                double twoSpIn = _up ? bottomLine - (2 * _spatium) : topLine + (2 * _spatium);
+                target = RealIsEqual(lineDistance / _spatium, 1.0) ? midLine : twoSpIn;
+            }
         } else {
-            double twoSpIn = _up ? bottomLine - (2 * _spatium) : topLine + (2 * _spatium);
-            target = RealIsEqual(lineDistance / _spatium, 1.0) ? midLine : twoSpIn;
+            // need to extend to second line in staff, or to opposite line if staff has < 3 lines
+            if (staffLineCount < 3) {
+                target = _up ? topLine : bottomLine;
+            } else {
+                target = _up ? bottomLine - (2 * lineDistance) : topLine + (2 * lineDistance);
+            }
         }
-    } else {
-        // need to extend to second line in staff, or to opposite line if staff has < 3 lines
-        if (staffLineCount < 3) {
-            target = _up ? topLine : bottomLine;
-        } else {
-            target = _up ? bottomLine - (2 * lineDistance) : topLine + (2 * lineDistance);
+        extraLength = 0.0;
+        if (_up && stemEndMag > target) {
+            extraLength = stemEndMag - target;
+        } else if (!_up && stemEndMag < target) {
+            extraLength = target - stemEndMag;
         }
     }
-    double extraLength = 0.0;
-    if (_up && stemEndMag > target) {
-        extraLength = stemEndMag - target;
-    } else if (!_up && stemEndMag < target) {
-        extraLength = target - stemEndMag;
-    }
-
     return finalStemLength + extraLength;
 }
 
@@ -2623,6 +2618,9 @@ void Chord::layoutTablature()
         bb.unite(_tabDur->bbox().translated(_tabDur->pos()));
     }
     setbbox(bb);
+    if (_stemSlash) {
+        _stemSlash->layout();
+    }
 }
 
 //---------------------------------------------------------
@@ -3860,7 +3858,7 @@ void Chord::layoutArticulations()
 //    To be finished after laying out slurs
 //---------------------------------------------------------
 
-void Chord::layoutArticulations2()
+void Chord::layoutArticulations2(bool layoutOnCrossBeamSide)
 {
     for (Chord* gc : graceNotes()) {
         gc->layoutArticulations2();
@@ -3911,6 +3909,9 @@ void Chord::layoutArticulations2()
         }
     }
     for (Articulation* a : _articulations) {
+        if (layoutOnCrossBeamSide && !a->isOnCrossBeamSide()) {
+            continue;
+        }
         ArticulationAnchor aa = a->anchor();
         if (aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD) {
             continue;
@@ -3943,6 +3944,9 @@ void Chord::layoutArticulations2()
     staffTopY = std::min(staffTopY, chordTopY);
     staffBotY = std::max(staffBotY, chordBotY);
     for (Articulation* a : _articulations) {
+        if (layoutOnCrossBeamSide && !a->isOnCrossBeamSide()) {
+            continue;
+        }
         ArticulationAnchor aa = a->anchor();
         if (aa == ArticulationAnchor::TOP_STAFF
             || aa == ArticulationAnchor::BOTTOM_STAFF
@@ -3964,7 +3968,7 @@ void Chord::layoutArticulations2()
     }
 
     for (Articulation* a : _articulations) {
-        if (a->addToSkyline()) {
+        if (a->addToSkyline() && !a->isOnCrossBeamSide()) {
             // the segment shape has already been calculated
             // so measure width and spacing is already determined
             // in line mode, we cannot add to segment shape without throwing this off

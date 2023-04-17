@@ -28,7 +28,6 @@
 #include "draw/types/brush.h"
 #include "draw/types/pen.h"
 #include "rw/xml.h"
-#include "rw/400/tread.h"
 
 #include "chord.h"
 #include "factory.h"
@@ -772,15 +771,6 @@ void FretDiagram::writeNew(XmlWriter& xml) const
 
         xml.tag("barre", { { "start", b.startString }, { "end", b.endString } }, f);
     }
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void FretDiagram::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

@@ -24,12 +24,13 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
-#include "rw/400/mmrestrw.h"
 
 #include "measure.h"
 #include "score.h"
 #include "undo.h"
 #include "utils.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -232,11 +233,6 @@ void MMRest::writeProperties(XmlWriter& xml) const
     ChordRest::writeProperties(xml);
     writeProperty(xml, Pid::MMREST_NUMBER_POS);
     writeProperty(xml, Pid::MMREST_NUMBER_VISIBLE);
-}
-
-bool MMRest::readProperties(XmlReader& xml)
-{
-    return rw400::MMRestRW::readProperties(this, xml, *xml.context());
 }
 
 //---------------------------------------------------------

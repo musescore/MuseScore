@@ -62,7 +62,6 @@ public:
 
     Measure* measure() const { return toMeasure(explicitParent()); }
 
-    void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
     void layout() override;

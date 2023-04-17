@@ -33,7 +33,7 @@ public:
     virtual ~IAudioPluginMetaReader() = default;
 
     virtual bool canReadMeta(const io::path_t& pluginPath) const = 0;
-    virtual RetVal<AudioResourceMeta> readMeta(const io::path_t& pluginPath) const = 0;
+    virtual RetVal<AudioResourceMetaList> readMeta(const io::path_t& pluginPath) const = 0;
 };
 
 using IAudioPluginMetaReaderPtr = std::shared_ptr<IAudioPluginMetaReader>;

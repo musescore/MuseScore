@@ -23,7 +23,6 @@
 #include "location.h"
 
 #include "rw/xml.h"
-#include "rw/400/locationrw.h"
 
 #include "chord.h"
 #include "engravingitem.h"
@@ -78,15 +77,6 @@ void Location::write(XmlWriter& xml) const
     xml.tag("grace", _graceIndex, relDefaults._graceIndex);
     xml.tag("notes", _note, relDefaults._note);
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   Location::read
-//---------------------------------------------------------
-
-void Location::read(XmlReader& e)
-{
-    rw400::LocationRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

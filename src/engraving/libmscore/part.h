@@ -79,7 +79,6 @@ class Part final : public EngravingObject
     bool _soloist = false;           ///< used in score ordering
     int _capoFret = 0;
 
-    static const int DEFAULT_COLOR = 0x3399ff;
     int _color = 0;                  ///User specified color for helping to label parts
 
     PreferSharpFlat _preferSharpFlat = PreferSharpFlat::DEFAULT;
@@ -88,6 +87,7 @@ class Part final : public EngravingObject
 
 public:
     static const Fraction MAIN_INSTRUMENT_TICK;
+    static const int DEFAULT_COLOR = 0x3399ff;
 
     Part(Score* score = nullptr);
     void initFromInstrTemplate(const InstrumentTemplate*);

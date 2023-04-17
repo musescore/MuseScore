@@ -111,7 +111,6 @@ public:
     void layout() override;
     void layout2();
     void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
 
     Chord* chord1() const { return _chord1; }
     Chord* chord2() const { return _chord2; }
@@ -151,6 +150,7 @@ public:
     void setStyle(TremoloStyle v) { _style = v; }
     void setBeamDirection(DirectionV v);
     void setBeamFragment(const BeamFragment& bf) { _beamFragment = bf; }
+    const BeamFragment& beamFragment() const { return _beamFragment; }
 
     double defaultStemLengthStart();
     double defaultStemLengthEnd();

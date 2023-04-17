@@ -27,6 +27,7 @@
 using namespace mu;
 using namespace mu::vst;
 using namespace mu::mpe;
+using namespace mu::audio;
 
 VstAudioClient::~VstAudioClient()
 {
@@ -38,9 +39,9 @@ VstAudioClient::~VstAudioClient()
     m_pluginComponent->terminate();
 }
 
-void VstAudioClient::init(VstPluginType&& type, VstPluginPtr plugin, audio::audioch_t&& audioChannelsCount)
+void VstAudioClient::init(AudioPluginType type, VstPluginPtr plugin, audio::audioch_t&& audioChannelsCount)
 {
-    IF_ASSERT_FAILED(plugin && type != VstPluginType::Undefined) {
+    IF_ASSERT_FAILED(plugin && type != AudioPluginType::Undefined) {
         return;
     }
 
@@ -104,7 +105,7 @@ audio::samples_t VstAudioClient::process(float* output, audio::samples_t samples
         setBlockSize(samplesPerChannel);
     }
 
-    if (m_type == VstPluginType::Fx) {
+    if (m_type == AudioPluginType::Fx) {
         extractInputSamples(samplesPerChannel, output);
     }
 
@@ -112,7 +113,7 @@ audio::samples_t VstAudioClient::process(float* output, audio::samples_t samples
         return 0;
     }
 
-    if (m_type == VstPluginType::Instrument) {
+    if (m_type == AudioPluginType::Instrument) {
         m_eventList.clear();
         m_paramChanges.clearQueue();
     }
@@ -342,7 +343,7 @@ bool VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
             for (audio::audioch_t audioChannelIndex = 0; audioChannelIndex < bus.numChannels; ++audioChannelIndex) {
                 float sample = bus.channelBuffers32[audioChannelIndex][sampleIndex];
 
-                if (m_type == VstPluginType::Instrument) {
+                if (m_type == AudioPluginType::Instrument) {
                     output[sampleIndex * m_audioChannelsCount + audioChannelIndex] += sample * m_volumeGain;
                 } else {
                     output[sampleIndex * m_audioChannelsCount + audioChannelIndex] = sample * m_volumeGain;

@@ -23,6 +23,7 @@
 #include "gradualtempochange.h"
 
 #include "rw/xml.h"
+
 #include "log.h"
 
 #include "measure.h"
@@ -102,34 +103,6 @@ GradualTempoChange::GradualTempoChange(EngravingItem* parent)
 GradualTempoChange* GradualTempoChange::clone() const
 {
     return new GradualTempoChange(*this);
-}
-
-void GradualTempoChange::read(XmlReader& reader)
-{
-    while (reader.readNextStartElement()) {
-        const AsciiStringView tag(reader.name());
-
-        if (readProperty(tag, reader, Pid::LINE_WIDTH)) {
-            setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
-            continue;
-        }
-
-        if (readProperty(tag, reader, Pid::TEMPO_CHANGE_TYPE)) {
-            continue;
-        }
-
-        if (readProperty(tag, reader, Pid::TEMPO_EASING_METHOD)) {
-            continue;
-        }
-
-        if (readProperty(tag, reader, Pid::TEMPO_CHANGE_FACTOR)) {
-            continue;
-        }
-
-        if (!TextLineBase::readProperties(reader)) {
-            reader.unknown();
-        }
-    }
 }
 
 void GradualTempoChange::write(XmlWriter& writer) const

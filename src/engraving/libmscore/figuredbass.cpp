@@ -27,6 +27,7 @@
 #include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
 #include "rw/xml.h"
+
 #include "style/textstyle.h"
 
 #include "chord.h"
@@ -463,36 +464,6 @@ void FiguredBassItem::write(XmlWriter& xml) const
         xml.tag("continuationLine", int(_contLine));
     }
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   FiguredBassItem read()
-//---------------------------------------------------------
-
-void FiguredBassItem::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-
-        if (tag == "brackets") {
-            parenth[0] = (Parenthesis)e.intAttribute("b0");
-            parenth[1] = (Parenthesis)e.intAttribute("b1");
-            parenth[2] = (Parenthesis)e.intAttribute("b2");
-            parenth[3] = (Parenthesis)e.intAttribute("b3");
-            parenth[4] = (Parenthesis)e.intAttribute("b4");
-            e.readNext();
-        } else if (tag == "prefix") {
-            _prefix = (Modifier)(e.readInt());
-        } else if (tag == "digit") {
-            _digit = e.readInt();
-        } else if (tag == "suffix") {
-            _suffix = (Modifier)(e.readInt());
-        } else if (tag == "continuationLine") {
-            _contLine = (ContLine)(e.readInt());
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -1093,44 +1064,6 @@ void FiguredBass::write(XmlWriter& xml) const
         EngravingItem::writeProperties(xml);
     }
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void FiguredBass::read(XmlReader& e)
-{
-    String normalizedText;
-    int idx = 0;
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "ticks") {
-            setTicks(e.readFraction());
-        } else if (tag == "onNote") {
-            setOnNote(e.readInt() != 0l);
-        } else if (tag == "FiguredBassItem") {
-            FiguredBassItem* pItem = new FiguredBassItem(this, idx++);
-            pItem->setTrack(track());
-            pItem->setParent(this);
-            pItem->read(e);
-            m_items.push_back(pItem);
-            // add item normalized text
-            if (!normalizedText.isEmpty()) {
-                normalizedText.append('\n');
-            }
-            normalizedText.append(pItem->normalizedText());
-        }
-//            else if (tag == "style")
-//                  setStyledPropertyListIdx(e.readElementText());
-        else if (!TextBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    // if items could be parsed set normalized text
-    if (m_items.size() > 0) {
-        setXmlText(normalizedText);          // this is the text to show while editing
-    }
 }
 
 //---------------------------------------------------------

@@ -172,7 +172,6 @@ public:
 
     void              draw(mu::draw::Painter* painter) const override;
     void              layout() override;
-    void              read(XmlReader&) override;
     void              write(XmlWriter& xml) const override;
 
     // read / write MusicXML
@@ -196,11 +195,11 @@ public:
     ContLine          contLine() const { return _contLine; }
     void              setContLine(const ContLine& v) { _contLine = v; }
     void              undoSetContLine(ContLine val);
-    Parenthesis       parenth1() { return parenth[0]; }
-    Parenthesis       parenth2() { return parenth[1]; }
-    Parenthesis       parenth3() { return parenth[2]; }
-    Parenthesis       parenth4() { return parenth[3]; }
-    Parenthesis       parenth5() { return parenth[4]; }
+    Parenthesis       parenth1() const { return parenth[0]; }
+    Parenthesis       parenth2() const { return parenth[1]; }
+    Parenthesis       parenth3() const { return parenth[2]; }
+    Parenthesis       parenth4() const { return parenth[3]; }
+    Parenthesis       parenth5() const { return parenth[4]; }
 
     void              setParenth1(Parenthesis v) { parenth[0] = v; }
     void              setParenth2(Parenthesis v) { parenth[1] = v; }
@@ -284,7 +283,6 @@ public:
 
     void draw(mu::draw::Painter* painter) const override;
     void layout() override;
-    void read(XmlReader&) override;
     void setSelected(bool f) override;
     void setVisible(bool f) override;
     void startEdit(EditData&) override;
@@ -320,7 +318,7 @@ public:
 
     void appendItem(FiguredBassItem* item) { m_items.push_back(item); }
 
-    std::vector<FiguredBassItem*> items() const { return m_items; }
+    const std::vector<FiguredBassItem*>& items() const { return m_items; }
 };
 } // namespace mu::engraving
 

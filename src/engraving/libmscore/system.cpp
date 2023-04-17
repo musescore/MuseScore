@@ -30,6 +30,7 @@
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "rw/xml.h"
+
 #include "layout/layoutcontext.h"
 #include "realfn.h"
 
@@ -1536,24 +1537,6 @@ void System::write(XmlWriter& xml) const
         _systemDividerRight->write(xml);
     }
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void System::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "SystemDivider") {
-            SystemDivider* sd = new SystemDivider(this);
-            sd->read(e);
-            add(sd);
-        } else {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------

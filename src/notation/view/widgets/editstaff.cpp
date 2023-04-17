@@ -213,7 +213,12 @@ void EditStaff::updateInstrument()
 
     longName->setPlainText(m_instrument.nameAsPlainText());
     shortName->setPlainText(m_instrument.abbreviatureAsPlainText());
-    instrumentName->setText(m_instrument.nameAsPlainText());
+    const InstrumentTemplate* templ = mu::engraving::searchTemplate(m_instrument.id());
+    if (templ) {
+        instrumentName->setText(formatInstrumentTitle(templ->trackName, templ->trait));
+    } else {
+        instrumentName->setText(qtrc("notation/editstaff", "Unknown"));
+    }
 
     m_minPitchA = m_instrument.minPitchA();
     m_maxPitchA = m_instrument.maxPitchA();

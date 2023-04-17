@@ -180,8 +180,6 @@ protected:
     SpannerSegment* getNextLayoutSystemSegment(System* system, std::function<SpannerSegment* (System*)> createSegment);
     void fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* (System*)> createSegment);
 
-    const std::vector<SpannerSegment*> spannerSegments() const { return segments; }
-
 public:
     // Score Tree functions
     virtual EngravingObject* scanParent() const override;
@@ -191,7 +189,6 @@ public:
 
     virtual void setScore(Score* s) override;
 
-    bool readProperties(XmlReader&) override;
     void writeProperties(XmlWriter&) const override;
 
     void writeSpannerStart(XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction frac = { -1, 1 }) const;
@@ -220,7 +217,7 @@ public:
     Anchor anchor() const { return _anchor; }
     void setAnchor(Anchor a) { _anchor = a; }
 
-    const std::vector<SpannerSegment*>& spannerSegments() { return segments; }
+    const std::vector<SpannerSegment*>& spannerSegments() const { return segments; }
     SpannerSegment* frontSegment() { return segments.front(); }
     const SpannerSegment* frontSegment() const { return segments.front(); }
     SpannerSegment* backSegment() { return segments.back(); }

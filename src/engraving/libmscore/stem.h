@@ -52,8 +52,6 @@ public:
     EngravingItem* drop(EditData&) override;
 
     void write(XmlWriter& xml) const override;
-    void read(XmlReader& e) override;
-    bool readProperties(XmlReader&) override;
 
     void reset() override;
     PropertyValue getProperty(Pid propertyId) const override;

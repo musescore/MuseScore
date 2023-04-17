@@ -32,6 +32,7 @@
 #include "translation.h"
 
 #include "engraving/rw/xml.h"
+#include "engraving/rw/400/tread.h"
 #include "engraving/libmscore/accidental.h"
 #include "engraving/libmscore/clef.h"
 #include "engraving/libmscore/keysig.h"
@@ -226,7 +227,8 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
         event->acceptProposedAction();
         dragElement = static_cast<Accidental*>(Factory::createItem(type, gpaletteScore->dummy()));
         dragElement->resetExplicitParent();
-        dragElement->read(e);
+        rw400::TRead::readItem(dragElement, e, *e.context());
+
         dragElement->layout();
     } else {
         if (MScore::debugMode) {

@@ -26,6 +26,7 @@
 #include <vector>
 
 #include "rw/xml.h"
+
 #include "types/typesconv.h"
 
 #include "changeMap.h"
@@ -148,45 +149,6 @@ void Volta::setText(const String& s)
 String Volta::text() const
 {
     return beginText();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Volta::read(XmlReader& e)
-{
-    eraseSpannerSegments();
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "endings") {
-            String s = e.readText();
-            _endings = TConv::fromXml(s, std::vector<int>());
-        } else if (readStyledProperty(e, tag)) {
-        } else if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Volta::readProperties(XmlReader& e)
-{
-    if (!TextLineBase::readProperties(e)) {
-        return false;
-    }
-
-    if (anchor() != VOLTA_ANCHOR) {
-        // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
-        LOGW("Correcting volta anchor type from %d to %d", int(anchor()), int(VOLTA_ANCHOR));
-        setAnchor(VOLTA_ANCHOR);
-    }
-
-    return true;
 }
 
 //---------------------------------------------------------

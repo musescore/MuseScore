@@ -86,7 +86,7 @@ static AudioResourceMeta metaFromJson(const JsonObject& object)
 }
 }
 
-void KnownAudioPluginsRegister::init()
+mu::Ret KnownAudioPluginsRegister::load()
 {
     TRACEFUNC;
 
@@ -99,10 +99,12 @@ void KnownAudioPluginsRegister::init()
     RetVal<io::paths_t> paths = fileSystem()->scanFiles(knownAudioPluginsDir,
                                                         { "*.json" },
                                                         io::ScanMode::FilesInCurrentDir);
-
     if (!paths.ret) {
-        LOGE() << paths.ret.toString();
+        return paths.ret;
     }
+
+    m_pluginInfoMap.clear();
+    m_pluginPaths.clear();
 
     for (const io::path_t& infoPath : paths.val) {
         RetVal<ByteArray> file = fileSystem()->readFile(infoPath);
@@ -131,6 +133,8 @@ void KnownAudioPluginsRegister::init()
         m_pluginInfoMap[info.meta.id] = info;
         m_pluginPaths.insert(info.path);
     }
+
+    return make_ok();
 }
 
 std::vector<AudioPluginInfo> KnownAudioPluginsRegister::pluginInfoList(PluginInfoAccepted accepted) const
@@ -184,7 +188,7 @@ mu::Ret KnownAudioPluginsRegister::registerPlugin(const AudioPluginInfo& info)
         obj.set("errorCode", info.errorCode);
     }
 
-    io::path_t path = pluginInfoPath(info.meta.id);
+    io::path_t path = pluginInfoPath(info.meta.vendor, info.meta.id);
     Ret ret = fileSystem()->writeFile(path, JsonDocument(obj).toJson());
     if (!ret) {
         return ret;
@@ -204,19 +208,29 @@ mu::Ret KnownAudioPluginsRegister::unregisterPlugin(const AudioResourceId& resou
         return make_ok();
     }
 
-    io::path_t path = pluginInfoPath(resourceId);
+    AudioPluginInfo info = m_pluginInfoMap[resourceId];
+    io::path_t path = pluginInfoPath(info.meta.vendor, resourceId);
+
     Ret ret = fileSystem()->remove(path);
     if (!ret) {
         return ret;
     }
 
-    AudioPluginInfo info = mu::take(m_pluginInfoMap, resourceId);
+    mu::remove(m_pluginInfoMap, resourceId);
     mu::remove(m_pluginPaths, info.path);
 
     return make_ok();
 }
 
-mu::io::path_t KnownAudioPluginsRegister::pluginInfoPath(const AudioResourceId& resourceId) const
+mu::io::path_t KnownAudioPluginsRegister::pluginInfoPath(const AudioResourceVendor& vendor, const AudioResourceId& resourceId) const
 {
-    return configuration()->knownAudioPluginsDir() + "/" + resourceId + ".json";
+    io::path_t fileName;
+
+    if (vendor.empty()) {
+        fileName = io::escapeFileName(resourceId);
+    } else {
+        fileName = io::escapeFileName(vendor + "_" + resourceId);
+    }
+
+    return configuration()->knownAudioPluginsDir() + "/" + fileName + ".json";
 }

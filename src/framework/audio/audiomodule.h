@@ -38,7 +38,9 @@ public:
     void registerExports() override;
     void registerResources() override;
     void registerUiTypes() override;
+    void resolveImports() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+    void onDelayedInit() override;
     void onDeinit() override;
     void onDestroy() override;
 

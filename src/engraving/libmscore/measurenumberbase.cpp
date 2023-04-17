@@ -28,6 +28,8 @@
 #include "score.h"
 #include "staff.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -96,19 +98,6 @@ PropertyValue MeasureNumberBase::propertyDefault(Pid id) const
         return TextStyleType::DEFAULT;
     default:
         return TextBase::propertyDefault(id);
-    }
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool MeasureNumberBase::readProperties(XmlReader& xml)
-{
-    if (readProperty(xml.name(), xml, Pid::HPLACEMENT)) {
-        return true;
-    } else {
-        return TextBase::readProperties(xml);
     }
 }
 

@@ -101,6 +101,16 @@ inline bool operator==(const AudioPluginInfo& info1, const AudioPluginInfo& info
 }
 }
 
+TEST_F(Audio_RegisterAudioPluginsScenarioTest, Init)
+{
+    // [THEN] The register is inited
+    EXPECT_CALL(*m_knownPlugins, load())
+    .WillOnce(Return(mu::make_ok()));
+
+    // [WHEN] Init the scenario
+    m_scenario->init();
+}
+
 TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterNewPlugins)
 {
     // [GIVEN] All found plugins
@@ -171,13 +181,56 @@ TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterNewPlugins)
     }
 
     // [THEN] All plugins remain in the register
-    EXPECT_CALL(*m_knownPlugins, unregisterPlugin(_)).Times(0);
+    EXPECT_CALL(*m_knownPlugins, unregisterPlugin(_))
+    .Times(0);
+
+    // [THEN] The register is refreshed
+    EXPECT_CALL(*m_knownPlugins, load())
+    .WillOnce(Return(mu::make_ok()));
 
     // [WHEN] Register new plugins
-    m_scenario->init();
     mu::Ret ret = m_scenario->registerNewPlugins();
 
     // [THEN] Plugins successfully registered
+    EXPECT_TRUE(ret);
+}
+
+TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterNewPlugins_NoNewPlugins)
+{
+    // [GIVEN] All found plugins (all are already registered)
+    paths_t foundPluginPaths = {
+        "/some/test/path/to/plugin/AAA.vst3",
+        "/some/test/path/to/plugin/BBB.vst3",
+        "/some/test/path/to/plugin/CCC.vst3",
+    };
+
+    for (IAudioPluginsScannerPtr scanner : m_scanners) {
+        AudioPluginsScannerMock* mock = dynamic_cast<AudioPluginsScannerMock*>(scanner.get());
+        ASSERT_TRUE(mock);
+
+        ON_CALL(*mock, scanPlugins())
+        .WillByDefault(Return(foundPluginPaths));
+    }
+
+    for (const path_t& pluginPath : foundPluginPaths) {
+        ON_CALL(*m_knownPlugins, exists(pluginPath))
+        .WillByDefault(Return(true));
+    }
+
+    // [THEN] Don't register the plugins again
+    EXPECT_CALL(*m_process, execute(_, _))
+    .Times(0);
+
+    EXPECT_CALL(*m_interactive, showProgress(_, _))
+    .Times(0);
+
+    EXPECT_CALL(*m_knownPlugins, load())
+    .Times(0);
+
+    // [WHEN] Try to register the plugins again
+    mu::Ret ret = m_scenario->registerNewPlugins();
+
+    // [THEN] No error
     EXPECT_TRUE(ret);
 }
 
@@ -186,9 +239,17 @@ TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterPlugin)
     // [GIVEN] Some plugin we want to register
     path_t pluginPath = "/some/test/path/to/plugin/AAA.vst3";
 
-    AudioResourceMeta pluginMeta;
-    pluginMeta.id = mu::io::filename(pluginPath).toStdString();
-    pluginMeta.attributes.insert({ mu::audio::CATEGORIES_ATTRIBUTE, u"Fx" });
+    AudioResourceMetaList metaList;
+
+    AudioResourceMeta pluginMeta1;
+    pluginMeta1.id = "Mono plugin";
+    pluginMeta1.attributes.insert({ mu::audio::CATEGORIES_ATTRIBUTE, u"Fx|Mono" });
+    metaList.push_back(pluginMeta1);
+
+    AudioResourceMeta pluginMeta2;
+    pluginMeta2.id = "Stereo plugin";
+    pluginMeta2.attributes.insert({ mu::audio::CATEGORIES_ATTRIBUTE, u"Fx|Stereo" });
+    metaList.push_back(pluginMeta2);
 
     ASSERT_FALSE(m_metaReaders.empty());
     AudioPluginMetaReaderMock* mock = dynamic_cast<AudioPluginMetaReaderMock*>(m_metaReaders[0].get());
@@ -196,22 +257,24 @@ TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterPlugin)
 
     ON_CALL(*mock, canReadMeta(pluginPath))
     .WillByDefault(Return(true));
+
     ON_CALL(*mock, readMeta(pluginPath))
-    .WillByDefault(Return(mu::RetVal<AudioResourceMeta>::make_ok(pluginMeta)));
+    .WillByDefault(Return(mu::RetVal<AudioResourceMetaList>::make_ok(metaList)));
 
     // [THEN] The plugin has been registered
-    AudioPluginInfo expectedPluginInfo;
-    expectedPluginInfo.type = AudioPluginType::Fx;
-    expectedPluginInfo.meta = pluginMeta;
-    expectedPluginInfo.path = pluginPath;
-    expectedPluginInfo.enabled = true;
-    expectedPluginInfo.errorCode = 0;
+    for (const AudioResourceMeta& meta : metaList) {
+        AudioPluginInfo expectedPluginInfo;
+        expectedPluginInfo.type = AudioPluginType::Fx;
+        expectedPluginInfo.meta = meta;
+        expectedPluginInfo.path = pluginPath;
+        expectedPluginInfo.enabled = true;
+        expectedPluginInfo.errorCode = 0;
 
-    EXPECT_CALL(*m_knownPlugins, registerPlugin(expectedPluginInfo))
-    .WillOnce(Return(true));
+        EXPECT_CALL(*m_knownPlugins, registerPlugin(expectedPluginInfo))
+        .WillOnce(Return(true));
+    }
 
     // [WHEN] Register the plugin
-    m_scenario->init();
     mu::Ret ret = m_scenario->registerPlugin(pluginPath);
 
     // [THEN] The plugin successfully registered
@@ -234,7 +297,6 @@ TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterFailedPlugin)
     .WillOnce(Return(true));
 
     // [WHEN] Register the incompatible plugin
-    m_scenario->init();
     mu::Ret ret = m_scenario->registerFailedPlugin(pluginPath, expectedPluginInfo.errorCode);
 
     // [THEN] The plugin successfully registered

@@ -210,6 +210,7 @@ public:
     static AsciiStringView toXml(VibratoType v);
     static VibratoType fromXml(const AsciiStringView& tag, VibratoType def);
 
+    static AsciiStringView toXml(ArticulationTextType v);
     static ArticulationTextType fromXml(const AsciiStringView& tag, ArticulationTextType def);
 
     static AsciiStringView toXml(LyricsSyllabic v);

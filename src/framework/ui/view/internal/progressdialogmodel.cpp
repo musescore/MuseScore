@@ -71,7 +71,7 @@ void ProgressDialogModel::load(const QVariant& progressObj)
     });
 
     m_progress->finished.onReceive(this, [this](const ProgressResult& res) {
-        if (!res.ret && !res.ret.text().empty()) {
+        if (!res.ret) {
             LOGE() << res.ret.toString();
         }
 

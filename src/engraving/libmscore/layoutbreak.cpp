@@ -98,32 +98,6 @@ void LayoutBreak::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void LayoutBreak::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "subtype") {
-            readProperty(e, Pid::LAYOUT_BREAK);
-        } else if (tag == "pause") {
-            readProperty(e, Pid::PAUSE);
-        } else if (tag == "startWithLongNames") {
-            readProperty(e, Pid::START_WITH_LONG_NAMES);
-        } else if (tag == "startWithMeasureOne") {
-            readProperty(e, Pid::START_WITH_MEASURE_ONE);
-        } else if (tag == "firstSystemIndentation"
-                   || tag == "firstSystemIdentation" /* pre-4.0 typo */) {
-            readProperty(e, Pid::FIRST_SYSTEM_INDENTATION);
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    layout0();
-}
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 

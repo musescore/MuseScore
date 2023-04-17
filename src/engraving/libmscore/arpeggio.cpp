@@ -28,7 +28,7 @@
 
 #include "iengravingfont.h"
 #include "rw/xml.h"
-#include "rw/400/arpeggiorw.h"
+
 #include "types/typesconv.h"
 
 #include "accidental.h"
@@ -40,6 +40,8 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
+
+#include "log.h"
 
 using namespace mu;
 
@@ -98,11 +100,6 @@ void Arpeggio::write(XmlWriter& xml) const
     writeProperty(xml, Pid::PLAY);
     writeProperty(xml, Pid::TIME_STRETCH);
     xml.endElement();
-}
-
-void Arpeggio::read(XmlReader& e)
-{
-    rw400::ArpeggioRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

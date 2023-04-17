@@ -26,7 +26,7 @@
 
 #include "rw/400/writecontext.h"
 #include "rw/xml.h"
-#include "rw/400/chordrestrw.h"
+
 #include "style/style.h"
 #include "types/typesconv.h"
 
@@ -63,7 +63,6 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rw400;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -193,11 +192,6 @@ void ChordRest::writeProperties(XmlWriter& xml) const
             s->writeSpannerEnd(xml, this, track());
         }
     }
-}
-
-bool ChordRest::readProperties(XmlReader& e)
-{
-    return ChordRestRW::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------

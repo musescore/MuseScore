@@ -106,7 +106,7 @@ private:
     void initStaff(Staff* staff, const InstrumentTemplate& templ, const mu::engraving::StaffType* staffType, size_t cleffIndex);
 
     void removeMissingParts(const PartInstrumentList& newParts);
-    void appendNewParts(const PartInstrumentList& parts);
+    void insertNewParts(const PartInstrumentList& parts);
     void updateSoloist(const PartInstrumentList& parts);
     void sortParts(const PartInstrumentList& parts);
 

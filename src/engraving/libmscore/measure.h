@@ -150,7 +150,6 @@ public:
     EngravingObject* scanParent() const override;
     EngravingObjectList scanChildren() const override;
 
-    void read(XmlReader& d) override;
     void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
     void write(XmlWriter& xml) const override { EngravingItem::write(xml); }
     void write(XmlWriter&, staff_idx_t, bool writeSystemElements, bool forceTimeSig) const override;

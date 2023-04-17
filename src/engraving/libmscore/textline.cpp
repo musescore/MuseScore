@@ -27,6 +27,8 @@
 #include "system.h"
 #include "undo.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace mu::engraving {
@@ -201,18 +203,6 @@ void TextLine::write(XmlWriter& xml) const
     writeProperty(xml, Pid::OFFSET);
     TextLineBase::writeProperties(xml);
     xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void TextLine::read(XmlReader& e)
-{
-    bool system =  e.intAttribute("system", 0) == 1;
-    setSystemFlag(system);
-    initStyle();
-    TextLineBase::read(e);
 }
 
 //---------------------------------------------------------

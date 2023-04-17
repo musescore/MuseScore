@@ -236,34 +236,34 @@ class InsertPart : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertPart)
 
-    Part* part = nullptr;
-    int idx = 0;
+    Part* m_part = nullptr;
+    size_t m_targetPartIdx = 0;
 
 public:
-    InsertPart(Part* p, int i);
+    InsertPart(Part* p, size_t targetPartIdx);
     void undo(EditData*) override;
     void redo(EditData*) override;
 
     UNDO_TYPE(CommandType::InsertPart)
     UNDO_NAME("InsertPart")
-    UNDO_CHANGED_OBJECTS({ part })
+    UNDO_CHANGED_OBJECTS({ m_part })
 };
 
 class RemovePart : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, RemovePart)
 
-    Part* part = nullptr;
-    staff_idx_t idx = mu::nidx;
+    Part* m_part = nullptr;
+    size_t m_partIdx = mu::nidx;
 
 public:
-    RemovePart(Part*, staff_idx_t idx);
+    RemovePart(Part*, size_t partIdx);
     void undo(EditData*) override;
     void redo(EditData*) override;
 
     UNDO_TYPE(CommandType::RemovePart)
     UNDO_NAME("RemovePart")
-    UNDO_CHANGED_OBJECTS({ part })
+    UNDO_CHANGED_OBJECTS({ m_part })
 };
 
 class SetSoloist : public UndoCommand

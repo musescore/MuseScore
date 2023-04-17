@@ -33,7 +33,7 @@ struct mu::iex::videoexport::FFmpeg {
     unsigned int ptsCounter = 0;
 
     // FFmpeg stuff
-#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(58, 0, 0)
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(59, 16, 100)
     AVOutputFormat* outputFormat = nullptr;
 #else
     const AVOutputFormat* outputFormat = nullptr;

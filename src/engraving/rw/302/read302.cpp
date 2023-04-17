@@ -42,6 +42,7 @@
 #include "libmscore/text.h"
 
 #include "../400/staffrw.h"
+#include "../400/tread.h"
 #include "../compat/readstyle.h"
 
 #include "log.h"
@@ -134,7 +135,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
             }
         } else if (tag == "Part") {
             Part* part = new Part(score);
-            part->read(e);
+            rw400::TRead::read(part, e, ctx);
             score->appendPart(part);
         } else if ((tag == "HairPin")
                    || (tag == "Ottava")
@@ -144,7 +145,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
                    || (tag == "Slur")
                    || (tag == "Pedal")) {
             Spanner* s = toSpanner(Factory::createItemByName(tag, score->dummy()));
-            s->read(e);
+            rw400::TRead::readItem(s, e, ctx);
             score->addSpanner(s);
         } else if (tag == "Excerpt") {
             if (MScore::noExcerpts) {
