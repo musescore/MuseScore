@@ -279,18 +279,17 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
         }
 
         if (tuple) {
-            Tuplet* tuplet = tuplets[staffIdx * 2 + voice];
-            if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
+            int track = staffIdx * 2 + voice;
+            Tuplet* tuplet = tuplets[track];
+            if ((tuplet == nullptr) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                 tuplet = Factory::createTuplet(measure);
-                tuplet->setTick(tick);
-                // int track = staffIdx * 2 + voice;
-                tuplets[staffIdx * 2 + voice] = tuplet;
-                tuplet->setTrack(cr->track());
+                tuplets[track] = tuplet;
                 setTuplet(tuplet, tuple);
                 tuplet->setParent(measure);
             }
             tuplet->setTrack(cr->track());
             tuplet->setBaseLen(l);
+            tuplet->setTick(tick);
             tuplet->setTicks(l * tuplet->ratio().denominator());
             cr->setTuplet(tuplet);
             tuplet->add(cr);
