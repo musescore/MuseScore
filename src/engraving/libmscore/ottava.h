@@ -100,6 +100,7 @@ public:
 class Ottava final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, Ottava)
+    DECLARE_CLASSOF(ElementType::OTTAVA)
 
     OttavaType _ottavaType;
     bool _numbersOnly;

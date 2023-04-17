@@ -33,6 +33,8 @@ class Segment;
 class MeasureRepeat final : public Rest
 {
     OBJECT_ALLOCATOR(engraving, MeasureRepeat)
+    DECLARE_CLASSOF(ElementType::MEASURE_REPEAT)
+
 public:
     MeasureRepeat(Segment* parent);
     MeasureRepeat(const MeasureRepeat&) = default;

@@ -30,6 +30,8 @@ namespace mu::engraving {
 class MMRest final : public Rest
 {
     OBJECT_ALLOCATOR(engraving, MMRest)
+    DECLARE_CLASSOF(ElementType::MMREST)
+
 public:
     MMRest(Segment* s = 0);
     MMRest(const MMRest&, bool link = false);

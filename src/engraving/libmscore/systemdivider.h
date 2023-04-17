@@ -33,6 +33,8 @@ namespace mu::engraving {
 class SystemDivider final : public Symbol
 {
     OBJECT_ALLOCATOR(engraving, SystemDivider)
+    DECLARE_CLASSOF(ElementType::SYSTEM_DIVIDER)
+
 public:
     enum class Type {
         LEFT, RIGHT

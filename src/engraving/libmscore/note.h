@@ -151,6 +151,8 @@ static const int INVALID_LINE = -10000;
 class Note final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Note)
+    DECLARE_CLASSOF(ElementType::NOTE)
+
 public:
     enum class SlideType {
         Undefined = 0,

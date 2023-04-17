@@ -91,6 +91,7 @@ public:
 class Clef final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Clef)
+    DECLARE_CLASSOF(ElementType::CLEF)
 
     SymId symId;
     bool _showCourtesy = true;

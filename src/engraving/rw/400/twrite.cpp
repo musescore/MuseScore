@@ -28,6 +28,7 @@
 #include "../../types/symnames.h"
 #include "../../style/textstyle.h"
 #include "../../infrastructure/ifileinfoprovider.h"
+#include "../../infrastructure/rtti.h"
 
 #include "../../libmscore/score.h"
 #include "../../libmscore/masterscore.h"
@@ -149,6 +150,45 @@
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
+
+using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
+                                  BagpipeEmbellishment, BarLine, Beam, HBox, VBox, FBox, TBox, Bracket, Breath,
+                                  Chord, ChordLine, Clef,
+                                  Dynamic,
+                                  Fermata, FiguredBass, Fingering, FretDiagram,
+                                  Glissando, GradualTempoChange,
+                                  Hairpin, Harmony, Hook,
+                                  Image, InstrumentChange,
+                                  Jump,
+                                  KeySig,
+                                  LayoutBreak, LedgerLine, LetRing, Lyrics,
+                                  Marker, MeasureNumber, MeasureRepeat, MMRest, MMRestRange,
+                                  Note, NoteDot, NoteLine,
+                                  Ottava,
+                                  Page, PalmMute, Pedal, PlayTechAnnotation,
+                                  RehearsalMark, Rest,
+                                  Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
+                                  Symbol, System, SystemDivider, SystemText,
+                                  TempoText, Text, TextLine, Tie, TimeSig, Tremolo, TremoloBar, Trill, Tuplet,
+                                  Vibrato, Volta,
+                                  WhammyBar>;
+
+template<typename T>
+bool write_visit(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (T::classof(item)) {
+        TWrite::write(static_cast<const T*>(item), xml, ctx);
+        return true;
+    }
+    return false;
+}
+
+DECLARE_VISITER(write)
+
+void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
+{
+    write_visiter(WriteTypes {}, item, xml, ctx);
+}
 
 void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid)
 {

@@ -43,6 +43,8 @@ class Note;
 class ChordLine final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, ChordLine)
+    DECLARE_CLASSOF(ElementType::CHORDLINE)
+
 private:
 
     bool _straight = false;

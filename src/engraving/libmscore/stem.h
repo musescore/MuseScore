@@ -31,6 +31,8 @@ class Chord;
 class Stem final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Stem)
+    DECLARE_CLASSOF(ElementType::STEM)
+
 public:
 
     Stem(const Stem&) = default;

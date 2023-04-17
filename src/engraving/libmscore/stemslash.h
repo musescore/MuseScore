@@ -36,6 +36,7 @@ class Chord;
 class StemSlash final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, StemSlash)
+    DECLARE_CLASSOF(ElementType::STEM_SLASH)
 
     mu::LineF line;
 

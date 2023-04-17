@@ -39,6 +39,8 @@ class Segment;
 class Dynamic final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, Dynamic)
+    DECLARE_CLASSOF(ElementType::DYNAMIC)
+
 public:
 
     struct ChangeSpeedItem {

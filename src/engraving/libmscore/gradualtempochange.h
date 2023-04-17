@@ -33,6 +33,8 @@ class GradualTempoChangeSegment;
 class GradualTempoChange : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, GradualTempoChange)
+    DECLARE_CLASSOF(ElementType::GRADUAL_TEMPO_CHANGE)
+
 public:
     GradualTempoChange(EngravingItem* parent);
 

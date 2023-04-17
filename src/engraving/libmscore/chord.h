@@ -93,6 +93,9 @@ private:
 class Chord final : public ChordRest
 {
     OBJECT_ALLOCATOR(engraving, Chord)
+    DECLARE_CLASSOF(ElementType::CHORD)
+
+private:
 
     std::vector<Note*> _notes;           // sorted to decreasing line step
     LedgerLine* _ledgerLines = nullptr;  // single linked list

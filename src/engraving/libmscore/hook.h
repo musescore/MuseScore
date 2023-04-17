@@ -33,6 +33,8 @@ class Chord;
 class Hook final : public Symbol
 {
     OBJECT_ALLOCATOR(engraving, Hook)
+    DECLARE_CLASSOF(ElementType::HOOK)
+
 public:
     Hook(Chord* parent = 0);
 

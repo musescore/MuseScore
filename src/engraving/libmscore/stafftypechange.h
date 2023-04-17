@@ -35,6 +35,7 @@ class StaffType;
 class StaffTypeChange final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, StaffTypeChange)
+    DECLARE_CLASSOF(ElementType::STAFFTYPE_CHANGE)
 
     StaffType* m_staffType { nullptr };
     bool m_ownsStaffType = false;

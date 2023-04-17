@@ -46,8 +46,10 @@ class IEngravingFont;
 class Symbol : public BSymbol
 {
     OBJECT_ALLOCATOR(engraving, Symbol)
+    DECLARE_CLASSOF(ElementType::SYMBOL)
 
     INJECT(engraving, IEngravingFontsProvider, engravingFonts)
+
 protected:
     SymId _sym;
     std::shared_ptr<IEngravingFont> _scoreFont = nullptr;

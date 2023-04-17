@@ -37,6 +37,8 @@ class Rest;
 class NoteDot final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, NoteDot)
+    DECLARE_CLASSOF(ElementType::NOTEDOT)
+
 public:
 
     NoteDot* clone() const override { return new NoteDot(*this); }

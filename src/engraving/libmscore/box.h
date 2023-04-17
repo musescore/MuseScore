@@ -117,6 +117,7 @@ public:
 class HBox final : public Box
 {
     OBJECT_ALLOCATOR(engraving, HBox)
+    DECLARE_CLASSOF(ElementType::HBOX)
 
     bool _createSystemHeader { true };
 
@@ -152,6 +153,8 @@ public:
 class VBox : public Box
 {
     OBJECT_ALLOCATOR(engraving, VBox)
+    DECLARE_CLASSOF(ElementType::VBOX)
+
 public:
     VBox(const ElementType& type, System* parent);
     VBox(System* parent);
@@ -181,6 +184,8 @@ private:
 class FBox : public VBox
 {
     OBJECT_ALLOCATOR(engraving, FBox)
+    DECLARE_CLASSOF(ElementType::FBOX)
+
 public:
     FBox(System* parent)
         : VBox(ElementType::FBOX, parent) {}

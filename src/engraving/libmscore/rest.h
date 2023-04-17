@@ -62,6 +62,8 @@ public:
 class Rest : public ChordRest
 {
     OBJECT_ALLOCATOR(engraving, Rest)
+    DECLARE_CLASSOF(ElementType::REST)
+
 public:
 
     ~Rest() { DeleteAll(m_dots); }

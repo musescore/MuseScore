@@ -62,6 +62,7 @@ public:
 class Glissando final : public SLine
 {
     OBJECT_ALLOCATOR(engraving, Glissando)
+    DECLARE_CLASSOF(ElementType::GLISSANDO)
 
     M_PROPERTY(String, text, setText)
     M_PROPERTY(GlissandoType, glissandoType, setGlissandoType)

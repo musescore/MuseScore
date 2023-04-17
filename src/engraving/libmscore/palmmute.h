@@ -57,6 +57,7 @@ public:
 class PalmMute final : public ChordTextLineBase
 {
     OBJECT_ALLOCATOR(engraving, PalmMute)
+    DECLARE_CLASSOF(ElementType::PALM_MUTE)
 
     Sid getPropertyStyle(Pid) const override;
 

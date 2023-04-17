@@ -40,6 +40,7 @@ class Segment;
 class KeySig final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, KeySig)
+    DECLARE_CLASSOF(ElementType::KEYSIG)
 
     bool _showCourtesy;
     bool _hideNaturals;       // used in layout to override score style (needed for the Continuous panel)

@@ -62,6 +62,8 @@ enum class ActionIconType {
 class ActionIcon final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, ActionIcon)
+    DECLARE_CLASSOF(ElementType::ACTION_ICON)
+
 public:
     ActionIcon(EngravingItem* score);
     ~ActionIcon() override = default;

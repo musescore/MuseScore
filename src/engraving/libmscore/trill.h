@@ -75,6 +75,7 @@ public:
 class Trill final : public SLine
 {
     OBJECT_ALLOCATOR(engraving, Trill)
+    DECLARE_CLASSOF(ElementType::TRILL)
 
     Sid getPropertyStyle(Pid) const override;
 

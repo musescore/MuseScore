@@ -66,6 +66,7 @@ public:
 class Vibrato final : public SLine
 {
     OBJECT_ALLOCATOR(engraving, Vibrato)
+    DECLARE_CLASSOF(ElementType::VIBRATO)
 
     Sid getPropertyStyle(Pid) const override;
 
