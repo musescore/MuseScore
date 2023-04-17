@@ -655,11 +655,14 @@ void Score::expandVoice()
 //   addInterval
 //---------------------------------------------------------
 
-void Score::addInterval(int val, const std::vector<Note*>& nl)
+void Score::addInterval(int val, const std::vector<Note*>& notes)
 {
-    for (Note* on : nl) {
+    std::vector<Note*> newNotes;
+
+    for (Note* on : notes) {
         Chord* chord = on->chord();
         Note* note = Factory::createNote(chord);
+        newNotes.push_back(note);
         note->setParent(chord);
         note->setTrack(chord->track());
         int valTmp = val < 0 ? val + 1 : val - 1;
@@ -729,6 +732,23 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
         setPlayNote(true);
 
         select(note, SelectType::SINGLE, 0);
+    }
+    unsigned i = 0;
+    for (Note* on : notes) {
+        if (on->tieFor()) {
+            auto it = find(notes.begin(), notes.end(), on->tieFor()->endNote());
+            if (it != notes.end()) {
+                unsigned index = it - notes.begin();
+                Tie* tie = Factory::createTie(this->dummy());
+                tie->setStartNote(newNotes[i]);
+                tie->setEndNote(newNotes[index]);
+                tie->setTrack(newNotes[i]->track());
+                tie->setTick(newNotes[i]->tick());
+                tie->setTick2(newNotes[index]->tick());
+                undoAddElement(tie);
+            }
+        }
+        ++i;
     }
     if (_is.noteEntryMode()) {
         _is.setAccidentalType(AccidentalType::NONE);
