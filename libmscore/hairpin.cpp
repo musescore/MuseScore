@@ -234,6 +234,14 @@ void HairpinSegment::layout()
             points[3] = l2.p2();
             npoints   = 4;
 
+            joinedHairpin.clear();
+            if (spannerSegmentType() != SpannerSegmentType::MIDDLE) {
+                  if (type == HairpinType::DECRESC_HAIRPIN && spannerSegmentType() != SpannerSegmentType::BEGIN)
+                        joinedHairpin << points[0] << points[1] << points[2]; // [top-left, joint, bottom-left]
+                  else if (type == HairpinType::CRESC_HAIRPIN && spannerSegmentType() != SpannerSegmentType::END)
+                        joinedHairpin << points[1] << points[0] << points[3]; // [top-right, joint, bottom-right]
+                  }
+
             QRectF r = QRectF(l1.p1(), l1.p2()).normalized() | QRectF(l2.p1(), l2.p2()).normalized();
             if (!_text->empty())
                   r |= _text->bbox();

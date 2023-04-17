@@ -114,6 +114,7 @@ void TextLineBaseSegment::draw(QPainter* painter) const
       QVector<qreal> dashDotDotted = { 3.0, 3.0, 0.01, 2.99, 0.01, 2.99 };
       QVector<qreal> customDashes  = { tl->dashLineLen(), tl->dashGapLen() };
 
+      pen.setCapStyle(Qt::FlatCap); // not SquareCaps
       switch (tl->lineStyle()) {
             case Qt::DashLine:
                 pen.setDashPattern(dashed);
@@ -137,10 +138,13 @@ void TextLineBaseSegment::draw(QPainter* painter) const
 
       //Draw lines
       if (twoLines) {   // hairpins
-            pen.setCapStyle(Qt::FlatCap);
+            pen.setJoinStyle(Qt::BevelJoin);
             painter->setPen(pen);
-            painter->drawLines(&points[0], 1);
-            painter->drawLines(&points[2], 1);
+
+            if (!joinedHairpin.isEmpty() && tl->lineStyle() == Qt::SolidLine)
+                  painter->drawPolyline(joinedHairpin);
+            else
+                  painter->drawLines(&points[0], 2);
             }
       else {
             int start = 0;
