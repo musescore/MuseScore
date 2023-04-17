@@ -3900,6 +3900,9 @@ void Measure::addSystemTrailer(Measure* nm)
     TimeSig* ts = nullptr;
     bool showCourtesySig = false;
     Segment* s = findSegmentR(SegmentType::TimeSigAnnounce, _rtick);
+    if (s) {
+        s->setTrailer(true);
+    }
     if (nm && score()->genCourtesyTimesig() && !isFinalMeasure && !score()->layoutOptions().isMode(LayoutMode::FLOAT)) {
         Segment* tss = nm->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
         if (tss) {
