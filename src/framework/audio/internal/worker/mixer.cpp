@@ -139,7 +139,7 @@ unsigned int Mixer::audioChannelsCount() const
     return m_audioChannelsCount;
 }
 
-samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
+samples_t Mixer::process(float* outBuffer, size_t bufferSize, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -148,6 +148,10 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
     }
 
     size_t outBufferSize = samplesPerChannel * m_audioChannelsCount;
+    IF_ASSERT_FAILED(outBufferSize <= bufferSize) {
+        return 0;
+    }
+
     std::fill(outBuffer, outBuffer + outBufferSize, 0.f);
 
     if (m_writeCacheBuff.size() != outBufferSize) {
@@ -168,7 +172,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
             buffer = silent_buffer;
 
             if (channel) {
-                channel->process(buffer.data(), samplesPerChannel);
+                channel->process(buffer.data(), outBufferSize, samplesPerChannel);
             }
 
             return buffer;
@@ -182,7 +186,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
     for (auto& pair : futures) {
         const std::vector<float>& trackBuffer = pair.second.get();
 
-        mixOutputFromChannel(outBuffer, trackBuffer.data(), samplesPerChannel);
+        mixOutputFromChannel(outBuffer, bufferSize, trackBuffer.data(), samplesPerChannel);
         masterChannelSampleCount = std::max(samplesPerChannel, masterChannelSampleCount);
 
         const AuxSendsParams& auxSends = m_trackChannels.at(pair.first)->outputParams().auxSends;
@@ -196,12 +200,12 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
         return 0;
     }
 
-    processAuxChannels(outBuffer, samplesPerChannel);
+    processAuxChannels(outBuffer, outBufferSize, samplesPerChannel);
     completeOutput(outBuffer, samplesPerChannel);
 
     for (IFxProcessorPtr& fxProcessor : m_masterFxProcessors) {
         if (fxProcessor->active()) {
-            fxProcessor->process(outBuffer, samplesPerChannel);
+            fxProcessor->process(outBuffer, bufferSize, samplesPerChannel);
         }
     }
 
@@ -303,9 +307,13 @@ async::Channel<audioch_t, AudioSignalVal> Mixer::masterAudioSignalChanges() cons
     return m_audioSignalNotifier.audioSignalChanges;
 }
 
-void Mixer::mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount, gain_t signalAmount)
+void Mixer::mixOutputFromChannel(float* outBuffer, size_t outBufferSize, const float* inBuffer, unsigned int samplesCount,
+                                 gain_t signalAmount)
 {
     IF_ASSERT_FAILED(outBuffer && inBuffer) {
+        return;
+    }
+    IF_ASSERT_FAILED(outBufferSize >= m_audioChannelsCount * samplesCount) {
         return;
     }
 
@@ -373,12 +381,13 @@ void Mixer::writeTrackToAuxBuffers(const AuxSendsParams& auxSends, const float* 
 
         const AuxSendParams& auxSend = auxSends.at(auxIdx);
         if (auxSend.active && !RealIsNull(auxSend.signalAmount)) {
-            mixOutputFromChannel(m_auxBuffers.at(auxIdx).data(), trackBuffer, samplesPerChannel, auxSend.signalAmount);
+            mixOutputFromChannel(m_auxBuffers.at(auxIdx).data(),
+                                 m_auxBuffers.at(auxIdx).size(), trackBuffer, samplesPerChannel, auxSend.signalAmount);
         }
     }
 }
 
-void Mixer::processAuxChannels(float* buffer, samples_t samplesPerChannel)
+void Mixer::processAuxChannels(float* buffer, size_t bufferSize, samples_t samplesPerChannel)
 {
     IF_ASSERT_FAILED(m_auxChannels.size() == m_auxBuffers.size()) {
         return;
@@ -392,8 +401,9 @@ void Mixer::processAuxChannels(float* buffer, samples_t samplesPerChannel)
         }
 
         float* auxBuffer = m_auxBuffers.at(i).data();
-        auxChannel->process(auxBuffer, samplesPerChannel);
-        mixOutputFromChannel(buffer, auxBuffer, samplesPerChannel);
+        size_t auxBufferSize = m_auxBuffers.at(i).size();
+        auxChannel->process(auxBuffer, auxBufferSize, samplesPerChannel);
+        mixOutputFromChannel(buffer, bufferSize, auxBuffer, samplesPerChannel);
     }
 }
 

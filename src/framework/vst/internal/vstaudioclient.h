@@ -41,7 +41,7 @@ public:
     bool handleParamChange(const PluginParamInfo& param);
     void setVolumeGain(const audio::gain_t newVolumeGain);
 
-    audio::samples_t process(float* output, audio::samples_t samplesPerChannel);
+    audio::samples_t process(float* output, size_t bufferSize, audio::samples_t samplesPerChannel);
     void flush();
 
     void setBlockSize(unsigned int samples);

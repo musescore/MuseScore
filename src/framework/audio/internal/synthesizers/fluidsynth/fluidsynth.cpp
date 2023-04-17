@@ -324,9 +324,13 @@ unsigned int FluidSynth::audioChannelsCount() const
     return FLUID_AUDIO_CHANNELS_PAIR * 2;
 }
 
-samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
+samples_t FluidSynth::process(float* buffer, size_t bufferSize, samples_t samplesPerChannel)
 {
     IF_ASSERT_FAILED(samplesPerChannel > 0) {
+        return 0;
+    }
+    unsigned int channelCount = audioChannelsCount();
+    IF_ASSERT_FAILED(bufferSize >= channelCount * samplesPerChannel) {
         return 0;
     }
 
@@ -343,8 +347,6 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
     }
 
     fluid_synth_tune_notes(m_fluid->synth, 0, 0, m_tuning.size(), m_tuning.keys.data(), m_tuning.pitches.data(), true);
-
-    unsigned int channelCount = audioChannelsCount();
 
     int result = fluid_synth_write_float(m_fluid->synth, samplesPerChannel,
                                          buffer, 0, channelCount,

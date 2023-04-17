@@ -41,7 +41,7 @@ public:
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
-    audio::samples_t process(float* buffer, audio::samples_t samplesPerChannel) override;
+    audio::samples_t process(float* buffer, size_t bufferSize, audio::samples_t samplesPerChannel) override;
 
     std::string name() const override;
     audio::AudioSourceType type() const override;
@@ -62,7 +62,7 @@ protected:
 
     void handleAuditionEvents(const MuseSamplerSequencer::EventType& event);
     void setCurrentPosition(const audio::samples_t samples);
-    void extractOutputSamples(audio::samples_t samples, float* output);
+    void extractOutputSamples(audio::samples_t samples, float* output, size_t bufferSize);
 
     async::Channel<unsigned int> m_audioChannelsCountChanged;
 

@@ -54,10 +54,10 @@ public:
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
-    samples_t process(float* buffer, samples_t samplesPerChannel) override;
+    samples_t process(float* buffer, size_t bufferSize, samples_t samplesPerChannel) override;
 
 private:
-    void completeOutput(float* buffer, unsigned int samplesCount) const;
+    void completeOutput(float* buffer, size_t bufferSize, unsigned int samplesCount) const;
     void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
 
     TrackId m_trackId = -1;

@@ -108,7 +108,7 @@ async::Channel<unsigned int> EventAudioSource::audioChannelsCountChanged() const
     return m_synth->audioChannelsCountChanged();
 }
 
-samples_t EventAudioSource::process(float* buffer, samples_t samplesPerChannel)
+samples_t EventAudioSource::process(float* buffer, size_t bufferSize, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -116,7 +116,7 @@ samples_t EventAudioSource::process(float* buffer, samples_t samplesPerChannel)
         return 0;
     }
 
-    return m_synth->process(buffer, samplesPerChannel);
+    return m_synth->process(buffer, bufferSize, samplesPerChannel);
 }
 
 void EventAudioSource::seek(const msecs_t newPositionMsecs)

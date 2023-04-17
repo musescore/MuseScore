@@ -330,10 +330,14 @@ void ReverbProcessor::setActive(bool active)
     m_params.active = active;
 }
 
-void ReverbProcessor::process(float* buffer, unsigned int sampleCount)
+void ReverbProcessor::process(float* buffer, size_t bufferSize, unsigned int sampleCount)
 {
     if (m_processor._blockSize != static_cast<int>(sampleCount)) {
         setFormat(m_processor._audioChannelsCount, m_processor._sampleRate, sampleCount);
+    }
+
+    IF_ASSERT_FAILED(bufferSize >= sampleCount * m_processor._audioChannelsCount) {
+        return;
     }
 
     for (samples_t sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {

@@ -44,7 +44,7 @@ mu::async::Channel<unsigned int> SynthesizerStub::audioChannelsCountChanged() co
     return async::Channel<unsigned int>();
 }
 
-samples_t SynthesizerStub::process(float*, samples_t)
+samples_t SynthesizerStub::process(float*, size_t, samples_t)
 {
     return 0;
 }

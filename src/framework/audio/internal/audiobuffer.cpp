@@ -142,7 +142,7 @@ void AudioBuffer::forward()
     samples_t framesToReserve = DEFAULT_SIZE / 2;
 
     while (reservedFrames(nextWriteIdx, currentReadIdx) < framesToReserve) {
-        m_source->process(m_data.data() + nextWriteIdx, m_renderStep);
+        m_source->process(m_data.data() + nextWriteIdx, m_data.size() - nextWriteIdx, m_renderStep);
 
         nextWriteIdx = incrementWriteIndex(nextWriteIdx, m_renderStep);
     }
@@ -152,6 +152,7 @@ void AudioBuffer::forward()
 
 void AudioBuffer::pop(float* dest, size_t sampleCount)
 {
+    // TODO: Check buffer size
     const auto currentReadIdx = m_readIndex.load(std::memory_order_relaxed);
     const auto currentWriteIdx = m_writeIndex.load(std::memory_order_acquire);
     if (currentReadIdx == currentWriteIdx) { // empty queue

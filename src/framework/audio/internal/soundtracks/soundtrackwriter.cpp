@@ -136,7 +136,7 @@ Ret SoundTrackWriter::prepareInputBuffer()
     samples_t renderStep = config()->renderStep();
 
     while (inputBufferOffset < inputBufferMaxOffset && !m_isAborted) {
-        m_source->process(m_intermBuffer.data(), renderStep);
+        m_source->process(m_intermBuffer.data(), m_intermBuffer.size(), renderStep);
 
         size_t samplesToCopy = std::min(m_intermBuffer.size(), inputBufferMaxOffset - inputBufferOffset);
 

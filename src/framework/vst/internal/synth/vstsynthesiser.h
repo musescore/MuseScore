@@ -68,7 +68,7 @@ public:
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
-    audio::samples_t process(float* buffer, audio::samples_t samplesPerChannel) override;
+    audio::samples_t process(float* buffer, size_t bufferSize, audio::samples_t samplesPerChannel) override;
 
 private:
     Ret init();

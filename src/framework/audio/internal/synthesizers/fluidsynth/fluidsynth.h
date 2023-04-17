@@ -63,7 +63,7 @@ public:
     void revokePlayingNotes() override; // all channels
 
     unsigned int audioChannelsCount() const override;
-    samples_t process(float* buffer, samples_t samplesPerChannel) override;
+    samples_t process(float* buffer, size_t bufferSize, samples_t samplesPerChannel) override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
     void setSampleRate(unsigned int sampleRate) override;
 

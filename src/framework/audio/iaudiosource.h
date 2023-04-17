@@ -48,7 +48,7 @@ public:
     virtual async::Channel<unsigned int> audioChannelsCountChanged() const = 0;
 
     //! move buffer forward for sampleCount samples
-    virtual samples_t process(float* buffer, samples_t samplesPerChannel) = 0;
+    virtual samples_t process(float* buffer, size_t bufferSize, samples_t samplesPerChannel) = 0;
 };
 
 using IAudioSourcePtr = std::shared_ptr<IAudioSource>;

@@ -163,18 +163,21 @@ async::Channel<unsigned int> MixerChannel::audioChannelsCountChanged() const
     return m_audioSource ? m_audioSource->audioChannelsCountChanged() : async::Channel<unsigned int>();
 }
 
-samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
+samples_t MixerChannel::process(float* buffer, size_t bufferSize, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
     samples_t processedSamplesCount = samplesPerChannel;
 
     if (m_audioSource) {
-        processedSamplesCount = m_audioSource->process(buffer, samplesPerChannel);
+        processedSamplesCount = m_audioSource->process(buffer, bufferSize, samplesPerChannel);
     }
 
     if (processedSamplesCount == 0 || m_params.muted) {
         unsigned int channelsCount = audioChannelsCount();
+        IF_ASSERT_FAILED(bufferSize >= samplesPerChannel * channelsCount) {
+            return 0;
+        }
         std::fill(buffer, buffer + samplesPerChannel * channelsCount, 0.f);
 
         for (audioch_t audioChNum = 0; audioChNum < channelsCount; ++audioChNum) {
@@ -188,17 +191,21 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
         if (!fx->active()) {
             continue;
         }
-        fx->process(buffer, samplesPerChannel);
+        fx->process(buffer, bufferSize, samplesPerChannel);
     }
 
-    completeOutput(buffer, samplesPerChannel);
+    completeOutput(buffer, bufferSize, samplesPerChannel);
 
     return processedSamplesCount;
 }
 
-void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount) const
+void MixerChannel::completeOutput(float* buffer, size_t bufferSize, unsigned int samplesCount) const
 {
     unsigned int channelsCount = audioChannelsCount();
+    IF_ASSERT_FAILED(bufferSize >= channelsCount * samplesCount) {
+        return;
+    }
+
     float volume = dsp::linearFromDecibels(m_params.volume);
     float totalSquaredSum = 0.f;
 

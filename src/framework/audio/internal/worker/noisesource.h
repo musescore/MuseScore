@@ -38,7 +38,7 @@ public:
     void setType(Type type);
     unsigned int audioChannelsCount() const override;
 
-    samples_t process(float* buffer, samples_t samplesPerChannel) override;
+    samples_t process(float* buffer, size_t bufferSize, samples_t samplesPerChannel) override;
 
 private:
     float pinkFilter(float white);
