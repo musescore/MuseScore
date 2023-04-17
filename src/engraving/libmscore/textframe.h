@@ -36,6 +36,8 @@ class Text;
 class TBox : public VBox
 {
     OBJECT_ALLOCATOR(engraving, TBox)
+    DECLARE_CLASSOF(ElementType::TBOX)
+
 public:
     TBox(System* parent);
     TBox(const TBox&);

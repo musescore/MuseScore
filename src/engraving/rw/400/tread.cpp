@@ -23,6 +23,7 @@
 
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
+#include "../../infrastructure/rtti.h"
 
 #include "../../libmscore/score.h"
 #include "../../libmscore/masterscore.h"
@@ -73,6 +74,7 @@
 #include "../../libmscore/bracket.h"
 #include "../../libmscore/breath.h"
 #include "../../libmscore/note.h"
+#include "../../libmscore/noteline.h"
 #include "../../libmscore/spanner.h"
 #include "../../libmscore/fingering.h"
 #include "../../libmscore/notedot.h"
@@ -82,6 +84,7 @@
 #include "../../libmscore/stem.h"
 #include "../../libmscore/stemslash.h"
 #include "../../libmscore/hook.h"
+#include "../../libmscore/page.h"
 #include "../../libmscore/tremolo.h"
 #include "../../libmscore/clef.h"
 #include "../../libmscore/glissando.h"
@@ -113,6 +116,7 @@
 #include "../../libmscore/palmmute.h"
 #include "../../libmscore/segment.h"
 #include "../../libmscore/part.h"
+#include "../../libmscore/whammybar.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -124,83 +128,42 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
 
+using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
+                                 BagpipeEmbellishment, BarLine, Beam, HBox, VBox, FBox, TBox, Bracket, Breath,
+                                 Chord, ChordLine, Clef,
+                                 Dynamic,
+                                 Fermata, FiguredBass, Fingering, FretDiagram,
+                                 Glissando, GradualTempoChange,
+                                 Hairpin, Harmony, Hook,
+                                 Image, InstrumentChange,
+                                 Jump,
+                                 KeySig,
+                                 LayoutBreak, LedgerLine, LetRing, Lyrics,
+                                 Marker, MeasureNumber, MeasureRepeat, MMRest, MMRestRange,
+                                 Note, NoteDot, NoteLine,
+                                 Ottava,
+                                 PalmMute, Pedal, PlayTechAnnotation, RehearsalMark, Rest,
+                                 Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
+                                 Symbol, System, SystemDivider, SystemText,
+                                 TempoText, Text, TextLine, Tie, TimeSig, Tremolo, TremoloBar, Trill, Tuplet,
+                                 Vibrato, Volta,
+                                 WhammyBar>;
+
 template<typename T>
-static bool try_read(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
+bool read_visit(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
 {
-    T* t = dynamic_cast<T*>(el);
-    if (!t) {
-        return false;
+    if (T::classof(item)) {
+        TRead::read(static_cast<T*>(item), xml, ctx);
+        return true;
     }
-    TRead::read(t, xml, ctx);
-    return true;
+    return false;
 }
 
-void TRead::readItem(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
+DECLARE_VISITER(read)
+
+void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
 {
-    if (try_read<Sticking>(el, xml, ctx)) {
-    } else if (try_read<HBox>(el, xml, ctx)) {
-    } else if (try_read<VBox>(el, xml, ctx)) {
-    } else if (try_read<TBox>(el, xml, ctx)) {
-    } else if (try_read<FBox>(el, xml, ctx)) {
-    } else if (try_read<Accidental>(el, xml, ctx)) {
-    } else if (try_read<ActionIcon>(el, xml, ctx)) {
-    } else if (try_read<Ambitus>(el, xml, ctx)) {
-    } else if (try_read<Arpeggio>(el, xml, ctx)) {
-    } else if (try_read<Articulation>(el, xml, ctx)) {
-    } else if (try_read<BagpipeEmbellishment>(el, xml, ctx)) {
-    } else if (try_read<BarLine>(el, xml, ctx)) {
-    } else if (try_read<Bend>(el, xml, ctx)) {
-    } else if (try_read<Bracket>(el, xml, ctx)) {
-    } else if (try_read<Breath>(el, xml, ctx)) {
-    } else if (try_read<Chord>(el, xml, ctx)) {
-    } else if (try_read<ChordLine>(el, xml, ctx)) {
-    } else if (try_read<Clef>(el, xml, ctx)) {
-    } else if (try_read<Dynamic>(el, xml, ctx)) {
-    } else if (try_read<Fermata>(el, xml, ctx)) {
-    } else if (try_read<FiguredBass>(el, xml, ctx)) {
-    } else if (try_read<Fingering>(el, xml, ctx)) {
-    } else if (try_read<FretDiagram>(el, xml, ctx)) {
-    } else if (try_read<Glissando>(el, xml, ctx)) {
-    } else if (try_read<GradualTempoChange>(el, xml, ctx)) {
-    } else if (try_read<Hairpin>(el, xml, ctx)) {
-    } else if (try_read<Harmony>(el, xml, ctx)) {
-    } else if (try_read<Image>(el, xml, ctx)) {
-    } else if (try_read<InstrumentChange>(el, xml, ctx)) {
-    } else if (try_read<Jump>(el, xml, ctx)) {
-    } else if (try_read<KeySig>(el, xml, ctx)) {
-    } else if (try_read<LayoutBreak>(el, xml, ctx)) {
-    } else if (try_read<LetRing>(el, xml, ctx)) {
-    } else if (try_read<Marker>(el, xml, ctx)) {
-    } else if (try_read<MeasureNumber>(el, xml, ctx)) {
-    } else if (try_read<MeasureRepeat>(el, xml, ctx)) {
-    } else if (try_read<Note>(el, xml, ctx)) {
-    } else if (try_read<Ottava>(el, xml, ctx)) {
-    } else if (try_read<PalmMute>(el, xml, ctx)) {
-    } else if (try_read<PlayTechAnnotation>(el, xml, ctx)) {
-    } else if (try_read<Pedal>(el, xml, ctx)) {
-    } else if (try_read<RehearsalMark>(el, xml, ctx)) {
-    } else if (try_read<Rest>(el, xml, ctx)) {
-    } else if (try_read<Slur>(el, xml, ctx)) {
-    } else if (try_read<Spacer>(el, xml, ctx)) {
-    } else if (try_read<StaffState>(el, xml, ctx)) {
-    } else if (try_read<StaffText>(el, xml, ctx)) {
-    } else if (try_read<StaffTypeChange>(el, xml, ctx)) {
-    } else if (try_read<Symbol>(el, xml, ctx)) {
-    } else if (try_read<SystemText>(el, xml, ctx)) {
-    } else if (try_read<Text>(el, xml, ctx)) {
-    } else if (try_read<TextLine>(el, xml, ctx)) {
-    } else if (try_read<TempoText>(el, xml, ctx)) {
-    } else if (try_read<Tie>(el, xml, ctx)) {
-    } else if (try_read<TimeSig>(el, xml, ctx)) {
-    } else if (try_read<Tremolo>(el, xml, ctx)) {
-    } else if (try_read<TremoloBar>(el, xml, ctx)) {
-    } else if (try_read<Trill>(el, xml, ctx)) {
-    } else if (try_read<Vibrato>(el, xml, ctx)) {
-    } else if (try_read<Volta>(el, xml, ctx)) {
-    } else {
-        LOGE("Unhandled element type %s", el->typeName());
-        UNREACHABLE;
-    }
+    read_visiter(ReadTypes {}, item, xml, ctx);
 }
 
 bool TRead::readProperty(EngravingItem* item, const AsciiStringView& tag, XmlReader& xml, ReadContext& ctx, Pid pid)

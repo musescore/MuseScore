@@ -37,6 +37,8 @@ class LyricsLine;
 class Lyrics final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, Lyrics)
+    DECLARE_CLASSOF(ElementType::LYRICS)
+
 public:
 
     // MELISMA FIRST UNDERSCORE:

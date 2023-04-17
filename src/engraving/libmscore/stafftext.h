@@ -33,6 +33,7 @@ namespace mu::engraving {
 class StaffText final : public StaffTextBase
 {
     OBJECT_ALLOCATOR(engraving, StaffText)
+    DECLARE_CLASSOF(ElementType::STAFF_TEXT)
 
     PropertyValue propertyDefault(Pid id) const override;
 

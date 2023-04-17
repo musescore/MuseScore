@@ -45,6 +45,7 @@ enum class SpacerType : char {
 class Spacer final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Spacer)
+    DECLARE_CLASSOF(ElementType::SPACER)
 
     SpacerType _spacerType;
     Millimetre _gap;

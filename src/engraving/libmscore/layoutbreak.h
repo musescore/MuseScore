@@ -36,6 +36,8 @@ class Factory;
 class LayoutBreak final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, LayoutBreak)
+    DECLARE_CLASSOF(ElementType::LAYOUT_BREAK)
+
 public:
 
     void setParent(MeasureBase* parent);

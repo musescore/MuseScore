@@ -57,6 +57,7 @@ public:
 class TextLine final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, TextLine)
+    DECLARE_CLASSOF(ElementType::TEXTLINE)
 
     Sid getTextLinePos(bool above) const;
     Sid getPropertyStyle(Pid) const override;

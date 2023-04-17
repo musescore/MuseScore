@@ -78,6 +78,7 @@ public:
 class Tie final : public SlurTie
 {
     OBJECT_ALLOCATOR(engraving, Tie)
+    DECLARE_CLASSOF(ElementType::TIE)
 
     static Note* editStartNote;
     static Note* editEndNote;

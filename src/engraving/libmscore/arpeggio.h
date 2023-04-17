@@ -36,6 +36,7 @@ class Chord;
 class Arpeggio final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Arpeggio)
+    DECLARE_CLASSOF(ElementType::ARPEGGIO)
 
     ArpeggioType _arpeggioType;
     double _userLen1;

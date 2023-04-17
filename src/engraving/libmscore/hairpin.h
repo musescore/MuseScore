@@ -89,6 +89,7 @@ public:
 class Hairpin final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, Hairpin)
+    DECLARE_CLASSOF(ElementType::HAIRPIN)
 
     HairpinType _hairpinType { HairpinType::INVALID };
     int _veloChange;

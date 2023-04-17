@@ -40,6 +40,7 @@ class Chord;
 class LedgerLine final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, LedgerLine)
+    DECLARE_CLASSOF(ElementType::LEDGER_LINE)
 
     double _width;
     double _len;

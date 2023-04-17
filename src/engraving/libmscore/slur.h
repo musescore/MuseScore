@@ -73,6 +73,7 @@ public:
 class Slur final : public SlurTie
 {
     OBJECT_ALLOCATOR(engraving, Slur)
+    DECLARE_CLASSOF(ElementType::SLUR)
 
     void slurPosChord(SlurPos*);
     int _sourceStemArrangement = -1;

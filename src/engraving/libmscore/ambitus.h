@@ -41,6 +41,7 @@ class Factory;
 class Ambitus final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Ambitus)
+    DECLARE_CLASSOF(ElementType::AMBITUS)
 
     NoteHeadGroup _noteHeadGroup;
     NoteHeadType _noteHeadType;

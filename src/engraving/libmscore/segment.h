@@ -84,6 +84,7 @@ struct Spring
 class Segment final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Segment)
+    DECLARE_CLASSOF(ElementType::SEGMENT)
 
     SegmentType _segmentType { SegmentType::Invalid };
     Fraction _tick;    // { Fraction(0, 1) };

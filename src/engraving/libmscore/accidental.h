@@ -71,6 +71,7 @@ struct SymElement {
 class Accidental final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Accidental)
+    DECLARE_CLASSOF(ElementType::ACCIDENTAL)
 
     std::vector<SymElement> el;
     AccidentalType _accidentalType { AccidentalType::NONE };

@@ -45,6 +45,7 @@ enum class TupletBracketType : char;
 class Tuplet final : public DurationElement
 {
     OBJECT_ALLOCATOR(engraving, Tuplet)
+    DECLARE_CLASSOF(ElementType::TUPLET)
 
     std::vector<DurationElement*> _elements;
     DirectionV _direction;

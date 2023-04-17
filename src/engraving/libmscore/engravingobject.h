@@ -33,6 +33,8 @@
 #include "types/propertyvalue.h"
 #include "types/types.h"
 
+#include "../infrastructure/rtti.h"
+
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
 

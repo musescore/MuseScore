@@ -38,6 +38,8 @@ namespace mu::engraving {
 class TempoText final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, TempoText)
+    DECLARE_CLASSOF(ElementType::TEMPO_TEXT)
+
 public:
     TempoText(Segment* parent);
 

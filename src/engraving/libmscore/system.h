@@ -94,6 +94,7 @@ public:
 class System final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, System)
+    DECLARE_CLASSOF(ElementType::SYSTEM)
 
     SystemDivider* _systemDividerLeft    { nullptr };       // to the next system
     SystemDivider* _systemDividerRight   { nullptr };

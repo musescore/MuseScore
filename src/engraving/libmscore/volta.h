@@ -57,6 +57,7 @@ public:
 class Volta final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, Volta)
+    DECLARE_CLASSOF(ElementType::VOLTA)
 
     std::vector<int> _endings;
 

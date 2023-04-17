@@ -55,6 +55,7 @@ public:
 class Pedal final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, Pedal)
+    DECLARE_CLASSOF(ElementType::PEDAL)
 
     Sid getPropertyStyle(Pid) const override;
 

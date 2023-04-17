@@ -247,6 +247,7 @@ struct FiguredBassFont {
 class FiguredBass final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, FiguredBass)
+    DECLARE_CLASSOF(ElementType::FIGURED_BASS)
 
     std::vector<FiguredBassItem*> m_items;        // the individual lines of the F.B.
     std::vector<double> _lineLengths;                // lengths of duration indicator lines (in raster units)
