@@ -2435,6 +2435,7 @@ void Score::deleteItem(EngravingItem* el)
         }
         if ((el->voice() != 0) && !rest->tuplet()) {
             rest->undoChangeProperty(Pid::GAP, true);
+            rest->undoChangeProperty(Pid::BEAM_MODE, BeamMode::AUTO);
             for (EngravingObject* r : el->linkList()) {
                 Rest* rr = toRest(r);
                 if (rr->track() % VOICES) {
