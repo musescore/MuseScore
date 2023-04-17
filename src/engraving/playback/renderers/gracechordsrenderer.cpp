@@ -71,13 +71,17 @@ void GraceChordsRenderer::renderPrependedGraceNotes(const Chord* chord, const Re
 {
     const std::vector<Chord*>& graceChords = chord->graceNotesBefore();
 
-    duration_t actualGraceNotesDuration = graceNotesMaxAvailableDuration(type, context, graceChords.size());
+    duration_t availableGraceNotesDuration = graceNotesMaxAvailableDuration(type, context, graceChords.size());
+    duration_t accumulatedGraceNotesDuration = graceNotesTotalDuration(graceChords, context);
+    duration_t actualGraceNotesDuration = std::min(availableGraceNotesDuration, accumulatedGraceNotesDuration);
+    double durationFactor = double(actualGraceNotesDuration) / accumulatedGraceNotesDuration;
+
     timestamp_t graceNotesTimestampFrom = graceNotesStartTimestamp(type, actualGraceNotesDuration, context.nominalTimestamp);
 
     timestamp_t principalNotesTimestampFrom = principalNotesStartTimestamp(type, actualGraceNotesDuration, context.nominalTimestamp);
     duration_t totalPrincipalNotesDuration = principalNotesDuration(actualGraceNotesDuration, context.nominalDuration);
 
-    buildGraceNoteEvents(graceChords, context, type, graceNotesTimestampFrom, actualGraceNotesDuration, result);
+    buildGraceNoteEvents(graceChords, context, type, graceNotesTimestampFrom, durationFactor, result);
 
     buildPrincipalNoteEvents(chord, context, type, principalNotesTimestampFrom, totalPrincipalNotesDuration, result);
 }
@@ -88,7 +92,11 @@ void GraceChordsRenderer::renderAppendedGraceNotes(const Chord* chord, const Ren
 {
     const std::vector<Chord*>& graceChords = chord->graceNotesAfter();
 
-    duration_t actualGraceNotesDuration = graceNotesMaxAvailableDuration(type, context, graceChords.size());
+    duration_t availableGraceNotesDuration = graceNotesMaxAvailableDuration(type, context, graceChords.size());
+    duration_t accumulatedGraceNotesDuration = graceNotesTotalDuration(graceChords, context);
+    duration_t actualGraceNotesDuration = std::min(availableGraceNotesDuration, accumulatedGraceNotesDuration);
+    double durationFactor = double(actualGraceNotesDuration) / accumulatedGraceNotesDuration;
+
     timestamp_t graceNotesTimestampFrom = graceNotesStartTimestamp(type, actualGraceNotesDuration,
                                                                    context.nominalTimestamp + context.nominalDuration);
 
@@ -97,7 +105,7 @@ void GraceChordsRenderer::renderAppendedGraceNotes(const Chord* chord, const Ren
 
     buildPrincipalNoteEvents(chord, context, type, principalNotesTimestampFrom, totalPrincipalNotesDuration, result);
 
-    buildGraceNoteEvents(graceChords, context, type, graceNotesTimestampFrom, actualGraceNotesDuration, result);
+    buildGraceNoteEvents(graceChords, context, type, graceNotesTimestampFrom, durationFactor, result);
 }
 
 duration_t GraceChordsRenderer::graceNotesTotalDuration(const std::vector<Chord*>& graceChords, const RenderingContext& context)
@@ -111,37 +119,33 @@ duration_t GraceChordsRenderer::graceNotesTotalDuration(const std::vector<Chord*
     return result;
 }
 
-float GraceChordsRenderer::graceNotesDurationRatio(const mpe::duration_t totalDuration, const duration_t maxAvailableDuration)
-{
-    float result = 1.f;
-
-    if (totalDuration > maxAvailableDuration) {
-        result = maxAvailableDuration / static_cast<float>(totalDuration);
-    }
-
-    return result;
-}
-
 void GraceChordsRenderer::buildGraceNoteEvents(const std::vector<Chord*>& graceChords, const RenderingContext& context,
                                                const ArticulationType type,
                                                const timestamp_t timestampFrom,
-                                               const duration_t availableDuration,
+                                               double durationFactor,
                                                mpe::PlaybackEventList& result)
 {
-    for (size_t i = 0; i < graceChords.size(); ++i) {
-        for (const Note* graceNote : graceChords[i]->notes()) {
+    timestamp_t timestamp = timestampFrom;
+
+    for (const Chord* graceChord : graceChords) {
+        duration_t duration
+            = RealRound(durationFactor * durationFromTicks(context.beatsPerSecond.val, graceChord->durationTypeTicks().ticks()), 0);
+
+        for (const Note* graceNote : graceChord->notes()) {
             if (!isNotePlayable(graceNote, context.commonArticulations)) {
                 continue;
             }
 
             NominalNoteCtx noteCtx(graceNote, context);
-            noteCtx.duration = RealRound(availableDuration / static_cast<float>(graceChords.size()), 0);
-            noteCtx.timestamp = timestampFrom + i * noteCtx.duration;
+            noteCtx.duration = duration;
+            noteCtx.timestamp = timestamp;
 
             updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.chordCtx.commonArticulations);
 
             result.emplace_back(buildNoteEvent(std::move(noteCtx)));
         }
+
+        timestamp += duration;
     }
 }
 

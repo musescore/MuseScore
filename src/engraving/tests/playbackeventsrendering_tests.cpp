@@ -1277,15 +1277,15 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
     int expectedSubNotesCount = 3;
 
     std::vector<duration_t> expectedDurations = {
-        QUAVER_NOTE_DURATION,
+        QUARTER_NOTE_DURATION - SEMI_QUAVER_NOTE_DURATION - DEMI_SEMI_QUAVER_NOTE_DURATION,
         SEMI_QUAVER_NOTE_DURATION,
-        SEMI_QUAVER_NOTE_DURATION
+        DEMI_SEMI_QUAVER_NOTE_DURATION
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
         0,
-        QUAVER_NOTE_DURATION,
-        QUAVER_NOTE_DURATION + SEMI_QUAVER_NOTE_DURATION
+        QUARTER_NOTE_DURATION - SEMI_QUAVER_NOTE_DURATION - DEMI_SEMI_QUAVER_NOTE_DURATION,
+        QUARTER_NOTE_DURATION - DEMI_SEMI_QUAVER_NOTE_DURATION
     };
 
     std::vector<pitch_level_t> expectedPitches = {

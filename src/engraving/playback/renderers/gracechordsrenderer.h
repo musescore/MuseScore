@@ -46,11 +46,10 @@ private:
                                          mpe::PlaybackEventList& result);
 
     static mpe::duration_t graceNotesTotalDuration(const std::vector<Chord*>& graceChords, const RenderingContext& context);
-    static float graceNotesDurationRatio(const mpe::duration_t totalDuration, const mpe::duration_t maxAvailableDuration);
 
     static void buildGraceNoteEvents(const std::vector<Chord*>& graceChords, const RenderingContext& context,
-                                     const mpe::ArticulationType type, const mpe::timestamp_t timestampFrom,
-                                     const mpe::duration_t availableDuration, mpe::PlaybackEventList& result);
+                                     const mpe::ArticulationType type, const mpe::timestamp_t timestampFrom, double durationFactor,
+                                     mpe::PlaybackEventList& result);
 
     static void buildPrincipalNoteEvents(const Chord* chord, const RenderingContext& ctx, const mpe::ArticulationType type,
                                          const mpe::timestamp_t timestamp, const mpe::duration_t duration, mpe::PlaybackEventList& result);
