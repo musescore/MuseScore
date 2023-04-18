@@ -48,6 +48,7 @@
 #include "libmscore/fingering.h"
 #include "libmscore/fret.h"
 #include "libmscore/glissando.h"
+#include "libmscore/gradualtempochange.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/harmony.h"
 #include "libmscore/instrchange.h"
@@ -2112,13 +2113,12 @@ static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
     gcl.clear();
 }
 
-static bool canAddTempoText(const TempoMap* const tempoMap, const int tick)
+static bool canAddTempoText(const TempoTextMap& tempoTextMap, const int tick, const QString text)
 {
-    if (!mu::contains(*tempoMap, tick)) {
+    if (!mu::contains(tempoTextMap, tick)) {
         return true;
     }
-
-    return tempoMap->tempo(tick) == Constants::DEFAULT_TEMPO;
+    return !mu::contains(tempoTextMap.at(tick), text);
 }
 
 //---------------------------------------------------------
@@ -2194,7 +2194,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
             attributes(partId, measure, time + mTime);
         } else if (_e.name() == "direction") {
             MusicXMLParserDirection dir(_e, _score, _pass1, *this, _logger);
-            dir.direction(partId, measure, time + mTime, _divs, _spanners, _tempoLineManager);
+            dir.direction(partId, measure, time + mTime, _divs, _spanners, _tempoLineManager, _tempoTextMap);
         } else if (_e.name() == "figured-bass") {
             FiguredBass* fb = figuredBass();
             if (fb) {
@@ -2265,17 +2265,17 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
                 // create an invisible default TempoText
                 // to prevent duplicates, only if none is present yet
                 Fraction tick = time + mTime;
-
-                if (canAddTempoText(_score->tempomap(), tick.ticks())) {
-                    double tpo = tempo.toDouble() / 60;
+                double tpo = tempo.toDouble() / 60;
+                QString text = QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER)), tempo);
+                if (canAddTempoText(_tempoTextMap, tick.ticks(), text)) {
                     TempoText* t = Factory::createTempoText(_score->dummy()->segment());
-                    t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER)),
-                                                         tempo));
+                    t->setXmlText(text);
                     t->setVisible(false);
                     t->setTempo(tpo);
                     t->setFollowText(true);
 
                     _score->setTempo(tick, tpo);
+                    _tempoTextMap[tick.ticks()].insert(text);
 
                     addElemOffset(t, _pass1.trackForPart(partId), "above", measure, tick);
                 }
@@ -2681,7 +2681,8 @@ void MusicXMLParserDirection::direction(const QString& partId,
                                         const Fraction& tick,
                                         const int divisions,
                                         MusicXmlSpannerMap& spanners,
-                                        TempoLineManager& tempoLine)
+                                        TempoLineManager& tempoLine,
+                                        TempoTextMap& tempoTextMap)
 {
     //LOGD("direction tick %s", qPrintable(tick.print()));
 
@@ -2742,13 +2743,15 @@ void MusicXMLParserDirection::direction(const QString& partId,
     if (_wordsText != "" || _rehearsalText != "" || _metroText != "" || _tempoText != "") {
         TextBase* t = 0;
         if (_tpoSound > 0.1) {
-            if (canAddTempoText(_score->tempomap(), tick.ticks())) {
+            QString text = _tempoText + _metroText;
+            if (canAddTempoText(tempoTextMap, tick.ticks(), text)) {
                 _tpoSound /= 60;
                 t = Factory::createTempoText(_score->dummy()->segment());
-                t->setXmlText(_tempoText + _metroText);
+                t->setXmlText(text);
                 ((TempoText*)t)->setTempo(_tpoSound);
                 ((TempoText*)t)->setFollowText(true);
                 _score->setTempo(tick, _tpoSound);
+                tempoTextMap[tick.ticks()].insert(text);
                 if (gtc) {
                     float originalTempo = _score->tempo(gtc->tick()).val;
                     double stretchedTempo = _tpoSound / originalTempo;
@@ -2765,63 +2768,65 @@ void MusicXMLParserDirection::direction(const QString& partId,
         } else if (_tempoText != "") {
             // TEMPO TEXT INFERENCE
             // if we have a tempo text without a metronome, we can infer the bpm etc by the text
-            if (canAddTempoText(_score->tempomap(), tick.ticks())) {
-                TempoInformation ti = getTempoInformationFromString(_tempoText);
-                if (ti.text != "") {
-                    // we have a tempo text without a metronome. use the musescore default bpm
-                    t = Factory::createTempoText(_score->dummy()->segment());
-                    t->setXmlText(_tempoText);
-                    ((TempoText*)t)->setFollowText(false);
-                    double tempo = ti.changeTo;
-                    if (ti.isTempo1) {
-                        if (tempoLine.currentTick() > Fraction()) {
-                            tempo = _score->tempo(Fraction(0, 1)).val;
-                        } else {
-                            tempo = 2.0; // tempo 1 at the very beginning of the score?? q=120 i guess
-                        }
-                        ((TempoText*)t)->setTempo(tempo);
-                    } else if (ti.isRelative) {
-                        // set relative tempo based on current tempo on this tick
-                        tempo = _score->tempo(tempoLine.currentTick()).val;
-                        tempo *= ti.changeTo;
-                        ((TempoText*)t)->setTempo(tempo);
-                    } else if (ti.isAtempo) {
-                        if (gtc) {
-                            // a gradual tempo line just ended, so we use its saved "before" tempo
-                            tempo = _score->tempo(gtc->tick()).val;
-                        } else if (tick > Fraction()) {
-                            // no gradual tempo line, so we use the current tempo
-                            tempo = _score->tempo(tempoLine.currentTick()).val;
-                        } else {
-                            // there is an 'a tempo' marking as the first tempo of a score. mysterious!
-                            // for now, I'm just going to default tempo 120bpm
-                            tempo = 2.0;
-                            ((TempoText*)t)->setFollowText(true); // maybe?
-                        }
-                        ((TempoText*)t)->setTempo(tempo);
+            TempoInformation ti = getTempoInformationFromString(_tempoText);
+            if (ti.text != "" && canAddTempoText(tempoTextMap, tick.ticks(), _tempoText)) {
+                // we have a tempo text without a metronome. use the musescore default bpm
+                t = Factory::createTempoText(_score->dummy()->segment());
+                t->setXmlText(_tempoText);
+                tempoTextMap[tick.ticks()].insert(_tempoText);
+                ((TempoText*)t)->setFollowText(false);
+                double tempo = ti.changeTo;
+                if (ti.isTempo1) {
+                    if (tempoLine.currentTick() > Fraction()) {
+                        tempo = _score->tempo(Fraction(0, 1)).val;
                     } else {
-                        // this is just a straight up bpm we will apply here
-                        tempo /= 60.0;
-                        ((TempoText*)t)->setTempo(tempo);
+                        tempo = 2.0; // tempo 1 at the very beginning of the score?? q=120 i guess
                     }
-                    _score->setTempo(tick, tempo);
+                    ((TempoText*)t)->setTempo(tempo);
+                } else if (ti.isRelative) {
+                    // set relative tempo based on current tempo on this tick
+                    tempo = _score->tempo(tempoLine.currentTick()).val;
+                    tempo *= ti.changeTo;
+                    ((TempoText*)t)->setTempo(tempo);
+                } else if (ti.isAtempo) {
                     if (gtc) {
-                        if (!ti.isAtempo) {
-                            float stretchedTempo = tempo / _score->tempo(gtc->tick()).val;
-                            if ((stretchedTempo < 1.0) == (gtc->tempoChangeFactor() < 1.0)) {
-                                // we only want to stretch the tempo as long as it's going in the same direction
-                                // i.e. q=120 rall___ q=240 should not make rall suddenly speed up
-                                gtc->setProperty(Pid::TEMPO_CHANGE_FACTOR, stretchedTempo);
-                            }
-                        }
-                        _score->addElement(gtc);
-                        tempoLine.added(); // clear finishedGTC in the manager, we're done with it
-                        gtc = nullptr;
+                        // a gradual tempo line just ended, so we use its saved "before" tempo
+                        tempo = _score->tempo(gtc->tick()).val;
+                    } else if (tick > Fraction()) {
+                        // no gradual tempo line, so we use the current tempo
+                        tempo = _score->tempo(tempoLine.currentTick()).val;
+                    } else {
+                        // there is an 'a tempo' marking as the first tempo of a score. mysterious!
+                        // for now, I'm just going to default tempo 120bpm
+                        tempo = 2.0;
+                        ((TempoText*)t)->setFollowText(true); // maybe?
                     }
+                    ((TempoText*)t)->setTempo(tempo);
+                } else {
+                    // this is just a straight up bpm we will apply here
+                    tempo /= 60.0;
+                    ((TempoText*)t)->setTempo(tempo);
+                }
+                _score->setTempo(tick, tempo);
+                if (gtc) {
+                    if (!ti.isAtempo) {
+                        float stretchedTempo = tempo / _score->tempo(gtc->tick()).val;
+                        if ((stretchedTempo < 1.0) == (gtc->tempoChangeFactor() < 1.0)) {
+                            // we only want to stretch the tempo as long as it's going in the same direction
+                            // i.e. q=120 rall___ q=240 should not make rall suddenly speed up
+                            gtc->setProperty(Pid::TEMPO_CHANGE_FACTOR, stretchedTempo);
+                        }
+                    }
+                    _score->addElement(gtc);
+                    tempoLine.added(); // clear finishedGTC in the manager, we're done with it
+                    gtc = nullptr;
                 }
             }
         } else {
-            if (_wordsText != "" || _metroText != "") {
+            if (_metroText != "" || _wordsText != "") {
+                // the possibility exists that this is a metronome marking with no associated <sound> element,
+                // which couldn't be inferred by metronome()
+                // handle this later, and for now just create staff text
                 t = Factory::createStaffText(_score->dummy()->segment());
                 t->setXmlText(_wordsText + _metroText);
             } else {
@@ -2853,12 +2858,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
     } else if (_tpoSound > 0) {
         // direction without text but with sound tempo="..."
         // create an invisible default TempoText
-
-        if (canAddTempoText(_score->tempomap(), tick.ticks())) {
+        double tpo = _tpoSound / 60;
+        QString text = QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER))).arg(_tpoSound);
+        if (canAddTempoText(tempoTextMap, tick.ticks(), text)) {
             double tpo = _tpoSound / 60;
             TempoText* t = Factory::createTempoText(_score->dummy()->segment());
-            t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER))).arg(
-                              _tpoSound));
+            t->setXmlText(text);
+            tempoTextMap[tick.ticks()].insert(text);
             t->setVisible(false);
             t->setTempo(tpo);
             t->setFollowText(true);

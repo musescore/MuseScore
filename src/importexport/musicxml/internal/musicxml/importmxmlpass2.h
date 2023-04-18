@@ -197,6 +197,7 @@ using OttavasStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using HairpinsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerSet = std::set<Spanner*>;
+using TempoTextMap = std::map<int, std::set<QString> >;
 
 class TempoLineManager
 {
@@ -390,6 +391,8 @@ private:
     size_t _nstaves;                              ///< Number of staves in current part
     std::vector<int> _measureRepeatNumMeasures;
     std::vector<int> _measureRepeatCount;
+
+    TempoTextMap _tempoTextMap;
 };
 
 struct TempoInformation
@@ -456,7 +459,7 @@ public:
     MusicXMLParserDirection(QXmlStreamReader& e, Score* score, const MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2,
                             MxmlLogger* logger);
     void direction(const QString& partId, Measure* measure, const Fraction& tick, const int divisions, MusicXmlSpannerMap& spanners,
-                   TempoLineManager& tempoLine);
+                   TempoLineManager& tempoLine, TempoTextMap& tempoTextMap);
 
 private:
     QXmlStreamReader& _e;
