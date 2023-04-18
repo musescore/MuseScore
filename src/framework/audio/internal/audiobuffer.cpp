@@ -24,7 +24,7 @@
 #include "log.h"
 #include "audiosanitizer.h"
 
-#include<algorithm>
+#include <algorithm>
 
 using namespace mu::audio;
 

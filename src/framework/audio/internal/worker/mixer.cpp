@@ -156,9 +156,13 @@ samples_t Mixer::process(float* outBuffer, size_t bufferSize, samples_t samplesP
 
     std::fill(outBuffer, outBuffer + outBufferSize, 0.f);
 
-    if (m_writeCacheBuff.size() != outBufferSize) {
+    // Use 2 channels in between because fx assumes that
+    const audioch_t intermediateChannels = 2;
+    const size_t writeCacheSize = samplesPerChannel * intermediateChannels;
+    if (m_writeCacheBuff.size() != writeCacheSize) {
         m_writeCacheBuff.resize(outBufferSize, 0.f);
     }
+    std::fill(m_writeCacheBuff.begin(), m_writeCacheBuff.end(), 0.f);
 
     samples_t masterChannelSampleCount = 0;
 
@@ -192,7 +196,8 @@ samples_t Mixer::process(float* outBuffer, size_t bufferSize, samples_t samplesP
         const std::vector<float>& trackBuffer = pair.second.first.get();
         audioch_t trackAudioChannels = pair.second.second;
 
-        mixOutputFromChannel(outBuffer, bufferSize, m_audioChannelsCount, trackBuffer.data(), samplesPerChannel, trackAudioChannels);
+        mixOutputFromChannel(m_writeCacheBuff.data(), writeCacheSize, intermediateChannels,
+                             trackBuffer.data(), samplesPerChannel, trackAudioChannels);
         masterChannelSampleCount = std::max(samplesPerChannel, masterChannelSampleCount);
 
         const AuxSendsParams& auxSends = m_trackChannels.at(pair.first)->outputParams().auxSends;
@@ -206,12 +211,23 @@ samples_t Mixer::process(float* outBuffer, size_t bufferSize, samples_t samplesP
         return 0;
     }
 
-    processAuxChannels(outBuffer, outBufferSize, samplesPerChannel);
-    completeOutput(outBuffer, samplesPerChannel);
+    processAuxChannels(m_writeCacheBuff.data(), writeCacheSize, intermediateChannels, samplesPerChannel);
+    completeOutput(m_writeCacheBuff.data(), samplesPerChannel, intermediateChannels);
 
     for (IFxProcessorPtr& fxProcessor : m_masterFxProcessors) {
         if (fxProcessor->active()) {
-            fxProcessor->process(outBuffer, bufferSize, samplesPerChannel);
+            fxProcessor->process(m_writeCacheBuff.data(), writeCacheSize, samplesPerChannel);
+        }
+    }
+
+    audioch_t minChannels = std::min(intermediateChannels, m_audioChannelsCount);
+    for (samples_t s = 0; s < samplesPerChannel; ++s) {
+        // TODO: Mix stereo -> mono or stereo -> surround
+        for (audioch_t audioChNum = 0; audioChNum < minChannels; ++audioChNum) {
+            int outIdx = s * m_audioChannelsCount + audioChNum;
+            int inIdx = s * intermediateChannels + audioChNum;
+
+            outBuffer[outIdx] += m_writeCacheBuff[inIdx];
         }
     }
 
@@ -392,13 +408,13 @@ void Mixer::writeTrackToAuxBuffers(const AuxSendsParams& auxSends, const float* 
 
         const AuxSendParams& auxSend = auxSends.at(auxIdx);
         if (auxSend.active && !RealIsNull(auxSend.signalAmount)) {
-            mixOutputFromChannel(m_auxBuffers.at(auxIdx).data(), m_auxBuffers.at(auxIdx).size(), m_audioChannelsCount,
+            mixOutputFromChannel(m_auxBuffers.at(auxIdx).data(), m_auxBuffers.at(auxIdx).size(), AUX_AUDIO_CHANNELS_COUNT,
                                  trackBuffer, samplesPerChannel, AUX_AUDIO_CHANNELS_COUNT, auxSend.signalAmount);
         }
     }
 }
 
-void Mixer::processAuxChannels(float* buffer, size_t bufferSize, samples_t samplesPerChannel)
+void Mixer::processAuxChannels(float* buffer, size_t bufferSize, audioch_t bufferChannels, samples_t samplesPerChannel)
 {
     IF_ASSERT_FAILED(m_auxChannels.size() == m_auxBuffers.size()) {
         return;
@@ -414,11 +430,11 @@ void Mixer::processAuxChannels(float* buffer, size_t bufferSize, samples_t sampl
         float* auxBuffer = m_auxBuffers.at(i).data();
         size_t auxBufferSize = m_auxBuffers.at(i).size();
         auxChannel->process(auxBuffer, auxBufferSize, samplesPerChannel);
-        mixOutputFromChannel(buffer, bufferSize, m_audioChannelsCount, auxBuffer, samplesPerChannel, AUX_AUDIO_CHANNELS_COUNT);
+        mixOutputFromChannel(buffer, bufferSize, bufferChannels, auxBuffer, samplesPerChannel, AUX_AUDIO_CHANNELS_COUNT);
     }
 }
 
-void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
+void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel, audioch_t channels)
 {
     IF_ASSERT_FAILED(buffer) {
         return;
@@ -427,13 +443,13 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
     float totalSquaredSum = 0.f;
     float volume = dsp::linearFromDecibels(m_masterParams.volume);
 
-    for (audioch_t audioChNum = 0; audioChNum < m_audioChannelsCount; ++audioChNum) {
+    for (audioch_t audioChNum = 0; audioChNum < channels; ++audioChNum) {
         float singleChannelSquaredSum = 0.f;
 
         gain_t totalGain = dsp::balanceGain(m_masterParams.balance, audioChNum) * volume;
 
         for (samples_t s = 0; s < samplesPerChannel; ++s) {
-            int idx = s * m_audioChannelsCount + audioChNum;
+            int idx = s * channels + audioChNum;
 
             float resultSample = buffer[idx] * totalGain;
             buffer[idx] = resultSample;
@@ -452,7 +468,7 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
     }
 
     float totalRms = dsp::samplesRootMeanSquare(totalSquaredSum, samplesPerChannel * m_audioChannelsCount);
-    m_limiter->process(totalRms, buffer, m_audioChannelsCount, samplesPerChannel);
+    m_limiter->process(totalRms, buffer, channels, samplesPerChannel);
 }
 
 void Mixer::notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const

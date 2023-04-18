@@ -74,9 +74,9 @@ private:
                               unsigned int samplesCount, audioch_t inChannels, gain_t signalAmount = 1.f);
     void prepareAuxBuffers(size_t outBufferSize);
     void writeTrackToAuxBuffers(const AuxSendsParams& auxSends, const float* trackBuffer, samples_t samplesPerChannel);
-    void processAuxChannels(float* buffer, size_t bufferSize, samples_t samplesPerChannel);
+    void processAuxChannels(float* buffer, size_t bufferSize, audioch_t bufferChannels, samples_t samplesPerChannel);
 
-    void completeOutput(float* buffer, samples_t samplesPerChannel);
+    void completeOutput(float* buffer, samples_t samplesPerChannel, audioch_t channels);
     void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
 
     std::vector<float> m_writeCacheBuff;
