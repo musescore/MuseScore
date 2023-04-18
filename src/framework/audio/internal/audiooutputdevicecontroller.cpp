@@ -40,13 +40,12 @@ void AudioOutputDeviceController::init()
 
     configuration()->audioOutputDeviceIdChanged().onNotify(this, [this]() {
         AudioDeviceID deviceId = configuration()->audioOutputDeviceId();
-        audioDriver()->selectOutputDevice(deviceId);
-        IAudioDriver::Spec spec = audioDriver()->activeSpec();
-        async::Async::call(this, [spec](){
+        async::Async::call(this, [this, deviceId](){
+            audioDriver()->selectOutputDevice(deviceId);
+            IAudioDriver::Spec spec = audioDriver()->activeSpec();
             AudioEngine::instance()->setAudioChannelsCount(spec.channels);
             AudioEngine::instance()->setSampleRate(spec.sampleRate);
         }, AudioThread::ID);
-
     });
 
     configuration()->driverBufferSizeChanged().onNotify(this, [this]() {
@@ -77,9 +76,9 @@ void AudioOutputDeviceController::checkConnection()
     AudioDeviceList devices = audioDriver()->availableOutputDevices();
 
     if (!preferredDeviceId.empty() && preferredDeviceId != currentDeviceId && containsDevice(devices, preferredDeviceId)) {
-        audioDriver()->selectOutputDevice(preferredDeviceId);
-        IAudioDriver::Spec spec = audioDriver()->activeSpec();
-        async::Async::call(this, [spec](){
+        async::Async::call(this, [this, preferredDeviceId](){
+            audioDriver()->selectOutputDevice(preferredDeviceId);
+            IAudioDriver::Spec spec = audioDriver()->activeSpec();
             AudioEngine::instance()->setAudioChannelsCount(spec.channels);
             AudioEngine::instance()->setSampleRate(spec.sampleRate);
         }, AudioThread::ID);
@@ -87,9 +86,9 @@ void AudioOutputDeviceController::checkConnection()
     }
 
     if (!containsDevice(devices, currentDeviceId)) {
-        audioDriver()->resetToDefaultOutputDevice();
-        IAudioDriver::Spec spec = audioDriver()->activeSpec();
-        async::Async::call(this, [spec](){
+        async::Async::call(this, [this](){
+            audioDriver()->resetToDefaultOutputDevice();
+            IAudioDriver::Spec spec = audioDriver()->activeSpec();
             AudioEngine::instance()->setAudioChannelsCount(spec.channels);
             AudioEngine::instance()->setSampleRate(spec.sampleRate);
         }, AudioThread::ID);

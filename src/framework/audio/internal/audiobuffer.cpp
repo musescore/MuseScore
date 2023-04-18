@@ -111,6 +111,7 @@ static BaseBufferProfiler WRITE_PROFILE("WRITE_PROFILE", 0);
 
 void AudioBuffer::init(const audioch_t audioChannelsCount, const samples_t renderStep)
 {
+    // Prevent both write and read thread from accessing the data buffer as it might be reallocated
     std::scoped_lock lock(m_writeMutex, m_readMutex);
     m_samplesPerChannel = DEFAULT_SIZE_PER_CHANNEL;
     m_audioChannelsCount = audioChannelsCount;
@@ -131,6 +132,7 @@ void AudioBuffer::setAudioChannelsCount(const audioch_t audioChannelsCount)
 
 void AudioBuffer::setSource(std::shared_ptr<IAudioSource> source)
 {
+    // Source pointer is only used in write thread
     std::scoped_lock lock(m_writeMutex);
     if (m_source == source) {
         return;
