@@ -194,13 +194,14 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
     m_soundFontRepository->init();
     m_registerAudioPluginsScenario->init();
 
-    m_audioBuffer->init(m_configuration->audioChannelsCount(),
-                        m_configuration->renderStep());
-
     m_audioOutputController->init();
 
     // Setup audio driver
-    setupAudioDriver(mode);
+    IAudioDriver::Spec spec = setupAudioDriver(mode);
+
+    // Use actual channel count instead of configuration
+    m_audioBuffer->init(spec.channels,
+                        m_configuration->renderStep());
 
     //! --- Diagnostics ---
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
@@ -241,7 +242,7 @@ void AudioModule::onDestroy()
     }
 }
 
-void AudioModule::setupAudioDriver(const framework::IApplication::RunMode& mode)
+IAudioDriver::Spec AudioModule::setupAudioDriver(const framework::IApplication::RunMode& mode)
 {
     IAudioDriver::Spec requiredSpec;
     requiredSpec.sampleRate = m_configuration->sampleRate();
@@ -249,8 +250,7 @@ void AudioModule::setupAudioDriver(const framework::IApplication::RunMode& mode)
     requiredSpec.channels = m_configuration->audioChannelsCount();
     requiredSpec.samples = m_configuration->driverBufferSize();
     requiredSpec.callback = [this](void* /*userdata*/, uint8_t* stream, int byteCount) {
-        auto samplesPerChannel = byteCount / (2 * sizeof(float));
-        m_audioBuffer->pop(reinterpret_cast<float*>(stream), samplesPerChannel);
+        m_audioBuffer->pop(reinterpret_cast<float*>(stream), byteCount);
     };
 
     if (mode == framework::IApplication::RunMode::GuiApp) {
@@ -259,13 +259,14 @@ void AudioModule::setupAudioDriver(const framework::IApplication::RunMode& mode)
         IAudioDriver::Spec activeSpec;
         if (m_audioDriver->open(requiredSpec, &activeSpec)) {
             setupAudioWorker(activeSpec);
-            return;
+            return activeSpec;
         }
 
         LOGE() << "audio output open failed";
     }
 
     setupAudioWorker(requiredSpec);
+    return requiredSpec;
 }
 
 void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)

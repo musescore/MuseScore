@@ -53,7 +53,7 @@ public:
     void setSource(std::shared_ptr<IAudioSource> source);
     void forward();
 
-    void pop(float* dest, size_t sampleCount);
+    void pop(float* dest, size_t byteCount);
     void setMinSamplesToReserve(size_t lag);
 
     void reset();

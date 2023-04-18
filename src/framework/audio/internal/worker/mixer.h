@@ -70,8 +70,8 @@ public:
     void setIsActive(bool arg) override;
 
 private:
-    void mixOutputFromChannel(float* outBuffer, size_t outBufferSize, const float* inBuffer, unsigned int samplesCount,
-                              gain_t signalAmount = 1.f);
+    void mixOutputFromChannel(float* outBuffer, size_t outBufferSize, audioch_t outChannels, const float* inBuffer,
+                              unsigned int samplesCount, audioch_t inChannels, gain_t signalAmount = 1.f);
     void prepareAuxBuffers(size_t outBufferSize);
     void writeTrackToAuxBuffers(const AuxSendsParams& auxSends, const float* trackBuffer, samples_t samplesPerChannel);
     void processAuxChannels(float* buffer, size_t bufferSize, samples_t samplesPerChannel);

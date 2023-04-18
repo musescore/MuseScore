@@ -136,6 +136,7 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
     m_activeSpec = m_desiredSpec;
     m_activeSpec.sampleRate = s_data.wasapiClient->sampleRate();
+    m_activeSpec.channels = s_data.wasapiClient->channelCount();
     *activeSpec = m_activeSpec;
 
     m_isOpened = true;

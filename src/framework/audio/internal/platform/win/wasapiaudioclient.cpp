@@ -130,6 +130,22 @@ static void logWAVEFORMATEX(WAVEFORMATEX* format)
     LOGI() << "cbSize: " << format->cbSize;
 }
 
+static void logWAVEFORMATEXTENSIBLE(WAVEFORMATEXTENSIBLE* format)
+{
+    logWAVEFORMATEX(&format->Format);
+    if (format->Format.wBitsPerSample != 0) {
+        LOGI() << "Valid bits per sample: "
+               << format->Samples.wValidBitsPerSample;
+    } else {
+        LOGI() << "Samples per block: " << format->Samples.wSamplesPerBlock;
+    }
+    LOGI() << "Channel mask: " << format->dwChannelMask;
+
+    // LOGI() << "SubFormat GUID: " << format->SubFormat.Data1 << "." <<
+    // format->SubFormat.Data2 << "." << format->SubFormat.Data3 << "." <<
+    // format->SubFormat.Data4;
+}
+
 //
 //  ActivateCompleted()
 //
@@ -286,7 +302,8 @@ HRESULT WasapiAudioClient::configureDeviceInternal() noexcept
         check_hresult(m_audioClient->GetMixFormat(m_mixFormat.put()));
 
         LOGI() << "WASAPI: Mix format after getting from audio client:";
-        logWAVEFORMATEX(m_mixFormat.get());
+        WAVEFORMATEXTENSIBLE* extensibleMixFormat = (WAVEFORMATEXTENSIBLE*)m_mixFormat.get();
+        logWAVEFORMATEXTENSIBLE(extensibleMixFormat);
 
         m_mixFormat->wFormatTag = WAVE_FORMAT_IEEE_FLOAT;
         m_mixFormat->nChannels = 2;
