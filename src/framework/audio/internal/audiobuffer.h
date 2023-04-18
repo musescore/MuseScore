@@ -25,6 +25,7 @@
 #include <vector>
 #include <memory>
 #include <atomic>
+#include <mutex>
 
 #include "iaudiosource.h"
 #include "audiotypes.h"
@@ -49,6 +50,7 @@ public:
     AudioBuffer() = default;
 
     void init(const audioch_t audioChannelsCount, const samples_t renderStep);
+    void setAudioChannelsCount(const audioch_t audioChannelsCount);
 
     void setSource(std::shared_ptr<IAudioSource> source);
     void forward();
@@ -74,6 +76,9 @@ private:
     samples_t m_renderStep = 0;
 
     std::shared_ptr<IAudioSource> m_source = nullptr;
+
+    std::mutex m_readMutex;
+    std::mutex m_writeMutex;
 };
 
 using AudioBufferPtr = std::shared_ptr<AudioBuffer>;

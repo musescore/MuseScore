@@ -96,6 +96,11 @@ std::vector<unsigned int> AudioDriverStub::availableOutputDeviceBufferSizes() co
     return {};
 }
 
+IAudioDriver::Spec AudioDriverStub::activeSpec() const
+{
+    return {};
+}
+
 void AudioDriverStub::resume()
 {
 }

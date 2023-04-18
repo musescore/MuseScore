@@ -56,6 +56,7 @@ public:
     async::Notification outputDeviceBufferSizeChanged() const override;
 
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+    Spec activeSpec() const override;
 
     void resume() override;
     void suspend() override;

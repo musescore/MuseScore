@@ -78,6 +78,7 @@ public:
     virtual async::Notification outputDeviceBufferSizeChanged() const = 0;
 
     virtual std::vector<unsigned int> availableOutputDeviceBufferSizes() const = 0;
+    virtual Spec activeSpec() const = 0;
 
     virtual void resume() = 0;
     virtual void suspend() = 0;

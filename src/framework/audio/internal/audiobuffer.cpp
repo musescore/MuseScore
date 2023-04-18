@@ -111,15 +111,27 @@ static BaseBufferProfiler WRITE_PROFILE("WRITE_PROFILE", 0);
 
 void AudioBuffer::init(const audioch_t audioChannelsCount, const samples_t renderStep)
 {
+    std::scoped_lock lock(m_writeMutex, m_readMutex);
     m_samplesPerChannel = DEFAULT_SIZE_PER_CHANNEL;
     m_audioChannelsCount = audioChannelsCount;
     m_renderStep = renderStep;
 
     m_data.resize(m_samplesPerChannel * m_audioChannelsCount, 0.f);
+    // Reset read and write indices
+    m_readIndex = 0;
+    m_writeIndex = 0;
+}
+
+void AudioBuffer::setAudioChannelsCount(const audioch_t audioChannelsCount)
+{
+    if (m_audioChannelsCount != audioChannelsCount) {
+        init(audioChannelsCount, m_renderStep);
+    }
 }
 
 void AudioBuffer::setSource(std::shared_ptr<IAudioSource> source)
 {
+    std::scoped_lock lock(m_writeMutex);
     if (m_source == source) {
         return;
     }
@@ -133,6 +145,7 @@ void AudioBuffer::setSource(std::shared_ptr<IAudioSource> source)
 
 void AudioBuffer::forward()
 {
+    std::scoped_lock lock(m_writeMutex);
     if (!m_source) {
         return;
     }
@@ -140,8 +153,6 @@ void AudioBuffer::forward()
     const auto currentWriteIdx = m_writeIndex.load(std::memory_order_relaxed);
     const auto currentReadIdx = m_readIndex.load(std::memory_order_acquire);
     size_t nextWriteIdx = currentWriteIdx;
-
-    // TODO: Make m_data.size() thread safe and support resizing
 
     samples_t framesToReserve = m_data.size() / 2;
 
@@ -161,7 +172,9 @@ void AudioBuffer::pop(float* dest, size_t byteCount)
 
     const auto currentReadIdx = m_readIndex.load(std::memory_order_relaxed);
     const auto currentWriteIdx = m_writeIndex.load(std::memory_order_acquire);
-    if (currentReadIdx == currentWriteIdx || m_audioChannelsCount == 0) { // empty queue / not initialized
+    std::unique_lock lock(m_readMutex, std::defer_lock);
+    if (!lock.try_lock() || currentReadIdx == currentWriteIdx || m_audioChannelsCount == 0) {
+        // empty queue, not initialized or currently blocked (resizing)
         std::fill(dest, dest + size, 0.0f);
         return;
     }
@@ -211,6 +224,7 @@ void AudioBuffer::setMinSamplesToReserve(size_t lag)
 
 void AudioBuffer::reset()
 {
+    std::scoped_lock lock(m_writeMutex, m_readMutex);
     m_readIndex.store(0, std::memory_order_release);
     m_writeIndex.store(0, std::memory_order_release);
 

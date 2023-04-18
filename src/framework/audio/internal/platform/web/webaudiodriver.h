@@ -41,9 +41,11 @@ public:
     bool selectOutputDevice(const std::string& name) override;
     std::vector<std::string> availableOutputDevices() const override;
     async::Notification availableOutputDevicesChanged() const override;
+    Spec activeSpec() const override;
 
 private:
     bool m_opened = false;
+    Spec m_activeSpec;
 };
 }
 

@@ -277,6 +277,11 @@ std::vector<unsigned int> WasapiAudioDriver::availableOutputDeviceBufferSizes() 
     return result;
 }
 
+IAudioDriver::Spec WasapiAudioDriver::activeSpec() const
+{
+    return m_activeSpec;
+}
+
 void WasapiAudioDriver::resume()
 {
 }

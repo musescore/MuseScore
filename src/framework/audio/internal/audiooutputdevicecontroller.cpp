@@ -41,6 +41,12 @@ void AudioOutputDeviceController::init()
     configuration()->audioOutputDeviceIdChanged().onNotify(this, [this]() {
         AudioDeviceID deviceId = configuration()->audioOutputDeviceId();
         audioDriver()->selectOutputDevice(deviceId);
+        IAudioDriver::Spec spec = audioDriver()->activeSpec();
+        async::Async::call(this, [spec](){
+            AudioEngine::instance()->setAudioChannelsCount(spec.channels);
+            AudioEngine::instance()->setSampleRate(spec.sampleRate);
+        }, AudioThread::ID);
+
     });
 
     configuration()->driverBufferSizeChanged().onNotify(this, [this]() {
@@ -72,10 +78,20 @@ void AudioOutputDeviceController::checkConnection()
 
     if (!preferredDeviceId.empty() && preferredDeviceId != currentDeviceId && containsDevice(devices, preferredDeviceId)) {
         audioDriver()->selectOutputDevice(preferredDeviceId);
+        IAudioDriver::Spec spec = audioDriver()->activeSpec();
+        async::Async::call(this, [spec](){
+            AudioEngine::instance()->setAudioChannelsCount(spec.channels);
+            AudioEngine::instance()->setSampleRate(spec.sampleRate);
+        }, AudioThread::ID);
         return;
     }
 
     if (!containsDevice(devices, currentDeviceId)) {
         audioDriver()->resetToDefaultOutputDevice();
+        IAudioDriver::Spec spec = audioDriver()->activeSpec();
+        async::Async::call(this, [spec](){
+            AudioEngine::instance()->setAudioChannelsCount(spec.channels);
+            AudioEngine::instance()->setSampleRate(spec.sampleRate);
+        }, AudioThread::ID);
     }
 }
