@@ -50,7 +50,7 @@
         </attributes>
       <direction placement="above">
         <direction-type>
-          <words font-weight="bold" font-size="12">Largo </words>
+          <words font-weight="bold" font-size="12">Largo</words>
           </direction-type>
         <direction-type>
           <metronome parentheses="no">
