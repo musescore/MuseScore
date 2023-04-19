@@ -71,11 +71,11 @@ MasterScore* ScoreRW::readScore(const String& name, bool isAbsolutePath, ImportF
     if (rv != Err::NoError) {
         LOGE() << "can't load score, path: " << path;
         delete score;
-        score = nullptr;
-    } else {
-        for (Score* s : score->scoreList()) {
-            s->doLayout();
-        }
+        return nullptr;
+    }
+
+    for (Score* s : score->scoreList()) {
+        s->doLayout();
     }
 
     // While reading the score, some elements might use `score->repeatList()` (which is incorrect
