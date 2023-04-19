@@ -24,6 +24,7 @@
 
 #include <map>
 
+#include "defer.h"
 #include "rw/xml.h"
 
 #include "chord.h"
@@ -170,26 +171,17 @@ int StringData::fret(int pitch, int string, Staff* staff) const
 
 void StringData::fretChords(Chord* chord) const
 {
-    int nFret, minFret, maxFret, nNewFret, nTempFret;
-    int nString, nNewString, nTempString;
-
     if (bFretting) {
         return;
     }
     bFretting = true;
+    DEFER {
+        bFretting = false;
+    };
 
-    // we need to keep track of string allocation
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-    int bUsed[strings()];                      // initially all strings are available
-#else
-    // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-    //    heap allocation is slow, an optimization might be used.
-    std::vector<int> bUsed(strings());
-#endif
-    for (nString = 0; nString < static_cast<int>(strings()); nString++) {
-        bUsed[nString] = 0;
-    }
-    // we also need the notes sorted in order of string (from highest to lowest) and then pitch
+    int strings = static_cast<int>(this->strings());
+
+    // we need the notes sorted in order of string (from highest to lowest) and then pitch
     std::map<int, Note*> sortedNotes;
     int count = 0;
     // store staff pitch offset at this tick, to speed up actual note pitch calculations
@@ -212,10 +204,35 @@ void StringData::fretChords(Chord* chord) const
             }
         }
     }
+
+    for (const auto& p : sortedNotes) {
+        Note* note = p.second;
+        if (note->string() >= strings) {
+            note->undoChangeProperty(Pid::STRING, INVALID_STRING_INDEX);
+            note->undoChangeProperty(Pid::FRET, INVALID_FRET_INDEX);
+        }
+    }
+
+    if (!strings) {
+        return;
+    }
+
+    // we need to keep track of string allocation
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+    int bUsed[strings];                      // initially all strings are available
+    for (int nString = 0; nString < strings; ++nString) {
+        bUsed[nString] = 0;
+    }
+#else
+    // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+    //    heap allocation is slow, an optimization might be used.
+    std::vector<int> bUsed(strings);
+#endif
+
     // determine used range of frets
-    minFret = INT32_MAX;
-    maxFret = INT32_MIN;
-    for (auto& p : sortedNotes) {
+    int minFret = INT32_MAX;
+    int maxFret = INT32_MIN;
+    for (const auto& p : sortedNotes) {
         Note* note = p.second;
         if (note->string() != INVALID_STRING_INDEX && note->displayFret() == Note::DisplayFretOption::NoHarmonic) {
             bUsed[note->string()]++;
@@ -229,10 +246,13 @@ void StringData::fretChords(Chord* chord) const
     }
 
     // scan chord notes from highest, matching with strings from the highest
-    for (auto& p : sortedNotes) {
+    for (const auto& p : sortedNotes) {
         Note* note = p.second;
-        nString     = nNewString    = note->string();
-        nFret       = nNewFret      = note->fret();
+        int nString, nNewString;
+        int nFret,   nNewFret,   nTempFret;
+
+        nString = nNewString = note->string();
+        nFret   = nNewFret   = note->fret();
         note->setFretConflict(false);           // assume no conflicts on this note
         // if no fretting (any invalid fretting has been erased by sortChordNotes() )
         if (nString == INVALID_STRING_INDEX /*|| nFret == INVALID_FRET_INDEX || getPitch(nString, nFret) != note->pitch()*/) {
@@ -260,7 +280,7 @@ void StringData::fretChords(Chord* chord) const
         // if the note string (either original or newly assigned) is also used by another note
         if (note->displayFret() == Note::DisplayFretOption::NoHarmonic && bUsed[nNewString] > 1) {
             // attempt to find a suitable string, from topmost
-            for (nTempString=0; nTempString < static_cast<int>(strings()); nTempString++) {
+            for (int nTempString = 0; nTempString < strings; nTempString++) {
                 if (bUsed[nTempString] < 1
                     && (nTempFret=fret(note->pitch(), nTempString, pitchOffset)) != INVALID_FRET_INDEX) {
                     bUsed[nNewString]--;              // free previous string
@@ -290,8 +310,6 @@ void StringData::fretChords(Chord* chord) const
             note->setFretConflict(true);
         }
     }
-
-    bFretting = false;
 }
 
 //---------------------------------------------------------
