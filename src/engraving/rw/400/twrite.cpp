@@ -1839,6 +1839,87 @@ void TWrite::write(const Spacer* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
+void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item, { { "id", item->idx() + 1 } });
+
+    if (item->links()) {
+        Score* s = item->masterScore();
+        for (auto le : *item->links()) {
+            Staff* staff = toStaff(le);
+            if ((staff->score() == s) && (staff != item)) {
+                xml.tag("linkedTo", static_cast<int>(staff->idx() + 1));
+            }
+        }
+    }
+
+    // for copy/paste we need to know the actual transposition
+    if (ctx.clipboardmode()) {
+        Interval v = item->part()->instrument()->transpose();     // TODO: tick?
+        if (v.diatonic) {
+            xml.tag("transposeDiatonic", v.diatonic);
+        }
+        if (v.chromatic) {
+            xml.tag("transposeChromatic", v.chromatic);
+        }
+    }
+
+    item->staffType(Fraction(0, 1))->write(xml);
+    ClefTypeList ct = item->defaultClefType();
+    if (ct._concertClef == ct._transposingClef) {
+        if (ct._concertClef != ClefType::G) {
+            xml.tag("defaultClef", TConv::toXml(ct._concertClef));
+        }
+    } else {
+        xml.tag("defaultConcertClef", TConv::toXml(ct._concertClef));
+        xml.tag("defaultTransposingClef", TConv::toXml(ct._transposingClef));
+    }
+
+    if (item->isLinesInvisible(Fraction(0, 1))) {
+        xml.tag("invisible", item->isLinesInvisible(Fraction(0, 1)));
+    }
+    if (item->hideWhenEmpty() != Staff::HideMode::AUTO) {
+        xml.tag("hideWhenEmpty", int(item->hideWhenEmpty()));
+    }
+    if (item->cutaway()) {
+        xml.tag("cutaway", item->cutaway());
+    }
+    if (item->showIfEmpty()) {
+        xml.tag("showIfSystemEmpty", item->showIfEmpty());
+    }
+    if (item->hideSystemBarLine()) {
+        xml.tag("hideSystemBarLine", item->hideSystemBarLine());
+    }
+    if (item->mergeMatchingRests()) {
+        xml.tag("mergeMatchingRests", item->mergeMatchingRests());
+    }
+    if (!item->visible()) {
+        xml.tag("isStaffVisible", item->visible());
+    }
+
+    for (const BracketItem* i : item->brackets()) {
+        BracketType a = i->bracketType();
+        size_t b = i->bracketSpan();
+        size_t c = i->column();
+        bool v = i->visible();
+        if (a != BracketType::NO_BRACKET || b > 0) {
+            xml.tag("bracket", { { "type", static_cast<int>(a) }, { "span", b }, { "col", c }, { "visible", v } });
+        }
+    }
+
+    writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN);
+    writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN_FROM);
+    writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN_TO);
+    writeProperty(item, xml, Pid::STAFF_USERDIST);
+    writeProperty(item, xml, Pid::STAFF_COLOR);
+    writeProperty(item, xml, Pid::PLAYBACK_VOICE1);
+    writeProperty(item, xml, Pid::PLAYBACK_VOICE2);
+    writeProperty(item, xml, Pid::PLAYBACK_VOICE3);
+    writeProperty(item, xml, Pid::PLAYBACK_VOICE4);
+
+    xml.endElement();
+}
+
 void TWrite::write(const StaffState* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
