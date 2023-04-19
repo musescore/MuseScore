@@ -40,7 +40,6 @@ public:
     constexpr static double GLISSANDO_VELOCITY_MULTIPLIER = 0.7;
     constexpr static double GHOST_VELOCITY_MULTIPLIER = 0.6;
     constexpr static double DEFAULT_VELOCITY_MULTIPLIER = 1.0;
-    constexpr static int SLIDE_DURATION = 20;
     constexpr static int SLIDE_AMOUNT = 3;
 
     NoteEvent() {}
@@ -57,6 +56,7 @@ public:
     void setPitch(int v) { m_pitch = v; }
     void setOntime(int v) { m_ontime = v; }
     void setLen(int v) { m_len = v; }
+    void setOffset(int v) { m_offset = v; }
 
     bool operator==(const NoteEvent&) const;
 
