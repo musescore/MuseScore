@@ -112,6 +112,7 @@ class SlurTie;
 class SLine;
 class Spanner;
 class Spacer;
+class Staff;
 class StaffState;
 class StaffText;
 class StaffTextBase;
@@ -230,6 +231,7 @@ public:
     static void write(const Segment* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Slur* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Spacer* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Staff* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StaffState* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StaffText* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StaffType* item, XmlWriter& xml, WriteContext& ctx);
@@ -264,17 +266,11 @@ private:
     static void writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx);
     static void writeBoxProperties(const Box* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void write(const Bend* b, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Box* b, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const HBox* item, XmlWriter& xml, WriteContext& ctx);
 
     static void writeProperties(const ChordRest* item, XmlWriter& xml, WriteContext& ctx);
     static void writeChordRestBeam(const ChordRest* item, XmlWriter& xml, WriteContext& ctx);
-
-    static void write(const FiguredBassItem* f, XmlWriter& xml, WriteContext& ctx);
-
-    static void write(const Groups* g, XmlWriter& xml, WriteContext& ctx);
 
     static void writeProperties(const Rest* item, XmlWriter& xml, WriteContext& ctx);
 
