@@ -89,15 +89,6 @@ void StretchedBend::fillDrawPoints()
     }
 
     m_drawPoints.clear();
-    auto isExtraPointHelper = [this](size_t i, std::function<bool(int, int)> compare) {
-        return compare(m_points[i - 1].pitch, m_points[i].pitch) && compare(m_points[i].pitch, m_points[i + 1].pitch);
-    };
-
-    auto isExtraPoint = [isExtraPointHelper](size_t i) {
-        return isExtraPointHelper(i, std::less<int>())
-               || isExtraPointHelper(i, std::greater<int>())
-               || isExtraPointHelper(i, std::equal_to<int>());
-    };
 
     if (Tie* tie = toNote(parent())->tieBack()) {
         Note* backTied = tie->startNote();
@@ -109,15 +100,9 @@ void StretchedBend::fillDrawPoints()
         }
     }
 
-    m_drawPoints.push_back(m_points[0].pitch);
-
-    for (size_t i = 1; i < m_points.size() - 1; i++) {
-        if (!isExtraPoint(i)) {
-            m_drawPoints.push_back(m_points[i].pitch);
-        }
+    for (size_t i = 0; i < m_points.size(); i++) {
+        m_drawPoints.push_back(m_points[i].pitch);
     }
-
-    m_drawPoints.push_back(m_points[m_points.size() - 1].pitch);
 }
 
 //---------------------------------------------------------
@@ -187,6 +172,9 @@ void StretchedBend::fillSegments()
         }
 
         if (type != BendSegmentType::NO_TYPE) {
+            if (type == BendSegmentType::LINE_STROKED && m_bendSegments.empty()) {
+                continue;
+            }
             m_bendSegments.push_back({ src, dest, type, tone });
         }
 
@@ -208,9 +196,14 @@ void StretchedBend::stretchSegments()
     double bendStart = m_bendSegments[0].src.x();
     double bendEnd = m_stretchedMode ? nextSegmentX() : m_spatium * 6;
 
+    if (bendStart > bendEnd) {
+        m_bendSegments.clear();
+        return;
+    }
+
     m_bendSegments[segsSize - 1].dest.rx() = bendEnd;
 
-    double step = ((bendEnd - bendStart) / segsSize);
+    double step = (bendEnd - bendStart) / segsSize;
 
     for (auto i = segsSize - 1; i > 0; --i) {
         auto& lastSeg = m_bendSegments[i];
