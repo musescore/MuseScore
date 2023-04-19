@@ -136,6 +136,8 @@ private:
 class Measure final : public MeasureBase
 {
     OBJECT_ALLOCATOR(engraving, Measure)
+    DECLARE_CLASSOF(ElementType::MEASURE)
+
 public:
 
     ~Measure();

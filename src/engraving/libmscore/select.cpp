@@ -28,6 +28,7 @@
 #include "containers.h"
 #include "io/buffer.h"
 #include "rw/xml.h"
+#include "rw/400/twrite.h"
 #include "rw/400/writecontext.h"
 
 #include "accidental.h"
@@ -1111,7 +1112,7 @@ ByteArray Selection::symbolListMimeData() const
             }
         }
         xml.tag("segDelta", numSegs);
-        iter->second.e->write(xml);
+        rw400::TWrite::writeItem(iter->second.e, xml, *xml.context());
     }
 
     xml.endElement();

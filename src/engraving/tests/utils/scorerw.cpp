@@ -31,6 +31,7 @@
 #include "engraving/infrastructure/localfileinfoprovider.h"
 #include "engraving/rw/xml.h"
 #include "engraving/rw/400/tread.h"
+#include "engraving/rw/400/twrite.h"
 #include "engraving/libmscore/factory.h"
 
 #include "log.h"
@@ -113,7 +114,7 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
     xml.startDocument();
-    element->write(xml);
+    rw400::TWrite::writeItem(element, xml, *xml.context());
     xml.flush();
     buffer.close();
 

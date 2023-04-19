@@ -31,6 +31,7 @@ namespace mu::engraving {
 class XmlWriter;
 class WriteContext;
 class EngravingItem;
+class ElementList;
 class Accidental;
 class ActionIcon;
 class Ambitus;
@@ -41,6 +42,7 @@ class BagpipeEmbellishment;
 class BarLine;
 class Beam;
 class Bend;
+class StretchedBend;
 class Box;
 class HBox;
 class VBox;
@@ -69,6 +71,7 @@ class Groups;
 
 class Hairpin;
 class Harmony;
+class HarmonicMark;
 class Hook;
 
 class Image;
@@ -103,12 +106,14 @@ class Part;
 class Pedal;
 class PlayTechAnnotation;
 
+class Rasgueado;
 class RehearsalMark;
 class Rest;
 
 class Segment;
 class Slur;
 class SlurTie;
+class SlurTieSegment;
 class SLine;
 class Spanner;
 class Spacer;
@@ -154,6 +159,7 @@ public:
     TWrite() = default;
 
     static void writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeItems(const ElementList& items, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Accidental* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const ActionIcon* item, XmlWriter& xml, WriteContext& ctx);
@@ -165,6 +171,7 @@ public:
     static void write(const BarLine* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Beam* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Bend* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const StretchedBend* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Box* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const HBox* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const VBox* item, XmlWriter& xml, WriteContext& ctx);
@@ -191,6 +198,7 @@ public:
 
     static void write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Harmony* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const HarmonicMark* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Hook* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Image* item, XmlWriter& xml, WriteContext& ctx);
@@ -225,6 +233,7 @@ public:
     static void write(const Pedal* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const PlayTechAnnotation* item, XmlWriter& xml, WriteContext& ctx);
 
+    static void write(const Rasgueado* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const RehearsalMark* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Rest* item, XmlWriter& xml, WriteContext& ctx);
 
@@ -276,6 +285,7 @@ private:
 
     static void write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const SlurTie* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeSlur(const SlurTieSegment* seg, XmlWriter& xml, WriteContext& ctx, int no);
     static void writeProperties(const SLine* item, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const Spanner* item, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const BSymbol* item, XmlWriter& xml, WriteContext& ctx);

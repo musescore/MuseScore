@@ -54,6 +54,8 @@ public:
 class Rasgueado final : public ChordTextLineBase
 {
     OBJECT_ALLOCATOR(engraving, Rasgueado)
+    DECLARE_CLASSOF(ElementType::RASGUEADO)
+
 public:
     Rasgueado(EngravingItem* parent);
 

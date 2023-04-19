@@ -35,6 +35,8 @@ class Factory;
 class StretchedBend final : public Bend
 {
     OBJECT_ALLOCATOR(engraving, StretchedBend)
+    DECLARE_CLASSOF(ElementType::STRETCHED_BEND)
+
 public:
     StretchedBend* clone() const override { return new StretchedBend(*this); }
 

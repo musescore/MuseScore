@@ -47,6 +47,7 @@ enum class BendType {
 class Bend : public EngravingItem // TODO: bring back "final" keyword
 {
     OBJECT_ALLOCATOR(engraving, Bend)
+    DECLARE_CLASSOF(ElementType::BEND)
 
     M_PROPERTY(String,     fontFace,  setFontFace)
     M_PROPERTY(double,      fontSize,  setFontSize)

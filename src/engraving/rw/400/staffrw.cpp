@@ -22,6 +22,7 @@
 #include "staffrw.h"
 
 #include "rw/400/writecontext.h"
+#include "rw/400/twrite.h"
 #include "rw/xml.h"
 
 #include "libmscore/factory.h"
@@ -129,11 +130,15 @@ static void writeMeasure(XmlWriter& xml, MeasureBase* m, staff_idx_t staffIdx, b
     // special case multi measure rest
     //
     if (m->isMeasure() || staffIdx == 0) {
-        m->write(xml, staffIdx, writeSystemElements, forceTimeSig);
+        if (Measure::classof(m)) {
+            rw400::MeasureRW::writeMeasure(static_cast<const Measure*>(m), xml, staffIdx, writeSystemElements, forceTimeSig);
+        } else {
+            rw400::TWrite::writeItem(m, xml, *xml.context());
+        }
     }
 
     if (m->score()->styleB(Sid::createMultiMeasureRests) && m->isMeasure() && toMeasure(m)->mmRest()) {
-        toMeasure(m)->mmRest()->write(xml, staffIdx, writeSystemElements, forceTimeSig);
+        rw400::MeasureRW::writeMeasure(toMeasure(m)->mmRest(), xml, staffIdx, writeSystemElements, forceTimeSig);
     }
 
     xml.context()->setCurTick(m->endTick());
