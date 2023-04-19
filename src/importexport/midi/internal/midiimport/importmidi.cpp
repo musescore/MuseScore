@@ -24,10 +24,11 @@
 
 #include <QFile>
 
-#include "engraving/engravingerrors.h"
-#include "engraving/rw/xml.h"
-
 #include "translation.h"
+
+#include "engraving/engravingerrors.h"
+#include "engraving/rw/xmlwriter.h"
+
 #include "infrastructure/messagebox.h"
 
 #include "libmscore/factory.h"

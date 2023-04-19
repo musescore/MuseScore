@@ -24,8 +24,6 @@
 
 #include <cmath>
 
-#include "rw/xml.h"
-
 #include "log.h"
 
 using namespace mu;

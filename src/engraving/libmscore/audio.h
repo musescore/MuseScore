@@ -28,9 +28,6 @@
 #include "types/string.h"
 
 namespace mu::engraving {
-class XmlWriter;
-class XmlReader;
-
 //---------------------------------------------------------
 //   Audio
 //---------------------------------------------------------
@@ -49,9 +46,6 @@ public:
     const ByteArray& data() const { return _data; }
     ByteArray data() { return _data; }
     void setData(const ByteArray& ba) { _data = ba; }
-
-    void read(XmlReader&);
-    void write(XmlWriter&) const;
 };
 } // namespace mu::engraving
 #endif // MU_ENGRAVING_AUDIO_H

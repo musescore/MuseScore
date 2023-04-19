@@ -22,8 +22,6 @@
 
 #include "log.h"
 
-#include "rw/xml.h"
-
 #include "layoutbreak.h"
 #include "measurebase.h"
 #include "score.h"

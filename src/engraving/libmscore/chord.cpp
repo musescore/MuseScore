@@ -29,7 +29,6 @@
 #include "containers.h"
 
 #include "style/style.h"
-#include "rw/xml.h"
 
 #include "accidental.h"
 #include "arpeggio.h"

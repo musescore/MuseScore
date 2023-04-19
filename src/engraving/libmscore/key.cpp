@@ -22,8 +22,6 @@
 
 #include "key.h"
 
-#include "rw/xml.h"
-
 #include "accidental.h"
 #include "part.h"
 #include "pitchspelling.h"

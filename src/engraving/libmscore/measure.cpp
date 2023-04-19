@@ -33,7 +33,7 @@
 
 #include "layout/layoutchords.h"
 #include "rw/400/measurerw.h"
-#include "rw/xml.h"
+
 #include "style/style.h"
 
 #include "accidental.h"

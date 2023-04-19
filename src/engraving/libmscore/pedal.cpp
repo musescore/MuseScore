@@ -22,8 +22,6 @@
 
 #include "pedal.h"
 
-#include "rw/xml.h"
-
 #include "chordrest.h"
 #include "measure.h"
 #include "score.h"

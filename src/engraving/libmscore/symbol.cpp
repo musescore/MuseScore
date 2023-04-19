@@ -24,7 +24,6 @@
 
 #include "draw/fontmetrics.h"
 #include "iengravingfont.h"
-#include "rw/xml.h"
 
 #include "types/symnames.h"
 

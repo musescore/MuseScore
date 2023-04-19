@@ -25,8 +25,6 @@
 #include <cmath>
 #include <QMimeData>
 
-#include "engraving/rw/xml.h"
-
 #include "libmscore/masterscore.h"
 #include "libmscore/engravingitem.h"
 #include "libmscore/page.h"

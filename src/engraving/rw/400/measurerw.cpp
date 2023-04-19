@@ -25,8 +25,6 @@
 #include "translation.h"
 
 #include "rw/400/twrite.h"
-#include "rw/400/writecontext.h"
-#include "rw/xml.h"
 
 #include "../libmscore/ambitus.h"
 #include "../libmscore/barline.h"
@@ -646,11 +644,11 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
         if (measure->repeatEnd()) {
             xml.tag("endRepeat", measure->m_repeatCount);
         }
-        measure->writeProperty(xml, Pid::IRREGULAR);
-        measure->writeProperty(xml, Pid::BREAK_MMR);
-        measure->writeProperty(xml, Pid::USER_STRETCH);
-        measure->writeProperty(xml, Pid::NO_OFFSET);
-        measure->writeProperty(xml, Pid::MEASURE_NUMBER_MODE);
+        rw400::TWrite::writeProperty(measure, xml, Pid::IRREGULAR);
+        rw400::TWrite::writeProperty(measure, xml, Pid::BREAK_MMR);
+        rw400::TWrite::writeProperty(measure, xml, Pid::USER_STRETCH);
+        rw400::TWrite::writeProperty(measure, xml, Pid::NO_OFFSET);
+        rw400::TWrite::writeProperty(measure, xml, Pid::MEASURE_NUMBER_MODE);
     }
     double _spatium = measure->spatium();
     MStaff* mstaff = measure->m_mstaves[staff];

@@ -24,7 +24,8 @@
 
 #include <cmath>
 
-#include "rw/xml.h"
+#include "mscore.h"
+
 #include "sig.h"
 #include "tempo.h"
 
@@ -338,36 +339,6 @@ void Pos::setFrame(unsigned pos)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Pos::write(XmlWriter& xml, const char* name) const
-{
-    if (_type == TType::TICKS) {
-        xml.tag(name, { { "tick", _tick } });
-    } else {
-        xml.tag(name, { { "frame", _frame } });
-    }
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Pos::read(XmlReader& e)
-{
-    sn = -1;
-    if (e.hasAttribute("tick")) {
-        _tick = e.intAttribute("tick");
-        _type = TType::TICKS;
-    }
-    if (e.hasAttribute("frame")) {
-        _frame = e.intAttribute("frame");
-        _type = TType::FRAMES;
-    }
-}
-
-//---------------------------------------------------------
 //   PosLen
 //---------------------------------------------------------
 
@@ -415,43 +386,6 @@ void Pos::dump(int /*n*/) const
     case TType::TICKS:
         LOGD("ticks=%d)", _tick);
         break;
-    }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void PosLen::write(XmlWriter& xml, const char* name) const
-{
-    if (type() == TType::TICKS) {
-        xml.tag(name, { { "tick", tick() }, { "len", _lenTick } });
-    } else {
-        xml.tag(name, { { "sample", frame() }, { "len", _lenFrame } });
-    }
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void PosLen::read(XmlReader& e)
-{
-    if (e.hasAttribute("tick")) {
-        setType(TType::TICKS);
-        setTick(e.intAttribute("tick"));
-    }
-    if (e.hasAttribute("sample")) {
-        setType(TType::FRAMES);
-        setFrame(e.intAttribute("sample"));
-    }
-    if (e.hasAttribute("len")) {
-        int n = e.intAttribute("len");
-        if (type() == TType::TICKS) {
-            setLenTick(n);
-        } else {
-            setLenFrame(n);
-        }
     }
 }
 

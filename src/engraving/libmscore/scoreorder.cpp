@@ -23,7 +23,9 @@
 
 #include <iostream>
 
-#include "rw/xml.h"
+#include "rw/xmlreader.h"
+#include "rw/xmlwriter.h"
+
 #include "types/translatablestring.h"
 
 #include "libmscore/bracketItem.h"

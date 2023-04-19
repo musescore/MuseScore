@@ -51,7 +51,7 @@
 #include "global/deprecated/qzipwriter_p.h"
 
 #include "engraving/style/style.h"
-#include "engraving/rw/xml.h"
+#include "engraving/rw/xmlwriter.h"
 #include "engraving/types/typesconv.h"
 #include "engraving/types/symnames.h"
 
@@ -5674,6 +5674,106 @@ static void annotations(ExportMusicXml* exp, track_idx_t strack, track_idx_t etr
 }
 
 //---------------------------------------------------------
+//   Write MusicXML
+//
+// Writes the portion within the <figure> tag.
+//
+// NOTE: Both MuseScore and MusicXML provide two ways of altering the (temporal) length of a
+// figured bass object: extension lines and duration. The convention is that an EXTENSION is
+// used if the figure lasts LONGER than the note (i.e., it "extends" to the following notes),
+// whereas DURATION is used if the figure lasts SHORTER than the note (e.g., when notating a
+// figure change under a note). However, MuseScore does not restrict durations in this way,
+// allowing them to act as extensions themselves. As a result, a few more branches are
+// required in the decision tree to handle everything correctly.
+//---------------------------------------------------------
+
+//---------------------------------------------------------
+//   Convert Modifier to MusicXML prefix/suffix
+//---------------------------------------------------------
+
+static String Modifier2MusicXML(FiguredBassItem::Modifier prefix)
+{
+    switch (prefix) {
+    case FiguredBassItem::Modifier::NONE:        return u"";
+    case FiguredBassItem::Modifier::DOUBLEFLAT:  return u"flat-flat";
+    case FiguredBassItem::Modifier::FLAT:        return u"flat";
+    case FiguredBassItem::Modifier::NATURAL:     return u"natural";
+    case FiguredBassItem::Modifier::SHARP:       return u"sharp";
+    case FiguredBassItem::Modifier::DOUBLESHARP: return u"double-sharp";
+    case FiguredBassItem::Modifier::CROSS:       return u"cross";
+    case FiguredBassItem::Modifier::BACKSLASH:   return u"backslash";
+    case FiguredBassItem::Modifier::SLASH:       return u"slash";
+    case FiguredBassItem::Modifier::NUMOF:       return u"";         // prevent gcc "‘FBINumOfAccid’ not handled in switch" warning
+    }
+    return u"";
+}
+
+static void writeMusicXML(const FiguredBassItem* item, XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick)
+{
+    xml.startElement("figure");
+
+    // The first figure of each group is the "original" figure. Practically, it is one inserted manually
+    // by the user, rather than automatically by the "duration" extend method.
+    if (isOriginalFigure) {
+        String strPrefix = Modifier2MusicXML(item->prefix());
+        if (strPrefix != "") {
+            xml.tag("prefix", strPrefix);
+        }
+        if (item->digit() != FBIDigitNone) {
+            xml.tag("figure-number", item->digit());
+        }
+        String strSuffix = Modifier2MusicXML(item->suffix());
+        if (strSuffix != "") {
+            xml.tag("suffix", strSuffix);
+        }
+
+        // Check if the figure ends before or at the same time as the current note. Otherwise, the figure
+        // extends to the next note, and so carries an extension type "start" by definition.
+        if (fbEndTick <= crEndTick) {
+            if (item->contLine() == FiguredBassItem::ContLine::SIMPLE) {
+                xml.tag("extend", { { "type", "stop" } });
+            } else if (item->contLine() == FiguredBassItem::ContLine::EXTENDED) {
+                bool hasFigure = (strPrefix != "" || item->digit() != FBIDigitNone || strSuffix != "");
+                if (hasFigure) {
+                    xml.tag("extend", { { "type", "start" } });
+                } else {
+                    xml.tag("extend", { { "type", "continue" } });
+                }
+            }
+        } else {
+            xml.tag("extend", { { "type", "start" } });
+        }
+    }
+    // If the figure is not "original", it must have been created using the "duration" feature of figured bass.
+    // In other words, the original figure belongs to a previous note rather than the current note.
+    else {
+        if (crEndTick < fbEndTick) {
+            xml.tag("extend", { { "type", "continue" } });
+        } else {
+            xml.tag("extend", { { "type", "stop" } });
+        }
+    }
+    xml.endElement();
+}
+
+static void writeMusicXML(const FiguredBass* item, XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration,
+                          int divisions)
+{
+    XmlWriter::Attributes attrs;
+    if (item->hasParentheses()) {
+        attrs = { { "parentheses", "yes" } };
+    }
+    xml.startElement("figured-bass", attrs);
+    for (FiguredBassItem* fbItem : item->items()) {
+        writeMusicXML(fbItem, xml, isOriginalFigure, crEndTick, fbEndTick);
+    }
+    if (writeDuration) {
+        xml.tag("duration", item->ticks().ticks() / divisions);
+    }
+    xml.endElement();
+}
+
+//---------------------------------------------------------
 //  figuredBass
 //---------------------------------------------------------
 
@@ -5705,15 +5805,15 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
                     const Fraction crEndTick = cr->tick() + cr->actualTicks();
                     const Fraction fbEndTick = fb->segment()->tick() + fb->ticks();
                     const bool writeDuration = fb->ticks() < cr->actualTicks();
-                    fb->writeMusicXML(xml, true, crEndTick.ticks(), fbEndTick.ticks(),
-                                      writeDuration, divisions);
+                    writeMusicXML(fb, xml, true, crEndTick.ticks(), fbEndTick.ticks(),
+                                  writeDuration, divisions);
 
                     // Check for changing figures under a single note (each figure stored in a separate segment)
                     for (Segment* segNext = seg->next(); segNext && segNext->element(track) == NULL; segNext = segNext->next()) {
                         for (EngravingItem* annot : segNext->annotations()) {
                             if (annot->type() == ElementType::FIGURED_BASS && annot->track() == track) {
                                 fb = dynamic_cast<const FiguredBass*>(annot);
-                                fb->writeMusicXML(xml, true, 0, 0, true, divisions);
+                                writeMusicXML(fb, xml, true, 0, 0, true, divisions);
                             }
                         }
                     }
@@ -5730,7 +5830,7 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
             bool writeDuration = fb->ticks() < cr->actualTicks();
             if (cr->tick() < fbEndTick) {
                 //LOGD("figuredbass() at tick %d extend only", cr->tick());
-                fb->writeMusicXML(xml, false, crEndTick.ticks(), fbEndTick.ticks(), writeDuration, divisions);
+                writeMusicXML(fb, xml, false, crEndTick.ticks(), fbEndTick.ticks(), writeDuration, divisions);
             }
             if (fbEndTick <= crEndTick) {
                 //LOGD("figuredbass() at tick %d extend done", cr->tick() + cr->actualTicks());
@@ -7478,6 +7578,85 @@ double ExportMusicXml::getTenthsFromDots(double dots) const
     return dots / DPMM / millimeters * tenths;
 }
 
+static void writeMusicXML(const FretDiagram* item, XmlWriter& xml)
+{
+    LOGD("FretDiagram::writeMusicXML() this %p harmony %p", item, item->harmony());
+    xml.startElement("frame");
+    xml.tag("frame-strings", item->strings());
+    xml.tag("frame-frets", item->frets());
+    if (item->fretOffset() > 0) {
+        xml.tag("first-fret", item->fretOffset() + 1);
+    }
+
+    for (int i = 0; i < item->strings(); ++i) {
+        int mxmlString = item->strings() - i;
+
+        std::vector<int> bStarts;
+        std::vector<int> bEnds;
+        for (auto const& j : item->barres()) {
+            FretItem::Barre b = j.second;
+            int fret = j.first;
+            if (!b.exists()) {
+                continue;
+            }
+
+            if (b.startString == i) {
+                bStarts.push_back(fret);
+            } else if (b.endString == i || (b.endString == -1 && mxmlString == 1)) {
+                bEnds.push_back(fret);
+            }
+        }
+
+        if (item->marker(i).exists() && item->marker(i).mtype == FretMarkerType::CIRCLE) {
+            xml.startElement("frame-note");
+            xml.tag("string", mxmlString);
+            xml.tag("fret", "0");
+            xml.endElement();
+        }
+        // Markers may exists alongside with dots
+        // Write dots
+        for (auto const& d : item->dot(i)) {
+            if (!d.exists()) {
+                continue;
+            }
+            xml.startElement("frame-note");
+            xml.tag("string", mxmlString);
+            xml.tag("fret", d.fret + item->fretOffset());
+            // TODO: write fingerings
+
+            // Also write barre if it starts at this dot
+            if (std::find(bStarts.begin(), bStarts.end(), d.fret) != bStarts.end()) {
+                xml.tag("barre", { { "type", "start" } });
+                bStarts.erase(std::remove(bStarts.begin(), bStarts.end(), d.fret), bStarts.end());
+            }
+            if (std::find(bEnds.begin(), bEnds.end(), d.fret) != bEnds.end()) {
+                xml.tag("barre", { { "type", "stop" } });
+                bEnds.erase(std::remove(bEnds.begin(), bEnds.end(), d.fret), bEnds.end());
+            }
+            xml.endElement();
+        }
+
+        // Write unwritten barres
+        for (int j : bStarts) {
+            xml.startElement("frame-note");
+            xml.tag("string", mxmlString);
+            xml.tag("fret", j);
+            xml.tag("barre", { { "type", "start" } });
+            xml.endElement();
+        }
+
+        for (int j : bEnds) {
+            xml.startElement("frame-note");
+            xml.tag("string", mxmlString);
+            xml.tag("fret", j);
+            xml.tag("barre", { { "type", "stop" } });
+            xml.endElement();
+        }
+    }
+
+    xml.endElement();
+}
+
 //---------------------------------------------------------
 //   harmony
 //---------------------------------------------------------
@@ -7587,7 +7766,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             _xml.tag("offset", offset);
         }
         if (fd) {
-            fd->writeMusicXML(_xml);
+            writeMusicXML(fd, _xml);
         }
 
         _xml.endElement();

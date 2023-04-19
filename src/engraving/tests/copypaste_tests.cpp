@@ -28,8 +28,6 @@
 
 #include "internal/qmimedataadapter.h"
 
-#include "engraving/rw/xml.h"
-
 #include "libmscore/chord.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/durationtype.h"

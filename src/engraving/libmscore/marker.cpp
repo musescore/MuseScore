@@ -22,8 +22,6 @@
 
 #include "marker.h"
 
-#include "rw/xml.h"
-
 #include "types/typesconv.h"
 
 #include "measure.h"

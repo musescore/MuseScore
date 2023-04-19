@@ -25,7 +25,6 @@
 #include <iterator>
 #include <unordered_set>
 
-#include "rw/xml.h"
 #include "style/textstyle.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
@@ -36,6 +35,7 @@
 #include "masterscore.h"
 #include "score.h"
 #include "undo.h"
+#include "connector.h"
 
 #include "log.h"
 
@@ -463,129 +463,6 @@ void EngravingObject::undoPushProperty(Pid id)
 {
     PropertyValue val = getProperty(id);
     score()->undoStack()->push1(new ChangeProperty(this, id, val));
-}
-
-//---------------------------------------------------------
-//   readProperty
-//---------------------------------------------------------
-
-void EngravingObject::readProperty(XmlReader& e, Pid id)
-{
-    PropertyValue v = mu::engraving::readProperty(id, e);
-    switch (propertyType(id)) {
-    case P_TYPE::MILLIMETRE: //! NOTE type mm, but stored in xml as spatium
-        v = v.value<Spatium>().toMM(score()->spatium());
-        break;
-    case P_TYPE::POINT:
-        if (offsetIsSpatiumDependent()) {
-            v = v.value<PointF>() * score()->spatium();
-        } else {
-            v = v.value<PointF>() * DPMM;
-        }
-        break;
-    default:
-        break;
-    }
-    setProperty(id, v);
-    if (isStyled(id)) {
-        setPropertyFlags(id, PropertyFlags::UNSTYLED);
-    }
-}
-
-bool EngravingObject::readProperty(const AsciiStringView& s, XmlReader& e, Pid id)
-{
-    if (s == propertyName(id)) {
-        readProperty(e, id);
-        return true;
-    }
-    return false;
-}
-
-//-----------------------------------------------------------------------------
-//   writeProperty
-//
-//    - styled properties are never written
-//    - unstyled properties are always written regardless of value,
-//    - properties without style are written if different from default value
-//-----------------------------------------------------------------------------
-
-void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
-{
-    if (isStyled(pid)) {
-        return;
-    }
-    PropertyValue p = getProperty(pid);
-    if (!p.isValid()) {
-        LOGD("%s invalid property %d <%s>", typeName(), int(pid), propertyName(pid));
-        return;
-    }
-    PropertyFlags f = propertyFlags(pid);
-    PropertyValue d = (f != PropertyFlags::STYLED) ? propertyDefault(pid) : PropertyValue();
-
-    if (pid == Pid::FONT_STYLE) {
-        FontStyle ds = FontStyle(d.isValid() ? d.toInt() : 0);
-        FontStyle fs = FontStyle(p.toInt());
-        if ((fs& FontStyle::Bold) != (ds & FontStyle::Bold)) {
-            xml.tag("bold", fs & FontStyle::Bold);
-        }
-        if ((fs& FontStyle::Italic) != (ds & FontStyle::Italic)) {
-            xml.tag("italic", fs & FontStyle::Italic);
-        }
-        if ((fs& FontStyle::Underline) != (ds & FontStyle::Underline)) {
-            xml.tag("underline", fs & FontStyle::Underline);
-        }
-        if ((fs& FontStyle::Strike) != (ds & FontStyle::Strike)) {
-            xml.tag("strike", fs & FontStyle::Strike);
-        }
-        return;
-    }
-
-    P_TYPE type = propertyType(pid);
-    if (P_TYPE::MILLIMETRE == type) {
-        double f1 = p.toReal();
-        if (d.isValid() && std::abs(f1 - d.toReal()) < 0.0001) {            // fuzzy compare
-            return;
-        }
-        p = PropertyValue(Spatium::fromMM(f1, score()->spatium()));
-        d = PropertyValue();
-    } else if (P_TYPE::POINT == type) {
-        PointF p1 = p.value<PointF>();
-        if (d.isValid()) {
-            PointF p2 = d.value<PointF>();
-            if ((std::abs(p1.x() - p2.x()) < 0.0001) && (std::abs(p1.y() - p2.y()) < 0.0001)) {
-                return;
-            }
-        }
-        double q = offsetIsSpatiumDependent() ? score()->spatium() : DPMM;
-        p = PropertyValue(p1 / q);
-        d = PropertyValue();
-    }
-    xml.tagProperty(pid, p, d);
-}
-
-//---------------------------------------------------------
-//   readStyledProperty
-//---------------------------------------------------------
-
-bool EngravingObject::readStyledProperty(XmlReader& e, const AsciiStringView& tag)
-{
-    for (const StyledProperty& spp : *styledProperties()) {
-        if (readProperty(tag, e, spp.pid)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-//---------------------------------------------------------
-//   writeStyledProperties
-//---------------------------------------------------------
-
-void EngravingObject::writeStyledProperties(XmlWriter& xml) const
-{
-    for (const StyledProperty& spp : *styledProperties()) {
-        writeProperty(xml, spp.pid);
-    }
 }
 
 //---------------------------------------------------------

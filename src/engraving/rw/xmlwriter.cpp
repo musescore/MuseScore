@@ -23,9 +23,11 @@
 #include "xmlwriter.h"
 
 #include "types/typesconv.h"
-#include "rw/400/writecontext.h"
+
 #include "libmscore/engravingitem.h"
 #include "libmscore/property.h"
+
+#include "400/writecontext.h"
 
 #include "log.h"
 

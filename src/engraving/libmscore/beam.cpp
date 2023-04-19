@@ -30,7 +30,6 @@
 #include "realfn.h"
 
 #include "draw/types/brush.h"
-#include "rw/xml.h"
 
 #include "actionicon.h"
 #include "chord.h"

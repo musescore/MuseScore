@@ -21,7 +21,6 @@
  */
 #include "readchordlisthook.h"
 
-#include "rw/xml.h"
 #include "style/style.h"
 
 #include "libmscore/score.h"

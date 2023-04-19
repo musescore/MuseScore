@@ -30,7 +30,6 @@
 
 #include "infrastructure/htmlparser.h"
 
-#include "rw/xml.h"
 #include "rw/compat/compatutils.h"
 
 #include "style/defaultstyle.h"
@@ -1263,9 +1262,9 @@ static void readOttava114(XmlReader& e, ReadContext& ctx, Ottava* ottava)
         } else if (tag == "numbersOnly") {
             ottava->setNumbersOnly(e.readInt());
         } else if (tag == "lineWidth") {
-            ottava->readProperty(e, Pid::LINE_WIDTH);
+            rw400::TRead::readProperty(ottava, e, ctx, Pid::LINE_WIDTH);
         } else if (tag == "lineStyle") {
-            ottava->readProperty(e, Pid::LINE_STYLE);
+            rw400::TRead::readProperty(ottava, e, ctx, Pid::LINE_STYLE);
         } else if (tag == "beginSymbol") {                        // obsolete
         } else if (tag == "continueSymbol") {                     // obsolete
         } else if (!readTextLineProperties114(e, ctx, ottava)) {
@@ -1370,7 +1369,7 @@ static void readPedal114(XmlReader& e, ReadContext& ctx, Pedal* pedal)
             pedal->setLineWidth(Millimetre(e.readDouble()));
             pedal->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
         } else if (tag == "lineStyle") {
-            pedal->readProperty(e, Pid::LINE_STYLE);
+            rw400::TRead::readProperty(pedal, e, ctx, Pid::LINE_STYLE);
             pedal->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
         } else if (tag == "beginSymbol" || tag == "symbol") {   // "symbol" is obsolete
             String text(e.readText());
@@ -2195,15 +2194,16 @@ static void readBox(XmlReader& e, Box* b);
 
 static bool readBoxProperties(XmlReader& e, Box* b)
 {
+    ReadContext& ctx = *e.context();
     const AsciiStringView tag(e.name());
     if (tag == "height") {
         b->setBoxHeight(Spatium(e.readDouble()));
     } else if (tag == "width") {
         b->setBoxWidth(Spatium(e.readDouble()));
     } else if (tag == "topGap") {
-        b->readProperty(e, Pid::TOP_GAP);
+        rw400::TRead::readProperty(b, e, ctx, Pid::TOP_GAP);
     } else if (tag == "bottomGap") {
-        b->readProperty(e, Pid::BOTTOM_GAP);
+        rw400::TRead::readProperty(b, e, ctx, Pid::BOTTOM_GAP);
     } else if (tag == "leftMargin") {
         b->setLeftMargin(e.readDouble());
     } else if (tag == "rightMargin") {
@@ -2402,7 +2402,7 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
                 staff->clefList().insert(std::pair<int, ClefType>(0, ClefType::G));
             }
         } else if (tag == "keylist") {
-            staff->keyList()->read(e, ctx);
+            rw400::TRead::read(staff->keyList(), e, ctx);
         } else if (tag == "bracket") {
             size_t col = staff->brackets().size();
             staff->setBracketType(col, BracketType(e.intAttribute("type", -1)));
@@ -2769,7 +2769,7 @@ Err Read114::read(Score* score, XmlReader& e, ReadInOutData* out)
             rw400::TRead::read(ks, e, ctx);
             delete ks;
         } else if (tag == "siglist") {
-            masterScore->_sigmap->read(e, ctx.fileDivision());
+            rw400::TRead::read(masterScore->_sigmap, e, ctx);
         } else if (tag == "programVersion") {
             masterScore->setMscoreVersion(e.readText());
         } else if (tag == "programRevision") {
@@ -2906,7 +2906,7 @@ Err Read114::read(Score* score, XmlReader& e, ReadInOutData* out)
                 e.skipCurrentElement();
             } else {
                 Excerpt* ex = new Excerpt(masterScore);
-                ex->read(e);
+                rw400::TRead::read(ex, e, ctx);
                 masterScore->_excerpts.push_back(ex);
             }
         } else if (tag == "Beam") {

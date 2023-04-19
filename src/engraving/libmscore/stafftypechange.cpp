@@ -21,7 +21,6 @@
  */
 
 #include "stafftypechange.h"
-#include "rw/xml.h"
 
 #include "score.h"
 #include "measure.h"

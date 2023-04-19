@@ -25,7 +25,6 @@
 #include <cmath>
 
 #include "containers.h"
-#include "rw/xml.h"
 
 #include "factory.h"
 #include "measure.h"

@@ -30,7 +30,6 @@
 #include <assert.h>
 
 #include "draw/types/brush.h"
-#include "rw/xml.h"
 
 #include "translation.h"
 #include "types/translatablestring.h"
@@ -40,11 +39,15 @@
 #include "accidental.h"
 #include "actionicon.h"
 #include "articulation.h"
+
 #include "bagpembell.h"
 #include "beam.h"
 #include "bend.h"
+
+#include "connector.h"
 #include "chord.h"
 #include "chordline.h"
+
 #include "drumset.h"
 #include "factory.h"
 #include "fingering.h"

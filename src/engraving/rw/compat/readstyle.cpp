@@ -23,7 +23,8 @@
 
 #include "style/defaultstyle.h"
 #include "style/style.h"
-#include "rw/xml.h"
+
+#include "rw/xmlreader.h"
 
 #include "libmscore/masterscore.h"
 

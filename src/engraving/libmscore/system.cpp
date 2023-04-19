@@ -29,7 +29,6 @@
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
-#include "rw/xml.h"
 
 #include "layout/layoutcontext.h"
 #include "realfn.h"

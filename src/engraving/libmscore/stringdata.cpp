@@ -25,7 +25,9 @@
 #include <map>
 
 #include "defer.h"
-#include "rw/xml.h"
+
+#include "rw/xmlreader.h"
+#include "rw/xmlwriter.h"
 
 #include "chord.h"
 #include "note.h"

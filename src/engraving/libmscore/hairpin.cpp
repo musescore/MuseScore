@@ -28,7 +28,6 @@
 
 #include "draw/types/pen.h"
 #include "draw/types/transform.h"
-#include "rw/xml.h"
 
 #include "types/typesconv.h"
 

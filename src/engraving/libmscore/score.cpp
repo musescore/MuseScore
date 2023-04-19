@@ -35,7 +35,7 @@
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "compat/dummyelement.h"
-#include "rw/xml.h"
+
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"

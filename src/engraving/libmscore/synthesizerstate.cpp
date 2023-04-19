@@ -21,7 +21,9 @@
  */
 
 #include "synthesizerstate.h"
-#include "rw/xml.h"
+
+#include "rw/xmlwriter.h"
+#include "rw/xmlreader.h"
 
 #include "log.h"
 

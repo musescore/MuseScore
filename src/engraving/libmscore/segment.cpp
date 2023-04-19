@@ -22,8 +22,10 @@
 
 #include "segment.h"
 
+#include <climits>
+
 #include "translation.h"
-#include "rw/xml.h"
+
 #include "types/typesconv.h"
 
 #include "accidental.h"

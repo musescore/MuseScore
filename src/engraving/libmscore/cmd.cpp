@@ -31,7 +31,9 @@
 
 #include "infrastructure/messagebox.h"
 #include "style/style.h"
-#include "rw/xml.h"
+
+#include "rw/xmlreader.h"
+#include "rw/400/readcontext.h"
 
 #include "accidental.h"
 #include "articulation.h"

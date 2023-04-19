@@ -25,7 +25,6 @@
 #include <cmath>
 
 #include "types/typesconv.h"
-#include "rw/xml.h"
 
 #include "iengravingfont.h"
 

@@ -31,7 +31,6 @@
 #include "commonscene/commonscenetypes.h"
 #include "translation.h"
 
-#include "engraving/rw/xml.h"
 #include "engraving/rw/400/tread.h"
 #include "engraving/libmscore/accidental.h"
 #include "engraving/libmscore/clef.h"

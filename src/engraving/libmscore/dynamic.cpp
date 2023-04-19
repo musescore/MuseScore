@@ -21,8 +21,6 @@
  */
 #include "dynamic.h"
 
-#include "rw/xml.h"
-
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 

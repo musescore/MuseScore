@@ -29,9 +29,6 @@
 #include "global/allocator.h"
 
 namespace mu::engraving {
-class XmlWriter;
-class XmlReader;
-
 //---------------------------------------------------------
 //    NoteEvent
 //---------------------------------------------------------
@@ -49,9 +46,6 @@ public:
     NoteEvent() {}
     NoteEvent(int a, int b, int c, double d = 1.0, double play = true, int offset = 0)
         : m_pitch(a), m_ontime(b), m_len(c), m_velocityMultiplier(d), m_play(play), m_offset(offset) {}
-
-    void read(XmlReader&);
-    void write(XmlWriter&) const;
 
     int pitch() const { return m_pitch; }
     int ontime() const { return m_ontime; }

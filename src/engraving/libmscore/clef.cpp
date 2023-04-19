@@ -29,8 +29,6 @@
 
 #include "translation.h"
 
-#include "rw/xml.h"
-
 #include "types/typesconv.h"
 
 #include "ambitus.h"

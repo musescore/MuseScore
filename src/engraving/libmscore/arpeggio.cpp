@@ -27,7 +27,6 @@
 #include "containers.h"
 
 #include "iengravingfont.h"
-#include "rw/xml.h"
 
 #include "types/typesconv.h"
 

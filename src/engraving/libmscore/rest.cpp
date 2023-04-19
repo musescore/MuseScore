@@ -29,8 +29,6 @@
 #include "realfn.h"
 #include "translation.h"
 
-#include "rw/xml.h"
-
 #include "actionicon.h"
 #include "articulation.h"
 #include "chord.h"

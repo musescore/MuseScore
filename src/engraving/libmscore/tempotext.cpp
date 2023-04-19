@@ -26,7 +26,6 @@
 
 #include "containers.h"
 #include "translation.h"
-#include "rw/xml.h"
 
 #include "types/typesconv.h"
 #include "types/constants.h"

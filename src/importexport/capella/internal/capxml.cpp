@@ -33,8 +33,9 @@
 
 #include <QRegularExpression>
 
-#include "engravingerrors.h"
-#include "libmscore/masterscore.h"
+#include "engraving/rw/xmlreader.h"
+#include "engraving/engravingerrors.h"
+#include "engraving/libmscore/masterscore.h"
 #include "serialization/zipreader.h"
 
 #include "log.h"

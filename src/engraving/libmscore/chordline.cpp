@@ -22,8 +22,6 @@
 
 #include "chordline.h"
 
-#include "rw/xml.h"
-
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"

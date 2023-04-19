@@ -197,10 +197,6 @@ public:
     double centerX() const;
     double rightX() const;
 
-    // read / write MusicXML
-    void readMusicXML(XmlReader& de);
-    void writeMusicXML(XmlWriter& xml) const;
-
     int  strings() const { return _strings; }
     int  frets()   const { return _frets; }
     void setStrings(int n);

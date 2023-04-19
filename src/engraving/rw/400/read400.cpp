@@ -21,8 +21,6 @@
  */
 #include "read400.h"
 
-#include "rw/xml.h"
-
 #include "libmscore/audio.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/factory.h"
@@ -103,7 +101,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
             e.skipCurrentElement();
         } else if (tag == "Audio") {
             score->_audio = new Audio;
-            score->_audio->read(e);
+            rw400::TRead::read(score->_audio, e, ctx);
         } else if (tag == "showOmr") {
             e.skipCurrentElement();
         } else if (tag == "playMode") {
