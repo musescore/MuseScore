@@ -24,9 +24,6 @@
 
 #include "translation.h"
 
-#include "rw/400/writecontext.h"
-#include "rw/xml.h"
-
 #include "style/style.h"
 #include "types/typesconv.h"
 
@@ -35,8 +32,11 @@
 #include "barline.h"
 #include "beam.h"
 #include "breath.h"
+
 #include "chord.h"
 #include "clef.h"
+#include "connector.h"
+
 #include "factory.h"
 #include "figuredbass.h"
 #include "harmony.h"

@@ -21,7 +21,8 @@
  */
 #include "spanner.h"
 
-#include "rw/xml.h"
+#include "rw/xmlwriter.h"
+#include "rw/400/writecontext.h"
 
 #include "chord.h"
 #include "chordrest.h"

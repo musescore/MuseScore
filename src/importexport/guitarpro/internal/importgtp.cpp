@@ -29,8 +29,8 @@
 #include "realfn.h"
 #include "translation.h"
 
-#include "rw/xml.h"
 #include "types/typesconv.h"
+#include "rw/xmlwriter.h"
 
 #include <libmscore/factory.h>
 #include <libmscore/measurebase.h>

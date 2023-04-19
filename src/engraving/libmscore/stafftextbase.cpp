@@ -22,8 +22,6 @@
 
 #include "stafftextbase.h"
 
-#include "rw/xml.h"
-
 #include "types/typesconv.h"
 
 #include "segment.h"

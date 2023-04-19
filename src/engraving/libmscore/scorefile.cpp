@@ -28,9 +28,9 @@
 #include "style/style.h"
 
 #include "compat/writescorehook.h"
-#include "rw/xml.h"
+
 #include "rw/400/twrite.h"
-#include "rw/400/writecontext.h"
+
 #include "rw/400/staffrw.h"
 
 #include "audio.h"
@@ -117,7 +117,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     if (_audio && xml.context()->isMsczMode()) {
         xml.tag("playMode", int(_playMode));
-        _audio->write(xml);
+        rw400::TWrite::write(_audio, xml, *xml.context());
     }
 
     for (int i = 0; i < 32; ++i) {

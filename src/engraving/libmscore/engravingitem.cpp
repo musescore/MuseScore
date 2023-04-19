@@ -37,10 +37,10 @@
 #include "draw/types/pen.h"
 #include "iengravingfont.h"
 #include "style/style.h"
-#include "rw/xml.h"
+
 #include "rw/400/tread.h"
 #include "rw/400/twrite.h"
-#include "rw/400/writecontext.h"
+
 #include "types/typesconv.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY

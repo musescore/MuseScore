@@ -25,7 +25,6 @@
 #include <cmath>
 
 #include "draw/types/pen.h"
-#include "rw/xml.h"
 
 #include "style/style.h"
 

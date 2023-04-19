@@ -23,7 +23,6 @@
 #include "accidental.h"
 
 #include "iengravingfont.h"
-#include "rw/xml.h"
 
 #include "types/symnames.h"
 #include "types/translatablestring.h"

@@ -23,11 +23,11 @@
 #include "instrtemplate.h"
 
 #include "io/file.h"
-
 #include "containers.h"
 #include "translation.h"
 
-#include "rw/xml.h"
+#include "rw/xmlreader.h"
+#include "rw/xmlwriter.h"
 #include "style/style.h"
 #include "types/typesconv.h"
 

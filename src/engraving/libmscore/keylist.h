@@ -29,9 +29,6 @@
 #include "key.h"
 
 namespace mu::engraving {
-class ReadContext;
-class XmlReader;
-
 //---------------------------------------------------------
 //   KeyList
 //    this list is instantiated for every staff
@@ -48,7 +45,6 @@ public:
     void setKey(int tick, KeySigEvent);
     int nextKeyTick(int tick) const;
     int currentKeyTick(int tick) const;
-    void read(XmlReader&, const ReadContext& ctx);
 };
 }
 

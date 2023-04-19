@@ -24,8 +24,10 @@
 
 #include "io/file.h"
 #include "io/fileinfo.h"
+#include "rw/xmlreader.h"
+#include "rw/400/readcontext.h"
+#include "rw/xmlwriter.h"
 
-#include "rw/xml.h"
 #include "style/style.h"
 
 #include "mscore.h"

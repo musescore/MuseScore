@@ -24,8 +24,6 @@
 
 #include "translation.h"
 
-#include "rw/xml.h"
-
 #include "beam.h"
 #include "chord.h"
 #include "measure.h"

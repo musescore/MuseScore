@@ -22,7 +22,9 @@
 #include "pageformat.h"
 
 #include "style/style.h"
-#include "rw/xml.h"
+#include "rw/xmlreader.h"
+
+#include "libmscore/mscore.h"
 
 namespace mu::engraving::compat {
 //---------------------------------------------------------

@@ -29,10 +29,11 @@
 
 #include "iengravingfont.h"
 
-#include "rw/xml.h"
-
 #include "style/defaultstyle.h"
 #include "style/textstyle.h"
+
+#include "rw/xmlreader.h"
+#include "rw/xmlwriter.h"
 
 #include "types/symnames.h"
 #include "types/translatablestring.h"

@@ -23,7 +23,6 @@
 #include "bagpembell.h"
 
 #include "draw/types/pen.h"
-#include "rw/xml.h"
 
 #include "types/typesconv.h"
 #include "iengravingfont.h"

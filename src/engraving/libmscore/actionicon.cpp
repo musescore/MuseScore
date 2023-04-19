@@ -23,7 +23,6 @@
 #include "actionicon.h"
 
 #include "draw/fontmetrics.h"
-#include "rw/xml.h"
 
 #include "property.h"
 

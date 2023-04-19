@@ -22,8 +22,6 @@
 
 #include "gradualtempochange.h"
 
-#include "rw/xml.h"
-
 #include "log.h"
 
 #include "measure.h"

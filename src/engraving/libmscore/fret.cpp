@@ -27,7 +27,6 @@
 #include "draw/fontmetrics.h"
 #include "draw/types/brush.h"
 #include "draw/types/pen.h"
-#include "rw/xml.h"
 
 #include "chord.h"
 #include "factory.h"
@@ -977,89 +976,6 @@ void FretDiagram::scanElements(void* data, void (* func)(void*, EngravingItem*),
     if (_harmony && !score()->isPaletteScore()) {
         func(data, _harmony);
     }
-}
-
-//---------------------------------------------------------
-//   Write MusicXML
-//---------------------------------------------------------
-
-void FretDiagram::writeMusicXML(XmlWriter& xml) const
-{
-    LOGD("FretDiagram::writeMusicXML() this %p harmony %p", this, _harmony);
-    xml.startElement("frame");
-    xml.tag("frame-strings", _strings);
-    xml.tag("frame-frets", frets());
-    if (fretOffset() > 0) {
-        xml.tag("first-fret", fretOffset() + 1);
-    }
-
-    for (int i = 0; i < _strings; ++i) {
-        int mxmlString = _strings - i;
-
-        std::vector<int> bStarts;
-        std::vector<int> bEnds;
-        for (auto const& j : _barres) {
-            FretItem::Barre b = j.second;
-            int fret = j.first;
-            if (!b.exists()) {
-                continue;
-            }
-
-            if (b.startString == i) {
-                bStarts.push_back(fret);
-            } else if (b.endString == i || (b.endString == -1 && mxmlString == 1)) {
-                bEnds.push_back(fret);
-            }
-        }
-
-        if (marker(i).exists() && marker(i).mtype == FretMarkerType::CIRCLE) {
-            xml.startElement("frame-note");
-            xml.tag("string", mxmlString);
-            xml.tag("fret", "0");
-            xml.endElement();
-        }
-        // Markers may exists alongside with dots
-        // Write dots
-        for (auto const& d : dot(i)) {
-            if (!d.exists()) {
-                continue;
-            }
-            xml.startElement("frame-note");
-            xml.tag("string", mxmlString);
-            xml.tag("fret", d.fret + fretOffset());
-            // TODO: write fingerings
-
-            // Also write barre if it starts at this dot
-            if (std::find(bStarts.begin(), bStarts.end(), d.fret) != bStarts.end()) {
-                xml.tag("barre", { { "type", "start" } });
-                bStarts.erase(std::remove(bStarts.begin(), bStarts.end(), d.fret), bStarts.end());
-            }
-            if (std::find(bEnds.begin(), bEnds.end(), d.fret) != bEnds.end()) {
-                xml.tag("barre", { { "type", "stop" } });
-                bEnds.erase(std::remove(bEnds.begin(), bEnds.end(), d.fret), bEnds.end());
-            }
-            xml.endElement();
-        }
-
-        // Write unwritten barres
-        for (int j : bStarts) {
-            xml.startElement("frame-note");
-            xml.tag("string", mxmlString);
-            xml.tag("fret", j);
-            xml.tag("barre", { { "type", "start" } });
-            xml.endElement();
-        }
-
-        for (int j : bEnds) {
-            xml.startElement("frame-note");
-            xml.tag("string", mxmlString);
-            xml.tag("fret", j);
-            xml.tag("barre", { { "type", "stop" } });
-            xml.endElement();
-        }
-    }
-
-    xml.endElement();
 }
 
 //---------------------------------------------------------

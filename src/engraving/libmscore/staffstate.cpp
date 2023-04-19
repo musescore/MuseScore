@@ -23,7 +23,6 @@
 #include "staffstate.h"
 
 #include "draw/types/pen.h"
-#include "rw/xml.h"
 
 #include "part.h"
 #include "score.h"

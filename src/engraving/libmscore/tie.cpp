@@ -26,7 +26,6 @@
 #include "draw/types/brush.h"
 #include "draw/types/pen.h"
 #include "draw/types/transform.h"
-#include "rw/xml.h"
 
 #include "accidental.h"
 #include "chord.h"

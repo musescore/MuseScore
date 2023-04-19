@@ -26,7 +26,7 @@
 #include "draw/types/transform.h"
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
-#include "rw/xml.h"
+
 #include "iengravingfont.h"
 
 #include "articulation.h"

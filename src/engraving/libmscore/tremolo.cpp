@@ -25,7 +25,6 @@
 #include "draw/types/brush.h"
 #include "draw/types/pen.h"
 #include "draw/types/transform.h"
-#include "rw/xml.h"
 
 #include "style/style.h"
 #include "types/translatablestring.h"

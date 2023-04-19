@@ -21,7 +21,6 @@
  */
 
 #include "systemdivider.h"
-#include "rw/xml.h"
 
 #include "types/symnames.h"
 

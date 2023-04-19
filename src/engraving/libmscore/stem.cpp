@@ -23,8 +23,6 @@
 
 #include <cmath>
 
-#include "rw/xml.h"
-
 #include "draw/types/brush.h"
 
 #include "beam.h"

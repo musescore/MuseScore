@@ -325,8 +325,6 @@ public:
     void setYoffset(Spatium val) { _yoffset = val; }
     double spatium(Score*) const;
 
-    void write(XmlWriter& xml) const;
-
     void setStemless(bool val) { _stemless = val; }
     bool stemless() const { return _stemless; }
     bool genTimesig() const { return _genTimesig; }

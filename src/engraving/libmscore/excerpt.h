@@ -79,8 +79,6 @@ public:
 
     void setVoiceVisible(Staff* staff, int voiceIndex, bool visible);
 
-    void read(XmlReader&);
-
     static std::vector<Excerpt*> createExcerptsFromParts(const std::vector<Part*>& parts);
     static Excerpt* createExcerptFromPart(Part* part);
 

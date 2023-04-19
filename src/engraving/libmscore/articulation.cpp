@@ -24,7 +24,6 @@
 
 #include "draw/fontmetrics.h"
 #include "rw/206/read206.h"
-#include "rw/xml.h"
 
 #include "types/symnames.h"
 #include "types/typesconv.h"

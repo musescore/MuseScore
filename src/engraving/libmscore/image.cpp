@@ -28,7 +28,6 @@
 #include "draw/types/pixmap.h"
 #include "draw/types/transform.h"
 #include "draw/svgrenderer.h"
-#include "rw/xml.h"
 
 #include "imageStore.h"
 #include "masterscore.h"

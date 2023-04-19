@@ -22,8 +22,6 @@
 
 #include "timesig.h"
 
-#include "rw/xml.h"
-
 #include "style/style.h"
 #include "translation.h"
 #include "iengravingfont.h"

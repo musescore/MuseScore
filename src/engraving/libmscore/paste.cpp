@@ -23,7 +23,7 @@
 #include "io/buffer.h"
 
 #include "imimedata.h"
-#include "rw/xml.h"
+
 #include "rw/400/tread.h"
 #include "types/typesconv.h"
 

@@ -24,7 +24,6 @@
  File handling: loading and saving.
  */
 
-#include "rw/xml.h"
 #include "style/style.h"
 
 #include "barline.h"

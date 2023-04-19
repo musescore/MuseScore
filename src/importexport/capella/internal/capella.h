@@ -25,7 +25,6 @@
 
 #include <QFont>
 
-#include "engraving/rw/xml.h"
 #include "engraving/types/types.h"
 
 class QFile;

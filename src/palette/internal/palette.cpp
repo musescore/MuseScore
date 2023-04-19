@@ -32,7 +32,9 @@
 #include "mimedatautils.h"
 
 #include "draw/types/geometry.h"
-#include "engraving/rw/xml.h"
+
+#include "engraving/rw/400/writecontext.h"
+
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/articulation.h"
 #include "engraving/libmscore/bracket.h"

@@ -25,8 +25,6 @@
 #include <algorithm>
 #include <vector>
 
-#include "rw/xml.h"
-
 #include "types/typesconv.h"
 
 #include "changeMap.h"

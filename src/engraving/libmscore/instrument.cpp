@@ -22,9 +22,12 @@
 
 #include "instrument.h"
 
-#include "rw/xml.h"
 #include "infrastructure/htmlparser.h"
 #include "types/typesconv.h"
+
+#include "rw/xmlreader.h"
+#include "rw/xmlwriter.h"
+#include "rw/400/readcontext.h"
 
 #include "compat/midi/event.h"
 //#include "compat/midi/midipatch.h"

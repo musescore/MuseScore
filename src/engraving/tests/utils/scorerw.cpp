@@ -29,7 +29,6 @@
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/writescorehook.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
-#include "engraving/rw/xml.h"
 #include "engraving/rw/400/tread.h"
 #include "engraving/rw/400/twrite.h"
 #include "engraving/libmscore/factory.h"

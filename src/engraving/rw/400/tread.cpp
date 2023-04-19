@@ -37,6 +37,9 @@
 #include "../../libmscore/dynamic.h"
 #include "../../libmscore/harmony.h"
 #include "../../libmscore/chordlist.h"
+
+#include "../../libmscore/excerpt.h"
+
 #include "../../libmscore/fret.h"
 #include "../../libmscore/tremolobar.h"
 #include "../../libmscore/sticking.h"
@@ -799,6 +802,27 @@ static SymId convertFromOldId(int val)
     return symId;
 }
 
+void TRead::read(KeyList* item, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        if (e.name() == "key") {
+            Key k;
+            int tick = e.intAttribute("tick", 0);
+            if (e.hasAttribute("custom")) {
+                k = Key::C;              // ke.setCustomType(e.intAttribute("custom"));
+            } else {
+                k = Key(e.intAttribute("idx"));
+            }
+            KeySigEvent ke;
+            ke.setKey(k);
+            (*item)[ctx.fileDivision(tick)] = ke;
+            e.readNext();
+        } else {
+            e.unknown();
+        }
+    }
+}
+
 void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
 {
     KeySigEvent sig;
@@ -983,6 +1007,26 @@ void TRead::read(FiguredBassItem* i, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+}
+
+void TRead::read(Excerpt* item, XmlReader& e, ReadContext&)
+{
+    const std::vector<Part*>& pl = item->masterScore()->parts();
+    std::vector<Part*> parts;
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag = e.name();
+        if (tag == "name" || tag == "title") {
+            item->setName(e.readText().trimmed());
+        } else if (tag == "part") {
+            size_t partIdx = static_cast<size_t>(e.readInt());
+            if (partIdx >= pl.size()) {
+                LOGD("Excerpt::read: bad part index");
+            } else {
+                parts.push_back(pl.at(partIdx));
+            }
+        }
+    }
+    item->setParts(parts);
 }
 
 void TRead::read(Fermata* f, XmlReader& e, ReadContext& ctx)
@@ -2586,7 +2630,7 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
             const AsciiStringView t(e.name());
             if (t == "Event") {
                 NoteEvent ne;
-                ne.read(e);
+                rw400::TRead::read(&ne, e, ctx);
                 playEvents.push_back(ne);
             } else {
                 e.unknown();
@@ -2608,6 +2652,22 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         return false;
     }
     return true;
+}
+
+void TRead::read(NoteEvent* item, XmlReader& e, ReadContext&)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "pitch") {
+            item->setPitch(e.readInt());
+        } else if (tag == "ontime") {
+            item->setOntime(e.readInt());
+        } else if (tag == "len") {
+            item->setLen(e.readInt());
+        } else {
+            e.unknown();
+        }
+    }
 }
 
 void TRead::read(NoteDot* d, XmlReader& e, ReadContext& ctx)
@@ -3093,7 +3153,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "isStaffVisible") {
         s->setVisible(e.readBool());
     } else if (tag == "keylist") {
-        s->keyList()->read(e, s->score());
+        rw400::TRead::read(s->keyList(), e, ctx);
     } else if (tag == "bracket") {
         int col = e.intAttribute("col", -1);
         if (col == -1) {
@@ -3332,6 +3392,55 @@ void TRead::read(TimeSig* s, XmlReader& e, ReadContext& ctx)
     s->setDenominatorString(denominatorString);
 }
 
+void TRead::read(TimeSigMap* item, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "sig") {
+            SigEvent t;
+            int tick = TRead::read(&t, e, ctx.fileDivision());
+            (*item)[tick] = t;
+        } else {
+            e.unknown();
+        }
+    }
+    item->normalize();
+}
+
+int TRead::read(SigEvent* item, XmlReader& e, int fileDivision)
+{
+    int tick  = e.intAttribute("tick", 0);
+    tick      = tick * Constants::division / fileDivision;
+
+    int numerator = 1;
+    int denominator = 1;
+    int denominator2 = -1;
+    int numerator2   = -1;
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "nom") {
+            numerator = e.readInt();
+        } else if (tag == "denom") {
+            denominator = e.readInt();
+        } else if (tag == "nom2") {
+            numerator2 = e.readInt();
+        } else if (tag == "denom2") {
+            denominator2 = e.readInt();
+        } else {
+            e.unknown();
+        }
+    }
+    if ((numerator2 == -1) || (denominator2 == -1)) {
+        numerator2   = numerator;
+        denominator2 = denominator;
+    }
+
+    item->setTimesig(TimeSigFrac(numerator, denominator));
+    item->setNominal(TimeSigFrac(numerator2, denominator2));
+    return tick;
+}
+
 void TRead::read(Tremolo* t, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
@@ -3477,7 +3586,7 @@ void TRead::read(Trill* t, XmlReader& e, ReadContext& ctx)
             accidental->setParent(t);
             t->setAccidental(accidental);
         } else if (tag == "ornamentStyle") {
-            t->readProperty(e, Pid::ORNAMENT_STYLE);
+            readProperty(t, e, ctx, Pid::ORNAMENT_STYLE);
         } else if (tag == "play") {
             t->setPlayArticulation(e.readBool());
         } else if (!readProperties(static_cast<SLine*>(t), e, ctx)) {

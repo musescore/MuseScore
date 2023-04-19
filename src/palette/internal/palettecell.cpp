@@ -23,7 +23,6 @@
 
 #include "mimedatautils.h"
 
-#include "engraving/rw/xml.h"
 #include "engraving/rw/400/tread.h"
 #include "engraving/rw/400/twrite.h"
 #include "engraving/libmscore/actionicon.h"

@@ -46,7 +46,7 @@
 
 #include "draw/types/color.h"
 #include "draw/types/pen.h"
-#include "engraving/rw/xml.h"
+
 #include "engraving/rw/400/tread.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/chord.h"

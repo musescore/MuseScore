@@ -24,7 +24,7 @@
 
 #include "containers.h"
 #include "style/style.h"
-#include "rw/xml.h"
+#include "rw/xmlwriter.h"
 
 #include "chordrest.h"
 #include "factory.h"

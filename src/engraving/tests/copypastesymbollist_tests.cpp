@@ -28,8 +28,6 @@
 
 #include "internal/qmimedataadapter.h"
 
-#include "engraving/rw/xml.h"
-
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"

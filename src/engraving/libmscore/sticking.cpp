@@ -22,8 +22,6 @@
 
 #include "sticking.h"
 
-#include "rw/xml.h"
-
 #include "segment.h"
 
 #include "log.h"

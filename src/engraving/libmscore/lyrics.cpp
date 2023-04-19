@@ -22,8 +22,6 @@
 
 #include "lyrics.h"
 
-#include "rw/xml.h"
-
 #include "translation.h"
 #include "types/translatablestring.h"
 

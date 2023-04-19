@@ -37,7 +37,6 @@ NICE-TO-HAVE TODO:
 #include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
 #include "style/style.h"
-#include "rw/xml.h"
 
 #include "types/typesconv.h"
 #include "iengravingfont.h"

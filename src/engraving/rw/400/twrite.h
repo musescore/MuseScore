@@ -22,21 +22,24 @@
 #ifndef MU_ENGRAVING_TWRITE_H
 #define MU_ENGRAVING_TWRITE_H
 
+#include "../xmlwriter.h"
+#include "writecontext.h"
+
 #include "../../libmscore/property.h"
 
 #include "global/modularity/ioc.h"
 #include "../../iengravingconfiguration.h"
 
 namespace mu::engraving {
-class XmlWriter;
-class WriteContext;
 class EngravingItem;
 class ElementList;
+
 class Accidental;
 class ActionIcon;
 class Ambitus;
 class Arpeggio;
 class Articulation;
+class Audio;
 
 class BagpipeEmbellishment;
 class BarLine;
@@ -166,6 +169,7 @@ public:
     static void write(const Ambitus* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Arpeggio* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Articulation* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Audio* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const BagpipeEmbellishment* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const BarLine* item, XmlWriter& xml, WriteContext& ctx);
@@ -270,8 +274,10 @@ public:
 
     static void writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t st, track_idx_t et, Segment* sseg, Segment* eseg, bool, bool);
 
-private:
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
+
+private:
+
     static void writeStyledProperties(const EngravingItem* item, XmlWriter& xml);
 
     static void writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx);

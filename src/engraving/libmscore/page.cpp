@@ -22,8 +22,6 @@
 
 #include "page.h"
 
-#include "rw/xml.h"
-
 #include "factory.h"
 #include "masterscore.h"
 #include "measurebase.h"

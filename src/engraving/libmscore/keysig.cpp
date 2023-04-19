@@ -23,7 +23,6 @@
 #include "keysig.h"
 
 #include "draw/types/pen.h"
-#include "rw/xml.h"
 
 #include "types/symnames.h"
 #include "types/typesconv.h"

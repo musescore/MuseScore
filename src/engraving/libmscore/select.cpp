@@ -27,9 +27,8 @@
 
 #include "containers.h"
 #include "io/buffer.h"
-#include "rw/xml.h"
+
 #include "rw/400/twrite.h"
-#include "rw/400/writecontext.h"
 
 #include "accidental.h"
 #include "arpeggio.h"

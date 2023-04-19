@@ -26,8 +26,12 @@
 
 #include "compat/writescorehook.h"
 #include "infrastructure/mscwriter.h"
+
 #include "rw/mscloader.h"
-#include "rw/xml.h"
+#include "rw/xmlwriter.h"
+#include "rw/xmlreader.h"
+#include "rw/400/writecontext.h"
+
 #include "style/defaultstyle.h"
 
 #include "engravingproject.h"

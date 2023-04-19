@@ -44,6 +44,7 @@
 #include "../../libmscore/ambitus.h"
 #include "../../libmscore/arpeggio.h"
 #include "../../libmscore/articulation.h"
+#include "../../libmscore/audio.h"
 
 #include "../../libmscore/bagpembell.h"
 #include "../../libmscore/barline.h"
@@ -316,7 +317,7 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
             const int guessedLocalIndex = ctx.assignLocalIndex(mainLoc);
             if (loc != mainLoc) {
                 mainLoc.toRelative(loc);
-                mainLoc.write(xml);
+                write(&mainLoc, xml, ctx);
             }
             const int indexDiff = ctx.lidLocalIndex(item->links()->lid()) - guessedLocalIndex;
             xml.tag("indexDiff", indexDiff, 0);
@@ -440,6 +441,13 @@ void TWrite::write(const Articulation* item, XmlWriter& xml, WriteContext& ctx)
         writeProperty(item, xml, spp.pid);
     }
     writeItemProperties(item, xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const Audio* item, XmlWriter& xml, WriteContext&)
+{
+    xml.startElement("Audio");
+    xml.tag("path", item->path());
     xml.endElement();
 }
 
@@ -2399,35 +2407,36 @@ void TWrite::write(const WhammyBar* item, XmlWriter& xml, WriteContext& ctx)
 //    Returns true if <voice> tag was written.
 //---------------------------------------------------------
 
-static bool writeVoiceMove(XmlWriter& xml, Segment* seg, const Fraction& startTick, track_idx_t track, int* lastTrackWrittenPtr)
+static bool writeVoiceMove(XmlWriter& xml, WriteContext& ctx, Segment* seg, const Fraction& startTick, track_idx_t track,
+                           int* lastTrackWrittenPtr)
 {
     bool voiceTagWritten = false;
     int& lastTrackWritten = *lastTrackWrittenPtr;
-    if ((lastTrackWritten < static_cast<int>(track)) && !xml.context()->clipboardmode()) {
+    if ((lastTrackWritten < static_cast<int>(track)) && !ctx.clipboardmode()) {
         while (lastTrackWritten < (static_cast < int > (track) - 1)) {
             xml.tag("voice");
             ++lastTrackWritten;
         }
         xml.startElement("voice");
-        xml.context()->setCurTick(startTick);
-        xml.context()->setCurTrack(track);
+        ctx.setCurTick(startTick);
+        ctx.setCurTrack(track);
         ++lastTrackWritten;
         voiceTagWritten = true;
     }
 
-    if ((xml.context()->curTick() != seg->tick()) || (track != xml.context()->curTrack())) {
+    if ((ctx.curTick() != seg->tick()) || (track != ctx.curTrack())) {
         Location curr = Location::absolute();
         Location dest = Location::absolute();
-        curr.setFrac(xml.context()->curTick());
+        curr.setFrac(ctx.curTick());
         dest.setFrac(seg->tick());
-        curr.setTrack(static_cast<int>(xml.context()->curTrack()));
+        curr.setTrack(static_cast<int>(ctx.curTrack()));
         dest.setTrack(static_cast<int>(track));
 
         dest.toRelative(curr);
-        dest.write(xml);
+        TWrite::write(&dest, xml, ctx);
 
-        xml.context()->setCurTick(seg->tick());
-        xml.context()->setCurTrack(track);
+        ctx.setCurTick(seg->tick());
+        ctx.setCurTrack(track);
     }
 
     return voiceTagWritten;
@@ -2544,7 +2553,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                     continue;
                 }
                 if (needMove) {
-                    voiceTagWritten |= writeVoiceMove(xml, segment, startTick, track, &lastTrackWritten);
+                    voiceTagWritten |= writeVoiceMove(xml, ctx, segment, startTick, track, &lastTrackWritten);
                     needMove = false;
                 }
                 rw400::TWrite::writeItem(e1, xml, ctx);
@@ -2563,7 +2572,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                         }
                         if (s->tick() == segment->tick() && (!clip || end) && !s->isSlur()) {
                             if (needMove) {
-                                voiceTagWritten |= writeVoiceMove(xml, segment, startTick, track, &lastTrackWritten);
+                                voiceTagWritten |= writeVoiceMove(xml, ctx, segment, startTick, track, &lastTrackWritten);
                                 needMove = false;
                             }
                             s->writeSpannerStart(xml, segment, track);
@@ -2575,7 +2584,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                         && (!clip || s->tick() >= sseg->tick())
                         ) {
                         if (needMove) {
-                            voiceTagWritten |= writeVoiceMove(xml, segment, startTick, track, &lastTrackWritten);
+                            voiceTagWritten |= writeVoiceMove(xml, ctx, segment, startTick, track, &lastTrackWritten);
                             needMove = false;
                         }
                         s->writeSpannerEnd(xml, segment, track);
@@ -2592,7 +2601,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
             if (forceTimeSig && track2voice(track) == 0 && segment->segmentType() == SegmentType::ChordRest && !timeSigWritten
                 && !crWritten) {
                 // Ensure that <voice> tag is open
-                voiceTagWritten |= writeVoiceMove(xml, segment, startTick, track, &lastTrackWritten);
+                voiceTagWritten |= writeVoiceMove(xml, ctx, segment, startTick, track, &lastTrackWritten);
                 // we will miss a key sig!
                 if (!keySigWritten) {
                     Key k = score->staff(track2staff(track))->key(segment->tick());
@@ -2611,7 +2620,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                 timeSigWritten = true;
             }
             if (needMove) {
-                voiceTagWritten |= writeVoiceMove(xml, segment, startTick, track, &lastTrackWritten);
+                voiceTagWritten |= writeVoiceMove(xml, ctx, segment, startTick, track, &lastTrackWritten);
                 // needMove = false; //! NOTE Not necessary, because needMove is currently never read again.
             }
             if (e->isChordRest()) {
