@@ -65,7 +65,7 @@ InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
 
         updateRearrangementAvailability();
         updateRemovingAvailability();
-        updateDeleteToolTip();
+        updateIsInstrumentSelected();
     });
 
     connect(this, &InstrumentsPanelTreeModel::rowsInserted, this, [this]() {
@@ -708,7 +708,7 @@ void InstrumentsPanelTreeModel::updateRemovingAvailability()
     setIsRemovingAvailable(isRemovingAvailable);
 }
 
-void InstrumentsPanelTreeModel::updateDeleteToolTip()
+void InstrumentsPanelTreeModel::updateIsInstrumentSelected()
 {
     QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
     bool isInstrumentSelected = true;

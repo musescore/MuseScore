@@ -105,7 +105,7 @@ private slots:
     void updateMovingUpAvailability(bool isSelectionMovable, const QModelIndex& firstSelectedRowIndex = QModelIndex());
     void updateMovingDownAvailability(bool isSelectionMovable, const QModelIndex& lastSelectedRowIndex = QModelIndex());
     void updateRemovingAvailability();
-    void updateDeleteToolTip();
+    void updateIsInstrumentSelected();
 
 private:
     bool removeRows(int row, int count, const QModelIndex& parent) override;
@@ -132,7 +132,7 @@ private:
     void setIsMovingUpAvailable(bool isMovingUpAvailable);
     void setIsMovingDownAvailable(bool isMovingDownAvailable);
     void setIsRemovingAvailable(bool isRemovingAvailable);
-    void setIsInstrumentSelected(bool selected);
+    void setIsInstrumentSelected(bool isInstrumentSelected);
 
     void setItemsSelected(const QModelIndexList& indexes, bool selected);
 
