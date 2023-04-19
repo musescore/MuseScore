@@ -77,14 +77,15 @@ foo_visiter(SomeTypeList {}, item, ...);
 template<typename ... Types> struct TypeList {};
 
 #define DECLARE_VISITER(name) \
-    template<typename ... Arg> void name##_visiter(rtti::TypeList<>, Arg & ...) {} \
-    template<class Head, class ... Tail, typename ... Arg> void name##_visiter(rtti::TypeList<Head, Tail...>, Arg & ...); \
-    template<class Head, class ... Tail, typename ... Arg> void name##_visiter(rtti::TypeList<Head, Tail...>, Arg & ... a) \
+    template<typename ... Arg> bool name##_visiter(rtti::TypeList<>, Arg & ...) { return false; } \
+    template<class Head, class ... Tail, typename ... Arg> bool name##_visiter(rtti::TypeList<Head, Tail...>, Arg & ...); \
+    template<class Head, class ... Tail, typename ... Arg> bool name##_visiter(rtti::TypeList<Head, Tail...>, Arg & ... a) \
     { \
         bool found = name##_visit<Head>(a ...); \
         if (!found) { \
-            name##_visiter(rtti::TypeList<Tail...> {}, a ...); \
+            found = name##_visiter(rtti::TypeList<Tail...> {}, a ...); \
         } \
+        return found; \
     } \
 
 }

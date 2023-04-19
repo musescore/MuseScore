@@ -24,6 +24,7 @@
 #include "libmscore/fret.h"
 #include "translation.h"
 
+#include "rw/400/twrite.h"
 #include "rw/400/writecontext.h"
 #include "rw/xml.h"
 
@@ -620,6 +621,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
 
 void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig)
 {
+    WriteContext& ctx = *xml.context();
     if (MScore::debugMode) {
         const int mno = measure->no() + 1;
         xml.comment(String(u"Measure %1").arg(mno));
@@ -631,8 +633,8 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
         xml.startElement(measure);
     }
 
-    xml.context()->setCurTick(measure->tick());
-    xml.context()->setCurTrack(staff * VOICES);
+    ctx.setCurTick(measure->tick());
+    ctx.setCurTrack(staff * VOICES);
 
     if (measure->m_mmRestCount > 0) {
         xml.tag("multiMeasureRest", measure->m_mmRestCount);
@@ -653,11 +655,11 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
     double _spatium = measure->spatium();
     MStaff* mstaff = measure->m_mstaves[staff];
     if (mstaff->noText() && !mstaff->noText()->generated()) {
-        mstaff->noText()->write(xml);
+        rw400::TWrite::write(mstaff->noText(), xml, ctx);
     }
 
     if (mstaff->mmRangeText() && !mstaff->mmRangeText()->generated()) {
-        mstaff->mmRangeText()->write(xml);
+        rw400::TWrite::write(mstaff->mmRangeText(), xml, ctx);
     }
 
     if (mstaff->vspacerUp()) {
@@ -709,7 +711,7 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
             }
         }
 
-        e->write(xml);
+        rw400::TWrite::writeItem(e, xml, ctx);
     }
     assert(measure->first());
     assert(measure->last());

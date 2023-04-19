@@ -479,9 +479,10 @@ static bool writeVoiceMove(XmlWriter& xml, Segment* seg, const Fraction& startTi
 void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack,
                           Segment* sseg, Segment* eseg, bool writeSystemElements, bool forceTimeSig)
 {
-    Fraction startTick = xml.context()->curTick();
+    WriteContext& ctx = *xml.context();
+    Fraction startTick = ctx.curTick();
     Fraction endTick   = eseg ? eseg->tick() : lastMeasure()->endTick();
-    bool clip          = xml.context()->clipboardmode();
+    bool clip          = ctx.clipboardmode();
 
     // in clipboard mode, ls might be in an mmrest
     // since we are traversing regular measures,
@@ -509,7 +510,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
     auto sl = spannerMap().findOverlapping(sseg->tick().ticks(), endTick.ticks());
     for (auto i : sl) {
         Spanner* s = i.value;
-        if (s->generated() || !xml.context()->canWrite(s)) {
+        if (s->generated() || !ctx.canWrite(s)) {
             continue;
         }
         // don't write voltas to clipboard
@@ -551,7 +552,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
                     if (segment->element(idx)) {
                         int oDiff = xml.context()->trackDiff();
                         xml.context()->setTrackDiff(idx);                      // staffIdx should be zero
-                        segment->element(idx)->write(xml);
+                        rw400::TWrite::writeItem(segment->element(idx), xml, ctx);
                         xml.context()->setTrackDiff(oDiff);
                         break;
                     }
@@ -583,7 +584,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
                     voiceTagWritten |= writeVoiceMove(xml, segment, startTick, track, &lastTrackWritten);
                     needMove = false;
                 }
-                e1->write(xml);
+                rw400::TWrite::writeItem(e1, xml, ctx);
             }
             Measure* m = segment->measure();
             // don't write spanners for multi measure rests
@@ -634,7 +635,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
                     Key k = score()->staff(track2staff(track))->key(segment->tick());
                     KeySig* ks = Factory::createKeySig(this->dummy()->segment());
                     ks->setKey(k);
-                    ks->write(xml);
+                    rw400::TWrite::write(ks, xml, ctx);
                     delete ks;
                     keySigWritten = true;
                 }
@@ -642,7 +643,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
                 Fraction tsf = sigmap()->timesig(segment->tick()).timesig();
                 TimeSig* ts = Factory::createTimeSig(this->dummy()->segment());
                 ts->setSig(tsf);
-                ts->write(xml);
+                rw400::TWrite::write(ts, xml, ctx);
                 delete ts;
                 timeSigWritten = true;
             }
@@ -654,7 +655,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
                 ChordRest* cr = toChordRest(e);
                 cr->writeTupletStart(xml);
             }
-            e->write(xml);
+            rw400::TWrite::writeItem(e, xml, ctx);
 
             if (e->isChordRest()) {
                 ChordRest* cr = toChordRest(e);
@@ -662,7 +663,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
             }
 
             if (!(e->isRest() && toRest(e)->isGap())) {
-                segment->write(xml);            // write only once
+                rw400::TWrite::write(segment, xml, ctx); // write only once
             }
             if (forceTimeSig) {
                 if (segment->segmentType() == SegmentType::KeySig) {

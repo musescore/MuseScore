@@ -54,6 +54,8 @@ public:
 class HarmonicMark final : public ChordTextLineBase
 {
     OBJECT_ALLOCATOR(engraving, HarmonicMark)
+    DECLARE_CLASSOF(ElementType::HARMONIC_MARK)
+
 public:
     HarmonicMark(EngravingItem* parent);
 

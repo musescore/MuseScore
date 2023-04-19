@@ -39,6 +39,7 @@
 #include "style/style.h"
 #include "rw/xml.h"
 #include "rw/400/tread.h"
+#include "rw/400/twrite.h"
 #include "rw/400/writecontext.h"
 #include "types/typesconv.h"
 
@@ -951,6 +952,7 @@ void ElementList::replace(EngravingItem* o, EngravingItem* n)
 
 void ElementList::write(XmlWriter& xml) const
 {
+    UNREACHABLE;
     for (const EngravingItem* e : *this) {
         e->write(xml);
     }
@@ -1089,7 +1091,7 @@ ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
     if (!dragOffset.isNull()) {
         xml.tagPoint("dragOffset", dragOffset);
     }
-    write(xml);
+    rw400::TWrite::writeItem(this, xml, *xml.context());
     xml.endElement();
     buffer.close();
     return buffer.data();
