@@ -875,7 +875,7 @@ ByteArray Selection::staffMimeData() const
         }
         xml.endElement();     // </voiceOffset>
         xml.context()->setCurTrack(startTrack);
-        _score->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, false);
+        rw400::TWrite::writeSegments(xml, *xml.context(), startTrack, endTrack, seg1, seg2, false, false);
         xml.endElement();
     }
 
