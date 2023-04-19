@@ -716,7 +716,8 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
     assert(measure->first());
     assert(measure->last());
     if (measure->first() && measure->last()) {
-        measure->score()->writeSegments(xml, strack, etrack, measure->first(), measure->last()->next1(), writeSystemElements, forceTimeSig);
+        rw400::TWrite::writeSegments(xml, ctx, strack, etrack, measure->first(), measure->last()->next1(), writeSystemElements,
+                                     forceTimeSig);
     }
 
     xml.endElement();

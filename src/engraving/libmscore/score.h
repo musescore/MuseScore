@@ -1064,7 +1064,6 @@ public:
 
     MasterScore* masterScore() const { return _masterScore; }
     void setMasterScore(MasterScore* s) { _masterScore = s; }
-    void writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, Segment* sseg, Segment* eseg, bool, bool);
 
     const std::map<String, String>& metaTags() const { return _metaTags; }
     std::map<String, String>& metaTags() { return _metaTags; }
