@@ -2978,12 +2978,12 @@ static void readBox(Box* b, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "HBox") {
-            HBox* hb = Factory::createHBox(b->system());
+            HBox* hb = Factory::createHBox(b->score()->dummy()->system());
             rw400::TRead::read(hb, e, ctx);
             b->add(hb);
             keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (tag == "VBox") {
-            VBox* vb = Factory::createVBox(b->system());
+            VBox* vb = Factory::createVBox(b->score()->dummy()->system());
             rw400::TRead::read(vb, e, ctx);
             b->add(vb);
             keepMargins = true;           // in old file, box nesting used outer box margins
