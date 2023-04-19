@@ -704,7 +704,9 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 
             DragMode mode = DragMode::BothXY;
             if (keyState & Qt::ShiftModifier) {
-                mode = DragMode::OnlyY;
+                if (!(keyState & Qt::ControlModifier)) {
+                    mode = DragMode::OnlyY;
+                }
             } else if (keyState & Qt::ControlModifier) {
                 mode = DragMode::OnlyX;
             }
