@@ -619,6 +619,7 @@ void DockWindow::initDocks(DockPageView* page)
     }
 
     if (page) {
+        page->setParentItem(this);
         page->init();
     }
 
