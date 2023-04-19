@@ -79,8 +79,7 @@ private:
                                             bool isPrimary = true);
     MixerChannelItem* buildMasterChannelItem();
 
-    TrackMixerChannelItem* trackChannelItem(const audio::TrackId& trackId) const;
-    TrackMixerChannelItem* trackChannelItem(const engraving::InstrumentTrackId& instrumentTrackId) const;
+    MixerChannelItem* findChannelItem(const audio::TrackId& trackId) const;
 
     project::INotationProjectPtr currentProject() const;
     project::IProjectAudioSettingsPtr audioSettings() const;

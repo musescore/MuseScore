@@ -43,13 +43,26 @@ static const std::string TRACK_ID_KEY("trackId");
 static const std::string RESOURCE_ID_KEY("resourceId");
 static const std::string CHAIN_ORDER_KEY("chainOrder");
 
-MixerChannelItem::MixerChannelItem(QObject* parent, audio::TrackId trackId, bool isPrimary)
+MixerChannelItem::MixerChannelItem(QObject* parent, Type type, audio::TrackId trackId)
     : QObject(parent),
+    m_type(type),
     m_trackId(trackId),
-    m_isPrimary(isPrimary),
     m_leftChannelPressure(MIN_DISPLAYED_DBFS),
     m_rightChannelPressure(MIN_DISPLAYED_DBFS)
 {
+}
+
+MixerChannelItem::~MixerChannelItem()
+{
+    m_audioSignalChanges.resetOnReceive(this);
+}
+
+void MixerChannelItem::init()
+{
+    if (!m_outputOnly) {
+        m_inputResourceItem = buildInputResourceItem();
+    }
+
     m_panel = new ui::NavigationPanel(this);
     m_panel->setDirection(ui::NavigationPanel::Vertical);
     m_panel->setName("MixerChannelPanel " + QString::number(m_trackId));
@@ -63,9 +76,9 @@ MixerChannelItem::MixerChannelItem(QObject* parent, audio::TrackId trackId, bool
     });
 }
 
-MixerChannelItem::~MixerChannelItem()
+MixerChannelItem::Type MixerChannelItem::type() const
 {
-    m_audioSignalChanges.resetOnReceive(this);
+    return m_type;
 }
 
 TrackId MixerChannelItem::trackId() const
@@ -73,9 +86,14 @@ TrackId MixerChannelItem::trackId() const
     return m_trackId;
 }
 
-bool MixerChannelItem::isMasterChannel() const
+const mu::engraving::InstrumentTrackId& MixerChannelItem::instrumentTrackId() const
 {
-    return false;
+    return m_instrumentTrackId;
+}
+
+void MixerChannelItem::setInstrumentTrackId(const mu::engraving::InstrumentTrackId& instrumentTrackId)
+{
+    m_instrumentTrackId = instrumentTrackId;
 }
 
 QString MixerChannelItem::title() const
@@ -85,7 +103,7 @@ QString MixerChannelItem::title() const
 
 bool MixerChannelItem::isPrimaryChannel() const
 {
-    return m_isPrimary;
+    return m_type == Type::PrimaryInstrument || m_type == Type::Master;
 }
 
 float MixerChannelItem::leftChannelPressure() const
@@ -136,6 +154,20 @@ void MixerChannelItem::setPanelOrder(int panelOrder)
 void MixerChannelItem::setPanelSection(mu::ui::INavigationSection* section)
 {
     m_panel->setSection(section);
+}
+
+void MixerChannelItem::loadInputParams(AudioInputParams&& newParams)
+{
+    if (m_outputOnly) {
+        return;
+    }
+
+    if (m_inputParams == newParams) {
+        return;
+    }
+
+    m_inputParams = newParams;
+    m_inputResourceItem->setParams(newParams);
 }
 
 void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
@@ -319,6 +351,37 @@ void MixerChannelItem::resetAudioChannelsVolumePressure()
     setRightChannelPressure(MIN_DISPLAYED_DBFS);
 }
 
+InputResourceItem* MixerChannelItem::buildInputResourceItem()
+{
+    InputResourceItem* newItem = new InputResourceItem(this);
+
+    connect(newItem, &InputResourceItem::inputParamsChanged, this, [this, newItem]() {
+        m_inputParams = newItem->params();
+
+        emit inputParamsChanged(m_inputParams);
+    });
+
+    connect(newItem, &InputResourceItem::isBlankChanged, this, &MixerChannelItem::inputResourceItemChanged);
+
+    connect(newItem, &InputResourceItem::nativeEditorViewLaunchRequested, this, [this, newItem]() {
+        if (newItem->params().type() != AudioSourceType::Vsti) {
+            return;
+        }
+
+        UriQuery uri(VSTI_EDITOR_URI);
+        uri.addParam(TRACK_ID_KEY, Val(m_trackId));
+        uri.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
+
+        openEditor(newItem, uri);
+    });
+
+    connect(newItem, &InputResourceItem::nativeEditorViewCloseRequested, this, [this, newItem]() {
+        closeEditor(newItem);
+    });
+
+    return newItem;
+}
+
 OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::AudioFxParams& fxParams)
 {
     OutputResourceItem* newItem = new OutputResourceItem(this, fxParams);
@@ -340,7 +403,7 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
 
         UriQuery uri(VSTFX_EDITOR_URI);
 
-        if (!isMasterChannel()) {
+        if (m_type != Type::Master) {
             uri.addParam(TRACK_ID_KEY, Val(m_trackId));
         }
 
@@ -454,78 +517,20 @@ AudioFxChainOrder MixerChannelItem::resolveNewBlankOutputResourceItemOrder() con
 
 bool MixerChannelItem::outputOnly() const
 {
-    return isMasterChannel();
+    return m_outputOnly;
+}
+
+void MixerChannelItem::setOutputOnly(bool outputOnly)
+{
+    m_outputOnly = outputOnly;
+}
+
+InputResourceItem* MixerChannelItem::inputResourceItem() const
+{
+    return m_inputResourceItem;
 }
 
 QList<OutputResourceItem*> MixerChannelItem::outputResourceItemList() const
 {
     return m_outputResourceItems.values();
-}
-
-TrackMixerChannelItem::TrackMixerChannelItem(QObject* parent, audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId,
-                                             bool isPrimary)
-    : MixerChannelItem(parent, trackId, isPrimary), m_instrumentTrackId(instrumentTrackId)
-{
-    m_inputResourceItem = buildInputResourceItem();
-}
-
-const mu::engraving::InstrumentTrackId& TrackMixerChannelItem::instrumentTrackId() const
-{
-    return m_instrumentTrackId;
-}
-
-void TrackMixerChannelItem::loadInputParams(AudioInputParams&& newParams)
-{
-    if (m_inputParams == newParams) {
-        return;
-    }
-
-    m_inputParams = newParams;
-    m_inputResourceItem->setParams(newParams);
-}
-
-InputResourceItem* TrackMixerChannelItem::buildInputResourceItem()
-{
-    InputResourceItem* newItem = new InputResourceItem(this);
-
-    connect(newItem, &InputResourceItem::inputParamsChanged, this, [this, newItem]() {
-        m_inputParams = newItem->params();
-
-        emit inputParamsChanged(m_inputParams);
-    });
-
-    connect(newItem, &InputResourceItem::isBlankChanged, this, &TrackMixerChannelItem::inputResourceItemChanged);
-
-    connect(newItem, &InputResourceItem::nativeEditorViewLaunchRequested, this, [this, newItem]() {
-        if (newItem->params().type() != AudioSourceType::Vsti) {
-            return;
-        }
-
-        UriQuery uri(VSTI_EDITOR_URI);
-        uri.addParam(TRACK_ID_KEY, Val(m_trackId));
-        uri.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
-
-        openEditor(newItem, uri);
-    });
-
-    connect(newItem, &InputResourceItem::nativeEditorViewCloseRequested, this, [this, newItem]() {
-        closeEditor(newItem);
-    });
-
-    return newItem;
-}
-
-InputResourceItem* TrackMixerChannelItem::inputResourceItem() const
-{
-    return m_inputResourceItem;
-}
-
-MasterMixerChannelItem::MasterMixerChannelItem(QObject* parent)
-    : MixerChannelItem(parent)
-{
-}
-
-bool MasterMixerChannelItem::isMasterChannel() const
-{
-    return true;
 }
