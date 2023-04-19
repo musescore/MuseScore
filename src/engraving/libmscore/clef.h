@@ -117,7 +117,6 @@ public:
     EngravingItem* drop(EditData&) override;
     void layout() override;
     void draw(mu::draw::Painter*) const override;
-    void write(XmlWriter&) const override;
 
     bool isEditable() const override { return false; }
 

@@ -359,23 +359,6 @@ void Bend::draw(mu::draw::Painter* painter) const
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Bend::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    for (const PitchValue& v : m_points) {
-        xml.tag("point", { { "time", v.time }, { "pitch", v.pitch }, { "vibrato", v.vibrato } });
-    }
-    writeStyledProperties(xml);
-    writeProperty(xml, Pid::PLAY);
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

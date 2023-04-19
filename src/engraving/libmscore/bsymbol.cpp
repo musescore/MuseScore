@@ -63,19 +63,6 @@ BSymbol::BSymbol(const BSymbol& s)
 }
 
 //---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void BSymbol::writeProperties(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    for (const EngravingItem* e : leafs()) {
-        e->write(xml);
-    }
-    EngravingItem::writeProperties(xml);
-}
-
-//---------------------------------------------------------
 //   add
 //---------------------------------------------------------
 

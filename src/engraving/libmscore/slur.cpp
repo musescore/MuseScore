@@ -1470,28 +1470,6 @@ int Slur::calcStemArrangement(EngravingItem* start, EngravingItem* end)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Slur::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (broken()) {
-        LOGD("broken slur not written");
-        return;
-    }
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    if (xml.context()->clipboardmode()) {
-        xml.tag("stemArr", calcStemArrangement(startElement(), endElement()));
-    }
-    SlurTie::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   directionMixture
 //---------------------------------------------------------
 

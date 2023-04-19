@@ -89,8 +89,6 @@ public:
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    void write(XmlWriter& xml) const override;
-
     int subtype() const override { return _no; }
     TranslatableString subtypeUserName() const override;
     void setNo(int n) { _no = n; }

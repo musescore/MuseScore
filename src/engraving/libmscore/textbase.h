@@ -410,11 +410,6 @@ public:
     bool isPrimed() const { return _primed; }
     void setPrimed(bool primed) { _primed = primed; }
 
-    virtual void write(XmlWriter& xml) const override;
-    virtual void writeProperties(XmlWriter& xml) const override { writeProperties(xml, true, true); }
-    void writeProperties(XmlWriter& xml, bool writeText) const { writeProperties(xml, writeText, true); }
-    void writeProperties(XmlWriter&, bool, bool) const;
-
     virtual void paste(EditData& ed, const String& txt);
 
     mu::RectF pageRectangle() const;

@@ -420,7 +420,6 @@ public:
 
     void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
     void setupAfterRead(const Fraction& tick, bool pasteMode);
-    void write(XmlWriter&) const override;
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;

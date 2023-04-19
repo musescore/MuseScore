@@ -81,24 +81,6 @@ void LayoutBreak::setParent(MeasureBase* parent)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void LayoutBreak::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    EngravingItem::writeProperties(xml);
-
-    for (auto id :
-         { Pid::LAYOUT_BREAK, Pid::PAUSE, Pid::START_WITH_LONG_NAMES, Pid::START_WITH_MEASURE_ONE, Pid::FIRST_SYSTEM_INDENTATION }) {
-        writeProperty(xml, id);
-    }
-
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 

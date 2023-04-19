@@ -50,21 +50,6 @@ Sticking::Sticking(Segment* parent)
     initElementStyle(&stickingStyle);
 }
 
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Sticking::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    TextBase::writeProperties(xml);
-    xml.endElement();
-}
-
 bool Sticking::isEditAllowed(EditData& ed) const
 {
     if (isTextNavigationKey(ed.key, ed.modifiers)) {

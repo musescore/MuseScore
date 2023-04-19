@@ -2009,16 +2009,6 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Measure::write(XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig) const
-{
-    UNREACHABLE;
-    rw400::MeasureRW::writeMeasure(this, xml, staff, writeSystemElements, forceTimeSig);
-}
-
-//---------------------------------------------------------
 //   Measure::readAddConnector
 //---------------------------------------------------------
 

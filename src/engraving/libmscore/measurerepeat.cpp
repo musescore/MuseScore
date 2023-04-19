@@ -222,20 +222,6 @@ Shape MeasureRepeat::shape() const
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void MeasureRepeat::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    writeProperty(xml, Pid::SUBTYPE);
-    Rest::writeProperties(xml);
-    el().write(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 

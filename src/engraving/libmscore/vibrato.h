@@ -83,8 +83,6 @@ public:
     void layout() override;
     LineSegment* createLineSegment(System* parent) override;
 
-    void write(XmlWriter&) const override;
-
     void undoSetVibratoType(VibratoType val);
     void setVibratoType(VibratoType tt) { _vibratoType = tt; }
     VibratoType vibratoType() const { return _vibratoType; }

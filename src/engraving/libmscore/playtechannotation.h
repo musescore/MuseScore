@@ -43,7 +43,6 @@ public:
     void layout() override;
 
 private:
-    void write(XmlWriter& writer) const override;
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue& val) override;

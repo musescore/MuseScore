@@ -94,8 +94,6 @@ public:
 
     virtual Segment* segment() const { return (Segment*)explicitParent(); }
 
-    virtual void writeProperties(XmlWriter& xml) const override;
-
     virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
 
     void setBeamMode(BeamMode m) { _beamMode = m; }
@@ -192,7 +190,7 @@ public:
     bool isGraceBefore() const;
     bool isGraceAfter() const;
     Breath* hasBreathMark() const;
-    void writeBeam(XmlWriter& xml) const;
+
     Segment* nextSegmentAfterCR(SegmentType types) const;
 
     void setScore(Score* s) override;

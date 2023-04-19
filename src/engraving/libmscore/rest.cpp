@@ -915,37 +915,6 @@ void Rest::remove(EngravingItem* e)
 }
 
 //---------------------------------------------------------
-//   Rest::write
-//---------------------------------------------------------
-
-void Rest::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (m_gap) {
-        return;
-    }
-    writeBeam(xml);
-    xml.startElement(this);
-    writeStyledProperties(xml);
-    ChordRest::writeProperties(xml);
-    el().write(xml);
-    bool write_dots = false;
-    for (NoteDot* dot : m_dots) {
-        if (!dot->offset().isNull() || !dot->visible() || dot->color() != engravingConfiguration()->defaultColor()
-            || dot->visible() != visible()) {
-            write_dots = true;
-            break;
-        }
-    }
-    if (write_dots) {
-        for (NoteDot* dot: m_dots) {
-            dot->write(xml);
-        }
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   localSpatiumChanged
 //---------------------------------------------------------
 

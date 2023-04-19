@@ -69,7 +69,7 @@ public:
 
     Segment* segment() const { return (Segment*)explicitParent(); }
     Measure* measure() const { return explicitParent() ? (Measure*)explicitParent()->explicitParent() : nullptr; }
-    void write(XmlWriter&) const override;
+
     //@ returns the key of the key signature (from -7 (flats) to +7 (sharps) )
     Key key() const { return _sig.key(); }
     const std::vector<CustDef>& customKeyDefs() const { return _sig.customKeyDefs(); }

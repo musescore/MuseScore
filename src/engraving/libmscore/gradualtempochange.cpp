@@ -105,18 +105,6 @@ GradualTempoChange* GradualTempoChange::clone() const
     return new GradualTempoChange(*this);
 }
 
-void GradualTempoChange::write(XmlWriter& writer) const
-{
-    UNREACHABLE;
-    writer.startElement(this);
-    writeProperty(writer, Pid::TEMPO_CHANGE_TYPE);
-    writeProperty(writer, Pid::TEMPO_EASING_METHOD);
-    writeProperty(writer, Pid::TEMPO_CHANGE_FACTOR);
-    writeProperty(writer, Pid::PLACEMENT);
-    TextLineBase::writeProperties(writer);
-    writer.endElement();
-}
-
 LineSegment* GradualTempoChange::createLineSegment(System* parent)
 {
     GradualTempoChangeSegment* lineSegment = new GradualTempoChangeSegment(this, parent);

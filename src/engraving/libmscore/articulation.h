@@ -153,8 +153,6 @@ public:
     void layout() override;
     bool layoutCloseToNote() const;
 
-    void write(XmlWriter& xml) const override;
-
     std::vector<mu::LineF> dragAnchorLines() const override;
 
     PropertyValue getProperty(Pid propertyId) const override;

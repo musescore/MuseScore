@@ -73,8 +73,6 @@ public:
     std::vector<System*>& systems() { return _systems; }
     System* system(int idx) { return _systems[idx]; }
 
-    void write(XmlWriter&) const override;
-
     void appendSystem(System* s);
 
     page_idx_t no() const { return _no; }

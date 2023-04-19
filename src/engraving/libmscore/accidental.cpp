@@ -251,22 +251,6 @@ Accidental::Accidental(EngravingItem* parent)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Accidental::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    writeProperty(xml, Pid::ACCIDENTAL_BRACKET);
-    writeProperty(xml, Pid::ACCIDENTAL_ROLE);
-    writeProperty(xml, Pid::SMALL);
-    writeProperty(xml, Pid::ACCIDENTAL_TYPE);
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   subTypeUserName
 //---------------------------------------------------------
 

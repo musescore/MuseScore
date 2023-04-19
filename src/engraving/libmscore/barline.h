@@ -103,7 +103,6 @@ public:
 
     BarLine* clone() const override { return new BarLine(*this); }
     Fraction playTick() const override;
-    void write(XmlWriter& xml) const override;
     void draw(mu::draw::Painter*) const override;
     mu::PointF canvasPos() const override;      ///< position in canvas coordinates
     mu::PointF pagePos() const override;        ///< position in page coordinates

@@ -135,67 +135,6 @@ ChordRest::~ChordRest()
 }
 
 //---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void ChordRest::writeProperties(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    DurationElement::writeProperties(xml);
-
-    //
-    // BeamMode default:
-    //    REST  - BeamMode::NONE
-    //    CHORD - BeamMode::AUTO
-    //
-    if ((isRest() && _beamMode != BeamMode::NONE) || (isChord() && _beamMode != BeamMode::AUTO)) {
-        xml.tag("BeamMode", TConv::toXml(_beamMode));
-    }
-    writeProperty(xml, Pid::SMALL);
-    if (actualDurationType().dots()) {
-        xml.tag("dots", actualDurationType().dots());
-    }
-    writeProperty(xml, Pid::STAFF_MOVE);
-
-    if (actualDurationType().isValid()) {
-        xml.tag("durationType", TConv::toXml(actualDurationType().type()));
-    }
-
-    if (!ticks().isZero() && (!actualDurationType().fraction().isValid()
-                              || (actualDurationType().fraction() != ticks()))) {
-        xml.tagFraction("duration", ticks());
-        //xml.tagE("duration z=\"%d\" n=\"%d\"", ticks().numerator(), ticks().denominator());
-    }
-
-    for (Lyrics* lyrics : _lyrics) {
-        lyrics->write(xml);
-    }
-
-    const int curTick = xml.context()->curTick().ticks();
-
-    if (!isGrace()) {
-        Fraction t(globalTicks());
-        if (staff()) {
-            t /= staff()->timeStretch(xml.context()->curTick());
-        }
-        xml.context()->incCurTick(t);
-    }
-
-    for (auto i : score()->spannerMap().findOverlapping(curTick - 1, curTick + 1)) {
-        Spanner* s = i.value;
-        if (s->generated() || !s->isSlur() || toSlur(s)->broken() || !xml.context()->canWrite(s)) {
-            continue;
-        }
-
-        if (s->startElement() == this) {
-            s->writeSpannerStart(xml, this, track());
-        } else if (s->endElement() == this) {
-            s->writeSpannerEnd(xml, this, track());
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   ChordRest::readAddConnector
 //---------------------------------------------------------
 
@@ -876,18 +815,6 @@ Breath* ChordRest::hasBreathMark() const
     Fraction end = tick() + actualTicks();
     Segment* s = measure()->findSegment(SegmentType::Breath, end);
     return s ? toBreath(s->element(track())) : 0;
-}
-
-//---------------------------------------------------------
-//   writeBeam
-//---------------------------------------------------------
-
-void ChordRest::writeBeam(XmlWriter& xml) const
-{
-    Beam* b = beam();
-    if (b && b->elements().front() == this && (MScore::testMode || !b->generated())) {
-        b->write(xml);
-    }
 }
 
 //---------------------------------------------------------

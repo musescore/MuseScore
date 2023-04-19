@@ -216,26 +216,6 @@ LineSegment* Vibrato::createLineSegment(System* parent)
 }
 
 //---------------------------------------------------------
-//   Vibrato::write
-//---------------------------------------------------------
-
-void Vibrato::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    xml.tag("subtype", TConv::toXml(vibratoType()));
-    writeProperty(xml, Pid::PLAY);
-    for (const StyledProperty& spp : *styledProperties()) {
-        writeProperty(xml, spp.pid);
-    }
-    SLine::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   vibratoTypeName
 //---------------------------------------------------------
 

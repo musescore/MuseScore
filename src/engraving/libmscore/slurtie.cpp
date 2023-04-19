@@ -331,42 +331,6 @@ void SlurTieSegment::undoChangeProperty(Pid pid, const PropertyValue& val, Prope
 }
 
 //---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
-{
-    if (visible() && autoplace()
-        && (color() == engravingConfiguration()->defaultColor())
-        && offset().isNull()
-        && ups(Grip::START).off.isNull()
-        && ups(Grip::BEZIER1).off.isNull()
-        && ups(Grip::BEZIER2).off.isNull()
-        && ups(Grip::END).off.isNull()
-        ) {
-        return;
-    }
-
-    xml.startElement(this, { { "no", no } });
-
-    double _spatium = score()->spatium();
-    if (!ups(Grip::START).off.isNull()) {
-        xml.tagPoint("o1", ups(Grip::START).off / _spatium);
-    }
-    if (!ups(Grip::BEZIER1).off.isNull()) {
-        xml.tagPoint("o2", ups(Grip::BEZIER1).off / _spatium);
-    }
-    if (!ups(Grip::BEZIER2).off.isNull()) {
-        xml.tagPoint("o3", ups(Grip::BEZIER2).off / _spatium);
-    }
-    if (!ups(Grip::END).off.isNull()) {
-        xml.tagPoint("o4", ups(Grip::END).off / _spatium);
-    }
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   drawEditMode
 //---------------------------------------------------------
 
@@ -422,22 +386,6 @@ SlurTie::SlurTie(const SlurTie& t)
 
 SlurTie::~SlurTie()
 {
-}
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void SlurTie::writeProperties(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    Spanner::writeProperties(xml);
-    int idx = 0;
-    for (const SpannerSegment* ss : spannerSegments()) {
-        ((SlurTieSegment*)ss)->writeSlur(xml, idx++);
-    }
-    writeProperty(xml, Pid::SLUR_DIRECTION);
-    writeProperty(xml, Pid::SLUR_STYLE_TYPE);
 }
 
 //---------------------------------------------------------

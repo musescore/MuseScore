@@ -129,8 +129,6 @@ public:
     void layout() override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    void write(XmlWriter&) const override;
-
     void reset() override;
 
     void draw(mu::draw::Painter*) const override;

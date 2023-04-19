@@ -73,18 +73,6 @@ noteList BagpipeEmbellishment::getNoteList() const
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void BagpipeEmbellishment::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    xml.tag("subtype", TConv::toXml(_embelType));
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   BEDrawingDataX
 //      BagpipeEmbellishment drawing data in the x direction
 //      shared between ::draw() and ::layout()

@@ -65,29 +65,6 @@ Fermata::Fermata(EngravingItem* parent)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Fermata::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (!xml.context()->canWrite(this)) {
-        LOGD("%s not written", typeName());
-        return;
-    }
-    xml.startElement(this);
-    xml.tag("subtype", SymNames::nameForSymId(_symId));
-    writeProperty(xml, Pid::TIME_STRETCH);
-    writeProperty(xml, Pid::PLAY);
-    writeProperty(xml, Pid::MIN_DISTANCE);
-    if (!isStyled(Pid::OFFSET)) {
-        writeProperty(xml, Pid::OFFSET);
-    }
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   subtype
 //---------------------------------------------------------
 

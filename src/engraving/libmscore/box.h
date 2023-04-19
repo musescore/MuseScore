@@ -66,9 +66,6 @@ public:
     virtual void endEdit(EditData&) override;
 
     virtual void layout() override;
-    virtual void write(XmlWriter&) const override;
-    virtual void write(XmlWriter& xml, staff_idx_t, bool, bool) const override { write(xml); }
-    virtual void writeProperties(XmlWriter&) const override;
 
     virtual bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;
@@ -128,7 +125,6 @@ public:
     HBox* clone() const override { return new HBox(*this); }
 
     void layout() override;
-    void writeProperties(XmlWriter&) const override;
 
     mu::RectF drag(EditData&) override;
     void layout2();

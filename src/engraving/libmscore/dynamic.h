@@ -76,7 +76,6 @@ public:
     String translatedSubtypeUserName() const override;
 
     void layout() override;
-    void write(XmlWriter& xml) const override;
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override;

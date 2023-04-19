@@ -947,25 +947,6 @@ void Segment::swapElements(track_idx_t i1, track_idx_t i2)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Segment::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (written()) {
-        return;
-    }
-    setWritten(true);
-    if (_extraLeadingSpace.isZero()) {
-        return;
-    }
-    xml.startElement(this);
-    xml.tag("leadingSpace", _extraLeadingSpace.val());
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

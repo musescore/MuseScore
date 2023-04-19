@@ -111,13 +111,10 @@ public:
     virtual void layout() override;
     virtual SpannerSegment* layoutSystem(System*) override;
 
-    void writeProperties(XmlWriter& xml) const override;
     virtual LineSegment* createLineSegment(System* parent) = 0;
     void setLen(double l);
     using EngravingItem::bbox;
     const mu::RectF& bbox() const override;
-
-    virtual void write(XmlWriter&) const override;
 
     bool diagonal() const { return _diagonal; }
     void setDiagonal(bool v) { _diagonal = v; }

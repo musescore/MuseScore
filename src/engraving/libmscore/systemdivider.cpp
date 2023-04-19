@@ -96,16 +96,4 @@ mu::RectF SystemDivider::drag(EditData& ed)
     setGenerated(false);
     return Symbol::drag(ed);
 }
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void SystemDivider::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this, { { "type", (dividerType() == SystemDivider::Type::LEFT ? "left" : "right") } });
-    writeProperties(xml);
-    xml.endElement();
-}
 } // namespace mu::engraving

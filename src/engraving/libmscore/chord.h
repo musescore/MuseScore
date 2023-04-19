@@ -199,8 +199,6 @@ public:
     double mag() const override;
     double noteHeadWidth() const;
 
-    void write(XmlWriter& xml) const override;
-
     EngravingItem* drop(EditData&) override;
 
     void setColor(const mu::draw::Color& c) override;

@@ -52,8 +52,6 @@ public:
 
     TBox* clone() const override { return new TBox(*this); }
 
-    void write(XmlWriter&) const override;
-    using VBox::write;
     EngravingItem* drop(EditData&) override;
     void add(EngravingItem* e) override;
     void remove(EngravingItem* el) override;

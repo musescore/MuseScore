@@ -1466,19 +1466,6 @@ static Fraction fraction(const XmlWriter& xml, const EngravingItem* current, con
     return tick;
 }
 
-//---------------------------------------------------------
-//   Spanner::writeProperties
-//---------------------------------------------------------
-
-void Spanner::writeProperties(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (xml.context()->clipboardmode()) {
-        xml.tagFraction("ticks_f", ticks());
-    }
-    EngravingItem::writeProperties(xml);
-}
-
 //--------------------------------------------------
 //   Spanner::writeSpannerStart
 //---------------------------------------------------------

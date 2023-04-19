@@ -1524,23 +1524,6 @@ SysStaff* System::staff(size_t staffIdx) const
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void System::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    if (_systemDividerLeft && _systemDividerLeft->isUserModified()) {
-        _systemDividerLeft->write(xml);
-    }
-    if (_systemDividerRight && _systemDividerRight->isUserModified()) {
-        _systemDividerRight->write(xml);
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   nextSegmentElement
 //---------------------------------------------------------
 

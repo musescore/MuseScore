@@ -71,8 +71,6 @@ public:
     LedgerLine* next() const { return _next; }
     void setNext(LedgerLine* l) { _next = l; }
 
-    void writeProperties(XmlWriter& xml) const override;
-
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 };
 } // namespace mu::engraving

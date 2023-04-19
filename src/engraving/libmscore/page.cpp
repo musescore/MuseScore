@@ -538,20 +538,6 @@ bool Page::isOdd() const
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Page::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    for (System* system : _systems) {
-        system->write(xml);
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   elements
 //---------------------------------------------------------
 

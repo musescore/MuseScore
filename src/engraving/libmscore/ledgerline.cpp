@@ -128,18 +128,4 @@ void LedgerLine::spatiumChanged(double oldValue, double newValue)
     _len   = (_len / oldValue) * newValue;
     layout();
 }
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void LedgerLine::writeProperties(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.tag("lineWidth", _width / spatium());
-    xml.tag("lineLen", _len / spatium());
-    if (!m_vertical) {
-        xml.tag("vertical", m_vertical);
-    }
-}
 }
