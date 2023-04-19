@@ -186,7 +186,7 @@ Item {
                 required property int column
 
                 readonly property var item: model ? model.itemRole : null
-                readonly property var modelIndex: instrumentsTreeView.modelIndex(row, column)
+                readonly property var modelIndex: instrumentsTreeView.index(row, column)
 
                 width: parent.width
                 implicitHeight: 38

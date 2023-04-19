@@ -72,7 +72,7 @@ Item {
             required property int row
             required property int column
 
-            readonly property var modelIndex: treeView.modelIndex(row, column)
+            readonly property var modelIndex: treeView.index(row, column)
 
             readonly property int navigationRow: modelIndex.row
             readonly property int navigationColumn: depth
