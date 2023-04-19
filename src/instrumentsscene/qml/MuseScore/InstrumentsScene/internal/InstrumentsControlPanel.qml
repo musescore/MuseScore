@@ -32,6 +32,7 @@ RowLayout {
     property bool isMovingDownAvailable: false
     property bool isRemovingAvailable: false
     property bool isAddingAvailable: value
+    property bool isInstrumentSelected: value
 
     property alias navigation: keynavSub
 
@@ -117,7 +118,7 @@ RowLayout {
         navigation.panel: keynavSub
         navigation.order: 4
 
-        toolTipTitle: qsTrc("instruments", "Remove selected instruments")
+        toolTipTitle: root.isInstrumentSelected ? qsTrc("instruments", "Remove selected instruments") : qsTrc("instruments", "Remove selected staves")
 
         enabled: root.isRemovingAvailable
 
