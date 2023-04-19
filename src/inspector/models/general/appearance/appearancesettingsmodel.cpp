@@ -92,6 +92,8 @@ void AppearanceSettingsModel::loadProperties()
     };
 
     loadProperties(propertyIdSet);
+
+    updateIsVerticalOffsetAvailable();
 }
 
 void AppearanceSettingsModel::resetProperties()
@@ -255,6 +257,11 @@ PropertyItem* AppearanceSettingsModel::offset() const
     return m_offset;
 }
 
+bool AppearanceSettingsModel::isVerticalOffsetAvailable() const
+{
+    return m_isVerticalOffsetAvailable;
+}
+
 bool AppearanceSettingsModel::isSnappedToGrid() const
 {
     bool isSnapped = notationConfiguration()->isSnappedToGrid(framework::Orientation::Horizontal);
@@ -273,4 +280,26 @@ void AppearanceSettingsModel::setIsSnappedToGrid(bool isSnapped)
     notationConfiguration()->setIsSnappedToGrid(framework::Orientation::Vertical, isSnapped);
 
     emit isSnappedToGridChanged(isSnappedToGrid());
+}
+
+void AppearanceSettingsModel::setIsVerticalOffsetAvailable(bool isAvailable)
+{
+    if (isAvailable == m_isVerticalOffsetAvailable) {
+        return;
+    }
+
+    m_isVerticalOffsetAvailable = isAvailable;
+    emit isVerticalOffsetAvailableChanged(m_isVerticalOffsetAvailable);
+}
+
+void AppearanceSettingsModel::updateIsVerticalOffsetAvailable()
+{
+    bool isAvailable = true;
+    for (EngravingItem* item : m_elementList) {
+        if (item->isBeam()) {
+            isAvailable = false;
+            break;
+        }
+    }
+    setIsVerticalOffsetAvailable(isAvailable);
 }
