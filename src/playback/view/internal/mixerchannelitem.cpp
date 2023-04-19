@@ -43,21 +43,13 @@ static const std::string TRACK_ID_KEY("trackId");
 static const std::string RESOURCE_ID_KEY("resourceId");
 static const std::string CHAIN_ORDER_KEY("chainOrder");
 
-MixerChannelItem::MixerChannelItem(QObject* parent, Type type, audio::TrackId trackId)
+MixerChannelItem::MixerChannelItem(QObject* parent, Type type, bool outputOnly, audio::TrackId trackId)
     : QObject(parent),
     m_type(type),
     m_trackId(trackId),
+    m_outputOnly(outputOnly),
     m_leftChannelPressure(MIN_DISPLAYED_DBFS),
     m_rightChannelPressure(MIN_DISPLAYED_DBFS)
-{
-}
-
-MixerChannelItem::~MixerChannelItem()
-{
-    m_audioSignalChanges.resetOnReceive(this);
-}
-
-void MixerChannelItem::init()
 {
     if (!m_outputOnly) {
         m_inputResourceItem = buildInputResourceItem();
@@ -74,6 +66,11 @@ void MixerChannelItem::init()
             resetAudioChannelsVolumePressure();
         }
     });
+}
+
+MixerChannelItem::~MixerChannelItem()
+{
+    m_audioSignalChanges.resetOnReceive(this);
 }
 
 MixerChannelItem::Type MixerChannelItem::type() const
@@ -518,11 +515,6 @@ AudioFxChainOrder MixerChannelItem::resolveNewBlankOutputResourceItemOrder() con
 bool MixerChannelItem::outputOnly() const
 {
     return m_outputOnly;
-}
-
-void MixerChannelItem::setOutputOnly(bool outputOnly)
-{
-    m_outputOnly = outputOnly;
 }
 
 InputResourceItem* MixerChannelItem::inputResourceItem() const

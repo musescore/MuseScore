@@ -71,10 +71,8 @@ public:
         Master,
     };
 
-    explicit MixerChannelItem(QObject* parent, Type type, audio::TrackId trackId = -1);
+    explicit MixerChannelItem(QObject* parent, Type type, bool outputOnly = false, audio::TrackId trackId = -1);
     ~MixerChannelItem() override;
-
-    void init();
 
     Type type() const;
 
@@ -107,7 +105,6 @@ public:
     void subscribeOnAudioSignalChanges(audio::AudioSignalChanges&& audioSignalChanges);
 
     bool outputOnly() const;
-    void setOutputOnly(bool outputOnly);
 
     InputResourceItem* inputResourceItem() const;
     QList<OutputResourceItem*> outputResourceItemList() const;
