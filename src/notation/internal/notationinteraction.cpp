@@ -3697,6 +3697,7 @@ void NotationInteraction::deleteSelection()
     }
 
     apply();
+    resetHitElementContext();
 }
 
 void NotationInteraction::flipSelection()
