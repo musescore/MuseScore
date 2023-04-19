@@ -533,6 +533,7 @@ private:
     friend class DropArea;
     friend class ::TestDocks;
     friend class StateDragging;
+    friend class WidgetResizeHandler;
     friend class KDDockWidgets::TabWidget;
     friend class KDDockWidgets::TitleBar;
     friend class KDDockWidgets::DragController;

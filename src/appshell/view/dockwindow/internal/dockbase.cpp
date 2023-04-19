@@ -557,11 +557,9 @@ void DockBase::applySizeConstraints()
     m_dockWidget->setMaximumSize(maximumSize);
 
     if (KDDockWidgets::FloatingWindow* window = m_dockWidget->floatingWindow()) {
-        window->setMinimumSize(minimumSize);
-        window->setMaximumSize(maximumSize);
-
-        QSize winSize = adjustSizeByConstraints(window->frameGeometry().size(), minimumSize, maximumSize);
-        QRect winRect(window->dragRect().topLeft(), winSize);
+        const QRect winGeo = window->frameGeometry();
+        const QSize winSize = winGeo.size();
+        const QRect winRect(window->dragRect().topLeft(), winSize);
 
         window->setGeometry(winRect);
 

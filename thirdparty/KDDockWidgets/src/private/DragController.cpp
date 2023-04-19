@@ -335,6 +335,15 @@ bool StateDragging::handleMouseButtonRelease(QPoint globalPos)
 {
     qCDebug(state) << "StateDragging: handleMouseButtonRelease";
 
+    // When we release a drag on a floating window which has a single dock widget, we save the position.
+    // This must happen before dropping, or else the draggable will be invalid.
+    if (Draggable *draggable = q->m_draggable) {
+        if (DockWidgetBase *dw = draggable->singleDockWidget()) {
+            if (dw->isFloating())
+                dw->d->saveLastFloatingGeometry();
+        }
+    }
+
     FloatingWindow *floatingWindow = q->m_windowBeingDragged->floatingWindow();
     if (!floatingWindow) {
         // It was deleted externally
@@ -360,6 +369,7 @@ bool StateDragging::handleMouseButtonRelease(QPoint globalPos)
         qCDebug(state) << "StateDragging: Bailling out, not over a drop area";
         Q_EMIT q->dragCanceled();
     }
+
     return true;
 }
 
