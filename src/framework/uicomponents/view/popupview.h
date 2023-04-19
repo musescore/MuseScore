@@ -208,6 +208,8 @@ protected:
     void componentComplete() override;
     bool eventFilter(QObject* watched, QEvent* event) override;
 
+    void initCloseController();
+
     void doFocusOut();
     void windowMoveEvent();
 

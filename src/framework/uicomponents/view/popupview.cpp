@@ -52,20 +52,6 @@ PopupView::PopupView(QQuickItem* parent)
 
     setPadding(12);
     setShowArrow(true);
-
-#if defined(Q_OS_MAC)
-    m_closeController = new MacOSPopupViewCloseController();
-#elif defined(Q_OS_WIN)
-    m_closeController = new WinPopupViewCloseController();
-#else
-    m_closeController = new PopupViewCloseController();
-#endif
-
-    m_closeController->init();
-
-    m_closeController->closeNotification().onNotify(this, [this]() {
-        close(true);
-    });
 }
 
 PopupView::~PopupView()
@@ -74,7 +60,10 @@ PopupView::~PopupView()
         m_window->setOnHidden(std::function<void()>());
     }
     m_contentItem->deleteLater();
-    delete m_closeController;
+
+    if (m_closeController) {
+        delete m_closeController;
+    }
 }
 
 QQuickItem* PopupView::parentItem() const
@@ -140,6 +129,23 @@ void PopupView::componentComplete()
     emit windowChanged();
 }
 
+void PopupView::initCloseController()
+{
+#if defined(Q_OS_MAC)
+    m_closeController = new MacOSPopupViewCloseController();
+#elif defined(Q_OS_WIN)
+    m_closeController = new WinPopupViewCloseController();
+#else
+    m_closeController = new PopupViewCloseController();
+#endif
+
+    m_closeController->init();
+
+    m_closeController->closeNotification().onNotify(this, [this]() {
+        close(true);
+    });
+}
+
 bool PopupView::eventFilter(QObject* watched, QEvent* event)
 {
     if (QEvent::UpdateRequest == event->type()) {
@@ -192,10 +198,16 @@ void PopupView::open()
 
     m_globalPos = QPointF(); // invalidate
 
-    m_closeController->setParentItem(parentItem());
-    m_closeController->setWindow(window());
-    m_closeController->setIsCloseOnPressOutsideParent(m_closePolicy == CloseOnPressOutsideParent);
-    m_closeController->setActive(true);
+    if (!isDialog()) {
+        if (!m_closeController) {
+            initCloseController();
+        }
+
+        m_closeController->setParentItem(parentItem());
+        m_closeController->setWindow(window());
+        m_closeController->setIsCloseOnPressOutsideParent(m_closePolicy == CloseOnPressOutsideParent);
+        m_closeController->setActive(true);
+    }
 
     qApp->installEventFilter(this);
 
@@ -219,7 +231,9 @@ void PopupView::close(bool force)
         return;
     }
 
-    m_closeController->setActive(false);
+    if (m_closeController) {
+        m_closeController->setActive(false);
+    }
 
     qApp->removeEventFilter(this);
 
