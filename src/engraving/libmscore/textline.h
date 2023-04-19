@@ -71,8 +71,6 @@ public:
 
     TextLine* clone() const override { return new TextLine(*this); }
 
-    void write(XmlWriter&) const override;
-
     void initStyle();
 
     LineSegment* createLineSegment(System* parent) override;

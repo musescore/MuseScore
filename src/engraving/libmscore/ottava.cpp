@@ -283,26 +283,6 @@ LineSegment* Ottava::createLineSegment(System* parent)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Ottava::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    writeProperty(xml, Pid::OTTAVA_TYPE);
-    writeProperty(xml, Pid::PLACEMENT);
-    writeProperty(xml, Pid::NUMBERS_ONLY);
-//      for (const StyledProperty& spp : *styledProperties())
-//            writeProperty(xml, spp.pid);
-    TextLineBase::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

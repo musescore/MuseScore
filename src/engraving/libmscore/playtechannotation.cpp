@@ -63,15 +63,6 @@ void PlayTechAnnotation::layout()
     autoplaceSegmentElement();
 }
 
-void PlayTechAnnotation::write(XmlWriter& writer) const
-{
-    UNREACHABLE;
-    writer.startElement(this);
-    writeProperty(writer, Pid::PLAY_TECH_TYPE);
-    StaffTextBase::writeProperties(writer);
-    writer.endElement();
-}
-
 PropertyValue PlayTechAnnotation::getProperty(Pid id) const
 {
     switch (id) {

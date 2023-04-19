@@ -45,54 +45,6 @@ StaffTextBase::StaffTextBase(const ElementType& type, Segment* parent, TextStyle
     setSwingParameters(Constants::division / 2, 60);
 }
 
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void StaffTextBase::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-
-    for (const ChannelActions& s : _channelActions) {
-        int channel = s.channel;
-        for (const String& name : s.midiActionNames) {
-            xml.tag("MidiAction", { { "channel", channel }, { "name", name } });
-        }
-    }
-    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-        if (!_channelNames[voice].isEmpty()) {
-            xml.tag("channelSwitch", { { "voice", voice }, { "name", _channelNames[voice] } });
-        }
-    }
-    if (_setAeolusStops) {
-        for (int i = 0; i < 4; ++i) {
-            xml.tag("aeolus", { { "group", i } }, m_aeolusStops[i]);
-        }
-    }
-    if (swing()) {
-        DurationType swingUnit;
-        if (swingParameters().swingUnit == Constants::division / 2) {
-            swingUnit = DurationType::V_EIGHTH;
-        } else if (swingParameters().swingUnit == Constants::division / 4) {
-            swingUnit = DurationType::V_16TH;
-        } else {
-            swingUnit = DurationType::V_ZERO;
-        }
-        int swingRatio = swingParameters().swingRatio;
-        xml.tag("swing", { { "unit", TConv::toXml(swingUnit) }, { "ratio", swingRatio } });
-    }
-    if (capo() != 0) {
-        xml.tag("capo", { { "fretId", capo() } });
-    }
-    TextBase::writeProperties(xml);
-
-    xml.endElement();
-}
-
 void StaffTextBase::clear()
 {
     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {

@@ -101,7 +101,7 @@ public:
     bool isInside() const { return _isInside; }
 
     void calculateDirection();
-    void write(XmlWriter& xml) const override;
+
     void slurPos(SlurPos*) override;
 
     TieSegment* layoutFor(System*);

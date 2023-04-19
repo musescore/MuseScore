@@ -74,8 +74,6 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
 
-    void write(XmlWriter&) const override;
-
     SpannerSegment* layoutSystem(System* system) override;
 
     void setVelocity() const;

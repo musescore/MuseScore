@@ -100,7 +100,6 @@ public:
 
     void read(XmlReader&);
     bool readProperties(XmlReader&);
-    void write(XmlWriter& xml) const;
 
     size_t nstaves() const;
     const std::vector<Staff*>& staves() const;

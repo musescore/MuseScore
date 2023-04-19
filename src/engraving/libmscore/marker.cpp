@@ -163,19 +163,6 @@ void Marker::layout()
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Marker::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    TextBase::writeProperties(xml);
-    xml.tag("label", _label);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   undoSetLabel
 //---------------------------------------------------------
 

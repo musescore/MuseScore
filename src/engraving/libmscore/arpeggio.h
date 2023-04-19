@@ -86,7 +86,6 @@ public:
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 
-    void write(XmlWriter& xml) const override;
     void reset() override;
 
     int span() const { return _span; }

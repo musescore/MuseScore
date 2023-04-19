@@ -76,17 +76,6 @@ void ActionIcon::setFontSize(double size)
     m_iconFont.setPointSizeF(size);
 }
 
-void ActionIcon::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    xml.tag("subtype", int(m_actionType));
-    if (!m_actionCode.empty()) {
-        xml.tag("action", String::fromStdString(m_actionCode));
-    }
-    xml.endElement();
-}
-
 void ActionIcon::layout()
 {
     FontMetrics fontMetrics(m_iconFont);

@@ -57,8 +57,6 @@ public:
 
     void clear();
 
-    virtual void write(XmlWriter& xml) const override;
-
     Segment* segment() const;
     String channelName(voice_idx_t voice) const { return _channelNames[voice]; }
     void setChannelName(voice_idx_t v, const String& s) { _channelNames[v] = s; }

@@ -54,8 +54,6 @@ public:
 
     StaffTypeChange* clone() const override { return new StaffTypeChange(*this); }
 
-    void write(XmlWriter&) const override;
-
     const StaffType* staffType() const { return m_staffType; }
     void setStaffType(StaffType* st, bool owned);
 

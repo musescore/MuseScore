@@ -194,22 +194,6 @@ std::vector<Clef*> InstrumentChange::clefs() const
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void InstrumentChange::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    _instrument->write(xml, part());
-    if (_init) {
-        xml.tag("init", _init);
-    }
-    TextBase::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 

@@ -189,8 +189,6 @@ public:
 
     virtual void setScore(Score* s) override;
 
-    void writeProperties(XmlWriter&) const override;
-
     void writeSpannerStart(XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction frac = { -1, 1 }) const;
     void writeSpannerEnd(XmlWriter& xml,   const EngravingItem* current, track_idx_t track, Fraction frac = { -1, 1 }) const;
     static void readSpanner(XmlReader& e, EngravingItem* current, track_idx_t track);

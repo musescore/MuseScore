@@ -118,23 +118,6 @@ void TremoloBar::draw(mu::draw::Painter* painter) const
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void TremoloBar::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    writeProperty(xml, Pid::MAG);
-    writeProperty(xml, Pid::LINE_WIDTH);
-    writeProperty(xml, Pid::PLAY);
-    for (const PitchValue& v : m_points) {
-        xml.tag("point", { { "time", v.time }, { "pitch", v.pitch }, { "vibrato", v.vibrato } });
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

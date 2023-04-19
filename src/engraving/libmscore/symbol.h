@@ -71,7 +71,7 @@ public:
     String accessibleInfo() const override;
 
     void draw(mu::draw::Painter*) const override;
-    void write(XmlWriter& xml) const override;
+
     void layout() override;
 
     PropertyValue getProperty(Pid) const override;
@@ -103,7 +103,7 @@ public:
     String accessibleInfo() const override;
 
     void draw(mu::draw::Painter*) const override;
-    void write(XmlWriter& xml) const override;
+
     void layout() override;
 
     double baseLine() const override { return 0.0; }

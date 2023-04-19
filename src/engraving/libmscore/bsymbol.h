@@ -54,8 +54,6 @@ public:
     void layout() override;
     mu::RectF drag(EditData&) override;
 
-    void writeProperties(XmlWriter& xml) const override;
-
     Align align() const { return _align; }
     void setAlign(Align a) { _align = a; }
 

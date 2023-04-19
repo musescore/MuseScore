@@ -791,27 +791,6 @@ Fraction BarLine::playTick() const
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void BarLine::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-
-    writeProperty(xml, Pid::BARLINE_TYPE);
-    writeProperty(xml, Pid::BARLINE_SPAN);
-    writeProperty(xml, Pid::BARLINE_SPAN_FROM);
-    writeProperty(xml, Pid::BARLINE_SPAN_TO);
-
-    for (const EngravingItem* e : _el) {
-        e->write(xml);
-    }
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   acceptDrop
 //---------------------------------------------------------
 

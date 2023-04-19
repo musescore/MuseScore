@@ -144,7 +144,6 @@ public:
     staff_idx_t rstaff() const;
     staff_idx_t idx() const;
 
-    void write(XmlWriter& xml) const override;
     Part* part() const { return _part; }
     void setPart(Part* p) { _part = p; }
 

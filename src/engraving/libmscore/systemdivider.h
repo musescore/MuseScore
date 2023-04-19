@@ -54,8 +54,6 @@ public:
 
     mu::RectF drag(EditData&) override;
 
-    void write(XmlWriter&) const override;
-
     void layout() override;
 
     Segment* segment() const override { return nullptr; }

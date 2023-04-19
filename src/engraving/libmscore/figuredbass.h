@@ -172,7 +172,6 @@ public:
 
     void              draw(mu::draw::Painter* painter) const override;
     void              layout() override;
-    void              write(XmlWriter& xml) const override;
 
     // read / write MusicXML
     void              writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const;
@@ -289,7 +288,6 @@ public:
     void startEdit(EditData&) override;
     bool isEditAllowed(EditData&) const override;
     void endEdit(EditData&) override;
-    void write(XmlWriter& xml) const override;
 
     // read / write MusicXML
     void writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;

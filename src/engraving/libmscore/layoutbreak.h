@@ -50,7 +50,6 @@ public:
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
-    void write(XmlWriter&) const override;
 
     MeasureBase* measure() const { return (MeasureBase*)explicitParent(); }
     double pause() const { return _pause; }

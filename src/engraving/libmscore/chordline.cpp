@@ -185,32 +185,6 @@ void ChordLine::layout()
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void ChordLine::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    writeProperty(xml, Pid::CHORD_LINE_TYPE);
-    writeProperty(xml, Pid::CHORD_LINE_STRAIGHT);
-    writeProperty(xml, Pid::CHORD_LINE_WAVY);
-    xml.tag("lengthX", _lengthX, 0.0);
-    xml.tag("lengthY", _lengthY, 0.0);
-    EngravingItem::writeProperties(xml);
-    if (m_modified) {
-        size_t n = m_path.elementCount();
-        xml.startElement("Path");
-        for (size_t i = 0; i < n; ++i) {
-            const PainterPath::Element& e = m_path.elementAt(i);
-            xml.tag("Element", { { "type", int(e.type) }, { "x", e.x }, { "y", e.y } });
-        }
-        xml.endElement();
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   Symbol::draw
 //---------------------------------------------------------
 

@@ -77,33 +77,6 @@ void Arpeggio::setHeight(double h)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Arpeggio::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    EngravingItem::writeProperties(xml);
-    writeProperty(xml, Pid::ARPEGGIO_TYPE);
-    if (_userLen1 != 0.0) {
-        xml.tag("userLen1", _userLen1 / spatium());
-    }
-    if (_userLen2 != 0.0) {
-        xml.tag("userLen2", _userLen2 / spatium());
-    }
-    if (_span != 1) {
-        xml.tag("span", _span);
-    }
-    writeProperty(xml, Pid::PLAY);
-    writeProperty(xml, Pid::TIME_STRETCH);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   symbolLine
 //    construct a string of symbols approximating width w
 //---------------------------------------------------------

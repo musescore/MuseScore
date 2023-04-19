@@ -442,32 +442,6 @@ String FiguredBassItem::normalizedText() const
 }
 
 //---------------------------------------------------------
-//   FiguredBassItem write()
-//---------------------------------------------------------
-
-void FiguredBassItem::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement("FiguredBassItem", this);
-    xml.tag("brackets", { { "b0", int(parenth[0]) }, { "b1", int(parenth[1]) },  { "b2", int(parenth[2]) }, { "b3", int(parenth[3]) },
-                { "b4", int(parenth[4]) } });
-
-    if (_prefix != Modifier::NONE) {
-        xml.tag("prefix", int(_prefix));
-    }
-    if (_digit != FBIDigitNone) {
-        xml.tag("digit", _digit);
-    }
-    if (_suffix != Modifier::NONE) {
-        xml.tag("suffix", int(_suffix));
-    }
-    if (_contLine != ContLine::NONE) {
-        xml.tag("continuationLine", int(_contLine));
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   FiguredBassItem layout()
 //    creates the display text (set as element text) and computes
 //    the horiz. offset needed to align the right part as well as the vert. offset
@@ -1031,41 +1005,6 @@ Sid FiguredBass::getPropertyStyle(Pid id) const
         }
     }
     return EngravingItem::getPropertyStyle(id);
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void FiguredBass::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    if (!onNote()) {
-        xml.tag("onNote", onNote());
-    }
-    if (ticks().isNotZero()) {
-        xml.tagFraction("ticks", ticks());
-    }
-    // if unparseable items, write full text data
-    if (m_items.size() < 1) {
-        TextBase::writeProperties(xml, true);
-    } else {
-//            if (textStyleType() != StyledPropertyListIdx::FIGURED_BASS)
-//                  // if all items parsed and not unstiled, we simply have a special style: write it
-//                  xml.tag("style", textStyle().name());
-        for (FiguredBassItem* item : m_items) {
-            item->write(xml);
-        }
-        for (const StyledProperty& spp : *_elementStyle) {
-            writeProperty(xml, spp.pid);
-        }
-        EngravingItem::writeProperties(xml);
-    }
-    xml.endElement();
 }
 
 //---------------------------------------------------------

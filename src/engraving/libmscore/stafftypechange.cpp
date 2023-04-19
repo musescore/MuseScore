@@ -63,21 +63,6 @@ StaffTypeChange::~StaffTypeChange()
     }
 }
 
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void StaffTypeChange::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    if (m_staffType) {
-        m_staffType->write(xml);
-    }
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
-}
-
 void StaffTypeChange::setStaffType(StaffType* st, bool owned)
 {
     if (m_staffType && m_ownsStaffType) {

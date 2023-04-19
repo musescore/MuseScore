@@ -63,8 +63,6 @@ public:
 
     Measure* measure() const { return toMeasure(explicitParent()); }
 
-    void write(XmlWriter& xml) const override;
-
     void layout() override;
 
     String jumpTo() const { return _jumpTo; }

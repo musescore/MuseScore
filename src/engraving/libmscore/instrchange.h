@@ -50,8 +50,6 @@ public:
 
     InstrumentChange* clone() const override { return new InstrumentChange(*this); }
 
-    void write(XmlWriter& xml) const override;
-
     void layout() override;
 
     Instrument* instrument() const { return _instrument; }

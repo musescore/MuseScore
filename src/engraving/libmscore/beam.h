@@ -156,7 +156,6 @@ public:
     Fraction rtick() const override;
     Fraction ticks() const;
 
-    void write(XmlWriter& xml) const override;
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     void reset() override;

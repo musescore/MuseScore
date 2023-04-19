@@ -140,7 +140,6 @@ public:
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
     void change(EngravingItem* o, EngravingItem* n) override;
-    void write(XmlWriter&) const override;
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 

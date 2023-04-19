@@ -485,32 +485,6 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Glissando::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    if (_showText && !_text.isEmpty()) {
-        xml.tag("text", _text);
-    }
-
-    for (auto id : { Pid::GLISS_TYPE, Pid::PLAY, Pid::GLISS_STYLE, Pid::GLISS_EASEIN, Pid::GLISS_EASEOUT }) {
-        writeProperty(xml, id);
-    }
-    for (const StyledProperty& spp : *styledProperties()) {
-        writeProperty(xml, spp.pid);
-    }
-
-    SLine::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   STATIC FUNCTIONS: guessInitialNote
 //
 //    Used while reading old scores (either 1.x or transitional 2.0) to determine (guess!)

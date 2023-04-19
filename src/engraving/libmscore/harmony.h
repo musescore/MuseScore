@@ -199,7 +199,6 @@ public:
     HarmonyType harmonyType() const { return _harmonyType; }
     void setHarmonyType(HarmonyType val);
 
-    void write(XmlWriter& xml) const override;
     void afterRead();
     String harmonyName() const;
     void render();

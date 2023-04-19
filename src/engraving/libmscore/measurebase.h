@@ -118,9 +118,6 @@ public:
     Measure* nextMeasureMM() const;
     Measure* prevMeasureMM() const;
 
-    virtual void write(XmlWriter&) const override = 0;
-    virtual void write(XmlWriter&, staff_idx_t, bool, bool) const = 0;
-
     virtual void layout() override;
     virtual void layoutCrossStaff() {}
 
@@ -142,7 +139,6 @@ public:
 
     virtual void add(EngravingItem*) override;
     virtual void remove(EngravingItem*) override;
-    virtual void writeProperties(XmlWriter&) const override;
 
     Fraction tick() const override;
     void setTick(const Fraction& f);

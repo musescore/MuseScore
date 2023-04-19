@@ -291,26 +291,6 @@ void Clef::setSmall(bool val)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Clef::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    writeProperty(xml, Pid::CLEF_TYPE_CONCERT);
-    writeProperty(xml, Pid::CLEF_TYPE_TRANSPOSING);
-    if (!_showCourtesy) {
-        xml.tag("showCourtesyClef", _showCourtesy);
-    }
-    if (_forInstrumentChange) {
-        xml.tag("forInstrumentChange", _forInstrumentChange);
-    }
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   setClefType
 //---------------------------------------------------------
 

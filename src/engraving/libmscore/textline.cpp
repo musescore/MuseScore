@@ -185,28 +185,6 @@ void TextLine::initStyle()
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void TextLine::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    if (systemFlag()) {
-        xml.startElement(this, { { "system", "1" } });
-    } else {
-        xml.startElement(this);
-    }
-    // other styled properties are included in TextLineBase pids list
-    writeProperty(xml, Pid::PLACEMENT);
-    writeProperty(xml, Pid::OFFSET);
-    TextLineBase::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
 

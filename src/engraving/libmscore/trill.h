@@ -100,7 +100,6 @@ public:
     LineSegment* createLineSegment(System* parent) override;
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
-    void write(XmlWriter&) const override;
 
     void setTrillType(TrillType tt) { _trillType = tt; }
     TrillType trillType() const { return _trillType; }

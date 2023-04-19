@@ -154,36 +154,6 @@ void Articulation::setUp(bool val)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Articulation::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    if (!_channelName.isEmpty()) {
-        xml.tag("channe", { { "name", _channelName } });
-    }
-    writeProperty(xml, Pid::DIRECTION);
-    if (m_textType != ArticulationTextType::NO_TEXT) {
-        xml.tag("subtype", artTypeToInfo.at(m_textType).xml);
-    } else {
-        xml.tag("subtype", SymNames::nameForSymId(_symId));
-    }
-
-    writeProperty(xml, Pid::PLAY);
-    writeProperty(xml, Pid::ORNAMENT_STYLE);
-    for (const StyledProperty& spp : *styledProperties()) {
-        writeProperty(xml, spp.pid);
-    }
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   typeUserName
 //---------------------------------------------------------
 

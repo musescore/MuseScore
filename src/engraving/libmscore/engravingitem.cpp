@@ -813,111 +813,6 @@ bool EngravingItem::hitShapeIntersects(const RectF& rr) const
 }
 
 //---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void EngravingItem::writeProperties(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    bool autoplaceEnabled = score()->styleB(Sid::autoplaceEnabled);
-    if (!autoplaceEnabled) {
-        score()->setStyleValue(Sid::autoplaceEnabled, true);
-        writeProperty(xml, Pid::AUTOPLACE);
-        score()->setStyleValue(Sid::autoplaceEnabled, autoplaceEnabled);
-    } else {
-        writeProperty(xml, Pid::AUTOPLACE);
-    }
-
-    // copy paste should not keep links
-    if (_links && (_links->size() > 1) && !xml.context()->clipboardmode()) {
-        WriteContext* ctx = xml.context();
-        IF_ASSERT_FAILED(ctx) {
-            return;
-        }
-
-        if (MScore::debugMode) {
-            xml.tag("lid", _links->lid());
-        }
-
-        EngravingItem* me = static_cast<EngravingItem*>(_links->mainElement());
-        assert(type() == me->type());
-        Staff* s = staff();
-        if (!s) {
-            s = score()->staff(xml.context()->curTrack() / VOICES);
-            if (!s) {
-                LOGW("EngravingItem::writeProperties: linked element's staff not found (%s)", typeName());
-            }
-        }
-        Location loc = Location::positionForElement(this);
-        if (me == this) {
-            xml.tag("linkedMain");
-            int index = ctx->assignLocalIndex(loc);
-            ctx->setLidLocalIndex(_links->lid(), index);
-        } else {
-            if (s && s->links()) {
-                Staff* linkedStaff = toStaff(s->links()->mainElement());
-                loc.setStaff(static_cast<int>(linkedStaff->idx()));
-            }
-            xml.startElement("linked");
-            if (!me->score()->isMaster()) {
-                if (me->score() == score()) {
-                    xml.tag("score", "same");
-                } else {
-                    LOGW(
-                        "EngravingItem::writeProperties: linked elements belong to different scores but none of them is master score: (%s lid=%d)",
-                        typeName(), _links->lid());
-                }
-            }
-
-            Location mainLoc = Location::positionForElement(me);
-            const int guessedLocalIndex = ctx->assignLocalIndex(mainLoc);
-            if (loc != mainLoc) {
-                mainLoc.toRelative(loc);
-                mainLoc.write(xml);
-            }
-            const int indexDiff = ctx->lidLocalIndex(_links->lid()) - guessedLocalIndex;
-            xml.tag("indexDiff", indexDiff, 0);
-            xml.endElement();       // </linked>
-        }
-    }
-    if ((xml.context()->writeTrack() || track() != xml.context()->curTrack())
-        && (track() != mu::nidx) && !isBeam()) {
-        // Writing track number for beams is redundant as it is calculated
-        // during layout.
-        int t = static_cast<int>(track()) + xml.context()->trackDiff();
-        xml.tag("track", t);
-    }
-    if (xml.context()->writePosition()) {
-        xml.tagProperty(Pid::POSITION, rtick());
-    }
-    if (_tag != 0x1) {
-        for (int i = 1; i < MAX_TAGS; i++) {
-            if (_tag == ((unsigned)1 << i)) {
-                xml.tag("tag", score()->layerTags()[i]);
-                break;
-            }
-        }
-    }
-    for (Pid pid : { Pid::OFFSET, Pid::COLOR, Pid::VISIBLE, Pid::Z, Pid::PLACEMENT }) {
-        if (propertyFlags(pid) == PropertyFlags::NOSTYLE) {
-            writeProperty(xml, pid);
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void EngravingItem::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   remove
 ///   Remove \a el from the list. Return true on success.
 //---------------------------------------------------------
@@ -944,18 +839,6 @@ void ElementList::replace(EngravingItem* o, EngravingItem* n)
         return;
     }
     *i = n;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void ElementList::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    for (const EngravingItem* e : *this) {
-        e->write(xml);
-    }
 }
 
 //---------------------------------------------------------

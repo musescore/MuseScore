@@ -718,37 +718,6 @@ LineSegment* Hairpin::createLineSegment(System* parent)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Hairpin::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    xml.tag("subtype", int(_hairpinType));
-    writeProperty(xml, Pid::VELO_CHANGE);
-    writeProperty(xml, Pid::HAIRPIN_CIRCLEDTIP);
-    writeProperty(xml, Pid::DYNAMIC_RANGE);
-//      writeProperty(xml, Pid::BEGIN_TEXT);
-    writeProperty(xml, Pid::END_TEXT);
-//      writeProperty(xml, Pid::CONTINUE_TEXT);
-    writeProperty(xml, Pid::LINE_VISIBLE);
-    writeProperty(xml, Pid::SINGLE_NOTE_DYNAMICS);
-    writeProperty(xml, Pid::VELO_CHANGE_METHOD);
-
-    for (const StyledProperty& spp : *styledProperties()) {
-        if (!isStyled(spp.pid)) {
-            writeProperty(xml, spp.pid);
-        }
-    }
-    SLine::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

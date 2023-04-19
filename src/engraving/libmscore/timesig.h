@@ -93,7 +93,7 @@ public:
 
     double mag() const override;
     void draw(mu::draw::Painter*) const override;
-    void write(XmlWriter& xml) const override;
+
     void layout() override;
 
     Fraction sig() const { return _sig; }

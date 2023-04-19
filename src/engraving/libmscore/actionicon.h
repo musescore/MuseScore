@@ -79,7 +79,6 @@ public:
     double fontSize() const;
     void setFontSize(double size);
 
-    void write(XmlWriter&) const override;
     void draw(mu::draw::Painter*) const override;
     void layout() override;
 

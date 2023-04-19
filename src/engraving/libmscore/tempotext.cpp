@@ -70,22 +70,6 @@ TempoText::TempoText(Segment* parent)
     _isRelative = false;
 }
 
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void TempoText::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    xml.tag("tempo", TConv::toXml(_tempo));
-    if (_followText) {
-        xml.tag("followText", _followText);
-    }
-    TextBase::writeProperties(xml);
-    xml.endElement();
-}
-
 double TempoText::tempoBpm() const
 {
     //! NOTE: find tempo in format " = 180"

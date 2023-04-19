@@ -71,8 +71,6 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
-    void write(XmlWriter&) const override;
-
     Instrument* instrument() const { return _instrument; }
     void setInstrument(const Instrument* i) { *_instrument = *i; }
     void setInstrument(const Instrument&& i) { *_instrument = i; }

@@ -222,16 +222,6 @@ void Stem::draw(mu::draw::Painter* painter) const
     }
 }
 
-void Stem::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    EngravingItem::writeProperties(xml);
-    writeProperty(xml, Pid::USER_LEN);
-    writeProperty(xml, Pid::LINE_WIDTH);
-    xml.endElement();
-}
-
 std::vector<mu::PointF> Stem::gripsPositions(const EditData&) const
 {
     return { pagePos() + m_line.p2() };

@@ -153,8 +153,7 @@ public:
     EngravingObjectList scanChildren() const override;
 
     void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
-    void write(XmlWriter& xml) const override { EngravingItem::write(xml); }
-    void write(XmlWriter&, staff_idx_t, bool writeSystemElements, bool forceTimeSig) const override;
+
     void writeBox(XmlWriter&) const;
     void readBox(XmlReader&);
     bool isEditable() const override { return false; }

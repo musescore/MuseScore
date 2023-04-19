@@ -228,30 +228,6 @@ bool Dynamic::isVelocityChangeAvailable() const
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Dynamic::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    writeProperty(xml, Pid::DYNAMIC_TYPE);
-    writeProperty(xml, Pid::VELOCITY);
-    writeProperty(xml, Pid::DYNAMIC_RANGE);
-
-    if (isVelocityChangeAvailable()) {
-        writeProperty(xml, Pid::VELO_CHANGE);
-        writeProperty(xml, Pid::VELO_CHANGE_SPEED);
-    }
-
-    TextBase::writeProperties(xml, dynamicType() == DynamicType::OTHER);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 

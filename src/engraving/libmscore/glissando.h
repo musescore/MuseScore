@@ -90,7 +90,6 @@ public:
     LineSegment* createLineSegment(System* parent) override;
 
     void layout() override;
-    void write(XmlWriter&) const override;
 
     // property/style methods
     PropertyValue getProperty(Pid propertyId) const override;

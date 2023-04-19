@@ -57,22 +57,6 @@ StaffState::~StaffState()
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void StaffState::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    xml.tag("subtype", int(_staffStateType));
-    if (staffStateType() == StaffStateType::INSTRUMENT) {
-        _instrument->write(xml, nullptr);
-    }
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 

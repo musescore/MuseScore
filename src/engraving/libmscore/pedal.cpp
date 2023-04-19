@@ -122,36 +122,6 @@ Pedal::Pedal(EngravingItem* parent)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Pedal::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-
-    for (auto i : {
-            Pid::END_HOOK_TYPE,
-            Pid::BEGIN_TEXT,
-            Pid::CONTINUE_TEXT,
-            Pid::END_TEXT,
-            Pid::LINE_VISIBLE,
-            Pid::BEGIN_HOOK_TYPE
-        }) {
-        writeProperty(xml, i);
-    }
-    for (const StyledProperty& spp : *styledProperties()) {
-        writeProperty(xml, spp.pid);
-    }
-
-    SLine::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
 

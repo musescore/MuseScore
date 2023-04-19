@@ -143,43 +143,6 @@ Part* Part::masterPart()
     return const_cast<Part*>(const_cast<const Part*>(this)->masterPart());
 }
 
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Part::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this, { { "id", _id.toUint64() } });
-
-    for (const Staff* staff : _staves) {
-        staff->write(xml);
-    }
-
-    if (!_show) {
-        xml.tag("show", _show);
-    }
-
-    if (_soloist) {
-        xml.tag("soloist", _soloist);
-    }
-
-    xml.tag("trackName", _partName);
-
-    if (_color != DEFAULT_COLOR) {
-        xml.tag("color", _color);
-    }
-
-    if (_preferSharpFlat != PreferSharpFlat::DEFAULT) {
-        xml.tag("preferSharpFlat",
-                _preferSharpFlat == PreferSharpFlat::SHARPS ? "sharps" : "flats");
-    }
-
-    instrument()->write(xml, this);
-
-    xml.endElement();
-}
-
 size_t Part::nstaves() const
 {
     return _staves.size();

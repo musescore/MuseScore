@@ -378,28 +378,6 @@ LineSegment* Trill::createLineSegment(System* parent)
 }
 
 //---------------------------------------------------------
-//   Trill::write
-//---------------------------------------------------------
-
-void Trill::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    xml.tag("subtype", TConv::toXml(trillType()));
-    writeProperty(xml, Pid::PLAY);
-    writeProperty(xml, Pid::ORNAMENT_STYLE);
-    writeProperty(xml, Pid::PLACEMENT);
-    SLine::writeProperties(xml);
-    if (_accidental) {
-        _accidental->write(xml);
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   trillTypeName
 //---------------------------------------------------------
 

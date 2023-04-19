@@ -1475,68 +1475,6 @@ void Note::draw(mu::draw::Painter* painter) const
     }
 }
 
-//--------------------------------------------------
-//   Note::write
-//---------------------------------------------------------
-
-void Note::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    EngravingItem::writeProperties(xml);
-
-    if (_accidental) {
-        _accidental->write(xml);
-    }
-    _el.write(xml);
-    bool write_dots = false;
-    for (NoteDot* dot : _dots) {
-        if (!dot->offset().isNull() || !dot->visible() || dot->color() != engravingConfiguration()->defaultColor()
-            || dot->visible() != visible()) {
-            write_dots = true;
-            break;
-        }
-    }
-    if (write_dots) {
-        for (NoteDot* dot : _dots) {
-            dot->write(xml);
-        }
-    }
-    if (_tieFor) {
-        _tieFor->writeSpannerStart(xml, this, track());
-    }
-    if (_tieBack) {
-        _tieBack->writeSpannerEnd(xml, this, track());
-    }
-    if ((chord() == 0 || chord()->playEventType() != PlayEventType::Auto) && !_playEvents.empty()) {
-        xml.startElement("Events");
-        for (const NoteEvent& e : _playEvents) {
-            e.write(xml);
-        }
-        xml.endElement();
-    }
-    for (Pid id : { Pid::PITCH, Pid::TPC1, Pid::TPC2, Pid::SMALL, Pid::MIRROR_HEAD, Pid::DOT_POSITION,
-                    Pid::HEAD_SCHEME, Pid::HEAD_GROUP, Pid::USER_VELOCITY, Pid::PLAY, Pid::TUNING, Pid::FRET, Pid::STRING,
-                    Pid::GHOST, Pid::DEAD, Pid::HEAD_TYPE, Pid::FIXED, Pid::FIXED_LINE }) {
-        writeProperty(xml, id);
-    }
-
-    for (Spanner* e : _spannerFor) {
-        e->writeSpannerStart(xml, this, track());
-    }
-    for (Spanner* e : _spannerBack) {
-        e->writeSpannerEnd(xml, this, track());
-    }
-
-    for (EngravingItem* e : chord()->el()) {
-        if (e->isChordLine() && toChordLine(e)->note() && toChordLine(e)->note() == this) {
-            toChordLine(e)->write(xml);
-        }
-    }
-
-    xml.endElement();
-}
-
 void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
 {
     // ensure sane values:

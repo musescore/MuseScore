@@ -47,7 +47,6 @@ public:
     Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
     void layout() override;
-    void write(XmlWriter& xml) const override;
 
     bool isEditAllowed(EditData&) const override;
 };

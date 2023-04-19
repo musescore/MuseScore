@@ -58,7 +58,6 @@ public:
 
     Image* clone() const override { return new Image(*this); }
 
-    void write(XmlWriter& xml) const override;
     bool load(); // after set paths
     bool load(const io::path_t& s);
     bool loadFromData(const io::path_t& name, const mu::ByteArray&);

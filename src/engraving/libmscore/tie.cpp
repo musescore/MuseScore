@@ -1008,18 +1008,6 @@ Tie::Tie(EngravingItem* parent)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Tie::write(XmlWriter& xml) const
-{
-    UNREACHABLE;
-    xml.startElement(this);
-    SlurTie::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   calculateDirection
 //---------------------------------------------------------
 
