@@ -883,8 +883,8 @@ void TWrite::write(const FiguredBass* item, XmlWriter& xml, WriteContext& ctx)
 //            if (textStyleType() != StyledPropertyListIdx::FIGURED_BASS)
 //                  // if all items parsed and not unstiled, we simply have a special style: write it
 //                  xml.tag("style", textStyle().name());
-        for (FiguredBassItem* item : item->items()) {
-            write(item, xml, ctx);
+        for (FiguredBassItem* fBItem : item->items()) {
+            write(fBItem, xml, ctx);
         }
         for (const StyledProperty& spp : *item->styledProperties()) {
             writeProperty(item, xml, spp.pid);
