@@ -89,6 +89,7 @@ public:
 class FSymbol final : public BSymbol
 {
     OBJECT_ALLOCATOR(engraving, FSymbol)
+    DECLARE_CLASSOF(ElementType::FSYMBOL)
 
     mu::draw::Font _font;
     char32_t _code; // character code point (Unicode)

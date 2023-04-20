@@ -167,12 +167,12 @@ using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Art
                                   KeySig,
                                   LayoutBreak, LedgerLine, LetRing, Lyrics,
                                   Marker, MeasureNumber, MeasureRepeat, MMRest, MMRestRange,
-                                  Note, NoteDot, NoteLine,
+                                  Note, NoteDot, NoteHead, NoteLine,
                                   Ottava,
                                   Page, PalmMute, Pedal, PlayTechAnnotation,
                                   Rasgueado, RehearsalMark, Rest,
                                   Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
-                                  Symbol, System, SystemDivider, SystemText,
+                                  Symbol, FSymbol, System, SystemDivider, SystemText,
                                   TempoText, Text, TextLine, Tie, TimeSig, Tremolo, TremoloBar, Trill, Tuplet,
                                   Vibrato, Volta,
                                   WhammyBar>;
@@ -1679,6 +1679,11 @@ void TWrite::write(const NoteDot* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
+void TWrite::write(const NoteHead* item, XmlWriter& xml, WriteContext& ctx)
+{
+    write(static_cast<const Symbol*>(item), xml, ctx);
+}
+
 void TWrite::write(const NoteLine* item, XmlWriter& xml, WriteContext& ctx)
 {
     if (!ctx.canWrite(item)) {
@@ -2181,6 +2186,16 @@ void TWrite::write(const Symbol* item, XmlWriter& xml, WriteContext& ctx)
     if (item->scoreFont()) {
         xml.tag("font", item->scoreFont()->name());
     }
+    writeProperties(static_cast<const BSymbol*>(item), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const FSymbol* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    xml.tag("font",     item->font().family());
+    xml.tag("fontsize", item->font().pointSizeF());
+    xml.tag("code",     item->code());
     writeProperties(static_cast<const BSymbol*>(item), xml, ctx);
     xml.endElement();
 }
