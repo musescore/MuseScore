@@ -46,48 +46,57 @@ auto item_cast(From* p) noexcept
 
 /* ===============================================
 This visitor to foreaching the list of given types
-How use:
-1. Make types list
-
+How to use:
+1. Make types list:
 using SomeTypeList = TypeList<ItemA, ItemB>;
 
-2. Write visit function with name 'somename_visit'
-   (there may be some number of arguments)
-
-template<typename T>
-bool foo_visit(EngravingItem* item, ...)
+2. Create subclass like this, and implement the `doVisit` method:
+class FooVisitor : public rtti::Visitor<FooVisitor>
 {
-    if (T::classof(item)) {
-        ...
-        return true;
+public:
+    template<typename T>
+    static bool doVisit(EngravingItem* item, ...)
+    {
+        if (T::classof(item)) {
+            ...
+            return true;
+        }
+        return false;
     }
-    return false;
-}
+};
 
-3. Declare visiter with some name
+3. Call the `visit` method:
 
-DECLARE_VISITER(foo)
-
-4. Call visiter
-
-foo_visiter(SomeTypeList {}, item, ...);
+FooVisitor::visit(SomeTypeList {}, item, ...);
 
 */
 
 template<typename ... Types> struct TypeList {};
 
-#define DECLARE_VISITER(name) \
-    template<typename ... Arg> bool name##_visiter(rtti::TypeList<>, Arg & ...) { return false; } \
-    template<class Head, class ... Tail, typename ... Arg> bool name##_visiter(rtti::TypeList<Head, Tail...>, Arg & ...); \
-    template<class Head, class ... Tail, typename ... Arg> bool name##_visiter(rtti::TypeList<Head, Tail...>, Arg & ... a) \
-    { \
-        bool found = name##_visit<Head>(a ...); \
-        if (!found) { \
-            found = name##_visiter(rtti::TypeList<Tail...> {}, a ...); \
-        } \
-        return found; \
-    } \
+template<typename Impl>
+class Visitor
+{
+public:
+    template<typename ... Types, typename ... Args >
+    static bool visit(TypeList<Types...> types, Args&& ... args)
+    {
+        return visit_helper(types, std::forward<Args>(args)...);
+    }
 
+private:
+    template<typename ... Args>
+    static bool visit_helper(TypeList<>, Args&&...) { return false; }
+
+    template<class Head, class ... Tail, typename ... Args>
+    static bool visit_helper(TypeList<Head, Tail...>, Args&& ... args)
+    {
+        bool found = Impl::template doVisit<Head>(args ...);
+        if (!found) {
+            found = visit_helper(TypeList<Tail...> {}, std::forward<Args>(args)...);
+        }
+        return found;
+    }
+};
 }
 
 #endif // MU_ENGRAVING_RTTI_H
