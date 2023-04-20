@@ -85,6 +85,7 @@ class TextLineBase : public SLine
     M_PROPERTY2(HookType,  endHookType,           setEndHookType,       HookType::NONE)
     M_PROPERTY(Spatium,    beginHookHeight,       setBeginHookHeight)
     M_PROPERTY(Spatium,    endHookHeight,         setEndHookHeight)
+    M_PROPERTY(Spatium,    gapBetweenTextAndLine,  setGapBetweenTextAndLine)
 
     M_PROPERTY2(TextPlace, beginTextPlace,        setBeginTextPlace,    TextPlace::AUTO)
     M_PROPERTY(String,     beginText,             setBeginText)
@@ -118,8 +119,9 @@ public:
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
-    static const std::array<Pid, 26>& textLineBasePropertyIds();
+    static const std::array<Pid, 27>& textLineBasePropertyIds();
 
 protected:
     friend class TextLineBaseSegment;
