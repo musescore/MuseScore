@@ -99,6 +99,7 @@ class MMRestRange;
 class Note;
 class NoteEvent;
 class NoteDot;
+class NoteHead;
 class NoteLine;
 
 class Ottava;
@@ -227,6 +228,7 @@ public:
     static void write(const Note* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const NoteEvent* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const NoteDot* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const NoteHead* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const NoteLine* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Ottava* item, XmlWriter& xml, WriteContext& ctx);

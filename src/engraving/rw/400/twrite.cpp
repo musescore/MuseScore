@@ -167,7 +167,7 @@ using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Art
                                   KeySig,
                                   LayoutBreak, LedgerLine, LetRing, Lyrics,
                                   Marker, MeasureNumber, MeasureRepeat, MMRest, MMRestRange,
-                                  Note, NoteDot, NoteLine,
+                                  Note, NoteDot, NoteHead, NoteLine,
                                   Ottava,
                                   Page, PalmMute, Pedal, PlayTechAnnotation,
                                   Rasgueado, RehearsalMark, Rest,
@@ -1677,6 +1677,11 @@ void TWrite::write(const NoteDot* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     writeItemProperties(item, xml, ctx);
     xml.endElement();
+}
+
+void TWrite::write(const NoteHead* item, XmlWriter& xml, WriteContext& ctx)
+{
+    write(static_cast<const Symbol*>(item), xml, ctx);
 }
 
 void TWrite::write(const NoteLine* item, XmlWriter& xml, WriteContext& ctx)

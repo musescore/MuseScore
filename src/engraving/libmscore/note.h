@@ -82,8 +82,9 @@ public:
 class NoteHead final : public Symbol
 {
     OBJECT_ALLOCATOR(engraving, NoteHead)
-public:
+    DECLARE_CLASSOF(ElementType::NOTEHEAD)
 
+public:
     NoteHead(Note* parent = 0);
     NoteHead(const NoteHead&) = default;
     NoteHead& operator=(const NoteHead&) = delete;
