@@ -331,7 +331,7 @@ void GPConverter::fixPercussion()
             continue;
         }
 
-        if (pPart->midiChannel() == 9) {
+        if (pPart->midiChannel() == PERC_CHANNEL) {
             pPart->setMidiProgram(0);
         }
     }
@@ -1061,7 +1061,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
     int pan_val = static_cast<int>(std::lround(tR->rse().pan * 127));
     part->instrument()->channel(0)->setPan(std::clamp(pan_val, 0, 127));
 
-    if (midiChannel == 9) {
+    if (midiChannel == PERC_CHANNEL) {
         part->instrument()->setDrumset(gpDrumset);
 
         String drumInstrName = tR->instrument();
@@ -1451,6 +1451,10 @@ void GPConverter::addInstrumentChanges()
             instr.setTranspose(track.second->transpose());
             instr.setStringData(*_score->parts()[trackIdx]->instrument()->stringData());
             instr.channel(0)->setProgram(midiProgramm);
+            if (track.second->midiChannel() == PERC_CHANNEL) {
+                instr.setDrumset(gpDrumset);
+            }
+
             InstrumentChange* instrCh =  Factory::createInstrumentChange(_score->dummy()->segment(), instr);
             instrCh->setTrack(trackIdx * VOICES);
             instrCh->setXmlText(instrName);
@@ -2130,7 +2134,7 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
         pitch = midiPitch.octave * 12 + midiPitch.tone;
     } else if (midiPitch.variation != -1) {
         pitch = calculateDrumPitch(midiPitch.element, midiPitch.variation, note->part()->shortName());
-    } else if (note->part()->midiChannel() == 9) {
+    } else if (note->part()->midiChannel() == PERC_CHANNEL) {
         //!@NOTE This is a case, when part of the note is a
         //       single drum instrument. It seems, that GP
         //       sets to -1 all midi parameters for the note,

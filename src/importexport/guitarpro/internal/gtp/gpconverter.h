@@ -81,6 +81,8 @@ public:
 
 private:
 
+    static constexpr int PERC_CHANNEL = 9;
+
     using ChordRestContainer = std::vector<std::pair<ChordRest*, const GPBeat*> >;
     using TieMap = std::unordered_map<track_idx_t, std::vector<Tie*> >;
 
