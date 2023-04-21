@@ -29,7 +29,6 @@ using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::framework;
 using namespace mu::async;
-using namespace mu::io;
 
 void SoundFontRepository::init()
 {
