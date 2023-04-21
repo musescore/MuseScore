@@ -27,6 +27,7 @@
 
 #include <set>
 #include <cmath>
+#include <tuple>
 
 #include "compat/midi/event.h"
 #include "compat/midi/midirender.h"
@@ -1106,15 +1107,18 @@ static std::set<size_t> getNotesIndexesToRender(Chord* chord)
     return notesIndexesToRender;
 }
 
-static void createSlideInNotePlayEvents(Note* note, NoteEventList* el)
+static void createSlideInNotePlayEvents(Note* note, int prevChordTicks, NoteEventList* el)
 {
     if (!note->isSlideToNote()) {
         return;
     }
 
     const int slideNotes = NoteEvent::SLIDE_AMOUNT;
-    const int slideDuration = NoteEvent::SLIDE_DURATION * NoteEvent::NOTE_LENGTH / note->chord()->ticks().ticks();
-    const int totalSlideDuration = slideNotes * slideDuration;
+    const int currentTicks = note->chord()->ticks().ticks();
+    // if previous chord exists, slide takes its half length, otherwise - current chord's half length
+    const int slideTicks = (prevChordTicks == 0 ? currentTicks : prevChordTicks) / 2;
+    const int totalSlideDuration = NoteEvent::NOTE_LENGTH * slideTicks / currentTicks;
+    const int slideDuration = totalSlideDuration / slideNotes;
 
     int slideOn = 0;
     int pitchOffset = (note->slide().is(Note::SlideType::Plop) ? 1 : -1);
@@ -1126,16 +1130,16 @@ static void createSlideInNotePlayEvents(Note* note, NoteEventList* el)
     }
 }
 
-static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onTime, int& trailtime)
+static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int onTime)
 {
     if (!note->isSlideOutNote()) {
         return;
     }
 
     const int slideNotes = NoteEvent::SLIDE_AMOUNT;
-    const int slideDuration = NoteEvent::SLIDE_DURATION * NoteEvent::NOTE_LENGTH / note->chord()->ticks().ticks();
-    trailtime += slideNotes * slideDuration;
-    int slideOn = 1000 - trailtime;
+    const int allSlidesDuration = NoteEvent::NOTE_LENGTH / 2;
+    const int slideDuration = allSlidesDuration / slideNotes;
+    int slideOn = NoteEvent::NOTE_LENGTH - allSlidesDuration;
     double velocity = !note->ghost() ? NoteEvent::DEFAULT_VELOCITY_MULTIPLIER : NoteEvent::GHOST_VELOCITY_MULTIPLIER;
     el->push_back(NoteEvent(0, onTime, slideOn, velocity, !note->tieBack()));
 
@@ -1155,7 +1159,7 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onT
 //    trailtime signifies how much gap to leave after the note to allow for graceNotesAfter to be rendered
 //---------------------------------------------------------
 
-static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, int trailtime)
+static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, int gateTime, int ontime, int trailtime)
 {
     if (chord->notes().empty()) {
         return std::vector<NoteEventList>();
@@ -1178,7 +1182,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
         Note* note = chord->notes()[i];
         NoteEventList* el = &ell[i];
 
-        createSlideOutNotePlayEvents(note, el, ontime, trailtime);
+        createSlideOutNotePlayEvents(note, el, ontime);
         if (arpeggio) {
             continue;       // don't add extra events and apply gateTime to arpeggio
         }
@@ -1189,7 +1193,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
                                     !note->ghost() ? NoteEvent::DEFAULT_VELOCITY_MULTIPLIER : NoteEvent::GHOST_VELOCITY_MULTIPLIER));
         }
 
-        createSlideInNotePlayEvents(note, el);
+        createSlideInNotePlayEvents(note, prevChord ? prevChord->ticks().ticks() : 0, el);
 
         for (NoteEvent& e : *el) {
             e.setLen(e.len() * gateTime / 100);
@@ -1312,7 +1316,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
 //    create default play events
 //---------------------------------------------------------
 
-void Score::createPlayEvents(Chord* chord)
+void Score::createPlayEvents(Chord* chord, Chord* prevChord)
 {
     int gateTime = 100;
 
@@ -1346,7 +1350,7 @@ void Score::createPlayEvents(Chord* chord)
     //
     //    render normal (and articulated) chords
     //
-    std::vector<NoteEventList> el = renderChord(chord, gateTime, ontime, trailtime);
+    std::vector<NoteEventList> el = renderChord(chord, prevChord, gateTime, ontime, trailtime);
     if (chord->playEventType() == PlayEventType::Auto) {
         chord->setNoteEventLists(el);
     }
@@ -1366,31 +1370,37 @@ static void adjustPreviousChordLength(Chord* currentChord, Chord* prevChord)
     });
 
     int prevTicks = prevChord->ticks().ticks();
-    double lengthMultiply = 1.0;
+
+    int reducedTicks = 0;
 
     const auto& notes = currentChord->notes();
     bool anySlidesIn = std::any_of(notes.begin(), notes.end(), [](const Note* note) { return note->isSlideToNote(); });
 
     if (!graceNotesBeforeBar.empty()) {
-        int reducedTicks = graceNotesBeforeBar[0]->ticks().ticks();
+        reducedTicks = graceNotesBeforeBar[0]->ticks().ticks();
         if (reducedTicks >= prevTicks) {
             return;
         }
-
-        lengthMultiply = std::min(1.0, (double)(prevTicks - reducedTicks) / prevTicks);
     } else if (anySlidesIn) {
-        lengthMultiply
-            = std::min(1.0,
-                       ((double)NoteEvent::NOTE_LENGTH - NoteEvent::SLIDE_AMOUNT * NoteEvent::SLIDE_DURATION * NoteEvent::NOTE_LENGTH
-                        / prevChord->ticks().ticks()) / NoteEvent::NOTE_LENGTH);
+        reducedTicks = prevTicks / 2;
     } else {
         return;
     }
 
+    double lengthMultiply = std::min(1.0, (double)(prevTicks - reducedTicks) / prevTicks);
+
     for (size_t i = 0; i < prevChord->notes().size(); i++) {
         Note* prevChordNote = prevChord->notes()[i];
         NoteEventList evList;
-        const auto& prevEvents = prevChordNote->playEvents();
+        NoteEventList prevEvents = prevChordNote->playEvents();
+        std::sort(prevEvents.begin(), prevEvents.end(), [](const NoteEvent& left, const NoteEvent& right) {
+            int l1 = left.ontime();
+            int l2 = -left.offset();
+            int r1 = right.ontime();
+            int r2 = -right.offset();
+
+            return std::tie(l1, l2) < std::tie(r1, r2);
+        });
 
         int curPos = prevEvents.front().ontime();
 
@@ -1399,10 +1409,19 @@ static void adjustPreviousChordLength(Chord* currentChord, Chord* prevChord)
             const NoteEvent& prevEvent = prevEvents[i];
             event.setOntime(curPos);
             event.setPitch(prevEvent.pitch());
-            int newEventLength = prevEvent.len() * lengthMultiply;
-            event.setLen(newEventLength);
+            event.setOffset(prevEvent.offset());
+            int prevLen = prevEvent.len();
+
+            // not shortening events before beat
+            if (prevEvent.offset() == 0) {
+                int newEventLength = prevLen * lengthMultiply;
+                event.setLen(newEventLength);
+                curPos += newEventLength;
+            } else {
+                event.setLen(prevLen);
+            }
+
             evList.push_back(event);
-            curPos += newEventLength;
         }
 
         prevChordNote->setPlayEvents(evList);
@@ -1460,7 +1479,7 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
                 }
 
                 Chord* chord = toChord(e);
-                createPlayEvents(chord);
+                createPlayEvents(chord, prevChord);
                 adjustPreviousChordLength(chord, prevChord);
                 prevChord = chord;
             }
