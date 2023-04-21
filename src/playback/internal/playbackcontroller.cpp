@@ -1055,9 +1055,10 @@ void PlaybackController::setupSequenceTracks()
         addTrack(trackId, onAddFinished);
     }
 
+    /*! TODO: https://github.com/musescore/MuseScore/issues/16466
     for (aux_channel_idx_t idx = 0; idx < AUX_CHANNEL_NUM; ++idx) {
         addAuxTrack(idx, onAddFinished);
-    }
+    }*/
 
     m_loadingProgress.progressChanged.send(0, trackCount, title);
 
