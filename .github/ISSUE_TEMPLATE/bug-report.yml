@@ -66,8 +66,8 @@ body:
         - Choose option...
         - No.
         - I don't know
-        - Yes, this used to work in Musescore 3.x and now is broken 
-        - Yes, this used to work in a previous version of Musescore 4.x
+        - Yes, this used to work in MuseScore 3.x and now is broken 
+        - Yes, this used to work in a previous version of MuseScore 4.x
     validations: 
       required: true
   - type: input
@@ -94,4 +94,3 @@ body:
         * For engraving: sample score (MuseScore project), screenshots
         * For UI issues: Screenshots, screen recordings, system information, GPU drivers
         * For regressions: The last MuseScore version (or even better: commit) that worked well. 
-
