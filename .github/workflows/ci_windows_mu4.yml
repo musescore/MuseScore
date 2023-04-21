@@ -7,7 +7,7 @@ on:
     
   schedule:
     - cron: '0 3 */1 */1 *' # At 03:00 on every day-of-month for master
-    - cron: '0 5 */1 */1 *' # At 05:00 on every day-of-month for 4.0.2
+    - cron: '0 5 */1 */1 *' # At 05:00 on every day-of-month for current release branch
   workflow_dispatch:
     inputs:
       build_mode:
@@ -23,6 +23,9 @@ on:
         required: false
         default: ''   
 
+env:
+  CURRENT_RELEASE_BRANCH: 4.0.2
+
 jobs:
   build_mu4_x64:
     runs-on: windows-2022
@@ -36,12 +39,12 @@ jobs:
       if: ${{ github.event_name != 'schedule' || github.event.schedule == '0 3 */1 */1 *' }}
       with:
         fetch-depth: 3
-    - name: Clone repository (4.0.2)
+    - name: Clone repository (${{ env.CURRENT_RELEASE_BRANCH }})
       uses: actions/checkout@v3
       if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
       with:
         fetch-depth: 3
-        ref: 4.0.2
+        ref: ${{ env.CURRENT_RELEASE_BRANCH }}
     - name: Fetch submodules
       run: |
         git submodule update --init --recursive
@@ -107,7 +110,7 @@ jobs:
         fi
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
-        if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_4.0.2"; fi
+        if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${BUILD_NUMBER}_Win${ADD_INFO}")"
 
