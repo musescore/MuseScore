@@ -34,6 +34,7 @@
 
 #include "inputresourceitem.h"
 #include "outputresourceitem.h"
+#include "auxsenditem.h"
 
 namespace mu::playback {
 class MixerChannelItem : public QObject, public async::Asyncable
@@ -47,6 +48,7 @@ class MixerChannelItem : public QObject, public async::Asyncable
 
     Q_PROPERTY(InputResourceItem * inputResourceItem READ inputResourceItem NOTIFY inputResourceItemChanged)
     Q_PROPERTY(QList<OutputResourceItem*> outputResourceItemList READ outputResourceItemList NOTIFY outputResourceItemListChanged)
+    Q_PROPERTY(QList<AuxSendItem*> auxSendItemList READ auxSendItemList NOTIFY auxSendItemListChanged)
 
     Q_PROPERTY(float leftChannelPressure READ leftChannelPressure NOTIFY leftChannelPressureChanged)
     Q_PROPERTY(float rightChannelPressure READ rightChannelPressure NOTIFY rightChannelPressureChanged)
@@ -108,6 +110,7 @@ public:
 
     InputResourceItem* inputResourceItem() const;
     QList<OutputResourceItem*> outputResourceItemList() const;
+    QList<AuxSendItem*> auxSendItemList() const;
 
 public slots:
     void setTitle(QString title);
@@ -141,6 +144,7 @@ signals:
 
     void inputResourceItemChanged();
     void outputResourceItemListChanged();
+    void auxSendItemListChanged();
 
 protected:
     void setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue);
@@ -148,8 +152,12 @@ protected:
 
     void applyMuteToOutputParams(const bool isMuted);
 
+    void loadOutputResourceItems(const audio::AudioFxChain& fxChain);
+    void loadAuxSendItems(const audio::AuxSendsParams& auxSends);
+
     InputResourceItem* buildInputResourceItem();
     OutputResourceItem* buildOutputResourceItem(const audio::AudioFxParams& fxParams);
+    AuxSendItem* buildAuxSendItem(size_t index);
 
     void removeRedundantEmptySlots();
     QList<audio::AudioFxChainOrder> emptySlotsToRemove() const;
@@ -171,6 +179,7 @@ protected:
 
     InputResourceItem* m_inputResourceItem = nullptr;
     QMap<audio::AudioFxChainOrder, OutputResourceItem*> m_outputResourceItems;
+    QList<AuxSendItem*> m_auxSendItems;
 
     audio::AudioSignalChanges m_audioSignalChanges;
 

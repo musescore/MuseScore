@@ -184,7 +184,13 @@ void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
         emit mutedChanged();
     }
 
-    m_outParams.fxChain = newParams.fxChain;
+    loadOutputResourceItems(newParams.fxChain);
+    loadAuxSendItems(newParams.auxSends);
+}
+
+void MixerChannelItem::loadOutputResourceItems(const AudioFxChain& fxChain)
+{
+    m_outParams.fxChain = fxChain;
 
     QMap<AudioFxChainOrder, OutputResourceItem*> newItems = m_outputResourceItems;
 
@@ -195,14 +201,14 @@ void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
             continue;
         }
 
-        if (newParams.fxChain.find(chainOrder) == newParams.fxChain.cend()) {
+        if (fxChain.find(chainOrder) == fxChain.cend()) {
             item->disconnect();
             item->deleteLater();
             newItems.remove(chainOrder);
         }
     }
 
-    for (const auto& pair : newParams.fxChain) {
+    for (const auto& pair : fxChain) {
         OutputResourceItem* item = newItems.value(pair.first, nullptr);
         if (!item) {
             newItems.insert(pair.first, buildOutputResourceItem(pair.second));
@@ -222,6 +228,36 @@ void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
     }
 
     ensureBlankOutputResourceSlot();
+}
+
+void MixerChannelItem::loadAuxSendItems(const AuxSendsParams& auxSends)
+{
+    if (m_outParams.auxSends == auxSends) {
+        return;
+    }
+
+    m_outParams.auxSends = auxSends;
+
+    if (m_auxSendItems.size() != static_cast<int>(auxSends.size())) {
+        qDeleteAll(m_auxSendItems);
+        m_auxSendItems.clear();
+
+        for (size_t i = 0; i < auxSends.size(); ++i) {
+            m_auxSendItems.push_back(buildAuxSendItem(i));
+        }
+
+        emit auxSendItemListChanged();
+    }
+
+    for (int i = 0; i < m_auxSendItems.size(); ++i) {
+        AuxSendItem* item = m_auxSendItems[i];
+        const AuxSendParams& params = auxSends[i];
+
+        item->setIsActive(params.active);
+        item->setSignalAmount(params.signalAmount);
+
+        item->setTitle(QString("Aux %1").arg(i + 1)); // TODO: use the actual title of the aux channel
+    }
 }
 
 void MixerChannelItem::loadSoloMuteState(project::IProjectAudioSettings::SoloMuteState&& newState)
@@ -417,6 +453,31 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
     return newItem;
 }
 
+AuxSendItem* MixerChannelItem::buildAuxSendItem(size_t index)
+{
+    AuxSendItem* newItem = new AuxSendItem(this);
+
+    connect(newItem, &AuxSendItem::isActiveChanged, this, [this, index](bool active) {
+        IF_ASSERT_FAILED(index < m_outParams.auxSends.size()) {
+            return;
+        }
+
+        m_outParams.auxSends[index].active = active;
+        emit outputParamsChanged(m_outParams);
+    });
+
+    connect(newItem, &AuxSendItem::signalAmountChanged, this, [this, index](float amount) {
+        IF_ASSERT_FAILED(index < m_outParams.auxSends.size()) {
+            return;
+        }
+
+        m_outParams.auxSends[index].signalAmount = amount;
+        emit outputParamsChanged(m_outParams);
+    });
+
+    return newItem;
+}
+
 void MixerChannelItem::openEditor(AbstractAudioResourceItem* item, const UriQuery& editorUri)
 {
     if (item->editorUri() != editorUri) {
@@ -525,4 +586,9 @@ InputResourceItem* MixerChannelItem::inputResourceItem() const
 QList<OutputResourceItem*> MixerChannelItem::outputResourceItemList() const
 {
     return m_outputResourceItems.values();
+}
+
+QList<AuxSendItem*> MixerChannelItem::auxSendItemList() const
+{
+    return m_auxSendItems;
 }

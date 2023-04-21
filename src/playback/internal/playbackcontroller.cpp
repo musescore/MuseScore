@@ -66,10 +66,13 @@ static AudioOutputParams makeReverbOutputParams()
 
 static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutputParams& params)
 {
+    UNUSED(params);
+
+    /* TODO
     if (params.fxChain.size() == 1) {
         const AudioResourceMeta& meta = params.fxChain.cbegin()->second.resourceMeta;
         return meta.id;
-    }
+    }*/
 
     return mu::mtrc("playback", "Aux %1").arg(index + 1).toStdString();
 }
@@ -1055,10 +1058,9 @@ void PlaybackController::setupSequenceTracks()
         addTrack(trackId, onAddFinished);
     }
 
-    /*! TODO: https://github.com/musescore/MuseScore/issues/16466
     for (aux_channel_idx_t idx = 0; idx < AUX_CHANNEL_NUM; ++idx) {
         addAuxTrack(idx, onAddFinished);
-    }*/
+    }
 
     m_loadingProgress.progressChanged.send(0, trackCount, title);
 

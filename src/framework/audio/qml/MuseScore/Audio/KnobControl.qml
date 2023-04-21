@@ -32,7 +32,9 @@ Dial {
 
     property alias navigation: navCtrl
 
-    implicitWidth: prv.radius * 2
+    property real radius: 16
+
+    implicitWidth: root.radius * 2
     implicitHeight: implicitWidth
 
     width: implicitWidth
@@ -51,7 +53,6 @@ Dial {
     QtObject {
         id: prv
 
-        readonly property real radius: 16
         readonly property bool reversed: root.angle < 0
 
         readonly property real handlerHeight: 8
@@ -103,7 +104,7 @@ Dial {
     background: Canvas {
         id: backgroundCanvas
 
-        width: prv.radius * 2
+        width: root.radius * 2
         height: width
 
         antialiasing: true
@@ -125,24 +126,24 @@ Dial {
 
             ctx.strokeStyle = prv.outerArcColor
             ctx.beginPath()
-            ctx.arc(width/2, height/2, prv.radius - prv.outerArcLineWidth/2, -140 * (Math.PI/180) - Math.PI/2, 140 * (Math.PI/180) - Math.PI/2, false)
+            ctx.arc(width/2, height/2, root.radius - prv.outerArcLineWidth/2, -140 * (Math.PI/180) - Math.PI/2, 140 * (Math.PI/180) - Math.PI/2, false)
             ctx.stroke()
 
             ctx.strokeStyle = prv.valueArcColor
             ctx.beginPath()
-            ctx.arc(width/2, height/2, prv.radius - prv.outerArcLineWidth/2, -Math.PI/2, root.angle * (Math.PI/180) - Math.PI/2, prv.reversed)
+            ctx.arc(width/2, height/2, root.radius - prv.outerArcLineWidth/2, -Math.PI/2, root.angle * (Math.PI/180) - Math.PI/2, prv.reversed)
             ctx.stroke()
 
             ctx.lineWidth = prv.innerArcLineWidth
             ctx.strokeStyle = prv.innerArcColor
             ctx.beginPath()
-            ctx.arc(width/2, height/2, prv.radius - (prv.outerArcLineWidth + prv.innerArcLineWidth/2), 0, Math.PI * 2, false)
+            ctx.arc(width/2, height/2, root.radius - (prv.outerArcLineWidth + prv.innerArcLineWidth/2), 0, Math.PI * 2, false)
             ctx.stroke()
         }
     }
 
     handle: Rectangle {
-        x: prv.radius - prv.handlerWidth / 2
+        x: root.radius - prv.handlerWidth / 2
         y: prv.outerArcLineWidth + prv.innerArcLineWidth + 2
 
         height: prv.handlerHeight
