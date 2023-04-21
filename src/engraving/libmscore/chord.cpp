@@ -699,11 +699,16 @@ void Chord::add(EngravingItem* e)
     {
         Articulation* a = toArticulation(e);
         if (a->layoutCloseToNote()) {
-            auto i = _articulations.begin();
-            while (i != _articulations.end() && (*i)->layoutCloseToNote()) {
-                i++;
+            if (a->isStaccato()) {
+                // staccato is always the first articulation
+                _articulations.insert(_articulations.begin(), a);
+            } else {
+                auto i = _articulations.begin();
+                while (i != _articulations.end() && (*i)->layoutCloseToNote()) {
+                    i++;
+                }
+                _articulations.insert(i, a);
             }
-            _articulations.insert(i, a);
         } else {
             _articulations.push_back(a);
         }
@@ -2148,6 +2153,36 @@ EngravingItem* Chord::drop(EditData& data)
             // score()->cmdRemove(oa); // unexpected behaviour?
             score()->select(oa, SelectType::SINGLE, 0);
         } else {
+            // intuit anchor for this accidental based on other accidentals in the chord
+            int aboveBelow = 0;
+            bool mixed = false;
+            for (Articulation* a : _articulations) {
+                PropertyFlags pf = a->propertyFlags(Pid::ARTICULATION_ANCHOR);
+                if (pf == PropertyFlags::STYLED) {
+                    continue;
+                }
+                if (a->anchor() == ArticulationAnchor::TOP_STAFF || a->anchor() == ArticulationAnchor::TOP_CHORD) {
+                    if (aboveBelow < 0) {
+                        mixed = true;
+                        break;
+                    }
+                    ++aboveBelow;
+                } else if (a->anchor() == ArticulationAnchor::BOTTOM_STAFF || a->anchor() == ArticulationAnchor::BOTTOM_CHORD) {
+                    if (aboveBelow > 0) {
+                        mixed = true;
+                        break;
+                    }
+                    --aboveBelow;
+                }
+            }
+            if (!mixed && aboveBelow != 0) {
+                if (aboveBelow > 0) {
+                    atr->setAnchor(ArticulationAnchor::TOP_CHORD);
+                } else {
+                    atr->setAnchor(ArticulationAnchor::BOTTOM_CHORD);
+                }
+                atr->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
+            }
             atr->setParent(this);
             atr->setTrack(track());
             score()->undoAddElement(atr);
@@ -2343,27 +2378,116 @@ Articulation* Chord::hasArticulation(const Articulation* aa)
 
 void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, ArticulationsUpdateMode updateMode)
 {
-    std::set<SymId> currentArticulationIds;
-    for (Articulation* artic: _articulations) {
-        currentArticulationIds.insert(artic->symId());
-        score()->undoRemoveElement(artic);
+    Articulation* staccato = nullptr;
+    Articulation* accent = nullptr;
+    Articulation* marcato = nullptr;
+    Articulation* tenuto = nullptr;
+    ArticulationAnchor overallAnchor = ArticulationAnchor::CHORD;
+    bool mixedDirections = false;
+    if (!_articulations.empty()) {
+        std::vector<Articulation*> articsToRemove;
+        // split all articulations
+        for (Articulation* artic : _articulations) {
+            if (!artic->isDouble()) {
+                continue;
+            }
+            auto splitSyms = splitArticulations({ artic->symId() });
+            for (const SymId& id : splitSyms) {
+                Articulation* newArticulation = Factory::createArticulation(score()->dummy()->chord());
+                newArticulation->setSymId(id);
+                newArticulation->setAnchor(artic->anchor());
+                newArticulation->setPropertyFlags(Pid::ARTICULATION_ANCHOR, artic->propertyFlags(Pid::ARTICULATION_ANCHOR));
+                if (!hasArticulation(newArticulation)) {
+                    score()->toggleArticulation(this, newArticulation);
+                } else {
+                    delete newArticulation;
+                }
+            }
+            articsToRemove.push_back(artic);
+        }
+        for (Articulation* artic : articsToRemove) {
+            score()->undoRemoveElement(artic);
+        }
+        // now we have guaranteed no more combined artics
+        // take an inventory of which articulations are already present
+        for (Articulation* artic : _articulations) {
+            PropertyFlags pf = artic->propertyFlags(Pid::ARTICULATION_ANCHOR);
+            if (!mixedDirections && pf == PropertyFlags::UNSTYLED && artic->anchor() != ArticulationAnchor::CHORD) {
+                if (overallAnchor != ArticulationAnchor::CHORD && artic->anchor() != overallAnchor) {
+                    mixedDirections = true;
+                    overallAnchor = ArticulationAnchor::CHORD;
+                } else {
+                    overallAnchor = artic->anchor();
+                }
+            }
+            if (artic->isStaccato()) {
+                staccato = artic;
+            } else if (artic->isAccent()) {
+                accent = artic;
+            } else if (artic->isMarcato()) {
+                marcato = artic;
+            } else if (artic->isTenuto()) {
+                tenuto = artic;
+            }
+        }
+    }
+    std::set<SymId> newArtics;
+    // get symbol id's for correct direction
+    for (const SymId& id : newArticulationIds) {
+        if (id == SymId::articAccentAbove || id == SymId::articAccentBelow) {
+            if (marcato && updateMode == ArticulationsUpdateMode::Insert) {
+                // adding an accent, which replaces marcato
+                score()->undoRemoveElement(marcato);
+            }
+        } else if (id == SymId::articMarcatoAbove || id == SymId::articMarcatoBelow) {
+            if (accent && updateMode == ArticulationsUpdateMode::Insert) {
+                // adding a marcato, which replaces accent
+                score()->undoRemoveElement(accent);
+            }
+        }
+        newArtics.insert(id);
     }
 
-    std::set<SymId> articulationIds = flipArticulations(currentArticulationIds, PlacementV::ABOVE);
-    articulationIds = splitArticulations(articulationIds);
-
-    std::set<SymId> _newArticulationIds = flipArticulations(newArticulationIds, PlacementV::ABOVE);
-    _newArticulationIds = splitArticulations(_newArticulationIds);
-
-    for (const SymId& articulationId: _newArticulationIds) {
-        articulationIds = mu::engraving::updateArticulations(articulationIds, articulationId, updateMode);
-    }
-
-    std::set<SymId> result = joinArticulations(articulationIds);
-    for (const SymId& articulationSymbolId: result) {
-        Articulation* newArticulation = Factory::createArticulation(score()->dummy()->chord());
-        newArticulation->setSymId(articulationSymbolId);
-        score()->toggleArticulation(this, newArticulation);
+    // newArtics now contains the articulations in the correct direction
+    if (updateMode == ArticulationsUpdateMode::Remove) {
+        // remove articulations from _articulations that are found in in newArtics
+        for (const SymId& id : newArtics) {
+            switch (id) {
+            case SymId::articAccentAbove:
+            case SymId::articAccentBelow:
+                score()->undoRemoveElement(accent);
+                accent = nullptr;
+                break;
+            case SymId::articMarcatoAbove:
+            case SymId::articMarcatoBelow:
+                score()->undoRemoveElement(marcato);
+                marcato = nullptr;
+                break;
+            case SymId::articTenutoAbove:
+            case SymId::articTenutoBelow:
+                score()->undoRemoveElement(tenuto);
+                tenuto = nullptr;
+                break;
+            case SymId::articStaccatoAbove:
+            case SymId::articStaccatoBelow:
+                score()->undoRemoveElement(staccato);
+                staccato = nullptr;
+                break;
+            default:
+                break;
+            }
+        }
+    } else {
+        // add articulations from newArtics that are not found in _articulations
+        for (const SymId& id : newArtics) {
+            Articulation* newArticulation = Factory::createArticulation(score()->dummy()->chord());
+            newArticulation->setSymId(id);
+            if (overallAnchor != ArticulationAnchor::CHORD) {
+                newArticulation->setAnchor(overallAnchor);
+                newArticulation->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
+            }
+            score()->toggleArticulation(this, newArticulation);
+        }
     }
 }
 
@@ -3075,6 +3199,29 @@ void Chord::layoutArticulations()
     double mag            = (staffType->isSmall() ? score()->styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
     double _spatium       = score()->spatium() * mag;
     double _lineDist       = _spatium * staffType->lineDistance().val() / 2;
+    const double minDist = score()->styleMM(Sid::articulationMinDistance);
+    const ArticulationStemSideAlign articulationHAlign = score()->styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
+    const bool keepArticsTogether = score()->styleB(Sid::articulationKeepTogether);
+    int numCloseArtics = 0;
+    bool hasStaffArticsUp = false;
+    bool hasStaffArticsDown = false;
+    if (keepArticsTogether) {
+        // find out how many close-to-note artics there are, and whether there is a staff-anchored artic to align to
+        for (Articulation* a : _articulations) {
+            if (a->layoutCloseToNote()) {
+                ++numCloseArtics;
+            } else {
+                if (a->up()) {
+                    hasStaffArticsUp = true;
+                } else {
+                    hasStaffArticsDown = true;
+                }
+                if (hasStaffArticsDown && hasStaffArticsUp) {
+                    break;           // nothing more to be learned now
+                }
+            }
+        }
+    }
 
     //
     //    determine direction
@@ -3105,8 +3252,27 @@ void Chord::layoutArticulations()
         a->layout();                 // must be done after assigning direction, or else symId is not reliable
 
         bool headSide = bottom == up();
-        double x = centerX();
         double y = 0.0;
+        double x;
+        if (!headSide || !a->isBasicArticulation()) {
+            switch (articulationHAlign) {
+            case ArticulationStemSideAlign::STEM:
+                x = stem()->width() * .5;
+                break;
+            case ArticulationStemSideAlign::NOTEHEAD:
+                x = centerX();
+                break;
+            case ArticulationStemSideAlign::AVERAGE:
+            default:
+                x = (stem()->width() * .5 + centerX()) * .5;
+                break;
+            }
+            if (_up) {
+                x = downNote()->bboxRightPos() - x;
+            }
+        } else {
+            x = centerX();
+        }
         if (bottom) {
             if (!headSide && stem()) {
                 // Check if there's a hook, because the tip of the hook always extends slightly past the end of the stem
@@ -3128,16 +3294,14 @@ void Chord::layoutArticulations()
                 } else {
                     y += score()->styleMM(Sid::propertyDistanceStem);
                 }
-                if (a->isStaccato() && articulations().size() == 1) {
-                    if (_up) {
-                        x = downNote()->bboxRightPos() - stem()->width() * .5;
-                    } else {
-                        x = stem()->width() * .5;
-                    }
-                }
             } else {
-                int line = downLine();
+                x = centerX();
                 int lines = (staffType->lines() - 1) * 2;
+                int line = std::max(downLine(), -1);
+                bool adjustArtic = (a->up() && hasStaffArticsUp) || (!a->up() && hasStaffArticsDown);
+                if (keepArticsTogether && adjustArtic && numCloseArtics > 0) {
+                    line = std::max(line, lines - (3 + ((numCloseArtics - 1) * 2)));
+                }
                 if (line < lines - 1) {
                     y = ((line & ~1) + 3) * _lineDist;
                     y -= a->height() * .5;
@@ -3146,7 +3310,12 @@ void Chord::layoutArticulations()
                 }
             }
             if (prevArticulation && (prevArticulation->up() == a->up())) {
-                y += _spatium;
+                int staffBottom = (staffType->lines() - 2) * 2;
+                if ((headSide && downLine() < staffBottom) || (!headSide && !RealIsEqualOrMore(y, (staffBottom + 1) * _lineDist))) {
+                    y += _spatium;
+                } else {
+                    y += prevArticulation->height() + minDist;
+                }
             }
             // center symbol
         } else {
@@ -3169,15 +3338,14 @@ void Chord::layoutArticulations()
                 } else {
                     y -= score()->styleMM(Sid::propertyDistanceStem);
                 }
-                if (a->isStaccato() && articulations().size() == 1) {
-                    if (_up) {
-                        x = downNote()->bboxRightPos() - stem()->width() * .5;
-                    } else {
-                        x = stem()->width() * .5;
-                    }
-                }
             } else {
-                int line = upLine();
+                x = centerX();
+                int lines = (staffType->lines() - 1) * 2;
+                int line = std::min(upLine(), lines + 1);
+                bool adjustArtic = (a->up() && hasStaffArticsUp) || (!a->up() && hasStaffArticsDown);
+                if (keepArticsTogether && adjustArtic && numCloseArtics > 0) {
+                    line = std::min(line, 3 + ((numCloseArtics - 1) * 2));
+                }
                 if (line > 1) {
                     y = (((line + 1) & ~1) - 3) * _lineDist;
                     y += a->height() * .5;
@@ -3186,7 +3354,11 @@ void Chord::layoutArticulations()
                 }
             }
             if (prevArticulation && (prevArticulation->up() == a->up())) {
-                y -= _spatium;
+                if ((headSide && upLine() > 2) || (!headSide && !RealIsEqualOrLess(y, 0.0))) {
+                    y -= spatium();
+                } else {
+                    y -= prevArticulation->height() + minDist;
+                }
             }
         }
         a->setPos(x, y);
@@ -3204,6 +3376,7 @@ void Chord::layoutArticulations()
 
 void Chord::layoutArticulations2(bool layoutOnCrossBeamSide)
 {
+    ArticulationStemSideAlign articulationHAlign = score()->styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
     for (Chord* gc : graceNotes()) {
         gc->layoutArticulations2();
     }
@@ -3211,7 +3384,27 @@ void Chord::layoutArticulations2(bool layoutOnCrossBeamSide)
     if (_articulations.empty()) {
         return;
     }
-    double x         = centerX();
+    double headSideX = centerX();
+    double stemSideX = headSideX;
+    if (stem()) {
+        switch (articulationHAlign) {
+        case ArticulationStemSideAlign::STEM:
+            stemSideX = stem()->width() * .5;
+            break;
+        case ArticulationStemSideAlign::NOTEHEAD:
+            stemSideX = centerX();
+            break;
+        case ArticulationStemSideAlign::AVERAGE:
+        default:
+            stemSideX = (stem()->width() * .5 + centerX()) * .5;
+            break;
+        }
+        if (_up) {
+            stemSideX = downNote()->bboxRightPos() - stemSideX;
+        }
+    }
+
+    double stacAccentKern = 0.2 * spatium();
     double minDist = score()->styleMM(Sid::articulationMinDistance);
     double staffDist = score()->styleMM(Sid::propertyDistance);
     double stemDist = score()->styleMM(Sid::propertyDistanceStem);
@@ -3244,7 +3437,9 @@ void Chord::layoutArticulations2(bool layoutOnCrossBeamSide)
     chordBotY += up() ? noteDist : stemDist;
     // add space for staccato and tenuto marks which may have been previously laid out
     for (Articulation* a : _articulations) {
-        if (a->layoutCloseToNote() && a->visible()) {
+        ArticulationAnchor aa = a->anchor();
+        if (a->layoutCloseToNote() && a->visible()
+            && aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF) {
             if (a->up()) {
                 chordTopY = a->y() - a->height() - minDist;
             } else {
@@ -3252,57 +3447,62 @@ void Chord::layoutArticulations2(bool layoutOnCrossBeamSide)
             }
         }
     }
+
     for (Articulation* a : _articulations) {
         if (layoutOnCrossBeamSide && !a->isOnCrossBeamSide()) {
             continue;
         }
         ArticulationAnchor aa = a->anchor();
-        if (aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD) {
+        if (!a->layoutCloseToNote() || aa == ArticulationAnchor::TOP_STAFF || aa == ArticulationAnchor::BOTTOM_STAFF) {
             continue;
         }
-
+        double x = (up() != a->up() || !a->isBasicArticulation()) ? headSideX : stemSideX;
         if (a->up()) {
-            if (!a->layoutCloseToNote()) {
-                a->layout();
-                a->setPos(x, chordTopY);
-                a->doAutoplace();
-            }
             if (a->visible()) {
                 chordTopY = a->y() - a->height() - minDist;
             }
         } else {
-            if (!a->layoutCloseToNote()) {
-                a->layout();
-                a->setPos(x, chordBotY + abs(a->bbox().top()));
-                a->doAutoplace();
-            }
             if (a->visible()) {
                 chordBotY = a->y() + a->height() + minDist;
             }
         }
     }
-
     //
-    //    now place all articulations with staff top or bottom anchor
+    //    now place all articulations with staff top or bottom anchor, or chord anchor for artics that don't layout close to note
     //
     staffTopY = std::min(staffTopY, chordTopY);
     staffBotY = std::max(staffBotY, chordBotY);
+    Articulation* stacc = nullptr;
     for (Articulation* a : _articulations) {
+        double kearnHeight = 0.0;
         if (layoutOnCrossBeamSide && !a->isOnCrossBeamSide()) {
             continue;
+        }
+        if (a->isStaccato()) {
+            stacc = a;
+        } else if (stacc && a->isAccent() && stacc->up() == a->up()
+                   && (RealIsEqualOrLess(stacc->ypos(), 0.0) || RealIsEqualOrMore(stacc->ypos(), staff()->height()))) {
+            // obviously, the accent doesn't have a cutout, so this value just artificially moves the stacc
+            // and accent closer to each other to simulate some kind of kerning. Looks great using all musescore fonts,
+            // though there is a possibility that a different font which has vertically-asymmetrical accents
+            // could make this look bad.
+            kearnHeight = stacAccentKern;
+            stacc = nullptr;
+        } else {
+            stacc = nullptr;
         }
         ArticulationAnchor aa = a->anchor();
         if (aa == ArticulationAnchor::TOP_STAFF
             || aa == ArticulationAnchor::BOTTOM_STAFF
-            || (aa == ArticulationAnchor::CHORD && !a->layoutCloseToNote())) {
+            || !a->layoutCloseToNote()) {
             a->layout();
             if (a->up()) {
-                a->setPos(x, staffTopY);
+                a->setPos(!up() || !a->isBasicArticulation() ? headSideX : stemSideX, staffTopY + kearnHeight);
                 if (a->visible()) {
                     staffTopY = a->y() - a->height() - minDist;
                 }
             } else {
-                a->setPos(x, staffBotY);
+                a->setPos(up() || !a->isBasicArticulation() ? headSideX : stemSideX, staffBotY - kearnHeight);
                 if (a->visible()) {
                     staffBotY = a->y() + a->height() + minDist;
                 }

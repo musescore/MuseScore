@@ -225,6 +225,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::articulationAnchorDefault, "articulationAnchorDefault", int(ArticulationAnchor::CHORD) },
     { Sid::articulationAnchorLuteFingering, "articulationAnchorLuteFingering", int(ArticulationAnchor::BOTTOM_CHORD) },
     { Sid::articulationAnchorOther, "articulationAnchorOther", int(ArticulationAnchor::TOP_STAFF) },
+    { Sid::articulationStemHAlign,  "articulationStemHAlign",  int(ArticulationStemSideAlign::AVERAGE) },
+    { Sid::articulationKeepTogether, "articulationKeepTogether", true },
     { Sid::lastSystemFillLimit,     "lastSystemFillLimit",     PropertyValue(0.3) },
 
     { Sid::hairpinPlacement,        "hairpinPlacement",        PlacementV::BELOW },
