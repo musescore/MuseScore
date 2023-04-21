@@ -39,6 +39,8 @@ class Segment;
 class Dynamic final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, Dynamic)
+    DECLARE_CLASSOF(ElementType::DYNAMIC)
+
 public:
 
     struct ChangeSpeedItem {
@@ -74,7 +76,6 @@ public:
     String translatedSubtypeUserName() const override;
 
     void layout() override;
-    void write(XmlWriter& xml) const override;
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override;

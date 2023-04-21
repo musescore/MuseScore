@@ -23,7 +23,6 @@
 #include "mmrest.h"
 
 #include "draw/types/pen.h"
-#include "rw/xml.h"
 
 #include "measure.h"
 #include "score.h"
@@ -214,25 +213,6 @@ RectF MMRest::numberRect() const
     RectF r = symBbox(m_numberSym);
     r.translate(numberPosition(r));
     return r;
-}
-
-//---------------------------------------------------------
-//   MMRest::write
-//---------------------------------------------------------
-
-void MMRest::write(XmlWriter& xml) const
-{
-    xml.startElement("Rest"); // for compatibility, see also Measure::readVoice()
-    writeProperties(xml);
-    el().write(xml);
-    xml.endElement();
-}
-
-void MMRest::writeProperties(XmlWriter& xml) const
-{
-    ChordRest::writeProperties(xml);
-    writeProperty(xml, Pid::MMREST_NUMBER_POS);
-    writeProperty(xml, Pid::MMREST_NUMBER_VISIBLE);
 }
 
 //---------------------------------------------------------

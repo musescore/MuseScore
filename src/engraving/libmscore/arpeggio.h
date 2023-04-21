@@ -36,6 +36,7 @@ class Chord;
 class Arpeggio final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Arpeggio)
+    DECLARE_CLASSOF(ElementType::ARPEGGIO)
 
     ArpeggioType _arpeggioType;
     double _userLen1;
@@ -85,7 +86,6 @@ public:
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 
-    void write(XmlWriter& xml) const override;
     void reset() override;
 
     int span() const { return _span; }

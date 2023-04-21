@@ -24,9 +24,10 @@
 
 #include "io/file.h"
 
+#include "rw/xmlreader.h"
+
 #include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
-#include "rw/xml.h"
 
 #include "style/textstyle.h"
 
@@ -442,31 +443,6 @@ String FiguredBassItem::normalizedText() const
 }
 
 //---------------------------------------------------------
-//   FiguredBassItem write()
-//---------------------------------------------------------
-
-void FiguredBassItem::write(XmlWriter& xml) const
-{
-    xml.startElement("FiguredBassItem", this);
-    xml.tag("brackets", { { "b0", int(parenth[0]) }, { "b1", int(parenth[1]) },  { "b2", int(parenth[2]) }, { "b3", int(parenth[3]) },
-                { "b4", int(parenth[4]) } });
-
-    if (_prefix != Modifier::NONE) {
-        xml.tag("prefix", int(_prefix));
-    }
-    if (_digit != FBIDigitNone) {
-        xml.tag("digit", _digit);
-    }
-    if (_suffix != Modifier::NONE) {
-        xml.tag("suffix", int(_suffix));
-    }
-    if (_contLine != ContLine::NONE) {
-        xml.tag("continuationLine", int(_contLine));
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   FiguredBassItem layout()
 //    creates the display text (set as element text) and computes
 //    the horiz. offset needed to align the right part as well as the vert. offset
@@ -836,124 +812,6 @@ void FiguredBassItem::undoSetParenth5(Parenthesis par)
 }
 
 //---------------------------------------------------------
-//
-//    MusicXML I/O
-//
-//---------------------------------------------------------
-
-//---------------------------------------------------------
-//   Convert MusicXML prefix/suffix to Modifier
-//---------------------------------------------------------
-
-FiguredBassItem::Modifier FiguredBassItem::MusicXML2Modifier(const String prefix) const
-{
-    if (prefix == u"sharp") {
-        return Modifier::SHARP;
-    } else if (prefix == u"flat") {
-        return Modifier::FLAT;
-    } else if (prefix == u"natural") {
-        return Modifier::NATURAL;
-    } else if (prefix == u"double-sharp") {
-        return Modifier::DOUBLESHARP;
-    } else if (prefix == u"flat-flat") {
-        return Modifier::DOUBLEFLAT;
-    } else if (prefix == u"sharp-sharp") {
-        return Modifier::DOUBLESHARP;
-    } else if (prefix == u"cross") {
-        return Modifier::CROSS;
-    } else if (prefix == u"backslash") {
-        return Modifier::BACKSLASH;
-    } else if (prefix == u"slash") {
-        return Modifier::SLASH;
-    } else {
-        return Modifier::NONE;
-    }
-}
-
-//---------------------------------------------------------
-//   Convert Modifier to MusicXML prefix/suffix
-//---------------------------------------------------------
-
-String FiguredBassItem::Modifier2MusicXML(FiguredBassItem::Modifier prefix) const
-{
-    switch (prefix) {
-    case Modifier::NONE:        return u"";
-    case Modifier::DOUBLEFLAT:  return u"flat-flat";
-    case Modifier::FLAT:        return u"flat";
-    case Modifier::NATURAL:     return u"natural";
-    case Modifier::SHARP:       return u"sharp";
-    case Modifier::DOUBLESHARP: return u"double-sharp";
-    case Modifier::CROSS:       return u"cross";
-    case Modifier::BACKSLASH:   return u"backslash";
-    case Modifier::SLASH:       return u"slash";
-    case Modifier::NUMOF:       return u"";         // prevent gcc "‘FBINumOfAccid’ not handled in switch" warning
-    }
-    return u"";
-}
-
-//---------------------------------------------------------
-//   Write MusicXML
-//
-// Writes the portion within the <figure> tag.
-//
-// NOTE: Both MuseScore and MusicXML provide two ways of altering the (temporal) length of a
-// figured bass object: extension lines and duration. The convention is that an EXTENSION is
-// used if the figure lasts LONGER than the note (i.e., it "extends" to the following notes),
-// whereas DURATION is used if the figure lasts SHORTER than the note (e.g., when notating a
-// figure change under a note). However, MuseScore does not restrict durations in this way,
-// allowing them to act as extensions themselves. As a result, a few more branches are
-// required in the decision tree to handle everything correctly.
-//---------------------------------------------------------
-
-void FiguredBassItem::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const
-{
-    xml.startElement("figure");
-
-    // The first figure of each group is the "original" figure. Practically, it is one inserted manually
-    // by the user, rather than automatically by the "duration" extend method.
-    if (isOriginalFigure) {
-        String strPrefix = Modifier2MusicXML(_prefix);
-        if (strPrefix != "") {
-            xml.tag("prefix", strPrefix);
-        }
-        if (_digit != FBIDigitNone) {
-            xml.tag("figure-number", _digit);
-        }
-        String strSuffix = Modifier2MusicXML(_suffix);
-        if (strSuffix != "") {
-            xml.tag("suffix", strSuffix);
-        }
-
-        // Check if the figure ends before or at the same time as the current note. Otherwise, the figure
-        // extends to the next note, and so carries an extension type "start" by definition.
-        if (fbEndTick <= crEndTick) {
-            if (_contLine == ContLine::SIMPLE) {
-                xml.tag("extend", { { "type", "stop" } });
-            } else if (_contLine == ContLine::EXTENDED) {
-                bool hasFigure = (strPrefix != "" || _digit != FBIDigitNone || strSuffix != "");
-                if (hasFigure) {
-                    xml.tag("extend", { { "type", "start" } });
-                } else {
-                    xml.tag("extend", { { "type", "continue" } });
-                }
-            }
-        } else {
-            xml.tag("extend", { { "type", "start" } });
-        }
-    }
-    // If the figure is not "original", it must have been created using the "duration" feature of figured bass.
-    // In other words, the original figure belongs to a previous note rather than the current note.
-    else {
-        if (crEndTick < fbEndTick) {
-            xml.tag("extend", { { "type", "continue" } });
-        } else {
-            xml.tag("extend", { { "type", "stop" } });
-        }
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   startsWithParenthesis
 //---------------------------------------------------------
 
@@ -1030,40 +888,6 @@ Sid FiguredBass::getPropertyStyle(Pid id) const
         }
     }
     return EngravingItem::getPropertyStyle(id);
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void FiguredBass::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    if (!onNote()) {
-        xml.tag("onNote", onNote());
-    }
-    if (ticks().isNotZero()) {
-        xml.tagFraction("ticks", ticks());
-    }
-    // if unparseable items, write full text data
-    if (m_items.size() < 1) {
-        TextBase::writeProperties(xml, true);
-    } else {
-//            if (textStyleType() != StyledPropertyListIdx::FIGURED_BASS)
-//                  // if all items parsed and not unstiled, we simply have a special style: write it
-//                  xml.tag("style", textStyle().name());
-        for (FiguredBassItem* item : m_items) {
-            item->write(xml);
-        }
-        for (const StyledProperty& spp : *_elementStyle) {
-            writeProperty(xml, spp.pid);
-        }
-        EngravingItem::writeProperties(xml);
-    }
-    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -1691,27 +1515,6 @@ bool FiguredBass::hasParentheses() const
         }
     }
     return false;
-}
-
-//---------------------------------------------------------
-//   Write MusicXML
-//---------------------------------------------------------
-
-void FiguredBass::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration,
-                                int divisions) const
-{
-    XmlWriter::Attributes attrs;
-    if (hasParentheses()) {
-        attrs = { { "parentheses", "yes" } };
-    }
-    xml.startElement("figured-bass", attrs);
-    for (FiguredBassItem* item : m_items) {
-        item->writeMusicXML(xml, isOriginalFigure, crEndTick, fbEndTick);
-    }
-    if (writeDuration) {
-        xml.tag("duration", ticks().ticks() / divisions);
-    }
-    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -24,10 +24,12 @@
 
 #include "compat/pageformat.h"
 #include "rw/compat/readchordlisthook.h"
-#include "rw/xml.h"
+#include "rw/xmlreader.h"
+#include "rw/xmlwriter.h"
 #include "types/typesconv.h"
 
 #include "libmscore/mscore.h"
+#include "libmscore/types.h"
 
 #include "defaultstyle.h"
 

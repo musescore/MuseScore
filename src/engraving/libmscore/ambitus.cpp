@@ -26,7 +26,6 @@
 
 #include "draw/types/pen.h"
 
-#include "rw/xml.h"
 #include "rw/206/read206.h"
 
 #include "accidental.h"
@@ -253,36 +252,6 @@ void Ambitus::setBottomTpc(int val, bool applyLogic)
     _bottomPitch= newPitch;
     _bottomTpc  = val;
     normalize();
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Ambitus::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    xml.tagProperty(Pid::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
-    xml.tagProperty(Pid::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
-    xml.tagProperty(Pid::MIRROR_HEAD, int(_dir),           int(DIR_DEFAULT));
-    xml.tag("hasLine",    _hasLine, true);
-    xml.tagProperty(Pid::LINE_WIDTH_SPATIUM, _lineWidth, LINEWIDTH_DEFAULT);
-    xml.tag("topPitch",   _topPitch);
-    xml.tag("topTpc",     _topTpc);
-    xml.tag("bottomPitch", _bottomPitch);
-    xml.tag("bottomTpc",  _bottomTpc);
-    if (_topAccid->accidentalType() != AccidentalType::NONE) {
-        xml.startElement("topAccidental");
-        _topAccid->write(xml);
-        xml.endElement();
-    }
-    if (_bottomAccid->accidentalType() != AccidentalType::NONE) {
-        xml.startElement("bottomAccidental");
-        _bottomAccid->write(xml);
-        xml.endElement();
-    }
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

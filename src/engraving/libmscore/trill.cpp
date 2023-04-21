@@ -25,7 +25,6 @@
 #include <cmath>
 
 #include "types/typesconv.h"
-#include "rw/xml.h"
 
 #include "iengravingfont.h"
 
@@ -375,27 +374,6 @@ LineSegment* Trill::createLineSegment(System* parent)
     seg->setColor(color());
     seg->initElementStyle(&trillSegmentStyle);
     return seg;
-}
-
-//---------------------------------------------------------
-//   Trill::write
-//---------------------------------------------------------
-
-void Trill::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    xml.tag("subtype", TConv::toXml(trillType()));
-    writeProperty(xml, Pid::PLAY);
-    writeProperty(xml, Pid::ORNAMENT_STYLE);
-    writeProperty(xml, Pid::PLACEMENT);
-    SLine::writeProperties(xml);
-    if (_accidental) {
-        _accidental->write(xml);
-    }
-    xml.endElement();
 }
 
 //---------------------------------------------------------

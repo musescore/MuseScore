@@ -26,7 +26,8 @@
 #include "paletteprovider.h"
 #include "palettecreator.h"
 
-#include "engraving/rw/xml.h"
+#include "engraving/rw/xmlreader.h"
+#include "engraving/rw/xmlwriter.h"
 
 #include "log.h"
 

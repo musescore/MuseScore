@@ -93,6 +93,9 @@ private:
 class Chord final : public ChordRest
 {
     OBJECT_ALLOCATOR(engraving, Chord)
+    DECLARE_CLASSOF(ElementType::CHORD)
+
+private:
 
     std::vector<Note*> _notes;           // sorted to decreasing line step
     LedgerLine* _ledgerLines = nullptr;  // single linked list
@@ -195,8 +198,6 @@ public:
     double intrinsicMag() const override;
     double mag() const override;
     double noteHeadWidth() const;
-
-    void write(XmlWriter& xml) const override;
 
     EngravingItem* drop(EditData&) override;
 

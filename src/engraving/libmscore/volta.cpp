@@ -25,8 +25,6 @@
 #include <algorithm>
 #include <vector>
 
-#include "rw/xml.h"
-
 #include "types/typesconv.h"
 
 #include "changeMap.h"
@@ -149,18 +147,6 @@ void Volta::setText(const String& s)
 String Volta::text() const
 {
     return beginText();
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Volta::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    TextLineBase::writeProperties(xml);
-    xml.tag("endings", TConv::toXml(_endings));
-    xml.endElement();
 }
 
 //---------------------------------------------------------

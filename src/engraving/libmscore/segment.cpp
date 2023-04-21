@@ -22,8 +22,10 @@
 
 #include "segment.h"
 
+#include <climits>
+
 #include "translation.h"
-#include "rw/xml.h"
+
 #include "types/typesconv.h"
 
 #include "accidental.h"
@@ -944,24 +946,6 @@ void Segment::swapElements(track_idx_t i1, track_idx_t i2)
         _elist[i2]->setTrack(i2);
     }
     triggerLayout();
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Segment::write(XmlWriter& xml) const
-{
-    if (written()) {
-        return;
-    }
-    setWritten(true);
-    if (_extraLeadingSpace.isZero()) {
-        return;
-    }
-    xml.startElement(this);
-    xml.tag("leadingSpace", _extraLeadingSpace.val());
-    xml.endElement();
 }
 
 //---------------------------------------------------------

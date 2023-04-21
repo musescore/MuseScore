@@ -82,8 +82,9 @@ public:
 class NoteHead final : public Symbol
 {
     OBJECT_ALLOCATOR(engraving, NoteHead)
-public:
+    DECLARE_CLASSOF(ElementType::NOTEHEAD)
 
+public:
     NoteHead(Note* parent = 0);
     NoteHead(const NoteHead&) = default;
     NoteHead& operator=(const NoteHead&) = delete;
@@ -151,6 +152,8 @@ static const int INVALID_LINE = -10000;
 class Note final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Note)
+    DECLARE_CLASSOF(ElementType::NOTE)
+
 public:
     enum class SlideType {
         Undefined = 0,
@@ -418,7 +421,6 @@ public:
 
     void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
     void setupAfterRead(const Fraction& tick, bool pasteMode);
-    void write(XmlWriter&) const override;
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;

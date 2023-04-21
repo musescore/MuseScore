@@ -23,7 +23,6 @@
 #include "actionicon.h"
 
 #include "draw/fontmetrics.h"
-#include "rw/xml.h"
 
 #include "property.h"
 
@@ -74,16 +73,6 @@ double ActionIcon::fontSize() const
 void ActionIcon::setFontSize(double size)
 {
     m_iconFont.setPointSizeF(size);
-}
-
-void ActionIcon::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    xml.tag("subtype", int(m_actionType));
-    if (!m_actionCode.empty()) {
-        xml.tag("action", String::fromStdString(m_actionCode));
-    }
-    xml.endElement();
 }
 
 void ActionIcon::layout()

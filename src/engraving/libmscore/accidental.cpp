@@ -23,7 +23,6 @@
 #include "accidental.h"
 
 #include "iengravingfont.h"
-#include "rw/xml.h"
 
 #include "types/symnames.h"
 #include "types/translatablestring.h"
@@ -248,21 +247,6 @@ AccidentalVal sym2accidentalVal(SymId id)
 Accidental::Accidental(EngravingItem* parent)
     : EngravingItem(ElementType::ACCIDENTAL, parent, ElementFlag::MOVABLE)
 {
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Accidental::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    writeProperty(xml, Pid::ACCIDENTAL_BRACKET);
-    writeProperty(xml, Pid::ACCIDENTAL_ROLE);
-    writeProperty(xml, Pid::SMALL);
-    writeProperty(xml, Pid::ACCIDENTAL_TYPE);
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

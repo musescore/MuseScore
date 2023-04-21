@@ -54,6 +54,8 @@ public:
 class LetRing final : public ChordTextLineBase
 {
     OBJECT_ALLOCATOR(engraving, LetRing)
+    DECLARE_CLASSOF(ElementType::LET_RING)
+
 public:
     LetRing(EngravingItem* parent);
 

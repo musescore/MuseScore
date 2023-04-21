@@ -69,8 +69,6 @@ public:
     void toAbsolute(const Location& ref);
     void toRelative(const Location& ref);
 
-    void write(XmlWriter& xml) const;
-
     bool isAbsolute() const { return !_rel; }
     bool isRelative() const { return _rel; }
 

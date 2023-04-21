@@ -23,7 +23,6 @@
 #include "bagpembell.h"
 
 #include "draw/types/pen.h"
-#include "rw/xml.h"
 
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -70,17 +69,6 @@ noteList BagpipeEmbellishment::getNoteList() const
     }
 
     return nl;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void BagpipeEmbellishment::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    xml.tag("subtype", TConv::toXml(_embelType));
-    xml.endElement();
 }
 
 //---------------------------------------------------------

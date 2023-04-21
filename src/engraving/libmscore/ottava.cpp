@@ -22,8 +22,6 @@
 
 #include "ottava.h"
 
-#include "rw/xml.h"
-
 #include "score.h"
 #include "staff.h"
 #include "system.h"
@@ -280,25 +278,6 @@ LineSegment* Ottava::createLineSegment(System* parent)
     os->setTrack(track());
     os->initElementStyle(&ottavaSegmentStyle);
     return os;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Ottava::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    writeProperty(xml, Pid::OTTAVA_TYPE);
-    writeProperty(xml, Pid::PLACEMENT);
-    writeProperty(xml, Pid::NUMBERS_ONLY);
-//      for (const StyledProperty& spp : *styledProperties())
-//            writeProperty(xml, spp.pid);
-    TextLineBase::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

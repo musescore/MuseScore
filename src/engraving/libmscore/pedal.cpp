@@ -22,8 +22,6 @@
 
 #include "pedal.h"
 
-#include "rw/xml.h"
-
 #include "chordrest.h"
 #include "measure.h"
 #include "score.h"
@@ -119,35 +117,6 @@ Pedal::Pedal(EngravingItem* parent)
 
     resetProperty(Pid::BEGIN_TEXT_PLACE);
     resetProperty(Pid::LINE_VISIBLE);
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Pedal::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-
-    for (auto i : {
-            Pid::END_HOOK_TYPE,
-            Pid::BEGIN_TEXT,
-            Pid::CONTINUE_TEXT,
-            Pid::END_TEXT,
-            Pid::LINE_VISIBLE,
-            Pid::BEGIN_HOOK_TYPE
-        }) {
-        writeProperty(xml, i);
-    }
-    for (const StyledProperty& spp : *styledProperties()) {
-        writeProperty(xml, spp.pid);
-    }
-
-    SLine::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

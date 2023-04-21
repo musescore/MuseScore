@@ -23,7 +23,6 @@
 #include "staffstate.h"
 
 #include "draw/types/pen.h"
-#include "rw/xml.h"
 
 #include "part.h"
 #include "score.h"
@@ -54,21 +53,6 @@ StaffState::StaffState(const StaffState& ss)
 StaffState::~StaffState()
 {
     delete _instrument;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void StaffState::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    xml.tag("subtype", int(_staffStateType));
-    if (staffStateType() == StaffStateType::INSTRUMENT) {
-        _instrument->write(xml, nullptr);
-    }
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -33,7 +33,7 @@
 
 #include "layout/layoutchords.h"
 #include "rw/400/measurerw.h"
-#include "rw/xml.h"
+
 #include "style/style.h"
 
 #include "accidental.h"
@@ -2006,15 +2006,6 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
             }
         }
     }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Measure::write(XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig) const
-{
-    rw400::MeasureRW::writeMeasure(this, xml, staff, writeSystemElements, forceTimeSig);
 }
 
 //---------------------------------------------------------

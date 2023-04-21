@@ -33,6 +33,8 @@
 #include "types/propertyvalue.h"
 #include "types/types.h"
 
+#include "../infrastructure/rtti.h"
+
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
 
@@ -275,9 +277,6 @@ public:
     void setPropertyFlags(Pid, PropertyFlags);
 
     virtual Sid getPropertyStyle(Pid) const;
-    bool readProperty(const mu::AsciiStringView&, XmlReader&, Pid);
-    void readProperty(XmlReader&, Pid);
-    bool readStyledProperty(XmlReader& e, const mu::AsciiStringView& tag);
 
     virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode);
 
@@ -288,8 +287,6 @@ public:
     void undoResetProperty(Pid id);
 
     void undoPushProperty(Pid);
-    void writeProperty(XmlWriter& xml, Pid id) const;
-    void writeStyledProperties(XmlWriter&) const;
 
     std::list<EngravingObject*> linkList() const;
 

@@ -22,8 +22,6 @@
 
 #include "breath.h"
 
-#include "rw/xml.h"
-
 #include "types/symnames.h"
 
 #include "measure.h"
@@ -93,22 +91,6 @@ void Breath::layout()
         }
     }
     setbbox(symBbox(_symId));
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Breath::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    writeProperty(xml, Pid::SYMBOL);
-    writeProperty(xml, Pid::PAUSE);
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -21,7 +21,7 @@
  */
 
 #include "containers.h"
-#include "rw/xml.h"
+
 #include "types/typesconv.h"
 
 #include "barline.h"
@@ -748,90 +748,6 @@ Fraction Staff::nextKeyTick(const Fraction& tick) const
 Fraction Staff::currentKeyTick(const Fraction& tick) const
 {
     return Fraction::fromTicks(_keys.currentKeyTick(tick.ticks()));
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Staff::write(XmlWriter& xml) const
-{
-    xml.startElement(this, { { "id", idx() + 1 } });
-
-    if (links()) {
-        Score* s = masterScore();
-        for (auto le : *links()) {
-            Staff* staff = toStaff(le);
-            if ((staff->score() == s) && (staff != this)) {
-                xml.tag("linkedTo", static_cast<int>(staff->idx() + 1));
-            }
-        }
-    }
-
-    // for copy/paste we need to know the actual transposition
-    if (xml.context()->clipboardmode()) {
-        Interval v = part()->instrument()->transpose();     // TODO: tick?
-        if (v.diatonic) {
-            xml.tag("transposeDiatonic", v.diatonic);
-        }
-        if (v.chromatic) {
-            xml.tag("transposeChromatic", v.chromatic);
-        }
-    }
-
-    staffType(Fraction(0, 1))->write(xml);
-    ClefTypeList ct = _defaultClefType;
-    if (ct._concertClef == ct._transposingClef) {
-        if (ct._concertClef != ClefType::G) {
-            xml.tag("defaultClef", TConv::toXml(ct._concertClef));
-        }
-    } else {
-        xml.tag("defaultConcertClef", TConv::toXml(ct._concertClef));
-        xml.tag("defaultTransposingClef", TConv::toXml(ct._transposingClef));
-    }
-
-    if (isLinesInvisible(Fraction(0, 1))) {
-        xml.tag("invisible", isLinesInvisible(Fraction(0, 1)));
-    }
-    if (hideWhenEmpty() != HideMode::AUTO) {
-        xml.tag("hideWhenEmpty", int(hideWhenEmpty()));
-    }
-    if (cutaway()) {
-        xml.tag("cutaway", cutaway());
-    }
-    if (showIfEmpty()) {
-        xml.tag("showIfSystemEmpty", showIfEmpty());
-    }
-    if (_hideSystemBarLine) {
-        xml.tag("hideSystemBarLine", _hideSystemBarLine);
-    }
-    if (_mergeMatchingRests) {
-        xml.tag("mergeMatchingRests", _mergeMatchingRests);
-    }
-    if (!visible()) {
-        xml.tag("isStaffVisible", visible());
-    }
-
-    for (const BracketItem* i : _brackets) {
-        BracketType a = i->bracketType();
-        size_t b = i->bracketSpan();
-        size_t c = i->column();
-        bool v = i->visible();
-        if (a != BracketType::NO_BRACKET || b > 0) {
-            xml.tag("bracket", { { "type", static_cast<int>(a) }, { "span", b }, { "col", c }, { "visible", v } });
-        }
-    }
-
-    writeProperty(xml, Pid::STAFF_BARLINE_SPAN);
-    writeProperty(xml, Pid::STAFF_BARLINE_SPAN_FROM);
-    writeProperty(xml, Pid::STAFF_BARLINE_SPAN_TO);
-    writeProperty(xml, Pid::STAFF_USERDIST);
-    writeProperty(xml, Pid::STAFF_COLOR);
-    writeProperty(xml, Pid::PLAYBACK_VOICE1);
-    writeProperty(xml, Pid::PLAYBACK_VOICE2);
-    writeProperty(xml, Pid::PLAYBACK_VOICE3);
-    writeProperty(xml, Pid::PLAYBACK_VOICE4);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -100,6 +100,7 @@ public:
 class Ottava final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, Ottava)
+    DECLARE_CLASSOF(ElementType::OTTAVA)
 
     OttavaType _ottavaType;
     bool _numbersOnly;
@@ -127,8 +128,6 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
     int pitchShift() const;
-
-    void write(XmlWriter& xml) const override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

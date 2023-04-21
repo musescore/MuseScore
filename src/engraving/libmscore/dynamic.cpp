@@ -21,8 +21,6 @@
  */
 #include "dynamic.h"
 
-#include "rw/xml.h"
-
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
@@ -225,29 +223,6 @@ bool Dynamic::isVelocityChangeAvailable() const
     default:
         return false;
     }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Dynamic::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    writeProperty(xml, Pid::DYNAMIC_TYPE);
-    writeProperty(xml, Pid::VELOCITY);
-    writeProperty(xml, Pid::DYNAMIC_RANGE);
-
-    if (isVelocityChangeAvailable()) {
-        writeProperty(xml, Pid::VELO_CHANGE);
-        writeProperty(xml, Pid::VELO_CHANGE_SPEED);
-    }
-
-    TextBase::writeProperties(xml, dynamicType() == DynamicType::OTHER);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

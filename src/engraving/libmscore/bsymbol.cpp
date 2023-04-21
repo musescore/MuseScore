@@ -25,7 +25,6 @@
 #include <cmath>
 
 #include "containers.h"
-#include "rw/xml.h"
 
 #include "factory.h"
 #include "measure.h"
@@ -60,18 +59,6 @@ BSymbol::BSymbol(const BSymbol& s)
         ee->setParent(this);
         _leafs.push_back(ee);
     }
-}
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void BSymbol::writeProperties(XmlWriter& xml) const
-{
-    for (const EngravingItem* e : leafs()) {
-        e->write(xml);
-    }
-    EngravingItem::writeProperties(xml);
 }
 
 //---------------------------------------------------------

@@ -22,8 +22,6 @@
 
 #include "letring.h"
 
-#include "rw/xml.h"
-
 #include "score.h"
 #include "stafftype.h"
 #include "system.h"

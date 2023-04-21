@@ -24,8 +24,6 @@
 
 #include <cmath>
 
-#include "rw/xml.h"
-
 #include "actionicon.h"
 #include "factory.h"
 #include "fret.h"
@@ -195,34 +193,6 @@ std::vector<PointF> VBox::gripsPositions(const EditData&) const
 {
     RectF r(abbox());
     return { PointF(r.x() + r.width() * .5, r.bottom()) };
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Box::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void Box::writeProperties(XmlWriter& xml) const
-{
-    for (Pid id : {
-            Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
-            Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE }) {
-        writeProperty(xml, id);
-    }
-    EngravingItem::writeProperties(xml);
-    for (const EngravingItem* e : el()) {
-        e->write(xml);
-    }
 }
 
 //---------------------------------------------------------
@@ -567,16 +537,6 @@ RectF HBox::drag(EditData& data)
 bool HBox::isMovable() const
 {
     return explicitParent() && (explicitParent()->isHBox() || explicitParent()->isVBox());
-}
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void HBox::writeProperties(XmlWriter& xml) const
-{
-    writeProperty(xml, Pid::CREATE_SYSTEM_HEADER);
-    Box::writeProperties(xml);
 }
 
 //---------------------------------------------------------

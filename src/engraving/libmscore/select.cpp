@@ -27,8 +27,8 @@
 
 #include "containers.h"
 #include "io/buffer.h"
-#include "rw/xml.h"
-#include "rw/400/writecontext.h"
+
+#include "rw/400/twrite.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -874,7 +874,7 @@ ByteArray Selection::staffMimeData() const
         }
         xml.endElement();     // </voiceOffset>
         xml.context()->setCurTrack(startTrack);
-        _score->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, false);
+        rw400::TWrite::writeSegments(xml, *xml.context(), startTrack, endTrack, seg1, seg2, false, false);
         xml.endElement();
     }
 
@@ -1111,7 +1111,7 @@ ByteArray Selection::symbolListMimeData() const
             }
         }
         xml.tag("segDelta", numSegs);
-        iter->second.e->write(xml);
+        rw400::TWrite::writeItem(iter->second.e, xml, *xml.context());
     }
 
     xml.endElement();

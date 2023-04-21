@@ -29,8 +29,6 @@
 
 #include "translation.h"
 
-#include "rw/xml.h"
-
 #include "types/typesconv.h"
 
 #include "ambitus.h"
@@ -288,25 +286,6 @@ void Clef::setSmall(bool val)
     if (val != m_isSmall) {
         m_isSmall = val;
     }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Clef::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    writeProperty(xml, Pid::CLEF_TYPE_CONCERT);
-    writeProperty(xml, Pid::CLEF_TYPE_TRANSPOSING);
-    if (!_showCourtesy) {
-        xml.tag("showCourtesyClef", _showCourtesy);
-    }
-    if (_forInstrumentChange) {
-        xml.tag("forInstrumentChange", _forInstrumentChange);
-    }
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

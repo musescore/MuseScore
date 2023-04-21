@@ -30,6 +30,8 @@ namespace mu::engraving {
 class MMRest final : public Rest
 {
     OBJECT_ALLOCATOR(engraving, MMRest)
+    DECLARE_CLASSOF(ElementType::MMREST)
+
 public:
     MMRest(Segment* s = 0);
     MMRest(const MMRest&, bool link = false);
@@ -41,9 +43,6 @@ public:
     void layout() override;
     void setWidth(double width) override { m_width = width; }
     double width() const override { return m_width; }
-
-    void write(XmlWriter&) const override;
-    void writeProperties(XmlWriter&) const override;
 
     PropertyValue propertyDefault(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;

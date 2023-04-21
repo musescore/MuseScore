@@ -23,7 +23,6 @@
 #include "keysig.h"
 
 #include "draw/types/pen.h"
-#include "rw/xml.h"
 
 #include "types/symnames.h"
 #include "types/typesconv.h"
@@ -437,42 +436,6 @@ void KeySig::setKey(Key key)
     KeySigEvent e;
     e.setKey(key);
     setKeySigEvent(e);
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void KeySig::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    EngravingItem::writeProperties(xml);
-    if (_sig.isAtonal()) {
-        xml.tag("custom", 1);
-    } else if (_sig.custom()) {
-        xml.tag("accidental", int(_sig.key()));
-        xml.tag("custom", 1);
-        for (const CustDef& cd : _sig.customKeyDefs()) {
-            xml.startElement("CustDef");
-            xml.tag("sym", SymNames::nameForSymId(cd.sym));
-            xml.tag("def", { { "degree", cd.degree }, { "xAlt", cd.xAlt }, { "octAlt", cd.octAlt } });
-            xml.endElement();
-        }
-    } else {
-        xml.tag("accidental", int(_sig.key()));
-    }
-
-    if (_sig.mode() != KeyMode::UNKNOWN) {
-        xml.tag("mode", TConv::toXml(_sig.mode()));
-    }
-
-    if (!_showCourtesy) {
-        xml.tag("showCourtesySig", _showCourtesy);
-    }
-    if (forInstrumentChange()) {
-        xml.tag("forInstrumentChange", true);
-    }
-    xml.endElement();
 }
 
 //---------------------------------------------------------

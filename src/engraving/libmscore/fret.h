@@ -135,6 +135,7 @@ public:
 class FretDiagram final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, FretDiagram)
+    DECLARE_CLASSOF(ElementType::FRET_DIAGRAM)
 
     int _strings       { 6 };
     int _frets         { 4 };
@@ -190,17 +191,11 @@ public:
     static std::shared_ptr<FretDiagram> createFromString(Score* score, const String& s);
 
     void layout() override;
-    void write(XmlWriter& xml) const override;
-    void writeNew(XmlWriter& xml) const;
-    void writeOld(XmlWriter& xml) const;
+
     std::vector<mu::LineF> dragAnchorLines() const override;
     mu::PointF pagePos() const override;
     double centerX() const;
     double rightX() const;
-
-    // read / write MusicXML
-    void readMusicXML(XmlReader& de);
-    void writeMusicXML(XmlWriter& xml) const;
 
     int  strings() const { return _strings; }
     int  frets()   const { return _frets; }

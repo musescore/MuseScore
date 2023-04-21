@@ -24,8 +24,10 @@
 
 #include "io/buffer.h"
 
-#include "engraving/rw/xml.h"
+#include "engraving/rw/xmlreader.h"
+#include "engraving/rw/xmlwriter.h"
 #include "engraving/rw/400/readcontext.h"
+#include "engraving/rw/400/writecontext.h"
 
 namespace mu::palette {
 template<class T>

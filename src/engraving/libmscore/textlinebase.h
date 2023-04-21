@@ -114,10 +114,6 @@ class TextLineBase : public SLine
 public:
     TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
 
-    void write(XmlWriter& xml) const override;
-
-    void writeProperties(XmlWriter& xml) const override;
-
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     PropertyValue getProperty(Pid id) const override;

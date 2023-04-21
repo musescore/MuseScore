@@ -22,8 +22,6 @@
 
 #include "sticking.h"
 
-#include "rw/xml.h"
-
 #include "segment.h"
 
 #include "log.h"
@@ -48,20 +46,6 @@ Sticking::Sticking(Segment* parent)
     : TextBase(ElementType::STICKING, parent, TextStyleType::STICKING, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&stickingStyle);
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Sticking::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    TextBase::writeProperties(xml);
-    xml.endElement();
 }
 
 bool Sticking::isEditAllowed(EditData& ed) const

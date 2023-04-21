@@ -78,6 +78,7 @@ public:
 class Tie final : public SlurTie
 {
     OBJECT_ALLOCATOR(engraving, Tie)
+    DECLARE_CLASSOF(ElementType::TIE)
 
     static Note* editStartNote;
     static Note* editEndNote;
@@ -100,7 +101,7 @@ public:
     bool isInside() const { return _isInside; }
 
     void calculateDirection();
-    void write(XmlWriter& xml) const override;
+
     void slurPos(SlurPos*) override;
 
     TieSegment* layoutFor(System*);

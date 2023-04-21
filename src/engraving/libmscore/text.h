@@ -33,6 +33,8 @@ namespace mu::engraving {
 class Text final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, Text)
+    DECLARE_CLASSOF(ElementType::TEXT)
+
 public:
 
     Text* clone() const override { return new Text(*this); }

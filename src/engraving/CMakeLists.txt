@@ -56,13 +56,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/paintdebugger.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/rtti.h
 
     ${LIBMSCORE_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/iscorereader.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/readoutdata.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/linksindexer.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/xml.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlreader.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlwriter.cpp

@@ -21,7 +21,8 @@
  */
 #include "spanner.h"
 
-#include "rw/xml.h"
+#include "rw/xmlwriter.h"
+#include "rw/400/writecontext.h"
 
 #include "chord.h"
 #include "chordrest.h"
@@ -1464,18 +1465,6 @@ static Fraction fraction(const XmlWriter& xml, const EngravingItem* current, con
         }
     }
     return tick;
-}
-
-//---------------------------------------------------------
-//   Spanner::writeProperties
-//---------------------------------------------------------
-
-void Spanner::writeProperties(XmlWriter& xml) const
-{
-    if (xml.context()->clipboardmode()) {
-        xml.tagFraction("ticks_f", ticks());
-    }
-    EngravingItem::writeProperties(xml);
 }
 
 //--------------------------------------------------

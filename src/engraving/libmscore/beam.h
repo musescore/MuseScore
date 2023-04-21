@@ -82,6 +82,7 @@ struct TremAnchor {
 class Beam final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Beam)
+    DECLARE_CLASSOF(ElementType::BEAM)
 
     std::vector<ChordRest*> _elements;          // must be sorted by tick
     std::vector<BeamSegment*> _beamSegments;
@@ -155,7 +156,6 @@ public:
     Fraction rtick() const override;
     Fraction ticks() const;
 
-    void write(XmlWriter& xml) const override;
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     void reset() override;

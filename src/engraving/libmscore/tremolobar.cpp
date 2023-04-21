@@ -23,7 +23,6 @@
 #include "tremolobar.h"
 
 #include "draw/types/pen.h"
-#include "rw/xml.h"
 
 #include "score.h"
 
@@ -115,22 +114,6 @@ void TremoloBar::draw(mu::draw::Painter* painter) const
     Pen pen(curColor(), m_lw.val(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->drawPolyline(m_polygon);
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void TremoloBar::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    writeProperty(xml, Pid::MAG);
-    writeProperty(xml, Pid::LINE_WIDTH);
-    writeProperty(xml, Pid::PLAY);
-    for (const PitchValue& v : m_points) {
-        xml.tag("point", { { "time", v.time }, { "pitch", v.pitch }, { "vibrato", v.vibrato } });
-    }
-    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -86,7 +86,7 @@ public:
 public slots:
     void setType(InstrumentsTreeItemType::ItemType type);
     void setTitle(QString title);
-    void setIsVisible(bool isVisible);
+    void setIsVisible(bool isVisible, bool setChildren = true);
     void setId(const ID& id);
     void setIsExpandable(bool expandable);
     void setIsEditable(bool editable);

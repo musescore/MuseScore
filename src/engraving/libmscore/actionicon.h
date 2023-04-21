@@ -62,6 +62,8 @@ enum class ActionIconType {
 class ActionIcon final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, ActionIcon)
+    DECLARE_CLASSOF(ElementType::ACTION_ICON)
+
 public:
     ActionIcon(EngravingItem* score);
     ~ActionIcon() override = default;
@@ -77,7 +79,6 @@ public:
     double fontSize() const;
     void setFontSize(double size);
 
-    void write(XmlWriter&) const override;
     void draw(mu::draw::Painter*) const override;
     void layout() override;
 

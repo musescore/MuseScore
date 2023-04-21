@@ -46,6 +46,7 @@ struct BreathType {
 class Breath final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Breath)
+    DECLARE_CLASSOF(ElementType::BREATH)
 
     double _pause;
     SymId _symId;
@@ -70,7 +71,7 @@ public:
 
     void draw(mu::draw::Painter*) const override;
     void layout() override;
-    void write(XmlWriter&) const override;
+
     mu::PointF pagePos() const override;        ///< position in page coordinates
 
     PropertyValue getProperty(Pid propertyId) const override;

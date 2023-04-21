@@ -66,9 +66,6 @@ public:
     virtual void endEdit(EditData&) override;
 
     virtual void layout() override;
-    virtual void write(XmlWriter&) const override;
-    virtual void write(XmlWriter& xml, staff_idx_t, bool, bool) const override { write(xml); }
-    virtual void writeProperties(XmlWriter&) const override;
 
     virtual bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;
@@ -117,6 +114,7 @@ public:
 class HBox final : public Box
 {
     OBJECT_ALLOCATOR(engraving, HBox)
+    DECLARE_CLASSOF(ElementType::HBOX)
 
     bool _createSystemHeader { true };
 
@@ -127,7 +125,6 @@ public:
     HBox* clone() const override { return new HBox(*this); }
 
     void layout() override;
-    void writeProperties(XmlWriter&) const override;
 
     mu::RectF drag(EditData&) override;
     void layout2();
@@ -152,6 +149,8 @@ public:
 class VBox : public Box
 {
     OBJECT_ALLOCATOR(engraving, VBox)
+    DECLARE_CLASSOF(ElementType::VBOX)
+
 public:
     VBox(const ElementType& type, System* parent);
     VBox(System* parent);
@@ -181,6 +180,8 @@ private:
 class FBox : public VBox
 {
     OBJECT_ALLOCATOR(engraving, FBox)
+    DECLARE_CLASSOF(ElementType::FBOX)
+
 public:
     FBox(System* parent)
         : VBox(ElementType::FBOX, parent) {}

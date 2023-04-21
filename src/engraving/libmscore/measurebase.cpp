@@ -22,8 +22,6 @@
 
 #include "measurebase.h"
 
-#include "rw/xml.h"
-
 #include "factory.h"
 #include "layoutbreak.h"
 #include "measure.h"
@@ -607,18 +605,6 @@ MeasureBase* MeasureBase::prevMM() const
         return const_cast<Measure*>(toMeasure(_prev)->mmRest1());
     }
     return _prev;
-}
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void MeasureBase::writeProperties(XmlWriter& xml) const
-{
-    EngravingItem::writeProperties(xml);
-    for (const EngravingItem* e : el()) {
-        e->write(xml);
-    }
 }
 
 //---------------------------------------------------------

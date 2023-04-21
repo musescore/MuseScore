@@ -42,6 +42,7 @@ enum class StaffStateType : char {
 class StaffState final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, StaffState)
+    DECLARE_CLASSOF(ElementType::STAFF_STATE)
 
     StaffStateType _staffStateType { StaffStateType::INVISIBLE };
     double lw { 0.0 };
@@ -69,8 +70,6 @@ public:
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
-
-    void write(XmlWriter&) const override;
 
     Instrument* instrument() const { return _instrument; }
     void setInstrument(const Instrument* i) { *_instrument = *i; }

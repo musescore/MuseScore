@@ -29,8 +29,6 @@
 #include "realfn.h"
 #include "translation.h"
 
-#include "rw/xml.h"
-
 #include "actionicon.h"
 #include "articulation.h"
 #include "chord.h"
@@ -912,36 +910,6 @@ void Rest::remove(EngravingItem* e)
         ChordRest::remove(e);
         break;
     }
-}
-
-//---------------------------------------------------------
-//   Rest::write
-//---------------------------------------------------------
-
-void Rest::write(XmlWriter& xml) const
-{
-    if (m_gap) {
-        return;
-    }
-    writeBeam(xml);
-    xml.startElement(this);
-    writeStyledProperties(xml);
-    ChordRest::writeProperties(xml);
-    el().write(xml);
-    bool write_dots = false;
-    for (NoteDot* dot : m_dots) {
-        if (!dot->offset().isNull() || !dot->visible() || dot->color() != engravingConfiguration()->defaultColor()
-            || dot->visible() != visible()) {
-            write_dots = true;
-            break;
-        }
-    }
-    if (write_dots) {
-        for (NoteDot* dot: m_dots) {
-            dot->write(xml);
-        }
-    }
-    xml.endElement();
 }
 
 //---------------------------------------------------------

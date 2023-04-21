@@ -62,6 +62,7 @@ public:
 class Glissando final : public SLine
 {
     OBJECT_ALLOCATOR(engraving, Glissando)
+    DECLARE_CLASSOF(ElementType::GLISSANDO)
 
     M_PROPERTY(String, text, setText)
     M_PROPERTY(GlissandoType, glissandoType, setGlissandoType)
@@ -89,7 +90,6 @@ public:
     LineSegment* createLineSegment(System* parent) override;
 
     void layout() override;
-    void write(XmlWriter&) const override;
 
     // property/style methods
     PropertyValue getProperty(Pid propertyId) const override;

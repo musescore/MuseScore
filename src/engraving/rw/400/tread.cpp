@@ -23,6 +23,7 @@
 
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
+#include "../../infrastructure/rtti.h"
 
 #include "../../libmscore/score.h"
 #include "../../libmscore/masterscore.h"
@@ -36,6 +37,9 @@
 #include "../../libmscore/dynamic.h"
 #include "../../libmscore/harmony.h"
 #include "../../libmscore/chordlist.h"
+
+#include "../../libmscore/excerpt.h"
+
 #include "../../libmscore/fret.h"
 #include "../../libmscore/tremolobar.h"
 #include "../../libmscore/sticking.h"
@@ -73,6 +77,7 @@
 #include "../../libmscore/bracket.h"
 #include "../../libmscore/breath.h"
 #include "../../libmscore/note.h"
+#include "../../libmscore/noteline.h"
 #include "../../libmscore/spanner.h"
 #include "../../libmscore/fingering.h"
 #include "../../libmscore/notedot.h"
@@ -82,6 +87,7 @@
 #include "../../libmscore/stem.h"
 #include "../../libmscore/stemslash.h"
 #include "../../libmscore/hook.h"
+#include "../../libmscore/page.h"
 #include "../../libmscore/tremolo.h"
 #include "../../libmscore/clef.h"
 #include "../../libmscore/glissando.h"
@@ -113,6 +119,7 @@
 #include "../../libmscore/palmmute.h"
 #include "../../libmscore/segment.h"
 #include "../../libmscore/part.h"
+#include "../../libmscore/whammybar.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -124,83 +131,42 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
 
+using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
+                                 BagpipeEmbellishment, BarLine, Beam, HBox, VBox, FBox, TBox, Bracket, Breath,
+                                 Chord, ChordLine, Clef,
+                                 Dynamic,
+                                 Fermata, FiguredBass, Fingering, FretDiagram,
+                                 Glissando, GradualTempoChange,
+                                 Hairpin, Harmony, Hook,
+                                 Image, InstrumentChange,
+                                 Jump,
+                                 KeySig,
+                                 LayoutBreak, LedgerLine, LetRing, Lyrics,
+                                 Marker, MeasureNumber, MeasureRepeat, MMRest, MMRestRange,
+                                 Note, NoteDot, NoteLine,
+                                 Ottava,
+                                 PalmMute, Pedal, PlayTechAnnotation, RehearsalMark, Rest,
+                                 Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
+                                 Symbol, System, SystemDivider, SystemText,
+                                 TempoText, Text, TextLine, Tie, TimeSig, Tremolo, TremoloBar, Trill, Tuplet,
+                                 Vibrato, Volta,
+                                 WhammyBar>;
+
 template<typename T>
-static bool try_read(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
+bool read_visit(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
 {
-    T* t = dynamic_cast<T*>(el);
-    if (!t) {
-        return false;
+    if (T::classof(item)) {
+        TRead::read(static_cast<T*>(item), xml, ctx);
+        return true;
     }
-    TRead::read(t, xml, ctx);
-    return true;
+    return false;
 }
 
-void TRead::readItem(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
+DECLARE_VISITER(read)
+
+void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
 {
-    if (try_read<Sticking>(el, xml, ctx)) {
-    } else if (try_read<HBox>(el, xml, ctx)) {
-    } else if (try_read<VBox>(el, xml, ctx)) {
-    } else if (try_read<TBox>(el, xml, ctx)) {
-    } else if (try_read<FBox>(el, xml, ctx)) {
-    } else if (try_read<Accidental>(el, xml, ctx)) {
-    } else if (try_read<ActionIcon>(el, xml, ctx)) {
-    } else if (try_read<Ambitus>(el, xml, ctx)) {
-    } else if (try_read<Arpeggio>(el, xml, ctx)) {
-    } else if (try_read<Articulation>(el, xml, ctx)) {
-    } else if (try_read<BagpipeEmbellishment>(el, xml, ctx)) {
-    } else if (try_read<BarLine>(el, xml, ctx)) {
-    } else if (try_read<Bend>(el, xml, ctx)) {
-    } else if (try_read<Bracket>(el, xml, ctx)) {
-    } else if (try_read<Breath>(el, xml, ctx)) {
-    } else if (try_read<Chord>(el, xml, ctx)) {
-    } else if (try_read<ChordLine>(el, xml, ctx)) {
-    } else if (try_read<Clef>(el, xml, ctx)) {
-    } else if (try_read<Dynamic>(el, xml, ctx)) {
-    } else if (try_read<Fermata>(el, xml, ctx)) {
-    } else if (try_read<FiguredBass>(el, xml, ctx)) {
-    } else if (try_read<Fingering>(el, xml, ctx)) {
-    } else if (try_read<FretDiagram>(el, xml, ctx)) {
-    } else if (try_read<Glissando>(el, xml, ctx)) {
-    } else if (try_read<GradualTempoChange>(el, xml, ctx)) {
-    } else if (try_read<Hairpin>(el, xml, ctx)) {
-    } else if (try_read<Harmony>(el, xml, ctx)) {
-    } else if (try_read<Image>(el, xml, ctx)) {
-    } else if (try_read<InstrumentChange>(el, xml, ctx)) {
-    } else if (try_read<Jump>(el, xml, ctx)) {
-    } else if (try_read<KeySig>(el, xml, ctx)) {
-    } else if (try_read<LayoutBreak>(el, xml, ctx)) {
-    } else if (try_read<LetRing>(el, xml, ctx)) {
-    } else if (try_read<Marker>(el, xml, ctx)) {
-    } else if (try_read<MeasureNumber>(el, xml, ctx)) {
-    } else if (try_read<MeasureRepeat>(el, xml, ctx)) {
-    } else if (try_read<Note>(el, xml, ctx)) {
-    } else if (try_read<Ottava>(el, xml, ctx)) {
-    } else if (try_read<PalmMute>(el, xml, ctx)) {
-    } else if (try_read<PlayTechAnnotation>(el, xml, ctx)) {
-    } else if (try_read<Pedal>(el, xml, ctx)) {
-    } else if (try_read<RehearsalMark>(el, xml, ctx)) {
-    } else if (try_read<Rest>(el, xml, ctx)) {
-    } else if (try_read<Slur>(el, xml, ctx)) {
-    } else if (try_read<Spacer>(el, xml, ctx)) {
-    } else if (try_read<StaffState>(el, xml, ctx)) {
-    } else if (try_read<StaffText>(el, xml, ctx)) {
-    } else if (try_read<StaffTypeChange>(el, xml, ctx)) {
-    } else if (try_read<Symbol>(el, xml, ctx)) {
-    } else if (try_read<SystemText>(el, xml, ctx)) {
-    } else if (try_read<Text>(el, xml, ctx)) {
-    } else if (try_read<TextLine>(el, xml, ctx)) {
-    } else if (try_read<TempoText>(el, xml, ctx)) {
-    } else if (try_read<Tie>(el, xml, ctx)) {
-    } else if (try_read<TimeSig>(el, xml, ctx)) {
-    } else if (try_read<Tremolo>(el, xml, ctx)) {
-    } else if (try_read<TremoloBar>(el, xml, ctx)) {
-    } else if (try_read<Trill>(el, xml, ctx)) {
-    } else if (try_read<Vibrato>(el, xml, ctx)) {
-    } else if (try_read<Volta>(el, xml, ctx)) {
-    } else {
-        LOGE("Unhandled element type %s", el->typeName());
-        UNREACHABLE;
-    }
+    read_visiter(ReadTypes {}, item, xml, ctx);
 }
 
 bool TRead::readProperty(EngravingItem* item, const AsciiStringView& tag, XmlReader& xml, ReadContext& ctx, Pid pid)
@@ -836,6 +802,27 @@ static SymId convertFromOldId(int val)
     return symId;
 }
 
+void TRead::read(KeyList* item, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        if (e.name() == "key") {
+            Key k;
+            int tick = e.intAttribute("tick", 0);
+            if (e.hasAttribute("custom")) {
+                k = Key::C;              // ke.setCustomType(e.intAttribute("custom"));
+            } else {
+                k = Key(e.intAttribute("idx"));
+            }
+            KeySigEvent ke;
+            ke.setKey(k);
+            (*item)[ctx.fileDivision(tick)] = ke;
+            e.readNext();
+        } else {
+            e.unknown();
+        }
+    }
+}
+
 void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
 {
     KeySigEvent sig;
@@ -1020,6 +1007,26 @@ void TRead::read(FiguredBassItem* i, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+}
+
+void TRead::read(Excerpt* item, XmlReader& e, ReadContext&)
+{
+    const std::vector<Part*>& pl = item->masterScore()->parts();
+    std::vector<Part*> parts;
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag = e.name();
+        if (tag == "name" || tag == "title") {
+            item->setName(e.readText().trimmed());
+        } else if (tag == "part") {
+            size_t partIdx = static_cast<size_t>(e.readInt());
+            if (partIdx >= pl.size()) {
+                LOGD("Excerpt::read: bad part index");
+            } else {
+                parts.push_back(pl.at(partIdx));
+            }
+        }
+    }
+    item->setParts(parts);
 }
 
 void TRead::read(Fermata* f, XmlReader& e, ReadContext& ctx)
@@ -2623,7 +2630,7 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
             const AsciiStringView t(e.name());
             if (t == "Event") {
                 NoteEvent ne;
-                ne.read(e);
+                rw400::TRead::read(&ne, e, ctx);
                 playEvents.push_back(ne);
             } else {
                 e.unknown();
@@ -2645,6 +2652,22 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         return false;
     }
     return true;
+}
+
+void TRead::read(NoteEvent* item, XmlReader& e, ReadContext&)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "pitch") {
+            item->setPitch(e.readInt());
+        } else if (tag == "ontime") {
+            item->setOntime(e.readInt());
+        } else if (tag == "len") {
+            item->setLen(e.readInt());
+        } else {
+            e.unknown();
+        }
+    }
 }
 
 void TRead::read(NoteDot* d, XmlReader& e, ReadContext& ctx)
@@ -3130,7 +3153,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "isStaffVisible") {
         s->setVisible(e.readBool());
     } else if (tag == "keylist") {
-        s->keyList()->read(e, s->score());
+        rw400::TRead::read(s->keyList(), e, ctx);
     } else if (tag == "bracket") {
         int col = e.intAttribute("col", -1);
         if (col == -1) {
@@ -3369,6 +3392,55 @@ void TRead::read(TimeSig* s, XmlReader& e, ReadContext& ctx)
     s->setDenominatorString(denominatorString);
 }
 
+void TRead::read(TimeSigMap* item, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "sig") {
+            SigEvent t;
+            int tick = TRead::read(&t, e, ctx.fileDivision());
+            (*item)[tick] = t;
+        } else {
+            e.unknown();
+        }
+    }
+    item->normalize();
+}
+
+int TRead::read(SigEvent* item, XmlReader& e, int fileDivision)
+{
+    int tick  = e.intAttribute("tick", 0);
+    tick      = tick * Constants::division / fileDivision;
+
+    int numerator = 1;
+    int denominator = 1;
+    int denominator2 = -1;
+    int numerator2   = -1;
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "nom") {
+            numerator = e.readInt();
+        } else if (tag == "denom") {
+            denominator = e.readInt();
+        } else if (tag == "nom2") {
+            numerator2 = e.readInt();
+        } else if (tag == "denom2") {
+            denominator2 = e.readInt();
+        } else {
+            e.unknown();
+        }
+    }
+    if ((numerator2 == -1) || (denominator2 == -1)) {
+        numerator2   = numerator;
+        denominator2 = denominator;
+    }
+
+    item->setTimesig(TimeSigFrac(numerator, denominator));
+    item->setNominal(TimeSigFrac(numerator2, denominator2));
+    return tick;
+}
+
 void TRead::read(Tremolo* t, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
@@ -3514,7 +3586,7 @@ void TRead::read(Trill* t, XmlReader& e, ReadContext& ctx)
             accidental->setParent(t);
             t->setAccidental(accidental);
         } else if (tag == "ornamentStyle") {
-            t->readProperty(e, Pid::ORNAMENT_STYLE);
+            readProperty(t, e, ctx, Pid::ORNAMENT_STYLE);
         } else if (tag == "play") {
             t->setPlayArticulation(e.readBool());
         } else if (!readProperties(static_cast<SLine*>(t), e, ctx)) {

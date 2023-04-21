@@ -62,6 +62,8 @@ public:
 class Rest : public ChordRest
 {
     OBJECT_ALLOCATOR(engraving, Rest)
+    DECLARE_CLASSOF(ElementType::REST)
+
 public:
 
     ~Rest() { DeleteAll(m_dots); }
@@ -93,8 +95,6 @@ public:
 
     virtual void add(EngravingItem*) override;
     virtual void remove(EngravingItem*) override;
-
-    void write(XmlWriter& xml) const override;
 
     SymId getSymbol(DurationType type, int line, int lines);
     void updateSymbol(int line, int lines);

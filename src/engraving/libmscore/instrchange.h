@@ -37,6 +37,7 @@ class Clef;
 class InstrumentChange final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, InstrumentChange)
+    DECLARE_CLASSOF(ElementType::INSTRUMENT_CHANGE)
 
     Instrument* _instrument;    // Staff holds ownership if part of score
     bool _init = false;   // Set if the instrument has been set by the user, as there is no other way to tell.
@@ -48,8 +49,6 @@ public:
     ~InstrumentChange();
 
     InstrumentChange* clone() const override { return new InstrumentChange(*this); }
-
-    void write(XmlWriter& xml) const override;
 
     void layout() override;
 

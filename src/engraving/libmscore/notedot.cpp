@@ -22,8 +22,6 @@
 
 #include "notedot.h"
 
-#include "rw/xml.h"
-
 #include "chord.h"
 #include "note.h"
 #include "rest.h"

@@ -24,7 +24,6 @@
 
 #include "draw/fontmetrics.h"
 #include "draw/types/font.h"
-#include "rw/xml.h"
 
 #include "translation.h"
 #include "types/symnames.h"
@@ -788,26 +787,6 @@ Fraction BarLine::playTick() const
     }
 
     return tick();
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void BarLine::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-
-    writeProperty(xml, Pid::BARLINE_TYPE);
-    writeProperty(xml, Pid::BARLINE_SPAN);
-    writeProperty(xml, Pid::BARLINE_SPAN_FROM);
-    writeProperty(xml, Pid::BARLINE_SPAN_TO);
-
-    for (const EngravingItem* e : _el) {
-        e->write(xml);
-    }
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

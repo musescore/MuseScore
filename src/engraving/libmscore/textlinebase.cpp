@@ -25,7 +25,6 @@
 #include <cmath>
 
 #include "draw/types/pen.h"
-#include "rw/xml.h"
 
 #include "style/style.h"
 
@@ -606,40 +605,11 @@ TextLineBase::TextLineBase(const ElementType& type, EngravingItem* parent, Eleme
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void TextLineBase::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------
 
 void TextLineBase::spatiumChanged(double /*ov*/, double /*nv*/)
 {
-}
-
-//---------------------------------------------------------
-//   writeProperties
-//    write properties different from prototype
-//---------------------------------------------------------
-
-void TextLineBase::writeProperties(XmlWriter& xml) const
-{
-    for (Pid pid : TextLineBasePropertyId) {
-        if (!isStyled(pid)) {
-            writeProperty(xml, pid);
-        }
-    }
-    SLine::writeProperties(xml);
 }
 
 //---------------------------------------------------------

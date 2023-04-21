@@ -23,8 +23,6 @@
 
 #include <cmath>
 
-#include "rw/xml.h"
-
 #include "draw/types/brush.h"
 
 #include "beam.h"
@@ -220,15 +218,6 @@ void Stem::draw(mu::draw::Painter* painter) const
             drawSymbol(SymId::augmentationDot, painter, PointF(x, y));
         }
     }
-}
-
-void Stem::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    EngravingItem::writeProperties(xml);
-    writeProperty(xml, Pid::USER_LEN);
-    writeProperty(xml, Pid::LINE_WIDTH);
-    xml.endElement();
 }
 
 std::vector<mu::PointF> Stem::gripsPositions(const EditData&) const

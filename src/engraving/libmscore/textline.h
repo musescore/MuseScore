@@ -57,6 +57,7 @@ public:
 class TextLine final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, TextLine)
+    DECLARE_CLASSOF(ElementType::TEXTLINE)
 
     Sid getTextLinePos(bool above) const;
     Sid getPropertyStyle(Pid) const override;
@@ -69,8 +70,6 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
     TextLine* clone() const override { return new TextLine(*this); }
-
-    void write(XmlWriter&) const override;
 
     void initStyle();
 

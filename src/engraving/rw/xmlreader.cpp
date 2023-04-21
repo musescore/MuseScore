@@ -20,9 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "xml.h"
+#include "xmlreader.h"
 
 #include "libmscore/score.h"
+
+#include "400/readcontext.h"
 
 #include "log.h"
 

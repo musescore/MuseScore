@@ -40,6 +40,7 @@ class Chord;
 class LedgerLine final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, LedgerLine)
+    DECLARE_CLASSOF(ElementType::LEDGER_LINE)
 
     double _width;
     double _len;
@@ -69,8 +70,6 @@ public:
     double measureXPos() const;
     LedgerLine* next() const { return _next; }
     void setNext(LedgerLine* l) { _next = l; }
-
-    void writeProperties(XmlWriter& xml) const override;
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 };

@@ -22,8 +22,6 @@
 
 #include "page.h"
 
-#include "rw/xml.h"
-
 #include "factory.h"
 #include "masterscore.h"
 #include "measurebase.h"
@@ -535,19 +533,6 @@ String Page::replaceTextMacros(const String& s) const
 bool Page::isOdd() const
 {
     return (_no + 1 + score()->pageNumberOffset()) & 1;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Page::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    for (System* system : _systems) {
-        system->write(xml);
-    }
-    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -24,7 +24,6 @@
 
 #include "draw/fontmetrics.h"
 #include "iengravingfont.h"
-#include "rw/xml.h"
 
 #include "types/symnames.h"
 
@@ -124,21 +123,6 @@ void Symbol::draw(mu::draw::Painter* painter) const
 }
 
 //---------------------------------------------------------
-//   Symbol::write
-//---------------------------------------------------------
-
-void Symbol::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    xml.tag("name", SymNames::nameForSymId(_sym));
-    if (_scoreFont) {
-        xml.tag("font", _scoreFont->name());
-    }
-    BSymbol::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   Symbol::getProperty
 //---------------------------------------------------------
 PropertyValue Symbol::getProperty(Pid propertyId) const
@@ -222,20 +206,6 @@ void FSymbol::draw(mu::draw::Painter* painter) const
     painter->setFont(f);
     painter->setPen(curColor());
     painter->drawText(PointF(0, 0), toString());
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void FSymbol::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    xml.tag("font",     _font.family());
-    xml.tag("fontsize", _font.pointSizeF());
-    xml.tag("code",     _code);
-    BSymbol::writeProperties(xml);
-    xml.endElement();
 }
 
 void FSymbol::layout()

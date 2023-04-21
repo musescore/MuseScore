@@ -23,7 +23,6 @@
 #include "measurerepeat.h"
 
 #include "draw/types/pen.h"
-#include "rw/xml.h"
 
 #include "translation.h"
 
@@ -219,19 +218,6 @@ Shape MeasureRepeat::shape() const
     shape.add(numberRect());
     shape.add(symBbox(symId()));
     return shape;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void MeasureRepeat::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    writeProperty(xml, Pid::SUBTYPE);
-    Rest::writeProperties(xml);
-    el().write(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

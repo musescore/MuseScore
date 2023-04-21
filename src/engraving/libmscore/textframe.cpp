@@ -22,7 +22,6 @@
 #include "textframe.h"
 
 #include "draw/fontmetrics.h"
-#include "rw/xml.h"
 
 #include "box.h"
 #include "factory.h"
@@ -84,18 +83,6 @@ void TBox::layout()
     bbox().setRect(0.0, 0.0, system()->width(), h);
 
     MeasureBase::layout();    // layout LayoutBreak's
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void TBox::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    Box::writeProperties(xml);
-    m_text->write(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

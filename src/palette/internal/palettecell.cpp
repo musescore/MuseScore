@@ -23,8 +23,8 @@
 
 #include "mimedatautils.h"
 
-#include "engraving/rw/xml.h"
 #include "engraving/rw/400/tread.h"
+#include "engraving/rw/400/twrite.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/fret.h"
@@ -267,9 +267,9 @@ void PaletteCell::write(XmlWriter& xml) const
     }
 
     if (untranslatedElement) {
-        untranslatedElement->write(xml);
+        rw400::TWrite::writeItem(untranslatedElement.get(), xml, *xml.context());
     } else {
-        element->write(xml);
+        rw400::TWrite::writeItem(element.get(), xml, *xml.context());
     }
     xml.endElement();
 }

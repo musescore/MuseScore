@@ -21,7 +21,8 @@
  */
 #include "writescorehook.h"
 
-#include "rw/xml.h"
+#include "rw/xmlwriter.h"
+
 #include "libmscore/masterscore.h"
 #include "libmscore/excerpt.h"
 

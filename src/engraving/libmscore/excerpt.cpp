@@ -27,7 +27,6 @@
 #include "containers.h"
 
 #include "style/style.h"
-#include "rw/xml.h"
 
 #include "barline.h"
 #include "beam.h"
@@ -299,24 +298,6 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
     // link master staff to cloned
     Staff* newStaff = excerptScore()->staffById(masterStaff->id());
     excerptScore()->undo(new Link(newStaff, masterStaff));
-}
-
-void Excerpt::read(XmlReader& e)
-{
-    const std::vector<Part*>& pl = m_masterScore->parts();
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag = e.name();
-        if (tag == "name" || tag == "title") {
-            m_name = e.readText().trimmed();
-        } else if (tag == "part") {
-            size_t partIdx = static_cast<size_t>(e.readInt());
-            if (partIdx >= pl.size()) {
-                LOGD("Excerpt::read: bad part index");
-            } else {
-                m_parts.push_back(pl.at(partIdx));
-            }
-        }
-    }
 }
 
 void Excerpt::createExcerpt(Excerpt* excerpt)

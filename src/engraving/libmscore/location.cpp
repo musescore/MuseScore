@@ -22,8 +22,6 @@
 
 #include "location.h"
 
-#include "rw/xml.h"
-
 #include "chord.h"
 #include "engravingitem.h"
 #include "measure.h"
@@ -59,24 +57,6 @@ void Location::setTrack(int track)
 {
     _staff = track / VOICES;
     _voice = track % VOICES;
-}
-
-//---------------------------------------------------------
-//   Location::write
-//    Only relative locations should be written
-//---------------------------------------------------------
-
-void Location::write(XmlWriter& xml) const
-{
-    assert(isRelative());
-    xml.startElement("location");
-    xml.tag("staves", _staff, relDefaults._staff);
-    xml.tag("voices", _voice, relDefaults._voice);
-    xml.tag("measures", _measure, relDefaults._measure);
-    xml.tagFraction("fractions", _frac.reduced(), relDefaults._frac);
-    xml.tag("grace", _graceIndex, relDefaults._graceIndex);
-    xml.tag("notes", _note, relDefaults._note);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

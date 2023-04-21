@@ -94,6 +94,7 @@ public:
 class System final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, System)
+    DECLARE_CLASSOF(ElementType::SYSTEM)
 
     SystemDivider* _systemDividerLeft    { nullptr };       // to the next system
     SystemDivider* _systemDividerRight   { nullptr };
@@ -139,7 +140,6 @@ public:
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
     void change(EngravingItem* o, EngravingItem* n) override;
-    void write(XmlWriter&) const override;
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 

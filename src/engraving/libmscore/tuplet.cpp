@@ -23,7 +23,6 @@
 #include "tuplet.h"
 
 #include "draw/types/pen.h"
-#include "rw/xml.h"
 
 #include "style/textstyle.h"
 #include "types/typesconv.h"
@@ -816,37 +815,6 @@ void Tuplet::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
     if (all || visible() || score()->showInvisible()) {
         func(data, this);
     }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Tuplet::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    EngravingItem::writeProperties(xml);
-
-    writeProperty(xml, Pid::NORMAL_NOTES);
-    writeProperty(xml, Pid::ACTUAL_NOTES);
-    writeProperty(xml, Pid::P1);
-    writeProperty(xml, Pid::P2);
-
-    xml.tag("baseNote", TConv::toXml(_baseLen.type()));
-    if (int dots = _baseLen.dots()) {
-        xml.tag("baseDots", dots);
-    }
-
-    if (_number) {
-        xml.startElement("Number", _number);
-        _number->writeProperty(xml, Pid::TEXT_STYLE);
-        _number->writeProperty(xml, Pid::TEXT);
-        xml.endElement();
-    }
-
-    writeStyledProperties(xml);
-
-    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -21,7 +21,6 @@
  */
 
 #include "sig.h"
-#include "rw/xml.h"
 
 #include "log.h"
 
@@ -386,87 +385,6 @@ int TimeSigMap::bar2tick(int bar, int beat) const
     int ticksB = ticks_beat(e->second.timesig().denominator());   // ticks per beat
     int ticksM = ticksB * e->second.timesig().numerator();        // bar length in ticks
     return e->first + (bar - e->second.bar()) * ticksM + ticksB * beat;
-}
-
-//---------------------------------------------------------
-//   TimeSigMap::write
-//---------------------------------------------------------
-
-void TimeSigMap::write(XmlWriter& xml) const
-{
-    xml.startElement("siglist");
-    for (auto i = begin(); i != end(); ++i) {
-        i->second.write(xml, i->first);
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   TimeSigMap::read
-//---------------------------------------------------------
-
-void TimeSigMap::read(XmlReader& e, int fileDivision)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "sig") {
-            SigEvent t;
-            int tick = t.read(e, fileDivision);
-            (*this)[tick] = t;
-        } else {
-            e.unknown();
-        }
-    }
-    normalize();
-}
-
-//---------------------------------------------------------
-//   SigEvent::write
-//---------------------------------------------------------
-
-void SigEvent::write(XmlWriter& xml, int tick) const
-{
-    xml.startElement("sig", { { "tick", tick } });
-    xml.tag("nom",   _timesig.numerator());
-    xml.tag("denom", _timesig.denominator());
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   SigEvent::read
-//---------------------------------------------------------
-
-int SigEvent::read(XmlReader& e, int fileDivision)
-{
-    int tick  = e.intAttribute("tick", 0);
-    tick      = tick * Constants::division / fileDivision;
-
-    int numerator = 1;
-    int denominator = 1;
-    int denominator2 = -1;
-    int numerator2   = -1;
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "nom") {
-            numerator = e.readInt();
-        } else if (tag == "denom") {
-            denominator = e.readInt();
-        } else if (tag == "nom2") {
-            numerator2 = e.readInt();
-        } else if (tag == "denom2") {
-            denominator2 = e.readInt();
-        } else {
-            e.unknown();
-        }
-    }
-    if ((numerator2 == -1) || (denominator2 == -1)) {
-        numerator2   = numerator;
-        denominator2 = denominator;
-    }
-    _timesig = TimeSigFrac(numerator, denominator);
-    _nominal = TimeSigFrac(numerator2, denominator2);
-    return tick;
 }
 
 //---------------------------------------------------------

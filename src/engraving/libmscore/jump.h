@@ -42,6 +42,7 @@ namespace mu::engraving {
 class Jump final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, Jump)
+    DECLARE_CLASSOF(ElementType::JUMP)
 
     String _jumpTo;
     String _playUntil;
@@ -61,8 +62,6 @@ public:
     int subtype() const override { return int(jumpType()); }
 
     Measure* measure() const { return toMeasure(explicitParent()); }
-
-    void write(XmlWriter& xml) const override;
 
     void layout() override;
 

@@ -22,7 +22,6 @@
 
 #include "fermata.h"
 
-#include "rw/xml.h"
 #include "types/symnames.h"
 #include "types/translatablestring.h"
 
@@ -62,28 +61,6 @@ Fermata::Fermata(EngravingItem* parent)
     _symId         = SymId::noSym;
     setPlay(true);
     initElementStyle(&fermataStyle);
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Fermata::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        LOGD("%s not written", typeName());
-        return;
-    }
-    xml.startElement(this);
-    xml.tag("subtype", SymNames::nameForSymId(_symId));
-    writeProperty(xml, Pid::TIME_STRETCH);
-    writeProperty(xml, Pid::PLAY);
-    writeProperty(xml, Pid::MIN_DISTANCE);
-    if (!isStyled(Pid::OFFSET)) {
-        writeProperty(xml, Pid::OFFSET);
-    }
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

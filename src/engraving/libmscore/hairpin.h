@@ -89,6 +89,7 @@ public:
 class Hairpin final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, Hairpin)
+    DECLARE_CLASSOF(ElementType::HAIRPIN)
 
     HairpinType _hairpinType { HairpinType::INVALID };
     int _veloChange;
@@ -149,8 +150,6 @@ public:
     {
         return _hairpinType == HairpinType::DECRESC_HAIRPIN || _hairpinType == HairpinType::DECRESC_LINE;
     }
-
-    void write(XmlWriter&) const override;
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

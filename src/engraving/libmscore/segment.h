@@ -84,6 +84,7 @@ struct Spring
 class Segment final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Segment)
+    DECLARE_CLASSOF(ElementType::SEGMENT)
 
     SegmentType _segmentType { SegmentType::Invalid };
     Fraction _tick;    // { Fraction(0, 1) };
@@ -231,8 +232,6 @@ public:
 
     Spatium extraLeadingSpace() const { return _extraLeadingSpace; }
     void setExtraLeadingSpace(Spatium v) { _extraLeadingSpace = v; }
-
-    void write(XmlWriter&) const override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

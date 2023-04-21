@@ -29,10 +29,11 @@
 
 #include "iengravingfont.h"
 
-#include "rw/xml.h"
-
 #include "style/defaultstyle.h"
 #include "style/textstyle.h"
+
+#include "rw/xmlreader.h"
+#include "rw/xmlwriter.h"
 
 #include "types/symnames.h"
 #include "types/translatablestring.h"
@@ -2249,47 +2250,6 @@ void TextBase::select(EditData& editData, SelectTextType type)
     case SelectTextType::All:
         selectAll(cursorFromEditData(editData));
         break;
-    }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void TextBase::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    writeProperties(xml, true, true);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle*/) const
-{
-    EngravingItem::writeProperties(xml);
-    writeProperty(xml, Pid::TEXT_STYLE);
-
-    for (const StyledProperty& spp : *_elementStyle) {
-        if (!isStyled(spp.pid)) {
-            writeProperty(xml, spp.pid);
-        }
-    }
-    for (const auto& spp : *textStyle(textStyleType())) {
-        if (isStyled(spp.pid)
-            || (spp.pid == Pid::FONT_SIZE && getProperty(spp.pid).toDouble() == TextBase::UNDEFINED_FONT_SIZE)
-            || (spp.pid == Pid::FONT_FACE && getProperty(spp.pid).value<String>() == TextBase::UNDEFINED_FONT_FAMILY)) {
-            continue;
-        }
-        writeProperty(xml, spp.pid);
-    }
-    if (writeText) {
-        xml.writeXml(u"text", xmlText());
     }
 }
 

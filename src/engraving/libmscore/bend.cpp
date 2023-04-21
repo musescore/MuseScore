@@ -22,8 +22,6 @@
 
 #include "bend.h"
 
-#include "rw/xml.h"
-
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
 #include "draw/fontmetrics.h"
@@ -356,22 +354,6 @@ void Bend::draw(mu::draw::Painter* painter) const
         x = x2;
         y = y2;
     }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Bend::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    for (const PitchValue& v : m_points) {
-        xml.tag("point", { { "time", v.time }, { "pitch", v.pitch }, { "vibrato", v.vibrato } });
-    }
-    writeStyledProperties(xml);
-    writeProperty(xml, Pid::PLAY);
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

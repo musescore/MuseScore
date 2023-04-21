@@ -31,6 +31,8 @@ class Chord;
 class Stem final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Stem)
+    DECLARE_CLASSOF(ElementType::STEM)
+
 public:
 
     Stem(const Stem&) = default;
@@ -50,8 +52,6 @@ public:
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
-
-    void write(XmlWriter& xml) const override;
 
     void reset() override;
     PropertyValue getProperty(Pid propertyId) const override;

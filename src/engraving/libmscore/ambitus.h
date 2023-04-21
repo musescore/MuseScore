@@ -41,6 +41,7 @@ class Factory;
 class Ambitus final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Ambitus)
+    DECLARE_CLASSOF(ElementType::AMBITUS)
 
     NoteHeadGroup _noteHeadGroup;
     NoteHeadType _noteHeadType;
@@ -120,7 +121,6 @@ public:
     mu::PointF pagePos() const override;        ///< position in page coordinates
     void      scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void      setTrack(track_idx_t val) override;
-    void      write(XmlWriter&) const override;
 
     String    accessibleInfo() const override;
 

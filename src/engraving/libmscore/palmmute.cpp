@@ -22,8 +22,6 @@
 
 #include "palmmute.h"
 
-#include "rw/xml.h"
-
 #include "chordrest.h"
 #include "part.h"
 #include "score.h"

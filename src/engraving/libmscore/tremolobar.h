@@ -47,14 +47,14 @@ enum class TremoloBarType {
 class TremoloBar final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, TremoloBar)
+    DECLARE_CLASSOF(ElementType::TREMOLOBAR)
+
 public:
 
     TremoloBar* clone() const override { return new TremoloBar(*this); }
 
     void layout() override;
     void draw(mu::draw::Painter*) const override;
-
-    void write(XmlWriter&) const override;
 
     PitchValues& points() { return m_points; }
     const PitchValues& points() const { return m_points; }

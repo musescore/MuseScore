@@ -70,6 +70,7 @@ enum class PreferSharpFlat : char {
 class Part final : public EngravingObject
 {
     OBJECT_ALLOCATOR(engraving, Part)
+    DECLARE_CLASSOF(ElementType::PART)
 
     String _partName;              ///< used in tracklist (mixer)
     InstrumentList _instruments;
@@ -99,7 +100,6 @@ public:
 
     void read(XmlReader&);
     bool readProperties(XmlReader&);
-    void write(XmlWriter& xml) const;
 
     size_t nstaves() const;
     const std::vector<Staff*>& staves() const;

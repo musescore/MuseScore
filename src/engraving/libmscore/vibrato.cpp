@@ -24,7 +24,6 @@
 #include <cmath>
 
 #include "types/typesconv.h"
-#include "rw/xml.h"
 
 #include "iengravingfont.h"
 
@@ -213,25 +212,6 @@ LineSegment* Vibrato::createLineSegment(System* parent)
     seg->setColor(color());
     seg->initElementStyle(&vibratoSegmentStyle);
     return seg;
-}
-
-//---------------------------------------------------------
-//   Vibrato::write
-//---------------------------------------------------------
-
-void Vibrato::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    xml.tag("subtype", TConv::toXml(vibratoType()));
-    writeProperty(xml, Pid::PLAY);
-    for (const StyledProperty& spp : *styledProperties()) {
-        writeProperty(xml, spp.pid);
-    }
-    SLine::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

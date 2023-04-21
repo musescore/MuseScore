@@ -24,6 +24,9 @@
 
 #include "global/types/string.h"
 
+#include "../xmlreader.h"
+#include "readcontext.h"
+
 #include "../../libmscore/property.h"
 
 namespace mu::engraving {
@@ -58,39 +61,51 @@ class FBox;
 class TBox;
 class Bracket;
 class Breath;
-class Symbol;
-class BSymbol;
-class FSymbol;
+
 class Chord;
 class ChordRest;
 class ChordLine;
 class Clef;
+
+class Excerpt;
+
 class FiguredBass;
 class FiguredBassItem;
 class Fingering;
+
 class Glissando;
 class GradualTempoChange;
 class Groups;
+
 class Hairpin;
 class Hook;
+
 class Instrument;
 class InstrumentChange;
+
 class Jump;
+
+class KeyList;
 class KeySig;
+
 class LayoutBreak;
 class LedgerLine;
 class LetRing;
 class LineSegment;
 class Location;
 class Lyrics;
+
 class Marker;
 class MeasureBase;
 class MeasureNumber;
 class MeasureNumberBase;
 class MeasureRepeat;
 class MMRest;
+
 class Note;
+class NoteEvent;
 class NoteDot;
+
 class Ottava;
 class PalmMute;
 class Part;
@@ -114,11 +129,17 @@ class Stem;
 class StemSlash;
 class System;
 class SystemDivider;
+class Symbol;
+class BSymbol;
+class FSymbol;
+
 class Text;
 class TextLine;
 class TextLineBase;
 class Tie;
 class TimeSig;
+class TimeSigMap;
+class SigEvent;
 class Tremolo;
 class TremoloBar;
 class Trill;
@@ -153,6 +174,7 @@ public:
     static void read(Arpeggio* a, XmlReader& xml, ReadContext& ctx);
     static void read(Articulation* a, XmlReader& xml, ReadContext& ctx);
     static void read(Audio* a, XmlReader& xml, ReadContext& ctx);
+
     static void read(BagpipeEmbellishment* b, XmlReader& xml, ReadContext& ctx);
     static void read(BarLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(Beam* b, XmlReader& xml, ReadContext& ctx);
@@ -164,36 +186,46 @@ public:
     static void read(TBox* b, XmlReader& xml, ReadContext& ctx);
     static void read(Bracket* b, XmlReader& xml, ReadContext& ctx);
     static void read(Breath* b, XmlReader& xml, ReadContext& ctx);
-    static void read(Symbol* sym, XmlReader& xml, ReadContext& ctx);
-    static void read(FSymbol* sym, XmlReader& xml, ReadContext& ctx);
+
     static void read(Chord* ch, XmlReader& xml, ReadContext& ctx);
     static void read(ChordLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(Clef* c, XmlReader& xml, ReadContext& ctx);
+
+    static void read(Excerpt* item, XmlReader& xml, ReadContext& ctx);
+
     static void read(Fermata* f, XmlReader& xml, ReadContext& ctx);
     static void read(FiguredBass* b, XmlReader& xml, ReadContext& ctx);
     static void read(FiguredBassItem* i, XmlReader& xml, ReadContext& ctx);
     static void read(Fingering* f, XmlReader& xml, ReadContext& ctx);
     static void read(FretDiagram* d, XmlReader& xml, ReadContext& ctx);
+
     static void read(Glissando* g, XmlReader& xml, ReadContext& ctx);
     static void read(GradualTempoChange* c, XmlReader& xml, ReadContext& ctx);
     static void read(Groups* g, XmlReader& xml, ReadContext& ctx);
     static void read(Hairpin* h, XmlReader& xml, ReadContext& ctx);
     static void read(Hook* h, XmlReader& xml, ReadContext& ctx);
     static void read(InstrumentChange* c, XmlReader& xml, ReadContext& ctx);
+
+    static void read(KeyList* item, XmlReader& xml, ReadContext& ctx);
     static void read(KeySig* s, XmlReader& xml, ReadContext& ctx);
+
     static void read(LayoutBreak* b, XmlReader& xml, ReadContext& ctx);
     static void read(LedgerLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(LetRing* r, XmlReader& xml, ReadContext& ctx);
     static void read(LineSegment* l, XmlReader& xml, ReadContext& ctx);
     static void read(Location* l, XmlReader& xml, ReadContext& ctx);
     static void read(Lyrics* l, XmlReader& xml, ReadContext& ctx);
+
     static void read(Marker* m, XmlReader& xml, ReadContext& ctx);
     static void read(MeasureNumber* n, XmlReader& xml, ReadContext& ctx);
     static void read(MeasureNumberBase* b, XmlReader& xml, ReadContext& ctx);
     static void read(MeasureRepeat* r, XmlReader& xml, ReadContext& ctx);
     static void read(MMRest* r, XmlReader& xml, ReadContext& ctx);
+
     static void read(Note* n, XmlReader& xml, ReadContext& ctx);
+    static void read(NoteEvent* item, XmlReader& xml, ReadContext& ctx);
     static void read(NoteDot* d, XmlReader& xml, ReadContext& ctx);
+
     static void read(Ottava* o, XmlReader& xml, ReadContext& ctx);
     static void read(PalmMute* p, XmlReader& xml, ReadContext& ctx);
     static void read(Part* p, XmlReader& xml, ReadContext& ctx);
@@ -217,11 +249,15 @@ public:
     static void read(StemSlash* s, XmlReader& xml, ReadContext& ctx);
     static void read(System* s, XmlReader& xml, ReadContext& ctx);
     static void read(SystemDivider* d, XmlReader& xml, ReadContext& ctx);
+    static void read(Symbol* sym, XmlReader& xml, ReadContext& ctx);
+    static void read(FSymbol* sym, XmlReader& xml, ReadContext& ctx);
+
     static void read(Text* t, XmlReader& xml, ReadContext& ctx);
     static void read(TextLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(TextLineBase* b, XmlReader& xml, ReadContext& ctx);
     static void read(Tie* t, XmlReader& xml, ReadContext& ctx);
     static void read(TimeSig* s, XmlReader& xml, ReadContext& ctx);
+    static void read(TimeSigMap* item, XmlReader& xml, ReadContext& ctx);
     static void read(Tremolo* t, XmlReader& xml, ReadContext& ctx);
     static void read(TremoloBar* b, XmlReader& xml, ReadContext& ctx);
     static void read(Trill* t, XmlReader& xml, ReadContext& ctx);
@@ -255,6 +291,8 @@ public:
     static bool readProperties(Note* n, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Ottava* o, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Part* p, XmlReader& xml, ReadContext& ctx);
+
+    static int read(SigEvent* item, XmlReader& xml, int fileDivision);
     static bool readProperties(SLine* l, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Slur* s, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(SlurTie* s, XmlReader& xml, ReadContext& ctx);

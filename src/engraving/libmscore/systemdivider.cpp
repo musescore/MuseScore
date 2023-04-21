@@ -21,7 +21,6 @@
  */
 
 #include "systemdivider.h"
-#include "rw/xml.h"
 
 #include "types/symnames.h"
 
@@ -95,16 +94,5 @@ mu::RectF SystemDivider::drag(EditData& ed)
 {
     setGenerated(false);
     return Symbol::drag(ed);
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void SystemDivider::write(XmlWriter& xml) const
-{
-    xml.startElement(this, { { "type", (dividerType() == SystemDivider::Type::LEFT ? "left" : "right") } });
-    writeProperties(xml);
-    xml.endElement();
 }
 } // namespace mu::engraving

@@ -106,8 +106,6 @@ public:
     void setTick(unsigned);
     void setFrame(unsigned);
 
-    void write(XmlWriter&, const char*) const;
-    void read(XmlReader&);
     bool valid() const { return _valid && tempo && sig; }
     void setInvalid() { _valid = false; }
 };
@@ -129,8 +127,6 @@ public:
     PosLen(const PosLen&);
     void dump(int n = 0) const;
 
-    void write(XmlWriter&, const char*) const;
-    void read(XmlReader&);
     void setLenTick(unsigned);
     void setLenFrame(unsigned);
     unsigned lenTick() const;

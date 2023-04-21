@@ -22,7 +22,7 @@
 
 #include "durationelement.h"
 
-#include "rw/xml.h"
+#include "rw/400/twrite.h"
 #include "realfn.h"
 
 #include "property.h"
@@ -134,7 +134,7 @@ void DurationElement::writeTupletStart(XmlWriter& xml) const
 {
     if (tuplet() && tuplet()->elements().front() == this) {
         tuplet()->writeTupletStart(xml);               // recursion
-        tuplet()->write(xml);
+        rw400::TWrite::write(tuplet(), xml, *xml.context());
     }
 }
 

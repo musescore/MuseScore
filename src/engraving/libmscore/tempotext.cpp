@@ -26,7 +26,6 @@
 
 #include "containers.h"
 #include "translation.h"
-#include "rw/xml.h"
 
 #include "types/typesconv.h"
 #include "types/constants.h"
@@ -68,21 +67,6 @@ TempoText::TempoText(Segment* parent)
     _followText = false;
     _relative   = 1.0;
     _isRelative = false;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void TempoText::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    xml.tag("tempo", TConv::toXml(_tempo));
-    if (_followText) {
-        xml.tag("followText", _followText);
-    }
-    TextBase::writeProperties(xml);
-    xml.endElement();
 }
 
 double TempoText::tempoBpm() const

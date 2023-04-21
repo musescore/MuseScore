@@ -21,7 +21,6 @@
  */
 
 #include "stafftypechange.h"
-#include "rw/xml.h"
 
 #include "score.h"
 #include "measure.h"
@@ -61,20 +60,6 @@ StaffTypeChange::~StaffTypeChange()
     if (m_staffType && m_ownsStaffType) {
         delete m_staffType;
     }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void StaffTypeChange::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    if (m_staffType) {
-        m_staffType->write(xml);
-    }
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
 }
 
 void StaffTypeChange::setStaffType(StaffType* st, bool owned)

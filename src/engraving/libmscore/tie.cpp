@@ -26,7 +26,6 @@
 #include "draw/types/brush.h"
 #include "draw/types/pen.h"
 #include "draw/types/transform.h"
-#include "rw/xml.h"
 
 #include "accidental.h"
 #include "chord.h"
@@ -1005,17 +1004,6 @@ Tie::Tie(EngravingItem* parent)
     : SlurTie(ElementType::TIE, parent)
 {
     setAnchor(Anchor::NOTE);
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Tie::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    SlurTie::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -22,8 +22,6 @@
 
 #include "marker.h"
 
-#include "rw/xml.h"
-
 #include "types/typesconv.h"
 
 #include "measure.h"
@@ -160,18 +158,6 @@ void Marker::layout()
     }
 
     autoplaceMeasureElement();
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Marker::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    TextBase::writeProperties(xml);
-    xml.tag("label", _label);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

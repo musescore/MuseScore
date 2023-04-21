@@ -42,6 +42,7 @@ class System;
 class Fermata final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Fermata)
+    DECLARE_CLASSOF(ElementType::FERMATA)
 
     SymId _symId;
     double _timeStretch = -1.0;
@@ -69,8 +70,6 @@ public:
     TranslatableString typeUserName() const override;
 
     void layout() override;
-
-    void write(XmlWriter& xml) const override;
 
     std::vector<mu::LineF> dragAnchorLines() const override;
 

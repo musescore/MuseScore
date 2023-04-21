@@ -54,6 +54,8 @@ public:
 class WhammyBar final : public ChordTextLineBase
 {
     OBJECT_ALLOCATOR(engraving, WhammyBar)
+    DECLARE_CLASSOF(ElementType::WHAMMY_BAR)
+
 public:
     WhammyBar(EngravingItem* parent);
 

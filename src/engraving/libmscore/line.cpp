@@ -26,8 +26,6 @@
 
 #include "containers.h"
 
-#include "rw/xml.h"
-
 #include "barline.h"
 #include "chord.h"
 #include "lyrics.h"
@@ -1276,76 +1274,6 @@ void SLine::layout()
 }
 
 //---------------------------------------------------------
-//   writeProperties
-//    write properties different from prototype
-//---------------------------------------------------------
-
-void SLine::writeProperties(XmlWriter& xml) const
-{
-    if (!endElement()) {
-        ((Spanner*)this)->computeEndElement();                    // HACK
-        if (!endElement()) {
-            xml.tagFraction("ticks", ticks());
-        }
-    }
-    Spanner::writeProperties(xml);
-    if (_diagonal) {
-        xml.tag("diagonal", _diagonal);
-    }
-    writeProperty(xml, Pid::LINE_WIDTH);
-    writeProperty(xml, Pid::LINE_STYLE);
-    writeProperty(xml, Pid::COLOR);
-    writeProperty(xml, Pid::ANCHOR);
-    writeProperty(xml, Pid::DASH_LINE_LEN);
-    writeProperty(xml, Pid::DASH_GAP_LEN);
-    if (score()->isPaletteScore()) {
-        // when used as icon
-        if (!spannerSegments().empty()) {
-            const LineSegment* s = frontSegment();
-            xml.tag("length", s->pos2().x());
-        } else {
-            xml.tag("length", spatium() * 4);
-        }
-        return;
-    }
-    //
-    // check if user has modified the default layout
-    //
-    bool modified = false;
-    for (const SpannerSegment* seg : spannerSegments()) {
-        if (!seg->autoplace() || !seg->visible()
-            || (seg->propertyFlags(Pid::MIN_DISTANCE) == PropertyFlags::UNSTYLED
-                || seg->getProperty(Pid::MIN_DISTANCE) != seg->propertyDefault(Pid::MIN_DISTANCE))
-            || (!seg->isStyled(Pid::OFFSET) && (!seg->offset().isNull() || !seg->userOff2().isNull()))) {
-            modified = true;
-            break;
-        }
-    }
-    if (!modified) {
-        return;
-    }
-
-    //
-    // write user modified layout and other segment properties
-    //
-    double _spatium = score()->spatium();
-    for (const SpannerSegment* seg : spannerSegments()) {
-        xml.startElement("Segment", seg);
-        xml.tag("subtype", int(seg->spannerSegmentType()));
-        // TODO:
-        // NOSTYLE offset written in EngravingItem::writeProperties,
-        // so we probably don't need to duplicate it here
-        // see https://musescore.org/en/node/286848
-        //if (seg->propertyFlags(Pid::OFFSET) & PropertyFlags::UNSTYLED)
-        xml.tagPoint("offset", seg->offset() / _spatium);
-        xml.tagPoint("off2", seg->userOff2() / _spatium);
-        seg->writeProperty(xml, Pid::MIN_DISTANCE);
-        seg->EngravingItem::writeProperties(xml);
-        xml.endElement();
-    }
-}
-
-//---------------------------------------------------------
 //   setLen
 //    used to create an element suitable for palette
 //---------------------------------------------------------
@@ -1373,17 +1301,6 @@ const mu::RectF& SLine::bbox() const
         setbbox(segmentAt(0)->bbox());
     }
     return EngravingItem::bbox();
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void SLine::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    SLine::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

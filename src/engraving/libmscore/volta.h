@@ -57,6 +57,7 @@ public:
 class Volta final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, Volta)
+    DECLARE_CLASSOF(ElementType::VOLTA)
 
     std::vector<int> _endings;
 
@@ -72,8 +73,6 @@ public:
     Volta* clone() const override { return new Volta(*this); }
 
     LineSegment* createLineSegment(System* parent) override;
-
-    void write(XmlWriter&) const override;
 
     SpannerSegment* layoutSystem(System* system) override;
 

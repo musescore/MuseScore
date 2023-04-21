@@ -30,7 +30,6 @@
 #include "realfn.h"
 
 #include "draw/types/brush.h"
-#include "rw/xml.h"
 
 #include "actionicon.h"
 #include "chord.h"
@@ -1271,47 +1270,6 @@ void Beam::spatiumChanged(double oldValue, double newValue)
             f->py2[idx] = f->py2[idx] * diff;
         }
     }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Beam::write(XmlWriter& xml) const
-{
-    if (_elements.empty()) {
-        return;
-    }
-    xml.startElement(this);
-    EngravingItem::writeProperties(xml);
-
-    writeProperty(xml, Pid::STEM_DIRECTION);
-    writeProperty(xml, Pid::BEAM_NO_SLOPE);
-    writeProperty(xml, Pid::GROW_LEFT);
-    writeProperty(xml, Pid::GROW_RIGHT);
-
-    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-    if (_userModified[idx]) {
-        double _spatium = spatium();
-        for (BeamFragment* f : fragments) {
-            xml.startElement("Fragment");
-            xml.tag("y1", f->py1[idx] / _spatium);
-            xml.tag("y2", f->py2[idx] / _spatium);
-            xml.endElement();
-        }
-    }
-
-    // this info is used for regression testing
-    // l1/l2 is the beam position of the layout engine
-    if (MScore::testMode) {
-        double spatium8 = spatium() * .125;
-        for (BeamFragment* f : fragments) {
-            xml.tag("l1", int(lrint(f->py1[idx] / spatium8)));
-            xml.tag("l2", int(lrint(f->py2[idx] / spatium8)));
-        }
-    }
-
-    xml.endElement();
 }
 
 //---------------------------------------------------------

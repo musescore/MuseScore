@@ -33,6 +33,7 @@ namespace mu::engraving {
 class SystemText : public StaffTextBase
 {
     OBJECT_ALLOCATOR(engraving, SystemText)
+    DECLARE_CLASSOF(ElementType::SYSTEM_TEXT)
 
     void layout() override;
 

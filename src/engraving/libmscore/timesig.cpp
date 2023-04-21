@@ -22,8 +22,6 @@
 
 #include "timesig.h"
 
-#include "rw/xml.h"
-
 #include "style/style.h"
 #include "translation.h"
 #include "iengravingfont.h"
@@ -141,33 +139,6 @@ void TimeSig::setDenominatorString(const String& a)
     if (_timeSigType == TimeSigType::NORMAL) {
         _denominatorString = a;
     }
-}
-
-//---------------------------------------------------------
-//   write TimeSig
-//---------------------------------------------------------
-
-void TimeSig::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    writeProperty(xml, Pid::TIMESIG_TYPE);
-    EngravingItem::writeProperties(xml);
-
-    xml.tag("sigN",  _sig.numerator());
-    xml.tag("sigD",  _sig.denominator());
-    if (stretch() != Fraction(1, 1)) {
-        xml.tag("stretchN", stretch().numerator());
-        xml.tag("stretchD", stretch().denominator());
-    }
-    writeProperty(xml, Pid::NUMERATOR_STRING);
-    writeProperty(xml, Pid::DENOMINATOR_STRING);
-    if (!_groups.empty()) {
-        _groups.write(xml);
-    }
-    writeProperty(xml, Pid::SHOW_COURTESY);
-    writeProperty(xml, Pid::SCALE);
-
-    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -1439,7 +1439,7 @@ void GPConverter::addInstrumentChanges()
                 instrName = soundAutomation.second.value;
             } else {
                 midiProgramm = it->second.programm;
-                instrName = it->second.name;
+                instrName = it->second.label;
             }
 
             if (bar == 0 && pos == 0 && midiProgramm == track.second->programm()) {

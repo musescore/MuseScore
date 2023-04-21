@@ -25,7 +25,6 @@
 #include <cmath>
 #include <QMimeData>
 
-#include "engraving/rw/xml.h"
 #include "engraving/rw/400/tread.h"
 
 #include "libmscore/masterscore.h"

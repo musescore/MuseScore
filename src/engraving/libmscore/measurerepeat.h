@@ -33,6 +33,8 @@ class Segment;
 class MeasureRepeat final : public Rest
 {
     OBJECT_ALLOCATOR(engraving, MeasureRepeat)
+    DECLARE_CLASSOF(ElementType::MEASURE_REPEAT)
+
 public:
     MeasureRepeat(Segment* parent);
     MeasureRepeat(const MeasureRepeat&) = default;
@@ -57,8 +59,6 @@ public:
     void layout() override;
     Fraction ticks() const override;
     Fraction actualTicks() const { return Rest::ticks(); }
-
-    void write(XmlWriter& xml) const override;
 
     PropertyValue propertyDefault(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;

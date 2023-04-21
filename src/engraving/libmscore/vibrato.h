@@ -66,6 +66,7 @@ public:
 class Vibrato final : public SLine
 {
     OBJECT_ALLOCATOR(engraving, Vibrato)
+    DECLARE_CLASSOF(ElementType::VIBRATO)
 
     Sid getPropertyStyle(Pid) const override;
 
@@ -81,8 +82,6 @@ public:
 
     void layout() override;
     LineSegment* createLineSegment(System* parent) override;
-
-    void write(XmlWriter&) const override;
 
     void undoSetVibratoType(VibratoType val);
     void setVibratoType(VibratoType tt) { _vibratoType = tt; }

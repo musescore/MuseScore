@@ -29,7 +29,6 @@
 #include "containers.h"
 
 #include "style/style.h"
-#include "rw/xml.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -1213,82 +1212,6 @@ Note* Chord::selectedNote() const
         }
     }
     return note;
-}
-
-//---------------------------------------------------------
-//   Chord::write
-//---------------------------------------------------------
-
-void Chord::write(XmlWriter& xml) const
-{
-    for (Chord* c : _graceNotes) {
-        c->write(xml);
-    }
-    writeBeam(xml);
-    xml.startElement(this);
-    ChordRest::writeProperties(xml);
-    for (const Articulation* a : _articulations) {
-        a->write(xml);
-    }
-    switch (_noteType) {
-    case NoteType::NORMAL:
-        break;
-    case NoteType::ACCIACCATURA:
-        xml.tag("acciaccatura");
-        break;
-    case NoteType::APPOGGIATURA:
-        xml.tag("appoggiatura");
-        break;
-    case NoteType::GRACE4:
-        xml.tag("grace4");
-        break;
-    case NoteType::GRACE16:
-        xml.tag("grace16");
-        break;
-    case NoteType::GRACE32:
-        xml.tag("grace32");
-        break;
-    case NoteType::GRACE8_AFTER:
-        xml.tag("grace8after");
-        break;
-    case NoteType::GRACE16_AFTER:
-        xml.tag("grace16after");
-        break;
-    case NoteType::GRACE32_AFTER:
-        xml.tag("grace32after");
-        break;
-    default:
-        break;
-    }
-
-    if (_noStem) {
-        xml.tag("noStem", _noStem);
-    } else if (_stem && (_stem->isUserModified() || (_stem->userLength() != 0.0))) {
-        _stem->write(xml);
-    }
-    if (_hook && _hook->isUserModified()) {
-        _hook->write(xml);
-    }
-    if (_stemSlash && _stemSlash->isUserModified()) {
-        _stemSlash->write(xml);
-    }
-    writeProperty(xml, Pid::STEM_DIRECTION);
-    for (Note* n : _notes) {
-        n->write(xml);
-    }
-    if (_arpeggio) {
-        _arpeggio->write(xml);
-    }
-    if (_tremolo && tremoloChordType() != TremoloChordType::TremoloSecondNote) {
-        _tremolo->write(xml);
-    }
-    for (EngravingItem* e : el()) {
-        if (e->isChordLine() && toChordLine(e)->note()) { // this is now written by Note
-            continue;
-        }
-        e->write(xml);
-    }
-    xml.endElement();
 }
 
 //---------------------------------------------------------

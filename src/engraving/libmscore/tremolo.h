@@ -46,6 +46,7 @@ enum class TremoloStyle : signed char {
 class Tremolo final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Tremolo)
+    DECLARE_CLASSOF(ElementType::TREMOLO)
 
     TremoloType _tremoloType { TremoloType::R8 };
     Chord* _chord1 { nullptr };
@@ -110,7 +111,6 @@ public:
     void draw(mu::draw::Painter*) const override;
     void layout() override;
     void layout2();
-    void write(XmlWriter& xml) const override;
 
     Chord* chord1() const { return _chord1; }
     Chord* chord2() const { return _chord2; }

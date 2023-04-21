@@ -62,6 +62,7 @@ struct BEDrawingDataY;
 class BagpipeEmbellishment final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, BagpipeEmbellishment)
+    DECLARE_CLASSOF(ElementType::BAGPIPE_EMBELLISHMENT)
 
     EmbellishmentType _embelType;
     void drawGraceNote(mu::draw::Painter*, const BEDrawingDataX&, const BEDrawingDataY&, SymId, const double x, const bool drawFlag) const;
@@ -75,7 +76,7 @@ public:
     EmbellishmentType embelType() const { return _embelType; }
     void setEmbelType(EmbellishmentType val) { _embelType = val; }
     double mag() const override;
-    void write(XmlWriter&) const override;
+
     void layout() override;
     void draw(mu::draw::Painter*) const override;
     static BagpipeNoteInfo BagpipeNoteInfoList[];

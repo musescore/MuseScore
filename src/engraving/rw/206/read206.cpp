@@ -30,7 +30,6 @@
 
 #include "iengravingfont.h"
 
-#include "rw/xml.h"
 #include "rw/compat/compatutils.h"
 
 #include "style/style.h"
@@ -981,15 +980,15 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
     } else if (tag == "small") {
         note->setSmall(e.readInt());
     } else if (tag == "mirror") {
-        note->readProperty(e, Pid::MIRROR_HEAD);
+        rw400::TRead::readProperty(note, e, ctx, Pid::MIRROR_HEAD);
     } else if (tag == "dotPosition") {
-        note->readProperty(e, Pid::DOT_POSITION);
+        rw400::TRead::readProperty(note, e, ctx, Pid::DOT_POSITION);
     } else if (tag == "fixed") {
         note->setFixed(e.readBool());
     } else if (tag == "fixedLine") {
         note->setFixedLine(e.readInt());
     } else if (tag == "head") {
-        note->readProperty(e, Pid::HEAD_GROUP);
+        rw400::TRead::readProperty(note, e, ctx, Pid::HEAD_GROUP);
     } else if (tag == "velocity") {
         note->setUserVelocity(e.readInt());
     } else if (tag == "play") {
@@ -1003,9 +1002,9 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
     } else if (tag == "ghost") {
         note->setGhost(e.readInt());
     } else if (tag == "headType") {
-        note->readProperty(e, Pid::HEAD_TYPE);
+        rw400::TRead::readProperty(note, e, ctx, Pid::HEAD_TYPE);
     } else if (tag == "veloType") {
-        note->readProperty(e, Pid::VELO_TYPE);
+        rw400::TRead::readProperty(note, e, ctx, Pid::VELO_TYPE);
     } else if (tag == "line") {
         note->setLine(e.readInt());
     } else if (tag == "Fingering") {
@@ -1042,7 +1041,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
             const AsciiStringView etag(e.name());
             if (etag == "Event") {
                 NoteEvent ne;
-                ne.read(e);
+                rw400::TRead::read(&ne, e, ctx);
                 note->playEvents().push_back(ne);
             } else {
                 e.unknown();
@@ -1213,7 +1212,7 @@ static bool readTextProperties206(XmlReader& e, ReadContext& ctx, TextBase* t)
         t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
         t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "frameRound") {
-        t->readProperty(e, Pid::FRAME_ROUND);
+        rw400::TRead::readProperty(t, e, ctx, Pid::FRAME_ROUND);
     } else if (tag == "circle") {
         if (e.readBool()) {
             t->setFrameType(FrameType::CIRCLE);
@@ -1224,13 +1223,13 @@ static bool readTextProperties206(XmlReader& e, ReadContext& ctx, TextBase* t)
         }
         t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "paddingWidthS") {
-        t->readProperty(e, Pid::FRAME_PADDING);
+        rw400::TRead::readProperty(t, e, ctx, Pid::FRAME_PADDING);
     } else if (tag == "frameWidthS") {
-        t->readProperty(e, Pid::FRAME_WIDTH);
+        rw400::TRead::readProperty(t, e, ctx, Pid::FRAME_WIDTH);
     } else if (tag == "frameColor") {
-        t->readProperty(e, Pid::FRAME_FG_COLOR);
+        rw400::TRead::readProperty(t, e, ctx, Pid::FRAME_FG_COLOR);
     } else if (tag == "backgroundColor") {
-        t->readProperty(e, Pid::FRAME_BG_COLOR);
+        rw400::TRead::readProperty(t, e, ctx, Pid::FRAME_BG_COLOR);
     } else if (tag == "halign") {
         Align align = t->align();
         align.horizontal = TConv::fromXml(e.readAsciiText(), AlignH::LEFT);
@@ -1242,7 +1241,7 @@ static bool readTextProperties206(XmlReader& e, ReadContext& ctx, TextBase* t)
         t->setAlign(align);
         t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
     } else if (tag == "pos") {
-        t->readProperty(e, Pid::OFFSET);
+        rw400::TRead::readProperty(t, e, ctx, Pid::OFFSET);
         if (t->align() == AlignV::TOP) {
             t->ryoffset() += .5 * ctx.spatium();           // HACK: bbox is different in 2.x
         }
@@ -1517,7 +1516,7 @@ bool Read206::readTupletProperties206(XmlReader& e, ReadContext& ctx, Tuplet* de
 {
     const AsciiStringView tag(e.name());
 
-    if (de->readStyledProperty(e, tag)) {
+    if (rw400::TRead::readStyledProperty(de, tag, e, ctx)) {
     } else if (tag == "normalNotes") {
         de->setProperty(Pid::NORMAL_NOTES, e.readInt());
     } else if (tag == "actualNotes") {
@@ -1774,7 +1773,7 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
         StemSlash* ss = Factory::createStemSlash(ch);
         rw400::TRead::read(ss, e, ctx);
         ch->add(ss);
-    } else if (ch->readProperty(tag, e, Pid::STEM_DIRECTION)) {
+    } else if (rw400::TRead::readProperty(ch, tag, e, ctx, Pid::STEM_DIRECTION)) {
     } else if (tag == "noStem") {
         ch->setNoStem(e.readInt());
     } else if (tag == "Arpeggio") {
@@ -2130,7 +2129,7 @@ void Read206::readTrill206(XmlReader& e, Trill* t)
             _accidental->setParent(t);
             t->setAccidental(_accidental);
         } else if (tag == "ornamentStyle") {
-            t->readProperty(e, Pid::ORNAMENT_STYLE);
+            rw400::TRead::readProperty(t, e, *e.context(), Pid::ORNAMENT_STYLE);
         } else if (tag == "play") {
             t->setPlayArticulation(e.readBool());
         } else if (!TRead::readProperties(static_cast<SLine*>(t), e, *e.context())) {
@@ -2338,7 +2337,7 @@ static bool readSlurTieProperties(XmlReader& e, ReadContext& ctx, SlurTie* st)
 {
     const AsciiStringView tag(e.name());
 
-    if (st->readProperty(tag, e, Pid::SLUR_DIRECTION)) {
+    if (rw400::TRead::readProperty(st, tag, e, ctx, Pid::SLUR_DIRECTION)) {
     } else if (tag == "lineType") {
         st->setStyleType(static_cast<SlurStyleType>(e.readInt()));
     } else if (tag == "SlurSegment") {
@@ -2978,12 +2977,12 @@ static void readBox(Box* b, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "HBox") {
-            HBox* hb = Factory::createHBox(b->system());
+            HBox* hb = Factory::createHBox(b->score()->dummy()->system());
             rw400::TRead::read(hb, e, ctx);
             b->add(hb);
             keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (tag == "VBox") {
-            VBox* vb = Factory::createVBox(b->system());
+            VBox* vb = Factory::createVBox(b->score()->dummy()->system());
             rw400::TRead::read(vb, e, ctx);
             b->add(vb);
             keepMargins = true;           // in old file, box nesting used outer box margins
@@ -3189,12 +3188,12 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         if (tag == "Staff") {
             readStaffContent206(score, e, ctx);
         } else if (tag == "siglist") {
-            score->sigmap()->read(e, score->fileDivision());
+            rw400::TRead::read(score->sigmap(), e, ctx);
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
             score->setAudio(new Audio);
-            score->audio()->read(e);
+            rw400::TRead::read(score->audio(), e, ctx);
         } else if (tag == "showOmr") {
             e.skipCurrentElement();
         } else if (tag == "playMode") {
@@ -3297,7 +3296,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
                 if (score->isMaster()) {
                     MasterScore* mScore = static_cast<MasterScore*>(score);
                     Excerpt* ex = new Excerpt(mScore);
-                    ex->read(e);
+                    rw400::TRead::read(ex, e, ctx);
                     mScore->excerpts().push_back(ex);
                 } else {
                     LOGD("read206: readScore(): part cannot have parts");

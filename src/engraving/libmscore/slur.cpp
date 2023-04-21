@@ -26,7 +26,7 @@
 #include "draw/types/transform.h"
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
-#include "rw/xml.h"
+
 #include "iengravingfont.h"
 
 #include "articulation.h"
@@ -1467,27 +1467,6 @@ int Slur::calcStemArrangement(EngravingItem* start, EngravingItem* end)
 {
     return (start && start->isChord() && toChord(start)->stem() && toChord(start)->stem()->up() ? 2 : 0)
            + (end && end->isChord() && toChord(end)->stem() && toChord(end)->stem()->up() ? 4 : 0);
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Slur::write(XmlWriter& xml) const
-{
-    if (broken()) {
-        LOGD("broken slur not written");
-        return;
-    }
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    if (xml.context()->clipboardmode()) {
-        xml.tag("stemArr", calcStemArrangement(startElement(), endElement()));
-    }
-    SlurTie::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

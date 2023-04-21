@@ -36,7 +36,6 @@
 #include "ptrutils.h"
 #include "containers.h"
 
-#include "engraving/rw/xml.h"
 #include "draw/types/pen.h"
 #include "draw/types/painterpath.h"
 #include "engraving/internal/qmimedataadapter.h"
@@ -3697,6 +3696,7 @@ void NotationInteraction::deleteSelection()
     }
 
     apply();
+    resetHitElementContext();
 }
 
 void NotationInteraction::flipSelection()

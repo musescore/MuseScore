@@ -95,6 +95,7 @@ std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, 
 class Articulation final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Articulation)
+    DECLARE_CLASSOF(ElementType::ARTICULATION)
 
 private:
 
@@ -151,8 +152,6 @@ public:
 
     void layout() override;
     bool layoutCloseToNote() const;
-
-    void write(XmlWriter& xml) const override;
 
     std::vector<mu::LineF> dragAnchorLines() const override;
 

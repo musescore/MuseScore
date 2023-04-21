@@ -47,6 +47,7 @@ enum class BendType {
 class Bend : public EngravingItem // TODO: bring back "final" keyword
 {
     OBJECT_ALLOCATOR(engraving, Bend)
+    DECLARE_CLASSOF(ElementType::BEND)
 
     M_PROPERTY(String,     fontFace,  setFontFace)
     M_PROPERTY(double,      fontSize,  setFontSize)
@@ -58,7 +59,7 @@ public:
 
     void layout() override;
     void draw(mu::draw::Painter*) const override;
-    void write(XmlWriter&) const override;
+
     PitchValues& points() { return m_points; }
     const PitchValues& points() const { return m_points; }
     void addPoint(const PitchValue& pv) { m_points.push_back(pv); }

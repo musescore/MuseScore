@@ -35,6 +35,7 @@ class StaffType;
 class StaffTypeChange final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, StaffTypeChange)
+    DECLARE_CLASSOF(ElementType::STAFFTYPE_CHANGE)
 
     StaffType* m_staffType { nullptr };
     bool m_ownsStaffType = false;
@@ -52,8 +53,6 @@ public:
     ~StaffTypeChange() override;
 
     StaffTypeChange* clone() const override { return new StaffTypeChange(*this); }
-
-    void write(XmlWriter&) const override;
 
     const StaffType* staffType() const { return m_staffType; }
     void setStaffType(StaffType* st, bool owned);

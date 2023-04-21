@@ -156,8 +156,6 @@ private:
     int               parsePrefixSuffix(String& str, bool bPrefix);
 
     void              setDisplayText(const String& s) { _displayText = s; }
-    // read / write MusicXML support
-    String            Modifier2MusicXML(FiguredBassItem::Modifier prefix) const;
 
 public:
 
@@ -165,17 +163,12 @@ public:
 
     FiguredBassItem& operator=(const FiguredBassItem&) = delete;
 
-    FiguredBassItem::Modifier MusicXML2Modifier(const String prefix) const;
-
     // standard re-implemented virtual functions
     FiguredBassItem* clone() const override { return new FiguredBassItem(*this); }
 
     void              draw(mu::draw::Painter* painter) const override;
     void              layout() override;
-    void              write(XmlWriter& xml) const override;
 
-    // read / write MusicXML
-    void              writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const;
     bool              startsWithParenthesis() const;
 
     // specific API
@@ -247,6 +240,7 @@ struct FiguredBassFont {
 class FiguredBass final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, FiguredBass)
+    DECLARE_CLASSOF(ElementType::FIGURED_BASS)
 
     std::vector<FiguredBassItem*> m_items;        // the individual lines of the F.B.
     std::vector<double> _lineLengths;                // lengths of duration indicator lines (in raster units)
@@ -288,10 +282,6 @@ public:
     void startEdit(EditData&) override;
     bool isEditAllowed(EditData&) const override;
     void endEdit(EditData&) override;
-    void write(XmlWriter& xml) const override;
-
-    // read / write MusicXML
-    void writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;
 
     double lineLength(size_t idx) const
     {

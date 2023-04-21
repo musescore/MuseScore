@@ -23,7 +23,6 @@
 #include "instrchange.h"
 
 #include "translation.h"
-#include "rw/xml.h"
 
 #include "keysig.h"
 #include "measure.h"
@@ -191,21 +190,6 @@ std::vector<Clef*> InstrumentChange::clefs() const
         }
     }
     return clefs;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void InstrumentChange::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    _instrument->write(xml, part());
-    if (_init) {
-        xml.tag("init", _init);
-    }
-    TextBase::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

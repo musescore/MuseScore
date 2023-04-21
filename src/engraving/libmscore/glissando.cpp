@@ -37,7 +37,6 @@ NICE-TO-HAVE TODO:
 #include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
 #include "style/style.h"
-#include "rw/xml.h"
 
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -482,31 +481,6 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
         }
     }
     return true;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Glissando::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    if (_showText && !_text.isEmpty()) {
-        xml.tag("text", _text);
-    }
-
-    for (auto id : { Pid::GLISS_TYPE, Pid::PLAY, Pid::GLISS_STYLE, Pid::GLISS_EASEIN, Pid::GLISS_EASEOUT }) {
-        writeProperty(xml, id);
-    }
-    for (const StyledProperty& spp : *styledProperties()) {
-        writeProperty(xml, spp.pid);
-    }
-
-    SLine::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

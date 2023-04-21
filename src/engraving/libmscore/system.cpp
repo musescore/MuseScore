@@ -29,7 +29,6 @@
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
-#include "rw/xml.h"
 
 #include "layout/layoutcontext.h"
 #include "realfn.h"
@@ -1521,22 +1520,6 @@ SysStaff* System::staff(size_t staffIdx) const
     }
 
     return nullptr;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void System::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    if (_systemDividerLeft && _systemDividerLeft->isUserModified()) {
-        _systemDividerLeft->write(xml);
-    }
-    if (_systemDividerRight && _systemDividerRight->isUserModified()) {
-        _systemDividerRight->write(xml);
-    }
-    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -117,9 +117,6 @@ class SigEvent
     int _bar;                 ///< precomputed value
 
 public:
-    int read(XmlReader&, int fileDivision);
-    void write(XmlWriter&, int) const;
-
     constexpr SigEvent()
         : _bar(0) {}                          ///< default SigEvent is invalid
     SigEvent(const Fraction& s, int bar = 0)
@@ -131,8 +128,9 @@ public:
     bool valid() const { return _timesig.isValid(); }
     String print() const { return _timesig.toString(); }
     TimeSigFrac timesig() const { return _timesig; }
+    void setTimesig(const TimeSigFrac& f) { _timesig = f; }
     TimeSigFrac nominal() const { return _nominal; }
-    void setNominal(const Fraction& f) { _nominal = f; }
+    void setNominal(const TimeSigFrac& f) { _nominal = f; }
     int bar() const { return _bar; }
     void setBar(int val) { _bar = val; }
 };
@@ -145,8 +143,6 @@ class TimeSigMap : public std::map<int, SigEvent>
 {
     OBJECT_ALLOCATOR(engraving, TimeSigMap)
 
-    void normalize();
-
 public:
     TimeSigMap() {}
 
@@ -157,8 +153,6 @@ public:
 
     void clearRange(int tick1, int tick2);
 
-    void read(XmlReader&, int fileDiv);
-    void write(XmlWriter&) const;
     void dump() const;
 
     const SigEvent& timesig(int tick) const;
@@ -172,6 +166,8 @@ public:
     unsigned raster1(unsigned tick, int raster) const;      // round down
     unsigned raster2(unsigned tick, int raster) const;      // round up
     int rasterStep(unsigned tick, int raster) const;
+
+    void normalize();
 };
 } // namespace mu::engraving
 #endif

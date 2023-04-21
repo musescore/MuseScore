@@ -34,6 +34,7 @@ namespace mu::engraving {
 class Sticking final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, Sticking)
+    DECLARE_CLASSOF(ElementType::STICKING)
 
     PropertyValue propertyDefault(Pid id) const override;
 
@@ -46,7 +47,6 @@ public:
     Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
     void layout() override;
-    void write(XmlWriter& xml) const override;
 
     bool isEditAllowed(EditData&) const override;
 };

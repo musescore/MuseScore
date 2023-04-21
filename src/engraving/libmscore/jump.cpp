@@ -22,8 +22,6 @@
 
 #include "jump.h"
 
-#include "rw/xml.h"
-
 #include "types/typesconv.h"
 
 #include "measure.h"
@@ -123,21 +121,6 @@ void Jump::layout()
 {
     TextBase::layout();
     autoplaceMeasureElement();
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Jump::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    TextBase::writeProperties(xml);
-    xml.tag("jumpTo", _jumpTo);
-    xml.tag("playUntil", _playUntil);
-    xml.tag("continueAt", _continueAt);
-    writeProperty(xml, Pid::PLAY_REPEATS);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

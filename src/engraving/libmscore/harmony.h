@@ -84,6 +84,7 @@ class HDegree;
 class Harmony final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, Harmony)
+    DECLARE_CLASSOF(ElementType::HARMONY)
 
     int _rootTpc;               // root note for chord
     int _baseTpc;               // bass note or chord base; used for "slash" chords
@@ -198,7 +199,6 @@ public:
     HarmonyType harmonyType() const { return _harmonyType; }
     void setHarmonyType(HarmonyType val);
 
-    void write(XmlWriter& xml) const override;
     void afterRead();
     String harmonyName() const;
     void render();

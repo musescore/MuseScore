@@ -22,8 +22,6 @@
 
 #include "ledgerline.h"
 
-#include "rw/xml.h"
-
 #include "chord.h"
 #include "measure.h"
 #include "score.h"
@@ -127,18 +125,5 @@ void LedgerLine::spatiumChanged(double oldValue, double newValue)
     _width = (_width / oldValue) * newValue;
     _len   = (_len / oldValue) * newValue;
     layout();
-}
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void LedgerLine::writeProperties(XmlWriter& xml) const
-{
-    xml.tag("lineWidth", _width / spatium());
-    xml.tag("lineLen", _len / spatium());
-    if (!m_vertical) {
-        xml.tag("vertical", m_vertical);
-    }
 }
 }

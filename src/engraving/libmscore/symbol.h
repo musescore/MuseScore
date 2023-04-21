@@ -46,8 +46,10 @@ class IEngravingFont;
 class Symbol : public BSymbol
 {
     OBJECT_ALLOCATOR(engraving, Symbol)
+    DECLARE_CLASSOF(ElementType::SYMBOL)
 
     INJECT(engraving, IEngravingFontsProvider, engravingFonts)
+
 protected:
     SymId _sym;
     std::shared_ptr<IEngravingFont> _scoreFont = nullptr;
@@ -69,7 +71,7 @@ public:
     String accessibleInfo() const override;
 
     void draw(mu::draw::Painter*) const override;
-    void write(XmlWriter& xml) const override;
+
     void layout() override;
 
     PropertyValue getProperty(Pid) const override;
@@ -87,6 +89,7 @@ public:
 class FSymbol final : public BSymbol
 {
     OBJECT_ALLOCATOR(engraving, FSymbol)
+    DECLARE_CLASSOF(ElementType::FSYMBOL)
 
     mu::draw::Font _font;
     char32_t _code; // character code point (Unicode)
@@ -101,7 +104,7 @@ public:
     String accessibleInfo() const override;
 
     void draw(mu::draw::Painter*) const override;
-    void write(XmlWriter& xml) const override;
+
     void layout() override;
 
     double baseLine() const override { return 0.0; }

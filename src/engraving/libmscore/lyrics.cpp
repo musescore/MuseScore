@@ -22,8 +22,6 @@
 
 #include "lyrics.h"
 
-#include "rw/xml.h"
-
 #include "translation.h"
 #include "types/translatablestring.h"
 
@@ -81,30 +79,6 @@ Lyrics::~Lyrics()
     if (_separator) {
         remove(_separator);
     }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Lyrics::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    writeProperty(xml, Pid::VERSE);
-    if (_syllabic != LyricsSyllabic::SINGLE) {
-        static const char* sl[] = {
-            "single", "begin", "end", "middle"
-        };
-        xml.tag("syllabic", sl[int(_syllabic)]);
-    }
-    xml.tag("ticks", _ticks.ticks(), 0);   // pre-3.1 compatibility: write integer ticks under <ticks> tag
-    writeProperty(xml, Pid::LYRIC_TICKS);
-
-    TextBase::writeProperties(xml);
-    xml.endElement();
 }
 
 TranslatableString Lyrics::subtypeUserName() const

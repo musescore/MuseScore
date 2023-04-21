@@ -24,7 +24,7 @@
 #include "global/defer.h"
 
 #include "iengravingfont.h"
-#include "rw/xml.h"
+
 #include "rw/compat/compatutils.h"
 #include "style/style.h"
 
@@ -63,7 +63,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
             e.skipCurrentElement();
         } else if (tag == "Audio") {
             score->_audio = new Audio;
-            score->_audio->read(e);
+            rw400::TRead::read(score->_audio, e, ctx);
         } else if (tag == "showOmr") {
             e.skipCurrentElement();
         } else if (tag == "playMode") {
@@ -154,7 +154,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
                 if (score->isMaster()) {
                     MasterScore* mScore = static_cast<MasterScore*>(score);
                     Excerpt* ex = new Excerpt(mScore);
-                    ex->read(e);
+                    rw400::TRead::read(ex, e, ctx);
                     mScore->excerpts().push_back(ex);
                 } else {
                     LOGD("Score::read(): part cannot have parts");

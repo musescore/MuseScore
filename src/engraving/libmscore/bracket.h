@@ -39,7 +39,9 @@ enum class BracketType : signed char;
 class Bracket final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Bracket)
+    DECLARE_CLASSOF(ElementType::BRACKET)
 
+private:
     BracketItem* _bi;
     double ay1;
     double h2;
@@ -94,8 +96,6 @@ public:
 
     void draw(mu::draw::Painter*) const override;
     void layout() override;
-
-    void write(XmlWriter& xml) const override;
 
     bool isEditable() const override;
     bool needStartEditingAfterSelecting() const override;

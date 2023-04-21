@@ -27,7 +27,6 @@
 #include "containers.h"
 
 #include "iengravingfont.h"
-#include "rw/xml.h"
 
 #include "types/typesconv.h"
 
@@ -74,32 +73,6 @@ const TranslatableString& Arpeggio::arpeggioTypeName() const
 void Arpeggio::setHeight(double h)
 {
     _height = h;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Arpeggio::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    EngravingItem::writeProperties(xml);
-    writeProperty(xml, Pid::ARPEGGIO_TYPE);
-    if (_userLen1 != 0.0) {
-        xml.tag("userLen1", _userLen1 / spatium());
-    }
-    if (_userLen2 != 0.0) {
-        xml.tag("userLen2", _userLen2 / spatium());
-    }
-    if (_span != 1) {
-        xml.tag("span", _span);
-    }
-    writeProperty(xml, Pid::PLAY);
-    writeProperty(xml, Pid::TIME_STRETCH);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

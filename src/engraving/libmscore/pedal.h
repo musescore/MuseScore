@@ -55,6 +55,7 @@ public:
 class Pedal final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, Pedal)
+    DECLARE_CLASSOF(ElementType::PEDAL)
 
     Sid getPropertyStyle(Pid) const override;
 
@@ -68,8 +69,6 @@ public:
     Pedal(EngravingItem* parent);
 
     Pedal* clone() const override { return new Pedal(*this); }
-
-    void write(XmlWriter& xml) const override;
 
     LineSegment* createLineSegment(System* parent) override;
     PropertyValue propertyDefault(Pid propertyId) const override;

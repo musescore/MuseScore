@@ -24,8 +24,7 @@
 #include "libmscore/fret.h"
 #include "translation.h"
 
-#include "rw/400/writecontext.h"
-#include "rw/xml.h"
+#include "rw/400/twrite.h"
 
 #include "../libmscore/ambitus.h"
 #include "../libmscore/barline.h"
@@ -620,6 +619,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
 
 void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig)
 {
+    WriteContext& ctx = *xml.context();
     if (MScore::debugMode) {
         const int mno = measure->no() + 1;
         xml.comment(String(u"Measure %1").arg(mno));
@@ -631,8 +631,8 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
         xml.startElement(measure);
     }
 
-    xml.context()->setCurTick(measure->tick());
-    xml.context()->setCurTrack(staff * VOICES);
+    ctx.setCurTick(measure->tick());
+    ctx.setCurTrack(staff * VOICES);
 
     if (measure->m_mmRestCount > 0) {
         xml.tag("multiMeasureRest", measure->m_mmRestCount);
@@ -644,20 +644,20 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
         if (measure->repeatEnd()) {
             xml.tag("endRepeat", measure->m_repeatCount);
         }
-        measure->writeProperty(xml, Pid::IRREGULAR);
-        measure->writeProperty(xml, Pid::BREAK_MMR);
-        measure->writeProperty(xml, Pid::USER_STRETCH);
-        measure->writeProperty(xml, Pid::NO_OFFSET);
-        measure->writeProperty(xml, Pid::MEASURE_NUMBER_MODE);
+        rw400::TWrite::writeProperty(measure, xml, Pid::IRREGULAR);
+        rw400::TWrite::writeProperty(measure, xml, Pid::BREAK_MMR);
+        rw400::TWrite::writeProperty(measure, xml, Pid::USER_STRETCH);
+        rw400::TWrite::writeProperty(measure, xml, Pid::NO_OFFSET);
+        rw400::TWrite::writeProperty(measure, xml, Pid::MEASURE_NUMBER_MODE);
     }
     double _spatium = measure->spatium();
     MStaff* mstaff = measure->m_mstaves[staff];
     if (mstaff->noText() && !mstaff->noText()->generated()) {
-        mstaff->noText()->write(xml);
+        rw400::TWrite::write(mstaff->noText(), xml, ctx);
     }
 
     if (mstaff->mmRangeText() && !mstaff->mmRangeText()->generated()) {
-        mstaff->mmRangeText()->write(xml);
+        rw400::TWrite::write(mstaff->mmRangeText(), xml, ctx);
     }
 
     if (mstaff->vspacerUp()) {
@@ -709,12 +709,13 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
             }
         }
 
-        e->write(xml);
+        rw400::TWrite::writeItem(e, xml, ctx);
     }
     assert(measure->first());
     assert(measure->last());
     if (measure->first() && measure->last()) {
-        measure->score()->writeSegments(xml, strack, etrack, measure->first(), measure->last()->next1(), writeSystemElements, forceTimeSig);
+        rw400::TWrite::writeSegments(xml, ctx, strack, etrack, measure->first(), measure->last()->next1(), writeSystemElements,
+                                     forceTimeSig);
     }
 
     xml.endElement();

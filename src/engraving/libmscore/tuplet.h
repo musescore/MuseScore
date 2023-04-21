@@ -45,6 +45,7 @@ enum class TupletBracketType : char;
 class Tuplet final : public DurationElement
 {
     OBJECT_ALLOCATOR(engraving, Tuplet)
+    DECLARE_CLASSOF(ElementType::TUPLET)
 
     std::vector<DurationElement*> _elements;
     DirectionV _direction;
@@ -127,8 +128,6 @@ public:
 
     void layout() override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
-
-    void write(XmlWriter&) const override;
 
     void reset() override;
 

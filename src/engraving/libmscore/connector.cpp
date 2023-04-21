@@ -22,9 +22,8 @@
 
 #include "connector.h"
 
-#include "rw/400/writecontext.h"
-#include "rw/xml.h"
 #include "rw/400/tread.h"
+#include "rw/400/twrite.h"
 #include "types/typesconv.h"
 
 #include "engravingitem.h"
@@ -358,23 +357,24 @@ ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, const EngravingItem* cu
 void ConnectorInfoWriter::write()
 {
     XmlWriter& xml = *_xml;
-    if (!xml.context()->canWrite(_connector)) {
+    WriteContext& ctx = *xml.context();
+    if (!ctx.canWrite(_connector)) {
         return;
     }
     xml.startElement(tagName(), { { "type", _connector->typeName() } });
     if (isStart()) {
-        _connector->write(xml);
+        rw400::TWrite::writeItem(_connector, xml, ctx);
     }
     if (hasPrevious()) {
         xml.startElement("prev");
         _prevLoc.toRelative(_currentLoc);
-        _prevLoc.write(xml);
+        rw400::TWrite::write(&_prevLoc, xml, ctx);
         xml.endElement();
     }
     if (hasNext()) {
         xml.startElement("next");
         _nextLoc.toRelative(_currentLoc);
-        _nextLoc.write(xml);
+        rw400::TWrite::write(&_nextLoc, xml, ctx);
         xml.endElement();
     }
     xml.endElement();

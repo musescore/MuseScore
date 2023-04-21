@@ -23,7 +23,6 @@
 #include "bracket.h"
 
 #include "draw/types/brush.h"
-#include "rw/xml.h"
 
 #include "types/typesconv.h"
 
@@ -557,41 +556,5 @@ void Bracket::setSelected(bool f)
 {
     _bi->setSelected(f);
     EngravingItem::setSelected(f);
-}
-
-//---------------------------------------------------------
-//   Bracket::write
-//    used only for palettes
-//---------------------------------------------------------
-
-void Bracket::write(XmlWriter& xml) const
-{
-    bool isStartTag = false;
-    switch (_bi->bracketType()) {
-    case BracketType::BRACE:
-    case BracketType::SQUARE:
-    case BracketType::LINE:
-    {
-        xml.startElement(this, { { "type", TConv::toXml(_bi->bracketType()) } });
-        isStartTag = true;
-    }
-    break;
-    case BracketType::NORMAL:
-        xml.startElement(this);
-        isStartTag = true;
-        break;
-    case BracketType::NO_BRACKET:
-        break;
-    }
-
-    if (isStartTag) {
-        if (_bi->column()) {
-            xml.tag("level", static_cast<int>(_bi->column()));
-        }
-
-        EngravingItem::writeProperties(xml);
-
-        xml.endElement();
-    }
 }
 }

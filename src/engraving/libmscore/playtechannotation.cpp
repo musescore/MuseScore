@@ -22,7 +22,6 @@
 
 #include "playtechannotation.h"
 
-#include "rw/xml.h"
 #include "segment.h"
 
 #include "log.h"
@@ -61,14 +60,6 @@ void PlayTechAnnotation::layout()
 {
     StaffTextBase::layout();
     autoplaceSegmentElement();
-}
-
-void PlayTechAnnotation::write(XmlWriter& writer) const
-{
-    writer.startElement(this);
-    writeProperty(writer, Pid::PLAY_TECH_TYPE);
-    StaffTextBase::writeProperties(writer);
-    writer.endElement();
 }
 
 PropertyValue PlayTechAnnotation::getProperty(Pid id) const

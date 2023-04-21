@@ -51,6 +51,7 @@ enum class TimeSigType : char {
 class TimeSig final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, TimeSig)
+    DECLARE_CLASSOF(ElementType::TIMESIG)
 
     String _numeratorString;       // calculated from actualSig() if !customText
     String _denominatorString;
@@ -92,7 +93,7 @@ public:
 
     double mag() const override;
     void draw(mu::draw::Painter*) const override;
-    void write(XmlWriter& xml) const override;
+
     void layout() override;
 
     Fraction sig() const { return _sig; }

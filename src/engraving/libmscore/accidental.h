@@ -71,6 +71,7 @@ struct SymElement {
 class Accidental final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Accidental)
+    DECLARE_CLASSOF(ElementType::ACCIDENTAL)
 
     std::vector<SymElement> el;
     AccidentalType _accidentalType { AccidentalType::NONE };
@@ -119,8 +120,6 @@ public:
     void setSmall(bool val) { m_isSmall = val; }
 
     void undoSetSmall(bool val);
-
-    void write(XmlWriter& xml) const override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

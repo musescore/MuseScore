@@ -23,7 +23,6 @@
 #include "spacer.h"
 
 #include "draw/types/pen.h"
-#include "rw/xml.h"
 
 #include "measure.h"
 #include "score.h"
@@ -189,19 +188,6 @@ std::vector<mu::PointF> Spacer::gripsPositions(const EditData&) const
         break;
     }
     return { pagePos() + p };
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Spacer::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    xml.tag("subtype", int(_spacerType));
-    EngravingItem::writeProperties(xml);
-    xml.tag("space", _gap.val() / spatium());
-    xml.endElement();
 }
 
 //---------------------------------------------------------
