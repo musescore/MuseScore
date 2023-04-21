@@ -26,8 +26,7 @@ namespace mu::io {
 enum class ScanMode {
     FilesInCurrentDir,
     FilesAndFoldersInCurrentDir,
-    FilesInCurrentDirAndSubdirs,
-    FilesAndSymLinksInCurrentDirAndSubdirs
+    FilesInCurrentDirAndSubdirs
 };
 
 enum class EntryType {

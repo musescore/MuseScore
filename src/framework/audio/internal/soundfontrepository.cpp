@@ -49,7 +49,7 @@ void SoundFontRepository::loadSoundFontPaths()
     io::paths_t dirs = configuration()->soundFontDirectories();
 
     for (const io::path_t& dir : dirs) {
-        RetVal<io::paths_t> soundFonts = fileSystem()->scanFiles(dir, filters, ScanMode::FilesAndSymLinksInCurrentDirAndSubdirs);
+        RetVal<io::paths_t> soundFonts = fileSystem()->scanFiles(dir, filters);
         if (!soundFonts.ret) {
             LOGE() << soundFonts.ret.toString();
             continue;
