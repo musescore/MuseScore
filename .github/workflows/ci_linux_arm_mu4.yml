@@ -16,6 +16,9 @@ on:
         required: false
         default: ''  
 
+env:
+  CURRENT_RELEASE_BRANCH: 4.0.2
+
 jobs:
   build_armhf:
     runs-on: ubuntu-22.04
@@ -27,11 +30,11 @@ jobs:
     - name: Clone repository (default)
       uses: actions/checkout@v3
       if: ${{ github.event_name != 'schedule' || github.event.schedule == '0 3 */1 */1 *' }}
-    - name: Clone repository (4.0.2)
+    - name: Clone repository (${{ env.CURRENT_RELEASE_BRANCH }})
       uses: actions/checkout@v3
       if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
       with:
-        ref: 4.0.2
+        ref: ${{ env.CURRENT_RELEASE_BRANCH }}
     - name: setup QEMU
       uses: docker/setup-qemu-action@v2
     - name: "Configure workflow"
@@ -86,7 +89,7 @@ jobs:
         fi
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
-        if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_4.0.2"; fi
+        if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${BUILD_NUMBER}_Lin_armv7l${ADD_INFO}")"
 
@@ -147,11 +150,11 @@ jobs:
     - name: Clone repository (default)
       uses: actions/checkout@v3
       if: ${{ github.event_name != 'schedule' || github.event.schedule == '0 3 */1 */1 *' }}
-    - name: Clone repository (4.0.2)
+    - name: Clone repository (${{ env.CURRENT_RELEASE_BRANCH }})
       uses: actions/checkout@v3
       if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
       with:
-        ref: 4.0.2
+        ref: ${{ env.CURRENT_RELEASE_BRANCH }}
     - name: setup QEMU
       uses: docker/setup-qemu-action@v2
     - name: "Configure workflow"
@@ -206,7 +209,7 @@ jobs:
         fi
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
-        if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_4.0.2"; fi
+        if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${BUILD_NUMBER}_Lin_aarch64${ADD_INFO}")"
 
