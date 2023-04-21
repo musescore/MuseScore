@@ -46,6 +46,9 @@ enum HarpStringType : char {
 
 class HarpPedalDiagram final : public TextBase
 {
+    OBJECT_ALLOCATOR(engraving, HarpPedalDiagram)
+    DECLARE_CLASSOF(ElementType::HARP_DIAGRAM)
+
     std::array<PedalPosition, 7> _pedalState;
 
     std::set<int> _playablePitches;
@@ -74,7 +77,7 @@ public:
     void setIsDiagram(bool diagram);
     bool isDiagram() { return _isDiagram; }
 
-    std::array<PedalPosition, 7> getPedalState() { return _pedalState; }
+    std::array<PedalPosition, 7> getPedalState() const { return _pedalState; }
     void setPedalState(std::array<PedalPosition, 7> state);
 
     void setPedal(HarpStringType harpString, PedalPosition pedal);

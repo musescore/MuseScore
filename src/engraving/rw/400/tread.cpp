@@ -149,7 +149,7 @@ using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Arti
                                  Dynamic, Expression,
                                  Fermata, FiguredBass, Fingering, FretDiagram,
                                  Glissando, GradualTempoChange,
-                                 Hairpin, Harmony, HarmonicMark, Hook,
+                                 Hairpin, Harmony, HarmonicMark, HarpPedalDiagram, Hook,
                                  Image, InstrumentChange,
                                  Jump,
                                  KeySig,
