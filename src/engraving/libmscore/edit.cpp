@@ -1621,9 +1621,14 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                     Chord* nchord = toChord(chord->clone());
                     for (size_t i = 0; i < numNotes; i++) {           // strip ties from cloned chord
                         Note* n = nchord->notes()[i];
-                        // TODO: memory leak?
-                        n->setTieFor(0);
-                        n->setTieBack(0);
+                        if (Tie* tieFor = n->tieFor()) {
+                            n->setTieFor(nullptr);
+                            delete tieFor;
+                        }
+                        if (Tie* tieBack = n->tieBack()) {
+                            n->setTieBack(nullptr);
+                            delete tieBack;
+                        }
                     }
                     Chord* startChord = nchord;
                     Measure* measure = nullptr;
