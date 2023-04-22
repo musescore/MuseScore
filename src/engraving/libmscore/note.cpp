@@ -2039,7 +2039,7 @@ void Note::getNoteListForDots(std::vector<Note*>& topDownNotes, std::vector<Note
                 int newOffset = 0;
                 bool adjustDown = (c->voice() & 1) && !c->up();
                 if (!anchoredDots.empty() && anchoredDots.back() == note->line()) {
-                    if (anchoredDots.size() >= 1 && anchoredDots[anchoredDots.size() - 2] == note->line() + adjustDown ? 2 : -2) {
+                    if (anchoredDots.size() >= 1 && anchoredDots[anchoredDots.size() - 2] == note->line() + (adjustDown ? 2 : -2)) {
                         newOffset = adjustDown ? -2 : 2;
                     } else {
                         newOffset = adjustDown ? 2 : -2;
