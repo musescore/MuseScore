@@ -1621,6 +1621,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                     Chord* nchord = toChord(chord->clone());
                     for (size_t i = 0; i < numNotes; i++) {           // strip ties from cloned chord
                         Note* n = nchord->notes()[i];
+                        // TODO: memory leak?
                         n->setTieFor(0);
                         n->setTieBack(0);
                     }
@@ -1722,7 +1723,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             tie->setTick(tie->startNote()->tick());
                             tie->setTick2(tie->endNote()->tick());
                             tie->setTrack(track);
-                            n->setTieFor(tie);
+                            nn->setTieFor(tie);
                             tieFor[i]->setTieBack(tie);
                             undoAddElement(tie);
                         }

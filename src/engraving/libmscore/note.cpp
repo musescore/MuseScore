@@ -1344,6 +1344,7 @@ void Note::remove(EngravingItem* e)
 
     case ElementType::TIE: {
         Tie* tie = toTie(e);
+        assert(tie->startNote() == this);
         setTieFor(0);
         if (tie->endNote()) {
             tie->endNote()->setTieBack(0);
