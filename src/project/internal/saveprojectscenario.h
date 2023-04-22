@@ -80,8 +80,9 @@ class QMLCloudVisibility
 
 public:
     enum CloudVisibility {
-        Private = int(cloud::Visibility::Private),
-        Public = int(cloud::Visibility::Public)
+        Public = int(cloud::Visibility::Public),
+        Unlisted = int(cloud::Visibility::Unlisted),
+        Private = int(cloud::Visibility::Private)
     };
     Q_ENUM(CloudVisibility);
 };
