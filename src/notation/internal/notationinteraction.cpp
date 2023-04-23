@@ -3622,6 +3622,7 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
         QMimeDataAdapter ma(mimeData);
         score()->cmdPaste(&ma, nullptr, scale);
     }
+
     apply();
 
     checkAndShowMScoreError();
@@ -3646,7 +3647,7 @@ void NotationInteraction::swapSelection()
         int stavesCount = 0;
 
         if (reader.name() == "StaffList") {
-            tickLen = mu::engraving::Fraction::fromTicks(reader.intAttribute("len", 0));
+            tickLen = mu::engraving::Fraction::fromString(reader.attribute("len"));
             stavesCount = reader.intAttribute("staves", 0);
         }
 
