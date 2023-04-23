@@ -23,6 +23,8 @@
 #ifndef __TUPLET_H__
 #define __TUPLET_H__
 
+#include <set>
+
 #include "durationelement.h"
 #include "property.h"
 
@@ -47,7 +49,14 @@ class Tuplet final : public DurationElement
     OBJECT_ALLOCATOR(engraving, Tuplet)
     DECLARE_CLASSOF(ElementType::TUPLET)
 
-    std::vector<DurationElement*> _elements;
+    // All DurationElements where `tuplet()` returns this tuplet
+    std::set<DurationElement*> _allElements;
+
+    // Those DurationElements that are currently really part of this tuplet
+    std::vector<DurationElement*> _currentElements;
+
+    bool _beingDestructed = false;
+
     DirectionV _direction;
     TupletNumberType _numberType;
     TupletBracketType _bracketType;
@@ -119,11 +128,11 @@ public:
     void setUserPoint1(PointF p) { _p1 = p; }
     void setUserPoint2(PointF p) { _p2 = p; }
 
-    const std::vector<DurationElement*>& elements() const { return _elements; }
-    void clear() { _elements.clear(); }
+    const std::vector<DurationElement*>& elements() const { return _currentElements; }
+    void clear() { _currentElements.clear(); }
     bool contains(const DurationElement* el) const
     {
-        return std::find(_elements.begin(), _elements.end(), el) != _elements.end();
+        return std::find(_currentElements.begin(), _currentElements.end(), el) != _currentElements.end();
     }
 
     void layout() override;
@@ -169,6 +178,11 @@ public:
     void addMissingElements();
 
     static int computeTupletDenominator(int numerator, Fraction totalDuration);
+
+private:
+    friend class DurationElement;
+    void addDurationElement(DurationElement* de);
+    void removeDurationElement(DurationElement* de);
 };
 } // namespace mu::engraving
 #endif
