@@ -1100,7 +1100,6 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
 
 static void capxLayoutBrackets(XmlReader& e, QList<CapBracket>& bracketList)
 {
-    int i = 0;   // bracket count
     while (e.readNextStartElement()) {
         if (e.name() == "bracket") {
             CapBracket b;
@@ -1110,7 +1109,6 @@ static void capxLayoutBrackets(XmlReader& e, QList<CapBracket>& bracketList)
             // LOGD("Bracket%d %d-%d curly %d", i, b.from, b.to, b.curly);
             bracketList.append(b);
             e.readNext();
-            ++i;
         } else {
             e.unknown();
         }

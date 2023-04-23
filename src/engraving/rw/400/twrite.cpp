@@ -964,7 +964,7 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
     // TODO: in the next score format version (4) use only write new + props and discard
     // the compatibility writing.
     xml.startElement("fretDiagram");
-    // writeNew
+    // writeNew (if want to make changes, do it here rather than in writeOld)
     {
         //    This is the important one for 3.1+
         //---------------------------------------------------------
@@ -1015,7 +1015,7 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.endElement();
 
-    // writeOld
+    // writeOld (for compatibility only)
     {
         int lowestDotFret = -1;
         int furthestLeftLowestDot = -1;

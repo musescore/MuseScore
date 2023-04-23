@@ -1064,7 +1064,6 @@ void NotationParts::sortParts(const PartInstrumentList& parts)
     TRACEFUNC;
 
     std::vector<mu::engraving::staff_idx_t> staffMapping;
-    int runningStaffIndex = 0;
 
     int partIndex = 0;
     for (const PartInstrument& pi: parts) {
@@ -1073,7 +1072,6 @@ void NotationParts::sortParts(const PartInstrumentList& parts)
         for (mu::engraving::Staff* staff : currentPart->staves()) {
             mu::engraving::staff_idx_t actualStaffIndex = mu::indexOf(score()->staves(), staff);
             staffMapping.push_back(actualStaffIndex);
-            ++runningStaffIndex;
         }
         ++partIndex;
     }

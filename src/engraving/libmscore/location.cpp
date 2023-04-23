@@ -35,7 +35,6 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 static constexpr Location absDefaults = Location::absolute();
-static constexpr Location relDefaults = Location::relative();
 
 //---------------------------------------------------------
 //   Location::track

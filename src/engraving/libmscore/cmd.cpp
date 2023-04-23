@@ -1852,8 +1852,6 @@ void Score::upDownDelta(int pitchDelta)
 void Score::toggleArticulation(SymId attr)
 {
     std::set<Chord*> set;
-    int numAdded = 0;
-    int numRemoved = 0;
     for (EngravingItem* el : selection().elements()) {
         if (el->isNote() || el->isChord()) {
             Chord* cr = 0;
@@ -1866,11 +1864,8 @@ void Score::toggleArticulation(SymId attr)
             }
             Articulation* na = Factory::createArticulation(this->dummy()->chord());
             na->setSymId(attr);
-            if (toggleArticulation(el, na)) {
-                ++numAdded;
-            } else {
+            if (!toggleArticulation(el, na)) {
                 delete na;
-                ++numRemoved;
             }
 
             if (cr) {

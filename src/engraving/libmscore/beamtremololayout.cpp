@@ -487,17 +487,12 @@ bool BeamTremoloLayout::calculateAnchors(const std::vector<ChordRest*>& chordRes
     if (chordRests.empty()) {
         return false;
     }
-    bool cross = false;
-    int otherStaff = 0;
+
     for (auto chordRest : chordRests) {
         if (!startCr) {
             startCr = chordRest;
         }
         endCr = chordRest;
-        if (chordRest->staffMove()) {
-            cross = true;
-            otherStaff = chordRest->staffMove();
-        }
         if (chordRest->isChord()) {
             if (!startChord) {
                 startChord = toChord(chordRest);
@@ -518,7 +513,7 @@ bool BeamTremoloLayout::calculateAnchors(const std::vector<ChordRest*>& chordRes
     if (calculateAnchorsCross()) {
         return true;
     }
-    cross = false;
+
     m_startAnchor = chordBeamAnchor(startChord, ChordBeamAnchorType::Start);
     m_endAnchor = chordBeamAnchor(endChord, ChordBeamAnchorType::End);
 

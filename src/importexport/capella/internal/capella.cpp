@@ -1347,10 +1347,8 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
 
             LOGD("  ReadCapStaff %d/%d", cstaff->numerator, 1 << cstaff->log2Denom);
             int staffIdx = cstaff->iLayout;
-            int voice = 0;
             for (CapVoice* cvoice : cstaff->voices) {
                 Fraction tick = readCapVoice(score, cvoice, staffIdx, systemTick, capxMode);
-                ++voice;
                 if (tick > mtick) {
                     mtick = tick;
                 }

@@ -477,7 +477,6 @@ void System::layoutSystem(LayoutContext& ctx, double xo1, const bool isFirstSyst
         _leftMargin = indent + maxBracketsWidth;
     }
 
-    int nVisible = 0;
     for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         SysStaff* s  = _staves[staffIdx];
         Staff* staff = score()->staff(staffIdx);
@@ -485,7 +484,7 @@ void System::layoutSystem(LayoutContext& ctx, double xo1, const bool isFirstSyst
             s->setbbox(RectF());
             continue;
         }
-        ++nVisible;
+
         double staffMag = staff->staffMag(Fraction(0, 1));         // ??? TODO
         int staffLines = staff->lines(Fraction(0, 1));
         if (staffLines <= 1) {
@@ -1449,14 +1448,12 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
         func(data, _systemDividerRight);
     }
 
-    int idx = 0;
     for (const SysStaff* st : _staves) {
         if (all || st->show()) {
             for (InstrumentName* t : st->instrumentNames) {
                 func(data, t);
             }
         }
-        ++idx;
     }
     for (SpannerSegment* ss : _spannerSegments) {
         staff_idx_t staffIdx = ss->spanner()->staffIdx();

@@ -892,8 +892,8 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
         }
         return true;
     }
-    int measures = 1;
-    bool fmr     = true;
+
+    bool fmr = true;
 
     // Format: chord 1 tick, chord 2 tick, tremolo, track
     std::vector<std::tuple<Fraction, Fraction, Tremolo*, track_idx_t> > tremoloChordTicks;
@@ -936,7 +936,6 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
         if (m == lm) {
             break;
         }
-        ++measures;
     }
 
     if (!fmr) {

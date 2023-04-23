@@ -1422,7 +1422,6 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
 // beam in grace
 int getGraceLevel(const QList<ovebase::NoteContainer*>& containers, int tick, int unit)
 {
-    int graceCount = 0;
     int level = 0; // normal chord rest
 
     for (int i = 0; i < containers.size(); ++i) {
@@ -1431,12 +1430,9 @@ int getGraceLevel(const QList<ovebase::NoteContainer*>& containers, int tick, in
             break;
         }
 
-        if (container->getIsGrace() && container->getTick() == tick) {
-            ++graceCount;
-
-            if (unit <= container->start()->getOffset()) {
-                ++level;
-            }
+        if (container->getIsGrace() && container->getTick() == tick
+            && unit <= container->start()->getOffset()) {
+            ++level;
         }
     }
 

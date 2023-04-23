@@ -578,23 +578,6 @@ double FretDiagram::rightX() const
 }
 
 //---------------------------------------------------------
-//   write
-//    NOTICE: if you are looking to change how fret diagrams are
-//    written, edit the writeNew function. writeOld is purely compatibility.
-//---------------------------------------------------------
-
-static const std::array<Pid, 8> pids { {
-    Pid::MIN_DISTANCE,
-    Pid::FRET_OFFSET,
-    Pid::FRET_FRETS,
-    Pid::FRET_STRINGS,
-    Pid::FRET_NUT,
-    Pid::MAG,
-    Pid::FRET_NUM_POS,
-    Pid::ORIENTATION
-} };
-
-//---------------------------------------------------------
 //   setDot
 //    take a fret value of 0 to mean remove the dot, except with add
 //    where we actually need to pass a fret val.

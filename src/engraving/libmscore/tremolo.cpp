@@ -504,9 +504,6 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
     UNUSED(h);
     UNUSED(spatium);
 
-    // TODO: This should be a style setting, to replace tremoloStrokeLengthMultiplier
-    static constexpr double stemGapSp = 1.0;
-
     // make sure both stems are in the same direction
     int up = 0;
     bool isUp = _up;
@@ -578,13 +575,11 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
     double mag = 0.0;
 
     notes.clear();
-    staff_idx_t staffIdx = mu::nidx;
     for (ChordRest* cr : chordRests) {
         double m = cr->isSmall() ? score()->styleD(Sid::smallNoteMag) : 1.0;
         mag = std::max(mag, m);
         if (cr->isChord()) {
             Chord* chord = toChord(cr);
-            staffIdx = chord->vStaffIdx();
             //int i = chord->staffMove();
             //_minMove = std::min(_minMove, i); todo: investigate this
             //_maxMove = std::max(_maxMove, i);
