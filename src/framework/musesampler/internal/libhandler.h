@@ -51,7 +51,7 @@ struct MuseSamplerLibHandler
     int getVersionRevision() { return ms_get_version_revision(); }
     const char* getVersionString() { return ms_get_version_string(); }
 
-    int getMatchingInstrumentId(const char* pack, const char* name) { reutrn ms_get_matching_instrument_id(pack, name); }
+    int getMatchingInstrumentId(const char* pack, const char* name) { return ms_get_matching_instrument_id(pack, name); }
     ms_InstrumentList getInstrumentList() { return ms_get_instrument_list(); }
     ms_InstrumentList getMatchingInstrumentList(const char* mpe_id, const char* musicxml)
     {
