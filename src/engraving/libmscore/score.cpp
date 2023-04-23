@@ -5708,6 +5708,18 @@ void Score::connectTies(bool silent)
                     }
                 }
             }
+            for (Chord* gc : c->graceNotes()) {
+                for (Note* n : gc->notes()) {
+                    // spanner with no end element apparently happens when reading some 206 files
+                    // (and possibly in other situations too)
+                    for (Spanner* spanner : n->spannerFor()) {
+                        if (spanner->endElement() == nullptr) {
+                            n->removeSpannerFor(spanner);
+                            delete spanner;
+                        }
+                    }
+                }
+            }
         }
     }
 }
