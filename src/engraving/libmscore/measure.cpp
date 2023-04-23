@@ -3335,7 +3335,7 @@ void Measure::layoutCrossStaff()
                 Beam* beam = c->beam();
                 Tremolo* tremolo = c->tremolo();
                 if ((beam && (beam->cross() || beam->userModified()))
-                    || tremolo && tremolo->twoNotes() && tremolo->userModified()) {
+                    || (tremolo && tremolo->twoNotes() && tremolo->userModified())) {
                     c->computeUp(); // for cross-staff beams
                 }
                 if (!c->graceNotes().empty()) {
