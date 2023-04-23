@@ -169,7 +169,7 @@ void BeamTremoloLayout::offsetBeamWithAnchorShortening(std::vector<ChordRest*> c
     int newDictator = dictator;
     int newPointer = pointer;
     int reduce = 0;
-    auto fourBeamException = [staffLines](int beams, int yPos) {
+    auto fourBeamException = [](int beams, int yPos) {
         yPos += 400; // because there is some weirdness with modular division around zero, add
                      // a large multiple of 4 so that we can guarantee that yPos%4 will be correct
         return beams >= 4 && (yPos % 4 == 2);
