@@ -6276,7 +6276,7 @@ void Score::undoChangeTpc(Note* note, int v)
 //   undoAddBracket
 //---------------------------------------------------------
 
-void Score::undoAddBracket(Staff* staff, int level, BracketType type, size_t span)
+void Score::undoAddBracket(Staff* staff, size_t level, BracketType type, size_t span)
 {
     staff_idx_t startStaffIdx = staff->idx();
     staff_idx_t totStaves = nstaves();
