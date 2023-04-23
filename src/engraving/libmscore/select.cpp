@@ -538,24 +538,31 @@ void Selection::updateSelectedElements()
     if (_state == SelState::RANGE && _plannedTick1 != Fraction(-1, 1) && _plannedTick2 != Fraction(-1, 1)) {
         const staff_idx_t staffStart = _staffStart;
         const staff_idx_t staffEnd = _staffEnd;
+
         deselectAll();
+
         Segment* s1 = _score->tick2segmentMM(_plannedTick1);
-        Segment* s2 = _score->tick2segmentMM(_plannedTick2, /* first */ true);
+        Segment* s2 = _score->tick2segmentMM(_plannedTick2, /* first */ true /* HACK */);
         if (s2 && s2->measure()->isMMRest()) {
-            s2 = s2->prev1MM();       // HACK both this and the previous "true"
+            s2 = s2->prev1MM(); // HACK
         }
-        // are needed to prevent bug #173381.
-        // This should exclude any segments belonging
-        // to MM-rest range from the selection.
+        // These hacks are needed to prevent https://musescore.org/node/173381.
+        // This should exclude any segments belonging to MM-rest range from the selection.
         if (s1 && s2 && s1->tick() + s1->ticks() > s2->tick()) {
-            // can happen with MM rests as tick2measure returns only
-            // the first segment for them.
+            // can happen with MM rests as tick2measure returns only the first segment for them.
+
+            _plannedTick1 = Fraction(-1, 1);
+            _plannedTick2 = Fraction(-1, 1);
             return;
         }
+
         if (s2 && s2 == s2->measure()->first() && !(s2->measure()->prevMeasure() && s2->measure()->prevMeasure()->mmRest1())) {
-            s2 = s2->prev1();         // we want the last segment of the previous measure (unless it's part of a MMrest)
+            // we want the last segment of the previous measure (unless it's part of a MMrest)
+            s2 = s2->prev1();
         }
+
         setRange(s1, s2, staffStart, staffEnd);
+
         _plannedTick1 = Fraction(-1, 1);
         _plannedTick2 = Fraction(-1, 1);
     }
