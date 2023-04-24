@@ -77,7 +77,7 @@ public:
     const TracksMap& tracksMapping();
     void setTracksMapping(const TracksMap& tracksMapping);
 
-    void setVoiceVisible(Staff* staff, int voiceIndex, bool visible);
+    void setVoiceVisible(Staff* staff, voice_idx_t voiceIndex, bool visible);
 
     static std::vector<Excerpt*> createExcerptsFromParts(const std::vector<Part*>& parts);
     static Excerpt* createExcerptFromPart(Part* part);
