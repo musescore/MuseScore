@@ -127,9 +127,7 @@ TEST_F(Engraving_BarlineTests, barline02)
     score->doLayout();
 
     msr = score->firstMeasure();
-    int msrNo = 1;
     while ((msr = msr->nextMeasure())) {
-        ++msrNo;
         Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick() + msr->ticks());
         EXPECT_TRUE(seg);
 
@@ -286,7 +284,6 @@ TEST_F(Engraving_BarlineTests, barline06)
 
     // scan each measure
     Measure* msr   = score->firstMeasure();
-    int msrNo = 1;
     for (int i=0; i < 3; i++) {
         // locate end-measure bar line segment
         Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick() + msr->ticks());
@@ -308,7 +305,6 @@ TEST_F(Engraving_BarlineTests, barline06)
         }
 
         msr = msr->nextMeasure();
-        msrNo++;
     }
 
     delete score;

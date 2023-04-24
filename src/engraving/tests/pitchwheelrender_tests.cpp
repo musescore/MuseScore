@@ -297,7 +297,7 @@ TEST_F(PitchWheelRender_Tests, threeDevidedFunctions)
         func.mStartTick = 10;
         func.mEndTick = 20;
 
-        auto firstFunc = [ startTick = func.mStartTick] (uint32_t) {
+        auto firstFunc = [](uint32_t) {
             return 10;
         };
         func.func = firstFunc;
@@ -309,7 +309,7 @@ TEST_F(PitchWheelRender_Tests, threeDevidedFunctions)
         func.mStartTick = 30;
         func.mEndTick = 40;
 
-        auto firstFunc = [ startTick = func.mStartTick] (uint32_t) {
+        auto firstFunc = [](uint32_t) {
             return 20;
         };
         func.func = firstFunc;
@@ -321,7 +321,7 @@ TEST_F(PitchWheelRender_Tests, threeDevidedFunctions)
         func.mStartTick = 60;
         func.mEndTick = 70;
 
-        auto firstFunc = [ startTick = func.mStartTick] (uint32_t) {
+        auto firstFunc = [](uint32_t) {
             return 30;
         };
         func.func = firstFunc;
@@ -350,7 +350,7 @@ TEST_F(PitchWheelRender_Tests, threeOverLappedFunctions)
         func.mStartTick = 0;
         func.mEndTick = 60;
 
-        auto firstFunc = [ startTick = func.mStartTick] (uint32_t) {
+        auto firstFunc = [](uint32_t) {
             return 10;
         };
         func.func = firstFunc;
@@ -362,7 +362,7 @@ TEST_F(PitchWheelRender_Tests, threeOverLappedFunctions)
         func.mStartTick = 20;
         func.mEndTick = 50;
 
-        auto firstFunc = [ startTick = func.mStartTick] (uint32_t) {
+        auto firstFunc = [](uint32_t) {
             return 10;
         };
         func.func = firstFunc;
@@ -374,7 +374,7 @@ TEST_F(PitchWheelRender_Tests, threeOverLappedFunctions)
         func.mStartTick = 40;
         func.mEndTick = 70;
 
-        auto firstFunc = [ startTick = func.mStartTick] (uint32_t) {
+        auto firstFunc = [](uint32_t) {
             return 10;
         };
         func.func = firstFunc;

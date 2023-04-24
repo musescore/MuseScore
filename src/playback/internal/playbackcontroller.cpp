@@ -1000,8 +1000,8 @@ void PlaybackController::setupSequencePlayer()
 {
     PlaybackCursorType cursorType = configuration()->cursorType();
 
-    playback()->player()->playbackPositionMsecs().onReceive(this, [this, cursor = std::move(cursorType)]
-                                                            (const TrackSequenceId id, const audio::msecs_t& msecs) {
+    playback()->player()->playbackPositionMsecs().onReceive(
+        this, [this](const TrackSequenceId id, const audio::msecs_t& msecs) {
         if (m_currentSequenceId != id) {
             return;
         }

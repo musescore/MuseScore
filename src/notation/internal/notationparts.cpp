@@ -809,12 +809,12 @@ void NotationParts::removeStaves(const IDList& stavesIds)
         staff_idx_t staffIdx = score()->staffIdx(staff);
         for (BracketItem* bi : staff->brackets()) {
             if ((bi->bracketType() == BracketType::BRACE) && (bi->bracketSpan() > 1)) {
-                newBrackets.push_back(BracketData(static_cast<int>(bi->column()), static_cast<int>(bi->bracketSpan()) - 1));
+                newBrackets.push_back(BracketData(bi->column(), bi->bracketSpan() - 1));
             }
         }
         score()->cmdRemoveStaff(staff->idx());
         for (BracketData bd : newBrackets) {
-            score()->undoAddBracket(score()->staff(staffIdx), static_cast<int>(bd.column), BracketType::BRACE, bd.span);
+            score()->undoAddBracket(score()->staff(staffIdx), bd.column, BracketType::BRACE, bd.span);
         }
     }
 
@@ -1064,7 +1064,6 @@ void NotationParts::sortParts(const PartInstrumentList& parts)
     TRACEFUNC;
 
     std::vector<mu::engraving::staff_idx_t> staffMapping;
-    int runningStaffIndex = 0;
 
     int partIndex = 0;
     for (const PartInstrument& pi: parts) {
@@ -1073,7 +1072,6 @@ void NotationParts::sortParts(const PartInstrumentList& parts)
         for (mu::engraving::Staff* staff : currentPart->staves()) {
             mu::engraving::staff_idx_t actualStaffIndex = mu::indexOf(score()->staves(), staff);
             staffMapping.push_back(actualStaffIndex);
-            ++runningStaffIndex;
         }
         ++partIndex;
     }

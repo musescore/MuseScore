@@ -111,7 +111,10 @@ Tuplet::Tuplet(const Tuplet& t)
 
 Tuplet::~Tuplet()
 {
-    for (DurationElement* de : _elements) {
+    _beingDestructed = true;
+
+    for (DurationElement* de : _allElements) {
+        assert(de->tuplet() == this);
         de->setTuplet(nullptr);
     }
     delete _number;
@@ -179,7 +182,7 @@ void Tuplet::resetNumberProperty(Text* number)
 
 void Tuplet::layout()
 {
-    if (_elements.empty()) {
+    if (_currentElements.empty()) {
         LOGD("Tuplet::layout(): tuplet is empty");
         return;
     }
@@ -215,7 +218,7 @@ void Tuplet::layout()
         }
 
         _isSmall = true;
-        for (const DurationElement* e : _elements) {
+        for (const DurationElement* e : _currentElements) {
             if ((e->isChordRest() && !toChordRest(e)->isSmall()) || (e->isTuplet() && !toTuplet(e)->isSmall())) {
                 _isSmall = false;
                 break;
@@ -236,7 +239,7 @@ void Tuplet::layout()
     //
     if (_direction == DirectionV::AUTO) {
         int up = 1;
-        for (const DurationElement* e : _elements) {
+        for (const DurationElement* e : _currentElements) {
             if (e->isChord()) {
                 const Chord* c = toChord(e);
                 if (c->stemDirection() != DirectionV::AUTO) {
@@ -257,7 +260,7 @@ void Tuplet::layout()
     // find first and last chord of tuplet
     // (tuplets can be nested)
     //
-    const DurationElement* cr1 = _elements.front();
+    const DurationElement* cr1 = _currentElements.front();
     while (cr1->isTuplet()) {
         const Tuplet* t = toTuplet(cr1);
         if (t->elements().empty()) {
@@ -265,7 +268,7 @@ void Tuplet::layout()
         }
         cr1 = t->elements().front();
     }
-    const DurationElement* cr2 = _elements.back();
+    const DurationElement* cr2 = _currentElements.back();
     while (cr2->isTuplet()) {
         const Tuplet* t = toTuplet(cr2);
         if (t->elements().empty()) {
@@ -405,11 +408,11 @@ void Tuplet::layout()
         }
 
         // check for collisions
-        size_t n = _elements.size();
+        size_t n = _currentElements.size();
         if (n >= 3) {
             d = (p2.y() - p1.y()) / (p2.x() - p1.x());
             for (size_t i = 1; i < (n - 1); ++i) {
-                EngravingItem* e = _elements[i];
+                EngravingItem* e = _currentElements[i];
                 if (e->isChord()) {
                     const Chord* chord = toChord(e);
                     const Stem* stem = chord->stem();
@@ -497,11 +500,11 @@ void Tuplet::layout()
         }
 
         // check for collisions
-        size_t n = _elements.size();
+        size_t n = _currentElements.size();
         if (n >= 3) {
             d  = (p2.y() - p1.y()) / (p2.x() - p1.x());
             for (size_t i = 1; i < (n - 1); ++i) {
-                EngravingItem* e = _elements[i];
+                EngravingItem* e = _currentElements[i];
                 if (e->isChord()) {
                     const Chord* chord = toChord(e);
                     const Stem* stem = chord->stem();
@@ -678,7 +681,7 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
     }
 
     int beamCount = -1;
-    for (DurationElement* e : _elements) {
+    for (DurationElement* e : _currentElements) {
         if (e->isTuplet() || e->isRest()) {
             return true;
         } else if (e->isChordRest()) {
@@ -824,7 +827,7 @@ void Tuplet::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 void Tuplet::add(EngravingItem* e)
 {
 #ifndef NDEBUG
-    for (DurationElement* el : _elements) {
+    for (DurationElement* el : _currentElements) {
         if (el == e) {
             LOGD("%p: %p %s already there", this, e, e->typeName());
             return;
@@ -836,22 +839,23 @@ void Tuplet::add(EngravingItem* e)
     case ElementType::CHORD:
     case ElementType::REST:
     case ElementType::TUPLET: {
-        bool found = false;
         DurationElement* de = toDurationElement(e);
+        de->setTuplet(this);
+
+        bool found = false;
         Fraction tick = de->rtick();
         if (tick != Fraction(-1, 1)) {
-            for (unsigned int i = 0; i < _elements.size(); ++i) {
-                if (_elements[i]->rtick() > tick) {
-                    _elements.insert(_elements.begin() + i, de);
+            for (unsigned int i = 0; i < _currentElements.size(); ++i) {
+                if (_currentElements[i]->rtick() > tick) {
+                    _currentElements.insert(_currentElements.begin() + i, de);
                     found = true;
                     break;
                 }
             }
         }
         if (!found) {
-            _elements.push_back(de);
+            _currentElements.push_back(de);
         }
-        de->setTuplet(this);
     }
     break;
 
@@ -877,12 +881,12 @@ void Tuplet::remove(EngravingItem* e)
     case ElementType::CHORD:
     case ElementType::REST:
     case ElementType::TUPLET: {
-        auto i = std::find(_elements.begin(), _elements.end(), toDurationElement(e));
-        if (i == _elements.end()) {
+        auto i = std::find(_currentElements.begin(), _currentElements.end(), toDurationElement(e));
+        if (i == _currentElements.end()) {
             LOGD("Tuplet::remove: cannot find element <%s>", e->typeName());
-            LOGD("  elements %zu", _elements.size());
+            LOGD("  elements %zu", _currentElements.size());
         } else {
-            _elements.erase(i);
+            _currentElements.erase(i);
             e->removed();
         }
     }
@@ -891,6 +895,21 @@ void Tuplet::remove(EngravingItem* e)
         LOGD("Tuplet::remove: unknown element");
         break;
     }
+}
+
+void Tuplet::addDurationElement(DurationElement* de)
+{
+    assert(!_beingDestructed);
+    _allElements.insert(de);
+}
+
+void Tuplet::removeDurationElement(DurationElement* de)
+{
+    if (_beingDestructed) {
+        return;
+    }
+
+    _allElements.erase(de);
 }
 
 //---------------------------------------------------------
@@ -993,7 +1012,7 @@ static bool tickGreater(const DurationElement* a, const DurationElement* b)
 
 void Tuplet::sortElements()
 {
-    std::sort(_elements.begin(), _elements.end(), tickGreater);
+    std::sort(_currentElements.begin(), _currentElements.end(), tickGreater);
 }
 
 //---------------------------------------------------------
@@ -1002,7 +1021,7 @@ void Tuplet::sortElements()
 
 bool Tuplet::cross() const
 {
-    for (DurationElement* de : _elements) {
+    for (DurationElement* de : _currentElements) {
         if (!de) {
             continue;
         } else if (de->isChordRest()) {
@@ -1027,7 +1046,7 @@ bool Tuplet::cross() const
 Fraction Tuplet::elementsDuration()
 {
     Fraction f;
-    for (DurationElement* el : _elements) {
+    for (DurationElement* el : _currentElements) {
         f += el->ticks();
     }
     return f;
@@ -1111,9 +1130,9 @@ bool Tuplet::setProperty(Pid propertyId, const PropertyValue& v)
     default:
         return DurationElement::setProperty(propertyId, v);
     }
-    if (!_elements.empty()) {
-        _elements.front()->triggerLayout();
-        _elements.back()->triggerLayout();
+    if (!_currentElements.empty()) {
+        _currentElements.front()->triggerLayout();
+        _currentElements.back()->triggerLayout();
     }
     return true;
 }

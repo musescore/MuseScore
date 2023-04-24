@@ -877,8 +877,9 @@ String Note::tpcUserName(const bool explicitAccidental, bool full) const
 
     String pitchOffset;
     if (tuning() != 0) {
-        char buffer[50];
-        sprintf(buffer, "%+.3f", tuning());
+        static constexpr size_t bufferSize = 50;
+        char buffer[bufferSize];
+        snprintf(buffer, bufferSize, "%+.3f", tuning());
         pitchOffset = String::fromAscii(buffer);
     }
 
@@ -1344,6 +1345,7 @@ void Note::remove(EngravingItem* e)
 
     case ElementType::TIE: {
         Tie* tie = toTie(e);
+        assert(tie->startNote() == this);
         setTieFor(0);
         if (tie->endNote()) {
             tie->endNote()->setTieBack(0);
@@ -2039,7 +2041,7 @@ void Note::getNoteListForDots(std::vector<Note*>& topDownNotes, std::vector<Note
                 int newOffset = 0;
                 bool adjustDown = (c->voice() & 1) && !c->up();
                 if (!anchoredDots.empty() && anchoredDots.back() == note->line()) {
-                    if (anchoredDots.size() >= 1 && anchoredDots[anchoredDots.size() - 2] == note->line() + adjustDown ? 2 : -2) {
+                    if (anchoredDots.size() >= 2 && anchoredDots[anchoredDots.size() - 2] == note->line() + (adjustDown ? 2 : -2)) {
                         newOffset = adjustDown ? -2 : 2;
                     } else {
                         newOffset = adjustDown ? 2 : -2;

@@ -1080,7 +1080,7 @@ void Tie::calculateDirection()
                 // determine if this note is in the lower or upper half of this chord
                 int notesAbove = 0, tiesAbove = 0;
                 int notesBelow = 0, tiesBelow = 0;
-                int unisonNotes = 0, unisonTies = 0;
+                int unisonTies = 0;
                 for (size_t i = 0; i < n; ++i) {
                     if (notes[i] == startNote()) {
                         // skip counting if this note is the current note or if this note doesn't have a tie
@@ -1088,7 +1088,6 @@ void Tie::calculateDirection()
                     }
                     int noteDiff = compareNotesPos(startNote(), notes[i]);
                     if (noteDiff == 0) {  // unison
-                        unisonNotes++;
                         if (notes[i]->tieFor()) {
                             unisonTies++;
                         }

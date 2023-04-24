@@ -225,6 +225,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::STEM_SLASH:
     case ElementType::PAGE:
     case ElementType::BEAM:
+    case ElementType::BEAM_SEGMENT:
     case ElementType::HOOK:
     case ElementType::HAIRPIN_SEGMENT:
     case ElementType::OTTAVA_SEGMENT:

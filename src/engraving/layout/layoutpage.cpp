@@ -136,7 +136,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
         y += cs->height();
     }
 
-    for (int k = 0;; ++k) {
+    for (;;) {
         //
         // calculate distance to previous system
         //

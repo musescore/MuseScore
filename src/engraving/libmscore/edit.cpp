@@ -892,8 +892,8 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
         }
         return true;
     }
-    int measures = 1;
-    bool fmr     = true;
+
+    bool fmr = true;
 
     // Format: chord 1 tick, chord 2 tick, tremolo, track
     std::vector<std::tuple<Fraction, Fraction, Tremolo*, track_idx_t> > tremoloChordTicks;
@@ -936,7 +936,6 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
         if (m == lm) {
             break;
         }
-        ++measures;
     }
 
     if (!fmr) {
@@ -1621,8 +1620,14 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                     Chord* nchord = toChord(chord->clone());
                     for (size_t i = 0; i < numNotes; i++) {           // strip ties from cloned chord
                         Note* n = nchord->notes()[i];
-                        n->setTieFor(0);
-                        n->setTieBack(0);
+                        if (Tie* tieFor = n->tieFor()) {
+                            n->setTieFor(nullptr);
+                            delete tieFor;
+                        }
+                        if (Tie* tieBack = n->tieBack()) {
+                            n->setTieBack(nullptr);
+                            delete tieBack;
+                        }
                     }
                     Chord* startChord = nchord;
                     Measure* measure = nullptr;
@@ -1722,7 +1727,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             tie->setTick(tie->startNote()->tick());
                             tie->setTick2(tie->endNote()->tick());
                             tie->setTrack(track);
-                            n->setTieFor(tie);
+                            nn->setTieFor(tie);
                             tieFor[i]->setTieBack(tie);
                             undoAddElement(tie);
                         }
@@ -6272,7 +6277,7 @@ void Score::undoChangeTpc(Note* note, int v)
 //   undoAddBracket
 //---------------------------------------------------------
 
-void Score::undoAddBracket(Staff* staff, int level, BracketType type, size_t span)
+void Score::undoAddBracket(Staff* staff, size_t level, BracketType type, size_t span)
 {
     staff_idx_t startStaffIdx = staff->idx();
     staff_idx_t totStaves = nstaves();

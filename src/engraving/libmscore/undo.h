@@ -1179,7 +1179,7 @@ class AddBracket : public UndoCommand
     OBJECT_ALLOCATOR(engraving, AddBracket)
 
     Staff* staff = nullptr;
-    int level = 0;
+    size_t level = 0;
     BracketType bracketType = BracketType::NORMAL;
     size_t span = 0;
 
@@ -1187,7 +1187,7 @@ class AddBracket : public UndoCommand
     void redo(EditData*) override;
 
 public:
-    AddBracket(Staff* s, int l, BracketType t, size_t sp)
+    AddBracket(Staff* s, size_t l, BracketType t, size_t sp)
         : staff(s), level(l), bracketType(t), span(sp) {}
 
     UNDO_TYPE(CommandType::AddBracket)

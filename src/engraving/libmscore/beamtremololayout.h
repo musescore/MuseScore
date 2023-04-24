@@ -68,7 +68,6 @@ private:
     EngravingItem* m_element = nullptr;
     Beam* m_beam = nullptr;
     Tremolo* m_trem = nullptr;
-    bool m_isValid = false;
     bool m_up = false;
     Fraction m_tick = Fraction(0, 1);
     double m_spatium = 0.;

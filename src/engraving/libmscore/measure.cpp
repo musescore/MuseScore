@@ -1602,7 +1602,7 @@ EngravingItem* Measure::drop(EditData& data)
     case ElementType::BRACKET:
     {
         Bracket* b = toBracket(e);
-        int level = 0;
+        size_t level = 0;
         staff_idx_t firstStaff = 0;
         for (Staff* s : score()->staves()) {
             for (const BracketItem* bi : s->brackets()) {
@@ -3335,7 +3335,7 @@ void Measure::layoutCrossStaff()
                 Beam* beam = c->beam();
                 Tremolo* tremolo = c->tremolo();
                 if ((beam && (beam->cross() || beam->userModified()))
-                    || tremolo && tremolo->twoNotes() && tremolo->userModified()) {
+                    || (tremolo && tremolo->twoNotes() && tremolo->userModified())) {
                     c->computeUp(); // for cross-staff beams
                 }
                 if (!c->graceNotes().empty()) {
