@@ -53,7 +53,7 @@ class StringData
 {
 //      std::vector<int>  stringTable { 40, 45, 50, 55, 59, 64 };   // guitar is default
 //      int         _frets = 19;
-    std::vector<instrString> stringTable {  };                      // no strings by default
+    std::vector<instrString> m_stringTable {  };                      // no strings by default
     int _frets = 0;
 
     static bool bFretting;
@@ -76,15 +76,13 @@ public:
     void        fretChords(Chord* chord) const;
     int         getPitch(int string, int fret, Staff* staff) const;
     static int  pitchOffsetAt(Staff* staff);
-    size_t      strings() const { return stringTable.size(); }
+    size_t      strings() const { return m_stringTable.size(); }
     int         frettedStrings() const;
-    const std::vector<instrString>& stringList() const { return stringTable; }
-    std::vector<instrString>& stringList() { return stringTable; }
+    const std::vector<instrString>& stringList() const { return m_stringTable; }
+    std::vector<instrString>& stringList() { return m_stringTable; }
     int         frets() const { return _frets; }
     void        setFrets(int val) { _frets = val; }
-    void        read(XmlReader&);
-    void        write(XmlWriter&) const;
-    bool operator==(const StringData& d) const { return d._frets == _frets && d.stringTable == stringTable; }
+    bool operator==(const StringData& d) const { return d._frets == _frets && d.m_stringTable == m_stringTable; }
     void        configBanjo5thString();
     int         adjustBanjo5thFret(int fret) const;
     bool        isFiveStringBanjo() const;

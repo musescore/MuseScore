@@ -29,6 +29,7 @@
 #include "rw/xmlreader.h"
 #include "rw/xmlwriter.h"
 #include "rw/400/twrite.h"
+#include "rw/400/tread.h"
 #include "style/style.h"
 #include "types/typesconv.h"
 
@@ -317,7 +318,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
     if (extended) {
         xml.tag("extended", extended);
     }
-    stringData.write(xml);
+    rw400::TWrite::write(&stringData, xml);
     if (staffCount > 1) {
         xml.tag("staves", static_cast<int>(staffCount));
     }
@@ -515,7 +516,7 @@ void InstrumentTemplate::read(XmlReader& e)
             trait.isHiddenOnScore = traitName.contains(u'(') && traitName.contains(u')');
             trait.name = traitName.remove(u'*').remove(u'(').remove(u')');
         } else if (tag == "StringData") {
-            stringData.read(e);
+            rw400::TRead::read(&stringData, e);
         } else if (tag == "drumset") {
             useDrumset = e.readInt();
         } else if (tag == "Drum") {
