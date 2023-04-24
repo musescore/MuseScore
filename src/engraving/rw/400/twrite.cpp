@@ -177,21 +177,23 @@ using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Art
                                   Vibrato, Volta,
                                   WhammyBar>;
 
-template<typename T>
-bool write_visit(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
+class WriteVisitor : public rtti::Visitor<WriteVisitor>
 {
-    if (T::classof(item)) {
-        TWrite::write(static_cast<const T*>(item), xml, ctx);
-        return true;
+public:
+    template<typename T>
+    static bool doVisit(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
+    {
+        if (T::classof(item)) {
+            TWrite::write(static_cast<const T*>(item), xml, ctx);
+            return true;
+        }
+        return false;
     }
-    return false;
-}
-
-DECLARE_VISITER(write)
+};
 
 void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
 {
-    bool found = write_visiter(WriteTypes {}, item, xml, ctx);
+    bool found = WriteVisitor::visit(WriteTypes {}, item, xml, ctx);
     IF_ASSERT_FAILED(found) {
     }
 }

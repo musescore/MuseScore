@@ -152,21 +152,23 @@ using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Arti
                                  Vibrato, Volta,
                                  WhammyBar>;
 
-template<typename T>
-bool read_visit(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
+class ReadVisitor : public rtti::Visitor<ReadVisitor>
 {
-    if (T::classof(item)) {
-        TRead::read(static_cast<T*>(item), xml, ctx);
-        return true;
+public:
+    template<typename T>
+    static bool doVisit(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
+    {
+        if (T::classof(item)) {
+            TRead::read(static_cast<T*>(item), xml, ctx);
+            return true;
+        }
+        return false;
     }
-    return false;
-}
-
-DECLARE_VISITER(read)
+};
 
 void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
 {
-    read_visiter(ReadTypes {}, item, xml, ctx);
+    ReadVisitor::visit(ReadTypes {}, item, xml, ctx);
 }
 
 bool TRead::readProperty(EngravingItem* item, const AsciiStringView& tag, XmlReader& xml, ReadContext& ctx, Pid pid)
