@@ -365,138 +365,6 @@ int Instrument::recognizeMidiProgram() const
 }
 
 //---------------------------------------------------------
-//   Instrument::read
-//---------------------------------------------------------
-
-void Instrument::read(XmlReader& e, Part* part)
-{
-    bool customDrumset = false;
-    bool readSingleNoteDynamics = false;
-
-    _channel.clear();         // remove default channel
-    _id = e.attribute("id");
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "singleNoteDynamics") {
-            _singleNoteDynamics = e.readBool();
-            readSingleNoteDynamics = true;
-        } else if (!readProperties(e, part, &customDrumset)) {
-            e.unknown();
-        }
-    }
-
-    if (_musicXmlId.isEmpty()) {
-        _musicXmlId = recognizeMusicXmlId();
-    }
-
-    if (_id.isEmpty()) {
-        _id = recognizeId();
-    }
-
-    if (channel(0) && channel(0)->program() == -1) {
-        channel(0)->setProgram(recognizeMidiProgram());
-    }
-
-    if (!readSingleNoteDynamics) {
-        setSingleNoteDynamicsFromTemplate();
-    }
-}
-
-//---------------------------------------------------------
-//   Instrument::readProperties
-//---------------------------------------------------------
-
-bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
-{
-    PartAudioSettingsCompat partAudioSetting;
-    InstrumentTrackId trackId;
-    if (part && part->score()) {
-        trackId = { part->score()->parts().size() + 1, id().toStdString() };//part is not assigned to score, _id field is not correct
-    }
-    partAudioSetting.instrumentId = trackId;
-    const AsciiStringView tag(e.name());
-    if (tag == "longName") {
-        StaffName name;
-        rw400::TRead::read(&name, e);
-        _longNames.push_back(name);
-    } else if (tag == "shortName") {
-        StaffName name;
-        rw400::TRead::read(&name, e);
-        _shortNames.push_back(name);
-    } else if (tag == "trackName") {
-        _trackName = e.readText();
-    } else if (tag == "minPitch") {      // obsolete
-        _minPitchP = _minPitchA = e.readInt();
-    } else if (tag == "maxPitch") {       // obsolete
-        _maxPitchP = _maxPitchA = e.readInt();
-    } else if (tag == "minPitchA") {
-        _minPitchA = e.readInt();
-    } else if (tag == "minPitchP") {
-        _minPitchP = e.readInt();
-    } else if (tag == "maxPitchA") {
-        _maxPitchA = e.readInt();
-    } else if (tag == "maxPitchP") {
-        _maxPitchP = e.readInt();
-    } else if (tag == "transposition") {    // obsolete
-        _transpose.chromatic = e.readInt();
-        _transpose.diatonic = chromatic2diatonic(_transpose.chromatic);
-    } else if (tag == "transposeChromatic") {
-        _transpose.chromatic = e.readInt();
-    } else if (tag == "transposeDiatonic") {
-        _transpose.diatonic = e.readInt();
-    } else if (tag == "instrumentId") {
-        _musicXmlId = e.readText();
-    } else if (tag == "useDrumset") {
-        _useDrumset = e.readInt();
-        if (_useDrumset) {
-            delete _drumset;
-            _drumset = new Drumset(*smDrumset);
-        }
-    } else if (tag == "Drum") {
-        // if we see on of this tags, a custom drumset will
-        // be created
-        if (!_drumset) {
-            _drumset = new Drumset(*smDrumset);
-        }
-        if (!(*customDrumset)) {
-            const_cast<Drumset*>(_drumset)->clear();
-            *customDrumset = true;
-        }
-        const_cast<Drumset*>(_drumset)->load(e);
-    }
-    // support tag "Tablature" for a while for compatibility with existent 2.0 scores
-    else if (tag == "Tablature" || tag == "StringData") {
-        _stringData.read(e);
-    } else if (tag == "MidiAction") {
-        NamedEventList a;
-        a.read(e);
-        _midiActions.push_back(a);
-    } else if (tag == "Articulation") {
-        MidiArticulation a;
-        a.read(e);
-        _articulation.push_back(a);
-    } else if (tag == "Channel" || tag == "channel") {
-        InstrChannel* a = new InstrChannel;
-        a->read(e, part, trackId);
-        _channel.push_back(a);
-    } else if (tag == "clef") {           // sets both transposing and concert clef
-        int idx = e.intAttribute("staff", 1) - 1;
-        ClefType ct = TConv::fromXml(e.readAsciiText(), ClefType::G);
-        setClefType(idx, ClefTypeList(ct, ct));
-    } else if (tag == "concertClef") {
-        int idx = e.intAttribute("staff", 1) - 1;
-        setClefType(idx, ClefTypeList(TConv::fromXml(e.readAsciiText(), ClefType::G), clefType(idx)._transposingClef));
-    } else if (tag == "transposingClef") {
-        int idx = e.intAttribute("staff", 1) - 1;
-        setClefType(idx, ClefTypeList(clefType(idx)._concertClef, TConv::fromXml(e.readAsciiText(), ClefType::G)));
-    } else {
-        return false;
-    }
-
-    return true;
-}
-
-//---------------------------------------------------------
 //   action
 //---------------------------------------------------------
 
@@ -1509,6 +1377,16 @@ void Instrument::setShortNames(const StaffNameList& l)
 const StaffNameList& Instrument::shortNames() const
 {
     return _shortNames;
+}
+
+void Instrument::appendLongName(const StaffName& n)
+{
+    _longNames.push_back(n);
+}
+
+void Instrument::appendShortName(const StaffName& n)
+{
+    _shortNames.push_back(n);
 }
 
 //---------------------------------------------------------

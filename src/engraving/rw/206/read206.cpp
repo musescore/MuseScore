@@ -682,7 +682,7 @@ static void readInstrument206(Instrument* i, Part* p, XmlReader& e)
                 customDrumset = true;
             }
             readDrumset206(i->drumset(), e);
-        } else if (i->readProperties(e, p, &customDrumset)) {
+        } else if (rw400::TRead::readProperties(i, e, p, &customDrumset)) {
         } else {
             e.unknown();
         }

@@ -327,8 +327,6 @@ public:
     Instrument(const Instrument&);
     ~Instrument();
 
-    void read(XmlReader&, Part* part);
-    bool readProperties(XmlReader&, Part*, bool* customDrumset);
     NamedEventList* midiAction(const String& s, int channel) const;
     int channelIdx(const String& s) const;
     void updateVelocity(int* velocity, int channel, const String& name);
@@ -372,7 +370,10 @@ public:
     void setClefType(size_t staffIdx, const ClefTypeList& c);
 
     const std::list<NamedEventList>& midiActions() const { return _midiActions; }
+    void addMidiAction(const NamedEventList& l) { _midiActions.push_back(l); }
+
     const std::vector<MidiArticulation>& articulation() const { return _articulation; }
+    void addMidiArticulation(const MidiArticulation& a) { _articulation.push_back(a); }
 
     const std::vector<InstrChannel*>& channel() const { return _channel; }
     void appendChannel(InstrChannel* c) { _channel.push_back(c); }
@@ -401,6 +402,8 @@ public:
     const StaffNameList& shortNames() const;
     void setLongNames(const StaffNameList& l);
     void setShortNames(const StaffNameList& l);
+    void appendLongName(const StaffName& n);
+    void appendShortName(const StaffName& n);
 
     String trackName() const;
     void setTrackName(const String& s);
