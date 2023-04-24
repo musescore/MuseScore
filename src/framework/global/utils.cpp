@@ -25,7 +25,7 @@
 
 using namespace mu;
 
-static constexpr const char* noteNames[] = {
+static constexpr const char* sharpNotes[] = {
     QT_TRANSLATE_NOOP("global", "C"),
     QT_TRANSLATE_NOOP("global", "C♯"),
     QT_TRANSLATE_NOOP("global", "D"),
@@ -40,16 +40,33 @@ static constexpr const char* noteNames[] = {
     QT_TRANSLATE_NOOP("global", "B")
 };
 
-std::string mu::pitchToString(int pitch, bool addoctave)
+static constexpr const char* flatNotes[] = {
+    QT_TRANSLATE_NOOP("global", "C"),
+    QT_TRANSLATE_NOOP("global", "Db"),
+    QT_TRANSLATE_NOOP("global", "D"),
+    QT_TRANSLATE_NOOP("global", "Eb"),
+    QT_TRANSLATE_NOOP("global", "E"),
+    QT_TRANSLATE_NOOP("global", "F"),
+    QT_TRANSLATE_NOOP("global", "Gb"),
+    QT_TRANSLATE_NOOP("global", "G"),
+    QT_TRANSLATE_NOOP("global", "Ab"),
+    QT_TRANSLATE_NOOP("global", "A"),
+    QT_TRANSLATE_NOOP("global", "Bb"),
+    QT_TRANSLATE_NOOP("global", "B")
+};
+
+std::string mu::pitchToString(int pitch, bool addoctave, bool useSharps /* = true */)
 {
     if (pitch < 0 || pitch > 127) {
         return std::string();
     }
 
+    auto source = useSharps ? sharpNotes : flatNotes;
+
     int i = pitch % 12;
     if (addoctave) {
         int octave = (pitch / 12) - 1;
-        return trc("global", noteNames[i]) + std::to_string(octave);
+        return trc("global", source[i]) + std::to_string(octave);
     }
-    return trc("global", noteNames[i]);
+    return trc("global", source[i]);
 }
