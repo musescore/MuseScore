@@ -65,7 +65,6 @@ public:
     bool operator==(const StaffName&) const;
     String toString() const;
     void read(XmlReader&);
-    void write(XmlWriter& xml, const char* name) const;
     int pos() const { return _pos; }
     String name() const { return _name; }
 };
@@ -82,7 +81,6 @@ public:
     StaffNameList(const std::list<StaffName>& l)
         : std::list<StaffName>(l) {}
 
-    void write(XmlWriter& xml, const char* name) const;
     std::list<String> toStringList() const;
 };
 
