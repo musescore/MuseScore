@@ -424,7 +424,7 @@ void NotationActionController::init()
     registerAction("add-down-bow", &Interaction::toggleArticulation, mu::engraving::SymId::stringsDownBow);
     registerAction("transpose-up", &Interaction::transposeSemitone, 1, PlayMode::PlayNote);
     registerAction("transpose-down", &Interaction::transposeSemitone, -1, PlayMode::PlayNote);
-    registerAction("toggle-insert-mode", &Interaction::toggleGlobalOrLocalInsert);
+    //registerAction("toggle-insert-mode", );
 
     registerAction("get-location", &Interaction::getLocation, &Controller::isNotationPage);
     registerAction("toggle-mmrest", &Interaction::execute, &mu::engraving::Score::cmdToggleMmrest);

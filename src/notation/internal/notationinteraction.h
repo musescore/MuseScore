@@ -271,7 +271,6 @@ public:
     void changeAccidental(mu::engraving::AccidentalType) override;
     void transposeSemitone(int) override;
     void transposeDiatonicAlterations(mu::engraving::TransposeDirection) override;
-    void toggleGlobalOrLocalInsert() override;
     void getLocation() override;
     void execute(void (mu::engraving::Score::*)()) override;
 

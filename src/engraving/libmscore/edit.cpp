@@ -4149,36 +4149,37 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
 }
 
 //---------------------------------------------------------
-//   globalTimeDelete
+//   cmdTimeDelete
+///    delete time by decreasing measure length if partial measures are selected
 //---------------------------------------------------------
 
-void Score::globalTimeDelete()
+void Score::cmdTimeDelete()
 {
-    LOGD("not implemented");
-}
+    EngravingItem* e = selection().element();
 
-//---------------------------------------------------------
-//   localTimeDelete
-//---------------------------------------------------------
+    if (e && e->isBarLine() && toBarLine(e)->segment()->isEndBarLineType()) {
+        Measure* m = toBarLine(e)->segment()->measure();
+        cmdJoinMeasure(m, m->nextMeasure());
+        return;
+    }
 
-void Score::localTimeDelete()
-{
     Segment* startSegment = nullptr;
     Segment* endSegment = nullptr;
 
     if (selection().state() != SelState::RANGE) {
-        EngravingItem* el = selection().element();
-        if (!el) {
+        if (!e) {
             return;
         }
+
         ChordRest* cr = nullptr;
-        if (el->isNote()) {
-            cr = toNote(el)->chord();
-        } else if (el->isChordRest()) {
-            cr = toChordRest(el);
+        if (e->isNote()) {
+            cr = toNote(e)->chord();
+        } else if (e->isChordRest()) {
+            cr = toChordRest(e);
         } else {
             return;
         }
+
         startSegment     = cr->segment();
         Fraction endTick = startSegment->tick() + cr->actualTicks();
         endSegment       = tick2measure(endTick)->findSegment(CR_TYPE, endTick);
@@ -4214,7 +4215,7 @@ void Score::localTimeDelete()
             } else {
                 len = mbStart->endTick() - tick;
             }
-            timeDelete(toMeasure(mbStart), startSegment, len);
+            doTimeDelete(toMeasure(mbStart), startSegment, len);
             if (mbStart == mbEnd) {
                 break;
             }
@@ -4223,7 +4224,7 @@ void Score::localTimeDelete()
         endTick = endSegment ? endSegment->tick() : mbEnd->endTick();
         if (mbEnd->endTick() != endTick) {
             Fraction len = endTick - mbEnd->tick();
-            timeDelete(toMeasure(mbEnd), toMeasure(mbEnd)->first(), len);
+            doTimeDelete(toMeasure(mbEnd), toMeasure(mbEnd)->first(), len);
             if (mbStart == mbEnd) {
                 break;
             }
@@ -4270,10 +4271,10 @@ void Score::localTimeDelete()
 }
 
 //---------------------------------------------------------
-//   timeDelete
+//   doTimeDelete
 //---------------------------------------------------------
 
-void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
+void Score::doTimeDelete(Measure* m, Segment* startSegment, const Fraction& f)
 {
     if (f.isZero()) {
         return;

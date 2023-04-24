@@ -355,7 +355,7 @@ Ret Score::putNote(const PointF& pos, bool replace, bool insert)
         return score->repitchNote(p, replace);
     } else {
         if (insert || score->inputState().usingNoteEntryMethod(NoteEntryMethod::TIMEWISE)) {
-            return score->insertChord(p);
+            return score->insertChordByInsertingTime(p);
         } else {
             return score->putNote(p, replace);
         }
@@ -662,12 +662,13 @@ Ret Score::repitchNote(const Position& p, bool replace)
 }
 
 //---------------------------------------------------------
-//   insertChord
+//   insertChordByInsertingTime
 //---------------------------------------------------------
 
-Ret Score::insertChord(const Position& pos)
+Ret Score::insertChordByInsertingTime(const Position& pos)
 {
-    // insert
+    // insert by increasing measure length
+    //
     // TODO:
     //    - check voices
     //    - split chord/rest
@@ -676,30 +677,16 @@ Ret Score::insertChord(const Position& pos)
     if (!el || !(el->isNote() || el->isRest())) {
         return make_ret(Ret::Code::UnknownError);
     }
+
     Segment* seg = pos.segment;
     if (seg->splitsTuplet()) {
         MScore::setError(MsError::CANNOT_INSERT_TUPLET);
         return make_ret(Ret::Code::UnknownError);
     }
-    if (_is.insertMode()) {
-        globalInsertChord(pos);
-    } else {
-        localInsertChord(pos);
-    }
 
-    return make_ok();
-}
-
-//---------------------------------------------------------
-//   localInsertChord
-//---------------------------------------------------------
-
-void Score::localInsertChord(const Position& pos)
-{
     const TDuration duration = _is.duration();
     const Fraction fraction  = duration.fraction();
     const Fraction len       = fraction;
-    Segment* seg             = pos.segment;
     Fraction tick            = seg->tick();
     Measure* measure         = seg->measure()->isMMRest() ? seg->measure()->mmRestFirst() : seg->measure();
     const Fraction targetMeasureLen = measure->ticks() + fraction;
@@ -778,63 +765,7 @@ void Score::localInsertChord(const Position& pos)
     Position p(pos);
     p.segment = s;
     putNote(p, true);
-}
 
-//---------------------------------------------------------
-//   globalInsertChord
-//---------------------------------------------------------
-
-void Score::globalInsertChord(const Position& pos)
-{
-    ChordRest* cr = selection().cr();
-    track_idx_t track = cr ? cr->track() : mu::nidx;
-    deselectAll();
-    Segment* s1        = pos.segment;
-    Segment* s2        = lastSegment();
-    TDuration duration = _is.duration();
-    Fraction fraction  = duration.fraction();
-    ScoreRange r;
-
-    r.read(s1, s2, false);
-
-    track_idx_t strack = 0;                        // for now for all tracks
-    track_idx_t etrack = nstaves() * VOICES;
-    Fraction stick  = s1->tick();
-    Fraction etick  = s2->tick();
-    Fraction ticks  = fraction;
-    Fraction len    = r.ticks();
-
-    if (!r.truncate(fraction)) {
-        appendMeasures(1);
-    }
-
-    putNote(pos, true);
-    Fraction dtick = s1->tick() + ticks;
-    int voiceOffsets[VOICES] { 0, 0, 0, 0 };
-    len = r.ticks();
-    for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
-        makeGap1(dtick, staffIdx, r.ticks(), voiceOffsets);
-    }
-    r.write(this, dtick);
-
-    for (auto i :  spanner()) {
-        Spanner* s = i.second;
-        if (s->track() >= strack && s->track() < etrack) {
-            if (s->tick() >= stick && s->tick() < etick) {
-                s->undoChangeProperty(Pid::SPANNER_TICK, s->tick() + ticks);
-            } else if (s->tick2() >= stick && s->tick2() < etick) {
-                s->undoChangeProperty(Pid::SPANNER_TICKS, s->ticks() + ticks);
-            }
-        }
-    }
-
-    if (track != mu::nidx) {
-        Measure* m = tick2measure(dtick);
-        Segment* s = m->findSegment(SegmentType::ChordRest, dtick);
-        EngravingItem* e = s->element(track);
-        if (e) {
-            select(e->isChord() ? toChord(e)->notes().front() : e);
-        }
-    }
+    return make_ok();
 }
 } // namespace mu::engraving

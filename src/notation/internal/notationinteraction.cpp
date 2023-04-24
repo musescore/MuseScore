@@ -5500,11 +5500,6 @@ void NotationInteraction::transposeDiatonicAlterations(mu::engraving::TransposeD
     execute(&mu::engraving::Score::transposeDiatonicAlterations, direction);
 }
 
-void NotationInteraction::toggleGlobalOrLocalInsert()
-{
-    score()->inputState().setInsertMode(!score()->inputState().insertMode());
-}
-
 void NotationInteraction::getLocation()
 {
     auto* e = score()->selection().element();
