@@ -49,6 +49,31 @@ static const ActionCode REPEAT_CODE("repeat");
 static const ActionCode PLAY_CHORD_SYMBOLS_CODE("play-chord-symbols");
 static const ActionCode PLAYBACK_SETUP("playback-setup");
 
+static constexpr aux_channel_idx_t AUX_CHANNEL_NUM = 2;
+
+static AudioOutputParams makeReverbOutputParams()
+{
+    AudioFxParams reverbParams;
+    reverbParams.resourceMeta = makeReverbMeta();
+    reverbParams.chainOrder = 0;
+    reverbParams.active = true;
+
+    AudioOutputParams result;
+    result.fxChain.emplace(reverbParams.chainOrder, std::move(reverbParams));
+
+    return result;
+}
+
+static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutputParams& params)
+{
+    if (params.fxChain.size() == 1) {
+        const AudioResourceMeta& meta = params.fxChain.cbegin()->second.resourceMeta;
+        return meta.id;
+    }
+
+    return mu::mtrc("playback", "Aux %1").arg(index + 1).toStdString();
+}
+
 void PlaybackController::init()
 {
     dispatcher()->reg(this, PLAY_CODE, this, &PlaybackController::togglePlay);
@@ -138,7 +163,7 @@ bool PlaybackController::isPaused() const
 
 bool PlaybackController::isLoaded() const
 {
-    return m_loadingTracks.empty();
+    return m_loadingTrackCount == 0;
 }
 
 bool PlaybackController::isLoopVisible() const
@@ -202,15 +227,20 @@ Notification PlaybackController::currentTrackSequenceIdChanged() const
 
 const IPlaybackController::InstrumentTrackIdMap& PlaybackController::instrumentTrackIdMap() const
 {
-    return m_trackIdMap;
+    return m_instrumentTrackIdMap;
 }
 
-Channel<TrackId, mu::engraving::InstrumentTrackId> PlaybackController::trackAdded() const
+const TrackIdList& PlaybackController::auxTrackIdList() const
+{
+    return m_auxTrackIdList;
+}
+
+Channel<TrackId> PlaybackController::trackAdded() const
 {
     return m_trackAdded;
 }
 
-Channel<TrackId, mu::engraving::InstrumentTrackId> PlaybackController::trackRemoved() const
+Channel<TrackId> PlaybackController::trackRemoved() const
 {
     return m_trackRemoved;
 }
@@ -319,6 +349,11 @@ INotationSelectionRangePtr PlaybackController::selectionRange() const
 INotationInteractionPtr PlaybackController::interaction() const
 {
     return m_notation ? m_notation->interaction() : nullptr;
+}
+
+uint64_t PlaybackController::notationPlaybackKey() const
+{
+    return reinterpret_cast<uint64_t>(notationPlayback().get());
 }
 
 void PlaybackController::onNotationChanged()
@@ -516,7 +551,7 @@ void PlaybackController::togglePlayChordSymbols()
     notationConfiguration()->setIsPlayChordSymbolsEnabled(!playChordSymbolsEnabled);
     notifyActionCheckedChanged(PLAY_CHORD_SYMBOLS_CODE);
 
-    for (auto it = m_trackIdMap.cbegin(); it != m_trackIdMap.cend(); ++it) {
+    for (auto it = m_instrumentTrackIdMap.cbegin(); it != m_instrumentTrackIdMap.cend(); ++it) {
         if (notationPlayback()->isChordSymbolsTrack(it->first)) {
             setTrackActivity(it->first, !playChordSymbolsEnabled);
         }
@@ -680,7 +715,8 @@ void PlaybackController::resetCurrentSequence()
 
     playback()->removeSequence(m_currentSequenceId);
 
-    m_trackIdMap.clear();
+    m_instrumentTrackIdMap.clear();
+    m_auxTrackIdList.clear();
 
     m_currentSequenceId = -1;
     m_currentSequenceIdChanged.notify();
@@ -757,35 +793,77 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
         }
     }
 
-    uint64_t notationPlaybackKey = reinterpret_cast<uint64_t>(notationPlayback().get());
+    uint64_t playbackKey = notationPlaybackKey();
 
     playback()->tracks()->addTrack(m_currentSequenceId, title, std::move(playbackData), { std::move(inParams), std::move(outParams) })
-    .onResolve(this, [this, instrumentTrackId, notationPlaybackKey, onFinished](const TrackId trackId, const AudioParams& appliedParams) {
+    .onResolve(this, [this, instrumentTrackId, playbackKey, onFinished](const TrackId trackId, const AudioParams& appliedParams) {
         //! NOTE It may be that while we were adding a track, the notation was already closed (or opened another)
         //! This situation can be if the notation was opened and immediately closed.
-        quint64 currentNotationPlaybackKey = reinterpret_cast<uint64_t>(notationPlayback().get());
-        if (currentNotationPlaybackKey != notationPlaybackKey) {
+        if (notationPlaybackKey() != playbackKey) {
             return;
         }
 
-        m_trackIdMap.insert({ instrumentTrackId, trackId });
+        m_instrumentTrackIdMap.insert({ instrumentTrackId, trackId });
 
         audioSettings()->setTrackInputParams(instrumentTrackId, appliedParams.in);
         audioSettings()->setTrackOutputParams(instrumentTrackId, appliedParams.out);
 
         updateMuteStates();
 
-        onFinished(instrumentTrackId);
+        onFinished();
 
-        m_trackAdded.send(trackId, instrumentTrackId);
+        m_trackAdded.send(trackId);
     })
     .onReject(this, [instrumentTrackId, onFinished](int code, const std::string& msg) {
         LOGE() << "can't add a new track, code: [" << code << "] " << msg;
 
-        onFinished(instrumentTrackId);
+        onFinished();
     });
 
-    m_loadingTracks.push_back(instrumentTrackId);
+    m_loadingTrackCount++;
+}
+
+void PlaybackController::addAuxTrack(aux_channel_idx_t index, const TrackAddFinished& onFinished)
+{
+    IF_ASSERT_FAILED(notationPlayback() && playback()) {
+        return;
+    }
+
+    AudioOutputParams outParams;
+
+    if (audioSettings()->containsAuxOutputParams(index)) {
+        outParams = audioSettings()->auxOutputParams(index);
+    } else if (index == 0) {
+        outParams = makeReverbOutputParams();
+    }
+
+    std::string title = resolveAuxTrackTitle(index, outParams);
+    uint64_t playbackKey = notationPlaybackKey();
+
+    playback()->tracks()->addAuxTrack(m_currentSequenceId, title, outParams)
+    .onResolve(this, [this, playbackKey, index, onFinished](const TrackId trackId, const AudioOutputParams& appliedParams) {
+        //! NOTE It may be that while we were adding a track, the notation was already closed (or opened another)
+        //! This situation can be if the notation was opened and immediately closed.
+        if (notationPlaybackKey() != playbackKey) {
+            return;
+        }
+
+        m_auxTrackIdList.push_back(trackId);
+
+        audioSettings()->setAuxOutputParams(index, appliedParams);
+
+        updateMuteStates();
+        onFinished();
+
+        m_trackAdded.send(trackId);
+    })
+    .onReject(this, [onFinished](int code, const std::string& msg) {
+        LOGE() << "can't add a new aux track, code: [" << code << "] " << msg;
+
+        onFinished();
+    });
+
+    m_loadingTrackCount++;
 }
 
 void PlaybackController::setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive)
@@ -798,7 +876,7 @@ void PlaybackController::setTrackActivity(const engraving::InstrumentTrackId& in
 
     outParams.muted = !isActive;
 
-    audio::TrackId trackId = m_trackIdMap[instrumentTrackId];
+    audio::TrackId trackId = m_instrumentTrackIdMap[instrumentTrackId];
     playback()->audioOutput()->setOutputParams(m_currentSequenceId, trackId, std::move(outParams));
 }
 
@@ -812,10 +890,16 @@ AudioOutputParams PlaybackController::trackOutputParams(const engraving::Instrum
 
     if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
         result.muted = !notationConfiguration()->isMetronomeEnabled();
+        return result;
     }
 
     if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId)) {
         result.muted = !notationConfiguration()->isPlayChordSymbolsEnabled();
+    }
+
+    if (result.auxSends.empty()) {
+        result.auxSends.emplace_back(AuxSendParams { 0.25, true }); // used by default for the reverb effect
+        result.auxSends.emplace_back(AuxSendParams { 0.0, true }); // no effects are assigned by default
     }
 
     return result;
@@ -825,7 +909,7 @@ InstrumentTrackIdSet PlaybackController::availableInstrumentTracks() const
 {
     InstrumentTrackIdSet result;
 
-    for (const auto& pair : m_trackIdMap) {
+    for (const auto& pair : m_instrumentTrackIdMap) {
         result.insert(pair.first);
     }
 
@@ -861,17 +945,17 @@ void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
         return;
     }
 
-    auto search = m_trackIdMap.find(instrumentTrackId);
+    auto search = m_instrumentTrackIdMap.find(instrumentTrackId);
 
-    if (search == m_trackIdMap.end()) {
+    if (search == m_instrumentTrackIdMap.end()) {
         return;
     }
 
     playback()->tracks()->removeTrack(m_currentSequenceId, search->second);
     audioSettings()->removeTrackParams(instrumentTrackId);
 
-    m_trackRemoved.send(search->second, instrumentTrackId);
-    m_trackIdMap.erase(instrumentTrackId);
+    m_trackRemoved.send(search->second);
+    m_instrumentTrackIdMap.erase(instrumentTrackId);
 }
 
 void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceId)
@@ -908,11 +992,11 @@ void PlaybackController::subscribeOnAudioParamsChanges()
             return;
         }
 
-        auto search = std::find_if(m_trackIdMap.begin(), m_trackIdMap.end(), [trackId](const auto& pair) {
+        auto search = std::find_if(m_instrumentTrackIdMap.begin(), m_instrumentTrackIdMap.end(), [trackId](const auto& pair) {
             return pair.second == trackId;
         });
 
-        if (search != m_trackIdMap.end()) {
+        if (search != m_instrumentTrackIdMap.end()) {
             audioSettings()->setTrackInputParams(search->first, params);
         }
     });
@@ -925,37 +1009,43 @@ void PlaybackController::subscribeOnAudioParamsChanges()
             return;
         }
 
-        auto search = std::find_if(m_trackIdMap.begin(), m_trackIdMap.end(), [trackId](const auto& pair) {
+        auto search = std::find_if(m_instrumentTrackIdMap.begin(), m_instrumentTrackIdMap.end(), [trackId](const auto& pair) {
             return pair.second == trackId;
         });
 
-        if (search != m_trackIdMap.end()) {
+        if (search != m_instrumentTrackIdMap.end()) {
             audioSettings()->setTrackOutputParams(search->first, params);
+            return;
+        }
+
+        size_t auxIdx = mu::indexOf(m_auxTrackIdList, trackId);
+        if (auxIdx != mu::nidx) {
+            audioSettings()->setAuxOutputParams(static_cast<aux_channel_idx_t>(auxIdx), params);
         }
     });
 }
 
 void PlaybackController::setupSequenceTracks()
 {
-    m_trackIdMap.clear();
+    m_instrumentTrackIdMap.clear();
 
     if (!masterNotationParts()) {
         return;
     }
 
-    m_loadingTracks.clear();
+    m_loadingTrackCount = 0;
 
     InstrumentTrackIdSet trackIdSet = notationPlayback()->existingTrackIdSet();
-    size_t trackCount = trackIdSet.size();
+    size_t trackCount = trackIdSet.size() + AUX_CHANNEL_NUM;
     std::string title = trc("playback", "Loading audio samples");
 
-    auto onAddFinished = [this, trackCount, title](const engraving::InstrumentTrackId& instrumentTrackId) {
-        m_loadingTracks.remove(instrumentTrackId);
+    auto onAddFinished = [this, trackCount, title]() {
+        m_loadingTrackCount--;
 
-        size_t current = trackCount - m_loadingTracks.size();
+        size_t current = trackCount - m_loadingTrackCount;
         m_loadingProgress.progressChanged.send(current, trackCount, title);
 
-        if (m_loadingTracks.empty()) {
+        if (m_loadingTrackCount == 0) {
             m_loadingProgress.finished.send(make_ok());
             m_isPlayAllowedChanged.notify();
         }
@@ -964,6 +1054,11 @@ void PlaybackController::setupSequenceTracks()
     for (const InstrumentTrackId& trackId : trackIdSet) {
         addTrack(trackId, onAddFinished);
     }
+
+    /*! TODO: https://github.com/musescore/MuseScore/issues/16466
+    for (aux_channel_idx_t idx = 0; idx < AUX_CHANNEL_NUM; ++idx) {
+        addAuxTrack(idx, onAddFinished);
+    }*/
 
     m_loadingProgress.progressChanged.send(0, trackCount, title);
 
@@ -978,8 +1073,8 @@ void PlaybackController::setupSequenceTracks()
     NotifyList<const Part*> partList = masterNotationParts()->partList();
     partList.onItemChanged(this, [this, onAddFinished](const Part* part) {
         for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
-            auto search = m_trackIdMap.find(trackId);
-            if (search == m_trackIdMap.cend()) {
+            auto search = m_instrumentTrackIdMap.find(trackId);
+            if (search == m_instrumentTrackIdMap.cend()) {
                 removeNonExistingTracks();
                 addTrack(trackId, onAddFinished);
             }
@@ -1049,7 +1144,7 @@ void PlaybackController::updateMuteStates()
     bool isRangePlaybackMode = !m_isExportingAudio && selection()->isRange() && !allowedInstrumentTrackIdSet.empty();
 
     for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
-        if (!mu::contains(m_trackIdMap, instrumentTrackId)) {
+        if (!mu::contains(m_instrumentTrackIdMap, instrumentTrackId)) {
             continue;
         }
 
@@ -1077,7 +1172,7 @@ void PlaybackController::updateMuteStates()
         AudioOutputParams params = trackOutputParams(instrumentTrackId);
         params.muted = shouldBeMuted;
 
-        audio::TrackId trackId = m_trackIdMap.at(instrumentTrackId);
+        audio::TrackId trackId = m_instrumentTrackIdMap.at(instrumentTrackId);
         playback()->audioOutput()->setOutputParams(m_currentSequenceId, trackId, std::move(params));
     }
 }
@@ -1192,7 +1287,7 @@ void PlaybackController::applyProfile(const SoundProfileName& profileName)
 
     const InstrumentTrackId& metronomeTrackId = notationPlayback()->metronomeTrackId();
 
-    for (const auto& pair : m_trackIdMap) {
+    for (const auto& pair : m_instrumentTrackIdMap) {
         if (pair.first == metronomeTrackId) {
             continue;
         }

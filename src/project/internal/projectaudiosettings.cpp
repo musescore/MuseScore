@@ -63,6 +63,27 @@ void ProjectAudioSettings::setMasterAudioOutputParams(const AudioOutputParams& p
     setNeedSave(true);
 }
 
+bool ProjectAudioSettings::containsAuxOutputParams(audio::aux_channel_idx_t index) const
+{
+    return mu::contains(m_auxOutputParams, index);
+}
+
+mu::audio::AudioOutputParams ProjectAudioSettings::auxOutputParams(audio::aux_channel_idx_t index) const
+{
+    return mu::value(m_auxOutputParams, index);
+}
+
+void ProjectAudioSettings::setAuxOutputParams(audio::aux_channel_idx_t index, const audio::AudioOutputParams& params)
+{
+    auto it = m_auxOutputParams.find(index);
+    if (it != m_auxOutputParams.end() && it->second == params) {
+        return;
+    }
+
+    m_auxOutputParams.insert_or_assign(index, params);
+    setNeedSave(true);
+}
+
 AudioInputParams ProjectAudioSettings::trackInputParams(const InstrumentTrackId& partId) const
 {
     auto search = m_trackInputParamsMap.find(partId);
@@ -201,6 +222,13 @@ mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
     QJsonObject masterObj = rootObj.value("master").toObject();
     m_masterOutputParams = outputParamsFromJson(masterObj);
 
+    QJsonArray auxArray = rootObj.value("aux").toArray();
+    for (int i = 0; i < auxArray.size(); ++i) {
+        QJsonObject auxObject = auxArray[i].toObject();
+        audio::AudioOutputParams outParams = outputParamsFromJson(auxObject.value("out").toObject());
+        m_auxOutputParams.emplace(static_cast<aux_channel_idx_t>(i), std::move(outParams));
+    }
+
     QJsonArray tracksArray = rootObj.value("tracks").toArray();
 
     for (const QJsonValue value : tracksArray) {
@@ -232,6 +260,13 @@ mu::Ret ProjectAudioSettings::write(engraving::MscWriter& writer)
 {
     QJsonObject rootObj;
     rootObj["master"] = outputParamsToJson(m_masterOutputParams);
+
+    QJsonArray auxArray;
+    for (const auto& pair : m_auxOutputParams) {
+        auxArray.append(buildAuxObject(pair.second));
+    }
+
+    rootObj["aux"] = auxArray;
 
     QJsonArray tracksArray;
     for (const auto& pair : m_trackInputParamsMap) {
@@ -310,7 +345,7 @@ AuxSendsParams ProjectAudioSettings::auxSendsFromJson(const QJsonObject& object)
 
     for (const QString& key : object.keys()) {
         AuxSendParams params = auxSendParamsFromJson(object.value(key).toObject());
-        result.emplace(static_cast<TrackId>(key.toInt()), std::move(params));
+        result.emplace_back(std::move(params));
     }
 
     return result;
@@ -375,7 +410,10 @@ QJsonObject ProjectAudioSettings::outputParamsToJson(const audio::AudioOutputPar
     result.insert("fxChain", fxChainToJson(params.fxChain));
     result.insert("balance", params.balance);
     result.insert("volumeDb", params.volume);
-    result.insert("auxSends", auxSendsToJson(params.auxSends));
+
+    if (!params.auxSends.empty()) {
+        result.insert("auxSends", auxSendsToJson(params.auxSends));
+    }
 
     return result;
 }
@@ -400,12 +438,12 @@ QJsonObject ProjectAudioSettings::fxChainToJson(const audio::AudioFxChain& fxCha
     return result;
 }
 
-QJsonObject ProjectAudioSettings::auxSendsToJson(const audio::AuxSendsParams& auxSends) const
+QJsonArray ProjectAudioSettings::auxSendsToJson(const audio::AuxSendsParams& auxSends) const
 {
-    QJsonObject result;
+    QJsonArray result;
 
-    for (const auto& pair : auxSends) {
-        result.insert(QString::number(static_cast<int>(pair.first)), auxSendParamsToJson(pair.second));
+    for (const AuxSendParams& auxSend : auxSends) {
+        result.push_back(auxSendParamsToJson(auxSend));
     }
 
     return result;
@@ -508,6 +546,15 @@ QString ProjectAudioSettings::resourceTypeToString(const audio::AudioResourceTyp
     }
 
     return RESOURCE_TYPE_MAP.at(AudioResourceType::Undefined);
+}
+
+QJsonObject ProjectAudioSettings::buildAuxObject(const audio::AudioOutputParams& params) const
+{
+    QJsonObject result;
+
+    result.insert("out", outputParamsToJson(params));
+
+    return result;
 }
 
 QJsonObject ProjectAudioSettings::buildTrackObject(const InstrumentTrackId& id) const

@@ -46,9 +46,10 @@ public:
     async::Notification currentTrackSequenceIdChanged() const override;
 
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
+    const audio::TrackIdList& auxTrackIdList() const override;
 
-    async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackAdded() const override;
-    async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackRemoved() const override;
+    async::Channel<audio::TrackId> trackAdded() const override;
+    async::Channel<audio::TrackId> trackRemoved() const override;
 
     void playElements(const std::vector<const notation::EngravingItem*>& elements) override;
     void playMetronome(int tick) override;

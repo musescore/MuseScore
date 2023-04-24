@@ -86,12 +86,18 @@ const IPlaybackController::InstrumentTrackIdMap& PlaybackControllerStub::instrum
     return m;
 }
 
-mu::async::Channel<mu::audio::TrackId, mu::engraving::InstrumentTrackId> PlaybackControllerStub::trackAdded() const
+const mu::audio::TrackIdList& PlaybackControllerStub::auxTrackIdList() const
+{
+    static const mu::audio::TrackIdList l;
+    return l;
+}
+
+mu::async::Channel<mu::audio::TrackId> PlaybackControllerStub::trackAdded() const
 {
     return {};
 }
 
-mu::async::Channel<mu::audio::TrackId, mu::engraving::InstrumentTrackId> PlaybackControllerStub::trackRemoved() const
+mu::async::Channel<mu::audio::TrackId> PlaybackControllerStub::trackRemoved() const
 {
     return {};
 }

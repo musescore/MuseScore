@@ -60,9 +60,10 @@ public:
 
     using InstrumentTrackIdMap = std::unordered_map<engraving::InstrumentTrackId, audio::TrackId>;
     virtual const InstrumentTrackIdMap& instrumentTrackIdMap() const = 0;
+    virtual const audio::TrackIdList& auxTrackIdList() const = 0;
 
-    virtual async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackAdded() const = 0;
-    virtual async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackRemoved() const = 0;
+    virtual async::Channel<audio::TrackId> trackAdded() const = 0;
+    virtual async::Channel<audio::TrackId> trackRemoved() const = 0;
 
     virtual void playElements(const std::vector<const notation::EngravingItem*>& elements) = 0;
     virtual void playMetronome(int tick) = 0;
