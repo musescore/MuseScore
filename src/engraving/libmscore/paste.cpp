@@ -357,7 +357,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                         pasteChordRest(cr, tick, e.context()->transpose());
                     }
                 } else if (tag == "Spanner") {
-                    Spanner::readSpanner(e, this, e.context()->track());
+                    rw400::TRead::readSpanner(e, this, e.context()->track());
                     spannerFound = true;
                 } else if (tag == "Harmony") {
                     // transpose
@@ -557,55 +557,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
         }
     }
     return true;
-}
-
-//---------------------------------------------------------
-//   Score::readAddConnector
-//---------------------------------------------------------
-
-void Score::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
-{
-    if (!pasteMode) {
-        // How did we get there?
-        LOGD("Score::readAddConnector is called not in paste mode.");
-        return;
-    }
-    const ElementType type = info->type();
-    switch (type) {
-    case ElementType::HAIRPIN:
-    case ElementType::PEDAL:
-    case ElementType::OTTAVA:
-    case ElementType::TRILL:
-    case ElementType::TEXTLINE:
-    case ElementType::VOLTA:
-    case ElementType::PALM_MUTE:
-    case ElementType::WHAMMY_BAR:
-    case ElementType::RASGUEADO:
-    case ElementType::HARMONIC_MARK:
-    case ElementType::PICK_SCRAPE:
-    case ElementType::LET_RING:
-    case ElementType::GRADUAL_TEMPO_CHANGE:
-    case ElementType::VIBRATO:
-    {
-        Spanner* sp = toSpanner(info->connector());
-        const Location& l = info->location();
-        if (info->isStart()) {
-            sp->setAnchor(Spanner::Anchor::SEGMENT);
-            sp->setTrack(l.track());
-            sp->setTrack2(l.track());
-            sp->setTick(l.frac());
-        } else if (info->isEnd()) {
-            sp->setTick2(l.frac());
-            undoAddElement(sp);
-            if (sp->isOttava()) {
-                sp->staff()->updateOttava();
-            }
-        }
-    }
-    break;
-    default:
-        break;
-    }
 }
 
 //---------------------------------------------------------

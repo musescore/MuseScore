@@ -102,39 +102,5 @@ public:
     bool isMiddle() const { return hasPrevious() && hasNext(); }
     bool isEnd() const { return hasPrevious() && !hasNext(); }
 };
-
-//---------------------------------------------------------
-//   @@ ConnectorInfoReader
-///    Helper class for reading beams, tuplets and spanners.
-//---------------------------------------------------------
-
-class ConnectorInfoReader final : public ConnectorInfo
-{
-    OBJECT_ALLOCATOR(engraving, ConnectorInfoReader)
-
-    XmlReader* _reader;
-    EngravingItem* _connector;
-    EngravingObject* _connectorReceiver;
-
-    void readEndpointLocation(Location& l);
-
-public:
-    ConnectorInfoReader(XmlReader& e, EngravingItem* current, int track = -1);
-    ConnectorInfoReader(XmlReader& e, Score* current, int track = -1);
-
-    ConnectorInfoReader* prev() const { return static_cast<ConnectorInfoReader*>(_prev); }
-    ConnectorInfoReader* next() const { return static_cast<ConnectorInfoReader*>(_next); }
-
-    EngravingItem* connector();
-    const EngravingItem* connector() const;
-    EngravingItem* releaseConnector();   // returns connector and "forgets" it by
-    // setting an internal pointer to it to zero
-
-    bool read();
-    void update();
-    void addToScore(bool pasteMode);
-
-    static void readConnector(std::unique_ptr<ConnectorInfoReader> info, XmlReader& e);
-};
 } // namespace mu::engraving
 #endif

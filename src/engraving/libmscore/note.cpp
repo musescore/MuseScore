@@ -1568,64 +1568,6 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
 }
 
 //---------------------------------------------------------
-//   Note::readAddConnector
-//---------------------------------------------------------
-
-void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
-{
-    const ElementType type = info->type();
-    const Location& l = info->location();
-    switch (type) {
-    case ElementType::TIE:
-    case ElementType::TEXTLINE:
-    case ElementType::GLISSANDO:
-    {
-        Spanner* sp = toSpanner(info->connector());
-        if (info->isStart()) {
-            sp->setTrack(l.track());
-            sp->setTick(tick());
-            if (sp->isTie()) {
-                Note* n = this;
-                while (n->tieFor()) {
-                    n = n->tieFor()->endNote();
-                }
-                Tie* tie = toTie(sp);
-                tie->setParent(n);
-                tie->setStartNote(n);
-                n->_tieFor = tie;
-            } else {
-                sp->setAnchor(Spanner::Anchor::NOTE);
-                sp->setStartElement(this);
-                addSpannerFor(sp);
-                sp->setParent(this);
-            }
-        } else if (info->isEnd()) {
-            sp->setTrack2(l.track());
-            sp->setTick2(tick());
-            sp->setEndElement(this);
-            if (sp->isTie()) {
-                _tieBack = toTie(sp);
-            } else {
-                if (sp->isGlissando() && explicitParent() && explicitParent()->isChord()) {
-                    toChord(explicitParent())->setEndsGlissando(true);
-                }
-                addSpannerBack(sp);
-            }
-
-            // As spanners get added after being fully read, they
-            // do not get cloned with the note when pasting to
-            // linked staves. So add this spanner explicitly.
-            if (pasteMode) {
-                score()->undoAddElement(sp);
-            }
-        }
-    }
-    default:
-        break;
-    }
-}
-
-//---------------------------------------------------------
 //   transposition
 //---------------------------------------------------------
 

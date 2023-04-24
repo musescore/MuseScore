@@ -419,7 +419,6 @@ public:
 
     void draw(mu::draw::Painter*) const override;
 
-    void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
     void setupAfterRead(const Fraction& tick, bool pasteMode);
 
     bool acceptDrop(EditData&) const override;

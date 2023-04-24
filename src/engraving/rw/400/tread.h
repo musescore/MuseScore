@@ -303,6 +303,9 @@ public:
     static bool readProperties(TextLineBase* b, XmlReader& e, ReadContext& ctx);
     static bool readProperties(Volta* v, XmlReader& e, ReadContext& ctx);
 
+    static void readSpanner(XmlReader& e, EngravingItem* current, track_idx_t track);
+    static void readSpanner(XmlReader& e, Score* current, track_idx_t track);
+
 private:
     static bool readProperties(Box* b, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(HBox* b, XmlReader& xml, ReadContext& ctx);

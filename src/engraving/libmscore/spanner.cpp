@@ -1435,26 +1435,6 @@ void Spanner::layoutSystemsDone()
     segments = std::move(validSegments);
 }
 
-//--------------------------------------------------
-//   Spanner::readSpanner
-//---------------------------------------------------------
-
-void Spanner::readSpanner(XmlReader& e, EngravingItem* current, track_idx_t track)
-{
-    std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, static_cast<int>(track)));
-    ConnectorInfoReader::readConnector(std::move(info), e);
-}
-
-//--------------------------------------------------
-//   Spanner::readSpanner
-//---------------------------------------------------------
-
-void Spanner::readSpanner(XmlReader& e, Score* current, track_idx_t track)
-{
-    std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, static_cast<int>(track)));
-    ConnectorInfoReader::readConnector(std::move(info), e);
-}
-
 //---------------------------------------------------------
 //   autoplaceSpannerSegment
 //---------------------------------------------------------

@@ -152,8 +152,6 @@ public:
     EngravingObject* scanParent() const override;
     EngravingObjectList scanChildren() const override;
 
-    void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
-
     void writeBox(XmlWriter&) const;
     void readBox(XmlReader&);
     bool isEditable() const override { return false; }

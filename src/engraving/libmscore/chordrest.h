@@ -54,6 +54,7 @@ class BeamSegment;
 class ChordRest : public DurationElement
 {
     OBJECT_ALLOCATOR(engraving, ChordRest)
+    DECLARE_CLASSOF(ElementType::INVALID) // dummy
 
     ElementList _el;
     TDuration _durationType;
@@ -93,8 +94,6 @@ public:
     virtual void undoUnlink() override;
 
     virtual Segment* segment() const { return (Segment*)explicitParent(); }
-
-    virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
 
     void setBeamMode(BeamMode m) { _beamMode = m; }
     void undoSetBeamMode(BeamMode m);

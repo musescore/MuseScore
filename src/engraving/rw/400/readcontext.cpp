@@ -28,10 +28,13 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/undo.h"
 
+#include "connectorinforeader.h"
+
 #include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rw400;
 
 ReadContext::ReadContext(Score* score)
     : m_score(score)

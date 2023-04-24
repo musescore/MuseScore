@@ -78,7 +78,6 @@ class Bracket;
 class Chord;
 class ChordRest;
 class Clef;
-class ConnectorInfoReader;
 class Element;
 class EventMap;
 class Excerpt;
@@ -364,6 +363,7 @@ using PaddingTable = PaddingVector<PaddingVector<double> >;
 class Score : public EngravingObject
 {
     OBJECT_ALLOCATOR(engraving, Score)
+    DECLARE_CLASSOF(ElementType::SCORE)
 
     INJECT(engraving, draw::IImageProvider, imageProvider)
     INJECT(engraving, IEngravingConfiguration, configuration)
@@ -935,7 +935,6 @@ public:
 
     void cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
     bool pasteStaff(XmlReader&, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
-    void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst);
     void renderMidi(EventMap* events, const MidiRenderer::Context& ctx, bool expandRepeats);
 

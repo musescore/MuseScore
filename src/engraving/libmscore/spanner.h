@@ -189,9 +189,6 @@ public:
 
     virtual void setScore(Score* s) override;
 
-    static void readSpanner(XmlReader& e, EngravingItem* current, track_idx_t track);
-    static void readSpanner(XmlReader& e, Score* current, track_idx_t track);
-
     virtual Fraction tick() const override { return _tick; }
     Fraction tick2() const { return _tick + _ticks; }
     Fraction ticks() const { return _ticks; }
