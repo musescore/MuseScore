@@ -133,11 +133,14 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
             }
         }
         Fraction tickStart = Fraction::fromString(e.attribute("tick"));
-        tickLen       =  Fraction::fromString(e.attribute("len"));
-        Fraction oTickLen =  tickLen;
-        tickLen       *= scale;
-        int staffStart    = e.intAttribute("staff", 0);
-        staves        = e.intAttribute("staves", 0);
+        Fraction oTickLen = Fraction::fromString(e.attribute("len"));
+        tickLen = oTickLen * scale;
+        int staffStart = e.intAttribute("staff", 0);
+        staves = e.intAttribute("staves", 0);
+
+        if (tickLen.isZero() || staves == 0) {
+            break;
+        }
 
         Fraction oEndTick = dstTick + oTickLen;
         auto oSpanner = spannerMap().findContained(dstTick.ticks(), oEndTick.ticks());
