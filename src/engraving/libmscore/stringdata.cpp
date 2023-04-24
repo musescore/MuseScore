@@ -65,6 +65,11 @@ StringData::StringData(int numFrets, std::vector<instrString>& strings)
     }
 }
 
+bool StringData::isNull() const
+{
+    return *this == StringData();
+}
+
 // called from import (musicxml/guitarpro/...)
 void StringData::set(const StringData& src)
 {

@@ -61,6 +61,7 @@
 #include "../../libmscore/chordrest.h"
 #include "../../libmscore/clef.h"
 
+#include "../../libmscore/drumset.h"
 #include "../../libmscore/dynamic.h"
 
 #include "../../libmscore/fermata.h"
@@ -79,6 +80,7 @@
 
 #include "../../libmscore/image.h"
 #include "../../libmscore/imageStore.h"
+#include "../../libmscore/instrument.h"
 #include "../../libmscore/instrchange.h"
 
 #include "../../libmscore/jump.h"
@@ -123,6 +125,7 @@
 #include "../../libmscore/stem.h"
 #include "../../libmscore/stemslash.h"
 #include "../../libmscore/sticking.h"
+#include "../../libmscore/stringdata.h"
 #include "../../libmscore/symbol.h"
 #include "../../libmscore/bsymbol.h"
 #include "../../libmscore/system.h"
@@ -1460,6 +1463,82 @@ void TWrite::write(const Image* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::LOCK_ASPECT_RATIO);
     writeProperty(item, xml, Pid::SIZE_IS_SPATIUM);
 
+    xml.endElement();
+}
+
+void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const Part* part)
+{
+    if (item->id().isEmpty()) {
+        xml.startElement("Instrument");
+    } else {
+        xml.startElement("Instrument", { { "id", item->id() } });
+    }
+    item->longNames().write(xml, "longName");
+    item->shortNames().write(xml, "shortName");
+//      if (!_trackName.empty())
+    xml.tag("trackName", item->trackName());
+    if (item->minPitchP() > 0) {
+        xml.tag("minPitchP", item->minPitchP());
+    }
+    if (item->maxPitchP() < 127) {
+        xml.tag("maxPitchP", item->maxPitchP());
+    }
+    if (item->minPitchA() > 0) {
+        xml.tag("minPitchA", item->minPitchA());
+    }
+    if (item->maxPitchA() < 127) {
+        xml.tag("maxPitchA", item->maxPitchA());
+    }
+    if (item->transpose().diatonic) {
+        xml.tag("transposeDiatonic", item->transpose().diatonic);
+    }
+    if (item->transpose().chromatic) {
+        xml.tag("transposeChromatic", item->transpose().chromatic);
+    }
+    if (!item->musicXmlId().isEmpty()) {
+        xml.tag("instrumentId", item->musicXmlId());
+    }
+    if (item->useDrumset()) {
+        xml.tag("useDrumset", item->useDrumset());
+        item->drumset()->save(xml);
+    }
+    for (size_t i = 0; i < item->cleffTypeCount(); ++i) {
+        ClefTypeList ct = item->clefType(i);
+        if (ct._concertClef == ct._transposingClef) {
+            if (ct._concertClef != ClefType::G) {
+                if (i) {
+                    xml.tag("clef", { { "staff", i + 1 } }, TConv::toXml(ct._concertClef));
+                } else {
+                    xml.tag("clef", TConv::toXml(ct._concertClef));
+                }
+            }
+        } else {
+            if (i) {
+                xml.tag("concertClef", { { "staff", i + 1 } }, TConv::toXml(ct._concertClef));
+                xml.tag("transposingClef", { { "staff", i + 1 } }, TConv::toXml(ct._transposingClef));
+            } else {
+                xml.tag("concertClef", TConv::toXml(ct._concertClef));
+                xml.tag("transposingClef", TConv::toXml(ct._transposingClef));
+            }
+        }
+    }
+
+    if (item->singleNoteDynamics() != item->getSingleNoteDynamicsFromTemplate()) {
+        xml.tag("singleNoteDynamics", item->singleNoteDynamics());
+    }
+
+    if (!item->stringData()->isNull()) {
+        item->stringData()->write(xml);
+    }
+    for (const NamedEventList& a : item->midiActions()) {
+        a.write(xml, "MidiAction");
+    }
+    for (const MidiArticulation& a : item->articulation()) {
+        a.write(xml);
+    }
+    for (const InstrChannel* a : item->channel()) {
+        a->write(xml, part);
+    }
     xml.endElement();
 }
 

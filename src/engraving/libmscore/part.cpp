@@ -184,12 +184,12 @@ void Part::clearStaves()
 
 void Part::setLongNames(std::list<StaffName>& name, const Fraction& tick)
 {
-    instrument(tick)->longNames() = name;
+    instrument(tick)->setLongNames(StaffNameList(name));
 }
 
 void Part::setShortNames(std::list<StaffName>& name, const Fraction& tick)
 {
-    instrument(tick)->shortNames() = name;
+    instrument(tick)->setShortNames(StaffNameList(name));
 }
 
 //---------------------------------------------------------

@@ -183,11 +183,11 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             mu::engraving::Segment* parent = score->tick2segment(Fraction::fromTicks(tick));
 
             // Find maximum width for the staff name
-            std::list<mu::engraving::StaffName>& staffNamesLong
+            const std::list<mu::engraving::StaffName>& staffNamesLong
                 = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->longNames();
             QString staffName = staffNamesLong.empty() ? u" " : staffNamesLong.front().name();
             if (staffName == "") {
-                std::list<mu::engraving::StaffName>& staffNamesShort
+                const std::list<mu::engraving::StaffName>& staffNamesShort
                     = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->shortNames();
                 staffName = staffNamesShort.empty() ? u"" : staffNamesShort.front().name();
             }
@@ -369,11 +369,11 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             barLine->draw(&painter);
 
             // Draw the current staff name
-            std::list<mu::engraving::StaffName>& staffNamesLong
+            const std::list<mu::engraving::StaffName>& staffNamesLong
                 = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->longNames();
             QString staffName = staffNamesLong.empty() ? u" " : staffNamesLong.front().name();
             if (staffName == "") {
-                std::list<mu::engraving::StaffName>& staffNamesShort
+                const std::list<mu::engraving::StaffName>& staffNamesShort
                     = currentStaff->part()->instrument(mu::engraving::Fraction::fromTicks(tick))->shortNames();
                 staffName = staffNamesShort.empty() ? u"" : staffNamesShort.front().name();
             }

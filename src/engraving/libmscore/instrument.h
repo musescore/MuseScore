@@ -78,6 +78,10 @@ class StaffNameList : public std::list<StaffName>
 {
     OBJECT_ALLOCATOR(engraving, StaffNameList)
 public:
+    StaffNameList() = default;
+    StaffNameList(const std::list<StaffName>& l)
+        : std::list<StaffName>(l) {}
+
     void write(XmlWriter& xml, const char* name) const;
     std::list<String> toStringList() const;
 };
@@ -395,10 +399,10 @@ public:
     int maxPitchA() const;
     String musicXmlId() const;
 
-    const std::list<StaffName>& longNames() const;
-    const std::list<StaffName>& shortNames() const;
-    std::list<StaffName>& longNames();
-    std::list<StaffName>& shortNames();
+    const StaffNameList& longNames() const;
+    const StaffNameList& shortNames() const;
+    void setLongNames(const StaffNameList& l);
+    void setShortNames(const StaffNameList& l);
 
     String trackName() const;
     void setTrackName(const String& s);
