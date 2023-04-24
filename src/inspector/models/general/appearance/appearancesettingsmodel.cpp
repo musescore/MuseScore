@@ -118,7 +118,7 @@ void AppearanceSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (mu::contains(propertyIdSet, Pid::USER_STRETCH)) {
-        loadPropertyItem(m_measureWidth);
+        loadPropertyItem(m_measureWidth, formatDoubleFunc);
     }
 
     if (mu::contains(propertyIdSet, Pid::MIN_DISTANCE)) {
