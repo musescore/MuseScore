@@ -1528,7 +1528,7 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
     }
 
     if (!item->stringData()->isNull()) {
-        item->stringData()->write(xml);
+        write(item->stringData(), xml);
     }
     for (const NamedEventList& a : item->midiActions()) {
         a.write(xml, "MidiAction");
@@ -2302,6 +2302,20 @@ void TWrite::write(const Sticking* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
+    xml.endElement();
+}
+
+void TWrite::write(const StringData* item, XmlWriter& xml)
+{
+    xml.startElement("StringData");
+    xml.tag("frets", item->frets());
+    for (const instrString& strg : item->stringList()) {
+        if (strg.open) {
+            xml.tag("string open=\"1\"", strg.pitch);
+        } else {
+            xml.tag("string", strg.pitch);
+        }
+    }
     xml.endElement();
 }
 

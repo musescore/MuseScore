@@ -133,6 +133,7 @@ class StaffTypeChange;
 class Stem;
 class StemSlash;
 class Sticking;
+class StringData;
 class Symbol;
 class BSymbol;
 class FSymbol;
@@ -261,6 +262,7 @@ public:
     static void write(const Stem* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StemSlash* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Sticking* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const StringData* item, XmlWriter& xml);
     static void write(const Symbol* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const FSymbol* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const System* item, XmlWriter& xml, WriteContext& ctx);

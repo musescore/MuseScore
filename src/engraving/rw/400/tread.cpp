@@ -823,7 +823,7 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, Part* part, bool* cus
     // support tag "Tablature" for a while for compatibility with existent 2.0 scores
     else if (tag == "Tablature" || tag == "StringData") {
         StringData sd;
-        sd.read(e);
+        read(&sd, e);
         item->setStringData(sd);
     } else if (tag == "MidiAction") {
         NamedEventList a;
@@ -3400,6 +3400,27 @@ void TRead::read(StemSlash* s, XmlReader& e, ReadContext& ctx)
         if (!readItemProperties(s, e, ctx)) {
             e.unknown();
         }
+    }
+}
+
+void TRead::read(StringData* item, XmlReader& e)
+{
+    item->stringList().clear();
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "frets") {
+            item->setFrets(e.readInt());
+        } else if (tag == "string") {
+            instrString strg;
+            strg.open  = e.intAttribute("open", 0);
+            strg.pitch = e.readInt();
+            item->stringList().push_back(strg);
+        } else {
+            e.unknown();
+        }
+    }
+    if (item->isFiveStringBanjo()) {
+        item->configBanjo5thString();
     }
 }
 
