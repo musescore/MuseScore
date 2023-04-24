@@ -28,6 +28,7 @@
 
 #include "rw/xmlreader.h"
 #include "rw/xmlwriter.h"
+#include "rw/400/twrite.h"
 #include "style/style.h"
 #include "types/typesconv.h"
 
@@ -305,8 +306,8 @@ bool InstrumentTemplate::isValid() const
 void InstrumentTemplate::write(XmlWriter& xml) const
 {
     xml.startElement("Instrument",  { { "id", id } });
-    longNames.write(xml, "longName");
-    shortNames.write(xml, "shortName");
+    rw400::TWrite::write(&longNames, xml, "longName");
+    rw400::TWrite::write(&shortNames, xml, "shortName");
 
     if (longNames.size() > 1) {
         xml.tag("trackName", trackName);

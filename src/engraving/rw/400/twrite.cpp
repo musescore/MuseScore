@@ -1473,8 +1473,8 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
     } else {
         xml.startElement("Instrument", { { "id", item->id() } });
     }
-    item->longNames().write(xml, "longName");
-    item->shortNames().write(xml, "shortName");
+    write(&item->longNames(), xml, "longName");
+    write(&item->shortNames(), xml, "shortName");
 //      if (!_trackName.empty())
     xml.tag("trackName", item->trackName());
     if (item->minPitchP() > 0) {
@@ -1540,6 +1540,24 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
         a->write(xml, part);
     }
     xml.endElement();
+}
+
+void TWrite::write(const StaffName* item, XmlWriter& xml, const char* tag)
+{
+    if (!item->name().isEmpty()) {
+        if (item->pos() == 0) {
+            xml.writeXml(String::fromUtf8(tag), item->name());
+        } else {
+            xml.writeXml(String(u"%1 pos=\"%2\"").arg(String::fromUtf8(tag)).arg(item->pos()), item->name());
+        }
+    }
+}
+
+void TWrite::write(const StaffNameList* item, XmlWriter& xml, const char* name)
+{
+    for (const StaffName& sn : *item) {
+        write(&sn, xml, name);
+    }
 }
 
 void TWrite::write(const InstrumentChange* item, XmlWriter& xml, WriteContext& ctx)

@@ -241,21 +241,6 @@ StaffName::StaffName(const String& xmlText, int pos)
 }
 
 //---------------------------------------------------------
-//   StaffName::write
-//---------------------------------------------------------
-
-void StaffName::write(XmlWriter& xml, const char* tag) const
-{
-    if (!name().isEmpty()) {
-        if (pos() == 0) {
-            xml.writeXml(String::fromUtf8(tag), name());
-        } else {
-            xml.writeXml(String(u"%1 pos=\"%2\"").arg(String::fromUtf8(tag)).arg(pos()), name());
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
@@ -1697,17 +1682,6 @@ bool Instrument::getSingleNoteDynamicsFromTemplate() const
 void Instrument::setSingleNoteDynamicsFromTemplate()
 {
     setSingleNoteDynamics(getSingleNoteDynamicsFromTemplate());
-}
-
-//---------------------------------------------------------
-//   StaffNameList::write
-//---------------------------------------------------------
-
-void StaffNameList::write(XmlWriter& xml, const char* name) const
-{
-    for (const StaffName& sn : *this) {
-        sn.write(xml, name);
-    }
 }
 
 std::list<String> StaffNameList::toStringList() const
