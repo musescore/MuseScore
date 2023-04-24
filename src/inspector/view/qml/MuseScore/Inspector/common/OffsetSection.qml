@@ -30,6 +30,7 @@ InspectorPropertyView {
 
     property alias horizontalOffsetControl: horizontalOffsetControl
     property alias verticalOffsetControl: verticalOffsetControl
+    property bool isVerticalOffsetAvailable: false
 
     titleText: qsTrc("inspector", "Offset")
 
@@ -66,6 +67,8 @@ InspectorPropertyView {
 
         IncrementalPropertyControl {
             id: verticalOffsetControl
+
+            enabled: root.isVerticalOffsetAvailable
 
             width: parent.width / 2 - row.spacing / 2
 
