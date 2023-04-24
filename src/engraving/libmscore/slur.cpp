@@ -369,10 +369,11 @@ void SlurSegment::adjustEndpoints()
 Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* endCR)
 {
     staff_idx_t startStaffIdx = startCR->staffIdx();
+    staff_idx_t endStaffIdx = endCR->staffIdx();
     Shape segShape = seg->staffShape(startStaffIdx).translated(seg->pos() + seg->measure()->pos());
     // If cross-staff, also add the shape of second staff
     if (slur()->isCrossStaff() && seg != startCR->segment()) {
-        staff_idx_t endStaffIdx = (endCR->staffIdx() != startStaffIdx) ? endCR->staffIdx() : endCR->vStaffIdx();
+        endStaffIdx = (endCR->staffIdx() != startStaffIdx) ? endCR->staffIdx() : endCR->vStaffIdx();
         SysStaff* startStaff = system()->staves().at(startStaffIdx);
         SysStaff* endStaff = system()->staves().at(endStaffIdx);
         double dist = endStaff->y() - startStaff->y();
@@ -405,6 +406,31 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
         }
         return false;
     });
+    for (track_idx_t track = staff2track(startStaffIdx); track < staff2track(endStaffIdx, VOICES); ++track) {
+        EngravingItem* e = seg->elementAt(track);
+        if (!e || !e->isChordRest()) {
+            continue;
+        }
+        // Gets ties shapes
+        if (e->isChord()) {
+            for (Note* note : toChord(e)->notes()) {
+                Tie* tieFor = note->tieFor();
+                Tie* tieBack = note->tieBack();
+                if (tieFor && tieFor->up() == slur()->up() && !tieFor->segmentsEmpty()) {
+                    TieSegment* tieSegment = tieFor->frontSegment();
+                    if (tieSegment->isSingleBeginType()) {
+                        segShape.add(tieSegment->shape());
+                    }
+                }
+                if (tieBack && tieBack->up() == slur()->up() && !tieBack->segmentsEmpty()) {
+                    TieSegment* tieSegment = tieBack->backSegment();
+                    if (tieSegment->isEndType()) {
+                        segShape.add(tieSegment->shape());
+                    }
+                }
+            }
+        }
+    }
     return segShape;
 }
 
@@ -737,8 +763,12 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
     ups(Grip::START).p = pp1 - ups(Grip::START).off;
     ups(Grip::END).p = toSystemCoordinates.map(p2) - ups(Grip::END).off;
     adjustEndpoints();
-    pp1 = ups(Grip::START).p + ups(Grip::START).off;
+    PointF newpp1 = ups(Grip::START).p + ups(Grip::START).off;
+    PointF difference = rotate.map(newpp1 - pp1);
+    pp1 = newpp1;
     pp2 = ups(Grip::END).p + ups(Grip::END).off;
+    p3 -= difference;
+    p4 -= difference;
     // Keep track of how much the end points position has changed
     if (!isEndPointsEdited()) {
         _endPointOff1 = pp1 - oldp1;
@@ -794,7 +824,7 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
     _shape.clear();
     PointF start = pp1;
     int nbShapes  = 32;
-    double minH    = abs(3 * w);
+    double minH    = abs(2 * w);
     const CubicBezier b(ups(Grip::START).pos(), ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
     for (int i = 1; i <= nbShapes; i++) {
         const PointF point = b.pointAtPercent(i / float(nbShapes));
