@@ -193,11 +193,16 @@ void BeamSettingsModel::setBeamHeight(const qreal left, const qreal right)
 
 void BeamSettingsModel::updateFeatheringMode(const qreal left, const qreal right)
 {
+    BeamTypes::FeatheringMode newFeathering = BeamTypes::FeatheringMode::FEATHERING_NONE;
     if (left != right) {
-        setFeatheringMode(left > right ? BeamTypes::FeatheringMode::FEATHERED_DECELERATE
-                          : BeamTypes::FeatheringMode::FEATHERED_ACCELERATE);
+        newFeathering = left > right ? BeamTypes::FeatheringMode::FEATHERED_DECELERATE
+                        : BeamTypes::FeatheringMode::FEATHERED_ACCELERATE;
     } else {
-        setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
+        newFeathering = BeamTypes::FeatheringMode::FEATHERING_NONE;
+    }
+    if (newFeathering != m_featheringMode) {
+        m_featheringMode = newFeathering;
+        emit featheringModeChanged(m_featheringMode);
     }
 }
 
