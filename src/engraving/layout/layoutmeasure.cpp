@@ -251,6 +251,8 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
                     score->undo(new AddElement(mmrTimeSig));
                 } else {
                     mmrTimeSig->setSig(underlyingTimeSig->sig(), underlyingTimeSig->timeSigType());
+                    mmrTimeSig->setNumeratorString(underlyingTimeSig->numeratorString());
+                    mmrTimeSig->setDenominatorString(underlyingTimeSig->denominatorString());
                     mmrTimeSig->layout();
                 }
             }
