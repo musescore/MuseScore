@@ -64,9 +64,10 @@ public:
 
     bool operator==(const StaffName&) const;
     String toString() const;
-    void read(XmlReader&);
     int pos() const { return _pos; }
+    void setPos(int p) { _pos = p; }
     String name() const { return _name; }
+    void setName(const String& n) { _name = n; }
 };
 
 //---------------------------------------------------------
@@ -328,7 +329,6 @@ public:
 
     void read(XmlReader&, Part* part);
     bool readProperties(XmlReader&, Part*, bool* customDrumset);
-    void write(XmlWriter& xml, const Part* part) const;
     NamedEventList* midiAction(const String& s, int channel) const;
     int channelIdx(const String& s) const;
     void updateVelocity(int* velocity, int channel, const String& name);
