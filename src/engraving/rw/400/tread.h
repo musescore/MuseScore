@@ -206,6 +206,8 @@ public:
     static void read(Groups* g, XmlReader& xml, ReadContext& ctx);
     static void read(Hairpin* h, XmlReader& xml, ReadContext& ctx);
     static void read(Hook* h, XmlReader& xml, ReadContext& ctx);
+
+    static void read(Instrument* item, XmlReader& xml, ReadContext& ctx, Part* part);
     static void read(InstrumentChange* c, XmlReader& xml, ReadContext& ctx);
 
     static void read(KeyList* item, XmlReader& xml, ReadContext& ctx);
@@ -285,7 +287,10 @@ public:
     static bool readProperties(Chord* ch, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(ChordRest* ch, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Clef* c, XmlReader& xml, ReadContext& ctx);
-    static bool readProperties(Fermata* f, XmlReader& e, ReadContext& ctx);
+    static bool readProperties(Fermata* f, XmlReader& xml, ReadContext& ctx);
+
+    static bool readProperties(Instrument* item, XmlReader& xml, Part* part, bool* customDrumset);
+
     static bool readProperties(LedgerLine* l, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(LineSegment* l, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Lyrics* l, XmlReader& xml, ReadContext& ctx);

@@ -35,7 +35,10 @@
 #include "../../libmscore/tempotext.h"
 #include "../../libmscore/stafftext.h"
 #include "../../libmscore/stafftextbase.h"
+
+#include "../../libmscore/drumset.h"
 #include "../../libmscore/dynamic.h"
+
 #include "../../libmscore/harmony.h"
 #include "../../libmscore/chordlist.h"
 
@@ -714,13 +717,150 @@ void TRead::read(RehearsalMark* m, XmlReader& xml, ReadContext& ctx)
     read(static_cast<TextBase*>(m), xml, ctx);
 }
 
+void TRead::read(Instrument* item, XmlReader& e, ReadContext&, Part* part)
+{
+    bool customDrumset = false;
+    bool readSingleNoteDynamics = false;
+
+    item->clearChannels();         // remove default channel
+    item->setId(e.attribute("id"));
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "singleNoteDynamics") {
+            item->setSingleNoteDynamics(e.readBool());
+            readSingleNoteDynamics = true;
+        } else if (!readProperties(item, e, part, &customDrumset)) {
+            e.unknown();
+        }
+    }
+
+    if (item->musicXmlId().isEmpty()) {
+        item->setMusicXmlId(item->recognizeMusicXmlId());
+    }
+
+    if (item->id().isEmpty()) {
+        item->setId(item->recognizeId());
+    }
+
+    if (item->channel(0) && item->channel(0)->program() == -1) {
+        item->channel(0)->setProgram(item->recognizeMidiProgram());
+    }
+
+    if (!readSingleNoteDynamics) {
+        item->setSingleNoteDynamicsFromTemplate();
+    }
+}
+
+bool TRead::readProperties(Instrument* item, XmlReader& e, Part* part, bool* customDrumset)
+{
+    PartAudioSettingsCompat partAudioSetting;
+    InstrumentTrackId trackId;
+    if (part && part->score()) {
+        trackId = { part->score()->parts().size() + 1, item->id().toStdString() };//part is not assigned to score, _id field is not correct
+    }
+    partAudioSetting.instrumentId = trackId;
+
+    const AsciiStringView tag(e.name());
+    if (tag == "longName") {
+        StaffName name;
+        TRead::read(&name, e);
+        item->appendLongName(name);
+    } else if (tag == "shortName") {
+        StaffName name;
+        TRead::read(&name, e);
+        item->appendShortName(name);
+    } else if (tag == "trackName") {
+        item->setTrackName(e.readText());
+    } else if (tag == "minPitch") {      // obsolete
+        int pitch = e.readInt();
+        item->setMinPitchP(pitch);
+        item->setMinPitchA(pitch);
+    } else if (tag == "maxPitch") {       // obsolete
+        int pitch = e.readInt();
+        item->setMaxPitchP(pitch);
+        item->setMaxPitchA(pitch);
+    } else if (tag == "minPitchA") {
+        item->setMinPitchA(e.readInt());
+    } else if (tag == "minPitchP") {
+        item->setMinPitchP(e.readInt());
+    } else if (tag == "maxPitchA") {
+        item->setMaxPitchA(e.readInt());
+    } else if (tag == "maxPitchP") {
+        item->setMaxPitchP(e.readInt());
+    } else if (tag == "transposition") {    // obsolete
+        Interval transpose;
+        transpose.chromatic = e.readInt();
+        transpose.diatonic = chromatic2diatonic(transpose.chromatic);
+        item->setTranspose(transpose);
+    } else if (tag == "transposeChromatic") {
+        Interval transpose = item->transpose();
+        transpose.chromatic = e.readInt();
+        item->setTranspose(transpose);
+    } else if (tag == "transposeDiatonic") {
+        Interval transpose = item->transpose();
+        transpose.diatonic = e.readInt();
+        item->setTranspose(transpose);
+    } else if (tag == "instrumentId") {
+        item->setMusicXmlId(e.readText());
+    } else if (tag == "useDrumset") {
+        item->setUseDrumset(e.readInt());
+        if (item->useDrumset()) {
+            delete item->drumset();
+            item->setDrumset(new Drumset(*smDrumset));
+        }
+    } else if (tag == "Drum") {
+        // if we see on of this tags, a custom drumset will
+        // be created
+        if (!item->drumset()) {
+            item->setDrumset(new Drumset(*smDrumset));
+        }
+        if (!(*customDrumset)) {
+            const_cast<Drumset*>(item->drumset())->clear();
+            *customDrumset = true;
+        }
+        const_cast<Drumset*>(item->drumset())->load(e);
+    }
+    // support tag "Tablature" for a while for compatibility with existent 2.0 scores
+    else if (tag == "Tablature" || tag == "StringData") {
+        StringData sd;
+        sd.read(e);
+        item->setStringData(sd);
+    } else if (tag == "MidiAction") {
+        NamedEventList a;
+        a.read(e);
+        item->addMidiAction(a);
+    } else if (tag == "Articulation") {
+        MidiArticulation a;
+        a.read(e);
+        item->addMidiArticulation(a);
+    } else if (tag == "Channel" || tag == "channel") {
+        InstrChannel* a = new InstrChannel;
+        a->read(e, part, trackId);
+        item->appendChannel(a);
+    } else if (tag == "clef") {           // sets both transposing and concert clef
+        int idx = e.intAttribute("staff", 1) - 1;
+        ClefType ct = TConv::fromXml(e.readAsciiText(), ClefType::G);
+        item->setClefType(idx, ClefTypeList(ct, ct));
+    } else if (tag == "concertClef") {
+        int idx = e.intAttribute("staff", 1) - 1;
+        item->setClefType(idx, ClefTypeList(TConv::fromXml(e.readAsciiText(), ClefType::G), item->clefType(idx)._transposingClef));
+    } else if (tag == "transposingClef") {
+        int idx = e.intAttribute("staff", 1) - 1;
+        item->setClefType(idx, ClefTypeList(item->clefType(idx)._concertClef, TConv::fromXml(e.readAsciiText(), ClefType::G)));
+    } else {
+        return false;
+    }
+
+    return true;
+}
+
 void TRead::read(InstrumentChange* c, XmlReader& e, ReadContext& ctx)
 {
     Instrument inst;
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "Instrument") {
-            inst.read(e, c->part());
+            read(&inst, e, ctx, c->part());
         } else if (tag == "init") {
             c->setInit(e.readBool());
         } else if (!readProperties(static_cast<TextBase*>(c), e, ctx)) {
@@ -948,7 +1088,7 @@ void TRead::read(StaffState* s, XmlReader& e, ReadContext& ctx)
             s->setStaffStateType(StaffStateType(e.readInt()));
         } else if (tag == "Instrument") {
             Instrument i;
-            i.read(e, nullptr);
+            read(&i, e, ctx, nullptr);
             s->setInstrument(std::move(i));
         } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
@@ -1045,25 +1185,25 @@ void TRead::read(Fermata* f, XmlReader& e, ReadContext& ctx)
     }
 }
 
-bool TRead::readProperties(Fermata* f, XmlReader& e, ReadContext& ctx)
+bool TRead::readProperties(Fermata* f, XmlReader& xml, ReadContext& ctx)
 {
-    const AsciiStringView tag(e.name());
+    const AsciiStringView tag(xml.name());
 
     if (tag == "subtype") {
-        AsciiStringView s = e.readAsciiText();
+        AsciiStringView s = xml.readAsciiText();
         SymId id = SymNames::symIdByName(s);
         f->setSymId(id);
     } else if (tag == "play") {
-        f->setPlay(e.readBool());
+        f->setPlay(xml.readBool());
     } else if (tag == "timeStretch") {
-        f->setTimeStretch(e.readDouble());
+        f->setTimeStretch(xml.readDouble());
     } else if (tag == "offset") {
         if (f->score()->mscVersion() > 114) {
-            readItemProperties(f, e, ctx);
+            readItemProperties(f, xml, ctx);
         } else {
-            e.skipCurrentElement();       // ignore manual layout in older scores
+            xml.skipCurrentElement();       // ignore manual layout in older scores
         }
-    } else if (readItemProperties(f, e, ctx)) {
+    } else if (readItemProperties(f, xml, ctx)) {
     } else {
         return false;
     }
@@ -2779,7 +2919,7 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
         TRead::read(staff, e, ctx);
     } else if (tag == "Instrument") {
         Instrument* instr = new Instrument;
-        instr->read(e, p);
+        read(instr, e, ctx, p);
         p->setInstrument(instr, Fraction(-1, 1));
     } else if (tag == "name") {
         p->instrument()->setLongName(e.readText());
