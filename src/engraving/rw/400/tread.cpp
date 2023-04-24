@@ -24,6 +24,7 @@
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
 #include "../../infrastructure/rtti.h"
+#include "../../infrastructure/htmlparser.h"
 
 #include "../../libmscore/score.h"
 #include "../../libmscore/masterscore.h"
@@ -46,7 +47,10 @@
 #include "../../libmscore/systemtext.h"
 #include "../../libmscore/playtechannotation.h"
 #include "../../libmscore/rehearsalmark.h"
+
+#include "../../libmscore/instrument.h"
 #include "../../libmscore/instrchange.h"
+
 #include "../../libmscore/staffstate.h"
 #include "../../libmscore/figuredbass.h"
 #include "../../libmscore/part.h"
@@ -3215,6 +3219,17 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
         return false;
     }
     return true;
+}
+
+void TRead::read(StaffName* item, XmlReader& xml)
+{
+    item->setPos(xml.intAttribute("pos", 0));
+    String name = xml.readXml();
+    if (name.startsWith(u"<html>")) {
+        // compatibility to old html implementation:
+        name = HtmlParser::parse(name);
+    }
+    item->setName(name);
 }
 
 void TRead::read(Stem* s, XmlReader& e, ReadContext& ctx)

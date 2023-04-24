@@ -28,6 +28,7 @@
 #include "rw/xmlreader.h"
 #include "rw/xmlwriter.h"
 #include "rw/400/readcontext.h"
+#include "rw/400/tread.h"
 
 #include "compat/midi/event.h"
 //#include "compat/midi/midipatch.h"
@@ -240,28 +241,6 @@ StaffName::StaffName(const String& xmlText, int pos)
     TextBase::validateText(_name); // enforce HTML encoding
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void StaffName::read(XmlReader& e)
-{
-    _pos  = e.intAttribute("pos", 0);
-    _name = e.readXml();
-    if (_name.startsWith(u"<html>")) {
-        // compatibility to old html implementation:
-        _name = HtmlParser::parse(_name);
-    }
-}
-
-//---------------------------------------------------------
-//   Instrument::write
-//---------------------------------------------------------
-
-void Instrument::write(XmlWriter& xml, const Part* part) const
-{
-}
-
 String Instrument::recognizeMusicXmlId() const
 {
     static const String defaultMusicXmlId(u"keyboard.piano");
@@ -438,11 +417,11 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
     const AsciiStringView tag(e.name());
     if (tag == "longName") {
         StaffName name;
-        name.read(e);
+        rw400::TRead::read(&name, e);
         _longNames.push_back(name);
     } else if (tag == "shortName") {
         StaffName name;
-        name.read(e);
+        rw400::TRead::read(&name, e);
         _shortNames.push_back(name);
     } else if (tag == "trackName") {
         _trackName = e.readText();

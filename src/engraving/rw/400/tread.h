@@ -112,6 +112,7 @@ class Part;
 class Pedal;
 class PlayTechAnnotation;
 class Rest;
+
 class Segment;
 class SLine;
 class Slur;
@@ -120,6 +121,7 @@ class SlurTieSegment;
 class Spanner;
 class Spacer;
 class Staff;
+class StaffName;
 class StaffState;
 class StaffText;
 class StaffTextBase;
@@ -232,6 +234,7 @@ public:
     static void read(Pedal* p, XmlReader& xml, ReadContext& ctx);
     static void read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx);
     static void read(Rest* r, XmlReader& xml, ReadContext& ctx);
+
     static void read(Segment* s, XmlReader& xml, ReadContext& ctx);
     static void read(SLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(Slur* s, XmlReader& xml, ReadContext& ctx);
@@ -239,6 +242,7 @@ public:
     static void read(SlurTieSegment* s, XmlReader& xml, ReadContext& ctx);
     static void read(Spacer* s, XmlReader& xml, ReadContext& ctx);
     static void read(Staff* s, XmlReader& xml, ReadContext& ctx);
+    static void read(StaffName* item, XmlReader& xml);
     static void read(StaffState* s, XmlReader& xml, ReadContext& ctx);
     static void read(StaffText* t, XmlReader& xml, ReadContext& ctx);
     static void read(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);

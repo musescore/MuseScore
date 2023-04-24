@@ -1563,7 +1563,7 @@ void TWrite::write(const StaffNameList* item, XmlWriter& xml, const char* name)
 void TWrite::write(const InstrumentChange* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
-    item->instrument()->write(xml, item->part());
+    write(item->instrument(), xml, ctx, item->part());
     if (item->init()) {
         xml.tag("init", item->init());
     }
@@ -1880,7 +1880,7 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("preferSharpFlat", item->preferSharpFlat() == PreferSharpFlat::SHARPS ? "sharps" : "flats");
     }
 
-    item->instrument()->write(xml, item);
+    write(item->instrument(), xml, ctx, item);
 
     xml.endElement();
 }
@@ -2133,7 +2133,7 @@ void TWrite::write(const StaffState* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     xml.tag("subtype", int(item->staffStateType()));
     if (item->staffStateType() == StaffStateType::INSTRUMENT) {
-        item->instrument()->write(xml, nullptr);
+        write(item->instrument(), xml, ctx, nullptr);
     }
     writeItemProperties(item, xml, ctx);
     xml.endElement();
