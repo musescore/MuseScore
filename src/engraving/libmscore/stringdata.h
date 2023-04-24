@@ -67,6 +67,9 @@ public:
     StringData() {}
     StringData(int numFrets, int numStrings, int strings[]);
     StringData(int numFrets, std::vector<instrString>& strings);
+
+    bool isNull() const;
+
     void        set(const StringData& src);
     bool        convertPitch(int pitch, Staff* staff, int* string, int* fret) const;
     int         fret(int pitch, int string, Staff* staff) const;

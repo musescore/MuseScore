@@ -275,78 +275,6 @@ void StaffName::read(XmlReader& e)
 
 void Instrument::write(XmlWriter& xml, const Part* part) const
 {
-    if (_id.isEmpty()) {
-        xml.startElement("Instrument");
-    } else {
-        xml.startElement("Instrument", { { "id", _id } });
-    }
-    _longNames.write(xml, "longName");
-    _shortNames.write(xml, "shortName");
-//      if (!_trackName.empty())
-    xml.tag("trackName", _trackName);
-    if (_minPitchP > 0) {
-        xml.tag("minPitchP", _minPitchP);
-    }
-    if (_maxPitchP < 127) {
-        xml.tag("maxPitchP", _maxPitchP);
-    }
-    if (_minPitchA > 0) {
-        xml.tag("minPitchA", _minPitchA);
-    }
-    if (_maxPitchA < 127) {
-        xml.tag("maxPitchA", _maxPitchA);
-    }
-    if (_transpose.diatonic) {
-        xml.tag("transposeDiatonic", _transpose.diatonic);
-    }
-    if (_transpose.chromatic) {
-        xml.tag("transposeChromatic", _transpose.chromatic);
-    }
-    if (!_musicXmlId.isEmpty()) {
-        xml.tag("instrumentId", _musicXmlId);
-    }
-    if (_useDrumset) {
-        xml.tag("useDrumset", _useDrumset);
-        _drumset->save(xml);
-    }
-    for (size_t i = 0; i < _clefType.size(); ++i) {
-        ClefTypeList ct = _clefType[i];
-        if (ct._concertClef == ct._transposingClef) {
-            if (ct._concertClef != ClefType::G) {
-                if (i) {
-                    xml.tag("clef", { { "staff", i + 1 } }, TConv::toXml(ct._concertClef));
-                } else {
-                    xml.tag("clef", TConv::toXml(ct._concertClef));
-                }
-            }
-        } else {
-            if (i) {
-                xml.tag("concertClef", { { "staff", i + 1 } }, TConv::toXml(ct._concertClef));
-                xml.tag("transposingClef", { { "staff", i + 1 } }, TConv::toXml(ct._transposingClef));
-            } else {
-                xml.tag("concertClef", TConv::toXml(ct._concertClef));
-                xml.tag("transposingClef", TConv::toXml(ct._transposingClef));
-            }
-        }
-    }
-
-    if (_singleNoteDynamics != getSingleNoteDynamicsFromTemplate()) {
-        xml.tag("singleNoteDynamics", _singleNoteDynamics);
-    }
-
-    if (!(_stringData == StringData())) {
-        _stringData.write(xml);
-    }
-    for (const NamedEventList& a : _midiActions) {
-        a.write(xml, "MidiAction");
-    }
-    for (const MidiArticulation& a : _articulation) {
-        a.write(xml);
-    }
-    for (const InstrChannel* a : _channel) {
-        a->write(xml, part);
-    }
-    xml.endElement();
 }
 
 String Instrument::recognizeMusicXmlId() const
@@ -1599,38 +1527,22 @@ bool InstrumentList::contains(const std::string& instrumentId) const
     return false;
 }
 
-//---------------------------------------------------------
-//   longName
-//---------------------------------------------------------
+void Instrument::setLongNames(const StaffNameList& l)
+{
+    _longNames = l;
+}
 
-const std::list<StaffName>& Instrument::longNames() const
+const StaffNameList& Instrument::longNames() const
 {
     return _longNames;
 }
 
-//---------------------------------------------------------
-//   shortName
-//---------------------------------------------------------
-
-const std::list<StaffName>& Instrument::shortNames() const
+void Instrument::setShortNames(const StaffNameList& l)
 {
-    return _shortNames;
+    _shortNames = l;
 }
 
-//---------------------------------------------------------
-//   longName
-//---------------------------------------------------------
-
-std::list<StaffName>& Instrument::longNames()
-{
-    return _longNames;
-}
-
-//---------------------------------------------------------
-//   shortName
-//---------------------------------------------------------
-
-std::list<StaffName>& Instrument::shortNames()
+const StaffNameList& Instrument::shortNames() const
 {
     return _shortNames;
 }
