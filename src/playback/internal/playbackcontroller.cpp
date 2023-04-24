@@ -1093,8 +1093,6 @@ void PlaybackController::setupSequenceTracks()
 
 void PlaybackController::setupSequencePlayer()
 {
-    PlaybackCursorType cursorType = configuration()->cursorType();
-
     playback()->player()->playbackPositionMsecs().onReceive(
         this, [this](const TrackSequenceId id, const audio::msecs_t& msecs) {
         if (m_currentSequenceId != id) {
