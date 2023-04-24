@@ -3160,9 +3160,10 @@ class ScoreFont {
 
       static QVector<ScoreFont> _builtinScoreFonts;
       static QVector<ScoreFont> _userScoreFonts;
+      static QVector<ScoreFont> _systemScoreFonts;
       static QVector<ScoreFont> _allScoreFonts;
       static std::array<uint, size_t(SymId::lastSym)+1> _mainSymCodeTable;
-      void load();
+      void load(bool system = false);
       void computeMetrics(Sym* sym, int code);
 
    public:
@@ -3184,7 +3185,7 @@ class ScoreFont {
       QString fontPath() const { return _fontPath; }
 
       static void initScoreFonts();
-      static void scanUserFonts(const QString& path);
+      static void scanUserFonts(const QString& path, bool system = false);
       static ScoreFont* fontFactory(QString);
       static ScoreFont* fallbackFont();
       static const char* fallbackTextFont();

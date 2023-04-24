@@ -47,6 +47,7 @@ QVector<ScoreFont> ScoreFont::_builtinScoreFonts {
       ScoreFont("Finale Broadway", "Finale Broadway", ":/fonts/finalebroadway/", "FinaleBroadway.otf"),
       };
 QVector<ScoreFont> ScoreFont::_userScoreFonts {};
+QVector<ScoreFont> ScoreFont::_systemScoreFonts {};
 QVector<ScoreFont> ScoreFont::_allScoreFonts {};
 
 std::array<uint, size_t(SymId::lastSym)+1> ScoreFont::_mainSymCodeTable { {0} };
@@ -6598,9 +6599,26 @@ void ScoreFont::initScoreFonts()
             if (key == PREF_APP_PATHS_MYSCOREFONTS)
                   scanUserFonts(value.toString());
             });
+
+      // as per https://w3c.github.io/smufl/latest/specification/font-metadata-locations.html
+      // Window: "%LOCALAPPDATA%/SMuFL/Fonts", "%COMMONPROGRAMFILES%/SMuFL/Fonts"
+      // Mac:    "~/Library/Application Support/SMuFL/Fonts", "/Library/Application Support/SMuFL/Fonts"
+      // Linux:  "$XDG_DATA_HOME/SMuFL/Fonts", "$XDG_DATA_DIRS/SMuFL/Fonts"
+      // as per https://doc.qt.io/qt-5/qstandardpaths.html#standardLocations that is the (start of the) list
+      // which `GenericDataLocation` gives (without the "/SMuFL/Fonts")
+#ifdef Q_OS_WIN
+      // take only the first two entries of that list on Windows (on Mac it is 2 elements only anyway)
+      QStringList systemFontsPaths = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).mid(0, 2);
+#else
+      QStringList systemFontsPaths = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+#endif
+      for (QString& systemFontsPath : systemFontsPaths) {
+            systemFontsPath += "/SMuFL/Fonts";
+            scanUserFonts(systemFontsPath, true);
+            }
       }
 
-void ScoreFont::scanUserFonts(const QString& path)
+void ScoreFont::scanUserFonts(const QString& path, bool system)
       {
       QVector<ScoreFont> userfonts;
 
@@ -6626,7 +6644,7 @@ void ScoreFont::scanUserFonts(const QString& path)
                         }
                   }
 
-            bool hasMetadataFile = QFileInfo::exists(fontDirPath + "metadata.json");
+            bool hasMetadataFile = QFileInfo::exists(fontDirPath + (system ? fontName : "metadata") + ".json");
 
             if (hasMetadataFile && !fontFilename.isEmpty()) {
                   QByteArray name = fontName.toLocal8Bit();
@@ -6637,22 +6655,26 @@ void ScoreFont::scanUserFonts(const QString& path)
             }
 
 
-      qDebug() << "Found" << userfonts.count() << "user score fonts.";
+      qDebug() << "Found" << userfonts.count() << (system ? "system" : "user") << "score fonts in" << path <<".";
 
       // TODO: Check for fonts that duplicate built-in fonts
-      _userScoreFonts.clear();
+      if (!system) // reset list when re-reading due to changed Preferences
+            _userScoreFonts.clear();
 
       // Make sure the fonts are loaded, to avoid the situation that MuseScore
       // thinks a font exists but in practice it has disappeared.
       for (const ScoreFont& f : userfonts) {
             ScoreFont font = f;
             if (!font.face)
-                  font.load();
-            _userScoreFonts << font;
+                  font.load(system);
+            if (system)
+                  _systemScoreFonts << font;
+            else
+                  _userScoreFonts << font;
             }
 
       _allScoreFonts = _builtinScoreFonts;
-      _allScoreFonts << _userScoreFonts;
+      _allScoreFonts << _userScoreFonts << _systemScoreFonts;
       }
 
 //---------------------------------------------------------
@@ -6712,7 +6734,7 @@ void ScoreFont::computeMetrics(Sym* sym, int code)
 //   load
 //---------------------------------------------------------
 
-void ScoreFont::load()
+void ScoreFont::load(bool system)
       {
       QString facePath = _fontPath + _filename;
       QFile f(facePath);
@@ -6741,7 +6763,7 @@ void ScoreFont::load()
             }
 
       QJsonParseError error;
-      QFile fi(_fontPath + "metadata.json");
+      QFile fi(_fontPath + (system ? _name : "metadata") + ".json");
       if (!fi.open(QIODevice::ReadOnly))
             qDebug("ScoreFont: open glyph metadata file <%s> failed", qPrintable(fi.fileName()));
       QJsonObject metadataJson = QJsonDocument::fromJson(fi.readAll(), &error).object();
