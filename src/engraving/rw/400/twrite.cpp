@@ -149,6 +149,7 @@
 
 #include "../xmlwriter.h"
 #include "writecontext.h"
+#include "connectorinfowriter.h"
 
 #include "log.h"
 
@@ -761,11 +762,37 @@ void TWrite::writeProperties(const ChordRest* item, XmlWriter& xml, WriteContext
         }
 
         if (s->startElement() == item) {
-            s->writeSpannerStart(xml, item, item->track());
+            writeSpannerStart(s, xml, item, item->track());
         } else if (s->endElement() == item) {
-            s->writeSpannerEnd(xml, item, item->track());
+            writeSpannerEnd(s, xml, item, item->track());
         }
     }
+}
+
+static Fraction fraction(const XmlWriter& xml, const EngravingItem* current, const Fraction& t)
+{
+    Fraction tick(t);
+    if (!xml.context()->clipboardmode()) {
+        const Measure* m = toMeasure(current->findMeasure());
+        if (m) {
+            tick -= m->tick();
+        }
+    }
+    return tick;
+}
+
+void TWrite::writeSpannerStart(Spanner* s, XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction tick)
+{
+    Fraction frac = fraction(xml, current, tick);
+    SpannerWriter w(xml, current, s, static_cast<int>(track), frac, true);
+    w.write();
+}
+
+void TWrite::writeSpannerEnd(Spanner* s, XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction tick)
+{
+    Fraction frac = fraction(xml, current, tick);
+    SpannerWriter w(xml, current, s, static_cast<int>(track), frac, false);
+    w.write();
 }
 
 void TWrite::write(const ChordLine* item, XmlWriter& xml, WriteContext& ctx)
@@ -1631,10 +1658,10 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
         }
     }
     if (item->tieFor()) {
-        item->tieFor()->writeSpannerStart(xml, item, item->track());
+        writeSpannerStart(item->tieFor(), xml, item, item->track());
     }
     if (item->tieBack()) {
-        item->tieBack()->writeSpannerEnd(xml, item, item->track());
+        writeSpannerEnd(item->tieBack(), xml, item, item->track());
     }
     if ((item->chord() == 0 || item->chord()->playEventType() != PlayEventType::Auto) && !item->playEvents().empty()) {
         xml.startElement("Events");
@@ -1650,10 +1677,10 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
     }
 
     for (Spanner* e : item->spannerFor()) {
-        e->writeSpannerStart(xml, item, item->track());
+        writeSpannerStart(e, xml, item, item->track());
     }
     for (Spanner* e : item->spannerBack()) {
-        e->writeSpannerEnd(xml, item, item->track());
+        writeSpannerEnd(e, xml, item, item->track());
     }
 
     for (EngravingItem* e : item->chord()->el()) {
@@ -2592,7 +2619,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                                 voiceTagWritten |= writeVoiceMove(xml, ctx, segment, startTick, track, &lastTrackWritten);
                                 needMove = false;
                             }
-                            s->writeSpannerStart(xml, segment, track);
+                            writeSpannerStart(s, xml, segment, track);
                         }
                     }
                     if ((s->tick2() == segment->tick())
@@ -2604,7 +2631,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                             voiceTagWritten |= writeVoiceMove(xml, ctx, segment, startTick, track, &lastTrackWritten);
                             needMove = false;
                         }
-                        s->writeSpannerEnd(xml, segment, track);
+                        writeSpannerEnd(s, xml, segment, track);
                     }
                 }
             }
@@ -2675,7 +2702,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                     && (s->track2() == track || (s->track2() == mu::nidx && s->track() == track))
                     && (!clip || s->tick() >= sseg->tick())
                     ) {
-                    s->writeSpannerEnd(xml, score->lastMeasure(), track, endTick);
+                    writeSpannerEnd(s, xml, score->lastMeasure(), track, endTick);
                 }
             }
         }

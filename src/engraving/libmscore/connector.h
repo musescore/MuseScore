@@ -136,35 +136,5 @@ public:
 
     static void readConnector(std::unique_ptr<ConnectorInfoReader> info, XmlReader& e);
 };
-
-//---------------------------------------------------------
-//   @@ ConnectorInfoWriter
-///    Helper class for writing connecting elements.
-///    Subclasses should fill _prevInfo and _nextInfo with
-///    the proper information on the connector's endpoints.
-//---------------------------------------------------------
-
-class ConnectorInfoWriter : public ConnectorInfo
-{
-    OBJECT_ALLOCATOR(engraving, ConnectorInfoWriter)
-
-    XmlWriter* _xml;
-
-protected:
-    const EngravingItem* _connector;
-
-    virtual const char* tagName() const = 0;
-
-public:
-    ConnectorInfoWriter(XmlWriter& xml, const EngravingItem* current, const EngravingItem* connector, int track = -1, Fraction = { -1, 1 });
-    virtual ~ConnectorInfoWriter() = default;
-
-    ConnectorInfoWriter* prev() const { return static_cast<ConnectorInfoWriter*>(_prev); }
-    ConnectorInfoWriter* next() const { return static_cast<ConnectorInfoWriter*>(_next); }
-
-    const EngravingItem* connector() const { return _connector; }
-
-    void write();
-};
 } // namespace mu::engraving
 #endif

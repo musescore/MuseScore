@@ -43,22 +43,6 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-//-----------------------------------------------------------------------------
-//   @@ SpannerWriter
-///   Helper class for writing Spanners
-//-----------------------------------------------------------------------------
-
-class SpannerWriter : public ConnectorInfoWriter
-{
-    OBJECT_ALLOCATOR(engraving, SpannerWriter)
-protected:
-    const char* tagName() const override { return "Spanner"; }
-public:
-    SpannerWriter(XmlWriter& xml, const EngravingItem* current, const Spanner* spanner, int track, Fraction frac, bool start);
-
-    static void fillSpannerPosition(Location& l, const MeasureBase* endpoint, const Fraction& tick, bool clipboardmode);
-};
-
 //---------------------------------------------------------
 //   SpannerSegment
 //---------------------------------------------------------
@@ -1452,44 +1436,6 @@ void Spanner::layoutSystemsDone()
 }
 
 //--------------------------------------------------
-//   fraction
-//---------------------------------------------------------
-
-static Fraction fraction(const XmlWriter& xml, const EngravingItem* current, const Fraction& t)
-{
-    Fraction tick(t);
-    if (!xml.context()->clipboardmode()) {
-        const Measure* m = toMeasure(current->findMeasure());
-        if (m) {
-            tick -= m->tick();
-        }
-    }
-    return tick;
-}
-
-//--------------------------------------------------
-//   Spanner::writeSpannerStart
-//---------------------------------------------------------
-
-void Spanner::writeSpannerStart(XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction tick) const
-{
-    Fraction frac = fraction(xml, current, tick);
-    SpannerWriter w(xml, current, this, static_cast<int>(track), frac, true);
-    w.write();
-}
-
-//--------------------------------------------------
-//   Spanner::writeSpannerEnd
-//---------------------------------------------------------
-
-void Spanner::writeSpannerEnd(XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction tick) const
-{
-    Fraction frac = fraction(xml, current, tick);
-    SpannerWriter w(xml, current, this, static_cast<int>(track), frac, false);
-    w.write();
-}
-
-//--------------------------------------------------
 //   Spanner::readSpanner
 //---------------------------------------------------------
 
@@ -1507,66 +1453,6 @@ void Spanner::readSpanner(XmlReader& e, Score* current, track_idx_t track)
 {
     std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, static_cast<int>(track)));
     ConnectorInfoReader::readConnector(std::move(info), e);
-}
-
-//---------------------------------------------------------
-//   SpannerWriter::fillSpannerPosition
-//---------------------------------------------------------
-
-void SpannerWriter::fillSpannerPosition(Location& l, const MeasureBase* m, const Fraction& tick, bool clipboardmode)
-{
-    if (clipboardmode) {
-        l.setMeasure(0);
-        l.setFrac(tick);
-    } else {
-        if (!m) {
-            LOGW("fillSpannerPosition: couldn't find spanner's endpoint's measure");
-            l.setMeasure(0);
-            l.setFrac(tick);
-            return;
-        }
-        l.setMeasure(m->measureIndex());
-        l.setFrac(tick - m->tick());
-    }
-}
-
-//---------------------------------------------------------
-//   SpannerWriter::SpannerWriter
-//---------------------------------------------------------
-
-SpannerWriter::SpannerWriter(XmlWriter& xml, const EngravingItem* current, const Spanner* sp, int track, Fraction frac, bool start)
-    : ConnectorInfoWriter(xml, current, sp, track, frac)
-{
-    const bool clipboardmode = xml.context()->clipboardmode();
-    if (!sp->startElement() || !sp->endElement()) {
-        LOGW("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->typeName());
-        return;
-    }
-    if (current->isMeasure() || current->isSegment() || (sp->startElement()->type() != current->type())) {
-        // (The latter is the hairpins' case, for example, though they are
-        // covered by the other checks too.)
-        // We cannot determine position of the spanner from its start/end
-        // elements and will try to obtain this info from the spanner itself.
-        if (!start) {
-            _prevLoc.setTrack(static_cast<int>(sp->track()));
-            Measure* m = sp->score()->tick2measure(sp->tick());
-            fillSpannerPosition(_prevLoc, m, sp->tick(), clipboardmode);
-        } else {
-            const track_idx_t track2 = (sp->track2() != mu::nidx) ? sp->track2() : sp->track();
-            _nextLoc.setTrack(static_cast<int>(track2));
-            Measure* m = sp->score()->tick2measure(sp->tick2());
-            fillSpannerPosition(_nextLoc, m, sp->tick2(), clipboardmode);
-        }
-    } else {
-        // We can obtain the spanner position info from its start/end
-        // elements and will prefer this source of information.
-        // Reason: some spanners contain no or wrong information (e.g. Ties).
-        if (!start) {
-            updateLocation(sp->startElement(), _prevLoc, clipboardmode);
-        } else {
-            updateLocation(sp->endElement(), _nextLoc, clipboardmode);
-        }
-    }
 }
 
 //---------------------------------------------------------

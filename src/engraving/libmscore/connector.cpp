@@ -336,51 +336,6 @@ ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Score* current, int track
 }
 
 //---------------------------------------------------------
-//   ConnectorInfoWriter
-//---------------------------------------------------------
-
-ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, const EngravingItem* current, const EngravingItem* connector, int track,
-                                         Fraction frac)
-    : ConnectorInfo(current, track, frac), _xml(&xml), _connector(connector)
-{
-    IF_ASSERT_FAILED(current) {
-        return;
-    }
-    _type = connector->type();
-    updateCurrentInfo(xml.context()->clipboardmode());
-}
-
-//---------------------------------------------------------
-//   ConnectorInfoWriter::write
-//---------------------------------------------------------
-
-void ConnectorInfoWriter::write()
-{
-    XmlWriter& xml = *_xml;
-    WriteContext& ctx = *xml.context();
-    if (!ctx.canWrite(_connector)) {
-        return;
-    }
-    xml.startElement(tagName(), { { "type", _connector->typeName() } });
-    if (isStart()) {
-        rw400::TWrite::writeItem(_connector, xml, ctx);
-    }
-    if (hasPrevious()) {
-        xml.startElement("prev");
-        _prevLoc.toRelative(_currentLoc);
-        rw400::TWrite::write(&_prevLoc, xml, ctx);
-        xml.endElement();
-    }
-    if (hasNext()) {
-        xml.startElement("next");
-        _nextLoc.toRelative(_currentLoc);
-        rw400::TWrite::write(&_nextLoc, xml, ctx);
-        xml.endElement();
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
 //   ConnectorInfoReader::read
 //---------------------------------------------------------
 
