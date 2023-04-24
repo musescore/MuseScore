@@ -1075,6 +1075,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
     }
 
     std::vector<int> standartTuning = { 40, 45, 50, 55, 59, 64 };
+    Instrument* instr = part->instrument();
 
     if (!tR->staffProperty().empty()) {
         auto staffProperty = tR->staffProperty();
@@ -1096,17 +1097,19 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
         }
 
         StringData stringData = StringData(fretCount, static_cast<int>(tunning.size()), tunning.data());
-
-        part->instrument()->setStringData(stringData);
+        instr->setStringData(stringData);
+    } else if (!instr->useDrumset()) {
+        StringData stringData = StringData(24, static_cast<int>(standartTuning.size()), standartTuning.data());
+        instr->setStringData(stringData);
     }
 
-    part->instrument()->setSingleNoteDynamics(false);
+    instr->setSingleNoteDynamics(false);
 
     // this code sets score lyrics from the first processed track.
 //    if (_score->OffLyrics.isEmpty())
 //        _score->OffLyrics = tR->lyrics();
 
-    part->instrument()->setTranspose(tR->transpose());
+    instr->setTranspose(tR->transpose());
 }
 
 void GPConverter::collectTempoMap(const GPMasterTracks* mTr)
