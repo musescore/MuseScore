@@ -66,7 +66,6 @@ class Chord;
 class ChordLine;
 class ChordRest;
 class Clef;
-class ConnectorInfoReader;
 class DeadSlapped;
 class DurationElement;
 class Dynamic;
@@ -277,8 +276,6 @@ public:
     void setPropertyFlags(Pid, PropertyFlags);
 
     virtual Sid getPropertyStyle(Pid) const;
-
-    virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode);
 
     virtual void styleChanged();
 

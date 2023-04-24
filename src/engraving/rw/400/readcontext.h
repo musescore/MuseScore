@@ -37,6 +37,8 @@
 #include "../linksindexer.h"
 #include "../readoutdata.h"
 
+#include "connectorinforeader.h"
+
 namespace mu::engraving {
 class Beam;
 class EngravingObject;
@@ -148,7 +150,7 @@ public:
     void addSpannerValues(const SpannerValues& sv) { _spannerValues.push_back(sv); }
     const SpannerValues* spannerValues(int id) const;
 
-    void addConnectorInfoLater(std::unique_ptr<ConnectorInfoReader> c) { _pendingConnectors.push_back(std::move(c)); }   // add connector info to be checked after calling checkConnectors()
+    void addConnectorInfoLater(std::unique_ptr<rw400::ConnectorInfoReader> c) { _pendingConnectors.push_back(std::move(c)); }   // add connector info to be checked after calling checkConnectors()
     void checkConnectors();
     void reconnectBrokenConnectors();
 
@@ -170,8 +172,8 @@ public:
 
 private:
 
-    void addConnectorInfo(std::unique_ptr<ConnectorInfoReader>);
-    void removeConnector(const ConnectorInfoReader*);   // Removes the whole ConnectorInfo chain from the connectors list.
+    void addConnectorInfo(std::unique_ptr<rw400::ConnectorInfoReader>);
+    void removeConnector(const rw400::ConnectorInfoReader*);   // Removes the whole ConnectorInfo chain from the connectors list.
 
     Score* m_score = nullptr;
 
@@ -197,8 +199,8 @@ private:
     std::list<SpannerValues> _spannerValues;
     std::list<std::pair<int, Spanner*> > _spanner;
 
-    std::vector<std::unique_ptr<ConnectorInfoReader> > _connectors;
-    std::vector<std::unique_ptr<ConnectorInfoReader> > _pendingConnectors;  // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
+    std::vector<std::unique_ptr<rw400::ConnectorInfoReader> > _connectors;
+    std::vector<std::unique_ptr<rw400::ConnectorInfoReader> > _pendingConnectors;  // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
 
     Interval _transpose;
 

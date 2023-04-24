@@ -28,6 +28,7 @@
 #include "style/textstyle.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
+#include "rw/400/connectorinforeader.h"
 
 #include "bracketItem.h"
 #include "factory.h"
@@ -474,16 +475,6 @@ void EngravingObject::reset()
     for (const StyledProperty& spp : *styledProperties()) {
         undoResetProperty(spp.pid);
     }
-}
-
-//---------------------------------------------------------
-//   readAddConnector
-//---------------------------------------------------------
-
-void EngravingObject::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
-{
-    UNUSED(pasteMode);
-    LOGD("Cannot add connector %s to %s", info->connector()->typeName(), typeName());
 }
 
 //---------------------------------------------------------

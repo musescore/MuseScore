@@ -2009,48 +2009,6 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
 }
 
 //---------------------------------------------------------
-//   Measure::readAddConnector
-//---------------------------------------------------------
-
-void Measure::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
-{
-    const ElementType type = info->type();
-    switch (type) {
-    case ElementType::HAIRPIN:
-    case ElementType::PEDAL:
-    case ElementType::OTTAVA:
-    case ElementType::TRILL:
-    case ElementType::TEXTLINE:
-    case ElementType::LET_RING:
-    case ElementType::GRADUAL_TEMPO_CHANGE:
-    case ElementType::VIBRATO:
-    case ElementType::PALM_MUTE:
-    case ElementType::WHAMMY_BAR:
-    case ElementType::RASGUEADO:
-    case ElementType::HARMONIC_MARK:
-    case ElementType::PICK_SCRAPE:
-    case ElementType::VOLTA:
-    {
-        Spanner* sp = toSpanner(info->connector());
-        const Location& l = info->location();
-        Fraction lTick    = l.frac();
-        Fraction spTick   = pasteMode ? lTick : (tick() + lTick);
-        if (info->isStart()) {
-            sp->setTrack(l.track());
-            sp->setTick(spTick);
-            score()->addSpanner(sp);
-        } else if (info->isEnd()) {
-            sp->setTrack2(l.track());
-            sp->setTick2(spTick);
-        }
-    }
-    break;
-    default:
-        break;
-    }
-}
-
-//---------------------------------------------------------
 //   visible
 //---------------------------------------------------------
 

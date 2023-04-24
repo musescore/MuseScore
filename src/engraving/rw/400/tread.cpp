@@ -125,6 +125,7 @@
 #include "../206/read206.h"
 
 #include "readcontext.h"
+#include "connectorinforeader.h"
 
 #include "log.h"
 
@@ -2092,7 +2093,7 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
             ch->setStaffMove(0);
         }
     } else if (tag == "Spanner") {
-        Spanner::readSpanner(e, ch, ch->track());
+        readSpanner(e, ch, ch->track());
     } else if (tag == "Lyrics") {
         Lyrics* lyr = Factory::createLyrics(ch);
         lyr->setTrack(e.context()->track());
@@ -2561,7 +2562,7 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         TRead::read(a, e, ctx);
         n->add(a);
     } else if (tag == "Spanner") {
-        Spanner::readSpanner(e, n, n->track());
+        readSpanner(e, n, n->track());
     } else if (tag == "tpc2") {
         n->setTpc2(e.readInt());
     } else if (tag == "small") {
@@ -3641,4 +3642,16 @@ bool TRead::readProperties(Volta* v, XmlReader& e, ReadContext& ctx)
     }
 
     return true;
+}
+
+void TRead::readSpanner(XmlReader& e, EngravingItem* current, track_idx_t track)
+{
+    std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, static_cast<int>(track)));
+    ConnectorInfoReader::readConnector(std::move(info), e);
+}
+
+void TRead::readSpanner(XmlReader& e, Score* current, track_idx_t track)
+{
+    std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, static_cast<int>(track)));
+    ConnectorInfoReader::readConnector(std::move(info), e);
 }

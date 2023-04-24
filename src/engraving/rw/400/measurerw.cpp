@@ -338,7 +338,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             TRead::read(breath, e, ctx);
             segment->add(breath);
         } else if (tag == "Spanner") {
-            Spanner::readSpanner(e, measure, ctx.track());
+            TRead::readSpanner(e, measure, ctx.track());
         } else if (tag == "MeasureRepeat" || tag == "RepeatMeasure") {
             //             4.x                       3.x
             segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
