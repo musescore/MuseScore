@@ -41,10 +41,10 @@ class MixerChannelItem : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
-    Q_PROPERTY(bool isPrimaryChannel READ isPrimaryChannel CONSTANT)
-
+    Q_PROPERTY(Type type READ type CONSTANT)
     Q_PROPERTY(bool outputOnly READ outputOnly CONSTANT)
+
+    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
 
     Q_PROPERTY(InputResourceItem * inputResourceItem READ inputResourceItem NOTIFY inputResourceItemChanged)
     Q_PROPERTY(QList<OutputResourceItem*> outputResourceItemList READ outputResourceItemList NOTIFY outputResourceItemListChanged)
@@ -72,8 +72,11 @@ public:
         Aux,
         Master,
     };
+    Q_ENUM(Type)
 
-    explicit MixerChannelItem(QObject* parent, Type type, bool outputOnly = false, audio::TrackId trackId = -1);
+    MixerChannelItem() = default;
+    MixerChannelItem(QObject* parent, Type type, bool outputOnly = false, audio::TrackId trackId = -1);
+
     ~MixerChannelItem() override;
 
     Type type() const;
@@ -84,7 +87,6 @@ public:
     void setInstrumentTrackId(const engraving::InstrumentTrackId& instrumentTrackId);
 
     QString title() const;
-    bool isPrimaryChannel() const;
 
     float leftChannelPressure() const;
     float rightChannelPressure() const;

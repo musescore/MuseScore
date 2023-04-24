@@ -98,11 +98,6 @@ QString MixerChannelItem::title() const
     return m_title;
 }
 
-bool MixerChannelItem::isPrimaryChannel() const
-{
-    return m_type == Type::PrimaryInstrument || m_type == Type::Master;
-}
-
 float MixerChannelItem::leftChannelPressure() const
 {
     return m_leftChannelPressure;
