@@ -1229,8 +1229,9 @@ public:
     virtual String name() const;
 
     void cmdTimeDelete();
-    bool checkTimeDelete(Segment*, Segment*);
-    void doTimeDelete(Measure*, Segment*, const Fraction&);
+    bool checkTimeDelete(Segment* startSegment, Segment* endSegment);
+    void doTimeDelete(Segment* startSegment, Segment* endSegment);
+    void doTimeDeleteForMeasure(Measure*, Segment*, const Fraction&);
 
     Text* headerText(int index) const { return _headersText[index]; }
     Text* footerText(int index) const { return _footersText[index]; }
