@@ -43,8 +43,6 @@ class MasterScore;
 class Part;
 class StringData;
 class Synthesizer;
-class XmlReader;
-class XmlWriter;
 
 //---------------------------------------------------------
 //   StaffName

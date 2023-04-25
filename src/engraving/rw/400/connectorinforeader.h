@@ -30,6 +30,7 @@
 //---------------------------------------------------------
 
 namespace mu::engraving {
+class XmlReader;
 class ChordRest;
 class Measure;
 class Note;

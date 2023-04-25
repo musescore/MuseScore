@@ -27,7 +27,7 @@
 
 namespace mu::engraving {
 class Score;
-class XmlWriter;
+
 class Volta;
 class Measure;
 

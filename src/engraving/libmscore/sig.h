@@ -31,9 +31,6 @@
 #include "types/fraction.h"
 
 namespace mu::engraving {
-class XmlWriter;
-class XmlReader;
-
 int ticks_beat(int n);
 
 //-------------------------------------------------------------------

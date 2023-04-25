@@ -28,13 +28,16 @@
 #include "thirdparty/haw_profiler/src/profiler.h"
 #include "thirdparty/haw_logger/logger/log_base.h"
 
-#define ASSERT_X(msg) \
-    LOGE() << "\"ASSERT!\": " << msg << ", file: " << __FILE__ << ", line: " << __LINE__; \
-    assert(false); \
+#define DO_ASSERT_X(cond, msg) \
+    LOGE() << "\"ASSERT FAILED!\": " << msg << ", file: " << __FILE__ << ", line: " << __LINE__; \
+    assert(cond); \
+
+#define DO_ASSERT(cond) DO_ASSERT_X(cond, #cond)
+
+#define ASSERT_X(msg) DO_ASSERT_X(false, msg)
 
 #define IF_ASSERT_FAILED_X(cond, msg) if (!(cond)) { \
-        LOGE() << "\"ASSERT FAILED!\": " << msg << ", file: " << __FILE__ << ", line: " << __LINE__; \
-        assert(cond); \
+        DO_ASSERT_X(cond, msg) \
 } \
     if (!(cond)) \
 

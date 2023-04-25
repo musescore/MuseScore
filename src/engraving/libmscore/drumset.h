@@ -28,11 +28,10 @@
 #include "types/types.h"
 
 namespace mu::engraving {
+class XmlWriter;
+class XmlReader;
 class Articulation;
 class Tremolo;
-
-class XmlReader;
-class XmlWriter;
 
 struct DrumInstrumentVariant {
     int pitch = INVALID_PITCH;

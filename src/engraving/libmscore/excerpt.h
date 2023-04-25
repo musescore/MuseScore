@@ -37,7 +37,6 @@ class Part;
 class Score;
 class Staff;
 class Spanner;
-class XmlReader;
 
 class Excerpt
 {

@@ -25,6 +25,8 @@
 #include "readcontext.h"
 
 namespace mu::engraving {
+class XmlWriter;
+class XmlReader;
 class Measure;
 }
 

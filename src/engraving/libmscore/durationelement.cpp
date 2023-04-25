@@ -136,30 +136,6 @@ void DurationElement::readAddTuplet(Tuplet* t)
     }
 }
 
-//---------------------------------------------------------
-//   writeTupletStart
-//---------------------------------------------------------
-
-void DurationElement::writeTupletStart(XmlWriter& xml) const
-{
-    if (tuplet() && tuplet()->elements().front() == this) {
-        tuplet()->writeTupletStart(xml);               // recursion
-        rw400::TWrite::write(tuplet(), xml, *xml.context());
-    }
-}
-
-//---------------------------------------------------------
-//   writeTupletEnd
-//---------------------------------------------------------
-
-void DurationElement::writeTupletEnd(XmlWriter& xml) const
-{
-    if (tuplet() && tuplet()->elements().back() == this) {
-        xml.tag("endTuplet");
-        tuplet()->writeTupletEnd(xml);               // recursion
-    }
-}
-
 void DurationElement::setTuplet(Tuplet* t)
 {
     if (_tuplet) {

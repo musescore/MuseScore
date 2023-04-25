@@ -29,8 +29,6 @@
 
 namespace mu::engraving {
 class EngravingItem;
-class XmlReader;
-class XmlWriter;
 
 enum class Pid;
 

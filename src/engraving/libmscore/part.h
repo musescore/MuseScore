@@ -34,7 +34,6 @@ class Read206;
 }
 
 namespace mu::engraving {
-class XmlWriter;
 class Staff;
 class Score;
 class InstrumentTemplate;

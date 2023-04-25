@@ -34,7 +34,7 @@ class Factory;
 class System;
 class Text;
 class Measure;
-class XmlWriter;
+
 class Score;
 class MeasureBase;
 

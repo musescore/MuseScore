@@ -32,8 +32,6 @@ namespace mu::engraving {
 class EngravingItem;
 class EngravingObject;
 class Score;
-class XmlReader;
-class XmlWriter;
 
 //---------------------------------------------------------
 //   @@ ConnectorInfo

@@ -47,8 +47,6 @@ public:
     virtual Measure* measure() const { return (Measure*)(explicitParent()); }
 
     void readAddTuplet(Tuplet* t);
-    void writeTupletStart(XmlWriter& xml) const;
-    void writeTupletEnd(XmlWriter& xml) const;
 
     void setTuplet(Tuplet* t);
     Tuplet* tuplet() const { return _tuplet; }

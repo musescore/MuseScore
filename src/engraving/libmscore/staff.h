@@ -49,9 +49,6 @@ class Score;
 class StaffType;
 class TimeSig;
 
-class XmlReader;
-class XmlWriter;
-
 enum class Key;
 
 //---------------------------------------------------------

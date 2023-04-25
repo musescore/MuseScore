@@ -28,8 +28,6 @@
 #include "types/propertyvalue.h"
 
 namespace mu::engraving {
-class XmlReader;
-
 //------------------------------------------------------------------------
 //    M_PROPERTY (type, getter_name, setter_name)
 //       helper macro to define a styled ScoreElement property
@@ -400,7 +398,6 @@ enum class Pid {
 
 using PropertyIdSet = std::unordered_set<Pid>;
 
-extern PropertyValue readProperty(Pid type, XmlReader& e);
 extern PropertyValue propertyFromString(P_TYPE type, String value);
 extern String propertyToString(Pid, const PropertyValue& value, bool mscx);
 extern P_TYPE propertyType(Pid);

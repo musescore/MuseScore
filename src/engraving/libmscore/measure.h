@@ -51,8 +51,6 @@ class Staff;
 class System;
 class TieMap;
 
-class XmlWriter;
-
 //---------------------------------------------------------
 //   MeasureNumberMode
 //---------------------------------------------------------
@@ -152,8 +150,6 @@ public:
     EngravingObject* scanParent() const override;
     EngravingObjectList scanChildren() const override;
 
-    void writeBox(XmlWriter&) const;
-    void readBox(XmlReader&);
     bool isEditable() const override { return false; }
     void checkMeasure(staff_idx_t idx, bool useGapRests = true);
 

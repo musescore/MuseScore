@@ -29,8 +29,6 @@
 
 namespace mu::engraving {
 class ChordRest;
-class XmlReader;
-class XmlWriter;
 
 //---------------------------------------------------------
 //   @@ Groups

@@ -198,8 +198,7 @@ public:
 void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
 {
     bool found = WriteVisitor::visit(WriteTypes {}, item, xml, ctx);
-    IF_ASSERT_FAILED(found) {
-    }
+    DO_ASSERT(found);
 }
 
 void TWrite::writeItems(const ElementList& items, XmlWriter& xml, WriteContext& ctx)
@@ -796,6 +795,22 @@ void TWrite::writeSpannerEnd(Spanner* s, XmlWriter& xml, const EngravingItem* cu
     Fraction frac = fraction(xml, current, tick);
     SpannerWriter w(xml, current, s, static_cast<int>(track), frac, false);
     w.write();
+}
+
+void TWrite::writeTupletStart(DurationElement* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (item->tuplet() && item->tuplet()->elements().front() == item) {
+        writeTupletStart(item->tuplet(), xml, ctx);               // recursion
+        TWrite::write(item->tuplet(), xml, ctx);
+    }
+}
+
+void TWrite::writeTupletEnd(DurationElement* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (item->tuplet() && item->tuplet()->elements().back() == item) {
+        xml.tag("endTuplet");
+        writeTupletEnd(item->tuplet(), xml, ctx);               // recursion
+    }
 }
 
 void TWrite::write(const ChordLine* item, XmlWriter& xml, WriteContext& ctx)
@@ -2796,7 +2811,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                     if (segment->element(idx)) {
                         int oDiff = xml.context()->trackDiff();
                         xml.context()->setTrackDiff(idx);                      // staffIdx should be zero
-                        rw400::TWrite::writeItem(segment->element(idx), xml, ctx);
+                        TWrite::writeItem(segment->element(idx), xml, ctx);
                         xml.context()->setTrackDiff(oDiff);
                         break;
                     }
@@ -2828,7 +2843,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                     voiceTagWritten |= writeVoiceMove(xml, ctx, segment, startTick, track, &lastTrackWritten);
                     needMove = false;
                 }
-                rw400::TWrite::writeItem(e1, xml, ctx);
+                TWrite::writeItem(e1, xml, ctx);
             }
             Measure* m = segment->measure();
             // don't write spanners for multi measure rests
@@ -2879,7 +2894,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                     Key k = score->staff(track2staff(track))->key(segment->tick());
                     KeySig* ks = Factory::createKeySig(score->dummy()->segment());
                     ks->setKey(k);
-                    rw400::TWrite::write(ks, xml, ctx);
+                    TWrite::write(ks, xml, ctx);
                     delete ks;
                     keySigWritten = true;
                 }
@@ -2887,7 +2902,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                 Fraction tsf = score->sigmap()->timesig(segment->tick()).timesig();
                 TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
                 ts->setSig(tsf);
-                rw400::TWrite::write(ts, xml, ctx);
+                TWrite::write(ts, xml, ctx);
                 delete ts;
                 timeSigWritten = true;
             }
@@ -2897,17 +2912,17 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
             }
             if (e->isChordRest()) {
                 ChordRest* cr = toChordRest(e);
-                cr->writeTupletStart(xml);
+                writeTupletStart(cr, xml, ctx);
             }
-            rw400::TWrite::writeItem(e, xml, ctx);
+            TWrite::writeItem(e, xml, ctx);
 
             if (e->isChordRest()) {
                 ChordRest* cr = toChordRest(e);
-                cr->writeTupletEnd(xml);
+                writeTupletEnd(cr, xml, ctx);
             }
 
             if (!(e->isRest() && toRest(e)->isGap())) {
-                rw400::TWrite::write(segment, xml, ctx); // write only once
+                TWrite::write(segment, xml, ctx); // write only once
             }
             if (forceTimeSig) {
                 if (segment->segmentType() == SegmentType::KeySig) {

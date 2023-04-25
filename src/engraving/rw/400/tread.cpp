@@ -178,7 +178,112 @@ public:
 
 void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
 {
-    ReadVisitor::visit(ReadTypes {}, item, xml, ctx);
+    bool found = ReadVisitor::visit(ReadTypes {}, item, xml, ctx);
+    DO_ASSERT(found);
+}
+
+PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e)
+{
+    switch (propertyType(id)) {
+    case P_TYPE::BOOL:
+        return PropertyValue(bool(e.readInt()));
+    case P_TYPE::INT:
+        return PropertyValue(e.readInt());
+    case P_TYPE::REAL:
+        return PropertyValue(e.readDouble());
+    case P_TYPE::SPATIUM: return PropertyValue(Spatium(e.readDouble()));
+    case P_TYPE::MILLIMETRE: return PropertyValue(Spatium(e.readDouble())); //! NOTE type mm, but stored in xml as spatium
+    case P_TYPE::TEMPO:
+        return PropertyValue(e.readDouble());
+    case P_TYPE::FRACTION:
+        return PropertyValue::fromValue(e.readFraction());
+
+    case P_TYPE::SYMID:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), SymId::noSym));
+    case P_TYPE::COLOR:
+        return PropertyValue::fromValue(e.readColor());
+    case P_TYPE::ORNAMENT_STYLE:
+        return PropertyValue::fromValue(TConv::fromXml(e.readAsciiText(), OrnamentStyle::DEFAULT));
+    case P_TYPE::POINT:
+        return PropertyValue::fromValue(e.readPoint());
+    case P_TYPE::SCALE:
+        return PropertyValue::fromValue(e.readScale());
+    case P_TYPE::SIZE:
+        return PropertyValue::fromValue(e.readSize());
+    case P_TYPE::STRING:
+        return PropertyValue(e.readText());
+
+    case P_TYPE::ALIGN:
+        return PropertyValue(TConv::fromXml(e.readText(), Align()));
+    case P_TYPE::PLACEMENT_V:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), PlacementV::ABOVE));
+    case P_TYPE::PLACEMENT_H:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), PlacementH::LEFT));
+    case P_TYPE::TEXT_PLACE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), TextPlace::AUTO));
+    case P_TYPE::DIRECTION_V:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), DirectionV::AUTO));
+    case P_TYPE::DIRECTION_H:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), DirectionH::AUTO));
+    case P_TYPE::ORIENTATION:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), Orientation::VERTICAL));
+
+    case P_TYPE::LAYOUTBREAK_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), LayoutBreakType::NOBREAK));
+    case P_TYPE::VELO_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), VeloType::OFFSET_VAL));
+    case P_TYPE::GLISS_STYLE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), GlissandoStyle::CHROMATIC));
+    case P_TYPE::BARLINE_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), BarLineType::NORMAL));
+
+    case P_TYPE::NOTEHEAD_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), NoteHeadType::HEAD_AUTO));
+    case P_TYPE::NOTEHEAD_SCHEME:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), NoteHeadScheme::HEAD_AUTO));
+    case P_TYPE::NOTEHEAD_GROUP:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), NoteHeadGroup::HEAD_NORMAL));
+
+    case P_TYPE::CLEF_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), ClefType::G));
+
+    case P_TYPE::DYNAMIC_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), DynamicType::OTHER));
+
+    case P_TYPE::LINE_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), LineType::SOLID));
+    case P_TYPE::HOOK_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), HookType::NONE));
+
+    case P_TYPE::KEY_MODE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), KeyMode::NONE));
+
+    case P_TYPE::TEXT_STYLE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), TextStyleType::DEFAULT));
+
+    case P_TYPE::CHANGE_METHOD:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), ChangeMethod::NORMAL));
+
+    case P_TYPE::BEAM_MODE:
+        return PropertyValue(int(0));
+    case P_TYPE::GROUPS: {
+        Groups g;
+        rw400::TRead::read(&g, e, *e.context());
+        return PropertyValue::fromValue(g.nodes());
+    }
+    case P_TYPE::DURATION_TYPE_WITH_DOTS:
+    case P_TYPE::INT_VEC:
+        return PropertyValue();
+
+    case P_TYPE::PLAYTECH_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), PlayingTechniqueType::Natural));
+    case P_TYPE::TEMPOCHANGE_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), GradualTempoChangeType::Undefined));
+    default:
+        ASSERT_X("unhandled PID type");
+        break;
+    }
+    return PropertyValue();
 }
 
 bool TRead::readProperty(EngravingItem* item, const AsciiStringView& tag, XmlReader& xml, ReadContext& ctx, Pid pid)
@@ -193,7 +298,7 @@ bool TRead::readProperty(EngravingItem* item, const AsciiStringView& tag, XmlRea
 void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, Pid pid)
 {
     double spatium = ctx.score() ? ctx.spatium() : item->spatium();
-    PropertyValue v = mu::engraving::readProperty(pid, xml);
+    PropertyValue v = readPropertyValue(pid, xml);
     switch (propertyType(pid)) {
     case P_TYPE::MILLIMETRE: //! NOTE type mm, but stored in xml as spatium
         v = v.value<Spatium>().toMM(spatium);
