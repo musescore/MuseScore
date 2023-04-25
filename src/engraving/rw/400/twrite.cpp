@@ -1754,6 +1754,7 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
             write(dot, xml, ctx);
         }
     }
+
     if (item->tieFor()) {
         writeSpannerStart(item->tieFor(), xml, item, item->track());
     }

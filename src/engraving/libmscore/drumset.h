@@ -79,6 +79,7 @@ class Drumset
     DrumInstrument _drum[DRUM_INSTRUMENTS];
 
 public:
+
     bool isValid(int pitch) const { return !_drum[pitch].name.empty(); }
     NoteHeadGroup noteHead(int pitch) const { return _drum[pitch].notehead; }
     SymId noteHeads(int pitch, NoteHeadType t) const { return _drum[pitch].noteheads[int(t)]; }

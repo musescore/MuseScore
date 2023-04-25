@@ -158,7 +158,7 @@ public:
     template<typename T>
     static bool doVisit(EngravingObject* item, ConnectorInfoReader* info, bool pasteMode)
     {
-        if (T::classof(item) || std::is_same<T, ChordRest>::value) {
+        if (T::classof(item) || (std::is_same<T, ChordRest>::value && item->isChordRest())) {
             ConnectorInfoReader::readAddConnector(static_cast<T*>(item), info, pasteMode);
             return true;
         }
@@ -175,7 +175,8 @@ void ConnectorInfoReader::addToScore(bool pasteMode)
         r = r->prev();
     }
     while (r) {
-        ReadAddConnectorVisitor::visit(ReadAddConnectorTypes {}, r->_connectorReceiver, r, pasteMode);
+        bool found = ReadAddConnectorVisitor::visit(ReadAddConnectorTypes {}, r->_connectorReceiver, r, pasteMode);
+        assert(found);
         r = r->next();
     }
 }
