@@ -805,7 +805,6 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, Part* part, bool* cus
     } else if (tag == "useDrumset") {
         item->setUseDrumset(e.readInt());
         if (item->useDrumset()) {
-            delete item->drumset();
             item->setDrumset(new Drumset(*smDrumset));
         }
     } else if (tag == "Drum") {
