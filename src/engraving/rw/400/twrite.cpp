@@ -1531,7 +1531,7 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
         write(item->stringData(), xml);
     }
     for (const NamedEventList& a : item->midiActions()) {
-        a.write(xml, "MidiAction");
+        write(&a, xml, "MidiAction");
     }
     for (const MidiArticulation& a : item->articulation()) {
         a.write(xml);
@@ -1558,6 +1558,50 @@ void TWrite::write(const StaffNameList* item, XmlWriter& xml, const char* name)
     for (const StaffName& sn : *item) {
         write(&sn, xml, name);
     }
+}
+
+static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
+{
+    switch (e.type()) {
+    case ME_NOTEON:
+        xml.tag("note-on", { { "channel", e.channel() }, { "pitch", e.pitch() }, { "velo", e.velo() } });
+        break;
+
+    case ME_NOTEOFF:
+        xml.tag("note-off", { { "channel", e.channel() }, { "pitch", e.pitch() }, { "velo", e.velo() } });
+        break;
+
+    case ME_CONTROLLER:
+        if (e.controller() == CTRL_PROGRAM) {
+            if (e.channel() == 0) {
+                xml.tag("program", { { "value", e.value() } });
+            } else {
+                xml.tag("program", { { "channel", e.channel() }, { "value", e.value() } });
+            }
+        } else {
+            if (e.channel() == 0) {
+                xml.tag("controller", { { "ctrl", e.controller() }, { "value", e.value() } });
+            } else {
+                xml.tag("controller", { { "channel", e.channel() }, { "ctrl", e.controller() }, { "value", e.value() } });
+            }
+        }
+        break;
+    default:
+        LOGD("MidiCoreEvent::write: unknown type");
+        break;
+    }
+}
+
+void TWrite::write(const NamedEventList* item, XmlWriter& xml, const AsciiStringView& n)
+{
+    xml.startElement(n, { { "name", item->name } });
+    if (!item->descr.empty()) {
+        xml.tag("descr", item->descr);
+    }
+    for (const MidiCoreEvent& e : item->events) {
+        midi_event_write(e, xml);
+    }
+    xml.endElement();
 }
 
 void TWrite::write(const InstrumentChange* item, XmlWriter& xml, WriteContext& ctx)
