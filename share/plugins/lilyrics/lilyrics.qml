@@ -52,7 +52,6 @@ MuseScore {
             id: textLabel
             wrapMode: Text.WordWrap
             text: qsTr("Example: Ky -- _ ri -- e~e -- lei -- son __ _ _")
-            font.pointSize:10
             anchors.left: window.left
             anchors.top: window.top
             anchors.leftMargin: 10
@@ -64,7 +63,7 @@ MuseScore {
             anchors.top: textLabel.bottom
             anchors.left: window.left
             anchors.right: buttonDump.left
-            anchors.bottom: labelStaff.top
+            anchors.bottom: bottomBar.top
             anchors.topMargin: 10
             anchors.bottomMargin: 10
             anchors.leftMargin: 10
@@ -247,135 +246,126 @@ MuseScore {
     *********** Bottom bar controls ***********
     ******************************************/
 
-        Label {
-            id: labelStaff
-            text: qsTr("Staff: ")
-            font.pointSize:12
-            anchors.bottom: window.bottom
+        Row {
+            id: bottomBar
+
+            spacing: 10
+
             anchors.left: textLily.left
-            anchors.topMargin: 10
-            anchors.bottomMargin: 10
-            anchors.leftMargin: 10
-        }
-
-        SpinBox {
-            id : spinStaff
+            anchors.right: textLily.right
             anchors.bottom: window.bottom
-            anchors.left: labelStaff.right
-            anchors.topMargin: 10
-            anchors.bottomMargin: 10
-            width: 40
-            minimumValue: 1;
-            maximumValue: Boolean(curScore) ? curScore.ntracks/4 : 0
-            value: staffSelection();
-            horizontalAlignment: Text.AlignHCenter
-        }
+            anchors.margins: 10
 
-        Label {
-            id: labelVoice
-            text: qsTr("Voice: ")
-            font.pointSize:12
-            anchors.bottom: window.bottom
-            anchors.left: spinStaff.right
-            anchors.topMargin: 10
-            anchors.bottomMargin: 10
-            anchors.leftMargin: 10
-        }
+            height: childrenRect.height
 
-        SpinBox {
-            id : spinVoice
-            anchors.bottom: window.bottom
-            anchors.left: labelVoice.right
-            anchors.topMargin: 10
-            anchors.bottomMargin: 10
-            width: 40
-            minimumValue: 1
-            maximumValue: 4
-            value: voiceSelection();
-            horizontalAlignment: Text.AlignHCenter
-        }
+            Row {
+                height: childrenRect.height
 
-        Label {
-            id: labelVerse
-            text: qsTr("Verse: ")
-            font.pointSize:12
-            anchors.bottom: window.bottom
-            anchors.left: spinVoice.right
-            anchors.topMargin: 10
-            anchors.bottomMargin: 10
-            anchors.leftMargin: 10
-        }
+                Label {
+                    id: labelStaff
 
-        SpinBox {
-            id : spinVerse
-            anchors.bottom: window.bottom
-            anchors.left: labelVerse.right
-            anchors.topMargin: 10
-            anchors.bottomMargin: 10
-            width: 40
-            minimumValue: 1
-            maximumValue: 8 // arbitrary
-            value: verseSelection();
-            horizontalAlignment: Text.AlignHCenter
-        }
+                    anchors.verticalCenter: spinStaff.verticalCenter
 
-        ComboBox {
-            id : comboPos
-            model: [qsTr("Above"), qsTr("Below")]
-            currentIndex: 1
-            anchors.bottom: window.bottom
-            anchors.left: spinVerse.right
-            anchors.topMargin: 10
-            anchors.bottomMargin: 10
-            anchors.leftMargin: 10
-            width: 80
-        }
+                    text: qsTr("Staff: ")
+                }
 
-        CheckBox {
-            id : checkTie
-            checked: true
-            text: qsTr("Skip ties")
-            anchors.bottom: window.bottom
-            anchors.left: comboPos.right
-            anchors.topMargin: 10
-            anchors.bottomMargin: 10
-            anchors.leftMargin: 15
-        }
+                SpinBox {
+                    id : spinStaff
+                    width: 40
+                    minimumValue: 1;
+                    maximumValue: Boolean(curScore) ? curScore.ntracks/4 : 0
+                    value: staffSelection();
+                    horizontalAlignment: Text.AlignHCenter
+                }
+            }
 
-        CheckBox {
-            id : checkExtender
-            checked: true
-            text: qsTr("Extender")
-            anchors.bottom: window.bottom
-            anchors.left: checkTie.right
-            anchors.topMargin: 10
-            anchors.bottomMargin: 10
-            anchors.leftMargin: 15
-        }
+            Row {
+                height: childrenRect.height
 
-        Button {
-            id : buttonElision
-            text: qsTr("~")
-            anchors.bottom: window.bottom
-            anchors.left: checkExtender.right
-            anchors.topMargin: 10
-            anchors.bottomMargin: 10
-            anchors.leftMargin: 10
-            width: 20
-            tooltip: qsTr("Character to use in synalepha:\n1: MuseScore elision\n2: Unicode undertie\n3: ASCII underscore");
+                Label {
+                    id: labelVoice
 
-        }
+                    anchors.verticalCenter: spinVoice.verticalCenter
 
-        ComboBox {
-            id : comboElision
-            model: ["1", "2", "3"]
-            currentIndex: 0
-            anchors.bottom: window.bottom
-            anchors.left: buttonElision.right
-            anchors.topMargin: 10
-            anchors.bottomMargin: 10
-            anchors.leftMargin: 5
-            width: 36
+                    text: qsTr("Voice: ")
+                }
+
+                SpinBox {
+                    id : spinVoice
+                    width: 40
+                    minimumValue: 1
+                    maximumValue: 4
+                    value: voiceSelection();
+                    horizontalAlignment: Text.AlignHCenter
+                }
+            }
+
+            Row {
+                height: childrenRect.height
+
+                Label {
+                    id: labelVerse
+
+                    anchors.verticalCenter: spinVerse.verticalCenter
+
+                    text: qsTr("Verse: ")
+                }
+
+                SpinBox {
+                    id : spinVerse
+                    width: 40
+                    minimumValue: 1
+                    maximumValue: 8 // arbitrary
+                    value: verseSelection();
+                    horizontalAlignment: Text.AlignHCenter
+                }
+            }
+
+            ComboBox {
+                id : comboPos
+
+                anchors.verticalCenter: comboElision.verticalCenter
+
+                model: [qsTr("Above"), qsTr("Below")]
+                currentIndex: 1
+                width: 80
+            }
+
+            CheckBox {
+                id : checkTie
+
+                anchors.verticalCenter: comboElision.verticalCenter
+
+                checked: true
+                text: qsTr("Skip ties")
+            }
+
+            CheckBox {
+                id : checkExtender
+
+                anchors.verticalCenter: comboElision.verticalCenter
+
+                checked: true
+                text: qsTr("Extender")
+            }
+
+            Button {
+                id : buttonElision
+
+                anchors.verticalCenter: comboElision.verticalCenter
+
+                text: qsTr("~")
+                width: 20
+                tooltip: qsTr("Character to use in synalepha:\n1: MuseScore elision\n2: Unicode undertie\n3: ASCII underscore");
+
+            }
+
+            ComboBox {
+                id : comboElision
+                model: ["1", "2", "3"]
+                currentIndex: 0
+                width: 36
+            }
         }
     }
 
