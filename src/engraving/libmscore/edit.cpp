@@ -1073,7 +1073,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffId
 
     // disable local time sig modifications in linked staves
     if (staffIdx != mu::nidx && masterScore()->excerpts().size() > 0) {
-        MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG);
+        MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS);
         return false;
     }
 
@@ -1092,7 +1092,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffId
 
             if (!rewriteMeasures(fm1, lm, ns, staffIdx)) {
                 if (staffIdx != mu::nidx) {
-                    MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG);
+                    MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG_MEASURE_NOT_EMPTY);
                     // restore measure rests that were prematurely modified
                     Fraction fr(staff(staffIdx)->timeSig(fm->tick())->sig());
                     for (Measure* m = fm1; m; m = m->nextMeasure()) {
@@ -1396,7 +1396,7 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
 void Score::cmdRemoveTimeSig(TimeSig* ts)
 {
     if (ts->isLocal() && masterScore()->excerpts().size() > 0) {
-        MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG);
+        MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS);
         return;
     }
 
