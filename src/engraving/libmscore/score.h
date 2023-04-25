@@ -744,16 +744,12 @@ public:
     void cmdFullMeasureRest();
 
     Ret putNote(const mu::PointF&, bool replace, bool insert);
-    Ret insertChord(const Position&);
-    void localInsertChord(const Position&);
-    void globalInsertChord(const Position&);
+    Ret insertChordByInsertingTime(const Position&);
 
     void cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, const Fraction& lTick, bool link = true, bool spanner = true);
 
     Ret repitchNote(const Position& pos, bool replace);
     void regroupNotesAndRests(const Fraction& startTick, const Fraction& endTick, track_idx_t track);
-    bool checkTimeDelete(Segment*, Segment*);
-    void timeDelete(Measure*, Segment*, const Fraction&);
 
     void startCmd();                    // start undoable command
     void endCmd(bool rollback = false, bool layoutAllParts = false); // end undoable command
@@ -1233,8 +1229,9 @@ public:
     virtual String name() const;
 
     void cmdTimeDelete();
-    void localTimeDelete();
-    void globalTimeDelete();
+    bool checkTimeDelete(Segment* startSegment, Segment* endSegment);
+    void doTimeDelete(Segment* startSegment, Segment* endSegment);
+    void doTimeDeleteForMeasure(Measure*, Segment*, const Fraction&);
 
     Text* headerText(int index) const { return _headersText[index]; }
     Text* footerText(int index) const { return _footersText[index]; }

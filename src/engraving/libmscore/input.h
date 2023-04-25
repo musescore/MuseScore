@@ -79,7 +79,6 @@ class InputState
 
     AccidentalType _accidentalType { AccidentalType::NONE };
     Slur* _slur = nullptr;
-    bool _insertMode { false };
 
     std::set<SymId> _articulationIds;
 
@@ -141,9 +140,6 @@ public:
 
     Slur* slur() const { return _slur; }
     void setSlur(Slur* s) { _slur = s; }
-
-    bool insertMode() const { return _insertMode; }
-    void setInsertMode(bool val) { _insertMode = val; }
 
     void update(Selection& selection);
     void moveInputPos(EngravingItem* e);

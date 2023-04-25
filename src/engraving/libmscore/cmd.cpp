@@ -3986,25 +3986,6 @@ void Score::cmdPitchDown()
 }
 
 //---------------------------------------------------------
-//   cmdTimeDelete
-//---------------------------------------------------------
-
-void Score::cmdTimeDelete()
-{
-    EngravingItem* e = selection().element();
-    if (e && e->isBarLine() && toBarLine(e)->segment()->isEndBarLineType()) {
-        Measure* m = toBarLine(e)->segment()->measure();
-        cmdJoinMeasure(m, m->nextMeasure());
-    } else {
-        if (_is.insertMode()) {
-            globalTimeDelete();
-        } else {
-            localTimeDelete();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   cmdPitchUpOctave
 //---------------------------------------------------------
 
@@ -4464,7 +4445,7 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
         repitchNote(pos, !addFlag);
     } else {
         if (insert) {
-            insertChord(pos);
+            insertChordByInsertingTime(pos);
         } else {
             putNote(pos, !addFlag);
         }

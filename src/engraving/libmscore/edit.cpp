@@ -4149,36 +4149,37 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
 }
 
 //---------------------------------------------------------
-//   globalTimeDelete
+//   cmdTimeDelete
+///    delete time by decreasing measure length if partial measures are selected
 //---------------------------------------------------------
 
-void Score::globalTimeDelete()
+void Score::cmdTimeDelete()
 {
-    LOGD("not implemented");
-}
+    EngravingItem* e = selection().element();
 
-//---------------------------------------------------------
-//   localTimeDelete
-//---------------------------------------------------------
+    if (e && e->isBarLine() && toBarLine(e)->segment()->isEndBarLineType()) {
+        Measure* m = toBarLine(e)->segment()->measure();
+        cmdJoinMeasure(m, m->nextMeasure());
+        return;
+    }
 
-void Score::localTimeDelete()
-{
     Segment* startSegment = nullptr;
     Segment* endSegment = nullptr;
 
     if (selection().state() != SelState::RANGE) {
-        EngravingItem* el = selection().element();
-        if (!el) {
+        if (!e) {
             return;
         }
+
         ChordRest* cr = nullptr;
-        if (el->isNote()) {
-            cr = toNote(el)->chord();
-        } else if (el->isChordRest()) {
-            cr = toChordRest(el);
+        if (e->isNote()) {
+            cr = toNote(e)->chord();
+        } else if (e->isChordRest()) {
+            cr = toChordRest(e);
         } else {
             return;
         }
+
         startSegment     = cr->segment();
         Fraction endTick = startSegment->tick() + cr->actualTicks();
         endSegment       = tick2measure(endTick)->findSegment(CR_TYPE, endTick);
@@ -4187,50 +4188,10 @@ void Score::localTimeDelete()
         endSegment   = selection().endSegment();
     }
 
-    if (!checkTimeDelete(startSegment, endSegment)) {
-        return;
-    }
-
-    MeasureBase* mbStart = startSegment->measure();
-    if (mbStart->isMeasure() && toMeasure(mbStart)->isMMRest()) {
-        mbStart = toMeasure(mbStart)->mmRestFirst();
-    }
-    MeasureBase* mbEnd;
-
-    if (endSegment) {
-        mbEnd = endSegment->prev(SegmentType::ChordRest) ? endSegment->measure() : endSegment->measure()->prev();
+    if (!isMaster() && masterScore()) {
+        masterScore()->doTimeDelete(startSegment, endSegment);
     } else {
-        mbEnd = lastMeasure();
-    }
-
-    Fraction endTick = endSegment ? endSegment->tick() : mbEnd->endTick();
-
-    for (;;) {
-        if (mbStart->tick() != startSegment->tick()) {
-            Fraction tick = startSegment->tick();
-            Fraction len;
-            if (mbEnd == mbStart) {
-                len = endTick - tick;
-            } else {
-                len = mbStart->endTick() - tick;
-            }
-            timeDelete(toMeasure(mbStart), startSegment, len);
-            if (mbStart == mbEnd) {
-                break;
-            }
-            mbStart = mbStart->next();
-        }
-        endTick = endSegment ? endSegment->tick() : mbEnd->endTick();
-        if (mbEnd->endTick() != endTick) {
-            Fraction len = endTick - mbEnd->tick();
-            timeDelete(toMeasure(mbEnd), toMeasure(mbEnd)->first(), len);
-            if (mbStart == mbEnd) {
-                break;
-            }
-            mbEnd = mbEnd->prev();
-        }
-        deleteMeasures(mbStart, mbEnd);
-        break;
+        doTimeDelete(startSegment, endSegment);
     }
 
     if (noteEntryMode()) {
@@ -4269,11 +4230,56 @@ void Score::localTimeDelete()
     }
 }
 
-//---------------------------------------------------------
-//   timeDelete
-//---------------------------------------------------------
+void Score::doTimeDelete(Segment* startSegment, Segment* endSegment)
+{
+    if (!checkTimeDelete(startSegment, endSegment)) {
+        return;
+    }
 
-void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
+    MeasureBase* mbStart = startSegment->measure();
+    if (mbStart->isMeasure() && toMeasure(mbStart)->isMMRest()) {
+        mbStart = toMeasure(mbStart)->mmRestFirst();
+    }
+    MeasureBase* mbEnd;
+
+    if (endSegment) {
+        mbEnd = endSegment->prev(SegmentType::ChordRest) ? endSegment->measure() : endSegment->measure()->prev();
+    } else {
+        mbEnd = lastMeasure();
+    }
+
+    Fraction endTick = endSegment ? endSegment->tick() : mbEnd->endTick();
+
+    for (;;) {
+        if (mbStart->tick() != startSegment->tick()) {
+            Fraction tick = startSegment->tick();
+            Fraction len;
+            if (mbEnd == mbStart) {
+                len = endTick - tick;
+            } else {
+                len = mbStart->endTick() - tick;
+            }
+            doTimeDeleteForMeasure(toMeasure(mbStart), startSegment, len);
+            if (mbStart == mbEnd) {
+                break;
+            }
+            mbStart = mbStart->next();
+        }
+        endTick = endSegment ? endSegment->tick() : mbEnd->endTick();
+        if (mbEnd->endTick() != endTick) {
+            Fraction len = endTick - mbEnd->tick();
+            doTimeDeleteForMeasure(toMeasure(mbEnd), toMeasure(mbEnd)->first(), len);
+            if (mbStart == mbEnd) {
+                break;
+            }
+            mbEnd = mbEnd->prev();
+        }
+        deleteMeasures(mbStart, mbEnd);
+        break;
+    }
+}
+
+void Score::doTimeDeleteForMeasure(Measure* m, Segment* startSegment, const Fraction& f)
 {
     if (f.isZero()) {
         return;
