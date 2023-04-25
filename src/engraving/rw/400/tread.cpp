@@ -21,6 +21,8 @@
  */
 #include "tread.h"
 
+#include "global/defer.h"
+
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
 #include "../../infrastructure/rtti.h"
@@ -834,7 +836,7 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, Part* part, bool* cus
         item->addMidiArticulation(a);
     } else if (tag == "Channel" || tag == "channel") {
         InstrChannel* a = new InstrChannel;
-        a->read(e, part, trackId);
+        read(a, e, part, trackId);
         item->appendChannel(a);
     } else if (tag == "clef") {           // sets both transposing and concert clef
         int idx = e.intAttribute("staff", 1) - 1;
@@ -851,6 +853,104 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, Part* part, bool* cus
     }
 
     return true;
+}
+
+void TRead::read(InstrChannel* item, XmlReader& e, Part* part, const InstrumentTrackId& instrId)
+{
+    item->setNotifyAboutChangedEnabled(false);
+    DEFER {
+        item->setNotifyAboutChangedEnabled(true);
+    };
+
+    // synti = 0;
+    item->setName(e.attribute("name"));
+    if (item->name() == "") {
+        item->setName(String::fromUtf8(InstrChannel::DEFAULT_NAME));
+    }
+
+    int midiPort = -1;
+    int midiChannel = -1;
+    PartAudioSettingsCompat partAudioSetting;
+    partAudioSetting.instrumentId = instrId;
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "program") {
+            item->setProgram(e.intAttribute("value", -1));
+            if (item->program() == -1) {
+                item->setProgram(e.readInt());
+            } else {
+                e.readNext();
+            }
+        } else if (tag == "controller") {
+            int value = e.intAttribute("value", 0);
+            int ctrl  = e.intAttribute("ctrl", 0);
+            switch (ctrl) {
+            case CTRL_HBANK:
+                item->setBank((value << 7) + (item->bank() & 0x7f));
+                item->setUserBankController(true);
+                break;
+            case CTRL_LBANK:
+                item->setBank((item->bank() & ~0x7f) + (value & 0x7f));
+                item->setUserBankController(true);
+                break;
+            case CTRL_VOLUME:
+                item->setVolume(value);
+                break;
+            case CTRL_PANPOT:
+                item->setPan(value);
+                break;
+            case CTRL_CHORUS_SEND:
+                item->setChorus(value);
+                break;
+            case CTRL_REVERB_SEND:
+                item->setReverb(value);
+                break;
+            default:
+            {
+                Event ev(ME_CONTROLLER);
+                ev.setOntime(-1);
+                ev.setChannel(0);
+                ev.setDataA(ctrl);
+                ev.setDataB(value);
+                item->addToInit(ev);
+            }
+            break;
+            }
+            e.readNext();
+        } else if (tag == "Articulation") {
+            MidiArticulation a;
+            a.read(e);
+            item->articulation.push_back(a);
+        } else if (tag == "MidiAction") {
+            NamedEventList a;
+            read(&a, e);
+            item->midiActions.push_back(a);
+        } else if (tag == "synti") {
+            item->setSynti(e.readText());
+        } else if (tag == "color") {
+            item->setColor(e.readInt());
+        } else if (tag == "mute") {
+            partAudioSetting.mute = e.readInt();
+        } else if (tag == "solo") {
+            partAudioSetting.solo = e.readInt();
+        } else if (tag == "midiPort") {
+            midiPort = e.readInt();
+        } else if (tag == "midiChannel") {
+            midiChannel = e.readInt();
+        } else {
+            e.unknown();
+        }
+    }
+
+    item->setMustUpdateInit(true);
+    if (e.context()) {
+        e.context()->addPartAudioSettingCompat(partAudioSetting);
+    }
+
+    if ((midiPort != -1 || midiChannel != -1) && part && part->score()->isMaster()) {
+        part->masterScore()->addMidiMapping(item, part, midiPort, midiChannel);
+    }
 }
 
 void TRead::read(NamedEventList* item, XmlReader& e)

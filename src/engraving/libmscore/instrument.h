@@ -125,7 +125,6 @@ class InstrChannel
     // Channel init EventList (maybe zero)
     String _name;
 
-    static const int DEFAULT_COLOR = 0x3399ff;
     int _color;    //rgb
 
     String _synti;
@@ -152,6 +151,7 @@ public:
     static const char* DEFAULT_NAME;
     static const char* HARMONY_NAME;
     static const char* PALM_MUTE_NAME;
+    static const int DEFAULT_COLOR = 0x3399ff;
     static constexpr char defaultVolume = 100;
 
     enum class A : char {
@@ -166,7 +166,13 @@ public:
 
 private:
     Notifier<InstrChannel::Prop> _notifier;
-    void firePropertyChanged(InstrChannel::Prop prop) { _notifier.notify(prop); }
+    bool m_notifyAboutChangedEnabled = true;
+    void firePropertyChanged(InstrChannel::Prop prop)
+    {
+        if (m_notifyAboutChangedEnabled) {
+            _notifier.notify(prop);
+        }
+    }
 
 public:
     std::vector<MidiCoreEvent>& initList() const;
@@ -187,6 +193,9 @@ public:
     char reverb() const { return _reverb; }
     void setReverb(char value);
 
+    void addToInit(const MidiCoreEvent& e) { _init.push_back(e); }
+    void setMustUpdateInit(bool arg) { _mustUpdateInit = arg; }
+
     int program() const { return _program; }
     void setProgram(int value);
     int bank() const { return _bank; }
@@ -204,8 +213,7 @@ public:
     std::vector<MidiArticulation> articulation;
 
     InstrChannel();
-    void write(XmlWriter&, const Part* part) const;
-    void read(XmlReader&, Part* part, const InstrumentTrackId& instrId);
+
     void updateInitList() const;
     bool operator==(const InstrChannel& c) const { return (_name == c._name) && (_channel == c._channel); }
     bool operator!=(const InstrChannel& c) const { return !(*this == c); }
@@ -214,6 +222,8 @@ public:
     void removeListener(ChannelListener* l);
 
     void switchExpressive(Synthesizer* synth, bool expressive, bool force = false);
+
+    void setNotifyAboutChangedEnabled(bool arg) { m_notifyAboutChangedEnabled = arg; }
 };
 
 //---------------------------------------------------------
