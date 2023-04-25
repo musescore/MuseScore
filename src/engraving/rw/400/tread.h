@@ -81,6 +81,7 @@ class Hairpin;
 class Hook;
 
 class Instrument;
+class InstrChannel;
 class InstrumentChange;
 
 class Jump;
@@ -210,6 +211,7 @@ public:
     static void read(Hook* h, XmlReader& xml, ReadContext& ctx);
 
     static void read(Instrument* item, XmlReader& xml, ReadContext& ctx, Part* part);
+    static void read(InstrChannel* item, XmlReader& e, Part* part, const InstrumentTrackId& instrId);
     static void read(InstrumentChange* c, XmlReader& xml, ReadContext& ctx);
 
     static void read(KeyList* item, XmlReader& xml, ReadContext& ctx);

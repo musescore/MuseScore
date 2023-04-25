@@ -1537,27 +1537,9 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
         a.write(xml);
     }
     for (const InstrChannel* a : item->channel()) {
-        a->write(xml, part);
+        write(a, xml, part);
     }
     xml.endElement();
-}
-
-void TWrite::write(const StaffName* item, XmlWriter& xml, const char* tag)
-{
-    if (!item->name().isEmpty()) {
-        if (item->pos() == 0) {
-            xml.writeXml(String::fromUtf8(tag), item->name());
-        } else {
-            xml.writeXml(String(u"%1 pos=\"%2\"").arg(String::fromUtf8(tag)).arg(item->pos()), item->name());
-        }
-    }
-}
-
-void TWrite::write(const StaffNameList* item, XmlWriter& xml, const char* name)
-{
-    for (const StaffName& sn : *item) {
-        write(&sn, xml, name);
-    }
 }
 
 static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
@@ -1589,6 +1571,81 @@ static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
     default:
         LOGD("MidiCoreEvent::write: unknown type");
         break;
+    }
+}
+
+void TWrite::write(const InstrChannel* item, XmlWriter& xml, const Part* part)
+{
+    if (item->name().isEmpty() || item->name() == InstrChannel::DEFAULT_NAME) {
+        xml.startElement("Channel");
+    } else {
+        xml.startElement("Channel", { { "name", item->name() } });
+    }
+    if (item->color() != InstrChannel::DEFAULT_COLOR) {
+        xml.tag("color", item->color());
+    }
+
+    for (const MidiCoreEvent& e : item->initList()) {
+        if (e.type() == ME_INVALID) {
+            continue;
+        }
+        if (e.type() == ME_CONTROLLER) {
+            // Don't write bank if automatically switched, but always write if switched by the user
+            if (e.dataA() == CTRL_HBANK && e.dataB() == 0 && !item->userBankController()) {
+                continue;
+            }
+            if (e.dataA() == CTRL_LBANK && e.dataB() == 0 && !item->userBankController()) {
+                continue;
+            }
+            if (e.dataA() == CTRL_VOLUME && e.dataB() == 100) {
+                continue;
+            }
+            if (e.dataA() == CTRL_PANPOT && e.dataB() == 64) {
+                continue;
+            }
+            if (e.dataA() == CTRL_REVERB_SEND && e.dataB() == 0) {
+                continue;
+            }
+            if (e.dataA() == CTRL_CHORUS_SEND && e.dataB() == 0) {
+                continue;
+            }
+        }
+
+        midi_event_write(e, xml);
+    }
+    if (!MScore::testMode) {
+        // xml.tag("synti", ::synti->name(synti));
+        xml.tag("synti", item->synti());
+    }
+
+    if (part && part->masterScore()->exportMidiMapping() && part->score() == part->masterScore()) {
+        xml.tag("midiPort",    part->masterScore()->midiMapping(item->channel())->port());
+        xml.tag("midiChannel", part->masterScore()->midiMapping(item->channel())->channel());
+    }
+    for (const NamedEventList& a : item->midiActions) {
+        write(&a, xml, "MidiAction");
+    }
+    for (const MidiArticulation& a : item->articulation) {
+        a.write(xml);
+    }
+    xml.endElement();
+}
+
+void TWrite::write(const StaffName* item, XmlWriter& xml, const char* tag)
+{
+    if (!item->name().isEmpty()) {
+        if (item->pos() == 0) {
+            xml.writeXml(String::fromUtf8(tag), item->name());
+        } else {
+            xml.writeXml(String(u"%1 pos=\"%2\"").arg(String::fromUtf8(tag)).arg(item->pos()), item->name());
+        }
+    }
+}
+
+void TWrite::write(const StaffNameList* item, XmlWriter& xml, const char* name)
+{
+    for (const StaffName& sn : *item) {
+        write(&sn, xml, name);
     }
 }
 

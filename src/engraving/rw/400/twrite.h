@@ -79,6 +79,7 @@ class Hook;
 
 class Image;
 class Instrument;
+class InstrChannel;
 class InstrumentChange;
 
 class Jump;
@@ -214,6 +215,7 @@ public:
 
     static void write(const Image* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Instrument* item, XmlWriter& xml, WriteContext& ctx, const Part* part);
+    static void write(const InstrChannel* item, XmlWriter& xml, const Part* part);
     static void write(const InstrumentChange* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Jump* item, XmlWriter& xml, WriteContext& ctx);

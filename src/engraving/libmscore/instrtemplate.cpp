@@ -402,7 +402,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
         rw400::TWrite::write(&a, xml, "MidiAction");
     }
     for (const InstrChannel& a : channel) {
-        a.write(xml, nullptr);
+        rw400::TWrite::write(&a, xml, nullptr);
     }
     for (const MidiArticulation& ma : midiArticulations) {
         bool isGlobal = false;
@@ -534,7 +534,7 @@ void InstrumentTemplate::read(XmlReader& e)
         } else if (tag == "Channel" || tag == "channel") {
             InstrChannel a;
             InstrumentTrackId tId;
-            a.read(e, nullptr, tId);
+            rw400::TRead::read(&a, e, nullptr, tId);
             channel.push_back(a);
         } else if (tag == "Articulation") {
             MidiArticulation a;
