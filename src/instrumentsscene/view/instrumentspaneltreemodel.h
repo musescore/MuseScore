@@ -119,6 +119,7 @@ private:
 
     void initPartOrders();
     void onBeforeChangeNotation();
+    void setLoadingBlocked(bool blocked);
 
     void sortParts(notation::PartList& parts);
 
@@ -145,8 +146,9 @@ private:
     bool m_isMovingUpAvailable = false;
     bool m_isMovingDownAvailable = false;
     bool m_isRemovingAvailable = false;
-    bool m_isLoadingBlocked = false;
     bool m_isInstrumentSelected = false;
+    bool m_isLoadingBlocked = false;
+    bool m_notationChangedWhileLoadingWasBlocked = false;
 
     AbstractInstrumentsPanelTreeItem* m_rootItem = nullptr;
     uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;

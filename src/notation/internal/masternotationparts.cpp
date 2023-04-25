@@ -91,6 +91,8 @@ void MasterNotationParts::setParts(const PartInstrumentList& partList, const Sco
     }
 
     endGlobalEdit();
+
+    m_partChangedNotifier.changed();
 }
 
 void MasterNotationParts::removeParts(const IDList& partsIds)

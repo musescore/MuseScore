@@ -97,6 +97,11 @@ void InstrumentsPanelTreeModel::onNotationChanged()
 {
     m_partsNotifyReceiver->disconnectAll();
 
+    if (m_isLoadingBlocked) {
+        m_notationChangedWhileLoadingWasBlocked = true;
+        return;
+    }
+
     onBeforeChangeNotation();
     m_notation = context()->currentNotation();
 
@@ -105,6 +110,8 @@ void InstrumentsPanelTreeModel::onNotationChanged()
     } else {
         clear();
     }
+
+    m_notationChangedWhileLoadingWasBlocked = false;
 }
 
 InstrumentsPanelTreeModel::~InstrumentsPanelTreeModel()
@@ -124,13 +131,13 @@ bool InstrumentsPanelTreeModel::removeRows(int row, int count, const QModelIndex
         parentItem = m_rootItem;
     }
 
-    m_isLoadingBlocked = true;
+    setLoadingBlocked(true);
     beginRemoveRows(parent, row, row + count - 1);
 
     parentItem->removeChildren(row, count, true);
 
     endRemoveRows();
-    m_isLoadingBlocked = false;
+    setLoadingBlocked(false);
 
     emit isEmptyChanged();
 
@@ -167,6 +174,15 @@ void InstrumentsPanelTreeModel::onBeforeChangeNotation()
     }
 
     m_sortedPartIdList[notationToKey(m_notation)] = partIdList;
+}
+
+void InstrumentsPanelTreeModel::setLoadingBlocked(bool blocked)
+{
+    m_isLoadingBlocked = blocked;
+
+    if (!m_isLoadingBlocked && m_notationChangedWhileLoadingWasBlocked) {
+        onNotationChanged();
+    }
 }
 
 void InstrumentsPanelTreeModel::setupPartsConnections()
@@ -412,7 +428,7 @@ void InstrumentsPanelTreeModel::removeSelectedRows()
 bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                                          int destinationChild)
 {
-    m_isLoadingBlocked = true;
+    setLoadingBlocked(true);
 
     AbstractInstrumentsPanelTreeItem* sourceParentItem = modelIndexToItem(sourceParent);
     AbstractInstrumentsPanelTreeItem* destinationParentItem = modelIndexToItem(destinationParent);
@@ -436,7 +452,7 @@ bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int so
 
     updateRearrangementAvailability();
 
-    m_isLoadingBlocked = false;
+    setLoadingBlocked(false);
 
     return true;
 }
