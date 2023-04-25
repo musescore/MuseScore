@@ -80,7 +80,8 @@ IPluginsService::CategoryInfoMap PluginsService::categories() const
     static CategoryInfoMap categories {
         { "composing-arranging-tools", TranslatableString("plugins", "Composing/arranging tools") },
         { "color-notes", TranslatableString("plugins", "Color notes") },
-        { "playback", TranslatableString("plugins", "Playback") }
+        { "playback", TranslatableString("plugins", "Playback") },
+        { "lyrics", TranslatableString("plugins", "Lyrics") }
     };
 
     return categories;
