@@ -102,6 +102,8 @@ public:
     void setPanelOrder(int panelOrder);
     void setPanelSection(ui::INavigationSection* section);
 
+    void setOutputResourceItemCount(size_t count);
+
     void loadInputParams(audio::AudioInputParams&& newParams);
     void loadOutputParams(audio::AudioOutputParams&& newParams);
     void loadSoloMuteState(project::IProjectAudioSettings::SoloMuteState&& newState);
@@ -109,6 +111,9 @@ public:
     void subscribeOnAudioSignalChanges(audio::AudioSignalChanges&& audioSignalChanges);
 
     bool outputOnly() const;
+
+    const audio::AudioInputParams& inputParams() const;
+    const audio::AudioOutputParams& outputParams() const;
 
     InputResourceItem* inputResourceItem() const;
     QList<OutputResourceItem*> outputResourceItemList() const;
@@ -161,10 +166,9 @@ protected:
     OutputResourceItem* buildOutputResourceItem(const audio::AudioFxParams& fxParams);
     AuxSendItem* buildAuxSendItem(size_t index);
 
-    void removeRedundantEmptySlots();
-    QList<audio::AudioFxChainOrder> emptySlotsToRemove() const;
+    void addBlankSlots(size_t count);
+    void removeBlankSlotsFromEnd(size_t count);
 
-    void ensureBlankOutputResourceSlot();
     audio::AudioFxChainOrder resolveNewBlankOutputResourceItemOrder() const;
 
     void openEditor(AbstractAudioResourceItem* item, const UriQuery& editorUri);
@@ -192,6 +196,8 @@ protected:
     float m_rightChannelPressure = 0.0;
 
     ui::NavigationPanel* m_panel = nullptr;
+
+    bool m_outputResourceItemsLoading = false;
 };
 }
 

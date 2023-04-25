@@ -82,6 +82,9 @@ private:
 
     MixerChannelItem* findChannelItem(const audio::TrackId& trackId) const;
 
+    void loadOutputParams(MixerChannelItem* item, audio::AudioOutputParams&& params);
+    void updateOutputResourceItemCount();
+
     project::INotationProjectPtr currentProject() const;
     project::IProjectAudioSettingsPtr audioSettings() const;
     notation::INotationPlaybackPtr notationPlayback() const;

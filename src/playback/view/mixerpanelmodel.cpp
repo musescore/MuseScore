@@ -263,14 +263,14 @@ void MixerPanelModel::setupConnections()
         }
 
         if (MixerChannelItem* item = findChannelItem(trackId)) {
-            item->loadOutputParams(std::move(params));
+            loadOutputParams(item, std::move(params));
         }
     });
 
     playback()->audioOutput()->masterOutputParamsChanged().onReceive(this,
                                                                      [this](AudioOutputParams params) {
         if (m_masterChannelItem) {
-            m_masterChannelItem->loadOutputParams(std::move(params));
+            loadOutputParams(m_masterChannelItem, std::move(params));
         }
     }, AsyncMode::AsyncSetRepeat);
 }
@@ -376,7 +376,7 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const audio::Track
     playback()->audioOutput()->outputParams(m_currentTrackSequenceId, trackId)
     .onResolve(this, [this, trackId](AudioOutputParams outParams) {
         if (MixerChannelItem* item = findChannelItem(trackId)) {
-            item->loadOutputParams(std::move(outParams));
+            loadOutputParams(item, std::move(outParams));
         }
     })
     .onReject(this, [](int errCode, std::string text) {
@@ -430,7 +430,7 @@ MixerChannelItem* MixerPanelModel::buildAuxChannelItem(const TrackId trackId)
     playback()->audioOutput()->outputParams(m_currentTrackSequenceId, trackId)
     .onResolve(this, [this, trackId](AudioOutputParams outParams) {
         if (MixerChannelItem* item = findChannelItem(trackId)) {
-            item->loadOutputParams(std::move(outParams));
+            loadOutputParams(item, std::move(outParams));
         }
     })
     .onReject(this, [](int errCode, std::string text) {
@@ -463,8 +463,8 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
     item->setTitle(qtrc("playback", "Master"));
 
     playback()->audioOutput()->masterOutputParams()
-    .onResolve(this, [item](AudioOutputParams outParams) {
-        item->loadOutputParams(std::move(outParams));
+    .onResolve(this, [this, item](AudioOutputParams outParams) {
+        loadOutputParams(item, std::move(outParams));
     })
     .onReject(this, [](int errCode, std::string text) {
         LOGE() << "unable to get master output parameters, error code: " << errCode
@@ -496,6 +496,35 @@ MixerChannelItem* MixerPanelModel::findChannelItem(const audio::TrackId& trackId
     }
 
     return nullptr;
+}
+
+void MixerPanelModel::loadOutputParams(MixerChannelItem* item, audio::AudioOutputParams&& params)
+{
+    IF_ASSERT_FAILED(item) {
+        return;
+    }
+
+    item->loadOutputParams(std::move(params));
+    updateOutputResourceItemCount();
+}
+
+void MixerPanelModel::updateOutputResourceItemCount()
+{
+    size_t maxFxCount = 0;
+
+    for (const MixerChannelItem* item : m_mixerChannelList) {
+        const AudioFxChain& chain = item->outputParams().fxChain;
+        if (chain.empty()) {
+            continue;
+        }
+
+        AudioFxChainOrder order = std::prev(chain.end())->first;
+        maxFxCount = std::max(maxFxCount, static_cast<size_t>(order) + 1);
+    }
+
+    for (MixerChannelItem* item : m_mixerChannelList) {
+        item->setOutputResourceItemCount(maxFxCount + 1 /* + 1 blank slot */);
+    }
 }
 
 INotationProjectPtr MixerPanelModel::currentProject() const

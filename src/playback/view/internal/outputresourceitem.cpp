@@ -106,8 +106,24 @@ void OutputResourceItem::setParams(const audio::AudioFxParams& params)
         return;
     }
 
+    bool activeChanged = m_currentFxParams.active != params.active;
+    bool resourceChanged = m_currentFxParams.resourceMeta.id != params.resourceMeta.id;
+    bool blankChanged = m_currentFxParams.isValid() != params.isValid();
+
     m_currentFxParams = params;
     emit fxParamsChanged();
+
+    if (activeChanged) {
+        emit isActiveChanged();
+    }
+
+    if (resourceChanged) {
+        emit titleChanged();
+    }
+
+    if (blankChanged) {
+        emit isBlankChanged();
+    }
 }
 
 QString OutputResourceItem::title() const
@@ -143,14 +159,11 @@ void OutputResourceItem::updateCurrentFxParams(const AudioResourceMeta& newMeta)
         return;
     }
 
-    m_currentFxParams.resourceMeta = newMeta;
-    m_currentFxParams.active = newMeta.isValid();
+    audio::AudioFxParams newParams = m_currentFxParams;
+    newParams.resourceMeta = newMeta;
+    newParams.active = newMeta.isValid();
 
-    emit isActiveChanged();
-    emit titleChanged();
-    emit fxParamsChanged();
-    emit isBlankChanged();
-
+    setParams(newParams);
     updateNativeEditorView();
 }
 
