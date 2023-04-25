@@ -176,6 +176,9 @@ void ConnectorInfoReader::addToScore(bool pasteMode)
     }
     while (r) {
         bool found = ReadAddConnectorVisitor::visit(ReadAddConnectorTypes {}, r->_connectorReceiver, r, pasteMode);
+#ifdef NDEBUG // avoid compiler warning
+        (void)(found);
+#endif
         assert(found);
         r = r->next();
     }
