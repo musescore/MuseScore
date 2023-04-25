@@ -78,6 +78,7 @@ class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
     Q_PROPERTY(bool modal READ modal WRITE setModal NOTIFY modalChanged)
     Q_PROPERTY(bool frameless READ frameless WRITE setFrameless NOTIFY framelessChanged)
     Q_PROPERTY(bool resizable READ resizable WRITE setResizable NOTIFY resizableChanged)
+    Q_PROPERTY(bool alwaysOnTop READ alwaysOnTop WRITE setAlwaysOnTop NOTIFY alwaysOnTopChanged)
     Q_PROPERTY(QVariantMap ret READ ret WRITE setRet NOTIFY retChanged)
 
     Q_ENUMS(OpenPolicy)
@@ -116,6 +117,8 @@ public:
 
     Q_INVOKABLE void forceActiveFocus();
 
+    void init();
+
     Q_INVOKABLE void open();
     Q_INVOKABLE void close(bool force = false);
     Q_INVOKABLE void toggleOpened();
@@ -138,6 +141,7 @@ public:
     bool modal() const;
     bool frameless() const;
     bool resizable() const;
+    bool alwaysOnTop() const;
     QVariantMap ret() const;
 
     bool opensUpward() const;
@@ -148,6 +152,8 @@ public:
 
 public slots:
     void setParentItem(QQuickItem* parent);
+    void setEngine(QQmlEngine* engine);
+    void setComponent(QQmlComponent* component);
     void setContentItem(QQuickItem* content);
     void setContentWidth(int contentWidth);
     void setContentHeight(int contentHeight);
@@ -161,6 +167,7 @@ public slots:
     void setModal(bool modal);
     void setFrameless(bool frameless);
     void setResizable(bool resizable);
+    void setAlwaysOnTop(bool alwaysOnTop);
     void setRet(QVariantMap ret);
 
     void setOpensUpward(bool opensUpward);
@@ -187,6 +194,7 @@ signals:
     void modalChanged(bool modal);
     void framelessChanged(bool frameless);
     void resizableChanged(bool resizable);
+    void alwaysOnTopChanged();
     void retChanged(QVariantMap ret);
 
     void isOpenedChanged();
@@ -232,7 +240,12 @@ protected:
     void resolveNavigationParentControl();
     void activateNavigationParentControl();
 
+    QQmlEngine* engine() const;
+
     IPopupWindow* m_window = nullptr;
+
+    QQmlComponent* m_component = nullptr;
+    QQmlEngine* m_engine = nullptr;
 
     QQuickItem* m_contentItem = nullptr;
     int m_contentWidth = 0;
@@ -251,6 +264,7 @@ protected:
     bool m_modal = true;
     bool m_frameless = false;
     bool m_resizable = false;
+    bool m_alwaysOnTop = false;
     QVariantMap m_ret;
     bool m_opensUpward = false;
     int m_arrowX = 0;

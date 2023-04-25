@@ -42,10 +42,9 @@ MuseScore {
         setTextCursor();
     }
 
-    Rectangle {
+    Item {
         id:window
 
-        color: "transparent"
         anchors.fill: parent
 
         Label {

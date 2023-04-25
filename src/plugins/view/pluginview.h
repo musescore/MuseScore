@@ -31,6 +31,8 @@
 #include "framework/ui/iuiengine.h"
 #include "plugins/ipluginsconfiguration.h"
 
+#include "uicomponents/view/dialogview.h"
+
 class QQmlComponent;
 class QQuickView;
 
@@ -73,7 +75,7 @@ private:
 
     QmlPlugin* m_qmlPlugin = nullptr;
     QQmlComponent* m_component = nullptr;
-    QQuickView* m_view = nullptr;
+    uicomponents::DialogView* m_dialogView = nullptr;
 };
 }
 
