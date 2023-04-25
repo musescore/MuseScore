@@ -102,6 +102,7 @@ class MeasureNumberBase;
 class MeasureRepeat;
 class MMRest;
 
+class NamedEventList;
 class Note;
 class NoteEvent;
 class NoteDot;
@@ -296,11 +297,16 @@ public:
     static bool readProperties(LedgerLine* l, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(LineSegment* l, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Lyrics* l, XmlReader& xml, ReadContext& ctx);
+
     static bool readProperties(MMRest* r, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(MeasureNumberBase* r, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(MeasureBase* b, XmlReader& xml, ReadContext& ctx);
+
+    static void read(NamedEventList* item, XmlReader& xml);
     static bool readProperties(Note* n, XmlReader& xml, ReadContext& ctx);
+
     static bool readProperties(Ottava* o, XmlReader& xml, ReadContext& ctx);
+
     static bool readProperties(Part* p, XmlReader& xml, ReadContext& ctx);
 
     static int read(SigEvent* item, XmlReader& xml, int fileDivision);

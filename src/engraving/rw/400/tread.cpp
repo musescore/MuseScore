@@ -826,7 +826,7 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, Part* part, bool* cus
         item->setStringData(sd);
     } else if (tag == "MidiAction") {
         NamedEventList a;
-        a.read(e);
+        read(&a, e);
         item->addMidiAction(a);
     } else if (tag == "Articulation") {
         MidiArticulation a;
@@ -851,6 +851,30 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, Part* part, bool* cus
     }
 
     return true;
+}
+
+void TRead::read(NamedEventList* item, XmlReader& e)
+{
+    item->name = e.attribute("name");
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "program") {
+            MidiCoreEvent ev(ME_CONTROLLER, 0, CTRL_PROGRAM, e.intAttribute("value", 0));
+            item->events.push_back(ev);
+            e.skipCurrentElement();
+        } else if (tag == "controller") {
+            MidiCoreEvent ev;
+            ev.setType(ME_CONTROLLER);
+            ev.setDataA(e.intAttribute("ctrl", 0));
+            ev.setDataB(e.intAttribute("value", 0));
+            item->events.push_back(ev);
+            e.skipCurrentElement();
+        } else if (tag == "descr") {
+            item->descr = e.readText();
+        } else {
+            e.unknown();
+        }
+    }
 }
 
 void TRead::read(InstrumentChange* c, XmlReader& e, ReadContext& ctx)

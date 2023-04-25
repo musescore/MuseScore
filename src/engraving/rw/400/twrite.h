@@ -97,6 +97,7 @@ class MeasureRepeat;
 class MMRest;
 class MMRestRange;
 
+class NamedEventList;
 class Note;
 class NoteEvent;
 class NoteDot;
@@ -231,6 +232,7 @@ public:
     static void write(const MMRest* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const MMRestRange* item, XmlWriter& xml, WriteContext& ctx);
 
+    static void write(const NamedEventList* item, XmlWriter& xml, const AsciiStringView& n);
     static void write(const Note* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const NoteEvent* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const NoteDot* item, XmlWriter& xml, WriteContext& ctx);
@@ -294,7 +296,6 @@ private:
 
     static void writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx);
     static void writeBoxProperties(const Box* item, XmlWriter& xml, WriteContext& ctx);
-
     static void writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const HBox* item, XmlWriter& xml, WriteContext& ctx);
 

@@ -29,6 +29,7 @@
 #include "rw/xmlwriter.h"
 #include "rw/400/readcontext.h"
 #include "rw/400/tread.h"
+#include "rw/400/twrite.h"
 
 #include "compat/midi/event.h"
 //#include "compat/midi/midipatch.h"
@@ -86,50 +87,6 @@ static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
     default:
         LOGD("MidiCoreEvent::write: unknown type");
         break;
-    }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void NamedEventList::write(XmlWriter& xml, const AsciiStringView& n) const
-{
-    xml.startElement(n, { { "name", name } });
-    if (!descr.empty()) {
-        xml.tag("descr", descr);
-    }
-    for (const MidiCoreEvent& e : events) {
-        midi_event_write(e, xml);
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void NamedEventList::read(XmlReader& e)
-{
-    name = e.attribute("name");
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "program") {
-            MidiCoreEvent ev(ME_CONTROLLER, 0, CTRL_PROGRAM, e.intAttribute("value", 0));
-            events.push_back(ev);
-            e.skipCurrentElement();
-        } else if (tag == "controller") {
-            MidiCoreEvent ev;
-            ev.setType(ME_CONTROLLER);
-            ev.setDataA(e.intAttribute("ctrl", 0));
-            ev.setDataB(e.intAttribute("value", 0));
-            events.push_back(ev);
-            e.skipCurrentElement();
-        } else if (tag == "descr") {
-            descr = e.readText();
-        } else {
-            e.unknown();
-        }
     }
 }
 
@@ -610,7 +567,7 @@ void InstrChannel::write(XmlWriter& xml, const Part* part) const
         xml.tag("midiChannel", part->masterScore()->midiMapping(_channel)->channel());
     }
     for (const NamedEventList& a : midiActions) {
-        a.write(xml, "MidiAction");
+        rw400::TWrite::write(&a, xml, "MidiAction");
     }
     for (const MidiArticulation& a : articulation) {
         a.write(xml);
@@ -686,7 +643,7 @@ void InstrChannel::read(XmlReader& e, Part* part, const InstrumentTrackId& instr
             articulation.push_back(a);
         } else if (tag == "MidiAction") {
             NamedEventList a;
-            a.read(e);
+            rw400::TRead::read(&a, e);
             midiActions.push_back(a);
         } else if (tag == "synti") {
             _synti = e.readText();

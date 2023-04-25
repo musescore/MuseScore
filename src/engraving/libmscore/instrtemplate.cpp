@@ -399,7 +399,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
     }
 
     for (const NamedEventList& a : midiActions) {
-        a.write(xml, "MidiAction");
+        rw400::TWrite::write(&a, xml, "MidiAction");
     }
     for (const InstrChannel& a : channel) {
         a.write(xml, nullptr);
@@ -529,7 +529,7 @@ void InstrumentTemplate::read(XmlReader& e)
             drumset->load(e);
         } else if (tag == "MidiAction") {
             NamedEventList a;
-            a.read(e);
+            rw400::TRead::read(&a, e);
             midiActions.push_back(a);
         } else if (tag == "Channel" || tag == "channel") {
             InstrChannel a;
