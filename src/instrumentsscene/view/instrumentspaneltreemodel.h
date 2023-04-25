@@ -56,6 +56,7 @@ class InstrumentsPanelTreeModel : public QAbstractItemModel, public async::Async
     Q_PROPERTY(bool isAddingAvailable READ isAddingAvailable NOTIFY isAddingAvailableChanged)
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
     Q_PROPERTY(QString addInstrumentsKeyboardShortcut READ addInstrumentsKeyboardShortcut NOTIFY addInstrumentsKeyboardShortcutChanged)
+    Q_PROPERTY(bool isInstrumentSelected READ isInstrumentSelected NOTIFY isInstrumentSelectedChanged)
 
 public:
     explicit InstrumentsPanelTreeModel(QObject* parent = nullptr);
@@ -74,6 +75,7 @@ public:
     bool isAddingAvailable() const;
     bool isEmpty() const;
     QString addInstrumentsKeyboardShortcut() const;
+    bool isInstrumentSelected() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex);
@@ -96,12 +98,14 @@ signals:
     void isRemovingAvailableChanged(bool isRemovingAvailable);
     void isEmptyChanged();
     void addInstrumentsKeyboardShortcutChanged();
+    void isInstrumentSelectedChanged(bool isInstrumentSelected);
 
 private slots:
     void updateRearrangementAvailability();
     void updateMovingUpAvailability(bool isSelectionMovable, const QModelIndex& firstSelectedRowIndex = QModelIndex());
     void updateMovingDownAvailability(bool isSelectionMovable, const QModelIndex& lastSelectedRowIndex = QModelIndex());
     void updateRemovingAvailability();
+    void updateIsInstrumentSelected();
 
 private:
     bool removeRows(int row, int count, const QModelIndex& parent) override;
@@ -128,6 +132,7 @@ private:
     void setIsMovingUpAvailable(bool isMovingUpAvailable);
     void setIsMovingDownAvailable(bool isMovingDownAvailable);
     void setIsRemovingAvailable(bool isRemovingAvailable);
+    void setIsInstrumentSelected(bool isInstrumentSelected);
 
     void setItemsSelected(const QModelIndexList& indexes, bool selected);
 
@@ -141,6 +146,7 @@ private:
     bool m_isMovingDownAvailable = false;
     bool m_isRemovingAvailable = false;
     bool m_isLoadingBlocked = false;
+    bool m_isInstrumentSelected = false;
 
     AbstractInstrumentsPanelTreeItem* m_rootItem = nullptr;
     uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;

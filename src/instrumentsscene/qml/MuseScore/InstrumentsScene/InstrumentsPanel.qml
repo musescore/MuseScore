@@ -91,6 +91,7 @@ Item {
             isMovingDownAvailable: instrumentsTreeModel.isMovingDownAvailable
             isAddingAvailable: instrumentsTreeModel.isAddingAvailable
             isRemovingAvailable: instrumentsTreeModel.isRemovingAvailable
+            isInstrumentSelected: instrumentsTreeModel.isInstrumentSelected
 
             onAddRequested: {
                 instrumentsTreeModel.addInstruments()
