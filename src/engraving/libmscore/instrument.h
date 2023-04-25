@@ -106,12 +106,11 @@ struct MidiArticulation {
     String descr;
     int velocity = 0;         // velocity change: -100% - +100%
     int gateTime = 0;         // gate time change: -100% - +100%
-    void write(XmlWriter&) const;
-    void read(XmlReader&);
 
     MidiArticulation() {}
     MidiArticulation(const String& n, const String& d, int v, int g)
         : name(n), descr(d), velocity(v), gateTime(g) {}
+
     bool operator==(const MidiArticulation& i) const;
 };
 

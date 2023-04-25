@@ -58,38 +58,6 @@ const char* InstrChannel::PALM_MUTE_NAME = QT_TRANSLATE_NOOP("engraving/instrume
 
 Instrument InstrumentList::defaultInstrument;
 
-static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
-{
-    switch (e.type()) {
-    case ME_NOTEON:
-        xml.tag("note-on", { { "channel", e.channel() }, { "pitch", e.pitch() }, { "velo", e.velo() } });
-        break;
-
-    case ME_NOTEOFF:
-        xml.tag("note-off", { { "channel", e.channel() }, { "pitch", e.pitch() }, { "velo", e.velo() } });
-        break;
-
-    case ME_CONTROLLER:
-        if (e.controller() == CTRL_PROGRAM) {
-            if (e.channel() == 0) {
-                xml.tag("program", { { "value", e.value() } });
-            } else {
-                xml.tag("program", { { "channel", e.channel() }, { "value", e.value() } });
-            }
-        } else {
-            if (e.channel() == 0) {
-                xml.tag("controller", { { "ctrl", e.controller() }, { "value", e.value() } });
-            } else {
-                xml.tag("controller", { { "channel", e.channel() }, { "ctrl", e.controller() }, { "value", e.value() } });
-            }
-        }
-        break;
-    default:
-        LOGD("MidiCoreEvent::write: unknown type");
-        break;
-    }
-}
-
 //---------------------------------------------------------
 //   operator
 //---------------------------------------------------------
@@ -760,54 +728,6 @@ int Instrument::channelIdx(const String& s) const
         ++idx;
     }
     return -1;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void MidiArticulation::write(XmlWriter& xml) const
-{
-    if (name.isEmpty()) {
-        xml.startElement("Articulation");
-    } else {
-        xml.startElement("Articulation", { { "name", name } });
-    }
-    if (!descr.isEmpty()) {
-        xml.tag("descr", descr);
-    }
-    xml.tag("velocity", velocity);
-    xml.tag("gateTime", gateTime);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void MidiArticulation::read(XmlReader& e)
-{
-    name = e.attribute("name");
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "velocity") {
-            String text(e.readText());
-            if (text.endsWith(u"%")) {
-                text = text.left(text.size() - 1);
-            }
-            velocity = text.toInt();
-        } else if (tag == "gateTime") {
-            String text(e.readText());
-            if (text.endsWith(u"%")) {
-                text = text.left(text.size() - 1);
-            }
-            gateTime = text.toInt();
-        } else if (tag == "descr") {
-            descr = e.readText();
-        } else {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------

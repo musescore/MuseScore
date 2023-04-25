@@ -101,9 +101,10 @@ class MeasureBase;
 class MeasureNumber;
 class MeasureNumberBase;
 class MeasureRepeat;
+struct MidiArticulation;
 class MMRest;
 
-class NamedEventList;
+struct NamedEventList;
 class Note;
 class NoteEvent;
 class NoteDot;
@@ -228,6 +229,7 @@ public:
     static void read(MeasureNumber* n, XmlReader& xml, ReadContext& ctx);
     static void read(MeasureNumberBase* b, XmlReader& xml, ReadContext& ctx);
     static void read(MeasureRepeat* r, XmlReader& xml, ReadContext& ctx);
+    static void read(MidiArticulation* item, XmlReader& xml);
     static void read(MMRest* r, XmlReader& xml, ReadContext& ctx);
 
     static void read(Note* n, XmlReader& xml, ReadContext& ctx);

@@ -95,10 +95,11 @@ class Lyrics;
 class Marker;
 class MeasureNumber;
 class MeasureRepeat;
+struct MidiArticulation;
 class MMRest;
 class MMRestRange;
 
-class NamedEventList;
+struct NamedEventList;
 class Note;
 class NoteEvent;
 class NoteDot;
@@ -231,6 +232,7 @@ public:
     static void write(const Marker* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const MeasureNumber* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const MeasureRepeat* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const MidiArticulation* item, XmlWriter& xml);
     static void write(const MMRest* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const MMRestRange* item, XmlWriter& xml, WriteContext& ctx);
 
