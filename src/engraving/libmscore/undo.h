@@ -245,6 +245,7 @@ public:
     InsertPart(Part* p, size_t targetPartIdx);
     void undo(EditData*) override;
     void redo(EditData*) override;
+    void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::InsertPart)
     UNDO_NAME("InsertPart")
@@ -262,6 +263,7 @@ public:
     RemovePart(Part*, size_t partIdx);
     void undo(EditData*) override;
     void redo(EditData*) override;
+    void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::RemovePart)
     UNDO_NAME("RemovePart")
@@ -296,6 +298,7 @@ public:
     InsertStaff(Staff*, staff_idx_t idx);
     void undo(EditData*) override;
     void redo(EditData*) override;
+    void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::InsertStaff)
     UNDO_NAME("InsertStaff")
@@ -314,6 +317,7 @@ public:
     RemoveStaff(Staff*);
     void undo(EditData*) override;
     void redo(EditData*) override;
+    void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::RemoveStaff)
     UNDO_NAME("RemoveStaff")

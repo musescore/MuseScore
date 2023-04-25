@@ -1111,6 +1111,14 @@ void InsertPart::redo(EditData*)
     m_part->score()->insertPart(m_part, m_targetPartIdx);
 }
 
+void InsertPart::cleanup(bool undo)
+{
+    if (!undo) {
+        delete m_part;
+        m_part = nullptr;
+    }
+}
+
 //---------------------------------------------------------
 //   RemovePart
 //---------------------------------------------------------
@@ -1133,6 +1141,14 @@ void RemovePart::undo(EditData*)
 void RemovePart::redo(EditData*)
 {
     m_part->score()->removePart(m_part);
+}
+
+void RemovePart::cleanup(bool undo)
+{
+    if (undo) {
+        delete m_part;
+        m_part = nullptr;
+    }
 }
 
 //---------------------------------------------------------
@@ -1175,6 +1191,14 @@ void InsertStaff::redo(EditData*)
     staff->score()->insertStaff(staff, ridx);
 }
 
+void InsertStaff::cleanup(bool undo)
+{
+    if (!undo) {
+        delete staff;
+        staff = nullptr;
+    }
+}
+
 //---------------------------------------------------------
 //   RemoveStaff
 //---------------------------------------------------------
@@ -1197,6 +1221,14 @@ void RemoveStaff::undo(EditData*)
 void RemoveStaff::redo(EditData*)
 {
     staff->score()->removeStaff(staff);
+}
+
+void RemoveStaff::cleanup(bool undo)
+{
+    if (undo) {
+        delete staff;
+        staff = nullptr;
+    }
 }
 
 //---------------------------------------------------------
