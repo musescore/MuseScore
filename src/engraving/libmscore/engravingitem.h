@@ -42,6 +42,7 @@
 
 namespace mu::engraving {
 class Factory;
+class XmlReader;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 class AccessibleItem;
@@ -50,8 +51,6 @@ typedef std::shared_ptr<AccessibleItem> AccessibleItemPtr;
 
 enum class Pid;
 class StaffType;
-class XmlReader;
-class XmlWriter;
 
 //---------------------------------------------------------
 //   OffsetChange

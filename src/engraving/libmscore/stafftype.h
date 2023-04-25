@@ -38,8 +38,6 @@ namespace mu::engraving {
 class Chord;
 class ChordRest;
 class Staff;
-class XmlReader;
-class XmlWriter;
 
 // all in spatium units
 #define STAFFTYPE_TAB_DEFAULTSTEMLEN_UP   3.0

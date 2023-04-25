@@ -985,8 +985,7 @@ ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
 //    return new position of QDomElement in e
 //---------------------------------------------------------
 
-ElementType EngravingItem::readType(XmlReader& e, PointF* dragOffset,
-                                    Fraction* duration)
+ElementType EngravingItem::readType(XmlReader& e, PointF* dragOffset, Fraction* duration)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "EngravingItem") {

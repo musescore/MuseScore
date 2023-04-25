@@ -32,6 +32,7 @@
 //---------------------------------------------------------
 
 namespace mu::engraving {
+class XmlWriter;
 class Spanner;
 class MeasureBase;
 }

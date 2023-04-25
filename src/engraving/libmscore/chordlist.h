@@ -40,8 +40,8 @@ class ReadChordListHook;
 namespace mu::engraving {
 class ChordList;
 class MStyle;
-class XmlReader;
 class XmlWriter;
+class XmlReader;
 
 //---------------------------------------------------------
 //   class HDegree

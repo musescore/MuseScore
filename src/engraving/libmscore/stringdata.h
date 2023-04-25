@@ -30,8 +30,7 @@
 namespace mu::engraving {
 class Chord;
 class Note;
-class XmlReader;
-class XmlWriter;
+
 class Staff;
 
 //---------------------------------------------------------

@@ -320,6 +320,9 @@ private:
 
     static void writeSpannerStart(Spanner* s, XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction frac = { -1, 1 });
     static void writeSpannerEnd(Spanner* s, XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction frac = { -1, 1 });
+
+    static void writeTupletStart(DurationElement* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeTupletEnd(DurationElement* item, XmlWriter& xml, WriteContext& ctx);
 };
 }
 

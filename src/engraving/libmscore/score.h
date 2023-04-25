@@ -116,8 +116,7 @@ class TimeSigMap;
 class Tuplet;
 class UndoCommand;
 class UndoStack;
-class XmlReader;
-class XmlWriter;
+
 class ShadowNote;
 
 struct Interval;

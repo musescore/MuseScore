@@ -30,8 +30,6 @@ namespace mu::engraving {
 class SigEvent;
 class TempoMap;
 class TimeSigMap;
-class XmlReader;
-class XmlWriter;
 
 enum class TType : char {
     TICKS, FRAMES

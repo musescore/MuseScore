@@ -29,8 +29,6 @@
 
 namespace mu::engraving {
 class Score;
-class XmlReader;
-class XmlWriter;
 
 enum class AccidentalVal : signed char;
 

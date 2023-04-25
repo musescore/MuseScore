@@ -34,9 +34,6 @@ class EngravingItem;
 class Text;
 class TextLineBase;
 
-class XmlReader;
-class XmlWriter;
-
 //---------------------------------------------------------
 //   @@ TextLineBaseSegment
 //---------------------------------------------------------

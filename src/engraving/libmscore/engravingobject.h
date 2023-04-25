@@ -179,9 +179,6 @@ class WhammyBar;
 class WhammyBarSegment;
 class FretCircle;
 
-class XmlReader;
-class XmlWriter;
-
 class LinkedObjects;
 
 enum class Pid : int;
