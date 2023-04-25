@@ -5104,8 +5104,7 @@ int Score::keysig()
 
 int Score::duration()
 {
-    masterScore()->setExpandRepeats(true);
-    const RepeatList& rl = repeatList();
+    const RepeatList& rl = masterScore()->repeatList(true);
     if (rl.empty()) {
         return 0;
     }
@@ -5119,7 +5118,7 @@ int Score::duration()
 
 int Score::durationWithoutRepeats()
 {
-    const RepeatList& rl = repeatList2();
+    const RepeatList& rl = masterScore()->repeatList(false);
     if (rl.empty()) {
         return 0;
     }
@@ -5960,7 +5959,7 @@ void Score::autoUpdateSpatium()
 
 UndoStack* Score::undoStack() const { return _masterScore->undoStack(); }
 const RepeatList& Score::repeatList()  const { return _masterScore->repeatList(); }
-const RepeatList& Score::repeatList2()  const { return _masterScore->repeatList2(); }
+const RepeatList& Score::repeatList(bool expandRepeats)  const { return _masterScore->repeatList(expandRepeats); }
 TempoMap* Score::tempomap() const { return _masterScore->tempomap(); }
 TimeSigMap* Score::sigmap() const { return _masterScore->sigmap(); }
 //QQueue<MidiInputEvent>* Score::midiInputQueue() { return _masterScore->midiInputQueue(); }

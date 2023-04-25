@@ -62,8 +62,8 @@ MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
     _undoStack   = new UndoStack();
     _tempomap    = new TempoMap;
     _sigmap      = new TimeSigMap();
-    _repeatList  = new RepeatList(this);
-    _repeatList2 = new RepeatList(this);
+    _expandedRepeatList  = new RepeatList(this);
+    _nonExpandedRepeatList = new RepeatList(this);
     setMasterScore(this);
 
     _pos[int(POS::CURRENT)] = Fraction(0, 1);
@@ -105,8 +105,8 @@ MasterScore::~MasterScore()
         m_project.lock()->m_masterScore = nullptr;
     }
 
-    delete _repeatList;
-    delete _repeatList2;
+    delete _expandedRepeatList;
+    delete _nonExpandedRepeatList;
     delete _sigmap;
     delete _tempomap;
     delete _undoStack;
@@ -169,8 +169,8 @@ String MasterScore::name() const
 void MasterScore::setPlaylistDirty()
 {
     _playlistDirty = true;
-    _repeatList->setScoreChanged();
-    _repeatList2->setScoreChanged();
+    _expandedRepeatList->setScoreChanged();
+    _nonExpandedRepeatList->setScoreChanged();
 }
 
 //---------------------------------------------------------
@@ -193,14 +193,14 @@ void MasterScore::setExpandRepeats(bool expand)
 
 void MasterScore::updateRepeatListTempo()
 {
-    _repeatList->updateTempo();
-    _repeatList2->updateTempo();
+    _expandedRepeatList->updateTempo();
+    _nonExpandedRepeatList->updateTempo();
 }
 
 void MasterScore::updateRepeatList()
 {
-    _repeatList->update(MScore::playRepeats);
-    _repeatList2->update(false);
+    _expandedRepeatList->update(true);
+    _nonExpandedRepeatList->update(false);
 }
 
 //---------------------------------------------------------
@@ -209,18 +209,24 @@ void MasterScore::updateRepeatList()
 
 const RepeatList& MasterScore::repeatList() const
 {
-    _repeatList->update(MScore::playRepeats);
-    return *_repeatList;
+    if (_expandRepeats) {
+        _expandedRepeatList->update(true);
+        return *_expandedRepeatList;
+    }
+
+    _nonExpandedRepeatList->update(false);
+    return *_nonExpandedRepeatList;
 }
 
-//---------------------------------------------------------
-//   repeatList2
-//---------------------------------------------------------
-
-const RepeatList& MasterScore::repeatList2() const
+const RepeatList& MasterScore::repeatList(bool expandRepeats) const
 {
-    _repeatList2->update(false);
-    return *_repeatList2;
+    if (expandRepeats) {
+        _expandedRepeatList->update(true);
+        return *_expandedRepeatList;
+    }
+
+    _nonExpandedRepeatList->update(false);
+    return *_nonExpandedRepeatList;
 }
 
 bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCreateThumbnail)

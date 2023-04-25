@@ -204,9 +204,6 @@ public:
 
     Q_INVOKABLE QString extractLyrics() { return score()->extractLyrics(); }
 
-//      //@ ??
-//      Q_INVOKABLE void updateRepeatList(bool expandRepeats) { score()->updateRepeatList(); } // TODO: needed?
-
     /// \cond MS_INTERNAL
     int nmeasures() const { return static_cast<int>(score()->nmeasures()); }
     int npages() const { return static_cast<int>(score()->npages()); }

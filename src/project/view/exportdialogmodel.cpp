@@ -439,8 +439,7 @@ void ExportDialogModel::setBitRate(int rate)
 
 bool ExportDialogModel::midiExpandRepeats() const
 {
-    NOT_IMPLEMENTED;
-    return true;
+    return midiImportExportConfiguration()->isExpandRepeats();
 }
 
 void ExportDialogModel::setMidiExpandRepeats(bool expandRepeats)
@@ -449,7 +448,7 @@ void ExportDialogModel::setMidiExpandRepeats(bool expandRepeats)
         return;
     }
 
-    NOT_IMPLEMENTED;
+    midiImportExportConfiguration()->setExpandRepeats(expandRepeats);
     emit midiExpandRepeatsChanged(expandRepeats);
 }
 

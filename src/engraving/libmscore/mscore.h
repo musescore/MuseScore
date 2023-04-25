@@ -246,8 +246,6 @@ public:
     static bool warnPitchRange;
     static int pedalEventsMinTicks;
 
-    static bool playRepeats;
-    static int playbackSpeedIncrement;
     static double nudgeStep;
     static double nudgeStep10;
     static double nudgeStep50;

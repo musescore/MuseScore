@@ -31,13 +31,18 @@ class MidiConfiguration : public IMidiImportExportConfiguration
 public:
     void init();
 
+    // import
     int midiShortestNote() const override; // ticks
     void setMidiShortestNote(int ticks) override;
 
-    bool isMidiExportRpns() const override;
-    void setIsMidiExportRpns(bool exportRpns) const override;
-
     void setMidiImportOperationsFile(const std::optional<io::path_t>& filePath) const override;
+
+    // export
+    bool isExpandRepeats() const override;
+    void setExpandRepeats(bool expand) override;
+
+    bool isMidiExportRpns() const override;
+    void setIsMidiExportRpns(bool exportRpns) override;
 };
 }
 

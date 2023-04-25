@@ -57,8 +57,6 @@ double MScore::horizontalPageGapOdd = 50.0;
 bool MScore::warnPitchRange;
 int MScore::pedalEventsMinTicks;
 
-bool MScore::playRepeats;
-int MScore::playbackSpeedIncrement;
 double MScore::nudgeStep;
 double MScore::nudgeStep10;
 double MScore::nudgeStep50;
@@ -92,8 +90,6 @@ void MScore::init()
     defaultPlayDuration = 300;        // ms
     warnPitchRange      = true;
     pedalEventsMinTicks = 1;
-    playRepeats         = true;
-    playbackSpeedIncrement = 5;
 
     //
     //  initialize styles
