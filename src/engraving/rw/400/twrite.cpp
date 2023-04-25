@@ -1534,7 +1534,7 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
         write(&a, xml, "MidiAction");
     }
     for (const MidiArticulation& a : item->articulation()) {
-        a.write(xml);
+        write(&a, xml);
     }
     for (const InstrChannel* a : item->channel()) {
         write(a, xml, part);
@@ -1626,8 +1626,23 @@ void TWrite::write(const InstrChannel* item, XmlWriter& xml, const Part* part)
         write(&a, xml, "MidiAction");
     }
     for (const MidiArticulation& a : item->articulation) {
-        a.write(xml);
+        write(&a, xml);
     }
+    xml.endElement();
+}
+
+void TWrite::write(const MidiArticulation* item, XmlWriter& xml)
+{
+    if (item->name.isEmpty()) {
+        xml.startElement("Articulation");
+    } else {
+        xml.startElement("Articulation", { { "name", item->name } });
+    }
+    if (!item->descr.isEmpty()) {
+        xml.tag("descr", item->descr);
+    }
+    xml.tag("velocity", item->velocity);
+    xml.tag("gateTime", item->gateTime);
     xml.endElement();
 }
 

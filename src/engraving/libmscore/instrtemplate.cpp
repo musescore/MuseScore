@@ -413,7 +413,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
             }
         }
         if (!isGlobal) {
-            ma.write(xml);
+            rw400::TWrite::write(&ma, xml);
         }
     }
     if (family) {
@@ -538,7 +538,7 @@ void InstrumentTemplate::read(XmlReader& e)
             channel.push_back(a);
         } else if (tag == "Articulation") {
             MidiArticulation a;
-            a.read(e);
+            rw400::TRead::read(&a, e);
             size_t n = midiArticulations.size();
             size_t i;
             for (i = 0; i < n; ++i) {
@@ -685,7 +685,7 @@ bool loadInstrumentTemplates(const io::path_t& instrTemplatesPath)
                     // read global articulation
                     String name(e.attribute("name"));
                     MidiArticulation a = searchArticulation(name);
-                    a.read(e);
+                    rw400::TRead::read(&a, e);
                     midiArticulations.push_back(a);
                 } else if (tag == "Genre") {
                     String idGenre(e.attribute("id"));

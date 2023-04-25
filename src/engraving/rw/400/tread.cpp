@@ -832,7 +832,7 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, Part* part, bool* cus
         item->addMidiAction(a);
     } else if (tag == "Articulation") {
         MidiArticulation a;
-        a.read(e);
+        read(&a, e);
         item->addMidiArticulation(a);
     } else if (tag == "Channel" || tag == "channel") {
         InstrChannel* a = new InstrChannel;
@@ -920,7 +920,7 @@ void TRead::read(InstrChannel* item, XmlReader& e, Part* part, const InstrumentT
             e.readNext();
         } else if (tag == "Articulation") {
             MidiArticulation a;
-            a.read(e);
+            read(&a, e);
             item->articulation.push_back(a);
         } else if (tag == "MidiAction") {
             NamedEventList a;
@@ -950,6 +950,31 @@ void TRead::read(InstrChannel* item, XmlReader& e, Part* part, const InstrumentT
 
     if ((midiPort != -1 || midiChannel != -1) && part && part->score()->isMaster()) {
         part->masterScore()->addMidiMapping(item, part, midiPort, midiChannel);
+    }
+}
+
+void TRead::read(MidiArticulation* item, XmlReader& e)
+{
+    item->name = e.attribute("name");
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "velocity") {
+            String text(e.readText());
+            if (text.endsWith(u"%")) {
+                text = text.left(text.size() - 1);
+            }
+            item->velocity = text.toInt();
+        } else if (tag == "gateTime") {
+            String text(e.readText());
+            if (text.endsWith(u"%")) {
+                text = text.left(text.size() - 1);
+            }
+            item->gateTime = text.toInt();
+        } else if (tag == "descr") {
+            item->descr = e.readText();
+        } else {
+            e.unknown();
+        }
     }
 }
 
