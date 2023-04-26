@@ -38,12 +38,12 @@ QString AuxSendItem::title() const
 
 bool AuxSendItem::isActive() const
 {
-    return m_params.active;
+    return m_isActive;
 }
 
-float AuxSendItem::signalAmount() const
+int AuxSendItem::audioSignalPercentage() const
 {
-    return m_params.signalAmount;
+    return m_audioSignalPercentage;
 }
 
 void AuxSendItem::setTitle(const QString& title)
@@ -58,22 +58,20 @@ void AuxSendItem::setTitle(const QString& title)
 
 void AuxSendItem::setIsActive(bool active)
 {
-    if (m_params.active == active) {
+    if (m_isActive == active) {
         return;
     }
 
-    m_params.active = active;
+    m_isActive = active;
     emit isActiveChanged(active);
 }
 
-void AuxSendItem::setSignalAmount(float amount)
+void AuxSendItem::setAudioSignalPercentage(int percentage)
 {
-    if (RealIsEqual(m_params.signalAmount, amount)) {
+    if (m_audioSignalPercentage == percentage) {
         return;
     }
 
-    LOGE() << "--- new signal amount: " << amount;
-
-    m_params.signalAmount = amount;
-    emit signalAmountChanged(amount);
+    m_audioSignalPercentage = percentage;
+    emit audioSignalPercentageChanged(percentage);
 }

@@ -56,8 +56,10 @@ Item {
 
             radius: root.height / 2
 
-            value: root.auxSendItemModel ? root.auxSendItemModel.signalAmount * 100 : 0
+            from: 0
+            to: 100
             stepSize: 1
+            value: root.auxSendItemModel.audioSignalPercentage
 
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart
@@ -69,15 +71,7 @@ Item {
             }
 
             onNewValueRequested: function(newValue) {
-                root.auxSendItemModel.signalAmount = newValue / 100
-            }
-
-            onIncreaseRequested: {
-                root.auxSendItemModel.signalAmount = (audioSignalAmountKnob.value + 1) / 100
-            }
-
-            onDecreaseRequested: {
-                root.auxSendItemModel.signalAmount = (audioSignalAmountKnob.value - 1) / 100
+                root.auxSendItemModel.audioSignalPercentage = newValue
             }
         }
 

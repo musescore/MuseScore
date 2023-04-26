@@ -28,11 +28,11 @@ import MuseScore.UiComponents 1.0
 Dial {
     id: root
 
-    property int valueScale: 100
-
     property alias navigation: navCtrl
 
     property real radius: 16
+
+    property bool isBalanceKnob: false
 
     implicitWidth: root.radius * 2
     implicitHeight: implicitWidth
@@ -42,18 +42,18 @@ Dial {
 
     wheelEnabled: true
 
-    from: -root.valueScale
-    to: root.valueScale
+    from: 0
+    to: 1
     value: 0
 
-    signal newValueRequested(int newValue)
+    signal newValueRequested(real newValue)
     signal increaseRequested()
     signal decreaseRequested()
 
     QtObject {
         id: prv
 
-        readonly property bool reversed: root.angle < 0
+        readonly property bool reversed: root.isBalanceKnob ? root.angle < 0 : false
 
         readonly property real handlerHeight: 8
         readonly property real handlerWidth: 2
@@ -65,9 +65,21 @@ Dial {
         readonly property color outerArcColor: Utils.colorWithAlpha(ui.theme.buttonColor, 0.7)
         readonly property color innerArcColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
 
-        property int initialValue: 0
+        readonly property real startValueArcAngle: root.isBalanceKnob ? 0 : -140
+
+        property real initialValue: 0
         property real dragStartX: 0
         property real dragStartY: 0
+
+        function requestNewValue(newValue) {
+            newValue = Math.max(root.from, Math.min(newValue, root.to))
+
+            if (newValue === root.value) {
+                return
+            }
+
+            root.newValueRequested(newValue)
+        }
 
         onValueArcColorChanged: { backgroundCanvas.requestPaint() }
         onOuterArcColorChanged: { backgroundCanvas.requestPaint() }
@@ -90,11 +102,11 @@ Dial {
         onNavigationEvent: function(event) {
             switch(event.type) {
             case NavigationEvent.Left:
-                root.decreaseRequested()
+                prv.requestNewValue(root.value - root.stepSize)
                 event.accepted = true
                 break
             case NavigationEvent.Right:
-                root.increaseRequested()
+                prv.requestNewValue(root.value + root.stepSize)
                 event.accepted = true
                 break
             }
@@ -131,7 +143,7 @@ Dial {
 
             ctx.strokeStyle = prv.valueArcColor
             ctx.beginPath()
-            ctx.arc(width/2, height/2, root.radius - prv.outerArcLineWidth/2, -Math.PI/2, root.angle * (Math.PI/180) - Math.PI/2, prv.reversed)
+            ctx.arc(width/2, height/2, root.radius - prv.outerArcLineWidth/2, prv.startValueArcAngle * (Math.PI/180) - Math.PI/2, root.angle * (Math.PI/180) - Math.PI/2, prv.reversed)
             ctx.stroke()
 
             ctx.lineWidth = prv.innerArcLineWidth
@@ -175,7 +187,7 @@ Dial {
         id: mouseArea
         anchors.fill: parent
         onDoubleClicked: {
-            root.newValueRequested(0)
+            prv.requestNewValue(0)
         }
 
         // The MouseArea steals mouse press events from the slider.
@@ -199,9 +211,9 @@ Dial {
             let dy = mouse.y - prv.dragStartY
             let dist = Math.sqrt(dx * dx + dy * dy)
             let sgn = (dy < dx) ? 1 : -1
-            let newValue = prv.initialValue + dist * sgn
-            let bounded = Math.max(root.from, Math.min(newValue, root.to))
-            root.newValueRequested(bounded)
+            let newValue = prv.initialValue + dist * root.stepSize * sgn
+
+            prv.requestNewValue(newValue)
         }
 
         // We also listen for wheel events here, but for a different reason:

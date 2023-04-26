@@ -34,28 +34,29 @@ class AuxSendItem : public QObject
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(bool isActive READ isActive WRITE setIsActive NOTIFY isActiveChanged)
-    Q_PROPERTY(float signalAmount READ signalAmount WRITE setSignalAmount NOTIFY signalAmountChanged)
+    Q_PROPERTY(int audioSignalPercentage READ audioSignalPercentage WRITE setAudioSignalPercentage NOTIFY audioSignalPercentageChanged)
 
 public:
     explicit AuxSendItem(QObject* parent = nullptr);
 
     QString title() const;
     bool isActive() const;
-    float signalAmount() const;
+    int audioSignalPercentage() const;
 
 public slots:
     void setTitle(const QString& title);
     void setIsActive(bool active);
-    void setSignalAmount(float amount);
+    void setAudioSignalPercentage(int percentage);
 
 signals:
     void titleChanged(const QString& title);
     void isActiveChanged(bool active);
-    void signalAmountChanged(float amount);
+    void audioSignalPercentageChanged(int percentage);
 
 private:
     QString m_title;
-    audio::AuxSendParams m_params;
+    bool m_isActive = false;
+    int m_audioSignalPercentage = 0;
 };
 }
 

@@ -317,7 +317,7 @@ void MixerChannelItem::loadAuxSendItems(const AuxSendsParams& auxSends)
         const AuxSendParams& params = auxSends[i];
 
         item->setIsActive(params.active);
-        item->setSignalAmount(params.signalAmount);
+        item->setAudioSignalPercentage(params.signalAmount * 100.f);
 
         item->setTitle(QString("Aux %1").arg(i + 1)); // TODO: use the actual title of the aux channel
     }
@@ -533,12 +533,12 @@ AuxSendItem* MixerChannelItem::buildAuxSendItem(size_t index)
         emit outputParamsChanged(m_outParams);
     });
 
-    connect(newItem, &AuxSendItem::signalAmountChanged, this, [this, index](float amount) {
+    connect(newItem, &AuxSendItem::audioSignalPercentageChanged, this, [this, index](int percentage) {
         IF_ASSERT_FAILED(index < m_outParams.auxSends.size()) {
             return;
         }
 
-        m_outParams.auxSends[index].signalAmount = amount;
+        m_outParams.auxSends[index].signalAmount = static_cast<float>(percentage) / 100.f;
         emit outputParamsChanged(m_outParams);
     });
 
