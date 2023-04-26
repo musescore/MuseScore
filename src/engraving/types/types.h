@@ -476,6 +476,9 @@ enum class NoteHeadGroup : signed char {
     HEAD_H,
     HEAD_H_SHARP,
 
+    HEAD_SWISS_RUDIMENTS_FLAM,
+    HEAD_SWISS_RUDIMENTS_DOUBLE,
+
     HEAD_CUSTOM,
     HEAD_GROUPS,
     HEAD_INVALID = -1

@@ -494,6 +494,12 @@ static const std::vector<Item<NoteHeadGroup> > NOTEHEAD_GROUPS = {
     { NoteHeadGroup::HEAD_H,            "h-name",       TranslatableString("engraving/noteheadgroup",  "H (Name)") },
     { NoteHeadGroup::HEAD_H_SHARP,      "h-sharp-name", TranslatableString("engraving/noteheadgroup",  "H♯ (Name)") },
 
+    // Swiss rudiments
+    { NoteHeadGroup::HEAD_SWISS_RUDIMENTS_FLAM,   "swiss-rudiments-flam",   TranslatableString("engraving/noteheadgroup",
+                                                                                               "Swiss Rudiments Flam") },
+    { NoteHeadGroup::HEAD_SWISS_RUDIMENTS_DOUBLE, "swiss-rudiments-double", TranslatableString("engraving/noteheadgroup",
+                                                                                               "Swiss Rudiments Doublé") },
+
     { NoteHeadGroup::HEAD_CUSTOM,       "custom",       TranslatableString("engraving",  "Custom") }
 };
 
