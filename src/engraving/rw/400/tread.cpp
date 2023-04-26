@@ -42,6 +42,7 @@
 #include "../../libmscore/dynamic.h"
 
 #include "../../libmscore/harmony.h"
+#include "../../libmscore/harmonicmark.h"
 #include "../../libmscore/chordlist.h"
 
 #include "../../libmscore/excerpt.h"
@@ -79,6 +80,7 @@
 #include "../../libmscore/barline.h"
 #include "../../libmscore/chord.h"
 #include "../../libmscore/bend.h"
+#include "../../libmscore/stretchedbend.h"
 #include "../../libmscore/box.h"
 #include "../../libmscore/textframe.h"
 #include "../../libmscore/layoutbreak.h"
@@ -112,6 +114,7 @@
 #include "../../libmscore/measurerepeat.h"
 #include "../../libmscore/mmrest.h"
 #include "../../libmscore/rest.h"
+#include "../../libmscore/rasgueado.h"
 #include "../../libmscore/slur.h"
 #include "../../libmscore/slurtie.h"
 #include "../../libmscore/spacer.h"
@@ -142,22 +145,23 @@ using namespace mu::engraving;
 using namespace mu::engraving::rw400;
 
 using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
-                                 BagpipeEmbellishment, BarLine, Beam, HBox, VBox, FBox, TBox, Bracket, Breath,
+                                 BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,  HBox, VBox, FBox, TBox, Bracket, Breath,
                                  Chord, ChordLine, Clef,
                                  Dynamic,
                                  Fermata, FiguredBass, Fingering, FretDiagram,
                                  Glissando, GradualTempoChange,
-                                 Hairpin, Harmony, Hook,
+                                 Hairpin, Harmony, HarmonicMark, Hook,
                                  Image, InstrumentChange,
                                  Jump,
                                  KeySig,
                                  LayoutBreak, LedgerLine, LetRing, Lyrics,
                                  Marker, MeasureNumber, MeasureRepeat, MMRest, MMRestRange,
-                                 Note, NoteDot, NoteLine,
+                                 Note, NoteDot, NoteHead, NoteLine,
                                  Ottava,
-                                 PalmMute, Pedal, PlayTechAnnotation, RehearsalMark, Rest,
+                                 Page, PalmMute, Pedal, PlayTechAnnotation,
+                                 Rasgueado, RehearsalMark, Rest,
                                  Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
-                                 Symbol, System, SystemDivider, SystemText,
+                                 Symbol, FSymbol, System, SystemDivider, SystemText,
                                  TempoText, Text, TextLine, Tie, TimeSig, Tremolo, TremoloBar, Trill, Tuplet,
                                  Vibrato, Volta,
                                  WhammyBar>;
@@ -598,74 +602,6 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-}
-
-void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "base") {
-            h->setBaseTpc(e.readInt());
-        } else if (tag == "baseCase") {
-            h->setBaseCase(static_cast<NoteCaseType>(e.readInt()));
-        } else if (tag == "extension") {
-            h->setId(e.readInt());
-        } else if (tag == "name") {
-            h->setTextName(e.readText());
-        } else if (tag == "root") {
-            h->setRootTpc(e.readInt());
-        } else if (tag == "rootCase") {
-            h->setRootCase(static_cast<NoteCaseType>(e.readInt()));
-        } else if (tag == "function") {
-            h->setFunction(e.readText());
-        } else if (tag == "degree") {
-            int degreeValue = 0;
-            int degreeAlter = 0;
-            String degreeType;
-            while (e.readNextStartElement()) {
-                const AsciiStringView t(e.name());
-                if (t == "degree-value") {
-                    degreeValue = e.readInt();
-                } else if (t == "degree-alter") {
-                    degreeAlter = e.readInt();
-                } else if (t == "degree-type") {
-                    degreeType = e.readText();
-                } else {
-                    e.unknown();
-                }
-            }
-            if (degreeValue <= 0 || degreeValue > 13
-                || degreeAlter < -2 || degreeAlter > 2
-                || (degreeType != "add" && degreeType != "alter" && degreeType != "subtract")) {
-                LOGD("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s",
-                     degreeValue, degreeAlter, muPrintable(degreeType));
-            } else {
-                if (degreeType == "add") {
-                    h->addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
-                } else if (degreeType == "alter") {
-                    h->addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ALTER));
-                } else if (degreeType == "subtract") {
-                    h->addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT));
-                }
-            }
-        } else if (tag == "leftParen") {
-            h->setLeftParen(true);
-            e.readNext();
-        } else if (tag == "rightParen") {
-            h->setRightParen(true);
-            e.readNext();
-        } else if (TRead::readProperty(h, tag, e, ctx, Pid::POS_ABOVE)) {
-        } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_TYPE)) {
-        } else if (TRead::readProperty(h, tag, e, ctx, Pid::PLAY)) {
-        } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICE_LITERAL)) {
-        } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICING)) {
-        } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_DURATION)) {
-        } else if (!readProperties(static_cast<TextBase*>(h), e, ctx)) {
-            e.unknown();
-        }
-    }
-
-    h->afterRead();
 }
 
 void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
@@ -1969,6 +1905,11 @@ void TRead::read(Bend* b, XmlReader& e, ReadContext& ctx)
     }
 }
 
+void TRead::read(StretchedBend* b, XmlReader& xml, ReadContext& ctx)
+{
+    read(static_cast<Bend*>(b), xml, ctx);
+}
+
 void TRead::read(Box* b, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
@@ -2717,6 +2658,79 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
     h->styleChanged();
 }
 
+void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "base") {
+            h->setBaseTpc(e.readInt());
+        } else if (tag == "baseCase") {
+            h->setBaseCase(static_cast<NoteCaseType>(e.readInt()));
+        } else if (tag == "extension") {
+            h->setId(e.readInt());
+        } else if (tag == "name") {
+            h->setTextName(e.readText());
+        } else if (tag == "root") {
+            h->setRootTpc(e.readInt());
+        } else if (tag == "rootCase") {
+            h->setRootCase(static_cast<NoteCaseType>(e.readInt()));
+        } else if (tag == "function") {
+            h->setFunction(e.readText());
+        } else if (tag == "degree") {
+            int degreeValue = 0;
+            int degreeAlter = 0;
+            String degreeType;
+            while (e.readNextStartElement()) {
+                const AsciiStringView t(e.name());
+                if (t == "degree-value") {
+                    degreeValue = e.readInt();
+                } else if (t == "degree-alter") {
+                    degreeAlter = e.readInt();
+                } else if (t == "degree-type") {
+                    degreeType = e.readText();
+                } else {
+                    e.unknown();
+                }
+            }
+            if (degreeValue <= 0 || degreeValue > 13
+                || degreeAlter < -2 || degreeAlter > 2
+                || (degreeType != "add" && degreeType != "alter" && degreeType != "subtract")) {
+                LOGD("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s",
+                     degreeValue, degreeAlter, muPrintable(degreeType));
+            } else {
+                if (degreeType == "add") {
+                    h->addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
+                } else if (degreeType == "alter") {
+                    h->addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ALTER));
+                } else if (degreeType == "subtract") {
+                    h->addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT));
+                }
+            }
+        } else if (tag == "leftParen") {
+            h->setLeftParen(true);
+            e.readNext();
+        } else if (tag == "rightParen") {
+            h->setRightParen(true);
+            e.readNext();
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::POS_ABOVE)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_TYPE)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::PLAY)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICE_LITERAL)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICING)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_DURATION)) {
+        } else if (!readProperties(static_cast<TextBase*>(h), e, ctx)) {
+            e.unknown();
+        }
+    }
+
+    h->afterRead();
+}
+
+void TRead::read(HarmonicMark* h, XmlReader& xml, ReadContext& ctx)
+{
+    TRead::read(static_cast<TextLineBase*>(h), xml, ctx);
+}
+
 void TRead::read(Hook* h, XmlReader& xml, ReadContext& ctx)
 {
     TRead::read(static_cast<Symbol*>(h), xml, ctx);
@@ -3083,6 +3097,11 @@ void TRead::read(NoteDot* d, XmlReader& e, ReadContext& ctx)
     }
 }
 
+void TRead::read(NoteHead* h, XmlReader& xml, ReadContext& ctx)
+{
+    read(static_cast<Symbol*>(h), xml, ctx);
+}
+
 void TRead::read(Ottava* o, XmlReader& e, ReadContext& ctx)
 {
     o->eraseSpannerSegments();
@@ -3130,6 +3149,19 @@ bool TRead::readProperties(Ottava* o, XmlReader& e, ReadContext& ctx)
         return false;
     }
     return true;
+}
+
+void TRead::read(Page* p, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        if (e.name() == "System") {
+            System* system = Factory::createSystem(p->score()->dummy()->page());
+            p->score()->systems().push_back(system);
+            read(system, e, ctx);
+        } else {
+            e.unknown();
+        }
+    }
 }
 
 void TRead::read(PalmMute* p, XmlReader& e, ReadContext& ctx)
@@ -3206,6 +3238,11 @@ void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+}
+
+void TRead::read(Rasgueado* r, XmlReader& xml, ReadContext& ctx)
+{
+    TRead::read(static_cast<TextLineBase*>(r), xml, ctx);
 }
 
 void TRead::read(Rest* r, XmlReader& e, ReadContext& ctx)

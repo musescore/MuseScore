@@ -36,7 +36,6 @@ class EngravingItem;
 class TextBase;
 class TempoText;
 class Dynamic;
-class Harmony;
 class FretDiagram;
 class Sticking;
 class SystemText;
@@ -54,6 +53,7 @@ class BagpipeEmbellishment;
 class BarLine;
 class Beam;
 class Bend;
+class StretchedBend;
 class Box;
 class HBox;
 class VBox;
@@ -78,6 +78,8 @@ class GradualTempoChange;
 class Groups;
 
 class Hairpin;
+class Harmony;
+class HarmonicMark;
 class Hook;
 
 class Instrument;
@@ -108,12 +110,17 @@ struct NamedEventList;
 class Note;
 class NoteEvent;
 class NoteDot;
+class NoteHead;
 
 class Ottava;
+
+class Page;
 class PalmMute;
 class Part;
 class Pedal;
 class PlayTechAnnotation;
+
+class Rasgueado;
 class Rest;
 
 class Segment;
@@ -168,7 +175,6 @@ public:
     static void read(TextBase* t, XmlReader& xml, ReadContext& ctx);
     static void read(TempoText* t, XmlReader& xml, ReadContext& ctx);
     static void read(Dynamic* d, XmlReader& xml, ReadContext& ctx);
-    static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
     static void read(SystemText* t, XmlReader& xml, ReadContext& ctx);
     static void read(RehearsalMark* m, XmlReader& xml, ReadContext& ctx);
     static void read(Image* i, XmlReader& xml, ReadContext& ctx);
@@ -185,6 +191,7 @@ public:
     static void read(BarLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(Beam* b, XmlReader& xml, ReadContext& ctx);
     static void read(Bend* b, XmlReader& xml, ReadContext& ctx);
+    static void read(StretchedBend* b, XmlReader& xml, ReadContext& ctx);
     static void read(Box* b, XmlReader& xml, ReadContext& ctx);
     static void read(HBox* b, XmlReader& xml, ReadContext& ctx);
     static void read(VBox* b, XmlReader& xml, ReadContext& ctx);
@@ -208,7 +215,10 @@ public:
     static void read(Glissando* g, XmlReader& xml, ReadContext& ctx);
     static void read(GradualTempoChange* c, XmlReader& xml, ReadContext& ctx);
     static void read(Groups* g, XmlReader& xml, ReadContext& ctx);
+
     static void read(Hairpin* h, XmlReader& xml, ReadContext& ctx);
+    static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
+    static void read(HarmonicMark* h, XmlReader& xml, ReadContext& ctx);
     static void read(Hook* h, XmlReader& xml, ReadContext& ctx);
 
     static void read(Instrument* item, XmlReader& xml, ReadContext& ctx, Part* part);
@@ -235,12 +245,17 @@ public:
     static void read(Note* n, XmlReader& xml, ReadContext& ctx);
     static void read(NoteEvent* item, XmlReader& xml, ReadContext& ctx);
     static void read(NoteDot* d, XmlReader& xml, ReadContext& ctx);
+    static void read(NoteHead* h, XmlReader& xml, ReadContext& ctx);
 
     static void read(Ottava* o, XmlReader& xml, ReadContext& ctx);
+
+    static void read(Page* p, XmlReader& xml, ReadContext& ctx);
     static void read(PalmMute* p, XmlReader& xml, ReadContext& ctx);
     static void read(Part* p, XmlReader& xml, ReadContext& ctx);
     static void read(Pedal* p, XmlReader& xml, ReadContext& ctx);
     static void read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx);
+
+    static void read(Rasgueado* r, XmlReader& xml, ReadContext& ctx);
     static void read(Rest* r, XmlReader& xml, ReadContext& ctx);
 
     static void read(Segment* s, XmlReader& xml, ReadContext& ctx);
