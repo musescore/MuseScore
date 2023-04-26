@@ -76,6 +76,9 @@ public:
     void setActionType(ActionIconType val);
     void setAction(const std::string& actionCode, char16_t icon);
 
+    char16_t icon() const { return m_icon; }
+
+    const mu::draw::Font& iconFont() const { return m_iconFont; }
     double fontSize() const;
     void setFontSize(double size);
 

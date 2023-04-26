@@ -22,13 +22,17 @@
 
 #include "tlayout.h"
 
+#include "draw/fontmetrics.h"
+
 #include "../iengravingfont.h"
 #include "../libmscore/score.h"
 
 #include "../libmscore/accidental.h"
+#include "../libmscore/actionicon.h"
 
 #include "../libmscore/note.h"
 
+using namespace mu::draw;
 using namespace mu::engraving;
 
 void TLayout::layout(Accidental* item, LayoutContext& ctx)
@@ -155,4 +159,10 @@ void TLayout::layoutMultiGlyphAccidental(Accidental* item, LayoutContext&)
         r.unite(item->symBbox(id).translated(x, 0.0));
     }
     item->setbbox(r);
+}
+
+void TLayout::layout(ActionIcon* item, LayoutContext&)
+{
+    FontMetrics fontMetrics(item->iconFont());
+    item->setbbox(fontMetrics.boundingRect(Char(item->icon())));
 }
