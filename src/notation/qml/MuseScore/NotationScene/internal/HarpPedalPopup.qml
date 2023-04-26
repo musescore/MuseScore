@@ -257,7 +257,7 @@ StyledPopupView {
             section: root.navigationSection
             direction: NavigationPanel.Horizontal
             order: 2
-            accessible.name: qsTrc("notation", "isDiagram buttons")
+            accessible.name: qsTrc("notation", "Diagram type buttons")
         }
 
         RoundedRadioButton {
