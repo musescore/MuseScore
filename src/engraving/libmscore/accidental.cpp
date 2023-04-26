@@ -28,6 +28,8 @@
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
+#include "layout/tlayout.h"
+
 #include "actionicon.h"
 #include "note.h"
 #include "score.h"
@@ -331,128 +333,8 @@ void Accidental::setSubtype(const AsciiStringView& tag)
 
 void Accidental::layout()
 {
-    el.clear();
-
-    // TODO: remove Accidental in layout()
-    // don't show accidentals for tab or slash notation
-    if (onTabStaff() || (note() && note()->fixed())) {
-        setbbox(RectF());
-        return;
-    }
-
-    double m = explicitParent() ? parentItem()->mag() : 1.0;
-    if (m_isSmall) {
-        m *= score()->styleD(Sid::smallNoteMag);
-    }
-    setMag(m);
-
-    // if the accidental is standard (doubleflat, flat, natural, sharp or double sharp)
-    // and it has either no bracket or parentheses, then we have glyphs straight from smufl.
-    if (_bracket == AccidentalBracket::NONE
-        || (_bracket == AccidentalBracket::PARENTHESIS
-            && (_accidentalType == AccidentalType::FLAT
-                || _accidentalType == AccidentalType::NATURAL
-                || _accidentalType == AccidentalType::SHARP
-                || _accidentalType == AccidentalType::SHARP2
-                || _accidentalType == AccidentalType::FLAT2))) {
-        layoutSingleGlyphAccidental();
-    } else {
-        layoutMultiGlyphAccidental();
-    }
-}
-
-void Accidental::layoutSingleGlyphAccidental()
-{
-    RectF r;
-
-    SymId s = symbol();
-    if (_bracket == AccidentalBracket::PARENTHESIS) {
-        switch (_accidentalType) {
-        case AccidentalType::FLAT2:
-            s = SymId::accidentalDoubleFlatParens;
-            break;
-        case AccidentalType::FLAT:
-            s = SymId::accidentalFlatParens;
-            break;
-        case AccidentalType::NATURAL:
-            s = SymId::accidentalNaturalParens;
-            break;
-        case AccidentalType::SHARP:
-            s = SymId::accidentalSharpParens;
-            break;
-        case AccidentalType::SHARP2:
-            s = SymId::accidentalDoubleSharpParens;
-            break;
-        default:
-            break;
-        }
-        if (!score()->engravingFont()->isValid(s)) {
-            layoutMultiGlyphAccidental();
-            return;
-        }
-    }
-
-    SymElement e(s, 0.0, 0.0);
-    el.push_back(e);
-    r.unite(symBbox(s));
-    setbbox(r);
-}
-
-void Accidental::layoutMultiGlyphAccidental()
-{
-    double margin = score()->styleMM(Sid::bracketedAccidentalPadding);
-    RectF r;
-    double x = 0.0;
-
-    // should always be true
-    if (_bracket != AccidentalBracket::NONE) {
-        SymId id = SymId::noSym;
-        switch (_bracket) {
-        case AccidentalBracket::PARENTHESIS:
-            id = SymId::accidentalParensLeft;
-            break;
-        case AccidentalBracket::BRACKET:
-            id = SymId::accidentalBracketLeft;
-            break;
-        case AccidentalBracket::BRACE:
-            id = SymId::accidentalCombiningOpenCurlyBrace;
-            break;
-        case AccidentalBracket::NONE: // can't happen
-            break;
-        }
-        SymElement se(id, 0.0, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
-        el.push_back(se);
-        r.unite(symBbox(id));
-        x += symAdvance(id) + margin;
-    }
-
-    SymId s = symbol();
-    SymElement e(s, x, 0.0);
-    el.push_back(e);
-    r.unite(symBbox(s).translated(x, 0.0));
-
-    // should always be true
-    if (_bracket != AccidentalBracket::NONE) {
-        x += symAdvance(s) + margin;
-        SymId id = SymId::noSym;
-        switch (_bracket) {
-        case AccidentalBracket::PARENTHESIS:
-            id = SymId::accidentalParensRight;
-            break;
-        case AccidentalBracket::BRACKET:
-            id = SymId::accidentalBracketRight;
-            break;
-        case AccidentalBracket::BRACE:
-            id = SymId::accidentalCombiningCloseCurlyBrace;
-            break;
-        case AccidentalBracket::NONE: // can't happen
-            break;
-        }
-        SymElement se(id, x, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
-        el.push_back(se);
-        r.unite(symBbox(id).translated(x, 0.0));
-    }
-    setbbox(r);
+    LayoutContext ctx(score());
+    TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

@@ -99,11 +99,13 @@ public:
 
     int subtype() const override { return (int)_accidentalType; }
 
+    void clearElements() { el.clear(); }
+    void addElement(const SymElement& e) { el.push_back(e); }
+
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
     void layout() override;
-    void layoutMultiGlyphAccidental();
-    void layoutSingleGlyphAccidental();
+
     void draw(mu::draw::Painter*) const override;
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override { setGenerated(false); }

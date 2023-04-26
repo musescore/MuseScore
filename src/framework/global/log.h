@@ -31,7 +31,7 @@
 #define DO_ASSERT_X(cond, msg) \
     LOGE() << "\"ASSERT FAILED!\": " << msg << ", file: " << __FILE__ << ", line: " << __LINE__; \
     assert(cond); \
-    (void)(cond); \    // avoid compiler warning
+    (void)(cond); \
 
 #define DO_ASSERT(cond) DO_ASSERT_X(cond, #cond)
 
