@@ -31,6 +31,7 @@
 #include "../libmscore/accidental.h"
 #include "../libmscore/actionicon.h"
 #include "../libmscore/ambitus.h"
+#include "../libmscore/arpeggio.h"
 
 #include "../libmscore/note.h"
 
@@ -334,4 +335,71 @@ void TLayout::layout(Ambitus* item, LayoutContext&)
                   .united(item->topAccidental()->bbox().translated(item->topAccidental()->ipos()))
                   .united(item->bottomAccidental()->bbox().translated(item->bottomAccidental()->ipos()))
                   );
+}
+
+void TLayout::layout(Arpeggio* item, LayoutContext&)
+{
+    double top = item->calcTop();
+    double bottom = item->calcBottom();
+    if (item->score()->styleB(Sid::ArpeggioHiddenInStdIfTab)) {
+        if (item->staff() && item->staff()->isPitchedStaff(item->tick())) {
+            for (Staff* s : item->staff()->staffList()) {
+                if (s->score() == item->score() && s->isTabStaff(item->tick()) && s->visible()) {
+                    item->setbbox(RectF());
+                    return;
+                }
+            }
+        }
+    }
+    if (item->staff()) {
+        item->setMag(item->staff()->staffMag(item->tick()));
+    }
+    switch (item->arpeggioType()) {
+    case ArpeggioType::NORMAL: {
+        item->symbolLine(SymId::wiggleArpeggiatoUp, SymId::wiggleArpeggiatoUp);
+        // string is rotated -90 degrees
+        RectF r(item->symBbox(item->symbols()));
+        item->setbbox(RectF(0.0, -r.x() + top, r.height(), r.width()));
+    }
+    break;
+
+    case ArpeggioType::UP: {
+        item->symbolLine(SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
+        // string is rotated -90 degrees
+        RectF r(item->symBbox(item->symbols()));
+        item->setbbox(RectF(0.0, -r.x() + top, r.height(), r.width()));
+    }
+    break;
+
+    case ArpeggioType::DOWN: {
+        item->symbolLine(SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
+        // string is rotated +90 degrees (so that UpArrow turns into a DownArrow)
+        RectF r(item->symBbox(item->symbols()));
+        item->setbbox(RectF(0.0, r.x() + top, r.height(), r.width()));
+    }
+    break;
+
+    case ArpeggioType::UP_STRAIGHT: {
+        double _spatium = item->spatium();
+        double x1 = _spatium * .5;
+        double w  = item->symBbox(SymId::arrowheadBlackUp).width();
+        item->setbbox(RectF(x1 - w * .5, top, w, bottom));
+    }
+    break;
+
+    case ArpeggioType::DOWN_STRAIGHT: {
+        double _spatium = item->spatium();
+        double x1 = _spatium * .5;
+        double w  = item->symBbox(SymId::arrowheadBlackDown).width();
+        item->setbbox(RectF(x1 - w * .5, top, w, bottom));
+    }
+    break;
+
+    case ArpeggioType::BRACKET: {
+        double _spatium = item->spatium();
+        double w  = item->score()->styleS(Sid::ArpeggioHookLen).val() * _spatium;
+        item->setbbox(RectF(0.0, top, w, bottom));
+        break;
+    }
+    }
 }

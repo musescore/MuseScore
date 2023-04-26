@@ -43,15 +43,13 @@ class Arpeggio final : public EngravingItem
     double _userLen2;
     double _height;
     int _span;                // spanning staves
-    SymIdList symbols;
+    SymIdList m_symbols;
     bool _playArpeggio;
 
     double _stretch;
 
     friend class Factory;
     Arpeggio(Chord* parent);
-
-    void symbolLine(SymId start, SymId fill);
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
     std::vector<mu::LineF> dragAnchorLines() const override;
@@ -105,6 +103,9 @@ public:
 
     double Stretch() const { return _stretch; }
     void setStretch(double val) { _stretch = val; }
+
+    void symbolLine(SymId start, SymId fill);
+    const SymIdList& symbols() { return m_symbols; }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
