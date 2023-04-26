@@ -23,6 +23,7 @@
 #include "actionicon.h"
 
 #include "draw/fontmetrics.h"
+#include "layout/tlayout.h"
 
 #include "property.h"
 
@@ -77,8 +78,8 @@ void ActionIcon::setFontSize(double size)
 
 void ActionIcon::layout()
 {
-    FontMetrics fontMetrics(m_iconFont);
-    setbbox(fontMetrics.boundingRect(Char(m_icon)));
+    LayoutContext ctx(score());
+    TLayout::layout(this, ctx);
 }
 
 void ActionIcon::draw(Painter* painter) const

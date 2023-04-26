@@ -26,12 +26,14 @@
 
 namespace mu::engraving {
 class Accidental;
+class ActionIcon;
 
 class TLayout
 {
 public:
 
     static void layout(Accidental* item, LayoutContext& ctx);
+    static void layout(ActionIcon* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
