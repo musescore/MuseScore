@@ -24,7 +24,6 @@
 
 #include "defer.h"
 #include "translation.h"
-
 #include "log.h"
 
 using namespace mu::playback;
@@ -301,26 +300,34 @@ void MixerChannelItem::loadAuxSendItems(const AuxSendsParams& auxSends)
 
     m_outParams.auxSends = auxSends;
 
-    if (m_auxSendItems.size() != static_cast<int>(auxSends.size())) {
-        qDeleteAll(m_auxSendItems);
-        m_auxSendItems.clear();
+    configuration()->isAuxSendVisibleChanged().onReceive(this, [this](aux_channel_idx_t index, bool visible) {
+        if (visible) {
+            IF_ASSERT_FAILED(index < m_outParams.auxSends.size()) {
+                return;
+            };
 
-        for (size_t i = 0; i < auxSends.size(); ++i) {
-            m_auxSendItems.push_back(buildAuxSendItem(i));
+            m_auxSendItems.insert(index, buildAuxSendItem(index, m_outParams.auxSends[index]));
+        } else {
+            m_auxSendItems.remove(index);
         }
 
         emit auxSendItemListChanged();
+    }, AsyncMode::AsyncSetOnce);
+
+    if (m_auxSendItems.size() == static_cast<int>(auxSends.size())) {
+        return;
     }
 
-    for (int i = 0; i < m_auxSendItems.size(); ++i) {
-        AuxSendItem* item = m_auxSendItems[i];
-        const AuxSendParams& params = auxSends[i];
+    qDeleteAll(m_auxSendItems);
+    m_auxSendItems.clear();
 
-        item->setIsActive(params.active);
-        item->setAudioSignalPercentage(params.signalAmount * 100.f);
-
-        item->setTitle(QString("Aux %1").arg(i + 1)); // TODO: use the actual title of the aux channel
+    for (aux_channel_idx_t i = 0; i < auxSends.size(); ++i) {
+        if (configuration()->isAuxSendVisible(i)) {
+            m_auxSendItems.insert(i, buildAuxSendItem(i, m_outParams.auxSends[i]));
+        }
     }
+
+    emit auxSendItemListChanged();
 }
 
 void MixerChannelItem::loadSoloMuteState(project::IProjectAudioSettings::SoloMuteState&& newState)
@@ -520,9 +527,14 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
     return newItem;
 }
 
-AuxSendItem* MixerChannelItem::buildAuxSendItem(size_t index)
+AuxSendItem* MixerChannelItem::buildAuxSendItem(aux_channel_idx_t index, const AuxSendParams& params)
 {
     AuxSendItem* newItem = new AuxSendItem(this);
+    newItem->blockSignals(true);
+    newItem->setIsActive(params.active);
+    newItem->setAudioSignalPercentage(params.signalAmount * 100.f);
+    newItem->setTitle(mu::qtrc("playback", "Aux %1").arg(index + 1)); // TODO: use the actual title of the aux channel
+    newItem->blockSignals(false);
 
     connect(newItem, &AuxSendItem::isActiveChanged, this, [this, index](bool active) {
         IF_ASSERT_FAILED(index < m_outParams.auxSends.size()) {
@@ -612,5 +624,5 @@ QList<OutputResourceItem*> MixerChannelItem::outputResourceItemList() const
 
 QList<AuxSendItem*> MixerChannelItem::auxSendItemList() const
 {
-    return m_auxSendItems;
+    return m_auxSendItems.values();
 }

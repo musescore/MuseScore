@@ -42,6 +42,7 @@ class MixerPanelContextMenuModel : public uicomponents::AbstractMenuModel, publi
     Q_PROPERTY(bool labelsSectionVisible READ labelsSectionVisible NOTIFY labelsSectionVisibleChanged)
     Q_PROPERTY(bool soundSectionVisible READ soundSectionVisible NOTIFY soundSectionVisibleChanged)
     Q_PROPERTY(bool audioFxSectionVisible READ audioFxSectionVisible NOTIFY audioFxSectionVisibleChanged)
+    Q_PROPERTY(bool auxSendsSectionVisible READ auxSendsSectionVisible NOTIFY auxSendsSectionVisibleChanged)
     Q_PROPERTY(bool balanceSectionVisible READ balanceSectionVisible NOTIFY balanceSectionVisibleChanged)
     Q_PROPERTY(bool volumeSectionVisible READ volumeSectionVisible NOTIFY volumeSectionVisibleChanged)
     Q_PROPERTY(bool faderSectionVisible READ faderSectionVisible NOTIFY faderSectionVisibleChanged)
@@ -54,6 +55,7 @@ public:
     bool labelsSectionVisible() const;
     bool soundSectionVisible() const;
     bool audioFxSectionVisible() const;
+    bool auxSendsSectionVisible() const;
     bool balanceSectionVisible() const;
     bool volumeSectionVisible() const;
     bool faderSectionVisible() const;
@@ -66,6 +68,7 @@ signals:
     void labelsSectionVisibleChanged();
     void soundSectionVisibleChanged();
     void audioFxSectionVisibleChanged();
+    void auxSendsSectionVisibleChanged();
     void balanceSectionVisibleChanged();
     void volumeSectionVisibleChanged();
     void faderSectionVisibleChanged();
@@ -75,9 +78,13 @@ signals:
 private:
     bool isSectionVisible(MixerSectionType sectionType) const;
 
-    uicomponents::MenuItem* buildViewMenuItem(MixerSectionType sectionType);
+    uicomponents::MenuItem* buildSectionVisibleItem(MixerSectionType sectionType);
+    uicomponents::MenuItem* buildAuxSendVisibleItem(audio::aux_channel_idx_t index);
 
     void toggleMixerSection(const actions::ActionData& args);
+    void toggleAuxSend(const actions::ActionData& args);
+
+    void setViewMenuItemChecked(const QString& itemId, bool checked);
 };
 }
 

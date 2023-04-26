@@ -25,10 +25,13 @@
 
 #include <QObject>
 
-#include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "audio/audiotypes.h"
+
+#include "modularity/ioc.h"
+#include "iplaybackconfiguration.h"
 #include "iinteractive.h"
+
+#include "audio/audiotypes.h"
 #include "ui/view/navigationpanel.h"
 #include "project/iprojectaudiosettings.h"
 
@@ -63,6 +66,7 @@ class MixerChannelItem : public QObject, public async::Asyncable
     Q_PROPERTY(mu::ui::NavigationPanel * panel READ panel NOTIFY panelChanged)
 
     INJECT(playback, framework::IInteractive, interactive)
+    INJECT(playback, IPlaybackConfiguration, configuration)
 
 public:
     enum class Type {
@@ -164,7 +168,7 @@ protected:
 
     InputResourceItem* buildInputResourceItem();
     OutputResourceItem* buildOutputResourceItem(const audio::AudioFxParams& fxParams);
-    AuxSendItem* buildAuxSendItem(size_t index);
+    AuxSendItem* buildAuxSendItem(audio::aux_channel_idx_t index, const audio::AuxSendParams& params);
 
     void addBlankSlots(size_t count);
     void removeBlankSlotsFromEnd(size_t count);
@@ -185,7 +189,7 @@ protected:
 
     InputResourceItem* m_inputResourceItem = nullptr;
     QMap<audio::AudioFxChainOrder, OutputResourceItem*> m_outputResourceItems;
-    QList<AuxSendItem*> m_auxSendItems;
+    QMap<audio::aux_channel_idx_t, AuxSendItem*> m_auxSendItems;
 
     audio::AudioSignalChanges m_audioSignalChanges;
 

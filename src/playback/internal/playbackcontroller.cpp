@@ -49,8 +49,6 @@ static const ActionCode REPEAT_CODE("repeat");
 static const ActionCode PLAY_CHORD_SYMBOLS_CODE("play-chord-symbols");
 static const ActionCode PLAYBACK_SETUP("playback-setup");
 
-static constexpr aux_channel_idx_t AUX_CHANNEL_NUM = 2;
-
 static AudioOutputParams makeReverbOutputParams()
 {
     AudioFxParams reverbParams;

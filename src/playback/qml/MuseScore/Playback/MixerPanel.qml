@@ -212,6 +212,7 @@ ColumnLayout {
             MixerAuxSendsSection {
                 id: auxSendsSection
 
+                visible: contextMenuModel.auxSendsSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
                 headerWidth: prv.headerWidth
 
