@@ -145,6 +145,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/layout/tlayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layout/tlayout.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/layout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/layout.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutoptions.h
