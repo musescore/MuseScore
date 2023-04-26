@@ -54,9 +54,9 @@ class Ambitus final : public EngravingItem
     int _topTpc, _bottomTpc;
 
     // internally managed, to optimize layout / drawing
-    mu::PointF _topPos;       // position of top note symbol
-    mu::PointF _bottomPos;    // position of bottom note symbol
-    mu::LineF _line;          // the drawn line
+    PointF _topPos;       // position of top note symbol
+    PointF _bottomPos;    // position of bottom note symbol
+    LineF _line;          // the drawn line
 
     friend class Factory;
     Ambitus(Segment* parent);
@@ -96,6 +96,19 @@ public:
     int bottomPitch() const { return _bottomPitch; }
     int topTpc() const { return _topTpc; }
     int bottomTpc() const { return _bottomTpc; }
+
+    PointF topPos() const { return _topPos; }
+    void setTopPos(const PointF& p) { _topPos = p; }
+    void setTopPosX(double p) { _topPos.setX(p); }
+    void setTopPosY(double p) { _topPos.setY(p); }
+
+    PointF bottomPos() const { return _bottomPos; }
+    void setBottomPos(const PointF& p) { _bottomPos = p; }
+    void setBottomPosX(double p) { _bottomPos.setX(p); }
+    void setBottomPosY(double p) { _bottomPos.setY(p); }
+
+    LineF line() const { return _line; }
+    void setLine(const LineF& l) { _line = l; }
 
     Accidental* topAccidental() const { return _topAccid; }
     Accidental* bottomAccidental() const { return _bottomAccid; }
