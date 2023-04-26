@@ -25,6 +25,7 @@
 #include "draw/fontmetrics.h"
 
 #include "../iengravingfont.h"
+#include "../types/typesconv.h"
 #include "../libmscore/score.h"
 #include "../libmscore/utils.h"
 
@@ -32,6 +33,7 @@
 #include "../libmscore/actionicon.h"
 #include "../libmscore/ambitus.h"
 #include "../libmscore/arpeggio.h"
+#include "../libmscore/articulation.h"
 
 #include "../libmscore/note.h"
 
@@ -402,4 +404,27 @@ void TLayout::layout(Arpeggio* item, LayoutContext&)
         break;
     }
     }
+}
+
+void TLayout::layout(Articulation* item, LayoutContext&)
+{
+    item->setSkipDraw(false);
+    if (item->isHiddenOnTabStaff()) {
+        item->setSkipDraw(true);
+        return;
+    }
+
+    RectF bRect;
+
+    if (item->textType() != ArticulationTextType::NO_TEXT) {
+        mu::draw::Font scaledFont(item->font());
+        scaledFont.setPointSizeF(item->font().pointSizeF() * item->magS());
+        mu::draw::FontMetrics fm(scaledFont);
+
+        bRect = fm.boundingRect(scaledFont, TConv::text(item->textType()));
+    } else {
+        bRect = item->symBbox(item->symId());
+    }
+
+    item->setbbox(bRect.translated(-0.5 * bRect.width(), 0.0));
 }

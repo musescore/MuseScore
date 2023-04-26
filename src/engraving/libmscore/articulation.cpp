@@ -23,11 +23,11 @@
 #include "articulation.h"
 
 #include "draw/fontmetrics.h"
-#include "rw/206/read206.h"
 
 #include "types/symnames.h"
 #include "types/typesconv.h"
 #include "types/translatablestring.h"
+#include "layout/tlayout.h"
 
 #include "beam.h"
 #include "chord.h"
@@ -54,19 +54,6 @@ static const ElementStyle articulationStyle {
     { Sid::articulationMinDistance, Pid::MIN_DISTANCE },
 //      { Sid::articulationOffset, Pid::OFFSET },
     { Sid::articulationAnchorDefault, Pid::ARTICULATION_ANCHOR },
-};
-
-struct ArticulationTextTypeMapping {
-    AsciiStringView xml;
-    String text;
-    TranslatableString name;
-};
-
-// Note about "engraving/sym": they need to be in this context because PaletteCell::translationContext expects them there
-static const std::map<ArticulationTextType, ArticulationTextTypeMapping> artTypeToInfo {
-    { ArticulationTextType::TAP, { "Tap", String(u"T"), TranslatableString("engraving/sym", "Tap") } },
-    { ArticulationTextType::SLAP, { "Slap", String(u"S"), TranslatableString("engraving/sym", "Slap") } },
-    { ArticulationTextType::POP, { "Pop", String(u"P"), TranslatableString("engraving/sym", "Pop") } },
 };
 
 //---------------------------------------------------------
@@ -159,7 +146,7 @@ void Articulation::setUp(bool val)
 TranslatableString Articulation::typeUserName() const
 {
     if (m_textType != ArticulationTextType::NO_TEXT) {
-        return artTypeToInfo.at(m_textType).name;
+        return TConv::userName(m_textType);
     }
 
     return TranslatableString("engraving/sym", SymNames::userNameForSymId(symId()));
@@ -168,7 +155,7 @@ TranslatableString Articulation::typeUserName() const
 String Articulation::translatedTypeUserName() const
 {
     if (m_textType != ArticulationTextType::NO_TEXT) {
-        return artTypeToInfo.at(m_textType).name.translated();
+        return TConv::userName(m_textType).translated();
     }
 
     return SymNames::translatedUserNameForSymId(symId());
@@ -188,7 +175,7 @@ void Articulation::draw(mu::draw::Painter* painter) const
         mu::draw::Font scaledFont(m_font);
         scaledFont.setPointSizeF(m_font.pointSizeF() * magS() * MScore::pixelRatio);
         painter->setFont(scaledFont);
-        painter->drawText(bbox(), draw::TextDontClip | draw::AlignLeft | draw::AlignTop, artTypeToInfo.at(m_textType).text);
+        painter->drawText(bbox(), draw::TextDontClip | draw::AlignLeft | draw::AlignTop, TConv::text(m_textType));
     } else {
         drawSymbol(_symId, painter, PointF(-0.5 * width(), 0.0));
     }
@@ -249,25 +236,8 @@ Page* Articulation::page() const
 
 void Articulation::layout()
 {
-    _skipDraw = false;
-    if (isHiddenOnTabStaff()) {
-        _skipDraw = true;
-        return;
-    }
-
-    RectF bRect;
-
-    if (m_textType != ArticulationTextType::NO_TEXT) {
-        mu::draw::Font scaledFont(m_font);
-        scaledFont.setPointSizeF(m_font.pointSizeF() * magS());
-        mu::draw::FontMetrics fm(scaledFont);
-
-        bRect = fm.boundingRect(scaledFont, artTypeToInfo.at(m_textType).text);
-    } else {
-        bRect = symBbox(_symId);
-    }
-
-    setbbox(bRect.translated(-0.5 * bRect.width(), 0.0));
+    LayoutContext ctx(score());
+    TLayout::layout(this, ctx);
 }
 
 bool Articulation::isHiddenOnTabStaff() const

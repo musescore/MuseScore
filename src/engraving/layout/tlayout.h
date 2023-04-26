@@ -29,6 +29,7 @@ class Accidental;
 class ActionIcon;
 class Ambitus;
 class Arpeggio;
+class Articulation;
 
 class TLayout
 {
@@ -38,6 +39,7 @@ public:
     static void layout(ActionIcon* item, LayoutContext& ctx);
     static void layout(Ambitus* item, LayoutContext& ctx);
     static void layout(Arpeggio* item, LayoutContext& ctx);
+    static void layout(Articulation* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
