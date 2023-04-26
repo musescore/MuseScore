@@ -28,16 +28,15 @@
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
 #include "global/iinteractive.h"
-#include "cloud/iauthorizationservice.h"
-#include "cloud/icloudprojectsservice.h"
+#include "cloud/icloudsregister.h"
 
 namespace mu::project {
 class SaveProjectScenario : public ISaveProjectScenario
 {
+
     INJECT(IProjectConfiguration, configuration)
     INJECT(framework::IInteractive, interactive)
-    INJECT(cloud::IAuthorizationService, authorizationService)
-    INJECT(cloud::ICloudProjectsService, cloudProjectsService)
+    INJECT(cloud::ICloudsRegister, cloudsRegister)
 
 public:
     SaveProjectScenario() = default;
@@ -48,6 +47,7 @@ public:
     RetVal<io::path_t> askLocalPath(INotationProjectPtr project, SaveMode mode) const override;
     RetVal<CloudProjectInfo> askCloudLocation(INotationProjectPtr project, SaveMode mode) const override;
     RetVal<CloudProjectInfo> askPublishLocation(INotationProjectPtr project) const override;
+    RetVal<CloudAudioInfo> askPublishAudioLocation(INotationProjectPtr project) const override;
 
     bool warnBeforeSavingToExistingPubliclyVisibleCloudProject() const override;
 
@@ -63,6 +63,9 @@ private:
     RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublish) const;
 
     bool warnBeforePublishing(bool isPublish, cloud::Visibility visibility) const;
+
+    cloud::IAuthorizationServicePtr museScoreComAuthorizationService() const;
+    cloud::IAuthorizationServicePtr audioComAuthorizationService() const;
 
     Ret warnCloudIsNotAvailable(bool isPublish) const;
 };

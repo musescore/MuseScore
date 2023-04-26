@@ -35,6 +35,7 @@ StyledDialogView {
     property int visibility: CloudVisibility.Private
     property string existingOnlineScoreUrl
     property bool replaceExistingOnlineScore: true
+    property string cloudCode: ""
 
     contentWidth: contentItem.implicitWidth
     contentHeight: contentItem.implicitHeight
@@ -55,21 +56,27 @@ StyledDialogView {
     Item {
         id: contentItem
 
+        property var cloudInfo: null
+
         implicitWidth: Math.max(420, contentColumn.implicitWidth)
         implicitHeight: contentColumn.implicitHeight
 
         AccountAvatar {
+            id: avatar
+
             anchors.top: parent.top
             anchors.right: parent.right
 
             side: 38
-            url: accountModel.accountInfo.avatarUrl
+            url: Boolean(contentItem.cloudInfo) ? contentItem.cloudInfo.userAvatarUrl : null
 
-            AccountModel {
-                id: accountModel
+            CloudsModel {
+                id: cloudsModel
 
                 Component.onCompleted: {
                     load()
+
+                    contentItem.cloudInfo = cloudsModel.cloudInfo(root.cloudCode)
                 }
             }
         }
@@ -82,7 +89,7 @@ StyledDialogView {
             StyledTextLabel {
                 id: titleLabel
                 text: root.isPublish
-                      ? qsTrc("project/save", "Publish to MuseScore.com")
+                      ? qsTrc("project/save", "Publish to") + " " + (Boolean(contentItem.cloudInfo) ? contentItem.cloudInfo.cloudTitle : "")
                       : qsTrc("project/save", "Save to cloud")
                 font: ui.theme.largeBodyBoldFont
                 horizontalAlignment: Text.AlignLeft

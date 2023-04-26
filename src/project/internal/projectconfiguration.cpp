@@ -594,11 +594,6 @@ void ProjectConfiguration::setShouldDestinationFolderBeOpenedOnExport(bool shoul
     settings()->setSharedValue(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT, Val(shouldDestinationFolderBeOpenedOnExport));
 }
 
-QUrl ProjectConfiguration::scoreManagerUrl() const
-{
-    return cloudConfiguration()->scoreManagerUrl();
-}
-
 QUrl ProjectConfiguration::supportForumUrl() const
 {
     if (languagesService()->currentLanguage().code.startsWith("en")) {

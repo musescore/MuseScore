@@ -32,8 +32,8 @@
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
 #include "multiinstances/imultiinstancesprovider.h"
-#include "cloud/icloudprojectsservice.h"
-#include "cloud/iauthorizationservice.h"
+#include "cloud/icloudsregister.h"
+#include "cloud/musescorecom/imusescorecomcloudservice.h"
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
 #include "inotationreadersregister.h"
@@ -59,14 +59,12 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(IProjectAutoSaver, projectAutoSaver)
     INJECT(ISaveProjectScenario, saveProjectScenario)
     INJECT(IExportProjectScenario, exportProjectScenario)
-
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(framework::IInteractive, interactive)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(cloud::IAuthorizationService, authorizationService)
-    INJECT(cloud::ICloudProjectsService, cloudProjectsService)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(cloud::ICloudsRegister, cloudsRegister)
+    INJECT(cloud::IMuseScoreComCloudService, museScoreComCloudService)
     INJECT(playback::IPlaybackController, playbackController)
     INJECT(print::IPrintProvider, printProvider)
     INJECT(io::IFileSystem, fileSystem)
@@ -170,6 +168,9 @@ private:
     void removeFromRecentScoreList(const io::path_t& filePath);
 
     bool hasSelection() const;
+
+    cloud::IAuthorizationServicePtr museScoreComAuthorizationService() const;
+    QUrl scoreManagerUrl() const;
 
     bool m_isProjectSaving = false;
     bool m_isProjectClosing = false;

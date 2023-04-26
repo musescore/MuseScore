@@ -527,11 +527,11 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
         }
     };
 
-    bool isCloudAvailable = authorizationService()->checkCloudIsAvailable();
+    bool isCloudAvailable = museScoreComAuthorizationService()->checkCloudIsAvailable();
     if (!isCloudAvailable) {
         warnCloudIsNotAvailable();
     } else {
-        Ret ret = authorizationService()->ensureAuthorization(
+        Ret ret = museScoreComAuthorizationService()->ensureAuthorization(
             trc("project/save", "Login or create a free account on musescore.com to save this score to the cloud."));
         if (!ret) {
             return false;
@@ -548,7 +548,7 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
 
     if (saveMode == SaveMode::Save && isCloudAvailable) {
         // Get up-to-date visibility information
-        RetVal<cloud::ScoreInfo> scoreInfo = cloudProjectsService()->downloadScoreInfo(info.sourceUrl);
+        RetVal<cloud::ScoreInfo> scoreInfo = museScoreComCloudService()->downloadScoreInfo(info.sourceUrl);
         if (scoreInfo.ret) {
             info.name = scoreInfo.val.title;
             info.visibility = scoreInfo.val.visibility;
@@ -737,8 +737,8 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
 
     bool isFirstSave = info.sourceUrl.isEmpty();
 
-    m_uploadingProjectProgress = cloudProjectsService()->uploadScore(*projectData, info.name, info.visibility, info.sourceUrl,
-                                                                     info.revisionId);
+    m_uploadingProjectProgress = museScoreComCloudService()->uploadScore(*projectData, info.name, info.visibility, info.sourceUrl,
+                                                                         info.revisionId);
 
     m_uploadingProjectProgress->started.onNotify(this, [this]() {
         showUploadProgressDialog();
@@ -791,7 +791,7 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
 
 void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen, bool isFirstSave)
 {
-    m_uploadingAudioProgress = cloudProjectsService()->uploadAudio(*audio.device, audio.format, sourceUrl);
+    m_uploadingAudioProgress = museScoreComCloudService()->uploadAudio(*audio.device, audio.format, sourceUrl);
 
     m_uploadingAudioProgress->started.onNotify(this, []() {
         LOGD() << "Uploading audio started";
@@ -827,7 +827,7 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
         return;
     }
 
-    QUrl scoreManagerUrl = configuration()->scoreManagerUrl();
+    QUrl scoreManagerUrl = this->scoreManagerUrl();
 
     if (configuration()->openDetailedProjectUploadedDialog()) {
         UriQuery query("musescore://project/upload/success");
@@ -1246,6 +1246,16 @@ void ProjectActionsController::prependToRecentScoreList(const io::path_t& filePa
 bool ProjectActionsController::hasSelection() const
 {
     return currentNotationSelection() ? !currentNotationSelection()->isNone() : false;
+}
+
+cloud::IAuthorizationServicePtr ProjectActionsController::museScoreComAuthorizationService() const
+{
+    return cloudsRegister()->cloud(cloud::MUSESCORE_COM_CLOUD_CODE);
+}
+
+QUrl ProjectActionsController::scoreManagerUrl() const
+{
+    return museScoreComCloudService()->scoreManagerUrl();
 }
 
 void ProjectActionsController::openProjectProperties()

@@ -51,6 +51,11 @@ mu::ValCh<AccountInfo> AuthorizationServiceStub::accountInfo() const
     return mu::ValCh<AccountInfo>();
 }
 
+mu::cloud::CloudInfo mu::cloud::AuthorizationServiceStub::cloudInfo() const
+{
+    return CloudInfo();
+}
+
 mu::Ret AuthorizationServiceStub::checkCloudIsAvailable() const
 {
     return make_ret(Ret::Code::NotSupported);

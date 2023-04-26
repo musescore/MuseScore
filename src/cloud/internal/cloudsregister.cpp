@@ -19,28 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_AUTHORIZATIONSERVICESTUB_H
-#define MU_CLOUD_AUTHORIZATIONSERVICESTUB_H
 
-#include "cloud/iauthorizationservice.h"
+#include "cloudsregister.h"
 
-namespace mu::cloud {
-class AuthorizationServiceStub : public IAuthorizationService
+#include "containers.h"
+
+using namespace mu::cloud;
+
+void CloudsRegister::reg(const QString& cloudCode, IAuthorizationServicePtr cloud)
 {
-public:
-    void signUp() override;
-    void signIn() override;
-    void signOut() override;
-
-    Ret ensureAuthorization(const std::string& text = {}) override;
-
-    ValCh<bool> userAuthorized() const override;
-    ValCh<AccountInfo> accountInfo() const override;
-
-    CloudInfo cloudInfo() const override;
-
-    Ret checkCloudIsAvailable() const override;
-};
+    m_clouds.insert({ cloudCode, cloud });
 }
 
-#endif // MU_CLOUD_AUTHORIZATIONSERVICESTUB_H
+IAuthorizationServicePtr CloudsRegister::cloud(const QString& cloudCode) const
+{
+    auto it = m_clouds.find(cloudCode);
+    if (it != m_clouds.end()) {
+        return it->second;
+    }
+
+    return nullptr;
+}
+
+std::vector<IAuthorizationServicePtr> CloudsRegister::clouds() const
+{
+    return values(m_clouds);
+}

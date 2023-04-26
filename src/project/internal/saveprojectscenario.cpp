@@ -179,7 +179,7 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
         return warnCloudIsNotAvailable(isPublish);
     }
 
-    Ret ret = authorizationService()->ensureAuthorization(
+    Ret ret = museScoreComAuthorizationService()->ensureAuthorization(
         isPublish
         ? trc("project/save", "Login or create a free account on musescore.com to save this score to the cloud.")
         : trc("project/save", "Login or create a free account on musescore.com to publish this score."));
@@ -294,6 +294,11 @@ bool SaveProjectScenario::warnBeforePublishing(bool isPublish, cloud::Visibility
     }
 
     return ok;
+}
+
+cloud::IAuthorizationServicePtr SaveProjectScenario::museScoreComAuthorizationService() const
+{
+    return cloudsRegister()->cloud(cloud::MUSESCORE_COM_CLOUD_CODE);
 }
 
 bool SaveProjectScenario::warnBeforeSavingToExistingPubliclyVisibleCloudProject() const

@@ -19,28 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_AUTHORIZATIONSERVICESTUB_H
-#define MU_CLOUD_AUTHORIZATIONSERVICESTUB_H
 
-#include "cloud/iauthorizationservice.h"
+#ifndef MU_CLOUD_ICLOUDSSREGISTER_H
+#define MU_CLOUD_ICLOUDSSREGISTER_H
+
+#include "modularity/imoduleexport.h"
+#include "iauthorizationservice.h"
 
 namespace mu::cloud {
-class AuthorizationServiceStub : public IAuthorizationService
+class ICloudsRegister : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(ICloudsRegister)
+
 public:
-    void signUp() override;
-    void signIn() override;
-    void signOut() override;
+    virtual ~ICloudsRegister() = default;
 
-    Ret ensureAuthorization(const std::string& text = {}) override;
+    virtual void reg(const QString& cloudCode, IAuthorizationServicePtr cloud) = 0;
+    virtual IAuthorizationServicePtr cloud(const QString& cloudCode) const = 0;
 
-    ValCh<bool> userAuthorized() const override;
-    ValCh<AccountInfo> accountInfo() const override;
-
-    CloudInfo cloudInfo() const override;
-
-    Ret checkCloudIsAvailable() const override;
+    virtual std::vector<IAuthorizationServicePtr> clouds() const = 0;
 };
 }
 
-#endif // MU_CLOUD_AUTHORIZATIONSERVICESTUB_H
+#endif // MU_CLOUD_ICLOUDSSREGISTER_H
