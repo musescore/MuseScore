@@ -5017,7 +5017,7 @@ String Score::extractLyrics()
                     if (playCount >= int(cr->lyrics().size())) {
                         continue;
                     }
-                    Lyrics* l = cr->lyrics(playCount, PlacementV::BELOW);            // TODO: ABOVE
+                    Lyrics* l = cr->lyrics(playCount);
                     if (!l) {
                         continue;
                     }
@@ -5052,7 +5052,7 @@ String Score::extractLyrics()
                         if (lyricsNumber >= cr->lyrics().size()) {
                             continue;
                         }
-                        Lyrics* l = cr->lyrics(lyricsNumber, PlacementV::BELOW);              // TODO
+                        Lyrics* l = cr->lyrics(lyricsNumber);
                         if (!l) {
                             continue;
                         }
