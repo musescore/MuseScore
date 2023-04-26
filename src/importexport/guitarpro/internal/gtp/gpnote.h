@@ -63,6 +63,16 @@ public:
         float middleValue{ -1 };
         float originOffset{ -1 };
         float originValue{ -1 };
+        bool isEmpty() const
+        {
+            return destinationValue == -1
+                   && destinationOffset == -1
+                   && middleValue == -1
+                   && middleOffset1 == -1
+                   && middleOffset2 == -1
+                   && originOffset == -1
+                   && originValue == -1;
+        }
     };
     struct Trill {
         int auxillaryFret{ -1 };

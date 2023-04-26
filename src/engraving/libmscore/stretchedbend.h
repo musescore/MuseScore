@@ -85,6 +85,7 @@ private:
         PointF dest;
         BendSegmentType type = BendSegmentType::NO_TYPE;
         int tone = -1;
+        PointF pagePos{ 0, 0 };
     };
 
     std::vector<int> m_drawPoints;

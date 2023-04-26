@@ -1911,6 +1911,10 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         return;
     }
 
+    if (gpnote->bend()->isEmpty()) {
+        return;
+    }
+
     auto gpTimeToMuTime = [] (float time) {
         return time * PitchValue::MAX_TIME / 100;
     };
@@ -1947,7 +1951,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         if (gpBend->middleOffset1 == -1 && gpBend->middleOffset2 == -1 && gpBend->middleValue != -1) {
             //!@NOTE It seems when middle point is places exactly in the middle
             //!of bend  GP6 stores this value equal -1
-            if (gpBend->destinationOffset > 50 || gpBend->destinationOffset == -1) {
+            if (gpBend->destinationOffset > 50) {
                 bend->points().push_back(PitchValue(gpTimeToMuTime(50), gpBend->middleValue));
             }
         }
