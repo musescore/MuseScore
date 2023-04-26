@@ -114,7 +114,7 @@ class PluginAPI : public QmlPlugin
     /** (read-only) */
     Q_PROPERTY(qreal mscoreDPI READ mscoreDPI)
     /** Current score, if any (read only) */
-    Q_PROPERTY(mu::plugins::api::Score * curScore READ curScore)
+    Q_PROPERTY(mu::plugins::api::Score * curScore READ curScore CONSTANT)
     /** List of currently open scores (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(QQmlListProperty<mu::plugins::api::Score> scores READ scores)
 

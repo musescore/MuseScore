@@ -25,27 +25,31 @@
 #include <QObject>
 #include <QQuickView>
 
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "ui/iinteractiveprovider.h"
 #include "ui/imainwindow.h"
+#include "ui/iuiconfiguration.h"
 
 #include "ipopupwindow.h"
 
 namespace mu::uicomponents {
-class PopupWindow_QQuickView : public IPopupWindow
+class PopupWindow_QQuickView : public IPopupWindow, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(uicomponents, ui::IInteractiveProvider, interactiveProvider)
     INJECT(uicomponents, ui::IMainWindow, mainWindow)
+    INJECT(uicomponents, ui::IUiConfiguration, uiConfiguration)
 
 public:
     explicit PopupWindow_QQuickView(QObject* parent = nullptr);
     ~PopupWindow_QQuickView();
 
-    void init(QQmlEngine* engine, bool isDialogMode) override;
+    void init(QQmlEngine* engine, bool isDialogMode, bool isFrameless) override;
 
-    void setContent(QQuickItem* item) override;
+    void setContent(QQmlComponent* component, QQuickItem* item) override;
 
     void show(QScreen* screen, QRect geometry, bool activateFocus) override;
     void close() override;

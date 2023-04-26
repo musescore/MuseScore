@@ -821,8 +821,7 @@ MuseScore {
         textField.previousText = newText
     }
 
-    Rectangle {
-        color: "transparent"
+    Item {
         anchors.fill: parent
 
         GridLayout {

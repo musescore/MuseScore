@@ -90,6 +90,24 @@ void PopupView::setParentItem(QQuickItem* parent)
     emit parentItemChanged();
 }
 
+void PopupView::setEngine(QQmlEngine* engine)
+{
+    if (m_engine == engine) {
+        return;
+    }
+
+    m_engine = engine;
+}
+
+void PopupView::setComponent(QQmlComponent* component)
+{
+    if (m_component == component) {
+        return;
+    }
+
+    m_component = component;
+}
+
 void PopupView::forceActiveFocus()
 {
     IF_ASSERT_FAILED(m_window) {
@@ -107,17 +125,17 @@ void PopupView::classBegin()
 {
 }
 
-void PopupView::componentComplete()
+void PopupView::init()
 {
-    QQmlEngine* engine = qmlEngine(this);
+    QQmlEngine* engine = this->engine();
     IF_ASSERT_FAILED(engine) {
         return;
     }
 
     m_window = new PopupWindow_QQuickView();
-    m_window->init(engine, isDialog());
+    m_window->init(engine, isDialog(), frameless());
     m_window->setOnHidden([this]() { onHidden(); });
-    m_window->setContent(m_contentItem);
+    m_window->setContent(m_component, m_contentItem);
 
     // TODO: Can't use new `connect` syntax because the IPopupWindow::aboutToClose
     // has a parameter of type QQuickCloseEvent, which is not public, so we
@@ -144,6 +162,11 @@ void PopupView::initCloseController()
     m_closeController->closeNotification().onNotify(this, [this]() {
         close(true);
     });
+}
+
+void PopupView::componentComplete()
+{
+    init();
 }
 
 bool PopupView::eventFilter(QObject* watched, QEvent* event)
@@ -182,8 +205,22 @@ void PopupView::open()
         IF_ASSERT_FAILED(qWindow) {
             return;
         }
+
         qWindow->setTitle(m_title);
-        qWindow->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
+
+        if (m_alwaysOnTop) {
+#ifdef Q_OS_MAC
+            auto updateStayOnTopHint = [this]() {
+                bool stay = qApp->applicationState() == Qt::ApplicationActive;
+                m_window->qWindow()->setFlag(Qt::WindowStaysOnTopHint, stay);
+            };
+            updateStayOnTopHint();
+            connect(qApp, &QApplication::applicationStateChanged, this, updateStayOnTopHint);
+#endif
+        } else {
+            qWindow->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
+        }
+
         qWindow->setFlag(Qt::FramelessWindowHint, m_frameless);
 #ifdef MUE_DISABLE_UI_MODALITY
         qWindow->setModality(Qt::NonModal);
@@ -486,6 +523,11 @@ void PopupView::setFrameless(bool frameless)
     emit framelessChanged(m_frameless);
 }
 
+bool PopupView::resizable() const
+{
+    return m_window ? m_window->resizable() : m_resizable;
+}
+
 void PopupView::setResizable(bool resizable)
 {
     if (this->resizable() == resizable) {
@@ -499,9 +541,19 @@ void PopupView::setResizable(bool resizable)
     emit resizableChanged(m_resizable);
 }
 
-bool PopupView::resizable() const
+bool PopupView::alwaysOnTop() const
 {
-    return m_window ? m_window->resizable() : m_resizable;
+    return m_alwaysOnTop;
+}
+
+void PopupView::setAlwaysOnTop(bool alwaysOnTop)
+{
+    if (m_alwaysOnTop == alwaysOnTop) {
+        return;
+    }
+
+    m_alwaysOnTop = alwaysOnTop;
+    emit alwaysOnTopChanged();
 }
 
 void PopupView::setRet(QVariantMap ret)
@@ -748,4 +800,13 @@ void PopupView::activateNavigationParentControl()
     if (m_activateParentOnClose && m_navigationParentControl) {
         m_navigationParentControl->requestActive();
     }
+}
+
+QQmlEngine* PopupView::engine() const
+{
+    if (m_engine) {
+        return m_engine;
+    }
+
+    return qmlEngine(this);
 }
