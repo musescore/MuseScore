@@ -279,6 +279,7 @@ public:
     double ypos() { return _pos.y(); }
     virtual void move(const PointF& s) { _pos += s; }
     bool skipDraw() const { return _skipDraw; }
+    void setSkipDraw(bool val) { _skipDraw = val; }
 
     virtual PointF pagePos() const;            ///< position in page coordinates
     virtual PointF canvasPos() const;          ///< position in canvas coordinates

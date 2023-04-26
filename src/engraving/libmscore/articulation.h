@@ -104,7 +104,7 @@ private:
     String _channelName;
 
     ArticulationTextType m_textType = ArticulationTextType::NO_TEXT;
-    mu::draw::Font m_font; // used for drawing text type articulations
+    draw::Font m_font; // used for drawing text type articulations
 
     ArticulationAnchor _anchor;
 
@@ -118,7 +118,7 @@ private:
     Articulation(ChordRest* parent);
 
     void draw(mu::draw::Painter*) const override;
-    bool isHiddenOnTabStaff() const;
+
     void setupShowOnTabStyles();
 
     enum class AnchorGroup {
@@ -152,6 +152,9 @@ public:
 
     void layout() override;
     bool layoutCloseToNote() const;
+
+    const draw::Font& font() const { return m_font; }
+    bool isHiddenOnTabStaff() const;
 
     std::vector<mu::LineF> dragAnchorLines() const override;
 

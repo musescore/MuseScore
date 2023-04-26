@@ -2373,20 +2373,61 @@ VibratoType TConv::fromXml(const AsciiStringView& tag, VibratoType def)
 }
 
 // Note about "engraving/sym": they need to be in this context because PaletteCell::translationContext expects them there
-const std::array<Item<ArticulationTextType>, 3> ARTICULATIONTEXT_TYPES = { {
-    { ArticulationTextType::TAP,    "Tap",      TranslatableString("engraving/sym", "Tap") },
-    { ArticulationTextType::SLAP,   "Slap",     TranslatableString("engraving/sym", "Slap") },
-    { ArticulationTextType::POP,    "Pop",      TranslatableString("engraving/sym", "Pop") }
+struct ArticulationTextTypeItem {
+    ArticulationTextType type;
+    AsciiStringView xml;
+    String text;
+    TranslatableString name;
+};
+
+const std::array<ArticulationTextTypeItem, 3> ARTICULATIONTEXT_TYPES = { {
+    { ArticulationTextType::TAP,    "Tap",  String(u"T"),  TranslatableString("engraving/sym", "Tap") },
+    { ArticulationTextType::SLAP,   "Slap", String(u"S"),  TranslatableString("engraving/sym", "Slap") },
+    { ArticulationTextType::POP,    "Pop",  String(u"P"),  TranslatableString("engraving/sym", "Pop") }
 } };
+
+const TranslatableString& TConv::userName(ArticulationTextType v)
+{
+    auto it = std::find_if(ARTICULATIONTEXT_TYPES.cbegin(), ARTICULATIONTEXT_TYPES.cend(), [v](const ArticulationTextTypeItem& i) {
+        return i.type == v;
+    });
+
+    IF_ASSERT_FAILED(it != ARTICULATIONTEXT_TYPES.cend()) {
+        static TranslatableString dummy;
+        return dummy;
+    }
+    return it->name;
+}
+
+String TConv::text(ArticulationTextType v)
+{
+    auto it = std::find_if(ARTICULATIONTEXT_TYPES.cbegin(), ARTICULATIONTEXT_TYPES.cend(), [v](const ArticulationTextTypeItem& i) {
+        return i.type == v;
+    });
+
+    IF_ASSERT_FAILED(it != ARTICULATIONTEXT_TYPES.cend()) {
+        static String dummy;
+        return dummy;
+    }
+    return it->text;
+}
 
 AsciiStringView TConv::toXml(ArticulationTextType v)
 {
-    return findXmlTagByType<ArticulationTextType>(ARTICULATIONTEXT_TYPES, v);
+    auto it = std::find_if(ARTICULATIONTEXT_TYPES.cbegin(), ARTICULATIONTEXT_TYPES.cend(), [v](const ArticulationTextTypeItem& i) {
+        return i.type == v;
+    });
+
+    IF_ASSERT_FAILED(it != ARTICULATIONTEXT_TYPES.cend()) {
+        static AsciiStringView dummy;
+        return dummy;
+    }
+    return it->xml;
 }
 
 ArticulationTextType TConv::fromXml(const AsciiStringView& tag, ArticulationTextType def)
 {
-    auto it = std::find_if(ARTICULATIONTEXT_TYPES.cbegin(), ARTICULATIONTEXT_TYPES.cend(), [tag](const Item<ArticulationTextType>& i) {
+    auto it = std::find_if(ARTICULATIONTEXT_TYPES.cbegin(), ARTICULATIONTEXT_TYPES.cend(), [tag](const ArticulationTextTypeItem& i) {
         return i.xml == tag;
     });
 
