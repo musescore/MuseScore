@@ -29,6 +29,7 @@
 #include "iengravingfont.h"
 
 #include "types/typesconv.h"
+#include "layout/tlayout.h"
 
 #include "accidental.h"
 #include "chord.h"
@@ -88,14 +89,14 @@ void Arpeggio::symbolLine(SymId end, SymId fill)
     double mag = magS();
     IEngravingFontPtr f = score()->engravingFont();
 
-    symbols.clear();
+    m_symbols.clear();
     double w1 = f->advance(end, mag);
     double w2 = f->advance(fill, mag);
     int n    = lrint((w - w1) / w2);
     for (int i = 0; i < n; ++i) {
-        symbols.push_back(fill);
+        m_symbols.push_back(fill);
     }
-    symbols.push_back(end);
+    m_symbols.push_back(end);
 }
 
 //---------------------------------------------------------
@@ -194,69 +195,8 @@ double Arpeggio::calcBottom() const
 
 void Arpeggio::layout()
 {
-    double top = calcTop();
-    double bottom = calcBottom();
-    if (score()->styleB(Sid::ArpeggioHiddenInStdIfTab)) {
-        if (staff() && staff()->isPitchedStaff(tick())) {
-            for (Staff* s : staff()->staffList()) {
-                if (s->score() == score() && s->isTabStaff(tick()) && s->visible()) {
-                    setbbox(RectF());
-                    return;
-                }
-            }
-        }
-    }
-    if (staff()) {
-        setMag(staff()->staffMag(tick()));
-    }
-    switch (arpeggioType()) {
-    case ArpeggioType::NORMAL: {
-        symbolLine(SymId::wiggleArpeggiatoUp, SymId::wiggleArpeggiatoUp);
-        // string is rotated -90 degrees
-        RectF r(symBbox(symbols));
-        setbbox(RectF(0.0, -r.x() + top, r.height(), r.width()));
-    }
-    break;
-
-    case ArpeggioType::UP: {
-        symbolLine(SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
-        // string is rotated -90 degrees
-        RectF r(symBbox(symbols));
-        setbbox(RectF(0.0, -r.x() + top, r.height(), r.width()));
-    }
-    break;
-
-    case ArpeggioType::DOWN: {
-        symbolLine(SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
-        // string is rotated +90 degrees (so that UpArrow turns into a DownArrow)
-        RectF r(symBbox(symbols));
-        setbbox(RectF(0.0, r.x() + top, r.height(), r.width()));
-    }
-    break;
-
-    case ArpeggioType::UP_STRAIGHT: {
-        double _spatium = spatium();
-        double x1 = _spatium * .5;
-        double w  = symBbox(SymId::arrowheadBlackUp).width();
-        setbbox(RectF(x1 - w * .5, top, w, bottom));
-    }
-    break;
-
-    case ArpeggioType::DOWN_STRAIGHT: {
-        double _spatium = spatium();
-        double x1 = _spatium * .5;
-        double w  = symBbox(SymId::arrowheadBlackDown).width();
-        setbbox(RectF(x1 - w * .5, top, w, bottom));
-    }
-    break;
-
-    case ArpeggioType::BRACKET: {
-        double _spatium = spatium();
-        double w  = score()->styleS(Sid::ArpeggioHookLen).val() * _spatium;
-        setbbox(RectF(0.0, top, w, bottom));
-        break;
-    }
-    }
+    LayoutContext ctx(score());
+    TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -282,17 +222,17 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     case ArpeggioType::NORMAL:
     case ArpeggioType::UP:
     {
-        RectF r(symBbox(symbols));
+        RectF r(symBbox(m_symbols));
         painter->rotate(-90.0);
-        score()->engravingFont()->draw(symbols, painter, magS(), PointF(-r.right() - y1, -r.bottom() + r.height()));
+        score()->engravingFont()->draw(m_symbols, painter, magS(), PointF(-r.right() - y1, -r.bottom() + r.height()));
     }
     break;
 
     case ArpeggioType::DOWN:
     {
-        RectF r(symBbox(symbols));
+        RectF r(symBbox(m_symbols));
         painter->rotate(90.0);
-        score()->engravingFont()->draw(symbols, painter, magS(), PointF(-r.left() + y1, -r.top() - r.height()));
+        score()->engravingFont()->draw(m_symbols, painter, magS(), PointF(-r.left() + y1, -r.top() - r.height()));
     }
     break;
 
