@@ -583,9 +583,13 @@ void Part::insertTime(const Fraction& tick, const Fraction& len)
         auto si = _instruments.lower_bound(tick.ticks());
         auto ei = _instruments.lower_bound((tick - len).ticks());
         _instruments.erase(si, ei);
+
+        // remove harp pedal diagrams between tickpo >= tick
+        harpDiagrams.erase(harpDiagrams.lower_bound(tick.ticks()), harpDiagrams.lower_bound((tick - len).ticks()));
     }
 
     InstrumentList il;
+
     for (auto i = _instruments.lower_bound(tick.ticks()); i != _instruments.end();) {
         Instrument* instrument = i->second;
         int t = i->first;
@@ -593,6 +597,15 @@ void Part::insertTime(const Fraction& tick, const Fraction& len)
         il[t + len.ticks()] = instrument;
     }
     _instruments.insert(il.begin(), il.end());
+
+    std::map<int, HarpPedalDiagram*> hd2;
+    for (auto h = harpDiagrams.lower_bound(tick.ticks()); h != harpDiagrams.end();) {
+        HarpPedalDiagram* diagram = h->second;
+        int t = h->first;
+        harpDiagrams.erase(h++);
+        hd2[t + len.ticks()] = diagram;
+    }
+    harpDiagrams.insert(hd2.begin(), hd2.end());
 }
 
 //---------------------------------------------------------
