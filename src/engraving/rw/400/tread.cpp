@@ -444,7 +444,7 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext&)
             }
         }
 #endif
-        assert(!item->links()->contains(item));
+        DO_ASSERT(!item->links()->contains(item));
         item->links()->push_back(item);
     } else if (tag == "tick") {
         int val = e.readInt();

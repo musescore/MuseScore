@@ -289,7 +289,7 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
         }
 
         EngravingItem* me = static_cast<EngravingItem*>(item->links()->mainElement());
-        assert(item->type() == me->type());
+        DO_ASSERT(item->type() == me->type());
         Staff* s = item->staff();
         if (!s) {
             s = item->score()->staff(xml.context()->curTrack() / VOICES);
@@ -1783,7 +1783,7 @@ void TWrite::write(const Location* item, XmlWriter& xml, WriteContext&)
 {
     static constexpr Location relDefaults = Location::relative();
 
-    assert(item->isRelative());
+    DO_ASSERT(item->isRelative());
     xml.startElement("location");
     xml.tag("staves", item->staff(), relDefaults.staff());
     xml.tag("voices", item->voice(), relDefaults.voice());
