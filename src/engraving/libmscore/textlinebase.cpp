@@ -395,10 +395,10 @@ void TextLineBaseSegment::layout()
 
     double l = 0.0;
     if (!_text->empty()) {
-        double textlineTextDistance = _spatium * .5;
+        double gapBetweenTextAndLine = _spatium * tl->gapBetweenTextAndLine().val();
         if ((isSingleBeginType() && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
             || (!isSingleBeginType() && (tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO))) {
-            l = _text->pos().x() + _text->bbox().width() + textlineTextDistance;
+            l = _text->pos().x() + _text->bbox().width() + gapBetweenTextAndLine;
         }
 
         double h = _text->height();
@@ -545,12 +545,13 @@ void TextLineBaseSegment::spatiumChanged(double ov, double nv)
     _endText->spatiumChanged(ov, nv);
 }
 
-static constexpr std::array<Pid, 26> TextLineBasePropertyId = { {
+static constexpr std::array<Pid, 27> TextLineBasePropertyId = { {
     Pid::LINE_VISIBLE,
     Pid::BEGIN_HOOK_TYPE,
     Pid::BEGIN_HOOK_HEIGHT,
     Pid::END_HOOK_TYPE,
     Pid::END_HOOK_HEIGHT,
+    Pid::GAP_BETWEEN_TEXT_AND_LINE,
     Pid::BEGIN_TEXT,
     Pid::BEGIN_TEXT_ALIGN,
     Pid::BEGIN_TEXT_PLACE,
@@ -574,7 +575,7 @@ static constexpr std::array<Pid, 26> TextLineBasePropertyId = { {
     Pid::END_TEXT_OFFSET,
 } };
 
-const std::array<Pid, 26>& TextLineBase::textLineBasePropertyIds()
+const std::array<Pid, 27>& TextLineBase::textLineBasePropertyIds()
 {
     return TextLineBasePropertyId;
 }
@@ -602,6 +603,7 @@ TextLineBase::TextLineBase(const ElementType& type, EngravingItem* parent, Eleme
 {
     setBeginHookHeight(Spatium(1.9));
     setEndHookHeight(Spatium(1.9));
+    setGapBetweenTextAndLine(Spatium(0.5));
 }
 
 //---------------------------------------------------------
@@ -661,6 +663,8 @@ PropertyValue TextLineBase::getProperty(Pid id) const
         return _endHookType;
     case Pid::END_HOOK_HEIGHT:
         return _endHookHeight;
+    case Pid::GAP_BETWEEN_TEXT_AND_LINE:
+        return _gapBetweenTextAndLine;
     case Pid::END_FONT_FACE:
         return _endFontFamily;
     case Pid::END_FONT_SIZE:
@@ -721,6 +725,9 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
     case Pid::BEGIN_TEXT_OFFSET:
         setBeginTextOffset(v.value<PointF>());
         break;
+    case Pid::GAP_BETWEEN_TEXT_AND_LINE:
+        _gapBetweenTextAndLine = v.value<Spatium>();
+        break;
     case Pid::CONTINUE_TEXT_OFFSET:
         setContinueTextOffset(v.value<PointF>());
         break;
@@ -774,5 +781,15 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
     }
     triggerLayout();
     return true;
+}
+
+mu::engraving::PropertyValue TextLineBase::propertyDefault(Pid propertyId) const
+{
+    switch (propertyId) {
+    case Pid::GAP_BETWEEN_TEXT_AND_LINE:
+        return Spatium(0.5);
+    default:
+        return SLine::propertyDefault(propertyId);
+    }
 }
 }

@@ -156,6 +156,7 @@ TextLine::TextLine(EngravingItem* parent, bool system)
     setEndHookType(HookType::NONE);
     setBeginHookHeight(Spatium(1.5));
     setEndHookHeight(Spatium(1.5));
+    setGapBetweenTextAndLine(Spatium(0.5));
 
     initElementStyle(&textLineStyle);
 

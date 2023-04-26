@@ -322,6 +322,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BEGIN_FONT_SIZE,         false, "beginFontSize",         P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "begin font size") },
     { Pid::BEGIN_FONT_STYLE,        false, "beginFontStyle",        P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "begin font style") },
     { Pid::BEGIN_TEXT_OFFSET,       false, "beginTextOffset",       P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "begin text offset") },
+    { Pid::GAP_BETWEEN_TEXT_AND_LINE, false, "gapBetweenTextAndLine", P_TYPE::SPATIUM,      DUMMY_QT_TR_NOOP("propertyName", "gap between text and line") },
 
     { Pid::CONTINUE_TEXT,           true,  "continueText",          P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "continue text") },
     { Pid::CONTINUE_TEXT_ALIGN,     false, "continueTextAlign",     P_TYPE::ALIGN,          DUMMY_QT_TR_NOOP("propertyName", "continue text align") },
