@@ -31,6 +31,8 @@ class Ambitus;
 class Arpeggio;
 class Articulation;
 
+class BagpipeEmbellishment;
+
 class TLayout
 {
 public:
@@ -40,6 +42,8 @@ public:
     static void layout(Ambitus* item, LayoutContext& ctx);
     static void layout(Arpeggio* item, LayoutContext& ctx);
     static void layout(Articulation* item, LayoutContext& ctx);
+
+    static void layout(BagpipeEmbellishment* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
