@@ -36,6 +36,7 @@
 #include "../libmscore/articulation.h"
 
 #include "../libmscore/bagpembell.h"
+#include "../libmscore/barline.h"
 
 #include "../libmscore/note.h"
 
@@ -498,5 +499,118 @@ void TLayout::layout(BagpipeEmbellishment* item, LayoutContext&)
 
         // move x to next note x position
         x += dx.headp;
+    }
+}
+
+void TLayout::layout(BarLine* item, LayoutContext&)
+{
+    item->setPos(PointF());
+    // barlines hidden on this staff
+    if (item->staff() && item->segment()) {
+        if ((!item->staff()->staffTypeForElement(item)->showBarlines() && item->segment()->segmentType() == SegmentType::EndBarLine)
+            || (item->staff()->hideSystemBarLine() && item->segment()->segmentType() == SegmentType::BeginBarLine)) {
+            item->setbbox(RectF());
+            return;
+        }
+    }
+
+    item->setMag(item->score()->styleB(Sid::scaleBarlines) && item->staff() ? item->staff()->staffMag(item->tick()) : 1.0);
+    // Note: the true values of y1 and y2 are computed in layout2() (can be done only
+    // after staff distances are known). This is a temporary layout.
+    double _spatium = item->spatium();
+    item->setY1(_spatium * .5 * item->spanFrom());
+    if (RealIsEqual(item->y2(), 0.0)) {
+        item->setY2(_spatium * .5 * (8.0 + item->spanTo()));
+    }
+
+    double w = item->layoutWidth() * item->mag();
+    RectF r(0.0, item->y1(), w, item->y2() - item->y1());
+
+    if (item->score()->styleB(Sid::repeatBarTips)) {
+        switch (item->barLineType()) {
+        case BarLineType::START_REPEAT:
+            r.unite(item->symBbox(SymId::bracketTop).translated(0, item->y1()));
+            // r |= symBbox(SymId::bracketBottom).translated(0, y2);
+            break;
+        case BarLineType::END_REPEAT: {
+            double w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
+            r.unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, item->y1()));
+            // r |= symBbox(SymId::reversedBracketBottom).translated(0, y2);
+        }
+        break;
+        case BarLineType::END_START_REPEAT: {
+            double w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
+            r.unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, item->y1()));
+            r.unite(item->symBbox(SymId::bracketTop).translated(0, item->y1()));
+            // r |= symBbox(SymId::reversedBracketBottom).translated(0, y2);
+        }
+        break;
+        default:
+            break;
+        }
+    }
+    item->setbbox(r);
+
+    for (EngravingItem* e : *item->el()) {
+        e->layout();
+        if (e->isArticulation()) {
+            Articulation* a  = toArticulation(e);
+            DirectionV dir    = a->direction();
+            double distance   = 0.5 * item->spatium();
+            double x          = item->width() * .5;
+            if (dir == DirectionV::DOWN) {
+                double botY = item->y2() + distance;
+                a->setPos(PointF(x, botY));
+            } else {
+                double topY = item->y1() - distance;
+                a->setPos(PointF(x, topY));
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//    called after system layout; set vertical dimensions
+//---------------------------------------------------------
+void TLayout::layout2(BarLine* item, LayoutContext&)
+{
+    // barlines hidden on this staff
+    if (item->staff() && item->segment()) {
+        if ((!item->staff()->staffTypeForElement(item)->showBarlines() && item->segment()->segmentType() == SegmentType::EndBarLine)
+            || (item->staff()->hideSystemBarLine() && item->segment()->segmentType() == SegmentType::BeginBarLine)) {
+            item->setbbox(RectF());
+            return;
+        }
+    }
+
+    item->getY();
+    item->bbox().setTop(item->y1());
+    item->bbox().setBottom(item->y2());
+
+    if (item->score()->styleB(Sid::repeatBarTips)) {
+        switch (item->barLineType()) {
+        case BarLineType::START_REPEAT:
+            item->bbox().unite(item->symBbox(SymId::bracketTop).translated(0, item->y1()));
+            item->bbox().unite(item->symBbox(SymId::bracketBottom).translated(0, item->y2()));
+            break;
+        case BarLineType::END_REPEAT:
+        {
+            double w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
+            item->bbox().unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, item->y1()));
+            item->bbox().unite(item->symBbox(SymId::reversedBracketBottom).translated(-w1, item->y2()));
+            break;
+        }
+        case BarLineType::END_START_REPEAT:
+        {
+            double w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
+            item->bbox().unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, item->y1()));
+            item->bbox().unite(item->symBbox(SymId::reversedBracketBottom).translated(-w1, item->y2()));
+            item->bbox().unite(item->symBbox(SymId::bracketTop).translated(0, item->y1()));
+            item->bbox().unite(item->symBbox(SymId::bracketBottom).translated(0, item->y2()));
+            break;
+        }
+        default:
+            break;
+        }
     }
 }

@@ -70,8 +70,8 @@ class BarLine final : public EngravingItem
     int _spanFrom           { 0 };         // line number on start and end staves
     int _spanTo             { 0 };
     BarLineType _barLineType { BarLineType::NORMAL };
-    mutable double y1 = 0.0;
-    mutable double y2 = 0.0;
+    mutable double m_y1 = 0.0;
+    mutable double m_y2 = 0.0;
     ElementList _el;          ///< fermata or other articulations
 
     friend class Factory;
@@ -118,6 +118,11 @@ public:
 
     Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
+
+    double y1() const { return m_y1; }
+    double y2() const { return m_y2; }
+    void setY1(double v) { m_y1 = v; }
+    void setY2(double v) { m_y2 = v; }
 
     void setSpanStaff(int val) { _spanStaff = val; }
     void setSpanFrom(int val) { _spanFrom = val; }
