@@ -161,9 +161,14 @@ void StretchedBend::fillSegments()
             if (bendUp && isPrevBendUp && pt > 0) {
                 // prevent double bendUp rendering
                 int prevBendPitch = m_drawPoints[pt - 1];
+                // remove prev segment if there are two bendup in a row
                 if (prevBendPitch == 0 && pitch > 0) {
                     m_bendSegments.pop_back();
+                } else if (prevBendPitch > 0 && prevBendPitch < pitch) {
+                    m_bendSegments.back().tone = bendTone(0);
                 }
+                // We need to reset the y position in case we remove or change prev bend
+                src.ry() = 0;
             }
 
             isPrevBendUp = bendUp;
