@@ -118,6 +118,8 @@ void StretchedBend::fillSegments()
         return;
     }
 
+    bool isPrevBendUp = false;
+
     PointF src = (m_drawPoints[0] == 0)
                  ? PointF(m_noteWidth + m_spatium * .8, 0)
                  : PointF(m_noteWidth * .5, -m_noteHeight * .5 - m_spatium * .2);
@@ -128,6 +130,7 @@ void StretchedBend::fillSegments()
     m_releasedToInitial = (0 == lastPointPitch);
 
     double baseBendHeight = m_spatium * 1.5;
+    BendSegmentType prevLineType = BendSegmentType::NO_TYPE;
 
     for (size_t pt = 0; pt < n - 1; pt++) {
         int pitch = m_drawPoints[pt];
@@ -155,6 +158,14 @@ void StretchedBend::fillSegments()
             }
         } else {
             bool bendUp = pitch < nextPitch;
+            if (bendUp && isPrevBendUp) {
+                int prevBendPitch = m_drawPoints[pt - 1];
+                if (prevBendPitch == 0 && pitch > 0) {
+                    m_bendSegments.pop_back();
+                }
+            }
+
+            isPrevBendUp = bendUp;
 
             if (bendUp) {
                 double minY = std::min(-m_notePos.y(), src.y());
@@ -171,11 +182,16 @@ void StretchedBend::fillSegments()
             }
         }
 
+        if (prevLineType == BendSegmentType::CURVE_DOWN && type == BendSegmentType::CURVE_DOWN) {
+            continue;
+        }
+
         if (type != BendSegmentType::NO_TYPE) {
             m_bendSegments.push_back({ src, dest, type, tone, pagePos() });
         }
 
         src = dest;
+        prevLineType = type;
     }
 }
 
@@ -342,9 +358,8 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
             if (layoutMode) {
                 m_boundingRect.unite(RectF(src.x(), src.y(), dest.x() - src.x(), dest.y() - src.y()));
             } else {
-                PointF correctedSrc{ bendSegment.pagePos.x() - pagePos().x() + m_bendArrowWidth, src.y() };
                 PainterPath path;
-                path.moveTo(correctedSrc);
+                path.moveTo(src + PointF(m_bendArrowWidth, 0));
                 path.lineTo(dest);
                 Pen p(painter->pen());
                 p.setStyle(PenStyle::DashLine);
