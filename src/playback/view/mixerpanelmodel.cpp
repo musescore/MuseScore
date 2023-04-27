@@ -273,6 +273,17 @@ void MixerPanelModel::setupConnections()
             loadOutputParams(m_masterChannelItem, std::move(params));
         }
     }, AsyncMode::AsyncSetRepeat);
+
+    controller()->auxChannelNameChanged().onReceive(this, [this](aux_channel_idx_t index, const std::string& name) {
+        for (MixerChannelItem* item : m_mixerChannelList) {
+            const QMap<aux_channel_idx_t, AuxSendItem*>& items = item->auxSendItems();
+            auto it = items.find(index);
+
+            if (it != items.end()) {
+                it.value()->setTitle(QString::fromStdString(name));
+            }
+        }
+    });
 }
 
 int MixerPanelModel::resolveInsertIndex(const engraving::InstrumentTrackId& newInstrumentTrackId) const
@@ -403,6 +414,13 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const audio::Track
         playback()->audioOutput()->setOutputParams(m_currentTrackSequenceId, trackId, params);
     });
 
+    connect(item, &MixerChannelItem::auxSendItemListChanged, this, [this, item]() {
+        const QMap<aux_channel_idx_t, AuxSendItem*>& auxSendItems = item->auxSendItems();
+        for (auto it = auxSendItems.begin(); it != auxSendItems.end(); ++it) {
+            it.value()->setTitle(QString::fromStdString(controller()->auxChannelName(it.key())));
+        }
+    });
+
     connect(item, &MixerChannelItem::soloMuteStateChanged, this,
             [this, instrumentTrackId](const project::IProjectAudioSettings::SoloMuteState& state) {
         audioSettings()->setSoloMuteState(instrumentTrackId, state);
@@ -498,7 +516,7 @@ MixerChannelItem* MixerPanelModel::findChannelItem(const audio::TrackId& trackId
     return nullptr;
 }
 
-void MixerPanelModel::loadOutputParams(MixerChannelItem* item, audio::AudioOutputParams&& params)
+void MixerPanelModel::loadOutputParams(MixerChannelItem* item, AudioOutputParams&& params)
 {
     IF_ASSERT_FAILED(item) {
         return;

@@ -64,13 +64,14 @@ static AudioOutputParams makeReverbOutputParams()
 
 static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutputParams& params)
 {
-    UNUSED(params);
-
-    /* TODO
     if (params.fxChain.size() == 1) {
         const AudioResourceMeta& meta = params.fxChain.cbegin()->second.resourceMeta;
+        if (meta.id == MUSE_REVERB_ID) {
+            return mu::trc("playback", "Reverb");
+        }
+
         return meta.id;
-    }*/
+    }
 
     return mu::mtrc("playback", "Aux %1").arg(index + 1).toStdString();
 }
@@ -244,6 +245,16 @@ Channel<TrackId> PlaybackController::trackAdded() const
 Channel<TrackId> PlaybackController::trackRemoved() const
 {
     return m_trackRemoved;
+}
+
+std::string PlaybackController::auxChannelName(aux_channel_idx_t index) const
+{
+    return resolveAuxTrackTitle(index, audioSettings()->auxOutputParams(index));
+}
+
+Channel<aux_channel_idx_t, std::string> PlaybackController::auxChannelNameChanged() const
+{
+    return m_auxChannelNameChanged;
 }
 
 void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements)
@@ -1019,9 +1030,17 @@ void PlaybackController::subscribeOnAudioParamsChanges()
             return;
         }
 
-        size_t auxIdx = mu::indexOf(m_auxTrackIdList, trackId);
-        if (auxIdx != mu::nidx) {
-            audioSettings()->setAuxOutputParams(static_cast<aux_channel_idx_t>(auxIdx), params);
+        size_t idx = mu::indexOf(m_auxTrackIdList, trackId);
+        if (idx != mu::nidx) {
+            aux_channel_idx_t auxIdx = static_cast<aux_channel_idx_t>(idx);
+            std::string oldName = resolveAuxTrackTitle(auxIdx, audioSettings()->auxOutputParams(auxIdx));
+            std::string newName = resolveAuxTrackTitle(auxIdx, params);
+
+            audioSettings()->setAuxOutputParams(auxIdx, params);
+
+            if (oldName != newName) {
+                m_auxChannelNameChanged.send(auxIdx, newName);
+            }
         }
     });
 }

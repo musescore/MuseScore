@@ -533,7 +533,7 @@ AuxSendItem* MixerChannelItem::buildAuxSendItem(aux_channel_idx_t index, const A
     newItem->blockSignals(true);
     newItem->setIsActive(params.active);
     newItem->setAudioSignalPercentage(params.signalAmount * 100.f);
-    newItem->setTitle(mu::qtrc("playback", "Aux %1").arg(index + 1)); // TODO: use the actual title of the aux channel
+    newItem->setTitle(mu::qtrc("playback", "Aux %1").arg(index + 1));
     newItem->blockSignals(false);
 
     connect(newItem, &AuxSendItem::isActiveChanged, this, [this, index](bool active) {
@@ -625,4 +625,9 @@ QList<OutputResourceItem*> MixerChannelItem::outputResourceItemList() const
 QList<AuxSendItem*> MixerChannelItem::auxSendItemList() const
 {
     return m_auxSendItems.values();
+}
+
+const QMap<aux_channel_idx_t, AuxSendItem*>& MixerChannelItem::auxSendItems() const
+{
+    return m_auxSendItems;
 }

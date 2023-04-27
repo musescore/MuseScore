@@ -123,6 +123,8 @@ public:
     QList<OutputResourceItem*> outputResourceItemList() const;
     QList<AuxSendItem*> auxSendItemList() const;
 
+    const QMap<audio::aux_channel_idx_t, AuxSendItem*>& auxSendItems() const;
+
 public slots:
     void setTitle(QString title);
 
