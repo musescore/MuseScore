@@ -701,6 +701,7 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, Sa
     Ret ret = project->save(filePath, saveMode);
     if (!ret) {
         LOGE() << ret.toString();
+        warnScoreCouldnotBeSaved(ret.text());
         return false;
     }
 
@@ -1141,7 +1142,7 @@ bool ProjectActionsController::askIfUserAgreesToSaveProjectWithErrors(const Ret&
 
     switch (static_cast<Err>(ret.code())) {
     case Err::NoPartsError:
-        warnScoreWithoutPartsCannotBeSaved();
+        warnScoreCouldnotBeSaved(trc("project/save", "Please add at least one instrument to enable saving."));
         return false;
     case Err::CorruptionUponOpenningError:
         return askIfUserAgreesToSaveCorruptedScoreUponOpenning(location, ret.text());
@@ -1152,12 +1153,6 @@ bool ProjectActionsController::askIfUserAgreesToSaveProjectWithErrors(const Ret&
     default:
         return false;
     }
-}
-
-void ProjectActionsController::warnScoreWithoutPartsCannotBeSaved()
-{
-    interactive()->warning(trc("project/save", "Your score could not be saved"),
-                           trc("project/save", "Please add at least one instrument to enable saving."));
 }
 
 bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScore(const SaveLocation& location, const std::string& errorText,
@@ -1278,6 +1273,11 @@ void ProjectActionsController::showErrCorruptedScoreCannotBeSaved(const SaveLoca
     if (btn == getHelpBtn.btn) {
         interactive()->openUrl(configuration()->supportForumUrl());
     }
+}
+
+void ProjectActionsController::warnScoreCouldnotBeSaved(const std::string& errorText)
+{
+    interactive()->warning(trc("project/save", "Your score could not be saved"), errorText);
 }
 
 void ProjectActionsController::revertCorruptedScoreToLastSaved()

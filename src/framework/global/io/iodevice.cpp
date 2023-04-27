@@ -77,6 +77,12 @@ bool IODevice::isOpenModeWriteable() const
     return m_mode == OpenMode::WriteOnly || m_mode == OpenMode::ReadWrite || m_mode == OpenMode::Append;
 }
 
+void IODevice::setError(int error, const std::string& errorString)
+{
+    m_error = error;
+    m_errorString = errorString;
+}
+
 bool IODevice::isWriteable() const
 {
     return isOpenModeWriteable();
@@ -221,4 +227,19 @@ size_t IODevice::write(const QByteArray& ba)
     return write(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
 }
 
+bool IODevice::hasError() const
+{
+    return m_error != 0;
+}
+
 #endif
+
+int IODevice::error() const
+{
+    return m_error;
+}
+
+std::string IODevice::errorString() const
+{
+    return m_errorString;
+}
