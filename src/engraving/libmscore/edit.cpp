@@ -6299,15 +6299,29 @@ void Score::undoAddBracket(Staff* staff, size_t level, BracketType type, size_t 
 {
     staff_idx_t startStaffIdx = staff->idx();
     staff_idx_t totStaves = nstaves();
+
     // Make sure this brackets won't overlap with others sharing same column.
     // If overlaps are found, move the other brackets outwards (i.e. increase column).
     for (staff_idx_t staffIdx = startStaffIdx; staffIdx < startStaffIdx + span && staffIdx < totStaves; ++staffIdx) {
-        for (BracketItem* bracketItem : _staves.at(staffIdx)->brackets()) {
-            if (bracketItem->column() >= level) {
-                bracketItem->setColumn(bracketItem->column() + 1);
+        const std::vector<BracketItem*>& brackets = _staves.at(staffIdx)->brackets();
+
+        for (int i = static_cast<int>(brackets.size()) - 1; i >= static_cast<int>(level); --i) {
+            if (i >= static_cast<int>(brackets.size())) {
+                // This might theoretically happen when a lot of brackets get cleaned up
+                // after changing the column of the first bracket we see
+                continue;
             }
+
+            if (brackets[i]->bracketType() == BracketType::NO_BRACKET) {
+                // Better not get brackets with type NO_BRACKET in the UndoStack,
+                // as they might be cleaned up (Staff::cleanupBrackets())
+                continue;
+            }
+
+            brackets[i]->undoChangeProperty(Pid::BRACKET_COLUMN, brackets[i]->column() + 1);
         }
     }
+
     undo(new AddBracket(staff, level, type, span));
 }
 
