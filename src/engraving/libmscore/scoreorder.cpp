@@ -431,7 +431,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                 if (thkBracketStaff && (thkBracketSpan > 1)) {
                     score->undoAddBracket(thkBracketStaff, 0, BracketType::NORMAL, thkBracketSpan);
                 }
-                if (sg.bracket && !staffIdx) {
+                if (!staffIdx) {
                     thkBracketStaff = sg.bracket ? staff : nullptr;
                     thkBracketSpan  = 0;
                 }
