@@ -158,6 +158,8 @@ private:
     bool askIfUserAgreesToSaveCorruptedScoreUponOpenning(const SaveLocation& location, const std::string& errorText);
     void showErrCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText);
 
+    void warnScoreCouldnotBeSaved(const std::string& errorText);
+
     void revertCorruptedScoreToLastSaved();
 
     ProjectFile makeRecentFile(INotationProjectPtr project);
