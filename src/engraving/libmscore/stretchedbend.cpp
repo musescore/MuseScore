@@ -145,7 +145,7 @@ void StretchedBend::fillSegments()
             double minY = std::min(-m_notePos.y(), src.y());
             dest = PointF(src.x(), minY - bendHeight(prebendTone) - baseBendHeight);
             if (!m_skipFirstPoint) {
-                m_bendSegments.push_back({ src, dest, BendSegmentType::LINE_UP, prebendTone, pagePos() });
+                m_bendSegments.push_back({ src, dest, BendSegmentType::LINE_UP, prebendTone });
             }
 
             src.ry() = dest.y();
@@ -158,7 +158,8 @@ void StretchedBend::fillSegments()
             }
         } else {
             bool bendUp = pitch < nextPitch;
-            if (bendUp && isPrevBendUp) {
+            if (bendUp && isPrevBendUp && pt > 0) {
+                // prevent double bendUp rendering
                 int prevBendPitch = m_drawPoints[pt - 1];
                 if (prevBendPitch == 0 && pitch > 0) {
                     m_bendSegments.pop_back();
@@ -181,13 +182,13 @@ void StretchedBend::fillSegments()
                 type = BendSegmentType::CURVE_DOWN;
             }
         }
-
+        // prevent double curve down rendering
         if (prevLineType == BendSegmentType::CURVE_DOWN && type == BendSegmentType::CURVE_DOWN) {
             continue;
         }
 
         if (type != BendSegmentType::NO_TYPE) {
-            m_bendSegments.push_back({ src, dest, type, tone, pagePos() });
+            m_bendSegments.push_back({ src, dest, type, tone });
         }
 
         src = dest;
