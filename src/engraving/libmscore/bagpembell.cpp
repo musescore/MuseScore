@@ -25,6 +25,7 @@
 #include "draw/types/pen.h"
 
 #include "types/typesconv.h"
+#include "layout/tlayout.h"
 #include "iengravingfont.h"
 
 #include "score.h"
@@ -77,31 +78,14 @@ noteList BagpipeEmbellishment::getNoteList() const
 //      shared between ::draw() and ::layout()
 //---------------------------------------------------------
 
-struct BEDrawingDataX {
-    const SymId headsym;      // grace note head symbol
-    const SymId flagsym;      // grace note flag symbol
-    const double mags;         // grace head magnification
-    double headw;              // grace head width
-    double headp;              // horizontal head pitch
-    const double spatium;      // spatium
-    const double lw;           // line width for stem
-    double xl;                 // calc x for stem of leftmost note
-    const double xcorr;        // correction to align flag with top of stem
-
-    BEDrawingDataX(SymId hs, SymId fs, const double m, const double s, const int nn)
-        : headsym(hs),
-        flagsym(fs),
-        mags(0.75 * m),
-        spatium(s),
-        lw(0.1 * s),
-        xcorr(0.1 * s)
-    {
-        double w = Score::paletteScore()->engravingFont()->width(hs, mags);
-        headw = 1.2 * w;     // using 1.0 the stem xpos is off
-        headp = 1.6 * w;
-        xl    = (1 - 1.6 * (nn - 1)) * w / 2;
-    }
-};
+BagpipeEmbellishment::BEDrawingDataX::BEDrawingDataX(SymId hs, SymId fs, const double m, const double s, const int nn)
+    : headsym(hs), flagsym(fs), mags(0.75 * m), spatium(s), lw(0.1 * s), xcorr(0.1 * s)
+{
+    double w = Score::paletteScore()->engravingFont()->width(hs, mags);
+    headw = 1.2 * w;         // using 1.0 the stem xpos is off
+    headp = 1.6 * w;
+    xl    = (1 - 1.6 * (nn - 1)) * w / 2;
+}
 
 //---------------------------------------------------------
 //   BEDrawingDataY
@@ -109,20 +93,12 @@ struct BEDrawingDataX {
 //      shared between ::draw() and ::layout()
 //---------------------------------------------------------
 
-struct BEDrawingDataY {
-    const double y1b;          // top of all stems for beamed notes
-    const double y1f;          // top of stem for note with flag
-    const double y2;           // bottom of stem
-    const double ycorr;        // correction to align flag with top of stem
-    const double bw;           // line width for beam
-
-    BEDrawingDataY(const int l, const double s)
-        : y1b(-8 * s / 2),
-        y1f((l - 6) * s / 2),
-        y2(l * s / 2),
-        ycorr(0.8 * s),
-        bw(0.3 * s) {}
-};
+BagpipeEmbellishment::BEDrawingDataY::BEDrawingDataY(const int l, const double s)
+    : y1b(-8 * s / 2),
+    y1f((l - 6) * s / 2),
+    y2(l * s / 2),
+    ycorr(0.8 * s),
+    bw(0.3 * s) {}
 
 //---------------------------------------------------------
 //   debug support (disabled)
@@ -170,71 +146,8 @@ double BagpipeEmbellishment::mag() const
 
 void BagpipeEmbellishment::layout()
 {
-    /*
-    if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
-          LOGD("BagpipeEmbellishment::layout st %d", _embelType);
-          }
-     */
-    SymId headsym = SymId::noteheadBlack;
-    SymId flagsym = SymId::flag32ndUp;
-
-    noteList nl = getNoteList();
-    BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), static_cast<int>(nl.size()));
-
-    setbbox(RectF());
-    /*
-    if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
-          symMetrics("headsym", headsym);
-          symMetrics("flagsym", flagsym);
-          LOGD("mags %f headw %f headp %f spatium %f xl %f",
-                 dx.mags, dx.headw, dx.headp, dx.spatium, dx.xl);
-          }
-     */
-
-    bool drawFlag = nl.size() == 1;
-
-    // draw the notes including stem, (optional) flag and (optional) ledger line
-    double x = dx.xl;
-    for (int note : nl) {
-        int line = BagpipeNoteInfoList[note].line;
-        BEDrawingDataY dy(line, score()->spatium());
-
-        // head
-        addbbox(score()->engravingFont()->bbox(headsym, dx.mags).translated(PointF(x - dx.lw * .5 - dx.headw, dy.y2)));
-        /*
-        if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
-              printBBox(" notehead", bbox());
-              }
-         */
-
-        // stem
-        // highest top of stems actually used is y1b
-        addbbox(RectF(x - dx.lw * .5 - dx.headw, dy.y1b, dx.lw, dy.y2 - dy.y1b));
-        /*
-        if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
-              printBBox(" notehead + stem", bbox());
-              }
-         */
-
-        // flag
-        if (drawFlag) {
-            addbbox(score()->engravingFont()->bbox(flagsym, dx.mags).translated(PointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
-            // printBBox(" notehead + stem + flag", bbox());
-        }
-
-        // draw the ledger line for high A
-        if (line == -2) {
-            addbbox(RectF(x - dx.headw * 1.5 - dx.lw * .5, dy.y2 - dx.lw * 2, dx.headw * 2, dx.lw));
-            /*
-            if (_embelType == 8) {
-                  printBBox(" notehead + stem + ledger line", bbox());
-                  }
-             */
-        }
-
-        // move x to next note x position
-        x += dx.headp;
-    }
+    LayoutContext ctx(score());
+    TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
