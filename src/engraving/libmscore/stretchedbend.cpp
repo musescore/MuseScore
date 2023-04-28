@@ -119,11 +119,10 @@ void StretchedBend::fillSegments()
     }
 
     bool isPrevBendUp = false;
+    PointF upBendDefaultSrc = PointF(m_noteWidth + m_spatium * .8, 0);
+    PointF downBendDefaultSrc = PointF(m_noteWidth * .5, -m_noteHeight * .5 - m_spatium * .2);
 
-    PointF src = (m_drawPoints[0] == 0)
-                 ? PointF(m_noteWidth + m_spatium * .8, 0)
-                 : PointF(m_noteWidth * .5, -m_noteHeight * .5 - m_spatium * .2);
-
+    PointF src = m_drawPoints[0] == 0 ? upBendDefaultSrc : downBendDefaultSrc;
     PointF dest(0, 0);
 
     int lastPointPitch = m_drawPoints.back();
@@ -167,8 +166,8 @@ void StretchedBend::fillSegments()
                 } else if (prevBendPitch > 0 && prevBendPitch < pitch) {
                     m_bendSegments.back().tone = bendTone(0);
                 }
-                // We need to reset the y position in case we remove or change prev bend
-                src.ry() = 0;
+                // We need to reset the src position in case we remove or change prev bend
+                src = upBendDefaultSrc;
             }
 
             isPrevBendUp = bendUp;
