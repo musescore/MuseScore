@@ -24,6 +24,8 @@
 
 #include <cmath>
 
+#include "layout/tlayout.h"
+
 #include "actionicon.h"
 #include "factory.h"
 #include "fret.h"
@@ -67,12 +69,8 @@ Box::Box(const ElementType& type, System* parent)
 
 void Box::layout()
 {
-    MeasureBase::layout();
-    for (EngravingItem* e : el()) {
-        if (!e->isLayoutBreak()) {
-            e->layout();
-        }
-    }
+    LayoutContext ctx(score());
+    TLayout::layoutBox(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -354,20 +352,8 @@ HBox::HBox(System* parent)
 
 void HBox::layout()
 {
-    if (explicitParent() && explicitParent()->isVBox()) {
-        VBox* vb = toVBox(explicitParent());
-        double x = vb->leftMargin() * DPMM;
-        double y = vb->topMargin() * DPMM;
-        double w = point(boxWidth());
-        double h = vb->height() - (vb->topMargin() + vb->bottomMargin()) * DPMM;
-        setPos(x, y);
-        bbox().setRect(0.0, 0.0, w, h);
-    } else if (system()) {
-        bbox().setRect(0.0, 0.0, point(boxWidth()), system()->height());
-    } else {
-        bbox().setRect(0.0, 0.0, 50, 50);
-    }
-    Box::layout();
+    LayoutContext ctx(score());
+    TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -627,53 +613,8 @@ PropertyValue VBox::getProperty(Pid propertyId) const
 
 void VBox::layout()
 {
-    setPos(PointF());
-
-    if (system()) {
-        bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
-    } else {
-        bbox().setRect(0.0, 0.0, 50, 50);
-    }
-
-    for (EngravingItem* e : el()) {
-        if (!e->isLayoutBreak()) {
-            e->layout();
-        }
-    }
-
-    if (getProperty(Pid::BOX_AUTOSIZE).toBool()) {
-        double contentHeight = contentRect().height();
-
-        if (contentHeight < minHeight()) {
-            contentHeight = minHeight();
-        }
-
-        setHeight(contentHeight);
-    }
-
-    MeasureBase::layout();
-
-    if (MScore::noImages) {
-        adjustLayoutWithoutImages();
-    }
-}
-
-void VBox::adjustLayoutWithoutImages()
-{
-    double calculatedVBoxHeight = 0;
-    const int padding = score()->spatium();
-    auto elementList = el();
-
-    for (auto pElement : elementList) {
-        if (pElement->isText()) {
-            Text* txt = toText(pElement);
-            txt->bbox().moveTop(0);
-            calculatedVBoxHeight += txt->height() + padding;
-        }
-    }
-
-    setHeight(calculatedVBoxHeight);
-    Box::layout();
+    LayoutContext ctx(score());
+    TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -695,9 +636,8 @@ void VBox::startEditDrag(EditData& ed)
 
 void FBox::layout()
 {
-//      setPos(PointF());      // !?
-    bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
-    Box::layout();
+    LayoutContext ctx(score());
+    TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

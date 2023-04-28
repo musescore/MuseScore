@@ -23,6 +23,7 @@
 #define MU_ENGRAVING_RTTI_H
 
 #include <type_traits>
+#include "log.h"
 
 namespace mu::engraving::rtti {
 #define DECLARE_CLASSOF(Type) \
@@ -77,10 +78,25 @@ template<typename Impl>
 class Visitor
 {
 public:
+    enum Policy {
+        MayBeNotFound = 0,
+        ShouldBeFound
+    };
+
     template<typename ... Types, typename ... Args >
     static bool visit(TypeList<Types...> types, Args&& ... args)
     {
-        return visit_helper(types, std::forward<Args>(args)...);
+        return visit(Policy::MayBeNotFound, types, std::forward<Args>(args)...);
+    }
+
+    template<typename ... Types, typename ... Args >
+    static bool visit(Policy policy, TypeList<Types...> types, Args&& ... args)
+    {
+        bool found = visit_helper(types, std::forward<Args>(args)...);
+        if (policy == Policy::ShouldBeFound) {
+            DO_ASSERT(found);
+        }
+        return found;
     }
 
 private:

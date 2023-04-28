@@ -24,6 +24,8 @@
 
 #include "draw/fontmetrics.h"
 
+#include "../infrastructure/rtti.h"
+
 #include "../iengravingfont.h"
 #include "../types/typesconv.h"
 #include "../libmscore/score.h"
@@ -39,10 +41,15 @@
 #include "../libmscore/barline.h"
 #include "../libmscore/beam.h"
 #include "../libmscore/bend.h"
+#include "../libmscore/box.h"
 
 #include "../libmscore/note.h"
 
 #include "../libmscore/staff.h"
+#include "../libmscore/system.h"
+
+#include "../libmscore/text.h"
+#include "../libmscore/textframe.h"
 
 #include "beamlayout.h"
 
@@ -736,4 +743,130 @@ void TLayout::layout(Bend* item, LayoutContext&)
     bb.adjust(-_lw, -_lw, _lw, _lw);
     item->setbbox(bb);
     item->setPos(0.0, 0.0);
+}
+
+using BoxTypes = rtti::TypeList<HBox, VBox, FBox, TBox>;
+
+class BoxVisitor : public rtti::Visitor<BoxVisitor>
+{
+public:
+    template<typename T>
+    static bool doVisit(EngravingItem* item, LayoutContext& ctx)
+    {
+        if (T::classof(item)) {
+            TLayout::layout(static_cast<T*>(item), ctx);
+            return true;
+        }
+        return false;
+    }
+};
+
+void TLayout::layout(Box* item, LayoutContext& ctx)
+{
+    BoxVisitor::visit(BoxVisitor::ShouldBeFound, BoxTypes {}, item, ctx);
+}
+
+void TLayout::layoutBox(Box* item, LayoutContext&)
+{
+    item->MeasureBase::layout();
+    for (EngravingItem* e : item->el()) {
+        if (!e->isLayoutBreak()) {
+            e->layout();
+        }
+    }
+}
+
+void TLayout::layout(HBox* item, LayoutContext& ctx)
+{
+    if (item->explicitParent() && item->explicitParent()->isVBox()) {
+        VBox* vb = toVBox(item->explicitParent());
+        double x = vb->leftMargin() * DPMM;
+        double y = vb->topMargin() * DPMM;
+        double w = item->point(item->boxWidth());
+        double h = vb->height() - (vb->topMargin() + vb->bottomMargin()) * DPMM;
+        item->setPos(x, y);
+        item->bbox().setRect(0.0, 0.0, w, h);
+    } else if (item->system()) {
+        item->bbox().setRect(0.0, 0.0, item->point(item->boxWidth()), item->system()->height());
+    } else {
+        item->bbox().setRect(0.0, 0.0, 50, 50);
+    }
+    layoutBox(static_cast<Box*>(item), ctx);
+}
+
+void TLayout::layout(VBox* item, LayoutContext& ctx)
+{
+    item->setPos(PointF());
+
+    if (item->system()) {
+        item->bbox().setRect(0.0, 0.0, item->system()->width(), item->point(item->boxHeight()));
+    } else {
+        item->bbox().setRect(0.0, 0.0, 50, 50);
+    }
+
+    for (EngravingItem* e : item->el()) {
+        if (!e->isLayoutBreak()) {
+            e->layout();
+        }
+    }
+
+    if (item->getProperty(Pid::BOX_AUTOSIZE).toBool()) {
+        double contentHeight = item->contentRect().height();
+
+        if (contentHeight < item->minHeight()) {
+            contentHeight = item->minHeight();
+        }
+
+        item->setHeight(contentHeight);
+    }
+
+    item->MeasureBase::layout();
+
+    if (MScore::noImages) {
+        adjustLayoutWithoutImages(item, ctx);
+    }
+}
+
+void TLayout::adjustLayoutWithoutImages(VBox* item, LayoutContext& ctx)
+{
+    double calculatedVBoxHeight = 0;
+    const int padding = item->score()->spatium();
+    auto elementList = item->el();
+
+    for (auto pElement : elementList) {
+        if (pElement->isText()) {
+            Text* txt = toText(pElement);
+            txt->bbox().moveTop(0);
+            calculatedVBoxHeight += txt->height() + padding;
+        }
+    }
+
+    item->setHeight(calculatedVBoxHeight);
+    layoutBox(static_cast<Box*>(item), ctx);
+}
+
+void TLayout::layout(FBox* item, LayoutContext& ctx)
+{
+    item->bbox().setRect(0.0, 0.0, item->system()->width(), item->point(item->boxHeight()));
+    layoutBox(static_cast<Box*>(item), ctx);
+}
+
+void TLayout::layout(TBox* item, LayoutContext&)
+{
+    item->setPos(PointF());        // !?
+    item->bbox().setRect(0.0, 0.0, item->system()->width(), 0);
+    item->text()->layout();
+
+    double h = 0.;
+    if (item->text()->empty()) {
+        h = mu::draw::FontMetrics::ascent(item->text()->font());
+    } else {
+        h = item->text()->height();
+    }
+    double y = item->topMargin() * DPMM;
+    item->text()->setPos(item->leftMargin() * DPMM, y);
+    h += item->topMargin() * DPMM + item->bottomMargin() * DPMM;
+    item->bbox().setRect(0.0, 0.0, item->system()->width(), h);
+
+    item->MeasureBase::layout();    // layout LayoutBreak's
 }
