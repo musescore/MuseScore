@@ -46,7 +46,7 @@
 #include "layoutpage.h"
 #include "layoutmeasure.h"
 #include "layoutsystem.h"
-#include "layoutbeams.h"
+#include "beamlayout.h"
 #include "layouttuplets.h"
 
 #include "log.h"
@@ -472,7 +472,7 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
                         continue;
                     }
                     ChordRest* cr = toChordRest(e);
-                    if (LayoutBeams::notTopBeam(cr)) {                           // layout cross staff beams
+                    if (BeamLayout::notTopBeam(cr)) {                           // layout cross staff beams
                         cr->beam()->layout();
                     }
                     if (LayoutTuplets::notTopTuplet(cr)) {

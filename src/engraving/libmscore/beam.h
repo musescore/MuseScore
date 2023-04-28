@@ -23,7 +23,7 @@
 #ifndef __BEAM_H__
 #define __BEAM_H__
 
-#include "beamtremololayout.h"
+#include "layout/beamtremololayout.h"
 #include "engravingitem.h"
 #include "durationtype.h"
 #include "property.h"
@@ -84,6 +84,8 @@ class Beam final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Beam)
     DECLARE_CLASSOF(ElementType::BEAM)
 
+    friend class BeamLayout;
+
     std::vector<ChordRest*> _elements;          // must be sorted by tick
     std::vector<BeamSegment*> _beamSegments;
     DirectionV _direction    { DirectionV::AUTO };
@@ -125,12 +127,6 @@ class Beam final : public EngravingItem
     Beam(System* parent);
     Beam(const Beam&);
 
-    bool calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break) const;
-    void createBeamSegment(ChordRest* startChord, ChordRest* endChord, int level);
-    void createBeamletSegment(ChordRest* chord, bool isBefore, int level);
-    void createBeamSegments(const std::vector<ChordRest*>& chordRests);
-    void layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag);
-    bool layout2Cross(const std::vector<ChordRest*>& chordRests, int frag);
     void addChordRest(ChordRest* a);
     void removeChordRest(ChordRest* a);
 
@@ -162,7 +158,6 @@ public:
 
     System* system() const { return toSystem(explicitParent()); }
 
-    void layout1();
     void layout() override;
     void layoutIfNeed();
 

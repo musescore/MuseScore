@@ -37,10 +37,13 @@
 
 #include "../libmscore/bagpembell.h"
 #include "../libmscore/barline.h"
+#include "../libmscore/beam.h"
 
 #include "../libmscore/note.h"
 
 #include "../libmscore/staff.h"
+
+#include "beamlayout.h"
 
 using namespace mu::draw;
 using namespace mu::engraving;
@@ -613,4 +616,14 @@ void TLayout::layout2(BarLine* item, LayoutContext&)
             break;
         }
     }
+}
+
+void TLayout::layout(Beam* item, LayoutContext& ctx)
+{
+    BeamLayout::layout(item, ctx);
+}
+
+void TLayout::layout1(Beam* item, LayoutContext& ctx)
+{
+    BeamLayout::layout1(item, ctx);
 }
