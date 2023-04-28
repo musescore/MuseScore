@@ -78,11 +78,10 @@ class Glissando;
 class GradualTempoChange;
 class Groups;
 
-class HarpPedalDiagram;
-
 class Hairpin;
 class Harmony;
 class HarmonicMark;
+class HarpPedalDiagram;
 class Hook;
 
 class Instrument;

@@ -1418,7 +1418,7 @@ void TWrite::write(const HarmonicMark* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const HarpPedalDiagram* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (!xml.context()->canWrite(item)) {
+    if (!ctx.canWrite(item)) {
         return;
     }
     xml.startElement(item);
