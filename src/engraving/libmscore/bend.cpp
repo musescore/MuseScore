@@ -26,6 +26,8 @@
 #include "draw/types/brush.h"
 #include "draw/fontmetrics.h"
 
+#include "layout/tlayout.h"
+
 #include "note.h"
 #include "score.h"
 #include "staff.h"
@@ -41,7 +43,7 @@ namespace mu::engraving {
 //   label
 //---------------------------------------------------------
 
-static const char* label[] = {
+const char* Bend::label[13] = {
     "", "1/4", "1/2", "3/4", "full",
     "1 1/4", "1 1/2", "1 3/4", "2",
     "2 1/4", "2 1/2", "2 3/4", "3"
@@ -154,109 +156,8 @@ void Bend::updatePointsByBendType(const BendType bendType)
 
 void Bend::layout()
 {
-    // during mtest, there may be no score. If so, exit.
-    if (!score()) {
-        return;
-    }
-
-    double _spatium = spatium();
-
-    if (staff() && !staff()->isTabStaff(tick())) {
-        if (!explicitParent()) {
-            m_noteWidth = -_spatium * 2;
-            m_notePos   = PointF(0.0, _spatium * 3);
-        }
-    }
-
-    double _lw = _lineWidth;
-    Note* note = toNote(explicitParent());
-    if (note == 0) {
-        m_noteWidth = 0.0;
-        m_notePos = PointF();
-    } else {
-        m_notePos   = note->pos();
-        m_notePos.ry() = std::max(m_notePos.y(), 0.0);
-        m_noteWidth = note->width();
-    }
-    RectF bb;
-
-    mu::draw::FontMetrics fm(font(_spatium));
-
-    size_t n   = m_points.size();
-    double x = m_noteWidth;
-    double y = -_spatium * .8;
-    double x2, y2;
-
-    double aw = _spatium * .5;
-    PolygonF arrowUp;
-    arrowUp << PointF(0, 0) << PointF(aw * .5, aw) << PointF(-aw * .5, aw);
-    PolygonF arrowDown;
-    arrowDown << PointF(0, 0) << PointF(aw * .5, -aw) << PointF(-aw * .5, -aw);
-
-    for (size_t pt = 0; pt < n; ++pt) {
-        if (pt == (n - 1)) {
-            break;
-        }
-        int pitch = m_points[pt].pitch;
-        if (pt == 0 && pitch) {
-            y2 = -m_notePos.y() - _spatium * 2;
-            x2 = x;
-            bb.unite(RectF(x, y, x2 - x, y2 - y));
-
-            bb.unite(arrowUp.translated(x2, y2 + _spatium * .2).boundingRect());
-
-            int idx = (pitch + 12) / 25;
-            const char* l = label[idx];
-            bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
-                                     draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
-                                     String::fromAscii(l)));
-            y = y2;
-        }
-        if (pitch == m_points[pt + 1].pitch) {
-            if (pt == (n - 2)) {
-                break;
-            }
-            x2 = x + _spatium;
-            y2 = y;
-            bb.unite(RectF(x, y, x2 - x, y2 - y));
-        } else if (pitch < m_points[pt + 1].pitch) {
-            // up
-            x2 = x + _spatium * .5;
-            y2 = -m_notePos.y() - _spatium * 2;
-            double dx = x2 - x;
-            double dy = y2 - y;
-
-            PainterPath path;
-            path.moveTo(x, y);
-            path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
-            bb.unite(path.boundingRect());
-            bb.unite(arrowUp.translated(x2, y2 + _spatium * .2).boundingRect());
-
-            int idx = (m_points[pt + 1].pitch + 12) / 25;
-            const char* l = label[idx];
-            bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
-                                     draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
-                                     String::fromAscii(l)));
-        } else {
-            // down
-            x2 = x + _spatium * .5;
-            y2 = y + _spatium * 3;
-            double dx = x2 - x;
-            double dy = y2 - y;
-
-            PainterPath path;
-            path.moveTo(x, y);
-            path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
-            bb.unite(path.boundingRect());
-
-            bb.unite(arrowDown.translated(x2, y2 - _spatium * .2).boundingRect());
-        }
-        x = x2;
-        y = y2;
-    }
-    bb.adjust(-_lw, -_lw, _lw, _lw);
-    setbbox(bb);
-    setPos(0.0, 0.0);
+    LayoutContext ctx(score());
+    TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

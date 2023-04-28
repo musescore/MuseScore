@@ -38,6 +38,7 @@
 #include "../libmscore/bagpembell.h"
 #include "../libmscore/barline.h"
 #include "../libmscore/beam.h"
+#include "../libmscore/bend.h"
 
 #include "../libmscore/note.h"
 
@@ -626,4 +627,113 @@ void TLayout::layout(Beam* item, LayoutContext& ctx)
 void TLayout::layout1(Beam* item, LayoutContext& ctx)
 {
     BeamLayout::layout1(item, ctx);
+}
+
+void TLayout::layout(Bend* item, LayoutContext&)
+{
+    // during mtest, there may be no score. If so, exit.
+    if (!item->score()) {
+        return;
+    }
+
+    double _spatium = item->spatium();
+
+    if (item->staff() && !item->staff()->isTabStaff(item->tick())) {
+        if (!item->explicitParent()) {
+            item->setNoteWidth(-_spatium * 2);
+            item->setNotePos(PointF(0.0, _spatium * 3));
+        }
+    }
+
+    double _lw = item->lineWidth();
+    Note* note = toNote(item->explicitParent());
+    if (note == 0) {
+        item->setNoteWidth(0.0);
+        item->setNotePos(PointF());
+    } else {
+        PointF notePos = note->pos();
+        notePos.ry() = std::max(notePos.y(), 0.0);
+
+        item->setNoteWidth(note->width());
+        item->setNotePos(notePos);
+    }
+    RectF bb;
+
+    mu::draw::FontMetrics fm(item->font(_spatium));
+
+    size_t n   = item->points().size();
+    double x = item->noteWidth();
+    double y = -_spatium * .8;
+    double x2, y2;
+
+    double aw = _spatium * .5;
+    PolygonF arrowUp;
+    arrowUp << PointF(0, 0) << PointF(aw * .5, aw) << PointF(-aw * .5, aw);
+    PolygonF arrowDown;
+    arrowDown << PointF(0, 0) << PointF(aw * .5, -aw) << PointF(-aw * .5, -aw);
+
+    for (size_t pt = 0; pt < n; ++pt) {
+        if (pt == (n - 1)) {
+            break;
+        }
+        int pitch = item->points().at(pt).pitch;
+        if (pt == 0 && pitch) {
+            y2 = -item->notePos().y() - _spatium * 2;
+            x2 = x;
+            bb.unite(RectF(x, y, x2 - x, y2 - y));
+
+            bb.unite(arrowUp.translated(x2, y2 + _spatium * .2).boundingRect());
+
+            int idx = (pitch + 12) / 25;
+            const char* l = Bend::label[idx];
+            bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
+                                     draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
+                                     String::fromAscii(l)));
+            y = y2;
+        }
+        if (pitch == item->points().at(pt + 1).pitch) {
+            if (pt == (n - 2)) {
+                break;
+            }
+            x2 = x + _spatium;
+            y2 = y;
+            bb.unite(RectF(x, y, x2 - x, y2 - y));
+        } else if (pitch < item->points().at(pt + 1).pitch) {
+            // up
+            x2 = x + _spatium * .5;
+            y2 = -item->notePos().y() - _spatium * 2;
+            double dx = x2 - x;
+            double dy = y2 - y;
+
+            PainterPath path;
+            path.moveTo(x, y);
+            path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
+            bb.unite(path.boundingRect());
+            bb.unite(arrowUp.translated(x2, y2 + _spatium * .2).boundingRect());
+
+            int idx = (item->points().at(pt + 1).pitch + 12) / 25;
+            const char* l = Bend::label[idx];
+            bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
+                                     draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
+                                     String::fromAscii(l)));
+        } else {
+            // down
+            x2 = x + _spatium * .5;
+            y2 = y + _spatium * 3;
+            double dx = x2 - x;
+            double dy = y2 - y;
+
+            PainterPath path;
+            path.moveTo(x, y);
+            path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
+            bb.unite(path.boundingRect());
+
+            bb.unite(arrowDown.translated(x2, y2 - _spatium * .2).boundingRect());
+        }
+        x = x2;
+        y = y2;
+    }
+    bb.adjust(-_lw, -_lw, _lw, _lw);
+    item->setbbox(bb);
+    item->setPos(0.0, 0.0);
 }
