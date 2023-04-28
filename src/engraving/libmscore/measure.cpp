@@ -932,7 +932,7 @@ void Measure::add(EngravingItem* e)
                 LOGD("there is already a <%s> segment", seg->subTypeName());
                 return;
             }
-            if (s->segmentType() > st) {
+            if (seg->goesBefore(s)) {
                 break;
             }
             s = s->next();
@@ -3578,6 +3578,7 @@ double Measure::createEndBarLines(bool isLastMeasureInSystem)
     // set relative position of end barline and clef
     // if end repeat, clef goes after, otherwise clef goes before
     Segment* clefSeg = findSegmentR(SegmentType::Clef, ticks());
+    ClefToBarlinePosition clefToBarlinePosition = ClefToBarlinePosition::AUTO;
     if (clefSeg) {
         bool wasVisible = clefSeg->visible();
         int visibleInt = 0;
@@ -3588,6 +3589,7 @@ double Measure::createEndBarLines(bool isLastMeasureInSystem)
             track_idx_t track = staffIdx * VOICES;
             Clef* clef = toClef(clefSeg->element(track));
             if (clef) {
+                clefToBarlinePosition = clef->clefToBarlinePosition();
                 bool showCourtesy = score()->genCourtesyClef() && clef->showCourtesy();         // normally show a courtesy clef
                 // check if the measure is the last measure of the system or the last measure before a frame
                 bool lastMeasure = isLastMeasureInSystem || (nm ? !(next() == nm) : true);
@@ -3620,7 +3622,7 @@ double Measure::createEndBarLines(bool isLastMeasureInSystem)
         if (seg) {
             Segment* s1;
             Segment* s2;
-            if (repeatEnd()) {
+            if (repeatEnd() && clefToBarlinePosition != ClefToBarlinePosition::BEFORE) {
                 s1 = seg;
                 s2 = clefSeg;
             } else {
@@ -3692,6 +3694,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
         if (isFirstSystem || score()->styleB(Sid::genClef)) {
             // find the clef type at the previous tick
             ClefTypeList cl = staff->clefType(tick() - Fraction::fromTicks(1));
+            bool showCourtesy = true;
             Segment* s = nullptr;
             if (prevMeasure()) {
                 // look for a clef change at the end of the previous measure
@@ -3704,6 +3707,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                 Clef* c = toClef(s->element(track));
                 if (c) {
                     cl = c->clefTypeList();
+                    showCourtesy = c->showCourtesy();
                 }
             }
             Clef* clef = nullptr;
@@ -3723,6 +3727,8 @@ void Measure::addSystemHeader(bool isFirstSystem)
                     clef->setTrack(track);
                     clef->setGenerated(true);
                     clef->setParent(cSegment);
+                    clef->setIsHeader(true);
+                    clef->setShowCourtesy(showCourtesy);
                     cSegment->add(clef);
                 }
                 if (clef->generated()) {

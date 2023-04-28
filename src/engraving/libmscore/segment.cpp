@@ -2858,4 +2858,36 @@ double Segment::computeDurationStretch(Segment* prevSeg, Fraction minTicks, Frac
 
     return durStretch;
 }
+
+bool Segment::goesBefore(const Segment* nextSegment) const
+{
+    bool thisIsClef = isClefType();
+    bool nextIsClef = nextSegment->isClefType();
+    bool thisIsBarline = isType(SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine);
+    bool nextIsBarline = nextSegment->isType(SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine);
+
+    if (thisIsClef && nextIsBarline) {
+        ClefToBarlinePosition clefPos = ClefToBarlinePosition::AUTO;
+        for (EngravingItem* item : elist()) {
+            if (item && item->isClef()) {
+                clefPos = toClef(item)->clefToBarlinePosition();
+                break;
+            }
+        }
+        return clefPos != ClefToBarlinePosition::AFTER;
+    }
+
+    if (thisIsBarline && nextIsClef) {
+        ClefToBarlinePosition clefPos = ClefToBarlinePosition::AUTO;
+        for (EngravingItem* item : nextSegment->elist()) {
+            if (item && item->isClef()) {
+                clefPos = toClef(item)->clefToBarlinePosition();
+                break;
+            }
+        }
+        return clefPos == ClefToBarlinePosition::AFTER;
+    }
+
+    return segmentType() < nextSegment->segmentType();
+}
 } // namespace mu::engraving

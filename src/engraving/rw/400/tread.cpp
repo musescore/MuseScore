@@ -2525,6 +2525,10 @@ void TRead::read(Clef* c, XmlReader& e, ReadContext& ctx)
             c->setShowCourtesy(e.readInt());
         } else if (tag == "forInstrumentChange") {
             c->setForInstrumentChange(e.readBool());
+        } else if (tag == "clefToBarlinePos") {
+            c->setClefToBarlinePosition(ClefToBarlinePosition(e.readInt()));
+        } else if (tag == "isHeader") {
+            c->setIsHeader(e.readBool());
         } else if (!readItemProperties(c, e, ctx)) {
             e.unknown();
         }

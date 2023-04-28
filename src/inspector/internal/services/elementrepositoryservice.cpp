@@ -85,7 +85,6 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     case mu::engraving::ElementType::BEAM: return findBeams();
     case mu::engraving::ElementType::STAFF: return findStaffs();
     case mu::engraving::ElementType::LAYOUT_BREAK: return findSectionBreaks(); //Page breaks and line breaks are of type LAYOUT_BREAK, but they don't appear in the inspector for now.
-    case mu::engraving::ElementType::CLEF: return findPairedClefs();
     case mu::engraving::ElementType::TEXT: return findTexts();
     case mu::engraving::ElementType::TREMOLO: return findTremolos();
     case mu::engraving::ElementType::BRACKET: return findBrackets();
@@ -366,29 +365,6 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findSectionBreaks
             }
 
             resultList << element;
-        }
-    }
-
-    return resultList;
-}
-
-QList<mu::engraving::EngravingItem*> ElementRepositoryService::findPairedClefs() const
-{
-    QList<mu::engraving::EngravingItem*> resultList;
-
-    for (mu::engraving::EngravingItem* element : m_exposedElementList) {
-        if (element->type() == mu::engraving::ElementType::CLEF) {
-            auto clef = mu::engraving::toClef(element);
-            IF_ASSERT_FAILED(clef) {
-                continue;
-            }
-
-            resultList << clef; //could be both main clef and courtesy clef
-
-            auto courtesyPairClef = clef->otherClef(); //seeking for a "pair" clef
-            if (courtesyPairClef) {
-                resultList << courtesyPairClef;
-            }
         }
     }
 

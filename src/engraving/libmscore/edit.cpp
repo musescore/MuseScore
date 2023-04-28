@@ -4872,7 +4872,8 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
         }
     } else if (e->rtick() == Fraction(0, 1)) {
         Measure* curMeasure = e->findMeasure();
-        if (curMeasure && curMeasure->prevMeasure()) {
+        Measure* prevMeasure = curMeasure ? curMeasure->prevMeasure() : nullptr;
+        if (prevMeasure && !prevMeasure->sectionBreak()) {
             moveClef = true;
         }
     } else if (e->isClef()) {
@@ -4966,6 +4967,7 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
             clef->setTrack(track);
             clef->setClefType(ct);
             clef->setParent(destSeg);
+            clef->setIsHeader(st == SegmentType::HeaderClef);
             score->undo(new AddElement(clef));
             clef->layout();
         }

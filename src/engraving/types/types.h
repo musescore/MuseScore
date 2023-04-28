@@ -525,6 +525,12 @@ enum class ClefType : signed char {
     MAX
 };
 
+enum class ClefToBarlinePosition : char {
+    AUTO,
+    BEFORE,
+    AFTER
+};
+
 // P_TYPE::DYNAMIC_TYPE
 enum class DynamicType : char {
     OTHER,

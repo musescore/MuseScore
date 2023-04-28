@@ -176,6 +176,9 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::LINE_TYPE:
                 set(idx, TConv::fromXml(e.readAsciiText(), LineType::SOLID));
                 break;
+            case P_TYPE::CLEF_TO_BARLINE_POS:
+                set(idx, ClefToBarlinePosition(e.readInt()));
+                break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
             }

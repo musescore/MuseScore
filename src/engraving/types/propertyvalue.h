@@ -92,6 +92,7 @@ enum class P_TYPE {
     NOTEHEAD_SCHEME,
     NOTEHEAD_GROUP,
     CLEF_TYPE,
+    CLEF_TO_BARLINE_POS,
     DYNAMIC_TYPE,
     DYNAMIC_RANGE,
     DYNAMIC_SPEED,
@@ -231,6 +232,9 @@ public:
 
     PropertyValue(ClefType v)
         : m_type(P_TYPE::CLEF_TYPE), m_data(make_data<ClefType>(v)) {}
+
+    PropertyValue(ClefToBarlinePosition v)
+        : m_type(P_TYPE::CLEF_TO_BARLINE_POS), m_data(make_data<ClefToBarlinePosition>(v)) {}
 
     PropertyValue(DynamicType v)
         : m_type(P_TYPE::DYNAMIC_TYPE), m_data(make_data<DynamicType>(v)) {}

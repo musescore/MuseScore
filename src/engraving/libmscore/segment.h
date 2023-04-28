@@ -329,6 +329,8 @@ public:
     void clearPreAppended(int track) { _preAppendedItems[track] = nullptr; }
     void addPreAppendedToShape();
 
+    bool goesBefore(const Segment* nextSegment) const;
+
     static constexpr SegmentType durationSegmentsMask = SegmentType::ChordRest;   // segment types which may have non-zero tick length
 };
 
