@@ -36,6 +36,12 @@ class BarLine;
 class Beam;
 class Bend;
 
+class Box;
+class HBox;
+class VBox;
+class FBox;
+class TBox;
+
 class TLayout
 {
 public:
@@ -53,9 +59,18 @@ public:
     static void layout1(Beam* item, LayoutContext& ctx);
     static void layout(Bend* item, LayoutContext& ctx);
 
+    static void layout(Box* item, LayoutContext& ctx);    // factory
+    static void layoutBox(Box* item, LayoutContext& ctx); // base
+    static void layout(HBox* item, LayoutContext& ctx);
+    static void layout(VBox* item, LayoutContext& ctx);
+    static void layout(FBox* item, LayoutContext& ctx);
+    static void layout(TBox* item, LayoutContext& ctx);
+
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
     static void layoutMultiGlyphAccidental(Accidental* item, LayoutContext& ctx);
+
+    static void adjustLayoutWithoutImages(VBox* item, LayoutContext& ctx);
 };
 }
 

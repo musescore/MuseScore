@@ -167,9 +167,6 @@ public:
     void startEditDrag(EditData&) override;
 
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
-
-private:
-    void adjustLayoutWithoutImages();
 };
 
 //---------------------------------------------------------
