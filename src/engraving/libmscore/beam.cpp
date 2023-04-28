@@ -1853,6 +1853,7 @@ Shape BeamSegment::shape() const
     // If not, break the beam shape into multiple rectangles
     double beamHeightDiff = endPoint.y() - startPoint.y();
     int subBoxesCount = floor(beamHorizontalLength / parentElement->spatium());
+    subBoxesCount = std::max(subBoxesCount, 1); // at least one rectangle, of course (avoid division by zero)
     double horizontalStep = beamHorizontalLength / subBoxesCount;
     double verticalStep = beamHeightDiff / subBoxesCount;
     std::vector<PointF> pointsOnBeamLine;
