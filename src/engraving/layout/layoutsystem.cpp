@@ -47,7 +47,7 @@
 #include "libmscore/volta.h"
 
 #include "beamlayout.h"
-#include "layoutchords.h"
+#include "chordlayout.h"
 #include "layoutharmonies.h"
 #include "layoutlyrics.h"
 #include "layoutmeasure.h"
@@ -843,7 +843,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
             Chord* c = toChord(e);
             c->layoutArticulations();
             c->layoutArticulations2();
-            LayoutChords::layoutChordBaseFingering(c, system);
+            ChordLayout::layoutChordBaseFingering(c, system);
             for (Note* note : c->notes()) {
                 for (EngravingItem* item : note->el()) {
                     if (item && item->isStretchedBend()) {
@@ -1423,7 +1423,7 @@ void LayoutSystem::updateCrossBeams(System* system, const LayoutContext& ctx)
                     chord->computeUp();
                     if (chord->up() != prevUp) {
                         // If the chord has changed direction needs to be re-laid out
-                        LayoutChords::layoutChords1(chord->score(), &seg, chord->vStaffIdx());
+                        ChordLayout::layoutChords1(chord->score(), &seg, chord->vStaffIdx());
                         seg.createShape(chord->vStaffIdx());
                     }
                 } else if (chord->tremolo() && chord->tremolo()->twoNotes()) {
@@ -1434,7 +1434,7 @@ void LayoutSystem::updateCrossBeams(System* system, const LayoutContext& ctx)
                         bool prevUp = chord->up();
                         chord->computeUp();
                         if (chord->up() != prevUp) {
-                            LayoutChords::layoutChords1(chord->score(), &seg, chord->vStaffIdx());
+                            ChordLayout::layoutChords1(chord->score(), &seg, chord->vStaffIdx());
                             seg.createShape(chord->vStaffIdx());
                         }
                     }

@@ -61,7 +61,7 @@ private:
     static void createBeamSegment(Beam* item, ChordRest* startChord, ChordRest* endChord, int level);
     static void createBeamletSegment(Beam* item, ChordRest* chord, bool isBefore, int level);
 
-    static bool layout2Cross(Beam *item, const std::vector<ChordRest*>& chordRests, int frag);
+    static bool layout2Cross(Beam* item, const std::vector<ChordRest*>& chordRests, int frag);
 };
 }
 

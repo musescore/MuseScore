@@ -31,7 +31,7 @@
 
 #include "realfn.h"
 
-#include "layout/layoutchords.h"
+#include "layout/chordlayout.h"
 #include "rw/400/measurerw.h"
 
 #include "style/style.h"
@@ -3184,7 +3184,7 @@ void Measure::layoutMeasureElements()
         }
 
         // After the rest of the spacing is calculated we position grace-notes-after.
-        LayoutChords::repositionGraceNotesAfter(&s);
+        ChordLayout::repositionGraceNotesAfter(&s);
 
         for (EngravingItem* e : s.elist()) {
             if (!e) {
@@ -4292,7 +4292,7 @@ void Measure::computeWidth(Fraction minTicks, Fraction maxTicks, double stretchC
         }
     }
 
-    LayoutChords::updateGraceNotes(this);
+    ChordLayout::updateGraceNotes(this);
 
     x = computeFirstSegmentXPosition(s);
     bool isSystemHeader = s->header();
@@ -4586,7 +4586,7 @@ void Measure::stretchMeasureInPracticeMode(double targetWidth)
             continue;
         }
         // After the rest of the spacing is calculated we position grace-notes-after.
-        LayoutChords::repositionGraceNotesAfter(&s);
+        ChordLayout::repositionGraceNotesAfter(&s);
         for (EngravingItem* e : s.elist()) {
             if (!e) {
                 continue;

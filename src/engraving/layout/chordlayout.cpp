@@ -19,18 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "layoutchords.h"
+#include "chordlayout.h"
 
 #include "containers.h"
 
+#include "libmscore/factory.h"
+
 #include "libmscore/accidental.h"
+#include "libmscore/arpeggio.h"
+
 #include "libmscore/beam.h"
 #include "libmscore/chord.h"
 #include "libmscore/fingering.h"
 #include "libmscore/glissando.h"
 #include "libmscore/hook.h"
+
+#include "libmscore/ledgerline.h"
+
 #include "libmscore/measure.h"
+
+#include "libmscore/navigate.h"
 #include "libmscore/note.h"
+
 #include "libmscore/part.h"
 #include "libmscore/rest.h"
 #include "libmscore/score.h"
@@ -41,9 +51,589 @@
 #include "libmscore/stemslash.h"
 #include "libmscore/system.h"
 #include "libmscore/tie.h"
+
+#include "libmscore/undo.h"
 #include "libmscore/utils.h"
 
 using namespace mu::engraving;
+
+void ChordLayout::layout(Chord* item, LayoutContext& ctx)
+{
+    if (item->notes().empty()) {
+        return;
+    }
+    if (item->onTabStaff()) {
+        layoutTablature(item, ctx);
+    } else {
+        layoutPitched(item, ctx);
+    }
+}
+
+void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
+{
+    int gi = 0;
+    for (Chord* c : item->_graceNotes) {
+        // HACK: graceIndex is not well-maintained on add & remove
+        // so rebuild now
+        c->setGraceIndex(gi++);
+        layoutPitched(c, ctx);
+    }
+
+    double _spatium         = item->spatium();
+    double mag_             = item->staff() ? item->staff()->staffMag(item) : 1.0;      // palette elements do not have a staff
+    double dotNoteDistance  = item->score()->styleMM(Sid::dotNoteDistance) * mag_;
+
+    double chordX           = (item->_noteType == NoteType::NORMAL) ? item->ipos().x() : 0.0;
+
+    while (item->_ledgerLines) {
+        LedgerLine* l = item->_ledgerLines->next();
+        delete item->_ledgerLines;
+        item->_ledgerLines = l;
+    }
+
+    double lll    = 0.0;           // space to leave at left of chord
+    double rrr    = 0.0;           // space to leave at right of chord
+    double lhead  = 0.0;           // amount of notehead to left of chord origin
+    Note* upnote = item->upNote();
+
+    delete item->_tabDur;     // no TAB? no duration symbol! (may happen when converting a TAB into PITCHED)
+    item->_tabDur = 0;
+
+    if (!item->segment()) {
+        //
+        // hack for use in palette
+        //
+        size_t n = item->_notes.size();
+        for (size_t i = 0; i < n; i++) {
+            Note* note = item->_notes.at(i);
+            note->layout();
+            double x = 0.0;
+            double y = note->line() * _spatium * .5;
+            note->setPos(x, y);
+        }
+        item->computeUp();
+        item->layoutStem();
+        item->addLedgerLines();
+        return;
+    }
+
+    //-----------------------------------------
+    //  process notes
+    //-----------------------------------------
+
+    // Keeps track if there are any accidentals in this chord.
+    // Used to remove excess space in front of arpeggios.
+    // See GitHub issue #8970 for more details.
+    // https://github.com/musescore/MuseScore/issues/8970
+    std::vector<Accidental*> chordAccidentals;
+
+    for (Note* note : item->_notes) {
+        note->layout();
+
+        double x1 = note->pos().x() + chordX;
+        double x2 = x1 + note->headWidth();
+        lll      = std::max(lll, -x1);
+        rrr      = std::max(rrr, x2);
+        // track amount of space due to notehead only
+        lhead    = std::max(lhead, -x1);
+
+        Accidental* accidental = note->accidental();
+        if (accidental && accidental->visible()) {
+            chordAccidentals.push_back(accidental);
+        }
+        if (accidental && accidental->addToSkyline() && !note->fixed()) {
+            // convert x position of accidental to segment coordinate system
+            double x = accidental->pos().x() + note->pos().x() + chordX;
+            // distance from accidental to note already taken into account
+            // but here perhaps we create more padding in *front* of accidental?
+            x -= item->score()->styleMM(Sid::accidentalDistance) * mag_;
+            lll = std::max(lll, -x);
+        }
+
+        // clear layout for note-based fingerings
+        for (EngravingItem* e : note->el()) {
+            if (e->isFingering()) {
+                Fingering* f = toFingering(e);
+                if (f->layoutType() == ElementType::NOTE) {
+                    f->setPos(PointF());
+                    f->setbbox(RectF());
+                }
+            }
+        }
+    }
+
+    //-----------------------------------------
+    //  create ledger lines
+    //-----------------------------------------
+
+    item->addLedgerLines();
+
+    if (item->_arpeggio) {
+        item->_arpeggio->computeHeight();
+        item->_arpeggio->layout();
+
+        double arpeggioNoteDistance = item->score()->styleMM(Sid::ArpeggioNoteDistance) * mag_;
+
+        double gapSize = arpeggioNoteDistance;
+
+        if (chordAccidentals.size()) {
+            double arpeggioAccidentalDistance = item->score()->styleMM(Sid::ArpeggioAccidentalDistance) * mag_;
+            double accidentalDistance = item->score()->styleMM(Sid::accidentalDistance) * mag_;
+            gapSize = arpeggioAccidentalDistance - accidentalDistance;
+            gapSize -= item->_arpeggio->insetDistance(chordAccidentals, mag_);
+        }
+
+        double extraX = item->_arpeggio->width() + gapSize + chordX;
+
+        double y1   = upnote->pos().y() - upnote->headHeight() * .5;
+        item->_arpeggio->setPos(-(lll + extraX), y1);
+        if (item->_arpeggio->visible()) {
+            lll += extraX;
+        }
+        // _arpeggio->layout() called in layoutArpeggio2()
+
+        // handle the special case of _arpeggio->span() > 1
+        // in layoutArpeggio2() after page layout has done so we
+        // know the y position of the next staves
+    }
+
+    if (item->dots()) {
+        double x = item->dotPosX() + dotNoteDistance
+                   + double(item->dots() - 1) * item->score()->styleMM(Sid::dotDotDistance) * mag_;
+        x += item->symWidth(SymId::augmentationDot);
+        rrr = std::max(rrr, x);
+    }
+
+    if (item->_hook) {
+        if (item->beam()) {
+            item->score()->undoRemoveElement(item->_hook);
+        } else {
+            item->_hook->layout();
+            if (item->up() && item->stem()) {
+                // hook position is not set yet
+                double x = item->_hook->bbox().right() + item->stem()->flagPosition().x() + chordX;
+                rrr = std::max(rrr, x);
+            }
+        }
+    }
+
+    item->_spaceLw = lll;
+    item->_spaceRw = rrr;
+
+    for (Note* note : item->_notes) {
+        note->layout2();
+    }
+
+    for (EngravingItem* e : item->el()) {
+        if (e->type() == ElementType::SLUR) {       // we cannot at this time as chordpositions are not fixed
+            continue;
+        }
+        e->layout();
+        if (e->type() == ElementType::CHORDLINE) {
+            RectF tbbox = e->bbox().translated(e->pos());
+            double lx = tbbox.left() + chordX;
+            double rx = tbbox.right() + chordX;
+            if (-lx > item->_spaceLw) {
+                item->_spaceLw = -lx;
+            }
+            if (rx > item->_spaceRw) {
+                item->_spaceRw = rx;
+            }
+        }
+    }
+
+    // align note-based fingerings
+    std::vector<Fingering*> alignNote;
+    double xNote = 10000.0;
+    for (Note* note : item->_notes) {
+        bool leftFound = false;
+        for (EngravingItem* e : note->el()) {
+            if (e->isFingering() && e->autoplace()) {
+                Fingering* f = toFingering(e);
+                if (f->layoutType() == ElementType::NOTE && f->textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
+                    alignNote.push_back(f);
+                    if (!leftFound) {
+                        leftFound = true;
+                        double xf = f->ipos().x();
+                        xNote = std::min(xNote, xf);
+                    }
+                }
+            }
+        }
+    }
+    for (Fingering* f : alignNote) {
+        f->setPosX(xNote);
+    }
+}
+
+void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
+{
+    double _spatium          = item->spatium();
+    double mag_ = item->staff() ? item->staff()->staffMag(item) : 1.0;    // palette elements do not have a staff
+    double dotNoteDistance = item->score()->styleMM(Sid::dotNoteDistance) * mag_;
+    double minNoteDistance = item->score()->styleMM(Sid::minNoteDistance) * mag_;
+    double minTieLength = item->score()->styleMM(Sid::MinTieLength) * mag_;
+
+    for (Chord* c : item->_graceNotes) {
+        layoutTablature(c, ctx);
+    }
+
+    while (item->_ledgerLines) {
+        LedgerLine* l = item->_ledgerLines->next();
+        delete item->_ledgerLines;
+        item->_ledgerLines = l;
+    }
+
+    double lll         = 0.0;                    // space to leave at left of chord
+    double rrr         = 0.0;                    // space to leave at right of chord
+    Note* upnote       = item->upNote();
+    double headWidth   = item->symWidth(SymId::noteheadBlack);
+    const Staff* st    = item->staff();
+    const StaffType* tab = st->staffTypeForElement(item);
+    double lineDist    = tab->lineDistance().val() * _spatium;
+    double stemX       = tab->chordStemPosX(item) * _spatium;
+    int ledgerLines = 0;
+    double llY         = 0.0;
+
+    size_t numOfNotes  = item->_notes.size();
+    double minY        = 1000.0;                 // just a very large value
+    for (size_t i = 0; i < numOfNotes; ++i) {
+        Note* note = item->_notes.at(i);
+        note->layout();
+        // set headWidth to max fret text width
+        double fretWidth = note->bbox().width();
+        if (headWidth < fretWidth) {
+            headWidth = fretWidth;
+        }
+        // centre fret string on stem
+        double x = stemX - fretWidth * 0.5;
+        double y = note->fixed() ? note->line() * lineDist / 2 : tab->physStringToYOffset(note->string()) * _spatium;
+        note->setPos(x, y);
+        if (y < minY) {
+            minY  = y;
+        }
+        int currLedgerLines   = tab->numOfTabLedgerLines(note->string());
+        if (currLedgerLines > ledgerLines) {
+            ledgerLines = currLedgerLines;
+            llY         = y;
+        }
+
+        // allow extra space for shortened ties; this code must be kept synchronized
+        // with the tie positioning code in Tie::slurPos()
+        // but the allocation of space needs to be performed here
+        Tie* tie;
+        tie = note->tieBack();
+        if (tie) {
+            tie->calculateDirection();
+            double overlap = 0.0;                // how much tie can overlap start and end notes
+            bool shortStart = false;            // whether tie should clear start note or not
+            Note* startNote = tie->startNote();
+            Chord* startChord = startNote->chord();
+            if (startChord && startChord->measure() == item->measure() && startChord == prevChordRest(item)) {
+                double startNoteWidth = startNote->width();
+                // overlap into start chord?
+                // if in start chord, there are several notes or stem and tie in same direction
+                if (startChord->notes().size() > 1 || (startChord->stem() && startChord->up() == tie->up())) {
+                    // clear start note (1/8 of fret mark width)
+                    shortStart = true;
+                    overlap -= startNoteWidth * 0.125;
+                } else {            // overlap start note (by ca. 1/3 of fret mark width)
+                    overlap += startNoteWidth * 0.35;
+                }
+                // overlap into end chord (this)?
+                // if several notes or neither stem or tie are up
+                if (item->notes().size() > 1 || (item->stem() && !item->up() && !tie->up())) {
+                    // for positive offset:
+                    //    use available space
+                    // for negative x offset:
+                    //    space is allocated elsewhere, so don't re-allocate here
+                    if (note->ipos().x() != 0.0) {                      // this probably does not work for TAB, as
+                        overlap += std::abs(note->ipos().x());              // _pos is used to centre the fret on the stem
+                    } else {
+                        overlap -= fretWidth * 0.125;
+                    }
+                } else {
+                    if (shortStart) {
+                        overlap += fretWidth * 0.15;
+                    } else {
+                        overlap += fretWidth * 0.35;
+                    }
+                }
+                double d = std::max(minTieLength - overlap, 0.0);
+                lll = std::max(lll, d);
+            }
+        }
+    }
+
+    // create ledger lines, if required (in some historic styles)
+    if (ledgerLines > 0) {
+// there seems to be no need for widening 'ledger lines' beyond fret mark widths; more 'on the field'
+// tests and usage will show if this depends on the metrics of the specific fonts used or not.
+//            double extraLen    = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
+        double extraLen    = 0;
+        double llX         = stemX - (headWidth + extraLen) * 0.5;
+        for (int i = 0; i < ledgerLines; i++) {
+            LedgerLine* ldgLin = new LedgerLine(item->score());
+            ldgLin->setParent(item);
+            ldgLin->setTrack(item->track());
+            ldgLin->setVisible(item->visible());
+            ldgLin->setLen(headWidth + extraLen);
+            ldgLin->setPos(llX, llY);
+            ldgLin->setNext(item->_ledgerLines);
+            item->_ledgerLines = ldgLin;
+            ldgLin->layout();
+            llY += lineDist / ledgerLines;
+        }
+        headWidth += extraLen;            // include ledger lines extra width in chord width
+    }
+
+    // horiz. spacing: leave half width at each side of the (potential) stem
+    double halfHeadWidth = headWidth * 0.5;
+    if (lll < stemX - halfHeadWidth) {
+        lll = stemX - halfHeadWidth;
+    }
+    if (rrr < stemX + halfHeadWidth) {
+        rrr = stemX + halfHeadWidth;
+    }
+    // align dots to the widest fret mark (not needed in all TAB styles, but harmless anyway)
+    item->setDotPosX(headWidth);
+
+    if (item->shouldHaveStem()) {
+        // if stem is required but missing, add it;
+        // set stem position (stem length is set in Chord:layoutStem() )
+        if (!item->_stem) {
+            Stem* stem = Factory::createStem(item);
+            stem->setParent(item);
+            stem->setGenerated(true);
+            item->score()->undo(new AddElement(stem));
+        }
+        item->_stem->setPos(tab->chordStemPos(item) * _spatium);
+        if (item->_hook) {
+            if (item->beam()) {
+                item->score()->undoRemoveElement(item->_hook);
+            } else {
+                if (rrr < stemX + item->_hook->width()) {
+                    rrr = stemX + item->_hook->width();
+                }
+
+                item->_hook->setPos(item->_stem->flagPosition());
+            }
+        }
+    } else {
+        if (item->_stem) {
+            item->score()->undo(new RemoveElement(item->_stem));
+            item->remove(item->_stem);
+        }
+        if (item->_hook) {
+            item->score()->undo(new RemoveElement(item->_hook));
+            item->remove(item->_hook);
+        }
+        if (item->_beam) {
+            item->score()->undo(new RemoveElement(item->_beam));
+            item->remove(item->_beam);
+        }
+    }
+
+    if (!tab->genDurations()                           // if tab is not set for duration symbols
+        || track2voice(item->track())                        // or not in first voice
+        || (item->isGrace()                                  // no tab duration symbols if grace notes
+            && item->beamMode() == BeamMode::AUTO)) {      // and beammode == AUTO
+        //
+        delete item->_tabDur;       // delete an existing duration symbol
+        item->_tabDur = 0;
+    } else {
+        //
+        // tab duration symbols
+        //
+        // if no previous CR
+        // OR symbol repeat set to ALWAYS
+        // OR symbol repeat condition is triggered
+        // OR duration type and/or number of dots is different from current CR
+        // OR chord beam mode not AUTO
+        // OR previous CR is a rest
+        // AND no not-stem
+        // set a duration symbol (trying to re-use existing symbols where existing to minimize
+        // symbol creation and deletion)
+        bool needTabDur = false;
+        bool repeat = false;
+        if (!item->noStem()) {
+            // check duration of prev. CR segm
+            ChordRest* prevCR = prevChordRest(item);
+            if (prevCR == 0) {
+                needTabDur = true;
+            } else if (item->beamMode() != BeamMode::AUTO
+                       || prevCR->durationType().type() != item->durationType().type()
+                       || prevCR->dots() != item->dots()
+                       || prevCR->tuplet() != item->tuplet()
+                       || prevCR->type() == ElementType::REST) {
+                needTabDur = true;
+            } else if (tab->symRepeat() == TablatureSymbolRepeat::ALWAYS
+                       || ((tab->symRepeat() == TablatureSymbolRepeat::MEASURE
+                            || tab->symRepeat() == TablatureSymbolRepeat::SYSTEM)
+                           && item->measure() != prevCR->measure())) {
+                needTabDur = true;
+                repeat = true;
+            }
+        }
+        if (needTabDur) {
+            // symbol needed; if not exist, create; if exists, update duration
+            if (!item->_tabDur) {
+                item->_tabDur = new TabDurationSymbol(item, tab, item->durationType().type(), item->dots());
+            } else {
+                item->_tabDur->setDuration(item->durationType().type(), item->dots(), tab);
+            }
+            item->_tabDur->setParent(item);
+            item->_tabDur->setRepeat(repeat);
+//                  _tabDur->setMag(mag());           // useless to set grace mag: graces have no dur. symbol
+            item->_tabDur->layout();
+            if (minY < 0) {                           // if some fret extends above tab body (like bass strings)
+                item->_tabDur->movePosY(minY);             // raise duration symbol
+                item->_tabDur->bbox().translate(0, minY);
+            }
+        } else {                                // symbol not needed: if exists, delete
+            delete item->_tabDur;
+            item->_tabDur = 0;
+        }
+    }                                     // end of if(duration_symbols)
+
+    if (item->_arpeggio) {
+        double headHeight = upnote->headHeight();
+        item->_arpeggio->layout();
+        lll += item->_arpeggio->width() + _spatium * .5;
+        double y = item->upNote()->pos().y() - headHeight * .5;
+        double h = item->downNote()->pos().y() + item->downNote()->headHeight() - y;
+        item->_arpeggio->setHeight(h);
+        item->_arpeggio->setPos(-lll, y);
+
+        // handle the special case of _arpeggio->span() > 1
+        // in layoutArpeggio2() after page layout has done so we
+        // know the y position of the next staves
+    }
+
+    // allocate enough room for glissandi
+    if (item->_endsGlissando) {
+        if (!item->rtick().isZero()) {                          // if not at beginning of measure
+            lll += _spatium * 0.5 + minTieLength;
+        }
+        // special case of system-initial glissando final note is handled in Glissando::layout() itself
+    }
+
+    if (item->_hook) {
+        if (item->beam()) {
+            item->score()->undoRemoveElement(item->_hook);
+        } else if (tab == 0) {
+            item->_hook->layout();
+            if (item->up()) {
+                // hook position is not set yet
+                double x = item->_hook->bbox().right() + item->stem()->flagPosition().x();
+                rrr = std::max(rrr, x);
+            }
+        }
+    }
+
+    if (item->dots()) {
+        double x = 0.0;
+        // if stems are beside staff, dots are placed near to stem
+        if (!tab->stemThrough()) {
+            // if there is an unbeamed hook, dots should start after the hook
+            if (item->_hook && !item->beam()) {
+                x = item->_hook->width() + dotNoteDistance;
+            }
+            // if not, dots should start at a fixed distance right after the stem
+            else {
+                x = STAFFTYPE_TAB_DEFAULTDOTDIST_X * _spatium;
+            }
+            item->setDotPosX(x);
+        }
+        // if stems are through staff, use dot position computed above on fret mark widths
+        else {
+            x = item->dotPosX() + dotNoteDistance
+                + (item->dots() - 1) * item->score()->styleS(Sid::dotDotDistance).val() * _spatium;
+        }
+        x += item->symWidth(SymId::augmentationDot);
+        rrr = std::max(rrr, x);
+    }
+
+    item->_spaceLw = lll;
+    item->_spaceRw = rrr;
+
+    double graceMag = item->score()->styleD(Sid::graceNoteMag);
+
+    std::vector<Chord*> graceNotesBefore = item->Chord::graceNotesBefore();
+    size_t nb = graceNotesBefore.size();
+    if (nb) {
+        double xl = -(item->_spaceLw + minNoteDistance);
+        for (int i = static_cast<int>(nb) - 1; i >= 0; --i) {
+            Chord* c = graceNotesBefore.at(i);
+            xl -= c->_spaceRw /* * 1.2*/;
+            c->setPos(xl, 0);
+            xl -= c->_spaceLw + minNoteDistance * graceMag;
+        }
+        if (-xl > item->_spaceLw) {
+            item->_spaceLw = -xl;
+        }
+    }
+    std::vector<Chord*> gna = item->graceNotesAfter();
+    size_t na = gna.size();
+    if (na) {
+        // get factor for start distance after main note. Values found by testing.
+        double fc;
+        switch (item->durationType().type()) {
+        case DurationType::V_LONG:    fc = 3.8;
+            break;
+        case DurationType::V_BREVE:   fc = 3.8;
+            break;
+        case DurationType::V_WHOLE:   fc = 3.8;
+            break;
+        case DurationType::V_HALF:    fc = 3.6;
+            break;
+        case DurationType::V_QUARTER: fc = 2.1;
+            break;
+        case DurationType::V_EIGHTH:  fc = 1.4;
+            break;
+        case DurationType::V_16TH:    fc = 1.2;
+            break;
+        default: fc = 1;
+        }
+        double xr = fc * (item->_spaceRw + minNoteDistance);
+        for (int i = 0; i <= static_cast<int>(na) - 1; i++) {
+            Chord* c = gna.at(i);
+            xr += c->_spaceLw * (i == 0 ? 1.3 : 1);
+            c->setPos(xr, 0);
+            xr += c->_spaceRw + minNoteDistance * graceMag;
+        }
+        if (xr > item->_spaceRw) {
+            item->_spaceRw = xr;
+        }
+    }
+    for (EngravingItem* e : item->el()) {
+        e->layout();
+        if (e->type() == ElementType::CHORDLINE) {
+            RectF tbbox = e->bbox().translated(e->pos());
+            double lx = tbbox.left();
+            double rx = tbbox.right();
+            if (-lx > item->_spaceLw) {
+                item->_spaceLw = -lx;
+            }
+            if (rx > item->_spaceRw) {
+                item->_spaceRw = rx;
+            }
+        }
+    }
+
+    for (size_t i = 0; i < numOfNotes; ++i) {
+        item->_notes.at(i)->layout2();
+    }
+    RectF bb;
+    item->processSiblings([&bb](EngravingItem* e) { bb.unite(e->bbox().translated(e->pos())); }, true);
+    if (item->_tabDur) {
+        bb.unite(item->_tabDur->bbox().translated(item->_tabDur->pos()));
+    }
+    item->setbbox(bb);
+    if (item->_stemSlash) {
+        item->_stemSlash->layout();
+    }
+}
 
 //---------------------------------------------------------
 //   layoutSegmentElements
@@ -66,7 +656,7 @@ static void layoutSegmentElements(Segment* segment, track_idx_t startTrack, trac
 //    - offset as necessary to avoid conflict
 //---------------------------------------------------------
 
-void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t staffIdx)
+void ChordLayout::layoutChords1(Score* score, Segment* segment, staff_idx_t staffIdx)
 {
     const Staff* staff = score->Score::staff(staffIdx);
     const bool isTab = staff->isTabStaff(segment->tick());
@@ -542,7 +1132,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
 //    - return maximum non-mirrored notehead width
 //---------------------------------------------------------
 
-double LayoutChords::layoutChords2(std::vector<Note*>& notes, bool up)
+double ChordLayout::layoutChords2(std::vector<Note*>& notes, bool up)
 {
     int startIdx, endIdx, incIdx;
     double maxWidth = 0.0;
@@ -812,7 +1402,7 @@ static std::pair<double, double> layoutAccidental(const MStyle& style, AcEl* me,
 //    - calculate positions of notes, accidentals, dots
 //---------------------------------------------------------
 
-void LayoutChords::layoutChords3(const MStyle& style, const std::vector<Chord*>& chords, std::vector<Note*>& notes, const Staff* staff)
+void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& chords, std::vector<Note*>& notes, const Staff* staff)
 {
     //---------------------------------------------------
     //    layout accidentals
@@ -1237,7 +1827,7 @@ void LayoutChords::layoutChords3(const MStyle& style, const std::vector<Chord*>&
  * attacched to the correct segment. Has to be performed after
  * all the segments are known.
  * */
-void LayoutChords::updateGraceNotes(Measure* measure)
+void ChordLayout::updateGraceNotes(Measure* measure)
 {
     Score* score = measure->score();
     // Clean everything
@@ -1281,7 +1871,7 @@ void LayoutChords::updateGraceNotes(Measure* measure)
     }
 }
 
-void LayoutChords::appendGraceNotes(Chord* chord)
+void ChordLayout::appendGraceNotes(Chord* chord)
 {
     Segment* segment = chord->segment();
     Measure* measure = chord->measure();
@@ -1321,7 +1911,7 @@ void LayoutChords::appendGraceNotes(Chord* chord)
 /* Grace-notes-after have the special property of belonging to
 *  a segment but being pre-appended to another. This repositioning
 *  is needed and must be called AFTER horizontal spacing is calculated. */
-void LayoutChords::repositionGraceNotesAfter(Segment* segment)
+void ChordLayout::repositionGraceNotesAfter(Segment* segment)
 {
     size_t tracks = segment->score()->staves().size() * VOICES;
     for (size_t track = 0; track < tracks; track++) {
@@ -1338,7 +1928,7 @@ void LayoutChords::repositionGraceNotesAfter(Segment* segment)
     }
 }
 
-void LayoutChords::clearLineAttachPoints(Measure* measure)
+void ChordLayout::clearLineAttachPoints(Measure* measure)
 {
     for (Segment& s : measure->segments()) {
         if (!s.isChordRestType()) {
@@ -1364,7 +1954,7 @@ void LayoutChords::clearLineAttachPoints(Measure* measure)
 /* We perform a pre-layout of ties and glissandi to obtain the attach points and attach them to
  * the notes of the chord. Will be needed for spacing calculation, particularly to
  * enforce minTieLength. The true layout of ties and glissandi is done much later. */
-void LayoutChords::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure)
+void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure)
 {
     if (chord->endsGlissando()) {
         for (Note* note : chord->notes()) {
@@ -1400,7 +1990,7 @@ void LayoutChords::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure)
     }
 }
 
-void LayoutChords::resolveVerticalRestConflicts(Score* score, Segment* segment, staff_idx_t staffIdx)
+void ChordLayout::resolveVerticalRestConflicts(Score* score, Segment* segment, staff_idx_t staffIdx)
 {
     std::vector<Rest*> rests;
     std::vector<Chord*> chords;
@@ -1426,8 +2016,8 @@ void LayoutChords::resolveVerticalRestConflicts(Score* score, Segment* segment, 
     resolveRestVSRest(rests, score, segment, staffIdx);
 }
 
-void LayoutChords::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord*>& chords, Score* score, Segment* segment,
-                                      staff_idx_t staffIdx)
+void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord*>& chords, Score* score, Segment* segment,
+                                     staff_idx_t staffIdx)
 {
     Fraction tick = segment->tick();
     Staff* staff = score->staff(staffIdx);
@@ -1490,7 +2080,7 @@ void LayoutChords::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Cho
     }
 }
 
-void LayoutChords::resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Segment* segment, staff_idx_t staffIdx, bool considerBeams)
+void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Segment* segment, staff_idx_t staffIdx, bool considerBeams)
 {
     if (rests.empty()) {
         return;
@@ -1612,7 +2202,7 @@ void LayoutChords::resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Se
     }
 }
 
-void LayoutChords::layoutChordBaseFingering(Chord* chord, System* system)
+void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system)
 {
     std::set<staff_idx_t> shapesToRecreate;
     std::list<Note*> notes;
