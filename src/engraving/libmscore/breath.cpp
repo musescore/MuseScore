@@ -23,6 +23,7 @@
 #include "breath.h"
 
 #include "types/symnames.h"
+#include "layout/tlayout.h"
 
 #include "measure.h"
 #include "score.h"
@@ -79,18 +80,8 @@ bool Breath::isCaesura() const
 
 void Breath::layout()
 {
-    bool palette = (!staff() || track() == mu::nidx);
-    if (!palette) {
-        int voiceOffset = placeBelow() * (staff()->lines(tick()) - 1) * spatium();
-        if (isCaesura()) {
-            setPos(xpos(), spatium() + voiceOffset);
-        } else if ((score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler") && (symId() == SymId::breathMarkComma)) {
-            setPos(xpos(), 0.5 * spatium() + voiceOffset);
-        } else {
-            setPos(xpos(), -0.5 * spatium() + voiceOffset);
-        }
-    }
-    setbbox(symBbox(_symId));
+    LayoutContext ctx(score());
+    TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

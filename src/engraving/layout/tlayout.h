@@ -43,6 +43,7 @@ class FBox;
 class TBox;
 
 class Bracket;
+class Breath;
 
 class TLayout
 {
@@ -69,6 +70,7 @@ public:
     static void layout(TBox* item, LayoutContext& ctx);
 
     static void layout(Bracket* item, LayoutContext& ctx);
+    static void layout(Breath* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
