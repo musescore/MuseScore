@@ -43,6 +43,7 @@
 #include "../libmscore/bend.h"
 #include "../libmscore/box.h"
 #include "../libmscore/bracket.h"
+#include "../libmscore/breath.h"
 
 #include "../libmscore/note.h"
 
@@ -967,4 +968,21 @@ void TLayout::layout(Bracket* item, LayoutContext&)
     case BracketType::NO_BRACKET:
         break;
     }
+}
+
+void TLayout::layout(Breath* item, LayoutContext&)
+{
+    bool palette = (!item->staff() || item->track() == mu::nidx);
+    if (!palette) {
+        int voiceOffset = item->placeBelow() * (item->staff()->lines(item->tick()) - 1) * item->spatium();
+        if (item->isCaesura()) {
+            item->setPos(item->xpos(), item->spatium() + voiceOffset);
+        } else if ((item->score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler")
+                   && (item->symId() == SymId::breathMarkComma)) {
+            item->setPos(item->xpos(), 0.5 * item->spatium() + voiceOffset);
+        } else {
+            item->setPos(item->xpos(), -0.5 * item->spatium() + voiceOffset);
+        }
+    }
+    item->setbbox(item->symBbox(item->symId()));
 }
