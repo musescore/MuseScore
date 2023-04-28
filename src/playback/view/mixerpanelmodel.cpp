@@ -39,11 +39,11 @@ MixerPanelModel::MixerPanelModel(QObject* parent)
     : QAbstractListModel(parent)
 {
     controller()->currentTrackSequenceIdChanged().onNotify(this, [this]() {
-        load(QVariant::fromValue(m_itemsNavigationSection), m_navigationPanelOrderStart);
+        load(QVariant::fromValue(m_itemsNavigationSection));
     });
 }
 
-void MixerPanelModel::load(const QVariant& navigationSection, int navigationPanelOrderStart)
+void MixerPanelModel::load(const QVariant& navigationSection)
 {
     TRACEFUNC;
 
@@ -54,7 +54,6 @@ void MixerPanelModel::load(const QVariant& navigationSection, int navigationPane
     }
 
     m_itemsNavigationSection = navigationSection.value<ui::NavigationSection*>();
-    m_navigationPanelOrderStart = navigationPanelOrderStart;
     m_currentTrackSequenceId = sequenceId;
 
     controller()->trackAdded().onReceive(this, [this](const TrackId trackId) {
@@ -219,7 +218,7 @@ void MixerPanelModel::updateItemsPanelsOrder()
     TRACEFUNC;
 
     for (int i = 0; i < m_mixerChannelList.size(); i++) {
-        m_mixerChannelList[i]->setPanelOrder(m_navigationPanelOrderStart + i + 1);
+        m_mixerChannelList[i]->setPanelOrder(i);
     }
 }
 
