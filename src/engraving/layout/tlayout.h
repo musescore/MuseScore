@@ -34,6 +34,7 @@ class Articulation;
 class BagpipeEmbellishment;
 class BarLine;
 class Beam;
+class Bend;
 
 class TLayout
 {
@@ -50,6 +51,7 @@ public:
     static void layout2(BarLine* item, LayoutContext& ctx);
     static void layout(Beam* item, LayoutContext& ctx);
     static void layout1(Beam* item, LayoutContext& ctx);
+    static void layout(Bend* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
