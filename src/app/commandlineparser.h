@@ -29,6 +29,8 @@
 #include "global/iapplication.h"
 #include "io/path.h"
 
+class QCoreApplication;
+
 namespace mu::app {
 class CommandLineParser
 {
@@ -148,6 +150,7 @@ public:
 
     void init();
     void parse(int argc, char** argv);
+    void processBuiltinArgs(const QCoreApplication& app);
 
     framework::IApplication::RunMode runMode() const;
 
