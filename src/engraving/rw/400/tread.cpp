@@ -40,7 +40,7 @@
 
 #include "../../libmscore/drumset.h"
 #include "../../libmscore/dynamic.h"
-
+#include "../../libmscore/expression.h"
 #include "../../libmscore/harmony.h"
 #include "../../libmscore/harmonicmark.h"
 #include "../../libmscore/chordlist.h"
@@ -147,7 +147,7 @@ using namespace mu::engraving::rw400;
 using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
                                  BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,  HBox, VBox, FBox, TBox, Bracket, Breath,
                                  Chord, ChordLine, Clef,
-                                 Dynamic,
+                                 Dynamic, Expression,
                                  Fermata, FiguredBass, Fingering, FretDiagram,
                                  Glissando, GradualTempoChange,
                                  Hairpin, Harmony, HarmonicMark, Hook,
@@ -598,8 +598,23 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
             d->setChangeInVelocity(e.readInt());
         } else if (tag == "veloChangeSpeed") {
             d->setVelChangeSpeed(TConv::fromXml(e.readAsciiText(), DynamicSpeed::NORMAL));
+        } else if (readProperty(d, tag, e, ctx, Pid::AVOID_BARLINES)) {
+        } else if (readProperty(d, tag, e, ctx, Pid::DYNAMICS_SIZE)) {
+        } else if (readProperty(d, tag, e, ctx, Pid::CENTER_ON_NOTEHEAD)) {
         } else if (!readProperties(static_cast<TextBase*>(d), e, ctx)) {
             e.unknown();
+        }
+    }
+}
+
+void TRead::read(Expression* expr, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag = xml.name();
+        if (tag == "snapToDynamics") {
+            readProperty(expr, xml, ctx, Pid::SNAP_TO_DYNAMICS);
+        } else if (!readProperties(static_cast<TextBase*>(expr), xml, ctx)) {
+            xml.unknown();
         }
     }
 }

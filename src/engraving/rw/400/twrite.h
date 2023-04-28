@@ -61,7 +61,7 @@ class Clef;
 
 class DurationElement;
 class Dynamic;
-
+class Expression;
 class Fermata;
 class FiguredBass;
 class FiguredBassItem;
@@ -198,7 +198,7 @@ public:
     static void write(const Clef* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx);
-
+    static void write(const Expression* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Fermata* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const FiguredBass* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const FiguredBassItem* item, XmlWriter& xml, WriteContext& ctx);

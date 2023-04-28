@@ -63,7 +63,7 @@
 
 #include "../../libmscore/drumset.h"
 #include "../../libmscore/dynamic.h"
-
+#include "../../libmscore/expression.h"
 #include "../../libmscore/fermata.h"
 #include "../../libmscore/figuredbass.h"
 #include "../../libmscore/fingering.h"
@@ -162,7 +162,7 @@ using namespace mu::engraving::rw400;
 using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
                                   BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,  HBox, VBox, FBox, TBox, Bracket, Breath,
                                   Chord, ChordLine, Clef,
-                                  Dynamic,
+                                  Dynamic, Expression,
                                   Fermata, FiguredBass, Fingering, FretDiagram,
                                   Glissando, GradualTempoChange,
                                   Hairpin, Harmony, HarmonicMark, Hook,
@@ -859,13 +859,26 @@ void TWrite::write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::DYNAMIC_TYPE);
     writeProperty(item, xml, Pid::VELOCITY);
     writeProperty(item, xml, Pid::DYNAMIC_RANGE);
+    writeProperty(item, xml, Pid::AVOID_BARLINES);
+    writeProperty(item, xml, Pid::DYNAMICS_SIZE);
+    writeProperty(item, xml, Pid::CENTER_ON_NOTEHEAD);
 
     if (item->isVelocityChangeAvailable()) {
         writeProperty(item, xml, Pid::VELO_CHANGE);
         writeProperty(item, xml, Pid::VELO_CHANGE_SPEED);
     }
 
-    writeProperties(static_cast<const TextBase*>(item), xml, ctx, item->dynamicType() == DynamicType::OTHER);
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, toDynamic(item)->hasCustomText());
+    xml.endElement();
+}
+
+void TWrite::write(const Expression* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
 

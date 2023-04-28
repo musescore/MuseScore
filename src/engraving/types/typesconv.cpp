@@ -168,6 +168,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::FERMATA,              "Fermata",              TranslatableString("engraving", "Fermata") },
     { ElementType::CHORDLINE,            "ChordLine",            TranslatableString("engraving", "Chord line") },
     { ElementType::DYNAMIC,              "Dynamic",              TranslatableString("engraving", "Dynamic") },
+    { ElementType::EXPRESSION,           "Expression",           TranslatableString("engraving", "Expression") },
     { ElementType::BEAM,                 "Beam",                 TranslatableString("engraving", "Beam") },
     { ElementType::BEAM_SEGMENT,         "BeamSegment",          TranslatableString("engraving", "Beam segment") },
     { ElementType::HOOK,                 "Hook",                 TranslatableString("engraving", "Flag") }, // internally called "Hook", but "Flag" in SMuFL, so here externally too

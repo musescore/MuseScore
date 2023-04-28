@@ -117,6 +117,7 @@ public:
         TYPE_TREMOLO,
         TYPE_MEASURE_REPEAT,
         TYPE_DYNAMIC,
+        TYPE_EXPRESSION,
         TYPE_TUPLET,
         TYPE_TEXT_LINE,
         TYPE_GRADUAL_TEMPO_CHANGE,
@@ -139,7 +140,8 @@ public:
 
     static InspectorModelType modelTypeByElementKey(const ElementKey& elementKey);
     static QSet<InspectorModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
-    static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange);
+    static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,
+                                                                const QList<mu::engraving::EngravingItem*>& selectedElementList = {});
 
     virtual bool isEmpty() const;
 

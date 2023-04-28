@@ -36,6 +36,7 @@ class EngravingItem;
 class TextBase;
 class TempoText;
 class Dynamic;
+class Expression;
 class FretDiagram;
 class Sticking;
 class SystemText;
@@ -205,6 +206,7 @@ public:
     static void read(Clef* c, XmlReader& xml, ReadContext& ctx);
 
     static void read(Excerpt* item, XmlReader& xml, ReadContext& ctx);
+    static void read(Expression* item, XmlReader& xml, ReadContext& ctx);
 
     static void read(Fermata* f, XmlReader& xml, ReadContext& ctx);
     static void read(FiguredBass* b, XmlReader& xml, ReadContext& ctx);

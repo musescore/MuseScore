@@ -626,10 +626,15 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::autoplaceHairpinDynamicsDistance, "autoplaceHairpinDynamicsDistance", Spatium(0.5) },
 
+    { Sid::dynamicsOverrideFont,    "dynamicsOverrideFont",    false },
+    { Sid::dynamicsFont,            "dynamicsFont",            PropertyValue(String(u"Leland")) },
+    { Sid::dynamicsSize,            "dynamicsSize",            1.0 }, // percentage of the standard size
     { Sid::dynamicsPlacement,       "dynamicsPlacement",       PlacementV::BELOW },
     { Sid::dynamicsPosAbove,        "dynamicsPosAbove",        PointF(.0, -1.5) },
     { Sid::dynamicsPosBelow,        "dynamicsPosBelow",        PointF(.0, 2.5) },
-
+    { Sid::avoidBarLines,           "avoidBarLines",           true },
+    { Sid::snapToDynamics,          "snapToDynamics",          true },
+    { Sid::centerOnNotehead,        "centerOnNotehead",        true },
     { Sid::dynamicsMinDistance,         "dynamicsMinDistance",               Spatium(0.5) },
     { Sid::autoplaceVerticalAlignRange, "autoplaceVerticalAlignRange",     int(VerticalAlignRange::SYSTEM) },
 
@@ -844,6 +849,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::partInstrumentFrameFgColor,    "partInstrumentFrameFgColor",   PropertyValue::fromValue(Color::BLACK) },
     { Sid::partInstrumentFrameBgColor,    "partInstrumentFrameBgColor",   PropertyValue::fromValue(Color::transparent) },
 
+    // OBSOLETE after version 4.1. Dynamic text now takes its setting from expression.
     { Sid::dynamicsFontFace,              "dynamicsFontFace",             "Edwin" },
     { Sid::dynamicsFontSize,              "dynamicsFontSize",             10.0 },
     { Sid::dynamicsLineSpacing,           "dynamicsLineSpacing",          1.0 },
@@ -873,6 +879,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::expressionFrameRound,          "expressionFrameRound",         0 },
     { Sid::expressionFrameFgColor,        "expressionFrameFgColor",       PropertyValue::fromValue(Color::BLACK) },
     { Sid::expressionFrameBgColor,        "expressionFrameBgColor",       PropertyValue::fromValue(Color::transparent) },
+    { Sid::expressionMinDistance,         "expressionMinDistance",        Spatium(.5) },
 
     { Sid::tempoFontFace,                 "tempoFontFace",                "Edwin" },
     { Sid::tempoFontSize,                 "tempoFontSize",                12.0 },

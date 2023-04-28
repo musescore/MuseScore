@@ -389,6 +389,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                     undoAddElement(harmony);
                     pastedHarmony.push_back(harmony);
                 } else if (tag == "Dynamic"
+                           || tag == "Expression"
                            || tag == "Symbol"
                            || tag == "FretDiagram"
                            || tag == "TremoloBar"

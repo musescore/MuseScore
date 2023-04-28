@@ -2215,6 +2215,7 @@ void Score::cmdFlip()
                    || e->isSticking()
                    || e->isFingering()
                    || e->isDynamic()
+                   || e->isExpression()
                    || e->isHarmony()
                    || e->isFretDiagram()
                    || e->isHairpin()
@@ -5613,6 +5614,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::PEDAL
             && et != ElementType::BREATH
             && et != ElementType::DYNAMIC
+            && et != ElementType::EXPRESSION
             && et != ElementType::STAFF_TEXT
             && et != ElementType::SYSTEM_TEXT
             && et != ElementType::TRIPLET_FEEL
@@ -5683,6 +5685,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                            || element->isImage()
                            || element->isTremoloBar()
                            || element->isDynamic()
+                           || element->isExpression()
                            || element->isStaffText()
                            || element->isPlayTechAnnotation()
                            || element->isSticking()
@@ -5716,6 +5719,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     case ElementType::HARMONY:
                     case ElementType::FIGURED_BASS:
                     case ElementType::DYNAMIC:
+                    case ElementType::EXPRESSION:
                     case ElementType::LYRICS:                   // not normally segment-attached
                         continue;
                     default:
@@ -5809,6 +5813,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                      || element->isImage()
                      || element->isTremoloBar()
                      || element->isDynamic()
+                     || element->isExpression()
                      || element->isStaffText()
                      || element->isPlayTechAnnotation()
                      || element->isSticking()

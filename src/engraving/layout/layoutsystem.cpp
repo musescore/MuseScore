@@ -957,8 +957,8 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
             if (e->isDynamic()) {
                 Dynamic* d = toDynamic(e);
                 d->layout();
-
                 if (d->autoplace()) {
+                    d->manageBarlineCollisions();
                     d->autoplaceSegmentElement(false);
                     dynamics.push_back(d);
                 }
@@ -970,7 +970,6 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     }
 
     // add dynamics shape to skyline
-
     for (Dynamic* d : dynamics) {
         if (!d->addToSkyline()) {
             continue;
@@ -979,6 +978,21 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         Segment* s = d->segment();
         Measure* m = s->measure();
         system->staff(si)->skyline().add(d->shape().translate(d->pos() + s->pos() + m->pos()));
+    }
+
+    //-------------------------------------------------------------
+    // Expressions
+    // Must be done after dynamics. Remember that expressions may
+    // also snap into alignment with dynamics.
+    //-------------------------------------------------------------
+    for (Segment* s : sl) {
+        Measure* m = s->measure();
+        for (EngravingItem* e : s->annotations()) {
+            if (e->isExpression()) {
+                e->layout();
+                system->staff(e->staffIdx())->skyline().add(e->shape().translate(e->pos() + s->pos() + m->pos()));
+            }
+        }
     }
 
     //-------------------------------------------------------------

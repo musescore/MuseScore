@@ -58,6 +58,8 @@ import "tuplets"
 import "instrumentname"
 import "lyrics"
 import "rests"
+import "dynamics"
+import "expressions"
 
 Loader {
     id: root
@@ -129,6 +131,8 @@ Loader {
             case Inspector.TYPE_LYRICS: return lyricsComp
             case Inspector.TYPE_REST: return restComp
             case Inspector.TYPE_REST_BEAM: return restComp
+            case Inspector.TYPE_DYNAMIC: return dynamicComp
+            case Inspector.TYPE_EXPRESSION: return expressionComp
             }
 
             return null
@@ -326,5 +330,15 @@ Loader {
     Component {
         id: restComp
         RestSettings {}
+    }
+
+    Component {
+        id: dynamicComp
+        DynamicsSettings {}
+    }
+
+    Component {
+        id: expressionComp
+        ExpressionsSettings {}
     }
 }

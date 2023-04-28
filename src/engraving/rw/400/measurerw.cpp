@@ -32,6 +32,7 @@
 #include "../libmscore/breath.h"
 #include "../libmscore/chord.h"
 #include "../libmscore/dynamic.h"
+#include "../libmscore/expression.h"
 #include "../libmscore/factory.h"
 #include "../libmscore/fermata.h"
 #include "../libmscore/keysig.h"
@@ -439,6 +440,12 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             dyn->setTrack(ctx.track());
             TRead::read(dyn, e, ctx);
             segment->add(dyn);
+        } else if (tag == "Expression") {
+            segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
+            Expression* expr = Factory::createExpression(segment);
+            expr->setTrack(ctx.track());
+            TRead::read(expr, e, ctx);
+            segment->add(expr);
         } else if (tag == "Harmony") {
             // hack - getSegment needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure
@@ -503,13 +510,23 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             // for symbols attached to anything but a measure
             segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
             StaffText* el = Factory::createStaffText(segment);
-
             el->setTrack(ctx.track());
             TRead::read(el, e, ctx);
-            if (el->systemFlag() && el->isTopSystemObject()) {
-                el->setTrack(0); // original system object always goes on top
+            if (el->textStyleType() != TextStyleType::EXPRESSION) {
+                if (el->systemFlag() && el->isTopSystemObject()) {
+                    el->setTrack(0); // original system object always goes on top
+                }
+                segment->add(el);
+            } else {
+                // Starting from version 4.1, Expressions have their own class.
+                // Map "old" expression objects into the "new" expression object.
+                Expression* expression = Factory::createExpression(segment);
+                expression->setTrack(ctx.track());
+                expression->setXmlText(el->xmlText());
+                expression->mapPropertiesFromOldExpressions(el);
+                segment->add(expression);
+                delete el;
             }
-            segment->add(el);
         } else if (tag == "Sticking"
                    || tag == "SystemText"
                    || tag == "PlayTechAnnotation"
