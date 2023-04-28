@@ -311,7 +311,14 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                                                                                    event.pitch(), 0));
                     }
 
-                    if (event.getOriginatingStaff() != staffIdx) {
+                    int equivalentStaffIdx = staffIdx;
+                    for (Staff* st : m_score->masterScore()->staves()) {
+                        if (staff->id() == st->id()) {
+                            equivalentStaffIdx = st->idx();
+                        }
+                    }
+
+                    if (event.getOriginatingStaff() != equivalentStaffIdx) {
                         continue;
                     }
 

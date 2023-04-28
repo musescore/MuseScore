@@ -636,6 +636,11 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
                                           PitchWheelRenderer& pitchWheelRenderer)
 {
     staff_idx_t firstStaffIdx = staff->idx();
+    for (Staff* st : staff->masterScore()->staves()) {
+        if (staff->id() == st->id()) {
+            firstStaffIdx = st->idx();
+        }
+    }
     staff_idx_t nextStaffIdx  = firstStaffIdx + 1;
 
     SegmentType st = SegmentType::ChordRest;
