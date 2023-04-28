@@ -59,6 +59,8 @@ private:
     Measure* _measure = nullptr;
 
     friend class Factory;
+    friend class TLayout;
+
     Bracket(EngravingItem* parent);
 
 public:
