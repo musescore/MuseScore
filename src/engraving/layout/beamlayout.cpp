@@ -42,7 +42,7 @@
 #include "libmscore/note.h"
 
 #include "layoutcontext.h"
-#include "layoutchords.h"
+#include "chordlayout.h"
 
 #include "log.h"
 
@@ -898,8 +898,8 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam)
         std::vector<Chord*> chords;
         std::vector<Rest*> rests;
         collectChordsAndRest(segment, staffIdx, chords, rests);
-        LayoutChords::resolveRestVSChord(rests, chords, score, segment, staffIdx);
-        LayoutChords::resolveRestVSRest(rests, score, segment, staffIdx, /*considerBeams*/ true);
+        ChordLayout::resolveRestVSChord(rests, chords, score, segment, staffIdx);
+        ChordLayout::resolveRestVSRest(rests, score, segment, staffIdx, /*considerBeams*/ true);
     }
     beam->layout();
 }

@@ -36,9 +36,11 @@ class Score;
 class Segment;
 class Staff;
 
-class LayoutChords
+class ChordLayout
 {
 public:
+
+    static void layout(Chord* item, LayoutContext& ctx);
 
     static void layoutChords1(Score* score, Segment* segment, staff_idx_t staffIdx);
     static double layoutChords2(std::vector<Note*>& notes, bool up);
@@ -54,6 +56,10 @@ public:
     static void resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Segment* segment, staff_idx_t staffIdx,
                                   bool considerBeams = false);
     static void layoutChordBaseFingering(Chord* chord, System* system);
+
+private:
+    static void layoutPitched(Chord* item, LayoutContext& ctx);
+    static void layoutTablature(Chord* item, LayoutContext& ctx);
 };
 }
 

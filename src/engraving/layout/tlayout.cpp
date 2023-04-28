@@ -45,6 +45,8 @@
 #include "../libmscore/bracket.h"
 #include "../libmscore/breath.h"
 
+#include "../libmscore/chord.h"
+
 #include "../libmscore/note.h"
 
 #include "../libmscore/staff.h"
@@ -54,6 +56,7 @@
 #include "../libmscore/textframe.h"
 
 #include "beamlayout.h"
+#include "chordlayout.h"
 
 using namespace mu::draw;
 using namespace mu::engraving;
@@ -985,4 +988,9 @@ void TLayout::layout(Breath* item, LayoutContext&)
         }
     }
     item->setbbox(item->symBbox(item->symId()));
+}
+
+void TLayout::layout(Chord* item, LayoutContext& ctx)
+{
+    ChordLayout::layout(item, ctx);
 }

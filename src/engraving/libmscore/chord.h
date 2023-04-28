@@ -147,6 +147,8 @@ private:
     std::vector<Articulation*> _articulations;
 
     friend class Factory;
+    friend class ChordLayout;
+
     Chord(Segment* parent = 0);
     Chord(const Chord&, bool link = false);
 
@@ -157,9 +159,6 @@ private:
 
     // `includeTemporarySiblings`: whether items that are deleted & recreated during every layout should also be processed
     void processSiblings(std::function<void(EngravingItem*)> func, bool includeTemporarySiblings) const;
-
-    void layoutPitched();
-    void layoutTablature();
 
     bool shouldHaveStem() const;
     bool shouldHaveHook() const;
