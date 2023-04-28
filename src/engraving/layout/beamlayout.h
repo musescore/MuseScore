@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTBEAMS_H
-#define MU_ENGRAVING_LAYOUTBEAMS_H
+#ifndef MU_ENGRAVING_BEAMLAYOUT_H
+#define MU_ENGRAVING_BEAMLAYOUT_H
 
 #include <vector>
+
+#include "types/types.h"
 
 namespace mu::engraving {
 class Beam;
@@ -34,21 +36,33 @@ class Score;
 class Segment;
 
 class LayoutContext;
-class LayoutBeams
+class BeamLayout
 {
 public:
+
+    static void layout(Beam* item, LayoutContext& ctx);
+    static void layout1(Beam* item, LayoutContext& ctx);
 
     static bool isTopBeam(ChordRest* cr);
     static bool notTopBeam(ChordRest* cr);
     static void createBeams(Score* score, LayoutContext& lc, Measure* measure);
     static void restoreBeams(Measure* m);
-    static void breakCrossMeasureBeams(const LayoutContext& ctx, Measure* measure);
+    static void breakCrossMeasureBeams(LayoutContext& ctx, Measure* measure);
     static void layoutNonCrossBeams(Segment* s);
     static void verticalAdjustBeamedRests(Rest* rest, Beam* beam);
 
 private:
     static void beamGraceNotes(Score* score, Chord* mainNote, bool after);
+
+    static void layout2(Beam* item, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag);
+
+    static void createBeamSegments(Beam* item, const std::vector<ChordRest*>& chordRests);
+    static bool calcIsBeamletBefore(const Beam* item, Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break);
+    static void createBeamSegment(Beam* item, ChordRest* startChord, ChordRest* endChord, int level);
+    static void createBeamletSegment(Beam* item, ChordRest* chord, bool isBefore, int level);
+
+    static bool layout2Cross(Beam *item, const std::vector<ChordRest*>& chordRests, int frag);
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUTBEAMS_H
+#endif // MU_ENGRAVING_BEAMLAYOUT_H

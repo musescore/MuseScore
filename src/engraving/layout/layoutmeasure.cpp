@@ -38,7 +38,7 @@
 #include "libmscore/undo.h"
 
 #include "layoutcontext.h"
-#include "layoutbeams.h"
+#include "beamlayout.h"
 #include "layoutchords.h"
 #include "layouttremolo.h"
 
@@ -824,7 +824,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         }
     }
 
-    LayoutBeams::createBeams(score, ctx, measure);
+    BeamLayout::createBeams(score, ctx, measure);
     /* HACK: The real beam layout is computed at much later stage (you can't do the beams until you know
      * horizontal spacing). However, horizontal spacing needs to know stems extensions to avoid collision
      * with stems, and stems extensions depend on beams. Solution: we compute dummy beams here, *before*
@@ -834,7 +834,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         if (!s.isChordRestType()) {
             continue;
         }
-        LayoutBeams::layoutNonCrossBeams(&s);
+        BeamLayout::layoutNonCrossBeams(&s);
     }
 
     for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {

@@ -889,6 +889,10 @@ enum class LyricsSyllabic : char {
     SINGLE, BEGIN, END, MIDDLE
 };
 
+enum class SpannerSegmentType {
+    SINGLE, BEGIN, MIDDLE, END
+};
+
 //---------------------------------------------------------
 //   Key
 //---------------------------------------------------------

@@ -46,7 +46,7 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
 
-#include "layoutbeams.h"
+#include "beamlayout.h"
 #include "layoutchords.h"
 #include "layoutharmonies.h"
 #include "layoutlyrics.h"
@@ -376,7 +376,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     m->computeWidth(m->system()->minSysTicks(), m->system()->maxSysTicks(), oldStretch);
                     m->stretchToTargetWidth(oldWidth);
                     m->layoutMeasureElements();
-                    LayoutBeams::restoreBeams(m);
+                    BeamLayout::restoreBeams(m);
                     if (m == nm || !m->noBreak()) {
                         break;
                     }
@@ -396,7 +396,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     // Create end barlines
     if (ctx.prevMeasure && ctx.prevMeasure->isMeasure()) {
         Measure* pm = toMeasure(ctx.prevMeasure);
-        LayoutBeams::breakCrossMeasureBeams(ctx, pm);
+        BeamLayout::breakCrossMeasureBeams(ctx, pm);
         pm->createEndBarLines(true);
     }
 
@@ -719,7 +719,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         if (!s->isChordRestType()) {
             continue;
         }
-        LayoutBeams::layoutNonCrossBeams(s);
+        BeamLayout::layoutNonCrossBeams(s);
         // Must recreate the shapes because stem lengths may have been changed!
         s->createShapes();
     }
@@ -732,7 +732,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
             Rest* rest = toRest(item);
             Beam* beam = rest->beam();
             if (beam && !beam->cross()) {
-                LayoutBeams::verticalAdjustBeamedRests(rest, beam);
+                BeamLayout::verticalAdjustBeamedRests(rest, beam);
             }
         }
     }
@@ -820,7 +820,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                         // add beams to skline
                         if (e->isChordRest()) {
                             ChordRest* cr = toChordRest(e);
-                            if (LayoutBeams::isTopBeam(cr)) {
+                            if (BeamLayout::isTopBeam(cr)) {
                                 Beam* b = cr->beam();
                                 b->addSkyline(skyline);
                             }

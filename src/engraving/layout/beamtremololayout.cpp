@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "beam.h"
-#include "chordrest.h"
-#include "note.h"
-#include "score.h"
-#include "staff.h"
-#include "stem.h"
-#include "stemslash.h"
-#include "tremolo.h"
+#include "../libmscore/beam.h"
+#include "../libmscore/chordrest.h"
+#include "../libmscore/note.h"
+#include "../libmscore/score.h"
+#include "../libmscore/staff.h"
+#include "../libmscore/stem.h"
+#include "../libmscore/stemslash.h"
+#include "../libmscore/tremolo.h"
 
 #include "log.h"
 
