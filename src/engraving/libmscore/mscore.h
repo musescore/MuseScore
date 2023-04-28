@@ -122,6 +122,10 @@ static constexpr double DPI       = 72.0 * DPI_F;
 static constexpr double SPATIUM20 = 5.0 * (DPI / 72.0);
 static constexpr double DPMM      = DPI / INCH;
 
+// NOTE: the Smufl default is actually 20pt. We use 10 for historical reasons
+// and back-compatibility, but this will be multiplied x2 during dynamic layout.
+static constexpr double DYNAMICS_DEFAULT_FONT_SIZE = 10.0;
+
 static constexpr int MAX_STAVES = 4;
 
 static constexpr char mimeSymbolFormat[]     = "application/musescore/symbol";

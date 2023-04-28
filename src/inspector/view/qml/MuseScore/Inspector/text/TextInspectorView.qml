@@ -187,6 +187,7 @@ InspectorSectionView {
                 width: parent.width
 
                 RadioButtonGroup {
+                    enabled: root.model ? root.model.isHorizontalAlignmentAvailable : false
                     id: horizontalAlignmentButtonList
 
                     property int navigationRowStart: alignmentSection.navigationRowStart + 1

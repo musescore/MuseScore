@@ -425,7 +425,7 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
             } else {
                 sp = score()->spatium();
             }
-            EngravingObject::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).value<PointF>() * sp);
+            setProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).value<PointF>() * sp);
             EngravingItem* e = toEngravingItem(this);
             e->setOffsetChanged(false);
         }
@@ -694,6 +694,7 @@ bool EngravingObject::isTextBase() const
     return type() == ElementType::TEXT
            || type() == ElementType::LYRICS
            || type() == ElementType::DYNAMIC
+           || type() == ElementType::EXPRESSION
            || type() == ElementType::FINGERING
            || type() == ElementType::HARMONY
            || type() == ElementType::MARKER

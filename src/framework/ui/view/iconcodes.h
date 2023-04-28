@@ -381,6 +381,10 @@ public:
 
         QUAVER_REST = 0xF44C,
 
+        DYNAMIC_CENTER_1 = 0xF451,
+        DYNAMIC_CENTER_2 = 0xF452,
+        EXPRESSION = 0xF453,
+
         NONE = 0xFFFF
     };
 

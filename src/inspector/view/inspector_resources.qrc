@@ -99,5 +99,8 @@
         <file>qml/MuseScore/Inspector/notation/lyrics/LyricsSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/rests/RestBeamSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/rests/RestSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/expressions/ExpressionsSettings.qml</file>
+        <file>qml/MuseScore/Inspector/common/FrameSettings.qml</file>
     </qresource>
 </RCC>

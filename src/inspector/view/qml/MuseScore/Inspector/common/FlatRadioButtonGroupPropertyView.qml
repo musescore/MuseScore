@@ -30,6 +30,8 @@ InspectorPropertyView {
 
     property alias radioButtonGroup: radioButtonGroupItem
     property alias model: radioButtonGroupItem.model
+    property int requestHeight: 30
+    property int requestIconFontSize: 0
 
     navigationRowEnd: navigationRowStart /* Menu button */ + radioButtonGroupItem.count /* FlatRadioButtons */
 
@@ -43,6 +45,7 @@ InspectorPropertyView {
 
         text: modelData["text"] ?? ""
         iconCode: modelData["iconCode"] ?? IconCode.NONE
+        iconFontSize: root.requestIconFontSize != 0 ? root.requestIconFontSize : ui.theme.iconsFont.pixelSize
 
         navigation.name: root.navigationName + (Boolean(text) ? text : modelData["title"])
         navigation.panel: root.navigationPanel
@@ -62,7 +65,7 @@ InspectorPropertyView {
     RadioButtonGroup {
         id: radioButtonGroupItem
 
-        height: 30
+        height: root.requestHeight
         width: parent.width
 
         delegate: Delegate {}

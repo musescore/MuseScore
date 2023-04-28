@@ -69,6 +69,7 @@ class Clef;
 class DeadSlapped;
 class DurationElement;
 class Dynamic;
+class Expression;
 class EngravingItem;
 class EngravingObject;
 class FBox;
@@ -362,6 +363,7 @@ public:
     CONVERT(Tuplet,        TUPLET)
     CONVERT(NoteDot,       NOTEDOT)
     CONVERT(Dynamic,       DYNAMIC)
+    CONVERT(Expression,    EXPRESSION)
     CONVERT(InstrumentName, INSTRUMENT_NAME)
     CONVERT(Accidental,    ACCIDENTAL)
     CONVERT(TextLine,      TEXTLINE)
@@ -708,6 +710,7 @@ CONVERT(MMRest)
 CONVERT(Tuplet)
 CONVERT(NoteDot)
 CONVERT(Dynamic)
+CONVERT(Expression)
 CONVERT(InstrumentName)
 CONVERT(Accidental)
 CONVERT(TextLine)

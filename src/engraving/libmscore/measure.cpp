@@ -1576,6 +1576,7 @@ EngravingItem* Measure::drop(EditData& data)
         return e;
 
     case ElementType::DYNAMIC:
+    case ElementType::EXPRESSION:
     case ElementType::FRET_DIAGRAM:
         e->setParent(seg);
         e->setTrack(staffIdx * VOICES);

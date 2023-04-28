@@ -81,6 +81,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/durationtype.h
     ${CMAKE_CURRENT_LIST_DIR}/dynamic.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dynamic.h
+    ${CMAKE_CURRENT_LIST_DIR}/expression.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/expression.h
     ${CMAKE_CURRENT_LIST_DIR}/dynamichairpingroup.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dynamichairpingroup.h
     ${CMAKE_CURRENT_LIST_DIR}/easeInOut.cpp

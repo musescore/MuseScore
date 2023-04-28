@@ -26,6 +26,7 @@
 #include "types/commontypes.h"
 #include "types/texttypes.h"
 
+#include "engraving/libmscore/dynamic.h"
 #include "engraving/libmscore/textbase.h"
 #include "engraving/types/typesconv.h"
 
@@ -149,6 +150,8 @@ void TextSettingsModel::loadProperties()
 
     updateFramePropertiesAvailability();
     updateStaffPropertiesAvailability();
+    updateIsDynamicSpecificSettings();
+    updateIsHorizontalAlignmentAvailable();
 }
 
 void TextSettingsModel::resetProperties()
@@ -193,6 +196,7 @@ void TextSettingsModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet
             return;
         }
     }
+    updateIsHorizontalAlignmentAvailable();
 }
 
 void TextSettingsModel::insertSpecialCharacters()
@@ -317,6 +321,16 @@ bool TextSettingsModel::isSpecialCharactersInsertionAvailable() const
     return m_isSpecialCharactersInsertionAvailable;
 }
 
+bool TextSettingsModel::isDynamicSpecificSettings() const
+{
+    return m_isDynamicSpecificSettings;
+}
+
+bool TextSettingsModel::isHorizontalAlignmentAvailable() const
+{
+    return m_isHorizontalAlignmentAvailable;
+}
+
 void TextSettingsModel::setAreStaffTextPropertiesAvailable(bool areStaffTextPropertiesAvailable)
 {
     if (m_areStaffTextPropertiesAvailable == areStaffTextPropertiesAvailable) {
@@ -335,6 +349,26 @@ void TextSettingsModel::setIsSpecialCharactersInsertionAvailable(bool isSpecialC
 
     m_isSpecialCharactersInsertionAvailable = isSpecialCharactersInsertionAvailable;
     emit isSpecialCharactersInsertionAvailableChanged(m_isSpecialCharactersInsertionAvailable);
+}
+
+void TextSettingsModel::setIsDynamicSpecificSettings(bool isOnlyDynamics)
+{
+    if (isOnlyDynamics == m_isDynamicSpecificSettings) {
+        return;
+    }
+
+    m_isDynamicSpecificSettings = isOnlyDynamics;
+    emit isDynamicSpecificSettingsChanged(m_isDynamicSpecificSettings);
+}
+
+void TextSettingsModel::setIsHorizontalAlignmentAvailable(bool isHorizontalAlignmentAvailable)
+{
+    if (isHorizontalAlignmentAvailable == m_isHorizontalAlignmentAvailable) {
+        return;
+    }
+
+    m_isHorizontalAlignmentAvailable = isHorizontalAlignmentAvailable;
+    emit isHorizontalAlignmentAvailableChanged(m_isHorizontalAlignmentAvailable);
 }
 
 void TextSettingsModel::updateFramePropertiesAvailability()
@@ -356,6 +390,31 @@ void TextSettingsModel::updateStaffPropertiesAvailability()
                        == TextTypes::TextType::TEXT_TYPE_STAFF;
 
     setAreStaffTextPropertiesAvailable(isAvailable && !m_textType->isUndefined());
+}
+
+void TextSettingsModel::updateIsDynamicSpecificSettings()
+{
+    bool isOnlyDynamic = true;
+    for (EngravingItem* item : m_elementList) {
+        if (!item->isDynamic()) {
+            isOnlyDynamic = false;
+            break;
+        }
+    }
+    setIsDynamicSpecificSettings(isOnlyDynamic);
+}
+
+void TextSettingsModel::updateIsHorizontalAlignmentAvailable()
+{
+    bool available = false;
+    for (EngravingItem* item : m_elementList) {
+        bool isPureAlignedDynamic = item->isDynamic() && toDynamic(item)->centerOnNotehead();
+        if (!isPureAlignedDynamic) {
+            available = true;
+            break;
+        }
+    }
+    setIsHorizontalAlignmentAvailable(available);
 }
 
 bool TextSettingsModel::isTextEditingStarted() const

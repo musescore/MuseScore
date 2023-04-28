@@ -350,6 +350,11 @@ enum class Pid {
     END_FONT_STYLE,
     END_TEXT_OFFSET,
 
+    AVOID_BARLINES, // meant for Dynamics
+    DYNAMICS_SIZE,
+    CENTER_ON_NOTEHEAD,
+    SNAP_TO_DYNAMICS,
+
     POS_ABOVE,
 
     LOCATION_STAVES,

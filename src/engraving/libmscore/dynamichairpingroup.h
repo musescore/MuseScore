@@ -33,6 +33,7 @@ namespace mu::engraving {
 class Dynamic;
 class Hairpin;
 class HairpinSegment;
+class Expression;
 
 //-------------------------------------------------------------------
 //   HairpinWithDynamicsDragGroup
@@ -80,6 +81,29 @@ public:
     void endDrag(EditData&) override;
 
     static std::unique_ptr<ElementGroup> detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged);
+};
+
+//-------------------------------------------------------------------
+//   DynamicExpressionDragGroup
+//-------------------------------------------------------------------
+
+class DynamicExpressionDragGroup : public ElementGroup
+{
+    OBJECT_ALLOCATOR(engraving, DynamicNearHairpinsDragGroup)
+
+    Dynamic* dynamic;
+    Expression* expression;
+
+public:
+    DynamicExpressionDragGroup(Dynamic* d, Expression* e)
+        : dynamic(d), expression(e) {}
+
+    void startDrag(EditData& ed) override;
+    mu::RectF drag(EditData& ed) override;
+    void endDrag(EditData& ed) override;
+
+    static std::unique_ptr<ElementGroup> detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged);
+    static std::unique_ptr<ElementGroup> detectFor(Expression* e, std::function<bool(const EngravingItem*)> isDragged);
 };
 } // namespace mu::engraving
 
