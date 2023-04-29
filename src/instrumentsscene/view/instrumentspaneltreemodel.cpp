@@ -36,6 +36,8 @@
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace mu::uicomponents;
+using namespace mu::framework;
+
 using ItemType = InstrumentsTreeItemType::ItemType;
 
 static const mu::actions::ActionCode ADD_INSTRUMENTS_ACTIONCODE("instruments");
@@ -129,6 +131,13 @@ bool InstrumentsPanelTreeModel::removeRows(int row, int count, const QModelIndex
 
     if (!parentItem) {
         parentItem = m_rootItem;
+    }
+
+    if (parentItem == m_rootItem) {
+        // When removing instruments, the user needs to be warned in some cases
+        if (!warnAboutRemovingInstrumentsIfNecessary(count)) {
+            return false;
+        }
     }
 
     setLoadingBlocked(true);
@@ -748,6 +757,28 @@ void InstrumentsPanelTreeModel::setItemsSelected(const QModelIndexList& indexes,
             item->setIsSelected(selected);
         }
     }
+}
+
+bool InstrumentsPanelTreeModel::warnAboutRemovingInstrumentsIfNecessary(int count)
+{
+    // Only warn if excerpts are existent
+    if (m_masterNotation->excerpts().val.empty()) {
+        return true;
+    }
+
+    return interactive()->warning(
+        //: Please omit `%n` in the translation in this case; it's only there so that you
+        //: have the possibility to provide translations with the correct numerus form,
+        //: i.e. to show "instrument" or "instruments" as appropriate.
+        trc("instruments", "Are you sure you want to delete the selected %n instrument(s)?", nullptr, count),
+
+        //: Please omit `%n` in the translation in this case; it's only there so that you
+        //: have the possibility to provide translations with the correct numerus form,
+        //: i.e. to show "instrument" or "instruments" as appropriate.
+        trc("instruments", "This will remove the %n instrument(s) from the full score and all part scores.", nullptr, count),
+
+        { IInteractive::Button::No, IInteractive::Button::Yes })
+           .standardButton() == IInteractive::Button::Yes;
 }
 
 AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::loadMasterPart(const Part* masterPart)
