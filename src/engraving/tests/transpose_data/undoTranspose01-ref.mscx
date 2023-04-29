@@ -64,6 +64,7 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <KeySig>
             <accidental>2</accidental>
@@ -333,6 +334,7 @@
           <Clef>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <KeySig>
             <accidental>2</accidental>

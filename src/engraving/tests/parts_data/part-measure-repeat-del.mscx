@@ -113,6 +113,7 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             <linkedMain/>
             </Clef>
           <TimeSig>
@@ -461,6 +462,7 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <isHeader>1</isHeader>
             <linkedMain/>
             </Clef>
           <TimeSig>
@@ -871,6 +873,7 @@
             <Clef>
               <concertClefType>G</concertClefType>
               <transposingClefType>G</transposingClefType>
+              <isHeader>1</isHeader>
               <linked>
                 </linked>
               </Clef>
@@ -1333,6 +1336,7 @@
             <Clef>
               <concertClefType>G8vb</concertClefType>
               <transposingClefType>G8vb</transposingClefType>
+              <isHeader>1</isHeader>
               <linked>
                 </linked>
               </Clef>

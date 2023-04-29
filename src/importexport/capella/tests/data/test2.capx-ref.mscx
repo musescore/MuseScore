@@ -51,6 +51,7 @@
           <Clef>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <Chord>
             <durationType>quarter</durationType>
@@ -186,6 +187,7 @@
           <Clef>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <Chord>
             <durationType>quarter</durationType>

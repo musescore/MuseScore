@@ -75,6 +75,7 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <TimeSig>
             <linkedMain/>
@@ -178,6 +179,7 @@
             <Clef>
               <concertClefType>G8vb</concertClefType>
               <transposingClefType>G8vb</transposingClefType>
+              <isHeader>1</isHeader>
               </Clef>
             <TimeSig>
               <linked>

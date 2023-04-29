@@ -544,6 +544,7 @@ Gtr.</shortName>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <TimeSig>
             <sigN>4</sigN>
@@ -565,6 +566,7 @@ Gtr.</shortName>
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <TimeSig>
             <sigN>4</sigN>
@@ -586,6 +588,7 @@ Gtr.</shortName>
           <Clef>
             <concertClefType>TAB</concertClefType>
             <transposingClefType>TAB</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <TimeSig>
             <sigN>4</sigN>
@@ -604,6 +607,7 @@ Gtr.</shortName>
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <TimeSig>
             <sigN>4</sigN>
@@ -625,6 +629,7 @@ Gtr.</shortName>
           <Clef>
             <concertClefType>TAB</concertClefType>
             <transposingClefType>TAB</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <TimeSig>
             <sigN>4</sigN>
@@ -643,6 +648,7 @@ Gtr.</shortName>
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <TimeSig>
             <sigN>4</sigN>
@@ -664,6 +670,7 @@ Gtr.</shortName>
           <Clef>
             <concertClefType>TAB</concertClefType>
             <transposingClefType>TAB</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <TimeSig>
             <sigN>4</sigN>
@@ -682,6 +689,7 @@ Gtr.</shortName>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <TimeSig>
             <sigN>4</sigN>
@@ -703,6 +711,7 @@ Gtr.</shortName>
           <Clef>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <TimeSig>
             <sigN>4</sigN>

@@ -91,6 +91,7 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <KeySig>
             <accidental>0</accidental>

@@ -242,6 +242,7 @@
           <Clef>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <KeySig>
             <accidental>0</accidental>
