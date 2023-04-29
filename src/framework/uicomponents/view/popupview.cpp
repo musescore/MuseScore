@@ -159,6 +159,11 @@ void PopupView::initCloseController()
 
     m_closeController->init();
 
+    m_closeController->setParentItem(parentItem());
+    m_closeController->setWindow(window());
+    m_closeController->setPopupHasFocus(m_openPolicy != OpenPolicy::NoActivateFocus);
+    m_closeController->setIsCloseOnPressOutsideParent(m_closePolicy == CloseOnPressOutsideParent);
+
     m_closeController->closeNotification().onNotify(this, [this]() {
         close(true);
     });
@@ -240,9 +245,6 @@ void PopupView::open()
             initCloseController();
         }
 
-        m_closeController->setParentItem(parentItem());
-        m_closeController->setWindow(window());
-        m_closeController->setIsCloseOnPressOutsideParent(m_closePolicy == CloseOnPressOutsideParent);
         m_closeController->setActive(true);
     }
 
