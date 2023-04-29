@@ -1646,6 +1646,14 @@ void Score::upDown(bool up, UpDownMode mode)
 {
     std::list<Note*> el = selection().uniqueNotes();
 
+    el.sort([up](Note* a, Note* b) {
+        if (up) {
+            return a->string() < b->string();
+        } else {
+            return a->string() > b->string();
+        }
+    });
+
     for (Note* oNote : el) {
         Fraction tick     = oNote->chord()->tick();
         Staff* staff = oNote->staff();
