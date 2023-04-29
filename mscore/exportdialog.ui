@@ -656,6 +656,9 @@
          <layout class="QGridLayout" name="gridLayout_5">
           <item row="1" column="0">
            <widget class="QCheckBox" name="midiExportRPNs">
+            <property name="toolTip">
+             <string notr="true">Registered Parameter Numbers</string>
+            </property>
             <property name="text">
              <string>Export RPNs</string>
             </property>

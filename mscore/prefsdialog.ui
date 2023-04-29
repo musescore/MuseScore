@@ -3716,6 +3716,9 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           </item>
           <item>
            <widget class="QCheckBox" name="exportRPNs">
+            <property name="toolTip">
+             <string notr="true">Registered Parameter Numbers</string>
+            </property>
             <property name="text">
              <string>Export RPNs</string>
             </property>
