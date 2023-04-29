@@ -21,8 +21,6 @@
  */
 #include "tread.h"
 
-#include "global/defer.h"
-
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
 #include "../../infrastructure/rtti.h"
@@ -914,9 +912,6 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, Part* part, bool* cus
 void TRead::read(InstrChannel* item, XmlReader& e, Part* part, const InstrumentTrackId& instrId)
 {
     item->setNotifyAboutChangedEnabled(false);
-    DEFER {
-        item->setNotifyAboutChangedEnabled(true);
-    };
 
     // synti = 0;
     item->setName(e.attribute("name"));
@@ -1003,6 +998,8 @@ void TRead::read(InstrChannel* item, XmlReader& e, Part* part, const InstrumentT
     if (e.context()) {
         e.context()->addPartAudioSettingCompat(partAudioSetting);
     }
+
+    item->setNotifyAboutChangedEnabled(true);
 
     if ((midiPort != -1 || midiChannel != -1) && part && part->score()->isMaster()) {
         part->masterScore()->addMidiMapping(item, part, midiPort, midiChannel);
