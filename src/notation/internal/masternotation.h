@@ -89,6 +89,8 @@ private:
 
     bool containsExcerpt(const engraving::Excerpt* excerpt) const;
 
+    void onPartsChanged();
+
     void notifyAboutNeedSaveChanged();
 
     void markScoreAsNeedToSave();
@@ -99,6 +101,12 @@ private:
     async::Notification m_hasPartsChanged;
 
     mutable ExcerptNotationList m_potentialExcerpts;
+
+    // When the user first removes instruments (`Parts`) and then adds new ones,
+    // the new ones might have the same ID as the removed ones. In this case,
+    // we need to regenerate potential excerpts, even though for all part IDs a
+    // potential excerpt already exists.
+    mutable bool m_potentialExcerptsForcedDirty = false;
 };
 
 using MasterNotationPtr = std::shared_ptr<MasterNotation>;
