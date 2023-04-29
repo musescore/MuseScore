@@ -314,7 +314,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                     int equivalentStaffIdx = staffIdx;
                     for (Staff* st : m_score->masterScore()->staves()) {
                         if (staff->id() == st->id()) {
-                            equivalentStaffIdx = st->idx();
+                            equivalentStaffIdx = static_cast <int>(st->idx());
                         }
                     }
 
