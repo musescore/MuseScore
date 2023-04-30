@@ -169,6 +169,11 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
 
             masterScore->addExcerpt(ex);
         }
+
+        // Needs to be re-done after reading excerpts, since the sigmap gets messed up while reading excerpts
+        // (only necessary for >= 400, because for older scores, part scores are read "recursively",
+        // so the `setupTempoMap` for the master score is last anyway)
+        masterScore->setUpTempoMap();
     }
 
     //  Read audio
