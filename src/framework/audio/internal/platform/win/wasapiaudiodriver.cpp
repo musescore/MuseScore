@@ -71,6 +71,7 @@ WasapiAudioDriver::WasapiAudioDriver()
 
         if (m_deviceId == DEFAULT_DEVICE_ID) {
             reopen();
+            m_outputDeviceChanged.notify();
         }
     });
 }
@@ -203,6 +204,7 @@ mu::async::Notification WasapiAudioDriver::outputDeviceChanged() const
 AudioDeviceList WasapiAudioDriver::availableOutputDevices() const
 {
     using namespace Windows::Devices::Enumeration;
+    using namespace winrt::Windows::Foundation;
     using namespace winrt::Windows::Media::Devices;
 
     AudioDeviceList result;

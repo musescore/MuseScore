@@ -25,7 +25,6 @@
 #include "log.h"
 
 using namespace winrt;
-using namespace winrt::Windows::Foundation;
 
 WasapiAudioClient::WasapiAudioClient(HANDLE clientStartedEvent, HANDLE clientFailedToStartEvent, HANDLE clientStoppedEvent)
     : m_clientStartedEvent(clientStartedEvent), m_clientFailedToStartEvent(clientFailedToStartEvent), m_clientStoppedEvent(
@@ -141,9 +140,10 @@ static void logWAVEFORMATEXTENSIBLE(WAVEFORMATEXTENSIBLE* format)
     }
     LOGI() << "Channel mask: " << format->dwChannelMask;
 
-    // LOGI() << "SubFormat GUID: " << format->SubFormat.Data1 << "." <<
-    // format->SubFormat.Data2 << "." << format->SubFormat.Data3 << "." <<
-    // format->SubFormat.Data4;
+    PWSTR subFormatString;
+    StringFromIID(format->SubFormat, &subFormatString);
+
+    LOGI() << "SubFormat GUID: " << subFormatString;
 }
 
 //
