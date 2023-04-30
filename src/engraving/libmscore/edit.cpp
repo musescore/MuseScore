@@ -2133,7 +2133,7 @@ void Score::cmdFlip()
                 } else {
                     continue;
                 }
-            } else if (chord->tremolo()) {
+            } else if (chord->tremolo() && chord->tremolo()->twoNotes()) {
                 if (!selection().isRange()) {
                     e = chord->tremolo();
                 } else {
