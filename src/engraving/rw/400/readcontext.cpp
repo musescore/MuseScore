@@ -102,11 +102,6 @@ compat::DummyElement* ReadContext::dummy() const
     return m_score->dummy();
 }
 
-TimeSigMap* ReadContext::sigmap()
-{
-    return m_score->sigmap();
-}
-
 Staff* ReadContext::staff(int n)
 {
     return m_score->staff(n);
@@ -518,4 +513,9 @@ void ReadContext::addPartAudioSettingCompat(PartAudioSettingsCompat partAudioSet
     if (_settingsCompat.audioSettings.count(partAudioSetting.instrumentId.partId) == 0) {
         _settingsCompat.audioSettings.insert({ partAudioSetting.instrumentId.partId, partAudioSetting });
     }
+}
+
+TimeSigMap* ReadContext::compatTimeSigMap()
+{
+    return &m_compatTimeSigMap;
 }

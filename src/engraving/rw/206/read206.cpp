@@ -1575,7 +1575,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
             }
         } else {
             if (ctx.mscVersion() <= 114) {
-                SigEvent event = ctx.sigmap()->timesig(ctx.tick());
+                SigEvent event = ctx.compatTimeSigMap()->timesig(ctx.tick());
                 ch->setTicks(event.timesig());
             }
         }
@@ -1605,7 +1605,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
     } else if (tag == "duration") {
         ch->setTicks(e.readFraction());
     } else if (tag == "ticklen") {      // obsolete (version < 1.12)
-        int mticks = ctx.sigmap()->timesig(ctx.tick()).timesig().ticks();
+        int mticks = ctx.compatTimeSigMap()->timesig(ctx.tick()).timesig().ticks();
         int i = e.readInt();
         if (i == 0) {
             i = mticks;
@@ -2422,8 +2422,8 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             LOGD("illegal measure size <%s>", muPrintable(e.attribute("len")));
         }
         irregular = true;
-        ctx.sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
-        ctx.sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
+        ctx.compatTimeSigMap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
+        ctx.compatTimeSigMap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
     } else {
         irregular = false;
     }
@@ -2740,11 +2740,11 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 m->setTimesig(ts->sig() / timeStretch);
 
                 if (irregular) {
-                    ctx.sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
-                    ctx.sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
+                    ctx.compatTimeSigMap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
+                    ctx.compatTimeSigMap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
                 } else {
                     m->setTicks(m->timesig());
-                    ctx.sigmap()->add(m->tick().ticks(), SigEvent(m->timesig()));
+                    ctx.compatTimeSigMap()->add(m->tick().ticks(), SigEvent(m->timesig()));
                 }
             }
         } else if (tag == "KeySig") {
@@ -3188,7 +3188,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         if (tag == "Staff") {
             readStaffContent206(score, e, ctx);
         } else if (tag == "siglist") {
-            rw400::TRead::read(score->sigmap(), e, ctx);
+            rw400::TRead::read(ctx.compatTimeSigMap(), e, ctx);
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {

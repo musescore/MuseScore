@@ -33,6 +33,7 @@
 #include "libmscore/connector.h"
 #include "libmscore/interval.h"
 #include "libmscore/location.h"
+#include "libmscore/sig.h"
 
 #include "../linksindexer.h"
 #include "../readoutdata.h"
@@ -47,7 +48,6 @@ class Measure;
 class Score;
 class Spanner;
 class Staff;
-class TimeSigMap;
 class Tuplet;
 }
 
@@ -92,7 +92,6 @@ public:
 
     compat::DummyElement* dummy() const;
 
-    TimeSigMap* sigmap();
     Staff* staff(int n);
 
     void appendStaff(Staff* staff);
@@ -170,6 +169,8 @@ public:
     void addPartAudioSettingCompat(PartAudioSettingsCompat partAudioSetting);
     const SettingsCompat& settingCompat() { return _settingsCompat; }
 
+    TimeSigMap* compatTimeSigMap();
+
 private:
 
     void addConnectorInfo(std::unique_ptr<rw400::ConnectorInfoReader>);
@@ -211,6 +212,8 @@ private:
 
     std::list<std::pair<EngravingItem*, mu::PointF> > _fixOffsets;
     SettingsCompat _settingsCompat;
+
+    TimeSigMap m_compatTimeSigMap;
 };
 }
 
