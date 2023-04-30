@@ -439,7 +439,6 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
                   }
             return true;
             }
-      int measures = 1;
       bool fmr     = true;
 
       // Format: chord 1 tick, chord 2 tick, tremolo, track
@@ -479,7 +478,6 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
 
             if (m == lm)
                   break;
-            ++measures;
             }
 
       if (!fmr) {
@@ -600,7 +598,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
 
       // disable local time sig modifications in linked staves
       if (staffIdx != -1 && excerpts().size() > 0) {
-            MScore::setError(CANNOT_CHANGE_LOCAL_TIMESIG);
+            MScore::setError(CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS);
             return false;
             }
 
@@ -619,7 +617,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
 
                   if (!rewriteMeasures(fm1, lm, ns, staffIdx)) {
                         if (staffIdx >= 0) {
-                              MScore::setError(CANNOT_CHANGE_LOCAL_TIMESIG);
+                              MScore::setError(CANNOT_CHANGE_LOCAL_TIMESIG_MEASURE_NOT_EMPTY);
                               // restore measure rests that were prematurely modified
                               Fraction fr(staff(staffIdx)->timeSig(fm->tick())->sig());
                               for (Measure* m = fm1; m; m = m->nextMeasure()) {
@@ -913,7 +911,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
 void Score::cmdRemoveTimeSig(TimeSig* ts)
       {
       if (ts->isLocal() && excerpts().size() > 0) {
-            MScore::setError(CANNOT_CHANGE_LOCAL_TIMESIG);
+            MScore::setError(CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS);
             return;
             }
 

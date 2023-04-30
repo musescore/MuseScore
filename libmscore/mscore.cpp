@@ -152,7 +152,10 @@ std::vector<MScoreError> MScore::errorList {
       { DEST_TREMOLO,                    "p5", QT_TRANSLATE_NOOP("error", "Cannot paste in tremolo")                                               },
       { NO_MIME,                         "p6", QT_TRANSLATE_NOOP("error", "Nothing to paste")                                                      },
       { DEST_NO_CR,                      "p7", QT_TRANSLATE_NOOP("error", "Destination is not a chord or rest")                                    },
-      { CANNOT_CHANGE_LOCAL_TIMESIG,     "l1", QT_TRANSLATE_NOOP("error", "Cannot change local time signature:\nMeasure is not empty")             },
+      { CANNOT_CHANGE_LOCAL_TIMESIG_MEASURE_NOT_EMPTY, "l1", QT_TRANSLATE_NOOP("error", "Cannot change local time signature:\nMeasure is not empty") },
+      { CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS,      "l1", QT_TRANSLATE_NOOP("error", "Cannot change local time signature:\n"
+                                                                                "This score already has part scores. Changing local time "
+                                                                                "signatures while part scores are present is not yet supported.")  },
       { CORRUPTED_MEASURE,               "c1", QT_TRANSLATE_NOOP("error", "Cannot change time signature in front of a corrupted measure")          },
       };
 
