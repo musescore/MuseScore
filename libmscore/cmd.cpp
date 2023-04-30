@@ -1480,7 +1480,14 @@ static void setTpc(Note* oNote, int tpc, int& newTpc1, int& newTpc2)
 
 void Score::upDown(bool up, UpDownMode mode)
       {
-      QList<Note*> el = selection().uniqueNotes();
+      std::list<Note*> el = selection().uniqueNotes();
+
+      el.sort([up](Note* a, Note* b) {
+            if (up)
+                  return a->string() < b->string();
+            else
+                  return a->string() > b->string();
+            });
 
       for (Note* oNote : qAsConst(el)) {
             Fraction tick     = oNote->chord()->tick();

@@ -189,8 +189,8 @@ class Selection {
       const QList<Element*>& elements() const { return _el; }
       std::vector<Note*> noteList(int track = -1) const;
 
-      const QList<Element*> uniqueElements() const;
-      QList<Note*> uniqueNotes(int track = -1) const;
+      const std::list<Element*> uniqueElements() const;
+      std::list<Note*> uniqueNotes(int track = -1) const;
 
       bool isSingle() const                   { return (_state == SelState::LIST) && (_el.size() == 1); }
 

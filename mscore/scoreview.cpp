@@ -2364,8 +2364,8 @@ void ScoreView::cmd(const char* s)
                   cv->score()->upDown(false, UpDownMode::DIATONIC);
                   }},
             {{"move-up"}, [](ScoreView* cv, const QByteArray) {
-                  QList<Element*> el = cv->score()->selection().uniqueElements();
-                  foreach (Element* e, el) {
+                  std::list<Element*> el = cv->score()->selection().uniqueElements();
+                  for (Element* e : el) {
                         ChordRest* cr = nullptr;
                         if (e->type() == ElementType::NOTE)
                               cr = static_cast<Note*>(e)->chord();
@@ -2376,8 +2376,8 @@ void ScoreView::cmd(const char* s)
                         }
                   }},
             {{"move-down"}, [](ScoreView* cv, const QByteArray&) {
-                  QList<Element*> el = cv->score()->selection().uniqueElements();
-                  foreach (Element* e, el) {
+                  std::list<Element*> el = cv->score()->selection().uniqueElements();
+                  for (Element* e : el) {
                         ChordRest* cr = nullptr;
                         if (e->type() == ElementType::NOTE)
                               cr = static_cast<Note*>(e)->chord();
@@ -4178,7 +4178,7 @@ void ScoreView::cmdAddNoteLine()
 void ScoreView::cmdChangeEnharmonic(bool both)
       {
       _score->startCmd();
-      QList<Note*> notes = _score->selection().uniqueNotes();
+      std::list<Note*> notes = _score->selection().uniqueNotes();
       for (Note* n : notes) {
             Staff* staff = n->staff();
             if (staff->part()->instrument(n->tick())->useDrumset())

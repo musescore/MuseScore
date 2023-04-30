@@ -1275,9 +1275,9 @@ bool Selection::measureRange(Measure** m1, Measure** m2) const
 //    elements show up in the list.
 //---------------------------------------------------------
 
-const QList<Element*> Selection::uniqueElements() const
+const std::list<Element*> Selection::uniqueElements() const
       {
-      QList<Element*> l;
+      std::list<Element*> l;
 
       for (Element* e : elements()) {
             bool alreadyThere = false;
@@ -1288,7 +1288,7 @@ const QList<Element*> Selection::uniqueElements() const
                         }
                   }
             if (!alreadyThere)
-                  l.append(e);
+                  l.push_back(e);
             }
       return l;
       }
@@ -1300,9 +1300,9 @@ const QList<Element*> Selection::uniqueElements() const
 //    elements show up in the list.
 //---------------------------------------------------------
 
-QList<Note*> Selection::uniqueNotes(int track) const
+std::list<Note*> Selection::uniqueNotes(int track) const
       {
-      QList<Note*> l;
+      std::list<Note*> l;
 
       for (Note* nn : noteList(track)) {
             for (Note* note : nn->tiedNotes()) {
@@ -1314,7 +1314,7 @@ QList<Note*> Selection::uniqueNotes(int track) const
                               }
                         }
                   if (!alreadyThere)
-                        l.append(note);
+                        l.push_back(note);
                   }
             }
       return l;
