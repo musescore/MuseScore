@@ -2949,7 +2949,6 @@ static Err importScore(MasterScore* score, mu::io::IODevice* io)
     }
 
     score->loadStyle(u":/engraving/styles/gp-style.mss");
-
     score->checkChordList();
     io->seek(0);
     char header[5];

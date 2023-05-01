@@ -74,6 +74,7 @@ Err importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* d
     const auto pass1_errors = pass1.errors();
 
     // pass 2
+    score->checkChordList(); // chordList is necessary to import harmony objects
     MusicXMLParserPass2 pass2(score, pass1, &logger);
     if (res == Err::NoError) {
         dev->seek(0);

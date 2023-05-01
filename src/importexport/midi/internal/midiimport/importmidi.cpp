@@ -1282,7 +1282,7 @@ Err importMidi(MasterScore* score, const QString& name)
         loadMidiData(mf);
         opers.setMidiFileData(name, mf);
     }
-
+    score->checkChordList();
     opers.data()->tracks = convertMidi(score, opers.midiFile(name));
     ++opers.data()->processingsOfOpenedFile;
 

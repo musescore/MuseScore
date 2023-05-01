@@ -554,7 +554,7 @@ Err importBww(MasterScore* score, const QString& path)
     if (!fp.open(QIODevice::ReadOnly)) {
         return engraving::Err::FileOpenError;
     }
-
+    score->checkChordList();
     Part* part = new Part(score);
     score->appendPart(part);
     Staff* staff = Factory::createStaff(part);

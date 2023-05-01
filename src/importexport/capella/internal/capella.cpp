@@ -2826,6 +2826,7 @@ Err importCapella(MasterScore* score, const QString& name)
         return Err::NoError;
     }
     fp.close();
+    score->checkChordList(); // make sure chordList is populated so we can import harmony objects
     convertCapella(score, &cf, false);
     return Err::NoError;
 }

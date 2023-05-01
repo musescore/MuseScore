@@ -2533,6 +2533,7 @@ Err importOve(MasterScore* score, const QString& name)
     oveLoader->release();
 
     if (result) {
+        score->checkChordList(); // must make sure the chord list isn't empty so harmony objects import nicely
         OveToMScore otm;
         otm.convert(&oveSong, score);
 
