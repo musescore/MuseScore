@@ -95,6 +95,8 @@ class Clef final : public EngravingItem
     bool _showCourtesy = true;
     bool m_isSmall = false;
     bool _forInstrumentChange = false;
+    M_PROPERTY(ClefToBarlinePosition, clefToBarlinePosition, setClefToBarlinePosition)
+    M_PROPERTY(bool, isHeader, setIsHeader)
 
     ClefTypeList _clefTypes { ClefType::INVALID };
 
@@ -148,6 +150,11 @@ public:
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
     void clear();
+
+    void changeClefToBarlinePos(ClefToBarlinePosition newPos);
+
+    void undoChangeProperty(Pid id, const PropertyValue& v) { EngravingObject::undoChangeProperty(id, v); }
+    void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
 };
 } // namespace mu::engraving
 #endif

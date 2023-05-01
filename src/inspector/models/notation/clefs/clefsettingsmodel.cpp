@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "clefsettingsmodel.h"
+#include "clef.h"
 
 #include "translation.h"
 
@@ -37,6 +38,8 @@ ClefSettingsModel::ClefSettingsModel(QObject* parent, IElementRepositoryService*
 void ClefSettingsModel::createProperties()
 {
     m_shouldShowCourtesy = buildPropertyItem(mu::engraving::Pid::SHOW_COURTESY);
+    m_clefToBarlinePosition = buildPropertyItem(mu::engraving::Pid::CLEF_TO_BARLINE_POS);
+    updateIsClefToBarPosAvailable();
 }
 
 void ClefSettingsModel::requestElements()
@@ -47,14 +50,50 @@ void ClefSettingsModel::requestElements()
 void ClefSettingsModel::loadProperties()
 {
     loadPropertyItem(m_shouldShowCourtesy);
+    loadPropertyItem(m_clefToBarlinePosition);
+    updateIsClefToBarPosAvailable();
 }
 
 void ClefSettingsModel::resetProperties()
 {
     m_shouldShowCourtesy->resetToDefault();
+    m_clefToBarlinePosition->resetToDefault();
 }
 
 PropertyItem* ClefSettingsModel::shouldShowCourtesy() const
 {
     return m_shouldShowCourtesy;
+}
+
+PropertyItem* ClefSettingsModel::clefToBarlinePosition() const
+{
+    return m_clefToBarlinePosition;
+}
+
+bool ClefSettingsModel::isClefToBarPosAvailable() const
+{
+    return m_isClefToBarPosAvailable;
+}
+
+void ClefSettingsModel::setIsClefToBarPosAvailable(bool available)
+{
+    if (available == m_isClefToBarPosAvailable) {
+        return;
+    }
+
+    m_isClefToBarPosAvailable = available;
+    emit isClefToBarPosAvailableChanged(available);
+}
+
+void ClefSettingsModel::updateIsClefToBarPosAvailable()
+{
+    bool available = true;
+    for (mu::engraving::EngravingItem* item : m_elementList) {
+        if (static_cast<mu::engraving::Clef*>(item)->segment()->isHeaderClefType()) {
+            available = false;
+            break;
+        }
+    }
+
+    setIsClefToBarPosAvailable(available);
 }

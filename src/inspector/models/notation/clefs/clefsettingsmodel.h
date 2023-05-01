@@ -30,6 +30,8 @@ class ClefSettingsModel : public AbstractInspectorModel
     Q_OBJECT
 
     Q_PROPERTY(PropertyItem * shouldShowCourtesy READ shouldShowCourtesy CONSTANT)
+    Q_PROPERTY(PropertyItem * clefToBarlinePosition READ clefToBarlinePosition CONSTANT)
+    Q_PROPERTY(bool isClefToBarPosAvailable READ isClefToBarPosAvailable NOTIFY isClefToBarPosAvailableChanged)
 
 public:
     explicit ClefSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -40,9 +42,22 @@ public:
     void resetProperties() override;
 
     PropertyItem* shouldShowCourtesy() const;
+    PropertyItem* clefToBarlinePosition() const;
+
+    bool isClefToBarPosAvailable() const;
+
+private slots:
+    void setIsClefToBarPosAvailable(bool available);
+
+signals:
+    void isClefToBarPosAvailableChanged(bool newValue);
 
 private:
     PropertyItem* m_shouldShowCourtesy = nullptr;
+    PropertyItem* m_clefToBarlinePosition = nullptr;
+
+    bool m_isClefToBarPosAvailable = true;
+    void updateIsClefToBarPosAvailable();
 };
 }
 

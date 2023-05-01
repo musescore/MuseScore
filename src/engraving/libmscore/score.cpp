@@ -2367,6 +2367,7 @@ void Score::splitStaff(staff_idx_t staffIdx, int splitPoint)
     clef->setClefType(ClefType::F);
     clef->setTrack((staffIdx + 1) * VOICES);
     clef->setParent(seg);
+    clef->setIsHeader(true);
     undoAddElement(clef);
     clef->layout();
 

@@ -374,10 +374,15 @@ EngravingItem* ChordRest::drop(EditData& data)
     {
         KeySig* ks    = toKeySig(e);
         KeySigEvent k = ks->keySigEvent();
-        delete ks;
 
-        // apply only to this stave
-        score()->undoChangeKeySig(staff(), tick(), k);
+        if (data.modifiers & ControlModifier) {
+            // apply only to this stave, before the selected chordRest
+            score()->undoChangeKeySig(staff(), tick(), k);
+            delete ks;
+        } else {
+            // apply to all staves, at the beginning of the measure
+            return m->drop(data);
+        }
     }
     break;
 

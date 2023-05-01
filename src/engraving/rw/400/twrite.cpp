@@ -840,6 +840,8 @@ void TWrite::write(const Clef* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     writeProperty(item, xml, Pid::CLEF_TYPE_CONCERT);
     writeProperty(item, xml, Pid::CLEF_TYPE_TRANSPOSING);
+    writeProperty(item, xml, Pid::CLEF_TO_BARLINE_POS);
+    writeProperty(item, xml, Pid::IS_HEADER);
     if (!item->showCourtesy()) {
         xml.tag("showCourtesyClef", item->showCourtesy());
     }

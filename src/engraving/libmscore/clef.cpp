@@ -39,6 +39,7 @@
 #include "segment.h"
 #include "staff.h"
 #include "stafftype.h"
+#include "undo.h"
 
 #include "log.h"
 
@@ -96,7 +97,10 @@ const ClefInfo ClefInfo::clefTable[] = {
 
 Clef::Clef(Segment* parent)
     : EngravingItem(ElementType::CLEF, parent, ElementFlag::ON_STAFF), symId(SymId::noSym)
-{}
+{
+    _clefToBarlinePosition = ClefToBarlinePosition::AUTO;
+    _isHeader = parent->isHeaderClefType();
+}
 
 //---------------------------------------------------------
 //   mag
@@ -406,6 +410,8 @@ PropertyValue Clef::getProperty(Pid propertyId) const
     case Pid::CLEF_TYPE_TRANSPOSING: return _clefTypes._transposingClef;
     case Pid::SHOW_COURTESY: return showCourtesy();
     case Pid::SMALL:         return isSmall();
+    case Pid::CLEF_TO_BARLINE_POS: return _clefToBarlinePosition;
+    case Pid::IS_HEADER: return _isHeader;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -424,15 +430,178 @@ bool Clef::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::CLEF_TYPE_TRANSPOSING:
         setTransposingClef(v.value<ClefType>());
         break;
-    case Pid::SHOW_COURTESY: _showCourtesy = v.toBool();
+    case Pid::SHOW_COURTESY:
+        _showCourtesy = v.toBool();
+        if (_showCourtesy && isHeader() && selected()) {
+            Clef* courtesyClef = otherClef();
+            if (courtesyClef) {
+                score()->deselect(this);
+                score()->select(courtesyClef, SelectType::ADD, staffIdx());
+            }
+        }
         break;
-    case Pid::SMALL:         setSmall(v.toBool());
+    case Pid::SMALL:
+        setSmall(v.toBool());
+        break;
+    case Pid::CLEF_TO_BARLINE_POS:
+        if (v.value<ClefToBarlinePosition>() != _clefToBarlinePosition && !_isHeader) {
+            changeClefToBarlinePos(v.value<ClefToBarlinePosition>());
+        }
+        break;
+    case Pid::IS_HEADER:
+        setIsHeader(v.toBool());
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);
     }
     triggerLayout();
     return true;
+}
+
+void Clef::changeClefToBarlinePos(ClefToBarlinePosition newPos)
+{
+    _clefToBarlinePosition = newPos;
+
+    if (!explicitParent()) {
+        return;
+    }
+
+    Segment* seg = segment();
+    Measure* meas = seg->measure();
+
+    staff_idx_t nStaves = score()->nstaves();
+    for (staff_idx_t staffIndex = 0; staffIndex < nStaves; ++staffIndex) {
+        Clef* clef = static_cast<Clef*>(seg->elementAt(staffIndex * VOICES));
+        if (clef) {
+            clef->setClefToBarlinePosition(newPos);
+        }
+    }
+
+    Segment* endBarlineSeg = nullptr;
+    Segment* endRepeatSeg = nullptr;
+    Segment* startRepeatSeg = nullptr;
+
+    // Search first segment at this tick
+    Segment* firstSegAtThisTick = seg;
+    while (true) {
+        Segment* prev1 = firstSegAtThisTick->prev1();
+        if (prev1 && prev1->tick() == seg->tick()) {
+            firstSegAtThisTick = prev1;
+        } else {
+            break;
+        }
+    }
+    for (Segment* s = firstSegAtThisTick; s && s->tick() == seg->tick(); s = s->next1enabled()) {
+        // Scan all segments at this tick looking for the ones we need
+        if (s->isEndBarLineType() && s->measure()->repeatEnd()) {
+            endRepeatSeg = s;
+        } else if (s->isEndBarLineType()) {
+            endBarlineSeg = s;
+        } else if (s->isStartRepeatBarLineType()) {
+            startRepeatSeg = s;
+        }
+    }
+
+    if (newPos == ClefToBarlinePosition::AFTER) {
+        undoChangeProperty(Pid::SHOW_COURTESY, false, propertyFlags(Pid::SHOW_COURTESY));
+    }
+
+    if (newPos == ClefToBarlinePosition::AUTO) {
+        if (endBarlineSeg) {
+            // Clef before the end bar line
+            Measure* destMeas = endBarlineSeg->measure();
+            meas->segments().remove(seg);
+            destMeas->segments().insert(seg, endBarlineSeg);
+            seg->setRtick(endBarlineSeg->rtick());
+            seg->setParent(destMeas);
+        } else if (endRepeatSeg) {
+            // Clef after the end repeat
+            Measure* destMeas = endRepeatSeg->measure();
+            meas->segments().remove(seg);
+            destMeas->segments().insert(seg, endRepeatSeg->next());
+            seg->setRtick(endRepeatSeg->rtick());
+            seg->setParent(destMeas);
+        } else if (startRepeatSeg) {
+            // End of previous measure
+            Measure* destMeas = startRepeatSeg->measure()->prevMeasure();
+            if (destMeas) {
+                meas->segments().remove(seg);
+                destMeas->segments().push_back(seg);
+                seg->setRtick(destMeas->ticks());
+                seg->setParent(destMeas);
+            }
+        }
+    } else if (newPos == ClefToBarlinePosition::BEFORE) {
+        if (endBarlineSeg || endRepeatSeg) {
+            // Before the bar line
+            Segment* refSeg = endBarlineSeg ? endBarlineSeg : endRepeatSeg;
+            Measure* destMeas = refSeg->measure();
+            meas->segments().remove(seg);
+            destMeas->segments().insert(seg, refSeg);
+            seg->setRtick(refSeg->rtick());
+            seg->setParent(destMeas);
+        } else if (startRepeatSeg) {
+            // End of previous measure
+            Measure* destMeas = startRepeatSeg->measure()->prevMeasure();
+            if (destMeas) {
+                meas->segments().remove(seg);
+                destMeas->segments().push_back(seg);
+                seg->setRtick(destMeas->ticks());
+                seg->setParent(destMeas);
+            }
+        }
+    } else if (newPos == ClefToBarlinePosition::AFTER) {
+        bool isAtMeasureEnd = seg->rtick() == meas->ticks();
+        if (startRepeatSeg) {
+            // After the start repeat
+            Measure* destMeas = startRepeatSeg->measure();
+            meas->segments().remove(seg);
+            destMeas->segments().insert(seg, startRepeatSeg->next());
+            seg->setRtick(startRepeatSeg->rtick());
+            seg->setParent(destMeas);
+        } else if (isAtMeasureEnd) {
+            Measure* destMeas = meas->nextMeasure();
+            if (destMeas && !destMeas->header()) {
+                meas->segments().remove(seg);
+                destMeas->segments().push_front(seg);
+                seg->setRtick(Fraction(0, 1));
+                seg->setParent(destMeas);
+            } else if (destMeas) {
+                Segment* refSeg = destMeas->firstEnabled();
+                while (refSeg && refSeg->header()) {
+                    refSeg = refSeg->nextEnabled();
+                }
+                if (refSeg) {
+                    meas->segments().remove(seg);
+                    destMeas->segments().insert(seg, refSeg);
+                    seg->setRtick(refSeg->rtick());
+                    seg->setParent(destMeas);
+                }
+            }
+        }
+    }
+
+    if ((newPos == ClefToBarlinePosition::AUTO || newPos == ClefToBarlinePosition::BEFORE)) {
+        undoChangeProperty(Pid::SHOW_COURTESY, true, PropertyFlags::STYLED);
+    }
+}
+
+void Clef::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
+{
+    if (id == Pid::SHOW_COURTESY) {
+        if (v.toBool() != _showCourtesy) {
+            score()->undo(new ChangeProperty(this, id, v, ps));
+            Clef* pairedClef = otherClef();
+            if (pairedClef) {
+                score()->undo(new ChangeProperty(pairedClef, id, v, ps));
+            }
+            if (!segment()->isHeaderClefType()) {
+                setGenerated(false);
+            }
+        }
+    } else {
+        EngravingObject::undoChangeProperty(id, v, ps);
+    }
 }
 
 //---------------------------------------------------------
@@ -446,6 +615,8 @@ PropertyValue Clef::propertyDefault(Pid id) const
     case Pid::CLEF_TYPE_TRANSPOSING: return ClefType::INVALID;
     case Pid::SHOW_COURTESY: return true;
     case Pid::SMALL:         return false;
+    case Pid::CLEF_TO_BARLINE_POS: return ClefToBarlinePosition::AUTO;
+    case Pid::IS_HEADER: return false;
     default:              return EngravingItem::propertyDefault(id);
     }
 }
@@ -489,5 +660,10 @@ void Clef::clear()
 {
     setbbox(RectF());
     symId = SymId::noSym;
+    Clef* pairedClef = otherClef();
+    if (selected() && !isHeader() && pairedClef) {
+        score()->deselect(this);
+        score()->select(pairedClef, SelectType::ADD, staffIdx());
+    }
 }
 }

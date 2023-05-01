@@ -932,7 +932,7 @@ void Measure::add(EngravingItem* e)
                 LOGD("there is already a <%s> segment", seg->subTypeName());
                 return;
             }
-            if (s->segmentType() > st) {
+            if (seg->goesBefore(s)) {
                 break;
             }
             s = s->next();
@@ -3579,6 +3579,7 @@ double Measure::createEndBarLines(bool isLastMeasureInSystem)
     // set relative position of end barline and clef
     // if end repeat, clef goes after, otherwise clef goes before
     Segment* clefSeg = findSegmentR(SegmentType::Clef, ticks());
+    ClefToBarlinePosition clefToBarlinePosition = ClefToBarlinePosition::AUTO;
     if (clefSeg) {
         bool wasVisible = clefSeg->visible();
         int visibleInt = 0;
@@ -3589,6 +3590,7 @@ double Measure::createEndBarLines(bool isLastMeasureInSystem)
             track_idx_t track = staffIdx * VOICES;
             Clef* clef = toClef(clefSeg->element(track));
             if (clef) {
+                clefToBarlinePosition = clef->clefToBarlinePosition();
                 bool showCourtesy = score()->genCourtesyClef() && clef->showCourtesy();         // normally show a courtesy clef
                 // check if the measure is the last measure of the system or the last measure before a frame
                 bool lastMeasure = isLastMeasureInSystem || (nm ? !(next() == nm) : true);
@@ -3621,7 +3623,7 @@ double Measure::createEndBarLines(bool isLastMeasureInSystem)
         if (seg) {
             Segment* s1;
             Segment* s2;
-            if (repeatEnd()) {
+            if (repeatEnd() && clefToBarlinePosition != ClefToBarlinePosition::BEFORE) {
                 s1 = seg;
                 s2 = clefSeg;
             } else {
@@ -3693,6 +3695,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
         if (isFirstSystem || score()->styleB(Sid::genClef)) {
             // find the clef type at the previous tick
             ClefTypeList cl = staff->clefType(tick() - Fraction::fromTicks(1));
+            bool showCourtesy = true;
             Segment* s = nullptr;
             if (prevMeasure()) {
                 // look for a clef change at the end of the previous measure
@@ -3705,6 +3708,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                 Clef* c = toClef(s->element(track));
                 if (c) {
                     cl = c->clefTypeList();
+                    showCourtesy = c->showCourtesy();
                 }
             }
             Clef* clef = nullptr;
@@ -3724,6 +3728,8 @@ void Measure::addSystemHeader(bool isFirstSystem)
                     clef->setTrack(track);
                     clef->setGenerated(true);
                     clef->setParent(cSegment);
+                    clef->setIsHeader(true);
+                    clef->setShowCourtesy(showCourtesy);
                     cSegment->add(clef);
                 }
                 if (clef->generated()) {
@@ -3901,6 +3907,9 @@ void Measure::addSystemTrailer(Measure* nm)
     TimeSig* ts = nullptr;
     bool showCourtesySig = false;
     Segment* s = findSegmentR(SegmentType::TimeSigAnnounce, _rtick);
+    if (s) {
+        s->setTrailer(true);
+    }
     if (nm && score()->genCourtesyTimesig() && !isFinalMeasure && !score()->layoutOptions().isMode(LayoutMode::FLOAT)) {
         Segment* tss = nm->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
         if (tss) {
@@ -4122,7 +4131,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
         // skipped in computeMinWidth() -- the only way this would be an issue here is
         // if this method was called specifically with the invisible segment specified
         // which I'm pretty sure doesn't happen at this point. still...
-        if (!s->enabled() || !s->visible() || s->allElementsInvisible() || s->isRightAligned()) {
+        if (!s->enabled() || !s->visible() || s->allElementsInvisible() || (s->isRightAligned() && s != firstEnabled())) {
             s->setWidth(0);
             s = s->next();
             continue;
@@ -4349,7 +4358,7 @@ void Measure::spaceRightAlignedSegments()
     for (Segment* raSegment : rightAlignedSegments) {
         // 1) right-align the segment against the following ones
         double minDistAfter = arbitraryLowReal;
-        for (Segment* seg = raSegment->nextActive(); seg; seg = seg->nextActive()) {
+        for (Segment* seg = raSegment->next(); seg; seg = seg->next()) {
             double xDiff = seg->x() - raSegment->x();
             double minDist = raSegment->minHorizontalCollidingDistance(seg);
             minDistAfter = std::max(minDistAfter, minDist - xDiff);
@@ -4410,12 +4419,16 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
 
     // First, try to compute first segment x-position by padding against end barline of previous measure
     Measure* prevMeas = (prev() && prev()->isMeasure() && prev()->system() == system()) ? toMeasure(prev()) : nullptr;
-    Segment* prevMeasEnd = prevMeas ? prevMeas->last() : nullptr;
-    if (prevMeasEnd && prevMeasEnd->isEndBarLineType()
-        && !(segment->isBeginBarLineType() || segment->isStartRepeatBarLineType() || segment->isBarLineType())) {
-        x = prevMeasEnd->minHorizontalCollidingDistance(segment) - prevMeasEnd->minRight();
+    Segment* prevMeasEnd = prevMeas ? prevMeas->lastEnabled() : nullptr;
+    bool ignorePrev = !prevMeas || prevMeas->system() != system() || !prevMeasEnd
+                      || (prevMeasEnd->segmentType() & SegmentType::BarLineType && segment->segmentType() & SegmentType::BarLineType);
+    if (!ignorePrev) {
+        x = prevMeasEnd->minHorizontalCollidingDistance(segment);
+        x -= prevMeas->width() - prevMeasEnd->x();
     }
-    if (x <= 0) { // If that doesn't succeed (e.g. first bar) then just use left-margins
+
+    // If that doesn't succeed (e.g. first bar) then just use left-margins
+    if (x <= 0) {
         x = segment->minLeft(ls);
         if (segment->isChordRestType()) {
             x += score()->styleMM(segment->hasAccidentals() ? Sid::barAccidentalDistance : Sid::barNoteDistance);
@@ -4427,10 +4440,13 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
             x = std::max(x, score()->styleMM(Sid::timesigLeftMargin).val());
         }
     }
-    if (prevMeas && prevMeas->repeatEnd() && segment->isStartRepeatBarLineType() && (prevMeas->system() == system())) {
-        // The start-repeat should overlap the end-repeat of the previous measure
+
+    // Special case: the start-repeat should overlap the end-repeat of the previous measure
+    bool prevIsEndRepeat = prevMeas && prevMeas->repeatEnd() && prevMeasEnd && prevMeasEnd->isEndBarLineType();
+    if (prevIsEndRepeat && segment->isStartRepeatBarLineType() && (prevMeas->system() == system())) {
         x -= score()->styleMM(Sid::endBarWidth);
     }
+
     // Do a final check of chord distances (invisible items may in some cases elude the 2 previous steps)
     if (segment->isChordRestType()) {
         double barNoteDist = score()->styleMM(Sid::barNoteDistance).val();

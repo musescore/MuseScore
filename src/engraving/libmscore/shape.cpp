@@ -104,10 +104,16 @@ double Shape::minHorizontalDistance(const Shape& a) const
     double absoluteMinPadding = 0.1 * _spatium * _squeezeFactor;
     double verticalClearance = 0.2 * _spatium * _squeezeFactor;
     for (const ShapeElement& r2 : a) {
+        if (r2.isNull()) {
+            continue;
+        }
         const EngravingItem* item2 = r2.toItem;
         double by1 = r2.top();
         double by2 = r2.bottom();
         for (const ShapeElement& r1 : *this) {
+            if (r1.isNull()) {
+                continue;
+            }
             const EngravingItem* item1 = r1.toItem;
             double ay1 = r1.top();
             double ay2 = r1.bottom();
@@ -121,8 +127,8 @@ double Shape::minHorizontalDistance(const Shape& a) const
                 kerningType = item1->computeKerningType(item2);
             }
             if ((intersection && kerningType != KerningType::ALLOW_COLLISION)
-                || (r1.width() == 0 || r2.width() == 0) // Temporary hack: shapes of zero-width are assumed to collide with everyghin
-                || (!item1 && item2 && item2->isLyrics()) // Temporary hack: avoids collision with melisma line
+                || (r1.width() == 0 || r2.width() == 0)  // Temporary hack: shapes of zero-width are assumed to collide with everyghin
+                || (!item1 && item2 && item2->isLyrics())  // Temporary hack: avoids collision with melisma line
                 || kerningType == KerningType::NON_KERNING) {
                 dist = std::max(dist, r1.right() - r2.left() + padding);
             }

@@ -60,7 +60,6 @@ private:
     QList<mu::engraving::EngravingItem*> findBeams() const;
     QList<mu::engraving::EngravingItem*> findStaffs() const;
     QList<mu::engraving::EngravingItem*> findSectionBreaks() const;
-    QList<mu::engraving::EngravingItem*> findPairedClefs() const;
     QList<mu::engraving::EngravingItem*> findTexts() const;
     QList<mu::engraving::EngravingItem*> findTremolos() const;
     QList<mu::engraving::EngravingItem*> findBrackets() const;
