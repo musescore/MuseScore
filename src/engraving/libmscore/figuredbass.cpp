@@ -1080,6 +1080,10 @@ bool FiguredBass::isEditAllowed(EditData& ed) const
         return false;
     }
 
+    if ((ed.key == Key_Left || ed.key == Key_Right) && (ed.modifiers & ControlModifier)) {
+        return false;
+    }
+
     return TextBase::isEditAllowed(ed);
 }
 
