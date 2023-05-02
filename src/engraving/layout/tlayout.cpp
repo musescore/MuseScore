@@ -59,6 +59,7 @@
 #include "../libmscore/figuredbass.h"
 #include "../libmscore/fingering.h"
 #include "../libmscore/fret.h"
+#include "../libmscore/fretcircle.h"
 
 #include "../libmscore/note.h"
 
@@ -1801,6 +1802,33 @@ void TLayout::layout(FretDiagram* item, LayoutContext&)
             ss->skyline().add(r);
         }
     }
+}
+
+void TLayout::layout(FretCircle* item, LayoutContext&)
+{
+    item->setSkipDraw(false);
+    if (!item->tabEllipseEnabled()) {
+        item->setSkipDraw(true);
+        item->setbbox(RectF());
+        return;
+    }
+
+    double lw = item->spatium() * FretCircle::CIRCLE_WIDTH / 2;
+    item->m_rect = item->ellipseRect();
+
+    RectF chordRect;
+    double minWidth = item->m_chord->upNote()->width();
+    for (const Note* note : item->m_chord->notes()) {
+        chordRect |= note->bbox();
+        minWidth = std::min(minWidth, note->width());
+    }
+
+    item->_offsetFromUpNote = (item->m_rect.height() - chordRect.height()
+                               - (item->m_chord->downNote()->pos().y() - item->m_chord->upNote()->pos().y())
+                               ) / 2;
+    item->_sideOffset = (item->m_rect.width() - minWidth) / 2;
+
+    item->setbbox(item->m_rect.adjusted(-lw, -lw, lw, lw));
 }
 
 void TLayout::layout(GraceNotesGroup* item, LayoutContext&)
