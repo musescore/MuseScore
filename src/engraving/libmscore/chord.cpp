@@ -1921,7 +1921,7 @@ mu::PointF Chord::pagePos() const
 void Chord::layout()
 {
     LayoutContext ctx(score());
-    TLayout::layout(this, ctx);
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -3501,7 +3501,7 @@ GraceNotesGroup::GraceNotesGroup(Chord* c)
 void GraceNotesGroup::layout()
 {
     LayoutContext ctx(score());
-    TLayout::layout(this, ctx);
+    v0::TLayout::layout(this, ctx);
 }
 
 void GraceNotesGroup::setPos(double x, double y)

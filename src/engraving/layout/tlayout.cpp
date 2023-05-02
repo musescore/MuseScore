@@ -61,6 +61,7 @@
 
 using namespace mu::draw;
 using namespace mu::engraving;
+using namespace mu::engraving::v0;
 
 void TLayout::layout(Accidental* item, LayoutContext& ctx)
 {

@@ -79,7 +79,7 @@ void ActionIcon::setFontSize(double size)
 void ActionIcon::layout()
 {
     LayoutContext ctx(score());
-    TLayout::layout(this, ctx);
+    v0::TLayout::layout(this, ctx);
 }
 
 void ActionIcon::draw(Painter* painter) const

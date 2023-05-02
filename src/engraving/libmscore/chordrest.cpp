@@ -579,7 +579,7 @@ void ChordRest::removeDeleteBeam(bool beamed)
             score()->undoRemoveElement(b);
         } else {
             LayoutContext ctx(score());
-            TLayout::layout1(b, ctx);
+            v0::TLayout::layout1(b, ctx);
         }
     }
     if (!beamed && isChord()) {

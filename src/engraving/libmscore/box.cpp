@@ -70,7 +70,7 @@ Box::Box(const ElementType& type, System* parent)
 void Box::layout()
 {
     LayoutContext ctx(score());
-    TLayout::layoutBox(this, ctx);
+    v0::TLayout::layoutBox(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -353,7 +353,7 @@ HBox::HBox(System* parent)
 void HBox::layout()
 {
     LayoutContext ctx(score());
-    TLayout::layout(this, ctx);
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -614,7 +614,7 @@ PropertyValue VBox::getProperty(Pid propertyId) const
 void VBox::layout()
 {
     LayoutContext ctx(score());
-    TLayout::layout(this, ctx);
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -637,7 +637,7 @@ void VBox::startEditDrag(EditData& ed)
 void FBox::layout()
 {
     LayoutContext ctx(score());
-    TLayout::layout(this, ctx);
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

@@ -81,7 +81,7 @@ bool Breath::isCaesura() const
 void Breath::layout()
 {
     LayoutContext ctx(score());
-    TLayout::layout(this, ctx);
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
