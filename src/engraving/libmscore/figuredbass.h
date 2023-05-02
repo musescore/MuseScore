@@ -132,33 +132,6 @@ public:
         NUMOF
     };
 
-private:
-
-    static const Char normParenthToChar[int(Parenthesis::NUMOF)];
-
-    String _displayText;                        // the constructed display text (read-only)
-    int ord;                                    // the line ordinal of this element in the FB stack
-    // the parts making a FiguredBassItem up
-    Modifier _prefix;                           // the accidental coming before the body
-    int _digit;                                 // the main digit (if present)
-    Modifier _suffix;                           // the accidental coming after the body
-    ContLine _contLine;                         // whether the item has continuation line or not
-    Parenthesis parenth[5];                     // each of the parenthesis: before, between and after parts
-    double textWidth;                            // the text width (in raster units), set during layout()
-                                                 //    used by draw()
-    friend class FiguredBass;
-    FiguredBassItem(FiguredBass* parent = 0, int line = 0);
-    FiguredBassItem(const FiguredBassItem&);
-
-    // part parsing
-    int               parseDigit(String& str);
-    int               parseParenthesis(String& str, int parenthIdx);
-    int               parsePrefixSuffix(String& str, bool bPrefix);
-
-    void              setDisplayText(const String& s) { _displayText = s; }
-
-public:
-
     ~FiguredBassItem();
 
     FiguredBassItem& operator=(const FiguredBassItem&) = delete;
@@ -188,17 +161,17 @@ public:
     ContLine          contLine() const { return _contLine; }
     void              setContLine(const ContLine& v) { _contLine = v; }
     void              undoSetContLine(ContLine val);
-    Parenthesis       parenth1() const { return parenth[0]; }
-    Parenthesis       parenth2() const { return parenth[1]; }
-    Parenthesis       parenth3() const { return parenth[2]; }
-    Parenthesis       parenth4() const { return parenth[3]; }
-    Parenthesis       parenth5() const { return parenth[4]; }
+    Parenthesis       parenth1() const { return m_parenth[0]; }
+    Parenthesis       parenth2() const { return m_parenth[1]; }
+    Parenthesis       parenth3() const { return m_parenth[2]; }
+    Parenthesis       parenth4() const { return m_parenth[3]; }
+    Parenthesis       parenth5() const { return m_parenth[4]; }
 
-    void              setParenth1(Parenthesis v) { parenth[0] = v; }
-    void              setParenth2(Parenthesis v) { parenth[1] = v; }
-    void              setParenth3(Parenthesis v) { parenth[2] = v; }
-    void              setParenth4(Parenthesis v) { parenth[3] = v; }
-    void              setParenth5(Parenthesis v) { parenth[4] = v; }
+    void              setParenth1(Parenthesis v) { m_parenth[0] = v; }
+    void              setParenth2(Parenthesis v) { m_parenth[1] = v; }
+    void              setParenth3(Parenthesis v) { m_parenth[2] = v; }
+    void              setParenth4(Parenthesis v) { m_parenth[3] = v; }
+    void              setParenth5(Parenthesis v) { m_parenth[4] = v; }
 
     void              undoSetParenth1(Parenthesis par);
     void              undoSetParenth2(Parenthesis par);
@@ -211,6 +184,34 @@ public:
     PropertyValue  getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue  propertyDefault(Pid) const override;
+
+private:
+
+    friend class FiguredBass;
+    friend class v0::TLayout;
+
+    static const Char normParenthToChar[int(Parenthesis::NUMOF)];
+
+    String _displayText;                        // the constructed display text (read-only)
+    int m_ord;                                  // the line ordinal of this element in the FB stack
+    // the parts making a FiguredBassItem up
+    Modifier _prefix;                           // the accidental coming before the body
+    int _digit;                                 // the main digit (if present)
+    Modifier _suffix;                           // the accidental coming after the body
+    ContLine _contLine;                         // whether the item has continuation line or not
+    Parenthesis m_parenth[5];                   // each of the parenthesis: before, between and after parts
+    double m_textWidth;                         // the text width (in raster units), set during layout()
+                                                //    used by draw()
+
+    FiguredBassItem(FiguredBass* parent = 0, int line = 0);
+    FiguredBassItem(const FiguredBassItem&);
+
+    // part parsing
+    int               parseDigit(String& str);
+    int               parseParenthesis(String& str, int parenthIdx);
+    int               parsePrefixSuffix(String& str, bool bPrefix);
+
+    void              setDisplayText(const String& s) { _displayText = s; }
 };
 
 //---------------------------------------------------------
@@ -228,6 +229,9 @@ struct FiguredBassFont {
 
     bool read(XmlReader&);
 };
+
+// the array of configured fonts
+static std::vector<FiguredBassFont> g_FBFonts;
 
 //---------------------------------------------------------
 //   @@ FiguredBass
