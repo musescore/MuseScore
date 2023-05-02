@@ -24,6 +24,7 @@
 
 #include "types/symnames.h"
 #include "types/translatablestring.h"
+#include "layout/tlayout.h"
 
 #include "chord.h"
 #include "chordrest.h"
@@ -147,52 +148,8 @@ Page* Fermata::page() const
 
 void Fermata::layout()
 {
-    const StaffType* stType = staffType();
-
-    _skipDraw = false;
-    if (stType && stType->isHiddenElementOnTab(score(), Sid::fermataShowTabCommon, Sid::fermataShowTabSimple)) {
-        _skipDraw = true;
-        return;
-    }
-
-    Segment* s = segment();
-    setPos(PointF());
-    if (!s) {            // for use in palette
-        setOffset(0.0, 0.0);
-        RectF b(symBbox(_symId));
-        setbbox(b.translated(-0.5 * b.width(), 0.0));
-        return;
-    }
-
-    if (isStyled(Pid::OFFSET)) {
-        setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
-    }
-    EngravingItem* e = s->element(track());
-    if (e) {
-        if (e->isChord()) {
-            Chord* chord = toChord(e);
-            Note* note = chord->up() ? chord->downNote() : chord->upNote();
-            double offset = chord->xpos() + note->xpos() + note->headWidth() / 2;
-            movePosX(offset);
-        } else {
-            movePosX(e->x() - e->shape().left() + e->width() * staff()->staffMag(Fraction(0, 1)) * .5);
-        }
-    }
-
-    String name = String::fromAscii(SymNames::nameForSymId(_symId).ascii());
-    if (placeAbove()) {
-        if (name.endsWith(u"Below")) {
-            _symId = SymNames::symIdByName(name.left(name.size() - 5) + u"Above");
-        }
-    } else {
-        movePosY(staff()->height());
-        if (name.endsWith(u"Above")) {
-            _symId = SymNames::symIdByName(name.left(name.size() - 5) + u"Below");
-        }
-    }
-    RectF b(symBbox(_symId));
-    setbbox(b.translated(-0.5 * b.width(), 0.0));
-    autoplaceSegmentElement();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
