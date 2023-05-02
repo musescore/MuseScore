@@ -91,7 +91,7 @@ class Clef final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Clef)
     DECLARE_CLASSOF(ElementType::CLEF)
 
-    SymId symId;
+    SymId m_symId;
     bool _showCourtesy = true;
     bool m_isSmall = false;
     bool _forInstrumentChange = false;
@@ -119,6 +119,9 @@ public:
     void draw(mu::draw::Painter*) const override;
 
     bool isEditable() const override { return false; }
+
+    SymId symId() const { return m_symId; }
+    void setSymId(SymId s) { m_symId = s; }
 
     bool isSmall() const { return m_isSmall; }
     void setSmall(bool val);
