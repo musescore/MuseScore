@@ -22,11 +22,13 @@
 
 #include "gradualtempochange.h"
 
-#include "log.h"
+#include "layout/tlayout.h"
 
 #include "measure.h"
 #include "score.h"
 #include "segment.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -301,11 +303,8 @@ Sid GradualTempoChangeSegment::getPropertyStyle(Pid id) const
 
 void GradualTempoChangeSegment::layout()
 {
-    TextLineBaseSegment::layout();
-    if (isStyled(Pid::OFFSET)) {
-        roffset() = tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
-    autoplaceSpannerSegment();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 void GradualTempoChangeSegment::endEdit(EditData& editData)

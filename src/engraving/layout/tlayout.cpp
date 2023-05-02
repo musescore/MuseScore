@@ -62,6 +62,7 @@
 #include "../libmscore/fretcircle.h"
 
 #include "../libmscore/glissando.h"
+#include "../libmscore/gradualtempochange.h"
 
 #include "../libmscore/note.h"
 
@@ -2058,4 +2059,13 @@ void TLayout::layout(GraceNotesGroup* item, LayoutContext&)
     // Safety net in case the shape checks don't succeed
     xPos = std::min(xPos, -double(item->score()->styleMM(Sid::graceToMainNoteDist) + firstGN->notes().front()->headWidth() / 2));
     item->setPos(xPos, 0.0);
+}
+
+void TLayout::layout(GradualTempoChangeSegment* item, LayoutContext&)
+{
+    item->TextLineBaseSegment::layout();
+    if (item->isStyled(Pid::OFFSET)) {
+        item->roffset() = item->tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
+    }
+    item->autoplaceSpannerSegment();
 }

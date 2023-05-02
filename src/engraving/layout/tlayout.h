@@ -63,6 +63,7 @@ class FretCircle;
 class Glissando;
 class GlissandoSegment;
 class GraceNotesGroup;
+class GradualTempoChangeSegment;
 }
 
 namespace mu::engraving::v0 {
@@ -111,6 +112,7 @@ public:
     static void layout(Glissando* item, LayoutContext& ctx);
     static void layout(GlissandoSegment* item, LayoutContext& ctx);
     static void layout(GraceNotesGroup* item, LayoutContext& ctx);
+    static void layout(GradualTempoChangeSegment* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
