@@ -45,19 +45,26 @@ class MixerPanelModel : public QAbstractListModel, public async::Asyncable
     INJECT(IPlaybackController, controller)
     INJECT(context::IGlobalContext, context)
 
+    Q_PROPERTY(
+        mu::ui::NavigationSection * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
+
     Q_PROPERTY(int count READ rowCount NOTIFY rowCountChanged)
 
 public:
     explicit MixerPanelModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void load(const QVariant& navigationSection);
+    Q_INVOKABLE void load();
     Q_INVOKABLE QVariantMap get(int index);
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    ui::NavigationSection* navigationSection() const;
+    void setNavigationSection(ui::NavigationSection* navigationSection);
+
 signals:
+    void navigationSectionChanged();
     void rowCountChanged();
 
 private:
@@ -94,7 +101,7 @@ private:
     MixerChannelItem* m_masterChannelItem = nullptr;
     audio::TrackSequenceId m_currentTrackSequenceId = -1;
 
-    ui::NavigationSection* m_itemsNavigationSection = nullptr;
+    ui::NavigationSection* m_navigationSection = nullptr;
 };
 }
 

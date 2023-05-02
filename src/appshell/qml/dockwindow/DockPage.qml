@@ -45,7 +45,8 @@ DockPageView {
     centralDock: DockCentralView {
         objectName: root.objectName + "_central"
 
-        contentNavigationPanel: Boolean(central.item) ? central.item.navigationPanel : null
+        contentNavigationPanel: Boolean(central.item) && Boolean(central.item.navigationPanel) ?
+                                    central.item.navigationPanel : null
 
         Loader {
             id: central

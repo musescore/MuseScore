@@ -31,7 +31,6 @@ Item {
     enabled: selectionFilterModel.enabled
 
     property NavigationSection navigationSection: null
-
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "SelectionFilter"
         section: root.navigationSection

@@ -29,7 +29,14 @@ Item {
     id: root
 
     property alias contextMenuModel: contextMenuModel
-    property NavigationPanel navigationPanel: null
+
+    property NavigationSection navigationSection: null
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "PianoKeyboardSection"
+        section: root.navigationSection
+        direction: NavigationPanel.Vertical
+        enabled: root.enabled && root.visible
+    }
 
     PianoKeyboardPanelContextMenuModel {
         id: contextMenuModel

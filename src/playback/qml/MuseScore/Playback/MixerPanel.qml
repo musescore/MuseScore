@@ -36,6 +36,7 @@ ColumnLayout {
     property alias contextMenuModel: contextMenuModel
 
     property NavigationSection navigationSection: null
+    property NavigationPanel navigationPanel: mixerPanelModel.count > 0 ? mixerPanelModel.get(0).channelItem.panel : null // first panel
 
     signal resizeRequested(var newWidth, var newHeight)
 
@@ -70,8 +71,10 @@ ColumnLayout {
     MixerPanelModel {
         id: mixerPanelModel
 
+        navigationSection: root.navigationSection
+
         Component.onCompleted: {
-            mixerPanelModel.load(root.navigationSection)
+            mixerPanelModel.load()
         }
 
         onModelReset: {

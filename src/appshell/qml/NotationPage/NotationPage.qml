@@ -363,7 +363,11 @@ DockPage {
 
             dropDestinations: root.horizontalPanelDropDestinations
 
+            navigationSection: root.navigationPanelSec(pianoKeyboardPanel.location)
+
             PianoKeyboardPanel {
+                navigationSection: pianoKeyboardPanel.navigationSection
+
                 Component.onCompleted: {
                     pianoKeyboardPanel.contextMenuModel = contextMenuModel
                 }
@@ -389,7 +393,11 @@ DockPage {
 
             dropDestinations: root.horizontalPanelDropDestinations
 
-            Timeline {}
+            navigationSection: root.navigationPanelSec(timelinePanel.location)
+
+            Timeline {
+                navigationSection: timelinePanel.navigationSection
+            }
         },
 
         DockPanel {
@@ -410,7 +418,11 @@ DockPage {
 
             location: Location.Bottom
 
-            DrumsetPanel {}
+            navigationSection: root.navigationPanelSec(drumsetPanel.location)
+
+            DrumsetPanel {
+                navigationSection: timelinePanel.navigationSection
+            }
         }
     ]
 

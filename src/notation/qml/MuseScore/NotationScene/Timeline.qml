@@ -26,7 +26,15 @@ import MuseScore.Ui 1.0
 import MuseScore.NotationScene 1.0
 
 Item {
-    property NavigationPanel navigationPanel: null // first panel
+    id: root
+
+    property NavigationSection navigationSection: null
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "TimelineSection"
+        section: root.navigationSection
+        direction: NavigationPanel.Vertical
+        enabled: root.enabled && root.visible
+    }
 
     TimelineView {
         anchors.fill: parent

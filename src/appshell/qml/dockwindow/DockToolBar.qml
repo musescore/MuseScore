@@ -41,7 +41,8 @@ DockToolBarView {
     minimumWidth: root.inited ? Math.min(root.contentWidth, root.maximumWidth) : prv.minimumLength
     minimumHeight: root.inited ? Math.min(root.contentHeight, root.maximumHeight) : prv.minimumLength
 
-    contentNavigationPanel: Boolean(contentLoader.item) ? contentLoader.item.navigationPanel : null
+    contentNavigationPanel: Boolean(contentLoader.item) && Boolean(contentLoader.item.navigationPanel) ?
+                                contentLoader.item.navigationPanel : null
 
     onFloatingChanged: {
         if (!root.floating) {

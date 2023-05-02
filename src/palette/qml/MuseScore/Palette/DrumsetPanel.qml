@@ -27,7 +27,15 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Palette 1.0
 
 Item {
-    property NavigationPanel navigationPanel: null // first panel
+    id: root
+
+    property NavigationSection navigationSection: null
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "DrumsetSection"
+        section: root.navigationSection
+        direction: NavigationPanel.Vertical
+        enabled: root.enabled && root.visible
+    }
 
     RowLayout {
         anchors.fill: parent
