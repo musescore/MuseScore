@@ -48,7 +48,9 @@ class Breath;
 class Chord;
 
 class GraceNotesGroup;
+}
 
+namespace mu::engraving::v0 {
 class TLayout
 {
 public:

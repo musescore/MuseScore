@@ -1199,7 +1199,7 @@ RectF BarLine::layoutRect() const
 void BarLine::layout()
 {
     LayoutContext ctx(score());
-    TLayout::layout(this, ctx);
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -1210,7 +1210,7 @@ void BarLine::layout()
 void BarLine::layout2()
 {
     LayoutContext ctx(score());
-    TLayout::layout2(this, ctx);
+    v0::TLayout::layout2(this, ctx);
 }
 
 //---------------------------------------------------------

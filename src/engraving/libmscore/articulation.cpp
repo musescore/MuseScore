@@ -237,7 +237,7 @@ Page* Articulation::page() const
 void Articulation::layout()
 {
     LayoutContext ctx(score());
-    TLayout::layout(this, ctx);
+    v0::TLayout::layout(this, ctx);
 }
 
 bool Articulation::isHiddenOnTabStaff() const

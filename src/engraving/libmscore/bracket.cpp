@@ -167,7 +167,7 @@ void Bracket::setStaffSpan(size_t a, size_t b)
 void Bracket::layout()
 {
     LayoutContext ctx(score());
-    TLayout::layout(this, ctx);
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
