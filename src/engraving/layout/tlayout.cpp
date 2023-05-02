@@ -50,6 +50,7 @@
 #include "../libmscore/note.h"
 
 #include "../libmscore/staff.h"
+#include "../libmscore/stem.h"
 #include "../libmscore/system.h"
 
 #include "../libmscore/text.h"
@@ -993,4 +994,52 @@ void TLayout::layout(Breath* item, LayoutContext&)
 void TLayout::layout(Chord* item, LayoutContext& ctx)
 {
     ChordLayout::layout(item, ctx);
+}
+
+void TLayout::layout(GraceNotesGroup* item, LayoutContext&)
+{
+    Shape _shape;
+    for (size_t i = item->size() - 1; i != mu::nidx; --i) {
+        Chord* grace = item->at(i);
+        Shape graceShape = grace->shape();
+        Shape groupShape = _shape;
+        mu::remove_if(groupShape, [grace](ShapeElement& s) {
+            if (!s.toItem || (s.toItem->isStem() && s.toItem->vStaffIdx() != grace->vStaffIdx())) {
+                return true;
+            }
+            return false;
+        });
+        double offset;
+        offset = -std::max(graceShape.minHorizontalDistance(groupShape), 0.0);
+        // Adjust spacing for cross-beam situations
+        if (i < item->size() - 1) {
+            Chord* prevGrace = item->at(i + 1);
+            if (prevGrace->up() != grace->up()) {
+                double crossCorrection = grace->notes().front()->headWidth() - grace->stem()->width();
+                if (prevGrace->up() && !grace->up()) {
+                    offset += crossCorrection;
+                } else {
+                    offset -= crossCorrection;
+                }
+            }
+        }
+        _shape.add(graceShape.translated(mu::PointF(offset, 0.0)));
+        double xpos = offset - item->parent()->rxoffset() - item->parent()->xpos();
+        grace->setPos(xpos, 0.0);
+    }
+    double xPos = -_shape.minHorizontalDistance(item->appendedSegment()->staffShape(item->parent()->staffIdx()));
+    // If the parent chord is cross-staff, also check against shape in the other staff and take the minimum
+    if (item->parent()->staffMove() != 0) {
+        double xPosCross = -_shape.minHorizontalDistance(item->appendedSegment()->staffShape(item->parent()->vStaffIdx()));
+        xPos = std::min(xPos, xPosCross);
+    }
+    // Same if the grace note itself is cross-staff
+    Chord* firstGN = item->back();
+    if (firstGN->staffMove() != 0) {
+        double xPosCross = -_shape.minHorizontalDistance(item->appendedSegment()->staffShape(firstGN->vStaffIdx()));
+        xPos = std::min(xPos, xPosCross);
+    }
+    // Safety net in case the shape checks don't succeed
+    xPos = std::min(xPos, -double(item->score()->styleMM(Sid::graceToMainNoteDist) + firstGN->notes().front()->headWidth() / 2));
+    item->setPos(xPos, 0.0);
 }
