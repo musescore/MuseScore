@@ -30,6 +30,7 @@
 #include "translation.h"
 
 #include "types/typesconv.h"
+#include "layout/tlayout.h"
 
 #include "ambitus.h"
 #include "factory.h"
@@ -96,7 +97,7 @@ const ClefInfo ClefInfo::clefTable[] = {
 //---------------------------------------------------------
 
 Clef::Clef(Segment* parent)
-    : EngravingItem(ElementType::CLEF, parent, ElementFlag::ON_STAFF), symId(SymId::noSym)
+    : EngravingItem(ElementType::CLEF, parent, ElementFlag::ON_STAFF), m_symId(SymId::noSym)
 {
     _clefToBarlinePosition = ClefToBarlinePosition::AUTO;
     _isHeader = parent->isHeaderClefType();
@@ -121,107 +122,8 @@ double Clef::mag() const
 
 void Clef::layout()
 {
-    // determine current number of lines and line distance
-    int lines;
-    double lineDist;
-    Segment* clefSeg  = segment();
-    int stepOffset;
-
-    // check clef visibility and type compatibility
-    if (clefSeg && staff()) {
-        Fraction tick = clefSeg->tick();
-        const StaffType* st = staff()->staffType(tick);
-        bool show     = st->genClef();            // check staff type allows clef display
-        StaffGroup staffGroup = st->group();
-
-        // if not tab, use instrument->useDrumset to set staffGroup (to allow pitched to unpitched in same staff)
-        if (staffGroup != StaffGroup::TAB) {
-            staffGroup = staff()->part()->instrument(this->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
-        }
-
-        // check clef is compatible with staff type group:
-        if (ClefInfo::staffGroup(clefType()) != staffGroup) {
-            if (tick > Fraction(0, 1) && !generated()) {     // if clef is not generated, hide it
-                show = false;
-            } else {                            // if generated, replace with initial clef type
-                // TODO : instead of initial staff clef (which is assumed to be compatible)
-                // use the last compatible clef previously found in staff
-                _clefTypes = staff()->clefType(Fraction(0, 1));
-            }
-        }
-
-        // if clef not to show or not compatible with staff group
-        if (!show) {
-            setbbox(RectF());
-            symId = SymId::noSym;
-            LOGD("Clef::layout(): invisible clef at tick %d(%d) staff %zu",
-                 segment()->tick().ticks(), segment()->tick().ticks() / 1920, staffIdx());
-            return;
-        }
-        lines      = st->lines();             // init values from staff type
-        lineDist   = st->lineDistance().val();
-        stepOffset = st->stepOffset();
-    } else {
-        lines      = 5;
-        lineDist   = 1.0;
-        stepOffset = 0;
-    }
-
-    double _spatium = spatium();
-    double yoff     = 0.0;
-    if (clefType() != ClefType::INVALID && clefType() != ClefType::MAX) {
-        symId = ClefInfo::symId(clefType());
-        yoff = lineDist * (5 - ClefInfo::line(clefType()));
-    } else {
-        symId = SymId::noSym;
-    }
-
-    switch (clefType()) {
-    case ClefType::C_19C:                                    // 19th C clef is like a G clef
-        yoff = lineDist * 1.5;
-        break;
-    case ClefType::TAB:                                    // TAB clef
-        // on tablature, position clef at half the number of spaces * line distance
-        yoff = lineDist * (lines - 1) * .5;
-        stepOffset = 0;           //  ignore stepOffset for TAB and percussion clefs
-        break;
-    case ClefType::TAB4:                                    // TAB clef 4 strings
-        // on tablature, position clef at half the number of spaces * line distance
-        yoff = lineDist * (lines - 1) * .5;
-        stepOffset = 0;
-        break;
-    case ClefType::TAB_SERIF:                                   // TAB clef alternate style
-        // on tablature, position clef at half the number of spaces * line distance
-        yoff = lineDist * (lines - 1) * .5;
-        stepOffset = 0;
-        break;
-    case ClefType::TAB4_SERIF:                                   // TAB clef alternate style
-        // on tablature, position clef at half the number of spaces * line distance
-        yoff = lineDist * (lines - 1) * .5;
-        stepOffset = 0;
-        break;
-    case ClefType::PERC:                                   // percussion clefs
-        yoff = lineDist * (lines - 1) * 0.5;
-        stepOffset = 0;
-        break;
-    case ClefType::PERC2:
-        yoff = lineDist * (lines - 1) * 0.5;
-        stepOffset = 0;
-        break;
-    case ClefType::INVALID:
-    case ClefType::MAX:
-        LOGD("Clef::layout: invalid type");
-        return;
-    default:
-        break;
-    }
-    // clefs on palette or at start of system/measure are left aligned
-    // other clefs are right aligned
-    RectF r(symBbox(symId));
-    double x = segment() && segment()->rtick().isNotZero() ? -r.right() : 0.0;
-    setPos(x, yoff * _spatium + (stepOffset * 0.5 * _spatium));
-
-    setbbox(r);
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -231,11 +133,11 @@ void Clef::layout()
 void Clef::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;
-    if (symId == SymId::noSym || (staff() && !const_cast<const Staff*>(staff())->staffType(tick())->genClef())) {
+    if (m_symId == SymId::noSym || (staff() && !const_cast<const Staff*>(staff())->staffType(tick())->genClef())) {
         return;
     }
     painter->setPen(curColor());
-    drawSymbol(symId, painter);
+    drawSymbol(m_symId, painter);
 }
 
 //---------------------------------------------------------
@@ -659,7 +561,7 @@ String Clef::accessibleInfo() const
 void Clef::clear()
 {
     setbbox(RectF());
-    symId = SymId::noSym;
+    m_symId = SymId::noSym;
     Clef* pairedClef = otherClef();
     if (selected() && !isHeader() && pairedClef) {
         score()->deselect(this);
