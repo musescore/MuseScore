@@ -178,8 +178,6 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::stemLengthSmall,         "stemLengthSmall",         PropertyValue(2.25) },
     { Sid::shortStemStartLocation,  "shortStemStartLocation",  1 },
     { Sid::shortestStem,            "shortestStem",            PropertyValue(2.5) },
-    { Sid::minStaffSizeForAutoStems, "minStaffSizeForAutoStems", 4 },
-    { Sid::smallStaffStemDirection, "smallStaffStemDirection", DirectionV::UP },
     { Sid::beginRepeatLeftMargin,   "beginRepeatLeftMargin",   Spatium(1.0) },
     { Sid::minNoteDistance,         "minNoteDistance",         Spatium(0.5) },
     { Sid::barNoteDistance,         "barNoteDistance",         Spatium(1.3) },     // was 1.2

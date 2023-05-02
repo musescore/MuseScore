@@ -1161,14 +1161,6 @@ void Chord::computeUp()
         return;
     }
 
-    int staffLineCount = staff()->lines(tick());
-    DirectionV stemDirection = score()->styleV(Sid::smallStaffStemDirection).value<DirectionV>();
-    int minStaffSizeForAutoStems = score()->styleI(Sid::minStaffSizeForAutoStems);
-    if (staffLineCount < minStaffSizeForAutoStems && stemDirection != DirectionV::AUTO) {
-        _up = stemDirection == DirectionV::UP;
-        return;
-    }
-
     std::vector<int> distances = noteDistances();
     int direction = Chord::computeAutoStemDirection(distances);
     _up = direction > 0;
