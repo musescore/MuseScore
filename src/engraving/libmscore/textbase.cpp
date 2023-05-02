@@ -785,9 +785,10 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     mu::draw::Font font;
 
     double m = format.fontSize();
+    double spatiumScaling = t->spatium() / SPATIUM20;
 
     if (t->sizeIsSpatiumDependent()) {
-        m *= t->spatium() / SPATIUM20;
+        m *= spatiumScaling;
     }
     if (format.valign() != VerticalAlignment::AlignNormal) {
         m *= subScriptSize;
@@ -801,7 +802,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
             family = String::fromStdString(fontName);
             fontType = draw::Font::Type::MusicSymbol;
             if (t->isDynamic()) {
-                m = DYNAMICS_DEFAULT_FONT_SIZE * t->getProperty(Pid::DYNAMICS_SIZE).toDouble();
+                m = DYNAMICS_DEFAULT_FONT_SIZE * t->getProperty(Pid::DYNAMICS_SIZE).toDouble() * spatiumScaling;
                 if (t->score()->styleB(Sid::dynamicsOverrideFont)) {
                     std::string fontName = engravingFonts()->fontByName(t->score()->styleSt(Sid::dynamicsFont).toStdString())->family();
                     family = String::fromStdString(fontName);
