@@ -76,6 +76,9 @@ class Glissando final : public SLine
     M_PROPERTY(int, easeOut, setEaseOut)
 
 public:
+    static constexpr double GLISS_PALETTE_WIDTH = 4.0;
+    static constexpr double GLISS_PALETTE_HEIGHT = 4.0;
+
     Glissando(EngravingItem* parent);
     Glissando(const Glissando&);
 
