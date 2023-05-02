@@ -44,6 +44,8 @@ class Fermata final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Fermata)
     DECLARE_CLASSOF(ElementType::FERMATA)
 
+    friend class v0::TLayout;
+
     SymId _symId;
     double _timeStretch = -1.0;
     bool _play;

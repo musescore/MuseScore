@@ -54,6 +54,8 @@ class Dynamic;
 
 class Expression;
 
+class Fermata;
+
 class GraceNotesGroup;
 }
 
@@ -93,6 +95,8 @@ public:
     static void layout(Dynamic* item, LayoutContext& ctx);
 
     static void layout(Expression* item, LayoutContext& ctx);
+
+    static void layout(Fermata* item, LayoutContext& ctx);
 
     static void layout(GraceNotesGroup* item, LayoutContext& ctx);
 
