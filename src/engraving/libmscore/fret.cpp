@@ -28,6 +28,8 @@
 #include "draw/types/brush.h"
 #include "draw/types/pen.h"
 
+#include "layout/tlayout.h"
+
 #include "chord.h"
 #include "factory.h"
 #include "harmony.h"
@@ -73,8 +75,8 @@ static const ElementStyle fretStyle {
 FretDiagram::FretDiagram(Segment* parent)
     : EngravingItem(ElementType::FRET_DIAGRAM, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-    font.setFamily(u"FreeSans", draw::Font::Type::Tablature);
-    font.setPointSizeF(4.0 * mag());
+    m_font.setFamily(u"FreeSans", draw::Font::Type::Tablature);
+    m_font.setPointSizeF(4.0 * mag());
     initElementStyle(&fretStyle);
 }
 
@@ -85,7 +87,7 @@ FretDiagram::FretDiagram(const FretDiagram& f)
     _frets      = f._frets;
     _fretOffset = f._fretOffset;
     _maxFrets   = f._maxFrets;
-    font        = f.font;
+    m_font        = f.m_font;
     _userMag    = f._userMag;
     _numPos     = f._numPos;
     _dots       = f._dots;
@@ -293,7 +295,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;
     using namespace mu::draw;
-    PointF translation = -PointF(stringDist * (_strings - 1), 0);
+    PointF translation = -PointF(m_stringDist * (_strings - 1), 0);
     if (_orientation == Orientation::HORIZONTAL) {
         painter->save();
         painter->rotate(-90);
@@ -307,25 +309,25 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     painter->setBrush(Brush(Color(painter->pen().color())));
 
     // x2 is the x val of the rightmost string
-    double x2 = (_strings - 1) * stringDist;
+    double x2 = (_strings - 1) * m_stringDist;
 
     // Draw the nut
-    pen.setWidthF(nutLw);
+    pen.setWidthF(m_nutLw);
     painter->setPen(pen);
-    painter->drawLine(LineF(-stringLw * .5, 0.0, x2 + stringLw * .5, 0.0));
+    painter->drawLine(LineF(-m_stringLw * .5, 0.0, x2 + m_stringLw * .5, 0.0));
 
     // Draw strings and frets
-    pen.setWidthF(stringLw);
+    pen.setWidthF(m_stringLw);
     painter->setPen(pen);
 
     // y2 is the y val of the bottom fretline
-    double y2 = fretDist * (_frets + .5);
+    double y2 = m_fretDist * (_frets + .5);
     for (int i = 0; i < _strings; ++i) {
-        double x = stringDist * i;
+        double x = m_stringDist * i;
         painter->drawLine(LineF(x, _fretOffset ? -_spatium * .2 : 0.0, x, y2));
     }
     for (int i = 1; i <= _frets; ++i) {
-        double y = fretDist * i;
+        double y = m_fretDist * i;
         painter->drawLine(LineF(0.0, y, x2, y));
     }
 
@@ -335,7 +337,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     // Draw dots, sym pen is used to draw them (and markers)
     Pen symPen(pen);
     symPen.setCapStyle(PenCapStyle::RoundCap);
-    double symPenWidth = stringLw * 1.2;
+    double symPenWidth = m_stringLw * 1.2;
     symPen.setWidthF(symPenWidth);
 
     for (auto const& i : _dots) {
@@ -348,8 +350,8 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
             int fret = d.fret - 1;
 
             // Calculate coords of the top left corner of the dot
-            double x = stringDist * string - dotd * .5;
-            double y = fretDist * fret + fretDist * .5 - dotd * .5;
+            double x = m_stringDist * string - dotd * .5;
+            double y = m_fretDist * fret + m_fretDist * .5 - dotd * .5;
 
             // Draw different symbols
             painter->setPen(symPen);
@@ -392,13 +394,13 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
             continue;
         }
 
-        double x = stringDist * string - markerSize * .5;
-        double y = -fretDist - markerSize * .5;
+        double x = m_stringDist * string - m_markerSize * .5;
+        double y = -m_fretDist - m_markerSize * .5;
         if (marker.mtype == FretMarkerType::CIRCLE) {
-            painter->drawEllipse(RectF(x, y, markerSize, markerSize));
+            painter->drawEllipse(RectF(x, y, m_markerSize, m_markerSize));
         } else if (marker.mtype == FretMarkerType::CROSS) {
-            painter->drawLine(PointF(x, y), PointF(x + markerSize, y + markerSize));
-            painter->drawLine(PointF(x, y + markerSize), PointF(x + markerSize, y));
+            painter->drawLine(PointF(x, y), PointF(x + m_markerSize, y + m_markerSize));
+            painter->drawLine(PointF(x, y + m_markerSize), PointF(x + m_markerSize, y));
         }
     }
 
@@ -408,9 +410,9 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
         int startString = i.second.startString;
         int endString   = i.second.endString;
 
-        double x1    = stringDist * startString;
-        double newX2 = endString == -1 ? x2 : stringDist * endString;
-        double y     = fretDist * (fret - 1) + fretDist * .5;
+        double x1    = m_stringDist * startString;
+        double newX2 = endString == -1 ? x2 : m_stringDist * endString;
+        double y     = m_fretDist * (fret - 1) + m_fretDist * .5;
         pen.setWidthF(dotd * score()->styleD(Sid::barreLineWidth));
         pen.setCapStyle(PenCapStyle::RoundCap);
         painter->setPen(pen);
@@ -420,17 +422,17 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     // Draw fret offset number
     if (_fretOffset > 0) {
         double fretNumMag = score()->styleD(Sid::fretNumMag);
-        mu::draw::Font scaledFont(font);
-        scaledFont.setPointSizeF(font.pointSizeF() * _userMag * (spatium() / SPATIUM20) * MScore::pixelRatio * fretNumMag);
+        mu::draw::Font scaledFont(m_font);
+        scaledFont.setPointSizeF(m_font.pointSizeF() * _userMag * (spatium() / SPATIUM20) * MScore::pixelRatio * fretNumMag);
         painter->setFont(scaledFont);
         String text = String::number(_fretOffset + 1);
 
         if (_orientation == Orientation::VERTICAL) {
             if (_numPos == 0) {
-                painter->drawText(RectF(-stringDist * .4, .0, .0, fretDist),
+                painter->drawText(RectF(-m_stringDist * .4, .0, .0, m_fretDist),
                                   draw::AlignVCenter | draw::AlignRight | draw::TextDontClip, text);
             } else {
-                painter->drawText(RectF(x2 + (stringDist * .4), .0, .0, fretDist),
+                painter->drawText(RectF(x2 + (m_stringDist * .4), .0, .0, m_fretDist),
                                   draw::AlignVCenter | draw::AlignLeft | draw::TextDontClip,
                                   String::number(_fretOffset + 1));
             }
@@ -439,14 +441,14 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
             painter->translate(-translation);
             painter->rotate(90);
             if (_numPos == 0) {
-                painter->drawText(RectF(.0, stringDist * (_strings - 1), .0, .0),
+                painter->drawText(RectF(.0, m_stringDist * (_strings - 1), .0, .0),
                                   draw::AlignLeft | draw::TextDontClip, text);
             } else {
                 painter->drawText(RectF(.0, .0, .0, .0), draw::AlignBottom | draw::AlignLeft | draw::TextDontClip, text);
             }
             painter->restore();
         }
-        painter->setFont(font);
+        painter->setFont(m_font);
     }
 
     // NOTE:JT possible future todo - draw fingerings
@@ -462,119 +464,20 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
 
 void FretDiagram::layout()
 {
-    double _spatium  = spatium() * _userMag;
-    stringLw        = _spatium * 0.08;
-    nutLw           = (_fretOffset || !_showNut) ? stringLw : _spatium * 0.2;
-    stringDist      = score()->styleMM(Sid::fretStringSpacing) * _userMag;
-    fretDist        = score()->styleMM(Sid::fretFretSpacing) * _userMag;
-    markerSize      = stringDist * .8;
-
-    double w    = stringDist * (_strings - 1) + markerSize;
-    double h    = (_frets + 1) * fretDist + markerSize;
-    double y    = -(markerSize * .5 + fretDist);
-    double x    = -(markerSize * .5);
-
-    // Allocate space for fret offset number
-    if (_fretOffset > 0) {
-        mu::draw::Font scaledFont(font);
-        scaledFont.setPointSizeF(font.pointSizeF() * _userMag);
-
-        double fretNumMag = score()->styleD(Sid::fretNumMag);
-        scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
-        mu::draw::FontMetrics fm2(scaledFont);
-        double numw = fm2.width(String::number(_fretOffset + 1));
-        double xdiff = numw + stringDist * .4;
-        w += xdiff;
-        x += (_numPos == 0) == (_orientation == Orientation::VERTICAL) ? -xdiff : 0;
-    }
-
-    if (_orientation == Orientation::HORIZONTAL) {
-        double tempW = w,
-               tempX = x;
-        w = h;
-        h = tempW;
-        x = y;
-        y = tempX;
-    }
-
-    // When changing how bbox is calculated, don't forget to update the centerX and rightX methods too.
-    bbox().setRect(x, y, w, h);
-
-    if (!explicitParent() || !explicitParent()->isSegment()) {
-        setPos(PointF());
-        return;
-    }
-
-    // We need to get the width of the notehead/rest in order to position the fret diagram correctly
-    Segment* pSeg = toSegment(explicitParent());
-    double noteheadWidth = 0;
-    if (pSeg->isChordRestType()) {
-        staff_idx_t idx = staff()->idx();
-        for (EngravingItem* e = pSeg->firstElementOfSegment(pSeg, idx); e; e = pSeg->nextElementOfSegment(pSeg, e, idx)) {
-            if (e->isRest()) {
-                Rest* r = toRest(e);
-                noteheadWidth = symWidth(r->sym());
-                break;
-            } else if (e->isNote()) {
-                Note* n = toNote(e);
-                noteheadWidth = n->headWidth();
-                break;
-            }
-        }
-    }
-
-    double mainWidth = 0.0;
-    if (_orientation == Orientation::VERTICAL) {
-        mainWidth = stringDist * (_strings - 1);
-    } else if (_orientation == Orientation::HORIZONTAL) {
-        mainWidth = fretDist * (_frets + 0.5);
-    }
-    setPos((noteheadWidth - mainWidth) / 2, -(h + styleP(Sid::fretY)));
-
-    autoplaceSegmentElement();
-
-    // don't display harmony in palette
-    if (!explicitParent()) {
-        return;
-    }
-
-    if (_harmony) {
-        _harmony->layout();
-    }
-    if (_harmony && _harmony->autoplace() && _harmony->explicitParent()) {
-        Segment* s = toSegment(explicitParent());
-        Measure* m = s->measure();
-        staff_idx_t si = staffIdx();
-
-        SysStaff* ss = m->system()->staff(si);
-        RectF r = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos());
-
-        double minDistance = _harmony->minDistance().val() * spatium();
-        SkylineLine sk(false);
-        sk.add(r.x(), r.bottom(), r.width());
-        double d = sk.minDistance(ss->skyline().north());
-        if (d > -minDistance) {
-            double yd = d + minDistance;
-            yd *= -1.0;
-            _harmony->movePosY(yd);
-            r.translate(PointF(0.0, yd));
-        }
-        if (_harmony->addToSkyline()) {
-            ss->skyline().add(r);
-        }
-    }
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 double FretDiagram::centerX() const
 {
     // Keep in sync with how bbox is calculated in layout().
-    return (bbox().right() - markerSize * .5) * .5;
+    return (bbox().right() - m_markerSize * .5) * .5;
 }
 
 double FretDiagram::rightX() const
 {
     // Keep in sync with how bbox is calculated in layout().
-    return bbox().right() - markerSize * .5;
+    return bbox().right() - m_markerSize * .5;
 }
 
 //---------------------------------------------------------

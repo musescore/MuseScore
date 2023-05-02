@@ -58,6 +58,7 @@
 #include "../libmscore/fermata.h"
 #include "../libmscore/figuredbass.h"
 #include "../libmscore/fingering.h"
+#include "../libmscore/fret.h"
 
 #include "../libmscore/note.h"
 
@@ -1695,6 +1696,111 @@ void TLayout::layout(Fingering* item, LayoutContext&)
         item->rebaseOffset(false);
     }
     item->setOffsetChanged(false);
+}
+
+void TLayout::layout(FretDiagram* item, LayoutContext&)
+{
+    double _spatium  = item->spatium() * item->_userMag;
+    item->m_stringLw        = _spatium * 0.08;
+    item->m_nutLw           = (item->_fretOffset || !item->_showNut) ? item->m_stringLw : _spatium * 0.2;
+    item->m_stringDist      = item->score()->styleMM(Sid::fretStringSpacing) * item->_userMag;
+    item->m_fretDist        = item->score()->styleMM(Sid::fretFretSpacing) * item->_userMag;
+    item->m_markerSize      = item->m_stringDist * .8;
+
+    double w    = item->m_stringDist * (item->_strings - 1) + item->m_markerSize;
+    double h    = (item->_frets + 1) * item->m_fretDist + item->m_markerSize;
+    double y    = -(item->m_markerSize * .5 + item->m_fretDist);
+    double x    = -(item->m_markerSize * .5);
+
+    // Allocate space for fret offset number
+    if (item->_fretOffset > 0) {
+        mu::draw::Font scaledFont(item->m_font);
+        scaledFont.setPointSizeF(item->m_font.pointSizeF() * item->_userMag);
+
+        double fretNumMag = item->score()->styleD(Sid::fretNumMag);
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
+        mu::draw::FontMetrics fm2(scaledFont);
+        double numw = fm2.width(String::number(item->_fretOffset + 1));
+        double xdiff = numw + item->m_stringDist * .4;
+        w += xdiff;
+        x += (item->_numPos == 0) == (item->_orientation == Orientation::VERTICAL) ? -xdiff : 0;
+    }
+
+    if (item->_orientation == Orientation::HORIZONTAL) {
+        double tempW = w,
+               tempX = x;
+        w = h;
+        h = tempW;
+        x = y;
+        y = tempX;
+    }
+
+    // When changing how bbox is calculated, don't forget to update the centerX and rightX methods too.
+    item->bbox().setRect(x, y, w, h);
+
+    if (!item->explicitParent() || !item->explicitParent()->isSegment()) {
+        item->setPos(PointF());
+        return;
+    }
+
+    // We need to get the width of the notehead/rest in order to position the fret diagram correctly
+    Segment* pSeg = toSegment(item->explicitParent());
+    double noteheadWidth = 0;
+    if (pSeg->isChordRestType()) {
+        staff_idx_t idx = item->staff()->idx();
+        for (EngravingItem* e = pSeg->firstElementOfSegment(pSeg, idx); e; e = pSeg->nextElementOfSegment(pSeg, e, idx)) {
+            if (e->isRest()) {
+                Rest* r = toRest(e);
+                noteheadWidth = item->symWidth(r->sym());
+                break;
+            } else if (e->isNote()) {
+                Note* n = toNote(e);
+                noteheadWidth = n->headWidth();
+                break;
+            }
+        }
+    }
+
+    double mainWidth = 0.0;
+    if (item->_orientation == Orientation::VERTICAL) {
+        mainWidth = item->m_stringDist * (item->_strings - 1);
+    } else if (item->_orientation == Orientation::HORIZONTAL) {
+        mainWidth = item->m_fretDist * (item->_frets + 0.5);
+    }
+    item->setPos((noteheadWidth - mainWidth) / 2, -(h + item->styleP(Sid::fretY)));
+
+    item->autoplaceSegmentElement();
+
+    // don't display harmony in palette
+    if (!item->explicitParent()) {
+        return;
+    }
+
+    if (item->_harmony) {
+        item->_harmony->layout();
+    }
+    if (item->_harmony && item->_harmony->autoplace() && item->_harmony->explicitParent()) {
+        Segment* s = toSegment(item->explicitParent());
+        Measure* m = s->measure();
+        staff_idx_t si = item->staffIdx();
+
+        SysStaff* ss = m->system()->staff(si);
+        RectF r = item->_harmony->bbox().translated(m->pos() + s->pos() + item->pos() + item->_harmony->pos());
+
+        double minDistance = item->_harmony->minDistance().val() * item->spatium();
+        SkylineLine sk(false);
+        sk.add(r.x(), r.bottom(), r.width());
+        double d = sk.minDistance(ss->skyline().north());
+        if (d > -minDistance) {
+            double yd = d + minDistance;
+            yd *= -1.0;
+            item->_harmony->movePosY(yd);
+            r.translate(PointF(0.0, yd));
+        }
+        if (item->_harmony->addToSkyline()) {
+            ss->skyline().add(r);
+        }
+    }
 }
 
 void TLayout::layout(GraceNotesGroup* item, LayoutContext&)

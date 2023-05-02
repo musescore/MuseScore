@@ -137,43 +137,6 @@ class FretDiagram final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, FretDiagram)
     DECLARE_CLASSOF(ElementType::FRET_DIAGRAM)
 
-    int _strings       { 6 };
-    int _frets         { 4 };
-    int _fretOffset    { 0 };
-    int _maxFrets      { 24 };
-    bool _showNut      { true };
-    Orientation _orientation      { Orientation::VERTICAL };
-
-    // Barres are stored in the format: K: fret, V: barre struct
-    BarreMap _barres;
-
-    // Dots stored as K: string, V: dot struct
-    DotMap _dots;
-
-    // Markers stored as K: string, V: marker struct
-    MarkerMap _markers;
-
-    Harmony* _harmony  { nullptr };
-
-    double stringLw;
-    double nutLw;
-    double stringDist;
-    double fretDist;
-    mu::draw::Font font;
-    double _userMag     { 1.0 };                 // allowed 0.1 - 10.0
-    double markerSize;
-    int _numPos;
-
-    friend class Factory;
-    FretDiagram(Segment* parent = nullptr);
-    FretDiagram(const FretDiagram&);
-
-    void removeDot(int s, int f = 0);
-    void removeBarre(int f);
-    void removeBarres(int string, int fret = 0);
-    void removeMarker(int s);
-    void removeDotsMarkers(int ss, int es, int fret);
-
 public:
 
     ~FretDiagram();
@@ -253,6 +216,46 @@ public:
     String screenReaderInfo() const override;
 
     friend class FretUndoData;
+
+private:
+    friend class v0::TLayout;
+    friend class Factory;
+
+    FretDiagram(Segment* parent = nullptr);
+    FretDiagram(const FretDiagram&);
+
+    void removeDot(int s, int f = 0);
+    void removeBarre(int f);
+    void removeBarres(int string, int fret = 0);
+    void removeMarker(int s);
+    void removeDotsMarkers(int ss, int es, int fret);
+
+    int _strings       { 6 };
+    int _frets         { 4 };
+    int _fretOffset    { 0 };
+    int _maxFrets      { 24 };
+    bool _showNut      { true };
+    Orientation _orientation      { Orientation::VERTICAL };
+
+    // Barres are stored in the format: K: fret, V: barre struct
+    BarreMap _barres;
+
+    // Dots stored as K: string, V: dot struct
+    DotMap _dots;
+
+    // Markers stored as K: string, V: marker struct
+    MarkerMap _markers;
+
+    Harmony* _harmony  { nullptr };
+
+    double m_stringLw;
+    double m_nutLw;
+    double m_stringDist;
+    double m_fretDist;
+    mu::draw::Font m_font;
+    double _userMag     { 1.0 };                 // allowed 0.1 - 10.0
+    double m_markerSize;
+    int _numPos;
 };
 } // namespace mu::engraving
 
