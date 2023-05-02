@@ -50,10 +50,13 @@
 #include "../libmscore/clef.h"
 
 #include "../libmscore/deadslapped.h"
+#include "../libmscore/dynamic.h"
 
 #include "../libmscore/note.h"
 
 #include "../libmscore/part.h"
+
+#include "../libmscore/rest.h"
 
 #include "../libmscore/staff.h"
 #include "../libmscore/stem.h"
@@ -1239,6 +1242,69 @@ void TLayout::layout(DeadSlapped* item, LayoutContext&)
         item->m_path2.lineTo(bottomLeft + offsetX);
         item->m_path2.lineTo(topRight);
     }
+}
+
+void TLayout::layout(Dynamic* item, LayoutContext&)
+{
+    item->_snappedExpression = nullptr; // Here we reset it. It will become known again when we layout expression
+
+    const StaffType* stType = item->staffType();
+
+    item->_skipDraw = false;
+    if (stType && stType->isHiddenElementOnTab(item->score(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
+        item->_skipDraw = true;
+        return;
+    }
+
+    item->TextBase::layout();
+
+    Segment* s = item->segment();
+    if (!s || (!item->_centerOnNotehead && item->align().horizontal == AlignH::LEFT)) {
+        return;
+    }
+
+    EngravingItem* itemToAlign = nullptr;
+    track_idx_t startTrack = staff2track(item->staffIdx());
+    track_idx_t endTrack = startTrack + VOICES;
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
+        EngravingItem* e = s->elementAt(track);
+        if (!e || (e->isRest() && toRest(e)->ticks() >= item->measure()->ticks() && item->measure()->hasVoices(e->staffIdx()))) {
+            continue;
+        }
+        itemToAlign = e;
+        break;
+    }
+
+    if (!itemToAlign->isChord()) {
+        item->movePosX(itemToAlign->width() * 0.5);
+        return;
+    }
+
+    Chord* chord = toChord(itemToAlign);
+    bool centerOnNote = item->_centerOnNotehead || (!item->_centerOnNotehead && item->align().horizontal == AlignH::HCENTER);
+
+    // Move to center of notehead width
+    Note* note = chord->notes().at(0);
+    double noteHeadWidth = note->headWidth();
+    item->movePosX(noteHeadWidth * (centerOnNote ? 0.5 : 1));
+
+    if (!item->_centerOnNotehead) {
+        return;
+    }
+
+    // Use Smufl optical center for dynamic if available
+    SymId symId = TConv::symId(item->dynamicType());
+    double opticalCenter = item->symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x();
+    if (symId != SymId::noSym && opticalCenter) {
+        double symWidth = item->symBbox(symId).width();
+        double offset = symWidth / 2 - opticalCenter + item->symBbox(symId).left();
+        double spatiumScaling = item->spatium() / item->score()->spatium();
+        offset *= spatiumScaling;
+        item->movePosX(offset);
+    }
+
+    // If the dynamic contains custom text, keep it aligned
+    item->movePosX(-item->customTextOffset());
 }
 
 void TLayout::layout(GraceNotesGroup* item, LayoutContext&)

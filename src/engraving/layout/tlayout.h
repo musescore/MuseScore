@@ -50,6 +50,7 @@ class ChordLine;
 class Clef;
 
 class DeadSlapped;
+class Dynamic;
 
 class GraceNotesGroup;
 }
@@ -87,6 +88,7 @@ public:
     static void layout(Clef* item, LayoutContext& ctx);
 
     static void layout(DeadSlapped* item, LayoutContext& ctx);
+    static void layout(Dynamic* item, LayoutContext& ctx);
 
     static void layout(GraceNotesGroup* item, LayoutContext& ctx);
 

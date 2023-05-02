@@ -23,6 +23,7 @@
 
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
+#include "layout/tlayout.h"
 
 #include "chord.h"
 #include "dynamichairpingroup.h"
@@ -238,65 +239,8 @@ bool Dynamic::isVelocityChangeAvailable() const
 
 void Dynamic::layout()
 {
-    _snappedExpression = nullptr; // Here we reset it. It will become known again when we layout expression
-
-    const StaffType* stType = staffType();
-
-    _skipDraw = false;
-    if (stType && stType->isHiddenElementOnTab(score(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
-        _skipDraw = true;
-        return;
-    }
-
-    TextBase::layout();
-
-    Segment* s = segment();
-    if (!s || (!_centerOnNotehead && align().horizontal == AlignH::LEFT)) {
-        return;
-    }
-
-    EngravingItem* itemToAlign = nullptr;
-    track_idx_t startTrack = staff2track(staffIdx());
-    track_idx_t endTrack = startTrack + VOICES;
-    for (track_idx_t track = startTrack; track < endTrack; ++track) {
-        EngravingItem* e = s->elementAt(track);
-        if (!e || (e->isRest() && toRest(e)->ticks() >= measure()->ticks() && measure()->hasVoices(e->staffIdx()))) {
-            continue;
-        }
-        itemToAlign = e;
-        break;
-    }
-
-    if (!itemToAlign->isChord()) {
-        movePosX(itemToAlign->width() * 0.5);
-        return;
-    }
-
-    Chord* chord = toChord(itemToAlign);
-    bool centerOnNote = _centerOnNotehead || (!_centerOnNotehead && align().horizontal == AlignH::HCENTER);
-
-    // Move to center of notehead width
-    Note* note = chord->notes().at(0);
-    double noteHeadWidth = note->headWidth();
-    movePosX(noteHeadWidth * (centerOnNote ? 0.5 : 1));
-
-    if (!_centerOnNotehead) {
-        return;
-    }
-
-    // Use Smufl optical center for dynamic if available
-    SymId symId = TConv::symId(dynamicType());
-    double opticalCenter = symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x();
-    if (symId != SymId::noSym && opticalCenter) {
-        double symWidth = symBbox(symId).width();
-        double offset = symWidth / 2 - opticalCenter + symBbox(symId).left();
-        double spatiumScaling = spatium() / score()->spatium();
-        offset *= spatiumScaling;
-        movePosX(offset);
-    }
-
-    // If the dynamic contains custom text, keep it aligned
-    movePosX(-customTextOffset());
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 double Dynamic::customTextOffset()
