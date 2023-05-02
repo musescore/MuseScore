@@ -37,7 +37,7 @@ NICE-TO-HAVE TODO:
 #include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
 #include "style/style.h"
-
+#include "layout/tlayout.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
 
@@ -64,9 +64,6 @@ static const ElementStyle glissandoElementStyle {
     { Sid::glissandoText,      Pid::GLISS_TEXT },
 };
 
-static constexpr double GLISS_PALETTE_WIDTH = 4.0;
-static constexpr double GLISS_PALETTE_HEIGHT = 4.0;
-
 //=========================================================
 //   GlissandoSegment
 //=========================================================
@@ -82,17 +79,8 @@ GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
 
 void GlissandoSegment::layout()
 {
-    if (pos2().x() <= 0) {
-        setbbox(RectF());
-        return;
-    }
-
-    if (staff()) {
-        setMag(staff()->staffMag(tick()));
-    }
-    RectF r = RectF(0.0, 0.0, pos2().x(), pos2().y()).normalized();
-    double lw = glissando()->lineWidth() * .5;
-    setbbox(r.adjusted(-lw, -lw, lw, lw));
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -248,164 +236,8 @@ LineSegment* Glissando::createLineSegment(System* parent)
 
 void Glissando::layout()
 {
-    double _spatium = spatium();
-
-    if (score()->isPaletteScore() || !startElement() || !endElement()) {    // for use in palettes or while dragging
-        if (spannerSegments().empty()) {
-            add(createLineSegment(score()->dummy()->system()));
-        }
-        LineSegment* s = frontSegment();
-        s->setPos(PointF(-_spatium * GLISS_PALETTE_WIDTH / 2, _spatium * GLISS_PALETTE_HEIGHT / 2));
-        s->setPos2(PointF(_spatium * GLISS_PALETTE_WIDTH, -_spatium * GLISS_PALETTE_HEIGHT));
-        s->layout();
-        return;
-    }
-    SLine::layout();
-    if (spannerSegments().empty()) {
-        LOGD("no segments");
-        return;
-    }
-    setPos(0.0, 0.0);
-
-    Note* anchor1     = toNote(startElement());
-    Note* anchor2     = toNote(endElement());
-    Chord* cr1         = anchor1->chord();
-    Chord* cr2         = anchor2->chord();
-    GlissandoSegment* segm1 = toGlissandoSegment(frontSegment());
-    GlissandoSegment* segm2 = toGlissandoSegment(backSegment());
-
-    // Note: line segments are defined by
-    // initial point: ipos() (relative to system origin)
-    // ending point:  pos2() (relative to initial point)
-
-    // LINE ENDING POINTS TO NOTEHEAD CENTRES
-
-    // assume gliss. line goes from centre of initial note centre to centre of ending note:
-    // move first segment origin and last segment ending point from notehead origin to notehead centre
-    // For TAB: begin at the right-edge of initial note rather than centre
-    PointF offs1 = (cr1->staff()->isTabStaff(cr1->tick())) ? PointF(anchor1->bbox().right(), 0.0) : PointF(
-        anchor1->headWidth() * 0.5, 0.0);
-    PointF offs2 = PointF(anchor2->headWidth() * 0.5, 0.0);
-
-    // AVOID HORIZONTAL LINES
-
-    int upDown = (0 < (anchor2->pitch() - anchor1->pitch())) - ((anchor2->pitch() - anchor1->pitch()) < 0);
-    // on TAB's, glissando are by necessity on the same string, this gives an horizontal glissando line;
-    // make bottom end point lower and top ending point higher
-    if (cr1->staff()->isTabStaff(cr1->tick())) {
-        double yOff = cr1->staff()->lineDistance(cr1->tick()) * 0.4 * _spatium;
-        offs1.ry() += yOff * upDown;
-        offs2.ry() -= yOff * upDown;
-    }
-    // if not TAB, angle glissando between notes on the same line
-    else {
-        if (anchor1->line() == anchor2->line()) {
-            offs1.ry() += _spatium * 0.25 * upDown;
-            offs2.ry() -= _spatium * 0.25 * upDown;
-        }
-    }
-
-    // move initial point of first segment and adjust its length accordingly
-    segm1->setPos(segm1->ipos() + offs1);
-    segm1->setPos2(segm1->ipos2() - offs1);
-    // adjust ending point of last segment
-    segm2->setPos2(segm2->ipos2() + offs2);
-
-    // FINAL SYSTEM-INITIAL NOTE
-    // if the last gliss. segment attaches to a system-initial note, some extra width has to be added
-    if (cr2->segment()->measure()->isFirstInSystem() && cr2->rtick().isZero()
-        // but ignore graces after, as they are not the first note of the system,
-        // even if their segment is the first segment of the system
-        && !(cr2->noteType() == NoteType::GRACE8_AFTER
-             || cr2->noteType() == NoteType::GRACE16_AFTER || cr2->noteType() == NoteType::GRACE32_AFTER)
-        // also ignore if cr1 is a child of cr2, which means cr1 is a grace-before of cr2
-        && !(cr1->explicitParent() == cr2)) {
-        // in theory we should be reserving space for the gliss prior to the first note of a system
-        // but in practice we are not (and would be difficult to get right in current layout algorithms)
-        // so, a compromise is to at least use the available space to the left -
-        // the default layout for lines left a margin after the header
-        segm2->movePosX(-_spatium);
-        segm2->rxpos2()+= _spatium;
-    }
-
-    // INTERPOLATION OF INTERMEDIATE POINTS
-    // This probably belongs to SLine class itself; currently it does not seem
-    // to be needed for anything else than Glissando, though
-
-    // get total x-width and total y-height of all segments
-    double xTot = 0.0;
-    for (SpannerSegment* segm : spannerSegments()) {
-        xTot += segm->ipos2().x();
-    }
-    double y0   = segm1->ipos().y();
-    double yTot = segm2->ipos().y() + segm2->ipos2().y() - y0;
-    yTot -= yStaffDifference(segm2->system(), segm2->staffIdx(), segm1->system(), segm1->staffIdx());
-    double ratio = yTot / xTot;
-    // interpolate y-coord of intermediate points across total width and height
-    double xCurr = 0.0;
-    double yCurr;
-    for (unsigned i = 0; i + 1 < spannerSegments().size(); i++) {
-        SpannerSegment* segm = segmentAt(i);
-        xCurr += segm->ipos2().x();
-        yCurr = y0 + ratio * xCurr;
-        segm->rypos2() = yCurr - segm->ipos().y();           // position segm. end point at yCurr
-        // next segment shall start where this segment stopped, corrected for the staff y-difference
-        SpannerSegment* nextSeg = segmentAt(i + 1);
-        yCurr += yStaffDifference(nextSeg->system(), nextSeg->staffIdx(), segm->system(), segm->staffIdx());
-        segm = nextSeg;
-        segm->rypos2() += segm->ipos().y() - yCurr;          // adjust next segm. vertical length
-        segm->setPosY(yCurr);                                // position next segm. start point at yCurr
-    }
-
-    // KEEP CLEAR OF ALL ELEMENTS OF THE CHORD
-    // Remove offset already applied
-    offs1 *= -1.0;
-    offs2 *= -1.0;
-    // Look at chord shapes (but don't consider lyrics)
-    Shape cr1shape = cr1->shape();
-    mu::remove_if(cr1shape, [](ShapeElement& s) {
-        if (!s.toItem || s.toItem->isLyrics()) {
-            return true;
-        } else {
-            return false;
-        }
-    });
-    offs1.rx() += cr1shape.right() - anchor1->pos().x();
-    if (!cr2->staff()->isTabStaff(cr2->tick())) {
-        offs2.rx() -= cr2->shape().left() + anchor2->pos().x();
-    }
-    // Add note distance
-    const double glissNoteDist = 0.25 * spatium(); // TODO: style
-    offs1.rx() += glissNoteDist;
-    offs2.rx() -= glissNoteDist;
-
-    // apply offsets: shorten first segment by x1 (and proportionally y) and adjust its length accordingly
-    offs1.ry() = segm1->ipos2().y() * offs1.x() / segm1->ipos2().x();
-    segm1->setPos(segm1->ipos() + offs1);
-    segm1->setPos2(segm1->ipos2() - offs1);
-    // adjust last segment length by x2 (and proportionally y)
-    offs2.ry() = segm2->ipos2().y() * offs2.x() / segm2->ipos2().x();
-    segm2->setPos2(segm2->ipos2() + offs2);
-
-    for (SpannerSegment* segm : spannerSegments()) {
-        segm->layout();
-    }
-
-    // compute glissando bbox as the bbox of the last segment, relative to the end anchor note
-    PointF anchor2PagePos = anchor2->pagePos();
-    PointF system2PagePos;
-    IF_ASSERT_FAILED(cr2->segment()->system()) {
-        system2PagePos = segm2->pos();
-    } else {
-        system2PagePos = cr2->segment()->system()->pagePos();
-    }
-
-    PointF anchor2SystPos = anchor2PagePos - system2PagePos;
-    RectF r = RectF(anchor2SystPos - segm2->pos(), anchor2SystPos - segm2->pos() - segm2->pos2()).normalized();
-    double lw = lineWidth() * .5;
-    setbbox(r.adjusted(-lw, -lw, lw, lw));
-
-    addLineAttachPoints();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 void Glissando::addLineAttachPoints()

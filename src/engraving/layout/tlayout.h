@@ -60,6 +60,8 @@ class Fingering;
 class FretDiagram;
 class FretCircle;
 
+class Glissando;
+class GlissandoSegment;
 class GraceNotesGroup;
 }
 
@@ -106,6 +108,8 @@ public:
     static void layout(FretDiagram* item, LayoutContext& ctx);
     static void layout(FretCircle* item, LayoutContext& ctx);
 
+    static void layout(Glissando* item, LayoutContext& ctx);
+    static void layout(GlissandoSegment* item, LayoutContext& ctx);
     static void layout(GraceNotesGroup* item, LayoutContext& ctx);
 
 private:
