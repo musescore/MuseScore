@@ -1446,7 +1446,7 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
 
     // construct font metrics
     int fontIdx = 0;
-    mu::draw::Font f(g_FBFonts.at(fontIdx).family, draw::Font::Type::Tablature);
+    mu::draw::Font f(FiguredBass::FBFonts().at(fontIdx).family, draw::Font::Type::Tablature);
 
     // font size in pixels, scaled according to spatium()
     // (use the same font selection as used in draw() below)
@@ -1463,7 +1463,7 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
     int style = item->score()->styleI(Sid::figuredBassStyle);
 
     if (item->m_parenth[0] != FiguredBassItem::Parenthesis::NONE) {
-        str.append(g_FBFonts.at(font).displayParenthesis[int(item->m_parenth[0])]);
+        str.append(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->m_parenth[0])]);
     }
 
     // prefix
@@ -1472,7 +1472,7 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
         if (item->_digit == FBIDigitNone) {
             x1 = fm.width(str);
         }
-        str.append(g_FBFonts.at(font).displayAccidental[int(item->_prefix)]);
+        str.append(FiguredBass::FBFonts().at(font).displayAccidental[int(item->_prefix)]);
         // if no digit, the string from here onward 'hangs' to the right of the note
         if (item->_digit == FBIDigitNone) {
             x2 = fm.width(str);
@@ -1480,7 +1480,7 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
     }
 
     if (item->m_parenth[1] != FiguredBassItem::Parenthesis::NONE) {
-        str.append(g_FBFonts.at(font).displayParenthesis[int(item->m_parenth[1])]);
+        str.append(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->m_parenth[1])]);
     }
 
     // digit
@@ -1494,16 +1494,16 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
                 || item->_suffix == FiguredBassItem::Modifier::BACKSLASH
                 || item->_suffix == FiguredBassItem::Modifier::SLASH)
             && item->m_parenth[2] == FiguredBassItem::Parenthesis::NONE) {
-            str.append(g_FBFonts.at(font).displayDigit[style][item->_digit][int(item->_suffix)
-                                                                            - (int(FiguredBassItem::Modifier::CROSS)
-                                                                               - 1)]);
+            str.append(FiguredBass::FBFonts().at(font).displayDigit[style][item->_digit][int(item->_suffix)
+                                                                                         - (int(FiguredBassItem::Modifier::CROSS)
+                                                                                            - 1)]);
         }
         // if several digits or no shape combination, convert _digit to font styled chars
         else {
             String digits;
             int digit = item->_digit;
             while (true) {
-                digits.prepend(g_FBFonts.at(font).displayDigit[style][(digit % 10)][0]);
+                digits.prepend(FiguredBass::FBFonts().at(font).displayDigit[style][(digit % 10)][0]);
                 digit /= 10;
                 if (digit == 0) {
                     break;
@@ -1516,7 +1516,7 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
     }
 
     if (item->m_parenth[2] != FiguredBassItem::Parenthesis::NONE) {
-        str.append(g_FBFonts.at(font).displayParenthesis[int(item->m_parenth[2])]);
+        str.append(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->m_parenth[2])]);
     }
 
     // suffix
@@ -1527,11 +1527,11 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
              && item->_suffix != FiguredBassItem::Modifier::SLASH)
             || item->_digit == FBIDigitNone
             || item->m_parenth[2] != FiguredBassItem::Parenthesis::NONE)) {
-        str.append(g_FBFonts.at(font).displayAccidental[int(item->_suffix)]);
+        str.append(FiguredBass::FBFonts().at(font).displayAccidental[int(item->_suffix)]);
     }
 
     if (item->m_parenth[3] != FiguredBassItem::Parenthesis::NONE) {
-        str.append(g_FBFonts.at(font).displayParenthesis[int(item->m_parenth[3])]);
+        str.append(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->m_parenth[3])]);
     }
 
     item->setDisplayText(str);                  // this text will be displayed

@@ -48,6 +48,13 @@ using namespace mu::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
+static std::vector<FiguredBassFont> g_FBFonts;
+
+const std::vector<FiguredBassFont>& FiguredBass::FBFonts()
+{
+    return g_FBFonts;
+}
+
 //---------------------------------------------------------
 //   figuredBassStyle
 //---------------------------------------------------------
