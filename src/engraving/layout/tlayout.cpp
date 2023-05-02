@@ -49,6 +49,8 @@
 #include "../libmscore/chordline.h"
 #include "../libmscore/clef.h"
 
+#include "../libmscore/deadslapped.h"
+
 #include "../libmscore/note.h"
 
 #include "../libmscore/part.h"
@@ -1200,6 +1202,43 @@ void TLayout::layout(Clef* item, LayoutContext&)
     item->setPos(x, yoff * _spatium + (stepOffset * 0.5 * _spatium));
 
     item->setbbox(r);
+}
+
+void TLayout::layout(DeadSlapped* item, LayoutContext&)
+{
+    const double deadSlappedWidth = item->spatium() * 2;
+    RectF rect = RectF(0, 0, deadSlappedWidth, item->staff()->height());
+    item->setbbox(rect);
+
+    // fillPath
+    {
+        constexpr double crossThinknessPercentage = 0.1;
+        double height = rect.height();
+        double width = rect.width();
+        double crossThickness = width * crossThinknessPercentage;
+
+        PointF topLeft = PointF(rect.x(), rect.y());
+        PointF bottomRight = topLeft + PointF(width, height);
+        PointF topRight = topLeft + PointF(width, 0);
+        PointF bottomLeft = topLeft + PointF(0, height);
+        PointF offsetX = PointF(crossThickness, 0);
+
+        item->m_path1 = mu::draw::PainterPath();
+
+        item->m_path1.moveTo(topLeft);
+        item->m_path1.lineTo(topLeft + offsetX);
+        item->m_path1.lineTo(bottomRight);
+        item->m_path1.lineTo(bottomRight - offsetX);
+        item->m_path1.lineTo(topLeft);
+
+        item->m_path2 = mu::draw::PainterPath();
+
+        item->m_path2.moveTo(topRight);
+        item->m_path2.lineTo(topRight - offsetX);
+        item->m_path2.lineTo(bottomLeft);
+        item->m_path2.lineTo(bottomLeft + offsetX);
+        item->m_path2.lineTo(topRight);
+    }
 }
 
 void TLayout::layout(GraceNotesGroup* item, LayoutContext&)
