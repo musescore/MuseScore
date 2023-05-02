@@ -161,10 +161,11 @@ void StretchedBend::fillSegments()
                 // prevent double bendUp rendering
                 int prevBendPitch = m_drawPoints[pt - 1];
                 // remove prev segment if there are two bendup in a row
-                if (prevBendPitch == 0 && pitch > 0) {
+                if (!m_bendSegments.empty()) {
                     m_bendSegments.pop_back();
-                } else if (prevBendPitch > 0 && prevBendPitch < pitch) {
-                    m_bendSegments.back().tone = bendTone(0);
+                    if (prevBendPitch > 0 && prevBendPitch < pitch && !m_bendSegments.empty()) {
+                        m_bendSegments.back().tone = bendTone(0);
+                    }
                 }
                 // We need to reset the src position in case we remove or change prev bend
                 src = upBendDefaultSrc;
@@ -346,10 +347,13 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
                     m_boundingRect.setHeight(m_boundingRect.height() + m_spatium);
                     m_boundingRect.setY(m_boundingRect.y() - m_spatium);
                 } else {
-                    double textLabelOffset = (!bendUp && !m_releasedToInitial ? m_spatium : 0);
-                    PointF textPoint = dest + PointF(textLabelOffset, -textLabelOffset);
-                    /// TODO: remove substraction after fixing bRect
-                    drawText(painter, textPoint - PointF(0, m_spatium * 0.5), text);
+                    // We need to draw text only for bendup elems
+                    if (bendUp) {
+                        double textLabelOffset = (!bendUp && !m_releasedToInitial ? m_spatium : 0);
+                        PointF textPoint = dest + PointF(textLabelOffset, -textLabelOffset);
+                        /// TODO: remove substraction after fixing bRect
+                        drawText(painter, textPoint - PointF(0, m_spatium * 0.5), text);
+                    }
                 }
 
                 isTextDrawn = true;
