@@ -49,6 +49,8 @@ class Chord;
 class ChordLine;
 class Clef;
 
+class DeadSlapped;
+
 class GraceNotesGroup;
 }
 
@@ -83,6 +85,8 @@ public:
     static void layout(Chord* item, LayoutContext& ctx);
     static void layout(ChordLine* item, LayoutContext& ctx);
     static void layout(Clef* item, LayoutContext& ctx);
+
+    static void layout(DeadSlapped* item, LayoutContext& ctx);
 
     static void layout(GraceNotesGroup* item, LayoutContext& ctx);
 

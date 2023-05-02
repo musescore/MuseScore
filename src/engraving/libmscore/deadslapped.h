@@ -47,10 +47,10 @@ public:
 private:
 
     friend class Factory;
-    DeadSlapped(Rest* parent);
-    void fillPath();
+    friend class v0::TLayout;
 
-    mu::RectF m_rect;
+    DeadSlapped(Rest* parent);
+
     mu::draw::PainterPath m_path1;
     mu::draw::PainterPath m_path2;
 };

@@ -22,6 +22,8 @@
 
 #include "deadslapped.h"
 
+#include "layout/tlayout.h"
+
 #include "rest.h"
 #include "staff.h"
 #include "log.h"
@@ -29,7 +31,6 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //    DeadSlapped
 //--------------------------------------------------------
@@ -54,43 +55,6 @@ void DeadSlapped::draw(mu::draw::Painter* painter) const
 
 void DeadSlapped::layout()
 {
-    const double deadSlappedWidth = spatium() * 2;
-    m_rect = RectF(0, 0, deadSlappedWidth, staff()->height());
-    setbbox(m_rect);
-    fillPath();
-}
-
-//---------------------------------------------------------
-//   fillPath
-//---------------------------------------------------------
-
-void DeadSlapped::fillPath()
-{
-    constexpr double crossThinknessPercentage = 0.1;
-    double height = m_rect.height();
-    double width = m_rect.width();
-    double crossThickness = width * crossThinknessPercentage;
-
-    PointF topLeft = PointF(m_rect.x(), m_rect.y());
-    PointF bottomRight = topLeft + PointF(width, height);
-    PointF topRight = topLeft + PointF(width, 0);
-    PointF bottomLeft = topLeft + PointF(0, height);
-    PointF offsetX = PointF(crossThickness, 0);
-
-    m_path1 = mu::draw::PainterPath();
-
-    m_path1.moveTo(topLeft);
-    m_path1.lineTo(topLeft + offsetX);
-    m_path1.lineTo(bottomRight);
-    m_path1.lineTo(bottomRight - offsetX);
-    m_path1.lineTo(topLeft);
-
-    m_path2 = mu::draw::PainterPath();
-
-    m_path2.moveTo(topRight);
-    m_path2.lineTo(topRight - offsetX);
-    m_path2.lineTo(bottomLeft);
-    m_path2.lineTo(bottomLeft + offsetX);
-    m_path2.lineTo(topRight);
-}
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
