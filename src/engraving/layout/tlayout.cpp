@@ -56,6 +56,7 @@
 #include "../libmscore/expression.h"
 
 #include "../libmscore/fermata.h"
+#include "../libmscore/figuredbass.h"
 
 #include "../libmscore/note.h"
 
@@ -1425,6 +1426,134 @@ void TLayout::layout(Fermata* item, LayoutContext&)
     RectF b(item->symBbox(item->_symId));
     item->setbbox(b.translated(-0.5 * b.width(), 0.0));
     item->autoplaceSegmentElement();
+}
+
+//---------------------------------------------------------
+//   FiguredBassItem layout
+//    creates the display text (set as element text) and computes
+//    the horiz. offset needed to align the right part as well as the vert. offset
+//---------------------------------------------------------
+
+void TLayout::layout(FiguredBassItem* item, LayoutContext&)
+{
+    double h, w, x, x1, x2, y;
+
+    // construct font metrics
+    int fontIdx = 0;
+    mu::draw::Font f(g_FBFonts.at(fontIdx).family, draw::Font::Type::Tablature);
+
+    // font size in pixels, scaled according to spatium()
+    // (use the same font selection as used in draw() below)
+    double m = item->score()->styleD(Sid::figuredBassFontSize) * item->spatium() / SPATIUM20;
+    f.setPointSizeF(m);
+    mu::draw::FontMetrics fm(f);
+
+    String str;
+    x  = item->symWidth(SymId::noteheadBlack) * .5;
+    x1 = x2 = 0.0;
+
+    // create display text
+    int font = 0;
+    int style = item->score()->styleI(Sid::figuredBassStyle);
+
+    if (item->m_parenth[0] != FiguredBassItem::Parenthesis::NONE) {
+        str.append(g_FBFonts.at(font).displayParenthesis[int(item->m_parenth[0])]);
+    }
+
+    // prefix
+    if (item->_prefix != FiguredBassItem::Modifier::NONE) {
+        // if no digit, the string created so far 'hangs' to the left of the note
+        if (item->_digit == FBIDigitNone) {
+            x1 = fm.width(str);
+        }
+        str.append(g_FBFonts.at(font).displayAccidental[int(item->_prefix)]);
+        // if no digit, the string from here onward 'hangs' to the right of the note
+        if (item->_digit == FBIDigitNone) {
+            x2 = fm.width(str);
+        }
+    }
+
+    if (item->m_parenth[1] != FiguredBassItem::Parenthesis::NONE) {
+        str.append(g_FBFonts.at(font).displayParenthesis[int(item->m_parenth[1])]);
+    }
+
+    // digit
+    if (item->_digit != FBIDigitNone) {
+        // if some digit, the string created so far 'hangs' to the left of the note
+        x1 = fm.width(str);
+        // if suffix is a combining shape, combine it with digit (multi-digit numbers cannot be combined)
+        // unless there is a parenthesis in between
+        if ((item->_digit < 10)
+            && (item->_suffix == FiguredBassItem::Modifier::CROSS
+                || item->_suffix == FiguredBassItem::Modifier::BACKSLASH
+                || item->_suffix == FiguredBassItem::Modifier::SLASH)
+            && item->m_parenth[2] == FiguredBassItem::Parenthesis::NONE) {
+            str.append(g_FBFonts.at(font).displayDigit[style][item->_digit][int(item->_suffix)
+                                                                            - (int(FiguredBassItem::Modifier::CROSS)
+                                                                               - 1)]);
+        }
+        // if several digits or no shape combination, convert _digit to font styled chars
+        else {
+            String digits;
+            int digit = item->_digit;
+            while (true) {
+                digits.prepend(g_FBFonts.at(font).displayDigit[style][(digit % 10)][0]);
+                digit /= 10;
+                if (digit == 0) {
+                    break;
+                }
+            }
+            str.append(digits);
+        }
+        // if some digit, the string from here onward 'hangs' to the right of the note
+        x2 = fm.width(str);
+    }
+
+    if (item->m_parenth[2] != FiguredBassItem::Parenthesis::NONE) {
+        str.append(g_FBFonts.at(font).displayParenthesis[int(item->m_parenth[2])]);
+    }
+
+    // suffix
+    // append only if non-combining shape or cannot combine (no digit or parenthesis in between)
+    if (item->_suffix != FiguredBassItem::Modifier::NONE
+        && ((item->_suffix != FiguredBassItem::Modifier::CROSS
+             && item->_suffix != FiguredBassItem::Modifier::BACKSLASH
+             && item->_suffix != FiguredBassItem::Modifier::SLASH)
+            || item->_digit == FBIDigitNone
+            || item->m_parenth[2] != FiguredBassItem::Parenthesis::NONE)) {
+        str.append(g_FBFonts.at(font).displayAccidental[int(item->_suffix)]);
+    }
+
+    if (item->m_parenth[3] != FiguredBassItem::Parenthesis::NONE) {
+        str.append(g_FBFonts.at(font).displayParenthesis[int(item->m_parenth[3])]);
+    }
+
+    item->setDisplayText(str);                  // this text will be displayed
+
+    if (str.size()) {                     // if some text
+        x = x - (x1 + x2) * 0.5;          // position the text so that [x1<-->x2] is centered below the note
+    } else {                              // if no text (but possibly a line)
+        x = 0;                            // start at note left margin
+    }
+    // vertical position
+    h = fm.lineSpacing();
+    h *= item->score()->styleD(Sid::figuredBassLineHeight);
+    if (item->score()->styleI(Sid::figuredBassAlignment) == 0) {          // top alignment: stack down from first item
+        y = h * item->m_ord;
+    } else {                                                      // bottom alignment: stack up from last item
+        y = -h * (item->figuredBass()->numOfItems() - item->m_ord);
+    }
+    item->setPos(x, y);
+    // determine bbox from text width
+//      w = fm.width(str);
+    w = fm.width(str);
+    item->m_textWidth = w;
+    // if there is a cont.line, extend width to cover the whole FB element duration line
+    int lineLen;
+    if (item->_contLine != FiguredBassItem::ContLine::NONE && (lineLen = item->figuredBass()->lineLength(0)) > w) {
+        w = lineLen;
+    }
+    item->bbox().setRect(0, 0, w, h);
 }
 
 void TLayout::layout(GraceNotesGroup* item, LayoutContext&)

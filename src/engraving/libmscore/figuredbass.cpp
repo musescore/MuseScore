@@ -30,6 +30,7 @@
 #include "draw/types/pen.h"
 
 #include "style/textstyle.h"
+#include "layout/tlayout.h"
 
 #include "chord.h"
 #include "factory.h"
@@ -71,9 +72,6 @@ static constexpr double FB_CONTLINE_LEFT_PADDING      = 0.1875;    // (3/16sp) t
 static constexpr double FB_CONTLINE_OVERLAP           = 0.125;     // (1/8sp)  the overlap of an extended cont. line (in sp)
 static constexpr double FB_CONTLINE_THICKNESS         = 0.09375;   // (3/32sp) the thickness of a cont. line (in sp)
 
-// the array of configured fonts
-static std::vector<FiguredBassFont> g_FBFonts;
-
 //---------------------------------------------------------
 //   F I G U R E D   B A S S   I T E M
 //---------------------------------------------------------
@@ -84,29 +82,29 @@ const Char FiguredBassItem::normParenthToChar[int(FiguredBassItem::Parenthesis::
 { 0, '(', ')', '[', ']' };
 
 FiguredBassItem::FiguredBassItem(FiguredBass* parent, int l)
-    : EngravingItem(ElementType::INVALID, parent), ord(l)
+    : EngravingItem(ElementType::INVALID, parent), m_ord(l)
 {
     _prefix     = _suffix = Modifier::NONE;
     _digit      = FBIDigitNone;
-    parenth[0]  = parenth[1] = parenth[2] = parenth[3] = parenth[4] = Parenthesis::NONE;
+    m_parenth[0]  = m_parenth[1] = m_parenth[2] = m_parenth[3] = m_parenth[4] = Parenthesis::NONE;
     _contLine   = ContLine::NONE;
-    textWidth   = 0;
+    m_textWidth   = 0;
 }
 
 FiguredBassItem::FiguredBassItem(const FiguredBassItem& item)
     : EngravingItem(item)
 {
-    ord         = item.ord;
+    m_ord         = item.m_ord;
     _prefix     = item._prefix;
     _digit      = item._digit;
     _suffix     = item._suffix;
-    parenth[0]  = item.parenth[0];
-    parenth[1]  = item.parenth[1];
-    parenth[2]  = item.parenth[2];
-    parenth[3]  = item.parenth[3];
-    parenth[4]  = item.parenth[4];
+    m_parenth[0]  = item.m_parenth[0];
+    m_parenth[1]  = item.m_parenth[1];
+    m_parenth[2]  = item.m_parenth[2];
+    m_parenth[3]  = item.m_parenth[3];
+    m_parenth[4]  = item.m_parenth[4];
     _contLine   = item._contLine;
-    textWidth   = item.textWidth;
+    m_textWidth   = item.m_textWidth;
     _displayText= item._displayText;
 }
 
@@ -154,21 +152,21 @@ bool FiguredBassItem::parse(String& str)
     parseParenthesis(str, 4);
 
     // remove useless parentheses, moving external parentheses toward central digit element
-    if (_prefix == Modifier::NONE && parenth[1] == Parenthesis::NONE) {
-        parenth[1] = parenth[0];
-        parenth[0] = Parenthesis::NONE;
+    if (_prefix == Modifier::NONE && m_parenth[1] == Parenthesis::NONE) {
+        m_parenth[1] = m_parenth[0];
+        m_parenth[0] = Parenthesis::NONE;
     }
-    if (_digit == FBIDigitNone && parenth[2] == Parenthesis::NONE) {
-        parenth[2] = parenth[1];
-        parenth[1] = Parenthesis::NONE;
+    if (_digit == FBIDigitNone && m_parenth[2] == Parenthesis::NONE) {
+        m_parenth[2] = m_parenth[1];
+        m_parenth[1] = Parenthesis::NONE;
     }
-    if (_contLine == ContLine::NONE && parenth[3] == Parenthesis::NONE) {
-        parenth[3] = parenth[4];
-        parenth[4] = Parenthesis::NONE;
+    if (_contLine == ContLine::NONE && m_parenth[3] == Parenthesis::NONE) {
+        m_parenth[3] = m_parenth[4];
+        m_parenth[4] = Parenthesis::NONE;
     }
-    if (_suffix == Modifier::NONE && parenth[2] == Parenthesis::NONE) {
-        parenth[2] = parenth[3];
-        parenth[3] = Parenthesis::NONE;
+    if (_suffix == Modifier::NONE && m_parenth[2] == Parenthesis::NONE) {
+        m_parenth[2] = m_parenth[3];
+        m_parenth[3] = Parenthesis::NONE;
     }
 
     // some checks:
@@ -334,7 +332,7 @@ int FiguredBassItem::parseParenthesis(String& str, int parenthIdx)
     default:
         break;
     }
-    parenth[parenthIdx] = code;
+    m_parenth[parenthIdx] = code;
     if (code != Parenthesis::NONE) {
         str.remove(0, 1);
         return 1;
@@ -352,8 +350,8 @@ int FiguredBassItem::parseParenthesis(String& str, int parenthIdx)
 String FiguredBassItem::normalizedText() const
 {
     String str;
-    if (parenth[0] != Parenthesis::NONE) {
-        str.append(normParenthToChar[int(parenth[0])]);
+    if (m_parenth[0] != Parenthesis::NONE) {
+        str.append(normParenthToChar[int(m_parenth[0])]);
     }
 
     if (_prefix != Modifier::NONE) {
@@ -381,8 +379,8 @@ String FiguredBassItem::normalizedText() const
         }
     }
 
-    if (parenth[1] != Parenthesis::NONE) {
-        str.append(normParenthToChar[int(parenth[1])]);
+    if (m_parenth[1] != Parenthesis::NONE) {
+        str.append(normParenthToChar[int(m_parenth[1])]);
     }
 
     // digit
@@ -390,8 +388,8 @@ String FiguredBassItem::normalizedText() const
         str.append(String::number(_digit));
     }
 
-    if (parenth[2] != Parenthesis::NONE) {
-        str.append(normParenthToChar[int(parenth[2])]);
+    if (m_parenth[2] != Parenthesis::NONE) {
+        str.append(normParenthToChar[int(m_parenth[2])]);
     }
 
     // suffix
@@ -426,8 +424,8 @@ String FiguredBassItem::normalizedText() const
         }
     }
 
-    if (parenth[3] != Parenthesis::NONE) {
-        str.append(normParenthToChar[int(parenth[3])]);
+    if (m_parenth[3] != Parenthesis::NONE) {
+        str.append(normParenthToChar[int(m_parenth[3])]);
     }
     if (_contLine > ContLine::NONE) {
         str.append('_');
@@ -435,8 +433,8 @@ String FiguredBassItem::normalizedText() const
             str.append('_');
         }
     }
-    if (parenth[4] != Parenthesis::NONE) {
-        str.append(normParenthToChar[int(parenth[4])]);
+    if (m_parenth[4] != Parenthesis::NONE) {
+        str.append(normParenthToChar[int(m_parenth[4])]);
     }
 
     return str;
@@ -450,118 +448,8 @@ String FiguredBassItem::normalizedText() const
 
 void FiguredBassItem::layout()
 {
-    double h, w, x, x1, x2, y;
-
-    // construct font metrics
-    int fontIdx = 0;
-    mu::draw::Font f(g_FBFonts.at(fontIdx).family, draw::Font::Type::Tablature);
-
-    // font size in pixels, scaled according to spatium()
-    // (use the same font selection as used in draw() below)
-    double m = score()->styleD(Sid::figuredBassFontSize) * spatium() / SPATIUM20;
-    f.setPointSizeF(m);
-    mu::draw::FontMetrics fm(f);
-
-    String str;
-    x  = symWidth(SymId::noteheadBlack) * .5;
-    x1 = x2 = 0.0;
-
-    // create display text
-    int font = 0;
-    int style = score()->styleI(Sid::figuredBassStyle);
-
-    if (parenth[0] != Parenthesis::NONE) {
-        str.append(g_FBFonts.at(font).displayParenthesis[int(parenth[0])]);
-    }
-
-    // prefix
-    if (_prefix != Modifier::NONE) {
-        // if no digit, the string created so far 'hangs' to the left of the note
-        if (_digit == FBIDigitNone) {
-            x1 = fm.width(str);
-        }
-        str.append(g_FBFonts.at(font).displayAccidental[int(_prefix)]);
-        // if no digit, the string from here onward 'hangs' to the right of the note
-        if (_digit == FBIDigitNone) {
-            x2 = fm.width(str);
-        }
-    }
-
-    if (parenth[1] != Parenthesis::NONE) {
-        str.append(g_FBFonts.at(font).displayParenthesis[int(parenth[1])]);
-    }
-
-    // digit
-    if (_digit != FBIDigitNone) {
-        // if some digit, the string created so far 'hangs' to the left of the note
-        x1 = fm.width(str);
-        // if suffix is a combining shape, combine it with digit (multi-digit numbers cannot be combined)
-        // unless there is a parenthesis in between
-        if ((_digit < 10)
-            && (_suffix == Modifier::CROSS || _suffix == Modifier::BACKSLASH || _suffix == Modifier::SLASH)
-            && parenth[2] == Parenthesis::NONE) {
-            str.append(g_FBFonts.at(font).displayDigit[style][_digit][int(_suffix) - (int(Modifier::CROSS) - 1)]);
-        }
-        // if several digits or no shape combination, convert _digit to font styled chars
-        else {
-            String digits;
-            int digit         = _digit;
-            while (true) {
-                digits.prepend(g_FBFonts.at(font).displayDigit[style][(digit % 10)][0]);
-                digit /= 10;
-                if (digit == 0) {
-                    break;
-                }
-            }
-            str.append(digits);
-        }
-        // if some digit, the string from here onward 'hangs' to the right of the note
-        x2 = fm.width(str);
-    }
-
-    if (parenth[2] != Parenthesis::NONE) {
-        str.append(g_FBFonts.at(font).displayParenthesis[int(parenth[2])]);
-    }
-
-    // suffix
-    // append only if non-combining shape or cannot combine (no digit or parenthesis in between)
-    if (_suffix != Modifier::NONE
-        && ((_suffix != Modifier::CROSS && _suffix != Modifier::BACKSLASH && _suffix != Modifier::SLASH)
-            || _digit == FBIDigitNone
-            || parenth[2] != Parenthesis::NONE)) {
-        str.append(g_FBFonts.at(font).displayAccidental[int(_suffix)]);
-    }
-
-    if (parenth[3] != Parenthesis::NONE) {
-        str.append(g_FBFonts.at(font).displayParenthesis[int(parenth[3])]);
-    }
-
-    setDisplayText(str);                  // this text will be displayed
-
-    if (str.size()) {                     // if some text
-        x = x - (x1 + x2) * 0.5;          // position the text so that [x1<-->x2] is centered below the note
-    } else {                              // if no text (but possibly a line)
-        x = 0;                            // start at note left margin
-    }
-    // vertical position
-    h = fm.lineSpacing();
-    h *= score()->styleD(Sid::figuredBassLineHeight);
-    if (score()->styleI(Sid::figuredBassAlignment) == 0) {          // top alignment: stack down from first item
-        y = h * ord;
-    } else {                                                      // bottom alignment: stack up from last item
-        y = -h * (figuredBass()->numOfItems() - ord);
-    }
-    setPos(x, y);
-    // determine bbox from text width
-//      w = fm.width(str);
-    w = fm.width(str);
-    textWidth = w;
-    // if there is a cont.line, extend width to cover the whole FB element duration line
-    int lineLen;
-    if (_contLine != ContLine::NONE && (lineLen=figuredBass()->lineLength(0)) > w) {
-        w = lineLen;
-    }
-    bbox().setRect(0, 0, w, h);
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -590,7 +478,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
     // continuation line
     double lineEndX = 0.0;
     if (_contLine != ContLine::NONE) {
-        double lineStartX  = textWidth;                           // by default, line starts right after text
+        double lineStartX  = m_textWidth;                           // by default, line starts right after text
         if (lineStartX > 0.0) {
             lineStartX += _spatium * FB_CONTLINE_LEFT_PADDING;          // if some text, give some room after it
         }
@@ -600,7 +488,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
         }
 
         // if extended cont.line and no closing parenthesis: look at next FB element
-        if (_contLine > ContLine::SIMPLE && parenth[4] == Parenthesis::NONE) {
+        if (_contLine > ContLine::SIMPLE && m_parenth[4] == Parenthesis::NONE) {
             FiguredBass* nextFB;
             // if there is a contiguous FB element
             if ((nextFB=figuredBass()->nextFiguredBass()) != 0) {
@@ -626,10 +514,10 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
     }
 
     // closing cont.line parenthesis
-    if (parenth[4] != Parenthesis::NONE) {
-        int x = lineEndX > 0.0 ? lineEndX : textWidth;
+    if (m_parenth[4] != Parenthesis::NONE) {
+        int x = lineEndX > 0.0 ? lineEndX : m_textWidth;
         painter->drawText(RectF(x, 0, bbox().width(), bbox().height()), draw::AlignLeft | draw::AlignTop,
-                          Char(g_FBFonts.at(font).displayParenthesis[int(parenth[4])].unicode()));
+                          Char(g_FBFonts.at(font).displayParenthesis[int(m_parenth[4])].unicode()));
     }
 }
 
@@ -649,15 +537,15 @@ PropertyValue FiguredBassItem::getProperty(Pid propertyId) const
     case Pid::FBCONTINUATIONLINE:
         return int(_contLine);
     case Pid::FBPARENTHESIS1:
-        return int(parenth[0]);
+        return int(m_parenth[0]);
     case Pid::FBPARENTHESIS2:
-        return int(parenth[1]);
+        return int(m_parenth[1]);
     case Pid::FBPARENTHESIS3:
-        return int(parenth[2]);
+        return int(m_parenth[2]);
     case Pid::FBPARENTHESIS4:
-        return int(parenth[3]);
+        return int(m_parenth[3]);
     case Pid::FBPARENTHESIS5:
-        return int(parenth[4]);
+        return int(m_parenth[4]);
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -693,31 +581,31 @@ bool FiguredBassItem::setProperty(Pid propertyId, const PropertyValue& v)
         if (val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF)) {
             return false;
         }
-        parenth[0] = (Parenthesis)val;
+        m_parenth[0] = (Parenthesis)val;
         break;
     case Pid::FBPARENTHESIS2:
         if (val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF)) {
             return false;
         }
-        parenth[1] = (Parenthesis)val;
+        m_parenth[1] = (Parenthesis)val;
         break;
     case Pid::FBPARENTHESIS3:
         if (val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF)) {
             return false;
         }
-        parenth[2] = (Parenthesis)val;
+        m_parenth[2] = (Parenthesis)val;
         break;
     case Pid::FBPARENTHESIS4:
         if (val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF)) {
             return false;
         }
-        parenth[3] = (Parenthesis)val;
+        m_parenth[3] = (Parenthesis)val;
         break;
     case Pid::FBPARENTHESIS5:
         if (val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF)) {
             return false;
         }
-        parenth[4] = (Parenthesis)val;
+        m_parenth[4] = (Parenthesis)val;
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);
@@ -818,13 +706,13 @@ void FiguredBassItem::undoSetParenth5(Parenthesis par)
 bool FiguredBassItem::startsWithParenthesis() const
 {
     if (_prefix != Modifier::NONE) {
-        return parenth[0] != Parenthesis::NONE;
+        return m_parenth[0] != Parenthesis::NONE;
     }
     if (_digit != FBIDigitNone) {
-        return parenth[1] != Parenthesis::NONE;
+        return m_parenth[1] != Parenthesis::NONE;
     }
     if (_suffix != Modifier::NONE) {
-        return parenth[2] != Parenthesis::NONE;
+        return m_parenth[2] != Parenthesis::NONE;
     }
     return false;
 }
