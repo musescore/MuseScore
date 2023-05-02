@@ -1445,6 +1445,24 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Zoom to 100%"),
              TranslatableString("action", "Zoom to 100%")
              ),
+    UiAction("zoom-page-width",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Zoom to page width"),
+             TranslatableString("action", "Zoom to page width")
+             ),
+    UiAction("zoom-whole-page",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Zoom to whole page"),
+             TranslatableString("action", "Zoom to whole page")
+             ),
+    UiAction("zoom-two-pages",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Zoom to two pages"),
+             TranslatableString("action", "Zoom to two pages")
+             ),
     UiAction("get-location",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
