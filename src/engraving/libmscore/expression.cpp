@@ -1,7 +1,31 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+#include "expression.h"
+
+#include "layout/tlayout.h"
+
 #include "chord.h"
 #include "dynamic.h"
 #include "dynamichairpingroup.h"
-#include "expression.h"
 #include "note.h"
 #include "segment.h"
 #include "score.h"
@@ -38,67 +62,8 @@ PropertyValue Expression::propertyDefault(Pid id) const
 
 void Expression::layout()
 {
-    TextBase::layout();
-
-    Segment* segment = explicitParent() ? toSegment(explicitParent()) : nullptr;
-    if (!segment) {
-        return;
-    }
-
-    if (align().horizontal != AlignH::LEFT) {
-        Chord* chordToAlign = nullptr;
-        // Look for chord in this staff
-        track_idx_t startTrack = track2staff(staffIdx());
-        track_idx_t endTrack = startTrack + VOICES;
-        for (track_idx_t track = startTrack; track < endTrack; ++track) {
-            EngravingItem* item = segment->elementAt(track);
-            if (item && item->isChord()) {
-                chordToAlign = toChord(item);
-                break;
-            }
-        }
-
-        if (chordToAlign) {
-            Note* note = chordToAlign->notes().at(0);
-            double headWidth = note->headWidth();
-            bool center = align().horizontal == AlignH::HCENTER;
-            movePosX(headWidth * (center ? 0.5 : 1));
-        }
-    }
-
-    _snappedDynamic = nullptr;
-    if (!_snapToDynamics) {
-        autoplaceSegmentElement();
-        return;
-    }
-
-    Dynamic* dynamic = toDynamic(segment->findAnnotation(ElementType::DYNAMIC, track(), track()));
-    if (!dynamic || dynamic->placeAbove() != placeAbove()) {
-        autoplaceSegmentElement();
-        return;
-    }
-
-    _snappedDynamic = dynamic;
-    dynamic->setSnappedExpression(this);
-
-    // If there is a dynamic on same segment and track, lock this expression to it
-    double padding = computeDynamicExpressionDistance();
-    double dynamicRight = dynamic->shape().translate(dynamic->pos()).right();
-    double expressionLeft = bbox().translated(pos()).left();
-    double difference = expressionLeft - dynamicRight - padding;
-    movePosX(-difference);
-
-    // Keep expression and dynamic vertically aligned
-    autoplaceSegmentElement();
-    bool above = placeAbove();
-    double yExpression = pos().y();
-    double yDynamic = dynamic->pos().y();
-    bool expressionIsOuter = above ? yExpression < yDynamic : yExpression > yDynamic;
-    if (expressionIsOuter) {
-        dynamic->movePosY((yExpression - yDynamic));
-    } else {
-        movePosY((yDynamic - yExpression));
-    }
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 double Expression::computeDynamicExpressionDistance() const
