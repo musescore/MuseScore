@@ -52,6 +52,8 @@ class Clef;
 class DeadSlapped;
 class Dynamic;
 
+class Expression;
+
 class GraceNotesGroup;
 }
 
@@ -89,6 +91,8 @@ public:
 
     static void layout(DeadSlapped* item, LayoutContext& ctx);
     static void layout(Dynamic* item, LayoutContext& ctx);
+
+    static void layout(Expression* item, LayoutContext& ctx);
 
     static void layout(GraceNotesGroup* item, LayoutContext& ctx);
 
