@@ -230,9 +230,6 @@ struct FiguredBassFont {
     bool read(XmlReader&);
 };
 
-// the array of configured fonts
-static std::vector<FiguredBassFont> g_FBFonts;
-
 //---------------------------------------------------------
 //   @@ FiguredBass
 ///    A complete figured bass indication
@@ -313,6 +310,9 @@ public:
     void appendItem(FiguredBassItem* item) { m_items.push_back(item); }
 
     const std::vector<FiguredBassItem*>& items() const { return m_items; }
+
+    // the array of configured fonts
+    static const std::vector<FiguredBassFont>& FBFonts();
 };
 } // namespace mu::engraving
 
