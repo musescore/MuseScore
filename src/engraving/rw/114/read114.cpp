@@ -1544,8 +1544,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
         } else {
             LOGD("illegal measure size <%s>", muPrintable(e.attribute("len")));
         }
-        ctx.sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
-        ctx.sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
+        ctx.compatTimeSigMap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
+        ctx.compatTimeSigMap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
     }
 
     Staff* staff = ctx.staff(staffIdx);

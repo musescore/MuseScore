@@ -101,8 +101,8 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
                               "MSCX error at line %1: invalid measure length: %2").arg(e.lineNumber()).arg(measure->_len.toString()));
             return;
         }
-        ctx.sigmap()->add(measure->tick().ticks(), SigEvent(measure->_len, measure->m_timesig));
-        ctx.sigmap()->add((measure->tick() + measure->ticks()).ticks(), SigEvent(measure->m_timesig));
+        ctx.compatTimeSigMap()->add(measure->tick().ticks(), SigEvent(measure->_len, measure->m_timesig));
+        ctx.compatTimeSigMap()->add((measure->tick() + measure->ticks()).ticks(), SigEvent(measure->m_timesig));
     } else {
         irregular = false;
     }
@@ -409,12 +409,8 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                 timeStretch = ts->stretch().reduced();
                 measure->m_timesig = ts->sig() / timeStretch;
 
-                if (irregular) {
-                    ctx.sigmap()->add(measure->tick().ticks(), SigEvent(measure->_len, measure->m_timesig));
-                    ctx.sigmap()->add((measure->tick() + measure->ticks()).ticks(), SigEvent(measure->m_timesig));
-                } else {
+                if (!irregular) {
                     measure->_len = measure->m_timesig;
-                    ctx.sigmap()->add(measure->tick().ticks(), SigEvent(measure->m_timesig));
                 }
             }
         } else if (tag == "KeySig") {

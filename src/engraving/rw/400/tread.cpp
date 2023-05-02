@@ -2406,7 +2406,7 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
             }
         } else {
             if (mscVersion <= 114) {
-                SigEvent event = ch->score()->sigmap()->timesig(e.context()->tick());
+                SigEvent event = ctx.compatTimeSigMap()->timesig(e.context()->tick());
                 ch->setTicks(event.timesig());
             }
         }
@@ -2425,7 +2425,7 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
     } else if (tag == "duration") {
         ch->setTicks(e.readFraction());
     } else if (tag == "ticklen") {      // obsolete (version < 1.12)
-        int mticks = ch->score()->sigmap()->timesig(e.context()->tick()).timesig().ticks();
+        int mticks = ctx.compatTimeSigMap()->timesig(e.context()->tick()).timesig().ticks();
         int i = e.readInt();
         if (i == 0) {
             i = mticks;
