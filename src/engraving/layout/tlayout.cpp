@@ -57,6 +57,7 @@
 
 #include "../libmscore/fermata.h"
 #include "../libmscore/figuredbass.h"
+#include "../libmscore/fingering.h"
 
 #include "../libmscore/note.h"
 
@@ -1554,6 +1555,146 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
         w = lineLen;
     }
     item->bbox().setRect(0, 0, w, h);
+}
+
+void TLayout::layout(Fingering* item, LayoutContext&)
+{
+    if (item->explicitParent()) {
+        Fraction tick = item->parentItem()->tick();
+        const Staff* st = item->staff();
+        item->setSkipDraw(false);
+        if (st && st->isTabStaff(tick)
+            && (!st->staffType(tick)->showTabFingering() || item->textStyleType() == TextStyleType::STRING_NUMBER)) {
+            item->setSkipDraw(true);
+            return;
+        }
+    }
+
+    item->TextBase::layout();
+    item->setPosY(0.0);      // handle placement below
+
+    if (item->autoplace() && item->note()) {
+        Note* n      = item->note();
+        Chord* chord = n->chord();
+        bool voices  = chord->measure()->hasVoices(chord->staffIdx(), chord->tick(), chord->actualTicks());
+        bool tight   = voices && chord->notes().size() == 1 && !chord->beam() && item->textStyleType() != TextStyleType::STRING_NUMBER;
+
+        double headWidth = n->bboxRightPos();
+
+        // update offset after drag
+        double rebase = 0.0;
+        if (item->offsetChanged() != OffsetChange::NONE && !tight) {
+            rebase = item->rebaseOffset();
+        }
+
+        // temporarily exclude self from chord shape
+        item->setAutoplace(false);
+
+        if (item->layoutType() == ElementType::CHORD) {
+            bool above = item->placeAbove();
+            Stem* stem = chord->stem();
+            Segment* s = chord->segment();
+            Measure* m = s->measure();
+            double sp = item->spatium();
+            double md = item->minDistance().val() * sp;
+            SysStaff* ss = m->system()->staff(chord->vStaffIdx());
+            Staff* vStaff = chord->staff();           // TODO: use current height at tick
+
+            if (n->mirror()) {
+                item->movePosX(-n->ipos().x());
+            }
+            item->movePosX(headWidth * .5);
+            if (above) {
+                if (tight) {
+                    if (chord->stem()) {
+                        item->movePosX(-0.8 * sp);
+                    }
+                    item->movePosY(-1.5 * sp);
+                } else {
+                    RectF r = item->bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + item->pos());
+                    SkylineLine sk(false);
+                    sk.add(r.x(), r.bottom(), r.width());
+                    double d = sk.minDistance(ss->skyline().north());
+                    double yd = 0.0;
+                    if (d > 0.0 && item->isStyled(Pid::MIN_DISTANCE)) {
+                        yd -= d + item->height() * .25;
+                    }
+                    // force extra space above staff & chord (but not other fingerings)
+                    double top;
+                    if (chord->up() && chord->beam() && stem) {
+                        top = stem->y() + stem->bbox().top();
+                    } else {
+                        Note* un = chord->upNote();
+                        top = std::min(0.0, un->y() + un->bbox().top());
+                    }
+                    top -= md;
+                    double diff = (item->bbox().bottom() + item->ipos().y() + yd + n->y()) - top;
+                    if (diff > 0.0) {
+                        yd -= diff;
+                    }
+                    if (item->offsetChanged() != OffsetChange::NONE) {
+                        // user moved element within the skyline
+                        // we may need to adjust minDistance, yd, and/or offset
+                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->height();
+                        item->rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
+                    }
+                    item->movePosY(yd);
+                }
+            } else {
+                if (tight) {
+                    if (chord->stem()) {
+                        item->movePosX(0.8 * sp);
+                    }
+                    item->movePosY(1.5 * sp);
+                } else {
+                    RectF r = item->bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + item->pos());
+                    SkylineLine sk(true);
+                    sk.add(r.x(), r.top(), r.width());
+                    double d = ss->skyline().south().minDistance(sk);
+                    double yd = 0.0;
+                    if (d > 0.0 && item->isStyled(Pid::MIN_DISTANCE)) {
+                        yd += d + item->height() * .25;
+                    }
+                    // force extra space below staff & chord (but not other fingerings)
+                    double bottom;
+                    if (!chord->up() && chord->beam() && stem) {
+                        bottom = stem->y() + stem->bbox().bottom();
+                    } else {
+                        Note* dn = chord->downNote();
+                        bottom = std::max(vStaff->height(), dn->y() + dn->bbox().bottom());
+                    }
+                    bottom += md;
+                    double diff = bottom - (item->bbox().top() + item->ipos().y() + yd + n->y());
+                    if (diff > 0.0) {
+                        yd += diff;
+                    }
+                    if (item->offsetChanged() != OffsetChange::NONE) {
+                        // user moved element within the skyline
+                        // we may need to adjust minDistance, yd, and/or offset
+                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->height();
+                        item->rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
+                    }
+                    item->movePosY(yd);
+                }
+            }
+        } else if (item->textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
+            // place to left of note
+            double left = n->shape().left();
+            if (left - n->x() > 0.0) {
+                item->movePosX(-left);
+            } else {
+                item->movePosX(-n->x());
+            }
+        }
+        // for other fingering styles, do not autoplace
+
+        // restore autoplace
+        item->setAutoplace(true);
+    } else if (item->offsetChanged() != OffsetChange::NONE) {
+        // rebase horizontally too, as autoplace may have adjusted it
+        item->rebaseOffset(false);
+    }
+    item->setOffsetChanged(false);
 }
 
 void TLayout::layout(GraceNotesGroup* item, LayoutContext&)
