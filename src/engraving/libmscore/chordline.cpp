@@ -22,9 +22,10 @@
 
 #include "chordline.h"
 
+#include "iengravingfont.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "iengravingfont.h"
+#include "layout/tlayout.h"
 
 #include "chord.h"
 #include "note.h"
@@ -37,7 +38,7 @@ using namespace mu::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static const SymIdList s_waveSymbols = { SymId::wiggleVIbratoMediumSlower, SymId::wiggleVIbratoMediumSlower };
+const SymIdList ChordLine::WAVE_SYMBOLS = { SymId::wiggleVIbratoMediumSlower, SymId::wiggleVIbratoMediumSlower };
 
 //---------------------------------------------------------
 //   ChordLine
@@ -89,97 +90,8 @@ const TranslatableString& ChordLine::chordLineTypeName() const
 
 void ChordLine::layout()
 {
-    setMag(chord() ? chord()->mag() : 1);
-    if (!m_modified) {
-        double x2 = 0;
-        double y2 = 0;
-        double baseLength = spatium() * (chord() ? chord()->intrinsicMag() : 1);
-        double horBaseLength = 1.2 * baseLength; // let the symbols extend a bit more horizontally
-        x2 += isToTheLeft() ? -horBaseLength : horBaseLength;
-        y2 += isBelow() ? baseLength : -baseLength;
-        if (_chordLineType != ChordLineType::NOTYPE && !_wavy) {
-            m_path = PainterPath();
-            if (!isToTheLeft()) {
-                if (_straight) {
-                    m_path.lineTo(x2, y2);
-                } else {
-                    m_path.cubicTo(x2 / 2, 0.0, x2, y2 / 2, x2, y2);
-                }
-            } else {
-                if (_straight) {
-                    m_path.lineTo(x2, y2);
-                } else {
-                    m_path.cubicTo(0.0, y2 / 2, x2 / 2, y2, x2, y2);
-                }
-            }
-        }
-    }
-
-    if (explicitParent()) {
-        Note* note = nullptr;
-
-        if (_note) {
-            note = chord()->findNote(_note->pitch());
-        }
-
-        if (!note) {
-            note = chord()->upNote();
-        }
-
-        double x = 0.0;
-        double y = note->pos().y();
-        double horOffset = 0.33 * spatium(); // one third of a space away from the note
-        double vertOffset = 0.25 * spatium(); // one quarter of a space from the center line
-        // Get chord shape
-        Shape chordShape = chord()->shape();
-        // ...but remove from the shape items that the chordline shouldn't try to avoid
-        // (especially the chordline itself)
-        mu::remove_if(chordShape, [](ShapeElement& shapeEl){
-            if (!shapeEl.toItem) {
-                return true;
-            }
-            const EngravingItem* item = shapeEl.toItem;
-            if (item->isChordLine() || item->isHarmony() || item->isLyrics()) {
-                return true;
-            }
-            return false;
-        });
-        x += isToTheLeft() ? -chordShape.left() - horOffset : chordShape.right() + horOffset;
-        y += isBelow() ? vertOffset : -vertOffset;
-
-        /// TODO: calculate properly the position for wavy type
-        if (_wavy) {
-            bool upDir = _chordLineType == ChordLineType::DOIT;
-            y += note->height() * (upDir ? 0.8 : -0.3);
-        }
-
-        setPos(x, y);
-    } else {
-        setPos(0.0, 0.0);
-    }
-
-    if (!_wavy) {
-        RectF r = m_path.boundingRect();
-        int x1 = 0, y1 = 0, width = 0, height = 0;
-
-        x1 = r.x();
-        y1 = r.y();
-        width = r.width();
-        height = r.height();
-        bbox().setRect(x1, y1, width, height);
-    } else {
-        RectF r(score()->engravingFont()->bbox(s_waveSymbols, magS()));
-        double angle = _waveAngle * M_PI / 180;
-
-        r.setHeight(r.height() + r.width() * sin(angle));
-
-        /// TODO: calculate properly the rect for wavy type
-        if (_chordLineType == ChordLineType::DOIT) {
-            r.setY(y() - r.height() * (onTabStaff() ? 1.25 : 1));
-        }
-
-        setbbox(r);
-    }
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -195,8 +107,8 @@ void ChordLine::draw(mu::draw::Painter* painter) const
         painter->drawPath(m_path);
     } else {
         painter->save();
-        painter->rotate((_chordLineType == ChordLineType::FALL ? 1 : -1) * _waveAngle);
-        drawSymbols(s_waveSymbols, painter);
+        painter->rotate((_chordLineType == ChordLineType::FALL ? 1 : -1) * WAVE_ANGEL);
+        drawSymbols(ChordLine::WAVE_SYMBOLS, painter);
         painter->restore();
     }
 }

@@ -46,6 +46,7 @@
 #include "../libmscore/breath.h"
 
 #include "../libmscore/chord.h"
+#include "../libmscore/chordline.h"
 
 #include "../libmscore/note.h"
 
@@ -995,6 +996,102 @@ void TLayout::layout(Breath* item, LayoutContext&)
 void TLayout::layout(Chord* item, LayoutContext& ctx)
 {
     ChordLayout::layout(item, ctx);
+}
+
+void TLayout::layout(ChordLine* item, LayoutContext&)
+{
+    item->setMag(item->chord() ? item->chord()->mag() : 1);
+    if (!item->modified()) {
+        double x2 = 0;
+        double y2 = 0;
+        double baseLength = item->spatium() * (item->chord() ? item->chord()->intrinsicMag() : 1);
+        double horBaseLength = 1.2 * baseLength;     // let the symbols extend a bit more horizontally
+        x2 += item->isToTheLeft() ? -horBaseLength : horBaseLength;
+        y2 += item->isBelow() ? baseLength : -baseLength;
+        if (item->chordLineType() != ChordLineType::NOTYPE && !item->isWavy()) {
+            PainterPath path;
+            if (!item->isToTheLeft()) {
+                if (item->isStraight()) {
+                    path.lineTo(x2, y2);
+                } else {
+                    path.cubicTo(x2 / 2, 0.0, x2, y2 / 2, x2, y2);
+                }
+            } else {
+                if (item->isStraight()) {
+                    path.lineTo(x2, y2);
+                } else {
+                    path.cubicTo(0.0, y2 / 2, x2 / 2, y2, x2, y2);
+                }
+            }
+            item->setPath(path);
+        }
+    }
+
+    if (item->explicitParent()) {
+        Note* note = nullptr;
+
+        if (item->note()) {
+            note = item->chord()->findNote(item->note()->pitch());
+        }
+
+        if (!note) {
+            note = item->chord()->upNote();
+        }
+
+        double x = 0.0;
+        double y = note->pos().y();
+        double horOffset = 0.33 * item->spatium();     // one third of a space away from the note
+        double vertOffset = 0.25 * item->spatium();     // one quarter of a space from the center line
+        // Get chord shape
+        Shape chordShape = item->chord()->shape();
+        // ...but remove from the shape items that the chordline shouldn't try to avoid
+        // (especially the chordline itself)
+        mu::remove_if(chordShape, [](ShapeElement& shapeEl){
+            if (!shapeEl.toItem) {
+                return true;
+            }
+            const EngravingItem* item = shapeEl.toItem;
+            if (item->isChordLine() || item->isHarmony() || item->isLyrics()) {
+                return true;
+            }
+            return false;
+        });
+        x += item->isToTheLeft() ? -chordShape.left() - horOffset : chordShape.right() + horOffset;
+        y += item->isBelow() ? vertOffset : -vertOffset;
+
+        /// TODO: calculate properly the position for wavy type
+        if (item->isWavy()) {
+            bool upDir = item->chordLineType() == ChordLineType::DOIT;
+            y += note->height() * (upDir ? 0.8 : -0.3);
+        }
+
+        item->setPos(x, y);
+    } else {
+        item->setPos(0.0, 0.0);
+    }
+
+    if (!item->isWavy()) {
+        RectF r = item->path().boundingRect();
+        int x1 = 0, y1 = 0, width = 0, height = 0;
+
+        x1 = r.x();
+        y1 = r.y();
+        width = r.width();
+        height = r.height();
+        item->bbox().setRect(x1, y1, width, height);
+    } else {
+        RectF r(item->score()->engravingFont()->bbox(ChordLine::WAVE_SYMBOLS, item->magS()));
+        double angle = ChordLine::WAVE_ANGEL * M_PI / 180;
+
+        r.setHeight(r.height() + r.width() * sin(angle));
+
+        /// TODO: calculate properly the rect for wavy type
+        if (item->chordLineType() == ChordLineType::DOIT) {
+            r.setY(item->y() - r.height() * (item->onTabStaff() ? 1.25 : 1));
+        }
+
+        item->setbbox(r);
+    }
 }
 
 void TLayout::layout(GraceNotesGroup* item, LayoutContext&)

@@ -46,6 +46,7 @@ class Bracket;
 class Breath;
 
 class Chord;
+class ChordLine;
 
 class GraceNotesGroup;
 }
@@ -79,6 +80,7 @@ public:
     static void layout(Breath* item, LayoutContext& ctx);
 
     static void layout(Chord* item, LayoutContext& ctx);
+    static void layout(ChordLine* item, LayoutContext& ctx);
 
     static void layout(GraceNotesGroup* item, LayoutContext& ctx);
 
