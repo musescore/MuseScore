@@ -56,7 +56,6 @@ private:
     double _lengthX = 0.0;
     double _lengthY = 0.0;
     Note* _note = nullptr;
-    static constexpr double _waveAngle = 20;
 
     friend class Factory;
 
@@ -68,6 +67,9 @@ private:
     KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
 
 public:
+
+    static constexpr double WAVE_ANGEL = 20;
+    static const SymIdList WAVE_SYMBOLS;
 
     ChordLine* clone() const override { return new ChordLine(*this); }
 
