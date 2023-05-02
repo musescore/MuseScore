@@ -31,17 +31,25 @@ class Chord;
 class FretCircle final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, FretCircle)
+
 public:
+
+    static constexpr double CIRCLE_WIDTH = 0.15;
+
+    ~FretCircle();
+
+    void layout() override;
+
+    void draw(mu::draw::Painter*) const override;
 
     double offsetFromUpNote() const { return _offsetFromUpNote; }
     double sideOffset() const { return _sideOffset; }
 
 private:
 
-    Chord* m_chord = nullptr;
-    static constexpr double circleWidth = 0.15;
-    mu::RectF m_rect;
+    friend class v0::TLayout;
     friend class Factory;
+
     FretCircle(Chord* ch = 0);
     FretCircle* clone() const override { return new FretCircle(*this); }
 
@@ -49,13 +57,8 @@ private:
 
     bool tabEllipseEnabled() const;
 
-public:
-
-    ~FretCircle();
-
-    void layout() override;
-
-    void draw(mu::draw::Painter*) const override;
+    Chord* m_chord = nullptr;
+    mu::RectF m_rect;
 
     double _offsetFromUpNote = 0;
     double _sideOffset = 0;
