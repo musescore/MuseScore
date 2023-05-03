@@ -74,6 +74,8 @@ class Hook;
 class Image;
 class InstrumentChange;
 class Jump;
+
+class KeySig;
 }
 
 namespace mu::engraving::v0 {
@@ -136,6 +138,8 @@ public:
 
     static void layout(Jump* item, LayoutContext& ctx);
 
+    static void layout(KeySig* item, LayoutContext& ctx);
+
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
     static void layoutMultiGlyphAccidental(Accidental* item, LayoutContext& ctx);
@@ -143,6 +147,8 @@ private:
     static void adjustLayoutWithoutImages(VBox* item, LayoutContext& ctx);
 
     static PointF calculateBoundingRect(Harmony* item);
+
+    static void keySigAddLayout(KeySig* item, SymId sym, int line);
 };
 }
 
