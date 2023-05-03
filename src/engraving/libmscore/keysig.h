@@ -42,11 +42,13 @@ class KeySig final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, KeySig)
     DECLARE_CLASSOF(ElementType::KEYSIG)
 
+    friend class v0::TLayout;
+    friend class Factory;
+
     bool _showCourtesy;
     bool _hideNaturals;       // used in layout to override score style (needed for the Continuous panel)
     KeySigEvent _sig;
 
-    friend class Factory;
     KeySig(Segment* = 0);
     KeySig(const KeySig&);
 
