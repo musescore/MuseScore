@@ -23,6 +23,7 @@
 #include "jump.h"
 
 #include "types/typesconv.h"
+#include "layout/tlayout.h"
 
 #include "measure.h"
 #include "score.h"
@@ -119,8 +120,8 @@ String Jump::jumpTypeUserName() const
 
 void Jump::layout()
 {
-    TextBase::layout();
-    autoplaceMeasureElement();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

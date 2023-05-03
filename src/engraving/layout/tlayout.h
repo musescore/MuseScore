@@ -73,6 +73,7 @@ class Hook;
 
 class Image;
 class InstrumentChange;
+class Jump;
 }
 
 namespace mu::engraving::v0 {
@@ -132,6 +133,8 @@ public:
 
     static void layout(Image* item, LayoutContext& ctx);
     static void layout(InstrumentChange* item, LayoutContext& ctx);
+
+    static void layout(Jump* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
