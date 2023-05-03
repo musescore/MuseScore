@@ -70,6 +70,7 @@
 #include "../libmscore/hook.h"
 
 #include "../libmscore/image.h"
+#include "../libmscore/instrchange.h"
 
 #include "../libmscore/note.h"
 
@@ -2543,4 +2544,10 @@ void TLayout::layout(Image* item, LayoutContext&)
 
     // in any case, adjust position relative to parent
     item->setbbox(RectF(PointF(), item->size2pixel(imageSize)));
+}
+
+void TLayout::layout(InstrumentChange* item, LayoutContext&)
+{
+    item->TextBase::layout();
+    item->autoplaceSegmentElement();
 }

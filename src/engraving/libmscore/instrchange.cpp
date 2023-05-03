@@ -24,6 +24,8 @@
 
 #include "translation.h"
 
+#include "layout/tlayout.h"
+
 #include "keysig.h"
 #include "measure.h"
 #include "mscore.h"
@@ -212,7 +214,7 @@ engraving::PropertyValue InstrumentChange::propertyDefault(Pid propertyId) const
 
 void InstrumentChange::layout()
 {
-    TextBase::layout();
-    autoplaceSegmentElement();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 }
