@@ -50,10 +50,6 @@ class Symbol : public BSymbol
 
     INJECT(engraving, IEngravingFontsProvider, engravingFonts)
 
-protected:
-    SymId _sym;
-    std::shared_ptr<IEngravingFont> _scoreFont = nullptr;
-
 public:
     Symbol(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::MOVABLE);
     Symbol(EngravingItem* parent, ElementFlags f = ElementFlag::MOVABLE);
@@ -79,6 +75,10 @@ public:
 
     double baseLine() const override { return 0.0; }
     virtual Segment* segment() const { return (Segment*)explicitParent(); }
+
+protected:
+    SymId _sym = SymId::noSym;
+    std::shared_ptr<IEngravingFont> _scoreFont = nullptr;
 };
 
 //---------------------------------------------------------

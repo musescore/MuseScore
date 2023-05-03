@@ -22,6 +22,8 @@
 
 #include "hook.h"
 
+#include "layout/tlayout.h"
+
 #include "chord.h"
 #include "score.h"
 
@@ -50,7 +52,8 @@ void Hook::setHookType(int i)
 
 void Hook::layout()
 {
-    setbbox(symBbox(_sym));
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 void Hook::draw(mu::draw::Painter* painter) const
