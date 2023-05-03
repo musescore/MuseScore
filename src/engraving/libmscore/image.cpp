@@ -29,6 +29,8 @@
 #include "draw/types/transform.h"
 #include "draw/svgrenderer.h"
 
+#include "layout/tlayout.h"
+
 #include "imageStore.h"
 #include "masterscore.h"
 #include "mscore.h"
@@ -442,13 +444,8 @@ SizeF Image::size2pixel(const SizeF& s) const
     return s * (_sizeIsSpatium ? spatium() : DPMM);
 }
 
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Image::layout()
+void Image::init()
 {
-    setPos(0.0, 0.0);
     if (imageType == ImageType::SVG && !svgDoc) {
         if (_storeItem) {
             svgDoc = new SvgRenderer(_storeItem->buffer());
@@ -464,29 +461,16 @@ void Image::layout()
     if (_size.isNull()) {
         _size = pixel2size(imageSize());
     }
+}
 
-    // if autoscale && inside a box, scale to box relevant size
-    if (autoScale() && explicitParent() && ((explicitParent()->isHBox() || explicitParent()->isVBox()))) {
-        if (_lockAspectRatio) {
-            double f = _sizeIsSpatium ? spatium() : DPMM;
-            SizeF size(imageSize());
-            double ratio = size.width() / size.height();
-            double w = parentItem()->width();
-            double h = parentItem()->height();
-            if ((w / h) < ratio) {
-                _size.setWidth(w / f);
-                _size.setHeight((w / ratio) / f);
-            } else {
-                _size.setHeight(h / f);
-                _size.setWidth(h * ratio / f);
-            }
-        } else {
-            _size = pixel2size(parentItem()->bbox().size());
-        }
-    }
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
 
-    // in any case, adjust position relative to parent
-    setbbox(RectF(PointF(), size2pixel(_size)));
+void Image::layout()
+{
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
