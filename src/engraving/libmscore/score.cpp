@@ -5591,6 +5591,11 @@ bool Score::isSystemObjectStaff(Staff* staff) const
     return mu::contains(m_systemObjectStaves, staff);
 }
 
+const std::vector<Part*>& Score::parts() const
+{
+    return _parts;
+}
+
 int Score::visiblePartCount() const
 {
     int count = 0;
