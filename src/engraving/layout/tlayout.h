@@ -64,6 +64,9 @@ class Glissando;
 class GlissandoSegment;
 class GraceNotesGroup;
 class GradualTempoChangeSegment;
+
+class HairpinSegment;
+class Hairpin;
 }
 
 namespace mu::engraving::v0 {
@@ -113,6 +116,9 @@ public:
     static void layout(GlissandoSegment* item, LayoutContext& ctx);
     static void layout(GraceNotesGroup* item, LayoutContext& ctx);
     static void layout(GradualTempoChangeSegment* item, LayoutContext& ctx);
+
+    static void layout(HairpinSegment* item, LayoutContext& ctx);
+    static void layout(Hairpin* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
