@@ -67,6 +67,7 @@ class GradualTempoChangeSegment;
 
 class HairpinSegment;
 class Hairpin;
+class HarmonicMarkSegment;
 }
 
 namespace mu::engraving::v0 {
@@ -119,6 +120,7 @@ public:
 
     static void layout(HairpinSegment* item, LayoutContext& ctx);
     static void layout(Hairpin* item, LayoutContext& ctx);
+    static void layout(HarmonicMarkSegment* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);

@@ -22,6 +22,8 @@
 
 #include "harmonicmark.h"
 
+#include "layout/tlayout.h"
+
 #include "score.h"
 #include "stafftype.h"
 #include "system.h"
@@ -65,18 +67,8 @@ HarmonicMarkSegment::HarmonicMarkSegment(HarmonicMark* sp, System* parent)
 
 void HarmonicMarkSegment::layout()
 {
-    const StaffType* stType = staffType();
-
-    _skipDraw = false;
-    if (stType
-        && (!stType->isTabStaff()
-            || stType->isHiddenElementOnTab(score(), Sid::harmonicMarkShowTabCommon, Sid::harmonicMarkShowTabSimple))) {
-        _skipDraw = true;
-        return;
-    }
-
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
