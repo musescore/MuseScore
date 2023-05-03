@@ -72,6 +72,8 @@
 #include "../libmscore/image.h"
 #include "../libmscore/instrchange.h"
 
+#include "../libmscore/jump.h"
+
 #include "../libmscore/note.h"
 
 #include "../libmscore/part.h"
@@ -2550,4 +2552,10 @@ void TLayout::layout(InstrumentChange* item, LayoutContext&)
 {
     item->TextBase::layout();
     item->autoplaceSegmentElement();
+}
+
+void TLayout::layout(Jump* item, LayoutContext&)
+{
+    item->TextBase::layout();
+    item->autoplaceMeasureElement();
 }
