@@ -86,6 +86,8 @@ class Harmony final : public TextBase
     OBJECT_ALLOCATOR(engraving, Harmony)
     DECLARE_CLASSOF(ElementType::HARMONY)
 
+    friend class v0::TLayout;
+
     int _rootTpc;               // root note for chord
     int _baseTpc;               // bass note or chord base; used for "slash" chords
                                 // or notation of base note in chord
@@ -116,7 +118,7 @@ class Harmony final : public TextBase
     NoteCaseType _rootRenderCase, _baseRenderCase;    // case to render
 
     void determineRootBaseSpelling();
-    PointF calculateBoundingRect();
+
     void draw(mu::draw::Painter*) const override;
     void drawEditMode(mu::draw::Painter* p, EditData& ed, double currentViewScaling) override;
     void render(const String&, double&, double&);
