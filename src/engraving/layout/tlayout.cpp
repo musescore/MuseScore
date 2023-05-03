@@ -67,6 +67,7 @@
 #include "../libmscore/hairpin.h"
 #include "../libmscore/harmonicmark.h"
 #include "../libmscore/harmony.h"
+#include "../libmscore/hook.h"
 
 #include "../libmscore/note.h"
 
@@ -2500,4 +2501,9 @@ PointF TLayout::calculateBoundingRect(Harmony* item)
     }
 
     return PointF(newPosX, newPosY);
+}
+
+void TLayout::layout(Hook* item, LayoutContext&)
+{
+    item->setbbox(item->symBbox(item->sym()));
 }
