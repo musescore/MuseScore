@@ -46,19 +46,6 @@ class HairpinSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, HairpinSegment)
 
-    bool drawCircledTip;
-    mu::PointF circledTip;
-    double circledTipRadius;
-
-    void startEditDrag(EditData&) override;
-    void editDrag(EditData&) override;
-
-    void draw(mu::draw::Painter*) const override;
-    Sid getPropertyStyle(Pid) const override;
-
-    bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
-
 public:
     HairpinSegment(Hairpin* sp, System* parent);
 
@@ -77,6 +64,23 @@ public:
     std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
+
+private:
+
+    friend class v0::TLayout;
+
+    void startEditDrag(EditData&) override;
+    void editDrag(EditData&) override;
+
+    void draw(mu::draw::Painter*) const override;
+    Sid getPropertyStyle(Pid) const override;
+
+    bool acceptDrop(EditData&) const override;
+    EngravingItem* drop(EditData&) override;
+
+    bool m_drawCircledTip = false;
+    mu::PointF m_circledTip;
+    double m_circledTipRadius = 0.0;
 };
 
 //---------------------------------------------------------

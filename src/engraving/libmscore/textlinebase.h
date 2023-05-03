@@ -41,13 +41,6 @@ class TextLineBase;
 class TextLineBaseSegment : public LineSegment
 {
     OBJECT_ALLOCATOR(engraving, TextLineBaseSegment)
-protected:
-    Text* _text;
-    Text* _endText;
-    mu::PointF points[6];
-    int npoints = 0;
-    double lineLength = 0;
-    bool twoLines = false;
 
 public:
     TextLineBaseSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::NOTHING);
@@ -67,6 +60,14 @@ public:
     Shape shape() const override;
 
     bool setProperty(Pid id, const PropertyValue& v) override;
+
+protected:
+    Text* m_text = nullptr;
+    Text* m_endText = nullptr;
+    mu::PointF m_points[6];
+    int m_npoints = 0;
+    double m_lineLength = 0;
+    bool m_twoLines = false;
 };
 
 //---------------------------------------------------------

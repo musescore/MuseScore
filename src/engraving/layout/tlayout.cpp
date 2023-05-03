@@ -64,6 +64,8 @@
 #include "../libmscore/glissando.h"
 #include "../libmscore/gradualtempochange.h"
 
+#include "../libmscore/hairpin.h"
+
 #include "../libmscore/note.h"
 
 #include "../libmscore/part.h"
@@ -2068,4 +2070,291 @@ void TLayout::layout(GradualTempoChangeSegment* item, LayoutContext&)
         item->roffset() = item->tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
     item->autoplaceSpannerSegment();
+}
+
+void TLayout::layout(HairpinSegment* item, LayoutContext&)
+{
+    const StaffType* stType = item->staffType();
+
+    item->setSkipDraw(false);
+    if (stType && stType->isHiddenElementOnTab(item->score(), Sid::hairpinShowTabCommon, Sid::hairpinShowTabSimple)) {
+        item->setSkipDraw(true);
+        return;
+    }
+
+    const double _spatium = item->spatium();
+    const track_idx_t _trck = item->track();
+    Dynamic* sd = nullptr;
+    Dynamic* ed = nullptr;
+    double dymax = item->hairpin()->placeBelow() ? -10000.0 : 10000.0;
+    if (item->autoplace() && !item->score()->isPaletteScore()) {
+        Segment* start = item->hairpin()->startSegment();
+        Segment* end = item->hairpin()->endSegment();
+        // Try to fit between adjacent dynamics
+        double minDynamicsDistance = item->score()->styleMM(Sid::autoplaceHairpinDynamicsDistance) * item->staff()->staffMag(item->tick());
+        const System* sys = item->system();
+        if (item->isSingleType() || item->isBeginType()) {
+            if (start && start->system() == sys) {
+                sd = toDynamic(start->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
+                if (!sd) {
+                    // Dynamics might have been added to the previous
+                    // segment rather than exactly to hairpin start,
+                    // search in that segment too.
+                    start = start->prev(SegmentType::ChordRest);
+                    if (start && start->system() == sys) {
+                        sd = toDynamic(start->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
+                    }
+                }
+            }
+            if (sd && sd->addToSkyline() && sd->placement() == item->hairpin()->placement()) {
+                const double sdRight = sd->bbox().right() + sd->pos().x()
+                                       + sd->segment()->pos().x() + sd->measure()->pos().x();
+                const double dist    = std::max(sdRight - item->pos().x() + minDynamicsDistance, 0.0);
+                item->movePosX(dist);
+                item->rxpos2() -= dist;
+                // prepare to align vertically
+                dymax = sd->pos().y();
+            }
+        }
+        if (item->isSingleType() || item->isEndType()) {
+            if (end && end->tick() < sys->endTick() && start != end) {
+                // checking ticks rather than systems
+                // systems may be unknown at layout stage.
+                ed = toDynamic(end->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
+            }
+            if (ed && ed->addToSkyline() && ed->placement() == item->hairpin()->placement()) {
+                const double edLeft  = ed->bbox().left() + ed->pos().x()
+                                       + ed->segment()->pos().x() + ed->measure()->pos().x();
+                const double dist    = edLeft - item->pos2().x() - item->pos().x() - minDynamicsDistance;
+                const double extendThreshold = 3.0 * _spatium;           // TODO: style setting
+                if (dist < 0.0) {
+                    item->rxpos2() += dist;                 // always shorten
+                } else if (dist >= extendThreshold && item->hairpin()->endText().isEmpty() && minDynamicsDistance > 0.0) {
+                    item->rxpos2() += dist;                 // lengthen only if appropriate
+                }
+                // prepare to align vertically
+                if (item->hairpin()->placeBelow()) {
+                    dymax = std::max(dymax, ed->pos().y());
+                } else {
+                    dymax = std::min(dymax, ed->pos().y());
+                }
+            }
+        }
+    }
+
+    HairpinType type = item->hairpin()->hairpinType();
+    if (item->hairpin()->isLineType()) {
+        item->m_twoLines = false;
+        item->TextLineBaseSegment::layout();
+        item->m_drawCircledTip   = false;
+        item->m_circledTipRadius = 0.0;
+    } else {
+        item->m_twoLines  = true;
+
+        item->hairpin()->setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
+        item->hairpin()->setEndTextAlign({ AlignH::RIGHT, AlignV::VCENTER });
+
+        double x1 = 0.0;
+        item->TextLineBaseSegment::layout();
+        if (!item->m_text->empty()) {
+            x1 = item->m_text->width() + _spatium * .5;
+        }
+
+        Transform t;
+        double h1 = item->hairpin()->hairpinHeight().val() * _spatium * .5;
+        double h2 = item->hairpin()->hairpinContHeight().val() * _spatium * .5;
+
+        double x = item->pos2().x();
+        if (!item->m_endText->empty()) {
+            x -= (item->m_endText->width() + _spatium * .5);             // 0.5 spatium distance
+        }
+        if (x < _spatium) {               // minimum size of hairpin
+            x = _spatium;
+        }
+        double y = item->pos2().y();
+        double len = sqrt(x * x + y * y);
+        t.rotateRadians(asin(y / len));
+
+        item->m_drawCircledTip   = item->hairpin()->hairpinCircledTip();
+        item->m_circledTipRadius = item->m_drawCircledTip ? 0.6 * _spatium * .5 : 0.0;
+
+        LineF l1, l2;
+
+        switch (type) {
+        case HairpinType::CRESC_HAIRPIN: {
+            switch (item->spannerSegmentType()) {
+            case SpannerSegmentType::SINGLE:
+            case SpannerSegmentType::BEGIN:
+                l1.setLine(x1 + item->m_circledTipRadius * 2.0, 0.0, len, h1);
+                l2.setLine(x1 + item->m_circledTipRadius * 2.0, 0.0, len, -h1);
+                item->m_circledTip.setX(x1 + item->m_circledTipRadius);
+                item->m_circledTip.setY(0.0);
+                break;
+
+            case SpannerSegmentType::MIDDLE:
+            case SpannerSegmentType::END:
+                item->m_drawCircledTip = false;
+                l1.setLine(x1,  h2, len, h1);
+                l2.setLine(x1, -h2, len, -h1);
+                break;
+            }
+        }
+        break;
+        case HairpinType::DECRESC_HAIRPIN: {
+            switch (item->spannerSegmentType()) {
+            case SpannerSegmentType::SINGLE:
+            case SpannerSegmentType::END:
+                l1.setLine(x1,  h1, len - item->m_circledTipRadius * 2, 0.0);
+                l2.setLine(x1, -h1, len - item->m_circledTipRadius * 2, 0.0);
+                item->m_circledTip.setX(len - item->m_circledTipRadius);
+                item->m_circledTip.setY(0.0);
+                break;
+            case SpannerSegmentType::BEGIN:
+            case SpannerSegmentType::MIDDLE:
+                item->m_drawCircledTip = false;
+                l1.setLine(x1,  h1, len, +h2);
+                l2.setLine(x1, -h1, len, -h2);
+                break;
+            }
+        }
+        break;
+        default:
+            break;
+        }
+
+        // Do Coord rotation
+        l1 = t.map(l1);
+        l2 = t.map(l2);
+        if (item->m_drawCircledTip) {
+            item->m_circledTip = t.map(item->m_circledTip);
+        }
+
+        item->m_points[0] = l1.p1();
+        item->m_points[1] = l1.p2();
+        item->m_points[2] = l2.p1();
+        item->m_points[3] = l2.p2();
+        item->m_npoints   = 4;
+
+        RectF r = RectF(l1.p1(), l1.p2()).normalized().united(RectF(l2.p1(), l2.p2()).normalized());
+        if (!item->m_text->empty()) {
+            r.unite(item->m_text->bbox());
+        }
+        if (!item->m_endText->empty()) {
+            r.unite(item->m_endText->bbox().translated(x + item->m_endText->bbox().width(), 0.0));
+        }
+        double w  = item->point(item->score()->styleS(Sid::hairpinLineWidth));
+        item->setbbox(r.adjusted(-w * .5, -w * .5, w, w));
+    }
+
+    if (!item->explicitParent()) {
+        item->setPos(PointF());
+        item->roffset() = PointF();
+        return;
+    }
+
+    if (item->isStyled(Pid::OFFSET)) {
+        item->roffset() = item->hairpin()->propertyDefault(Pid::OFFSET).value<PointF>();
+    }
+
+    // rebase vertical offset on drag
+    double rebase = 0.0;
+    if (item->offsetChanged() != OffsetChange::NONE) {
+        rebase = item->rebaseOffset();
+    }
+
+    if (item->autoplace()) {
+        double ymax = item->pos().y();
+        double d;
+        double ddiff = item->hairpin()->isLineType() ? 0.0 : _spatium * 0.5;
+
+        double sp = item->spatium();
+
+        // TODO: in the future, there should be a minDistance style setting for hairpinLines as well as hairpins.
+        double minDist = item->m_twoLines ? item->minDistance().val() : item->score()->styleS(Sid::dynamicsMinDistance).val();
+        double md = minDist * sp;
+
+        bool above = item->spanner()->placeAbove();
+        SkylineLine sl(!above);
+        Shape sh = item->shape();
+        sl.add(sh.translated(item->pos()));
+        if (above) {
+            d  = item->system()->topDistance(item->staffIdx(), sl);
+            if (d > -md) {
+                ymax -= d + md;
+            }
+            // align hairpin with dynamics
+            if (!item->hairpin()->diagonal()) {
+                ymax = std::min(ymax, dymax - ddiff);
+            }
+        } else {
+            d  = item->system()->bottomDistance(item->staffIdx(), sl);
+            if (d > -md) {
+                ymax += d + md;
+            }
+            // align hairpin with dynamics
+            if (!item->hairpin()->diagonal()) {
+                ymax = std::max(ymax, dymax - ddiff);
+            }
+        }
+        double yd = ymax - item->pos().y();
+        if (yd != 0.0) {
+            if (item->offsetChanged() != OffsetChange::NONE) {
+                // user moved element within the skyline
+                // we may need to adjust minDistance, yd, and/or offset
+                double adj = item->pos().y() + rebase;
+                bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < item->staff()->height();
+                item->rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
+            }
+            item->movePosY(yd);
+        }
+
+        if (item->hairpin()->addToSkyline() && !item->hairpin()->diagonal()) {
+            // align dynamics with hairpin
+            if (sd && sd->autoplace() && sd->placement() == item->hairpin()->placement()) {
+                double ny = item->y() + ddiff - sd->offset().y();
+                if (sd->placeAbove()) {
+                    ny = std::min(ny, sd->ipos().y());
+                } else {
+                    ny = std::max(ny, sd->ipos().y());
+                }
+                if (sd->ipos().y() != ny) {
+                    sd->setPosY(ny);
+                    if (sd->addToSkyline()) {
+                        Segment* s = sd->segment();
+                        Measure* m = s->measure();
+                        RectF r = sd->bbox().translated(sd->pos());
+                        s->staffShape(sd->staffIdx()).add(r);
+                        r = sd->bbox().translated(sd->pos() + s->pos() + m->pos());
+                        m->system()->staff(sd->staffIdx())->skyline().add(r);
+                    }
+                }
+            }
+            if (ed && ed->autoplace() && ed->placement() == item->hairpin()->placement()) {
+                double ny = item->y() + ddiff - ed->offset().y();
+                if (ed->placeAbove()) {
+                    ny = std::min(ny, ed->ipos().y());
+                } else {
+                    ny = std::max(ny, ed->ipos().y());
+                }
+                if (ed->ipos().y() != ny) {
+                    ed->setPosY(ny);
+                    if (ed->addToSkyline()) {
+                        Segment* s = ed->segment();
+                        Measure* m = s->measure();
+                        RectF r = ed->bbox().translated(ed->pos());
+                        s->staffShape(ed->staffIdx()).add(r);
+                        r = ed->bbox().translated(ed->pos() + s->pos() + m->pos());
+                        m->system()->staff(ed->staffIdx())->skyline().add(r);
+                    }
+                }
+            }
+        }
+    }
+    item->setOffsetChanged(false);
+}
+
+void TLayout::layout(Hairpin* item, LayoutContext&)
+{
+    item->setPos(0.0, 0.0);
+    item->TextLineBase::layout();
 }

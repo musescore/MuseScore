@@ -47,28 +47,28 @@ namespace mu::engraving {
 TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
     : LineSegment(type, sp, parent, f)
 {
-    _text    = Factory::createText(this, TextStyleType::DEFAULT, false);
-    _endText = Factory::createText(this, TextStyleType::DEFAULT, false);
-    _text->setParent(this);
-    _endText->setParent(this);
-    _text->setFlag(ElementFlag::MOVABLE, false);
-    _endText->setFlag(ElementFlag::MOVABLE, false);
+    m_text    = Factory::createText(this, TextStyleType::DEFAULT, false);
+    m_endText = Factory::createText(this, TextStyleType::DEFAULT, false);
+    m_text->setParent(this);
+    m_endText->setParent(this);
+    m_text->setFlag(ElementFlag::MOVABLE, false);
+    m_endText->setFlag(ElementFlag::MOVABLE, false);
 }
 
 TextLineBaseSegment::TextLineBaseSegment(const TextLineBaseSegment& seg)
     : LineSegment(seg)
 {
-    _text    = seg._text->clone();
-    _endText = seg._endText->clone();
-    _text->setParent(this);
-    _endText->setParent(this);
+    m_text    = seg.m_text->clone();
+    m_endText = seg.m_endText->clone();
+    m_text->setParent(this);
+    m_endText->setParent(this);
     layout();      // set the right _text
 }
 
 TextLineBaseSegment::~TextLineBaseSegment()
 {
-    delete _text;
-    delete _endText;
+    delete m_text;
+    delete m_endText;
 }
 
 //---------------------------------------------------------
@@ -78,8 +78,8 @@ TextLineBaseSegment::~TextLineBaseSegment()
 void TextLineBaseSegment::setSelected(bool f)
 {
     SpannerSegment::setSelected(f);
-    _text->setSelected(f);
-    _endText->setSelected(f);
+    m_text->setSelected(f);
+    m_endText->setSelected(f);
 }
 
 //---------------------------------------------------------
@@ -100,21 +100,21 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
     using namespace mu::draw;
     TextLineBase* tl   = textLineBase();
 
-    if (!_text->empty()) {
-        painter->translate(_text->pos());
-        _text->setVisible(tl->visible());
-        _text->draw(painter);
-        painter->translate(-_text->pos());
+    if (!m_text->empty()) {
+        painter->translate(m_text->pos());
+        m_text->setVisible(tl->visible());
+        m_text->draw(painter);
+        painter->translate(-m_text->pos());
     }
 
-    if (!_endText->empty()) {
-        painter->translate(_endText->pos());
-        _endText->setVisible(tl->visible());
-        _endText->draw(painter);
-        painter->translate(-_endText->pos());
+    if (!m_endText->empty()) {
+        painter->translate(m_endText->pos());
+        m_endText->setVisible(tl->visible());
+        m_endText->draw(painter);
+        painter->translate(-m_endText->pos());
     }
 
-    if ((npoints == 0) || (score() && (score()->printing() || !score()->showInvisible()) && !tl->lineVisible())) {
+    if ((m_npoints == 0) || (score() && (score()->printing() || !score()->showInvisible()) && !tl->lineVisible())) {
         return;
     }
 
@@ -144,26 +144,26 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
     const bool isNonSolid = tl->lineStyle() != LineType::SOLID;
 
     // Draw lines
-    if (twoLines) { // hairpins
+    if (m_twoLines) { // hairpins
         if (isNonSolid) {
             pen.setDashPattern({ dash, gap });
         }
 
         painter->setPen(pen);
-        painter->drawLines(&points[0], 1);
-        painter->drawLines(&points[2], 1);
+        painter->drawLines(&m_points[0], 1);
+        painter->drawLines(&m_points[2], 1);
         return;
     }
 
-    int start = 0, end = npoints;
+    int start = 0, end = m_npoints;
 
     // Draw begin hook, if it needs to be drawn separately
     if (isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
         bool isTHook = tl->beginHookType() == HookType::HOOK_90T;
 
         if (isNonSolid || isTHook) {
-            const PointF& p1 = points[start++];
-            const PointF& p2 = points[start++];
+            const PointF& p1 = m_points[start++];
+            const PointF& p2 = m_points[start++];
 
             if (isTHook) {
                 painter->setPen(solidPen);
@@ -182,8 +182,8 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
         bool isTHook = tl->endHookType() == HookType::HOOK_90T;
 
         if (isNonSolid || isTHook) {
-            const PointF& p1 = points[--end];
-            const PointF& p2 = points[--end];
+            const PointF& p1 = m_points[--end];
+            const PointF& p2 = m_points[--end];
 
             if (isTHook) {
                 painter->setPen(solidPen);
@@ -199,11 +199,11 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
 
     // Draw the rest
     if (isNonSolid) {
-        pen.setDashPattern(distributedDashPattern(dash, gap, lineLength / lineWidth));
+        pen.setDashPattern(distributedDashPattern(dash, gap, m_lineLength / lineWidth));
     }
 
     painter->setPen(pen);
-    painter->drawPolyline(&points[start], end - start);
+    painter->drawPolyline(&m_points[start], end - start);
 }
 
 static RectF boundingBoxOfLine(const PointF& p1, const PointF& p2, double lw2, bool isDottedLine)
@@ -224,20 +224,20 @@ static RectF boundingBoxOfLine(const PointF& p1, const PointF& p2, double lw2, b
 Shape TextLineBaseSegment::shape() const
 {
     Shape shape;
-    if (!_text->empty()) {
-        shape.add(_text->bbox().translated(_text->pos()));
+    if (!m_text->empty()) {
+        shape.add(m_text->bbox().translated(m_text->pos()));
     }
-    if (!_endText->empty()) {
-        shape.add(_endText->bbox().translated(_endText->pos()));
+    if (!m_endText->empty()) {
+        shape.add(m_endText->bbox().translated(m_endText->pos()));
     }
     double lw2 = 0.5 * textLineBase()->lineWidth();
     bool isDottedLine = textLineBase()->lineStyle() == LineType::DOTTED;
-    if (twoLines) {     // hairpins
-        shape.add(boundingBoxOfLine(points[0], points[1], lw2, isDottedLine));
-        shape.add(boundingBoxOfLine(points[2], points[3], lw2, isDottedLine));
+    if (m_twoLines) {     // hairpins
+        shape.add(boundingBoxOfLine(m_points[0], m_points[1], lw2, isDottedLine));
+        shape.add(boundingBoxOfLine(m_points[2], m_points[3], lw2, isDottedLine));
     } else if (textLineBase()->lineVisible()) {
-        for (int i = 0; i < npoints - 1; ++i) {
-            shape.add(boundingBoxOfLine(points[i], points[i + 1], lw2, isDottedLine));
+        for (int i = 0; i < m_npoints - 1; ++i) {
+            shape.add(boundingBoxOfLine(m_points[i], m_points[i + 1], lw2, isDottedLine));
         }
     }
     return shape;
@@ -248,12 +248,12 @@ bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)
     if (id == Pid::COLOR) {
         mu::draw::Color color = v.value<mu::draw::Color>();
 
-        if (_text) {
-            _text->setColor(color);
+        if (m_text) {
+            m_text->setColor(color);
         }
 
-        if (_endText) {
-            _endText->setColor(color);
+        if (m_endText) {
+            m_endText->setColor(color);
         }
     }
 
@@ -289,7 +289,7 @@ static inline void extendLines(const PointF& l1p1, PointF& l1p2, PointF& l2p1, c
 
 void TextLineBaseSegment::layout()
 {
-    npoints      = 0;
+    m_npoints      = 0;
     TextLineBase* tl = textLineBase();
     double _spatium = tl->spatium();
 
@@ -329,57 +329,57 @@ void TextLineBaseSegment::layout()
     switch (spannerSegmentType()) {
     case SpannerSegmentType::SINGLE:
     case SpannerSegmentType::BEGIN:
-        _text->setXmlText(tl->beginText());
-        _text->setFamily(tl->beginFontFamily());
-        _text->setSize(tl->beginFontSize());
-        _text->setOffset(tl->beginTextOffset() * mag());
-        _text->setAlign(tl->beginTextAlign());
-        _text->setFontStyle(tl->beginFontStyle());
+        m_text->setXmlText(tl->beginText());
+        m_text->setFamily(tl->beginFontFamily());
+        m_text->setSize(tl->beginFontSize());
+        m_text->setOffset(tl->beginTextOffset() * mag());
+        m_text->setAlign(tl->beginTextAlign());
+        m_text->setFontStyle(tl->beginFontStyle());
         break;
     case SpannerSegmentType::MIDDLE:
     case SpannerSegmentType::END:
-        _text->setXmlText(tl->continueText());
-        _text->setFamily(tl->continueFontFamily());
-        _text->setSize(tl->continueFontSize());
-        _text->setOffset(tl->continueTextOffset() * mag());
-        _text->setAlign(tl->continueTextAlign());
-        _text->setFontStyle(tl->continueFontStyle());
+        m_text->setXmlText(tl->continueText());
+        m_text->setFamily(tl->continueFontFamily());
+        m_text->setSize(tl->continueFontSize());
+        m_text->setOffset(tl->continueTextOffset() * mag());
+        m_text->setAlign(tl->continueTextAlign());
+        m_text->setFontStyle(tl->continueFontStyle());
         break;
     }
-    _text->setPlacement(PlacementV::ABOVE);
-    _text->setTrack(track());
-    _text->layout();
+    m_text->setPlacement(PlacementV::ABOVE);
+    m_text->setTrack(track());
+    m_text->layout();
 
     if ((isSingleType() || isEndType())) {
-        _endText->setXmlText(tl->endText());
-        _endText->setFamily(tl->endFontFamily());
-        _endText->setSize(tl->endFontSize());
-        _endText->setOffset(tl->endTextOffset());
-        _endText->setAlign(tl->endTextAlign());
-        _endText->setFontStyle(tl->endFontStyle());
-        _endText->setPlacement(PlacementV::ABOVE);
-        _endText->setTrack(track());
-        _endText->layout();
+        m_endText->setXmlText(tl->endText());
+        m_endText->setFamily(tl->endFontFamily());
+        m_endText->setSize(tl->endFontSize());
+        m_endText->setOffset(tl->endTextOffset());
+        m_endText->setAlign(tl->endTextAlign());
+        m_endText->setFontStyle(tl->endFontStyle());
+        m_endText->setPlacement(PlacementV::ABOVE);
+        m_endText->setTrack(track());
+        m_endText->layout();
     } else {
-        _endText->setXmlText(u"");
+        m_endText->setXmlText(u"");
     }
 
     if (!textLineBase()->textSizeSpatiumDependent()) {
-        _text->setSize(_text->size() * SPATIUM20 / spatium());
-        _endText->setSize(_endText->size() * SPATIUM20 / spatium());
+        m_text->setSize(m_text->size() * SPATIUM20 / spatium());
+        m_endText->setSize(m_endText->size() * SPATIUM20 / spatium());
     }
 
     PointF pp1;
     PointF pp2(pos2());
 
     // line with no text or hooks - just use the basic rectangle for line
-    if (_text->empty() && _endText->empty()
+    if (m_text->empty() && m_endText->empty()
         && (!isSingleBeginType() || tl->beginHookType() == HookType::NONE)
         && (!isSingleEndType() || tl->endHookType() == HookType::NONE)) {
-        npoints = 2;
-        points[0] = pp1;
-        points[1] = pp2;
-        lineLength = sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1));
+        m_npoints = 2;
+        m_points[0] = pp1;
+        m_points[1] = pp2;
+        m_lineLength = sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1));
 
         setbbox(boundingBoxOfLine(pp1, pp2, tl->lineWidth() / 2, tl->lineStyle() == LineType::DOTTED));
         return;
@@ -394,14 +394,14 @@ void TextLineBaseSegment::layout()
     double y2 = std::max(0.0, pp2.y()) - y0;
 
     double l = 0.0;
-    if (!_text->empty()) {
+    if (!m_text->empty()) {
         double gapBetweenTextAndLine = _spatium * tl->gapBetweenTextAndLine().val();
         if ((isSingleBeginType() && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
             || (!isSingleBeginType() && (tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO))) {
-            l = _text->pos().x() + _text->bbox().width() + gapBetweenTextAndLine;
+            l = m_text->pos().x() + m_text->bbox().width() + gapBetweenTextAndLine;
         }
 
-        double h = _text->height();
+        double h = m_text->height();
         if (tl->beginTextPlace() == TextPlace::ABOVE) {
             y1 = std::min(y1, -h);
         } else if (tl->beginTextPlace() == TextPlace::BELOW) {
@@ -410,7 +410,7 @@ void TextLineBaseSegment::layout()
             y1 = std::min(y1, -h * .5);
             y2 = std::max(y2, h * .5);
         }
-        x2 = std::max(x2, _text->width());
+        x2 = std::max(x2, m_text->width());
     }
 
     if (tl->endHookType() != HookType::NONE) {
@@ -431,13 +431,13 @@ void TextLineBaseSegment::layout()
         }
     }
     bbox().setRect(x1, y1, x2 - x1, y2 - y1);
-    if (!_text->empty()) {
-        bbox() |= _text->bbox().translated(_text->pos());      // DEBUG
+    if (!m_text->empty()) {
+        bbox() |= m_text->bbox().translated(m_text->pos());      // DEBUG
     }
     // set end text position and extend bbox
-    if (!_endText->empty()) {
-        _endText->movePosX(bbox().right());
-        bbox() |= _endText->bbox().translated(_endText->pos());
+    if (!m_endText->empty()) {
+        m_endText->movePosX(bbox().right());
+        bbox() |= m_endText->bbox().translated(m_endText->pos());
     }
 
     if (!(tl->lineVisible() || score()->showInvisible())) {
@@ -452,13 +452,13 @@ void TextLineBaseSegment::layout()
         bool alignContinueText = tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO;
         bool alignEndText = tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO;
         bool isSingleOrBegin = isSingleBeginType();
-        bool hasBeginText = !_text->empty() && isSingleOrBegin;
-        bool hasContinueText = !_text->empty() && !isSingleOrBegin;
-        bool hasEndText = !_endText->empty() && isSingleEndType();
+        bool hasBeginText = !m_text->empty() && isSingleOrBegin;
+        bool hasContinueText = !m_text->empty() && !isSingleOrBegin;
+        bool hasEndText = !m_endText->empty() && isSingleEndType();
         if ((hasBeginText && alignBeginText) || (hasContinueText && alignContinueText)) {
-            alignBaseLine(_text, pp1, pp2);
+            alignBaseLine(m_text, pp1, pp2);
         } else if (hasEndText && alignEndText) {
-            alignBaseLine(_endText, pp1, pp2);
+            alignBaseLine(m_endText, pp1, pp2);
         }
 
         double beginHookHeight = tl->beginHookHeight().val() * _spatium;
@@ -477,21 +477,21 @@ void TextLineBaseSegment::layout()
         }
 
         // don't draw backwards lines (or hooks) if text is longer than nominal line length
-        if (!_text->empty() && pp1.x() > pp2.x() && !tl->diagonal()) {
+        if (!m_text->empty() && pp1.x() > pp2.x() && !tl->diagonal()) {
             return;
         }
 
         if (isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
             // We use the term "endpoint" for the point that does not touch the main line.
-            const PointF& beginHookEndpoint = points[npoints++] = PointF(pp1.x() - beginHookWidth, pp1.y() + beginHookHeight);
+            const PointF& beginHookEndpoint = m_points[m_npoints++] = PointF(pp1.x() - beginHookWidth, pp1.y() + beginHookHeight);
 
             if (tl->beginHookType() == HookType::HOOK_90T) {
                 // A T-hook needs to be drawn separately, so we add an extra point
-                points[npoints++] = PointF(pp1.x() - beginHookWidth, pp1.y() - beginHookHeight);
+                m_points[m_npoints++] = PointF(pp1.x() - beginHookWidth, pp1.y() - beginHookHeight);
             } else if (tl->lineStyle() != LineType::SOLID) {
                 // For non-solid lines, we also draw the hook separately,
                 // so that we can distribute the dashes/dots for each linepiece individually
-                PointF& beginHookStartpoint = points[npoints++] = pp1;
+                PointF& beginHookStartpoint = m_points[m_npoints++] = pp1;
 
                 if (tl->lineStyle() == LineType::DASHED) {
                     // For dashes lines, we extend the lines somewhat,
@@ -502,19 +502,19 @@ void TextLineBaseSegment::layout()
             }
         }
 
-        points[npoints++] = pp1;
-        PointF& pp22 = points[npoints++] = pp2; // Keep a reference so that we can modify later
+        m_points[m_npoints++] = pp1;
+        PointF& pp22 = m_points[m_npoints++] = pp2; // Keep a reference so that we can modify later
 
         if (isSingleEndType() && tl->endHookType() != HookType::NONE) {
             const PointF endHookEndpoint = PointF(pp2.x() + endHookWidth, pp2.y() + endHookHeight);
 
             if (tl->endHookType() == HookType::HOOK_90T) {
                 // A T-hook needs to be drawn separately, so we add an extra point
-                points[npoints++] = PointF(pp2.x() + endHookWidth, pp2.y() - endHookHeight);
+                m_points[m_npoints++] = PointF(pp2.x() + endHookWidth, pp2.y() - endHookHeight);
             } else if (tl->lineStyle() != LineType::SOLID) {
                 // For non-solid lines, we also draw the hook separately,
                 // so that we can distribute the dashes/dots for each linepiece individually
-                PointF& endHookStartpoint = points[npoints++] = pp2;
+                PointF& endHookStartpoint = m_points[m_npoints++] = pp2;
 
                 if (tl->lineStyle() == LineType::DASHED) {
                     bool checkAngle = tl->endHookType() == HookType::HOOK_45 || tl->diagonal();
@@ -525,10 +525,10 @@ void TextLineBaseSegment::layout()
                 }
             }
 
-            points[npoints++] = endHookEndpoint;
+            m_points[m_npoints++] = endHookEndpoint;
         }
 
-        lineLength = sqrt(PointF::dotProduct(pp22 - pp1, pp22 - pp1));
+        m_lineLength = sqrt(PointF::dotProduct(pp22 - pp1, pp22 - pp1));
     }
 }
 
@@ -541,8 +541,8 @@ void TextLineBaseSegment::spatiumChanged(double ov, double nv)
     LineSegment::spatiumChanged(ov, nv);
 
     textLineBase()->spatiumChanged(ov, nv);
-    _text->spatiumChanged(ov, nv);
-    _endText->spatiumChanged(ov, nv);
+    m_text->spatiumChanged(ov, nv);
+    m_endText->spatiumChanged(ov, nv);
 }
 
 static constexpr std::array<Pid, 27> TextLineBasePropertyId = { {
