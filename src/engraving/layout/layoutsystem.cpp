@@ -1349,6 +1349,41 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
             }
         }
     }
+    //
+    // Fix harmonic marks and vibrato overlaps
+    //
+    SpannerSegment* prevSegment = nullptr;
+    bool fixed = false;
+
+    for (SpannerSegment* ss : segments) {
+        if (fixed) {
+            fixed = false;
+            prevSegment = ss;
+            continue;
+        }
+        if (prevSegment) {
+            if (prevSegment->visible()
+                && ss->visible()
+                && prevSegment->isHarmonicMarkSegment()
+                && ss->isVibratoSegment()
+                && prevSegment->x() == ss->x()) {
+                double diff = ss->bbox().bottom() - prevSegment->bbox().bottom() + prevSegment->bbox().top();
+                prevSegment->movePosY(diff);
+                fixed = true;
+            }
+            if (prevSegment->visible()
+                && ss->visible()
+                && prevSegment->isVibratoSegment()
+                && ss->isHarmonicMarkSegment()
+                && prevSegment->x() == ss->x()) {
+                double diff = prevSegment->bbox().bottom() - ss->bbox().bottom() + ss->bbox().top();
+                ss->movePosY(diff);
+                fixed = true;
+            }
+        }
+
+        prevSegment = ss;
+    }
 
     //
     // add shapes to skyline
