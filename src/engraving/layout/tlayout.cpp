@@ -65,6 +65,7 @@
 #include "../libmscore/gradualtempochange.h"
 
 #include "../libmscore/hairpin.h"
+#include "../libmscore/harmonicmark.h"
 
 #include "../libmscore/note.h"
 
@@ -2357,4 +2358,20 @@ void TLayout::layout(Hairpin* item, LayoutContext&)
 {
     item->setPos(0.0, 0.0);
     item->TextLineBase::layout();
+}
+
+void TLayout::layout(HarmonicMarkSegment* item, LayoutContext&)
+{
+    const StaffType* stType = item->staffType();
+
+    item->setSkipDraw(false);
+    if (stType
+        && (!stType->isTabStaff()
+            || stType->isHiddenElementOnTab(item->score(), Sid::harmonicMarkShowTabCommon, Sid::harmonicMarkShowTabSimple))) {
+        item->setSkipDraw(true);
+        return;
+    }
+
+    item->TextLineBaseSegment::layout();
+    item->autoplaceSpannerSegment();
 }
