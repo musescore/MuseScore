@@ -64,6 +64,8 @@ public:
     void layout() override;
     void draw(mu::draw::Painter*) const override;
 
+    void init();
+
     bool isImageFramed() const;
     double imageAspectRatio() const;
     void setSize(const mu::SizeF& s) { _size = s; }
@@ -103,6 +105,9 @@ public:
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
 protected:
+
+    friend class v0::TLayout;
+
     ImageStoreItem* _storeItem;
     String _storePath;             // the path of the img in the ImageStore
     String _linkPath;              // the path of an external linked img

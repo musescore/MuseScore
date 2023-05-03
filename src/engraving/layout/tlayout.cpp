@@ -69,6 +69,8 @@
 #include "../libmscore/harmony.h"
 #include "../libmscore/hook.h"
 
+#include "../libmscore/image.h"
+
 #include "../libmscore/note.h"
 
 #include "../libmscore/part.h"
@@ -2506,4 +2508,39 @@ PointF TLayout::calculateBoundingRect(Harmony* item)
 void TLayout::layout(Hook* item, LayoutContext&)
 {
     item->setbbox(item->symBbox(item->sym()));
+}
+
+void TLayout::layout(Image* item, LayoutContext&)
+{
+    item->setPos(0.0, 0.0);
+    item->init();
+
+    SizeF imageSize = item->size();
+
+    // if autoscale && inside a box, scale to box relevant size
+    if (item->autoScale()
+        && item->explicitParent()
+        && ((item->explicitParent()->isHBox() || item->explicitParent()->isVBox()))) {
+        if (item->lockAspectRatio()) {
+            double f = item->sizeIsSpatium() ? item->spatium() : DPMM;
+            SizeF size(item->imageSize());
+            double ratio = size.width() / size.height();
+            double w = item->parentItem()->width();
+            double h = item->parentItem()->height();
+            if ((w / h) < ratio) {
+                imageSize.setWidth(w / f);
+                imageSize.setHeight((w / ratio) / f);
+            } else {
+                imageSize.setHeight(h / f);
+                imageSize.setWidth(h * ratio / f);
+            }
+        } else {
+            imageSize = item->pixel2size(item->parentItem()->bbox().size());
+        }
+    }
+
+    item->setSize(imageSize);
+
+    // in any case, adjust position relative to parent
+    item->setbbox(RectF(PointF(), item->size2pixel(imageSize)));
 }

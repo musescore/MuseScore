@@ -70,6 +70,8 @@ class Hairpin;
 class HarmonicMarkSegment;
 class Harmony;
 class Hook;
+
+class Image;
 }
 
 namespace mu::engraving::v0 {
@@ -126,6 +128,8 @@ public:
     static void layout(Harmony* item, LayoutContext& ctx);
     static void layout1(Harmony* item, LayoutContext& ctx);
     static void layout(Hook* item, LayoutContext& ctx);
+
+    static void layout(Image* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
