@@ -127,6 +127,7 @@ option(MUE_ENABLE_DRAW_TRACE "Trace draw objects" ON)
 option(MUE_DISABLE_UI_MODALITY "Disable dialogs modality for testing purpose" OFF)
 option(MUE_ENABLE_LOAD_QML_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 option(MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER "Enable diagnostic engraving paint debugger" OFF)
+option(MUE_ENABLE_STRING_DEBUG_HACK "Enable string debug hack (only clang)" ON)
 
 ###########################################
 # Setup Configure

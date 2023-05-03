@@ -74,7 +74,9 @@ elseif(CC_IS_CLANG)
         link_libraries("-fsanitize=address")
     endif()
 
-    if (BUILD_IS_DEBUG)
+    # On MacOS with clang there are problems with debugging
+    # - the value of the std::u16string is not visible.
+    if (BUILD_IS_DEBUG AND MUE_ENABLE_STRING_DEBUG_HACK)
         add_definitions(-DSTRING_DEBUG_HACK)
     endif()
 
