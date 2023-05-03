@@ -785,7 +785,7 @@ public:
 
     void changeSelectedNotesVoice(voice_idx_t);
 
-    const std::vector<Part*>& parts() const { return _parts; }
+    const std::vector<Part*>& parts() const;
     int visiblePartCount() const;
     std::set<ID> partIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const;
     std::set<staff_idx_t> staffIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const;
