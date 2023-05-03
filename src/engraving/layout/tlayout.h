@@ -72,6 +72,7 @@ class Harmony;
 class Hook;
 
 class Image;
+class InstrumentChange;
 }
 
 namespace mu::engraving::v0 {
@@ -130,6 +131,7 @@ public:
     static void layout(Hook* item, LayoutContext& ctx);
 
     static void layout(Image* item, LayoutContext& ctx);
+    static void layout(InstrumentChange* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
