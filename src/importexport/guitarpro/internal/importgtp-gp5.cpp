@@ -1013,8 +1013,10 @@ bool GuitarPro5::readNoteEffects(Note* note)
     uint8_t modMask1 = readUInt8();
     uint8_t modMask2 = readUInt8();
     bool slur = false;
+    bool addBendToHarmonic = false;
 
     if (modMask1 & EFFECT_BEND) {
+        addBendToHarmonic = true;
         readBend(note);
     }
     if (modMask1 & EFFECT_HAMMER) {
@@ -1274,6 +1276,10 @@ bool GuitarPro5::readNoteEffects(Note* note)
             }
 
             addTextToNote(harmonicText, harmonicNote);
+
+            if (addBendToHarmonic) {
+                harmonicNote->add(note->bend()->clone());
+            }
         }
     }
 
