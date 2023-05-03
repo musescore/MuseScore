@@ -1524,7 +1524,7 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
     // but since there are other causes of tpc corruption (eg, https://musescore.org/en/node/74746)
     // including perhaps some we don't know about yet,
     // we will attempt to fix some problems here regardless of version
-
+#if 0
     if (staff() && !staff()->isDrumStaff(ctxTick) && !pasteMode && !MScore::testMode) {
         int tpc1Pitch = (tpc2pitch(_tpc[0]) + 12) % 12;
         int tpc2Pitch = (tpc2pitch(_tpc[1]) + 12) % 12;
@@ -1552,7 +1552,7 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
             }
         }
     }
-
+#endif
     for (EngravingItem* item : _el) {
         if (!item->isSymbol()) {
             continue;
