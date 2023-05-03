@@ -30,6 +30,8 @@
 #include "draw/types/brush.h"
 #include "draw/types/pen.h"
 
+#include "layout/tlayout.h"
+
 #include "chordlist.h"
 #include "fret.h"
 #include "linkedobjects.h"
@@ -1252,17 +1254,8 @@ const ChordDescription* Harmony::generateDescription()
 
 void Harmony::layout()
 {
-    if (!explicitParent()) {
-        setPos(0.0, 0.0);
-        setOffset(0.0, 0.0);
-        layout1();
-        return;
-    }
-    //if (isStyled(Pid::OFFSET))
-    //      setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
-
-    layout1();
-    setPos(calculateBoundingRect());
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -1271,109 +1264,8 @@ void Harmony::layout()
 
 void Harmony::layout1()
 {
-    if (isLayoutInvalid()) {
-        createLayout();
-    }
-    if (textBlockList().empty()) {
-        textBlockList().push_back(TextBlock());
-    }
-    calculateBoundingRect();
-    if (hasFrame()) {
-        layoutFrame();
-    }
-    score()->addRefresh(canvasBoundingRect());
-}
-
-//---------------------------------------------------------
-//   calculateBoundingRect
-//---------------------------------------------------------
-
-PointF Harmony::calculateBoundingRect()
-{
-    const double ypos = (placeBelow() && staff()) ? staff()->height() : 0.0;
-    const FretDiagram* fd = (explicitParent() && explicitParent()->isFretDiagram()) ? toFretDiagram(explicitParent()) : nullptr;
-    const double cw = symWidth(SymId::noteheadBlack);
-
-    double newPosX = 0.0;
-    double newPosY = 0.0;
-
-    if (textList.empty()) {
-        TextBase::layout1();
-
-        if (fd) {
-            newPosY = this->ypos();
-        } else {
-            newPosY = ypos - ((align() == AlignV::BOTTOM) ? _harmonyHeight - bbox().height() : 0.0);
-        }
-    } else {
-        RectF bb;
-        for (TextSegment* ts : textList) {
-            bb.unite(ts->tightBoundingRect().translated(ts->x, ts->y));
-        }
-
-        double xx = 0.0;
-        switch (align().horizontal) {
-        case AlignH::LEFT:
-            xx = -bb.left();
-            break;
-        case AlignH::HCENTER:
-            xx = -(bb.center().x());
-            break;
-        case AlignH::RIGHT:
-            xx = -bb.right();
-            break;
-        }
-
-        double yy = -bb.y();      // Align::TOP
-        if (align() == AlignV::VCENTER) {
-            yy = -bb.y() / 2.0;
-        } else if (align() == AlignV::BASELINE) {
-            yy = 0.0;
-        } else if (align() == AlignV::BOTTOM) {
-            yy = -bb.height() - bb.y();
-        }
-
-        if (fd) {
-            newPosY = ypos - yy - score()->styleMM(Sid::harmonyFretDist);
-        } else {
-            newPosY = ypos;
-        }
-
-        for (TextSegment* ts : textList) {
-            ts->offset = PointF(xx, yy);
-        }
-
-        setbbox(bb.translated(xx, yy));
-        _harmonyHeight = bbox().height();
-    }
-
-    if (fd) {
-        switch (align().horizontal) {
-        case AlignH::LEFT:
-            newPosX = 0.0;
-            break;
-        case AlignH::HCENTER:
-            newPosX = fd->centerX();
-            break;
-        case AlignH::RIGHT:
-            newPosX = fd->rightX();
-            break;
-        }
-    } else {
-        switch (align().horizontal) {
-        case AlignH::LEFT:
-            newPosX = 0.0;
-            break;
-        case AlignH::HCENTER:
-            newPosX = cw * 0.5;
-            break;
-        case AlignH::RIGHT:
-            newPosX = cw;
-            break;
-        }
-    }
-
-    return PointF(newPosX, newPosY);
+    LayoutContext ctx(score());
+    v0::TLayout::layout1(this, ctx);
 }
 
 //---------------------------------------------------------

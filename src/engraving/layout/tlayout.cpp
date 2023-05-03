@@ -66,6 +66,7 @@
 
 #include "../libmscore/hairpin.h"
 #include "../libmscore/harmonicmark.h"
+#include "../libmscore/harmony.h"
 
 #include "../libmscore/note.h"
 
@@ -2374,4 +2375,129 @@ void TLayout::layout(HarmonicMarkSegment* item, LayoutContext&)
 
     item->TextLineBaseSegment::layout();
     item->autoplaceSpannerSegment();
+}
+
+void TLayout::layout(Harmony* item, LayoutContext&)
+{
+    if (!item->explicitParent()) {
+        item->setPos(0.0, 0.0);
+        item->setOffset(0.0, 0.0);
+        item->layout1();
+        return;
+    }
+    //if (isStyled(Pid::OFFSET))
+    //      setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
+
+    item->layout1();
+    item->setPos(calculateBoundingRect(item));
+}
+
+void TLayout::layout1(Harmony* item, LayoutContext&)
+{
+    if (item->isLayoutInvalid()) {
+        item->createLayout();
+    }
+
+    if (item->textBlockList().empty()) {
+        item->textBlockList().push_back(TextBlock());
+    }
+
+    calculateBoundingRect(item);
+
+    if (item->hasFrame()) {
+        item->layoutFrame();
+    }
+
+    item->score()->addRefresh(item->canvasBoundingRect());
+}
+
+PointF TLayout::calculateBoundingRect(Harmony* item)
+{
+    const double ypos = (item->placeBelow() && item->staff()) ? item->staff()->height() : 0.0;
+    const FretDiagram* fd = (item->explicitParent() && item->explicitParent()->isFretDiagram())
+                            ? toFretDiagram(item->explicitParent())
+                            : nullptr;
+
+    const double cw = item->symWidth(SymId::noteheadBlack);
+
+    double newPosX = 0.0;
+    double newPosY = 0.0;
+
+    if (item->textList.empty()) {
+        item->TextBase::layout1();
+
+        if (fd) {
+            newPosY = item->ypos();
+        } else {
+            newPosY = ypos - ((item->align() == AlignV::BOTTOM) ? item->_harmonyHeight - item->bbox().height() : 0.0);
+        }
+    } else {
+        RectF bb;
+        for (TextSegment* ts : item->textList) {
+            bb.unite(ts->tightBoundingRect().translated(ts->x, ts->y));
+        }
+
+        double xx = 0.0;
+        switch (item->align().horizontal) {
+        case AlignH::LEFT:
+            xx = -bb.left();
+            break;
+        case AlignH::HCENTER:
+            xx = -(bb.center().x());
+            break;
+        case AlignH::RIGHT:
+            xx = -bb.right();
+            break;
+        }
+
+        double yy = -bb.y();      // Align::TOP
+        if (item->align() == AlignV::VCENTER) {
+            yy = -bb.y() / 2.0;
+        } else if (item->align() == AlignV::BASELINE) {
+            yy = 0.0;
+        } else if (item->align() == AlignV::BOTTOM) {
+            yy = -bb.height() - bb.y();
+        }
+
+        if (fd) {
+            newPosY = ypos - yy - item->score()->styleMM(Sid::harmonyFretDist);
+        } else {
+            newPosY = ypos;
+        }
+
+        for (TextSegment* ts : item->textList) {
+            ts->offset = PointF(xx, yy);
+        }
+
+        item->setbbox(bb.translated(xx, yy));
+        item->_harmonyHeight = item->bbox().height();
+    }
+
+    if (fd) {
+        switch (item->align().horizontal) {
+        case AlignH::LEFT:
+            newPosX = 0.0;
+            break;
+        case AlignH::HCENTER:
+            newPosX = fd->centerX();
+            break;
+        case AlignH::RIGHT:
+            newPosX = fd->rightX();
+            break;
+        }
+    } else {
+        switch (item->align().horizontal) {
+        case AlignH::LEFT:
+            newPosX = 0.0;
+            break;
+        case AlignH::HCENTER:
+            newPosX = cw * 0.5;
+            break;
+        case AlignH::RIGHT:
+            newPosX = cw;
+            break;
+        }
+    }
+
+    return PointF(newPosX, newPosY);
 }
