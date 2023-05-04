@@ -81,6 +81,8 @@
 #include "../libmscore/line.h"
 #include "../libmscore/lyrics.h"
 
+#include "../libmscore/marker.h"
+
 #include "../libmscore/note.h"
 
 #include "../libmscore/part.h"
@@ -2890,6 +2892,20 @@ void TLayout::layout(LyricsLine* item, LayoutContext& ctx)
 void TLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
 {
     LyricsLayout::layout(item, ctx);
+}
+
+void TLayout::layout(Marker* item, LayoutContext&)
+{
+    item->TextBase::layout();
+
+    // although normally laid out to parent (measure) width,
+    // force to center over barline if left-aligned
+
+    if (!item->score()->isPaletteScore() && item->layoutToParentWidth() && item->align() == AlignH::LEFT) {
+        item->movePosX(-item->width() * 0.5);
+    }
+
+    item->autoplaceMeasureElement();
 }
 
 void TLayout::layout(SLine* item, LayoutContext&)

@@ -83,6 +83,8 @@ class Lyrics;
 class LyricsLine;
 class LyricsLineSegment;
 
+class Marker;
+
 class SLine;
 }
 
@@ -153,6 +155,8 @@ public:
     static void layout(Lyrics* item, LayoutContext& ctx);
     static void layout(LyricsLine* item, LayoutContext& ctx);
     static void layout(LyricsLineSegment* item, LayoutContext& ctx);
+
+    static void layout(Marker* item, LayoutContext& ctx);
 
     static void layout(SLine* item, LayoutContext& ctx);
 
