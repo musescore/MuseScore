@@ -50,7 +50,7 @@
 #include "beamlayout.h"
 #include "chordlayout.h"
 #include "layoutharmonies.h"
-#include "layoutlyrics.h"
+#include "lyricslayout.h"
 #include "layoutmeasure.h"
 #include "layouttuplets.h"
 
@@ -1039,7 +1039,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     // Lyric
     //-------------------------------------------------------------
 
-    LayoutLyrics::layoutLyrics(options, score, system);
+    LyricsLayout::layoutLyrics(options, score, system);
 
     // here are lyrics dashes and melisma
     for (Spanner* sp : score->unmanagedSpanners()) {

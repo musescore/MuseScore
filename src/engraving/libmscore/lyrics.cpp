@@ -25,6 +25,8 @@
 #include "translation.h"
 #include "types/translatablestring.h"
 
+#include "layout/tlayout.h"
+
 #include "measure.h"
 #include "mscoreview.h"
 #include "navigate.h"
@@ -157,161 +159,8 @@ bool Lyrics::isMelisma() const
 
 void Lyrics::layout()
 {
-    if (!explicitParent()) {   // palette & clone trick
-        setPos(PointF());
-        TextBase::layout1();
-        return;
-    }
-
-    //
-    // parse leading verse number and/or punctuation, so we can factor it into layout separately
-    //
-    bool hasNumber     = false;   // _verseNumber;
-
-    // find:
-    // 1) string of numbers and non-word characters at start of syllable
-    // 2) at least one other character (indicating start of actual lyric)
-    // 3) string of non-word characters at end of syllable
-    //QRegularExpression leadingPattern("(^[\\d\\W]+)([^\\d\\W]+)");
-
-    const String text = plainText();
-    String leading;
-    String trailing;
-
-    if (score()->styleB(Sid::lyricsAlignVerseNumber)) {
-        size_t leadingIdx = 0;
-        for (size_t i = 0; i < text.size(); ++i) {
-            Char ch = text.at(i);
-            if (ch.isLetter()) {
-                leadingIdx = i;
-                break;
-            }
-        }
-
-        if (leadingIdx != 0) {
-            leading = text.mid(0, leadingIdx);
-        }
-
-        size_t trailingIdx = text.size() - 1;
-        for (int i = static_cast<int>(text.size() - 1); i >= 0; --i) {
-            Char ch = text.at(i);
-            if (ch.isLetter()) {
-                trailingIdx = i;
-                break;
-            }
-        }
-
-        if (trailingIdx != text.size() - 1) {
-            trailing = text.mid(trailingIdx + 1);
-        }
-
-        if (!leading.isEmpty() && leading.at(0).isDigit()) {
-            hasNumber = true;
-        }
-    }
-
-    bool styleDidChange = false;
-    if (isEven() && !_even) {
-        initTextStyleType(TextStyleType::LYRICS_EVEN, /* preserveDifferent */ true);
-        _even             = true;
-        styleDidChange    = true;
-    }
-    if (!isEven() && _even) {
-        initTextStyleType(TextStyleType::LYRICS_ODD, /* preserveDifferent */ true);
-        _even             = false;
-        styleDidChange    = true;
-    }
-
-    if (styleDidChange) {
-        styleChanged();
-    }
-
-    ChordRest* cr = chordRest();
-    if (_removeInvalidSegments) {
-        removeInvalidSegments();
-    } else if (_ticks > Fraction(0, 1) || _syllabic == LyricsSyllabic::BEGIN || _syllabic == LyricsSyllabic::MIDDLE) {
-        if (!_separator) {
-            _separator = new LyricsLine(score()->dummy());
-            _separator->setTick(cr->tick());
-            score()->addUnmanagedSpanner(_separator);
-        }
-        _separator->setParent(this);
-        _separator->setTick(cr->tick());
-        // HACK separator should have non-zero length to get its layout
-        // always triggered. A proper ticks length will be set later on the
-        // separator layout.
-        _separator->setTicks(Fraction::fromTicks(1));
-        _separator->setTrack(track());
-        _separator->setTrack2(track());
-        _separator->setVisible(visible());
-        // bbox().setWidth(bbox().width());  // ??
-    } else {
-        if (_separator) {
-            _separator->removeUnmanaged();
-            delete _separator;
-            _separator = 0;
-        }
-    }
-
-    if (isMelisma() || hasNumber) {
-        // use the melisma style alignment setting
-        if (isStyled(Pid::ALIGN)) {
-            setAlign(score()->styleV(Sid::lyricsMelismaAlign).value<Align>());
-        }
-    } else {
-        // use the text style alignment setting
-        if (isStyled(Pid::ALIGN)) {
-            setAlign(propertyDefault(Pid::ALIGN).value<Align>());
-        }
-    }
-
-    PointF o(propertyDefault(Pid::OFFSET).value<PointF>());
-    setPosX(o.x());
-    double x = pos().x();
-    TextBase::layout1();
-
-    double centerAdjust = 0.0;
-    double leftAdjust   = 0.0;
-
-    if (score()->styleB(Sid::lyricsAlignVerseNumber)) {
-        // Calculate leading and trailing parts widths. Lyrics
-        // should have text layout to be able to do it correctly.
-        assert(rows() != 0);
-        if (!leading.isEmpty() || !trailing.isEmpty()) {
-//                   LOGD("create leading, trailing <%s> -- <%s><%s>", muPrintable(text), muPrintable(leading), muPrintable(trailing));
-            const TextBlock& tb = textBlock(0);
-
-            const double leadingWidth = tb.xpos(leading.size(), this) - tb.boundingRect().x();
-            const size_t trailingPos = text.size() - trailing.size();
-            const double trailingWidth = tb.boundingRect().right() - tb.xpos(trailingPos, this);
-
-            leftAdjust = leadingWidth;
-            centerAdjust = leadingWidth - trailingWidth;
-        }
-    }
-
-    if (align() == AlignH::HCENTER) {
-        //
-        // center under notehead, not origin
-        // however, lyrics that are melismas or have verse numbers will be forced to left alignment
-        //
-        // center under note head
-        double nominalWidth = symWidth(SymId::noteheadBlack);
-        x += nominalWidth * .5 - cr->x() - centerAdjust * 0.5;
-    } else if (!(align() == AlignH::RIGHT)) {
-        // even for left aligned syllables, ignore leading verse numbers and/or punctuation
-        x -= leftAdjust;
-    }
-
-    setPosX(x);
-
-    if (_ticks.isNotZero()) {
-        // set melisma end
-        ChordRest* ecr = score()->findCR(endTick(), track());
-        if (ecr) {
-            ecr->setMelismaEnd(true);
-        }
-    }
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

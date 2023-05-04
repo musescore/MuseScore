@@ -152,8 +152,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutoptions.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutcontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutlyrics.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutlyrics.h
+    ${CMAKE_CURRENT_LIST_DIR}/layout/lyricslayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layout/lyricslayout.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutmeasure.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutmeasure.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/beamlayout.cpp
