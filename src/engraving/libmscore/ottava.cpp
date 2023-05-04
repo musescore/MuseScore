@@ -22,6 +22,8 @@
 
 #include "ottava.h"
 
+#include "layout/tlayout.h"
+
 #include "score.h"
 #include "staff.h"
 #include "system.h"
@@ -75,8 +77,8 @@ OttavaSegment::OttavaSegment(Ottava* sp, System* parent)
 
 void OttavaSegment::layout()
 {
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

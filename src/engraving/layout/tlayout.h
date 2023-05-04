@@ -92,6 +92,8 @@ class MMRest;
 class Note;
 class NoteDot;
 
+class OttavaSegment;
+
 class SLine;
 }
 
@@ -172,6 +174,8 @@ public:
     static void layout(Note* item, LayoutContext& ctx);
     static void layout2(Note* item, LayoutContext& ctx);
     static void layout(NoteDot* item, LayoutContext& ctx);
+
+    static void layout(OttavaSegment* item, LayoutContext& ctx);
 
     static void layoutLine(SLine* item, LayoutContext& ctx); // base
 
