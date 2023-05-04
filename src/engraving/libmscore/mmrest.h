@@ -51,6 +51,8 @@ public:
     Shape shape() const override;
 
 private:
+    friend class v0::TLayout;
+
     Sid getPropertyStyle(Pid) const override;
 
     mu::PointF numberPosition(const mu::RectF& numberBbox) const;
