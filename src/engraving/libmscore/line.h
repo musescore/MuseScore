@@ -94,6 +94,8 @@ class SLine : public Spanner
 {
     OBJECT_ALLOCATOR(engraving, SLine)
 
+    friend class v0::TLayout;
+
     Millimetre _lineWidth;
     mu::draw::Color _lineColor { engravingConfiguration()->defaultColor() };
     LineType _lineStyle { LineType::SOLID };

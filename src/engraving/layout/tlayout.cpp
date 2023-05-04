@@ -78,6 +78,7 @@
 
 #include "../libmscore/ledgerline.h"
 #include "../libmscore/letring.h"
+#include "../libmscore/line.h"
 
 #include "../libmscore/note.h"
 
@@ -2872,4 +2873,110 @@ void TLayout::layout(LetRingSegment* item, LayoutContext&)
 
     item->TextLineBaseSegment::layout();
     item->autoplaceSpannerSegment();
+}
+
+void TLayout::layout(SLine* item, LayoutContext&)
+{
+    if (item->score()->isPaletteScore() || (item->tick() == Fraction(-1, 1)) || (item->tick2() == Fraction::fromTicks(1))) {
+        //
+        // when used in a palette or while dragging from palette,
+        // SLine has no parent and
+        // tick and tick2 has no meaning so no layout is
+        // possible and needed
+        //
+        if (item->spannerSegments().empty()) {
+            item->setLen(item->score()->spatium() * 7);
+        }
+
+        LineSegment* lineSegm = item->frontSegment();
+        lineSegm->layout();
+        item->setbbox(lineSegm->bbox());
+        return;
+    }
+
+    item->computeStartElement();
+    item->computeEndElement();
+
+    System* s1;
+    System* s2;
+    PointF p1(item->linePos(Grip::START, &s1));
+    PointF p2(item->linePos(Grip::END,   &s2));
+
+    const std::vector<System*>& systems = item->score()->systems();
+    system_idx_t sysIdx1 = mu::indexOf(systems, s1);
+    system_idx_t sysIdx2 = mu::indexOf(systems, s2);
+    int segmentsNeeded = 0;
+
+    if (sysIdx1 == mu::nidx || sysIdx2 == mu::nidx) {
+        return;
+    }
+
+    for (system_idx_t i = sysIdx1; i <= sysIdx2; ++i) {
+        if (systems.at(i)->vbox()) {
+            continue;
+        }
+        ++segmentsNeeded;
+    }
+
+    int segCount = int(item->spannerSegments().size());
+
+    if (segmentsNeeded != segCount) {
+        item->fixupSegments(segmentsNeeded, [item](System* parent) { return item->createLineSegment(parent); });
+        if (segmentsNeeded > segCount) {
+            for (int i = segCount; i < segmentsNeeded; ++i) {
+                LineSegment* lineSegm = item->segmentAt(i);
+                // set user offset to previous segment's offset
+                if (segCount > 0) {
+                    lineSegm->setOffset(PointF(0, item->segmentAt(i - 1)->offset().y()));
+                } else {
+                    lineSegm->setOffset(PointF(0, item->offset().y()));
+                }
+            }
+        }
+    }
+
+    int segIdx = 0;
+    for (system_idx_t i = sysIdx1; i <= sysIdx2; ++i) {
+        System* system = systems.at(i);
+        if (system->vbox()) {
+            continue;
+        }
+        LineSegment* lineSegm = item->segmentAt(segIdx++);
+        lineSegm->setTrack(item->track());           // DEBUG
+        lineSegm->setSystem(system);
+
+        if (sysIdx1 == sysIdx2) {
+            // single segment
+            lineSegm->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+            double len = p2.x() - p1.x();
+            // enforcing a minimum length would be possible but inadvisable
+            // the line length calculations are tuned well enough that this should not be needed
+            //if (anchor() == Anchor::SEGMENT && type() != ElementType::PEDAL)
+            //      len = std::max(1.0 * spatium(), len);
+            lineSegm->setPos(p1);
+            lineSegm->setPos2(PointF(len, p2.y() - p1.y()));
+        } else if (i == sysIdx1) {
+            // start segment
+            lineSegm->setSpannerSegmentType(SpannerSegmentType::BEGIN);
+            lineSegm->setPos(p1);
+            double x2 = system->lastNoteRestSegmentX(true);
+            lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
+        } else if (i > 0 && i != sysIdx2) {
+            // middle segment
+            lineSegm->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
+            double x1 = system->firstNoteRestSegmentX(true);
+            double x2 = system->lastNoteRestSegmentX(true);
+            lineSegm->setPos(PointF(x1, p1.y()));
+            lineSegm->setPos2(PointF(x2 - x1, 0.0));
+        } else if (i == sysIdx2) {
+            // end segment
+            double minLen = 0.0;
+            double x1 = system->firstNoteRestSegmentX(true);
+            double len = std::max(minLen, p2.x() - x1);
+            lineSegm->setSpannerSegmentType(SpannerSegmentType::END);
+            lineSegm->setPos(PointF(p2.x() - len, p2.y()));
+            lineSegm->setPos2(PointF(len, 0.0));
+        }
+        lineSegm->layout();
+    }
 }

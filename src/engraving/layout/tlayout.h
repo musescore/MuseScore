@@ -79,6 +79,8 @@ class KeySig;
 
 class LedgerLine;
 class LetRingSegment;
+
+class SLine;
 }
 
 namespace mu::engraving::v0 {
@@ -145,6 +147,8 @@ public:
 
     static void layout(LedgerLine* item, LayoutContext& ctx);
     static void layout(LetRingSegment* item, LayoutContext& ctx);
+
+    static void layout(SLine* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
