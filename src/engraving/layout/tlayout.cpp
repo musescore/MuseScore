@@ -100,6 +100,7 @@
 #include "../libmscore/pickscrape.h"
 #include "../libmscore/playtechannotation.h"
 
+#include "../libmscore/rasgueado.h"
 #include "../libmscore/rest.h"
 
 #include "../libmscore/staff.h"
@@ -3375,6 +3376,20 @@ void TLayout::layout(PlayTechAnnotation* item, LayoutContext&)
 {
     item->StaffTextBase::layout();
     item->autoplaceSegmentElement();
+}
+
+void TLayout::layout(RasgueadoSegment* item, LayoutContext&)
+{
+    const StaffType* stType = item->staffType();
+
+    item->setSkipDraw(false);
+    if (stType && stType->isHiddenElementOnTab(item->score(), Sid::rasgueadoShowTabCommon, Sid::rasgueadoShowTabSimple)) {
+        item->setSkipDraw(true);
+        return;
+    }
+
+    item->TextLineBaseSegment::layout();
+    item->autoplaceSpannerSegment();
 }
 
 void TLayout::layoutLine(SLine* item, LayoutContext&)
