@@ -96,6 +96,7 @@
 
 #include "../libmscore/palmmute.h"
 #include "../libmscore/part.h"
+#include "../libmscore/pedal.h"
 
 #include "../libmscore/rest.h"
 
@@ -3350,6 +3351,15 @@ void TLayout::layout(PalmMuteSegment* item, LayoutContext&)
     }
 
     item->TextLineBaseSegment::layout();
+    item->autoplaceSpannerSegment();
+}
+
+void TLayout::layout(PedalSegment* item, LayoutContext&)
+{
+    item->TextLineBaseSegment::layout();
+    if (item->isStyled(Pid::OFFSET)) {
+        item->roffset() = item->pedal()->propertyDefault(Pid::OFFSET).value<PointF>();
+    }
     item->autoplaceSpannerSegment();
 }
 
