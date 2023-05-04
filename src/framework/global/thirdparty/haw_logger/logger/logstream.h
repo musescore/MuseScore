@@ -18,8 +18,8 @@ public:
     inline Stream& operator<<(char t) { m_ss << t; return *this; }
     inline Stream& operator<<(signed short t) { m_ss << t; return *this; }
     inline Stream& operator<<(unsigned short t) { m_ss << t; return *this; }
-    inline Stream& operator<<(char16_t t) { m_ss << t; return *this; }
-    inline Stream& operator<<(char32_t t) { m_ss << t; return *this; }
+    inline Stream& operator<<(char16_t t) { m_ss << static_cast<uint16_t>(t); return *this; }
+    inline Stream& operator<<(char32_t t) { m_ss << static_cast<uint32_t>(t); return *this; }
     inline Stream& operator<<(signed int t) { m_ss << t; return *this; }
     inline Stream& operator<<(unsigned int t) { m_ss << t; return *this; }
     inline Stream& operator<<(signed long t) { m_ss << t; return *this; }
