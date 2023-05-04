@@ -22,6 +22,8 @@
 
 #include "pickscrape.h"
 
+#include "layout/tlayout.h"
+
 #include "score.h"
 #include "system.h"
 
@@ -64,8 +66,8 @@ PickScrapeSegment::PickScrapeSegment(PickScrape* sp, System* parent)
 
 void PickScrapeSegment::layout()
 {
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
