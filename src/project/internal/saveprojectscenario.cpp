@@ -187,6 +187,7 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
         return ret;
     }
 
+<<<<<<< HEAD
     QString defaultName = project->displayName();
     cloud::Visibility defaultVisibility = isPublish ? cloud::Visibility::Public : cloud::Visibility::Private;
     const QUrl existingOnlineScoreUrl = project->cloudInfo().sourceUrl;
@@ -209,6 +210,12 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
         default: break;
         }
     }
+=======
+    // TODO(save-to-cloud): better name?
+    const QString defaultName = project->displayName();
+    const cloud::Visibility defaultVisibility = isPublish ? cloud::Visibility::Public : cloud::Visibility::Private;
+    const QUrl existingOnlineScoreUrl = project->cloudInfo().sourceUrl;
+>>>>>>> 02a58c197f... Publish: add option to choose whether to replace existing score or upload as new score
 
     UriQuery query("musescore://project/savetocloud");
     query.addParam("isPublish", Val(isPublish));
