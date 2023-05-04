@@ -22,6 +22,8 @@
 
 #include "letring.h"
 
+#include "layout/tlayout.h"
+
 #include "score.h"
 #include "stafftype.h"
 #include "system.h"
@@ -68,16 +70,8 @@ LetRingSegment::LetRingSegment(LetRing* sp, System* parent)
 
 void LetRingSegment::layout()
 {
-    const StaffType* stType = staffType();
-
-    _skipDraw = false;
-    if (stType && stType->isHiddenElementOnTab(score(), Sid::letRingShowTabCommon, Sid::letRingShowTabSimple)) {
-        _skipDraw = true;
-        return;
-    }
-
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
