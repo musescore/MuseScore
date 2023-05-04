@@ -77,6 +77,7 @@
 #include "../libmscore/keysig.h"
 
 #include "../libmscore/ledgerline.h"
+#include "../libmscore/letring.h"
 
 #include "../libmscore/note.h"
 
@@ -2857,4 +2858,18 @@ void TLayout::layout(LedgerLine* item, LayoutContext&)
     } else {
         item->bbox().setRect(0, -w2, item->len(), w2);
     }
+}
+
+void TLayout::layout(LetRingSegment* item, LayoutContext&)
+{
+    const StaffType* stType = item->staffType();
+
+    item->setSkipDraw(false);
+    if (stType && stType->isHiddenElementOnTab(item->score(), Sid::letRingShowTabCommon, Sid::letRingShowTabSimple)) {
+        item->setSkipDraw(true);
+        return;
+    }
+
+    item->TextLineBaseSegment::layout();
+    item->autoplaceSpannerSegment();
 }
