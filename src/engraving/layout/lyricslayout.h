@@ -19,21 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTLYRICS_H
-#define MU_ENGRAVING_LAYOUTLYRICS_H
+#ifndef MU_ENGRAVING_LYRICSLAYOUT_H
+#define MU_ENGRAVING_LYRICSLAYOUT_H
 
 #include "layoutoptions.h"
+#include "layoutcontext.h"
 
 namespace mu::engraving {
 class Score;
 class System;
+class Lyrics;
+class LyricsLine;
+class LyricsLineSegment;
 
-class LayoutLyrics
+class LyricsLayout
 {
 public:
-    LayoutLyrics() = default;
+    LyricsLayout() = default;
+
+    static void layout(Lyrics* item, LayoutContext& ctx);
+    static void layout(LyricsLine* item, LayoutContext& ctx);
+    static void layout(LyricsLineSegment* item, LayoutContext& ctx);
 
     static void layoutLyrics(const LayoutOptions& options, const Score* score, System* system);
 };
 }
-#endif // MU_ENGRAVING_LAYOUTLYRICS_H
+#endif // MU_ENGRAVING_LYRICSLAYOUT_H

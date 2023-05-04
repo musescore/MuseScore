@@ -79,6 +79,7 @@
 #include "../libmscore/ledgerline.h"
 #include "../libmscore/letring.h"
 #include "../libmscore/line.h"
+#include "../libmscore/lyrics.h"
 
 #include "../libmscore/note.h"
 
@@ -95,6 +96,7 @@
 
 #include "beamlayout.h"
 #include "chordlayout.h"
+#include "lyricslayout.h"
 
 using namespace mu::draw;
 using namespace mu::engraving;
@@ -2873,6 +2875,21 @@ void TLayout::layout(LetRingSegment* item, LayoutContext&)
 
     item->TextLineBaseSegment::layout();
     item->autoplaceSpannerSegment();
+}
+
+void TLayout::layout(Lyrics* item, LayoutContext& ctx)
+{
+    LyricsLayout::layout(item, ctx);
+}
+
+void TLayout::layout(LyricsLine* item, LayoutContext& ctx)
+{
+    LyricsLayout::layout(item, ctx);
+}
+
+void TLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
+{
+    LyricsLayout::layout(item, ctx);
 }
 
 void TLayout::layout(SLine* item, LayoutContext&)

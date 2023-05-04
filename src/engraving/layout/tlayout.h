@@ -79,6 +79,9 @@ class KeySig;
 
 class LedgerLine;
 class LetRingSegment;
+class Lyrics;
+class LyricsLine;
+class LyricsLineSegment;
 
 class SLine;
 }
@@ -147,6 +150,9 @@ public:
 
     static void layout(LedgerLine* item, LayoutContext& ctx);
     static void layout(LetRingSegment* item, LayoutContext& ctx);
+    static void layout(Lyrics* item, LayoutContext& ctx);
+    static void layout(LyricsLine* item, LayoutContext& ctx);
+    static void layout(LyricsLineSegment* item, LayoutContext& ctx);
 
     static void layout(SLine* item, LayoutContext& ctx);
 
