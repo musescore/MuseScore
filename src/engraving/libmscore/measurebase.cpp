@@ -22,6 +22,8 @@
 
 #include "measurebase.h"
 
+#include "layout/tlayout.h"
+
 #include "factory.h"
 #include "layoutbreak.h"
 #include "measure.h"
@@ -288,30 +290,8 @@ double MeasureBase::pause() const
 
 void MeasureBase::layout()
 {
-    int breakCount = 0;
-
-    for (EngravingItem* element : _el) {
-        if (!score()->tagIsValid(element->tag())) {
-            continue;
-        }
-        if (element->isLayoutBreak()) {
-            double _spatium = spatium();
-            double x;
-            double y;
-            if (toLayoutBreak(element)->isNoBreak()) {
-                x = width() + score()->styleMM(Sid::barWidth) - element->width() * .5;
-            } else {
-                x = width() + score()->styleMM(Sid::barWidth) - element->width()
-                    - breakCount * (element->width() + _spatium * .5);
-                breakCount++;
-            }
-            y = -2.5 * _spatium - element->height();
-            element->setPos(x, y);
-        } else if (element->isMarker() || element->isJump()) {
-        } else {
-            element->layout();
-        }
-    }
+    LayoutContext ctx(score());
+    v0::TLayout::layoutMeasureBase(this, ctx);
 }
 
 //---------------------------------------------------------

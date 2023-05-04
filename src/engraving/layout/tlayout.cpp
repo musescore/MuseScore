@@ -76,12 +76,14 @@
 
 #include "../libmscore/keysig.h"
 
+#include "../libmscore/layoutbreak.h"
 #include "../libmscore/ledgerline.h"
 #include "../libmscore/letring.h"
 #include "../libmscore/line.h"
 #include "../libmscore/lyrics.h"
 
 #include "../libmscore/marker.h"
+#include "../libmscore/measurebase.h"
 
 #include "../libmscore/note.h"
 
@@ -2908,7 +2910,35 @@ void TLayout::layout(Marker* item, LayoutContext&)
     item->autoplaceMeasureElement();
 }
 
-void TLayout::layout(SLine* item, LayoutContext&)
+void TLayout::layoutMeasureBase(MeasureBase* item, LayoutContext&)
+{
+    int breakCount = 0;
+
+    for (EngravingItem* element : item->el()) {
+        if (!item->score()->tagIsValid(element->tag())) {
+            continue;
+        }
+        if (element->isLayoutBreak()) {
+            double _spatium = item->spatium();
+            double x;
+            double y;
+            if (toLayoutBreak(element)->isNoBreak()) {
+                x = item->width() + item->score()->styleMM(Sid::barWidth) - element->width() * .5;
+            } else {
+                x = item->width() + item->score()->styleMM(Sid::barWidth) - element->width()
+                    - breakCount * (element->width() + _spatium * .5);
+                breakCount++;
+            }
+            y = -2.5 * _spatium - element->height();
+            element->setPos(x, y);
+        } else if (element->isMarker() || element->isJump()) {
+        } else {
+            element->layout();
+        }
+    }
+}
+
+void TLayout::layoutLine(SLine* item, LayoutContext&)
 {
     if (item->score()->isPaletteScore() || (item->tick() == Fraction(-1, 1)) || (item->tick2() == Fraction::fromTicks(1))) {
         //
