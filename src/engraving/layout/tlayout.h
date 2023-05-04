@@ -85,6 +85,7 @@ class LyricsLineSegment;
 
 class Marker;
 class MeasureBase;
+class MeasureNumberBase;
 
 class SLine;
 }
@@ -159,6 +160,7 @@ public:
 
     static void layout(Marker* item, LayoutContext& ctx);
     static void layoutMeasureBase(MeasureBase* item, LayoutContext& ctx); // base
+    static void layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext& ctx); // base
 
     static void layoutLine(SLine* item, LayoutContext& ctx); // base
 
