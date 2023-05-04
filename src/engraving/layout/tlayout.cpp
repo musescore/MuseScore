@@ -97,6 +97,7 @@
 #include "../libmscore/palmmute.h"
 #include "../libmscore/part.h"
 #include "../libmscore/pedal.h"
+#include "../libmscore/pickscrape.h"
 
 #include "../libmscore/rest.h"
 
@@ -3360,6 +3361,12 @@ void TLayout::layout(PedalSegment* item, LayoutContext&)
     if (item->isStyled(Pid::OFFSET)) {
         item->roffset() = item->pedal()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
+    item->autoplaceSpannerSegment();
+}
+
+void TLayout::layout(PickScrapeSegment* item, LayoutContext&)
+{
+    item->TextLineBaseSegment::layout();
     item->autoplaceSpannerSegment();
 }
 

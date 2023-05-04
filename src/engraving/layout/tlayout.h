@@ -96,6 +96,7 @@ class OttavaSegment;
 
 class PalmMuteSegment;
 class PedalSegment;
+class PickScrapeSegment;
 
 class SLine;
 }
@@ -182,6 +183,7 @@ public:
 
     static void layout(PalmMuteSegment* item, LayoutContext& ctx);
     static void layout(PedalSegment* item, LayoutContext& ctx);
+    static void layout(PickScrapeSegment* item, LayoutContext& ctx);
 
     static void layoutLine(SLine* item, LayoutContext& ctx); // base
 
