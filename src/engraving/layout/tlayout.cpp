@@ -92,6 +92,8 @@
 #include "../libmscore/note.h"
 #include "../libmscore/notedot.h"
 
+#include "../libmscore/ottava.h"
+
 #include "../libmscore/part.h"
 
 #include "../libmscore/rest.h"
@@ -3328,6 +3330,12 @@ void TLayout::layout2(Note* item, LayoutContext&)
 void TLayout::layout(NoteDot* item, LayoutContext&)
 {
     item->setbbox(item->symBbox(SymId::augmentationDot));
+}
+
+void TLayout::layout(OttavaSegment* item, LayoutContext&)
+{
+    item->TextLineBaseSegment::layout();
+    item->autoplaceSpannerSegment();
 }
 
 void TLayout::layoutLine(SLine* item, LayoutContext&)
