@@ -22,6 +22,8 @@
 
 #include "notedot.h"
 
+#include "layout/tlayout.h"
+
 #include "chord.h"
 #include "note.h"
 #include "rest.h"
@@ -79,7 +81,8 @@ void NoteDot::draw(mu::draw::Painter* painter) const
 
 void NoteDot::layout()
 {
-    setbbox(symBbox(SymId::augmentationDot));
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

@@ -90,6 +90,7 @@
 #include "../libmscore/mmrest.h"
 
 #include "../libmscore/note.h"
+#include "../libmscore/notedot.h"
 
 #include "../libmscore/part.h"
 
@@ -3322,6 +3323,11 @@ void TLayout::layout2(Note* item, LayoutContext&)
             e->layout();
         }
     }
+}
+
+void TLayout::layout(NoteDot* item, LayoutContext&)
+{
+    item->setbbox(item->symBbox(SymId::augmentationDot));
 }
 
 void TLayout::layoutLine(SLine* item, LayoutContext&)
