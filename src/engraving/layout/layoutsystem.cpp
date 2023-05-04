@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "realfn.h"
 #include "layoutsystem.h"
 
 #include "libmscore/barline.h"
@@ -1366,7 +1367,7 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
                 && ss->visible()
                 && prevSegment->isHarmonicMarkSegment()
                 && ss->isVibratoSegment()
-                && prevSegment->x() == ss->x()) {
+                && RealIsEqual(prevSegment->x(), ss->x())) {
                 double diff = ss->bbox().bottom() - prevSegment->bbox().bottom() + prevSegment->bbox().top();
                 prevSegment->movePosY(diff);
                 fixed = true;
@@ -1375,7 +1376,7 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
                 && ss->visible()
                 && prevSegment->isVibratoSegment()
                 && ss->isHarmonicMarkSegment()
-                && prevSegment->x() == ss->x()) {
+                && RealIsEqual(prevSegment->x(), ss->x())) {
                 double diff = prevSegment->bbox().bottom() - ss->bbox().bottom() + ss->bbox().top();
                 ss->movePosY(diff);
                 fixed = true;
