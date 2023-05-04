@@ -71,6 +71,9 @@ public:
     bool placeMultiple() const override { return numMeasures() == 1; }     // prevent overlapping additions with range selection
 
 private:
+
+    friend class v0::TLayout;
+
     Sid getPropertyStyle(Pid) const override;
 
     mu::PointF numberPosition(const mu::RectF& numberBbox) const;

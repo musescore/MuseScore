@@ -85,6 +85,7 @@
 #include "../libmscore/marker.h"
 #include "../libmscore/measurebase.h"
 #include "../libmscore/measurenumberbase.h"
+#include "../libmscore/measurerepeat.h"
 
 #include "../libmscore/note.h"
 
@@ -3020,6 +3021,74 @@ void TLayout::layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext&)
         item->setPosX((x1 + x2) * 0.5);
     } else if (item->hPlacement() == PlacementH::RIGHT) {
         item->setPosX(item->measure()->width());
+    }
+}
+
+void TLayout::layout(MeasureRepeat* item, LayoutContext&)
+{
+    for (EngravingItem* e : item->el()) {
+        e->layout();
+    }
+
+    switch (item->numMeasures()) {
+    case 1:
+    {
+        item->setSymId(SymId::repeat1Bar);
+        if (item->score()->styleB(Sid::mrNumberSeries) && item->track() != mu::nidx) {
+            int placeInSeries = 2; // "1" would be the measure actually being repeated
+            staff_idx_t staffIdx = item->staffIdx();
+            Measure* m = item->measure();
+            while (m && m->isOneMeasureRepeat(staffIdx) && m->prevIsOneMeasureRepeat(staffIdx)) {
+                placeInSeries++;
+                m = m->prevMeasure();
+            }
+            if (placeInSeries % item->score()->styleI(Sid::mrNumberEveryXMeasures) == 0) {
+                if (item->score()->styleB(Sid::mrNumberSeriesWithParentheses)) {
+                    item->m_numberSym = timeSigSymIdsFromString(String(u"(%1)").arg(placeInSeries));
+                } else {
+                    item->setNumberSym(placeInSeries);
+                }
+            } else {
+                item->m_numberSym.clear();
+            }
+        } else if (item->score()->styleB(Sid::oneMeasureRepeatShow1)) {
+            item->setNumberSym(1);
+        } else {
+            item->m_numberSym.clear();
+        }
+        break;
+    }
+    case 2:
+        item->setSymId(SymId::repeat2Bars);
+        item->setNumberSym(item->numMeasures());
+        break;
+    case 4:
+        item->setSymId(SymId::repeat4Bars);
+        item->setNumberSym(item->numMeasures());
+        break;
+    default:
+        item->setSymId(SymId::noSym); // should never happen
+        item->m_numberSym.clear();
+        break;
+    }
+
+    RectF bbox = item->symBbox(item->symId());
+
+    if (item->track() != mu::nidx) { // if this is in score rather than a palette cell
+        // For unknown reasons, the symbol has some offset in almost all SMuFL fonts
+        // We compensate for it, to make sure the symbol is visually centered around the staff line
+        double offset = (-bbox.top() - bbox.bottom()) / 2.0;
+
+        const StaffType* staffType = item->staffType();
+
+        // Only need to set y position here; x position is handled in Measure::layoutMeasureElements()
+        item->setPos(0, std::floor(staffType->middleLine() / 2.0) * staffType->lineDistance().val() * item->spatium() + offset);
+    }
+
+    item->setbbox(bbox);
+
+    if (item->track() != mu::nidx && !item->m_numberSym.empty()) {
+        item->addbbox(item->numberRect());
     }
 }
 
