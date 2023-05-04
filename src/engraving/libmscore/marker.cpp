@@ -24,6 +24,8 @@
 
 #include "types/typesconv.h"
 
+#include "layout/tlayout.h"
+
 #include "measure.h"
 #include "score.h"
 
@@ -148,16 +150,8 @@ void Marker::styleChanged()
 
 void Marker::layout()
 {
-    TextBase::layout();
-
-    // although normally laid out to parent (measure) width,
-    // force to center over barline if left-aligned
-
-    if (!score()->isPaletteScore() && layoutToParentWidth() && align() == AlignH::LEFT) {
-        movePosX(-width() * 0.5);
-    }
-
-    autoplaceMeasureElement();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

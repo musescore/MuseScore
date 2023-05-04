@@ -38,10 +38,6 @@ class Marker final : public TextBase
     OBJECT_ALLOCATOR(engraving, Marker)
     DECLARE_CLASSOF(ElementType::MARKER)
 
-private:
-    MarkerType _markerType;
-    String _label;                 ///< referenced from Jump() element
-
 public:
     Marker(EngravingItem* parent);
     Marker(EngravingItem* parent, TextStyleType);
@@ -72,6 +68,10 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
+
+private:
+    MarkerType _markerType;
+    String _label;                 ///< referenced from Jump() element
 };
 } // namespace mu::engraving
 
