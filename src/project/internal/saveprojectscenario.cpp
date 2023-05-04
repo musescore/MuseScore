@@ -180,13 +180,15 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
     }
 
     // TODO(save-to-cloud): better name?
-    QString defaultName = project->displayName();
-    cloud::Visibility defaultVisibility = isPublish ? cloud::Visibility::Public : cloud::Visibility::Private;
+    const QString defaultName = project->displayName();
+    const cloud::Visibility defaultVisibility = isPublish ? cloud::Visibility::Public : cloud::Visibility::Private;
+    const QUrl existingOnlineScoreUrl = project->cloudInfo().sourceUrl;
 
     UriQuery query("musescore://project/savetocloud");
     query.addParam("isPublish", Val(isPublish));
     query.addParam("name", Val(defaultName));
     query.addParam("visibility", Val(defaultVisibility));
+    query.addParam("existingOnlineScoreUrl", Val(existingOnlineScoreUrl.toString()));
 
     RetVal<Val> rv = interactive()->open(query);
     if (!rv.ret) {
@@ -213,8 +215,8 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
         return make_ret(Ret::Code::Cancel);
     }
 
-    if (mode == SaveMode::Save) {
-        result.sourceUrl = project->cloudInfo().sourceUrl;
+    if (mode == SaveMode::Save && vals["replaceExistingOnlineScore"].toBool()) {
+        result.sourceUrl = existingOnlineScoreUrl;
     }
 
     return RetVal<CloudProjectInfo>::make_ok(result);

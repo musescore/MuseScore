@@ -33,6 +33,8 @@ StyledDialogView {
     property bool isPublish: false
     property string name
     property int visibility: CloudVisibility.Private
+    property string existingOnlineScoreUrl
+    property bool replaceExistingOnlineScore: true
 
     contentWidth: contentItem.implicitWidth
     contentHeight: contentItem.implicitHeight
@@ -153,6 +155,34 @@ StyledDialogView {
                         }
                     }
                 }
+
+                RadioButtonGroup {
+                    Layout.fillWidth: true
+
+                    orientation: ListView.Vertical
+                    spacing: 8
+
+                    visible: root.isPublish && Boolean(root.existingOnlineScoreUrl)
+
+                    model: [
+                        //: The text between `<a href=\"%1\">` and `</a>` will be a clickable link to the online score in question
+                        { text: qsTrc("project/save", "Replace the existing <a href=\"%1\">online score</a>").arg(root.existingOnlineScoreUrl), value: true },
+                        { text: qsTrc("project/save", "Publish as new online score"), value: false }
+                    ]
+
+                    delegate: RoundedRadioButton {
+                        checked: modelData.value === root.replaceExistingOnlineScore
+                        text: modelData.text
+
+                        navigation.name: modelData.text
+                        navigation.panel: optionsNavPanel
+                        navigation.row: 3 + model.index
+
+                        onToggled: {
+                            root.replaceExistingOnlineScore = modelData.value
+                        }
+                    }
+                }
             }
 
             RowLayout {
@@ -204,7 +234,8 @@ StyledDialogView {
                     onClicked: {
                         root.done(SaveToCloudResponse.Ok, {
                                       name: root.name,
-                                      visibility: root.visibility
+                                      visibility: root.visibility,
+                                      replaceExistingOnlineScore: root.replaceExistingOnlineScore
                                   })
                     }
                 }
