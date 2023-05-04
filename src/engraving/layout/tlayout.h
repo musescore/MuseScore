@@ -89,6 +89,8 @@ class MeasureNumberBase;
 class MeasureRepeat;
 class MMRest;
 
+class Note;
+
 class SLine;
 }
 
@@ -165,6 +167,9 @@ public:
     static void layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext& ctx); // base
     static void layout(MeasureRepeat* item, LayoutContext& ctx);
     static void layout(MMRest* item, LayoutContext& ctx);
+
+    static void layout(Note* item, LayoutContext& ctx);
+    static void layout2(Note* item, LayoutContext& ctx);
 
     static void layoutLine(SLine* item, LayoutContext& ctx); // base
 
