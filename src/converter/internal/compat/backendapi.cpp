@@ -51,8 +51,10 @@ using namespace mu::io;
 
 static const std::string PNG_WRITER_NAME = "png";
 static const std::string SVG_WRITER_NAME = "svg";
-static const std::string SEGMENTS_POSITIONS_WRITER_NAME = "sposXML";
-static const std::string MEASURES_POSITIONS_WRITER_NAME = "mposXML";
+static const std::string SEGMENTS_POSITIONS_WRITER_NAME = "spos";
+static const std::string SEGMENTS_POSITIONS_TAG_NAME = "sposXML";
+static const std::string MEASURES_POSITIONS_WRITER_NAME = "mpos";
+static const std::string MEASURES_POSITIONS_TAG_NAME = "mposXML";
 static const std::string PDF_WRITER_NAME = "pdf";
 static const std::string MIDI_WRITER_NAME = "midi";
 static const std::string MUSICXML_WRITER_NAME = "mxl";
@@ -85,8 +87,10 @@ Ret BackendApi::exportScoreMedia(const io::path_t& in, const io::path_t& out, co
 
     result &= exportScorePngs(notation, jsonWriter, ADD_SEPARATOR);
     result &= exportScoreSvgs(notation, highlightConfigPath, jsonWriter, ADD_SEPARATOR);
-    result &= exportScoreElementsPositions(SEGMENTS_POSITIONS_WRITER_NAME, notation, jsonWriter, ADD_SEPARATOR);
-    result &= exportScoreElementsPositions(MEASURES_POSITIONS_WRITER_NAME, notation, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreElementsPositions(SEGMENTS_POSITIONS_WRITER_NAME, SEGMENTS_POSITIONS_TAG_NAME,
+                                           notation, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreElementsPositions(MEASURES_POSITIONS_WRITER_NAME, MEASURES_POSITIONS_TAG_NAME,
+                                           notation, jsonWriter, ADD_SEPARATOR);
     result &= exportScorePdf(notation, jsonWriter, ADD_SEPARATOR);
     result &= exportScoreMidi(notation, jsonWriter, ADD_SEPARATOR);
     result &= exportScoreMusicXML(notation, jsonWriter, ADD_SEPARATOR);
@@ -358,8 +362,8 @@ Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const io::path_t& h
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreElementsPositions(const std::string& elementsPositionsWriterName, const INotationPtr notation,
-                                             BackendJsonWriter& jsonWriter, bool addSeparator)
+Ret BackendApi::exportScoreElementsPositions(const std::string& elementsPositionsWriterName, const std::string& elementsPositionsTagName,
+                                             const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     TRACEFUNC
 
@@ -368,7 +372,7 @@ Ret BackendApi::exportScoreElementsPositions(const std::string& elementsPosition
         return writerRetVal.ret;
     }
 
-    jsonWriter.addKey(elementsPositionsWriterName.c_str());
+    jsonWriter.addKey(elementsPositionsTagName.c_str());
     jsonWriter.addValue(writerRetVal.val, addSeparator, false);
 
     return make_ret(Ret::Code::Ok);
