@@ -22,6 +22,8 @@
 
 #include "pedal.h"
 
+#include "layout/tlayout.h"
+
 #include "chordrest.h"
 #include "measure.h"
 #include "score.h"
@@ -69,11 +71,8 @@ PedalSegment::PedalSegment(Pedal* sp, System* parent)
 
 void PedalSegment::layout()
 {
-    TextLineBaseSegment::layout();
-    if (isStyled(Pid::OFFSET)) {
-        roffset() = pedal()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
-    autoplaceSpannerSegment();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
