@@ -22,6 +22,8 @@
 
 #include "playtechannotation.h"
 
+#include "layout/tlayout.h"
+
 #include "segment.h"
 
 #include "log.h"
@@ -58,8 +60,8 @@ PlayTechAnnotation* PlayTechAnnotation::clone() const
 
 void PlayTechAnnotation::layout()
 {
-    StaffTextBase::layout();
-    autoplaceSegmentElement();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 PropertyValue PlayTechAnnotation::getProperty(Pid id) const

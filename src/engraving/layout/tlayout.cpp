@@ -98,6 +98,7 @@
 #include "../libmscore/part.h"
 #include "../libmscore/pedal.h"
 #include "../libmscore/pickscrape.h"
+#include "../libmscore/playtechannotation.h"
 
 #include "../libmscore/rest.h"
 
@@ -3368,6 +3369,12 @@ void TLayout::layout(PickScrapeSegment* item, LayoutContext&)
 {
     item->TextLineBaseSegment::layout();
     item->autoplaceSpannerSegment();
+}
+
+void TLayout::layout(PlayTechAnnotation* item, LayoutContext&)
+{
+    item->StaffTextBase::layout();
+    item->autoplaceSegmentElement();
 }
 
 void TLayout::layoutLine(SLine* item, LayoutContext&)
