@@ -22,6 +22,8 @@
 
 #include "rasgueado.h"
 
+#include "layout/tlayout.h"
+
 #include "score.h"
 #include "stafftype.h"
 #include "system.h"
@@ -65,16 +67,8 @@ RasgueadoSegment::RasgueadoSegment(Rasgueado* sp, System* parent)
 
 void RasgueadoSegment::layout()
 {
-    const StaffType* stType = staffType();
-
-    _skipDraw = false;
-    if (stType && stType->isHiddenElementOnTab(score(), Sid::rasgueadoShowTabCommon, Sid::rasgueadoShowTabSimple)) {
-        _skipDraw = true;
-        return;
-    }
-
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
