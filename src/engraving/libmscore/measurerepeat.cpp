@@ -26,6 +26,8 @@
 
 #include "translation.h"
 
+#include "layout/tlayout.h"
+
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
@@ -119,70 +121,8 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
 
 void MeasureRepeat::layout()
 {
-    for (EngravingItem* e : el()) {
-        e->layout();
-    }
-
-    switch (numMeasures()) {
-    case 1:
-    {
-        setSymId(SymId::repeat1Bar);
-        if (score()->styleB(Sid::mrNumberSeries) && track() != mu::nidx) {
-            int placeInSeries = 2; // "1" would be the measure actually being repeated
-            staff_idx_t staffIdx = this->staffIdx();
-            Measure* m = measure();
-            while (m && m->isOneMeasureRepeat(staffIdx) && m->prevIsOneMeasureRepeat(staffIdx)) {
-                placeInSeries++;
-                m = m->prevMeasure();
-            }
-            if (placeInSeries % score()->styleI(Sid::mrNumberEveryXMeasures) == 0) {
-                if (score()->styleB(Sid::mrNumberSeriesWithParentheses)) {
-                    m_numberSym = timeSigSymIdsFromString(String(u"(%1)").arg(placeInSeries));
-                } else {
-                    setNumberSym(placeInSeries);
-                }
-            } else {
-                m_numberSym.clear();
-            }
-        } else if (score()->styleB(Sid::oneMeasureRepeatShow1)) {
-            setNumberSym(1);
-        } else {
-            m_numberSym.clear();
-        }
-        break;
-    }
-    case 2:
-        setSymId(SymId::repeat2Bars);
-        setNumberSym(numMeasures());
-        break;
-    case 4:
-        setSymId(SymId::repeat4Bars);
-        setNumberSym(numMeasures());
-        break;
-    default:
-        setSymId(SymId::noSym); // should never happen
-        m_numberSym.clear();
-        break;
-    }
-
-    RectF bbox = symBbox(symId());
-
-    if (track() != mu::nidx) { // if this is in score rather than a palette cell
-        // For unknown reasons, the symbol has some offset in almost all SMuFL fonts
-        // We compensate for it, to make sure the symbol is visually centered around the staff line
-        double offset = (-bbox.top() - bbox.bottom()) / 2.0;
-
-        const StaffType* staffType = this->staffType();
-
-        // Only need to set y position here; x position is handled in Measure::layoutMeasureElements()
-        setPos(0, std::floor(staffType->middleLine() / 2.0) * staffType->lineDistance().val() * spatium() + offset);
-    }
-
-    setbbox(bbox);
-
-    if (track() != mu::nidx && !m_numberSym.empty()) {
-        addbbox(numberRect());
-    }
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
