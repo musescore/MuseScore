@@ -94,6 +94,7 @@
 
 #include "../libmscore/ottava.h"
 
+#include "../libmscore/palmmute.h"
 #include "../libmscore/part.h"
 
 #include "../libmscore/rest.h"
@@ -3334,6 +3335,20 @@ void TLayout::layout(NoteDot* item, LayoutContext&)
 
 void TLayout::layout(OttavaSegment* item, LayoutContext&)
 {
+    item->TextLineBaseSegment::layout();
+    item->autoplaceSpannerSegment();
+}
+
+void TLayout::layout(PalmMuteSegment* item, LayoutContext&)
+{
+    const StaffType* stType = item->staffType();
+
+    item->setSkipDraw(false);
+    if (stType && stType->isHiddenElementOnTab(item->score(), Sid::palmMuteShowTabCommon, Sid::palmMuteShowTabSimple)) {
+        item->setSkipDraw(true);
+        return;
+    }
+
     item->TextLineBaseSegment::layout();
     item->autoplaceSpannerSegment();
 }

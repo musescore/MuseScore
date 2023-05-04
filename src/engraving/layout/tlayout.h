@@ -94,6 +94,8 @@ class NoteDot;
 
 class OttavaSegment;
 
+class PalmMuteSegment;
+
 class SLine;
 }
 
@@ -176,6 +178,8 @@ public:
     static void layout(NoteDot* item, LayoutContext& ctx);
 
     static void layout(OttavaSegment* item, LayoutContext& ctx);
+
+    static void layout(PalmMuteSegment* item, LayoutContext& ctx);
 
     static void layoutLine(SLine* item, LayoutContext& ctx); // base
 
