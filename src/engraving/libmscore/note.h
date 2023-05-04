@@ -180,107 +180,6 @@ public:
         ArtificialHarmonic
     };
 
-private:
-    bool _ghost = false;        ///< ghost note
-    bool _deadNote = false;     ///< dead note
-
-    bool _hidden = false;                 ///< marks this note as the hidden one if there are
-                                          ///< overlapping notes; hidden notes are not played
-                                          ///< and heads + accidentals are not shown
-    bool _dotsHidden = false;        ///< dots of hidden notes are hidden too
-                                     ///< except if only one note is dotted
-    bool _fretConflict = false;      ///< used by TAB staves to mark a fretting conflict:
-                                     ///< two or more notes on the same string
-    bool dragMode = false;
-    bool _mirror = false;        ///< True if note is mirrored at stem.
-    bool m_isSmall = false;
-    bool _play = true;           ///< note is not played if false
-    mutable bool _mark = false;  ///< for use in sequencer
-    bool _fixed = false;         ///< for slash notation
-    StretchedBend* m_bend = nullptr;
-
-    DirectionH _userMirror = DirectionH::AUTO;        ///< user override of mirror
-    DirectionV _userDotPosition = DirectionV::AUTO;   ///< user override of dot position
-
-    NoteHeadScheme _headScheme = NoteHeadScheme::HEAD_AUTO;
-    NoteHeadGroup _headGroup = NoteHeadGroup::HEAD_NORMAL;
-    NoteHeadType _headType = NoteHeadType::HEAD_AUTO;
-
-    VeloType _veloType = VeloType::USER_VAL;
-
-    int _offTimeType = 0;     ///< compatibility only 1 - user(absolute), 2 - offset (%)
-    int _onTimeType = 0;      ///< compatibility only 1 - user, 2 - offset
-
-    int _subchannel = 0;       ///< articulation
-    int _line = INVALID_LINE;  ///< y-Position; 0 - top line.
-    int _fret = -1;            ///< for tablature view
-    float m_harmonicFret = -1.0;
-    DisplayFretOption m_displayFret = DisplayFretOption::NoHarmonic;
-    int _string = -1;
-    mutable int _tpc[2] = { Tpc::TPC_INVALID, Tpc::TPC_INVALID };   ///< tonal pitch class  (concert/transposing)
-    mutable int _pitch = 0;      ///< Note pitch as midi value (0 - 127).
-
-    int _userVelocity = 0;    ///< velocity user offset in percent, or absolute velocity for this note
-    int _fixedLine = 0;     ///< fixed line number if _fixed == true
-    double _tuning = 0.0;    ///< pitch offset in cent, playable only by internal synthesizer
-
-    Accidental* _accidental = nullptr;
-
-    Tie* _tieFor = nullptr;
-    Tie* _tieBack = nullptr;
-
-    Slide _attachedSlide;           ///< slide which starts from note
-    Slide* _relatedSlide = nullptr; ///< slide which goes to note
-
-    Symbol* _leftParenthesis = nullptr;
-    Symbol* _rightParenthesis = nullptr;
-    bool _hasHeadParentheses = false;
-
-    bool _isHammerOn = false;
-    bool _harmonic = false;
-
-    ElementList _el;          ///< fingering, other text, symbols or images
-    std::vector<NoteDot*> _dots;
-    NoteEventList _playEvents;
-    std::vector<Spanner*> _spannerFor;
-    std::vector<Spanner*> _spannerBack;
-
-    SymId _cachedNoteheadSym;   // use in draw to avoid recomputing at every update
-    SymId _cachedSymNull;   // additional symbol for some transparent notehead
-
-    String _fretString;
-
-    friend class Factory;
-    Note(Chord* ch = 0);
-    Note(const Note&, bool link = false);
-
-    void startDrag(EditData&) override;
-    mu::RectF drag(EditData& ed) override;
-    void endDrag(EditData&) override;
-    void editDrag(EditData& editData) override;
-
-    void verticalDrag(EditData& ed);
-    void horizontalDrag(EditData& ed);
-
-    void addSpanner(Spanner*);
-    void removeSpanner(Spanner*);
-    int concertPitchIdx() const;
-    void updateRelLine(int relLine, bool undoable);
-    bool isNoteName() const;
-    SymId noteHead() const;
-
-    void normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned);
-
-    static String tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full = false);
-
-    bool sameVoiceKerningLimited() const override { return true; }
-
-    void getNoteListForDots(std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes, std::vector<int>& anchoredDots);
-
-    std::vector<LineAttachPoint> _lineAttachPoints;
-
-public:
-
     ~Note();
 
     std::vector<const Note*> compoundNotes() const;
@@ -557,6 +456,107 @@ public:
     const std::vector<LineAttachPoint>& lineAttachPoints() const { return _lineAttachPoints; }
 
     mu::PointF posInStaffCoordinates();
+
+private:
+
+    friend class v0::TLayout;
+    friend class Factory;
+    Note(Chord* ch = 0);
+    Note(const Note&, bool link = false);
+
+    void startDrag(EditData&) override;
+    mu::RectF drag(EditData& ed) override;
+    void endDrag(EditData&) override;
+    void editDrag(EditData& editData) override;
+
+    void verticalDrag(EditData& ed);
+    void horizontalDrag(EditData& ed);
+
+    void addSpanner(Spanner*);
+    void removeSpanner(Spanner*);
+    int concertPitchIdx() const;
+    void updateRelLine(int relLine, bool undoable);
+    bool isNoteName() const;
+    SymId noteHead() const;
+
+    void normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned);
+
+    static String tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full = false);
+
+    bool sameVoiceKerningLimited() const override { return true; }
+
+    void getNoteListForDots(std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes, std::vector<int>& anchoredDots);
+
+    bool _ghost = false;        ///< ghost note
+    bool _deadNote = false;     ///< dead note
+
+    bool _hidden = false;                 ///< marks this note as the hidden one if there are
+                                          ///< overlapping notes; hidden notes are not played
+                                          ///< and heads + accidentals are not shown
+    bool _dotsHidden = false;        ///< dots of hidden notes are hidden too
+                                     ///< except if only one note is dotted
+    bool _fretConflict = false;      ///< used by TAB staves to mark a fretting conflict:
+                                     ///< two or more notes on the same string
+    bool dragMode = false;
+    bool _mirror = false;        ///< True if note is mirrored at stem.
+    bool m_isSmall = false;
+    bool _play = true;           ///< note is not played if false
+    mutable bool _mark = false;  ///< for use in sequencer
+    bool _fixed = false;         ///< for slash notation
+    StretchedBend* m_bend = nullptr;
+
+    DirectionH _userMirror = DirectionH::AUTO;        ///< user override of mirror
+    DirectionV _userDotPosition = DirectionV::AUTO;   ///< user override of dot position
+
+    NoteHeadScheme _headScheme = NoteHeadScheme::HEAD_AUTO;
+    NoteHeadGroup _headGroup = NoteHeadGroup::HEAD_NORMAL;
+    NoteHeadType _headType = NoteHeadType::HEAD_AUTO;
+
+    VeloType _veloType = VeloType::USER_VAL;
+
+    int _offTimeType = 0;     ///< compatibility only 1 - user(absolute), 2 - offset (%)
+    int _onTimeType = 0;      ///< compatibility only 1 - user, 2 - offset
+
+    int _subchannel = 0;       ///< articulation
+    int _line = INVALID_LINE;  ///< y-Position; 0 - top line.
+    int _fret = -1;            ///< for tablature view
+    float m_harmonicFret = -1.0;
+    DisplayFretOption m_displayFret = DisplayFretOption::NoHarmonic;
+    int _string = -1;
+    mutable int _tpc[2] = { Tpc::TPC_INVALID, Tpc::TPC_INVALID };   ///< tonal pitch class  (concert/transposing)
+    mutable int _pitch = 0;      ///< Note pitch as midi value (0 - 127).
+
+    int _userVelocity = 0;    ///< velocity user offset in percent, or absolute velocity for this note
+    int _fixedLine = 0;     ///< fixed line number if _fixed == true
+    double _tuning = 0.0;    ///< pitch offset in cent, playable only by internal synthesizer
+
+    Accidental* _accidental = nullptr;
+
+    Tie* _tieFor = nullptr;
+    Tie* _tieBack = nullptr;
+
+    Slide _attachedSlide;           ///< slide which starts from note
+    Slide* _relatedSlide = nullptr; ///< slide which goes to note
+
+    Symbol* _leftParenthesis = nullptr;
+    Symbol* _rightParenthesis = nullptr;
+    bool _hasHeadParentheses = false;
+
+    bool _isHammerOn = false;
+    bool _harmonic = false;
+
+    ElementList _el;          ///< fingering, other text, symbols or images
+    std::vector<NoteDot*> _dots;
+    NoteEventList _playEvents;
+    std::vector<Spanner*> _spannerFor;
+    std::vector<Spanner*> _spannerBack;
+
+    SymId _cachedNoteheadSym;   // use in draw to avoid recomputing at every update
+    SymId _cachedSymNull;   // additional symbol for some transparent notehead
+
+    String _fretString;
+
+    std::vector<LineAttachPoint> _lineAttachPoints;
 };
 } // namespace mu::engraving
 #endif

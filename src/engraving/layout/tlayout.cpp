@@ -24,6 +24,7 @@
 
 #include "draw/fontmetrics.h"
 
+#include "../iengravingconfiguration.h"
 #include "../infrastructure/rtti.h"
 
 #include "../iengravingfont.h"
@@ -100,6 +101,7 @@
 
 #include "../libmscore/text.h"
 #include "../libmscore/textframe.h"
+#include "../libmscore/tie.h"
 
 #include "beamlayout.h"
 #include "chordlayout.h"
@@ -3143,6 +3145,182 @@ void TLayout::layout(MMRest* item, LayoutContext&)
 
     if (item->m_numberVisible) {
         item->addbbox(item->numberRect());
+    }
+}
+
+void TLayout::layout(Note* item, LayoutContext&)
+{
+    bool useTablature = item->staff() && item->staff()->isTabStaff(item->chord()->tick());
+    if (useTablature) {
+        if (item->m_displayFret == Note::DisplayFretOption::Hide) {
+            return;
+        }
+
+        const Staff* st = item->staff();
+        const StaffType* tab = st->staffTypeForElement(item);
+        double mags = item->magS();
+        // not complete but we need systems to be laid out to add parenthesis
+        if (item->_fixed) {
+            item->_fretString = u"/";
+        } else {
+            item->_fretString = tab->fretString(fabs(item->_fret), item->_string, item->_deadNote);
+
+            if (item->negativeFretUsed()) {
+                item->_fretString = u"-" + item->_fretString;
+            }
+
+            if (item->m_displayFret == Note::DisplayFretOption::ArtificialHarmonic) {
+                item->_fretString = String(u"%1 <%2>").arg(item->_fretString, String::number(item->m_harmonicFret));
+            } else if (item->m_displayFret == Note::DisplayFretOption::NaturalHarmonic) {
+                item->_fretString = String(u"<%1>").arg(String::number(item->m_harmonicFret));
+            }
+        }
+
+        if ((item->_ghost && !Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround())) {
+            item->_fretString = String(u"(%1)").arg(item->_fretString);
+        }
+
+        double w = item->tabHeadWidth(tab);     // !! use _fretString
+        item->bbox().setRect(0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
+
+        if (item->_ghost && Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround()) {
+            item->bbox().setWidth(w + item->symWidth(SymId::noteheadParenthesisLeft) + item->symWidth(SymId::noteheadParenthesisRight));
+        } else {
+            item->bbox().setWidth(w);
+        }
+    } else {
+        if (item->_deadNote) {
+            item->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+        } else if (item->_harmonic) {
+            item->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
+        }
+        SymId nh = item->noteHead();
+        if (Note::engravingConfiguration()->crossNoteHeadAlwaysBlack() && ((nh == SymId::noteheadXHalf) || (nh == SymId::noteheadXWhole))) {
+            nh = SymId::noteheadXBlack;
+        }
+
+        item->_cachedNoteheadSym = nh;
+
+        if (item->isNoteName()) {
+            item->_cachedSymNull = SymId::noteEmptyBlack;
+            NoteHeadType ht = item->_headType == NoteHeadType::HEAD_AUTO ? item->chord()->durationType().headType() : item->_headType;
+            if (ht == NoteHeadType::HEAD_WHOLE) {
+                item->_cachedSymNull = SymId::noteEmptyWhole;
+            } else if (ht == NoteHeadType::HEAD_HALF) {
+                item->_cachedSymNull = SymId::noteEmptyHalf;
+            }
+        } else {
+            item->_cachedSymNull = SymId::noSym;
+        }
+        item->setbbox(item->symBbox(nh));
+    }
+}
+
+// called after final position of note is set
+void TLayout::layout2(Note* item, LayoutContext&)
+{
+    const StaffType* staffType = item->staff()->staffTypeForElement(item);
+    // for standard staves this is done in Score::layoutChords3()
+    // so that the results are available there
+    bool isTabStaff = staffType && staffType->isTabStaff();
+    // First, for tab staves that have show back-tied fret marks option, we add parentheses to the tied note if
+    // the tie spans a system boundary. This can't be done in layout() as the system of each note is not decided yet
+    bool useParens = isTabStaff && !staffType->showBackTied() && !item->_fixed;
+    if (useParens
+        && item->tieBack()
+        && (
+            item->chord()->measure()->system() != item->tieBack()->startNote()->chord()->measure()->system()
+            || !item->el().empty()
+            )) {
+        item->_fretString = String(u"(%1)").arg(item->_fretString);
+        double w = item->tabHeadWidth(staffType);     // !! use _fretString
+        item->bbox().setRect(0, staffType->fretBoxY() * item->magS(), w, staffType->fretBoxH() * item->magS());
+    }
+    int dots = item->chord()->dots();
+    if (dots && !item->_dots.empty()) {
+        // if chords have notes with different mag, dots must still  align
+        double correctMag = item->chord()->notes().size() > 1 ? item->chord()->mag() : item->mag();
+        double d  = item->score()->point(item->score()->styleS(Sid::dotNoteDistance)) * correctMag;
+        double dd = item->score()->point(item->score()->styleS(Sid::dotDotDistance)) * correctMag;
+        double x  = item->chord()->dotPosX() - item->pos().x() - item->chord()->pos().x();
+        // in case of dots with different size, center-align them
+        if (item->mag() != item->chord()->mag() && item->chord()->notes().size() > 1) {
+            double relativeMag = item->mag() / item->chord()->mag();
+            double centerAlignOffset = item->dot(0)->width() * (1 / relativeMag - 1) / 2;
+            x += centerAlignOffset;
+        }
+        // adjust dot distance for hooks
+        if (item->chord()->hook() && item->chord()->up()) {
+            double hookRight = item->chord()->hook()->width() + item->chord()->hook()->x() + item->chord()->pos().x();
+            double hookBottom = item->chord()->hook()->height() + item->chord()->hook()->y() + item->chord()->pos().y()
+                                + (0.25 * item->spatium());
+            // the top dot in the chord, not the dot for this particular note:
+            double dotY = item->chord()->notes().back()->y() + item->chord()->notes().back()->dots().front()->pos().y();
+            if (item->chord()->dotPosX() < hookRight && dotY < hookBottom) {
+                d = item->chord()->hook()->width();
+            }
+        }
+        // if TAB and stems through staff
+        if (isTabStaff && staffType->stemThrough()) {
+            // with TAB's, dot Y is not calculated during layoutChords3(),
+            // as layoutChords3() is not even called for TAB's;
+            // setDotY() actually also manages creation/deletion of NoteDot's
+            item->setDotY(DirectionV::AUTO);
+
+            // use TAB default note-to-dot spacing
+            dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * item->spatium();
+            d = dd * 0.5;
+        }
+        // apply to dots
+        double xx = x + d;
+        for (NoteDot* dot : item->_dots) {
+            dot->setPosX(xx);
+            xx += dd;
+        }
+    }
+
+    // layout elements attached to note
+    for (EngravingItem* e : item->_el) {
+        if (!item->score()->tagIsValid(e->tag())) {
+            continue;
+        }
+        if (e->isSymbol()) {
+            e->setMag(item->mag());
+            double w = item->headWidth();
+            Symbol* sym = toSymbol(e);
+            e->layout();
+            if (sym->sym() == SymId::noteheadParenthesisRight) {
+                if (isTabStaff) {
+                    const Staff* st = item->staff();
+                    const StaffType* tab = st->staffTypeForElement(item);
+                    w = item->tabHeadWidth(tab);
+                }
+
+                if (Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround() && item->staff()->isTabStaff(e->tick())) {
+                    e->movePosX(w + item->symWidth(SymId::noteheadParenthesisRight));
+                } else {
+                    e->movePosX(w);
+                }
+            } else if (sym->sym() == SymId::noteheadParenthesisLeft) {
+                if (!Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround() || !item->staff()->isTabStaff(e->tick())) {
+                    e->movePosX(-item->symWidth(SymId::noteheadParenthesisLeft));
+                }
+            }
+        } else if (e->isFingering()) {
+            // don't set mag; fingerings should not scale with note
+            Fingering* f = toFingering(e);
+            if (f->propertyFlags(Pid::PLACEMENT) == PropertyFlags::STYLED) {
+                f->setPlacement(f->calculatePlacement());
+            }
+            // layout fingerings that are placed relative to notehead
+            // fingerings placed relative to chord will be laid out later
+            if (f->layoutType() == ElementType::NOTE) {
+                f->layout();
+            }
+        } else {
+            e->setMag(item->mag());
+            e->layout();
+        }
     }
 }
 
