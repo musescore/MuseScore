@@ -22,6 +22,8 @@
 
 #include "ledgerline.h"
 
+#include "layout/tlayout.h"
+
 #include "chord.h"
 #include "measure.h"
 #include "score.h"
@@ -79,22 +81,8 @@ double LedgerLine::measureXPos() const
 
 void LedgerLine::layout()
 {
-    setLineWidth(score()->styleMM(Sid::ledgerLineWidth) * chord()->mag());
-    if (staff()) {
-        setColor(staff()->staffType(tick())->color());
-    }
-    double w2 = _width * .5;
-
-    //Adjust Y position to staffType offset
-    if (staffType()) {
-        movePosY(staffType()->yoffset().val() * spatium());
-    }
-
-    if (m_vertical) {
-        bbox().setRect(-w2, 0, w2, _len);
-    } else {
-        bbox().setRect(0, -w2, _len, w2);
-    }
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
