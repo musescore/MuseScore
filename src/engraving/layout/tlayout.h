@@ -84,6 +84,7 @@ class LyricsLine;
 class LyricsLineSegment;
 
 class Marker;
+class MeasureBase;
 
 class SLine;
 }
@@ -157,8 +158,9 @@ public:
     static void layout(LyricsLineSegment* item, LayoutContext& ctx);
 
     static void layout(Marker* item, LayoutContext& ctx);
+    static void layoutMeasureBase(MeasureBase* item, LayoutContext& ctx); // base
 
-    static void layout(SLine* item, LayoutContext& ctx);
+    static void layoutLine(SLine* item, LayoutContext& ctx); // base
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);

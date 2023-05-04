@@ -1172,7 +1172,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
 void SLine::layout()
 {
     LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    v0::TLayout::layoutLine(this, ctx);
 }
 
 //---------------------------------------------------------
