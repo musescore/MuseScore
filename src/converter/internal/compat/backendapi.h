@@ -67,8 +67,9 @@ private:
     static Ret exportScorePngs(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
     static Ret exportScoreSvgs(const notation::INotationPtr notation, const io::path_t& highlightConfigPath, BackendJsonWriter& jsonWriter,
                                bool addSeparator = false);
-    static Ret exportScoreElementsPositions(const std::string& elementsPositionsWriterName, const notation::INotationPtr notation,
-                                            BackendJsonWriter& jsonWriter, bool addSeparator = false);
+    static Ret exportScoreElementsPositions(const std::string& elementsPositionsWriterName, const std::string& elementsPositionsTagName,
+                                            const notation::INotationPtr notation, BackendJsonWriter& jsonWriter,
+                                            bool addSeparator = false);
     static Ret exportScorePdf(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
     static Ret exportScorePdf(const notation::INotationPtr notation, QIODevice& destinationDevice);
     static Ret exportScoreMidi(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);

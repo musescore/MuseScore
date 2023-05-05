@@ -116,8 +116,8 @@ void NotationModule::resolveImports()
 
     auto writers = modularity::ioc()->resolve<project::INotationWritersRegister>(moduleName());
     if (writers) {
-        writers->reg({ "sposXML" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::SEGMENT));
-        writers->reg({ "mposXML" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE));
+        writers->reg({ "spos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::SEGMENT));
+        writers->reg({ "mpos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE));
         writers->reg({ "mscz" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Zip));
         writers->reg({ "mscx" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Dir));
     }
