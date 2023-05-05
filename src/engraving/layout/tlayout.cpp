@@ -104,6 +104,7 @@
 #include "../libmscore/rehearsalmark.h"
 #include "../libmscore/rest.h"
 
+#include "../libmscore/shadownote.h"
 #include "../libmscore/staff.h"
 #include "../libmscore/stem.h"
 #include "../libmscore/system.h"
@@ -3519,6 +3520,78 @@ void TLayout::layoutRestDots(Rest* item)
         dot->setPos(x, y);
         x += dx;
     }
+}
+
+void TLayout::layout(ShadowNote* item, LayoutContext&)
+{
+    if (!item->isValid()) {
+        item->setbbox(RectF());
+        return;
+    }
+    double _spatium = item->spatium();
+    RectF newBbox;
+    RectF noteheadBbox = item->symBbox(item->m_noteheadSymbol);
+    bool up = item->computeUp();
+
+    // TODO: Take into account accidentals and articulations?
+
+    // Layout dots
+    double dotWidth = 0;
+    if (item->m_duration.dots() > 0) {
+        double noteheadWidth = noteheadBbox.width();
+        double d  = item->score()->styleMM(Sid::dotNoteDistance) * item->mag();
+        double dd = item->score()->styleMM(Sid::dotDotDistance) * item->mag();
+        dotWidth = (noteheadWidth + d);
+        if (item->hasFlag() && up) {
+            dotWidth = std::max(dotWidth, noteheadWidth + item->symBbox(item->flagSym()).right());
+        }
+        for (int i = 0; i < item->m_duration.dots(); i++) {
+            dotWidth += dd * i;
+        }
+    }
+    newBbox.setRect(noteheadBbox.x(), noteheadBbox.y(), noteheadBbox.width() + dotWidth, noteheadBbox.height());
+
+    // Layout stem and flag
+    if (item->hasStem()) {
+        double x = noteheadBbox.x();
+        double w = noteheadBbox.width();
+
+        double stemWidth = item->score()->styleMM(Sid::stemWidth);
+        double stemLength = (up ? -3.5 : 3.5) * _spatium;
+        double stemAnchor = item->symSmuflAnchor(item->m_noteheadSymbol, up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
+        newBbox |= RectF(up ? x + w - stemWidth : x,
+                         stemAnchor,
+                         stemWidth,
+                         stemLength - stemAnchor);
+
+        if (item->hasFlag()) {
+            RectF flagBbox = item->symBbox(item->flagSym());
+            newBbox |= RectF(up ? x + w - stemWidth : x,
+                             stemAnchor + stemLength + flagBbox.y(),
+                             flagBbox.width(),
+                             flagBbox.height());
+        }
+    }
+
+    // Layout ledger lines if needed
+    if (!item->m_isRest && item->m_lineIndex < 100 && item->m_lineIndex > -100) {
+        double extraLen = item->score()->styleMM(Sid::ledgerLineLength) * item->mag();
+        double step = 0.5 * _spatium * item->staffType()->lineDistance().val();
+        double x = noteheadBbox.x() - extraLen;
+        double w = noteheadBbox.width() + 2 * extraLen;
+
+        double lw = item->score()->styleMM(Sid::ledgerLineWidth);
+
+        RectF r(x, -lw * .5, w, lw);
+        for (int i = -2; i >= item->m_lineIndex; i -= 2) {
+            newBbox |= r.translated(PointF(0, step * (i - item->m_lineIndex)));
+        }
+        int l = item->staffType()->lines() * 2; // first ledger line below staff
+        for (int i = l; i <= item->m_lineIndex; i += 2) {
+            newBbox |= r.translated(PointF(0, step * (i - item->m_lineIndex)));
+        }
+    }
+    item->setbbox(newBbox);
 }
 
 void TLayout::layoutLine(SLine* item, LayoutContext&)
