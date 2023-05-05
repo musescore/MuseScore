@@ -105,6 +105,7 @@
 #include "../libmscore/rest.h"
 
 #include "../libmscore/shadownote.h"
+#include "../libmscore/slur.h"
 #include "../libmscore/staff.h"
 #include "../libmscore/stem.h"
 #include "../libmscore/system.h"
@@ -116,6 +117,7 @@
 #include "beamlayout.h"
 #include "chordlayout.h"
 #include "lyricslayout.h"
+#include "slurtielayout.h"
 
 using namespace mu::draw;
 using namespace mu::engraving;
@@ -3698,4 +3700,9 @@ void TLayout::layoutLine(SLine* item, LayoutContext&)
         }
         lineSegm->layout();
     }
+}
+
+void TLayout::layout(Slur* item, LayoutContext& ctx)
+{
+    SlurTieLayout::layout(item, ctx);
 }

@@ -105,6 +105,7 @@ class Rest;
 
 class ShadowNote;
 class SLine;
+class Slur;
 }
 
 namespace mu::engraving::v0 {
@@ -126,7 +127,7 @@ public:
     static void layout(Bend* item, LayoutContext& ctx);
 
     static void layout(Box* item, LayoutContext& ctx);    // factory
-    static void layoutBox(Box* item, LayoutContext& ctx); // base
+    static void layoutBox(Box* item, LayoutContext& ctx); // base class
     static void layout(HBox* item, LayoutContext& ctx);
     static void layout(VBox* item, LayoutContext& ctx);
     static void layout(FBox* item, LayoutContext& ctx);
@@ -176,8 +177,8 @@ public:
     static void layout(LyricsLineSegment* item, LayoutContext& ctx);
 
     static void layout(Marker* item, LayoutContext& ctx);
-    static void layoutMeasureBase(MeasureBase* item, LayoutContext& ctx); // base
-    static void layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext& ctx); // base
+    static void layoutMeasureBase(MeasureBase* item, LayoutContext& ctx); // base class
+    static void layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext& ctx); // base class
     static void layout(MeasureRepeat* item, LayoutContext& ctx);
     static void layout(MMRest* item, LayoutContext& ctx);
 
@@ -195,9 +196,10 @@ public:
     static void layout(RasgueadoSegment* item, LayoutContext& ctx);
     static void layout(RehearsalMark* item, LayoutContext& ctx);
     static void layout(Rest* item, LayoutContext& ctx);
-    static void layout(ShadowNote* item, LayoutContext& ctx);
 
-    static void layoutLine(SLine* item, LayoutContext& ctx); // base
+    static void layout(ShadowNote* item, LayoutContext& ctx);
+    static void layoutLine(SLine* item, LayoutContext& ctx); // base class
+    static void layout(Slur* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);

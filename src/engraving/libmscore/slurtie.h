@@ -160,6 +160,7 @@ public:
     ~SlurTie();
 
     bool up() const { return _up; }
+    void setUp(bool val) { _up = val; }
 
     virtual void reset() override;
 
