@@ -43,17 +43,6 @@ class ShadowNote final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, ShadowNote)
 
-    INJECT(notation, IEngravingConfiguration, engravingConfiguration)
-
-    Fraction m_tick;
-    int m_lineIndex;
-    SymId m_noteheadSymbol;
-    TDuration m_duration;
-    bool m_isRest;
-
-    double m_segmentSkylineTopY = 0;
-    double m_segmentSkylineBottomY = 0;
-
 public:
     ShadowNote(Score*);
 
@@ -81,6 +70,18 @@ public:
     bool hasStem() const;
     bool hasFlag() const;
     SymId flagSym() const;
+
+private:
+    friend class v0::TLayout;
+
+    Fraction m_tick;
+    int m_lineIndex;
+    SymId m_noteheadSymbol;
+    TDuration m_duration;
+    bool m_isRest;
+
+    double m_segmentSkylineTopY = 0;
+    double m_segmentSkylineBottomY = 0;
 };
 } // namespace mu::engraving
 #endif
