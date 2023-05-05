@@ -30,6 +30,7 @@
 
 #include "style/style.h"
 #include "layout/tlayout.h"
+#include "layout/slurtielayout.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -2043,12 +2044,12 @@ void Chord::layoutSpanners(System* system, const Fraction& stick)
     for (const Note* note : notes()) {
         Tie* t = note->tieFor();
         if (t) {
-            t->layoutFor(system);
+            SlurTieLayout::tieLayoutFor(t, system);
         }
         t = note->tieBack();
         if (t) {
             if (t->startNote()->tick() < stick) {
-                t->layoutBack(system);
+                SlurTieLayout::tieLayoutBack(t, system);
             }
         }
         for (Spanner* sp : note->spannerBack()) {

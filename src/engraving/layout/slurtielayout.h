@@ -30,6 +30,8 @@ struct SlurPos;
 class SpannerSegment;
 class System;
 class Chord;
+class TieSegment;
+class Tie;
 
 class SlurTieLayout
 {
@@ -37,9 +39,14 @@ public:
     static void layout(Slur* item, LayoutContext& ctx);
     static SpannerSegment* layoutSystem(Slur* item, System* system);
 
+    static TieSegment* tieLayoutFor(Tie* item, System* system);
+    static TieSegment* tieLayoutBack(Tie* item, System* system);
+
 private:
     static void slurPos(Slur* item, SlurPos* sp);
     static void fixArticulations(Slur* item, PointF& pt, Chord* c, double up, bool stemSide);
+
+    static void tiePos(Tie* item, SlurPos* sp);
 };
 }
 

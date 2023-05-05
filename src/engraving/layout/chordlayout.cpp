@@ -55,6 +55,8 @@
 #include "libmscore/undo.h"
 #include "libmscore/utils.h"
 
+#include "slurtielayout.h"
+
 using namespace mu::engraving;
 
 void ChordLayout::layout(Chord* item, LayoutContext& ctx)
@@ -1975,7 +1977,7 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure)
         for (Note* note : chord->notes()) {
             Tie* tieBack = note->tieBack();
             if (tieBack && tieBack->startNote()->findMeasure() != note->findMeasure()) {
-                tieBack->layoutBack(note->findMeasure()->system());
+                SlurTieLayout::tieLayoutBack(tieBack, note->findMeasure()->system());
             }
         }
     }
@@ -1984,7 +1986,7 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure)
         if (tie) {
             Note* endNote = tie->endNote();
             if (endNote && endNote->findMeasure() == note->findMeasure()) {
-                tie->layoutFor(note->findMeasure()->system()); // line attach points are updated here
+                SlurTieLayout::tieLayoutFor(tie, note->findMeasure()->system());  // line attach points are updated here
             }
         }
     }

@@ -83,9 +83,6 @@ class Tie final : public SlurTie
     static Note* editStartNote;
     static Note* editEndNote;
 
-private:
-    bool _isInside{ false };
-
 public:
     Tie(EngravingItem* parent = 0);
 
@@ -102,11 +99,6 @@ public:
 
     void calculateDirection();
 
-    void slurPos(SlurPos*) override;
-
-    TieSegment* layoutFor(System*);
-    TieSegment* layoutBack(System*);
-
     TieSegment* frontSegment() { return toTieSegment(Spanner::frontSegment()); }
     const TieSegment* frontSegment() const { return toTieSegment(Spanner::frontSegment()); }
     TieSegment* backSegment() { return toTieSegment(Spanner::backSegment()); }
@@ -115,6 +107,12 @@ public:
     const TieSegment* segmentAt(int n) const { return toTieSegment(Spanner::segmentAt(n)); }
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new TieSegment(parent); }
+
+private:
+
+    friend class SlurTieLayout;
+
+    bool _isInside = false;
 };
 } // namespace mu::engraving
 #endif
