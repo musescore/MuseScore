@@ -100,6 +100,7 @@ class PickScrapeSegment;
 class PlayTechAnnotation;
 
 class RasgueadoSegment;
+class RehearsalMark;
 
 class SLine;
 }
@@ -190,6 +191,7 @@ public:
     static void layout(PlayTechAnnotation* item, LayoutContext& ctx);
 
     static void layout(RasgueadoSegment* item, LayoutContext& ctx);
+    static void layout(RehearsalMark* item, LayoutContext& ctx);
 
     static void layoutLine(SLine* item, LayoutContext& ctx); // base
 
