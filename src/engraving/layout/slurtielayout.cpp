@@ -981,3 +981,259 @@ void SlurTieLayout::fixArticulations(Slur* item, PointF& pt, Chord* c, double up
         }
     }
 }
+
+//---------------------------------------------------------
+//   layoutFor
+//    layout the first SpannerSegment of a slur
+//---------------------------------------------------------
+
+TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
+{
+    // do not layout ties in tablature if not showing back-tied fret marks
+    StaffType* st = item->staff()->staffType(item->startNote() ? item->startNote()->tick() : Fraction(0, 1));
+    if (st && st->isTabStaff() && !st->showBackTied()) {
+        if (!item->segmentsEmpty()) {
+            item->eraseSpannerSegments();
+        }
+        return nullptr;
+    }
+    //
+    //    show short bow
+    //
+    if (item->startNote() == 0 || item->endNote() == 0) {
+        if (item->startNote() == 0) {
+            LOGD("no start note");
+            return 0;
+        }
+        Chord* c1 = item->startNote()->chord();
+        item->setTick(c1->tick());
+        if (item->_slurDirection == DirectionV::AUTO) {
+            bool simpleException = st && st->isSimpleTabStaff();
+            if (st && st->isSimpleTabStaff()) {
+                item->_up = isUpVoice(c1->voice());
+            } else {
+                if (c1->measure()->hasVoices(c1->staffIdx(), c1->tick(), c1->actualTicks())) {
+                    // in polyphonic passage, ties go on the stem side
+                    item->_up = simpleException ? isUpVoice(c1->voice()) : c1->up();
+                } else {
+                    item->_up = !c1->up();
+                }
+            }
+        } else {
+            item->_up = item->_slurDirection == DirectionV::UP ? true : false;
+        }
+        item->fixupSegments(1);
+        TieSegment* segment = item->segmentAt(0);
+        segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+        segment->setSystem(item->startNote()->chord()->segment()->measure()->system());
+        SlurPos sPos;
+        tiePos(item, &sPos);
+        segment->adjustY(sPos.p1, sPos.p2);
+        segment->finalizeSegment();
+        return segment;
+    }
+    item->calculateDirection();
+
+    SlurPos sPos;
+    tiePos(item, &sPos);  // get unadjusted x values and determine inside or outside
+
+    item->setPos(0, 0);
+
+    int n;
+    if (sPos.system1 != sPos.system2) {
+        n = 2;
+        sPos.p2 = PointF(system->lastNoteRestSegmentX(true), sPos.p1.y());
+    } else {
+        n = 1;
+    }
+
+    item->fixupSegments(n);
+    TieSegment* segment = item->segmentAt(0);
+    segment->setSystem(system);   // Needed to populate System.spannerSegments
+    Chord* c1 = item->startNote()->chord();
+    item->setTick(c1->tick());
+    segment->adjustY(sPos.p1, sPos.p2); // adjust vertically
+    segment->setSpannerSegmentType(sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
+    segment->adjustX(); // adjust horizontally for inside-style ties
+    segment->finalizeSegment(); // compute bezier and set bbox
+    segment->addLineAttachPoints(); // add attach points to start and end note
+    return segment;
+}
+
+//---------------------------------------------------------
+//   layoutBack
+//    layout the second SpannerSegment of a split slur
+//---------------------------------------------------------
+
+TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system)
+{
+    // do not layout ties in tablature if not showing back-tied fret marks
+    StaffType* st = item->staff()->staffType(item->startNote() ? item->startNote()->tick() : Fraction(0, 1));
+    if (st->isTabStaff() && !st->showBackTied()) {
+        if (!item->segmentsEmpty()) {
+            item->eraseSpannerSegments();
+        }
+        return nullptr;
+    }
+
+    SlurPos sPos;
+    tiePos(item, &sPos);
+
+    item->fixupSegments(2);
+    TieSegment* segment = item->segmentAt(1);
+    segment->setSystem(system);
+
+    double x = system ? system->firstNoteRestSegmentX(true) : 0;
+
+    segment->adjustY(PointF(x, sPos.p2.y()), sPos.p2);
+    segment->setSpannerSegmentType(SpannerSegmentType::END);
+    segment->adjustX();
+    segment->finalizeSegment();
+    segment->addLineAttachPoints();
+    return segment;
+}
+
+//---------------------------------------------------------
+//   slurPos
+//    Calculate position of start- and endpoint of slur
+//    relative to System() position.
+//---------------------------------------------------------
+
+void SlurTieLayout::tiePos(Tie* item, SlurPos* sp)
+{
+    const StaffType* staffType = item->staffType();
+    bool useTablature = staffType->isTabStaff();
+    double _spatium = item->spatium();
+    double hw = item->startNote()->tabHeadWidth(staffType); // if staffType == 0, defaults to headWidth()
+    /* Inside-style and Outside-style ties
+     Outside ties connect above the notehead, in the middle. Ideally, we'd use opticalcenter for this, but
+     that Smufl anchor is not available for noteheads yet. For this reason, we rely on Note::outsideTieAttachX()
+     which makes its best guess as to where ties should connect.
+
+     As for y connection point, inside-style ties are decided by the space or line the note occupies in TieSegment::adjustY()
+     so we don't need to worry about that. Outside-style ties will be 0.125 spatium from the top or bottom of the notehead.
+     We can parameterize that later, but this describes only a minimum distance from the notehead, it can be changed, again,
+     in TieSegment::adjustY().
+    */
+
+    Chord* sc = item->startNote()->chord();
+    Chord* ec = item->endNote() ? item->endNote()->chord() : nullptr;
+    sp->system1 = sc->measure()->system();
+    if (!sp->system1) {
+        Measure* m = sc->measure();
+        LOGD("No system: measure is %d has %d count %d", m->isMMRest(), m->hasMMRest(), m->mmRestCount());
+    }
+
+    double x1, y1;
+    double x2, y2;
+
+    // determine attachment points
+    // similar code is used in Chord::layoutPitched()
+    // to allocate extra space to enforce minTieLength
+    // so keep these in sync
+    if (sc->notes().size() > 1 || (ec && ec->notes().size() > 1)) {
+        item->_isInside = true;
+    } else {
+        item->_isInside = false;
+    }
+    sp->p1    = sc->pos() + sc->segment()->pos() + sc->measure()->pos();
+
+    //------p1
+    y1 = item->startNote()->pos().y();
+    y2 = item->endNote() ? item->endNote()->pos().y() : y1;
+
+    // force tie to be horizontal except for cross-staff or if there is a difference of line (tpc, clef)
+    int line1 = useTablature ? item->startNote()->string() : item->startNote()->line();
+    int line2 = line1;
+    if (item->endNote()) {
+        line2 = useTablature ? item->endNote()->string() : item->endNote()->line();
+    }
+    bool isHorizontal = ec ? line1 == line2 && sc->vStaffIdx() == ec->vStaffIdx() : true;
+    y1 += item->startNote()->bbox().y();
+    if (item->endNote()) {
+        y2 += item->endNote()->bbox().y();
+    }
+    if (!item->up()) {
+        y1 += item->startNote()->bbox().height();
+        if (item->endNote()) {
+            y2 += item->endNote()->bbox().height();
+        }
+    }
+    if (!item->endNote()) {
+        y2 = y1;
+    }
+
+    // ensure that horizontal ties remain horizontal
+    if (isHorizontal) {
+        y1 = item->_up ? std::min(y1, y2) : std::max(y1, y2);
+        y2 = item->_up ? std::min(y1, y2) : std::max(y1, y2);
+    }
+
+    if (item->_isInside) {
+        x1 = item->startNote()->pos().x() + hw;  // the offset for these will be decided in TieSegment::adjustX()
+    } else {
+        if (sc->stem() && sc->stem()->visible() && sc->up() && item->_up) {
+            // usually, outside ties start in the middle of the notehead, but
+            // for up-ties on up-stems, we'll start at the end of the notehead
+            // to avoid the stem
+            x1 = item->startNote()->pos().x() + hw;
+        } else {
+            x1 = item->startNote()->outsideTieAttachX(item->_up);
+        }
+    }
+
+    sp->p1 += PointF(x1, y1);
+
+    //------p2
+    if (!ec) {
+        sp->p2 = sp->p1 + PointF(_spatium * 3, 0.0);
+        sp->system2 = sp->system1;
+        return;
+    }
+    sp->p2 = ec->pos() + ec->segment()->pos() + ec->measure()->pos();
+    sp->system2 = ec->measure()->system();
+
+    if (item->isInside()) {
+        x2 = item->endNote()->x();
+    } else {
+        if (ec->stem() && ec->stem()->visible() && !ec->up() && !item->_up) {
+            // as before, xo should account for stems that could get in the way
+            x2 = item->endNote()->x();
+        } else {
+            x2 = item->endNote()->outsideTieAttachX(item->_up);
+        }
+    }
+    sp->p2 += PointF(x2, y2);
+    // adjust for cross-staff
+    if (sc->vStaffIdx() != item->staffIdx() && sp->system1) {
+        double diff = sp->system1->staff(sc->vStaffIdx())->y() - sp->system1->staff(item->staffIdx())->y();
+        sp->p1.ry() += diff;
+    }
+    if (ec->vStaffIdx() != item->staffIdx() && sp->system2) {
+        double diff = sp->system2->staff(ec->vStaffIdx())->y() - sp->system2->staff(item->staffIdx())->y();
+        sp->p2.ry() += diff;
+    }
+
+    /// adjusting ties for notes in circles
+    if (Tie::engravingConfiguration()->enableExperimentalFretCircle() && item->staff()->staffType()->isCommonTabStaff()) {
+        auto adjustTie = [item](Chord* ch, PointF& coord, bool tieStart) {
+            const Fraction halfFraction = Fraction(1, 2);
+            if (ch && ch->ticks() >= halfFraction) {
+                for (EngravingItem* e : ch->el()) {
+                    if (e && e->isFretCircle()) {
+                        FretCircle* fretCircle = toFretCircle(e);
+                        coord += PointF(0, fretCircle->offsetFromUpNote() * (item->up() ? -1 : 1));
+                        if (item->isInside()) {
+                            coord += PointF(fretCircle->sideOffset() * (tieStart ? 1 : -1), 0);
+                        }
+
+                        break;
+                    }
+                }
+            }
+        };
+
+        adjustTie(sc, sp->p1, true);
+        adjustTie(ec, sp->p2, false);
+    }
+}

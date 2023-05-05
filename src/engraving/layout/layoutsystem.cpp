@@ -53,6 +53,7 @@
 #include "lyricslayout.h"
 #include "layoutmeasure.h"
 #include "layouttuplets.h"
+#include "slurtielayout.h"
 
 #include "log.h"
 
@@ -1409,7 +1410,7 @@ void LayoutSystem::layoutTies(Chord* ch, System* system, const Fraction& stick)
     for (Note* note : ch->notes()) {
         Tie* t = note->tieFor();
         if (t) {
-            TieSegment* ts = t->layoutFor(system);
+            TieSegment* ts = SlurTieLayout::tieLayoutFor(t, system);
             if (ts && ts->addToSkyline()) {
                 staff->skyline().add(ts->shape().translate(ts->pos()));
             }
@@ -1417,7 +1418,7 @@ void LayoutSystem::layoutTies(Chord* ch, System* system, const Fraction& stick)
         t = note->tieBack();
         if (t) {
             if (t->startNote()->tick() < stick) {
-                TieSegment* ts = t->layoutBack(system);
+                TieSegment* ts = SlurTieLayout::tieLayoutBack(t, system);
                 if (ts && ts->addToSkyline()) {
                     staff->skyline().add(ts->shape().translate(ts->pos()));
                 }

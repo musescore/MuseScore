@@ -95,7 +95,7 @@ public:
     void layout() override;
     SpannerSegment* layoutSystem(System*) override;
     void setTrack(track_idx_t val) override;
-    void slurPos(SlurPos*) override {}
+
     void computeUp();
 
     void setSourceStemArrangement(int v) { _sourceStemArrangement = v; }

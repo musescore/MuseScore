@@ -174,7 +174,6 @@ public:
     SlurStyleType styleType() const { return _styleType; }
     void setStyleType(SlurStyleType type) { _styleType = type; }
 
-    virtual void slurPos(SlurPos*) = 0;
     virtual SlurTieSegment* newSlurTieSegment(System* parent) = 0;
 
     PropertyValue getProperty(Pid propertyId) const override;
