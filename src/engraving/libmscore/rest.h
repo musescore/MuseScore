@@ -100,7 +100,7 @@ public:
     void updateSymbol(int line, int lines);
 
     void checkDots();
-    void layoutDots();
+
     double symWidthNoLedgerLines() const;
     NoteDot* dot(int n);
     const std::vector<NoteDot*>& dotList() const;
@@ -151,6 +151,7 @@ protected:
 
 private:
 
+    friend class v0::TLayout;
     friend class Factory;
     Rest(Segment* parent);
     Rest(Segment* parent, const TDuration&);

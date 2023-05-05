@@ -101,6 +101,7 @@ class PlayTechAnnotation;
 
 class RasgueadoSegment;
 class RehearsalMark;
+class Rest;
 
 class SLine;
 }
@@ -192,6 +193,7 @@ public:
 
     static void layout(RasgueadoSegment* item, LayoutContext& ctx);
     static void layout(RehearsalMark* item, LayoutContext& ctx);
+    static void layout(Rest* item, LayoutContext& ctx);
 
     static void layoutLine(SLine* item, LayoutContext& ctx); // base
 
@@ -204,6 +206,8 @@ private:
     static PointF calculateBoundingRect(Harmony* item);
 
     static void keySigAddLayout(KeySig* item, SymId sym, int line);
+
+    static void layoutRestDots(Rest* item);
 };
 }
 

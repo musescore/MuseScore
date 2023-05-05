@@ -29,6 +29,8 @@
 #include "realfn.h"
 #include "translation.h"
 
+#include "layout/tlayout.h"
+
 #include "actionicon.h"
 #include "articulation.h"
 #include "chord.h"
@@ -339,95 +341,8 @@ void Rest::updateSymbol(int line, int lines)
 
 void Rest::layout()
 {
-    if (m_gap) {
-        return;
-    }
-    for (EngravingItem* e : el()) {
-        e->layout();
-    }
-
-    _skipDraw = false;
-    if (_deadSlapped) {
-        _skipDraw = true;
-        return;
-    }
-
-    double _spatium = spatium();
-
-    setPosX(0.0);
-    const StaffType* stt = staffType();
-    if (stt && stt->isTabStaff()) {
-        // if rests are shown and note values are shown as duration symbols
-        if (stt->showRests() && stt->genDurations()) {
-            DurationType type = durationType().type();
-            int dots = durationType().dots();
-            // if rest is whole measure, convert into actual type and dot values
-            if (type == DurationType::V_MEASURE && measure()) {
-                Fraction ticks = measure()->ticks();
-                TDuration dur  = TDuration(ticks).type();
-                type           = dur.type();
-                dots           = dur.dots();
-            }
-            // symbol needed; if not exist, create, if exists, update duration
-            if (!_tabDur) {
-                _tabDur = new TabDurationSymbol(this, stt, type, dots);
-            } else {
-                _tabDur->setDuration(type, dots, stt);
-            }
-            _tabDur->setParent(this);
-// needed?        _tabDur->setTrack(track());
-            _tabDur->layout();
-            setbbox(_tabDur->bbox());
-            setPos(0.0, 0.0);                   // no rest is drawn: reset any position might be set for it
-            return;
-        }
-        // if no rests or no duration symbols, delete any dur. symbol and chain into standard staff mngmt
-        // this is to ensure horiz space is reserved for rest, even if they are not displayed
-        // Rest::draw() will skip their drawing, if not needed
-        if (_tabDur) {
-            delete _tabDur;
-            _tabDur = 0;
-        }
-    }
-
-    m_dotline = Rest::getDotline(durationType().type());
-
-    double yOff       = offset().y();
-    const Staff* stf = staff();
-    const StaffType* st = stf ? stf->staffTypeForElement(this) : 0;
-    double lineDist = st ? st->lineDistance().val() : 1.0;
-    int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * _spatium));
-    int lines      = st ? st->lines() : 5;
-
-    int naturalLine = computeNaturalLine(lines); // Measured in 1sp steps
-    int voiceOffset = computeVoiceOffset(lines); // Measured in 1sp steps
-    int wholeRestOffset = computeWholeRestOffset(voiceOffset, lines);
-    int finalLine = naturalLine + voiceOffset + wholeRestOffset;
-
-    m_sym = getSymbol(durationType().type(), finalLine + userLine, lines);
-
-    setPosY(finalLine * lineDist * _spatium);
-    if (!shouldNotBeDrawn()) {
-        setbbox(symBbox(m_sym));
-    }
-    layoutDots();
-}
-
-//---------------------------------------------------------
-//   layoutDots
-//---------------------------------------------------------
-
-void Rest::layoutDots()
-{
-    checkDots();
-    double x = symWidthNoLedgerLines() + score()->styleMM(Sid::dotNoteDistance) * mag();
-    double dx = score()->styleMM(Sid::dotDotDistance) * mag();
-    double y = m_dotline * spatium() * .5;
-    for (NoteDot* dot : m_dots) {
-        dot->layout();
-        dot->setPos(x, y);
-        x += dx;
-    }
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 double Rest::symWidthNoLedgerLines() const
