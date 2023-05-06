@@ -202,6 +202,8 @@ private:
 
     const mu::engraving::Harmony* editedChordSymbol() const;
 
+    bool elementHasPopup(EngravingItem* e);
+
     bool canUndo() const;
     bool canRedo() const;
     bool isNotationPage() const;

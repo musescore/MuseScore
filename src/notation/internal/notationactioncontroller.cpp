@@ -1356,7 +1356,7 @@ void NotationActionController::startEditSelectedElement(const ActionData& args)
         return;
     }
 
-    if (element->isHarpPedalDiagram()) {
+    if (elementHasPopup(element)) {
         dispatcher()->dispatch("notation-popup-menu");
         return;
     }
@@ -1938,6 +1938,15 @@ const mu::engraving::Harmony* NotationActionController::editedChordSymbol() cons
     }
 
     return toHarmony(text);
+}
+
+bool NotationActionController::elementHasPopup(EngravingItem* e)
+{
+    if (e->isHarpPedalDiagram()) {
+        return true;
+    }
+
+    return false;
 }
 
 bool NotationActionController::canUndo() const
