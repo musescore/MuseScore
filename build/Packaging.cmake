@@ -48,7 +48,6 @@ IF(MINGW OR MSVC)
     SET(CPACK_NSIS_URL_INFO_ABOUT "https://www.musescore.org/")
     SET(CPACK_NSIS_CONTACT "info@musescore.org")
     SET(CPACK_NSIS_MODIFY_PATH OFF)
-    SET(CPACK_STRIP_FILES "${MSCORE_EXECUTABLE_NAME}.exe")
 
     # File types association:
     message(STATUS "[Packaging.cmake] PACKAGE_FILE_ASSOCIATION: ${MUE_ENABLE_FILE_ASSOCIATION}")
