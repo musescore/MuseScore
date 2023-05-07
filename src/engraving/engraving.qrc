@@ -23,6 +23,8 @@
         <file alias="engraving/styles/cchords_muse.xml">data/chords/cchords_muse.xml</file>
         <file>qml/MuseScore/Engraving/EngravingElementsDialog.qml</file>
         <file>qml/MuseScore/Engraving/EngravingElementsPanel.qml</file>
+        <file>qml/MuseScore/Engraving/EngravingUndoStackDialog.qml</file>
+        <file>qml/MuseScore/Engraving/EngravingUndoStackPanel.qml</file>
         <file>qml/MuseScore/Engraving/qmldir</file>
     </qresource>
 </RCC>

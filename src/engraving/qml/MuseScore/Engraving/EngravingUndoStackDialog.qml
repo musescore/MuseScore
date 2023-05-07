@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-Studio-CLA-applies
+ * MuseScore-CLA-applies
  *
- * MuseScore Studio
+ * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,24 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-
-import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+import Muse.Ui
+import Muse.UiComponents
 
 StyledDialogView {
     id: root
 
-    title: "Diagnostic: Engraving elements"
+    title: "Diagnostic: Engraving UndoStack"
 
-    contentHeight: 800
-    contentWidth: 600
+    contentHeight: 900
+    contentWidth: 500
     resizable: true
 
     //! NOTE It is necessary that it can be determined that this is an object for diagnostics
     contentItem.objectName: panel.objectName
 
-    EngravingElementsPanel {
+    margins: 12
+
+    EngravingUndoStackPanel {
         id: panel
         anchors.fill: parent
     }

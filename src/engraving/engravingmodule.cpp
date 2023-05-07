@@ -64,6 +64,7 @@
 #include "ui/iinteractiveuriregister.h"
 #include "devtools/engravingelementsprovider.h"
 #include "devtools/engravingelementsmodel.h"
+#include "devtools/engravingundostackmodel.h"
 #include "devtools/corruptscoredevtoolsmodel.h"
 #include "devtools/drawdata/diagnosticdrawprovider.h"
 #endif
@@ -132,6 +133,7 @@ void EngravingModule::resolveImports()
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://diagnostics/engraving/elements"), "MuseScore/Engraving/EngravingElementsDialog.qml");
+        ir->registerQmlUri(Uri("musescore://diagnostics/engraving/undostack"), "MuseScore/Engraving/EngravingUndoStackDialog.qml");
     }
 #endif
 }
@@ -159,6 +161,7 @@ void EngravingModule::registerUiTypes()
 
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
     qmlRegisterType<EngravingElementsModel>("MuseScore.Engraving", 1, 0, "EngravingElementsModel");
+    qmlRegisterType<EngravingUndoStackModel>("MuseScore.Engraving", 1, 0, "EngravingUndoStackModel");
     qmlRegisterType<CorruptScoreDevToolsModel>("MuseScore.Engraving", 1, 0, "CorruptScoreDevToolsModel");
 #endif
 }
