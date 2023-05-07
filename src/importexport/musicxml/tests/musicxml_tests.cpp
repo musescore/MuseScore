@@ -781,6 +781,9 @@ TEST_F(Musicxml_Tests, specialCharacters) {
 TEST_F(Musicxml_Tests, staffTwoKeySigs) {
     mxmlIoTest("testStaffTwoKeySigs");
 }
+TEST_F(Musicxml_Tests, stringData) {
+    mxmlIoTest("testStringData");
+}
 TEST_F(Musicxml_Tests, stringVoiceName) {
     mxmlIoTestRef("testStringVoiceName");
 }
