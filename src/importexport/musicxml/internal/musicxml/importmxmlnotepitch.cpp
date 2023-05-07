@@ -48,9 +48,10 @@ static Accidental* accidental(QXmlStreamReader& e, Score* score)
     bool cautionary = e.attributes().value("cautionary") == "yes";
     bool editorial = e.attributes().value("editorial") == "yes";
     bool parentheses = e.attributes().value("parentheses") == "yes";
+    QString smufl = e.attributes().value("smufl").toString();
 
     const auto s = e.readElementText();
-    const auto type = mxmlString2accidentalType(s);
+    const auto type = mxmlString2accidentalType(s, smufl);
 
     if (type != AccidentalType::NONE) {
         auto a = Factory::createAccidental(score->dummy());
