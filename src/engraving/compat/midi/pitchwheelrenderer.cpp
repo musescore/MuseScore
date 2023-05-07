@@ -78,48 +78,47 @@ void PitchWheelRenderer::renderChannelPitchWheel(EventMap& pitchWheelEvents,
                 funcIter = unProcessedFunctions.functions.erase(funcIter);
             }
 
-            pitchValue = calculatePitchBend(unProcessedFunctions.functions, tick);
-
             ++funcIter;
         }
 
+        PitchWheelFunctions pitchBendCalculationFunctions;
+        for (const auto& func : unProcessedFunctions.functions) {
+            if (tick >= func.mStartTick && tick < func.mEndTick) {
+                pitchBendCalculationFunctions.functions.push_back(func);
+            }
+        }
+
+        pitchValue = calculatePitchBend(pitchBendCalculationFunctions.functions, tick);
+
         if (pitchValue != prevPitchValue) {
-            NPlayEvent evb(ME_PITCHBEND, channel, pitchValue % 128, pitchValue / 128);
-            evb.setEffect(effect);
-            pitchWheelEvents.emplace_hint(pitchWheelEvents.end(), std::make_pair(tick, evb));
+            if (!pitchBendCalculationFunctions.functions.empty()) {
+                /// handling pitchbend from previous ticks
+                auto lastPitchInfoIt = m_lastPitchInfoByChan.find(channel);
+                if (lastPitchInfoIt != m_lastPitchInfoByChan.end()) {
+                    int oldTick = m_lastPitchInfoByChan.at(channel).tick;
+                    int ticksDist = tick - oldTick;
+                    int oldPitch = m_lastPitchInfoByChan.at(channel).pitch;
+                    NPlayEvent evb(ME_PITCHBEND, channel, oldPitch % 128, oldPitch / 128);
+                    evb.setEffect(effect);
+                    pitchWheelEvents.emplace_hint(pitchWheelEvents.end(), std::make_pair(oldTick + ticksDist / 2, evb));
+
+                    m_lastPitchInfoByChan.erase(lastPitchInfoIt);
+                }
+
+                NPlayEvent evb(ME_PITCHBEND, channel, pitchValue % 128, pitchValue / 128);
+                evb.setEffect(effect);
+                pitchWheelEvents.emplace_hint(pitchWheelEvents.end(), std::make_pair(tick, evb));
+            } else {
+                /// save the value for next
+                PitchBendInfo pbInfo;
+                pbInfo.tick = tick;
+                pbInfo.pitch = pitchValue;
+                m_lastPitchInfoByChan[channel] = pbInfo;
+            }
         }
 
         prevPitchValue = pitchValue;
         tick += _wheelSpec.mStep;
-    }
-
-    //!@NOTE handling end of each function. endTick usually
-    //! means end of note and starting of next note.
-    //! But endTick can fall on the segment between two points.
-    //! So next note can start with  pitch value of previous note.
-    for (const auto& endFunc : functions.functions) {
-        int pitchValue = _wheelSpec.mLimit;
-        int32_t endFuncTick = endFunc.mEndTick;
-        if (endFuncTick % _wheelSpec.mStep == 0) {
-            //!already proccessed
-            continue;
-        }
-
-        for (const auto& func : functions.functions) {
-            if (endFuncTick < func.mStartTick || endFuncTick > func.mEndTick || &func == &endFunc) {
-                continue;
-            }
-
-            pitchValue += func.func(endFuncTick);
-        }
-
-        if (endFuncTick == functions.endTick) {
-            pitchValue = _wheelSpec.mLimit;
-        }
-
-        NPlayEvent evb(ME_PITCHBEND, channel, pitchValue % 128, pitchValue / 128);
-        evb.setEffect(effect);
-        pitchWheelEvents.emplace_hint(pitchWheelEvents.end(), std::make_pair(endFuncTick, evb));
     }
 }
 
@@ -138,10 +137,6 @@ int32_t PitchWheelRenderer::calculatePitchBend(const std::list<PitchWheelFunctio
     int pitchValue = _wheelSpec.mLimit;
 
     for (const auto& func : functions) {
-        if (tick < func.mStartTick || tick >= func.mEndTick) {
-            continue;
-        }
-
         pitchValue += func.func(tick);
     }
 

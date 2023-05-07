@@ -66,6 +66,13 @@ private:
     PitchWheelSpecs _wheelSpec;
 
     std::unordered_map<int, MidiInstrumentEffect> _effectByChannel;
+
+    struct PitchBendInfo {
+        int pitch = 0;
+        int tick = 0;
+    };
+
+    mutable std::unordered_map<uint32_t /*channel*/, PitchBendInfo> m_lastPitchInfoByChan;
 };
 }  // namespace mu::engraving
 
