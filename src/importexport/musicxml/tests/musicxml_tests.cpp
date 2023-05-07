@@ -697,6 +697,9 @@ TEST_F(Musicxml_Tests, multiMeasureRest4) {
 TEST_F(Musicxml_Tests, multipleNotations) {
     mxmlIoTestRef("testMultipleNotations");
 }
+TEST_F(Musicxml_Tests, negativeOctave) {
+    mxmlMscxExportTestRef("testNegativeOctave");
+}
 TEST_F(Musicxml_Tests, nonStandardKeySig1) {
     mxmlIoTest("testNonStandardKeySig1");
 }
