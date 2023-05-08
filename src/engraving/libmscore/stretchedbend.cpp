@@ -22,13 +22,15 @@
 
 #include "stretchedbend.h"
 
+#include "draw/fontmetrics.h"
+
+#include "layout/tlayout.h"
+
 #include "chord.h"
 #include "note.h"
 #include "score.h"
 #include "segment.h"
 #include "tie.h"
-
-#include "draw/fontmetrics.h"
 
 #include "log.h"
 
@@ -242,8 +244,8 @@ void StretchedBend::stretchSegments()
 
 void StretchedBend::layout()
 {
-    m_stretchedMode = false;
-    doLayout();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -252,19 +254,8 @@ void StretchedBend::layout()
 
 void StretchedBend::layoutStretched()
 {
-    m_stretchedMode = true;
-    doLayout();
-}
-
-//---------------------------------------------------------
-//   doLayout
-//---------------------------------------------------------
-
-void StretchedBend::doLayout()
-{
-    preLayout();
-    layoutDraw(true);
-    postLayout();
+    LayoutContext ctx(score());
+    v0::TLayout::layoutStretched(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -382,36 +373,6 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
             break;
         }
     }
-}
-
-//---------------------------------------------------------
-//   preLayout
-//---------------------------------------------------------
-
-void StretchedBend::preLayout()
-{
-    m_spatium = spatium();
-    m_boundingRect = RectF();
-    Note* note = toNote(explicitParent());
-    m_notePos   = note->pos();
-    m_noteWidth = note->width();
-    m_noteHeight = note->height();
-
-    fillArrows();
-    fillSegments();
-    stretchSegments();
-}
-
-//---------------------------------------------------------
-//   postLayout
-//---------------------------------------------------------
-
-void StretchedBend::postLayout()
-{
-    double lw = lineWidth();
-    m_boundingRect.adjust(-lw, -lw, lw, lw);
-    setbbox(m_boundingRect);
-    setPos(0.0, 0.0);
 }
 
 //---------------------------------------------------------

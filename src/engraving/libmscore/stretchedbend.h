@@ -49,7 +49,8 @@ public:
     static void layoutBends(const std::vector<Segment*>& sl);
 
 private:
-    friend class mu::engraving::Factory;
+    friend class v0::TLayout;
+    friend class Factory;
 
     StretchedBend(Note* parent);
 
@@ -59,9 +60,6 @@ private:
     void glueNeighbor(); // fixing the double appearance of some bends
 
     void layoutDraw(const bool layoutMode, mu::draw::Painter* painter = nullptr) const; /// loop for both layout and draw logic
-    void preLayout();
-    void postLayout();
-    void doLayout();
 
     void setupPainter(mu::draw::Painter* painter) const;
     void fillArrows();
