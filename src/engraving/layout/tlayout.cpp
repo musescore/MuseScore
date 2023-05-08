@@ -114,6 +114,7 @@
 #include "../libmscore/stafftypechange.h"
 #include "../libmscore/stem.h"
 #include "../libmscore/stemslash.h"
+#include "../libmscore/sticking.h"
 #include "../libmscore/system.h"
 
 #include "../libmscore/text.h"
@@ -3953,6 +3954,12 @@ void TLayout::layout(StemSlash* item, LayoutContext&)
     item->m_width = item->score()->styleMM(Sid::stemSlashThickness) * graceNoteMag;
     item->setbbox(RectF(item->m_line.p1(), item->m_line.p2()).normalized().adjusted(-item->m_width / 2, -item->m_width / 2, item->m_width,
                                                                                     item->m_width));
+}
+
+void TLayout::layout(Sticking* item, LayoutContext&)
+{
+    item->TextBase::layout();
+    item->autoplaceSegmentElement();
 }
 
 void TLayout::layout(TabDurationSymbol* item, LayoutContext&)
