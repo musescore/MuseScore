@@ -241,6 +241,8 @@ enum class Sid {
     articulationAnchorDefault,
     articulationAnchorLuteFingering,
     articulationAnchorOther,
+    articulationStemHAlign,
+    articulationKeepTogether,
     lastSystemFillLimit,
 
     hairpinPlacement,

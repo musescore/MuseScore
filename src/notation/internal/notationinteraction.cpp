@@ -41,6 +41,7 @@
 #include "engraving/internal/qmimedataadapter.h"
 
 #include "libmscore/actionicon.h"
+#include "libmscore/articulation.h"
 #include "libmscore/bracket.h"
 #include "libmscore/chord.h"
 #include "libmscore/drumset.h"
@@ -1695,6 +1696,16 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             rw400::TRead::readItem(spanner, e, *e.context());
             spanner->styleChanged();
             score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
+        } else if (element->isArticulation() && sel.elements().size() == 1) {
+            // understand adding an articulation to another articulation as adding it to the chord it's attached to
+            EngravingItem* e = sel.elements().front();
+            if (e->isArticulation()) {
+                if (Chord* c = toChord(toArticulation(e)->explicitParent())) {
+                    applyDropPaletteElement(score, c->notes().front(), element, modifiers);
+                }
+            } else {
+                applyDropPaletteElement(score, e, element, modifiers);
+            }
         } else {
             for (EngravingItem* e : sel.elements()) {
                 applyDropPaletteElement(score, e, element, modifiers);
@@ -3827,6 +3838,16 @@ void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationS
     }
 
     std::vector<mu::engraving::Note*> notes = score()->selection().noteList();
+    if (notes.empty()) {
+        // no notes, but maybe they have an articulation selected. we should use that chord
+        EngravingItem* e = score()->selection().element();
+        if (e && e->isArticulation()) {
+            Chord* c = toChord(toArticulation(e)->explicitParent());
+            if (c) {
+                notes.insert(notes.begin(), c->notes().begin(), c->notes().end());
+            }
+        }
+    }
 
     auto updateMode = notesHaveActiculation(notes, articulationSymbolId)
                       ? mu::engraving::ArticulationsUpdateMode::Remove : mu::engraving::ArticulationsUpdateMode::Insert;

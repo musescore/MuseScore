@@ -61,6 +61,14 @@ enum class ArticulationAnchor : char {
     BOTTOM_CHORD,     // attribute is placed at bottom of chord
 };
 
+enum class ArticulationStemSideAlign : char
+{
+    // horizontal align for stem-side articulation layout
+    STEM,                // attribute is placed directly over the stem
+    NOTEHEAD,            // attribute is centered on the notehead
+    AVERAGE,             // attribute is placed at the average of stem pos and notehead center
+};
+
 // flags:
 enum class ArticulationShowIn : char {
     PITCHED_STAFF = 1, TABLATURE = 2
@@ -198,6 +206,7 @@ public:
 
     bool isOrnament() const;
     static bool isOrnament(int subtype);
+    bool isBasicArticulation() const;
 
     void doAutoplace();
 

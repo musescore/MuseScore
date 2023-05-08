@@ -622,6 +622,28 @@ bool Articulation::isOrnament(int subtype)
     return ornaments.find(symId) != ornaments.end();
 }
 
+bool Articulation::isBasicArticulation() const
+{
+    static const std::set<SymId> articulations{
+        SymId::articAccentAbove, SymId::articAccentBelow,
+        SymId::articStaccatoAbove, SymId::articStaccatoBelow,
+        SymId::articTenutoAbove, SymId::articTenutoBelow,
+        SymId::articMarcatoAbove, SymId::articMarcatoBelow,
+
+        SymId::articAccentStaccatoAbove, SymId::articAccentStaccatoBelow,
+        SymId::articMarcatoStaccatoAbove, SymId::articMarcatoStaccatoBelow,
+        SymId::articMarcatoTenutoAbove, SymId::articMarcatoTenutoBelow,
+        SymId::articTenutoStaccatoAbove, SymId::articTenutoStaccatoBelow,
+        SymId::articTenutoAccentAbove, SymId::articTenutoAccentBelow,
+        SymId::articStaccatissimoAbove, SymId::articStaccatissimoBelow,
+        SymId::articStaccatissimoStrokeAbove, SymId::articStaccatissimoStrokeBelow,
+        SymId::articStaccatissimoWedgeAbove, SymId::articStaccatissimoWedgeBelow,
+        SymId::articStressAbove, SymId::articStressBelow
+    };
+    SymId symId = static_cast<SymId>(subtype());
+    return articulations.find(symId) != articulations.end();
+}
+
 //---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
@@ -766,6 +788,14 @@ static std::map<SymId, ArticulationGroup> articulationAboveSplitGroups = {
     { SymId::articMarcatoTenutoAbove, { SymId::articTenutoAbove, SymId::articMarcatoAbove } },
 };
 
+static std::map<SymId, ArticulationGroup> articulationBelowSplitGroups = {
+    { SymId::articAccentStaccatoBelow, { SymId::articStaccatoBelow, SymId::articAccentBelow } },
+    { SymId::articTenutoAccentBelow, { SymId::articTenutoBelow, SymId::articAccentBelow } },
+    { SymId::articTenutoStaccatoBelow, { SymId::articTenutoBelow, SymId::articStaccatoBelow } },
+    { SymId::articMarcatoStaccatoBelow, { SymId::articStaccatoBelow, SymId::articMarcatoBelow } },
+    { SymId::articMarcatoTenutoBelow, { SymId::articTenutoBelow, SymId::articMarcatoBelow } },
+};
+
 static std::map<ArticulationGroup, SymId> articulationAboveJoinGroups = {
     { { SymId::articStaccatoAbove, SymId::articAccentAbove }, SymId::articAccentStaccatoAbove },
     { { SymId::articTenutoAbove, SymId::articAccentAbove }, SymId::articTenutoAccentAbove },
@@ -795,11 +825,20 @@ std::set<SymId> splitArticulations(const std::set<SymId>& articulationSymbolIds)
     for (const SymId& articulationSymbolId: articulationSymbolIds) {
         auto artic = articulationAboveSplitGroups.find(articulationSymbolId);
         if (artic != articulationAboveSplitGroups.end()) {
+            // check above
             ArticulationGroup group = articulationAboveSplitGroups[articulationSymbolId];
             result.insert(group.first);
             result.insert(group.second);
         } else {
-            result.insert(articulationSymbolId);
+            // check below
+            artic = articulationBelowSplitGroups.find(articulationSymbolId);
+            if (artic != articulationBelowSplitGroups.end()) {
+                ArticulationGroup group = articulationBelowSplitGroups[articulationSymbolId];
+                result.insert(group.first);
+                result.insert(group.second);
+            } else {
+                result.insert(articulationSymbolId);
+            }
         }
     }
 
@@ -911,8 +950,9 @@ std::set<SymId> updateArticulations(const std::set<SymId>& articulationSymbolIds
     default:
         break;
     }
-
-    return joinArticulations(splittedArticulations);
+    // we no longer want to join articulations when adding or removing individual ones. combined articulations can still
+    // be added by the palette (which doesn't perform any of this splitting)
+    return splittedArticulations;
 }
 
 std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, PlacementV placement)
