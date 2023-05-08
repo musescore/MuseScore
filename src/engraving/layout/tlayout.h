@@ -115,6 +115,10 @@ class StemSlash;
 class Sticking;
 class StretchedBend;
 
+class BSymbol;
+class Symbol;
+class FSymbol;
+
 class TabDurationSymbol;
 }
 
@@ -220,6 +224,10 @@ public:
     static void layout(Sticking* item, LayoutContext& ctx);
     static void layout(StretchedBend* item, LayoutContext& ctx);
     static void layoutStretched(StretchedBend* item, LayoutContext& ctx);
+
+    static void layoutBaseSymbol(BSymbol* item, LayoutContext& ctx);
+    static void layout(Symbol* item, LayoutContext& ctx);
+    static void layout(FSymbol* item, LayoutContext& ctx);
 
     static void layout(TabDurationSymbol* item, LayoutContext& ctx);
 

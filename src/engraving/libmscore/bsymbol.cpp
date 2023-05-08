@@ -26,6 +26,8 @@
 
 #include "containers.h"
 
+#include "layout/tlayout.h"
+
 #include "factory.h"
 #include "measure.h"
 #include "page.h"
@@ -141,16 +143,8 @@ EngravingItem* BSymbol::drop(EditData& data)
 
 void BSymbol::layout()
 {
-    if (staff()) {
-        setMag(staff()->staffMag(tick()));
-    }
-    if (!explicitParent()) {
-        setOffset(.0, .0);
-        setPos(.0, .0);
-    }
-    for (EngravingItem* e : _leafs) {
-        e->layout();
-    }
+    LayoutContext ctx(score());
+    v0::TLayout::layoutBaseSymbol(this, ctx);
 }
 
 //---------------------------------------------------------
