@@ -102,6 +102,10 @@ mkdir -p "$qt_sql_drivers_tmp"
 mv "${qt_sql_drivers_path}/libqsqlmysql.so" "${qt_sql_drivers_tmp}/libqsqlmysql.so"
 mv "${qt_sql_drivers_path}/libqsqlpsql.so" "${qt_sql_drivers_tmp}/libqsqlpsql.so"
 
+# Semicolon-separated list of platforms to deploy in addition to `libqxcb.so`.
+# Used by linuxdeploy-plugin-qt.
+export EXTRA_PLATFORM_PLUGINS=libqoffscreen.so
+
 # Colon-separated list of root directories containing QML files.
 # Needed for linuxdeploy-plugin-qt to scan for QML imports.
 # Qml files can be in different directories, the qmlimportscanner will go through everything recursively.
