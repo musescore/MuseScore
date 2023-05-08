@@ -25,6 +25,10 @@
 #include <QPainter>
 
 #include "audio/iplayer.h"
+#include "libmscore/property.h"
+#include "libmscore/staff.h"
+#include "libmscore/animationtrack.h"
+#include "libmscore/animationkey.h"
 
 using namespace mu::pianoroll;
 
@@ -80,6 +84,27 @@ void PianorollAutomationCurves::onSelectionChanged()
 
 void PianorollAutomationCurves::buildNoteData()
 {
+    notation::INotationPtr notation = globalContext()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    Ms::Score* curScore = score();
+
+    m_selectedStaves.clear();
+    std::vector<Ms::EngravingItem*> selectedElements = notation->interaction()->selection()->elements();
+    for (Ms::EngravingItem* e: selectedElements) {
+        int idx = e->staffIdx();
+        m_activeStaff = idx;
+        if (std::find(m_selectedStaves.begin(), m_selectedStaves.end(), idx) == m_selectedStaves.end()) {
+            m_selectedStaves.push_back(idx);
+        }
+    }
+
+    if (m_activeStaff == -1) {
+        m_activeStaff = 0;
+    }
+
 }
 
 Ms::Score* PianorollAutomationCurves::score()
@@ -340,6 +365,38 @@ void PianorollAutomationCurves::paint(QPainter* p)
                 p->drawLine(x, 0, x, height());
             }
         }
+    }
+
+    //------------------
+    //Draw note data
+    staff = activeStaff();
+    if (!staff)
+        return;
+
+    Ms::Pid id = Ms::Pid::END;
+    if (!m_propertyName.isEmpty())
+        id = Ms::propertyId(m_propertyName);
+
+    if (id == Ms::Pid::END)
+        return;
+
+//    QVariant vmax = Ms::propertyMaxValue(id);
+//    QVariant vmin = Ms::propertyMinValue(id);
+//    QVariant vdef = Ms::propertyDefaultValue(id);
+
+    double pMax = Ms::propertyMaxValue(id).toDouble();
+    double pMin = Ms::propertyMinValue(id).toDouble();
+    double pDef = Ms::propertyDefaultValue(id).toDouble();
+
+    const QPen penDataLine = QPen(m_colorDataLine, 1.0, Qt::SolidLine);
+    p->setPen(penDataLine);
+
+    Ms::AnimationTrack* track = staff->getAnimationTrack(m_propertyName);
+    if (!track)
+    {
+        //Draw line at default level
+        double y = valueToPixY(pDef, pMin, pMax);
+        p->drawLine(x1, y, x2, y);
     }
 }
 

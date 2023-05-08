@@ -52,6 +52,7 @@
 #include "factory.h"
 #include "fret.h"
 #include "linkedobjects.h"
+#include "animationtrack.h"
 #include "masterscore.h"
 #include "measure.h"
 #include "mscore.h"
@@ -800,6 +801,20 @@ bool EngravingItem::contains(const mu::PointF& p) const
 bool EngravingItem::intersects(const RectF& rr) const
 {
     return shape().intersects(rr.translated(-pagePos()));
+}
+
+//---------------------------------------------------------
+//   getAnimationTrack
+//---------------------------------------------------------
+
+AnimationTrack* EngravingItem::getAnimationTrack(const QString& propertyName)
+{
+    for (AnimationTrack* track: _animationTracks)
+    {
+        if (track->propertyName() == propertyName)
+            return track;
+    }
+    return nullptr;
 }
 
 //---------------------------------------------------------

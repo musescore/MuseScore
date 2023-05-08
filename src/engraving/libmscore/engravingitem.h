@@ -339,6 +339,7 @@ public:
 
     const QList<AnimationTrack*>& animationTracks() const { return _animationTracks; }
     QList<AnimationTrack*>& animationTracks() { return _animationTracks; }
+    AnimationTrack* getAnimationTrack(const QString& propertyName);
     void insertAnimationTrack(AnimationTrack* track, int index);
     void moveAnimationTrack(int indexFrom, int indexTo);
     void deleteAnimationTrack(int index);

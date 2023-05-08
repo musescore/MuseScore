@@ -83,31 +83,31 @@ ColumnLayout {
 //                    case Display.VELOCITY:
                     {
                         noteTweak = true;
-                        automationEditor.automationType = PianorollAutomationNote.VELOCITY;
+                        automationNotes.automationType = PianorollAutomationNote.VELOCITY;
                         break;
                     }
                     case PianorollAutomationRow.Shape.VelocityAbs:
                     {
                         noteTweak = true;
-                        automationEditor.automationType = PianorollAutomationNote.VELOCITY_ABS;
+                        automationNotes.automationType = PianorollAutomationNote.VELOCITY_ABS;
                         break;
                     }
                     case PianorollAutomationRow.Shape.Position:
                     {
                         noteTweak = true;
-                        automationEditor.automationType = PianorollAutomationNote.POSITION;
+                        automationNotes.automationType = PianorollAutomationNote.POSITION;
                         break;
                     }
                     case PianorollAutomationRow.Shape.Duration:
                     {
                         noteTweak = true;
-                        automationEditor.automationType = PianorollAutomationNote.DURATION;
+                        automationNotes.automationType = PianorollAutomationNote.DURATION;
                         break;
                     }
                     case PianorollAutomationRow.Shape.DurationMult:
                     {
                         noteTweak = true;
-                        automationEditor.automationType = PianorollAutomationNote.DURATION_MULT;
+                        automationNotes.automationType = PianorollAutomationNote.DURATION_MULT;
                         break;
                     }
                     case PianorollAutomationRow.Shape.Expression:
@@ -124,11 +124,11 @@ ColumnLayout {
 
                     if (noteTweak)
                     {
-                        automationEditor.visible = true
+                        automationNotes.visible = true
                         automationCurves.visible = false
                     }
                     else {
-                        automationEditor.visible = false
+                        automationNotes.visible = false
                         automationCurves.visible = true
                     }
 
@@ -152,7 +152,7 @@ ColumnLayout {
         }
 
         PianorollAutomationNote {
-            id: automationEditor
+            id: automationNotes
             Layout.preferredWidth: m_graphWidth
             Layout.fillHeight: true
 

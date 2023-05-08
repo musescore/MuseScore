@@ -132,6 +132,7 @@ private:
     QColor m_colorVertexFill = QColor(0xffffff);
     QColor m_colorVertexLine = Qt::black;
     QColor m_colorGraphFill = QColor(0x80, 0x9b, 0xcd, 0x80);
+    QColor m_colorDataLine = Qt::black;
 };
 }
 
