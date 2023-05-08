@@ -111,6 +111,7 @@
 #include "../libmscore/staffstate.h"
 #include "../libmscore/stafftext.h"
 #include "../libmscore/stafftype.h"
+#include "../libmscore/stafftypechange.h"
 #include "../libmscore/stem.h"
 #include "../libmscore/system.h"
 
@@ -3810,6 +3811,18 @@ void TLayout::layout(StaffText* item, LayoutContext&)
 {
     item->TextBase::layout();
     item->autoplaceSegmentElement();
+}
+
+void TLayout::layout(StaffTypeChange* item, LayoutContext&)
+{
+    double _spatium = item->score()->spatium();
+    item->setbbox(RectF(-item->m_lw * .5, -item->m_lw * .5, _spatium * 2.5 + item->m_lw, _spatium * 2.5 + item->m_lw));
+    if (item->measure()) {
+        double y = -1.5 * _spatium - item->height() + item->measure()->system()->staff(item->staffIdx())->y();
+        item->setPos(_spatium * .8, y);
+    } else {
+        item->setPos(0.0, 0.0);
+    }
 }
 
 void TLayout::layout(TabDurationSymbol* item, LayoutContext&)

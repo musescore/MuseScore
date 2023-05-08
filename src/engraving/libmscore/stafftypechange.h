@@ -37,18 +37,6 @@ class StaffTypeChange final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, StaffTypeChange)
     DECLARE_CLASSOF(ElementType::STAFFTYPE_CHANGE)
 
-    StaffType* m_staffType { nullptr };
-    bool m_ownsStaffType = false;
-    double lw;
-
-    friend class Factory;
-    StaffTypeChange(MeasureBase* parent = 0);
-    StaffTypeChange(const StaffTypeChange&);
-
-    void layout() override;
-    void spatiumChanged(double oldValue, double newValue) override;
-    void draw(mu::draw::Painter*) const override;
-
 public:
     ~StaffTypeChange() override;
 
@@ -62,6 +50,21 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
+
+private:
+
+    friend class v0::TLayout;
+    friend class Factory;
+    StaffTypeChange(MeasureBase* parent = 0);
+    StaffTypeChange(const StaffTypeChange&);
+
+    void layout() override;
+    void spatiumChanged(double oldValue, double newValue) override;
+    void draw(mu::draw::Painter*) const override;
+
+    StaffType* m_staffType { nullptr };
+    bool m_ownsStaffType = false;
+    double m_lw = 0.0;
 };
 } // namespace mu::engraving
 

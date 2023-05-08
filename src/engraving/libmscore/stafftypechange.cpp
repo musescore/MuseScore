@@ -22,6 +22,8 @@
 
 #include "stafftypechange.h"
 
+#include "layout/tlayout.h"
+
 #include "score.h"
 #include "measure.h"
 #include "system.h"
@@ -40,13 +42,13 @@ namespace mu::engraving {
 StaffTypeChange::StaffTypeChange(MeasureBase* parent)
     : EngravingItem(ElementType::STAFFTYPE_CHANGE, parent, ElementFlag::HAS_TAG)
 {
-    lw = spatium() * 0.3;
+    m_lw = spatium() * 0.3;
 }
 
 StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb)
     : EngravingItem(lb)
 {
-    lw = lb.lw;
+    m_lw = lb.m_lw;
     m_ownsStaffType = lb.m_ownsStaffType;
     if (lb.m_ownsStaffType && lb.m_staffType) {
         m_staffType = new StaffType(*lb.m_staffType);
@@ -78,7 +80,7 @@ void StaffTypeChange::setStaffType(StaffType* st, bool owned)
 
 void StaffTypeChange::spatiumChanged(double, double)
 {
-    lw = spatium() * 0.3;
+    m_lw = spatium() * 0.3;
 }
 
 //---------------------------------------------------------
@@ -87,14 +89,8 @@ void StaffTypeChange::spatiumChanged(double, double)
 
 void StaffTypeChange::layout()
 {
-    double _spatium = score()->spatium();
-    setbbox(RectF(-lw * .5, -lw * .5, _spatium * 2.5 + lw, _spatium * 2.5 + lw));
-    if (measure()) {
-        double y = -1.5 * _spatium - height() + measure()->system()->staff(staffIdx())->y();
-        setPos(_spatium * .8, y);
-    } else {
-        setPos(0.0, 0.0);
-    }
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -114,7 +110,7 @@ void StaffTypeChange::draw(mu::draw::Painter* painter) const
     double lineDist = 0.35;           // line distance for the icon 'staff lines'
     // draw icon rectangle
     painter->setPen(Pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
-                        lw, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
+                        m_lw, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawRect(0, 0, w, h);
 
