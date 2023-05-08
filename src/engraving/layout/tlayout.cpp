@@ -109,6 +109,7 @@
 #include "../libmscore/staff.h"
 #include "../libmscore/stafflines.h"
 #include "../libmscore/staffstate.h"
+#include "../libmscore/stafftext.h"
 #include "../libmscore/stem.h"
 #include "../libmscore/system.h"
 
@@ -3757,7 +3758,7 @@ void TLayout::layout(StaffState* item, LayoutContext&)
     double w  = _spatium * 2.5;
 //      double w1 = w * .6;
 
-    PainterPath& path = item->m_path;
+    PainterPath path;
     switch (item->staffStateType()) {
     case StaffStateType::INSTRUMENT:
         path.lineTo(w, 0.0);
@@ -3795,8 +3796,17 @@ void TLayout::layout(StaffState* item, LayoutContext&)
         LOGD("unknown layout break symbol");
         break;
     }
+
+    item->m_path = path;
+
     RectF bb(0, 0, w, h);
     bb.adjust(-item->m_lw, -item->m_lw, item->m_lw, item->m_lw);
     item->setbbox(bb);
     item->setPos(0.0, _spatium * -6.0);
+}
+
+void TLayout::layout(StaffText* item, LayoutContext&)
+{
+    item->TextBase::layout();
+    item->autoplaceSegmentElement();
 }

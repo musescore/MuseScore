@@ -108,6 +108,7 @@ class SLine;
 class Slur;
 class StaffLines;
 class StaffState;
+class StaffText;
 }
 
 namespace mu::engraving::v0 {
@@ -205,6 +206,7 @@ public:
     static void layout(StaffLines* item, LayoutContext& ctx);
     static void layoutForWidth(StaffLines* item, double w, LayoutContext& ctx);
     static void layout(StaffState* item, LayoutContext& ctx);
+    static void layout(StaffText* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
