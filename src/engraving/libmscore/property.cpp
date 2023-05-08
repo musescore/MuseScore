@@ -599,5 +599,4 @@ QVariant propertyDefaultValue(Pid id)
     }
     return QVariant();
 }
-
 }

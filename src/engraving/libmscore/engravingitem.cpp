@@ -804,19 +804,6 @@ bool EngravingItem::intersects(const RectF& rr) const
 }
 
 //---------------------------------------------------------
-//   getAnimationTrack
-//---------------------------------------------------------
-
-AnimationTrack* EngravingItem::getAnimationTrack(const QString& propertyName)
-{
-    if (_animationTracks.contains(propertyName))
-    {
-        return _animationTracks[propertyName];
-    }
-    return nullptr;
-}
-
-//---------------------------------------------------------
 //   insertAutomationTrack
 //---------------------------------------------------------
 

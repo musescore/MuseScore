@@ -38,7 +38,6 @@ struct KeyBlock
     Ms::AnimationKey* key;
 };
 
-
 PianorollAutomationCurves::PianorollAutomationCurves(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
@@ -131,7 +130,6 @@ void PianorollAutomationCurves::buildNoteData()
 //            m_keyBlocks.push_back(new KeyBlock{key});
 //        }
 //    }
-
 }
 
 Ms::Score* PianorollAutomationCurves::score()
@@ -266,15 +264,18 @@ double PianorollAutomationCurves::pixelXToWholeNote(int pixX) const
 Ms::AnimationTrack* PianorollAutomationCurves::getAnimationTrack()
 {
     Ms::Staff* staff = activeStaff();
-    if (!staff)
+    if (!staff) {
         return nullptr;
+    }
 
     Ms::Pid id = Ms::Pid::END;
-    if (!m_propertyName.isEmpty())
+    if (!m_propertyName.isEmpty()) {
         id = Ms::propertyId(m_propertyName);
+    }
 
-    if (id == Ms::Pid::END)
+    if (id == Ms::Pid::END) {
         return nullptr;
+    }
 
     Ms::AnimationTrack* track = staff->getAnimationTrack(m_propertyName);
     return track;
@@ -283,22 +284,24 @@ Ms::AnimationTrack* PianorollAutomationCurves::getAnimationTrack()
 Ms::AnimationKey* PianorollAutomationCurves::pickKey(QPointF point)
 {
     Ms::Staff* staff = activeStaff();
-    if (!staff)
+    if (!staff) {
         return nullptr;
+    }
 
     Ms::Pid id = Ms::Pid::END;
-    if (!m_propertyName.isEmpty())
+    if (!m_propertyName.isEmpty()) {
         id = Ms::propertyId(m_propertyName);
+    }
 
     double pMax = Ms::propertyMaxValue(id).toDouble();
     double pMin = Ms::propertyMinValue(id).toDouble();
 
     Ms::AnimationTrack* track = getAnimationTrack();
-    if (!track)
+    if (!track) {
         return nullptr;
+    }
 
-    for (Ms::AnimationKey* key: track->keys())
-    {
+    for (Ms::AnimationKey* key: track->keys()) {
         int x = wholeNoteToPixelX(key->tick());
         int y = valueToPixY(key->value(), pMin, pMax);
 
@@ -311,20 +314,23 @@ Ms::AnimationKey* PianorollAutomationCurves::pickKey(QPointF point)
     return nullptr;
 }
 
-void PianorollAutomationCurves::mouseDoubleClickEvent(QMouseEvent *event)
+void PianorollAutomationCurves::mouseDoubleClickEvent(QMouseEvent* event)
 {
     Ms::Score* curScore = score();
     Ms::Staff* staff = activeStaff();
 
-    if (!staff)
+    if (!staff) {
         return;
+    }
 
     Ms::Pid id = Ms::Pid::END;
-    if (!m_propertyName.isEmpty())
+    if (!m_propertyName.isEmpty()) {
         id = Ms::propertyId(m_propertyName);
+    }
 
-    if (id == Ms::Pid::END)
+    if (id == Ms::Pid::END) {
         return;
+    }
     double pMax = Ms::propertyMaxValue(id).toDouble();
     double pMin = Ms::propertyMinValue(id).toDouble();
 
@@ -342,8 +348,7 @@ void PianorollAutomationCurves::mouseDoubleClickEvent(QMouseEvent *event)
     Ms::Fraction tickFrac(floor(tick * Ms::MScore::division), Ms::MScore::division);
 
     Ms::AnimationTrack* track = staff->getAnimationTrack(m_propertyName);
-    if (!track)
-    {
+    if (!track) {
         track = staff->createAnimationTrack(m_propertyName);
     }
     track->addKey(tickFrac, val);
@@ -363,8 +368,7 @@ void PianorollAutomationCurves::mousePressEvent(QMouseEvent* e)
 
 void PianorollAutomationCurves::mouseReleaseEvent(QMouseEvent* e)
 {
-    if (m_dragging)
-    {
+    if (m_dragging) {
         finishDrag();
     }
 
@@ -378,15 +382,18 @@ void PianorollAutomationCurves::finishDrag()
     Ms::Score* curScore = score();
     Ms::Staff* staff = activeStaff();
 
-    if (!staff)
+    if (!staff) {
         return;
+    }
 
     Ms::Pid id = Ms::Pid::END;
-    if (!m_propertyName.isEmpty())
+    if (!m_propertyName.isEmpty()) {
         id = Ms::propertyId(m_propertyName);
+    }
 
-    if (id == Ms::Pid::END)
+    if (id == Ms::Pid::END) {
         return;
+    }
     double pMax = Ms::propertyMaxValue(id).toDouble();
     double pMin = Ms::propertyMinValue(id).toDouble();
 
@@ -507,15 +514,18 @@ void PianorollAutomationCurves::paint(QPainter* p)
     //------------------
     //Draw note data
     staff = activeStaff();
-    if (!staff)
+    if (!staff) {
         return;
+    }
 
     Ms::Pid id = Ms::Pid::END;
-    if (!m_propertyName.isEmpty())
+    if (!m_propertyName.isEmpty()) {
         id = Ms::propertyId(m_propertyName);
+    }
 
-    if (id == Ms::Pid::END)
+    if (id == Ms::Pid::END) {
         return;
+    }
 
     double pMax = Ms::propertyMaxValue(id).toDouble();
     double pMin = Ms::propertyMinValue(id).toDouble();
@@ -527,8 +537,7 @@ void PianorollAutomationCurves::paint(QPainter* p)
     double yDefault = valueToPixY(pDef, pMin, pMax);
 
     Ms::AnimationTrack* track = staff->getAnimationTrack(m_propertyName);
-    if (!track)
-    {
+    if (!track) {
         //Draw line at default level
         p->drawLine(x1, yDefault, x2, yDefault);
         return;
@@ -536,20 +545,19 @@ void PianorollAutomationCurves::paint(QPainter* p)
 
     //Find screen coords of keys in sorted order
     std::map<int, QPoint> points;
-    for (Ms::AnimationKey* key: track->keys())
-    {
+    for (Ms::AnimationKey* key: track->keys()) {
         int y = valueToPixY(key->value(), pMin, pMax);
         int x = wholeNoteToPixelX(key->tick());
 
-        if (m_dragging && key == m_draggedKey)
+        if (m_dragging && key == m_draggedKey) {
             continue;
+        }
 
         points[key->tick().ticks()] = QPoint(x, y);
     }
 
     //Special handling for dragged key
-    if (m_dragging)
-    {
+    if (m_dragging) {
         double endTicks = end.numerator() / (double)end.denominator();
 
         double val = pixYToValue(m_lastMousePos.y(), pMin, pMax);
@@ -566,8 +574,7 @@ void PianorollAutomationCurves::paint(QPainter* p)
 
     //Draw lines between points
     QPoint prev((int)x1, (int)yDefault);
-    for (auto it = points.begin(); it != points.end(); ++it)
-    {
+    for (auto it = points.begin(); it != points.end(); ++it) {
         QPoint cur = (*it).second;
         p->drawLine(prev, cur);
         prev = (*it).second;
@@ -575,8 +582,7 @@ void PianorollAutomationCurves::paint(QPainter* p)
     p->drawLine(prev, QPoint(x2, prev.y()));
 
     //Draw vertices
-    for (auto it = points.begin(); it != points.end(); ++it)
-    {
+    for (auto it = points.begin(); it != points.end(); ++it) {
         int x0 = (*it).second.x();
         int y = (*it).second.y();
 

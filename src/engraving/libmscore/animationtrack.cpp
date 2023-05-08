@@ -69,8 +69,7 @@ bool AnimationTrack::isKeyAt(Fraction tick)
 void AnimationTrack::addKey(Fraction tick, float value)
 {
     int index = keyIndexForTick(tick);
-    if (index == -1)
-    {
+    if (index == -1) {
         AnimationKey* key = new AnimationKey(this);
         key->setValue(value);
         key->setTick(tick);
@@ -79,8 +78,7 @@ void AnimationTrack::addKey(Fraction tick, float value)
     }
 
     AnimationKey* keyIndex = _keys[index];
-    if (keyIndex->tick() == tick)
-    {
+    if (keyIndex->tick() == tick) {
         keyIndex->setValue(value);
     }
 
@@ -93,12 +91,12 @@ void AnimationTrack::addKey(Fraction tick, float value)
 void AnimationTrack::removeKey(Fraction tick)
 {
     int index = keyIndexForTick(tick);
-    if (index == -1)
+    if (index == -1) {
         return;
+    }
 
     AnimationKey* key = _keys[index];
-    if (key->tick() == tick)
-    {
+    if (key->tick() == tick) {
         _keys.removeAt(index);
         delete key;
     }
@@ -107,15 +105,13 @@ void AnimationTrack::removeKey(Fraction tick)
 float AnimationTrack::evaluate(Fraction tick)
 {
     int index = keyIndexForTick(tick);
-    if (index == -1)
-    {
+    if (index == -1) {
         Pid id = propertyId(_propertyName);
         double defaultValue = propertyDefaultValue(id).toDouble();
         return defaultValue;
     }
 
-    if (index == _keys.length() - 1)
-    {
+    if (index == _keys.length() - 1) {
         AnimationKey* k0 = _keys[index];
         return k0->value();
     }
@@ -133,5 +129,4 @@ float AnimationTrack::evaluate(Fraction tick)
     double ratio = (tmd - t0d) / (t1d - t0d);
     return (k1->value() - k0->value()) * ratio + k0->value();
 }
-
 }
