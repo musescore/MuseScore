@@ -761,7 +761,10 @@ void Instrument::updateGateTime(int* gateTime, int /*channelIdx*/, const String&
 {
     for (const MidiArticulation& a : _articulation) {
         if (a.name == name) {
-            *gateTime = a.gateTime;
+            // Imagine ["staccato", "accent"] articulations
+            // accent will override the gate time,
+            // so we have to take the minimum value from all articulations
+            *gateTime = std::min(*gateTime, a.gateTime);
             break;
         }
     }
