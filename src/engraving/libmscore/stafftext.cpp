@@ -22,6 +22,8 @@
 
 #include "stafftext.h"
 
+#include "layout/tlayout.h"
+
 using namespace mu;
 
 namespace mu::engraving {
@@ -50,8 +52,8 @@ StaffText::StaffText(Segment* parent, TextStyleType tid)
 
 void StaffText::layout()
 {
-    TextBase::layout();
-    autoplaceSegmentElement();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
