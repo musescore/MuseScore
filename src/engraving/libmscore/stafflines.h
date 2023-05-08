@@ -38,12 +38,6 @@ class StaffLines final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, StaffLines)
 
-    double lw { 0.0 };
-    std::vector<mu::LineF> lines;
-
-    friend class Factory;
-    StaffLines(Measure* parent);
-
 public:
 
     StaffLines* clone() const override { return new StaffLines(*this); }
@@ -55,13 +49,21 @@ public:
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    std::vector<mu::LineF>& getLines() { return lines; }
+    std::vector<mu::LineF>& getLines() { return m_lines; }
     Measure* measure() const { return (Measure*)explicitParent(); }
     double y1() const;
     void layoutForWidth(double width);
     void layoutPartialWidth(double w, double wPartial, bool alignLeft);
     RectF hitBBox() const override;
     Shape hitShape() const override;
+
+private:
+    friend class v0::TLayout;
+    friend class Factory;
+    StaffLines(Measure* parent);
+
+    double m_lw = 0.0;
+    std::vector<mu::LineF> m_lines;
 };
 }
 
