@@ -1506,6 +1506,11 @@ bool GuitarPro5::readNote(int string, Note* note)
             }
             segment = segment->prev1(SegmentType::ChordRest);
         }
+
+        if (true_note && true_note->chord()->notes().size() > 1) {
+            addTiesToHarmonics(true_note);
+        }
+
         if (true_note && chords.size()) {
             Note* end_note = note;
             for (unsigned int i = 0; i < chords.size(); ++i) {
@@ -1561,6 +1566,58 @@ bool GuitarPro5::readNote(int string, Note* note)
     }
     dead_end[{ static_cast<int>(note->staffIdx()), string }] = false;
     return slur;
+}
+
+void GuitarPro5::addTiesToHarmonics(Note* note)
+{
+    std::vector<Note*> harmonicNotes;
+    Chord* chord = note->chord();
+    Note* refNote = nullptr;
+    for (Note* n : chord->notes()) {
+        if (n->harmonic()) {
+            harmonicNotes.push_back(n);
+        } else {
+            harmonicNotes.push_back(nullptr);
+            refNote = n;
+        }
+    }
+
+    Tie* tie = nullptr;
+    Note* newNote = nullptr;
+    int harmonicPitch = -1;
+    for (size_t i = 0; i < harmonicNotes.size(); ++i) {
+        if (!harmonicNotes.at(i)) {
+            continue;
+        }
+        newNote = harmonicNotes.at(i);
+        harmonicPitch = newNote->pitch();
+        tie = Factory::createTie(newNote);
+        tie->setStartNote(newNote);
+        newNote->setTieFor(tie);
+        refNote = refNote->tieFor()->endNote();
+        if (!refNote) {
+            continue;
+        }
+        do {
+            newNote = Factory::createNote(refNote->chord());
+            newNote->setHarmonic(true);
+            newNote->setPitch(harmonicPitch);
+            newNote->setTpcFromPitch();
+            refNote->chord()->add(newNote);
+            newNote->setPlay(true);
+            if (tie) {
+                tie->setEndNote(newNote);
+                newNote->setTieBack(tie);
+            }
+            if (!refNote->tieFor()) {
+                break;
+            }
+            tie = Factory::createTie(newNote);
+            tie->setStartNote(newNote);
+            newNote->setTieFor(tie);
+            refNote = refNote->tieFor()->endNote();
+        } while (refNote->tieFor());
+    }
 }
 
 float GuitarPro5::naturalHarmonicFromFret(int fret)
