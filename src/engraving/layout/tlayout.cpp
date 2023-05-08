@@ -115,6 +115,7 @@
 #include "../libmscore/stem.h"
 #include "../libmscore/stemslash.h"
 #include "../libmscore/sticking.h"
+#include "../libmscore/stretchedbend.h"
 #include "../libmscore/system.h"
 
 #include "../libmscore/text.h"
@@ -3960,6 +3961,45 @@ void TLayout::layout(Sticking* item, LayoutContext&)
 {
     item->TextBase::layout();
     item->autoplaceSegmentElement();
+}
+
+void TLayout::layout(StretchedBend* item, LayoutContext& ctx)
+{
+    doLayout(item, ctx, false);
+}
+
+void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
+{
+    doLayout(item, ctx, true);
+}
+
+void TLayout::doLayout(StretchedBend* item, LayoutContext&, bool stretchedMode)
+{
+    item->m_stretchedMode = stretchedMode;
+
+    // preLayout
+    {
+        item->m_spatium = item->spatium();
+        item->m_boundingRect = RectF();
+        Note* note = toNote(item->explicitParent());
+        item->m_notePos   = note->pos();
+        item->m_noteWidth = note->width();
+        item->m_noteHeight = note->height();
+
+        item->fillArrows();
+        item->fillSegments();
+        item->stretchSegments();
+    }
+
+    item->layoutDraw(true);
+
+    // postLayout
+    {
+        double lw = item->lineWidth();
+        item->m_boundingRect.adjust(-lw, -lw, lw, lw);
+        item->setbbox(item->m_boundingRect);
+        item->setPos(0.0, 0.0);
+    }
 }
 
 void TLayout::layout(TabDurationSymbol* item, LayoutContext&)
