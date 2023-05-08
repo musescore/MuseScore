@@ -3825,6 +3825,72 @@ void TLayout::layout(StaffTypeChange* item, LayoutContext&)
     }
 }
 
+void TLayout::layout(Stem* item, LayoutContext&)
+{
+    const bool up = item->up();
+    const double _up = up ? -1.0 : 1.0;
+
+    double y1 = 0.0; // vertical displacement to match note attach point
+    double y2 = _up * (item->length());
+
+    bool isTabStaff = false;
+    if (item->chord()) {
+        item->setMag(item->chord()->mag());
+
+        const Staff* staff = item->staff();
+        const StaffType* staffType = staff ? staff->staffTypeForElement(item->chord()) : nullptr;
+        isTabStaff = staffType && staffType->isTabStaff();
+
+        if (isTabStaff) {
+            if (staffType->stemThrough()) {
+                // if stems through staves, gets Y pos. of stem-side note relative to chord other side
+                const double staffLinesDistance = staffType->lineDistance().val() * item->spatium();
+                y1 = (item->chord()->downString() - item->chord()->upString()) * _up * staffLinesDistance;
+
+                // if fret marks above lines, raise stem beginning by 1/2 line distance
+                if (!staffType->onLines()) {
+                    y1 -= staffLinesDistance * 0.5;
+                }
+
+                // shorten stem by 1/2 lineDist to clear the note and a little more to keep 'air' between stem and note
+                y1 += _up * staffLinesDistance * 0.7;
+            }
+            // in other TAB types, no correction
+        } else { // non-TAB
+            // move stem start to note attach point
+            Note* note = up ? item->chord()->downNote() : item->chord()->upNote();
+            if ((up && !note->mirror()) || (!up && note->mirror())) {
+                y1 = note->stemUpSE().y();
+            } else {
+                y1 = note->stemDownNW().y();
+            }
+
+            item->setPosY(note->ypos());
+        }
+
+        if (item->chord()->hook() && !item->chord()->beam()) {
+            y2 += item->chord()->hook()->smuflAnchor().y();
+        }
+
+        if (item->chord()->beam()) {
+            y2 -= _up * item->point(item->score()->styleS(Sid::beamWidth)) * .5 * item->chord()->beam()->mag();
+        }
+    }
+
+    double lineWidthCorrection = item->lineWidthMag() * 0.5;
+    double lineX = isTabStaff ? 0.0 : _up * lineWidthCorrection;
+
+    LineF line = LineF(lineX, y1, lineX, y2);
+    item->setLine(line);
+
+    // HACK: if there is a beam, extend the bounding box of the stem (NOT the stem itself) by half beam width.
+    // This way the bbox of the stem covers also the beam position. Hugely helps with all the collision checks.
+    double beamCorrection = (item->chord() && item->chord()->beam()) ? _up * item->score()->styleMM(Sid::beamWidth) * item->mag() / 2 : 0.0;
+    // compute line and bounding rectangle
+    RectF rect(line.p1(), line.p2() + PointF(0.0, beamCorrection));
+    item->setbbox(rect.normalized().adjusted(-lineWidthCorrection, 0, lineWidthCorrection, 0));
+}
+
 void TLayout::layout(TabDurationSymbol* item, LayoutContext&)
 {
     static constexpr double TAB_RESTSYMBDISPL = 2.0;
