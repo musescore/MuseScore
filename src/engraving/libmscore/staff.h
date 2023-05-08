@@ -108,8 +108,6 @@ private:
     bool _playbackVoice[VOICES] { true, true, true, true };
     std::array<bool, VOICES> _visibilityVoices { true, true, true, true };
 
-    QList<AnimationTrack*> _automationTracks;
-
     ChangeMap _velocities;           ///< cached value
     ChangeMap _velocityMultiplications;         ///< cached value
     PitchList _pitchOffsets;        ///< cached value

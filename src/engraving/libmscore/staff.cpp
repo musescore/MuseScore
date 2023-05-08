@@ -114,39 +114,6 @@ void Staff::triggerLayout(const Fraction& tick)
 }
 
 //---------------------------------------------------------
-//   insertAutomationTrack
-//---------------------------------------------------------
-
-void Staff::insertAutomationTrack(AnimationTrack* track, int index)
-{
-    _automationTracks.insert(index, track);
-}
-
-//---------------------------------------------------------
-//   moveAutomationTrack
-//---------------------------------------------------------
-
-void Staff::moveAutomationTrack(int indexFrom, int indexTo)
-{
-    AnimationTrack* track = _automationTracks.at(indexFrom);
-    _automationTracks.removeAt(indexFrom);
-
-    _automationTracks.insert(indexTo, track);
-}
-
-//---------------------------------------------------------
-//   deleteAutomationTrack
-//---------------------------------------------------------
-
-void Staff::deleteAutomationTrack(int index)
-{
-    AnimationTrack* track = _automationTracks.at(index);
-    _automationTracks.removeAt(index);
-
-    delete track;
-}
-
-//---------------------------------------------------------
 //   fillBrackets
 //    make sure index idx is valid
 //---------------------------------------------------------

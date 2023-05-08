@@ -802,7 +802,40 @@ bool EngravingItem::intersects(const RectF& rr) const
     return shape().intersects(rr.translated(-pagePos()));
 }
 
-bool EngravingItem::hitShapeContains(const PointF& p) const
+//---------------------------------------------------------
+//   insertAnimationTrack
+//---------------------------------------------------------
+
+void EngravingItem::insertAnimationTrack(AnimationTrack* track, int index)
+{
+    _animationTracks.insert(index, track);
+}
+
+//---------------------------------------------------------
+//   moveAnimationTrack
+//---------------------------------------------------------
+
+void EngravingItem::moveAnimationTrack(int indexFrom, int indexTo)
+{
+    AnimationTrack* track = _animationTracks.at(indexFrom);
+    _animationTracks.removeAt(indexFrom);
+
+    _animationTracks.insert(indexTo, track);
+}
+
+//---------------------------------------------------------
+//   deleteAnimationTrack
+//---------------------------------------------------------
+
+void EngravingItem::deleteAnimationTrack(int index)
+{
+    AnimationTrack* track = _animationTracks.at(index);
+    _animationTracks.removeAt(index);
+
+    delete track;
+}
+
+bool EngravingItem::hitShapeContains(const PointF & p) const
 {
     return hitShape().contains(p - pagePos());
 }
