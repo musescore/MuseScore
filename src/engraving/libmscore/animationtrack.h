@@ -30,12 +30,9 @@ namespace Ms {
 class Staff;
 class AnimationKey;
 
-
-class AnimationTrack : public EngravingItem
+class AnimationTrack
 {
-//    AutomationDataType _dataType = AutomationDataType::INVALID;
     QString _propertyName;
-//    bool _enabled = true;
 
     QList<AnimationKey*> _keys;
 
@@ -46,19 +43,17 @@ public:
 
     AnimationTrack& operator=(const BarLine&) = delete;
 
-//    AutomationDataType dataType() const { return _dataType; }
-//    void setDataType(AutomationDataType value);
-//    bool enabled() const { return _enabled; }
-//    void setEnabled(bool value);
     QString propertyName() const { return _propertyName; }
     void setPropertyName(QString value);
 
-    const QList<AnimationKey*>& vertices() const { return _keys; }
-    QList<AnimationKey*>& vertices() { return _keys; }
-    void addKey(AnimationKey* vertex);
+    const QList<AnimationKey*>& keys() const { return _keys; }
+    QList<AnimationKey*>& keys() { return _keys; }
+//    void addKey(AnimationKey* vertex);
+    void addKey(Fraction tick, float value);
+    void removeKey(Fraction tick);
     bool isKeyAt(Fraction tick);
-
     int keyIndexForTick(Fraction tick);
+    float evaluate(Fraction tick);
 };
 }
 

@@ -29,8 +29,13 @@
 #include "context/iglobalcontext.h"
 #include "audio/iplayback.h"
 #include "pianoroll/ipianorollcontroller.h"
+#include "libmscore/animationkey.h"
+#include "libmscore/animationtrack.h"
 
 namespace mu::pianoroll {
+//class AnimationKey;
+//class AnimationTrack;
+
 class PianorollAutomationCurves : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
@@ -44,7 +49,6 @@ class PianorollAutomationCurves : public QQuickPaintedItem, public async::Asynca
     Q_PROPERTY(double displayObjectWidth READ displayObjectWidth WRITE setDisplayObjectWidth NOTIFY displayObjectWidthChanged)
     Q_PROPERTY(int tuplet READ tuplet WRITE setTuplet NOTIFY tupletChanged)
     Q_PROPERTY(int subdivision READ subdivision WRITE setSubdivision NOTIFY subdivisionChanged)
-//    Q_PROPERTY(AutomationType automationType READ automationType WRITE setAutomationType NOTIFY automationTypeChanged)
     Q_PROPERTY(QString propertyName READ propertyName WRITE setPropertyName NOTIFY propertyNameChanged)
 
 public:
@@ -72,6 +76,7 @@ public:
     void mousePressEvent(QMouseEvent* e) override;
     void mouseReleaseEvent(QMouseEvent* e) override;
     void mouseMoveEvent(QMouseEvent* e) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
     int wholeNoteToPixelX(Ms::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
     int wholeNoteToPixelX(double tick) const;
@@ -96,17 +101,24 @@ private:
     void updateBoundingSize();
 
     void buildNoteData();
+    void finishDrag();
 
     double pixYToValue(double pixY, double valMin, double valMax);
     double valueToPixY(double value, double valMin, double valMax);
+
+    Ms::AnimationTrack* getAnimationTrack();
+    Ms::AnimationKey* pickKey(QPointF point);
 
     int m_activeStaff;
     std::vector<int> m_selectedStaves;
 
     QString m_propertyName = "";
 
+//    std::vector<KeyBlock*> m_keyBlocks;
+
     bool m_mouseDown = false;
     bool m_dragging = false;
+    Ms::AnimationKey* m_draggedKey = nullptr;
     QPoint m_mouseDownPos;
     QPoint m_lastMousePos;
     int m_pickRadius = 4;
@@ -122,7 +134,7 @@ private:
 
     Ms::Fraction m_playbackPosition;
 
-    const int m_vertexRadius = 4;
+    const int m_vertexRadius = 3;
 
     QColor m_colorBackground = Qt::gray;
     QColor m_colorGridBackground = QColor(0xdddddd);

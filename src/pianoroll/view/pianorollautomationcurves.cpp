@@ -23,6 +23,7 @@
 #include "pianorollautomationcurves.h"
 
 #include <QPainter>
+#include <qquickitem.h>
 
 #include "audio/iplayer.h"
 #include "libmscore/property.h"
@@ -31,6 +32,12 @@
 #include "libmscore/animationkey.h"
 
 using namespace mu::pianoroll;
+
+struct KeyBlock
+{
+    Ms::AnimationKey* key;
+};
+
 
 PianorollAutomationCurves::PianorollAutomationCurves(QQuickItem* parent)
     : QQuickPaintedItem(parent)
@@ -104,6 +111,26 @@ void PianorollAutomationCurves::buildNoteData()
     if (m_activeStaff == -1) {
         m_activeStaff = 0;
     }
+
+//    staff = activeStaff();
+//    if (!staff)
+//        return;
+
+//    Ms::Pid id = Ms::Pid::END;
+//    if (!m_propertyName.isEmpty())
+//        id = Ms::propertyId(m_propertyName);
+
+//    if (id == Ms::Pid::END)
+//        return;
+
+//    Ms::AnimationTrack* track = staff->getAnimationTrack(m_propertyName);
+//    if (track)
+//    {
+//        for (auto key: track->keys())
+//        {
+//            m_keyBlocks.push_back(new KeyBlock{key});
+//        }
+//    }
 
 }
 
@@ -236,59 +263,169 @@ double PianorollAutomationCurves::pixelXToWholeNote(int pixX) const
     return (pixX + m_centerX * m_displayObjectWidth - width() / 2) / m_wholeNoteWidth;
 }
 
+Ms::AnimationTrack* PianorollAutomationCurves::getAnimationTrack()
+{
+    Ms::Staff* staff = activeStaff();
+    if (!staff)
+        return nullptr;
+
+    Ms::Pid id = Ms::Pid::END;
+    if (!m_propertyName.isEmpty())
+        id = Ms::propertyId(m_propertyName);
+
+    if (id == Ms::Pid::END)
+        return nullptr;
+
+    Ms::AnimationTrack* track = staff->getAnimationTrack(m_propertyName);
+    return track;
+}
+
+Ms::AnimationKey* PianorollAutomationCurves::pickKey(QPointF point)
+{
+    Ms::Staff* staff = activeStaff();
+    if (!staff)
+        return nullptr;
+
+    Ms::Pid id = Ms::Pid::END;
+    if (!m_propertyName.isEmpty())
+        id = Ms::propertyId(m_propertyName);
+
+    double pMax = Ms::propertyMaxValue(id).toDouble();
+    double pMin = Ms::propertyMinValue(id).toDouble();
+
+    Ms::AnimationTrack* track = getAnimationTrack();
+    if (!track)
+        return nullptr;
+
+    for (Ms::AnimationKey* key: track->keys())
+    {
+        int x = wholeNoteToPixelX(key->tick());
+        int y = valueToPixY(key->value(), pMin, pMax);
+
+        int dx = x - point.x();
+        int dy = y - point.y();
+        if (dx * dx + dy * dy < m_vertexRadius * m_vertexRadius) {
+            return key;
+        }
+    }
+    return nullptr;
+}
+
+void PianorollAutomationCurves::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    Ms::Score* curScore = score();
+    Ms::Staff* staff = activeStaff();
+
+    if (!staff)
+        return;
+
+    Ms::Pid id = Ms::Pid::END;
+    if (!m_propertyName.isEmpty())
+        id = Ms::propertyId(m_propertyName);
+
+    if (id == Ms::Pid::END)
+        return;
+    double pMax = Ms::propertyMaxValue(id).toDouble();
+    double pMin = Ms::propertyMinValue(id).toDouble();
+
+    //Visible area we are rendering to
+    Ms::Measure* lm = curScore->lastMeasure();
+    Ms::Fraction end = lm->tick() + lm->ticks();
+
+    double endTicks = end.numerator() / (double)end.denominator();
+
+    double val = pixYToValue(m_lastMousePos.y(), pMin, pMax);
+    double tick = pixelXToWholeNote(m_lastMousePos.x());
+    val = qMin(qMax(val, pMin), pMax);
+    tick = qMin(qMax(tick, 0.0), endTicks);
+
+    Ms::Fraction tickFrac(floor(tick * Ms::MScore::division), Ms::MScore::division);
+
+    Ms::AnimationTrack* track = staff->getAnimationTrack(m_propertyName);
+    if (!track)
+    {
+        track = staff->createAnimationTrack(m_propertyName);
+    }
+    track->addKey(tickFrac, val);
+
+    update();
+}
+
 void PianorollAutomationCurves::mousePressEvent(QMouseEvent* e)
 {
-//    if (e->button() == Qt::LeftButton) {
-//        m_mouseDown = true;
-//        m_mouseDownPos = e->pos();
-//        m_lastMousePos = m_mouseDownPos;
-//        m_dragBlock = pickBlock(m_mouseDownPos);
-//    }
+    if (e->button() == Qt::LeftButton) {
+        m_mouseDown = true;
+        m_mouseDownPos = e->pos();
+        m_lastMousePos = m_mouseDownPos;
+        m_draggedKey = pickKey(m_mouseDownPos);
+    }
 }
 
 void PianorollAutomationCurves::mouseReleaseEvent(QMouseEvent* e)
 {
-//    m_mouseDown = false;
-//    m_dragging = false;
-//    m_dragBlock = nullptr;
+    if (m_dragging)
+    {
+        finishDrag();
+    }
+
+    m_mouseDown = false;
+    m_dragging = false;
+    m_draggedKey = nullptr;
+}
+
+void PianorollAutomationCurves::finishDrag()
+{
+    Ms::Score* curScore = score();
+    Ms::Staff* staff = activeStaff();
+
+    if (!staff)
+        return;
+
+    Ms::Pid id = Ms::Pid::END;
+    if (!m_propertyName.isEmpty())
+        id = Ms::propertyId(m_propertyName);
+
+    if (id == Ms::Pid::END)
+        return;
+    double pMax = Ms::propertyMaxValue(id).toDouble();
+    double pMin = Ms::propertyMinValue(id).toDouble();
+
+    //Visible area we are rendering to
+    Ms::Measure* lm = curScore->lastMeasure();
+    Ms::Fraction end = lm->tick() + lm->ticks();
+
+    double endTicks = end.numerator() / (double)end.denominator();
+
+    double val = pixYToValue(m_lastMousePos.y(), pMin, pMax);
+    double tick = pixelXToWholeNote(m_lastMousePos.x());
+    val = qMin(qMax(val, pMin), pMax);
+    tick = qMin(qMax(tick, 0.0), endTicks);
+
+    Ms::Fraction tickFrac(floor(tick * Ms::MScore::division), Ms::MScore::division);
+
+    Ms::AnimationTrack* track = staff->getAnimationTrack(m_propertyName);
+    track->removeKey(m_draggedKey->tick());
+    track->addKey(tickFrac, val);
+
+    update();
 }
 
 void PianorollAutomationCurves::mouseMoveEvent(QMouseEvent* e)
 {
-//    if (m_mouseDown) {
-//        m_lastMousePos = e->pos();
+    if (m_mouseDown) {
+        m_lastMousePos = e->pos();
 
-//        if (!m_dragging && m_dragBlock) {
-//            int dx = e->x() - m_mouseDownPos.x();
-//            int dy = e->y() - m_mouseDownPos.y();
-//            if (dx * dx + dy * dy > m_pickRadius * m_pickRadius) {
-//                //Start dragging
-//                m_dragging = true;
-//            }
-//        }
+        if (!m_dragging && m_draggedKey) {
+            int dx = e->x() - m_mouseDownPos.x();
+            int dy = e->y() - m_mouseDownPos.y();
+            if (dx * dx + dy * dy > m_pickRadius * m_pickRadius) {
+                //Start dragging
+                m_dragging = true;
+            }
+        }
 
-//        IPianorollAutomationModel* model = lookupModel(m_automationType);
-
-//        if (m_dragging && model) {
-//            QPointF offset = m_lastMousePos - m_mouseDownPos;
-
-//            Ms::Score* curScore = score();
-//            Ms::Staff* staff = curScore->staff(m_dragBlock->staffIdx);
-
-//            double valMax = model->maxValue();
-//            double valMin = model->minValue();
-
-//            int pixMaxY = height() - m_marginY;
-//            int pixMinY = m_marginY;
-
-//            double dragToVal = pixYToValue(m_lastMousePos.y(), valMin, valMax);
-//            dragToVal = qMin(qMax(dragToVal, valMin), valMax);
-
-//            model->setValue(staff, *m_dragBlock, dragToVal);
-
-//            update();
-//        }
-//    }
+        update();
+    }
 }
 
 void PianorollAutomationCurves::paint(QPainter* p)
@@ -380,10 +517,6 @@ void PianorollAutomationCurves::paint(QPainter* p)
     if (id == Ms::Pid::END)
         return;
 
-//    QVariant vmax = Ms::propertyMaxValue(id);
-//    QVariant vmin = Ms::propertyMinValue(id);
-//    QVariant vdef = Ms::propertyDefaultValue(id);
-
     double pMax = Ms::propertyMaxValue(id).toDouble();
     double pMin = Ms::propertyMinValue(id).toDouble();
     double pDef = Ms::propertyDefaultValue(id).toDouble();
@@ -391,12 +524,65 @@ void PianorollAutomationCurves::paint(QPainter* p)
     const QPen penDataLine = QPen(m_colorDataLine, 1.0, Qt::SolidLine);
     p->setPen(penDataLine);
 
+    double yDefault = valueToPixY(pDef, pMin, pMax);
+
     Ms::AnimationTrack* track = staff->getAnimationTrack(m_propertyName);
     if (!track)
     {
         //Draw line at default level
-        double y = valueToPixY(pDef, pMin, pMax);
-        p->drawLine(x1, y, x2, y);
+        p->drawLine(x1, yDefault, x2, yDefault);
+        return;
+    }
+
+    //Find screen coords of keys in sorted order
+    std::map<int, QPoint> points;
+    for (Ms::AnimationKey* key: track->keys())
+    {
+        int y = valueToPixY(key->value(), pMin, pMax);
+        int x = wholeNoteToPixelX(key->tick());
+
+        if (m_dragging && key == m_draggedKey)
+            continue;
+
+        points[key->tick().ticks()] = QPoint(x, y);
+    }
+
+    //Special handling for dragged key
+    if (m_dragging)
+    {
+        double endTicks = end.numerator() / (double)end.denominator();
+
+        double val = pixYToValue(m_lastMousePos.y(), pMin, pMax);
+        double tick = pixelXToWholeNote(m_lastMousePos.x());
+        val = qMin(qMax(val, pMin), pMax);
+        tick = qMin(qMax(tick, 0.0), endTicks);
+
+        int y = valueToPixY(val, pMin, pMax);
+        int x = wholeNoteToPixelX(tick);
+
+        points[tick] = QPoint(x, y);
+    }
+
+    //Draw lines between points
+    QPoint prev((int)x1, (int)yDefault);
+    for (auto it = points.begin(); it != points.end(); ++it)
+    {
+        QPoint cur = (*it).second;
+        p->drawLine(prev, cur);
+        prev = (*it).second;
+    }
+    p->drawLine(prev, QPoint(x2, prev.y()));
+
+    //Draw vertices
+    for (auto it = points.begin(); it != points.end(); ++it)
+    {
+        int x0 = (*it).second.x();
+        int y = (*it).second.y();
+
+        QRectF circleBounds(x0 - m_vertexRadius, y - m_vertexRadius, m_vertexRadius * 2, m_vertexRadius * 2);
+        p->setPen(m_colorVertexLine);
+        p->setBrush(m_colorVertexFill);
+        p->drawEllipse(circleBounds);
     }
 }
 

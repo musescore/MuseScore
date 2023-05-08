@@ -29,7 +29,6 @@ using namespace mu::engraving;
 
 namespace Ms {
 AnimationKey::AnimationKey(AnimationTrack* parent)
-    : EngravingItem(ElementType::ANIMATION_KEY, parent)
 {
 }
 
@@ -42,8 +41,8 @@ void AnimationKey::setValue(float value)
     _value = value;
 }
 
-//void AutomationVertex::setTicks(int value)
-//{
-//    _ticks = value;
-//}
+void AnimationKey::setTick(Fraction tick)
+{
+    _tick = tick;
+}
 }

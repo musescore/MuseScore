@@ -29,9 +29,10 @@
 namespace Ms {
 class AnimationTrack;
 
-class AnimationKey : public EngravingItem
+class AnimationKey
 {
     float _value;
+    Ms::Fraction _tick;
 
 public:
     AnimationKey(AnimationTrack* parent);
@@ -39,6 +40,8 @@ public:
 
     float value() { return _value; }
     void setValue(float value);
+    Fraction tick() { return _tick; }
+    void setTick(Fraction tick);
 };
 }
 #endif // __ANIMATIONKEY_H__

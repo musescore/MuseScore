@@ -809,45 +809,52 @@ bool EngravingItem::intersects(const RectF& rr) const
 
 AnimationTrack* EngravingItem::getAnimationTrack(const QString& propertyName)
 {
-    for (AnimationTrack* track: _animationTracks)
+    if (_animationTracks.contains(propertyName))
     {
-        if (track->propertyName() == propertyName)
-            return track;
+        return _animationTracks[propertyName];
     }
     return nullptr;
 }
 
 //---------------------------------------------------------
-//   insertAnimationTrack
+//   insertAutomationTrack
 //---------------------------------------------------------
 
-void EngravingItem::insertAnimationTrack(AnimationTrack* track, int index)
+AnimationTrack* EngravingItem::getAnimationTrack(const std::string& propertyName)
 {
-    _animationTracks.insert(index, track);
+    if (_animationTracks.count(propertyName)) {
+        return _animationTracks[propertyName];
+    }
+    return nullptr;
 }
 
 //---------------------------------------------------------
-//   moveAnimationTrack
+//   createAnimationTrack
 //---------------------------------------------------------
 
-void EngravingItem::moveAnimationTrack(int indexFrom, int indexTo)
+AnimationTrack* EngravingItem::createAnimationTrack(const std::string& propertyName)
 {
-    AnimationTrack* track = _animationTracks.at(indexFrom);
-    _animationTracks.removeAt(indexFrom);
+    if (_animationTracks.count(propertyName)) {
+        return _animationTracks[propertyName];
+    }
 
-    _animationTracks.insert(indexTo, track);
+    AnimationTrack* track = new AnimationTrack(this);
+    track->setPropertyName(propertyName);
+    _animationTracks[propertyName] = track;
+    return track;
 }
 
 //---------------------------------------------------------
-//   deleteAnimationTrack
+//   removeAnimationTrack
 //---------------------------------------------------------
 
-void EngravingItem::deleteAnimationTrack(int index)
+void EngravingItem::removeAnimationTrack(const std::string& propertyName)
 {
-    AnimationTrack* track = _animationTracks.at(index);
-    _animationTracks.removeAt(index);
-
-    delete track;
+    if (_animationTracks.count(propertyName)) {
+        AnimationTrack* track = _animationTracks[propertyName];
+        _animationTracks.erase(propertyName);
+        delete track;
+    }
 }
 
 bool EngravingItem::hitShapeContains(const PointF & p) const
