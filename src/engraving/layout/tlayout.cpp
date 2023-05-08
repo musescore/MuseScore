@@ -107,6 +107,7 @@
 #include "../libmscore/shadownote.h"
 #include "../libmscore/slur.h"
 #include "../libmscore/staff.h"
+#include "../libmscore/stafflines.h"
 #include "../libmscore/stem.h"
 #include "../libmscore/system.h"
 
@@ -3705,4 +3706,43 @@ void TLayout::layoutLine(SLine* item, LayoutContext&)
 void TLayout::layout(Slur* item, LayoutContext& ctx)
 {
     SlurTieLayout::layout(item, ctx);
+}
+
+void TLayout::layout(StaffLines* item, LayoutContext& ctx)
+{
+    layoutForWidth(item, item->measure()->width(), ctx);
+}
+
+void TLayout::layoutForWidth(StaffLines* item, double w, LayoutContext&)
+{
+    const Staff* s = item->staff();
+    double _spatium = item->spatium();
+    double dist     = _spatium;
+    item->setPos(PointF(0.0, 0.0));
+    int _lines;
+    if (s) {
+        item->setMag(s->staffMag(item->measure()->tick()));
+        item->setVisible(!s->isLinesInvisible(item->measure()->tick()));
+        item->setColor(s->color(item->measure()->tick()));
+        const StaffType* st = s->staffType(item->measure()->tick());
+        dist         *= st->lineDistance().val();
+        _lines        = st->lines();
+        item->setPosY(st->yoffset().val() * _spatium);
+//            if (_lines == 1)
+//                  rypos() = 2 * _spatium;
+    } else {
+        _lines = 5;
+        item->setColor(StaffLines::engravingConfiguration()->defaultColor());
+    }
+    item->m_lw       = item->score()->styleS(Sid::staffLineWidth).val() * _spatium;
+    double x1 = item->pos().x();
+    double x2 = x1 + w;
+    double y  = item->pos().y();
+    item->bbox().setRect(x1, -item->m_lw * .5 + y, w, (_lines - 1) * dist + item->m_lw);
+
+    item->m_lines.clear();
+    for (int i = 0; i < _lines; ++i) {
+        item->m_lines.push_back(LineF(x1, y, x2, y));
+        y += dist;
+    }
 }
