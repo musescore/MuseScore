@@ -153,7 +153,7 @@ class EngravingItem : public EngravingObject
     unsigned int _tag;                    ///< tag bitmask
 
     bool m_colorsInversionEnabled = true;
-    QMap<QString, AnimationTrack*> _animationTracks;
+    QMap<std::string, AnimationTrack*> _animationTracks;
 
     virtual bool sameVoiceKerningLimited() const { return false; }
     virtual bool neverKernable() const { return false; }
@@ -337,14 +337,11 @@ public:
     virtual void draw(mu::draw::Painter*) const {}
     void drawAt(mu::draw::Painter* p, const PointF& pt) const { p->translate(pt); draw(p); p->translate(-pt); }
 
-    const QMap<QString, AnimationTrack*>& animationTracks() const { return _animationTracks; }
-    QMap<QString, AnimationTrack*>& animationTracks() { return _animationTracks; }
-    AnimationTrack* getAnimationTrack(const QString& propertyName);
-    AnimationTrack* createAnimationTrack(const QString& propertyName);
-    void removeAnimationTrack(const QString& propertyName);
-    //void insertAnimationTrack(AnimationTrack* track, int index);
-    //void moveAnimationTrack(int indexFrom, int indexTo);
-    //void deleteAnimationTrack(int index);
+    const QMap<std::string, AnimationTrack*>& animationTracks() const { return _animationTracks; }
+    QMap<std::string, AnimationTrack*>& animationTracks() { return _animationTracks; }
+    AnimationTrack* getAnimationTrack(const std::string& propertyName);
+    AnimationTrack* createAnimationTrack(const std::string& propertyName);
+    void removeAnimationTrack(const std::string& propertyName);
 
 //       virtual ElementGroup getElementGroup() { return SingleElementGroup(this); }
     virtual std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> /*isDragged*/)

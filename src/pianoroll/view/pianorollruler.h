@@ -58,17 +58,17 @@ public:
     void setDisplayObjectWidth(double value);
     void paint(QPainter*) override;
 
-    int wholeNoteToPixelX(Ms::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
+    int wholeNoteToPixelX(engraving::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
     int wholeNoteToPixelX(double tick) const;
     double pixelXToWholeNote(int pixelX) const;
 
-    Ms::Fraction playbackPosition() { return m_playbackPosition; }
-    void setPlaybackPosition(Ms::Fraction value);
+    engraving::Fraction playbackPosition() { return m_playbackPosition; }
+    void setPlaybackPosition(engraving::Fraction value);
 
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
 
-    Ms::Score* score();
+    engraving::Score* score();
 
 signals:
     void wholeNoteWidthChanged();
@@ -90,7 +90,7 @@ private:
     QFont m_font1;
     QFont m_font2;
 
-    Ms::Fraction m_playbackPosition;
+    engraving::Fraction m_playbackPosition;
 
     QColor m_colorBackground = Qt::lightGray;
     QColor m_colorPlaybackLine = QColor(0xff0000);

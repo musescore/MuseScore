@@ -191,6 +191,9 @@ enum class ElementType {
     ROOT_ITEM,
     DUMMY,
 
+    ANIMATION_KEY,
+    ANIMATION_TRACK,
+
     MAXTYPE
     ///\}
 };
@@ -922,8 +925,8 @@ enum class Key {
     C_S,
     MIN     = Key::C_B,
     MAX     = Key::C_S,
-    INVALID = Key::MIN - 1,
-    NUM_OF  = Key::MAX - Key::MIN + 1,
+    INVALID = (int)Key::MIN - 1,
+    NUM_OF  = (int)Key::MAX - (int)Key::MIN + 1,
     DELTA_ENHARMONIC = 12
 };
 

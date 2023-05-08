@@ -29,7 +29,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 AnimationTrack::AnimationTrack(EngravingItem* parent)
 {
 }
@@ -38,7 +38,7 @@ AnimationTrack::~AnimationTrack()
 {
 }
 
-void AnimationTrack::setPropertyName(QString value)
+void AnimationTrack::setPropertyName(std::string value)
 {
     _propertyName = value;
 }
@@ -119,8 +119,8 @@ float AnimationTrack::evaluate(Fraction tick)
     AnimationKey* k0 = _keys[index];
     AnimationKey* k1 = _keys[index + 1];
 
-    Ms::Fraction t0 = k0->tick();
-    Ms::Fraction t1 = k1->tick();
+    Fraction t0 = k0->tick();
+    Fraction t1 = k1->tick();
 
     double t0d = t0.toDouble();
     double t1d = t1.toDouble();

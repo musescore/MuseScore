@@ -71,8 +71,8 @@ public:
     void setTuplet(int value);
     int subdivision() const { return m_subdivision; }
     void setSubdivision(int value);
-    Ms::Fraction playbackPosition() { return m_playbackPosition; }
-    void setPlaybackPosition(Ms::Fraction value);
+    engraving::Fraction playbackPosition() { return m_playbackPosition; }
+    void setPlaybackPosition(engraving::Fraction value);
     AutomationType automationType() { return m_automationType; }
     void setAutomationType(AutomationType value);
 
@@ -82,12 +82,12 @@ public:
     void mouseReleaseEvent(QMouseEvent* e) override;
     void mouseMoveEvent(QMouseEvent* e) override;
 
-    int wholeNoteToPixelX(Ms::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
+    int wholeNoteToPixelX(engraving::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
     int wholeNoteToPixelX(double tick) const;
     double pixelXToWholeNote(int pixelX) const;
 
-    Ms::Score* score();
-    Ms::Staff* activeStaff();
+    engraving::Score* score();
+    engraving::Staff* activeStaff();
 
 signals:
     void wholeNoteWidthChanged();
@@ -105,7 +105,7 @@ private:
     void updateBoundingSize();
 
     void buildNoteData();
-    void addChord(Ms::Chord* chrd, int voice, int staffIdx);
+    void addChord(engraving::Chord* chrd, int voice, int staffIdx);
 
     double pixYToValue(double pixY, double valMin, double valMax);
     double valueToPixY(double value, double valMin, double valMax);
@@ -145,7 +145,7 @@ private:
     int m_tuplet = 1;
     int m_subdivision = 0;
 
-    Ms::Fraction m_playbackPosition;
+    engraving::Fraction m_playbackPosition;
 
     const int m_vertexRadius = 4;
 

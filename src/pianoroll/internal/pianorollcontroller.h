@@ -25,7 +25,6 @@
 #include <unordered_map>
 
 #include "modularity/ioc.h"
-#include "retval.h"
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
@@ -84,7 +83,7 @@ public:
     void setNoteHeight(int value);
 
     int widthInTicks() const { return m_widthInTicks; }
-    Ms::Fraction widthInBeats();
+    mu::engraving::Fraction widthInBeats();
 
     async::Notification pitchHighlightChanged() const override;
     bool isPitchHighlight(int pitch) const override { return m_pitchHighlight[pitch]; }
@@ -103,17 +102,15 @@ private:
     void onSelectionChanged();
 
     void buildNoteBlocks();
-    void addChord(Ms::Chord* chrd, int voice);
+    void addChord(engraving::Chord* chrd, int voice);
 
-    Ms::Measure* lastMeasure();
-    Ms::Score* score();
+    engraving::Measure* lastMeasure();
+    engraving::Score* score();
 
     bool m_pitchHighlight[128];
 
     std::vector<int> m_selectedStaves;
     int m_activeStaff = -1;
-
-//    std::vector<NoteBlock> m_notes;
 
     async::Notification m_noteLayoutChanged;
     async::Notification m_pitchHighlightChanged;

@@ -27,6 +27,7 @@
 #include "audio/iplayer.h"
 
 using namespace mu::pianoroll;
+using namespace mu::engraving;
 
 QPixmap* PianorollRuler::markIcon[3];
 
@@ -125,7 +126,7 @@ void PianorollRuler::load()
                                                             [this](audio::TrackSequenceId currentTrackSequence,
                                                                    const audio::msecs_t newPosMsecs) {
         int tick = score()->utime2utick(newPosMsecs / 1000.);
-        setPlaybackPosition(Ms::Fraction::fromTicks(tick));
+        setPlaybackPosition(Fraction::fromTicks(tick));
     });
 }
 
@@ -146,7 +147,7 @@ void PianorollRuler::onCurrentNotationChanged()
     updateBoundingSize();
 }
 
-Ms::Score* PianorollRuler::score()
+Score* PianorollRuler::score()
 {
     notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
@@ -154,11 +155,11 @@ Ms::Score* PianorollRuler::score()
     }
 
     //Find staff to draw from
-    Ms::Score* score = notation->elements()->msScore();
+    Score* score = notation->elements()->msScore();
     return score;
 }
 
-void PianorollRuler::setPlaybackPosition(Ms::Fraction value)
+void PianorollRuler::setPlaybackPosition(Fraction value)
 {
     if (value == m_playbackPosition) {
         return;
@@ -209,9 +210,9 @@ void PianorollRuler::updateBoundingSize()
         return;
     }
 
-    Ms::Score* score = notation->elements()->msScore();
-    Ms::Measure* lm = score->lastMeasure();
-    Ms::Fraction wholeNotesFrac = lm->tick() + lm->ticks();
+    Score* score = notation->elements()->msScore();
+    Measure* lm = score->lastMeasure();
+    Fraction wholeNotesFrac = lm->tick() + lm->ticks();
     double wholeNotes = wholeNotesFrac.numerator() / (double)wholeNotesFrac.denominator();
 
     setDisplayObjectWidth(wholeNotes * m_wholeNoteWidth);
@@ -232,10 +233,10 @@ double PianorollRuler::pixelXToWholeNote(int pixX) const
 void PianorollRuler::mousePressEvent(QMouseEvent* event)
 {
     double wholeNote = pixelXToWholeNote(event->pos().x());
-    Ms::Fraction frac(wholeNote * 1000, 1000);
+    Fraction frac(wholeNote * 1000, 1000);
     int ticks = frac.ticks();
 
-    Ms::Score* curScore = score();
+    Score* curScore = score();
     qreal time = curScore->utick2utime(ticks);
 
     playback()->player()->seek(0, time);
@@ -256,8 +257,8 @@ void PianorollRuler::paint(QPainter* p)
         return;
     }
 
-    Ms::Score* score = notation->elements()->msScore();
-    Ms::Staff* staff = score->staff(0);
+    Score* score = notation->elements()->msScore();
+    Staff* staff = score->staff(0);
 
     const QPen penLineMajor = QPen(m_colorGridLine, 2.0, Qt::SolidLine);
     const QPen penLineMinor = QPen(m_colorGridLine, 1.0, Qt::SolidLine);
@@ -267,9 +268,9 @@ void PianorollRuler::paint(QPainter* p)
     int lastDrawPos = -1;
     int measureIndex = 0;
 
-    for (Ms::MeasureBase* m = score->first(); m; m = m->next()) {
+    for (MeasureBase* m = score->first(); m; m = m->next()) {
         measureIndex++;
-        Ms::Fraction start = m->tick();  //fraction representing number of whole notes since start of score.  Expressed in terms of the note getting the beat in this bar
+        Fraction start = m->tick();  //fraction representing number of whole notes since start of score.  Expressed in terms of the note getting the beat in this bar
 
         int pos = wholeNoteToPixelX(start);
 

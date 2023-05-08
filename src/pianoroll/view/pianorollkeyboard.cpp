@@ -30,6 +30,7 @@
 #include "pianorollview.h"
 
 using namespace mu::pianoroll;
+using namespace mu::engraving;
 
 struct KeyShape
 {
@@ -154,11 +155,11 @@ void PianorollKeyboard::paint(QPainter* p)
     }
 
     //Find staff to draw from
-    Ms::Score* score = notation->elements()->msScore();
-    std::vector<Ms::EngravingItem*> selectedElements = notation->interaction()->selection()->elements();
+    Score* score = notation->elements()->msScore();
+    std::vector<EngravingItem*> selectedElements = notation->interaction()->selection()->elements();
     std::vector<int> selectedStaves;
     int activeStaff = -1;
-    for (Ms::EngravingItem* e: selectedElements) {
+    for (EngravingItem* e: selectedElements) {
         int idx = e->staffIdx();
         qDebug() << "ele idx " << idx;
         activeStaff = idx;
@@ -170,12 +171,12 @@ void PianorollKeyboard::paint(QPainter* p)
     if (activeStaff == -1) {
         activeStaff = 0;
     }
-    Ms::Staff* staff = score->staff(activeStaff);
-    Ms::Part* part = staff->part();
+    Staff* staff = score->staff(activeStaff);
+    Part* part = staff->part();
 
     //Check for drumset, if any
-    Ms::Drumset* ds = nullptr;
-    Ms::Interval transp;
+    Drumset* ds = nullptr;
+    Interval transp;
     if (staff) {
         ds = part->instrument()->drumset();
         transp = part->instrument()->transpose();
@@ -186,7 +187,7 @@ void PianorollKeyboard::paint(QPainter* p)
     p->setFont(font);
 
     if (ds) {
-        Ms::Interval transp = part->instrument()->transpose();
+        Interval transp = part->instrument()->transpose();
 
         //MIDI notes span [0, 127] and map to pitches with MIDI pitch 0 being the note C-1
 
@@ -205,7 +206,7 @@ void PianorollKeyboard::paint(QPainter* p)
 
             p->setPen(m_colorText);
 
-            QString noteName = ds->name(pitch).toUtf8().constData();
+            QString noteName = ds->name(pitch).toQString();
 
             QRectF rectText(1, y, width() - 2, m_noteHeight);
             p->drawText(rectText, Qt::AlignBottom | Qt::AlignLeft, noteName);

@@ -26,13 +26,13 @@
 #include "engravingitem.h"
 #include "mscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 class AnimationTrack;
 
 class AnimationKey
 {
     float _value;
-    Ms::Fraction _tick;
+    Fraction _tick;
 
 public:
     AnimationKey(AnimationTrack* parent);

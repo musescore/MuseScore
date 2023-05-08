@@ -30,7 +30,7 @@
 namespace mu::pianoroll {
 struct NoteEventBlock
 {
-    Ms::Note* note;
+    engraving::Note* note;
     int voice;
     int staffIdx;
 };
@@ -44,8 +44,8 @@ public:
 
     virtual double maxValue() = 0;
     virtual double minValue() = 0;
-    virtual double value(Ms::Staff* staff, NoteEventBlock& block) = 0;
-    virtual void setValue(Ms::Staff* staff, NoteEventBlock& block, double value) = 0;
+    virtual double value(engraving::Staff* staff, NoteEventBlock& block) = 0;
+    virtual void setValue(engraving::Staff* staff, NoteEventBlock& block, double value) = 0;
 };
 }
 

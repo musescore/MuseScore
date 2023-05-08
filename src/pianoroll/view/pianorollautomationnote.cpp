@@ -35,6 +35,7 @@
 #include "pianorollview.h"
 
 using namespace mu::pianoroll;
+using namespace mu::engraving;
 
 std::vector<IPianorollAutomationModel*> PianorollAutomationNote::m_automationModels = {
     new AutomationVelocity(),
@@ -71,7 +72,7 @@ void PianorollAutomationNote::load()
                                                             [this](audio::TrackSequenceId currentTrackSequence,
                                                                    const audio::msecs_t newPosMsecs) {
         int tick = score()->utime2utick(newPosMsecs / 1000.);
-        setPlaybackPosition(Ms::Fraction::fromTicks(tick));
+        setPlaybackPosition(Fraction::fromTicks(tick));
     });
 }
 
@@ -121,11 +122,11 @@ void PianorollAutomationNote::buildNoteData()
         return;
     }
 
-    Ms::Score* curScore = score();
+    Score* curScore = score();
 
     m_selectedStaves.clear();
-    std::vector<Ms::EngravingItem*> selectedElements = notation->interaction()->selection()->elements();
-    for (Ms::EngravingItem* e: selectedElements) {
+    std::vector<EngravingItem*> selectedElements = notation->interaction()->selection()->elements();
+    for (EngravingItem* e: selectedElements) {
         int idx = e->staffIdx();
         m_activeStaff = idx;
         if (std::find(m_selectedStaves.begin(), m_selectedStaves.end(), idx) == m_selectedStaves.end()) {
@@ -138,12 +139,12 @@ void PianorollAutomationNote::buildNoteData()
     }
 
     for (int staffIndex : m_selectedStaves) {
-        Ms::Staff* staff = curScore->staff(staffIndex);
+        Staff* staff = curScore->staff(staffIndex);
 
-        for (Ms::Segment* s = staff->score()->firstSegment(Ms::SegmentType::ChordRest); s; s = s->next1(Ms::SegmentType::ChordRest)) {
+        for (Segment* s = staff->score()->firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
             for (int voice = 0; voice < PianorollView::VOICES; ++voice) {
                 int track = voice + staffIndex * PianorollView::VOICES;
-                Ms::EngravingItem* e = s->element(track);
+                EngravingItem* e = s->element(track);
                 if (e && e->isChord()) {
                     addChord(toChord(e), voice, staffIndex);
                 }
@@ -152,13 +153,13 @@ void PianorollAutomationNote::buildNoteData()
     }
 }
 
-void PianorollAutomationNote::addChord(Ms::Chord* chrd, int voice, int staffIdx)
+void PianorollAutomationNote::addChord(Chord* chrd, int voice, int staffIdx)
 {
-    for (Ms::Chord* c : chrd->graceNotes()) {
+    for (Chord* c : chrd->graceNotes()) {
         addChord(c, voice, staffIdx);
     }
 
-    for (Ms::Note* note : chrd->notes()) {
+    for (Note* note : chrd->notes()) {
         if (note->tieBack()) {
             continue;
         }
@@ -167,7 +168,7 @@ void PianorollAutomationNote::addChord(Ms::Chord* chrd, int voice, int staffIdx)
     }
 }
 
-Ms::Score* PianorollAutomationNote::score()
+Score* PianorollAutomationNote::score()
 {
     notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
@@ -175,24 +176,24 @@ Ms::Score* PianorollAutomationNote::score()
     }
 
     //Find staff to draw from
-    Ms::Score* score = notation->elements()->msScore();
+    Score* score = notation->elements()->msScore();
     return score;
 }
 
-Ms::Staff* PianorollAutomationNote::activeStaff()
+Staff* PianorollAutomationNote::activeStaff()
 {
     notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
         return nullptr;
     }
 
-    Ms::Score* score = notation->elements()->msScore();
+    Score* score = notation->elements()->msScore();
 
-    Ms::Staff* staff = score->staff(m_activeStaff);
+    Staff* staff = score->staff(m_activeStaff);
     return staff;
 }
 
-void PianorollAutomationNote::setPlaybackPosition(Ms::Fraction value)
+void PianorollAutomationNote::setPlaybackPosition(Fraction value)
 {
     if (value == m_playbackPosition) {
         return;
@@ -276,9 +277,9 @@ void PianorollAutomationNote::updateBoundingSize()
         return;
     }
 
-    Ms::Score* score = notation->elements()->msScore();
-    Ms::Measure* lm = score->lastMeasure();
-    Ms::Fraction wholeNotesFrac = lm->tick() + lm->ticks();
+    Score* score = notation->elements()->msScore();
+    Measure* lm = score->lastMeasure();
+    Fraction wholeNotesFrac = lm->tick() + lm->ticks();
     double wholeNotes = wholeNotesFrac.numerator() / (double)wholeNotesFrac.denominator();
 
     setDisplayObjectWidth(wholeNotes * m_wholeNoteWidth);
@@ -332,8 +333,8 @@ void PianorollAutomationNote::mouseMoveEvent(QMouseEvent* e)
         if (m_dragging && model) {
             QPointF offset = m_lastMousePos - m_mouseDownPos;
 
-            Ms::Score* curScore = score();
-            Ms::Staff* staff = curScore->staff(m_dragBlock->staffIdx);
+            Score* curScore = score();
+            Staff* staff = curScore->staff(m_dragBlock->staffIdx);
 
             double valMax = model->maxValue();
             double valMin = model->minValue();
@@ -360,17 +361,17 @@ void PianorollAutomationNote::paint(QPainter* p)
         return;
     }
 
-    Ms::Score* curScore = notation->elements()->msScore();
-    Ms::Staff* staff = curScore->staff(0);
-    Ms::Part* part = staff->part();
+    Score* curScore = notation->elements()->msScore();
+    Staff* staff = curScore->staff(0);
+    Part* part = staff->part();
 
     const QPen penLineMajor = QPen(m_colorGridLine, 2.0, Qt::SolidLine);
     const QPen penLineMinor = QPen(m_colorGridLine, 1.0, Qt::SolidLine);
     const QPen penLineSub = QPen(m_colorGridLine, 1.0, Qt::DotLine);
 
     //Visible area we are rendering to
-    Ms::Measure* lm = curScore->lastMeasure();
-    Ms::Fraction end = lm->tick() + lm->ticks();
+    Measure* lm = curScore->lastMeasure();
+    Fraction end = lm->tick() + lm->ticks();
 
     qreal x1 = wholeNoteToPixelX(0);
     qreal x2 = wholeNoteToPixelX(end);
@@ -386,9 +387,9 @@ void PianorollAutomationNote::paint(QPainter* p)
     //-----------------------------------
     //Draw vertial grid lines
     const int minBeatGap = 20;
-    for (Ms::MeasureBase* m = curScore->first(); m; m = m->next()) {
-        Ms::Fraction start = m->tick();  //fraction representing number of whole notes since start of score.  Expressed in terms of the note getting the beat in this bar
-        Ms::Fraction len = m->ticks();  //Beats in bar / note length with the beat
+    for (MeasureBase* m = curScore->first(); m; m = m->next()) {
+        Fraction start = m->tick();  //fraction representing number of whole notes since start of score.  Expressed in terms of the note getting the beat in this bar
+        Fraction len = m->ticks();  //Beats in bar / note length with the beat
 
         p->setPen(penLineMajor);
         int x = wholeNoteToPixelX(start);
@@ -401,7 +402,7 @@ void PianorollAutomationNote::paint(QPainter* p)
         }
 
         for (int i = 1; i < len.numerator(); ++i) {
-            Ms::Fraction beat = start + Ms::Fraction(i, len.denominator());
+            Fraction beat = start + Fraction(i, len.denominator());
             int x = wholeNoteToPixelX(beat);
             p->setPen(penLineMinor);
             p->drawLine(x, 0, x, height());
@@ -417,9 +418,9 @@ void PianorollAutomationNote::paint(QPainter* p)
         }
 
         for (int i = 0; i < len.numerator(); ++i) {
-            Ms::Fraction beat = start + Ms::Fraction(i, len.denominator());
+            Fraction beat = start + Fraction(i, len.denominator());
             for (int j = 1; j < subbeats; ++j) {
-                Ms::Fraction subbeat = beat + Ms::Fraction(j, len.denominator() * subbeats);
+                Fraction subbeat = beat + Fraction(j, len.denominator() * subbeats);
                 int x = wholeNoteToPixelX(subbeat);
                 p->setPen(penLineSub);
                 p->drawLine(x, 0, x, height());
@@ -434,7 +435,7 @@ void PianorollAutomationNote::paint(QPainter* p)
     if (model) {
         for (int i = 0; i < m_noteLevels.size(); ++i) {
             NoteEventBlock* block = m_noteLevels.at(i);
-            Ms::Staff* staff = curScore->staff(block->staffIdx);
+            Staff* staff = curScore->staff(block->staffIdx);
 
             double valMax = model->maxValue();
             double valMin = model->minValue();
@@ -482,13 +483,13 @@ double PianorollAutomationNote::valueToPixY(double value, double valMin, double 
 
 NoteEventBlock* PianorollAutomationNote::pickBlock(QPointF point)
 {
-    Ms::Score* curScore = score();
+    Score* curScore = score();
     IPianorollAutomationModel* model = lookupModel(m_automationType);
 
     if (model) {
         for (int i = 0; i < m_noteLevels.size(); ++i) {
             NoteEventBlock* block = m_noteLevels.at(i);
-            Ms::Staff* staff = curScore->staff(block->staffIdx);
+            Staff* staff = curScore->staff(block->staffIdx);
 
             double valMax = model->maxValue();
             double valMin = model->minValue();

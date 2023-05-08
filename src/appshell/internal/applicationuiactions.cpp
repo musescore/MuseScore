@@ -168,8 +168,9 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("toggle-piano-roll",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Piano roll"),
-             QT_TRANSLATE_NOOP("action", "Toggle piano roll"),
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Piano roll"),
+             TranslatableString("action", "Show/hide piano roll"),
              IconCode::Code::MIXER,
              Checkable::Yes
              ),

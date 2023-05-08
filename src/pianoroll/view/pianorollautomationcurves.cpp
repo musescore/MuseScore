@@ -32,10 +32,11 @@
 #include "libmscore/animationkey.h"
 
 using namespace mu::pianoroll;
+using namespace mu::engraving;
 
 struct KeyBlock
 {
-    Ms::AnimationKey* key;
+    AnimationKey* key;
 };
 
 PianorollAutomationCurves::PianorollAutomationCurves(QQuickItem* parent)
@@ -55,7 +56,7 @@ void PianorollAutomationCurves::load()
                                                             [this](audio::TrackSequenceId currentTrackSequence,
                                                                    const audio::msecs_t newPosMsecs) {
         int tick = score()->utime2utick(newPosMsecs / 1000.);
-        setPlaybackPosition(Ms::Fraction::fromTicks(tick));
+        setPlaybackPosition(Fraction::fromTicks(tick));
     });
 }
 
@@ -95,11 +96,11 @@ void PianorollAutomationCurves::buildNoteData()
         return;
     }
 
-    Ms::Score* curScore = score();
+    Score* curScore = score();
 
     m_selectedStaves.clear();
-    std::vector<Ms::EngravingItem*> selectedElements = notation->interaction()->selection()->elements();
-    for (Ms::EngravingItem* e: selectedElements) {
+    std::vector<EngravingItem*> selectedElements = notation->interaction()->selection()->elements();
+    for (EngravingItem* e: selectedElements) {
         int idx = e->staffIdx();
         m_activeStaff = idx;
         if (std::find(m_selectedStaves.begin(), m_selectedStaves.end(), idx) == m_selectedStaves.end()) {
@@ -132,7 +133,7 @@ void PianorollAutomationCurves::buildNoteData()
 //    }
 }
 
-Ms::Score* PianorollAutomationCurves::score()
+Score* PianorollAutomationCurves::score()
 {
     notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
@@ -140,24 +141,24 @@ Ms::Score* PianorollAutomationCurves::score()
     }
 
     //Find staff to draw from
-    Ms::Score* score = notation->elements()->msScore();
+    Score* score = notation->elements()->msScore();
     return score;
 }
 
-Ms::Staff* PianorollAutomationCurves::activeStaff()
+Staff* PianorollAutomationCurves::activeStaff()
 {
     notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
         return nullptr;
     }
 
-    Ms::Score* score = notation->elements()->msScore();
+    Score* score = notation->elements()->msScore();
 
-    Ms::Staff* staff = score->staff(m_activeStaff);
+    Staff* staff = score->staff(m_activeStaff);
     return staff;
 }
 
-void PianorollAutomationCurves::setPlaybackPosition(Ms::Fraction value)
+void PianorollAutomationCurves::setPlaybackPosition(Fraction value)
 {
     if (value == m_playbackPosition) {
         return;
@@ -241,9 +242,9 @@ void PianorollAutomationCurves::updateBoundingSize()
         return;
     }
 
-    Ms::Score* score = notation->elements()->msScore();
-    Ms::Measure* lm = score->lastMeasure();
-    Ms::Fraction wholeNotesFrac = lm->tick() + lm->ticks();
+    Score* score = notation->elements()->msScore();
+    Measure* lm = score->lastMeasure();
+    Fraction wholeNotesFrac = lm->tick() + lm->ticks();
     double wholeNotes = wholeNotesFrac.numerator() / (double)wholeNotesFrac.denominator();
 
     setDisplayObjectWidth(wholeNotes * m_wholeNoteWidth);
@@ -261,47 +262,47 @@ double PianorollAutomationCurves::pixelXToWholeNote(int pixX) const
     return (pixX + m_centerX * m_displayObjectWidth - width() / 2) / m_wholeNoteWidth;
 }
 
-Ms::AnimationTrack* PianorollAutomationCurves::getAnimationTrack()
+AnimationTrack* PianorollAutomationCurves::getAnimationTrack()
 {
-    Ms::Staff* staff = activeStaff();
+    Staff* staff = activeStaff();
     if (!staff) {
         return nullptr;
     }
 
-    Ms::Pid id = Ms::Pid::END;
+    Pid id = Pid::END;
     if (!m_propertyName.isEmpty()) {
-        id = Ms::propertyId(m_propertyName);
+        id = propertyId(m_propertyName.toStdString());
     }
 
-    if (id == Ms::Pid::END) {
+    if (id == Pid::END) {
         return nullptr;
     }
 
-    Ms::AnimationTrack* track = staff->getAnimationTrack(m_propertyName);
+    AnimationTrack* track = staff->getAnimationTrack(m_propertyName.toStdString());
     return track;
 }
 
-Ms::AnimationKey* PianorollAutomationCurves::pickKey(QPointF point)
+AnimationKey* PianorollAutomationCurves::pickKey(QPointF point)
 {
-    Ms::Staff* staff = activeStaff();
+    Staff* staff = activeStaff();
     if (!staff) {
         return nullptr;
     }
 
-    Ms::Pid id = Ms::Pid::END;
+    Pid id = Pid::END;
     if (!m_propertyName.isEmpty()) {
-        id = Ms::propertyId(m_propertyName);
+        id = propertyId(m_propertyName.toStdString());
     }
 
-    double pMax = Ms::propertyMaxValue(id).toDouble();
-    double pMin = Ms::propertyMinValue(id).toDouble();
+    double pMax = propertyMaxValue(id).toDouble();
+    double pMin = propertyMinValue(id).toDouble();
 
-    Ms::AnimationTrack* track = getAnimationTrack();
+    AnimationTrack* track = getAnimationTrack();
     if (!track) {
         return nullptr;
     }
 
-    for (Ms::AnimationKey* key: track->keys()) {
+    for (AnimationKey* key: track->keys()) {
         int x = wholeNoteToPixelX(key->tick());
         int y = valueToPixY(key->value(), pMin, pMax);
 
@@ -316,27 +317,27 @@ Ms::AnimationKey* PianorollAutomationCurves::pickKey(QPointF point)
 
 void PianorollAutomationCurves::mouseDoubleClickEvent(QMouseEvent* event)
 {
-    Ms::Score* curScore = score();
-    Ms::Staff* staff = activeStaff();
+    Score* curScore = score();
+    Staff* staff = activeStaff();
 
     if (!staff) {
         return;
     }
 
-    Ms::Pid id = Ms::Pid::END;
+    Pid id = Pid::END;
     if (!m_propertyName.isEmpty()) {
-        id = Ms::propertyId(m_propertyName);
+        id = propertyId(m_propertyName.toStdString());
     }
 
-    if (id == Ms::Pid::END) {
+    if (id == Pid::END) {
         return;
     }
-    double pMax = Ms::propertyMaxValue(id).toDouble();
-    double pMin = Ms::propertyMinValue(id).toDouble();
+    double pMax = propertyMaxValue(id).toDouble();
+    double pMin = propertyMinValue(id).toDouble();
 
     //Visible area we are rendering to
-    Ms::Measure* lm = curScore->lastMeasure();
-    Ms::Fraction end = lm->tick() + lm->ticks();
+    Measure* lm = curScore->lastMeasure();
+    Fraction end = lm->tick() + lm->ticks();
 
     double endTicks = end.numerator() / (double)end.denominator();
 
@@ -345,11 +346,11 @@ void PianorollAutomationCurves::mouseDoubleClickEvent(QMouseEvent* event)
     val = qMin(qMax(val, pMin), pMax);
     tick = qMin(qMax(tick, 0.0), endTicks);
 
-    Ms::Fraction tickFrac(floor(tick * Ms::Constant::division), Ms::Constant::division);
+    Fraction tickFrac(floor(tick * Constants::division), Constants::division);
 
-    Ms::AnimationTrack* track = staff->getAnimationTrack(m_propertyName);
+    AnimationTrack* track = staff->getAnimationTrack(m_propertyName.toStdString());
     if (!track) {
-        track = staff->createAnimationTrack(m_propertyName);
+        track = staff->createAnimationTrack(m_propertyName.toStdString());
     }
     track->addKey(tickFrac, val);
 
@@ -379,27 +380,27 @@ void PianorollAutomationCurves::mouseReleaseEvent(QMouseEvent* e)
 
 void PianorollAutomationCurves::finishDrag()
 {
-    Ms::Score* curScore = score();
-    Ms::Staff* staff = activeStaff();
+    Score* curScore = score();
+    Staff* staff = activeStaff();
 
     if (!staff) {
         return;
     }
 
-    Ms::Pid id = Ms::Pid::END;
+    Pid id = Pid::END;
     if (!m_propertyName.isEmpty()) {
-        id = Ms::propertyId(m_propertyName);
+        id = propertyId(m_propertyName.toStdString());
     }
 
-    if (id == Ms::Pid::END) {
+    if (id == Pid::END) {
         return;
     }
-    double pMax = Ms::propertyMaxValue(id).toDouble();
-    double pMin = Ms::propertyMinValue(id).toDouble();
+    double pMax = propertyMaxValue(id).toDouble();
+    double pMin = propertyMinValue(id).toDouble();
 
     //Visible area we are rendering to
-    Ms::Measure* lm = curScore->lastMeasure();
-    Ms::Fraction end = lm->tick() + lm->ticks();
+    Measure* lm = curScore->lastMeasure();
+    Fraction end = lm->tick() + lm->ticks();
 
     double endTicks = end.toDouble();
 
@@ -408,9 +409,9 @@ void PianorollAutomationCurves::finishDrag()
     val = qMin(qMax(val, pMin), pMax);
     tick = qMin(qMax(tick, 0.0), endTicks);
 
-    Ms::Fraction tickFrac(floor(tick * Ms::Constant::division), Ms::Constant::division);
+    Fraction tickFrac(floor(tick * Constants::division), Constants::division);
 
-    Ms::AnimationTrack* track = staff->getAnimationTrack(m_propertyName);
+    AnimationTrack* track = staff->getAnimationTrack(m_propertyName.toStdString());
     track->removeKey(m_draggedKey->tick());
     track->addKey(tickFrac, val);
 
@@ -444,17 +445,17 @@ void PianorollAutomationCurves::paint(QPainter* p)
         return;
     }
 
-    Ms::Score* curScore = notation->elements()->msScore();
-    Ms::Staff* staff = curScore->staff(0);
-    Ms::Part* part = staff->part();
+    Score* curScore = notation->elements()->msScore();
+    Staff* staff = curScore->staff(0);
+    Part* part = staff->part();
 
     const QPen penLineMajor = QPen(m_colorGridLine, 2.0, Qt::SolidLine);
     const QPen penLineMinor = QPen(m_colorGridLine, 1.0, Qt::SolidLine);
     const QPen penLineSub = QPen(m_colorGridLine, 1.0, Qt::DotLine);
 
     //Visible area we are rendering to
-    Ms::Measure* lm = curScore->lastMeasure();
-    Ms::Fraction end = lm->tick() + lm->ticks();
+    Measure* lm = curScore->lastMeasure();
+    Fraction end = lm->tick() + lm->ticks();
 
     qreal x1 = wholeNoteToPixelX(0);
     qreal x2 = wholeNoteToPixelX(end);
@@ -470,9 +471,9 @@ void PianorollAutomationCurves::paint(QPainter* p)
     //-----------------------------------
     //Draw vertial grid lines
     const int minBeatGap = 20;
-    for (Ms::MeasureBase* m = curScore->first(); m; m = m->next()) {
-        Ms::Fraction start = m->tick();  //fraction representing number of whole notes since start of score.  Expressed in terms of the note getting the beat in this bar
-        Ms::Fraction len = m->ticks();  //Beats in bar / note length with the beat
+    for (MeasureBase* m = curScore->first(); m; m = m->next()) {
+        Fraction start = m->tick();  //fraction representing number of whole notes since start of score.  Expressed in terms of the note getting the beat in this bar
+        Fraction len = m->ticks();  //Beats in bar / note length with the beat
 
         p->setPen(penLineMajor);
         int x = wholeNoteToPixelX(start);
@@ -485,7 +486,7 @@ void PianorollAutomationCurves::paint(QPainter* p)
         }
 
         for (int i = 1; i < len.numerator(); ++i) {
-            Ms::Fraction beat = start + Ms::Fraction(i, len.denominator());
+            Fraction beat = start + Fraction(i, len.denominator());
             int x = wholeNoteToPixelX(beat);
             p->setPen(penLineMinor);
             p->drawLine(x, 0, x, height());
@@ -501,9 +502,9 @@ void PianorollAutomationCurves::paint(QPainter* p)
         }
 
         for (int i = 0; i < len.numerator(); ++i) {
-            Ms::Fraction beat = start + Ms::Fraction(i, len.denominator());
+            Fraction beat = start + Fraction(i, len.denominator());
             for (int j = 1; j < subbeats; ++j) {
-                Ms::Fraction subbeat = beat + Ms::Fraction(j, len.denominator() * subbeats);
+                Fraction subbeat = beat + Fraction(j, len.denominator() * subbeats);
                 int x = wholeNoteToPixelX(subbeat);
                 p->setPen(penLineSub);
                 p->drawLine(x, 0, x, height());
@@ -518,25 +519,25 @@ void PianorollAutomationCurves::paint(QPainter* p)
         return;
     }
 
-    Ms::Pid id = Ms::Pid::END;
+    Pid id = Pid::END;
     if (!m_propertyName.isEmpty()) {
-        id = Ms::propertyId(m_propertyName);
+        id = propertyId(m_propertyName.toStdString());
     }
 
-    if (id == Ms::Pid::END) {
+    if (id == Pid::END) {
         return;
     }
 
-    double pMax = Ms::propertyMaxValue(id).toDouble();
-    double pMin = Ms::propertyMinValue(id).toDouble();
-    double pDef = Ms::propertyDefaultValue(id).toDouble();
+    double pMax = propertyMaxValue(id).toDouble();
+    double pMin = propertyMinValue(id).toDouble();
+    double pDef = propertyDefaultValue(id).toDouble();
 
     const QPen penDataLine = QPen(m_colorDataLine, 1.0, Qt::SolidLine);
     p->setPen(penDataLine);
 
     double yDefault = valueToPixY(pDef, pMin, pMax);
 
-    Ms::AnimationTrack* track = staff->getAnimationTrack(m_propertyName);
+    AnimationTrack* track = staff->getAnimationTrack(m_propertyName.toStdString());
     if (!track) {
         //Draw line at default level
         p->drawLine(x1, yDefault, x2, yDefault);
@@ -545,7 +546,7 @@ void PianorollAutomationCurves::paint(QPainter* p)
 
     //Find screen coords of keys in sorted order
     std::map<int, QPoint> points;
-    for (Ms::AnimationKey* key: track->keys()) {
+    for (AnimationKey* key: track->keys()) {
         int y = valueToPixY(key->value(), pMin, pMax);
         int x = wholeNoteToPixelX(key->tick());
 
@@ -568,7 +569,7 @@ void PianorollAutomationCurves::paint(QPainter* p)
         int y = valueToPixY(val, pMin, pMax);
         int x = wholeNoteToPixelX(tick);
 
-        int iticks = Ms::Fraction::fromFloat(tick).ticks();
+        int iticks = Fraction::fromFloat(tick).ticks();
         points[iticks] = QPoint(x, y);
     }
 

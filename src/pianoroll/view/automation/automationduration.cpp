@@ -3,6 +3,7 @@
 #include "libmscore/undo.h"
 
 using namespace mu::pianoroll;
+using namespace mu::engraving;
 
 AutomationDuration::AutomationDuration()
 {
@@ -23,39 +24,39 @@ double AutomationDuration::minValue()
     return -1000;
 }
 
-double AutomationDuration::value(Ms::Staff* staff, NoteEventBlock& block)
+double AutomationDuration::value(Staff* staff, NoteEventBlock& block)
 {
-    Ms::Note* note = block.note;
-    Ms::NoteEvent* evt = &(note->playEvents()[0]);
+    Note* note = block.note;
+    NoteEvent* evt = &(note->playEvents()[0]);
 
 //    Ms::Chord* chord = note->chord();
 //    Ms::Fraction noteLen = chord->ticks();
-    Ms::Fraction noteLen = note->playTicksFraction();
+    Fraction noteLen = note->playTicksFraction();
     int evtLen = evt->len();
-    Ms::Fraction offsetLen = noteLen - (noteLen * evtLen / 1000);
+    Fraction offsetLen = noteLen - (noteLen * evtLen / 1000);
 
     return -offsetLen.numerator() * 1000 / offsetLen.denominator();
 }
 
-void AutomationDuration::setValue(Ms::Staff* staff, NoteEventBlock& block, double value)
+void AutomationDuration::setValue(Staff* staff, NoteEventBlock& block, double value)
 {
-    Ms::Note* note = block.note;
-    Ms::NoteEvent* evt = &(note->playEvents()[0]);
+    Note* note = block.note;
+    NoteEvent* evt = &(note->playEvents()[0]);
 
-    Ms::Fraction noteLen = note->playTicksFraction();
+    Fraction noteLen = note->playTicksFraction();
 //    Ms::Chord* chord = note->chord();
 //    Ms::Fraction noteLen = chord->ticks();
-    Ms::Fraction cutLen(-value, 1000);
-    Ms::Fraction playLen = noteLen - cutLen;
-    Ms::Fraction evtLenFrac = playLen / noteLen;
+    Fraction cutLen(-value, 1000);
+    Fraction playLen = noteLen - cutLen;
+    Fraction evtLenFrac = playLen / noteLen;
     int evtLen = qMax(evtLenFrac.numerator() * 1000 / evtLenFrac.denominator(), 1);
 
-    Ms::Score* score = staff->score();
+    Score* score = staff->score();
 
-    Ms::NoteEvent ne = *evt;
+    NoteEvent ne = *evt;
     ne.setLen(evtLen);
 
     score->startCmd();
-    score->undo(new Ms::ChangeNoteEvent(note, evt, ne));
+    score->undo(new ChangeNoteEvent(note, evt, ne));
     score->endCmd();
 }

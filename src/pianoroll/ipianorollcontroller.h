@@ -49,7 +49,7 @@ public:
     virtual void setNoteHeight(int value) = 0;
 
     virtual int widthInTicks() const = 0;
-    virtual Ms::Fraction widthInBeats() = 0;
+    virtual engraving::Fraction widthInBeats() = 0;
 
     virtual async::Notification pitchHighlightChanged() const = 0;
     virtual bool isPitchHighlight(int pitch) const = 0;

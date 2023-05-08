@@ -153,12 +153,6 @@ public:
     void swapBracket(size_t oldIdx, size_t newIdx);
     void changeBracketColumn(size_t oldColumn, size_t newColumn);
 
-    const QList<AutomationTrack*>& automationTracks() const { return _automationTracks; }
-    QList<AutomationTrack*>& automationTracks() { return _automationTracks; }
-    void insertAutomationTrack(AutomationTrack* track, int index);
-    void moveAutomationTrack(int indexFrom, int indexTo);
-    void deleteAutomationTrack(int index);
-
     void addBracket(BracketItem*);
     const std::vector<BracketItem*>& brackets() const { return _brackets; }
     std::vector<BracketItem*>& brackets() { return _brackets; }
