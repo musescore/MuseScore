@@ -108,6 +108,7 @@
 #include "../libmscore/slur.h"
 #include "../libmscore/staff.h"
 #include "../libmscore/stafflines.h"
+#include "../libmscore/staffstate.h"
 #include "../libmscore/stem.h"
 #include "../libmscore/system.h"
 
@@ -3745,4 +3746,57 @@ void TLayout::layoutForWidth(StaffLines* item, double w, LayoutContext&)
         item->m_lines.push_back(LineF(x1, y, x2, y));
         y += dist;
     }
+}
+
+void TLayout::layout(StaffState* item, LayoutContext&)
+{
+    double _spatium = item->spatium();
+    item->m_path      = PainterPath();
+    item->m_lw        = _spatium * 0.3;
+    double h  = _spatium * 4;
+    double w  = _spatium * 2.5;
+//      double w1 = w * .6;
+
+    PainterPath& path = item->m_path;
+    switch (item->staffStateType()) {
+    case StaffStateType::INSTRUMENT:
+        path.lineTo(w, 0.0);
+        path.lineTo(w, h);
+        path.lineTo(0.0, h);
+        path.lineTo(0.0, 0.0);
+        path.moveTo(w * .5, h - _spatium * .5);
+        path.lineTo(w * .5, _spatium * 2);
+        path.moveTo(w * .5, _spatium * .8);
+        path.lineTo(w * .5, _spatium * 1.0);
+        break;
+
+    case StaffStateType::TYPE:
+        path.lineTo(w, 0.0);
+        path.lineTo(w, h);
+        path.lineTo(0.0, h);
+        path.lineTo(0.0, 0.0);
+        break;
+
+    case StaffStateType::VISIBLE:
+        path.lineTo(w, 0.0);
+        path.lineTo(w, h);
+        path.lineTo(0.0, h);
+        path.lineTo(0.0, 0.0);
+        break;
+
+    case StaffStateType::INVISIBLE:
+        path.lineTo(w, 0.0);
+        path.lineTo(w, h);
+        path.lineTo(0.0, h);
+        path.lineTo(0.0, 0.0);
+        break;
+
+    default:
+        LOGD("unknown layout break symbol");
+        break;
+    }
+    RectF bb(0, 0, w, h);
+    bb.adjust(-item->m_lw, -item->m_lw, item->m_lw, item->m_lw);
+    item->setbbox(bb);
+    item->setPos(0.0, _spatium * -6.0);
 }

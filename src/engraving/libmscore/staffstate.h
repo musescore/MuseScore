@@ -44,19 +44,6 @@ class StaffState final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, StaffState)
     DECLARE_CLASSOF(ElementType::STAFF_STATE)
 
-    StaffStateType _staffStateType { StaffStateType::INVISIBLE };
-    double lw { 0.0 };
-    mu::draw::PainterPath path;
-
-    Instrument* _instrument { nullptr };
-
-    friend class Factory;
-    StaffState(EngravingItem* parent);
-    StaffState(const StaffState&);
-
-    void draw(mu::draw::Painter*) const override;
-    void layout() override;
-
 public:
 
     ~StaffState();
@@ -75,6 +62,22 @@ public:
     void setInstrument(const Instrument* i) { *_instrument = *i; }
     void setInstrument(const Instrument&& i) { *_instrument = i; }
     Segment* segment() { return (Segment*)explicitParent(); }
+
+private:
+
+    friend class v0::TLayout;
+    friend class Factory;
+    StaffState(EngravingItem* parent);
+    StaffState(const StaffState&);
+
+    void draw(mu::draw::Painter*) const override;
+    void layout() override;
+
+    StaffStateType _staffStateType { StaffStateType::INVISIBLE };
+    double m_lw { 0.0 };
+    mu::draw::PainterPath m_path;
+
+    Instrument* _instrument { nullptr };
 };
 } // namespace mu::engraving
 #endif
