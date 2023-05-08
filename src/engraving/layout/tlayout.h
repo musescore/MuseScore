@@ -109,6 +109,7 @@ class Slur;
 class StaffLines;
 class StaffState;
 class StaffText;
+class StaffTypeChange;
 
 class TabDurationSymbol;
 }
@@ -209,6 +210,7 @@ public:
     static void layoutForWidth(StaffLines* item, double w, LayoutContext& ctx);
     static void layout(StaffState* item, LayoutContext& ctx);
     static void layout(StaffText* item, LayoutContext& ctx);
+    static void layout(StaffTypeChange* item, LayoutContext& ctx);
 
     static void layout(TabDurationSymbol* item, LayoutContext& ctx);
 
