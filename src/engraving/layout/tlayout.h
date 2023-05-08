@@ -109,6 +109,8 @@ class Slur;
 class StaffLines;
 class StaffState;
 class StaffText;
+
+class TabDurationSymbol;
 }
 
 namespace mu::engraving::v0 {
@@ -207,6 +209,8 @@ public:
     static void layoutForWidth(StaffLines* item, double w, LayoutContext& ctx);
     static void layout(StaffState* item, LayoutContext& ctx);
     static void layout(StaffText* item, LayoutContext& ctx);
+
+    static void layout(TabDurationSymbol* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
