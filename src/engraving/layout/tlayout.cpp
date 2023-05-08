@@ -113,6 +113,7 @@
 #include "../libmscore/stafftype.h"
 #include "../libmscore/stafftypechange.h"
 #include "../libmscore/stem.h"
+#include "../libmscore/stemslash.h"
 #include "../libmscore/system.h"
 
 #include "../libmscore/text.h"
@@ -3889,6 +3890,69 @@ void TLayout::layout(Stem* item, LayoutContext&)
     // compute line and bounding rectangle
     RectF rect(line.p1(), line.p2() + PointF(0.0, beamCorrection));
     item->setbbox(rect.normalized().adjusted(-lineWidthCorrection, 0, lineWidthCorrection, 0));
+}
+
+void TLayout::layout(StemSlash* item, LayoutContext&)
+{
+    if (!item->chord() || !item->chord()->stem()) {
+        return;
+    }
+    Chord* c = item->chord();
+    Stem* stem = c->stem();
+    Hook* hook = c->hook();
+    Beam* beam = c->beam();
+
+    static constexpr double heightReduction = 0.66;
+    static constexpr double angleIncrease = 1.2;
+    static constexpr double lengthIncrease = 1.1;
+
+    double up = c->up() ? -1 : 1;
+    double stemTipY = c->up() ? stem->bbox().translated(stem->pos()).top() : stem->bbox().translated(stem->pos()).bottom();
+    double leftHang = item->score()->noteHeadWidth() * item->score()->styleD(Sid::graceNoteMag) / 2;
+    double angle = item->score()->styleD(Sid::stemSlashAngle) * M_PI / 180; // converting to radians
+    bool straight = item->score()->styleB(Sid::useStraightNoteFlags);
+    double graceNoteMag = item->score()->styleD(Sid::graceNoteMag);
+
+    double startX = stem->bbox().translated(stem->pos()).right() - leftHang;
+
+    double startY;
+    if (straight || beam) {
+        startY = stemTipY - up * graceNoteMag * item->score()->styleMM(Sid::stemSlashPosition) * heightReduction;
+    } else {
+        startY = stemTipY - up * graceNoteMag * item->score()->styleMM(Sid::stemSlashPosition);
+    }
+
+    double endX = 0;
+    double endY = 0;
+
+    if (hook) {
+        auto musicFont = item->score()->styleSt(Sid::MusicalSymbolFont);
+        // HACK: adjust slash angle for fonts with "fat" hooks. In future, we must use smufl cutOut
+        if (c->beams() >= 2 && !straight
+            && (musicFont == "Bravura" || musicFont == "Finale Maestro" || musicFont == "Gonville")) {
+            angle *= angleIncrease;
+        }
+        endX = hook->bbox().translated(hook->pos()).right(); // always ends at the right bbox margin of the hook
+        endY = startY + up * (endX - startX) * tan(angle);
+    }
+    if (beam) {
+        PointF p1 = beam->startAnchor();
+        PointF p2 = beam->endAnchor();
+        double beamAngle = p2.x() > p1.x() ? atan((p2.y() - p1.y()) / (p2.x() - p1.x())) : 0;
+        angle += up * beamAngle / 2;
+        double length = 2 * item->spatium();
+        bool obtuseAngle = (c->up() && beamAngle < 0) || (!c->up() && beamAngle > 0);
+        if (obtuseAngle) {
+            length *= lengthIncrease; // needs to be slightly longer
+        }
+        endX = startX + length * cos(angle);
+        endY = startY + up * length * sin(angle);
+    }
+
+    item->m_line = LineF(PointF(startX, startY), PointF(endX, endY));
+    item->m_width = item->score()->styleMM(Sid::stemSlashThickness) * graceNoteMag;
+    item->setbbox(RectF(item->m_line.p1(), item->m_line.p2()).normalized().adjusted(-item->m_width / 2, -item->m_width / 2, item->m_width,
+                                                                                    item->m_width));
 }
 
 void TLayout::layout(TabDurationSymbol* item, LayoutContext&)
