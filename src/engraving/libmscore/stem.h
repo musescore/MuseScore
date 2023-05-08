@@ -73,21 +73,22 @@ public:
     double lineWidthMag() const { return m_lineWidth * mag(); }
     void setLineWidth(Millimetre lineWidth) { m_lineWidth = lineWidth; }
 
-    mu::PointF p2() const { return m_line.p2(); }
-    mu::PointF flagPosition() const;
+    void setLine(const LineF& l) { m_line = l; }
+    PointF p2() const { return m_line.p2(); }
+    PointF flagPosition() const;
     double length() const { return m_baseLength + m_userLength; }
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+    std::vector<PointF> gripsPositions(const EditData&) const override;
 
 private:
     friend class Factory;
     Stem(Chord* parent = 0);
 
-    mu::LineF m_line;
+    LineF m_line;
 
     Millimetre m_baseLength = Millimetre(0.0);
     Millimetre m_userLength = Millimetre(0.0);

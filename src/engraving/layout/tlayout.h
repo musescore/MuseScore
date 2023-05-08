@@ -110,6 +110,7 @@ class StaffLines;
 class StaffState;
 class StaffText;
 class StaffTypeChange;
+class Stem;
 
 class TabDurationSymbol;
 }
@@ -211,6 +212,7 @@ public:
     static void layout(StaffState* item, LayoutContext& ctx);
     static void layout(StaffText* item, LayoutContext& ctx);
     static void layout(StaffTypeChange* item, LayoutContext& ctx);
+    static void layout(Stem* item, LayoutContext& ctx);
 
     static void layout(TabDurationSymbol* item, LayoutContext& ctx);
 
