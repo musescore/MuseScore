@@ -22,6 +22,8 @@
 
 #include "sticking.h"
 
+#include "layout/tlayout.h"
+
 #include "segment.h"
 
 #include "log.h"
@@ -63,8 +65,8 @@ bool Sticking::isEditAllowed(EditData& ed) const
 
 void Sticking::layout()
 {
-    TextBase::layout();
-    autoplaceSegmentElement();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
