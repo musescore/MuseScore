@@ -31,6 +31,10 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/articulation.h
     ${CMAKE_CURRENT_LIST_DIR}/audio.cpp
     ${CMAKE_CURRENT_LIST_DIR}/audio.h
+    ${CMAKE_CURRENT_LIST_DIR}/automationtrack.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/automationtrack.h
+    ${CMAKE_CURRENT_LIST_DIR}/automationvertex.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/automationvertex.h
     ${CMAKE_CURRENT_LIST_DIR}/bagpembell.cpp
     ${CMAKE_CURRENT_LIST_DIR}/bagpembell.h
     ${CMAKE_CURRENT_LIST_DIR}/barline.cpp

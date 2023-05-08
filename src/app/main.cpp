@@ -130,7 +130,6 @@
 #endif
 
 #include "inspector/inspectormodule.h"
-
 #ifdef MUE_BUILD_INSTRUMENTSSCENE_MODULE
 #include "instrumentsscene/instrumentsscenemodule.h"
 #else

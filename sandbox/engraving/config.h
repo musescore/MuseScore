@@ -22,5 +22,4 @@
 
 #define VERSION                "4.0.0"
 
-
 #endif /* MUSESCORE_CONFIG_H */
