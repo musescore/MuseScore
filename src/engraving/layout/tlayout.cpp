@@ -116,6 +116,8 @@
 #include "../libmscore/stemslash.h"
 #include "../libmscore/sticking.h"
 #include "../libmscore/stretchedbend.h"
+#include "../libmscore/bsymbol.h"
+#include "../libmscore/symbol.h"
 #include "../libmscore/system.h"
 
 #include "../libmscore/text.h"
@@ -4000,6 +4002,46 @@ void TLayout::doLayout(StretchedBend* item, LayoutContext&, bool stretchedMode)
         item->setbbox(item->m_boundingRect);
         item->setPos(0.0, 0.0);
     }
+}
+
+void TLayout::layoutBaseSymbol(BSymbol* item, LayoutContext&)
+{
+    if (item->staff()) {
+        item->setMag(item->staff()->staffMag(item->tick()));
+    }
+    if (!item->explicitParent()) {
+        item->setOffset(.0, .0);
+        item->setPos(.0, .0);
+    }
+    for (EngravingItem* e : item->leafs()) {
+        e->layout();
+    }
+}
+
+void TLayout::layout(Symbol* item, LayoutContext& ctx)
+{
+    item->setbbox(item->scoreFont() ? item->scoreFont()->bbox(item->sym(), item->magS()) : item->symBbox(item->sym()));
+    double w = item->width();
+    PointF p;
+    if (item->align() == AlignV::BOTTOM) {
+        p.setY(-item->height());
+    } else if (item->align() == AlignV::VCENTER) {
+        p.setY((-item->height()) * .5);
+    } else if (item->align() == AlignV::BASELINE) {
+        p.setY(-item->baseLine());
+    }
+    if (item->align() == AlignH::RIGHT) {
+        p.setX(-w);
+    } else if (item->align() == AlignH::HCENTER) {
+        p.setX(-(w * .5));
+    }
+    item->setPos(p);
+    layoutBaseSymbol(item, ctx);
+}
+
+void TLayout::layout(FSymbol* item, LayoutContext&)
+{
+    item->setbbox(mu::draw::FontMetrics::boundingRect(item->font(), item->toString()));
 }
 
 void TLayout::layout(TabDurationSymbol* item, LayoutContext&)

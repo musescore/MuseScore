@@ -109,7 +109,7 @@ public:
 
     double baseLine() const override { return 0.0; }
     Segment* segment() const { return (Segment*)explicitParent(); }
-    mu::draw::Font font() const { return _font; }
+    const mu::draw::Font& font() const { return _font; }
     char32_t code() const { return _code; }
     void setFont(const mu::draw::Font& f);
     void setCode(char32_t val) { _code = val; }
