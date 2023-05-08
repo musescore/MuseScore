@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "splashscreen.h"
+#include "loadingscreenview.h"
 
 #include <QApplication>
 #include <QPainter>
@@ -34,43 +34,28 @@ using namespace mu::appshell;
 
 static const QString imagePath(":/resources/LoadingScreen.svg");
 
-static constexpr QSize splashScreenSize(810, 405);
+static constexpr QSize loadingScreenSize(810, 405);
 
 static const QColor messageColor("#99FFFFFF");
-static constexpr QRectF messageRect(splashScreenSize.width() / 2, 269, 0, 0);
+static constexpr QRectF messageRect(loadingScreenSize.width() / 2, 269, 0, 0);
 
 static const QString website("www.musescore.org");
-static constexpr QRectF websiteRect(splashScreenSize.width() - 48, splashScreenSize.height() - 48, 0, 0);
+static constexpr QRectF websiteRect(loadingScreenSize.width() - 48, loadingScreenSize.height() - 48, 0, 0);
 
 static const QColor versionNumberColor("#22A0F4");
 static constexpr qreal versionNumberSpacing = 5.0;
 
-#ifdef Q_OS_MAC
-// Necessary to remove undesired background, so that we really get our rounded corners
-static constexpr Qt::WindowFlags splashScreenWindowFlags = (Qt::SplashScreen | Qt::FramelessWindowHint) & ~Qt::Sheet | Qt::Window;
-#else
-static constexpr Qt::WindowFlags splashScreenWindowFlags = Qt::SplashScreen | Qt::FramelessWindowHint;
-#endif
-
-SplashScreen::SplashScreen()
-    : QWidget(nullptr, splashScreenWindowFlags),
+LoadingScreenView::LoadingScreenView(QWidget* parent)
+    : QWidget(parent),
     m_backgroundRenderer(new QSvgRenderer(imagePath, this))
 {
     setAttribute(Qt::WA_TranslucentBackground);
-    setSize(splashScreenSize);
+    resize(loadingScreenSize);
 
     m_message = qtrc("appshell", "Loading…\u200e");
-
-    repaint();
 }
 
-void SplashScreen::repaint()
-{
-    QWidget::repaint();
-    QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-}
-
-bool SplashScreen::event(QEvent* event)
+bool LoadingScreenView::event(QEvent* event)
 {
     if (event->type() == QEvent::Paint) {
         QPainter painter(this);
@@ -81,7 +66,7 @@ bool SplashScreen::event(QEvent* event)
     return QWidget::event(event);
 }
 
-void SplashScreen::draw(QPainter* painter)
+void LoadingScreenView::draw(QPainter* painter)
 {
     painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
 
@@ -113,13 +98,4 @@ void SplashScreen::draw(QPainter* painter)
     painter->drawText(websiteRect.translated(0.0, -websiteBoundingRect.height() - versionNumberSpacing),
                       Qt::AlignBottom | alignment | Qt::TextDontClip,
                       qtrc("appshell", "Version %1").arg(QString::fromStdString(framework::MUVersion::fullVersion().toStdString())));
-}
-
-void SplashScreen::setSize(const QSize& size)
-{
-    resize(size);
-
-    if (screen()) {
-        move(screen()->geometry().center() - QPoint(size.width() / 2, size.height() / 2));
-    }
 }

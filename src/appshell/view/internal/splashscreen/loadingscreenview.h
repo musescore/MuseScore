@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2022 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,30 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MI_MULTIINSTANCESMODULE_H
-#define MU_MI_MULTIINSTANCESMODULE_H
 
-#include <memory>
+#ifndef MU_APPSHELL_LOADINGSCREENVIEW_H
+#define MU_APPSHELL_LOADINGSCREENVIEW_H
 
-#include "modularity/imodulesetup.h"
+#include <QWidget>
 
-namespace mu::mi {
-class MultiInstancesProvider;
-class MultiInstancesModule : public modularity::IModuleSetup
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
+#include "languages/ilanguagesservice.h"
+
+class QSvgRenderer;
+
+namespace mu::appshell {
+class LoadingScreenView : public QWidget
 {
-public:
+    Q_OBJECT
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void registerUiTypes() override;
-    void registerResources() override;
-    void onPreInit(const framework::IApplication::RunMode& mode) override;
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(languages::ILanguagesService, languagesService)
+
+public:
+    explicit LoadingScreenView(QWidget* parent = nullptr);
 
 private:
+    bool event(QEvent* event) override;
+    void draw(QPainter* painter);
 
-    std::shared_ptr<MultiInstancesProvider> m_multiInstancesProvider;
+    QString m_message;
+    QSvgRenderer* m_backgroundRenderer = nullptr;
 };
 }
 
-#endif // MU_MI_MULTIINSTANCESMODULE_H
+#endif // MU_APPSHELL_LOADINGSCREENVIEW_H

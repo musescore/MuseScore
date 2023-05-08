@@ -47,6 +47,8 @@ class StartupScenario : public IStartupScenario, public async::Asyncable
 public:
 
     void setStartupType(const std::optional<std::string>& type) override;
+
+    io::path_t startupScorePath() const override;
     void setStartupScorePath(const std::optional<io::path_t>& path) override;
 
     void run() override;

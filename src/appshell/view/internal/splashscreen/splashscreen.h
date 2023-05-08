@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2022 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,30 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MI_MULTIINSTANCESMODULE_H
-#define MU_MI_MULTIINSTANCESMODULE_H
 
-#include <memory>
+#ifndef MU_APPSHELL_SPLASHSCREEN_H
+#define MU_APPSHELL_SPLASHSCREEN_H
 
-#include "modularity/imodulesetup.h"
+#include <QWidget>
 
-namespace mu::mi {
-class MultiInstancesProvider;
-class MultiInstancesModule : public modularity::IModuleSetup
+class QSvgRenderer;
+
+namespace mu::appshell {
+class SplashScreen : public QWidget
 {
 public:
+    enum SplashScreenType {
+        Default,
+        ForNewInstance
+    };
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void registerUiTypes() override;
-    void registerResources() override;
-    void onPreInit(const framework::IApplication::RunMode& mode) override;
+    explicit SplashScreen(SplashScreenType type, const QVariant& data = QVariant());
 
 private:
+    bool event(QEvent* event) override;
+    void repaint();
+    void draw(QPainter* painter);
+    void setSize(const QSize& size);
 
-    std::shared_ptr<MultiInstancesProvider> m_multiInstancesProvider;
+    QWidget* m_view = nullptr;
 };
 }
 
-#endif // MU_MI_MULTIINSTANCESMODULE_H
+#endif // MU_APPSHELL_SPLASHSCREEN_H

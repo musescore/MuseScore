@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_APPSHELL_SPLASHSCREEN_H
-#define MU_APPSHELL_SPLASHSCREEN_H
+#ifndef MU_APPSHELL_NEWINSTANCELOADINSCREENVIEW_H
+#define MU_APPSHELL_NEWINSTANCELOADINSCREENVIEW_H
 
 #include <QWidget>
 
@@ -32,7 +32,7 @@
 class QSvgRenderer;
 
 namespace mu::appshell {
-class SplashScreen : public QWidget
+class NewInstanceLoadingScreenView : public QWidget
 {
     Q_OBJECT
 
@@ -40,17 +40,16 @@ class SplashScreen : public QWidget
     INJECT(languages::ILanguagesService, languagesService)
 
 public:
-    SplashScreen();
+    explicit NewInstanceLoadingScreenView(const QString& openingFileName);
 
 private:
     bool event(QEvent* event) override;
-    void repaint();
     void draw(QPainter* painter);
-    void setSize(const QSize& size);
 
     QString m_message;
-    QSvgRenderer* m_backgroundRenderer = nullptr;
+
+    QSize m_dialogSize;
 };
 }
 
-#endif // MU_APPSHELL_SPLASHSCREEN_H
+#endif // MU_APPSHELL_NEWINSTANCELOADINSCREENVIEW_H

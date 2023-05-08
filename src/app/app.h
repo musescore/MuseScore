@@ -32,6 +32,7 @@
 #include "diagnostics/idiagnosticdrawprovider.h"
 #include "autobot/iautobot.h"
 #include "audio/iregisteraudiopluginsscenario.h"
+#include "multiinstances/imultiinstancesprovider.h"
 
 #include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
@@ -54,6 +55,7 @@ class App
     INJECT(diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
     INJECT(autobot::IAutobot, autobot)
     INJECT(audio::IRegisterAudioPluginsScenario, registerAudioPluginsScenario)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell::IAppShellConfiguration, appshellConfiguration)
     INJECT(appshell::IStartupScenario, startupScenario)

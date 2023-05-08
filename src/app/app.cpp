@@ -30,7 +30,7 @@
 #include <QThreadPool>
 #endif
 
-#include "appshell/view/internal/splashscreen.h"
+#include "appshell/view/internal/splashscreen/splashscreen.h"
 #include "appshell/view/dockwindow/docksetup.h"
 
 #include "modularity/ioc.h"
@@ -166,7 +166,13 @@ int App::run(int argc, char** argv)
 #ifdef MUE_BUILD_APPSHELL_MODULE
     SplashScreen* splashScreen = nullptr;
     if (runMode == framework::IApplication::RunMode::GuiApp) {
-        splashScreen = new SplashScreen();
+        if (multiInstancesProvider()->isMainInstance()) {
+            splashScreen = new SplashScreen(SplashScreen::Default);
+        } else {
+            QString fileName = io::filename(startupScenario()->startupScorePath(), true /* includingExtension */).toQString();
+            splashScreen = new SplashScreen(SplashScreen::ForNewInstance, fileName);
+        }
+
         splashScreen->show();
     }
 #endif
