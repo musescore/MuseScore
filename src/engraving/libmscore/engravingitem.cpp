@@ -844,7 +844,7 @@ void EngravingItem::removeAnimationTrack(const std::string& propertyName)
     }
 }
 
-bool EngravingItem::hitShapeContains(const PointF & p) const
+bool EngravingItem::hitShapeContains(const PointF& p) const
 {
     return hitShape().contains(p - pagePos());
 }
