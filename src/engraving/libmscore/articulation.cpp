@@ -466,6 +466,10 @@ String Articulation::symId2ArticulationName(SymId symId)
 
     case SymId::articAccentAbove:
     case SymId::articAccentBelow:
+        return u"accent";
+
+    case SymId::dynamicSforzato:
+    case SymId::dynamicSforzando:
         return u"sforzato";
 
     case SymId::brassMuteOpen:
