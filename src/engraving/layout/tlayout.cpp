@@ -119,6 +119,7 @@
 #include "../libmscore/bsymbol.h"
 #include "../libmscore/symbol.h"
 #include "../libmscore/system.h"
+#include "../libmscore/systemdivider.h"
 
 #include "../libmscore/text.h"
 #include "../libmscore/textframe.h"
@@ -4042,6 +4043,20 @@ void TLayout::layout(Symbol* item, LayoutContext& ctx)
 void TLayout::layout(FSymbol* item, LayoutContext&)
 {
     item->setbbox(mu::draw::FontMetrics::boundingRect(item->font(), item->toString()));
+}
+
+void TLayout::layout(SystemDivider* item, LayoutContext& ctx)
+{
+    SymId sid;
+
+    if (item->dividerType() == SystemDivider::Type::LEFT) {
+        sid = SymNames::symIdByName(item->score()->styleSt(Sid::dividerLeftSym));
+    } else {
+        sid = SymNames::symIdByName(item->score()->styleSt(Sid::dividerRightSym));
+    }
+    item->setSym(sid, item->score()->engravingFont());
+
+    layout(static_cast<Symbol*>(item), ctx);
 }
 
 void TLayout::layout(TabDurationSymbol* item, LayoutContext&)
