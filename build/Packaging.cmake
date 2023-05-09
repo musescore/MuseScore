@@ -4,101 +4,75 @@
 
 include (InstallRequiredSystemLibraries)
 
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "MuseScore is a full featured WYSIWYG score editor")
-SET(CPACK_PACKAGE_VENDOR "MuseScore BVBA and Others")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "MuseScore is a full featured WYSIWYG score editor")
+set(CPACK_PACKAGE_VENDOR "MuseScore BVBA and Others")
 
-SET(CPACK_PACKAGE_VERSION_MAJOR "${MUSESCORE_VERSION_MAJOR}")
-SET(CPACK_PACKAGE_VERSION_MINOR "${MUSESCORE_VERSION_MINOR}")
-SET(CPACK_PACKAGE_VERSION_PATCH "${MUSESCORE_VERSION_PATCH}")
-SET(CPACK_PACKAGE_VERSION_BUILD "${CMAKE_BUILD_NUMBER}")
-SET(CPACK_PACKAGE_VERSION "${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}.${MUSESCORE_VERSION_PATCH}.${CPACK_PACKAGE_VERSION_BUILD}")
-SET(CPACK_PACKAGE_INSTALL_DIRECTORY "MuseScore ${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_MAJOR "${MUSESCORE_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${MUSESCORE_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${MUSESCORE_VERSION_PATCH}")
+set(CPACK_PACKAGE_VERSION_BUILD "${CMAKE_BUILD_NUMBER}")
+set(CPACK_PACKAGE_VERSION "${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}.${MUSESCORE_VERSION_PATCH}.${CPACK_PACKAGE_VERSION_BUILD}")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "MuseScore ${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}")
 
 message("CPACK_PACKAGE_VERSION: ${CPACK_PACKAGE_VERSION}")
 
 set(git_date_string "")
 if (MUSESCORE_UNSTABLE)
-      find_program(GIT_EXECUTABLE git PATHS ENV PATH)
-      if (GIT_EXECUTABLE)
-            execute_process(
-                  COMMAND "${GIT_EXECUTABLE}" log -1 --date=short --format=%cd
-                  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-                  OUTPUT_VARIABLE git_date
-                  OUTPUT_STRIP_TRAILING_WHITESPACE)
-      endif (GIT_EXECUTABLE)
-      if (git_date)
-            STRING(REGEX REPLACE "-" "" git_date "${git_date}")
-            set(git_date_string "~git${git_date}")
-      endif (git_date)
+    find_program(GIT_EXECUTABLE git PATHS ENV PATH)
+    if (GIT_EXECUTABLE)
+        execute_process(
+            COMMAND "${GIT_EXECUTABLE}" log -1 --date=short --format=%cd
+            WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+            OUTPUT_VARIABLE git_date
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+    endif()
+    if (git_date)
+        string(REGEX REPLACE "-" "" git_date "${git_date}")
+        set(git_date_string "~git${git_date}")
+    endif()
 endif (MUSESCORE_UNSTABLE)
 
-SET(CPACK_NSIS_COMPRESSOR "/FINAL /SOLID lzma")
-
-IF(MINGW OR MSVC)
-    SET(CPACK_PACKAGE_INSTALL_DIRECTORY ${MUSESCORE_NAME_VERSION})
-    SET(CPACK_PACKAGE_NAME    ${MUSESCORE_NAME})
-    SET(MSCORE_EXECUTABLE_NAME ${MUSESCORE_NAME}${MUSESCORE_VERSION_MAJOR})
-
-    # There is a bug in NSI that does not handle full unix paths properly. Make
-    # sure there is at least one set of four (4) backslashes.
-    SET(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/build/packaging\\\\installer_head_nsis.bmp")
-    SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\${MSCORE_EXECUTABLE_NAME}.exe,0")
-    SET(CPACK_NSIS_DISPLAY_NAME "${MUSESCORE_NAME} ${MUSESCORE_VERSION_FULL}")
-    SET(CPACK_NSIS_HELP_LINK "https://www.musescore.org/")
-    SET(CPACK_NSIS_URL_INFO_ABOUT "https://www.musescore.org/")
-    SET(CPACK_NSIS_CONTACT "info@musescore.org")
-    SET(CPACK_NSIS_MODIFY_PATH OFF)
-    SET(CPACK_STRIP_FILES "${MSCORE_EXECUTABLE_NAME}.exe")
+if (MINGW OR MSVC)
+    set(CPACK_PACKAGE_INSTALL_DIRECTORY ${MUSESCORE_NAME_VERSION})
+    set(CPACK_PACKAGE_NAME ${MUSESCORE_NAME})
+    set(MSCORE_EXECUTABLE_NAME ${MUSESCORE_NAME}${MUSESCORE_VERSION_MAJOR})
 
     # File types association:
     message(STATUS "[Packaging.cmake] PACKAGE_FILE_ASSOCIATION: ${MUE_ENABLE_FILE_ASSOCIATION}")
-    IF (MUE_ENABLE_FILE_ASSOCIATION)
-      SET(CPACK_NSIS_DEFINES "!include ${PROJECT_SOURCE_DIR}/build/packaging\\\\FileAssociation.nsh")
-
-      SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
-            \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
-            \\\${registerExtension} \\\"MuseScore Uncompressed File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
-            \\\${registerExtension} \\\"MuseScore Uncompressde File\\\" \\\".mscs\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
-      ")
-      SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
-            \\\${unregisterExtension} \\\".mscz\\\" \\\"MuseScore File\\\"
-            \\\${unregisterExtension} \\\".mscx\\\" \\\"MuseScore Uncompressed File\\\"
-            \\\${unregisterExtension} \\\".mscs\\\" \\\"MuseScore Uncompressed File\\\"
-      ")
-
-      list(APPEND CPACK_WIX_CANDLE_EXTRA_FLAGS -dCPACK_WIX_FILE_ASSOCIATION=ON)
-    ELSE(MUE_ENABLE_FILE_ASSOCIATION)
-      list(APPEND CPACK_WIX_CANDLE_EXTRA_FLAGS -dCPACK_WIX_FILE_ASSOCIATION=OFF)
-    ENDIF(MUE_ENABLE_FILE_ASSOCIATION)
+    if (MUE_ENABLE_FILE_ASSOCIATION)
+        list(APPEND CPACK_WIX_CANDLE_EXTRA_FLAGS -dCPACK_WIX_FILE_ASSOCIATION=ON)
+    else()
+        list(APPEND CPACK_WIX_CANDLE_EXTRA_FLAGS -dCPACK_WIX_FILE_ASSOCIATION=OFF)
+    endif()
 
     file(TO_CMAKE_PATH $ENV{PROGRAMFILES} PROGRAMFILES)
-    SET(CPACK_WIX_ROOT "${PROGRAMFILES}/WiX Toolset v3.11")
-    SET(CPACK_WIX_PRODUCT_GUID "00000000-0000-0000-0000-000000000000")
+    set(CPACK_WIX_ROOT "${PROGRAMFILES}/WiX Toolset v3.11")
+    set(CPACK_WIX_PRODUCT_GUID "00000000-0000-0000-0000-000000000000")
     message(STATUS "[Packaging.cmake] CPACK_WIX_PRODUCT_GUID: ${CPACK_WIX_PRODUCT_GUID}")
-    SET(CPACK_WIX_UPGRADE_GUID "11111111-1111-1111-1111-111111111111")
+    set(CPACK_WIX_UPGRADE_GUID "11111111-1111-1111-1111-111111111111")
     message(STATUS "[Packaging.cmake] CPACK_WIX_UPGRADE_GUID: ${CPACK_WIX_UPGRADE_GUID}")
-    SET(CPACK_WIX_LICENSE_RTF  "${PROJECT_SOURCE_DIR}/build/packaging/LICENSE.rtf")
-    SET(CPACK_WIX_PRODUCT_ICON "${PROJECT_SOURCE_DIR}/share/icons/AppIcon/MS4_AppIcon.ico")
-    SET(CPACK_WIX_UI_BANNER "${PROJECT_SOURCE_DIR}/build/packaging/installer_banner_wix.png")
-    SET(CPACK_WIX_UI_DIALOG "${PROJECT_SOURCE_DIR}/build/packaging/installer_background_wix.png")
-    SET(CPACK_WIX_PROGRAM_MENU_FOLDER "${MUSESCORE_NAME_VERSION}")
-    SET(CPACK_CREATE_DESKTOP_LINKS "${MUSESCORE_NAME_VERSION}")
-    SET(CPACK_WIX_EXTENSIONS "WixUtilExtension")
+    set(CPACK_WIX_LICENSE_RTF  "${PROJECT_SOURCE_DIR}/build/packaging/LICENSE.rtf")
+    set(CPACK_WIX_PRODUCT_ICON "${PROJECT_SOURCE_DIR}/share/icons/AppIcon/MS4_AppIcon.ico")
+    set(CPACK_WIX_UI_BANNER "${PROJECT_SOURCE_DIR}/build/packaging/installer_banner_wix.png")
+    set(CPACK_WIX_UI_DIALOG "${PROJECT_SOURCE_DIR}/build/packaging/installer_background_wix.png")
+    set(CPACK_WIX_PROGRAM_MENU_FOLDER "${MUSESCORE_NAME_VERSION}")
+    set(CPACK_CREATE_DESKTOP_LINKS "${MUSESCORE_NAME_VERSION}")
+    set(CPACK_WIX_EXTENSIONS "WixUtilExtension")
 
-    SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/packaging" ${CMAKE_MODULE_PATH}) # Use custom version of NSIS.InstallOptions.ini
-    SET(CPACK_PACKAGE_EXECUTABLES   "${MSCORE_EXECUTABLE_NAME}" "${MUSESCORE_NAME_VERSION}") # exe name, label
-    SET(CPACK_CREATE_DESKTOP_LINKS "${MSCORE_EXECUTABLE_NAME}" "${MUSESCORE_NAME_VERSION}") #exe name, label
+    set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/packaging" ${CMAKE_MODULE_PATH}) # Use custom version of WIX.template.in
+    set(CPACK_PACKAGE_EXECUTABLES   "${MSCORE_EXECUTABLE_NAME}" "${MUSESCORE_NAME_VERSION}") # exe name, label
+    set(CPACK_CREATE_DESKTOP_LINKS "${MSCORE_EXECUTABLE_NAME}" "${MUSESCORE_NAME_VERSION}") #exe name, label
 
-    SET(CPACK_PACKAGE_FILE_NAME     "${MUSESCORE_NAME}-${MUSESCORE_VERSION_FULL}${git_date_string}")
+    set(CPACK_PACKAGE_FILE_NAME     "${MUSESCORE_NAME}-${MUSESCORE_VERSION_FULL}${git_date_string}")
 
-ELSE(MINGW OR MSVC)
-    SET(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/mscore/data/mscore.bmp")
-    SET(CPACK_STRIP_FILES "${MSCORE_OUTPUT_NAME}")
-    SET(CPACK_SOURCE_STRIP_FILES "")
-    SET(CPACK_PACKAGE_EXECUTABLES   "mscore" "MuseScore")
-    SET(CPACK_SOURCE_PACKAGE_FILE_NAME "mscore")
-    SET(CPACK_PACKAGE_FILE_NAME     "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${MUSESCORE_VERSION_FULL}${git_date_string}")
-ENDIF(MINGW OR MSVC)
+else(MINGW OR MSVC)
+    set(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/mscore/data/mscore.bmp")
+    set(CPACK_STRIP_FILES "${MSCORE_OUTPUT_NAME}")
+    set(CPACK_SOURCE_STRIP_FILES "")
+    set(CPACK_PACKAGE_EXECUTABLES "mscore" "MuseScore")
+    set(CPACK_SOURCE_PACKAGE_FILE_NAME "mscore")
+    set(CPACK_PACKAGE_FILE_NAME "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${MUSESCORE_VERSION_FULL}${git_date_string}")
+endif(MINGW OR MSVC)
 
 set(CPACK_DEBIAN_PACKAGE_NAME         "mscore")
 set(CPACK_DEBIAN_PACKAGE_VERSION      "${MUSESCORE_VERSION_FULL}${git_date_string}")
@@ -108,28 +82,27 @@ set(CPACK_DEBIAN_PACKAGE_PRIORITY     "optional")
 set(CPACK_DEBIAN_PACKAGE_RECOMMENDS   "")
 set(CPACK_DEBIAN_PACKAGE_SUGGESTS     "")
 
-set(CPACK_PACKAGE_CONTACT       "info@musescore.org")
+set(CPACK_PACKAGE_CONTACT "info@musescore.org")
 
 if (MINGW OR MSVC)
-  set(CPACK_GENERATOR             "WIX")
+    set(CPACK_GENERATOR "WIX")
 else (MINGW OR MSVC)
-   if (NOT APPLE)
-     set(CPACK_GENERATOR             "DEB;TBZ2")
-     set(CPACK_DEB "on")
-   endif (NOT APPLE)
+    if (NOT APPLE)
+        set(CPACK_GENERATOR "DEB;TBZ2")
+        set(CPACK_DEB "on")
+    endif (NOT APPLE)
 endif (MINGW OR MSVC)
 
-
 if (CPACK_DEB)
-      find_program(DPKG_EXECUTABLE dpkg PATHS ENV PATH)
-      if (DPKG_EXECUTABLE)
-            set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS	"ON")
-            execute_process(
-                  COMMAND "${DPKG_EXECUTABLE} --print-architecture"
-                  OUTPUT_VARIABLE dpkg_architecture
-                  OUTPUT_STRIP_TRAILING_WHITESPACE)
-            set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "${dpkg_architecture}")
-      endif (DPKG_EXECUTABLE)
+    find_program(DPKG_EXECUTABLE dpkg PATHS ENV PATH)
+    if (DPKG_EXECUTABLE)
+        set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS "ON")
+        execute_process(
+            COMMAND "${DPKG_EXECUTABLE} --print-architecture"
+            OUTPUT_VARIABLE dpkg_architecture
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+        set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "${dpkg_architecture}")
+    endif (DPKG_EXECUTABLE)
 endif (CPACK_DEB)
 
 include (CPack)
