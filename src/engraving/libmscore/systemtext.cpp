@@ -22,6 +22,8 @@
 
 #include "systemtext.h"
 
+#include "layout/tlayout.h"
+
 using namespace mu;
 
 namespace mu::engraving {
@@ -64,7 +66,7 @@ engraving::PropertyValue SystemText::propertyDefault(Pid id) const
 
 void SystemText::layout()
 {
-    TextBase::layout();
-    autoplaceSegmentElement();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 } // namespace mu::engraving

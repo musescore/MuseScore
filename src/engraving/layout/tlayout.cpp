@@ -120,6 +120,7 @@
 #include "../libmscore/symbol.h"
 #include "../libmscore/system.h"
 #include "../libmscore/systemdivider.h"
+#include "../libmscore/systemtext.h"
 
 #include "../libmscore/text.h"
 #include "../libmscore/textframe.h"
@@ -4057,6 +4058,12 @@ void TLayout::layout(SystemDivider* item, LayoutContext& ctx)
     item->setSym(sid, item->score()->engravingFont());
 
     layout(static_cast<Symbol*>(item), ctx);
+}
+
+void TLayout::layout(SystemText* item, LayoutContext&)
+{
+    item->TextBase::layout();
+    item->autoplaceSegmentElement();
 }
 
 void TLayout::layout(TabDurationSymbol* item, LayoutContext&)
