@@ -36,12 +36,6 @@ class VibratoSegment final : public LineSegment
 {
     OBJECT_ALLOCATOR(engraving, VibratoSegment)
 
-    SymIdList _symbols;
-
-    void symbolLine(SymId start, SymId fill);
-    void symbolLine(SymId start, SymId fill, SymId end);
-    virtual Sid getPropertyStyle(Pid) const override;
-
 public:
     VibratoSegment(Vibrato* sp, System* parent);
 
@@ -57,6 +51,14 @@ public:
     Shape shape() const override;
     SymIdList symbols() const { return _symbols; }
     void setSymbols(const SymIdList& s) { _symbols = s; }
+
+    void symbolLine(SymId start, SymId fill);
+    void symbolLine(SymId start, SymId fill, SymId end);
+
+private:
+    virtual Sid getPropertyStyle(Pid) const override;
+
+    SymIdList _symbols;
 };
 
 //---------------------------------------------------------
