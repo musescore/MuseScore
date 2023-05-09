@@ -52,7 +52,7 @@
 #include "layoutharmonies.h"
 #include "lyricslayout.h"
 #include "layoutmeasure.h"
-#include "layouttuplets.h"
+#include "tupletlayout.h"
 #include "slurtielayout.h"
 
 #include "log.h"
@@ -878,7 +878,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
             while (de->tuplet()) {
                 de = de->tuplet();
             }
-            LayoutTuplets::layout(de); // recursively lay out all tuplets covered by this tuplet
+            TupletLayout::layout(de); // recursively lay out all tuplets covered by this tuplet
 
             // don't layout any tuplets covered by this top level tuplet for this voice--
             // they've already been laid out by layoutTuplet().

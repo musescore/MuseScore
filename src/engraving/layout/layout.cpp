@@ -47,7 +47,7 @@
 #include "layoutmeasure.h"
 #include "layoutsystem.h"
 #include "beamlayout.h"
-#include "layouttuplets.h"
+#include "tupletlayout.h"
 
 #include "log.h"
 
@@ -475,7 +475,7 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
                     if (BeamLayout::notTopBeam(cr)) {                           // layout cross staff beams
                         cr->beam()->layout();
                     }
-                    if (LayoutTuplets::notTopTuplet(cr)) {
+                    if (TupletLayout::notTopTuplet(cr)) {
                         // fix layout of tuplets
                         DurationElement* de = cr;
                         while (de->tuplet() && de->tuplet()->elements().front() == de) {

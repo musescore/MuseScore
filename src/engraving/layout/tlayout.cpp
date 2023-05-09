@@ -130,12 +130,14 @@
 #include "../libmscore/timesig.h"
 #include "../libmscore/tremolobar.h"
 #include "../libmscore/trill.h"
+#include "../libmscore/tuplet.h"
 
 #include "beamlayout.h"
 #include "chordlayout.h"
 #include "lyricslayout.h"
 #include "slurtielayout.h"
 #include "tremololayout.h"
+#include "tupletlayout.h"
 
 using namespace mu::draw;
 using namespace mu::engraving;
@@ -4660,4 +4662,9 @@ void TLayout::layout(Trill* item, LayoutContext& ctx)
     if (item->accidental()) {
         item->accidental()->setParent(ls);
     }
+}
+
+void TLayout::layout(Tuplet* item, LayoutContext& ctx)
+{
+    TupletLayout::layout(item, ctx);
 }
