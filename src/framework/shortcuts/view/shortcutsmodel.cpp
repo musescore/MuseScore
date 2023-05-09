@@ -51,7 +51,7 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     }
 
     const Shortcut& shortcut = m_shortcuts.at(index.row());
-
+    QString sectionN = sectionName(shortcut);
     switch (role) {
     case RoleTitle: return actionText(shortcut.action);
     case RoleIcon: return static_cast<int>(this->action(shortcut.action).iconCode);
@@ -61,12 +61,13 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
         return QString::fromStdString(action.code) + action.title.qTranslatedWithoutMnemonic() + action.description.qTranslated()
                + sequencesToNativeText(shortcut.sequences);
     }
+;
     case RoleSection:
-        return sectionName(shortcut);
+        return sectionN;
     case RoleSectionValue:
-        return sectionName(shortcut) + sequencesToNativeText(shortcut.sequences);
+        return sectionN;
     case RoleSectionKey:
-        return sectionName(shortcut) + this->action(shortcut.action).title.qTranslated();
+        return sectionN;
     }
 
     return QVariant();

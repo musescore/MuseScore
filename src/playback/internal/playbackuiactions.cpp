@@ -72,6 +72,7 @@ const UiActionList PlaybackUiActions::m_mainActions = {
              Checkable::Yes
              ),
     UiAction("playback-setup",
+             ActionCategory::Playback,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Playback setup"),
@@ -100,6 +101,7 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              Checkable::Yes
              ),
     UiAction("play-chord-symbols",
+             ActionCategory::Playback,
              mu::context::UiCtxAny,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Play chord symbols"),

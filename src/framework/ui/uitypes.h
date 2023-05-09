@@ -228,19 +228,19 @@ struct UiAction
     UiAction(const actions::ActionCode& code, ActionCategory cat, UiContext ctx, std::string scCtx, Checkable ch = Checkable::No)
         : code(code), category(cat), uiCtx(ctx), scCtx(scCtx), checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, ActionCategory cat = ActionCategory::Internal, UiContext ctx, std::string scCtx, const MnemonicString& title,
+    UiAction(const actions::ActionCode& code, ActionCategory cat, UiContext ctx, std::string scCtx, const MnemonicString& title,
              Checkable ch = Checkable::No)
         : code(code), category(cat), uiCtx(ctx), scCtx(scCtx), title(title), checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, ActionCategory cat = ActionCategory::Internal, UiContext ctx, std::string scCtx, const MnemonicString& title,
+    UiAction(const actions::ActionCode& code, ActionCategory cat, UiContext ctx, std::string scCtx, const MnemonicString& title,
              const TranslatableString& desc, Checkable ch = Checkable::No)
         : code(code), category(cat), uiCtx(ctx), scCtx(scCtx), title(title), description(desc),  checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, ActionCategory cat = ActionCategory::Internal, UiContext ctx, std::string scCtx, const MnemonicString& title,
+    UiAction(const actions::ActionCode& code, ActionCategory cat, UiContext ctx, std::string scCtx, const MnemonicString& title,
              const TranslatableString& desc, IconCode::Code icon, Checkable ch = Checkable::No)
         : code(code), category(cat), uiCtx(ctx), scCtx(scCtx), title(title), description(desc), iconCode(icon), checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, ActionCategory cat = ActionCategory::Internal, UiContext ctx, std::string scCtx, const MnemonicString& title, IconCode::Code icon,
+    UiAction(const actions::ActionCode& code, ActionCategory cat, UiContext ctx, std::string scCtx, const MnemonicString& title, IconCode::Code icon,
              Checkable ch = Checkable::No)
         : code(code), category(cat), uiCtx(ctx), scCtx(scCtx), title(title), iconCode(icon), checkable(ch) {}
 

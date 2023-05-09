@@ -111,7 +111,7 @@ const UiActionList ProjectUiActions::m_actions = {
              IconCode::Code::IMPORT
              ),
     UiAction("project-properties",
-             ActionCategory::Dialogspanels,
+             ActionCategory::DialogsPanels,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Project propert&ies…"),

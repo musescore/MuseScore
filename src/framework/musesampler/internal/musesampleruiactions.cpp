@@ -30,6 +30,7 @@ using namespace mu::musesampler;
 
 const UiActionList MuseSamplerUiActions::m_actions = {
     UiAction("musesampler-check",
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Check Muse Sampler")

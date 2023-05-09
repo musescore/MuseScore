@@ -1671,18 +1671,21 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Zoom to 100%")
              ),
     UiAction("zoom-page-width",
+             ActionCategory::ViewingNavigation,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Zoom to page width"),
              TranslatableString("action", "Zoom to page width")
              ),
     UiAction("zoom-whole-page",
+             ActionCategory::ViewingNavigation,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Zoom to whole page"),
              TranslatableString("action", "Zoom to whole page")
              ),
     UiAction("zoom-two-pages",
+             ActionCategory::ViewingNavigation,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Zoom to two pages"),
@@ -1854,6 +1857,7 @@ const UiActionList NotationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("next-word",
+             ActionCategory::ViewingNavigation,
              mu::context::UiCtxNotationFocused,
              mu::context::CTX_NOTATION_TEXT_EDITING,
              TranslatableString("action", "Next word"),
@@ -2723,6 +2727,7 @@ const UiActionList NotationUiActions::m_engravingDebuggingActions = {
              Checkable::Yes
              ),
     UiAction("color-element-shapes",
+             ActionCategory::Undefined,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString::untranslatable("Color element shapes"),
@@ -2750,6 +2755,7 @@ const UiActionList NotationUiActions::m_engravingDebuggingActions = {
              Checkable::Yes
              ),
     UiAction("show-system-bounding-rects",
+             ActionCategory::Undefined,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString::untranslatable("Show system bounding rectangles"),
