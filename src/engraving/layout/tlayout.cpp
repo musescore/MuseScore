@@ -125,6 +125,7 @@
 #include "../libmscore/tempotext.h"
 #include "../libmscore/text.h"
 #include "../libmscore/textframe.h"
+#include "../libmscore/textline.h"
 #include "../libmscore/tie.h"
 
 #include "beamlayout.h"
@@ -4148,4 +4149,13 @@ void TLayout::layout(TempoText* item, LayoutContext&)
         }
     }
     item->autoplaceSegmentElement();
+}
+
+void TLayout::layout(TextLineSegment* item, LayoutContext&)
+{
+    item->TextLineBaseSegment::layout();
+    if (item->isStyled(Pid::OFFSET)) {
+        item->roffset() = item->textLine()->propertyDefault(Pid::OFFSET).value<PointF>();
+    }
+    item->autoplaceSpannerSegment();
 }
