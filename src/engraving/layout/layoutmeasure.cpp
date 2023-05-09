@@ -788,23 +788,6 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                         chord->computeUp();
                         chord->layoutStem();               // create stems needed to calculate spacing
                                                            // stem direction can change later during beam processing
-
-                        // if there is a two-note tremolo attached, and it is too steep,
-                        // extend stem of one of the chords (if not cross-staff)
-                        // or extend both stems (if cross-staff)
-                        // this should be done after the stem lengths of two notes are both calculated
-                        if (chord->tremolo() && chord == chord->tremolo()->chord2()) {
-                            Stem* stem1 = chord->tremolo()->chord1()->stem();
-                            Stem* stem2 = chord->tremolo()->chord2()->stem();
-                            if (stem1 && stem2) {
-                                std::pair<double, double> extendedLen = TremoloLayout::extendedStemLenWithTwoNoteTremolo(
-                                    chord->tremolo(),
-                                    stem1->p2().y(),
-                                    stem2->p2().y());
-                                stem1->setBaseLength(Millimetre(extendedLen.first));
-                                stem2->setBaseLength(Millimetre(extendedLen.second));
-                            }
-                        }
                     }
                     cr->setMag(m);
                     cr->setBeamlet(nullptr); // Will be defined during beam layout

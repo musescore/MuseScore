@@ -1007,7 +1007,7 @@ void Chord::computeUp()
         }
     }
 
-    if (_stemDirection != DirectionV::AUTO && !_beam) {
+    if (_stemDirection != DirectionV::AUTO && !_beam && !(_tremolo && _tremolo->twoNotes())) {
         _up = _stemDirection == DirectionV::UP;
         return;
     }
@@ -1121,6 +1121,9 @@ void Chord::computeUp()
         Chord* c1 = _tremolo->chord1();
         Chord* c2 = _tremolo->chord2();
         bool cross = c1->staffMove() != c2->staffMove();
+        if (cross && this == c1) {
+            _tremolo->layout();
+        }
         Measure* measure = findMeasure();
         if (!cross && !_tremolo->userModified()) {
             _up = _tremolo->up();
@@ -1132,15 +1135,19 @@ void Chord::computeUp()
             // because we don't know how far apart the staves actually are
             return;
         }
-        _tremolo->layout();
         if (_tremolo->userModified()) {
             Note* baseNote = _up ? downNote() : upNote();
-            PairF beamPos = _tremolo->beamPos();
-            double tremY = c1 == this ? beamPos.first : beamPos.second;
-            tremY *= spatium();
-            tremY += pagePos().y();
+            double tremY = _tremolo->chordBeamAnchor(this, BeamTremoloLayout::ChordBeamAnchorType::Middle).y();
             double noteY = baseNote->pagePos().y();
             _up = noteY > tremY;
+        } else if (cross) {
+            // unmodified cross-staff trem, should be one note per staff
+            if (_staffMove != 0) {
+                _up = _staffMove > 0;
+            } else {
+                int otherStaffMove = _staffMove == c1->staffMove() ? c2->staffMove() : c1->staffMove();
+                _up = otherStaffMove < 0;
+            }
         }
         if (!cross && !_tremolo->userModified()) {
             _up = _tremolo->up();
