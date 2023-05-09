@@ -57,12 +57,16 @@
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Articulation name="marcato">
+        <Articulation name="accent">
           <velocity>120</velocity>
           <gateTime>67</gateTime>
           </Articulation>
+        <Articulation name="marcato">
+          <velocity>144</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
         <Articulation name="sforzato">
-          <velocity>120</velocity>
+          <velocity>169</velocity>
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
@@ -112,12 +116,16 @@
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Articulation name="marcato">
+        <Articulation name="accent">
           <velocity>120</velocity>
           <gateTime>67</gateTime>
           </Articulation>
+        <Articulation name="marcato">
+          <velocity>144</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
         <Articulation name="sforzato">
-          <velocity>120</velocity>
+          <velocity>169</velocity>
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
