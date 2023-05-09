@@ -95,7 +95,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     // find out main direction
     //
     if (item->_direction == DirectionV::AUTO) {
-        int up = 1;
+        int up = 0;
         for (const DurationElement* e : item->_currentElements) {
             if (e->isChord()) {
                 const Chord* c = toChord(e);
@@ -104,8 +104,15 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                 } else {
                     up += c->up() ? 1 : -1;
                 }
-            } else if (e->isTuplet()) {
-                // TODO
+            }
+        }
+        if (up == 0) {
+            // this is a tuplet full of rests, default to up but also take voices into consideration
+            Measure* m = item->measure();
+            if (m && m->hasVoices(item->staffIdx())) {
+                up = item->voice() % 2 == 0 ? 1 : -1;
+            } else {
+                up = 1;         // default up
             }
         }
         item->_isUp = up > 0;
