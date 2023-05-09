@@ -59,8 +59,6 @@ class DockPageView : public QQuickItem
     Q_PROPERTY(mu::dock::DockCentralView * centralDock READ centralDock WRITE setCentralDock NOTIFY centralDockChanged)
     Q_PROPERTY(mu::dock::DockStatusBarView * statusBar READ statusBar WRITE setStatusBar NOTIFY statusBarChanged)
 
-    Q_PROPERTY(bool autoOrder READ autoOrder WRITE setAutoOrder NOTIFY autoOrderChanged)
-
 public:
     explicit DockPageView(QQuickItem* parent = nullptr);
 
@@ -99,9 +97,6 @@ public:
 
     Q_INVOKABLE void setDefaultNavigationControl(mu::ui::NavigationControl* control);
 
-    bool autoOrder() const;
-    void setAutoOrder(bool newAutoOrder);
-
 public slots:
     void setUri(const QString& uri);
     void setCentralDock(DockCentralView* central);
@@ -113,8 +108,6 @@ signals:
     void uriChanged(const QString& uri);
     void centralDockChanged(DockCentralView* central);
     void statusBarChanged(DockStatusBarView* statusBar);
-
-    void autoOrderChanged();
 
 private:
     void componentComplete() override;
@@ -134,7 +127,6 @@ private:
     uicomponents::QmlListProperty<DockingHolderView> m_panelsDockingHolders;
     DockCentralView* m_central = nullptr;
     DockStatusBarView* m_statusBar = nullptr;
-    bool m_autoOrder = false;
 };
 }
 

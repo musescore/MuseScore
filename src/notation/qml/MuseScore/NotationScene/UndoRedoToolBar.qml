@@ -28,7 +28,6 @@ import MuseScore.NotationScene 1.0
 Item {
     id: root
 
-    property alias navigation: navPanel
 
     width: content.width
     height: content.height
@@ -37,7 +36,7 @@ Item {
         model.load()
     }
 
-    NavigationPanel {
+    property NavigationPanel navigationPanel: NavigationPanel {
         id: navPanel
         name: "UndoRedoToolBar"
         enabled: root.enabled && root.visible
@@ -78,7 +77,7 @@ Item {
             enabled: Boolean(item) ? item.enabled : false
             transparent: true
 
-            navigation.panel: navPanel
+            navigation.panel: root.navigationPanel
             navigation.order: 1
 
             onClicked: {
@@ -102,7 +101,7 @@ Item {
             enabled: Boolean(item) ? item.enabled : false
             transparent: true
 
-            navigation.panel: navPanel
+            navigation.panel: root.navigationPanel
             navigation.order: 2
 
             onClicked: {

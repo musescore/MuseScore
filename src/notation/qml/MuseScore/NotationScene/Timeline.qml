@@ -22,9 +22,12 @@
 
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.NotationScene 1.0
 
 Item {
+    property NavigationPanel navigationPanel: null // first panel
+
     TimelineView {
         anchors.fill: parent
     }

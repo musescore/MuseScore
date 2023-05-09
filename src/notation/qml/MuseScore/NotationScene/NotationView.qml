@@ -42,6 +42,8 @@ FocusScope {
 
     property alias defaultNavigationControl: fakeNavCtrl
 
+    property NavigationPanel navigationPanel: notationView.navigationPanel // first panel
+
     NavigationSection {
         id: navSec
         name: "NotationView"
@@ -71,7 +73,7 @@ FocusScope {
             Layout.fillWidth: true
 
             navigationPanel.section: navSec
-            navigationPanel.order: popUpLoader.navigationOrderEnd + 1
+            navigationPanel.order: notationView.navigationPanel.order + 1
         }
 
         SeparatorLine { visible: tabPanel.visible }
@@ -92,8 +94,7 @@ FocusScope {
                     id: notationView
                     anchors.fill: parent
 
-                    NavigationPanel {
-                        id: navPanel
+                    property NavigationPanel navigationPanel: NavigationPanel {
                         name: "ScoreView"
                         section: navSec
                         enabled: notationView.enabled && notationView.visible
@@ -106,14 +107,14 @@ FocusScope {
                         name: "Score"
                         enabled: notationView.enabled && notationView.visible
 
-                        panel: navPanel
+                        panel: navigationPanel
                         order: 1
 
                         onActiveChanged: {
                             if (fakeNavCtrl.active) {
                                 notationView.forceFocusIn()
 
-                                if (navPanel.highlight) {
+                                if (navigationPanel.highlight) {
                                     notationView.selectOnNavigationActive()
                                 }
                             } else {

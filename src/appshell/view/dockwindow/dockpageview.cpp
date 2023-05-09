@@ -445,18 +445,3 @@ void DockPageView::setDefaultNavigationControl(mu::ui::NavigationControl* contro
     ui::INavigationControl* _control = dynamic_cast<ui::INavigationControl*>(control);
     navigationController()->setDefaultNavigationControl(_control);
 }
-
-bool DockPageView::autoOrder() const
-{
-    return m_autoOrder;
-}
-
-void DockPageView::setAutoOrder(bool newAutoOrder)
-{
-    if (m_autoOrder == newAutoOrder) {
-        return;
-    }
-
-    m_autoOrder = newAutoOrder;
-    emit autoOrderChanged();
-}

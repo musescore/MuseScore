@@ -27,6 +27,8 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Palette 1.0
 
 Item {
+    property NavigationPanel navigationPanel: null // first panel
+
     RowLayout {
         anchors.fill: parent
         anchors.leftMargin: 12

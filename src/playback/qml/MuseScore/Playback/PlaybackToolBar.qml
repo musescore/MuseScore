@@ -32,14 +32,12 @@ import "internal"
 Item {
     id: root
 
-    property alias navigation: navPanel
     property bool floating: false
 
     width: content.width
     height: content.height
 
-    NavigationPanel {
-        id: navPanel
+    property NavigationPanel navigationPanel: NavigationPanel {
         name: "PlaybackToolBar"
         enabled: root.enabled && root.visible
         accessible.name: qsTrc("playback", "Playback toolbar")
@@ -69,7 +67,7 @@ Item {
             playbackModel: playbackModel
             floating: root.floating
 
-            navPanel: root.navigation
+            navPanel: root.navigationPanel
         }
 
         StyledSlider {
