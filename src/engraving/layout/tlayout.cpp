@@ -122,6 +122,7 @@
 #include "../libmscore/systemdivider.h"
 #include "../libmscore/systemtext.h"
 
+#include "../libmscore/tempotext.h"
 #include "../libmscore/text.h"
 #include "../libmscore/textframe.h"
 #include "../libmscore/tie.h"
@@ -4123,4 +4124,28 @@ void TLayout::layout(TabDurationSymbol* item, LayoutContext&)
 // set magnified bbox and position
     item->bbox().setRect(xbb * mag, ybb * mag, wbb * mag, hbb * mag);
     item->setPos(xpos * mag, ypos * mag);
+}
+
+void TLayout::layout(TempoText* item, LayoutContext&)
+{
+    item->TextBase::layout();
+
+    Segment* s = item->segment();
+    if (!s) {                       // for use in palette
+        return;
+    }
+
+    // tempo text on first chordrest of measure should align over time sig if present
+    //
+    if (item->autoplace() && s->rtick().isZero()) {
+        Segment* p = item->segment()->prev(SegmentType::TimeSig);
+        if (p) {
+            item->movePosX(-(s->x() - p->x()));
+            EngravingItem* e = p->element(item->staffIdx() * VOICES);
+            if (e) {
+                item->movePosX(e->x());
+            }
+        }
+    }
+    item->autoplaceSegmentElement();
 }
