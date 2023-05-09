@@ -37,12 +37,6 @@ class TrillSegment final : public LineSegment
 {
     OBJECT_ALLOCATOR(engraving, TrillSegment)
 
-    SymIdList _symbols;
-
-    void symbolLine(SymId start, SymId fill);
-    void symbolLine(SymId start, SymId fill, SymId end);
-    Sid getPropertyStyle(Pid) const override;
-
 public:
     TrillSegment(Trill* sp, System* parent);
     TrillSegment(System* parent);
@@ -65,6 +59,14 @@ public:
 
     SymIdList symbols() const { return _symbols; }
     void setSymbols(const SymIdList& s) { _symbols = s; }
+
+    void symbolLine(SymId start, SymId fill);
+    void symbolLine(SymId start, SymId fill, SymId end);
+
+private:
+    Sid getPropertyStyle(Pid) const override;
+
+    SymIdList _symbols;
 };
 
 //---------------------------------------------------------

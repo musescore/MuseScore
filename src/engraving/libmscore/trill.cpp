@@ -25,7 +25,7 @@
 #include <cmath>
 
 #include "types/typesconv.h"
-
+#include "layout/tlayout.h"
 #include "iengravingfont.h"
 
 #include "accidental.h"
@@ -149,46 +149,8 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
 
 void TrillSegment::layout()
 {
-    if (staff()) {
-        setMag(staff()->staffMag(tick()));
-    }
-    if (spanner()->placeBelow()) {
-        setPosY(staff() ? staff()->height() : 0.0);
-    }
-
-    if (isSingleType() || isBeginType()) {
-        Accidental* a = trill()->accidental();
-        if (a) {
-            a->layout();
-            a->setMag(a->mag() * .6);
-            double _spatium = spatium();
-            a->setPos(_spatium * 1.3, -2.2 * _spatium);
-            a->setParent(this);
-        }
-        switch (trill()->trillType()) {
-        case TrillType::TRILL_LINE:
-            symbolLine(SymId::ornamentTrill, SymId::wiggleTrill);
-            break;
-        case TrillType::PRALLPRALL_LINE:
-            symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
-            break;
-        case TrillType::UPPRALL_LINE:
-            symbolLine(SymId::ornamentBottomLeftConcaveStroke,
-                       SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
-            break;
-        case TrillType::DOWNPRALL_LINE:
-            symbolLine(SymId::ornamentLeftVerticalStroke,
-                       SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
-            break;
-        }
-    } else {
-        symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
-    }
-    if (isStyled(Pid::OFFSET)) {
-        roffset() = trill()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
-
-    autoplaceSpannerSegment();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -342,20 +304,8 @@ void Trill::remove(EngravingItem* e)
 
 void Trill::layout()
 {
-    SLine::layout();
-    if (score()->isPaletteScore()) {
-        return;
-    }
-    if (spannerSegments().empty()) {
-        return;
-    }
-    TrillSegment* ls = toTrillSegment(frontSegment());
-    if (spannerSegments().empty()) {
-        LOGD("Trill: no segments");
-    }
-    if (_accidental) {
-        _accidental->setParent(ls);
-    }
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

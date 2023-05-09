@@ -129,6 +129,8 @@ class TextLineBaseSegment;
 class TimeSig;
 class Tremolo;
 class TremoloBar;
+class TrillSegment;
+class Trill;
 }
 
 namespace mu::engraving::v0 {
@@ -248,6 +250,8 @@ public:
     static void layout(TimeSig* item, LayoutContext& ctx);
     static void layout(Tremolo* item, LayoutContext& ctx);
     static void layout(TremoloBar* item, LayoutContext& ctx);
+    static void layout(TrillSegment* item, LayoutContext& ctx);
+    static void layout(Trill* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
