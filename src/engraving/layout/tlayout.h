@@ -120,6 +120,7 @@ class Symbol;
 class FSymbol;
 
 class SystemDivider;
+class SystemText;
 
 class TabDurationSymbol;
 }
@@ -232,6 +233,7 @@ public:
     static void layout(FSymbol* item, LayoutContext& ctx);
 
     static void layout(SystemDivider* item, LayoutContext& ctx);
+    static void layout(SystemText* item, LayoutContext& ctx);
 
     static void layout(TabDurationSymbol* item, LayoutContext& ctx);
 
