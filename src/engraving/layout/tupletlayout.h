@@ -19,20 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTTUPLETS_H
-#define MU_ENGRAVING_LAYOUTTUPLETS_H
+#ifndef MU_ENGRAVING_TUPLETLAYOUT_H
+#define MU_ENGRAVING_TUPLETLAYOUT_H
+
+#include "layoutcontext.h"
 
 namespace mu::engraving {
 class ChordRest;
 class DurationElement;
+class Tuplet;
 
-class LayoutTuplets
+class TupletLayout
 {
 public:
+
+    static void layout(Tuplet* item, LayoutContext& ctx);
+
     static void layout(DurationElement* de);
     static bool isTopTuplet(ChordRest* cr);
     static bool notTopTuplet(ChordRest* cr);
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUTTUPLETS_H
+#endif // MU_ENGRAVING_TUPLETLAYOUT_H
