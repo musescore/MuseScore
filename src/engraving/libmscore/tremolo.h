@@ -75,8 +75,6 @@ class Tremolo final : public EngravingItem
 
     mu::draw::PainterPath basePath(double stretch = 0) const;
     void computeShape();
-    void layoutOneNoteTremolo(double x, double y, double h, double spatium);
-    void layoutTwoNotesTremolo(double x, double y, double h, double spatium);
     void createBeamSegments();
     void setBeamPos(const PairF& bp);
 

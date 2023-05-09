@@ -40,7 +40,7 @@
 #include "layoutcontext.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
-#include "layouttremolo.h"
+#include "tremololayout.h"
 
 #include "log.h"
 
@@ -797,7 +797,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                             Stem* stem1 = chord->tremolo()->chord1()->stem();
                             Stem* stem2 = chord->tremolo()->chord2()->stem();
                             if (stem1 && stem2) {
-                                std::pair<double, double> extendedLen = LayoutTremolo::extendedStemLenWithTwoNoteTremolo(
+                                std::pair<double, double> extendedLen = TremoloLayout::extendedStemLenWithTwoNoteTremolo(
                                     chord->tremolo(),
                                     stem1->p2().y(),
                                     stem2->p2().y());
