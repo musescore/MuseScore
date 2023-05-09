@@ -21,6 +21,8 @@
  */
 #include "textline.h"
 
+#include "layout/tlayout.h"
+
 #include "score.h"
 #include "system.h"
 #include "undo.h"
@@ -126,11 +128,8 @@ EngravingItem* TextLineSegment::propertyDelegate(Pid pid)
 
 void TextLineSegment::layout()
 {
-    TextLineBaseSegment::layout();
-    if (isStyled(Pid::OFFSET)) {
-        roffset() = textLine()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
-    autoplaceSpannerSegment();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
