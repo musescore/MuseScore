@@ -25,6 +25,7 @@
 #include "style/style.h"
 #include "translation.h"
 #include "iengravingfont.h"
+#include "layout/tlayout.h"
 
 #include "score.h"
 #include "segment.h"
@@ -147,129 +148,8 @@ void TimeSig::setDenominatorString(const String& a)
 
 void TimeSig::layout()
 {
-    setPos(0.0, 0.0);
-    double _spatium = spatium();
-
-    setbbox(RectF());                    // prepare for an empty time signature
-    pointLargeLeftParen = PointF();
-    pz = PointF();
-    pn = PointF();
-    pointLargeRightParen = PointF();
-
-    double lineDist;
-    int numOfLines;
-    TimeSigType sigType = timeSigType();
-    const Staff* _staff       = staff();
-
-    if (_staff) {
-        // if staff is without time sig, format as if no text at all
-        if (!_staff->staffTypeForElement(this)->genTimesig()) {
-            // reset position and box sizes to 0
-            // LOGD("staff: no time sig");
-            pointLargeLeftParen.rx() = 0.0;
-            pn.rx() = 0.0;
-            pz.rx() = 0.0;
-            pointLargeRightParen.rx() = 0.0;
-            setbbox(RectF());
-            // leave everything else as it is:
-            // draw() will anyway skip any drawing if staff type has no time sigs
-            return;
-        }
-        numOfLines  = _staff->lines(tick());
-        lineDist    = _staff->lineDistance(tick());
-    } else {
-        // assume dimensions of a standard staff
-        lineDist = 1.0;
-        numOfLines = 5;
-    }
-
-    // if some symbol
-    // compute vert. displacement to center in the staff height
-    // determine middle staff position:
-
-    double yoff = _spatium * (numOfLines - 1) * .5 * lineDist;
-
-    // C and Ccut are placed at the middle of the staff: use yoff directly
-    IEngravingFontPtr font = score()->engravingFont();
-    SizeF mag(magS() * _scale);
-
-    if (sigType == TimeSigType::FOUR_FOUR) {
-        pz = PointF(0.0, yoff);
-        RectF bbox = font->bbox(SymId::timeSigCommon, mag);
-        setbbox(bbox.translated(pz));
-        ns.clear();
-        ns.push_back(SymId::timeSigCommon);
-        ds.clear();
-    } else if (sigType == TimeSigType::ALLA_BREVE) {
-        pz = PointF(0.0, yoff);
-        RectF bbox = font->bbox(SymId::timeSigCutCommon, mag);
-        setbbox(bbox.translated(pz));
-        ns.clear();
-        ns.push_back(SymId::timeSigCutCommon);
-        ds.clear();
-    } else if (sigType == TimeSigType::CUT_BACH) {
-        pz = PointF(0.0, yoff);
-        RectF bbox = font->bbox(SymId::timeSigCut2, mag);
-        setbbox(bbox.translated(pz));
-        ns.clear();
-        ns.push_back(SymId::timeSigCut2);
-        ds.clear();
-    } else if (sigType == TimeSigType::CUT_TRIPLE) {
-        pz = PointF(0.0, yoff);
-        RectF bbox = font->bbox(SymId::timeSigCut3, mag);
-        setbbox(bbox.translated(pz));
-        ns.clear();
-        ns.push_back(SymId::timeSigCut3);
-        ds.clear();
-    } else {
-        if (_numeratorString.isEmpty()) {
-            ns = timeSigSymIdsFromString(_numeratorString.isEmpty() ? String::number(_sig.numerator()) : _numeratorString);
-            ds = timeSigSymIdsFromString(_denominatorString.isEmpty() ? String::number(_sig.denominator()) : _denominatorString);
-        } else {
-            ns = timeSigSymIdsFromString(_numeratorString);
-            ds = timeSigSymIdsFromString(_denominatorString);
-        }
-
-        RectF numRect = font->bbox(ns, mag);
-        RectF denRect = font->bbox(ds, mag);
-
-        // position numerator and denominator; vertical displacement:
-        // number of lines is odd: 0.0 (strings are directly above and below the middle line)
-        // number of lines even:   0.05 (strings are moved up/down to leave 1/10sp between them)
-
-        double displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
-
-        //align on the wider
-        double pzY = yoff - (denRect.width() < 0.01 ? 0.0 : (displ + numRect.height() * .5));
-        double pnY = yoff + displ + denRect.height() * .5;
-
-        if (numRect.width() >= denRect.width()) {
-            // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-            pz = PointF(0.0, pzY);
-            // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-            pn = PointF((numRect.width() - denRect.width()) * .5, pnY);
-        } else {
-            // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-            pz = PointF((denRect.width() - numRect.width()) * .5, pzY);
-            // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-            pn = PointF(0.0, pnY);
-        }
-
-        // centering of parenthesis so the middle of the parenthesis is at the divisor marking level
-        int centerY = yoff / 2 + _spatium;
-        int widestPortion = numRect.width() > denRect.width() ? numRect.width() : denRect.width();
-        pointLargeLeftParen = PointF(-_spatium, centerY);
-        pointLargeRightParen = PointF(widestPortion + _spatium, centerY);
-
-        setbbox(numRect.translated(pz));       // translate bounding boxes to actual string positions
-        addbbox(denRect.translated(pn));
-        if (_largeParentheses) {
-            addbbox(RectF(pointLargeLeftParen.x(), pointLargeLeftParen.y() - denRect.height(), _spatium / 2,
-                          numRect.height() + denRect.height()));
-            addbbox(RectF(pointLargeRightParen.x(), pointLargeRightParen.y() - denRect.height(),  _spatium / 2,
-                          numRect.height() + denRect.height()));
-        }
-    }
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
