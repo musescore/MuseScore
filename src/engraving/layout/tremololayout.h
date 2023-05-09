@@ -19,19 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTTREMOLO_H
-#define MU_ENGRAVING_LAYOUTTREMOLO_H
+#ifndef MU_ENGRAVING_TREMOLOLAYOUT_H
+#define MU_ENGRAVING_TREMOLOLAYOUT_H
 
 #include <utility>
+
+#include "layoutcontext.h"
 
 namespace mu::engraving {
 class Tremolo;
 
-class LayoutTremolo
+class TremoloLayout
 {
 public:
+
+    static void layout(Tremolo* item, LayoutContext& ctx);
+
     static std::pair<double, double> extendedStemLenWithTwoNoteTremolo(Tremolo* tremolo, double stemLen1, double stemLen2);
+
+private:
+    static void layoutOneNoteTremolo(Tremolo* item, double x, double y, double h, double spatium);
+    static void layoutTwoNotesTremolo(Tremolo* item, double x, double y, double h, double spatium);
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUTTREMOLO_H
+#endif // MU_ENGRAVING_TREMOLOLAYOUT_H

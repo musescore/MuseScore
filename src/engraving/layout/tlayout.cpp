@@ -133,6 +133,7 @@
 #include "chordlayout.h"
 #include "lyricslayout.h"
 #include "slurtielayout.h"
+#include "tremololayout.h"
 
 using namespace mu::draw;
 using namespace mu::engraving;
@@ -4560,4 +4561,9 @@ void TLayout::layout(TimeSig* item, LayoutContext&)
                                 numRect.height() + denRect.height()));
         }
     }
+}
+
+void TLayout::layout(Tremolo* item, LayoutContext& ctx)
+{
+    TremoloLayout::layout(item, ctx);
 }
