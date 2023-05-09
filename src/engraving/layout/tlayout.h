@@ -136,6 +136,8 @@ class Tuplet;
 class VibratoSegment;
 class Vibrato;
 class VoltaSegment;
+
+class WhammyBarSegment;
 }
 
 namespace mu::engraving::v0 {
@@ -262,6 +264,8 @@ public:
     static void layout(VibratoSegment* item, LayoutContext& ctx);
     static void layout(Vibrato* item, LayoutContext& ctx);
     static void layout(VoltaSegment* item, LayoutContext& ctx);
+
+    static void layout(WhammyBarSegment* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
