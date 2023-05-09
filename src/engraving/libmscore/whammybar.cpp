@@ -22,6 +22,8 @@
 
 #include "whammybar.h"
 
+#include "layout/tlayout.h"
+
 #include "score.h"
 #include "system.h"
 
@@ -64,8 +66,8 @@ WhammyBarSegment::WhammyBarSegment(WhammyBar* sp, System* parent)
 
 void WhammyBarSegment::layout()
 {
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

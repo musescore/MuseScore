@@ -135,6 +135,8 @@
 #include "../libmscore/vibrato.h"
 #include "../libmscore/volta.h"
 
+#include "../libmscore/whammybar.h"
+
 #include "beamlayout.h"
 #include "chordlayout.h"
 #include "lyricslayout.h"
@@ -4717,6 +4719,12 @@ void TLayout::layout(Vibrato* item, LayoutContext& ctx)
 }
 
 void TLayout::layout(VoltaSegment* item, LayoutContext& ctx)
+{
+    layoutTextLineBaseSegment(item, ctx);
+    item->autoplaceSpannerSegment();
+}
+
+void TLayout::layout(WhammyBarSegment* item, LayoutContext& ctx)
 {
     layoutTextLineBaseSegment(item, ctx);
     item->autoplaceSpannerSegment();
