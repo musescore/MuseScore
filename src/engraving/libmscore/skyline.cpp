@@ -26,6 +26,7 @@
 #include "beam.h"
 #include "chord.h"
 #include "stem.h"
+#include "tremolo.h"
 
 #include "draw/painter.h"
 
@@ -61,14 +62,23 @@ void Skyline::add(const ShapeElement& r)
         Chord* chord = toStem(item)->chord();
         if (chord) {
             Beam* beam = chord->beam();
-            if (beam && beam->cross()) {
+            Tremolo* tremolo = chord->tremolo();
+            bool isCross = (beam && beam->cross())
+                           || (tremolo && tremolo->twoNotes() && tremolo->chord1()->staffMove() != tremolo->chord2()->staffMove());
+            if (isCross) {
+                std::vector<ChordRest*> elements;
+                if (beam) {
+                    elements = beam->elements();
+                } else if (tremolo) {
+                    elements = { tremolo->chord1(), tremolo->chord2() };
+                }
                 int thisStaffMove = chord->staffMove();
                 if (thisStaffMove < 0) {
                     crossNorth = true;
                 } else if (thisStaffMove > 0) {
                     crossSouth = true;
                 }
-                for (ChordRest* element : beam->elements()) {
+                for (ChordRest* element : elements) {
                     int staffMove = element->staffMove();
                     if (staffMove < thisStaffMove) {
                         crossNorth = true;
