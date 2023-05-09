@@ -166,6 +166,14 @@ const UiActionList ApplicationUiActions::m_actions = {
              IconCode::Code::MIXER,
              Checkable::Yes
              ),
+    UiAction("toggle-piano-roll",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Piano roll"),
+             TranslatableString("action", "Show/hide piano roll"),
+             IconCode::Code::MIXER,
+             Checkable::Yes
+             ),
     UiAction("toggle-piano-keyboard",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
@@ -292,6 +300,7 @@ const QMap<mu::actions::ActionCode, DockName>& ApplicationUiActions::toggleDockA
 
         { "toggle-timeline", TIMELINE_PANEL_NAME },
         { "toggle-mixer", MIXER_PANEL_NAME },
+        { "toggle-piano-roll", PIANO_ROLL_PANEL_NAME },
         { "toggle-piano-keyboard", PIANO_KEYBOARD_PANEL_NAME },
 
         { "toggle-statusbar", NOTATION_STATUSBAR_NAME },

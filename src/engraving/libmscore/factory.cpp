@@ -265,6 +265,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::GRACE_NOTES_GROUP:
     case ElementType::ROOT_ITEM:
     case ElementType::DUMMY:
+    case ElementType::ANIMATION_KEY:
+    case ElementType::ANIMATION_TRACK:
         break;
     }
 

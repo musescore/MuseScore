@@ -390,10 +390,15 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::PREFER_SHARP_FLAT,       true,  "preferSharpFlat",       P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "prefer sharps or flats") },
 
     { Pid::PLAY_TECH_TYPE,          true,  "playTechType",          P_TYPE::PLAYTECH_TYPE,  DUMMY_QT_TR_NOOP("propertyName", "playing technique type") },
+    { Pid::PAN,                     true,  "pan",                   P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "pan") },
+    { Pid::EXPRESSION,              true,  "expression",            P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "expression") },
 
     { Pid::TEMPO_CHANGE_TYPE,       true,  "tempoChangeType",       P_TYPE::TEMPOCHANGE_TYPE,  DUMMY_QT_TR_NOOP("propertyName", "gradual tempo change type") },
     { Pid::TEMPO_EASING_METHOD,     true,  "tempoEasingMethod",     P_TYPE::CHANGE_METHOD,  DUMMY_QT_TR_NOOP("propertyName", "tempo easing method") },
     { Pid::TEMPO_CHANGE_FACTOR,     true,  "tempoChangeFactor",     P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "tempo change factor") },
+
+    { Pid::PAN,                     true,  "pan",                   P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "pan") },
+    { Pid::EXPRESSION,              true,  "expression",            P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "expression") },
 
     { Pid::END,                     false, "++end++",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };
@@ -542,5 +547,56 @@ String propertyToString(Pid id, const PropertyValue& value, bool mscx)
     }
 
     return String();
+}
+
+//---------------------------------------------------------
+//   propertyMaxValue
+//---------------------------------------------------------
+
+double propertyMaxValue(Pid id)
+{
+    switch (id) {
+    case Pid::PAN:
+        return 1;
+    case Pid::EXPRESSION:
+        return 1;
+    default:
+        //Unhandled PID type
+        return 0;
+    }
+}
+
+//---------------------------------------------------------
+//   propertyMinValue
+//---------------------------------------------------------
+
+double propertyMinValue(Pid id)
+{
+    switch (id) {
+    case Pid::PAN:
+        return -1;
+    case Pid::EXPRESSION:
+        return -1;
+    default:
+        //Unhandled PID type
+        return 0;
+    }
+}
+
+//---------------------------------------------------------
+//   propertyMinValue
+//---------------------------------------------------------
+
+double propertyDefaultValue(Pid id)
+{
+    switch (id) {
+    case Pid::PAN:
+        return 0;
+    case Pid::EXPRESSION:
+        return 0;
+    default:
+        //Unhandled PID type
+        return 0;
+    }
 }
 }

@@ -22,6 +22,8 @@
 
 #include "beam.h"
 
+#include "log.h"
+
 #include <cmath>
 #include <set>
 #include <algorithm>

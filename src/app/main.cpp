@@ -130,7 +130,6 @@
 #endif
 
 #include "inspector/inspectormodule.h"
-
 #ifdef MUE_BUILD_INSTRUMENTSSCENE_MODULE
 #include "instrumentsscene/instrumentsscenemodule.h"
 #else
@@ -165,6 +164,12 @@
 #include "palette/palettemodule.h"
 #else
 #include "stubs/palette/palettestubmodule.h"
+#endif
+
+#ifdef MUE_BUILD_PIANOROLL_MODULE
+#include "pianoroll/pianorollmodule.h"
+#else
+#include "stubs/pianoroll/pianorollmodule.h"
 #endif
 
 #ifdef MUE_BUILD_PLAYBACK_MODULE
@@ -290,6 +295,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::mi::MultiInstancesModule());
     app.addModule(new mu::notation::NotationModule());
     app.addModule(new mu::palette::PaletteModule());
+    app.addModule(new mu::pianoroll::PianorollModule());
     app.addModule(new mu::playback::PlaybackModule());
     app.addModule(new mu::plugins::PluginsModule());
     app.addModule(new mu::print::PrintModule());

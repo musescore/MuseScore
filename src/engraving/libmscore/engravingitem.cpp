@@ -52,6 +52,7 @@
 #include "factory.h"
 #include "fret.h"
 #include "linkedobjects.h"
+#include "animationtrack.h"
 #include "masterscore.h"
 #include "measure.h"
 #include "mscore.h"
@@ -800,6 +801,47 @@ bool EngravingItem::contains(const mu::PointF& p) const
 bool EngravingItem::intersects(const RectF& rr) const
 {
     return shape().intersects(rr.translated(-pagePos()));
+}
+
+//---------------------------------------------------------
+//   insertAutomationTrack
+//---------------------------------------------------------
+
+AnimationTrack* EngravingItem::getAnimationTrack(const std::string& propertyName)
+{
+    if (_animationTracks.count(propertyName)) {
+        return _animationTracks[propertyName];
+    }
+    return nullptr;
+}
+
+//---------------------------------------------------------
+//   createAnimationTrack
+//---------------------------------------------------------
+
+AnimationTrack* EngravingItem::createAnimationTrack(const std::string& propertyName)
+{
+    if (_animationTracks.count(propertyName)) {
+        return _animationTracks[propertyName];
+    }
+
+    AnimationTrack* track = new AnimationTrack(this);
+    track->setPropertyName(propertyName);
+    _animationTracks[propertyName] = track;
+    return track;
+}
+
+//---------------------------------------------------------
+//   removeAnimationTrack
+//---------------------------------------------------------
+
+void EngravingItem::removeAnimationTrack(const std::string& propertyName)
+{
+    if (_animationTracks.count(propertyName)) {
+        AnimationTrack* track = _animationTracks[propertyName];
+        _animationTracks.erase(propertyName);
+        delete track;
+    }
 }
 
 bool EngravingItem::hitShapeContains(const PointF& p) const

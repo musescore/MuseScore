@@ -44,6 +44,7 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "timesig.h"
+#include "animationtrack.h"
 
 // #define DEBUG_CLEFS
 

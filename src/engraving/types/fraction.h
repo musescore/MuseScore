@@ -261,7 +261,17 @@ public:
         return (i == mu::nidx) ? Fraction(str.toInt(), 1) : Fraction(str.left(i).toInt(), str.mid(i + 1).toInt());
     }
 
+    constexpr float toFloat() const { return static_cast<float>(m_numerator) / static_cast<float>(m_denominator); }
+    static Fraction fromFloat(float ticks)
+    {
+        return Fraction((int)(ticks * Constants::division * 4), Constants::division * 4).reduced();
+    }
+
     constexpr double toDouble() const { return static_cast<double>(m_numerator) / static_cast<double>(m_denominator); }
+    static Fraction fromDouble(double ticks)
+    {
+        return Fraction((int)(ticks * Constants::division * 4), Constants::division * 4).reduced();
+    }
 };
 
 inline Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }

@@ -25,6 +25,10 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/actionicon.h
     ${CMAKE_CURRENT_LIST_DIR}/ambitus.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ambitus.h
+    ${CMAKE_CURRENT_LIST_DIR}/animationtrack.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/animationtrack.h
+    ${CMAKE_CURRENT_LIST_DIR}/animationkey.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/animationkey.h
     ${CMAKE_CURRENT_LIST_DIR}/arpeggio.cpp
     ${CMAKE_CURRENT_LIST_DIR}/arpeggio.h
     ${CMAKE_CURRENT_LIST_DIR}/articulation.cpp

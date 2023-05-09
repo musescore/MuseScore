@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -32,6 +33,7 @@ import MuseScore.Palette 1.0
 import MuseScore.Inspector 1.0
 import MuseScore.InstrumentsScene 1.0
 import MuseScore.Playback 1.0
+import MuseScore.Pianoroll 1.0
 
 import "../dockwindow"
 
@@ -341,6 +343,31 @@ DockPage {
 
                 onResizeRequested: function(newWidth, newHeight) {
                     mixerPanel.resize(newWidth, newHeight)
+                }
+            }
+        },
+
+        DockPanel {
+            id: pianoRollPanel
+
+            objectName: pageModel.pianoRollPanelName()
+            title: qsTrc("appshell", "Piano roll")
+
+            height: 200
+            minimumHeight: root.horizontalPanelMinHeight
+            maximumHeight: root.horizontalPanelMaxHeight
+
+            groupName: root.horizontalPanelsGroup
+
+            //! NOTE: hidden by default
+            visible: false
+
+            location: Location.Bottom
+
+            dropDestinations: root.horizontalPanelDropDestinations
+            PianorollPanel {
+                Component.onCompleted: {
+                    pianoRollPanel.contextMenuModel = contextMenuModel
                 }
             }
         },

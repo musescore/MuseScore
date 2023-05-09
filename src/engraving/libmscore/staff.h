@@ -48,6 +48,7 @@ class Part;
 class Score;
 class StaffType;
 class TimeSig;
+class AnimationTrack;
 
 enum class Key;
 
