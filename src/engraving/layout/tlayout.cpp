@@ -127,6 +127,7 @@
 #include "../libmscore/textframe.h"
 #include "../libmscore/textline.h"
 #include "../libmscore/tie.h"
+#include "../libmscore/timesig.h"
 
 #include "beamlayout.h"
 #include "chordlayout.h"
@@ -4151,11 +4152,412 @@ void TLayout::layout(TempoText* item, LayoutContext&)
     item->autoplaceSegmentElement();
 }
 
-void TLayout::layout(TextLineSegment* item, LayoutContext&)
+void TLayout::layout(TextLineSegment* item, LayoutContext& ctx)
 {
-    item->TextLineBaseSegment::layout();
+    layoutTextLineBaseSegment(item, ctx);
     if (item->isStyled(Pid::OFFSET)) {
         item->roffset() = item->textLine()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
     item->autoplaceSpannerSegment();
+}
+
+// Extends lines to fill the corner between them.
+// Assumes that l1p2 == l2p1 is the intersection between the lines.
+// If checkAngle is false, assumes that the lines are perpendicular,
+// and some calculations are saved.
+static inline void extendLines(const PointF& l1p1, PointF& l1p2, PointF& l2p1, const PointF& l2p2, double lineWidth, bool checkAngle)
+{
+    PointF l1UnitVector = (l1p2 - l1p1).normalized();
+    PointF l2UnitVector = (l2p1 - l2p2).normalized();
+
+    double addedLength = lineWidth * 0.5;
+
+    if (checkAngle) {
+        double angle = M_PI - acos(PointF::dotProduct(l1UnitVector, l2UnitVector));
+
+        if (angle <= M_PI_2) {
+            addedLength *= tan(0.5 * angle);
+        }
+    }
+
+    l1p2 += l1UnitVector * addedLength;
+    l2p1 += l2UnitVector * addedLength;
+}
+
+void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext&)
+{
+    item->m_npoints      = 0;
+    TextLineBase* tl = item->textLineBase();
+    double _spatium = tl->spatium();
+
+    if (item->spanner()->placeBelow()) {
+        item->setPosY(item->staff() ? item->staff()->height() : 0.0);
+    }
+
+    // adjust Y pos to staffType offset
+    if (const StaffType* st = item->staffType()) {
+        item->movePosY(st->yoffset().val() * item->spatium());
+    }
+
+    if (!tl->diagonal()) {
+        item->_offset2.setY(0);
+    }
+
+    auto alignBaseLine = [tl](Text* text, PointF& pp1, PointF& pp2) {
+        PointF widthCorrection(0.0, tl->lineWidth() / 2);
+        switch (text->align().vertical) {
+        case AlignV::TOP:
+            pp1 += widthCorrection;
+            pp2 += widthCorrection;
+            break;
+        case AlignV::VCENTER:
+            break;
+        case AlignV::BOTTOM:
+            pp1 -= widthCorrection;
+            pp2 -= widthCorrection;
+            break;
+        case AlignV::BASELINE:
+            pp1 -= widthCorrection;
+            pp2 -= widthCorrection;
+            break;
+        }
+    };
+
+    switch (item->spannerSegmentType()) {
+    case SpannerSegmentType::SINGLE:
+    case SpannerSegmentType::BEGIN:
+        item->m_text->setXmlText(tl->beginText());
+        item->m_text->setFamily(tl->beginFontFamily());
+        item->m_text->setSize(tl->beginFontSize());
+        item->m_text->setOffset(tl->beginTextOffset() * item->mag());
+        item->m_text->setAlign(tl->beginTextAlign());
+        item->m_text->setFontStyle(tl->beginFontStyle());
+        break;
+    case SpannerSegmentType::MIDDLE:
+    case SpannerSegmentType::END:
+        item->m_text->setXmlText(tl->continueText());
+        item->m_text->setFamily(tl->continueFontFamily());
+        item->m_text->setSize(tl->continueFontSize());
+        item->m_text->setOffset(tl->continueTextOffset() * item->mag());
+        item->m_text->setAlign(tl->continueTextAlign());
+        item->m_text->setFontStyle(tl->continueFontStyle());
+        break;
+    }
+    item->m_text->setPlacement(PlacementV::ABOVE);
+    item->m_text->setTrack(item->track());
+    item->m_text->layout();
+
+    if ((item->isSingleType() || item->isEndType())) {
+        item->m_endText->setXmlText(tl->endText());
+        item->m_endText->setFamily(tl->endFontFamily());
+        item->m_endText->setSize(tl->endFontSize());
+        item->m_endText->setOffset(tl->endTextOffset());
+        item->m_endText->setAlign(tl->endTextAlign());
+        item->m_endText->setFontStyle(tl->endFontStyle());
+        item->m_endText->setPlacement(PlacementV::ABOVE);
+        item->m_endText->setTrack(item->track());
+        item->m_endText->layout();
+    } else {
+        item->m_endText->setXmlText(u"");
+    }
+
+    if (!item->textLineBase()->textSizeSpatiumDependent()) {
+        item->m_text->setSize(item->m_text->size() * SPATIUM20 / item->spatium());
+        item->m_endText->setSize(item->m_endText->size() * SPATIUM20 / item->spatium());
+    }
+
+    PointF pp1;
+    PointF pp2(item->pos2());
+
+    // line with no text or hooks - just use the basic rectangle for line
+    if (item->m_text->empty() && item->m_endText->empty()
+        && (!item->isSingleBeginType() || tl->beginHookType() == HookType::NONE)
+        && (!item->isSingleEndType() || tl->endHookType() == HookType::NONE)) {
+        item->m_npoints = 2;
+        item->m_points[0] = pp1;
+        item->m_points[1] = pp2;
+        item->m_lineLength = sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1));
+
+        item->setbbox(TextLineBaseSegment::boundingBoxOfLine(pp1, pp2, tl->lineWidth() / 2, tl->lineStyle() == LineType::DOTTED));
+        return;
+    }
+
+    // line has text or hooks or is not diagonal - calculate reasonable bbox
+
+    double x1 = std::min(0.0, pp2.x());
+    double x2 = std::max(0.0, pp2.x());
+    double y0 = -tl->lineWidth();
+    double y1 = std::min(0.0, pp2.y()) + y0;
+    double y2 = std::max(0.0, pp2.y()) - y0;
+
+    double l = 0.0;
+    if (!item->m_text->empty()) {
+        double gapBetweenTextAndLine = _spatium * tl->gapBetweenTextAndLine().val();
+        if ((item->isSingleBeginType() && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
+            || (!item->isSingleBeginType() && (tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO))) {
+            l = item->m_text->pos().x() + item->m_text->bbox().width() + gapBetweenTextAndLine;
+        }
+
+        double h = item->m_text->height();
+        if (tl->beginTextPlace() == TextPlace::ABOVE) {
+            y1 = std::min(y1, -h);
+        } else if (tl->beginTextPlace() == TextPlace::BELOW) {
+            y2 = std::max(y2, h);
+        } else {
+            y1 = std::min(y1, -h * .5);
+            y2 = std::max(y2, h * .5);
+        }
+        x2 = std::max(x2, item->m_text->width());
+    }
+
+    if (tl->endHookType() != HookType::NONE) {
+        double h = pp2.y() + tl->endHookHeight().val() * _spatium;
+        if (h > y2) {
+            y2 = h;
+        } else if (h < y1) {
+            y1 = h;
+        }
+    }
+
+    if (tl->beginHookType() != HookType::NONE) {
+        double h = tl->beginHookHeight().val() * _spatium;
+        if (h > y2) {
+            y2 = h;
+        } else if (h < y1) {
+            y1 = h;
+        }
+    }
+    item->bbox().setRect(x1, y1, x2 - x1, y2 - y1);
+    if (!item->m_text->empty()) {
+        item->bbox() |= item->m_text->bbox().translated(item->m_text->pos());      // DEBUG
+    }
+    // set end text position and extend bbox
+    if (!item->m_endText->empty()) {
+        item->m_endText->movePosX(item->bbox().right());
+        item->bbox() |= item->m_endText->bbox().translated(item->m_endText->pos());
+    }
+
+    if (!(tl->lineVisible() || item->score()->showInvisible())) {
+        return;
+    }
+
+    if (tl->lineVisible() || !item->score()->printing()) {
+        pp1 = PointF(l, 0.0);
+
+        // Make sure baseline of text and line are properly aligned (accounting for line thickness)
+        bool alignBeginText = tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO;
+        bool alignContinueText = tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO;
+        bool alignEndText = tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO;
+        bool isSingleOrBegin = item->isSingleBeginType();
+        bool hasBeginText = !item->m_text->empty() && isSingleOrBegin;
+        bool hasContinueText = !item->m_text->empty() && !isSingleOrBegin;
+        bool hasEndText = !item->m_endText->empty() && item->isSingleEndType();
+        if ((hasBeginText && alignBeginText) || (hasContinueText && alignContinueText)) {
+            alignBaseLine(item->m_text, pp1, pp2);
+        } else if (hasEndText && alignEndText) {
+            alignBaseLine(item->m_endText, pp1, pp2);
+        }
+
+        double beginHookHeight = tl->beginHookHeight().val() * _spatium;
+        double endHookHeight = tl->endHookHeight().val() * _spatium;
+        double beginHookWidth = 0.0;
+        double endHookWidth = 0.0;
+
+        if (tl->beginHookType() == HookType::HOOK_45) {
+            beginHookWidth = fabs(beginHookHeight * .4);
+            pp1.rx() += beginHookWidth;
+        }
+
+        if (tl->endHookType() == HookType::HOOK_45) {
+            endHookWidth = fabs(endHookHeight * .4);
+            pp2.rx() -= endHookWidth;
+        }
+
+        // don't draw backwards lines (or hooks) if text is longer than nominal line length
+        if (!item->m_text->empty() && pp1.x() > pp2.x() && !tl->diagonal()) {
+            return;
+        }
+
+        if (item->isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
+            // We use the term "endpoint" for the point that does not touch the main line.
+            const PointF& beginHookEndpoint = item->m_points[item->m_npoints++]
+                                                  = PointF(pp1.x() - beginHookWidth, pp1.y() + beginHookHeight);
+
+            if (tl->beginHookType() == HookType::HOOK_90T) {
+                // A T-hook needs to be drawn separately, so we add an extra point
+                item->m_points[item->m_npoints++] = PointF(pp1.x() - beginHookWidth, pp1.y() - beginHookHeight);
+            } else if (tl->lineStyle() != LineType::SOLID) {
+                // For non-solid lines, we also draw the hook separately,
+                // so that we can distribute the dashes/dots for each linepiece individually
+                PointF& beginHookStartpoint = item->m_points[item->m_npoints++] = pp1;
+
+                if (tl->lineStyle() == LineType::DASHED) {
+                    // For dashes lines, we extend the lines somewhat,
+                    // so that the corner between them gets filled
+                    bool checkAngle = tl->beginHookType() == HookType::HOOK_45 || tl->diagonal();
+                    extendLines(beginHookEndpoint, beginHookStartpoint, pp1, pp2, tl->lineWidth() * item->mag(), checkAngle);
+                }
+            }
+        }
+
+        item->m_points[item->m_npoints++] = pp1;
+        PointF& pp22 = item->m_points[item->m_npoints++] = pp2; // Keep a reference so that we can modify later
+
+        if (item->isSingleEndType() && tl->endHookType() != HookType::NONE) {
+            const PointF endHookEndpoint = PointF(pp2.x() + endHookWidth, pp2.y() + endHookHeight);
+
+            if (tl->endHookType() == HookType::HOOK_90T) {
+                // A T-hook needs to be drawn separately, so we add an extra point
+                item->m_points[item->m_npoints++] = PointF(pp2.x() + endHookWidth, pp2.y() - endHookHeight);
+            } else if (tl->lineStyle() != LineType::SOLID) {
+                // For non-solid lines, we also draw the hook separately,
+                // so that we can distribute the dashes/dots for each linepiece individually
+                PointF& endHookStartpoint = item->m_points[item->m_npoints++] = pp2;
+
+                if (tl->lineStyle() == LineType::DASHED) {
+                    bool checkAngle = tl->endHookType() == HookType::HOOK_45 || tl->diagonal();
+
+                    // For dashes lines, we extend the lines somewhat,
+                    // so that the corner between them gets filled
+                    extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, tl->lineWidth() * item->mag(), checkAngle);
+                }
+            }
+
+            item->m_points[item->m_npoints++] = endHookEndpoint;
+        }
+
+        item->m_lineLength = sqrt(PointF::dotProduct(pp22 - pp1, pp22 - pp1));
+    }
+}
+
+void TLayout::layout(TimeSig* item, LayoutContext&)
+{
+    item->setPos(0.0, 0.0);
+    double _spatium = item->spatium();
+
+    item->setbbox(RectF());                    // prepare for an empty time signature
+    item->pointLargeLeftParen = PointF();
+    item->pz = PointF();
+    item->pn = PointF();
+    item->pointLargeRightParen = PointF();
+
+    double lineDist;
+    int numOfLines;
+    TimeSigType sigType = item->timeSigType();
+    const Staff* _staff = item->staff();
+
+    if (_staff) {
+        // if staff is without time sig, format as if no text at all
+        if (!_staff->staffTypeForElement(item)->genTimesig()) {
+            // reset position and box sizes to 0
+            // LOGD("staff: no time sig");
+            item->pointLargeLeftParen.rx() = 0.0;
+            item->pn.rx() = 0.0;
+            item->pz.rx() = 0.0;
+            item->pointLargeRightParen.rx() = 0.0;
+            item->setbbox(RectF());
+            // leave everything else as it is:
+            // draw() will anyway skip any drawing if staff type has no time sigs
+            return;
+        }
+        numOfLines  = _staff->lines(item->tick());
+        lineDist    = _staff->lineDistance(item->tick());
+    } else {
+        // assume dimensions of a standard staff
+        lineDist = 1.0;
+        numOfLines = 5;
+    }
+
+    // if some symbol
+    // compute vert. displacement to center in the staff height
+    // determine middle staff position:
+
+    double yoff = _spatium * (numOfLines - 1) * .5 * lineDist;
+
+    // C and Ccut are placed at the middle of the staff: use yoff directly
+    IEngravingFontPtr font = item->score()->engravingFont();
+    SizeF mag(item->magS() * item->_scale);
+
+    if (sigType == TimeSigType::FOUR_FOUR) {
+        item->pz = PointF(0.0, yoff);
+        RectF bbox = font->bbox(SymId::timeSigCommon, mag);
+        item->setbbox(bbox.translated(item->pz));
+        item->ns.clear();
+        item->ns.push_back(SymId::timeSigCommon);
+        item->ds.clear();
+    } else if (sigType == TimeSigType::ALLA_BREVE) {
+        item->pz = PointF(0.0, yoff);
+        RectF bbox = font->bbox(SymId::timeSigCutCommon, mag);
+        item->setbbox(bbox.translated(item->pz));
+        item->ns.clear();
+        item->ns.push_back(SymId::timeSigCutCommon);
+        item->ds.clear();
+    } else if (sigType == TimeSigType::CUT_BACH) {
+        item->pz = PointF(0.0, yoff);
+        RectF bbox = font->bbox(SymId::timeSigCut2, mag);
+        item->setbbox(bbox.translated(item->pz));
+        item->ns.clear();
+        item->ns.push_back(SymId::timeSigCut2);
+        item->ds.clear();
+    } else if (sigType == TimeSigType::CUT_TRIPLE) {
+        item->pz = PointF(0.0, yoff);
+        RectF bbox = font->bbox(SymId::timeSigCut3, mag);
+        item->setbbox(bbox.translated(item->pz));
+        item->ns.clear();
+        item->ns.push_back(SymId::timeSigCut3);
+        item->ds.clear();
+    } else {
+        if (item->_numeratorString.isEmpty()) {
+            item->ns = timeSigSymIdsFromString(item->_numeratorString.isEmpty()
+                                               ? String::number(item->_sig.numerator())
+                                               : item->_numeratorString);
+
+            item->ds = timeSigSymIdsFromString(item->_denominatorString.isEmpty()
+                                               ? String::number(item->_sig.denominator())
+                                               : item->_denominatorString);
+        } else {
+            item->ns = timeSigSymIdsFromString(item->_numeratorString);
+            item->ds = timeSigSymIdsFromString(item->_denominatorString);
+        }
+
+        RectF numRect = font->bbox(item->ns, mag);
+        RectF denRect = font->bbox(item->ds, mag);
+
+        // position numerator and denominator; vertical displacement:
+        // number of lines is odd: 0.0 (strings are directly above and below the middle line)
+        // number of lines even:   0.05 (strings are moved up/down to leave 1/10sp between them)
+
+        double displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
+
+        //align on the wider
+        double pzY = yoff - (denRect.width() < 0.01 ? 0.0 : (displ + numRect.height() * .5));
+        double pnY = yoff + displ + denRect.height() * .5;
+
+        if (numRect.width() >= denRect.width()) {
+            // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
+            item->pz = PointF(0.0, pzY);
+            // denominator: horiz: centred around centre of numerator | vert: one space below centre line
+            item->pn = PointF((numRect.width() - denRect.width()) * .5, pnY);
+        } else {
+            // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
+            item->pz = PointF((denRect.width() - numRect.width()) * .5, pzY);
+            // denominator: horiz: centred around centre of numerator | vert: one space below centre line
+            item->pn = PointF(0.0, pnY);
+        }
+
+        // centering of parenthesis so the middle of the parenthesis is at the divisor marking level
+        int centerY = yoff / 2 + _spatium;
+        int widestPortion = numRect.width() > denRect.width() ? numRect.width() : denRect.width();
+        item->pointLargeLeftParen = PointF(-_spatium, centerY);
+        item->pointLargeRightParen = PointF(widestPortion + _spatium, centerY);
+
+        item->setbbox(numRect.translated(item->pz));       // translate bounding boxes to actual string positions
+        item->addbbox(denRect.translated(item->pn));
+        if (item->_largeParentheses) {
+            item->addbbox(RectF(item->pointLargeLeftParen.x(), item->pointLargeLeftParen.y() - denRect.height(), _spatium / 2,
+                                numRect.height() + denRect.height()));
+            item->addbbox(RectF(item->pointLargeRightParen.x(), item->pointLargeRightParen.y() - denRect.height(),  _spatium / 2,
+                                numRect.height() + denRect.height()));
+        }
+    }
 }

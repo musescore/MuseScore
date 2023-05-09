@@ -125,6 +125,8 @@ class SystemText;
 class TabDurationSymbol;
 class TempoText;
 class TextLineSegment;
+class TextLineBaseSegment;
+class TimeSig;
 }
 
 namespace mu::engraving::v0 {
@@ -240,6 +242,8 @@ public:
     static void layout(TabDurationSymbol* item, LayoutContext& ctx);
     static void layout(TempoText* item, LayoutContext& ctx);
     static void layout(TextLineSegment* item, LayoutContext& ctx);
+    static void layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext& ctx); // base class
+    static void layout(TimeSig* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);

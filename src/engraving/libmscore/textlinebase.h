@@ -62,6 +62,11 @@ public:
     bool setProperty(Pid id, const PropertyValue& v) override;
 
 protected:
+
+    friend class v0::TLayout;
+
+    static RectF boundingBoxOfLine(const PointF& p1, const PointF& p2, double lw2, bool isDottedLine);
+
     Text* m_text = nullptr;
     Text* m_endText = nullptr;
     mu::PointF m_points[6];

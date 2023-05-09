@@ -53,30 +53,6 @@ class TimeSig final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, TimeSig)
     DECLARE_CLASSOF(ElementType::TIMESIG)
 
-    String _numeratorString;       // calculated from actualSig() if !customText
-    String _denominatorString;
-
-    SymIdList ns;
-    SymIdList ds;
-
-    mu::PointF pz;
-    mu::PointF pn;
-    mu::PointF pointLargeLeftParen;
-    mu::PointF pointLargeRightParen;
-    Fraction _sig;
-    Fraction _stretch;        // localSig / globalSig
-    Groups _groups;
-
-    mu::ScaleF _scale;
-    TimeSigType _timeSigType;
-    bool _showCourtesySig;
-    bool _largeParentheses;
-
-    friend class Factory;
-    TimeSig(Segment* parent = 0);
-
-    bool neverKernable() const override { return true; }
-
 public:
 
     void setParent(Segment* parent);
@@ -146,6 +122,32 @@ public:
 protected:
     void added() override;
     void removed() override;
+
+private:
+    friend class v0::TLayout;
+    friend class Factory;
+    TimeSig(Segment* parent = 0);
+
+    bool neverKernable() const override { return true; }
+
+    String _numeratorString;       // calculated from actualSig() if !customText
+    String _denominatorString;
+
+    SymIdList ns;
+    SymIdList ds;
+
+    mu::PointF pz;
+    mu::PointF pn;
+    mu::PointF pointLargeLeftParen;
+    mu::PointF pointLargeRightParen;
+    Fraction _sig;
+    Fraction _stretch;        // localSig / globalSig
+    Groups _groups;
+
+    mu::ScaleF _scale;
+    TimeSigType _timeSigType;
+    bool _showCourtesySig;
+    bool _largeParentheses;
 };
 } // namespace mu::engraving
 #endif
