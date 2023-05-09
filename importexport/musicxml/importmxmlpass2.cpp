@@ -2821,12 +2821,7 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
 
       int staffIdx = _score->staffIdx(part) + n;
 
-      StringData* t = nullptr;
-      if (_score->staff(staffIdx)->isTabStaff(Fraction(0,1))) {
-            t = new StringData;
-            t->setFrets(25);  // sensible default
-            }
-
+      StringData* t = new StringData;
       int staffLines = 0;
       while (_e.readNextStartElement()) {
             if (_e.name() == "staff-lines") {
@@ -2852,13 +2847,16 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
 
       if (t) {
             Instrument* i = part->instrument();
-            if (i->stringData()->strings() == 0) {
-                  // string data not set yet
-                  if (t->strings() > 0)
-                        i->setStringData(*t);
+            if (_score->staff(staffIdx)->isTabStaff(Fraction(0, 1))) {
+                  if (i->stringData()->frets() == 0)
+                        t->setFrets(25);
                   else
-                        _logger->logError("trying to change string data (not supported)", &_e);
+                     t->setFrets(i->stringData()->frets());
                   }
+            if (t->strings() > 0)
+                  i->setStringData(*t);
+            else
+                  _logger->logError("trying to change string data (not supported)", &_e);
             }
       }
 //---------------------------------------------------------
