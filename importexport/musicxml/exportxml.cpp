@@ -6247,6 +6247,23 @@ void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, boo
       }
 
 //---------------------------------------------------------
+//  clampMusicXmlOctave
+//---------------------------------------------------------
+
+/**
+ Clamps octave to min and max value as per MusicXML Schema
+ */
+
+static void clampMusicXmlOctave(int& octave)
+      {
+#if (__cplusplus >= 201703L) // C++17 or later
+      octave = std::clamp(octave, 0, 9);
+#else
+      octave = std::max(std::min(octave, 9), 0);
+#endif
+      }
+
+//---------------------------------------------------------
 //  writeStaffDetails
 //---------------------------------------------------------
 
@@ -6281,6 +6298,7 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
                               xml.tag("tuning-step", QString("%1").arg(step));
                               if (alter)
                                     xml.tag("tuning-alter", alter);
+                              clampMusicXmlOctave(octave);
                               xml.tag("tuning-octave", octave);
                               xml.etag();
                               }

@@ -188,6 +188,7 @@ private slots:
       void multiMeasureRest3() { mxmlIoTestRef("testMultiMeasureRest3"); }
       void multiMeasureRest4() { mxmlIoTestRef("testMultiMeasureRest4"); }
       void multipleNotations() { mxmlIoTestRef("testMultipleNotations"); }
+      void negativeOctave() { mxmlMscxExportTestRef("testNegativeOctave"); }
       void negativeOffset() { mxmlImportTestRef("testNegativeOffset"); }
       void nonStandardKeySig1() { mxmlIoTest("testNonStandardKeySig1"); }
       void nonStandardKeySig2() { mxmlIoTest("testNonStandardKeySig2"); }
