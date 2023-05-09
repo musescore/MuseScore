@@ -133,6 +133,7 @@
 #include "../libmscore/tuplet.h"
 
 #include "../libmscore/vibrato.h"
+#include "../libmscore/volta.h"
 
 #include "beamlayout.h"
 #include "chordlayout.h"
@@ -4713,4 +4714,10 @@ void TLayout::layout(Vibrato* item, LayoutContext& ctx)
         LOGD("Vibrato: no segments");
         return;
     }
+}
+
+void TLayout::layout(VoltaSegment* item, LayoutContext& ctx)
+{
+    layoutTextLineBaseSegment(item, ctx);
+    item->autoplaceSpannerSegment();
 }

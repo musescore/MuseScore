@@ -26,6 +26,7 @@
 #include <vector>
 
 #include "types/typesconv.h"
+#include "layout/tlayout.h"
 
 #include "changeMap.h"
 #include "measure.h"
@@ -81,8 +82,8 @@ VoltaSegment::VoltaSegment(Volta* sp, System* parent)
 
 void VoltaSegment::layout()
 {
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
