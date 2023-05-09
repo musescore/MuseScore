@@ -24,7 +24,7 @@
 #include <cmath>
 
 #include "types/typesconv.h"
-
+#include "layout/tlayout.h"
 #include "iengravingfont.h"
 
 #include "score.h"
@@ -105,33 +105,8 @@ void VibratoSegment::symbolLine(SymId start, SymId fill, SymId end)
 
 void VibratoSegment::layout()
 {
-    if (staff()) {
-        setMag(staff()->staffMag(tick()));
-    }
-    if (spanner()->placeBelow()) {
-        setPosY(staff() ? staff()->height() : 0.0);
-    }
-
-    switch (vibrato()->vibratoType()) {
-    case VibratoType::GUITAR_VIBRATO:
-        symbolLine(SymId::guitarVibratoStroke, SymId::guitarVibratoStroke);
-        break;
-    case VibratoType::GUITAR_VIBRATO_WIDE:
-        symbolLine(SymId::guitarWideVibratoStroke, SymId::guitarWideVibratoStroke);
-        break;
-    case VibratoType::VIBRATO_SAWTOOTH:
-        symbolLine(SymId::wiggleSawtooth, SymId::wiggleSawtooth);
-        break;
-    case VibratoType::VIBRATO_SAWTOOTH_WIDE:
-        symbolLine(SymId::wiggleSawtoothWide, SymId::wiggleSawtoothWide);
-        break;
-    }
-
-    if (isStyled(Pid::OFFSET)) {
-        roffset() = vibrato()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
-
-    autoplaceSpannerSegment();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -186,14 +161,8 @@ Vibrato::~Vibrato()
 
 void Vibrato::layout()
 {
-    SLine::layout();
-    if (score()->isPaletteScore()) {
-        return;
-    }
-    if (spannerSegments().empty()) {
-        LOGD("Vibrato: no segments");
-        return;
-    }
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 static const ElementStyle vibratoSegmentStyle {

@@ -132,6 +132,8 @@
 #include "../libmscore/trill.h"
 #include "../libmscore/tuplet.h"
 
+#include "../libmscore/vibrato.h"
+
 #include "beamlayout.h"
 #include "chordlayout.h"
 #include "lyricslayout.h"
@@ -4667,4 +4669,48 @@ void TLayout::layout(Trill* item, LayoutContext& ctx)
 void TLayout::layout(Tuplet* item, LayoutContext& ctx)
 {
     TupletLayout::layout(item, ctx);
+}
+
+void TLayout::layout(VibratoSegment* item, LayoutContext&)
+{
+    if (item->staff()) {
+        item->setMag(item->staff()->staffMag(item->tick()));
+    }
+    if (item->spanner()->placeBelow()) {
+        item->setPosY(item->staff() ? item->staff()->height() : 0.0);
+    }
+
+    switch (item->vibrato()->vibratoType()) {
+    case VibratoType::GUITAR_VIBRATO:
+        item->symbolLine(SymId::guitarVibratoStroke, SymId::guitarVibratoStroke);
+        break;
+    case VibratoType::GUITAR_VIBRATO_WIDE:
+        item->symbolLine(SymId::guitarWideVibratoStroke, SymId::guitarWideVibratoStroke);
+        break;
+    case VibratoType::VIBRATO_SAWTOOTH:
+        item->symbolLine(SymId::wiggleSawtooth, SymId::wiggleSawtooth);
+        break;
+    case VibratoType::VIBRATO_SAWTOOTH_WIDE:
+        item->symbolLine(SymId::wiggleSawtoothWide, SymId::wiggleSawtoothWide);
+        break;
+    }
+
+    if (item->isStyled(Pid::OFFSET)) {
+        item->roffset() = item->vibrato()->propertyDefault(Pid::OFFSET).value<PointF>();
+    }
+
+    item->autoplaceSpannerSegment();
+}
+
+void TLayout::layout(Vibrato* item, LayoutContext& ctx)
+{
+    layoutLine(static_cast<SLine*>(item), ctx);
+
+    if (item->score()->isPaletteScore()) {
+        return;
+    }
+    if (item->spannerSegments().empty()) {
+        LOGD("Vibrato: no segments");
+        return;
+    }
 }

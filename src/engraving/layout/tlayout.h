@@ -132,6 +132,9 @@ class TremoloBar;
 class TrillSegment;
 class Trill;
 class Tuplet;
+
+class VibratoSegment;
+class Vibrato;
 }
 
 namespace mu::engraving::v0 {
@@ -254,6 +257,9 @@ public:
     static void layout(TrillSegment* item, LayoutContext& ctx);
     static void layout(Trill* item, LayoutContext& ctx);
     static void layout(Tuplet* item, LayoutContext& ctx);
+
+    static void layout(VibratoSegment* item, LayoutContext& ctx);
+    static void layout(Vibrato* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
