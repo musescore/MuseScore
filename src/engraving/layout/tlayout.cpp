@@ -129,6 +129,7 @@
 #include "../libmscore/tie.h"
 #include "../libmscore/timesig.h"
 #include "../libmscore/tremolobar.h"
+#include "../libmscore/trill.h"
 
 #include "beamlayout.h"
 #include "chordlayout.h"
@@ -4596,4 +4597,67 @@ void TLayout::layout(TremoloBar* item, LayoutContext&)
 
     double w = item->m_lw.val();
     item->setbbox(item->m_polygon.boundingRect().adjusted(-w, -w, w, w));
+}
+
+void TLayout::layout(TrillSegment* item, LayoutContext&)
+{
+    if (item->staff()) {
+        item->setMag(item->staff()->staffMag(item->tick()));
+    }
+    if (item->spanner()->placeBelow()) {
+        item->setPosY(item->staff() ? item->staff()->height() : 0.0);
+    }
+
+    if (item->isSingleType() || item->isBeginType()) {
+        Accidental* a = item->trill()->accidental();
+        if (a) {
+            a->layout();
+            a->setMag(a->mag() * .6);
+            double _spatium = item->spatium();
+            a->setPos(_spatium * 1.3, -2.2 * _spatium);
+            a->setParent(item);
+        }
+        switch (item->trill()->trillType()) {
+        case TrillType::TRILL_LINE:
+            item->symbolLine(SymId::ornamentTrill, SymId::wiggleTrill);
+            break;
+        case TrillType::PRALLPRALL_LINE:
+            item->symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
+            break;
+        case TrillType::UPPRALL_LINE:
+            item->symbolLine(SymId::ornamentBottomLeftConcaveStroke,
+                             SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+            break;
+        case TrillType::DOWNPRALL_LINE:
+            item->symbolLine(SymId::ornamentLeftVerticalStroke,
+                             SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+            break;
+        }
+    } else {
+        item->symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
+    }
+    if (item->isStyled(Pid::OFFSET)) {
+        item->roffset() = item->trill()->propertyDefault(Pid::OFFSET).value<PointF>();
+    }
+
+    item->autoplaceSpannerSegment();
+}
+
+void TLayout::layout(Trill* item, LayoutContext& ctx)
+{
+    layoutLine(static_cast<SLine*>(item), ctx);
+
+    if (item->score()->isPaletteScore()) {
+        return;
+    }
+    if (item->spannerSegments().empty()) {
+        return;
+    }
+    TrillSegment* ls = toTrillSegment(item->frontSegment());
+    if (item->spannerSegments().empty()) {
+        LOGD("Trill: no segments");
+    }
+    if (item->accidental()) {
+        item->accidental()->setParent(ls);
+    }
 }
