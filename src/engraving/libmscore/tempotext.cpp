@@ -29,6 +29,7 @@
 
 #include "types/typesconv.h"
 #include "types/constants.h"
+#include "layout/tlayout.h"
 
 #include "score.h"
 #include "segment.h"
@@ -399,26 +400,8 @@ PropertyValue TempoText::propertyDefault(Pid id) const
 
 void TempoText::layout()
 {
-    TextBase::layout();
-
-    Segment* s = segment();
-    if (!s) {                       // for use in palette
-        return;
-    }
-
-    // tempo text on first chordrest of measure should align over time sig if present
-    //
-    if (autoplace() && s->rtick().isZero()) {
-        Segment* p = segment()->prev(SegmentType::TimeSig);
-        if (p) {
-            movePosX(-(s->x() - p->x()));
-            EngravingItem* e = p->element(staffIdx() * VOICES);
-            if (e) {
-                movePosX(e->x());
-            }
-        }
-    }
-    autoplaceSegmentElement();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

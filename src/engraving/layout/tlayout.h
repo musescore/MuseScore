@@ -123,6 +123,7 @@ class SystemDivider;
 class SystemText;
 
 class TabDurationSymbol;
+class TempoText;
 }
 
 namespace mu::engraving::v0 {
@@ -236,6 +237,7 @@ public:
     static void layout(SystemText* item, LayoutContext& ctx);
 
     static void layout(TabDurationSymbol* item, LayoutContext& ctx);
+    static void layout(TempoText* item, LayoutContext& ctx);
 
 private:
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
