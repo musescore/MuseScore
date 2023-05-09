@@ -236,8 +236,6 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
         return;
     }
 
-    m_masterParams = params;
-
     m_masterFxProcessors.clear();
     m_masterFxProcessors = fxResolver()->resolveMasterFxList(params.fxChain);
 
@@ -248,6 +246,8 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
             m_masterOutputParamsChanged.send(m_masterParams);
         });
     }
+
+    AudioOutputParams resultParams = params;
 
     auto findFxProcessor = [this](const std::pair<AudioFxChainOrder, AudioFxParams>& params) -> IFxProcessorPtr {
         for (IFxProcessorPtr& fx : m_masterFxProcessors) {
@@ -263,13 +263,17 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
         return nullptr;
     };
 
-    for (auto it = params.fxChain.begin(); it != params.fxChain.end(); ++it) {
+    for (auto it = resultParams.fxChain.begin(); it != resultParams.fxChain.end();) {
         if (IFxProcessorPtr fx = findFxProcessor(*it)) {
             fx->setActive(it->second.active);
+            ++it;
+        } else {
+            it = resultParams.fxChain.erase(it);
         }
     }
 
-    m_masterOutputParamsChanged.send(params);
+    m_masterParams = resultParams;
+    m_masterOutputParamsChanged.send(resultParams);
 }
 
 void Mixer::clearMasterOutputParams()
