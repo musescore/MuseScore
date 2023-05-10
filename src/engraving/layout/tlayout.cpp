@@ -4301,11 +4301,14 @@ void TLayout::layout(TempoText* item, LayoutContext& ctx)
     item->autoplaceSegmentElement();
 }
 
+<<<<<<< HEAD
 void TLayout::layout(TextBase* item, LayoutContext& ctx)
 {
     layoutItem(item, ctx);
 }
 
+=======
+>>>>>>> 1b64bad571... [engraving] moved layout TextBase
 void TLayout::layoutTextBase(TextBase* item, LayoutContext& ctx)
 {
     item->setPos(PointF());
@@ -4407,6 +4410,7 @@ void TLayout::layout1TextBase(TextBase* item, LayoutContext&)
     item->score()->addRefresh(item->canvasBoundingRect());
 }
 
+<<<<<<< HEAD
 void TLayout::layout(Text* item, LayoutContext& ctx)
 {
     layoutTextBase(static_cast<TextBase*>(item), ctx);
@@ -4417,6 +4421,8 @@ void TLayout::layout(TextLine* item, LayoutContext& ctx)
     layoutLine(item, ctx);
 }
 
+=======
+>>>>>>> 1b64bad571... [engraving] moved layout TextBase
 void TLayout::layout(TextLineSegment* item, LayoutContext& ctx)
 {
     layoutTextLineBaseSegment(item, ctx);

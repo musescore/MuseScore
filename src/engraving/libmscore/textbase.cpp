@@ -1871,6 +1871,19 @@ void TextBase::prepareFormat(const String& token, TextCursor& cursor)
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
+=======
+//   layout
+//---------------------------------------------------------
+
+void TextBase::layout()
+{
+    LayoutContext ctx(score());
+    v0::TLayout::layoutTextBase(this, ctx);
+}
+
+//---------------------------------------------------------
+>>>>>>> 1b64bad571... [engraving] moved layout TextBase
 //   layout1
 //---------------------------------------------------------
 

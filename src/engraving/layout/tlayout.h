@@ -139,8 +139,11 @@ class SystemText;
 class TabDurationSymbol;
 class TempoText;
 class TextBase;
+<<<<<<< HEAD
 class Text;
 class TextLine;
+=======
+>>>>>>> 1b64bad571... [engraving] moved layout TextBase
 class TextLineSegment;
 class TextLineBase;
 class TextLineBaseSegment;
@@ -289,6 +292,7 @@ public:
     static void layout(TabDurationSymbol* item, LayoutContext& ctx);
     static void layout(TempoText* item, LayoutContext& ctx);
 
+<<<<<<< HEAD
     static void layout(TextBase* item, LayoutContext& ctx);          // factory
     static void layoutTextBase(TextBase* item, LayoutContext& ctx);  // base class
     static void layout1(TextBase* item, LayoutContext& ctx);         // factory
@@ -296,6 +300,12 @@ public:
     static void layout(Text* item, LayoutContext& ctx);
 
     static void layout(TextLine* item, LayoutContext& ctx);
+=======
+    static void layoutTextBase(TextBase* item, LayoutContext& ctx);  // base class
+    static void layout1(TextBase* item, LayoutContext& ctx);         // factory
+    static void layout1TextBase(TextBase* item, LayoutContext& ctx); // base class
+
+>>>>>>> 1b64bad571... [engraving] moved layout TextBase
     static void layout(TextLineSegment* item, LayoutContext& ctx);
     static void layoutTextLineBase(TextLineBase* item, LayoutContext& ctx);
     static void layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext& ctx); // base class
