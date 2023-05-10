@@ -1674,7 +1674,11 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
     item->bbox().setRect(0, 0, w, h);
 }
 
+<<<<<<< HEAD
 void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
+=======
+void TLayout::layout(FiguredBass* item, LayoutContext&)
+>>>>>>> 6ed6e9cf16... [engraving] moved layout FiguredBass
 {
     // VERTICAL POSITION:
     const double y = item->score()->styleD(Sid::figuredBassYOffset) * item->spatium();
@@ -1690,13 +1694,22 @@ void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
         item->bbox().setRect(0, 0, item->lineLength(0), 0);
         // layout each item and enlarge bbox to include items bboxes
         for (FiguredBassItem* fit : item->items()) {
+<<<<<<< HEAD
             layout(fit, ctx);
             item->addbbox(fit->bbox().translated(fit->pos()));
+=======
+            fit->layout();
+            item->addbbox(item->bbox().translated(fit->pos()));
+>>>>>>> 6ed6e9cf16... [engraving] moved layout FiguredBass
         }
     }
 }
 
+<<<<<<< HEAD
 void TLayout::layout(Fingering* item, LayoutContext& ctx)
+=======
+void TLayout::layout(Fingering* item, LayoutContext&)
+>>>>>>> 6ed6e9cf16... [engraving] moved layout FiguredBass
 {
     if (item->explicitParent()) {
         Fraction tick = item->parentItem()->tick();

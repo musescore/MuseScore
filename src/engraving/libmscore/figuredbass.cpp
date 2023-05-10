@@ -792,6 +792,19 @@ Sid FiguredBass::getPropertyStyle(Pid id) const
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
+=======
+//   layout
+//---------------------------------------------------------
+
+void FiguredBass::layout()
+{
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+//---------------------------------------------------------
+>>>>>>> 6ed6e9cf16... [engraving] moved layout FiguredBass
 //   layoutLines
 //
 //    lays out the duration indicator line(s), filling the _lineLengths array
