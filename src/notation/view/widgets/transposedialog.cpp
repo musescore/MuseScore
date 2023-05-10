@@ -212,16 +212,7 @@ Key TransposeDialog::firstPitchedStaffKey() const
             }
 
             if (staff->isPitchedStaff(startTick)) {
-                key = staff->key(startTick);
-                bool concertPitchEnabled = notation()->style()->styleValue(StyleId::concertPitch).toBool();
-
-                if (!concertPitchEnabled) {
-                    int diff = staff->part()->instrument(startTick)->transpose().chromatic;
-
-                    if (diff) {
-                        key = mu::engraving::transposeKey(key, diff, staff->part()->preferSharpFlat());
-                    }
-                }
+                key = staff->concertKey(startTick);
 
                 break;
             }

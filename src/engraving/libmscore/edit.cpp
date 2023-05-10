@@ -2890,10 +2890,8 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
     }
 
     // get the last deleted timesig & keysig in order to restore after deletion
-    KeySigEvent lastDeletedKeySigEvent;
     std::map<staff_idx_t, TimeSig*> lastDeletedTimeSigs;
     KeySig* lastDeletedKeySig = 0;
-    bool transposeKeySigEvent = false;
 
     for (MeasureBase* mb = mbEnd;; mb = mb->prev()) {
         if (mb->isMeasure()) {
@@ -2913,18 +2911,6 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
             sts = m->findSegment(SegmentType::KeySig, m->tick());
             if (sts && !lastDeletedKeySig) {
                 lastDeletedKeySig = toKeySig(sts->element(0));
-                if (lastDeletedKeySig) {
-                    lastDeletedKeySigEvent = lastDeletedKeySig->keySigEvent();
-                    if (!styleB(Sid::concertPitch) && !lastDeletedKeySigEvent.isAtonal()) {
-                        // convert to concert pitch
-                        transposeKeySigEvent = true;
-                        Interval v = staff(0)->part()->instrument(m->tick())->transpose();
-                        if (!v.isZero()) {
-                            lastDeletedKeySigEvent.setKey(transposeKey(lastDeletedKeySigEvent.key(), v,
-                                                                       lastDeletedKeySig->part()->preferSharpFlat()));
-                        }
-                    }
-                }
             }
             if (lastDeletedTimeSigs.size() == nstaves() && lastDeletedKeySig) {
                 break;
@@ -2989,11 +2975,11 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
             if (!s) {
                 Segment* ns = mAfterSel->undoGetSegment(SegmentType::KeySig, mAfterSel->tick());
                 for (size_t staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
-                    KeySigEvent nkse = lastDeletedKeySigEvent;
-                    if (transposeKeySigEvent) {
+                    KeySigEvent nkse = lastDeletedKeySig->keySigEvent();
+                    if (!styleB(Sid::concertPitch) && !nkse.isAtonal()) {
                         Interval v = score->staff(staffIdx)->part()->instrument(Fraction(0, 1))->transpose();
                         v.flip();
-                        nkse.setKey(transposeKey(nkse.key(), v, lastDeletedKeySig->part()->preferSharpFlat()));
+                        nkse.setKey(transposeKey(nkse.concertKey(), v, score->staff(staffIdx)->part()->preferSharpFlat()));
                     }
                     KeySig* nks = Factory::createKeySig(ns);
                     nks->setTrack(staffIdx * VOICES);
@@ -4889,7 +4875,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
 
         if (interval.chromatic && !concertPitch && !nkey.isAtonal()) {
             interval.flip();
-            nkey.setKey(transposeKey(key.key(), interval, staff->part()->preferSharpFlat()));
+            nkey.setKey(transposeKey(key.concertKey(), interval, staff->part()->preferSharpFlat()));
         }
 
         updateInstrumentChangeTranspositions(key, staff, tick);
@@ -4925,14 +4911,14 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
                 track_idx_t track = staff->idx() * VOICES;
                 if (key.isAtonal() && !e.isAtonal()) {
                     e.setMode(KeyMode::NONE);
-                    e.setKey(Key::C);
+                    e.setConcertKey(Key::C);
                 } else {
                     e.setMode(key.mode());
                     Interval transposeInterval = staff->part()->instrument(Fraction::fromTicks(nextTick))->transpose();
-                    Interval previousTranspose = staff->part()->instrument(tick)->transpose();
                     transposeInterval.flip();
-                    Key nkey = transposeKey(key.key(), transposeInterval);
-                    nkey = transposeKey(nkey, previousTranspose);
+                    Key ckey = key.concertKey();
+                    Key nkey = transposeKey(ckey, transposeInterval, staff->part()->preferSharpFlat());
+                    e.setConcertKey(ckey);
                     e.setKey(nkey);
                 }
                 KeySig* keySig = nullptr;

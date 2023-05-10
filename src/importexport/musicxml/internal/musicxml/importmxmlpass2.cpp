@@ -3822,7 +3822,14 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "fifths") {
-            key.setKey(Key(_e.readElementText().toInt()));
+            Key tKey = Key(_e.readElementText().toInt());
+            Key cKey = tKey;
+            Interval v = _pass1.getPart(partId)->instrument()->transpose();
+            if (!v.isZero() && !_score->styleB(Sid::concertPitch)) {
+                cKey = transposeKey(tKey, v);
+            }
+            key.setConcertKey(cKey);
+            key.setKey(tKey);
         } else if (_e.name() == "mode") {
             QString m = _e.readElementText();
             if (m == "none") {

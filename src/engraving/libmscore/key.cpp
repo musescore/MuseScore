@@ -145,13 +145,25 @@ const SymId accTable[] = {
 //   see KeySig::layout()
 //---------------------------------------------------------
 
-void KeySigEvent::enforceLimits()
+void KeySigEvent::enforceLimits(bool transposing)
 {
     if (_key < Key::MIN) {
         _key = Key::MIN;
         LOGD("key < -7");
     } else if (_key > Key::MAX) {
         _key = Key::MAX;
+        LOGD("key > 7");
+    }
+
+    if (transposing) {
+        return;
+    }
+
+    if (_concertKey < Key::MIN) {
+        _concertKey = Key::MIN;
+        LOGD("key < -7");
+    } else if (_concertKey > Key::MAX) {
+        _concertKey = Key::MAX;
         LOGD("key > 7");
     }
 }
@@ -182,8 +194,32 @@ void KeySigEvent::print() const
 
 void KeySigEvent::setKey(Key v)
 {
-    _key    = v;
+    _key = v;
+    enforceLimits(true);
+}
+
+//---------------------------------------------------------
+//   setConcertKey
+//---------------------------------------------------------
+
+void KeySigEvent::setConcertKey(Key v)
+{
+    _key = v;
+    _concertKey = v;
     enforceLimits();
+}
+
+//---------------------------------------------------------
+//   setCustom
+//---------------------------------------------------------
+
+void KeySigEvent::setCustom(bool val)
+{
+    _custom = val;
+    if (_key == Key::INVALID) {
+        _concertKey = Key::C;
+        _key = Key::C;
+    }
 }
 
 //---------------------------------------------------------
@@ -208,7 +244,7 @@ bool KeySigEvent::operator==(const KeySigEvent& e) const
         }
         return true;
     }
-    return e._key == _key;
+    return e._concertKey == _concertKey && e._key == _key;
 }
 
 //---------------------------------------------------------
@@ -283,6 +319,7 @@ void KeySigEvent::initFromSubtype(int st)
     //end of legacy code
 
     _key            = Key(a._key);
+    _concertKey     = _key;
 //      _customType     = a._customType;
     _custom         = a._custom;
     if (a._invalid) {

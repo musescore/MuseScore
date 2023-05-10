@@ -90,6 +90,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         Fraction tickStart = segment()->tick();
         Part* part = staff()->part();
         Interval oldV = part->instrument(tickStart)->transpose();
+        Interval v = instrument->transpose();
         bool concPitch = score()->styleB(Sid::concertPitch);
 
         // change the clef for each staff
@@ -107,16 +108,13 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         }
 
         // Change key signature if necessary. CAUTION: not necessary in case of octave-transposing!
-        if ((instrument->transpose().chromatic - oldV.chromatic) % 12) {
+        if ((v.chromatic - oldV.chromatic) % 12) {
             for (size_t i = 0; i < part->nstaves(); i++) {
                 if (!part->staff(i)->keySigEvent(tickStart).isAtonal()) {
                     KeySigEvent ks;
                     ks.setForInstrumentChange(true);
-                    Key key = part->staff(i)->key(tickStart);
-                    if (!score()->styleB(Sid::concertPitch)) {
-                        key = transposeKey(key, oldV);
-                    }
-                    ks.setKey(key);
+                    Key cKey = part->staff(i)->concertKey(tickStart);
+                    ks.setConcertKey(cKey);
                     score()->undoChangeKeySig(part->staff(i), tickStart, ks);
                 }
             }

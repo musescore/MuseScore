@@ -184,6 +184,7 @@ public:
 
     KeyList* keyList() { return &_keys; }
     Key key(const Fraction& tick) const { return keySigEvent(tick).key(); }
+    Key concertKey(const Fraction& tick) const { return keySigEvent(tick).concertKey(); }
     KeySigEvent keySigEvent(const Fraction&) const;
     Fraction nextKeyTick(const Fraction&) const;
     Fraction currentKeyTick(const Fraction&) const;

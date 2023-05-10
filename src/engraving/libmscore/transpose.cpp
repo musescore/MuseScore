@@ -296,13 +296,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             for (staff_idx_t i = startStaffIdx; i < endStaffIdx; ++i) {
                 Staff* s = staff(i);
                 if (s->isPitchedStaff(startTick)) {
-                    key = s->key(startTick);
-                    if (!styleB(Sid::concertPitch)) {
-                        int diff = s->part()->instrument(startTick)->transpose().chromatic;
-                        if (diff) {
-                            key = transposeKey(key, diff, s->part()->preferSharpFlat());
-                        }
-                    }
+                    key = s->concertKey(startTick);
                     // remember this staff to use as basis in transposing key signatures
                     st = s;
                     break;
@@ -385,7 +379,9 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 KeySig* ks     = toKeySig(e);
                 if (!ks->isAtonal()) {
                     Key key        = st->key(ks->tick());
+                    Key cKey       = st->concertKey(ks->tick());
                     KeySigEvent ke = ks->keySigEvent();
+                    ke.setConcertKey(cKey);
                     ke.setKey(key);
                     undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
                 }
@@ -488,19 +484,10 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 bool addKey = ks->isChange();
                 if ((startKey || addKey) && !ks->isAtonal()) {
                     Staff* staff = ks->staff();
-                    Key oKey = ks->key();
-                    if (!styleB(Sid::concertPitch)) {
-                        Interval i = staff->part()->instrument(tick)->transpose();
-                        // TODO: here we are converting the instrument-transposed key to concert pitch
-                        // ideally, we would figure out how to get the original concert pitch key,
-                        // since the current key may be affected by preferSharpsFlats() setting
-                        // but ultimately it should not matter,
-                        // because undoChangeKeySig() is going to change this again
-                        oKey = transposeKey(oKey, i);
-                    }
+                    Key oKey = ks->concertKey();
                     Key nKey = transposeKey(oKey, interval);
                     KeySigEvent ke = ks->keySigEvent();
-                    ke.setKey(nKey);
+                    ke.setConcertKey(nKey);
                     // undoChangeKey handles linked staves/parts and generating new keysigs as needed
                     // it always sets the keysig non-generated
                     // so only call it when needed
@@ -549,7 +536,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             if (!ks) {
                 ks = Factory::createKeySig(seg);
                 ks->setTrack(track);
-                Key nKey = transposeKey(Key::C, interval, ks->part()->preferSharpFlat());
+                Key nKey = transposeKey(Key::C, interval);
                 ks->setKey(nKey);
                 ks->setParent(seg);
                 undoAddElement(ks);
@@ -604,25 +591,11 @@ void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fr
             if (!ks->isAtonal()) {
                 KeySigEvent ke = st->keySigEvent(s->tick());
                 PreferSharpFlat pref = ks->part()->preferSharpFlat();
-                // TODO: if we are transposing to concert pitch,
-                // then instead of using the part preferSharpFlat() setting,
-                // we should somehow determine the actual concert pitch key
-                // eg, if concert pitch for the score as a whole is B, Eb instruments transpose to Ab
-                // it would be nice if when toggling concert pitch, those instruments were B, not Cb
-                // the code below makes a bold but unwarranted assumption:
-                // if you are using the prefer flats option,
-                // it's because you have sharps in your concert key signatures
-                // (and vice versa)
-                // better would be to check other non-transposing staves,
-                // but ideally we would record and save transposed and concert keys separately
-                // (like we do tpc1 & tpc2 for notes)
-                //if (useInstrument && !flip) {
-                //      if (pref == PreferSharpFlat::FLATS)
-                //            pref = PreferSharpFlat::SHARPS;
-                //      else if (pref == PreferSharpFlat::SHARPS)
-                //            pref = PreferSharpFlat::FLATS;
-                //      }
-                Key nKey = transposeKey(ke.key(), segmentInterval, pref);
+                Key nKey = ke.concertKey();
+                if (flip) {
+                    nKey = transposeKey(ke.concertKey(), segmentInterval, pref);
+                }
+
                 ke.setKey(nKey);
                 undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
             }
@@ -634,7 +607,8 @@ void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fr
             ks->setTrack(staffIdx * VOICES);
             Key nKey = transposeKey(Key::C, firstInterval, ks->part()->preferSharpFlat());
             KeySigEvent ke;
-            ke.setKey(nKey);
+            ke.setConcertKey(nKey);
+            ke.setKey(Key::C);
             ks->setKeySigEvent(ke);
             ks->setParent(seg);
             undoAddElement(ks);
@@ -807,7 +781,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
         scores.insert(score);
         Part* lp = ls->part();
         if (!score->styleB(Sid::concertPitch)) {
-            score->transposeKeys(lp->startTrack() / VOICES, lp->endTrack() / VOICES, tickStart, tickEnd, diffV);
+            score->transposeKeys(lp->startTrack() / VOICES, lp->endTrack() / VOICES, tickStart, tickEnd, diffV, true, true);
         }
     }
 

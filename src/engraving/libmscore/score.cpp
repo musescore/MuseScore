@@ -2793,18 +2793,18 @@ void Score::adjustKeySigs(track_idx_t sidx, track_idx_t eidx, KeyList km)
             if (staff->isDrumStaff(tick)) {
                 continue;
             }
-            KeySigEvent oKey = i->second;
-            KeySigEvent nKey = oKey;
-            int diff = -staff->part()->instrument(tick)->transpose().chromatic;
-            if (diff != 0 && !styleB(Sid::concertPitch) && !oKey.isAtonal()) {
-                nKey.setKey(transposeKey(nKey.key(), diff, staff->part()->preferSharpFlat()));
+            KeySigEvent key = i->second;
+            Interval v = staff->part()->instrument(tick)->transpose();
+            if (!v.isZero() && !styleB(Sid::concertPitch) && !key.isAtonal()) {
+                v.flip();
+                key.setKey(transposeKey(key.concertKey(), v, staff->part()->preferSharpFlat()));
             }
-            staff->setKey(tick, nKey);
+            staff->setKey(tick, key);
 
             Segment* s = measure->getSegment(SegmentType::KeySig, tick);
             KeySig* keysig = Factory::createKeySig(s);
             keysig->setTrack(staffIdx * VOICES);
-            keysig->setKeySigEvent(nKey);
+            keysig->setKeySigEvent(key);
             s->add(keysig);
         }
     }
@@ -2867,15 +2867,15 @@ KeyList Score::keyList() const
         normalizedC = transposeKey(normalizedC, interval);
         for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
             int tick = i->first;
-            Key oKey = i->second.key();
-            tmpKeymap[tick].setKey(transposeKey(oKey, interval));
+            Key cKey = i->second.concertKey();
+            tmpKeymap[tick].setKey(cKey);
         }
     }
 
     // create initial keyevent for transposing instrument if necessary
     auto i = tmpKeymap.begin();
     if (i == tmpKeymap.end() || i->first != 0) {
-        tmpKeymap[0].setKey(normalizedC);
+        tmpKeymap[0].setConcertKey(normalizedC);
     }
 
     return tmpKeymap;
@@ -5083,15 +5083,12 @@ int Score::keysig()
     for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
         Staff* st = staff(staffIdx);
         constexpr Fraction t(0, 1);
-        Key key = st->key(t);
+        Key key = st->concertKey(t);
         if (st->staffType(t)->group() == StaffGroup::PERCUSSION || st->keySigEvent(t).isAtonal()) {         // ignore percussion and custom / atonal key
             continue;
         }
         result = key;
-        int diff = st->part()->instrument()->transpose().chromatic; //TODO keySigs and pitched to unpitched instr changes
-        if (!styleB(Sid::concertPitch) && diff) {
-            result = transposeKey(key, diff, st->part()->preferSharpFlat());
-        }
+        //TODO keySigs and pitched to unpitched instr changes (Igor Korsukov 2021-02-05) ??? why here?
         break;
     }
     return int(result);
