@@ -88,7 +88,11 @@ bool FileIO::write(const QString& data)
         return false;
     }
 
-    QFile file(mSource);
+    QUrl url(mSource);
+
+    QString source = (url.isValid() && url.isLocalFile()) ? url.toLocalFile() : mSource;
+
+    QFile file(source);
     if (!file.open(QFile::WriteOnly | QFile::Truncate)) {
         return false;
     }
