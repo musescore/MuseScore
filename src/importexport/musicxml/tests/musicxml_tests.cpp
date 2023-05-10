@@ -955,6 +955,9 @@ TEST_F(Musicxml_Tests, wedge3) {
 TEST_F(Musicxml_Tests, wedge4) {
     mxmlMscxExportTestRef("testWedge4");
 }
+TEST_F(Musicxml_Tests, wedge5) {
+    mxmlIoTestRef("testWedge5");
+}
 TEST_F(Musicxml_Tests, words1) {
     mxmlIoTest("testWords1");
 }

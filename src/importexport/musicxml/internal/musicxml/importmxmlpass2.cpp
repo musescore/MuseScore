@@ -1730,6 +1730,17 @@ void MusicXMLParserPass2::scorePart()
 }
 
 //---------------------------------------------------------
+//   createSegmentChordRest
+//---------------------------------------------------------
+
+static void createSegmentChordRest(Score* score, Fraction tick)
+{
+    // getSegment() creates the segment if it does not yet exist
+    const auto measure = score->tick2measure(tick);
+    measure->getSegment(SegmentType::ChordRest, tick);
+}
+
+//---------------------------------------------------------
 //   part
 //---------------------------------------------------------
 
@@ -1817,10 +1828,17 @@ void MusicXMLParserPass2::part()
         auto sp = i.key();
         Fraction tick1 = Fraction::fromTicks(i.value().first);
         Fraction tick2 = Fraction::fromTicks(i.value().second);
-        //LOGD("spanner %p tp %d tick1 %s tick2 %s track1 %d track2 %d",
-        //       sp, sp->type(), qPrintable(tick1.print()), qPrintable(tick2.print()), sp->track(), sp->track2());
+        //LOGD("spanner %p tp %d isHairpin %d tick1 %s tick2 %s track1 %d track2 %d start %p end %p",
+        //       sp, sp->type(), sp->isHairpin(), qPrintable(tick1.toString()), qPrintable(tick2.toString()),
+        //       sp->track(), sp->track2(), sp->startElement(), sp->endElement());
         if (incompleteSpanners.find(sp) == incompleteSpanners.end()) {
-            // complete spanner -> add to score
+            // complete spanner found
+            // PlaybackContext::handleSpanners() requires hairpins to have a valid start segment
+            // always create start segment to prevent crash in case no note starts at this tick
+            if (sp->isHairpin()) {
+                createSegmentChordRest(_score, tick1);
+            }
+            // add to score
             sp->setTick(tick1);
             sp->setTick2(tick2);
             sp->score()->addElement(sp);
