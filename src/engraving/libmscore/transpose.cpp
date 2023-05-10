@@ -775,9 +775,6 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
     if (tickStart == Fraction(-1, 1)) {
         tickStart = Fraction(0, 1);
     }
-    Interval v = part->staff(0)->transpose(tickStart);
-    v.flip();
-    Interval diffV(oldV.chromatic + v.chromatic);
 
     // transpose keys first
     std::set<Score*> scores;
@@ -803,6 +800,9 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
         if (tickEnd != Fraction(-1, 1) && s->tick() >= tickEnd) {
             break;
         }
+        Interval v = part->staff(0)->transpose(s->tick());
+        v.flip();
+        Interval diffV(oldV.chromatic + v.chromatic);
         for (Staff* st : part->staves()) {
             if (st->staffType(tickStart)->group() == StaffGroup::PERCUSSION) {
                 continue;
