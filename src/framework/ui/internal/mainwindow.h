@@ -28,8 +28,11 @@
 
 #include "framework/ui/imainwindow.h"
 
+#include "async/asyncable.h"
+#include "async/notification.h"
+
 namespace mu::ui {
-class MainWindow : public IMainWindow
+class MainWindow : public IMainWindow, public async::Asyncable
 {
 public:
     MainWindow() = default;
@@ -43,11 +46,15 @@ public:
     void requestShowOnFront() override;
 
     bool isFullScreen() const override;
+    async::Notification isFullScreenChanged() const override;
+
     void toggleFullScreen() override;
     QScreen* screen() const override;
 
 private:
     MainWindowBridge* m_bridge = nullptr;
+
+    async::Notification m_isFullScreenChanged;
 };
 }
 
