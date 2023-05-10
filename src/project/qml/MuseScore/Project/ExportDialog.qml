@@ -35,7 +35,7 @@ StyledDialogView {
     title: qsTrc("project/export", "Export")
 
     contentWidth: 756
-    contentHeight: 336
+    contentHeight: 372
     margins: 24
 
     ExportDialogModel {

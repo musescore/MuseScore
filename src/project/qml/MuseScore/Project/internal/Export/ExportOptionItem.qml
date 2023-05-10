@@ -24,18 +24,17 @@ import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 
-RowLayout {
+ColumnLayout {
     id: root
 
-    property int labelWidth: 72
     property alias text: label.text
 
     width: Math.min(implicitWidth, parent.width)
-    spacing: 12
+    spacing: 8
 
     StyledTextLabel {
         id: label
-        Layout.preferredWidth: root.labelWidth
+        Layout.fillWidth: true
         horizontalAlignment: Text.AlignLeft
     }
 }
