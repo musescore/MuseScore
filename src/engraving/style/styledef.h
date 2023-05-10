@@ -196,8 +196,6 @@ enum class Sid {
     stemLengthSmall,
     shortStemStartLocation,
     shortestStem,
-    minStaffSizeForAutoStems,
-    smallStaffStemDirection,
     beginRepeatLeftMargin,
     minNoteDistance,
     barNoteDistance,
