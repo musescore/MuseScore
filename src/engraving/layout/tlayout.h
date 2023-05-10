@@ -168,7 +168,11 @@ class TLayout
 {
 public:
 
+<<<<<<< HEAD
     static void layoutItem(EngravingItem* item, LayoutContext& ctx);  // factory
+=======
+    static void layout(EngravingItem* item, LayoutContext& ctx);  // factory
+>>>>>>> be3645c968... [engraving] added EngravingItem layout factory
 
     static void layout(Accidental* item, LayoutContext& ctx);
     static void layout(ActionIcon* item, LayoutContext& ctx);

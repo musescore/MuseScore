@@ -159,6 +159,7 @@ using LayoutTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Ar
                                    Chord, ChordLine, Clef,
                                    Dynamic, Expression,
                                    Fermata, FiguredBass, Fingering, FretDiagram,
+<<<<<<< HEAD
                                    Glissando, GlissandoSegment, GradualTempoChange, GradualTempoChangeSegment,
                                    Hairpin, HairpinSegment, HarpPedalDiagram, Harmony, HarmonicMarkSegment, Hook,
                                    Image, InstrumentChange,
@@ -176,6 +177,24 @@ using LayoutTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Ar
                                    Tremolo, TremoloBar, Trill, TrillSegment, Tuplet,
                                    Vibrato, VibratoSegment, Volta, VoltaSegment,
                                    WhammyBarSegment>;
+=======
+                                   Glissando, GradualTempoChange,
+                                   Hairpin, Harmony, HarmonicMark, Hook,
+                                   Image, InstrumentChange,
+                                   Jump,
+                                   KeySig,
+                                   LayoutBreak, LedgerLine, LetRing, Lyrics,
+                                   Marker, MeasureRepeat, MMRest,
+                                   Note, NoteDot, NoteHead,
+                                   Ottava,
+                                   Page, PalmMute, Pedal, PlayTechAnnotation,
+                                   Rasgueado, RehearsalMark, Rest,
+                                   Segment, Slur, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
+                                   Symbol, FSymbol, System, SystemDivider, SystemText,
+                                   TempoText, Text, TextLine, Tie, TimeSig, TremoloBar, Trill, Tuplet,
+                                   Vibrato, Volta,
+                                   WhammyBar>;
+>>>>>>> be3645c968... [engraving] added EngravingItem layout factory
 
 class LayoutVisitor : public rtti::Visitor<LayoutVisitor>
 {
@@ -191,7 +210,11 @@ public:
     }
 };
 
+<<<<<<< HEAD
 void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
+=======
+void TLayout::layout(EngravingItem* item, LayoutContext& ctx)
+>>>>>>> be3645c968... [engraving] added EngravingItem layout factory
 {
     LayoutVisitor::visit(LayoutVisitor::ShouldBeFound, LayoutTypes {}, item, ctx);
 }
