@@ -65,7 +65,7 @@ namespace mu::engraving {
 //   transposeChord
 //---------------------------------------------------------
 
-void Score::transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick)
+void Score::transposeChord(Chord* c, const Fraction& tick)
 {
     // set note track
     // check if staffMove moves a note to a
@@ -79,19 +79,17 @@ void Score::transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick
     Staff* staff = c->staff();
     Interval dstTranspose = staff->transpose(tick);
 
-    if (srcTranspose != dstTranspose) {  // TODO change also srcTranspose to reflect actual keysig
-        if (!dstTranspose.isZero()) {
-            dstTranspose.flip();
-            for (Note* n : c->notes()) {
-                int npitch;
-                int ntpc;
-                transposeInterval(n->pitch(), n->tpc1(), &npitch, &ntpc, dstTranspose, true);
-                n->setTpc2(ntpc);
-            }
-        } else {
-            for (Note* n : c->notes()) {
-                n->setTpc2(n->tpc1());
-            }
+    if (dstTranspose.isZero()) {
+        for (Note* n : c->notes()) {
+            n->setTpc2(n->tpc1());
+        }
+    } else {
+        dstTranspose.flip();
+        for (Note* n : c->notes()) {
+            int npitch;
+            int ntpc;
+            transposeInterval(n->pitch(), n->tpc1(), &npitch, &ntpc, dstTranspose, true);
+            n->setTpc2(ntpc);
         }
     }
 }
@@ -123,7 +121,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
 
     int twoNoteTremoloFactor = 1;
     if (cr->isChord()) {
-        transposeChord(toChord(cr), srcTranspose, tick);
+        transposeChord(toChord(cr), tick);
         if (toChord(cr)->tremolo() && toChord(cr)->tremolo()->twoNotes()) {
             twoNoteTremoloFactor = 2;
         } else if (cr->durationTypeTicks() == (cr->actualTicks() * 2)) {

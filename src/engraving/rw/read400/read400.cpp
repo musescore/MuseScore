@@ -495,7 +495,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             for (size_t i = 0; i < graceNotes.size(); ++i) {
                                 Chord* gc = graceNotes.at(i);
                                 gc->setGraceIndex(i);
-                                Score::transposeChord(gc, ctx.transpose(), tick);
+                                Score::transposeChord(gc, tick);
                                 chord->add(gc);
                             }
                             graceNotes.clear();
