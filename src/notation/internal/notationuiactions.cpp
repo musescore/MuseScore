@@ -491,7 +491,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Parts"),
-             TranslatableString("action", "Parts…"),
+             TranslatableString("action", "Manage parts"),
              IconCode::Code::PAGE
              ),
     UiAction("view-mode-page",
