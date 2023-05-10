@@ -1541,18 +1541,21 @@ EngravingItem* System::nextSegmentElement()
 
 EngravingItem* System::prevSegmentElement()
 {
-    Segment* seg = firstMeasure()->first();
     EngravingItem* re = 0;
-    while (!re) {
-        seg = seg->prev1MM();
-        if (!seg) {
-            return score()->firstElement();
-        }
+    Measure* m = firstMeasure();
+    if (m) {
+        Segment* seg = m->first();
+        while (!re) {
+            seg = seg->prev1MM();
+            if (!seg) {
+                return score()->firstElement();
+            }
 
-        if (seg->segmentType() == SegmentType::EndBarLine) {
-            score()->inputState().setTrack((score()->staves().size() - 1) * VOICES);       //correction
+            if (seg->segmentType() == SegmentType::EndBarLine) {
+                score()->inputState().setTrack((score()->staves().size() - 1) * VOICES);       //correction
+            }
+            re = seg->lastElement(score()->staves().size() - 1);
         }
-        re = seg->lastElement(score()->staves().size() - 1);
     }
     return re;
 }
