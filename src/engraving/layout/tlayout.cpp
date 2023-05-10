@@ -94,6 +94,7 @@
 
 #include "../libmscore/ottava.h"
 
+#include "../libmscore/page.h"
 #include "../libmscore/palmmute.h"
 #include "../libmscore/part.h"
 #include "../libmscore/pedal.h"
@@ -4160,6 +4161,107 @@ void TLayout::layout(TempoText* item, LayoutContext&)
         }
     }
     item->autoplaceSegmentElement();
+}
+
+void TLayout::layoutTextBase(TextBase* item, LayoutContext& ctx)
+{
+    item->setPos(PointF());
+    if (!item->explicitParent()) {
+        item->setOffset(0.0, 0.0);
+    }
+//      else if (isStyled(Pid::OFFSET))                                   // TODO: should be set already
+//            setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
+    if (item->placeBelow()) {
+        item->setPosY(item->staff() ? item->staff()->height() : 0.0);
+    }
+
+    layout1(item, ctx);
+}
+
+void TLayout::layout1(TextBase* item, LayoutContext& ctx)
+{
+    if (Harmony::classof(item)) {
+        layout1(static_cast<Harmony*>(item), ctx);
+    } else {
+        layout1TextBase(item, ctx);
+    }
+}
+
+void TLayout::layout1TextBase(TextBase* item, LayoutContext&)
+{
+    if (item->layoutInvalid) {
+        item->createLayout();
+    }
+    if (item->_layout.empty()) {
+        item->_layout.push_back(TextBlock());
+    }
+    RectF bb;
+    double y = 0;
+
+    // adjust the bounding box for the text item
+    for (size_t i = 0; i < item->rows(); ++i) {
+        TextBlock* t = &item->_layout[i];
+        t->layout(item);
+        const RectF* r = &t->boundingRect();
+
+        if (r->height() == 0) {
+            r = &item->_layout[i - i].boundingRect();
+        }
+        y += t->lineSpacing();
+        t->setY(y);
+        bb |= r->translated(0.0, y);
+    }
+    double yoff = 0;
+    double h    = 0;
+    if (item->explicitParent()) {
+        if (item->layoutToParentWidth()) {
+            if (item->explicitParent()->isTBox()) {
+                // hack: vertical alignment is always TOP
+                item->_align = AlignV::TOP;
+            } else if (item->explicitParent()->isBox()) {
+                // consider inner margins of frame
+                Box* b = toBox(item->explicitParent());
+                yoff = b->topMargin() * DPMM;
+
+                if (b->height() < bb.bottom()) {
+                    h = b->height() / 2 + bb.height();
+                } else {
+                    h  = b->height() - yoff - b->bottomMargin() * DPMM;
+                }
+            } else if (item->explicitParent()->isPage()) {
+                Page* p = toPage(item->explicitParent());
+                h = p->height() - p->tm() - p->bm();
+                yoff = p->tm();
+            } else if (item->explicitParent()->isMeasure()) {
+            } else {
+                h  = item->parentItem()->height();
+            }
+        }
+    } else {
+        item->setPos(PointF());
+    }
+
+    if (item->align() == AlignV::BOTTOM) {
+        yoff += h - bb.bottom();
+    } else if (item->align() == AlignV::VCENTER) {
+        yoff +=  (h - (bb.top() + bb.bottom())) * .5;
+    } else if (item->align() == AlignV::BASELINE) {
+        yoff += h * .5 - item->_layout.front().lineSpacing();
+    } else {
+        yoff += -bb.top();
+    }
+
+    for (TextBlock& t : item->_layout) {
+        t.setY(t.y() + yoff);
+    }
+
+    bb.translate(0.0, yoff);
+
+    item->setbbox(bb);
+    if (item->hasFrame()) {
+        item->layoutFrame();
+    }
+    item->score()->addRefresh(item->canvasBoundingRect());
 }
 
 void TLayout::layout(TextLineSegment* item, LayoutContext& ctx)
