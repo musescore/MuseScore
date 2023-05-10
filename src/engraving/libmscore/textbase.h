@@ -293,6 +293,8 @@ class TextBase : public EngravingItem
     M_PROPERTY(Spatium,    paddingWidth,           setPaddingWidth)
     M_PROPERTY(int,        frameRound,             setFrameRound)
 
+    friend class v0::TLayout;
+
     Align _align;
 
     // there are two representations of text; only one

@@ -35,6 +35,8 @@
 #include "rw/xmlreader.h"
 #include "rw/xmlwriter.h"
 
+#include "layout/tlayout.h"
+
 #include "types/symnames.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
@@ -1860,16 +1862,8 @@ void TextBase::prepareFormat(const String& token, TextCursor& cursor)
 
 void TextBase::layout()
 {
-    setPos(PointF());
-    if (!explicitParent()) {
-        setOffset(0.0, 0.0);
-    }
-//      else if (isStyled(Pid::OFFSET))                                   // TODO: should be set already
-//            setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
-    if (placeBelow()) {
-        setPosY(staff() ? staff()->height() : 0.0);
-    }
-    layout1();
+    LayoutContext ctx(score());
+    v0::TLayout::layoutTextBase(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -1878,79 +1872,8 @@ void TextBase::layout()
 
 void TextBase::layout1()
 {
-    if (layoutInvalid) {
-        createLayout();
-    }
-    if (_layout.empty()) {
-        _layout.push_back(TextBlock());
-    }
-    RectF bb;
-    double y = 0;
-
-    // adjust the bounding box for the text item
-    for (size_t i = 0; i < rows(); ++i) {
-        TextBlock* t = &_layout[i];
-        t->layout(this);
-        const RectF* r = &t->boundingRect();
-
-        if (r->height() == 0) {
-            r = &_layout[i - i].boundingRect();
-        }
-        y += t->lineSpacing();
-        t->setY(y);
-        bb |= r->translated(0.0, y);
-    }
-    double yoff = 0;
-    double h    = 0;
-    if (explicitParent()) {
-        if (layoutToParentWidth()) {
-            if (explicitParent()->isTBox()) {
-                // hack: vertical alignment is always TOP
-                _align = AlignV::TOP;
-            } else if (explicitParent()->isBox()) {
-                // consider inner margins of frame
-                Box* b = toBox(explicitParent());
-                yoff = b->topMargin() * DPMM;
-
-                if (b->height() < bb.bottom()) {
-                    h = b->height() / 2 + bb.height();
-                } else {
-                    h  = b->height() - yoff - b->bottomMargin() * DPMM;
-                }
-            } else if (explicitParent()->isPage()) {
-                Page* p = toPage(explicitParent());
-                h = p->height() - p->tm() - p->bm();
-                yoff = p->tm();
-            } else if (explicitParent()->isMeasure()) {
-            } else {
-                h  = parentItem()->height();
-            }
-        }
-    } else {
-        setPos(PointF());
-    }
-
-    if (align() == AlignV::BOTTOM) {
-        yoff += h - bb.bottom();
-    } else if (align() == AlignV::VCENTER) {
-        yoff +=  (h - (bb.top() + bb.bottom())) * .5;
-    } else if (align() == AlignV::BASELINE) {
-        yoff += h * .5 - _layout.front().lineSpacing();
-    } else {
-        yoff += -bb.top();
-    }
-
-    for (TextBlock& t : _layout) {
-        t.setY(t.y() + yoff);
-    }
-
-    bb.translate(0.0, yoff);
-
-    setbbox(bb);
-    if (hasFrame()) {
-        layoutFrame();
-    }
-    score()->addRefresh(canvasBoundingRect());
+    LayoutContext ctx(score());
+    v0::TLayout::layout1TextBase(this, ctx);
 }
 
 //---------------------------------------------------------

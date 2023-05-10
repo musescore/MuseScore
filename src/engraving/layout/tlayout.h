@@ -124,6 +124,7 @@ class SystemText;
 
 class TabDurationSymbol;
 class TempoText;
+class TextBase;
 class TextLineSegment;
 class TextLineBaseSegment;
 class TimeSig;
@@ -252,6 +253,11 @@ public:
 
     static void layout(TabDurationSymbol* item, LayoutContext& ctx);
     static void layout(TempoText* item, LayoutContext& ctx);
+
+    static void layoutTextBase(TextBase* item, LayoutContext& ctx);  // base class
+    static void layout1(TextBase* item, LayoutContext& ctx);         // factory
+    static void layout1TextBase(TextBase* item, LayoutContext& ctx); // base class
+
     static void layout(TextLineSegment* item, LayoutContext& ctx);
     static void layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext& ctx); // base class
     static void layout(TimeSig* item, LayoutContext& ctx);
