@@ -294,6 +294,8 @@ void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContex
         types.emplace(mpe::ArticulationType::InvertedTurn);
         break;
     case SymId::ornamentTrill:
+    case SymId::ornamentShake3:
+    case SymId::ornamentShakeMuffat1:
         if (articulationSymbol->ornamentStyle() == OrnamentStyle::DEFAULT) {
             types.emplace(mpe::ArticulationType::Trill);
         } else {
