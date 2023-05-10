@@ -1627,6 +1627,28 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
     item->bbox().setRect(0, 0, w, h);
 }
 
+void TLayout::layout(FiguredBass* item, LayoutContext&)
+{
+    // VERTICAL POSITION:
+    const double y = item->score()->styleD(Sid::figuredBassYOffset) * item->spatium();
+    item->setPos(PointF(0.0, y));
+
+    // BOUNDING BOX and individual item layout (if required)
+    item->TextBase::layout1();   // prepare structs and data expected by Text methods
+    // if element could be parsed into items, layout each element
+    // Items list will be empty in edit mode (see FiguredBass::startEdit).
+    // TODO: consider disabling specific layout in case text style is changed (tid() != TextStyleName::FIGURED_BASS).
+    if (item->items().size() > 0) {
+        item->layoutLines();
+        item->bbox().setRect(0, 0, item->lineLength(0), 0);
+        // layout each item and enlarge bbox to include items bboxes
+        for (FiguredBassItem* fit : item->items()) {
+            fit->layout();
+            item->addbbox(item->bbox().translated(fit->pos()));
+        }
+    }
+}
+
 void TLayout::layout(Fingering* item, LayoutContext&)
 {
     if (item->explicitParent()) {

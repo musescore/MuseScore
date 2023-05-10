@@ -56,6 +56,7 @@ class Expression;
 
 class Fermata;
 class FiguredBassItem;
+class FiguredBass;
 class Fingering;
 class FretDiagram;
 class FretCircle;
@@ -180,6 +181,7 @@ public:
 
     static void layout(Fermata* item, LayoutContext& ctx);
     static void layout(FiguredBassItem* item, LayoutContext& ctx);
+    static void layout(FiguredBass* item, LayoutContext& ctx);
     static void layout(Fingering* item, LayoutContext& ctx);
     static void layout(FretDiagram* item, LayoutContext& ctx);
     static void layout(FretCircle* item, LayoutContext& ctx);
