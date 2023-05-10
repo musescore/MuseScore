@@ -568,6 +568,60 @@ Note* Score::addNote(Chord* chord, const NoteVal& noteVal, bool forceAccidental,
     return note;
 }
 
+Note* Score::addNoteToTiedChord(Chord* chord, const NoteVal& noteVal, bool forceAccidental, const std::set<SymId>& articulationIds,
+                                InputState* externalInputState)
+{
+    assert(!chord->notes().empty());
+    Note* referenceNote = chord->notes()[0];
+
+    while (referenceNote->tieBack()) {
+        referenceNote = referenceNote->tieBack()->startNote();
+    }
+
+    Tie* tie = nullptr;
+    Note* newNote = nullptr;
+
+    while (referenceNote->tieFor()) {
+        chord = referenceNote->chord();
+        newNote = addNote(chord, noteVal, forceAccidental, articulationIds);
+        if (!newNote) {
+            return nullptr;
+        }
+        if (tie) {
+            tie->setEndNote(newNote);
+            tie->setTick2(newNote->tick());
+            newNote->setTieBack(tie);
+            undoAddElement(tie);
+        }
+
+        tie = Factory::createTie(newNote);
+        tie->setStartNote(newNote);
+        tie->setTick(newNote->tick());
+        tie->setTrack(newNote->track());
+        newNote->setTieFor(tie);
+
+        referenceNote = referenceNote->tieFor()->endNote();
+    }
+
+    chord = referenceNote->chord();
+    newNote = addNote(chord, noteVal, forceAccidental, articulationIds);
+
+    if (!newNote) {
+        return nullptr;
+    }
+
+    if (tie) {
+        tie->setEndNote(newNote);
+        tie->setTick2(newNote->tick());
+        newNote->setTieBack(tie);
+        undoAddElement(tie);
+    }
+
+    connectTies();
+
+    return newNote;
+}
+
 Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Slur* slurTemplate)
 {
     if (!secondChordRest) {

@@ -159,12 +159,17 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
 
     if (addFlag) {
         ChordRest* c = toChordRest(is.lastSegment()->element(is.track()));
+        bool isTied = (c
+                       && c->isChord()
+                       && !toChord(c)->notes().empty()
+                       && (toChord(c)->notes()[0]->tieFor() || toChord(c)->notes()[0]->tieBack()));
 
         if (c == 0 || !c->isChord()) {
             LOGD("Score::addPitch: cr %s", c ? c->typeName() : "zero");
             return 0;
         }
-        Note* note = addNote(toChord(c), nval, /* forceAccidental */ false, is.articulationIds(), externalInputState);
+        Note* note = isTied ? addNoteToTiedChord(toChord(c), nval, /* forceAccidental */ false, is.articulationIds(), externalInputState)
+                     : addNote(toChord(c), nval, /* forceAccidental */ false, is.articulationIds(), externalInputState);
         if (is.lastSegment() == is.segment()) {
             NoteEntryMethod entryMethod = is.noteEntryMethod();
             if (entryMethod != NoteEntryMethod::REALTIME_AUTO && entryMethod != NoteEntryMethod::REALTIME_MANUAL) {
@@ -424,8 +429,19 @@ Ret Score::putNote(const Position& p, bool replace)
     }
 
     expandVoice();
+
     ChordRest* cr = _is.cr();
+
+    auto checkTied = [&](){
+        if (!cr->isChord()) {
+            return false;
+        }
+        auto ch = toChord(cr);
+        return !ch->notes().empty() && !ch->notes()[0]->tieBack() && ch->notes()[0]->tieFor();
+    };
+
     bool addToChord = false;
+    bool shouldAddAsTied = checkTied();
 
     if (cr) {
         // retrieve total duration of current chord
@@ -433,7 +449,7 @@ Ret Score::putNote(const Position& p, bool replace)
         // if not in replace mode AND chord duration == input duration AND not rest input
         // we need to add to current chord (otherwise, we will need to replace it or create a new one)
         if (!replace
-            && (d == _is.duration())
+            && ((d == _is.duration()) || shouldAddAsTied)
             && cr->isChord()
             && !_is.rest()) {
             if (st->isTabStaff(cr->tick())) {            // TAB
@@ -483,7 +499,17 @@ Ret Score::putNote(const Position& p, bool replace)
 
     if (addToChord && cr->isChord()) {
         // if adding, add!
-        Note* note = addNote(toChord(cr), nval, forceAccidental, _is.articulationIds());
+        Chord* chord = toChord(cr);
+        if (shouldAddAsTied) {
+            Note* n = addNoteToTiedChord(chord, nval, forceAccidental, _is.articulationIds());
+            if (!n) {
+                ret = make_ret(Ret::Code::UnknownError);
+            }
+
+            _is.setAccidentalType(AccidentalType::NONE);
+            return ret;
+        }
+        Note* note = addNote(chord, nval, forceAccidental, _is.articulationIds());
         if (!note) {
             ret = make_ret(Ret::Code::UnknownError);
         }

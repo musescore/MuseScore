@@ -730,6 +730,8 @@ public:
     Note* addMidiPitch(int pitch, bool addFlag);
     Note* addNote(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {},
                   InputState* externalInputState = nullptr);
+    Note* addNoteToTiedChord(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {},
+                             InputState* externalInputState = nullptr);
 
     NoteVal noteValForPosition(Position pos, AccidentalType at, bool& error);
 
