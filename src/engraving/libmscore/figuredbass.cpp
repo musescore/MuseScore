@@ -791,24 +791,8 @@ Sid FiguredBass::getPropertyStyle(Pid id) const
 
 void FiguredBass::layout()
 {
-    // VERTICAL POSITION:
-    const double y = score()->styleD(Sid::figuredBassYOffset) * spatium();
-    setPos(PointF(0.0, y));
-
-    // BOUNDING BOX and individual item layout (if required)
-    TextBase::layout1();   // prepare structs and data expected by Text methods
-    // if element could be parsed into items, layout each element
-    // Items list will be empty in edit mode (see FiguredBass::startEdit).
-    // TODO: consider disabling specific layout in case text style is changed (tid() != TextStyleName::FIGURED_BASS).
-    if (m_items.size() > 0) {
-        layoutLines();
-        bbox().setRect(0, 0, _lineLengths.at(0), 0);
-        // layout each item and enlarge bbox to include items bboxes
-        for (FiguredBassItem* item : m_items) {
-            item->layout();
-            addbbox(item->bbox().translated(item->pos()));
-        }
-    }
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
