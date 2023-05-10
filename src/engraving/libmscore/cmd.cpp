@@ -657,8 +657,31 @@ void Score::expandVoice()
 
 void Score::addInterval(int val, const std::vector<Note*>& nl)
 {
-    for (Note* on : nl) {
+    // Prepare note selection in case there are not selected tied notes and sort them
+    std::vector<Note*> tmpnl;
+    bool shouldSelectFirstNote = nl.size() == 1 && nl[0]->tieFor();
+    for (auto n : nl) {
+        if (std::find(tmpnl.begin(), tmpnl.end(), n) != tmpnl.end()) {
+            continue;
+        }
+        tmpnl.push_back(n);
+        if (n->tieFor()
+            && (std::find(tmpnl.begin(), tmpnl.end(), n->tieFor()->endNote()) == tmpnl.end())) {
+            Note* currNote = n->tieFor()->endNote();
+            do {
+                tmpnl.push_back(currNote);
+                currNote = currNote->tieFor() ? currNote->tieFor()->endNote() : nullptr;
+            }while (currNote);
+        }
+    }
+
+    Note* prevTied = nullptr;
+    Chord* firstChord = nullptr;
+    for (Note* on : tmpnl) {
         Chord* chord = on->chord();
+        if (!firstChord) {
+            firstChord = chord;
+        }
         Note* note = Factory::createNote(chord);
         note->setParent(chord);
         note->setTrack(chord->track());
@@ -726,14 +749,36 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
             a->setParent(note);
             undoAddElement(a);
         }
-        setPlayNote(true);
+        if (on->tieBack() && prevTied) {
+            Tie* tie = prevTied->tieFor();
+            tie->setEndNote(note);
+            tie->setTick2(note->tick());
+            note->setTieBack(tie);
+            undoAddElement(tie);
+        }
+        if (on->tieFor()) {
+            Tie* tie = Factory::createTie(this->dummy());
+            tie->setStartNote(note);
+            tie->setTick(note->tick());
+            tie->setTrack(note->track());
+            note->setTieFor(tie);
+            prevTied = note;
+        }
 
-        select(note, SelectType::SINGLE, 0);
+        setPlayNote(true);
+        if (shouldSelectFirstNote && firstChord && !firstChord->notes().empty()) {
+            Note* noteToSelect = firstChord->notes()[firstChord->notes().size() - 1];
+            select(noteToSelect, SelectType::SINGLE, 0);
+        } else {
+            select(note, SelectType::SINGLE, 0);
+        }
     }
     if (_is.noteEntryMode()) {
         _is.setAccidentalType(AccidentalType::NONE);
     }
-    _is.moveToNextInputPos();
+    if (!shouldSelectFirstNote) {
+        _is.moveToNextInputPos();
+    }
 }
 
 //---------------------------------------------------------
