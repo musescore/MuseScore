@@ -552,12 +552,9 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
 //---------------------------------------------------------
 
 void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& ts, const Fraction& tickEnd,
-                          const Interval& interval,
-                          bool useInstrument, bool flip)
+                          bool flip)
 {
     Fraction tickStart(ts);
-    Interval firstInterval = interval;
-    Interval segmentInterval = interval;
     if (tickStart < Fraction(0, 1)) {            // -1 and 0 are valid values to indicate start of score
         tickStart = Fraction(0, 1);
     }
@@ -575,29 +572,25 @@ void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fr
             if (tickEnd != Fraction(-1, 1) && s->tick() >= tickEnd) {
                 break;
             }
-            if (useInstrument) {
-                segmentInterval = st->part()->instrument(s->tick())->transpose();
-                if (flip) {
-                    segmentInterval.flip();
-                }
-            }
             KeySig* ks = toKeySig(s->element(staffIdx * VOICES));
             if (!ks || ks->generated()) {
                 continue;
             }
-            if (s->tick().isZero()) {
-                createKey = false;
-            }
             if (!ks->isAtonal()) {
+                Interval v = st->part()->instrument(s->tick())->transpose();
                 KeySigEvent ke = st->keySigEvent(s->tick());
                 PreferSharpFlat pref = ks->part()->preferSharpFlat();
                 Key nKey = ke.concertKey();
                 if (flip) {
-                    nKey = transposeKey(ke.concertKey(), segmentInterval, pref);
+                    v.flip();
+                    nKey = transposeKey(ke.concertKey(), v, pref);
                 }
 
                 ke.setKey(nKey);
                 undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
+            }
+            if (s->tick().isZero()) {
+                createKey = false;
             }
         }
         if (createKey && firstMeasure()) {
@@ -605,11 +598,17 @@ void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fr
             seg->setHeader(true);
             KeySig* ks = Factory::createKeySig(seg);
             ks->setTrack(staffIdx * VOICES);
-            Key nKey = transposeKey(Key::C, firstInterval, ks->part()->preferSharpFlat());
-            KeySigEvent ke;
-            ke.setConcertKey(nKey);
-            ke.setKey(Key::C);
-            ks->setKeySigEvent(ke);
+            Interval v = ks->part()->instrument()->transpose();
+            Key cKey = Key::C;
+            Key nKey = cKey;
+            if (flip) {
+                v.flip();
+                nKey = transposeKey(Key::C, v, ks->part()->preferSharpFlat());
+            } else {
+                cKey = transposeKey(Key::C, v);
+                nKey = cKey;
+            }
+            ks->setKey(cKey, nKey);
             ks->setParent(seg);
             undoAddElement(ks);
         }
@@ -781,7 +780,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
         scores.insert(score);
         Part* lp = ls->part();
         if (!score->styleB(Sid::concertPitch)) {
-            score->transposeKeys(lp->startTrack() / VOICES, lp->endTrack() / VOICES, tickStart, tickEnd, diffV, true, true);
+            score->transposeKeys(lp->startTrack() / VOICES, lp->endTrack() / VOICES, tickStart, tickEnd, true);
         }
     }
 

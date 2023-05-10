@@ -416,7 +416,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             if (score->lastSegment()) {
                 endTick = score->lastSegment()->tick();
             }
-            score->transposeKeys(staffIdx, staffIdx + 1, Fraction(0, 1), endTick, interval, true, flip);
+            score->transposeKeys(staffIdx, staffIdx + 1, Fraction(0, 1), endTick, flip);
 
             for (auto segment = score->firstSegmentMM(SegmentType::ChordRest); segment;
                  segment = segment->next1MM(SegmentType::ChordRest)) {
@@ -1563,7 +1563,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             interval.flip();
         }
 
-        score->transposeKeys(dstStaffIdx, dstStaffIdx + 1, startTick, endTick, interval, true, !scoreConcertPitch);
+        score->transposeKeys(dstStaffIdx, dstStaffIdx + 1, startTick, endTick, !scoreConcertPitch);
     }
 }
 
