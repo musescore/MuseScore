@@ -559,8 +559,8 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     TRead::read(harmony, e, ctx);
                     harmony->setTrack(ctx.track());
 
-                    Part* partDest = score->staff(ctx.track() / VOICES)->part();
-                    Interval interval = partDest->instrument(tick)->transpose();
+                    Staff* staffDest = score->staff(ctx.track() / VOICES);
+                    Interval interval = staffDest->transpose(tick);
                     if (!score->styleB(Sid::concertPitch) && !interval.isZero()) {
                         interval.flip();
                         int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
@@ -823,8 +823,8 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
                         TRead::read(el, e, ctx);
                         el->setTrack(trackZeroVoice(destTrack));
                         // transpose
-                        Part* partDest = score->staff(track2staff(destTrack))->part();
-                        Interval interval = partDest->instrument(destTick)->transpose();
+                        Staff* staffDest = score->staff(track2staff(destTrack));
+                        Interval interval = staffDest->transpose(destTick);
                         if (!score->styleB(Sid::concertPitch) && !interval.isZero()) {
                             interval.flip();
                             int rootTpc = transposeTpc(el->rootTpc(), interval, true);

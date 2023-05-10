@@ -361,6 +361,9 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             } else if (e->isHarmony() && transposeChordNames) {
                 Harmony* h  = toHarmony(e);
                 int rootTpc, baseTpc;
+                Interval kv = e->staff()->transpose(e->tick());
+                Interval iv = e->part()->instrument(e->tick())->transpose();
+                Interval hInterval((interval.diatonic - kv.diatonic + iv.diatonic), (interval.chromatic - kv.chromatic + iv.chromatic));
                 if (mode == TransposeMode::DIATONICALLY) {
                     Fraction tick = Fraction(0, 1);
                     if (h->explicitParent()->isSegment()) {
@@ -374,8 +377,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                     baseTpc = transposeTpcDiatonicByKey(h->baseTpc(),
                                                         transposeInterval, key, trKeys, useDoubleSharpsFlats);
                 } else {
-                    rootTpc = transposeTpc(h->rootTpc(), interval, useDoubleSharpsFlats);
-                    baseTpc = transposeTpc(h->baseTpc(), interval, useDoubleSharpsFlats);
+                    rootTpc = transposeTpc(h->rootTpc(), hInterval, useDoubleSharpsFlats);
+                    baseTpc = transposeTpc(h->baseTpc(), hInterval, useDoubleSharpsFlats);
                 }
                 undoTransposeHarmony(h, rootTpc, baseTpc);
             } else if (e->isKeySig() && mode != TransposeMode::DIATONICALLY && trKeys) {
@@ -509,6 +512,14 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 if ((e->type() != ElementType::HARMONY) || (!mu::contains(tracks, e->track()))) {
                     continue;
                 }
+                // TODO also source interval should reflect modified key (f.ex. by prefer flat)
+                // now we calculate interval from first pitched staff
+                // but even if it were right staff, this may differ each tick (actual key signature)
+                // we can  add something like "concert pitch rootTpc" to harmony definition, or ...
+                Interval kv = e->staff()->transpose(e->tick());
+                Interval iv = e->part()->instrument(e->tick())->transpose();
+                Interval hInterval((interval.diatonic - kv.diatonic + iv.diatonic), (interval.chromatic - kv.chromatic + iv.chromatic));
+
                 Harmony* hh  = toHarmony(e);
                 int rootTpc, baseTpc;
                 // undoTransposeHarmony does not do links
@@ -524,8 +535,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         baseTpc = transposeTpcDiatonicByKey(h->baseTpc(),
                                                             transposeInterval, key, trKeys, useDoubleSharpsFlats);
                     } else {
-                        rootTpc = transposeTpc(h->rootTpc(), interval, useDoubleSharpsFlats);
-                        baseTpc = transposeTpc(h->baseTpc(), interval, useDoubleSharpsFlats);
+                        rootTpc = transposeTpc(h->rootTpc(), hInterval, useDoubleSharpsFlats);
+                        baseTpc = transposeTpc(h->baseTpc(), hInterval, useDoubleSharpsFlats);
                     }
                     undoTransposeHarmony(h, rootTpc, baseTpc);
                 }
@@ -802,7 +813,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
         }
         Interval v = part->staff(0)->transpose(s->tick());
         v.flip();
-        Interval diffV(oldV.chromatic + v.chromatic);
+        Interval diffV(oldV.diatonic + v.diatonic, oldV.chromatic + v.chromatic);
         for (Staff* st : part->staves()) {
             if (st->staffType(tickStart)->group() == StaffGroup::PERCUSSION) {
                 continue;

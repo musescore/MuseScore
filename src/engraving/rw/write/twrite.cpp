@@ -1372,7 +1372,7 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
             // parent can be a fret diagram
             Segment* segment = item->getParentSeg();
             Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
-            const Interval& interval = item->part()->instrument(tick)->transpose();
+            const Interval& interval = item->staff()->transpose(tick);
             if (ctx.clipboardmode() && !item->score()->styleB(Sid::concertPitch) && interval.chromatic) {
                 rRootTpc = transposeTpc(item->rootTpc(), interval, true);
                 rBaseTpc = transposeTpc(item->baseTpc(), interval, true);

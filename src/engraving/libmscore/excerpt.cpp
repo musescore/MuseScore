@@ -420,7 +420,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
             for (auto segment = score->firstSegmentMM(SegmentType::ChordRest); segment;
                  segment = segment->next1MM(SegmentType::ChordRest)) {
-                interval = staff->part()->instrument(segment->tick())->transpose();
+                interval = staff->transpose(segment->tick());
                 if (interval.isZero()) {
                     continue;
                 }

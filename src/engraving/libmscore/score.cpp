@@ -3074,7 +3074,7 @@ void Score::cmdConcertPitchChanged(bool flag)
         transposeKeys(staffIdx, staffIdx + 1, Fraction(0, 1), lastSegment()->tick(), !flag);
 
         for (Segment* segment = firstSegment(SegmentType::ChordRest); segment; segment = segment->next1(SegmentType::ChordRest)) {
-            interval = staff->part()->instrument(segment->tick())->transpose();
+            interval = staff->transpose(segment->tick());
             if (!flag) {
                 interval.flip();
             }

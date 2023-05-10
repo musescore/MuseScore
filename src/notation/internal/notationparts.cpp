@@ -290,7 +290,7 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
 
     startEdit();
 
-    mu::engraving::Interval oldTransposition = part->instrument()->transpose();
+    mu::engraving::Interval oldTransposition = part->staff(0)->transpose(DEFAULT_TICK);
 
     part->undoChangeProperty(mu::engraving::Pid::PREFER_SHARP_FLAT, shartFlatInt);
     score()->transpositionChanged(part, oldTransposition);

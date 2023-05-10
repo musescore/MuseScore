@@ -791,10 +791,10 @@ void Harmony::endEdit(EditData& ed)
             // (as a result of TextBase::endEdit() calling setText() for linked elements)
             // we may now need to change the TPC's and the text, and re-render
             if (score()->styleB(Sid::concertPitch) != h->score()->styleB(Sid::concertPitch)) {
-                Part* partDest = h->part();
+                Staff* staffDest = h->staff();
                 Segment* segment = getParentSeg();
                 Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
-                Interval interval = partDest->instrument(tick)->transpose();
+                Interval interval = staffDest->transpose(tick);
                 if (!interval.isZero()) {
                     if (!h->score()->styleB(Sid::concertPitch)) {
                         interval.flip();

@@ -90,6 +90,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         Fraction tickStart = segment()->tick();
         Part* part = staff()->part();
         Interval oldV = part->instrument(tickStart)->transpose();
+        Interval oldKv = staff()->transpose(tickStart);
         Interval v = instrument->transpose();
         bool concPitch = score()->styleB(Sid::concertPitch);
 
@@ -137,7 +138,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             } else {
                 tickEnd = Fraction::fromTicks(i->first);
             }
-            score()->transpositionChanged(part, oldV, tickStart, tickEnd);
+            score()->transpositionChanged(part, oldKv, tickStart, tickEnd);
         }
 
         //: The text of an "instrument change" marking. It is an instruction to the player to switch to another instrument.

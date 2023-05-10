@@ -274,7 +274,7 @@ EngravingItem* ChordRest::drop(EditData& data)
     {
         // transpose
         Harmony* harmony = toHarmony(e);
-        Interval interval = staff()->part()->instrument(tick())->transpose();
+        Interval interval = staff()->transpose(tick());
         if (!score()->styleB(Sid::concertPitch) && !interval.isZero()) {
             interval.flip();
             int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);

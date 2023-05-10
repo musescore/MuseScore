@@ -2795,7 +2795,7 @@ void Score::deleteItem(EngravingItem* el)
         InstrumentChange* ic = static_cast<InstrumentChange*>(el);
         Fraction tickStart = ic->segment()->tick();
         Part* part = ic->part();
-        Interval oldV = part->instrument(tickStart)->transpose();
+        Interval oldV = part->staff(0)->transpose(tickStart);
         undoRemoveElement(el);
         if (tickStart != Fraction(0, 1)) {
             for (KeySig* keySig : ic->keySigs()) {
@@ -2805,7 +2805,7 @@ void Score::deleteItem(EngravingItem* el)
         for (Clef* clef : ic->clefs()) {
             deleteItem(clef);
         }
-        if (part->instrument(tickStart)->transpose() != oldV) {
+        if (part->staff(0)->transpose(tickStart) != oldV) {
             auto i = part->instruments().upper_bound(tickStart.ticks());
             Fraction tickEnd;
             if (i == part->instruments().end()) {
@@ -5981,8 +5981,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 if (element->isHarmony() && ne != element) {
                     Harmony* h = toHarmony(ne);
                     if (score->styleB(Sid::concertPitch) != element->score()->styleB(Sid::concertPitch)) {
-                        Part* partDest = h->part();
-                        Interval interval = partDest->instrument(tick)->transpose();
+                        Staff* staffDest = h->staff();
+                        Interval interval = staffDest->transpose(tick);
                         if (!interval.isZero()) {
                             if (!score->styleB(Sid::concertPitch)) {
                                 interval.flip();
@@ -6106,7 +6106,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 nis->setParent(ns1);
                 Fraction tickStart = nis->segment()->tick();
                 Part* part = nis->part();
-                Interval oldV = nis->part()->instrument(tickStart)->transpose();
+                Interval oldV = nis->staff()->transpose(tickStart);
                 // ws: instrument should not be changed here
                 if (is->instrument()->channel().empty() || is->instrument()->channel(0)->program() == -1) {
                     nis->setInstrument(*staff->part()->instrument(s1->tick()));
@@ -6115,7 +6115,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 }
                 undo(new AddElement(nis));
                 // transpose root score; parts will follow
-                if (score->isMaster() && part->instrument(tickStart)->transpose() != oldV) {
+                if (score->isMaster() && nis->staff()->transpose(tickStart) != oldV) {
                     auto i = part->instruments().upper_bound(tickStart.ticks());
                     Fraction tickEnd = i == part->instruments().end() ? Fraction(-1, 1) : Fraction::fromTicks(i->first);
                     transpositionChanged(part, oldV, tickStart, tickEnd);
