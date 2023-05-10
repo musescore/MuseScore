@@ -269,13 +269,13 @@ void System::adjustStavesNumber(size_t nstaves)
 //   instrumentNamesWidth
 //---------------------------------------------------------
 
-double System::instrumentNamesWidth()
+double System::instrumentNamesWidth(const bool isFirstSystem)
 {
     double namesWidth = 0.0;
 
     for (staff_idx_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
         const SysStaff* staff = this->staff(staffIdx);
-        if (!staff) {
+        if (!staff || (isFirstSystem && !staff->show())) {
             continue;
         }
 
@@ -459,7 +459,7 @@ void System::layoutSystem(LayoutContext& ctx, double xo1, const bool isFirstSyst
     layoutBrackets(ctx);
     double maxBracketsWidth = totalBracketOffset(ctx);
 
-    double maxNamesWidth = instrumentNamesWidth();
+    double maxNamesWidth = instrumentNamesWidth(isFirstSystem);
 
     double indent = maxNamesWidth > 0 ? maxNamesWidth + instrumentNameOffset : 0.0;
     if (isFirstSystem && firstSystemIndent) {

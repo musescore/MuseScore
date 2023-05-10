@@ -122,7 +122,7 @@ class System final : public EngravingItem
     Bracket* createBracket(const LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx, std::vector<Bracket*>& bl,
                            Measure* measure);
 
-    double instrumentNamesWidth();
+    double instrumentNamesWidth(const bool isFirstSystem);
     double layoutBrackets(const LayoutContext& ctx);
     static double totalBracketOffset(LayoutContext& ctx);
 
