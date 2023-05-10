@@ -3032,12 +3032,7 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
 
     textEl->mousePress(m_editData);
     if (m_editData.buttons == mu::engraving::MiddleButton) {
-        #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-        QClipboard::Mode mode = QClipboard::Clipboard;
-        #else
-        QClipboard::Mode mode = QClipboard::Selection;
-        #endif
-        QString txt = QGuiApplication::clipboard()->text(mode);
+        QString txt = QGuiApplication::clipboard()->text();
         textEl->paste(m_editData, txt);
     }
 
@@ -3552,12 +3547,7 @@ void NotationInteraction::copySelection()
         m_editData.element->editCopy(m_editData);
         mu::engraving::TextEditData* ted = static_cast<mu::engraving::TextEditData*>(m_editData.getData(m_editData.element).get());
         if (!ted->selectedText.isEmpty()) {
-            #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-            QClipboard::Mode mode = QClipboard::Clipboard;
-            #else
-            QClipboard::Mode mode = QClipboard::Selection;
-            #endif
-            QGuiApplication::clipboard()->setText(ted->selectedText, mode);
+            QGuiApplication::clipboard()->setText(ted->selectedText);
         }
     } else {
         QMimeData* mimeData = selection()->mimeData();
@@ -3631,12 +3621,7 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     startEdit();
 
     if (isTextEditingStarted()) {
-        #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-        QClipboard::Mode mode = QClipboard::Clipboard;
-        #else
-        QClipboard::Mode mode = QClipboard::Selection;
-        #endif
-        QString txt = QGuiApplication::clipboard()->text(mode);
+        QString txt = QGuiApplication::clipboard()->text();
         toTextBase(m_editData.element)->paste(m_editData, txt);
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
