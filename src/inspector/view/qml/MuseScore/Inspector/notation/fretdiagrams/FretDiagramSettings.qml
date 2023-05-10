@@ -91,6 +91,7 @@ Item {
 
                 onClicked: {
                     fretCanvas.clear()
+                    root.model.fretNumber.resetToDefault()
                 }
             }
         }
