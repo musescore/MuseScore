@@ -571,6 +571,7 @@ Note* Score::addNote(Chord* chord, const NoteVal& noteVal, bool forceAccidental,
 Note* Score::addNoteToTiedChord(Chord* chord, const NoteVal& noteVal, bool forceAccidental, const std::set<SymId>& articulationIds,
                                 InputState* externalInputState)
 {
+    UNUSED(externalInputState)
     assert(!chord->notes().empty());
     Note* referenceNote = chord->notes()[0];
 
