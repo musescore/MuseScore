@@ -508,7 +508,7 @@ void Selection::appendChord(Chord* chord)
             if (note->tieFor()->endElement()->isNote()) {
                 Note* endNote = toNote(note->tieFor()->endElement());
                 Segment* s = endNote->chord()->segment();
-                if (s->tick() < tickEnd()) {
+                if (!s || s->tick() < tickEnd()) {
                     _el.push_back(note->tieFor());
                 }
             }
@@ -517,7 +517,7 @@ void Selection::appendChord(Chord* chord)
             if (sp->endElement()->isNote()) {
                 Note* endNote = toNote(sp->endElement());
                 Segment* s = endNote->chord()->segment();
-                if (s->tick() < tickEnd()) {
+                if (!s || s->tick() < tickEnd()) {
                     _el.push_back(sp);
                 }
             }
