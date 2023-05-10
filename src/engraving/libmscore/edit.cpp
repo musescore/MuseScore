@@ -2797,8 +2797,10 @@ void Score::deleteItem(EngravingItem* el)
         Part* part = ic->part();
         Interval oldV = part->instrument(tickStart)->transpose();
         undoRemoveElement(el);
-        for (KeySig* keySig : ic->keySigs()) {
-            deleteItem(keySig);
+        if (tickStart != Fraction(0, 1)) {
+            for (KeySig* keySig : ic->keySigs()) {
+                deleteItem(keySig);
+            }
         }
         for (Clef* clef : ic->clefs()) {
             deleteItem(clef);
