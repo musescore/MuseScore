@@ -744,14 +744,7 @@ int Note::tpc1default(int p) const
     Key key = Key::C;
     if (staff() && chord()) {
         Fraction tick = chord()->tick();
-        key = staff()->key(tick);
-        if (!concertPitch()) {
-            Interval interval = part()->instrument(tick)->transpose();
-            if (!interval.isZero()) {
-                interval.flip();
-                key = transposeKey(key, interval);
-            }
-        }
+        key = staff()->concertKey(tick);
     }
     return pitch2tpc(p, key, Prefer::NEAREST);
 }
@@ -769,6 +762,7 @@ int Note::tpc2default(int p) const
         if (concertPitch()) {
             Interval interval = part()->instrument(tick)->transpose();
             if (!interval.isZero()) {
+                interval.flip();
                 key = transposeKey(key, interval);
             }
         }
@@ -785,13 +779,9 @@ void Note::setTpcFromPitch()
     // works best if note is already added to score, otherwise we can't determine transposition or key
     Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
     Interval v = staff() ? part()->instrument(tick)->transpose() : Interval();
-    Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
-    // convert key to concert pitch
-    if (!concertPitch() && !v.isZero()) {
-        key = transposeKey(key, v);
-    }
+    Key cKey = (staff() && chord()) ? staff()->concertKey(chord()->tick()) : Key::C;
     // set concert pitch tpc
-    _tpc[0] = pitch2tpc(_pitch, key, Prefer::NEAREST);
+    _tpc[0] = pitch2tpc(_pitch, cKey, Prefer::NEAREST);
     // set transposed tpc
     if (v.isZero()) {
         _tpc[1] = _tpc[0];
@@ -2813,10 +2803,7 @@ void Note::setNval(const NoteVal& nval, Fraction tick)
     }
     Interval v = part()->instrument(tick)->transpose();
     if (nval.tpc1 == Tpc::TPC_INVALID) {
-        Key key = staff()->key(tick);
-        if (!concertPitch() && !v.isZero()) {
-            key = transposeKey(key, v);
-        }
+        Key key = staff()->concertKey(tick);
         _tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
     }
     if (nval.tpc2 == Tpc::TPC_INVALID) {
