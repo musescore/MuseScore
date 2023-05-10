@@ -922,7 +922,6 @@ void Measure::add(EngravingItem* e)
     {
         Segment* seg   = toSegment(e);
         Fraction t     = seg->rtick();
-        SegmentType st = seg->segmentType();
         Segment* s;
 
         for (s = first(); s && s->rtick() < t; s = s->next()) {

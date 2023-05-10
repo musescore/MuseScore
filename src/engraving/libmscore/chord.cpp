@@ -3457,7 +3457,6 @@ void Chord::layoutArticulations2(bool layoutOnCrossBeamSide)
         if (!a->layoutCloseToNote() || aa == ArticulationAnchor::TOP_STAFF || aa == ArticulationAnchor::BOTTOM_STAFF) {
             continue;
         }
-        double x = (up() != a->up() || !a->isBasicArticulation()) ? headSideX : stemSideX;
         if (a->up()) {
             if (a->visible()) {
                 chordTopY = a->y() - a->height() - minDist;

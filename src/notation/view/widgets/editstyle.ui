@@ -10732,7 +10732,7 @@ By default, they will be placed such as that their right end are at the same lev
       <widget class="QWidget" name="PageExpression">
        <layout class="QVBoxLayout" name="verticalLayout_37">
         <item>
-         <widget class="QGroupBox" name="groupBox">
+         <widget class="QGroupBox" name="groupBox_expression">
           <property name="title">
            <string>Expression</string>
           </property>

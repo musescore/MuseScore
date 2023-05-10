@@ -2082,8 +2082,8 @@ void EditStyle::valueChanged(int i)
     PropertyValue val  = getValue(idx);
     bool setValue = false;
     if (idx == StyleId::MusicalSymbolFont) {
-        bool dynamicsOverrideFont = getValue(StyleId::dynamicsOverrideFont).toBool();
-        if (!dynamicsOverrideFont) {
+        bool overrideDynamicsFont = getValue(StyleId::dynamicsOverrideFont).toBool();
+        if (!overrideDynamicsFont) {
             setStyleValue(StyleId::dynamicsFont, val); // Match dynamics font
         }
         if (optimizeStyleCheckbox->isChecked()) {
