@@ -104,16 +104,12 @@ mv "${qt_sql_drivers_path}/libqsqlpsql.so" "${qt_sql_drivers_tmp}/libqsqlpsql.so
 
 # Semicolon-separated list of platforms to deploy in addition to `libqxcb.so`.
 # Used by linuxdeploy-plugin-qt.
-export EXTRA_PLATFORM_PLUGINS=libqoffscreen.so
+export EXTRA_PLATFORM_PLUGINS="libqoffscreen.so;libqwayland-egl.so;libqwayland-generic.so"
 
 # Colon-separated list of root directories containing QML files.
 # Needed for linuxdeploy-plugin-qt to scan for QML imports.
 # Qml files can be in different directories, the qmlimportscanner will go through everything recursively.
 export QML_SOURCES_PATHS=./
-
-# Semicolon-separated list of needed .so files in Qt's platform/plugins
-# directory for linuxdeploy-plugin-qt to scan and deploy.
-export EXTRA_PLATFORM_PLUGINS="libqwayland-egl.so;libqwayland-generic.so"
 
 linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
 linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
