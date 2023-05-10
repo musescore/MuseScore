@@ -581,7 +581,7 @@ void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fr
                 KeySigEvent ke = st->keySigEvent(s->tick());
                 PreferSharpFlat pref = ks->part()->preferSharpFlat();
                 Key nKey = ke.concertKey();
-                if (flip) {
+                if (flip && !v.isZero()) {
                     v.flip();
                     nKey = transposeKey(ke.concertKey(), v, pref);
                 }
@@ -602,8 +602,10 @@ void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fr
             Key cKey = Key::C;
             Key nKey = cKey;
             if (flip) {
-                v.flip();
-                nKey = transposeKey(Key::C, v, ks->part()->preferSharpFlat());
+                if (!v.isZero()) {
+                    v.flip();
+                    nKey = transposeKey(Key::C, v, ks->part()->preferSharpFlat());
+                }
             } else {
                 cKey = transposeKey(Key::C, v);
                 nKey = cKey;
