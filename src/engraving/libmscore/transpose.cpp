@@ -254,8 +254,14 @@ bool Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
     int ntpc1, ntpc2;
     transposeInterval(n->pitch(), n->tpc1(), &npitch, &ntpc1, interval, useDoubleSharpsFlats);
     if (n->transposition()) {
-        int p;
-        transposeInterval(n->pitch() - n->transposition(), n->tpc2(), &p, &ntpc2, interval, useDoubleSharpsFlats);
+        if (n->staff()) {
+            Interval v = n->staff()->transpose(n->tick());
+            v.flip();
+            ntpc2 = transposeTpc(ntpc1, v, useDoubleSharpsFlats);
+        } else {
+            int p;
+            transposeInterval(n->pitch() - n->transposition(), n->tpc2(), &p, &ntpc2, interval, useDoubleSharpsFlats);
+        }
     } else {
         ntpc2 = ntpc1;
     }
@@ -694,7 +700,7 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
     // transpose appropriately
     int newTpc1 = TPC_INVALID;
     int newTpc2 = TPC_INVALID;
-    Interval v   = staff() ? staff()->part()->instrument(tick)->transpose() : Interval(0);
+    Interval v   = staff() ? staff()->transpose(tick) : Interval(0);
     if (concertPitch()) {
         v.flip();
         newTpc1 = newTpc;
@@ -769,7 +775,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
     if (tickStart == Fraction(-1, 1)) {
         tickStart = Fraction(0, 1);
     }
-    Interval v = part->instrument(tickStart)->transpose();
+    Interval v = part->staff(0)->transpose(tickStart);
     v.flip();
     Interval diffV(oldV.chromatic + v.chromatic);
 

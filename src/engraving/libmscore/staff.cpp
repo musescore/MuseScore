@@ -687,6 +687,46 @@ void Staff::clearTimeSig()
 }
 
 //---------------------------------------------------------
+//   Staff::transpose
+//
+//    actual staff transposioton at tick
+//    (taking key into account)
+//---------------------------------------------------------
+
+Interval Staff::transpose(const Fraction& tick) const
+{
+    // get real transposition
+
+    Interval v = part()->instrument(tick)->transpose();
+    if (v.isZero()) {
+        return v;
+    }
+    Key cKey = concertKey(tick);
+    v.flip();
+    Key tKey = transposeKey(cKey, v, part()->preferSharpFlat());
+    v.flip();
+
+    int chromatic = (7 * (static_cast<int>(cKey) - static_cast<int>(tKey))) % 12;
+    if (chromatic < 0) {
+        chromatic += 12;
+    }
+    int diatonic = (4 * (static_cast<int>(cKey) - static_cast<int>(tKey))) % 7;
+    if (diatonic < 0) {
+        diatonic += 7;
+    }
+
+    if (v.chromatic < 0 || v.diatonic < 0) {
+        chromatic -= 12;
+        diatonic -= 7;
+    }
+
+    v.chromatic = v.chromatic - (v.chromatic % 12) + chromatic;
+    v.diatonic = v.diatonic - (v.diatonic % 7) + diatonic;
+
+    return v;
+}
+
+//---------------------------------------------------------
 //   Staff::keySigEvent
 //
 //    locates the key sig currently in effect at tick

@@ -836,7 +836,7 @@ static void readNote206(Note* note, XmlReader& e, ReadContext& ctx)
     }
     if (!(tpcIsValid(note->tpc1()) && tpcIsValid(note->tpc2()))) {
         Fraction tick = note->chord() ? note->chord()->tick() : Fraction(-1, 1);
-        Interval v = note->staff() ? note->part()->instrument(tick)->transpose() : Interval();
+        Interval v = note->staff() ? note->staff()->transpose(tick) : Interval();
         if (tpcIsValid(note->tpc1())) {
             v.flip();
             if (v.isZero()) {

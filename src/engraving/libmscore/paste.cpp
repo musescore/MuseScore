@@ -76,10 +76,10 @@ void Score::transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick
     if (nn >= c->score()->nstaves()) {
         c->setStaffMove(0);
     }
-    Part* part = c->part();
-    Interval dstTranspose = part->instrument(tick)->transpose();
+    Staff* staff = c->staff();
+    Interval dstTranspose = staff->transpose(tick);
 
-    if (srcTranspose != dstTranspose) {
+    if (srcTranspose != dstTranspose) {  // TODO change also srcTranspose to reflect actual keysig
         if (!dstTranspose.isZero()) {
             dstTranspose.flip();
             for (Note* n : c->notes()) {
