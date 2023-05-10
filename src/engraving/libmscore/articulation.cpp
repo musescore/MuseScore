@@ -411,6 +411,12 @@ Articulation::AnchorGroup Articulation::anchorGroup(SymId symId)
     case SymId::luteFingeringRHThird:
         return AnchorGroup::LUTE_FINGERING;
 
+    case SymId::tremoloDivisiDots2:
+    case SymId::tremoloDivisiDots3:
+    case SymId::tremoloDivisiDots4:
+    case SymId::tremoloDivisiDots6:
+        return AnchorGroup::ARTICULATION;
+
     default:
         break;
     }
@@ -434,6 +440,10 @@ String Articulation::symId2ArticulationName(SymId symId)
 
     case SymId::articStaccatoAbove:
     case SymId::articStaccatoBelow:
+    case SymId::tremoloDivisiDots2:
+    case SymId::tremoloDivisiDots3:
+    case SymId::tremoloDivisiDots4:
+    case SymId::tremoloDivisiDots6:
         return u"staccato";
 
     case SymId::articAccentStaccatoAbove:
@@ -573,7 +583,9 @@ void Articulation::computeCategories()
                          _symId == SymId::articStaccatoAbove || _symId == SymId::articStaccatoBelow
                          || _symId == SymId::articMarcatoStaccatoAbove || _symId == SymId::articMarcatoStaccatoBelow
                          || _symId == SymId::articTenutoStaccatoAbove || _symId == SymId::articTenutoStaccatoBelow
-                         || _symId == SymId::articAccentStaccatoAbove || _symId == SymId::articAccentStaccatoBelow);
+                         || _symId == SymId::articAccentStaccatoAbove || _symId == SymId::articAccentStaccatoBelow
+                         || _symId == SymId::tremoloDivisiDots2 || _symId == SymId::tremoloDivisiDots3
+                         || _symId == SymId::tremoloDivisiDots4 || _symId == SymId::tremoloDivisiDots6);
 
     m_categories.setFlag(ArticulationCategory::ACCENT,
                          _symId == SymId::articAccentAbove || _symId == SymId::articAccentBelow
