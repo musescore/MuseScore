@@ -25,6 +25,8 @@
 #include "layoutcontext.h"
 
 namespace mu::engraving {
+class EngravingItem;
+
 class Accidental;
 class ActionIcon;
 class Ambitus;
@@ -146,6 +148,8 @@ namespace mu::engraving::v0 {
 class TLayout
 {
 public:
+
+    static void layout(EngravingItem* item, LayoutContext& ctx);  // factory
 
     static void layout(Accidental* item, LayoutContext& ctx);
     static void layout(ActionIcon* item, LayoutContext& ctx);
