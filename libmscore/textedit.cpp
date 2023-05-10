@@ -618,7 +618,7 @@ Element* TextBase::drop(EditData& ed)
 
 void TextBase::paste(EditData& ed)
       {
-      QString txt = QApplication::clipboard()->text(QClipboard::Clipboard);
+      QString txt = QApplication::clipboard()->text();
       if (MScore::debugMode)
             qDebug("<%s>", qPrintable(txt));
 

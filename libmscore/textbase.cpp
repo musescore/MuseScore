@@ -3042,7 +3042,7 @@ void TextBase::editCut(EditData& ed)
       QString s = _cursor->selectedText();
 
       if (!s.isEmpty()) {
-            QApplication::clipboard()->setText(s, QClipboard::Clipboard);
+            QApplication::clipboard()->setText(s);
             ed.curGrip = Grip::START;
             ed.key     = Qt::Key_Delete;
             ed.s       = QString();
@@ -3063,7 +3063,7 @@ void TextBase::editCopy(EditData& ed)
       TextCursor* _cursor = &ted->cursor;
       QString s = _cursor->selectedText();
       if (!s.isEmpty())
-            QApplication::clipboard()->setText(s, QClipboard::Clipboard);
+            QApplication::clipboard()->setText(s);
       }
 
 //---------------------------------------------------------

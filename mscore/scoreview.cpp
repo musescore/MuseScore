@@ -1972,7 +1972,7 @@ void ScoreView::editSwap()
             QString s = text->selectedText();
             text->paste(this);
             if (!s.isEmpty())
-                  QApplication::clipboard()->setText(s, QClipboard::Clipboard);
+                  QApplication::clipboard()->setText(s);
             }
 #endif
       }
