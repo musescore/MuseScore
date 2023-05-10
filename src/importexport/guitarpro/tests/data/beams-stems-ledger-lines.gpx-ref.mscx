@@ -91,9 +91,11 @@
             <subtype>f</subtype>
             <velocity>96</velocity>
             </Dynamic>
-          <StaffText>
-            <text>Dadd11/F#</text>
-            </StaffText>
+          <Harmony>
+            <root>16</root>
+            <name>add11</name>
+            <base>20</base>
+            </Harmony>
           <RehearsalMark>
             <text>Verse 1</text>
             </RehearsalMark>
@@ -443,9 +445,11 @@
             <subtype>f</subtype>
             <velocity>96</velocity>
             </Dynamic>
-          <StaffText>
-            <text>Gadd9/E</text>
-            </StaffText>
+          <Harmony>
+            <root>15</root>
+            <name>add9</name>
+            <base>18</base>
+            </Harmony>
           <Beam>
             <l1>-16</l1>
             <l2>-16</l2>

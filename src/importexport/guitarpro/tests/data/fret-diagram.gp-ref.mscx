@@ -423,9 +423,11 @@
               <string>1</string>
               </Note>
             </Chord>
-          <StaffText>
-            <text>Asus4/E</text>
-            </StaffText>
+          <Harmony>
+            <root>17</root>
+            <name>sus4</name>
+            <base>18</base>
+            </Harmony>
           <Beam>
             <l1>-20</l1>
             <l2>-20</l2>

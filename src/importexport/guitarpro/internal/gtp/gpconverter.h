@@ -127,7 +127,7 @@ private:
     void addBarline(const GPMasterBar* mB, Measure* measure);
 
     void addTie(const GPNote* gpnote, Note* note, TieMap& ties);
-    void addFretDiagram(const GPBeat* gpnote, ChordRest* note, const Context& ctx);
+    void addFretDiagram(const GPBeat* gpnote, ChordRest* note, const Context& ctx, bool asHarmony = true);
     ChordRest* addChordRest(const GPBeat* beats, const Context& ctx);
     void addOrnament(const GPNote* gpnote, Note* note);
     void addVibratoLeftHand(const GPNote* gpnote, Note* note);

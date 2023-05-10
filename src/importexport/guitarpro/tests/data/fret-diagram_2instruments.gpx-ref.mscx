@@ -153,9 +153,10 @@
             <subtype>mf</subtype>
             <velocity>80</velocity>
             </Dynamic>
-          <StaffText>
-            <text>Em</text>
-            </StaffText>
+          <Harmony>
+            <root>18</root>
+            <name>m</name>
+            </Harmony>
           <Tempo>
             <tempo>2</tempo>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
