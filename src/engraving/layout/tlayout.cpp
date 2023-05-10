@@ -149,6 +149,47 @@ using namespace mu::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::v0;
 
+using LayoutTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
+                                   BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,  HBox, VBox, FBox, TBox, Bracket, Breath,
+                                   Chord, ChordLine, Clef,
+                                   Dynamic, Expression,
+                                   Fermata, FiguredBass, Fingering, FretDiagram,
+                                   Glissando, GradualTempoChange,
+                                   Hairpin, Harmony, HarmonicMark, Hook,
+                                   Image, InstrumentChange,
+                                   Jump,
+                                   KeySig,
+                                   LayoutBreak, LedgerLine, LetRing, Lyrics,
+                                   Marker, MeasureRepeat, MMRest,
+                                   Note, NoteDot, NoteHead,
+                                   Ottava,
+                                   Page, PalmMute, Pedal, PlayTechAnnotation,
+                                   Rasgueado, RehearsalMark, Rest,
+                                   Segment, Slur, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
+                                   Symbol, FSymbol, System, SystemDivider, SystemText,
+                                   TempoText, Text, TextLine, Tie, TimeSig, TremoloBar, Trill, Tuplet,
+                                   Vibrato, Volta,
+                                   WhammyBar>;
+
+class LayoutVisitor : public rtti::Visitor<LayoutVisitor>
+{
+public:
+    template<typename T>
+    static bool doVisit(EngravingItem* item, LayoutContext& ctx)
+    {
+        if (T::classof(item)) {
+            TLayout::layout(static_cast<T*>(item), ctx);
+            return true;
+        }
+        return false;
+    }
+};
+
+void TLayout::layout(EngravingItem* item, LayoutContext& ctx)
+{
+    LayoutVisitor::visit(LayoutVisitor::ShouldBeFound, LayoutTypes {}, item, ctx);
+}
+
 void TLayout::layout(Accidental* item, LayoutContext& ctx)
 {
     item->clearElements();
