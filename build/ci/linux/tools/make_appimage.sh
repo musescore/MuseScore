@@ -111,6 +111,10 @@ export EXTRA_PLATFORM_PLUGINS=libqoffscreen.so
 # Qml files can be in different directories, the qmlimportscanner will go through everything recursively.
 export QML_SOURCES_PATHS=./
 
+# Semicolon-separated list of needed .so files in Qt's platform/plugins
+# directory for linuxdeploy-plugin-qt to scan and deploy.
+export EXTRA_PLATFORM_PLUGINS="libqwayland-egl.so;libqwayland-generic.so"
+
 linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
 linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 
@@ -134,7 +138,7 @@ if [ -f ${appdir}/lib/libglib-2.0.so.0 ]; then
   rm -f ${appdir}/lib/libglib-2.0.so.0 
 fi
 
-unset QML_SOURCES_PATHS
+unset QML_SOURCES_PATHS EXTRA_PLATFORM_PLUGINS
 
 # In case this container is reused multiple times, return the moved libraries back
 mv "${qt_sql_drivers_tmp}/libqsqlmysql.so" "${qt_sql_drivers_path}/libqsqlmysql.so"
@@ -181,7 +185,12 @@ unwanted_files=(
 # List them here using paths relative to the Qt root directory. Report new
 # additions at https://github.com/linuxdeploy/linuxdeploy-plugin-qt/issues
 additional_qt_components=(
-  /plugins/printsupport/libcupsprintersupport.so
+  plugins/printsupport/libcupsprintersupport.so
+
+  # Wayland support (run with QT_QPA_PLATFORM=wayland to use)
+  plugins/wayland-decoration-client
+  plugins/wayland-graphics-integration-client
+  plugins/wayland-shell-integration
 )
 
 # ADDITIONAL LIBRARIES
@@ -222,7 +231,7 @@ done
 
 for file in "${additional_qt_components[@]}"; do
   mkdir -p "${appdir}/$(dirname "${file}")"
-  cp -L "${QT_PATH}/${file}" "${appdir}/${file}"
+  cp -Lr "${QT_PATH}/${file}" "${appdir}/${file}"
 done
 
 for lib in "${additional_libraries[@]}"; do
