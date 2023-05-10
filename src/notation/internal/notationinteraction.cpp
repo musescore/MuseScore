@@ -1915,6 +1915,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
         LOGD("unknown selection state");
     }
 
+    score->setSelectionChanged(true);
+
     apply();
 
     setDropTarget(nullptr);
