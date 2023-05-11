@@ -42,6 +42,10 @@ public:
     bool isMixerSectionVisible(MixerSectionType sectionType) const override;
     void setMixerSectionVisible(MixerSectionType sectionType, bool visible) override;
 
+    bool isAuxSendVisible(audio::aux_channel_idx_t index) const override;
+    void setAuxSendVisible(audio::aux_channel_idx_t index, bool visible) override;
+    async::Channel<audio::aux_channel_idx_t, bool> isAuxSendVisibleChanged() const override;
+
     const SoundProfileName& basicSoundProfileName() const override;
     const SoundProfileName& museSoundProfileName() const override;
 

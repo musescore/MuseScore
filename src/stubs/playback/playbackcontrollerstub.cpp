@@ -102,6 +102,16 @@ mu::async::Channel<mu::audio::TrackId> PlaybackControllerStub::trackRemoved() co
     return {};
 }
 
+std::string PlaybackControllerStub::auxChannelName(audio::aux_channel_idx_t) const
+{
+    return "";
+}
+
+mu::async::Channel<mu::audio::aux_channel_idx_t, std::string> PlaybackControllerStub::auxChannelNameChanged() const
+{
+    return {};
+}
+
 void PlaybackControllerStub::playElements(const std::vector<const notation::EngravingItem*>&)
 {
 }

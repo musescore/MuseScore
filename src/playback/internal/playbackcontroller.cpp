@@ -49,8 +49,6 @@ static const ActionCode REPEAT_CODE("repeat");
 static const ActionCode PLAY_CHORD_SYMBOLS_CODE("play-chord-symbols");
 static const ActionCode PLAYBACK_SETUP("playback-setup");
 
-static constexpr aux_channel_idx_t AUX_CHANNEL_NUM = 2;
-
 static AudioOutputParams makeReverbOutputParams()
 {
     AudioFxParams reverbParams;
@@ -68,6 +66,10 @@ static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutp
 {
     if (params.fxChain.size() == 1) {
         const AudioResourceMeta& meta = params.fxChain.cbegin()->second.resourceMeta;
+        if (meta.id == MUSE_REVERB_ID) {
+            return mu::trc("playback", "Reverb");
+        }
+
         return meta.id;
     }
 
@@ -243,6 +245,16 @@ Channel<TrackId> PlaybackController::trackAdded() const
 Channel<TrackId> PlaybackController::trackRemoved() const
 {
     return m_trackRemoved;
+}
+
+std::string PlaybackController::auxChannelName(aux_channel_idx_t index) const
+{
+    return resolveAuxTrackTitle(index, audioSettings()->auxOutputParams(index));
+}
+
+Channel<aux_channel_idx_t, std::string> PlaybackController::auxChannelNameChanged() const
+{
+    return m_auxChannelNameChanged;
 }
 
 void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements)
@@ -1018,9 +1030,17 @@ void PlaybackController::subscribeOnAudioParamsChanges()
             return;
         }
 
-        size_t auxIdx = mu::indexOf(m_auxTrackIdList, trackId);
-        if (auxIdx != mu::nidx) {
-            audioSettings()->setAuxOutputParams(static_cast<aux_channel_idx_t>(auxIdx), params);
+        size_t idx = mu::indexOf(m_auxTrackIdList, trackId);
+        if (idx != mu::nidx) {
+            aux_channel_idx_t auxIdx = static_cast<aux_channel_idx_t>(idx);
+            std::string oldName = resolveAuxTrackTitle(auxIdx, audioSettings()->auxOutputParams(auxIdx));
+            std::string newName = resolveAuxTrackTitle(auxIdx, params);
+
+            audioSettings()->setAuxOutputParams(auxIdx, params);
+
+            if (oldName != newName) {
+                m_auxChannelNameChanged.send(auxIdx, newName);
+            }
         }
     });
 }
@@ -1055,10 +1075,9 @@ void PlaybackController::setupSequenceTracks()
         addTrack(trackId, onAddFinished);
     }
 
-    /*! TODO: https://github.com/musescore/MuseScore/issues/16466
     for (aux_channel_idx_t idx = 0; idx < AUX_CHANNEL_NUM; ++idx) {
         addAuxTrack(idx, onAddFinished);
-    }*/
+    }
 
     m_loadingProgress.progressChanged.send(0, trackCount, title);
 

@@ -64,6 +64,20 @@ void PlaybackConfigurationStub::setMixerSectionVisible(MixerSectionType, bool)
 {
 }
 
+bool PlaybackConfigurationStub::isAuxSendVisible(audio::aux_channel_idx_t) const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setAuxSendVisible(audio::aux_channel_idx_t, bool)
+{
+}
+
+mu::async::Channel<mu::audio::aux_channel_idx_t, bool> PlaybackConfigurationStub::isAuxSendVisibleChanged() const
+{
+    return {};
+}
+
 const SoundProfileName& PlaybackConfigurationStub::basicSoundProfileName() const
 {
     static const SoundProfileName basic;

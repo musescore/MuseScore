@@ -28,6 +28,7 @@
 
 using namespace mu::playback;
 using namespace mu::framework;
+using namespace mu::audio;
 
 static const std::string moduleName("playback");
 
@@ -66,6 +67,11 @@ static Settings::Key mixerSectionVisibleKey(MixerSectionType sectionType)
     return Settings::Key();
 }
 
+static Settings::Key auxSendVisibleKey(aux_channel_idx_t index)
+{
+    return Settings::Key(moduleName, "playback/mixer/auxSend" + std::to_string(index) + "Visible");
+}
+
 void PlaybackConfiguration::init()
 {
     settings()->setDefaultValue(PLAY_NOTES_WHEN_EDITING, Val(true));
@@ -79,6 +85,15 @@ void PlaybackConfiguration::init()
     }
 
     settings()->setDefaultValue(DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS, Val(fallbackSoundProfileStr().toStdString()));
+
+    for (aux_channel_idx_t idx = 0; idx < AUX_CHANNEL_NUM; ++idx) {
+        Settings::Key key = auxSendVisibleKey(idx);
+
+        settings()->setDefaultValue(key, Val(false));
+        settings()->valueChanged(key).onReceive(this, [this, idx](const Val& val) {
+            m_isAuxSendVisibleChanged.send(idx, val.toBool());
+        });
+    }
 }
 
 bool PlaybackConfiguration::playNotesWhenEditing() const
@@ -124,6 +139,21 @@ bool PlaybackConfiguration::isMixerSectionVisible(MixerSectionType sectionType) 
 void PlaybackConfiguration::setMixerSectionVisible(MixerSectionType sectionType, bool visible)
 {
     settings()->setSharedValue(mixerSectionVisibleKey(sectionType), Val(visible));
+}
+
+bool PlaybackConfiguration::isAuxSendVisible(aux_channel_idx_t index) const
+{
+    return settings()->value(auxSendVisibleKey(index)).toBool();
+}
+
+void PlaybackConfiguration::setAuxSendVisible(aux_channel_idx_t index, bool visible)
+{
+    settings()->setSharedValue(auxSendVisibleKey(index), Val(visible));
+}
+
+mu::async::Channel<aux_channel_idx_t, bool> PlaybackConfiguration::isAuxSendVisibleChanged() const
+{
+    return m_isAuxSendVisibleChanged;
 }
 
 const SoundProfileName& PlaybackConfiguration::basicSoundProfileName() const

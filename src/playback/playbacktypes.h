@@ -28,6 +28,8 @@
 #include "audio/audiotypes.h"
 
 namespace mu::playback {
+static constexpr audio::aux_channel_idx_t AUX_CHANNEL_NUM = 2;
+
 enum class PlaybackCursorType {
     SMOOTH,
     STEPPED
