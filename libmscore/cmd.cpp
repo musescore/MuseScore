@@ -2702,8 +2702,19 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
 
       // if measure rest is selected as input, then the correct initialDuration will be the
       // duration of the measure's time signature, else is just the input state's duration
-      TDuration initialDuration = (cr->durationType() == TDuration::DurationType::V_MEASURE) ? TDuration(cr->measure()->timesig(), true) : _is.duration();
-      TDuration d = initialDuration.shiftRetainDots(nSteps, stepDotted);
+      TDuration initialDuration;
+      if (cr->durationType() == TDuration::DurationType::V_MEASURE) {
+            initialDuration = TDuration(cr->measure()->timesig(), true);
+
+            if (initialDuration.fraction() < cr->measure()->timesig() && nSteps > 0) {
+                  // Duration already shortened by truncation; shorten one step less
+                  --nSteps;
+                  }
+            }
+      else {
+            initialDuration = _is.duration();
+            }
+      TDuration d = (nSteps != 0) ? initialDuration.shiftRetainDots(nSteps, stepDotted) : initialDuration;
       if (!d.isValid())
             return;
       if (cr->isChord() && (toChord(cr)->noteType() != NoteType::NORMAL)) {
