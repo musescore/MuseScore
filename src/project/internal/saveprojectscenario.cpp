@@ -188,6 +188,7 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     QString defaultName = project->displayName();
     cloud::Visibility defaultVisibility = isPublish ? cloud::Visibility::Public : cloud::Visibility::Private;
     const QUrl existingOnlineScoreUrl = project->cloudInfo().sourceUrl;
@@ -214,8 +215,31 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
     // TODO(save-to-cloud): better name?
     const QString defaultName = project->displayName();
     const cloud::Visibility defaultVisibility = isPublish ? cloud::Visibility::Public : cloud::Visibility::Private;
+=======
+    QString defaultName = project->displayName();
+    cloud::Visibility defaultVisibility = isPublish ? cloud::Visibility::Public : cloud::Visibility::Private;
+>>>>>>> 4fe7859914... Download latest cloud score info to show in SaveToCloud/Publish dialog
     const QUrl existingOnlineScoreUrl = project->cloudInfo().sourceUrl;
 >>>>>>> 02a58c197f... Publish: add option to choose whether to replace existing score or upload as new score
+
+    if (!existingOnlineScoreUrl.isEmpty()) {
+        RetVal<cloud::ScoreInfo> scoreInfo = cloudProjectsService()->downloadScoreInfo(existingOnlineScoreUrl);
+
+        switch (scoreInfo.ret.code()) {
+        case int(Ret::Code::Ok):
+            defaultName = scoreInfo.val.title;
+            defaultVisibility = scoreInfo.val.visibility;
+            break;
+
+        case int(cloud::Err::AccountNotActivated):
+        case int(cloud::Err::NetworkError):
+            return doShowCloudSaveError(scoreInfo.ret, isPublish, false);
+
+        // It's possible the source URL is invalid or points to a score on a different user's account.
+        // In this situation we shouldn't see an error.
+        default: break;
+        }
+    }
 
     UriQuery query("musescore://project/savetocloud");
     query.addParam("isPublish", Val(isPublish));
