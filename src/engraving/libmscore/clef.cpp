@@ -122,6 +122,7 @@ double Clef::mag() const
 
 void Clef::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -251,7 +252,8 @@ ClefType Clef::clefType() const
 void Clef::spatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::spatiumChanged(oldValue, newValue);
-    layout();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

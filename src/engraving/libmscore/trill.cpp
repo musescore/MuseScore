@@ -149,6 +149,7 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
 
 void TrillSegment::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -304,6 +305,7 @@ void Trill::remove(EngravingItem* e)
 
 void Trill::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

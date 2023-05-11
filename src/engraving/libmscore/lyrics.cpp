@@ -159,6 +159,7 @@ bool Lyrics::isMelisma() const
 
 void Lyrics::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -429,7 +430,8 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
         if (_ticks <= Fraction(0, 1)) {
             // if no ticks, we have to relayout in order to remove invalid melisma segments
             setRemoveInvalidSegments();
-            layout();
+            LayoutContext ctx(score());
+            v0::TLayout::layout(this, ctx);
         }
         break;
     case Pid::VERSE:

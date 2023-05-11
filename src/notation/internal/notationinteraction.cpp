@@ -39,6 +39,7 @@
 #include "draw/types/pen.h"
 #include "draw/types/painterpath.h"
 #include "engraving/internal/qmimedataadapter.h"
+#include "engraving/layout/tlayout.h"
 
 #include "libmscore/actionicon.h"
 #include "libmscore/articulation.h"
@@ -1249,7 +1250,9 @@ void NotationInteraction::startDrop(const QByteArray& edata)
         m_dropData.ed.dropElement = el;
         m_dropData.ed.dropElement->setParent(0);
         rw400::TRead::readItem(m_dropData.ed.dropElement, e, *e.context());
-        m_dropData.ed.dropElement->layout();
+
+        LayoutContext lctx(m_dropData.ed.dropElement->score());
+        v0::TLayout::layoutItem(m_dropData.ed.dropElement, lctx);
     }
 }
 
@@ -1269,7 +1272,9 @@ bool NotationInteraction::startDrop(const QUrl& url)
     m_dropData.ed.dropElement = image;
     m_dropData.ed.dragOffset = QPointF();
     m_dropData.ed.dropElement->setParent(nullptr);
-    m_dropData.ed.dropElement->layout();
+
+    LayoutContext lctx(m_dropData.ed.dropElement->score());
+    v0::TLayout::layoutItem(m_dropData.ed.dropElement, lctx);
 
     return true;
 }

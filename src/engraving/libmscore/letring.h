@@ -35,6 +35,8 @@ class LetRing;
 class LetRingSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, LetRingSegment)
+    DECLARE_CLASSOF(ElementType::LET_RING_SEGMENT)
+
 public:
     LetRingSegment(LetRing* sp, System* parent);
 

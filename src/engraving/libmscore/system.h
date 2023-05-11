@@ -157,7 +157,7 @@ public:
 
     void addBrackets(const LayoutContext& ctx, Measure* measure);
 
-    void layout2(const LayoutContext& ctx); ///< Called after Measure layout.
+    void layout2(LayoutContext &ctx); ///< Called after Measure layout.
     void restoreLayout2();
     void clear(); ///< Clear measure list.
 

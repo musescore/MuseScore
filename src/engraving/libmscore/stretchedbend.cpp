@@ -244,6 +244,7 @@ void StretchedBend::stretchSegments()
 
 void StretchedBend::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

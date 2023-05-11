@@ -47,17 +47,19 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
 
+#include "tlayout.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
 #include "layoutharmonies.h"
 #include "lyricslayout.h"
-#include "layoutmeasure.h"
+#include "measurelayout.h"
 #include "tupletlayout.h"
 #include "slurtielayout.h"
 
 #include "log.h"
 
 using namespace mu::engraving;
+using namespace mu::engraving::v0;
 
 //---------------------------------------------------------
 //   collectSystem
@@ -122,7 +124,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             if (!(oldSystem && oldSystem->page() && oldSystem->page() != ctx.page)) {
                 // Construct information that is needed before horizontal spacing
                 // (unless the curMeasure we've just collected comes from the next page)
-                LayoutMeasure::computePreSpacingItems(m);
+                MeasureLayout::computePreSpacingItems(m, ctx);
             }
             // After appending a new measure, the shortest note in the system may change, in which case
             // we need to recompute the layout of the previous measures. When updating the width of these
@@ -199,7 +201,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             createHeader = toHBox(ctx.curMeasure)->createSystemHeader();
         } else {
             // vbox:
-            LayoutMeasure::getNextMeasure(options, ctx);
+            MeasureLayout::getNextMeasure(options, ctx);
             system->layout2(ctx);         // compute staff distances
             return system;
         }
@@ -330,7 +332,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             }
         }
 
-        LayoutMeasure::getNextMeasure(options, ctx);
+        MeasureLayout::getNextMeasure(options, ctx);
 
         curSysWidth += ww;
 
@@ -398,7 +400,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     // Create end barlines
     if (ctx.prevMeasure && ctx.prevMeasure->isMeasure()) {
         Measure* pm = toMeasure(ctx.prevMeasure);
-        BeamLayout::breakCrossMeasureBeams(ctx, pm);
+        BeamLayout::breakCrossMeasureBeams(pm, ctx);
         pm->createEndBarLines(true);
     }
 
@@ -466,7 +468,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             }
         } else if (mb->isHBox()) {
             mb->setPos(pos + PointF(toHBox(mb)->topGap(), 0.0));
-            mb->layout();
+            TLayout::layout(mb, ctx);
             createBrackets = toHBox(mb)->createSystemHeader();
         } else if (mb->isVBox()) {
             mb->setPos(pos);
@@ -680,7 +682,7 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
     }
 }
 
-void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutContext& lc, Score* score, System* system)
+void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutContext& ctx, Score* score, System* system)
 {
     if (score->noStaves()) {
         return;
@@ -701,7 +703,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
         // in continuous view, entire score is one system
         // but we only need to process the range
-        if (options.isLinearMode() && (m->tick() < lc.startTick || m->tick() > lc.endTick)) {
+        if (options.isLinearMode() && (m->tick() < ctx.startTick || m->tick() > ctx.endTick)) {
             continue;
         }
         for (Segment* s = m->first(); s; s = s->next()) {
@@ -721,7 +723,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         if (!s->isChordRestType()) {
             continue;
         }
-        BeamLayout::layoutNonCrossBeams(s);
+        BeamLayout::layoutNonCrossBeams(s, ctx);
         // Must recreate the shapes because stem lengths may have been changed!
         s->createShapes();
     }
@@ -734,7 +736,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
             Rest* rest = toRest(item);
             Beam* beam = rest->beam();
             if (beam && !beam->cross()) {
-                BeamLayout::verticalAdjustBeamedRests(rest, beam);
+                BeamLayout::verticalAdjustBeamedRests(rest, beam, ctx);
             }
         }
     }
@@ -755,7 +757,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
             MeasureNumber* mno = m->noText(staffIdx);
             MMRestRange* mmrr  = m->mmRangeText(staffIdx);
             // no need to build skyline outside of range in continuous view
-            if (options.isLinearMode() && (m->tick() < lc.startTick || m->tick() > lc.endTick)) {
+            if (options.isLinearMode() && (m->tick() < ctx.startTick || m->tick() > ctx.endTick)) {
                 continue;
             }
             if (mno && mno->addToSkyline()) {
@@ -843,9 +845,9 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                 continue;
             }
             Chord* c = toChord(e);
-            c->layoutArticulations();
-            c->layoutArticulations2();
-            ChordLayout::layoutChordBaseFingering(c, system);
+            ChordLayout::layoutArticulations(c, ctx);
+            ChordLayout::layoutArticulations2(c, ctx);
+            ChordLayout::layoutChordBaseFingering(c, system, ctx);
             for (Note* note : c->notes()) {
                 for (EngravingItem* item : note->el()) {
                     if (item && item->isStretchedBend()) {
@@ -878,7 +880,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
             while (de->tuplet()) {
                 de = de->tuplet();
             }
-            TupletLayout::layout(de); // recursively lay out all tuplets covered by this tuplet
+            TupletLayout::layout(de, ctx); // recursively lay out all tuplets covered by this tuplet
 
             // don't layout any tuplets covered by this top level tuplet for this voice--
             // they've already been laid out by layoutTuplet().
@@ -893,7 +895,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isSticking()) {
-                e->layout();
+                TLayout::layoutItem(e, ctx);
             }
         }
     }
@@ -903,8 +905,8 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //-------------------------------------------------------------
 
     bool useRange = false;    // TODO: lineMode();
-    Fraction stick = useRange ? lc.startTick : system->measures().front()->tick();
-    Fraction etick = useRange ? lc.endTick : system->measures().back()->endTick();
+    Fraction stick = useRange ? ctx.startTick : system->measures().front()->tick();
+    Fraction etick = useRange ? ctx.endTick : system->measures().back()->endTick();
     auto spanners = score->spannerMap().findOverlapping(stick.ticks(), etick.ticks());
 
     // ties
@@ -916,7 +918,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         Spanner* sp = interval.value;
         sp->computeStartElement();
         sp->computeEndElement();
-        lc.processedSpanners.insert(sp);
+        ctx.processedSpanners.insert(sp);
         if (sp->tick() < etick && sp->tick2() >= stick) {
             if (sp->isSlur() && !toSlur(sp)->isCrossStaff()) {
                 // skip cross-staff slurs, will be done after page layout
@@ -930,10 +932,10 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         ChordRest* scr = s->startCR();
         ChordRest* ecr = s->endCR();
         if (scr && scr->isChord()) {
-            toChord(scr)->layoutArticulations3(slur);
+            ChordLayout::layoutArticulations3(toChord(scr), slur, ctx);
         }
         if (ecr && ecr->isChord()) {
-            toChord(ecr)->layoutArticulations3(slur);
+            ChordLayout::layoutArticulations3(toChord(ecr), slur, ctx);
         }
     }
 
@@ -944,7 +946,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isFermata() || e->isTremoloBar()) {
-                e->layout();
+                TLayout::layoutItem(e, ctx);
             }
         }
     }
@@ -958,14 +960,14 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         for (EngravingItem* e : s->annotations()) {
             if (e->isDynamic()) {
                 Dynamic* d = toDynamic(e);
-                d->layout();
+                TLayout::layout(d, ctx);
                 if (d->autoplace()) {
                     d->manageBarlineCollisions();
                     d->autoplaceSegmentElement(false);
                     dynamics.push_back(d);
                 }
             } else if (e->isFiguredBass()) {
-                e->layout();
+                TLayout::layoutItem(e, ctx);
                 e->autoplaceSegmentElement();
             }
         }
@@ -991,7 +993,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         Measure* m = s->measure();
         for (EngravingItem* e : s->annotations()) {
             if (e->isExpression()) {
-                e->layout();
+                TLayout::layoutItem(e, ctx);
                 system->staff(e->staffIdx())->skyline().add(e->shape().translate(e->pos() + s->pos() + m->pos()));
             }
         }
@@ -1087,7 +1089,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //-------------------------------------------------------------
 
     if (!hasFretDiagram) {
-        LayoutHarmonies::layoutHarmonies(sl);
+        LayoutHarmonies::layoutHarmonies(sl, ctx);
         LayoutHarmonies::alignHarmonies(system, sl, true, options.maxChordShiftAbove, options.maxChordShiftBelow);
     }
 
@@ -1098,7 +1100,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isStaffText()) {
-                e->layout();
+                TLayout::layoutItem(e, ctx);
             }
         }
     }
@@ -1110,7 +1112,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isInstrumentChange()) {
-                e->layout();
+                TLayout::layoutItem(e, ctx);
             }
         }
     }
@@ -1122,7 +1124,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isPlayTechAnnotation() || e->isSystemText() || e->isTripletFeel()) {
-                e->layout();
+                TLayout::layoutItem(e, ctx);
             }
         }
     }
@@ -1183,7 +1185,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         for (const Segment* s : sl) {
             for (EngravingItem* e : s->annotations()) {
                 if (e->isFretDiagram()) {
-                    e->layout();
+                    TLayout::layoutItem(e, ctx);
                 }
             }
         }
@@ -1194,7 +1196,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         // above the volta.
         //-------------------------------------------------------------
 
-        LayoutHarmonies::layoutHarmonies(sl);
+        LayoutHarmonies::layoutHarmonies(sl, ctx);
         LayoutHarmonies::alignHarmonies(system, sl, false, options.maxFretShiftAbove, options.maxFretShiftBelow);
     }
 
@@ -1205,7 +1207,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isTempoText()) {
-                e->layout();
+                TLayout::layoutItem(e, ctx);
             }
         }
     }
@@ -1222,7 +1224,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         Measure* m = toMeasure(mb);
         for (EngravingItem* e : m->el()) {
             if (e->isMarker() || e->isJump()) {
-                e->layout();
+                TLayout::layoutItem(e, ctx);
             }
         }
     }
@@ -1234,7 +1236,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isRehearsalMark()) {
-                e->layout();
+                TLayout::layoutItem(e, ctx);
             }
         }
     }
@@ -1246,7 +1248,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isImage()) {
-                e->layout();
+                TLayout::layoutItem(e, ctx);
             }
         }
     }
@@ -1446,7 +1448,7 @@ void LayoutSystem::layoutTies(Chord* ch, System* system, const Fraction& stick)
  * of cross-beam chords accordingly.
  * *************************************************************************/
 
-void LayoutSystem::updateCrossBeams(System* system, const LayoutContext& ctx)
+void LayoutSystem::updateCrossBeams(System* system, LayoutContext& ctx)
 {
     system->layout2(ctx); // Computes staff distances, essential for the rest of the calculations
     // Update grace cross beams
@@ -1486,7 +1488,7 @@ void LayoutSystem::updateCrossBeams(System* system, const LayoutContext& ctx)
                     chord->computeUp();
                     if (chord->up() != prevUp) {
                         // If the chord has changed direction needs to be re-laid out
-                        ChordLayout::layoutChords1(chord->score(), &seg, chord->vStaffIdx());
+                        ChordLayout::layoutChords1(chord->score(), &seg, chord->vStaffIdx(), ctx);
                         seg.createShape(chord->vStaffIdx());
                     }
                 } else if (chord->tremolo() && chord->tremolo()->twoNotes()) {
@@ -1497,7 +1499,7 @@ void LayoutSystem::updateCrossBeams(System* system, const LayoutContext& ctx)
                         bool prevUp = chord->up();
                         chord->computeUp();
                         if (chord->up() != prevUp) {
-                            ChordLayout::layoutChords1(chord->score(), &seg, chord->vStaffIdx());
+                            ChordLayout::layoutChords1(chord->score(), &seg, chord->vStaffIdx(), ctx);
                             seg.createShape(chord->vStaffIdx());
                         }
                     }

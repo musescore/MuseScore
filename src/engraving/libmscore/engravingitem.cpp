@@ -894,6 +894,7 @@ void Compound::addElement(EngravingItem* e, double x, double y)
 
 void Compound::layout()
 {
+    UNREACHABLE;
     setbbox(RectF());
     for (auto i = elements.begin(); i != elements.end(); ++i) {
         EngravingItem* e = *i;

@@ -96,6 +96,7 @@ void RehearsalMark::styleChanged()
 
 void RehearsalMark::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

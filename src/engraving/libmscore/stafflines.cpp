@@ -91,6 +91,7 @@ PointF StaffLines::canvasPos() const
 
 void StaffLines::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

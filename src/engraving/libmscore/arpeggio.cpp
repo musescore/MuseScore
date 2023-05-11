@@ -195,6 +195,7 @@ double Arpeggio::calcBottom() const
 
 void Arpeggio::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -293,7 +294,9 @@ void Arpeggio::editDrag(EditData& ed)
     } else if (ed.curGrip == Grip::END) {
         _userLen2 += d;
     }
-    layout();
+
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -390,7 +393,9 @@ bool Arpeggio::edit(EditData& ed)
         }
     }
 
-    layout();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+
     Chord* c = chord();
     setPosX(-(width() + spatium() * .5));
     c->layoutArpeggio2();

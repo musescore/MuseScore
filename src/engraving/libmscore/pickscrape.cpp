@@ -66,6 +66,7 @@ PickScrapeSegment::PickScrapeSegment(PickScrape* sp, System* parent)
 
 void PickScrapeSegment::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

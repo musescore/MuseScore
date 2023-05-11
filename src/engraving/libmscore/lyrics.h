@@ -158,6 +158,7 @@ protected:
 class LyricsLineSegment final : public LineSegment
 {
     OBJECT_ALLOCATOR(engraving, LyricsLineSegment)
+    DECLARE_CLASSOF(ElementType::LYRICSLINE_SEGMENT)
 
 public:
     LyricsLineSegment(LyricsLine*, System* parent);

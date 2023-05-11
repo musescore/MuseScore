@@ -35,6 +35,8 @@ class HarmonicMark;
 class HarmonicMarkSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, HarmonicMarkSegment)
+    DECLARE_CLASSOF(ElementType::HARMONIC_MARK_SEGMENT)
+
 public:
     HarmonicMarkSegment(HarmonicMark* sp, System* parent);
 

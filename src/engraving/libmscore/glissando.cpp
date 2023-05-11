@@ -79,6 +79,7 @@ GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
 
 void GlissandoSegment::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -236,6 +237,7 @@ LineSegment* Glissando::createLineSegment(System* parent)
 
 void Glissando::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

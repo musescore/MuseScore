@@ -32,9 +32,12 @@
 #include "libmscore/stem.h"
 #include "libmscore/system.h"
 
-using namespace mu::engraving;
+#include "tlayout.h"
 
-void TupletLayout::layout(Tuplet* item, LayoutContext&)
+using namespace mu::engraving;
+using namespace mu::engraving::v0;
+
+void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 {
     if (item->_currentElements.empty()) {
         LOGD("Tuplet::layout(): tuplet is empty");
@@ -410,7 +413,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext&)
     double x3 = 0.0;
     double numberWidth = 0.0;
     if (item->_number) {
-        item->_number->layout();
+        TLayout::layout(item->_number, ctx);
         numberWidth = item->_number->bbox().width();
 
         double y3 = item->p1.y() + (item->p2.y() - item->p1.y()) * .5 - l1 * (item->_isUp ? 1.0 : -1.0);
@@ -510,7 +513,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext&)
 /// Recursively calls layout() on any nested tuplets and then the tuplet itself
 /// </summary>
 /// <param name="de">Start element of the tuplet</param>
-void TupletLayout::layout(DurationElement* de)
+void TupletLayout::layout(DurationElement* de, LayoutContext& ctx)
 {
     Tuplet* t = reinterpret_cast<Tuplet*>(de);
     if (!t) {
@@ -524,11 +527,11 @@ void TupletLayout::layout(DurationElement* de)
         }
         // if element is tuplet, layoutTuplet(that tuplet)
         if (d->isTuplet()) {
-            layout(d);
+            layout(d, ctx);
         }
     }
     // layout t
-    t->layout();
+    TLayout::layout(t, ctx);
 }
 
 bool TupletLayout::isTopTuplet(ChordRest* cr)

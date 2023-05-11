@@ -69,6 +69,7 @@ bool Stem::up() const
 
 void Stem::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -76,13 +77,15 @@ void Stem::layout()
 void Stem::setBaseLength(Millimetre baseLength)
 {
     m_baseLength = Millimetre(std::abs(baseLength.val()));
-    layout();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 void Stem::spatiumChanged(double oldValue, double newValue)
 {
     m_userLength = (m_userLength / oldValue) * newValue;
-    layout();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //! In chord coordinates
@@ -186,7 +189,8 @@ void Stem::editDrag(EditData& ed)
 {
     double yDelta = ed.delta.y();
     m_userLength += up() ? Millimetre(-yDelta) : Millimetre(yDelta);
-    layout();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
     Chord* c = chord();
     if (c->hook()) {
         c->hook()->move(PointF(0.0, yDelta));

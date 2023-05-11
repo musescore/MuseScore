@@ -63,7 +63,9 @@ TextLineBaseSegment::TextLineBaseSegment(const TextLineBaseSegment& seg)
     m_endText = seg.m_endText->clone();
     m_text->setParent(this);
     m_endText->setParent(this);
-    layout();      // set the right _text
+    // set the right _text
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 TextLineBaseSegment::~TextLineBaseSegment()
@@ -267,6 +269,7 @@ bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)
 
 void TextLineBaseSegment::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layoutTextLineBaseSegment(this, ctx);
 }

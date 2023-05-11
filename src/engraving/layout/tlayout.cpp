@@ -72,6 +72,7 @@
 
 #include "../libmscore/image.h"
 #include "../libmscore/instrchange.h"
+#include "../libmscore/instrumentname.h"
 
 #include "../libmscore/jump.h"
 
@@ -85,6 +86,7 @@
 
 #include "../libmscore/marker.h"
 #include "../libmscore/measurebase.h"
+#include "../libmscore/measurenumber.h"
 #include "../libmscore/measurenumberbase.h"
 #include "../libmscore/measurerepeat.h"
 #include "../libmscore/mmrest.h"
@@ -107,6 +109,7 @@
 
 #include "../libmscore/shadownote.h"
 #include "../libmscore/slur.h"
+#include "../libmscore/spacer.h"
 #include "../libmscore/staff.h"
 #include "../libmscore/stafflines.h"
 #include "../libmscore/staffstate.h"
@@ -129,6 +132,7 @@
 #include "../libmscore/textline.h"
 #include "../libmscore/tie.h"
 #include "../libmscore/timesig.h"
+#include "../libmscore/tremolo.h"
 #include "../libmscore/tremolobar.h"
 #include "../libmscore/trill.h"
 #include "../libmscore/tuplet.h"
@@ -154,22 +158,23 @@ using LayoutTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Ar
                                    Chord, ChordLine, Clef,
                                    Dynamic, Expression,
                                    Fermata, FiguredBass, Fingering, FretDiagram,
-                                   Glissando, GradualTempoChange,
-                                   Hairpin, Harmony, HarmonicMark, Hook,
+                                   Glissando, GlissandoSegment, GradualTempoChange, GradualTempoChangeSegment,
+                                   Hairpin, HairpinSegment, Harmony, HarmonicMarkSegment, Hook,
                                    Image, InstrumentChange,
                                    Jump,
                                    KeySig,
-                                   LayoutBreak, LedgerLine, LetRing, Lyrics,
-                                   Marker, MeasureRepeat, MMRest,
+                                   LayoutBreak, LetRing, LetRingSegment, LedgerLine, Lyrics, LyricsLineSegment,
+                                   Marker, MeasureNumber, MeasureRepeat, MMRest,
                                    Note, NoteDot, NoteHead,
-                                   Ottava,
-                                   Page, PalmMute, Pedal, PlayTechAnnotation,
-                                   Rasgueado, RehearsalMark, Rest,
-                                   Segment, Slur, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
-                                   Symbol, FSymbol, System, SystemDivider, SystemText,
-                                   TempoText, Text, TextLine, Tie, TimeSig, TremoloBar, Trill, Tuplet,
-                                   Vibrato, Volta,
-                                   WhammyBar>;
+                                   Ottava, OttavaSegment,
+                                   PalmMute, PalmMuteSegment, Pedal, PedalSegment, PlayTechAnnotation,
+                                   RasgueadoSegment, RehearsalMark, Rest,
+                                   Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
+                                   Symbol, FSymbol, SystemDivider, SystemText,
+                                   TempoText, Text, TextLine, TextLineSegment, Tie, TimeSig,
+                                   Tremolo, TremoloBar, Trill, TrillSegment, Tuplet,
+                                   Vibrato, VibratoSegment, Volta, VoltaSegment,
+                                   WhammyBarSegment>;
 
 class LayoutVisitor : public rtti::Visitor<LayoutVisitor>
 {
@@ -185,7 +190,7 @@ public:
     }
 };
 
-void TLayout::layout(EngravingItem* item, LayoutContext& ctx)
+void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
 {
     LayoutVisitor::visit(LayoutVisitor::ShouldBeFound, LayoutTypes {}, item, ctx);
 }
@@ -194,7 +199,7 @@ void TLayout::layout(Accidental* item, LayoutContext& ctx)
 {
     item->clearElements();
 
-    // TODO: remove Accidental in layout()
+    // TODO: remove Accidental in layout
     // don't show accidentals for tab or slash notation
     if (item->onTabStaff() || (item->note() && item->note()->fixed())) {
         item->setbbox(RectF());
@@ -322,7 +327,7 @@ void TLayout::layout(ActionIcon* item, LayoutContext&)
     item->setbbox(fontMetrics.boundingRect(Char(item->icon())));
 }
 
-void TLayout::layout(Ambitus* item, LayoutContext&)
+void TLayout::layout(Ambitus* item, LayoutContext& ctx)
 {
     int bottomLine, topLine;
     ClefType clf;
@@ -380,7 +385,7 @@ void TLayout::layout(Ambitus* item, LayoutContext&)
         }
         item->topAccidental()->setAccidentalType(accidType);
         if (accidType != AccidentalType::NONE) {
-            item->topAccidental()->layout();
+            layout(item->topAccidental(), ctx);
         } else {
             item->topAccidental()->setbbox(RectF());
         }
@@ -407,7 +412,7 @@ void TLayout::layout(Ambitus* item, LayoutContext&)
         }
         item->bottomAccidental()->setAccidentalType(accidType);
         if (accidType != AccidentalType::NONE) {
-            item->bottomAccidental()->layout();
+            layout(item->bottomAccidental(), ctx);
         } else {
             item->bottomAccidental()->setbbox(RectF());
         }
@@ -647,7 +652,7 @@ void TLayout::layout(BagpipeEmbellishment* item, LayoutContext&)
     }
 }
 
-void TLayout::layout(BarLine* item, LayoutContext&)
+void TLayout::layout(BarLine* item, LayoutContext& ctx)
 {
     item->setPos(PointF());
     // barlines hidden on this staff
@@ -697,7 +702,7 @@ void TLayout::layout(BarLine* item, LayoutContext&)
     item->setbbox(r);
 
     for (EngravingItem* e : *item->el()) {
-        e->layout();
+        layoutItem(e, ctx);
         if (e->isArticulation()) {
             Articulation* a  = toArticulation(e);
             DirectionV dir    = a->direction();
@@ -900,12 +905,12 @@ void TLayout::layout(Box* item, LayoutContext& ctx)
     BoxVisitor::visit(BoxVisitor::ShouldBeFound, BoxTypes {}, item, ctx);
 }
 
-void TLayout::layoutBox(Box* item, LayoutContext&)
+void TLayout::layoutBox(Box* item, LayoutContext& ctx)
 {
-    item->MeasureBase::layout();
+    layoutMeasureBase(item, ctx);
     for (EngravingItem* e : item->el()) {
         if (!e->isLayoutBreak()) {
-            e->layout();
+            layoutItem(e, ctx);
         }
     }
 }
@@ -940,7 +945,7 @@ void TLayout::layout(VBox* item, LayoutContext& ctx)
 
     for (EngravingItem* e : item->el()) {
         if (!e->isLayoutBreak()) {
-            e->layout();
+            layoutItem(e, ctx);
         }
     }
 
@@ -954,7 +959,7 @@ void TLayout::layout(VBox* item, LayoutContext& ctx)
         item->setHeight(contentHeight);
     }
 
-    item->MeasureBase::layout();
+    layoutMeasureBase(item, ctx);
 
     if (MScore::noImages) {
         adjustLayoutWithoutImages(item, ctx);
@@ -985,11 +990,11 @@ void TLayout::layout(FBox* item, LayoutContext& ctx)
     layoutBox(static_cast<Box*>(item), ctx);
 }
 
-void TLayout::layout(TBox* item, LayoutContext&)
+void TLayout::layout(TBox* item, LayoutContext& ctx)
 {
     item->setPos(PointF());        // !?
     item->bbox().setRect(0.0, 0.0, item->system()->width(), 0);
-    item->text()->layout();
+    layout(item->text(), ctx);
 
     double h = 0.;
     if (item->text()->empty()) {
@@ -1002,7 +1007,7 @@ void TLayout::layout(TBox* item, LayoutContext&)
     h += item->topMargin() * DPMM + item->bottomMargin() * DPMM;
     item->bbox().setRect(0.0, 0.0, item->system()->width(), h);
 
-    item->MeasureBase::layout();    // layout LayoutBreak's
+    layoutMeasureBase(item, ctx);   // layout LayoutBreak's
 }
 
 void TLayout::layout(Bracket* item, LayoutContext&)
@@ -1255,7 +1260,7 @@ void TLayout::layout(Clef* item, LayoutContext&)
         if (!show) {
             item->setbbox(RectF());
             item->setSymId(SymId::noSym);
-            LOGD("Clef::layout(): invisible clef at tick %d(%d) staff %zu",
+            LOGD("invisible clef at tick %d(%d) staff %zu",
                  item->segment()->tick().ticks(), item->segment()->tick().ticks() / 1920, item->staffIdx());
             return;
         }
@@ -1362,7 +1367,7 @@ void TLayout::layout(DeadSlapped* item, LayoutContext&)
     }
 }
 
-void TLayout::layout(Dynamic* item, LayoutContext&)
+void TLayout::layout(Dynamic* item, LayoutContext& ctx)
 {
     item->_snappedExpression = nullptr; // Here we reset it. It will become known again when we layout expression
 
@@ -1374,7 +1379,7 @@ void TLayout::layout(Dynamic* item, LayoutContext&)
         return;
     }
 
-    item->TextBase::layout();
+    layoutTextBase(item, ctx);
 
     Segment* s = item->segment();
     if (!s || (!item->_centerOnNotehead && item->align().horizontal == AlignH::LEFT)) {
@@ -1425,9 +1430,9 @@ void TLayout::layout(Dynamic* item, LayoutContext&)
     item->movePosX(-item->customTextOffset());
 }
 
-void TLayout::layout(Expression* item, LayoutContext&)
+void TLayout::layout(Expression* item, LayoutContext& ctx)
 {
-    item->TextBase::layout();
+    layoutTextBase(item, ctx);
 
     Segment* segment = item->explicitParent() ? toSegment(item->explicitParent()) : nullptr;
     if (!segment) {
@@ -1668,7 +1673,7 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
     item->bbox().setRect(0, 0, w, h);
 }
 
-void TLayout::layout(FiguredBass* item, LayoutContext&)
+void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
 {
     // VERTICAL POSITION:
     const double y = item->score()->styleD(Sid::figuredBassYOffset) * item->spatium();
@@ -1684,13 +1689,13 @@ void TLayout::layout(FiguredBass* item, LayoutContext&)
         item->bbox().setRect(0, 0, item->lineLength(0), 0);
         // layout each item and enlarge bbox to include items bboxes
         for (FiguredBassItem* fit : item->items()) {
-            fit->layout();
+            layout(fit, ctx);
             item->addbbox(item->bbox().translated(fit->pos()));
         }
     }
 }
 
-void TLayout::layout(Fingering* item, LayoutContext&)
+void TLayout::layout(Fingering* item, LayoutContext& ctx)
 {
     if (item->explicitParent()) {
         Fraction tick = item->parentItem()->tick();
@@ -1703,7 +1708,7 @@ void TLayout::layout(Fingering* item, LayoutContext&)
         }
     }
 
-    item->TextBase::layout();
+    layoutTextBase(item, ctx);
     item->setPosY(0.0);      // handle placement below
 
     if (item->autoplace() && item->note()) {
@@ -1830,7 +1835,7 @@ void TLayout::layout(Fingering* item, LayoutContext&)
     item->setOffsetChanged(false);
 }
 
-void TLayout::layout(FretDiagram* item, LayoutContext&)
+void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
 {
     double _spatium  = item->spatium() * item->_userMag;
     item->m_stringLw        = _spatium * 0.08;
@@ -1909,7 +1914,7 @@ void TLayout::layout(FretDiagram* item, LayoutContext&)
     }
 
     if (item->_harmony) {
-        item->_harmony->layout();
+        layout(item->_harmony, ctx);
     }
     if (item->_harmony && item->_harmony->autoplace() && item->_harmony->explicitParent()) {
         Segment* s = toSegment(item->explicitParent());
@@ -1962,7 +1967,7 @@ void TLayout::layout(FretCircle* item, LayoutContext&)
     item->setbbox(item->m_rect.adjusted(-lw, -lw, lw, lw));
 }
 
-void TLayout::layout(Glissando* item, LayoutContext&)
+void TLayout::layout(Glissando* item, LayoutContext& ctx)
 {
     double _spatium = item->spatium();
 
@@ -1973,10 +1978,10 @@ void TLayout::layout(Glissando* item, LayoutContext&)
         LineSegment* s = item->frontSegment();
         s->setPos(PointF(-_spatium * Glissando::GLISS_PALETTE_WIDTH / 2, _spatium * Glissando::GLISS_PALETTE_HEIGHT / 2));
         s->setPos2(PointF(_spatium * Glissando::GLISS_PALETTE_WIDTH, -_spatium * Glissando::GLISS_PALETTE_HEIGHT));
-        s->layout();
+        layout(s, ctx);
         return;
     }
-    item->SLine::layout();
+    layoutLine(item, ctx);
     if (item->spannerSegments().empty()) {
         LOGD("no segments");
         return;
@@ -2106,7 +2111,7 @@ void TLayout::layout(Glissando* item, LayoutContext&)
     segm2->setPos2(segm2->ipos2() + offs2);
 
     for (SpannerSegment* segm : item->spannerSegments()) {
-        segm->layout();
+        layoutItem(segm, ctx);
     }
 
     // compute glissando bbox as the bbox of the last segment, relative to the end anchor note
@@ -2189,16 +2194,22 @@ void TLayout::layout(GraceNotesGroup* item, LayoutContext&)
     item->setPos(xPos, 0.0);
 }
 
-void TLayout::layout(GradualTempoChangeSegment* item, LayoutContext&)
+void TLayout::layout(GradualTempoChangeSegment* item, LayoutContext& ctx)
 {
-    item->TextLineBaseSegment::layout();
+    layoutTextLineBaseSegment(item, ctx);
+
     if (item->isStyled(Pid::OFFSET)) {
         item->roffset() = item->tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
     item->autoplaceSpannerSegment();
 }
 
-void TLayout::layout(HairpinSegment* item, LayoutContext&)
+void TLayout::layout(GradualTempoChange* item, LayoutContext& ctx)
+{
+    layoutLine(item, ctx);
+}
+
+void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
 {
     const StaffType* stType = item->staffType();
 
@@ -2271,7 +2282,7 @@ void TLayout::layout(HairpinSegment* item, LayoutContext&)
     HairpinType type = item->hairpin()->hairpinType();
     if (item->hairpin()->isLineType()) {
         item->m_twoLines = false;
-        item->TextLineBaseSegment::layout();
+        layoutTextLineBaseSegment(item, ctx);
         item->m_drawCircledTip   = false;
         item->m_circledTipRadius = 0.0;
     } else {
@@ -2281,7 +2292,7 @@ void TLayout::layout(HairpinSegment* item, LayoutContext&)
         item->hairpin()->setEndTextAlign({ AlignH::RIGHT, AlignV::VCENTER });
 
         double x1 = 0.0;
-        item->TextLineBaseSegment::layout();
+        layoutTextLineBaseSegment(item, ctx);
         if (!item->m_text->empty()) {
             x1 = item->m_text->width() + _spatium * .5;
         }
@@ -2479,13 +2490,13 @@ void TLayout::layout(HairpinSegment* item, LayoutContext&)
     item->setOffsetChanged(false);
 }
 
-void TLayout::layout(Hairpin* item, LayoutContext&)
+void TLayout::layout(Hairpin* item, LayoutContext& ctx)
 {
     item->setPos(0.0, 0.0);
-    item->TextLineBase::layout();
+    layoutTextLineBase(item, ctx);
 }
 
-void TLayout::layout(HarmonicMarkSegment* item, LayoutContext&)
+void TLayout::layout(HarmonicMarkSegment* item, LayoutContext& ctx)
 {
     const StaffType* stType = item->staffType();
 
@@ -2497,7 +2508,8 @@ void TLayout::layout(HarmonicMarkSegment* item, LayoutContext&)
         return;
     }
 
-    item->TextLineBaseSegment::layout();
+    layoutTextLineBaseSegment(item, ctx);
+
     item->autoplaceSpannerSegment();
 }
 
@@ -2666,15 +2678,20 @@ void TLayout::layout(Image* item, LayoutContext&)
     item->setbbox(RectF(PointF(), item->size2pixel(imageSize)));
 }
 
-void TLayout::layout(InstrumentChange* item, LayoutContext&)
+void TLayout::layout(InstrumentChange* item, LayoutContext& ctx)
 {
-    item->TextBase::layout();
+    layoutTextBase(item, ctx);
     item->autoplaceSegmentElement();
 }
 
-void TLayout::layout(Jump* item, LayoutContext&)
+void TLayout::layout(InstrumentName* item, LayoutContext& ctx)
 {
-    item->TextBase::layout();
+    layoutTextBase(item, ctx);
+}
+
+void TLayout::layout(Jump* item, LayoutContext& ctx)
+{
+    layoutTextBase(item, ctx);
     item->autoplaceMeasureElement();
 }
 
@@ -2953,6 +2970,11 @@ void TLayout::keySigAddLayout(KeySig* item, SymId sym, int line)
     item->_sig.keySymbols().push_back(ks);
 }
 
+void TLayout::layout(LayoutBreak* item, LayoutContext&)
+{
+    UNUSED(item);
+}
+
 void TLayout::layout(LedgerLine* item, LayoutContext&)
 {
     item->setLineWidth(item->score()->styleMM(Sid::ledgerLineWidth) * item->chord()->mag());
@@ -2973,7 +2995,12 @@ void TLayout::layout(LedgerLine* item, LayoutContext&)
     }
 }
 
-void TLayout::layout(LetRingSegment* item, LayoutContext&)
+void TLayout::layout(LetRing* item, LayoutContext& ctx)
+{
+    layoutLine(item, ctx);
+}
+
+void TLayout::layout(LetRingSegment* item, LayoutContext& ctx)
 {
     const StaffType* stType = item->staffType();
 
@@ -2983,8 +3010,13 @@ void TLayout::layout(LetRingSegment* item, LayoutContext&)
         return;
     }
 
-    item->TextLineBaseSegment::layout();
+    layoutTextLineBaseSegment(item, ctx);
     item->autoplaceSpannerSegment();
+}
+
+void TLayout::layout(LineSegment* item, LayoutContext& ctx)
+{
+    layoutItem(item, ctx);
 }
 
 void TLayout::layout(Lyrics* item, LayoutContext& ctx)
@@ -3002,9 +3034,9 @@ void TLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
     LyricsLayout::layout(item, ctx);
 }
 
-void TLayout::layout(Marker* item, LayoutContext&)
+void TLayout::layout(Marker* item, LayoutContext& ctx)
 {
-    item->TextBase::layout();
+    layoutTextBase(item, ctx);
 
     // although normally laid out to parent (measure) width,
     // force to center over barline if left-aligned
@@ -3016,7 +3048,12 @@ void TLayout::layout(Marker* item, LayoutContext&)
     item->autoplaceMeasureElement();
 }
 
-void TLayout::layoutMeasureBase(MeasureBase* item, LayoutContext&)
+void TLayout::layout(MeasureBase* item, LayoutContext& ctx)
+{
+    layoutItem(item, ctx);
+}
+
+void TLayout::layoutMeasureBase(MeasureBase* item, LayoutContext& ctx)
 {
     int breakCount = 0;
 
@@ -3039,9 +3076,14 @@ void TLayout::layoutMeasureBase(MeasureBase* item, LayoutContext&)
             element->setPos(x, y);
         } else if (element->isMarker() || element->isJump()) {
         } else {
-            element->layout();
+            layoutItem(element, ctx);
         }
     }
+}
+
+void TLayout::layout(MeasureNumber* item, LayoutContext& ctx)
+{
+    layoutMeasureNumberBase(item, ctx);
 }
 
 void TLayout::layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext&)
@@ -3128,10 +3170,10 @@ void TLayout::layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext&)
     }
 }
 
-void TLayout::layout(MeasureRepeat* item, LayoutContext&)
+void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
 {
     for (EngravingItem* e : item->el()) {
-        e->layout();
+        layoutItem(e, ctx);
     }
 
     switch (item->numMeasures()) {
@@ -3196,13 +3238,13 @@ void TLayout::layout(MeasureRepeat* item, LayoutContext&)
     }
 }
 
-void TLayout::layout(MMRest* item, LayoutContext&)
+void TLayout::layout(MMRest* item, LayoutContext& ctx)
 {
     item->m_number = item->measure()->mmRestCount();
     item->m_numberSym = timeSigSymIdsFromString(String::number(item->m_number));
 
     for (EngravingItem* e : item->el()) {
-        e->layout();
+        layoutItem(e, ctx);
     }
 
     if (item->score()->styleB(Sid::oldStyleMultiMeasureRests)) {
@@ -3318,14 +3360,14 @@ void TLayout::layout(Note* item, LayoutContext&)
 }
 
 // called after final position of note is set
-void TLayout::layout2(Note* item, LayoutContext&)
+void TLayout::layout2(Note* item, LayoutContext& ctx)
 {
     const StaffType* staffType = item->staff()->staffTypeForElement(item);
     // for standard staves this is done in Score::layoutChords3()
     // so that the results are available there
     bool isTabStaff = staffType && staffType->isTabStaff();
     // First, for tab staves that have show back-tied fret marks option, we add parentheses to the tied note if
-    // the tie spans a system boundary. This can't be done in layout() as the system of each note is not decided yet
+    // the tie spans a system boundary. This can't be done in layout as the system of each note is not decided yet
     bool useParens = isTabStaff && !staffType->showBackTied() && !item->_fixed;
     if (useParens
         && item->tieBack()
@@ -3389,7 +3431,7 @@ void TLayout::layout2(Note* item, LayoutContext&)
             e->setMag(item->mag());
             double w = item->headWidth();
             Symbol* sym = toSymbol(e);
-            e->layout();
+            layoutItem(e, ctx);
             if (sym->sym() == SymId::noteheadParenthesisRight) {
                 if (isTabStaff) {
                     const Staff* st = item->staff();
@@ -3416,11 +3458,11 @@ void TLayout::layout2(Note* item, LayoutContext&)
             // layout fingerings that are placed relative to notehead
             // fingerings placed relative to chord will be laid out later
             if (f->layoutType() == ElementType::NOTE) {
-                f->layout();
+                layout(f, ctx);
             }
         } else {
             e->setMag(item->mag());
-            e->layout();
+            layoutItem(e, ctx);
         }
     }
 }
@@ -3430,13 +3472,23 @@ void TLayout::layout(NoteDot* item, LayoutContext&)
     item->setbbox(item->symBbox(SymId::augmentationDot));
 }
 
-void TLayout::layout(OttavaSegment* item, LayoutContext&)
+void TLayout::layout(Ottava* item, LayoutContext& ctx)
 {
-    item->TextLineBaseSegment::layout();
+    layoutLine(item, ctx);
+}
+
+void TLayout::layout(OttavaSegment* item, LayoutContext& ctx)
+{
+    layoutTextLineBaseSegment(item, ctx);
     item->autoplaceSpannerSegment();
 }
 
-void TLayout::layout(PalmMuteSegment* item, LayoutContext&)
+void TLayout::layout(PalmMute* item, LayoutContext& ctx)
+{
+    layoutLine(item, ctx);
+}
+
+void TLayout::layout(PalmMuteSegment* item, LayoutContext& ctx)
 {
     const StaffType* stType = item->staffType();
 
@@ -3446,32 +3498,37 @@ void TLayout::layout(PalmMuteSegment* item, LayoutContext&)
         return;
     }
 
-    item->TextLineBaseSegment::layout();
+    layoutTextLineBaseSegment(item, ctx);
     item->autoplaceSpannerSegment();
 }
 
-void TLayout::layout(PedalSegment* item, LayoutContext&)
+void TLayout::layout(Pedal* item, LayoutContext& ctx)
 {
-    item->TextLineBaseSegment::layout();
+    layoutLine(item, ctx);
+}
+
+void TLayout::layout(PedalSegment* item, LayoutContext& ctx)
+{
+    layoutTextLineBaseSegment(item, ctx);
     if (item->isStyled(Pid::OFFSET)) {
         item->roffset() = item->pedal()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
     item->autoplaceSpannerSegment();
 }
 
-void TLayout::layout(PickScrapeSegment* item, LayoutContext&)
+void TLayout::layout(PickScrapeSegment* item, LayoutContext& ctx)
 {
-    item->TextLineBaseSegment::layout();
+    layoutTextLineBaseSegment(item, ctx);
     item->autoplaceSpannerSegment();
 }
 
-void TLayout::layout(PlayTechAnnotation* item, LayoutContext&)
+void TLayout::layout(PlayTechAnnotation* item, LayoutContext& ctx)
 {
-    item->StaffTextBase::layout();
+    layoutTextBase(item, ctx);
     item->autoplaceSegmentElement();
 }
 
-void TLayout::layout(RasgueadoSegment* item, LayoutContext&)
+void TLayout::layout(RasgueadoSegment* item, LayoutContext& ctx)
 {
     const StaffType* stType = item->staffType();
 
@@ -3481,13 +3538,13 @@ void TLayout::layout(RasgueadoSegment* item, LayoutContext&)
         return;
     }
 
-    item->TextLineBaseSegment::layout();
+    layoutTextLineBaseSegment(item, ctx);
     item->autoplaceSpannerSegment();
 }
 
-void TLayout::layout(RehearsalMark* item, LayoutContext&)
+void TLayout::layout(RehearsalMark* item, LayoutContext& ctx)
 {
-    item->TextBase::layout();
+    layoutTextBase(item, ctx);
 
     Segment* s = item->segment();
     if (s) {
@@ -3524,13 +3581,13 @@ void TLayout::layout(RehearsalMark* item, LayoutContext&)
     }
 }
 
-void TLayout::layout(Rest* item, LayoutContext&)
+void TLayout::layout(Rest* item, LayoutContext& ctx)
 {
     if (item->m_gap) {
         return;
     }
     for (EngravingItem* e : item->el()) {
-        e->layout();
+        layoutItem(e, ctx);
     }
 
     item->setSkipDraw(false);
@@ -3563,7 +3620,7 @@ void TLayout::layout(Rest* item, LayoutContext&)
             }
             item->_tabDur->setParent(item);
 // needed?        _tabDur->setTrack(track());
-            item->_tabDur->layout();
+            layout(item->_tabDur, ctx);
             item->setbbox(item->_tabDur->bbox());
             item->setPos(0.0, 0.0);                   // no rest is drawn: reset any position might be set for it
             return;
@@ -3597,17 +3654,17 @@ void TLayout::layout(Rest* item, LayoutContext&)
     if (!item->shouldNotBeDrawn()) {
         item->setbbox(item->symBbox(item->m_sym));
     }
-    layoutRestDots(item);
+    layoutRestDots(item, ctx);
 }
 
-void TLayout::layoutRestDots(Rest* item)
+void TLayout::layoutRestDots(Rest* item, LayoutContext& ctx)
 {
     item->checkDots();
     double x = item->symWidthNoLedgerLines() + item->score()->styleMM(Sid::dotNoteDistance) * item->mag();
     double dx = item->score()->styleMM(Sid::dotDotDistance) * item->mag();
     double y = item->m_dotline * item->spatium() * .5;
     for (NoteDot* dot : item->m_dots) {
-        dot->layout();
+        layout(dot, ctx);
         dot->setPos(x, y);
         x += dx;
     }
@@ -3685,7 +3742,7 @@ void TLayout::layout(ShadowNote* item, LayoutContext&)
     item->setbbox(newBbox);
 }
 
-void TLayout::layoutLine(SLine* item, LayoutContext&)
+void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
 {
     if (item->score()->isPaletteScore() || (item->tick() == Fraction(-1, 1)) || (item->tick2() == Fraction::fromTicks(1))) {
         //
@@ -3699,7 +3756,7 @@ void TLayout::layoutLine(SLine* item, LayoutContext&)
         }
 
         LineSegment* lineSegm = item->frontSegment();
-        lineSegm->layout();
+        layout(lineSegm, ctx);
         item->setbbox(lineSegm->bbox());
         return;
     }
@@ -3787,13 +3844,23 @@ void TLayout::layoutLine(SLine* item, LayoutContext&)
             lineSegm->setPos(PointF(p2.x() - len, p2.y()));
             lineSegm->setPos2(PointF(len, 0.0));
         }
-        lineSegm->layout();
+        layout(lineSegm, ctx);
     }
 }
 
 void TLayout::layout(Slur* item, LayoutContext& ctx)
 {
     SlurTieLayout::layout(item, ctx);
+}
+
+void TLayout::layout(Spacer* item, LayoutContext&)
+{
+    UNUSED(item);
+}
+
+void TLayout::layout(Spanner* item, LayoutContext& ctx)
+{
+    layoutItem(item, ctx);
 }
 
 void TLayout::layout(StaffLines* item, LayoutContext& ctx)
@@ -3891,9 +3958,9 @@ void TLayout::layout(StaffState* item, LayoutContext&)
     item->setPos(0.0, _spatium * -6.0);
 }
 
-void TLayout::layout(StaffText* item, LayoutContext&)
+void TLayout::layout(StaffText* item, LayoutContext& ctx)
 {
-    item->TextBase::layout();
+    layoutTextBase(item, ctx);
     item->autoplaceSegmentElement();
 }
 
@@ -4038,9 +4105,9 @@ void TLayout::layout(StemSlash* item, LayoutContext&)
                                                                                     item->m_width));
 }
 
-void TLayout::layout(Sticking* item, LayoutContext&)
+void TLayout::layout(Sticking* item, LayoutContext& ctx)
 {
-    item->TextBase::layout();
+    layoutTextBase(item, ctx);
     item->autoplaceSegmentElement();
 }
 
@@ -4083,7 +4150,7 @@ void TLayout::doLayout(StretchedBend* item, LayoutContext&, bool stretchedMode)
     }
 }
 
-void TLayout::layoutBaseSymbol(BSymbol* item, LayoutContext&)
+void TLayout::layoutBaseSymbol(BSymbol* item, LayoutContext& ctx)
 {
     if (item->staff()) {
         item->setMag(item->staff()->staffMag(item->tick()));
@@ -4093,7 +4160,7 @@ void TLayout::layoutBaseSymbol(BSymbol* item, LayoutContext&)
         item->setPos(.0, .0);
     }
     for (EngravingItem* e : item->leafs()) {
-        e->layout();
+        layoutItem(e, ctx);
     }
 }
 
@@ -4137,9 +4204,9 @@ void TLayout::layout(SystemDivider* item, LayoutContext& ctx)
     layout(static_cast<Symbol*>(item), ctx);
 }
 
-void TLayout::layout(SystemText* item, LayoutContext&)
+void TLayout::layout(SystemText* item, LayoutContext& ctx)
 {
-    item->TextBase::layout();
+    layoutTextBase(item, ctx);
     item->autoplaceSegmentElement();
 }
 
@@ -4202,9 +4269,9 @@ void TLayout::layout(TabDurationSymbol* item, LayoutContext&)
     item->setPos(xpos * mag, ypos * mag);
 }
 
-void TLayout::layout(TempoText* item, LayoutContext&)
+void TLayout::layout(TempoText* item, LayoutContext& ctx)
 {
-    item->TextBase::layout();
+    layoutTextBase(item, ctx);
 
     Segment* s = item->segment();
     if (!s) {                       // for use in palette
@@ -4224,6 +4291,11 @@ void TLayout::layout(TempoText* item, LayoutContext&)
         }
     }
     item->autoplaceSegmentElement();
+}
+
+void TLayout::layout(TextBase* item, LayoutContext& ctx)
+{
+    layoutItem(item, ctx);
 }
 
 void TLayout::layoutTextBase(TextBase* item, LayoutContext& ctx)
@@ -4327,6 +4399,16 @@ void TLayout::layout1TextBase(TextBase* item, LayoutContext&)
     item->score()->addRefresh(item->canvasBoundingRect());
 }
 
+void TLayout::layout(Text* item, LayoutContext& ctx)
+{
+    layoutTextBase(static_cast<TextBase*>(item), ctx);
+}
+
+void TLayout::layout(TextLine* item, LayoutContext& ctx)
+{
+    layoutLine(item, ctx);
+}
+
 void TLayout::layout(TextLineSegment* item, LayoutContext& ctx)
 {
     layoutTextLineBaseSegment(item, ctx);
@@ -4359,7 +4441,12 @@ static inline void extendLines(const PointF& l1p1, PointF& l1p2, PointF& l2p1, c
     l2p1 += l2UnitVector * addedLength;
 }
 
-void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext&)
+void TLayout::layoutTextLineBase(TextLineBase* item, LayoutContext& ctx)
+{
+    layoutLine(item, ctx);
+}
+
+void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext& ctx)
 {
     item->m_npoints      = 0;
     TextLineBase* tl = item->textLineBase();
@@ -4420,7 +4507,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     }
     item->m_text->setPlacement(PlacementV::ABOVE);
     item->m_text->setTrack(item->track());
-    item->m_text->layout();
+    layout(item->m_text, ctx);
 
     if ((item->isSingleType() || item->isEndType())) {
         item->m_endText->setXmlText(tl->endText());
@@ -4431,7 +4518,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->m_endText->setFontStyle(tl->endFontStyle());
         item->m_endText->setPlacement(PlacementV::ABOVE);
         item->m_endText->setTrack(item->track());
-        item->m_endText->layout();
+        layout(item->m_endText, ctx);
     } else {
         item->m_endText->setXmlText(u"");
     }
@@ -4605,6 +4692,11 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     }
 }
 
+void TLayout::layout(Tie* item, LayoutContext&)
+{
+    UNUSED(item);
+}
+
 void TLayout::layout(TimeSig* item, LayoutContext&)
 {
     item->setPos(0.0, 0.0);
@@ -4771,7 +4863,7 @@ void TLayout::layout(TremoloBar* item, LayoutContext&)
     item->setbbox(item->m_polygon.boundingRect().adjusted(-w, -w, w, w));
 }
 
-void TLayout::layout(TrillSegment* item, LayoutContext&)
+void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
 {
     if (item->staff()) {
         item->setMag(item->staff()->staffMag(item->tick()));
@@ -4783,7 +4875,7 @@ void TLayout::layout(TrillSegment* item, LayoutContext&)
     if (item->isSingleType() || item->isBeginType()) {
         Accidental* a = item->trill()->accidental();
         if (a) {
-            a->layout();
+            layout(a, ctx);
             a->setMag(a->mag() * .6);
             double _spatium = item->spatium();
             a->setPos(_spatium * 1.3, -2.2 * _spatium);
@@ -4881,6 +4973,11 @@ void TLayout::layout(Vibrato* item, LayoutContext& ctx)
         LOGD("Vibrato: no segments");
         return;
     }
+}
+
+void TLayout::layout(Volta* item, LayoutContext& ctx)
+{
+    layoutLine(item, ctx);
 }
 
 void TLayout::layout(VoltaSegment* item, LayoutContext& ctx)

@@ -62,6 +62,7 @@ PropertyValue Expression::propertyDefault(Pid id) const
 
 void Expression::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

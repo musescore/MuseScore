@@ -209,7 +209,7 @@ public:
     Fraction computeTicks();
     Fraction shortestChordRest() const;
     Fraction maxTicks() const;
-    void layout2();
+
     void layoutCrossStaff() override;
 
     bool showsMeasureNumber();
@@ -369,9 +369,10 @@ public:
     void respaceSegments();
 
 private:
-    double _squeezableSpace = 0;
+
     friend class Factory;
     friend class rw400::MeasureRW;
+    friend class MeasureLayout;
 
     Measure(System* parent = 0);
     Measure(const Measure&);
@@ -386,6 +387,8 @@ private:
     void spaceRightAlignedSegments();
 
     MStaff* mstaff(staff_idx_t staffIndex) const;
+
+    double _squeezableSpace = 0;
 
     std::vector<MStaff*> m_mstaves;
     SegmentList m_segments;

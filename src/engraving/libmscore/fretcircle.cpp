@@ -66,6 +66,7 @@ void FretCircle::draw(mu::draw::Painter* painter) const
 
 void FretCircle::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

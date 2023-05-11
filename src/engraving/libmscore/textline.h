@@ -35,9 +35,7 @@ class Note;
 class TextLineSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, TextLineSegment)
-
-    Sid getTextLinePos(bool above) const;
-    Sid getPropertyStyle(Pid) const override;
+    DECLARE_CLASSOF(ElementType::TEXTLINE_SEGMENT)
 
 public:
     TextLineSegment(Spanner* sp, System* parent, bool system=false);
@@ -48,6 +46,10 @@ public:
 
     TextLine* textLine() const { return toTextLine(spanner()); }
     void layout() override;
+
+private:
+    Sid getTextLinePos(bool above) const;
+    Sid getPropertyStyle(Pid) const override;
 };
 
 //---------------------------------------------------------

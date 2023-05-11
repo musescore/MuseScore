@@ -46,14 +46,18 @@
 #include "libmscore/tremolo.h"
 #include "libmscore/tuplet.h"
 
+#include "tlayout.h"
 #include "layoutsystem.h"
+#include "chordlayout.h"
 #include "beamlayout.h"
+#include "measurelayout.h"
 #include "tupletlayout.h"
 #include "verticalgapdata.h"
 
 #include "log.h"
 
 using namespace mu::engraving;
+using namespace mu::engraving::v0;
 
 //---------------------------------------------------------
 //   getNextPage
@@ -274,14 +278,14 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                         }
                         ChordRest* cr = toChordRest(e);
                         if (BeamLayout::notTopBeam(cr)) {                           // layout cross staff beams
-                            cr->beam()->layout();
+                            TLayout::layout(cr->beam(), ctx);
                         }
                         if (TupletLayout::notTopTuplet(cr)) {
                             // fix layout of tuplets
                             DurationElement* de = cr;
                             while (de->tuplet() && de->tuplet()->elements().front() == de) {
                                 Tuplet* t = de->tuplet();
-                                t->layout();
+                                TLayout::layout(t, ctx);
                                 de = t;
                             }
                         }
@@ -290,29 +294,30 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                             Chord* c = toChord(cr);
                             for (Chord* cc : c->graceNotes()) {
                                 if (cc->beam() && cc->beam()->elements().front() == cc) {
-                                    cc->beam()->layout();
+                                    TLayout::layout(cc->beam(), ctx);
                                 }
-                                cc->layoutSpanners();
+                                ChordLayout::layoutSpanners(cc, ctx);
                                 for (EngravingItem* element : cc->el()) {
                                     if (element->isSlur()) {
-                                        element->layout();
+                                        TLayout::layoutItem(element, ctx);
                                     }
                                 }
                             }
                             c->layoutArpeggio2();
-                            c->layoutSpanners();
+                            ChordLayout::layoutSpanners(c, ctx);
                             if (c->tremolo()) {
                                 Tremolo* t = c->tremolo();
                                 Chord* c1 = t->chord1();
                                 Chord* c2 = t->chord2();
                                 if (t->twoNotes() && c1 && c2 && (c1->staffMove() || c2->staffMove())) {
-                                    t->layout();
+                                    TLayout::layout(t, ctx);
                                 }
                             }
                             // Fingering and articulations on top of cross-staff beams must be laid out here
                             if (c->beam() && (c->beam()->cross() || c->staffMove() != 0)) {
-                                c->layoutArticulations();
-                                c->layoutArticulations2(true);
+                                ChordLayout::layoutArticulations(c, ctx);
+                                ChordLayout::layoutArticulations2(c, ctx, true);
+
                                 for (Note* note : c->notes()) {
                                     for (EngravingItem* e : note->el()) {
                                         if (!e || !e->isFingering()) {
@@ -320,7 +325,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                                         }
                                         Fingering* fingering = toFingering(e);
                                         if (fingering->isOnCrossBeamSide()) {
-                                            fingering->layout();
+                                            TLayout::layout(fingering, ctx);
                                         }
                                     }
                                 }
@@ -331,7 +336,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                     }
                 }
             }
-            m->layout2();
+            MeasureLayout::layout2(m, ctx);
         }
     }
 
@@ -360,7 +365,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                 continue;
             }
             if (toSlur(sp)->isCrossStaff()) {
-                toSlur(sp)->layout();
+                TLayout::layout(toSlur(sp), ctx);
             }
         }
     }
@@ -376,7 +381,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
 //    systems.
 //---------------------------------------------------------
 
-void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, double restHeight, double footerPadding)
+void LayoutPage::layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding)
 {
     if (restHeight < 0.0) {
         LOGN("restHeight < 0.0: %f\n", restHeight);
@@ -493,7 +498,7 @@ void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, double restHei
     page->systems().back()->setPosY(y);
 }
 
-void LayoutPage::checkDivider(const LayoutContext& ctx, bool left, System* s, double yOffset, bool remove)
+void LayoutPage::checkDivider(LayoutContext& ctx, bool left, System* s, double yOffset, bool remove)
 {
     SystemDivider* divider = left ? s->systemDividerLeft() : s->systemDividerRight();
     if ((ctx.score()->styleB(left ? Sid::dividerLeft : Sid::dividerRight)) && !remove) {
@@ -503,7 +508,7 @@ void LayoutPage::checkDivider(const LayoutContext& ctx, bool left, System* s, do
             divider->setGenerated(true);
             s->add(divider);
         }
-        divider->layout();
+        TLayout::layout(divider, ctx);
         divider->setPosY(divider->height() * .5 + yOffset);
         if (left) {
             divider->movePosY(ctx.score()->styleD(Sid::dividerLeftY) * SPATIUM20);

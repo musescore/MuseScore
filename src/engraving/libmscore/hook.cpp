@@ -52,6 +52,7 @@ void Hook::setHookType(int i)
 
 void Hook::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

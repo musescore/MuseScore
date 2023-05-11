@@ -35,6 +35,7 @@ class PalmMute;
 class PalmMuteSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, PalmMuteSegment)
+    DECLARE_CLASSOF(ElementType::PALM_MUTE_SEGMENT)
 
     Sid getPropertyStyle(Pid) const override;
 

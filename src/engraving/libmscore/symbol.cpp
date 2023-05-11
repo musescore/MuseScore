@@ -85,6 +85,7 @@ String Symbol::accessibleInfo() const
 
 void Symbol::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -194,6 +195,7 @@ void FSymbol::draw(mu::draw::Painter* painter) const
 
 void FSymbol::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

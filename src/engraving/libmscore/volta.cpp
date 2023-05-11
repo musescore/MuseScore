@@ -82,6 +82,7 @@ VoltaSegment::VoltaSegment(Volta* sp, System* parent)
 
 void VoltaSegment::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

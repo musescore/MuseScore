@@ -70,6 +70,7 @@ LetRingSegment::LetRingSegment(LetRing* sp, System* parent)
 
 void LetRingSegment::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

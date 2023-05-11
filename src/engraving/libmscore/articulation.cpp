@@ -236,6 +236,7 @@ Page* Articulation::page() const
 
 void Articulation::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

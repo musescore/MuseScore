@@ -128,6 +128,7 @@ EngravingItem* TextLineSegment::propertyDelegate(Pid pid)
 
 void TextLineSegment::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

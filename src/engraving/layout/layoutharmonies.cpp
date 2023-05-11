@@ -33,9 +33,12 @@
 #include "libmscore/segment.h"
 #include "libmscore/system.h"
 
-using namespace mu::engraving;
+#include "tlayout.h"
 
-void LayoutHarmonies::layoutHarmonies(const std::vector<Segment*>& sl)
+using namespace mu::engraving;
+using namespace mu::engraving::v0;
+
+void LayoutHarmonies::layoutHarmonies(const std::vector<Segment*>& sl, LayoutContext& ctx)
 {
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
@@ -46,7 +49,7 @@ void LayoutHarmonies::layoutHarmonies(const std::vector<Segment*>& sl)
                 // in order to calculate a bbox and allocate its shape to the ChordRest.
                 // But that layout (if it happens at all) does not do autoplace,
                 // so we need the full layout here.
-                h->layout();
+                TLayout::layout(h, ctx);
                 h->autoplaceSegmentElement();
             }
         }
