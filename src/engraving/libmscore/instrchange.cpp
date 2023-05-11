@@ -207,4 +207,18 @@ engraving::PropertyValue InstrumentChange::propertyDefault(Pid propertyId) const
         return TextBase::propertyDefault(propertyId);
     }
 }
+<<<<<<< HEAD
+=======
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void InstrumentChange::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 }

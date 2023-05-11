@@ -264,6 +264,20 @@ bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
+=======
+//   layout
+//---------------------------------------------------------
+
+void TextLineBaseSegment::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layoutTextLineBaseSegment(this, ctx);
+}
+
+//---------------------------------------------------------
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 //   spatiumChanged
 //---------------------------------------------------------
 

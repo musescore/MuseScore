@@ -490,6 +490,19 @@ void Tremolo::setBeamDirection(DirectionV d)
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
+=======
+//   layout
+//---------------------------------------------------------
+void Tremolo::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+//---------------------------------------------------------
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 //   crossStaffBeamBetween
 //    Return true if tremolo is two-note cross-staff and beams between staves
 //---------------------------------------------------------

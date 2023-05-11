@@ -138,6 +138,20 @@ EngravingItem* BSymbol::drop(EditData& data)
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
+=======
+//   layout
+//---------------------------------------------------------
+
+void BSymbol::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layoutBaseSymbol(this, ctx);
+}
+
+//---------------------------------------------------------
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 //   drag
 //---------------------------------------------------------
 

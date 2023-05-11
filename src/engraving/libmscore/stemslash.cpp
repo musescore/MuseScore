@@ -53,6 +53,20 @@ void StemSlash::draw(mu::draw::Painter* painter) const
     painter->drawLine(m_line);
 }
 
+<<<<<<< HEAD
+=======
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void StemSlash::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 KerningType StemSlash::doComputeKerningType(const EngravingItem* nextItem) const
 {
     if (!this->chord() || !this->chord()->beam() || !nextItem || !nextItem->parentItem()) {

@@ -339,6 +339,20 @@ void Rest::updateSymbol(int line, int lines)
     m_sym = getSymbol(durationType().type(), line, lines);
 }
 
+<<<<<<< HEAD
+=======
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Rest::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 double Rest::symWidthNoLedgerLines() const
 {
     if (m_sym == SymId::restHalfLegerLine) {

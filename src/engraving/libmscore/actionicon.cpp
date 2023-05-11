@@ -76,6 +76,16 @@ void ActionIcon::setFontSize(double size)
     m_iconFont.setPointSizeF(size);
 }
 
+<<<<<<< HEAD
+=======
+void ActionIcon::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 void ActionIcon::draw(Painter* painter) const
 {
     TRACE_ITEM_DRAW;

@@ -60,6 +60,16 @@ PropertyValue Expression::propertyDefault(Pid id) const
     }
 }
 
+<<<<<<< HEAD
+=======
+void Expression::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 double Expression::computeDynamicExpressionDistance() const
 {
     if (!_snappedDynamic) {

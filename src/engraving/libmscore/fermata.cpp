@@ -141,6 +141,22 @@ Page* Fermata::page() const
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
+=======
+//   layout
+//    height() and width() should return sensible
+//    values when calling this method
+//---------------------------------------------------------
+
+void Fermata::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+//---------------------------------------------------------
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 //   dragAnchorLines
 //---------------------------------------------------------
 

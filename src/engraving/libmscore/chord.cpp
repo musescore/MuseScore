@@ -1930,6 +1930,20 @@ mu::PointF Chord::pagePos() const
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
+=======
+//   layout
+//---------------------------------------------------------
+
+void Chord::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+//---------------------------------------------------------
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 //   scanElements
 //---------------------------------------------------------
 
@@ -3263,6 +3277,16 @@ void Chord::computeKerningExceptions()
 GraceNotesGroup::GraceNotesGroup(Chord* c)
     : EngravingItem(ElementType::GRACE_NOTES_GROUP, c), _parent(c) {}
 
+<<<<<<< HEAD
+=======
+void GraceNotesGroup::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 void GraceNotesGroup::setPos(double x, double y)
 {
     doSetPos(x, y);

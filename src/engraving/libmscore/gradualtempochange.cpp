@@ -301,6 +301,16 @@ Sid GradualTempoChangeSegment::getPropertyStyle(Pid id) const
     return TextLineBaseSegment::getPropertyStyle(id);
 }
 
+<<<<<<< HEAD
+=======
+void GradualTempoChangeSegment::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 void GradualTempoChangeSegment::endEdit(EditData& editData)
 {
     IF_ASSERT_FAILED(tempoChange()) {

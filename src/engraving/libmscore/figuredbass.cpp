@@ -448,6 +448,22 @@ String FiguredBassItem::normalizedText() const
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
+=======
+//   FiguredBassItem layout()
+//    creates the display text (set as element text) and computes
+//    the horiz. offset needed to align the right part as well as the vert. offset
+//---------------------------------------------------------
+
+void FiguredBassItem::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+//---------------------------------------------------------
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 //   FiguredBassItem draw()
 //---------------------------------------------------------
 
@@ -799,6 +815,7 @@ Sid FiguredBass::getPropertyStyle(Pid id) const
 
 void FiguredBass::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

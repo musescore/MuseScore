@@ -230,6 +230,20 @@ Page* Articulation::page() const
     return toPage(s ? s->explicitParent() : 0);
 }
 
+<<<<<<< HEAD
+=======
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Articulation::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 bool Articulation::isHiddenOnTabStaff() const
 {
     if (m_showOnTabStyles.first == Sid::NOSTYLE || m_showOnTabStyles.second == Sid::NOSTYLE) {

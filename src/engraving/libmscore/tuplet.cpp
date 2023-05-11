@@ -178,6 +178,20 @@ void Tuplet::resetNumberProperty(Text* number)
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
+=======
+//   layout
+//---------------------------------------------------------
+
+void Tuplet::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    TupletLayout::layout(this, ctx);
+}
+
+//---------------------------------------------------------
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 //   calcHasBracket
 //---------------------------------------------------------
 

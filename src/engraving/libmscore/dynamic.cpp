@@ -233,6 +233,20 @@ bool Dynamic::isVelocityChangeAvailable() const
     }
 }
 
+<<<<<<< HEAD
+=======
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Dynamic::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 double Dynamic::customTextOffset()
 {
     if (!_centerOnNotehead || _dynamicType == DynamicType::OTHER) {

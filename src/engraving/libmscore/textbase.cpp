@@ -1878,6 +1878,7 @@ void TextBase::prepareFormat(const String& token, TextCursor& cursor)
 
 void TextBase::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layoutTextBase(this, ctx);
 }

@@ -116,6 +116,20 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
+=======
+//   layout
+//---------------------------------------------------------
+
+void MeasureRepeat::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+//---------------------------------------------------------
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 //   numberRect
 ///   returns the measure repeat number's bounding rectangle
 //---------------------------------------------------------

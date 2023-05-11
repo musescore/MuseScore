@@ -48,3 +48,17 @@ void DeadSlapped::draw(mu::draw::Painter* painter) const
     painter->drawPath(m_path1);
     painter->drawPath(m_path2);
 }
+<<<<<<< HEAD
+=======
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void DeadSlapped::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout

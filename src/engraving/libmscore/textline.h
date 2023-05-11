@@ -45,6 +45,10 @@ public:
     virtual EngravingItem* propertyDelegate(Pid) override;
 
     TextLine* textLine() const { return toTextLine(spanner()); }
+<<<<<<< HEAD
+=======
+    void layout() override;
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 
 private:
     Sid getTextLinePos(bool above) const;

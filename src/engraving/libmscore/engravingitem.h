@@ -410,6 +410,10 @@ public:
     virtual void removed() {}
     virtual void change(EngravingItem* o, EngravingItem* n);
 
+<<<<<<< HEAD
+=======
+    virtual void layout() { UNREACHABLE; }
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
     virtual void spatiumChanged(double /*oldValue*/, double /*newValue*/);
     virtual void localSpatiumChanged(double /*oldValue*/, double /*newValue*/);
 

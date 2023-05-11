@@ -1162,7 +1162,26 @@ SpannerSegment* SLine::layoutSystem(System* system)
     }
     break;
     }
+<<<<<<< HEAD
 
+=======
+
+    LayoutContext ctx(score());
+    v0::TLayout::layout(lineSegm, ctx);
+
+    return lineSegm;
+}
+
+//---------------------------------------------------------
+//   layout
+//    compute segments from tick1 tick2
+//    (used for palette, edit mode, and layout of note lines and glissandi)
+//---------------------------------------------------------
+
+void SLine::layout()
+{
+    UNREACHABLE;
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
     LayoutContext ctx(score());
     v0::TLayout::layout(lineSegm, ctx);
 

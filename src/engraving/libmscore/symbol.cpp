@@ -78,6 +78,22 @@ String Symbol::accessibleInfo() const
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
+=======
+//   layout
+//    height() and width() should return sensible
+//    values when calling this method
+//---------------------------------------------------------
+
+void Symbol::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+//---------------------------------------------------------
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 //   Symbol::draw
 //---------------------------------------------------------
 
@@ -180,6 +196,16 @@ void FSymbol::draw(mu::draw::Painter* painter) const
     painter->drawText(PointF(0, 0), toString());
 }
 
+<<<<<<< HEAD
+=======
+void FSymbol::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 //---------------------------------------------------------
 //   setFont
 //---------------------------------------------------------

@@ -74,6 +74,20 @@ GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
+=======
+//   layout
+//---------------------------------------------------------
+
+void GlissandoSegment::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+//---------------------------------------------------------
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 //   draw
 //---------------------------------------------------------
 
@@ -220,6 +234,20 @@ LineSegment* Glissando::createLineSegment(System* parent)
     return seg;
 }
 
+<<<<<<< HEAD
+=======
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Glissando::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 void Glissando::addLineAttachPoints()
 {
     auto seg = toGlissandoSegment(frontSegment());

@@ -272,6 +272,21 @@ void Beam::move(const PointF& offset)
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
+=======
+//   layout
+//   TODO - document what this function does
+//---------------------------------------------------------
+
+void Beam::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+//---------------------------------------------------------
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 //   layoutIfNeed
 //   check to see if the layout info is valid, and if not, layout
 //---------------------------------------------------------

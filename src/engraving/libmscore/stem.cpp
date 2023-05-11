@@ -67,6 +67,16 @@ bool Stem::up() const
     return chord() ? chord()->up() : true;
 }
 
+<<<<<<< HEAD
+=======
+void Stem::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 void Stem::setBaseLength(Millimetre baseLength)
 {
     m_baseLength = Millimetre(std::abs(baseLength.val()));

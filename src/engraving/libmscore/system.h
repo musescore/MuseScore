@@ -157,7 +157,11 @@ public:
 
     void addBrackets(const LayoutContext& ctx, Measure* measure);
 
+<<<<<<< HEAD
     void layout2(LayoutContext& ctx); ///< Called after Measure layout.
+=======
+    void layout2(LayoutContext &ctx); ///< Called after Measure layout.
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
     void restoreLayout2();
     void clear(); ///< Clear measure list.
 

@@ -140,6 +140,21 @@ double BagpipeEmbellishment::mag() const
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
+=======
+//   layout
+//      calculate and set bounding box
+//---------------------------------------------------------
+
+void BagpipeEmbellishment::layout()
+{
+    UNREACHABLE;
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+}
+
+//---------------------------------------------------------
+>>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 //   drawBeams
 //      draw the beams
 //      x1,y is one side of the top beam
