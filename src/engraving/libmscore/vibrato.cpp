@@ -105,6 +105,7 @@ void VibratoSegment::symbolLine(SymId start, SymId fill, SymId end)
 
 void VibratoSegment::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -161,6 +162,7 @@ Vibrato::~Vibrato()
 
 void Vibrato::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

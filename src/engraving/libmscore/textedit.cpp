@@ -29,6 +29,8 @@
 #include "types/symnames.h"
 #include "lyrics.h"
 
+#include "layout/tlayout.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -99,7 +101,8 @@ void TextBase::startEdit(EditData& ed)
     ted->startUndoIdx = score()->undoStack()->getCurIdx();
 
     if (layoutInvalid) {
-        layout();
+        LayoutContext ctx(score());
+        v0::TLayout::layout(this, ctx);
     }
     if (!ted->cursor()->set(ed.startMove)) {
         resetFormatting();
@@ -193,7 +196,8 @@ void TextBase::endEdit(EditData& ed)
             Lyrics* prev = prevLyrics(toLyrics(this));
             if (prev) {
                 prev->setRemoveInvalidSegments();
-                prev->layout();
+                LayoutContext ctx(score());
+                v0::TLayout::layout(prev, ctx);
             }
         }
         return;

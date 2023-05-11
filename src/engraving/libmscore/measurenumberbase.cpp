@@ -107,6 +107,7 @@ PropertyValue MeasureNumberBase::propertyDefault(Pid id) const
 
 void MeasureNumberBase::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layoutMeasureNumberBase(this, ctx);
 }

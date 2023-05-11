@@ -278,6 +278,7 @@ void Beam::move(const PointF& offset)
 
 void Beam::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -290,7 +291,8 @@ void Beam::layout()
 void Beam::layoutIfNeed()
 {
     if (!_layoutInfo.isValid()) {
-        layout();
+        LayoutContext ctx(score());
+        v0::TLayout::layout(this, ctx);
     }
 }
 

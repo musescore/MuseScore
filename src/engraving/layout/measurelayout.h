@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTMEASURE_H
-#define MU_ENGRAVING_LAYOUTMEASURE_H
+#ifndef MU_ENGRAVING_MEASURELAYOUT_H
+#define MU_ENGRAVING_MEASURELAYOUT_H
 
 #include "layoutoptions.h"
 
@@ -30,13 +30,15 @@ class MeasureBase;
 class Score;
 
 class LayoutContext;
-class LayoutMeasure
+class MeasureLayout
 {
 public:
-    LayoutMeasure() = default;
+    MeasureLayout() = default;
 
-    static void getNextMeasure(const LayoutOptions& options, LayoutContext& lc);
-    static void computePreSpacingItems(Measure* m);
+    static void layout2(Measure* item, LayoutContext& ctx);
+
+    static void getNextMeasure(const LayoutOptions& options, LayoutContext& ctx);
+    static void computePreSpacingItems(Measure* m, LayoutContext& ctx);
 
 private:
 
@@ -46,4 +48,4 @@ private:
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUTMEASURE_H
+#endif // MU_ENGRAVING_MEASURELAYOUT_H

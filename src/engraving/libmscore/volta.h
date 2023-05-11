@@ -38,6 +38,8 @@ class Measure;
 class VoltaSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, VoltaSegment)
+    DECLARE_CLASSOF(ElementType::VOLTA_SEGMENT)
+
 public:
     VoltaSegment(Volta*, System* parent);
 

@@ -47,9 +47,9 @@ public:
     static bool notTopBeam(ChordRest* cr);
     static void createBeams(Score* score, LayoutContext& lc, Measure* measure);
     static void restoreBeams(Measure* m);
-    static void breakCrossMeasureBeams(LayoutContext& ctx, Measure* measure);
-    static void layoutNonCrossBeams(Segment* s);
-    static void verticalAdjustBeamedRests(Rest* rest, Beam* beam);
+    static void breakCrossMeasureBeams(Measure* measure, LayoutContext& ctx);
+    static void layoutNonCrossBeams(Segment* s, LayoutContext& ctx);
+    static void verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext& ctx);
 
 private:
     static void beamGraceNotes(Score* score, Chord* mainNote, bool after);

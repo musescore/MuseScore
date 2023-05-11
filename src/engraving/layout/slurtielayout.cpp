@@ -35,9 +35,12 @@
 #include "libmscore/fretcircle.h"
 #include "libmscore/tie.h"
 
-using namespace mu::engraving;
+#include "tlayout.h"
 
-void SlurTieLayout::layout(Slur* item, LayoutContext&)
+using namespace mu::engraving;
+using namespace mu::engraving::v0;
+
+void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
 {
     if (item->track2() == mu::nidx) {
         item->setTrack2(item->track());
@@ -119,7 +122,7 @@ void SlurTieLayout::layout(Slur* item, LayoutContext&)
     }
 
     SlurPos sPos;
-    slurPos(item, &sPos);
+    slurPos(item, &sPos, ctx);
 
     const std::vector<System*>& sl = item->score()->systems();
     ciSystem is = sl.begin();
@@ -193,7 +196,7 @@ void SlurTieLayout::layout(Slur* item, LayoutContext&)
     item->setbbox(item->spannerSegments().empty() ? RectF() : item->frontSegment()->bbox());
 }
 
-SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system)
+SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutContext& ctx)
 {
     const double horizontalTieClearance = 0.35 * item->spatium();
     const double tieClearance = 0.65 * item->spatium();
@@ -242,7 +245,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system)
     slurSegment->setSpannerSegmentType(sst);
 
     SlurPos sPos;
-    slurPos(item, &sPos);
+    slurPos(item, &sPos, ctx);
     PointF p1, p2;
     // adjust for ties
     p1 = sPos.p1;
@@ -462,7 +465,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system)
 //    relative to System() position
 //---------------------------------------------------------
 
-void SlurTieLayout::slurPos(Slur* item, SlurPos* sp)
+void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
 {
     item->_stemFloated.reset();
     double _spatium = (item->staffType() ? item->staffType()->lineDistance().val() : 1.0) * item->spatium();
@@ -684,7 +687,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp)
         if (stem1 || (trem && trem->twoNotes())) {     //sc not null
             Beam* beam1 = sc->beam();
             if (beam1 && (beam1->elements().back() != sc) && (sc->up() == item->_up)) {
-                beam1->layout();
+                TLayout::layout(beam1, ctx);
                 // start chord is beamed but not the last chord of beam group
                 // and slur direction is same as start chord (stem side)
 
@@ -706,7 +709,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp)
                 // if start and end chords have same stem direction
                 stemPos = true;
             } else if (trem && trem->twoNotes() && trem->chord2() != sc && sc->up() == item->_up) {
-                trem->layout();
+                TLayout::layout(trem, ctx);
                 Note* note = item->_up ? sc->upNote() : sc->downNote();
                 double stemHeight = stem1 ? stem1->length() : trem->defaultStemLengthStart();
                 double offset = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
@@ -828,10 +831,10 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp)
                     || (trem && trem->twoNotes() && ec->up() == item->up())
                     ) {
                     if (beam2) {
-                        beam2->layout();
+                        TLayout::layout(beam2, ctx);
                     }
                     if (trem) {
-                        trem->layout();
+                        TLayout::layout(trem, ctx);
                     }
                     // slur start was laid out to stem and start and end have same direction
                     // OR

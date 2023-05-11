@@ -59,6 +59,7 @@ void StemSlash::draw(mu::draw::Painter* painter) const
 
 void StemSlash::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

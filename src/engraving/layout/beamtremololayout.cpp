@@ -29,10 +29,13 @@
 #include "../libmscore/stemslash.h"
 #include "../libmscore/tremolo.h"
 
+#include "tlayout.h"
+
 #include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::v0;
 
 namespace mu::engraving {
 constexpr std::array _maxSlopes = { 0, 1, 2, 3, 4, 5, 6, 7 };
@@ -227,7 +230,8 @@ void BeamTremoloLayout::extendStem(Chord* chord, double addition)
         chord->setBeamExtension(desiredY - anchor.y() + addition);
     }
     if (chord->stemSlash()) {
-        chord->stemSlash()->layout();
+        LayoutContext ctx(chord->stemSlash()->score());
+        TLayout::layout(chord->stemSlash(), ctx);
     }
 }
 

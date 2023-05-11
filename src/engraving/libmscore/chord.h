@@ -219,8 +219,6 @@ public:
 
     void layoutStem();
     void layoutArpeggio2();
-    void layoutSpanners();
-    void layoutSpanners(System* system, const Fraction& stick);
 
     std::vector<Note*>& notes() { return _notes; }
     const std::vector<Note*>& notes() const { return _notes; }
@@ -306,10 +304,6 @@ public:
     void setNoteEventLists(std::vector<NoteEventList>& nel);
 
     TremoloChordType tremoloChordType() const;
-
-    void layoutArticulations();
-    void layoutArticulations2(bool layoutOnCrossBeamSide = false);
-    void layoutArticulations3(Slur* s);
 
     std::vector<Articulation*>& articulations() { return _articulations; }
     const std::vector<Articulation*>& articulations() const { return _articulations; }

@@ -62,10 +62,13 @@
 #include "accessibility/accessibleitem.h"
 #endif
 
+#include "layout/tlayout.h"
+
 #include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::v0;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -279,8 +282,9 @@ double System::instrumentNamesWidth(const bool isFirstSystem)
             continue;
         }
 
+        LayoutContext ctx(score());
         for (InstrumentName* name : staff->instrumentNames) {
-            name->layout();
+            TLayout::layout(name, ctx);
             namesWidth = std::max(namesWidth, name->width());
         }
     }
@@ -399,7 +403,7 @@ double System::totalBracketOffset(LayoutContext& ctx)
                 Bracket* dummyBr = Factory::createBracket(ctx.score()->dummy(), /*isAccessibleEnabled=*/ false);
                 dummyBr->setBracketItem(bi);
                 dummyBr->setStaffSpan(firstStaff, lastStaff);
-                dummyBr->layout();
+                TLayout::layout(dummyBr, ctx);
                 for (staff_idx_t stfIdx = firstStaff; stfIdx <= lastStaff; ++stfIdx) {
                     bracketWidth[stfIdx] += dummyBr->width();
                 }
@@ -511,7 +515,7 @@ void System::layoutSystem(LayoutContext& ctx, double xo1, const bool isFirstSyst
 
     for (SysStaff* s : _staves) {
         for (InstrumentName* t : s->instrumentNames) {
-            t->layout();
+            TLayout::layout(t, ctx);
 
             switch (t->align().horizontal) {
             case AlignH::LEFT:
@@ -554,7 +558,8 @@ void System::setMeasureHeight(double height)
             m->bbox().setRect(0.0, 0.0, m->width(), height);
             toHBox(m)->layout2();
         } else if (m->isTBox()) {
-            toTBox(m)->layout();
+            LayoutContext ctx(score());
+            TLayout::layout(toTBox(m), ctx);
         } else {
             LOGD("unhandled measure type %s", m->typeName());
         }
@@ -567,6 +572,7 @@ void System::setMeasureHeight(double height)
 
 void System::layoutBracketsVertical()
 {
+    LayoutContext ctx(score());
     for (Bracket* b : _brackets) {
         int staffIdx1 = static_cast<int>(b->firstStaff());
         int staffIdx2 = static_cast<int>(b->lastStaff());
@@ -593,7 +599,7 @@ void System::layoutBracketsVertical()
         }
         b->setPosY(sy);
         b->setHeight(ey - sy);
-        b->layout();
+        TLayout::layout(b, ctx);
     }
 }
 
@@ -879,11 +885,11 @@ staff_idx_t System::firstVisibleStaff() const
 //    adjusts staff distance
 //---------------------------------------------------------
 
-void System::layout2(const LayoutContext& ctx)
+void System::layout2(LayoutContext& ctx)
 {
     Box* vb = vbox();
     if (vb) {
-        vb->layout();
+        TLayout::layout(vb, ctx);
         setbbox(vb->bbox());
         return;
     }

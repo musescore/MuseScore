@@ -81,6 +81,7 @@ void NoteDot::draw(mu::draw::Painter* painter) const
 
 void NoteDot::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

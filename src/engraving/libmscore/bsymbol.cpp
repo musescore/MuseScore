@@ -143,6 +143,7 @@ EngravingItem* BSymbol::drop(EditData& data)
 
 void BSymbol::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layoutBaseSymbol(this, ctx);
 }

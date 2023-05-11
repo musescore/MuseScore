@@ -79,6 +79,7 @@ class Ottava;
 class OttavaSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, OttavaSegment)
+    DECLARE_CLASSOF(ElementType::OTTAVA_SEGMENT)
 
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     Sid getPropertyStyle(Pid) const override;

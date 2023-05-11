@@ -74,6 +74,7 @@ PalmMuteSegment::PalmMuteSegment(PalmMute* sp, System* parent)
 
 void PalmMuteSegment::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

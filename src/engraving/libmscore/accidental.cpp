@@ -333,6 +333,7 @@ void Accidental::setSubtype(const AsciiStringView& tag)
 
 void Accidental::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

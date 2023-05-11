@@ -71,6 +71,7 @@ void LyricsLine::styleChanged()
 
 void LyricsLine::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -81,6 +82,8 @@ void LyricsLine::layout()
 
 SpannerSegment* LyricsLine::layoutSystem(System* system)
 {
+    LayoutContext ctx(score());
+
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
@@ -90,12 +93,13 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
 
     SpannerSegmentType sst;
     if (tick() >= stick) {
-        layout();
+        v0::TLayout::layout(this, ctx);
         if (ticks().isZero() && isEndMelisma()) { // only do layout if some time span
             // dash lines still need to be laid out, though
             return nullptr;
         }
-        SLine::layout();
+
+        v0::TLayout::layoutLine(this, ctx);
         //
         // this is the first call to layoutSystem,
         // processing the first line segment
@@ -153,7 +157,9 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
     }
     break;
     }
-    lineSegm->layout();
+
+    v0::TLayout::layout(lineSegm, ctx);
+
     // if temp melisma extend the first line segment to be
     // after the lyrics syllable (otherwise the melisma segment
     // will be too short).
@@ -237,6 +243,7 @@ LyricsLineSegment::LyricsLineSegment(LyricsLine* sp, System* parent)
 
 void LyricsLineSegment::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

@@ -171,7 +171,10 @@ mu::RectF Rest::drag(EditData& ed)
         s.rx() = xDragRange * (s.x() < 0 ? -1.0 : 1.0);
     }
     setOffset(PointF(s.x(), s.y()));
-    layout();
+
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
+
     score()->rebuildBspTree();
     return abbox().united(r);
 }
@@ -342,6 +345,7 @@ void Rest::updateSymbol(int line, int lines)
 
 void Rest::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -900,7 +904,10 @@ bool Rest::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::OFFSET:
         score()->addRefresh(canvasBoundingRect());
         setOffset(v.value<PointF>());
-        layout();
+        {
+            LayoutContext ctx(score());
+            v0::TLayout::layout(this, ctx);
+        }
         score()->addRefresh(canvasBoundingRect());
         if (measure() && durationType().type() == DurationType::V_MEASURE) {
             measure()->triggerLayout();

@@ -43,6 +43,8 @@ enum class GlissandoType;
 class GlissandoSegment final : public LineSegment
 {
     OBJECT_ALLOCATOR(engraving, GlissandoSegment)
+    DECLARE_CLASSOF(ElementType::GLISSANDO_SEGMENT)
+
 public:
     GlissandoSegment(Glissando* sp, System* parent);
 

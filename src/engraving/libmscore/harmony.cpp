@@ -1254,6 +1254,7 @@ const ChordDescription* Harmony::generateDescription()
 
 void Harmony::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

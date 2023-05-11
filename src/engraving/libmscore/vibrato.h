@@ -35,6 +35,7 @@ class Vibrato;
 class VibratoSegment final : public LineSegment
 {
     OBJECT_ALLOCATOR(engraving, VibratoSegment)
+    DECLARE_CLASSOF(ElementType::VIBRATO_SEGMENT)
 
 public:
     VibratoSegment(Vibrato* sp, System* parent);

@@ -45,6 +45,7 @@ enum class HairpinType : signed char {
 class HairpinSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, HairpinSegment)
+    DECLARE_CLASSOF(ElementType::HAIRPIN_SEGMENT)
 
 public:
     HairpinSegment(Hairpin* sp, System* parent);

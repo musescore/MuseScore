@@ -27,6 +27,7 @@
 #include "translation.h"
 
 #include "types/typesconv.h"
+#include "layout/tlayout.h"
 
 #include "accidental.h"
 #include "barline.h"
@@ -2301,7 +2302,9 @@ void Segment::createShape(staff_idx_t staffIdx)
 
         if (e->isHarmony()) {
             // use same spacing calculation as for chordrest
-            toHarmony(e)->layout();
+            LayoutContext ctx(score());
+            v0::TLayout::layout(toHarmony(e), ctx);
+
             double x1 = e->bbox().x() + e->pos().x();
             double x2 = e->bbox().x() + e->bbox().width() + e->pos().x();
             s.addHorizontalSpacing(e, x1, x2);

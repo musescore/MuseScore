@@ -827,6 +827,7 @@ TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
 
 void TabDurationSymbol::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

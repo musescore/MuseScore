@@ -25,6 +25,8 @@
 
 #include <gtest/gtest.h>
 
+#include "layout/tlayout.h"
+
 #include "libmscore/chordrest.h"
 #include "libmscore/dynamic.h"
 #include "libmscore/masterscore.h"
@@ -138,7 +140,8 @@ TEST_F(Engraving_TextBaseTests, undoChangeFontStyleProperty)
     MasterScore* score = ScoreRW::readScore(u"test.mscx");
     StaffText* staffText = addStaffText(score);
     staffText->setXmlText(u"normal <b>bold</b> <u>underline</u> <i>italic</i>");
-    staffText->layout();
+    LayoutContext lctx(score);
+    v0::TLayout::layout(staffText, lctx);
     score->startCmd();
     staffText->undoChangeProperty(Pid::FONT_STYLE, PropertyValue::fromValue(0), PropertyFlags::UNSTYLED);
     score->endCmd();
@@ -176,7 +179,8 @@ TEST_F(Engraving_TextBaseTests, musicalSymbolsNotBold)
     MasterScore* score = ScoreRW::readScore(u"test.mscx");
     StaffText* staffText = addStaffText(score);
     staffText->setXmlText(u"<b>Allegro <sym>metNoteQuarterUp</sym> = 120</b>");
-    staffText->layout();
+    LayoutContext lctx(score);
+    v0::TLayout::layout(staffText, lctx);
     auto fragmentList = staffText->fragmentList();
     EXPECT_TRUE(fragmentList.front().font(staffText).bold());
     EXPECT_TRUE(!std::next(fragmentList.begin())->font(staffText).bold());
@@ -187,7 +191,8 @@ TEST_F(Engraving_TextBaseTests, musicalSymbolsNotItalic)
     MasterScore* score = ScoreRW::readScore(u"test.mscx");
     Dynamic* dynamic = addDynamic(score);
     dynamic->setXmlText(u"molto <sym>dynamicForte</sym>");
-    dynamic->layout();
+    LayoutContext lctx(score);
+    v0::TLayout::layout(dynamic, lctx);
     auto fragmentList = dynamic->fragmentList();
     EXPECT_TRUE(fragmentList.front().font(dynamic).italic());
     EXPECT_TRUE(!std::next(fragmentList.begin())->font(dynamic).italic());

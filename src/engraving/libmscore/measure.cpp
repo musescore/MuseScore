@@ -87,10 +87,14 @@
 #include "accessibility/accessibleitem.h"
 #endif
 
+#include "layout/tlayout.h"
+#include "layout/chordlayout.h"
+
 #include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::v0;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -230,6 +234,7 @@ Measure::Measure(const Measure& m)
 
 void Measure::layoutStaffLines()
 {
+    LayoutContext ctx(score());
     int staffIdx = 0;
     for (MStaff* ms : m_mstaves) {
         if (isCutawayClef(staffIdx) && (score()->staff(staffIdx)->cutaway() || !visible(staffIdx))) {
@@ -241,7 +246,7 @@ void Measure::layoutStaffLines()
             ms->lines()->layoutPartialWidth(width(), partialWidth / (spatium() * staffMag), true);
         } else {
             // normal staff lines
-            ms->lines()->layout();
+            TLayout::layout(ms->lines(), ctx);
         }
         staffIdx += 1;
     }
@@ -611,6 +616,7 @@ bool Measure::showsMeasureNumber()
 
 void Measure::layoutMeasureNumber()
 {
+    LayoutContext ctx(score());
     bool smn = showsMeasureNumber();
 
     String s;
@@ -645,7 +651,7 @@ void Measure::layoutMeasureNumber()
                 add(t);
             }
             t->setXmlText(s);
-            t->layout();
+            TLayout::layout(t, ctx);
         } else {
             if (t) {
                 if (t->generated()) {
@@ -660,6 +666,7 @@ void Measure::layoutMeasureNumber()
 
 void Measure::layoutMMRestRange()
 {
+    LayoutContext ctx(score());
     if (!isMMRest() || !score()->styleB(Sid::mmRestShowMeasureNumberRange)) {
         // Remove existing
         for (unsigned staffIdx = 0; staffIdx < m_mstaves.size(); ++staffIdx) {
@@ -699,68 +706,8 @@ void Measure::layoutMMRestRange()
         }
         // setXmlText is reimplemented to take care of brackets
         rr->setXmlText(s);
-        rr->layout();
+        TLayout::layout(rr, ctx);
     }
-}
-
-//---------------------------------------------------------
-//   layout2
-//    called after layout of page
-//---------------------------------------------------------
-
-void Measure::layout2()
-{
-    assert(explicitParent());
-    assert(score()->nstaves() == m_mstaves.size());
-
-    double _spatium = spatium();
-
-    for (size_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-        MStaff* ms = m_mstaves[staffIdx];
-        Spacer* sp = ms->vspacerDown();
-        if (sp) {
-            sp->layout();
-            Staff* staff = score()->staff(staffIdx);
-            int n = staff->lines(tick()) - 1;
-            double y = system()->staff(staffIdx)->y();
-            sp->setPos(_spatium * .5, y + n * _spatium * staff->staffMag(tick()));
-        }
-        sp = ms->vspacerUp();
-        if (sp) {
-            sp->layout();
-            double y = system()->staff(staffIdx)->y();
-            sp->setPos(_spatium * .5, y - sp->gap());
-        }
-    }
-
-    MeasureBase::layout();    // layout LAYOUT_BREAK elements
-
-    //---------------------------------------------------
-    //    layout ties
-    //---------------------------------------------------
-
-    Fraction stick = system()->measures().front()->tick();
-    size_t tracks = score()->ntracks();
-    static const SegmentType st { SegmentType::ChordRest };
-    for (track_idx_t track = 0; track < tracks; ++track) {
-        if (!score()->staff(track / VOICES)->show()) {
-            track += VOICES - 1;
-            continue;
-        }
-        for (Segment* seg = first(st); seg; seg = seg->next(st)) {
-            ChordRest* cr = seg->cr(track);
-            if (!cr) {
-                continue;
-            }
-
-            if (cr->isChord()) {
-                Chord* c = toChord(cr);
-                c->layoutSpanners(system(), stick);
-            }
-        }
-    }
-
-    layoutCrossStaff();
 }
 
 //---------------------------------------------------------
@@ -1589,7 +1536,10 @@ EngravingItem* Measure::drop(EditData& data)
     case ElementType::SYMBOL:
         e->setParent(seg);
         e->setTrack(staffIdx * VOICES);
-        e->layout();
+        {
+            LayoutContext ctx(score());
+            TLayout::layoutItem(e, ctx);
+        }
         {
             PointF uo(data.pos - e->canvasPos() - data.dragOffset);
             e->setOffset(uo);
@@ -3184,6 +3134,8 @@ String Measure::accessibleInfo() const
 
 void Measure::layoutMeasureElements()
 {
+    LayoutContext ctx(score());
+
     //---------------------------------------------------
     //    layout individual elements
     //---------------------------------------------------
@@ -3237,7 +3189,7 @@ void Measure::layoutMeasureElements()
                         w = x2 - x1 - d;
                     }
                     mmrest->setWidth(w);
-                    mmrest->layout();
+                    TLayout::layout(mmrest, ctx);
                     mmrest->setPosX(headerException ? (x1 - s.x()) : (x1 - s.x() + d));
                 } else if (e->isMeasureRepeat() && !(toMeasureRepeat(e)->numMeasures() % 2)) {
                     // two- or four-measure repeat, center on following barline
@@ -3245,7 +3197,7 @@ void Measure::layoutMeasureElements()
                     e->setPosX(measureWidth - .5 * e->width());
                 } else {
                     // full measure rest or one-measure repeat, center within this measure
-                    e->layout();
+                    TLayout::layoutItem(e, ctx);
                     e->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->bbox().x());
                 }
                 s.createShape(staffIdx);            // DEBUG
@@ -3258,7 +3210,7 @@ void Measure::layoutMeasureElements()
                     Chord* c1 = tr->chord1();
                     Chord* c2 = tr->chord2();
                     if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
-                        tr->layout();
+                        TLayout::layout(tr, ctx);
                     }
                 }
                 for (Chord* g : c->graceNotes()) {
@@ -3267,7 +3219,7 @@ void Measure::layoutMeasureElements()
                         Chord* c1 = tr->chord1();
                         Chord* c2 = tr->chord2();
                         if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
-                            tr->layout();
+                            TLayout::layout(tr, ctx);
                         }
                     }
                 }
@@ -3461,7 +3413,8 @@ void Measure::barLinesSetSpan(Segment* seg)
             bl->setSpanStaff(staff->barLineSpan());
             bl->setSpanFrom(staff->barLineFrom());
             bl->setSpanTo(staff->barLineTo());
-            bl->layout();
+            LayoutContext ctx(score());
+            TLayout::layout(bl, ctx);
             score()->addElement(bl);
         }
         track += VOICES;
@@ -3476,6 +3429,7 @@ void Measure::barLinesSetSpan(Segment* seg)
 
 double Measure::createEndBarLines(bool isLastMeasureInSystem)
 {
+    LayoutContext ctx(score());
     size_t nstaves  = score()->nstaves();
     Segment* seg = findSegmentR(SegmentType::EndBarLine, ticks());
     Measure* nm  = nextMeasure();
@@ -3571,7 +3525,8 @@ double Measure::createEndBarLines(bool isLastMeasureInSystem)
                     }
                 }
             }
-            bl->layout();
+
+            TLayout::layout(bl, ctx);
             blw = std::max(blw, bl->width());
         }
         // right align within segment
@@ -3613,7 +3568,7 @@ double Measure::createEndBarLines(bool isLastMeasureInSystem)
                         visibleInt = 1;
                     }
                 } else {
-                    clef->layout();
+                    TLayout::layout(clef, ctx);
                     clefSeg->createShape(staffIdx);
                     visibleInt = 2;
                 }
@@ -3694,6 +3649,7 @@ double Measure::basicWidth() const
 
 void Measure::addSystemHeader(bool isFirstSystem)
 {
+    LayoutContext ctx(score());
     int staffIdx = 0;
     Segment* kSegment = findFirstR(SegmentType::KeySig, Fraction(0, 1));
     Segment* cSegment = findFirstR(SegmentType::HeaderClef, Fraction(0, 1));
@@ -3745,7 +3701,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                     clef->setClefType(cl);
                 }
                 clef->setSmall(false);
-                clef->layout();
+                TLayout::layout(clef, ctx);
             } else if (clef) {
                 clef->parentItem()->remove(clef);
                 if (clef->generated()) {
@@ -3810,7 +3766,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                 kSegment->add(keysig);
             }
             keysig->setKeySigEvent(keyIdx);
-            keysig->layout();
+            TLayout::layout(keysig, ctx);
             //kSegment->createShape(staffIdx);
             kSegment->setEnabled(true);
         } else if (kSegment && isPitchedStaff) {
@@ -3836,7 +3792,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                 EngravingItem* e = kSegment->element(track);
                 if (e && e->isKeySig()) {
                     KeySig* keysig = toKeySig(e);
-                    keysig->layout();
+                    TLayout::layout(keysig, ctx);
                 }
             }
         } else if (kSegment && !isPitchedStaff) {
@@ -3889,7 +3845,8 @@ void Measure::createSystemBeginBarLine()
                 bl->setParent(s);
                 bl->setBarLineType(BarLineType::NORMAL);
                 bl->setSpanStaff(true);
-                bl->layout();
+                LayoutContext ctx(score());
+                TLayout::layout(bl, ctx);
                 s->add(bl);
             }
         }
@@ -3908,6 +3865,7 @@ void Measure::createSystemBeginBarLine()
 
 void Measure::addSystemTrailer(Measure* nm)
 {
+    LayoutContext ctx(score());
     Fraction _rtick = ticks();
     bool isFinalMeasure = isFinalMeasureOfSection();
 
@@ -3955,7 +3913,7 @@ void Measure::addSystemTrailer(Measure* nm)
                         s->setTrailer(true);
                     }
                     ts->setFrom(nts);
-                    ts->layout();
+                    TLayout::layout(ts, ctx);
                     //s->createShape(track / VOICES);
                 }
                 s->createShapes();
@@ -4003,7 +3961,7 @@ void Measure::addSystemTrailer(Measure* nm)
                 //      score()->undo(new ChangeKeySig(ks, key2, ks->showCourtesy()));
                 //      }
                 ks->setKeySigEvent(key2);
-                ks->layout();
+                TLayout::layout(ks, ctx);
                 //s->createShape(track / VOICES);
                 s->setEnabled(true);
             } else { /// !staffIsPitchedAtNextMeas
@@ -4311,7 +4269,8 @@ void Measure::computeWidth(Fraction minTicks, Fraction maxTicks, double stretchC
         }
     }
 
-    ChordLayout::updateGraceNotes(this);
+    LayoutContext ctx(score());
+    ChordLayout::updateGraceNotes(this, ctx);
 
     x = computeFirstSegmentXPosition(s);
     bool isSystemHeader = s->header();
@@ -4532,6 +4491,8 @@ Fraction Measure::quantumOfSegmentCell() const
 
 void Measure::stretchMeasureInPracticeMode(double targetWidth)
 {
+    LayoutContext ctx(score());
+
     bbox().setWidth(targetWidth);
 
     //---------------------------------------------------
@@ -4646,7 +4607,7 @@ void Measure::stretchMeasureInPracticeMode(double targetWidth)
                     double w = x2 - x1 - 2 * d;
 
                     mmrest->setWidth(w);
-                    mmrest->layout();
+                    TLayout::layout(mmrest, ctx);
                     e->setPos(x1 - s.x() + d, e->staff()->height() * .5);   // center vertically in measure
                     s.createShape(staffIdx);
                 } else { // if (rest->isFullMeasureRest()) {
@@ -4665,7 +4626,7 @@ void Measure::stretchMeasureInPracticeMode(double targetWidth)
                     Chord* c1 = tr->chord1();
                     Chord* c2 = tr->chord2();
                     if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
-                        tr->layout();
+                        TLayout::layout(tr, ctx);
                     }
                 }
             } else if (t == ElementType::BAR_LINE) {

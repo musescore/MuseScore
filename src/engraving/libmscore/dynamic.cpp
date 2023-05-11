@@ -239,6 +239,7 @@ bool Dynamic::isVelocityChangeAvailable() const
 
 void Dynamic::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -256,7 +257,9 @@ double Dynamic::customTextOffset()
 
     Dynamic referenceDynamic(*this);
     referenceDynamic.setXmlText(referenceString);
-    toTextBase(&referenceDynamic)->layout();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(toTextBase(&referenceDynamic), ctx);
+
     TextFragment referenceFragment;
     if (!referenceDynamic.textBlockList().empty()) {
         TextBlock referenceBlock = referenceDynamic.textBlockList().front();
@@ -527,7 +530,8 @@ mu::RectF Dynamic::drag(EditData& ed)
             PointF pos1(canvasPos());
             score()->undo(new ChangeParent(this, seg, si));
             setOffset(PointF());
-            layout();
+            LayoutContext ctx(score());
+            v0::TLayout::layout(this, ctx);
             PointF pos2(canvasPos());
             const PointF newOffset = pos1 - pos2;
             setOffset(newOffset);

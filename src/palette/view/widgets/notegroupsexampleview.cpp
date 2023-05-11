@@ -26,6 +26,7 @@
 #include <QMimeData>
 
 #include "engraving/rw/400/tread.h"
+#include "engraving/layout/tlayout.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/engravingitem.h"
@@ -69,7 +70,8 @@ void NoteGroupsExampleView::dragEnterEvent(QDragEnterEvent* event)
         if (m_dragElement) {
             m_dragElement->resetExplicitParent();
             rw400::TRead::readItem(m_dragElement, e, *e.context());
-            m_dragElement->layout();
+            LayoutContext lctx(m_dragElement->score());
+            v0::TLayout::layoutItem(m_dragElement, lctx);
         }
         return;
     }

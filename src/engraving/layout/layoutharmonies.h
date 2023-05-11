@@ -24,6 +24,8 @@
 
 #include <vector>
 
+#include "layoutcontext.h"
+
 namespace mu::engraving {
 class Segment;
 class System;
@@ -32,7 +34,7 @@ class LayoutHarmonies
 {
 public:
 
-    static void layoutHarmonies(const std::vector<Segment*>& sl);
+    static void layoutHarmonies(const std::vector<Segment*>& sl, LayoutContext& ctx);
     static void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool harmony, const double maxShiftAbove,
                                const double maxShiftBelow);
 };
