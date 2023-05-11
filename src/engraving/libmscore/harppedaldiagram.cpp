@@ -101,8 +101,9 @@ HarpPedalDiagram::HarpPedalDiagram(Segment* parent)
 {
     initElementStyle(&harpPedalDiagramStyle);
     _pedalState
-        = std::array<PedalPosition, 7> { PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL,
-                                         PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL };
+        = std::array<PedalPosition, HARP_STRING_NO> { PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL,
+                                                      PedalPosition::NATURAL,
+                                                      PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL };
     setPlayablePitches();
 }
 
@@ -121,7 +122,7 @@ void HarpPedalDiagram::layout()
     autoplaceSegmentElement();
 }
 
-void HarpPedalDiagram::setPedalState(std::array<PedalPosition, 7> state)
+void HarpPedalDiagram::setPedalState(std::array<PedalPosition, HARP_STRING_NO> state)
 {
     _pedalState = state;
     setPlayablePitches();
@@ -174,10 +175,10 @@ String HarpPedalDiagram::createDiagramText()
         // find difference between pedal state of previous diagram and this one
         // if no previous, the pedals are "unset" meaning the whole diagram will be displayed
 
-        constexpr std::array<PedalPosition, 7> initState
+        constexpr std::array<PedalPosition, HARP_STRING_NO> initState
             = { PedalPosition::UNSET, PedalPosition::UNSET, PedalPosition::UNSET, PedalPosition::UNSET, PedalPosition::UNSET,
                 PedalPosition::UNSET, PedalPosition::UNSET };
-        std::array<PedalPosition, 7> prevState;
+        std::array<PedalPosition, HARP_STRING_NO> prevState;
         HarpPedalDiagram* prevDiagram = nullptr;
         if (part()) {
             prevDiagram = part()->prevHarpDiagram(segment()->tick());

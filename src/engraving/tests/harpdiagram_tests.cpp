@@ -100,7 +100,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams)
 
     // set first diagram all natural
     HarpPedalDiagram* diagram1 = Factory::createHarpPedalDiagram(s1);
-    std::array<PedalPosition, 7> pedalState
+    std::array<PedalPosition, HARP_STRING_NO> pedalState
         = { PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL,
             PedalPosition::NATURAL, PedalPosition::NATURAL };
     diagram1->setIsDiagram(false);
@@ -235,7 +235,7 @@ TEST_F(Engraving_HarpDiagramTests, testmap)
     HarpPedalDiagram* h1 = p->currentHarpDiagram(s2->tick());
 
     std::array<PedalPosition,
-               7> expState
+               HARP_STRING_NO> expState
         = { PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::FLAT, PedalPosition::FLAT, PedalPosition::NATURAL,
             PedalPosition::NATURAL, PedalPosition::NATURAL };
     EXPECT_EQ(expState, h1->getPedalState());

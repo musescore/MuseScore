@@ -23,16 +23,20 @@
 #define MU_NOTATION_ABSTRACTELEMENTPOPUPMODEL_H
 
 #include "async/asyncable.h"
+#include "actions/actionable.h"
+#include "actions/actiontypes.h"
+
 #include "context/iglobalcontext.h"
 #include "libmscore/engravingitem.h"
 #include "modularity/ioc.h"
 #include <QObject>
 
 namespace mu::notation {
-class AbstractElementPopupModel : public QObject, public async::Asyncable
+class AbstractElementPopupModel : public QObject, public async::Asyncable, public actions::Actionable
 {
     Q_OBJECT
 
+    INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)

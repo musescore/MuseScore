@@ -1562,10 +1562,10 @@ public:
 class ChangeHarpPedalState : public UndoCommand
 {
     HarpPedalDiagram* diagram;
-    std::array<PedalPosition, 7> pedalState;
+    std::array<PedalPosition, HARP_STRING_NO> pedalState;
 
 public:
-    ChangeHarpPedalState(HarpPedalDiagram* _diagram, std::array<PedalPosition, 7> _pedalState)
+    ChangeHarpPedalState(HarpPedalDiagram* _diagram, std::array<PedalPosition, HARP_STRING_NO> _pedalState)
         : diagram(_diagram), pedalState(_pedalState) {}
     void flip(EditData*) override;
     UNDO_NAME("ChangeHarpPedalState")

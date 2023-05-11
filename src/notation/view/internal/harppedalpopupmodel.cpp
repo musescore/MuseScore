@@ -36,9 +36,9 @@ HarpPedalPopupModel::HarpPedalPopupModel(QObject* parent)
     setPopupPedalState(m_diagram->getPedalState());
 }
 
-std::array<mu::engraving::PedalPosition, 7> HarpPedalPopupModel::getPopupPedalState()
+std::array<mu::engraving::PedalPosition, mu::engraving::HARP_STRING_NO> HarpPedalPopupModel::getPopupPedalState()
 {
-    std::array<mu::engraving::PedalPosition, 7> posArr;
+    std::array<mu::engraving::PedalPosition, mu::engraving::HARP_STRING_NO> posArr;
     for (int i = 0; i < 7; i++) {
         switch (m_pedalState.at(i)) {
         case HarpPedalPopupModel::Position::FLAT:
@@ -62,14 +62,14 @@ std::array<mu::engraving::PedalPosition, 7> HarpPedalPopupModel::getPopupPedalSt
     return posArr;
 }
 
-void HarpPedalPopupModel::setPopupPedalState(std::array<HarpPedalPopupModel::Position, 7> pos)
+void HarpPedalPopupModel::setPopupPedalState(std::array<HarpPedalPopupModel::Position, mu::engraving::HARP_STRING_NO> pos)
 {
     m_pedalState = pos;
 }
 
-void HarpPedalPopupModel::setPopupPedalState(std::array<mu::engraving::PedalPosition, 7> pos)
+void HarpPedalPopupModel::setPopupPedalState(std::array<mu::engraving::PedalPosition, mu::engraving::HARP_STRING_NO> pos)
 {
-    std::array<HarpPedalPopupModel::Position, 7> posArr;
+    std::array<HarpPedalPopupModel::Position, mu::engraving::HARP_STRING_NO> posArr;
     for (int i = 0; i < 7; i++) {
         switch (pos.at(i)) {
         case mu::engraving::PedalPosition::FLAT:
@@ -163,7 +163,7 @@ void HarpPedalPopupModel::setIsDiagram(bool isDiagram)
 
 void HarpPedalPopupModel::setDiagramPedalState(QVector<Position> pedalState)
 {
-    std::array<HarpPedalPopupModel::Position, 7> stdPedalState;
+    std::array<HarpPedalPopupModel::Position, mu::engraving::HARP_STRING_NO> stdPedalState;
     for (int i = 0; i < 7; i++) {
         stdPedalState[i] = pedalState.at(i);
     }

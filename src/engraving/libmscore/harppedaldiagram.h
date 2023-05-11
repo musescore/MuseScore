@@ -28,7 +28,6 @@
 #include "pitchspelling.h"
 
 using namespace mu;
-//using namespace mu::engraving;
 
 namespace mu::engraving {
 enum class PedalPosition : char {
@@ -44,12 +43,15 @@ enum HarpStringType : char {
     D, C, B, E, F, G, A
 };
 
+// Number of strings per octave on a harp
+static constexpr int HARP_STRING_NO = 7;
+
 class HarpPedalDiagram final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, HarpPedalDiagram)
     DECLARE_CLASSOF(ElementType::HARP_DIAGRAM)
 
-    std::array<PedalPosition, 7> _pedalState;
+    std::array<PedalPosition, HARP_STRING_NO> _pedalState;
 
     std::set<int> _playablePitches;
 
@@ -77,8 +79,8 @@ public:
     void setIsDiagram(bool diagram);
     bool isDiagram() { return _isDiagram; }
 
-    std::array<PedalPosition, 7> getPedalState() const { return _pedalState; }
-    void setPedalState(std::array<PedalPosition, 7> state);
+    std::array<PedalPosition, HARP_STRING_NO> getPedalState() const { return _pedalState; }
+    void setPedalState(std::array<PedalPosition, HARP_STRING_NO> state);
 
     void setPedal(HarpStringType harpString, PedalPosition pedal);
 

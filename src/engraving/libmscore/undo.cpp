@@ -2914,7 +2914,7 @@ void ChangeScoreOrder::flip(EditData*)
 
 void ChangeHarpPedalState::flip(EditData*)
 {
-    std::array<PedalPosition, 7> f_state = diagram->getPedalState();
+    std::array<PedalPosition, HARP_STRING_NO> f_state = diagram->getPedalState();
     if (f_state == pedalState) {
         return;
     }
