@@ -137,7 +137,6 @@ private:
     void onProjectUploadFailed(const Ret& ret, bool publishMode);
 
     void warnCloudIsNotAvailable();
-    void warnPublishIsNotAvailable();
 
     bool askIfUserAgreesToSaveProjectWithErrors(const Ret& ret, const SaveLocation& location);
     void warnScoreWithoutPartsCannotBeSaved();

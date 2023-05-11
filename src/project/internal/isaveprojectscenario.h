@@ -42,6 +42,8 @@ public:
     virtual RetVal<CloudProjectInfo> askPublishLocation(INotationProjectPtr project) const = 0;
 
     virtual bool warnBeforeSavingToExistingPubliclyVisibleCloudProject() const = 0;
+
+    virtual void showCloudSaveError(const Ret& ret, bool publishMode, bool alreadyAttempted) const = 0;
 };
 }
 
