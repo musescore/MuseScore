@@ -141,7 +141,7 @@ void CommandLineParser::init()
 void CommandLineParser::parse(int argc, char** argv)
 {
     QStringList args = prepareArguments(argc, argv);
-    m_parser.process(args);
+    m_parser.parse(args);
 
     auto floatValue = [this](const QString& name) -> std::optional<float> {
         bool ok = true;
@@ -454,6 +454,12 @@ void CommandLineParser::parse(int argc, char** argv)
             m_options.startup.scorePath = scorefiles[0].toStdString();
         }
     }
+}
+
+void CommandLineParser::processBuiltinArgs(const QCoreApplication& app)
+{
+    //! NOTE: some options require an instance of QCoreApplication
+    m_parser.process(app);
 }
 
 mu::framework::IApplication::RunMode CommandLineParser::runMode() const

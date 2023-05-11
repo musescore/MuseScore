@@ -126,6 +126,8 @@ int App::run(int argc, char** argv)
     QGuiApplication::setDesktopFileName("org.musescore.MuseScore" MUSESCORE_INSTALL_SUFFIX ".desktop");
 #endif
 
+    commandLineParser.processBuiltinArgs(*app);
+
     // ====================================================
     // Setup modules: Resources, Exports, Imports, UiTypes
     // ====================================================
