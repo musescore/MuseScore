@@ -383,6 +383,10 @@ bool Accidental::acceptDrop(EditData& data) const
 {
     EngravingItem* e = data.dropElement;
 
+    if (e->type() == ElementType::ACCIDENTAL) {
+        return true;
+    }
+
     if (e->isActionIcon()) {
         ActionIconType type = toActionIcon(e)->actionType();
         return type == ActionIconType::PARENTHESES
@@ -400,6 +404,9 @@ EngravingItem* Accidental::drop(EditData& data)
 {
     EngravingItem* e = data.dropElement;
     switch (e->type()) {
+    case ElementType::ACCIDENTAL:
+        score()->changeAccidental(note(), toAccidental(e)->accidentalType());
+        break;
     case ElementType::ACTION_ICON:
         switch (toActionIcon(e)->actionType()) {
         case ActionIconType::PARENTHESES:

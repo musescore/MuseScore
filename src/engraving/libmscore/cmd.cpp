@@ -1960,8 +1960,27 @@ void Score::toggleAccidental(AccidentalType at, const EditData& ed)
 
 void Score::changeAccidental(AccidentalType idx)
 {
-    for (Note* note : selection().noteList()) {
-        changeAccidental(note, idx);
+    for (EngravingItem* item : selection().elements()) {
+        Accidental* accidental = 0;
+        Note* note = 0;
+        switch (item->type()) {
+        case ElementType::ACCIDENTAL:
+            accidental = toAccidental(item);
+
+            if (accidental->accidentalType() == idx) {
+                changeAccidental(accidental->note(), AccidentalType::NONE);
+            } else {
+                changeAccidental(accidental->note(), idx);
+            }
+
+            break;
+        case ElementType::NOTE:
+            note = toNote(item);
+            changeAccidental(note, idx);
+            break;
+        default:
+            break;
+        }
     }
 }
 
