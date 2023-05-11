@@ -25,13 +25,11 @@
 #include <QTemporaryFile>
 #include <QFileInfo>
 
-#include "translation.h"
 #include "defer.h"
-#include "notation/notationerrors.h"
-#include "projectconfiguration.h"
+#include "translation.h"
+
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
-#include "cloud/clouderrors.h"
 #include "projecterrors.h"
 
 #include "log.h"
@@ -431,14 +429,12 @@ bool ProjectActionsController::saveProject(SaveMode saveMode, SaveLocationType s
 
     INotationProjectPtr project = currentNotationProject();
 
-    if (saveMode == SaveMode::Save) {
-        if (!project->isNewlyCreated()) {
-            if (project->isCloudProject()) {
-                return saveProjectAt(SaveLocation(SaveLocationType::Cloud, project->cloudInfo()));
-            }
-
-            return saveProjectAt(SaveLocation(SaveLocationType::Local));
+    if (saveMode == SaveMode::Save && !project->isNewlyCreated()) {
+        if (project->isCloudProject()) {
+            return saveProjectAt(SaveLocation(SaveLocationType::Cloud, project->cloudInfo()));
         }
+
+        return saveProjectAt(SaveLocation(SaveLocationType::Local));
     }
 
     RetVal<SaveLocation> response = saveProjectScenario()->askSaveLocation(project, saveMode, saveLocationType);
@@ -464,11 +460,6 @@ void ProjectActionsController::publish()
     Ret ret = canSaveProject();
     if (!ret) {
         askIfUserAgreesToSaveProjectWithErrors(ret, SaveLocationType::Cloud);
-        return;
-    }
-
-    if (!authorizationService()->checkCloudIsAvailable()) {
-        warnPublishIsNotAvailable();
         return;
     }
 
@@ -867,39 +858,7 @@ void ProjectActionsController::onProjectUploadFailed(const Ret& ret, bool publis
 
     closeUploadProgressDialog();
 
-    std::string title = publishMode
-                        ? trc("project/save", "Your score could not be published")
-                        : trc("project/save", "Your score could not be saved to the cloud");
-
-    std::string msg;
-
-    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
-    IInteractive::ButtonData helpBtn { IInteractive::Button::CustomButton, trc("project/save", "Get help") };
-
-    IInteractive::ButtonDatas buttons { helpBtn, okBtn };
-
-    switch (ret.code()) {
-    case int(cloud::Err::AccountNotActivated):
-        msg = trc("project/save", "Your musescore.com account needs to be verified first. "
-                                  "Please activate your account via the link in the activation email.");
-        buttons = { okBtn };
-        break;
-    case int(cloud::Err::NetworkError):
-        msg = cloud::cloudNetworkErrorUserDescription(ret);
-        if (!msg.empty()) {
-            msg += "\n\n" + trc("project/save", "Please try again later, or get help for this problem on musescore.org.");
-            break;
-        }
-    // FALLTHROUGH
-    default:
-        msg = trc("project/save", "Please try again later, or get help for this problem on musescore.org.");
-        break;
-    }
-
-    IInteractive::Result result = interactive()->warning(title, msg, buttons, okBtn.btn);
-    if (result.button() == helpBtn.btn) {
-        interactive()->openUrl(configuration()->supportForumUrl());
-    }
+    saveProjectScenario()->showCloudSaveError(ret, publishMode, true);
 }
 
 void ProjectActionsController::warnCloudIsNotAvailable()
@@ -918,12 +877,6 @@ void ProjectActionsController::warnCloudIsNotAvailable()
                                                          IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
 
     configuration()->setShowCloudIsNotAvailableWarning(result.showAgain());
-}
-
-void ProjectActionsController::warnPublishIsNotAvailable()
-{
-    interactive()->warning(trc("project/save", "Unable to connect to MuseScore.com"),
-                           trc("project/save", "Please check your internet connection or try again later."));
 }
 
 bool ProjectActionsController::askIfUserAgreesToSaveProjectWithErrors(const Ret& ret, const SaveLocation& location)
