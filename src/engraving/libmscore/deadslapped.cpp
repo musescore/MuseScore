@@ -55,6 +55,7 @@ void DeadSlapped::draw(mu::draw::Painter* painter) const
 
 void DeadSlapped::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

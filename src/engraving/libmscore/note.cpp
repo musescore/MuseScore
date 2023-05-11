@@ -2149,8 +2149,10 @@ void Note::setDotY(DirectionV pos)
             score()->undoRemoveElement(_dots.back());
         }
     }
+
+    LayoutContext ctx(score());
     for (NoteDot* dot : _dots) {
-        dot->layout();
+        v0::TLayout::layout(dot, ctx);
         dot->setPosY(y);
     }
 }
@@ -2161,6 +2163,7 @@ void Note::setDotY(DirectionV pos)
 
 void Note::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

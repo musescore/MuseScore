@@ -148,6 +148,7 @@ void TimeSig::setDenominatorString(const String& a)
 
 void TimeSig::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

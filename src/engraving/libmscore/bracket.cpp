@@ -166,6 +166,7 @@ void Bracket::setStaffSpan(size_t a, size_t b)
 
 void Bracket::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -283,7 +284,8 @@ void Bracket::endEdit(EditData& ed)
 void Bracket::editDrag(EditData& ed)
 {
     h2 += ed.delta.y() * .5;
-    layout();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

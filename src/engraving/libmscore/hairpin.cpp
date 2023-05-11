@@ -117,6 +117,7 @@ EngravingItem* HairpinSegment::drop(EditData& data)
 
 void HairpinSegment::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -421,6 +422,7 @@ void Hairpin::setHairpinType(HairpinType val)
 
 void Hairpin::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

@@ -39,6 +39,7 @@
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
+#include "layout/tlayout.h"
 
 #include "articulation.h"
 #include "audio.h"
@@ -2369,7 +2370,8 @@ void Score::splitStaff(staff_idx_t staffIdx, int splitPoint)
     clef->setParent(seg);
     clef->setIsHeader(true);
     undoAddElement(clef);
-    clef->layout();
+    LayoutContext ctx(this);
+    v0::TLayout::layout(clef, ctx);
 
     undoChangeKeySig(ns, Fraction(0, 1), st->keySigEvent(Fraction(0, 1)));
 

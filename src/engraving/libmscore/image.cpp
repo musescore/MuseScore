@@ -410,7 +410,9 @@ void Image::editDrag(EditData& ed)
             _size.setWidth(_size.height() * ratio);
         }
     }
-    layout();
+
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -469,6 +471,7 @@ void Image::init()
 
 void Image::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

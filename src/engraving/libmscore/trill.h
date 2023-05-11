@@ -36,6 +36,7 @@ class Accidental;
 class TrillSegment final : public LineSegment
 {
     OBJECT_ALLOCATOR(engraving, TrillSegment)
+    DECLARE_CLASSOF(ElementType::TRILL_SEGMENT)
 
 public:
     TrillSegment(Trill* sp, System* parent);

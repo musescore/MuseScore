@@ -89,6 +89,7 @@ void StaffTypeChange::spatiumChanged(double, double)
 
 void StaffTypeChange::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

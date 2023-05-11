@@ -35,6 +35,7 @@ class Rest;
 class Score;
 class Segment;
 class Staff;
+class Slur;
 
 class ChordLayout
 {
@@ -42,20 +43,27 @@ public:
 
     static void layout(Chord* item, LayoutContext& ctx);
 
-    static void layoutChords1(Score* score, Segment* segment, staff_idx_t staffIdx);
-    static double layoutChords2(std::vector<Note*>& notes, bool up);
-    static void layoutChords3(const MStyle& style, const std::vector<Chord*>&, std::vector<Note*>&, const Staff*);
-    static void updateGraceNotes(Measure* measure);
+    static void layoutSpanners(Chord* item, LayoutContext& ctx);
+    static void layoutSpanners(Chord* item, System* system, const Fraction& stick, LayoutContext& ctx);
+
+    static void layoutArticulations(Chord* item, LayoutContext& ctx);
+    static void layoutArticulations2(Chord* item, LayoutContext& ctx, bool layoutOnCrossBeamSide = false);
+    static void layoutArticulations3(Chord* item, Slur* s, LayoutContext& ctx);
+
+    static void layoutChords1(Score* score, Segment* segment, staff_idx_t staffIdx, LayoutContext& ctx);
+    static double layoutChords2(std::vector<Note*>& notes, bool up, LayoutContext& ctx);
+    static void layoutChords3(const MStyle& style, const std::vector<Chord*>&, std::vector<Note*>&, const Staff*, LayoutContext& ctx);
+    static void updateGraceNotes(Measure* measure, LayoutContext& ctx);
     static void repositionGraceNotesAfter(Segment* segment);
     static void appendGraceNotes(Chord* chord);
     static void clearLineAttachPoints(Measure* measure);
-    static void updateLineAttachPoints(Chord* chord, bool isFirstInMeasure);
-    static void resolveVerticalRestConflicts(Score* score, Segment* segment, staff_idx_t staffIdx);
+    static void updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, LayoutContext& ctx);
+    static void resolveVerticalRestConflicts(Score* score, Segment* segment, staff_idx_t staffIdx, LayoutContext& ctx);
     static void resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord*>& chords, Score* score, Segment* segment,
                                    staff_idx_t staffIdx);
-    static void resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Segment* segment, staff_idx_t staffIdx,
+    static void resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Segment* segment, staff_idx_t staffIdx, LayoutContext& ctx,
                                   bool considerBeams = false);
-    static void layoutChordBaseFingering(Chord* chord, System* system);
+    static void layoutChordBaseFingering(Chord* chord, System* system, LayoutContext& ctx);
 
 private:
     static void layoutPitched(Chord* item, LayoutContext& ctx);

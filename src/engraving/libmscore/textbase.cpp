@@ -1876,6 +1876,7 @@ void TextBase::prepareFormat(const String& token, TextCursor& cursor)
 
 void TextBase::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layoutTextBase(this, ctx);
 }
@@ -2282,10 +2283,11 @@ bool TextBase::mousePress(EditData& ed)
 
 void TextBase::layoutEdit()
 {
-    layout();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
     if (explicitParent() && explicitParent()->type() == ElementType::TBOX) {
         TBox* tbox = toTBox(explicitParent());
-        tbox->layout();
+        v0::TLayout::layout(tbox, ctx);
         System* system = tbox->system();
         system->setHeight(tbox->height());
         triggerLayout();

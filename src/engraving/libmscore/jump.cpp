@@ -118,6 +118,7 @@ String Jump::jumpTypeUserName() const
 
 void Jump::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

@@ -42,11 +42,13 @@
 #include "libmscore/note.h"
 
 #include "layoutcontext.h"
+#include "tlayout.h"
 #include "chordlayout.h"
 
 #include "log.h"
 
 using namespace mu::engraving;
+using namespace mu::engraving::v0;
 
 void BeamLayout::layout(Beam* item, LayoutContext&)
 {
@@ -426,13 +428,14 @@ bool BeamLayout::notTopBeam(ChordRest* cr)
 
 void BeamLayout::restoreBeams(Measure* m)
 {
+    LayoutContext ctx(m->score());
     for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
         for (EngravingItem* e : s->elist()) {
             if (e && e->isChordRest()) {
                 ChordRest* cr = toChordRest(e);
                 Beam* b = cr->beam();
                 if (b && !b->elements().empty() && b->elements().front() == cr) {
-                    b->layout();
+                    TLayout::layout(b, ctx);
                     b->addSkyline(m->system()->staff(b->staffIdx())->skyline());
                 }
             }
@@ -444,7 +447,7 @@ void BeamLayout::restoreBeams(Measure* m)
 //   breakCrossMeasureBeams
 //---------------------------------------------------------
 
-void BeamLayout::breakCrossMeasureBeams(LayoutContext& ctx, Measure* measure)
+void BeamLayout::breakCrossMeasureBeams(Measure* measure, LayoutContext& ctx)
 {
     MeasureBase* mbNext = measure->next();
     if (!mbNext || !mbNext->isMeasure()) {
@@ -810,7 +813,7 @@ void BeamLayout::createBeams(Score* score, LayoutContext& lc, Measure* measure)
  * layout all non-cross-staff beams starting on this segment
  * **********************************************************/
 
-void BeamLayout::layoutNonCrossBeams(Segment* s)
+void BeamLayout::layoutNonCrossBeams(Segment* s, LayoutContext& ctx)
 {
     for (EngravingItem* e : s->elist()) {
         if (!e || !e->isChordRest() || !e->score()->staff(e->staffIdx())->show()) {
@@ -824,7 +827,7 @@ void BeamLayout::layoutNonCrossBeams(Segment* s)
         ChordRest* cr = toChordRest(e);
         // layout beam
         if (BeamLayout::isTopBeam(cr)) {
-            cr->beam()->layout();
+            TLayout::layout(cr->beam(), ctx);
             if (!cr->beam()->tremAnchors().empty()) {
                 // there are inset tremolos in here
                 for (ChordRest* beamCr : cr->beam()->elements()) {
@@ -833,7 +836,7 @@ void BeamLayout::layoutNonCrossBeams(Segment* s)
                     }
                     Chord* c = toChord(beamCr);
                     if (c->tremolo() && c->tremolo()->twoNotes()) {
-                        c->tremolo()->layout();
+                        TLayout::layout(c->tremolo(), ctx);
                     }
                 }
             }
@@ -843,13 +846,13 @@ void BeamLayout::layoutNonCrossBeams(Segment* s)
         }
         for (Chord* grace : toChord(cr)->graceNotes()) {
             if (BeamLayout::isTopBeam(grace)) {
-                grace->beam()->layout();
+                TLayout::layout(grace->beam(), ctx);
             }
         }
     }
 }
 
-void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam)
+void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext& ctx)
 {
     const double spatium = rest->spatium();
     static constexpr Fraction rest32nd(1, 32);
@@ -899,9 +902,10 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam)
         std::vector<Rest*> rests;
         collectChordsAndRest(segment, staffIdx, chords, rests);
         ChordLayout::resolveRestVSChord(rests, chords, score, segment, staffIdx);
-        ChordLayout::resolveRestVSRest(rests, score, segment, staffIdx, /*considerBeams*/ true);
+        ChordLayout::resolveRestVSRest(rests, score, segment, staffIdx, ctx, /*considerBeams*/ true);
     }
-    beam->layout();
+
+    TLayout::layout(beam, ctx);
 }
 
 void BeamLayout::createBeamSegments(Beam* item, const std::vector<ChordRest*>& chordRests)

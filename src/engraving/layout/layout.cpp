@@ -43,15 +43,18 @@
 #include "libmscore/tuplet.h"
 
 #include "layoutcontext.h"
+#include "tlayout.h"
 #include "layoutpage.h"
-#include "layoutmeasure.h"
+#include "measurelayout.h"
 #include "layoutsystem.h"
+#include "chordlayout.h"
 #include "beamlayout.h"
 #include "tupletlayout.h"
 
 #include "log.h"
 
 using namespace mu::engraving;
+using namespace mu::engraving::v0;
 
 //---------------------------------------------------------
 //   CmdStateLocker
@@ -213,7 +216,7 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
 
     ctx.prevMeasure = 0;
 
-    LayoutMeasure::getNextMeasure(options, ctx);
+    MeasureLayout::getNextMeasure(options, ctx);
     ctx.curSystem = LayoutSystem::collectSystem(options, ctx, m_score);
 
     doLayout(options, ctx);
@@ -349,7 +352,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
     //utilizing in getNextMeasure()
     ctx.nextMeasure = m_score->_measures.first();
     ctx.tick = Fraction(0, 1);
-    LayoutMeasure::getNextMeasure(options, ctx);
+    MeasureLayout::getNextMeasure(options, ctx);
 
     static constexpr Fraction minTicks = Fraction(1, 16);
     static constexpr Fraction maxTicks = Fraction(4, 4);
@@ -362,7 +365,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
         double ww = 0.0;
         if (ctx.curMeasure->isVBox() || ctx.curMeasure->isTBox()) {
             ctx.curMeasure->resetExplicitParent();
-            LayoutMeasure::getNextMeasure(options, ctx);
+            MeasureLayout::getNextMeasure(options, ctx);
             continue;
         }
         system->appendMeasure(ctx.curMeasure);
@@ -429,12 +432,12 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
             m->layoutStaffLines();
         } else if (ctx.curMeasure->isHBox()) {
             ctx.curMeasure->setPos(pos + PointF(toHBox(ctx.curMeasure)->topGap(), 0.0));
-            ctx.curMeasure->layout();
+            TLayout::layoutMeasureBase(ctx.curMeasure, ctx);
             ww = ctx.curMeasure->width();
         }
         pos.rx() += ww;
 
-        LayoutMeasure::getNextMeasure(options, ctx);
+        MeasureLayout::getNextMeasure(options, ctx);
     }
 
     system->setWidth(pos.x());
@@ -473,14 +476,14 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
                     }
                     ChordRest* cr = toChordRest(e);
                     if (BeamLayout::notTopBeam(cr)) {                           // layout cross staff beams
-                        cr->beam()->layout();
+                        TLayout::layout(cr->beam(), ctx);
                     }
                     if (TupletLayout::notTopTuplet(cr)) {
                         // fix layout of tuplets
                         DurationElement* de = cr;
                         while (de->tuplet() && de->tuplet()->elements().front() == de) {
                             Tuplet* t = de->tuplet();
-                            t->layout();
+                            TLayout::layout(t, ctx);
                             de = de->tuplet();
                         }
                     }
@@ -489,23 +492,23 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
                         Chord* c = toChord(cr);
                         for (Chord* cc : c->graceNotes()) {
                             if (cc->beam() && cc->beam()->elements().front() == cc) {
-                                cc->beam()->layout();
+                                TLayout::layout(cc->beam(), ctx);
                             }
-                            cc->layoutSpanners();
+                            ChordLayout::layoutSpanners(cc, ctx);
                             for (EngravingItem* element : cc->el()) {
                                 if (element->isSlur()) {
-                                    element->layout();
+                                    TLayout::layoutItem(element, ctx);
                                 }
                             }
                         }
                         c->layoutArpeggio2();
-                        c->layoutSpanners();
+                        ChordLayout::layoutSpanners(c, ctx);
                         if (c->tremolo()) {
                             Tremolo* t = c->tremolo();
                             Chord* c1 = t->chord1();
                             Chord* c2 = t->chord2();
                             if (t->twoNotes() && c1 && c2 && (c1->staffMove() || c2->staffMove())) {
-                                t->layout();
+                                TLayout::layout(t, ctx);
                             }
                         }
                     }
@@ -514,7 +517,7 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
                 }
             }
         }
-        m->layout2();
+        MeasureLayout::layout2(m, ctx);
     }
 
     const double lm = ctx.page->lm();

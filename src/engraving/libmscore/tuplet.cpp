@@ -183,6 +183,7 @@ void Tuplet::resetNumberProperty(Text* number)
 
 void Tuplet::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     TupletLayout::layout(this, ctx);
 }

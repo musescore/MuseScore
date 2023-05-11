@@ -61,6 +61,8 @@
 
 #include "tread.h"
 
+#include "layout/tlayout.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
@@ -259,7 +261,8 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             if (barLine) {
                 segment = measure->getSegmentR(st, t);
                 segment->add(barLine);
-                barLine->layout();
+                LayoutContext lctx(barLine->score());
+                v0::TLayout::layout(barLine, lctx);
             }
             if (fermata) {
                 segment->add(fermata);

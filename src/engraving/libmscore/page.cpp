@@ -34,6 +34,8 @@
 #include "accessibility/accessibleitem.h"
 #endif
 
+#include "layout/tlayout.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -204,7 +206,8 @@ Text* Page::layoutHeaderFooter(int area, const String& ss) const
     }
     text->setAlign(align);
     text->setXmlText(s);
-    text->layout();
+    LayoutContext ctx(text->score());
+    v0::TLayout::layout(text, ctx);
     return text;
 }
 

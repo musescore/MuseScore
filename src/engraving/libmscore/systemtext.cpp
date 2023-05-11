@@ -66,6 +66,7 @@ engraving::PropertyValue SystemText::propertyDefault(Pid id) const
 
 void SystemText::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

@@ -91,6 +91,8 @@
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "engraving/iengravingfontsprovider.h"
 
+#include "engraving/layout/tlayout.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -1674,7 +1676,8 @@ static void addBarlineToMeasure(Measure* measure, const Fraction tick, std::uniq
         st = SegmentType::BeginBarLine;
     }
     const auto segment = measure->getSegment(st, tick);
-    barline->layout();
+    LayoutContext ctx(barline->score());
+    v0::TLayout::layout(barline.get(), ctx);
     segment->add(barline.release());
 }
 

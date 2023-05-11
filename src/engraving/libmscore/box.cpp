@@ -69,6 +69,7 @@ Box::Box(const ElementType& type, System* parent)
 
 void Box::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layoutBox(this, ctx);
 }
@@ -165,7 +166,9 @@ void Box::editDrag(EditData& ed)
         }
         triggerLayout();
     }
-    layout();
+
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -174,7 +177,8 @@ void Box::editDrag(EditData& ed)
 
 void Box::endEdit(EditData&)
 {
-    layout();
+    LayoutContext ctx(score());
+    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -352,6 +356,7 @@ HBox::HBox(System* parent)
 
 void HBox::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -363,7 +368,8 @@ void HBox::layout()
 
 void HBox::layout2()
 {
-    Box::layout();
+    LayoutContext ctx(score());
+    v0::TLayout::layoutBox(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -613,6 +619,7 @@ PropertyValue VBox::getProperty(Pid propertyId) const
 
 void VBox::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
@@ -636,6 +643,7 @@ void VBox::startEditDrag(EditData& ed)
 
 void FBox::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

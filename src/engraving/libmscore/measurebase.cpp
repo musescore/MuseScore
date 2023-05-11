@@ -290,6 +290,7 @@ double MeasureBase::pause() const
 
 void MeasureBase::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layoutMeasureBase(this, ctx);
 }

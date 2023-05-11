@@ -78,6 +78,7 @@ TremoloBar::TremoloBar(EngravingItem* parent)
 
 void TremoloBar::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

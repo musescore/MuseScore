@@ -52,6 +52,7 @@ StaffText::StaffText(Segment* parent, TextStyleType tid)
 
 void StaffText::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

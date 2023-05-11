@@ -67,6 +67,7 @@ HarmonicMarkSegment::HarmonicMarkSegment(HarmonicMark* sp, System* parent)
 
 void HarmonicMarkSegment::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

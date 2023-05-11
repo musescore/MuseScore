@@ -303,6 +303,7 @@ Sid GradualTempoChangeSegment::getPropertyStyle(Pid id) const
 
 void GradualTempoChangeSegment::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

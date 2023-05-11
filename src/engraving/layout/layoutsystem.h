@@ -38,7 +38,7 @@ class LayoutSystem
 {
 public:
     static System* collectSystem(const LayoutOptions& options, LayoutContext& lc, Score* score);
-    static void layoutSystemElements(const LayoutOptions& options, LayoutContext& lc, Score* score, System* system);
+    static void layoutSystemElements(const LayoutOptions& options, LayoutContext& ctx, Score* score, System* system);
 
 private:
     static System* getNextSystem(LayoutContext& lc);
@@ -47,7 +47,7 @@ private:
     static void layoutTies(Chord* ch, System* system, const Fraction& stick);
     static void doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick);
     static void justifySystem(System* system, double curSysWidth, double targetSystemWidth);
-    static void updateCrossBeams(System* system, const LayoutContext& ctx);
+    static void updateCrossBeams(System* system, LayoutContext& ctx);
     static void restoreTies(System* system);
     static void manageNarrowSpacing(System* system, double& curSysWidth, double targetSysWidth, const Fraction minTicks,
                                     const Fraction maxTicks);

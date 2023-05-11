@@ -30,6 +30,7 @@
 #include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/style/defaultstyle.h"
+#include "engraving/layout/tlayout.h"
 
 #include "log.h"
 
@@ -113,7 +114,8 @@ void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect,
 
     ActionIcon* action = toActionIcon(element);
     action->setFontSize(ActionIcon::DEFAULT_FONT_SIZE * m_cell->mag * m_extraMag);
-    action->layout();
+    LayoutContext lctx(action->score());
+    v0::TLayout::layout(action, lctx);
 
     painter.translate(rect.center() - action->bbox().center());
     action->draw(&painter);
@@ -169,7 +171,10 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* e
     const qreal sizeRatio = spatium / gpaletteScore->spatium();
     painter.scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size
 
-    element->layout(); // calculate bbox
+    // calculate bbox
+    LayoutContext lctx(element->score());
+    v0::TLayout::layoutItem(element, lctx);
+
     PointF origin = element->bbox().center();
 
     if (alignToStaff) {

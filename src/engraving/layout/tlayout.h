@@ -67,6 +67,7 @@ class Glissando;
 class GlissandoSegment;
 class GraceNotesGroup;
 class GradualTempoChangeSegment;
+class GradualTempoChange;
 
 class HairpinSegment;
 class Hairpin;
@@ -76,18 +77,23 @@ class Hook;
 
 class Image;
 class InstrumentChange;
+class InstrumentName;
 class Jump;
 
 class KeySig;
 
+class LayoutBreak;
 class LedgerLine;
+class LetRing;
 class LetRingSegment;
+class LineSegment;
 class Lyrics;
 class LyricsLine;
 class LyricsLineSegment;
 
 class Marker;
 class MeasureBase;
+class MeasureNumber;
 class MeasureNumberBase;
 class MeasureRepeat;
 class MMRest;
@@ -95,9 +101,12 @@ class MMRest;
 class Note;
 class NoteDot;
 
+class Ottava;
 class OttavaSegment;
 
+class PalmMute;
 class PalmMuteSegment;
+class Pedal;
 class PedalSegment;
 class PickScrapeSegment;
 class PlayTechAnnotation;
@@ -109,6 +118,7 @@ class Rest;
 class ShadowNote;
 class SLine;
 class Slur;
+class Spacer;
 class StaffLines;
 class StaffState;
 class StaffText;
@@ -128,8 +138,12 @@ class SystemText;
 class TabDurationSymbol;
 class TempoText;
 class TextBase;
+class Text;
+class TextLine;
 class TextLineSegment;
+class TextLineBase;
 class TextLineBaseSegment;
+class Tie;
 class TimeSig;
 class Tremolo;
 class TremoloBar;
@@ -139,6 +153,7 @@ class Tuplet;
 
 class VibratoSegment;
 class Vibrato;
+class Volta;
 class VoltaSegment;
 
 class WhammyBarSegment;
@@ -149,7 +164,7 @@ class TLayout
 {
 public:
 
-    static void layout(EngravingItem* item, LayoutContext& ctx);  // factory
+    static void layoutItem(EngravingItem* item, LayoutContext& ctx);  // factory
 
     static void layout(Accidental* item, LayoutContext& ctx);
     static void layout(ActionIcon* item, LayoutContext& ctx);
@@ -194,6 +209,7 @@ public:
     static void layout(GlissandoSegment* item, LayoutContext& ctx);
     static void layout(GraceNotesGroup* item, LayoutContext& ctx);
     static void layout(GradualTempoChangeSegment* item, LayoutContext& ctx);
+    static void layout(GradualTempoChange* item, LayoutContext& ctx);
 
     static void layout(HairpinSegment* item, LayoutContext& ctx);
     static void layout(Hairpin* item, LayoutContext& ctx);
@@ -204,19 +220,25 @@ public:
 
     static void layout(Image* item, LayoutContext& ctx);
     static void layout(InstrumentChange* item, LayoutContext& ctx);
+    static void layout(InstrumentName* item, LayoutContext& ctx);
 
     static void layout(Jump* item, LayoutContext& ctx);
 
     static void layout(KeySig* item, LayoutContext& ctx);
 
+    static void layout(LayoutBreak* item, LayoutContext& ctx);
     static void layout(LedgerLine* item, LayoutContext& ctx);
+    static void layout(LetRing* item, LayoutContext& ctx);
     static void layout(LetRingSegment* item, LayoutContext& ctx);
+    static void layout(LineSegment* item, LayoutContext& ctx);  // factory
     static void layout(Lyrics* item, LayoutContext& ctx);
     static void layout(LyricsLine* item, LayoutContext& ctx);
     static void layout(LyricsLineSegment* item, LayoutContext& ctx);
 
     static void layout(Marker* item, LayoutContext& ctx);
+    static void layout(MeasureBase* item, LayoutContext& ctx); // factory
     static void layoutMeasureBase(MeasureBase* item, LayoutContext& ctx); // base class
+    static void layout(MeasureNumber* item, LayoutContext& ctx);
     static void layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext& ctx); // base class
     static void layout(MeasureRepeat* item, LayoutContext& ctx);
     static void layout(MMRest* item, LayoutContext& ctx);
@@ -225,9 +247,12 @@ public:
     static void layout2(Note* item, LayoutContext& ctx);
     static void layout(NoteDot* item, LayoutContext& ctx);
 
+    static void layout(Ottava* item, LayoutContext& ctx);
     static void layout(OttavaSegment* item, LayoutContext& ctx);
 
+    static void layout(PalmMute* item, LayoutContext& ctx);
     static void layout(PalmMuteSegment* item, LayoutContext& ctx);
+    static void layout(Pedal* item, LayoutContext& ctx);
     static void layout(PedalSegment* item, LayoutContext& ctx);
     static void layout(PickScrapeSegment* item, LayoutContext& ctx);
     static void layout(PlayTechAnnotation* item, LayoutContext& ctx);
@@ -239,6 +264,8 @@ public:
     static void layout(ShadowNote* item, LayoutContext& ctx);
     static void layoutLine(SLine* item, LayoutContext& ctx); // base class
     static void layout(Slur* item, LayoutContext& ctx);
+    static void layout(Spacer* item, LayoutContext& ctx);
+    static void layout(Spanner* item, LayoutContext& ctx);
     static void layout(StaffLines* item, LayoutContext& ctx);
     static void layoutForWidth(StaffLines* item, double w, LayoutContext& ctx);
     static void layout(StaffState* item, LayoutContext& ctx);
@@ -260,21 +287,27 @@ public:
     static void layout(TabDurationSymbol* item, LayoutContext& ctx);
     static void layout(TempoText* item, LayoutContext& ctx);
 
+    static void layout(TextBase* item, LayoutContext& ctx);          // factory
     static void layoutTextBase(TextBase* item, LayoutContext& ctx);  // base class
     static void layout1(TextBase* item, LayoutContext& ctx);         // factory
     static void layout1TextBase(TextBase* item, LayoutContext& ctx); // base class
+    static void layout(Text* item, LayoutContext& ctx);
 
+    static void layout(TextLine* item, LayoutContext& ctx);
     static void layout(TextLineSegment* item, LayoutContext& ctx);
+    static void layoutTextLineBase(TextLineBase* item, LayoutContext& ctx);
     static void layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext& ctx); // base class
+    static void layout(Tie* item, LayoutContext& ctx);
     static void layout(TimeSig* item, LayoutContext& ctx);
     static void layout(Tremolo* item, LayoutContext& ctx);
     static void layout(TremoloBar* item, LayoutContext& ctx);
-    static void layout(TrillSegment* item, LayoutContext& ctx);
     static void layout(Trill* item, LayoutContext& ctx);
+    static void layout(TrillSegment* item, LayoutContext& ctx);
     static void layout(Tuplet* item, LayoutContext& ctx);
 
-    static void layout(VibratoSegment* item, LayoutContext& ctx);
     static void layout(Vibrato* item, LayoutContext& ctx);
+    static void layout(VibratoSegment* item, LayoutContext& ctx);
+    static void layout(Volta* item, LayoutContext& ctx);
     static void layout(VoltaSegment* item, LayoutContext& ctx);
 
     static void layout(WhammyBarSegment* item, LayoutContext& ctx);
@@ -289,7 +322,7 @@ private:
 
     static void keySigAddLayout(KeySig* item, SymId sym, int line);
 
-    static void layoutRestDots(Rest* item);
+    static void layoutRestDots(Rest* item, LayoutContext& ctx);
 
     static void doLayout(StretchedBend* item, LayoutContext& ctx, bool stretchedMode);
 };

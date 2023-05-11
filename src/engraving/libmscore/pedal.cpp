@@ -71,6 +71,7 @@ PedalSegment::PedalSegment(Pedal* sp, System* parent)
 
 void PedalSegment::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }

@@ -494,6 +494,7 @@ void Tremolo::setBeamDirection(DirectionV d)
 //---------------------------------------------------------
 void Tremolo::layout()
 {
+    UNREACHABLE;
     LayoutContext ctx(score());
     v0::TLayout::layout(this, ctx);
 }
