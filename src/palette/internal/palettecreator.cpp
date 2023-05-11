@@ -812,6 +812,8 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
         SymId::ornamentPrecompSlide,
         SymId::ornamentShake3,
         SymId::ornamentShakeMuffat1,
+        SymId::ornamentTremblementCouperin,
+        SymId::ornamentPinceCouperin
     };
 
     for (auto ornamentType : defaultPalette ? defaultOrnaments : masterOrnaments) {

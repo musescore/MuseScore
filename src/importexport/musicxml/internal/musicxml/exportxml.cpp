@@ -2894,6 +2894,12 @@ static QString symIdToOrnam(const SymId sid)
     case SymId::ornamentPrecompSlide:
         return "schleifer";
         break;
+    case SymId::ornamentTremblementCouperin:
+        return "other-ornament smufl=\"ornamentTremblementCouperin\"";
+        break;
+    case SymId::ornamentPinceCouperin:
+        return "other-ornament smufl=\"ornamentPinceCouperin\"";
+        break;
 
     default:
         ;           // nothing
