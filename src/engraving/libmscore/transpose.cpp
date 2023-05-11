@@ -274,6 +274,7 @@ bool Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
 bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKey,
                       int transposeInterval, bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats)
 {
+    bool result = true;
     bool rangeSelection = selection().isRange();
     staff_idx_t startStaffIdx   = 0;
     staff_idx_t endStaffIdx     = 0;
@@ -353,7 +354,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                     note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
                 } else {
                     if (!transpose(note, interval, useDoubleSharpsFlats)) {
-                        return false;
+                        result = false;
+                        continue;
                     }
                 }
             } else if (e->isHarmony() && transposeChordNames) {
@@ -389,7 +391,6 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 }
             }
         }
-        return true;
     }
 
     //--------------------------
@@ -460,7 +461,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
                     } else {
                         if (!transpose(n, interval, useDoubleSharpsFlats)) {
-                            return false;
+                            result = false;
+                            continue;
                         }
                     }
                 }
@@ -470,7 +472,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                             n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
                         } else {
                             if (!transpose(n, interval, useDoubleSharpsFlats)) {
-                                return false;
+                                result = false;
+                                continue;
                             }
                         }
                     }
@@ -550,7 +553,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             }
         }
     }
-    return true;
+    return result;
 }
 
 //---------------------------------------------------------
