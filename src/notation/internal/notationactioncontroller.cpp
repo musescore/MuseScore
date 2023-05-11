@@ -450,7 +450,7 @@ void NotationActionController::init()
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
-            registerAction("interval" + std::to_string(i), &Interaction::addIntervalToSelectedNotes, i);
+            registerAction("interval" + std::to_string(i), &Interaction::addIntervalToSelectedNotes, i, PlayMode::PlayChord);
         }
     }
 
