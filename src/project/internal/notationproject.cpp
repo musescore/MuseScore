@@ -184,8 +184,9 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
     }
 
     MscReader reader(params);
-    if (!reader.open()) {
-        return make_ret(engraving::Err::FileOpenError);
+    Ret openResult = reader.open();
+    if (openResult != make_ret(mu::engraving::Err::NoError)) {
+        return openResult;
     }
 
     // Load engraving project
