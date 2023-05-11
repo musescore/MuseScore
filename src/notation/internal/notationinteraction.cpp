@@ -321,9 +321,14 @@ void NotationInteraction::checkAndShowMScoreError() const
     case MsError::DEST_NO_CR:
         title = trc("notation", "Destination is not a chord or rest");
         break;
-    case MsError::CANNOT_CHANGE_LOCAL_TIMESIG:
+    case MsError::CANNOT_CHANGE_LOCAL_TIMESIG_MEASURE_NOT_EMPTY:
         title = trc("notation", "Cannot change local time signature");
         message = trc("notation", "Measure is not empty");
+        break;
+    case MsError::CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS:
+        title = trc("notation", "Cannot change local time signature");
+        message = trc("notation", "This score already has part scores. Changing local time "
+                                  "signatures while part scores are present is not yet supported.");
         break;
     case MsError::CORRUPTED_MEASURE:
         title = trc("notation", "Cannot change time signature in front of a corrupted measure");

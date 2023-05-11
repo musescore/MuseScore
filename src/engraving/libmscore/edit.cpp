@@ -1128,7 +1128,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffId
 
     // disable local time sig modifications in linked staves
     if (staffIdx != mu::nidx && masterScore()->excerpts().size() > 0) {
-        MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG);
+        MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS);
         return false;
     }
 
@@ -1147,7 +1147,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffId
 
             if (!rewriteMeasures(fm1, lm, ns, staffIdx)) {
                 if (staffIdx != mu::nidx) {
-                    MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG);
+                    MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG_MEASURE_NOT_EMPTY);
                     // restore measure rests that were prematurely modified
                     Fraction fr(staff(staffIdx)->timeSig(fm->tick())->sig());
                     for (Measure* m = fm1; m; m = m->nextMeasure()) {
@@ -1451,7 +1451,7 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
 void Score::cmdRemoveTimeSig(TimeSig* ts)
 {
     if (ts->isLocal() && masterScore()->excerpts().size() > 0) {
-        MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG);
+        MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS);
         return;
     }
 
@@ -2879,7 +2879,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
 
     // get the last deleted timesig & keysig in order to restore after deletion
     KeySigEvent lastDeletedKeySigEvent;
-    TimeSig* lastDeletedSig   = 0;
+    std::map<staff_idx_t, TimeSig*> lastDeletedTimeSigs;
     KeySig* lastDeletedKeySig = 0;
     bool transposeKeySigEvent = false;
 
@@ -2887,9 +2887,17 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
         if (mb->isMeasure()) {
             Measure* m = toMeasure(mb);
             Segment* sts = m->findSegment(SegmentType::TimeSig, m->tick());
-            if (sts && !lastDeletedSig) {
-                lastDeletedSig = toTimeSig(sts->element(0));
+
+            if (sts) {
+                for (staff_idx_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                    if (!mu::contains(lastDeletedTimeSigs, staffIdx)) {
+                        if (TimeSig* ts = toTimeSig(sts->element(staffIdx * VOICES))) {
+                            lastDeletedTimeSigs.insert({ staffIdx, ts });
+                        }
+                    }
+                }
             }
+
             sts = m->findSegment(SegmentType::KeySig, m->tick());
             if (sts && !lastDeletedKeySig) {
                 lastDeletedKeySig = toKeySig(sts->element(0));
@@ -2906,7 +2914,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                     }
                 }
             }
-            if (lastDeletedSig && lastDeletedKeySig) {
+            if (lastDeletedTimeSigs.size() == nstaves() && lastDeletedKeySig) {
                 break;
             }
         }
@@ -2932,25 +2940,37 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
         // insert correct timesig after deletion
         Measure* mBeforeSel = startMeasure->prevMeasure();
         Measure* mAfterSel  = mBeforeSel ? mBeforeSel->nextMeasure() : score->firstMeasure();
-        if (mAfterSel && lastDeletedSig) {
-            bool changed = true;
-            if (mBeforeSel) {
-                if (mBeforeSel->timesig() == mAfterSel->timesig()) {
-                    changed = false;
-                }
-            }
+        if (mAfterSel) {
             Segment* s = mAfterSel->findSegment(SegmentType::TimeSig, mAfterSel->tick());
-            if (!s && changed) {
-                Segment* ns = mAfterSel->undoGetSegment(SegmentType::TimeSig, mAfterSel->tick());
-                for (size_t staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
-                    TimeSig* nts = Factory::createTimeSig(ns);
-                    nts->setTrack(staffIdx * VOICES);
-                    nts->setParent(ns);
-                    nts->setSig(lastDeletedSig->sig(), lastDeletedSig->timeSigType());
-                    score->undoAddElement(nts);
+
+            for (staff_idx_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                if (s && s->element(staffIdx * VOICES)) {
+                    continue;
                 }
+
+                TimeSig* lastDeletedForThisStaff = mu::value(lastDeletedTimeSigs, staffIdx, nullptr);
+                if (!lastDeletedForThisStaff) {
+                    continue;
+                }
+
+                if (mBeforeSel
+                    && staff(staffIdx)->timeSig(mBeforeSel->tick())->sig() == lastDeletedForThisStaff->sig()) {
+                    continue;
+                }
+
+                if (!s) {
+                    s = mAfterSel->undoGetSegment(SegmentType::TimeSig, mAfterSel->tick());
+                }
+
+                TimeSig* nts = Factory::createTimeSig(s);
+                nts->setTrack(staffIdx * VOICES);
+                nts->setParent(s);
+                nts->setFrom(lastDeletedForThisStaff);
+                nts->setStretch(nts->sig() / mAfterSel->timesig());
+                score->undoAddElement(nts);
             }
         }
+
         // insert correct keysig if necessary
         if (mAfterSel && !mBeforeSel && lastDeletedKeySig) {
             Segment* s = mAfterSel->findSegment(SegmentType::KeySig, mAfterSel->tick());
