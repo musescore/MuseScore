@@ -2220,8 +2220,6 @@ static const std::vector<Item<JumpType> > JUMP_TYPES = {
     { JumpType::DSS_AL_CODA,    "", TranslatableString("engraving", "Dal Segno Segno al Coda") },
     { JumpType::DSS_AL_DBLCODA, "", TranslatableString("engraving", "Dal Segno Segno al Double Coda") },
     { JumpType::DSS_AL_FINE,    "", TranslatableString("engraving", "Dal Segno Segno al Fine") },
-    { JumpType::DCODA,          "", TranslatableString("engraving", "Da Coda") },
-    { JumpType::DDBLCODA,       "", TranslatableString("engraving", "Da Double Coda") },
 
     { JumpType::USER,           "", TranslatableString("engraving", "Custom") }
 };
@@ -2236,7 +2234,7 @@ String TConv::translatedUserName(JumpType v)
     return findUserNameByType<JumpType>(JUMP_TYPES, v).translated();
 }
 
-static const std::array<Item<MarkerType>, 9> MARKER_TYPES = { {
+static const std::array<Item<MarkerType>, 11> MARKER_TYPES = { {
     { MarkerType::SEGNO,        "segno",    TranslatableString("engraving", "Segno") },
     { MarkerType::VARSEGNO,     "varsegno", TranslatableString("engraving", "Segno variation") },
     { MarkerType::CODA,         "codab",    TranslatableString("engraving", "Coda") },
@@ -2245,6 +2243,8 @@ static const std::array<Item<MarkerType>, 9> MARKER_TYPES = { {
     { MarkerType::FINE,         "fine",     TranslatableString("engraving", "Fine") },
     { MarkerType::TOCODA,       "coda",     TranslatableString("engraving", "To coda") },
     { MarkerType::TOCODASYM,    "",         TranslatableString("engraving", "To coda (symbol)") },
+    { MarkerType::DA_CODA,      "",         TranslatableString("engraving", "Da Coda") },
+    { MarkerType::DA_DBLCODA,   "",         TranslatableString("engraving", "Da Double Coda") },
     { MarkerType::USER,         "",         TranslatableString("engraving", "Custom") }
 } };
 

@@ -1382,6 +1382,11 @@ std::vector<GPMasterBar::Direction> GP67DomBuilder::readRepeatsJumps(XmlDomNode*
         repeatJump.type = (innerNode.nodeName() == "Jump" ? GPMasterBar::Direction::Type::Jump : GPMasterBar::Direction::Type::Repeat);
         repeatJump.name = innerNode.toElement().text();
 
+        // GP encodes "To Coda" instructions as Jumps, but MuseScore uses Markers for that
+        if ((repeatJump.name == u"DaCoda") || (repeatJump.name == u"DaDoubleCoda")) {
+            repeatJump.type = GPMasterBar::Direction::Type::Marker;
+        }
+
         repeatsJumps.push_back(repeatJump);
         innerNode = innerNode.nextSibling();
     }

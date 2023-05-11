@@ -855,8 +855,6 @@ enum class JumpType : char {
     DSS_AL_CODA,
     DSS_AL_DBLCODA,
     DSS_AL_FINE,
-    DCODA,
-    DDBLCODA,
     USER
 };
 
@@ -869,6 +867,8 @@ enum class MarkerType : char {
     FINE,
     TOCODA,
     TOCODASYM,
+    DA_CODA,
+    DA_DBLCODA,
     USER
 };
 

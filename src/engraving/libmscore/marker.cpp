@@ -113,6 +113,18 @@ void Marker::setMarkerType(MarkerType t)
         setLabel(u"coda");
         break;
 
+    case MarkerType::DA_CODA:
+        txt = "Da Coda";
+        initTextStyleType(TextStyleType::REPEAT_RIGHT, true);
+        setLabel(u"coda");
+        break;
+
+    case MarkerType::DA_DBLCODA:
+        txt = "Da Double Coda";
+        initTextStyleType(TextStyleType::REPEAT_RIGHT, true);
+        setLabel(u"coda");
+        break;
+
     case MarkerType::USER:
         break;
 

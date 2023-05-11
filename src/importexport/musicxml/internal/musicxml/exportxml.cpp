@@ -5319,7 +5319,9 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
         sound = u"fine=\"yes\"";
         break;
     case MarkerType::TOCODA:
-    case MarkerType::TOCODASYM: {
+    case MarkerType::TOCODASYM:
+    case MarkerType::DA_CODA:
+    case MarkerType::DA_DBLCODA: {
         if (m->xmlText() == "") {
             words = "To Coda";
         } else {
@@ -5419,6 +5421,8 @@ void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const
             case MarkerType::FINE:
             case MarkerType::TOCODA:
             case MarkerType::TOCODASYM:
+            case MarkerType::DA_CODA:
+            case MarkerType::DA_DBLCODA:
                 // ignore
                 break;
             case MarkerType::USER:
@@ -5460,6 +5464,8 @@ void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, track_idx_t str
             case MarkerType::FINE:
             case MarkerType::TOCODA:
             case MarkerType::TOCODASYM:
+            case MarkerType::DA_CODA:
+            case MarkerType::DA_DBLCODA:
                 directionMarker(_xml, mk, _jumpElements);
                 break;
             case MarkerType::SEGNO:

@@ -51,7 +51,7 @@ public:
 
     struct Direction {
         enum class Type {
-            Repeat, Jump
+            Repeat, Jump, Marker
         };
 
         Type type = Type::Repeat;

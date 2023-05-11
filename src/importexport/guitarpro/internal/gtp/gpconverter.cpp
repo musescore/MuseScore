@@ -83,9 +83,6 @@ static JumpType jumpType(const String& typeString)
         { u"DaSegnoSegnoAlCoda", JumpType::DSS_AL_CODA },
         { u"DaSegnoSegnoAlDoubleCoda", JumpType::DSS_AL_DBLCODA },
         { u"DaSegnoSegnoAlFine", JumpType::DSS_AL_FINE },
-        { u"DaCoda", JumpType::DCODA },
-        { u"DaDoubleCoda", JumpType::DDBLCODA },
-        { u"DaCoda", JumpType::DCODA },
     };
 
     if (types.find(typeString) != types.end()) {
@@ -103,7 +100,9 @@ static MarkerType markerType(const String& typeString)
         { u"SegnoSegno", MarkerType::VARSEGNO },
         { u"Coda", MarkerType::CODA },
         { u"DoubleCoda", MarkerType::VARCODA },
-        { u"Fine", MarkerType::FINE }
+        { u"Fine", MarkerType::FINE },
+        { u"DaCoda", MarkerType::DA_CODA },
+        { u"DaDoubleCoda", MarkerType::DA_DBLCODA },
     };
 
     if (types.find(typeString) != types.end()) {
