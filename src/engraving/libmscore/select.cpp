@@ -39,6 +39,7 @@
 #include "engravingitem.h"
 #include "figuredbass.h"
 #include "hairpin.h"
+#include "harppedaldiagram.h"
 #include "hook.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
@@ -1042,6 +1043,9 @@ ByteArray Selection::symbolListMimeData() const
         // fall through
         case ElementType::HAIRPIN:
             seg = toHairpin(e)->startSegment();
+            break;
+        case ElementType::HARP_DIAGRAM:
+            seg = toHarpPedalDiagram(e)->segment();
             break;
         default:
             continue;

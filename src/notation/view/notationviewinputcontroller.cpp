@@ -29,6 +29,7 @@
 
 #include "log.h"
 #include "commonscene/commonscenetypes.h"
+#include "internal/abstractelementpopupmodel.h"
 
 using namespace mu;
 using namespace mu::notation;
@@ -77,6 +78,12 @@ void NotationViewInputController::init()
 
         dispatcher()->reg(this, "notation-context-menu", [this]() {
             m_view->showContextMenu(selectionType(), m_view->fromLogical(selectionElementPos()).toQPointF(), true);
+        });
+
+        dispatcher()->reg(this, "notation-popup-menu", [this]() {
+            m_view->toggleElementPopup(selectionType(),
+                                       m_view->fromLogical(selectionElementPos()).toQPointF(),
+                                       viewInteraction()->selection()->canvasBoundingRect(), true);
         });
     }
 }
@@ -609,6 +616,7 @@ bool NotationViewInputController::needSelect(const ClickContext& ctx) const
 void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
 {
     m_view->hideContextMenu();
+    m_view->hideElementPopup();
 
     if (ctx.isHitGrip) {
         viewInteraction()->startEditGrip(ctx.logicClickPos);
@@ -782,6 +790,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
 
     const INotationInteraction::HitElementContext& ctx = hitElementContext();
     if (!ctx.element) {
+        m_view->hideElementPopup();
         return;
     }
 
@@ -798,6 +807,13 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
     if (ctx.element && ctx.element->needStartEditingAfterSelecting()) {
         viewInteraction()->startEditElement(ctx.element);
         return;
+    }
+
+    if (AbstractElementPopupModel::modelTypeFromElement(ctx.element->type()) != PopupModelType::TYPE_UNDEFINED) {
+        QPointF elemPosition = m_view->fromLogical(ctx.element->canvasPos()).toQPointF();
+        m_view->toggleElementPopup(selectionType(), elemPosition, ctx.element->canvasBoundingRect());
+    } else {
+        m_view->hideElementPopup();
     }
 
     if (ctx.element != m_prevHitElement) {

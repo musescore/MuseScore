@@ -1477,6 +1477,13 @@ void Note::draw(mu::draw::Painter* painter) const
                 painter->setPen(selected() ? engravingConfiguration()->warningSelectedColor() : engravingConfiguration()->warningColor());
             }
         }
+        // Warn if notes are unplayable based on previous harp diagram setting
+        if (chord() && chord()->segment() && staff() && !score()->printing() && !staff()->isDrumStaff(chord()->tick())) {
+            HarpPedalDiagram* prevDiagram = part()->currentHarpDiagram(chord()->segment()->tick());
+            if (prevDiagram && !prevDiagram->isPitchPlayable(ppitch())) {
+                painter->setPen(selected() ? engravingConfiguration()->criticalSelectedColor() : engravingConfiguration()->criticalColor());
+            }
+        }
         // draw blank notehead to avoid staff and ledger lines
         if (_cachedSymNull != SymId::noSym) {
             painter->save();
@@ -1701,6 +1708,7 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::FRET_DIAGRAM)
            || (type == ElementType::FIGURED_BASS)
            || (type == ElementType::LYRICS)
+           || (type == ElementType::HARP_DIAGRAM)
            || (type != ElementType::TIE && e->isSpanner());
 }
 

@@ -2319,6 +2319,10 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Staff type change"),
              TranslatableString("action", "Insert staff type change"),
              IconCode::Code::STAFF_TYPE_CHANGE
+             ),
+    UiAction("notation-popup-menu",
+             mu::context::UiCtxNotationFocused,
+             mu::context::CTX_NOTATION_FOCUSED
              )
 };
 

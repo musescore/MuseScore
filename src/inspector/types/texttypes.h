@@ -98,6 +98,8 @@ public:
         TEXT_TYPE_LH_GUITAR_FINGERING,
         TEXT_TYPE_RH_GUITAR_FINGERING,
         TEXT_TYPE_STRING_NUMBER,
+        TEXT_TYPE_HARP_PEDAL_DIAGRAM,
+        TEXT_TYPE_HARP_PEDAL_TEXT_DIAGRAM,
         TEXT_TYPE_TEXTLINE,
         TEXT_TYPE_VOLTA,
         TEXT_TYPE_OTTAVA,
@@ -155,7 +157,8 @@ static const QList<mu::engraving::ElementType> TEXT_ELEMENT_TYPES = {
     mu::engraving::ElementType::STICKING,
     mu::engraving::ElementType::TEMPO_TEXT,
     mu::engraving::ElementType::TUPLET,
-    mu::engraving::ElementType::PLAYTECH_ANNOTATION
+    mu::engraving::ElementType::PLAYTECH_ANNOTATION,
+    mu::engraving::ElementType::HARP_DIAGRAM
 };
 }
 

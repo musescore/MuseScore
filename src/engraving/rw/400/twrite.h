@@ -75,6 +75,7 @@ class Groups;
 class Hairpin;
 class Harmony;
 class HarmonicMark;
+class HarpPedalDiagram;
 class Hook;
 
 class Image;
@@ -212,6 +213,7 @@ public:
     static void write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Harmony* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const HarmonicMark* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const HarpPedalDiagram* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Hook* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Image* item, XmlWriter& xml, WriteContext& ctx);

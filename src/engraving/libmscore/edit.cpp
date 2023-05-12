@@ -40,6 +40,7 @@
 #include "glissando.h"
 #include "hairpin.h"
 #include "harmony.h"
+#include "harppedaldiagram.h"
 #include "hook.h"
 #include "instrchange.h"
 #include "instrumentname.h"
@@ -903,6 +904,16 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement, 
 
         textBox = tempoText;
         undoAddElement(textBox);
+        break;
+    }
+    case TextStyleType::HARP_PEDAL_DIAGRAM:
+    case TextStyleType::HARP_PEDAL_TEXT_DIAGRAM: {
+        ChordRest* chordRest = getSelectedChordRest();
+        if (!chordRest) {
+            break;
+        }
+        textBox = Factory::createHarpPedalDiagram(this->dummy()->segment());
+        chordRest->undoAddAnnotation(textBox);
         break;
     }
     default:
@@ -5709,7 +5720,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::TREMOLOBAR
             && et != ElementType::FRET_DIAGRAM
             && et != ElementType::FERMATA
-            && et != ElementType::HARMONY)
+            && et != ElementType::HARMONY
+            && et != ElementType::HARP_DIAGRAM)
         ) {
         undo(new AddElement(element));
         return;
@@ -5901,7 +5913,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                      || element->isSticking()
                      || element->isFretDiagram()
                      || element->isFermata()
-                     || element->isHarmony()) {
+                     || element->isHarmony()
+                     || element->isHarpPedalDiagram()) {
                 Segment* segment
                     = element->explicitParent()->isFretDiagram() ? toSegment(element->explicitParent()->explicitParent()) : toSegment(
                           element->explicitParent());

@@ -70,6 +70,8 @@
 #include "view/widgets/realizeharmonydialog.h"
 #include "view/notationcontextmenumodel.h"
 #include "view/internal/undoredomodel.h"
+#include "view/internal/abstractelementpopupmodel.h"
+#include "view/internal/harppedalpopupmodel.h"
 
 #include "view/styledialog/styleitem.h"
 #include "view/styledialog/notespagemodel.h"
@@ -192,6 +194,9 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<EditGridSizeDialogModel>("MuseScore.NotationScene", 1, 0, "EditGridSizeDialogModel");
     qmlRegisterType<PianoKeyboardView>("MuseScore.NotationScene", 1, 0, "PianoKeyboardView");
     qmlRegisterType<PianoKeyboardPanelContextMenuModel>("MuseScore.NotationScene", 1, 0, "PianoKeyboardPanelContextMenuModel");
+    qmlRegisterUncreatableType<AbstractElementPopupModel>("MuseScore.NotationScene", 1, 0, "Notation",
+                                                          "Not creatable as it is an enum type");
+    qmlRegisterType<HarpPedalPopupModel>("MuseScore.NotationScene", 1, 0, "HarpPedalPopupModel");
 
     qmlRegisterUncreatableType<StyleItem>("MuseScore.NotationScene", 1, 0, "StyleItem", "Cannot create StyleItem from QML");
     qmlRegisterType<NotesPageModel>("MuseScore.NotationScene", 1, 0, "NotesPageModel");

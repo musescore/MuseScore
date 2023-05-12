@@ -116,6 +116,7 @@ enum class ElementType {
     STAFFTYPE_CHANGE,
     HARMONY,
     FRET_DIAGRAM,
+    HARP_DIAGRAM,
     BEND,
     STRETCHED_BEND,
     TREMOLOBAR,
@@ -664,6 +665,8 @@ enum class TextStyleType {
     LH_GUITAR_FINGERING,
     RH_GUITAR_FINGERING,
     STRING_NUMBER,
+    HARP_PEDAL_DIAGRAM,
+    HARP_PEDAL_TEXT_DIAGRAM,
 
     // Line-oriented styles
     TEXTLINE,

@@ -76,6 +76,7 @@
 #include "../../libmscore/hairpin.h"
 #include "../../libmscore/harmony.h"
 #include "../../libmscore/harmonicmark.h"
+#include "../../libmscore/harppedaldiagram.h"
 #include "../../libmscore/hook.h"
 
 #include "../../libmscore/image.h"
@@ -165,7 +166,7 @@ using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Art
                                   Dynamic, Expression,
                                   Fermata, FiguredBass, Fingering, FretDiagram,
                                   Glissando, GradualTempoChange,
-                                  Hairpin, Harmony, HarmonicMark, Hook,
+                                  Hairpin, Harmony, HarmonicMark, HarpPedalDiagram, Hook,
                                   Image, InstrumentChange,
                                   Jump,
                                   KeySig,
@@ -1412,6 +1413,25 @@ void TWrite::write(const HarmonicMark* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const HarpPedalDiagram* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::HARP_IS_DIAGRAM);
+
+    // Write vector of harp strings.  Order is always D, C, B, E, F, G, A
+    xml.startElement("pedalState");
+    for (int idx = 0; idx < item->getPedalState().size(); idx++) {
+        xml.tag("string", { { "name", idx } }, static_cast<int>(item->getPedalState()[idx]));
+    }
+    xml.endElement();
+
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
 

@@ -81,6 +81,7 @@ class Groups;
 class Hairpin;
 class Harmony;
 class HarmonicMark;
+class HarpPedalDiagram;
 class Hook;
 
 class Instrument;
@@ -220,6 +221,7 @@ public:
 
     static void read(Hairpin* h, XmlReader& xml, ReadContext& ctx);
     static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
+    static void read(HarpPedalDiagram* h, XmlReader& xml, ReadContext& ctx);
     static void read(HarmonicMark* h, XmlReader& xml, ReadContext& ctx);
     static void read(Hook* h, XmlReader& xml, ReadContext& ctx);
 

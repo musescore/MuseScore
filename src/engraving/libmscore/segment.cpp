@@ -36,6 +36,7 @@
 #include "engravingitem.h"
 #include "factory.h"
 #include "harmony.h"
+#include "harppedaldiagram.h"
 #include "hook.h"
 #include "instrchange.h"
 #include "keysig.h"
@@ -622,6 +623,15 @@ void Segment::add(EngravingItem* el)
         break;
     }
 
+    case ElementType::HARP_DIAGRAM:
+        // already a diagram in this segment
+        if (el->part()->harpDiagrams.count(toHarpPedalDiagram(el)->segment()->tick().ticks()) > 0) {
+            break;
+        }
+        el->part()->addHarpDiagram(toHarpPedalDiagram(el));
+        _annotations.push_back(el);
+        break;
+
     case ElementType::CLEF:
         assert(_segmentType == SegmentType::Clef || _segmentType == SegmentType::HeaderClef);
         checkElement(el, track);
@@ -787,6 +797,11 @@ void Segment::remove(EngravingItem* el)
         Part* part = is->part();
         part->removeInstrument(tick());
     }
+        removeAnnotation(el);
+        break;
+
+    case ElementType::HARP_DIAGRAM:
+        el->part()->removeHarpDiagram(toHarpPedalDiagram(el));
         removeAnnotation(el);
         break;
 
@@ -1787,6 +1802,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::FIGURED_BASS:
     case ElementType::STAFF_STATE:
     case ElementType::INSTRUMENT_CHANGE:
+    case ElementType::HARP_DIAGRAM:
     case ElementType::STICKING: {
         EngravingItem* next = nullptr;
         if (e->explicitParent() == this) {
@@ -1931,6 +1947,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::FIGURED_BASS:
     case ElementType::STAFF_STATE:
     case ElementType::INSTRUMENT_CHANGE:
+    case ElementType::HARP_DIAGRAM:
     case ElementType::STICKING: {
         EngravingItem* prev = nullptr;
         if (e->explicitParent() == this) {
@@ -2303,6 +2320,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isArticulation()
                    && !e->isFermata()
                    && !e->isStaffText()
+                   && !e->isHarpPedalDiagram()
                    && !e->isPlayTechAnnotation()) {
             // annotations added here are candidates for collision detection
             // lyrics, ...

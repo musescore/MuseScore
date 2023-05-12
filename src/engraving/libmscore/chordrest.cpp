@@ -41,6 +41,7 @@
 #include "factory.h"
 #include "figuredbass.h"
 #include "harmony.h"
+#include "harppedaldiagram.h"
 #include "instrchange.h"
 #include "keysig.h"
 #include "lyrics.h"
@@ -288,6 +289,7 @@ EngravingItem* ChordRest::drop(EditData& data)
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::STICKING:
     case ElementType::STAFF_STATE:
+    case ElementType::HARP_DIAGRAM:
     // fall through
     case ElementType::REHEARSAL_MARK:
     {
@@ -297,6 +299,16 @@ EngravingItem* ChordRest::drop(EditData& data)
             RehearsalMark* r = toRehearsalMark(e);
             if (fromPalette) {
                 r->setXmlText(score()->createRehearsalMarkText(r));
+            }
+        }
+        // Match pedal config with previous diagram's
+        if (e->isHarpPedalDiagram()) {
+            HarpPedalDiagram* h = toHarpPedalDiagram(e);
+            if (fromPalette && part()) {
+                HarpPedalDiagram* prevDiagram = part()->prevHarpDiagram(segment()->tick());
+                if (prevDiagram) {
+                    h->setPedalState(prevDiagram->getPedalState());
+                }
             }
         }
         score()->undoAddElement(e);

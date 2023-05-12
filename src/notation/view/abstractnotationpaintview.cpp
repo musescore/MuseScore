@@ -494,6 +494,60 @@ void AbstractNotationPaintView::hideContextMenu()
     emit hideContextMenuRequested();
 }
 
+void AbstractNotationPaintView::showElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size, bool activateFocus)
+{
+    TRACEFUNC;
+
+    QPointF _pos = pos;
+    if (_pos.isNull()) {
+        _pos = QPointF(width() / 2, height() / 2);
+    }
+
+    RectF elemRect = fromLogical(size);
+    QPointF elemSize = QPointF(elemRect.width(), elemRect.height());
+
+    PopupModelType modelType = AbstractElementPopupModel::modelTypeFromElement(elementType);
+
+    emit showElementPopupRequested(modelType, pos, elemSize);
+
+    setIsPopupOpen(true);
+
+    if (activateFocus) {
+        dispatcher()->dispatch("nav-first-control");
+    }
+}
+
+void AbstractNotationPaintView::hideElementPopup()
+{
+    TRACEFUNC;
+    emit hideElementPopupRequested();
+    setIsPopupOpen(false);
+}
+
+void AbstractNotationPaintView::toggleElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size,
+                                                   bool activateFocus)
+{
+    if (isPopupOpen()) {
+        hideElementPopup();
+        return;
+    }
+    showElementPopup(elementType, pos, size, activateFocus);
+}
+
+bool AbstractNotationPaintView::isPopupOpen() const
+{
+    return m_isPopupOpen;
+}
+
+void AbstractNotationPaintView::setIsPopupOpen(bool isPopupOpen)
+{
+    if (isPopupOpen == m_isPopupOpen) {
+        return;
+    }
+    m_isPopupOpen = isPopupOpen;
+    emit isPopupOpenChanged(m_isPopupOpen);
+}
+
 void AbstractNotationPaintView::paint(QPainter* qp)
 {
     TRACEFUNC;
@@ -867,6 +921,8 @@ bool AbstractNotationPaintView::moveCanvas(qreal dx, qreal dy)
 
         m_autoScrollEnabled = false;
         m_enableAutoScrollTimer.start(2000);
+
+        hideElementPopup();
     }
 
     return moved;
@@ -929,6 +985,8 @@ void AbstractNotationPaintView::setScaling(qreal scaling, const PointF& pos, boo
     if (!m_notation) {
         return;
     }
+
+    hideElementPopup();
 
     qreal currentScaling = this->currentScaling();
 

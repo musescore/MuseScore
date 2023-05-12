@@ -104,6 +104,7 @@
 #include "../../libmscore/line.h"
 #include "../../libmscore/textlinebase.h"
 #include "../../libmscore/groups.h"
+#include "../../libmscore/harppedaldiagram.h"
 #include "../../libmscore/hairpin.h"
 #include "../../libmscore/keysig.h"
 #include "../../libmscore/layoutbreak.h"
@@ -148,7 +149,7 @@ using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Arti
                                  Dynamic, Expression,
                                  Fermata, FiguredBass, Fingering, FretDiagram,
                                  Glissando, GradualTempoChange,
-                                 Hairpin, Harmony, HarmonicMark, Hook,
+                                 Hairpin, Harmony, HarmonicMark, HarpPedalDiagram, Hook,
                                  Image, InstrumentChange,
                                  Jump,
                                  KeySig,
@@ -2745,6 +2746,30 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
 void TRead::read(HarmonicMark* h, XmlReader& xml, ReadContext& ctx)
 {
     TRead::read(static_cast<TextLineBase*>(h), xml, ctx);
+}
+
+void TRead::read(HarpPedalDiagram* h, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag = xml.name();
+        if (tag == "isDiagram") {
+            h->setIsDiagram(xml.readBool());
+        } else if (tag == "pedalState") {
+            while (xml.readNextStartElement()) {
+                const AsciiStringView stringTag = xml.name();
+                if (stringTag == "string") {
+                    HarpStringType str = HarpStringType(xml.intAttribute("name"));
+                    PedalPosition pos = PedalPosition(xml.readInt());
+                    h->setPedal(str, pos);
+                } else {
+                    xml.unknown();
+                }
+            }
+            h->setPlayablePitches();
+        } else if (!readProperties(h, xml, ctx)) {
+            xml.unknown();
+        }
+    }
 }
 
 void TRead::read(Hook* h, XmlReader& xml, ReadContext& ctx)

@@ -1050,6 +1050,18 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         sp->layoutSystem(system);
     }
 
+    //-------------------------------------------------------------
+    // Harp pedal diagrams
+    //-------------------------------------------------------------
+
+    for (const Segment* s : sl) {
+        for (EngravingItem* e : s->annotations()) {
+            if (e->isHarpPedalDiagram()) {
+                e->layout();
+            }
+        }
+    }
+
     //
     // We need to known if we have FretDiagrams in the system to decide when to layout the Harmonies
     //

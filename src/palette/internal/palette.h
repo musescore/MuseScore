@@ -83,6 +83,7 @@ public:
         Guitar,
         Keyboard,
         Pitch,
+        Harp,
         Custom
     };
     Q_ENUM(Type)
