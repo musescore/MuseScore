@@ -42,8 +42,6 @@ public:
 
     PickScrape* pickScrape() const { return (PickScrape*)spanner(); }
 
-    void layout() override;
-
     friend class PickScrape;
 };
 

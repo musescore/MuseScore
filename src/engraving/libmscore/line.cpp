@@ -1170,19 +1170,6 @@ SpannerSegment* SLine::layoutSystem(System* system)
 }
 
 //---------------------------------------------------------
-//   layout
-//    compute segments from tick1 tick2
-//    (used for palette, edit mode, and layout of note lines and glissandi)
-//---------------------------------------------------------
-
-void SLine::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layoutLine(this, ctx);
-}
-
-//---------------------------------------------------------
 //   setLen
 //    used to create an element suitable for palette
 //---------------------------------------------------------

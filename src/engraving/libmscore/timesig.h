@@ -70,8 +70,6 @@ public:
     double mag() const override;
     void draw(mu::draw::Painter*) const override;
 
-    void layout() override;
-
     Fraction sig() const { return _sig; }
     void setSig(const Fraction& f, TimeSigType st = TimeSigType::NORMAL);
     int numerator() const { return _sig.numerator(); }

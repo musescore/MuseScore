@@ -77,7 +77,7 @@ public:
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
-    void layout() override;
+
     void draw(mu::draw::Painter* painter) const override;
     bool isEditable() const override { return true; }
     void editDrag(EditData&) override;

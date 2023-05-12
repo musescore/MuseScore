@@ -40,7 +40,7 @@ public:
     EngravingItem* linkedClone() override { return new MMRest(*this, true); }
 
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
+
     void setWidth(double width) override { m_width = width; }
     double width() const override { return m_width; }
 

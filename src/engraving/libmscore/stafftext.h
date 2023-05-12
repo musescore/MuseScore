@@ -39,7 +39,6 @@ public:
     StaffText(Segment* parent = 0, TextStyleType = TextStyleType::STAFF);
 
     StaffText* clone() const override { return new StaffText(*this); }
-    void layout() override;
 
 private:
     PropertyValue propertyDefault(Pid id) const override;

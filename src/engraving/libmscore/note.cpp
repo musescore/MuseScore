@@ -2158,17 +2158,6 @@ void Note::setDotY(DirectionV pos)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Note::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   layout2
 //    called after final position of note is set
 //---------------------------------------------------------

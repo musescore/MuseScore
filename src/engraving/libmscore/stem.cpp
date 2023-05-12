@@ -67,13 +67,6 @@ bool Stem::up() const
     return chord() ? chord()->up() : true;
 }
 
-void Stem::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
 void Stem::setBaseLength(Millimetre baseLength)
 {
     m_baseLength = Millimetre(std::abs(baseLength.val()));

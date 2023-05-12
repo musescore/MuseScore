@@ -63,8 +63,6 @@ public:
 
     Measure* measure() const { return toMeasure(explicitParent()); }
 
-    void layout() override;
-
     String jumpTo() const { return _jumpTo; }
     String playUntil() const { return _playUntil; }
     String continueAt() const { return _continueAt; }

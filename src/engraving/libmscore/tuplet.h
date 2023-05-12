@@ -101,7 +101,6 @@ public:
         return std::find(_currentElements.begin(), _currentElements.end(), el) != _currentElements.end();
     }
 
-    void layout() override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     void reset() override;

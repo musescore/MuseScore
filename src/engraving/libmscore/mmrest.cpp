@@ -138,17 +138,6 @@ void MMRest::draw(mu::draw::Painter* painter) const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void MMRest::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   numberRect
 ///   returns the mmrest number's bounding rectangle
 //---------------------------------------------------------

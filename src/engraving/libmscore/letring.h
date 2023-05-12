@@ -44,8 +44,6 @@ public:
 
     LetRing* letRing() const { return (LetRing*)spanner(); }
 
-    void layout() override;
-
     friend class LetRing;
 };
 

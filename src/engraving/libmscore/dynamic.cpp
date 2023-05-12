@@ -233,17 +233,6 @@ bool Dynamic::isVelocityChangeAvailable() const
     }
 }
 
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Dynamic::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
 double Dynamic::customTextOffset()
 {
     if (!_centerOnNotehead || _dynamicType == DynamicType::OTHER) {

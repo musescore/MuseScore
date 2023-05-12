@@ -40,7 +40,6 @@ public:
     void setTechniqueType(const PlayingTechniqueType techniqueType);
 
     PlayTechAnnotation* clone() const override;
-    void layout() override;
 
 private:
 

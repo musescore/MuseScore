@@ -153,8 +153,6 @@ public:
 
     static std::shared_ptr<FretDiagram> createFromString(Score* score, const String& s);
 
-    void layout() override;
-
     std::vector<mu::LineF> dragAnchorLines() const override;
     mu::PointF pagePos() const override;
     double centerX() const;

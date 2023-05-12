@@ -45,7 +45,6 @@ public:
     Vibrato* vibrato() const { return toVibrato(spanner()); }
 
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
 
     EngravingItem* propertyDelegate(Pid) override;
 
@@ -83,7 +82,6 @@ public:
 
     Vibrato* clone() const override { return new Vibrato(*this); }
 
-    void layout() override;
     LineSegment* createLineSegment(System* parent) override;
 
     void undoSetVibratoType(VibratoType val);

@@ -68,8 +68,6 @@ public:
 
     void draw(mu::draw::Painter*) const override;
 
-    void layout() override;
-
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
 
@@ -104,8 +102,6 @@ public:
     String accessibleInfo() const override;
 
     void draw(mu::draw::Painter*) const override;
-
-    void layout() override;
 
     double baseLine() const override { return 0.0; }
     Segment* segment() const { return (Segment*)explicitParent(); }

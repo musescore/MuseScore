@@ -46,7 +46,6 @@ public:
     VoltaSegment* clone() const override { return new VoltaSegment(*this); }
 
     Volta* volta() const { return (Volta*)spanner(); }
-    void layout() override;
 
     EngravingItem* propertyDelegate(Pid) override;
 };

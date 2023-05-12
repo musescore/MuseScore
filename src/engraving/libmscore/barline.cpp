@@ -1193,17 +1193,6 @@ RectF BarLine::layoutRect() const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void BarLine::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   layout2
 //    called after system layout; set vertical dimensions
 //---------------------------------------------------------

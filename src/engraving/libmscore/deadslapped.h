@@ -42,8 +42,6 @@ public:
 
     void draw(mu::draw::Painter*) const override;
 
-    void layout() override;
-
 private:
 
     friend class Factory;

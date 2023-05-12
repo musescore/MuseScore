@@ -178,17 +178,6 @@ void Tuplet::resetNumberProperty(Text* number)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Tuplet::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    TupletLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   calcHasBracket
 //---------------------------------------------------------
 

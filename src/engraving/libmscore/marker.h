@@ -52,8 +52,6 @@ public:
 
     Measure* measure() const { return (Measure*)explicitParent(); }
 
-    void layout() override;
-
     String label() const { return _label; }
     void setLabel(const String& s) { _label = s; }
     void undoSetLabel(const String& s);

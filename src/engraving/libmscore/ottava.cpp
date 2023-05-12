@@ -72,17 +72,6 @@ OttavaSegment::OttavaSegment(Ottava* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void OttavaSegment::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   propertyDelegate
 //---------------------------------------------------------
 

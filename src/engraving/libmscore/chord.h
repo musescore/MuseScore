@@ -64,7 +64,7 @@ public:
 
     Chord* parent() const { return _parent; }
     Shape shape() const override;
-    void layout() override;
+
     void setPos(double x, double y) override;
     Segment* appendedSegment() const { return _appendedSegment; }
     void setAppendedSegment(Segment* s) { _appendedSegment = s; }
@@ -278,7 +278,7 @@ public:
     void remove(EngravingItem*) override;
 
     Note* selectedNote() const;
-    void layout() override;
+
     mu::PointF pagePos() const override;        ///< position in page coordinates
     void cmdUpdateNotes(AccidentalState*);
 

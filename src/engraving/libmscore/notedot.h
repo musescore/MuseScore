@@ -45,7 +45,6 @@ public:
     double mag() const override;
 
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
 
     Note* note() const { return explicitParent()->isNote() ? toNote(explicitParent()) : 0; }
     Rest* rest() const { return explicitParent()->isRest() ? toRest(explicitParent()) : 0; }

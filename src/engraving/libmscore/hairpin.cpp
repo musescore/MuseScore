@@ -112,17 +112,6 @@ EngravingItem* HairpinSegment::drop(EditData& data)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void HairpinSegment::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   shape
 //---------------------------------------------------------
 
@@ -413,18 +402,6 @@ void Hairpin::setHairpinType(HairpinType val)
     }
     _hairpinType = val;
     styleChanged();
-}
-
-//---------------------------------------------------------
-//   layout
-//    compute segments from tick() to _tick2
-//---------------------------------------------------------
-
-void Hairpin::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

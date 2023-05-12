@@ -44,8 +44,6 @@ public:
 
     Rasgueado* rasgueado() const { return (Rasgueado*)spanner(); }
 
-    void layout() override;
-
     friend class Rasgueado;
 };
 

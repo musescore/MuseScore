@@ -88,7 +88,6 @@ public:
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
-    void layout() override;
 
     bool isGap() const { return m_gap; }
     virtual void setGap(bool v) { m_gap = v; }
