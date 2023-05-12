@@ -92,7 +92,6 @@ public:
 
     Slur* clone() const override { return new Slur(*this); }
 
-    void layout() override;
     SpannerSegment* layoutSystem(System*) override;
     void setTrack(track_idx_t val) override;
 

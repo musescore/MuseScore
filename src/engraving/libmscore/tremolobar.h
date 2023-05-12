@@ -53,7 +53,6 @@ public:
 
     TremoloBar* clone() const override { return new TremoloBar(*this); }
 
-    void layout() override;
     void draw(mu::draw::Painter*) const override;
 
     PitchValues& points() { return m_points; }

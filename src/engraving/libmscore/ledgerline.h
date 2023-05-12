@@ -64,7 +64,6 @@ public:
     void setVertical(bool v) { m_vertical = v; }
     bool vertical() const { return m_vertical; }
 
-    void layout() override;
     void draw(mu::draw::Painter*) const override;
 
     double measureXPos() const;

@@ -339,17 +339,6 @@ void Rest::updateSymbol(int line, int lines)
     m_sym = getSymbol(durationType().type(), line, lines);
 }
 
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Rest::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
 double Rest::symWidthNoLedgerLines() const
 {
     if (m_sym == SymId::restHalfLegerLine) {

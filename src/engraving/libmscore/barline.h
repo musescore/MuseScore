@@ -106,7 +106,7 @@ public:
     void draw(mu::draw::Painter*) const override;
     mu::PointF canvasPos() const override;      ///< position in canvas coordinates
     mu::PointF pagePos() const override;        ///< position in page coordinates
-    void layout() override;
+
     void layout2();
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void setTrack(track_idx_t t) override;

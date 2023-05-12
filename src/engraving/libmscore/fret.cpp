@@ -458,17 +458,6 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     }
 }
 
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void FretDiagram::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
 double FretDiagram::centerX() const
 {
     // Keep in sync with how bbox is calculated in layout().

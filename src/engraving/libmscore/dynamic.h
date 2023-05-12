@@ -83,7 +83,6 @@ public:
     TranslatableString subtypeUserName() const override;
     String translatedSubtypeUserName() const override;
 
-    void layout() override;
     double customTextOffset();
 
     bool isEditable() const override { return true; }

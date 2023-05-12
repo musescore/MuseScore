@@ -57,17 +57,6 @@ SystemDivider::SystemDivider(const SystemDivider& sd)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void SystemDivider::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   setDividerType
 //---------------------------------------------------------
 

@@ -50,13 +50,6 @@ void Hook::setHookType(int i)
     setSym(symIdForHookIndex(i, straight));
 }
 
-void Hook::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
 void Hook::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;

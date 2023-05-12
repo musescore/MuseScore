@@ -140,7 +140,6 @@ public:
     FiguredBassItem* clone() const override { return new FiguredBassItem(*this); }
 
     void              draw(mu::draw::Painter* painter) const override;
-    void              layout() override;
 
     bool              startsWithParenthesis() const;
 
@@ -277,7 +276,7 @@ public:
     FiguredBassItem* createItem(int line) { return new FiguredBassItem(this, line); }
 
     void draw(mu::draw::Painter* painter) const override;
-    void layout() override;
+
     void setSelected(bool f) override;
     void setVisible(bool f) override;
     void startEdit(EditData&) override;

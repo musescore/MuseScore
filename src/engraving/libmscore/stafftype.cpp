@@ -822,17 +822,6 @@ TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void TabDurationSymbol::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   layout2
 //
 //    Second step: after horizontal positions of elements involved are defined,

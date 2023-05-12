@@ -100,15 +100,4 @@ PropertyValue MeasureNumberBase::propertyDefault(Pid id) const
         return TextBase::propertyDefault(id);
     }
 }
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void MeasureNumberBase::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layoutMeasureNumberBase(this, ctx);
-}
 } // namespace MS

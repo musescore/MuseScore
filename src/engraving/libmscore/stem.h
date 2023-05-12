@@ -40,7 +40,6 @@ public:
 
     Stem* clone() const override { return new Stem(*this); }
 
-    void layout() override;
     void draw(mu::draw::Painter*) const override;
     void spatiumChanged(double oldValue, double newValue) override;
     EngravingItem* elementBase() const override;

@@ -66,17 +66,6 @@ void LyricsLine::styleChanged()
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void LyricsLine::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   layoutSystem
 //---------------------------------------------------------
 
@@ -235,17 +224,6 @@ LyricsLineSegment::LyricsLineSegment(LyricsLine* sp, System* parent)
     : LineSegment(ElementType::LYRICSLINE_SEGMENT, sp, parent, ElementFlag::ON_STAFF | ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void LyricsLineSegment::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

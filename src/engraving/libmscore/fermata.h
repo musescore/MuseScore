@@ -71,8 +71,6 @@ public:
     int subtype() const override;
     TranslatableString typeUserName() const override;
 
-    void layout() override;
-
     std::vector<mu::LineF> dragAnchorLines() const override;
 
     PropertyValue getProperty(Pid propertyId) const override;

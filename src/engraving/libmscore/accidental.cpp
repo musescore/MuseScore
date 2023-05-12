@@ -328,17 +328,6 @@ void Accidental::setSubtype(const AsciiStringView& tag)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Accidental::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   value2subtype
 //---------------------------------------------------------
 

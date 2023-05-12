@@ -79,7 +79,6 @@ public:
 
     GradualTempoChange* tempoChange() const;
 
-    void layout() override;
     void endEdit(EditData& editData) override;
     void added() override;
     void removed() override;

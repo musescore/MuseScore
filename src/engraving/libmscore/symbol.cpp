@@ -78,19 +78,6 @@ String Symbol::accessibleInfo() const
 }
 
 //---------------------------------------------------------
-//   layout
-//    height() and width() should return sensible
-//    values when calling this method
-//---------------------------------------------------------
-
-void Symbol::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   Symbol::draw
 //---------------------------------------------------------
 
@@ -191,13 +178,6 @@ void FSymbol::draw(mu::draw::Painter* painter) const
     painter->setFont(f);
     painter->setPen(curColor());
     painter->drawText(PointF(0, 0), toString());
-}
-
-void FSymbol::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

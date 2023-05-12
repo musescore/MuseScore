@@ -379,7 +379,6 @@ public:
 
     void insertText(EditData&, const String&);
 
-    virtual void layout() override;
     virtual void layout1();
     double lineSpacing() const;
     double lineHeight() const;

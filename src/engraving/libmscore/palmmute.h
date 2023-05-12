@@ -46,8 +46,6 @@ public:
 
     PalmMute* palmMute() const { return (PalmMute*)spanner(); }
 
-    void layout() override;
-
     friend class PalmMute;
 };
 

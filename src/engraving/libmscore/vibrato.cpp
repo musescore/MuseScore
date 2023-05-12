@@ -100,17 +100,6 @@ void VibratoSegment::symbolLine(SymId start, SymId fill, SymId end)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void VibratoSegment::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   shape
 //---------------------------------------------------------
 
@@ -154,17 +143,6 @@ Vibrato::Vibrato(EngravingItem* parent)
 
 Vibrato::~Vibrato()
 {
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Vibrato::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 static const ElementStyle vibratoSegmentStyle {

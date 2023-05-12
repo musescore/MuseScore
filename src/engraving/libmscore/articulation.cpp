@@ -230,17 +230,6 @@ Page* Articulation::page() const
     return toPage(s ? s->explicitParent() : 0);
 }
 
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Articulation::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
 bool Articulation::isHiddenOnTabStaff() const
 {
     if (m_showOnTabStyles.first == Sid::NOSTYLE || m_showOnTabStyles.second == Sid::NOSTYLE) {

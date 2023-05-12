@@ -40,7 +40,6 @@ class StretchedBend final : public Bend
 public:
     StretchedBend* clone() const override { return new StretchedBend(*this); }
 
-    void layout() override;
     void layoutStretched();
     void draw(mu::draw::Painter*) const override;
     bool stretchedMode() const { return m_stretchedMode; }

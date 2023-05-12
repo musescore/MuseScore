@@ -301,13 +301,6 @@ Sid GradualTempoChangeSegment::getPropertyStyle(Pid id) const
     return TextLineBaseSegment::getPropertyStyle(id);
 }
 
-void GradualTempoChangeSegment::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
 void GradualTempoChangeSegment::endEdit(EditData& editData)
 {
     IF_ASSERT_FAILED(tempoChange()) {

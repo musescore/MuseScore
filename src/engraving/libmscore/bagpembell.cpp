@@ -140,18 +140,6 @@ double BagpipeEmbellishment::mag() const
 }
 
 //---------------------------------------------------------
-//   layout
-//      calculate and set bounding box
-//---------------------------------------------------------
-
-void BagpipeEmbellishment::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   drawBeams
 //      draw the beams
 //      x1,y is one side of the top beam

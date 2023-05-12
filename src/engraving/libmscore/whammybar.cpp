@@ -61,17 +61,6 @@ WhammyBarSegment::WhammyBarSegment(WhammyBar* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void WhammyBarSegment::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   WhammyBar
 //---------------------------------------------------------
 

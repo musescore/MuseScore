@@ -42,7 +42,6 @@ public:
 
     StaffLines* clone() const override { return new StaffLines(*this); }
 
-    void layout() override;
     void draw(mu::draw::Painter*) const override;
     mu::PointF pagePos() const override;      ///< position in page coordinates
     mu::PointF canvasPos() const override;    ///< position in page coordinates

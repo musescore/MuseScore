@@ -60,17 +60,6 @@ bool Sticking::isEditAllowed(EditData& ed) const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Sticking::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 

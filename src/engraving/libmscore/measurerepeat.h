@@ -56,7 +56,7 @@ public:
     const Measure* referringMeasure() const;
 
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
+
     Fraction ticks() const override;
     Fraction actualTicks() const { return Rest::ticks(); }
 

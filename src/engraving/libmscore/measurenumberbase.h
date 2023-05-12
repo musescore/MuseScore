@@ -43,7 +43,6 @@ public:
     bool setProperty(Pid id, const PropertyValue& val) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    void layout() override;
     Measure* measure() const { return toMeasure(explicitParent()); }
 
     bool isEditable() const override { return false; }    // The measure numbers' text should not be editable

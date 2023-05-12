@@ -495,7 +495,9 @@ void NotationInteraction::showShadowNote(const PointF& pos)
         shadowNote.setState(symNotehead, duration, false, segmentSkylineTopY, segmentSkylineBottomY);
     }
 
-    shadowNote.layout();
+    LayoutContext lctx(shadowNote.score());
+    v0::TLayout::layout(&shadowNote, lctx);
+
     shadowNote.setPos(position.pos);
 }
 

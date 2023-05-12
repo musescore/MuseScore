@@ -410,7 +410,6 @@ public:
     virtual void removed() {}
     virtual void change(EngravingItem* o, EngravingItem* n);
 
-    virtual void layout() { UNREACHABLE; }
     virtual void spatiumChanged(double /*oldValue*/, double /*newValue*/);
     virtual void localSpatiumChanged(double /*oldValue*/, double /*newValue*/);
 

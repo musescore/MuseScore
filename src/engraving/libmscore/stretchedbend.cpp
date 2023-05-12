@@ -239,17 +239,6 @@ void StretchedBend::stretchSegments()
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void StretchedBend::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   layoutStretched
 //---------------------------------------------------------
 

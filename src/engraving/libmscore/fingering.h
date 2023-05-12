@@ -50,7 +50,6 @@ public:
     PlacementV calculatePlacement() const;
 
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
 
     bool isEditAllowed(EditData&) const override;
 

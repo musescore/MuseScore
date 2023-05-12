@@ -65,8 +65,6 @@ public:
     virtual void editDrag(EditData&) override;
     virtual void endEdit(EditData&) override;
 
-    virtual void layout() override;
-
     virtual bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;
     virtual void add(EngravingItem* e) override;
@@ -124,8 +122,6 @@ public:
 
     HBox* clone() const override { return new HBox(*this); }
 
-    void layout() override;
-
     mu::RectF drag(EditData&) override;
     void layout2();
     bool isMovable() const override;
@@ -162,7 +158,6 @@ public:
     double maxHeight() const;
 
     PropertyValue getProperty(Pid propertyId) const override;
-    void layout() override;
 
     void startEditDrag(EditData&) override;
 
@@ -186,7 +181,6 @@ public:
 
     FBox* clone() const override { return new FBox(*this); }
 
-    void layout() override;
     void add(EngravingItem*) override;
 };
 } // namespace mu::engraving
