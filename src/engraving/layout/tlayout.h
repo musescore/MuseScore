@@ -71,6 +71,7 @@ class GradualTempoChange;
 
 class HairpinSegment;
 class Hairpin;
+class HarpPedalDiagram;
 class HarmonicMarkSegment;
 class Harmony;
 class Hook;
@@ -213,6 +214,7 @@ public:
 
     static void layout(HairpinSegment* item, LayoutContext& ctx);
     static void layout(Hairpin* item, LayoutContext& ctx);
+    static void layout(HarpPedalDiagram* item, LayoutContext& ctx);
     static void layout(HarmonicMarkSegment* item, LayoutContext& ctx);
     static void layout(Harmony* item, LayoutContext& ctx);
     static void layout1(Harmony* item, LayoutContext& ctx);
