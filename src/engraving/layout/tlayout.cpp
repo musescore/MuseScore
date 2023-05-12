@@ -183,8 +183,12 @@ using LayoutTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Ar
                                    Hairpin, Harmony, HarmonicMark, Hook,
 =======
                                    Glissando, GlissandoSegment, GradualTempoChange, GradualTempoChangeSegment,
+<<<<<<< HEAD
                                    Hairpin, HairpinSegment, Harmony, HarmonicMarkSegment, Hook,
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+                                   Hairpin, HairpinSegment, HarpPedalDiagram, Harmony, HarmonicMarkSegment, Hook,
+>>>>>>> 4d3f9ea99e... fixed conflicts
                                    Image, InstrumentChange,
                                    Jump,
                                    KeySig,
@@ -2567,6 +2571,9 @@ void TLayout::layout(Hairpin* item, LayoutContext& ctx)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 4d3f9ea99e... fixed conflicts
 void TLayout::layout(HarpPedalDiagram* item, LayoutContext& ctx)
 {
     item->updateDiagramText();
@@ -2574,8 +2581,11 @@ void TLayout::layout(HarpPedalDiagram* item, LayoutContext& ctx)
     item->autoplaceSegmentElement();
 }
 
+<<<<<<< HEAD
 =======
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 4d3f9ea99e... fixed conflicts
 void TLayout::layout(HarmonicMarkSegment* item, LayoutContext& ctx)
 {
     const StaffType* stType = item->staffType();
