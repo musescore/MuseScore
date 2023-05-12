@@ -58,7 +58,6 @@ private:
     StaffTypeChange(MeasureBase* parent = 0);
     StaffTypeChange(const StaffTypeChange&);
 
-    void layout() override;
     void spatiumChanged(double oldValue, double newValue) override;
     void draw(mu::draw::Painter*) const override;
 

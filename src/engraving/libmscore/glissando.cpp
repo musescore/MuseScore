@@ -74,17 +74,6 @@ GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void GlissandoSegment::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -229,17 +218,6 @@ LineSegment* Glissando::createLineSegment(System* parent)
     seg->setTrack(track());
     seg->setColor(color());
     return seg;
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Glissando::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 void Glissando::addLineAttachPoints()

@@ -62,19 +62,6 @@ TBox::~TBox()
 }
 
 //---------------------------------------------------------
-//   layout
-///   The text box layout() adjusts the frame height to text
-///   height.
-//---------------------------------------------------------
-
-void TBox::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   drop
 //---------------------------------------------------------
 

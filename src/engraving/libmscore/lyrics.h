@@ -65,7 +65,6 @@ public:
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()->explicitParent()); }
     ChordRest* chordRest() const { return toChordRest(explicitParent()); }
 
-    void layout() override;
     void layout2(int);
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
@@ -132,7 +131,7 @@ public:
     LyricsLine(const LyricsLine&);
 
     LyricsLine* clone() const override { return new LyricsLine(*this); }
-    void layout() override;
+
     LineSegment* createLineSegment(System* parent) override;
     void removeUnmanaged() override;
     void styleChanged() override;
@@ -165,7 +164,7 @@ public:
 
     LyricsLineSegment* clone() const override { return new LyricsLineSegment(*this); }
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
+
     // helper functions
     LyricsLine* lyricsLine() const { return toLyricsLine(spanner()); }
     Lyrics* lyrics() const { return lyricsLine()->lyrics(); }

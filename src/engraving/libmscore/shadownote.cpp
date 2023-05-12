@@ -267,15 +267,4 @@ void ShadowNote::drawArticulation(mu::draw::Painter* painter, const SymId& artic
 
     drawSymbol(artic, painter, coord);
 }
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void ShadowNote::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
 }

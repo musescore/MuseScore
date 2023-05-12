@@ -153,18 +153,6 @@ bool Lyrics::isMelisma() const
 }
 
 //---------------------------------------------------------
-//   layout
-//    - does not touch vertical position
-//---------------------------------------------------------
-
-void Lyrics::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 

@@ -272,18 +272,6 @@ void Beam::move(const PointF& offset)
 }
 
 //---------------------------------------------------------
-//   layout
-//   TODO - document what this function does
-//---------------------------------------------------------
-
-void Beam::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   layoutIfNeed
 //   check to see if the layout info is valid, and if not, layout
 //---------------------------------------------------------

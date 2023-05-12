@@ -38,8 +38,6 @@ public:
 
     ~FretCircle();
 
-    void layout() override;
-
     void draw(mu::draw::Painter*) const override;
 
     double offsetFromUpNote() const { return _offsetFromUpNote; }

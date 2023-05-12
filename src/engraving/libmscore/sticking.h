@@ -46,8 +46,6 @@ public:
     Segment* segment() const { return (Segment*)explicitParent(); }
     Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
-    void layout() override;
-
     bool isEditAllowed(EditData&) const override;
 };
 } // namespace mu::engraving

@@ -264,17 +264,6 @@ bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void TextLineBaseSegment::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layoutTextLineBaseSegment(this, ctx);
-}
-
-//---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------
 

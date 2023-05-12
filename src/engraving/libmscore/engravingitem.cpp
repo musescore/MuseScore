@@ -42,6 +42,7 @@
 #include "rw/400/twrite.h"
 
 #include "types/typesconv.h"
+#include "layout/tlayout.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -896,9 +897,10 @@ void Compound::layout()
 {
     UNREACHABLE;
     setbbox(RectF());
+    LayoutContext lctx(score());
     for (auto i = elements.begin(); i != elements.end(); ++i) {
         EngravingItem* e = *i;
-        e->layout();
+        v0::TLayout::layoutItem(e, lctx);
         addbbox(e->bbox().translated(e->pos()));
     }
 }

@@ -76,13 +76,6 @@ void ActionIcon::setFontSize(double size)
     m_iconFont.setPointSizeF(size);
 }
 
-void ActionIcon::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
 void ActionIcon::draw(Painter* painter) const
 {
     TRACE_ITEM_DRAW;

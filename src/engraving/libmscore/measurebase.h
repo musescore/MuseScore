@@ -118,7 +118,6 @@ public:
     Measure* nextMeasureMM() const;
     Measure* prevMeasureMM() const;
 
-    virtual void layout() override;
     virtual void layoutCrossStaff() {}
 
     ElementList& el() { return _el; }

@@ -453,7 +453,6 @@ public:
     TabDurationSymbol* clone() const override { return new TabDurationSymbol(*this); }
     void draw(mu::draw::Painter*) const override;
     bool isEditable() const override { return false; }
-    void layout() override;
 
     TabBeamGrid beamGrid() { return _beamGrid; }
     void layout2();                 // second step of layout: after horiz. pos. are defined, compute width of 'grid beams'

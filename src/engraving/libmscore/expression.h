@@ -41,7 +41,6 @@ public:
 
     PropertyValue propertyDefault(Pid id) const override;
 
-    void layout() override;
     double computeDynamicExpressionDistance() const;
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;

@@ -58,13 +58,6 @@ PlayTechAnnotation* PlayTechAnnotation::clone() const
     return new PlayTechAnnotation(*this);
 }
 
-void PlayTechAnnotation::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
 PropertyValue PlayTechAnnotation::getProperty(Pid id) const
 {
     switch (id) {

@@ -151,17 +151,6 @@ void Bend::updatePointsByBendType(const BendType bendType)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Bend::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 

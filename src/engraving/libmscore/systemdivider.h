@@ -54,8 +54,6 @@ public:
 
     mu::RectF drag(EditData&) override;
 
-    void layout() override;
-
     Segment* segment() const override { return nullptr; }
     System* system() const { return (System*)explicitParent(); }
 };

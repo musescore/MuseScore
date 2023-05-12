@@ -158,7 +158,6 @@ public:
 
     System* system() const { return toSystem(explicitParent()); }
 
-    void layout() override;
     void layoutIfNeed();
 
     PointF chordBeamAnchor(const ChordRest* chord, BeamTremoloLayout::ChordBeamAnchorType anchorType) const;

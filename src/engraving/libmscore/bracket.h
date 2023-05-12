@@ -97,7 +97,6 @@ public:
     Shape shape() const override { return _shape; }
 
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
 
     bool isEditable() const override;
     bool needStartEditingAfterSelecting() const override;

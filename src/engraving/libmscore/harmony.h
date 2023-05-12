@@ -170,7 +170,6 @@ public:
                                    NoteCaseType& baseCase);
 
     void textChanged();
-    void layout() override;
     void layout1() override;
 
     bool isEditable() const override { return true; }

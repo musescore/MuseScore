@@ -59,15 +59,4 @@ engraving::PropertyValue SystemText::propertyDefault(Pid id) const
         return TextBase::propertyDefault(id);
     }
 }
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void SystemText::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
 } // namespace mu::engraving

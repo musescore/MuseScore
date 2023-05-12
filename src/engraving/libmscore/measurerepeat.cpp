@@ -116,17 +116,6 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void MeasureRepeat::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   numberRect
 ///   returns the measure repeat number's bounding rectangle
 //---------------------------------------------------------

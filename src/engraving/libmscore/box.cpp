@@ -64,17 +64,6 @@ Box::Box(const ElementType& type, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Box::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layoutBox(this, ctx);
-}
-
-//---------------------------------------------------------
 //   computeMinWidth
 //---------------------------------------------------------
 
@@ -351,17 +340,6 @@ HBox::HBox(System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void HBox::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   layout2
 //    height (bbox) is defined now
 //---------------------------------------------------------
@@ -614,17 +592,6 @@ PropertyValue VBox::getProperty(Pid propertyId) const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void VBox::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   startEditDrag
 //---------------------------------------------------------
 
@@ -635,17 +602,6 @@ void VBox::startEditDrag(EditData& ed)
         setBoxHeight(Spatium(height() / spatium()));
     }
     Box::startEditDrag(ed);
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void FBox::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

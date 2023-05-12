@@ -71,7 +71,6 @@ private:
     StaffState(const StaffState&);
 
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
 
     StaffStateType _staffStateType { StaffStateType::INVISIBLE };
     double m_lw { 0.0 };

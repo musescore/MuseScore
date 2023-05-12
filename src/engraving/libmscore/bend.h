@@ -59,7 +59,6 @@ public:
 
     static const char* label[13];
 
-    void layout() override;
     void draw(mu::draw::Painter*) const override;
 
     PitchValues& points() { return m_points; }

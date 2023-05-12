@@ -62,17 +62,6 @@ RasgueadoSegment::RasgueadoSegment(Rasgueado* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void RasgueadoSegment::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   Rasgueado
 //---------------------------------------------------------
 

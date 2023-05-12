@@ -91,17 +91,6 @@ void RehearsalMark::styleChanged()
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void RehearsalMark::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 

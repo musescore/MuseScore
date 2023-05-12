@@ -58,8 +58,6 @@ public:
 
     void setState(SymId noteSymbol, TDuration duration, bool isRest, double segmentSkylineTopY, double segmentSkylineBottomY);
 
-    void layout() override;
-
     void draw(mu::draw::Painter*) const override;
     void drawArticulations(mu::draw::Painter* painter) const;
     void drawMarcato(mu::draw::Painter* painter, const SymId& articulation, mu::RectF& boundRect) const;

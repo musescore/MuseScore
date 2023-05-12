@@ -158,7 +158,6 @@ public:
     String articulationName() const;    // type-name of articulation; used for midi rendering
     static String symId2ArticulationName(SymId symId);
 
-    void layout() override;
     bool layoutCloseToNote() const;
 
     const draw::Font& font() const { return m_font; }

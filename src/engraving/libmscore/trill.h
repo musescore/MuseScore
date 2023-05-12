@@ -48,7 +48,6 @@ public:
     void draw(mu::draw::Painter*) const override;
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
-    void layout() override;
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all) override;
 
@@ -99,7 +98,6 @@ public:
 
     Trill* clone() const override { return new Trill(*this); }
 
-    void layout() override;
     LineSegment* createLineSegment(System* parent) override;
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;

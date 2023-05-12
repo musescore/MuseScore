@@ -107,7 +107,7 @@ public:
     double mag() const override;
     RectF drag(EditData&) override;
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
+
     void layout2();
 
     Chord* chord1() const { return _chord1; }

@@ -58,7 +58,6 @@ public:
 
     EngravingItem* propertyDelegate(Pid) override;
 
-    void layout() override;
     Shape shape() const override;
 
     int gripsCount() const override;
@@ -122,7 +121,6 @@ public:
     void setHairpinType(HairpinType val);
 
     Segment* segment() const { return (Segment*)explicitParent(); }
-    void layout() override;
     LineSegment* createLineSegment(System* parent) override;
 
     bool hairpinCircledTip() const { return _hairpinCircledTip; }

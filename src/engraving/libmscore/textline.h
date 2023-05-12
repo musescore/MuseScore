@@ -45,7 +45,6 @@ public:
     virtual EngravingItem* propertyDelegate(Pid) override;
 
     TextLine* textLine() const { return toTextLine(spanner()); }
-    void layout() override;
 
 private:
     Sid getTextLinePos(bool above) const;

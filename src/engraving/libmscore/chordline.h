@@ -92,7 +92,6 @@ public:
 
     const TranslatableString& chordLineTypeName() const;
 
-    void layout() override;
     void draw(mu::draw::Painter*) const override;
 
     void startEditDrag(EditData&) override;

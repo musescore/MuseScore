@@ -77,17 +77,6 @@ VoltaSegment::VoltaSegment(Volta* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void VoltaSegment::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   propertyDelegate
 //---------------------------------------------------------
 

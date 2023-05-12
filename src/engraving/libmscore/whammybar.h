@@ -44,8 +44,6 @@ public:
 
     WhammyBar* whammyBar() const { return (WhammyBar*)spanner(); }
 
-    void layout() override;
-
     friend class WhammyBar;
 };
 

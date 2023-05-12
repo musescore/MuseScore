@@ -50,7 +50,6 @@ public:
     TextLineBase* textLineBase() const { return (TextLineBase*)spanner(); }
     void draw(mu::draw::Painter*) const override;
 
-    void layout() override;
     void setSelected(bool f) override;
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;

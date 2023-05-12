@@ -75,17 +75,6 @@ void StaffState::draw(mu::draw::Painter* painter) const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void StaffState::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   setStaffStateType
 //---------------------------------------------------------
 

@@ -394,18 +394,6 @@ PropertyValue TempoText::propertyDefault(Pid id) const
 }
 
 //---------------------------------------------------------
-//   layout
-//    called after Measure->stretchMeasure()
-//---------------------------------------------------------
-
-void TempoText::layout()
-{
-    UNREACHABLE;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   duration2userName
 //---------------------------------------------------------
 

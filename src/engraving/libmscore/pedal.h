@@ -44,7 +44,6 @@ public:
 
     PedalSegment* clone() const override { return new PedalSegment(*this); }
     Pedal* pedal() const { return toPedal(spanner()); }
-    void layout() override;
 
     friend class Pedal;
 };

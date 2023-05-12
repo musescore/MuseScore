@@ -110,7 +110,6 @@ public:
     SLine(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
     SLine(const SLine&);
 
-    virtual void layout() override;
     virtual SpannerSegment* layoutSystem(System*) override;
 
     virtual LineSegment* createLineSegment(System* parent) = 0;

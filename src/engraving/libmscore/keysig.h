@@ -63,7 +63,7 @@ public:
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
-    void layout() override;
+
     double mag() const override;
 
     //@ sets the key of the key signature
