@@ -167,7 +167,6 @@ void Tremolo::createBeamSegments()
         // we don't need to do anything if these chords are part of the same beam--their stems are taken care of
         // by the beam layout
         int beamSpacing = score()->styleB(Sid::useWideBeams) ? 4 : 3;
-        bool cross = chord1()->staffMove() != chord2()->staffMove();
         for (ChordRest* cr : { _chord1, _chord2 }) {
             Chord* chord = toChord(cr);
             double addition = 0.0;
