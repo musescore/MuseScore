@@ -209,6 +209,7 @@ typedef struct ms_LivePlayStopNoteEvent
 } ms_LivePlayStopNoteEvent;
 
 typedef ms_Result (* ms_init)();
+typedef ms_Result (* ms_disable_reverb)();
 typedef int (* ms_contains_instrument)(const char* mpe_id, const char* musicxml_id);
 typedef int (* ms_get_matching_instrument_id)(const char* pack, const char* name);
 typedef ms_InstrumentList (* ms_get_instrument_list)();

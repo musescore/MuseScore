@@ -41,6 +41,8 @@ namespace mu::musesampler {
 struct MuseSamplerLibHandler
 {
     ms_Result initLib() { return ms_init(); }
+    ms_Result disableReverb() { return ms_disable_reverb(); }
+
     bool containsInstrument(const char* mpe_id, const char* musicxml)
     {
         return ms_contains_instrument(mpe_id, musicxml) == 1;
@@ -168,6 +170,7 @@ struct MuseSamplerLibHandler
 struct MuseSamplerLibHandler
 {
     ms_init initLib = nullptr;
+    ms_disable_reverb disableReverb = nullptr;
     ms_get_version_major getVersionMajor = nullptr;
     ms_get_version_minor getVersionMinor = nullptr;
     ms_get_version_revision getVersionRevision = nullptr;
@@ -251,6 +254,7 @@ public:
         }
 
         initLib = (ms_init)getLibFunc(m_lib, "ms_init");
+
         getVersionMajor = (ms_get_version_major)getLibFunc(m_lib, "ms_get_version_major");
         getVersionMinor = (ms_get_version_minor)getLibFunc(m_lib, "ms_get_version_minor");
         getVersionRevision = (ms_get_version_revision)getLibFunc(m_lib, "ms_get_version_revision");
@@ -313,6 +317,7 @@ public:
                     return addDynamicsEventInternal2(ms, track, evt) == ms_Result_OK;
                 };
             }
+            disableReverb = (ms_disable_reverb)getLibFunc(m_lib, "ms_disable_reverb");
         } else {
             if (addDynamicsEventInternal
                     = (ms_MuseSampler_add_track_dynamics_event)getLibFunc(m_lib, "ms_MuseSampler_add_track_dynamics_event");
@@ -433,6 +438,10 @@ public:
 
         if (initLib) {
             initLib();
+
+            if (disableReverb) {
+                disableReverb();
+            }
         }
     }
 
