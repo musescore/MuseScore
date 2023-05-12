@@ -171,7 +171,7 @@ void Tremolo::createBeamSegments()
         for (ChordRest* cr : { _chord1, _chord2 }) {
             Chord* chord = toChord(cr);
             double addition = 0.0;
-            if (cross && cr->staffMove() != 0 && lines() > 1) {
+            if (cr->up() != _up && lines() > 1) {
                 // need to adjust further for beams on the opposite side
                 addition += (lines() - 1.) * beamSpacing / 4. * spatium() * mag();
             }
