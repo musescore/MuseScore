@@ -67,8 +67,6 @@ public:
     Segment* segment() const { return (Segment*)explicitParent(); }
     Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
-    void layout() override;
-
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;
