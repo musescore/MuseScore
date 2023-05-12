@@ -823,6 +823,7 @@ TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
 
 //---------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //---------------------------------------------------------
@@ -836,6 +837,8 @@ void TabDurationSymbol::layout()
 
 //---------------------------------------------------------
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 //   layout2
 //
 //    Second step: after horizontal positions of elements involved are defined,

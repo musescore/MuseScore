@@ -1173,6 +1173,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
 //   layout
 //    compute segments from tick1 tick2
 //    (used for palette, edit mode, and layout of note lines and glissandi)
@@ -1189,6 +1190,8 @@ void SLine::layout()
 }
 
 //---------------------------------------------------------
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 //   setLen
 //    used to create an element suitable for palette
 //---------------------------------------------------------

@@ -113,6 +113,7 @@ EngravingItem* HairpinSegment::drop(EditData& data)
 
 //---------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //---------------------------------------------------------
@@ -126,6 +127,8 @@ void HairpinSegment::layout()
 
 //---------------------------------------------------------
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 //   shape
 //---------------------------------------------------------
 
@@ -420,6 +423,7 @@ void Hairpin::setHairpinType(HairpinType val)
 
 //---------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //    compute segments from tick() to _tick2
@@ -434,6 +438,8 @@ void Hairpin::layout()
 
 //---------------------------------------------------------
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 //   createLineSegment
 //---------------------------------------------------------
 

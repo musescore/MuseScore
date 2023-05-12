@@ -46,9 +46,12 @@ public:
 
     TextLine* textLine() const { return toTextLine(spanner()); }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     void layout() override;
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 
 private:
     Sid getTextLinePos(bool above) const;

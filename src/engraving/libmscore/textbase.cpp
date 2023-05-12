@@ -1872,6 +1872,7 @@ void TextBase::prepareFormat(const String& token, TextCursor& cursor)
 
 //---------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //---------------------------------------------------------
@@ -1885,6 +1886,8 @@ void TextBase::layout()
 
 //---------------------------------------------------------
 >>>>>>> 1b64bad571... [engraving] moved layout TextBase
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 //   layout1
 //---------------------------------------------------------
 

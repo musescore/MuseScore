@@ -329,6 +329,7 @@ void Accidental::setSubtype(const AsciiStringView& tag)
 
 //---------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //---------------------------------------------------------
@@ -342,6 +343,8 @@ void Accidental::layout()
 
 //---------------------------------------------------------
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 //   value2subtype
 //---------------------------------------------------------
 

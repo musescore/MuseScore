@@ -179,6 +179,7 @@ void Tuplet::resetNumberProperty(Text* number)
 
 //---------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //---------------------------------------------------------
@@ -192,6 +193,8 @@ void Tuplet::layout()
 
 //---------------------------------------------------------
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 //   calcHasBracket
 //---------------------------------------------------------
 

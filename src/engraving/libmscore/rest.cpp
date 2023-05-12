@@ -340,6 +340,7 @@ void Rest::updateSymbol(int line, int lines)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //---------------------------------------------------------
 //   layout
@@ -353,6 +354,8 @@ void Rest::layout()
 }
 
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 double Rest::symWidthNoLedgerLines() const
 {
     if (m_sym == SymId::restHalfLegerLine) {

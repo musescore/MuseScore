@@ -265,6 +265,7 @@ bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)
 
 //---------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //---------------------------------------------------------
@@ -278,6 +279,8 @@ void TextLineBaseSegment::layout()
 
 //---------------------------------------------------------
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 //   spatiumChanged
 //---------------------------------------------------------
 

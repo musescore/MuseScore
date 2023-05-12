@@ -101,6 +101,7 @@ void VibratoSegment::symbolLine(SymId start, SymId fill, SymId end)
 
 //---------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //---------------------------------------------------------
@@ -114,6 +115,8 @@ void VibratoSegment::layout()
 
 //---------------------------------------------------------
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 //   shape
 //---------------------------------------------------------
 
@@ -160,6 +163,7 @@ Vibrato::~Vibrato()
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //---------------------------------------------------------
 //   layout
@@ -173,6 +177,8 @@ void Vibrato::layout()
 }
 
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 static const ElementStyle vibratoSegmentStyle {
     { Sid::vibratoPosAbove,       Pid::OFFSET },
     { Sid::vibratoMinDistance,    Pid::MIN_DISTANCE },

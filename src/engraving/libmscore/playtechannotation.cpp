@@ -59,6 +59,7 @@ PlayTechAnnotation* PlayTechAnnotation::clone() const
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 void PlayTechAnnotation::layout()
 {
@@ -68,6 +69,8 @@ void PlayTechAnnotation::layout()
 }
 
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 PropertyValue PlayTechAnnotation::getProperty(Pid id) const
 {
     switch (id) {

@@ -459,6 +459,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //---------------------------------------------------------
 //   layout
@@ -472,6 +473,8 @@ void FretDiagram::layout()
 }
 
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 double FretDiagram::centerX() const
 {
     // Keep in sync with how bbox is calculated in layout().

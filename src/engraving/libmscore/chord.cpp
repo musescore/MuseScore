@@ -1931,6 +1931,7 @@ mu::PointF Chord::pagePos() const
 
 //---------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //---------------------------------------------------------
@@ -1944,6 +1945,8 @@ void Chord::layout()
 
 //---------------------------------------------------------
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 //   scanElements
 //---------------------------------------------------------
 
@@ -3278,6 +3281,7 @@ GraceNotesGroup::GraceNotesGroup(Chord* c)
     : EngravingItem(ElementType::GRACE_NOTES_GROUP, c), _parent(c) {}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 void GraceNotesGroup::layout()
 {
@@ -3287,6 +3291,8 @@ void GraceNotesGroup::layout()
 }
 
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 void GraceNotesGroup::setPos(double x, double y)
 {
     doSetPos(x, y);

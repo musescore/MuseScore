@@ -154,6 +154,7 @@ bool Lyrics::isMelisma() const
 
 //---------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //    - does not touch vertical position
@@ -168,6 +169,8 @@ void Lyrics::layout()
 
 //---------------------------------------------------------
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 //   scanElements
 //---------------------------------------------------------
 

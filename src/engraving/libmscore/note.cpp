@@ -2159,6 +2159,7 @@ void Note::setDotY(DirectionV pos)
 
 //---------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //---------------------------------------------------------
@@ -2172,6 +2173,8 @@ void Note::layout()
 
 //---------------------------------------------------------
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 //   layout2
 //    called after final position of note is set
 //---------------------------------------------------------

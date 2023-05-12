@@ -141,6 +141,7 @@ double BagpipeEmbellishment::mag() const
 
 //---------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //      calculate and set bounding box
@@ -155,6 +156,8 @@ void BagpipeEmbellishment::layout()
 
 //---------------------------------------------------------
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 //   drawBeams
 //      draw the beams
 //      x1,y is one side of the top beam

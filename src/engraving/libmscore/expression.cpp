@@ -61,6 +61,7 @@ PropertyValue Expression::propertyDefault(Pid id) const
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 void Expression::layout()
 {
@@ -70,6 +71,8 @@ void Expression::layout()
 }
 
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> 11610ff2b5... [engraving] removed item->layout method
 double Expression::computeDynamicExpressionDistance() const
 {
     if (!_snappedDynamic) {
