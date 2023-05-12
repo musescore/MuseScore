@@ -115,13 +115,6 @@ HarpPedalDiagram::HarpPedalDiagram(const HarpPedalDiagram& h)
     setPlayablePitches();
 }
 
-void HarpPedalDiagram::layout()
-{
-    updateDiagramText();
-    TextBase::layout();
-    autoplaceSegmentElement();
-}
-
 void HarpPedalDiagram::setPedalState(std::array<PedalPosition, HARP_STRING_NO> state)
 {
     _pedalState = state;

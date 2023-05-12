@@ -1129,7 +1129,8 @@ void Chord::computeUp()
         Chord* c2 = _tremolo->chord2();
         bool cross = c1->staffMove() != c2->staffMove();
         if (cross && this == c1) {
-            _tremolo->layout();
+            LayoutContext ctx(score());
+            v0::TLayout::layout(_tremolo, ctx);
         }
         Measure* measure = findMeasure();
         if (!cross && !_tremolo->userModified()) {

@@ -1426,8 +1426,8 @@ void TWrite::write(const HarpPedalDiagram* item, XmlWriter& xml, WriteContext& c
 
     // Write vector of harp strings.  Order is always D, C, B, E, F, G, A
     xml.startElement("pedalState");
-    for (int idx = 0; idx < item->getPedalState().size(); idx++) {
-        xml.tag("string", { { "name", idx } }, static_cast<int>(item->getPedalState()[idx]));
+    for (size_t idx = 0; idx < item->getPedalState().size(); idx++) {
+        xml.tag("string", { { "name", idx } }, static_cast<int>(item->getPedalState().at(idx)));
     }
     xml.endElement();
 

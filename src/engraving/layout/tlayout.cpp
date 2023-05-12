@@ -66,6 +66,7 @@
 #include "../libmscore/gradualtempochange.h"
 
 #include "../libmscore/hairpin.h"
+#include "../libmscore/harppedaldiagram.h"
 #include "../libmscore/harmonicmark.h"
 #include "../libmscore/harmony.h"
 #include "../libmscore/hook.h"
@@ -159,7 +160,7 @@ using LayoutTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Ar
                                    Dynamic, Expression,
                                    Fermata, FiguredBass, Fingering, FretDiagram,
                                    Glissando, GlissandoSegment, GradualTempoChange, GradualTempoChangeSegment,
-                                   Hairpin, HairpinSegment, Harmony, HarmonicMarkSegment, Hook,
+                                   Hairpin, HairpinSegment, HarpPedalDiagram, Harmony, HarmonicMarkSegment, Hook,
                                    Image, InstrumentChange,
                                    Jump,
                                    KeySig,
@@ -2494,6 +2495,13 @@ void TLayout::layout(Hairpin* item, LayoutContext& ctx)
 {
     item->setPos(0.0, 0.0);
     layoutTextLineBase(item, ctx);
+}
+
+void TLayout::layout(HarpPedalDiagram* item, LayoutContext& ctx)
+{
+    item->updateDiagramText();
+    layoutTextBase(item, ctx);
+    item->autoplaceSegmentElement();
 }
 
 void TLayout::layout(HarmonicMarkSegment* item, LayoutContext& ctx)
