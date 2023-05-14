@@ -393,7 +393,7 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, fra
 
 #ifdef MUE_BUILD_IMAGESEXPORT_MODULE
     imagesExportConfiguration()->setTrimMarginPixelSize(options.exportImage.trimMarginPixelSize);
-    imagesExportConfiguration()->setExportPngDpiResolution(options.exportImage.pngDpiResolution);
+    imagesExportConfiguration()->setExportPngDpiResolutionOverride(options.exportImage.pngDpiResolution);
 #endif
 
 #ifdef MUE_BUILD_VIDEOEXPORT_MODULE
@@ -404,7 +404,7 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, fra
 #endif
 
 #ifdef MUE_BUILD_IMPORTEXPORT_MODULE
-    audioExportConfiguration()->setExportMp3Bitrate(options.exportAudio.mp3Bitrate);
+    audioExportConfiguration()->setExportMp3BitrateOverride(options.exportAudio.mp3Bitrate);
     midiImportExportConfiguration()->setMidiImportOperationsFile(options.importMidi.operationsFile);
     guitarProConfiguration()->setLinkedTabStaffCreated(options.guitarPro.linkedTabStaffCreated);
     guitarProConfiguration()->setExperimental(options.guitarPro.experimental);

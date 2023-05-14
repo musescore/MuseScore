@@ -47,13 +47,19 @@ public:
     std::vector<INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;
 
     RetVal<io::path_t> askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
-                                     INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART) const override;
+                                     INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                                     io::path_t defaultPath = "") const override;
 
-    bool exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
+    bool exportScores(const notation::INotationPtrList& notations, const io::path_t destinationPath,
                       INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                       bool openDestinationFolderOnExport = false) const override;
 
+    const ExportInfo& exportInfo() const override;
+    void setExportInfo(const ExportInfo& exportInfo) override;
+
 private:
+    ExportInfo m_exportInfo;
+
     enum class FileConflictPolicy {
         Undefined,
         SkipAll,

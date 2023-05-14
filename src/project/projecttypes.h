@@ -31,7 +31,9 @@
 #include "log.h"
 
 #include "cloud/cloudtypes.h"
+#include "notation/inotation.h"
 #include "notation/notationtypes.h"
+#include "inotationwriter.h"
 
 namespace mu::project {
 struct ProjectCreateOptions
@@ -86,6 +88,28 @@ struct CloudProjectInfo {
     bool isValid() const
     {
         return !name.isEmpty();
+    }
+};
+
+struct ExportInfo {
+    QString id;
+    io::path_t projectPath;
+    io::path_t exportPath;
+    INotationWriter::UnitType unitType;
+    std::vector<notation::INotationPtr> notations;
+
+    bool operator==(const ExportInfo& other) const
+    {
+        return id == other.id
+               && projectPath == other.projectPath
+               && exportPath == other.exportPath
+               && unitType == other.unitType
+               && notations == other.notations;
+    }
+
+    bool operator!=(const ExportInfo other) const
+    {
+        return !(*this == other);
     }
 };
 
