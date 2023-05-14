@@ -51,7 +51,7 @@ public:
 
     bool warnBeforeSavingToExistingPubliclyVisibleCloudProject() const override;
 
-    void showCloudSaveError(const Ret& ret, bool isPublish, bool alreadyAttempted) const override;
+    Ret showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool isPublish, bool alreadyAttempted) const override;
 
 private:
     RetVal<SaveLocationType> saveLocationType() const;
@@ -65,7 +65,6 @@ private:
     bool warnBeforePublishing(bool isPublish, cloud::Visibility visibility) const;
 
     Ret warnCloudIsNotAvailable(bool isPublish) const;
-    Ret doShowCloudSaveError(const Ret& ret, bool isPublish, bool alreadyAttempted) const;
 };
 
 class QMLSaveLocationType

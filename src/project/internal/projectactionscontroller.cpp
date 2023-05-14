@@ -737,7 +737,8 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
 
     bool isFirstSave = info.sourceUrl.isEmpty();
 
-    m_uploadingProjectProgress = cloudProjectsService()->uploadScore(*projectData, info.name, info.visibility, info.sourceUrl);
+    m_uploadingProjectProgress = cloudProjectsService()->uploadScore(*projectData, info.name, info.visibility, info.sourceUrl,
+                                                                     info.revisionId);
 
     m_uploadingProjectProgress->started.onNotify(this, [this]() {
         showUploadProgressDialog();
@@ -750,19 +751,20 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
         }
     });
 
-    m_uploadingProjectProgress->finished.onReceive(this, [this, project, projectData, audio, openEditUrl, publishMode,
+    m_uploadingProjectProgress->finished.onReceive(this, [this, project, projectData, info,  audio, openEditUrl, publishMode,
                                                           isFirstSave](const ProgressResult& res) {
         projectData->deleteLater();
 
         if (!res.ret) {
             LOGE() << res.ret.toString();
-            onProjectUploadFailed(res.ret, publishMode);
+            onProjectUploadFailed(res.ret, info, audio, openEditUrl, publishMode);
             return;
         }
 
         ValMap urlMap = res.val.toMap();
         QString newSourceUrl = urlMap["sourceUrl"].toQString();
         QString editUrl = openEditUrl ? urlMap["editUrl"].toQString() : QString();
+        int newRevisionId = urlMap["revisionId"].toInt();
 
         LOGD() << "Source url received: " << newSourceUrl;
 
@@ -773,11 +775,12 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
         }
 
         CloudProjectInfo info = project->cloudInfo();
-        if (info.sourceUrl == newSourceUrl) {
+        if (info.sourceUrl == newSourceUrl && info.revisionId == newRevisionId) {
             return;
         }
 
         info.sourceUrl = newSourceUrl;
+        info.revisionId = newRevisionId;
         project->setCloudInfo(info);
 
         if (!project->isNewlyCreated()) {
@@ -852,13 +855,42 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
     }
 }
 
-void ProjectActionsController::onProjectUploadFailed(const Ret& ret, bool publishMode)
+void ProjectActionsController::onProjectUploadFailed(const Ret& ret, const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl,
+                                                     bool publishMode)
 {
     m_isProjectUploading = false;
 
     closeUploadProgressDialog();
 
-    saveProjectScenario()->showCloudSaveError(ret, publishMode, true);
+    Ret userResponse = saveProjectScenario()->showCloudSaveError(ret, info, publishMode, true);
+    switch (userResponse.code()) {
+    case ISaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_SAVE_AS: {
+        saveProject(SaveMode::SaveAs);
+        break;
+    }
+    case ISaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_PUBLISH_AS_NEW_SCORE: {
+        CloudProjectInfo newInfo = info;
+        newInfo.sourceUrl = QUrl();
+        uploadProject(newInfo, audio, openEditUrl, publishMode);
+        break;
+    }
+    case ISaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_REPLACE: {
+        RetVal<cloud::ScoreInfo> scoreInfo = cloudProjectsService()->downloadScoreInfo(info.sourceUrl);
+        if (!scoreInfo.ret) {
+            LOGE() << scoreInfo.ret.toString();
+            saveProjectScenario()->showCloudSaveError(scoreInfo.ret, info, publishMode, false);
+            return;
+        }
+
+        int cloudRevisionId = scoreInfo.val.revisionId;
+        CloudProjectInfo newInfo = info;
+        newInfo.revisionId = cloudRevisionId;
+        uploadProject(newInfo, audio, openEditUrl, publishMode);
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 void ProjectActionsController::warnCloudIsNotAvailable()

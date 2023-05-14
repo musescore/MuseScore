@@ -29,7 +29,7 @@ using namespace mu;
 using namespace mu::framework;
 using namespace mu::project;
 
-constexpr int RET_CODE_CHANGE_SAVE_LOCATION_TYPE = 1234;
+static constexpr int RET_CODE_CHANGE_SAVE_LOCATION_TYPE = 1234;
 
 RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr project, SaveMode mode,
                                                           SaveLocationType preselectedType) const
@@ -189,10 +189,10 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
 
     QString defaultName = project->displayName();
     cloud::Visibility defaultVisibility = isPublish ? cloud::Visibility::Public : cloud::Visibility::Private;
-    const QUrl existingOnlineScoreUrl = project->cloudInfo().sourceUrl;
+    const CloudProjectInfo existingProjectInfo = project->cloudInfo();
 
-    if (!existingOnlineScoreUrl.isEmpty()) {
-        RetVal<cloud::ScoreInfo> scoreInfo = cloudProjectsService()->downloadScoreInfo(existingOnlineScoreUrl);
+    if (!existingProjectInfo.sourceUrl.isEmpty()) {
+        RetVal<cloud::ScoreInfo> scoreInfo = cloudProjectsService()->downloadScoreInfo(existingProjectInfo.sourceUrl);
 
         switch (scoreInfo.ret.code()) {
         case int(Ret::Code::Ok):
@@ -202,7 +202,7 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
 
         case int(cloud::Err::AccountNotActivated):
         case int(cloud::Err::NetworkError):
-            return doShowCloudSaveError(scoreInfo.ret, isPublish, false);
+            return showCloudSaveError(scoreInfo.ret, project->cloudInfo(), isPublish, false);
 
         // It's possible the source URL is invalid or points to a score on a different user's account.
         // In this situation we shouldn't see an error.
@@ -214,7 +214,7 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
     query.addParam("isPublish", Val(isPublish));
     query.addParam("name", Val(defaultName));
     query.addParam("visibility", Val(defaultVisibility));
-    query.addParam("existingOnlineScoreUrl", Val(existingOnlineScoreUrl.toString()));
+    query.addParam("existingOnlineScoreUrl", Val(existingProjectInfo.sourceUrl.toString()));
 
     RetVal<Val> rv = interactive()->open(query);
     if (!rv.ret) {
@@ -234,15 +234,16 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
     }
 
     CloudProjectInfo result;
+
+    if ((mode == SaveMode::Save || isPublish) && vals["replaceExistingOnlineScore"].toBool()) {
+        result = existingProjectInfo;
+    }
+
     result.name = vals["name"].toString();
     result.visibility = static_cast<cloud::Visibility>(vals["visibility"].toInt());
 
     if (!warnBeforePublishing(isPublish, result.visibility)) {
         return make_ret(Ret::Code::Cancel);
-    }
-
-    if (mode == SaveMode::Save && vals["replaceExistingOnlineScore"].toBool()) {
-        result.sourceUrl = existingOnlineScoreUrl;
     }
 
     return RetVal<CloudProjectInfo>::make_ok(result);
@@ -335,12 +336,7 @@ Ret SaveProjectScenario::warnCloudIsNotAvailable(bool isPublish) const
     return make_ret(Ret::Code::Cancel);
 }
 
-void SaveProjectScenario::showCloudSaveError(const Ret& ret, bool isPublish, bool alreadyAttempted) const
-{
-    (void)doShowCloudSaveError(ret, isPublish, alreadyAttempted);
-}
-
-Ret SaveProjectScenario::doShowCloudSaveError(const Ret& ret, bool isPublish, bool alreadyAttempted) const
+Ret SaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool isPublish, bool alreadyAttempted) const
 {
     std::string title;
     if (alreadyAttempted) {
@@ -355,19 +351,53 @@ Ret SaveProjectScenario::doShowCloudSaveError(const Ret& ret, bool isPublish, bo
 
     std::string msg;
 
+    static constexpr int helpBtnCode = int(IInteractive::Button::CustomButton) + 1;
+    static constexpr int saveLocallyBtnCode = int(IInteractive::Button::CustomButton) + 2;
+    static constexpr int saveAsBtnCode = int(IInteractive::Button::CustomButton) + 3;
+    static constexpr int publishAsNewScoreBtnCode = int(IInteractive::Button::CustomButton) + 4;
+    static constexpr int replaceBtnCode = int(IInteractive::Button::CustomButton) + 5;
+
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
-    IInteractive::ButtonData saveLocallyBtn { int(IInteractive::Button::CustomButton) + 1, trc("project/save", "Save to computer") };
-    IInteractive::ButtonData helpBtn { IInteractive::Button::CustomButton, trc("project/save", "Get help") };
+    IInteractive::ButtonData saveLocallyBtn { saveLocallyBtnCode, trc("project/save", "Save to computer") };
+    IInteractive::ButtonData helpBtn { helpBtnCode, trc("project/save", "Get help") };
 
     IInteractive::ButtonDatas buttons = (alreadyAttempted || isPublish)
                                         ? (IInteractive::ButtonDatas { helpBtn, okBtn })
                                         : (IInteractive::ButtonDatas { helpBtn, saveLocallyBtn, okBtn });
+
+    int defaultButtonCode = okBtn.btn;
 
     switch (ret.code()) {
     case int(cloud::Err::AccountNotActivated):
         msg = trc("project/save", "Your musescore.com account needs to be verified first. "
                                   "Please activate your account via the link in the activation email.");
         buttons = { okBtn };
+        break;
+    case int(cloud::Err::Conflict):
+        title = trc("project/save", "There are conflicting changes in the online score");
+        if (isPublish) {
+            msg = qtrc("project/save", "You can replace the <a href=\"%1\">online score</a>, or publish this as a new score "
+                                       "to avoid losing changes in the current online version.")
+                  .arg(info.sourceUrl.toString())
+                  .toStdString();
+            buttons = {
+                interactive()->buttonData(framework::IInteractive::Button::Cancel),
+                IInteractive::ButtonData { publishAsNewScoreBtnCode, trc("project/save", "Publish as new score") },
+                IInteractive::ButtonData { replaceBtnCode, trc("project/save", "Replace") }
+            };
+            defaultButtonCode = replaceBtnCode;
+        } else {
+            msg = qtrc("project/save", "You can replace the <a href=\"%1\">online score</a>, or save this as a new file "
+                                       "to avoid losing changes in the current online version.")
+                  .arg(info.sourceUrl.toString())
+                  .toStdString();
+            buttons = {
+                interactive()->buttonData(framework::IInteractive::Button::Cancel),
+                IInteractive::ButtonData { saveAsBtnCode, trc("project/save", "Save as…") },
+                IInteractive::ButtonData { replaceBtnCode, trc("project/save", "Replace") }
+            };
+            defaultButtonCode = replaceBtnCode;
+        }
         break;
     case int(cloud::Err::NetworkError):
         msg = cloud::cloudNetworkErrorUserDescription(ret);
@@ -381,11 +411,19 @@ Ret SaveProjectScenario::doShowCloudSaveError(const Ret& ret, bool isPublish, bo
         break;
     }
 
-    IInteractive::Result result = interactive()->warning(title, msg, buttons, okBtn.btn);
-    if (result.button() == helpBtn.btn) {
+    IInteractive::Result result = interactive()->warning(title, msg, buttons, defaultButtonCode);
+    switch (result.button()) {
+    case helpBtnCode:
         interactive()->openUrl(configuration()->supportForumUrl());
-    } else if (result.button() == saveLocallyBtn.btn) {
+        break;
+    case saveLocallyBtnCode:
         return Ret(RET_CODE_CHANGE_SAVE_LOCATION_TYPE);
+    case saveAsBtnCode:
+        return Ret(RET_CODE_CONFLICT_RESPONSE_SAVE_AS);
+    case publishAsNewScoreBtnCode:
+        return Ret(RET_CODE_CONFLICT_RESPONSE_PUBLISH_AS_NEW_SCORE);
+    case replaceBtnCode:
+        return Ret(RET_CODE_CONFLICT_RESPONSE_REPLACE);
     }
 
     return make_ret(Ret::Code::Cancel);

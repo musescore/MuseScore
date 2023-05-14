@@ -78,6 +78,7 @@ enum class SaveLocationType
 
 struct CloudProjectInfo {
     QUrl sourceUrl;
+    int revisionId = 0;
     QString name;
 
     cloud::Visibility visibility = cloud::Visibility::Private;
