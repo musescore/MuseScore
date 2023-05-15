@@ -26,7 +26,8 @@
 #include <cmath>
 #include <cassert>
 
-#include "realfn.h"
+#include "global/realfn.h"
+#include "global/logstream.h"
 
 #ifndef NO_QT_SUPPORT
 #include <QPair>
@@ -710,6 +711,13 @@ RectX<T> RectX<T>::normalized() const
     }
     return r;
 }
+}
+
+template<typename T>
+inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::RectX<T>& r)
+{
+    s << "{x: " << r.x() << ", y: " << r.y() << ", w: " << r.width() << ", h: " << r.height() << "}";
+    return s;
 }
 
 #endif // MU_DRAW_GEOMETRY_H
