@@ -544,7 +544,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                 cr->setDurationType(newLength);
                             }
                         }
-                        score->pasteChordRest(cr, tick, ctx.transpose());
+                        score->pasteChordRest(cr, tick);
                     }
                 } else if (tag == "Spanner") {
                     TRead::readSpanner(e, ctx, score, ctx.track());

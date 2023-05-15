@@ -109,7 +109,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
 //   pasteChordRest
 //---------------------------------------------------------
 
-void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& srcTranspose)
+void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
 {
     Fraction tick(t);
 // LOGD("pasteChordRest %s at %d, len %d/%d", cr->typeName(), tick, cr->ticks().numerator(), cr->ticks().denominator() );

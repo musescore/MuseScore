@@ -488,7 +488,7 @@ private:
     bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, staff_idx_t staffIdx);
     bool rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffIdx);
     std::list<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
-    void pasteChordRest(ChordRest* cr, const Fraction& tick, const Interval&);
+    void pasteChordRest(ChordRest* cr, const Fraction& tick);
 
     void doSelect(EngravingItem* e, SelectType type, staff_idx_t staffIdx);
     void selectSingle(EngravingItem* e, staff_idx_t staffIdx);
