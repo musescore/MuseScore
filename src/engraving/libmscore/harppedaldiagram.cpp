@@ -317,9 +317,9 @@ String HarpPedalDiagram::screenReaderInfo() const
     String rez = score() ? score()->getTextStyleUserName(textStyleType()).translated() : TConv::translatedUserName(textStyleType());
     String s;
 
-    for (int idx = 0; idx < _pedalState.size(); idx++) {
+    for (size_t idx = 0; idx < _pedalState.size(); idx++) {
         s.append(harpStringTypeToString(HarpStringType(idx)) + u" ");
-        switch (_pedalState[idx]) {
+        switch (_pedalState.at(idx)) {
         case PedalPosition::FLAT:
             s.append(mtrc("engraving", TConv::userName(AccidentalVal::FLAT, true)));
             break;

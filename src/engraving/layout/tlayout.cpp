@@ -1691,7 +1691,7 @@ void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
         // layout each item and enlarge bbox to include items bboxes
         for (FiguredBassItem* fit : item->items()) {
             layout(fit, ctx);
-            item->addbbox(item->bbox().translated(fit->pos()));
+            item->addbbox(fit->bbox().translated(fit->pos()));
         }
     }
 }
