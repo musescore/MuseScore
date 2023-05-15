@@ -112,6 +112,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/exportdialogmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/scorethumbnailloader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/scorethumbnailloader.h
     ${CMAKE_CURRENT_LIST_DIR}/view/newscoremodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/newscoremodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/additionalinfomodel.cpp

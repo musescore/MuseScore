@@ -55,36 +55,6 @@ const RecentFilesList& RecentFilesController::recentFilesList() const
     return m_recentFilesList;
 }
 
-/*
-ProjectMetaList RecentFilesController::recentFilesList() const
-{
-    if (m_dirty) {
-        io::paths_t paths = configuration()->recentProjectPaths();
-        m_recentList.clear();
-        for (const io::path_t& path : paths) {
-            ProjectMeta meta;
-            if (engraving::isMuseScoreFile(io::suffix(path))) {
-                RetVal<ProjectMeta> rv = mscMetaReader()->readMeta(path);
-                if (!rv.ret) {
-                    LOGE() << "failed read meta, path: " << path;
-                    continue;
-                }
-
-                meta = std::move(rv.val);
-            } else {
-                meta.filePath = path;
-            }
-
-            m_recentList.push_back(std::move(meta));
-        }
-        m_dirty = false;
-    }
-
-    return m_recentList;
-}
-
-*/
-
 mu::async::Notification RecentFilesController::recentFilesListChanged() const
 {
     return m_recentFilesListChanged;

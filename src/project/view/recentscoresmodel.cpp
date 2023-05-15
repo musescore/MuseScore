@@ -133,10 +133,6 @@ void RecentScoresModel::updateRecentScores()
         obj[SUFFIX_KEY] = QString::fromStdString(suffix);
         obj[IS_CLOUD_KEY] = configuration()->isCloudProject(file);
 
-//        if (!meta.thumbnail.isNull()) {
-//            obj[THUMBNAIL_KEY] = !meta.thumbnail.isNull() ? meta.thumbnail : QVariant();
-//        }
-
         obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(file).lastModified().date()).toQString();
         obj[ADD_NEW_KEY] = false;
         obj[NO_RESULT_FOUND_KEY] = false;

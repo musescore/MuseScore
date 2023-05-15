@@ -28,14 +28,12 @@
 
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
-#include "imscmetareader.h"
 #include "io/ifilesystem.h"
 
 namespace mu::project {
 class RecentFilesController : public IRecentFilesController, public async::Asyncable
 {
     INJECT(IProjectConfiguration, configuration)
-    INJECT(IMscMetaReader, mscMetaReader)
     INJECT(io::IFileSystem, fileSystem)
 
 public:
