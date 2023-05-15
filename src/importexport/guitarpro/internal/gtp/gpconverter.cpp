@@ -63,10 +63,6 @@
 
 using namespace mu::engraving;
 
-constexpr int PALM_MUTE_CHAN = 1;
-constexpr int HARMONIC_CHAN = 2;
-constexpr int PALM_MUTE_PROG = 28;
-
 namespace mu::engraving {
 static JumpType jumpType(const String& typeString)
 {

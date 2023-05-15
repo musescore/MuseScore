@@ -202,8 +202,6 @@ void Lyrics::paste(EditData& ed, const String& txt)
     }
 
     StringList hyph = sl.at(0).split(u'-');
-    bool minus = false;
-    bool underscore = false;
     score()->startCmd();
 
     deleteSelectedText(ed);
@@ -212,18 +210,15 @@ void Lyrics::paste(EditData& ed, const String& txt)
         score()->undo(new InsertText(cursorFromEditData(ed), hyph[0]), &ed);
         hyph.removeAt(0);
         sl[0] =  hyph.join(u"-");
-        minus = true;
     } else if (sl.size() > 1 && sl[1] == u"-") {
         score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
         sl.removeAt(0);
         sl.removeAt(0);
-        minus = true;
     } else if (sl[0].startsWith(u"_")) {
         sl[0].remove(0, 1);
         if (sl[0].isEmpty()) {
             sl.removeAt(0);
         }
-        underscore = true;
     } else if (sl[0].contains(u"_")) {
         size_t p = sl[0].indexOf(u'_');
         score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
@@ -231,12 +226,10 @@ void Lyrics::paste(EditData& ed, const String& txt)
         if (sl[0].isEmpty()) {
             sl.removeAt(0);
         }
-        underscore = true;
     } else if (sl.size() > 1 && sl[1] == "_") {
         score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
         sl.removeAt(0);
         sl.removeAt(0);
-        underscore = true;
     } else {
         score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
         sl.removeAt(0);
