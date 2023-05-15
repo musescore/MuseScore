@@ -148,6 +148,7 @@ static PointF bindCursorPosToText(const PointF& cursorPos, const EngravingItem* 
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 inline QString extractSyllable(const QString& text)
 {
     QString _text = text;
@@ -175,20 +176,40 @@ inline QString extractSyllable(const QString& text)
 }
 =======
 class EventFilter : public QObject
+=======
+inline QString extractSyllable(const QString& text)
+>>>>>>> 733d5aa1c2... Delete pasted text from clipboard
 {
-public:
-    EventFilter(std::function<void(QEvent*)> action, QObject* parent)
-        : QObject(parent) { m_action = action; }
-    virtual bool eventFilter(QObject* obj, QEvent* event)
-    {
-        m_action(event);
-        return QObject::eventFilter(obj, event);
+    QString _text = text;
+
+    _text.replace(QRegularExpression("\r+"), "\n");
+    _text.replace(QRegularExpression("\n+"), "\n");
+    if (_text.startsWith(u"\n")) {
+        _text.remove("\n");
     }
 
+<<<<<<< HEAD
 private:
     std::function<void(QEvent*)> m_action;
 };
 >>>>>>> a4ec30994b... fix #13215 - support syllable-paste lyrics paste
+=======
+    int textPos = _text.indexOf(QRegularExpression("\\S"));
+    if (textPos == -1) {
+        return QString();
+    }
+
+    QRegularExpressionMatch match;
+    int splitPos = _text.indexOf(QRegularExpression("(_| |-|\n)"), textPos, &match);
+    if (splitPos == -1) {
+        splitPos = _text.size();
+    } else {
+        splitPos += match.capturedLength();
+    }
+
+    return _text.mid(textPos, splitPos - textPos);
+}
+>>>>>>> 733d5aa1c2... Delete pasted text from clipboard
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
     : m_notation(notation), m_undoStack(undoStack), m_editData(&m_scoreCallbacks)
@@ -222,13 +243,6 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
     m_notation->scoreInited().onNotify(this, [this]() {
         onScoreInited();
     });
-    auto filter = new EventFilter([this](QEvent* evt)
-    {
-        if (evt->type() == QEvent::Type::FocusIn) {
-            m_clipboardTextPos = 0;
-        }
-    }, qApp);
-    qApp->installEventFilter(filter);
 }
 
 mu::engraving::Score* NotationInteraction::score() const
@@ -3401,9 +3415,12 @@ void NotationInteraction::doEndEditElement()
         m_editData.element->endEdit(m_editData);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     m_clipboardTextPos = 0;
 >>>>>>> a4ec30994b... fix #13215 - support syllable-paste lyrics paste
+=======
+>>>>>>> 733d5aa1c2... Delete pasted text from clipboard
     m_editData.clear();
 }
 
@@ -3618,7 +3635,6 @@ void NotationInteraction::copySelection()
         }
         QApplication::clipboard()->setMimeData(mimeData);
     }
-    m_clipboardTextPos = 0;
 }
 
 mu::Ret NotationInteraction::repeatSelection()
@@ -3679,35 +3695,15 @@ void NotationInteraction::copyLyrics()
     QApplication::clipboard()->setText(text);
 }
 
-inline QString extractSyllable(const QString& txt, int& textPos)
-{
-    textPos = txt.indexOf(QRegExp("\\S"), textPos);
-    if (textPos == -1) {
-        textPos = 0;
-        return "";
-    }
-    static QString regex = QString("[^\\S") + QChar(0xa0) + QChar(0x202F) + "]+";
-    int splitPos = txt.indexOf(QRegExp(regex), textPos);
-    if (splitPos == -1) {
-        splitPos = txt.length();
-    }
-    QString result = txt.mid(textPos, splitPos - textPos);
-    int hyphPos = result.indexOf('-');
-    if (hyphPos != -1) {
-        result = result.mid(0, ++hyphPos);
-        textPos += hyphPos;
-    } else {
-        textPos = splitPos + 1;
-    }
-    return result;
-}
-
 void NotationInteraction::pasteSelection(const Fraction& scale)
 {
     startEdit();
 
     if (isTextEditingStarted()) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 733d5aa1c2... Delete pasted text from clipboard
         QString clipboardText = QGuiApplication::clipboard()->text();
         QString textForPaste = clipboardText;
         if ((!clipboardText.startsWith('<') || !clipboardText.contains('>')) && m_editData.element->isLyrics()) {
@@ -3718,6 +3714,7 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
 
         if (!textForPaste.isEmpty() && m_editData.element->isLyrics()) {
             if (textForPaste.endsWith('-')) {
+<<<<<<< HEAD
                 navigateToNextSyllable();
             } else if (textForPaste.endsWith('_')) {
 =======
@@ -3729,10 +3726,15 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
                 navigateToNextSyllable();
             } else if (txt.endsWith('_')) {
 >>>>>>> a4ec30994b... fix #13215 - support syllable-paste lyrics paste
+=======
+                navigateToNextSyllable();
+            } else if (textForPaste.endsWith('_')) {
+>>>>>>> 733d5aa1c2... Delete pasted text from clipboard
                 addMelisma();
             } else {
                 navigateToLyrics(false, false, false);
             }
+<<<<<<< HEAD
 <<<<<<< HEAD
 
             QString textForNextPaste = clipboardText.remove(0, clipboardText.indexOf(textForPaste) + textForPaste.size());
@@ -3740,6 +3742,11 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
 =======
             m_clipboardTextPos = clipTextPos;
 >>>>>>> a4ec30994b... fix #13215 - support syllable-paste lyrics paste
+=======
+
+            QString textForNextPaste = clipboardText.remove(0, clipboardText.indexOf(textForPaste) + textForPaste.size());
+            QGuiApplication::clipboard()->setText(textForNextPaste);
+>>>>>>> 733d5aa1c2... Delete pasted text from clipboard
         }
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
@@ -4653,6 +4660,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
     if (nextSegment == 0) {
         return;
     }
+
     endEditText();
 
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
@@ -5361,9 +5369,8 @@ void NotationInteraction::addMelisma()
     mu::engraving::PlacementV placement = lyrics->placement();
     mu::engraving::PropertyFlags pFlags = lyrics->propertyFlags(mu::engraving::Pid::PLACEMENT);
     Fraction endTick = segment->tick(); // a previous melisma cannot extend beyond this point
-    int clipTextPos = m_clipboardTextPos;
+
     endEditText();
-    m_clipboardTextPos = clipTextPos;
 
     // search next chord
     mu::engraving::Segment* nextSegment = segment;

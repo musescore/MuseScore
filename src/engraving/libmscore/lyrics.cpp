@@ -213,9 +213,13 @@ void Lyrics::paste(EditData& ed, const String& txt)
         return;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> a4ec30994b... fix #13215 - support syllable-paste lyrics paste
+=======
+
+>>>>>>> 733d5aa1c2... Delete pasted text from clipboard
     String regex = String(u"[^\\S") + Char(0xa0) + Char(0x202F) + u"]+";
     StringList sl = txt.split(std::regex(regex.toStdString()), mu::SkipEmptyParts);
     if (sl.empty()) {
