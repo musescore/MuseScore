@@ -19,33 +19,49 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_RECENTPROJECTSPROVIDER_H
-#define MU_PROJECT_RECENTPROJECTSPROVIDER_H
+#ifndef MU_PROJECT_RECENTFILESCONTROLLER_H
+#define MU_PROJECT_RECENTFILESCONTROLLER_H
 
-#include "irecentprojectsprovider.h"
-#include "modularity/ioc.h"
+#include "irecentfilescontroller.h"
+
 #include "async/asyncable.h"
+
+#include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
 #include "imscmetareader.h"
+#include "io/ifilesystem.h"
 
 namespace mu::project {
-class RecentProjectsProvider : public IRecentProjectsProvider, public async::Asyncable
+class RecentFilesController : public IRecentFilesController, public async::Asyncable
 {
     INJECT(IProjectConfiguration, configuration)
     INJECT(IMscMetaReader, mscMetaReader)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     void init();
 
-    ProjectMetaList recentProjectList() const override;
-    async::Notification recentProjectListChanged() const override;
+    const RecentFilesList& recentFilesList() const override;
+    async::Notification recentFilesListChanged() const override;
+
+    void prependRecentFile(const RecentFile& file) override;
+    void clearRecentFiles() override;
+
+protected:
+    virtual void prependPlatformRecentFile(const io::path_t& path);
+    virtual void clearPlatformRecentFiles();
 
 private:
+    void loadRecentFilesList();
+    void removeNonexistentFiles();
+    void setRecentFilesList(const RecentFilesList& list, bool save);
+    void saveRecentFilesList();
 
     mutable bool m_dirty = true;
-    mutable ProjectMetaList m_recentList;
-    async::Notification m_recentListChanged;
+    mutable RecentFilesList m_recentFilesList;
+    async::Notification m_recentFilesListChanged;
+    mutable bool m_reloadingBlocked = false;
 };
 }
 
-#endif // MU_PROJECT_RECENTPROJECTSPROVIDER_H
+#endif // MU_PROJECT_RECENTFILESCONTROLLER_H

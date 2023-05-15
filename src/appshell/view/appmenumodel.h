@@ -35,7 +35,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "workspace/iworkspacemanager.h"
 #include "iappshellconfiguration.h"
-#include "project/irecentprojectsprovider.h"
+#include "project/irecentfilescontroller.h"
 #include "internal/iappmenumodelhook.h"
 #include "plugins/ipluginsservice.h"
 #include "update/iupdateconfiguration.h"
@@ -53,7 +53,7 @@ class AppMenuModel : public uicomponents::AbstractMenuModel
     INJECT(actions::IActionsDispatcher, actionsDispatcher)
     INJECT(workspace::IWorkspaceManager, workspacesManager)
     INJECT(IAppShellConfiguration, configuration)
-    INJECT(project::IRecentProjectsProvider, recentProjectsProvider)
+    INJECT(project::IRecentFilesController, recentFilesController)
     INJECT(IAppMenuModelHook, appMenuModelHook)
     INJECT(plugins::IPluginsService, pluginsService)
     INJECT(update::IUpdateConfiguration, updateConfiguration)

@@ -238,7 +238,7 @@ Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
     if (isNewlyCreated) {
         project->markAsNewlyCreated();
     } else {
-        prependToRecentScoreList(filePath);
+        recentFilesController()->prependRecentFile(filePath);
     }
 
     globalContext()->setCurrentProject(project);
@@ -570,7 +570,7 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, Sa
         return false;
     }
 
-    prependToRecentScoreList(filePath);
+    recentFilesController()->prependRecentFile(filePath);
     return true;
 }
 
@@ -1240,13 +1240,12 @@ void ProjectActionsController::importPdf()
 
 void ProjectActionsController::clearRecentScores()
 {
-    configuration()->setRecentProjectPaths({});
-    platformRecentFilesController()->clearRecentFiles();
+    recentFilesController()->clearRecentFiles();
 }
 
 void ProjectActionsController::continueLastSession()
 {
-    io::paths_t recentScorePaths = configuration()->recentProjectPaths();
+    const RecentFilesList& recentScorePaths = recentFilesController()->recentFilesList();
 
     if (recentScorePaths.empty()) {
         return;
@@ -1308,24 +1307,6 @@ io::path_t ProjectActionsController::selectScoreOpeningFile()
     }
 
     return filePath;
-}
-
-void ProjectActionsController::prependToRecentScoreList(const io::path_t& filePath)
-{
-    if (filePath.empty()) {
-        return;
-    }
-
-    io::paths_t recentScorePaths = configuration()->recentProjectPaths();
-
-    auto it = std::find(recentScorePaths.begin(), recentScorePaths.end(), filePath);
-    if (it != recentScorePaths.end()) {
-        recentScorePaths.erase(it);
-    }
-
-    recentScorePaths.insert(recentScorePaths.begin(), filePath);
-    configuration()->setRecentProjectPaths(recentScorePaths);
-    platformRecentFilesController()->addRecentFile(filePath);
 }
 
 bool ProjectActionsController::hasSelection() const

@@ -29,7 +29,7 @@
 namespace mu::project {
 class ProjectConfiguration;
 class ProjectActionsController;
-class RecentProjectsProvider;
+class RecentFilesController;
 class ProjectAutoSaver;
 class ProjectModule : public modularity::IModuleSetup
 {
@@ -45,7 +45,7 @@ public:
 private:
     std::shared_ptr<ProjectConfiguration> m_configuration;
     std::shared_ptr<ProjectActionsController> m_actionsController;
-    std::shared_ptr<RecentProjectsProvider> m_recentProjectsProvider;
+    std::shared_ptr<RecentFilesController> m_recentFilesController;
     std::shared_ptr<ProjectAutoSaver> m_projectAutoSaver;
 };
 }

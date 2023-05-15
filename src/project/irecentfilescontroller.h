@@ -19,18 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_STUBRECENTFILESCONTROLLER_H
-#define MU_PROJECT_STUBRECENTFILESCONTROLLER_H
+#ifndef MU_PROJECT_IRECENTFILESCONTROLLER_H
+#define MU_PROJECT_IRECENTFILESCONTROLLER_H
 
-#include "internal/iplatformrecentfilescontroller.h"
+#include "modularity/imoduleinterface.h"
+#include "projecttypes.h"
+#include "async/notification.h"
 
 namespace mu::project {
-class StubRecentFilesController : public IPlatformRecentFilesController
+class IRecentFilesController : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IRecentFilesProvider)
+
 public:
-    void addRecentFile(const io::path_t& path) override;
-    void clearRecentFiles() override;
+    virtual ~IRecentFilesController() = default;
+
+    virtual const RecentFilesList& recentFilesList() const = 0;
+    virtual async::Notification recentFilesListChanged() const = 0;
+
+    virtual void prependRecentFile(const RecentFile& file) = 0;
+    virtual void clearRecentFiles() = 0;
 };
 }
 
-#endif // MU_PROJECT_STUBRECENTFILESCONTROLLER_H
+#endif // MU_PROJECT_IRECENTFILESCONTROLLER_H

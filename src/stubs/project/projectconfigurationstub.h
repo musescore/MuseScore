@@ -30,9 +30,9 @@ class ProjectConfigurationStub : public IProjectConfiguration
 public:
     ProjectConfigurationStub() = default;
 
-    io::paths_t recentProjectPaths() const override;
-    void setRecentProjectPaths(const io::paths_t& recentScorePaths) override;
-    async::Channel<io::paths_t> recentProjectPathsChanged() const override;
+    ByteArray rawRecentProjectsData() const override;
+    void setRawRecentProjectData(const ByteArray& data) override;
+    async::Notification rawRecentProjectsDataChanged() const override;
 
     io::path_t myFirstProjectPath() const override;
 
@@ -96,7 +96,6 @@ public:
     bool shouldDestinationFolderBeOpenedOnExport() const override;
     void setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport) override;
 
-    QUrl scoreManagerUrl() const override;
     QUrl supportForumUrl() const override;
 
     bool openDetailedProjectUploadedDialog() const override;

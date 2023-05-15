@@ -24,19 +24,19 @@
 using namespace mu;
 using namespace mu::project;
 
-io::paths_t ProjectConfigurationStub::recentProjectPaths() const
+ByteArray ProjectConfigurationStub::rawRecentProjectsData() const
 {
-    return io::paths_t();
+    return ByteArray();
 }
 
-void ProjectConfigurationStub::setRecentProjectPaths(const io::paths_t&)
+void ProjectConfigurationStub::setRawRecentProjectData(const ByteArray&)
 {
 }
 
-async::Channel<io::paths_t> ProjectConfigurationStub::recentProjectPathsChanged() const
+async::Notification ProjectConfigurationStub::rawRecentProjectsDataChanged() const
 {
-    static async::Channel<io::paths_t> ch;
-    return ch;
+    static async::Notification n;
+    return n;
 }
 
 io::path_t ProjectConfigurationStub::myFirstProjectPath() const
@@ -234,11 +234,6 @@ bool ProjectConfigurationStub::shouldDestinationFolderBeOpenedOnExport() const
 
 void ProjectConfigurationStub::setShouldDestinationFolderBeOpenedOnExport(bool)
 {
-}
-
-QUrl ProjectConfigurationStub::scoreManagerUrl() const
-{
-    return QUrl();
 }
 
 QUrl ProjectConfigurationStub::supportForumUrl() const

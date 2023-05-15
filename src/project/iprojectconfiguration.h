@@ -31,6 +31,7 @@
 #include "async/notification.h"
 #include "inotationproject.h"
 #include "projecttypes.h"
+#include "types/bytearray.h"
 
 namespace mu::project {
 class IProjectConfiguration : MODULE_EXPORT_INTERFACE
@@ -40,9 +41,9 @@ class IProjectConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IProjectConfiguration() = default;
 
-    virtual io::paths_t recentProjectPaths() const = 0;
-    virtual void setRecentProjectPaths(const io::paths_t& recentScorePaths) = 0;
-    virtual async::Channel<io::paths_t> recentProjectPathsChanged() const = 0;
+    virtual ByteArray rawRecentFilesData() const = 0;
+    virtual void setRawRecentFilesData(const ByteArray& data) = 0;
+    virtual async::Notification rawRecentFilesDataChanged() const = 0;
 
     virtual io::path_t myFirstProjectPath() const = 0;
 
