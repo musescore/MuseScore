@@ -2080,8 +2080,22 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("color", item->color());
     }
 
-    if (item->preferSharpFlat() != PreferSharpFlat::DEFAULT) {
-        xml.tag("preferSharpFlat", item->preferSharpFlat() == PreferSharpFlat::SHARPS ? "sharps" : "flats");
+    if (item->preferSharpFlat() != PreferSharpFlat::AUTO) {
+        switch (item->preferSharpFlat()) {
+        case PreferSharpFlat::AUTO:
+            break;
+        case PreferSharpFlat::FLATS:
+            xml.tag("preferSharpFlat", "flats");
+            break;
+        case PreferSharpFlat::SHARPS:
+            xml.tag("preferSharpFlat", "flats");
+            break;
+        case PreferSharpFlat::NONE:
+            xml.tag("preferSharpFlat", "none");
+            break;
+        default:
+            break;
+        }
     }
 
     write(item->instrument(), xml, ctx, item);

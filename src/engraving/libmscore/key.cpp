@@ -256,17 +256,28 @@ Key transposeKey(Key key, const Interval& interval, PreferSharpFlat prefer)
     int tpc = int(key) + 14;
     tpc     = transposeTpc(tpc, interval, false);
 
-    // change between 5/6/7 sharps and 7/6/5 flats
-    // other key signatures cannot be changed enharmonically
-    // without causing double-sharp/flat
-    // (-7 <=) tpc-14 <= -5, which has Cb, Gb, Db
-    if (tpc <= 9 && prefer == PreferSharpFlat::SHARPS) {
-        tpc += 12;
-    }
+    // ignore prefer for octave transposing instruments
+    if (interval.chromatic % 12 != 0 || interval.diatonic % 7 != 0) {
+        // prefer key with less accidentals
+        if (tpc < 8 && prefer == PreferSharpFlat::AUTO) {
+            tpc += 12;
+        }
+        if (tpc > 20 && prefer == PreferSharpFlat::AUTO) {
+            tpc -= 12;
+        }
 
-    // 5 <= tpc-14 <= 7, which has B, F#, C#, enharmonic with Cb, Gb, Db respectively
-    if (tpc >= 19 && tpc <= 21 && prefer == PreferSharpFlat::FLATS) {
-        tpc -= 12;
+        // change between 5/6/7 sharps and 7/6/5 flats
+        // other key signatures cannot be changed enharmonically
+        // without causing double-sharp/flat
+        // (-7 <=) tpc-14 <= -5, which has Cb, Gb, Db
+        if (tpc <= 9 && prefer == PreferSharpFlat::SHARPS) {
+            tpc += 12;
+        }
+
+        // 5 <= tpc-14 <= 7, which has B, F#, C#, enharmonic with Cb, Gb, Db respectively
+        if (tpc >= 19 && tpc <= 21 && prefer == PreferSharpFlat::FLATS) {
+            tpc -= 12;
+        }
     }
 
     // check for valid key sigs

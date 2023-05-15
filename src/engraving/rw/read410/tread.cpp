@@ -3312,7 +3312,16 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
     } else if (tag == "soloist") {
         p->setSoloist(e.readInt());
     } else if (tag == "preferSharpFlat") {
-        p->setPreferSharpFlat(e.readText() == "sharps" ? PreferSharpFlat::SHARPS : PreferSharpFlat::FLATS);
+        String val = e.readText();
+        if (val == "sharps") {
+            p->setPreferSharpFlat(PreferSharpFlat::SHARPS);
+        } else if (val == "flats") {
+            p->setPreferSharpFlat(PreferSharpFlat::FLATS);
+        } else if (val == "none") {
+            p->setPreferSharpFlat(PreferSharpFlat::NONE);
+        } else {
+            p->setPreferSharpFlat(PreferSharpFlat::AUTO);
+        }
     } else {
         return false;
     }

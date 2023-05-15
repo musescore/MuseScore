@@ -564,7 +564,7 @@ void EditStaff::applyPartProperties()
     SharpFlat newSharpFlat = SharpFlat(preferSharpFlat->currentIndex());
     if ((iList->currentIndex() == 0) || (iList->currentIndex() == 25)) {
         // instrument becomes non/octave-transposing, preferSharpFlat isn't useful anymore
-        newSharpFlat = SharpFlat::DEFAULT;
+        newSharpFlat = SharpFlat::NONE;
     }
 
     if (part->preferSharpFlat() != newSharpFlat) {
