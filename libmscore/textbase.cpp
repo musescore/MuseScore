@@ -126,6 +126,20 @@ bool CharFormat::operator==(const CharFormat& cf) const
       }
 
 //---------------------------------------------------------
+//   operator=
+//---------------------------------------------------------
+
+CharFormat& CharFormat::operator=(const CharFormat& cf)
+      {
+      setStyle(cf.style());
+      setValign(cf.valign());
+      setFontSize(cf.fontSize());
+      setFontFamily(cf.fontFamily());
+
+      return *this;
+      }
+
+//---------------------------------------------------------
 //   clearSelection
 //---------------------------------------------------------
 

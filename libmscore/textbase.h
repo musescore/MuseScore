@@ -71,7 +71,9 @@ class CharFormat {
 
    public:
       CharFormat() {}
-      bool operator==(const CharFormat&) const;
+      CharFormat(const CharFormat& cf) { *this = cf; }
+      bool operator==(const CharFormat& cf) const;
+      CharFormat& operator=(const CharFormat& cf);
 
       FontStyle style() const                { return _style;                         }
       void setStyle(FontStyle s)             { _style = s;                            }

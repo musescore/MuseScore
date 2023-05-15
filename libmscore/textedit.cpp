@@ -494,6 +494,7 @@ void TextBase::movePosition(EditData& ed, QTextCursor::MoveOperation op)
 void ChangeText::insertText(EditData* ed)
       {
       TextCursor tc = c;
+      tc.setFormat(format); // To undo TextCursor::updateCursorFormat()
       c.text()->editInsertText(&tc, s);
       if (ed) {
             TextCursor* ttc = c.text()->cursor(*ed);
@@ -510,6 +511,7 @@ void ChangeText::removeText(EditData* ed)
       TextCursor tc = c;
       TextBlock& l  = c.curLine();
       int column    = c.column();
+      format = *l.formatAt(column + s.size() - 1);
 
       for (int n = 0; n < s.size(); ++n)
             l.remove(column, &c);
