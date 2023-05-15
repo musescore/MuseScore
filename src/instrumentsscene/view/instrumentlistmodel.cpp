@@ -100,6 +100,7 @@ bool InstrumentListModel::setData(const QModelIndex& index, const QVariant& valu
         instrument.currentTemplateIndex = value.toInt();
         selectInstrument(index.row());
         emit dataChanged(index, index, { RoleCurrentTraitIndex });
+        emit selectionChanged();
         return true;
     }
 
