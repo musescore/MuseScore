@@ -43,6 +43,10 @@ VstPluginProvider::VstPluginProvider(const PluginFactory& factory, const ClassIn
     m_impl = std::make_unique<Impl>(factory, info);
 }
 
+VstPluginProvider::~VstPluginProvider()
+{
+}
+
 PluginComponentPtr VstPluginProvider::component() const
 {
     return m_impl->component;

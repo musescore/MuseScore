@@ -29,6 +29,10 @@
 
 class QFile;
 
+namespace mu::engraving {
+class XmlReader;
+}
+
 namespace mu::iex::capella {
 enum class TIMESTEP : char {
     D1, D2, D4, D8, D16, D32, D64, D128, D256, D_BREVE

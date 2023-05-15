@@ -714,7 +714,7 @@ void NotationActionController::padNote(const Pad& pad)
     startNoteInputIfNeed();
 
     noteInput->padNote(pad);
-    if (currentNotationElements()->msScore()->inputState().usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
+    if (currentNotationElements()->msScore()->inputState().usingNoteEntryMethod(engraving::NoteEntryMethod::RHYTHM)) {
         playSelectedElement();
     }
 }
