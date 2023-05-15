@@ -205,8 +205,9 @@ void Lyrics::paste(EditData& ed, const String& txt)
         TextBase::paste(ed, txt);
         return;
     }
+
     String regex = String(u"[^\\S") + Char(0xa0) + Char(0x202F) + u"]+";
-    StringList sl = correctedText.split(std::regex(regex.toStdString()), mu::SkipEmptyParts);
+    StringList sl = txt.split(std::regex(regex.toStdString()), mu::SkipEmptyParts);
     if (sl.empty()) {
         return;
     }
@@ -253,15 +254,6 @@ void Lyrics::paste(EditData& ed, const String& txt)
     }
 
     score()->endCmd();
-
-    MuseScoreView* scoreview = ed.view();
-    if (minus) {
-        scoreview->lyricsMinus();
-    } else if (underscore) {
-        scoreview->lyricsUnderscore();
-    } else {
-        scoreview->lyricsTab(false, false, true);
-    }
 }
 
 //---------------------------------------------------------
