@@ -72,6 +72,7 @@ void MuseSamplerModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
+    m_configuration->init();
     m_actionController->init();
     m_resolver->init();
 }

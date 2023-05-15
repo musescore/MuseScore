@@ -32,7 +32,10 @@ namespace mu::musesampler {
 class MuseSamplerConfiguration : public IMuseSamplerConfiguration
 {
     INJECT(framework::IGlobalConfiguration, globalConfig)
+
 public:
+    void init();
+
     // Preferred local user install path; try this first.
     io::path_t userLibraryPath() const override;
 
