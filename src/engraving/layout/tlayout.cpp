@@ -1750,6 +1750,7 @@ void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
 <<<<<<< HEAD
             layout(fit, ctx);
             item->addbbox(fit->bbox().translated(fit->pos()));
+<<<<<<< HEAD
 =======
             fit->layout();
 =======
@@ -1757,6 +1758,8 @@ void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
             item->addbbox(item->bbox().translated(fit->pos()));
 >>>>>>> 6ed6e9cf16... [engraving] moved layout FiguredBass
+=======
+>>>>>>> acbfef7fa5... [engraving] fixed FiguredBass layout
         }
     }
 }
