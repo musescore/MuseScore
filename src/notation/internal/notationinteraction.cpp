@@ -31,6 +31,8 @@
 #include <QKeyEvent>
 #include <QMimeData>
 #include <QDrag>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
 
 #include "defer.h"
 #include "ptrutils.h"
@@ -143,6 +145,32 @@ static PointF bindCursorPosToText(const PointF& cursorPos, const EngravingItem* 
         : cursorPos.y() >= bbox.bottom() ? bbox.bottom() - 1 : cursorPos.y());
 
     return boundPos;
+}
+
+inline QString extractSyllable(const QString& text)
+{
+    QString _text = text;
+
+    _text.replace(QRegularExpression("\r+"), "\n");
+    _text.replace(QRegularExpression("\n+"), "\n");
+    if (_text.startsWith(u"\n")) {
+        _text.remove("\n");
+    }
+
+    int textPos = _text.indexOf(QRegularExpression("\\S"));
+    if (textPos == -1) {
+        return QString();
+    }
+
+    QRegularExpressionMatch match;
+    int splitPos = _text.indexOf(QRegularExpression("(_| |-|\n)"), textPos, &match);
+    if (splitPos == -1) {
+        splitPos = _text.size();
+    } else {
+        splitPos += match.capturedLength();
+    }
+
+    return _text.mid(textPos, splitPos - textPos);
 }
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
@@ -3348,7 +3376,6 @@ void NotationInteraction::doEndEditElement()
     if (m_editData.element) {
         m_editData.element->endEdit(m_editData);
     }
-
     m_editData.clear();
 }
 
@@ -3628,8 +3655,26 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     startEdit();
 
     if (isTextEditingStarted()) {
-        QString txt = QGuiApplication::clipboard()->text();
-        toTextBase(m_editData.element)->paste(m_editData, txt);
+        QString clipboardText = QGuiApplication::clipboard()->text();
+        QString textForPaste = clipboardText;
+        if ((!clipboardText.startsWith('<') || !clipboardText.contains('>')) && m_editData.element->isLyrics()) {
+            textForPaste = extractSyllable(clipboardText);
+        }
+
+        toTextBase(m_editData.element)->paste(m_editData, textForPaste);
+
+        if (!textForPaste.isEmpty() && m_editData.element->isLyrics()) {
+            if (textForPaste.endsWith('-')) {
+                navigateToNextSyllable();
+            } else if (textForPaste.endsWith('_')) {
+                addMelisma();
+            } else {
+                navigateToLyrics(false, false, false);
+            }
+
+            QString textForNextPaste = clipboardText.remove(0, clipboardText.indexOf(textForPaste) + textForPaste.size());
+            QGuiApplication::clipboard()->setText(textForNextPaste);
+        }
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         QMimeDataAdapter ma(mimeData);
