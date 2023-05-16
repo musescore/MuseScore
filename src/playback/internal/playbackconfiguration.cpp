@@ -74,6 +74,11 @@ static Settings::Key auxSendVisibleKey(aux_channel_idx_t index)
     return Settings::Key(moduleName, "playback/mixer/auxSend" + std::to_string(index) + "Visible");
 }
 
+static Settings::Key auxChannelVisibleKey(aux_channel_idx_t index)
+{
+    return Settings::Key(moduleName, "playback/mixer/auxChannel" + std::to_string(index) + "Visible");
+}
+
 void PlaybackConfiguration::init()
 {
     settings()->setDefaultValue(PLAY_NOTES_WHEN_EDITING, Val(true));
@@ -89,11 +94,18 @@ void PlaybackConfiguration::init()
     settings()->setDefaultValue(DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS, Val(fallbackSoundProfileStr().toStdString()));
 
     for (aux_channel_idx_t idx = 0; idx < AUX_CHANNEL_NUM; ++idx) {
-        Settings::Key key = auxSendVisibleKey(idx);
+        Settings::Key auxSendKey = auxSendVisibleKey(idx);
+        Settings::Key auxChannelKey = auxChannelVisibleKey(idx);
 
-        settings()->setDefaultValue(key, Val(false));
-        settings()->valueChanged(key).onReceive(this, [this, idx](const Val& val) {
+        settings()->setDefaultValue(auxSendKey, Val(idx == REVERB_CHANNEL_IDX));
+        settings()->setDefaultValue(auxChannelKey, Val(false));
+
+        settings()->valueChanged(auxSendKey).onReceive(this, [this, idx](const Val& val) {
             m_isAuxSendVisibleChanged.send(idx, val.toBool());
+        });
+
+        settings()->valueChanged(auxChannelKey).onReceive(this, [this, idx](const Val& val) {
+            m_isAuxChannelVisibleChanged.send(idx, val.toBool());
         });
     }
 }
@@ -156,6 +168,21 @@ void PlaybackConfiguration::setAuxSendVisible(aux_channel_idx_t index, bool visi
 mu::async::Channel<aux_channel_idx_t, bool> PlaybackConfiguration::isAuxSendVisibleChanged() const
 {
     return m_isAuxSendVisibleChanged;
+}
+
+bool PlaybackConfiguration::isAuxChannelVisible(aux_channel_idx_t index) const
+{
+    return settings()->value(auxChannelVisibleKey(index)).toBool();
+}
+
+void PlaybackConfiguration::setAuxChannelVisible(aux_channel_idx_t index, bool visible) const
+{
+    settings()->setSharedValue(auxChannelVisibleKey(index), Val(visible));
+}
+
+mu::async::Channel<aux_channel_idx_t, bool> PlaybackConfiguration::isAuxChannelVisibleChanged() const
+{
+    return m_isAuxChannelVisibleChanged;
 }
 
 gain_t PlaybackConfiguration::defaultAuxSendValue(aux_channel_idx_t index, AudioSourceType sourceType,

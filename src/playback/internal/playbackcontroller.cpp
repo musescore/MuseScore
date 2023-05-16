@@ -232,9 +232,9 @@ const IPlaybackController::InstrumentTrackIdMap& PlaybackController::instrumentT
     return m_instrumentTrackIdMap;
 }
 
-const TrackIdList& PlaybackController::auxTrackIdList() const
+const IPlaybackController::AuxTrackIdMap& PlaybackController::auxTrackIdMap() const
 {
-    return m_auxTrackIdList;
+    return m_auxTrackIdMap;
 }
 
 Channel<TrackId> PlaybackController::trackAdded() const
@@ -728,7 +728,7 @@ void PlaybackController::resetCurrentSequence()
     playback()->removeSequence(m_currentSequenceId);
 
     m_instrumentTrackIdMap.clear();
-    m_auxTrackIdList.clear();
+    m_auxTrackIdMap.clear();
 
     m_currentSequenceId = -1;
     m_currentSequenceIdChanged.notify();
@@ -869,7 +869,7 @@ void PlaybackController::addAuxTrack(aux_channel_idx_t index, const TrackAddFini
             return;
         }
 
-        m_auxTrackIdList.push_back(trackId);
+        m_auxTrackIdMap.insert({ index, trackId });
 
         audioSettings()->setAuxOutputParams(index, appliedParams);
 
@@ -1025,18 +1025,21 @@ void PlaybackController::subscribeOnAudioParamsChanges()
             return;
         }
 
-        auto search = std::find_if(m_instrumentTrackIdMap.begin(), m_instrumentTrackIdMap.end(), [trackId](const auto& pair) {
+        auto instrumentIt = std::find_if(m_instrumentTrackIdMap.begin(), m_instrumentTrackIdMap.end(), [trackId](const auto& pair) {
             return pair.second == trackId;
         });
 
-        if (search != m_instrumentTrackIdMap.end()) {
-            audioSettings()->setTrackOutputParams(search->first, params);
+        if (instrumentIt != m_instrumentTrackIdMap.end()) {
+            audioSettings()->setTrackOutputParams(instrumentIt->first, params);
             return;
         }
 
-        size_t idx = mu::indexOf(m_auxTrackIdList, trackId);
-        if (idx != mu::nidx) {
-            aux_channel_idx_t auxIdx = static_cast<aux_channel_idx_t>(idx);
+        auto auxIt = std::find_if(m_auxTrackIdMap.begin(), m_auxTrackIdMap.end(), [trackId](const auto& pair) {
+            return pair.second == trackId;
+        });
+
+        if (auxIt != m_auxTrackIdMap.end()) {
+            aux_channel_idx_t auxIdx = auxIt->first;
             std::string oldName = resolveAuxTrackTitle(auxIdx, audioSettings()->auxOutputParams(auxIdx));
             std::string newName = resolveAuxTrackTitle(auxIdx, params);
 

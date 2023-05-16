@@ -46,7 +46,7 @@ public:
     async::Notification currentTrackSequenceIdChanged() const override;
 
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
-    const audio::TrackIdList& auxTrackIdList() const override;
+    const AuxTrackIdMap& auxTrackIdMap() const override;
 
     async::Channel<audio::TrackId> trackAdded() const override;
     async::Channel<audio::TrackId> trackRemoved() const override;

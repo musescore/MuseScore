@@ -80,9 +80,11 @@ private:
 
     uicomponents::MenuItem* buildSectionVisibleItem(MixerSectionType sectionType);
     uicomponents::MenuItem* buildAuxSendVisibleItem(audio::aux_channel_idx_t index);
+    uicomponents::MenuItem* buildAuxChannelVisibleItem(audio::aux_channel_idx_t index);
 
     void toggleMixerSection(const actions::ActionData& args);
     void toggleAuxSend(const actions::ActionData& args);
+    void toggleAuxChannel(const actions::ActionData& args);
 
     void setViewMenuItemChecked(const QString& itemId, bool checked);
 };

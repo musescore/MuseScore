@@ -79,6 +79,20 @@ mu::async::Channel<mu::audio::aux_channel_idx_t, bool> PlaybackConfigurationStub
     return {};
 }
 
+bool PlaybackConfigurationStub::isAuxChannelVisible(audio::aux_channel_idx_t index) const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setAuxChannelVisible(audio::aux_channel_idx_t, bool) const
+{
+}
+
+mu::async::Channel<mu::audio::aux_channel_idx_t, bool> PlaybackConfigurationStub::isAuxChannelVisibleChanged() const
+{
+    return {};
+}
+
 gain_t PlaybackConfigurationStub::defaultAuxSendValue(aux_channel_idx_t, AudioSourceType, const String&) const
 {
     return 0.f;

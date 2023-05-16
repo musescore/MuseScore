@@ -32,6 +32,7 @@
 #include "audio/iplayback.h"
 #include "context/iglobalcontext.h"
 #include "ui/view/navigationsection.h"
+#include "playback/iplaybackconfiguration.h"
 
 #include "iplaybackcontroller.h"
 #include "internal/mixerchannelitem.h"
@@ -44,6 +45,7 @@ class MixerPanelModel : public QAbstractListModel, public async::Asyncable
     INJECT(audio::IPlayback, playback)
     INJECT(IPlaybackController, controller)
     INJECT(context::IGlobalContext, context)
+    INJECT(IPlaybackConfiguration, configuration)
 
     Q_PROPERTY(
         mu::ui::NavigationSection * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
@@ -73,6 +75,7 @@ private:
     };
 
     void loadItems();
+    void onTrackAdded(const audio::TrackId& trackId);
     void addItem(MixerChannelItem* item, int index);
     void removeItem(const audio::TrackId trackId);
     void updateItemsPanelsOrder();
