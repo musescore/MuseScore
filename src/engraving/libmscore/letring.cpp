@@ -22,7 +22,7 @@
 
 #include "letring.h"
 
-#include "layout/tlayout.h"
+
 
 #include "score.h"
 #include "stafftype.h"

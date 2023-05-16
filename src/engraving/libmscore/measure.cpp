@@ -30,10 +30,9 @@
 #include <cmath>
 
 #include "realfn.h"
-
+#include "layout/tlayout.h"
 #include "layout/chordlayout.h"
 #include "rw/400/measurerw.h"
-
 #include "style/style.h"
 
 #include "accidental.h"
@@ -87,7 +86,6 @@
 #include "accessibility/accessibleitem.h"
 #endif
 
-#include "layout/tlayout.h"
 #include "layout/chordlayout.h"
 
 #include "log.h"

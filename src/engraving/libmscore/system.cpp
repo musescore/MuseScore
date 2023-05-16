@@ -27,11 +27,13 @@
 
 #include "system.h"
 
+#include "realfn.h"
+
 #include "style/style.h"
 #include "style/defaultstyle.h"
 
+#include "layout/tlayout.h"
 #include "layout/layoutcontext.h"
-#include "realfn.h"
 
 #include "barline.h"
 #include "beam.h"
@@ -61,8 +63,6 @@
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
 #endif
-
-#include "layout/tlayout.h"
 
 #include "log.h"
 

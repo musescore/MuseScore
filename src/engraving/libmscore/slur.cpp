@@ -28,6 +28,7 @@
 #include "draw/types/brush.h"
 
 #include "iengravingfont.h"
+
 #include "layout/tlayout.h"
 #include "layout/slurtielayout.h"
 

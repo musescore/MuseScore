@@ -30,7 +30,9 @@
 #include "realfn.h"
 
 #include "draw/types/brush.h"
+
 #include "layout/tlayout.h"
+#include "layout/beamlayout.h"
 
 #include "actionicon.h"
 #include "chord.h"
@@ -49,8 +51,6 @@
 #include "system.h"
 #include "tremolo.h"
 #include "tuplet.h"
-
-#include "layout/beamlayout.h"
 
 #include "log.h"
 

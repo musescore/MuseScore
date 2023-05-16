@@ -22,14 +22,14 @@
 
 #include "textedit.h"
 
+#include "iengravingfont.h"
+#include "types/symnames.h"
+#include "layout/tlayout.h"
+
 #include "mscoreview.h"
 #include "navigate.h"
 #include "score.h"
-#include "iengravingfont.h"
-#include "types/symnames.h"
 #include "lyrics.h"
-
-#include "layout/tlayout.h"
 
 #include "log.h"
 

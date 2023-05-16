@@ -862,7 +862,7 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
             for (Note* note : c->notes()) {
                 for (EngravingItem* item : note->el()) {
                     if (item && item->isStretchedBend()) {
-                        toStretchedBend(item)->layoutStretched();
+                        v0::TLayout::layoutStretched(toStretchedBend(item), ctx);
                     }
                 }
             }

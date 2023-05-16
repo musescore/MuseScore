@@ -22,7 +22,7 @@
 
 #include "stafftypechange.h"
 
-#include "layout/tlayout.h"
+
 
 #include "score.h"
 #include "measure.h"

@@ -40,12 +40,8 @@ class StretchedBend final : public Bend
 public:
     StretchedBend* clone() const override { return new StretchedBend(*this); }
 
-    void layoutStretched();
     void draw(mu::draw::Painter*) const override;
     bool stretchedMode() const { return m_stretchedMode; }
-
-    static void prepareBends(std::vector<StretchedBend*>& bends);
-    static void layoutBends(const std::vector<Segment*>& sl);
 
 private:
     friend class v0::TLayout;

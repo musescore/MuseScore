@@ -24,6 +24,7 @@
 #include <set>
 
 #include "infrastructure/messagebox.h"
+#include "layout/tlayout.h"
 
 #include "accidental.h"
 #include "articulation.h"
@@ -83,8 +84,6 @@
 #include "tupletmap.h"
 #include "undo.h"
 #include "utils.h"
-
-#include "layout/tlayout.h"
 
 #include "log.h"
 

@@ -28,7 +28,7 @@
 #include "translation.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
-#include "layout/tlayout.h"
+
 #include "iengravingfont.h"
 
 #include "articulation.h"
