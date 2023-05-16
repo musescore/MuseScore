@@ -1399,6 +1399,10 @@ void TLayout::layout(Dynamic* item, LayoutContext& ctx)
         break;
     }
 
+    if (!itemToAlign) {
+        return;
+    }
+
     if (!itemToAlign->isChord()) {
         item->movePosX(itemToAlign->width() * 0.5);
         return;
