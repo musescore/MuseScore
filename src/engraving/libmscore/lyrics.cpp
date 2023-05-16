@@ -521,11 +521,10 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
 void Lyrics::removeInvalidSegments()
 {
     _removeInvalidSegments = false;
-    if (_separator && isMelisma() && _ticks <= _separator->startCR()->ticks()) {
+    if (_separator && isMelisma() && _ticks < _separator->startCR()->ticks()) {
         setTicks(Fraction(0, 1));
         _separator->setTicks(Fraction(0, 1));
         _separator->removeUnmanaged();
-        delete _separator;
         _separator = nullptr;
         setAlign(propertyDefault(Pid::ALIGN).value<Align>());
         if (_syllabic == LyricsSyllabic::BEGIN || _syllabic == LyricsSyllabic::SINGLE) {

@@ -141,7 +141,7 @@ public:
 
     Lyrics* lyrics() const { return toLyrics(explicitParent()); }
     Lyrics* nextLyrics() const { return _nextLyrics; }
-    bool isEndMelisma() const { return lyrics()->ticks().isNotZero(); }
+    bool isEndMelisma() const { return lyrics() && lyrics()->ticks().isNotZero(); }
     bool isDash() const { return !isEndMelisma(); }
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
 

@@ -135,7 +135,8 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     ChordRest* cr = item->chordRest();
     if (item->_removeInvalidSegments) {
         item->removeInvalidSegments();
-    } else if (item->_ticks > Fraction(0, 1) || item->_syllabic == LyricsSyllabic::BEGIN || item->_syllabic == LyricsSyllabic::MIDDLE) {
+    }
+    if (item->_ticks > Fraction(0, 1) || item->_syllabic == LyricsSyllabic::BEGIN || item->_syllabic == LyricsSyllabic::MIDDLE) {
         if (!item->_separator) {
             item->_separator = new LyricsLine(ctx.mutDom().dummyParent());
             item->_separator->setTick(cr->tick());

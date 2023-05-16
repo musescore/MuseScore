@@ -886,7 +886,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                         }
                     }
                 }
-            } else if (isLyricsLine() && toLyrics(explicitParent())->ticks() > Fraction(0, 1)) {
+            } else if (isLyricsLine() && explicitParent() && toLyrics(explicitParent())->ticks() > Fraction(0, 1)) {
                 // melisma line
                 // it is possible CR won't be in correct track
                 // prefer element in current track if available
