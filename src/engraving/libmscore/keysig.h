@@ -42,20 +42,6 @@ class KeySig final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, KeySig)
     DECLARE_CLASSOF(ElementType::KEYSIG)
 
-    friend class layout::v0::TLayout;
-    friend class Factory;
-
-    bool _showCourtesy;
-    bool _hideNaturals;       // used in layout to override score style (needed for the Continuous panel)
-    KeySigEvent _sig;
-
-    KeySig(Segment* = 0);
-    KeySig(const KeySig&);
-
-    void addLayout(SymId sym, int line);
-
-    bool neverKernable() const override { return true; }
-
 public:
 
     KeySig* clone() const override { return new KeySig(*this); }
@@ -103,6 +89,21 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
+
+private:
+    friend class layout::v0::TLayout;
+    friend class Factory;
+
+    KeySig(Segment* = 0);
+    KeySig(const KeySig&);
+
+    void addLayout(SymId sym, int line);
+
+    bool neverKernable() const override { return true; }
+
+    bool _showCourtesy;
+    bool _hideNaturals;       // used in layout to override score style (needed for the Continuous panel)
+    KeySigEvent _sig;
 };
 } // namespace mu::engraving
 #endif

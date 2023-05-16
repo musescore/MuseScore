@@ -42,11 +42,6 @@ class LedgerLine final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, LedgerLine)
     DECLARE_CLASSOF(ElementType::LEDGER_LINE)
 
-    double _width;
-    double _len;
-    LedgerLine* _next;
-    bool m_vertical = false;
-
 public:
     LedgerLine(Score*);
     ~LedgerLine();
@@ -71,6 +66,12 @@ public:
     void setNext(LedgerLine* l) { _next = l; }
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
+
+private:
+    double _width;
+    double _len;
+    LedgerLine* _next;
+    bool m_vertical = false;
 };
 } // namespace mu::engraving
 #endif

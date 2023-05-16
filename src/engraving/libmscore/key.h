@@ -61,15 +61,6 @@ struct CustDef {
 
 class KeySigEvent
 {
-    Key _key            { Key::INVALID };                // -7 -> +7
-    KeyMode _mode       { KeyMode::UNKNOWN };
-    bool _custom        { false };
-    bool _forInstrumentChange{ false };
-    std::vector<CustDef> _customKeyDefs;
-    std::vector<KeySym> _keySymbols;
-
-    void enforceLimits();
-
 public:
     KeySigEvent() = default;
 
@@ -95,6 +86,16 @@ public:
     const std::vector<KeySym>& keySymbols() const { return _keySymbols; }
     std::vector<CustDef>& customKeyDefs() { return _customKeyDefs; }
     const std::vector<CustDef>& customKeyDefs() const { return _customKeyDefs; }
+
+private:
+    Key _key            { Key::INVALID };                // -7 -> +7
+    KeyMode _mode       { KeyMode::UNKNOWN };
+    bool _custom        { false };
+    bool _forInstrumentChange{ false };
+    std::vector<CustDef> _customKeyDefs;
+    std::vector<KeySym> _keySymbols;
+
+    void enforceLimits();
 };
 
 //---------------------------------------------------------
