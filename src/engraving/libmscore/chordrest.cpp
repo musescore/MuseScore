@@ -27,6 +27,7 @@
 #include "style/style.h"
 #include "types/typesconv.h"
 #include "layout/tlayout.h"
+#include "layout/chordlayout.h"
 
 #include "actionicon.h"
 #include "articulation.h"
@@ -596,7 +597,8 @@ void ChordRest::removeDeleteBeam(bool beamed)
         }
     }
     if (!beamed && isChord()) {
-        toChord(this)->layoutStem();
+        LayoutContext lctx(score());
+        ChordLayout::layoutStem(toChord(this), lctx);
     }
 }
 

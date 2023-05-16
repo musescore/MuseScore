@@ -30,6 +30,7 @@
 #include "../libmscore/tremolo.h"
 
 #include "tlayout.h"
+#include "chordlayout.h"
 
 #include "log.h"
 
@@ -504,7 +505,8 @@ bool BeamTremoloLayout::calculateAnchors(const std::vector<ChordRest*>& chordRes
             } else {
                 endChord = toChord(chordRest);
             }
-            toChord(chordRest)->layoutStem();
+            LayoutContext ctx(toChord(chordRest)->score());
+            ChordLayout::layoutStem(toChord(chordRest), ctx);
         }
     }
     if (!startChord) {

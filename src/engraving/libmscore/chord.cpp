@@ -31,6 +31,7 @@
 #include "style/style.h"
 #include "layout/tlayout.h"
 #include "layout/slurtielayout.h"
+#include "layout/chordlayout.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -1728,63 +1729,6 @@ void Chord::createHook()
     score()->undoAddElement(hook);
 }
 
-void Chord::layoutHook()
-{
-    if (!_hook) {
-        createHook();
-        computeUp();
-    }
-    _hook->setHookType(up() ? durationType().hooks() : -durationType().hooks());
-    LayoutContext ctx(score());
-    v0::TLayout::layout(_hook, ctx);
-}
-
-//! May be called again when the chord is added to or removed from a beam.
-void Chord::layoutStem()
-{
-    // Stem needs to know hook's bbox and SMuFL anchors.
-    // This is done before calcDefaultStemLength because the presence or absence of a hook affects stem length
-    if (shouldHaveHook()) {
-        layoutHook();
-    } else {
-        score()->undoRemoveElement(_hook);
-    }
-
-    // we should calculate default stem length for this chord even if it doesn't have a stem
-    // because this length is used for tremolos or other things that attach to where the stem WOULD be
-    _defaultStemLength = calcDefaultStemLength();
-
-    if (!shouldHaveStem()) {
-        removeStem();
-        return;
-    }
-
-    if (!_stem) {
-        createStem();
-    }
-
-    _stem->setPosX(stemPosX());
-
-    // This calls _stem->layout()
-    _stem->setBaseLength(Millimetre(_defaultStemLength));
-
-    // And now we need to set the position of the flag.
-    if (_hook) {
-        _hook->setPos(_stem->flagPosition());
-    }
-
-    // Add Stem slash
-    if ((_noteType == NoteType::ACCIACCATURA) && !(beam() && beam()->elements().front() != this)) {
-        if (!_stemSlash) {
-            add(Factory::createStemSlash(this));
-        }
-        LayoutContext ctx(score());
-        v0::TLayout::layout(_stemSlash, ctx);
-    } else if (_stemSlash) {
-        remove(_stemSlash);
-    }
-}
-
 //---------------------------------------------------------
 //    underBeam: true, if grace note is placed under a beam.
 //---------------------------------------------------------
@@ -2001,7 +1945,8 @@ void Chord::crossMeasureSetup(bool on)
     if (!on) {
         if (_crossMeasure != CrossMeasure::UNKNOWN) {
             _crossMeasure = CrossMeasure::UNKNOWN;
-            layoutStem();
+            LayoutContext lctx(score());
+            ChordLayout::layoutStem(this, lctx);
         }
         return;
     }
@@ -2021,7 +1966,8 @@ void Chord::crossMeasureSetup(bool on)
                 if (durList.size() == 1) {
                     _crossMeasure = tempCross = CrossMeasure::FIRST;
                     _crossMeasureTDur = durList[0];
-                    layoutStem();
+                    LayoutContext lctx(score());
+                    ChordLayout::layoutStem(this, lctx);
                 }
             }
             _crossMeasure = tempCross;

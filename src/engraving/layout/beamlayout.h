@@ -54,7 +54,7 @@ public:
 private:
     static void beamGraceNotes(Score* score, Chord* mainNote, bool after);
 
-    static void layout2(Beam* item, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag);
+    static void layout2(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag);
 
     static void createBeamSegments(Beam* item, const std::vector<ChordRest*>& chordRests);
     static bool calcIsBeamletBefore(const Beam* item, Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break);

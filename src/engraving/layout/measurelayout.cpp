@@ -846,15 +846,15 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                             if (drumset) {
                                 layoutDrumsetChord(c, drumset, st, score->spatium());
                             }
-                            c->layoutStem();
+                            ChordLayout::layoutStem(c, ctx);
                             c->setBeamlet(nullptr); // Will be defined during beam layout
                         }
                         if (drumset) {
                             layoutDrumsetChord(chord, drumset, st, score->spatium());
                         }
                         chord->computeUp();
-                        chord->layoutStem();               // create stems needed to calculate spacing
-                                                           // stem direction can change later during beam processing
+                        ChordLayout::layoutStem(chord, ctx); // create stems needed to calculate spacing
+                                                             // stem direction can change later during beam processing
                     }
                     cr->setMag(m);
                     cr->setBeamlet(nullptr); // Will be defined during beam layout

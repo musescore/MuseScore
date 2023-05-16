@@ -28,6 +28,8 @@
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
 
+#include "chordlayout.h"
+
 using namespace mu::engraving;
 
 void TremoloLayout::layout(Tremolo* item, LayoutContext&)
@@ -177,8 +179,10 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, double x, double y, dou
         item->_up = isUp;
         item->_chord1->setUp(item->_chord1->staffMove() == 0 ? isUp : !isUp); // if on a different staff, flip stem dir
         item->_chord2->setUp(item->_chord2->staffMove() == 0 ? isUp : !isUp);
-        item->_chord1->layoutStem();
-        item->_chord2->layoutStem();
+
+        LayoutContext ctx(item->score());
+        ChordLayout::layoutStem(item->_chord1, ctx);
+        ChordLayout::layoutStem(item->_chord2, ctx);
     }
 
     item->_layoutInfo = BeamTremoloLayout(item);
@@ -200,8 +204,11 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, double x, double y, dou
         item->_startAnchor.setY(startY);
         item->_endAnchor.setY(endY);
         item->_layoutInfo.setAnchors(item->_startAnchor, item->_endAnchor);
-        item->_chord1->layoutStem();
-        item->_chord2->layoutStem();
+
+        LayoutContext ctx(item->score());
+        ChordLayout::layoutStem(item->_chord1, ctx);
+        ChordLayout::layoutStem(item->_chord2, ctx);
+
         item->createBeamSegments();
         return;
     }

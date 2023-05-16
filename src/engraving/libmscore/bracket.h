@@ -41,28 +41,6 @@ class Bracket final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Bracket)
     DECLARE_CLASSOF(ElementType::BRACKET)
 
-private:
-    BracketItem* _bi;
-    double ay1;
-    double h2;
-
-    size_t _firstStaff = 0;
-    size_t _lastStaff = 0;
-
-    mu::draw::PainterPath path;
-    SymId _braceSymbol;
-    Shape _shape;
-
-    // horizontal scaling factor for brace symbol. Cannot be equal to magY or depend on h
-    // because layout needs width of brace before knowing height of system...
-    double _magx;
-    Measure* _measure = nullptr;
-
-    friend class Factory;
-    friend class v0::TLayout;
-
-    Bracket(EngravingItem* parent);
-
 public:
 
     ~Bracket();
@@ -125,6 +103,28 @@ public:
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
     void setSelected(bool f) override;
+
+private:
+    BracketItem* _bi;
+    double ay1;
+    double h2;
+
+    size_t _firstStaff = 0;
+    size_t _lastStaff = 0;
+
+    mu::draw::PainterPath path;
+    SymId _braceSymbol;
+    Shape _shape;
+
+    // horizontal scaling factor for brace symbol. Cannot be equal to magY or depend on h
+    // because layout needs width of brace before knowing height of system...
+    double _magx;
+    Measure* _measure = nullptr;
+
+    friend class Factory;
+    friend class v0::TLayout;
+
+    Bracket(EngravingItem* parent);
 };
 } // namespace mu::engraving
 #endif
