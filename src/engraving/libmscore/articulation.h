@@ -105,40 +105,6 @@ class Articulation : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Articulation)
     DECLARE_CLASSOF(ElementType::ARTICULATION)
 
-private:
-
-    SymId _symId;
-    DirectionV _direction;
-    String _channelName;
-
-    ArticulationTextType m_textType = ArticulationTextType::NO_TEXT;
-    draw::Font m_font; // used for drawing text type articulations
-
-    ArticulationAnchor _anchor;
-
-    bool _up;
-    OrnamentStyle _ornamentStyle;       // for use in ornaments such as trill
-    bool _playArticulation;
-
-    std::pair<Sid, Sid> m_showOnTabStyles = { Sid::NOSTYLE, Sid::NOSTYLE };
-
-    friend class mu::engraving::Factory;
-
-    void setupShowOnTabStyles();
-
-    enum class AnchorGroup {
-        ARTICULATION,
-        LUTE_FINGERING,
-        OTHER
-    };
-    static AnchorGroup anchorGroup(SymId);
-
-    ArticulationCategories m_categories = ArticulationCategory::NONE;
-    void computeCategories();
-
-protected:
-    Articulation(ChordRest* parent, ElementType type = ElementType::ARTICULATION);
-    void draw(mu::draw::Painter*) const override;
 public:
 
     Articulation(const Articulation&) = default;
@@ -210,6 +176,41 @@ public:
     void styleChanged() override;
 
     bool isOnCrossBeamSide() const;
+
+protected:
+    friend class mu::engraving::Factory;
+    Articulation(ChordRest* parent, ElementType type = ElementType::ARTICULATION);
+
+    void draw(mu::draw::Painter*) const override;
+
+private:
+
+    void setupShowOnTabStyles();
+
+    enum class AnchorGroup {
+        ARTICULATION,
+        LUTE_FINGERING,
+        OTHER
+    };
+    static AnchorGroup anchorGroup(SymId);
+
+    ArticulationCategories m_categories = ArticulationCategory::NONE;
+    void computeCategories();
+
+    SymId _symId;
+    DirectionV _direction;
+    String _channelName;
+
+    ArticulationTextType m_textType = ArticulationTextType::NO_TEXT;
+    draw::Font m_font; // used for drawing text type articulations
+
+    ArticulationAnchor _anchor;
+
+    bool _up;
+    OrnamentStyle _ornamentStyle;       // for use in ornaments such as trill
+    bool _playArticulation;
+
+    std::pair<Sid, Sid> m_showOnTabStyles = { Sid::NOSTYLE, Sid::NOSTYLE };
 };
 } // namespace mu::engraving
 

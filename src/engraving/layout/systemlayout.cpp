@@ -779,7 +779,7 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
                     & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
                     BarLine* bl = toBarLine(s.element(staffIdx * VOICES));
                     if (bl && bl->addToSkyline()) {
-                        RectF r = bl->layoutRect();
+                        RectF r = TLayout::layoutRect(bl, ctx);
                         skyline.add(r.translated(bl->pos() + p));
                     }
                 } else {

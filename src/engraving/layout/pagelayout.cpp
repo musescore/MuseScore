@@ -333,7 +333,7 @@ void PageLayout::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                             }
                         }
                     } else if (e->isBarLine()) {
-                        toBarLine(e)->layout2();
+                        v0::TLayout::layout2(toBarLine(e), ctx);
                     }
                 }
             }
