@@ -44,10 +44,6 @@ class HairpinWithDynamicsDragGroup : public ElementGroup
 {
     OBJECT_ALLOCATOR(engraving, HairpinWithDynamicsDragGroup)
 
-    Dynamic* startDynamic;
-    HairpinSegment* hairpinSegment;
-    Dynamic* endDynamic;
-
 public:
     HairpinWithDynamicsDragGroup(Dynamic* start, HairpinSegment* hs, Dynamic* end)
         : startDynamic(start), hairpinSegment(hs), endDynamic(end) {}
@@ -58,6 +54,12 @@ public:
 
     static std::unique_ptr<ElementGroup> detectFor(HairpinSegment* hs, std::function<bool(const EngravingItem*)> isDragged);
     static std::unique_ptr<ElementGroup> detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged);
+
+private:
+
+    Dynamic* startDynamic;
+    HairpinSegment* hairpinSegment;
+    Dynamic* endDynamic;
 };
 
 //-------------------------------------------------------------------
@@ -91,9 +93,6 @@ class DynamicExpressionDragGroup : public ElementGroup
 {
     OBJECT_ALLOCATOR(engraving, DynamicNearHairpinsDragGroup)
 
-    Dynamic* dynamic;
-    Expression* expression;
-
 public:
     DynamicExpressionDragGroup(Dynamic* d, Expression* e)
         : dynamic(d), expression(e) {}
@@ -104,6 +103,10 @@ public:
 
     static std::unique_ptr<ElementGroup> detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged);
     static std::unique_ptr<ElementGroup> detectFor(Expression* e, std::function<bool(const EngravingItem*)> isDragged);
+
+private:
+    Dynamic* dynamic = nullptr;
+    Expression* expression = nullptr;
 };
 } // namespace mu::engraving
 

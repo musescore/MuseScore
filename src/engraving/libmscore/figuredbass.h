@@ -242,22 +242,6 @@ class FiguredBass final : public TextBase
     OBJECT_ALLOCATOR(engraving, FiguredBass)
     DECLARE_CLASSOF(ElementType::FIGURED_BASS)
 
-    std::vector<FiguredBassItem*> m_items;        // the individual lines of the F.B.
-    std::vector<double> _lineLengths;                // lengths of duration indicator lines (in raster units)
-    bool _onNote;                               // true if this element is on a staff note | false if it is between notes
-    Fraction _ticks;                            // the duration (used for cont. lines and for multiple F.B.
-                                                // under the same note)
-    double _printedLineLength;                   // the length of lines actually printed (i.e. continuation lines)
-
-    friend class Factory;
-    FiguredBass(Segment* parent = 0);
-    FiguredBass(const FiguredBass&);
-
-    void              layoutLines();
-    bool              hasParentheses() const;   // read / write MusicXML support
-
-    Sid getPropertyStyle(Pid) const override;
-
 public:
 
     ~FiguredBass();
@@ -312,6 +296,24 @@ public:
 
     // the array of configured fonts
     static const std::vector<FiguredBassFont>& FBFonts();
+
+    bool hasParentheses() const;       // read / write MusicXML support
+
+private:
+
+    friend class v0::TLayout;
+    friend class Factory;
+    FiguredBass(Segment* parent = 0);
+    FiguredBass(const FiguredBass&);
+
+    Sid getPropertyStyle(Pid) const override;
+
+    std::vector<FiguredBassItem*> m_items;        // the individual lines of the F.B.
+    std::vector<double> _lineLengths;                // lengths of duration indicator lines (in raster units)
+    bool _onNote;                               // true if this element is on a staff note | false if it is between notes
+    Fraction _ticks;                            // the duration (used for cont. lines and for multiple F.B.
+                                                // under the same note)
+    double _printedLineLength;                   // the length of lines actually printed (i.e. continuation lines)
 };
 } // namespace mu::engraving
 

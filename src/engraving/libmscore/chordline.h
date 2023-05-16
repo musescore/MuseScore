@@ -45,27 +45,6 @@ class ChordLine final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, ChordLine)
     DECLARE_CLASSOF(ElementType::CHORDLINE)
 
-private:
-
-    bool _straight = false;
-    bool _wavy = false;
-
-    ChordLineType _chordLineType = ChordLineType::NOTYPE;
-    draw::PainterPath m_path;
-    bool m_modified = false;
-    double _lengthX = 0.0;
-    double _lengthY = 0.0;
-    Note* _note = nullptr;
-
-    friend class Factory;
-
-    ChordLine(Chord* parent);
-    ChordLine(const ChordLine&);
-
-    bool sameVoiceKerningLimited() const override { return true; }
-    bool alwaysKernable() const override { return true; }
-    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
-
 public:
 
     static constexpr double WAVE_ANGEL = 20;
@@ -114,6 +93,27 @@ public:
 
     void setNote(Note* note) { _note = note; }
     Note* note() const { return _note; }
+
+private:
+
+    friend class Factory;
+
+    ChordLine(Chord* parent);
+    ChordLine(const ChordLine&);
+
+    bool sameVoiceKerningLimited() const override { return true; }
+    bool alwaysKernable() const override { return true; }
+    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
+
+    bool _straight = false;
+    bool _wavy = false;
+
+    ChordLineType _chordLineType = ChordLineType::NOTYPE;
+    draw::PainterPath m_path;
+    bool m_modified = false;
+    double _lengthX = 0.0;
+    double _lengthY = 0.0;
+    Note* _note = nullptr;
 };
 } // namespace mu::engraving
 #endif

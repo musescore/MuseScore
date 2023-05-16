@@ -42,33 +42,11 @@ class Dynamic final : public TextBase
     DECLARE_CLASSOF(ElementType::DYNAMIC)
 
 public:
-
     struct ChangeSpeedItem {
         DynamicSpeed speed;
         const char* name;
     };
 
-private:
-
-    friend class v0::TLayout;
-
-    DynamicType _dynamicType;
-    Expression* _snappedExpression = nullptr;
-
-    M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)
-    M_PROPERTY(double, dynamicsSize, setDynamicsSize)
-    M_PROPERTY(bool, centerOnNotehead, setCenterOnNotehead)
-
-    mutable mu::PointF dragOffset;
-    int _velocity;       // associated midi velocity 0-127
-    DynamicRange _dynRange;     // STAFF, PART, SYSTEM
-
-    int _changeInVelocity         { 128 };
-    DynamicSpeed _velChangeSpeed         { DynamicSpeed::NORMAL };
-
-    mu::RectF drag(EditData&) override;
-
-public:
     Dynamic(Segment* parent);
     Dynamic(const Dynamic&);
     Dynamic* clone() const override { return new Dynamic(*this); }
@@ -124,6 +102,26 @@ public:
 
     bool acceptDrop(EditData& ed) const override;
     EngravingItem* drop(EditData& ed) override;
+
+private:
+
+    friend class v0::TLayout;
+
+    DynamicType _dynamicType;
+    Expression* _snappedExpression = nullptr;
+
+    M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)
+    M_PROPERTY(double, dynamicsSize, setDynamicsSize)
+    M_PROPERTY(bool, centerOnNotehead, setCenterOnNotehead)
+
+    mutable mu::PointF dragOffset;
+    int _velocity;           // associated midi velocity 0-127
+    DynamicRange _dynRange;         // STAFF, PART, SYSTEM
+
+    int _changeInVelocity         { 128 };
+    DynamicSpeed _velChangeSpeed         { DynamicSpeed::NORMAL };
+
+    mu::RectF drag(EditData&) override;
 };
 } // namespace mu::engraving
 
