@@ -122,7 +122,7 @@ private:
     Measure* _measure = nullptr;
 
     friend class Factory;
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
 
     Bracket(EngravingItem* parent);
 };

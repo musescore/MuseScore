@@ -2503,8 +2503,8 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             }
             segment = m->getSegment(st, ctx.tick());
             segment->add(bl);
-            LayoutContext lctx(bl->score());
-            v0::TLayout::layout(bl, lctx);
+            layout::v0::LayoutContext lctx(bl->score());
+            layout::v0::TLayout::layout(bl, lctx);
             if (fermataAbove) {
                 segment->add(fermataAbove);
             }

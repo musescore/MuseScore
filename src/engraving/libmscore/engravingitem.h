@@ -40,7 +40,7 @@
 #include "shape.h"
 #include "editdata.h"
 
-namespace mu::engraving::v0 {
+namespace mu::engraving::layout::v0 {
 class TLayout;
 }
 

@@ -80,7 +80,7 @@ public:
 
 protected: /// TODO: bring back "private" keyword after removing StretchedBend class
     friend class Factory;
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
 
     Bend(Note* parent, ElementType type = ElementType::BEND);
 

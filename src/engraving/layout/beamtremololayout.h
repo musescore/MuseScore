@@ -34,6 +34,9 @@ class ChordRest;
 class Beam;
 enum class ActionIconType;
 enum class SpannerSegmentType;
+}
+
+namespace mu::engraving::layout::v0 {
 class BeamTremoloLayout
 {
 public:

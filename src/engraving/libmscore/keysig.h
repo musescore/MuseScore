@@ -42,7 +42,7 @@ class KeySig final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, KeySig)
     DECLARE_CLASSOF(ElementType::KEYSIG)
 
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
     friend class Factory;
 
     bool _showCourtesy;

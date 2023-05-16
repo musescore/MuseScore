@@ -32,6 +32,10 @@
 
 #include "skyline.h"
 
+namespace mu::engraving::layout::v0 {
+class LayoutContext;
+}
+
 namespace mu::engraving {
 class Box;
 class Bracket;
@@ -39,8 +43,6 @@ class InstrumentName;
 class MeasureBase;
 class Page;
 class SpannerSegment;
-
-class LayoutContext;
 
 //---------------------------------------------------------
 //   SysStaff
@@ -119,12 +121,12 @@ class System final : public EngravingItem
 
     size_t getBracketsColumnsCount();
     void setBracketsXPosition(const double xOffset);
-    Bracket* createBracket(const LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx, std::vector<Bracket*>& bl,
-                           Measure* measure);
+    Bracket* createBracket(const layout::v0::LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
+                           std::vector<Bracket*>& bl, Measure* measure);
 
     double instrumentNamesWidth(const bool isFirstSystem);
-    double layoutBrackets(const LayoutContext& ctx);
-    static double totalBracketOffset(LayoutContext& ctx);
+    double layoutBrackets(const layout::v0::LayoutContext& ctx);
+    static double totalBracketOffset(layout::v0::LayoutContext& ctx);
 
 public:
     ~System();
@@ -149,15 +151,15 @@ public:
 
     Page* page() const { return (Page*)explicitParent(); }
 
-    void layoutSystem(LayoutContext& ctx, double xo1, const bool isFirstSystem = false, bool firstSystemIndent = false);
+    void layoutSystem(layout::v0::LayoutContext& ctx, double xo1, const bool isFirstSystem = false, bool firstSystemIndent = false);
 
     void setMeasureHeight(double height);
     void layoutBracketsVertical();
     void layoutInstrumentNames();
 
-    void addBrackets(const LayoutContext& ctx, Measure* measure);
+    void addBrackets(const layout::v0::LayoutContext& ctx, Measure* measure);
 
-    void layout2(LayoutContext& ctx); ///< Called after Measure layout.
+    void layout2(layout::v0::LayoutContext& ctx); ///< Called after Measure layout.
     void restoreLayout2();
     void clear(); ///< Clear measure list.
 
@@ -176,7 +178,7 @@ public:
 
     int y2staff(double y) const;
     staff_idx_t searchStaff(double y, staff_idx_t preferredStaff = mu::nidx, double spacingFactor = 0.5) const;
-    void setInstrumentNames(const LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
+    void setInstrumentNames(const layout::v0::LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
     Fraction snap(const Fraction& tick, const mu::PointF p) const;
     Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
 

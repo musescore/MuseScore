@@ -29,7 +29,9 @@
 namespace mu::engraving {
 class Segment;
 class System;
+}
 
+namespace mu::engraving::layout::v0 {
 class HarmonyLayout
 {
 public:

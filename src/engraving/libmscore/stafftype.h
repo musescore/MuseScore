@@ -466,7 +466,7 @@ public:
     void setRepeat(bool val) { _repeat = val; }
 
 private:
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
 
     double _beamLength { 0.0 };              // if _grid==MEDIALFINAL, length of the beam toward previous grid element
     int _beamLevel  { 0 };                 // if _grid==MEDIALFINAL, the number of beams

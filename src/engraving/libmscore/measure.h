@@ -36,6 +36,10 @@ namespace mu::engraving::rw400 {
 class MeasureRW;
 }
 
+namespace mu::engraving::layout::v0 {
+class MeasureLayout;
+}
+
 namespace mu::engraving {
 class AccidentalState;
 class Chord;
@@ -372,7 +376,7 @@ private:
 
     friend class Factory;
     friend class rw400::MeasureRW;
-    friend class MeasureLayout;
+    friend class layout::v0::MeasureLayout;
 
     Measure(System* parent = 0);
     Measure(const Measure&);

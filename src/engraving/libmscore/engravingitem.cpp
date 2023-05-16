@@ -897,10 +897,10 @@ void Compound::layout()
 {
     UNREACHABLE;
     setbbox(RectF());
-    LayoutContext lctx(score());
+    layout::v0::LayoutContext lctx(score());
     for (auto i = elements.begin(); i != elements.end(); ++i) {
         EngravingItem* e = *i;
-        v0::TLayout::layoutItem(e, lctx);
+        layout::v0::TLayout::layoutItem(e, lctx);
         addbbox(e->bbox().translated(e->pos()));
     }
 }

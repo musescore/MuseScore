@@ -57,7 +57,7 @@ public:
     Shape hitShape() const override;
 
 private:
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
     friend class Factory;
     StaffLines(Measure* parent);
 

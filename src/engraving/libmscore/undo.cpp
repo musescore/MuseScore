@@ -2421,8 +2421,8 @@ void ChangeClefType::flip(EditData*)
     concertClef     = ocl;
     transposingClef = otc;
     // layout the clef to align the currentClefType with the actual one immediately
-    LayoutContext ctx(clef->score());
-    v0::TLayout::layout(clef, ctx);
+    layout::v0::LayoutContext ctx(clef->score());
+    layout::v0::TLayout::layout(clef, ctx);
 }
 
 //---------------------------------------------------------

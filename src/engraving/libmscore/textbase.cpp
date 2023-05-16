@@ -1876,8 +1876,8 @@ void TextBase::prepareFormat(const String& token, TextCursor& cursor)
 
 void TextBase::layout1()
 {
-    LayoutContext ctx(score());
-    v0::TLayout::layout1TextBase(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout1TextBase(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -2272,11 +2272,11 @@ bool TextBase::mousePress(EditData& ed)
 
 void TextBase::layoutEdit()
 {
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout(this, ctx);
     if (explicitParent() && explicitParent()->type() == ElementType::TBOX) {
         TBox* tbox = toTBox(explicitParent());
-        v0::TLayout::layout(tbox, ctx);
+        layout::v0::TLayout::layout(tbox, ctx);
         System* system = tbox->system();
         system->setHeight(tbox->height());
         triggerLayout();

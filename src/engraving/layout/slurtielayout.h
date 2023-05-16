@@ -32,7 +32,9 @@ class System;
 class Chord;
 class TieSegment;
 class Tie;
+}
 
+namespace mu::engraving::layout::v0 {
 class SlurTieLayout
 {
 public:

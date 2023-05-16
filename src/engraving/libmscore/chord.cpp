@@ -75,7 +75,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::v0;
+using namespace mu::engraving::layout::v0;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -985,9 +985,9 @@ void Chord::addLedgerLines()
         }
     }
 
-    LayoutContext ctx(score());
+    layout::v0::LayoutContext ctx(score());
     for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next()) {
-        v0::TLayout::layout(ll, ctx);
+        layout::v0::TLayout::layout(ll, ctx);
     }
 }
 
@@ -1091,8 +1091,8 @@ void Chord::computeUp()
             if (cross && this == firstCr) {
                 // necessary because this beam was never laid out before, so its position isn't known
                 // and the first chord would calculate wrong stem direction
-                LayoutContext ctx(score());
-                v0::TLayout::layout(_beam, ctx);
+                layout::v0::LayoutContext ctx(score());
+                layout::v0::TLayout::layout(_beam, ctx);
             } else {
                 // otherwise we can use stale layout data; the only reason we would need to lay out here is if
                 // it's literally never been laid out before which due to the insane nature of our layout system
@@ -1118,13 +1118,13 @@ void Chord::computeUp()
                 _up = noteY > desiredY;
             }
         }
-        LayoutContext ctx(score());
-        v0::TLayout::layout(_beam, ctx);
+        layout::v0::LayoutContext ctx(score());
+        layout::v0::TLayout::layout(_beam, ctx);
         if (cross && _tremolo && _tremolo->twoNotes() && _tremolo->chord1() == this
             && _tremolo->chord1()->beam() == _tremolo->chord2()->beam()) {
             // beam-infixed two-note trems have to be laid out here
-            LayoutContext ctx(score());
-            v0::TLayout::layout(_tremolo, ctx);
+            layout::v0::LayoutContext ctx(score());
+            layout::v0::TLayout::layout(_tremolo, ctx);
         }
         if (!cross && !_beam->userModified()) {
             _up = _beam->up();
@@ -1135,8 +1135,8 @@ void Chord::computeUp()
         Chord* c2 = _tremolo->chord2();
         bool cross = c1->staffMove() != c2->staffMove();
         if (cross && this == c1) {
-            LayoutContext ctx(score());
-            v0::TLayout::layout(_tremolo, ctx);
+            layout::v0::LayoutContext ctx(score());
+            layout::v0::TLayout::layout(_tremolo, ctx);
         }
         Measure* measure = findMeasure();
         if (!cross && !_tremolo->userModified()) {
@@ -1946,7 +1946,7 @@ void Chord::crossMeasureSetup(bool on)
     if (!on) {
         if (_crossMeasure != CrossMeasure::UNKNOWN) {
             _crossMeasure = CrossMeasure::UNKNOWN;
-            LayoutContext lctx(score());
+            layout::v0::LayoutContext lctx(score());
             ChordLayout::layoutStem(this, lctx);
         }
         return;
@@ -1967,7 +1967,7 @@ void Chord::crossMeasureSetup(bool on)
                 if (durList.size() == 1) {
                     _crossMeasure = tempCross = CrossMeasure::FIRST;
                     _crossMeasureTDur = durList[0];
-                    LayoutContext lctx(score());
+                    layout::v0::LayoutContext lctx(score());
                     ChordLayout::layoutStem(this, lctx);
                 }
             }

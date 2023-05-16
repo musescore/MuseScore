@@ -91,8 +91,8 @@ PointF StaffLines::canvasPos() const
 
 void StaffLines::layoutForWidth(double w)
 {
-    LayoutContext ctx(score());
-    v0::TLayout::layoutForWidth(this, w, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layoutForWidth(this, w, ctx);
 }
 
 //---------------------------------------------------------

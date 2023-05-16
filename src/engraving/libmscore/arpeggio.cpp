@@ -261,8 +261,8 @@ void Arpeggio::editDrag(EditData& ed)
         _userLen2 += d;
     }
 
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -359,13 +359,13 @@ bool Arpeggio::edit(EditData& ed)
         }
     }
 
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout(this, ctx);
 
     Chord* c = chord();
     setPosX(-(width() + spatium() * .5));
-    LayoutContext lctx(c->score());
-    ArpeggioLayout::layoutArpeggio2(c->arpeggio(), lctx);
+    layout::v0::LayoutContext lctx(c->score());
+    layout::v0::ArpeggioLayout::layoutArpeggio2(c->arpeggio(), lctx);
     Fraction _tick = tick();
     score()->setLayout(_tick, _tick, staffIdx(), staffIdx() + _span, this);
     return true;

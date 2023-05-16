@@ -27,20 +27,24 @@
 
 #include "draw/types/painterpath.h"
 
+namespace mu::engraving::layout::v0 {
+class SlurTieLayout;
+}
+
 namespace mu::engraving {
 //---------------------------------------------------------
 //   SlurPos
 //---------------------------------------------------------
 
 struct SlurPos {
-    mu::PointF p1;               // start point of slur
-    System* system1;          // start system of slur
-    mu::PointF p2;               // end point of slur
-    System* system2;          // end system of slur
+    PointF p1;               // start point of slur
+    System* system1 = nullptr;          // start system of slur
+    PointF p2;               // end point of slur
+    System* system2 = nullptr;           // end system of slur
 };
 
 struct SlurOffsets {
-    mu::PointF o[4];
+    PointF o[4];
 };
 
 //---------------------------------------------------------
@@ -48,10 +52,10 @@ struct SlurOffsets {
 //---------------------------------------------------------
 
 struct UP {
-    mu::PointF p;              // layout position relative to pos()
-    mu::PointF off;            // user offset in point units
+    PointF p;              // layout position relative to pos()
+    PointF off;            // user offset in point units
 
-    mu::PointF pos() const { return p + off; }
+    PointF pos() const { return p + off; }
     bool operator!=(const UP& up) const { return p != up.p || off != up.off; }
 };
 
@@ -63,21 +67,21 @@ struct UP {
 
 class CubicBezier
 {
-    mu::PointF p1;
-    mu::PointF p2;
-    mu::PointF p3;
-    mu::PointF p4;
+    PointF p1;
+    PointF p2;
+    PointF p3;
+    PointF p4;
 
 public:
-    CubicBezier(mu::PointF _p1, mu::PointF _p2, mu::PointF _p3, mu::PointF _p4)
+    CubicBezier(PointF _p1, PointF _p2, PointF _p3, PointF _p4)
         : p1(_p1), p2(_p2), p3(_p3), p4(_p4) {}
 
-    mu::PointF pointAtPercent(double t) const
+    PointF pointAtPercent(double t) const
     {
         assert(t >= 0.0 && t <= 1.0);
         const double r = 1.0 - t;
-        const mu::PointF B123 = r * (r * p1 + t * p2) + t * (r * p2 + t * p3);
-        const mu::PointF B234 = r * (r * p2 + t * p3) + t * (r * p3 + t * p4);
+        const PointF B123 = r * (r * p1 + t * p2) + t * (r * p2 + t * p3);
+        const PointF B234 = r * (r * p2 + t * p3) + t * (r * p3 + t * p4);
         return r * B123 + t * B234;
     }
 };
@@ -118,10 +122,10 @@ public:
     PropertyValue propertyDefault(Pid id) const override;
     void reset() override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
-    void move(const mu::PointF& s) override;
+    void move(const PointF& s) override;
     bool isEditable() const override { return true; }
 
-    void setSlurOffset(Grip i, const mu::PointF& val) { _ups[int(i)].off = val; }
+    void setSlurOffset(Grip i, const PointF& val) { _ups[int(i)].off = val; }
     const UP& ups(Grip i) const { return _ups[int(i)]; }
     UP& ups(Grip i) { return _ups[int(i)]; }
     Shape shape() const override { return _shape; }
@@ -130,10 +134,10 @@ public:
     int gripsCount() const override { return int(Grip::GRIPS); }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::DRAG; }
-    std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
+    std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
     virtual void drawEditMode(mu::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
-    virtual void computeBezier(mu::PointF so = mu::PointF()) = 0;
+    virtual void computeBezier(PointF so = PointF()) = 0;
 };
 
 //-------------------------------------------------------------------
@@ -149,6 +153,9 @@ class SlurTie : public Spanner
     SlurStyleType _styleType = SlurStyleType::Undefined;
 
 protected:
+
+    friend class layout::v0::SlurTieLayout;
+
     bool _up;                 // actual direction
 
     DirectionV _slurDirection;
@@ -168,8 +175,8 @@ public:
     void setSlurDirection(DirectionV d) { _slurDirection = d; }
     void undoSetSlurDirection(DirectionV d);
 
-    virtual void layout2(const mu::PointF, int, struct UP&) {}
-    virtual bool contains(const mu::PointF&) const { return false; }    // not selectable
+    virtual void layout2(const PointF, int, struct UP&) {}
+    virtual bool contains(const PointF&) const { return false; }    // not selectable
 
     SlurStyleType styleType() const { return _styleType; }
     void setStyleType(SlurStyleType type) { _styleType = type; }

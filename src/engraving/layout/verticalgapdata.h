@@ -30,7 +30,9 @@ class Spacer;
 class Staff;
 class SysStaff;
 class System;
+}
 
+namespace mu::engraving::layout::v0 {
 //---------------------------------------------------------
 //   VerticalStretchData
 //    helper class for spreading staves over a page

@@ -36,7 +36,7 @@
 #include "tlayout.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::v0;
+using namespace mu::engraving::layout::v0;
 
 void HarmonyLayout::layoutHarmonies(const std::vector<Segment*>& sl, LayoutContext& ctx)
 {

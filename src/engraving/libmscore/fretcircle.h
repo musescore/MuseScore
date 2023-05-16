@@ -45,7 +45,7 @@ public:
 
 private:
 
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
     friend class Factory;
 
     FretCircle(Chord* ch = 0);

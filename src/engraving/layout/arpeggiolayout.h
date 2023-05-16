@@ -26,6 +26,9 @@
 
 namespace mu::engraving {
 class Arpeggio;
+}
+
+namespace mu::engraving::layout::v0 {
 class ArpeggioLayout
 {
 public:

@@ -26,6 +26,8 @@
 
 #include "types/types.h"
 
+#include "layoutcontext.h"
+
 namespace mu::engraving {
 class Beam;
 class Chord;
@@ -34,8 +36,9 @@ class ChordRest;
 class Measure;
 class Score;
 class Segment;
+}
 
-class LayoutContext;
+namespace mu::engraving::layout::v0 {
 class BeamLayout
 {
 public:

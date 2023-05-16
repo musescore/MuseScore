@@ -201,8 +201,8 @@ EngravingItem* ChordRest::drop(EditData& data)
                 l->setTrack(st->idx() * VOICES);
                 l->setParent(seg);
                 score->undoAddElement(l);
-                LayoutContext ctx(score);
-                v0::TLayout::layout(l, ctx);
+                layout::v0::LayoutContext ctx(score);
+                layout::v0::TLayout::layout(l, ctx);
             }
         }
         delete e;
@@ -592,13 +592,13 @@ void ChordRest::removeDeleteBeam(bool beamed)
         if (b->empty()) {
             score()->undoRemoveElement(b);
         } else {
-            LayoutContext ctx(score());
-            v0::TLayout::layout1(b, ctx);
+            layout::v0::LayoutContext lctx(score());
+            layout::v0::TLayout::layout1(b, lctx);
         }
     }
     if (!beamed && isChord()) {
-        LayoutContext lctx(score());
-        ChordLayout::layoutStem(toChord(this), lctx);
+        layout::v0::LayoutContext lctx(score());
+        layout::v0::ChordLayout::layoutStem(toChord(this), lctx);
     }
 }
 

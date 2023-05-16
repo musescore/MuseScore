@@ -5061,8 +5061,8 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
             clef->setParent(destSeg);
             clef->setIsHeader(st == SegmentType::HeaderClef);
             score->undo(new AddElement(clef));
-            LayoutContext ctx(this);
-            v0::TLayout::layout(clef, ctx);
+            layout::v0::LayoutContext ctx(this);
+            layout::v0::TLayout::layout(clef, ctx);
         }
         if (forInstrumentChange) {
             clef->setForInstrumentChange(true);

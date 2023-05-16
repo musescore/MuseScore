@@ -34,7 +34,9 @@ class Page;
 class Score;
 class Spanner;
 class System;
+}
 
+namespace mu::engraving::layout::v0 {
 class LayoutContext
 {
 public:

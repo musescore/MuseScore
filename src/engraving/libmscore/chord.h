@@ -39,6 +39,10 @@
 
 #include "draw/types/color.h"
 
+namespace mu::engraving::layout::v0 {
+class ChordLayout;
+}
+
 namespace mu::engraving {
 class AccidentalState;
 class Arpeggio;
@@ -277,7 +281,7 @@ public:
 private:
 
     friend class Factory;
-    friend class ChordLayout;
+    friend class layout::v0::ChordLayout;
 
     Chord(Segment* parent = 0);
     Chord(const Chord&, bool link = false);

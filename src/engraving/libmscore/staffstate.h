@@ -65,7 +65,7 @@ public:
 
 private:
 
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
     friend class Factory;
     StaffState(EngravingItem* parent);
     StaffState(const StaffState&);

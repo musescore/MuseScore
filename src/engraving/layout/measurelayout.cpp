@@ -48,7 +48,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::v0;
+using namespace mu::engraving::layout::v0;
 
 //---------------------------------------------------------
 //   layout2

@@ -31,6 +31,7 @@
 #include "chordlayout.h"
 
 using namespace mu::engraving;
+using namespace mu::engraving::layout::v0;
 
 void TremoloLayout::layout(Tremolo* item, LayoutContext&)
 {

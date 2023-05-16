@@ -31,7 +31,9 @@ class System;
 class Lyrics;
 class LyricsLine;
 class LyricsLineSegment;
+}
 
+namespace mu::engraving::layout::v0 {
 class LyricsLayout
 {
 public:

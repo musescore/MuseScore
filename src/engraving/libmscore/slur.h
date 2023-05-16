@@ -27,6 +27,10 @@
 
 #include "global/allocator.h"
 
+namespace mu::engraving::layout::v0 {
+class SlurTieLayout;
+}
+
 namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ SlurSegment
@@ -121,7 +125,7 @@ public:
 private:
     void slurPosChord(SlurPos*);
 
-    friend class SlurTieLayout;
+    friend class layout::v0::SlurTieLayout;
     friend class Factory;
     Slur(EngravingItem* parent);
     Slur(const Slur&);

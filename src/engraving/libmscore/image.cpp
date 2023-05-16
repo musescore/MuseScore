@@ -411,8 +411,8 @@ void Image::editDrag(EditData& ed)
         }
     }
 
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

@@ -162,7 +162,7 @@ class VoltaSegment;
 class WhammyBarSegment;
 }
 
-namespace mu::engraving::v0 {
+namespace mu::engraving::layout::v0 {
 class TLayout
 {
 public:

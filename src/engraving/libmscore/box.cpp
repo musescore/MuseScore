@@ -156,8 +156,8 @@ void Box::editDrag(EditData& ed)
         triggerLayout();
     }
 
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -166,8 +166,8 @@ void Box::editDrag(EditData& ed)
 
 void Box::endEdit(EditData&)
 {
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -346,8 +346,8 @@ HBox::HBox(System* parent)
 
 void HBox::layout2()
 {
-    LayoutContext ctx(score());
-    v0::TLayout::layoutBox(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layoutBox(this, ctx);
 }
 
 //---------------------------------------------------------

@@ -55,7 +55,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::v0;
+using namespace mu::engraving::layout::v0;
 
 //---------------------------------------------------------
 //   CmdStateLocker
@@ -514,7 +514,7 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
                         }
                     }
                 } else if (e->isBarLine()) {
-                    v0::TLayout::layout2(toBarLine(e), ctx);
+                    TLayout::layout2(toBarLine(e), ctx);
                 }
             }
         }

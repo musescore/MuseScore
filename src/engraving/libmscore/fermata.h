@@ -85,7 +85,7 @@ protected:
     void removed() override;
 
 private:
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
     friend class Factory;
     Fermata(EngravingItem* parent);
 
