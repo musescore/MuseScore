@@ -731,7 +731,7 @@ void ChangeText::removeText(EditData* ed)
     TextCursor tc = _cursor;
     TextBlock& l  = _cursor.curLine();
     size_t column = _cursor.column();
-    format = *l.formatAt(column + s.size() - 1);
+    format = *l.formatAt(static_cast<int>(column + s.size()) - 1);
 
     for (size_t n = 0; n < s.size(); ++n) {
         l.remove(static_cast<int>(column), &_cursor);
