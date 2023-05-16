@@ -239,6 +239,7 @@ bool Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
 bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKey,
   int transposeInterval, bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats)
       {
+      bool result = true;
       bool rangeSelection = selection().isRange();
       int startStaffIdx   = 0;
       int endStaffIdx     = 0;
@@ -312,8 +313,10 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         if (mode == TransposeMode::DIATONICALLY)
                               note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
                         else {
-                              if (!transpose(note, interval, useDoubleSharpsFlats))
-                                    return false;
+                              if (!transpose(note, interval, useDoubleSharpsFlats)) {
+                                    result = false;
+                                    continue;
+                                    }
                               }
                         }
                   else if (e->isHarmony() && transposeChordNames) {
@@ -350,7 +353,6 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                               }
                         }
                   }
-            return true;
             }
 
       //--------------------------
@@ -408,8 +410,10 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                               if (mode == TransposeMode::DIATONICALLY)
                                     n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
                               else {
-                                    if (!transpose(n, interval, useDoubleSharpsFlats))
-                                          return false;
+                                    if (!transpose(n, interval, useDoubleSharpsFlats)) {
+                                          result = false;
+                                          continue;
+                                          }
                                     }
                               }
                         for (Chord* g : chord->graceNotes()) {
@@ -417,8 +421,10 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                                     if (mode == TransposeMode::DIATONICALLY)
                                           n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
                                     else {
-                                          if (!transpose(n, interval, useDoubleSharpsFlats))
-                                                return false;
+                                          if (!transpose(n, interval, useDoubleSharpsFlats)) {
+                                                result = false;
+                                                continue;
+                                                }
                                           }
                                     }
                               }
@@ -497,7 +503,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         }
                   }
             }
-      return true;
+      return result;
       }
 
 //---------------------------------------------------------
