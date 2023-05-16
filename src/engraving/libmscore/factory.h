@@ -52,6 +52,9 @@ public:
     static Articulation* createArticulation(ChordRest* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Articulation> makeArticulation(ChordRest* parent);
 
+    static Ornament* createOrnament(ChordRest* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Ornament> makeOrnament(ChordRest* parent);
+
     static BarLine* createBarLine(Segment* parent, bool isAccessibleEnabled = true);
     static BarLine* copyBarLine(const BarLine& src);
     static std::shared_ptr<BarLine> makeBarLine(Segment* parent);

@@ -675,7 +675,11 @@ void Spanner::computeStartElement()
 
     case Anchor::CHORD:
     case Anchor::NOTE:
-        return;
+        break;
+    }
+
+    if (_startElement && !mu::contains(_startElement->startingSpanners(), this)) {
+        _startElement->startingSpanners().push_back(this);
     }
 }
 
@@ -760,6 +764,10 @@ void Spanner::computeEndElement()
         }
     case Anchor::CHORD:
         break;
+    }
+
+    if (_endElement && !mu::contains(_endElement->endingSpanners(), this)) {
+        _endElement->endingSpanners().push_back(this);
     }
 }
 

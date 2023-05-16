@@ -113,7 +113,7 @@ class Note;
 class NoteEvent;
 class NoteDot;
 class NoteHead;
-
+class Ornament;
 class Ottava;
 
 class Page;
@@ -250,7 +250,7 @@ public:
     static void read(NoteEvent* item, XmlReader& xml, ReadContext& ctx);
     static void read(NoteDot* d, XmlReader& xml, ReadContext& ctx);
     static void read(NoteHead* h, XmlReader& xml, ReadContext& ctx);
-
+    static void read(Ornament* o, XmlReader& xml, ReadContext& ctx);
     static void read(Ottava* o, XmlReader& xml, ReadContext& ctx);
 
     static void read(Page* p, XmlReader& xml, ReadContext& ctx);
@@ -329,6 +329,7 @@ public:
     static void read(NamedEventList* item, XmlReader& xml);
     static bool readProperties(Note* n, XmlReader& xml, ReadContext& ctx);
 
+    static bool readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Ottava* o, XmlReader& xml, ReadContext& ctx);
 
     static bool readProperties(Part* p, XmlReader& xml, ReadContext& ctx);

@@ -182,7 +182,9 @@ void InputState::update(Selection& selection)
 
                 std::set<SymId> articulationsIds;
                 for (Articulation* artic: n->chord()->articulations()) {
-                    articulationsIds.insert(artic->symId());
+                    if (!artic->isOrnament()) {
+                        articulationsIds.insert(artic->symId());
+                    }
                 }
                 articulationSymbolIds = mu::engraving::flipArticulations(articulationsIds, PlacementV::ABOVE);
 

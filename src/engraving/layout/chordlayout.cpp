@@ -41,6 +41,7 @@
 #include "libmscore/navigate.h"
 #include "libmscore/note.h"
 
+#include "libmscore/ornament.h"
 #include "libmscore/part.h"
 #include "libmscore/rest.h"
 #include "libmscore/score.h"
@@ -729,10 +730,11 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
 
     Articulation* prevArticulation = nullptr;
     for (Articulation* a : item->_articulations) {
-        if (a->anchor() == ArticulationAnchor::CHORD) {
-            if (item->measure()->hasVoices(a->staffIdx(), item->tick(), item->actualTicks())) {
-                a->setUp(item->up());         // if there are voices place articulation at stem
-            } else if (a->symId() >= SymId::articMarcatoAbove && a->symId() <= SymId::articMarcatoTenutoBelow) {
+        if (item->measure()->hasVoices(a->staffIdx(), item->tick(), item->actualTicks())
+            && !(a->anchor() == ArticulationAnchor::TOP_CHORD || a->anchor() == ArticulationAnchor::BOTTOM_CHORD)) {
+            a->setUp(item->up());         // if there are voices place articulation at stem
+        } else if (a->anchor() == ArticulationAnchor::CHORD) {
+            if (a->symId() >= SymId::articMarcatoAbove && a->symId() <= SymId::articMarcatoTenutoBelow) {
                 a->setUp(true);         // Gould, p. 117: strong accents above staff
             } else if (item->isGrace() && item->up() && !a->layoutCloseToNote() && item->downNote()->line() < 6) {
                 a->setUp(true);         // keep articulation close to grace note
@@ -1023,7 +1025,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             // but adding to skyline is always good
             Segment* s = item->segment();
             Measure* m = s->measure();
-            RectF r = a->bbox().translated(a->pos() + item->pos());
+            Shape sh = a->shape().translate(a->pos() + item->pos());
             // TODO: limit to width of chord
             // this avoids "staircase" effect due to space not having been allocated already
             // ANOTHER alternative is to allocate the space in layoutPitched() / layoutTablature()
@@ -1031,10 +1033,10 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             //r.translate((r.width() - w) * 0.5, 0.0);
             //r.setWidth(w);
             if (!item->score()->lineMode()) {
-                s->staffShape(item->staffIdx()).add(r, a);
+                s->staffShape(item->staffIdx()).add(sh);
             }
-            r.translate(s->pos() + m->pos());
-            m->system()->staff(item->vStaffIdx())->skyline().add(r);
+            sh.translate(s->pos() + m->pos());
+            m->system()->staff(item->vStaffIdx())->skyline().add(sh);
         }
     }
 }
@@ -1568,6 +1570,12 @@ void ChordLayout::layoutChords1(Score* score, Segment* segment, staff_idx_t staf
     }
 
     layoutSegmentElements(segment, partStartTrack, partEndTrack, staffIdx, ctx);
+    for (Chord* chord : chords) {
+        Ornament* ornament = chord->findOrnament();
+        if (ornament && ornament->showCueNote()) {
+            TLayout::layout(ornament, ctx);
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -1850,7 +1858,7 @@ static std::pair<double, double> layoutAccidental(const MStyle& style, AcEl* me,
 //---------------------------------------------------------
 
 void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& chords,
-                                std::vector<Note*>& notes, const Staff* staff, LayoutContext& ctx)
+                                const std::vector<Note*>& notes, const Staff* staff, LayoutContext& ctx)
 {
     //---------------------------------------------------
     //    layout accidentals
@@ -1890,6 +1898,7 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
         } else if (ac) {
             prevLine = note->line();
             prevSubtype = ac->subtype();
+            ac->computeMag();
             TLayout::layout(ac, ctx);
             if (!ac->visible() || note->fixed()) {
                 ac->setPos(ac->bbox().x() - ac->width(), 0.0);

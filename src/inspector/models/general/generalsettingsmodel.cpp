@@ -58,6 +58,9 @@ void GeneralSettingsModel::requestElements()
     QSet<EngravingItem*> elementsForIsSmallProperty;
 
     for (EngravingItem* element : m_elementList) {
+        if (element->isNote() && toNote(element)->isTrillCueNote()) {
+            continue;
+        }
         EngravingItem* chord = element->findAncestor(ElementType::CHORD);
 
         if (chord) {

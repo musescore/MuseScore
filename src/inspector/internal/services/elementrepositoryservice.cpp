@@ -37,6 +37,7 @@
 #include "durationtype.h"
 #include "stafftype.h"
 #include "mscore.h"
+#include "trill.h"
 
 #include "log.h"
 #include "types/texttypes.h"
@@ -89,6 +90,7 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     case mu::engraving::ElementType::TREMOLO: return findTremolos();
     case mu::engraving::ElementType::BRACKET: return findBrackets();
     case mu::engraving::ElementType::REST: return findRests();
+    case mu::engraving::ElementType::ORNAMENT: return findOrnaments();
     case mu::engraving::ElementType::PEDAL:
     case mu::engraving::ElementType::GLISSANDO:
     case mu::engraving::ElementType::VIBRATO:
@@ -421,6 +423,23 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findRests() const
     for (mu::engraving::EngravingItem* element : m_exposedElementList) {
         if (element->isRest()) {
             resultList << element;
+        }
+    }
+
+    return resultList;
+}
+
+QList<mu::engraving::EngravingItem*> ElementRepositoryService::findOrnaments() const
+{
+    QList<mu::engraving::EngravingItem*> resultList;
+
+    for (mu::engraving::EngravingItem* element : m_exposedElementList) {
+        if (element->isOrnament()) {
+            resultList << element;
+        } else if (element->isTrill()) {
+            resultList << (EngravingItem*)(toTrill(element)->ornament());
+        } else if (element->isTrillSegment()) {
+            resultList << (EngravingItem*)(toTrillSegment(element)->trill()->ornament());
         }
     }
 

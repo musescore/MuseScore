@@ -354,6 +354,8 @@ public:
     bool allowKerningAbove() const { return _allowKerningAbove; }
     bool allowKerningBelow() const { return _allowKerningBelow; }
     void computeKerningExceptions();
+
+    Ornament* findOrnament() const;
 };
 } // namespace mu::engraving
 #endif

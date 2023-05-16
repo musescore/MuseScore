@@ -46,6 +46,7 @@
 #include "mmrest.h"
 #include "mscore.h"
 #include "note.h"
+#include "ornament.h"
 #include "part.h"
 #include "rest.h"
 #include "score.h"
@@ -2287,6 +2288,14 @@ void Segment::createShape(staff_idx_t staffIdx)
             }
             if (e->addToSkyline()) {
                 s.add(e->shape().translate(e->isClef() ? e->ipos() : e->pos()));
+            }
+            // Non-standard trills display a cue note that we must add to shape here
+            if (e->isChord()) {
+                Ornament* orn = toChord(e)->findOrnament();
+                Chord* cueNoteChord = orn ? orn->cueNoteChord() : nullptr;
+                if (cueNoteChord && cueNoteChord->upNote()->visible()) {
+                    s.add(cueNoteChord->shape().translate(cueNoteChord->pos()));
+                }
             }
         }
     }

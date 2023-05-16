@@ -21,6 +21,7 @@
  */
 
 #include "interval.h"
+#include "types/types.h"
 #include "utils.h"
 
 namespace mu::engraving {
@@ -61,5 +62,73 @@ void Interval::flip()
 bool Interval::isZero() const
 {
     return diatonic == 0 && chromatic == 0;
+}
+
+Interval Interval::fromOrnamentInterval(OrnamentInterval ornInt)
+{
+    Interval resultingInterval = Interval(0, 0);
+
+    resultingInterval.diatonic = static_cast<int>(ornInt.m_step);
+
+    int cromaticSteps = 0;
+    switch (ornInt.m_step) {
+    case IntervalStep::UNISON:
+        cromaticSteps = 0;
+        break;
+    case IntervalStep::SECOND:
+        cromaticSteps = 2;
+        break;
+    case IntervalStep::THIRD:
+        cromaticSteps = 4;
+        break;
+    case IntervalStep::FOURTH:
+        cromaticSteps = 5;
+        break;
+    case IntervalStep::FIFTH:
+        cromaticSteps = 7;
+        break;
+    case IntervalStep::SIXTH:
+        cromaticSteps = 9;
+        break;
+    case IntervalStep::SEVENTH:
+        cromaticSteps = 11;
+        break;
+    case IntervalStep::OCTAVE:
+        cromaticSteps = 12;
+        break;
+    default:
+        break;
+    }
+
+    if (ornInt.isPerfect()) {
+        switch (ornInt.m_type) {
+        case IntervalType::DIMINISHED:
+            cromaticSteps -= 1;
+            break;
+        case IntervalType::AUGMENTED:
+            cromaticSteps += 1;
+            break;
+        default:
+            break;
+        }
+    } else {
+        switch (ornInt.m_type) {
+        case IntervalType::DIMINISHED:
+            cromaticSteps -= 2;
+            break;
+        case IntervalType::MINOR:
+            cromaticSteps -= 1;
+            break;
+        case IntervalType::AUGMENTED:
+            cromaticSteps += 1;
+            break;
+        default:
+            break;
+        }
+    }
+
+    resultingInterval.chromatic = cromaticSteps;
+
+    return resultingInterval;
 }
 }

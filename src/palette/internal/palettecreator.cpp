@@ -64,6 +64,7 @@
 #include "libmscore/measurenumber.h"
 #include "libmscore/measurerepeat.h"
 #include "libmscore/note.h"
+#include "libmscore/ornament.h"
 #include "libmscore/ottava.h"
 #include "libmscore/palmmute.h"
 #include "libmscore/pedal.h"
@@ -822,7 +823,7 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
     };
 
     for (auto ornamentType : defaultPalette ? defaultOrnaments : masterOrnaments) {
-        auto ornament = Factory::makeArticulation(gpaletteScore->dummy()->chord());
+        auto ornament = Factory::makeOrnament(gpaletteScore->dummy()->chord());
         ornament->setSymId(ornamentType);
         qreal mag = ornament->symId() == SymId::ornamentTrill ? 1.0 : 1.2;
         sp->appendElement(ornament, ornament->typeUserName(), mag);

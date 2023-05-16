@@ -36,6 +36,7 @@
 #include "206/read206.h"
 #include "302/read302.h"
 #include "400/read400.h"
+#include "rw/compat/compatutils.h"
 
 #include "compat/readstyle.h"
 
@@ -170,6 +171,10 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
             masterScore->addExcerpt(ex);
         }
     }
+
+    // Compatibility conversions
+    // NOTE: must be done after all score and parts have been read
+    compat::CompatUtils::doCompatibilityConversions(masterScore);
 
     //  Read audio
     {

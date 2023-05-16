@@ -55,6 +55,7 @@
 #include "mscoreview.h"
 #include "navigate.h"
 #include "note.h"
+#include "ornament.h"
 #include "ottava.h"
 #include "part.h"
 #include "range.h"
@@ -77,6 +78,7 @@
 #include "tiemap.h"
 #include "timesig.h"
 #include "tremolo.h"
+#include "trill.h"
 #include "tuplet.h"
 #include "tupletmap.h"
 #include "undo.h"
@@ -4115,7 +4117,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
 //    start and end anchor.
 //---------------------------------------------------------
 
-void Score::checkSpanner(const Fraction& startTick, const Fraction& endTick)
+void Score::checkSpanner(const Fraction& startTick, const Fraction& endTick, bool removeOrphans)
 {
     std::list<Spanner*> sl;       // spanners to remove
     std::list<Spanner*> sl2;      // spanners to shorten
@@ -4154,8 +4156,10 @@ void Score::checkSpanner(const Fraction& startTick, const Fraction& endTick)
             }
         }
     }
-    for (auto s : sl) {       // actually remove scheduled spanners
-        undo(new RemoveElement(s));
+    if (removeOrphans) {
+        for (auto s : sl) {       // actually remove scheduled spanners
+            undo(new RemoveElement(s));
+        }
     }
     for (auto s : sl2) {      // shorten spanners that extended past end of score
         undo(new ChangeProperty(s, Pid::SPANNER_TICKS, lastTick - s->tick()));
@@ -5427,6 +5431,10 @@ static void undoChangeNoteVisibility(Note* note, bool visible)
         dot->undoChangeProperty(Pid::VISIBLE, visible);
     }
 
+    for (EngravingItem* e : note->el()) {
+        e->undoChangeProperty(Pid::VISIBLE, visible);
+    }
+
     if (note->accidental()) {
         note->accidental()->undoChangeProperty(Pid::VISIBLE, visible);
     }
@@ -5496,12 +5504,35 @@ static void undoChangeRestVisibility(Rest* rest, bool visible)
     }
 }
 
+static void undoChangeOrnamentVisibility(Ornament* ornament, bool visible)
+{
+    ornament->undoChangeProperty(Pid::VISIBLE, visible);
+    Chord* cueNoteChord = ornament->cueNoteChord();
+    if (cueNoteChord) {
+        undoChangeNoteVisibility(cueNoteChord->upNote(), visible);
+    }
+    if (ornament->accidentalAbove()) {
+        ornament->accidentalAbove()->undoChangeProperty(Pid::VISIBLE, visible);
+    }
+    if (ornament->accidentalBelow()) {
+        ornament->accidentalBelow()->undoChangeProperty(Pid::VISIBLE, visible);
+    }
+}
+
 void Score::undoChangeVisible(EngravingItem* item, bool visible)
 {
     if (item->isNote()) {
         undoChangeNoteVisibility(toNote(item), visible);
     } else if (item->isRest()) {
         undoChangeRestVisibility(toRest(item), visible);
+    } else if (item->isOrnament()) {
+        undoChangeOrnamentVisibility(toOrnament(item), visible);
+    } else if (item->isTrillSegment()) {
+        item->undoChangeProperty(Pid::VISIBLE, visible);
+        Ornament* orn = toTrillSegment(item)->trill()->ornament();
+        if (orn) {
+            undoChangeOrnamentVisibility(orn, visible);
+        }
     } else {
         item->undoChangeProperty(Pid::VISIBLE, visible);
     }
@@ -5696,6 +5727,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
 
     if (ostaff == 0 || (
             et != ElementType::ARTICULATION
+            && et != ElementType::ORNAMENT
             && et != ElementType::CHORDLINE
             && et != ElementType::LYRICS
             && et != ElementType::SLUR

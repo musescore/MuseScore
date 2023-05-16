@@ -1658,6 +1658,7 @@ bool Note::acceptDrop(EditData& data) const
     bool isTablature  = st->isTabStaff(tick());
     bool tabFingering = st->staffTypeForElement(this)->showTabFingering();
     return type == ElementType::ARTICULATION
+           || type == ElementType::ORNAMENT
            || type == ElementType::FERMATA
            || type == ElementType::CHORDLINE
            || type == ElementType::TEXT
@@ -2211,7 +2212,7 @@ void Note::updateAccidental(AccidentalState* as)
 
         AccidentalVal accVal = tpc2alter(tpc());
         bool error = false;
-        int eRelLine = absStep(tpc(), epitch() + ottaveCapoFret());
+        int eRelLine = absStep(tpc(), epitch());
         AccidentalVal relLineAccVal = as->accidentalVal(eRelLine, error);
         if (error) {
             LOGD("error accidentalVal()");
@@ -3771,6 +3772,11 @@ double Note::computePadding(const EngravingItem* nextItem) const
 
 KerningType Note::doComputeKerningType(const EngravingItem* nextItem) const
 {
+    EngravingItem* nextParent = nextItem->parentItem(true);
+    if (nextParent && nextParent->isNote() && toNote(nextParent)->isTrillCueNote()) {
+        return KerningType::NON_KERNING;
+    }
+
     Chord* c = chord();
     if (!c || (c->allowKerningAbove() && c->allowKerningBelow())) {
         return KerningType::KERNING;

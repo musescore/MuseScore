@@ -52,7 +52,7 @@ public:
 
     static void layoutChords1(Score* score, Segment* segment, staff_idx_t staffIdx, LayoutContext& ctx);
     static double layoutChords2(std::vector<Note*>& notes, bool up, LayoutContext& ctx);
-    static void layoutChords3(const MStyle& style, const std::vector<Chord*>&, std::vector<Note*>&, const Staff*, LayoutContext& ctx);
+    static void layoutChords3(const MStyle& style, const std::vector<Chord*>&, const std::vector<Note*>&, const Staff*, LayoutContext& ctx);
     static void updateGraceNotes(Measure* measure, LayoutContext& ctx);
     static void repositionGraceNotesAfter(Segment* segment);
     static void appendGraceNotes(Chord* chord);

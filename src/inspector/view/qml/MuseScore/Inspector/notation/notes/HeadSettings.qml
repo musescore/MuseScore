@@ -70,6 +70,7 @@ FocusableItem {
         }
 
         CheckBoxPropertyView {
+            visible: root.model ? !root.model.isTrillCueNote : true
             id: hideNoteheadCheckBox
 
             text: qsTrc("inspector", "Hide notehead")
@@ -92,6 +93,7 @@ FocusableItem {
         }
 
         FlatRadioButtonGroupPropertyView {
+            visible: root.model ? !root.model.isTrillCueNote : true
             id: durationDotPosition
 
             titleText: qsTrc("inspector", "Duration dot position")
@@ -108,7 +110,18 @@ FocusableItem {
             ]
         }
 
+        OffsetSection {
+            visible: root.model ? root.model.isTrillCueNote : false
+            titleText: qsTrc("inspector", "Notehead offset")
+            propertyItem: root.model ? root.model.offset : null
+
+            navigationName: "NoteHeadOffsetSection"
+            navigationPanel: root.navigationPanel
+            navigationRowStart: noteDirectionSection.navigationRowEnd + 1
+        }
+
         ExpandableBlank {
+            visible: root.model ? !root.model.isTrillCueNote : true
             id: showItem
 
             isExpanded: false

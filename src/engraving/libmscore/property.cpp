@@ -210,6 +210,10 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::LINE_WIDTH_SPATIUM,      false, "lineWidth",             P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "line width (spatium)") },
     { Pid::TIME_STRETCH,            true,  "timeStretch",           P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "time stretch") },
     { Pid::ORNAMENT_STYLE,          true,  "ornamentStyle",         P_TYPE::ORNAMENT_STYLE, DUMMY_QT_TR_NOOP("propertyName", "ornament style") },
+    { Pid::INTERVAL_ABOVE,          true,  "intervalAbove",         P_TYPE::ORNAMENT_INTERVAL, DUMMY_QT_TR_NOOP("propertyName", "interval above") },
+    { Pid::INTERVAL_BELOW,          true,  "intervalBelow",         P_TYPE::ORNAMENT_INTERVAL, DUMMY_QT_TR_NOOP("propertyName", "interval below") },
+    { Pid::ORNAMENT_SHOW_ACCIDENTAL,true,  "ornamentShowAccidental",P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "ornament show accidental") },
+    { Pid::START_ON_UPPER_NOTE,     true,  "startOnUpperNote",      P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "start on upper note") },
 
     { Pid::TIMESIG,                 false, "timesig",               P_TYPE::FRACTION,       DUMMY_QT_TR_NOOP("propertyName", "time signature") },
     { Pid::TIMESIG_GLOBAL,          false, 0,                       P_TYPE::FRACTION,       DUMMY_QT_TR_NOOP("propertyName", "global time signature") },

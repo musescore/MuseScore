@@ -207,6 +207,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/noteline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/noteline.h
     ${CMAKE_CURRENT_LIST_DIR}/notifier.h
+    ${CMAKE_CURRENT_LIST_DIR}/ornament.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/ornament.h
     ${CMAKE_CURRENT_LIST_DIR}/ottava.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ottava.h
     ${CMAKE_CURRENT_LIST_DIR}/page.cpp

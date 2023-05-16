@@ -95,6 +95,7 @@
 #include "../libmscore/note.h"
 #include "../libmscore/notedot.h"
 
+#include "../libmscore/ornament.h"
 #include "../libmscore/ottava.h"
 
 #include "../libmscore/page.h"
@@ -167,6 +168,7 @@ using LayoutTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Ar
                                    LayoutBreak, LetRing, LetRingSegment, LedgerLine, Lyrics, LyricsLineSegment,
                                    Marker, MeasureNumber, MeasureRepeat, MMRest,
                                    Note, NoteDot, NoteHead,
+                                   Ornament,
                                    Ottava, OttavaSegment,
                                    PalmMute, PalmMuteSegment, Pedal, PedalSegment, PlayTechAnnotation,
                                    RasgueadoSegment, RehearsalMark, Rest,
@@ -207,12 +209,6 @@ void TLayout::layout(Accidental* item, LayoutContext& ctx)
         return;
     }
 
-    double m = item->explicitParent() ? item->parentItem()->mag() : 1.0;
-    if (item->isSmall()) {
-        m *= item->score()->styleD(Sid::smallNoteMag);
-    }
-    item->setMag(m);
-
     // if the accidental is standard (doubleflat, flat, natural, sharp or double sharp)
     // and it has either no bracket or parentheses, then we have glyphs straight from smufl.
     if (item->bracket() == AccidentalBracket::NONE
@@ -233,7 +229,7 @@ void TLayout::layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx)
     RectF r;
 
     SymId s = item->symbol();
-    if (item->bracket() == AccidentalBracket::PARENTHESIS) {
+    if (item->bracket() == AccidentalBracket::PARENTHESIS && !item->parentNoteHasParentheses()) {
         switch (item->accidentalType()) {
         case AccidentalType::FLAT2:
             s = SymId::accidentalDoubleFlatParens;
@@ -272,7 +268,7 @@ void TLayout::layoutMultiGlyphAccidental(Accidental* item, LayoutContext&)
     double x = 0.0;
 
     // should always be true
-    if (item->bracket() != AccidentalBracket::NONE) {
+    if (item->bracket() != AccidentalBracket::NONE && !item->parentNoteHasParentheses()) {
         SymId id = SymId::noSym;
         switch (item->bracket()) {
         case AccidentalBracket::PARENTHESIS:
@@ -299,7 +295,7 @@ void TLayout::layoutMultiGlyphAccidental(Accidental* item, LayoutContext&)
     r.unite(item->symBbox(s).translated(x, 0.0));
 
     // should always be true
-    if (item->bracket() != AccidentalBracket::NONE) {
+    if (item->bracket() != AccidentalBracket::NONE && !item->parentNoteHasParentheses()) {
         x += item->symAdvance(s) + margin;
         SymId id = SymId::noSym;
         switch (item->bracket()) {
@@ -560,7 +556,7 @@ void TLayout::layout(Arpeggio* item, LayoutContext&)
     }
 }
 
-void TLayout::layout(Articulation* item, LayoutContext&)
+void TLayout::layout(Articulation* item, LayoutContext& ctx)
 {
     item->setSkipDraw(false);
     if (item->isHiddenOnTabStaff()) {
@@ -581,6 +577,10 @@ void TLayout::layout(Articulation* item, LayoutContext&)
     }
 
     item->setbbox(bRect.translated(-0.5 * bRect.width(), 0.0));
+
+    if (item->isOrnament()) {
+        layout(toOrnament(item), ctx);
+    }
 }
 
 void TLayout::layout(BagpipeEmbellishment* item, LayoutContext&)
@@ -3441,24 +3441,33 @@ void TLayout::layout2(Note* item, LayoutContext& ctx)
         }
         if (e->isSymbol()) {
             e->setMag(item->mag());
-            double w = item->headWidth();
+            Shape noteShape = item->shape();
+            mu::remove_if(noteShape, [e](ShapeElement& s) { return s.toItem == e; });
+            LedgerLine* ledger = item->line() < -1 || item->line() > item->staff()->lines(item->tick())
+                                 ? item->chord()->ledgerLines() : nullptr;
+            if (ledger) {
+                noteShape.add(ledger->shape().translate(ledger->pos() - item->pos()));
+            }
+            double right = noteShape.right();
+            double left = noteShape.left();
             Symbol* sym = toSymbol(e);
             layoutItem(e, ctx);
+            double parenthesisPadding = item->score()->styleMM(Sid::bracketedAccidentalPadding) * item->mag();
             if (sym->sym() == SymId::noteheadParenthesisRight) {
                 if (isTabStaff) {
                     const Staff* st = item->staff();
                     const StaffType* tab = st->staffTypeForElement(item);
-                    w = item->tabHeadWidth(tab);
+                    right = item->tabHeadWidth(tab);
                 }
 
                 if (Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround() && item->staff()->isTabStaff(e->tick())) {
-                    e->movePosX(w + item->symWidth(SymId::noteheadParenthesisRight));
+                    e->movePosX(right + item->symWidth(SymId::noteheadParenthesisRight));
                 } else {
-                    e->movePosX(w);
+                    e->setPosX(right + parenthesisPadding);
                 }
             } else if (sym->sym() == SymId::noteheadParenthesisLeft) {
                 if (!Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround() || !item->staff()->isTabStaff(e->tick())) {
-                    e->movePosX(-item->symWidth(SymId::noteheadParenthesisLeft));
+                    e->setPosX(-left - e->width() - parenthesisPadding);
                 }
             }
         } else if (e->isFingering()) {
@@ -3482,6 +3491,55 @@ void TLayout::layout2(Note* item, LayoutContext& ctx)
 void TLayout::layout(NoteDot* item, LayoutContext&)
 {
     item->setbbox(item->symBbox(SymId::augmentationDot));
+}
+
+void TLayout::layout(Ornament* item, LayoutContext& ctx)
+{
+    double _spatium = item->spatium();
+    double vertMargin = 0.35 * _spatium;
+    static constexpr double ornamentAccidentalMag = 0.6; // TODO: style?
+
+    if (!item->showCueNote()) {
+        for (int i = 0; i < item->accidentalsAboveAndBelow().size(); ++i) {
+            bool above = (i == 0);
+            Accidental* accidental = item->accidentalsAboveAndBelow()[i];
+            if (!accidental) {
+                continue;
+            }
+            accidental->computeMag();
+            accidental->setMag(accidental->mag() * ornamentAccidentalMag);
+            layout(accidental, ctx);
+            Shape accidentalShape = accidental->shape();
+            double minVertDist = above ? accidentalShape.minVerticalDistance(item->bbox()) : Shape(item->bbox()).minVerticalDistance(
+                accidentalShape);
+            accidental->setPos(-0.5 * accidental->width(), above ? (-minVertDist - vertMargin) : (minVertDist + vertMargin));
+        }
+        return;
+    }
+
+    if (!item->explicitParent()) {
+        return;
+    }
+
+    Chord* parentChord = toChord(item->parentItem());
+    Chord* cueNoteChord = item->cueNoteChord();
+
+    Note* cueNote = cueNoteChord->notes().front();
+    ChordLayout::layoutChords3(item->score()->style(), { cueNoteChord }, { cueNote }, item->staff(), ctx);
+    layout(cueNoteChord, ctx);
+    Shape noteShape = cueNoteChord->shape();
+    Shape parentChordShape = parentChord->shape();
+    double minDist = parentChordShape.minHorizontalDistance(noteShape);
+    // Check for possible other chords in same segment
+    staff_idx_t startStaff = staff2track(parentChord->staffIdx());
+    for (staff_idx_t staff = startStaff; staff < startStaff + VOICES; ++staff) {
+        Segment* segment = parentChord->segment();
+        ChordRest* cr = segment->elementAt(staff) ? toChordRest(segment->elementAt(staff)) : nullptr;
+        if (cr) {
+            minDist = std::max(minDist, cr->shape().minHorizontalDistance(noteShape));
+        }
+    }
+    cueNoteChord->setPosX(minDist);
 }
 
 void TLayout::layout(Ottava* item, LayoutContext& ctx)
@@ -4164,9 +4222,12 @@ void TLayout::doLayout(StretchedBend* item, LayoutContext&, bool stretchedMode)
 
 void TLayout::layoutBaseSymbol(BSymbol* item, LayoutContext& ctx)
 {
-    if (item->staff()) {
+    if (item->explicitParent() && item->parentItem()->isNote()) {
+        item->setMag(item->parentItem()->mag());
+    } else if (item->staff()) {
         item->setMag(item->staff()->staffMag(item->tick()));
     }
+
     if (!item->explicitParent()) {
         item->setOffset(.0, .0);
         item->setPos(.0, .0);
@@ -4884,15 +4945,17 @@ void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
         item->setPosY(item->staff() ? item->staff()->height() : 0.0);
     }
 
-    if (item->isSingleType() || item->isBeginType()) {
-        Accidental* a = item->trill()->accidental();
-        if (a) {
-            layout(a, ctx);
-            a->setMag(a->mag() * .6);
-            double _spatium = item->spatium();
-            a->setPos(_spatium * 1.3, -2.2 * _spatium);
-            a->setParent(item);
+    bool accidentalGoesBelow = item->trill()->trillType() == TrillType::DOWNPRALL_LINE;
+    Ornament* ornament = item->trill()->ornament();
+    if (ornament) {
+        if (item->isSingleBeginType()) {
+            TLayout::layout(ornament, ctx);
         }
+        item->trill()->setAccidental(accidentalGoesBelow ? ornament->accidentalBelow() : ornament->accidentalAbove());
+        item->trill()->setCueNoteChord(ornament->cueNoteChord());
+    }
+
+    if (item->isSingleType() || item->isBeginType()) {
         switch (item->trill()->trillType()) {
         case TrillType::TRILL_LINE:
             item->symbolLine(SymId::ornamentTrill, SymId::wiggleTrill);
@@ -4909,9 +4972,23 @@ void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
                              SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
             break;
         }
+        Accidental* a = item->trill()->accidental();
+        if (a) {
+            double vertMargin = 0.35 * item->spatium();
+            RectF box = item->symBbox(item->symbols().front());
+            double x = 0;
+            double y = 0;
+            x = 0.5 * (box.width() - a->width());
+            double minVertDist = accidentalGoesBelow ? Shape(box).minVerticalDistance(a->shape())
+                                 : a->shape().minVerticalDistance(Shape(box));
+            y = accidentalGoesBelow ? minVertDist + vertMargin : -minVertDist - vertMargin;
+            a->setPos(x, y);
+            a->setParent(item);
+        }
     } else {
         item->symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
     }
+
     if (item->isStyled(Pid::OFFSET)) {
         item->roffset() = item->trill()->propertyDefault(Pid::OFFSET).value<PointF>();
     }

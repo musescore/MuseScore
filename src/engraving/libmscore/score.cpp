@@ -1655,6 +1655,7 @@ void Score::addElement(EngravingItem* element)
     case ElementType::NOTE:
     case ElementType::TREMOLO:
     case ElementType::ARTICULATION:
+    case ElementType::ORNAMENT:
     case ElementType::ARPEGGIO:
     {
         if (parent && parent->isChord()) {
@@ -1817,6 +1818,7 @@ void Score::removeElement(EngravingItem* element)
 
     case ElementType::TREMOLO:
     case ElementType::ARTICULATION:
+    case ElementType::ORNAMENT:
     case ElementType::ARPEGGIO:
     {
         EngravingItem* cr = element->parentItem();
@@ -4460,12 +4462,8 @@ void Score::addSpanner(Spanner* s)
 {
     _spanner.addSpanner(s);
     s->added();
-    if (s->startElement()) {
-        s->startElement()->startingSpanners().push_back(s);
-    }
-    if (s->endElement()) {
-        s->endElement()->endingSpanners().push_back(s);
-    }
+    s->computeStartElement();
+    s->computeEndElement();
 }
 
 //---------------------------------------------------------
@@ -5930,6 +5928,15 @@ void Score::createPaddingTable()
 
     // This is needed for beamlets, not beams themselves
     _paddingTable[ElementType::BEAM][ElementType::BEAM] = 0.4 * spatium();
+
+    // Symbols (semi-hack: the only symbol for which
+    // this is relevant is noteHead parenthesis)
+    _paddingTable[ElementType::SYMBOL] = _paddingTable[ElementType::NOTE];
+    _paddingTable[ElementType::SYMBOL][ElementType::NOTE] = 0.35 * spatium();
+    for (auto& elem : _paddingTable) {
+        elem[ElementType::SYMBOL] = elem[ElementType::ACCIDENTAL];
+    }
+    _paddingTable[ElementType::NOTEDOT][ElementType::SYMBOL] = 0.2 * spatium();
 }
 
 //--------------------------------------------------------

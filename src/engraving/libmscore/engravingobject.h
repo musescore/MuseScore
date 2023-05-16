@@ -118,6 +118,7 @@ class Note;
 class NoteDot;
 class NoteHead;
 class NoteLine;
+class Ornament;
 class Ottava;
 class OttavaSegment;
 class Page;
@@ -313,7 +314,7 @@ public:
     CONVERT(DeadSlapped,   DEAD_SLAPPED)
     CONVERT(Chord,         CHORD)
     CONVERT(BarLine,       BAR_LINE)
-    CONVERT(Articulation,  ARTICULATION)
+    CONVERT(Ornament,      ORNAMENT)
     CONVERT(Fermata,       FERMATA)
     CONVERT(Marker,        MARKER)
     CONVERT(Clef,          CLEF)
@@ -504,6 +505,11 @@ public:
     {
         return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation();
     }
+
+    bool isArticulation() const
+    {
+        return type() == ElementType::ARTICULATION || type() == ElementType::ORNAMENT;
+    }
 };
 
 //---------------------------------------------------
@@ -655,6 +661,7 @@ CONVERT(Note)
 CONVERT(Chord)
 CONVERT(BarLine)
 CONVERT(Articulation)
+CONVERT(Ornament)
 CONVERT(Fermata)
 CONVERT(Marker)
 CONVERT(Clef)

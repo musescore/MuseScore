@@ -114,6 +114,7 @@ public:
 
     AccidentalBracket bracket() const { return _bracket; }
     void setBracket(AccidentalBracket val) { _bracket = val; }
+    bool parentNoteHasParentheses() const;
 
     void setRole(AccidentalRole r) { _role = r; }
 
@@ -134,6 +135,8 @@ public:
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
 
     String accessibleInfo() const override;
+
+    void computeMag();
 };
 
 extern AccidentalVal sym2accidentalVal(SymId id);

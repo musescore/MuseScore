@@ -269,6 +269,11 @@ SymId Accidental::symbol() const
     return accList[int(accidentalType())].sym;
 }
 
+bool Accidental::parentNoteHasParentheses() const
+{
+    return explicitParent() && parentItem()->isNote() ? toNote(parentItem())->headHasParentheses() : false;
+}
+
 //---------------------------------------------------------
 //   subtype2value
 //    returns the resulting pitch offset
@@ -325,6 +330,19 @@ AccidentalType Accidental::name2subtype(const AsciiStringView& tag)
 void Accidental::setSubtype(const AsciiStringView& tag)
 {
     setAccidentalType(name2subtype(tag));
+}
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Accidental::computeMag()
+{
+    double m = explicitParent() ? parentItem()->mag() : 1.0;
+    if (isSmall()) {
+        m *= score()->styleD(Sid::smallNoteMag);
+    }
+    setMag(m);
 }
 
 //---------------------------------------------------------

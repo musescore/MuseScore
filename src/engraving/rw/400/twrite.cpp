@@ -103,7 +103,7 @@
 #include "../../libmscore/note.h"
 #include "../../libmscore/notedot.h"
 #include "../../libmscore/noteline.h"
-
+#include "../../libmscore/ornament.h"
 #include "../../libmscore/ottava.h"
 
 #include "../../libmscore/page.h"
@@ -173,7 +173,7 @@ using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Art
                                   LayoutBreak, LedgerLine, LetRing, Lyrics,
                                   Marker, MeasureNumber, MeasureRepeat, MMRest, MMRestRange,
                                   Note, NoteDot, NoteHead, NoteLine,
-                                  Ottava,
+                                  Ornament, Ottava,
                                   Page, PalmMute, Pedal, PlayTechAnnotation,
                                   Rasgueado, RehearsalMark, Rest,
                                   Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
@@ -429,7 +429,17 @@ void TWrite::write(const Articulation* item, XmlWriter& xml, WriteContext& ctx)
     if (!ctx.canWrite(item)) {
         return;
     }
+    if (toEngravingItem(item)->isOrnament()) {
+        write(static_cast<const Ornament*>(item), xml, ctx);
+        return;
+    }
     xml.startElement(item);
+    writeProperties(item, xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const Articulation* item, XmlWriter& xml, WriteContext& ctx)
+{
     if (!item->channelName().isEmpty()) {
         xml.tag("channe", { { "name", item->channelName() } });
     }
@@ -447,6 +457,31 @@ void TWrite::write(const Articulation* item, XmlWriter& xml, WriteContext& ctx)
         writeProperty(item, xml, spp.pid);
     }
     writeItemProperties(item, xml, ctx);
+}
+
+void TWrite::write(const Ornament* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+
+    if (item->cueNoteChord()) {
+        write(item->cueNoteChord(), xml, ctx);
+    } else {
+        if (item->accidentalAbove()) {
+            write(item->accidentalAbove(), xml, ctx);
+        }
+        if (item->accidentalBelow()) {
+            write(item->accidentalBelow(), xml, ctx);
+        }
+    }
+
+    writeProperty(item, xml, Pid::INTERVAL_ABOVE);
+    writeProperty(item, xml, Pid::INTERVAL_BELOW);
+    writeProperty(item, xml, Pid::ORNAMENT_SHOW_ACCIDENTAL);
+    writeProperty(item, xml, Pid::START_ON_UPPER_NOTE);
+    writeProperties(static_cast<const Articulation*>(item), xml, ctx);
     xml.endElement();
 }
 
@@ -2656,8 +2691,8 @@ void TWrite::write(const Trill* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::ORNAMENT_STYLE);
     writeProperty(item, xml, Pid::PLACEMENT);
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
-    if (item->accidental()) {
-        write(item->accidental(), xml, ctx);
+    if (item->ornament()) {
+        write(item->ornament(), xml, ctx);
     }
     xml.endElement();
 }

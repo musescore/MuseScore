@@ -114,6 +114,11 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::SYMID:       return static_cast<int>(value<SymId>());
     case P_TYPE::COLOR:       return value<draw::Color>().toQColor();
     case P_TYPE::ORNAMENT_STYLE: return static_cast<int>(value<OrnamentStyle>());
+    case P_TYPE::ORNAMENT_INTERVAL: {
+        OrnamentInterval interval = value<OrnamentInterval>();
+        return QVariantList({ static_cast<int>(interval.m_step), static_cast<int>(interval.m_type) });
+    } break;
+    case P_TYPE::ORNAMENT_SHOW_ACCIDENTAL: return static_cast<int>(value<OrnamentShowAccidental>());
     case P_TYPE::GLISS_STYLE: return static_cast<int>(value<GlissandoStyle>());
 
     // Layout
@@ -203,6 +208,14 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::SYMID:         return PropertyValue(SymId(v.toInt()));
     case P_TYPE::COLOR:         return PropertyValue(Color::fromQColor(v.value<QColor>()));
     case P_TYPE::ORNAMENT_STYLE: return PropertyValue(OrnamentStyle(v.toInt()));
+    case P_TYPE::ORNAMENT_INTERVAL: {
+        QVariantList l = v.toList();
+        IF_ASSERT_FAILED(l.size() == 2) {
+            return PropertyValue();
+        }
+        return PropertyValue(OrnamentInterval(IntervalStep(l.at(0).toInt()), IntervalType(l.at(1).toInt())));
+    } break;
+    case P_TYPE::ORNAMENT_SHOW_ACCIDENTAL: return PropertyValue(OrnamentShowAccidental(v.toInt()));
     case P_TYPE::GLISS_STYLE:   return PropertyValue(GlissandoStyle(v.toInt()));
 
     // Layout

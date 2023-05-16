@@ -73,6 +73,7 @@ void NoteheadSettingsModel::loadProperties()
     };
 
     loadProperties(propertyIdSet);
+    updateIsTrillCueNote();
 }
 
 void NoteheadSettingsModel::resetProperties()
@@ -179,6 +180,11 @@ PropertyItem* NoteheadSettingsModel::offset() const
     return m_offset;
 }
 
+bool NoteheadSettingsModel::isTrillCueNote() const
+{
+    return m_isTrillCueNote;
+}
+
 QVariantList NoteheadSettingsModel::possibleHeadSystemTypes() const
 {
     QMap<mu::engraving::NoteHeadScheme, QString> types {
@@ -206,4 +212,25 @@ QVariantList NoteheadSettingsModel::possibleHeadSystemTypes() const
     }
 
     return result;
+}
+
+void NoteheadSettingsModel::updateIsTrillCueNote()
+{
+    bool isTrillCueNote = true;
+    for (EngravingItem* item : m_elementList) {
+        if (item->isNote() && !toNote(item)->isTrillCueNote()) {
+            isTrillCueNote = false;
+            break;
+        }
+    }
+    setIsTrillCueNote(isTrillCueNote);
+}
+
+void NoteheadSettingsModel::setIsTrillCueNote(bool v)
+{
+    if (v == m_isTrillCueNote) {
+        return;
+    }
+    m_isTrillCueNote = v;
+    emit isTrillCueNoteChanged(m_isTrillCueNote);
 }
