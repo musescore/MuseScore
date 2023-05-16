@@ -22,6 +22,7 @@
 
 #include "saveprojectscenario.h"
 
+#include "cloud/clouderrors.h"
 #include "engraving/infrastructure/mscio.h"
 
 using namespace mu;
@@ -173,20 +174,47 @@ RetVal<CloudProjectInfo> SaveProjectScenario::askPublishLocation(INotationProjec
 
 RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublish) const
 {
+    bool isCloudAvailable = authorizationService()->checkCloudIsAvailable();
+    if (!isCloudAvailable) {
+        return warnCloudIsNotAvailable(isPublish);
+    }
+
     Ret ret = authorizationService()->ensureAuthorization(
-        trc("project/save", "Login or create a free account on musescore.com to save this score to the cloud."));
+        isPublish
+        ? trc("project/save", "Login or create a free account on musescore.com to save this score to the cloud.")
+        : trc("project/save", "Login or create a free account on musescore.com to publish this score."));
     if (!ret) {
         return ret;
     }
 
-    // TODO(save-to-cloud): better name?
     QString defaultName = project->displayName();
     cloud::Visibility defaultVisibility = isPublish ? cloud::Visibility::Public : cloud::Visibility::Private;
+    const QUrl existingOnlineScoreUrl = project->cloudInfo().sourceUrl;
+
+    if (!existingOnlineScoreUrl.isEmpty()) {
+        RetVal<cloud::ScoreInfo> scoreInfo = cloudProjectsService()->downloadScoreInfo(existingOnlineScoreUrl);
+
+        switch (scoreInfo.ret.code()) {
+        case int(Ret::Code::Ok):
+            defaultName = scoreInfo.val.title;
+            defaultVisibility = scoreInfo.val.visibility;
+            break;
+
+        case int(cloud::Err::AccountNotActivated):
+        case int(cloud::Err::NetworkError):
+            return doShowCloudSaveError(scoreInfo.ret, isPublish, false);
+
+        // It's possible the source URL is invalid or points to a score on a different user's account.
+        // In this situation we shouldn't see an error.
+        default: break;
+        }
+    }
 
     UriQuery query("musescore://project/savetocloud");
     query.addParam("isPublish", Val(isPublish));
     query.addParam("name", Val(defaultName));
     query.addParam("visibility", Val(defaultVisibility));
+    query.addParam("existingOnlineScoreUrl", Val(existingOnlineScoreUrl.toString()));
 
     RetVal<Val> rv = interactive()->open(query);
     if (!rv.ret) {
@@ -213,8 +241,8 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
         return make_ret(Ret::Code::Cancel);
     }
 
-    if (mode == SaveMode::Save) {
-        result.sourceUrl = project->cloudInfo().sourceUrl;
+    if (mode == SaveMode::Save && vals["replaceExistingOnlineScore"].toBool()) {
+        result.sourceUrl = existingOnlineScoreUrl;
     }
 
     return RetVal<CloudProjectInfo>::make_ok(result);
@@ -281,4 +309,84 @@ bool SaveProjectScenario::warnBeforeSavingToExistingPubliclyVisibleCloudProject(
         buttons, int(IInteractive::Button::Ok));
 
     return result.standardButton() == IInteractive::Button::Ok;
+}
+
+Ret SaveProjectScenario::warnCloudIsNotAvailable(bool isPublish) const
+{
+    if (isPublish) {
+        interactive()->warning(trc("project/save", "Unable to connect to MuseScore.com"),
+                               trc("project/save", "Please check your internet connection or try again later."));
+        return make_ret(Ret::Code::Cancel);
+    }
+
+    IInteractive::ButtonDatas buttons = {
+        IInteractive::ButtonData(IInteractive::Button::Cancel, trc("global", "Cancel")),
+        IInteractive::ButtonData(IInteractive::Button::Ok, trc("project/save", "Save to computer"), true)
+    };
+
+    IInteractive::Result result = interactive()->warning(trc("project/save", "Unable to connect to the cloud"),
+                                                         trc("project/save", "Please check your internet connection or try again later."),
+                                                         buttons, int(IInteractive::Button::Ok));
+
+    if (result.standardButton() == framework::IInteractive::Button::Ok) {
+        return Ret(RET_CODE_CHANGE_SAVE_LOCATION_TYPE);
+    }
+
+    return make_ret(Ret::Code::Cancel);
+}
+
+void SaveProjectScenario::showCloudSaveError(const Ret& ret, bool isPublish, bool alreadyAttempted) const
+{
+    (void)doShowCloudSaveError(ret, isPublish, alreadyAttempted);
+}
+
+Ret SaveProjectScenario::doShowCloudSaveError(const Ret& ret, bool isPublish, bool alreadyAttempted) const
+{
+    std::string title;
+    if (alreadyAttempted) {
+        title = isPublish
+                ? trc("project/save", "Your score could not be published")
+                : trc("project/save", "Your score could not be saved to the cloud");
+    } else {
+        title = isPublish
+                ? trc("project/save", "Your score cannot be published")
+                : trc("project/save", "Your score cannot be saved to the cloud");
+    }
+
+    std::string msg;
+
+    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
+    IInteractive::ButtonData saveLocallyBtn { int(IInteractive::Button::CustomButton) + 1, trc("project/save", "Save to computer") };
+    IInteractive::ButtonData helpBtn { IInteractive::Button::CustomButton, trc("project/save", "Get help") };
+
+    IInteractive::ButtonDatas buttons = (alreadyAttempted || isPublish)
+                                        ? (IInteractive::ButtonDatas { helpBtn, okBtn })
+                                        : (IInteractive::ButtonDatas { helpBtn, saveLocallyBtn, okBtn });
+
+    switch (ret.code()) {
+    case int(cloud::Err::AccountNotActivated):
+        msg = trc("project/save", "Your musescore.com account needs to be verified first. "
+                                  "Please activate your account via the link in the activation email.");
+        buttons = { okBtn };
+        break;
+    case int(cloud::Err::NetworkError):
+        msg = cloud::cloudNetworkErrorUserDescription(ret);
+        if (!msg.empty()) {
+            msg += "\n\n" + trc("project/save", "Please try again later, or get help for this problem on musescore.org.");
+            break;
+        }
+    // FALLTHROUGH
+    default:
+        msg = trc("project/save", "Please try again later, or get help for this problem on musescore.org.");
+        break;
+    }
+
+    IInteractive::Result result = interactive()->warning(title, msg, buttons, okBtn.btn);
+    if (result.button() == helpBtn.btn) {
+        interactive()->openUrl(configuration()->supportForumUrl());
+    } else if (result.button() == saveLocallyBtn.btn) {
+        return Ret(RET_CODE_CHANGE_SAVE_LOCATION_TYPE);
+    }
+
+    return make_ret(Ret::Code::Cancel);
 }

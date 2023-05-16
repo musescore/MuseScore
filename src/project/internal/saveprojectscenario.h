@@ -29,6 +29,7 @@
 #include "iprojectconfiguration.h"
 #include "global/iinteractive.h"
 #include "cloud/iauthorizationservice.h"
+#include "cloud/icloudprojectsservice.h"
 
 namespace mu::project {
 class SaveProjectScenario : public ISaveProjectScenario
@@ -36,6 +37,7 @@ class SaveProjectScenario : public ISaveProjectScenario
     INJECT(project, IProjectConfiguration, configuration)
     INJECT(project, framework::IInteractive, interactive)
     INJECT(project, cloud::IAuthorizationService, authorizationService)
+    INJECT(project, cloud::ICloudProjectsService, cloudProjectsService)
 
 public:
     SaveProjectScenario() = default;
@@ -49,6 +51,8 @@ public:
 
     bool warnBeforeSavingToExistingPubliclyVisibleCloudProject() const override;
 
+    void showCloudSaveError(const Ret& ret, bool isPublish, bool alreadyAttempted) const override;
+
 private:
     RetVal<SaveLocationType> saveLocationType() const;
     RetVal<SaveLocationType> askSaveLocationType() const;
@@ -59,6 +63,9 @@ private:
     RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublish) const;
 
     bool warnBeforePublishing(bool isPublish, cloud::Visibility visibility) const;
+
+    Ret warnCloudIsNotAvailable(bool isPublish) const;
+    Ret doShowCloudSaveError(const Ret& ret, bool isPublish, bool alreadyAttempted) const;
 };
 
 class QMLSaveLocationType
