@@ -38,16 +38,6 @@ class BracketItem final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, BracketItem)
 
-    BracketType _bracketType { BracketType::NO_BRACKET };
-    size_t _column = 0;
-    size_t _bracketSpan = 0;
-    Staff* _staff = nullptr;
-
-    friend class Factory;
-
-    BracketItem(EngravingItem* parent);
-    BracketItem(EngravingItem* parent, BracketType a, int b);
-
 public:
     EngravingItem* clone() const override;
 
@@ -63,6 +53,18 @@ public:
     void setStaff(Staff* s) { _staff = s; }
     size_t column() const { return _column; }
     void setColumn(size_t v) { _column = v; }
+
+private:
+
+    friend class Factory;
+
+    BracketItem(EngravingItem* parent);
+    BracketItem(EngravingItem* parent, BracketType a, int b);
+
+    BracketType _bracketType { BracketType::NO_BRACKET };
+    size_t _column = 0;
+    size_t _bracketSpan = 0;
+    Staff* _staff = nullptr;
 };
 }
 #endif

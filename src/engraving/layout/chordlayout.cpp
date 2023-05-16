@@ -119,7 +119,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             note->setPos(x, y);
         }
         item->computeUp();
-        item->layoutStem();
+        layoutStem(item, ctx);
         item->addLedgerLines();
         return;
     }
@@ -1083,6 +1083,61 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext&)
             }
         }
     }
+}
+
+//! May be called again when the chord is added to or removed from a beam.
+void ChordLayout::layoutStem(Chord* item, LayoutContext& ctx)
+{
+    // Stem needs to know hook's bbox and SMuFL anchors.
+    // This is done before calcDefaultStemLength because the presence or absence of a hook affects stem length
+    if (item->shouldHaveHook()) {
+        layoutHook(item, ctx);
+    } else {
+        item->score()->undoRemoveElement(item->_hook);
+    }
+
+    // we should calculate default stem length for this chord even if it doesn't have a stem
+    // because this length is used for tremolos or other things that attach to where the stem WOULD be
+    item->_defaultStemLength = item->calcDefaultStemLength();
+
+    if (!item->shouldHaveStem()) {
+        item->removeStem();
+        return;
+    }
+
+    if (!item->_stem) {
+        item->createStem();
+    }
+
+    item->_stem->setPosX(item->stemPosX());
+
+    // This calls _stem->layout()
+    item->_stem->setBaseLength(Millimetre(item->_defaultStemLength));
+
+    // And now we need to set the position of the flag.
+    if (item->_hook) {
+        item->_hook->setPos(item->_stem->flagPosition());
+    }
+
+    // Add Stem slash
+    if ((item->_noteType == NoteType::ACCIACCATURA) && !(item->beam() && item->beam()->elements().front() != item)) {
+        if (!item->_stemSlash) {
+            item->add(Factory::createStemSlash(item));
+        }
+        v0::TLayout::layout(item->_stemSlash, ctx);
+    } else if (item->_stemSlash) {
+        item->remove(item->_stemSlash);
+    }
+}
+
+void ChordLayout::layoutHook(Chord* item, LayoutContext& ctx)
+{
+    if (!item->_hook) {
+        item->createHook();
+        item->computeUp();
+    }
+    item->_hook->setHookType(item->up() ? item->durationType().hooks() : -item->durationType().hooks());
+    v0::TLayout::layout(item->_hook, ctx);
 }
 
 //---------------------------------------------------------

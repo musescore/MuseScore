@@ -50,6 +50,9 @@ public:
     static void layoutArticulations2(Chord* item, LayoutContext& ctx, bool layoutOnCrossBeamSide = false);
     static void layoutArticulations3(Chord* item, Slur* s, LayoutContext& ctx);
 
+    static void layoutStem(Chord* item, LayoutContext& ctx);
+    static void layoutHook(Chord* item, LayoutContext& ctx);
+
     static void layoutChords1(Score* score, Segment* segment, staff_idx_t staffIdx, LayoutContext& ctx);
     static double layoutChords2(std::vector<Note*>& notes, bool up, LayoutContext& ctx);
     static void layoutChords3(const MStyle& style, const std::vector<Chord*>&, const std::vector<Note*>&, const Staff*, LayoutContext& ctx);

@@ -50,7 +50,7 @@
 using namespace mu::engraving;
 using namespace mu::engraving::v0;
 
-void BeamLayout::layout(Beam* item, LayoutContext&)
+void BeamLayout::layout(Beam* item, LayoutContext& ctx)
 {
     // all of the beam layout code depends on _elements being in order by tick
     // this may not be the case if two cr's were recently swapped.
@@ -77,7 +77,7 @@ void BeamLayout::layout(Beam* item, LayoutContext&)
             if (item->fragments.size() < n) {
                 item->fragments.push_back(new BeamFragment);
             }
-            layout2(item, crl, st, static_cast<int>(n) - 1);
+            layout2(item, ctx, crl, st, static_cast<int>(n) - 1);
             crl.clear();
             system = cr->measure()->system();
         }
@@ -94,7 +94,7 @@ void BeamLayout::layout(Beam* item, LayoutContext&)
         if (item->fragments.size() < (n + 1)) {
             item->fragments.push_back(new BeamFragment);
         }
-        layout2(item, crl, st, static_cast<int>(n));
+        layout2(item, ctx, crl, st, static_cast<int>(n));
 
         double lw2 = item->_beamWidth / 2.0;
 
@@ -115,7 +115,7 @@ void BeamLayout::layout(Beam* item, LayoutContext&)
 //    - detach from system
 //    - calculate stem direction and set chord
 //---------------------------------------------------------
-void BeamLayout::layout1(Beam* item, LayoutContext&)
+void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
 {
     item->resetExplicitParent();  // parent is System
 
@@ -166,7 +166,7 @@ void BeamLayout::layout1(Beam* item, LayoutContext&)
         for (ChordRest* cr : item->_elements) {
             cr->computeUp();
             if (cr->isChord()) {
-                toChord(cr)->layoutStem();
+                ChordLayout::layoutStem(toChord(cr), ctx);
             }
         }
         return;
@@ -259,14 +259,14 @@ void BeamLayout::layout1(Beam* item, LayoutContext&)
             if (cr->up() != item->_up) {
                 cr->setUp(isEntirelyMoved ? item->_up : (item->_up != staffMove));
                 if (cr->isChord()) {
-                    toChord(cr)->layoutStem();
+                    ChordLayout::layoutStem(toChord(cr), ctx);
                 }
             }
         }
     }
 }
 
-void BeamLayout::layout2(Beam* item, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag)
+void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag)
 {
     item->_layoutInfo = BeamTremoloLayout(item);
     Chord* startChord = nullptr;
@@ -282,7 +282,7 @@ void BeamLayout::layout2(Beam* item, const std::vector<ChordRest*>& chordRests, 
             } else {
                 endChord = toChord(chordRest);
             }
-            toChord(chordRest)->layoutStem();
+            ChordLayout::layoutStem(toChord(chordRest), ctx);
         }
     }
     if (!startChord) {
