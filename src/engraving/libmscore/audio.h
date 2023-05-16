@@ -36,9 +36,6 @@ class Audio
 {
     OBJECT_ALLOCATOR(engraving, Audio)
 
-    String _path;
-    ByteArray _data;
-
 public:
     Audio();
     const String& path() const { return _path; }
@@ -46,6 +43,10 @@ public:
     const ByteArray& data() const { return _data; }
     ByteArray data() { return _data; }
     void setData(const ByteArray& ba) { _data = ba; }
+
+private:
+    String _path;
+    ByteArray _data;
 };
 } // namespace mu::engraving
 #endif // MU_ENGRAVING_AUDIO_H
