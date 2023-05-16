@@ -695,6 +695,10 @@ bool Harmony::isEditAllowed(EditData& ed) const
         return false;
     }
 
+    if ((ed.key == Key_Left || ed.key == Key_Right) && (ed.modifiers & ControlModifier)) {
+        return false;
+    }
+
     if (ed.key == Key_Return || ed.key == Key_Enter) {
         // This "edit" is actually handled in NotationInteraction::editElement
         return true;
