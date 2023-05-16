@@ -91,20 +91,6 @@ class Clef final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Clef)
     DECLARE_CLASSOF(ElementType::CLEF)
 
-    SymId m_symId;
-    bool _showCourtesy = true;
-    bool m_isSmall = false;
-    bool _forInstrumentChange = false;
-    M_PROPERTY(ClefToBarlinePosition, clefToBarlinePosition, setClefToBarlinePosition)
-    M_PROPERTY(bool, isHeader, setIsHeader)
-
-    ClefTypeList _clefTypes { ClefType::INVALID };
-
-    friend class Factory;
-    Clef(Segment* parent);
-
-    bool neverKernable() const override { return true; }
-
 public:
 
     Clef* clone() const override { return new Clef(*this); }
@@ -158,6 +144,22 @@ public:
 
     void undoChangeProperty(Pid id, const PropertyValue& v) { EngravingObject::undoChangeProperty(id, v); }
     void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
+
+private:
+
+    friend class Factory;
+    Clef(Segment* parent);
+
+    bool neverKernable() const override { return true; }
+
+    SymId m_symId;
+    bool _showCourtesy = true;
+    bool m_isSmall = false;
+    bool _forInstrumentChange = false;
+    M_PROPERTY(ClefToBarlinePosition, clefToBarlinePosition, setClefToBarlinePosition)
+    M_PROPERTY(bool, isHeader, setIsHeader)
+
+    ClefTypeList _clefTypes { ClefType::INVALID };
 };
 } // namespace mu::engraving
 #endif

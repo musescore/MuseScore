@@ -55,6 +55,7 @@ public:
     void mapPropertiesFromOldExpressions(StaffText* staffText);
 
     Dynamic* snappedDynamic() const { return _snappedDynamic; }
+
 private:
     friend class v0::TLayout;
 

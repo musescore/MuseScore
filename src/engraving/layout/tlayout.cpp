@@ -1781,13 +1781,121 @@ void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
     // Items list will be empty in edit mode (see FiguredBass::startEdit).
     // TODO: consider disabling specific layout in case text style is changed (tid() != TextStyleName::FIGURED_BASS).
     if (item->items().size() > 0) {
-        item->layoutLines();
+        layoutLines(item, ctx);
         item->bbox().setRect(0, 0, item->lineLength(0), 0);
         // layout each item and enlarge bbox to include items bboxes
         for (FiguredBassItem* fit : item->items()) {
             layout(fit, ctx);
             item->addbbox(fit->bbox().translated(fit->pos()));
         }
+    }
+}
+
+//    lays out the duration indicator line(s), filling the _lineLengths array
+//    and the length of printed lines (used by continuation lines)
+
+void TLayout::layoutLines(FiguredBass* item, LayoutContext&)
+{
+    if (item->_ticks <= Fraction(0, 1) || !item->segment()) {
+        item->_lineLengths.resize(1);                             // be sure to always have
+        item->_lineLengths[0] = 0;                                // at least 1 item in array
+        return;
+    }
+
+    ChordRest* lastCR  = nullptr;                         // the last ChordRest of this
+    Segment* nextSegm = nullptr;                          // the Segment beyond this' segment
+    Fraction nextTick = item->segment()->tick() + item->_ticks;       // the tick beyond this' duration
+
+    // locate the measure containing the last tick of this; it is either:
+    // the same measure containing nextTick, if nextTick is not the first tick of a measure
+    //    (and line should stop right before it)
+    // or the previous measure, if nextTick is the first tick of a measure
+    //    (and line should stop before any measure terminal segment (bar, clef, ...) )
+
+    Measure* m = item->score()->tick2measure(nextTick - Fraction::fromTicks(1));
+    if (m) {
+        // locate the first segment (of ANY type) right after this' last tick
+        for (nextSegm = m->first(SegmentType::All); nextSegm; nextSegm = nextSegm->next()) {
+            if (nextSegm->tick() >= nextTick) {
+                break;
+            }
+        }
+        // locate the last ChordRest of this
+        if (nextSegm) {
+            track_idx_t startTrack = trackZeroVoice(item->track());
+            track_idx_t endTrack = startTrack + VOICES;
+            for (const Segment* seg = nextSegm->prev1(); seg; seg = seg->prev1()) {
+                for (track_idx_t t = startTrack; t < endTrack; ++t) {
+                    EngravingItem* el = seg->element(t);
+                    if (el && el->isChordRest()) {
+                        lastCR = toChordRest(el);
+                        break;
+                    }
+                }
+                if (lastCR) {
+                    break;
+                }
+            }
+        }
+    }
+    if (!m || !nextSegm) {
+        LOGD("FiguredBass layout: no segment found for tick %d", nextTick.ticks());
+        item->_lineLengths.resize(1);                             // be sure to always have
+        item->_lineLengths[0] = 0;                                // at least 1 item in array
+        return;
+    }
+
+    // get length of printed lines from horiz. page position of lastCR
+    // (enter a bit 'into' the ChordRest for clarity)
+    item->_printedLineLength = lastCR ? lastCR->pageX() - item->pageX() + 1.5 * item->spatium() : 3 * item->spatium();
+
+    // get duration indicator line(s) from page position of nextSegm
+    const std::vector<System*>& systems = item->score()->systems();
+    System* s1  = item->segment()->measure()->system();
+    System* s2  = nextSegm->measure()->system();
+    system_idx_t sysIdx1 = mu::indexOf(systems, s1);
+    system_idx_t sysIdx2 = mu::indexOf(systems, s2);
+
+    if (sysIdx2 == mu::nidx || sysIdx2 < sysIdx1) {
+        sysIdx2 = sysIdx1;
+        nextSegm = item->segment()->next1();
+        // TODO
+        // During layout of figured bass next systems' numbers may be still
+        // undefined (then sysIdx2 == mu::nidx) or change in the future.
+        // A layoutSystem() approach similar to that for spanners should
+        // probably be implemented.
+    }
+
+    system_idx_t i;
+    int len;
+    size_t segIdx = 0;
+    for (i = sysIdx1, segIdx = 0; i <= sysIdx2; ++i, ++segIdx) {
+        len = 0;
+        if (sysIdx1 == sysIdx2 || i == sysIdx1) {
+            // single line
+            len = nextSegm->pageX() - item->pageX() - 4;               // stop 4 raster units before next segm
+        } else if (i == sysIdx1) {
+            // initial line
+            double w   = s1->staff(item->staffIdx())->bbox().right();
+            double x   = s1->pageX() + w;
+            len = x - item->pageX();
+        } else if (i > 0 && i != sysIdx2) {
+            // middle line
+            LOGD("FiguredBass: duration indicator middle line not implemented");
+        } else if (i == sysIdx2) {
+            // end line
+            LOGD("FiguredBass: duration indicator end line not implemented");
+        }
+        // store length item, reusing array items if already present
+        if (item->_lineLengths.size() <= segIdx) {
+            item->_lineLengths.push_back(len);
+        } else {
+            item->_lineLengths[segIdx] = len;
+        }
+    }
+    // if more array items than needed, truncate array
+    if (item->_lineLengths.size() > segIdx) {
+        item->_lineLengths.resize(segIdx);
     }
 }
 
