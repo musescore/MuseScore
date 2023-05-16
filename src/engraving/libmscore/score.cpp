@@ -36,9 +36,9 @@
 #include "style/defaultstyle.h"
 #include "compat/dummyelement.h"
 
+#include "iengravingfont.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "iengravingfont.h"
 #include "layout/tlayout.h"
 
 #include "articulation.h"

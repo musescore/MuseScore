@@ -24,6 +24,7 @@
 #include <cmath>
 
 #include "draw/types/brush.h"
+
 #include "layout/tlayout.h"
 
 #include "beam.h"

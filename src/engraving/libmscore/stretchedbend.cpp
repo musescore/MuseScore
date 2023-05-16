@@ -24,8 +24,6 @@
 
 #include "draw/fontmetrics.h"
 
-#include "layout/tlayout.h"
-
 #include "chord.h"
 #include "note.h"
 #include "score.h"
@@ -228,16 +226,6 @@ void StretchedBend::stretchSegments()
 }
 
 //---------------------------------------------------------
-//   layoutStretched
-//---------------------------------------------------------
-
-void StretchedBend::layoutStretched()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layoutStretched(this, ctx);
-}
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -366,37 +354,6 @@ void StretchedBend::setupPainter(mu::draw::Painter* painter) const
 
     mu::draw::Font f = font(spatium() * MScore::pixelRatio);
     painter->setFont(f);
-}
-
-//---------------------------------------------------------
-//   glueNeighbor
-//---------------------------------------------------------
-
-void StretchedBend::prepareBends(std::vector<StretchedBend*>& bends)
-{
-#if 0
-    /// glueing extra bends together
-    for (StretchedBend* bend : bends) {
-        bend->glueNeighbor();
-    }
-
-    /// deleting reduntant bends
-    auto reduntantIt = std::partition(bends.begin(), bends.end(), [](StretchedBend* bend) { return bend->m_reduntant; });
-
-    for (auto bendIt = bends.begin(); bendIt != reduntantIt; bendIt++) {
-        StretchedBend* bendToRemove = *bendIt;
-        EngravingObject* parentObj = bendToRemove->parent();
-        if (Note* note = dynamic_cast<Note*>(parentObj)) {
-            note->remove(bendToRemove);
-        }
-
-        delete bendToRemove;
-        bendToRemove = nullptr;
-    }
-#endif
-    for (StretchedBend* bend : bends) {
-        bend->fillDrawPoints();
-    }
 }
 
 //---------------------------------------------------------

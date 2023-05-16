@@ -22,7 +22,7 @@
 
 #include "whammybar.h"
 
-#include "layout/tlayout.h"
+
 
 #include "score.h"
 #include "system.h"

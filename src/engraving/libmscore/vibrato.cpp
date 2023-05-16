@@ -24,7 +24,7 @@
 #include <cmath>
 
 #include "types/typesconv.h"
-#include "layout/tlayout.h"
+
 #include "iengravingfont.h"
 
 #include "score.h"

@@ -27,6 +27,8 @@
 #include "draw/types/pen.h"
 #include "draw/types/transform.h"
 
+#include "layout/tlayout.h"
+
 #include "accidental.h"
 #include "chord.h"
 #include "fretcircle.h"
@@ -41,8 +43,6 @@
 #include "stafftype.h"
 #include "stem.h"
 #include "system.h"
-
-#include "layout/tlayout.h"
 
 #include "log.h"
 

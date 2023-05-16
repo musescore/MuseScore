@@ -22,6 +22,12 @@
 
 #include "page.h"
 
+#include "layout/tlayout.h"
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+#include "accessibility/accessibleitem.h"
+#endif
+
 #include "factory.h"
 #include "masterscore.h"
 #include "measurebase.h"
@@ -29,12 +35,6 @@
 #include "score.h"
 #include "system.h"
 #include "text.h"
-
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-#include "accessibility/accessibleitem.h"
-#endif
-
-#include "layout/tlayout.h"
 
 #include "log.h"
 

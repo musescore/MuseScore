@@ -29,6 +29,7 @@
 #include "containers.h"
 
 #include "style/style.h"
+
 #include "layout/tlayout.h"
 #include "layout/slurtielayout.h"
 #include "layout/chordlayout.h"

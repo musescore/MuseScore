@@ -41,6 +41,10 @@
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+#include "accessibility/accessibleitem.h"
+#endif
+
 #include "box.h"
 #include "measure.h"
 #include "mscore.h"
@@ -50,10 +54,6 @@
 #include "textedit.h"
 #include "textframe.h"
 #include "undo.h"
-
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-#include "accessibility/accessibleitem.h"
-#endif
 
 #include "log.h"
 

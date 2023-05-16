@@ -25,6 +25,7 @@
 #include "translation.h"
 
 #include "rw/400/twrite.h"
+#include "layout/tlayout.h"
 
 #include "../libmscore/ambitus.h"
 #include "../libmscore/barline.h"
@@ -60,8 +61,6 @@
 #include "../libmscore/image.h"
 
 #include "tread.h"
-
-#include "layout/tlayout.h"
 
 #include "log.h"
 

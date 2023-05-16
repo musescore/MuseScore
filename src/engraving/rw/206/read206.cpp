@@ -34,7 +34,7 @@
 
 #include "style/style.h"
 #include "style/textstyle.h"
-
+#include "layout/tlayout.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
 
@@ -102,8 +102,6 @@
 #include "../compat/readstyle.h"
 
 #include "../400/tread.h"
-
-#include "layout/tlayout.h"
 
 #include "log.h"
 
