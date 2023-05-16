@@ -463,9 +463,25 @@ InputResourceItem* MixerChannelItem::buildInputResourceItem()
     InputResourceItem* newItem = new InputResourceItem(this);
 
     connect(newItem, &InputResourceItem::inputParamsChanged, this, [this, newItem]() {
-        m_inputParams = newItem->params();
+        bool audioSourceChanged = m_inputParams.type() != newItem->params().type();
 
+        m_inputParams = newItem->params();
         emit inputParamsChanged(m_inputParams);
+
+        if (!audioSourceChanged) {
+            return;
+        }
+
+        for (aux_channel_idx_t idx = 0; idx < static_cast<size_t>(m_auxSendItems.size()); ++idx) {
+            auto it = m_auxSendItems.find(idx);
+            if (it == m_auxSendItems.end()) {
+                continue;
+            }
+
+            const String& soundId = m_inputParams.resourceMeta.attributeVal(PLAYBACK_SETUP_DATA_ATTRIBUTE);
+            int newAudioSignalPercentage = configuration()->defaultAuxSendValue(idx, m_inputParams.type(), soundId) * 100.f;
+            it.value()->setAudioSignalPercentage(newAudioSignalPercentage);
+        }
     });
 
     connect(newItem, &InputResourceItem::isBlankChanged, this, &MixerChannelItem::inputResourceItemChanged);

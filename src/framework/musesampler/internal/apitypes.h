@@ -222,6 +222,7 @@ typedef const char*(* ms_Instrument_get_category)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_package)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_musicxml_sound)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_mpe_sound)(ms_InstrumentInfo);
+typedef float (* ms_Instrument_get_reverb_level)(ms_InstrumentInfo);
 
 typedef ms_PresetList (* ms_Instrument_get_preset_list)(ms_InstrumentInfo);
 typedef const char*(* ms_PresetList_get_next)(ms_PresetList);

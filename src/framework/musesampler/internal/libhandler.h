@@ -67,6 +67,7 @@ struct MuseSamplerLibHandler
     const char* getInstrumentPackage(ms_InstrumentInfo instrument) { return ms_Instrument_get_package(instrument); }
     const char* getMusicXmlSoundId(ms_InstrumentInfo instrument) { return ms_Instrument_get_musicxml_sound(instrument); }
     const char* getMpeSoundId(ms_InstrumentInfo instrument) { return ms_Instrument_get_mpe_sound(instrument); }
+    float getReverbLevel(ms_InstrumentInfo instrument) { return ms_Instrument_get_reverb_level(instrument); }
 
     ms_PresetList getPresetList(ms_InstrumentInfo instrument_info) { return ms_Instrument_get_preset_list(instrument_info); }
     const char* getNextPreset(ms_PresetList preset_list) { return ms_PresetList_get_next(preset_list); }
@@ -188,6 +189,7 @@ struct MuseSamplerLibHandler
     ms_Instrument_get_package getInstrumentPackage = nullptr;
     ms_Instrument_get_musicxml_sound getMusicXmlSoundId = nullptr;
     ms_Instrument_get_mpe_sound getMpeSoundId = nullptr;
+    ms_Instrument_get_reverb_level getReverbLevel = nullptr;
 
     ms_Instrument_get_preset_list getPresetList = nullptr;
     ms_PresetList_get_next getNextPreset = nullptr;
@@ -318,6 +320,7 @@ public:
                 };
             }
             disableReverb = (ms_disable_reverb)getLibFunc(m_lib, "ms_disable_reverb");
+            getReverbLevel = (ms_Instrument_get_reverb_level)getLibFunc(m_lib, "ms_Instrument_get_reverb_level");
         } else {
             if (addDynamicsEventInternal
                     = (ms_MuseSampler_add_track_dynamics_event)getLibFunc(m_lib, "ms_MuseSampler_add_track_dynamics_event");
@@ -522,11 +525,13 @@ private:
                << "\n ms_Instrument_get_package - " << reinterpret_cast<uint64_t>(getInstrumentPackage)
                << "\n ms_Instrument_get_musicxml_sound - " << reinterpret_cast<uint64_t>(getMusicXmlSoundId)
                << "\n ms_Instrument_get_mpe_sound - " << reinterpret_cast<uint64_t>(getMpeSoundId)
+               << "\n ms_Instrument_get_reverb_level - " << reinterpret_cast<uint64_t>(getReverbLevel)
                << "\n ms_Instrument_get_preset_list - " << reinterpret_cast<uint64_t>(getPresetList)
                << "\n ms_PresetList_get_next - " << reinterpret_cast<uint64_t>(getNextPreset)
                << "\n ms_MuseSampler_create - " << reinterpret_cast<uint64_t>(create)
                << "\n ms_MuseSampler_destroy - " << reinterpret_cast<uint64_t>(destroy)
                << "\n ms_MuseSampler_init - " << reinterpret_cast<uint64_t>(initSampler)
+               << "\n ms_disable_reverb - " << reinterpret_cast<uint64_t>(disableReverb)
                << "\n ms_MuseSampler_clear_score - " << reinterpret_cast<uint64_t>(clearScore)
                << "\n ms_MuseSampler_add_track - " << reinterpret_cast<uint64_t>(addTrack)
                << "\n ms_MuseSampler_finalize_track - " << reinterpret_cast<uint64_t>(finalizeTrack)

@@ -785,23 +785,32 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
     }
 
     mpe::PlaybackData playbackData = notationPlayback()->trackPlaybackData(instrumentTrackId);
-
-    AudioInputParams inParams = audioSettings()->trackInputParams(instrumentTrackId);
-    AudioOutputParams outParams = trackOutputParams(instrumentTrackId);
-
     if (!playbackData.isValid()) {
         return;
     }
 
-    if (!inParams.isValid()) {
-        bool isMetronome = notationPlayback()->metronomeTrackId() == instrumentTrackId;
+    AudioInputParams inParams = audioSettings()->trackInputParams(instrumentTrackId);
+    AudioOutputParams outParams = trackOutputParams(instrumentTrackId);
 
+    bool isMetronome = notationPlayback()->metronomeTrackId() == instrumentTrackId;
+
+    if (!inParams.isValid()) {
         if (isMetronome) {
             const SoundProfile& profile = profilesRepo()->profile(configuration()->basicSoundProfileName());
             inParams = { profile.findResource(playbackData.setupData), {} };
         } else {
             const SoundProfile& profile = profilesRepo()->profile(audioSettings()->activeSoundProfile());
             inParams = { profile.findResource(playbackData.setupData), {} };
+        }
+    }
+
+    if (!isMetronome && outParams.auxSends.empty()) {
+        const String& instrumentSoundId = inParams.resourceMeta.attributeVal(PLAYBACK_SETUP_DATA_ATTRIBUTE);
+        AudioSourceType sourceType = inParams.isValid() ? inParams.type() : AudioSourceType::Fluid;
+
+        for (aux_channel_idx_t idx = 0; idx < AUX_CHANNEL_NUM; ++idx) {
+            gain_t signalAmount = configuration()->defaultAuxSendValue(idx, sourceType, instrumentSoundId);
+            outParams.auxSends.emplace_back(AuxSendParams { signalAmount, true });
         }
     }
 
@@ -845,7 +854,7 @@ void PlaybackController::addAuxTrack(aux_channel_idx_t index, const TrackAddFini
 
     if (audioSettings()->containsAuxOutputParams(index)) {
         outParams = audioSettings()->auxOutputParams(index);
-    } else if (index == 0) {
+    } else if (index == REVERB_CHANNEL_IDX) {
         outParams = makeReverbOutputParams();
     }
 
@@ -892,7 +901,7 @@ void PlaybackController::setTrackActivity(const engraving::InstrumentTrackId& in
     playback()->audioOutput()->setOutputParams(m_currentSequenceId, trackId, std::move(outParams));
 }
 
-AudioOutputParams PlaybackController::trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const
+AudioOutputParams PlaybackController::trackOutputParams(const InstrumentTrackId& instrumentTrackId) const
 {
     IF_ASSERT_FAILED(audioSettings() && notationConfiguration() && notationPlayback()) {
         return {};
@@ -907,11 +916,6 @@ AudioOutputParams PlaybackController::trackOutputParams(const engraving::Instrum
 
     if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId)) {
         result.muted = !notationConfiguration()->isPlayChordSymbolsEnabled();
-    }
-
-    if (result.auxSends.empty()) {
-        result.auxSends.emplace_back(AuxSendParams { 0.25, true }); // used by default for the reverb effect
-        result.auxSends.emplace_back(AuxSendParams { 0.0, true }); // no effects are assigned by default
     }
 
     return result;

@@ -22,6 +22,7 @@
 #include "playbackconfigurationstub.h"
 
 using namespace mu::playback;
+using namespace mu::audio;
 
 bool PlaybackConfigurationStub::playNotesWhenEditing() const
 {
@@ -76,6 +77,11 @@ void PlaybackConfigurationStub::setAuxSendVisible(audio::aux_channel_idx_t, bool
 mu::async::Channel<mu::audio::aux_channel_idx_t, bool> PlaybackConfigurationStub::isAuxSendVisibleChanged() const
 {
     return {};
+}
+
+gain_t PlaybackConfigurationStub::defaultAuxSendValue(aux_channel_idx_t, AudioSourceType, const String&) const
+{
+    return 0.f;
 }
 
 const SoundProfileName& PlaybackConfigurationStub::basicSoundProfileName() const

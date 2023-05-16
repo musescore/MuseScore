@@ -46,6 +46,9 @@ public:
     void setAuxSendVisible(audio::aux_channel_idx_t index, bool visible) override;
     async::Channel<audio::aux_channel_idx_t, bool> isAuxSendVisibleChanged() const override;
 
+    audio::gain_t defaultAuxSendValue(audio::aux_channel_idx_t index, audio::AudioSourceType sourceType,
+                                      const String& instrumentSoundId) const override;
+
     const SoundProfileName& basicSoundProfileName() const override;
     const SoundProfileName& museSoundProfileName() const override;
 

@@ -47,6 +47,8 @@ public:
     std::string version() const override;
     bool isInstalled() const override;
 
+    float defaultReverbLevel(const String& instrumentSoundId) const override;
+
 private:
     bool checkLibrary() const;
     bool isVersionSupported() const;

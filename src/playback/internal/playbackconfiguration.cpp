@@ -26,6 +26,8 @@
 
 #include "playbacktypes.h"
 
+#include "log.h"
+
 using namespace mu::playback;
 using namespace mu::framework;
 using namespace mu::audio;
@@ -154,6 +156,25 @@ void PlaybackConfiguration::setAuxSendVisible(aux_channel_idx_t index, bool visi
 mu::async::Channel<aux_channel_idx_t, bool> PlaybackConfiguration::isAuxSendVisibleChanged() const
 {
     return m_isAuxSendVisibleChanged;
+}
+
+gain_t PlaybackConfiguration::defaultAuxSendValue(aux_channel_idx_t index, AudioSourceType sourceType,
+                                                  const String& instrumentSoundId) const
+{
+    TRACEFUNC;
+
+    constexpr gain_t DEFAULT_VALUE = 0.30f;
+
+    if (sourceType == AudioSourceType::MuseSampler) {
+        if (index == REVERB_CHANNEL_IDX) {
+            float lvl = musesamplerInfo()->defaultReverbLevel(instrumentSoundId);
+            return RealIsNull(lvl) ? DEFAULT_VALUE : lvl;
+        }
+    } else if (sourceType == AudioSourceType::Vsti) {
+        return 0.f;
+    }
+
+    return DEFAULT_VALUE;
 }
 
 const SoundProfileName& PlaybackConfiguration::basicSoundProfileName() const
