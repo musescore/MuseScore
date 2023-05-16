@@ -641,8 +641,8 @@ void FiguredBassItem::undoSetPrefix(Modifier pref)
             undoChangeProperty(Pid::FBSUFFIX, int(Modifier::NONE));
         }
         // re-generate displayText
-        LayoutContext ctx(score());
-        v0::TLayout::layout(this, ctx);
+        layout::v0::LayoutContext ctx(score());
+        layout::v0::TLayout::layout(this, ctx);
     }
 }
 
@@ -651,8 +651,8 @@ void FiguredBassItem::undoSetDigit(int digit)
     if (digit >= 0 && digit <= 9) {
         undoChangeProperty(Pid::FBDIGIT, digit);
         // re-generate displayText
-        LayoutContext ctx(score());
-        v0::TLayout::layout(this, ctx);
+        layout::v0::LayoutContext ctx(score());
+        layout::v0::TLayout::layout(this, ctx);
     }
 }
 
@@ -664,56 +664,56 @@ void FiguredBassItem::undoSetSuffix(Modifier suff)
         undoChangeProperty(Pid::FBPREFIX, int(Modifier::NONE));
     }
     // re-generate displayText
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout(this, ctx);
 }
 
 void FiguredBassItem::undoSetContLine(ContLine val)
 {
     undoChangeProperty(Pid::FBCONTINUATIONLINE, int(val));
     // re-generate displayText
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout(this, ctx);
 }
 
 void FiguredBassItem::undoSetParenth1(Parenthesis par)
 {
     undoChangeProperty(Pid::FBPARENTHESIS1, int(par));
     // re-generate displayText
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout(this, ctx);
 }
 
 void FiguredBassItem::undoSetParenth2(Parenthesis par)
 {
     undoChangeProperty(Pid::FBPARENTHESIS2, int(par));
     // re-generate displayText
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout(this, ctx);
 }
 
 void FiguredBassItem::undoSetParenth3(Parenthesis par)
 {
     undoChangeProperty(Pid::FBPARENTHESIS3, int(par));
     // re-generate displayText
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout(this, ctx);
 }
 
 void FiguredBassItem::undoSetParenth4(Parenthesis par)
 {
     undoChangeProperty(Pid::FBPARENTHESIS4, int(par));
     // re-generate displayText
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout(this, ctx);
 }
 
 void FiguredBassItem::undoSetParenth5(Parenthesis par)
 {
     undoChangeProperty(Pid::FBPARENTHESIS5, int(par));
     // re-generate displayText
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

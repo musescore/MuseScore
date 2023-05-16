@@ -60,7 +60,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::v0;
+using namespace mu::engraving::layout::v0;
 
 //---------------------------------------------------------
 //   collectSystem
@@ -862,7 +862,7 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
             for (Note* note : c->notes()) {
                 for (EngravingItem* item : note->el()) {
                     if (item && item->isStretchedBend()) {
-                        v0::TLayout::layoutStretched(toStretchedBend(item), ctx);
+                        layout::v0::TLayout::layoutStretched(toStretchedBend(item), ctx);
                     }
                 }
             }
@@ -1070,7 +1070,7 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isHarpPedalDiagram()) {
-                v0::TLayout::layoutItem(e, ctx);
+                layout::v0::TLayout::layoutItem(e, ctx);
             }
         }
     }

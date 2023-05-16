@@ -36,7 +36,9 @@ class Score;
 class Segment;
 class Staff;
 class Slur;
+}
 
+namespace mu::engraving::layout::v0 {
 class ChordLayout
 {
 public:

@@ -23,13 +23,15 @@
 #define MU_ENGRAVING_MEASURELAYOUT_H
 
 #include "layoutoptions.h"
+#include "layoutcontext.h"
 
 namespace mu::engraving {
 class Measure;
 class MeasureBase;
 class Score;
+}
 
-class LayoutContext;
+namespace mu::engraving::layout::v0 {
 class MeasureLayout
 {
 public:

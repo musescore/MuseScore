@@ -279,12 +279,12 @@ void Beam::move(const PointF& offset)
 void Beam::layoutIfNeed()
 {
     if (!_layoutInfo.isValid()) {
-        LayoutContext ctx(score());
-        v0::TLayout::layout(this, ctx);
+        layout::v0::LayoutContext ctx(score());
+        layout::v0::TLayout::layout(this, ctx);
     }
 }
 
-PointF Beam::chordBeamAnchor(const ChordRest* chord, BeamTremoloLayout::ChordBeamAnchorType anchorType) const
+PointF Beam::chordBeamAnchor(const ChordRest* chord, layout::v0::BeamTremoloLayout::ChordBeamAnchorType anchorType) const
 {
     return _layoutInfo.chordBeamAnchor(chord, anchorType);
 }
@@ -320,13 +320,13 @@ void Beam::setTremAnchors()
             // find the left-side anchor
             double width = _endAnchor.x() - _startAnchor.x();
             double height = _endAnchor.y() - _startAnchor.y();
-            double x = chordBeamAnchor(c, BeamTremoloLayout::ChordBeamAnchorType::Middle).x();
+            double x = chordBeamAnchor(c, layout::v0::BeamTremoloLayout::ChordBeamAnchorType::Middle).x();
             double proportionAlongX = (x - _startAnchor.x()) / width;
             double y = _startAnchor.y() + (proportionAlongX * height);
             y += regularBeams * (score()->styleB(Sid::useWideBeams) ? 1.0 : 0.75) * spatium() * (tremUp ? 1. : -1.);
             tremAnchor.y1 = y;
             // find the right-side anchor
-            x = chordBeamAnchor(t->chord2(), BeamTremoloLayout::ChordBeamAnchorType::Middle).x();
+            x = chordBeamAnchor(t->chord2(), layout::v0::BeamTremoloLayout::ChordBeamAnchorType::Middle).x();
             proportionAlongX = (x - _startAnchor.x()) / width;
             y = _startAnchor.y() + (proportionAlongX * height);
             y += regularBeams * (score()->styleB(Sid::useWideBeams) ? 1.0 : 0.75) * spatium() * (tremUp ? 1. : -1.);

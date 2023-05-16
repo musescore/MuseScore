@@ -28,7 +28,9 @@ namespace mu::engraving {
 class ChordRest;
 class DurationElement;
 class Tuplet;
+}
 
+namespace mu::engraving::layout::v0 {
 class TupletLayout
 {
 public:

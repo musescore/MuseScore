@@ -84,8 +84,8 @@ TimeDialog::TimeDialog(QWidget* parent)
     }
 
     ElementPtr el = sp->elementForCellAt(2);
-    LayoutContext lctx(el->score());
-    v0::TLayout::layoutItem(el.get(), lctx);
+    layout::v0::LayoutContext lctx(el->score());
+    layout::v0::TLayout::layoutItem(el.get(), lctx);
 
     sp->setSelected(2);
     paletteChanged(2);

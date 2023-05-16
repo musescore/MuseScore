@@ -25,7 +25,7 @@
 #include "libmscore/score.h"
 #include "libmscore/spanner.h"
 
-using namespace mu::engraving;
+using namespace mu::engraving::layout::v0;
 
 LayoutContext::LayoutContext(Score* score)
     : m_score(score)

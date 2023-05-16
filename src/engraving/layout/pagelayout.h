@@ -28,7 +28,9 @@
 namespace mu::engraving {
 class Page;
 class System;
+}
 
+namespace mu::engraving::layout::v0 {
 class PageLayout
 {
 public:

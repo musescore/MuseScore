@@ -51,7 +51,7 @@ public:
     Shape shape() const override;
 
 private:
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
 
     Sid getPropertyStyle(Pid) const override;
 

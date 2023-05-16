@@ -206,8 +206,8 @@ Text* Page::layoutHeaderFooter(int area, const String& ss) const
     }
     text->setAlign(align);
     text->setXmlText(s);
-    LayoutContext ctx(text->score());
-    v0::TLayout::layout(text, ctx);
+    layout::v0::LayoutContext ctx(text->score());
+    layout::v0::TLayout::layout(text, ctx);
     return text;
 }
 

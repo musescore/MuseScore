@@ -33,7 +33,9 @@ class Score;
 class Segment;
 class Spanner;
 class System;
+}
 
+namespace mu::engraving::layout::v0 {
 class SystemLayout
 {
 public:

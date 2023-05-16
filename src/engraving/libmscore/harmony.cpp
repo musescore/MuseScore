@@ -1258,8 +1258,8 @@ const ChordDescription* Harmony::generateDescription()
 
 void Harmony::layout1()
 {
-    LayoutContext ctx(score());
-    v0::TLayout::layout1(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout1(this, ctx);
 }
 
 //---------------------------------------------------------

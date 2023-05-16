@@ -101,8 +101,8 @@ void TextBase::startEdit(EditData& ed)
     ted->startUndoIdx = score()->undoStack()->getCurIdx();
 
     if (layoutInvalid) {
-        LayoutContext ctx(score());
-        v0::TLayout::layout(this, ctx);
+        layout::v0::LayoutContext ctx(score());
+        layout::v0::TLayout::layout(this, ctx);
     }
     if (!ted->cursor()->set(ed.startMove)) {
         resetFormatting();
@@ -196,8 +196,8 @@ void TextBase::endEdit(EditData& ed)
             Lyrics* prev = prevLyrics(toLyrics(this));
             if (prev) {
                 prev->setRemoveInvalidSegments();
-                LayoutContext ctx(score());
-                v0::TLayout::layout(prev, ctx);
+                layout::v0::LayoutContext ctx(score());
+                layout::v0::TLayout::layout(prev, ctx);
             }
         }
         return;

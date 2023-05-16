@@ -150,7 +150,7 @@ protected:
 
 private:
 
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
     friend class Factory;
     Rest(Segment* parent);
     Rest(Segment* parent, const TDuration&);

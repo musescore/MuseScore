@@ -27,6 +27,10 @@
 #include "line.h"
 #include "textbase.h"
 
+namespace mu::engraving::layout::v0 {
+class LyricsLayout;
+}
+
 namespace mu::engraving {
 //---------------------------------------------------------
 //   Lyrics
@@ -101,7 +105,7 @@ protected:
 
 private:
 
-    friend class LyricsLayout;
+    friend class layout::v0::LyricsLayout;
     friend class Factory;
     Lyrics(ChordRest* parent);
     Lyrics(const Lyrics&);
@@ -144,7 +148,7 @@ public:
     SpannerSegment* layoutSystem(System*) override;
 
 protected:
-    friend class LyricsLayout;
+    friend class layout::v0::LyricsLayout;
 
     Lyrics* _nextLyrics;
 };
@@ -170,7 +174,7 @@ public:
     Lyrics* lyrics() const { return lyricsLine()->lyrics(); }
 
 protected:
-    friend class LyricsLayout;
+    friend class layout::v0::LyricsLayout;
     int _numOfDashes = 0;
     double _dashLength = 0;
 };

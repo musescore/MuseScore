@@ -58,7 +58,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::v0;
+using namespace mu::engraving::layout::v0;
 
 //---------------------------------------------------------
 //   getNextPage
@@ -333,7 +333,7 @@ void PageLayout::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                             }
                         }
                     } else if (e->isBarLine()) {
-                        v0::TLayout::layout2(toBarLine(e), ctx);
+                        layout::v0::TLayout::layout2(toBarLine(e), ctx);
                     }
                 }
             }

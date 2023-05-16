@@ -62,7 +62,7 @@ public:
 
 protected:
 
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
 
     static RectF boundingBoxOfLine(const PointF& p1, const PointF& p2, double lw2, bool isDottedLine);
 

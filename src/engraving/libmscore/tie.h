@@ -35,13 +35,13 @@ class TieSegment final : public SlurTieSegment
 {
     OBJECT_ALLOCATOR(engraving, TieSegment)
 
-    mu::PointF autoAdjustOffset;
+    PointF autoAdjustOffset;
     double shoulderHeightMin = 0.4;
     double shoulderHeightMax = 1.3;
 
-    void setAutoAdjust(const mu::PointF& offset);
-    void setAutoAdjust(double x, double y) { setAutoAdjust(mu::PointF(x, y)); }
-    mu::PointF getAutoAdjust() const { return autoAdjustOffset; }
+    void setAutoAdjust(const PointF& offset);
+    void setAutoAdjust(double x, double y) { setAutoAdjust(PointF(x, y)); }
+    PointF getAutoAdjust() const { return autoAdjustOffset; }
 
 protected:
     void changeAnchor(EditData&, EngravingItem*) override;
@@ -55,7 +55,7 @@ public:
     int subtype() const override { return static_cast<int>(spanner()->type()); }
     void draw(mu::draw::Painter*) const override;
 
-    void adjustY(const mu::PointF& p1, const mu::PointF& p2);
+    void adjustY(const PointF& p1, const PointF& p2);
     void adjustX();
     void finalizeSegment();
 
@@ -66,7 +66,7 @@ public:
 
     Tie* tie() const { return (Tie*)spanner(); }
 
-    void computeBezier(mu::PointF so = mu::PointF()) override;
+    void computeBezier(PointF so = PointF()) override;
     void addLineAttachPoints();
 };
 
@@ -110,7 +110,7 @@ public:
 
 private:
 
-    friend class SlurTieLayout;
+    friend class layout::v0::SlurTieLayout;
 
     bool _isInside = false;
 };

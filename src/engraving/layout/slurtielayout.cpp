@@ -38,7 +38,7 @@
 #include "tlayout.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::v0;
+using namespace mu::engraving::layout::v0;
 
 void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
 {
@@ -1010,7 +1010,7 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
         }
         Chord* c1 = item->startNote()->chord();
         item->setTick(c1->tick());
-        if (item->_slurDirection == DirectionV::AUTO) {
+        if (item->slurDirection() == DirectionV::AUTO) {
             bool simpleException = st && st->isSimpleTabStaff();
             if (st && st->isSimpleTabStaff()) {
                 item->_up = isUpVoice(c1->voice());

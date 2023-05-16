@@ -187,7 +187,7 @@ public:
 private:
 
     friend class FiguredBass;
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
 
     static const Char normParenthToChar[int(Parenthesis::NUMOF)];
 
@@ -301,7 +301,7 @@ public:
 
 private:
 
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
     friend class Factory;
     FiguredBass(Segment* parent = 0);
     FiguredBass(const FiguredBass&);

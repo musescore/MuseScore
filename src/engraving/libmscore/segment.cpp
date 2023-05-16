@@ -2259,8 +2259,8 @@ void Segment::createShape(staff_idx_t staffIdx)
         setVisible(true);
         BarLine* bl = toBarLine(element(staffIdx * VOICES));
         if (bl) {
-            LayoutContext lctx(score());
-            RectF r = v0::TLayout::layoutRect(bl, lctx);
+            layout::v0::LayoutContext lctx(score());
+            RectF r = layout::v0::TLayout::layoutRect(bl, lctx);
             s.add(r.translated(bl->pos()), bl);
         }
         s.addHorizontalSpacing(bl, 0, 0);
@@ -2312,8 +2312,8 @@ void Segment::createShape(staff_idx_t staffIdx)
 
         if (e->isHarmony()) {
             // use same spacing calculation as for chordrest
-            LayoutContext ctx(score());
-            v0::TLayout::layout(toHarmony(e), ctx);
+            layout::v0::LayoutContext ctx(score());
+            layout::v0::TLayout::layout(toHarmony(e), ctx);
 
             double x1 = e->bbox().x() + e->pos().x();
             double x2 = e->bbox().x() + e->bbox().width() + e->pos().x();

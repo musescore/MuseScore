@@ -28,6 +28,10 @@
 #include "durationtype.h"
 #include "property.h"
 
+namespace mu::engraving::layout::v0 {
+class BeamLayout;
+}
+
 namespace mu::engraving {
 class Chord;
 class ChordRest;
@@ -111,7 +115,7 @@ public:
 
     void layoutIfNeed();
 
-    PointF chordBeamAnchor(const ChordRest* chord, BeamTremoloLayout::ChordBeamAnchorType anchorType) const;
+    PointF chordBeamAnchor(const ChordRest* chord, layout::v0::BeamTremoloLayout::ChordBeamAnchorType anchorType) const;
     double chordBeamAnchorY(const ChordRest* chord) const;
 
     const std::vector<ChordRest*>& elements() const { return _elements; }
@@ -196,7 +200,7 @@ public:
 
 private:
 
-    friend class BeamLayout;
+    friend class layout::v0::BeamLayout;
     friend class Factory;
     friend class BeamSegment;
     Beam(System* parent);
@@ -229,7 +233,7 @@ private:
     double _beamWidth        { 0.0f }; // how wide each beam is
     mu::PointF _startAnchor;
     mu::PointF _endAnchor;
-    BeamTremoloLayout _layoutInfo;
+    layout::v0::BeamTremoloLayout _layoutInfo;
 
     // for tabs
     bool _isBesideTabStaff  { false };

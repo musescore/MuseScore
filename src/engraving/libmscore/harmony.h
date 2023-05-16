@@ -86,7 +86,7 @@ class Harmony final : public TextBase
     OBJECT_ALLOCATOR(engraving, Harmony)
     DECLARE_CLASSOF(ElementType::HARMONY)
 
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
 
     int _rootTpc;               // root note for chord
     int _baseTpc;               // bass note or chord base; used for "slash" chords

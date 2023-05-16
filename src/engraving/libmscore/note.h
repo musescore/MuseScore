@@ -462,7 +462,7 @@ public:
 
 private:
 
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
     friend class Factory;
     Note(Chord* ch = 0);
     Note(const Note&, bool link = false);

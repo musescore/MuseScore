@@ -372,7 +372,7 @@ private:
 
     friend class compat::Read302;
     friend class rw400::Read400;
-    friend class Layout;
+    friend class layout::v0::Layout;
 
     static std::set<Score*> validScores;
     int _linkId { 0 };
@@ -441,7 +441,7 @@ private:
     double _noteHeadWidth { 0.0 };         // cached value
 
     RootItem* m_rootItem = nullptr;
-    Layout m_layout;
+    layout::v0::Layout m_layout;
     LayoutOptions m_layoutOptions;
 
     mu::async::Channel<EngravingItem*> m_elementDestroyed;

@@ -260,8 +260,8 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             if (barLine) {
                 segment = measure->getSegmentR(st, t);
                 segment->add(barLine);
-                LayoutContext lctx(barLine->score());
-                v0::TLayout::layout(barLine, lctx);
+                layout::v0::LayoutContext lctx(barLine->score());
+                layout::v0::TLayout::layout(barLine, lctx);
             }
             if (fermata) {
                 segment->add(fermata);

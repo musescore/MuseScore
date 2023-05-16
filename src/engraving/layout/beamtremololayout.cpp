@@ -36,7 +36,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::v0;
+using namespace mu::engraving::layout::v0;
 
 namespace mu::engraving {
 constexpr std::array _maxSlopes = { 0, 1, 2, 3, 4, 5, 6, 7 };

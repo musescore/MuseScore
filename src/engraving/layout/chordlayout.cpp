@@ -62,7 +62,7 @@
 #include "slurtielayout.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::v0;
+using namespace mu::engraving::layout::v0;
 
 void ChordLayout::layout(Chord* item, LayoutContext& ctx)
 {
@@ -1124,7 +1124,7 @@ void ChordLayout::layoutStem(Chord* item, LayoutContext& ctx)
         if (!item->_stemSlash) {
             item->add(Factory::createStemSlash(item));
         }
-        v0::TLayout::layout(item->_stemSlash, ctx);
+        layout::v0::TLayout::layout(item->_stemSlash, ctx);
     } else if (item->_stemSlash) {
         item->remove(item->_stemSlash);
     }
@@ -1137,7 +1137,7 @@ void ChordLayout::layoutHook(Chord* item, LayoutContext& ctx)
         item->computeUp();
     }
     item->_hook->setHookType(item->up() ? item->durationType().hooks() : -item->durationType().hooks());
-    v0::TLayout::layout(item->_hook, ctx);
+    layout::v0::TLayout::layout(item->_hook, ctx);
 }
 
 //---------------------------------------------------------

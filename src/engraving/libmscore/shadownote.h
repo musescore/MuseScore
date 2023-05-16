@@ -70,7 +70,7 @@ public:
     SymId flagSym() const;
 
 private:
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
 
     Fraction m_tick;
     int m_lineIndex;

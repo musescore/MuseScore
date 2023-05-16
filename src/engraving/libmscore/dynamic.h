@@ -105,7 +105,7 @@ public:
 
 private:
 
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
 
     DynamicType _dynamicType;
     Expression* _snappedExpression = nullptr;

@@ -273,8 +273,8 @@ void Bracket::endEdit(EditData& ed)
 void Bracket::editDrag(EditData& ed)
 {
     h2 += ed.delta.y() * .5;
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

@@ -188,8 +188,8 @@ bool SlurSegment::edit(EditData& ed)
 
     if (ed.key == Key_Home && !ed.modifiers) {
         ups(ed.curGrip).off = PointF();
-        LayoutContext ctx(score());
-        v0::TLayout::layout(sl, ctx);
+        layout::v0::LayoutContext ctx(score());
+        layout::v0::TLayout::layout(sl, ctx);
         triggerLayout();
         return true;
     }
@@ -234,7 +234,7 @@ bool SlurSegment::edit(EditData& ed)
 
 void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
 {
-    LayoutContext ctx(score());
+    layout::v0::LayoutContext ctx(score());
     ChordRest* cr = element->isChordRest() ? toChordRest(element) : nullptr;
     ChordRest* scr = spanner()->startCR();
     ChordRest* ecr = spanner()->endCR();
@@ -298,13 +298,13 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
                 }
             }
             score()->undo(new ChangeStartEndSpanner(sp, se, ee));
-            v0::TLayout::layout(sp, ctx);
+            layout::v0::TLayout::layout(sp, ctx);
         }
     }
 
     const size_t segments  = spanner()->spannerSegments().size();
     ups(ed.curGrip).off = PointF();
-    v0::TLayout::layout(spanner(), ctx);
+    layout::v0::TLayout::layout(spanner(), ctx);
     if (spanner()->spannerSegments().size() != segments) {
         const std::vector<SpannerSegment*>& ss = spanner()->spannerSegments();
         const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::DRAG;
@@ -320,8 +320,8 @@ void SlurSegment::editDrag(EditData& ed)
     System* startSys = slur()->startCR()->measure()->system();
     System* endSys = slur()->endCR()->measure()->system();
     if (startSys && endSys && startSys == endSys) {
-        LayoutContext ctx(score());
-        v0::TLayout::layout(slur(), ctx);
+        layout::v0::LayoutContext ctx(score());
+        layout::v0::TLayout::layout(slur(), ctx);
     }
 }
 
@@ -1026,8 +1026,8 @@ bool Slur::isDirectionMixture(Chord* c1, Chord* c2)
 
 SpannerSegment* Slur::layoutSystem(System* system)
 {
-    LayoutContext ctx(score());
-    return SlurTieLayout::layoutSystem(this, system, ctx);
+    layout::v0::LayoutContext ctx(score());
+    return layout::v0::SlurTieLayout::layoutSystem(this, system, ctx);
 }
 
 void Slur::computeUp()

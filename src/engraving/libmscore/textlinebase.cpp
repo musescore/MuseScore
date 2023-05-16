@@ -64,8 +64,8 @@ TextLineBaseSegment::TextLineBaseSegment(const TextLineBaseSegment& seg)
     m_text->setParent(this);
     m_endText->setParent(this);
     // set the right _text
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    layout::v0::LayoutContext ctx(score());
+    layout::v0::TLayout::layout(this, ctx);
 }
 
 TextLineBaseSegment::~TextLineBaseSegment()

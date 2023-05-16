@@ -32,7 +32,6 @@
 
 #include "layout/tremololayout.h"
 
-
 #include "beam.h"
 #include "chord.h"
 #include "measure.h"
@@ -184,7 +183,7 @@ void Tremolo::createBeamSegments()
 //   chordBeamAnchor
 //---------------------------------------------------------
 
-PointF Tremolo::chordBeamAnchor(const ChordRest* chord, BeamTremoloLayout::ChordBeamAnchorType anchorType) const
+PointF Tremolo::chordBeamAnchor(const ChordRest* chord, layout::v0::BeamTremoloLayout::ChordBeamAnchorType anchorType) const
 {
     return _layoutInfo.chordBeamAnchor(chord, anchorType);
 }
@@ -450,7 +449,8 @@ PointF Tremolo::pagePos() const
 
 double Tremolo::defaultStemLengthStart()
 {
-    return TremoloLayout::extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(), _chord2->defaultStemLength()).first;
+    return layout::v0::TremoloLayout::extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(),
+                                                                        _chord2->defaultStemLength()).first;
 }
 
 //---------------------------------------------------------
@@ -459,7 +459,8 @@ double Tremolo::defaultStemLengthStart()
 
 double Tremolo::defaultStemLengthEnd()
 {
-    return TremoloLayout::extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(), _chord2->defaultStemLength()).second;
+    return layout::v0::TremoloLayout::extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(),
+                                                                        _chord2->defaultStemLength()).second;
 }
 
 //---------------------------------------------------------

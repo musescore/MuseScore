@@ -48,7 +48,7 @@ public:
     Chord* chord() const { return (Chord*)explicitParent(); }
 
 private:
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
     friend class Factory;
     StemSlash(Chord* parent = 0);
 

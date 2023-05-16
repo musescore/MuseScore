@@ -28,6 +28,10 @@
 #include "durationelement.h"
 #include "property.h"
 
+namespace mu::engraving::layout::v0 {
+class TupletLayout;
+}
+
 namespace mu::engraving {
 class Text;
 class Spanner;
@@ -145,7 +149,7 @@ public:
     static int computeTupletDenominator(int numerator, Fraction totalDuration);
 
 private:
-    friend class TupletLayout;
+    friend class layout::v0::TupletLayout;
     friend class DurationElement;
 
     void addDurationElement(DurationElement* de);

@@ -295,7 +295,7 @@ class TextBase : public EngravingItem
     M_PROPERTY(Spatium,    paddingWidth,           setPaddingWidth)
     M_PROPERTY(int,        frameRound,             setFrameRound)
 
-    friend class v0::TLayout;
+    friend class layout::v0::TLayout;
 
     Align _align;
 

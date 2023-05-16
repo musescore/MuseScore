@@ -28,7 +28,9 @@
 
 namespace mu::engraving {
 class Tremolo;
+}
 
+namespace mu::engraving::layout::v0 {
 class TremoloLayout
 {
 public:

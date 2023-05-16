@@ -29,7 +29,7 @@
 #include "tlayout.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::v0;
+using namespace mu::engraving::layout::v0;
 
 //   layoutArpeggio2
 //    called after layout of page
