@@ -176,6 +176,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutpage.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/slurtielayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/slurtielayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/layout/arpeggiolayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layout/arpeggiolayout.h
 
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderingcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext.cpp

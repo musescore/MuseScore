@@ -53,6 +53,7 @@
 #include "measurelayout.h"
 #include "tupletlayout.h"
 #include "verticalgapdata.h"
+#include "arpeggiolayout.h"
 
 #include "log.h"
 
@@ -303,7 +304,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                                     }
                                 }
                             }
-                            c->layoutArpeggio2();
+                            ArpeggioLayout::layoutArpeggio2(c->arpeggio(), ctx);
                             ChordLayout::layoutSpanners(c, ctx);
                             if (c->tremolo()) {
                                 Tremolo* t = c->tremolo();

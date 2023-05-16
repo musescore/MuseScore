@@ -73,16 +73,6 @@ class Accidental final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Accidental)
     DECLARE_CLASSOF(ElementType::ACCIDENTAL)
 
-    std::vector<SymElement> el;
-    AccidentalType _accidentalType { AccidentalType::NONE };
-    bool m_isSmall                    { false };
-    AccidentalBracket _bracket     { AccidentalBracket::NONE };
-    AccidentalRole _role           { AccidentalRole::AUTO };
-
-    friend class Factory;
-
-    Accidental(EngravingItem* parent);
-
 public:
 
     Accidental* clone() const override { return new Accidental(*this); }
@@ -137,6 +127,18 @@ public:
     String accessibleInfo() const override;
 
     void computeMag();
+
+private:
+
+    friend class Factory;
+
+    Accidental(EngravingItem* parent);
+
+    std::vector<SymElement> el;
+    AccidentalType _accidentalType { AccidentalType::NONE };
+    bool m_isSmall                    { false };
+    AccidentalBracket _bracket     { AccidentalBracket::NONE };
+    AccidentalRole _role           { AccidentalRole::AUTO };
 };
 
 extern AccidentalVal sym2accidentalVal(SymId id);

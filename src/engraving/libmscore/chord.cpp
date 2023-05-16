@@ -2032,21 +2032,6 @@ void Chord::crossMeasureSetup(bool on)
 }
 
 //---------------------------------------------------------
-//   layoutArpeggio2
-//    called after layout of page
-//---------------------------------------------------------
-
-void Chord::layoutArpeggio2()
-{
-    if (!_arpeggio || _arpeggio->span() < 2) {
-        return;
-    }
-    _arpeggio->computeHeight(/*includeCrossStaffHeight = */ true);
-    LayoutContext ctx(score());
-    TLayout::layout(_arpeggio, ctx);
-}
-
-//---------------------------------------------------------
 //   isChordPlayable
 //   @note Now every related to chord element has it's own "PLAY" property,
 //         However, there is no way to control these properties outside the scope of the chord since the new inspector.

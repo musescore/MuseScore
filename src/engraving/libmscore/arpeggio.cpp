@@ -41,6 +41,8 @@
 #include "segment.h"
 #include "staff.h"
 
+#include "layout/arpeggiolayout.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -136,30 +138,6 @@ double Arpeggio::calcTop() const
         return top - spatium() / 4;
     }
     }
-}
-
-//---------------------------------------------------------
-//   computeHeight
-//---------------------------------------------------------
-
-void Arpeggio::computeHeight(bool includeCrossStaffHeight)
-{
-    Chord* topChord = chord();
-    if (!topChord) {
-        return;
-    }
-    double y = topChord->upNote()->pagePos().y() - topChord->upNote()->headHeight() * .5;
-
-    Note* bottomNote = topChord->downNote();
-    if (includeCrossStaffHeight) {
-        track_idx_t bottomTrack = track() + (_span - 1) * VOICES;
-        EngravingItem* element = topChord->segment()->element(bottomTrack);
-        Chord* bottomChord = (element && element->isChord()) ? toChord(element) : topChord;
-        bottomNote = bottomChord->downNote();
-    }
-
-    double h = bottomNote->pagePos().y() + bottomNote->headHeight() * .5 - y;
-    setHeight(h);
 }
 
 //---------------------------------------------------------
@@ -387,7 +365,8 @@ bool Arpeggio::edit(EditData& ed)
 
     Chord* c = chord();
     setPosX(-(width() + spatium() * .5));
-    c->layoutArpeggio2();
+    LayoutContext lctx(c->score());
+    ArpeggioLayout::layoutArpeggio2(c->arpeggio(), lctx);
     Fraction _tick = tick();
     score()->setLayout(_tick, _tick, staffIdx(), staffIdx() + _span, this);
     return true;
