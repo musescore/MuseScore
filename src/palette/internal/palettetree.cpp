@@ -24,6 +24,9 @@
 
 #include <QBuffer>
 
+#include "engraving/rw/xmlreader.h"
+#include "engraving/rw/xmlwriter.h"
+
 using namespace mu::palette;
 
 void PaletteTree::insert(size_t idx, PalettePtr palette)

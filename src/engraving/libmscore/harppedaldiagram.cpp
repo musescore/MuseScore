@@ -21,19 +21,21 @@
  */
 
 #include "harppedaldiagram.h"
-#include "log.h"
-#include "part.h"
-#include "rw/400/tread.h"
-#include "score.h"
-#include "segment.h"
+
 #include "translation.h"
 #include "types/typesconv.h"
+
+#include "part.h"
+#include "score.h"
+#include "segment.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
 
 // Position of separator character in diagram
-static constexpr int SEPARATOR_IDX = 3;
+static constexpr size_t SEPARATOR_IDX = 3;
 
 static const String harpStringTypeToString(HarpStringType type)
 {
@@ -86,7 +88,7 @@ void HarpPedalDiagram::setPlayablePitches()
         { PedalPosition::SHARP, 1 }
     };
 
-    for (int i = 0; i < _pedalState.size(); i++) {
+    for (size_t i = 0; i < _pedalState.size(); i++) {
         int stringPitch = string2pitch.at(HarpStringType(i));
         int delta = position2delta.at(_pedalState[i]);
         int resPitch = (stringPitch + delta + 12) % 12;
@@ -145,7 +147,7 @@ String HarpPedalDiagram::createDiagramText()
 {
     String diagram;
     if (_isDiagram) {
-        for (int idx = 0; idx < _pedalState.size(); idx++) {
+        for (size_t idx = 0; idx < _pedalState.size(); idx++) {
             if (idx == SEPARATOR_IDX) {
                 // insert separator
                 diagram.append(u"<sym>harpPedalDivider</sym>");
@@ -203,7 +205,7 @@ String HarpPedalDiagram::createDiagramText()
 
         String topLine, bottomLine;
 
-        for (int idx = 0; idx < _pedalState.size(); idx++) {
+        for (size_t idx = 0; idx < _pedalState.size(); idx++) {
             if (_pedalState[idx] != prevState[idx]) {
                 String strName = harpStringTypeToString(HarpStringType(idx));
                 switch (_pedalState[idx]) {
@@ -288,7 +290,7 @@ String HarpPedalDiagram::accessibleInfo() const
     String rez = score() ? score()->getTextStyleUserName(textStyleType()).translated() : TConv::translatedUserName(textStyleType());
     String s;
 
-    for (int idx = 0; idx < _pedalState.size(); idx++) {
+    for (size_t idx = 0; idx < _pedalState.size(); idx++) {
         s.append(harpStringTypeToString(HarpStringType(idx)));
         switch (_pedalState[idx]) {
         case PedalPosition::FLAT:

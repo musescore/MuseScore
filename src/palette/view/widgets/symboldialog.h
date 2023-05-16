@@ -25,6 +25,7 @@
 
 #include "ui_symboldialog.h"
 
+#include "modularity/ioc.h"
 #include "engraving/iengravingfontsprovider.h"
 
 namespace mu::palette {

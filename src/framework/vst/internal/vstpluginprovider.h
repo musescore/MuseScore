@@ -30,7 +30,7 @@ class VstPluginProvider
 {
 public:
     VstPluginProvider(const PluginFactory& factory, const ClassInfo& info);
-    ~VstPluginProvider() = default;
+    ~VstPluginProvider();
 
     PluginComponentPtr component() const;
     PluginControllerPtr controller() const;

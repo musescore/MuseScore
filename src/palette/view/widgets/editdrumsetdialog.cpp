@@ -29,6 +29,7 @@
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
 
+#include "engraving/rw/xmlreader.h"
 #include "engraving/rw/xmlwriter.h"
 
 #include "libmscore/chord.h"
