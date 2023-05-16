@@ -525,7 +525,7 @@ void LayoutSystem::justifySystem(System* system, double curSysWidth, double targ
             continue;
         }
         for (Segment& s : toMeasure(mb)->segments()) {
-            if (s.isChordRestType() && s.visible() && s.enabled() && !s.allElementsInvisible()) {
+            if (s.isChordRestType() && s.ticks() > Fraction(0, 1) && s.visible() && s.enabled() && !s.allElementsInvisible()) {
                 double springConst = 1 / s.stretch();
                 double width = s.width() - s.widthOffset();
                 double preTension = width * springConst;
