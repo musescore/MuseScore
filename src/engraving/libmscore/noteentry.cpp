@@ -159,17 +159,30 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
 
     if (addFlag) {
         ChordRest* c = toChordRest(is.lastSegment()->element(is.track()));
-        bool isTied = (c
-                       && c->isChord()
-                       && !toChord(c)->notes().empty()
-                       && (toChord(c)->notes()[0]->tieFor() || toChord(c)->notes()[0]->tieBack()));
-
         if (c == 0 || !c->isChord()) {
             LOGD("Score::addPitch: cr %s", c ? c->typeName() : "zero");
             return 0;
         }
-        Note* note = isTied ? addNoteToTiedChord(toChord(c), nval, /* forceAccidental */ false, is.articulationIds(), externalInputState)
-                     : addNote(toChord(c), nval, /* forceAccidental */ false, is.articulationIds(), externalInputState);
+
+        Chord* chord = toChord(c);
+        auto isTied = [](const Chord* ch) {
+            if (ch->notes().empty()) {
+                return false;
+            }
+            Note* n = ch->notes().at(0);
+            return n->tieFor() || n->tieBack();
+        };
+
+        Note* note = nullptr;
+        if (isTied(chord)) {
+            note = addNoteToTiedChord(chord, nval, /* forceAccidental */ false, is.articulationIds());
+            if (!note) {
+                note = addNote(chord, nval, /* forceAccidental */ false, is.articulationIds(), externalInputState);
+            }
+        } else {
+            note = addNote(chord, nval, /* forceAccidental */ false, is.articulationIds(), externalInputState);
+        }
+
         if (is.lastSegment() == is.segment()) {
             NoteEntryMethod entryMethod = is.noteEntryMethod();
             if (entryMethod != NoteEntryMethod::REALTIME_AUTO && entryMethod != NoteEntryMethod::REALTIME_MANUAL) {
