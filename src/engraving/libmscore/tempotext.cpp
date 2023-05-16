@@ -30,7 +30,6 @@
 #include "types/typesconv.h"
 #include "types/constants.h"
 
-
 #include "score.h"
 #include "segment.h"
 #include "tempotext.h"

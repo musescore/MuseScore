@@ -24,8 +24,6 @@
 
 #include "translation.h"
 
-
-
 #include "keysig.h"
 #include "measure.h"
 #include "mscore.h"

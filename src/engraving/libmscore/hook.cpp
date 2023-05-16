@@ -22,8 +22,6 @@
 
 #include "hook.h"
 
-
-
 #include "chord.h"
 #include "score.h"
 

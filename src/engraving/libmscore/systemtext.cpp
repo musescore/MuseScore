@@ -22,8 +22,6 @@
 
 #include "systemtext.h"
 
-
-
 using namespace mu;
 
 namespace mu::engraving {

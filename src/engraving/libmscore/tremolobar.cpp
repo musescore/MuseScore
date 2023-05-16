@@ -24,8 +24,6 @@
 
 #include "draw/types/pen.h"
 
-
-
 #include "score.h"
 
 #include "log.h"

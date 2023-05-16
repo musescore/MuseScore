@@ -24,7 +24,6 @@
 
 #include "types/symnames.h"
 
-
 #include "score.h"
 #include "system.h"
 

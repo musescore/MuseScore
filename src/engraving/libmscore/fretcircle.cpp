@@ -22,8 +22,6 @@
 
 #include "fretcircle.h"
 
-
-
 #include "chord.h"
 #include "note.h"
 #include "staff.h"

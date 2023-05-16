@@ -22,8 +22,6 @@
 
 #include "stafftext.h"
 
-
-
 using namespace mu;
 
 namespace mu::engraving {

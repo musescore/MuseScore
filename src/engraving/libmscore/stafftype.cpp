@@ -29,7 +29,6 @@
 #include "rw/xmlreader.h"
 #include "types/typesconv.h"
 
-
 #include "chord.h"
 #include "measure.h"
 #include "mscore.h"

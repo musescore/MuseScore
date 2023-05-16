@@ -27,7 +27,6 @@
 #include "types/symnames.h"
 #include "types/typesconv.h"
 
-
 #include "clef.h"
 #include "masterscore.h"
 #include "measure.h"

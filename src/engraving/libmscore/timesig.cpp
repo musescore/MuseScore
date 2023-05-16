@@ -26,7 +26,6 @@
 #include "translation.h"
 #include "iengravingfont.h"
 
-
 #include "score.h"
 #include "segment.h"
 #include "staff.h"

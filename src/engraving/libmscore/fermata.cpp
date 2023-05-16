@@ -25,7 +25,6 @@
 #include "types/symnames.h"
 #include "types/translatablestring.h"
 
-
 #include "chord.h"
 #include "chordrest.h"
 #include "measure.h"
