@@ -774,14 +774,14 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
             onProjectSuccessfullyUploaded(editUrl, isFirstSave);
         }
 
-        CloudProjectInfo info = project->cloudInfo();
-        if (info.sourceUrl == newSourceUrl && info.revisionId == newRevisionId) {
+        CloudProjectInfo cpinfo = project->cloudInfo();
+        if (cpinfo.sourceUrl == newSourceUrl && cpinfo.revisionId == newRevisionId) {
             return;
         }
 
-        info.sourceUrl = newSourceUrl;
-        info.revisionId = newRevisionId;
-        project->setCloudInfo(info);
+        cpinfo.sourceUrl = newSourceUrl;
+        cpinfo.revisionId = newRevisionId;
+        project->setCloudInfo(cpinfo);
 
         if (!project->isNewlyCreated()) {
             project->save();
