@@ -40,12 +40,16 @@ StyledPopupView {
 
     property variant pedalState: harpModel.pedalState
 
+    property int navigationOrderStart: 0
+    property int navigationOrderEnd: isDiagramNavPanel.order
+
     contentWidth: menuItems.width
 
     contentHeight: menuItems.height
 
     margins: 0
 
+    openPolicy: PopupView.NoActivateFocus
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
     showArrow: false
@@ -111,7 +115,7 @@ StyledPopupView {
             name: "PedalSettings"
             direction: NavigationPanel.Vertical
             section: root.navigationSection
-            order: 1
+            order: root.navigationOrderStart
             accessible.name: qsTrc("notation", "Pedal Settings buttons")
         }
 
@@ -256,7 +260,7 @@ StyledPopupView {
             name: "HarpPedalIsDiagramButtons"
             section: root.navigationSection
             direction: NavigationPanel.Horizontal
-            order: 2
+            order: pedalSettingsNavPanel.order + 1
             accessible.name: qsTrc("notation", "Diagram type buttons")
         }
 

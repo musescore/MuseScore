@@ -70,7 +70,8 @@ FocusScope {
             id: tabPanel
             Layout.fillWidth: true
 
-            navigationSection: navSec
+            navigationPanel.section: navSec
+            navigationPanel.order: popUpLoader.navigationOrderEnd + 1
         }
 
         SeparatorLine { visible: tabPanel.visible }
@@ -97,7 +98,7 @@ FocusScope {
                         section: navSec
                         enabled: notationView.enabled && notationView.visible
                         direction: NavigationPanel.Both
-                        order: 2
+                        order: 1
                     }
 
                     NavigationControl {
@@ -161,6 +162,10 @@ FocusScope {
 
                     ElementPopupLoader {
                         id: popUpLoader
+
+                        navigationSection: navSec
+                        navigationOrderStart: 2
+
                         onOpened: paintView.setIsPopupOpen(true)
                         onClosed: paintView.setIsPopupOpen(false)
                     }
@@ -242,7 +247,7 @@ FocusScope {
             Layout.fillWidth: true
 
             navigationPanel.section: navSec
-            navigationPanel.order: 3
+            navigationPanel.order: tabPanel.navigationPanel.order + 1
 
             onClosed: {
                 fakeNavCtrl.requestActive()

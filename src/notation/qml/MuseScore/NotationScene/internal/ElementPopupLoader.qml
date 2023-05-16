@@ -40,6 +40,10 @@ Item {
     signal opened()
     signal closed()
 
+    property NavigationSection navigationSection: null
+    property int navigationOrderStart: 0
+    property int navigationOrderEnd: Boolean(loader.item) ? loader.item.navigationOrderEnd : 0
+
     QtObject {
         id: prv
 
@@ -102,6 +106,9 @@ Item {
     Component {
         id: harpPedalComp
         HarpPedalPopup {
+            navigationSection: container.navigationSection
+            navigationOrderStart: container.navigationOrderStart
+
             onClosed: {
                 prv.resetOpenedPopup()
                 loader.sourceComponent = null
