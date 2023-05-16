@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "layoutpage.h"
+#include "pagelayout.h"
 
 #include "realfn.h"
 
@@ -47,7 +47,7 @@
 #include "libmscore/tuplet.h"
 
 #include "tlayout.h"
-#include "layoutsystem.h"
+#include "systemlayout.h"
 #include "chordlayout.h"
 #include "beamlayout.h"
 #include "measurelayout.h"
@@ -64,7 +64,7 @@ using namespace mu::engraving::v0;
 //   getNextPage
 //---------------------------------------------------------
 
-void LayoutPage::getNextPage(const LayoutOptions& options, LayoutContext& lc)
+void PageLayout::getNextPage(const LayoutOptions& options, LayoutContext& lc)
 {
     if (!lc.page || lc.curPage >= lc.score()->npages()) {
         lc.page = Factory::createPage(lc.score()->rootItem());
@@ -107,7 +107,7 @@ void LayoutPage::getNextPage(const LayoutOptions& options, LayoutContext& lc)
 //   collectPage
 //---------------------------------------------------------
 
-void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
+void PageLayout::collectPage(const LayoutOptions& options, LayoutContext& ctx)
 {
     TRACEFUNC;
 
@@ -207,7 +207,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                 }
             }
         } else {
-            nextSystem = LayoutSystem::collectSystem(options, ctx, ctx.score());
+            nextSystem = SystemLayout::collectSystem(options, ctx, ctx.score());
             if (nextSystem) {
                 collected = true;
             }
@@ -382,7 +382,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
 //    systems.
 //---------------------------------------------------------
 
-void LayoutPage::layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding)
+void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding)
 {
     if (restHeight < 0.0) {
         LOGN("restHeight < 0.0: %f\n", restHeight);
@@ -499,7 +499,7 @@ void LayoutPage::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
     page->systems().back()->setPosY(y);
 }
 
-void LayoutPage::checkDivider(LayoutContext& ctx, bool left, System* s, double yOffset, bool remove)
+void PageLayout::checkDivider(LayoutContext& ctx, bool left, System* s, double yOffset, bool remove)
 {
     SystemDivider* divider = left ? s->systemDividerLeft() : s->systemDividerRight();
     if ((ctx.score()->styleB(left ? Sid::dividerLeft : Sid::dividerRight)) && !remove) {
@@ -529,7 +529,7 @@ void LayoutPage::checkDivider(LayoutContext& ctx, bool left, System* s, double y
     }
 }
 
-void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, double footerPadding)
+void PageLayout::distributeStaves(const LayoutContext& ctx, Page* page, double footerPadding)
 {
     Score* score = ctx.score();
     VerticalGapDataList vgdl;

@@ -166,14 +166,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/layout/tupletlayout.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/verticalgapdata.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/verticalgapdata.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutsystem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutsystem.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutharmonies.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutharmonies.h
+    ${CMAKE_CURRENT_LIST_DIR}/layout/systemlayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layout/systemlayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/layout/harmonylayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layout/harmonylayout.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/tremololayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/tremololayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutpage.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutpage.h
+    ${CMAKE_CURRENT_LIST_DIR}/layout/pagelayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layout/pagelayout.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/slurtielayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/slurtielayout.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/arpeggiolayout.cpp
