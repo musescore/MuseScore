@@ -44,9 +44,9 @@
 
 #include "layoutcontext.h"
 #include "tlayout.h"
-#include "layoutpage.h"
+#include "pagelayout.h"
 #include "measurelayout.h"
-#include "layoutsystem.h"
+#include "systemlayout.h"
 #include "chordlayout.h"
 #include "beamlayout.h"
 #include "tupletlayout.h"
@@ -90,7 +90,7 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
         m_score->_systems.clear();
         DeleteAll(m_score->pages());
         m_score->pages().clear();
-        LayoutPage::getNextPage(options, ctx);
+        PageLayout::getNextPage(options, ctx);
         return;
     }
 
@@ -218,7 +218,7 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
     ctx.prevMeasure = 0;
 
     MeasureLayout::getNextMeasure(options, ctx);
-    ctx.curSystem = LayoutSystem::collectSystem(options, ctx, m_score);
+    ctx.curSystem = SystemLayout::collectSystem(options, ctx, m_score);
 
     doLayout(options, ctx);
 }
@@ -227,8 +227,8 @@ void Layout::doLayout(const LayoutOptions& options, LayoutContext& lc)
 {
     MeasureBase* lmb;
     do {
-        LayoutPage::getNextPage(options, lc);
-        LayoutPage::collectPage(options, lc);
+        PageLayout::getNextPage(options, lc);
+        PageLayout::collectPage(options, lc);
 
         if (lc.page && !lc.page->systems().empty()) {
             lmb = lc.page->systems().back()->measures().back();
@@ -452,7 +452,7 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
 {
     System* system = ctx.score()->systems().front();
 
-    LayoutSystem::layoutSystemElements(options, ctx, ctx.score(), system);
+    SystemLayout::layoutSystemElements(options, ctx, ctx.score(), system);
 
     system->layout2(ctx);     // compute staff distances
 

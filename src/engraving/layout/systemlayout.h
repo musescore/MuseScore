@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTSYSTEM_H
-#define MU_ENGRAVING_LAYOUTSYSTEM_H
+#ifndef MU_ENGRAVING_SYSTEMLAYOUT_H
+#define MU_ENGRAVING_SYSTEMLAYOUT_H
 
 #include <vector>
 
@@ -34,7 +34,7 @@ class Segment;
 class Spanner;
 class System;
 
-class LayoutSystem
+class SystemLayout
 {
 public:
     static System* collectSystem(const LayoutOptions& options, LayoutContext& lc, Score* score);
@@ -54,4 +54,4 @@ private:
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUTSYSTEM_H
+#endif // MU_ENGRAVING_SYSTEMLAYOUT_H

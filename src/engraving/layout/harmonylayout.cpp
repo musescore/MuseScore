@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "layoutharmonies.h"
+#include "harmonylayout.h"
 
 #include <map>
 #include <vector>
@@ -38,7 +38,7 @@
 using namespace mu::engraving;
 using namespace mu::engraving::v0;
 
-void LayoutHarmonies::layoutHarmonies(const std::vector<Segment*>& sl, LayoutContext& ctx)
+void HarmonyLayout::layoutHarmonies(const std::vector<Segment*>& sl, LayoutContext& ctx)
 {
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
@@ -56,8 +56,8 @@ void LayoutHarmonies::layoutHarmonies(const std::vector<Segment*>& sl, LayoutCon
     }
 }
 
-void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool harmony, const double maxShiftAbove,
-                                     const double maxShiftBelow)
+void HarmonyLayout::alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool harmony, const double maxShiftAbove,
+                                   const double maxShiftBelow)
 {
     // Help class.
     // Contains harmonies/fretboard per segment.

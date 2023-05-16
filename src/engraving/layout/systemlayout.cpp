@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "realfn.h"
-#include "layoutsystem.h"
+#include "systemlayout.h"
 
 #include "libmscore/barline.h"
 #include "libmscore/beam.h"
@@ -51,7 +51,7 @@
 #include "tlayout.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
-#include "layoutharmonies.h"
+#include "harmonylayout.h"
 #include "lyricslayout.h"
 #include "measurelayout.h"
 #include "tupletlayout.h"
@@ -66,7 +66,7 @@ using namespace mu::engraving::v0;
 //   collectSystem
 //---------------------------------------------------------
 
-System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext& ctx, Score* score)
+System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext& ctx, Score* score)
 {
     TRACEFUNC;
 
@@ -502,13 +502,13 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     if (oldSystem && !(oldSystem->page() && oldSystem->page() != ctx.page)) {
         // We may have previously processed the ties of the next system (in LayoutChords::updateLineAttachPoints()).
         // We need to restore them to the correct state.
-        LayoutSystem::restoreTies(oldSystem);
+        SystemLayout::restoreTies(oldSystem);
     }
 
     return system;
 }
 
-void LayoutSystem::justifySystem(System* system, double curSysWidth, double targetSystemWidth)
+void SystemLayout::justifySystem(System* system, double curSysWidth, double targetSystemWidth)
 {
     double rest = targetSystemWidth - curSysWidth;
     if (RealIsNull(rest)) {
@@ -550,7 +550,7 @@ void LayoutSystem::justifySystem(System* system, double curSysWidth, double targ
 //   getNextSystem
 //---------------------------------------------------------
 
-System* LayoutSystem::getNextSystem(LayoutContext& ctx)
+System* SystemLayout::getNextSystem(LayoutContext& ctx)
 {
     Score* score = ctx.score();
     bool isVBox = ctx.curMeasure->isVBox();
@@ -574,7 +574,7 @@ System* LayoutSystem::getNextSystem(LayoutContext& ctx)
     return system;
 }
 
-void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSystem)
+void SystemLayout::hideEmptyStaves(Score* score, System* system, bool isFirstSystem)
 {
     size_t staves = score->nstaves();
     staff_idx_t staffIdx = 0;
@@ -683,7 +683,7 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
     }
 }
 
-void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutContext& ctx, Score* score, System* system)
+void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutContext& ctx, Score* score, System* system)
 {
     if (score->noStaves()) {
         return;
@@ -1100,8 +1100,8 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //-------------------------------------------------------------
 
     if (!hasFretDiagram) {
-        LayoutHarmonies::layoutHarmonies(sl, ctx);
-        LayoutHarmonies::alignHarmonies(system, sl, true, options.maxChordShiftAbove, options.maxChordShiftBelow);
+        HarmonyLayout::layoutHarmonies(sl, ctx);
+        HarmonyLayout::alignHarmonies(system, sl, true, options.maxChordShiftAbove, options.maxChordShiftBelow);
     }
 
     //-------------------------------------------------------------
@@ -1207,8 +1207,8 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         // above the volta.
         //-------------------------------------------------------------
 
-        LayoutHarmonies::layoutHarmonies(sl, ctx);
-        LayoutHarmonies::alignHarmonies(system, sl, false, options.maxFretShiftAbove, options.maxFretShiftBelow);
+        HarmonyLayout::layoutHarmonies(sl, ctx);
+        HarmonyLayout::alignHarmonies(system, sl, false, options.maxFretShiftAbove, options.maxFretShiftBelow);
     }
 
     //-------------------------------------------------------------
@@ -1265,7 +1265,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     }
 }
 
-void LayoutSystem::doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick)
+void SystemLayout::doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick)
 {
     UNUSED(etick);
 
@@ -1283,7 +1283,7 @@ void LayoutSystem::doLayoutTies(System* system, std::vector<Segment*> sl, const 
     }
 }
 
-void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, bool align)
+void SystemLayout::processLines(System* system, std::vector<Spanner*> lines, bool align)
 {
     std::vector<SpannerSegment*> segments;
     for (Spanner* sp : lines) {
@@ -1426,7 +1426,7 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
     }
 }
 
-void LayoutSystem::layoutTies(Chord* ch, System* system, const Fraction& stick)
+void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick)
 {
     SysStaff* staff = system->staff(ch->staffIdx());
     if (!staff->show()) {
@@ -1459,7 +1459,7 @@ void LayoutSystem::layoutTies(Chord* ch, System* system, const Fraction& stick)
  * of cross-beam chords accordingly.
  * *************************************************************************/
 
-void LayoutSystem::updateCrossBeams(System* system, LayoutContext& ctx)
+void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
 {
     system->layout2(ctx); // Computes staff distances, essential for the rest of the calculations
     // Update grace cross beams
@@ -1520,7 +1520,7 @@ void LayoutSystem::updateCrossBeams(System* system, LayoutContext& ctx)
     }
 }
 
-void LayoutSystem::restoreTies(System* system)
+void SystemLayout::restoreTies(System* system)
 {
     std::vector<Segment*> segList;
     for (MeasureBase* mb : system->measures()) {
@@ -1538,7 +1538,7 @@ void LayoutSystem::restoreTies(System* system)
     doLayoutTies(system, segList, stick, etick);
 }
 
-void LayoutSystem::manageNarrowSpacing(System* system, double& curSysWidth, double targetSysWidth, const Fraction minTicks,
+void SystemLayout::manageNarrowSpacing(System* system, double& curSysWidth, double targetSysWidth, const Fraction minTicks,
                                        const Fraction maxTicks)
 {
     static constexpr double step = 0.2; // We'll try reducing the spacing in steps of 20%

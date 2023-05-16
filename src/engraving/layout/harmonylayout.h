@@ -19,28 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTPAGE_H
-#define MU_ENGRAVING_LAYOUTPAGE_H
+#ifndef MU_ENGRAVING_HARMONYLAYOUT_H
+#define MU_ENGRAVING_HARMONYLAYOUT_H
 
-#include "layoutoptions.h"
+#include <vector>
+
 #include "layoutcontext.h"
 
 namespace mu::engraving {
-class Page;
+class Segment;
 class System;
 
-class LayoutPage
+class HarmonyLayout
 {
 public:
 
-    static void getNextPage(const LayoutOptions& options, LayoutContext& lc);
-    static void collectPage(const LayoutOptions& options, LayoutContext& lc);
-
-private:
-    static void layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding);
-    static void checkDivider(LayoutContext& ctx, bool left, System* s, double yOffset, bool remove = false);
-    static void distributeStaves(const LayoutContext& ctx, Page* page, double footerPadding);
+    static void layoutHarmonies(const std::vector<Segment*>& sl, LayoutContext& ctx);
+    static void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool harmony, const double maxShiftAbove,
+                               const double maxShiftBelow);
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUTPAGE_H
+#endif // MU_ENGRAVING_HARMONYLAYOUT_H
