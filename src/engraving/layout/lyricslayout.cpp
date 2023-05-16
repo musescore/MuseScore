@@ -195,19 +195,17 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext&)
         }
     }
 
-    double nominalWidth = item->symWidth(SymId::noteheadBlack);
     if (item->align() == AlignH::HCENTER) {
         //
         // center under notehead, not origin
         // however, lyrics that are melismas or have verse numbers will be forced to left alignment
         //
         // center under note head
+        double nominalWidth = item->symWidth(SymId::noteheadBlack);
         x += nominalWidth * .5 - centerAdjust * 0.5;
     } else if (!(item->align() == AlignH::RIGHT)) {
         // even for left aligned syllables, ignore leading verse numbers and/or punctuation
         x -= leftAdjust;
-    } else if (item->align() == AlignH::RIGHT) {
-        x += nominalWidth;
     }
 
     item->setPosX(x);
