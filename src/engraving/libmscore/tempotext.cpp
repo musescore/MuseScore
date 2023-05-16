@@ -396,6 +396,7 @@ PropertyValue TempoText::propertyDefault(Pid id) const
 //---------------------------------------------------------
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //    called after Measure->stretchMeasure()
@@ -412,6 +413,8 @@ void TempoText::layout()
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 =======
 >>>>>>> 11610ff2b5... [engraving] removed item->layout method
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 //   duration2userName
 //---------------------------------------------------------
 

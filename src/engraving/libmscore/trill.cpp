@@ -146,6 +146,7 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
 //---------------------------------------------------------
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //---------------------------------------------------------
@@ -161,6 +162,8 @@ void TrillSegment::layout()
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 =======
 >>>>>>> 11610ff2b5... [engraving] removed item->layout method
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 //   shape
 //---------------------------------------------------------
 
@@ -308,6 +311,7 @@ void Trill::remove(EngravingItem* e)
 //---------------------------------------------------------
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //---------------------------------------------------------
@@ -323,6 +327,8 @@ void Trill::layout()
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 =======
 >>>>>>> 11610ff2b5... [engraving] removed item->layout method
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 //   createLineSegment
 //---------------------------------------------------------
 

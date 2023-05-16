@@ -450,6 +450,7 @@ String FiguredBassItem::normalizedText() const
 //---------------------------------------------------------
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   FiguredBassItem layout()
 //    creates the display text (set as element text) and computes
@@ -467,6 +468,8 @@ void FiguredBassItem::layout()
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 =======
 >>>>>>> 11610ff2b5... [engraving] removed item->layout method
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 //   FiguredBassItem draw()
 //---------------------------------------------------------
 
@@ -813,6 +816,7 @@ Sid FiguredBass::getPropertyStyle(Pid id) const
 //---------------------------------------------------------
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //---------------------------------------------------------
@@ -828,6 +832,8 @@ void FiguredBass::layout()
 >>>>>>> 6ed6e9cf16... [engraving] moved layout FiguredBass
 =======
 >>>>>>> 11610ff2b5... [engraving] removed item->layout method
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 //   layoutLines
 //
 //    lays out the duration indicator line(s), filling the _lineLengths array

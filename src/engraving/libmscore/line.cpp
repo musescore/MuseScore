@@ -1163,6 +1163,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
     break;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 
@@ -1183,6 +1184,9 @@ void SLine::layout()
 {
     UNREACHABLE;
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
     LayoutContext ctx(score());
     v0::TLayout::layout(lineSegm, ctx);
 

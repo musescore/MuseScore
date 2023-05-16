@@ -6402,6 +6402,7 @@ void Score::undoAddBracket(Staff* staff, size_t level, BracketType type, size_t 
                 // after changing the column of the first bracket we see
                 continue;
 <<<<<<< HEAD
+<<<<<<< HEAD
             }
 
             if (brackets[i]->bracketType() == BracketType::NO_BRACKET) {
@@ -6413,13 +6414,20 @@ void Score::undoAddBracket(Staff* staff, size_t level, BracketType type, size_t 
 =======
             }
 
+=======
+            }
+
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
             if (brackets[i]->bracketType() == BracketType::NO_BRACKET) {
                 // Better not get brackets with type NO_BRACKET in the UndoStack,
                 // as they might be cleaned up (Staff::cleanupBrackets())
                 continue;
             }
 
+<<<<<<< HEAD
 >>>>>>> ce01ab2243... Don't mess up brackets in `Score::undoAddBracket`
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
             brackets[i]->undoChangeProperty(Pid::BRACKET_COLUMN, brackets[i]->column() + 1);
         }
     }

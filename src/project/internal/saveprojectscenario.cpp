@@ -189,6 +189,7 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     QString defaultName = project->displayName();
     cloud::Visibility defaultVisibility = isPublish ? cloud::Visibility::Public : cloud::Visibility::Private;
     const QUrl existingOnlineScoreUrl = project->cloudInfo().sourceUrl;
@@ -221,6 +222,11 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
 >>>>>>> 4fe7859914... Download latest cloud score info to show in SaveToCloud/Publish dialog
     const QUrl existingOnlineScoreUrl = project->cloudInfo().sourceUrl;
 >>>>>>> 02a58c197f... Publish: add option to choose whether to replace existing score or upload as new score
+=======
+    QString defaultName = project->displayName();
+    cloud::Visibility defaultVisibility = isPublish ? cloud::Visibility::Public : cloud::Visibility::Private;
+    const QUrl existingOnlineScoreUrl = project->cloudInfo().sourceUrl;
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 
     if (!existingOnlineScoreUrl.isEmpty()) {
         RetVal<cloud::ScoreInfo> scoreInfo = cloudProjectsService()->downloadScoreInfo(existingOnlineScoreUrl);

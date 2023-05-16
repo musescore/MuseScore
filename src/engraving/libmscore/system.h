@@ -159,6 +159,7 @@ public:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     void layout2(LayoutContext& ctx); ///< Called after Measure layout.
 =======
     void layout2(LayoutContext &ctx); ///< Called after Measure layout.
@@ -166,6 +167,9 @@ public:
 =======
     void layout2(LayoutContext& ctx); ///< Called after Measure layout.
 >>>>>>> 11610ff2b5... [engraving] removed item->layout method
+=======
+    void layout2(LayoutContext& ctx); ///< Called after Measure layout.
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
     void restoreLayout2();
     void clear(); ///< Clear measure list.
 

@@ -161,6 +161,9 @@ using LayoutTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Ar
                                    Fermata, FiguredBass, Fingering, FretDiagram,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
                                    Glissando, GlissandoSegment, GradualTempoChange, GradualTempoChangeSegment,
                                    Hairpin, HairpinSegment, HarpPedalDiagram, Harmony, HarmonicMarkSegment, Hook,
                                    Image, InstrumentChange,
@@ -178,6 +181,7 @@ using LayoutTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Ar
                                    Tremolo, TremoloBar, Trill, TrillSegment, Tuplet,
                                    Vibrato, VibratoSegment, Volta, VoltaSegment,
                                    WhammyBarSegment>;
+<<<<<<< HEAD
 =======
                                    Glissando, GradualTempoChange,
                                    Hairpin, Harmony, HarmonicMark, Hook,
@@ -216,6 +220,8 @@ using LayoutTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Ar
                                    Vibrato, VibratoSegment, Volta, VoltaSegment,
                                    WhammyBarSegment>;
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 
 class LayoutVisitor : public rtti::Visitor<LayoutVisitor>
 {
@@ -233,6 +239,7 @@ public:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
 =======
 void TLayout::layout(EngravingItem* item, LayoutContext& ctx)
@@ -240,6 +247,9 @@ void TLayout::layout(EngravingItem* item, LayoutContext& ctx)
 =======
 void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 {
     LayoutVisitor::visit(LayoutVisitor::ShouldBeFound, LayoutTypes {}, item, ctx);
 }
@@ -1724,6 +1734,7 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
 =======
 void TLayout::layout(FiguredBass* item, LayoutContext&)
@@ -1731,6 +1742,9 @@ void TLayout::layout(FiguredBass* item, LayoutContext&)
 =======
 void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 {
     // VERTICAL POSITION:
     const double y = item->score()->styleD(Sid::figuredBassYOffset) * item->spatium();
@@ -1748,6 +1762,7 @@ void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
         for (FiguredBassItem* fit : item->items()) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             layout(fit, ctx);
             item->addbbox(fit->bbox().translated(fit->pos()));
 <<<<<<< HEAD
@@ -1760,10 +1775,15 @@ void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
 >>>>>>> 6ed6e9cf16... [engraving] moved layout FiguredBass
 =======
 >>>>>>> acbfef7fa5... [engraving] fixed FiguredBass layout
+=======
+            layout(fit, ctx);
+            item->addbbox(fit->bbox().translated(fit->pos()));
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
         }
     }
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 void TLayout::layout(Fingering* item, LayoutContext& ctx)
@@ -1773,6 +1793,9 @@ void TLayout::layout(Fingering* item, LayoutContext&)
 =======
 void TLayout::layout(Fingering* item, LayoutContext& ctx)
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+void TLayout::layout(Fingering* item, LayoutContext& ctx)
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 {
     if (item->explicitParent()) {
         Fraction tick = item->parentItem()->tick();
@@ -2575,8 +2598,11 @@ void TLayout::layout(Hairpin* item, LayoutContext& ctx)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 4d3f9ea99e... fixed conflicts
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 void TLayout::layout(HarpPedalDiagram* item, LayoutContext& ctx)
 {
     item->updateDiagramText();
@@ -2585,10 +2611,13 @@ void TLayout::layout(HarpPedalDiagram* item, LayoutContext& ctx)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 =======
 >>>>>>> 4d3f9ea99e... fixed conflicts
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 void TLayout::layout(HarmonicMarkSegment* item, LayoutContext& ctx)
 {
     const StaffType* stType = item->staffType();
@@ -4388,18 +4417,24 @@ void TLayout::layout(TempoText* item, LayoutContext& ctx)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 void TLayout::layout(TextBase* item, LayoutContext& ctx)
 {
     layoutItem(item, ctx);
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 1b64bad571... [engraving] moved layout TextBase
 =======
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 void TLayout::layoutTextBase(TextBase* item, LayoutContext& ctx)
 {
     item->setPos(PointF());
@@ -4503,8 +4538,11 @@ void TLayout::layout1TextBase(TextBase* item, LayoutContext&)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 void TLayout::layout(Text* item, LayoutContext& ctx)
 {
     layoutTextBase(static_cast<TextBase*>(item), ctx);
@@ -4516,10 +4554,13 @@ void TLayout::layout(TextLine* item, LayoutContext& ctx)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 1b64bad571... [engraving] moved layout TextBase
 =======
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 void TLayout::layout(TextLineSegment* item, LayoutContext& ctx)
 {
     layoutTextLineBaseSegment(item, ctx);

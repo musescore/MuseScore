@@ -149,6 +149,9 @@ static PointF bindCursorPosToText(const PointF& cursorPos, const EngravingItem* 
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 inline QString extractSyllable(const QString& text)
 {
     QString _text = text;
@@ -174,6 +177,7 @@ inline QString extractSyllable(const QString& text)
 
     return _text.mid(textPos, splitPos - textPos);
 }
+<<<<<<< HEAD
 =======
 class EventFilter : public QObject
 =======
@@ -210,6 +214,8 @@ private:
     return _text.mid(textPos, splitPos - textPos);
 }
 >>>>>>> 733d5aa1c2... Delete pasted text from clipboard
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
     : m_notation(notation), m_undoStack(undoStack), m_editData(&m_scoreCallbacks)
@@ -3416,11 +3422,14 @@ void NotationInteraction::doEndEditElement()
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     m_clipboardTextPos = 0;
 >>>>>>> a4ec30994b... fix #13215 - support syllable-paste lyrics paste
 =======
 >>>>>>> 733d5aa1c2... Delete pasted text from clipboard
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
     m_editData.clear();
 }
 
@@ -3702,8 +3711,11 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     if (isTextEditingStarted()) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 733d5aa1c2... Delete pasted text from clipboard
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
         QString clipboardText = QGuiApplication::clipboard()->text();
         QString textForPaste = clipboardText;
         if ((!clipboardText.startsWith('<') || !clipboardText.contains('>')) && m_editData.element->isLyrics()) {
@@ -3714,6 +3726,7 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
 
         if (!textForPaste.isEmpty() && m_editData.element->isLyrics()) {
             if (textForPaste.endsWith('-')) {
+<<<<<<< HEAD
 <<<<<<< HEAD
                 navigateToNextSyllable();
             } else if (textForPaste.endsWith('_')) {
@@ -3730,10 +3743,15 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
                 navigateToNextSyllable();
             } else if (textForPaste.endsWith('_')) {
 >>>>>>> 733d5aa1c2... Delete pasted text from clipboard
+=======
+                navigateToNextSyllable();
+            } else if (textForPaste.endsWith('_')) {
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
                 addMelisma();
             } else {
                 navigateToLyrics(false, false, false);
             }
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -3747,6 +3765,11 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
             QString textForNextPaste = clipboardText.remove(0, clipboardText.indexOf(textForPaste) + textForPaste.size());
             QGuiApplication::clipboard()->setText(textForNextPaste);
 >>>>>>> 733d5aa1c2... Delete pasted text from clipboard
+=======
+
+            QString textForNextPaste = clipboardText.remove(0, clipboardText.indexOf(textForPaste) + textForPaste.size());
+            QGuiApplication::clipboard()->setText(textForNextPaste);
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
         }
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();

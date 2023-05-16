@@ -141,6 +141,7 @@ class TempoText;
 class TextBase;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 class Text;
 class TextLine;
 =======
@@ -149,6 +150,10 @@ class TextLine;
 class Text;
 class TextLine;
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+class Text;
+class TextLine;
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 class TextLineSegment;
 class TextLineBase;
 class TextLineBaseSegment;
@@ -175,6 +180,7 @@ public:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     static void layoutItem(EngravingItem* item, LayoutContext& ctx);  // factory
 =======
     static void layout(EngravingItem* item, LayoutContext& ctx);  // factory
@@ -182,6 +188,9 @@ public:
 =======
     static void layoutItem(EngravingItem* item, LayoutContext& ctx);  // factory
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+    static void layoutItem(EngravingItem* item, LayoutContext& ctx);  // factory
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 
     static void layout(Accidental* item, LayoutContext& ctx);
     static void layout(ActionIcon* item, LayoutContext& ctx);
@@ -307,8 +316,11 @@ public:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
     static void layout(TextBase* item, LayoutContext& ctx);          // factory
     static void layoutTextBase(TextBase* item, LayoutContext& ctx);  // base class
     static void layout1(TextBase* item, LayoutContext& ctx);         // factory
@@ -316,6 +328,7 @@ public:
     static void layout(Text* item, LayoutContext& ctx);
 
     static void layout(TextLine* item, LayoutContext& ctx);
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
     static void layoutTextBase(TextBase* item, LayoutContext& ctx);  // base class
@@ -325,6 +338,8 @@ public:
 >>>>>>> 1b64bad571... [engraving] moved layout TextBase
 =======
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
     static void layout(TextLineSegment* item, LayoutContext& ctx);
     static void layoutTextLineBase(TextLineBase* item, LayoutContext& ctx);
     static void layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext& ctx); // base class

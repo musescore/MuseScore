@@ -66,6 +66,7 @@ Box::Box(const ElementType& type, System* parent)
 //---------------------------------------------------------
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //---------------------------------------------------------
@@ -81,6 +82,8 @@ void Box::layout()
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 =======
 >>>>>>> 11610ff2b5... [engraving] removed item->layout method
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 //   computeMinWidth
 //---------------------------------------------------------
 
@@ -359,6 +362,7 @@ HBox::HBox(System* parent)
 //---------------------------------------------------------
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //---------------------------------------------------------
@@ -374,6 +378,8 @@ void HBox::layout()
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 =======
 >>>>>>> 11610ff2b5... [engraving] removed item->layout method
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 //   layout2
 //    height (bbox) is defined now
 //---------------------------------------------------------
@@ -628,6 +634,7 @@ PropertyValue VBox::getProperty(Pid propertyId) const
 //---------------------------------------------------------
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //---------------------------------------------------------
@@ -643,6 +650,8 @@ void VBox::layout()
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 =======
 >>>>>>> 11610ff2b5... [engraving] removed item->layout method
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 //   startEditDrag
 //---------------------------------------------------------
 
@@ -656,6 +665,7 @@ void VBox::startEditDrag(EditData& ed)
 }
 
 //---------------------------------------------------------
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -673,6 +683,8 @@ void FBox::layout()
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 =======
 >>>>>>> 11610ff2b5... [engraving] removed item->layout method
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 //   add
 ///   Add new EngravingItem \a e to fret diagram box
 //---------------------------------------------------------

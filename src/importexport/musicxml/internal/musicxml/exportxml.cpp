@@ -6206,6 +6206,7 @@ static void scoreInstrument(XmlWriter& xml, const int partNr, const int instrNr,
     xml.tag("instrument-name", instrName);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (instr && !instr->musicXmlId().isEmpty() && !MScore::testMode) {
 =======
     if (instr && !instr->musicXmlId().isEmpty()) {
@@ -6213,6 +6214,9 @@ static void scoreInstrument(XmlWriter& xml, const int partNr, const int instrNr,
 =======
     if (instr && !instr->musicXmlId().isEmpty() && !MScore::testMode) {
 >>>>>>> 3b1d151555... Avoid unit test failures
+=======
+    if (instr && !instr->musicXmlId().isEmpty() && !MScore::testMode) {
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
         xml.tag("instrument-sound", instr->musicXmlId());
     }
     xml.endElement();

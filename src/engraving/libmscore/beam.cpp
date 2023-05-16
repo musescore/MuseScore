@@ -274,6 +274,7 @@ void Beam::move(const PointF& offset)
 //---------------------------------------------------------
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //   TODO - document what this function does
@@ -290,6 +291,8 @@ void Beam::layout()
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 =======
 >>>>>>> 11610ff2b5... [engraving] removed item->layout method
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 //   layoutIfNeed
 //   check to see if the layout info is valid, and if not, layout
 //---------------------------------------------------------

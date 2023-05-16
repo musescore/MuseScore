@@ -155,6 +155,7 @@ bool Lyrics::isMelisma() const
 //---------------------------------------------------------
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //   layout
 //    - does not touch vertical position
@@ -171,6 +172,8 @@ void Lyrics::layout()
 >>>>>>> 4f8a1b6dd0... [engraving] replaced item->layout() to TLayout::layout
 =======
 >>>>>>> 11610ff2b5... [engraving] removed item->layout method
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 //   scanElements
 //---------------------------------------------------------
 
@@ -214,10 +217,13 @@ void Lyrics::paste(EditData& ed, const String& txt)
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> a4ec30994b... fix #13215 - support syllable-paste lyrics paste
 =======
+=======
+>>>>>>> cd79de8b507ce5e52931bbfbce650f3fc04e0ae2
 
 >>>>>>> 733d5aa1c2... Delete pasted text from clipboard
     String regex = String(u"[^\\S") + Char(0xa0) + Char(0x202F) + u"]+";
