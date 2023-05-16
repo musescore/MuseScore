@@ -62,6 +62,7 @@ static const std::string STATUS_KEY("status");
 static constexpr int USER_UNAUTHORIZED_STATUS_CODE = 401;
 static constexpr int FORBIDDEN_CODE = 403;
 static constexpr int NOT_FOUND_STATUS_CODE = 404;
+static constexpr int CONFLICT_STATUS_CODE = 409;
 
 static constexpr int INVALID_SCORE_ID = 0;
 
@@ -347,6 +348,7 @@ mu::RetVal<ScoreInfo> CloudService::downloadScoreInfo(int scoreId)
     QJsonObject scoreInfo = document.object();
 
     result.val.id = scoreInfo.value("id").toInt();
+    result.val.revisionId = scoreInfo.value("revision_id").toInt();
     result.val.title = scoreInfo.value("title").toString();
     result.val.description = scoreInfo.value("description").toString();
     result.val.license = scoreInfo.value("license").toString();
@@ -466,7 +468,8 @@ void CloudService::setAccountInfo(const AccountInfo& info)
     m_userAuthorized.set(info.isValid());
 }
 
-ProgressPtr CloudService::uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility, const QUrl& sourceUrl)
+ProgressPtr CloudService::uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility, const QUrl& sourceUrl,
+                                      int revisionId)
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
@@ -477,8 +480,8 @@ ProgressPtr CloudService::uploadScore(QIODevice& scoreData, const QString& title
 
     std::shared_ptr<ValMap> scoreUrlMap = std::make_shared<ValMap>();
 
-    auto uploadCallback = [this, manager, &scoreData, title, visibility, sourceUrl, scoreUrlMap]() {
-        RetVal<ValMap> urlMap = doUploadScore(manager, scoreData, title, visibility, sourceUrl);
+    auto uploadCallback = [this, manager, &scoreData, title, visibility, sourceUrl, revisionId, scoreUrlMap]() {
+        RetVal<ValMap> urlMap = doUploadScore(manager, scoreData, title, visibility, sourceUrl, revisionId);
         *scoreUrlMap = urlMap.val;
 
         return urlMap.ret;
@@ -527,6 +530,10 @@ static Ret uploadingRetFromRawUploadingRet(const Ret& rawRet, bool isScoreAlread
         return make_ret(cloud::Err::AccountNotActivated);
     }
 
+    if (code == CONFLICT_STATUS_CODE) {
+        return make_ret(cloud::Err::Conflict);
+    }
+
     static const std::map<int, mu::TranslatableString> codes {
         { 400, mu::TranslatableString("cloud", "Invalid request") },
         { 401, mu::TranslatableString("cloud", "Authorization required") },
@@ -548,7 +555,7 @@ static Ret uploadingRetFromRawUploadingRet(const Ret& rawRet, bool isScoreAlread
 }
 
 mu::RetVal<mu::ValMap> CloudService::doUploadScore(INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                                                   Visibility visibility, const QUrl& sourceUrl)
+                                                   Visibility visibility, const QUrl& sourceUrl, int revisionId)
 {
     TRACEFUNC;
 
@@ -597,6 +604,13 @@ mu::RetVal<mu::ValMap> CloudService::doUploadScore(INetworkManagerPtr uploadMana
         scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
         scoreIdPart.setBody(QString::number(scoreId).toLatin1());
         multiPart.append(scoreIdPart);
+
+        if (revisionId) {
+            QHttpPart revisionIdPart;
+            scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"last_revision_id\""));
+            scoreIdPart.setBody(QByteArray::number(revisionId));
+            multiPart.append(scoreIdPart);
+        }
     }
 
     QHttpPart titlePart;
@@ -635,6 +649,7 @@ mu::RetVal<mu::ValMap> CloudService::doUploadScore(INetworkManagerPtr uploadMana
     QJsonObject scoreInfo = QJsonDocument::fromJson(receivedData.data()).object();
     QUrl newSourceUrl = QUrl(scoreInfo.value("permalink").toString());
     QUrl editUrl = QUrl(scoreInfo.value("edit_url").toString());
+    int newRevisionId = scoreInfo.value("revision_id").toInt();
 
     if (!newSourceUrl.isValid()) {
         result.ret = make_ret(cloud::Err::CouldNotReceiveSourceUrl);
@@ -643,6 +658,7 @@ mu::RetVal<mu::ValMap> CloudService::doUploadScore(INetworkManagerPtr uploadMana
 
     result.val["sourceUrl"] = Val(newSourceUrl.toString());
     result.val["editUrl"] = Val(editUrl.toString());
+    result.val["revisionId"] = Val(newRevisionId);
 
     return result;
 }

@@ -76,6 +76,7 @@ enum class Visibility {
 
 struct ScoreInfo {
     int id = 0;
+    int revisionId = 0;
     QString title;
     QString description;
     Visibility visibility = Visibility::Private;
@@ -89,6 +90,8 @@ struct ScoreInfo {
         bool equals = true;
 
         equals &= (id == another.id);
+        equals &= (revisionId == another.revisionId);
+        equals &= (title == another.title);
         equals &= (description == another.description);
         equals &= (visibility == another.visibility);
         equals &= (license == another.license);

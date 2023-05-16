@@ -134,7 +134,7 @@ private:
     void uploadAudio(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen, bool isFirstSave);
 
     void onProjectSuccessfullyUploaded(const QUrl& urlToOpen = QUrl(), bool isFirstSave = true);
-    void onProjectUploadFailed(const Ret& ret, bool publishMode);
+    void onProjectUploadFailed(const Ret& ret, const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode);
 
     void warnCloudIsNotAvailable();
 

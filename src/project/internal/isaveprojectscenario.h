@@ -43,7 +43,11 @@ public:
 
     virtual bool warnBeforeSavingToExistingPubliclyVisibleCloudProject() const = 0;
 
-    virtual void showCloudSaveError(const Ret& ret, bool publishMode, bool alreadyAttempted) const = 0;
+    static constexpr int RET_CODE_CONFLICT_RESPONSE_SAVE_AS = 1235;
+    static constexpr int RET_CODE_CONFLICT_RESPONSE_PUBLISH_AS_NEW_SCORE = 1236;
+    static constexpr int RET_CODE_CONFLICT_RESPONSE_REPLACE = 1237;
+
+    virtual Ret showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool publishMode, bool alreadyAttempted) const = 0;
 };
 }
 
