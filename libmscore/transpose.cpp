@@ -384,6 +384,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             }
 
       Segment* s1 = _selection.startSegment();
+      if (!s1)
+            return result;
       // if range start on mmRest, get the actual segment instead
       if (s1->measure()->isMMRest())
             s1 = tick2segment(s1->tick(), true, s1->segmentType(), false);
