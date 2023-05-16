@@ -28,8 +28,6 @@
 #include "draw/types/brush.h"
 #include "draw/types/pen.h"
 
-
-
 #include "chord.h"
 #include "factory.h"
 #include "harmony.h"

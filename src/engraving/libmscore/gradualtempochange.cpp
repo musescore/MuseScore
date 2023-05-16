@@ -22,8 +22,6 @@
 
 #include "gradualtempochange.h"
 
-
-
 #include "measure.h"
 #include "score.h"
 #include "segment.h"

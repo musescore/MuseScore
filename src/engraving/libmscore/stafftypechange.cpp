@@ -22,8 +22,6 @@
 
 #include "stafftypechange.h"
 
-
-
 #include "score.h"
 #include "measure.h"
 #include "system.h"

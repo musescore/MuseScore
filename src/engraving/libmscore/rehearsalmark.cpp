@@ -22,8 +22,6 @@
 
 #include "rehearsalmark.h"
 
-
-
 #include "measure.h"
 #include "score.h"
 #include "system.h"

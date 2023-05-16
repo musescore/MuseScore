@@ -21,8 +21,6 @@
  */
 #include "textline.h"
 
-
-
 #include "score.h"
 #include "system.h"
 #include "undo.h"

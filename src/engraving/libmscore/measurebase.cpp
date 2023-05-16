@@ -22,8 +22,6 @@
 
 #include "measurebase.h"
 
-
-
 #include "factory.h"
 #include "layoutbreak.h"
 #include "measure.h"

@@ -21,8 +21,6 @@
  */
 #include "expression.h"
 
-
-
 #include "chord.h"
 #include "dynamic.h"
 #include "dynamichairpingroup.h"

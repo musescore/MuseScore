@@ -24,7 +24,6 @@
 
 #include "types/typesconv.h"
 
-
 #include "measure.h"
 #include "score.h"
 

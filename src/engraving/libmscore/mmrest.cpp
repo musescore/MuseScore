@@ -24,8 +24,6 @@
 
 #include "draw/types/pen.h"
 
-
-
 #include "measure.h"
 #include "score.h"
 #include "undo.h"

@@ -28,8 +28,6 @@
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
-
-
 #include "actionicon.h"
 #include "note.h"
 #include "score.h"

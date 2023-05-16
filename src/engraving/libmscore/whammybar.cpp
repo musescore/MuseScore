@@ -22,8 +22,6 @@
 
 #include "whammybar.h"
 
-
-
 #include "score.h"
 #include "system.h"
 

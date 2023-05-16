@@ -27,7 +27,6 @@
 
 #include "types/typesconv.h"
 
-
 #include "changeMap.h"
 #include "measure.h"
 #include "score.h"

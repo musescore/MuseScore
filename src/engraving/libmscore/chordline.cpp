@@ -26,7 +26,6 @@
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
-
 #include "chord.h"
 #include "note.h"
 #include "score.h"

@@ -27,7 +27,6 @@
 
 #include "types/symnames.h"
 
-
 #include "image.h"
 #include "staff.h"
 

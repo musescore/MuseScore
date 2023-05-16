@@ -31,7 +31,6 @@
 
 #include "types/typesconv.h"
 
-
 #include "dynamic.h"
 #include "dynamichairpingroup.h"
 #include "measure.h"

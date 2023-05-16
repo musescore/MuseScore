@@ -26,8 +26,6 @@
 
 #include "draw/types/pen.h"
 
-
-
 #include "accidental.h"
 #include "chord.h"
 #include "factory.h"

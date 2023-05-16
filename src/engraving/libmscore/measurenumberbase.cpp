@@ -22,8 +22,6 @@
 
 #include "measurenumberbase.h"
 
-
-
 #include "measure.h"
 #include "score.h"
 #include "staff.h"

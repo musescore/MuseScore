@@ -24,7 +24,6 @@
 
 #include "draw/fontmetrics.h"
 
-
 #include "property.h"
 
 #include "log.h"

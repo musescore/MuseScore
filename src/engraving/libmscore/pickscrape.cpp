@@ -22,8 +22,6 @@
 
 #include "pickscrape.h"
 
-
-
 #include "score.h"
 #include "system.h"
 

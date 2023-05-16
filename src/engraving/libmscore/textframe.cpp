@@ -23,8 +23,6 @@
 
 #include "draw/fontmetrics.h"
 
-
-
 #include "box.h"
 #include "factory.h"
 #include "mscore.h"

@@ -28,7 +28,6 @@
 #include "types/typesconv.h"
 #include "types/translatablestring.h"
 
-
 #include "beam.h"
 #include "chord.h"
 #include "chordrest.h"

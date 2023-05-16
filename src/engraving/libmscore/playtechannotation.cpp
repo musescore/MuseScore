@@ -22,8 +22,6 @@
 
 #include "playtechannotation.h"
 
-
-
 #include "segment.h"
 
 #include "log.h"

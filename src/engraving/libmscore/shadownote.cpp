@@ -24,8 +24,6 @@
 
 #include "draw/types/pen.h"
 
-
-
 #include "accidental.h"
 #include "articulation.h"
 #include "hook.h"
