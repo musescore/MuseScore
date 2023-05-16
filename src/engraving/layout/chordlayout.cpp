@@ -58,6 +58,7 @@
 #include "libmscore/utils.h"
 
 #include "tlayout.h"
+#include "arpeggiolayout.h"
 #include "slurtielayout.h"
 
 using namespace mu::engraving;
@@ -175,7 +176,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     item->addLedgerLines();
 
     if (item->_arpeggio) {
-        item->_arpeggio->computeHeight();
+        ArpeggioLayout::computeHeight(item->_arpeggio);
         TLayout::layout(item->_arpeggio, ctx);
 
         double arpeggioNoteDistance = item->score()->styleMM(Sid::ArpeggioNoteDistance) * mag_;

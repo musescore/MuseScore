@@ -218,7 +218,6 @@ public:
                                bool isFullSize);
 
     void layoutStem();
-    void layoutArpeggio2();
 
     std::vector<Note*>& notes() { return _notes; }
     const std::vector<Note*>& notes() const { return _notes; }
