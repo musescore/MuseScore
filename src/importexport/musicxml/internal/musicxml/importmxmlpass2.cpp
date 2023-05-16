@@ -5820,9 +5820,17 @@ void MusicXMLParserNotations::articulations()
             _notations.push_back(artic);
             _e.skipCurrentElement();  // skip but don't log
         } else if (_e.name() == "breath-mark") {
-            _breath = SymId::breathMarkComma;
-            _e.readElementText();
-            // TODO: handle value read (note: encoding unknown, only "comma" found)
+            auto value = _e.readElementText();
+            if (value == "tick") {
+                _breath = SymId::breathMarkTick;
+            } else if (value == "upbow") {
+                _breath = SymId::breathMarkUpbow;
+            } else if (value == "salzedo") {
+                _breath = SymId::breathMarkSalzedo;
+            } else {
+                // Use comma as the default symbol
+                _breath = SymId::breathMarkComma;
+            }
         } else if (_e.name() == "caesura") {
             _breath = SymId::caesura;
             _e.skipCurrentElement();  // skip but don't log

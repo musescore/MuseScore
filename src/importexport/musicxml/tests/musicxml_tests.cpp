@@ -418,6 +418,9 @@ TEST_F(Musicxml_Tests, DISABLED_breaksPage) { // fail after sync with 3.x
 TEST_F(Musicxml_Tests, breaksSystem) {
     mxmlMscxExportTestRefBreaks("testBreaksSystem");
 }
+TEST_F(Musicxml_Tests, breathMarks) {
+    mxmlIoTest("testBreathMarks");
+}
 TEST_F(Musicxml_Tests, changeTranspose) {
     mxmlIoTest("testChangeTranspose");
 }
