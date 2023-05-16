@@ -279,13 +279,15 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
                 ps = ps->prev1(SegmentType::ChordRest);
             }
             if (!ps || ps == lyricsSegment) {
-                // no valid previous CR, so try to lengthen melisma instead
+                // either there is no valid previous CR, or the previous CR is the one the lyric starts on
+                // we don't want to make the melisma longer arbitrarily, but there is a possibility that the next
+                // CR won't extend the melisma, so let's check it
                 ps = ns;
                 s = ps->nextCR(lyricsTrack, true);
                 EngravingItem* e = s ? s->element(lyricsTrack) : nullptr;
                 // check to make sure we have a chord
-                if (!e || e->type() != ElementType::CHORD) {
-                    // nothing to do but set ticks to 0
+                if (!e || e->type() != ElementType::CHORD || ps->tick() > item->tick() + item->ticks()) {
+                    // nope, nothing to do but set ticks to 0
                     // this will result in melisma being deleted later
                     item->lyrics()->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(0));
                     item->setTicks(Fraction(0, 1));

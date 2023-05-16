@@ -373,6 +373,9 @@ PropertyValue Lyrics::getProperty(Pid propertyId) const
 
 bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
 {
+    ChordRest* scr = nullptr;
+    ChordRest* ecr = nullptr;
+
     switch (propertyId) {
     case Pid::PLACEMENT:
         setPlacement(v.value<PlacementV>());
@@ -389,14 +392,14 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
             // endTick info is wrong.
             // Somehow we need to fix this.
             // See https://musescore.org/en/node/285304 and https://musescore.org/en/node/311289
-            ChordRest* ecr = score()->findCR(endTick(), track());
+            ecr = score()->findCR(endTick(), track());
             if (ecr) {
                 ecr->setMelismaEnd(false);
             }
         }
-
+        scr = score()->findCR(tick(), track());
         _ticks = v.value<Fraction>();
-        if (_ticks <= Fraction(0, 1)) {
+        if (scr && _ticks <= scr->ticks()) {
             // if no ticks, we have to relayout in order to remove invalid melisma segments
             setRemoveInvalidSegments();
             layout()->layoutItem(this);
@@ -518,8 +521,9 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
 void Lyrics::removeInvalidSegments()
 {
     _removeInvalidSegments = false;
-    if (_separator && isMelisma() && _ticks < _separator->startCR()->ticks()) {
+    if (_separator && isMelisma() && _ticks <= _separator->startCR()->ticks()) {
         setTicks(Fraction(0, 1));
+        _separator->setTicks(Fraction(0, 1));
         _separator->removeUnmanaged();
         delete _separator;
         _separator = nullptr;
