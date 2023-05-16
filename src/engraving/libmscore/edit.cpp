@@ -4959,12 +4959,6 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
         } else {
             st = SegmentType::HeaderClef;
         }
-    } else if (e->rtick() == Fraction(0, 1)) {
-        Measure* curMeasure = e->findMeasure();
-        Measure* prevMeasure = curMeasure ? curMeasure->prevMeasure() : nullptr;
-        if (prevMeasure && !prevMeasure->sectionBreak()) {
-            moveClef = true;
-        }
     } else if (e->isClef()) {
         Clef* clef = toClef(e);
         if (clef->segment()->isHeaderClefType()) {
@@ -4974,6 +4968,12 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
                 st = SegmentType::HeaderClef;
             }
         } else if (clef->rtick() == clef->measure()->ticks()) {
+            moveClef = true;
+        }
+    } else if (e->rtick() == Fraction(0, 1)) {
+        Measure* curMeasure = e->findMeasure();
+        Measure* prevMeasure = curMeasure ? curMeasure->prevMeasure() : nullptr;
+        if (prevMeasure && !prevMeasure->sectionBreak()) {
             moveClef = true;
         }
     }
