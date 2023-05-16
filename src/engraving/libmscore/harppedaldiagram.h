@@ -51,12 +51,6 @@ class HarpPedalDiagram final : public TextBase
     OBJECT_ALLOCATOR(engraving, HarpPedalDiagram)
     DECLARE_CLASSOF(ElementType::HARP_DIAGRAM)
 
-    std::array<PedalPosition, HARP_STRING_NO> _pedalState;
-
-    std::set<int> _playablePitches;
-
-    bool _isDiagram = true;
-
 public:
     HarpPedalDiagram(Segment* parent);
     HarpPedalDiagram(const HarpPedalDiagram& h);
@@ -88,6 +82,14 @@ public:
     void updateDiagramText();
 
     bool isPitchPlayable(int pitch);
+
+private:
+
+    std::array<PedalPosition, HARP_STRING_NO> _pedalState;
+
+    std::set<int> _playablePitches;
+
+    bool _isDiagram = true;
 };
 } // namespace mu::engraving
 
