@@ -399,6 +399,7 @@ public:
     void setDotY(DirectionV);
 
     void setHeadHasParentheses(bool hasParentheses);
+    bool headHasParentheses() const { return _hasHeadParentheses; }
 
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme);
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);
@@ -456,6 +457,9 @@ public:
 
     mu::PointF posInStaffCoordinates();
 
+    bool isTrillCueNote() const { return _isTrillCueNote; }
+    void setIsTrillCueNote(bool v) { _isTrillCueNote = v; }
+
 private:
 
     friend class v0::TLayout;
@@ -488,6 +492,8 @@ private:
 
     bool _ghost = false;        ///< ghost note
     bool _deadNote = false;     ///< dead note
+
+    bool _isTrillCueNote = false;
 
     bool _hidden = false;                 ///< marks this note as the hidden one if there are
                                           ///< overlapping notes; hidden notes are not played

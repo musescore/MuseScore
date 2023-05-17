@@ -855,7 +855,7 @@ EngravingItem* BarLine::drop(EditData& data)
             undoChangeBarLineType(this, st, true);
         }
         delete e;
-    } else if (e->isArticulation()) {
+    } else if (e->isArticulationFamily()) {
         Articulation* atr = toArticulation(e);
         atr->setParent(this);
         atr->setTrack(track());

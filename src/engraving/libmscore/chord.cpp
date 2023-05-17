@@ -48,6 +48,7 @@
 #include "navigate.h"
 #include "note.h"
 #include "noteevent.h"
+#include "ornament.h"
 #include "part.h"
 #include "score.h"
 #include "segment.h"
@@ -60,6 +61,7 @@
 #include "system.h"
 #include "tie.h"
 #include "tremolo.h"
+#include "trill.h"
 #include "tuplet.h"
 #include "undo.h"
 
@@ -698,6 +700,7 @@ void Chord::add(EngravingItem* e)
         ASSERT_X("Chord::add ledgerline");
         break;
     case ElementType::ARTICULATION:
+    case ElementType::ORNAMENT:
     {
         Articulation* a = toArticulation(e);
         if (a->layoutCloseToNote()) {
@@ -793,6 +796,7 @@ void Chord::remove(EngravingItem* e)
     }
     break;
     case ElementType::ARTICULATION:
+    case ElementType::ORNAMENT:
     {
         Articulation* a = toArticulation(e);
         if (!mu::remove(_articulations, a)) {
@@ -1884,6 +1888,22 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
             }
             note->updateAccidental(as);
         }
+        for (Articulation* art : _articulations) {
+            if (!art->isOrnament()) {
+                continue;
+            }
+            Ornament* ornament = toOrnament(art);
+            ornament->computeNotesAboveAndBelow(as);
+        }
+        for (Spanner* spanner : startingSpanners()) {
+            if (spanner->isTrill()) {
+                Ornament* ornament = toTrill(spanner)->ornament();
+                if (ornament) {
+                    ornament->setParent(this);
+                    ornament->computeNotesAboveAndBelow(as);
+                }
+            }
+        }
         const std::vector<Chord*> gna(graceNotesAfter());
         for (Chord* ch : gna) {
             std::vector<Note*> notes(ch->notes());        // we need a copy!
@@ -1936,7 +1956,7 @@ mu::PointF Chord::pagePos() const
 void Chord::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     for (Articulation* a : _articulations) {
-        func(data, a);
+        a->scanElements(data, func, all);
     }
     if (_hook) {
         func(data, _hook);
@@ -2107,6 +2127,7 @@ EngravingItem* Chord::drop(EditData& data)
     EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::ARTICULATION:
+    case ElementType::ORNAMENT:
     {
         Articulation* atr = toArticulation(e);
         Articulation* oa = hasArticulation(atr);
@@ -3254,6 +3275,21 @@ void Chord::computeKerningExceptions()
     if (_startEndSlurs.startDown || _startEndSlurs.endDown) {
         _allowKerningBelow = false;
     }
+}
+
+Ornament* Chord::findOrnament() const
+{
+    for (Articulation* art : _articulations) {
+        if (art->isOrnament()) {
+            return toOrnament(art);
+        }
+    }
+    for (Spanner* spanner : _startingSpanners) {
+        if (spanner->isTrill()) {
+            return toTrill(spanner)->ornament();
+        }
+    }
+    return nullptr;
 }
 
 //---------------------------------

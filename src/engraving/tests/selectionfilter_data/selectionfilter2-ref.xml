@@ -22,6 +22,9 @@
       <Trill>
         <subtype>trill</subtype>
         <ticks_f>1/4</ticks_f>
+        <Ornament>
+          <subtype>ornamentTrill</subtype>
+          </Ornament>
         </Trill>
       <next>
         <location>

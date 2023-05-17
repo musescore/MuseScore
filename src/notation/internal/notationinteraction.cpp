@@ -1738,10 +1738,10 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             rw400::TRead::readItem(spanner, e, *e.context());
             spanner->styleChanged();
             score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
-        } else if (element->isArticulation() && sel.elements().size() == 1) {
+        } else if (element->isArticulationFamily() && sel.elements().size() == 1) {
             // understand adding an articulation to another articulation as adding it to the chord it's attached to
             EngravingItem* e = sel.elements().front();
-            if (e->isArticulation()) {
+            if (e->isArticulationFamily()) {
                 if (Chord* c = toChord(toArticulation(e)->explicitParent())) {
                     applyDropPaletteElement(score, c->notes().front(), element, modifiers);
                 }
@@ -1943,7 +1943,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                         }
                     } else {
                         // do not apply articulation to barline in a range selection
-                        if (!e->isBarLine() || !element->isArticulation()) {
+                        if (!e->isBarLine() || !element->isArticulationFamily()) {
                             applyDropPaletteElement(score, e, element, modifiers);
                         }
                     }
@@ -2834,7 +2834,7 @@ void NotationInteraction::moveLyrics(MoveDirection d)
 void NotationInteraction::nudge(MoveDirection d, bool quickly)
 {
     EngravingItem* el = score()->selection().element();
-    IF_ASSERT_FAILED(el && (el->isTextBase() || el->isArticulation())) {
+    IF_ASSERT_FAILED(el && (el->isTextBase() || el->isArticulationFamily())) {
         return;
     }
 
@@ -3888,7 +3888,7 @@ void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationS
     if (notes.empty()) {
         // no notes, but maybe they have an articulation selected. we should use that chord
         EngravingItem* e = score()->selection().element();
-        if (e && e->isArticulation()) {
+        if (e && e->isArticulationFamily()) {
             Chord* c = toChord(toArticulation(e)->explicitParent());
             if (c) {
                 notes.insert(notes.begin(), c->notes().begin(), c->notes().end());

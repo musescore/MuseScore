@@ -73,6 +73,7 @@
 #include "../../libmscore/actionicon.h"
 #include "../../libmscore/arpeggio.h"
 #include "../../libmscore/articulation.h"
+#include "../../libmscore/ornament.h"
 #include "../../libmscore/audio.h"
 #include "../../libmscore/bagpembell.h"
 #include "../../libmscore/barline.h"
@@ -156,9 +157,9 @@ using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Arti
                                  LayoutBreak, LedgerLine, LetRing, Lyrics,
                                  Marker, MeasureNumber, MeasureRepeat, MMRest, MMRestRange,
                                  Note, NoteDot, NoteHead, NoteLine,
-                                 Ottava,
                                  Page, PalmMute, Pedal, PlayTechAnnotation,
                                  Rasgueado, RehearsalMark, Rest,
+                                 Ornament, Ottava,
                                  Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
                                  Symbol, FSymbol, System, SystemDivider, SystemText,
                                  TempoText, Text, TextLine, Tie, TimeSig, Tremolo, TremoloBar, Trill, Tuplet,
@@ -207,6 +208,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e)
         return PropertyValue::fromValue(e.readColor());
     case P_TYPE::ORNAMENT_STYLE:
         return PropertyValue::fromValue(TConv::fromXml(e.readAsciiText(), OrnamentStyle::DEFAULT));
+    case P_TYPE::ORNAMENT_INTERVAL:
+        return PropertyValue(TConv::fromXml(e.readText(), OrnamentInterval()));
     case P_TYPE::POINT:
         return PropertyValue::fromValue(e.readPoint());
     case P_TYPE::SCALE:
@@ -1774,6 +1777,40 @@ void TRead::read(Arpeggio* a, XmlReader& e, ReadContext& ctx)
     }
 }
 
+void TRead::read(Ornament* o, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        if (!readProperties(o, xml, ctx)) {
+            xml.unknown();
+        }
+    }
+}
+
+bool TRead::readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx)
+{
+    const AsciiStringView tag(xml.name());
+    if (readProperty(o, tag, xml, ctx, Pid::INTERVAL_ABOVE)) {
+    } else if (readProperty(o, tag, xml, ctx, Pid::INTERVAL_BELOW)) {
+    } else if (readProperty(o, tag, xml, ctx, Pid::ORNAMENT_SHOW_ACCIDENTAL)) {
+    } else if (readProperty(o, tag, xml, ctx, Pid::START_ON_UPPER_NOTE)) {
+    } else if (readProperties(static_cast<Articulation*>(o), xml, ctx)) {
+    } else if (tag == "Accidental") {
+        Accidental* accidental = Factory::createAccidental(o);
+        TRead::read(accidental, xml, ctx);
+        accidental->setParent(o);
+        accidental->placement() == PlacementV::ABOVE ? o->setAccidentalAbove(accidental) : o->setAccidentalBelow(accidental);
+    } else if (tag == "Chord") {
+        Chord* chord = Factory::createChord(ctx.score()->dummy()->segment());
+        TRead::read(chord, xml, ctx);
+        chord->setTrack(ctx.track());
+        o->setCueNoteChord(chord);
+        o->setNoteAbove(chord->notes().front());
+    } else {
+        return false;
+    }
+    return true;
+}
+
 void TRead::read(Articulation* a, XmlReader& xml, ReadContext& ctx)
 {
     while (xml.readNextStartElement()) {
@@ -2415,6 +2452,11 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
         atr->setTrack(ch->track());
         TRead::read(atr, e, ctx);
         ch->add(atr);
+    } else if (tag == "Ornament") {
+        Ornament* ornament = Factory::createOrnament(ch);
+        ornament->setTrack(ch->track());
+        TRead::read(ornament, e, ctx);
+        ch->add(ornament);
     } else if (tag == "leadingSpace" || tag == "trailingSpace") {
         LOGD("ChordRest: %s obsolete", tag.ascii());
         e.skipCurrentElement();
@@ -4090,11 +4132,23 @@ void TRead::read(Trill* t, XmlReader& e, ReadContext& ctx)
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             t->setTrillType(TConv::fromXml(e.readAsciiText(), TrillType::TRILL_LINE));
+        } else if (tag == "Ornament") {
+            Ornament* ornament = t->ornament();
+            if (!ornament) {
+                ornament = Factory::createOrnament(toChordRest(t->parentItem(true)));
+                t->setOrnament(ornament);
+            }
+            TRead::read(ornament, e, ctx);
+            ornament->setSymId(Ornament::fromTrillType(t->trillType()));
+            ornament->setTrack(t->track());
         } else if (tag == "Accidental") {
             Accidental* accidental = Factory::createAccidental(t);
             TRead::read(accidental, e, ctx);
             accidental->setParent(t);
             t->setAccidental(accidental);
+            if (t->ornament()) {
+                t->ornament()->setTrillOldCompatAccidental(accidental);
+            }
         } else if (tag == "ornamentStyle") {
             readProperty(t, e, ctx, Pid::ORNAMENT_STYLE);
         } else if (tag == "play") {

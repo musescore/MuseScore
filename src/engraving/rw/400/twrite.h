@@ -106,7 +106,7 @@ class NoteEvent;
 class NoteDot;
 class NoteHead;
 class NoteLine;
-
+class Ornament;
 class Ottava;
 
 class Page;
@@ -244,7 +244,7 @@ public:
     static void write(const NoteDot* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const NoteHead* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const NoteLine* item, XmlWriter& xml, WriteContext& ctx);
-
+    static void write(const Ornament* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Ottava* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Page* item, XmlWriter& xml, WriteContext& ctx);
@@ -302,6 +302,7 @@ private:
 
     static void writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx);
     static void writeBoxProperties(const Box* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const Articulation* item, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const HBox* item, XmlWriter& xml, WriteContext& ctx);
 

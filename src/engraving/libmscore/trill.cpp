@@ -29,7 +29,10 @@
 #include "iengravingfont.h"
 
 #include "accidental.h"
+#include "chord.h"
 #include "factory.h"
+#include "note.h"
+#include "ornament.h"
 #include "score.h"
 #include "staff.h"
 #include "system.h"
@@ -71,20 +74,6 @@ void TrillSegment::draw(mu::draw::Painter* painter) const
 }
 
 //---------------------------------------------------------
-//   add
-//---------------------------------------------------------
-
-void TrillSegment::add(EngravingItem* e)
-{
-    e->setParent(this);
-    if (e->type() == ElementType::ACCIDENTAL) {
-        // accidental is part of trill
-        trill()->setAccidental(toAccidental(e));
-        e->added();
-    }
-}
-
-//---------------------------------------------------------
 //   remove
 //---------------------------------------------------------
 
@@ -103,7 +92,7 @@ void TrillSegment::remove(EngravingItem* e)
 
 void TrillSegment::symbolLine(SymId start, SymId fill)
 {
-    double x1 = 0;
+    double x1 = 0.0;
     double x2 = pos2().x();
     double w   = x2 - x1;
     double mag = magS();
@@ -123,7 +112,7 @@ void TrillSegment::symbolLine(SymId start, SymId fill)
 
 void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
 {
-    double x1 = 0;
+    double x1 = 0.0;
     double x2 = pos2().x();
     double w   = x2 - x1;
     double mag = magS();
@@ -149,40 +138,13 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
 
 Shape TrillSegment::shape() const
 {
-    return Shape(bbox());
-}
-
-//---------------------------------------------------------
-//   acceptDrop
-//---------------------------------------------------------
-
-bool TrillSegment::acceptDrop(EditData& data) const
-{
-    if (data.dropElement->isAccidental()) {
-        return true;
+    IEngravingFontPtr font = score()->engravingFont();
+    Shape s = font->shape(_symbols, _mag);
+    Accidental* accidental = trill()->accidental();
+    if (accidental && accidental->visible() && isSingleBeginType()) {
+        s.add(accidental->shape().translate(accidental->pos()));
     }
-    return false;
-}
-
-//---------------------------------------------------------
-//   drop
-//---------------------------------------------------------
-
-EngravingItem* TrillSegment::drop(EditData& data)
-{
-    EngravingItem* e = data.dropElement;
-    switch (e->type()) {
-    case ElementType::ACCIDENTAL:
-        e->setParent(trill());
-        score()->undoAddElement(e);
-        break;
-
-    default:
-        delete e;
-        e = 0;
-        break;
-    }
-    return e;
+    return s;
 }
 
 //---------------------------------------------------------
@@ -196,6 +158,10 @@ void TrillSegment::scanElements(void* data, void (* func)(void*, EngravingItem*)
         Accidental* a = trill()->accidental();
         if (a) {
             func(data, a);
+        }
+        Chord* cueNoteChord = trill()->cueNoteChord();
+        if (cueNoteChord) {
+            cueNoteChord->scanElements(data, func);
         }
     }
 }
@@ -240,7 +206,9 @@ Trill::Trill(EngravingItem* parent)
     : SLine(ElementType::TRILL, parent)
 {
     _trillType     = TrillType::TRILL_LINE;
-    _accidental    = 0;
+    _ornament = nullptr;
+    _accidental = nullptr;
+    _cueNoteChord = nullptr;
     _ornamentStyle = OrnamentStyle::DEFAULT;
     setPlayArticulation(true);
     initElementStyle(&trillStyle);
@@ -250,7 +218,7 @@ Trill::Trill(const Trill& t)
     : SLine(t)
 {
     _trillType = t._trillType;
-    _accidental = t._accidental ? t._accidental->clone() : nullptr;
+    _ornament = t._ornament ? t._ornament->clone() : nullptr;
     _ornamentStyle = t._ornamentStyle;
     _playArticulation = t._playArticulation;
     initElementStyle(&trillStyle);
@@ -258,22 +226,7 @@ Trill::Trill(const Trill& t)
 
 Trill::~Trill()
 {
-    delete _accidental;
-}
-
-//---------------------------------------------------------
-//   add
-//---------------------------------------------------------
-
-void Trill::add(EngravingItem* e)
-{
-    if (e->type() == ElementType::ACCIDENTAL) {
-        e->setParent(this);
-        _accidental = toAccidental(e);
-        e->added();
-    } else {
-        SLine::add(e);
-    }
+    delete _ornament;
 }
 
 //---------------------------------------------------------
@@ -286,6 +239,17 @@ void Trill::remove(EngravingItem* e)
         _accidental = nullptr;
         e->removed();
     }
+}
+
+void Trill::setTrillType(TrillType tt)
+{
+    _trillType = tt;
+    if (!_ornament) {
+        // ornament parent will be explicitely set at layout stage
+        _ornament = Factory::createOrnament((ChordRest*)score()->dummy()->chord());
+    }
+    _ornament->setTrack(track());
+    _ornament->setSymId(Ornament::fromTrillType(tt));
 }
 
 //---------------------------------------------------------

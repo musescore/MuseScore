@@ -60,8 +60,8 @@ static const ElementStyle articulationStyle {
 //   Articulation
 //---------------------------------------------------------
 
-Articulation::Articulation(ChordRest* parent)
-    : EngravingItem(ElementType::ARTICULATION, parent, ElementFlag::MOVABLE)
+Articulation::Articulation(ChordRest* parent, ElementType type)
+    : EngravingItem(type, parent, ElementFlag::MOVABLE)
 {
     _symId         = SymId::noSym;
     _anchor        = ArticulationAnchor::TOP_STAFF;
@@ -177,7 +177,7 @@ void Articulation::draw(mu::draw::Painter* painter) const
         painter->setFont(scaledFont);
         painter->drawText(bbox(), draw::TextDontClip | draw::AlignLeft | draw::AlignTop, TConv::text(m_textType));
     } else {
-        drawSymbol(_symId, painter, PointF(-0.5 * width(), 0.0));
+        drawSymbol(symId(), painter, PointF(-0.5 * width(), 0.0));
     }
 }
 
@@ -592,46 +592,6 @@ void Articulation::computeCategories()
                          || _symId == SymId::luteFingeringRHThird);
 }
 
-//---------------------------------------------------------
-//   isOrnament
-//---------------------------------------------------------
-
-bool Articulation::isOrnament() const
-{
-    return isOrnament(subtype());
-}
-
-bool Articulation::isOrnament(int subtype)
-{
-    static const std::set<SymId> ornaments {
-        SymId::ornamentTurn,
-        SymId::ornamentTurnInverted,
-        SymId::ornamentTurnSlash,
-        SymId::ornamentTrill,
-        SymId::brassMuteClosed,
-        SymId::ornamentMordent,
-        SymId::ornamentShortTrill,
-        SymId::ornamentTremblement,
-        SymId::ornamentPrallMordent,
-        SymId::ornamentLinePrall,
-        SymId::ornamentUpPrall,
-        SymId::ornamentUpMordent,
-        SymId::ornamentPrecompMordentUpperPrefix,
-        SymId::ornamentDownMordent,
-        SymId::ornamentPrallUp,
-        SymId::ornamentPrallDown,
-        SymId::ornamentPrecompSlide,
-        SymId::ornamentShake3,
-        SymId::ornamentShakeMuffat1,
-        SymId::ornamentTremblementCouperin,
-        SymId::ornamentPinceCouperin
-    };
-
-    SymId symId = static_cast<SymId>(subtype);
-
-    return ornaments.find(symId) != ornaments.end();
-}
-
 bool Articulation::isBasicArticulation() const
 {
     static const std::set<SymId> articulations{
@@ -685,34 +645,39 @@ void Articulation::doAutoplace()
         double md = minDistance().val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
-        RectF r = bbox().translated(chordRest()->pos() + m->pos() + s->pos() + pos());
 
-        double d;
-        bool above = up();     // (anchor() == ArticulationAnchor::TOP_STAFF || anchor() == ArticulationAnchor::TOP_CHORD);
-        SkylineLine sk(!above);
-        if (above) {
-            sk.add(r.x(), r.bottom(), r.width());
-            d = sk.minDistance(ss->skyline().north());
-        } else {
-            sk.add(r.x(), r.top(), r.width());
-            d = ss->skyline().south().minDistance(sk);
-        }
+        Shape thisShape = shape().translate(chordRest()->pos() + m->pos() + s->pos() + pos());
 
-        if (d > -md) {
-            double yd = d + md;
+        for (ShapeElement& shapeEl : thisShape) {
+            RectF r = shapeEl;
+
+            double d = 0.0;
+            bool above = up();
+            SkylineLine sk(!above);
             if (above) {
-                yd *= -1.0;
+                sk.add(r.x(), r.bottom(), r.width());
+                d = sk.minDistance(ss->skyline().north());
+            } else {
+                sk.add(r.x(), r.top(), r.width());
+                d = ss->skyline().south().minDistance(sk);
             }
-            if (offsetChanged() != OffsetChange::NONE) {
-                // user moved element within the skyline
-                // we may need to adjust minDistance, yd, and/or offset
-                //bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
-                if (rebaseMinDistance(md, yd, sp, rebase, above, true)) {
-                    r.translate(0.0, rebase);
+
+            if (d > -md) {
+                double yd = d + md;
+                if (above) {
+                    yd *= -1.0;
                 }
+                if (offsetChanged() != OffsetChange::NONE) {
+                    // user moved element within the skyline
+                    // we may need to adjust minDistance, yd, and/or offset
+                    //bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
+                    if (rebaseMinDistance(md, yd, sp, rebase, above, true)) {
+                        r.translate(0.0, rebase);
+                    }
+                }
+                movePosY(yd);
+                r.translate(PointF(0.0, yd));
             }
-            movePosY(yd);
-            r.translate(PointF(0.0, yd));
         }
     }
     setOffsetChanged(false);

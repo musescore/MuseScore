@@ -100,7 +100,7 @@ std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, 
 ///    articulation marks
 //---------------------------------------------------------
 
-class Articulation final : public EngravingItem
+class Articulation : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Articulation)
     DECLARE_CLASSOF(ElementType::ARTICULATION)
@@ -123,9 +123,6 @@ private:
     std::pair<Sid, Sid> m_showOnTabStyles = { Sid::NOSTYLE, Sid::NOSTYLE };
 
     friend class mu::engraving::Factory;
-    Articulation(ChordRest* parent);
-
-    void draw(mu::draw::Painter*) const override;
 
     void setupShowOnTabStyles();
 
@@ -139,6 +136,9 @@ private:
     ArticulationCategories m_categories = ArticulationCategory::NONE;
     void computeCategories();
 
+protected:
+    Articulation(ChordRest* parent, ElementType type = ElementType::ARTICULATION);
+    void draw(mu::draw::Painter*) const override;
 public:
 
     Articulation(const Articulation&) = default;
@@ -203,8 +203,6 @@ public:
     bool isMarcato() const { return m_categories & ArticulationCategory::MARCATO; }
     bool isLuteFingering() { return m_categories & ArticulationCategory::LUTE_FINGERING; }
 
-    bool isOrnament() const;
-    static bool isOrnament(int subtype);
     bool isBasicArticulation() const;
 
     void doAutoplace();

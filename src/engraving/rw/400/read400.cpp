@@ -35,6 +35,7 @@
 #include "tread.h"
 
 #include "log.h"
+#include "rw/compat/compatutils.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;

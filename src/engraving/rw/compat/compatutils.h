@@ -26,6 +26,7 @@
 
 namespace mu::engraving {
 class Score;
+class MasterScore;
 class Excerpt;
 }
 
@@ -33,8 +34,10 @@ namespace mu::engraving::compat {
 class CompatUtils
 {
 public:
+    static void doCompatibilityConversions(MasterScore* masterScore);
     static void replaceStaffTextWithPlayTechniqueAnnotation(Score* score);
     static void assignInitialPartToExcerpts(const std::vector<Excerpt*>& excerpts);
+    static void replaceOldWithNewOrnaments(MasterScore* score);
 };
 }
 #endif // MU_ENGRAVING_COMPATUTILS_H

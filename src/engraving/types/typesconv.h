@@ -48,6 +48,11 @@ public:
     static AlignH fromXml(const AsciiStringView& str, AlignH def);
     static AlignV fromXml(const AsciiStringView& str, AlignV def);
 
+    static String toXml(OrnamentInterval interval);
+    static OrnamentInterval fromXml(const String& str, OrnamentInterval def);
+    static IntervalStep fromXml(const AsciiStringView& tag, IntervalStep def);
+    static IntervalType fromXml(const AsciiStringView& tag, IntervalType def);
+
     static String translatedUserName(SymId v);
     static AsciiStringView toXml(SymId v);
     static SymId fromXml(const AsciiStringView& tag, SymId def);

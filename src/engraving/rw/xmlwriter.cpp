@@ -293,6 +293,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::TEMPOCHANGE_TYPE: {
         element(name, TConv::toXml(data.value<GradualTempoChangeType>()));
     } break;
+    case P_TYPE::ORNAMENT_INTERVAL: {
+        element(name, TConv::toXml(data.value<OrnamentInterval>()));
+    } break;
     default: {
         UNREACHABLE; //! TODO
     }

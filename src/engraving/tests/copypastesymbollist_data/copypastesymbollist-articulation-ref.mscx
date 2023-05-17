@@ -143,9 +143,9 @@
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>ornamentMordent</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -187,9 +187,9 @@
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>ornamentTurnInverted</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>79</pitch>
               <tpc>15</tpc>
@@ -313,9 +313,6 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>ornamentMordent</subtype>
-              </Articulation>
             <Note>
               <pitch>76</pitch>
               <tpc>18</tpc>
@@ -357,9 +354,6 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>ornamentTurnInverted</subtype>
-              </Articulation>
             <Note>
               <pitch>76</pitch>
               <tpc>18</tpc>

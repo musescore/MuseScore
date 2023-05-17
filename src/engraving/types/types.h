@@ -93,6 +93,7 @@ enum class ElementType {
     MEASURE_REPEAT,
     TIE,
     ARTICULATION,
+    ORNAMENT,
     FERMATA,
     CHORDLINE,
     DYNAMIC,
@@ -607,6 +608,61 @@ enum class KeyMode : signed char {
 // P_TYPE::INT
 enum class ArpeggioType : unsigned char {
     NORMAL, UP, DOWN, BRACKET, UP_STRAIGHT, DOWN_STRAIGHT
+};
+
+enum class IntervalStep {
+    UNISON,
+    SECOND,
+    THIRD,
+    FOURTH,
+    FIFTH,
+    SIXTH,
+    SEVENTH,
+    OCTAVE
+};
+
+enum class IntervalType {
+    AUTO,
+    AUGMENTED,
+    MAJOR,
+    PERFECT,
+    MINOR,
+    DIMINISHED
+};
+
+struct OrnamentInterval
+{
+    IntervalStep step = IntervalStep::SECOND;
+    IntervalType type = IntervalType::AUTO;
+
+    OrnamentInterval() = default;
+    OrnamentInterval(IntervalStep s, IntervalType t)
+        : step(s), type(t) {}
+
+    inline bool operator ==(const OrnamentInterval& interval) const { return step == interval.step && type == interval.type; }
+    inline bool operator !=(const OrnamentInterval& interval) const { return !operator ==(interval); }
+
+    static bool isPerfectStep(IntervalStep step)
+    {
+        static const std::unordered_set<IntervalStep> perfectSteps {
+            IntervalStep::UNISON,
+            IntervalStep::FOURTH,
+            IntervalStep::FIFTH,
+            IntervalStep::OCTAVE
+        };
+        return mu::contains(perfectSteps, step);
+    }
+
+    bool isPerfect() const
+    {
+        return isPerfectStep(step);
+    }
+};
+
+enum class OrnamentShowAccidental {
+    DEFAULT,
+    ANY_ALTERATION,
+    ALWAYS,
 };
 
 //-------------------------------------------------------------------

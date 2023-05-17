@@ -4010,7 +4010,7 @@ void Score::cmdPitchUp()
     EngravingItem* el = selection().element();
     if (el && el->isLyrics()) {
         cmdMoveLyrics(toLyrics(el), DirectionV::UP);
-    } else if (el && (el->isArticulation() || el->isTextBase())) {
+    } else if (el && (el->isArticulationFamily() || el->isTextBase())) {
         el->undoChangeProperty(Pid::OFFSET, el->offset() + PointF(0.0, -MScore::nudgeStep * el->spatium()), PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
         cmdMoveRest(toRest(el), DirectionV::UP);
@@ -4028,7 +4028,7 @@ void Score::cmdPitchDown()
     EngravingItem* el = selection().element();
     if (el && el->isLyrics()) {
         cmdMoveLyrics(toLyrics(el), DirectionV::DOWN);
-    } else if (el && (el->isArticulation() || el->isTextBase())) {
+    } else if (el && (el->isArticulationFamily() || el->isTextBase())) {
         el->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(el->offset() + PointF(0.0, MScore::nudgeStep * el->spatium())),
                                PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
@@ -4045,7 +4045,7 @@ void Score::cmdPitchDown()
 void Score::cmdPitchUpOctave()
 {
     EngravingItem* el = selection().element();
-    if (el && (el->isArticulation() || el->isTextBase())) {
+    if (el && (el->isArticulationFamily() || el->isTextBase())) {
         el->undoChangeProperty(Pid::OFFSET,
                                PropertyValue::fromValue(el->offset() + PointF(0.0, -MScore::nudgeStep10 * el->spatium())),
                                PropertyFlags::UNSTYLED);
@@ -4061,7 +4061,7 @@ void Score::cmdPitchUpOctave()
 void Score::cmdPitchDownOctave()
 {
     EngravingItem* el = selection().element();
-    if (el && (el->isArticulation() || el->isTextBase())) {
+    if (el && (el->isArticulationFamily() || el->isTextBase())) {
         el->undoChangeProperty(Pid::OFFSET, el->offset() + PointF(0.0, MScore::nudgeStep10 * el->spatium()), PropertyFlags::UNSTYLED);
     } else {
         upDown(false, UpDownMode::OCTAVE);

@@ -165,6 +165,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::MEASURE_REPEAT,       "MeasureRepeat",        TranslatableString("engraving", "Measure repeat") },
     { ElementType::TIE,                  "Tie",                  TranslatableString("engraving", "Tie") },
     { ElementType::ARTICULATION,         "Articulation",         TranslatableString("engraving", "Articulation") },
+    { ElementType::ORNAMENT,             "Ornament",             TranslatableString("engraving", "Ornament") },
     { ElementType::FERMATA,              "Fermata",              TranslatableString("engraving", "Fermata") },
     { ElementType::CHORDLINE,            "ChordLine",            TranslatableString("engraving", "Chord line") },
     { ElementType::DYNAMIC,              "Dynamic",              TranslatableString("engraving", "Dynamic") },
@@ -323,6 +324,58 @@ Align TConv::fromXml(const String& str, Align def)
     a.horizontal = findTypeByXmlTag<AlignH>(ALIGN_H, sl.at(0), def.horizontal);
     a.vertical = findTypeByXmlTag<AlignV>(ALIGN_V, sl.at(1), def.vertical);
     return a;
+}
+
+static const std::vector<Item<IntervalStep> > INTERVAL_STEP = {
+    { IntervalStep::UNISON, "unison" },
+    { IntervalStep::SECOND, "second" },
+    { IntervalStep::THIRD, "third" },
+    { IntervalStep::FOURTH, "fourth" },
+    { IntervalStep::FIFTH, "fifth" },
+    { IntervalStep::SIXTH, "sixth" },
+    { IntervalStep::SEVENTH, "seventh" },
+    { IntervalStep::OCTAVE, "octave" }
+};
+
+static const std::vector<Item<IntervalType> > INTERVAL_TYPE = {
+    { IntervalType::AUTO, "auto" },
+    { IntervalType::MINOR, "minor" },
+    { IntervalType::MAJOR, "major" },
+    { IntervalType::PERFECT, "perfect" },
+    { IntervalType::DIMINISHED, "diminished" },
+    { IntervalType::AUGMENTED, "augmented" },
+};
+
+String TConv::toXml(OrnamentInterval interval)
+{
+    StringList sl;
+    sl << String::fromAscii(findXmlTagByType<IntervalStep>(INTERVAL_STEP, interval.step).ascii());
+    sl << String::fromAscii(findXmlTagByType<IntervalType>(INTERVAL_TYPE, interval.type).ascii());
+    return sl.join(u",");
+}
+
+OrnamentInterval TConv::fromXml(const String& str, OrnamentInterval def)
+{
+    StringList sl = str.split(',');
+    if (sl.size() != 2) {
+        LOGD() << "bad ornament interval value: " << str;
+        return def;
+    }
+
+    OrnamentInterval interval;
+    interval.step = findTypeByXmlTag<IntervalStep>(INTERVAL_STEP, sl.at(0), def.step);
+    interval.type = findTypeByXmlTag<IntervalType>(INTERVAL_TYPE, sl.at(1), def.type);
+    return interval;
+}
+
+IntervalStep TConv::fromXml(const AsciiStringView& tag, IntervalStep def)
+{
+    return findTypeByXmlTag<IntervalStep>(INTERVAL_STEP, tag, def);
+}
+
+IntervalType TConv::fromXml(const AsciiStringView& tag, IntervalType def)
+{
+    return findTypeByXmlTag<IntervalType>(INTERVAL_TYPE, tag, def);
 }
 
 String TConv::translatedUserName(SymId v)

@@ -241,7 +241,7 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
-        <notations print-object="no">
+        <notations>
           <ornaments>
             <turn/>
             </ornaments>

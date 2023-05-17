@@ -69,6 +69,7 @@
 #include "libmscore/measurenumber.h"
 #include "libmscore/measurerepeat.h"
 #include "libmscore/mmrest.h"
+#include "libmscore/ornament.h"
 #include "libmscore/ottava.h"
 #include "libmscore/page.h"
 #include "libmscore/part.h"
@@ -2130,6 +2131,9 @@ void Read206::readTrill206(XmlReader& e, Trill* t)
             readAccidental206(_accidental, e);
             _accidental->setParent(t);
             t->setAccidental(_accidental);
+            if (t->ornament()) {
+                t->ornament()->setTrillOldCompatAccidental(_accidental);
+            }
         } else if (tag == "ornamentStyle") {
             rw400::TRead::readProperty(t, e, *e.context(), Pid::ORNAMENT_STYLE);
         } else if (tag == "play") {
@@ -2197,7 +2201,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
     {
         if (el->isFermata()) {
             return rw400::TRead::readProperties(dynamic_cast<Fermata*>(el), e, ctx);
-        } else if (el->isArticulation()) {
+        } else if (el->isArticulationFamily()) {
             return rw400::TRead::readProperties(dynamic_cast<Articulation*>(el), e, ctx);
         }
         UNREACHABLE;
@@ -3447,6 +3451,8 @@ Err Read206::read(Score* score, XmlReader& e, ReadInOutData* out)
         }
         staffIdx += sp;
     }
+
+    compat::CompatUtils::doCompatibilityConversions(score->masterScore());
 
     // fix positions
     //    offset = saved offset - layout position

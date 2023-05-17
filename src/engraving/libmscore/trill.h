@@ -46,14 +46,11 @@ public:
 
     TrillSegment* clone() const override { return new TrillSegment(*this); }
     void draw(mu::draw::Painter*) const override;
-    bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all) override;
 
     EngravingItem* propertyDelegate(Pid) override;
 
-    void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
     Shape shape() const override;
 
@@ -82,10 +79,12 @@ class Trill final : public SLine
     Sid getPropertyStyle(Pid) const override;
 
 private:
-    TrillType _trillType;
-    Accidental* _accidental;
-    OrnamentStyle _ornamentStyle;   // for use in ornaments such as trill
-    bool _playArticulation;
+    TrillType _trillType = TrillType::TRILL_LINE;
+    Accidental* _accidental = nullptr;
+    Chord* _cueNoteChord = nullptr;
+    OrnamentStyle _ornamentStyle = OrnamentStyle::DEFAULT;   // for use in ornaments such as trill
+    bool _playArticulation = true;
+    Ornament* _ornament = nullptr;
 
 public:
     Trill(EngravingItem* parent);
@@ -99,10 +98,9 @@ public:
     Trill* clone() const override { return new Trill(*this); }
 
     LineSegment* createLineSegment(System* parent) override;
-    void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
 
-    void setTrillType(TrillType tt) { _trillType = tt; }
+    void setTrillType(TrillType tt);
     TrillType trillType() const { return _trillType; }
     void setOrnamentStyle(OrnamentStyle val) { _ornamentStyle = val; }
     OrnamentStyle ornamentStyle() const { return _ornamentStyle; }
@@ -111,6 +109,8 @@ public:
     String trillTypeUserName() const;
     Accidental* accidental() const { return _accidental; }
     void setAccidental(Accidental* a) { _accidental = a; }
+    Chord* cueNoteChord() const { return _cueNoteChord; }
+    void setCueNoteChord(Chord* c) { _cueNoteChord = c; }
 
     Segment* segment() const { return (Segment*)explicitParent(); }
 
@@ -119,6 +119,9 @@ public:
     PropertyValue propertyDefault(Pid) const override;
 
     String accessibleInfo() const override;
+
+    Ornament* ornament() const { return _ornament; }
+    void setOrnament(Ornament* o) { _ornament = o; }
 };
 } // namespace mu::engraving
 

@@ -34,6 +34,7 @@
 #include "libmscore/measurenumber.h"
 #include "libmscore/mmrestrange.h"
 #include "libmscore/note.h"
+#include "libmscore/ornament.h"
 #include "libmscore/part.h"
 #include "libmscore/rest.h"
 #include "libmscore/score.h"
@@ -805,6 +806,16 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                                 }
                                 if (!graceAfter.empty()) {
                                     skyline.add(graceAfter.shape().translated(graceAfter.pos() + p));
+                                }
+                            }
+                            // If present, add ornament cue note to skyline
+                            if (e->isChord()) {
+                                Ornament* ornament = toChord(e)->findOrnament();
+                                if (ornament) {
+                                    Chord* cue = ornament->cueNoteChord();
+                                    if (cue && cue->upNote()->visible()) {
+                                        skyline.add(cue->shape().translate(cue->pos() + p));
+                                    }
                                 }
                             }
                         }

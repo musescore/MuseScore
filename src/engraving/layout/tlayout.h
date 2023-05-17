@@ -102,6 +102,8 @@ class MMRest;
 class Note;
 class NoteDot;
 
+class Ornament;
+
 class Ottava;
 class OttavaSegment;
 
@@ -248,6 +250,8 @@ public:
     static void layout(Note* item, LayoutContext& ctx);
     static void layout2(Note* item, LayoutContext& ctx);
     static void layout(NoteDot* item, LayoutContext& ctx);
+
+    static void layout(Ornament* item, LayoutContext& ctx);
 
     static void layout(Ottava* item, LayoutContext& ctx);
     static void layout(OttavaSegment* item, LayoutContext& ctx);

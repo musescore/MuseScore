@@ -75,6 +75,8 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::VBOX, InspectorModelType::TYPE_VERTICAL_FRAME },// vertical frame
     { mu::engraving::ElementType::HBOX, InspectorModelType::TYPE_HORIZONTAL_FRAME },// horizontal frame
     { mu::engraving::ElementType::ARTICULATION, InspectorModelType::TYPE_ARTICULATION },
+    { mu::engraving::ElementType::ORNAMENT, InspectorModelType::TYPE_ORNAMENT },
+    { mu::engraving::ElementType::TRILL_SEGMENT, InspectorModelType::TYPE_ORNAMENT },
     { mu::engraving::ElementType::IMAGE, InspectorModelType::TYPE_IMAGE },
     { mu::engraving::ElementType::HARMONY, InspectorModelType::TYPE_CHORD_SYMBOL },
     { mu::engraving::ElementType::AMBITUS, InspectorModelType::TYPE_AMBITUS },
@@ -194,12 +196,6 @@ InspectorModelType AbstractInspectorModel::modelTypeByElementKey(const ElementKe
     if (elementKey.type == mu::engraving::ElementType::LAYOUT_BREAK) {
         return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::LayoutBreakType>(elementKey.subtype),
                                                       InspectorModelType::TYPE_UNDEFINED);
-    }
-
-    if (elementKey.type == mu::engraving::ElementType::ARTICULATION) {
-        if (mu::engraving::Articulation::isOrnament(elementKey.subtype)) {
-            return InspectorModelType::TYPE_ORNAMENT;
-        }
     }
 
     return NOTATION_ELEMENT_MODEL_TYPES.value(elementKey.type, InspectorModelType::TYPE_UNDEFINED);
