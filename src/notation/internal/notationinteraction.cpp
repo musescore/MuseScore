@@ -5130,6 +5130,8 @@ void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
         }
     }
 
+    doEndEditElement();
+
     // look for a segment at this tick; if none, create one
     mu::engraving::Segment* nextSegm = segm;
     while (nextSegm && nextSegm->tick() < nextSegTick) {

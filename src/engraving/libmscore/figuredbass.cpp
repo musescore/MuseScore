@@ -148,11 +148,11 @@ bool FiguredBassItem::parse(String& str)
     parseParenthesis(str, 3);
     // check for a possible cont. line symbol(s)
     _contLine = ContLine::NONE;                         // contLine
-    if (str.at(0) == u'-' || str.at(0) == u'_') {             // 1 symbol: simple continuation
+    if (!str.empty() && (str.at(0) == u'-' || str.at(0) == u'_')) {             // 1 symbol: simple continuation
         _contLine = ContLine::SIMPLE;
         str.remove(0, 1);
     }
-    while (str.at(0) == u'-' || str.at(0) == u'_') {          // more than 1 symbol: extended continuation
+    while (!str.empty() && (str.at(0) == u'-' || str.at(0) == u'_')) {          // more than 1 symbol: extended continuation
         _contLine = ContLine::EXTENDED;
         str.remove(0, 1);
     }
@@ -178,7 +178,7 @@ bool FiguredBassItem::parse(String& str)
 
     // some checks:
     // if some extra input, str is not conformant
-    if (str.size()) {
+    if (!str.empty()) {
         return false;
     }
     // can't have BOTH prefix and suffix
@@ -321,6 +321,10 @@ int FiguredBassItem::parseDigit(String& str)
 
 int FiguredBassItem::parseParenthesis(String& str, int parenthIdx)
 {
+    if (str.empty()) {
+        return 0;
+    }
+
     char16_t c = str.at(0).unicode();
     Parenthesis code = Parenthesis::NONE;
     switch (c) {
