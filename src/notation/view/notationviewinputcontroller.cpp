@@ -615,9 +615,6 @@ bool NotationViewInputController::needSelect(const ClickContext& ctx) const
 
 void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
 {
-    m_view->hideContextMenu();
-    m_view->hideElementPopup();
-
     if (ctx.isHitGrip) {
         viewInteraction()->startEditGrip(ctx.logicClickPos);
         return;
@@ -790,7 +787,6 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
 
     const INotationInteraction::HitElementContext& ctx = hitElementContext();
     if (!ctx.element) {
-        m_view->hideElementPopup();
         return;
     }
 

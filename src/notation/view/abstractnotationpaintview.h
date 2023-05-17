@@ -271,6 +271,7 @@ private:
     QTimer m_enableAutoScrollTimer;
 
     bool m_isPopupOpen = false;
+    notation::EngravingItem* m_previousSelectedElement = nullptr;
 };
 }
 
