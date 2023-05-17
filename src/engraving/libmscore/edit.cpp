@@ -5423,6 +5423,8 @@ static bool chordHasVisibleNote(const Chord* chord)
     return false;
 }
 
+static void undoChangeOrnamentVisibility(Ornament* ornament, bool visible);
+
 static void undoChangeNoteVisibility(Note* note, bool visible)
 {
     note->undoChangeProperty(Pid::VISIBLE, visible);
@@ -5489,8 +5491,11 @@ static void undoChangeNoteVisibility(Note* note, bool visible)
                     continue;
                 }
             }
-
-            child->undoChangeProperty(Pid::VISIBLE, chordHasVisibleNote_);
+            if (child->isOrnament()) {
+                undoChangeOrnamentVisibility(toOrnament(child), visible);
+            } else {
+                child->undoChangeProperty(Pid::VISIBLE, chordHasVisibleNote_);
+            }
         }
     }
 }
