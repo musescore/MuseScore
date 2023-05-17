@@ -55,25 +55,6 @@ StyledGridView {
         accessible.name: qsTrc("appshell", "Recent scores grid")
     }
 
-    header: Item {
-        height: headerTitle.height
-        anchors.left: parent.left
-        anchors.right: parent.right
-
-        StyledTextLabel {
-            id: headerTitle
-
-            anchors.top: parent.top
-            anchors.topMargin: 8
-            anchors.left: parent.left
-            anchors.leftMargin: root.sideMargin
-
-            text: qsTrc("project", "New & recent")
-
-            font: ui.theme.tabBoldFont
-        }
-    }
-
     ScrollBar.vertical: StyledScrollBar {
         parent: root.parent
 

@@ -35,7 +35,6 @@ FocusScope {
         id: prv
 
         readonly property int sideMargin: 46
-        readonly property int buttonWidth: 134
     }
 
     NavigationSection {
@@ -77,6 +76,7 @@ FocusScope {
         NavigationPanel {
             id: navSearchPanel
             name: "HomeScoresSearch"
+            enabled: topLayout.enabled && topLayout.visible
             section: navSec
             order: 1
             accessible.name: qsTrc("project", "Recent scores")
@@ -103,8 +103,51 @@ FocusScope {
         }
     }
 
+    StyledTabBar {
+        id: tabBar
+
+        anchors.top: topLayout.bottom
+        anchors.topMargin: prv.sideMargin
+        anchors.left: parent.left
+        anchors.leftMargin: prv.sideMargin
+        anchors.right: parent.right
+        anchors.rightMargin: prv.sideMargin
+
+        NavigationPanel {
+            id: navTabPanel
+            name: "HomeScoresTabs"
+            section: navSec
+            direction: NavigationPanel.Horizontal
+            order: 2
+            accessible.name: qsTrc("project", "Scores tab bar")
+            enabled: tabBar.enabled && tabBar.visible
+
+            onNavigationEvent: function(event) {
+                if (event.type === NavigationEvent.AboutActive) {
+                    event.setData("controlName", tabBar.currentItem.navigation.name)
+                }
+            }
+        }
+
+        StyledTabButton {
+            text: qsTrc("project", "New & recent")
+
+            navigation.name: "New and recent"
+            navigation.panel: navTabPanel
+            navigation.column: 1
+        }
+
+        StyledTabButton {
+            text: qsTrc("project", "My online scores")
+
+            navigation.name: "My online scores"
+            navigation.panel: navTabPanel
+            navigation.column: 2
+        }
+    }
+
     Rectangle {
-        anchors.top: view.top
+        anchors.top: contentLoader.top
 
         width: parent.width
         height: 8
@@ -123,44 +166,64 @@ FocusScope {
         }
     }
 
-    RecentScoresView {
-        id: view
+    Loader {
+        id: contentLoader
 
-        anchors.top: topLayout.bottom
-        anchors.topMargin: prv.sideMargin
+        anchors.top: tabBar.bottom
+        anchors.topMargin: 28
         anchors.left: parent.left
-        anchors.leftMargin: prv.sideMargin - view.sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: prv.sideMargin - view.sideMargin
         anchors.bottom: buttonsPanel.top
 
-        navigation.section: navSec
-        navigation.order: 2
+        sourceComponent: [newAndRecentComp, onlineScoresComp][tabBar.currentIndex]
+    }
 
-        backgroundColor: background.color
+    Component {
+        id: newAndRecentComp
 
-        isSearching: searchField.searchText.length != 0
+        RecentScoresView {
+            id: view
 
-        model: SortFilterProxyModel {
-            sourceModel: recentScoresModel
+            anchors.fill: parent
+            anchors.leftMargin: prv.sideMargin - view.sideMargin
+            anchors.rightMargin: prv.sideMargin - view.sideMargin
 
-            excludeIndexes: [0, recentScoresModel.rowCount() - 1]           // New score and no result items
+            navigation.section: navSec
+            navigation.order: 3
 
-            filters: [
-                FilterValue {
-                    roleName: "name"
-                    roleValue: searchField.searchText
-                    compareType: CompareType.Contains
-                }
-            ]
+            backgroundColor: background.color
+
+            isSearching: searchField.searchText.length != 0
+
+            model: SortFilterProxyModel {
+                sourceModel: recentScoresModel
+
+                excludeIndexes: [0, recentScoresModel.rowCount() - 1]           // New score and no result items
+
+                filters: [
+                    FilterValue {
+                        roleName: "name"
+                        roleValue: searchField.searchText
+                        compareType: CompareType.Contains
+                    }
+                ]
+            }
+
+            onAddNewScoreRequested: {
+                recentScoresModel.addNewScore()
+            }
+
+            onOpenScoreRequested: function(scorePath) {
+                recentScoresModel.openRecentScore(scorePath)
+            }
         }
+    }
 
-        onAddNewScoreRequested: {
-            recentScoresModel.addNewScore()
-        }
+    Component {
+        id: onlineScoresComp
 
-        onOpenScoreRequested: function(scorePath) {
-            recentScoresModel.openRecentScore(scorePath)
+        Item {
+            // TODO
         }
     }
 
@@ -230,12 +293,10 @@ FocusScope {
             spacing: 22
 
             FlatButton {
-
                 navigation.name: "NewScore"
                 navigation.panel: navBottomPanel
                 navigation.column: 2
 
-                minWidth: prv.buttonWidth
                 text: qsTrc("project", "New")
 
                 onClicked: {
@@ -248,7 +309,6 @@ FocusScope {
                 navigation.panel: navBottomPanel
                 navigation.column: 3
 
-                minWidth: prv.buttonWidth
                 text: qsTrc("project", "Open other…")
 
                 onClicked: {
