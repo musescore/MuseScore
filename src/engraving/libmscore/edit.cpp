@@ -572,15 +572,19 @@ Note* Score::addNote(Chord* chord, const NoteVal& noteVal, bool forceAccidental,
     return note;
 }
 
-Note* Score::addNoteToTiedChord(Chord* chord, const NoteVal& noteVal, bool forceAccidental, const std::set<SymId>& articulationIds,
-                                InputState* externalInputState)
+Note* Score::addNoteToTiedChord(Chord* chord, const NoteVal& noteVal, bool forceAccidental, const std::set<SymId>& articulationIds)
 {
-    UNUSED(externalInputState)
-    assert(!chord->notes().empty());
-    Note* referenceNote = chord->notes()[0];
+    IF_ASSERT_FAILED(!chord->notes().empty()) {
+        return nullptr;
+    };
+    Note* referenceNote = chord->notes().at(0);
 
     while (referenceNote->tieBack()) {
         referenceNote = referenceNote->tieBack()->startNote();
+    }
+    // don't add note if it is already exist
+    if (referenceNote->chord()->findNote(noteVal.pitch)) {
+        return nullptr;
     }
 
     Tie* tie = nullptr;
