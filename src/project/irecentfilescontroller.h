@@ -24,10 +24,10 @@
 
 #include "modularity/imoduleinterface.h"
 
-#include "projecttypes.h"
-
 #include "async/notification.h"
 #include "async/promise.h"
+
+#include "types/projecttypes.h"
 
 class QPixmap;
 

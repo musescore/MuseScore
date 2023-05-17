@@ -31,10 +31,12 @@
 #include "progress.h"
 #include "log.h"
 
+#include "projectmeta.h"
+
 #include "cloud/cloudtypes.h"
 #include "notation/inotation.h"
 #include "notation/notationtypes.h"
-#include "inotationwriter.h"
+#include "../inotationwriter.h"
 
 namespace mu::project {
 struct ProjectCreateOptions
@@ -288,66 +290,6 @@ struct RecentFile {
 };
 
 using RecentFilesList = std::vector<RecentFile>;
-
-struct ProjectMeta
-{
-    io::path_t filePath;
-
-    QString title;
-    QString subtitle;
-    QString composer;
-    QString lyricist;
-    QString copyright;
-    QString translator;
-    QString arranger;
-    size_t partsCount = 0;
-    QPixmap thumbnail;
-    QDate creationDate;
-
-    QString source;
-    QString audioComUrl;
-    QString platform;
-    QString musescoreVersion;
-    int musescoreRevision = 0;
-    int mscVersion = 0;
-
-    QVariantMap additionalTags;
-
-    io::path_t fileName(bool includingExtension = true) const
-    {
-        return io::filename(filePath, includingExtension);
-    }
-
-    bool operator==(const ProjectMeta& other) const
-    {
-        bool equal = filePath == other.filePath;
-        equal &= title == other.title;
-        equal &= subtitle == other.subtitle;
-        equal &= composer == other.composer;
-        equal &= lyricist == other.lyricist;
-        equal &= copyright == other.copyright;
-        equal &= translator == other.translator;
-        equal &= arranger == other.arranger;
-        equal &= partsCount == other.partsCount;
-        equal &= creationDate == other.creationDate;
-        equal &= source == other.source;
-        equal &= audioComUrl == other.audioComUrl;
-        equal &= platform == other.platform;
-        equal &= musescoreVersion == other.musescoreVersion;
-        equal &= musescoreRevision == other.musescoreRevision;
-        equal &= mscVersion == other.mscVersion;
-        equal &= additionalTags == other.additionalTags;
-        equal &= thumbnail.toImage() == other.thumbnail.toImage();
-        return equal;
-    }
-
-    bool operator!=(const ProjectMeta& other) const
-    {
-        return !(*this == other);
-    }
-};
-
-using ProjectMetaList = QList<ProjectMeta>;
 
 struct Template
 {

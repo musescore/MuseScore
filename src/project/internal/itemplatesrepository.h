@@ -24,7 +24,7 @@
 #define MU_PROJECT_ITEMPLATESREPOSITORY_H
 
 #include "modularity/imoduleinterface.h"
-#include "project/projecttypes.h"
+#include "project/types/projecttypes.h"
 
 #include "types/retval.h"
 

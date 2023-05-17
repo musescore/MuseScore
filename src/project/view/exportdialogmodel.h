@@ -22,6 +22,8 @@
 #ifndef MU_PROJECT_EXPORTDIALOGMODEL_H
 #define MU_PROJECT_EXPORTDIALOGMODEL_H
 
+#include <QAbstractListModel>
+
 #include "modularity/ioc.h"
 
 #include "async/asyncable.h"
@@ -34,12 +36,10 @@
 #include "importexport/audioexport/iaudioexportconfiguration.h"
 #include "importexport/mei/imeiconfiguration.h"
 
-#include "projecttypes.h"
-#include "iprojectconfiguration.h"
 #include "inotationwritersregister.h"
+#include "iprojectconfiguration.h"
 #include "internal/iexportprojectscenario.h"
-
-#include <QAbstractListModel>
+#include "types/projecttypes.h"
 
 class QItemSelectionModel;
 

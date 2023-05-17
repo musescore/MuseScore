@@ -26,12 +26,13 @@
 #include <QColor>
 
 #include "modularity/imoduleinterface.h"
-#include "io/path.h"
 #include "async/channel.h"
 #include "async/notification.h"
-#include "inotationproject.h"
-#include "projecttypes.h"
+#include "io/path.h"
 #include "types/bytearray.h"
+
+#include "inotationproject.h"
+#include "types/projecttypes.h"
 
 namespace mu::project {
 class IProjectConfiguration : MODULE_EXPORT_INTERFACE

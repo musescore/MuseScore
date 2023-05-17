@@ -26,7 +26,7 @@
 #include "types/ret.h"
 #include "io/path.h"
 
-#include "projecttypes.h"
+#include "types/projecttypes.h"
 
 class QUrl;
 

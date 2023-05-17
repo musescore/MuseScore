@@ -28,17 +28,6 @@ using namespace mu::modularity;
 using namespace mu::notation;
 using namespace mu::project;
 
-static const QString WORK_TITLE_TAG("workTitle"); //// Keep updated with notationproject.cpp
-static const QString COMPOSER_TAG("composer");
-static const QString LYRICIST_TAG("lyricist");
-static const QString SOURCE_TAG("source");
-static const QString AUDIO_COM_URL_TAG("audioComFile");
-static const QString COPYRIGHT_TAG("copyright");
-static const QString TRANSLATOR_TAG("translator");
-static const QString ARRANGER_TAG("arranger");
-static const QString CREATION_DATE_TAG("creationDate");
-static const QString PLATFORM_TAG("platform");
-
 ProjectPropertiesModel::ProjectPropertiesModel(QObject* parent)
     : QAbstractListModel(parent)
 {
@@ -52,22 +41,29 @@ void ProjectPropertiesModel::load()
 {
     beginResetModel();
 
+    QVariantMap additionalProperties = m_projectMetaInfo.additionalTags;
+
     m_properties = {
         { WORK_TITLE_TAG,          qtrc("project", "Work title"),         m_projectMetaInfo.title,                      true },
-        { ARRANGER_TAG,            qtrc("project", "Arranger"),           m_projectMetaInfo.arranger,                   true },
+        { SUBTITLE_TAG,            qtrc("project", "Subtitle"),           m_projectMetaInfo.subtitle,                   true },
         { COMPOSER_TAG,            qtrc("project", "Composer"),           m_projectMetaInfo.composer,                   true },
-        { COPYRIGHT_TAG,           qtrc("project", "Copyright"),          m_projectMetaInfo.copyright,                  true },
-        { CREATION_DATE_TAG,       qtrc("project", "Creation date"),      m_projectMetaInfo.creationDate.toString(),    true },
+        { ARRANGER_TAG,            qtrc("project", "Arranger"),           m_projectMetaInfo.arranger,                   true },
         { LYRICIST_TAG,            qtrc("project", "Lyricist"),           m_projectMetaInfo.lyricist,                   true },
         { TRANSLATOR_TAG,          qtrc("project", "Translator"),         m_projectMetaInfo.translator,                 true },
+        { COPYRIGHT_TAG,           qtrc("project", "Copyright"),          m_projectMetaInfo.copyright,                  true },
+        { WORK_NUMBER_TAG,         qtrc("project", "Work number"),        additionalProperties[WORK_NUMBER_TAG].toString(), true },
+        { MOVEMENT_TITLE_TAG,      qtrc("project", "Movement title"),     additionalProperties[MOVEMENT_TITLE_TAG].toString(), true },
+        { MOVEMENT_NUMBER_TAG,     qtrc("project", "Movement number"),    additionalProperties[MOVEMENT_NUMBER_TAG].toString(), true },
+        { CREATION_DATE_TAG,       qtrc("project", "Creation date"),      m_projectMetaInfo.creationDate.toString(),    true },
         { PLATFORM_TAG,            qtrc("project", "Platform"),           m_projectMetaInfo.platform,                   true },
         { SOURCE_TAG,              qtrc("project", "Source"),             m_projectMetaInfo.source,                     true },
         { AUDIO_COM_URL_TAG,       qtrc("project", "Audio.com URL"),      m_projectMetaInfo.audioComUrl,                true }
     };
 
-    QVariantMap additionalProperties = m_projectMetaInfo.additionalTags;
     for (const QString& propertyName : additionalProperties.keys()) {
-        m_properties.append({ "", propertyName, additionalProperties[propertyName].toString() });
+        if (!isStandardTag(propertyName)) {
+            m_properties.append({ "", propertyName, additionalProperties[propertyName].toString() });
+        }
     }
 
     endResetModel();

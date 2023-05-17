@@ -27,7 +27,8 @@
 #include "modularity/imoduleinterface.h"
 #include "io/path.h"
 #include "types/retval.h"
-#include "projecttypes.h"
+
+#include "types/projectmeta.h"
 
 namespace mu::project {
 class IMscMetaReader : MODULE_EXPORT_INTERFACE
