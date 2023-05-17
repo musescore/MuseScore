@@ -349,8 +349,8 @@ static const std::vector<Item<IntervalType> > INTERVAL_TYPE = {
 String TConv::toXml(OrnamentInterval interval)
 {
     StringList sl;
-    sl << String::fromAscii(findXmlTagByType<IntervalStep>(INTERVAL_STEP, interval.m_step).ascii());
-    sl << String::fromAscii(findXmlTagByType<IntervalType>(INTERVAL_TYPE, interval.m_type).ascii());
+    sl << String::fromAscii(findXmlTagByType<IntervalStep>(INTERVAL_STEP, interval.step).ascii());
+    sl << String::fromAscii(findXmlTagByType<IntervalType>(INTERVAL_TYPE, interval.type).ascii());
     return sl.join(u",");
 }
 
@@ -363,8 +363,8 @@ OrnamentInterval TConv::fromXml(const String& str, OrnamentInterval def)
     }
 
     OrnamentInterval interval;
-    interval.m_step = findTypeByXmlTag<IntervalStep>(INTERVAL_STEP, sl.at(0), def.m_step);
-    interval.m_type = findTypeByXmlTag<IntervalType>(INTERVAL_TYPE, sl.at(1), def.m_type);
+    interval.step = findTypeByXmlTag<IntervalStep>(INTERVAL_STEP, sl.at(0), def.step);
+    interval.type = findTypeByXmlTag<IntervalType>(INTERVAL_TYPE, sl.at(1), def.type);
     return interval;
 }
 

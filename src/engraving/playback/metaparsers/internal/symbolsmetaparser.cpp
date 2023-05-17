@@ -28,7 +28,7 @@ using namespace mu::engraving;
 
 void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(item->isArticulation()) {
+    IF_ASSERT_FAILED(item->isArticulationFamily()) {
         return;
     }
 

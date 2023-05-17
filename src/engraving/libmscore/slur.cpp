@@ -395,7 +395,7 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
         const EngravingItem* parent = item->parentItem();
         // Its own startCR or items belonging to it, lyrics, fingering, ledger lines, articulation on endCR
         if (item == startCR || parent == startCR || item->isTextBase() || item->isLedgerLine()
-            || (item->isArticulation() && parent == endCR) || item->isBend() || item->isStretchedBend()) {
+            || (item->isArticulationFamily() && parent == endCR) || item->isBend() || item->isStretchedBend()) {
             return true;
         }
         // Items that are on the start segment but in a different voice

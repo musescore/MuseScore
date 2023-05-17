@@ -79,6 +79,14 @@ signals:
     void isPerfectStepChanged(bool perfect);
 
 private:
+    void updateIsIntervalAboveAvailable();
+    void updateIsIntervalBelowAvailable();
+    void updateIsFullIntervalChoiceAvailable();
+    void updateIsPerfectStep();
+    void setIntervalStep(engraving::Pid id, mu::engraving::IntervalStep step);
+    void setIntervalType(engraving::Pid id, mu::engraving::IntervalType type);
+
+private:
     PropertyItem* m_placement = nullptr;
 
     PropertyItem* m_intervalAbove = nullptr;
@@ -94,16 +102,6 @@ private:
 
     PropertyItem* m_showAccidental = nullptr;
     PropertyItem* m_startOnUpperNote = nullptr;
-
-private:
-    void updateIsIntervalAboveAvailable();
-    void updateIsIntervalBelowAvailable();
-    void updateIsFullIntervalChoiceAvailable();
-    void updateIsPerfectStep();
-
-private slots:
-    void setIntervalStep(engraving::Pid id, mu::engraving::IntervalStep step);
-    void setIntervalType(engraving::Pid id, mu::engraving::IntervalType type);
 };
 }
 

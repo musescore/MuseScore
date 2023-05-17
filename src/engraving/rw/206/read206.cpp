@@ -2201,7 +2201,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
     {
         if (el->isFermata()) {
             return rw400::TRead::readProperties(dynamic_cast<Fermata*>(el), e, ctx);
-        } else if (el->isArticulation()) {
+        } else if (el->isArticulationFamily()) {
             return rw400::TRead::readProperties(dynamic_cast<Articulation*>(el), e, ctx);
         }
         UNREACHABLE;

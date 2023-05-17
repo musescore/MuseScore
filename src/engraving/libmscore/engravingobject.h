@@ -314,6 +314,7 @@ public:
     CONVERT(DeadSlapped,   DEAD_SLAPPED)
     CONVERT(Chord,         CHORD)
     CONVERT(BarLine,       BAR_LINE)
+    CONVERT(Articulation,  ARTICULATION)
     CONVERT(Ornament,      ORNAMENT)
     CONVERT(Fermata,       FERMATA)
     CONVERT(Marker,        MARKER)
@@ -506,9 +507,9 @@ public:
         return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation();
     }
 
-    bool isArticulation() const
+    bool isArticulationFamily() const
     {
-        return type() == ElementType::ARTICULATION || type() == ElementType::ORNAMENT;
+        return isArticulation() || isOrnament();
     }
 };
 
@@ -652,6 +653,18 @@ static inline const Bend* toBend(const EngravingObject* e)
     return (const Bend*)e;
 }
 
+static inline Articulation* toArticulation(EngravingObject* e)
+{
+    assert(e == 0 || e->isArticulationFamily());
+    return (Articulation*)e;
+}
+
+static inline const Articulation* toArticulation(const EngravingObject* e)
+{
+    assert(e == 0 || e->isArticulationFamily());
+    return (const Articulation*)e;
+}
+
 #define CONVERT(a)  \
     static inline a* to##a(EngravingObject * e) { assert(e == 0 || e->is##a()); return (a*)e; } \
     static inline const a* to##a(const EngravingObject * e) { assert(e == 0 || e->is##a()); return (const a*)e; }
@@ -660,7 +673,6 @@ CONVERT(EngravingItem)
 CONVERT(Note)
 CONVERT(Chord)
 CONVERT(BarLine)
-CONVERT(Articulation)
 CONVERT(Ornament)
 CONVERT(Fermata)
 CONVERT(Marker)

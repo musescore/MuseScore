@@ -845,7 +845,7 @@ void ChordRest::processSiblings(std::function<void(EngravingItem*)> func)
 
 EngravingItem* ChordRest::nextArticulationOrLyric(EngravingItem* e)
 {
-    if (isChord() && e->isArticulation()) {
+    if (isChord() && e->isArticulationFamily()) {
         Chord* c = toChord(this);
         auto i = std::find(c->articulations().begin(), c->articulations().end(), e);
         if (i != c->articulations().end()) {
@@ -887,7 +887,7 @@ EngravingItem* ChordRest::prevArticulationOrLyric(EngravingItem* e)
                 return nullptr;
             }
         }
-    } else if (isChord() && e->isArticulation()) {
+    } else if (isChord() && e->isArticulationFamily()) {
         Chord* c = toChord(this);
         auto j = std::find(c->articulations().begin(), c->articulations().end(), e);
         if (j != c->articulations().end()) {

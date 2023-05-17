@@ -646,12 +646,13 @@ void Articulation::doAutoplace()
 
         SysStaff* ss = m->system()->staff(si);
 
-        Shape thisShape = shape();
-        for (ShapeElement& shapeEl : thisShape) {
-            RectF r = shapeEl.translated(chordRest()->pos() + m->pos() + s->pos() + pos());
+        Shape thisShape = shape().translate(chordRest()->pos() + m->pos() + s->pos() + pos());
 
-            double d;
-            bool above = up();     // (anchor() == ArticulationAnchor::TOP_STAFF || anchor() == ArticulationAnchor::TOP_CHORD);
+        for (ShapeElement& shapeEl : thisShape) {
+            RectF r = shapeEl;
+
+            double d = 0.0;
+            bool above = up();
             SkylineLine sk(!above);
             if (above) {
                 sk.add(r.x(), r.bottom(), r.width());

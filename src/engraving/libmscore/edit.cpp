@@ -2235,7 +2235,7 @@ void Score::cmdFlip()
                 DirectionV dir = slurTieSegment->up() ? DirectionV::DOWN : DirectionV::UP;
                 slurTieSegment->undoChangeProperty(Pid::SLUR_DIRECTION, dir);
             });
-        } else if (e->isArticulation()) {
+        } else if (e->isArticulationFamily()) {
             auto artic = toArticulation(e);
             flipOnce(artic, [artic]() {
                 ArticulationAnchor articAnchor = artic->anchor();
@@ -5871,7 +5871,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 }
             }
 
-            if (element->isArticulation()) {
+            if (element->isArticulationFamily()) {
                 Articulation* a  = toArticulation(element);
                 Segment* segment;
                 SegmentType st;

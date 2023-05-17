@@ -632,22 +632,30 @@ enum class IntervalType {
 
 struct OrnamentInterval
 {
-    IntervalStep m_step = IntervalStep::SECOND;
-    IntervalType m_type = IntervalType::AUTO;
+    IntervalStep step = IntervalStep::SECOND;
+    IntervalType type = IntervalType::AUTO;
 
     OrnamentInterval() = default;
     OrnamentInterval(IntervalStep s, IntervalType t)
-        : m_step(s), m_type(t) {}
+        : step(s), type(t) {}
 
-    inline bool operator ==(const OrnamentInterval& interval) const { return m_step == interval.m_step && m_type == interval.m_type; }
+    inline bool operator ==(const OrnamentInterval& interval) const { return step == interval.step && type == interval.type; }
     inline bool operator !=(const OrnamentInterval& interval) const { return !operator ==(interval); }
+
+    static bool isPerfectStep(IntervalStep step)
+    {
+        static const std::unordered_set<IntervalStep> perfectSteps {
+            IntervalStep::UNISON,
+            IntervalStep::FOURTH,
+            IntervalStep::FIFTH,
+            IntervalStep::OCTAVE
+        };
+        return mu::contains(perfectSteps, step);
+    }
 
     bool isPerfect() const
     {
-        return m_step == IntervalStep::UNISON
-               || m_step == IntervalStep::FOURTH
-               || m_step == IntervalStep::FIFTH
-               || m_step == IntervalStep::OCTAVE;
+        return isPerfectStep(step);
     }
 };
 

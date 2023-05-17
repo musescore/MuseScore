@@ -1,5 +1,27 @@
-#ifndef ORNAMENT_H
-#define ORNAMENT_H
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef MU_ENGRAVING_ORNAMENT_H
+#define MU_ENGRAVING_ORNAMENT_H
 
 #include "articulation.h"
 
@@ -10,26 +32,6 @@ class Ornament final : public Articulation
 {
     OBJECT_ALLOCATOR(engraving, Ornament)
     DECLARE_CLASSOF(ElementType::ORNAMENT)
-
-private:
-    M_PROPERTY(OrnamentInterval, intervalAbove, setIntervalAbove)
-    M_PROPERTY(OrnamentInterval, intervalBelow, setIntervalBelow)
-    M_PROPERTY(OrnamentShowAccidental, showAccidental, setShowAccidental)
-    M_PROPERTY(bool, startOnUpperNote, setStartOnUpperNote)
-
-    std::array<Note*, 2> _notesAboveAndBelow { nullptr, nullptr }; // [0] = above, [1] = below
-    Note* noteAbove() const { return _notesAboveAndBelow[0]; }
-    Note* noteBelow() const { return _notesAboveAndBelow[1]; }
-
-    std::array<Accidental*, 2> _accidentalsAboveAndBelow { nullptr, nullptr }; // [0] = above, [1] = below
-
-    Chord* _cueNoteChord = nullptr;
-
-    Accidental* _trillOldCompatAccidental = nullptr; // used temporarily to map old (i.e. pre-4.1) trill accidentals
-
-private:
-    void updateAccidentalsAboveAndBelow();
-    void updateCueNote();
 
 public:
     Ornament(ChordRest* parent);
@@ -48,7 +50,7 @@ public:
     bool hasIntervalAbove() const;
     bool hasIntervalBelow() const;
     bool hasFullIntervalChoice() const;
-    bool showCueNote() { return _intervalAbove.m_step != IntervalStep::SECOND; }
+    bool showCueNote() { return _intervalAbove.step != IntervalStep::SECOND; }
 
     void computeNotesAboveAndBelow(AccidentalState* accState);
 
@@ -69,6 +71,26 @@ public:
     void setAccidentalBelow(Accidental* a) { _accidentalsAboveAndBelow[1] = a; }
 
     void setTrillOldCompatAccidental(Accidental* a) { _trillOldCompatAccidental = a; }
+
+private:
+    void updateAccidentalsAboveAndBelow();
+    void updateCueNote();
+    Note* noteAbove() const { return _notesAboveAndBelow[0]; }
+    Note* noteBelow() const { return _notesAboveAndBelow[1]; }
+
+private:
+    M_PROPERTY(OrnamentInterval, intervalAbove, setIntervalAbove)
+    M_PROPERTY(OrnamentInterval, intervalBelow, setIntervalBelow)
+    M_PROPERTY(OrnamentShowAccidental, showAccidental, setShowAccidental)
+    M_PROPERTY(bool, startOnUpperNote, setStartOnUpperNote)
+
+    std::array<Note*, 2> _notesAboveAndBelow { nullptr, nullptr }; // [0] = above, [1] = below
+
+    std::array<Accidental*, 2> _accidentalsAboveAndBelow { nullptr, nullptr }; // [0] = above, [1] = below
+
+    Chord* _cueNoteChord = nullptr;
+
+    Accidental* _trillOldCompatAccidental = nullptr; // used temporarily to map old (i.e. pre-4.1) trill accidentals
 };
 } // namespace mu::engraving
-#endif // ORNAMENT_H
+#endif // MU_ENGRAVING_ORNAMENT_H

@@ -68,10 +68,10 @@ Interval Interval::fromOrnamentInterval(OrnamentInterval ornInt)
 {
     Interval resultingInterval = Interval(0, 0);
 
-    resultingInterval.diatonic = static_cast<int>(ornInt.m_step);
+    resultingInterval.diatonic = static_cast<int>(ornInt.step);
 
     int cromaticSteps = 0;
-    switch (ornInt.m_step) {
+    switch (ornInt.step) {
     case IntervalStep::UNISON:
         cromaticSteps = 0;
         break;
@@ -101,7 +101,7 @@ Interval Interval::fromOrnamentInterval(OrnamentInterval ornInt)
     }
 
     if (ornInt.isPerfect()) {
-        switch (ornInt.m_type) {
+        switch (ornInt.type) {
         case IntervalType::DIMINISHED:
             cromaticSteps -= 1;
             break;
@@ -112,7 +112,7 @@ Interval Interval::fromOrnamentInterval(OrnamentInterval ornInt)
             break;
         }
     } else {
-        switch (ornInt.m_type) {
+        switch (ornInt.type) {
         case IntervalType::DIMINISHED:
             cromaticSteps -= 2;
             break;

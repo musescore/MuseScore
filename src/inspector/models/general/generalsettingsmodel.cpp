@@ -58,9 +58,11 @@ void GeneralSettingsModel::requestElements()
     QSet<EngravingItem*> elementsForIsSmallProperty;
 
     for (EngravingItem* element : m_elementList) {
+        // Trill cue note is small by definition, so isSmall property does not apply
         if (element->isNote() && toNote(element)->isTrillCueNote()) {
             continue;
         }
+
         EngravingItem* chord = element->findAncestor(ElementType::CHORD);
 
         if (chord) {

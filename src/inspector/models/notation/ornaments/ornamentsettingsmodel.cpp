@@ -55,16 +55,16 @@ void OrnamentSettingsModel::createProperties()
         OrnamentInterval newInterval;
         switch (basicInterval) {
         case OrnamentTypes::BasicInterval::TYPE_AUTO_DIATONIC:
-            newInterval.m_step = IntervalStep::SECOND;
-            newInterval.m_type = IntervalType::AUTO;
+            newInterval.step = IntervalStep::SECOND;
+            newInterval.type = IntervalType::AUTO;
             break;
         case OrnamentTypes::BasicInterval::TYPE_MAJOR_SECOND:
-            newInterval.m_step = IntervalStep::SECOND;
-            newInterval.m_type = IntervalType::MAJOR;
+            newInterval.step = IntervalStep::SECOND;
+            newInterval.type = IntervalType::MAJOR;
             break;
         case OrnamentTypes::BasicInterval::TYPE_MINOR_SECOND:
-            newInterval.m_step = IntervalStep::SECOND;
-            newInterval.m_type = IntervalType::MINOR;
+            newInterval.step = IntervalStep::SECOND;
+            newInterval.type = IntervalType::MINOR;
             break;
         default:
             break;
@@ -77,16 +77,16 @@ void OrnamentSettingsModel::createProperties()
         OrnamentInterval newInterval;
         switch (basicInterval) {
         case OrnamentTypes::BasicInterval::TYPE_AUTO_DIATONIC:
-            newInterval.m_step = IntervalStep::SECOND;
-            newInterval.m_type = IntervalType::AUTO;
+            newInterval.step = IntervalStep::SECOND;
+            newInterval.type = IntervalType::AUTO;
             break;
         case OrnamentTypes::BasicInterval::TYPE_MAJOR_SECOND:
-            newInterval.m_step = IntervalStep::SECOND;
-            newInterval.m_type = IntervalType::MAJOR;
+            newInterval.step = IntervalStep::SECOND;
+            newInterval.type = IntervalType::MAJOR;
             break;
         case OrnamentTypes::BasicInterval::TYPE_MINOR_SECOND:
-            newInterval.m_step = IntervalStep::SECOND;
-            newInterval.m_type = IntervalType::MINOR;
+            newInterval.step = IntervalStep::SECOND;
+            newInterval.type = IntervalType::MINOR;
             break;
         default:
             break;
@@ -121,11 +121,11 @@ void OrnamentSettingsModel::loadProperties()
         PropertyValue propertyValue = PropertyValue::fromQVariant(elementPropertyValue, P_TYPE::ORNAMENT_INTERVAL);
         OrnamentInterval interval = propertyValue.value<OrnamentInterval>();
         OrnamentTypes::BasicInterval basicInterval = OrnamentTypes::BasicInterval::TYPE_INVALID;
-        if (interval.m_step == IntervalStep::SECOND && interval.m_type == IntervalType::AUTO) {
+        if (interval.step == IntervalStep::SECOND && interval.type == IntervalType::AUTO) {
             basicInterval = OrnamentTypes::BasicInterval::TYPE_AUTO_DIATONIC;
-        } else if (interval.m_step == IntervalStep::SECOND && interval.m_type == IntervalType::MAJOR) {
+        } else if (interval.step == IntervalStep::SECOND && interval.type == IntervalType::MAJOR) {
             basicInterval = OrnamentTypes::BasicInterval::TYPE_MAJOR_SECOND;
-        } else if (interval.m_step == IntervalStep::SECOND && interval.m_type == IntervalType::MINOR) {
+        } else if (interval.step == IntervalStep::SECOND && interval.type == IntervalType::MINOR) {
             basicInterval = OrnamentTypes::BasicInterval::TYPE_MINOR_SECOND;
         }
         return static_cast<int>(basicInterval);
@@ -135,11 +135,11 @@ void OrnamentSettingsModel::loadProperties()
         PropertyValue propertyValue = PropertyValue::fromQVariant(elementPropertyValue, P_TYPE::ORNAMENT_INTERVAL);
         OrnamentInterval interval = propertyValue.value<OrnamentInterval>();
         OrnamentTypes::BasicInterval basicInterval = OrnamentTypes::BasicInterval::TYPE_INVALID;
-        if (interval.m_step == IntervalStep::SECOND && interval.m_type == IntervalType::AUTO) {
+        if (interval.step == IntervalStep::SECOND && interval.type == IntervalType::AUTO) {
             basicInterval = OrnamentTypes::BasicInterval::TYPE_AUTO_DIATONIC;
-        } else if (interval.m_step == IntervalStep::SECOND && interval.m_type == IntervalType::MAJOR) {
+        } else if (interval.step == IntervalStep::SECOND && interval.type == IntervalType::MAJOR) {
             basicInterval = OrnamentTypes::BasicInterval::TYPE_MAJOR_SECOND;
-        } else if (interval.m_step == IntervalStep::SECOND && interval.m_type == IntervalType::MINOR) {
+        } else if (interval.step == IntervalStep::SECOND && interval.type == IntervalType::MINOR) {
             basicInterval = OrnamentTypes::BasicInterval::TYPE_MINOR_SECOND;
         }
         return static_cast<int>(basicInterval);
@@ -148,13 +148,13 @@ void OrnamentSettingsModel::loadProperties()
     loadPropertyItem(m_intervalStep, [](const QVariant& elementPropertyValue) -> QVariant {
         PropertyValue propertyValue = PropertyValue::fromQVariant(elementPropertyValue, P_TYPE::ORNAMENT_INTERVAL);
         OrnamentInterval interval = propertyValue.value<OrnamentInterval>();
-        return static_cast<int>(interval.m_step);
+        return static_cast<int>(interval.step);
     });
 
     loadPropertyItem(m_intervalType, [](const QVariant& elementPropertyValue) -> QVariant {
         PropertyValue propertyValue = PropertyValue::fromQVariant(elementPropertyValue, P_TYPE::ORNAMENT_INTERVAL);
         OrnamentInterval interval = propertyValue.value<OrnamentInterval>();
-        return static_cast<int>(interval.m_type);
+        return static_cast<int>(interval.type);
     });
 
     loadPropertyItem(m_showAccidental);
@@ -254,12 +254,9 @@ void OrnamentSettingsModel::updateIsFullIntervalChoiceAvailable()
 void OrnamentSettingsModel::updateIsPerfectStep()
 {
     int intervalStepValue = !m_intervalStep->isUndefined() ? m_intervalStep->value().toInt() : -1;
-    bool perfect = intervalStepValue == static_cast<int>(IntervalStep::UNISON)
-                   || intervalStepValue == static_cast<int>(IntervalStep::FOURTH)
-                   || intervalStepValue == static_cast<int>(IntervalStep::FIFTH)
-                   || intervalStepValue == static_cast<int>(IntervalStep::OCTAVE);
+    IntervalStep intervalStep = static_cast<IntervalStep>(intervalStepValue);
 
-    setIsPerfectStep(perfect);
+    setIsPerfectStep(OrnamentInterval::isPerfectStep(intervalStep));
 }
 
 void OrnamentSettingsModel::setIntervalStep(Pid id, engraving::IntervalStep step)
@@ -279,11 +276,11 @@ void OrnamentSettingsModel::setIntervalStep(Pid id, engraving::IntervalStep step
         }
 
         OrnamentInterval interval = static_cast<Ornament*>(item)->intervalAbove();
-        interval.m_step = step;
-        if (interval.isPerfect() && (interval.m_type == IntervalType::MAJOR || interval.m_type == IntervalType::MINOR)) {
-            interval.m_type = IntervalType::PERFECT;
-        } else if (!interval.isPerfect() && interval.m_type == IntervalType::PERFECT) {
-            interval.m_type = IntervalType::AUTO;
+        interval.step = step;
+        if (interval.isPerfect() && (interval.type == IntervalType::MAJOR || interval.type == IntervalType::MINOR)) {
+            interval.type = IntervalType::PERFECT;
+        } else if (!interval.isPerfect() && interval.type == IntervalType::PERFECT) {
+            interval.type = IntervalType::AUTO;
         }
 
         item->undoChangeProperty(id, interval);
@@ -311,7 +308,7 @@ void OrnamentSettingsModel::setIntervalType(Pid id, engraving::IntervalType type
         }
 
         OrnamentInterval interval = static_cast<mu::engraving::Ornament*>(item)->intervalAbove();
-        interval.m_type = type;
+        interval.type = type;
         item->undoChangeProperty(id, interval);
     }
 
@@ -383,6 +380,7 @@ void OrnamentSettingsModel::setIsPerfectStep(bool isPerfect)
     if (isPerfect == m_isPerfectStep) {
         return;
     }
+
     m_isPerfectStep = isPerfect;
     emit isPerfectStepChanged(m_isPerfectStep);
 }

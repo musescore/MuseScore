@@ -332,10 +332,6 @@ void Accidental::setSubtype(const AsciiStringView& tag)
     setAccidentalType(name2subtype(tag));
 }
 
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
 void Accidental::computeMag()
 {
     double m = explicitParent() ? parentItem()->mag() : 1.0;

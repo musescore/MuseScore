@@ -231,6 +231,7 @@ void NoteheadSettingsModel::setIsTrillCueNote(bool v)
     if (v == m_isTrillCueNote) {
         return;
     }
+
     m_isTrillCueNote = v;
     emit isTrillCueNoteChanged(m_isTrillCueNote);
 }

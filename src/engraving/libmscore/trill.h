@@ -79,12 +79,12 @@ class Trill final : public SLine
     Sid getPropertyStyle(Pid) const override;
 
 private:
-    TrillType _trillType;
-    Accidental* _accidental;
-    Chord* _cueNoteChord;
-    OrnamentStyle _ornamentStyle;   // for use in ornaments such as trill
-    bool _playArticulation;
-    Ornament* _ornament;
+    TrillType _trillType = TrillType::TRILL_LINE;
+    Accidental* _accidental = nullptr;
+    Chord* _cueNoteChord = nullptr;
+    OrnamentStyle _ornamentStyle = OrnamentStyle::DEFAULT;   // for use in ornaments such as trill
+    bool _playArticulation = true;
+    Ornament* _ornament = nullptr;
 
 public:
     Trill(EngravingItem* parent);

@@ -187,7 +187,7 @@ public:
     double computePadding(const EngravingItem* nextItem) const override;
     KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
 
-    //Note& operator=(const Note&) = delete;
+    Note& operator=(const Note&) = delete;
     virtual Note* clone() const override { return new Note(*this, false); }
 
     Chord* chord() const { return (Chord*)explicitParent(); }

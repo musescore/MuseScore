@@ -1,3 +1,25 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #include "accidental.h"
 #include "chord.h"
 #include "engravingitem.h"
@@ -188,11 +210,11 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
             note->setTpc2(mainNote->tpc2());
             note->setPitch(mainNote->pitch());
         }
-        if ((above && _intervalAbove.m_type == IntervalType::AUTO)
-            || (!above && _intervalBelow.m_type == IntervalType::AUTO)) {
+        if ((above && _intervalAbove.type == IntervalType::AUTO)
+            || (!above && _intervalBelow.type == IntervalType::AUTO)) {
             // NOTE: In AUTO mode, the ornament note should match not only any alteration from the
             // key signature, but also any alteration present in the measure before this point.
-            int intervalSteps = above ? static_cast<int>(_intervalAbove.m_step) : -static_cast<int>(_intervalBelow.m_step);
+            int intervalSteps = above ? static_cast<int>(_intervalAbove.step) : -static_cast<int>(_intervalBelow.step);
             note->transposeDiatonic(intervalSteps, false, true);
             if (_trillOldCompatAccidental) {
                 // Compatibility with trills pre-4.1
@@ -203,16 +225,16 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
                 int semitones = note->pitch() - mainNote->pitch();
                 switch (semitones) {
                 case 0:
-                    _intervalAbove.m_type = IntervalType::DIMINISHED;
+                    _intervalAbove.type = IntervalType::DIMINISHED;
                     break;
                 case 1:
-                    _intervalAbove.m_type = IntervalType::MINOR;
+                    _intervalAbove.type = IntervalType::MINOR;
                     break;
                 case 2:
-                    _intervalAbove.m_type = IntervalType::MAJOR;
+                    _intervalAbove.type = IntervalType::MAJOR;
                     break;
                 case 3:
-                    _intervalAbove.m_type = IntervalType::AUGMENTED;
+                    _intervalAbove.type = IntervalType::AUGMENTED;
                     break;
                 default:
                     break;

@@ -704,7 +704,7 @@ void TLayout::layout(BarLine* item, LayoutContext& ctx)
 
     for (EngravingItem* e : *item->el()) {
         layoutItem(e, ctx);
-        if (e->isArticulation()) {
+        if (e->isArticulationFamily()) {
             Articulation* a  = toArticulation(e);
             DirectionV dir    = a->direction();
             double distance   = 0.5 * item->spatium();

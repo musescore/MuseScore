@@ -116,7 +116,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::ORNAMENT_STYLE: return static_cast<int>(value<OrnamentStyle>());
     case P_TYPE::ORNAMENT_INTERVAL: {
         OrnamentInterval interval = value<OrnamentInterval>();
-        return QVariantList({ static_cast<int>(interval.m_step), static_cast<int>(interval.m_type) });
+        return QVariantList({ static_cast<int>(interval.step), static_cast<int>(interval.type) });
     } break;
     case P_TYPE::ORNAMENT_SHOW_ACCIDENTAL: return static_cast<int>(value<OrnamentShowAccidental>());
     case P_TYPE::GLISS_STYLE: return static_cast<int>(value<GlissandoStyle>());
