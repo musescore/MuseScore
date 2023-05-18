@@ -37,14 +37,15 @@ public:
 
     static ModulesIoC* instance();
 
+    // Register Export
     template<class I>
-    void registerExportCreator(const std::string& module, IModuleExportCreator* c)
+    void registerExportCreator(const std::string& module, IModuleCreator* c)
     {
         if (!c) {
             assert(c);
             return;
         }
-        registerService(module, I::interfaceInfo(), std::shared_ptr<IModuleExportInterface>(), c);
+        registerService(module, I::interfaceInfo(), std::shared_ptr<IModuleInterface>(), c);
     }
 
     template<class I>
@@ -74,27 +75,70 @@ public:
             assert(p);
             return;
         }
-        registerService(module, I::interfaceInfo(), std::static_pointer_cast<IModuleExportInterface>(p), nullptr);
+        registerService(module, I::interfaceInfo(), std::static_pointer_cast<IModuleInterface>(p), nullptr);
+    }
+
+    // Register Internal
+    template<class I>
+    void registerInternalCreator(const std::string& module, IModuleCreator* c)
+    {
+        if (!c) {
+            assert(c);
+            return;
+        }
+        registerService(module, I::interfaceInfo(), std::shared_ptr<IModuleInterface>(), c);
     }
 
     template<class I>
-    void unregisterExport(const std::string& /*module*/)
+    void registerInternal(const std::string& module, I* p)
+    {
+        if (!p) {
+            assert(p);
+            return;
+        }
+        registerInternal<I>(module, std::shared_ptr<I>(p));
+    }
+
+    template<class I>
+    void registerInternalNoDelete(const std::string& module, I* p)
+    {
+        if (!p) {
+            assert(p);
+            return;
+        }
+        registerInternal<I>(module, std::shared_ptr<I>(p, [](I*) {}));
+    }
+
+    template<class I>
+    void registerInternal(const std::string& module, std::shared_ptr<I> p)
+    {
+        if (!p) {
+            assert(p);
+            return;
+        }
+        registerService(module, I::interfaceInfo(), std::static_pointer_cast<IModuleInterface>(p), nullptr);
+    }
+
+    // Unregister
+    template<class I>
+    void unregister(const std::string& /*module*/)
     {
         unregisterService(I::interfaceInfo());
     }
 
     template<class I>
-    void unregisterExportIfRegistered(const std::string& module, std::shared_ptr<I> p)
+    void unregisterIfRegistered(const std::string& module, std::shared_ptr<I> p)
     {
         if (resolve<I>(module, std::string_view()) == p) {
-            unregisterExport<I>(module);
+            unregister<I>(module);
         }
     }
 
+    // Resolve
     template<class I>
     std::shared_ptr<I> resolve(const std::string_view& module, const std::string_view& callInfo = std::string_view())
     {
-        std::shared_ptr<IModuleExportInterface> p = doResolvePtrByInfo(module, I::interfaceInfo(), callInfo);
+        std::shared_ptr<IModuleInterface> p = doResolvePtrByInfo(module, I::interfaceInfo(), callInfo);
 #ifndef NDEBUG
         return std::dynamic_pointer_cast<I>(p);
 #else
@@ -105,7 +149,7 @@ public:
     template<class I>
     std::shared_ptr<I> resolveRequiredImport(const std::string& module)
     {
-        std::shared_ptr<IModuleExportInterface> p = doResolvePtrByInfo(module, I::interfaceInfo(), std::string_view());
+        std::shared_ptr<IModuleInterface> p = doResolvePtrByInfo(module, I::interfaceInfo(), std::string_view());
         if (!p) {
             std::cerr << "not found implementation for interface: " << I::interfaceInfo().id << std::endl;
             assert(false);
@@ -133,8 +177,8 @@ private:
 
     void registerService(const std::string& module,
                          const InterfaceInfo& info,
-                         std::shared_ptr<IModuleExportInterface> p,
-                         IModuleExportCreator* c)
+                         std::shared_ptr<IModuleInterface> p,
+                         IModuleCreator* c)
     {
         auto foundIt = m_map.find(info.id);
         if (foundIt != m_map.end()) {
@@ -151,9 +195,9 @@ private:
         m_map[info.id] = inj;
     }
 
-    std::shared_ptr<IModuleExportInterface> doResolvePtrByInfo(const std::string_view& usageModule,
-                                                               const InterfaceInfo& info,
-                                                               const std::string_view& callInfo)
+    std::shared_ptr<IModuleInterface> doResolvePtrByInfo(const std::string_view& usageModule,
+                                                         const InterfaceInfo& info,
+                                                         const std::string_view& callInfo)
     {
         //! TODO add statistics collection / monitoring, who resolves what
 
@@ -189,9 +233,9 @@ private:
     }
 
     struct Service {
-        IModuleExportCreator* c = nullptr;
+        IModuleCreator* c = nullptr;
         std::string sourceModule;
-        std::shared_ptr<IModuleExportInterface> p;
+        std::shared_ptr<IModuleInterface> p;
     };
 
     std::map<std::string_view, Service > m_map;
@@ -200,7 +244,7 @@ private:
 template<class T>
 struct Creator : MODULE_EXPORT_CREATOR
 {
-    std::shared_ptr<IModuleExportInterface> create() { return std::make_shared<T>(); }
+    std::shared_ptr<IModuleInterface> create() { return std::make_shared<T>(); }
 };
 }
 

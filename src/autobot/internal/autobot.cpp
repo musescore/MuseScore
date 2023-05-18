@@ -84,7 +84,7 @@ void Autobot::affectOnServices()
         //! NOTE Change Interactive implementation
         auto realInteractive = modularity::ioc()->resolve<IInteractive>("autobot");
         m_autobotInteractive->setRealInteractive(realInteractive);
-        modularity::ioc()->unregisterExport<IInteractive>("autobot");
+        modularity::ioc()->unregister<IInteractive>("autobot");
         modularity::ioc()->registerExport<IInteractive>("autobot", m_autobotInteractive);
     }
 
@@ -100,7 +100,7 @@ void Autobot::restoreAffectOnServices()
         shortcutsRegister()->reload(false);
 
         auto realInteractive = m_autobotInteractive->realInteractive();
-        modularity::ioc()->unregisterExport<IInteractive>("autobot");
+        modularity::ioc()->unregister<IInteractive>("autobot");
         modularity::ioc()->registerExport<IInteractive>("autobot", realInteractive);
     }
 
