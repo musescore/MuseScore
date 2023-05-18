@@ -44,7 +44,7 @@ public:
             assert(c);
             return;
         }
-        registerService(module, I::interfaceId(), std::shared_ptr<IModuleExportInterface>(), c);
+        registerService(module, I::interfaceInfo(), std::shared_ptr<IModuleExportInterface>(), c);
     }
 
     template<class I>
@@ -74,28 +74,28 @@ public:
             assert(p);
             return;
         }
-        registerService(module, I::interfaceId(), std::static_pointer_cast<IModuleExportInterface>(p), nullptr);
+        registerService(module, I::interfaceInfo(), std::static_pointer_cast<IModuleExportInterface>(p), nullptr);
     }
 
     template<class I>
     void unregisterExport(const std::string& /*module*/)
     {
-        unregisterService(I::interfaceId());
+        unregisterService(I::interfaceInfo());
     }
 
     template<class I>
     void unregisterExportIfRegistered(const std::string& module, std::shared_ptr<I> p)
     {
-        if (resolve<I>(module) == p) {
+        if (resolve<I>(module, std::string_view()) == p) {
             unregisterExport<I>(module);
         }
     }
 
     template<class I>
-    std::shared_ptr<I> resolve(const std::string& module)
+    std::shared_ptr<I> resolve(const std::string_view& module, const std::string_view& callInfo = std::string_view())
     {
-        std::shared_ptr<IModuleExportInterface> p = doResolvePtrById(module, I::interfaceId());
-#ifdef DEBUG
+        std::shared_ptr<IModuleExportInterface> p = doResolvePtrByInfo(module, I::interfaceInfo(), callInfo);
+#ifndef NDEBUG
         return std::dynamic_pointer_cast<I>(p);
 #else
         return std::static_pointer_cast<I>(p);
@@ -105,12 +105,12 @@ public:
     template<class I>
     std::shared_ptr<I> resolveRequiredImport(const std::string& module)
     {
-        std::shared_ptr<IModuleExportInterface> p = doResolvePtrById(module, I::interfaceId());
+        std::shared_ptr<IModuleExportInterface> p = doResolvePtrByInfo(module, I::interfaceInfo(), std::string_view());
         if (!p) {
-            //LOGE() << "not found implementation for interface: " << I::interfaceId();
+            std::cerr << "not found implementation for interface: " << I::interfaceInfo().id << std::endl;
             assert(false);
         }
-#ifdef DEBUG
+#ifndef NDEBUG
         return std::dynamic_pointer_cast<I>(p);
 #else
         return std::static_pointer_cast<I>(p);
@@ -126,19 +126,20 @@ private:
 
     ModulesIoC() = default;
 
-    void unregisterService(const std::string& id)
+    void unregisterService(const InterfaceInfo& info)
     {
-        m_map.erase(id);
+        m_map.erase(info.id);
     }
 
     void registerService(const std::string& module,
-                         const std::string& id,
+                         const InterfaceInfo& info,
                          std::shared_ptr<IModuleExportInterface> p,
                          IModuleExportCreator* c)
     {
-        auto foundIt = m_map.find(id);
+        auto foundIt = m_map.find(info.id);
         if (foundIt != m_map.end()) {
-            std::cout << module << ": double register:" << id << ", first register in" << m_map[id].sourceModule;
+            std::cerr << module << ": double register:"
+                      << info.id << ", first register in" << m_map[info.id].sourceModule << std::endl;
             assert(false);
             return;
         }
@@ -147,13 +148,30 @@ private:
         inj.sourceModule = module;
         inj.c = c;
         inj.p = p;
-        m_map[id] = inj;
+        m_map[info.id] = inj;
     }
 
-    std::shared_ptr<IModuleExportInterface> doResolvePtrById(const std::string& resolveModule, const std::string& id)
+    std::shared_ptr<IModuleExportInterface> doResolvePtrByInfo(const std::string_view& usageModule,
+                                                               const InterfaceInfo& info,
+                                                               const std::string_view& callInfo)
     {
-        (void)(resolveModule); //! TODO add statistics collection / monitoring, who resolves what
-        auto it = m_map.find(id);
+        //! TODO add statistics collection / monitoring, who resolves what
+
+        if (info.internal) {
+            if (usageModule != info.module) {
+                std::cerr << "Assertion failed!! Interface '" << info.id << "' is internal"
+                          << ", usage module: '" << usageModule << "'"
+                          << ", interface module: '" << info.module << "'"
+                          << ", called from: " << (callInfo.empty() ? std::string_view("unknown") : callInfo)
+                          << std::endl;
+
+                #ifndef NDEBUG
+                std::abort();
+                #endif
+            }
+        }
+
+        auto it = m_map.find(info.id);
         if (it == m_map.end()) {
             return nullptr;
         }
@@ -176,7 +194,7 @@ private:
         std::shared_ptr<IModuleExportInterface> p;
     };
 
-    std::map<std::string, Service > m_map;
+    std::map<std::string_view, Service > m_map;
 };
 
 template<class T>

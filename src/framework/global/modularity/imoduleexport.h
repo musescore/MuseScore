@@ -24,15 +24,17 @@
 #define MU_MODULARITY_IMODULEEXPORT_H
 
 #include <memory>
-
-#define INTERFACE_ID(cls)               \
-public:                                 \
-    static const char* interfaceId() {  \
-        static const char* id = #cls;   \
-        return id;                      \
-    }                                   \
+#include "moduleinfo.h"
 
 namespace mu::modularity {
+struct InterfaceInfo {
+    std::string_view id;
+    std::string_view module;
+    bool internal = false;
+    InterfaceInfo(std::string_view i, std::string_view m, bool intr)
+        : id(i), module(m), internal(intr) {}
+};
+
 class IModuleExportInterface
 {
 public:
@@ -44,6 +46,18 @@ struct IModuleExportCreator {
     virtual std::shared_ptr<IModuleExportInterface> create() = 0;
 };
 }
+
+#define DO_INTERFACE_ID(id, internal)                                           \
+public:                                                                         \
+    static const mu::modularity::InterfaceInfo& interfaceInfo() {               \
+        static constexpr std::string_view sig(IOC_FUNC_SIG);                    \
+        static const mu::modularity::InterfaceInfo info(#id, mu::modularity::moduleNameBySig(sig), internal);    \
+        return info;                                                            \
+    }                                                                           \
+private:                                                                        \
+
+#define INTERFACE_ID(id) DO_INTERFACE_ID(id, false)
+#define INTERNAL_INTERFACE_ID(id) DO_INTERFACE_ID(id, true)
 
 #define MODULE_EXPORT_INTERFACE public mu::modularity::IModuleExportInterface
 #define MODULE_EXPORT_CREATOR public mu::modularity::IModuleExportCreator
