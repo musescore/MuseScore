@@ -26,8 +26,8 @@
 
 #include "style/style.h"
 #include "types/typesconv.h"
-#include "layout/tlayout.h"
-#include "layout/chordlayout.h"
+#include "layout/v0/tlayout.h"
+#include "layout/v0/chordlayout.h"
 
 #include "actionicon.h"
 #include "articulation.h"

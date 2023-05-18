@@ -25,7 +25,7 @@
 #include "translation.h"
 #include "types/translatablestring.h"
 
-#include "layout/tlayout.h"
+#include "layout/v0/tlayout.h"
 
 #include "measure.h"
 #include "mscoreview.h"

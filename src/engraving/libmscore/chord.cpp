@@ -30,9 +30,9 @@
 
 #include "style/style.h"
 
-#include "layout/tlayout.h"
-#include "layout/slurtielayout.h"
-#include "layout/chordlayout.h"
+#include "layout/v0/tlayout.h"
+#include "layout/v0/slurtielayout.h"
+#include "layout/v0/chordlayout.h"
 
 #include "accidental.h"
 #include "arpeggio.h"

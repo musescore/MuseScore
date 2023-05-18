@@ -25,7 +25,7 @@
 
 #include <gtest/gtest.h>
 
-#include "layout/tlayout.h"
+#include "layout/v0/tlayout.h"
 
 #include "libmscore/chordrest.h"
 #include "libmscore/dynamic.h"

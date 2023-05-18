@@ -30,7 +30,7 @@
 #include "draw/types/pen.h"
 
 #include "style/textstyle.h"
-#include "layout/tlayout.h"
+#include "layout/v0/tlayout.h"
 
 #include "chord.h"
 #include "factory.h"

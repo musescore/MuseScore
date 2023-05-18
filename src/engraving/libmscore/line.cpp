@@ -26,7 +26,7 @@
 
 #include "containers.h"
 
-#include "layout/tlayout.h"
+#include "layout/v0/tlayout.h"
 
 #include "barline.h"
 #include "chord.h"

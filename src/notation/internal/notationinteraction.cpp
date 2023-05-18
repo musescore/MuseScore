@@ -41,7 +41,7 @@
 #include "draw/types/pen.h"
 #include "draw/types/painterpath.h"
 #include "engraving/internal/qmimedataadapter.h"
-#include "engraving/layout/tlayout.h"
+#include "engraving/layout/v0/tlayout.h"
 
 #include "libmscore/actionicon.h"
 #include "libmscore/articulation.h"

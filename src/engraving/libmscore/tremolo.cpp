@@ -30,7 +30,7 @@
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
-#include "layout/tremololayout.h"
+#include "layout/v0/tremololayout.h"
 
 #include "beam.h"
 #include "chord.h"

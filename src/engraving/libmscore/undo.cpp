@@ -35,7 +35,7 @@
 #include "undo.h"
 
 #include "iengravingfont.h"
-#include "layout/tlayout.h"
+#include "layout/v0/tlayout.h"
 
 #include "bend.h"
 #include "bracket.h"

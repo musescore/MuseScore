@@ -26,7 +26,7 @@
 
 #include "style/textstyle.h"
 #include "types/typesconv.h"
-#include "layout/tupletlayout.h"
+#include "layout/v0/tupletlayout.h"
 
 #include "beam.h"
 #include "chord.h"

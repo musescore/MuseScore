@@ -30,7 +30,7 @@
 #include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/style/defaultstyle.h"
-#include "engraving/layout/tlayout.h"
+#include "engraving/layout/v0/tlayout.h"
 
 #include "log.h"
 

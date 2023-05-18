@@ -23,7 +23,7 @@
 #ifndef __BEAM_H__
 #define __BEAM_H__
 
-#include "layout/beamtremololayout.h"
+#include "layout/v0/beamtremololayout.h"
 #include "engravingitem.h"
 #include "durationtype.h"
 #include "property.h"
