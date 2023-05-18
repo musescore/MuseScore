@@ -383,7 +383,8 @@ class GuitarPro5 : public GuitarPro
 {
     std::map<std::pair<int, int>, bool> dead_end;
     int _beat_counter{ 0 };
-    std::unordered_map<Chord*, TremoloType> m_tremolosInChords;
+    std::unordered_map<Chord*, TremoloType> m_tremolosInChords; // for adding tremolo for tied notes
+    std::unordered_map<Note*, Note*> m_harmonicNotes; // for adding ties for harmonic notes
 
     void readInfo();
     void readPageSetup();
@@ -397,7 +398,6 @@ class GuitarPro5 : public GuitarPro
     Fraction readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, Tuplet** tuplets, bool mixChange);
     bool readNoteEffects(Note*);
     float naturalHarmonicFromFret(int fret);
-    void addTiesToHarmonics(Note* note);
 
 public:
     GuitarPro5(MasterScore* s, int v)
