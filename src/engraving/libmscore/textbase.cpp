@@ -35,7 +35,7 @@
 #include "rw/xmlreader.h"
 #include "rw/xmlwriter.h"
 
-#include "layout/tlayout.h"
+#include "layout/v0/tlayout.h"
 
 #include "types/symnames.h"
 #include "types/translatablestring.h"

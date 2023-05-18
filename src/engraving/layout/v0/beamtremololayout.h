@@ -23,10 +23,10 @@
 #ifndef __BEAMTREMOLOLAYOUT_H__
 #define __BEAMTREMOLOLAYOUT_H__
 
-#include "../libmscore/beam.h"
-#include "../libmscore/engravingitem.h"
-#include "../libmscore/durationtype.h"
-#include "../libmscore/property.h"
+#include "libmscore/beam.h"
+#include "libmscore/engravingitem.h"
+#include "libmscore/durationtype.h"
+#include "libmscore/property.h"
 
 namespace mu::engraving {
 class Chord;

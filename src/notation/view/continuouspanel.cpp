@@ -23,7 +23,7 @@
 
 #include "continuouspanel.h"
 
-#include "engraving/layout/tlayout.h"
+#include "engraving/layout/v0/tlayout.h"
 
 #include "libmscore/barline.h"
 #include "libmscore/factory.h"

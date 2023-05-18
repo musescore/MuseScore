@@ -40,8 +40,8 @@
 #include "draw/iimageprovider.h"
 #include "iengravingfontsprovider.h"
 
-#include "layout/layout.h"
-#include "layout/layoutoptions.h"
+#include "layout/v0/layout.h"
+#include "layout/v0/layoutoptions.h"
 
 #include "style/style.h"
 #include "style/pagestyle.h"

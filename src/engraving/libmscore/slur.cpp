@@ -29,8 +29,8 @@
 
 #include "iengravingfont.h"
 
-#include "layout/tlayout.h"
-#include "layout/slurtielayout.h"
+#include "layout/v0/tlayout.h"
+#include "layout/v0/slurtielayout.h"
 
 #include "articulation.h"
 #include "beam.h"

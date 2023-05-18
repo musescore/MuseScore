@@ -35,7 +35,7 @@
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
-#include "layout/tlayout.h"
+#include "layout/v0/tlayout.h"
 
 #include "accidental.h"
 #include "actionicon.h"

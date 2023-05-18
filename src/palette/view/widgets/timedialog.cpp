@@ -34,7 +34,7 @@
 #include "engraving/libmscore/part.h"
 #include "engraving/libmscore/timesig.h"
 #include "engraving/compat/dummyelement.h"
-#include "engraving/layout/tlayout.h"
+#include "engraving/layout/v0/tlayout.h"
 
 #include "translation.h"
 

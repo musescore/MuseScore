@@ -26,7 +26,7 @@
 #include <QMimeData>
 
 #include "engraving/rw/400/tread.h"
-#include "engraving/layout/tlayout.h"
+#include "engraving/layout/v0/tlayout.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/engravingitem.h"

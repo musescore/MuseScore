@@ -24,7 +24,7 @@
 
 #include "iengravingfont.h"
 #include "types/symnames.h"
-#include "layout/tlayout.h"
+#include "layout/v0/tlayout.h"
 
 #include "mscoreview.h"
 #include "navigate.h"

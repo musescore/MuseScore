@@ -91,7 +91,7 @@
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "engraving/iengravingfontsprovider.h"
 
-#include "engraving/layout/tlayout.h"
+#include "engraving/layout/v0/tlayout.h"
 
 #include "log.h"
 

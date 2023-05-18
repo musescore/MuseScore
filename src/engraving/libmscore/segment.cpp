@@ -27,7 +27,7 @@
 #include "translation.h"
 
 #include "types/typesconv.h"
-#include "layout/tlayout.h"
+#include "layout/v0/tlayout.h"
 
 #include "accidental.h"
 #include "barline.h"

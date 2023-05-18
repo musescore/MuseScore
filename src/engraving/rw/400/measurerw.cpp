@@ -25,7 +25,7 @@
 #include "translation.h"
 
 #include "rw/400/twrite.h"
-#include "layout/tlayout.h"
+#include "layout/v0/tlayout.h"
 
 #include "../libmscore/ambitus.h"
 #include "../libmscore/barline.h"

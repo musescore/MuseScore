@@ -42,7 +42,7 @@
 #include "rw/400/twrite.h"
 
 #include "types/typesconv.h"
-#include "layout/tlayout.h"
+#include "layout/v0/tlayout.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"

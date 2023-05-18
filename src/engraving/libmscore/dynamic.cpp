@@ -23,7 +23,7 @@
 
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "layout/tlayout.h"
+#include "layout/v0/tlayout.h"
 
 #include "chord.h"
 #include "dynamichairpingroup.h"

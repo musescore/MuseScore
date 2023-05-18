@@ -31,8 +31,8 @@
 
 #include "draw/types/brush.h"
 
-#include "layout/tlayout.h"
-#include "layout/beamlayout.h"
+#include "layout/v0/tlayout.h"
+#include "layout/v0/beamlayout.h"
 
 #include "actionicon.h"
 #include "chord.h"
