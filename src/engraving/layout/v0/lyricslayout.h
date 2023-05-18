@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_LYRICSLAYOUT_H
 #define MU_ENGRAVING_LYRICSLAYOUT_H
 
-#include "layoutoptions.h"
+#include "../layoutoptions.h"
 #include "layoutcontext.h"
 
 namespace mu::engraving {

@@ -24,7 +24,7 @@
 
 #include <vector>
 
-#include "layoutoptions.h"
+#include "../layoutoptions.h"
 #include "layoutcontext.h"
 
 namespace mu::engraving {

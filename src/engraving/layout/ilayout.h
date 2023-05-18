@@ -19,35 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_MEASURELAYOUT_H
-#define MU_ENGRAVING_MEASURELAYOUT_H
+#ifndef MU_ENGRAVING_ILAYOUT_H
+#define MU_ENGRAVING_ILAYOUT_H
 
-#include "../layoutoptions.h"
-#include "layoutcontext.h"
+#include "layoutoptions.h"
 
-namespace mu::engraving {
-class Measure;
-class MeasureBase;
-class Score;
-}
-
-namespace mu::engraving::layout::v0 {
-class MeasureLayout
+namespace mu::engraving::layout {
+class ILayout
 {
 public:
-    MeasureLayout() = default;
+    virtual ~ILayout() = default;
 
-    static void layout2(Measure* item, LayoutContext& ctx);
-
-    static void getNextMeasure(const LayoutOptions& options, LayoutContext& ctx);
-    static void computePreSpacingItems(Measure* m, LayoutContext& ctx);
-
-private:
-
-    static void createMMRest(const LayoutOptions& options, Score* score, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);
-
-    static int adjustMeasureNo(LayoutContext& lc, MeasureBase* m);
+    virtual void layoutRange(const LayoutOptions& options, const Fraction&, const Fraction&) = 0;
 };
 }
 
-#endif // MU_ENGRAVING_MEASURELAYOUT_H
+#endif // MU_ENGRAVING_ILAYOUT_H
