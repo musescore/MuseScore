@@ -31,35 +31,64 @@ struct InterfaceInfo {
     std::string_view id;
     std::string_view module;
     bool internal = false;
-    InterfaceInfo(std::string_view i, std::string_view m, bool intr)
+    constexpr InterfaceInfo(std::string_view i, std::string_view m, bool intr)
         : id(i), module(m), internal(intr) {}
 };
 
-class IModuleExportInterface
+class IModuleInterface
 {
 public:
-    virtual ~IModuleExportInterface() {}
+    virtual ~IModuleInterface() = default;
 };
 
-struct IModuleExportCreator {
-    virtual ~IModuleExportCreator() {}
-    virtual std::shared_ptr<IModuleExportInterface> create() = 0;
+class IModuleExportInterface : public IModuleInterface
+{
+public:
+    virtual ~IModuleExportInterface() = default;
+
+    static constexpr bool isInternalInterface() { return false; }
+};
+
+class IModuleInternalInterface : public IModuleInterface
+{
+public:
+    virtual ~IModuleInternalInterface() = default;
+
+    static constexpr bool isInternalInterface() { return true; }
+};
+
+class IModuleCreator
+{
+public:
+    virtual ~IModuleCreator() = default;
+    virtual std::shared_ptr<IModuleInterface> create() = 0;
+};
+
+struct IModuleExportCreator : public IModuleCreator {
+    virtual ~IModuleExportCreator() = default;
+    static constexpr bool isInternalInterface() { return false; }
+};
+
+struct IModuleInternalCreator : public IModuleCreator {
+    virtual ~IModuleInternalCreator() = default;
+    static constexpr bool isInternalInterface() { return true; }
 };
 }
 
-#define DO_INTERFACE_ID(id, internal)                                           \
-public:                                                                         \
-    static const mu::modularity::InterfaceInfo& interfaceInfo() {               \
-        static constexpr std::string_view sig(IOC_FUNC_SIG);                    \
-        static const mu::modularity::InterfaceInfo info(#id, mu::modularity::moduleNameBySig(sig), internal);    \
-        return info;                                                            \
-    }                                                                           \
-private:                                                                        \
+#define INTERFACE_ID(id)                                                \
+public:                                                                 \
+    static constexpr mu::modularity::InterfaceInfo interfaceInfo() {    \
+        constexpr std::string_view sig(IOC_FUNC_SIG);                   \
+        constexpr mu::modularity::InterfaceInfo info(#id, mu::modularity::moduleNameBySig(sig), isInternalInterface());    \
+        return info;                                                    \
+    }                                                                   \
+private:                                                                \
 
-#define INTERFACE_ID(id) DO_INTERFACE_ID(id, false)
-#define INTERNAL_INTERFACE_ID(id) DO_INTERFACE_ID(id, true)
 
 #define MODULE_EXPORT_INTERFACE public mu::modularity::IModuleExportInterface
 #define MODULE_EXPORT_CREATOR public mu::modularity::IModuleExportCreator
+
+#define MODULE_INTERNAL_INTERFACE public mu::modularity::IModuleInternalInterface
+#define MODULE_INTERNAL_CREATOR public mu::modularity::IModuleInternalCreator
 
 #endif // MU_MODULARITY_IMODULEEXPORT_H

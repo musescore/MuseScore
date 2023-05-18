@@ -44,12 +44,12 @@ constexpr std::string_view moduleNameBySig(const std::string_view& sig)
     //! SomeType mu::modulename::maybe::ClassName::methodName()
 
     std::size_t endMethod = sig.find_first_of(ArgBegin);
-    if (endMethod == std::string::npos) {
+    if (endMethod == std::string_view::npos) {
         return sig;
     }
 
     std::size_t beginMethod = sig.find_last_of(Space, endMethod);
-    if (beginMethod == std::string::npos) {
+    if (beginMethod == std::string_view::npos) {
         return sig;
     }
 

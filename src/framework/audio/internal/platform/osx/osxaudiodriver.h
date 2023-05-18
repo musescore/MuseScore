@@ -39,7 +39,7 @@ struct OpaqueAudioQueue;
 namespace mu::audio {
 class OSXAudioDriver : public IAudioDriver
 {
-    INJECT(audio, IAudioConfiguration, configuration)
+    INJECT(IAudioConfiguration, configuration)
 
 public:
     OSXAudioDriver();
