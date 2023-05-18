@@ -35,7 +35,7 @@ class ContextApi : public ApiObject
 {
     Q_OBJECT
 
-    INJECT(api, autobot::IAutobot, autobot)
+    INJECT(autobot::IAutobot, autobot)
 public:
     explicit ContextApi(IApiEngine* e);
 

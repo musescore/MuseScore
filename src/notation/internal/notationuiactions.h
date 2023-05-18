@@ -34,8 +34,8 @@
 namespace mu::notation {
 class NotationUiActions : public ui::IUiActionsModule, public async::Asyncable
 {
-    INJECT(notation, context::IUiContextResolver, uicontextResolver)
-    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(context::IUiContextResolver, uicontextResolver)
+    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
 
 public:
 

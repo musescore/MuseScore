@@ -43,8 +43,8 @@ class PluginView : public QObject
 {
     Q_OBJECT
 
-    INJECT(plugins, ui::IUiEngine, uiEngine)
-    INJECT(plugins, IPluginsConfiguration, configuration)
+    INJECT(ui::IUiEngine, uiEngine)
+    INJECT(IPluginsConfiguration, configuration)
 
 public:
     PluginView(QObject* parent = nullptr);

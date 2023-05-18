@@ -37,8 +37,8 @@ class UndoRedoModel : public QObject, public async::Asyncable
     Q_PROPERTY(QVariant undoItem READ makeUndoItem NOTIFY stackChanged)
     Q_PROPERTY(QVariant redoItem READ makeRedoItem NOTIFY stackChanged)
 
-    INJECT(notation, context::IGlobalContext, context)
-    INJECT(notation, ui::IUiActionsRegister, actionsRegister)
+    INJECT(context::IGlobalContext, context)
+    INJECT(ui::IUiActionsRegister, actionsRegister)
 
 public:
     explicit UndoRedoModel(QObject* parent = nullptr);

@@ -58,9 +58,9 @@ class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncabl
 
     Q_PROPERTY(QQuickWindow * window READ windowProperty NOTIFY windowPropertyChanged)
 
-    INJECT(dock, ui::IUiConfiguration, uiConfiguration)
-    INJECT(dock, workspace::IWorkspaceManager, workspaceManager)
-    INJECT(dock, IDockWindowProvider, dockWindowProvider)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(workspace::IWorkspaceManager, workspaceManager)
+    INJECT(IDockWindowProvider, dockWindowProvider)
 
 public:
     explicit DockWindow(QQuickItem* parent = nullptr);

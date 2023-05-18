@@ -30,7 +30,7 @@ class MainWindowTitleProvider : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(ui, context::IGlobalContext, context)
+    INJECT(context::IGlobalContext, context)
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString filePath READ filePath NOTIFY filePathChanged)

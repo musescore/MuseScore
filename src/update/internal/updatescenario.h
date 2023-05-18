@@ -37,11 +37,11 @@
 namespace mu::update {
 class UpdateScenario : public IUpdateScenario, public async::Asyncable
 {
-    INJECT(update, framework::IInteractive, interactive)
-    INJECT(update, actions::IActionsDispatcher, dispatcher)
-    INJECT(update, mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(update, IUpdateConfiguration, configuration)
-    INJECT(update, IUpdateService, updateService)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(IUpdateConfiguration, configuration)
+    INJECT(IUpdateService, updateService)
 
 public:
     void delayedInit();

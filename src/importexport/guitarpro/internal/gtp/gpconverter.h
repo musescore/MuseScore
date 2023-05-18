@@ -41,7 +41,7 @@ class Bend;
 
 class GPConverter
 {
-    INJECT(importexport, mu::engraving::IEngravingConfiguration, engravingConfiguration);
+    INJECT(mu::engraving::IEngravingConfiguration, engravingConfiguration);
 
 public:
     GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom);

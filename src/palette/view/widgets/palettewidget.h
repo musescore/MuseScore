@@ -68,11 +68,11 @@ class PaletteWidget : public QWidget
 {
     Q_OBJECT
 
-    INJECT_STATIC(palette, IPaletteConfiguration, configuration)
-    INJECT_STATIC(palette, ui::IUiActionsRegister, actionsRegister)
-    INJECT_STATIC(palette, context::IGlobalContext, globalContext)
-    INJECT(palette, framework::IInteractive, interactive)
-    INJECT(palette, ui::IUiConfiguration, uiConfiguration)
+    INJECT_STATIC(IPaletteConfiguration, configuration)
+    INJECT_STATIC(ui::IUiActionsRegister, actionsRegister)
+    INJECT_STATIC(context::IGlobalContext, globalContext)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
 
 public:
     PaletteWidget(QWidget* parent = nullptr);

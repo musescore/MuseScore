@@ -53,7 +53,7 @@ class AbstractNavigation : public QObject, public QQmlParserStatus, public async
 
     Q_INTERFACES(QQmlParserStatus)
 
-    INJECT(ui, INavigationController, navigationController)
+    INJECT(INavigationController, navigationController)
 
 public:
     explicit AbstractNavigation(QObject* parent = nullptr);

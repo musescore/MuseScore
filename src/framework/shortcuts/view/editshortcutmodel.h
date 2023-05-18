@@ -34,7 +34,7 @@ class EditShortcutModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(shortcuts, framework::IInteractive, interactive)
+    INJECT(framework::IInteractive, interactive)
 
     Q_PROPERTY(QString originSequence READ originSequenceInNativeFormat NOTIFY originSequenceChanged)
     Q_PROPERTY(QString newSequence READ newSequenceInNativeFormat NOTIFY newSequenceChanged)

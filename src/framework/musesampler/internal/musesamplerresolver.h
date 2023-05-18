@@ -33,7 +33,7 @@
 namespace mu::musesampler {
 class MuseSamplerResolver : public audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo
 {
-    INJECT(musesampler, IMuseSamplerConfiguration, configuration)
+    INJECT(IMuseSamplerConfiguration, configuration)
 
 public:
     void init();

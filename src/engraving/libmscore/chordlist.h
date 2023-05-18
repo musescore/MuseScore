@@ -268,7 +268,7 @@ class ChordList : public std::map<int, ChordDescription>
 {
     OBJECT_ALLOCATOR(engraving, ChordList)
 
-    INJECT(engraving, IEngravingConfiguration, configuration)
+    INJECT(IEngravingConfiguration, configuration)
 
     std::map<String, ChordSymbol> symbols;
     bool _autoAdjust = false;

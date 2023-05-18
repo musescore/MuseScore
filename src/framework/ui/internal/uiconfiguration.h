@@ -36,8 +36,8 @@
 namespace mu::ui {
 class UiConfiguration : public IUiConfiguration, public async::Asyncable
 {
-    INJECT(ui, IMainWindow, mainWindow)
-    INJECT(ui, IPlatformTheme, platformTheme)
+    INJECT(IMainWindow, mainWindow)
+    INJECT(IPlatformTheme, platformTheme)
 
 public:
     void initSettings();

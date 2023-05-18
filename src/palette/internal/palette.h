@@ -49,9 +49,9 @@ class Palette : public QObject
 {
     Q_GADGET
 
-    INJECT_STATIC(palette, IPaletteConfiguration, configuration)
-    INJECT_STATIC(palette, ui::IUiActionsRegister, actionsRegister)
-    INJECT(palette, framework::IInteractive, interactive)
+    INJECT_STATIC(IPaletteConfiguration, configuration)
+    INJECT_STATIC(ui::IUiActionsRegister, actionsRegister)
+    INJECT(framework::IInteractive, interactive)
 
 public:
     enum class Type {

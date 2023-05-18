@@ -36,12 +36,12 @@
 namespace mu::project {
 class ExportProjectScenario : public IExportProjectScenario, public async::Asyncable
 {
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, framework::IInteractive, interactive)
-    INJECT(project, INotationWritersRegister, writers)
-    INJECT(project, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
-    INJECT(project, context::IGlobalContext, context)
-    INJECT(project, io::IFileSystem, fileSystem)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(INotationWritersRegister, writers)
+    INJECT(iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
+    INJECT(context::IGlobalContext, context)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     std::vector<INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;

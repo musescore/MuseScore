@@ -37,7 +37,7 @@ class BreaksDialog : public QDialog, public Ui::BreaksDialog
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, context)
+    INJECT(context::IGlobalContext, context)
 
 public:
     BreaksDialog(QWidget* parent = nullptr);

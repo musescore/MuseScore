@@ -110,8 +110,8 @@ class Timeline : public QGraphicsView, public mu::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
-    INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(actions::IActionsDispatcher, dispatcher)
 
 public:
     enum class ItemType {

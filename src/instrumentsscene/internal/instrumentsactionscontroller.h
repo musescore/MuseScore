@@ -32,9 +32,9 @@
 namespace mu::instrumentsscene {
 class InstrumentsActionsController : public actions::Actionable
 {
-    INJECT(instrumentsscene, actions::IActionsDispatcher, dispatcher)
-    INJECT(instrumentsscene, notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
-    INJECT(instrumentsscene, context::IGlobalContext, context)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
+    INJECT(context::IGlobalContext, context)
 
 public:
     virtual ~InstrumentsActionsController() = default;

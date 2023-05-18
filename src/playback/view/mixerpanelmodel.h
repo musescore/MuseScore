@@ -41,9 +41,9 @@ class MixerPanelModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(playback, audio::IPlayback, playback)
-    INJECT(playback, IPlaybackController, controller)
-    INJECT(playback, context::IGlobalContext, context)
+    INJECT(audio::IPlayback, playback)
+    INJECT(IPlaybackController, controller)
+    INJECT(context::IGlobalContext, context)
 
     Q_PROPERTY(int count READ rowCount NOTIFY rowCountChanged)
 

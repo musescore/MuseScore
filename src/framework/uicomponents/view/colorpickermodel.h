@@ -33,7 +33,7 @@ class ColorPickerModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(uicomponents, framework::IInteractive, interactive)
+    INJECT(framework::IInteractive, interactive)
 
 public:
     explicit ColorPickerModel(QObject* parent = nullptr);

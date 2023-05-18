@@ -40,7 +40,7 @@ using SoundTrackWriterPtr = std::shared_ptr<SoundTrackWriter>;
 
 class AudioOutputHandler : public IAudioOutput, public async::Asyncable
 {
-    INJECT(audio, fx::IFxResolver, fxResolver)
+    INJECT(fx::IFxResolver, fxResolver)
 
 public:
     explicit AudioOutputHandler(IGetTrackSequence* getSequence);

@@ -38,8 +38,8 @@ class PopupViewCloseController : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(uicomponents, ui::IMainWindow, mainWindow)
-    INJECT(uicomponents, ui::IInteractiveProvider, interactiveProvider)
+    INJECT(ui::IMainWindow, mainWindow)
+    INJECT(ui::IInteractiveProvider, interactiveProvider)
 
 public:
     explicit PopupViewCloseController(QObject* parent = nullptr);

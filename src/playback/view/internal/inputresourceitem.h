@@ -40,7 +40,7 @@ class InputResourceItem : public AbstractAudioResourceItem, public async::Asynca
 {
     Q_OBJECT
 
-    INJECT(playback, audio::IPlayback, playback)
+    INJECT(audio::IPlayback, playback)
 
 public:
     explicit InputResourceItem(QObject* parent);

@@ -65,8 +65,8 @@ class MixerChannelItem : public QObject, public async::Asyncable
 
     Q_PROPERTY(mu::ui::NavigationPanel * panel READ panel NOTIFY panelChanged)
 
-    INJECT(playback, framework::IInteractive, interactive)
-    INJECT(playback, IPlaybackConfiguration, configuration)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(IPlaybackConfiguration, configuration)
 
 public:
     enum class Type {

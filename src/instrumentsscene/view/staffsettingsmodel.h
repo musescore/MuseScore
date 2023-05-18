@@ -33,7 +33,7 @@ class StaffSettingsModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(instruments, context::IGlobalContext, context)
+    INJECT(context::IGlobalContext, context)
 
     Q_PROPERTY(int staffType READ staffType WRITE setStaffType NOTIFY staffTypeChanged)
     Q_PROPERTY(bool isSmallStaff READ isSmallStaff WRITE setIsSmallStaff NOTIFY isSmallStaffChanged)

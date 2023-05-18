@@ -37,7 +37,7 @@ class InspectorListModel : public QAbstractListModel, public mu::async::Asyncabl
 {
     Q_OBJECT
 
-    INJECT(inspector, context::IGlobalContext, context)
+    INJECT(context::IGlobalContext, context)
 
 public:
     explicit InspectorListModel(QObject* parent = nullptr);

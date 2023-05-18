@@ -41,7 +41,7 @@ class AbstractVstEditorView : public uicomponents::TopLevelDialog, public Steinb
     Q_PROPERTY(int trackId READ trackId WRITE setTrackId NOTIFY trackIdChanged)
     Q_PROPERTY(QString resourceId READ resourceId WRITE setResourceId NOTIFY resourceIdChanged)
 
-    INJECT(vst, IVstPluginsRegister, pluginsRegister)
+    INJECT(IVstPluginsRegister, pluginsRegister)
 
 public:
     AbstractVstEditorView(QWidget* parent = nullptr);

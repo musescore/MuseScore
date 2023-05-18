@@ -32,7 +32,7 @@
 namespace mu::engraving {
 class DefaultStyle
 {
-    INJECT(engraving, IEngravingConfiguration, engravingConfiguration)
+    INJECT(IEngravingConfiguration, engravingConfiguration)
 
 public:
     static DefaultStyle* instance();

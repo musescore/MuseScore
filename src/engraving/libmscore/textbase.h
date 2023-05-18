@@ -211,7 +211,7 @@ private:
 
 class TextFragment
 {
-    INJECT_STATIC(engraving, IEngravingFontsProvider, engravingFonts)
+    INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
 public:
     mutable CharFormat format;
     mu::PointF pos;                    // y is relative to TextBlock->y()
@@ -284,7 +284,7 @@ class TextBase : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, TextBase)
 
-    INJECT(engraving, IEngravingFontsProvider, engravingFonts)
+    INJECT(IEngravingFontsProvider, engravingFonts)
 
     // sorted by size to allow for most compact memory layout
     M_PROPERTY(FrameType,  frameType,              setFrameType)

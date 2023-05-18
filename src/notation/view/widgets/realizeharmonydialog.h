@@ -37,7 +37,7 @@ class RealizeHarmonyDialog : public QDialog, Ui::RealizeHarmonyDialogBase
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(context::IGlobalContext, globalContext)
 
 public:
     RealizeHarmonyDialog(QWidget* parent = nullptr);

@@ -36,8 +36,8 @@ class SplashScreen : public QWidget
 {
     Q_OBJECT
 
-    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
-    INJECT(appshell, languages::ILanguagesService, languagesService)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(languages::ILanguagesService, languagesService)
 
 public:
     SplashScreen();

@@ -34,9 +34,9 @@
 namespace mu::appshell {
 class ApplicationUiActions : public ui::IUiActionsModule, public async::Asyncable
 {
-    INJECT(appshell, ui::IMainWindow, mainWindow)
-    INJECT(appshell, dock::IDockWindowProvider, dockWindowProvider)
-    INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(ui::IMainWindow, mainWindow)
+    INJECT(dock::IDockWindowProvider, dockWindowProvider)
+    INJECT(IAppShellConfiguration, configuration)
 
 public:
     ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller);

@@ -30,7 +30,7 @@
 namespace mu::project {
 class ProjectUiActions : public ui::IUiActionsModule
 {
-    INJECT(project, context::IUiContextResolver, uicontextResolver)
+    INJECT(context::IUiContextResolver, uicontextResolver)
 public:
 
     ProjectUiActions(std::shared_ptr<ProjectActionsController> controller);

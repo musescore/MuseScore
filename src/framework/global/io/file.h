@@ -31,7 +31,7 @@
 namespace mu::io {
 class File : public IODevice
 {
-    INJECT_STATIC(io, IFileSystem, fileSystem)
+    INJECT_STATIC(IFileSystem, fileSystem)
 public:
 
     enum Error {

@@ -33,7 +33,7 @@
 namespace mu::workspace {
 class WorkspacesDataProvider : public IWorkspacesDataProvider, public async::Asyncable
 {
-    INJECT(workspace, IWorkspaceManager, manager)
+    INJECT(IWorkspaceManager, manager)
 
 public:
     WorkspacesDataProvider() = default;

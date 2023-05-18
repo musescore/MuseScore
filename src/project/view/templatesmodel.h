@@ -30,7 +30,7 @@ class TemplatesModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(project, ITemplatesRepository, repository)
+    INJECT(ITemplatesRepository, repository)
 
     Q_PROPERTY(QStringList categoriesTitles READ categoriesTitles NOTIFY categoriesChanged)
     Q_PROPERTY(QStringList templatesTitles READ templatesTitles NOTIFY templatesChanged)

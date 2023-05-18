@@ -46,7 +46,7 @@ class ScriptApi : public QObject
     Q_PROPERTY(QJSValue process READ process CONSTANT)
     Q_PROPERTY(QJSValue filesystem READ filesystem CONSTANT)
 
-    INJECT(api, IApiRegister, apiRegister)
+    INJECT(IApiRegister, apiRegister)
 
 public:
     ScriptApi(IApiEngine* engine, QObject* parent);

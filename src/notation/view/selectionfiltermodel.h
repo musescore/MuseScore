@@ -34,7 +34,7 @@ class SelectionFilterModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(context::IGlobalContext, globalContext)
 
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
 

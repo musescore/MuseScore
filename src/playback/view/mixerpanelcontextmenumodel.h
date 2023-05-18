@@ -36,8 +36,8 @@ class MixerPanelContextMenuModel : public uicomponents::AbstractMenuModel, publi
 {
     Q_OBJECT
 
-    INJECT(playback, actions::IActionsDispatcher, dispatcher)
-    INJECT(playback, playback::IPlaybackConfiguration, configuration)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(playback::IPlaybackConfiguration, configuration)
 
     Q_PROPERTY(bool labelsSectionVisible READ labelsSectionVisible NOTIFY labelsSectionVisibleChanged)
     Q_PROPERTY(bool soundSectionVisible READ soundSectionVisible NOTIFY soundSectionVisibleChanged)

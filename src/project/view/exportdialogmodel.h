@@ -47,15 +47,15 @@ class ExportDialogModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(project, framework::IInteractive, interactive)
-    INJECT(project, context::IGlobalContext, context)
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, INotationWritersRegister, writers)
-    INJECT(project, iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
-    INJECT(project, iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
-    INJECT(project, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
-    INJECT(project, iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
-    INJECT(project, IExportProjectScenario, exportProjectScenario)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(context::IGlobalContext, context)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(INotationWritersRegister, writers)
+    INJECT(iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
+    INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
+    INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
+    INJECT(iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
+    INJECT(IExportProjectScenario, exportProjectScenario)
 
     Q_PROPERTY(int selectionLength READ selectionLength NOTIFY selectionChanged)
 

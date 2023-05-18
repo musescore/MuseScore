@@ -34,11 +34,11 @@
 namespace mu::shortcuts {
 class ShortcutsController : public IShortcutsController, public async::Asyncable
 {
-    INJECT(shortcuts, IShortcutsRegister, shortcutsRegister)
-    INJECT(shortcuts, actions::IActionsDispatcher, dispatcher)
-    INJECT(shortcuts, ui::IUiActionsRegister, aregister)
-    INJECT(shortcuts, ui::IInteractiveProvider, interactiveProvider)
-    INJECT(shortcuts, context::IUiContextResolver, uiContextResolver)
+    INJECT(IShortcutsRegister, shortcutsRegister)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(ui::IUiActionsRegister, aregister)
+    INJECT(ui::IInteractiveProvider, interactiveProvider)
+    INJECT(context::IUiContextResolver, uiContextResolver)
 
 public:
     ShortcutsController() = default;

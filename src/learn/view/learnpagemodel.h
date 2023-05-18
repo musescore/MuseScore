@@ -37,7 +37,7 @@ class LearnPageModel : public QObject, public async::Asyncable
     Q_PROPERTY(QVariantList startedPlaylist READ startedPlaylist NOTIFY startedPlaylistChanged)
     Q_PROPERTY(QVariantList advancedPlaylist READ advancedPlaylist NOTIFY advancedPlaylistChanged)
 
-    INJECT(learn, ILearnService, learnService)
+    INJECT(ILearnService, learnService)
 
 public:
     explicit LearnPageModel(QObject* parent = nullptr);

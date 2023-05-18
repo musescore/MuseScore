@@ -30,7 +30,7 @@
 namespace mu::diagnostics {
 class DiagnosticsModule : public modularity::IModuleSetup
 {
-    INJECT(diagnostics, io::IFileSystem, fileSystem)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     std::string moduleName() const override;

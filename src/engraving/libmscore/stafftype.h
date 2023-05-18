@@ -188,7 +188,7 @@ enum class StaffTypes : signed char {
 
 class StaffType
 {
-    INJECT_STATIC(engraving, IEngravingConfiguration, engravingConfiguration)
+    INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
 
     friend class TabDurationSymbol;
 

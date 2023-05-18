@@ -56,7 +56,7 @@ class Score;
 namespace mu::engraving::compat {
 class Read206 : public IScoreReader
 {
-    INJECT_STATIC(engraving, IEngravingFontsProvider, engravingFonts)
+    INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
 public:
 
     //---------------------------------------------------------

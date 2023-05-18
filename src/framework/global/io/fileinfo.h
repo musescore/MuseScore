@@ -31,7 +31,7 @@
 namespace mu::io {
 class FileInfo
 {
-    INJECT_STATIC(io, IFileSystem, fileSystem)
+    INJECT_STATIC(IFileSystem, fileSystem)
 public:
     FileInfo() = default;
     FileInfo(const path_t& filePath);

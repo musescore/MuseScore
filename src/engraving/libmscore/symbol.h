@@ -48,7 +48,7 @@ class Symbol : public BSymbol
     OBJECT_ALLOCATOR(engraving, Symbol)
     DECLARE_CLASSOF(ElementType::SYMBOL)
 
-    INJECT(engraving, IEngravingFontsProvider, engravingFonts)
+    INJECT(IEngravingFontsProvider, engravingFonts)
 
 public:
     Symbol(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::MOVABLE);

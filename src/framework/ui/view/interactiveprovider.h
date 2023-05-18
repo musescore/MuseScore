@@ -52,8 +52,8 @@ class InteractiveProvider : public QObject, public IInteractiveProvider
 {
     Q_OBJECT
 
-    INJECT(ui, IInteractiveUriRegister, uriRegister)
-    INJECT(ui, IMainWindow, mainWindow)
+    INJECT(IInteractiveUriRegister, uriRegister)
+    INJECT(IMainWindow, mainWindow)
 
 public:
     explicit InteractiveProvider();
