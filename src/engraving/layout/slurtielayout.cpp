@@ -1104,6 +1104,7 @@ TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system)
 
 void SlurTieLayout::tiePos(Tie* item, SlurPos* sp)
 {
+    const double smallInset = item->isInside() ? 0.0 : 0.125; // 1/8 spatium, slight visual adjust so that ties don't hit the center
     const StaffType* staffType = item->staffType();
     bool useTablature = staffType->isTabStaff();
     double _spatium = item->spatium();
@@ -1184,7 +1185,9 @@ void SlurTieLayout::tiePos(Tie* item, SlurPos* sp)
             x1 = item->startNote()->outsideTieAttachX(item->_up);
         }
     }
-
+    if (!(item->up() && sc->up())) {
+        x1 += smallInset * _spatium;
+    }
     sp->p1 += PointF(x1, y1);
 
     //------p2
@@ -1205,6 +1208,9 @@ void SlurTieLayout::tiePos(Tie* item, SlurPos* sp)
         } else {
             x2 = item->endNote()->outsideTieAttachX(item->_up);
         }
+    }
+    if (!(!item->up() && !ec->up())) {
+        x2 -= smallInset * _spatium;
     }
     sp->p2 += PointF(x2, y2);
     // adjust for cross-staff
