@@ -65,6 +65,7 @@ public:
     QString name() const;
 
     const INavigation::Index& index() const;
+    void setIndex(const INavigation::Index& index);
     async::Channel<INavigation::Index> indexChanged() const;
 
     bool enabled() const;

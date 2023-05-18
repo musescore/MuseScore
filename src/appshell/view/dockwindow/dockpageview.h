@@ -29,6 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "ui/inavigationcontroller.h"
+#include "ui/view/navigationsection.h"
 
 #include "internal/dockbase.h"
 #include "docktypes.h"
@@ -58,10 +59,13 @@ class DockPageView : public QQuickItem
     Q_PROPERTY(mu::dock::DockCentralView * centralDock READ centralDock WRITE setCentralDock NOTIFY centralDockChanged)
     Q_PROPERTY(mu::dock::DockStatusBarView * statusBar READ statusBar WRITE setStatusBar NOTIFY statusBarChanged)
 
+    Q_PROPERTY(bool autoOrder READ autoOrder WRITE setAutoOrder NOTIFY autoOrderChanged)
+
 public:
     explicit DockPageView(QQuickItem* parent = nullptr);
 
     void init();
+    void deinit();
 
     QString uri() const;
 
@@ -95,6 +99,9 @@ public:
 
     Q_INVOKABLE void setDefaultNavigationControl(mu::ui::NavigationControl* control);
 
+    bool autoOrder() const;
+    void setAutoOrder(bool newAutoOrder);
+
 public slots:
     void setUri(const QString& uri);
     void setCentralDock(DockCentralView* central);
@@ -107,10 +114,17 @@ signals:
     void centralDockChanged(DockCentralView* central);
     void statusBarChanged(DockStatusBarView* statusBar);
 
+    void autoOrderChanged();
+
 private:
     void componentComplete() override;
 
     DockPanelView* findPanelForTab(const DockPanelView* tab) const;
+
+    void reorderSections();
+    void doReorderSections();
+    void reorderDocksNavigationSections(QList<DockBase*>& docks);
+    void reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks);
 
     QString m_uri;
     uicomponents::QmlListProperty<DockToolBarView> m_mainToolBars;
@@ -120,6 +134,7 @@ private:
     uicomponents::QmlListProperty<DockingHolderView> m_panelsDockingHolders;
     DockCentralView* m_central = nullptr;
     DockStatusBarView* m_statusBar = nullptr;
+    bool m_autoOrder = false;
 };
 }
 

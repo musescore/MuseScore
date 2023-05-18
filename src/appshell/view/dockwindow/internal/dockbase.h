@@ -28,6 +28,7 @@
 
 #include "../docktypes.h"
 #include "uicomponents/view/qmllistproperty.h"
+#include "ui/view/navigationpanel.h"
 
 namespace KDDockWidgets {
 class DockWidgetQuick;
@@ -60,6 +61,9 @@ class DockBase : public QQuickItem
 
     Q_PROPERTY(bool inited READ inited NOTIFY initedChanged)
 
+    Q_PROPERTY(mu::ui::NavigationPanel * contentNavigationPanel READ contentNavigationPanel
+               WRITE setContentNavigationPanel NOTIFY contentNavigationPanelChanged)
+
 public:
     DockBase(DockType type, QQuickItem* parent = nullptr);
 
@@ -75,6 +79,8 @@ public:
 
     int locationProperty() const;
     Location location() const;
+
+    QPoint globalPosition() const;
 
     QVariantList dropDestinationsProperty() const;
     QList<DropDestination> dropDestinations() const;
@@ -102,7 +108,12 @@ public:
 
     QRect frameGeometry() const;
 
+    bool isInSameFrame(const DockBase* other) const;
+    void setFramePanelOrder(int order);
+
     Q_INVOKABLE void resize(int width, int height);
+
+    ui::NavigationPanel* contentNavigationPanel() const;
 
 public slots:
     void setTitle(const QString& title);
@@ -124,6 +135,8 @@ public slots:
 
     void setFloating(bool floating);
 
+    void setContentNavigationPanel(mu::ui::NavigationPanel* panel);
+
 signals:
     void titleChanged();
 
@@ -142,6 +155,10 @@ signals:
     void floatingChanged();
 
     void initedChanged();
+
+    void contentNavigationPanelChanged();
+
+    void reorderNavigationRequested();
 
 protected:
     friend class DockWindow;
@@ -185,6 +202,7 @@ private:
 
     bool m_inited = false;
     KDDockWidgets::DockWidgetQuick* m_dockWidget = nullptr;
+    mu::ui::NavigationPanel* m_contentNavigationPanel = nullptr;
 };
 
 struct DropDestination
