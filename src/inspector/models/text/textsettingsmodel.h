@@ -33,7 +33,7 @@ class TextSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    INJECT(inspector, actions::IActionsDispatcher, dispatcher)
+    INJECT(actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(PropertyItem * fontFamily READ fontFamily CONSTANT)
     Q_PROPERTY(PropertyItem * fontStyle READ fontStyle CONSTANT)

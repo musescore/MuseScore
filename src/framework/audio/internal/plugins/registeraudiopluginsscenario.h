@@ -37,12 +37,12 @@
 namespace mu::audio {
 class RegisterAudioPluginsScenario : public IRegisterAudioPluginsScenario, public async::Asyncable
 {
-    INJECT(audio, IKnownAudioPluginsRegister, knownPluginsRegister)
-    INJECT(audio, IAudioPluginsScannerRegister, scannerRegister)
-    INJECT(audio, IAudioPluginMetaReaderRegister, metaReaderRegister)
-    INJECT(audio, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(audio, framework::IInteractive, interactive)
-    INJECT(audio, IProcess, process)
+    INJECT(IKnownAudioPluginsRegister, knownPluginsRegister)
+    INJECT(IAudioPluginsScannerRegister, scannerRegister)
+    INJECT(IAudioPluginMetaReaderRegister, metaReaderRegister)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(IProcess, process)
 
 public:
     void init();

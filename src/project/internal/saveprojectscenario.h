@@ -34,10 +34,10 @@
 namespace mu::project {
 class SaveProjectScenario : public ISaveProjectScenario
 {
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, framework::IInteractive, interactive)
-    INJECT(project, cloud::IAuthorizationService, authorizationService)
-    INJECT(project, cloud::ICloudProjectsService, cloudProjectsService)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(cloud::IAuthorizationService, authorizationService)
+    INJECT(cloud::ICloudProjectsService, cloudProjectsService)
 
 public:
     SaveProjectScenario() = default;

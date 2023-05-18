@@ -32,7 +32,7 @@ class AccessibilityApi : public ApiObject
 {
     Q_OBJECT
 
-    INJECT(api, accessibility::IAccessibilityController, accessibilityController)
+    INJECT(accessibility::IAccessibilityController, accessibilityController)
 
 public:
     explicit AccessibilityApi(IApiEngine* e);

@@ -31,7 +31,7 @@
 namespace mu::appshell {
 class WindowDropArea : public QQuickItem
 {
-    INJECT(appshell, IApplicationActionController, applicationActionController)
+    INJECT(IApplicationActionController, applicationActionController)
 public:
     explicit WindowDropArea(QQuickItem* parent = nullptr);
 

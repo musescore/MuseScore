@@ -31,7 +31,7 @@
 namespace mu::iex::imagesexport {
 class PngWriter : public AbstractImageWriter
 {
-    INJECT(iex_imagesexport, IImagesExportConfiguration, configuration)
+    INJECT(IImagesExportConfiguration, configuration)
 
 public:
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;

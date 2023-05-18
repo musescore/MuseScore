@@ -50,8 +50,8 @@ class Shape;
 
 class EngravingFont : public IEngravingFont
 {
-    INJECT_STATIC(score, mu::draw::IFontProvider, fontProvider)
-    INJECT_STATIC(score, IEngravingFontsProvider, engravingFonts)
+    INJECT_STATIC(mu::draw::IFontProvider, fontProvider)
+    INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
 public:
     EngravingFont(const std::string& name, const std::string& family, const io::path_t& filePath);
     EngravingFont(const EngravingFont& other);

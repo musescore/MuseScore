@@ -32,8 +32,8 @@
 namespace mu::dock {
 class DockWindowActionsController : public actions::Actionable
 {
-    INJECT(dock, IDockWindowProvider, dockWindowProvider)
-    INJECT(dock, actions::IActionsDispatcher, dispatcher)
+    INJECT(IDockWindowProvider, dockWindowProvider)
+    INJECT(actions::IActionsDispatcher, dispatcher)
 
 public:
     void init();

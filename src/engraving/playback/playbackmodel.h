@@ -50,7 +50,7 @@ class RepeatList;
 
 class PlaybackModel : public async::Asyncable
 {
-    INJECT(engraving, mpe::IArticulationProfilesRepository, profilesRepository)
+    INJECT(mpe::IArticulationProfilesRepository, profilesRepository)
 
 public:
     void load(Score* score);

@@ -36,7 +36,7 @@ class QmlToolTip : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(ui, IInteractiveProvider, interactiveProvider)
+    INJECT(IInteractiveProvider, interactiveProvider)
 
 public:
     explicit QmlToolTip(QObject* parent = nullptr);

@@ -54,7 +54,7 @@ class Score : public mu::plugins::api::ScoreElement
 {
     Q_OBJECT
 
-    INJECT(plugins, mu::context::IGlobalContext, context)
+    INJECT(mu::context::IGlobalContext, context)
 
     /** Composer of the score, as taken from the score properties (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(QString composer READ composer)

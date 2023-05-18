@@ -42,10 +42,10 @@ class MidiDeviceMappingModel : public QAbstractListModel, public async::Asyncabl
 {
     Q_OBJECT
 
-    INJECT(shortcuts, ui::IUiActionsRegister, uiActionsRegister)
-    INJECT(shortcuts, shortcuts::IMidiRemote, midiRemote)
-    INJECT(shortcuts, IShortcutsConfiguration, configuration)
-    INJECT(shortcuts, midi::IMidiConfiguration, midiConfiguration)
+    INJECT(ui::IUiActionsRegister, uiActionsRegister)
+    INJECT(shortcuts::IMidiRemote, midiRemote)
+    INJECT(IShortcutsConfiguration, configuration)
+    INJECT(midi::IMidiConfiguration, midiConfiguration)
 
     Q_PROPERTY(bool useRemoteControl READ useRemoteControl WRITE setUseRemoteControl NOTIFY useRemoteControlChanged)
 

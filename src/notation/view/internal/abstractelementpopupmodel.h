@@ -36,8 +36,8 @@ class AbstractElementPopupModel : public QObject, public async::Asyncable, publi
 {
     Q_OBJECT
 
-    INJECT(notation, actions::IActionsDispatcher, dispatcher)
-    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(context::IGlobalContext, globalContext)
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(PopupModelType modelType READ modelType CONSTANT)

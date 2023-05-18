@@ -31,7 +31,7 @@
 namespace mu::iex::imagesexport {
 class SvgWriter : public AbstractImageWriter
 {
-    INJECT(iex, IImagesExportConfiguration, configuration)
+    INJECT(IImagesExportConfiguration, configuration)
 
 public:
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;

@@ -37,7 +37,7 @@ class MultiInstancesDevModel : public QObject, public async::Asyncable
     Q_PROPERTY(QString selfID READ selfID CONSTANT)
     Q_PROPERTY(QVariantList instances READ instances NOTIFY instancesChanged)
 
-    INJECT(mi, IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     explicit MultiInstancesDevModel(QObject* parent = nullptr);

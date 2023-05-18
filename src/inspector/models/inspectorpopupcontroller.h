@@ -44,7 +44,7 @@ class InspectorPopupController : public QObject
 
     Q_PROPERTY(QQuickItem * notationView READ notationView WRITE setNotationView NOTIFY notationViewChanged)
 
-    INJECT(inspector, ui::IMainWindow, mainWindow)
+    INJECT(ui::IMainWindow, mainWindow)
 
 public:
     explicit InspectorPopupController(QObject* parent = nullptr);

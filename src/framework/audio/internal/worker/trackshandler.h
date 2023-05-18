@@ -33,7 +33,7 @@
 namespace mu::audio {
 class TracksHandler : public ITracks, public async::Asyncable
 {
-    INJECT(audio, synth::ISynthResolver, resolver)
+    INJECT(synth::ISynthResolver, resolver)
 public:
     explicit TracksHandler(IGetTrackSequence* getSequence);
     ~TracksHandler();

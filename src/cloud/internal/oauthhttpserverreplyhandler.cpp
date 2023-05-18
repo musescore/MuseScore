@@ -44,7 +44,7 @@ using namespace mu::cloud;
 
 class OAuthHttpServerReplyHandler::Impl
 {
-    INJECT(cloud, ICloudConfiguration, configuration)
+    INJECT(ICloudConfiguration, configuration)
 
 public:
     explicit Impl(OAuthHttpServerReplyHandler* p);

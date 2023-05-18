@@ -52,24 +52,24 @@
 namespace mu::project {
 class ProjectActionsController : public IProjectFilesController, public QObject, public actions::Actionable, public async::Asyncable
 {
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, INotationReadersRegister, readers)
-    INJECT(project, IProjectCreator, projectCreator)
-    INJECT(project, IPlatformRecentFilesController, platformRecentFilesController)
-    INJECT(project, IProjectAutoSaver, projectAutoSaver)
-    INJECT(project, ISaveProjectScenario, saveProjectScenario)
-    INJECT(project, IExportProjectScenario, exportProjectScenario)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(INotationReadersRegister, readers)
+    INJECT(IProjectCreator, projectCreator)
+    INJECT(IPlatformRecentFilesController, platformRecentFilesController)
+    INJECT(IProjectAutoSaver, projectAutoSaver)
+    INJECT(ISaveProjectScenario, saveProjectScenario)
+    INJECT(IExportProjectScenario, exportProjectScenario)
 
-    INJECT(project, actions::IActionsDispatcher, dispatcher)
-    INJECT(project, framework::IInteractive, interactive)
-    INJECT(project, context::IGlobalContext, globalContext)
-    INJECT(project, mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(project, cloud::IAuthorizationService, authorizationService)
-    INJECT(project, cloud::ICloudProjectsService, cloudProjectsService)
-    INJECT(project, notation::INotationConfiguration, notationConfiguration)
-    INJECT(project, playback::IPlaybackController, playbackController)
-    INJECT(project, print::IPrintProvider, printProvider)
-    INJECT(project, io::IFileSystem, fileSystem)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(cloud::IAuthorizationService, authorizationService)
+    INJECT(cloud::ICloudProjectsService, cloudProjectsService)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(playback::IPlaybackController, playbackController)
+    INJECT(print::IPrintProvider, printProvider)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     void init();

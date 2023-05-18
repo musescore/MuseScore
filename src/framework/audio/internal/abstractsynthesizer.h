@@ -38,7 +38,7 @@
 namespace mu::audio::synth {
 class AbstractSynthesizer : public ISynthesizer, public async::Asyncable
 {
-    INJECT_STATIC(audio, IAudioConfiguration, config)
+    INJECT_STATIC(IAudioConfiguration, config)
 public:
     AbstractSynthesizer(const audio::AudioInputParams& params);
     virtual ~AbstractSynthesizer() = default;

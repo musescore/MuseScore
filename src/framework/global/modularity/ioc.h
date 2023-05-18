@@ -26,7 +26,7 @@
 #include <memory>
 #include "modulesioc.h"
 
-#define INJECT(Module, Interface, getter) \
+#define INJECT(Interface, getter) \
 private: \
     mutable std::shared_ptr<Interface> m_##getter = nullptr; \
 public: \
@@ -39,7 +39,7 @@ public: \
     } \
     void set##getter(std::shared_ptr<Interface> impl) { m_##getter = impl; } \
 
-#define INJECT_STATIC(Module, Interface, getter) \
+#define INJECT_STATIC(Interface, getter) \
 public: \
     static std::shared_ptr<Interface>& getter() {  \
         static std::shared_ptr<Interface> s_##getter = nullptr; \

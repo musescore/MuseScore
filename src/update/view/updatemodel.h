@@ -35,7 +35,7 @@ class UpdateModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(update, IUpdateService, service)
+    INJECT(IUpdateService, service)
 
     Q_PROPERTY(int currentProgress READ currentProgress NOTIFY currentProgressChanged)
     Q_PROPERTY(int totalProgress READ totalProgress NOTIFY totalProgressChanged)

@@ -34,7 +34,7 @@ class HarpPedalPopupModel : public AbstractElementPopupModel
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(context::IGlobalContext, globalContext)
 
     Q_PROPERTY(bool isDiagram READ isDiagram WRITE setIsDiagram NOTIFY isDiagramChanged)
     Q_PROPERTY(

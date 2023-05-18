@@ -37,9 +37,9 @@ class PreferencesModel : public QAbstractItemModel
 {
     Q_OBJECT
 
-    INJECT(appshell, actions::IActionsDispatcher, dispatcher)
-    INJECT(appshell, IAppShellConfiguration, configuration)
-    INJECT(appshell, ui::IUiActionsRegister, actionsRegister)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(IAppShellConfiguration, configuration)
+    INJECT(ui::IUiActionsRegister, actionsRegister)
 
     Q_PROPERTY(QString currentPageId READ currentPageId WRITE setCurrentPageId NOTIFY currentPageIdChanged)
 

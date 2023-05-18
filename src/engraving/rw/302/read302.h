@@ -41,7 +41,7 @@ class XmlReader;
 namespace mu::engraving::compat {
 class Read302 : public IScoreReader
 {
-    INJECT_STATIC(engraving, IEngravingFontsProvider, engravingFonts)
+    INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
 public:
 
     Err read(Score* score, XmlReader& e, ReadInOutData* out) override;

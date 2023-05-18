@@ -31,7 +31,7 @@
 namespace mu::palette {
 class PaletteCreator
 {
-    INJECT_STATIC(palette, IPaletteConfiguration, configuration)
+    INJECT_STATIC(IPaletteConfiguration, configuration)
 
 public:
     static PalettePtr newTempoPalette(bool defaultPalette = false);

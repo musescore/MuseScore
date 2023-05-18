@@ -166,7 +166,7 @@ class WhammyBar;
 namespace mu::engraving::rw400 {
 class TWrite
 {
-    INJECT_STATIC(engraving, IEngravingConfiguration, engravingConfiguration)
+    INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
 
 public:
     TWrite() = default;

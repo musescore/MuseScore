@@ -31,8 +31,8 @@
 namespace mu::project {
 class RecentProjectsProvider : public IRecentProjectsProvider, public async::Asyncable
 {
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, IMscMetaReader, mscMetaReader)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(IMscMetaReader, mscMetaReader)
 
 public:
     void init();

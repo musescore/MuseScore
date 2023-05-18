@@ -197,7 +197,7 @@ public:
 
 class EngravingObject
 {
-    INJECT_STATIC(engraving, mu::diagnostics::IEngravingElementsProvider, elementsProvider)
+    INJECT_STATIC(mu::diagnostics::IEngravingElementsProvider, elementsProvider)
 
     ElementType m_type = ElementType::INVALID;
     EngravingObject* m_parent = nullptr;

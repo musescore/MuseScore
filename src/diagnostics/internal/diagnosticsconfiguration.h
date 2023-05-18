@@ -30,7 +30,7 @@
 namespace mu::diagnostics {
 class DiagnosticsConfiguration : public IDiagnosticsConfiguration
 {
-    INJECT(diagnostics, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     DiagnosticsConfiguration() = default;

@@ -39,9 +39,9 @@ namespace mu::notation {
 class Notation;
 class NotationPainting : public INotationPainting
 {
-    INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
-    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
+    INJECT(INotationConfiguration, configuration)
+    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
 
 public:
     NotationPainting(Notation* notation);

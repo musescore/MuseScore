@@ -32,9 +32,9 @@
 namespace mu::diagnostics {
 class DiagnosticsActionsController : public actions::Actionable
 {
-    INJECT(diagnostics, actions::IActionsDispatcher, dispatcher)
-    INJECT(diagnostics, framework::IInteractive, interactive)
-    INJECT(diagnostics, diagnostics::ISaveDiagnosticFilesScenario, saveDiagnosticsScenario)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(diagnostics::ISaveDiagnosticFilesScenario, saveDiagnosticsScenario)
 
 public:
     DiagnosticsActionsController() = default;

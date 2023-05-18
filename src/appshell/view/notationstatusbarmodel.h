@@ -43,11 +43,11 @@ class NotationStatusBarModel : public QObject, public async::Asyncable, public a
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, context)
-    INJECT(notation, actions::IActionsDispatcher, dispatcher)
-    INJECT(notation, ui::IUiActionsRegister, actionsRegister)
-    INJECT(notation, workspace::IWorkspaceConfiguration, workspaceConfiguration)
-    INJECT(notation, notation::INotationConfiguration, notationConfiguration)
+    INJECT(context::IGlobalContext, context)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(ui::IUiActionsRegister, actionsRegister)
+    INJECT(workspace::IWorkspaceConfiguration, workspaceConfiguration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
 
     Q_PROPERTY(QString accessibilityInfo READ accessibilityInfo NOTIFY accessibilityInfoChanged)
     Q_PROPERTY(QVariant currentWorkspaceItem READ currentWorkspaceItem NOTIFY currentWorkspaceActionChanged)

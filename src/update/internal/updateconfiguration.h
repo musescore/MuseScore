@@ -32,7 +32,7 @@
 namespace mu::update {
 class UpdateConfiguration : public IUpdateConfiguration, public async::Asyncable
 {
-    INJECT(update, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     void init();

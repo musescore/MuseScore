@@ -75,8 +75,8 @@ class PluginAPI : public QmlPlugin
 {
     Q_OBJECT
 
-    INJECT(plugins, mu::actions::IActionsDispatcher, actionsDispatcher)
-    INJECT(plugins, mu::context::IGlobalContext, context)
+    INJECT(mu::actions::IActionsDispatcher, actionsDispatcher)
+    INJECT(mu::context::IGlobalContext, context)
 
     /** Path where the plugin is placed in menu */
     Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)

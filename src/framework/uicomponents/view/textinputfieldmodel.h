@@ -33,7 +33,7 @@ class TextInputFieldModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(uicomponents, shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
 
 public:
     explicit TextInputFieldModel(QObject* parent = nullptr);

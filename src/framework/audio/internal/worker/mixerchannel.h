@@ -34,7 +34,7 @@
 namespace mu::audio {
 class MixerChannel : public ITrackAudioOutput, public async::Asyncable
 {
-    INJECT(audio, fx::IFxResolver, fxResolver)
+    INJECT(fx::IFxResolver, fxResolver)
 
 public:
     explicit MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate);

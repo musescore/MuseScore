@@ -36,7 +36,7 @@ class CrashpadClient;
 namespace mu::diagnostics {
 class CrashHandler
 {
-    INJECT(diagnostics, io::IFileSystem, fileSystem)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     CrashHandler() = default;

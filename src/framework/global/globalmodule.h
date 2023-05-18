@@ -29,7 +29,7 @@
 namespace mu::framework {
 class GlobalModule : public modularity::IModuleSetup
 {
-    INJECT(framework, io::IFileSystem, fileSystem)
+    INJECT(io::IFileSystem, fileSystem)
 public:
 
     std::string moduleName() const override;

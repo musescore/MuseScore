@@ -33,7 +33,7 @@ class CorruptScoreDevToolsModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(diagnostics, context::IGlobalContext, globalContext)
+    INJECT(context::IGlobalContext, globalContext)
 
 public:
     explicit CorruptScoreDevToolsModel(QObject* parent = nullptr);

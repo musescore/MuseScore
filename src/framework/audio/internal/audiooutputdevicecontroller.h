@@ -31,8 +31,8 @@
 namespace mu::audio {
 class AudioOutputDeviceController : public async::Asyncable
 {
-    INJECT(audio, IAudioConfiguration, configuration)
-    INJECT(audio, IAudioDriver, audioDriver)
+    INJECT(IAudioConfiguration, configuration)
+    INJECT(IAudioDriver, audioDriver)
 
 public:
     void init();

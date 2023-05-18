@@ -40,7 +40,7 @@ class MainWindowBridge : public QObject
     Q_PROPERTY(QString filePath READ filePath WRITE setFilePath NOTIFY filePathChanged)
     Q_PROPERTY(bool fileModified READ fileModified WRITE setFileModified NOTIFY fileModifiedChanged)
 
-    INJECT(ui, IMainWindow, mainWindow)
+    INJECT(IMainWindow, mainWindow)
 
 public:
     explicit MainWindowBridge(QObject* parent = nullptr);

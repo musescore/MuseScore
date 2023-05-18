@@ -47,7 +47,7 @@ class DockPageView : public QQuickItem
 {
     Q_OBJECT
 
-    INJECT(dock, ui::INavigationController, navigationController)
+    INJECT(ui::INavigationController, navigationController)
 
     Q_PROPERTY(QString uri READ uri WRITE setUri NOTIFY uriChanged)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBarView> mainToolBars READ mainToolBarsProperty)

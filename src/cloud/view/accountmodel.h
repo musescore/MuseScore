@@ -35,7 +35,7 @@ class AccountModel : public QObject, async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(cloud, IAuthorizationService, authorizationService)
+    INJECT(IAuthorizationService, authorizationService)
 
     Q_PROPERTY(bool userAuthorized READ userAuthorized NOTIFY userAuthorizedChanged)
     Q_PROPERTY(QVariant accountInfo READ accountInfo NOTIFY accountInfoChanged)

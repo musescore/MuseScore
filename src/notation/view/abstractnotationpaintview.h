@@ -53,15 +53,15 @@ class AbstractNotationPaintView : public uicomponents::QuickPaintedView, public 
 {
     Q_OBJECT
 
-    INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
-    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
-    INJECT(notation, actions::IActionsDispatcher, dispatcher)
-    INJECT(notation, context::IGlobalContext, globalContext)
-    INJECT(notation, playback::IPlaybackController, playbackController)
-    INJECT(notation, ui::IUiContextResolver, uiContextResolver)
-    INJECT(notation, ui::IMainWindow, mainWindow)
-    INJECT(notation, ui::IUiActionsRegister, actionsRegister)
+    INJECT(INotationConfiguration, configuration)
+    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(playback::IPlaybackController, playbackController)
+    INJECT(ui::IUiContextResolver, uiContextResolver)
+    INJECT(ui::IMainWindow, mainWindow)
+    INJECT(ui::IUiActionsRegister, actionsRegister)
 
     Q_PROPERTY(qreal startHorizontalScrollPosition READ startHorizontalScrollPosition NOTIFY horizontalScrollChanged)
     Q_PROPERTY(qreal horizontalScrollbarSize READ horizontalScrollbarSize NOTIFY horizontalScrollChanged)

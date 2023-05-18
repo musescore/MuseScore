@@ -31,8 +31,8 @@
 namespace mu::vst {
 class VstPluginsScanner : public audio::IAudioPluginsScanner
 {
-    INJECT(vst, IVstConfiguration, configuration)
-    INJECT(vst, io::IFileSystem, fileSystem)
+    INJECT(IVstConfiguration, configuration)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     io::paths_t scanPlugins() const override;

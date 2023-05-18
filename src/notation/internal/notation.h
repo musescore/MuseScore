@@ -39,8 +39,8 @@ class NotationInteraction;
 class NotationPlayback;
 class Notation : virtual public INotation, public IGetScore, public async::Asyncable
 {
-    INJECT_STATIC(notation, INotationConfiguration, configuration)
-    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT_STATIC(INotationConfiguration, configuration)
+    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
 
 public:
     explicit Notation(engraving::Score* score = nullptr);

@@ -32,8 +32,8 @@
 namespace mu::vst {
 class VstFxResolver : public audio::fx::AbstractFxResolver
 {
-    INJECT(vst, IVstModulesRepository, pluginModulesRepo)
-    INJECT(vst, IVstPluginsRegister, pluginsRegister)
+    INJECT(IVstModulesRepository, pluginModulesRepo)
+    INJECT(IVstPluginsRegister, pluginsRegister)
 public:
     // IFxResolver::IResolver interface
     audio::AudioResourceMetaList resolveResources() const override;

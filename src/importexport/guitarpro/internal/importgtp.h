@@ -120,7 +120,7 @@ inline Drumset* gpDrumset = nullptr;
 
 class GuitarPro
 {
-    INJECT(importexport, mu::engraving::IEngravingConfiguration, engravingConfiguration);
+    INJECT(mu::engraving::IEngravingConfiguration, engravingConfiguration);
 
 protected:
 

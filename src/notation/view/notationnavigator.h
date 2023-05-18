@@ -40,10 +40,10 @@ class NotationNavigator : public AbstractNotationPaintView
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, globalContext)
-    INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
-    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(INotationConfiguration, configuration)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
 
     Q_PROPERTY(int orientation READ orientation NOTIFY orientationChanged)
 

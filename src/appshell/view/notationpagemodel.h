@@ -37,10 +37,10 @@ class NotationPageModel : public QObject, public async::Asyncable, public action
 {
     Q_OBJECT
 
-    INJECT(appshell, actions::IActionsDispatcher, dispatcher)
-    INJECT(appshell, context::IGlobalContext, globalContext)
-    INJECT(appshell, IAppShellConfiguration, configuration)
-    INJECT(appshell, dock::IDockWindowProvider, dockWindowProvider)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(IAppShellConfiguration, configuration)
+    INJECT(dock::IDockWindowProvider, dockWindowProvider)
 
     Q_PROPERTY(bool isNavigatorVisible READ isNavigatorVisible NOTIFY isNavigatorVisibleChanged)
 

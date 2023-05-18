@@ -83,10 +83,10 @@ public:
 
 class NotationViewInputController : public actions::Actionable, public async::Asyncable
 {
-    INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, actions::IActionsDispatcher, dispatcher)
-    INJECT(notation, playback::IPlaybackController, playbackController)
-    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(INotationConfiguration, configuration)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(playback::IPlaybackController, playbackController)
+    INJECT(context::IGlobalContext, globalContext)
 
 public:
     NotationViewInputController(IControlledView* view);

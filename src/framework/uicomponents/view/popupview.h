@@ -84,9 +84,9 @@ class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
     Q_ENUMS(OpenPolicy)
     Q_ENUMS(ClosePolicy)
 
-    INJECT(uicomponents, ui::IMainWindow, mainWindow)
-    INJECT(uicomponents, ui::IUiConfiguration, uiConfiguration)
-    INJECT(uicomponents, ui::INavigationController, navigationController)
+    INJECT(ui::IMainWindow, mainWindow)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(ui::INavigationController, navigationController)
 
 public:
 

@@ -37,8 +37,8 @@ class ShortcutsInstanceModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(shortcuts, IShortcutsRegister, shortcutsRegister)
-    INJECT(shortcuts, IShortcutsController, controller)
+    INJECT(IShortcutsRegister, shortcutsRegister)
+    INJECT(IShortcutsController, controller)
 
     Q_PROPERTY(QStringList shortcuts READ shortcuts NOTIFY shortcutsChanged)
     Q_PROPERTY(bool active READ active NOTIFY activeChanged)

@@ -30,7 +30,7 @@
 namespace mu::shortcuts {
 class ShortcutsConfiguration : public IShortcutsConfiguration, public async::Asyncable
 {
-    INJECT(shortcuts, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     void init();

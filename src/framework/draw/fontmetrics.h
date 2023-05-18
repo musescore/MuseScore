@@ -32,7 +32,7 @@
 namespace mu::draw {
 class FontMetrics
 {
-    INJECT(draw, IFontProvider, fontProvider)
+    INJECT(IFontProvider, fontProvider)
 public:
     FontMetrics(const Font& font);
 

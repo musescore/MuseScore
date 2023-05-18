@@ -35,8 +35,8 @@
 namespace mu::autobot {
 class TestCaseReport
 {
-    INJECT(autobot, IAutobotConfiguration, configuration)
-    INJECT(autobot, io::IFileSystem, fileSystem)
+    INJECT(IAutobotConfiguration, configuration)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     TestCaseReport() = default;

@@ -45,11 +45,11 @@ class CloudService : public QObject, public IAuthorizationService, public ICloud
 {
     Q_OBJECT
 
-    INJECT(cloud, ICloudConfiguration, configuration)
-    INJECT(cloud, io::IFileSystem, fileSystem)
-    INJECT(cloud, network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(cloud, framework::IInteractive, interactive)
-    INJECT(cloud, mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(ICloudConfiguration, configuration)
+    INJECT(io::IFileSystem, fileSystem)
+    INJECT(network::INetworkManagerCreator, networkManagerCreator)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     CloudService(QObject* parent = nullptr);

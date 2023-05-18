@@ -48,13 +48,13 @@
 namespace mu::playback {
 class PlaybackController : public IPlaybackController, public actions::Actionable, public async::Asyncable
 {
-    INJECT_STATIC(playback, actions::IActionsDispatcher, dispatcher)
-    INJECT_STATIC(playback, context::IGlobalContext, globalContext)
-    INJECT_STATIC(playback, IPlaybackConfiguration, configuration)
-    INJECT_STATIC(playback, notation::INotationConfiguration, notationConfiguration)
-    INJECT_STATIC(playback, audio::IPlayback, playback)
-    INJECT_STATIC(playback, ISoundProfilesRepository, profilesRepo)
-    INJECT_STATIC(playback, framework::IInteractive, interactive)
+    INJECT_STATIC(actions::IActionsDispatcher, dispatcher)
+    INJECT_STATIC(context::IGlobalContext, globalContext)
+    INJECT_STATIC(IPlaybackConfiguration, configuration)
+    INJECT_STATIC(notation::INotationConfiguration, notationConfiguration)
+    INJECT_STATIC(audio::IPlayback, playback)
+    INJECT_STATIC(ISoundProfilesRepository, profilesRepo)
+    INJECT_STATIC(framework::IInteractive, interactive)
 
 public:
     void init();

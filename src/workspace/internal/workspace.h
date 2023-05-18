@@ -33,7 +33,7 @@
 namespace mu::workspace {
 class Workspace : public IWorkspace, public async::Asyncable
 {
-    INJECT(workspace, mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     Workspace(const io::path_t& filePath);

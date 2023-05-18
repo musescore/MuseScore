@@ -36,8 +36,8 @@ class MainToolBarModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(appshell, context::IGlobalContext, context)
-    INJECT(appshell, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(context::IGlobalContext, context)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     explicit MainToolBarModel(QObject* parent = nullptr);

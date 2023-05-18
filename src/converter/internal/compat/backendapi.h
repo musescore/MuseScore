@@ -39,9 +39,9 @@ namespace mu::converter {
 class BackendJsonWriter;
 class BackendApi
 {
-    INJECT_STATIC(converter, io::IFileSystem, fileSystem)
-    INJECT_STATIC(converter, project::IProjectCreator, notationCreator)
-    INJECT_STATIC(converter, project::INotationWritersRegister, writers)
+    INJECT_STATIC(io::IFileSystem, fileSystem)
+    INJECT_STATIC(project::IProjectCreator, notationCreator)
+    INJECT_STATIC(project::INotationWritersRegister, writers)
 
 public:
     static Ret exportScoreMedia(const io::path_t& in, const io::path_t& out, const io::path_t& highlightConfigPath,

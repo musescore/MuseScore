@@ -36,8 +36,8 @@ class PaletteRootModel : public QObject, public actions::Actionable, public asyn
 {
     Q_OBJECT
 
-    INJECT(palette, IPaletteProvider, paletteProvider)
-    INJECT(palette, actions::IActionsDispatcher, dispatcher)
+    INJECT(IPaletteProvider, paletteProvider)
+    INJECT(actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(mu::palette::PaletteProvider * paletteProvider READ paletteProvider_property CONSTANT)
 

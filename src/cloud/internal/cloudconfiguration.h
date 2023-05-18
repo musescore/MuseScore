@@ -30,7 +30,7 @@
 namespace mu::cloud {
 class CloudConfiguration : public ICloudConfiguration
 {
-    INJECT(cloud, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     void init();

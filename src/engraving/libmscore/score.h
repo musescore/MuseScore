@@ -364,9 +364,9 @@ class Score : public EngravingObject
     OBJECT_ALLOCATOR(engraving, Score)
     DECLARE_CLASSOF(ElementType::SCORE)
 
-    INJECT(engraving, draw::IImageProvider, imageProvider)
-    INJECT(engraving, IEngravingConfiguration, configuration)
-    INJECT(engraving, IEngravingFontsProvider, engravingFonts)
+    INJECT(draw::IImageProvider, imageProvider)
+    INJECT(IEngravingConfiguration, configuration)
+    INJECT(IEngravingFontsProvider, engravingFonts)
 
 private:
 

@@ -49,7 +49,7 @@ class Image final : public BSymbol
     OBJECT_ALLOCATOR(engraving, Image)
     DECLARE_CLASSOF(ElementType::IMAGE)
 
-    INJECT(engraving, mu::draw::IImageProvider, imageProvider)
+    INJECT(mu::draw::IImageProvider, imageProvider)
 
 public:
     Image(EngravingItem* parent = 0);

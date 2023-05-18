@@ -29,7 +29,7 @@
 namespace mu::iex::videoexport {
 class VideoWriter : public project::IProjectWriter
 {
-    INJECT(videoexport, IVideoExportConfiguration, configuration)
+    INJECT(IVideoExportConfiguration, configuration)
 public:
     VideoWriter() = default;
 

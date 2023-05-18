@@ -34,8 +34,8 @@
 namespace mu::ui {
 class UiActionsRegister : public IUiActionsRegister, public async::Asyncable
 {
-    INJECT(ui, IUiContextResolver, uicontextResolver)
-    INJECT(ui, shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(IUiContextResolver, uicontextResolver)
+    INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
 public:
     UiActionsRegister() = default;
 

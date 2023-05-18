@@ -69,7 +69,7 @@ struct TextStyleMap {
 
 class ReadContext
 {
-    INJECT(engraving, IEngravingFontsProvider, engravingFonts)
+    INJECT(IEngravingFontsProvider, engravingFonts)
 public:
 
     ReadContext(Score* score);

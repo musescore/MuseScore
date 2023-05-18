@@ -37,9 +37,9 @@
 namespace mu::ui {
 class NavigationController : public QObject, public INavigationController, public actions::Actionable, public async::Asyncable
 {
-    INJECT(ui, actions::IActionsDispatcher, dispatcher)
-    INJECT(ui, framework::IInteractive, interactive)
-    INJECT(ui, IMainWindow, mainWindow)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(IMainWindow, mainWindow)
 
 public:
     NavigationController() = default;

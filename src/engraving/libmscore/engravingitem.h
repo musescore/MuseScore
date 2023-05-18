@@ -137,7 +137,7 @@ public:
 
 class EngravingItem : public EngravingObject
 {
-    INJECT_STATIC(engraving, IEngravingConfiguration, engravingConfiguration)
+    INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
 
     mutable mu::RectF _bbox;  ///< Bounding box relative to _pos + _offset
     double _mag;                     ///< standard magnification (derived value)

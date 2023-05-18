@@ -38,7 +38,7 @@
 namespace mu::vst {
 class VstModulesRepository : public IVstModulesRepository
 {
-    INJECT(vst, audio::IKnownAudioPluginsRegister, knownPlugins)
+    INJECT(audio::IKnownAudioPluginsRegister, knownPlugins)
     INJECT_STATIC(vst, audio::IAudioThreadSecurer, threadSecurer)
 
 public:

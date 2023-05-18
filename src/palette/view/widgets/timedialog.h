@@ -39,8 +39,8 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase
 
     Q_PROPERTY(bool showTimePalette READ showTimePalette WRITE setShowTimePalette)
 
-    INJECT(palette, IPaletteConfiguration, configuration)
-    INJECT(palette, IPaletteProvider, paletteProvider)
+    INJECT(IPaletteConfiguration, configuration)
+    INJECT(IPaletteProvider, paletteProvider)
 
 public:
     TimeDialog(QWidget* parent = 0);

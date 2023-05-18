@@ -33,9 +33,9 @@
 namespace mu::plugins {
 class PluginsActionController : public actions::Actionable, public async::Asyncable
 {
-    INJECT(plugins, framework::IInteractive, interactive)
-    INJECT(plugins, actions::IActionsDispatcher, dispatcher)
-    INJECT(plugins, IPluginsService, service)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(IPluginsService, service)
 
 public:
     void init();

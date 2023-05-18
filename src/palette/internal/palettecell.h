@@ -66,7 +66,7 @@ private:
 class PaletteCell : public QObject
 {
     Q_OBJECT
-    INJECT_STATIC(palette, mu::ui::IUiActionsRegister, actionsRegister)
+    INJECT_STATIC(mu::ui::IUiActionsRegister, actionsRegister)
 
 public:
     explicit PaletteCell(QObject* parent = nullptr);
