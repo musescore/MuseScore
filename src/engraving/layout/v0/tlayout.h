@@ -151,6 +151,7 @@ class TimeSig;
 class Tremolo;
 class TremoloBar;
 class TrillSegment;
+class TripletFeel;
 class Trill;
 class Tuplet;
 
@@ -309,6 +310,7 @@ public:
     static void layout(TremoloBar* item, LayoutContext& ctx);
     static void layout(Trill* item, LayoutContext& ctx);
     static void layout(TrillSegment* item, LayoutContext& ctx);
+    static void layout(TripletFeel* item, LayoutContext& ctx);
     static void layout(Tuplet* item, LayoutContext& ctx);
 
     static void layout(Vibrato* item, LayoutContext& ctx);

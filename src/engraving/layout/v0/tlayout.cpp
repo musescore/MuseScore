@@ -137,6 +137,7 @@
 #include "../libmscore/tremolo.h"
 #include "../libmscore/tremolobar.h"
 #include "../libmscore/trill.h"
+#include "../libmscore/tripletfeel.h"
 #include "../libmscore/tuplet.h"
 
 #include "../libmscore/vibrato.h"
@@ -175,7 +176,7 @@ using LayoutTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Ar
                                    Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
                                    Symbol, FSymbol, SystemDivider, SystemText,
                                    TempoText, Text, TextLine, TextLineSegment, Tie, TimeSig,
-                                   Tremolo, TremoloBar, Trill, TrillSegment, Tuplet,
+                                   Tremolo, TremoloBar, Trill, TrillSegment, TripletFeel, Tuplet,
                                    Vibrato, VibratoSegment, Volta, VoltaSegment,
                                    WhammyBarSegment>;
 
@@ -5193,6 +5194,11 @@ void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
     }
 
     item->autoplaceSpannerSegment();
+}
+
+void TLayout::layout(TripletFeel* item, LayoutContext& ctx)
+{
+    layout(static_cast<SystemText*>(item), ctx);
 }
 
 void TLayout::layout(Trill* item, LayoutContext& ctx)
