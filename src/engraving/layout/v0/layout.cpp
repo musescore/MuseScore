@@ -75,6 +75,11 @@ Layout::Layout(Score* score)
 {
 }
 
+void Layout::layoutRange(const LayoutOptions& options, const Fraction& st, const Fraction& et)
+{
+    doLayoutRange(options, st, et);
+}
+
 void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, const Fraction& et)
 {
     CmdStateLocker cmdStateLocker(m_score);

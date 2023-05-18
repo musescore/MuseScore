@@ -40,8 +40,8 @@
 #include "draw/iimageprovider.h"
 #include "iengravingfontsprovider.h"
 
-#include "layout/v0/layout.h"
-#include "layout/v0/layoutoptions.h"
+#include "layout/ilayout.h"
+#include "layout/layoutoptions.h"
 
 #include "style/style.h"
 #include "style/pagestyle.h"
@@ -68,6 +68,10 @@ class Read400;
 namespace mu::engraving::compat {
 class Read302;
 class WriteScoreHook;
+}
+
+namespace mu::engraving::layout::v0 {
+class Layout;
 }
 
 namespace mu::engraving {
@@ -441,7 +445,7 @@ private:
     double _noteHeadWidth { 0.0 };         // cached value
 
     RootItem* m_rootItem = nullptr;
-    layout::v0::Layout m_layout;
+    layout::ILayout* m_layout = nullptr;
     LayoutOptions m_layoutOptions;
 
     mu::async::Channel<EngravingItem*> m_elementDestroyed;

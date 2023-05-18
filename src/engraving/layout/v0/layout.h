@@ -22,7 +22,8 @@
 #ifndef MU_ENGRAVING_LAYOUT_H
 #define MU_ENGRAVING_LAYOUT_H
 
-#include "layoutoptions.h"
+#include "../ilayout.h"
+#include "../layoutoptions.h"
 #include "layoutcontext.h"
 
 namespace mu::engraving {
@@ -30,15 +31,15 @@ class Score;
 }
 
 namespace mu::engraving::layout::v0  {
-class Layout
+class Layout : public ILayout
 {
 public:
     Layout(Score* score);
 
-    void doLayoutRange(const LayoutOptions& options, const Fraction&, const Fraction&);
+    void layoutRange(const LayoutOptions& options, const Fraction& st, const Fraction& et) override;
 
 private:
-
+    void doLayoutRange(const LayoutOptions& options, const Fraction&, const Fraction&);
     void layoutLinear(const LayoutOptions& options, LayoutContext& ctx);
     void layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& lc);
     void resetSystems(bool layoutAll, const LayoutOptions& options, LayoutContext& lc);

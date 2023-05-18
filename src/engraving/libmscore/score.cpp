@@ -40,6 +40,7 @@
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 #include "layout/v0/tlayout.h"
+#include "layout/v0/layout.h"
 
 #include "articulation.h"
 #include "audio.h"
@@ -309,10 +310,8 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
 //---------------------------------------------------------
 
 Score::Score()
-    : EngravingObject(ElementType::SCORE, nullptr), _headersText(MAX_HEADERS, nullptr), _footersText(
-        MAX_FOOTERS, nullptr),
-    _selection(this),
-    m_layout(this)
+    : EngravingObject(ElementType::SCORE, nullptr), _headersText(MAX_HEADERS, nullptr)
+    , _footersText(MAX_FOOTERS, nullptr), _selection(this)
 {
     Score::validScores.insert(this);
     _masterScore = 0;
@@ -333,6 +332,8 @@ Score::Score()
 
     m_shadowNote = new ShadowNote(this);
     m_shadowNote->setVisible(false);
+
+    m_layout = new layout::v0::Layout(this);
 }
 
 Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
@@ -428,6 +429,7 @@ Score::~Score()
 
     delete m_rootItem;
     delete m_shadowNote;
+    delete m_layout;
 }
 
 mu::async::Channel<POS, unsigned> Score::posChanged() const
@@ -5749,7 +5751,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     _noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
     m_layoutOptions.updateFromStyle(style());
-    m_layout.doLayoutRange(m_layoutOptions, st, et);
+    m_layout->layoutRange(m_layoutOptions, st, et);
 
     if (_resetAutoplace) {
         _resetAutoplace = false;
