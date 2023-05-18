@@ -29,8 +29,8 @@ static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPE
     { mu::engraving::ElementType::HARP_DIAGRAM, PopupModelType::TYPE_HARP_DIAGRAM },
 };
 
-AbstractElementPopupModel::AbstractElementPopupModel(QObject* parent, mu::engraving::ElementType elementType)
-    : QObject(parent), m_elementType(elementType)
+AbstractElementPopupModel::AbstractElementPopupModel(QObject* parent)
+    : QObject(parent)
 {
 }
 
@@ -69,11 +69,6 @@ void AbstractElementPopupModel::setTitle(QString title)
 
     m_title = title;
     emit titleChanged();
-}
-
-void AbstractElementPopupModel::setElementType(engraving::ElementType type)
-{
-    m_elementType = type;
 }
 
 mu::PointF AbstractElementPopupModel::fromLogical(PointF point) const
@@ -139,4 +134,23 @@ const INotationInteraction::HitElementContext& AbstractElementPopupModel::hitEle
 
     static INotationInteraction::HitElementContext dummy;
     return dummy;
+}
+
+void AbstractElementPopupModel::init()
+{
+    auto undoStack = this->undoStack();
+    if (!undoStack) {
+        return;
+    }
+
+    undoStack->changesChannel().onReceive(this, [this] (const ChangesRange& range) {
+        if (contains(range.changedTypes, elementType())) {
+            emit dataChanged();
+        }
+    });
+}
+
+mu::engraving::ElementType AbstractElementPopupModel::elementType() const
+{
+    return ELEMENT_POPUP_TYPES.key(m_modelType, ElementType::INVALID);
 }

@@ -21,8 +21,9 @@
  */
 
 #include "harppedalpopupmodel.h"
-#include "log.h"
 #include "libmscore/stafflines.h"
+
+#include "log.h"
 
 using namespace mu::notation;
 
@@ -31,9 +32,32 @@ HarpPedalPopupModel::HarpPedalPopupModel(QObject* parent)
 {
     setModelType(PopupModelType::TYPE_HARP_DIAGRAM);
     setTitle("Harp pedal");
-    m_diagram = toHarpPedalDiagram(getElement());
+}
+
+void HarpPedalPopupModel::init()
+{
+    AbstractElementPopupModel::init();
+
+    connect(this, &AbstractElementPopupModel::dataChanged, [this]() {
+        load();
+    });
+
+    load();
+}
+
+void HarpPedalPopupModel::load()
+{
+    EngravingItem* element = getElement();
+    m_diagram = element && element->isHarpPedalDiagram() ? toHarpPedalDiagram(getElement()) : nullptr;
+    if (!m_diagram) {
+        return;
+    }
+
     m_isDiagram = m_diagram->isDiagram();
+    emit isDiagramChanged(isDiagram());
+
     setPopupPedalState(m_diagram->getPedalState());
+    emit pedalStateChanged(pedalState());
 }
 
 std::array<mu::engraving::PedalPosition, mu::engraving::HARP_STRING_NO> HarpPedalPopupModel::getPopupPedalState()

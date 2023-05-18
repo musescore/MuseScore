@@ -68,6 +68,8 @@ public:
 
     QVector<Position> pedalState() const;
 
+    Q_INVOKABLE void init() override;
+
 public slots:
     void setIsDiagram(bool isDiagram);
     void setDiagramPedalState(QVector<mu::notation::HarpPedalPopupModel::Position> pedalState);
@@ -77,6 +79,8 @@ signals:
     void pedalStateChanged(QVector<mu::notation::HarpPedalPopupModel::Position> pedalState);
 
 private:
+    void load();
+
     // Convert between mu::engraving::PedalPosition and internal qml safe Position enums
     void setPopupPedalState(std::array<mu::engraving::PedalPosition, mu::engraving::HARP_STRING_NO> pos);
 

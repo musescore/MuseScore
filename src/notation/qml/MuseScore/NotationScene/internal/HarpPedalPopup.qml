@@ -103,6 +103,10 @@ StyledPopupView {
         return noteNames[string][state]
     }
 
+    Component.onCompleted: {
+        harpModel.init()
+    }
+
     GridLayout {
         id: menuItems
         rows: 5
