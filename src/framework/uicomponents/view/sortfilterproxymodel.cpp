@@ -67,10 +67,7 @@ SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
         connect(m_sorters.at(index), &SorterValue::dataChanged, this, onSortersChanged);
     });
 
-    connect(this, &QSortFilterProxyModel::sourceModelChanged, this, [onFiltersChanged, onSortersChanged] {
-        onFiltersChanged();
-        onSortersChanged();
-    });
+    connect(this, &SortFilterProxyModel::sourceModelRoleNamesChanged, this, onFiltersChanged);
 }
 
 QQmlListProperty<FilterValue> SortFilterProxyModel::filters()
@@ -117,6 +114,31 @@ void SortFilterProxyModel::setAlwaysExcludeIndices(const QList<int>& indices)
     invalidateFilter();
 }
 
+QHash<int, QByteArray> SortFilterProxyModel::roleNames() const
+{
+    if (!sourceModel()) {
+        return {};
+    }
+
+    return sourceModel()->roleNames();
+}
+
+void SortFilterProxyModel::setSourceModel(QAbstractItemModel* sourceModel)
+{
+    if (m_subSourceModelConnection) {
+        disconnect(m_subSourceModelConnection);
+    }
+
+    QSortFilterProxyModel::setSourceModel(sourceModel);
+
+    emit sourceModelRoleNamesChanged();
+
+    if (auto sourceSortFilterModel = qobject_cast<SortFilterProxyModel*>(sourceModel)) {
+        m_subSourceModelConnection = connect(sourceSortFilterModel, &SortFilterProxyModel::sourceModelRoleNamesChanged,
+                                             this, &SortFilterProxyModel::sourceModelRoleNamesChanged);
+    }
+}
+
 void SortFilterProxyModel::refresh()
 {
     setFilterFixedString(filterRegularExpression().pattern());
@@ -146,16 +168,17 @@ bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& so
             continue;
         }
 
-        CompareType::Type compareType = value->compareType().value<CompareType::Type>();
-
-        if (CompareType::Contains == compareType) {
-            if (!data.toString().contains(value->roleValue().toString(), Qt::CaseInsensitive)) {
-                return false;
-            }
-        } else if (CompareType::Equal == compareType) {
+        switch (value->compareType()) {
+        case CompareType::Equal:
             if (data != value->roleValue()) {
                 return false;
             }
+            break;
+        case CompareType::Contains:
+            if (!data.toString().contains(value->roleValue().toString(), Qt::CaseInsensitive)) {
+                return false;
+            }
+            break;
         }
     }
 

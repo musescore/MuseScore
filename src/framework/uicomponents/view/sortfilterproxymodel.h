@@ -52,6 +52,10 @@ public:
     QList<int> alwaysExcludeIndices() const;
     void setAlwaysExcludeIndices(const QList<int>& indices);
 
+    QHash<int, QByteArray> roleNames() const override;
+
+    void setSourceModel(QAbstractItemModel* sourceModel) override;
+
     Q_INVOKABLE void refresh();
 
 signals:
@@ -61,6 +65,8 @@ signals:
 
     void alwaysIncludeIndicesChanged();
     void alwaysExcludeIndicesChanged();
+
+    void sourceModelRoleNamesChanged();
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
@@ -80,6 +86,8 @@ private:
 
     QList<int> m_alwaysIncludeIndices;
     QList<int> m_alwaysExcludeIndices;
+
+    QMetaObject::Connection m_subSourceModelConnection;
 };
 }
 
