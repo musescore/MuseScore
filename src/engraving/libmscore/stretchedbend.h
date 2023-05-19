@@ -43,6 +43,8 @@ public:
     void draw(mu::draw::Painter*) const override;
     bool stretchedMode() const { return m_stretchedMode; }
 
+    static void prepareBends(std::vector<StretchedBend*>& bends);
+
 private:
     friend class layout::v0::TLayout;
     friend class Factory;

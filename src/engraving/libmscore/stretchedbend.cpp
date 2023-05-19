@@ -463,4 +463,11 @@ double StretchedBend::bendHeight(int bendIdx) const
 {
     return m_spatium * (bendIdx + 1) * s_bendHeightMultiplier;
 }
+
+void StretchedBend::prepareBends(std::vector<StretchedBend*>& bends)
+{
+    for (StretchedBend* bend : bends) {
+        bend->fillDrawPoints();
+    }
+}
 }
