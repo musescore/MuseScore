@@ -34,27 +34,42 @@ SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
 {
     ModelUtils::connectRowCountChangedSignal(this, &SortFilterProxyModel::rowCountChanged);
 
-    connect(m_filters.notifier(), &QmlListPropertyNotifier::appended, this, [this](int index) {
-        connect(m_filters.at(index), &FilterValue::dataChanged, this, [this]() {
-            if (sourceModel()) {
-                fillRoleIds();
-            }
-        });
+    auto onFiltersChanged = [this] {
+        invalidateFilter();
+
+        if (sourceModel()) {
+            fillRoleIds();
+        }
+    };
+
+    connect(m_filters.notifier(), &QmlListPropertyNotifier::appended, this, [this, onFiltersChanged](int index) {
+        onFiltersChanged();
+
+        connect(m_filters.at(index), &FilterValue::dataChanged, this, onFiltersChanged);
     });
 
-    connect(m_sorters.notifier(), &QmlListPropertyNotifier::appended, this, [this](int index) {
-        connect(m_sorters.at(index), &SorterValue::dataChanged, this, [this]() {
-            SorterValue* sorter = currentSorterValue();
-            invalidate();
+    auto onSortersChanged = [this] {
+        SorterValue* sorter = currentSorterValue();
+        invalidate();
 
-            if (!sorter) {
-                return;
-            }
+        if (!sorter) {
+            return;
+        }
 
-            if (sourceModel()) {
-                sort(0, sorter->sortOrder());
-            }
-        });
+        if (sourceModel()) {
+            sort(0, sorter->sortOrder());
+        }
+    };
+
+    connect(m_sorters.notifier(), &QmlListPropertyNotifier::appended, this, [this, onSortersChanged](int index) {
+        onSortersChanged();
+
+        connect(m_sorters.at(index), &SorterValue::dataChanged, this, onSortersChanged);
+    });
+
+    connect(this, &QSortFilterProxyModel::sourceModelChanged, this, [onFiltersChanged, onSortersChanged] {
+        onFiltersChanged();
+        onSortersChanged();
     });
 }
 
