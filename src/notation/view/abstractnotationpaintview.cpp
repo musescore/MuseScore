@@ -81,6 +81,8 @@ AbstractNotationPaintView::~AbstractNotationPaintView()
         m_notation->accessibility()->setMapToScreenFunc(nullptr);
         m_notation->interaction()->setGetViewRectFunc(nullptr);
     }
+
+    m_previousSelectedElement = nullptr;
 }
 
 void AbstractNotationPaintView::load()
@@ -242,6 +244,14 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 
     interaction->selectionChanged().onNotify(this, [this]() {
         redraw();
+
+        EngravingItem* selectedElement = notationInteraction()->selection()->element();
+        if (selectedElement != m_previousSelectedElement) {
+            hideElementPopup();
+            hideContextMenu();
+        }
+
+        m_previousSelectedElement = selectedElement;
     });
 
     interaction->showItemRequested().onReceive(this, [this](const INotationInteraction::ShowItemRequest& request) {

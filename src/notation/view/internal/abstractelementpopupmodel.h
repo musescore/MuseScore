@@ -49,13 +49,14 @@ public:
     };
     Q_ENUM(PopupModelType)
 
-    explicit AbstractElementPopupModel(QObject* parent = nullptr,
-                                       mu::engraving::ElementType elementType = mu::engraving::ElementType::INVALID);
+    explicit AbstractElementPopupModel(QObject* parent = nullptr);
     QString title() const;
     PopupModelType modelType() const;
     EngravingItem* getElement();
 
     static PopupModelType modelTypeFromElement(const mu::engraving::ElementType& elementType);
+
+    virtual void init();
 
 public slots:
     void setTitle(QString title);
@@ -63,10 +64,9 @@ public slots:
 
 signals:
     void titleChanged();
+    void dataChanged();
 
 protected:
-    void setElementType(mu::engraving::ElementType type);
-
     PointF fromLogical(PointF point) const;
     RectF fromLogical(RectF rect) const;
 
@@ -81,9 +81,10 @@ private:
     INotationSelectionPtr selection() const;
     const INotationInteraction::HitElementContext& hitElementContext() const;
 
+    engraving::ElementType elementType() const;
+
     QString m_title;
     PopupModelType m_modelType = PopupModelType::TYPE_UNDEFINED;
-    mu::engraving::ElementType m_elementType = mu::engraving::ElementType::INVALID;
 };
 
 using PopupModelType = AbstractElementPopupModel::PopupModelType;

@@ -40,13 +40,16 @@ StyledPopupView {
 
     property variant pedalState: harpModel.pedalState
 
+    property int navigationOrderStart: 0
+    property int navigationOrderEnd: isDiagramNavPanel.order
+
     contentWidth: menuItems.width
 
     contentHeight: menuItems.height
 
     margins: 0
 
-    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+    openPolicy: PopupView.NoActivateFocus
 
     showArrow: false
 
@@ -63,14 +66,14 @@ StyledPopupView {
         }
 
         // not enough room on window to open above so open below stave
-        var globPos = mapToItem(notationView, Qt.point(root.x, root.y))
+        var globPos = mapToItem(ui.rootItem, Qt.point(root.x, root.y))
         if (globPos.y < 0) {
             setOpensUpward(false)
             root.y = harpModel.staffPos.y + harpModel.staffPos.height + 10
         }
 
         // not enough room below stave to open so open above
-        if (root.y > notationView.height) {
+        if (root.y > ui.rootItem.height) {
             root.y = pos.y - size.y
         }
     }
@@ -99,6 +102,10 @@ StyledPopupView {
         return noteNames[string][state]
     }
 
+    Component.onCompleted: {
+        harpModel.init()
+    }
+
     GridLayout {
         id: menuItems
         rows: 5
@@ -111,7 +118,7 @@ StyledPopupView {
             name: "PedalSettings"
             direction: NavigationPanel.Vertical
             section: root.navigationSection
-            order: 1
+            order: root.navigationOrderStart
             accessible.name: qsTrc("notation", "Pedal Settings buttons")
         }
 
@@ -256,7 +263,7 @@ StyledPopupView {
             name: "HarpPedalIsDiagramButtons"
             section: root.navigationSection
             direction: NavigationPanel.Horizontal
-            order: 2
+            order: pedalSettingsNavPanel.order + 1
             accessible.name: qsTrc("notation", "Diagram type buttons")
         }
 

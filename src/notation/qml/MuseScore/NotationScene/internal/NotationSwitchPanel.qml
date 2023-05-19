@@ -36,6 +36,14 @@ Rectangle {
     visible: notationsView.count > 0
     color: ui.theme.backgroundSecondaryColor
 
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "NotationViewTabs"
+        enabled: root.enabled && root.visible
+        section: root.navigationSection
+        direction: NavigationPanel.Horizontal
+        order: 3
+    }
+
     function ensureActive() {
         var item = notationsView.itemAtIndex(notationsView.currentIndex)
         item.navigation.requestActive()
@@ -51,15 +59,6 @@ Rectangle {
 
     Component.onCompleted: {
         notationSwitchModel.load()
-    }
-
-    NavigationPanel {
-        id: navPanel
-        name: "NotationViewTabs"
-        enabled: root.enabled && root.visible
-        section: root.navigationSection
-        direction: NavigationPanel.Horizontal
-        order: 1
     }
 
     RowLayout {
@@ -100,7 +99,7 @@ Rectangle {
                 id: button
 
                 navigation.name: "NotationTab" + index
-                navigation.panel: navPanel
+                navigation.panel: root.navigationPanel
                 navigation.row: index * 10  + 1 // * 10 - for close button
                 navigation.accessible.name: text + (needSave ? (" " + qsTrc("notation", "Not saved")) : "")
 
@@ -142,7 +141,7 @@ Rectangle {
                 enabled: !notationsView.atXBeginning
 
                 navigation.name: "ScrollLeftButton"
-                navigation.panel: navPanel
+                navigation.panel: root.navigationPanel
                 navigation.row: notationsView.count * 10 + 1
                 navigation.accessible.name: qsTrc("notation", "Scroll left")
 
@@ -159,7 +158,7 @@ Rectangle {
                 enabled: !notationsView.atXEnd
 
                 navigation.name: "ScrollRightButton"
-                navigation.panel: navPanel
+                navigation.panel: root.navigationPanel
                 navigation.row: notationsView.count * 10 + 2
                 navigation.accessible.name: qsTrc("notation", "Scroll right")
 
