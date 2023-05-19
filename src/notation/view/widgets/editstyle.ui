@@ -10655,7 +10655,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="2" column="0">
             <widget class="QLabel" name="label_62">
              <property name="text">
-              <string>Size:</string>
+              <string>Scale:</string>
              </property>
              <property name="margin">
               <number>0</number>
