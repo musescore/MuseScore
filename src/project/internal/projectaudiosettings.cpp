@@ -123,8 +123,8 @@ void ProjectAudioSettings::setTrackOutputParams(const InstrumentTrackId& partId,
     bool needSave = it == m_trackOutputParamsMap.cend();
 
     if (!needSave) {
-        needSave |= (it->second.volume != params.volume);
-        needSave |= (it->second.balance != params.balance);
+        needSave |= !RealIsEqual(it->second.volume, params.volume);
+        needSave |= !RealIsEqual(it->second.balance, params.balance);
         needSave |= (it->second.fxChain != params.fxChain);
         needSave |= (it->second.auxSends != params.auxSends);
     }
