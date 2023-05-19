@@ -198,13 +198,10 @@ Column {
 
         navigationPanel: root.navigationPanel
         navigationRowStart: performanceSection.navigationRowEnd + 1
-
         model: [
-            { text: qsTrc("inspector", "Above staff"), value: ArticulationTypes.TYPE_ABOVE_STAFF },
-            { text: qsTrc("inspector", "Below staff"), value: ArticulationTypes.TYPE_BELOW_STAFF },
-            { text: qsTrc("inspector", "Chord automatic"), value: ArticulationTypes.TYPE_CHORD_AUTO },
-            { text: qsTrc("inspector", "Above chord"), value: ArticulationTypes.TYPE_ABOVE_CHORD },
-            { text: qsTrc("inspector", "Below chord"), value: ArticulationTypes.TYPE_BELOW_CHORD }
+            { text: qsTrc("inspector", "Above"), value: ArticulationTypes.TYPE_TOP },
+            { text: qsTrc("inspector", "Auto"), value: ArticulationTypes.TYPE_AUTO },
+            { text: qsTrc("inspector", "Below"), value: ArticulationTypes.TYPE_BOTTOM }
         ]
     }
 }

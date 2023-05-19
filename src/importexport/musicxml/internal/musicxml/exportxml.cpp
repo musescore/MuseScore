@@ -3048,9 +3048,8 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                 } else {
                     mxmlArtic += " type=\"down\"";
                 }
-            } else if (a->anchor() != ArticulationAnchor::CHORD) {
-                if (a->anchor() == ArticulationAnchor::TOP_CHORD
-                    || a->anchor() == ArticulationAnchor::TOP_STAFF) {
+            } else if (a->anchor() != ArticulationAnchor::AUTO) {
+                if (a->anchor() == ArticulationAnchor::TOP) {
                     mxmlArtic += " placement=\"above\"";
                 } else {
                     mxmlArtic += " placement=\"below\"";
@@ -3100,9 +3099,8 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         QString direction;
 
         QString attr;
-        if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::CHORD) {
-            placement
-                = (a->anchor() == ArticulationAnchor::BOTTOM_STAFF || a->anchor() == ArticulationAnchor::BOTTOM_CHORD) ? "below" : "above";
+        if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::AUTO) {
+            placement = (a->anchor() == ArticulationAnchor::BOTTOM) ? "below" : "above";
         } else if (!a->isStyled(Pid::DIRECTION) && a->direction() != DirectionV::AUTO) {
             direction = (a->direction() == DirectionV::DOWN) ? "down" : "up";
         }

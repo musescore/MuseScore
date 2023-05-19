@@ -63,7 +63,7 @@ Articulation::Articulation(ChordRest* parent, ElementType type)
     : EngravingItem(type, parent, ElementFlag::MOVABLE)
 {
     _symId         = SymId::noSym;
-    _anchor        = ArticulationAnchor::TOP_STAFF;
+    _anchor        = ArticulationAnchor::AUTO;
     _direction     = DirectionV::AUTO;
     _up            = true;
     _ornamentStyle = OrnamentStyle::DEFAULT;
@@ -717,10 +717,10 @@ void Articulation::setupShowOnTabStyles()
 
 void Articulation::styleChanged()
 {
-    bool isGolpeThumb = _symId == SymId::guitarGolpe && _anchor == ArticulationAnchor::BOTTOM_STAFF;
+    bool isGolpeThumb = _symId == SymId::guitarGolpe && _anchor == ArticulationAnchor::BOTTOM;
     EngravingItem::styleChanged();
     if (isGolpeThumb) {
-        setAnchor(ArticulationAnchor::BOTTOM_STAFF);
+        setAnchor(ArticulationAnchor::BOTTOM);
     }
 }
 

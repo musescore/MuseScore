@@ -54,11 +54,9 @@ DECLARE_FLAGS(ArticulationCategories, ArticulationCategory)
 DECLARE_OPERATORS_FOR_FLAGS(ArticulationCategories)
 
 enum class ArticulationAnchor : char {
-    TOP_STAFF,        // anchor is always placed at top of staff
-    BOTTOM_STAFF,     // anchor is always placed at bottom of staff
-    CHORD,            // anchor depends on chord direction, away from stem
-    TOP_CHORD,        // attribute is always placed at top of chord
-    BOTTOM_CHORD,     // attribute is placed at bottom of chord
+    TOP,        // attribute is always placed at top
+    BOTTOM,     // attribute is placed at bottom
+    AUTO,       // anchor depends on chord direction, away from stem
 };
 
 enum class ArticulationStemSideAlign : char

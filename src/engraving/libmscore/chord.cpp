@@ -2078,13 +2078,13 @@ EngravingItem* Chord::drop(EditData& data)
                 if (pf == PropertyFlags::STYLED) {
                     continue;
                 }
-                if (a->anchor() == ArticulationAnchor::TOP_STAFF || a->anchor() == ArticulationAnchor::TOP_CHORD) {
+                if (a->anchor() == ArticulationAnchor::TOP) {
                     if (aboveBelow < 0) {
                         mixed = true;
                         break;
                     }
                     ++aboveBelow;
-                } else if (a->anchor() == ArticulationAnchor::BOTTOM_STAFF || a->anchor() == ArticulationAnchor::BOTTOM_CHORD) {
+                } else if (a->anchor() == ArticulationAnchor::BOTTOM) {
                     if (aboveBelow > 0) {
                         mixed = true;
                         break;
@@ -2094,9 +2094,9 @@ EngravingItem* Chord::drop(EditData& data)
             }
             if (!mixed && aboveBelow != 0) {
                 if (aboveBelow > 0) {
-                    atr->setAnchor(ArticulationAnchor::TOP_CHORD);
+                    atr->setAnchor(ArticulationAnchor::TOP);
                 } else {
-                    atr->setAnchor(ArticulationAnchor::BOTTOM_CHORD);
+                    atr->setAnchor(ArticulationAnchor::BOTTOM);
                 }
                 atr->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
             }
@@ -2299,7 +2299,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
     Articulation* accent = nullptr;
     Articulation* marcato = nullptr;
     Articulation* tenuto = nullptr;
-    ArticulationAnchor overallAnchor = ArticulationAnchor::CHORD;
+    ArticulationAnchor overallAnchor = ArticulationAnchor::AUTO;
     bool mixedDirections = false;
     if (!_articulations.empty()) {
         std::vector<Articulation*> articsToRemove;
@@ -2329,10 +2329,10 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
         // take an inventory of which articulations are already present
         for (Articulation* artic : _articulations) {
             PropertyFlags pf = artic->propertyFlags(Pid::ARTICULATION_ANCHOR);
-            if (!mixedDirections && pf == PropertyFlags::UNSTYLED && artic->anchor() != ArticulationAnchor::CHORD) {
-                if (overallAnchor != ArticulationAnchor::CHORD && artic->anchor() != overallAnchor) {
+            if (!mixedDirections && pf == PropertyFlags::UNSTYLED && artic->anchor() != ArticulationAnchor::AUTO) {
+                if (overallAnchor != ArticulationAnchor::AUTO && artic->anchor() != overallAnchor) {
                     mixedDirections = true;
-                    overallAnchor = ArticulationAnchor::CHORD;
+                    overallAnchor = ArticulationAnchor::AUTO;
                 } else {
                     overallAnchor = artic->anchor();
                 }
@@ -2399,7 +2399,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
         for (const SymId& id : newArtics) {
             Articulation* newArticulation = Factory::createArticulation(score()->dummy()->chord());
             newArticulation->setSymId(id);
-            if (overallAnchor != ArticulationAnchor::CHORD) {
+            if (overallAnchor != ArticulationAnchor::AUTO) {
                 newArticulation->setAnchor(overallAnchor);
                 newArticulation->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
             }

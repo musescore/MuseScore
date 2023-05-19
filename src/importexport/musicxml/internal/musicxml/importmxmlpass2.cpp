@@ -1047,10 +1047,10 @@ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
     // when setting anchor, assume type up/down without explicit placement
     // implies placement above/below
     if (place == "above" || (dir == "up" && place == "")) {
-        na->setAnchor(ArticulationAnchor::TOP_CHORD);
+        na->setAnchor(ArticulationAnchor::TOP);
         na->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
     } else if (place == "below" || (dir == "down" && place == "")) {
-        na->setAnchor(ArticulationAnchor::BOTTOM_CHORD);
+        na->setAnchor(ArticulationAnchor::BOTTOM);
         na->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
     }
 

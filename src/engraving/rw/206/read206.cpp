@@ -2167,17 +2167,15 @@ static void setFermataPlacement(EngravingItem* el, ArticulationAnchor anchor, Di
         el->setPlacement(PlacementV::BELOW);
     } else {
         switch (anchor) {
-        case ArticulationAnchor::TOP_STAFF:
-        case ArticulationAnchor::TOP_CHORD:
+        case ArticulationAnchor::TOP:
             el->setPlacement(PlacementV::ABOVE);
             break;
 
-        case ArticulationAnchor::BOTTOM_STAFF:
-        case ArticulationAnchor::BOTTOM_CHORD:
+        case ArticulationAnchor::BOTTOM:
             el->setPlacement(PlacementV::BELOW);
             break;
 
-        case ArticulationAnchor::CHORD:
+        case ArticulationAnchor::AUTO:
             break;
         default:
             break;
@@ -2189,7 +2187,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
 {
     EngravingItem* el = nullptr;
     SymId sym = SymId::fermataAbove;            // default -- backward compatibility (no type = ufermata in 1.2)
-    ArticulationAnchor anchor  = ArticulationAnchor::TOP_STAFF;
+    ArticulationAnchor anchor  = ArticulationAnchor::TOP;
     DirectionV direction = DirectionV::AUTO;
     track_idx_t track = parent->track();
     double timeStretch = 0.0;
