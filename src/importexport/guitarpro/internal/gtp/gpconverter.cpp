@@ -2423,7 +2423,7 @@ void GPConverter::addHarmonicMark(const GPBeat* gpbeat, ChordRest* cr)
     }
 }
 
-void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Context& ctx)
+void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Context& ctx, bool asHarmony)
 {
     int GPTrackIdx = static_cast<int>(ctx.curTrack);
     int diaId = gpnote->diagramIdx(GPTrackIdx, ctx.masterBarIndex);
@@ -2450,11 +2450,14 @@ void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Cont
     GPTrack::Diagram diagram = trackIt->second->diagram().at(diaId);
 
     /// currently importing fret diagrams as chord names
-    if (true) {
-        StaffText* staffText = Factory::createStaffText(cr->segment());
-        staffText->setTrack(cr->track());
-        staffText->setPlainText(diagram.name);
-        cr->segment()->add(staffText);
+    if (asHarmony) {
+        Harmony* h = Factory::createHarmony(cr->segment());
+        h->setTrack(cr->track());
+        h->setParent(cr->segment());
+        h->setHarmonyType(HarmonyType::STANDARD);
+        h->setHarmony(diagram.name); // F#dim7
+        h->setPlainText(h->harmonyName());
+        cr->segment()->add(h);
         return;
     }
 

@@ -99,9 +99,9 @@
             <subtype>mf</subtype>
             <velocity>80</velocity>
             </Dynamic>
-          <StaffText>
-            <text>G</text>
-            </StaffText>
+          <Harmony>
+            <root>15</root>
+            </Harmony>
           <Tempo>
             <tempo>2</tempo>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
