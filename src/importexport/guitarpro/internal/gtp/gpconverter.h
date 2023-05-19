@@ -279,7 +279,6 @@ private:
     std::unordered_map<Measure*, size_t> m_chordsInMeasure;
     BeamMode m_previousBeamMode = BeamMode::AUTO;
 
-    std::unordered_map<Note*, Note*> m_harmonicNotes;
     std::unique_ptr<GPDrumSetResolver> _drumResolver;
 };
 } //end Ms namespace

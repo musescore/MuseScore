@@ -1744,7 +1744,6 @@ Note* GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
         note->setPlay(false);
 
         note->setHarmonicFret(note->fret() + gpnote->harmonic().fret);
-        m_harmonicNotes[note] = hnote;
     } else {
         note->setHarmonicFret(gpnote->harmonic().fret);
         note->setDisplayFret(Note::DisplayFretOption::NaturalHarmonic);
