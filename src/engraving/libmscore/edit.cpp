@@ -4013,8 +4013,10 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                         EngravingItem* ee = 0;
                         if (e->isKeySig()) {
                             KeySig* ks = toKeySig(e);
-                            ksl.push_back(ks);
-                            ee = e;
+                            if (!ks->forInstrumentChange()) {
+                                ksl.push_back(ks);
+                                ee = e;
+                            }
                         } else if (e->isTimeSig()) {
                             TimeSig* ts = toTimeSig(e);
                             tsl.push_back(ts);
