@@ -22,7 +22,7 @@
 #ifndef MU_SYSTEM_IFILESYSTEM_H
 #define MU_SYSTEM_IFILESYSTEM_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "types/bytearray.h"
 #include "types/datetime.h"
 #include "types/retval.h"

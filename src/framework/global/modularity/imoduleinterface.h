@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MODULARITY_IMODULEEXPORT_H
-#define MU_MODULARITY_IMODULEEXPORT_H
+#ifndef MU_MODULARITY_IMODULEINTERFACE_H
+#define MU_MODULARITY_IMODULEINTERFACE_H
 
 #include <memory>
 #include "moduleinfo.h"
@@ -91,4 +91,4 @@ private:                                                                \
 #define MODULE_INTERNAL_INTERFACE public mu::modularity::IModuleInternalInterface
 #define MODULE_INTERNAL_CREATOR public mu::modularity::IModuleInternalCreator
 
-#endif // MU_MODULARITY_IMODULEEXPORT_H
+#endif // MU_MODULARITY_IMODULEINTERFACE_H

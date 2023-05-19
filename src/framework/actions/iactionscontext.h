@@ -22,7 +22,7 @@
 #ifndef MU_ACTIONS_IACTIONSCONTEXT_H
 #define MU_ACTIONS_IACTIONSCONTEXT_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "actiontypes.h"
 
 namespace mu::actions {

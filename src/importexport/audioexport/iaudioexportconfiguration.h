@@ -24,7 +24,7 @@
 
 #include <optional>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 namespace mu::iex::audioexport {
 class IAudioExportConfiguration : MODULE_EXPORT_INTERFACE

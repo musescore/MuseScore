@@ -24,7 +24,7 @@
 
 #include <string>
 #include <optional>
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 namespace mu::iex::imagesexport {
 class IImagesExportConfiguration : MODULE_EXPORT_INTERFACE

@@ -23,7 +23,7 @@
 #ifndef MU_MUSESAMPLER_IMUSESAMPLERINFO_H
 #define MU_MUSESAMPLER_IMUSESAMPLERINFO_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 namespace mu::musesampler {
 class IMuseSamplerInfo : MODULE_EXPORT_INTERFACE

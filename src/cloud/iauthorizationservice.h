@@ -22,7 +22,7 @@
 #ifndef MU_CLOUD_IAUTHORIZATIONSERVICE_H
 #define MU_CLOUD_IAUTHORIZATIONSERVICE_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "cloudtypes.h"
 
 #include "types/retval.h"

@@ -28,7 +28,7 @@
 #include <string>
 #include <cassert>
 #include <iostream>
-#include "imoduleexport.h"
+#include "imoduleinterface.h"
 
 namespace mu::modularity {
 class ModulesIoC

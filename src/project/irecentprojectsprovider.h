@@ -22,7 +22,7 @@
 #ifndef MU_PROJECT_IRECENTPROJECTSPROVIDER_H
 #define MU_PROJECT_IRECENTPROJECTSPROVIDER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "projecttypes.h"
 #include "async/notification.h"
 

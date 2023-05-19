@@ -24,7 +24,7 @@
 
 #include <QUrl>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "progress.h"
 
 #include "cloudtypes.h"

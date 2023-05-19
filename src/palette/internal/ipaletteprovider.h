@@ -23,7 +23,7 @@
 #ifndef MU_PALETTE_IPALETTEPROVIDER_H
 #define MU_PALETTE_IPALETTEPROVIDER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "async/notification.h"
 

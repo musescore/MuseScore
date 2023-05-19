@@ -22,7 +22,7 @@
 #ifndef MU_UI_IINTERACTIVEPROVIDER_H
 #define MU_UI_IINTERACTIVEPROVIDER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "types/uri.h"
 #include "types/retval.h"
 #include "progress.h"

@@ -22,7 +22,7 @@
 #ifndef MU_NETWORK_INETWORKMANAGERCREATOR_H
 #define MU_NETWORK_INETWORKMANAGERCREATOR_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "inetworkmanager.h"
 
 namespace mu::network {

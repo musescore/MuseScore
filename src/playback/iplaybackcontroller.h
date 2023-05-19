@@ -22,7 +22,7 @@
 #ifndef MU_PLAYBACK_IPLAYBACKCONTROLLER_H
 #define MU_PLAYBACK_IPLAYBACKCONTROLLER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/notification.h"
 #include "async/channel.h"
 #include "global/progress.h"

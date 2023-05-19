@@ -25,7 +25,7 @@
 #include <functional>
 #include <QSizeF>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "types/ret.h"
 #include "notation/inotation.h"
 

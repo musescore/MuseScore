@@ -25,7 +25,7 @@
 #include <QColor>
 #include <QSize>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "types/retval.h"
 #include "io/path.h"

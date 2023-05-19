@@ -22,7 +22,7 @@
 #ifndef MU_AUDIO_IAUDIOPLUGINSSCANNERREGISTER_H
 #define MU_AUDIO_IAUDIOPLUGINSSCANNERREGISTER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "iaudiopluginsscanner.h"
 

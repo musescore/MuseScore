@@ -22,7 +22,7 @@
 #ifndef MU_MIDI_IMIDIOUTPORT_H
 #define MU_MIDI_IMIDIOUTPORT_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "types/ret.h"
 #include "async/notification.h"
