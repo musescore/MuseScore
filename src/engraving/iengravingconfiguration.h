@@ -24,7 +24,7 @@
 
 #include "types/string.h"
 #include "io/path.h"
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/channel.h"
 #include "async/notification.h"
 #include "engraving/types/types.h"

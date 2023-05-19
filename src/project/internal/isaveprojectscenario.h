@@ -23,7 +23,7 @@
 #ifndef MU_PROJECT_ISAVEPROJECTSCENARIO_H
 #define MU_PROJECT_ISAVEPROJECTSCENARIO_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "inotationproject.h"
 
 #include "types/retval.h"

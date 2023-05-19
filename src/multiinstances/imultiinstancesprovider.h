@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 #include "mitypes.h"
 #include "async/notification.h"

@@ -22,7 +22,7 @@
 #ifndef MU_PROJECT_IEXPORTPROJECTSCENARIO_H
 #define MU_PROJECT_IEXPORTPROJECTSCENARIO_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "notation/inotation.h"
 #include "inotationwriter.h"
 #include "exporttype.h"

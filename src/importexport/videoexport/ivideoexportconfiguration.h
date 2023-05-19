@@ -25,7 +25,7 @@
 #include <string>
 #include <optional>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "videoexporttypes.h"
 

@@ -22,7 +22,7 @@
 #ifndef MU_UI_INAVIGATIONCONTROLLER_H
 #define MU_UI_INAVIGATIONCONTROLLER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "inavigation.h"
 #include "async/notification.h"
 

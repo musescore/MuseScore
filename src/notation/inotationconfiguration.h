@@ -25,7 +25,7 @@
 #include <QColor>
 #include <optional>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/channel.h"
 #include "types/retval.h"
 #include "io/path.h"

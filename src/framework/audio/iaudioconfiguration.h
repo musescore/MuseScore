@@ -22,7 +22,7 @@
 #ifndef MU_AUDIO_IAUDIOCONFIGURATION_H
 #define MU_AUDIO_IAUDIOCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 #include "types/ret.h"
 #include "async/channel.h"

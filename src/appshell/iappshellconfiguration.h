@@ -22,7 +22,7 @@
 #ifndef MU_APPSHELL_IAPPSHELLCONFIGURATION_H
 #define MU_APPSHELL_IAPPSHELLCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "types/retval.h"
 
 #include "io/path.h"

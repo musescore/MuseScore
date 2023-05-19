@@ -22,7 +22,7 @@
 #ifndef MU_CLOUD_ICLOUDCONFIGURATION_H
 #define MU_CLOUD_ICLOUDCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 #include "network/networktypes.h"
 

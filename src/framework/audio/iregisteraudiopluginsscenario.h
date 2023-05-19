@@ -23,7 +23,7 @@
 #ifndef MU_AUDIO_IREGISTERAUDIOPLUGINSSCENARIO_H
 #define MU_AUDIO_IREGISTERAUDIOPLUGINSSCENARIO_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "types/ret.h"
 #include "io/path.h"

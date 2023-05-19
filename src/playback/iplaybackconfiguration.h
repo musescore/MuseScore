@@ -22,7 +22,7 @@
 #ifndef MU_PLAYBACK_IPLAYBACKCONFIGURATION_H
 #define MU_PLAYBACK_IPLAYBACKCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "types/retval.h"
 #include "playbacktypes.h"
 

@@ -22,7 +22,7 @@
 #ifndef MU_LEARN_ILEARNSERVICE_H
 #define MU_LEARN_ILEARNSERVICE_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/channel.h"
 #include "learntypes.h"
 

@@ -23,7 +23,7 @@
 #ifndef MU_PROJECT_IPLATFORMRECENTFILESCONTROLLER_H
 #define MU_PROJECT_IPLATFORMRECENTFILESCONTROLLER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 
 namespace mu::project {

@@ -22,7 +22,7 @@
 #ifndef MU_UI_IMAINWINDOW_H
 #define MU_UI_IMAINWINDOW_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/notification.h"
 
 class QWindow;

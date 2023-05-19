@@ -22,7 +22,7 @@
 #ifndef MU_CONTEXT_IGLOBALCONTEXT_H
 #define MU_CONTEXT_IGLOBALCONTEXT_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "project/inotationproject.h"
 #include "async/notification.h"
 #include "io/path.h"

@@ -22,7 +22,7 @@
 #ifndef MU_IMPORTEXPORT_IMUSICXMLCONFIGURATION_H
 #define MU_IMPORTEXPORT_IMUSICXMLCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 
 namespace mu::iex::musicxml {

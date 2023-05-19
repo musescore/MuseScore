@@ -24,7 +24,7 @@
 
 #include <QString>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 #include "types/retval.h"
 #include "projecttypes.h"
