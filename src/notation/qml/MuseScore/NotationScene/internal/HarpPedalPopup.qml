@@ -50,7 +50,6 @@ StyledPopupView {
     margins: 0
 
     openPolicy: PopupView.NoActivateFocus
-    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
     showArrow: false
 
