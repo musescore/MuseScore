@@ -1273,7 +1273,7 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
         } else if (tag == "subtype") {
             subtype = e.readInt();
         } else if (tag == "forInstrumentChange") {
-            s->setForInstrumentChange(e.readBool());
+            sig.setForInstrumentChange(e.readBool());
         } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
         }
