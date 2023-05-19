@@ -113,7 +113,12 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             for (size_t i = 0; i < part->nstaves(); i++) {
                 if (!part->staff(i)->keySigEvent(tickStart).isAtonal()) {
                     KeySigEvent ks;
-                    ks.setForInstrumentChange(true);
+                    // Check, if some key signature is already there, if no, mark new one "for instrument change"
+                    Segment* seg = segment()->prev1(SegmentType::KeySig);
+                    voice_idx_t voice = part->staff(i)->idx() * VOICES;
+                    KeySig* ksig = toKeySig(seg->element(voice));
+                    bool forInstChange = ksig && ksig->tick() != tickStart;
+                    ks.setForInstrumentChange(forInstChange);
                     Key cKey = part->staff(i)->concertKey(tickStart);
                     ks.setConcertKey(cKey);
                     score()->undoChangeKeySig(part->staff(i), tickStart, ks);
