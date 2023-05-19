@@ -19,29 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_CLOUD_IAUDIOCOMSERVICE_H
+#define MU_CLOUD_IAUDIOCOMSERVICE_H
 
-#include "cloudsregister.h"
+#include "modularity/imoduleinterface.h"
+#include "progress.h"
 
-#include "containers.h"
+#include "cloud/cloudtypes.h"
 
-using namespace mu::cloud;
+class QIODevice;
+class QString;
 
-void CloudsRegister::reg(const QString& cloudCode, IAuthorizationServicePtr cloud)
+namespace mu::cloud {
+class IAudioComService : MODULE_EXPORT_INTERFACE
 {
-    m_clouds.insert({ cloudCode, cloud });
+    INTERFACE_ID(IAudioComService)
+
+public:
+    virtual ~IAudioComService() = default;
+
+    virtual IAuthorizationServicePtr authorization() = 0;
+
+    virtual framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title,
+                                               Visibility visibility = Visibility::Private) = 0;
+};
 }
 
-IAuthorizationServicePtr CloudsRegister::cloud(const QString& cloudCode) const
-{
-    auto it = m_clouds.find(cloudCode);
-    if (it != m_clouds.end()) {
-        return it->second;
-    }
-
-    return nullptr;
-}
-
-std::vector<IAuthorizationServicePtr> CloudsRegister::clouds() const
-{
-    return values(m_clouds);
-}
+#endif // MU_CLOUD_IAUDIOCOMSERVICE_H

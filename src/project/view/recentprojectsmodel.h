@@ -31,7 +31,7 @@
 #include "iprojectconfiguration.h"
 #include "irecentprojectsprovider.h"
 #include "iinteractive.h"
-#include "cloud/musescorecom/imusescorecomcloudservice.h"
+#include "cloud/musescorecom/imusescorecomservice.h"
 
 namespace mu::project {
 class RecentProjectsModel : public QAbstractListModel, public async::Asyncable
@@ -42,7 +42,7 @@ class RecentProjectsModel : public QAbstractListModel, public async::Asyncable
     INJECT(IProjectConfiguration, configuration)
     INJECT(IRecentProjectsProvider, recentProjectsProvider)
     INJECT(framework::IInteractive, interactive)
-    INJECT(cloud::IMuseScoreComCloudService, museScoreComCloudService)
+    INJECT(cloud::IMuseScoreComService, museScoreComService)
 
 public:
     RecentProjectsModel(QObject* parent = nullptr);

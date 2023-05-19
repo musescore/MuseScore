@@ -76,29 +76,14 @@ QVariant CloudsModel::data(const QModelIndex& index, int role) const
         return cloudInfo.title;
     case rUserIsAuthorized:
         return isAuthorized;
-    case rUserName: {
-        if (!isAuthorized) {
-            return qtrc("cloud", "Not signed in");
-        }
-
+    case rUserName:
         return accountInfo.userName;
-    }
-    case rUserProfileUrl: {
-        if (!isAuthorized) {
-            return cloudInfo.url;
-        }
-
+    case rUserProfileUrl:
         return accountInfo.profileUrl;
-    }
     case rUserAvatarUrl:
         return accountInfo.avatarUrl;
-    case rUserCollectionUrl: {
-        if (!isAuthorized) {
-            return cloudInfo.title;
-        }
-
+    case rUserCollectionUrl:
         return accountInfo.profileUrl.host() + accountInfo.profileUrl.path();
-    }
     }
 
     return QVariant();
@@ -161,20 +146,10 @@ void CloudsModel::load()
     beginResetModel();
     m_clouds.clear();
 
-    m_clouds = cloudsRegister()->clouds();
-
-    std::sort(m_clouds.begin(), m_clouds.end(), [](const IAuthorizationServicePtr& cloud1, const IAuthorizationServicePtr& cloud2) {
-        const CloudInfo& cloud1Info = cloud1->cloudInfo();
-        const CloudInfo& cloud2Info = cloud2->cloudInfo();
-
-        if (cloud1Info.code == MUSESCORE_COM_CLOUD_CODE) {
-            return true;
-        } else if (cloud2Info.code == MUSESCORE_COM_CLOUD_CODE) {
-            return false;
-        }
-
-        return cloud1Info.title < cloud2Info.title;
-    });
+    m_clouds = {
+        museScoreComService()->authorization(),
+        audioComService()->authorization()
+    };
 
     for (const IAuthorizationServicePtr& cloud : m_clouds) {
         QString cloudCode = cloud->cloudInfo().code;
@@ -208,7 +183,7 @@ int CloudsModel::indexByCode(const QString& code) const
     for (size_t i = 0; i < m_clouds.size(); ++i) {
         const IAuthorizationServicePtr cloud = m_clouds[i];
         if (cloud->cloudInfo().code == code) {
-            return i;
+            return static_cast<int>(i);
         }
     }
 

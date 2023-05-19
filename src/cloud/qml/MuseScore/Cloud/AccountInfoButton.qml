@@ -36,7 +36,7 @@ PageTabButton {
 
     orientation: Qt.Horizontal
 
-    spacing: 30 - 32/4 // todo
+    spacing: 22
     leftPadding: spacing
 
     title: Boolean(root.cloudInfo) ? root.cloudInfo.userName : qsTrc("cloud", "My account")

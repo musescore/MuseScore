@@ -39,14 +39,11 @@ StyledGridView {
     readonly property real actualCellWidth: 500
     readonly property real actualCellHeight: 200
 
+    property NavigationSection navigationSection: null
+
     signal signInRequested(string cloudCode)
     signal signOutRequested(string cloudCode)
     signal createAccountRequested(string cloudCode)
-
-    property NavigationPanel navigationPanel: NavigationPanel {
-        name: "AccountsListView"
-        direction: NavigationPanel.Both
-    }
 
     delegate: Item {
         id: item
@@ -54,13 +51,7 @@ StyledGridView {
         height: root.cellHeight
         width: root.cellWidth
 
-        function requestActive() {
-            _item.navigation.requestActive()
-        }
-
         CloudItem {
-            id: _item
-
             width: root.actualCellWidth
             height: root.actualCellHeight
 
@@ -73,6 +64,9 @@ StyledGridView {
             userProfileUrl: model.userProfileUrl
             userAvatarUrl: model.userAvatarUrl
             userCollectionUrl: model.userCollectionUrl
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: model.index
 
             onSignInRequested: {
                 root.signInRequested(model.cloudCode)

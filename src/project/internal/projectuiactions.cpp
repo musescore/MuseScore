@@ -86,6 +86,13 @@ const UiActionList ProjectUiActions::m_actions = {
              TranslatableString("action", "Publish to MuseScore.com…"),
              IconCode::Code::CLOUD_FILE
              ),
+    UiAction("file-share-audio",
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Share on Audio.com…"),
+             TranslatableString("action", "Share on Audio.com…"),
+             IconCode::Code::SHARE_AUDIO
+             ),
     UiAction("file-export",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,

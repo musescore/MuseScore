@@ -26,6 +26,7 @@
 
 namespace mu::cloud {
 static const QString MUSESCORE_COM_CLOUD_CODE = "musescorecom";
+static const QString AUDIO_COM_CLOUD_CODE = "audiocom";
 
 struct CloudInfo {
     QString code;

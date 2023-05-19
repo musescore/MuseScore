@@ -28,14 +28,16 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "cloud/icloudsregister.h"
+#include "cloud/musescorecom/imusescorecomservice.h"
+#include "cloud/audiocom/iaudiocomservice.h"
 
 namespace mu::cloud {
 class CloudsModel : public QAbstractListModel, async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(project, cloud::ICloudsRegister, cloudsRegister)
+    INJECT(IMuseScoreComService, museScoreComService)
+    INJECT(IAudioComService, audioComService)
 
     Q_PROPERTY(bool userAuthorized READ userAuthorized NOTIFY userAuthorizedChanged)
 

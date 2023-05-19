@@ -56,6 +56,7 @@ static const std::string STATUS_KEY("status");
 static constexpr int USER_UNAUTHORIZED_STATUS_CODE = 401;
 static constexpr int FORBIDDEN_CODE = 403;
 static constexpr int NOT_FOUND_STATUS_CODE = 404;
+static constexpr int CONFLICT_STATUS_CODE = 409;
 
 static QString userAgent()
 {
@@ -364,12 +365,16 @@ Ret AbstractCloudService::executeRequest(const RequestCallback& requestCallback)
     return ret;
 }
 
-Ret AbstractCloudService::uploadingRetFromRawUploadingRet(const Ret& rawRet, bool isScoreAlreadyUploaded) const
+Ret AbstractCloudService::uploadingRetFromRawUploadingRet(const Ret& rawRet, bool isAlreadyUploaded) const
 {
     int code = statusCode(rawRet);
 
-    if (!isScoreAlreadyUploaded && code == FORBIDDEN_CODE) {
+    if (!isAlreadyUploaded && code == FORBIDDEN_CODE) {
         return make_ret(cloud::Err::AccountNotActivated);
+    }
+
+    if (code == CONFLICT_STATUS_CODE) {
+        return make_ret(cloud::Err::Conflict);
     }
 
     static const std::map<int, mu::TranslatableString> codes {

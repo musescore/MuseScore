@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "musescorecomcloudservice.h"
+#include "musescorecomservice.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -67,12 +67,17 @@ static int scoreIdFromSourceUrl(const QUrl& sourceUrl)
     return parts.last().toInt();
 }
 
-MuseScoreComCloudService::MuseScoreComCloudService(QObject* parent)
+MuseScoreComService::MuseScoreComService(QObject* parent)
     : AbstractCloudService(parent)
 {
 }
 
-CloudInfo MuseScoreComCloudService::cloudInfo() const
+IAuthorizationServicePtr MuseScoreComService::authorization()
+{
+    return shared_from_this();
+}
+
+CloudInfo MuseScoreComService::cloudInfo() const
 {
     return {
         MUSESCORE_COM_CLOUD_CODE,
@@ -81,12 +86,12 @@ CloudInfo MuseScoreComCloudService::cloudInfo() const
     };
 }
 
-QUrl MuseScoreComCloudService::scoreManagerUrl() const
+QUrl MuseScoreComService::scoreManagerUrl() const
 {
     return MUSESCORECOM_CLOUD_URL + "/my-scores";
 }
 
-AbstractCloudService::ServerConfig MuseScoreComCloudService::serverConfig()
+AbstractCloudService::ServerConfig MuseScoreComService::serverConfig() const
 {
     ServerConfig serverConfig;
     serverConfig.serverCode = MUSESCORE_COM_CLOUD_CODE;
@@ -113,7 +118,7 @@ AbstractCloudService::ServerConfig MuseScoreComCloudService::serverConfig()
     return serverConfig;
 }
 
-RequestHeaders MuseScoreComCloudService::headers() const
+RequestHeaders MuseScoreComService::headers() const
 {
     RequestHeaders headers;
     headers.rawHeaders["Accept"] = "application/json";
@@ -123,7 +128,7 @@ RequestHeaders MuseScoreComCloudService::headers() const
     return headers;
 }
 
-mu::Ret MuseScoreComCloudService::downloadAccountInfo()
+mu::Ret MuseScoreComService::downloadAccountInfo()
 {
     TRACEFUNC;
 
@@ -161,7 +166,7 @@ mu::Ret MuseScoreComCloudService::downloadAccountInfo()
     return make_ok();
 }
 
-bool MuseScoreComCloudService::doUpdateTokens()
+bool MuseScoreComService::doUpdateTokens()
 {
     TRACEFUNC;
 
@@ -193,12 +198,12 @@ bool MuseScoreComCloudService::doUpdateTokens()
     return true;
 }
 
-mu::RetVal<ScoreInfo> MuseScoreComCloudService::downloadScoreInfo(const QUrl& sourceUrl)
+mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(const QUrl& sourceUrl)
 {
     return downloadScoreInfo(scoreIdFromSourceUrl(sourceUrl));
 }
 
-mu::RetVal<ScoreInfo> MuseScoreComCloudService::downloadScoreInfo(int scoreId)
+mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
 {
     TRACEFUNC;
 
@@ -227,6 +232,7 @@ mu::RetVal<ScoreInfo> MuseScoreComCloudService::downloadScoreInfo(int scoreId)
     QJsonObject scoreInfo = document.object();
 
     result.val.id = scoreInfo.value("id").toInt();
+    result.val.revisionId = scoreInfo.value("revision_id").toInt();
     result.val.title = scoreInfo.value("title").toString();
     result.val.description = scoreInfo.value("description").toString();
     result.val.license = scoreInfo.value("license").toString();
@@ -243,7 +249,8 @@ mu::RetVal<ScoreInfo> MuseScoreComCloudService::downloadScoreInfo(int scoreId)
     return result;
 }
 
-ProgressPtr MuseScoreComCloudService::uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility, const QUrl& sourceUrl)
+ProgressPtr MuseScoreComService::uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility, const QUrl& sourceUrl,
+                                             int revisionId)
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
@@ -254,8 +261,8 @@ ProgressPtr MuseScoreComCloudService::uploadScore(QIODevice& scoreData, const QS
 
     std::shared_ptr<ValMap> scoreUrlMap = std::make_shared<ValMap>();
 
-    auto uploadCallback = [this, manager, &scoreData, title, visibility, sourceUrl, scoreUrlMap]() {
-        RetVal<ValMap> urlMap = doUploadScore(manager, scoreData, title, visibility, sourceUrl);
+    auto uploadCallback = [this, manager, &scoreData, title, visibility, sourceUrl, revisionId, scoreUrlMap]() {
+        RetVal<ValMap> urlMap = doUploadScore(manager, scoreData, title, visibility, sourceUrl, revisionId);
         *scoreUrlMap = urlMap.val;
 
         return urlMap.ret;
@@ -274,7 +281,7 @@ ProgressPtr MuseScoreComCloudService::uploadScore(QIODevice& scoreData, const QS
     return progress;
 }
 
-ProgressPtr MuseScoreComCloudService::uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl)
+ProgressPtr MuseScoreComService::uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl)
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
@@ -296,8 +303,8 @@ ProgressPtr MuseScoreComCloudService::uploadAudio(QIODevice& audioData, const QS
     return progress;
 }
 
-mu::RetVal<mu::ValMap> MuseScoreComCloudService::doUploadScore(INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                                                               Visibility visibility, const QUrl& sourceUrl)
+mu::RetVal<mu::ValMap> MuseScoreComService::doUploadScore(INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
+                                                          Visibility visibility, const QUrl& sourceUrl, int revisionId)
 {
     TRACEFUNC;
 
@@ -346,6 +353,13 @@ mu::RetVal<mu::ValMap> MuseScoreComCloudService::doUploadScore(INetworkManagerPt
         scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
         scoreIdPart.setBody(QString::number(scoreId).toLatin1());
         multiPart.append(scoreIdPart);
+
+        if (revisionId) {
+            QHttpPart revisionIdPart;
+            scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"last_revision_id\""));
+            scoreIdPart.setBody(QByteArray::number(revisionId));
+            multiPart.append(scoreIdPart);
+        }
     }
 
     QHttpPart titlePart;
@@ -384,6 +398,7 @@ mu::RetVal<mu::ValMap> MuseScoreComCloudService::doUploadScore(INetworkManagerPt
     QJsonObject scoreInfo = QJsonDocument::fromJson(receivedData.data()).object();
     QUrl newSourceUrl = QUrl(scoreInfo.value("permalink").toString());
     QUrl editUrl = QUrl(scoreInfo.value("edit_url").toString());
+    int newRevisionId = scoreInfo.value("revision_id").toInt();
 
     if (!newSourceUrl.isValid()) {
         result.ret = make_ret(cloud::Err::CouldNotReceiveSourceUrl);
@@ -392,12 +407,13 @@ mu::RetVal<mu::ValMap> MuseScoreComCloudService::doUploadScore(INetworkManagerPt
 
     result.val["sourceUrl"] = Val(newSourceUrl.toString());
     result.val["editUrl"] = Val(editUrl.toString());
+    result.val["revisionId"] = Val(newRevisionId);
 
     return result;
 }
 
-mu::Ret MuseScoreComCloudService::doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat,
-                                                const QUrl& sourceUrl)
+mu::Ret MuseScoreComService::doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat,
+                                           const QUrl& sourceUrl)
 {
     TRACEFUNC;
 

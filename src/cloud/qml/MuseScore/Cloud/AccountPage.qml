@@ -90,7 +90,7 @@ FocusScope {
 
         model: cloudsModel
 
-        navigationPanel.accessible.name: pageTitle.text
+        navigationSection: navSec
 
         onSignInRequested: {
             cloudsModel.signIn(cloudCode)

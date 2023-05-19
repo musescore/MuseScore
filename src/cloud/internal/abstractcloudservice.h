@@ -52,7 +52,7 @@ class AbstractCloudService : public QObject, public IAuthorizationService, publi
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
-    AbstractCloudService(QObject* parent = nullptr);
+    explicit AbstractCloudService(QObject* parent = nullptr);
 
     void init();
 
@@ -89,7 +89,7 @@ protected:
         QVariantMap refreshParameters;
     };
 
-    virtual ServerConfig serverConfig() = 0;
+    virtual ServerConfig serverConfig() const = 0;
 
     virtual Ret downloadAccountInfo() = 0;
 
@@ -100,7 +100,7 @@ protected:
     using RequestCallback = std::function<Ret()>;
     Ret executeRequest(const RequestCallback& requestCallback);
 
-    Ret uploadingRetFromRawUploadingRet(const Ret& rawRet, bool isScoreAlreadyUploaded) const;
+    Ret uploadingRetFromRawUploadingRet(const Ret& rawRet, bool isAlreadyUploaded = false) const;
     int statusCode(const mu::Ret& ret) const;
     void printServerReply(const QBuffer& reply) const;
 

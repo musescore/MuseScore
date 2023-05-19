@@ -100,7 +100,7 @@ void RecentProjectsModel::openRecentScore(const QString& scorePath)
 
 void RecentProjectsModel::openScoreManager()
 {
-    interactive()->openUrl(museScoreComCloudService()->scoreManagerUrl());
+    interactive()->openUrl(museScoreComService()->scoreManagerUrl());
 }
 
 void RecentProjectsModel::setRecentScores(const QVariantList& recentScores)

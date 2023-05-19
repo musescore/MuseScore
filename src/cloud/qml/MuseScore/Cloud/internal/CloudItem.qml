@@ -37,22 +37,47 @@ Item {
     property var userAvatarUrl: null
     property var userCollectionUrl: null
 
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: root.cloudTitle + "Item"
+        direction: NavigationPanel.Both
+
+        onActiveChanged: function(active) {
+            if (active) {
+                firstButton.navigation.requestActive()
+                accessibleInfo.ignored = false
+                accessibleInfo.focused = true
+            } else {
+                accessibleInfo.ignored = true
+                accessibleInfo.focused = false
+                firstButton.accessible.ignored = true
+            }
+        }
+    }
+
     signal signInRequested()
     signal signOutRequested()
     signal createAccountRequested()
 
-    property NavigationControl navigation: NavigationControl {
-        accessible.role: MUAccessible.ListItem
-        //        accessible.name: root.name
-        enabled: root.enabled && root.visible
-
-        onActiveChanged: function(active) {
-            if (active) {
-                root.forceActiveFocus()
+    AccessibleItem {
+        id: accessibleInfo
+        accessibleParent: root.navigationPanel.accessible
+        visualItem: root
+        role: MUAccessible.Button
+        name: {
+            var msg = ""
+            if (Boolean(root.userIsAuthorized)) {
+                msg = "%1. %2. %3. %4".arg(root.cloudTitle)
+                .arg(root.userName)
+                .arg(root.userCollectionUrl)
+                .arg(firstButton.text)
+            } else {
+                msg = "%1. %2. %3".arg(root.cloudTitle)
+                .arg(qsTrc("cloud", "Not signed in"))
+                .arg(firstButton.text)
             }
-        }
 
-        onTriggered: root.clicked()
+            return msg
+        }
     }
 
     StyledTextLabel {
@@ -63,7 +88,7 @@ Item {
 
         text: root.cloudTitle
 
-        font: ui.theme.headerFont
+        font: ui.theme.tabBoldFont
         horizontalAlignment: Text.AlignLeft
     }
 
@@ -103,7 +128,7 @@ Item {
                     anchors.left: parent.left
                     anchors.right: parent.right
 
-                    text: root.userName
+                    text: Boolean(root.userIsAuthorized) ? root.userName : qsTrc("cloud", "Not signed in")
 
                     font: ui.theme.headerBoldFont
                     horizontalAlignment: Text.AlignLeft
@@ -113,7 +138,7 @@ Item {
                     anchors.left: parent.left
                     anchors.right: parent.right
 
-                    text: root.userCollectionUrl
+                    text: Boolean(root.userIsAuthorized) ? root.userCollectionUrl : root.cloudTitle
 
                     font: ui.theme.tabFont
                     horizontalAlignment: Text.AlignLeft
@@ -129,10 +154,23 @@ Item {
                 anchors.bottom: parent.bottom
 
                 FlatButton {
+                    id: firstButton
+
                     width: (parent.width - parent.spacing) / 2
 
                     text: Boolean(root.userIsAuthorized) ? qsTrc("cloud", "My profile") : qsTrc("cloud", "Sign in")
                     accentButton: true
+
+                    navigation.panel: root.navigationPanel
+                    navigation.name: "FirstButton"
+                    navigation.order: 1
+                    navigation.accessible.ignored: true
+                    navigation.onActiveChanged: {
+                        if (!navigation.active) {
+                            accessible.ignored = false
+                            accessibleInfo.ignored = true
+                        }
+                    }
 
                     onClicked: {
                         if (Boolean(root.userIsAuthorized)) {
@@ -144,10 +182,16 @@ Item {
                 }
 
                 FlatButton {
+                    id: secondButton
+
                     width: (parent.width - parent.spacing) / 2
 
                     text: Boolean(root.userIsAuthorized) ? qsTrc("cloud", "Sign out") : qsTrc("cloud", "Create account")
                     accentButton: !Boolean(root.userIsAuthorized)
+
+                    navigation.panel: root.navigationPanel
+                    navigation.name: "SecondButton"
+                    navigation.order: 2
 
                     onClicked: {
                         if (Boolean(root.userIsAuthorized)) {

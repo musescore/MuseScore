@@ -172,14 +172,58 @@ RetVal<CloudProjectInfo> SaveProjectScenario::askPublishLocation(INotationProjec
     return doAskCloudLocation(project, SaveMode::Save, true);
 }
 
+RetVal<CloudAudioInfo> SaveProjectScenario::askShareAudioLocation(INotationProjectPtr project) const
+{
+    bool isCloudAvailable = museScoreComService()->authorization()->checkCloudIsAvailable();
+    if (!isCloudAvailable) {
+        return warnAudioCloudIsNotAvailable();
+    }
+
+    Ret ret = audioComService()->authorization()->ensureAuthorization(
+        trc("project/save", "Login or create a new account on Audio.com to share your music."));
+    if (!ret) {
+        return ret;
+    }
+
+    QString defaultName = project->displayName();
+    cloud::Visibility defaultVisibility = cloud::Visibility::Public;
+
+    UriQuery query("musescore://project/shareonaudiocloud");
+    query.addParam("name", Val(defaultName));
+    query.addParam("visibility", Val(defaultVisibility));
+    query.addParam("cloudCode", Val(cloud::AUDIO_COM_CLOUD_CODE));
+
+    RetVal<Val> rv = interactive()->open(query);
+    if (!rv.ret) {
+        return rv.ret;
+    }
+
+    QVariantMap vals = rv.val.toQVariant().toMap();
+    using Response = QMLSaveToCloudResponse::SaveToCloudResponse;
+    auto response = static_cast<Response>(vals["response"].toInt());
+    switch (response) {
+    case Response::Cancel:
+    case Response::SaveLocallyInstead:
+        return make_ret(Ret::Code::Cancel);
+    case Response::Ok:
+        break;
+    }
+
+    CloudAudioInfo result;
+    result.name = vals["name"].toString();
+    result.visibility = static_cast<cloud::Visibility>(vals["visibility"].toInt());
+
+    return RetVal<CloudAudioInfo>::make_ok(result);
+}
+
 RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublish) const
 {
-    bool isCloudAvailable = authorizationService()->checkCloudIsAvailable();
+    bool isCloudAvailable = museScoreComService()->authorization()->checkCloudIsAvailable();
     if (!isCloudAvailable) {
         return warnCloudIsNotAvailable(isPublish);
     }
 
-    Ret ret = museScoreComAuthorizationService()->ensureAuthorization(
+    Ret ret = museScoreComService()->authorization()->ensureAuthorization(
         isPublish
         ? trc("project/save", "Login or create a free account on musescore.com to save this score to the cloud.")
         : trc("project/save", "Login or create a free account on musescore.com to publish this score."));
@@ -192,7 +236,7 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
     const CloudProjectInfo existingProjectInfo = project->cloudInfo();
 
     if (!existingProjectInfo.sourceUrl.isEmpty()) {
-        RetVal<cloud::ScoreInfo> scoreInfo = cloudProjectsService()->downloadScoreInfo(existingProjectInfo.sourceUrl);
+        RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(existingProjectInfo.sourceUrl);
 
         switch (scoreInfo.ret.code()) {
         case int(Ret::Code::Ok):
@@ -215,6 +259,7 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
     query.addParam("name", Val(defaultName));
     query.addParam("visibility", Val(defaultVisibility));
     query.addParam("existingOnlineScoreUrl", Val(existingProjectInfo.sourceUrl.toString()));
+    query.addParam("cloudCode", Val(cloud::MUSESCORE_COM_CLOUD_CODE));
 
     RetVal<Val> rv = interactive()->open(query);
     if (!rv.ret) {
@@ -296,11 +341,6 @@ bool SaveProjectScenario::warnBeforePublishing(bool isPublish, cloud::Visibility
     return ok;
 }
 
-cloud::IAuthorizationServicePtr SaveProjectScenario::museScoreComAuthorizationService() const
-{
-    return cloudsRegister()->cloud(cloud::MUSESCORE_COM_CLOUD_CODE);
-}
-
 bool SaveProjectScenario::warnBeforeSavingToExistingPubliclyVisibleCloudProject() const
 {
     IInteractive::ButtonDatas buttons = {
@@ -338,6 +378,13 @@ Ret SaveProjectScenario::warnCloudIsNotAvailable(bool isPublish) const
         return Ret(RET_CODE_CHANGE_SAVE_LOCATION_TYPE);
     }
 
+    return make_ret(Ret::Code::Cancel);
+}
+
+Ret SaveProjectScenario::warnAudioCloudIsNotAvailable() const
+{
+    interactive()->warning(trc("project/save", "Unable to connect to Audio.com"),
+                           trc("project/save", "Please check your internet connection or try again later."));
     return make_ret(Ret::Code::Cancel);
 }
 
@@ -432,4 +479,34 @@ Ret SaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProjectIn
     }
 
     return make_ret(Ret::Code::Cancel);
+}
+
+Ret SaveProjectScenario::showAudioCloudShareError(const Ret& ret) const
+{
+    std::string title= trc("project/save", "Your audio could not be shared");
+    std::string msg;
+
+    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
+    IInteractive::ButtonDatas buttons = IInteractive::ButtonDatas { okBtn };
+
+    switch (ret.code()) {
+    case int(cloud::Err::AccountNotActivated):
+        msg = trc("project/save", "Your audio.com account needs to be verified first. "
+                                  "Please activate your account via the link in the activation email.");
+        break;
+    case int(cloud::Err::NetworkError):
+        msg = cloud::cloudNetworkErrorUserDescription(ret);
+        if (!msg.empty()) {
+            msg += "\n\n" + trc("project/save", "Please try again later, or get help for this problem on audio.com.");
+            break;
+        }
+    // FALLTHROUGH
+    default:
+        msg = trc("project/save", "Please try again later, or get help for this problem on audio.com.");
+        break;
+    }
+
+    interactive()->warning(title, msg, buttons);
+
+    return make_ok();
 }

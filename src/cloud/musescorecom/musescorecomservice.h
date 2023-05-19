@@ -19,8 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_MUSESCORECOM_CLOUDSERVICE_H
-#define MU_CLOUD_MUSESCORECOM_CLOUDSERVICE_H
+#ifndef MU_CLOUD_MUSESCORECOMSERVICE_H
+#define MU_CLOUD_MUSESCORECOMSERVICE_H
+
+#include <memory>
 
 #include "modularity/ioc.h"
 #include "icloudconfiguration.h"
@@ -29,42 +31,45 @@
 
 #include "internal/abstractcloudservice.h"
 
-#include "musescorecom/imusescorecomcloudservice.h"
+#include "musescorecom/imusescorecomservice.h"
 
 namespace mu::cloud {
-class MuseScoreComCloudService : public AbstractCloudService, public IMuseScoreComCloudService
+class MuseScoreComService : public IMuseScoreComService, public AbstractCloudService,
+    public std::enable_shared_from_this<MuseScoreComService>
 {
-    Q_OBJECT
-
-    INJECT(cloud, ICloudConfiguration, configuration)
-    INJECT(cloud, network::INetworkManagerCreator, networkManagerCreator)
+    INJECT(ICloudConfiguration, configuration)
+    INJECT(network::INetworkManagerCreator, networkManagerCreator)
 
 public:
-    MuseScoreComCloudService(QObject* parent = nullptr);
+    explicit MuseScoreComService(QObject* parent = nullptr);
+
+    IAuthorizationServicePtr authorization() override;
 
     CloudInfo cloudInfo() const override;
 
     QUrl scoreManagerUrl() const override;
 
     framework::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility = Visibility::Private,
-                                       const QUrl& sourceUrl = QUrl()) override;
+                                       const QUrl& sourceUrl = QUrl(), int revisionId = 0) override;
     framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) override;
 
     RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) override;
 
 private:
-    ServerConfig serverConfig() override;
+    ServerConfig serverConfig() const override;
 
     Ret downloadAccountInfo() override;
+
+    bool doUpdateTokens() override;
 
     network::RequestHeaders headers() const;
 
     RetVal<ScoreInfo> downloadScoreInfo(int scoreId);
 
     mu::RetVal<mu::ValMap> doUploadScore(network::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                                         Visibility visibility, const QUrl& sourceUrl = QUrl());
+                                         Visibility visibility, const QUrl& sourceUrl = QUrl(), int revisionId = 0);
     Ret doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl);
 };
 }
 
-#endif // MU_CLOUD_MUSESCORECOM_CLOUDSERVICE_H
+#endif // MU_CLOUD_MUSESCORECOMSERVICE_H
