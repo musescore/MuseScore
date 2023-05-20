@@ -2862,7 +2862,7 @@ KeyList Score::keyList() const
 
     Key normalizedC = Key::C;
     // normalize the keyevents to concert pitch if necessary
-    if (firstStaff && !masterScore()->styleB(Sid::concertPitch) && firstStaff->part()->instrument()->transpose().chromatic) {
+    if (firstStaff && !masterScore()->styleB(Sid::concertPitch) && (firstStaff->part()->instrument()->transpose().chromatic || firstStaff->part()->instruments().size() > 1)) {
         int interval = firstStaff->part()->instrument()->transpose().chromatic;
         normalizedC = transposeKey(normalizedC, interval);
         for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
