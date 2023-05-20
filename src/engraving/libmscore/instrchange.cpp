@@ -156,7 +156,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
 //   keySigs
 //---------------------------------------------------------
 
-std::vector<KeySig*> InstrumentChange::keySigs() const
+std::vector<KeySig*> InstrumentChange::keySigs(bool all) const
 {
     std::vector<KeySig*> keysigs;
     Segment* seg = segment()->prev1(SegmentType::KeySig);
@@ -166,7 +166,7 @@ std::vector<KeySig*> InstrumentChange::keySigs() const
         Fraction t = tick();
         for (voice_idx_t i = startVoice; i <= endVoice; i += VOICES) {
             KeySig* ks = toKeySig(seg->element(i));
-            if (ks && ks->forInstrumentChange() && ks->tick() == t) {
+            if (ks && (all || ks->forInstrumentChange()) && ks->tick() == t) {
                 keysigs.push_back(ks);
             }
         }
