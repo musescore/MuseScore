@@ -214,5 +214,5 @@ Promise<QPixmap> RecentFilesController::thumbnail(const RecentFile& file) const
         });
 
         return Promise<QPixmap>::Result::unchecked();
-    });
+    }, Promise<QPixmap>::AsynchronyType::ProvidedByBody);
 }
