@@ -2399,7 +2399,27 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::KEYSIG:
     {
         KeySig* k = toKeySig(el);
+        bool ic = k->segment()->next(SegmentType::ChordRest)->findAnnotation(ElementType::INSTRUMENT_CHANGE,
+                                                                             el->part()->startTrack(), el->part()->endTrack() - 1);
+        if (ic && k->forInstrumentChange()) {
+            // TODO add allert for user
+            break;
+        }
         undoRemoveElement(k);
+        if (ic) {
+            KeySigEvent ke = k->keySigEvent();
+            ke.setForInstrumentChange(true);
+            Key cKey = k->staff()->keySigEvent(k->tick()).concertKey();
+            Key tKey = cKey;
+            if (!score()->styleB(Sid::concertPitch)) {
+                Interval v = k->part()->instrument(k->tick())->transpose();
+                v.flip();
+                tKey = transposeKey(cKey, v, k->part()->preferSharpFlat());
+            }
+            ke.setConcertKey(cKey);
+            ke.setKey(tKey);
+            undoChangeKeySig(k->staff(), k->tick(), ke);
+        }
         for (size_t i = 0; i < k->part()->nstaves(); i++) {
             Staff* staff = k->part()->staff(i);
             KeySigEvent e = staff->keySigEvent(k->tick());
