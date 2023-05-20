@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,33 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_RECENTSCORESMODEL_H
-#define MU_PROJECT_RECENTSCORESMODEL_H
+#ifndef MU_PROJECT_SCORESPAGEMODEL_H
+#define MU_PROJECT_SCORESPAGEMODEL_H
 
-#include "abstractscoresmodel.h"
+#include <QObject>
 
-#include "async/asyncable.h"
-
-#include "iprojectconfiguration.h"
-#include "irecentfilescontroller.h"
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+#include "iinteractive.h"
+#include "cloud/musescorecom/imusescorecomservice.h"
 
 namespace mu::project {
-class RecentScoresModel : public AbstractScoresModel, public async::Asyncable
+class ScoresPageModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(IRecentFilesController, recentFilesController)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(cloud::IMuseScoreComService, museScoreComService)
 
 public:
-    RecentScoresModel(QObject* parent = nullptr);
+    explicit ScoresPageModel(QObject* parent = nullptr);
 
-    void load() override;
-
-private:
-    void updateRecentScores();
-    void setRecentScores(const std::vector<QVariantMap>& items);
+    Q_INVOKABLE void createNewScore();
+    Q_INVOKABLE void openOther();
+    Q_INVOKABLE void openScore(const QString& scorePath);
+    Q_INVOKABLE void openScoreManager();
 };
 }
 
-#endif // MU_PROJECT_RECENTSCORESMODEL_H
+#endif // MU_PROJECT_SCORESPAGEMODEL_H

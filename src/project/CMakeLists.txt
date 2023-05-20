@@ -110,6 +110,10 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/view/exportdialogmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/exportdialogmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/scorespagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/scorespagemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractscoresmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractscoresmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/scorethumbnailloader.cpp

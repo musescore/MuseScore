@@ -41,6 +41,7 @@
 #include "internal/projectrwregister.h"
 
 #include "view/exportdialogmodel.h"
+#include "view/scorespagemodel.h"
 #include "view/recentscoresmodel.h"
 #include "view/scorethumbnailloader.h"
 #include "view/scorethumbnail.h"
@@ -137,6 +138,9 @@ void ProjectModule::registerUiTypes()
 {
     qmlRegisterType<ExportDialogModel>("MuseScore.Project", 1, 0, "ExportDialogModel");
 
+    qmlRegisterType<ScoresPageModel>("MuseScore.Project", 1, 0, "ScoresPageModel");
+    qmlRegisterUncreatableType<AbstractScoresModel>("MuseScore.Project", 1, 0, "AbstractScoresModel",
+                                                    "Not creatable as it is an abstract type");
     qmlRegisterType<RecentScoresModel>("MuseScore.Project", 1, 0, "RecentScoresModel");
     qmlRegisterType<NewScoreModel>("MuseScore.Project", 1, 0, "NewScoreModel");
     qmlRegisterType<AdditionalInfoModel>("MuseScore.Project", 1, 0, "AdditionalInfoModel");

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,33 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_RECENTSCORESMODEL_H
-#define MU_PROJECT_RECENTSCORESMODEL_H
 
-#include "abstractscoresmodel.h"
+#include "scorespagemodel.h"
 
-#include "async/asyncable.h"
+#include "actions/actiontypes.h"
+#include "io/path.h"
 
-#include "iprojectconfiguration.h"
-#include "irecentfilescontroller.h"
+using namespace mu::project;
+using namespace mu::actions;
 
-namespace mu::project {
-class RecentScoresModel : public AbstractScoresModel, public async::Asyncable
+ScoresPageModel::ScoresPageModel(QObject* parent)
+    : QObject(parent)
 {
-    Q_OBJECT
-
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(IRecentFilesController, recentFilesController)
-
-public:
-    RecentScoresModel(QObject* parent = nullptr);
-
-    void load() override;
-
-private:
-    void updateRecentScores();
-    void setRecentScores(const std::vector<QVariantMap>& items);
-};
 }
 
-#endif // MU_PROJECT_RECENTSCORESMODEL_H
+void ScoresPageModel::createNewScore()
+{
+    dispatcher()->dispatch("file-new");
+}
+
+void ScoresPageModel::openOther()
+{
+    dispatcher()->dispatch("file-open");
+}
+
+void ScoresPageModel::openScore(const QString& scorePath)
+{
+    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path_t>(io::path_t(scorePath)));
+}
+
+void ScoresPageModel::openScoreManager()
+{
+    interactive()->openUrl(museScoreComService()->scoreManagerUrl());
+}

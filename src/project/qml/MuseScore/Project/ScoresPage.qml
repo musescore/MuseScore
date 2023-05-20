@@ -26,7 +26,7 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Project 1.0
 
-import "internal"
+import "internal/ScoresPage"
 
 FocusScope {
     id: root
@@ -49,8 +49,8 @@ FocusScope {
         }
     }
 
-    RecentScoresModel {
-        id: recentScoresModel
+    ScoresPageModel {
+        id: scoresPageModel
     }
 
     Rectangle {
@@ -79,7 +79,7 @@ FocusScope {
             enabled: topLayout.enabled && topLayout.visible
             section: navSec
             order: 1
-            accessible.name: qsTrc("project", "Recent scores")
+            accessible.name: qsTrc("project", "Scores")
         }
 
         StyledTextLabel {
@@ -146,31 +146,10 @@ FocusScope {
         }
     }
 
-    Rectangle {
-        anchors.top: contentLoader.top
-
-        width: parent.width
-        height: 8
-        z: 1
-
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: background.color
-            }
-
-            GradientStop {
-                position: 1.0
-                color: "transparent"
-            }
-        }
-    }
-
     Loader {
         id: contentLoader
 
         anchors.top: tabBar.bottom
-        anchors.topMargin: 28
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: buttonsPanel.top
@@ -182,39 +161,23 @@ FocusScope {
         id: newAndRecentComp
 
         RecentScoresView {
-            id: view
-
             anchors.fill: parent
-            anchors.leftMargin: prv.sideMargin - view.sideMargin
-            anchors.rightMargin: prv.sideMargin - view.sideMargin
 
-            navigation.section: navSec
-            navigation.order: 3
+            searchText: searchField.searchText
 
             backgroundColor: background.color
+            sideMargin: prv.sideMargin
+            topMargin: 24
 
-            isSearching: searchField.searchText.length != 0
+            navigationSection: navSec
+            navigationOrder: 3
 
-            model: SortFilterProxyModel {
-                sourceModel: recentScoresModel
-
-                excludeIndexes: [0, recentScoresModel.rowCount() - 1]           // New score and no result items
-
-                filters: [
-                    FilterValue {
-                        roleName: "name"
-                        roleValue: searchField.searchText
-                        compareType: CompareType.Contains
-                    }
-                ]
-            }
-
-            onAddNewScoreRequested: {
-                recentScoresModel.addNewScore()
+            onCreateNewScoreRequested: {
+                scoresPageModel.createNewScore()
             }
 
             onOpenScoreRequested: function(scorePath) {
-                recentScoresModel.openRecentScore(scorePath)
+                scoresPageModel.openScore(scorePath)
             }
         }
     }
@@ -227,25 +190,6 @@ FocusScope {
         }
     }
 
-    Rectangle {
-        anchors.bottom: buttonsPanel.top
-
-        width: parent.width
-        height: 8
-        z: 1
-
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: "transparent"
-            }
-
-            GradientStop {
-                position: 1.0
-                color: buttonsPanel.color
-            }
-        }
-    }
 
     Rectangle {
         id: buttonsPanel
@@ -281,7 +225,7 @@ FocusScope {
             text: qsTrc("project", "Score manager (online)")
 
             onClicked: {
-                recentScoresModel.openScoreManager()
+                scoresPageModel.openScoreManager()
             }
         }
 
@@ -300,7 +244,7 @@ FocusScope {
                 text: qsTrc("project", "New")
 
                 onClicked: {
-                    recentScoresModel.addNewScore()
+                    scoresPageModel.createNewScore()
                 }
             }
 
@@ -312,7 +256,7 @@ FocusScope {
                 text: qsTrc("project", "Open other…")
 
                 onClicked: {
-                    recentScoresModel.openScore()
+                    scoresPageModel.openOther()
                 }
             }
         }

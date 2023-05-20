@@ -19,33 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_RECENTSCORESMODEL_H
-#define MU_PROJECT_RECENTSCORESMODEL_H
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
-#include "abstractscoresmodel.h"
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Project 1.0
 
-#include "async/asyncable.h"
+ScoresView {
+    id: root
 
-#include "iprojectconfiguration.h"
-#include "irecentfilescontroller.h"
+    model: RecentScoresModel {
+        id: recentScoresModel
+    }
 
-namespace mu::project {
-class RecentScoresModel : public AbstractScoresModel, public async::Asyncable
-{
-    Q_OBJECT
+    Component.onCompleted: {
+        recentScoresModel.load()
+    }
 
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(IRecentFilesController, recentFilesController)
+    sourceComponent: root.viewType === ScoresView.ViewType_List ? listComp : gridComp
 
-public:
-    RecentScoresModel(QObject* parent = nullptr);
+    Component {
+        id: gridComp
 
-    void load() override;
+        ScoresView.Grid {}
+    }
 
-private:
-    void updateRecentScores();
-    void setRecentScores(const std::vector<QVariantMap>& items);
-};
+    Component {
+        id: listComp
+
+        ScoresView.List {}
+    }
 }
-
-#endif // MU_PROJECT_RECENTSCORESMODEL_H

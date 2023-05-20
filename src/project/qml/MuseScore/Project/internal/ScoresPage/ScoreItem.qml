@@ -33,7 +33,7 @@ FocusScope {
     property string path: ""
     property string suffix: ""
     property alias timeSinceModified: timeSinceModified.text
-    property bool isAdd: false
+    property bool isCreateNew: false
     property bool isNoResultFound: false
     property bool isCloud: false
 
@@ -80,7 +80,7 @@ FocusScope {
                 anchors.fill: parent
 
                 sourceComponent: {
-                    if (root.isAdd) {
+                    if (root.isCreateNew) {
                         return addComp
                     }
 
@@ -185,7 +185,7 @@ FocusScope {
 
                 font.capitalization: Font.AllUppercase
 
-                visible: !root.isAdd && !root.isNoResultFound
+                visible: !root.isCreateNew && !root.isNoResultFound
             }
         }
     }
