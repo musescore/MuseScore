@@ -4013,8 +4013,18 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                         EngravingItem* ee = 0;
                         if (e->isKeySig()) {
                             KeySig* ks = toKeySig(e);
-                            if (!ks->forInstrumentChange()) {
-                                ksl.push_back(ks);
+                            if (ks->forInstrumentChange()) {
+                                continue;
+                            }
+                            ksl.push_back(ks);
+                            // if instrument change on that place, set correct key signature for instrument change
+                            bool ic = s->next(SegmentType::ChordRest)->findAnnotation(ElementType::INSTRUMENT_CHANGE,
+                                                                                      e->part()->startTrack(), e->part()->endTrack() - 1);
+                            if (ic) {
+                                KeySigEvent ke = ks->keySigEvent();
+                                ke.setForInstrumentChange(true);
+                                undoChangeKeySig(ks->staff(), e->tick(), ke);
+                            } else {
                                 ee = e;
                             }
                         } else if (e->isTimeSig()) {
@@ -4050,6 +4060,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                 KeySig* nks = Factory::copyKeySig(*ks);
                 Segment* s  = m->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
                 nks->setParent(s);
+                nks->setKey(nks->concertKey());  // to set correct (transposing) key
                 undoAddElement(nks);
             }
             for (Clef* clef : cl) {
