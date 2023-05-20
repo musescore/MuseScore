@@ -33,6 +33,7 @@ FocusScope {
     property string path: ""
     property string suffix: ""
     property alias timeSinceModified: timeSinceModified.text
+    property string thumbnailUrl: ""
     property bool isCreateNew: false
     property bool isNoResultFound: false
     property bool isCloud: false
@@ -267,10 +268,25 @@ FocusScope {
                 scorePath: root.path
             }
 
+            Image {
+                id: image
+                anchors.fill: parent
+                visible: status == Image.Ready
+                source: root.thumbnailUrl
+            }
+
             Loader {
                 anchors.fill: parent
+                visible: !image.visible
+                active: visible
 
-                sourceComponent: thumbnailLoader.isThumbnailValid ? scoreThumbnailComp : genericThumbnailComp
+                sourceComponent: {
+                    if (thumbnailLoader.isThumbnailValid) {
+                        return scoreThumbnailComp
+                    }
+
+                    return genericThumbnailComp
+                }
 
                 Component {
                     id: scoreThumbnailComp

@@ -152,6 +152,7 @@ Item {
                 name: score.name
                 path: score.path ?? ""
                 suffix: score.suffix ?? ""
+                thumbnailUrl: score.thumbnailUrl ?? ""
                 isCreateNew: score.isCreateNew
                 isNoResultFound: score.isNoResultFound
                 isCloud: score.isCloud
