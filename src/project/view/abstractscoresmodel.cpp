@@ -21,6 +21,8 @@
  */
 #include "abstractscoresmodel.h"
 
+#include "uicomponents/view/modelutils.h"
+
 using namespace mu::project;
 
 const QString AbstractScoresModel::NAME_KEY("name");
@@ -35,6 +37,7 @@ const QString AbstractScoresModel::IS_CLOUD_KEY("isCloud");
 AbstractScoresModel::AbstractScoresModel(QObject* parent)
     : QAbstractListModel(parent)
 {
+    uicomponents::ModelUtils::connectRowCountChangedSignal(this, &AbstractScoresModel::rowCountChanged);
 }
 
 QVariant AbstractScoresModel::data(const QModelIndex& index, int role) const
