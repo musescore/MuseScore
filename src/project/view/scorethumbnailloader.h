@@ -25,16 +25,15 @@
 #include <QObject>
 
 #include "async/asyncable.h"
-#include "async/channel.h"
 
-#include "imscmetareader.h"
+#include "irecentfilescontroller.h"
 
 namespace mu::project {
 class ScoreThumbnailLoader : public QObject, public async::Asyncable
 {
     Q_OBJECT;
 
-    INJECT_STATIC(IMscMetaReader, mscMetaReader)
+    INJECT(IRecentFilesController, recentFilesController)
 
     Q_PROPERTY(QString scorePath READ scorePath WRITE setScorePath NOTIFY scorePathChanged)
 
@@ -59,7 +58,6 @@ private:
     void loadThumbnail();
     void setThumbnail(const QPixmap& thumbnail);
 
-    async::Channel<RetVal<ProjectMeta> > m_finishedLoading;
     QPixmap m_thumbnail;
     QString m_scorePath;
 };

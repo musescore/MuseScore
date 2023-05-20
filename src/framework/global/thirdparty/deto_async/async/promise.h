@@ -20,6 +20,11 @@ public:
     // Dummy struct, with the purpose to enforce that the body
     // of a Promise resolves OR rejects exactly once
     struct Result {
+        static Result unchecked()
+        {
+            return {};
+        }
+
     private:
         Result() = default;
 

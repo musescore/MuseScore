@@ -24,16 +24,22 @@
 
 #include "irecentfilescontroller.h"
 
+#include <mutex>
+#include <map>
+
 #include "async/asyncable.h"
+#include "async/promise.h"
 
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
+#include "imscmetareader.h"
 #include "io/ifilesystem.h"
 
 namespace mu::project {
 class RecentFilesController : public IRecentFilesController, public async::Asyncable
 {
     INJECT(IProjectConfiguration, configuration)
+    INJECT(IMscMetaReader, mscMetaReader)
     INJECT(io::IFileSystem, fileSystem)
 
 public:
@@ -44,6 +50,8 @@ public:
 
     void prependRecentFile(const RecentFile& file) override;
     void clearRecentFiles() override;
+
+    async::Promise<QPixmap> thumbnail(const RecentFile& file) const override;
 
 protected:
     virtual void prependPlatformRecentFile(const io::path_t& path);
@@ -59,6 +67,9 @@ private:
     mutable RecentFilesList m_recentFilesList;
     async::Notification m_recentFilesListChanged;
     mutable bool m_reloadingBlocked = false;
+
+    mutable std::mutex m_thumbnailCacheMutex;
+    mutable std::map<io::path_t, QPixmap> m_thumbnailCache;
 };
 }
 

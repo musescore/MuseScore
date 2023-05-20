@@ -21,6 +21,8 @@
  */
 #include "recentfilescontroller.h"
 
+#include <QtConcurrent>
+
 #include <QJsonArray>
 #include <QJsonDocument>
 
@@ -28,6 +30,7 @@
 #include "defer.h"
 
 using namespace mu::project;
+using namespace mu::async;
 
 void RecentFilesController::init()
 {
@@ -36,6 +39,11 @@ void RecentFilesController::init()
     configuration()->rawRecentFilesDataChanged().onNotify(this, [this]() {
         if (!m_reloadingBlocked) {
             m_dirty = true;
+
+            {
+                std::lock_guard lock(m_thumbnailCacheMutex);
+                m_thumbnailCache.clear();
+            }
         }
 
         m_recentFilesListChanged.notify();
@@ -55,7 +63,7 @@ const RecentFilesList& RecentFilesController::recentFilesList() const
     return m_recentFilesList;
 }
 
-mu::async::Notification RecentFilesController::recentFilesListChanged() const
+Notification RecentFilesController::recentFilesListChanged() const
 {
     return m_recentFilesListChanged;
 }
@@ -155,6 +163,11 @@ void RecentFilesController::setRecentFilesList(const RecentFilesList& list, bool
 
     m_recentFilesList = list;
 
+    {
+        std::lock_guard lock(m_thumbnailCacheMutex);
+        m_thumbnailCache.clear();
+    }
+
     if (save) {
         saveRecentFilesList();
     }
@@ -177,4 +190,29 @@ void RecentFilesController::saveRecentFilesList()
 
     QJsonDocument jsonDoc(jsonArray);
     configuration()->setRawRecentFilesData(ByteArray::fromQByteArrayNoCopy(jsonDoc.toJson(QJsonDocument::Compact)));
+}
+
+Promise<QPixmap> RecentFilesController::thumbnail(const RecentFile& file) const
+{
+    return Promise<QPixmap>([this, file](auto resolve, auto reject) {
+        QtConcurrent::run([this, file, resolve, reject]() {
+            std::lock_guard lock(m_thumbnailCacheMutex);
+
+            if (mu::contains(m_thumbnailCache, file)) {
+                (void)resolve(m_thumbnailCache.at(file));
+                return;
+            }
+
+            RetVal<ProjectMeta> rv = mscMetaReader()->readMeta(file);
+            if (!rv.ret) {
+                m_thumbnailCache[file] = QPixmap();
+                (void)reject(rv.ret.code(), rv.ret.toString());
+            } else {
+                m_thumbnailCache[file] = rv.val.thumbnail;
+                (void)resolve(rv.val.thumbnail);
+            }
+        });
+
+        return Promise<QPixmap>::Result::unchecked();
+    });
 }

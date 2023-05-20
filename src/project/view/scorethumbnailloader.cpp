@@ -21,20 +21,11 @@
  */
 #include "scorethumbnailloader.h"
 
-#include <QtConcurrent>
-
 using namespace mu::project;
 
 ScoreThumbnailLoader::ScoreThumbnailLoader(QObject* parent)
     : QObject(parent)
 {
-    m_finishedLoading.onReceive(this, [this](const RetVal<ProjectMeta>& rv) {
-        if (!rv.ret) {
-            setThumbnail(QPixmap());
-        } else {
-            setThumbnail(rv.val.thumbnail);
-        }
-    });
 }
 
 QString ScoreThumbnailLoader::scorePath() const
@@ -66,8 +57,17 @@ QPixmap ScoreThumbnailLoader::thumbnail() const
 
 void ScoreThumbnailLoader::loadThumbnail()
 {
-    QtConcurrent::run([finishedLoading = m_finishedLoading, scorePath = m_scorePath]() mutable {
-        finishedLoading.send(mscMetaReader()->readMeta(scorePath));
+    if (m_scorePath.isEmpty()) {
+        setThumbnail(QPixmap());
+        return;
+    }
+
+    recentFilesController()->thumbnail(m_scorePath)
+    .onResolve(this, [this](const QPixmap& thumbnail) {
+        setThumbnail(thumbnail);
+    }).onReject(this, [this](int code, const std::string& error) {
+        LOGE() << "Could not load thumbnail for " << m_scorePath << ": [" << code << "] " << error;
+        setThumbnail(QPixmap());
     });
 }
 

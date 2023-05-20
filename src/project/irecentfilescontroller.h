@@ -23,8 +23,13 @@
 #define MU_PROJECT_IRECENTFILESCONTROLLER_H
 
 #include "modularity/imoduleinterface.h"
+
 #include "projecttypes.h"
+
 #include "async/notification.h"
+#include "async/promise.h"
+
+class QPixmap;
 
 namespace mu::project {
 class IRecentFilesController : MODULE_EXPORT_INTERFACE
@@ -39,6 +44,8 @@ public:
 
     virtual void prependRecentFile(const RecentFile& file) = 0;
     virtual void clearRecentFiles() = 0;
+
+    virtual async::Promise<QPixmap> thumbnail(const RecentFile& file) const = 0;
 };
 }
 
