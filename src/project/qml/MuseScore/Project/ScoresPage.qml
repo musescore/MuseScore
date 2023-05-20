@@ -103,8 +103,8 @@ FocusScope {
         }
     }
 
-    StyledTabBar {
-        id: tabBar
+    RowLayout {
+        id: controlsRow
 
         anchors.top: topLayout.bottom
         anchors.topMargin: prv.sideMargin
@@ -113,43 +113,74 @@ FocusScope {
         anchors.right: parent.right
         anchors.rightMargin: prv.sideMargin
 
-        NavigationPanel {
-            id: navTabPanel
-            name: "HomeScoresTabs"
-            section: navSec
-            direction: NavigationPanel.Horizontal
-            order: 2
-            accessible.name: qsTrc("project", "Scores tab bar")
-            enabled: tabBar.enabled && tabBar.visible
+        spacing: 12
 
-            onNavigationEvent: function(event) {
-                if (event.type === NavigationEvent.AboutActive) {
-                    event.setData("controlName", tabBar.currentItem.navigation.name)
+        StyledTabBar {
+            id: tabBar
+
+            Layout.fillWidth: true
+
+            NavigationPanel {
+                id: navTabPanel
+                name: "HomeScoresTabs"
+                section: navSec
+                direction: NavigationPanel.Horizontal
+                order: 2
+                accessible.name: qsTrc("project", "Scores tab bar")
+                enabled: tabBar.enabled && tabBar.visible
+
+                onNavigationEvent: function(event) {
+                    if (event.type === NavigationEvent.AboutActive) {
+                        event.setData("controlName", tabBar.currentItem.navigation.name)
+                    }
                 }
+            }
+
+            StyledTabButton {
+                text: qsTrc("project", "New & recent")
+
+                navigation.name: "New and recent"
+                navigation.panel: navTabPanel
+                navigation.column: 1
+            }
+
+            StyledTabButton {
+                text: qsTrc("project", "My online scores")
+
+                navigation.name: "My online scores"
+                navigation.panel: navTabPanel
+                navigation.column: 2
             }
         }
 
-        StyledTabButton {
-            text: qsTrc("project", "New & recent")
-
-            navigation.name: "New and recent"
-            navigation.panel: navTabPanel
-            navigation.column: 1
+        NavigationPanel {
+            id: viewButtonsNavPanel
+            name: "ViewButtons"
+            enabled: tabBar.enabled && tabBar.visible
+            section: navSec
+            order: 3
+            direction: NavigationPanel.Horizontal
+            accessible.name: qsTrc("project", "View buttons")
         }
 
-        StyledTabButton {
-            text: qsTrc("project", "My online scores")
+        FlatButton {
+            id: refreshButton
 
-            navigation.name: "My online scores"
-            navigation.panel: navTabPanel
-            navigation.column: 2
+            visible: tabBar.currentIndex === 1
+
+            navigation.panel: viewButtonsNavPanel
+            navigation.order: 1
+
+            icon: IconCode.UPDATE
+            text: qsTrc("project", "Refresh")
+            orientation: Qt.Horizontal
         }
     }
 
     Loader {
         id: contentLoader
 
-        anchors.top: tabBar.bottom
+        anchors.top: controlsRow.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: buttonsPanel.top
@@ -170,7 +201,7 @@ FocusScope {
             topMargin: 24
 
             navigationSection: navSec
-            navigationOrder: 3
+            navigationOrder: 4
 
             onCreateNewScoreRequested: {
                 scoresPageModel.createNewScore()
@@ -186,6 +217,7 @@ FocusScope {
         id: onlineScoresComp
 
         CloudScoresView {
+            id: cloudScoresView
             anchors.fill: parent
 
             searchText: searchField.searchText
@@ -195,7 +227,7 @@ FocusScope {
             topMargin: 24
 
             navigationSection: navSec
-            navigationOrder: 3
+            navigationOrder: 4
 
             onCreateNewScoreRequested: {
                 scoresPageModel.createNewScore()
@@ -203,6 +235,14 @@ FocusScope {
 
             onOpenScoreRequested: function(scorePath) {
                 scoresPageModel.openScore(scorePath)
+            }
+
+            Connections {
+                target: refreshButton
+
+                function onClicked() {
+                    cloudScoresView.refresh()
+                }
             }
         }
     }
@@ -223,7 +263,7 @@ FocusScope {
             name: "RecentScoresBottom"
             section: navSec
             direction: NavigationPanel.Horizontal
-            order: 3
+            order: 5
 
             //: accessibility name for the panel at the bottom of the "Scores" page
             accessible.name: qsTrc("project", "Scores actions")

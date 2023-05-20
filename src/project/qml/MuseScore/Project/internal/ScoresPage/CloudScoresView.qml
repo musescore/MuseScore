@@ -38,6 +38,10 @@ ScoresView {
         cloudScoresModel.load()
     }
 
+    function refresh() {
+        cloudScoresModel.reload()
+    }
+
     sourceComponent: {
         switch (cloudScoresModel.state) {
         case CloudScoresModel.NotSignedIn:
