@@ -50,7 +50,9 @@ public:
                                                const QUrl& sourceUrl = QUrl(), int revisionId = 0) = 0;
     virtual framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) = 0;
 
-    virtual RetVal<cloud::ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) = 0;
+    virtual RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) = 0;
+
+    virtual RetVal<ScoresList> downloadScoresList(int pageSize, int pageNumber) = 0;
 };
 }
 

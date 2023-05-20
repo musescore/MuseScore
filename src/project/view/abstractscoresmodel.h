@@ -30,6 +30,7 @@ class AbstractScoresModel : public QAbstractListModel
     Q_OBJECT
 
     Q_PROPERTY(int rowCount READ rowCount NOTIFY rowCountChanged)
+    Q_PROPERTY(QList<int> nonScoreItemIndices READ nonScoreItemIndices NOTIFY rowCountChanged)
 
 public:
     explicit AbstractScoresModel(QObject* parent = nullptr);
@@ -39,6 +40,8 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
+
+    virtual QList<int> nonScoreItemIndices() const;
 
 signals:
     void rowCountChanged();
@@ -52,7 +55,7 @@ protected:
     static const QString NAME_KEY;
     static const QString PATH_KEY;
     static const QString SUFFIX_KEY;
-    //static const QString THUMBNAIL_URL_KEY;
+    static const QString THUMBNAIL_URL_KEY;
     static const QString TIME_SINCE_MODIFIED_KEY;
     static const QString IS_CREATE_NEW_KEY;
     static const QString IS_NO_RESULT_FOUND_KEY;

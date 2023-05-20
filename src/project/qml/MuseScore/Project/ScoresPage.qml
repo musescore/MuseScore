@@ -185,8 +185,25 @@ FocusScope {
     Component {
         id: onlineScoresComp
 
-        Item {
-            // TODO
+        CloudScoresView {
+            anchors.fill: parent
+
+            searchText: searchField.searchText
+
+            backgroundColor: background.color
+            sideMargin: prv.sideMargin
+            topMargin: 24
+
+            navigationSection: navSec
+            navigationOrder: 3
+
+            onCreateNewScoreRequested: {
+                scoresPageModel.createNewScore()
+            }
+
+            onOpenScoreRequested: function(scorePath) {
+                scoresPageModel.openScore(scorePath)
+            }
         }
     }
 

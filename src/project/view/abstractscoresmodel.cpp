@@ -28,7 +28,7 @@ using namespace mu::project;
 const QString AbstractScoresModel::NAME_KEY("name");
 const QString AbstractScoresModel::PATH_KEY("path");
 const QString AbstractScoresModel::SUFFIX_KEY("suffix");
-//const QString AbstractScoresModel::THUMBNAIL_URL_KEY("thumbnailUrl");
+const QString AbstractScoresModel::THUMBNAIL_URL_KEY("thumbnailUrl");
 const QString AbstractScoresModel::TIME_SINCE_MODIFIED_KEY("timeSinceModified");
 const QString AbstractScoresModel::IS_CREATE_NEW_KEY("isCreateNew");
 const QString AbstractScoresModel::IS_NO_RESULT_FOUND_KEY("isNoResultFound");
@@ -42,7 +42,7 @@ AbstractScoresModel::AbstractScoresModel(QObject* parent)
 
 QVariant AbstractScoresModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid()) {
+    if (!index.isValid() || index.row() < 0 || index.row() >= rowCount()) {
         return QVariant();
     }
 
@@ -69,4 +69,9 @@ QHash<int, QByteArray> AbstractScoresModel::roleNames() const
     };
 
     return ROLE_NAMES;
+}
+
+QList<int> AbstractScoresModel::nonScoreItemIndices() const
+{
+    return {};
 }

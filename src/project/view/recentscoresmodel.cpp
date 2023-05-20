@@ -95,3 +95,8 @@ void RecentScoresModel::updateRecentScores()
 
     setRecentScores(items);
 }
+
+QList<int> RecentScoresModel::nonScoreItemIndices() const
+{
+    return { 0, rowCount() - 1 };
+}

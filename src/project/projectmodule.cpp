@@ -43,6 +43,7 @@
 #include "view/exportdialogmodel.h"
 #include "view/scorespagemodel.h"
 #include "view/recentscoresmodel.h"
+#include "view/cloudscoresmodel.h"
 #include "view/scorethumbnailloader.h"
 #include "view/scorethumbnail.h"
 #include "view/templatesmodel.h"
@@ -142,6 +143,7 @@ void ProjectModule::registerUiTypes()
     qmlRegisterUncreatableType<AbstractScoresModel>("MuseScore.Project", 1, 0, "AbstractScoresModel",
                                                     "Not creatable as it is an abstract type");
     qmlRegisterType<RecentScoresModel>("MuseScore.Project", 1, 0, "RecentScoresModel");
+    qmlRegisterType<CloudScoresModel>("MuseScore.Project", 1, 0, "CloudScoresModel");
     qmlRegisterType<NewScoreModel>("MuseScore.Project", 1, 0, "NewScoreModel");
     qmlRegisterType<AdditionalInfoModel>("MuseScore.Project", 1, 0, "AdditionalInfoModel");
     qmlRegisterType<ProjectPropertiesModel>("MuseScore.Project", 1, 0, "ProjectPropertiesModel");

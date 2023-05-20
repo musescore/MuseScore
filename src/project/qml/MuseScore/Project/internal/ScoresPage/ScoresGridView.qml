@@ -24,6 +24,7 @@ import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Project 1.0
 
 Item {
     id: root
@@ -33,6 +34,8 @@ Item {
 
     property color backgroundColor: ui.theme.backgroundSecondaryColor
     property real sideMargin: 46
+
+    property alias view: view
 
     property alias navigation: navPanel
 
@@ -45,7 +48,7 @@ Item {
         id: searchFilterModel
         sourceModel: root.model
 
-        excludeIndexes: [0, root.model.rowCount - 1] // New score and no result items
+        excludeIndexes: root.model.nonScoreItemIndices
 
         filters: [
             FilterValue {
@@ -62,7 +65,6 @@ Item {
         direction: NavigationPanel.Both
         accessible.name: qsTrc("appshell", "Recent scores grid")
     }
-
 
     Rectangle {
         id: topGradient
@@ -99,6 +101,7 @@ Item {
         bottomMargin: bottomGradient.height
 
         readonly property int columns: Math.max(0, Math.floor(width / cellWidth))
+        readonly property int rows: Math.max(0, Math.ceil(height / cellHeight))
 
         readonly property real spacingBetweenColumns: 60
         readonly property real spacingBetweenRows: 40
@@ -129,7 +132,7 @@ Item {
             height: view.cellHeight
 
             // TODO: when an item is invisible, there is still visual space allocated for it
-            visible: score.isNoResultFound ? view.count === 2 && Boolean(root.searchText) : true // New score and No result items
+            visible: score.isNoResultFound ? view.count === root.model.nonScoreItemIndices.length && Boolean(root.searchText) : true
 
             ScoreItem {
                 anchors.centerIn: parent

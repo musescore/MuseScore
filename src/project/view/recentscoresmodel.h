@@ -42,6 +42,8 @@ public:
 
     void load() override;
 
+    QList<int> nonScoreItemIndices() const override;
+
 private:
     void updateRecentScores();
     void setRecentScores(const std::vector<QVariantMap>& items);

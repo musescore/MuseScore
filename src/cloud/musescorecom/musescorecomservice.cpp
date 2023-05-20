@@ -22,6 +22,7 @@
 
 #include "musescorecomservice.h"
 
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QBuffer>
@@ -47,6 +48,7 @@ static const QUrl MUSESCORECOM_SCORE_MANAGER_URL(MUSESCORECOM_CLOUD_URL + "/my-s
 static const QUrl MUSESCORECOM_USER_INFO_API_URL(MUSESCORECOM_API_ROOT_URL + "/me");
 
 static const QUrl MUSESCORECOM_SCORE_INFO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/info");
+static const QUrl MUSESCORECOM_SCORES_LIST_API_URL(MUSESCORECOM_API_ROOT_URL + "/collection/scores");
 static const QUrl MUSESCORECOM_UPLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/upload");
 static const QUrl MUSESCORECOM_UPLOAD_AUDIO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/audio");
 
@@ -245,6 +247,63 @@ mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
     result.val.owner.id = owner.value("uid").toInt();
     result.val.owner.userName = owner.value("username").toString();
     result.val.owner.profileUrl = owner.value("custom_url").toString();
+
+    return result;
+}
+
+RetVal<ScoresList> MuseScoreComService::downloadScoresList(int pageSize, int pageNumber)
+{
+    RetVal<ScoresList> result = RetVal<ScoresList>::make_ok(ScoresList());
+
+    QVariantMap params;
+    params["per-page"] = pageSize;
+    params["page"] = pageNumber;
+
+    RetVal<QUrl> scoresListUrl = prepareUrlForRequest(MUSESCORECOM_SCORES_LIST_API_URL, params);
+    if (!scoresListUrl.ret) {
+        result.ret = scoresListUrl.ret;
+        return result;
+    }
+
+    QBuffer receivedData;
+    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    Ret ret = manager->get(scoresListUrl.val, &receivedData, headers());
+
+    if (!ret) {
+        printServerReply(receivedData);
+        result.ret = ret;
+        return result;
+    }
+
+    QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
+    QJsonObject obj = document.object();
+
+    QJsonObject metaObj = obj.value("_meta").toObject();
+    result.val.meta.totalCount = metaObj.value("totalCount").toInt();
+    result.val.meta.pageCount = metaObj.value("pageCount").toInt();
+    result.val.meta.currentPage = metaObj.value("currentPage").toInt();
+    result.val.meta.perPage = metaObj.value("perPage").toInt();
+
+    if (result.val.meta.currentPage < pageNumber) {
+        // This happens when the requested page number was too high.
+        // In this situation, the API just returns the last page and the items from that page.
+        // We will return just an empty list, in order not to confuse the caller.
+        return result;
+    }
+
+    QJsonArray items = obj.value("items").toArray();
+
+    for (const QJsonValue itemVal : items) {
+        QJsonObject itemObj = itemVal.toObject();
+
+        ScoresList::Item item;
+        item.id = itemObj.value("id").toInt();
+        item.title = itemObj.value("title").toString();
+        item.lastModified = QDateTime::fromSecsSinceEpoch(itemObj.value("date_updated").toInt());
+        item.thumbnailUrl = itemObj.value("thumbnails").toObject().value("small").toString();
+
+        result.val.items.push_back(item);
+    }
 
     return result;
 }

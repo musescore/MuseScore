@@ -7,6 +7,7 @@
         <file>qml/MuseScore/Project/internal/ScoresPage/ScoresGridView.qml</file>
         <file>qml/MuseScore/Project/internal/ScoresPage/ScoreItem.qml</file>
         <file>qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml</file>
+        <file>qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml</file>
         <file>qml/MuseScore/Project/AskSaveLocationTypeDialog.qml</file>
         <file>qml/MuseScore/Project/SaveToCloudDialog.qml</file>
         <file>qml/MuseScore/Project/ExportDialog.qml</file>

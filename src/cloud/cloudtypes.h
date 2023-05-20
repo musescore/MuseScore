@@ -22,6 +22,7 @@
 #ifndef MU_CLOUD_CLOUDTYPES_H
 #define MU_CLOUD_CLOUDTYPES_H
 
+#include <QDate>
 #include <QUrl>
 
 namespace mu::cloud {
@@ -115,6 +116,24 @@ struct ScoreInfo {
     {
         return id > 0 && !title.isEmpty();
     }
+};
+
+struct ScoresList {
+    struct Item {
+        int id = 0;
+        QString title;
+        QDateTime lastModified;
+        QString thumbnailUrl;
+    };
+
+    std::vector<Item> items;
+
+    struct Meta {
+        int totalCount = 0;
+        int pageCount = 0;
+        int currentPage = 0;
+        int perPage = 0;
+    } meta;
 };
 }
 

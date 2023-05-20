@@ -134,13 +134,13 @@ FocusScope {
         visible: !view.visible
 
         anchors.top: parent.top
-        anchors.topMargin: topGradient.height + Math.max(parent.height / 4 - height / 2, 0)
+        anchors.topMargin: topGradient.height + Math.max(parent.height / 3 - height / 2, 0)
         anchors.left: parent.left
         anchors.leftMargin: root.sideMargin
         anchors.right: parent.right
         anchors.rightMargin: root.sideMargin
 
-        spacing: 6
+        spacing: 16
 
         StyledTextLabel {
             width: parent.width
