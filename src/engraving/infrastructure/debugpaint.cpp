@@ -72,7 +72,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
 
     if (!item->bbox().isEmpty()) {
         // Draw shape
-        if (configuration()->debuggingOptions().colorElementShapes
+        if (engravingConfiguration()->debuggingOptions().colorElementShapes
             && !item->isPage() && !item->isSystem() && !item->isStaffLines() && !item->isBox()) {
             PainterPath path;
             path.setFillRule(PainterPath::FillRule::WindingFill);
@@ -88,8 +88,8 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
         }
 
         // Draw bbox
-        if (isDiagnosticSelected || configuration()->debuggingOptions().showElementBoundingRects) {
-            double scaling = painter.worldTransform().m11() / configuration()->guiScaling();
+        if (isDiagnosticSelected || engravingConfiguration()->debuggingOptions().showElementBoundingRects) {
+            double scaling = painter.worldTransform().m11() / engravingConfiguration()->guiScaling();
             draw::Pen borderPen(DEBUG_ELTREE_SELECTED_COLOR, (item->selected() ? 2.0 : 1.0) / scaling);
 
             painter.setPen(borderPen);
@@ -135,11 +135,11 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
         return;
     }
 
-    double scaling = painter.worldTransform().m11() / configuration()->guiScaling();
+    double scaling = painter.worldTransform().m11() / engravingConfiguration()->guiScaling();
 
     painter.save();
 
-    auto options = configuration()->debuggingOptions();
+    auto options = engravingConfiguration()->debuggingOptions();
 
     if (options.showSystemBoundingRects) {
         painter.setBrush(BrushStyle::NoBrush);

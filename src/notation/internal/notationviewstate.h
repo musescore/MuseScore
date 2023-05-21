@@ -32,7 +32,7 @@ namespace mu::notation {
 class Notation;
 class NotationViewState : public INotationViewState, public async::Asyncable
 {
-    INJECT_STATIC(INotationConfiguration, configuration)
+    INJECT_STATIC(INotationConfiguration, notationConfiguration)
 
 public:
     explicit NotationViewState(Notation* notation);

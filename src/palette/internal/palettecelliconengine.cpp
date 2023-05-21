@@ -71,7 +71,7 @@ void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool 
         return;
     }
 
-    painter.setPen(configuration()->elementsColor());
+    painter.setPen(paletteConfiguration()->elementsColor());
 
     if (element->isActionIcon()) {
         paintActionIcon(painter, rect, element);
@@ -79,7 +79,7 @@ void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool 
     }
 
     const bool drawStaff = m_cell->drawStaff;
-    const qreal spatium = configuration()->paletteSpatium() * m_extraMag * m_cell->mag;
+    const qreal spatium = paletteConfiguration()->paletteSpatium() * m_extraMag * m_cell->mag;
 
     PointF origin = rect.center(); // draw element at center of cell by default
     if (drawStaff) {
@@ -96,7 +96,7 @@ void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool 
 void PaletteCellIconEngine::paintBackground(Painter& painter, const RectF& rect, bool selected, bool current) const
 {
     if (current || selected) {
-        QColor c(configuration()->accentColor());
+        QColor c(paletteConfiguration()->accentColor());
         c.setAlpha(selected ? 100 : 60);
         painter.fillRect(rect, c);
     }
@@ -128,7 +128,7 @@ qreal PaletteCellIconEngine::paintStaff(Painter& painter, const RectF& rect, qre
 {
     painter.save();
 
-    Color staffLinesColor(configuration()->elementsColor());
+    Color staffLinesColor(paletteConfiguration()->elementsColor());
     staffLinesColor.setAlpha(127);//reduce alpha of staff lines to half
     Pen pen(staffLinesColor);
     pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * spatium);
@@ -208,7 +208,7 @@ void PaletteCellIconEngine::paintPaletteElement(void* context, EngravingItem* el
     element->setColorsInverionEnabled(ctx->colorsInversionEnabled);
 
     if (!ctx->useElementColors) {
-        Color color = configuration()->elementsColor();
+        Color color = paletteConfiguration()->elementsColor();
         element->setProperty(Pid::COLOR, color);
         element->setProperty(Pid::FRAME_FG_COLOR, color);
     }

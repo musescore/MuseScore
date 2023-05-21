@@ -124,7 +124,7 @@ async::Channel<Transform, NotationPaintView*> NotationViewState::matrixChanged()
 
 void NotationViewState::setMatrix(const Transform& matrix, NotationPaintView* sender)
 {
-    int newZoomPercentage = configuration()->zoomPercentageFromScaling(matrix.m11());
+    int newZoomPercentage = notationConfiguration()->zoomPercentageFromScaling(matrix.m11());
     if (m_matrix == matrix && m_zoomPercentage.val == newZoomPercentage) {
         return;
     }

@@ -565,7 +565,7 @@ PalettePtr PaletteCreator::newLayoutPalette()
     sp->appendActionIcon(ActionIconType::VFRAME, "insert-vbox");
     sp->appendActionIcon(ActionIconType::HFRAME, "insert-hbox");
     sp->appendActionIcon(ActionIconType::TFRAME, "insert-textframe");
-    if (configuration()->enableExperimental()) {
+    if (paletteConfiguration()->enableExperimental()) {
         sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
     }
     sp->appendActionIcon(ActionIconType::STAFF_TYPE_CHANGE, "insert-staff-type-change");

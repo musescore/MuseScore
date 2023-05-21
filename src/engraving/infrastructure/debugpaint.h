@@ -35,7 +35,7 @@ class Page;
 class PaintDebugger;
 class DebugPaint
 {
-    INJECT_STATIC(IEngravingConfiguration, configuration)
+    INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
     INJECT_STATIC(diagnostics::IEngravingElementsProvider, elementsProvider)
 
 public:
