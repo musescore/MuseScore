@@ -227,21 +227,14 @@ TEST_F(MidiRenderer_Tests, diffStringWithEffects)
     checkEventInterval(events, 960, 1919, 60, defVol, DEFAULT_CHANNEL + 2);
 }
 
-/*****************************************************************************
-
-    DISABLED TESTS BELOW
-
- *****************************************************************************/
-
-/// TODO: enable after fix of rendering tremolo and glissando simultaniously
-TEST_F(MidiRenderer_Tests, DISABLED_tremoloAndGlissando)
+TEST_F(MidiRenderer_Tests, tremoloAndGlissando)
 {
     constexpr int defVol = 96; // f
     constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
 
     EventMap events = renderMidiEvents(u"tremolo_and_glissando.mscx");
 
-    EXPECT_EQ(events.size(), 8);
+    EXPECT_EQ(events.size(), 14);
 
     checkEventInterval(events, 0, 239, 59, defVol);
     checkEventInterval(events, 240, 479, 59, defVol);
@@ -251,6 +244,12 @@ TEST_F(MidiRenderer_Tests, DISABLED_tremoloAndGlissando)
     checkEventInterval(events, 840, 959, 56, glissVol);
     checkEventInterval(events, 960, 1439, 55, defVol);
 }
+
+/*****************************************************************************
+
+    DISABLED TESTS BELOW
+
+*****************************************************************************/
 
 /// TODO: enable after fixing slides midi rendering
 TEST_F(MidiRenderer_Tests, DISABLED_slideInFromBelow)
