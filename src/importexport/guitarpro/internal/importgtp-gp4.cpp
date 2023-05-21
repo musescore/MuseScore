@@ -1141,10 +1141,7 @@ bool GuitarPro4::read(IODevice* io)
         }
     }
 
-#ifdef ENGRAVING_USE_STRETCHED_BENDS
-    StretchedBend::prepareBends(m_bends);
-#endif
-
+    StretchedBend::prepareBends(m_stretchedBends);
     return true;
 }
 }

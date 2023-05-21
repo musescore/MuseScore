@@ -236,12 +236,8 @@ protected:
     int slide = 0;
     int voltaSequence = 0;
     Slur** slurs       { nullptr };
-
-#ifdef ENGRAVING_USE_STRETCHED_BENDS
-    std::vector<StretchedBend*> m_bends;
-#else
     std::vector<Bend*> m_bends;
-#endif
+    std::vector<StretchedBend*> m_stretchedBends;
 
     void skip(int64_t len);
     void read(void* p, int64_t len);
@@ -254,7 +250,9 @@ protected:
     int readInt();
     String readDelphiString();
     void readVolta(GPVolta*, Measure*);
-    virtual void readBend(Note*);
+    void readBend(Note*);
+    std::vector<PitchValue> readBendDataFromFile();
+    void createBend(Note* note, std::vector<PitchValue>& bendData);
     virtual bool readMixChange(Measure* measure);
     virtual int readBeatEffects(int track, Segment*) = 0;
     void readLyrics();

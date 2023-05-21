@@ -441,7 +441,7 @@ public:
 
     void relateSlide(Note& start) { _relatedSlide = &start._attachedSlide; }
 
-    StretchedBend* bend() const { return m_bend; }
+    Bend* bend() const { return m_bend; }
 
     bool isHammerOn() const { return _isHammerOn; }
     void setIsHammerOn(bool hammerOn) { _isHammerOn = hammerOn; }
@@ -508,7 +508,7 @@ private:
     bool _play = true;           ///< note is not played if false
     mutable bool _mark = false;  ///< for use in sequencer
     bool _fixed = false;         ///< for slash notation
-    StretchedBend* m_bend = nullptr;
+    Bend* m_bend = nullptr;
 
     DirectionH _userMirror = DirectionH::AUTO;        ///< user override of mirror
     DirectionV _userDotPosition = DirectionV::AUTO;   ///< user override of dot position

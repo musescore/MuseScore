@@ -1266,13 +1266,13 @@ void Note::add(EngravingItem* e)
     case ElementType::NOTEDOT:
         _dots.push_back(toNoteDot(e));
         break;
+    case ElementType::BEND:
     case ElementType::STRETCHED_BEND:
-        m_bend = toStretchedBend(e);
+        m_bend = toBend(e);
     // fallthrough
     case ElementType::FINGERING:
     case ElementType::IMAGE:
     case ElementType::TEXT:
-    case ElementType::BEND:
         _el.push_back(e);
         break;
     case ElementType::SYMBOL: {
@@ -1325,13 +1325,13 @@ void Note::remove(EngravingItem* e)
         _dots.pop_back();
         break;
 
+    case ElementType::BEND:
     case ElementType::STRETCHED_BEND:
         m_bend = nullptr;
     // fallthrough
     case ElementType::TEXT:
     case ElementType::IMAGE:
     case ElementType::FINGERING:
-    case ElementType::BEND:
         if (!_el.remove(e)) {
             LOGD("Note::remove(): cannot find %s", e->typeName());
         }

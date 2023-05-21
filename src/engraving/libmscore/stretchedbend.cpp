@@ -56,7 +56,7 @@ static int bendTone(int notePitch);
 //   static values
 //---------------------------------------------------------
 
-static constexpr double s_bendHeightMultiplier = .2; /// how much height differs for bend pitches
+static constexpr double BEND_HEIGHT_MULTIPLIER = .2; /// how much height differs for bend pitches
 
 //---------------------------------------------------------
 //   StretchedBend
@@ -78,16 +78,7 @@ void StretchedBend::fillDrawPoints()
     }
 
     m_drawPoints.clear();
-
-    if (Tie* tie = toNote(parent())->tieBack()) {
-        Note* backTied = tie->startNote();
-        if (StretchedBend* lastBend = (backTied ? backTied->bend() : nullptr)) {
-            auto lastBendPoints = lastBend->m_drawPoints;
-            if (!lastBendPoints.empty() && lastBendPoints.back() == m_points[0].pitch) {
-                m_skipFirstPoint = true;
-            }
-        }
-    }
+    m_skipFirstPoint = firstPointShouldBeSkipped();
 
     for (size_t i = 0; i < m_points.size(); i++) {
         m_drawPoints.push_back(m_points[i].pitch);
@@ -111,7 +102,7 @@ void StretchedBend::fillSegments()
     PointF upBendDefaultSrc = PointF(m_noteWidth + m_spatium * .8, 0);
     PointF downBendDefaultSrc = PointF(m_noteWidth * .5, -m_noteHeight * .5 - m_spatium * .2);
 
-    PointF src = m_drawPoints[0] == 0 ? upBendDefaultSrc : downBendDefaultSrc;
+    PointF src = m_drawPoints.at(0) == 0 ? upBendDefaultSrc : downBendDefaultSrc;
     PointF dest(0, 0);
 
     int lastPointPitch = m_drawPoints.back();
@@ -121,8 +112,8 @@ void StretchedBend::fillSegments()
     BendSegmentType prevLineType = BendSegmentType::NO_TYPE;
 
     for (size_t pt = 0; pt < n - 1; pt++) {
-        int pitch = m_drawPoints[pt];
-        int nextPitch = m_drawPoints[pt + 1];
+        int pitch = m_drawPoints.at(pt);
+        int nextPitch = m_drawPoints.at(pt + 1);
 
         BendSegmentType type = BendSegmentType::NO_TYPE;
         int tone = bendTone(nextPitch);
@@ -148,7 +139,7 @@ void StretchedBend::fillSegments()
             bool bendUp = pitch < nextPitch;
             if (bendUp && isPrevBendUp && pt > 0) {
                 // prevent double bendUp rendering
-                int prevBendPitch = m_drawPoints[pt - 1];
+                int prevBendPitch = m_drawPoints.at(pt - 1);
                 // remove prev segment if there are two bendup in a row
                 if (!m_bendSegments.empty()) {
                     m_bendSegments.pop_back();
@@ -357,33 +348,6 @@ void StretchedBend::setupPainter(mu::draw::Painter* painter) const
 }
 
 //---------------------------------------------------------
-//   glueNeighbor
-//---------------------------------------------------------
-
-void StretchedBend::glueNeighbor()
-{
-    if (m_reduntant) {
-        return;
-    }
-
-    std::vector<Note*> ties = toNote(parent())->tiedNotes();
-    for (Note* t : ties) {
-        assert(!!t);
-        if (t->bend() && t != parent()) {
-            auto bend = t->bend();
-
-            auto& lastPoints = bend->points();
-            for (size_t i = 1; i < lastPoints.size(); ++i) {
-                m_points.push_back(lastPoints[i]);
-            }
-
-            t->remove(bend);
-            bend->m_reduntant = true;
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   fillArrows
 //---------------------------------------------------------
 
@@ -447,7 +411,7 @@ double StretchedBend::nextSegmentX() const
 }
 
 //---------------------------------------------------------
-//   bendPitch
+//   bendTone
 //---------------------------------------------------------
 
 int bendTone(int notePitch)
@@ -461,13 +425,40 @@ int bendTone(int notePitch)
 
 double StretchedBend::bendHeight(int bendIdx) const
 {
-    return m_spatium * (bendIdx + 1) * s_bendHeightMultiplier;
+    return m_spatium * (bendIdx + 1) * BEND_HEIGHT_MULTIPLIER;
 }
+
+//---------------------------------------------------------
+//   prepareBends
+//---------------------------------------------------------
 
 void StretchedBend::prepareBends(std::vector<StretchedBend*>& bends)
 {
     for (StretchedBend* bend : bends) {
         bend->fillDrawPoints();
     }
+}
+
+//---------------------------------------------------------
+//   firstPointShouldBeSkipped
+//---------------------------------------------------------
+
+bool StretchedBend::firstPointShouldBeSkipped() const
+{
+    if (Tie* tie = toNote(parent())->tieBack()) {
+        Note* backTied = tie->startNote();
+        if (Bend* lastBend = (backTied ? backTied->bend() : nullptr)) {
+            if (lastBend && lastBend->isStretchedBend()) {
+                StretchedBend* lastStretchedBend = toStretchedBend(lastBend);
+
+                const auto& lastBendPoints = lastStretchedBend->m_drawPoints;
+                if (!lastBendPoints.empty() && lastBendPoints.back() == m_points.at(0).pitch) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
 }
 }
