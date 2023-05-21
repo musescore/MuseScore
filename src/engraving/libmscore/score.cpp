@@ -2847,7 +2847,7 @@ KeyList Score::keyList() const
                     break;
                 }
                 if (key.first == (*currKey).first) {
-                    // there is a matching time sig on this staff
+                    // there is a matching key sig on this staff
                     ++currKey;
                     kl.insert(key);
                     if (currKey == km->end()) {
@@ -2859,26 +2859,33 @@ KeyList Score::keyList() const
             tmpKeymap.insert(kl.begin(), kl.end());
         }
     }
-
     Key normalizedC = Key::C;
+    bool needNormalize = firstStaff && !masterScore()->styleB(Sid::concertPitch)
+                         && (firstStaff->part()->instrument()->transpose().chromatic || firstStaff->part()->instruments().size() > 1);
     // normalize the keyevents to concert pitch if necessary
-    if (firstStaff && !masterScore()->styleB(Sid::concertPitch) && (firstStaff->part()->instrument()->transpose().chromatic || firstStaff->part()->instruments().size() > 1)) {
+    KeyList nkl;
+    for (auto key : tmpKeymap) {
+        if (firstStaff && !key.second.forInstrumentChange()) {
+            if (needNormalize) {
+                Key cKey = key.second.concertKey();
+                key.second.setKey(cKey);
+            }
+            nkl.insert(key);
+        }
+    }
+    if (firstStaff && !masterScore()->styleB(Sid::concertPitch)
+        && (firstStaff->part()->instrument()->transpose().chromatic || firstStaff->part()->instruments().size() > 1)) {
         int interval = firstStaff->part()->instrument()->transpose().chromatic;
         normalizedC = transposeKey(normalizedC, interval);
-        for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
-            int tick = i->first;
-            Key cKey = i->second.concertKey();
-            tmpKeymap[tick].setKey(cKey);
-        }
     }
 
     // create initial keyevent for transposing instrument if necessary
-    auto i = tmpKeymap.begin();
-    if (i == tmpKeymap.end() || i->first != 0) {
-        tmpKeymap[0].setConcertKey(normalizedC);
+    auto i = nkl.begin();
+    if (i == nkl.end() || i->first != 0) {
+        nkl[0].setConcertKey(normalizedC);
     }
 
-    return tmpKeymap;
+    return nkl;
 }
 
 //---------------------------------------------------------
