@@ -28,30 +28,30 @@
 
 #define INJECT(Interface, getter) \
 private: \
-    mutable std::shared_ptr<Interface> m_##getter = nullptr; \
+    mutable std::shared_ptr<Interface> mutable_##getter = nullptr; \
 public: \
     std::shared_ptr<Interface> getter() const {  \
-        if (!m_##getter) { \
+        if (!mutable_##getter) { \
             static const std::string_view sig(IOC_FUNC_SIG); \
-            m_##getter = mu::modularity::ioc()->resolve<Interface>(mu::modularity::moduleNameBySig(sig), sig); \
+            mutable_##getter = mu::modularity::ioc()->resolve<Interface>(mu::modularity::moduleNameBySig(sig), sig); \
         } \
-        return m_##getter; \
+        return mutable_##getter; \
     } \
-    void set##getter(std::shared_ptr<Interface> impl) { m_##getter = impl; } \
+    void set##getter(std::shared_ptr<Interface> impl) { mutable_##getter = impl; } \
 
 #define INJECT_STATIC(Interface, getter) \
 public: \
     static std::shared_ptr<Interface>& getter() {  \
-        static std::shared_ptr<Interface> s_##getter = nullptr; \
-        if (!s_##getter) { \
+        static std::shared_ptr<Interface> static_##getter = nullptr; \
+        if (!static_##getter) { \
             static const std::string_view sig(IOC_FUNC_SIG); \
-            s_##getter = mu::modularity::ioc()->resolve<Interface>(mu::modularity::moduleNameBySig(sig), sig); \
+            static_##getter = mu::modularity::ioc()->resolve<Interface>(mu::modularity::moduleNameBySig(sig), sig); \
         } \
-        return s_##getter; \
+        return static_##getter; \
     } \
     static void set##getter(std::shared_ptr<Interface> impl) { \
-        std::shared_ptr<Interface>& s_##getter = getter(); \
-        s_##getter = impl; \
+        std::shared_ptr<Interface>& static_##getter = getter(); \
+        static_##getter = impl; \
     } \
 
 namespace mu::modularity {
