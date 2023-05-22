@@ -208,8 +208,10 @@ QPointF PalmMute::linePos(Grip grip, System** sys) const
       System* s = nullptr;
       if (grip == Grip::START) {
             ChordRest* c = toChordRest(startElement());
-            if (!c)
+            if (!c) {
+                  *sys = s;
                   return QPointF();
+                  }
             s = c->segment()->system();
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
             if (c->isRest() && c->durationType() == TDuration::DurationType::V_MEASURE)
