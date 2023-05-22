@@ -56,12 +56,6 @@ using namespace mu::modularity;
 using namespace mu::ui;
 using namespace mu::accessibility;
 
-static std::shared_ptr<PaletteProvider> s_paletteProvider = std::make_shared<PaletteProvider>();
-static std::shared_ptr<PaletteActionsController> s_actionsController = std::make_shared<PaletteActionsController>();
-static std::shared_ptr<PaletteUiActions> s_paletteUiActions = std::make_shared<PaletteUiActions>(s_actionsController);
-static std::shared_ptr<PaletteConfiguration> s_configuration = std::make_shared<PaletteConfiguration>();
-static std::shared_ptr<PaletteWorkspaceSetup> s_paletteWorkspaceSetup = std::make_shared<PaletteWorkspaceSetup>();
-
 static void palette_init_qrc()
 {
     Q_INIT_RESOURCE(palette);
@@ -74,15 +68,21 @@ std::string PaletteModule::moduleName() const
 
 void PaletteModule::registerExports()
 {
-    ioc()->registerExport<IPaletteProvider>(moduleName(), s_paletteProvider);
-    ioc()->registerExport<IPaletteConfiguration>(moduleName(), s_configuration);
+    m_paletteProvider = std::make_shared<PaletteProvider>();
+    m_actionsController = std::make_shared<PaletteActionsController>();
+    m_paletteUiActions = std::make_shared<PaletteUiActions>(m_actionsController);
+    m_configuration = std::make_shared<PaletteConfiguration>();
+    m_paletteWorkspaceSetup = std::make_shared<PaletteWorkspaceSetup>();
+
+    ioc()->registerExport<IPaletteProvider>(moduleName(), m_paletteProvider);
+    ioc()->registerExport<IPaletteConfiguration>(moduleName(), m_configuration);
 }
 
 void PaletteModule::resolveImports()
 {
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(s_paletteUiActions);
+        ar->reg(m_paletteUiActions);
     }
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
@@ -153,10 +153,10 @@ void PaletteModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
-    s_configuration->init();
-    s_actionsController->init();
-    s_paletteUiActions->init();
-    s_paletteProvider->init();
+    m_configuration->init();
+    m_actionsController->init();
+    m_paletteUiActions->init();
+    m_paletteProvider->init();
 }
 
 void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
@@ -167,15 +167,15 @@ void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
 
     //! NOTE We need to be sure that the workspaces are initialized.
     //! So, we loads these settings on onAllInited
-    s_paletteWorkspaceSetup->setup();
+    m_paletteWorkspaceSetup->setup();
 }
 
 void PaletteModule::onDeinit()
 {
-    s_paletteWorkspaceSetup.reset();
-    s_configuration.reset();
-    s_paletteUiActions.reset();
+    m_paletteWorkspaceSetup.reset();
+    m_configuration.reset();
+    m_paletteUiActions.reset();
 
-    ioc()->unregisterIfRegistered<IPaletteProvider>(moduleName(), s_paletteProvider);
-    s_paletteProvider.reset();
+    ioc()->unregisterIfRegistered<IPaletteProvider>(moduleName(), m_paletteProvider);
+    m_paletteProvider.reset();
 }

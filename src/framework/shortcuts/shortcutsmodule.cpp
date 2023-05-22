@@ -51,11 +51,6 @@ using namespace mu::framework;
 using namespace mu::modularity;
 using namespace mu::ui;
 
-static std::shared_ptr<ShortcutsController> s_shortcutsController = std::make_shared<ShortcutsController>();
-static std::shared_ptr<ShortcutsRegister> s_shortcutsRegister = std::make_shared<ShortcutsRegister>();
-static std::shared_ptr<ShortcutsConfiguration> s_configuration = std::make_shared<ShortcutsConfiguration>();
-static std::shared_ptr<MidiRemote> s_midiRemote = std::make_shared<MidiRemote>();
-
 static void shortcuts_init_qrc()
 {
     Q_INIT_RESOURCE(shortcuts);
@@ -68,10 +63,15 @@ std::string ShortcutsModule::moduleName() const
 
 void ShortcutsModule::registerExports()
 {
-    ioc()->registerExport<IShortcutsRegister>(moduleName(), s_shortcutsRegister);
-    ioc()->registerExport<IShortcutsController>(moduleName(), s_shortcutsController);
-    ioc()->registerExport<IMidiRemote>(moduleName(), s_midiRemote);
-    ioc()->registerExport<IShortcutsConfiguration>(moduleName(), s_configuration);
+    m_shortcutsController = std::make_shared<ShortcutsController>();
+    m_shortcutsRegister = std::make_shared<ShortcutsRegister>();
+    m_configuration = std::make_shared<ShortcutsConfiguration>();
+    m_midiRemote = std::make_shared<MidiRemote>();
+
+    ioc()->registerExport<IShortcutsRegister>(moduleName(), m_shortcutsRegister);
+    ioc()->registerExport<IShortcutsController>(moduleName(), m_shortcutsController);
+    ioc()->registerExport<IMidiRemote>(moduleName(), m_midiRemote);
+    ioc()->registerExport<IShortcutsConfiguration>(moduleName(), m_configuration);
 }
 
 void ShortcutsModule::registerResources()
@@ -101,15 +101,15 @@ void ShortcutsModule::onInit(const IApplication::RunMode& mode)
         return;
     }
 
-    s_configuration->init();
-    s_shortcutsController->init();
-    s_shortcutsRegister->init();
-    s_midiRemote->init();
+    m_configuration->init();
+    m_shortcutsController->init();
+    m_shortcutsRegister->init();
+    m_midiRemote->init();
 
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        pr->reg("shortcutsUserAppDataPath", s_configuration->shortcutsUserAppDataPath());
-        pr->reg("shortcutsAppDataPath", s_configuration->shortcutsAppDataPath());
-        pr->reg("midiMappingUserAppDataPath", s_configuration->midiMappingUserAppDataPath());
+        pr->reg("shortcutsUserAppDataPath", m_configuration->shortcutsUserAppDataPath());
+        pr->reg("shortcutsAppDataPath", m_configuration->shortcutsAppDataPath());
+        pr->reg("midiMappingUserAppDataPath", m_configuration->midiMappingUserAppDataPath());
     }
 }

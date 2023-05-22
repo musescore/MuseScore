@@ -32,8 +32,6 @@
 using namespace mu::iex::ove;
 using namespace mu::project;
 
-static std::shared_ptr<OveConfiguration> s_configuration = std::make_shared<OveConfiguration>();
-
 std::string OveModule::moduleName() const
 {
     return "iex_ove";
@@ -41,7 +39,9 @@ std::string OveModule::moduleName() const
 
 void OveModule::registerExports()
 {
-    modularity::ioc()->registerExport<IOveConfiguration>(moduleName(), s_configuration);
+    m_configuration = std::make_shared<OveConfiguration>();
+
+    modularity::ioc()->registerExport<IOveConfiguration>(moduleName(), m_configuration);
 }
 
 void OveModule::resolveImports()
@@ -58,5 +58,5 @@ void OveModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
-    s_configuration->init();
+    m_configuration->init();
 }

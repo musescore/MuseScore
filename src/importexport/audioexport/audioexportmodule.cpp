@@ -37,8 +37,6 @@ using namespace mu::iex::audioexport;
 using namespace mu::project;
 using namespace mu::modularity;
 
-static std::shared_ptr<AudioExportConfiguration> s_configuration = std::make_shared<AudioExportConfiguration>();
-
 std::string AudioExportModule::moduleName() const
 {
     return "iex_audioexport";
@@ -46,7 +44,9 @@ std::string AudioExportModule::moduleName() const
 
 void AudioExportModule::registerExports()
 {
-    ioc()->registerExport<AudioExportConfiguration>(moduleName(), s_configuration);
+    m_configuration = std::make_shared<AudioExportConfiguration>();
+
+    ioc()->registerExport<AudioExportConfiguration>(moduleName(), m_configuration);
 }
 
 void AudioExportModule::resolveImports()
@@ -66,5 +66,5 @@ void AudioExportModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
-    s_configuration->init();
+    m_configuration->init();
 }

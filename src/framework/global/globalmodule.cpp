@@ -48,9 +48,7 @@ using namespace mu::framework;
 using namespace mu::modularity;
 using namespace mu::io;
 
-static std::shared_ptr<GlobalConfiguration> s_globalConf = std::make_shared<GlobalConfiguration>();
-
-static Invoker s_asyncInvoker;
+std::shared_ptr<Invoker> GlobalModule::s_asyncInvoker = {};
 
 std::string GlobalModule::moduleName() const
 {
@@ -59,8 +57,11 @@ std::string GlobalModule::moduleName() const
 
 void GlobalModule::registerExports()
 {
+    m_configuration = std::make_shared<GlobalConfiguration>();
+    s_asyncInvoker = std::make_shared<Invoker>();
+
     ioc()->registerExport<IApplication>(moduleName(), new Application());
-    ioc()->registerExport<IGlobalConfiguration>(moduleName(), s_globalConf);
+    ioc()->registerExport<IGlobalConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
     ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
     ioc()->registerExport<ICryptographicHash>(moduleName(), new CryptographicHash());
@@ -86,7 +87,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
         logger->addDest(new ConsoleLogDest(LogLayout("${time} | ${type|5} | ${thread} | ${tag|10} | ${message}")));
     }
 
-    io::path_t logPath = s_globalConf->userAppDataPath() + "/logs";
+    io::path_t logPath = m_configuration->userAppDataPath() + "/logs";
     fileSystem()->makePath(logPath);
 
     //! Remove old logs
@@ -134,19 +135,19 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     Invoker::setup();
 
     mu::async::onMainThreadInvoke([](const std::function<void()>& f, bool isAlwaysQueued) {
-        s_asyncInvoker.invoke(f, isAlwaysQueued);
+        s_asyncInvoker->invoke(f, isAlwaysQueued);
     });
 
     //! --- Diagnostics ---
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        pr->reg("appBinPath", s_globalConf->appBinPath());
-        pr->reg("appBinDirPath", s_globalConf->appBinDirPath());
-        pr->reg("appDataPath", s_globalConf->appDataPath());
-        pr->reg("appConfigPath", s_globalConf->appConfigPath());
-        pr->reg("userAppDataPath", s_globalConf->userAppDataPath());
-        pr->reg("userBackupPath", s_globalConf->userBackupPath());
-        pr->reg("userDataPath", s_globalConf->userDataPath());
+        pr->reg("appBinPath", m_configuration->appBinPath());
+        pr->reg("appBinDirPath", m_configuration->appBinDirPath());
+        pr->reg("appDataPath", m_configuration->appDataPath());
+        pr->reg("appConfigPath", m_configuration->appConfigPath());
+        pr->reg("userAppDataPath", m_configuration->userAppDataPath());
+        pr->reg("userBackupPath", m_configuration->userBackupPath());
+        pr->reg("userDataPath", m_configuration->userDataPath());
         pr->reg("log file", logFile->filePath());
         pr->reg("settings file", settings()->filePath());
     }
@@ -154,7 +155,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 
 void GlobalModule::onInit(const IApplication::RunMode&)
 {
-    s_globalConf->init();
+    m_configuration->init();
 }
 
 void GlobalModule::onDeinit()
@@ -164,5 +165,5 @@ void GlobalModule::onDeinit()
 
 void GlobalModule::invokeQueuedCalls()
 {
-    s_asyncInvoker.invokeQueuedCalls();
+    s_asyncInvoker->invokeQueuedCalls();
 }

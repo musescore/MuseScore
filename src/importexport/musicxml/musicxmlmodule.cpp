@@ -36,8 +36,6 @@
 using namespace mu::iex::musicxml;
 using namespace mu::project;
 
-static std::shared_ptr<MusicXmlConfiguration> s_configuration = std::make_shared<MusicXmlConfiguration>();
-
 static void musicxml_init_qrc()
 {
     Q_INIT_RESOURCE(musicxml);
@@ -55,12 +53,17 @@ void MusicXmlModule::registerResources()
 
 void MusicXmlModule::registerExports()
 {
-    modularity::ioc()->registerExport<IMusicXmlConfiguration>(moduleName(), s_configuration);
+    m_configuration = std::make_shared<MusicXmlConfiguration>();
+
+    modularity::ioc()->registerExport<IMusicXmlConfiguration>(moduleName(), m_configuration);
 }
 
 void MusicXmlModule::resolveImports()
 {
-    s_configuration->init();
+    //! TODO For some reason, the configuration init should be here,
+    //! we need to find out if this is not correct... for the correct one,
+    //! it should be in the onInit module
+    m_configuration->init();
 
     auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {

@@ -3700,7 +3700,7 @@ void TLayout::layout(Ornament* item, LayoutContext& ctx)
     static constexpr double ornamentAccidentalMag = 0.6; // TODO: style?
 
     if (!item->showCueNote()) {
-        for (int i = 0; i < item->accidentalsAboveAndBelow().size(); ++i) {
+        for (size_t i = 0; i < item->accidentalsAboveAndBelow().size(); ++i) {
             bool above = (i == 0);
             Accidental* accidental = item->accidentalsAboveAndBelow()[i];
             if (!accidental) {

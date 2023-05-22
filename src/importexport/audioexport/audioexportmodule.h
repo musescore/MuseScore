@@ -22,9 +22,11 @@
 #ifndef MU_IMPORTEXPORT_AUDIOEXPORTMODULE_H
 #define MU_IMPORTEXPORT_AUDIOEXPORTMODULE_H
 
+#include <memory>
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::audioexport {
+class AudioExportConfiguration;
 class AudioExportModule : public modularity::IModuleSetup
 {
 public:
@@ -32,6 +34,9 @@ public:
     void registerExports() override;
     void resolveImports() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<AudioExportConfiguration> m_configuration;
 };
 }
 

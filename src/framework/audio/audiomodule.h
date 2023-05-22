@@ -22,12 +22,29 @@
 #ifndef MU_AUDIO_AUDIOMODULE_H
 #define MU_AUDIO_AUDIOMODULE_H
 
+#include <memory>
 #include "modularity/imodulesetup.h"
 #include "async/asyncable.h"
 
 #include "iaudiodriver.h"
 
+namespace mu::audio::fx {
+class FxResolver;
+}
+
+namespace mu::audio::synth  {
+class SynthResolver;
+}
+
 namespace mu::audio {
+class AudioConfiguration;
+class AudioThread;
+class AudioBuffer;
+class AudioOutputDeviceController;
+class Playback;
+class SoundFontRepository;
+class KnownAudioPluginsRegister;
+class RegisterAudioPluginsScenario;
 class AudioModule : public modularity::IModuleSetup, public async::Asyncable
 {
 public:
@@ -47,6 +64,39 @@ public:
 private:
     void setupAudioDriver(const framework::IApplication::RunMode& mode);
     void setupAudioWorker(const IAudioDriver::Spec& activeSpec);
+
+    std::shared_ptr<AudioConfiguration> m_configuration;
+    std::shared_ptr<AudioThread> m_audioWorker;
+    std::shared_ptr<AudioBuffer> m_audioBuffer;
+    std::shared_ptr<AudioOutputDeviceController> m_audioOutputController;
+
+    std::shared_ptr<fx::FxResolver> m_fxResolver;
+    std::shared_ptr<synth::SynthResolver> m_synthResolver;
+
+    std::shared_ptr<Playback> m_playbackFacade;
+
+    std::shared_ptr<SoundFontRepository> m_soundFontRepository;
+
+    std::shared_ptr<KnownAudioPluginsRegister> m_knownAudioPluginsRegister;
+    std::shared_ptr<RegisterAudioPluginsScenario> m_registerAudioPluginsScenario;
+
+    #ifdef Q_OS_LINUX
+    std::shared_ptr<IAudioDriver> m_audioDriver;
+    #endif
+
+    #ifdef Q_OS_WIN
+    //std::shared_ptr<IAudioDriver> m_audioDriver;
+    //std::shared_ptr<IAudioDriver> m_audioDriver;
+    std::shared_ptr<IAudioDriver> m_audioDriver;
+    #endif
+
+    #ifdef Q_OS_MACOS
+    std::shared_ptr<IAudioDriver> m_audioDriver;
+    #endif
+
+    #ifdef Q_OS_WASM
+    std::shared_ptr<IAudioDriver> m_audioDriver;
+    #endif
 };
 }
 

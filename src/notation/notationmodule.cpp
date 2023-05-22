@@ -86,12 +86,6 @@ using namespace mu::ui;
 using namespace mu::actions;
 using namespace mu::uicomponents;
 
-static std::shared_ptr<NotationConfiguration> s_configuration = std::make_shared<NotationConfiguration>();
-static std::shared_ptr<NotationActionController> s_actionController = std::make_shared<NotationActionController>();
-static std::shared_ptr<NotationUiActions> s_notationUiActions = std::make_shared<NotationUiActions>(s_actionController);
-static std::shared_ptr<MidiInputOutputController> s_midiInputOutputController = std::make_shared<MidiInputOutputController>();
-static std::shared_ptr<InstrumentsRepository> s_instrumentsRepository = std::make_shared<InstrumentsRepository>();
-
 static void notationscene_init_qrc()
 {
     Q_INIT_RESOURCE(notationscene);
@@ -104,16 +98,22 @@ std::string NotationModule::moduleName() const
 
 void NotationModule::registerExports()
 {
-    ioc()->registerExport<INotationConfiguration>(moduleName(), s_configuration);
+    m_configuration = std::make_shared<NotationConfiguration>();
+    m_actionController = std::make_shared<NotationActionController>();
+    m_notationUiActions = std::make_shared<NotationUiActions>(m_actionController);
+    m_midiInputOutputController = std::make_shared<MidiInputOutputController>();
+    m_instrumentsRepository = std::make_shared<InstrumentsRepository>();
+
+    ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
-    ioc()->registerExport<IInstrumentsRepository>(moduleName(), s_instrumentsRepository);
+    ioc()->registerExport<IInstrumentsRepository>(moduleName(), m_instrumentsRepository);
 }
 
 void NotationModule::resolveImports()
 {
     auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(s_notationUiActions);
+        ar->reg(m_notationUiActions);
     }
 
     auto writers = modularity::ioc()->resolve<project::INotationWritersRegister>(moduleName());
@@ -223,27 +223,27 @@ void NotationModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
-    s_configuration->init();
-    s_instrumentsRepository->init();
-    s_actionController->init();
-    s_notationUiActions->init();
+    m_configuration->init();
+    m_instrumentsRepository->init();
+    m_actionController->init();
+    m_notationUiActions->init();
 
     if (mode == framework::IApplication::RunMode::GuiApp) {
-        s_midiInputOutputController->init();
+        m_midiInputOutputController->init();
     }
 
     Notation::init();
 
     auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        pr->reg("instruments", s_configuration->instrumentListPath());
+        pr->reg("instruments", m_configuration->instrumentListPath());
 
-        io::paths_t scoreOrderPaths = s_configuration->scoreOrderListPaths();
+        io::paths_t scoreOrderPaths = m_configuration->scoreOrderListPaths();
         for (const io::path_t& p : scoreOrderPaths) {
             pr->reg("scoreOrder", p);
         }
 
-        io::paths_t uscoreOrderPaths = s_configuration->userScoreOrderListPaths();
+        io::paths_t uscoreOrderPaths = m_configuration->userScoreOrderListPaths();
         for (const io::path_t& p : uscoreOrderPaths) {
             pr->reg("user scoreOrder", p);
         }

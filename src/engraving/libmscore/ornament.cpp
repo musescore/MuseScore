@@ -192,7 +192,7 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
         return;
     }
 
-    for (int i = 0; i < _notesAboveAndBelow.size(); ++i) {
+    for (size_t i = 0; i < _notesAboveAndBelow.size(); ++i) {
         bool above = (i == 0);
         bool hasIntAbove = hasIntervalAbove();
         bool hasIntBelow = hasIntervalBelow();
@@ -202,7 +202,7 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
         }
 
         // First: get the right notes above or below as needed
-        Note*& note = _notesAboveAndBelow[i];
+        Note*& note = _notesAboveAndBelow.at(i);
         if (!note) {
             note = mainNote->clone();
         } else {
@@ -287,7 +287,7 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
 
 void Ornament::updateAccidentalsAboveAndBelow()
 {
-    for (int i = 0; i < _notesAboveAndBelow.size(); ++i) {
+    for (size_t i = 0; i < _notesAboveAndBelow.size(); ++i) {
         Note* note = _notesAboveAndBelow[i];
         Accidental* accidental = note ? note->accidental() : nullptr;
         Accidental*& curAccidental = _accidentalsAboveAndBelow[i];

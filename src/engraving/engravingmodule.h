@@ -22,9 +22,13 @@
 #ifndef MU_ENGRAVING_ENGRAVINGMODULE_H
 #define MU_ENGRAVING_ENGRAVINGMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::engraving {
+class EngravingConfiguration;
+class EngravingFontsProvider;
 class EngravingModule : public modularity::IModuleSetup
 {
 public:
@@ -36,6 +40,11 @@ public:
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
     void onDestroy() override;
+
+private:
+
+    std::shared_ptr<EngravingConfiguration> m_configuration;
+    std::shared_ptr<EngravingFontsProvider> m_engravingfonts;
 };
 }
 
