@@ -756,7 +756,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
         bool headSide = bottom == item->up();
         double y = 0.0;
         double x;
-        if (!headSide || !a->isBasicArticulation()) {
+        if ((!headSide || !a->isBasicArticulation()) && item->stem()) {
             switch (articulationHAlign) {
             case ArticulationStemSideAlign::STEM:
                 x = item->stem()->width() * .5;
