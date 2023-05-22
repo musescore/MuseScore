@@ -180,6 +180,7 @@ class Spanner : public Element {
       void setTick2(const Fraction&);
       void setTicks(const Fraction&);
 
+      bool isVoiceSpecific() const;
       int track2() const       { return _track2;   }
       void setTrack2(int v)    { _track2 = v;      }
       int effectiveTrack2() const { return _track2 == -1 ? track() : _track2; }

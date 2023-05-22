@@ -1097,6 +1097,17 @@ void Spanner::setTicks(const Fraction& f)
             score()->spannerMap().setDirty();
       }
 
+bool Spanner::isVoiceSpecific() const
+      {
+      static const std::set <ElementType> VOICE_SPECIFIC_SPANNERS {
+            ElementType::TRILL,
+            ElementType::HAIRPIN,
+            ElementType::LET_RING,
+            };
+
+      return VOICE_SPECIFIC_SPANNERS.find(type()) == VOICE_SPECIFIC_SPANNERS.end();
+      }
+
 //---------------------------------------------------------
 //   triggerLayout
 //---------------------------------------------------------

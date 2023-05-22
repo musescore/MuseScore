@@ -597,8 +597,6 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                   Segment* endSegment = cr2->segment();
                   if (element->type() == ElementType::PEDAL && cr2 != cr1)
                         endSegment = endSegment->nextCR(cr2->track());
-                  // TODO - handle cross-voice selections
-                  int idx = cr1->staffIdx();
 
                   QByteArray a = element->mimeData(QPointF());
 //printf("<<%s>>\n", a.data());
@@ -609,7 +607,8 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                   Spanner* spanner = static_cast<Spanner*>(Element::create(type, score));
                   spanner->read(e);
                   spanner->styleChanged();
-                  score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
+                  score->cmdAddSpanner(spanner, cr1->staffIdx(), startSegment, endSegment);
+                  spanner->isVoiceSpecific();
                   }
             else {
                   for (Element* e : sel.elements())
