@@ -109,6 +109,7 @@ void StretchedBend::fillSegments()
     m_releasedToInitial = (0 == lastPointPitch);
 
     double baseBendHeight = m_spatium * 1.5;
+    int prevTone = 0;
     BendSegmentType prevLineType = BendSegmentType::NO_TYPE;
 
     for (size_t pt = 0; pt < n - 1; pt++) {
@@ -161,7 +162,7 @@ void StretchedBend::fillSegments()
                 if (m_releasedToInitial) {
                     dest.ry() = 0;
                 } else {
-                    dest.ry() = src.y() + baseBendHeight;
+                    dest.ry() = src.y() + bendHeight(prevTone) + baseBendHeight;
                 }
 
                 type = BendSegmentType::CURVE_DOWN;
@@ -178,6 +179,7 @@ void StretchedBend::fillSegments()
 
         src = dest;
         prevLineType = type;
+        prevTone = tone;
     }
 }
 
@@ -238,7 +240,6 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
         return;
     }
 
-    // For chained bends we need to draw text at least once
     bool isTextDrawn = false;
 
     for (const BendSegment& bendSegment : m_bendSegments) {
@@ -288,7 +289,7 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
                 painter->drawPolygon(arrowPath.translated(dest));
             }
 
-            if (!isTextDrawn || (bendUp && !m_releasedToInitial)) {
+            if (bendUp && !isTextDrawn) {
                 if (layoutMode) {
                     mu::draw::FontMetrics fm(font(m_spatium));
                     m_boundingRect.unite(textBoundingRect(fm, dest - PointF(m_spatium, 0), text));
@@ -296,15 +297,9 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
                     m_boundingRect.setHeight(m_boundingRect.height() + m_spatium);
                     m_boundingRect.setY(m_boundingRect.y() - m_spatium);
                 } else {
-                    // We need to draw text only for bendup elems
-                    if (bendUp) {
-                        double textLabelOffset = (!bendUp && !m_releasedToInitial ? m_spatium : 0);
-                        PointF textPoint = dest + PointF(textLabelOffset, -textLabelOffset);
-                        /// TODO: remove substraction after fixing bRect
-                        drawText(painter, textPoint - PointF(0, m_spatium * 0.5), text);
-                    }
+                    /// TODO: remove subtraction after fixing bRect
+                    drawText(painter, dest - PointF(0, m_spatium * 0.5), text);
                 }
-
                 isTextDrawn = true;
             }
 
