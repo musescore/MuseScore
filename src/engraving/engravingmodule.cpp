@@ -42,6 +42,8 @@
 #include "engraving/libmscore/mscore.h"
 #include "engraving/libmscore/masterscore.h"
 
+#include "layout/v0/layout.h"
+
 #include "compat/scoreaccess.h"
 
 #include "log.h"
@@ -72,6 +74,9 @@ void EngravingModule::registerExports()
     ioc()->registerExport<IEngravingConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IEngravingFontsProvider>(moduleName(), m_engravingfonts);
 #endif
+
+    // internal
+    ioc()->registerExport<layout::ILayout>(moduleName(), new layout::v0::Layout());
 }
 
 void EngravingModule::resolveImports()

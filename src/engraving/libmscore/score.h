@@ -372,6 +372,9 @@ class Score : public EngravingObject
     INJECT(IEngravingConfiguration, configuration)
     INJECT(IEngravingFontsProvider, engravingFonts)
 
+    // internal
+    INJECT(layout::ILayout, layout)
+
 private:
 
     friend class compat::Read302;
@@ -445,7 +448,6 @@ private:
     double _noteHeadWidth { 0.0 };         // cached value
 
     RootItem* m_rootItem = nullptr;
-    layout::ILayout* m_layout = nullptr;
     LayoutOptions m_layoutOptions;
 
     mu::async::Channel<EngravingItem*> m_elementDestroyed;

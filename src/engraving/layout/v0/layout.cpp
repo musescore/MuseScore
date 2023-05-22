@@ -70,61 +70,60 @@ public:
     ~CmdStateLocker() { m_score->cmdState().unlock(); }
 };
 
-Layout::Layout(Score* score)
-    : m_score(score)
+Layout::Layout()
 {
 }
 
-void Layout::layoutRange(const LayoutOptions& options, const Fraction& st, const Fraction& et)
+void Layout::layoutRange(Score* score, const LayoutOptions& options, const Fraction& st, const Fraction& et)
 {
-    doLayoutRange(options, st, et);
+    doLayoutRange(score, options, st, et);
 }
 
-void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, const Fraction& et)
+void Layout::doLayoutRange(Score* score, const LayoutOptions& options, const Fraction& st, const Fraction& et)
 {
-    CmdStateLocker cmdStateLocker(m_score);
-    LayoutContext ctx(m_score);
+    CmdStateLocker cmdStateLocker(score);
+    LayoutContext ctx(score);
 
     Fraction stick(st);
     Fraction etick(et);
     assert(!(stick == Fraction(-1, 1) && etick == Fraction(-1, 1)));
 
-    if (!m_score->last() || (options.isLinearMode() && !m_score->firstMeasure())) {
+    if (!score->last() || (options.isLinearMode() && !score->firstMeasure())) {
         LOGD("empty score");
-        DeleteAll(m_score->_systems);
-        m_score->_systems.clear();
-        DeleteAll(m_score->pages());
-        m_score->pages().clear();
+        DeleteAll(score->_systems);
+        score->_systems.clear();
+        DeleteAll(score->pages());
+        score->pages().clear();
         PageLayout::getNextPage(options, ctx);
         return;
     }
 
-    bool layoutAll = stick <= Fraction(0, 1) && (etick < Fraction(0, 1) || etick >= m_score->masterScore()->last()->endTick());
+    bool layoutAll = stick <= Fraction(0, 1) && (etick < Fraction(0, 1) || etick >= score->masterScore()->last()->endTick());
     if (stick < Fraction(0, 1)) {
         stick = Fraction(0, 1);
     }
     if (etick < Fraction(0, 1)) {
-        etick = m_score->last()->endTick();
+        etick = score->last()->endTick();
     }
 
     ctx.endTick = etick;
 
-    if (m_score->cmdState().layoutFlags & LayoutFlag::REBUILD_MIDI_MAPPING) {
-        if (m_score->isMaster()) {
-            m_score->masterScore()->rebuildMidiMapping();
+    if (score->cmdState().layoutFlags & LayoutFlag::REBUILD_MIDI_MAPPING) {
+        if (score->isMaster()) {
+            score->masterScore()->rebuildMidiMapping();
         }
     }
-    if (m_score->cmdState().layoutFlags & LayoutFlag::FIX_PITCH_VELO) {
-        m_score->updateVelo();
+    if (score->cmdState().layoutFlags & LayoutFlag::FIX_PITCH_VELO) {
+        score->updateVelo();
     }
 
     //---------------------------------------------------
     //    initialize layout context lc
     //---------------------------------------------------
 
-    MeasureBase* m = m_score->tick2measure(stick);
+    MeasureBase* m = score->tick2measure(stick);
     if (m == 0) {
-        m = m_score->first();
+        m = score->first();
     }
     // start layout one measure earlier to handle clefs and cautionary elements
     if (m->prevMeasureMM()) {
@@ -155,23 +154,23 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
 
     if (!layoutAll && m->system()) {
         System* system = m->system();
-        system_idx_t systemIndex = mu::indexOf(m_score->_systems, system);
+        system_idx_t systemIndex = mu::indexOf(score->_systems, system);
         ctx.page = system->page();
-        ctx.curPage = m_score->pageIdx(ctx.page);
+        ctx.curPage = score->pageIdx(ctx.page);
         if (ctx.curPage == mu::nidx) {
             ctx.curPage = 0;
         }
         ctx.curSystem   = system;
-        ctx.systemList  = mu::mid(m_score->_systems, systemIndex);
+        ctx.systemList  = mu::mid(score->_systems, systemIndex);
 
         if (systemIndex == 0) {
-            ctx.nextMeasure = options.showVBox ? m_score->first() : m_score->firstMeasure();
+            ctx.nextMeasure = options.showVBox ? score->first() : score->firstMeasure();
         } else {
-            System* prevSystem = m_score->_systems[systemIndex - 1];
+            System* prevSystem = score->_systems[systemIndex - 1];
             ctx.nextMeasure = prevSystem->measures().back()->next();
         }
 
-        m_score->_systems.erase(m_score->_systems.begin() + systemIndex, m_score->_systems.end());
+        score->_systems.erase(score->_systems.begin() + systemIndex, score->_systems.end());
         if (!ctx.nextMeasure->prevMeasure()) {
             ctx.measureNo = 0;
             ctx.tick      = Fraction(0, 1);
@@ -193,37 +192,37 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
             ctx.tick = ctx.nextMeasure->tick();
         }
     } else {
-        for (System* s : m_score->_systems) {
+        for (System* s : score->_systems) {
             for (Bracket* b : s->brackets()) {
                 if (b->selected()) {
                     bool selected = b->selected();
-                    m_score->_selection.remove(b);
+                    score->_selection.remove(b);
                     BracketItem* item = b->bracketItem();
                     item->setSelected(selected);
-                    m_score->setSelectionChanged(true);
+                    score->setSelectionChanged(true);
                 }
             }
             s->resetExplicitParent();
         }
-        for (MeasureBase* mb = m_score->first(); mb; mb = mb->next()) {
+        for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
             mb->resetExplicitParent();
             if (mb->isMeasure() && toMeasure(mb)->mmRest()) {
                 toMeasure(mb)->mmRest()->moveToDummy();
             }
         }
-        DeleteAll(m_score->_systems);
-        m_score->_systems.clear();
+        DeleteAll(score->_systems);
+        score->_systems.clear();
 
-        DeleteAll(m_score->pages());
-        m_score->pages().clear();
+        DeleteAll(score->pages());
+        score->pages().clear();
 
-        ctx.nextMeasure = options.showVBox ? m_score->first() : m_score->firstMeasure();
+        ctx.nextMeasure = options.showVBox ? score->first() : score->firstMeasure();
     }
 
     ctx.prevMeasure = 0;
 
     MeasureLayout::getNextMeasure(options, ctx);
-    ctx.curSystem = SystemLayout::collectSystem(options, ctx, m_score);
+    ctx.curSystem = SystemLayout::collectSystem(options, ctx, score);
 
     doLayout(options, ctx);
 }
@@ -276,13 +275,13 @@ void Layout::doLayout(const LayoutOptions& options, LayoutContext& lc)
 //   layoutLinear
 //---------------------------------------------------------
 
-void Layout::layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& lc)
+void Layout::layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& ctx)
 {
-    resetSystems(layoutAll, options, lc);
+    resetSystems(layoutAll, options, ctx);
 
-    collectLinearSystem(options, lc);
+    collectLinearSystem(options, ctx);
 
-    layoutLinear(options, lc);
+    layoutLinear(options, ctx);
 }
 
 //---------------------------------------------------------
@@ -291,47 +290,47 @@ void Layout::layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutCo
 //    which contains one system
 //---------------------------------------------------------
 
-void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutContext& lc)
+void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutContext& ctx)
 {
     Page* page = 0;
     if (layoutAll) {
-        for (System* s : m_score->_systems) {
+        for (System* s : ctx.score()->_systems) {
             for (SpannerSegment* ss : s->spannerSegments()) {
                 ss->resetExplicitParent();
             }
         }
-        DeleteAll(m_score->_systems);
-        m_score->_systems.clear();
-        DeleteAll(m_score->pages());
-        m_score->pages().clear();
-        if (!m_score->firstMeasure()) {
+        DeleteAll(ctx.score()->_systems);
+        ctx.score()->_systems.clear();
+        DeleteAll(ctx.score()->pages());
+        ctx.score()->pages().clear();
+        if (!ctx.score()->firstMeasure()) {
             LOGD("no measures");
             return;
         }
 
-        for (MeasureBase* mb = m_score->first(); mb; mb = mb->next()) {
+        for (MeasureBase* mb = ctx.score()->first(); mb; mb = mb->next()) {
             mb->resetExplicitParent();
         }
 
-        page = Factory::createPage(m_score->rootItem());
-        m_score->pages().push_back(page);
+        page = Factory::createPage(ctx.score()->rootItem());
+        ctx.score()->pages().push_back(page);
         page->bbox().setRect(0.0, 0.0, options.loWidth, options.loHeight);
         page->setNo(0);
 
         System* system = Factory::createSystem(page);
-        m_score->_systems.push_back(system);
+        ctx.score()->_systems.push_back(system);
         page->appendSystem(system);
-        system->adjustStavesNumber(static_cast<int>(m_score->nstaves()));
+        system->adjustStavesNumber(static_cast<int>(ctx.score()->nstaves()));
     } else {
-        if (m_score->pages().empty()) {
+        if (ctx.score()->pages().empty()) {
             return;
         }
-        page = m_score->pages().front();
-        System* system = m_score->systems().front();
+        page = ctx.score()->pages().front();
+        System* system = ctx.score()->systems().front();
         system->clear();
-        system->adjustStavesNumber(static_cast<int>(m_score->nstaves()));
+        system->adjustStavesNumber(static_cast<int>(ctx.score()->nstaves()));
     }
-    lc.page = page;
+    ctx.page = page;
 }
 
 //---------------------------------------------------------
@@ -342,13 +341,13 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
 void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ctx)
 {
     std::vector<int> visibleParts;
-    for (size_t partIdx = 0; partIdx < m_score->parts().size(); partIdx++) {
-        if (m_score->parts().at(partIdx)->show()) {
+    for (size_t partIdx = 0; partIdx < ctx.score()->parts().size(); partIdx++) {
+        if (ctx.score()->parts().at(partIdx)->show()) {
             visibleParts.push_back(static_cast<int>(partIdx));
         }
     }
 
-    System* system = m_score->systems().front();
+    System* system = ctx.score()->systems().front();
     system->setInstrumentNames(ctx, /* longNames */ true);
 
     PointF pos;
@@ -356,7 +355,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
 
     //set first measure to lc.nextMeasures for following
     //utilizing in getNextMeasure()
-    ctx.nextMeasure = m_score->_measures.first();
+    ctx.nextMeasure = ctx.score()->_measures.first();
     ctx.tick = Fraction(0, 1);
     MeasureLayout::getNextMeasure(options, ctx);
 
@@ -422,7 +421,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
                         if (!s.isChordRestType()) {
                             continue;
                         }
-                        for (size_t track = 0; track < m_score->ntracks(); ++track) {
+                        for (size_t track = 0; track < ctx.score()->ntracks(); ++track) {
                             EngravingItem* e = s.element(static_cast<int>(track));
                             if (e) {
                                 ChordRest* cr = toChordRest(e);

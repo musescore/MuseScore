@@ -332,8 +332,6 @@ Score::Score()
 
     m_shadowNote = new ShadowNote(this);
     m_shadowNote->setVisible(false);
-
-    m_layout = new layout::v0::Layout(this);
 }
 
 Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
@@ -429,7 +427,6 @@ Score::~Score()
 
     delete m_rootItem;
     delete m_shadowNote;
-    delete m_layout;
 }
 
 mu::async::Channel<POS, unsigned> Score::posChanged() const
@@ -5751,7 +5748,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     _noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
     m_layoutOptions.updateFromStyle(style());
-    m_layout->layoutRange(m_layoutOptions, st, et);
+    layout()->layoutRange(this, m_layoutOptions, st, et);
 
     if (_resetAutoplace) {
         _resetAutoplace = false;
