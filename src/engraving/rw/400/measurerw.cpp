@@ -519,21 +519,10 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             StaffText* el = Factory::createStaffText(segment);
             el->setTrack(ctx.track());
             TRead::read(el, e, ctx);
-            if (el->textStyleType() != TextStyleType::EXPRESSION) {
-                if (el->systemFlag() && el->isTopSystemObject()) {
-                    el->setTrack(0); // original system object always goes on top
-                }
-                segment->add(el);
-            } else {
-                // Starting from version 4.1, Expressions have their own class.
-                // Map "old" expression objects into the "new" expression object.
-                Expression* expression = Factory::createExpression(segment);
-                expression->setTrack(ctx.track());
-                expression->setXmlText(el->xmlText());
-                expression->mapPropertiesFromOldExpressions(el);
-                segment->add(expression);
-                delete el;
+            if (el->systemFlag() && el->isTopSystemObject()) {
+                el->setTrack(0);     // original system object always goes on top
             }
+            segment->add(el);
         } else if (tag == "Sticking"
                    || tag == "SystemText"
                    || tag == "PlayTechAnnotation"

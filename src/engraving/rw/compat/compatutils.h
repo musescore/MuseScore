@@ -28,6 +28,8 @@ namespace mu::engraving {
 class Score;
 class MasterScore;
 class Excerpt;
+class Dynamic;
+enum class DynamicType : char;
 }
 
 namespace mu::engraving::compat {
@@ -35,9 +37,12 @@ class CompatUtils
 {
 public:
     static void doCompatibilityConversions(MasterScore* masterScore);
-    static void replaceStaffTextWithPlayTechniqueAnnotation(Score* score);
+    static void replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score);
     static void assignInitialPartToExcerpts(const std::vector<Excerpt*>& excerpts);
     static void replaceOldWithNewOrnaments(MasterScore* score);
+    static void replaceOldWithNewExpressions(MasterScore* score);
+    static void reconstructTypeOfCustomDynamics(MasterScore* score);
+    static DynamicType reconstructDynamicTypeFromString(Dynamic* dynamic);
 };
 }
 #endif // MU_ENGRAVING_COMPATUTILS_H
