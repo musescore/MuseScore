@@ -41,6 +41,7 @@ private:
     static QString poet(const mu::engraving::Score* score);
     static QString timesig(const mu::engraving::Score* score);
     static std::pair<int, QString> tempo(const mu::engraving::Score* score);
+    static QJsonArray instrumentsJsonArray(const mu::engraving::Score* score);
     static QJsonArray partsJsonArray(const mu::engraving::Score* score);
     static QJsonObject pageFormatJson(const mu::engraving::Score* score);
     static QJsonObject typeDataJson(mu::engraving::Score* score);

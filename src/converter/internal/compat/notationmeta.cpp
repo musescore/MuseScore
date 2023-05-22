@@ -27,6 +27,8 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
+#include "libmscore/excerpt.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/text.h"
 
@@ -75,6 +77,7 @@ mu::RetVal<std::string> NotationMeta::metaJson(notation::INotationPtr notation)
     json["tempo"] =  _tempo.first;
     json["tempoText"] =  _tempo.second;
 
+    json["instruments"] = instrumentsJsonArray(score);
     json["parts"] =  partsJsonArray(score);
     json["pageFormat"] = pageFormatJson(score);
     json["textFramesData"] =  typeDataJson(score);
@@ -191,21 +194,33 @@ std::pair<int, QString> NotationMeta::tempo(const mu::engraving::Score* score)
     return { tempo, tempoText };
 }
 
+QJsonArray NotationMeta::instrumentsJsonArray(const mu::engraving::Score* score)
+{
+    QJsonArray jsonInstrumentsArray;
+    for (const mu::engraving::Part* part : score->parts()) {
+        QJsonObject jsonInstrument;
+        jsonInstrument.insert("name", part->longName().replace(u"\n", u"").toQString());
+        int midiProgram = part->midiProgram();
+        jsonInstrument.insert("program", midiProgram);
+        jsonInstrument.insert("instrumentId", part->instrumentId().toQString());
+        jsonInstrument.insert("lyricCount", part->lyricCount());
+        jsonInstrument.insert("harmonyCount", part->harmonyCount());
+        jsonInstrument.insert("hasPitchedStaff", boolToString(part->hasPitchedStaff()));
+        jsonInstrument.insert("hasTabStaff", boolToString(part->hasTabStaff()));
+        jsonInstrument.insert("hasDrumStaff", boolToString(part->hasDrumStaff()));
+        jsonInstrument.insert("isVisible", boolToString(part->show()));
+        jsonInstrumentsArray.append(jsonInstrument);
+    }
+
+    return jsonInstrumentsArray;
+}
+
 QJsonArray NotationMeta::partsJsonArray(const mu::engraving::Score* score)
 {
     QJsonArray jsonPartsArray;
-    for (const mu::engraving::Part* part : score->parts()) {
+    for (const mu::engraving::Excerpt* excerpt : score->masterScore()->excerpts()) {
         QJsonObject jsonPart;
-        jsonPart.insert("name", part->longName().replace(u"\n", u"").toQString());
-        int midiProgram = part->midiProgram();
-        jsonPart.insert("program", midiProgram);
-        jsonPart.insert("instrumentId", part->instrumentId().toQString());
-        jsonPart.insert("lyricCount", part->lyricCount());
-        jsonPart.insert("harmonyCount", part->harmonyCount());
-        jsonPart.insert("hasPitchedStaff", boolToString(part->hasPitchedStaff()));
-        jsonPart.insert("hasTabStaff", boolToString(part->hasTabStaff()));
-        jsonPart.insert("hasDrumStaff", boolToString(part->hasDrumStaff()));
-        jsonPart.insert("isVisible", boolToString(part->show()));
+        jsonPart.insert("name", excerpt->name().toQString());
         jsonPartsArray.append(jsonPart);
     }
 
