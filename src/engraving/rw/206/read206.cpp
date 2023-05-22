@@ -2289,7 +2289,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
         } else if (tag == "anchor") {
             useDefaultPlacement = false;
             if (!el || el->isFermata()) {
-                anchor = ArticulationAnchor(e.readInt());
+                anchor = CompatUtils::translateToNewArticulationAnchor(e.readInt());
             } else {
                 readProperties(el, e, ctx);
             }

@@ -367,3 +367,21 @@ DynamicType CompatUtils::reconstructDynamicTypeFromString(Dynamic* dynamic)
     }
     return DynamicType::OTHER;
 }
+
+ArticulationAnchor CompatUtils::translateToNewArticulationAnchor(int anchor)
+{
+    switch (anchor) {
+    case 0: // ArticulationAnchor::TOP_STAFF
+    case 3: // ArticulationAnchor::TOP_CHORD
+        return ArticulationAnchor::TOP;
+        break;
+    case 1: // ArticulationAnchor::BOTTOM_STAFF
+    case 4: // ArticulationAnchor::BOTTOM_CHORD
+        return ArticulationAnchor::BOTTOM;
+        break;
+    case 2: // ArticulationAnchor::CHORD
+    default:
+        return ArticulationAnchor::AUTO;
+        break;
+    }
+}

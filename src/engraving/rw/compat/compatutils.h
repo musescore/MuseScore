@@ -24,6 +24,8 @@
 
 #include <vector>
 
+#include "libmscore/articulation.h"
+
 namespace mu::engraving {
 class Score;
 class MasterScore;
@@ -43,6 +45,7 @@ public:
     static void replaceOldWithNewExpressions(MasterScore* score);
     static void reconstructTypeOfCustomDynamics(MasterScore* score);
     static DynamicType reconstructDynamicTypeFromString(Dynamic* dynamic);
+    static ArticulationAnchor translateToNewArticulationAnchor(int anchor);
 };
 }
 #endif // MU_ENGRAVING_COMPATUTILS_H
