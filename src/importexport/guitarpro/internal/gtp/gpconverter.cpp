@@ -50,12 +50,7 @@
 #include "libmscore/tripletfeel.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
-
-#ifdef ENGRAVING_USE_STRETCHED_BENDS
 #include "libmscore/stretchedbend.h"
-#else
-#include "libmscore/bend.h"
-#endif
 
 #include "types/symid.h"
 
@@ -285,6 +280,7 @@ GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
 
     _drumResolver = std::make_unique<GPDrumSetResolver>();
     _drumResolver->initGPDrum();
+    m_useStretchedBends = engravingConfiguration()->guitarProImportExperimental();
 }
 
 const std::unique_ptr<GPDomModel>& GPConverter::gpDom() const
@@ -391,13 +387,8 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
     }
 
     addTempoMap();
-
     addInstrumentChanges();
-
-#ifdef ENGRAVING_USE_STRETCHED_BENDS
-    StretchedBend::prepareBends(m_bends);
-#endif
-
+    StretchedBend::prepareBends(m_stretchedBends);
     addFermatas();
     addContinuousSlideHammerOn();
 }
@@ -1901,27 +1892,20 @@ void GPConverter::collectHammerOn(const GPNote* gpnote, Note* note)
 
 void GPConverter::addBend(const GPNote* gpnote, Note* note)
 {
-    if (!gpnote->bend()) {
+    if (!gpnote->bend() || gpnote->bend()->isEmpty()) {
         return;
     }
 
-    if (gpnote->bend()->isEmpty()) {
-        return;
-    }
+    using namespace mu::engraving;
 
     auto gpTimeToMuTime = [] (float time) {
         return time * PitchValue::MAX_TIME / 100;
     };
 
-#ifdef ENGRAVING_USE_STRETCHED_BENDS
-    StretchedBend* bend = mu::engraving::Factory::createStretchedBend(note);
-#else
-    Bend* bend = mu::engraving::Factory::createBend(note);
-#endif
+    Bend* bend = m_useStretchedBends ? Factory::createStretchedBend(note) : Factory::createBend(note);
+    const GPNote::Bend* gpBend = gpnote->bend();
 
-    auto gpBend = gpnote->bend();
-
-    bool bendHasMiddleValue{ true };
+    bool bendHasMiddleValue = true;
     if (gpBend->middleOffset1 == 12 || gpBend->middleOffset2 == 12) {
         bendHasMiddleValue = false;
     }
@@ -1935,6 +1919,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
             gpBend->middleOffset1 >= 0 && gpBend->middleOffset1 < gpBend->destinationOffset && value != lastPoint) {
             bend->points().push_back(std::move(value));
         }
+
         if (PitchValue value(gpTimeToMuTime(gpBend->middleOffset2), gpBend->middleValue);
             gpBend->middleOffset2 >= 0 && gpBend->middleOffset2 != gpBend->middleOffset1
             && gpBend->middleOffset2 < gpBend->destinationOffset
@@ -1965,7 +1950,12 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
 
     bend->setTrack(note->track());
     note->add(bend);
-    m_bends.push_back(bend);
+
+    if (m_useStretchedBends) {
+        m_stretchedBends.push_back(toStretchedBend(bend));
+    } else {
+        m_bends.push_back(bend);
+    }
 }
 
 void GPConverter::buildContiniousElement(ChordRest* cr, std::vector<SLine*>& elements, ElementType muType, LineImportType importType,

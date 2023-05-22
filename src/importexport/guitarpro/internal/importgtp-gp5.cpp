@@ -997,10 +997,7 @@ bool GuitarPro5::read(IODevice* io)
         }
     }
 
-#ifdef ENGRAVING_USE_STRETCHED_BENDS
-    StretchedBend::prepareBends(m_bends);
-#endif
-
+    StretchedBend::prepareBends(m_stretchedBends);
     return true;
 }
 
@@ -1013,11 +1010,12 @@ bool GuitarPro5::readNoteEffects(Note* note)
     uint8_t modMask1 = readUInt8();
     uint8_t modMask2 = readUInt8();
     bool slur = false;
-    bool addBendToHarmonic = false;
+    std::vector<PitchValue> bendData;
+    Note* bendParent = nullptr;
 
     if (modMask1 & EFFECT_BEND) {
-        addBendToHarmonic = true;
-        readBend(note);
+        bendData = readBendDataFromFile();
+        bendParent = note;
     }
     if (modMask1 & EFFECT_HAMMER) {
         slur = true;
@@ -1148,34 +1146,12 @@ bool GuitarPro5::readNoteEffects(Note* note)
             note->attachSlide(sl);
         }
 
-        if (false && !slideList.empty() && slideList.back()->chord()->segment() != note->chord()->segment()) {
-            Note* start = slideList.front();
-            slideList.pop_front();
-            bool skip = false;
-            for (auto e : start->el()) {
-                if (e->isChordLine()) {
-                    skip = true;
-                }
-            }
-            if (!skip) {
-                Glissando* s = new Glissando(start);
-                s->setAnchor(Spanner::Anchor::NOTE);
-                s->setStartElement(start);
-                s->setTick(start->chord()->segment()->tick());
-                s->setTrack(start->staffIdx());
-                s->setParent(start);
-                s->setGlissandoType(GlissandoType::STRAIGHT);
-                s->setEndElement(note);
-                s->setTick2(note->chord()->segment()->tick());
-                s->setTrack2(note->staffIdx());
-                score->addElement(s);
-            }
-        }
         if (slideKind & LEGATO_SLIDE) {
             slideKind &= ~LEGATO_SLIDE;
             slideList.push_back(nullptr);
             createSlur(true, note->staffIdx(), note->chord());
         }
+
         if (slideKind & SHIFT_SLIDE) {
             slideKind &= ~SHIFT_SLIDE;
             slideList.push_back(note);
@@ -1278,10 +1254,14 @@ bool GuitarPro5::readNoteEffects(Note* note)
 
             addTextToNote(harmonicText, harmonicNote);
 
-            if (addBendToHarmonic) {
-                harmonicNote->add(note->bend()->clone());
+            if (!bendData.empty()) {
+                bendParent = harmonicNote;
             }
         }
+    }
+
+    if (bendParent) {
+        createBend(bendParent, bendData);
     }
 
     if (modMask2 & 0x40) {

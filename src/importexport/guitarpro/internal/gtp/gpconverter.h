@@ -265,11 +265,9 @@ private:
         static constexpr int LOWEST_BASE = 1024;
     } m_nextTupletInfo;
 
-#ifdef ENGRAVING_USE_STRETCHED_BENDS
-    std::vector<StretchedBend*> m_bends;
-#else
     std::vector<Bend*> m_bends;
-#endif
+    std::vector<StretchedBend*> m_stretchedBends;
+    bool m_useStretchedBends = false;
 
     static constexpr voice_idx_t VOICES = 4;
 

@@ -733,6 +733,45 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
     }
 }
 
+std::vector<PitchValue> GuitarPro::readBendDataFromFile()
+{
+    std::vector<PitchValue> bendData;
+
+    readUInt8();                          // icon
+    /*int amplitude =*/ readInt();        // shown amplitude
+    int numPoints = readInt();            // the number of points in the bend
+
+    for (int i = 0; i < numPoints; ++i) {
+        int bendTime  = readInt();
+        int bendPitch = readInt();
+        int bendVibrato = readUInt8();
+        bendData.emplace_back(bendTime, bendPitch, bendVibrato);
+    }
+
+    return bendData;
+}
+
+void GuitarPro::createBend(Note* note, std::vector<PitchValue>& bendData)
+{
+    using namespace mu::engraving;
+
+    if (bendData.empty()) {
+        return;
+    }
+
+    bool useStretchedBends = engravingConfiguration()->guitarProImportExperimental();
+    Bend* bend = useStretchedBends ? Factory::createStretchedBend(note) : Factory::createBend(note);
+
+    bend->points() = std::move(bendData);
+    bend->setTrack(note->track());
+    note->add(bend);
+    if (useStretchedBends) {
+        m_stretchedBends.push_back(toStretchedBend(bend));
+    } else {
+        m_bends.push_back(bend);
+    }
+}
+
 //---------------------------------------------------------
 //   readBend
 //    bend graph
@@ -740,32 +779,8 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
 
 void GuitarPro::readBend(Note* note)
 {
-    readUInt8();                          // icon
-    /*int amplitude =*/ readInt();                            // shown amplitude
-    int numPoints = readInt();            // the number of points in the bend
-
-    // there are no notes in the bend, exit the function
-    if (numPoints == 0) {
-        return;
-    }
-
-#ifdef ENGRAVING_USE_STRETCHED_BENDS
-    StretchedBend* bend = Factory::createStretchedBend(note);
-#else
-    Bend* bend = Factory::createBend(note);
-#endif
-
-    //TODO-ws      bend->setNote(note);
-    for (int i = 0; i < numPoints; ++i) {
-        int bendTime  = readInt();
-        int bendPitch = readInt();
-        int bendVibrato = readUInt8();
-        bend->points().push_back(PitchValue(bendTime, bendPitch, bendVibrato));
-    }
-    //TODO-ws      bend->setAmplitude(amplitude);
-    bend->setTrack(note->track());
-    note->add(bend);
-    m_bends.push_back(bend);
+    std::vector<PitchValue> bendData = readBendDataFromFile();
+    createBend(note, bendData);
 }
 
 //---------------------------------------------------------
@@ -2734,10 +2749,7 @@ bool GuitarPro3::read(IODevice* io)
         }
     }
 
-#ifdef ENGRAVING_USE_STRETCHED_BENDS
-    StretchedBend::prepareBends(m_bends);
-#endif
-
+    StretchedBend::prepareBends(m_stretchedBends);
     return true;
 }
 

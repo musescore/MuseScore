@@ -54,7 +54,6 @@ private:
     void fillDrawPoints(); // filling the points which specify how bend will be drawn
     void fillSegments(); // converting points from file to bend segments
     void stretchSegments(); // stretching until end of chord duration
-    void glueNeighbor(); // fixing the double appearance of some bends
 
     void layoutDraw(const bool layoutMode, mu::draw::Painter* painter = nullptr) const; /// loop for both layout and draw logic
 
@@ -62,8 +61,7 @@ private:
     void fillArrows();
     double nextSegmentX() const;
     double bendHeight(int bendIdx) const;
-
-    bool m_reduntant = false; // marks that the bend was 'glued' to neighbour and is now unnecessary
+    bool firstPointShouldBeSkipped() const;
 
     bool m_stretchedMode = false; // layout with fixed size or stretched to next segment
 
