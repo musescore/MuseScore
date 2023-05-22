@@ -28,16 +28,16 @@
 
 #define INJECT(Interface, getter) \
 private: \
-    mutable std::shared_ptr<Interface> mutable_##getter = nullptr; \
+    mutable std::shared_ptr<Interface> m_##getter = nullptr; \
 public: \
     std::shared_ptr<Interface> getter() const {  \
-        if (!mutable_##getter) { \
+        if (!m_##getter) { \
             static const std::string_view sig(IOC_FUNC_SIG); \
-            mutable_##getter = mu::modularity::ioc()->resolve<Interface>(mu::modularity::moduleNameBySig(sig), sig); \
+            m_##getter = mu::modularity::ioc()->resolve<Interface>(mu::modularity::moduleNameBySig(sig), sig); \
         } \
-        return mutable_##getter; \
+        return m_##getter; \
     } \
-    void set##getter(std::shared_ptr<Interface> impl) { mutable_##getter = impl; } \
+    void set##getter(std::shared_ptr<Interface> impl) { m_##getter = impl; } \
 
 #define INJECT_STATIC(Interface, getter) \
 public: \
