@@ -95,7 +95,7 @@
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>71</pitch>
@@ -106,7 +106,7 @@
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <Spanner type="Tie">
@@ -172,7 +172,7 @@
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>71</pitch>
@@ -183,7 +183,7 @@
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <Spanner type="Tie">
@@ -239,7 +239,7 @@
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>71</pitch>
@@ -250,7 +250,7 @@
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>71</pitch>
@@ -337,7 +337,7 @@
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>71</pitch>
@@ -364,7 +364,7 @@
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>71</pitch>
@@ -375,7 +375,7 @@
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>71</pitch>
@@ -462,7 +462,7 @@
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>71</pitch>

@@ -296,7 +296,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -307,7 +307,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>60</pitch>
@@ -342,7 +342,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -353,7 +353,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>60</pitch>
@@ -437,7 +437,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -448,7 +448,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>60</pitch>
@@ -575,7 +575,6 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>guitarFadeIn</subtype>
-              <anchor>3</anchor>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -586,7 +585,6 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>guitarFadeIn</subtype>
-              <anchor>3</anchor>
               </Articulation>
             <Note>
               <pitch>60</pitch>
@@ -624,7 +622,6 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>guitarFadeOut</subtype>
-              <anchor>3</anchor>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -635,7 +632,6 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>guitarFadeOut</subtype>
-              <anchor>3</anchor>
               </Articulation>
             <Note>
               <pitch>60</pitch>
@@ -670,7 +666,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wiggleSawtooth</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -681,7 +677,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wiggleSawtooth</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>60</pitch>
@@ -716,7 +712,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wiggleSawtoothWide</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -727,7 +723,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wiggleSawtoothWide</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>60</pitch>
@@ -762,7 +758,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wiggleVibratoLargeFaster</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -773,7 +769,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wiggleVibratoLargeFaster</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>60</pitch>
@@ -811,7 +807,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wiggleVibratoLargeSlowest</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -822,7 +818,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wiggleVibratoLargeSlowest</subtype>
-              <anchor>3</anchor>
+              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>60</pitch>
