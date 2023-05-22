@@ -1119,7 +1119,8 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>2</accidental>
+            <concertKey>0</concertKey>
+            <actualKey>2</actualKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>

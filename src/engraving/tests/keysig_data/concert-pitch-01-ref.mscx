@@ -133,7 +133,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -148,7 +148,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>-4</accidental>
+            <concertKey>-4</concertKey>
             </KeySig>
           <Rest>
             <durationType>measure</durationType>
@@ -159,7 +159,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <Rest>
             <durationType>measure</durationType>
@@ -170,7 +170,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>-1</accidental>
+            <concertKey>-1</concertKey>
             </KeySig>
           <Rest>
             <durationType>measure</durationType>
@@ -195,7 +195,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -210,7 +210,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>-4</accidental>
+            <concertKey>-4</concertKey>
             </KeySig>
           <Rest>
             <durationType>measure</durationType>
@@ -221,7 +221,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <Rest>
             <durationType>measure</durationType>
@@ -232,7 +232,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>-1</accidental>
+            <concertKey>-1</concertKey>
             </KeySig>
           <Rest>
             <durationType>measure</durationType>
