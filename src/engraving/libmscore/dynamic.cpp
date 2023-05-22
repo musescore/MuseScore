@@ -48,16 +48,8 @@ namespace mu::engraving {
 //    see: http://en.wikipedia.org/wiki/File:Dynamic's_Note_Velocity.svg
 //-----------------------------------------------------------------------------
 
-struct Dyn {
-    DynamicType type;
-    int velocity;        ///< associated midi velocity (0-127, -1 = none)
-    int changeInVelocity;
-    bool accent;         ///< if true add velocity to current chord velocity
-    const char* text;    // utf8 text of dynamic
-};
-
 // variant with ligatures, works for both emmentaler and bravura:
-static Dyn dynList[] = {
+const std::vector<Dyn> Dynamic::dynList = {
     // dynamic:
     { DynamicType::OTHER,  -1, 0,   true, "" },
     { DynamicType::PPPPPP,  1, 0,   false,
@@ -399,7 +391,7 @@ void Dynamic::manageBarlineCollisions()
 void Dynamic::setDynamicType(const String& tag)
 {
     std::string utf8Tag = tag.toStdString();
-    int n = sizeof(dynList) / sizeof(*dynList);
+    size_t n = dynList.size();
     for (int i = 0; i < n; ++i) {
         if (TConv::toXml(DynamicType(i)).ascii() == utf8Tag || dynList[i].text == utf8Tag) {
             setDynamicType(DynamicType(i));
