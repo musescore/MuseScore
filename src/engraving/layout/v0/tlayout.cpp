@@ -91,6 +91,7 @@
 #include "../libmscore/measurenumberbase.h"
 #include "../libmscore/measurerepeat.h"
 #include "../libmscore/mmrest.h"
+#include "../libmscore/mmrestrange.h"
 
 #include "../libmscore/note.h"
 #include "../libmscore/notedot.h"
@@ -167,7 +168,7 @@ using LayoutTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Ar
                                    Jump,
                                    KeySig,
                                    LayoutBreak, LetRing, LetRingSegment, LedgerLine, Lyrics, LyricsLineSegment,
-                                   Marker, MeasureNumber, MeasureRepeat, MMRest,
+                                   Marker, MeasureNumber, MeasureRepeat, MMRest, MMRestRange,
                                    Note, NoteDot, NoteHead,
                                    Ornament,
                                    Ottava, OttavaSegment,
@@ -196,7 +197,11 @@ public:
 
 void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
 {
-    LayoutVisitor::visit(LayoutVisitor::ShouldBeFound, LayoutTypes {}, item, ctx);
+    bool found = LayoutVisitor::visit(LayoutTypes {}, item, ctx);
+    if (!found) {
+        LOGE() << "not found in lyaout types item: " << item->typeName();
+        DO_ASSERT(found);
+    }
 }
 
 void TLayout::layout(Accidental* item, LayoutContext& ctx)
@@ -3501,6 +3506,11 @@ void TLayout::layout(MMRest* item, LayoutContext& ctx)
     if (item->m_numberVisible) {
         item->addbbox(item->numberRect());
     }
+}
+
+void TLayout::layout(MMRestRange* item, LayoutContext& ctx)
+{
+    layoutMeasureNumberBase(item, ctx);
 }
 
 void TLayout::layout(Note* item, LayoutContext&)

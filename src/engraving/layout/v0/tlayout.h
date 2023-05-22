@@ -98,6 +98,7 @@ class MeasureNumber;
 class MeasureNumberBase;
 class MeasureRepeat;
 class MMRest;
+class MMRestRange;
 
 class Note;
 class NoteDot;
@@ -247,6 +248,7 @@ public:
     static void layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext& ctx); // base class
     static void layout(MeasureRepeat* item, LayoutContext& ctx);
     static void layout(MMRest* item, LayoutContext& ctx);
+    static void layout(MMRestRange* item, LayoutContext& ctx);
 
     static void layout(Note* item, LayoutContext& ctx);
     static void layout2(Note* item, LayoutContext& ctx);
