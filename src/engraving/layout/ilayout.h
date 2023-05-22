@@ -22,15 +22,23 @@
 #ifndef MU_ENGRAVING_ILAYOUT_H
 #define MU_ENGRAVING_ILAYOUT_H
 
+#include "modularity/imoduleinterface.h"
+
 #include "layoutoptions.h"
 
+namespace mu::engraving {
+class Score;
+}
+
 namespace mu::engraving::layout {
-class ILayout
+class ILayout : MODULE_INTERNAL_INTERFACE
 {
+    INTERFACE_ID(IEngravingLayout)
+
 public:
     virtual ~ILayout() = default;
 
-    virtual void layoutRange(const LayoutOptions& options, const Fraction&, const Fraction&) = 0;
+    virtual void layoutRange(Score* score, const LayoutOptions& options, const Fraction&, const Fraction&) = 0;
 };
 }
 

@@ -34,20 +34,18 @@ namespace mu::engraving::layout::v0  {
 class Layout : public ILayout
 {
 public:
-    Layout(Score* score);
+    Layout();
 
-    void layoutRange(const LayoutOptions& options, const Fraction& st, const Fraction& et) override;
+    void layoutRange(Score* score, const LayoutOptions& options, const Fraction& st, const Fraction& et) override;
 
 private:
-    void doLayoutRange(const LayoutOptions& options, const Fraction&, const Fraction&);
+    void doLayoutRange(Score* score, const LayoutOptions& options, const Fraction&, const Fraction&);
     void layoutLinear(const LayoutOptions& options, LayoutContext& ctx);
-    void layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& lc);
-    void resetSystems(bool layoutAll, const LayoutOptions& options, LayoutContext& lc);
+    void layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& ctx);
+    void resetSystems(bool layoutAll, const LayoutOptions& options, LayoutContext& ctx);
     void collectLinearSystem(const LayoutOptions& options, LayoutContext& ctx);
 
     void doLayout(const LayoutOptions& options, LayoutContext& lc);
-
-    Score* m_score = nullptr;
 };
 }
 
