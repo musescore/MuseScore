@@ -102,7 +102,7 @@ The Wall</text>
       <Measure>
         <voice>
           <KeySig>
-            <accidental>1</accidental>
+            <concertKey>1</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
