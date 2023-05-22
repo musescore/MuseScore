@@ -22,9 +22,14 @@
 #ifndef MU_SHORTCUTS_SHORTCUTSMODULE_H
 #define MU_SHORTCUTS_SHORTCUTSMODULE_H
 
+#include <memory>
 #include "modularity/imodulesetup.h"
 
 namespace mu::shortcuts {
+class ShortcutsController;
+class ShortcutsRegister;
+class ShortcutsConfiguration;
+class MidiRemote;
 class ShortcutsModule : public modularity::IModuleSetup
 {
 public:
@@ -34,6 +39,13 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+
+    std::shared_ptr<ShortcutsController> m_shortcutsController;
+    std::shared_ptr<ShortcutsRegister> m_shortcutsRegister;
+    std::shared_ptr<ShortcutsConfiguration> m_configuration;
+    std::shared_ptr<MidiRemote> m_midiRemote;
 };
 }
 

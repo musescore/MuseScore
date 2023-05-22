@@ -22,11 +22,15 @@
 #ifndef MU_FRAMEWORK_GLOBALMODULE_H
 #define MU_FRAMEWORK_GLOBALMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 #include "modularity/ioc.h"
 #include "io/ifilesystem.h"
 
 namespace mu::framework {
+class Invoker;
+class GlobalConfiguration;
 class GlobalModule : public modularity::IModuleSetup
 {
     INJECT(io::IFileSystem, fileSystem)
@@ -39,6 +43,11 @@ public:
     void onDeinit() override;
 
     static void invokeQueuedCalls();
+
+private:
+    std::shared_ptr<GlobalConfiguration> m_configuration;
+
+    static std::shared_ptr<Invoker> s_asyncInvoker;
 };
 }
 

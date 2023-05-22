@@ -33,9 +33,6 @@
 using namespace mu::cloud;
 using namespace mu::modularity;
 
-static std::shared_ptr<CloudConfiguration> s_cloudConfiguration = std::make_shared<CloudConfiguration>();
-static std::shared_ptr<CloudService> s_cloudService = std::make_shared<CloudService>();
-
 static void cloud_init_qrc()
 {
     Q_INIT_RESOURCE(cloud);
@@ -48,9 +45,12 @@ std::string CloudModule::moduleName() const
 
 void CloudModule::registerExports()
 {
-    ioc()->registerExport<ICloudConfiguration>(moduleName(), s_cloudConfiguration);
-    ioc()->registerExport<IAuthorizationService>(moduleName(), s_cloudService);
-    ioc()->registerExport<ICloudProjectsService>(moduleName(), s_cloudService);
+    m_cloudConfiguration = std::make_shared<CloudConfiguration>();
+    m_cloudService = std::make_shared<CloudService>();
+
+    ioc()->registerExport<ICloudConfiguration>(moduleName(), m_cloudConfiguration);
+    ioc()->registerExport<IAuthorizationService>(moduleName(), m_cloudService);
+    ioc()->registerExport<ICloudProjectsService>(moduleName(), m_cloudService);
 }
 
 void CloudModule::resolveImports()
@@ -79,6 +79,6 @@ void CloudModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
-    s_cloudConfiguration->init();
-    s_cloudService->init();
+    m_cloudConfiguration->init();
+    m_cloudService->init();
 }

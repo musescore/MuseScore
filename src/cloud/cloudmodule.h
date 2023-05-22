@@ -22,9 +22,12 @@
 #ifndef MU_CLOUD_CLOUDMODULE_H
 #define MU_CLOUD_CLOUDMODULE_H
 
+#include <memory>
 #include "modularity/imodulesetup.h"
 
 namespace mu::cloud {
+class CloudConfiguration;
+class CloudService;
 class CloudModule : public modularity::IModuleSetup
 {
 public:
@@ -34,6 +37,10 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<CloudConfiguration> m_cloudConfiguration;
+    std::shared_ptr<CloudService> m_cloudService;
 };
 }
 

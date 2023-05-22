@@ -35,8 +35,6 @@
 using namespace mu::mi;
 using namespace mu::modularity;
 
-static std::shared_ptr<MultiInstancesProvider> s_multiInstancesProvider = std::make_shared<MultiInstancesProvider>();
-
 static void multiinstances_init_qrc()
 {
     Q_INIT_RESOURCE(multiinstances);
@@ -49,7 +47,9 @@ std::string MultiInstancesModule::moduleName() const
 
 void MultiInstancesModule::registerExports()
 {
-    ioc()->registerExport<IMultiInstancesProvider>(moduleName(), s_multiInstancesProvider);
+    m_multiInstancesProvider = std::make_shared<MultiInstancesProvider>();
+
+    ioc()->registerExport<IMultiInstancesProvider>(moduleName(), m_multiInstancesProvider);
 }
 
 void MultiInstancesModule::resolveImports()
@@ -81,5 +81,5 @@ void MultiInstancesModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
-    s_multiInstancesProvider->init();
+    m_multiInstancesProvider->init();
 }

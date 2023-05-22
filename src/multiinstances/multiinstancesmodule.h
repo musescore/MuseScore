@@ -22,9 +22,12 @@
 #ifndef MU_MI_MULTIINSTANCESMODULE_H
 #define MU_MI_MULTIINSTANCESMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::mi {
+class MultiInstancesProvider;
 class MultiInstancesModule : public modularity::IModuleSetup
 {
 public:
@@ -35,6 +38,10 @@ public:
     void registerUiTypes() override;
     void registerResources() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+
+    std::shared_ptr<MultiInstancesProvider> m_multiInstancesProvider;
 };
 }
 

@@ -27,9 +27,6 @@
 
 using namespace mu::context;
 
-static std::shared_ptr<GlobalContext> s_globalContext = std::make_shared<GlobalContext>();
-static std::shared_ptr<UiContextResolver> s_uicontextResolver = std::make_shared<UiContextResolver>();
-
 std::string ContextModule::moduleName() const
 {
     return "context";
@@ -37,8 +34,11 @@ std::string ContextModule::moduleName() const
 
 void ContextModule::registerExports()
 {
-    modularity::ioc()->registerExport<IGlobalContext>(moduleName(), s_globalContext);
-    modularity::ioc()->registerExport<IUiContextResolver>(moduleName(), s_uicontextResolver);
+    m_globalContext = std::make_shared<GlobalContext>();
+    m_uicontextResolver = std::make_shared<UiContextResolver>();
+
+    modularity::ioc()->registerExport<IGlobalContext>(moduleName(), m_globalContext);
+    modularity::ioc()->registerExport<IUiContextResolver>(moduleName(), m_uicontextResolver);
 }
 
 void ContextModule::onInit(const framework::IApplication::RunMode& mode)
@@ -47,10 +47,10 @@ void ContextModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
-    s_uicontextResolver->init();
+    m_uicontextResolver->init();
 }
 
 void ContextModule::onDeinit()
 {
-    s_globalContext->setCurrentProject(nullptr);
+    m_globalContext->setCurrentProject(nullptr);
 }

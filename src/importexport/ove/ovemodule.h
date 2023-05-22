@@ -22,9 +22,12 @@
 #ifndef MU_IMPORTEXPORT_OVEMODULE_H
 #define MU_IMPORTEXPORT_OVEMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::ove {
+class OveConfiguration;
 class OveModule : public modularity::IModuleSetup
 {
 public:
@@ -33,6 +36,10 @@ public:
     void registerExports() override;
     void resolveImports() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+
+    std::shared_ptr<OveConfiguration> m_configuration;
 };
 }
 

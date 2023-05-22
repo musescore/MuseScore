@@ -22,9 +22,15 @@
 #ifndef MU_PLUGINS_PLUGINSSMODULE_H
 #define MU_PLUGINS_PLUGINSSMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::plugins {
+class PluginsConfiguration;
+class PluginsService;
+class PluginsUiActions;
+class PluginsActionController;
 class PluginsModule : public modularity::IModuleSetup
 {
 public:
@@ -36,6 +42,12 @@ public:
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
     void onDelayedInit() override;
+
+private:
+    std::shared_ptr<PluginsConfiguration> m_configuration;
+    std::shared_ptr<PluginsService> m_pluginsService;
+    std::shared_ptr<PluginsUiActions> m_pluginsUiActions;
+    std::shared_ptr<PluginsActionController> m_pluginActionController;
 };
 }
 

@@ -39,8 +39,6 @@ static void mpe_init_qrc()
     Q_INIT_RESOURCE(mpe);
 }
 
-static std::shared_ptr<ArticulationProfilesRepository> s_profilesRepository = std::make_shared<ArticulationProfilesRepository>();
-
 std::string MpeModule::moduleName() const
 {
     return "mpe";
@@ -48,7 +46,9 @@ std::string MpeModule::moduleName() const
 
 void MpeModule::registerExports()
 {
-    ioc()->registerExport<IArticulationProfilesRepository>(moduleName(), s_profilesRepository);
+    m_profilesRepository = std::make_shared<ArticulationProfilesRepository>();
+
+    ioc()->registerExport<IArticulationProfilesRepository>(moduleName(), m_profilesRepository);
 }
 
 void MpeModule::registerUiTypes()

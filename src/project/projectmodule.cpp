@@ -65,11 +65,6 @@
 using namespace mu::project;
 using namespace mu::modularity;
 
-static std::shared_ptr<ProjectConfiguration> s_configuration = std::make_shared<ProjectConfiguration>();
-static std::shared_ptr<ProjectActionsController> s_actionsController = std::make_shared<ProjectActionsController>();
-static std::shared_ptr<RecentProjectsProvider> s_recentProjectsProvider = std::make_shared<RecentProjectsProvider>();
-static std::shared_ptr<ProjectAutoSaver> s_projectAutoSaver = std::make_shared<ProjectAutoSaver>();
-
 static void project_init_qrc()
 {
     Q_INIT_RESOURCE(project);
@@ -82,16 +77,21 @@ std::string ProjectModule::moduleName() const
 
 void ProjectModule::registerExports()
 {
-    ioc()->registerExport<IProjectConfiguration>(moduleName(), s_configuration);
+    m_configuration = std::make_shared<ProjectConfiguration>();
+    m_actionsController = std::make_shared<ProjectActionsController>();
+    m_recentProjectsProvider = std::make_shared<RecentProjectsProvider>();
+    m_projectAutoSaver = std::make_shared<ProjectAutoSaver>();
+
+    ioc()->registerExport<IProjectConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IProjectCreator>(moduleName(), new ProjectCreator());
-    ioc()->registerExport<IProjectFilesController>(moduleName(), s_actionsController);
+    ioc()->registerExport<IProjectFilesController>(moduleName(), m_actionsController);
     ioc()->registerExport<ISaveProjectScenario>(moduleName(), new SaveProjectScenario());
     ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario());
-    ioc()->registerExport<IRecentProjectsProvider>(moduleName(), s_recentProjectsProvider);
+    ioc()->registerExport<IRecentProjectsProvider>(moduleName(), m_recentProjectsProvider);
     ioc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
     ioc()->registerExport<IProjectMigrator>(moduleName(), new ProjectMigrator());
-    ioc()->registerExport<IProjectAutoSaver>(moduleName(), s_projectAutoSaver);
+    ioc()->registerExport<IProjectAutoSaver>(moduleName(), m_projectAutoSaver);
 
     //! TODO Should be replace INotationReaders/WritersRegister with IProjectRWRegister
     ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());
@@ -111,7 +111,7 @@ void ProjectModule::resolveImports()
 {
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(std::make_shared<ProjectUiActions>(s_actionsController));
+        ar->reg(std::make_shared<ProjectUiActions>(m_actionsController));
     }
 
     auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
@@ -166,8 +166,8 @@ void ProjectModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
-    s_configuration->init();
-    s_actionsController->init();
-    s_recentProjectsProvider->init();
-    s_projectAutoSaver->init();
+    m_configuration->init();
+    m_actionsController->init();
+    m_recentProjectsProvider->init();
+    m_projectAutoSaver->init();
 }
