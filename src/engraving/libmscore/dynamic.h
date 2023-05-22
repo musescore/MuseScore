@@ -29,6 +29,14 @@ namespace mu::engraving {
 class Measure;
 class Segment;
 
+struct Dyn {
+    DynamicType type;
+    int velocity;        ///< associated midi velocity (0-127, -1 = none)
+    int changeInVelocity;
+    bool accent;         ///< if true add velocity to current chord velocity
+    const char* text;    // utf8 text of dynamic
+};
+
 //-----------------------------------------------------------------------------
 //   @@ Dynamic
 ///    dynamics marker; determines midi velocity
@@ -103,6 +111,8 @@ public:
     bool acceptDrop(EditData& ed) const override;
     EngravingItem* drop(EditData& ed) override;
 
+    static const std::vector<Dyn>& dynamicList() { return dynList; }
+
 private:
 
     friend class layout::v0::TLayout;
@@ -122,6 +132,8 @@ private:
     DynamicSpeed _velChangeSpeed         { DynamicSpeed::NORMAL };
 
     mu::RectF drag(EditData&) override;
+
+    static const std::vector<Dyn> dynList;
 };
 } // namespace mu::engraving
 

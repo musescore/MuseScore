@@ -3368,8 +3368,6 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         ms->updateChannel();
     }
 
-    CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(score);
-
     if (score->isMaster()) {
         CompatUtils::assignInitialPartToExcerpts(score->masterScore()->excerpts());
     }

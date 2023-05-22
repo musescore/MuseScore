@@ -24,6 +24,8 @@
 
 #include "libmscore/articulation.h"
 #include "libmscore/chord.h"
+#include "libmscore/dynamic.h"
+#include "libmscore/expression.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/score.h"
 #include "libmscore/excerpt.h"
@@ -32,6 +34,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/factory.h"
 #include "libmscore/ornament.h"
+#include "libmscore/stafftext.h"
 #include "libmscore/stafftextbase.h"
 #include "libmscore/playtechannotation.h"
 
@@ -53,12 +56,17 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
     }
 
     // TODO: collect all compatibility conversions here
-    if (masterScore->mscVersion() <= 400) {
+    if (masterScore->mscVersion() < 400) {
+        replaceStaffTextWithPlayTechniqueAnnotation(masterScore);
+    }
+    if (masterScore->mscVersion() < 410) {
+        reconstructTypeOfCustomDynamics(masterScore);
+        replaceOldWithNewExpressions(masterScore);
         replaceOldWithNewOrnaments(masterScore);
     }
 }
 
-void CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(Score* score)
+void CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score)
 {
     TRACEFUNC;
 
@@ -79,6 +87,8 @@ void CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(Score* score)
         { u"pizzicato", PlayingTechniqueType::Pizzicato },
         { u"tremolo", PlayingTechniqueType::Tremolo },
     };
+
+    std::map<StaffTextBase*, PlayingTechniqueType> oldPlayTechniquesAndNewTypes;
 
     for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
         for (Segment* segment = measure->first(); segment; segment = segment->next()) {
@@ -105,16 +115,38 @@ void CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(Score* score)
                     continue;
                 }
 
-                PlayTechAnnotation* playTechAnnotation = Factory::createPlayTechAnnotation(segment, type, text->textStyleType());
-                playTechAnnotation->setXmlText(text->xmlText());
-                playTechAnnotation->setTrack(annotation->track());
-
-                segment->removeAnnotation(annotation);
-                segment->add(playTechAnnotation);
-
-                delete annotation;
+                oldPlayTechniquesAndNewTypes.emplace(text, type);
+                LinkedObjects* links = text->links();
+                if (!links || links->empty()) {
+                    continue;
+                }
+                for (EngravingObject* linked : *links) {
+                    if (linked != text) {
+                        oldPlayTechniquesAndNewTypes.emplace(toStaffTextBase(linked), type);
+                    }
+                }
             }
         }
+    }
+
+    for (auto& pair : oldPlayTechniquesAndNewTypes) {
+        StaffTextBase* oldPlayTech = pair.first;
+        PlayingTechniqueType type = pair.second;
+        Segment* parentSegment = oldPlayTech->segment();
+
+        PlayTechAnnotation* newPlayTech = Factory::createPlayTechAnnotation(parentSegment, type, oldPlayTech->textStyleType());
+        newPlayTech->setXmlText(oldPlayTech->xmlText());
+        newPlayTech->setTrack(oldPlayTech->track());
+
+        LinkedObjects* links = oldPlayTech->links();
+        newPlayTech->setLinks(links);
+        if (links) {
+            links->push_back(newPlayTech);
+        }
+        parentSegment->add(newPlayTech);
+        parentSegment->removeAnnotation(oldPlayTech);
+
+        delete oldPlayTech;
     }
 }
 
@@ -182,7 +214,7 @@ void CompatUtils::replaceOldWithNewOrnaments(MasterScore* score)
         SymId::ornamentPinceCouperin
     };
 
-    std::vector<Articulation*> oldOrnaments;     // ornaments used to be articulations
+    std::set<Articulation*> oldOrnaments;     // ornaments used to be articulations
 
     for (Measure* meas = score->firstMeasure(); meas; meas = meas->nextMeasure()) {
         for (Segment& seg : meas->segments()) {
@@ -198,14 +230,14 @@ void CompatUtils::replaceOldWithNewOrnaments(MasterScore* score)
                         continue;
                     }
                     if (ornamentIds.find(articulation->symId()) != ornamentIds.end()) {
-                        oldOrnaments.push_back(articulation);
+                        oldOrnaments.insert(articulation);
                         LinkedObjects* links = articulation->links();
                         if (!links || links->empty()) {
                             continue;
                         }
                         for (EngravingObject* linked : *links) {
                             if (linked != articulation) {
-                                oldOrnaments.push_back(toArticulation(linked));
+                                oldOrnaments.insert(toArticulation(linked));
                             }
                         }
                     }
@@ -234,4 +266,104 @@ void CompatUtils::replaceOldWithNewOrnaments(MasterScore* score)
         parentChord->remove(oldOrnament);
         delete oldOrnament;
     }
+}
+
+void CompatUtils::replaceOldWithNewExpressions(MasterScore* score)
+{
+    std::set<StaffText*> oldExpressions; // Expressions used to be staff text
+
+    for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (Segment& seg : measure->segments()) {
+            for (EngravingItem* item : seg.annotations()) {
+                if (item && item->isStaffText() && toStaffText(item)->textStyleType() == TextStyleType::EXPRESSION) {
+                    oldExpressions.insert(toStaffText(item));
+                    LinkedObjects* links = item->links();
+                    if (!links || links->empty()) {
+                        continue;
+                    }
+                    for (EngravingObject* linkedItem : *links) {
+                        if (linkedItem != item) {
+                            oldExpressions.insert(toStaffText(linkedItem));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for (StaffText* oldExpression : oldExpressions) {
+        Segment* parentSegment = toSegment(oldExpression->parentItem(true));
+
+        Expression* newExpression = Factory::createExpression(score->dummy()->segment());
+        newExpression->setParent(parentSegment);
+        newExpression->setTrack(oldExpression->track());
+        newExpression->setXmlText(oldExpression->xmlText());
+        newExpression->mapPropertiesFromOldExpressions(oldExpression);
+
+        LinkedObjects* links = oldExpression->links();
+        newExpression->setLinks(links);
+        if (links) {
+            links->push_back(newExpression);
+        }
+
+        parentSegment->add(newExpression);
+        parentSegment->removeAnnotation(oldExpression);
+        delete oldExpression;
+    }
+}
+
+void CompatUtils::reconstructTypeOfCustomDynamics(MasterScore* score)
+{
+    // Before version 4.1, Dynamics containing custom text were saved as type "other"
+    // We check the string to see if we can reconstruct their true type.
+    std::set<Dynamic*> otherTypeDynamic;
+
+    for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (Segment& seg : measure->segments()) {
+            for (EngravingItem* item : seg.annotations()) {
+                if (item && item->isDynamic() && toDynamic(item)->dynamicType() == DynamicType::OTHER) {
+                    otherTypeDynamic.insert(toDynamic(item));
+                    LinkedObjects* links = item->links();
+                    if (!links || links->empty()) {
+                        continue;
+                    }
+                    for (EngravingObject* linkedItem : *links) {
+                        if (linkedItem != item) {
+                            otherTypeDynamic.insert(toDynamic(linkedItem));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for (Dynamic* dynamic : otherTypeDynamic) {
+        DynamicType dynType = reconstructDynamicTypeFromString(dynamic);
+        dynamic->setDynamicType(dynType);
+    }
+}
+
+DynamicType CompatUtils::reconstructDynamicTypeFromString(Dynamic* dynamic)
+{
+    static std::vector<Dyn> sortedDynList; // copy of dynList sorted by string length
+
+    if (sortedDynList.empty()) {
+        sortedDynList = Dynamic::dynamicList();
+        std::sort(sortedDynList.begin(), sortedDynList.end(), [](const Dyn& a, const Dyn& b) {
+            String stringA = String::fromUtf8(a.text);
+            String stringB = String::fromUtf8(b.text);
+            return stringA.size() > stringB.size();
+        });
+    }
+
+    for (Dyn dyn : sortedDynList) {
+        String dynText = String::fromUtf8(dyn.text);
+        if (dynText.size() == 0) {
+            return DynamicType::OTHER;
+        }
+        if (dynamic->xmlText().contains(dynText)) {
+            return dyn.type;
+        }
+    }
+    return DynamicType::OTHER;
 }
