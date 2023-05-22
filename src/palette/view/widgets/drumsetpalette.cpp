@@ -196,7 +196,7 @@ void DrumsetPalette::previewSound(const Chord* chord, bool newChordSelected, con
 
     Chord* preview = chord->clone();
     preview->setParent(inputState.segment);
-    preview->setStaffIdx(engraving::track2staff(inputState.currentTrack));
+    preview->setTrack(inputState.currentTrack);
 
     playback()->playElements({ preview });
 
