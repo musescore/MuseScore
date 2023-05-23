@@ -22,15 +22,13 @@
 
 #include "braillewriter.h"
 
-#include "exportbraille.h"
+#include "braille.h"
 
 #include "log.h"
 
-using namespace mu;
-using namespace mu::iex::braille;
-using namespace mu::notation;
 using namespace mu::project;
 
+namespace mu::engraving {
 std::vector<INotationWriter::UnitType> BrailleWriter::supportedUnitTypes() const
 {
     return { UnitType::PER_PART };
@@ -53,12 +51,12 @@ mu::Ret BrailleWriter::write(notation::INotationPtr notation, QIODevice& destina
         return make_ret(Ret::Code::UnknownError);
     }
 
-    ExportBraille exporter(score);
-    return exporter.write(destinationDevice);
+    return Braille(score).write(destinationDevice);
 }
 
 mu::Ret BrailleWriter::writeList(const notation::INotationPtrList&, QIODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);
+}
 }

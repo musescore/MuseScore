@@ -92,6 +92,10 @@
 #include "autobot/autobotmodule.h"
 #endif
 
+#ifdef MUE_BUILD_BRAILLE_MODULE
+#include "braille/braillemodule.h"
+#endif
+
 #ifdef MUE_BUILD_CLOUD_MODULE
 #include "cloud/cloudmodule.h"
 #else
@@ -111,7 +115,6 @@
 #ifdef MUE_BUILD_IMPORTEXPORT_MODULE
 #include "importexport/musicxml/musicxmlmodule.h"
 #include "importexport/bb/bbmodule.h"
-#include "importexport/braille/braillemodule.h"
 #include "importexport/bww/bwwmodule.h"
 #include "importexport/capella/capellamodule.h"
 #include "importexport/guitarpro/guitarpromodule.h"
@@ -252,6 +255,10 @@ int main(int argc, char** argv)
     app.addModule(new mu::autobot::AutobotModule());
 #endif
 
+#ifdef MUE_BUILD_BRAILLE_MODULE
+    app.addModule(new mu::braille::BrailleModule());
+#endif
+
     app.addModule(new mu::cloud::CloudModule());
     app.addModule(new mu::commonscene::CommonSceneModule());
     app.addModule(new mu::context::ContextModule());
@@ -264,7 +271,6 @@ int main(int argc, char** argv)
 
 #ifdef MUE_BUILD_IMPORTEXPORT_MODULE
     app.addModule(new mu::iex::bb::BBModule());
-    app.addModule(new mu::iex::braille::BrailleModule());
     app.addModule(new mu::iex::bww::BwwModule());
     app.addModule(new mu::iex::musicxml::MusicXmlModule());
     app.addModule(new mu::iex::capella::CapellaModule());

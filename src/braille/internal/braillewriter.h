@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_IMPORTEXPORT_BRAILLEWRITER_H
-#define MU_IMPORTEXPORT_BRAILLEWRITER_H
+#ifndef MU_BRAILLE_BRAILLEWRITER_H
+#define MU_BRAILLE_BRAILLEWRITER_H
 
 #include "project/inotationwriter.h"
 
-namespace mu::iex::braille {
+namespace mu::engraving {
 class BrailleWriter : public project::INotationWriter
 {
 public:
@@ -37,4 +37,4 @@ public:
 };
 }
 
-#endif // MU_IMPORTEXPORT_BRAILLEWRITER_H
+#endif // MU_BRAILLE_BRAILLEWRITER_H

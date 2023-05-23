@@ -20,7 +20,7 @@
 
 if (MUE_BUILD_IMPORTEXPORT_MODULE)
     add_subdirectory(bb)
-    add_subdirectory(braille)
+
     add_subdirectory(bww)
     add_subdirectory(capella)
     add_subdirectory(midi)

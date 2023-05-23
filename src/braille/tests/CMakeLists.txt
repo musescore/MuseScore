@@ -18,25 +18,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE iex_braille)
+set(MODULE_TEST braille_tests)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/braillemodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/braillemodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/braillewriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/braillewriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/exportbraille.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/exportbraille.h
-    )
+set(MODULE_TEST_SRC
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.cpp
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.h
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorecomp.cpp
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorecomp.h
 
-set(MODULE_LINK
+    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/braille_tests.cpp
+)
+
+set(MODULE_TEST_LINK
+    braille
     engraving
-    notation
-    project
+    fonts
+    accessibility
     )
 
-include(SetupModule)
+set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
-if (MUE_BUILD_UNIT_TESTS)
-    add_subdirectory(tests)
-endif()
+include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
