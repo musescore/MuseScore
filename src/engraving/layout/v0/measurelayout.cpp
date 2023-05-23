@@ -471,6 +471,9 @@ static bool validMMRestMeasure(const LayoutContext& ctx, Measure* m)
     int n = 0;
     for (Segment* s = m->first(); s; s = s->next()) {
         for (EngravingItem* e : s->annotations()) {
+            if (!e->staff()->show()) {
+                continue;
+            }
             if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isTripletFeel()
                   || e->isPlayTechAnnotation() || e->isInstrumentChange())) {
                 return false;
