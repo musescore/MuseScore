@@ -84,10 +84,10 @@ public:
     void setEffect(MidiInstrumentEffect effect) { _effect = effect; }
     MidiInstrumentEffect effect() const { return _effect; }
 
-    int getOriginatingStaff() const { return _origin; }
-    void setOriginatingStaff(int i) { _origin = i; }
-    void setDiscard(int d) { _discard = d; }
-    int discard() const { return _discard; }
+    size_t getOriginatingStaff() const { return _origin; }
+    void setOriginatingStaff(size_t i) { _origin = i; }
+    void setDiscard(size_t d) { _discard = d; }
+    size_t discard() const { return _discard; }
     bool isMuted() const;
     void setPortamento(bool p) { _portamento = p; }
     bool portamento() const
@@ -102,8 +102,8 @@ private:
 
     const Note* _note = nullptr;
     const Harmony* _harmony = nullptr;
-    int _origin = -1;
-    int _discard = 0;
+    size_t _origin = size_t(-1);
+    size_t _discard = 0;
     bool _portamento = false;
     MidiInstrumentEffect _effect = MidiInstrumentEffect::NONE;
 };
