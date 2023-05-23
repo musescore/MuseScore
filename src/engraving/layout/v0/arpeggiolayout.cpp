@@ -25,6 +25,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/segment.h"
+#include "libmscore/score.h"
 
 #include "tlayout.h"
 
@@ -61,4 +62,22 @@ void ArpeggioLayout::computeHeight(Arpeggio* item, bool includeCrossStaffHeight)
 
     double h = bottomNote->pagePos().y() + bottomNote->headHeight() * .5 - y;
     item->setHeight(h);
+}
+
+void ArpeggioLayout::layoutOnEditDrag(Arpeggio* item, LayoutContext& ctx)
+{
+    TLayout::layout(item, ctx);
+}
+
+void ArpeggioLayout::layoutOnEdit(Arpeggio* item, LayoutContext& ctx)
+{
+    TLayout::layout(item, ctx);
+
+    Chord* c = item->chord();
+    item->setPosX(-(item->width() + item->spatium() * .5));
+
+    layoutArpeggio2(c->arpeggio(), ctx);
+    Fraction _tick = item->tick();
+
+    ctx.score()->setLayout(_tick, _tick, item->staffIdx(), item->staffIdx() + item->span(), item);
 }

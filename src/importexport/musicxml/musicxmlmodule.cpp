@@ -21,7 +21,6 @@
  */
 #include "musicxmlmodule.h"
 
-#include "log.h"
 #include "modularity/ioc.h"
 
 #include "project/inotationreadersregister.h"
@@ -32,6 +31,8 @@
 #include "internal/mxlwriter.h"
 
 #include "internal/musicxmlconfiguration.h"
+
+#include "log.h"
 
 using namespace mu::iex::musicxml;
 using namespace mu::project;

@@ -23,6 +23,8 @@
 
 #include "containers.h"
 
+#include "libmscore/arpeggio.h"
+
 #include "libmscore/barline.h"
 #include "libmscore/beam.h"
 #include "libmscore/box.h"
@@ -535,4 +537,19 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
     ctx.page->setWidth(lm + system->width() + rm);
     ctx.page->setHeight(tm + system->height() + bm);
     ctx.page->invalidateBspTree();
+}
+
+// ===============================================================
+// Layout Elements on Edit
+// ===============================================================
+void Layout::layoutOnEditDrag(Arpeggio* item)
+{
+    LayoutContext ctx(item->score());
+    ArpeggioLayout::layoutOnEditDrag(item, ctx);
+}
+
+void Layout::layoutOnEdit(Arpeggio* item)
+{
+    LayoutContext ctx(item->score());
+    ArpeggioLayout::layoutOnEdit(item, ctx);
 }
