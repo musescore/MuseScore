@@ -3048,6 +3048,14 @@ void MStyle::load(XmlReader& e)
                   }
             else if (tag == "lyricsDashMaxLegth") // pre-3.6 typo
                   set(Sid::lyricsDashMaxLength, e.readDouble());
+            else if (tag == "dontHideStavesInFirstSystem") // pre-4.0 typo
+                  set(Sid::dontHideStavesInFirstSystem, e.readBool());
+            else if (tag == "useWideBeams") // beamDistance maps to useWideBeams in 4.0
+                  set(Sid::beamDistance, e.readDouble() > 0.75);
+            else if (tag == "pedalLineStyle") // pre-4.0 typo
+                  set(Sid::pedalLineStyle, e.readInt());
+            else if (tag == "chordlineThickness") // Ignoring pre-4.1 value as it was wrong (it wasn't user-editable anyway)
+                  e.skipCurrentElement();
             else if (!readProperties(e))
                   e.unknown();
             }
