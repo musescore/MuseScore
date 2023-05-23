@@ -43,6 +43,8 @@ public:
 
     void layoutOnEditDrag(Box* item) override;
     void layoutOnEndEdit(Box* item) override;
+
+    void layoutOnEditDrag(Bracket* item) override;
 };
 }
 
