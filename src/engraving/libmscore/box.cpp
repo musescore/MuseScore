@@ -24,17 +24,12 @@
 
 #include <cmath>
 
-#include "layout/v0/tlayout.h"
-
 #include "actionicon.h"
 #include "factory.h"
-#include "fret.h"
-#include "image.h"
 #include "layoutbreak.h"
 #include "mscore.h"
 #include "score.h"
 #include "stafftext.h"
-#include "symbol.h"
 #include "system.h"
 #include "text.h"
 #include "textframe.h"
@@ -53,10 +48,6 @@ static const ElementStyle boxStyle {
 
 static const ElementStyle hBoxStyle {
 };
-
-//---------------------------------------------------------
-//   Box
-//---------------------------------------------------------
 
 Box::Box(const ElementType& type, System* parent)
     : MeasureBase(type, parent)
@@ -130,10 +121,6 @@ void Box::startEditDrag(EditData& ed)
     }
 }
 
-//---------------------------------------------------------
-//   editDrag
-//---------------------------------------------------------
-
 void Box::editDrag(EditData& ed)
 {
     if (isVBox()) {
@@ -156,18 +143,12 @@ void Box::editDrag(EditData& ed)
         triggerLayout();
     }
 
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+    layout()->layoutOnEditDrag(this);
 }
-
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
 
 void Box::endEdit(EditData&)
 {
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+    layout()->layoutOnEndEdit(this);
 }
 
 //---------------------------------------------------------

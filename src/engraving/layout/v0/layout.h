@@ -40,6 +40,9 @@ public:
     // Layout Elements on Edit
     void layoutOnEditDrag(Arpeggio* item) override;
     void layoutOnEdit(Arpeggio* item) override;
+
+    void layoutOnEditDrag(Box* item) override;
+    void layoutOnEndEdit(Box* item) override;
 };
 }
 
