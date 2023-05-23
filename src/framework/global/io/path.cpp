@@ -213,16 +213,20 @@ bool mu::io::isAllowedFileName(const path_t& fn_)
     return true;
 }
 
-mu::io::path_t mu::io::escapeFileName(const mu::io::path_t& fn_)
+mu::io::path_t mu::io::escapeFileName(const mu::io::path_t& fn_, bool removeSpace)
 {
     //
     // special characters in filenames are a constant source
     // of trouble, this replaces some of them common in german:
     //
     String fn = fn_.toString();
-    fn = fn.simplified();
-    fn = fn.replace(' ',  '_');
     fn = fn.replace('\n', '_');
+    fn = fn.simplified();
+
+    if (removeSpace) {
+        fn = fn.replace(' ',  '_');
+    }
+
     fn = fn.replace(Char(0xe4), u"ae"); // &auml;
     fn = fn.replace(Char(0xf6), u"oe"); // &ouml;
     fn = fn.replace(Char(0xfc), u"ue"); // &uuml;

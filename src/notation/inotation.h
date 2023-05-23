@@ -62,6 +62,8 @@ public:
     virtual QString projectWorkTitle() const = 0;
     virtual QString projectWorkTitleAndPartName() const = 0;
 
+    virtual QString firstTitleText() const = 0;
+
     virtual bool isOpen() const = 0;
     virtual void setIsOpen(bool opened) = 0;
     virtual async::Notification openChanged() const = 0;

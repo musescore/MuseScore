@@ -285,6 +285,9 @@ io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr proje
             }
 
             filename = io::filename(projectPath, false);
+            if (filename == NotationProject::scoreDefaultTitle()) {
+                filename = project->masterNotation()->notation()->firstTitleText();
+            }
         } else {
             projectPath = engraving::containerPath(projectPath);
             folderPath = io::dirpath(projectPath);

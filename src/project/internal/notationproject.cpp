@@ -109,11 +109,6 @@ static void setupScoreMetaTags(mu::engraving::MasterScore* masterScore, const Pr
     }
 }
 
-static QString scoreDefaultTitle()
-{
-    return qtrc("project", "Untitled score");
-}
-
 NotationProject::~NotationProject()
 {
     m_projectAudioSettings = nullptr;
@@ -325,6 +320,11 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     m_isImported = true;
 
     return make_ret(Ret::Code::Ok);
+}
+
+QString NotationProject::scoreDefaultTitle()
+{
+    return qtrc("project", "Untitled score");
 }
 
 mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)

@@ -107,7 +107,7 @@ path_t absoluteDirpath(const path_t& path);
 bool isAbsolute(const path_t& path);
 
 bool isAllowedFileName(const path_t& fn);
-path_t escapeFileName(const path_t& fn);
+path_t escapeFileName(const path_t& fn, bool removeSpace = true);
 
 path_t toNativeSeparators(const path_t& path);
 
