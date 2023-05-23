@@ -91,7 +91,7 @@ QVariant CloudsModel::data(const QModelIndex& index, int role) const
 
 int CloudsModel::rowCount(const QModelIndex&) const
 {
-    return m_clouds.size();
+    return static_cast<int>(m_clouds.size());
 }
 
 QHash<int, QByteArray> CloudsModel::roleNames() const
@@ -195,7 +195,7 @@ int CloudsModel::indexOfFirstAuthorizedCloud() const
     for (size_t i = 0; i < m_clouds.size(); ++i) {
         const IAuthorizationServicePtr cloud = m_clouds[i];
         if (cloud->userAuthorized().val) {
-            return i;
+            return static_cast<int>(i);
         }
     }
 
