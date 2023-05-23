@@ -98,6 +98,25 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/connectorinforeader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/connectorinforeader.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/read410.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/read410.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/staffrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/staffrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/measurerw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/measurerw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/readcontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/readcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/writecontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/writecontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/tread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/tread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/twrite.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/twrite.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/connectorinfowriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/connectorinfowriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/connectorinforeader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/410/connectorinforeader.h
+
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readchordlisthook.cpp
