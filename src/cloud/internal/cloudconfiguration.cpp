@@ -21,9 +21,9 @@
  */
 #include "cloudconfiguration.h"
 
-#include "settings.h"
-
 #include <QRandomGenerator>
+
+#include "settings.h"
 
 using namespace mu::cloud;
 using namespace mu::network;
@@ -52,22 +52,6 @@ static QByteArray generateClientId()
     return QString::number(randId, 16).toLatin1();
 }
 
-static QString userAgent()
-{
-    static const QStringList systemInfo {
-        QSysInfo::kernelType(),
-        QSysInfo::kernelVersion(),
-        QSysInfo::productType(),
-        QSysInfo::productVersion(),
-        QSysInfo::currentCpuArchitecture()
-    };
-
-    return QString("MS_EDITOR/%1.%2 (%3)")
-           .arg(MUSESCORE_VERSION)
-           .arg(MUSESCORE_BUILD_NUMBER)
-           .arg(systemInfo.join(' ')).toLatin1();
-}
-
 void CloudConfiguration::init()
 {
     if (settings()->value(CLIENT_ID_KEY).isNull()) {
@@ -75,14 +59,9 @@ void CloudConfiguration::init()
     }
 }
 
-RequestHeaders CloudConfiguration::headers() const
+std::string CloudConfiguration::clientId() const
 {
-    RequestHeaders headers;
-    headers.rawHeaders["Accept"] = "application/json";
-    headers.rawHeaders["X-MS-CLIENT-ID"] = QByteArray::fromStdString(settings()->value(CLIENT_ID_KEY).toString());
-    headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
-
-    return headers;
+    return settings()->value(CLIENT_ID_KEY).toString();
 }
 
 QByteArray CloudConfiguration::uploadingLicense() const
@@ -90,72 +69,7 @@ QByteArray CloudConfiguration::uploadingLicense() const
     return "all-rights-reserved";
 }
 
-QUrl CloudConfiguration::cloudUrl() const
+mu::io::path_t CloudConfiguration::tokensFilePath(const std::string& cloudName) const
 {
-    return QUrl("https://musescore.com");
-}
-
-QUrl CloudConfiguration::authorizationUrl() const
-{
-    return QUrl("https://musescore.com/oauth/authorize");
-}
-
-QUrl CloudConfiguration::signUpUrl() const
-{
-    return QUrl("https://musescore.com/oauth/authorize-new");
-}
-
-QUrl CloudConfiguration::signInSuccessUrl() const
-{
-    return QUrl("https://musescore.com/desktop-signin-success");
-}
-
-QUrl CloudConfiguration::scoreManagerUrl() const
-{
-    return QUrl("https://musescore.com/my-scores");
-}
-
-QUrl CloudConfiguration::accessTokenUrl() const
-{
-    return apiRootUrl() + "/oauth/token";
-}
-
-QUrl CloudConfiguration::refreshApiUrl() const
-{
-    return apiRootUrl() + "/oauth/refresh";
-}
-
-QUrl CloudConfiguration::userInfoApiUrl() const
-{
-    return apiRootUrl() + "/me";
-}
-
-QUrl CloudConfiguration::logoutApiUrl() const
-{
-    return apiRootUrl() + "/oauth/logout";
-}
-
-QUrl CloudConfiguration::scoreInfoApiUrl() const
-{
-    return apiRootUrl() + "/score/info";
-}
-
-QUrl CloudConfiguration::uploadScoreApiUrl() const
-{
-    return apiRootUrl() + "/score/upload";
-}
-
-QUrl CloudConfiguration::uploadAudioApiUrl() const
-{
-    return apiRootUrl() + "/score/audio";
-}
-
-mu::io::path_t CloudConfiguration::tokensFilePath() const
-{
-    return globalConfiguration()->userAppDataPath() + "/cred.dat";
-}
-
-QString CloudConfiguration::apiRootUrl() const
-{
-    return "https://desktop.musescore.com/editor/v1";
+    return globalConfiguration()->userAppDataPath() + "/" + cloudName + "_cred.dat";
 }

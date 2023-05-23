@@ -40,6 +40,7 @@ public:
     virtual RetVal<io::path_t> askLocalPath(INotationProjectPtr project, SaveMode mode) const = 0;
     virtual RetVal<CloudProjectInfo> askCloudLocation(INotationProjectPtr project, SaveMode mode) const = 0;
     virtual RetVal<CloudProjectInfo> askPublishLocation(INotationProjectPtr project) const = 0;
+    virtual RetVal<CloudAudioInfo> askShareAudioLocation(INotationProjectPtr project) const = 0;
 
     virtual bool warnBeforeSavingToExistingPubliclyVisibleCloudProject() const = 0;
 
@@ -48,6 +49,7 @@ public:
     static constexpr int RET_CODE_CONFLICT_RESPONSE_REPLACE = 1237;
 
     virtual Ret showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool publishMode, bool alreadyAttempted) const = 0;
+    virtual Ret showAudioCloudShareError(const Ret& ret) const = 0;
 };
 }
 

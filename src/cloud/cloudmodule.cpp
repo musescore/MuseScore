@@ -26,9 +26,11 @@
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiengine.h"
 
-#include "internal/cloudservice.h"
+#include "musescorecom/musescorecomservice.h"
+#include "audiocom/audiocomservice.h"
 #include "internal/cloudconfiguration.h"
-#include "view/accountmodel.h"
+
+#include "view/cloudsmodel.h"
 
 using namespace mu::cloud;
 using namespace mu::modularity;
@@ -46,11 +48,12 @@ std::string CloudModule::moduleName() const
 void CloudModule::registerExports()
 {
     m_cloudConfiguration = std::make_shared<CloudConfiguration>();
-    m_cloudService = std::make_shared<CloudService>();
+    m_museScoreComService = std::make_shared<MuseScoreComService>();
+    m_audioComService = std::make_shared<AudioComService>();
 
     ioc()->registerExport<ICloudConfiguration>(moduleName(), m_cloudConfiguration);
-    ioc()->registerExport<IAuthorizationService>(moduleName(), m_cloudService);
-    ioc()->registerExport<ICloudProjectsService>(moduleName(), m_cloudService);
+    ioc()->registerExport<IMuseScoreComService>(moduleName(), m_museScoreComService);
+    ioc()->registerExport<IAudioComService>(moduleName(), m_audioComService);
 }
 
 void CloudModule::resolveImports()
@@ -68,7 +71,7 @@ void CloudModule::registerResources()
 
 void CloudModule::registerUiTypes()
 {
-    qmlRegisterType<AccountModel>("MuseScore.Cloud", 1, 0, "AccountModel");
+    qmlRegisterType<CloudsModel>("MuseScore.Cloud", 1, 0, "CloudsModel");
 
     modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(cloud_QML_IMPORT);
 }
@@ -80,5 +83,6 @@ void CloudModule::onInit(const framework::IApplication::RunMode& mode)
     }
 
     m_cloudConfiguration->init();
-    m_cloudService->init();
+    m_museScoreComService->init();
+    m_audioComService->init();
 }

@@ -19,27 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_CLOUD_IAUDIOCOMSERVICE_H
+#define MU_CLOUD_IAUDIOCOMSERVICE_H
 
-#include "publishtoolbarmodel.h"
+#include "modularity/imoduleinterface.h"
+#include "progress.h"
 
-using namespace mu::appshell;
-using namespace mu::uicomponents;
+#include "cloud/cloudtypes.h"
 
-PublishToolBarModel::PublishToolBarModel(QObject* parent)
-    : AbstractMenuModel(parent)
+class QIODevice;
+class QString;
+
+namespace mu::cloud {
+class IAudioComService : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IAudioComService)
+
+public:
+    virtual ~IAudioComService() = default;
+
+    virtual IAuthorizationServicePtr authorization() = 0;
+
+    virtual framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title,
+                                               Visibility visibility = Visibility::Private) = 0;
+};
 }
 
-void PublishToolBarModel::load()
-{
-    AbstractMenuModel::load();
-
-    MenuItemList items {
-        makeMenuItem("print"),
-        makeMenuItem("file-publish"),
-        makeMenuItem("file-share-audio"),
-        makeMenuItem("file-export")
-    };
-
-    setItems(items);
-}
+#endif // MU_CLOUD_IAUDIOCOMSERVICE_H

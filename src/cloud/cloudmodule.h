@@ -27,7 +27,8 @@
 
 namespace mu::cloud {
 class CloudConfiguration;
-class CloudService;
+class MuseScoreComService;
+class AudioComService;
 class CloudModule : public modularity::IModuleSetup
 {
 public:
@@ -40,7 +41,8 @@ public:
 
 private:
     std::shared_ptr<CloudConfiguration> m_cloudConfiguration;
-    std::shared_ptr<CloudService> m_cloudService;
+    std::shared_ptr<MuseScoreComService> m_museScoreComService;
+    std::shared_ptr<AudioComService> m_audioComService;
 };
 }
 

@@ -51,6 +51,8 @@ public:
     void close();
     bool isListening() const;
 
+    void setRedirectUrl(const QUrl& url);
+
 private:
     class Impl;
 

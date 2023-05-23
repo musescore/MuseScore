@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -30,11 +31,8 @@ import MuseScore.Cloud 1.0
 StyledDialogView {
     id: root
 
-    property bool isPublish: false
     property string name
-    property int visibility: CloudVisibility.Private
-    property string existingOnlineScoreUrl
-    property bool replaceExistingOnlineScore: true
+    property int visibility: CloudVisibility.Public
     property string cloudCode: ""
 
     contentWidth: contentItem.implicitWidth
@@ -84,20 +82,18 @@ StyledDialogView {
         ColumnLayout {
             id: contentColumn
             anchors.fill: parent
-            spacing: 20
+            spacing: 28
 
             StyledTextLabel {
                 id: titleLabel
-                text: root.isPublish
-                      ? qsTrc("project/save", "Publish to") + " " + (Boolean(contentItem.cloudInfo) ? contentItem.cloudInfo.cloudTitle : "")
-                      : qsTrc("project/save", "Save to cloud")
+                text: qsTrc("project/save", "Share on Audio.com")
                 font: ui.theme.largeBodyBoldFont
                 horizontalAlignment: Text.AlignLeft
             }
 
             ColumnLayout {
                 id: optionsColumn
-                spacing: 16
+                spacing: 20
 
                 NavigationPanel {
                     id: optionsNavPanel
@@ -119,6 +115,8 @@ StyledDialogView {
                     }
 
                     TextInputField {
+                        id: nameField
+
                         Layout.fillWidth: true
                         currentText: root.name
 
@@ -133,60 +131,77 @@ StyledDialogView {
                 }
 
                 ColumnLayout {
-                    spacing: 8
+                    spacing: 12
 
                     StyledTextLabel {
                         Layout.fillWidth: true
-                        //: visibility of a score on MuseScore.com: private, public or unlisted
+                        //: visibility of a score on Audio.com: public or unlisted
                         text: qsTrc("project/save", "Visibility")
                         horizontalAlignment: Text.AlignLeft
                     }
 
-                    StyledDropdown {
+                    RadioButtonGroup {
+                        id: radioButtonList
+
                         Layout.fillWidth: true
 
+                        spacing: 28
+                        orientation: ListView.Vertical
+
                         model: [
-                            { value: CloudVisibility.Public, text: qsTrc("project/save", "Public") },
-                            { value: CloudVisibility.Unlisted, text: qsTrc("project/save", "Unlisted") },
-                            { value: CloudVisibility.Private, text: qsTrc("project/save", "Private") }
+                            { valueRole: CloudVisibility.Public, text: qsTrc("project/save", "Public"), description: qsTrc("project/save", "Anyone will be able to listen to this audio") },
+                            { valueRole: CloudVisibility.Unlisted, text: qsTrc("project/save", "Unlisted"), description: qsTrc("project/save", "Only people with a link can listen to this audio")  },
                         ]
 
-                        currentIndex: indexOfValue(root.visibility)
+                        delegate: RoundedRadioButton {
+                            id: timeFractionButton
 
-                        navigation.panel: optionsNavPanel
-                        navigation.row: 2
-                        navigation.accessible.name: qsTrc("project/save", "Visibility") + ": " + currentText
+                            property bool isCurrent: radioButtonList.currentIndex === model.index
 
-                        onActivated: function(index, value) {
-                            root.visibility = value
-                        }
-                    }
-                }
+                            ButtonGroup.group: radioButtonList.radioButtonGroup
 
-                RadioButtonGroup {
-                    Layout.fillWidth: true
+                            spacing: 18
+                            leftPadding: 0
+                            implicitHeight: 40
 
-                    orientation: ListView.Vertical
-                    spacing: 8
+                            contentComponent: Column {
+                                property string accessibleName: qsTrc("project/share", "Visibility") + ": " + textLabel.text + ", " +
+                                                                qsTrc("project/share", "Description") + descriptionLabel.text
 
-                    visible: root.isPublish && Boolean(root.existingOnlineScoreUrl)
+                                spacing: 8
 
-                    model: [
-                        //: The text between `<a href=\"%1\">` and `</a>` will be a clickable link to the online score in question
-                        { text: qsTrc("project/save", "Replace the existing <a href=\"%1\">online score</a>").arg(root.existingOnlineScoreUrl), value: true },
-                        { text: qsTrc("project/save", "Publish as new online score"), value: false }
-                    ]
+                                StyledTextLabel {
+                                    id: textLabel
 
-                    delegate: RoundedRadioButton {
-                        checked: modelData.value === root.replaceExistingOnlineScore
-                        text: modelData.text
+                                    text: modelData["text"]
+                                    font: ui.theme.bodyBoldFont
+                                    horizontalAlignment: Qt.AlignLeft
+                                }
 
-                        navigation.name: modelData.text
-                        navigation.panel: optionsNavPanel
-                        navigation.row: 3 + model.index
+                                StyledTextLabel {
+                                    id: descriptionLabel
 
-                        onToggled: {
-                            root.replaceExistingOnlineScore = modelData.value
+                                    text: modelData["description"]
+                                    font: ui.theme.bodyFont
+                                    horizontalAlignment: Qt.AlignLeft
+                                }
+                            }
+
+                            checked: (root.visibility === modelData["valueRole"])
+
+                            navigation.name: modelData["valueRole"]
+                            navigation.panel: optionsNavPanel
+                            navigation.row: nameField.navigation.row + 1 + model.index
+
+                            onToggled: {
+                                root.visibility = modelData["valueRole"]
+                            }
+
+                            onCheckedChanged: {
+                                if (checked && !navigation.active) {
+                                    navigation.requestActive()
+                                }
+                            }
                         }
                     }
                 }
@@ -199,23 +214,11 @@ StyledDialogView {
 
                 NavigationPanel {
                     id: buttonsNavPanel
-                    name: "SaveToCloudButtons"
+                    name: "ShareOnCloudButtons"
                     enabled: buttonsRow.enabled && buttonsRow.visible
                     direction: NavigationPanel.Horizontal
                     section: root.navigationSection
                     order: 2
-                }
-
-                FlatButton {
-                    text: qsTrc("project/save", "Save to computer")
-                    visible: !root.isPublish
-
-                    navigation.panel: buttonsNavPanel
-                    navigation.column: 2
-
-                    onClicked: {
-                        root.done(SaveToCloudResponse.SaveLocallyInstead)
-                    }
                 }
 
                 FlatButton {
@@ -230,8 +233,8 @@ StyledDialogView {
                 }
 
                 FlatButton {
-                    id: saveButton
-                    text: root.isPublish ? qsTrc("project/save", "Publish") : qsTrc("project/save", "Save")
+                    id: shareButton
+                    text: qsTrc("project/share", "Share")
                     accentButton: enabled
                     enabled: Boolean(root.name)
 
@@ -241,8 +244,7 @@ StyledDialogView {
                     onClicked: {
                         root.done(SaveToCloudResponse.Ok, {
                                       name: root.name,
-                                      visibility: root.visibility,
-                                      replaceExistingOnlineScore: root.replaceExistingOnlineScore
+                                      visibility: root.visibility
                                   })
                     }
                 }

@@ -25,11 +25,20 @@
 #include <QUrl>
 
 namespace mu::cloud {
+static const QString MUSESCORE_COM_CLOUD_CODE = "musescorecom";
+static const QString AUDIO_COM_CLOUD_CODE = "audiocom";
+
+struct CloudInfo {
+    QString code;
+    QString title;
+    QUrl url;
+};
+
 struct AccountInfo {
-    int id = 0;
+    QString id;
     QString userName;
     QUrl profileUrl;
-    QUrl sheetmusicUrl;
+    QUrl collectionUrl;
     QUrl avatarUrl;
 
     bool operator==(const AccountInfo& another) const
@@ -39,7 +48,7 @@ struct AccountInfo {
         equals &= (id == another.id);
         equals &= (userName == another.userName);
         equals &= (profileUrl == another.profileUrl);
-        equals &= (sheetmusicUrl == another.sheetmusicUrl);
+        equals &= (collectionUrl == another.collectionUrl);
         equals &= (avatarUrl == another.avatarUrl);
 
         return equals;
@@ -47,7 +56,7 @@ struct AccountInfo {
 
     bool isValid() const
     {
-        return id != 0 && !userName.isEmpty();
+        return !id.isEmpty() && !userName.isEmpty();
     }
 };
 

@@ -44,8 +44,11 @@ public:
     virtual ValCh<bool> userAuthorized() const = 0;
     virtual ValCh<AccountInfo> accountInfo() const = 0;
 
+    virtual CloudInfo cloudInfo() const = 0;
+
     virtual Ret checkCloudIsAvailable() const = 0;
 };
+using IAuthorizationServicePtr = std::shared_ptr<IAuthorizationService>;
 }
 
 #endif // MU_CLOUD_IAUTHORIZATIONSERVICE_H

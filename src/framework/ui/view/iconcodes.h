@@ -381,6 +381,8 @@ public:
 
         QUAVER_REST = 0xF44C,
 
+        SHARE_AUDIO = 0xF44F,
+
         DYNAMIC_CENTER_1 = 0xF451,
         DYNAMIC_CENTER_2 = 0xF452,
         EXPRESSION = 0xF453,

@@ -115,7 +115,6 @@ public:
     bool shouldDestinationFolderBeOpenedOnExport() const override;
     void setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport) override;
 
-    QUrl scoreManagerUrl() const override;
     QUrl supportForumUrl() const override;
 
     bool openDetailedProjectUploadedDialog() const override;

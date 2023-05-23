@@ -32,8 +32,8 @@
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
 #include "multiinstances/imultiinstancesprovider.h"
-#include "cloud/icloudprojectsservice.h"
-#include "cloud/iauthorizationservice.h"
+#include "cloud/musescorecom/imusescorecomservice.h"
+#include "cloud/audiocom/iaudiocomservice.h"
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
 #include "inotationreadersregister.h"
@@ -59,13 +59,12 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(IProjectAutoSaver, projectAutoSaver)
     INJECT(ISaveProjectScenario, saveProjectScenario)
     INJECT(IExportProjectScenario, exportProjectScenario)
-
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(framework::IInteractive, interactive)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(cloud::IAuthorizationService, authorizationService)
-    INJECT(cloud::ICloudProjectsService, cloudProjectsService)
+    INJECT(cloud::IMuseScoreComService, museScoreComService)
+    INJECT(cloud::IAudioComService, audioComService)
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(playback::IPlaybackController, playbackController)
     INJECT(print::IPrintProvider, printProvider)
@@ -106,6 +105,7 @@ private:
     bool saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
 
     void publish();
+    void shareAudio();
 
     bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
     bool saveProjectLocally(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save);
@@ -135,6 +135,9 @@ private:
 
     void onProjectSuccessfullyUploaded(const QUrl& urlToOpen = QUrl(), bool isFirstSave = true);
     void onProjectUploadFailed(const Ret& ret, const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode);
+
+    void onAudioSuccessfullyUploaded(const QUrl& urlToOpen);
+    void onAudioUploadFailed(const Ret& ret);
 
     void warnCloudIsNotAvailable();
 
@@ -171,11 +174,14 @@ private:
 
     bool hasSelection() const;
 
+    QUrl scoreManagerUrl() const;
+
     bool m_isProjectSaving = false;
     bool m_isProjectClosing = false;
     bool m_isProjectProcessing = false;
     bool m_isProjectPublishing = false;
     bool m_isProjectUploading = false;
+    bool m_isAudioSharing = false;
 
     framework::ProgressPtr m_uploadingProjectProgress = nullptr;
     framework::ProgressPtr m_uploadingAudioProgress = nullptr;

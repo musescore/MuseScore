@@ -113,7 +113,6 @@ public:
     virtual bool shouldDestinationFolderBeOpenedOnExport() const = 0;
     virtual void setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport) = 0;
 
-    virtual QUrl scoreManagerUrl() const = 0;
     virtual QUrl supportForumUrl() const = 0;
 
     virtual bool openDetailedProjectUploadedDialog() const = 0;

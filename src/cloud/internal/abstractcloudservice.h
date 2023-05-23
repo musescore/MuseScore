@@ -19,15 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_CLOUDSERVICE_H
-#define MU_CLOUD_CLOUDSERVICE_H
+#ifndef MU_CLOUD_ABSTRACTCLOUDSERVICE_H
+#define MU_CLOUD_ABSTRACTCLOUDSERVICE_H
 
 #include <QObject>
+#include <QBuffer>
 
 class QOAuth2AuthorizationCodeFlow;
-
-#include "iauthorizationservice.h"
-#include "icloudprojectsservice.h"
 
 #include "async/asyncable.h"
 
@@ -38,10 +36,12 @@ class QOAuth2AuthorizationCodeFlow;
 #include "multiinstances/imultiinstancesprovider.h"
 #include "iinteractive.h"
 
+#include "iauthorizationservice.h"
+
 namespace mu::cloud {
 class OAuthHttpServerReplyHandler;
 
-class CloudService : public QObject, public IAuthorizationService, public ICloudProjectsService, public async::Asyncable
+class AbstractCloudService : public QObject, public IAuthorizationService, public async::Asyncable
 {
     Q_OBJECT
 
@@ -52,7 +52,7 @@ class CloudService : public QObject, public IAuthorizationService, public ICloud
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
-    CloudService(QObject* parent = nullptr);
+    explicit AbstractCloudService(QObject* parent = nullptr);
 
     void init();
 
@@ -67,14 +67,50 @@ public:
 
     Ret checkCloudIsAvailable() const override;
 
-    framework::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility = Visibility::Private,
-                                       const QUrl& sourceUrl = QUrl(), int revisionId = 0) override;
-    framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) override;
-
-    RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) override;
-
 private slots:
     void onUserAuthorized();
+
+protected:
+    struct ServerConfig {
+        QString serverCode;
+        QUrl serverUrl;
+
+        QUrl authorizationUrl;
+        QUrl signUpUrl;
+        QUrl signInSuccessUrl;
+        QUrl accessTokenUrl;
+        QUrl userInfoUrl;
+
+        QUrl refreshApiUrl;
+        QUrl logoutApiUrl;
+
+        network::RequestHeaders headers;
+        QVariantMap authorizationParameters;
+        QVariantMap refreshParameters;
+    };
+
+    virtual ServerConfig serverConfig() const = 0;
+
+    virtual Ret downloadAccountInfo() = 0;
+
+    void setAccountInfo(const AccountInfo& info);
+
+    RetVal<QUrl> prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params = QVariantMap()) const;
+
+    using RequestCallback = std::function<Ret()>;
+    Ret executeRequest(const RequestCallback& requestCallback);
+
+    Ret uploadingRetFromRawUploadingRet(const Ret& rawRet, bool isAlreadyUploaded = false) const;
+    int statusCode(const mu::Ret& ret) const;
+    void printServerReply(const QBuffer& reply) const;
+
+    QString accessToken() const;
+    void setAccessToken(const QString& token);
+
+    QString refreshToken() const;
+    void setRefreshToken(const QString& token);
+
+    virtual bool doUpdateTokens();
 
 private:
     void initOAuthIfNecessary();
@@ -84,22 +120,11 @@ private:
     bool updateTokens();
     void clearTokens();
 
-    void setAccountInfo(const AccountInfo& info);
+    io::path_t tokensFilePath() const;
 
     void openUrl(const QUrl& url);
 
-    RetVal<QUrl> prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params = QVariantMap()) const;
     network::RequestHeaders headers() const;
-
-    Ret downloadAccountInfo();
-    RetVal<ScoreInfo> downloadScoreInfo(int scoreId);
-
-    mu::RetVal<mu::ValMap> doUploadScore(network::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                                         Visibility visibility, const QUrl& sourceUrl = QUrl(), int revisionId = 0);
-    Ret doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl);
-
-    using RequestCallback = std::function<Ret()>;
-    Ret executeRequest(const RequestCallback& requestCallback);
 
     QOAuth2AuthorizationCodeFlow* m_oauth2 = nullptr;
     OAuthHttpServerReplyHandler* m_replyHandler = nullptr;
@@ -109,7 +134,9 @@ private:
 
     QString m_accessToken;
     QString m_refreshToken;
+
+    ServerConfig m_serverConfig;
 };
 }
 
-#endif // MU_CLOUD_CLOUDSERVICE_H
+#endif // MU_CLOUD_ABSTRACTCLOUDSERVICE_H
