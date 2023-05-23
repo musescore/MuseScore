@@ -44,6 +44,7 @@ class BeamLayout
 public:
 
     static void layout(Beam* item, LayoutContext& ctx);
+    static void layoutIfNeed(Beam* item, LayoutContext& ctx);
     static void layout1(Beam* item, LayoutContext& ctx);
 
     static bool isTopBeam(ChordRest* cr);

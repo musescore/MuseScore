@@ -110,6 +110,13 @@ void BeamLayout::layout(Beam* item, LayoutContext& ctx)
     }
 }
 
+void BeamLayout::layoutIfNeed(Beam* item, LayoutContext& ctx)
+{
+    if (!item->_layoutInfo.isValid()) {
+        BeamLayout::layout(item, ctx);
+    }
+}
+
 //---------------------------------------------------------
 //    - remove beam segments
 //    - detach from system
