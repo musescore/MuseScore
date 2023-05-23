@@ -28,6 +28,7 @@
 
 namespace mu::engraving {
 class Score;
+class Arpeggio;
 }
 
 namespace mu::engraving::layout {
@@ -38,7 +39,12 @@ class ILayout : MODULE_INTERNAL_INTERFACE
 public:
     virtual ~ILayout() = default;
 
+    // Layout Score
     virtual void layoutRange(Score* score, const LayoutOptions& options, const Fraction&, const Fraction&) = 0;
+
+    // Layout Elements on Edit
+    virtual void layoutOnEditDrag(Arpeggio* item) = 0;
+    virtual void layoutOnEdit(Arpeggio* item) = 0;
 };
 }
 

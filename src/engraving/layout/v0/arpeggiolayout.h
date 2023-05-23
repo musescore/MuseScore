@@ -35,6 +35,9 @@ public:
 
     static void layoutArpeggio2(Arpeggio* item, LayoutContext& ctx);
     static void computeHeight(Arpeggio* item, bool includeCrossStaffHeight = false);
+
+    static void layoutOnEditDrag(Arpeggio* item, LayoutContext& ctx);
+    static void layoutOnEdit(Arpeggio* item, LayoutContext& ctx);
 };
 }
 

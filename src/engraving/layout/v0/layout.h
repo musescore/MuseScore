@@ -36,7 +36,12 @@ class Layout : public ILayout
 public:
     Layout();
 
+    // Layout Score
     void layoutRange(Score* score, const LayoutOptions& options, const Fraction& st, const Fraction& et) override;
+
+    // Layout Elements on Edit
+    void layoutOnEditDrag(Arpeggio* item) override;
+    void layoutOnEdit(Arpeggio* item) override;
 
 private:
     void doLayoutRange(Score* score, const LayoutOptions& options, const Fraction&, const Fraction&);
