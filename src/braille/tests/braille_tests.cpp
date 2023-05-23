@@ -28,11 +28,10 @@
 #include "engraving/tests/utils/scorecomp.h"
 
 #include "libmscore/masterscore.h"
-#include "importexport/braille/internal/exportbraille.h"
+#include "../internal/braille.h"
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::iex::braille;
 
 static const String BRAILLE_DIR(u"data/");
 
@@ -60,8 +59,7 @@ static bool saveBraille(MasterScore* score, const String& saveName)
         return false;
     }
 
-    ExportBraille exporter(score);
-    bool res = exporter.write(file);
+    bool res = Braille(score).write(file);
     file.close();
     return res;
 }

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,18 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_BRAILLEMODULE_H
-#define MU_IMPORTEXPORT_BRAILLEMODULE_H
+#include "braillemodule.h"
 
-#include "modularity/imodulesetup.h"
+#include "modularity/ioc.h"
+#include "project/inotationwritersregister.h"
 
-namespace mu::iex::braille {
-class BrailleModule : public modularity::IModuleSetup
+#include "internal/braillewriter.h"
+
+using namespace mu::engraving;
+using namespace mu::project;
+
+namespace mu::braille {
+std::string BrailleModule::moduleName() const
 {
-public:
-    std::string moduleName() const override;
-    void resolveImports() override;
-};
+    return "braille";
 }
 
-#endif // MU_IMPORTEXPORT_BRAILLEMODULE_H
+void BrailleModule::resolveImports()
+{
+    auto writers = modularity::ioc()->resolve<INotationWritersRegister>(moduleName());
+    if (writers) {
+        writers->reg({ "brf" }, std::make_shared<BrailleWriter>());
+    }
+}
+}

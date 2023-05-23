@@ -30,8 +30,6 @@
 #include "engraving/libmscore/instrtemplate.h"
 #include "engraving/libmscore/mscore.h"
 
-#include "log.h"
-
 static mu::testing::SuiteEnvironment importexport_se(
 {
     new mu::draw::DrawModule(),
@@ -42,7 +40,7 @@ static mu::testing::SuiteEnvironment importexport_se(
     []() {
     LOGI() << "braille tests suite post init";
 
-    mu::engraving::ScoreRW::setRootPath(mu::String::fromUtf8(iex_braille_tests_DATA_ROOT));
+    mu::engraving::ScoreRW::setRootPath(mu::String::fromUtf8(braille_tests_DATA_ROOT));
 
     mu::engraving::MScore::testMode = true;
     mu::engraving::MScore::testWriteStyleToScore = false;

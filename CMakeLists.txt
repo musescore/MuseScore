@@ -72,7 +72,7 @@ set(VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VER
 # Modules (alphabetical order please)
 option(MUE_BUILD_APPSHELL_MODULE "Build appshell module" ON)
 option(MUE_BUILD_AUTOBOT_MODULE "Build autobot module" ON)
-option(MUE_BUILD_BRAILLE_MODULE "Build braille module (not yet implemented)" OFF)
+option(MUE_BUILD_BRAILLE_MODULE "Build braille module" ON)
 option(MUE_BUILD_CLOUD_MODULE "Build cloud module" ON)
 option(MUE_BUILD_CONVERTER_MODULE "Build converter module" ON)
 option(MUE_BUILD_DIAGNOSTICS_MODULE "Build diagnostic code" ON)
