@@ -1031,6 +1031,11 @@ void TLayout::layout(HBox* item, LayoutContext& ctx)
     layoutBox(static_cast<Box*>(item), ctx);
 }
 
+void TLayout::layout2(HBox* item, LayoutContext& ctx)
+{
+    TLayout::layoutBox(item, ctx);
+}
+
 void TLayout::layout(VBox* item, LayoutContext& ctx)
 {
     item->setPos(PointF());

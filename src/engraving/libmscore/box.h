@@ -122,7 +122,7 @@ public:
     HBox* clone() const override { return new HBox(*this); }
 
     mu::RectF drag(EditData&) override;
-    void layout2();
+
     bool isMovable() const override;
     void computeMinWidth() override;
 
