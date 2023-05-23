@@ -50,11 +50,8 @@ bool IpcSocket::connect(const QString& serverName)
         m_lock = new IpcLock(serverName);
         m_socket = new QLocalSocket();
 
-        QObject::connect(m_socket, &QLocalSocket::errorOccurred, [this](QLocalSocket::LocalSocketError err) {
-            //! NOTE If the server is down, then we will try to connect to another or create a server ourselves
-            if (err == QLocalSocket::PeerClosedError) {
-                m_disconnected.notify();
-            }
+        QObject::connect(m_socket, &QLocalSocket::disconnected, [this]() {
+            m_disconnected.notify();
         });
 
         QObject::connect(m_socket, &QLocalSocket::readyRead, [this]() {
