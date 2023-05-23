@@ -28,8 +28,8 @@
 #include "engraving/types/types.h"
 
 namespace mu::engraving {
-#define MSC_VERSION     "4.00"
-static constexpr int MSCVERSION = 400;
+#define MSC_VERSION     "4.10"
+static constexpr int MSCVERSION = 410;
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -77,6 +77,12 @@ static constexpr int MSCVERSION = 400;
 //    4.00 (Version 4.0)
 //       - The style is stored in a separate file (inside mscz)
 //       - The ChordList is stored in a separate file (inside mscz)
+
+//    4.10 (Version 4.1)
+//       - New "Expression" item
+//       - A bunch of new options for dynamics
+//       - Clefs carry a "header" tag in the file (istead of trying to guess it from context)
+//       - New "Ornament" item with new properties and options
 
 static constexpr size_t VOICES = 4;
 
