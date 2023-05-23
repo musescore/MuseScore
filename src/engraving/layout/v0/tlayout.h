@@ -187,6 +187,7 @@ public:
     static void layout(Box* item, LayoutContext& ctx);    // factory
     static void layoutBox(Box* item, LayoutContext& ctx); // base class
     static void layout(HBox* item, LayoutContext& ctx);
+    static void layout2(HBox* item, LayoutContext& ctx);
     static void layout(VBox* item, LayoutContext& ctx);
     static void layout(FBox* item, LayoutContext& ctx);
     static void layout(TBox* item, LayoutContext& ctx);
