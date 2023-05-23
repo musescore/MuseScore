@@ -24,11 +24,7 @@
 
 #include "draw/types/brush.h"
 
-#include "types/typesconv.h"
-#include "layout/v0/tlayout.h"
-
 #include "bracketItem.h"
-#include "factory.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
@@ -266,15 +262,11 @@ void Bracket::endEdit(EditData& ed)
     ed.clear(); // score layout invalidates element
 }
 
-//---------------------------------------------------------
-//   editDrag
-//---------------------------------------------------------
-
 void Bracket::editDrag(EditData& ed)
 {
     h2 += ed.delta.y() * .5;
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+
+    layout()->layoutOnEditDrag(this);
 }
 
 //---------------------------------------------------------

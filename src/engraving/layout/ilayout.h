@@ -30,6 +30,7 @@ namespace mu::engraving {
 class Score;
 class Arpeggio;
 class Box;
+class Bracket;
 }
 
 namespace mu::engraving::layout {
@@ -49,6 +50,8 @@ public:
 
     virtual void layoutOnEditDrag(Box* item) = 0;
     virtual void layoutOnEndEdit(Box* item) = 0;
+
+    virtual void layoutOnEditDrag(Bracket* item) = 0;
 };
 }
 

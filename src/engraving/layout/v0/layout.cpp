@@ -23,6 +23,7 @@
 
 #include "libmscore/arpeggio.h"
 #include "libmscore/box.h"
+#include "libmscore/bracket.h"
 
 #include "tlayout.h"
 #include "layoutcontext.h"
@@ -61,6 +62,12 @@ void Layout::layoutOnEditDrag(Box* item)
 }
 
 void Layout::layoutOnEndEdit(Box* item)
+{
+    LayoutContext ctx(item->score());
+    TLayout::layout(item, ctx);
+}
+
+void Layout::layoutOnEditDrag(Bracket* item)
 {
     LayoutContext ctx(item->score());
     TLayout::layout(item, ctx);
