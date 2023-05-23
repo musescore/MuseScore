@@ -141,7 +141,7 @@ bool isGlissandoFor(const Note* note)
 static void collectGlissando(int channel, MidiInstrumentEffect effect,
                              int onTime, int offTime,
                              int pitchDelta,
-                             PitchWheelRenderer& pitchWheelRenderer)
+                             PitchWheelRenderer& pitchWheelRenderer, staff_idx_t staffIdx)
 {
     const float scale = (float)wheelSpec.mLimit / wheelSpec.mAmplitude;
 
@@ -155,7 +155,7 @@ static void collectGlissando(int channel, MidiInstrumentEffect effect,
     };
     func.func = linearFunc;
 
-    pitchWheelRenderer.addPitchWheelFunction(func, channel, effect);
+    pitchWheelRenderer.addPitchWheelFunction(func, channel, staffIdx, effect);
 }
 
 static Fraction getPlayTicksForBend(const Note* note)
@@ -218,7 +218,8 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
                 double pitchDelta = nextNote->ppitch() - params.pitch;
                 int timeDelta = params.offTime - params.onTime;
                 if (pitchDelta != 0 && timeDelta != 0) {
-                    collectGlissando(params.channel, params.effect, params.onTime, params.offTime, pitchDelta, pitchWheelRenderer);
+                    collectGlissando(params.channel, params.effect, params.onTime, params.offTime, pitchDelta, pitchWheelRenderer,
+                                     glissando->staffIdx());
                 }
             }
         }
@@ -234,7 +235,7 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
 static void collectVibrato(int channel,
                            int onTime, int offTime,
                            const VibratoParams& vibratoParams,
-                           PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect)
+                           PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect, staff_idx_t staffIdx)
 {
     const uint16_t vibratoPeriod = vibratoParams.period;
     const uint32_t duration = offTime - onTime;
@@ -257,7 +258,7 @@ static void collectVibrato(int channel,
     };
     func.func = vibratoFunc;
 
-    pitchWheelRenderer.addPitchWheelFunction(func, channel, effect);
+    pitchWheelRenderer.addPitchWheelFunction(func, channel, staffIdx, effect);
 }
 
 static void collectBend(const Bend* bend,
@@ -298,7 +299,7 @@ static void collectBend(const Bend* bend,
             return y * scale;
         };
         func.func = bendFunc;
-        pitchWheelRenderer.addPitchWheelFunction(func, channel, effect);
+        pitchWheelRenderer.addPitchWheelFunction(func, channel, bend->staffIdx(), effect);
     }
     PitchWheelRenderer::PitchWheelFunction func;
     func.mStartTick = onTime + points[pitchSize - 1].time * duration / PitchValue::MAX_TIME;
@@ -315,7 +316,7 @@ static void collectBend(const Bend* bend,
         return releaseValue;
     };
     func.func = bendFunc;
-    pitchWheelRenderer.addPitchWheelFunction(func, channel, effect);
+    pitchWheelRenderer.addPitchWheelFunction(func, channel, bend->staffIdx(), effect);
 }
 
 //---------------------------------------------------------
@@ -959,7 +960,7 @@ void MidiRenderer::doRenderSpanners(EventMap* events, Spanner* s, uint32_t chann
         std::vector<std::pair<int, int> > vibratoTicksForEffect = collectTicksForEffect(score, s->track(), stick, etick, effect);
 
         for (const auto& [tickStart, tickEnd] : vibratoTicksForEffect) {
-            collectVibrato(channel, tickStart, tickEnd, vibratoParams, pitchWheelRenderer, effect);
+            collectVibrato(channel, tickStart, tickEnd, vibratoParams, pitchWheelRenderer, effect, s->staffIdx());
         }
     }
 

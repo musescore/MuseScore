@@ -8,10 +8,12 @@ PitchWheelRenderer::PitchWheelRenderer(PitchWheelSpecs wheelSpec)
     : _wheelSpec(wheelSpec)
 {}
 
-void PitchWheelRenderer::addPitchWheelFunction(const PitchWheelFunction& function, uint32_t channel, MidiInstrumentEffect effect)
+void PitchWheelRenderer::addPitchWheelFunction(const PitchWheelFunction& function, uint32_t channel, staff_idx_t staffIdx,
+                                               MidiInstrumentEffect effect)
 {
     PitchWheelFunctions& functions =  _functions[channel];
     _effectByChannel[channel] = effect;
+    _staffIdxByChannel[channel] = staffIdx;
 
     if (function.mStartTick < functions.startTick) {
         functions.startTick = function.mStartTick;
@@ -47,6 +49,14 @@ void PitchWheelRenderer::renderChannelPitchWheel(EventMap& pitchWheelEvents,
     MidiInstrumentEffect effect = MidiInstrumentEffect::NONE;
     if (_effectByChannel.find(channel) != _effectByChannel.end()) {
         effect = _effectByChannel.at(channel);
+    }
+
+    bool staffInfoValid = false;
+    staff_idx_t staffIdx = 0;
+
+    if (_staffIdxByChannel.find(channel) != _staffIdxByChannel.end()) {
+        staffInfoValid = true;
+        staffIdx = _staffIdxByChannel.at(channel);
     }
 
     int32_t tick = functions.startTick;
@@ -86,6 +96,10 @@ void PitchWheelRenderer::renderChannelPitchWheel(EventMap& pitchWheelEvents,
         if (pitchValue != prevPitchValue) {
             NPlayEvent evb(ME_PITCHBEND, channel, pitchValue % 128, pitchValue / 128);
             evb.setEffect(effect);
+            if (staffInfoValid) {
+                evb.setOriginatingStaff(staffIdx);
+            }
+
             pitchWheelEvents.emplace_hint(pitchWheelEvents.end(), std::make_pair(tick, evb));
         }
 
@@ -119,6 +133,10 @@ void PitchWheelRenderer::renderChannelPitchWheel(EventMap& pitchWheelEvents,
 
         NPlayEvent evb(ME_PITCHBEND, channel, pitchValue % 128, pitchValue / 128);
         evb.setEffect(effect);
+        if (staffInfoValid) {
+            evb.setOriginatingStaff(staffIdx);
+        }
+
         pitchWheelEvents.emplace_hint(pitchWheelEvents.end(), std::make_pair(endFuncTick, evb));
     }
 }
