@@ -33,6 +33,7 @@
 #include "layout/v0/tlayout.h"
 #include "layout/v0/slurtielayout.h"
 #include "layout/v0/chordlayout.h"
+#include "layout/v0/beamlayout.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -1091,13 +1092,14 @@ void Chord::computeUp()
             if (cross && this == firstCr) {
                 // necessary because this beam was never laid out before, so its position isn't known
                 // and the first chord would calculate wrong stem direction
-                layout::v0::LayoutContext ctx(score());
-                layout::v0::TLayout::layout(_beam, ctx);
+                layout::v0::LayoutContext lctx(score());
+                layout::v0::TLayout::layout(_beam, lctx);
             } else {
                 // otherwise we can use stale layout data; the only reason we would need to lay out here is if
                 // it's literally never been laid out before which due to the insane nature of our layout system
                 // is actually a possible thing
-                _beam->layoutIfNeed();
+                layout::v0::LayoutContext lctx(score());
+                layout::v0::BeamLayout::layoutIfNeed(_beam, lctx);
             }
             PointF base = _beam->pagePos();
             Note* baseNote = _up ? downNote() : upNote();

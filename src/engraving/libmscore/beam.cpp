@@ -271,19 +271,6 @@ void Beam::move(const PointF& offset)
     }
 }
 
-//---------------------------------------------------------
-//   layoutIfNeed
-//   check to see if the layout info is valid, and if not, layout
-//---------------------------------------------------------
-
-void Beam::layoutIfNeed()
-{
-    if (!_layoutInfo.isValid()) {
-        layout::v0::LayoutContext ctx(score());
-        layout::v0::TLayout::layout(this, ctx);
-    }
-}
-
 PointF Beam::chordBeamAnchor(const ChordRest* chord, layout::v0::BeamTremoloLayout::ChordBeamAnchorType anchorType) const
 {
     return _layoutInfo.chordBeamAnchor(chord, anchorType);
