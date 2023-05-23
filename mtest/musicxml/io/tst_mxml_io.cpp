@@ -85,6 +85,7 @@ private slots:
       void changeTransposeNoDiatonic() { mxmlIoTestRef("testChangeTranspose-no-diatonic"); }
       void chordDiagrams1() { mxmlIoTest("testChordDiagrams1"); }
       void chordNoVoice() { mxmlIoTestRef("testChordNoVoice"); }
+      void chordSymbols() { mxmlMscxExportTestRef("testChordSymbols"); }
       void clefs1() { mxmlIoTest("testClefs1"); }
       void clefs2() { mxmlIoTest("testClefs2"); }
       void completeMeasureRests() { mxmlIoTest("testCompleteMeasureRests"); }

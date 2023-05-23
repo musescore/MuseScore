@@ -7029,6 +7029,18 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                   if (h->xmlParens() == "yes")
                         s += " parentheses-degrees=\"yes\"";
                   _xml.tag(s, h->xmlKind());
+
+                  int baseTpc = h->baseTpc();
+                  if (baseTpc != Tpc::TPC_INVALID) {
+                        _xml.stag("bass");
+                        _xml.tag("bass-step", tpc2stepName(baseTpc));
+                        alter = int(tpc2alter(baseTpc));
+                        if (alter) {
+                              _xml.tag("bass-alter", alter);
+                              }
+                        _xml.etag();
+                        }
+
                   QStringList l = h->xmlDegrees();
                   if (!l.isEmpty()) {
                         for (QString tag : qAsConst(l)) {
@@ -7074,18 +7086,19 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                         _xml.tag("kind", "");
                   else
                         _xml.tag(QString("kind text=\"%1\"").arg(h->extensionName()), "");
+
+                  int baseTpc = h->baseTpc();
+                  if (baseTpc != Tpc::TPC_INVALID) {
+                        _xml.stag("bass");
+                        _xml.tag("bass-step", tpc2stepName(baseTpc));
+                        alter = int(tpc2alter(baseTpc));
+                        if (alter) {
+                              _xml.tag("bass-alter", alter);
+                              }
+                        _xml.etag();
+                        }
                   }
 
-            int baseTpc = h->baseTpc();
-            if (baseTpc != Tpc::TPC_INVALID) {
-                  _xml.stag("bass");
-                  _xml.tag("bass-step", tpc2stepName(baseTpc));
-                  alter = int(tpc2alter(baseTpc));
-                  if (alter) {
-                        _xml.tag("bass-alter", alter);
-                        }
-                  _xml.etag();
-                  }
             if (offset > 0)
                   _xml.tag("offset", offset);
             if (fd)
