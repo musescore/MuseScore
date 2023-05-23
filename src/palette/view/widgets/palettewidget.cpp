@@ -47,7 +47,7 @@
 #include "draw/types/color.h"
 #include "draw/types/pen.h"
 
-#include "engraving/rw/400/tread.h"
+#include "engraving/rw/410/tread.h"
 #include "engraving/layout/v0/tlayout.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/chord.h"
@@ -890,12 +890,12 @@ void PaletteWidget::dropEvent(QDropEvent* event)
 
         if (type == ElementType::SYMBOL) {
             auto symbol = std::make_shared<Symbol>(gpaletteScore->dummy());
-            rw400::TRead::read(symbol.get(), xml, *xml.context());
+            rw410::TRead::read(symbol.get(), xml, *xml.context());
             element = symbol;
         } else {
             element = std::shared_ptr<EngravingItem>(Factory::createItem(type, gpaletteScore->dummy()));
             if (element) {
-                rw400::TRead::readItem(element.get(), xml, *xml.context());
+                rw410::TRead::readItem(element.get(), xml, *xml.context());
                 element->setTrack(0);
 
                 if (element->isActionIcon()) {

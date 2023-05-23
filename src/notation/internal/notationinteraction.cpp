@@ -77,7 +77,7 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/undo.h"
 
-#include "engraving/rw/400/tread.h"
+#include "engraving/rw/410/tread.h"
 
 #include "masternotation.h"
 #include "scorecallbacks.h"
@@ -1279,7 +1279,7 @@ void NotationInteraction::startDrop(const QByteArray& edata)
         }
         m_dropData.ed.dropElement = el;
         m_dropData.ed.dropElement->setParent(0);
-        rw400::TRead::readItem(m_dropData.ed.dropElement, e, *e.context());
+        rw410::TRead::readItem(m_dropData.ed.dropElement, e, *e.context());
 
         layout::v0::LayoutContext lctx(m_dropData.ed.dropElement->score());
         layout::v0::TLayout::layoutItem(m_dropData.ed.dropElement, lctx);
@@ -1735,7 +1735,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             PointF dragOffset;
             mu::engraving::ElementType type = mu::engraving::EngravingItem::readType(e, &dragOffset, &duration);
             mu::engraving::Spanner* spanner = static_cast<mu::engraving::Spanner*>(engraving::Factory::createItem(type, score->dummy()));
-            rw400::TRead::readItem(spanner, e, *e.context());
+            rw410::TRead::readItem(spanner, e, *e.context());
             spanner->styleChanged();
             score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
         } else if (element->isArticulationFamily() && sel.elements().size() == 1) {
@@ -1788,7 +1788,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 for (staff_idx_t i = sel.staffStart(); i < sel.staffEnd(); ++i) {
                     mu::engraving::XmlReader n(a);
                     StaffTypeChange* stc = engraving::Factory::createStaffTypeChange(measure);
-                    rw400::TRead::read(stc, n, *n.context());
+                    rw410::TRead::read(stc, n, *n.context());
                     stc->styleChanged(); // update to local style
 
                     score->cmdAddStaffTypeChange(measure, i, stc);
@@ -2002,7 +2002,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         ElementType type = EngravingItem::readType(n, &dragOffset, &duration);
         dropData->dropElement = engraving::Factory::createItem(type, score->dummy());
 
-        rw400::TRead::readItem(dropData->dropElement, n, *n.context());
+        rw410::TRead::readItem(dropData->dropElement, n, *n.context());
         dropData->dropElement->styleChanged();       // update to local style
 
         mu::engraving::EngravingItem* el = target->drop(*dropData);

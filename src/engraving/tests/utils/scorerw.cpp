@@ -29,8 +29,8 @@
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/writescorehook.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
-#include "engraving/rw/400/tread.h"
-#include "engraving/rw/400/twrite.h"
+#include "engraving/rw/410/tread.h"
+#include "engraving/rw/410/twrite.h"
 #include "engraving/libmscore/factory.h"
 
 #include "log.h"
@@ -113,7 +113,7 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
     xml.startDocument();
-    rw400::TWrite::writeItem(element, xml, *xml.context());
+    rw410::TWrite::writeItem(element, xml, *xml.context());
     xml.flush();
     buffer.close();
 
@@ -124,7 +124,7 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     XmlReader e(buffer.data());
     e.readNextStartElement();
     element = Factory::createItemByName(e.name(), element->score()->dummy());
-    rw400::TRead::readItem(element, e, *e.context());
+    rw410::TRead::readItem(element, e, *e.context());
     return element;
 }
 

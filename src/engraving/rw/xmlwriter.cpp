@@ -28,6 +28,7 @@
 #include "libmscore/property.h"
 
 #include "400/writecontext.h"
+#include "410/writecontext.h"
 
 #include "log.h"
 

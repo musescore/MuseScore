@@ -25,6 +25,7 @@
 #include "libmscore/score.h"
 
 #include "400/readcontext.h"
+#include "410/readcontext.h"
 
 #include "log.h"
 

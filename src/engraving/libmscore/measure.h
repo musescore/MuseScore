@@ -36,6 +36,10 @@ namespace mu::engraving::rw400 {
 class MeasureRW;
 }
 
+namespace mu::engraving::rw410 {
+class MeasureRW;
+}
+
 namespace mu::engraving::layout::v0 {
 class MeasureLayout;
 }
@@ -376,6 +380,7 @@ private:
 
     friend class Factory;
     friend class rw400::MeasureRW;
+    friend class rw410::MeasureRW;
     friend class layout::v0::MeasureLayout;
 
     Measure(System* parent = 0);

@@ -23,8 +23,8 @@
 
 #include "mimedatautils.h"
 
-#include "engraving/rw/400/tread.h"
-#include "engraving/rw/400/twrite.h"
+#include "engraving/rw/410/tread.h"
+#include "engraving/rw/410/twrite.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/fret.h"
@@ -203,7 +203,7 @@ bool PaletteCell::read(XmlReader& e)
             if (!element) {
                 e.unknown();
             } else {
-                rw400::TRead::readItem(element.get(), e, *e.context());
+                rw410::TRead::readItem(element.get(), e, *e.context());
                 element->styleChanged();
 
                 if (element->type() == ElementType::ACTION_ICON) {
@@ -267,9 +267,9 @@ void PaletteCell::write(XmlWriter& xml) const
     }
 
     if (untranslatedElement) {
-        rw400::TWrite::writeItem(untranslatedElement.get(), xml, *xml.context());
+        rw410::TWrite::writeItem(untranslatedElement.get(), xml, *xml.context());
     } else {
-        rw400::TWrite::writeItem(element.get(), xml, *xml.context());
+        rw410::TWrite::writeItem(element.get(), xml, *xml.context());
     }
     xml.endElement();
 }

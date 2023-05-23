@@ -36,12 +36,14 @@
 #include "206/read206.h"
 #include "302/read302.h"
 #include "400/read400.h"
+#include "410/read410.h"
 #include "rw/compat/compatutils.h"
 
 #include "compat/readstyle.h"
 
 #include "xmlreader.h"
 #include "400/readcontext.h"
+#include "410/readcontext.h"
 
 #include "log.h"
 
@@ -73,9 +75,11 @@ static RetVal<IScoreReaderPtr> makeReader(int version, bool ignoreVersionError)
         return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<compat::Read206>());
     } else if (version < 400 || MScore::testMode) {
         return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<compat::Read302>());
+    } else if (version < 410) {
+        return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<rw400::Read400>());
     }
 
-    return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<rw400::Read400>());
+    return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<rw410::Read410>());
 }
 
 mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, SettingsCompat& settingsCompat,
@@ -162,7 +166,7 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
             ReadInOutData partReadInData;
             partReadInData.links = masterReadOutData.links;
 
-            rw400::Read400().read(partScore, xml, &partReadInData);
+            rw410::Read410().read(partScore, xml, &partReadInData);
 
             partScore->linkMeasures(masterScore);
 

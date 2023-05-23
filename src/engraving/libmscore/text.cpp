@@ -22,7 +22,7 @@
 
 #include "text.h"
 
-#include "rw/400/tread.h"
+#include "rw/410/tread.h"
 #include "types/typesconv.h"
 #include "score.h"
 
@@ -68,7 +68,7 @@ engraving::PropertyValue Text::propertyDefault(Pid id) const
 String Text::readXmlText(XmlReader& r, Score* score)
 {
     Text t(score->dummy());
-    rw400::TRead::read(&t, r, *r.context());
+    rw410::TRead::read(&t, r, *r.context());
     return t.xmlText();
 }
 }

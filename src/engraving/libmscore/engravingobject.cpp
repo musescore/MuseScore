@@ -28,7 +28,7 @@
 #include "style/textstyle.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "rw/400/connectorinforeader.h"
+#include "rw/410/connectorinforeader.h"
 
 #include "bracketItem.h"
 #include "factory.h"

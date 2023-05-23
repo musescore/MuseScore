@@ -65,6 +65,10 @@ namespace mu::engraving::rw400 {
 class Read400;
 }
 
+namespace mu::engraving::rw410 {
+class Read410;
+}
+
 namespace mu::engraving::compat {
 class Read302;
 class WriteScoreHook;
@@ -372,6 +376,7 @@ private:
 
     friend class compat::Read302;
     friend class rw400::Read400;
+    friend class rw410::Read410;
     friend class layout::v0::Layout;
 
     static std::set<Score*> validScores;
@@ -629,8 +634,8 @@ public:
     bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook);
     bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook, WriteContext& ctx);
 
-    bool read400(XmlReader& e);
-    bool readScore400(XmlReader& e);
+    bool read410(XmlReader& e);
+    bool readScore410(XmlReader& e);
 
     const std::vector<Staff*>& staves() const { return _staves; }
     size_t nstaves() const { return _staves.size(); }

@@ -29,9 +29,9 @@
 
 #include "compat/writescorehook.h"
 
-#include "rw/400/twrite.h"
+#include "rw/410/twrite.h"
 
-#include "rw/400/staffrw.h"
+#include "rw/410/staffrw.h"
 
 #include "audio.h"
 #include "chordrest.h"
@@ -117,7 +117,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     if (_audio && xml.context()->isMsczMode()) {
         xml.tag("playMode", int(_playMode));
-        rw400::TWrite::write(_audio, xml, *xml.context());
+        rw410::TWrite::write(_audio, xml, *xml.context());
     }
 
     for (int i = 0; i < 32; ++i) {
@@ -229,7 +229,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     masterScore()->checkMidiMapping();
     for (const Part* part : _parts) {
         if (!selectionOnly || ((staffIdx(part) >= staffStart) && (staffEnd >= staffIdx(part) + part->nstaves()))) {
-            rw400::TWrite::write(part, xml, *xml.context());
+            rw410::TWrite::write(part, xml, *xml.context());
         }
     }
 
@@ -238,7 +238,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     if (measureStart) {
         for (staff_idx_t staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
             const Staff* st = staff(staffIdx);
-            rw400::StaffRW::writeStaff(st, xml, measureStart, measureEnd, staffStart, staffIdx, selectionOnly);
+            rw410::StaffRW::writeStaff(st, xml, measureStart, measureEnd, staffStart, staffIdx, selectionOnly);
         }
     }
     xml.context()->setCurTrack(mu::nidx);

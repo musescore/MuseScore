@@ -229,7 +229,7 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
         event->acceptProposedAction();
         dragElement = static_cast<Accidental*>(Factory::createItem(type, gpaletteScore->dummy()));
         dragElement->resetExplicitParent();
-        rw400::TRead::readItem(dragElement, e, *e.context());
+        rw410::TRead::readItem(dragElement, e, *e.context());
 
         layout::v0::LayoutContext lctx(dragElement->score());
         layout::v0::TLayout::layoutItem(dragElement, lctx);

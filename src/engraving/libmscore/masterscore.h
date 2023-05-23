@@ -38,6 +38,10 @@ namespace mu::engraving::rw400 {
 class Read400;
 }
 
+namespace mu::engraving::rw410 {
+class Read410;
+}
+
 namespace mu::engraving::compat {
 class ScoreAccess;
 class Read114;
@@ -127,6 +131,7 @@ class MasterScore : public Score
     friend class compat::Read206;
     friend class compat::Read302;
     friend class rw400::Read400;
+    friend class rw410::Read410;
 
     MasterScore(std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
     MasterScore(const MStyle&, std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());

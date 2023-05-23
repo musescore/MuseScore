@@ -28,8 +28,8 @@
 
 #include "rw/xmlreader.h"
 #include "rw/xmlwriter.h"
-#include "rw/400/twrite.h"
-#include "rw/400/tread.h"
+#include "rw/410/twrite.h"
+#include "rw/410/tread.h"
 #include "style/style.h"
 #include "types/typesconv.h"
 
@@ -307,8 +307,8 @@ bool InstrumentTemplate::isValid() const
 void InstrumentTemplate::write(XmlWriter& xml) const
 {
     xml.startElement("Instrument",  { { "id", id } });
-    rw400::TWrite::write(&longNames, xml, "longName");
-    rw400::TWrite::write(&shortNames, xml, "shortName");
+    rw410::TWrite::write(&longNames, xml, "longName");
+    rw410::TWrite::write(&shortNames, xml, "shortName");
 
     if (longNames.size() > 1) {
         xml.tag("trackName", trackName);
@@ -318,7 +318,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
     if (extended) {
         xml.tag("extended", extended);
     }
-    rw400::TWrite::write(&stringData, xml);
+    rw410::TWrite::write(&stringData, xml);
     if (staffCount > 1) {
         xml.tag("staves", static_cast<int>(staffCount));
     }
@@ -399,10 +399,10 @@ void InstrumentTemplate::write(XmlWriter& xml) const
     }
 
     for (const NamedEventList& a : midiActions) {
-        rw400::TWrite::write(&a, xml, "MidiAction");
+        rw410::TWrite::write(&a, xml, "MidiAction");
     }
     for (const InstrChannel& a : channel) {
-        rw400::TWrite::write(&a, xml, nullptr);
+        rw410::TWrite::write(&a, xml, nullptr);
     }
     for (const MidiArticulation& ma : midiArticulations) {
         bool isGlobal = false;
@@ -413,7 +413,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
             }
         }
         if (!isGlobal) {
-            rw400::TWrite::write(&ma, xml);
+            rw410::TWrite::write(&ma, xml);
         }
     }
     if (family) {
@@ -516,7 +516,7 @@ void InstrumentTemplate::read(XmlReader& e)
             trait.isHiddenOnScore = traitName.contains(u'(') && traitName.contains(u')');
             trait.name = traitName.remove(u'*').remove(u'(').remove(u')');
         } else if (tag == "StringData") {
-            rw400::TRead::read(&stringData, e);
+            rw410::TRead::read(&stringData, e);
         } else if (tag == "drumset") {
             useDrumset = e.readInt();
         } else if (tag == "Drum") {
@@ -529,16 +529,16 @@ void InstrumentTemplate::read(XmlReader& e)
             drumset->load(e);
         } else if (tag == "MidiAction") {
             NamedEventList a;
-            rw400::TRead::read(&a, e);
+            rw410::TRead::read(&a, e);
             midiActions.push_back(a);
         } else if (tag == "Channel" || tag == "channel") {
             InstrChannel a;
             InstrumentTrackId tId;
-            rw400::TRead::read(&a, e, nullptr, tId);
+            rw410::TRead::read(&a, e, nullptr, tId);
             channel.push_back(a);
         } else if (tag == "Articulation") {
             MidiArticulation a;
-            rw400::TRead::read(&a, e);
+            rw410::TRead::read(&a, e);
             size_t n = midiArticulations.size();
             size_t i;
             for (i = 0; i < n; ++i) {
@@ -685,7 +685,7 @@ bool loadInstrumentTemplates(const io::path_t& instrTemplatesPath)
                     // read global articulation
                     String name(e.attribute("name"));
                     MidiArticulation a = searchArticulation(name);
-                    rw400::TRead::read(&a, e);
+                    rw410::TRead::read(&a, e);
                     midiArticulations.push_back(a);
                 } else if (tag == "Genre") {
                     String idGenre(e.attribute("id"));
