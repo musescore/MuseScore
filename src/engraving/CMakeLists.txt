@@ -154,6 +154,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/layout/v0/layout.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/v0/layoutcontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/v0/layoutcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/scorelayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/scorelayout.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/v0/lyricslayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/v0/lyricslayout.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/v0/measurelayout.cpp

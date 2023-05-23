@@ -24,7 +24,6 @@
 
 #include "../ilayout.h"
 #include "../layoutoptions.h"
-#include "layoutcontext.h"
 
 namespace mu::engraving {
 class Score;
@@ -34,7 +33,6 @@ namespace mu::engraving::layout::v0  {
 class Layout : public ILayout
 {
 public:
-    Layout();
 
     // Layout Score
     void layoutRange(Score* score, const LayoutOptions& options, const Fraction& st, const Fraction& et) override;
@@ -42,15 +40,6 @@ public:
     // Layout Elements on Edit
     void layoutOnEditDrag(Arpeggio* item) override;
     void layoutOnEdit(Arpeggio* item) override;
-
-private:
-    void doLayoutRange(Score* score, const LayoutOptions& options, const Fraction&, const Fraction&);
-    void layoutLinear(const LayoutOptions& options, LayoutContext& ctx);
-    void layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& ctx);
-    void resetSystems(bool layoutAll, const LayoutOptions& options, LayoutContext& ctx);
-    void collectLinearSystem(const LayoutOptions& options, LayoutContext& ctx);
-
-    void doLayout(const LayoutOptions& options, LayoutContext& lc);
 };
 }
 

@@ -71,7 +71,7 @@ class WriteScoreHook;
 }
 
 namespace mu::engraving::layout::v0 {
-class Layout;
+class ScoreLayout;
 }
 
 namespace mu::engraving {
@@ -379,7 +379,7 @@ private:
 
     friend class compat::Read302;
     friend class rw400::Read400;
-    friend class layout::v0::Layout;
+    friend class layout::v0::ScoreLayout;
 
     static std::set<Score*> validScores;
     int _linkId { 0 };
