@@ -22,6 +22,8 @@
 
 #include "dockpageview.h"
 
+#include <QTimer>
+
 #include "docktoolbarview.h"
 #include "dockingholderview.h"
 #include "dockcentralview.h"
@@ -52,9 +54,26 @@ void DockPageView::init()
 
     for (DockBase* dock : allDocks()) {
         dock->init();
+
+        connect(dock, &DockBase::floatingChanged, [this](){
+            reorderSections();
+        });
+
+        connect(dock, &DockBase::reorderNavigationRequested, [this](){
+            reorderSections();
+        });
     }
 
     emit inited();
+}
+
+void DockPageView::deinit()
+{
+    TRACEFUNC;
+
+    for (DockBase* dock : allDocks()) {
+        dock->disconnect(this);
+    }
 }
 
 QString DockPageView::uri() const
@@ -213,6 +232,134 @@ DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
     return !panels.isEmpty() ? panels.first() : nullptr;
 }
 
+void DockPageView::reorderSections()
+{
+    //! NOTE: In some cases, such as setting visible true,
+    //! it is necessary to give the UI time to render the content, so we will add a delay.
+    QTimer::singleShot(2000, this, [this](){
+        doReorderSections();
+    });
+}
+
+void DockPageView::doReorderSections()
+{
+    TRACEFUNC;
+
+    if (!isVisible()) {
+        return;
+    }
+
+    QList<DockBase*> docks = allDocks();
+    QList<DockBase*> docksAvailableForNavigation;
+
+    for (DockBase* dock: docks) {
+        if (dock->contentNavigationPanel() && dock->isVisible()) {
+            docksAvailableForNavigation.append(dock);
+        }
+    }
+
+    reorderDocksNavigationSections(docksAvailableForNavigation);
+}
+
+void DockPageView::reorderDocksNavigationSections(QList<DockBase*>& docks)
+{
+    std::sort(docks.begin(), docks.end(), [this](DockBase* dock1, DockBase* dock2) {
+        if (!dock1->contentNavigationPanel() || !dock2->contentNavigationPanel()) {
+            return false;
+        }
+
+        QPoint dock1Pos = dock1->globalPosition();
+        QPoint dock2Pos = dock2->globalPosition();
+
+        if (dock1Pos.y() == dock2Pos.y()) {
+            if (dock1 == m_central) {
+                return true;
+            } else if (dock2 == m_central) {
+                return false;
+            }
+
+            return dock1Pos.x() < dock2Pos.x();
+        }
+
+        return dock1Pos.y() < dock2Pos.y();
+    });
+
+    int i = 0;
+    QHash<ui::INavigationSection*, QList<DockBase*> > orderedSections;
+    for (DockBase* dock: docks) {
+        ui::NavigationPanel* panel = dock->contentNavigationPanel();
+        if (!panel) {
+            continue;
+        }
+
+        ui::INavigationSection* section = panel ? panel->section() : nullptr;
+        if (section && !orderedSections.contains(section)) {
+            auto index = section->index();
+            index.setOrder(i++);
+            section->setIndex(index);
+        }
+
+        orderedSections[section] << dock;
+    }
+
+    for (QList<DockBase*>& panels : orderedSections.values()) {
+        reorderNavigationSectionPanels(panels);
+    }
+}
+
+void DockPageView::reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks)
+{
+    std::sort(sectionDocks.begin(), sectionDocks.end(), [](DockBase* dock1, DockBase* dock2) {
+        if (!dock1->contentNavigationPanel() || !dock2->contentNavigationPanel()) {
+            return false;
+        }
+
+        QPoint dock1Pos = dock1->globalPosition();
+        QPoint dock2Pos = dock2->globalPosition();
+
+        if (dock1->floating() && dock2->floating()) {
+            return dock1Pos.x() < dock2Pos.x();
+        } else if (dock1->floating()) {
+            return false;
+        } else if (dock2->floating()) {
+            return true;
+        }
+
+        if (dock1Pos.x() == dock2Pos.x()) {
+            return dock1Pos.y() < dock2Pos.y();
+        }
+
+        return dock1Pos.x() < dock2Pos.x();
+    });
+
+    //!NOTE: It is possible that the dock does not contain all the panels.
+    //! For example, MainToolBar is created for the entire window and is always visible.
+    //! Reserve n panels for each dock.
+    int i = 10;
+    QHash<DockBase*, int> orderedDocks;
+    for (DockBase* dock: sectionDocks) {
+        //!NOTE: It is possible that the dock contains multiple panels.
+        //! Reserve n panels for each dock.
+        int order = i++ *100;
+
+        //! NOTE: If a panel is inside a frame with another panel,
+        //! there is no need to set the order for the frame panel, as it is already set.
+        bool exists = false;
+        for (DockBase* orderedPanel: orderedDocks.keys()) {
+            if (orderedPanel->isInSameFrame(dock)) {
+                exists = true;
+            }
+        }
+
+        if (!exists) {
+            orderedDocks[dock] = order;
+            dock->setFramePanelOrder(order);
+        }
+
+        dock->contentNavigationPanel()->setOrder(order + 1);
+    }
+}
+
 bool DockPageView::isDockFloating(const QString& dockName) const
 {
     const DockBase* dock = dockByName(dockName);
@@ -265,6 +412,12 @@ void DockPageView::componentComplete()
 
     Q_ASSERT(!m_uri.isEmpty());
     Q_ASSERT(m_central != nullptr);
+
+    connect(this, &DockPageView::visibleChanged, [this](){
+        if (isVisible()) {
+            reorderSections();
+        }
+    });
 }
 
 QList<DockBase*> DockPageView::allDocks() const

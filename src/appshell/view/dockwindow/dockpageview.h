@@ -29,6 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "ui/inavigationcontroller.h"
+#include "ui/view/navigationsection.h"
 
 #include "internal/dockbase.h"
 #include "docktypes.h"
@@ -62,6 +63,7 @@ public:
     explicit DockPageView(QQuickItem* parent = nullptr);
 
     void init();
+    void deinit();
 
     QString uri() const;
 
@@ -111,6 +113,11 @@ private:
     void componentComplete() override;
 
     DockPanelView* findPanelForTab(const DockPanelView* tab) const;
+
+    void reorderSections();
+    void doReorderSections();
+    void reorderDocksNavigationSections(QList<DockBase*>& docks);
+    void reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks);
 
     QString m_uri;
     uicomponents::QmlListProperty<DockToolBarView> m_mainToolBars;

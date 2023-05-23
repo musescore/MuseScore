@@ -30,8 +30,6 @@ import MuseScore.NotationScene 1.0
 Rectangle {
     id: root
 
-    property NavigationSection navigationSection: null
-
     height: 26
     visible: notationsView.count > 0
     color: ui.theme.backgroundSecondaryColor
@@ -41,7 +39,6 @@ Rectangle {
         enabled: root.enabled && root.visible
         section: root.navigationSection
         direction: NavigationPanel.Horizontal
-        order: 3
     }
 
     function ensureActive() {

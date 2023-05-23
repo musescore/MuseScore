@@ -35,26 +35,22 @@ import "score"
 ExpandableBlank {
     id: root
 
-    property int index: -1
     property var sectionModel // Comes from inspectorListModel
     property var anchorItem: null
-    property var navigationSection: null
 
     signal returnToBoundsRequested()
     signal ensureContentVisibleRequested(int invisibleContentHeight)
     signal popupOpened(var openedPopup, var visualControl)
 
-    NavigationPanel {
-        id: navPanel
+    property NavigationPanel navigationPanel: NavigationPanel {
         name: root.title
         section: root.navigationSection
         direction: NavigationPanel.Vertical
         accessible.name: root.title
         enabled: root.enabled && root.visible
-        order: root.index + 2
     }
 
-    navigation.panel: navPanel
+    navigation.panel: root.navigationPanel
     navigation.row: 0
 
     title: root.sectionModel ? root.sectionModel.title : ""
@@ -90,7 +86,7 @@ ExpandableBlank {
 
         GeneralInspectorView {
             model: root.sectionModel
-            navigationPanel: navPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
 
@@ -109,7 +105,7 @@ ExpandableBlank {
 
         MeasuresInspectorView {
             model: root.sectionModel
-            navigationPanel: navPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
 
@@ -128,7 +124,7 @@ ExpandableBlank {
 
         TextInspectorView {
             model: root.sectionModel
-            navigationPanel: navPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
 
@@ -147,7 +143,7 @@ ExpandableBlank {
 
         NotationMultiElementView {
             model: root.sectionModel
-            navigationPanel: navPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
 
@@ -166,7 +162,7 @@ ExpandableBlank {
 
         NotationSingleElementView {
             model: root.sectionModel
-            navigationPanel: navPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
 
             onPopupOpened: {
@@ -180,7 +176,7 @@ ExpandableBlank {
 
         ScoreDisplayInspectorView {
             model: root.sectionModel
-            navigationPanel: navPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
 
             onPopupOpened: {
@@ -194,7 +190,7 @@ ExpandableBlank {
 
         ScoreAppearanceInspectorView {
             model: root.sectionModel
-            navigationPanel: navPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
 

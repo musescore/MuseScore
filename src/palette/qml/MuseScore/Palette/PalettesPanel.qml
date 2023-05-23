@@ -34,6 +34,8 @@ Item {
     id: root
 
     property NavigationSection navigationSection: null
+    property NavigationPanel navigationPanel: palettesPanelHeader.navigation // first panel
+
     property alias contextMenuModel: contextMenuModel
 
     readonly property PaletteProvider paletteProvider: paletteRootModel.paletteProvider
@@ -137,7 +139,7 @@ Item {
             paletteProvider: root.paletteProvider
 
             navigation.section: root.navigationSection
-            navigation.order: 5
+            navigation.order: palettesPanelHeader.navigation.order + 1
 
             filter: palettesPanelHeader.searchText
             enableAnimations: !palettesPanelHeader.isSearchFieldFocused

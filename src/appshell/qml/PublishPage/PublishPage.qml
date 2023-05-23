@@ -64,11 +64,11 @@ DockPage {
             contentBottomPadding: 2
 
             NotationToolBar {
-                navigation.section: root.topToolKeyNavSec
-                navigation.order: 2
+                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.order: 2
 
                 onActiveFocusRequested: {
-                    if (navigation.active) {
+                    if (navigationPanel.active) {
                         notationToolBar.forceActiveFocus()
                     }
                 }
@@ -86,8 +86,8 @@ DockPage {
             contentBottomPadding: 2
 
             PlaybackToolBar {
-                navigation.section: root.topToolKeyNavSec
-                navigation.order: 3
+                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.order: 3
 
                 floating: playbackToolBar.floating
             }
@@ -108,8 +108,8 @@ DockPage {
             contentBottomPadding: 2
 
             UndoRedoToolBar {
-                navigation.section: root.topToolKeyNavSec
-                navigation.order: 4
+                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.order: 4
             }
         }
     ]
