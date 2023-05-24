@@ -23,7 +23,9 @@
 
 #include "libmscore/arpeggio.h"
 #include "libmscore/box.h"
+#include "libmscore/barline.h"
 #include "libmscore/bracket.h"
+#include "libmscore/ledgerline.h"
 
 #include "tlayout.h"
 #include "layoutcontext.h"
@@ -68,6 +70,26 @@ void Layout::layoutOnEndEdit(Box* item)
 }
 
 void Layout::layoutOnEditDrag(Bracket* item)
+{
+    LayoutContext ctx(item->score());
+    TLayout::layout(item, ctx);
+}
+
+// ===============================================================
+// Layout Elements on Drop and Drag
+// ===============================================================
+
+void Layout::layoutOnChordRestDrop(BarLine* item)
+{
+    LayoutContext ctx(item->score());
+    TLayout::layout(item, ctx);
+}
+
+// ===============================================================
+// Layout others
+// ===============================================================
+
+void Layout::layoutOnAddLedgerLines(LedgerLine* item)
 {
     LayoutContext ctx(item->score());
     TLayout::layout(item, ctx);
