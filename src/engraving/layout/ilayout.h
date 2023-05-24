@@ -30,7 +30,9 @@ namespace mu::engraving {
 class Score;
 class Arpeggio;
 class Box;
+class BarLine;
 class Bracket;
+class LedgerLine;
 }
 
 namespace mu::engraving::layout {
@@ -52,6 +54,13 @@ public:
     virtual void layoutOnEndEdit(Box* item) = 0;
 
     virtual void layoutOnEditDrag(Bracket* item) = 0;
+
+    // Layout Elements on Drop and Drag
+    virtual void layoutOnChordRestDrop(BarLine* item) = 0;
+
+    // Layout others
+    //! TODO Need to find out why
+    virtual void layoutOnAddLedgerLines(LedgerLine* item) = 0;
 };
 }
 

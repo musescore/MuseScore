@@ -202,8 +202,8 @@ EngravingItem* ChordRest::drop(EditData& data)
                 l->setTrack(st->idx() * VOICES);
                 l->setParent(seg);
                 score->undoAddElement(l);
-                layout::v0::LayoutContext ctx(score);
-                layout::v0::TLayout::layout(l, ctx);
+
+                layout()->layoutOnChordRestDrop(l);
             }
         }
         delete e;

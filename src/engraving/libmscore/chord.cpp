@@ -986,9 +986,8 @@ void Chord::addLedgerLines()
         }
     }
 
-    layout::v0::LayoutContext ctx(score());
     for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next()) {
-        layout::v0::TLayout::layout(ll, ctx);
+        layout()->layoutOnAddLedgerLines(ll);
     }
 }
 

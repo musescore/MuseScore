@@ -45,6 +45,13 @@ public:
     void layoutOnEndEdit(Box* item) override;
 
     void layoutOnEditDrag(Bracket* item) override;
+
+    // Layout Elements on Drop and Drag
+    void layoutOnChordRestDrop(BarLine* item) override;
+
+    // Layout others
+    //! TODO Need to find out why
+    void layoutOnAddLedgerLines(LedgerLine* item) override;
 };
 }
 
