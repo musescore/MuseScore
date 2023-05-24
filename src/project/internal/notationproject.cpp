@@ -345,7 +345,7 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
         excerpt->notation()->viewState()->makeDefault();
     }
 
-    masterScore->setSaved(true);
+    masterScore->setSaved(false);
 
     m_isNewlyCreated = true;
 

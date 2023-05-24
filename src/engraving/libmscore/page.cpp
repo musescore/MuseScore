@@ -455,14 +455,14 @@ String Page::replaceTextMacros(const String& s) const
             }
             break;
             case 'm':
-                if (score()->dirty()) {
+                if (score()->dirty() || !masterScore()->saved()) {
                     d += Time::currentTime().toString(DateFormat::ISODate);
                 } else {
                     d += masterScore()->fileInfo()->lastModified().time().toString(DateFormat::ISODate);
                 }
                 break;
             case 'M':
-                if (score()->dirty()) {
+                if (score()->dirty() || !masterScore()->saved()) {
                     d += Date::currentDate().toString(DateFormat::ISODate);
                 } else {
                     d += masterScore()->fileInfo()->lastModified().date().toString(DateFormat::ISODate);
