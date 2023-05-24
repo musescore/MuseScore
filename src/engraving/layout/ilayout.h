@@ -33,6 +33,7 @@ class Box;
 class BarLine;
 class Bracket;
 class LedgerLine;
+class FiguredBassItem;
 }
 
 namespace mu::engraving::layout {
@@ -61,6 +62,7 @@ public:
     // Layout others
     //! TODO Need to find out why
     virtual void layoutOnAddLedgerLines(LedgerLine* item) = 0;
+    virtual void regenerateDisplayText(FiguredBassItem* item) = 0;
 };
 }
 

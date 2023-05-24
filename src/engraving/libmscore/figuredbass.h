@@ -189,6 +189,15 @@ private:
     friend class FiguredBass;
     friend class layout::v0::TLayout;
 
+    // part parsing
+    int               parseDigit(String& str);
+    int               parseParenthesis(String& str, int parenthIdx);
+    int               parsePrefixSuffix(String& str, bool bPrefix);
+
+    void              setDisplayText(const String& s) { _displayText = s; }
+
+    void regenerateDisplayText();
+
     static const Char normParenthToChar[int(Parenthesis::NUMOF)];
 
     String _displayText;                        // the constructed display text (read-only)
@@ -204,13 +213,6 @@ private:
 
     FiguredBassItem(FiguredBass* parent = 0, int line = 0);
     FiguredBassItem(const FiguredBassItem&);
-
-    // part parsing
-    int               parseDigit(String& str);
-    int               parseParenthesis(String& str, int parenthIdx);
-    int               parsePrefixSuffix(String& str, bool bPrefix);
-
-    void              setDisplayText(const String& s) { _displayText = s; }
 };
 
 //---------------------------------------------------------
