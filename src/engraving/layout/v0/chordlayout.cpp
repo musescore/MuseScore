@@ -60,6 +60,7 @@
 #include "tlayout.h"
 #include "arpeggiolayout.h"
 #include "slurtielayout.h"
+#include "beamlayout.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::layout::v0;
@@ -118,7 +119,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             double y = note->line() * _spatium * .5;
             note->setPos(x, y);
         }
-        item->computeUp();
+        computeUp(item, ctx);
         layoutStem(item, ctx);
         item->addLedgerLines();
         return;
@@ -1134,10 +1135,241 @@ void ChordLayout::layoutHook(Chord* item, LayoutContext& ctx)
 {
     if (!item->_hook) {
         item->createHook();
-        item->computeUp();
+        computeUp(item, ctx);
     }
     item->_hook->setHookType(item->up() ? item->durationType().hooks() : -item->durationType().hooks());
     layout::v0::TLayout::layout(item->_hook, ctx);
+}
+
+void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
+{
+    assert(!item->_notes.empty());
+
+    item->_usesAutoUp = false;
+
+    const StaffType* tab = item->staff() ? item->staff()->staffTypeForElement(item) : 0;
+    bool isTabStaff = tab && tab->isTabStaff();
+    if (isTabStaff) {
+        if (tab->stemless()) {
+            item->_up = false;
+            return;
+        }
+        if (!tab->stemThrough()) {
+            bool staffHasMultipleVoices = item->measure()->hasVoices(item->staffIdx(), item->tick(), item->actualTicks());
+            if (staffHasMultipleVoices) {
+                bool isTrackEven = item->track() % 2 == 0;
+                item->_up = isTrackEven;
+                return;
+            }
+            item->_up = !tab->stemsDown();
+            return;
+        }
+    }
+
+    if (item->_stemDirection != DirectionV::AUTO && !item->_beam && !(item->_tremolo && item->_tremolo->twoNotes())) {
+        item->_up = item->_stemDirection == DirectionV::UP;
+        return;
+    }
+
+    if (item->_isUiItem) {
+        item->_up = true;
+        return;
+    }
+
+    if (item->_beam) {
+        bool mixedDirection = false;
+        bool cross = false;
+        ChordRest* firstCr = item->_beam->elements().front();
+        ChordRest* lastCr = item->_beam->elements().back();
+        Chord* firstChord = nullptr;
+        Chord* lastChord = nullptr;
+        for (ChordRest* currCr : item->_beam->elements()) {
+            if (!currCr->isChord()) {
+                continue;
+            }
+            if (!firstChord) {
+                firstChord = toChord(currCr);
+            }
+            lastChord = toChord(currCr);
+        }
+        DirectionV stemDirections = DirectionV::AUTO;
+        for (ChordRest* cr : item->_beam->elements()) {
+            if (!item->_beam->userModified() && !mixedDirection && cr->isChord() && toChord(cr)->stemDirection() != DirectionV::AUTO) {
+                // on an unmodified beam, if all of the elements on that beam are explicitly set in one direction
+                // (or AUTO), use that as the direction. This is necessary because the beam has not been laid out yet.
+                if (stemDirections == DirectionV::AUTO) {
+                    stemDirections = toChord(cr)->stemDirection();
+                } else if (stemDirections != toChord(cr)->stemDirection()) {
+                    mixedDirection = true;
+                }
+            }
+            if (cr->isChord() && toChord(cr)->staffMove() != 0) {
+                cross = true;
+                if (!item->_beam->userModified()) { // if the beam is user-modified _up must be decided later down
+                    int move = toChord(cr)->staffMove();
+                    // we have to determine the first and last chord direction for the beam
+                    // so that we can calculate the beam anchor points
+                    if (move > 0) {
+                        item->_up = item->staffMove() > 0;
+                        firstCr->setUp(firstCr->staffMove() > 0);
+                        lastCr->setUp(lastCr->staffMove() > 0);
+                    } else {
+                        item->_up = item->staffMove() >= 0;
+                        firstCr->setUp(firstCr->staffMove() >= 0);
+                        lastCr->setUp(lastCr->staffMove() >= 0);
+                    }
+                }
+                break;
+            }
+        }
+        Measure* measure = item->findMeasure();
+        if (!cross) {
+            if (!mixedDirection && stemDirections != DirectionV::AUTO) {
+                item->_up = stemDirections == DirectionV::UP;
+            } else if (!item->_beam->userModified()) {
+                item->_up = item->_beam->up();
+            }
+        }
+        if (!measure->explicitParent()) {
+            // this method will be called later (from Measure::layoutCrossStaff) after the
+            // system is completely laid out.
+            // this is necessary because otherwise there's no way to deal with cross-staff beams
+            // because we don't know how far apart the staves actually are
+            return;
+        }
+        if (item->_beam->userModified()) {
+            if (cross && item == firstCr) {
+                // necessary because this beam was never laid out before, so its position isn't known
+                // and the first chord would calculate wrong stem direction
+                TLayout::layout(item->_beam, ctx);
+            } else {
+                // otherwise we can use stale layout data; the only reason we would need to lay out here is if
+                // it's literally never been laid out before which due to the insane nature of our layout system
+                // is actually a possible thing
+                BeamLayout::layoutIfNeed(item->_beam, ctx);
+            }
+            PointF base = item->_beam->pagePos();
+            Note* baseNote = item->_up ? item->downNote() : item->upNote();
+            double noteY = baseNote->pagePos().y();
+            double noteX = item->stemPosX() + item->pagePos().x() - base.x();
+            PointF startAnchor = PointF();
+            PointF endAnchor = PointF();
+            startAnchor = item->_beam->chordBeamAnchor(firstChord, BeamTremoloLayout::ChordBeamAnchorType::Start);
+            endAnchor = item->_beam->chordBeamAnchor(lastChord, BeamTremoloLayout::ChordBeamAnchorType::End);
+
+            if (item == item->_beam->elements().front()) {
+                item->_up = noteY > startAnchor.y();
+            } else if (item == item->_beam->elements().back()) {
+                item->_up = noteY > endAnchor.y();
+            } else {
+                double proportionAlongX = (noteX - startAnchor.x()) / (endAnchor.x() - startAnchor.x());
+                double desiredY = proportionAlongX * (endAnchor.y() - startAnchor.y()) + startAnchor.y();
+                item->_up = noteY > desiredY;
+            }
+        }
+
+        TLayout::layout(item->_beam, ctx);
+        if (cross && item->_tremolo && item->_tremolo->twoNotes() && item->_tremolo->chord1() == item
+            && item->_tremolo->chord1()->beam() == item->_tremolo->chord2()->beam()) {
+            // beam-infixed two-note trems have to be laid out here
+            TLayout::layout(item->_tremolo, ctx);
+        }
+        if (!cross && !item->_beam->userModified()) {
+            item->_up = item->_beam->up();
+        }
+        return;
+    } else if (item->_tremolo && item->_tremolo->twoNotes()) {
+        Chord* c1 = item->_tremolo->chord1();
+        Chord* c2 = item->_tremolo->chord2();
+        bool cross = c1->staffMove() != c2->staffMove();
+        if (cross && item == c1) {
+            TLayout::layout(item->_tremolo, ctx);
+        }
+        Measure* measure = item->findMeasure();
+        if (!cross && !item->_tremolo->userModified()) {
+            item->_up = item->_tremolo->up();
+        }
+        if (!measure->explicitParent()) {
+            // this method will be called later (from Measure::layoutCrossStaff) after the
+            // system is completely laid out.
+            // this is necessary because otherwise there's no way to deal with cross-staff beams
+            // because we don't know how far apart the staves actually are
+            return;
+        }
+        if (item->_tremolo->userModified()) {
+            Note* baseNote = item->_up ? item->downNote() : item->upNote();
+            double tremY = item->_tremolo->chordBeamAnchor(item, BeamTremoloLayout::ChordBeamAnchorType::Middle).y();
+            double noteY = baseNote->pagePos().y();
+            item->_up = noteY > tremY;
+        } else if (cross) {
+            // unmodified cross-staff trem, should be one note per staff
+            if (item->_staffMove != 0) {
+                item->_up = item->_staffMove > 0;
+            } else {
+                int otherStaffMove = item->_staffMove == c1->staffMove() ? c2->staffMove() : c1->staffMove();
+                item->_up = otherStaffMove < 0;
+            }
+        }
+        if (!cross && !item->_tremolo->userModified()) {
+            item->_up = item->_tremolo->up();
+        }
+        return;
+    }
+
+    bool staffHasMultipleVoices = item->measure()->hasVoices(item->staffIdx(), item->tick(), item->actualTicks());
+    if (staffHasMultipleVoices) {
+        bool isTrackEven = item->track() % 2 == 0;
+        item->_up = isTrackEven;
+        return;
+    }
+
+    bool isGraceNote = item->_noteType != NoteType::NORMAL;
+    if (isGraceNote) {
+        item->_up = true;
+        return;
+    }
+
+    bool chordIsCrossStaff = item->staffMove() != 0;
+    if (chordIsCrossStaff) {
+        item->_up = item->staffMove() > 0;
+        return;
+    }
+
+    std::vector<int> distances = item->noteDistances();
+    int direction = ChordLayout::computeAutoStemDirection(distances);
+    item->_up = direction > 0;
+    item->_usesAutoUp = direction == 0;
+}
+
+void ChordLayout::computeUp(ChordRest* item, LayoutContext& ctx)
+{
+    if (item->isChord()) {
+        computeUp(static_cast<Chord*>(item), ctx);
+    } else {
+        // base ChordRest
+        item->_usesAutoUp = false;
+        item->_up = true;
+    }
+}
+
+// return 1 means up, 0 means in the middle, -1 means down
+int ChordLayout::computeAutoStemDirection(const std::vector<int>& noteDistances)
+{
+    int left = 0;
+    int right = static_cast<int>(noteDistances.size()) - 1;
+
+    while (left <= right) {
+        int leftNote = noteDistances.at(left);
+        int rightNote = noteDistances.at(right);
+        int netDirecting = leftNote + rightNote;
+        if (netDirecting == 0) {
+            left++;
+            right--;
+            continue;
+        }
+        return netDirecting > 0 ? 1 : -1;
+    }
+    return 0;
 }
 
 //---------------------------------------------------------

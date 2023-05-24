@@ -164,7 +164,7 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, double x, double y, dou
                 noteDistances.push_back(distance);
             }
             std::sort(noteDistances.begin(), noteDistances.end());
-            up = Chord::computeAutoStemDirection(noteDistances);
+            up = ChordLayout::computeAutoStemDirection(noteDistances);
             isUp = up > 0;
         } else if (item->_chord1->stemDirection() != DirectionV::AUTO) {
             isUp = item->_chord1->stemDirection() == DirectionV::UP;

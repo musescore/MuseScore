@@ -25,12 +25,10 @@
 #include "types/typesconv.h"
 #include "layout/v0/tlayout.h"
 
-#include "chord.h"
 #include "dynamichairpingroup.h"
 #include "expression.h"
 #include "measure.h"
 #include "mscore.h"
-#include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "system.h"
@@ -392,7 +390,7 @@ void Dynamic::setDynamicType(const String& tag)
 {
     std::string utf8Tag = tag.toStdString();
     size_t n = dynList.size();
-    for (int i = 0; i < n; ++i) {
+    for (size_t i = 0; i < n; ++i) {
         if (TConv::toXml(DynamicType(i)).ascii() == utf8Tag || dynList[i].text == utf8Tag) {
             setDynamicType(DynamicType(i));
             setXmlText(String::fromUtf8(dynList[i].text));

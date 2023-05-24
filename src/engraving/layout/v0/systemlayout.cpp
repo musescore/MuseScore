@@ -1477,7 +1477,7 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                 }
                 for (Chord* grace : toChord(e)->graceNotes()) {
                     if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
-                        grace->computeUp();
+                        ChordLayout::computeUp(grace, ctx);
                     }
                 }
             }
@@ -1496,7 +1496,7 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                 Chord* chord = toChord(e);
                 if (chord->beam() && (chord->beam()->cross() || chord->beam()->userModified())) {
                     bool prevUp = chord->up();
-                    chord->computeUp();
+                    ChordLayout::computeUp(chord, ctx);
                     if (chord->up() != prevUp) {
                         // If the chord has changed direction needs to be re-laid out
                         ChordLayout::layoutChords1(chord->score(), &seg, chord->vStaffIdx(), ctx);
@@ -1508,7 +1508,7 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                     Chord* c2 = t->chord2();
                     if (t->userModified() || (c1->staffMove() != 0 || c2->staffMove() != 0)) {
                         bool prevUp = chord->up();
-                        chord->computeUp();
+                        ChordLayout::computeUp(chord, ctx);
                         if (chord->up() != prevUp) {
                             ChordLayout::layoutChords1(chord->score(), &seg, chord->vStaffIdx(), ctx);
                             seg.createShape(chord->vStaffIdx());

@@ -602,6 +602,13 @@ void ChordRest::removeDeleteBeam(bool beamed)
     }
 }
 
+void ChordRest::computeUp()
+{
+    UNREACHABLE;
+    _usesAutoUp = false;
+    _up = true;
+}
+
 //---------------------------------------------------------
 //   replaceBeam
 //---------------------------------------------------------
