@@ -2729,6 +2729,9 @@ void Note::updateRelLine(int relLine, bool undoable)
       const Staff* staff  = score()->staff(idx);
       const StaffType* st = staff->staffTypeForElement(this);
 
+      if (st->isTabStaff()) // tab staff is already correct, and the following relStep method doesn't apply whatsoever to tab staves
+            return;
+
       if (chord()->staffMove()) {
             // check that destination staff makes sense (might have been deleted)
             int minStaff = part()->startTrack() / VOICES;
