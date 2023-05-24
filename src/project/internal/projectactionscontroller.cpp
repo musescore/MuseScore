@@ -27,6 +27,7 @@
 
 #include "defer.h"
 #include "translation.h"
+#include "async/async.h"
 
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
@@ -360,7 +361,10 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
         globalContext()->setCurrentProject(nullptr);
 
         if (quitApp) {
-            dispatcher()->dispatch("quit", actions::ActionData::make_arg1<bool>(false));
+            //! NOTE: we need to call `quit` in the next event loop due to controlling the lifecycle of this method
+            async::Async::call(this, [this](){
+                dispatcher()->dispatch("quit", actions::ActionData::make_arg1<bool>(false));
+            });
         } else {
             Ret ret = openPageIfNeed(HOME_PAGE_URI);
             if (!ret) {
