@@ -27,16 +27,12 @@
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
 
-#include "iengravingfont.h"
-
 #include "layout/v0/tlayout.h"
 #include "layout/v0/slurtielayout.h"
+#include "layout/v0/chordlayout.h"
 
-#include "articulation.h"
 #include "beam.h"
 #include "chord.h"
-#include "fretcircle.h"
-#include "hook.h"
 #include "measure.h"
 #include "mscoreview.h"
 #include "navigate.h"
@@ -1059,7 +1055,8 @@ void Slur::computeUp()
             for (Note* note : chord2->notes()) {
                 note->updateLine(); // because chord direction is based on note lines
             }
-            chord2->computeUp();
+            layout::v0::LayoutContext ctx(score());
+            layout::v0::ChordLayout::computeUp(chord2, ctx);
         }
 
         if (chord1 && chord1->beam() && chord1->beam()->cross()) {

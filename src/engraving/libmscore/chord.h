@@ -210,9 +210,6 @@ public:
 
     void setTrack(track_idx_t val) override;
 
-    void computeUp() override;
-    static int computeAutoStemDirection(const std::vector<int>& noteDistances);
-
     double dotPosX() const { return _dotPosX; }
     void setDotPosX(double x) { _dotPosX = x; }
 

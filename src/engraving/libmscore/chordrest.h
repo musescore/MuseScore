@@ -28,6 +28,10 @@
 #include "durationelement.h"
 #include "types/types.h"
 
+namespace mu::engraving::layout::v0 {
+class ChordLayout;
+}
+
 namespace mu::engraving {
 enum class CrossMeasure : signed char {
     UNKNOWN = -1,
@@ -55,29 +59,6 @@ class ChordRest : public DurationElement
 {
     OBJECT_ALLOCATOR(engraving, ChordRest)
     DECLARE_CLASSOF(ElementType::INVALID) // dummy
-
-    ElementList _el;
-    TDuration _durationType;
-    int _staffMove; // -1, 0, +1, used for crossbeaming
-    int _storedStaffMove = 0; // used to remember and re-apply staff move if needed
-
-    void processSiblings(std::function<void(EngravingItem*)> func);
-
-protected:
-    std::vector<Lyrics*> _lyrics;
-    TabDurationSymbol* _tabDur;           // stores a duration symbol in tablature staves
-
-    Beam* _beam;
-    BeamSegment* _beamlet = nullptr;
-    BeamMode _beamMode;
-    bool _up;                             // actual stem direction
-    bool _usesAutoUp;
-    bool m_isSmall;
-    bool _melismaEnd;
-
-    // CrossMeasure: combine 2 tied notes if across a bar line and can be combined in a single duration
-    CrossMeasure _crossMeasure;           ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
-    TDuration _crossMeasureTDur;          ///< the total Duration type of the combined notes
 
 public:
     ChordRest(const ElementType& type, Segment* parent);
@@ -203,7 +184,7 @@ public:
     virtual EngravingItem* prevSegmentElement() override;
     virtual String accessibleExtraInfo() const override;
     virtual Shape shape() const override;
-    virtual void computeUp() { _usesAutoUp = false; _up = true; }
+    virtual void computeUp();
 
     bool isFullMeasureRest() const { return _durationType == DurationType::V_MEASURE; }
     virtual void removeMarkings(bool keepTremolo = false);
@@ -213,6 +194,34 @@ public:
     void undoAddAnnotation(EngravingItem*);
 
     virtual double intrinsicMag() const = 0;
+
+protected:
+
+    friend class layout::v0::ChordLayout;
+
+    std::vector<Lyrics*> _lyrics;
+    TabDurationSymbol* _tabDur;           // stores a duration symbol in tablature staves
+
+    Beam* _beam;
+    BeamSegment* _beamlet = nullptr;
+    BeamMode _beamMode;
+    bool _up;                             // actual stem direction
+    bool _usesAutoUp;
+    bool m_isSmall;
+    bool _melismaEnd;
+
+    // CrossMeasure: combine 2 tied notes if across a bar line and can be combined in a single duration
+    CrossMeasure _crossMeasure;           ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
+    TDuration _crossMeasureTDur;          ///< the total Duration type of the combined notes
+
+private:
+
+    void processSiblings(std::function<void(EngravingItem*)> func);
+
+    ElementList _el;
+    TDuration _durationType;
+    int _staffMove; // -1, 0, +1, used for crossbeaming
+    int _storedStaffMove = 0; // used to remember and re-apply staff move if needed
 };
 } // namespace mu::engraving
 #endif

@@ -32,8 +32,6 @@
 #include "realfn.h"
 #include "layout/v0/tlayout.h"
 #include "layout/v0/chordlayout.h"
-#include "rw/400/measurerw.h"
-#include "style/style.h"
 
 #include "accidental.h"
 #include "actionicon.h"
@@ -3240,6 +3238,7 @@ void Measure::layoutMeasureElements()
 
 void Measure::layoutCrossStaff()
 {
+    layout::v0::LayoutContext ctx(score());
     for (Segment& s : m_segments) {
         if (!s.enabled()) {
             continue;
@@ -3254,12 +3253,12 @@ void Measure::layoutCrossStaff()
                 Tremolo* tremolo = c->tremolo();
                 if ((beam && (beam->cross() || beam->userModified()))
                     || (tremolo && tremolo->twoNotes() && tremolo->userModified())) {
-                    c->computeUp(); // for cross-staff beams
+                    layout::v0::ChordLayout::computeUp(c, ctx); // for cross-staff beams
                 }
                 if (!c->graceNotes().empty()) {
                     for (Chord* grace : c->graceNotes()) {
                         if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
-                            grace->computeUp(); // for cross-staff beams
+                            layout::v0::ChordLayout::computeUp(grace, ctx); // for cross-staff beams
                         }
                     }
                 }

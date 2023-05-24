@@ -28,6 +28,7 @@
 
 namespace mu::engraving {
 class Chord;
+class ChordRest;
 class MStyle;
 class Measure;
 class Note;
@@ -54,6 +55,10 @@ public:
 
     static void layoutStem(Chord* item, LayoutContext& ctx);
     static void layoutHook(Chord* item, LayoutContext& ctx);
+
+    static void computeUp(Chord* item, LayoutContext& ctx);
+    static void computeUp(ChordRest* item, LayoutContext& ctx);
+    static int computeAutoStemDirection(const std::vector<int>& noteDistances);
 
     static void layoutChords1(Score* score, Segment* segment, staff_idx_t staffIdx, LayoutContext& ctx);
     static double layoutChords2(std::vector<Note*>& notes, bool up, LayoutContext& ctx);
