@@ -163,7 +163,7 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_WHITE_THEME_VALUES {
     { ITEM_OPACITY_DISABLED, 0.3 }
 };
 
-void UiConfiguration::initSettings()
+void UiConfiguration::init()
 {
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
     settings()->setDefaultValue(UI_FOLLOW_SYSTEM_THEME_KEY, Val(false));
@@ -212,6 +212,8 @@ void UiConfiguration::initSettings()
     m_uiArrangement.stateChanged(WINDOW_GEOMETRY_KEY).onNotify(this, [this]() {
         m_windowGeometryChanged.notify();
     });
+
+    initThemes();
 }
 
 void UiConfiguration::load()

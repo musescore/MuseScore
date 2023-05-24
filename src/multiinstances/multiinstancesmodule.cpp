@@ -75,7 +75,7 @@ void MultiInstancesModule::registerResources()
     multiinstances_init_qrc();
 }
 
-void MultiInstancesModule::onInit(const framework::IApplication::RunMode& mode)
+void MultiInstancesModule::onPreInit(const framework::IApplication::RunMode& mode)
 {
     if (mode != framework::IApplication::RunMode::GuiApp) {
         return;
