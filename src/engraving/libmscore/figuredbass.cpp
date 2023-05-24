@@ -26,11 +26,9 @@
 
 #include "rw/xmlreader.h"
 
-#include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
 
 #include "style/textstyle.h"
-#include "layout/v0/tlayout.h"
 
 #include "chord.h"
 #include "factory.h"
@@ -39,7 +37,6 @@
 #include "rest.h"
 #include "score.h"
 #include "segment.h"
-#include "system.h"
 
 #include "log.h"
 
@@ -628,6 +625,12 @@ PropertyValue FiguredBassItem::propertyDefault(Pid id) const
     }
 }
 
+void FiguredBassItem::regenerateDisplayText()
+{
+    // re-generate displayText
+    layout()->regenerateDisplayText(this);
+}
+
 //---------------------------------------------------------
 //   UNDOABLE PROPERTY SETTERS
 //---------------------------------------------------------
@@ -640,9 +643,7 @@ void FiguredBassItem::undoSetPrefix(Modifier pref)
         if (pref != Modifier::NONE && _suffix != Modifier::NONE) {
             undoChangeProperty(Pid::FBSUFFIX, int(Modifier::NONE));
         }
-        // re-generate displayText
-        layout::v0::LayoutContext ctx(score());
-        layout::v0::TLayout::layout(this, ctx);
+        regenerateDisplayText();
     }
 }
 
@@ -650,9 +651,7 @@ void FiguredBassItem::undoSetDigit(int digit)
 {
     if (digit >= 0 && digit <= 9) {
         undoChangeProperty(Pid::FBDIGIT, digit);
-        // re-generate displayText
-        layout::v0::LayoutContext ctx(score());
-        layout::v0::TLayout::layout(this, ctx);
+        regenerateDisplayText();
     }
 }
 
@@ -663,57 +662,43 @@ void FiguredBassItem::undoSetSuffix(Modifier suff)
     if (suff != Modifier::NONE && _prefix != Modifier::NONE) {
         undoChangeProperty(Pid::FBPREFIX, int(Modifier::NONE));
     }
-    // re-generate displayText
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+    regenerateDisplayText();
 }
 
 void FiguredBassItem::undoSetContLine(ContLine val)
 {
     undoChangeProperty(Pid::FBCONTINUATIONLINE, int(val));
-    // re-generate displayText
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+    regenerateDisplayText();
 }
 
 void FiguredBassItem::undoSetParenth1(Parenthesis par)
 {
     undoChangeProperty(Pid::FBPARENTHESIS1, int(par));
-    // re-generate displayText
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+    regenerateDisplayText();
 }
 
 void FiguredBassItem::undoSetParenth2(Parenthesis par)
 {
     undoChangeProperty(Pid::FBPARENTHESIS2, int(par));
-    // re-generate displayText
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+    regenerateDisplayText();
 }
 
 void FiguredBassItem::undoSetParenth3(Parenthesis par)
 {
     undoChangeProperty(Pid::FBPARENTHESIS3, int(par));
-    // re-generate displayText
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+    regenerateDisplayText();
 }
 
 void FiguredBassItem::undoSetParenth4(Parenthesis par)
 {
     undoChangeProperty(Pid::FBPARENTHESIS4, int(par));
-    // re-generate displayText
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+    regenerateDisplayText();
 }
 
 void FiguredBassItem::undoSetParenth5(Parenthesis par)
 {
     undoChangeProperty(Pid::FBPARENTHESIS5, int(par));
-    // re-generate displayText
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+    regenerateDisplayText();
 }
 
 //---------------------------------------------------------

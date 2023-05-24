@@ -52,6 +52,7 @@ public:
     // Layout others
     //! TODO Need to find out why
     void layoutOnAddLedgerLines(LedgerLine* item) override;
+    void regenerateDisplayText(FiguredBassItem* item) override;
 };
 }
 

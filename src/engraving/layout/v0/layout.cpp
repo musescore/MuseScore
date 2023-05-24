@@ -26,6 +26,7 @@
 #include "libmscore/barline.h"
 #include "libmscore/bracket.h"
 #include "libmscore/ledgerline.h"
+#include "libmscore/figuredbass.h"
 
 #include "tlayout.h"
 #include "layoutcontext.h"
@@ -91,6 +92,13 @@ void Layout::layoutOnChordRestDrop(BarLine* item)
 
 void Layout::layoutOnAddLedgerLines(LedgerLine* item)
 {
+    LayoutContext ctx(item->score());
+    TLayout::layout(item, ctx);
+}
+
+void Layout::regenerateDisplayText(FiguredBassItem* item)
+{
+    // re-generate displayText
     LayoutContext ctx(item->score());
     TLayout::layout(item, ctx);
 }
