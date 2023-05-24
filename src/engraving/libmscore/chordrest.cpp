@@ -182,8 +182,9 @@ EngravingItem* ChordRest::drop(EditData& data)
             bl->setPos(PointF());
             bl->setTrack(staffIdx() * VOICES);
             bl->setGenerated(false);
+            Fraction blt = bl->barLineType() == BarLineType::START_REPEAT ? tick() : tick() + actualTicks();
 
-            if (tick() == m->tick()) {
+            if (blt == m->tick() || blt == m->endTick()) {
                 return m->drop(data);
             }
 
@@ -191,7 +192,7 @@ EngravingItem* ChordRest::drop(EditData& data)
             for (Staff* st  : staff()->staffList()) {
                 Score* score = st->score();
                 Measure* measure = score->tick2measure(m->tick());
-                Segment* seg = measure->undoGetSegmentR(SegmentType::BarLine, rtick());
+                Segment* seg = measure->undoGetSegment(SegmentType::BarLine, blt);
                 BarLine* l;
                 if (obl == 0) {
                     obl = l = bl->clone();

@@ -3412,6 +3412,14 @@ void Score::cmdDeleteSelection()
                             break;
                         }
                     }
+                } else if (e->isBarLine() && toBarLine(e)->barLineType() != BarLineType::START_REPEAT) {
+                    // we want the tick of the ChordRest that precedes the barline (in the same track)
+                    for (Segment* s = toBarLine(e)->segment()->prev(); s; s = s->prev()) {
+                        if (s->isChordRestType() && s->element(e->track())) {
+                            tick = s->tick();
+                            break;
+                        }
+                    }
                 } else if (e->explicitParent()
                            && (e->explicitParent()->isSegment() || e->explicitParent()->isChord() || e->explicitParent()->isNote()
                                || e->explicitParent()->isRest())) {
