@@ -381,7 +381,7 @@ Ret AbstractCloudService::uploadingRetFromRawUploadingRet(const Ret& rawRet, boo
         { 400, mu::TranslatableString("cloud", "Invalid request") },
         { 401, mu::TranslatableString("cloud", "Authorization required") },
         { 403, mu::TranslatableString("cloud", "Forbidden. User is not owner of the score.") },
-        { 422, mu::TranslatableString("cloud", "Validation is failed") },
+        { 422, mu::TranslatableString("cloud", "Validation failed") },
         { 500, mu::TranslatableString("cloud", "Internal server error") },
     };
 

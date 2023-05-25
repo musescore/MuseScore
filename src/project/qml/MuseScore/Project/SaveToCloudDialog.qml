@@ -89,7 +89,7 @@ StyledDialogView {
             StyledTextLabel {
                 id: titleLabel
                 text: root.isPublish
-                      ? qsTrc("project/save", "Publish to") + " " + (Boolean(contentItem.cloudInfo) ? contentItem.cloudInfo.cloudTitle : "")
+                      ? qsTrc("project/save", "Publish to %1").arg(Boolean(contentItem.cloudInfo) ? contentItem.cloudInfo.cloudTitle : "")
                       : qsTrc("project/save", "Save to cloud")
                 font: ui.theme.largeBodyBoldFont
                 horizontalAlignment: Text.AlignLeft

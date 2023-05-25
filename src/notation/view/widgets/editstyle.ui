@@ -10516,8 +10516,14 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="1" column="2">
             <widget class="QToolButton" name="resetAvoidBarLines">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Avoid barlines' setting</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -10562,8 +10568,14 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="2">
             <widget class="QToolButton" name="resetDynamicsSize">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Scale' value</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -10759,8 +10771,14 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="0" column="1">
             <widget class="QToolButton" name="resetSnapExpression">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Snap to dynamics' setting</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
