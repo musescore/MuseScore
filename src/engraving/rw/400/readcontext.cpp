@@ -72,6 +72,41 @@ bool ReadContext::isMasterScore() const
     return m_score->isMaster();
 }
 
+void ReadContext::setMasterCtx(ReadContext* ctx)
+{
+    m_masterCtx = ctx;
+}
+
+ReadContext* ReadContext::masterCtx()
+{
+    if (!m_score) {
+        return this;
+    }
+
+    if (m_score->isMaster()) {
+        return this;
+    }
+
+    DO_ASSERT(m_masterCtx);
+
+    return m_masterCtx;
+}
+
+const ReadContext* ReadContext::masterCtx() const
+{
+    if (!m_score) {
+        return this;
+    }
+
+    if (m_score->isMaster()) {
+        return this;
+    }
+
+    DO_ASSERT(m_masterCtx);
+
+    return m_masterCtx;
+}
+
 String ReadContext::mscoreVersion() const
 {
     return m_score->mscoreVersion();
@@ -129,6 +164,11 @@ bool ReadContext::isSameScore(const EngravingObject* obj) const
 
 ReadLinks ReadContext::readLinks() const
 {
+    return doReadLinks();
+}
+
+ReadLinks ReadContext::doReadLinks() const
+{
     ReadLinks l;
     l.linksIndexer = m_linksIndexer;
     l.staffLinkedElements = m_staffLinkedElements;
@@ -137,11 +177,21 @@ ReadLinks ReadContext::readLinks() const
 
 void ReadContext::initLinks(const ReadLinks& l)
 {
+    doInitLinks(l);
+}
+
+void ReadContext::doInitLinks(const ReadLinks& l)
+{
     m_linksIndexer = l.linksIndexer;
     m_staffLinkedElements = l.staffLinkedElements;
 }
 
 void ReadContext::addLink(Staff* staff, LinkedObjects* link, const Location& location)
+{
+    doAddLink(staff, link, location);
+}
+
+void ReadContext::doAddLink(Staff* staff, LinkedObjects* link, const Location& location)
 {
     int staffIndex = static_cast<int>(staff->idx());
     const bool isMasterScore = staff->score()->isMaster();
@@ -163,6 +213,11 @@ void ReadContext::addLink(Staff* staff, LinkedObjects* link, const Location& loc
 }
 
 LinkedObjects* ReadContext::getLink(bool isMasterScore, const Location& location, int localIndexDiff)
+{
+    return doGetLink(isMasterScore, location, localIndexDiff);
+}
+
+LinkedObjects* ReadContext::doGetLink(bool isMasterScore, const Location& location, int localIndexDiff)
 {
     int staffIndex = location.staff();
     if (!isMasterScore) {
@@ -206,6 +261,11 @@ std::map<int, std::vector<std::pair<LinkedObjects*, Location> > >& ReadContext::
     return m_staffLinkedElements;
 }
 
+std::map<int, LinkedObjects*>& ReadContext::linkIds()
+{
+    return masterCtx()->_elinks;
+}
+
 Fraction ReadContext::rtick() const
 {
     return _curMeasure ? _tick - _curMeasure->tick() : _tick;
@@ -226,8 +286,13 @@ void ReadContext::incTick(const Fraction& f)
 
 Location ReadContext::location(bool forceAbsFrac) const
 {
+    return doLocation(forceAbsFrac);
+}
+
+Location ReadContext::doLocation(bool forceAbsFrac) const
+{
     Location l = Location::absolute();
-    fillLocation(l, forceAbsFrac);
+    doFillLocation(l, forceAbsFrac);
     return l;
 }
 
@@ -241,6 +306,11 @@ Location ReadContext::location(bool forceAbsFrac) const
 //---------------------------------------------------------
 
 void ReadContext::fillLocation(Location& l, bool forceAbsFrac) const
+{
+    doFillLocation(l, forceAbsFrac);
+}
+
+void ReadContext::doFillLocation(Location& l, bool forceAbsFrac) const
 {
     constexpr Location defaults = Location::absolute();
     const bool absFrac = (pasteMode() || forceAbsFrac);
@@ -263,6 +333,11 @@ void ReadContext::fillLocation(Location& l, bool forceAbsFrac) const
 
 void ReadContext::setLocation(const Location& l)
 {
+    doSetLocation(l);
+}
+
+void ReadContext::doSetLocation(const Location& l)
+{
     if (l.isRelative()) {
         Location newLoc = l;
         newLoc.toAbsolute(location());
@@ -272,7 +347,7 @@ void ReadContext::setLocation(const Location& l)
             setTrack(newLoc.track() - _trackOffset);
             return;
         }
-        setLocation(newLoc);     // recursion
+        doSetLocation(newLoc);     // recursion
         return;
     }
     setTrack(l.track() - _trackOffset);
@@ -377,20 +452,30 @@ void ReadContext::removeConnector(const ConnectorInfoReader* c)
     }
 }
 
+void ReadContext::addConnectorInfoLater(std::shared_ptr<rw400::ConnectorInfoReader> c)
+{
+    _pendingConnectors.push_back(c);
+}
+
 void ReadContext::checkConnectors()
 {
-    for (std::unique_ptr<ConnectorInfoReader>& c : _pendingConnectors) {
-        addConnectorInfo(std::move(c));
+    doCheckConnectors();
+}
+
+void ReadContext::doCheckConnectors()
+{
+    for (std::shared_ptr<ConnectorInfoReader>& c : _pendingConnectors) {
+        addConnectorInfo(c);
     }
     _pendingConnectors.clear();
 }
 
-void ReadContext::addConnectorInfo(std::unique_ptr<ConnectorInfoReader> c)
+void ReadContext::addConnectorInfo(std::shared_ptr<ConnectorInfoReader> c)
 {
     _connectors.push_back(std::move(c));
     ConnectorInfoReader* c1 = _connectors.back().get();
     c1->update();
-    for (std::unique_ptr<ConnectorInfoReader>& c2 : _connectors) {
+    for (std::shared_ptr<ConnectorInfoReader>& c2 : _connectors) {
         if (c2->connect(c1)) {
             if (c2->finished()) {
                 c2->addToScore(pasteMode());
@@ -412,6 +497,11 @@ static bool distanceSort(const std::pair<int, std::pair<ConnectorInfoReader*, Co
 //---------------------------------------------------------
 
 void ReadContext::reconnectBrokenConnectors()
+{
+    doReconnectBrokenConnectors();
+}
+
+void ReadContext::doReconnectBrokenConnectors()
 {
     if (_connectors.empty()) {
         return;

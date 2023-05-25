@@ -28,10 +28,7 @@
 #include "engraving/rw/400/tread.h"
 #include "engraving/layout/v0/tlayout.h"
 
-#include "libmscore/masterscore.h"
 #include "libmscore/engravingitem.h"
-#include "libmscore/page.h"
-#include "libmscore/system.h"
 #include "libmscore/actionicon.h"
 #include "libmscore/chord.h"
 #include "libmscore/factory.h"
@@ -62,6 +59,7 @@ void NoteGroupsExampleView::dragEnterEvent(QDragEnterEvent* event)
 // LOGD("NoteGroupsExampleView::dragEnterEvent Symbol: <%s>", a.data());
 
         XmlReader e(ByteArray::fromQByteArrayNoCopy(a));
+        ReadContext rctx;
         PointF dragOffset;
         Fraction duration;      // dummy
         ElementType type = EngravingItem::readType(e, &dragOffset, &duration);
@@ -69,7 +67,7 @@ void NoteGroupsExampleView::dragEnterEvent(QDragEnterEvent* event)
         m_dragElement = Factory::createItem(type, m_score->dummy());
         if (m_dragElement) {
             m_dragElement->resetExplicitParent();
-            rw400::TRead::readItem(m_dragElement, e, *e.context());
+            rw400::TRead::readItem(m_dragElement, e, rctx);
             layout::v0::LayoutContext lctx(m_dragElement->score());
             layout::v0::TLayout::layoutItem(m_dragElement, lctx);
         }

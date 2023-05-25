@@ -298,7 +298,7 @@ static String convertFromHtml(const String& in_html)
 //   readTextProperties
 //---------------------------------------------------------
 
-static bool readTextProperties(XmlReader& e, TextBase* t, EngravingItem*)
+static bool readTextProperties(XmlReader& e, ReadContext& ctx, TextBase* t, EngravingItem*)
 {
     const AsciiStringView tag(e.name());
     if (tag == "style") {
@@ -414,7 +414,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, EngravingItem*)
         e.readText();
     } else if (tag == "systemFlag") {
         e.readText();
-    } else if (!rw400::TRead::readTextProperties(t, e, *e.context())) {
+    } else if (!rw400::TRead::readTextProperties(t, e, ctx)) {
         return false;
     }
     t->setOffset(PointF());       // ignore user offsets
@@ -426,10 +426,10 @@ static bool readTextProperties(XmlReader& e, TextBase* t, EngravingItem*)
 //   readText114
 //---------------------------------------------------------
 
-static void readText114(XmlReader& e, TextBase* t, EngravingItem* be)
+static void readText114(XmlReader& e, ReadContext& ctx, TextBase* t, EngravingItem* be)
 {
     while (e.readNextStartElement()) {
-        if (!readTextProperties(e, t, be)) {
+        if (!readTextProperties(e, ctx, t, be)) {
             e.unknown();
         }
     }
@@ -439,7 +439,7 @@ static void readText114(XmlReader& e, TextBase* t, EngravingItem* be)
 //   readAccidental
 //---------------------------------------------------------
 
-static void readAccidental(Accidental* a, XmlReader& e)
+static void readAccidental(Accidental* a, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -589,7 +589,7 @@ static void readAccidental(Accidental* a, XmlReader& e)
             a->setSmall(e.readInt());
         } else if (tag == "offset") {
             e.skipCurrentElement();       // ignore manual layout in older scores
-        } else if (TRead::readItemProperties(a, e, *e.context())) {
+        } else if (TRead::readItemProperties(a, e, ctx)) {
         } else {
             e.unknown();
         }
@@ -673,7 +673,7 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
             // the accidental needs to know the properties of the
             // track it belongs to (??)
             a->setTrack(note->track());
-            readAccidental(a, e);
+            readAccidental(a, e, ctx);
             if (!ctx.hasAccidental) {              // only the new accidental, if it has been added previously
                 note->add(a);
             }
@@ -946,13 +946,13 @@ static ClefType readClefType(int i)
 //   readClef
 //---------------------------------------------------------
 
-static void readClef(Clef* clef, XmlReader& e)
+static void readClef(Clef* clef, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             clef->setClefType(readClefType(e.readInt()));
-        } else if (!rw400::TRead::readProperties(clef, e, *e.context())) {
+        } else if (!rw400::TRead::readProperties(clef, e, ctx)) {
             e.unknown();
         }
     }
@@ -1005,7 +1005,7 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e, ReadContext& ctx)
 //   readTremolo
 //---------------------------------------------------------
 
-static void readTremolo(Tremolo* tremolo, XmlReader& e)
+static void readTremolo(Tremolo* tremolo, XmlReader& e, ReadContext& ctx)
 {
     enum class OldTremoloType : char {
         OLD_R8 = 0,
@@ -1035,7 +1035,7 @@ static void readTremolo(Tremolo* tremolo, XmlReader& e)
                 break;
             }
             tremolo->setTremoloType(st);
-        } else if (!TRead::readItemProperties(tremolo, e, *e.context())) {
+        } else if (!TRead::readItemProperties(tremolo, e, ctx)) {
             e.unknown();
         }
     }
@@ -1071,7 +1071,7 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e, ReadContext& ctx)
             tremolo->setDurationType(chord->durationType());
             chord->setTremolo(tremolo);
             tremolo->setTrack(chord->track());
-            readTremolo(tremolo, e);
+            readTremolo(tremolo, e, ctx);
             tremolo->setParent(chord);
         } else if (Read206::readChordProperties206(e, ctx, chord)) {
         } else {
@@ -1109,13 +1109,13 @@ static void readRest(Measure* m, Rest* rest, XmlReader& e, ReadContext& ctx)
 //   readTempoText
 //---------------------------------------------------------
 
-void readTempoText(TempoText* t, XmlReader& e)
+void readTempoText(TempoText* t, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "tempo") {
             t->setTempo(e.readDouble());
-        } else if (!readTextProperties(e, t, t)) {
+        } else if (!readTextProperties(e, ctx, t, t)) {
             e.unknown();
         }
     }
@@ -1125,10 +1125,10 @@ void readTempoText(TempoText* t, XmlReader& e)
 //   readStaffText
 //---------------------------------------------------------
 
-void readStaffText(StaffText* t, XmlReader& e)
+void readStaffText(StaffText* t, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
-        if (!readTextProperties(e, t, t)) {
+        if (!readTextProperties(e, ctx, t, t)) {
             e.unknown();
         }
     }
@@ -1138,14 +1138,14 @@ void readStaffText(StaffText* t, XmlReader& e)
 //   readLineSegment114
 //---------------------------------------------------------
 
-static void readLineSegment114(XmlReader& e, LineSegment* ls)
+static void readLineSegment114(XmlReader& e, ReadContext& ctx, LineSegment* ls)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "off1") {
             ls->setOffset(e.readPoint() * ls->spatium());
         } else {
-            rw400::TRead::readProperties(ls, e, *e.context());
+            rw400::TRead::readProperties(ls, e, ctx);
         }
     }
 }
@@ -1160,19 +1160,19 @@ static bool readTextLineProperties114(XmlReader& e, ReadContext& ctx, TextLineBa
 
     if (tag == "beginText") {
         Text* text = Factory::createText(tl, TextStyleType::DEFAULT, false);
-        readText114(e, text, tl);
+        readText114(e, ctx, text, tl);
         tl->setBeginText(text->xmlText());
         tl->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
         delete text;
     } else if (tag == "continueText") {
         Text* text = Factory::createText(tl, TextStyleType::DEFAULT, false);
-        readText114(e, text, tl);
+        readText114(e, ctx, text, tl);
         tl->setContinueText(text->xmlText());
         tl->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
         delete text;
     } else if (tag == "endText") {
         Text* text = Factory::createText(tl, TextStyleType::DEFAULT, false);
-        readText114(e, text, tl);
+        readText114(e, ctx, text, tl);
         tl->setEndText(text->xmlText());
         tl->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
         delete text;
@@ -1187,7 +1187,7 @@ static bool readTextLineProperties114(XmlReader& e, ReadContext& ctx, TextLineBa
     } else if (tag == "Segment") {
         LineSegment* ls = tl->createLineSegment(ctx.dummy()->system());
         ls->setTrack(tl->track());     // needed in read to get the right staff mag
-        readLineSegment114(e, ls);
+        readLineSegment114(e, ctx, ls);
         // in v1.x "visible" is a property of the segment only;
         // we must ensure that it propagates also to the parent element.
         // That's why the visibility is set after adding the segment
@@ -1470,7 +1470,7 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
         } else if (tag == "rightParen") {
             h->setRightParen(true);
             e.readNext();
-        } else if (!readTextProperties(e, h, h)) {
+        } else if (!readTextProperties(e, ctx, h, h)) {
             e.unknown();
         }
     }
@@ -1838,7 +1838,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
 
             Clef* clef = Factory::createClef(segment);
             clef->setTrack(ctx.track());
-            readClef(clef, e);
+            readClef(clef, e, ctx);
             if (ctx.mscVersion() < 113) {
                 clef->setOffset(PointF());
             }
@@ -1919,8 +1919,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                     l->setTicks(Fraction::fromTicks(e.readInt()));
                 } else if (t == "Number") {                                 // obsolete
                     _verseNumber = Factory::createText(l);
-                    readText114(e, _verseNumber, l);
-                } else if (!readTextProperties(e, l, l)) {
+                    readText114(e, ctx, _verseNumber, l);
+                } else if (!readTextProperties(e, ctx, l, l)) {
                     e.unknown();
                 }
             }
@@ -1949,7 +1949,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
             StaffText* t = Factory::createStaffText(segment);
             t->setTrack(ctx.track());
-            readStaffText(t, e);
+            readStaffText(t, e, ctx);
             if (t->empty()) {
                 LOGD("reading empty text: deleted");
                 delete t;
@@ -1962,7 +1962,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             dyn->setTrack(ctx.track());
             rw400::TRead::read(dyn, e, ctx); // for 114 scores, dynamics are frontloaded in the measure with <tick> attributes.
             // so we need to reset its parent to the correct one after that element is read.
-            segment = m->getSegment(SegmentType::ChordRest, e.context()->tick());
+            segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
             dyn->setParent(segment);
             if (dyn->dynamicType() == DynamicType::OTHER && dyn->xmlText().isEmpty()) {
                 // if we add this dynamic, it will be an unselectable invisible object that
@@ -1976,13 +1976,13 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
             TempoText* t = Factory::createTempoText(segment);
             t->setTrack(ctx.track());
-            readTempoText(t, e);
+            readTempoText(t, e, ctx);
             segment->add(t);
         } else if (tag == "StaffText") {
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
             StaffText* t = Factory::createStaffText(segment);
             t->setTrack(ctx.track());
-            readStaffText(t, e);
+            readStaffText(t, e, ctx);
             segment->add(t);
         } else if (tag == "Harmony") {
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
@@ -2137,7 +2137,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             }
         } else if (tag == "MeasureNumber") {
             MeasureNumber* noText = new MeasureNumber(m);
-            readText114(e, noText, m);
+            readText114(e, ctx, noText, m);
             noText->setTrack(ctx.track());
             noText->setParent(m);
             m->setNoText(noText->staffIdx(), noText);
@@ -2190,11 +2190,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
 //   readBoxProperties
 //---------------------------------------------------------
 
-static void readBox(XmlReader& e, Box* b);
+static void readBox(XmlReader& e, ReadContext& ctx, Box* b);
 
-static bool readBoxProperties(XmlReader& e, Box* b)
+static bool readBoxProperties(XmlReader& e, ReadContext& ctx, Box* b)
 {
-    ReadContext& ctx = *e.context();
     const AsciiStringView tag(e.name());
     if (tag == "height") {
         b->setBoxHeight(Spatium(e.readDouble()));
@@ -2220,10 +2219,10 @@ static bool readBoxProperties(XmlReader& e, Box* b)
         Text* t;
         if (b->isTBox()) {
             t = toTBox(b)->text();
-            readText114(e, t, t);
+            readText114(e, ctx, t, t);
         } else {
             t = Factory::createText(b);
-            readText114(e, t, t);
+            readText114(e, ctx, t, t);
             if (t->empty()) {
                 LOGD("read empty text");
             } else {
@@ -2232,24 +2231,24 @@ static bool readBoxProperties(XmlReader& e, Box* b)
         }
     } else if (tag == "Symbol") {
         Symbol* s = new Symbol(b);
-        rw400::TRead::read(s, e, *e.context());
+        rw400::TRead::read(s, e, ctx);
         b->add(s);
     } else if (tag == "Image") {
         if (MScore::noImages) {
             e.skipCurrentElement();
         } else {
             Image* image = new Image(b);
-            image->setTrack(e.context()->track());
-            rw400::TRead::read(image, e, *e.context());
+            image->setTrack(ctx.track());
+            rw400::TRead::read(image, e, ctx);
             b->add(image);
         }
     } else if (tag == "HBox") {
         HBox* hb = Factory::createHBox(b->system());
-        readBox(e, hb);
+        readBox(e, ctx, hb);
         b->add(hb);
     } else if (tag == "VBox") {
         VBox* vb = Factory::createVBox(b->system());
-        readBox(e, vb);
+        readBox(e, ctx, vb);
         b->add(vb);
     }
 //      else if (MeasureBase::readProperties(e))
@@ -2264,7 +2263,7 @@ static bool readBoxProperties(XmlReader& e, Box* b)
 //   readBox
 //---------------------------------------------------------
 
-static void readBox(XmlReader& e, Box* b)
+static void readBox(XmlReader& e, ReadContext& ctx, Box* b)
 {
     b->setLeftMargin(0.0);
     b->setRightMargin(0.0);
@@ -2278,13 +2277,13 @@ static void readBox(XmlReader& e, Box* b)
         const AsciiStringView tag(e.name());
         if (tag == "HBox") {
             HBox* hb = Factory::createHBox(b->system());
-            readBox(e, hb);
+            readBox(e, ctx, hb);
             b->add(hb);
         } else if (tag == "VBox") {
             VBox* vb = Factory::createVBox(b->system());
-            readBox(e, vb);
+            readBox(e, ctx, vb);
             b->add(vb);
-        } else if (!readBoxProperties(e, b)) {
+        } else if (!readBoxProperties(e, ctx, b)) {
             e.unknown();
         }
     }
@@ -2354,7 +2353,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
             }
         } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
             Box* mb = toBox(Factory::createItemByName(tag, score->dummy()));
-            readBox(e, mb);
+            readBox(e, ctx, mb);
             mb->setTick(ctx.tick());
             score->measures()->add(mb);
         } else if (tag == "tick") {
@@ -2442,7 +2441,7 @@ static void readDrumset(Drumset* ds, XmlReader& e)
 //   readInstrument
 //---------------------------------------------------------
 
-static void readInstrument(Instrument* i, Part* p, XmlReader& e)
+static void readInstrument(Instrument* i, Part* p, XmlReader& e, ReadContext& ctx)
 {
     int program = -1;
     int bank    = 0;
@@ -2477,7 +2476,7 @@ static void readInstrument(Instrument* i, Part* p, XmlReader& e)
                 customDrumset = true;
             }
             readDrumset(i->drumset(), e);
-        } else if (rw400::TRead::readProperties(i, e, p, &customDrumset)) {
+        } else if (rw400::TRead::readProperties(i, e, ctx, p, &customDrumset)) {
         } else {
             e.unknown();
         }
@@ -2534,7 +2533,7 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
             readStaff(staff, e, ctx);
         } else if (tag == "Instrument") {
             Instrument* i = part->instrument();
-            readInstrument(i, part, e);
+            readInstrument(i, part, e, ctx);
             // add string data from MIDI program number, if possible
             if (i->stringData()->strings() == 0
                 && i->channel().size() > 0
@@ -2565,12 +2564,12 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
             }
         } else if (tag == "name") {
             Text* t = Factory::createText(ctx.dummy(), TextStyleType::DEFAULT, false);
-            readText114(e, t, t);
+            readText114(e, ctx, t, t);
             part->instrument()->setLongName(t->xmlText());
             delete t;
         } else if (tag == "shortName") {
             Text* t = Factory::createText(ctx.dummy(), TextStyleType::DEFAULT, false);
-            readText114(e, t, t);
+            readText114(e, ctx, t, t);
             part->instrument()->setShortName(t->xmlText());
             delete t;
         } else if (tag == "trackName") {
@@ -2748,7 +2747,6 @@ Err Read114::read(Score* score, XmlReader& e, ReadInOutData* out)
     }
 
     ReadContext ctx(score);
-    e.setContext(&ctx);
 
     DEFER {
         if (out) {
@@ -2837,7 +2835,7 @@ Err Read114::read(Score* score, XmlReader& e, ReadInOutData* out)
             readPageFormat(&pf, e);
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = Factory::createText(masterScore->dummy(), TextStyleType::DEFAULT, false);
-            readText114(e, text, text);
+            readText114(e, ctx, text, text);
             masterScore->setMetaTag(u"copyright", text->plainText());
             delete text;
         } else if (tag == "movement-number") {
@@ -2877,7 +2875,7 @@ Err Read114::read(Score* score, XmlReader& e, ReadInOutData* out)
             } else if (tag == "Pedal") {
                 readPedal114(e, ctx, toPedal(s));
             } else if (tag == "Trill") {
-                Read206::readTrill206(e, toTrill(s));
+                Read206::readTrill206(e, ctx, toTrill(s));
             } else {
                 assert(tag == "HairPin");
                 Read206::readHairpin206(e, ctx, toHairpin(s));

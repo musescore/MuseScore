@@ -50,7 +50,7 @@ static PaletteTreePtr readPalette(const ByteArray& data)
 
         if (reader.name() == PALETTE_XML_TAG) {
             PaletteTreePtr tree = std::make_shared<PaletteTree>();
-            tree->read(reader);
+            tree->read(reader, false);
             return tree;
         }
     }

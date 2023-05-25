@@ -167,7 +167,7 @@ void PaletteCell::setElementTranslated(bool translate)
     }
 }
 
-bool PaletteCell::read(XmlReader& e)
+bool PaletteCell::read(XmlReader& e, bool pasteMode)
 {
     bool add = true;
     name = e.attribute("name");
@@ -203,7 +203,9 @@ bool PaletteCell::read(XmlReader& e)
             if (!element) {
                 e.unknown();
             } else {
-                rw400::TRead::readItem(element.get(), e, *e.context());
+                ReadContext ctx;
+                ctx.setPasteMode(pasteMode);
+                rw400::TRead::readItem(element.get(), e, ctx);
                 element->styleChanged();
 
                 if (element->type() == ElementType::ACTION_ICON) {

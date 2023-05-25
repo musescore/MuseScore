@@ -998,10 +998,10 @@ void PaletteProvider::write(XmlWriter& xml) const
     }
 }
 
-bool PaletteProvider::read(XmlReader& e)
+bool PaletteProvider::read(XmlReader& e, bool pasteMode)
 {
     PaletteTreePtr tree = std::make_shared<PaletteTree>();
-    if (!tree->read(e)) {
+    if (!tree->read(e, pasteMode)) {
         return false;
     }
 

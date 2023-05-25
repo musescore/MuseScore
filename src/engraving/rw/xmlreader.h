@@ -74,9 +74,6 @@ public:
     // for reading old files (< 3.01)
     void setOffsetLines(int64_t val) { m_offsetLines = val; }
 
-    ReadContext* context() const;
-    void setContext(ReadContext* context);
-
 private:
 
     void htmlToString(int level, String*);

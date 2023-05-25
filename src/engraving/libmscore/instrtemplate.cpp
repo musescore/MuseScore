@@ -534,7 +534,8 @@ void InstrumentTemplate::read(XmlReader& e)
         } else if (tag == "Channel" || tag == "channel") {
             InstrChannel a;
             InstrumentTrackId tId;
-            rw400::TRead::read(&a, e, nullptr, tId);
+            ReadContext rctx(nullptr);
+            rw400::TRead::read(&a, e, rctx, nullptr, tId);
             channel.push_back(a);
         } else if (tag == "Articulation") {
             MidiArticulation a;

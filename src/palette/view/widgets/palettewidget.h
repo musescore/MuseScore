@@ -152,7 +152,7 @@ public:
     QSize sizeHint() const override;
 
     // Read/write
-    void read(mu::engraving::XmlReader&);
+    void read(mu::engraving::XmlReader&, bool pasteMode);
     void write(mu::engraving::XmlWriter&) const;
     bool readFromFile(const QString& path);
     void writeToFile(const QString& path) const;

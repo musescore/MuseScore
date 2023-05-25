@@ -84,7 +84,7 @@ public:
     void setElementTranslated(bool translate);
 
     void write(mu::engraving::XmlWriter& xml) const;
-    bool read(mu::engraving::XmlReader&);
+    bool read(mu::engraving::XmlReader&, bool pasteMode);
     QByteArray toMimeData() const;
 
     static PaletteCellPtr fromMimeData(const QByteArray& data);
