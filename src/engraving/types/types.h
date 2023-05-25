@@ -662,7 +662,7 @@ struct OrnamentInterval
 };
 
 enum class OrnamentShowAccidental {
-    DEFAULT,
+    AUTO,
     ANY_ALTERATION,
     ALWAYS,
 };
