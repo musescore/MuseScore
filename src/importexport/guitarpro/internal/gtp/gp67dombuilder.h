@@ -52,6 +52,7 @@ protected:
     std::vector<GPMasterTracks::Automation> readTempoMap(XmlDomNode* currentNode);
     GPTrack::RSE readTrackRSE(XmlDomNode* trackChildNode) const;
     GPMasterBar::KeySig readKeySig(XmlDomNode* keyNode) const;
+    bool readUseFlats(XmlDomNode* keyNode) const;
     GPMasterBar::TimeSig readTimeSig(XmlDomNode* timeNode) const;
     void readTrackProperties(XmlDomNode* propertiesNode, GPTrack* track) const;
     void readBeatProperties(const XmlDomNode& propertiesNode, GPBeat* beat) const;

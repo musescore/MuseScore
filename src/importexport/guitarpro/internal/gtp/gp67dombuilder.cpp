@@ -350,7 +350,7 @@ std::unique_ptr<GPMasterBar> GP67DomBuilder::createGPMasterBar(XmlDomNode* maste
         } else if (nodeName == u"AlternateEndings") {
             masterBar->setAlternativeEnding(readEnding(&innerNode));
         } else if (nodeName == u"Key") {
-            masterBar->setKeySig(readKeySig(&innerNode));
+            masterBar->setKeySig(readKeySig(&innerNode), readUseFlats(&innerNode));
         } else if (nodeName == u"Bars") {
             const String& barsElement = innerNode.toElement().text();
             const StringList& bars = barsElement.split(u' ');
@@ -859,6 +859,15 @@ GPMasterBar::KeySig GP67DomBuilder::readKeySig(XmlDomNode* keyNode) const
     int keyCount = accidentalCount.toElement().text().toInt();
 
     return GPMasterBar::KeySig(keyCount);
+}
+
+bool GP67DomBuilder::readUseFlats(XmlDomNode* keyNode) const
+{
+    const auto& transposeAs = keyNode->firstChildElement("TransposeAs");
+    if (transposeAs.isNull()) {
+        return false;
+    }
+    return transposeAs.toElement().text() == "Flats";
 }
 
 GPMasterBar::TimeSig GP67DomBuilder::readTimeSig(XmlDomNode* timeNode) const
