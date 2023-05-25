@@ -66,10 +66,11 @@ public:
     Err read(Score* score, XmlReader& e, ReadInOutData* out) override;
 
     static EngravingItem* readArticulation(EngravingItem*, XmlReader&, ReadContext& ctx);
-    static void readAccidental206(Accidental*, XmlReader&);
-    static void readTextStyle206(MStyle* style, XmlReader& e, std::map<String, std::map<Sid, PropertyValue> >& excessStyles);
+    static void readAccidental206(Accidental*, XmlReader&, ReadContext& ctx);
+    static void readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, std::map<String, std::map<Sid,
+                                                                                                          PropertyValue> >& excessStyles);
     static void readTextLine206(XmlReader& e, ReadContext& ctx, TextLineBase* tlb);
-    static void readTrill206(XmlReader& e, Trill* t);
+    static void readTrill206(XmlReader& e, ReadContext& ctx, Trill* t);
     static void readHairpin206(XmlReader& e, ReadContext& ctx, Hairpin* h);
     static void readSlur206(XmlReader& e, ReadContext& ctx, Slur* s);
     static void readTie206(XmlReader& e, ReadContext& ctx, Tie* t);

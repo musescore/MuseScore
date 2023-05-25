@@ -294,7 +294,7 @@ public:
 
     virtual void undoUnlink();
     LinkedObjects* links() const { return _links; }
-    void setLinks(LinkedObjects* le) { _links = le; }
+    void setLinks(LinkedObjects* le);
 
     //---------------------------------------------------
     // check type

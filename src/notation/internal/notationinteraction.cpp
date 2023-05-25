@@ -76,6 +76,7 @@
 #include "libmscore/textframe.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/undo.h"
+#include "engraving/compat/dummyelement.h"
 
 #include "engraving/rw/400/tread.h"
 
@@ -1267,6 +1268,7 @@ void NotationInteraction::startDrop(const QByteArray& edata)
     resetDropElement();
 
     mu::engraving::XmlReader e(edata);
+    mu::engraving::ReadContext rctx;
     m_dropData.ed.dragOffset = QPointF();
     Fraction duration;      // dummy
     ElementType type = EngravingItem::readType(e, &m_dropData.ed.dragOffset, &duration);
@@ -1279,7 +1281,7 @@ void NotationInteraction::startDrop(const QByteArray& edata)
         }
         m_dropData.ed.dropElement = el;
         m_dropData.ed.dropElement->setParent(0);
-        rw400::TRead::readItem(m_dropData.ed.dropElement, e, *e.context());
+        rw400::TRead::readItem(m_dropData.ed.dropElement, e, rctx);
 
         layout::v0::LayoutContext lctx(m_dropData.ed.dropElement->score());
         layout::v0::TLayout::layoutItem(m_dropData.ed.dropElement, lctx);
@@ -1735,11 +1737,12 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             ByteArray a = element->mimeData();
 //printf("<<%s>>\n", a.data());
             mu::engraving::XmlReader e(a);
+            mu::engraving::ReadContext rctx;
             mu::engraving::Fraction duration;        // dummy
             PointF dragOffset;
             mu::engraving::ElementType type = mu::engraving::EngravingItem::readType(e, &dragOffset, &duration);
             mu::engraving::Spanner* spanner = static_cast<mu::engraving::Spanner*>(engraving::Factory::createItem(type, score->dummy()));
-            rw400::TRead::readItem(spanner, e, *e.context());
+            rw400::TRead::readItem(spanner, e, rctx);
             spanner->styleChanged();
             score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
         } else if (element->isArticulationFamily() && sel.elements().size() == 1) {
@@ -1791,8 +1794,9 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
 
                 for (staff_idx_t i = sel.staffStart(); i < sel.staffEnd(); ++i) {
                     mu::engraving::XmlReader n(a);
+                    mu::engraving::ReadContext rctx;
                     StaffTypeChange* stc = engraving::Factory::createStaffTypeChange(measure);
-                    rw400::TRead::read(stc, n, *n.context());
+                    rw400::TRead::read(stc, n, rctx);
                     stc->styleChanged(); // update to local style
 
                     score->cmdAddStaffTypeChange(measure, i, stc);
@@ -2000,13 +2004,14 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         ByteArray a = e->mimeData();
 
         mu::engraving::XmlReader n(a);
-        n.context()->setPasteMode(pasteMode);
+        mu::engraving::ReadContext rctx;
+        rctx.setPasteMode(pasteMode);
         Fraction duration;      // dummy
         PointF dragOffset;
         ElementType type = EngravingItem::readType(n, &dragOffset, &duration);
         dropData->dropElement = engraving::Factory::createItem(type, score->dummy());
 
-        rw400::TRead::readItem(dropData->dropElement, n, *n.context());
+        rw400::TRead::readItem(dropData->dropElement, n, rctx);
         dropData->dropElement->styleChanged();       // update to local style
 
         mu::engraving::EngravingItem* el = target->drop(*dropData);
@@ -3627,8 +3632,8 @@ mu::Ret NotationInteraction::repeatSelection()
     }
 
     mu::engraving::XmlReader xml(selection.mimeData());
-    xml.context()->setScore(score());
-    xml.context()->setPasteMode(true);
+    mu::engraving::ReadContext rctx(score());
+    rctx.setPasteMode(true);
     track_idx_t dStaff = selection.staffStart();
     mu::engraving::Segment* endSegment = selection.endSegment();
 
@@ -3640,7 +3645,7 @@ mu::Ret NotationInteraction::repeatSelection()
         if (e) {
             startEdit();
             ChordRest* cr = toChordRest(e);
-            score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
+            score()->pasteStaff(xml, rctx, cr->segment(), cr->staffIdx());
             apply();
         }
     }

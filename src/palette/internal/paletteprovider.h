@@ -248,7 +248,7 @@ public:
     bool paletteChanged() const { return m_userPaletteModel->paletteTreeChanged(); }
 
     void write(engraving::XmlWriter&) const;
-    bool read(engraving::XmlReader&);
+    bool read(engraving::XmlReader&, bool pasteMode);
 
     void updateCellsState(const engraving::Selection& sel) { m_userPaletteModel->updateCellsState(sel); }
     void retranslate()

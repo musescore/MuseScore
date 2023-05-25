@@ -32,8 +32,6 @@
 #include "libmscore/excerpt.h"
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
-#include "libmscore/measurebase.h"
-#include "libmscore/page.h"
 #include "libmscore/part.h"
 #include "libmscore/score.h"
 #include "libmscore/scoreorder.h"
@@ -182,12 +180,13 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
                 ex->setExcerptScore(s);
                 ctx.setLastMeasure(nullptr);
 
-                Score* curScore = e.context()->score();
-                e.context()->setScore(s);
+                Score* curScore = ctx.score();
+                ctx.setScore(s);
+                ctx.setMasterCtx(&ctx);
 
-                readScore302(s, e, *e.context());
+                readScore302(s, e, ctx);
 
-                e.context()->setScore(curScore);
+                ctx.setScore(curScore);
 
                 s->linkMeasures(m);
                 ex->setTracksMapping(ctx.tracks());
@@ -211,7 +210,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-    e.context()->reconnectBrokenConnectors();
+    ctx.reconnectBrokenConnectors();
     if (e.error() != XmlStreamReader::NoError) {
         if (e.error() == XmlStreamReader::CustomError) {
             LOGE() << e.errorString();
@@ -265,7 +264,6 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
 Err Read302::read(Score* score, XmlReader& e, ReadInOutData* out)
 {
     ReadContext ctx(score);
-    e.setContext(&ctx);
 
     DEFER {
         if (out) {

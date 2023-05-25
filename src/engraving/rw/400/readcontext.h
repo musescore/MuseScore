@@ -72,12 +72,17 @@ class ReadContext
     INJECT(IEngravingFontsProvider, engravingFonts)
 public:
 
+    ReadContext() = default;
     ReadContext(Score* score);
     ~ReadContext();
 
     void setScore(Score* score);
     Score* score() const;
     bool isMasterScore() const;
+
+    void setMasterCtx(ReadContext* ctx);
+    ReadContext* masterCtx();
+    const ReadContext* masterCtx() const;
 
     bool pasteMode() const { return _pasteMode; }
     void setPasteMode(bool v) { _pasteMode = v; }
@@ -101,12 +106,6 @@ public:
 
     bool isSameScore(const EngravingObject* obj) const;
 
-    ReadLinks readLinks() const;
-    void initLinks(const ReadLinks& l);
-    void addLink(Staff* staff, LinkedObjects* link, const Location& location);
-    LinkedObjects* getLink(bool isMasterScore, const Location& location, int localIndexDiff);
-    std::map<int, std::vector<std::pair<LinkedObjects*, Location> > >& staffLinkedElements();
-
     bool hasAccidental = false; // used for userAccidental backward compatibility
 
     Fraction tick()  const { return _tick + _tickOffset; }
@@ -120,10 +119,6 @@ public:
     void setTrackOffset(int val) { _trackOffset = val; }
     int trackOffset() const { return _trackOffset; }
     void setTrack(track_idx_t val) { _track = val; }
-
-    Location location(bool forceAbsFrac = false) const;
-    void fillLocation(Location&, bool forceAbsFrac = false) const;
-    void setLocation(const Location&);   // sets a new reading point, taking into account its type (absolute or relative).
 
     void setCurrentMeasure(Measure* m) { _curMeasure = m; }
     Measure* currentMeasure() const { return _curMeasure; }
@@ -149,15 +144,10 @@ public:
     void addSpannerValues(const SpannerValues& sv) { _spannerValues.push_back(sv); }
     const SpannerValues* spannerValues(int id) const;
 
-    void addConnectorInfoLater(std::unique_ptr<rw400::ConnectorInfoReader> c) { _pendingConnectors.push_back(std::move(c)); }   // add connector info to be checked after calling checkConnectors()
-    void checkConnectors();
-    void reconnectBrokenConnectors();
-
     Interval transpose() const { return _transpose; }
     void setTransposeChromatic(int8_t v) { _transpose.chromatic = v; }
     void setTransposeDiatonic(int8_t v) { _transpose.diatonic = v; }
 
-    std::map<int, LinkedObjects*>& linkIds() { return _elinks; }
     TracksMap& tracks() { return _tracks; }
 
     TextStyleType addUserTextStyle(const String& name);
@@ -171,17 +161,51 @@ public:
 
     TimeSigMap* compatTimeSigMap();
 
+    // Master
+    Location location(bool forceAbsFrac = false) const;
+    void fillLocation(Location&, bool forceAbsFrac = false) const;
+    void setLocation(const Location&);   // sets a new reading point, taking into account its type (absolute or relative).
+
+    ReadLinks readLinks() const;
+    void initLinks(const ReadLinks& l);
+    void addLink(Staff* staff, LinkedObjects* link, const Location& location);
+    LinkedObjects* getLink(bool isMasterScore, const Location& location, int localIndexDiff);
+    std::map<int, std::vector<std::pair<LinkedObjects*, Location> > >& staffLinkedElements();
+    std::map<int, LinkedObjects*>& linkIds();
+
+    void addConnectorInfoLater(std::shared_ptr<rw400::ConnectorInfoReader> c);   // add connector info to be checked after calling checkConnectors()
+    void checkConnectors();
+    void reconnectBrokenConnectors();
+
 private:
 
-    void addConnectorInfo(std::unique_ptr<rw400::ConnectorInfoReader>);
+    Location doLocation(bool forceAbsFrac = false) const;
+    void doFillLocation(Location&, bool forceAbsFrac = false) const;
+    void doSetLocation(const Location&);
+
+    ReadLinks doReadLinks() const;
+    void doInitLinks(const ReadLinks& l);
+    void doAddLink(Staff* staff, LinkedObjects* link, const Location& location);
+    LinkedObjects* doGetLink(bool isMasterScore, const Location& location, int localIndexDiff);
+
+    void doCheckConnectors();
+    void doReconnectBrokenConnectors();
+
+    void addConnectorInfo(std::shared_ptr<rw400::ConnectorInfoReader>);
     void removeConnector(const rw400::ConnectorInfoReader*);   // Removes the whole ConnectorInfo chain from the connectors list.
 
     Score* m_score = nullptr;
+    ReadContext* m_masterCtx = nullptr;
 
     bool _pasteMode = false;  // modifies read behaviour on paste operation
 
     std::map<int /*staffIndex*/, std::vector<std::pair<LinkedObjects*, Location> > > m_staffLinkedElements; // one list per staff
     LinksIndexer m_linksIndexer;
+
+    std::map<int, LinkedObjects*> _elinks;       // for reading old files (< 3.01)
+
+    std::vector<std::shared_ptr<rw400::ConnectorInfoReader> > _connectors;
+    std::vector<std::shared_ptr<rw400::ConnectorInfoReader> > _pendingConnectors;  // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
 
     Fraction _tick             { Fraction(0, 1) };
     Fraction _tickOffset       { Fraction(0, 1) };
@@ -200,12 +224,7 @@ private:
     std::list<SpannerValues> _spannerValues;
     std::list<std::pair<int, Spanner*> > _spanner;
 
-    std::vector<std::unique_ptr<rw400::ConnectorInfoReader> > _connectors;
-    std::vector<std::unique_ptr<rw400::ConnectorInfoReader> > _pendingConnectors;  // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
-
     Interval _transpose;
-
-    std::map<int, LinkedObjects*> _elinks;   // for reading old files (< 3.01)
     TracksMap _tracks;
 
     std::list<TextStyleMap> userTextStyles;

@@ -34,6 +34,8 @@ class XmlReader;
 class ChordRest;
 class Measure;
 class Note;
+
+class ReadContext;
 }
 
 namespace mu::engraving::rw400 {
@@ -41,15 +43,9 @@ class ConnectorInfoReader final : public ConnectorInfo
 {
     OBJECT_ALLOCATOR(engraving, ConnectorInfoReader)
 
-    XmlReader* _reader;
-    EngravingItem* _connector;
-    EngravingObject* _connectorReceiver;
-
-    void readEndpointLocation(Location& l);
-
 public:
-    ConnectorInfoReader(XmlReader& e, EngravingItem* current, int track = -1);
-    ConnectorInfoReader(XmlReader& e, Score* current, int track = -1);
+    ConnectorInfoReader(XmlReader& e, ReadContext* ctx, EngravingItem* current, int track = -1);
+    ConnectorInfoReader(XmlReader& e, ReadContext* ctx, Score* current, int track = -1);
 
     ConnectorInfoReader* prev() const { return static_cast<ConnectorInfoReader*>(_prev); }
     ConnectorInfoReader* next() const { return static_cast<ConnectorInfoReader*>(_next); }
@@ -63,12 +59,20 @@ public:
     void update();
     void addToScore(bool pasteMode);
 
-    static void readConnector(std::unique_ptr<ConnectorInfoReader> info, XmlReader& e);
+    static void readConnector(std::shared_ptr<ConnectorInfoReader> info, XmlReader& e, ReadContext& ctx);
 
     static void readAddConnector(ChordRest* item, ConnectorInfoReader* info, bool pasteMode);
     static void readAddConnector(Measure* item, ConnectorInfoReader* info, bool pasteMode);
     static void readAddConnector(Note* item, ConnectorInfoReader* info, bool pasteMode);
     static void readAddConnector(Score* item, ConnectorInfoReader* info, bool pasteMode);
+
+private:
+    void readEndpointLocation(Location& l);
+
+    XmlReader* m_reader = nullptr;
+    ReadContext* m_ctx = nullptr;
+    EngravingItem* m_connector = nullptr;
+    EngravingObject* m_connectorReceiver = nullptr;
 };
 }
 

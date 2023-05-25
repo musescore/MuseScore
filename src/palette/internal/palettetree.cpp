@@ -39,13 +39,13 @@ void PaletteTree::append(PalettePtr palette)
     palettes.emplace_back(palette);
 }
 
-bool PaletteTree::read(mu::engraving::XmlReader& e)
+bool PaletteTree::read(mu::engraving::XmlReader& e, bool pasteMode)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "Palette") {
             PalettePtr p = std::make_shared<Palette>();
-            p->read(e);
+            p->read(e, pasteMode);
             palettes.push_back(p);
         } else {
             e.unknown();

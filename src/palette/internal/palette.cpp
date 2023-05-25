@@ -263,7 +263,7 @@ QSize Palette::scaledGridSize() const
     return gridSize() * configuration()->paletteScaling();
 }
 
-bool Palette::read(XmlReader& e)
+bool Palette::read(XmlReader& e, bool pasteMode)
 {
     m_name = e.attribute("name");
     m_type = Type::Unknown;
@@ -290,13 +290,13 @@ bool Palette::read(XmlReader& e)
             }
         } else if (tag == "visible") {
             m_isVisible = e.readBool();
-        } else if (e.context()->pasteMode() && tag == "expanded") {
+        } else if (pasteMode && tag == "expanded") {
             m_isExpanded = e.readBool();
         } else if (tag == "editable") {
             m_isEditable = e.readBool();
         } else if (tag == "Cell") {
             PaletteCellPtr cell = std::make_shared<PaletteCell>(this);
-            if (!cell->read(e)) {
+            if (!cell->read(e, pasteMode)) {
                 continue;
             }
 
@@ -436,7 +436,7 @@ bool Palette::readFromFile(const QString& p)
 
             while (e.readNextStartElement()) {
                 if (e.name() == "Palette") {
-                    read(e);
+                    read(e, false);
                 } else {
                     e.unknown();
                 }

@@ -46,12 +46,11 @@ template<class T>
 std::shared_ptr<T> fromMimeData(const QByteArray& data, const AsciiStringView& tagName)
 {
     engraving::XmlReader e(data);
-    e.context()->setPasteMode(true);
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == tagName) {
             std::shared_ptr<T> t(new T);
-            if (!t->read(e)) {
+            if (!t->read(e, true)) {
                 return nullptr;
             }
             return t;

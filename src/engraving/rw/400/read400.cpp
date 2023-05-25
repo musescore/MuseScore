@@ -35,7 +35,6 @@
 #include "tread.h"
 
 #include "log.h"
-#include "rw/compat/compatutils.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -43,7 +42,6 @@ using namespace mu::engraving::rw400;
 Err Read400::read(Score* score, XmlReader& e, ReadInOutData* data)
 {
     ReadContext ctx(score);
-    e.setContext(&ctx);
 
     if (!score->isMaster() && data) {
         ctx.initLinks(data->links);
@@ -94,7 +92,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
 {
     std::vector<int> sysStaves;
     while (e.readNextStartElement()) {
-        e.context()->setTrack(mu::nidx);
+        ctx.setTrack(mu::nidx);
         const AsciiStringView tag(e.name());
         if (tag == "Staff") {
             StaffRW::readStaff(score, e, ctx);
