@@ -25,14 +25,14 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Electric Guitar</trackName>
-      <Instrument id="electric-guitar">
-        <longName>Electric Guitar</longName>
-        <shortName>E-Gt</shortName>
+      <trackName>Nylon Guitar</trackName>
+      <Instrument id="cavaquinho">
+        <longName>Nylon Guitar</longName>
+        <shortName>n.guit.</shortName>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
-        <instrumentId>pluck.guitar.electric</instrumentId>
+        <instrumentId>pluck.guitar</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
@@ -72,7 +72,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="27"/>
+          <program value="24"/>
+          <controller ctrl="7" value="95"/>
           </Channel>
         </Instrument>
       </Part>
@@ -91,34 +92,74 @@
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
+            <durationType>quarter</durationType>
             </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
             </Dynamic>
           <Chord>
-            <durationType>whole</durationType>
+            <durationType>quarter</durationType>
             <Note>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>15</fret>
-              <string>4</string>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              <fret>0</fret>
+              <string>1</string>
               </Note>
             </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <location>
+            <fractions>3/4</fractions>
+            </location>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <location>
+            <fractions>3/4</fractions>
+            </location>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
+            <durationType>half</durationType>
             </Rest>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              <fret>10</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>77</pitch>
+              <tpc>13</tpc>
+              <fret>13</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
           <BarLine>
             <subtype>end</subtype>
             </BarLine>

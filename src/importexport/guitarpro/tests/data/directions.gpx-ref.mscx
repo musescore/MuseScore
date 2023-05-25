@@ -249,7 +249,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -271,7 +272,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -293,7 +295,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -315,7 +318,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -345,7 +349,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -375,7 +380,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -405,7 +411,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -427,7 +434,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -447,7 +455,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>

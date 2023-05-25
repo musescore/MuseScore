@@ -729,3 +729,6 @@ TEST_F(GuitarPro_Tests, gpInstrumentChange1beat) {
 TEST_F(GuitarPro_Tests, gpxInstrumentChange1beat) {
     gpReadTest("instr-change-1-beat", "gpx");
 }
+TEST_F(GuitarPro_Tests, gpFixEmptyMeasures) {
+    gpReadTest("mmrest", "gp");
+}
