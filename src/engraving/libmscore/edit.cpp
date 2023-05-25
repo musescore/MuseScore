@@ -2401,10 +2401,6 @@ void Score::deleteItem(EngravingItem* el)
         KeySig* k = toKeySig(el);
         bool ic = k->segment()->next(SegmentType::ChordRest)->findAnnotation(ElementType::INSTRUMENT_CHANGE,
                                                                              el->part()->startTrack(), el->part()->endTrack() - 1);
-        if (ic && k->forInstrumentChange()) {
-            // TODO add allert for user
-            break;
-        }
         undoRemoveElement(k);
         if (ic) {
             KeySigEvent ke = k->keySigEvent();
@@ -3385,6 +3381,7 @@ void Score::cmdDeleteSelection()
         // so we don't try to delete them twice if they are also in selection
         std::set<Spanner*> deletedSpanners;
 
+        bool allertInstrChange = true;
         for (EngravingItem* e : el) {
             // these are the linked elements we are about to delete
             std::list<EngravingObject*> links;
@@ -3436,10 +3433,22 @@ void Score::cmdDeleteSelection()
             }
 
             // We should not allow deleting the very first keySig of the piece, because it is
-            // logically incorrect and leads to a state of undefined key/transposition. The correct
-            // action is for the user to set an atonal/custom keySig as needed.
-            if (e->isKeySig() && e->tick() == Fraction(0, 1)) {
-                continue;
+            // logically incorrect and leads to a state of undefined key/transposition.
+            // Also instrument change key signatures should be undeletable.
+            // The correct action is for the user to set an atonal/custom keySig as needed.
+            if (e->isKeySig()) {
+                if (e->tick() == Fraction(0, 1)) {
+                    continue;
+                } else if (toKeySig(e)->forInstrumentChange()) {
+                    if (allertInstrChange) {
+                        MessageBox::warning(mtrc("engraving", "Instrument change key signature cannot be deleted").toStdString(),
+                                            mtrc("engraving",
+                                                 "Please replace it with a key signature from the palettes instead.").toStdString(),
+                                            { MessageBox::Ok });
+                        allertInstrChange = false;
+                    }
+                    continue;
+                }
             }
 
             // delete element if we have not done so already
