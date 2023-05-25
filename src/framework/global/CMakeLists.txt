@@ -171,9 +171,8 @@ else()
             SKIP_PRECOMPILE_HEADERS ON
         )
         find_library(AppKit NAMES AppKit)
-        set(MODULE_LINK ${MODULE_LINK} ${AppKit})
+        list(APPEND MODULE_LINK ${AppKit})
     endif()
-
 endif()
 
 set(FS_LIB )
@@ -196,11 +195,11 @@ else ()
     set(Z_LIB z)
 endif ()
 
-set(MODULE_INCLUDE
+list(APPEND MODULE_INCLUDE
     ${Z_INCLUDE}
     )
 
-set(MODULE_LINK
+list(APPEND MODULE_LINK
     ${FS_LIB}
     ${Z_LIB}
 )
