@@ -54,6 +54,8 @@ using system_idx_t = size_t;
 using part_idx_t = size_t;
 using page_idx_t = size_t;
 
+using semitone_t = int8_t;
+
 //-------------------------------------------------------------------
 ///   The value of this enum determines the "stacking order"
 ///   of elements on the canvas.
