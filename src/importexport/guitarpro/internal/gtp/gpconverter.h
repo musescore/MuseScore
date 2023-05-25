@@ -96,6 +96,7 @@ private:
     void clearDefectedSpanner();
 
     void convertMasterBar(const GPMasterBar* mB, Context ctx);
+    void fixEmptyMeasures();
     void convertBars(const std::vector<std::unique_ptr<GPBar> >& bars, Context ctx);
     void convertBar(const GPBar* bar, Context ctx);
     void convertVoices(const std::vector<std::unique_ptr<GPVoice> >&, Context ctx);

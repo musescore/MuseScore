@@ -92,11 +92,12 @@
             <tempo>1.683333</tempo>
             <text><sym>metNoteQuarterUp</sym> = 101</text>
             </Tempo>
+          <location>
+            <fractions>1/1</fractions>
+            </location>
           <Rest>
-            <durationType>whole</durationType>
-            </Rest>
-          <Rest>
-            <durationType>half</durationType>
+            <durationType>measure</durationType>
+            <duration>12/8</duration>
             </Rest>
           </voice>
         </Measure>

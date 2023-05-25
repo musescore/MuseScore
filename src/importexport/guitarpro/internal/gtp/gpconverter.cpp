@@ -416,6 +416,54 @@ void GPConverter::convertMasterBar(const GPMasterBar* mB, Context ctx)
     addDirection(mB, measure);
 
     _lastMeasure = measure;
+
+    fixEmptyMeasures();
+}
+
+void GPConverter::fixEmptyMeasures()
+{
+    // Get all ChordRest elems and sort them by staves
+    // Also store root Segment ptr will need it later to delete some rest elems
+    std::map<int, std::vector<std::pair<Segment*, EngravingItem*> > > elems;
+
+    auto ntracks = _score->ntracks();
+    auto type = SegmentType::ChordRest;
+
+    for (Segment* s = _lastMeasure->segments().first(type); s; s = s->next(type)) {
+        for (track_idx_t i = 0; i < ntracks; ++i) {
+            auto e = s->element(i);
+            if (!e) {
+                continue;
+            }
+            elems[i / VOICES].push_back({ s, e });
+        }
+    }
+
+    for (const auto& [staffIdx, segItemPairs] : elems) {
+        bool shouldClear = true;
+        for (auto p : segItemPairs) {
+            // Don't need to do anything if there is not "rest" elem on a staff
+            if (!p.second->isRest()) {
+                shouldClear = false;
+                break;
+            }
+        }
+        if (shouldClear) {
+            // Keep only one rest element in a bar and make its duration V_MEASURE
+            // that way layout can recognize this bar as "empty"
+            // and properly render mmrests
+            size_t lastIndex = segItemPairs.size() - 1;
+            if (segItemPairs.empty()) {
+                continue;
+            }
+            for (size_t i = 0; i < lastIndex; ++i) {
+                segItemPairs.at(i).first->remove(segItemPairs.at(i).second);
+            }
+            Rest* rest = toRest(segItemPairs.at(lastIndex).second);
+            rest->setTicks(_lastMeasure->ticks());
+            rest->setDurationType(DurationType::V_MEASURE);
+        }
+    }
 }
 
 void GPConverter::convertBars(const std::vector<std::unique_ptr<GPBar> >& bars, Context ctx)
