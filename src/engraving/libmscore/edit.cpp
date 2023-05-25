@@ -2955,7 +2955,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
         if (mAfterSel) {
             Segment* s = mAfterSel->findSegment(SegmentType::TimeSig, mAfterSel->tick());
 
-            for (staff_idx_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+            for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                 if (s && s->element(staffIdx * VOICES)) {
                     continue;
                 }
