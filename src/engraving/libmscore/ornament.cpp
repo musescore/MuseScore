@@ -40,7 +40,7 @@ Ornament::Ornament(ChordRest* parent)
 {
     _intervalAbove = OrnamentInterval(IntervalStep::SECOND, IntervalType::AUTO);
     _intervalBelow = OrnamentInterval(IntervalStep::SECOND, IntervalType::AUTO);
-    _showAccidental = OrnamentShowAccidental::ANY_ALTERATION;
+    _showAccidental = OrnamentShowAccidental::DEFAULT;
     _startOnUpperNote = false;
 }
 
@@ -126,7 +126,7 @@ PropertyValue Ornament::propertyDefault(Pid id) const
     case Pid::INTERVAL_BELOW:
         return OrnamentInterval(IntervalStep::SECOND, IntervalType::AUTO);
     case Pid::ORNAMENT_SHOW_ACCIDENTAL:
-        return OrnamentShowAccidental::ANY_ALTERATION;
+        return OrnamentShowAccidental::DEFAULT;
     case Pid::START_ON_UPPER_NOTE:
         return false;
     case Pid::ARTICULATION_ANCHOR:
