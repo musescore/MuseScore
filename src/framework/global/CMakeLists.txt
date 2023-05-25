@@ -159,6 +159,8 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/deprecated/qzipwriter_p.h
         )
 
+    include(GetPlatformInfo)
+
     if (OS_IS_MAC)
         set(MODULE_SRC ${MODULE_SRC}
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosinteractivehelper.mm
