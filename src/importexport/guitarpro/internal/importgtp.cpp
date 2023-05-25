@@ -1093,7 +1093,7 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
         if (version >= 400) {
             Articulation* a = Factory::createArticulation(chord);
             a->setSymId(SymId::guitarFadeIn);
-            a->setAnchor(ArticulationAnchor::TOP_STAFF);
+            a->setAnchor(ArticulationAnchor::TOP);
             a->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
             chord->add(a);
         }
@@ -2640,7 +2640,7 @@ bool GuitarPro3::read(IODevice* io)
                         beatEffects -= 200;
                         Articulation* art = Factory::createArticulation(cr);
                         art->setSymId(SymId::guitarFadeOut);
-                        art->setAnchor(ArticulationAnchor::TOP_STAFF);
+                        art->setAnchor(ArticulationAnchor::TOP);
                         art->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
                         if (!score->toggleArticulation(cr, art)) {
                             delete art;

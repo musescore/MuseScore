@@ -220,9 +220,9 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::articulationMag,         "articulationMag",         PropertyValue(1.0) },
     { Sid::articulationPosAbove,    "articulationPosAbove",    PointF(0.0, 0.0) },
-    { Sid::articulationAnchorDefault, "articulationAnchorDefault", int(ArticulationAnchor::CHORD) },
-    { Sid::articulationAnchorLuteFingering, "articulationAnchorLuteFingering", int(ArticulationAnchor::BOTTOM_CHORD) },
-    { Sid::articulationAnchorOther, "articulationAnchorOther", int(ArticulationAnchor::TOP_STAFF) },
+    { Sid::articulationAnchorDefault, "articulationAnchorDefault", int(ArticulationAnchor::AUTO) },
+    { Sid::articulationAnchorLuteFingering, "articulationAnchorLuteFingering", int(ArticulationAnchor::BOTTOM) },
+    { Sid::articulationAnchorOther, "articulationAnchorOther", int(ArticulationAnchor::TOP) },
     { Sid::articulationStemHAlign,  "articulationStemHAlign",  int(ArticulationStemSideAlign::AVERAGE) },
     { Sid::articulationKeepTogether, "articulationKeepTogether", true },
     { Sid::lastSystemFillLimit,     "lastSystemFillLimit",     PropertyValue(0.3) },

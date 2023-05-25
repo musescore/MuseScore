@@ -732,10 +732,9 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
 
     Articulation* prevArticulation = nullptr;
     for (Articulation* a : item->_articulations) {
-        if (item->measure()->hasVoices(a->staffIdx(), item->tick(), item->actualTicks())
-            && !(a->anchor() == ArticulationAnchor::TOP_CHORD || a->anchor() == ArticulationAnchor::BOTTOM_CHORD)) {
+        if (item->measure()->hasVoices(a->staffIdx(), item->tick(), item->actualTicks()) && a->anchor() == ArticulationAnchor::AUTO) {
             a->setUp(item->up());         // if there are voices place articulation at stem
-        } else if (a->anchor() == ArticulationAnchor::CHORD) {
+        } else if (a->anchor() == ArticulationAnchor::AUTO) {
             if (a->symId() >= SymId::articMarcatoAbove && a->symId() <= SymId::articMarcatoTenutoBelow) {
                 a->setUp(true);         // Gould, p. 117: strong accents above staff
             } else if (item->isGrace() && item->up() && !a->layoutCloseToNote() && item->downNote()->line() < 6) {
@@ -744,7 +743,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                 a->setUp(!item->up());         // place articulation at note head
             }
         } else {
-            a->setUp(a->anchor() == ArticulationAnchor::TOP_STAFF || a->anchor() == ArticulationAnchor::TOP_CHORD);
+            a->setUp(a->anchor() == ArticulationAnchor::TOP);
         }
 
         if (!a->layoutCloseToNote()) {
@@ -947,8 +946,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
     // add space for staccato and tenuto marks which may have been previously laid out
     for (Articulation* a : item->_articulations) {
         ArticulationAnchor aa = a->anchor();
-        if (a->layoutCloseToNote() && a->visible()
-            && aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF) {
+        if (a->layoutCloseToNote() && a->visible() && aa == ArticulationAnchor::AUTO) {
             if (a->up()) {
                 chordTopY = a->y() - a->height() - minDist;
             } else {
@@ -962,7 +960,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             continue;
         }
         ArticulationAnchor aa = a->anchor();
-        if (!a->layoutCloseToNote() || aa == ArticulationAnchor::TOP_STAFF || aa == ArticulationAnchor::BOTTOM_STAFF) {
+        if (!a->layoutCloseToNote()) {
             continue;
         }
         if (a->up()) {
@@ -1000,9 +998,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             stacc = nullptr;
         }
         ArticulationAnchor aa = a->anchor();
-        if (aa == ArticulationAnchor::TOP_STAFF
-            || aa == ArticulationAnchor::BOTTOM_STAFF
-            || !a->layoutCloseToNote()) {
+        if (!a->layoutCloseToNote()) {
             TLayout::layout(a, ctx);
             if (a->up()) {
                 a->setPos(!item->up() || !a->isBasicArticulation() ? headSideX : stemSideX, staffTopY + kearnHeight);

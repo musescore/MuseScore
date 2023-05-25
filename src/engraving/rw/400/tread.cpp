@@ -135,7 +135,7 @@
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
-
+#include "../compat/compatutils.h"
 #include "readcontext.h"
 #include "connectorinforeader.h"
 
@@ -1851,7 +1851,17 @@ bool TRead::readProperties(Articulation* a, XmlReader& xml, ReadContext& ctx)
     } else if (tag == "channel") {
         a->setChannelName(xml.attribute("name"));
         xml.readNext();
-    } else if (TRead::readProperty(a, tag, xml, ctx, Pid::ARTICULATION_ANCHOR)) {
+    } else if (tag == "anchor") {
+        if (ctx.mscVersion() <= 400) {
+            int v = xml.readInt();
+            ArticulationAnchor aa = compat::CompatUtils::translateToNewArticulationAnchor(v);
+            a->setAnchor(aa);
+            if (a->isStyled(Pid::ARTICULATION_ANCHOR)) {
+                a->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
+            }
+        } else {
+            TRead::readProperty(a, tag, xml, ctx, Pid::ARTICULATION_ANCHOR);
+        }
     } else if (tag == "direction") {
         TRead::readProperty(a, xml, ctx, Pid::DIRECTION);
     } else if (tag == "ornamentStyle") {

@@ -2880,7 +2880,7 @@ void GPConverter::addGolpe(const GPBeat* beat, ChordRest* cr)
     art->setSymId(SymId::guitarGolpe);
 
     if (beat->golpe() == GPBeat::Golpe::Thumb) {
-        art->setAnchor(ArticulationAnchor::BOTTOM_STAFF);
+        art->setAnchor(ArticulationAnchor::BOTTOM);
     }
 
     if (!_score->toggleArticulation(static_cast<Chord*>(cr)->upNote(), art)) {
