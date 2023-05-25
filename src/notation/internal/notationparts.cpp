@@ -709,7 +709,7 @@ void NotationParts::onPartsRemoved(const std::vector<Part*>&)
 void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
 {
     staff_idx_t staffLocalIndex = destinationPart->nstaves();
-    mu::engraving::KeyList keyList = score()->keyList();
+    mu::engraving::KeyList keyList = *destinationPart->staff(staffLocalIndex - 1)->keyList();
 
     staff->setScore(score());
     staff->setPart(destinationPart);
