@@ -192,6 +192,10 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
         return;
     }
 
+    if (_cueNoteChord && !_cueNoteChord->explicitParent()) {
+        _cueNoteChord->setParent(toSegment(parentChord->segment()));
+    }
+
     for (size_t i = 0; i < _notesAboveAndBelow.size(); ++i) {
         bool above = (i == 0);
         bool hasIntAbove = hasIntervalAbove();
@@ -259,25 +263,25 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
 
         // Second: if the "Accidental visibility" property is different than default,
         // force the implicit accidentals to be visible when appropriate
+        AccidentalVal accidentalValue = tpc2alter(note->tpc());
+        bool show = false;
         if (_showAccidental == OrnamentShowAccidental::ALWAYS) {
-            AccidentalVal accidentalValue = tpc2alter(note->tpc());
+            show = true;
+        } else if (_showAccidental == OrnamentShowAccidental::ANY_ALTERATION) {
+            Key key = staff()->key(tick());
+            AccidentalState unalteredState;
+            unalteredState.init(key);
+            int pitchLine = absStep(note->tpc(), note->epitch() + note->ottaveCapoFret());
+            AccidentalVal unalteredAccidentalVal = unalteredState.accidentalVal(pitchLine);
+            show = accidentalValue != unalteredAccidentalVal;
+        }
+        if (show) {
             AccidentalType accidentalType = Accidental::value2subtype(accidentalValue);
             if (accidentalType == AccidentalType::NONE) {
                 accidentalType = AccidentalType::NATURAL;
             }
             note->setAccidentalType(accidentalType);
             note->accidental()->setRole(AccidentalRole::AUTO);
-        } else if (_showAccidental == OrnamentShowAccidental::ANY_ALTERATION) {
-            AccidentalVal accidentalValue = tpc2alter(note->tpc());
-            Key key = staff()->key(tick());
-            AccidentalState unalteredState;
-            unalteredState.init(key);
-            int pitchLine = absStep(note->tpc(), note->epitch() + note->ottaveCapoFret());
-            AccidentalVal unalteredAccidentalVal = unalteredState.accidentalVal(pitchLine);
-            if (accidentalValue != unalteredAccidentalVal) {
-                note->setAccidentalType(Accidental::value2subtype(accidentalValue));
-                note->accidental()->setRole(AccidentalRole::AUTO);
-            }
         }
     }
 
