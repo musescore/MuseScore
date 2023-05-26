@@ -23,6 +23,7 @@
 #define MU_ENGRAVING_STAFFRW_H
 
 #include "readcontext.h"
+#include "writecontext.h"
 
 namespace mu::engraving {
 class XmlReader;
@@ -36,8 +37,8 @@ class StaffRW
 public:
 
     static void readStaff(Score* score, XmlReader&, ReadContext& ctx);
-    static void writeStaff(const Staff* staff, XmlWriter& xml, MeasureBase* measureStart, MeasureBase* measureEnd, staff_idx_t staffStart,
-                           staff_idx_t staffIdx, bool selectionOnly);
+    static void writeStaff(const Staff* staff, XmlWriter& xml, WriteContext& ctx, MeasureBase* measureStart, MeasureBase* measureEnd,
+                           staff_idx_t staffStart, staff_idx_t staffIdx, bool selectionOnly);
 };
 }
 

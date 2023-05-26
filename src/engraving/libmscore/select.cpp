@@ -841,9 +841,10 @@ ByteArray Selection::staffMimeData() const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
+    WriteContext wctx;
     xml.startDocument();
-    xml.context()->setClipboardmode(true);
-    xml.context()->setFilter(selectionFilter());
+    wctx.setClipboardmode(true);
+    wctx.setFilter(selectionFilter());
 
     Fraction ticks  = tickEnd() - tickStart();
     int staves = static_cast<int>(staffEnd() - staffStart());
@@ -874,15 +875,14 @@ ByteArray Selection::staffMimeData() const
         }
         xml.startElement("voiceOffset");
         for (voice_idx_t voice = 0; voice < VOICES; voice++) {
-            if (hasElementInTrack(seg1, seg2, startTrack + voice)
-                && xml.context()->canWriteVoice(voice)) {
+            if (hasElementInTrack(seg1, seg2, startTrack + voice) && wctx.canWriteVoice(voice)) {
                 Fraction offset = firstElementInTrack(seg1, seg2, startTrack + voice) - tickStart();
                 xml.tag("voice", { { "id", voice } }, offset.ticks());
             }
         }
         xml.endElement();     // </voiceOffset>
-        xml.context()->setCurTrack(startTrack);
-        rw400::TWrite::writeSegments(xml, *xml.context(), startTrack, endTrack, seg1, seg2, false, false);
+        wctx.setCurTrack(startTrack);
+        rw400::TWrite::writeSegments(xml, wctx, startTrack, endTrack, seg1, seg2, false, false);
         xml.endElement();
     }
 
@@ -900,8 +900,9 @@ ByteArray Selection::symbolListMimeData() const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
+    WriteContext wctx;
     xml.startDocument();
-    xml.context()->setClipboardmode(true);
+    wctx.setClipboardmode(true);
 
     track_idx_t topTrack    = 1000000;
     track_idx_t bottomTrack = 0;
@@ -1122,7 +1123,7 @@ ByteArray Selection::symbolListMimeData() const
             }
         }
         xml.tag("segDelta", numSegs);
-        rw400::TWrite::writeItem(iter->second.e, xml, *xml.context());
+        rw400::TWrite::writeItem(iter->second.e, xml, wctx);
     }
 
     xml.endElement();

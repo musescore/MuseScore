@@ -338,23 +338,4 @@ String XmlWriter::xmlString(const String& s)
 {
     return XmlStreamWriter::escapeString(s);
 }
-
-WriteContext* XmlWriter::context() const
-{
-    if (!m_context) {
-        m_context = new WriteContext();
-        m_selfContext = true;
-    }
-    return m_context;
-}
-
-void XmlWriter::setContext(WriteContext* context)
-{
-    if (m_context && m_selfContext) {
-        delete m_context;
-    }
-
-    m_context = context;
-    m_selfContext = false;
-}
 }

@@ -25,6 +25,7 @@
 namespace mu::engraving {
 class Score;
 class XmlWriter;
+class WriteContext;
 }
 
 namespace mu::engraving::compat {
@@ -34,7 +35,7 @@ public:
     WriteScoreHook() = default;
 
     void onWriteStyle302(Score* score, XmlWriter& xml);
-    void onWriteExcerpts302(Score* score, XmlWriter& xml, bool selectionOnly);
+    void onWriteExcerpts302(Score* score, XmlWriter& xml, WriteContext& ctx, bool selectionOnly);
 };
 }
 #endif // MU_ENGRAVING_WRITESCOREHOOK_H

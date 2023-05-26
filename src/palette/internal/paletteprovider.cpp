@@ -988,13 +988,13 @@ mu::async::Channel<ElementPtr> PaletteProvider::addCustomItemRequested() const
     return m_addCustomItemRequested;
 }
 
-void PaletteProvider::write(XmlWriter& xml) const
+void PaletteProvider::write(XmlWriter& xml, bool pasteMode) const
 {
     if (!m_userPaletteModel) {
         return;
     }
     if (const PaletteTree* tree = m_userPaletteModel->paletteTree()) {
-        tree->write(xml);
+        tree->write(xml, pasteMode);
     }
 }
 

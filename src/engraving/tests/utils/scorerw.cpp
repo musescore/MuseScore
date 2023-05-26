@@ -112,8 +112,9 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
+    WriteContext wctx;
     xml.startDocument();
-    rw400::TWrite::writeItem(element, xml, *xml.context());
+    rw400::TWrite::writeItem(element, xml, wctx);
     xml.flush();
     buffer.close();
 
@@ -121,11 +122,11 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     // read element
     //
 
-    rw400::ReadContext ctx;
+    rw400::ReadContext rctx;
     XmlReader e(buffer.data());
     e.readNextStartElement();
     element = Factory::createItemByName(e.name(), element->score()->dummy());
-    rw400::TRead::readItem(element, e, ctx);
+    rw400::TRead::readItem(element, e, rctx);
     return element;
 }
 

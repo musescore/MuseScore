@@ -417,13 +417,12 @@ MasterScore* MasterScore::clone()
 
     WriteContext writeCtx;
     XmlWriter xml(&buffer);
-    xml.setContext(&writeCtx);
     xml.startDocument();
 
     xml.startElement("museScore", { { "version", MSC_VERSION } });
 
     compat::WriteScoreHook hook;
-    write(xml, false, hook);
+    write(xml, writeCtx, false, hook);
     xml.endElement();
 
     buffer.close();

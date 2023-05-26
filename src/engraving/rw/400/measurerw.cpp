@@ -631,9 +631,11 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
     }
 }
 
-void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig)
+void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, WriteContext& ctx,
+                             staff_idx_t staff,
+                             bool writeSystemElements,
+                             bool forceTimeSig)
 {
-    WriteContext& ctx = *xml.context();
     if (MScore::debugMode) {
         const int mno = measure->no() + 1;
         xml.comment(String(u"Measure %1").arg(mno));

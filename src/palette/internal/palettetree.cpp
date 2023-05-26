@@ -55,12 +55,12 @@ bool PaletteTree::read(mu::engraving::XmlReader& e, bool pasteMode)
     return true;
 }
 
-void PaletteTree::write(mu::engraving::XmlWriter& xml) const
+void PaletteTree::write(mu::engraving::XmlWriter& xml, bool pasteMode) const
 {
     xml.startElement("PaletteBox"); // for compatibility with old palettes file format
 
     for (PalettePtr palette : palettes) {
-        palette->write(xml);
+        palette->write(xml, pasteMode);
     }
 
     xml.endElement();

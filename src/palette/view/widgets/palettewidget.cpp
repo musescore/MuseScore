@@ -1192,9 +1192,9 @@ void PaletteWidget::read(XmlReader& e, bool pasteMode)
     m_palette->read(e, pasteMode);
 }
 
-void PaletteWidget::write(XmlWriter& xml) const
+void PaletteWidget::write(XmlWriter& xml, bool pasteMode) const
 {
-    m_palette->write(xml);
+    m_palette->write(xml, pasteMode);
 }
 
 bool PaletteWidget::readFromFile(const QString& path)

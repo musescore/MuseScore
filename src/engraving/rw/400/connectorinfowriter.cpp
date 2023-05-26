@@ -36,21 +36,23 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
 
-ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, const EngravingItem* current, const EngravingItem* connector, int track,
+ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, WriteContext* ctx, const EngravingItem* current,
+                                         const EngravingItem* connector,
+                                         int track,
                                          Fraction frac)
-    : ConnectorInfo(current, track, frac), _xml(&xml), _connector(connector)
+    : ConnectorInfo(current, track, frac), m_xml(&xml), m_ctx(ctx), _connector(connector)
 {
     IF_ASSERT_FAILED(current) {
         return;
     }
     _type = connector->type();
-    updateCurrentInfo(xml.context()->clipboardmode());
+    updateCurrentInfo(m_ctx->clipboardmode());
 }
 
 void ConnectorInfoWriter::write()
 {
-    XmlWriter& xml = *_xml;
-    WriteContext& ctx = *xml.context();
+    XmlWriter& xml = *m_xml;
+    WriteContext& ctx = *m_ctx;
     if (!ctx.canWrite(_connector)) {
         return;
     }
@@ -98,10 +100,11 @@ void SpannerWriter::fillSpannerPosition(Location& l, const MeasureBase* m, const
 //   SpannerWriter::SpannerWriter
 //---------------------------------------------------------
 
-SpannerWriter::SpannerWriter(XmlWriter& xml, const EngravingItem* current, const Spanner* sp, int track, Fraction frac, bool start)
-    : ConnectorInfoWriter(xml, current, sp, track, frac)
+SpannerWriter::SpannerWriter(XmlWriter& xml, WriteContext* ctx, const EngravingItem* current, const Spanner* sp, int track, Fraction frac,
+                             bool start)
+    : ConnectorInfoWriter(xml, ctx, current, sp, track, frac)
 {
-    const bool clipboardmode = xml.context()->clipboardmode();
+    const bool clipboardmode = ctx->clipboardmode();
     if (!sp->startElement() || !sp->endElement()) {
         LOGW("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->typeName());
         return;
