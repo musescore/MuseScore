@@ -100,7 +100,7 @@ static void transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick
 //    return false if paste fails
 //---------------------------------------------------------
 
-bool Score::pasteStaff(XmlReader& e, ReadContext& ctx, Segment* dst, staff_idx_t dstStaff, Fraction scale)
+bool Score::pasteStaff(XmlReader& e, rw400::ReadContext& ctx, Segment* dst, staff_idx_t dstStaff, Fraction scale)
 {
     assert(dst->isChordRestType());
 
@@ -735,7 +735,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
 
 void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
 {
-    ReadContext ctx(score());
+    rw400::ReadContext ctx(score());
     ctx.setPasteMode(true);
 
     Segment* currSegm = dst->segment();
@@ -1143,7 +1143,7 @@ void Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
             }
             if (canPasteStaff(data, scale)) {
                 XmlReader e(data);
-                ReadContext ctx(this);
+                rw400::ReadContext ctx(this);
                 ctx.setPasteMode(true);
                 if (!pasteStaff(e, ctx, cr->segment(), cr->staffIdx(), scale)) {
                     return;

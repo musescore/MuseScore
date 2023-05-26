@@ -26,16 +26,17 @@
 
 namespace mu::engraving {
 class Score;
-class ReadContext;
 class XmlReader;
 }
 
 namespace mu::engraving::rw400 {
+class ReadContext;
 class Read400 : public IScoreReader
 {
 public:
 
     Err read(Score* score, XmlReader& e, ReadInOutData* data) override;
+
     static bool readScore400(Score* score, XmlReader& e, ReadContext& ctx);
 };
 }

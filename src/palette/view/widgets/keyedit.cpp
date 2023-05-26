@@ -218,7 +218,7 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
     if (dta->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
         QByteArray a = dta->data(mu::commonscene::MIME_SYMBOL_FORMAT);
         XmlReader e(a);
-        ReadContext rctx;
+        rw400::ReadContext rctx;
 
         PointF dragOffset;
         Fraction duration;

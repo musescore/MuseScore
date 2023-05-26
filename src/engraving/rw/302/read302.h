@@ -34,8 +34,11 @@ class Instrument;
 class MasterScore;
 class Score;
 
-class ReadContext;
 class XmlReader;
+}
+
+namespace mu::engraving::rw400 {
+class ReadContext;
 }
 
 namespace mu::engraving::compat {
@@ -47,7 +50,7 @@ public:
     Err read(Score* score, XmlReader& e, ReadInOutData* out) override;
 
 private:
-    static bool readScore302(Score* score, XmlReader& e, ReadContext& ctx);
+    static bool readScore302(Score* score, XmlReader& e, rw400::ReadContext& ctx);
 
     static void fixInstrumentId(Instrument* instrument);
 };

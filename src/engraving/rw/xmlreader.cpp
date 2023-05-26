@@ -33,9 +33,6 @@ using namespace mu;
 namespace mu::engraving {
 XmlReader::~XmlReader()
 {
-    if (m_selfContext) {
-        delete m_context;
-    }
 }
 
 PointF XmlReader::readPoint()

@@ -59,11 +59,11 @@
 namespace mu::engraving {
 class IMimeData;
 class WriteContext;
-class ReadContext;
 }
 
 namespace mu::engraving::rw400 {
 class Read400;
+class ReadContext;
 }
 
 namespace mu::engraving::compat {
@@ -941,7 +941,7 @@ public:
     void styleChanged() override;
 
     void cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
-    bool pasteStaff(XmlReader&, mu::engraving::ReadContext& ctx, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
+    bool pasteStaff(XmlReader&, rw400::ReadContext& ctx, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
     void pasteSymbols(XmlReader& e, ChordRest* dst);
     void renderMidi(EventMap* events, const MidiRenderer::Context& ctx, bool expandRepeats);
 

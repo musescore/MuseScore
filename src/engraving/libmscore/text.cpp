@@ -68,7 +68,7 @@ engraving::PropertyValue Text::propertyDefault(Pid id) const
 String Text::readXmlText(XmlReader& r, Score* score)
 {
     Text t(score->dummy());
-    ReadContext ctx(score);
+    rw400::ReadContext ctx(score);
     rw400::TRead::read(&t, r, ctx);
     return t.xmlText();
 }
