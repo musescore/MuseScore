@@ -959,7 +959,6 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
         if (layoutOnCrossBeamSide && !a->isOnCrossBeamSide()) {
             continue;
         }
-        ArticulationAnchor aa = a->anchor();
         if (!a->layoutCloseToNote()) {
             continue;
         }
@@ -997,7 +996,6 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
         } else {
             stacc = nullptr;
         }
-        ArticulationAnchor aa = a->anchor();
         if (!a->layoutCloseToNote()) {
             TLayout::layout(a, ctx);
             if (a->up()) {
