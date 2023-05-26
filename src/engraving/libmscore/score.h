@@ -58,12 +58,12 @@
 
 namespace mu::engraving {
 class IMimeData;
-class WriteContext;
 }
 
 namespace mu::engraving::rw400 {
 class Read400;
 class ReadContext;
+class WriteContext;
 }
 
 namespace mu::engraving::compat {
@@ -632,9 +632,9 @@ public:
     bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
     bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
-    void write(XmlWriter&, WriteContext& ctx, bool onlySelection, compat::WriteScoreHook& hook);
+    void write(XmlWriter&, rw400::WriteContext& ctx, bool onlySelection, compat::WriteScoreHook& hook);
     bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook);
-    bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook, WriteContext& ctx);
+    bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook, rw400::WriteContext& ctx);
 
     bool read400(XmlReader& e);
     bool readScore400(XmlReader& e);

@@ -33,12 +33,12 @@
 
 namespace mu::engraving {
 class XmlWriter;
-class WriteContext;
 class Spanner;
 class MeasureBase;
 }
 
 namespace mu::engraving::rw400 {
+class WriteContext;
 class ConnectorInfoWriter : public ConnectorInfo
 {
     OBJECT_ALLOCATOR(engraving, ConnectorInfoWriter)

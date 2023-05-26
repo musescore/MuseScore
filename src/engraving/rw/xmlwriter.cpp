@@ -27,8 +27,6 @@
 #include "libmscore/engravingitem.h"
 #include "libmscore/property.h"
 
-#include "400/writecontext.h"
-
 #include "log.h"
 
 using namespace mu;
@@ -42,9 +40,6 @@ XmlWriter::XmlWriter(mu::io::IODevice* device)
 
 XmlWriter::~XmlWriter()
 {
-    if (m_selfContext) {
-        delete m_context;
-    }
 }
 
 void XmlWriter::startElementRaw(const String& s)

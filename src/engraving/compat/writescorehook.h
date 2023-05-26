@@ -25,6 +25,9 @@
 namespace mu::engraving {
 class Score;
 class XmlWriter;
+}
+
+namespace mu::engraving::rw400 {
 class WriteContext;
 }
 
@@ -35,7 +38,7 @@ public:
     WriteScoreHook() = default;
 
     void onWriteStyle302(Score* score, XmlWriter& xml);
-    void onWriteExcerpts302(Score* score, XmlWriter& xml, WriteContext& ctx, bool selectionOnly);
+    void onWriteExcerpts302(Score* score, XmlWriter& xml, rw400::WriteContext& ctx, bool selectionOnly);
 };
 }
 #endif // MU_ENGRAVING_WRITESCOREHOOK_H
