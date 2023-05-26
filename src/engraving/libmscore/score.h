@@ -632,7 +632,7 @@ public:
     bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
     bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
-    void write(XmlWriter&, bool onlySelection, compat::WriteScoreHook& hook);
+    void write(XmlWriter&, WriteContext& ctx, bool onlySelection, compat::WriteScoreHook& hook);
     bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook);
     bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook, WriteContext& ctx);
 

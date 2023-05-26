@@ -270,10 +270,8 @@ void TWrite::writeStyledProperties(const EngravingItem* item, XmlWriter& xml)
     }
 }
 
-void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext&)
+void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
 {
-    WriteContext& ctx = *xml.context();
-
     bool autoplaceEnabled = item->score()->styleB(Sid::autoplaceEnabled);
     if (!autoplaceEnabled) {
         item->score()->setStyleValue(Sid::autoplaceEnabled, true);
@@ -284,7 +282,7 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
     }
 
     // copy paste should not keep links
-    if (item->links() && (item->links()->size() > 1) && !xml.context()->clipboardmode()) {
+    if (item->links() && (item->links()->size() > 1) && !ctx.clipboardmode()) {
         if (MScore::debugMode) {
             xml.tag("lid", item->links()->lid());
         }
@@ -293,7 +291,7 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
         DO_ASSERT(item->type() == me->type());
         Staff* s = item->staff();
         if (!s) {
-            s = item->score()->staff(xml.context()->curTrack() / VOICES);
+            s = item->score()->staff(ctx.curTrack() / VOICES);
             if (!s) {
                 LOGW("EngravingItem::writeProperties: linked element's staff not found (%s)", item->typeName());
             }
@@ -800,17 +798,17 @@ void TWrite::writeProperties(const ChordRest* item, XmlWriter& xml, WriteContext
         }
 
         if (s->startElement() == item) {
-            writeSpannerStart(s, xml, item, item->track());
+            writeSpannerStart(s, xml, ctx, item, item->track());
         } else if (s->endElement() == item) {
-            writeSpannerEnd(s, xml, item, item->track());
+            writeSpannerEnd(s, xml, ctx, item, item->track());
         }
     }
 }
 
-static Fraction fraction(const XmlWriter& xml, const EngravingItem* current, const Fraction& t)
+static Fraction fraction(bool clipboardmode, const EngravingItem* current, const Fraction& t)
 {
     Fraction tick(t);
-    if (!xml.context()->clipboardmode()) {
+    if (!clipboardmode) {
         const Measure* m = toMeasure(current->findMeasure());
         if (m) {
             tick -= m->tick();
@@ -819,17 +817,18 @@ static Fraction fraction(const XmlWriter& xml, const EngravingItem* current, con
     return tick;
 }
 
-void TWrite::writeSpannerStart(Spanner* s, XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction tick)
+void TWrite::writeSpannerStart(Spanner* s, XmlWriter& xml, WriteContext& ctx, const EngravingItem* current, track_idx_t track,
+                               Fraction tick)
 {
-    Fraction frac = fraction(xml, current, tick);
-    SpannerWriter w(xml, current, s, static_cast<int>(track), frac, true);
+    Fraction frac = fraction(ctx.clipboardmode(), current, tick);
+    SpannerWriter w(xml, &ctx, current, s, static_cast<int>(track), frac, true);
     w.write();
 }
 
-void TWrite::writeSpannerEnd(Spanner* s, XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction tick)
+void TWrite::writeSpannerEnd(Spanner* s, XmlWriter& xml, WriteContext& ctx, const EngravingItem* current, track_idx_t track, Fraction tick)
 {
-    Fraction frac = fraction(xml, current, tick);
-    SpannerWriter w(xml, current, s, static_cast<int>(track), frac, false);
+    Fraction frac = fraction(ctx.clipboardmode(), current, tick);
+    SpannerWriter w(xml, &ctx, current, s, static_cast<int>(track), frac, false);
     w.write();
 }
 
@@ -1957,10 +1956,10 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
     }
 
     if (item->tieFor()) {
-        writeSpannerStart(item->tieFor(), xml, item, item->track());
+        writeSpannerStart(item->tieFor(), xml, ctx, item, item->track());
     }
     if (item->tieBack()) {
-        writeSpannerEnd(item->tieBack(), xml, item, item->track());
+        writeSpannerEnd(item->tieBack(), xml, ctx, item, item->track());
     }
     if ((item->chord() == 0 || item->chord()->playEventType() != PlayEventType::Auto) && !item->playEvents().empty()) {
         xml.startElement("Events");
@@ -1976,10 +1975,10 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
     }
 
     for (Spanner* e : item->spannerFor()) {
-        writeSpannerStart(e, xml, item, item->track());
+        writeSpannerStart(e, xml, ctx, item, item->track());
     }
     for (Spanner* e : item->spannerBack()) {
-        writeSpannerEnd(e, xml, item, item->track());
+        writeSpannerEnd(e, xml, ctx, item, item->track());
     }
 
     for (EngravingItem* e : item->chord()->el()) {
@@ -2851,7 +2850,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
 
     int lastTrackWritten = static_cast<int>(strack - 1);   // for counting necessary <voice> tags
     for (track_idx_t track = strack; track < etrack; ++track) {
-        if (!xml.context()->canWriteVoice(track)) {
+        if (!ctx.canWriteVoice(track)) {
             continue;
         }
 
@@ -2874,15 +2873,15 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
             // special case: - barline span > 1
             //               - part (excerpt) staff starts after
             //                 barline element
-            bool needMove = (segment->tick() != xml.context()->curTick() || (static_cast<int>(track) > lastTrackWritten));
+            bool needMove = (segment->tick() != ctx.curTick() || (static_cast<int>(track) > lastTrackWritten));
             if ((segment->isEndBarLineType()) && !e && writeSystemElements && ((track % VOICES) == 0)) {
                 // search barline:
                 for (int idx = static_cast<int>(track - VOICES); idx >= 0; idx -= static_cast<int>(VOICES)) {
                     if (segment->element(idx)) {
-                        int oDiff = xml.context()->trackDiff();
-                        xml.context()->setTrackDiff(idx);                      // staffIdx should be zero
+                        int oDiff = ctx.trackDiff();
+                        ctx.setTrackDiff(idx);                      // staffIdx should be zero
                         TWrite::writeItem(segment->element(idx), xml, ctx);
-                        xml.context()->setTrackDiff(oDiff);
+                        ctx.setTrackDiff(oDiff);
                         break;
                     }
                 }
@@ -2932,7 +2931,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                                 voiceTagWritten |= writeVoiceMove(xml, ctx, segment, startTick, track, &lastTrackWritten);
                                 needMove = false;
                             }
-                            writeSpannerStart(s, xml, segment, track);
+                            writeSpannerStart(s, xml, ctx, segment, track);
                         }
                     }
                     if ((s->tick2() == segment->tick())
@@ -2944,12 +2943,12 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                             voiceTagWritten |= writeVoiceMove(xml, ctx, segment, startTick, track, &lastTrackWritten);
                             needMove = false;
                         }
-                        writeSpannerEnd(s, xml, segment, track);
+                        writeSpannerEnd(s, xml, ctx, segment, track);
                     }
                 }
             }
 
-            if (!e || !xml.context()->canWrite(e)) {
+            if (!e || !ctx.canWrite(e)) {
                 continue;
             }
             if (e->generated()) {
@@ -3015,7 +3014,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                     && (s->track2() == track || (s->track2() == mu::nidx && s->track() == track))
                     && (!clip || s->tick() >= sseg->tick())
                     ) {
-                    writeSpannerEnd(s, xml, score->lastMeasure(), track, endTick);
+                    writeSpannerEnd(s, xml, ctx, score->lastMeasure(), track, endTick);
                 }
             }
         }

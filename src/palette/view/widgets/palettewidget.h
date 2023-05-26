@@ -153,7 +153,7 @@ public:
 
     // Read/write
     void read(mu::engraving::XmlReader&, bool pasteMode);
-    void write(mu::engraving::XmlWriter&) const;
+    void write(mu::engraving::XmlWriter&, bool pasteMode) const;
     bool readFromFile(const QString& path);
     void writeToFile(const QString& path) const;
 

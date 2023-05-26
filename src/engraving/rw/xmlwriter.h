@@ -64,9 +64,6 @@ public:
 
     void comment(const String& text);
 
-    WriteContext* context() const;
-    void setContext(WriteContext* context);
-
     static String xmlString(const String&);
 
 private:

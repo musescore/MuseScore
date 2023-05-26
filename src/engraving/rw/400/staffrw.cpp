@@ -123,36 +123,39 @@ void StaffRW::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
     }
 }
 
-static void writeMeasure(XmlWriter& xml, MeasureBase* m, staff_idx_t staffIdx, bool writeSystemElements, bool forceTimeSig)
+static void writeMeasure(XmlWriter& xml, WriteContext& ctx, MeasureBase* m,
+                         staff_idx_t staffIdx,
+                         bool writeSystemElements,
+                         bool forceTimeSig)
 {
     //
     // special case multi measure rest
     //
     if (m->isMeasure() || staffIdx == 0) {
         if (Measure::classof(m)) {
-            rw400::MeasureRW::writeMeasure(static_cast<const Measure*>(m), xml, staffIdx, writeSystemElements, forceTimeSig);
+            rw400::MeasureRW::writeMeasure(static_cast<const Measure*>(m), xml, ctx, staffIdx, writeSystemElements, forceTimeSig);
         } else {
-            rw400::TWrite::writeItem(m, xml, *xml.context());
+            rw400::TWrite::writeItem(m, xml, ctx);
         }
     }
 
     if (m->score()->styleB(Sid::createMultiMeasureRests) && m->isMeasure() && toMeasure(m)->mmRest()) {
-        rw400::MeasureRW::writeMeasure(toMeasure(m)->mmRest(), xml, staffIdx, writeSystemElements, forceTimeSig);
+        rw400::MeasureRW::writeMeasure(toMeasure(m)->mmRest(), xml, ctx, staffIdx, writeSystemElements, forceTimeSig);
     }
 
-    xml.context()->setCurTick(m->endTick());
+    ctx.setCurTick(m->endTick());
 }
 
-void StaffRW::writeStaff(const Staff* staff, XmlWriter& xml,
+void StaffRW::writeStaff(const Staff* staff, XmlWriter& xml, WriteContext& ctx,
                          MeasureBase* measureStart, MeasureBase* measureEnd,
                          staff_idx_t staffStart, staff_idx_t staffIdx,
                          bool selectionOnly)
 {
     xml.startElement(staff, { { "id", static_cast<int>(staffIdx + 1 - staffStart) } });
 
-    xml.context()->setCurTick(measureStart->tick());
-    xml.context()->setTickDiff(xml.context()->curTick());
-    xml.context()->setCurTrack(staffIdx * VOICES);
+    ctx.setCurTick(measureStart->tick());
+    ctx.setTickDiff(ctx.curTick());
+    ctx.setCurTrack(staffIdx * VOICES);
     bool writeSystemElements = (staffIdx == staffStart);
     bool firstMeasureWritten = false;
     bool forceTimeSig = false;
@@ -166,7 +169,7 @@ void StaffRW::writeStaff(const Staff* staff, XmlWriter& xml,
                 forceTimeSig = false;
             }
         }
-        writeMeasure(xml, m, staffIdx, writeSystemElements, forceTimeSig);
+        writeMeasure(xml, ctx, m, staffIdx, writeSystemElements, forceTimeSig);
     }
 
     xml.endElement();

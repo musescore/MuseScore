@@ -330,7 +330,7 @@ QByteArray Palette::toMimeData() const
     return ::toMimeData(this);
 }
 
-void Palette::write(XmlWriter& xml) const
+void Palette::write(XmlWriter& xml, bool pasteMode) const
 {
     xml.startElement("Palette", { { "name", m_name } });
     xml.tag("type", QMetaEnum::fromType<Type>().valueToKey(int(m_type)));
@@ -348,7 +348,7 @@ void Palette::write(XmlWriter& xml) const
     xml.tag("visible", m_isVisible, true);
     xml.tag("editable", m_isEditable, true);
 
-    if (xml.context()->clipboardmode()) {
+    if (pasteMode) {
         xml.tag("expanded", m_isExpanded, false);
     }
 
@@ -357,7 +357,7 @@ void Palette::write(XmlWriter& xml) const
             xml.tag("Cell");
             continue;
         }
-        cell->write(xml);
+        cell->write(xml, pasteMode);
     }
     xml.endElement();
 }
@@ -500,7 +500,7 @@ bool Palette::writeToFile(const QString& p) const
         XmlWriter xml1(&cbuf1);
         xml1.startDocument();
         xml1.startElement("museScore", { { "version", MSC_VERSION } });
-        write(xml1);
+        write(xml1, false);
         xml1.endElement();
         cbuf1.close();
         f.addFile("palette.xml", cbuf1.data());

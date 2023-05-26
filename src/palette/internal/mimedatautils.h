@@ -36,8 +36,7 @@ QByteArray toMimeData(T* t)
     io::Buffer buffer;
     buffer.open(io::IODevice::WriteOnly);
     engraving::XmlWriter xml(&buffer);
-    xml.context()->setClipboardmode(true);
-    t->write(xml);
+    t->write(xml, true);
     buffer.close();
     return buffer.data().toQByteArray();
 }

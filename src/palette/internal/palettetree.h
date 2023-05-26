@@ -39,7 +39,7 @@ struct PaletteTree
     void append(PalettePtr palette);
 
     bool read(mu::engraving::XmlReader&, bool pasteMode);
-    void write(mu::engraving::XmlWriter&) const;
+    void write(mu::engraving::XmlWriter&, bool pasteMode) const;
 
     void retranslate();
 };

@@ -161,7 +161,7 @@ public:
     void setExpanded(bool val) { m_isExpanded = val; }
 
     bool read(engraving::XmlReader&, bool pasteMode);
-    void write(engraving::XmlWriter&) const;
+    void write(engraving::XmlWriter&, bool pasteMode) const;
     static PalettePtr fromMimeData(const QByteArray& data);
     QByteArray toMimeData() const;
 

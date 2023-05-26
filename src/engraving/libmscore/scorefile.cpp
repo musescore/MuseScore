@@ -65,7 +65,7 @@ namespace mu::engraving {
 //   write
 //---------------------------------------------------------
 
-void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& hook)
+void Score::write(XmlWriter& xml, WriteContext& ctx, bool selectionOnly, compat::WriteScoreHook& hook)
 {
     // if we have multi measure rests and some parts are hidden,
     // then some layout information is missing:
@@ -115,9 +115,9 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         xml.tag("layoutMode", "system");
     }
 
-    if (_audio && xml.context()->isMsczMode()) {
+    if (_audio && ctx.isMsczMode()) {
         xml.tag("playMode", int(_playMode));
-        rw400::TWrite::write(_audio, xml, *xml.context());
+        rw400::TWrite::write(_audio, xml, ctx);
     }
 
     for (int i = 0; i < 32; ++i) {
@@ -140,7 +140,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         xml.tag("page-offset", pageNumberOffset());
     }
     xml.tag("Division", Constants::division);
-    xml.context()->setCurTrack(mu::nidx);
+    ctx.setCurTrack(mu::nidx);
 
     hook.onWriteStyle302(this, xml);
 
@@ -193,7 +193,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         }
     }
 
-    xml.context()->setCurTrack(0);
+    ctx.setCurTrack(0);
     staff_idx_t staffStart;
     staff_idx_t staffEnd;
     MeasureBase* measureStart;
@@ -229,21 +229,21 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     masterScore()->checkMidiMapping();
     for (const Part* part : _parts) {
         if (!selectionOnly || ((staffIdx(part) >= staffStart) && (staffEnd >= staffIdx(part) + part->nstaves()))) {
-            rw400::TWrite::write(part, xml, *xml.context());
+            rw400::TWrite::write(part, xml, ctx);
         }
     }
 
-    xml.context()->setCurTrack(0);
-    xml.context()->setTrackDiff(-static_cast<int>(staffStart * VOICES));
+    ctx.setCurTrack(0);
+    ctx.setTrackDiff(-static_cast<int>(staffStart * VOICES));
     if (measureStart) {
         for (staff_idx_t staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
             const Staff* st = staff(staffIdx);
-            rw400::StaffRW::writeStaff(st, xml, measureStart, measureEnd, staffStart, staffIdx, selectionOnly);
+            rw400::StaffRW::writeStaff(st, xml, ctx, measureStart, measureEnd, staffStart, staffIdx, selectionOnly);
         }
     }
-    xml.context()->setCurTrack(mu::nidx);
+    ctx.setCurTrack(mu::nidx);
 
-    hook.onWriteExcerpts302(this, xml, selectionOnly);
+    hook.onWriteExcerpts302(this, xml, ctx, selectionOnly);
 
     xml.endElement();
 
@@ -380,8 +380,7 @@ bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, com
 bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook, WriteContext& ctx)
 {
     XmlWriter xml(f);
-    xml.context()->setIsMsczMode(msczFormat);
-    xml.setContext(&ctx);
+    ctx.setIsMsczMode(msczFormat);
     xml.startDocument();
 
     xml.startElement("museScore", { { "version", MSC_VERSION } });
@@ -390,7 +389,7 @@ bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, com
         xml.tag("programVersion", MUSESCORE_VERSION);
         xml.tag("programRevision", MUSESCORE_REVISION);
     }
-    write(xml, onlySelection, hook);
+    write(xml, ctx, onlySelection, hook);
 
     xml.endElement();
 

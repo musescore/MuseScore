@@ -226,7 +226,7 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
     return add && element;
 }
 
-void PaletteCell::write(XmlWriter& xml) const
+void PaletteCell::write(XmlWriter& xml, bool pasteMode) const
 {
     if (!element) {
         xml.tag("Cell");
@@ -268,10 +268,12 @@ void PaletteCell::write(XmlWriter& xml) const
         xml.tag("mag", mag);
     }
 
+    WriteContext wctx;
+    wctx.setClipboardmode(pasteMode);
     if (untranslatedElement) {
-        rw400::TWrite::writeItem(untranslatedElement.get(), xml, *xml.context());
+        rw400::TWrite::writeItem(untranslatedElement.get(), xml, wctx);
     } else {
-        rw400::TWrite::writeItem(element.get(), xml, *xml.context());
+        rw400::TWrite::writeItem(element.get(), xml, wctx);
     }
     xml.endElement();
 }

@@ -83,7 +83,7 @@ public:
     void retranslate();
     void setElementTranslated(bool translate);
 
-    void write(mu::engraving::XmlWriter& xml) const;
+    void write(mu::engraving::XmlWriter& xml, bool pasteMode) const;
     bool read(mu::engraving::XmlReader&, bool pasteMode);
     QByteArray toMimeData() const;
 
