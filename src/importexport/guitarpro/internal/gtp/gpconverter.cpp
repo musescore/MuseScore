@@ -424,7 +424,7 @@ void GPConverter::fixEmptyMeasures()
 {
     // Get all ChordRest elems and sort them by staves
     // Also store root Segment ptr will need it later to delete some rest elems
-    std::map<int, std::vector<std::pair<Segment*, EngravingItem*> > > elems;
+    std::map<track_idx_t, std::vector<std::pair<Segment*, EngravingItem*> > > elems;
 
     auto ntracks = _score->ntracks();
     auto type = SegmentType::ChordRest;
