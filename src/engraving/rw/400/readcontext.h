@@ -55,7 +55,7 @@ namespace mu::engraving::compat {
 class DummyElement;
 }
 
-namespace mu::engraving {
+namespace mu::engraving::rw400 {
 struct SpannerValues {
     int spannerId;
     Fraction tick2;
@@ -161,7 +161,6 @@ public:
 
     TimeSigMap* compatTimeSigMap();
 
-    // Master
     Location location(bool forceAbsFrac = false) const;
     void fillLocation(Location&, bool forceAbsFrac = false) const;
     void setLocation(const Location&);   // sets a new reading point, taking into account its type (absolute or relative).

@@ -203,7 +203,7 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
             if (!element) {
                 e.unknown();
             } else {
-                ReadContext ctx;
+                rw400::ReadContext ctx;
                 ctx.setPasteMode(pasteMode);
                 rw400::TRead::readItem(element.get(), e, ctx);
                 element->styleChanged();

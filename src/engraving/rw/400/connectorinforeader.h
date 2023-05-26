@@ -34,11 +34,10 @@ class XmlReader;
 class ChordRest;
 class Measure;
 class Note;
-
-class ReadContext;
 }
 
 namespace mu::engraving::rw400 {
+class ReadContext;
 class ConnectorInfoReader final : public ConnectorInfo
 {
     OBJECT_ALLOCATOR(engraving, ConnectorInfoReader)

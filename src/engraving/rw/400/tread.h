@@ -31,7 +31,6 @@
 
 namespace mu::engraving {
 class XmlReader;
-class ReadContext;
 class EngravingItem;
 class TextBase;
 class TempoText;

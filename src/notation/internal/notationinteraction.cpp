@@ -1268,7 +1268,7 @@ void NotationInteraction::startDrop(const QByteArray& edata)
     resetDropElement();
 
     mu::engraving::XmlReader e(edata);
-    mu::engraving::ReadContext rctx;
+    mu::engraving::rw400::ReadContext rctx;
     m_dropData.ed.dragOffset = QPointF();
     Fraction duration;      // dummy
     ElementType type = EngravingItem::readType(e, &m_dropData.ed.dragOffset, &duration);
@@ -1737,7 +1737,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             ByteArray a = element->mimeData();
 //printf("<<%s>>\n", a.data());
             mu::engraving::XmlReader e(a);
-            mu::engraving::ReadContext rctx;
+            mu::engraving::rw400::ReadContext rctx;
             mu::engraving::Fraction duration;        // dummy
             PointF dragOffset;
             mu::engraving::ElementType type = mu::engraving::EngravingItem::readType(e, &dragOffset, &duration);
@@ -1794,7 +1794,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
 
                 for (staff_idx_t i = sel.staffStart(); i < sel.staffEnd(); ++i) {
                     mu::engraving::XmlReader n(a);
-                    mu::engraving::ReadContext rctx;
+                    mu::engraving::rw400::ReadContext rctx;
                     StaffTypeChange* stc = engraving::Factory::createStaffTypeChange(measure);
                     rw400::TRead::read(stc, n, rctx);
                     stc->styleChanged(); // update to local style
@@ -2004,7 +2004,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         ByteArray a = e->mimeData();
 
         mu::engraving::XmlReader n(a);
-        mu::engraving::ReadContext rctx;
+        mu::engraving::rw400::ReadContext rctx;
         rctx.setPasteMode(pasteMode);
         Fraction duration;      // dummy
         PointF dragOffset;
@@ -3632,7 +3632,7 @@ mu::Ret NotationInteraction::repeatSelection()
     }
 
     mu::engraving::XmlReader xml(selection.mimeData());
-    mu::engraving::ReadContext rctx(score());
+    mu::engraving::rw400::ReadContext rctx(score());
     rctx.setPasteMode(true);
     track_idx_t dStaff = selection.staffStart();
     mu::engraving::Segment* endSegment = selection.endSegment();

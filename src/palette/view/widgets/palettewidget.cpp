@@ -884,7 +884,7 @@ void PaletteWidget::dropEvent(QDropEvent* event)
         QByteArray dta(event->mimeData()->data(mu::commonscene::MIME_SYMBOL_FORMAT));
         ByteArray ba = ByteArray::fromQByteArrayNoCopy(dta);
         XmlReader xml(ba);
-        ReadContext rctx;
+        rw400::ReadContext rctx;
         PointF dragOffset;
         Fraction duration;
         ElementType type = EngravingItem::readType(xml, &dragOffset, &duration);
