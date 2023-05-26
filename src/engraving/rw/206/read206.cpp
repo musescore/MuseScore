@@ -1832,6 +1832,7 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
 
 static void convertDoubleArticulations(Chord* chord, XmlReader& e, ReadContext& ctx)
 {
+    UNUSED(e);
     std::vector<Articulation*> pairableArticulations;
     for (Articulation* a : chord->articulations()) {
         if (a->isStaccato() || a->isTenuto()
