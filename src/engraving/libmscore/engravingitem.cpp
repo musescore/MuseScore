@@ -967,7 +967,7 @@ ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    WriteContext wctx;
+    rw400::WriteContext wctx;
     wctx.setClipboardmode(true);
     xml.startElement("EngravingItem");
     if (isNote()) {

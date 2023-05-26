@@ -841,7 +841,7 @@ ByteArray Selection::staffMimeData() const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    WriteContext wctx;
+    rw400::WriteContext wctx;
     xml.startDocument();
     wctx.setClipboardmode(true);
     wctx.setFilter(selectionFilter());
@@ -900,7 +900,7 @@ ByteArray Selection::symbolListMimeData() const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    WriteContext wctx;
+    rw400::WriteContext wctx;
     xml.startDocument();
     wctx.setClipboardmode(true);
 

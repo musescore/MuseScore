@@ -123,7 +123,7 @@ void StaffRW::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
     }
 }
 
-static void writeMeasure(XmlWriter& xml, WriteContext& ctx, MeasureBase* m,
+static void writeMeasure(XmlWriter& xml, rw400::WriteContext& ctx, MeasureBase* m,
                          staff_idx_t staffIdx,
                          bool writeSystemElements,
                          bool forceTimeSig)

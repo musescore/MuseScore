@@ -59,13 +59,14 @@
 using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
+using namespace mu::engraving::rw400;
 
 namespace mu::engraving {
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
-void Score::write(XmlWriter& xml, WriteContext& ctx, bool selectionOnly, compat::WriteScoreHook& hook)
+void Score::write(XmlWriter& xml, rw400::WriteContext& ctx, bool selectionOnly, compat::WriteScoreHook& hook)
 {
     // if we have multi measure rests and some parts are hidden,
     // then some layout information is missing:

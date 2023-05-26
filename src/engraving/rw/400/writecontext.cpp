@@ -24,6 +24,7 @@
 #include "containers.h"
 
 using namespace mu::engraving;
+using namespace mu::engraving::rw400;
 
 int WriteContext::assignLocalIndex(const Location& mainElementLocation)
 {

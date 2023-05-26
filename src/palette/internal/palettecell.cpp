@@ -268,7 +268,7 @@ void PaletteCell::write(XmlWriter& xml, bool pasteMode) const
         xml.tag("mag", mag);
     }
 
-    WriteContext wctx;
+    rw400::WriteContext wctx;
     wctx.setClipboardmode(pasteMode);
     if (untranslatedElement) {
         rw400::TWrite::writeItem(untranslatedElement.get(), xml, wctx);

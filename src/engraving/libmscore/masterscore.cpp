@@ -246,7 +246,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
         mscWriter.writeStyleFile(styleData);
     }
 
-    WriteContext ctx;
+    rw400::WriteContext ctx;
 
     // Write MasterScore
     {
@@ -415,7 +415,7 @@ MasterScore* MasterScore::clone()
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
 
-    WriteContext writeCtx;
+    rw400::WriteContext writeCtx;
     XmlWriter xml(&buffer);
     xml.startDocument();
 

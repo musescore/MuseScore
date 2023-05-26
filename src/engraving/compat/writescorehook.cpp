@@ -28,6 +28,7 @@
 
 using namespace mu::engraving;
 using namespace mu::engraving::compat;
+using namespace mu::engraving::rw400;
 
 void WriteScoreHook::onWriteStyle302(Score* score, XmlWriter& xml)
 {
