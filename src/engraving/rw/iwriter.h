@@ -19,29 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "scoreaccess.h"
-#include "style/defaultstyle.h"
-#include "libmscore/masterscore.h"
+#ifndef MU_ENGRAVING_IWRITER_H
+#define MU_ENGRAVING_IWRITER_H
 
-using namespace mu::engraving;
-using namespace mu::engraving::compat;
+#include <memory>
 
-MasterScore* ScoreAccess::createMasterScore()
-{
-    return new MasterScore();
+#include "global/io/iodevice.h"
+
+namespace mu::engraving {
+class Score;
+class XmlWriter;
 }
 
-MasterScore* ScoreAccess::createMasterScoreWithBaseStyle()
+namespace mu::engraving::rw {
+struct WriteInOutData;
+class IWriter
 {
-    return new MasterScore(DefaultStyle::baseStyle());
+public:
+    virtual ~IWriter() = default;
+
+    virtual bool writeScore(Score* score, io::IODevice* device, bool onlySelection, WriteInOutData* out = nullptr) = 0;
+};
+
+using IWriterPtr = std::shared_ptr<IWriter>;
 }
 
-MasterScore* ScoreAccess::createMasterScoreWithDefaultStyle()
-{
-    return new MasterScore(DefaultStyle::defaultStyle());
-}
-
-MasterScore* ScoreAccess::createMasterScore(const MStyle& style)
-{
-    return new MasterScore(style);
-}
+#endif // MU_ENGRAVING_IWRITER_H

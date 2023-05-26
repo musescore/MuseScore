@@ -21,16 +21,14 @@
  */
 #include "masterscore.h"
 
-#include "types/datetime.h"
 #include "io/buffer.h"
 
 #include "compat/writescorehook.h"
 #include "infrastructure/mscwriter.h"
 
 #include "rw/mscloader.h"
-#include "rw/xmlwriter.h"
 #include "rw/xmlreader.h"
-#include "rw/400/writecontext.h"
+#include "rw/rwregister.h"
 
 #include "style/defaultstyle.h"
 
@@ -38,8 +36,6 @@
 
 #include "audio.h"
 #include "excerpt.h"
-#include "imageStore.h"
-#include "part.h"
 #include "repeatlist.h"
 #include "sig.h"
 #include "tempo.h"
@@ -229,155 +225,6 @@ const RepeatList& MasterScore::repeatList(bool expandRepeats) const
     return *_nonExpandedRepeatList;
 }
 
-bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCreateThumbnail)
-{
-    IF_ASSERT_FAILED(mscWriter.isOpened()) {
-        return false;
-    }
-
-    // Write style of MasterScore
-    {
-        //! NOTE The style is writing to a separate file only for the master score.
-        //! At the moment, the style for the parts is still writing to the score file.
-        ByteArray styleData;
-        Buffer styleBuf(&styleData);
-        styleBuf.open(IODevice::WriteOnly);
-        style().write(&styleBuf);
-        mscWriter.writeStyleFile(styleData);
-    }
-
-    rw400::WriteContext ctx;
-
-    // Write MasterScore
-    {
-        ByteArray scoreData;
-        Buffer scoreBuf(&scoreData);
-        scoreBuf.open(IODevice::ReadWrite);
-
-        compat::WriteScoreHook hook;
-        Score::writeScore(&scoreBuf, false, onlySelection, hook, ctx);
-
-        mscWriter.writeScoreFile(scoreData);
-    }
-
-    // Write Excerpts
-    {
-        if (!onlySelection) {
-            for (const Excerpt* excerpt : this->excerpts()) {
-                Score* partScore = excerpt->excerptScore();
-                if (partScore != this) {
-                    // Write excerpt style
-                    {
-                        ByteArray excerptStyleData;
-                        Buffer styleStyleBuf(&excerptStyleData);
-                        styleStyleBuf.open(IODevice::WriteOnly);
-                        partScore->style().write(&styleStyleBuf);
-
-                        mscWriter.addExcerptStyleFile(excerpt->name(), excerptStyleData);
-                    }
-
-                    // Write excerpt
-                    {
-                        ByteArray excerptData;
-                        Buffer excerptBuf(&excerptData);
-                        excerptBuf.open(IODevice::ReadWrite);
-
-                        compat::WriteScoreHook hook;
-                        excerpt->excerptScore()->writeScore(&excerptBuf, false, onlySelection, hook, ctx);
-
-                        mscWriter.addExcerptFile(excerpt->name(), excerptData);
-                    }
-                }
-            }
-        }
-    }
-
-    // Write ChordList
-    {
-        ChordList* chordList = this->chordList();
-        if (chordList->customChordList() && !chordList->empty()) {
-            ByteArray chlData;
-            Buffer chlBuf(&chlData);
-            chlBuf.open(IODevice::WriteOnly);
-            chordList->write(&chlBuf);
-            mscWriter.writeChordListFile(chlData);
-        }
-    }
-
-    // Write images
-    {
-        for (ImageStoreItem* ip : imageStore) {
-            if (!ip->isUsed(this)) {
-                continue;
-            }
-            ByteArray data = ip->buffer();
-            mscWriter.addImageFile(ip->hashName(), data);
-        }
-    }
-
-    // Write thumbnail
-    {
-        if (doCreateThumbnail && !pages().empty()) {
-            auto pixmap = createThumbnail();
-
-            ByteArray ba;
-            Buffer b(&ba);
-            b.open(IODevice::WriteOnly);
-            imageProvider()->saveAsPng(pixmap, &b);
-            mscWriter.writeThumbnailFile(ba);
-        }
-    }
-
-    // Write audio
-    {
-        if (_audio) {
-            mscWriter.writeAudioFile(_audio->data());
-        }
-    }
-
-    return true;
-}
-
-bool MasterScore::exportPart(MscWriter& mscWriter, Score* partScore)
-{
-    // Write excerpt style as main
-    {
-        ByteArray excerptStyleData;
-        Buffer styleStyleBuf(&excerptStyleData);
-        styleStyleBuf.open(IODevice::WriteOnly);
-        partScore->style().write(&styleStyleBuf);
-
-        mscWriter.writeStyleFile(excerptStyleData);
-    }
-
-    // Write excerpt as main score
-    {
-        ByteArray excerptData;
-        Buffer excerptBuf(&excerptData);
-        excerptBuf.open(IODevice::WriteOnly);
-
-        compat::WriteScoreHook hook;
-        partScore->writeScore(&excerptBuf, false, false, hook);
-
-        mscWriter.writeScoreFile(excerptData);
-    }
-
-    // Write thumbnail
-    {
-        if (!partScore->pages().empty()) {
-            auto pixmap = partScore->createThumbnail();
-
-            ByteArray ba;
-            Buffer b(&ba);
-            b.open(IODevice::WriteOnly);
-            imageProvider()->saveAsPng(pixmap, &b);
-            mscWriter.writeThumbnailFile(ba);
-        }
-    }
-
-    return true;
-}
-
 //---------------------------------------------------------
 //   addExcerpt
 //---------------------------------------------------------
@@ -415,15 +262,7 @@ MasterScore* MasterScore::clone()
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
 
-    rw400::WriteContext writeCtx;
-    XmlWriter xml(&buffer);
-    xml.startDocument();
-
-    xml.startElement("museScore", { { "version", MSC_VERSION } });
-
-    compat::WriteScoreHook hook;
-    write(xml, writeCtx, false, hook);
-    xml.endElement();
+    rw::RWRegister::latestWriter()->writeScore(this, &buffer, false);
 
     buffer.close();
 

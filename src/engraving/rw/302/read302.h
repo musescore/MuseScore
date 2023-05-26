@@ -42,12 +42,12 @@ class ReadContext;
 }
 
 namespace mu::engraving::compat {
-class Read302 : public IReader
+class Read302 : public rw::IReader
 {
     INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
 public:
 
-    Err readScore(Score* score, XmlReader& e, ReadInOutData* out) override;
+    Err readScore(Score* score, XmlReader& e, rw::ReadInOutData* out) override;
 
 private:
     static bool readScore302(Score* score, XmlReader& e, rw400::ReadContext& ctx);

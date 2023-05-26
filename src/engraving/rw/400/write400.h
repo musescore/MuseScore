@@ -19,29 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "scoreaccess.h"
-#include "style/defaultstyle.h"
-#include "libmscore/masterscore.h"
+#ifndef MU_ENGRAVING_WRITE400_H
+#define MU_ENGRAVING_WRITE400_H
 
-using namespace mu::engraving;
-using namespace mu::engraving::compat;
+#include "../iwriter.h"
 
-MasterScore* ScoreAccess::createMasterScore()
+#include "writecontext.h"
+#include "../compat/writescorehook.h"
+
+namespace mu::engraving::rw400 {
+class Write400 : public rw::IWriter
 {
-    return new MasterScore();
+public:
+
+    bool writeScore(Score* score, io::IODevice* device, bool onlySelection, rw::WriteInOutData* out) override;
+
+    static void write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selectionOnly, compat::WriteScoreHook& hook);
+};
 }
 
-MasterScore* ScoreAccess::createMasterScoreWithBaseStyle()
-{
-    return new MasterScore(DefaultStyle::baseStyle());
-}
-
-MasterScore* ScoreAccess::createMasterScoreWithDefaultStyle()
-{
-    return new MasterScore(DefaultStyle::defaultStyle());
-}
-
-MasterScore* ScoreAccess::createMasterScore(const MStyle& style)
-{
-    return new MasterScore(style);
-}
+#endif // MU_ENGRAVING_WRITE400_H

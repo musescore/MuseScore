@@ -31,6 +31,7 @@
 #include "engraving/infrastructure/localfileinfoprovider.h"
 #include "engraving/rw/400/tread.h"
 #include "engraving/rw/400/twrite.h"
+#include "engraving/rw/rwregister.h"
 #include "engraving/libmscore/factory.h"
 
 #include "log.h"
@@ -100,8 +101,8 @@ bool ScoreRW::saveScore(Score* score, const String& name)
     if (!file.open(IODevice::ReadWrite)) {
         return false;
     }
-    compat::WriteScoreHook hook;
-    return score->writeScore(&file, false, false, hook);
+
+    return rw::RWRegister::latestWriter()->writeScore(score, &file, false);
 }
 
 EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)

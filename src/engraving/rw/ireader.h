@@ -26,18 +26,20 @@
 #include <memory>
 
 #include "engravingerrors.h"
-#include "readoutdata.h"
 
 namespace mu::engraving {
 class Score;
 class XmlReader;
+}
 
+namespace mu::engraving::rw {
+struct ReadInOutData;
 class IReader
 {
 public:
     virtual ~IReader() = default;
 
-    virtual Err readScore(Score* score, XmlReader& e, ReadInOutData* out) = 0;
+    virtual Err readScore(Score* score, XmlReader& xml, rw::ReadInOutData* out) = 0;
 };
 
 using IReaderPtr = std::shared_ptr<IReader>;

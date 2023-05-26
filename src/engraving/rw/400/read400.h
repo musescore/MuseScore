@@ -31,11 +31,11 @@ class XmlReader;
 
 namespace mu::engraving::rw400 {
 class ReadContext;
-class Read400 : public IReader
+class Read400 : public rw::IReader
 {
 public:
 
-    Err readScore(Score* score, XmlReader& e, ReadInOutData* data) override;
+    Err readScore(Score* score, XmlReader& e, rw::ReadInOutData* data) override;
 
     static bool readScore400(Score* score, XmlReader& e, ReadContext& ctx);
 };

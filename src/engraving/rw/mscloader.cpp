@@ -37,6 +37,7 @@
 
 #include "rwregister.h"
 #include "xmlreader.h"
+#include "inoutdata.h"
 
 #include "log.h"
 

@@ -131,9 +131,6 @@ class MasterScore : public Score
     MasterScore(std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
     MasterScore(const MStyle&, std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
 
-    bool writeMscz(MscWriter& mscWriter, bool onlySelection = false, bool createThumbnail = true);
-    bool exportPart(MscWriter& mscWriter, Score* partScore);
-
     void initParts(Excerpt*);
 
 public:

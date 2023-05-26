@@ -57,7 +57,7 @@ class ReadContext;
 }
 
 namespace mu::engraving::compat {
-class Read206 : public IReader
+class Read206 : public rw::IReader
 {
     INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
 public:
@@ -66,7 +66,7 @@ public:
     //   read206
     //    import old version > 1.3  and < 3.x files
     //---------------------------------------------------------
-    Err readScore(Score* score, XmlReader& e, ReadInOutData* out) override;
+    Err readScore(Score* score, XmlReader& e, rw::ReadInOutData* out) override;
 
     static EngravingItem* readArticulation(EngravingItem*, XmlReader&, rw400::ReadContext& ctx);
     static void readAccidental206(Accidental*, XmlReader&, rw400::ReadContext& ctx);
