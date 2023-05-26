@@ -162,25 +162,25 @@ bool ReadContext::isSameScore(const EngravingObject* obj) const
     return obj->score() == m_score;
 }
 
-ReadLinks ReadContext::readLinks() const
+rw::ReadLinks ReadContext::readLinks() const
 {
     return doReadLinks();
 }
 
-ReadLinks ReadContext::doReadLinks() const
+rw::ReadLinks ReadContext::doReadLinks() const
 {
-    ReadLinks l;
+    rw::ReadLinks l;
     l.linksIndexer = m_linksIndexer;
     l.staffLinkedElements = m_staffLinkedElements;
     return l;
 }
 
-void ReadContext::initLinks(const ReadLinks& l)
+void ReadContext::initLinks(const rw::ReadLinks& l)
 {
     doInitLinks(l);
 }
 
-void ReadContext::doInitLinks(const ReadLinks& l)
+void ReadContext::doInitLinks(const rw::ReadLinks& l)
 {
     m_linksIndexer = l.linksIndexer;
     m_staffLinkedElements = l.staffLinkedElements;

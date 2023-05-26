@@ -19,29 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "scoreaccess.h"
-#include "style/defaultstyle.h"
-#include "libmscore/masterscore.h"
+#ifndef MU_ENGRAVING_MSCSAVER_H
+#define MU_ENGRAVING_MSCSAVER_H
 
-using namespace mu::engraving;
-using namespace mu::engraving::compat;
+#include "global/modularity/ioc.h"
+#include "draw/iimageprovider.h"
 
-MasterScore* ScoreAccess::createMasterScore()
+#include "infrastructure/mscwriter.h"
+
+namespace mu::engraving {
+class MasterScore;
+class Score;
+class MscSaver
 {
-    return new MasterScore();
+    INJECT(draw::IImageProvider, imageProvider)
+public:
+    MscSaver() = default;
+
+    bool writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySelection, bool doCreateThumbnail);
+
+    bool exportPart(Score* partScore, MscWriter& mscWriter);
+};
 }
 
-MasterScore* ScoreAccess::createMasterScoreWithBaseStyle()
-{
-    return new MasterScore(DefaultStyle::baseStyle());
-}
-
-MasterScore* ScoreAccess::createMasterScoreWithDefaultStyle()
-{
-    return new MasterScore(DefaultStyle::defaultStyle());
-}
-
-MasterScore* ScoreAccess::createMasterScore(const MStyle& style)
-{
-    return new MasterScore(style);
-}
+#endif // MU_ENGRAVING_MSCSAVER_H

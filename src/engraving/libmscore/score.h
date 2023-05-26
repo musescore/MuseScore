@@ -62,6 +62,7 @@ class IMimeData;
 
 namespace mu::engraving::rw400 {
 class Read400;
+class Write400;
 class ReadContext;
 class WriteContext;
 }
@@ -380,6 +381,7 @@ private:
 
     friend class compat::Read302;
     friend class rw400::Read400;
+    friend class rw400::Write400;
     friend class layout::v0::ScoreLayout;
 
     static std::set<Score*> validScores;
@@ -631,13 +633,6 @@ public:
 
     bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
     bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
-
-    void write(XmlWriter&, rw400::WriteContext& ctx, bool onlySelection, compat::WriteScoreHook& hook);
-    bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook);
-    bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook, rw400::WriteContext& ctx);
-
-    bool read400(XmlReader& e);
-    bool readScore400(XmlReader& e);
 
     const std::vector<Staff*>& staves() const { return _staves; }
     size_t nstaves() const { return _staves.size(); }

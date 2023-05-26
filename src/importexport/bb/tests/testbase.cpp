@@ -34,6 +34,7 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/writescorehook.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
+#include "engraving/rw/rwregister.h"
 
 #include "log.h"
 
@@ -86,8 +87,8 @@ bool MTest::saveScore(Score* score, const QString& name) const
     if (!file.open(IODevice::ReadWrite)) {
         return false;
     }
-    compat::WriteScoreHook hook;
-    return score->writeScore(&file, false, false, hook);
+
+    return rw::RWRegister::latestWriter()->writeScore(score, &file, false);
 }
 
 bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)

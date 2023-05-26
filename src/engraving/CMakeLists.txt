@@ -61,9 +61,10 @@ set(MODULE_SRC
     ${LIBMSCORE_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/ireader.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/iwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/rwregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/rwregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/readoutdata.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/inoutdata.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/linksindexer.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlreader.h
@@ -71,6 +72,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/mscloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/mscloader.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/mscsaver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/mscsaver.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/114/read114.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/114/read114.h
@@ -83,6 +86,8 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/read400.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/read400.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/write400.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/write400.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/staffrw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/staffrw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/measurerw.cpp

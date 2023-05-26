@@ -31,9 +31,12 @@ namespace mu::engraving::compat {
 class ReadStyleHook;
 }
 
+namespace mu::engraving::rw {
+struct ReadInOutData;
+}
+
 namespace mu::engraving {
 class MasterScore;
-struct ReadInOutData;
 class XmlReader;
 class MscLoader
 {
@@ -43,10 +46,8 @@ public:
     Ret loadMscz(MasterScore* score, const MscReader& mscReader, SettingsCompat& settingsCompat, bool ignoreVersionError);
 
 private:
-
     friend class MasterScore;
-
-    Ret readMasterScore(MasterScore* score, XmlReader&, bool ignoreVersionError, ReadInOutData* out = nullptr,
+    Ret readMasterScore(MasterScore* score, XmlReader&, bool ignoreVersionError, rw::ReadInOutData* out = nullptr,
                         compat::ReadStyleHook* styleHook = nullptr);
 };
 }

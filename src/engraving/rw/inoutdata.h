@@ -20,17 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_READOUTDATA_H
-#define MU_ENGRAVING_READOUTDATA_H
+#ifndef MU_ENGRAVING_INOUTDATA_H
+#define MU_ENGRAVING_INOUTDATA_H
 
 #include <map>
 #include <vector>
 
 #include "linksindexer.h"
 
+#include "400/writecontext.h"
+
 namespace mu::engraving {
 class LinkedObjects;
+}
 
+namespace mu::engraving::rw {
 struct ReadLinks
 {
     std::map<int /*staffIndex*/, std::vector<std::pair<LinkedObjects*, Location> > > staffLinkedElements; // one list per staff
@@ -45,6 +49,10 @@ struct ReadInOutData {
     // out
     SettingsCompat settingsCompat;
 };
+
+struct WriteInOutData {
+    rw400::WriteContext ctx;
+};
 }
 
-#endif // MU_ENGRAVING_READOUTDATA_H
+#endif // MU_ENGRAVING_INOUTDATA_H

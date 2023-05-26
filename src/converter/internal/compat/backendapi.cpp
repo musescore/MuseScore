@@ -35,6 +35,7 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/infrastructure/mscwriter.h"
 #include "engraving/libmscore/excerpt.h"
+#include "engraving/rw/mscsaver.h"
 
 #include "backendjsonwriter.h"
 #include "notationmeta.h"
@@ -639,7 +640,7 @@ RetVal<QByteArray> BackendApi::scorePartJson(mu::engraving::Score* score, const 
     MscWriter mscWriter(params);
     mscWriter.open();
 
-    bool ok = compat::ScoreAccess::exportPart(mscWriter, score);
+    bool ok = MscSaver().exportPart(score, mscWriter);
     if (!ok) {
         LOGW() << "Error save mscz file";
     }

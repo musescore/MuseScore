@@ -54,7 +54,6 @@
 #include "libmscore/image.h"
 #include "libmscore/jump.h"
 #include "libmscore/keysig.h"
-#include "libmscore/linkedobjects.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/marker.h"
 #include "libmscore/masterscore.h"
@@ -95,6 +94,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rw;
 using namespace mu::engraving::rw400;
 using namespace mu::engraving::compat;
 

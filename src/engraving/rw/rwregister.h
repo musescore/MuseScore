@@ -25,6 +25,7 @@
 #include <memory>
 
 #include "ireader.h"
+#include "iwriter.h"
 
 namespace mu::engraving::rw {
 class RWRegister
@@ -33,6 +34,8 @@ public:
 
     static IReaderPtr reader(int version);
     static IReaderPtr latestReader();
+
+    static IWriterPtr latestWriter();
 };
 }
 

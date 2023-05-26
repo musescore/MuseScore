@@ -26,6 +26,8 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/excerpt.h"
 
+#include "rw/400/write400.h"
+
 using namespace mu::engraving;
 using namespace mu::engraving::compat;
 using namespace mu::engraving::rw400;
@@ -64,7 +66,7 @@ void WriteScoreHook::onWriteExcerpts302(Score* score, XmlWriter& xml, WriteConte
                 MasterScore* mScore = static_cast<MasterScore*>(score);
                 for (const Excerpt* excerpt : mScore->excerpts()) {
                     if (excerpt->excerptScore() != score) {
-                        excerpt->excerptScore()->write(xml, ctx, selectionOnly, *this); // recursion write
+                        rw400::Write400::write(excerpt->excerptScore(), xml, ctx, selectionOnly, *this); // recursion write
                     }
                 }
             }

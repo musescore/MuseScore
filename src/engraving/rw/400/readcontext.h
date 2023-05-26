@@ -36,7 +36,7 @@
 #include "libmscore/sig.h"
 
 #include "../linksindexer.h"
-#include "../readoutdata.h"
+#include "../inoutdata.h"
 
 #include "connectorinforeader.h"
 
@@ -165,8 +165,8 @@ public:
     void fillLocation(Location&, bool forceAbsFrac = false) const;
     void setLocation(const Location&);   // sets a new reading point, taking into account its type (absolute or relative).
 
-    ReadLinks readLinks() const;
-    void initLinks(const ReadLinks& l);
+    rw::ReadLinks readLinks() const;
+    void initLinks(const rw::ReadLinks& l);
     void addLink(Staff* staff, LinkedObjects* link, const Location& location);
     LinkedObjects* getLink(bool isMasterScore, const Location& location, int localIndexDiff);
     std::map<int, std::vector<std::pair<LinkedObjects*, Location> > >& staffLinkedElements();
@@ -182,8 +182,8 @@ private:
     void doFillLocation(Location&, bool forceAbsFrac = false) const;
     void doSetLocation(const Location&);
 
-    ReadLinks doReadLinks() const;
-    void doInitLinks(const ReadLinks& l);
+    rw::ReadLinks doReadLinks() const;
+    void doInitLinks(const rw::ReadLinks& l);
     void doAddLink(Staff* staff, LinkedObjects* link, const Location& location);
     LinkedObjects* doGetLink(bool isMasterScore, const Location& location, int localIndexDiff);
 
