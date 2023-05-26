@@ -49,6 +49,30 @@
 using namespace mu::engraving;
 using namespace mu::engraving::compat;
 
+const std::set<SymId> CompatUtils::ORNAMENT_IDS {
+    SymId::ornamentTurn,
+    SymId::ornamentTurnInverted,
+    SymId::ornamentTurnSlash,
+    SymId::ornamentTrill,
+    SymId::brassMuteClosed,
+    SymId::ornamentMordent,
+    SymId::ornamentShortTrill,
+    SymId::ornamentTremblement,
+    SymId::ornamentPrallMordent,
+    SymId::ornamentLinePrall,
+    SymId::ornamentUpPrall,
+    SymId::ornamentUpMordent,
+    SymId::ornamentPrecompMordentUpperPrefix,
+    SymId::ornamentDownMordent,
+    SymId::ornamentPrallUp,
+    SymId::ornamentPrallDown,
+    SymId::ornamentPrecompSlide,
+    SymId::ornamentShake3,
+    SymId::ornamentShakeMuffat1,
+    SymId::ornamentTremblementCouperin,
+    SymId::ornamentPinceCouperin
+};
+
 void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
 {
     if (!masterScore) {
@@ -190,30 +214,6 @@ void CompatUtils::assignInitialPartToExcerpts(const std::vector<Excerpt*>& excer
 
 void CompatUtils::replaceOldWithNewOrnaments(MasterScore* score)
 {
-    static const std::set<SymId> ornamentIds {
-        SymId::ornamentTurn,
-        SymId::ornamentTurnInverted,
-        SymId::ornamentTurnSlash,
-        SymId::ornamentTrill,
-        SymId::brassMuteClosed,
-        SymId::ornamentMordent,
-        SymId::ornamentShortTrill,
-        SymId::ornamentTremblement,
-        SymId::ornamentPrallMordent,
-        SymId::ornamentLinePrall,
-        SymId::ornamentUpPrall,
-        SymId::ornamentUpMordent,
-        SymId::ornamentPrecompMordentUpperPrefix,
-        SymId::ornamentDownMordent,
-        SymId::ornamentPrallUp,
-        SymId::ornamentPrallDown,
-        SymId::ornamentPrecompSlide,
-        SymId::ornamentShake3,
-        SymId::ornamentShakeMuffat1,
-        SymId::ornamentTremblementCouperin,
-        SymId::ornamentPinceCouperin
-    };
-
     std::set<Articulation*> oldOrnaments;     // ornaments used to be articulations
 
     for (Measure* meas = score->firstMeasure(); meas; meas = meas->nextMeasure()) {
@@ -229,7 +229,7 @@ void CompatUtils::replaceOldWithNewOrnaments(MasterScore* score)
                     if (articulation->isOrnament()) {
                         continue;
                     }
-                    if (ornamentIds.find(articulation->symId()) != ornamentIds.end()) {
+                    if (ORNAMENT_IDS.find(articulation->symId()) != ORNAMENT_IDS.end()) {
                         oldOrnaments.insert(articulation);
                         LinkedObjects* links = articulation->links();
                         if (!links || links->empty()) {
