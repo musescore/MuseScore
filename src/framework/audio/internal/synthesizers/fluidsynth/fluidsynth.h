@@ -64,7 +64,7 @@ public:
 
     unsigned int audioChannelsCount() const override;
     samples_t process(float* buffer, size_t bufferSize, samples_t samplesPerChannel) override;
-    async::Channel<unsigned int> audioChannelsCountChanged() const override;
+    bool setAudioChannelsCount(unsigned int channels) override;
     void setSampleRate(unsigned int sampleRate) override;
 
     bool isValid() const override;

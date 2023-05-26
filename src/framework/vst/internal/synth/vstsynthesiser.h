@@ -67,7 +67,7 @@ public:
     // IAudioSource
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
-    async::Channel<unsigned int> audioChannelsCountChanged() const override;
+    bool setAudioChannelsCount(unsigned int channels) override;
     audio::samples_t process(float* buffer, size_t bufferSize, audio::samples_t samplesPerChannel) override;
 
 private:
@@ -78,7 +78,6 @@ private:
 
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
-    async::Channel<unsigned int> m_streamsCountChanged;
     audio::samples_t m_samplesPerChannel = 0;
 
     VstSequencer m_sequencer;

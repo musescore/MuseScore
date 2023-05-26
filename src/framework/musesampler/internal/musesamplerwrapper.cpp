@@ -92,9 +92,9 @@ unsigned int MuseSamplerWrapper::audioChannelsCount() const
     return AUDIO_CHANNELS_COUNT;
 }
 
-async::Channel<unsigned int> MuseSamplerWrapper::audioChannelsCountChanged() const
+bool MuseSamplerWrapper::setAudioChannelsCount(unsigned int /*channels*/)
 {
-    return m_audioChannelsCountChanged;
+    return false;
 }
 
 samples_t MuseSamplerWrapper::process(float* buffer, size_t bufferSize, audio::samples_t samplesPerChannel)

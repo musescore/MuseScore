@@ -171,9 +171,9 @@ unsigned int VstSynthesiser::audioChannelsCount() const
     return config()->audioChannelsCount();
 }
 
-async::Channel<unsigned int> VstSynthesiser::audioChannelsCountChanged() const
+bool VstSynthesiser::setAudioChannelsCount(unsigned int /*channels*/)
 {
-    return m_streamsCountChanged;
+    return false;
 }
 
 audio::samples_t VstSynthesiser::process(float* buffer, size_t bufferSize, audio::samples_t samplesPerChannel)

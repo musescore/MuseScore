@@ -51,8 +51,6 @@ public:
     RetVal<MixerChannelPtr> addAuxChannel(const TrackId trackId);
     Ret removeChannel(const TrackId trackId);
 
-    void setAudioChannelsCount(const audioch_t count);
-
     void addClock(IClockPtr clock);
     void removeClock(IClockPtr clock);
 
@@ -66,6 +64,8 @@ public:
     // IAudioSource
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
+    bool setAudioChannelsCount(unsigned int channels) override;
+
     samples_t process(float* outBuffer, size_t bufferSize, samples_t samplesPerChannel) override;
     void setIsActive(bool arg) override;
 

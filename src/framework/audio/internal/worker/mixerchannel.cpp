@@ -156,11 +156,11 @@ unsigned int MixerChannel::audioChannelsCount() const
     return m_audioSource ? m_audioSource->audioChannelsCount() : m_audioChannelsCount;
 }
 
-async::Channel<unsigned int> MixerChannel::audioChannelsCountChanged() const
+bool MixerChannel::setAudioChannelsCount(unsigned int channels)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    return m_audioSource ? m_audioSource->audioChannelsCountChanged() : async::Channel<unsigned int>();
+    return m_audioSource ? m_audioSource->setAudioChannelsCount(channels) : false;
 }
 
 samples_t MixerChannel::process(float* buffer, size_t bufferSize, samples_t samplesPerChannel)

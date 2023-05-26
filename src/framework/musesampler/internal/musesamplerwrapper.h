@@ -40,7 +40,7 @@ public:
 
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
-    async::Channel<unsigned int> audioChannelsCountChanged() const override;
+    bool setAudioChannelsCount(unsigned int channels) override;
     audio::samples_t process(float* buffer, size_t bufferSize, audio::samples_t samplesPerChannel) override;
 
     std::string name() const override;

@@ -114,11 +114,12 @@ Ret Mixer::removeChannel(const TrackId trackId)
     return make_ret(Err::InvalidTrackId);
 }
 
-void Mixer::setAudioChannelsCount(const audioch_t count)
+bool Mixer::setAudioChannelsCount(unsigned int channels)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_audioChannelsCount = count;
+    m_audioChannelsCount = channels;
+    return true;
 }
 
 void Mixer::setSampleRate(unsigned int sampleRate)

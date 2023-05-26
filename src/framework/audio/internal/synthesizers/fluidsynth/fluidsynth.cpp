@@ -359,9 +359,10 @@ samples_t FluidSynth::process(float* buffer, size_t bufferSize, samples_t sample
     return samplesPerChannel;
 }
 
-async::Channel<unsigned int> FluidSynth::audioChannelsCountChanged() const
+bool FluidSynth::setAudioChannelsCount(unsigned int /*channels*/)
 {
-    return m_streamsCountChanged;
+    // Different number of channels not implemented
+    return false;
 }
 
 void FluidSynth::toggleExpressionController()

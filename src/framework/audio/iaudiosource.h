@@ -45,7 +45,8 @@ public:
     //! return substream count for this source: 1 for mono, 2 for stereo, 6 for surround
     virtual unsigned int audioChannelsCount() const = 0;
 
-    virtual async::Channel<unsigned int> audioChannelsCountChanged() const = 0;
+    //! Try to set audio channel count, returns false if failed
+    virtual bool setAudioChannelsCount(unsigned int channels) = 0;
 
     //! move buffer forward for sampleCount samples
     virtual samples_t process(float* buffer, size_t bufferSize, samples_t samplesPerChannel) = 0;
