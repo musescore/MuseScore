@@ -23,17 +23,17 @@
 #ifndef MU_ENGRAVING_READ114_H
 #define MU_ENGRAVING_READ114_H
 
-#include "../iscorereader.h"
+#include "../ireader.h"
 
 namespace mu::engraving::compat {
-class Read114 : public IScoreReader
+class Read114 : public IReader
 {
 public:
     //---------------------------------------------------------
     //   read114
     //    import old version <= 1.3 files
     //---------------------------------------------------------
-    Err read(Score* masterScore, XmlReader& e, ReadInOutData* out) override;
+    Err readScore(Score* masterScore, XmlReader& e, ReadInOutData* out) override;
 };
 }
 

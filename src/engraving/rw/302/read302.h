@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_READ302_H
 #define MU_ENGRAVING_READ302_H
 
-#include "../iscorereader.h"
+#include "../ireader.h"
 
 #include "modularity/ioc.h"
 #include "iengravingfontsprovider.h"
@@ -42,12 +42,12 @@ class ReadContext;
 }
 
 namespace mu::engraving::compat {
-class Read302 : public IScoreReader
+class Read302 : public IReader
 {
     INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
 public:
 
-    Err read(Score* score, XmlReader& e, ReadInOutData* out) override;
+    Err readScore(Score* score, XmlReader& e, ReadInOutData* out) override;
 
 private:
     static bool readScore302(Score* score, XmlReader& e, rw400::ReadContext& ctx);
