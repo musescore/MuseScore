@@ -47,9 +47,9 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
         return;
     }
 
-    samples_t totalSamplesNumber = (totalDuration / 1000000.f) * sizeof(float) * format.sampleRate;
+    samples_t totalSamplesNumber = (totalDuration / 1000000.f) * format.audioChannelsNumber * format.sampleRate;
     m_inputBuffer.resize(totalSamplesNumber);
-    m_intermBuffer.resize(config()->renderStep() * config()->audioChannelsCount());
+    m_intermBuffer.resize(config()->renderStep() * format.audioChannelsNumber);
 
     m_encoderPtr = createEncoder(format.type);
 
@@ -73,7 +73,10 @@ Ret SoundTrackWriter::write()
 
     AudioEngine::instance()->setMode(RenderMode::OfflineMode);
 
+    const unsigned int previousChannels = m_source->audioChannelsCount();
+    const unsigned int targetChannels = m_encoderPtr->format().audioChannelsNumber;
     m_source->setSampleRate(m_encoderPtr->format().sampleRate);
+    const bool setChannelSuccess = m_source->setAudioChannelsCount(targetChannels);
     m_source->setIsActive(true);
 
     DEFER {
@@ -82,17 +85,21 @@ Ret SoundTrackWriter::write()
         AudioEngine::instance()->setMode(RenderMode::RealTimeMode);
 
         m_source->setSampleRate(AudioEngine::instance()->sampleRate());
+        m_source->setAudioChannelsCount(previousChannels);
         m_source->setIsActive(false);
 
         m_isAborted = false;
     };
+    if (!setChannelSuccess && previousChannels != targetChannels) {
+        return make_ret(Ret::Code::NotSupported, std::string("Unable to set requested audio channel count"));
+    }
 
     Ret ret = prepareInputBuffer();
     if (!ret) {
         return ret;
     }
-
-    size_t bytes = m_encoderPtr->encode(m_inputBuffer.size() / sizeof(float), m_inputBuffer.data());
+    size_t samplesPerChannel = m_inputBuffer.size() / targetChannels;
+    size_t bytes = m_encoderPtr->encode(samplesPerChannel, m_inputBuffer.data());
 
     if (m_isAborted) {
         return make_ret(Ret::Code::Cancel);

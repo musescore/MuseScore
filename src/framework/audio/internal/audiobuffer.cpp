@@ -226,7 +226,6 @@ void AudioBuffer::setMinSamplesToReserve(size_t lag)
 
 void AudioBuffer::reset()
 {
-    std::scoped_lock lock(m_writeMutex, m_readMutex);
     m_readIndex.store(0, std::memory_order_release);
     m_writeIndex.store(0, std::memory_order_release);
 
