@@ -3376,7 +3376,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Err Read206::read(Score* score, XmlReader& e, ReadInOutData* out)
+Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 {
     ReadContext ctx(score);
     DEFER {

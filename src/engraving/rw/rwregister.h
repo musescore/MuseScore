@@ -19,24 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_ENGRAVING_RWREGISTER_H
+#define MU_ENGRAVING_RWREGISTER_H
 
-#ifndef MU_ENGRAVING_ISCOREREADER_H
-#define MU_ENGRAVING_ISCOREREADER_H
+#include <memory>
 
-#include "engravingerrors.h"
-#include "readoutdata.h"
+#include "ireader.h"
 
-namespace mu::engraving {
-class Score;
-class XmlReader;
-
-class IScoreReader
+namespace mu::engraving::rw {
+class RWRegister
 {
 public:
-    virtual ~IScoreReader() = default;
 
-    virtual Err read(Score* score, XmlReader& e, ReadInOutData* out) = 0;
+    static IReaderPtr reader(int version);
+    static IReaderPtr latestReader();
 };
 }
 
-#endif // MU_ENGRAVING_ISCOREREADER_H
+#endif // MU_ENGRAVING_RWREGISTER_H

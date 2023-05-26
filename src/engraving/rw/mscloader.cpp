@@ -32,50 +32,36 @@
 #include "../libmscore/excerpt.h"
 #include "../libmscore/imageStore.h"
 
-#include "114/read114.h"
-#include "206/read206.h"
-#include "302/read302.h"
-#include "400/read400.h"
-#include "rw/compat/compatutils.h"
-
+#include "compat/compatutils.h"
 #include "compat/readstyle.h"
 
+#include "rwregister.h"
 #include "xmlreader.h"
-#include "400/readcontext.h"
 
 #include "log.h"
 
 using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
+using namespace mu::engraving::rw;
 
-using IScoreReaderPtr = std::shared_ptr<IScoreReader>;
-
-static RetVal<IScoreReaderPtr> makeReader(int version, bool ignoreVersionError)
+static RetVal<IReaderPtr> makeReader(int version, bool ignoreVersionError)
 {
     if (!ignoreVersionError) {
         if (version > MSCVERSION) {
-            return RetVal<IScoreReaderPtr>(make_ret(Err::FileTooNew));
+            return RetVal<IReaderPtr>(make_ret(Err::FileTooNew));
         }
 
         if (version < 114) {
-            return RetVal<IScoreReaderPtr>(make_ret(Err::FileTooOld));
+            return RetVal<IReaderPtr>(make_ret(Err::FileTooOld));
         }
 
         if (version == 300) {
-            return RetVal<IScoreReaderPtr>(make_ret(Err::FileOld300Format));
+            return RetVal<IReaderPtr>(make_ret(Err::FileOld300Format));
         }
     }
 
-    if (version <= 114) {
-        return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<compat::Read114>());
-    } else if (version <= 207) {
-        return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<compat::Read206>());
-    } else if (version < 400 || MScore::testMode) {
-        return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<compat::Read302>());
-    }
-
-    return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<rw400::Read400>());
+    return RetVal<IReaderPtr>::make_ok(RWRegister::reader(version));
 }
 
 mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, SettingsCompat& settingsCompat,
@@ -135,11 +121,11 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
         XmlReader xml(scoreData);
         xml.setDocName(docName);
 
-        ret = read(masterScore, xml, ignoreVersionError, &masterReadOutData, &styleHook);
+        ret = readMasterScore(masterScore, xml, ignoreVersionError, &masterReadOutData, &styleHook);
     }
 
     // Read excerpts
-    if (masterScore->mscVersion() >= 400) {
+    if (ret && masterScore->mscVersion() >= 400) {
         std::vector<String> excerptNames = mscReader.excerptNames();
         for (const String& excerptName : excerptNames) {
             Score* partScore = masterScore->createScore();
@@ -162,7 +148,17 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
             ReadInOutData partReadInData;
             partReadInData.links = masterReadOutData.links;
 
-            rw400::Read400().read(partScore, xml, &partReadInData);
+            RetVal<IReaderPtr> reader = makeReader(masterScore->mscVersion(), ignoreVersionError);
+            if (!reader.ret) {
+                ret = reader.ret;
+                break;
+            }
+
+            Err err = reader.val->readScore(partScore, xml, &partReadInData);
+            ret =  make_ret(err);
+            if (!ret) {
+                break;
+            }
 
             partScore->linkMeasures(masterScore);
 
@@ -189,7 +185,8 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
     return ret;
 }
 
-mu::Ret MscLoader::read(MasterScore* score, XmlReader& e, bool ignoreVersionError, ReadInOutData* out, compat::ReadStyleHook* styleHook)
+mu::Ret MscLoader::readMasterScore(MasterScore* score, XmlReader& e, bool ignoreVersionError, ReadInOutData* out,
+                                   compat::ReadStyleHook* styleHook)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -197,7 +194,7 @@ mu::Ret MscLoader::read(MasterScore* score, XmlReader& e, bool ignoreVersionErro
             StringList sl = version.split('.');
             score->setMscVersion(sl[0].toInt() * 100 + sl[1].toInt());
 
-            RetVal<IScoreReaderPtr> reader = makeReader(score->mscVersion(), ignoreVersionError);
+            RetVal<IReaderPtr> reader = makeReader(score->mscVersion(), ignoreVersionError);
             if (!reader.ret) {
                 return reader.ret;
             }
@@ -221,7 +218,7 @@ mu::Ret MscLoader::read(MasterScore* score, XmlReader& e, bool ignoreVersionErro
                 score->checkChordList();
             }
 
-            Err err = reader.val->read(score, e, out);
+            Err err = reader.val->readScore(score, e, out);
 
             score->setExcerptsChanged(false);
 

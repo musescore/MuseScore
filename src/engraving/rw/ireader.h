@@ -19,36 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_MSCLOADER_H
-#define MU_ENGRAVING_MSCLOADER_H
 
-#include "global/types/ret.h"
+#ifndef MU_ENGRAVING_IREADER_H
+#define MU_ENGRAVING_IREADER_H
 
-#include "infrastructure/mscreader.h"
-#include "engraving/types/types.h"
+#include <memory>
 
-namespace mu::engraving::compat {
-class ReadStyleHook;
-}
+#include "engravingerrors.h"
+#include "readoutdata.h"
 
 namespace mu::engraving {
-class MasterScore;
-struct ReadInOutData;
+class Score;
 class XmlReader;
-class MscLoader
+
+class IReader
 {
 public:
-    MscLoader() = default;
+    virtual ~IReader() = default;
 
-    Ret loadMscz(MasterScore* score, const MscReader& mscReader, SettingsCompat& settingsCompat, bool ignoreVersionError);
-
-private:
-
-    friend class MasterScore;
-
-    Ret readMasterScore(MasterScore* score, XmlReader&, bool ignoreVersionError, ReadInOutData* out = nullptr,
-                        compat::ReadStyleHook* styleHook = nullptr);
+    virtual Err readScore(Score* score, XmlReader& e, ReadInOutData* out) = 0;
 };
+
+using IReaderPtr = std::shared_ptr<IReader>;
 }
 
-#endif // MU_ENGRAVING_MSCLOADER_H
+#endif // MU_ENGRAVING_IREADER_H

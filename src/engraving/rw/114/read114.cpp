@@ -2740,7 +2740,7 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
 //    import old version <= 1.3 files
 //---------------------------------------------------------
 
-Err Read114::read(Score* score, XmlReader& e, ReadInOutData* out)
+Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 {
     IF_ASSERT_FAILED(score->isMaster()) {
         return Err::FileUnknownError;

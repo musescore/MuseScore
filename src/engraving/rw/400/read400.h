@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_READ400_H
 #define MU_ENGRAVING_READ400_H
 
-#include "../iscorereader.h"
+#include "../ireader.h"
 
 namespace mu::engraving {
 class Score;
@@ -31,11 +31,11 @@ class XmlReader;
 
 namespace mu::engraving::rw400 {
 class ReadContext;
-class Read400 : public IScoreReader
+class Read400 : public IReader
 {
 public:
 
-    Err read(Score* score, XmlReader& e, ReadInOutData* data) override;
+    Err readScore(Score* score, XmlReader& e, ReadInOutData* data) override;
 
     static bool readScore400(Score* score, XmlReader& e, ReadContext& ctx);
 };

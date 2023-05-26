@@ -19,36 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_MSCLOADER_H
-#define MU_ENGRAVING_MSCLOADER_H
+#include "rwregister.h"
 
-#include "global/types/ret.h"
+#include "114/read114.h"
+#include "206/read206.h"
+#include "302/read302.h"
+#include "400/read400.h"
 
-#include "infrastructure/mscreader.h"
-#include "engraving/types/types.h"
+using namespace mu::engraving;
+using namespace mu::engraving::rw;
 
-namespace mu::engraving::compat {
-class ReadStyleHook;
-}
-
-namespace mu::engraving {
-class MasterScore;
-struct ReadInOutData;
-class XmlReader;
-class MscLoader
+IReaderPtr RWRegister::reader(int version)
 {
-public:
-    MscLoader() = default;
+    if (version >= 0 && version <= 114) {
+        return std::make_shared<compat::Read114>();
+    } else if (version <= 207) {
+        return std::make_shared<compat::Read206>();
+    } else if (version < 400 || MScore::testMode) {
+        return std::make_shared<compat::Read302>();
+    }
 
-    Ret loadMscz(MasterScore* score, const MscReader& mscReader, SettingsCompat& settingsCompat, bool ignoreVersionError);
-
-private:
-
-    friend class MasterScore;
-
-    Ret readMasterScore(MasterScore* score, XmlReader&, bool ignoreVersionError, ReadInOutData* out = nullptr,
-                        compat::ReadStyleHook* styleHook = nullptr);
-};
+    return std::make_shared<rw400::Read400>();
 }
 
-#endif // MU_ENGRAVING_MSCLOADER_H
+IReaderPtr RWRegister::latestReader()
+{
+    return reader(-1);
+}

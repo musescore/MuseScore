@@ -261,7 +261,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Err Read302::read(Score* score, XmlReader& e, ReadInOutData* out)
+Err Read302::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 {
     ReadContext ctx(score);
 

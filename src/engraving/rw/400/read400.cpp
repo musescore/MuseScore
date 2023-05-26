@@ -39,7 +39,7 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
 
-Err Read400::read(Score* score, XmlReader& e, ReadInOutData* data)
+Err Read400::readScore(Score* score, XmlReader& e, ReadInOutData* data)
 {
     ReadContext ctx(score);
 

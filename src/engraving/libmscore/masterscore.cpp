@@ -431,7 +431,7 @@ MasterScore* MasterScore::clone()
     MasterScore* score = new MasterScore(style(), m_project);
 
     XmlReader r(scoreData);
-    MscLoader().read(score, r, true);
+    MscLoader().readMasterScore(score, r, true);
 
     score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();
