@@ -194,10 +194,10 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
     m_soundFontRepository->init();
     m_registerAudioPluginsScenario->init();
 
-    m_audioOutputController->init();
-
     // Setup audio driver
     IAudioDriver::Spec spec = setupAudioDriver(mode);
+
+    m_audioOutputController->init();
 
     // Use actual channel count instead of configuration
     m_audioBuffer->init(spec.channels,

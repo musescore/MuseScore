@@ -87,9 +87,12 @@ std::string WasapiAudioDriver::name() const
 
 bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
+    std::lock_guard lock(m_mutex);
     if (!s_data.wasapiClient.get()) {
         s_data.wasapiClient
             = make_self<WasapiAudioClient>(s_data.clientStartedEvent, s_data.clientFailedToStartEvent, s_data.clientStoppedEvent);
+        // Client is available now, cannot get output devices before this
+        m_availableOutputDevicesChanged.notify();
     }
 
     m_desiredSpec = spec;
@@ -166,11 +169,13 @@ bool WasapiAudioDriver::isOpened() const
 
 AudioDeviceID WasapiAudioDriver::outputDevice() const
 {
+    std::lock_guard lock(m_mutex);
     return m_deviceId;
 }
 
 bool WasapiAudioDriver::selectOutputDevice(const AudioDeviceID& id)
 {
+    std::lock_guard lock(m_mutex);
     bool result = true;
 
     if (m_deviceId == id) {

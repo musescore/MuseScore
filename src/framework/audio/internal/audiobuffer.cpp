@@ -159,8 +159,12 @@ void AudioBuffer::forward()
     samples_t framesToReserve = m_data.size() / 2;
 
     while (reservedFrames(nextWriteIdx, currentReadIdx) < framesToReserve) {
-        m_source->process(m_data.data() + nextWriteIdx, m_data.size() - nextWriteIdx, m_renderStep);
-
+        samples_t num = m_source->process(m_data.data() + nextWriteIdx, m_data.size() - nextWriteIdx, m_renderStep);
+        if (num == 0) {
+            // Free audio worker thread if there is no progress
+            break;
+        }
+        // Increment by render step even if num is less, because otherwise we could write over the buffer end
         nextWriteIdx = incrementWriteIndex(nextWriteIdx, m_renderStep);
     }
 
