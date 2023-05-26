@@ -4111,13 +4111,13 @@ void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
             // start segment
             lineSegm->setSpannerSegmentType(SpannerSegmentType::BEGIN);
             lineSegm->setPos(p1);
-            double x2 = system->lastNoteRestSegmentX(true);
+            double x2 = system->endingXForOpenEndedLines();
             lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
         } else if (i > 0 && i != sysIdx2) {
             // middle segment
             lineSegm->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
             double x1 = system->firstNoteRestSegmentX(true);
-            double x2 = system->lastNoteRestSegmentX(true);
+            double x2 = system->endingXForOpenEndedLines();
             lineSegm->setPos(PointF(x1, p1.y()));
             lineSegm->setPos2(PointF(x2 - x1, 0.0));
         } else if (i == sysIdx2) {

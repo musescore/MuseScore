@@ -121,14 +121,14 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
         System* s;
         PointF p1 = linePos(Grip::START, &s);
         lineSegm->setPos(p1);
-        double x2 = system->lastNoteRestSegmentX(true);
+        double x2 = system->endingXForOpenEndedLines();
         lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
     }
     break;
     case SpannerSegmentType::MIDDLE: {
         bool leading = (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE);
         double x1 = system->firstNoteRestSegmentX(leading);
-        double x2 = system->lastNoteRestSegmentX(true);
+        double x2 = system->endingXForOpenEndedLines();
         System* s;
         PointF p1 = linePos(Grip::START, &s);
         lineSegm->setPos(PointF(x1, p1.y()));
