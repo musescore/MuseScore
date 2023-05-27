@@ -1142,7 +1142,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             sld->setStraight(true);
             note->chord()->add(sld);
             sld->setNote(note);
-            Note::Slide sl{ convertSlideType(slideType), nullptr };
+            Note::Slide sl{ convertSlideType(slideType) };
             note->attachSlide(sl);
         }
 
