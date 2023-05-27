@@ -160,6 +160,14 @@ ScoresView {
                     width: implicitWidth
                     spacing: 12
 
+                    MuseScoreComAuthorizationModel {
+                        id: authorizationModel
+                    }
+
+                    Component.onCompleted: {
+                        authorizationModel.load()
+                    }
+
                     NavigationPanel {
                         id: navPanel
                         name: "SignInButtons"
@@ -169,17 +177,13 @@ ScoresView {
                         accessible.name: qsTrc("appshell", "Sign in buttons")
                     }
 
-                    AccountModel {
-                        id: accountModel
-                    }
-
                     FlatButton {
                         navigation.panel: navPanel
                         navigation.order: 1
 
                         text: qsTrc("cloud", "Create account")
                         onClicked: {
-                            accountModel.createAccount()
+                            authorizationModel.createAccount()
                         }
                     }
 
@@ -189,7 +193,7 @@ ScoresView {
 
                         text: qsTrc("cloud", "Sign in")
                         onClicked: {
-                            accountModel.signIn()
+                            authorizationModel.signIn()
                         }
                     }
                 }

@@ -31,6 +31,7 @@
 #include "internal/cloudconfiguration.h"
 
 #include "view/cloudsmodel.h"
+#include "view/musescorecomauthorizationmodel.h"
 
 using namespace mu::cloud;
 using namespace mu::modularity;
@@ -72,6 +73,7 @@ void CloudModule::registerResources()
 void CloudModule::registerUiTypes()
 {
     qmlRegisterType<CloudsModel>("MuseScore.Cloud", 1, 0, "CloudsModel");
+    qmlRegisterType<MuseScoreComAuthorizationModel>("MuseScore.Cloud", 1, 0, "MuseScoreComAuthorizationModel");
 
     modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(cloud_QML_IMPORT);
 }
