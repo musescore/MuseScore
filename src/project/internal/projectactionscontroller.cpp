@@ -378,7 +378,7 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
 
 IInteractive::Button ProjectActionsController::askAboutSavingScore(INotationProjectPtr project)
 {
-    std::string title = qtrc("project", "Do you want to save changes to the score “%1” before closing?")
+    std::string title = qtrc("project", "Do you want to save changes to the score "%1" before closing?")
                         .arg(project->displayName()).toStdString();
 
     std::string body = trc("project", "Your changes will be lost if you don’t save them.");
@@ -1203,7 +1203,7 @@ bool ProjectActionsController::askIfUserAgreesToOpenProjectWithIncompatibleVersi
 
 bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const String& projectName, const std::string& errorText)
 {
-    std::string title = mtrc("project", "File “%1” is corrupted").arg(projectName).toStdString();
+    std::string title = mtrc("project", "File "%1" is corrupted").arg(projectName).toStdString();
     std::string body = trc("project", "This file contains errors that could cause MuseScore to malfunction.");
 
     IInteractive::ButtonData openAnywayBtn(IInteractive::Button::CustomButton, trc("project", "Open anyway"), true /*accent*/);
@@ -1218,7 +1218,7 @@ bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const Strin
 
 void ProjectActionsController::warnProjectCannotBeOpened(const String& projectName, const std::string& errorText)
 {
-    std::string title = mtrc("project", "File “%1” is corrupted and cannot be opened").arg(projectName).toStdString();
+    std::string title = mtrc("project", "File "%1" is corrupted and cannot be opened").arg(projectName).toStdString();
     std::string body = trc("project", "Get help for this issue on musescore.org.");
 
     IInteractive::ButtonData getHelpBtn(IInteractive::Button::CustomButton, trc("project", "Get help"), true /*accent*/);
