@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "palettecell.h"
+#include "palettecompat.h"
 
 #include "mimedatautils.h"
 
@@ -206,6 +207,7 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
                 rw400::ReadContext ctx;
                 ctx.setPasteMode(pasteMode);
                 rw400::TRead::readItem(element.get(), e, ctx);
+                PaletteCompat::migrateOldPaletteItemIfNeeded(element, gpaletteScore);
                 element->styleChanged();
 
                 if (element->type() == ElementType::ACTION_ICON) {

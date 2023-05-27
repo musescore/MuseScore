@@ -58,6 +58,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/palettecelliconengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/palettecelliconengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mimedatautils.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/palettecompat.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/palettecompat.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/view/paletterootmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/paletterootmodel.h
