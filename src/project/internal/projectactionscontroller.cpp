@@ -49,8 +49,8 @@ static mu::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress");
 
 void ProjectActionsController::init()
 {
-    dispatcher()->reg(this, "file-open", this, &ProjectActionsController::openProject);
     dispatcher()->reg(this, "file-new", this, &ProjectActionsController::newProject);
+    dispatcher()->reg(this, "file-open", this, &ProjectActionsController::openProject);
 
     dispatcher()->reg(this, "file-close", [this]() {
         bool quitApp = multiInstancesProvider()->instances().size() > 1;
@@ -193,7 +193,13 @@ Ret ProjectActionsController::openProject(const io::path_t& projectPath_)
         return make_ret(Ret::Code::Ok);
     }
 
-    //! Step 5. Open project in the current window
+    //! Step 5. If it's a cloud project, download the latest version
+    if (configuration()->isNewCloudProject(projectPath)) {
+        downloadAndOpenCloudProject(configuration()->cloudScoreIdFromPath(projectPath));
+        return make_ret(Ret::Code::Ok);
+    }
+
+    //! Step 6. Open project in the current window
     return doOpenProject(projectPath);
 }
 
@@ -244,6 +250,49 @@ Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
     globalContext()->setCurrentProject(project);
 
     return openPageIfNeed(NOTATION_PAGE_URI);
+}
+
+void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
+{
+    // TODO(cloud): conflict checking (don't recklessly overwrite the existing file)
+    io::path_t localPath = configuration()->cloudProjectPath(scoreId);
+    QFile* projectData = new QFile(localPath.toQString());
+    if (!projectData->open(QIODevice::WriteOnly)) {
+        // TODO(cloud): show error dialog?
+        return;
+    }
+
+    m_projectBeingDownloaded.scoreId = scoreId;
+    m_projectBeingDownloaded.progress = museScoreComService()->downloadScore(scoreId, *projectData);
+
+    m_projectBeingDownloaded.progress->finished.onReceive(this, [this, localPath, projectData](const ProgressResult& res) {
+        projectData->deleteLater();
+
+        m_projectBeingDownloaded = {};
+        m_projectBeingDownloadedChanged.notify();
+
+        m_isProjectProcessing = false;
+
+        if (!res.ret) {
+            LOGE() << res.ret.toString();
+            // TODO(cloud): show error dialog?
+            return;
+        }
+
+        doOpenProject(localPath);
+    });
+
+    m_projectBeingDownloadedChanged.notify();
+}
+
+ProjectBeingDownloaded ProjectActionsController::projectBeingDownloaded() const
+{
+    return m_projectBeingDownloaded;
+}
+
+async::Notification ProjectActionsController::projectBeingDownloadedChanged() const
+{
+    return m_projectBeingDownloadedChanged;
 }
 
 Ret ProjectActionsController::openPageIfNeed(Uri pageUri)
@@ -649,10 +698,12 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
     }
 
     if (savingPath.empty()) {
-        savingPath = configuration()->cloudProjectSavingFilePath(info.name.toStdString());
+        int scoreId = cloud::scoreIdFromSourceUrl(info.sourceUrl);
+
+        savingPath = configuration()->cloudProjectSavingPath(scoreId);
     }
 
-    if (!saveProjectLocally(savingPath)) {
+    if (!saveProjectLocally(savingPath, saveMode)) {
         return false;
     }
 
@@ -814,7 +865,7 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
         }
     });
 
-    m_uploadingProjectProgress->finished.onReceive(this, [this, project, projectData, info,  audio, openEditUrl, publishMode,
+    m_uploadingProjectProgress->finished.onReceive(this, [this, project, projectData, info, audio, openEditUrl, publishMode,
                                                           isFirstSave](const ProgressResult& res) {
         projectData->deleteLater();
 
@@ -848,6 +899,10 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
 
         if (!project->isNewlyCreated()) {
             project->save();
+        }
+
+        if (project->isCloudProject()) {
+            moveProject(project, configuration()->cloudProjectPath(cloud::scoreIdFromSourceUrl(cpinfo.sourceUrl)), true);
         }
     });
 }
@@ -1168,6 +1223,16 @@ void ProjectActionsController::revertCorruptedScoreToLastSaved()
     if (!ret) {
         LOGE() << ret.toString();
     }
+}
+
+void ProjectActionsController::moveProject(INotationProjectPtr project, const io::path_t& newPath, bool replace)
+{
+    if (project->path() == newPath) {
+        return;
+    }
+
+    fileSystem()->move(project->path(), newPath, replace);
+    project->setPath(newPath);
 }
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const String& projectName)

@@ -73,9 +73,13 @@ public:
     bool shouldAskSaveLocationType() const override;
     void setShouldAskSaveLocationType(bool shouldAsk) override;
 
-    bool isCloudProject(const io::path_t& projectPath) const override;
+    bool isOldCloudProject(const io::path_t& projectPath) const override;
+    bool isNewCloudProject(const io::path_t& projectPath) const override;
+    io::path_t cloudProjectPath(int scoreId) const override;
+    int cloudScoreIdFromPath(const io::path_t& projectPath) const override;
 
-    io::path_t cloudProjectSavingFilePath(const io::path_t& projectName) const override;
+    io::path_t cloudProjectSavingPath(int scoreId = 0) const override;
+
     io::path_t defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition = "",
                                      const std::string& suffix = "") const override;
 
@@ -136,10 +140,9 @@ public:
     void setShowCloudIsNotAvailableWarning(bool show) override;
 
 private:
-    io::paths_t scanCloudProjects() const;
-
     io::path_t appTemplatesPath() const;
-    io::path_t cloudProjectsPath() const;
+    io::path_t oldCloudProjectsPath() const;
+    io::path_t newCloudProjectsPath() const;
 
     async::Channel<io::path_t> m_userTemplatesPathChanged;
     async::Channel<io::path_t> m_userScoresPathChanged;

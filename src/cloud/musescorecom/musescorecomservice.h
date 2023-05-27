@@ -56,6 +56,8 @@ public:
 
     async::Promise<ScoresList> downloadScoresList(int scoresPerBatch, int batchNumber) override;
 
+    framework::ProgressPtr downloadScore(int scoreId, QIODevice& scoreData) override;
+
 private:
     ServerConfig serverConfig() const override;
 
@@ -66,6 +68,8 @@ private:
     network::RequestHeaders headers() const;
 
     RetVal<ScoreInfo> downloadScoreInfo(int scoreId);
+
+    Ret doDownloadScore(network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData);
 
     mu::RetVal<mu::ValMap> doUploadScore(network::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
                                          Visibility visibility, const QUrl& sourceUrl = QUrl(), int revisionId = 0);

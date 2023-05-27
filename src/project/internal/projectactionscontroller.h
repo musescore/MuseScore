@@ -82,6 +82,9 @@ public:
     bool isAnyProjectOpened() const override;
     bool saveProject(const io::path_t& path = io::path_t()) override;
 
+    ProjectBeingDownloaded projectBeingDownloaded() const override;
+    async::Notification projectBeingDownloadedChanged() const override;
+
 private:
     void setupConnections();
 
@@ -91,8 +94,11 @@ private:
     notation::INotationInteractionPtr currentInteraction() const;
     notation::INotationSelectionPtr currentNotationSelection() const;
 
-    void openProject(const actions::ActionData& args);
     void newProject();
+
+    void openProject(const actions::ActionData& args);
+    void doOpenProject(const io::path_t& path, int scoreId);
+    void downloadAndOpenCloudProject(int scoreId);
 
     bool checkCanIgnoreError(const Ret& ret, const String& projectName);
     bool askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText);
@@ -151,6 +157,8 @@ private:
 
     void revertCorruptedScoreToLastSaved();
 
+    void moveProject(INotationProjectPtr project, const io::path_t& newPath, bool replace);
+
     void importPdf();
 
     void clearRecentScores();
@@ -184,6 +192,9 @@ private:
     framework::ProgressPtr m_uploadingAudioProgress = nullptr;
 
     int m_numberOfSavesToCloud = 0;
+
+    ProjectBeingDownloaded m_projectBeingDownloaded;
+    async::Notification m_projectBeingDownloadedChanged;
 };
 }
 

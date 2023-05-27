@@ -410,7 +410,7 @@ QString NotationProject::displayName() const
     }
 
     if (isCloudProject()) {
-        // TODO(save-to-cloud)
+        return m_cloudInfo.name;
     }
 
     bool isSuffixInteresting = io::suffix(m_path) != engraving::MSCZ;
@@ -419,7 +419,7 @@ QString NotationProject::displayName() const
 
 bool NotationProject::isCloudProject() const
 {
-    return configuration()->isCloudProject(m_path);
+    return configuration()->isNewCloudProject(m_path) || configuration()->isOldCloudProject(m_path);
 }
 
 const CloudProjectInfo& NotationProject::cloudInfo() const

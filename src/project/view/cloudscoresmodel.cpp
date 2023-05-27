@@ -124,7 +124,7 @@ void CloudScoresModel::loadItemsIfNecessary()
                     QVariantMap obj;
 
                     obj[NAME_KEY] = item.title;
-                    obj[PATH_KEY] = "";
+                    obj[PATH_KEY] = configuration()->cloudProjectPath(item.id).toQString();
                     obj[SUFFIX_KEY] = "";
                     obj[IS_CLOUD_KEY] = true;
                     obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(Date::fromQDate(item.lastModified.date())).toQString();

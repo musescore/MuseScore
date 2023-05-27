@@ -26,6 +26,8 @@
 #include "types/ret.h"
 #include "io/path.h"
 
+#include "projecttypes.h"
+
 namespace mu::project {
 class IProjectFilesController : MODULE_EXPORT_INTERFACE
 {
@@ -40,6 +42,9 @@ public:
     virtual bool isProjectOpened(const io::path_t& path) const = 0;
     virtual bool isAnyProjectOpened() const = 0;
     virtual bool saveProject(const io::path_t& path = io::path_t()) = 0;
+
+    virtual ProjectBeingDownloaded projectBeingDownloaded() const = 0;
+    virtual async::Notification projectBeingDownloadedChanged() const = 0;
 };
 }
 

@@ -104,10 +104,12 @@ void ProjectConfiguration::init()
     if (!userTemplatesPath().empty()) {
         fileSystem()->makePath(userTemplatesPath());
     }
+
     if (!userProjectsPath().empty()) {
         fileSystem()->makePath(userProjectsPath());
     }
-    fileSystem()->makePath(cloudProjectsPath());
+
+    fileSystem()->makePath(newCloudProjectsPath());
 }
 
 io::path_t ProjectConfiguration::recentFilesJsonPath() const
@@ -120,19 +122,6 @@ ByteArray ProjectConfiguration::compatRecentFilesData() const
     std::string data = settings()->value(COMPAT_RECENT_FILES_DATA).toString();
 
     return ByteArray(data.data(), data.size());
-}
-
-io::paths_t ProjectConfiguration::scanCloudProjects() const
-{
-    TRACEFUNC;
-
-    RetVal<io::paths_t> paths = fileSystem()->scanFiles(cloudProjectsPath(), { DEFAULT_FILE_FILTER }, io::ScanMode::FilesInCurrentDir);
-
-    if (!paths.ret) {
-        LOGE() << paths.ret.toString();
-    }
-
-    return paths.val;
 }
 
 io::path_t ProjectConfiguration::myFirstProjectPath() const
@@ -230,41 +219,52 @@ void ProjectConfiguration::setShouldAskSaveLocationType(bool shouldAsk)
     settings()->setSharedValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(shouldAsk));
 }
 
-bool ProjectConfiguration::isCloudProject(const io::path_t& projectPath) const
-{
-    return io::dirpath(projectPath) == cloudProjectsPath();
-}
-
-io::path_t ProjectConfiguration::cloudProjectSavingFilePath(const io::path_t& projectName) const
-{
-    io::path_t savingPathWithoutSuffix = cloudProjectsPath() + '/' + projectName;
-
-    auto makeSavingPath = [savingPathWithoutSuffix](size_t num = 0) {
-        std::string numPart = num > 0 ? ' ' + std::to_string(num) : "";
-        return savingPathWithoutSuffix + numPart + DEFAULT_FILE_SUFFIX;
-    };
-
-    io::paths_t cloudProjectPaths = scanCloudProjects();
-    io::path_t savingPath = makeSavingPath();
-
-    if (!mu::contains(cloudProjectPaths, savingPath)) {
-        return savingPath;
-    }
-
-    for (size_t i = 0; i < cloudProjectPaths.size(); ++i) {
-        savingPath = makeSavingPath(i + 2);
-
-        if (!mu::contains(cloudProjectPaths, savingPath)) {
-            return savingPath;
-        }
-    }
-
-    return makeSavingPath(cloudProjectPaths.size() + 2);
-}
-
-io::path_t ProjectConfiguration::cloudProjectsPath() const
+io::path_t ProjectConfiguration::oldCloudProjectsPath() const
 {
     return globalConfiguration()->userDataPath() + "/Cloud Scores";
+}
+
+io::path_t ProjectConfiguration::newCloudProjectsPath() const
+{
+    return globalConfiguration()->userAppDataPath() + "/cloud_scores";
+}
+
+bool ProjectConfiguration::isOldCloudProject(const io::path_t& projectPath) const
+{
+    return io::dirpath(projectPath) == oldCloudProjectsPath();
+}
+
+bool ProjectConfiguration::isNewCloudProject(const io::path_t& projectPath) const
+{
+    return io::dirpath(projectPath) == newCloudProjectsPath();
+}
+
+io::path_t ProjectConfiguration::cloudProjectPath(int scoreId) const
+{
+    return newCloudProjectsPath().appendingComponent(QString::number(scoreId)).appendingSuffix(DEFAULT_FILE_SUFFIX);
+}
+
+int ProjectConfiguration::cloudScoreIdFromPath(const io::path_t& projectPath) const
+{
+    return io::filename(projectPath, false).toQString().toInt();
+}
+
+io::path_t ProjectConfiguration::cloudProjectSavingPath(int scoreId) const
+{
+    if (scoreId != 0) {
+        return cloudProjectPath(scoreId);
+    }
+
+    io::path_t path;
+    int counter = 0;
+
+    do {
+        path = newCloudProjectsPath()
+               .appendingComponent(QStringLiteral("not_uploaded_") + QString::number(counter))
+               .appendingSuffix(DEFAULT_FILE_SUFFIX);
+    } while (fileSystem()->exists(path));
+
+    return path;
 }
 
 io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition,

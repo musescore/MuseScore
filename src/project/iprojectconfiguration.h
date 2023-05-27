@@ -67,9 +67,14 @@ public:
     virtual bool shouldAskSaveLocationType() const = 0;
     virtual void setShouldAskSaveLocationType(bool shouldAsk) = 0;
 
-    virtual bool isCloudProject(const io::path_t& projectPath) const = 0;
+    // To do: compat
+    virtual bool isOldCloudProject(const io::path_t& projectPath) const = 0;
+    virtual bool isNewCloudProject(const io::path_t& projectPath) const = 0;
+    virtual io::path_t cloudProjectPath(int scoreId) const = 0;
+    virtual int cloudScoreIdFromPath(const io::path_t& projectPath) const = 0;
 
-    virtual io::path_t cloudProjectSavingFilePath(const io::path_t& projectName) const = 0;
+    virtual io::path_t cloudProjectSavingPath(int scoreId = 0) const = 0;
+
     virtual io::path_t defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition = "",
                                              const std::string& suffix = "") const = 0;
 

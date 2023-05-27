@@ -58,6 +58,8 @@ public:
     /// It is similar to e.g. the list of issues on GitHub: you don't have one
     /// big list of all issues, but you have many pages, with 25 issues per page.
     virtual async::Promise<ScoresList> downloadScoresList(int scoresPerBatch, int batchNumber) = 0;
+
+    virtual framework::ProgressPtr downloadScore(int scoreId, QIODevice& scoreData) = 0;
 };
 }
 

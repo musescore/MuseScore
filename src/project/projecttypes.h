@@ -28,6 +28,7 @@
 #include <QUrl>
 
 #include "io/path.h"
+#include "progress.h"
 #include "log.h"
 
 #include "cloud/cloudtypes.h"
@@ -252,6 +253,11 @@ using Templates = QList<Template>;
 
 using RecentFile = io::path_t;
 using RecentFilesList = std::vector<RecentFile>;
+
+struct ProjectBeingDownloaded {
+    int scoreId = 0;
+    framework::ProgressPtr progress;
+};
 
 class GenerateAudioTimePeriod
 {

@@ -27,6 +27,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
+#include "iprojectconfiguration.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 namespace mu::project {
@@ -34,6 +35,7 @@ class CloudScoresModel : public AbstractScoresModel, public async::Asyncable
 {
     Q_OBJECT
 
+    INJECT(IProjectConfiguration, configuration)
     INJECT(cloud::IMuseScoreComService, museScoreComService)
 
     Q_PROPERTY(State state READ state NOTIFY stateChanged)

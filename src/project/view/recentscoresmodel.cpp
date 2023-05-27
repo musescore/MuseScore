@@ -78,7 +78,7 @@ void RecentScoresModel::updateRecentScores()
         obj[NAME_KEY] = io::filename(file, isSuffixInteresting).toQString();
         obj[PATH_KEY] = file.toQString();
         obj[SUFFIX_KEY] = QString::fromStdString(suffix);
-        obj[IS_CLOUD_KEY] = configuration()->isCloudProject(file);
+        obj[IS_CLOUD_KEY] = configuration()->isNewCloudProject(file) || configuration()->isOldCloudProject(file);
         obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(file).lastModified().date()).toQString();
         obj[IS_CREATE_NEW_KEY] = false;
         obj[IS_NO_RESULT_FOUND_KEY] = false;

@@ -136,6 +136,18 @@ struct ScoresList {
         int scoresPerBatch = 0;
     } meta;
 };
+
+constexpr int INVALID_SCORE_ID = 0;
+
+inline int scoreIdFromSourceUrl(const QUrl& sourceUrl)
+{
+    QStringList parts = sourceUrl.toString().split("/");
+    if (parts.isEmpty()) {
+        return INVALID_SCORE_ID;
+    }
+
+    return parts.last().toInt();
+}
 }
 
 #endif // MU_CLOUD_ACCOUNTTYPES_H
