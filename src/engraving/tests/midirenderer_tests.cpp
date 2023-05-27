@@ -328,13 +328,7 @@ TEST_F(MidiRenderer_Tests, tremoloSlideIn)
     checkEventInterval(events, 960, 1439, 59, defVol);
 }
 
-/*****************************************************************************
-
-    DISABLED TESTS BELOW
-
-*****************************************************************************/
-
-TEST_F(MidiRenderer_Tests, DISABLED_tremoloSlideOut)
+TEST_F(MidiRenderer_Tests, tremoloSlideOut)
 {
     constexpr int defVol = 96; // f
     constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
@@ -349,5 +343,11 @@ TEST_F(MidiRenderer_Tests, DISABLED_tremoloSlideOut)
     checkEventInterval(events, 720, 959, 59, defVol);
     checkEventInterval(events, 960, 1277, 58, glissVol);
     checkEventInterval(events, 1278, 1595, 57, glissVol);
-    checkEventInterval(events, 1597, 1919, 56, glissVol);
+    checkEventInterval(events, 1597, 1914, 56, glissVol);
 }
+
+/*****************************************************************************
+
+    DISABLED TESTS BELOW
+
+*****************************************************************************/
