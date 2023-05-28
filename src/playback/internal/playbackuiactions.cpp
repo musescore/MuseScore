@@ -54,7 +54,7 @@ const UiActionList PlaybackUiActions::m_mainActions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Loop playback"),
-             TranslatableString("action", "Toggle ‘Loop playback’"),
+             TranslatableString("action", "Toggle 'Loop playback'"),
              IconCode::Code::LOOP,
              Checkable::Yes
              ),
