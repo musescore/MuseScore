@@ -125,7 +125,7 @@ You can share drafts with others and publish your finished scores publicly too."
             id: dontAskAgainCheckbox
 
             width: parent.width
-            text: qsTrc("global", "Don’t show again")
+            text: qsTrc("global", "Don't show again")
             checked: !root.askAgain
 
             navigation.panel: dontAskAgainPanel
