@@ -327,14 +327,21 @@ EngravingItem* ChordRest::drop(EditData& data)
             ic->setParent(segment());
             ic->setTrack(trackZeroVoice(track()));
 
-            const Instrument* instr = part()->instrument(tick());
-            IF_ASSERT_FAILED(instr) {
+            const Instrument* prevInstr = part()->instrument(tick());
+            const Instrument instr = *ic->instrument();
+
+            IF_ASSERT_FAILED(prevInstr) {
                 delete e;
                 return nullptr;
             }
 
-            ic->setInstrument(*instr);
+            // temporarily set previous instrument, for correct transposition calculation
+            ic->setInstrument(*prevInstr);
             score()->undoAddElement(ic);
+
+            if (!fromPalette) {
+                ic->setupInstrument(&instr);
+            }
             return e;
         }
     case ElementType::FIGURED_BASS:
