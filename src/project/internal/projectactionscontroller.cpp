@@ -381,7 +381,7 @@ IInteractive::Button ProjectActionsController::askAboutSavingScore(INotationProj
     std::string title = qtrc("project", "Do you want to save changes to the score \"%1\" before closing?")
                         .arg(project->displayName()).toStdString();
 
-    std::string body = trc("project", "Your changes will be lost if you don’t save them.");
+    std::string body = trc("project", "Your changes will be lost if you don't save them.");
 
     IInteractive::Result result = interactive()->warning(title, body, {
         IInteractive::Button::DontSave,
