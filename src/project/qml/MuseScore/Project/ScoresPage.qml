@@ -227,7 +227,7 @@ FocusScope {
             }
 
             onOpenScoreRequested: function(scorePath) {
-                scoresPageModel.openScore(scorePath)
+                Qt.callLater(scoresPageModel.openScore, scorePath)
             }
         }
     }
@@ -253,7 +253,7 @@ FocusScope {
             }
 
             onOpenScoreRequested: function(scorePath) {
-                scoresPageModel.openScore(scorePath)
+                Qt.callLater(scoresPageModel.openScore, scorePath)
             }
 
             Connections {
@@ -265,7 +265,6 @@ FocusScope {
             }
         }
     }
-
 
     Rectangle {
         id: buttonsPanel
