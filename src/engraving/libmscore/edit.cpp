@@ -3187,7 +3187,7 @@ void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, track_idx_t tra
                 if (!filter.canSelect(annotation)) {
                     continue;
                 }
-                if (!annotation->systemFlag() && annotation->track() == track) {
+                if (!annotation->systemFlag() && annotation->track() == track && !(annotation->type() == ElementType::INSTRUMENT_CHANGE)) {
                     deleteItem(annotation);
                 }
             }
