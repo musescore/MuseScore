@@ -322,7 +322,7 @@ bool SaveProjectScenario::warnBeforePublishing(bool isPublish, cloud::Visibility
         title = trc("project/save", "Publish this score online?"),
         message = trc("project/save", "All saved changes will be publicly visible on MuseScore.com. "
                                       "If you want to make frequent changes, we recommend saving this "
-                                      "score privately until you’re ready to share it to the world.");
+                                      "score privately until you're ready to share it to the world.");
     } else {
         return true;
     }
