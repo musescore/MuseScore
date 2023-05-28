@@ -2091,6 +2091,10 @@ void Note::setDotY(DirectionV pos)
         bool finished = false;
         for (Note* note : topDownNotes) {
             int dotMove = -1;
+            if (pos == DirectionV::DOWN) {
+                dotMove = 1;
+            }
+
             if (mu::contains(anchoredDots, note->line() + dotMove)) {
                 dotMove = 1; // if the desired space is taken, adjust downwards
             }
@@ -2116,6 +2120,10 @@ void Note::setDotY(DirectionV pos)
             }
         }
     } else {
+        if (pos == DirectionV::UP) {
+            y = -1;
+        }
+
         // on a space; usually this means the dot is on this same line, but there is an exception
         // for a unison within the same chord.
         for (Note* note : chord()->notes()) {
