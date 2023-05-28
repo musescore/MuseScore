@@ -216,7 +216,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Toggle 'insert mode'"),
-             TranslatableString("action", "Note input: toggle ‘insert’ mode")
+             TranslatableString("action", "Note input: toggle 'insert' mode")
              ),
     UiAction("select-next-chord",
              mu::context::UiCtxNotationOpened,
@@ -449,7 +449,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Toggle rhythmic sl&ash notation"),
-             TranslatableString("action", "Toggle ‘rhythmic slash notation’")
+             TranslatableString("action", "Toggle 'rhythmic slash notation'")
              ),
     UiAction("pitch-spell",
              mu::context::UiCtxNotationOpened,
@@ -1901,13 +1901,13 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Toggle 'automatic placement' for selected elements"),
-             TranslatableString("action", "Toggle automatic placement for selected elements")
+             TranslatableString("action", "Toggle 'automatic placement' for selected elements")
              ),
     UiAction("autoplace-enabled",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Toggle 'automatic placement' (whole score)"),
-             TranslatableString("action", "Toggle ‘automatic placement’ (whole score)")
+             TranslatableString("action", "Toggle 'automatic placement' (whole score)")
              ),
     UiAction("string-above",
              mu::context::UiCtxNotationOpened,
@@ -1933,42 +1933,42 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Default (step time)"),
-             TranslatableString("action", "Note input: toggle ‘default (step-time)’ mode"),
+             TranslatableString("action", "Note input: toggle 'default (step-time)' mode"),
              IconCode::Code::EDIT
              ),
     UiAction("note-input-rhythm",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Rhythm only (not pitch)"),
-             TranslatableString("action", "Note input: toggle ‘rhythm only (not pitch)’ mode"),
+             TranslatableString("action", "Note input: toggle 'rhythm only (not pitch)' mode"),
              IconCode::Code::RHYTHM_ONLY
              ),
     UiAction("note-input-repitch",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Re-pitch existing notes"),
-             TranslatableString("action", "Note input: toggle ‘re-pitch existing notes’ mode"),
+             TranslatableString("action", "Note input: toggle 're-pitch existing notes' mode"),
              IconCode::Code::RE_PITCH
              ),
     UiAction("note-input-realtime-auto",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Real-time (metronome)"),
-             TranslatableString("action", "Note input: toggle ‘real-time (metronome)’ mode"),
+             TranslatableString("action", "Note input: toggle 'real-time (metronome)' mode"),
              IconCode::Code::METRONOME
              ),
     UiAction("note-input-realtime-manual",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Real-time (foot pedal)"),
-             TranslatableString("action", "Note input: toggle ‘real-time (foot pedal)’ mode"),
+             TranslatableString("action", "Note input: toggle 'real-time (foot pedal)' mode"),
              IconCode::Code::FOOT_PEDAL
              ),
     UiAction("note-input-timewise",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Insert"),
-             TranslatableString("action", "Note input: toggle ‘insert’ mode (increases measure duration)"),
+             TranslatableString("action", "Note input: toggle 'insert' mode (increases measure duration)"),
              IconCode::Code::NOTE_PLUS
              ),
     UiAction("realtime-advance",
