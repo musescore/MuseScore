@@ -127,6 +127,7 @@ void CloudScoresModel::loadItemsIfNecessary()
                     obj[PATH_KEY] = configuration()->cloudProjectPath(item.id).toQString();
                     obj[SUFFIX_KEY] = "";
                     obj[IS_CLOUD_KEY] = true;
+                    obj[CLOUD_SCORE_ID_KEY] = item.id;
                     obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(Date::fromQDate(item.lastModified.date())).toQString();
                     obj[THUMBNAIL_URL_KEY] = item.thumbnailUrl;
                     obj[IS_CREATE_NEW_KEY] = false;

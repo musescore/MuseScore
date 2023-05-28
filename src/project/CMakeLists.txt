@@ -118,6 +118,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/cloudscoresmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/cloudscoresmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/cloudscorestatuswatcher.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/cloudscorestatuswatcher.h
     ${CMAKE_CURRENT_LIST_DIR}/view/scorethumbnailloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/scorethumbnailloader.h
     ${CMAKE_CURRENT_LIST_DIR}/view/newscoremodel.cpp

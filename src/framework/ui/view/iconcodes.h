@@ -379,6 +379,8 @@ public:
         PLUGIN = 0xF440,
         LYRICS = 0xF441,
 
+        STOP_FILL = 0xF447,
+
         QUAVER_REST = 0xF44C,
 
         SHARE_AUDIO = 0xF44F,
@@ -386,6 +388,8 @@ public:
         DYNAMIC_CENTER_1 = 0xF451,
         DYNAMIC_CENTER_2 = 0xF452,
         EXPRESSION = 0xF453,
+
+        CLOUD_FILL = 0xF454,
 
         NONE = 0xFFFF
     };

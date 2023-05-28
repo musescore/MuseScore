@@ -142,7 +142,7 @@ Item {
 
                 navigation.panel: navPanel
                 navigation.row: view.columns === 0 ? 0 : Math.floor(model.index / view.columns)
-                navigation.column: model.index - (navigation.row * view.columns)
+                navigation.column: (model.index - (navigation.row * view.columns)) * 3 // * 3 because of controls inside ScoreItem
                 navigation.onActiveChanged: {
                     if (navigation.active) {
                         root.positionViewAtIndex(index, ListView.Contain)
@@ -156,6 +156,7 @@ Item {
                 isCreateNew: score.isCreateNew
                 isNoResultFound: score.isNoResultFound
                 isCloud: score.isCloud
+                cloudScoreId: score.scoreId ?? 0
                 timeSinceModified: score.timeSinceModified ?? ""
 
                 onClicked: {
