@@ -165,7 +165,7 @@ void UpdateScenario::showNoUpdateMsg()
     IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
 
-    interactive()->info(trc("update", "You’re up to date!"), text, { okBtn }, okBtn.btn,
+    interactive()->info(trc("update", "You're up to date!"), text, { okBtn }, okBtn.btn,
                         IInteractive::Option::WithIcon);
 }
 
