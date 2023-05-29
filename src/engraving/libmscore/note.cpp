@@ -2449,7 +2449,7 @@ void Note::setHeadGroup(NoteHeadGroup val)
 int Note::ottaveCapoFret() const
 {
     Chord* ch = chord();
-    int capoFretId = staff()->capo(ch->segment()->tick());
+    int capoFretId = staff()->capo(ch->segment()->tick()).fretPosition;
     if (capoFretId != 0) {
         capoFretId -= 1;
     }

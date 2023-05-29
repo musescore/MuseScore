@@ -891,7 +891,21 @@ void TWrite::write(const Clef* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::write(const Capo* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
-    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
+    writeProperty(item, xml, Pid::ACTIVE);
+    writeProperty(item, xml, Pid::CAPO_FRET_POSITION);
+
+    std::set<string_idx_t> orderedStrings;
+    for (string_idx_t idx : item->params().ignoredStrings) {
+        orderedStrings.insert(idx);
+    }
+
+    for (string_idx_t idx : orderedStrings) {
+        xml.startElement("string", { { "no", idx } });
+        xml.tag("apply", false);
+        xml.endElement();
+    }
+
+    writeProperties(static_cast<const StaffTextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
 
@@ -2404,9 +2418,6 @@ void TWrite::write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
         }
         int swingRatio = item->swingParameters().swingRatio;
         xml.tag("swing", { { "unit", TConv::toXml(swingUnit) }, { "ratio", swingRatio } });
-    }
-    if (item->capo() != 0) {
-        xml.tag("capo", { { "fretId", item->capo() } });
     }
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
 

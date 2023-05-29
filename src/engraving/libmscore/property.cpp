@@ -399,6 +399,11 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::HARP_IS_DIAGRAM,         false,  "isDiagram",            P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "is diagram") },
 
+    { Pid::ACTIVE,                  true,  "active",                P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "active") },
+
+    { Pid::CAPO_FRET_POSITION,      true,  "fretPosition",          P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "fret position") },
+    { Pid::CAPO_IGNORED_STRINGS,    true,  "ignoredStrings",        P_TYPE::INT_VEC,        DUMMY_QT_TR_NOOP("propertyName", "ignored strings") },
+
     { Pid::END,                     false, "++end++",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };
 /* *INDENT-ON* */

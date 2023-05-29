@@ -408,6 +408,11 @@ enum class Pid {
 
     HARP_IS_DIAGRAM,
 
+    ACTIVE,
+
+    CAPO_FRET_POSITION,
+    CAPO_IGNORED_STRINGS,
+
     END
 };
 

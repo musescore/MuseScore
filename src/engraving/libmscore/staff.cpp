@@ -866,64 +866,31 @@ SwingParameters Staff::swing(const Fraction& tick) const
     return _swingList.at(*it);
 }
 
-//---------------------------------------------------------
-//   capo
-//---------------------------------------------------------
-
-int Staff::capo(const Fraction& tick) const
+const CapoParams& Staff::capo(const Fraction& tick) const
 {
-    if (_capoList.empty()) {
-        return 0;
+    static const CapoParams dummy;
+
+    if (_capoMap.empty()) {
+        return dummy;
     }
 
-    std::vector<int> ticks = mu::keys(_capoList);
+    std::vector<int> ticks = mu::keys(_capoMap);
     auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick.ticks());
     if (it == ticks.cbegin()) {
-        return 0;
+        return dummy;
     }
     --it;
-    return _capoList.at(*it);
+    return _capoMap.at(*it);
 }
 
-//---------------------------------------------------------
-//   getNotes
-//---------------------------------------------------------
-
-std::list<Note*> Staff::getNotes() const
+void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
 {
-    std::list<Note*> list;
-
-    staff_idx_t staffIdx = idx();
-
-    SegmentType st = SegmentType::ChordRest;
-    for (Segment* s = score()->firstSegment(st); s; s = s->next1(st)) {
-        for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-            track_idx_t track = voice + staffIdx * VOICES;
-            EngravingItem* e = s->element(track);
-            if (e && e->isChord()) {
-                addChord(list, toChord(e), voice);
-            }
-        }
-    }
-
-    return list;
+    _capoMap.insert_or_assign(tick.ticks(), params);
 }
 
-//---------------------------------------------------------
-//   addChord
-//---------------------------------------------------------
-
-void Staff::addChord(std::list<Note*>& list, Chord* chord, voice_idx_t voice) const
+void Staff::clearCapoParams()
 {
-    for (Chord* c : chord->graceNotes()) {
-        addChord(list, c, voice);
-    }
-    for (Note* note : chord->notes()) {
-        if (note->tieBack()) {
-            continue;
-        }
-        list.push_back(note);
-    }
+    _capoMap.clear();
 }
 
 //---------------------------------------------------------

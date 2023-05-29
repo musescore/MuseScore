@@ -2607,13 +2607,36 @@ void TRead::read(Clef* c, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Capo* c, XmlReader& xml, ReadContext& ctx)
 {
+    CapoParams params = c->params();
+
     while (xml.readNextStartElement()) {
         const AsciiStringView tag(xml.name());
 
-        if (!readProperties(static_cast<StaffTextBase*>(c), xml, ctx)) {
+        if (tag == "active") {
+            params.active = xml.readBool();
+        } else if (tag == "fretPosition") {
+            params.fretPosition = xml.readInt();
+        } else if (tag == "string") {
+            string_idx_t idx = static_cast<string_idx_t>(xml.intAttribute("no"));
+
+            while (xml.readNextStartElement()) {
+                const AsciiStringView stringTag(xml.name());
+
+                if (stringTag == "apply") {
+                    bool apply = xml.readBool();
+                    if (!apply) {
+                        params.ignoredStrings.insert(idx);
+                    }
+                } else {
+                    xml.unknown();
+                }
+            }
+        } else if (!readProperties(static_cast<StaffTextBase*>(c), xml, ctx)) {
             xml.unknown();
         }
     }
+
+    c->setParams(params);
 }
 
 bool TRead::readProperties(Clef* c, XmlReader& xml, ReadContext& ctx)

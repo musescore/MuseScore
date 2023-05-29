@@ -39,6 +39,14 @@ public:
     PropertyValue getProperty(Pid id) const override;
     PropertyValue propertyDefault(Pid id) const override;
     bool setProperty(Pid id, const PropertyValue& val) override;
+
+    bool isEditable() const override;
+
+    const CapoParams& params() const;
+    void setParams(const CapoParams& params);
+
+private:
+    CapoParams m_params;
 };
 }
 

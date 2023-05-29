@@ -752,7 +752,7 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
             // TODO-gp: settings if we need to show capo
             if (m_showCapo && !m_hasCapo[curTrack]) {
                 Fraction fr = { 0, 1 };
-                int capo = staff->capo(fr);
+                int capo = staff->capo(fr).fretPosition;
 
                 if (capo != 0 && !engravingConfiguration()->guitarProImportExperimental()) {
                     StaffText* st = Factory::createStaffText(s);
@@ -1114,7 +1114,12 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
         auto staffProperty = tR->staffProperty();
 
         int capoFret = staffProperty[0].capoFret;
-        part->staff(0)->insertIntoCapoList({ 0, 1 }, capoFret);
+
+        CapoParams params;
+        params.active = true;
+        params.fretPosition = capoFret;
+
+        part->staff(0)->insertCapoParams({ 0, 1 }, params);
         part->setCapoFret(capoFret);
 
         auto tunning = staffProperty[0].tunning;
@@ -2039,7 +2044,7 @@ void GPConverter::setTpc(Note* note, int accidental)
         { 11, 19 },
     };
 
-    if (note->staff()->capo({ 0, 1 }) != 0 || accidental == GPNote::invalidAccidental) {
+    if (note->staff()->capo({ 0, 1 }).fretPosition != 0 || accidental == GPNote::invalidAccidental) {
         note->setTpcFromPitch();
     } else {
         int tone = (note->pitch() - accidental + 12) % 12;
