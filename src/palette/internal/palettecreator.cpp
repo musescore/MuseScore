@@ -41,6 +41,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/chordline.h"
 #include "libmscore/chordrest.h"
+#include "libmscore/capo.h"
 #include "libmscore/clef.h"
 #include "libmscore/drumset.h"
 #include "libmscore/dynamic.h"
@@ -110,6 +111,7 @@ MAKE_ELEMENT(TempoText, score->dummy()->segment())
 MAKE_ELEMENT(StaffText, score->dummy()->segment())
 MAKE_ELEMENT(Expression, score->dummy()->segment())
 MAKE_ELEMENT(PlayTechAnnotation, score->dummy()->segment())
+MAKE_ELEMENT(Capo, score->dummy()->segment())
 MAKE_ELEMENT(RehearsalMark, score->dummy()->segment())
 
 MAKE_ELEMENT(Jump, score->dummy()->measure())
@@ -1854,6 +1856,10 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         vibrato->setLen(gpaletteScore->spatium() * 8);
         sp->appendElement(vibrato, TConv::userName(vibratoType));
     }
+
+    auto capo = makeElement<Capo>(gpaletteScore);
+    capo->setXmlText(QT_TRANSLATE_NOOP("palette", "Capo"));
+    sp->appendElement(capo, QT_TRANSLATE_NOOP("palette", "Capo"))->setElementTranslated(true);
 
     const char* finger = "pimac";
     for (unsigned i = 0; i < strlen(finger); ++i) {

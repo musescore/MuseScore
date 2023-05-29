@@ -198,6 +198,7 @@ bool Rest::acceptDrop(EditData& data) const
         || (type == ElementType::TRIPLET_FEEL)
         || (type == ElementType::STAFF_TEXT)
         || (type == ElementType::PLAYTECH_ANNOTATION)
+        || (type == ElementType::CAPO)
         || (type == ElementType::BAR_LINE)
         || (type == ElementType::BREATH)
         || (type == ElementType::CHORD)

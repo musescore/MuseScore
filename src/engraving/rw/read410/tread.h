@@ -66,6 +66,7 @@ class Chord;
 class ChordRest;
 class ChordLine;
 class Clef;
+class Capo;
 
 class Excerpt;
 
@@ -204,6 +205,7 @@ public:
     static void read(Chord* ch, XmlReader& xml, ReadContext& ctx);
     static void read(ChordLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(Clef* c, XmlReader& xml, ReadContext& ctx);
+    static void read(Capo* c, XmlReader& xml, ReadContext& ctx);
 
     static void read(Excerpt* item, XmlReader& xml, ReadContext& ctx);
     static void read(Expression* item, XmlReader& xml, ReadContext& ctx);

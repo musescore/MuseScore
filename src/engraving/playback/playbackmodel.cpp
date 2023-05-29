@@ -453,6 +453,7 @@ bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) con
 {
     static const std::unordered_set<ElementType> REQUIRED_TYPES = {
         ElementType::PLAYTECH_ANNOTATION,
+        ElementType::CAPO,
         ElementType::DYNAMIC,
         ElementType::HAIRPIN,
         ElementType::HAIRPIN_SEGMENT,

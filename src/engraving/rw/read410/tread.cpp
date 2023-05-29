@@ -35,6 +35,7 @@
 #include "../../libmscore/tempotext.h"
 #include "../../libmscore/stafftext.h"
 #include "../../libmscore/stafftextbase.h"
+#include "../../libmscore/capo.h"
 
 #include "../../libmscore/drumset.h"
 #include "../../libmscore/dynamic.h"
@@ -146,7 +147,7 @@ using namespace mu::engraving::read410;
 
 using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
                                  BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,  HBox, VBox, FBox, TBox, Bracket, Breath,
-                                 Chord, ChordLine, Clef,
+                                 Chord, ChordLine, Clef, Capo,
                                  Dynamic, Expression,
                                  Fermata, FiguredBass, Fingering, FretDiagram,
                                  Glissando, GradualTempoChange,
@@ -2601,6 +2602,17 @@ void TRead::read(Clef* c, XmlReader& e, ReadContext& ctx)
 
     if (c->clefType() == ClefType::INVALID) {
         c->setClefType(ClefType::G);
+    }
+}
+
+void TRead::read(Capo* c, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+
+        if (!readProperties(static_cast<StaffTextBase*>(c), xml, ctx)) {
+            xml.unknown();
+        }
     }
 }
 

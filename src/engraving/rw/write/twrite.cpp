@@ -60,6 +60,7 @@
 #include "../../libmscore/chordline.h"
 #include "../../libmscore/chordrest.h"
 #include "../../libmscore/clef.h"
+#include "../../libmscore/capo.h"
 
 #include "../../libmscore/drumset.h"
 #include "../../libmscore/dynamic.h"
@@ -162,7 +163,7 @@ using namespace mu::engraving::write;
 
 using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
                                   BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,  HBox, VBox, FBox, TBox, Bracket, Breath,
-                                  Chord, ChordLine, Clef,
+                                  Chord, ChordLine, Clef, Capo,
                                   Dynamic, Expression,
                                   Fermata, FiguredBass, Fingering, FretDiagram,
                                   Glissando, GradualTempoChange,
@@ -884,6 +885,13 @@ void TWrite::write(const Clef* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("forInstrumentChange", item->forInstrumentChange());
     }
     writeItemProperties(item, xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const Capo* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
 
@@ -2914,6 +2922,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                         || (et == ElementType::SYSTEM_TEXT)
                         || (et == ElementType::TRIPLET_FEEL)
                         || (et == ElementType::PLAYTECH_ANNOTATION)
+                        || (et == ElementType::CAPO)
                         || (et == ElementType::JUMP)
                         || (et == ElementType::MARKER)
                         || (et == ElementType::TEMPO_TEXT)
