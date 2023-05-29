@@ -26,8 +26,6 @@
 
 using namespace winrt;
 using namespace winrt::Windows::Foundation;
-using namespace winrt::Windows::Media::Devices;
-using namespace winrt::Windows::Devices::Enumeration;
 
 WasapiAudioClient::WasapiAudioClient(HANDLE clientStartedEvent, HANDLE clientFailedToStartEvent, HANDLE clientStoppedEvent)
     : m_clientStartedEvent(clientStartedEvent), m_clientFailedToStartEvent(clientFailedToStartEvent), m_clientStoppedEvent(
@@ -98,28 +96,9 @@ unsigned int WasapiAudioClient::channelCount() const
     return m_mixFormat.get()->nChannels;
 }
 
-DeviceInformationCollection WasapiAudioClient::availableDevices() const
+void WasapiAudioClient::setFallbackDevice(const hstring& deviceId)
 {
-    // Get the string identifier of the audio renderer
-    hstring AudioSelector = MediaDevice::GetAudioRenderSelector();
-
-    IAsyncOperation<DeviceInformationCollection> deviceRequest
-        = DeviceInformation::FindAllAsync(AudioSelector, {});
-
-    DeviceInformationCollection deviceInfoCollection = nullptr;
-
-    try {
-        deviceInfoCollection = deviceRequest.get();
-    } catch (...) {
-        LOGE() << to_string(hresult_error(to_hresult()).message());
-    }
-
-    return deviceInfoCollection;
-}
-
-hstring WasapiAudioClient::defaultDeviceId() const
-{
-    return MediaDevice::GetDefaultAudioRenderId(AudioDeviceRole::Default);
+    m_fallbackDeviceIdString = deviceId;
 }
 
 void WasapiAudioClient::asyncInitializeAudioDevice(const hstring& deviceId, bool useClosestSupportedFormat) noexcept
@@ -558,7 +537,7 @@ void WasapiAudioClient::onAudioSampleRequested(bool IsSilence)
         m_audioRenderClient = nullptr;
         m_sampleReadyAsyncResult = nullptr;
 
-        asyncInitializeAudioDevice(defaultDeviceId());
+        asyncInitializeAudioDevice(m_fallbackDeviceIdString);
     }
 }
 
