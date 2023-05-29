@@ -2531,6 +2531,10 @@ double Segment::spacing() const
 
 double Segment::minHorizontalCollidingDistance(Segment* ns) const
 {
+    if (isBeginBarLineType() && ns->isStartRepeatBarLineType()) {
+        return 0.0;
+    }
+
     double w = -100000.0; // This can remain negative in some cases (for instance, mid-system clefs)
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
         double d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx));
@@ -2612,6 +2616,10 @@ double Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
 
 double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
 {
+    if (isBeginBarLineType() && ns->isStartRepeatBarLineType()) {
+        return 0.0;
+    }
+
     double ww = -1000000.0;          // can remain negative
     double d = 0.0;
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
