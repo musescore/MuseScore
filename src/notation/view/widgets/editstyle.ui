@@ -9209,6 +9209,91 @@ By default, they will be placed such as that their right end are at the same lev
          </widget>
         </item>
         <item>
+         <spacer name="verticalSpacer_38">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_stemSideArticAlign">
+          <property name="title">
+           <string>Articulation alignment when positioned at the stem</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_42">
+           <item>
+            <widget class="QRadioButton" name="radioArticAlignStem">
+             <property name="text">
+              <string>Align with stem</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioArticAlignNoteHead">
+             <property name="text">
+              <string>Align with notehead</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioArticAlignCenter">
+             <property name="text">
+              <string>Center between stem and notehead</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_41">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_combinedArtic">
+          <property name="title">
+           <string>Combined articulation</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_43">
+           <item>
+            <widget class="QRadioButton" name="radioArticKeepTogether">
+             <property name="text">
+              <string>Always keep together</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioArticAllowSeparate">
+             <property name="text">
+              <string>Prefer closeness to notehead (combined articulations may become separated)</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
          <spacer name="verticalSpacer_25">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
