@@ -1847,13 +1847,13 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Transpose up"),
-             TranslatableString("action", "Transpose up half a step")
+             TranslatableString("action", "Transpose up a semitone")
              ),
     UiAction("transpose-down",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Transpose down"),
-             TranslatableString("action", "Transpose down half a step")
+             TranslatableString("action", "Transpose down a semitone")
              ),
     UiAction("pitch-up-diatonic-alterations",
              mu::context::UiCtxNotationOpened,
