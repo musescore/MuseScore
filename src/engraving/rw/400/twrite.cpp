@@ -329,8 +329,8 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
         }
     }
     if ((ctx.writeTrack() || item->track() != ctx.curTrack())
-        && (item->track() != mu::nidx) && !item->isBeam()) {
-        // Writing track number for beams is redundant as it is calculated
+        && (item->track() != mu::nidx) && !item->isBeam() && !item->isTuplet()) {
+        // Writing track number for beams and tuplets is redundant as it is calculated
         // during layout.
         int t = static_cast<int>(item->track()) + ctx.trackDiff();
         xml.tag("track", t);
