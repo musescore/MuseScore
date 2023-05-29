@@ -182,7 +182,7 @@ const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, co
     return resolveTrackPlaybackData(idKey(partId, instrumentId));
 }
 
-void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*>& items)
+void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*>& items, mpe::duration_t duration)
 {
     std::vector<const EngravingItem*> playableItems = filterPlaybleItems(items);
     if (playableItems.empty()) {
@@ -203,7 +203,11 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
 
     constexpr timestamp_t actualTimestamp = 0;
     constexpr dynamic_level_t actualDynamicLevel = dynamicLevelFromType(mpe::DynamicType::Natural);
+
     duration_t actualDuration = MScore::defaultPlayDuration * 1000;
+    if (duration >= 0) {
+        actualDuration = duration;
+    }
 
     for (const EngravingItem* item : playableItems) {
         ArticulationsProfilePtr profile = defaultActiculationProfile(trackId);

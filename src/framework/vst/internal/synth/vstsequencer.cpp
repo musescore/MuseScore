@@ -91,7 +91,10 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
             float velocityFraction = noteVelocityFraction(noteEvent);
             float tuning = noteTuning(noteEvent, noteId);
 
-            destination[timestampFrom].emplace(buildEvent(VstEvent::kNoteOnEvent, noteId, velocityFraction, tuning));
+            if (noteEvent.arrangementCtx().actualDuration > 0) {
+                destination[timestampFrom].emplace(buildEvent(VstEvent::kNoteOnEvent, noteId, velocityFraction, tuning));
+            }
+
             destination[timestampTo].emplace(buildEvent(VstEvent::kNoteOffEvent, noteId, velocityFraction, tuning));
 
             appendControlSwitch(destination, noteEvent, PEDAL_CC_SUPPORTED_TYPES, SUSTAIN_IDX);

@@ -101,13 +101,15 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
             velocity_t velocity = noteVelocity(noteEvent);
             tuning_t tuning = noteTuning(noteEvent, noteIdx);
 
-            midi::Event noteOn(Event::Opcode::NoteOn, Event::MessageType::ChannelVoice20);
-            noteOn.setChannel(channelIdx);
-            noteOn.setNote(noteIdx);
-            noteOn.setVelocity(velocity);
-            noteOn.setPitchNote(noteIdx, tuning);
+            if (noteEvent.arrangementCtx().actualDuration > 0) {
+                midi::Event noteOn(Event::Opcode::NoteOn, Event::MessageType::ChannelVoice20);
+                noteOn.setChannel(channelIdx);
+                noteOn.setNote(noteIdx);
+                noteOn.setVelocity(velocity);
+                noteOn.setPitchNote(noteIdx, tuning);
 
-            destination[timestampFrom].emplace(std::move(noteOn));
+                destination[timestampFrom].emplace(std::move(noteOn));
+            }
 
             midi::Event noteOff(Event::Opcode::NoteOff, Event::MessageType::ChannelVoice20);
             noteOff.setChannel(channelIdx);

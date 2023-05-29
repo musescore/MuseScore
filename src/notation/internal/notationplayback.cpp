@@ -123,9 +123,9 @@ const mpe::PlaybackData& NotationPlayback::trackPlaybackData(const engraving::In
     return m_playbackModel.resolveTrackPlaybackData(trackId);
 }
 
-void NotationPlayback::triggerEventsForItems(const std::vector<const EngravingItem*>& items)
+void NotationPlayback::triggerEventsForItems(const std::vector<const EngravingItem*>& items, mpe::duration_t duration)
 {
-    m_playbackModel.triggerEventsForItems(items);
+    m_playbackModel.triggerEventsForItems(items, duration);
 }
 
 void NotationPlayback::triggerMetronome(int tick)

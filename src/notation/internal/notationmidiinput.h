@@ -74,7 +74,10 @@ private:
     bool isRealtimeAuto() const;
     bool isRealtimeManual() const;
 
-    bool isNoteInputMode() const;
+    bool isSoundPreview() const;
+
+    void playNoteOn(const std::vector<const Note*>& notes);
+    void playNoteOff(const std::vector<const Note*>& notes);
 
     IGetScore* m_getScore = nullptr;
     INotationInteractionPtr m_notationInteraction;

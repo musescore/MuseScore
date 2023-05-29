@@ -79,7 +79,7 @@ mu::async::Channel<std::vector<const Note*> > NotationMidiInput::notesReceived()
 
 void NotationMidiInput::onRealtimeAdvance()
 {
-    if (!isNoteInputMode()) {
+    if (isSoundPreview()) {
         return;
     }
 
@@ -115,17 +115,24 @@ void NotationMidiInput::doProcessEvents()
         return;
     }
 
-    std::vector<const Note*> notes;
+    std::vector<const Note*> notesOn;
+    std::vector<const Note*> notesOff;
 
     for (size_t i = 0; i < m_eventsQueue.size(); ++i) {
         const midi::Event& event = m_eventsQueue.at(i);
-        Note* note = isNoteInputMode() ? addNoteToScore(event) : makeNote(event);
+        bool noteOn = event.opcode() == midi::Event::Opcode::NoteOn;
+        bool noteOff = event.opcode() == midi::Event::Opcode::NoteOff;
+
+        Note* note = !isSoundPreview() ? addNoteToScore(event) : makeNote(event);
         if (note) {
-            notes.push_back(note);
+            if (noteOff) {
+                notesOff.push_back(note);
+            } else if (noteOn) {
+                notesOn.push_back(note);
+            }
         }
 
         bool chord = i != 0;
-        bool noteOn = event.opcode() == midi::Event::Opcode::NoteOn;
         if (!chord && noteOn && !m_realtimeTimer.isActive() && isRealtimeAuto()) {
             m_extendNoteTimer.start(configuration()->delayBetweenNotesInRealTimeModeMilliseconds());
             enableMetronome();
@@ -133,13 +140,16 @@ void NotationMidiInput::doProcessEvents()
         }
     }
 
-    if (!notes.empty()) {
-        std::vector<const EngravingItem*> notesItems;
-        for (const Note* note : notes) {
-            notesItems.push_back(note);
+    if (!notesOn.empty() || !notesOff.empty()) {
+        playNoteOn(notesOn);
+
+        if (isSoundPreview()) {
+            playNoteOff(notesOff);
         }
 
-        playbackController()->playElements(notesItems);
+        std::vector<const Note*> notes = notesOn;
+        notes.insert(notes.end(), notesOff.begin(), notesOff.end());
+
         m_notesReceivedChannel.send(notes);
     }
 
@@ -213,10 +223,6 @@ Note* NotationMidiInput::addNoteToScore(const midi::Event& e)
 
 Note* NotationMidiInput::makeNote(const midi::Event& e)
 {
-    if (e.opcode() == midi::Event::Opcode::NoteOff || e.velocity() == 0) {
-        return nullptr;
-    }
-
     mu::engraving::Score* score = this->score();
     if (!score) {
         return nullptr;
@@ -278,7 +284,7 @@ void NotationMidiInput::stopRealtime()
 
 void NotationMidiInput::doRealtimeAdvance()
 {
-    if (!isRealtime() || !isNoteInputMode() || (!m_allowRealtimeRests && m_getScore->score()->activeMidiPitches().empty())) {
+    if (!isRealtime() || isSoundPreview() || (!m_allowRealtimeRests && m_getScore->score()->activeMidiPitches().empty())) {
         if (m_realtimeTimer.isActive()) {
             stopRealtime();
         }
@@ -308,7 +314,7 @@ void NotationMidiInput::doRealtimeAdvance()
 
 void NotationMidiInput::doExtendCurrentNote()
 {
-    if (!isNoteInputMode() || m_realtimeTimer.isActive()) {
+    if (isSoundPreview() || m_realtimeTimer.isActive()) {
         return;
     }
 
@@ -337,7 +343,33 @@ bool NotationMidiInput::isRealtimeManual() const
     return noteInputMethod() == NoteInputMethod::REALTIME_MANUAL;
 }
 
-bool NotationMidiInput::isNoteInputMode() const
+bool NotationMidiInput::isSoundPreview() const
 {
-    return m_notationInteraction->noteInput()->isNoteInputMode();
+    return !m_notationInteraction->noteInput()->isNoteInputMode();
+}
+
+void NotationMidiInput::playNoteOn(const std::vector<const Note*>& notes)
+{
+    std::vector<const EngravingItem*> notesOnItems;
+    for (const Note* note : notes) {
+        notesOnItems.push_back(note);
+    }
+
+    if (isSoundPreview()) {
+        static mpe::duration_t NOTE_ON_LONG_DURATION = configuration()->notePlayDurationMilliseconds() * 10000;
+        playbackController()->playElements(notesOnItems, NOTE_ON_LONG_DURATION);
+    } else {
+        playbackController()->playElements(notesOnItems);
+    }
+}
+
+void NotationMidiInput::playNoteOff(const std::vector<const Note*>& notes)
+{
+    std::vector<const EngravingItem*> notesOffItems;
+    for (const Note* note : notes) {
+        notesOffItems.push_back(note);
+    }
+
+    static constexpr mpe::duration_t NOTE_OFF_DURATION = 0;
+    playbackController()->playElements(notesOffItems, NOTE_OFF_DURATION);
 }

@@ -257,7 +257,7 @@ Channel<aux_channel_idx_t, std::string> PlaybackController::auxChannelNameChange
     return m_auxChannelNameChanged;
 }
 
-void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements)
+void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements, mpe::duration_t duration)
 {
     IF_ASSERT_FAILED(notationPlayback()) {
         return;
@@ -285,7 +285,7 @@ void PlaybackController::playElements(const std::vector<const notation::Engravin
         elementsForPlaying.push_back(element);
     }
 
-    notationPlayback()->triggerEventsForItems(elementsForPlaying);
+    notationPlayback()->triggerEventsForItems(elementsForPlaying, duration);
 }
 
 void PlaybackController::playMetronome(int tick)

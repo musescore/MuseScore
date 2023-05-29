@@ -68,7 +68,7 @@ public:
     virtual std::string auxChannelName(audio::aux_channel_idx_t index) const = 0;
     virtual async::Channel<audio::aux_channel_idx_t, std::string> auxChannelNameChanged() const = 0;
 
-    virtual void playElements(const std::vector<const notation::EngravingItem*>& elements) = 0;
+    virtual void playElements(const std::vector<const notation::EngravingItem*>& elements, mpe::duration_t duration = -1) = 0;
     virtual void playMetronome(int tick) = 0;
     virtual void seekElement(const notation::EngravingItem* element) = 0;
 

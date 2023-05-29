@@ -112,7 +112,7 @@ mu::async::Channel<mu::audio::aux_channel_idx_t, std::string> PlaybackController
     return {};
 }
 
-void PlaybackControllerStub::playElements(const std::vector<const notation::EngravingItem*>&)
+void PlaybackControllerStub::playElements(const std::vector<const notation::EngravingItem*>&, mpe::duration_t)
 {
 }
 

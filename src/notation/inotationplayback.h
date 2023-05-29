@@ -45,7 +45,7 @@ public:
     virtual bool isChordSymbolsTrack(const engraving::InstrumentTrackId& trackId) const = 0;
 
     virtual const mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const = 0;
-    virtual void triggerEventsForItems(const std::vector<const EngravingItem*>& items) = 0;
+    virtual void triggerEventsForItems(const std::vector<const EngravingItem*>& items, mpe::duration_t duration = -1) = 0;
     virtual void triggerMetronome(int tick) = 0;
 
     virtual engraving::InstrumentTrackIdSet existingTrackIdSet() const = 0;
