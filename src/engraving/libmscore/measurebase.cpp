@@ -607,8 +607,12 @@ int MeasureBase::measureIndex() const
 {
     int idx = 0;
     MeasureBase* m = score()->firstMeasure();
+    Measure* mmRestFirst = nullptr;
+    if (isMeasure() && toMeasure(this)->isMMRest()) {
+        mmRestFirst = toMeasure(this)->mmRestFirst();
+    }
     while (m) {
-        if (m == this) {
+        if (m == this || m == mmRestFirst) {
             return idx;
         }
         m = m->next();
