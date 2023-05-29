@@ -5144,13 +5144,21 @@ void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
     }
 
     bool accidentalGoesBelow = item->trill()->trillType() == TrillType::DOWNPRALL_LINE;
-    Ornament* ornament = item->trill()->ornament();
+    Trill* trill = item->trill();
+    Ornament* ornament = trill->ornament();
     if (ornament) {
         if (item->isSingleBeginType()) {
             TLayout::layout(ornament, ctx);
         }
-        item->trill()->setAccidental(accidentalGoesBelow ? ornament->accidentalBelow() : ornament->accidentalAbove());
-        item->trill()->setCueNoteChord(ornament->cueNoteChord());
+        trill->setAccidental(accidentalGoesBelow ? ornament->accidentalBelow() : ornament->accidentalAbove());
+        trill->setCueNoteChord(ornament->cueNoteChord());
+        ArticulationAnchor anchor = ornament->anchor();
+        if (anchor == ArticulationAnchor::AUTO) {
+            trill->setPlacement(trill->track() % 2 ? PlacementV::BELOW : PlacementV::ABOVE);
+        } else {
+            trill->setPlacement(anchor == ArticulationAnchor::TOP ? PlacementV::ABOVE : PlacementV::BELOW);
+        }
+        trill->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::STYLED); // Ensures that the property isn't written (it is written by the ornamnent)
     }
 
     if (item->isSingleType() || item->isBeginType()) {

@@ -735,7 +735,10 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
         if (item->measure()->hasVoices(a->staffIdx(), item->tick(), item->actualTicks()) && a->anchor() == ArticulationAnchor::AUTO) {
             a->setUp(item->up());         // if there are voices place articulation at stem
         } else if (a->anchor() == ArticulationAnchor::AUTO) {
-            if (a->symId() >= SymId::articMarcatoAbove && a->symId() <= SymId::articMarcatoTenutoBelow) {
+            if (a->isOrnament()) {
+                bool oddVoice = item->track() % 2;
+                a->setUp(!oddVoice);
+            } else if (a->symId() >= SymId::articMarcatoAbove && a->symId() <= SymId::articMarcatoTenutoBelow) {
                 a->setUp(true);         // Gould, p. 117: strong accents above staff
             } else if (item->isGrace() && item->up() && !a->layoutCloseToNote() && item->downNote()->line() < 6) {
                 a->setUp(true);         // keep articulation close to grace note

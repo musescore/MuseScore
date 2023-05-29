@@ -109,6 +109,16 @@ PropertyValue Ornament::getProperty(Pid propertyId) const
     }
 }
 
+Sid Ornament::getPropertyStyle(Pid propertyId) const
+{
+    switch (propertyId) {
+    case Pid::ARTICULATION_ANCHOR:
+        return Sid::articulationAnchorDefault;
+    default:
+        return Articulation::getPropertyStyle(propertyId);
+    }
+}
+
 PropertyValue Ornament::propertyDefault(Pid id) const
 {
     switch (id) {
@@ -119,6 +129,8 @@ PropertyValue Ornament::propertyDefault(Pid id) const
         return OrnamentShowAccidental::ANY_ALTERATION;
     case Pid::START_ON_UPPER_NOTE:
         return false;
+    case Pid::ARTICULATION_ANCHOR:
+        return static_cast<int>(ArticulationAnchor::AUTO);
     default:
         return Articulation::propertyDefault(id);
     }

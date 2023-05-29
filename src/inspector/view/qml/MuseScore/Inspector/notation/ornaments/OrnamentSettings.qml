@@ -192,15 +192,15 @@ Column {
         propertyItem: root.model ? root.model.startOnUpperNote : null
     }
 
-    DropdownPropertyView {
+    PlacementSection {
         titleText: qsTrc("inspector", "Placement")
         propertyItem: root.model ? root.model.placement : null
 
         navigationPanel: root.navigationPanel
         navigationRowStart: performanceSection.navigationRowEnd + 1
         model: [
-            { text: qsTrc("inspector", "Above"), value: ArticulationTypes.TYPE_TOP },
             { text: qsTrc("inspector", "Auto"), value: ArticulationTypes.TYPE_AUTO },
+            { text: qsTrc("inspector", "Above"), value: ArticulationTypes.TYPE_TOP },
             { text: qsTrc("inspector", "Below"), value: ArticulationTypes.TYPE_BOTTOM }
         ]
     }
