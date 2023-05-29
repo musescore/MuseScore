@@ -245,14 +245,7 @@ TEST_F(MidiRenderer_Tests, tremoloAndGlissando)
     checkEventInterval(events, 960, 1439, 55, defVol);
 }
 
-/*****************************************************************************
-
-    DISABLED TESTS BELOW
-
-*****************************************************************************/
-
-/// TODO: enable after fixing slides midi rendering
-TEST_F(MidiRenderer_Tests, DISABLED_slideInFromBelow)
+TEST_F(MidiRenderer_Tests, slideInFromBelow)
 {
     constexpr int defVol = 80; // mf
     constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
@@ -263,13 +256,28 @@ TEST_F(MidiRenderer_Tests, DISABLED_slideInFromBelow)
 
     checkEventInterval(events, 0, 239, 60, defVol);
     checkEventInterval(events, 240, 318, 57, glissVol);
-    checkEventInterval(events, 318, 398, 58, glissVol);
+    checkEventInterval(events, 320, 398, 58, glissVol);
     checkEventInterval(events, 400, 478, 59, glissVol);
     checkEventInterval(events, 480, 959, 60, defVol);
 }
 
-/// TODO: enable after fixing slides midi rendering
-TEST_F(MidiRenderer_Tests, DISABLED_slideOutFromAbove)
+TEST_F(MidiRenderer_Tests, slideInFromAbove)
+{
+    constexpr int defVol = 80; // mf
+    constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
+
+    EventMap events = renderMidiEvents(u"slide_in_from_above.mscx");
+
+    EXPECT_EQ(events.size(), 10);
+
+    checkEventInterval(events, 0, 239, 60, defVol);
+    checkEventInterval(events, 240, 318, 63, glissVol);
+    checkEventInterval(events, 320, 398, 62, glissVol);
+    checkEventInterval(events, 400, 478, 61, glissVol);
+    checkEventInterval(events, 480, 959, 60, defVol);
+}
+
+TEST_F(MidiRenderer_Tests, slideOutFromAbove)
 {
     constexpr int defVol = 80; // mf
     constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
@@ -280,7 +288,66 @@ TEST_F(MidiRenderer_Tests, DISABLED_slideOutFromAbove)
 
     checkEventInterval(events, 0, 239, 60, defVol);
     checkEventInterval(events, 240, 318, 59, glissVol);
-    checkEventInterval(events, 318, 397, 58, glissVol);
+    checkEventInterval(events, 319, 397, 58, glissVol);
     checkEventInterval(events, 399, 477, 57, glissVol);
     checkEventInterval(events, 480, 959, 60, defVol);
 }
+
+TEST_F(MidiRenderer_Tests, slideOutFromBelow)
+{
+    constexpr int defVol = 80; // mf
+    constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
+
+    EventMap events = renderMidiEvents(u"slide_out_from_below.mscx");
+
+    EXPECT_EQ(events.size(), 10);
+
+    checkEventInterval(events, 0, 239, 60, defVol);
+    checkEventInterval(events, 240, 318, 61, glissVol);
+    checkEventInterval(events, 319, 397, 62, glissVol);
+    checkEventInterval(events, 399, 477, 63, glissVol);
+    checkEventInterval(events, 480, 959, 60, defVol);
+}
+
+TEST_F(MidiRenderer_Tests, tremoloSlideIn)
+{
+    constexpr int defVol = 96; // f
+    constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
+
+    EventMap events = renderMidiEvents(u"tremolo_and_slide_in.mscx");
+
+    EXPECT_EQ(events.size(), 16);
+
+    checkEventInterval(events, 0, 119, 59, defVol);
+    checkEventInterval(events, 120, 239, 59, defVol);
+    checkEventInterval(events, 240, 359, 59, defVol);
+    checkEventInterval(events, 360, 479, 59, defVol);
+    checkEventInterval(events, 480, 638, 56, glissVol);
+    checkEventInterval(events, 640, 798, 57, glissVol);
+    checkEventInterval(events, 800, 958, 58, glissVol);
+    checkEventInterval(events, 960, 1439, 59, defVol);
+}
+
+TEST_F(MidiRenderer_Tests, tremoloSlideOut)
+{
+    constexpr int defVol = 96; // f
+    constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
+
+    EventMap events = renderMidiEvents(u"tremolo_and_slide_out.mscx");
+
+    EXPECT_EQ(events.size(), 14);
+
+    checkEventInterval(events, 0, 239, 59, defVol);
+    checkEventInterval(events, 240, 479, 59, defVol);
+    checkEventInterval(events, 480, 719, 59, defVol);
+    checkEventInterval(events, 720, 959, 59, defVol);
+    checkEventInterval(events, 960, 1277, 58, glissVol);
+    checkEventInterval(events, 1278, 1595, 57, glissVol);
+    checkEventInterval(events, 1597, 1914, 56, glissVol);
+}
+
+/*****************************************************************************
+
+    DISABLED TESTS BELOW
+
+*****************************************************************************/

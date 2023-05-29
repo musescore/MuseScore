@@ -1900,7 +1900,7 @@ void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
             note->chord()->add(cl);
             cl->setNote(note);
 
-            Note::Slide sl{ type.second, nullptr };
+            Note::Slide sl{ type.second };
             note->attachSlide(sl);
         }
     }

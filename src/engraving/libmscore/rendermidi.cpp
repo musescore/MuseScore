@@ -1146,7 +1146,7 @@ static void createSlideInNotePlayEvents(Note* note, int prevChordTicks, NoteEven
     }
 }
 
-static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int onTime)
+static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int onTime, bool hasTremolo)
 {
     if (!note->isSlideOutNote()) {
         return;
@@ -1157,7 +1157,9 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int onTi
     const int slideDuration = allSlidesDuration / slideNotes;
     int slideOn = NoteEvent::NOTE_LENGTH - allSlidesDuration;
     double velocity = !note->ghost() ? NoteEvent::DEFAULT_VELOCITY_MULTIPLIER : NoteEvent::GHOST_VELOCITY_MULTIPLIER;
-    el->push_back(NoteEvent(0, onTime, slideOn, velocity, !note->tieBack()));
+    if (!hasTremolo) {
+        el->push_back(NoteEvent(0, onTime, slideOn, velocity, !note->tieBack()));
+    }
 
     int pitch = 0;
     int pitchOffset = note->slide().is(Note::SlideType::Doit) ? 1 : -1;
@@ -1209,7 +1211,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, in
         Note* note = chord->notes()[i];
         NoteEventList* el = &ell[i];
 
-        createSlideOutNotePlayEvents(note, el, ontime);
+        createSlideOutNotePlayEvents(note, el, ontime, tremolo);
         if (arpeggio) {
             continue;       // don't add extra events and apply gateTime to arpeggio
         }
