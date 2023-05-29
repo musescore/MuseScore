@@ -241,6 +241,19 @@ void Trill::remove(EngravingItem* e)
     }
 }
 
+void Trill::setTrack(track_idx_t n)
+{
+    EngravingItem::setTrack(n);
+
+    for (SpannerSegment* ss : spannerSegments()) {
+        ss->setTrack(n);
+    }
+
+    if (_ornament) {
+        _ornament->setTrack(n);
+    }
+}
+
 void Trill::setTrillType(TrillType tt)
 {
     _trillType = tt;
