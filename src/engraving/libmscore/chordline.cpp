@@ -53,12 +53,12 @@ ChordLine::ChordLine(const ChordLine& cl)
 {
     m_path     = cl.m_path;
     m_modified = cl.m_modified;
-    _chordLineType = cl._chordLineType;
-    _straight = cl._straight;
-    _wavy = cl._wavy;
-    _lengthX = cl._lengthX;
-    _lengthY = cl._lengthY;
-    _note = cl._note;
+    m_chordLineType = cl.m_chordLineType;
+    m_straight = cl.m_straight;
+    m_wavy = cl.m_wavy;
+    m_lengthX = cl.m_lengthX;
+    m_lengthY = cl.m_lengthY;
+    m_note = cl.m_note;
 }
 
 KerningType ChordLine::doComputeKerningType(const EngravingItem* nextItem) const
@@ -75,12 +75,12 @@ KerningType ChordLine::doComputeKerningType(const EngravingItem* nextItem) const
 
 void ChordLine::setChordLineType(ChordLineType st)
 {
-    _chordLineType = st;
+    m_chordLineType = st;
 }
 
 const TranslatableString& ChordLine::chordLineTypeName() const
 {
-    return TConv::userName(_chordLineType, _straight);
+    return TConv::userName(m_chordLineType, m_straight);
 }
 
 //---------------------------------------------------------
@@ -90,13 +90,13 @@ const TranslatableString& ChordLine::chordLineTypeName() const
 void ChordLine::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;
-    if (!_wavy) {
+    if (!m_wavy) {
         painter->setPen(Pen(curColor(), score()->styleMM(Sid::chordlineThickness) * mag(), PenStyle::SolidLine));
         painter->setBrush(BrushStyle::NoBrush);
         painter->drawPath(m_path);
     } else {
         painter->save();
-        painter->rotate((_chordLineType == ChordLineType::FALL ? 1 : -1) * WAVE_ANGEL);
+        painter->rotate((m_chordLineType == ChordLineType::FALL ? 1 : -1) * WAVE_ANGEL);
         drawSymbols(ChordLine::WAVE_SYMBOLS, painter);
         painter->restore();
     }
@@ -122,25 +122,25 @@ void ChordLine::editDrag(EditData& ed)
 {
     auto n = m_path.elementCount();
     PainterPath p;
-    _lengthX += ed.delta.x();
-    _lengthY += ed.delta.y();
+    m_lengthX += ed.delta.x();
+    m_lengthY += ed.delta.y();
 
     // used to limit how grips can affect the slide, stops the user from being able to turn one kind of slide into another
     int slideBoundary = 5;
-    if ((_chordLineType == ChordLineType::PLOP || _chordLineType == ChordLineType::FALL) && _lengthY < -slideBoundary) {
-        _lengthY = -slideBoundary;
-    } else if ((_chordLineType == ChordLineType::FALL || _chordLineType == ChordLineType::DOIT) && _lengthX < -slideBoundary) {
-        _lengthX = -slideBoundary;
-    } else if ((_chordLineType == ChordLineType::DOIT || _chordLineType == ChordLineType::SCOOP) && _lengthY > slideBoundary) {
-        _lengthY = slideBoundary;
-    } else if ((_chordLineType == ChordLineType::SCOOP || _chordLineType == ChordLineType::PLOP) && _lengthX > slideBoundary) {
-        _lengthX = slideBoundary;
+    if ((m_chordLineType == ChordLineType::PLOP || m_chordLineType == ChordLineType::FALL) && m_lengthY < -slideBoundary) {
+        m_lengthY = -slideBoundary;
+    } else if ((m_chordLineType == ChordLineType::FALL || m_chordLineType == ChordLineType::DOIT) && m_lengthX < -slideBoundary) {
+        m_lengthX = -slideBoundary;
+    } else if ((m_chordLineType == ChordLineType::DOIT || m_chordLineType == ChordLineType::SCOOP) && m_lengthY > slideBoundary) {
+        m_lengthY = slideBoundary;
+    } else if ((m_chordLineType == ChordLineType::SCOOP || m_chordLineType == ChordLineType::PLOP) && m_lengthX > slideBoundary) {
+        m_lengthX = slideBoundary;
     }
 
     double dx = ed.delta.x();
     double dy = ed.delta.y();
 
-    bool curvative = !_wavy && !_straight;
+    bool curvative = !m_wavy && !m_straight;
     for (size_t i = 0; i < n; ++i) {
         const PainterPath::Element& e = curvative ? m_path.elementAt(i) : m_path.elementAt(1);
         if (!curvative) {
@@ -149,10 +149,10 @@ void ChordLine::editDrag(EditData& ed)
             }
             // check the gradient of the line
             const PainterPath::Element& startPoint = m_path.elementAt(0);
-            if ((_chordLineType == ChordLineType::FALL && (e.x + dx < startPoint.x || e.y + dy < startPoint.y))
-                || (_chordLineType == ChordLineType::DOIT && (e.x + dx < startPoint.x || e.y + dy > startPoint.y))
-                || (_chordLineType == ChordLineType::SCOOP && (e.x + dx > startPoint.x || e.y + dy < startPoint.y))
-                || (_chordLineType == ChordLineType::PLOP && (e.x + dx > startPoint.x || e.y + dy > startPoint.y))) {
+            if ((m_chordLineType == ChordLineType::FALL && (e.x + dx < startPoint.x || e.y + dy < startPoint.y))
+                || (m_chordLineType == ChordLineType::DOIT && (e.x + dx < startPoint.x || e.y + dy > startPoint.y))
+                || (m_chordLineType == ChordLineType::SCOOP && (e.x + dx > startPoint.x || e.y + dy < startPoint.y))
+                || (m_chordLineType == ChordLineType::PLOP && (e.x + dx > startPoint.x || e.y + dy > startPoint.y))) {
                 return;
             }
         }
@@ -201,7 +201,7 @@ void ChordLine::editDrag(EditData& ed)
 
 std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
 {
-    if (_wavy) {
+    if (m_wavy) {
         NOT_IMPLEMENTED;
         return {};
     }
@@ -209,18 +209,18 @@ std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
     double sp = spatium();
     auto n   = m_path.elementCount();
     PointF cp(pagePos());
-    if (_straight) {
+    if (m_straight) {
         // limit the number of grips to one
         double offset = 0.5 * sp;
         PointF p;
 
-        if (_chordLineType == ChordLineType::FALL) {
+        if (m_chordLineType == ChordLineType::FALL) {
             p = PointF(offset, -offset);
-        } else if (_chordLineType == ChordLineType::DOIT) {
+        } else if (m_chordLineType == ChordLineType::DOIT) {
             p = PointF(offset, offset);
-        } else if (_chordLineType == ChordLineType::SCOOP) {
+        } else if (m_chordLineType == ChordLineType::SCOOP) {
             p = PointF(-offset, offset);
-        } else if (_chordLineType == ChordLineType::PLOP) {
+        } else if (m_chordLineType == ChordLineType::PLOP) {
             p = PointF(-offset, -offset);
         }
 
@@ -234,6 +234,36 @@ std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
         }
         return grips;
     }
+}
+
+//---------------------------------------------------------
+//   slideType
+//---------------------------------------------------------
+
+static Note::SlideType slideType(ChordLineType type)
+{
+    static std::unordered_map<ChordLineType, Note::SlideType> chordLineToSlideTypes {
+        { ChordLineType::FALL, Note::SlideType::DownFromNote },
+        { ChordLineType::DOIT, Note::SlideType::UpFromNote },
+        { ChordLineType::SCOOP, Note::SlideType::DownToNote },
+        { ChordLineType::PLOP, Note::SlideType::UpToNote }
+    };
+
+    if (chordLineToSlideTypes.find(type) != chordLineToSlideTypes.end()) {
+        return chordLineToSlideTypes.at(type);
+    }
+
+    return Note::SlideType::Undefined;
+}
+
+//---------------------------------------------------------
+//   setNote
+//---------------------------------------------------------
+
+void ChordLine::setNote(Note* note)
+{
+    m_note = note;
+    note->attachSlide(slideType(m_chordLineType));
 }
 
 //---------------------------------------------------------
@@ -259,11 +289,11 @@ PropertyValue ChordLine::getProperty(Pid propertyId) const
     case Pid::PATH:
         return PropertyValue::fromValue(m_path);
     case Pid::CHORD_LINE_TYPE:
-        return int(_chordLineType);
+        return int(m_chordLineType);
     case Pid::CHORD_LINE_STRAIGHT:
-        return _straight;
+        return m_straight;
     case Pid::CHORD_LINE_WAVY:
-        return _wavy;
+        return m_wavy;
     default:
         break;
     }

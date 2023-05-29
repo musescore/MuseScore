@@ -55,15 +55,15 @@ public:
     Chord* chord() const { return (Chord*)(explicitParent()); }
 
     void setChordLineType(ChordLineType);
-    ChordLineType chordLineType() const { return _chordLineType; }
-    bool isStraight() const { return _straight; }
-    void setStraight(bool straight) { _straight =  straight; }
-    bool isWavy() const { return _wavy; }
-    void setWavy(bool wavy) { _wavy =  wavy; }
-    void setLengthX(double length) { _lengthX = length; }
-    double lengthX() const { return _lengthX; }
-    void setLengthY(double length) { _lengthY = length; }
-    double lengthY() const { return _lengthY; }
+    ChordLineType chordLineType() const { return m_chordLineType; }
+    bool isStraight() const { return m_straight; }
+    void setStraight(bool straight) { m_straight =  straight; }
+    bool isWavy() const { return m_wavy; }
+    void setWavy(bool wavy) { m_wavy =  wavy; }
+    void setLengthX(double length) { m_lengthX = length; }
+    double lengthX() const { return m_lengthX; }
+    void setLengthY(double length) { m_lengthY = length; }
+    double lengthY() const { return m_lengthY; }
     void setPath(const draw::PainterPath& p) { m_path = p; }
     const draw::PainterPath& path() const { return m_path; }
     void setModified(bool m) { m_modified = m; }
@@ -83,16 +83,16 @@ public:
     PropertyValue propertyDefault(Pid) const override;
 
     bool needStartEditingAfterSelecting() const override { return true; }
-    int gripsCount() const override { return _straight ? 1 : static_cast<int>(m_path.elementCount()); }
+    int gripsCount() const override { return m_straight ? 1 : static_cast<int>(m_path.elementCount()); }
     Grip initialEditModeGrip() const override { return Grip(gripsCount() - 1); }
     Grip defaultGrip() const override { return initialEditModeGrip(); }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
-    bool isToTheLeft() const { return _chordLineType == ChordLineType::PLOP || _chordLineType == ChordLineType::SCOOP; }
-    bool isBelow() const { return _chordLineType == ChordLineType::SCOOP || _chordLineType == ChordLineType::FALL; }
+    bool isToTheLeft() const { return m_chordLineType == ChordLineType::PLOP || m_chordLineType == ChordLineType::SCOOP; }
+    bool isBelow() const { return m_chordLineType == ChordLineType::SCOOP || m_chordLineType == ChordLineType::FALL; }
 
-    void setNote(Note* note) { _note = note; }
-    Note* note() const { return _note; }
+    void setNote(Note* note);
+    Note* note() const { return m_note; }
 
 private:
 
@@ -105,15 +105,15 @@ private:
     bool alwaysKernable() const override { return true; }
     KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
 
-    bool _straight = false;
-    bool _wavy = false;
+    bool m_straight = false;
+    bool m_wavy = false;
 
-    ChordLineType _chordLineType = ChordLineType::NOTYPE;
+    ChordLineType m_chordLineType = ChordLineType::NOTYPE;
     draw::PainterPath m_path;
     bool m_modified = false;
-    double _lengthX = 0.0;
-    double _lengthY = 0.0;
-    Note* _note = nullptr;
+    double m_lengthX = 0.0;
+    double m_lengthY = 0.0;
+    Note* m_note = nullptr;
 };
 } // namespace mu::engraving
 #endif

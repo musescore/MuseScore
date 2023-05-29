@@ -1125,7 +1125,7 @@ static std::set<size_t> getNotesIndexesToRender(Chord* chord)
 
 static void createSlideInNotePlayEvents(Note* note, int prevChordTicks, NoteEventList* el)
 {
-    if (!note->isSlideToNote()) {
+    if (!note->hasSlideToNote()) {
         return;
     }
 
@@ -1137,7 +1137,7 @@ static void createSlideInNotePlayEvents(Note* note, int prevChordTicks, NoteEven
     const int slideDuration = totalSlideDuration / slideNotes;
 
     int slideOn = 0;
-    int pitchOffset = (note->slide().is(Note::SlideType::Plop) ? 1 : -1);
+    int pitchOffset = note->slideToType() == Note::SlideType::UpToNote ? 1 : -1;
     int pitch = pitchOffset * slideNotes;
     for (int i = 0; i < slideNotes; ++i) {
         el->push_back(NoteEvent(pitch, 0, slideDuration, NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER, true, totalSlideDuration - slideOn));
@@ -1148,7 +1148,7 @@ static void createSlideInNotePlayEvents(Note* note, int prevChordTicks, NoteEven
 
 static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int onTime, bool hasTremolo)
 {
-    if (!note->isSlideOutNote()) {
+    if (!note->hasSlideFromNote()) {
         return;
     }
 
@@ -1162,7 +1162,7 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int onTi
     }
 
     int pitch = 0;
-    int pitchOffset = note->slide().is(Note::SlideType::Doit) ? 1 : -1;
+    int pitchOffset = note->slideFromType() == Note::SlideType::UpFromNote ? 1 : -1;
     for (int i = 0; i < slideNotes; ++i) {
         pitch += pitchOffset;
         el->push_back(NoteEvent(pitch, slideOn, slideDuration, velocity * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER));
@@ -1187,8 +1187,10 @@ static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, in
     std::vector<NoteEventList> ell(notes.size(), NoteEventList());
 
     bool arpeggio = false;
-    bool glissandoExists = std::any_of(notes.begin(), notes.end(), [] (Note* note) {
-        return noteHasGlissando(note) || note->slide().is(Note::SlideType::Doit) || note->slide().is(Note::SlideType::Fall);
+
+    /// when note has glissando or slide from note, half of chord is played tremolo, second half - glissando
+    bool shouldShortenTremolo = std::any_of(notes.begin(), notes.end(), [] (Note* note) {
+        return noteHasGlissando(note) || note->hasSlideFromNote();
     });
 
     bool tremolo = false;
@@ -1198,8 +1200,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, in
         arpeggio = true;
     } else {
         if (chord->tremolo()) {
-            /// when note has glissando, half of chord is played tremolo, second half - glissando
-            renderTremolo(chord, ell, ontime, glissandoExists ? 0.5 : 1);
+            renderTremolo(chord, ell, ontime, shouldShortenTremolo ? 0.5 : 1);
             tremolo = true;
         }
 
@@ -1403,7 +1404,7 @@ static void adjustPreviousChordLength(Chord* currentChord, Chord* prevChord)
     int reducedTicks = 0;
 
     const auto& notes = currentChord->notes();
-    bool anySlidesIn = std::any_of(notes.begin(), notes.end(), [](const Note* note) { return note->isSlideToNote(); });
+    bool anySlidesIn = std::any_of(notes.begin(), notes.end(), [](const Note* note) { return note->hasSlideToNote(); });
 
     if (!graceNotesBeforeBar.empty()) {
         reducedTicks = graceNotesBeforeBar[0]->ticks().ticks();

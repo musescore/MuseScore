@@ -3682,43 +3682,33 @@ void Note::undoUnlink()
 //   slides
 //---------------------------------------------------------
 
-bool Note::isSlideToNote() const
+static bool isSlideTo(Note::SlideType slideType)
 {
-    if (!_attachedSlide.isValid()) {
-        return false;
-    }
-
-    if (_attachedSlide.is(Note::SlideType::Lift)
-        || _attachedSlide.is(Note::SlideType::Plop)) {
-        return true;
-    }
-
-    return false;
+    return slideType == Note::SlideType::UpToNote || slideType == Note::SlideType::DownToNote;
 }
 
-bool Note::isSlideOutNote() const
+static bool isSlideFrom(Note::SlideType slideType)
 {
-    if (!_attachedSlide.isValid()) {
-        return false;
-    }
-
-    if (_attachedSlide.is(Note::SlideType::Doit)
-        || _attachedSlide.is(Note::SlideType::Fall)) {
-        return true;
-    }
-
-    return false;
+    return slideType == Note::SlideType::UpFromNote || slideType == Note::SlideType::DownFromNote;
 }
 
-bool Note::isSlideStart() const
+void Note::attachSlide(SlideType slideType)
 {
-    return _attachedSlide.isValid() && _attachedSlide.startNote == this;
+    if (isSlideTo(slideType)) {
+        m_slideToType = slideType;
+    } else if (isSlideFrom(slideType)) {
+        m_slideFromType = slideType;
+    }
 }
 
-bool Note::isSlideEnd() const
+bool Note::hasSlideToNote() const
 {
-    return (_attachedSlide.isValid() && _attachedSlide.endNote == this)
-           || (_relatedSlide && _relatedSlide->endNote == this);
+    return m_slideToType != SlideType::Undefined;
+}
+
+bool Note::hasSlideFromNote() const
+{
+    return m_slideFromType != SlideType::Undefined;
 }
 
 double Note::computePadding(const EngravingItem* nextItem) const
