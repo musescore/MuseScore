@@ -12,9 +12,9 @@ on:
         required: false
         default: 'off'
       sentry_project:
-        description: 'Upload symbols and dumps to Sentry (choose a project): editor, sandbox'
+        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
         required: false
-        default: ''  
+        default: ''
 
 env:
   CURRENT_RELEASE_BRANCH: 4.0.2
@@ -73,9 +73,16 @@ jobs:
         DO_UPLOAD_SYMBOLS='false'
         SENTRY_PROJECT=${{ github.event.inputs.sentry_project }}
         SENTRY_URL=""
-        if [ "$SENTRY_PROJECT" == "editor" ] && [ ${{ secrets.SENTRY_SERVER_MU3_KEY }} != 0 ]; then 
-          DO_UPLOAD_SYMBOLS='true'
-          SENTRY_URL=https://sentry.musescore.org/api/2/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_MU3_KEY }}
+
+        if [ ${{ secrets.SENTRY_SERVER_MU4_KEY }} != 0 ]; then 
+          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable_build" ]; then 
+            SENTRY_PROJECT="mu4"
+          fi
+
+          if [ "$SENTRY_PROJECT" == "mu4" ]; then 
+            DO_UPLOAD_SYMBOLS='true'
+            SENTRY_URL=https://sentry.musescore.org/api/4/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_MU4_KEY }}
+          fi
         fi
 
         if [ "$SENTRY_PROJECT" == "sandbox" ] && [ ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }} != 0 ]; then 
