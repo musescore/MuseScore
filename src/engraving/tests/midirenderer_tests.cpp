@@ -346,6 +346,24 @@ TEST_F(MidiRenderer_Tests, tremoloSlideOut)
     checkEventInterval(events, 1597, 1914, 56, glissVol);
 }
 
+TEST_F(MidiRenderer_Tests, slideInAndOut)
+{
+    constexpr int defVol = 80; // mf
+    constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
+
+    EventMap events = renderMidiEvents(u"slide_in_and_out.mscx");
+
+    EXPECT_EQ(events.size(), 14);
+
+    checkEventInterval(events, 240, 318, 57, glissVol);
+    checkEventInterval(events, 320, 398, 58, glissVol);
+    checkEventInterval(events, 400, 478, 59, glissVol);
+    checkEventInterval(events, 480, 719, 60, defVol);
+    checkEventInterval(events, 720, 798, 61, glissVol);
+    checkEventInterval(events, 799, 877, 62, glissVol);
+    checkEventInterval(events, 879, 957, 63, glissVol);
+}
+
 /*****************************************************************************
 
     DISABLED TESTS BELOW

@@ -901,7 +901,6 @@ bool GuitarPro5::read(IODevice* io)
     }
     readMeasures(tempo);
     for (auto n : slideList) {
-//		Note* next = nullptr;
         auto segment = n->chord()->segment();
         auto measure = segment->measure();
         while ((segment = segment->next1(SegmentType::ChordRest)) || ((measure = measure->nextMeasure()) && (segment = measure->first()))) {
@@ -1123,27 +1122,10 @@ bool GuitarPro5::readNoteEffects(Note* note)
         }
 
         if (sld) {
-            auto convertSlideType = [](ChordLineType slideType) -> Note::SlideType {
-                if (slideType == ChordLineType::FALL) {
-                    return Note::SlideType::Fall;
-                } else if (slideType == ChordLineType::DOIT) {
-                    return Note::SlideType::Doit;
-                } else if (slideType == ChordLineType::SCOOP) {
-                    return Note::SlideType::Lift;
-                } else if (slideType == ChordLineType::PLOP) {
-                    return Note::SlideType::Plop;
-                } else {
-                    LOGE() << "wrong slide type";
-                    return Note::SlideType::Undefined;
-                }
-            };
-
             sld->setChordLineType(slideType);
             sld->setStraight(true);
             note->chord()->add(sld);
             sld->setNote(note);
-            Note::Slide sl{ convertSlideType(slideType) };
-            note->attachSlide(sl);
         }
 
         if (slideKind & LEGATO_SLIDE) {

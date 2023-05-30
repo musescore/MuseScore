@@ -157,20 +157,10 @@ class Note final : public EngravingItem
 public:
     enum class SlideType {
         Undefined = 0,
-        Shift, // connects 2 notes
-        Legato, // connects 2 notes and adds a slur
-        Plop, // from up to note
-        Lift, // from down to note
-        Doit, // from note to up
-        Fall, // from note to down
-    };
-
-    struct Slide {
-        SlideType type { SlideType::Undefined };
-        Note* startNote = nullptr;   // note to start slide (for 2 notes slides)
-        Note* endNote = nullptr;     // note to end slide (for 2 notes slides)
-        bool isValid() const { return type != SlideType::Undefined; }
-        bool is(SlideType t) const { return t == type; }
+        UpToNote,
+        DownToNote,
+        UpFromNote,
+        DownFromNote
     };
 
     enum DisplayFretOption {
@@ -425,21 +415,12 @@ public:
     int offTimeType() const { return _offTimeType; }
     int onTimeType() const { return _onTimeType; }
 
-    const Slide& slide() const { return _attachedSlide; }
+    void attachSlide(SlideType slideType);
 
-    void attachSlide(const Slide& s) { _attachedSlide = s; }
-    void setRelatedSlide(Slide* pSlide) { _relatedSlide = pSlide; }
-
-    bool hasRelatedSlide() const { return !!_relatedSlide; }
-    const Slide& relatedSlide() const { return *_relatedSlide; }
-
-    bool isSlideToNote() const;
-    bool isSlideOutNote() const;
-
-    bool isSlideStart() const;
-    bool isSlideEnd() const;
-
-    void relateSlide(Note& start) { _relatedSlide = &start._attachedSlide; }
+    bool hasSlideToNote() const;
+    bool hasSlideFromNote() const;
+    SlideType slideToType() const { return m_slideToType; }
+    SlideType slideFromType() const { return m_slideFromType; }
 
     Bend* bend() const { return m_bend; }
 
@@ -509,6 +490,8 @@ private:
     mutable bool _mark = false;  ///< for use in sequencer
     bool _fixed = false;         ///< for slash notation
     Bend* m_bend = nullptr;
+    SlideType m_slideToType = SlideType::Undefined;
+    SlideType m_slideFromType = SlideType::Undefined;
 
     DirectionH _userMirror = DirectionH::AUTO;        ///< user override of mirror
     DirectionV _userDotPosition = DirectionV::AUTO;   ///< user override of dot position
@@ -539,9 +522,6 @@ private:
 
     Tie* _tieFor = nullptr;
     Tie* _tieBack = nullptr;
-
-    Slide _attachedSlide;           ///< slide which starts from note
-    Slide* _relatedSlide = nullptr; ///< slide which goes to note
 
     Symbol* _leftParenthesis = nullptr;
     Symbol* _rightParenthesis = nullptr;

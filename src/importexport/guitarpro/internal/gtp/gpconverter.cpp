@@ -1345,17 +1345,6 @@ void GPConverter::addContinuousSlideHammerOn()
                 segment->add(staffText);
             }
         }
-
-        /// Sound info
-        if (slide.second == SlideHammerOn::LegatoSlide
-            || slide.second == SlideHammerOn::Slide) {
-            Note::SlideType slideType = (slide.second == SlideHammerOn::Slide
-                                         ? Note::SlideType::Shift
-                                         : Note::SlideType::Legato);
-            Note::Slide sl{ slideType, startNote, endNote };
-            startNote->attachSlide(sl);
-            endNote->relateSlide(*startNote);
-        }
     }
 }
 
@@ -1908,33 +1897,31 @@ void GPConverter::addSlide(const GPNote* gpnote, Note* note)
 
 void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
 {
-    auto slideType = [](size_t flagIdx) -> std::pair<ChordLineType, Note::SlideType> {
-        if (flagIdx == 2) {
-            return { ChordLineType::FALL, Note::SlideType::Fall };
-        } else if (flagIdx == 3) {
-            return { ChordLineType::DOIT, Note::SlideType::Doit };
-        } else if (flagIdx == 4) {
-            return { ChordLineType::SCOOP, Note::SlideType::Lift };
-        } else if (flagIdx == 5) {
-            return { ChordLineType::PLOP, Note::SlideType::Plop };
+    auto slideType = [](size_t flagIdx) -> ChordLineType {
+        switch (flagIdx) {
+        case 2:
+            return ChordLineType::FALL;
+        case 3:
+            return ChordLineType::DOIT;
+        case 4:
+            return ChordLineType::SCOOP;
+        case 5:
+            return ChordLineType::PLOP;
+        default:
+            LOGE() << "wrong slide type";
+            return ChordLineType::NOTYPE;
         }
 
-        LOGE() << "wrong slide type";
-        return { ChordLineType::NOTYPE, Note::SlideType::Undefined };
+        return ChordLineType::NOTYPE;
     };
 
     for (size_t flagIdx = 2; flagIdx < gpnote->slides().size(); flagIdx++) {
         if (gpnote->slides()[flagIdx]) {
-            auto type = slideType(flagIdx);
-
-            ChordLine* cl = mu::engraving::Factory::createChordLine(_score->dummy()->chord());
-            cl->setChordLineType(type.first);
+            ChordLine* cl = Factory::createChordLine(_score->dummy()->chord());
+            cl->setChordLineType(slideType(flagIdx));
             cl->setStraight(true);
             note->chord()->add(cl);
             cl->setNote(note);
-
-            Note::Slide sl{ type.second };
-            note->attachSlide(sl);
         }
     }
 }

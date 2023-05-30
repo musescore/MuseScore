@@ -3145,27 +3145,9 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         readItemProperties(n, e, ctx);
     } else if (tag == "ChordLine" && n->chord()) {
         ChordLine* cl = Factory::createChordLine(n->chord());
-        cl->setNote(n);
         TRead::read(cl, e, ctx);
+        cl->setNote(n);
         n->chord()->add(cl);
-
-        auto convertSlideType = [](ChordLineType type) {
-            switch (type) {
-            case ChordLineType::FALL:
-                return Note::SlideType::Fall;
-            case ChordLineType::DOIT:
-                return Note::SlideType::Doit;
-            case ChordLineType::SCOOP:
-                return Note::SlideType::Lift;
-            case ChordLineType::PLOP:
-                return Note::SlideType::Plop;
-            default:
-                return Note::SlideType::Undefined;
-            }
-        };
-
-        Note::Slide sl{ convertSlideType(cl->chordLineType()) };
-        n->attachSlide(sl);
     } else if (readItemProperties(n, e, ctx)) {
     } else {
         return false;
