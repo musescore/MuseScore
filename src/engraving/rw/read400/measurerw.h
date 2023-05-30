@@ -23,22 +23,18 @@
 #define MU_ENGRAVING_MEASURERW_H
 
 #include "readcontext.h"
-#include "../write/writecontext.h"
 
 namespace mu::engraving {
-class XmlWriter;
 class XmlReader;
 class Measure;
 }
 
 namespace mu::engraving::read400 {
-class MeasureRW
+class MeasureRead
 {
 public:
 
     static void readMeasure(Measure* measure, XmlReader& xml, ReadContext& ctx, int staffIdx);
-    static void writeMeasure(const Measure* measure, XmlWriter& xml, write::WriteContext& ctx, staff_idx_t staff, bool writeSystemElements,
-                             bool forceTimeSig);
 
 private:
     static void readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int staffIdx, bool irregular);

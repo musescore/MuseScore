@@ -83,6 +83,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/write/twrite.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/write/connectorinfowriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/write/connectorinfowriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/staffwrite.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/staffwrite.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/measurewrite.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/measurewrite.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/read114/read114.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read114/read114.h

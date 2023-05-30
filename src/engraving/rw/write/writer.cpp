@@ -28,9 +28,10 @@
 #include "libmscore/staff.h"
 
 #include "../xmlwriter.h"
+#include "../inoutdata.h"
 
 #include "twrite.h"
-#include "../read400/staffrw.h"
+#include "staffwrite.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::write;
@@ -244,7 +245,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
     if (measureStart) {
         for (staff_idx_t staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
             const Staff* st = score->staff(staffIdx);
-            read400::StaffRW::writeStaff(st, xml, ctx, measureStart, measureEnd, staffStart, staffIdx, selectionOnly);
+            StaffWrite::writeStaff(st, xml, ctx, measureStart, measureEnd, staffStart, staffIdx, selectionOnly);
         }
     }
     ctx.setCurTrack(mu::nidx);
