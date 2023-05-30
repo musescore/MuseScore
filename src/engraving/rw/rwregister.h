@@ -35,7 +35,7 @@ public:
     static IReaderPtr reader(int version);
     static IReaderPtr latestReader();
 
-    static IWriterPtr latestWriter();
+    static IWriterPtr writer();
 };
 }
 

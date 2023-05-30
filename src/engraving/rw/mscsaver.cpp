@@ -62,7 +62,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySele
         Buffer scoreBuf(&scoreData);
         scoreBuf.open(IODevice::ReadWrite);
 
-        RWRegister::latestWriter()->writeScore(score, &scoreBuf, onlySelection, &masterWriteOutData);
+        RWRegister::writer()->writeScore(score, &scoreBuf, onlySelection, &masterWriteOutData);
 
         mscWriter.writeScoreFile(scoreData);
     }
@@ -89,7 +89,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySele
                         Buffer excerptBuf(&excerptData);
                         excerptBuf.open(IODevice::ReadWrite);
 
-                        RWRegister::latestWriter()->writeScore(excerpt->excerptScore(), &excerptBuf, onlySelection, &masterWriteOutData);
+                        RWRegister::writer()->writeScore(excerpt->excerptScore(), &excerptBuf, onlySelection, &masterWriteOutData);
 
                         mscWriter.addExcerptFile(excerpt->name(), excerptData);
                     }
@@ -162,7 +162,7 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
         Buffer excerptBuf(&excerptData);
         excerptBuf.open(IODevice::WriteOnly);
 
-        rw::RWRegister::latestWriter()->writeScore(partScore, &excerptBuf, false);
+        rw::RWRegister::writer()->writeScore(partScore, &excerptBuf, false);
 
         mscWriter.writeScoreFile(excerptData);
     }

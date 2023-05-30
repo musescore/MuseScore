@@ -28,7 +28,7 @@
 #include "../linksindexer.h"
 #include "libmscore/select.h"
 
-namespace mu::engraving::rw400 {
+namespace mu::engraving::write {
 class WriteContext
 {
 public:

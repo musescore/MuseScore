@@ -67,6 +67,11 @@ class ReadContext;
 class WriteContext;
 }
 
+namespace mu::engraving::write {
+class Writer;
+class WriteContext;
+}
+
 namespace mu::engraving::compat {
 class Read302;
 class WriteScoreHook;
@@ -381,7 +386,7 @@ private:
 
     friend class compat::Read302;
     friend class rw400::Read400;
-    friend class rw400::Write400;
+    friend class write::Writer;
     friend class layout::v0::ScoreLayout;
 
     static std::set<Score*> validScores;

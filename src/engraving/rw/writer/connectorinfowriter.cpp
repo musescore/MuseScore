@@ -34,7 +34,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::rw400;
+using namespace mu::engraving::write;
 
 ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, WriteContext* ctx, const EngravingItem* current,
                                          const EngravingItem* connector,
@@ -58,18 +58,18 @@ void ConnectorInfoWriter::write()
     }
     xml.startElement(tagName(), { { "type", _connector->typeName() } });
     if (isStart()) {
-        rw400::TWrite::writeItem(_connector, xml, ctx);
+        TWrite::writeItem(_connector, xml, ctx);
     }
     if (hasPrevious()) {
         xml.startElement("prev");
         _prevLoc.toRelative(_currentLoc);
-        rw400::TWrite::write(&_prevLoc, xml, ctx);
+        TWrite::write(&_prevLoc, xml, ctx);
         xml.endElement();
     }
     if (hasNext()) {
         xml.startElement("next");
         _nextLoc.toRelative(_currentLoc);
-        rw400::TWrite::write(&_nextLoc, xml, ctx);
+        TWrite::write(&_nextLoc, xml, ctx);
         xml.endElement();
     }
     xml.endElement();

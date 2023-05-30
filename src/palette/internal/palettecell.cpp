@@ -268,12 +268,12 @@ void PaletteCell::write(XmlWriter& xml, bool pasteMode) const
         xml.tag("mag", mag);
     }
 
-    rw400::WriteContext wctx;
+    write::WriteContext wctx;
     wctx.setClipboardmode(pasteMode);
     if (untranslatedElement) {
-        rw400::TWrite::writeItem(untranslatedElement.get(), xml, wctx);
+        write::TWrite::writeItem(untranslatedElement.get(), xml, wctx);
     } else {
-        rw400::TWrite::writeItem(element.get(), xml, wctx);
+        write::TWrite::writeItem(element.get(), xml, wctx);
     }
     xml.endElement();
 }

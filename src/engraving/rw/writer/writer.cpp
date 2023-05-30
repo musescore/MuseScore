@@ -33,12 +33,16 @@
 #include "../400/staffrw.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::rw400;
+using namespace mu::engraving::write;
 
-bool Write400::writeScore(Score* score, io::IODevice* device, bool onlySelection, rw::WriteInOutData* out)
+bool Writer::writeScore(Score* score, io::IODevice* device, bool onlySelection, rw::WriteInOutData* inout)
 {
     XmlWriter xml(device);
     WriteContext ctx;
+    if (inout) {
+        ctx = inout->ctx;
+    }
+
     xml.startDocument();
 
     xml.startElement("museScore", { { "version", MSC_VERSION } });
@@ -59,10 +63,15 @@ bool Write400::writeScore(Score* score, io::IODevice* device, bool onlySelection
         score->_mscoreRevision = AsciiStringView(MUSESCORE_REVISION).toInt(nullptr, 16);
         score->_mscVersion = MSCVERSION;
     }
+
+    if (inout) {
+        inout->ctx = ctx;
+    }
+
     return true;
 }
 
-void Write400::write(Score* score, XmlWriter& xml, rw400::WriteContext& ctx, bool selectionOnly, compat::WriteScoreHook& hook)
+void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selectionOnly, compat::WriteScoreHook& hook)
 {
     // if we have multi measure rests and some parts are hidden,
     // then some layout information is missing:
@@ -114,7 +123,7 @@ void Write400::write(Score* score, XmlWriter& xml, rw400::WriteContext& ctx, boo
 
     if (score->_audio && ctx.isMsczMode()) {
         xml.tag("playMode", int(score->_playMode));
-        rw400::TWrite::write(score->_audio, xml, ctx);
+        TWrite::write(score->_audio, xml, ctx);
     }
 
     for (int i = 0; i < 32; ++i) {
@@ -226,7 +235,7 @@ void Write400::write(Score* score, XmlWriter& xml, rw400::WriteContext& ctx, boo
     score->masterScore()->checkMidiMapping();
     for (const Part* part : score->_parts) {
         if (!selectionOnly || ((score->staffIdx(part) >= staffStart) && (staffEnd >= score->staffIdx(part) + part->nstaves()))) {
-            rw400::TWrite::write(part, xml, ctx);
+            TWrite::write(part, xml, ctx);
         }
     }
 

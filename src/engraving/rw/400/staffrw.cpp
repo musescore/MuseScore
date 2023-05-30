@@ -123,7 +123,7 @@ void StaffRW::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
     }
 }
 
-static void writeMeasure(XmlWriter& xml, rw400::WriteContext& ctx, MeasureBase* m,
+static void writeMeasure(XmlWriter& xml, write::WriteContext& ctx, MeasureBase* m,
                          staff_idx_t staffIdx,
                          bool writeSystemElements,
                          bool forceTimeSig)
@@ -135,7 +135,7 @@ static void writeMeasure(XmlWriter& xml, rw400::WriteContext& ctx, MeasureBase* 
         if (Measure::classof(m)) {
             rw400::MeasureRW::writeMeasure(static_cast<const Measure*>(m), xml, ctx, staffIdx, writeSystemElements, forceTimeSig);
         } else {
-            rw400::TWrite::writeItem(m, xml, ctx);
+            write::TWrite::writeItem(m, xml, ctx);
         }
     }
 
@@ -146,7 +146,7 @@ static void writeMeasure(XmlWriter& xml, rw400::WriteContext& ctx, MeasureBase* 
     ctx.setCurTick(m->endTick());
 }
 
-void StaffRW::writeStaff(const Staff* staff, XmlWriter& xml, WriteContext& ctx,
+void StaffRW::writeStaff(const Staff* staff, XmlWriter& xml, write::WriteContext& ctx,
                          MeasureBase* measureStart, MeasureBase* measureEnd,
                          staff_idx_t staffStart, staff_idx_t staffIdx,
                          bool selectionOnly)

@@ -841,7 +841,7 @@ ByteArray Selection::staffMimeData() const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    rw400::WriteContext wctx;
+    write::WriteContext wctx;
     xml.startDocument();
     wctx.setClipboardmode(true);
     wctx.setFilter(selectionFilter());
@@ -882,7 +882,7 @@ ByteArray Selection::staffMimeData() const
         }
         xml.endElement();     // </voiceOffset>
         wctx.setCurTrack(startTrack);
-        rw400::TWrite::writeSegments(xml, wctx, startTrack, endTrack, seg1, seg2, false, false);
+        write::TWrite::writeSegments(xml, wctx, startTrack, endTrack, seg1, seg2, false, false);
         xml.endElement();
     }
 
@@ -900,7 +900,7 @@ ByteArray Selection::symbolListMimeData() const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    rw400::WriteContext wctx;
+    write::WriteContext wctx;
     xml.startDocument();
     wctx.setClipboardmode(true);
 
@@ -1123,7 +1123,7 @@ ByteArray Selection::symbolListMimeData() const
             }
         }
         xml.tag("segDelta", numSegs);
-        rw400::TWrite::writeItem(iter->second.e, xml, wctx);
+        write::TWrite::writeItem(iter->second.e, xml, wctx);
     }
 
     xml.endElement();

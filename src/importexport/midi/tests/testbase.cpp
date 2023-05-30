@@ -81,7 +81,7 @@ bool MTest::saveScore(Score* score, const QString& name) const
         return false;
     }
 
-    return rw::RWRegister::latestWriter()->writeScore(score, &file, false);
+    return rw::RWRegister::writer()->writeScore(score, &file, false);
 }
 
 bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)

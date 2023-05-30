@@ -37,7 +37,7 @@ class Spanner;
 class MeasureBase;
 }
 
-namespace mu::engraving::rw400 {
+namespace mu::engraving::write {
 class WriteContext;
 class ConnectorInfoWriter : public ConnectorInfo
 {
