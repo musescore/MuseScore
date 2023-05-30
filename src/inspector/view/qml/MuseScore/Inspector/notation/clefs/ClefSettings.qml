@@ -58,7 +58,7 @@ Column {
         id: clefToBarlinePosition
         enabled: root.model ? root.model.isClefToBarPosAvailable : false
 
-        titleText: qsTrc("inspector", "Position relative to bar line")
+        titleText: qsTrc("inspector", "Position relative to barline")
         propertyItem: root.model ? root.model.clefToBarlinePosition : null
 
         navigationName: "ClefToBarlinePosition"

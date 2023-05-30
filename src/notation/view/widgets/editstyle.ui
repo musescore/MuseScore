@@ -10706,7 +10706,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="1" column="0">
             <widget class="QCheckBox" name="avoidBarLines">
              <property name="text">
-              <string>Avoid bar lines:</string>
+              <string>Avoid barlines:</string>
              </property>
             </widget>
            </item>
