@@ -134,7 +134,7 @@
 #include "../../libmscore/whammybar.h"
 
 #include "../xmlreader.h"
-#include "../206/read206.h"
+#include "../read206/read206.h"
 #include "../compat/compatutils.h"
 #include "readcontext.h"
 #include "connectorinforeader.h"

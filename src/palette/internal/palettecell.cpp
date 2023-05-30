@@ -24,8 +24,8 @@
 
 #include "mimedatautils.h"
 
-#include "engraving/rw/400/tread.h"
-#include "engraving/rw/writer/twrite.h"
+#include "engraving/rw/read400/tread.h"
+#include "engraving/rw/write/twrite.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/fret.h"

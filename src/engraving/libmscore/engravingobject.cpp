@@ -28,15 +28,12 @@
 #include "style/textstyle.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "rw/400/connectorinforeader.h"
 
 #include "bracketItem.h"
-#include "factory.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
 #include "score.h"
 #include "undo.h"
-#include "connector.h"
 
 #include "log.h"
 

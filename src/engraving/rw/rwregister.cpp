@@ -21,12 +21,12 @@
  */
 #include "rwregister.h"
 
-#include "114/read114.h"
-#include "206/read206.h"
-#include "302/read302.h"
-#include "400/read400.h"
+#include "read114/read114.h"
+#include "read206/read206.h"
+#include "read302/read302.h"
+#include "read400/read400.h"
 
-#include "writer/writer.h"
+#include "write/writer.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw;

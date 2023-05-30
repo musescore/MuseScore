@@ -28,7 +28,7 @@
 
 #include "linksindexer.h"
 
-#include "writer/writecontext.h"
+#include "write/writecontext.h"
 
 namespace mu::engraving {
 class LinkedObjects;

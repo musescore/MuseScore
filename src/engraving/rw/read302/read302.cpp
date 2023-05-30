@@ -39,8 +39,8 @@
 #include "libmscore/staff.h"
 #include "libmscore/text.h"
 
-#include "../400/staffrw.h"
-#include "../400/tread.h"
+#include "../read400/staffrw.h"
+#include "../read400/tread.h"
 #include "../compat/readstyle.h"
 
 #include "log.h"

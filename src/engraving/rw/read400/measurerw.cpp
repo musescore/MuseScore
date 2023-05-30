@@ -24,7 +24,7 @@
 #include "libmscore/fret.h"
 #include "translation.h"
 
-#include "rw/writer/twrite.h"
+#include "rw/write/twrite.h"
 #include "layout/v0/tlayout.h"
 
 #include "../libmscore/ambitus.h"

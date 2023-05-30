@@ -24,13 +24,10 @@
 
 #include "translation.h"
 
-#include "rw/400/tread.h"
-#include "style/style.h"
 #include "types/typesconv.h"
 
 #include "accidental.h"
 #include "bracket.h"
-#include "groups.h"
 #include "note.h"
 #include "ottava.h"
 
