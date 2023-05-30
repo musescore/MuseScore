@@ -21,22 +21,19 @@
  */
 #include "spanner.h"
 
-#include "rw/xmlwriter.h"
-#include "rw/400/writecontext.h"
+#include "translation.h"
 
 #include "chord.h"
 #include "chordrest.h"
-#include "connector.h"
+#include "location.h"
 #include "lyrics.h"
 #include "measure.h"
 #include "note.h"
-#include "repeatlist.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
 
-#include "translation.h"
 #include "log.h"
 
 using namespace mu;

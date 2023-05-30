@@ -28,9 +28,8 @@
 
 #include "rw/xmlreader.h"
 #include "rw/xmlwriter.h"
-#include "rw/400/twrite.h"
+#include "rw/writer/twrite.h"
 #include "rw/400/tread.h"
-#include "style/style.h"
 #include "types/typesconv.h"
 
 #include "bracket.h"

@@ -23,7 +23,7 @@
 #define MU_ENGRAVING_STAFFRW_H
 
 #include "readcontext.h"
-#include "writecontext.h"
+#include "../writer/writecontext.h"
 
 namespace mu::engraving {
 class XmlReader;

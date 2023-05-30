@@ -27,32 +27,11 @@
 
 #include "style/style.h"
 
-#include "compat/writescorehook.h"
-
-#include "rw/400/twrite.h"
-
-#include "rw/400/staffrw.h"
-
-#include "audio.h"
-#include "chordrest.h"
 #include "engravingitem.h"
-#include "excerpt.h"
-#include "factory.h"
-#include "keysig.h"
-#include "masterscore.h"
-#include "measure.h"
 #include "mscore.h"
 #include "page.h"
-#include "part.h"
-#include "rest.h"
 #include "score.h"
-#include "scoreorder.h"
-#include "segment.h"
-#include "sig.h"
-#include "staff.h"
-#include "timesig.h"
 #include "undo.h"
-#include "utils.h"
 
 #include "log.h"
 

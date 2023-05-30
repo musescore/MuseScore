@@ -38,7 +38,7 @@
 #include "iengravingfont.h"
 
 #include "rw/400/tread.h"
-#include "rw/400/twrite.h"
+#include "rw/writer/twrite.h"
 
 #include "types/typesconv.h"
 #include "layout/v0/tlayout.h"

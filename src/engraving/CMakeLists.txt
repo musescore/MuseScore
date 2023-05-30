@@ -75,6 +75,15 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/mscsaver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/mscsaver.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/writer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/writer.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/writecontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/writecontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/twrite.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/twrite.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/connectorinfowriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/connectorinfowriter.h
+
     ${CMAKE_CURRENT_LIST_DIR}/rw/114/read114.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/114/read114.h
 
@@ -86,22 +95,14 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/read400.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/read400.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/write400.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/write400.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/staffrw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/staffrw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/measurerw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/measurerw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/readcontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/readcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/writecontext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/writecontext.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/tread.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/tread.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/twrite.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/twrite.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/connectorinfowriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/connectorinfowriter.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/connectorinforeader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/connectorinforeader.h
 

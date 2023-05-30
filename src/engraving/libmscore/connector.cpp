@@ -22,13 +22,8 @@
 
 #include "connector.h"
 
-#include "rw/400/tread.h"
-#include "rw/400/twrite.h"
-#include "types/typesconv.h"
-
 #include "engravingitem.h"
 #include "engravingobject.h"
-#include "factory.h"
 #include "score.h"
 
 #include "log.h"
