@@ -174,7 +174,7 @@ void TextSettingsModel::resetProperties()
     m_textScriptAlignment->resetToDefault();
 }
 
-void TextSettingsModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet& changedStyleIds)
+void TextSettingsModel::onNotationChanged(const PropertyIdSet& changedProperyIds, const StyleIdSet& changedStyleIds)
 {
     for (Sid s : {
         Sid::user1Name,
@@ -196,6 +196,11 @@ void TextSettingsModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet
             return;
         }
     }
+
+    if (mu::contains(changedProperyIds, Pid::PLACEMENT)) {
+        loadPropertyItem(m_textPlacement);
+    }
+
     updateIsHorizontalAlignmentAvailable();
 }
 

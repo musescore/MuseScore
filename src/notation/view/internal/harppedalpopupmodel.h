@@ -88,8 +88,6 @@ private:
 
     std::array<mu::engraving::PedalPosition, mu::engraving::HARP_STRING_NO> getPopupPedalState();
 
-    mu::engraving::HarpPedalDiagram* m_diagram = nullptr;
-
     bool m_isDiagram = false;
 
     std::array<Position, mu::engraving::HARP_STRING_NO> m_pedalState;

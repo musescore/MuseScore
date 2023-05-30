@@ -1,0 +1,208 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2023 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include "caposettingsmodel.h"
+
+#include "engraving/libmscore/capo.h"
+
+using namespace mu::notation;
+
+CapoSettingsModel::CapoSettingsModel(QObject* parent)
+    : AbstractElementPopupModel(PopupModelType::TYPE_CAPO, parent)
+{
+}
+
+bool CapoSettingsModel::capoIsOn() const
+{
+    return params().active;
+}
+
+int CapoSettingsModel::fretPosition() const
+{
+    return params().fretPosition;
+}
+
+QList<StringItem*> CapoSettingsModel::strings() const
+{
+    return m_strings;
+}
+
+int CapoSettingsModel::capoPlacement() const
+{
+    return m_item ? static_cast<int>(m_item->placement()) : 0;
+}
+
+QString CapoSettingsModel::capoText() const
+{
+    return "";
+}
+
+void CapoSettingsModel::init()
+{
+    TRACEFUNC;
+
+    m_strings.clear();
+
+    AbstractElementPopupModel::init();
+
+    IF_ASSERT_FAILED(m_item) {
+        return;
+    }
+
+    const mu::engraving::Part* part = m_item->part();
+    IF_ASSERT_FAILED(part) {
+        return;
+    }
+
+    const mu::engraving::Instrument* instrument = part->instrument(m_item->tick());
+    IF_ASSERT_FAILED(instrument) {
+        return;
+    }
+
+    const mu::engraving::StringData* stringData = instrument->stringData();
+    IF_ASSERT_FAILED(stringData) {
+        return;
+    }
+
+    for (mu::engraving::string_idx_t i = 0; i < stringData->strings(); ++i) {
+        StringItem* item = new StringItem(this);
+        item->blockSignals(true);
+        item->setApplyCapo(!mu::contains(params().ignoredStrings, i));
+        item->blockSignals(false);
+
+        m_strings.push_back(item);
+    }
+
+    emit capoIsOnChanged(capoIsOn());
+    emit fretPositionChanged(fretPosition());
+    emit stringsChanged(m_strings);
+    emit capoPlacementChanged(capoPlacement());
+    emit capoTextChanged(capoText());
+}
+
+void CapoSettingsModel::toggleCapoForString(int stringIndex)
+{
+    if (stringIndex >= m_strings.size()) {
+        return;
+    }
+
+    StringItem* item = m_strings.at(stringIndex);
+    item->setApplyCapo(!item->applyCapo());
+
+    std::vector<int> ignoredStrings;
+    for (int i = 0; i < m_strings.size(); ++i) {
+        const StringItem* item = m_strings.at(i);
+
+        if (!item->applyCapo()) {
+            ignoredStrings.push_back(i);
+        }
+    }
+
+    changeItemProperty(mu::engraving::Pid::CAPO_IGNORED_STRINGS, ignoredStrings);
+}
+
+QVariantList CapoSettingsModel::possibleCapoPlacements() const
+{
+    QVariantMap above {
+        { "text", qtrc("notation", "Above") },
+        { "value", static_cast<int>(mu::engraving::PlacementV::ABOVE) }
+    };
+
+    QVariantMap below {
+        { "text", qtrc("notation", "Below") },
+        { "value", static_cast<int>(mu::engraving::PlacementV::BELOW) }
+    };
+
+    return {
+        above,
+        below
+    };
+}
+
+void CapoSettingsModel::setCapoIsOn(bool isOn)
+{
+    if (capoIsOn() == isOn) {
+        return;
+    }
+
+    changeItemProperty(mu::engraving::Pid::ACTIVE, isOn);
+    emit capoIsOnChanged(isOn);
+}
+
+void CapoSettingsModel::setFretPosition(int position)
+{
+    if (fretPosition() == position) {
+        return;
+    }
+
+    changeItemProperty(mu::engraving::Pid::CAPO_FRET_POSITION, position);
+    emit fretPositionChanged(position);
+}
+
+void CapoSettingsModel::setCapoPlacement(int position)
+{
+    IF_ASSERT_FAILED(m_item) {
+        return;
+    }
+
+    if (m_item->placement() == static_cast<mu::engraving::PlacementV>(position)) {
+        return;
+    }
+
+    changeItemProperty(mu::engraving::Pid::PLACEMENT, position);
+    emit capoPlacementChanged(position);
+}
+
+void CapoSettingsModel::setCapoText(const QString& text)
+{
+    emit capoTextChanged(text);
+}
+
+const mu::engraving::CapoParams& CapoSettingsModel::params() const
+{
+    if (!m_item || !m_item->isCapo()) {
+        static mu::engraving::CapoParams dummy;
+        return dummy;
+    }
+
+    return mu::engraving::toCapo(m_item)->params();
+}
+
+StringItem::StringItem(QObject* parent)
+    : QObject(parent)
+{
+}
+
+bool StringItem::applyCapo() const
+{
+    return m_applyCapo;
+}
+
+void StringItem::setApplyCapo(bool apply)
+{
+    if (m_applyCapo == apply) {
+        return;
+    }
+
+    m_applyCapo = apply;
+    emit applyCapoChanged(apply);
+}

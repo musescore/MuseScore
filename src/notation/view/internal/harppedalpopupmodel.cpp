@@ -28,9 +28,8 @@
 using namespace mu::notation;
 
 HarpPedalPopupModel::HarpPedalPopupModel(QObject* parent)
-    : AbstractElementPopupModel(parent)
+    : AbstractElementPopupModel(PopupModelType::TYPE_HARP_DIAGRAM, parent)
 {
-    setModelType(PopupModelType::TYPE_HARP_DIAGRAM);
     setTitle("Harp pedal");
 }
 
@@ -47,23 +46,22 @@ void HarpPedalPopupModel::init()
 
 void HarpPedalPopupModel::load()
 {
-    EngravingItem* element = getElement();
-    m_diagram = element && element->isHarpPedalDiagram() ? toHarpPedalDiagram(getElement()) : nullptr;
-    if (!m_diagram) {
+    mu::engraving::HarpPedalDiagram* diagram = m_item && m_item->isHarpPedalDiagram() ? toHarpPedalDiagram(m_item) : nullptr;
+    if (!diagram) {
         return;
     }
 
-    m_isDiagram = m_diagram->isDiagram();
+    m_isDiagram = diagram->isDiagram();
     emit isDiagramChanged(isDiagram());
 
-    setPopupPedalState(m_diagram->getPedalState());
+    setPopupPedalState(diagram->getPedalState());
     emit pedalStateChanged(pedalState());
 }
 
 std::array<mu::engraving::PedalPosition, mu::engraving::HARP_STRING_NO> HarpPedalPopupModel::getPopupPedalState()
 {
     std::array<mu::engraving::PedalPosition, mu::engraving::HARP_STRING_NO> posArr;
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < mu::engraving::HARP_STRING_NO; i++) {
         switch (m_pedalState.at(i)) {
         case HarpPedalPopupModel::Position::FLAT:
             posArr[i] = mu::engraving::PedalPosition::FLAT;
@@ -94,7 +92,7 @@ void HarpPedalPopupModel::setPopupPedalState(std::array<HarpPedalPopupModel::Pos
 void HarpPedalPopupModel::setPopupPedalState(std::array<mu::engraving::PedalPosition, mu::engraving::HARP_STRING_NO> pos)
 {
     std::array<HarpPedalPopupModel::Position, mu::engraving::HARP_STRING_NO> posArr;
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < mu::engraving::HARP_STRING_NO; i++) {
         switch (pos.at(i)) {
         case mu::engraving::PedalPosition::FLAT:
             posArr[i] = HarpPedalPopupModel::Position::FLAT;
@@ -124,28 +122,37 @@ bool HarpPedalPopupModel::isDiagram() const
 
 QPointF HarpPedalPopupModel::pos() const
 {
-    return fromLogical(m_diagram->canvasPos()).toQPointF();
+    if (!m_item) {
+        return QPointF();
+    }
+
+    return fromLogical(m_item->canvasPos()).toQPointF();
 }
 
 QPointF HarpPedalPopupModel::size() const
 {
-    RectF elemRect = fromLogical(m_diagram->canvasBoundingRect());
+    if (!m_item) {
+        return QPointF();
+    }
+
+    RectF elemRect = fromLogical(m_item->canvasBoundingRect());
     return QPointF(elemRect.width(), elemRect.height());
 }
 
 bool HarpPedalPopupModel::belowStave() const
 {
-    if (m_diagram != nullptr && (m_diagram->getProperty(mu::engraving::Pid::PLACEMENT) == mu::engraving::PlacementV::BELOW)) {
-        return true;
+    if (!m_item) {
+        return false;
     }
-    return false;
+
+    return m_item->getProperty(mu::engraving::Pid::PLACEMENT) == mu::engraving::PlacementV::BELOW;
 }
 
 QRectF HarpPedalPopupModel::staffPos() const
 {
     // Just need top & bottom y.  Don't need x pos
-    Measure* measure = m_diagram->measure();
-    auto harpIdxList = m_diagram->part()->staveIdxList();
+    Measure* measure = m_item->findMeasure();
+    auto harpIdxList = m_item->part()->staveIdxList();
     std::list<engraving::StaffLines*> staves;
     for (auto idx : harpIdxList) {
         staves.push_back(measure->staffLines(idx));
@@ -162,6 +169,7 @@ QRectF HarpPedalPopupModel::staffPos() const
 
         return fromLogical(staffRect).toQRectF();
     }
+
     return QRectF();
 }
 
@@ -176,19 +184,16 @@ void HarpPedalPopupModel::setIsDiagram(bool isDiagram)
         return;
     }
 
-    beginCommand();
-
     m_isDiagram = isDiagram;
-    m_diagram->undoChangeProperty(mu::engraving::Pid::HARP_IS_DIAGRAM, m_isDiagram, mu::engraving::PropertyFlags::STYLED);
-    updateNotation();
-    endCommand();
+    changeItemProperty(mu::engraving::Pid::HARP_IS_DIAGRAM, m_isDiagram, mu::engraving::PropertyFlags::STYLED);
+
     emit isDiagramChanged(m_isDiagram);
 }
 
 void HarpPedalPopupModel::setDiagramPedalState(QVector<Position> pedalState)
 {
     std::array<HarpPedalPopupModel::Position, mu::engraving::HARP_STRING_NO> stdPedalState;
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < mu::engraving::HARP_STRING_NO; i++) {
         stdPedalState[i] = pedalState.at(i);
     }
 
@@ -198,7 +203,7 @@ void HarpPedalPopupModel::setDiagramPedalState(QVector<Position> pedalState)
 
     beginCommand();
     setPopupPedalState(stdPedalState);
-    m_diagram->score()->undo(new mu::engraving::ChangeHarpPedalState(m_diagram, getPopupPedalState()));
+    m_item->score()->undo(new mu::engraving::ChangeHarpPedalState(mu::engraving::toHarpPedalDiagram(m_item), getPopupPedalState()));
     updateNotation();
     endCommand();
     emit pedalStateChanged(pedalState);

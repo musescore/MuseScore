@@ -27,10 +27,11 @@ using namespace mu::notation;
 
 static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPES = {
     { mu::engraving::ElementType::HARP_DIAGRAM, PopupModelType::TYPE_HARP_DIAGRAM },
+    { mu::engraving::ElementType::CAPO, PopupModelType::TYPE_CAPO },
 };
 
-AbstractElementPopupModel::AbstractElementPopupModel(QObject* parent)
-    : QObject(parent)
+AbstractElementPopupModel::AbstractElementPopupModel(PopupModelType modelType, QObject* parent)
+    : QObject(parent), m_modelType(modelType)
 {
 }
 
@@ -44,21 +45,9 @@ PopupModelType AbstractElementPopupModel::modelType() const
     return m_modelType;
 }
 
-EngravingItem* AbstractElementPopupModel::getElement()
-{
-    EngravingItem* hitElement = hitElementContext().element;
-
-    return hitElement ? hitElement : selection()->element();
-}
-
 PopupModelType AbstractElementPopupModel::modelTypeFromElement(const engraving::ElementType& elementType)
 {
     return ELEMENT_POPUP_TYPES.value(elementType, PopupModelType::TYPE_UNDEFINED);
-}
-
-void AbstractElementPopupModel::setModelType(PopupModelType modelType)
-{
-    m_modelType = modelType;
 }
 
 void AbstractElementPopupModel::setTitle(QString title)
@@ -114,6 +103,35 @@ INotationPtr AbstractElementPopupModel::currentNotation() const
     return globalContext()->currentNotation();
 }
 
+void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const PropertyValue& value)
+{
+    IF_ASSERT_FAILED(m_item) {
+        return;
+    }
+
+    mu::engraving::PropertyFlags flags = m_item->propertyFlags(id);
+    if (flags == mu::engraving::PropertyFlags::STYLED) {
+        flags = mu::engraving::PropertyFlags::UNSTYLED;
+    }
+
+    beginCommand();
+    m_item->undoChangeProperty(id, value, flags);
+    endCommand();
+    updateNotation();
+}
+
+void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const PropertyValue& value, mu::engraving::PropertyFlags flags)
+{
+    IF_ASSERT_FAILED(m_item) {
+        return;
+    }
+
+    beginCommand();
+    m_item->undoChangeProperty(id, value, flags);
+    endCommand();
+    updateNotation();
+}
+
 INotationInteractionPtr AbstractElementPopupModel::interaction() const
 {
     INotationPtr notation = globalContext()->currentNotation();
@@ -138,6 +156,11 @@ const INotationInteraction::HitElementContext& AbstractElementPopupModel::hitEle
 
 void AbstractElementPopupModel::init()
 {
+    m_item = hitElementContext().element;
+    if (!m_item) {
+        m_item = selection()->element();
+    }
+
     auto undoStack = this->undoStack();
     if (!undoStack) {
         return;

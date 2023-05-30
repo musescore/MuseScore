@@ -45,14 +45,14 @@ class AbstractElementPopupModel : public QObject, public async::Asyncable, publi
 public:
     enum class PopupModelType {
         TYPE_UNDEFINED = -1,
-        TYPE_HARP_DIAGRAM
+        TYPE_HARP_DIAGRAM,
+        TYPE_CAPO,
     };
     Q_ENUM(PopupModelType)
 
-    explicit AbstractElementPopupModel(QObject* parent = nullptr);
+    AbstractElementPopupModel(PopupModelType modelType, QObject* parent = nullptr);
     QString title() const;
     PopupModelType modelType() const;
-    EngravingItem* getElement();
 
     static PopupModelType modelTypeFromElement(const mu::engraving::ElementType& elementType);
 
@@ -60,7 +60,6 @@ public:
 
 public slots:
     void setTitle(QString title);
-    void setModelType(mu::notation::AbstractElementPopupModel::PopupModelType modelType);
 
 signals:
     void titleChanged();
@@ -75,6 +74,11 @@ protected:
     void endCommand();
     void updateNotation();
     notation::INotationPtr currentNotation() const;
+
+    void changeItemProperty(mu::engraving::Pid id, const PropertyValue& value);
+    void changeItemProperty(mu::engraving::Pid id, const PropertyValue& value, engraving::PropertyFlags flags);
+
+    EngravingItem* m_item = nullptr;
 
 private:
     INotationInteractionPtr interaction() const;
