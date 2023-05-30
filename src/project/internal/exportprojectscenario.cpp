@@ -46,7 +46,7 @@ std::vector<INotationWriter::UnitType> ExportProjectScenario::supportedUnitTypes
 }
 
 mu::RetVal<mu::io::path_t> ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
-                                                                INotationWriter::UnitType unitType) const
+                                                                INotationWriter::UnitType unitType, io::path_t defaultPath) const
 {
     INotationProjectPtr project = context()->currentProject();
 
@@ -83,7 +83,9 @@ mu::RetVal<mu::io::path_t> ExportProjectScenario::askExportPath(const INotationP
         }
     }
 
-    io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front().toStdString());
+    if (defaultPath == "") {
+        defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front().toStdString());
+    }
 
     RetVal<io::path_t> exportPath;
     exportPath.val = interactive()->selectSavingFile(qtrc("project/export", "Export"), defaultPath,
@@ -93,7 +95,7 @@ mu::RetVal<mu::io::path_t> ExportProjectScenario::askExportPath(const INotationP
     return exportPath;
 }
 
-bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
+bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notations, const io::path_t destinationPath,
                                          INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
 {
     std::string suffix = io::suffix(destinationPath);
@@ -223,6 +225,20 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
     }
 
     return true;
+}
+
+const ExportInfo& ExportProjectScenario::exportInfo() const
+{
+    return m_exportInfo;
+}
+
+void ExportProjectScenario::setExportInfo(const ExportInfo& exportInfo)
+{
+    if (m_exportInfo == exportInfo) {
+        return;
+    }
+
+    m_exportInfo = exportInfo;
 }
 
 size_t ExportProjectScenario::exportFileCount(const INotationPtrList& notations, INotationWriter::UnitType unitType) const

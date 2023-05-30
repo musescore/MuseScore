@@ -145,6 +145,8 @@ public:
     bool shouldDestinationFolderBeOpenedOnExport() const;
     void setShouldDestinationFolderBeOpenedOnExport(bool enabled);
 
+    Q_INVOKABLE void updateExportInfo();
+
 signals:
     void selectionChanged();
 
@@ -179,11 +181,14 @@ private:
     bool isMainNotation(notation::INotationPtr notation) const;
     notation::IMasterNotationPtr masterNotation() const;
 
+    void selectSavedNotations();
+
     QList<notation::INotationPtr> m_notations {};
     QItemSelectionModel* m_selectionModel = nullptr;
 
     ExportTypeList m_exportTypeList {};
     ExportType m_selectedExportType = ExportType();
+    io::path_t m_exportPath;
     project::INotationWriter::UnitType m_selectedUnitType = project::INotationWriter::UnitType::PER_PART;
 };
 }

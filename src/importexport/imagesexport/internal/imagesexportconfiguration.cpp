@@ -35,8 +35,8 @@ static const Settings::Key EXPORT_PNG_USE_TRANSPARENCY_KEY("iex_imagesexport", "
 void ImagesExportConfiguration::init()
 {
     settings()->setDefaultValue(EXPORT_PNG_DPI_RESOLUTION_KEY, Val(mu::engraving::DPI));
-    settings()->setDefaultValue(EXPORT_PNG_USE_TRANSPARENCY_KEY, Val(false));
     settings()->setDefaultValue(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(mu::engraving::DPI));
+    settings()->setDefaultValue(EXPORT_PNG_USE_TRANSPARENCY_KEY, Val(false));
 }
 
 int ImagesExportConfiguration::exportPdfDpiResolution() const
@@ -49,18 +49,23 @@ void ImagesExportConfiguration::setExportPdfDpiResolution(int dpi)
     settings()->setSharedValue(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(dpi));
 }
 
-void ImagesExportConfiguration::setExportPngDpiResolution(std::optional<float> dpi)
-{
-    m_customExportPngDpi = dpi;
-}
-
 float ImagesExportConfiguration::exportPngDpiResolution() const
 {
-    if (m_customExportPngDpi) {
-        return m_customExportPngDpi.value();
+    if (m_customExportPngDpiOverride) {
+        return m_customExportPngDpiOverride.value();
     }
 
     return settings()->value(EXPORT_PNG_DPI_RESOLUTION_KEY).toFloat();
+}
+
+void ImagesExportConfiguration::setExportPngDpiResolution(float dpi)
+{
+    settings()->setSharedValue(EXPORT_PNG_DPI_RESOLUTION_KEY, Val(dpi));
+}
+
+void ImagesExportConfiguration::setExportPngDpiResolutionOverride(std::optional<float> dpi)
+{
+    m_customExportPngDpiOverride = dpi;
 }
 
 bool ImagesExportConfiguration::exportPngWithTransparentBackground() const

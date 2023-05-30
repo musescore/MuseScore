@@ -35,7 +35,8 @@ public:
     virtual ~IAudioExportConfiguration() = default;
 
     virtual int exportMp3Bitrate() const = 0;
-    virtual void setExportMp3Bitrate(std::optional<int> bitrate) = 0;
+    virtual void setExportMp3Bitrate(int bitrate) = 0;
+    virtual void setExportMp3BitrateOverride(std::optional<int> bitrate) = 0;
     virtual const std::vector<int>& availableMp3BitRates() const = 0;
 
     virtual int exportSampleRate() const = 0;

@@ -50,6 +50,10 @@ StyledDialogView {
         exportScoresListView.focusOnFirst()
     }
 
+    onClosed: {
+        exportModel.updateExportInfo()
+    }
+
     RowLayout {
         anchors.fill: parent
         spacing: 2 * root.margins
