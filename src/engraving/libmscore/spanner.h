@@ -190,6 +190,7 @@ public:
     void setTick2(const Fraction&);
     void setTicks(const Fraction&);
 
+    bool isVoiceSpecific() const;
     track_idx_t track2() const { return _track2; }
     void setTrack2(track_idx_t v) { _track2 = v; }
     track_idx_t effectiveTrack2() const { return _track2 == mu::nidx ? track() : _track2; }
