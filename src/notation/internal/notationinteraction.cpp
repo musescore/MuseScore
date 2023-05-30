@@ -1731,8 +1731,6 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 // Ensure that list-selection results in the same endSegment as range selection
                 endSegment = cr2->nextSegmentAfterCR(SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef);
             }
-            // TODO - handle cross-voice selections
-            staff_idx_t idx = cr1->staffIdx();
 
             ByteArray a = element->mimeData();
 //printf("<<%s>>\n", a.data());
@@ -1744,7 +1742,10 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             mu::engraving::Spanner* spanner = static_cast<mu::engraving::Spanner*>(engraving::Factory::createItem(type, score->dummy()));
             read400::TRead::readItem(spanner, e, rctx);
             spanner->styleChanged();
-            score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
+            score->cmdAddSpanner(spanner, cr1->staffIdx(), startSegment, endSegment);
+            if (spanner->isVoiceSpecific()) {
+                spanner->setTrack(cr1->track());
+            }
         } else if (element->isArticulationFamily() && sel.elements().size() == 1) {
             // understand adding an articulation to another articulation as adding it to the chord it's attached to
             EngravingItem* e = sel.elements().front();
