@@ -95,7 +95,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
         ctx.setTrack(mu::nidx);
         const AsciiStringView tag(e.name());
         if (tag == "Staff") {
-            StaffRW::readStaff(score, e, ctx);
+            StaffRead::readStaff(score, e, ctx);
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {

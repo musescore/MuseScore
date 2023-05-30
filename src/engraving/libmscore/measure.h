@@ -33,7 +33,11 @@
 #include "segmentlist.h"
 
 namespace mu::engraving::read400 {
-class MeasureRW;
+class MeasureRead;
+}
+
+namespace mu::engraving::write {
+class MeasureWrite;
 }
 
 namespace mu::engraving::layout::v0 {
@@ -375,7 +379,8 @@ public:
 private:
 
     friend class Factory;
-    friend class read400::MeasureRW;
+    friend class read400::MeasureRead;
+    friend class write::MeasureWrite;
     friend class layout::v0::MeasureLayout;
 
     Measure(System* parent = 0);
