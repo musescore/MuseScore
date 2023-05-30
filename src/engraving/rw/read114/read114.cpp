@@ -87,8 +87,8 @@
 
 #include "../compat/readchordlisthook.h"
 #include "../compat/readstyle.h"
-#include "../206/read206.h"
-#include "../400/tread.h"
+#include "../read206/read206.h"
+#include "../read400/tread.h"
 
 #include "log.h"
 

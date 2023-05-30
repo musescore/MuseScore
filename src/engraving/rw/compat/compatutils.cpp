@@ -38,10 +38,6 @@
 #include "libmscore/stafftextbase.h"
 #include "libmscore/playtechannotation.h"
 
-#include "rw/xmlreader.h"
-#include "rw/400/readcontext.h"
-#include "rw/400/tread.h"
-
 #include "types/string.h"
 
 #include "log.h"

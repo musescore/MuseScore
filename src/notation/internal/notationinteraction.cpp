@@ -78,7 +78,7 @@
 #include "libmscore/undo.h"
 #include "engraving/compat/dummyelement.h"
 
-#include "engraving/rw/400/tread.h"
+#include "engraving/rw/read400/tread.h"
 
 #include "masternotation.h"
 #include "scorecallbacks.h"

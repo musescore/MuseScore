@@ -30,7 +30,7 @@
 #include "../xmlwriter.h"
 
 #include "twrite.h"
-#include "../400/staffrw.h"
+#include "../read400/staffrw.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::write;

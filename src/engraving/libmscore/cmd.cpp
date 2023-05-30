@@ -33,7 +33,7 @@
 #include "style/style.h"
 
 #include "rw/xmlreader.h"
-#include "rw/400/readcontext.h"
+#include "rw/read400/readcontext.h"
 
 #include "accidental.h"
 #include "articulation.h"

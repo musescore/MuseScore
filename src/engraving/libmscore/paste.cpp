@@ -24,7 +24,7 @@
 
 #include "imimedata.h"
 
-#include "rw/400/tread.h"
+#include "rw/read400/tread.h"
 #include "types/typesconv.h"
 
 #include "articulation.h"

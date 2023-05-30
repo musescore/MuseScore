@@ -22,10 +22,6 @@
 
 #include "xmlreader.h"
 
-#include "libmscore/score.h"
-
-#include "400/readcontext.h"
-
 #include "log.h"
 
 using namespace mu;

@@ -75,36 +75,36 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/mscsaver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/mscsaver.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/writer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/writer.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/writecontext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/writecontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/twrite.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/twrite.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/connectorinfowriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/writer/connectorinfowriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/writer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/writer.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/writecontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/writecontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/twrite.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/twrite.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/connectorinfowriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/connectorinfowriter.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/rw/114/read114.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/114/read114.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read114/read114.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read114/read114.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/rw/206/read206.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/206/read206.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read206/read206.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read206/read206.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/rw/302/read302.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/302/read302.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read302/read302.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read302/read302.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/read400.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/read400.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/staffrw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/staffrw.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/measurerw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/measurerw.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/readcontext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/readcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/tread.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/tread.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/connectorinforeader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/connectorinforeader.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/read400.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/read400.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/staffrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/staffrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/measurerw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/measurerw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/readcontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/readcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/tread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/tread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/connectorinforeader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/connectorinforeader.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h

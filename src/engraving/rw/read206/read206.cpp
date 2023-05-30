@@ -101,7 +101,7 @@
 #include "../compat/readchordlisthook.h"
 #include "../compat/readstyle.h"
 
-#include "../400/tread.h"
+#include "../read400/tread.h"
 
 #include "log.h"
 
