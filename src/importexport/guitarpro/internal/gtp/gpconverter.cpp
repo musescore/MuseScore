@@ -934,8 +934,6 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
     auto convertKeySig = [](GPMasterBar::KeySig kS) {
         if (kS == GPMasterBar::KeySig::C_B) {
             return Key::C_B;
-        } else if (kS == GPMasterBar::KeySig::C_B) {
-            return Key::C_B;
         } else if (kS == GPMasterBar::KeySig::G_B) {
             return Key::G_B;
         } else if (kS == GPMasterBar::KeySig::D_B) {
@@ -967,14 +965,49 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
         }
     };
 
+    using KS = GPMasterBar::KeySig;
+
     Fraction tick = measure->tick();
-    auto scoreKeySig = convertKeySig(mB->keySig());
     size_t staves = _score->staves().size();
+
+    auto getNumSharps = [this](int key) {
+        if (key > 0) {
+            for (size_t i = 0; i < m_sharpsToKeyConverter.size(); ++i) {
+                if (m_sharpsToKeyConverter.at(i) == key) {
+                    return i;
+                }
+            }
+        } else {
+            for (size_t i = 0; i < m_sharpsToFlatKeysConverter.size(); ++i) {
+                if (m_sharpsToFlatKeysConverter.at(i) == key) {
+                    return i;
+                }
+            }
+        }
+        // Never should get here
+        return nidx;
+    };
 
     for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
         if (!tick.isZero() && _lastKeySigs[staffIdx] == mB->keySig()) {
             continue;
         }
+        int capoFret = _score->staff(staffIdx)->part()->capoFret();
+        int key = static_cast<int>(mB->keySig());
+        bool useFlats = mB->useFlats() || key < 0;
+        size_t numSharps = getNumSharps(key) + capoFret;
+        IF_ASSERT_FAILED(numSharps != nidx) {
+            LOGE() << "Unprocessable key for key signature";
+            numSharps = 0;
+        }
+        numSharps = static_cast<int>(numSharps) % 12;
+        if (useFlats) {
+            key = m_sharpsToFlatKeysConverter.at(numSharps);
+        } else {
+            key = m_sharpsToKeyConverter.at(numSharps);
+        }
+
+        auto scoreKeySig = convertKeySig(static_cast<KS>(key));
 
         Staff* staff = _score->staff(staffIdx);
         if (staff->staffType()->genTimesig()) {

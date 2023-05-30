@@ -251,7 +251,6 @@ private:
     std::vector<SLine*> m_trillElements;
 
     std::map<uint16_t, uint16_t > _drumExtension;
-
     Volta* _lastVolta = nullptr;
     int _lastDiagramIdx = -1;
 
@@ -265,6 +264,11 @@ private:
         int lowestBase = LOWEST_BASE;     // expected denominator
         static constexpr int LOWEST_BASE = 1024;
     } m_nextTupletInfo;
+
+    // Index is the number of sharps. Using flat keysigs for signatures with double sharps
+    std::vector<int> m_sharpsToKeyConverter{ 0, 1, 2, 3, 4, 5, 6, 7, -4, -3, -2, -1 };
+    // Index is the number of sharps. Using sharp keysigs for signatures with double flats
+    std::vector<int> m_sharpsToFlatKeysConverter{ 0, 1, 2, 3, 4, -7, -6, -5, -4, -3, -2, -1 };
 
     std::vector<Bend*> m_bends;
     std::vector<StretchedBend*> m_stretchedBends;
