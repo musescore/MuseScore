@@ -22,27 +22,11 @@
 
 #include "instrument.h"
 
-#include "infrastructure/htmlparser.h"
-#include "types/typesconv.h"
-
-#include "rw/xmlreader.h"
-#include "rw/xmlwriter.h"
-#include "rw/400/readcontext.h"
-#include "rw/400/tread.h"
-#include "rw/400/twrite.h"
-
-#include "compat/midi/event.h"
-//#include "compat/midi/midipatch.h"
-
 #include "drumset.h"
 #include "instrtemplate.h"
 #include "masterscore.h"
-#include "mscore.h"
-#include "part.h"
-#include "score.h"
 #include "stringdata.h"
 #include "textbase.h"
-#include "utils.h"
 
 #include "log.h"
 

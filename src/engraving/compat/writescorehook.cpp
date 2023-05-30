@@ -26,7 +26,7 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/excerpt.h"
 
-#include "rw/400/write400.h"
+#include "rw/writer/writer.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::compat;

@@ -26,7 +26,7 @@
 #include "302/read302.h"
 #include "400/read400.h"
 
-#include "400/write400.h"
+#include "writer/writer.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw;

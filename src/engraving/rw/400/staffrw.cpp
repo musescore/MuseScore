@@ -21,7 +21,7 @@
  */
 #include "staffrw.h"
 
-#include "rw/400/twrite.h"
+#include "rw/writer/twrite.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/measure.h"

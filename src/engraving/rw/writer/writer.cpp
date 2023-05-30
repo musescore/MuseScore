@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "write400.h"
+#include "writer.h"
 
 #include "libmscore/score.h"
 #include "libmscore/masterscore.h"
@@ -30,7 +30,7 @@
 #include "../xmlwriter.h"
 
 #include "twrite.h"
-#include "staffrw.h"
+#include "../400/staffrw.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;

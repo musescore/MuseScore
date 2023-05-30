@@ -25,15 +25,13 @@
 #include "mimedatautils.h"
 
 #include "engraving/rw/400/tread.h"
-#include "engraving/rw/400/twrite.h"
+#include "engraving/rw/writer/twrite.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/fret.h"
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/textbase.h"
 #include "engraving/libmscore/factory.h"
-
-#include "engraving/accessibility/accessibleitem.h"
 
 #include "view/widgets/palettewidget.h"
 

@@ -31,9 +31,6 @@
 #include "translation.h"
 #include "mimedatautils.h"
 
-#include "draw/types/geometry.h"
-
-#include "engraving/rw/400/writecontext.h"
 #include "engraving/layout/v0/tlayout.h"
 
 #include "engraving/libmscore/actionicon.h"
