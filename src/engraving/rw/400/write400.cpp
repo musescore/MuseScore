@@ -37,6 +37,7 @@ using namespace mu::engraving::rw400;
 
 bool Write400::writeScore(Score* score, io::IODevice* device, bool onlySelection, rw::WriteInOutData* out)
 {
+    UNUSED(out);
     XmlWriter xml(device);
     WriteContext ctx;
     xml.startDocument();
