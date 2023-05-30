@@ -40,7 +40,7 @@
 #include "bracket.h"
 #include "chord.h"
 #include "clef.h"
-#include "clef.h"
+#include "capo.h"
 #include "engravingitem.h"
 #include "excerpt.h"
 #include "fret.h"
@@ -144,6 +144,17 @@ void updateNoteLines(Segment* segment, track_idx_t track)
                 }
             }
         }
+    }
+}
+
+static void updateStaffTextCache(const StaffTextBase* text, Score* score)
+{
+    TRACEFUNC;
+
+    if (text->isCapo()) {
+        score->updateCapo();
+    } else if (text->swing()) {
+        score->updateSwing();
     }
 }
 
@@ -859,7 +870,7 @@ void AddElement::undo(EditData*)
     }
 
     if (element->isStaffTextBase()) {
-        score->updateSwing();
+        updateStaffTextCache(toStaffTextBase(element), score);
     }
 
     endUndoRedo(true);
@@ -878,7 +889,7 @@ void AddElement::redo(EditData*)
     }
 
     if (element->isStaffTextBase()) {
-        score->updateSwing();
+        updateStaffTextCache(toStaffTextBase(element), score);
     }
 
     endUndoRedo(false);
@@ -1006,10 +1017,8 @@ void RemoveElement::undo(EditData*)
     }
 
     if (element->isStaffTextBase()) {
-        score->updateSwing();
-    }
-
-    if (element->isChordRest()) {
+        updateStaffTextCache(toStaffTextBase(element), score);
+    } else if (element->isChordRest()) {
         if (element->isChord()) {
             Chord* chord = toChord(element);
             for (Note* note : chord->notes()) {
@@ -1037,10 +1046,8 @@ void RemoveElement::redo(EditData*)
     }
 
     if (element->isStaffTextBase()) {
-        score->updateSwing();
-    }
-
-    if (element->isChordRest()) {
+        updateStaffTextCache(toStaffTextBase(element), score);
+    } else if (element->isChordRest()) {
         undoRemoveTuplet(toChordRest(element));
         if (element->isChord()) {
             Chord* chord = toChord(element);
@@ -1396,7 +1403,7 @@ void ChangeElement::flip(EditData*)
     }
 
     if (newElement->isStaffTextBase()) {
-        score->updateSwing();
+        updateStaffTextCache(toStaffTextBase(newElement), score);
     }
 
     std::swap(oldElement, newElement);
@@ -2436,6 +2443,11 @@ void ChangeProperty::flip(EditData*)
 
     element->setProperty(id, property);
     element->setPropertyFlags(id, flags);
+
+    if (element->isStaffTextBase()) {
+        updateStaffTextCache(toStaffTextBase(element), element->score());
+    }
+
     property = v;
     flags = ps;
 }
