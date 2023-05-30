@@ -91,7 +91,7 @@
           </Drum>
         <Drum pitch="35">
           <head>normal</head>
-          <line>7</line>
+          <line>8</line>
           <voice>0</voice>
           <name>Acoustic Bass Drum</name>
           <stem>1</stem>

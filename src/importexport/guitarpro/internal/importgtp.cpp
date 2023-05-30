@@ -305,7 +305,7 @@ void GuitarPro::initGuitarProDrumset()
     gpDrumset->drum(32) = DrumInstrument(TConv::userName(DrumNum(32)), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
     gpDrumset->drum(33) = DrumInstrument(TConv::userName(DrumNum(33)), NoteHeadGroup::HEAD_CROSS, 3, DirectionV::UP);
     gpDrumset->drum(34) = DrumInstrument(TConv::userName(DrumNum(34)), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(35) = DrumInstrument(TConv::userName(DrumNum(35)), NoteHeadGroup::HEAD_NORMAL, 7, DirectionV::UP);
+    gpDrumset->drum(35) = DrumInstrument(TConv::userName(DrumNum(35)), NoteHeadGroup::HEAD_NORMAL, 8, DirectionV::UP);
     gpDrumset->drum(36) = DrumInstrument(TConv::userName(DrumNum(36)), NoteHeadGroup::HEAD_NORMAL, 7, DirectionV::UP);
     gpDrumset->drum(37) = DrumInstrument(TConv::userName(DrumNum(37)), NoteHeadGroup::HEAD_CROSS, 3, DirectionV::UP);
     gpDrumset->drum(38) = DrumInstrument(TConv::userName(DrumNum(38)), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
