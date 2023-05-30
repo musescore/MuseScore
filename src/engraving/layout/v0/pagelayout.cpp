@@ -311,7 +311,10 @@ void PageLayout::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                                 Chord* c1 = t->chord1();
                                 Chord* c2 = t->chord2();
                                 if (t->twoNotes() && c1 && c2 && (c1->staffMove() || c2->staffMove())) {
-                                    TLayout::layout(t, ctx);
+                                    // For cross-staff tremolo, vertical justification may have changed
+                                    // staff distances, and therefore also stem directions, so re-compute them
+                                    ChordLayout::computeUp(c1, ctx); // This will also call a tremolo layout
+                                    ChordLayout::computeUp(c2, ctx);
                                 }
                             }
                             // Fingering and articulations on top of cross-staff beams must be laid out here
