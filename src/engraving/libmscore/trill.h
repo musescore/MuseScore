@@ -96,6 +96,7 @@ public:
     EngravingObjectList scanChildren() const override;
 
     Trill* clone() const override { return new Trill(*this); }
+    EngravingItem* linkedClone() override;
 
     LineSegment* createLineSegment(System* parent) override;
     void remove(EngravingItem*) override;
