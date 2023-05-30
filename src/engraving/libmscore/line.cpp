@@ -110,7 +110,7 @@ PointF LineSegment::leftAnchorPosition(const double& systemPositionY) const
 PointF LineSegment::rightAnchorPosition(const double& systemPositionY) const
 {
     if (isMiddleType() || isBeginType()) {
-        return PointF(system()->lastNoteRestSegmentX(true), systemPositionY);
+        return PointF(system()->endingXForOpenEndedLines(), systemPositionY);
     }
 
     PointF result;
@@ -1139,13 +1139,13 @@ SpannerSegment* SLine::layoutSystem(System* system)
         System* s;
         PointF p1 = linePos(Grip::START, &s);
         lineSegm->setPos(p1);
-        double x2 = system->lastNoteRestSegmentX(true);
+        double x2 = system->endingXForOpenEndedLines();
         lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
     }
     break;
     case SpannerSegmentType::MIDDLE: {
         double x1 = system->firstNoteRestSegmentX(true);
-        double x2 = system->lastNoteRestSegmentX(true);
+        double x2 = system->endingXForOpenEndedLines();
         System* s;
         PointF p1 = linePos(Grip::START, &s);
         lineSegm->setPos(PointF(x1, p1.y()));

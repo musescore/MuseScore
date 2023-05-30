@@ -1883,42 +1883,30 @@ double System::firstNoteRestSegmentX(bool leading)
 }
 
 //---------------------------------------------------------
-//   lastNoteRestSegmentX
-//    in System() coordinates
-//    returns the position of the last note or rest,
-//    or the position just before the first non-chordrest segment
+//   endingXForOpenEndedLines
+//    in System() coordinates returns the end point for
+//    open ended (i.e. cross-system) lines
 //---------------------------------------------------------
 
-double System::lastNoteRestSegmentX(bool trailing)
+double System::endingXForOpenEndedLines() const
 {
     double margin = score()->spatium() / 4;  // TODO: this can be parameterizable
-    //for (const MeasureBase* mb : measures()) {
-    for (auto measureBaseIter = measures().rbegin(); measureBaseIter != measures().rend(); measureBaseIter++) {
-        if ((*measureBaseIter)->isMeasure()) {
-            const Measure* measure = static_cast<const Measure*>(*measureBaseIter);
-            for (const Segment* seg = measure->last(); seg; seg = seg->prev()) {
-                if (seg->isChordRestType()) {
-                    double noteRestPos = seg->measure()->pos().x() + seg->pos().x();
-                    if (!trailing) {
-                        return noteRestPos;
-                    }
+    double systemEndX = bbox().width();
 
-                    // last CR found; find next segment after this one
-                    seg = seg->nextActive();
-                    while (seg && seg->allElementsInvisible()) {
-                        seg = seg->nextActive();
-                    }
-                    if (seg) {
-                        return std::max(seg->measure()->pos().x() + seg->pos().x() - margin, noteRestPos);
-                    } else {
-                        return bbox().x() - margin;
-                    }
-                }
-            }
-        }
+    Measure* lastMeas = lastMeasure();
+    if (!lastMeas) {
+        return systemEndX - margin;
     }
-    LOGD("lastNoteRestSegmentX: did not find segment");
-    return margin;
+
+    Segment* lastSeg = lastMeas->last();
+    while (lastSeg && !lastSeg->isType(SegmentType::BarLineType)) {
+        lastSeg = lastSeg->prevEnabled();
+    }
+    if (!lastSeg) {
+        return systemEndX - margin;
+    }
+
+    return lastSeg->x() + lastMeas->x() - margin;
 }
 
 //---------------------------------------------------------

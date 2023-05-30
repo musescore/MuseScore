@@ -36,6 +36,7 @@
 #include "clef.h"
 #include "engravingitem.h"
 #include "factory.h"
+#include "glissando.h"
 #include "harmony.h"
 #include "harppedaldiagram.h"
 #include "hook.h"
@@ -2672,7 +2673,7 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
         }
     }
 
-    // Allocate space to ensure minimum length of "dangling" ties at start of system
+    // Allocate space to ensure minimum length of "dangling" ties or gliss at start of system
     if (systemHeaderGap && ns && ns->isChordRestType()) {
         for (EngravingItem* e : ns->elist()) {
             if (!e || !e->isChord()) {
@@ -2680,15 +2681,25 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
             }
             double headerTieMargin = score()->styleMM(Sid::HeaderToLineStartDistance);
             for (Note* note : toChord(e)->notes()) {
-                if (!note->tieBack() || note->lineAttachPoints().empty()) {
+                bool tieOrGlissBack = note->spannerBack().size() || note->tieBack();
+                if (!tieOrGlissBack || note->lineAttachPoints().empty()) {
                     continue;
+                }
+                const EngravingItem* attachedLine = note->lineAttachPoints().front().line();
+                double minLength = 0.0;
+                if (attachedLine->isTie()) {
+                    minLength = score()->styleMM(Sid::MinTieLength);
+                } else if (attachedLine->isGlissando()) {
+                    bool straight = toGlissando(attachedLine)->glissandoType() == GlissandoType::STRAIGHT;
+                    minLength = straight ? score()->styleMM(Sid::MinStraightGlissandoLength)
+                                : score()->styleMM(Sid::MinWigglyGlissandoLength);
                 }
                 double tieStartPointX = minRight() + headerTieMargin;
                 double notePosX = w + note->pos().x() + toChord(e)->pos().x() + note->headWidth() / 2;
                 double tieEndPointX = notePosX + note->lineAttachPoints().at(0).pos().x();
                 double tieLength = tieEndPointX - tieStartPointX;
-                if (tieLength < score()->styleMM(Sid::MinTieLength)) {
-                    w += score()->styleMM(Sid::MinTieLength) - tieLength;
+                if (tieLength < minLength) {
+                    w += minLength - tieLength;
                 }
             }
         }

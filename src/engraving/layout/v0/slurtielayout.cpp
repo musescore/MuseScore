@@ -419,7 +419,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
             }
         }
 
-        p2 = PointF(system->lastNoteRestSegmentX(true), y);
+        p2 = PointF(system->endingXForOpenEndedLines(), y);
 
         // adjust for ties at the end of the system
         ChordRest* cr = system->lastChordRest(item->track());
@@ -1045,7 +1045,7 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
     int n;
     if (sPos.system1 != sPos.system2) {
         n = 2;
-        sPos.p2 = PointF(system->lastNoteRestSegmentX(true), sPos.p1.y());
+        sPos.p2 = PointF(system->endingXForOpenEndedLines(), sPos.p1.y());
     } else {
         n = 1;
     }

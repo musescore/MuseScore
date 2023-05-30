@@ -469,6 +469,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::SlurMidWidth,            "slurMidWidth",            Spatium(.21) },
     { Sid::SlurDottedWidth,         "slurDottedWidth",         Spatium(.10) },
     { Sid::MinTieLength,            "minTieLength",            Spatium(1.0) },
+    { Sid::MinStraightGlissandoLength, "minStraightGlissandoLength", Spatium(1.2) },
+    { Sid::MinWigglyGlissandoLength, "minWigglyGlissandoLength", Spatium(2.0) },
     { Sid::SlurMinDistance,         "slurMinDistance",         Spatium(0.5) },
     { Sid::HeaderToLineStartDistance,   "headerSlurTieDistance",   Spatium(1.0) },
 

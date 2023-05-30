@@ -215,7 +215,7 @@ public:
     Spacer* downSpacer(staff_idx_t staffIdx) const;
 
     double firstNoteRestSegmentX(bool leading = false);
-    double lastNoteRestSegmentX(bool trailing = false);
+    double endingXForOpenEndedLines() const;
     ChordRest* lastChordRest(track_idx_t track);
     ChordRest* firstChordRest(track_idx_t track);
 

@@ -481,6 +481,8 @@ enum class Sid {
     SlurMidWidth,
     SlurDottedWidth,
     MinTieLength,
+    MinStraightGlissandoLength,
+    MinWigglyGlissandoLength,
     SlurMinDistance,
     HeaderToLineStartDistance, // determines start point of "dangling" lines (ties, gliss, lyrics...) at start of system
 

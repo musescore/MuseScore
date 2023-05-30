@@ -2701,10 +2701,7 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, La
                 if (sp->isGlissando()) {
                     Glissando* gliss = toGlissando(sp);
                     if (gliss->startElement() && gliss->startElement()->isNote()) {
-                        Note* startNote = toNote(gliss->startElement());
-                        if (startNote->findMeasure() == chord->measure()) {
-                            TLayout::layout(gliss, ctx); // line attach points are updated here
-                        }
+                        TLayout::layout(gliss, ctx);     // line attach points are updated here
                     }
                 }
             }
