@@ -139,7 +139,7 @@ FocusScope {
             StyledTabButton {
                 text: qsTrc("project", "New & recent")
 
-                navigation.name: "New and recent"
+                navigation.name: "NewAndRecent"
                 navigation.panel: navTabPanel
                 navigation.column: 1
             }
@@ -147,7 +147,7 @@ FocusScope {
             StyledTabButton {
                 text: qsTrc("project", "My online scores")
 
-                navigation.name: "My online scores"
+                navigation.name: "MyOnlineScores"
                 navigation.panel: navTabPanel
                 navigation.column: 2
             }
