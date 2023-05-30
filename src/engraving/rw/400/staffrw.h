@@ -31,7 +31,7 @@ class XmlWriter;
 class MeasureBase;
 }
 
-namespace mu::engraving::rw400 {
+namespace mu::engraving::read400 {
 class StaffRW
 {
 public:

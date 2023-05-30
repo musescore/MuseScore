@@ -36,14 +36,14 @@ static const int LATEST_VERSION(400);
 IReaderPtr RWRegister::reader(int version)
 {
     if (version <= 114) {
-        return std::make_shared<compat::Read114>();
+        return std::make_shared<read114::Read114>();
     } else if (version <= 207) {
-        return std::make_shared<compat::Read206>();
+        return std::make_shared<read206::Read206>();
     } else if (version < 400 || MScore::testMode) {
-        return std::make_shared<compat::Read302>();
+        return std::make_shared<read302::Read302>();
     }
 
-    return std::make_shared<rw400::Read400>();
+    return std::make_shared<read400::Read400>();
 }
 
 IReaderPtr RWRegister::latestReader()

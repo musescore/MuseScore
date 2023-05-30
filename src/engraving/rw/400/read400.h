@@ -29,7 +29,7 @@ class Score;
 class XmlReader;
 }
 
-namespace mu::engraving::rw400 {
+namespace mu::engraving::read400 {
 class ReadContext;
 class Read400 : public rw::IReader
 {

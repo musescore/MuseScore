@@ -25,7 +25,7 @@
 
 #include "../ireader.h"
 
-namespace mu::engraving::compat {
+namespace mu::engraving::read114 {
 class Read114 : public rw::IReader
 {
 public:

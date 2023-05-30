@@ -202,9 +202,9 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
             if (!element) {
                 e.unknown();
             } else {
-                rw400::ReadContext ctx;
+                read400::ReadContext ctx;
                 ctx.setPasteMode(pasteMode);
-                rw400::TRead::readItem(element.get(), e, ctx);
+                read400::TRead::readItem(element.get(), e, ctx);
                 PaletteCompat::migrateOldPaletteItemIfNeeded(element, gpaletteScore);
                 element->styleChanged();
 

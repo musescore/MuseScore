@@ -34,7 +34,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rw400;
+using namespace mu::engraving::read400;
 
 ReadContext::ReadContext(Score* score)
     : m_score(score)
@@ -452,7 +452,7 @@ void ReadContext::removeConnector(const ConnectorInfoReader* c)
     }
 }
 
-void ReadContext::addConnectorInfoLater(std::shared_ptr<rw400::ConnectorInfoReader> c)
+void ReadContext::addConnectorInfoLater(std::shared_ptr<read400::ConnectorInfoReader> c)
 {
     _pendingConnectors.push_back(c);
 }

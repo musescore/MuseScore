@@ -1019,7 +1019,7 @@ ElementType EngravingItem::readType(XmlReader& e, PointF* dragOffset, Fraction* 
 EngravingItem* EngravingItem::readMimeData(Score* score, const ByteArray& data, PointF* dragOffset, Fraction* duration)
 {
     XmlReader e(data);
-    rw400::ReadContext ctx(score);
+    read400::ReadContext ctx(score);
     ctx.setPasteMode(true);
 
     const ElementType type = EngravingItem::readType(e, dragOffset, duration);
@@ -1030,7 +1030,7 @@ EngravingItem* EngravingItem::readMimeData(Score* score, const ByteArray& data, 
 
     EngravingItem* el = Factory::createItem(type, score->dummy(), false);
     if (el) {
-        rw400::TRead::readItem(el, e, ctx);
+        read400::TRead::readItem(el, e, ctx);
     }
 
     return el;

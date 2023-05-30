@@ -38,7 +38,7 @@
 using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
-using namespace mu::engraving::rw400;
+using namespace mu::engraving::read400;
 
 namespace mu::engraving {
 //---------------------------------------------------------

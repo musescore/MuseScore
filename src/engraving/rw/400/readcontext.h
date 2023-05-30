@@ -55,7 +55,7 @@ namespace mu::engraving::compat {
 class DummyElement;
 }
 
-namespace mu::engraving::rw400 {
+namespace mu::engraving::read400 {
 struct SpannerValues {
     int spannerId;
     Fraction tick2;
@@ -172,7 +172,7 @@ public:
     std::map<int, std::vector<std::pair<LinkedObjects*, Location> > >& staffLinkedElements();
     std::map<int, LinkedObjects*>& linkIds();
 
-    void addConnectorInfoLater(std::shared_ptr<rw400::ConnectorInfoReader> c);   // add connector info to be checked after calling checkConnectors()
+    void addConnectorInfoLater(std::shared_ptr<read400::ConnectorInfoReader> c);   // add connector info to be checked after calling checkConnectors()
     void checkConnectors();
     void reconnectBrokenConnectors();
 
@@ -190,8 +190,8 @@ private:
     void doCheckConnectors();
     void doReconnectBrokenConnectors();
 
-    void addConnectorInfo(std::shared_ptr<rw400::ConnectorInfoReader>);
-    void removeConnector(const rw400::ConnectorInfoReader*);   // Removes the whole ConnectorInfo chain from the connectors list.
+    void addConnectorInfo(std::shared_ptr<read400::ConnectorInfoReader>);
+    void removeConnector(const read400::ConnectorInfoReader*);   // Removes the whole ConnectorInfo chain from the connectors list.
 
     Score* m_score = nullptr;
     ReadContext* m_masterCtx = nullptr;
@@ -203,8 +203,8 @@ private:
 
     std::map<int, LinkedObjects*> _elinks;       // for reading old files (< 3.01)
 
-    std::vector<std::shared_ptr<rw400::ConnectorInfoReader> > _connectors;
-    std::vector<std::shared_ptr<rw400::ConnectorInfoReader> > _pendingConnectors;  // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
+    std::vector<std::shared_ptr<read400::ConnectorInfoReader> > _connectors;
+    std::vector<std::shared_ptr<read400::ConnectorInfoReader> > _pendingConnectors;  // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
 
     Fraction _tick             { Fraction(0, 1) };
     Fraction _tickOffset       { Fraction(0, 1) };

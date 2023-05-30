@@ -142,7 +142,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::rw400;
+using namespace mu::engraving::read400;
 
 using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
                                  BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,  HBox, VBox, FBox, TBox, Bracket, Breath,
@@ -274,7 +274,7 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(int(0));
     case P_TYPE::GROUPS: {
         Groups g;
-        rw400::TRead::read(&g, e, ctx);
+        read400::TRead::read(&g, e, ctx);
         return PropertyValue::fromValue(g.nodes());
     }
     case P_TYPE::DURATION_TYPE_WITH_DOTS:
@@ -1607,7 +1607,7 @@ bool TRead::readProperties(Ambitus* a, XmlReader& e, ReadContext& ctx)
         while (e.readNextStartElement()) {
             if (e.name() == "Accidental") {
                 if (a->score()->mscVersion() < 301) {
-                    compat::Read206::readAccidental206(a->topAccidental(), e, ctx);
+                    read206::Read206::readAccidental206(a->topAccidental(), e, ctx);
                 } else {
                     TRead::read(a->topAccidental(), e, ctx);
                 }
@@ -1619,7 +1619,7 @@ bool TRead::readProperties(Ambitus* a, XmlReader& e, ReadContext& ctx)
         while (e.readNextStartElement()) {
             if (e.name() == "Accidental") {
                 if (a->score()->mscVersion() < 301) {
-                    compat::Read206::readAccidental206(a->bottomAccidental(), e, ctx);
+                    read206::Read206::readAccidental206(a->bottomAccidental(), e, ctx);
                 } else {
                     TRead::read(a->bottomAccidental(), e, ctx);
                 }
@@ -1826,7 +1826,7 @@ bool TRead::readProperties(Articulation* a, XmlReader& xml, ReadContext& ctx)
         } else {
             SymId id = SymNames::symIdByName(s);
             if (id == SymId::noSym) {
-                id = compat::Read206::articulationNames2SymId206(s); // compatibility hack for "old" 3.0 scores
+                id = read206::Read206::articulationNames2SymId206(s); // compatibility hack for "old" 3.0 scores
             }
             if (id == SymId::noSym || s == "ornamentMordentInverted") {   // SMuFL < 1.30
                 id = SymId::ornamentMordent;
@@ -3131,7 +3131,7 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
             const AsciiStringView t(e.name());
             if (t == "Event") {
                 NoteEvent ne;
-                rw400::TRead::read(&ne, e, ctx);
+                read400::TRead::read(&ne, e, ctx);
                 playEvents.push_back(ne);
             } else {
                 e.unknown();
@@ -3677,7 +3677,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "isStaffVisible") {
         s->setVisible(e.readBool());
     } else if (tag == "keylist") {
-        rw400::TRead::read(s->keyList(), e, ctx);
+        read400::TRead::read(s->keyList(), e, ctx);
     } else if (tag == "bracket") {
         int col = e.intAttribute("col", -1);
         if (col == -1) {

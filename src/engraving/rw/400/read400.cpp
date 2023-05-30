@@ -37,7 +37,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::rw400;
+using namespace mu::engraving::read400;
 
 Err Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
 {
@@ -100,7 +100,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
             e.skipCurrentElement();
         } else if (tag == "Audio") {
             score->_audio = new Audio;
-            rw400::TRead::read(score->_audio, e, ctx);
+            read400::TRead::read(score->_audio, e, ctx);
         } else if (tag == "showOmr") {
             e.skipCurrentElement();
         } else if (tag == "playMode") {
@@ -192,7 +192,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
                    || (tag == "Slur")
                    || (tag == "Pedal")) {
             Spanner* s = toSpanner(Factory::createItemByName(tag, score->dummy()));
-            rw400::TRead::readItem(s, e, ctx);
+            read400::TRead::readItem(s, e, ctx);
             score->addSpanner(s);
         } else if (tag == "Excerpt") {
             // Since version 400, the Excerpts are stored in a separate file

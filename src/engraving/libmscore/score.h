@@ -60,7 +60,15 @@ namespace mu::engraving {
 class IMimeData;
 }
 
-namespace mu::engraving::rw400 {
+namespace mu::engraving::read114 {
+class Read114;
+}
+
+namespace mu::engraving::read302 {
+class Read302;
+}
+
+namespace mu::engraving::read400 {
 class Read400;
 class Write400;
 class ReadContext;
@@ -73,7 +81,6 @@ class WriteContext;
 }
 
 namespace mu::engraving::compat {
-class Read302;
 class WriteScoreHook;
 }
 
@@ -384,8 +391,8 @@ class Score : public EngravingObject
 
 private:
 
-    friend class compat::Read302;
-    friend class rw400::Read400;
+    friend class read302::Read302;
+    friend class read400::Read400;
     friend class write::Writer;
     friend class layout::v0::ScoreLayout;
 
@@ -941,7 +948,7 @@ public:
     void styleChanged() override;
 
     void cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
-    bool pasteStaff(XmlReader&, rw400::ReadContext& ctx, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
+    bool pasteStaff(XmlReader&, read400::ReadContext& ctx, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
     void pasteSymbols(XmlReader& e, ChordRest* dst);
     void renderMidi(EventMap* events, const MidiRenderer::Context& ctx, bool expandRepeats);
 

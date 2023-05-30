@@ -29,7 +29,7 @@
 #include "instrument.h"
 #include "types/types.h"
 
-namespace mu::engraving::compat {
+namespace mu::engraving::read206 {
 class Read206;
 }
 
@@ -70,22 +70,6 @@ class Part final : public EngravingObject
 {
     OBJECT_ALLOCATOR(engraving, Part)
     DECLARE_CLASSOF(ElementType::PART)
-
-    String _partName;              ///< used in tracklist (mixer)
-    InstrumentList _instruments;
-    std::vector<Staff*> _staves;
-    ID _id = INVALID_ID;             ///< used for MusicXml import
-    bool _show = false;              ///< show part in partitur if true
-    bool _soloist = false;           ///< used in score ordering
-    int _capoFret = 0;
-
-    int _color = 0;                  ///User specified color for helping to label parts
-
-    PreferSharpFlat _preferSharpFlat = PreferSharpFlat::DEFAULT;
-
-    std::map<int, HarpPedalDiagram*> harpDiagrams;
-
-    friend class compat::Read206;
 
 public:
     static const Fraction MAIN_INSTRUMENT_TICK;
@@ -203,6 +187,23 @@ public:
     // Allows not reading the same instrument twice on importing 2.X scores.
     // TODO: do we need instruments info in parts at all?
     friend void readPart206(Part*, XmlReader&);
+
+    std::map<int, HarpPedalDiagram*> harpDiagrams;
+
+private:
+    friend class read206::Read206;
+
+    String _partName;              ///< used in tracklist (mixer)
+    InstrumentList _instruments;
+    std::vector<Staff*> _staves;
+    ID _id = INVALID_ID;             ///< used for MusicXml import
+    bool _show = false;              ///< show part in partitur if true
+    bool _soloist = false;           ///< used in score ordering
+    int _capoFret = 0;
+
+    int _color = 0;                  ///User specified color for helping to label parts
+
+    PreferSharpFlat _preferSharpFlat = PreferSharpFlat::DEFAULT;
 };
 } // namespace mu::engraving
 #endif

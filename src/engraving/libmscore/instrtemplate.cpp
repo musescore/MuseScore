@@ -515,7 +515,7 @@ void InstrumentTemplate::read(XmlReader& e)
             trait.isHiddenOnScore = traitName.contains(u'(') && traitName.contains(u')');
             trait.name = traitName.remove(u'*').remove(u'(').remove(u')');
         } else if (tag == "StringData") {
-            rw400::TRead::read(&stringData, e);
+            read400::TRead::read(&stringData, e);
         } else if (tag == "drumset") {
             useDrumset = e.readInt();
         } else if (tag == "Drum") {
@@ -528,17 +528,17 @@ void InstrumentTemplate::read(XmlReader& e)
             drumset->load(e);
         } else if (tag == "MidiAction") {
             NamedEventList a;
-            rw400::TRead::read(&a, e);
+            read400::TRead::read(&a, e);
             midiActions.push_back(a);
         } else if (tag == "Channel" || tag == "channel") {
             InstrChannel a;
             InstrumentTrackId tId;
-            rw400::ReadContext rctx(nullptr);
-            rw400::TRead::read(&a, e, rctx, nullptr, tId);
+            read400::ReadContext rctx(nullptr);
+            read400::TRead::read(&a, e, rctx, nullptr, tId);
             channel.push_back(a);
         } else if (tag == "Articulation") {
             MidiArticulation a;
-            rw400::TRead::read(&a, e);
+            read400::TRead::read(&a, e);
             size_t n = midiArticulations.size();
             size_t i;
             for (i = 0; i < n; ++i) {
@@ -685,7 +685,7 @@ bool loadInstrumentTemplates(const io::path_t& instrTemplatesPath)
                     // read global articulation
                     String name(e.attribute("name"));
                     MidiArticulation a = searchArticulation(name);
-                    rw400::TRead::read(&a, e);
+                    read400::TRead::read(&a, e);
                     midiArticulations.push_back(a);
                 } else if (tag == "Genre") {
                     String idGenre(e.attribute("id"));

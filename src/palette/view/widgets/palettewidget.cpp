@@ -884,19 +884,19 @@ void PaletteWidget::dropEvent(QDropEvent* event)
         QByteArray dta(event->mimeData()->data(mu::commonscene::MIME_SYMBOL_FORMAT));
         ByteArray ba = ByteArray::fromQByteArrayNoCopy(dta);
         XmlReader xml(ba);
-        rw400::ReadContext rctx;
+        read400::ReadContext rctx;
         PointF dragOffset;
         Fraction duration;
         ElementType type = EngravingItem::readType(xml, &dragOffset, &duration);
 
         if (type == ElementType::SYMBOL) {
             auto symbol = std::make_shared<Symbol>(gpaletteScore->dummy());
-            rw400::TRead::read(symbol.get(), xml, rctx);
+            read400::TRead::read(symbol.get(), xml, rctx);
             element = symbol;
         } else {
             element = std::shared_ptr<EngravingItem>(Factory::createItem(type, gpaletteScore->dummy()));
             if (element) {
-                rw400::TRead::readItem(element.get(), xml, rctx);
+                read400::TRead::readItem(element.get(), xml, rctx);
                 element->setTrack(0);
 
                 if (element->isActionIcon()) {
