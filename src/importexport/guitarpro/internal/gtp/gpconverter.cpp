@@ -1911,8 +1911,6 @@ void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
             LOGE() << "wrong slide type";
             return ChordLineType::NOTYPE;
         }
-
-        return ChordLineType::NOTYPE;
     };
 
     for (size_t flagIdx = 2; flagIdx < gpnote->slides().size(); flagIdx++) {
