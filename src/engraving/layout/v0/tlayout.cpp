@@ -2249,23 +2249,6 @@ void TLayout::layout(Glissando* item, LayoutContext& ctx)
     // adjust ending point of last segment
     segm2->setPos2(segm2->ipos2() + offs2);
 
-    // FINAL SYSTEM-INITIAL NOTE
-    // if the last gliss. segment attaches to a system-initial note, some extra width has to be added
-    if (cr2->segment()->measure()->isFirstInSystem() && cr2->rtick().isZero()
-        // but ignore graces after, as they are not the first note of the system,
-        // even if their segment is the first segment of the system
-        && !(cr2->noteType() == NoteType::GRACE8_AFTER
-             || cr2->noteType() == NoteType::GRACE16_AFTER || cr2->noteType() == NoteType::GRACE32_AFTER)
-        // also ignore if cr1 is a child of cr2, which means cr1 is a grace-before of cr2
-        && !(cr1->explicitParent() == cr2)) {
-        // in theory we should be reserving space for the gliss prior to the first note of a system
-        // but in practice we are not (and would be difficult to get right in current layout algorithms)
-        // so, a compromise is to at least use the available space to the left -
-        // the default layout for lines left a margin after the header
-        segm2->movePosX(-_spatium);
-        segm2->rxpos2()+= _spatium;
-    }
-
     // INTERPOLATION OF INTERMEDIATE POINTS
     // This probably belongs to SLine class itself; currently it does not seem
     // to be needed for anything else than Glissando, though

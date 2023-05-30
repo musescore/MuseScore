@@ -3740,7 +3740,6 @@ double Note::computePadding(const EngravingItem* nextItem) const
         // This is where space for minTieLength and minGlissandoLength is allocated by making sure
         // there is enough distance between the attach points
         double minEndPointsDistance = 0.0;
-        const double minGlissandoLength = 1.2 * spatium(); // TODO: style settings
         for (LineAttachPoint thisLAP : lineAttachPoints()) {
             for (LineAttachPoint nextLAP : toNote(nextItem)->lineAttachPoints()) {
                 if (thisLAP.line() != nextLAP.line()) {
@@ -3750,6 +3749,9 @@ double Note::computePadding(const EngravingItem* nextItem) const
                     minEndPointsDistance = score()->styleMM(Sid::MinTieLength);
                 }
                 if (thisLAP.line()->isGlissando()) {
+                    bool straight = toGlissando(thisLAP.line())->glissandoType() == GlissandoType::STRAIGHT;
+                    double minGlissandoLength = straight ? score()->styleMM(Sid::MinStraightGlissandoLength)
+                                                : score()->styleMM(Sid::MinWigglyGlissandoLength);
                     minEndPointsDistance = minGlissandoLength;
                 }
                 double lapPadding = (thisLAP.pos().x() - headWidth()) + minEndPointsDistance - nextLAP.pos().x();
