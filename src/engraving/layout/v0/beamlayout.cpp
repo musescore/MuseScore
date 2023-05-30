@@ -928,6 +928,7 @@ void BeamLayout::createBeamSegments(Beam* item, const std::vector<ChordRest*>& c
 
     bool levelHasBeam = false;
     int level = 0;
+    constexpr size_t noLastChord = std::numeric_limits<size_t>::max();
     do {
         levelHasBeam = false;
         ChordRest* startCr = nullptr;
@@ -935,31 +936,42 @@ void BeamLayout::createBeamSegments(Beam* item, const std::vector<ChordRest*>& c
         bool breakBeam = false;
         bool previousBreak32 = false;
         bool previousBreak64 = false;
+        size_t lastChordIndex = noLastChord;
 
         for (size_t i = 0; i < chordRests.size(); i++) {
             ChordRest* chordRest = chordRests[i];
             ChordRest* prevChordRest = i < 1 ? nullptr : chordRests[i - 1];
+            ChordRest* nextChordRest = i + 1 >= chordRests.size() ? nullptr : chordRests[i + 1];
 
             if (level < chordRest->beams()) {
                 levelHasBeam = true;
             }
             bool isBroken32 = false;
             bool isBroken64 = false;
+
             // updates isBroken32 and isBroken64
             item->calcBeamBreaks(chordRest, prevChordRest, level, isBroken32, isBroken64);
             breakBeam = isBroken32 || isBroken64;
 
             if (level < chordRest->beams() && !breakBeam) {
                 endCr = chordRest;
-                if (!startCr) {
+                if (!startCr || (startCr->isRest() && startCr != item->elements().front())) {
                     startCr = chordRest;
                 }
             } else {
+                size_t beamletIndex = static_cast<size_t>(i) - 1;
+                if (lastChordIndex < item->elements().size() && (chordRest->isRest() || (endCr && endCr->isRest()))) {
+                    // we broke the beam on this chordrest, but the last cr of the beam segment can't end on a rest
+                    // so it ends on lastChord
+                    endCr = toChordRest(item->elements()[lastChordIndex]);
+                    beamletIndex = lastChordIndex;
+                    lastChordIndex = noLastChord;
+                }
                 if (startCr && endCr) {
                     if (startCr == endCr && startCr->isChord()) {
                         bool isBeamletBefore = calcIsBeamletBefore(item,
                                                                    toChord(startCr),
-                                                                   static_cast<int>(i) - 1,
+                                                                   beamletIndex,
                                                                    level,
                                                                    previousBreak32,
                                                                    previousBreak64);
@@ -974,6 +986,9 @@ void BeamLayout::createBeamSegments(Beam* item, const std::vector<ChordRest*>& c
             }
             previousBreak32 = isBroken32;
             previousBreak64 = isBroken64;
+            if (chordRest && chordRest->isChord()) {
+                lastChordIndex = i;
+            }
         }
 
         // if the beam ends on the last chord
