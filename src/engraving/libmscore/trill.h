@@ -100,6 +100,8 @@ public:
     LineSegment* createLineSegment(System* parent) override;
     void remove(EngravingItem*) override;
 
+    void setTrack(track_idx_t n) override;
+
     void setTrillType(TrillType tt);
     TrillType trillType() const { return _trillType; }
     void setOrnamentStyle(OrnamentStyle val) { _ornamentStyle = val; }
