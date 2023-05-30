@@ -43,7 +43,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::rw400;
+using namespace mu::engraving::read400;
 
 //---------------------------------------------------------
 //   ConnectorInfoReader
@@ -106,7 +106,7 @@ bool ConnectorInfoReader::read()
                 return false;
             }
             m_connector->setTrack(_currentLoc.track());
-            rw400::TRead::readItem(m_connector, e, *m_ctx);
+            read400::TRead::readItem(m_connector, e, *m_ctx);
         }
     }
     return true;
@@ -123,7 +123,7 @@ void ConnectorInfoReader::readEndpointLocation(Location& l)
         const AsciiStringView tag(e.name());
         if (tag == "location") {
             l = Location::relative();
-            rw400::TRead::read(&l, e, *m_ctx);
+            read400::TRead::read(&l, e, *m_ctx);
         } else {
             e.unknown();
         }

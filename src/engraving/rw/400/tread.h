@@ -162,7 +162,7 @@ class Vibrato;
 class Volta;
 }
 
-namespace mu::engraving::rw400 {
+namespace mu::engraving::read400 {
 class TRead
 {
 public:

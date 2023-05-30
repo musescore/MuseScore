@@ -218,7 +218,7 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
     if (dta->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
         QByteArray a = dta->data(mu::commonscene::MIME_SYMBOL_FORMAT);
         XmlReader e(a);
-        rw400::ReadContext rctx;
+        read400::ReadContext rctx;
 
         PointF dragOffset;
         Fraction duration;
@@ -230,7 +230,7 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
         event->acceptProposedAction();
         dragElement = static_cast<Accidental*>(Factory::createItem(type, gpaletteScore->dummy()));
         dragElement->resetExplicitParent();
-        rw400::TRead::readItem(dragElement, e, rctx);
+        read400::TRead::readItem(dragElement, e, rctx);
 
         layout::v0::LayoutContext lctx(dragElement->score());
         layout::v0::TLayout::layoutItem(dragElement, lctx);

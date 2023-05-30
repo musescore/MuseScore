@@ -3259,7 +3259,7 @@ void Score::cmdExplode()
             ChordRest* cr = toChordRest(firstCRSegment->element(track));
             if (cr) {
                 XmlReader e(mimeData);
-                rw400::ReadContext ctx(score());
+                read400::ReadContext ctx(score());
                 ctx.setPasteMode(true);
                 pasteStaff(e, ctx, cr->segment(), cr->staffIdx());
             }

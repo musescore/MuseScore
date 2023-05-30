@@ -48,7 +48,8 @@
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
-using namespace mu::engraving::rw400;
+using namespace mu::engraving::read400;
+using namespace mu::engraving::read302;
 using namespace mu::engraving::compat;
 
 bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
@@ -57,12 +58,12 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
         ctx.setTrack(mu::nidx);
         const AsciiStringView tag(e.name());
         if (tag == "Staff") {
-            rw400::StaffRW::readStaff(score, e, ctx);
+            read400::StaffRW::readStaff(score, e, ctx);
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
             score->_audio = new Audio;
-            rw400::TRead::read(score->_audio, e, ctx);
+            read400::TRead::read(score->_audio, e, ctx);
         } else if (tag == "showOmr") {
             e.skipCurrentElement();
         } else if (tag == "playMode") {
@@ -134,7 +135,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
             }
         } else if (tag == "Part") {
             Part* part = new Part(score);
-            rw400::TRead::read(part, e, ctx);
+            read400::TRead::read(part, e, ctx);
             score->appendPart(part);
         } else if ((tag == "HairPin")
                    || (tag == "Ottava")
@@ -144,7 +145,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
                    || (tag == "Slur")
                    || (tag == "Pedal")) {
             Spanner* s = toSpanner(Factory::createItemByName(tag, score->dummy()));
-            rw400::TRead::readItem(s, e, ctx);
+            read400::TRead::readItem(s, e, ctx);
             score->addSpanner(s);
         } else if (tag == "Excerpt") {
             if (MScore::noExcerpts) {
@@ -153,7 +154,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
                 if (score->isMaster()) {
                     MasterScore* mScore = static_cast<MasterScore*>(score);
                     Excerpt* ex = new Excerpt(mScore);
-                    rw400::TRead::read(ex, e, ctx);
+                    read400::TRead::read(ex, e, ctx);
                     mScore->excerpts().push_back(ex);
                 } else {
                     LOGD("Score::read(): part cannot have parts");

@@ -36,7 +36,7 @@ class Measure;
 class Note;
 }
 
-namespace mu::engraving::rw400 {
+namespace mu::engraving::read400 {
 class ReadContext;
 class ConnectorInfoReader final : public ConnectorInfo
 {

@@ -65,7 +65,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::rw400;
+using namespace mu::engraving::read400;
 using namespace mu::engraving::write;
 
 void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, int staffIdx)
@@ -599,7 +599,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             }
             startingBeam = beam;
         } else if (tag == "Segment" && segment) {
-            rw400::TRead::read(segment, e, ctx);
+            read400::TRead::read(segment, e, ctx);
         } else if (tag == "Ambitus") {
             segment = measure->getSegment(SegmentType::Ambitus, ctx.tick());
             Ambitus* range = Factory::createAmbitus(segment);

@@ -34,7 +34,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::rw400;
+using namespace mu::engraving::read400;
 
 void StaffRW::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
 {
@@ -133,14 +133,14 @@ static void writeMeasure(XmlWriter& xml, write::WriteContext& ctx, MeasureBase* 
     //
     if (m->isMeasure() || staffIdx == 0) {
         if (Measure::classof(m)) {
-            rw400::MeasureRW::writeMeasure(static_cast<const Measure*>(m), xml, ctx, staffIdx, writeSystemElements, forceTimeSig);
+            read400::MeasureRW::writeMeasure(static_cast<const Measure*>(m), xml, ctx, staffIdx, writeSystemElements, forceTimeSig);
         } else {
             write::TWrite::writeItem(m, xml, ctx);
         }
     }
 
     if (m->score()->styleB(Sid::createMultiMeasureRests) && m->isMeasure() && toMeasure(m)->mmRest()) {
-        rw400::MeasureRW::writeMeasure(toMeasure(m)->mmRest(), xml, ctx, staffIdx, writeSystemElements, forceTimeSig);
+        read400::MeasureRW::writeMeasure(toMeasure(m)->mmRest(), xml, ctx, staffIdx, writeSystemElements, forceTimeSig);
     }
 
     ctx.setCurTick(m->endTick());

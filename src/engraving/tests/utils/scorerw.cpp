@@ -122,11 +122,11 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     // read element
     //
 
-    rw400::ReadContext rctx;
+    read400::ReadContext rctx;
     XmlReader e(buffer.data());
     e.readNextStartElement();
     element = Factory::createItemByName(e.name(), element->score()->dummy());
-    rw400::TRead::readItem(element, e, rctx);
+    read400::TRead::readItem(element, e, rctx);
     return element;
 }
 

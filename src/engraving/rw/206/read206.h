@@ -52,11 +52,11 @@ class Part;
 class Score;
 }
 
-namespace mu::engraving::rw400 {
+namespace mu::engraving::read400 {
 class ReadContext;
 }
 
-namespace mu::engraving::compat {
+namespace mu::engraving::read206 {
 class Read206 : public rw::IReader
 {
     INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
@@ -68,29 +68,29 @@ public:
     //---------------------------------------------------------
     Err readScore(Score* score, XmlReader& e, rw::ReadInOutData* out) override;
 
-    static EngravingItem* readArticulation(EngravingItem*, XmlReader&, rw400::ReadContext& ctx);
-    static void readAccidental206(Accidental*, XmlReader&, rw400::ReadContext& ctx);
-    static void readTextStyle206(MStyle* style, XmlReader& e, rw400::ReadContext& ctx, std::map<String, std::map<Sid,
-                                                                                                                 PropertyValue> >& excessStyles);
-    static void readTextLine206(XmlReader& e, rw400::ReadContext& ctx, TextLineBase* tlb);
-    static void readTrill206(XmlReader& e, rw400::ReadContext& ctx, Trill* t);
-    static void readHairpin206(XmlReader& e, rw400::ReadContext& ctx, Hairpin* h);
-    static void readSlur206(XmlReader& e, rw400::ReadContext& ctx, Slur* s);
-    static void readTie206(XmlReader& e, rw400::ReadContext& ctx, Tie* t);
+    static EngravingItem* readArticulation(EngravingItem*, XmlReader&, read400::ReadContext& ctx);
+    static void readAccidental206(Accidental*, XmlReader&, read400::ReadContext& ctx);
+    static void readTextStyle206(MStyle* style, XmlReader& e, read400::ReadContext& ctx, std::map<String, std::map<Sid,
+                                                                                                                   PropertyValue> >& excessStyles);
+    static void readTextLine206(XmlReader& e, read400::ReadContext& ctx, TextLineBase* tlb);
+    static void readTrill206(XmlReader& e, read400::ReadContext& ctx, Trill* t);
+    static void readHairpin206(XmlReader& e, read400::ReadContext& ctx, Hairpin* h);
+    static void readSlur206(XmlReader& e, read400::ReadContext& ctx, Slur* s);
+    static void readTie206(XmlReader& e, read400::ReadContext& ctx, Tie* t);
 
-    static bool readNoteProperties206(Note* note, XmlReader& e, rw400::ReadContext& ctx);
-    static bool readDurationProperties206(XmlReader& e, rw400::ReadContext& ctx, DurationElement* de);
-    static bool readTupletProperties206(XmlReader& e, rw400::ReadContext& ctx, Tuplet* t);
-    static bool readChordRestProperties206(XmlReader& e, rw400::ReadContext& ctx, ChordRest* cr);
-    static bool readChordProperties206(XmlReader& e, rw400::ReadContext& ctx, Chord* ch);
+    static bool readNoteProperties206(Note* note, XmlReader& e, read400::ReadContext& ctx);
+    static bool readDurationProperties206(XmlReader& e, read400::ReadContext& ctx, DurationElement* de);
+    static bool readTupletProperties206(XmlReader& e, read400::ReadContext& ctx, Tuplet* t);
+    static bool readChordRestProperties206(XmlReader& e, read400::ReadContext& ctx, ChordRest* cr);
+    static bool readChordProperties206(XmlReader& e, read400::ReadContext& ctx, Chord* ch);
 
     static SymId articulationNames2SymId206(const AsciiStringView& s);
 
     static NoteHeadGroup convertHeadGroup(int i);
 
 private:
-    static bool readScore206(Score* score, XmlReader& e, rw400::ReadContext& ctx);
-    static void readPart206(Part* part, XmlReader& e, rw400::ReadContext& ctx);
+    static bool readScore206(Score* score, XmlReader& e, read400::ReadContext& ctx);
+    static void readPart206(Part* part, XmlReader& e, read400::ReadContext& ctx);
 };
 }
 
