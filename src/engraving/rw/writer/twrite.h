@@ -163,7 +163,7 @@ class Volta;
 class WhammyBar;
 }
 
-namespace mu::engraving::rw400 {
+namespace mu::engraving::write {
 class TWrite
 {
     INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)

@@ -27,8 +27,8 @@
 #include "writecontext.h"
 #include "../compat/writescorehook.h"
 
-namespace mu::engraving::rw400 {
-class Write400 : public rw::IWriter
+namespace mu::engraving::write {
+class Writer : public rw::IWriter
 {
 public:
 

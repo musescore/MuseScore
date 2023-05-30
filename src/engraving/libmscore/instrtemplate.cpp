@@ -306,8 +306,8 @@ bool InstrumentTemplate::isValid() const
 void InstrumentTemplate::write(XmlWriter& xml) const
 {
     xml.startElement("Instrument",  { { "id", id } });
-    rw400::TWrite::write(&longNames, xml, "longName");
-    rw400::TWrite::write(&shortNames, xml, "shortName");
+    write::TWrite::write(&longNames, xml, "longName");
+    write::TWrite::write(&shortNames, xml, "shortName");
 
     if (longNames.size() > 1) {
         xml.tag("trackName", trackName);
@@ -317,7 +317,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
     if (extended) {
         xml.tag("extended", extended);
     }
-    rw400::TWrite::write(&stringData, xml);
+    write::TWrite::write(&stringData, xml);
     if (staffCount > 1) {
         xml.tag("staves", static_cast<int>(staffCount));
     }
@@ -398,10 +398,10 @@ void InstrumentTemplate::write(XmlWriter& xml) const
     }
 
     for (const NamedEventList& a : midiActions) {
-        rw400::TWrite::write(&a, xml, "MidiAction");
+        write::TWrite::write(&a, xml, "MidiAction");
     }
     for (const InstrChannel& a : channel) {
-        rw400::TWrite::write(&a, xml, nullptr);
+        write::TWrite::write(&a, xml, nullptr);
     }
     for (const MidiArticulation& ma : midiArticulations) {
         bool isGlobal = false;
@@ -412,7 +412,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
             }
         }
         if (!isGlobal) {
-            rw400::TWrite::write(&ma, xml);
+            write::TWrite::write(&ma, xml);
         }
     }
     if (family) {

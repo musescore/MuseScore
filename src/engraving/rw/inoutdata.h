@@ -51,7 +51,7 @@ struct ReadInOutData {
 };
 
 struct WriteInOutData {
-    rw400::WriteContext ctx;
+    write::WriteContext ctx;
 };
 }
 

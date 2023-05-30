@@ -51,7 +51,7 @@ IReaderPtr RWRegister::latestReader()
     return reader(LATEST_VERSION);
 }
 
-IWriterPtr RWRegister::latestWriter()
+IWriterPtr RWRegister::writer()
 {
-    return std::make_shared<rw400::Write400>();
+    return std::make_shared<write::Writer>();
 }

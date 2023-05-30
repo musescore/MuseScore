@@ -37,7 +37,7 @@ class MeasureRW
 public:
 
     static void readMeasure(Measure* measure, XmlReader& xml, ReadContext& ctx, int staffIdx);
-    static void writeMeasure(const Measure* measure, XmlWriter& xml, WriteContext& ctx, staff_idx_t staff, bool writeSystemElements,
+    static void writeMeasure(const Measure* measure, XmlWriter& xml, write::WriteContext& ctx, staff_idx_t staff, bool writeSystemElements,
                              bool forceTimeSig);
 
 private:

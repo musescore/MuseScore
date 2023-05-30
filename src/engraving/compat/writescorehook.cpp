@@ -30,7 +30,7 @@
 
 using namespace mu::engraving;
 using namespace mu::engraving::compat;
-using namespace mu::engraving::rw400;
+using namespace mu::engraving::write;
 
 void WriteScoreHook::onWriteStyle302(Score* score, XmlWriter& xml)
 {
@@ -66,7 +66,7 @@ void WriteScoreHook::onWriteExcerpts302(Score* score, XmlWriter& xml, WriteConte
                 MasterScore* mScore = static_cast<MasterScore*>(score);
                 for (const Excerpt* excerpt : mScore->excerpts()) {
                     if (excerpt->excerptScore() != score) {
-                        rw400::Write400::write(excerpt->excerptScore(), xml, ctx, selectionOnly, *this); // recursion write
+                        write::Writer::write(excerpt->excerptScore(), xml, ctx, selectionOnly, *this); // recursion write
                     }
                 }
             }

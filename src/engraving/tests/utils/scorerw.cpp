@@ -101,7 +101,7 @@ bool ScoreRW::saveScore(Score* score, const String& name)
         return false;
     }
 
-    return rw::RWRegister::latestWriter()->writeScore(score, &file, false);
+    return rw::RWRegister::writer()->writeScore(score, &file, false);
 }
 
 EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
@@ -112,9 +112,9 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    rw400::WriteContext wctx;
+    write::WriteContext wctx;
     xml.startDocument();
-    rw400::TWrite::writeItem(element, xml, wctx);
+    write::TWrite::writeItem(element, xml, wctx);
     xml.flush();
     buffer.close();
 
