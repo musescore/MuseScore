@@ -24,12 +24,18 @@
 #define MU_ENGRAVING_IREADER_H
 
 #include <memory>
+#include <variant>
 
 #include "engravingerrors.h"
 
 namespace mu::engraving {
-class Score;
 class XmlReader;
+class Score;
+class EngravingItem;
+
+class ChordRest;
+class Harmony;
+class Tuplet;
 }
 
 namespace mu::engraving::rw {
@@ -40,6 +46,35 @@ public:
     virtual ~IReader() = default;
 
     virtual Err readScore(Score* score, XmlReader& xml, rw::ReadInOutData* out) = 0;
+
+    using Supported = std::variant<std::monostate,
+                                   ChordRest*,
+                                   Harmony*,
+                                   Tuplet*
+                                   >;
+
+    template<typename T>
+    static void check_supported_static(T item)
+    {
+        if constexpr (std::is_same<T, EngravingItem*>::value) {
+            // noop
+        } else {
+            Supported check(item);
+            (void)check;
+        }
+    }
+
+    template<typename T>
+    void readItem(T item, XmlReader& xml)
+    {
+#ifndef NDEBUG
+        check_supported_static(item);
+#endif
+        doReadItem(static_cast<EngravingItem*>(item), xml);
+    }
+
+private:
+    virtual void doReadItem(EngravingItem* item, XmlReader& xml) = 0;
 };
 
 using IReaderPtr = std::shared_ptr<IReader>;

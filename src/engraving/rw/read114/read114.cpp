@@ -3167,3 +3167,8 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 
     return Err::NoError;
 }
+
+void Read114::doReadItem(EngravingItem*, XmlReader&)
+{
+    UNREACHABLE;
+}

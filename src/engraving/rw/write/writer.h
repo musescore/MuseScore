@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_WRITE400_H
-#define MU_ENGRAVING_WRITE400_H
+#ifndef MU_ENGRAVING_WRITER_H
+#define MU_ENGRAVING_WRITER_H
 
 #include "../iwriter.h"
 
@@ -38,4 +38,4 @@ public:
 };
 }
 
-#endif // MU_ENGRAVING_WRITE400_H
+#endif // MU_ENGRAVING_WRITER_H

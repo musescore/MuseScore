@@ -50,6 +50,8 @@ public:
     Err readScore(Score* score, XmlReader& e, rw::ReadInOutData* out) override;
 
 private:
+    void doReadItem(EngravingItem* item, XmlReader& xml) override;
+
     static bool readScore302(Score* score, XmlReader& e, read400::ReadContext& ctx);
 
     static void fixInstrumentId(Instrument* instrument);

@@ -3460,3 +3460,8 @@ Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 
     return Err::NoError;
 }
+
+void Read206::doReadItem(EngravingItem*, XmlReader&)
+{
+    UNREACHABLE;
+}
