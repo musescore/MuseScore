@@ -107,6 +107,13 @@ void BeamLayout::layout(Beam* item, LayoutContext& ctx)
             item->addbbox(r);
         }
     }
+
+    // The beam may have changed shape. one-note trems within this beam need to be layed out here
+    for (ChordRest* cr : item->_elements) {
+        if (cr->isChord() && toChord(cr)->tremolo() && !toChord(cr)->tremolo()->twoNotes()) {
+            TLayout::layout(toChord(cr)->tremolo(), ctx);
+        }
+    }
 }
 
 void BeamLayout::layoutIfNeed(Beam* item, LayoutContext& ctx)
