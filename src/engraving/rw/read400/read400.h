@@ -40,6 +40,7 @@ public:
     static bool readScore400(Score* score, XmlReader& e, ReadContext& ctx);
 
     bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
+    void pasteSymbols(XmlReader& e, ChordRest* dst) override;
 
 private:
     void doReadItem(EngravingItem* item, XmlReader& xml) override;

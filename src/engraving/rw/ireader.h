@@ -78,6 +78,7 @@ public:
     //! NOTE Needs refactoring - reading should be separated from insertion
     //! (we read the elements into some structure, then inserted them)
     virtual bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) = 0;
+    virtual void pasteSymbols(XmlReader& e, ChordRest* dst) = 0;
 
 private:
     virtual void doReadItem(EngravingItem* item, XmlReader& xml) = 0;
