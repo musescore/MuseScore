@@ -8,6 +8,7 @@
         <file>qml/MuseScore/UiComponents/IncrementalPropertyControl.qml</file>
         <file>qml/MuseScore/UiComponents/FlatToggleButton.qml</file>
         <file>qml/MuseScore/UiComponents/FlatButton.qml</file>
+        <file>qml/MuseScore/UiComponents/ToggleButton.qml</file>
         <file>qml/MuseScore/UiComponents/ExpandableBlankSection.qml</file>
         <file>qml/MuseScore/UiComponents/ExpandableBlank.qml</file>
         <file>qml/MuseScore/UiComponents/RadioButtonGroup.qml</file>
