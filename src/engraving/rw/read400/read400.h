@@ -38,6 +38,9 @@ public:
     Err readScore(Score* score, XmlReader& e, rw::ReadInOutData* data) override;
 
     static bool readScore400(Score* score, XmlReader& e, ReadContext& ctx);
+
+private:
+    void doReadItem(EngravingItem* item, XmlReader& xml) override;
 };
 }
 

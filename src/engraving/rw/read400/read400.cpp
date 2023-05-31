@@ -271,3 +271,9 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
 
     return true;
 }
+
+void Read400::doReadItem(EngravingItem* item, XmlReader& xml)
+{
+    ReadContext ctx(item->score());
+    TRead::readItem(item, xml, ctx);
+}

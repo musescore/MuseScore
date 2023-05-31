@@ -100,9 +100,12 @@ static void transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick
 //    return false if paste fails
 //---------------------------------------------------------
 
-bool Score::pasteStaff(XmlReader& e, read400::ReadContext& ctx, Segment* dst, staff_idx_t dstStaff, Fraction scale)
+bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale)
 {
     assert(dst->isChordRestType());
+
+    read400::ReadContext ctx(dst->score());
+    ctx.setPasteMode(true);
 
     std::vector<Harmony*> pastedHarmony;
     std::vector<Chord*> graceNotes;
@@ -1143,9 +1146,7 @@ void Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
             }
             if (canPasteStaff(data, scale)) {
                 XmlReader e(data);
-                read400::ReadContext ctx(this);
-                ctx.setPasteMode(true);
-                if (!pasteStaff(e, ctx, cr->segment(), cr->staffIdx(), scale)) {
+                if (!pasteStaff(e, cr->segment(), cr->staffIdx(), scale)) {
                     return;
                 }
             }

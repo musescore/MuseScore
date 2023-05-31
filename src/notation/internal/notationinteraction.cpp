@@ -3633,8 +3633,6 @@ mu::Ret NotationInteraction::repeatSelection()
     }
 
     mu::engraving::XmlReader xml(selection.mimeData());
-    mu::engraving::read400::ReadContext rctx(score());
-    rctx.setPasteMode(true);
     track_idx_t dStaff = selection.staffStart();
     mu::engraving::Segment* endSegment = selection.endSegment();
 
@@ -3646,7 +3644,7 @@ mu::Ret NotationInteraction::repeatSelection()
         if (e) {
             startEdit();
             ChordRest* cr = toChordRest(e);
-            score()->pasteStaff(xml, rctx, cr->segment(), cr->staffIdx());
+            score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
             apply();
         }
     }

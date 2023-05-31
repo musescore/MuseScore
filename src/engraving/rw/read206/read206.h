@@ -89,6 +89,8 @@ public:
     static NoteHeadGroup convertHeadGroup(int i);
 
 private:
+    void doReadItem(EngravingItem* item, XmlReader& xml) override;
+
     static bool readScore206(Score* score, XmlReader& e, read400::ReadContext& ctx);
     static void readPart206(Part* part, XmlReader& e, read400::ReadContext& ctx);
 };

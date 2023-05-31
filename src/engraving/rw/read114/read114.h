@@ -34,6 +34,9 @@ public:
     //    import old version <= 1.3 files
     //---------------------------------------------------------
     Err readScore(Score* masterScore, XmlReader& e, rw::ReadInOutData* out) override;
+
+private:
+    void doReadItem(EngravingItem* item, XmlReader& xml) override;
 };
 }
 

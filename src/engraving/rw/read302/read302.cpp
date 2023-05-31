@@ -324,3 +324,8 @@ void Read302::fixInstrumentId(Instrument* instrument)
 
     instrument->setId(id);
 }
+
+void Read302::doReadItem(EngravingItem*, XmlReader&)
+{
+    UNREACHABLE;
+}
