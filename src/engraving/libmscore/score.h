@@ -950,6 +950,8 @@ public:
     void pasteSymbols(XmlReader& e, ChordRest* dst);
     void renderMidi(EventMap* events, const MidiRenderer::Context& ctx, bool expandRepeats);
 
+    static void transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick);
+
     BeatType tick2beatType(const Fraction& tick) const;
 
     int mscVersion() const { return _mscVersion; }

@@ -3168,6 +3168,11 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     return Err::NoError;
 }
 
+bool Read114::pasteStaff(XmlReader&, Segment*, staff_idx_t, Fraction)
+{
+    UNREACHABLE;
+}
+
 void Read114::doReadItem(EngravingItem*, XmlReader&)
 {
     UNREACHABLE;
