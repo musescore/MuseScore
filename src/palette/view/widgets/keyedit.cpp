@@ -31,7 +31,7 @@
 #include "commonscene/commonscenetypes.h"
 #include "translation.h"
 
-#include "engraving/rw/read400/tread.h"
+#include "engraving/rw/rwregister.h"
 #include "engraving/libmscore/accidental.h"
 #include "engraving/libmscore/clef.h"
 #include "engraving/libmscore/keysig.h"
@@ -218,7 +218,6 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
     if (dta->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
         QByteArray a = dta->data(mu::commonscene::MIME_SYMBOL_FORMAT);
         XmlReader e(a);
-        read400::ReadContext rctx;
 
         PointF dragOffset;
         Fraction duration;
@@ -230,7 +229,8 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
         event->acceptProposedAction();
         dragElement = static_cast<Accidental*>(Factory::createItem(type, gpaletteScore->dummy()));
         dragElement->resetExplicitParent();
-        read400::TRead::readItem(dragElement, e, rctx);
+
+        rw::RWRegister::reader()->readItem(dragElement, e);
 
         layout::v0::LayoutContext lctx(dragElement->score());
         layout::v0::TLayout::layoutItem(dragElement, lctx);

@@ -104,7 +104,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
 {
     //! NOTE Needs refactoring - reading should be separated from insertion
     //! (we read the elements into some structure, then inserted them)
-    return rw::RWRegister::latestReader()->pasteStaff(e, dst, dstStaff, scale);
+    return rw::RWRegister::reader()->pasteStaff(e, dst, dstStaff, scale);
 }
 
 //---------------------------------------------------------
@@ -284,7 +284,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
 {
     //! NOTE Needs refactoring - reading should be separated from insertion
     //! (we read the elements into some structure, then inserted them)
-    rw::RWRegister::latestReader()->pasteSymbols(e, dst);
+    rw::RWRegister::reader()->pasteSymbols(e, dst);
 }
 
 static ChordRest* replaceWithRest(ChordRest* target)

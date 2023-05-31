@@ -22,7 +22,7 @@
 
 #include "text.h"
 
-#include "rw/read400/tread.h"
+#include "rw/rwregister.h"
 #include "score.h"
 
 #include "log.h"
@@ -64,11 +64,10 @@ engraving::PropertyValue Text::propertyDefault(Pid id) const
     }
 }
 
-String Text::readXmlText(XmlReader& r, Score* score)
+String Text::readXmlText(XmlReader& xml, Score* score)
 {
     Text t(score->dummy());
-    read400::ReadContext ctx(score);
-    read400::TRead::read(&t, r, ctx);
+    rw::RWRegister::reader()->readItem(&t, xml);
     return t.xmlText();
 }
 }

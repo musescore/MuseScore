@@ -24,7 +24,7 @@
 
 #include "mimedatautils.h"
 
-#include "engraving/rw/read400/tread.h"
+#include "engraving/rw/rwregister.h"
 #include "engraving/rw/write/twrite.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/engravingitem.h"
@@ -168,6 +168,8 @@ void PaletteCell::setElementTranslated(bool translate)
 
 bool PaletteCell::read(XmlReader& e, bool pasteMode)
 {
+    UNUSED(pasteMode);
+
     bool add = true;
     name = e.attribute("name");
 
@@ -202,9 +204,7 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
             if (!element) {
                 e.unknown();
             } else {
-                read400::ReadContext ctx;
-                ctx.setPasteMode(pasteMode);
-                read400::TRead::readItem(element.get(), e, ctx);
+                rw::RWRegister::reader()->readItem(element.get(), e);
                 PaletteCompat::migrateOldPaletteItemIfNeeded(element, gpaletteScore);
                 element->styleChanged();
 

@@ -78,7 +78,8 @@
 #include "libmscore/undo.h"
 #include "engraving/compat/dummyelement.h"
 
-#include "engraving/rw/read400/tread.h"
+#include "engraving/rw/xmlreader.h"
+#include "engraving/rw/rwregister.h"
 
 #include "masternotation.h"
 #include "scorecallbacks.h"
@@ -1268,7 +1269,6 @@ void NotationInteraction::startDrop(const QByteArray& edata)
     resetDropElement();
 
     mu::engraving::XmlReader e(edata);
-    mu::engraving::read400::ReadContext rctx;
     m_dropData.ed.dragOffset = QPointF();
     Fraction duration;      // dummy
     ElementType type = EngravingItem::readType(e, &m_dropData.ed.dragOffset, &duration);
@@ -1281,7 +1281,8 @@ void NotationInteraction::startDrop(const QByteArray& edata)
         }
         m_dropData.ed.dropElement = el;
         m_dropData.ed.dropElement->setParent(0);
-        read400::TRead::readItem(m_dropData.ed.dropElement, e, rctx);
+
+        rw::RWRegister::reader()->readItem(m_dropData.ed.dropElement, e);
 
         layout::v0::LayoutContext lctx(m_dropData.ed.dropElement->score());
         layout::v0::TLayout::layoutItem(m_dropData.ed.dropElement, lctx);
@@ -1735,12 +1736,11 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             ByteArray a = element->mimeData();
 //printf("<<%s>>\n", a.data());
             mu::engraving::XmlReader e(a);
-            mu::engraving::read400::ReadContext rctx;
             mu::engraving::Fraction duration;        // dummy
             PointF dragOffset;
             mu::engraving::ElementType type = mu::engraving::EngravingItem::readType(e, &dragOffset, &duration);
             mu::engraving::Spanner* spanner = static_cast<mu::engraving::Spanner*>(engraving::Factory::createItem(type, score->dummy()));
-            read400::TRead::readItem(spanner, e, rctx);
+            rw::RWRegister::reader()->readItem(spanner, e);
             spanner->styleChanged();
             score->cmdAddSpanner(spanner, cr1->staffIdx(), startSegment, endSegment);
             if (spanner->isVoiceSpecific()) {
@@ -1795,9 +1795,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
 
                 for (staff_idx_t i = sel.staffStart(); i < sel.staffEnd(); ++i) {
                     mu::engraving::XmlReader n(a);
-                    mu::engraving::read400::ReadContext rctx;
                     StaffTypeChange* stc = engraving::Factory::createStaffTypeChange(measure);
-                    read400::TRead::read(stc, n, rctx);
+                    rw::RWRegister::reader()->readItem(stc, n);
                     stc->styleChanged(); // update to local style
 
                     score->cmdAddStaffTypeChange(measure, i, stc);
@@ -2005,14 +2004,12 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         ByteArray a = e->mimeData();
 
         mu::engraving::XmlReader n(a);
-        mu::engraving::read400::ReadContext rctx;
-        rctx.setPasteMode(pasteMode);
+
         Fraction duration;      // dummy
         PointF dragOffset;
         ElementType type = EngravingItem::readType(n, &dragOffset, &duration);
         dropData->dropElement = engraving::Factory::createItem(type, score->dummy());
-
-        read400::TRead::readItem(dropData->dropElement, n, rctx);
+        rw::RWRegister::reader()->readItem(dropData->dropElement, n);
         dropData->dropElement->styleChanged();       // update to local style
 
         mu::engraving::EngravingItem* el = target->drop(*dropData);

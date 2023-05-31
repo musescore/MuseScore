@@ -32,6 +32,7 @@
 #include "engraving/rw/write/twrite.h"
 #include "engraving/rw/rwregister.h"
 #include "engraving/libmscore/factory.h"
+#include "engraving/rw/rwregister.h"
 
 #include "log.h"
 
@@ -122,11 +123,10 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     // read element
     //
 
-    read400::ReadContext rctx;
     XmlReader e(buffer.data());
     e.readNextStartElement();
     element = Factory::createItemByName(e.name(), element->score()->dummy());
-    read400::TRead::readItem(element, e, rctx);
+    rw::RWRegister::reader()->readItem(element, e);
     return element;
 }
 

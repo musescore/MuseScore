@@ -37,7 +37,7 @@
 #include "draw/types/pen.h"
 #include "iengravingfont.h"
 
-#include "rw/read400/tread.h"
+#include "rw/rwregister.h"
 #include "rw/write/twrite.h"
 
 #include "types/typesconv.h"
@@ -1019,8 +1019,6 @@ ElementType EngravingItem::readType(XmlReader& e, PointF* dragOffset, Fraction* 
 EngravingItem* EngravingItem::readMimeData(Score* score, const ByteArray& data, PointF* dragOffset, Fraction* duration)
 {
     XmlReader e(data);
-    read400::ReadContext ctx(score);
-    ctx.setPasteMode(true);
 
     const ElementType type = EngravingItem::readType(e, dragOffset, duration);
     if (type == ElementType::INVALID) {
@@ -1030,7 +1028,7 @@ EngravingItem* EngravingItem::readMimeData(Score* score, const ByteArray& data, 
 
     EngravingItem* el = Factory::createItem(type, score->dummy(), false);
     if (el) {
-        read400::TRead::readItem(el, e, ctx);
+        rw::RWRegister::reader()->readItem(el, e);
     }
 
     return el;

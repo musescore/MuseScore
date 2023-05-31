@@ -1023,5 +1023,6 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
 void Read400::doReadItem(EngravingItem* item, XmlReader& xml)
 {
     ReadContext ctx(item->score());
+    ctx.setPasteMode(true);
     TRead::readItem(item, xml, ctx);
 }

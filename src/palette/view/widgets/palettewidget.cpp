@@ -45,7 +45,7 @@
 #include "draw/types/color.h"
 #include "draw/types/pen.h"
 
-#include "engraving/rw/read400/tread.h"
+#include "engraving/rw/rwregister.h"
 #include "engraving/layout/v0/tlayout.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/chord.h"
@@ -881,19 +881,18 @@ void PaletteWidget::dropEvent(QDropEvent* event)
         QByteArray dta(event->mimeData()->data(mu::commonscene::MIME_SYMBOL_FORMAT));
         ByteArray ba = ByteArray::fromQByteArrayNoCopy(dta);
         XmlReader xml(ba);
-        read400::ReadContext rctx;
         PointF dragOffset;
         Fraction duration;
         ElementType type = EngravingItem::readType(xml, &dragOffset, &duration);
 
         if (type == ElementType::SYMBOL) {
             auto symbol = std::make_shared<Symbol>(gpaletteScore->dummy());
-            read400::TRead::read(symbol.get(), xml, rctx);
+            rw::RWRegister::reader()->readItem(symbol.get(), xml);
             element = symbol;
         } else {
             element = std::shared_ptr<EngravingItem>(Factory::createItem(type, gpaletteScore->dummy()));
             if (element) {
-                read400::TRead::readItem(element.get(), xml, rctx);
+                rw::RWRegister::reader()->readItem(element.get(), xml);
                 element->setTrack(0);
 
                 if (element->isActionIcon()) {

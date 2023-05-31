@@ -62,6 +62,10 @@ static RetVal<IReaderPtr> makeReader(int version, bool ignoreVersionError)
         }
     }
 
+    if (version > 302 && MScore::testMode) {
+        version = 302;
+    }
+
     return RetVal<IReaderPtr>::make_ok(RWRegister::reader(version));
 }
 
