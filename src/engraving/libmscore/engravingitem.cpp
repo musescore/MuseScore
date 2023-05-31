@@ -967,8 +967,7 @@ ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    write::WriteContext wctx;
-    wctx.setClipboardmode(true);
+
     xml.startElement("EngravingItem");
     if (isNote()) {
         xml.tagFraction("duration", toNote(this)->chord()->ticks());
@@ -976,7 +975,9 @@ ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
     if (!dragOffset.isNull()) {
         xml.tagPoint("dragOffset", dragOffset);
     }
-    write::TWrite::writeItem(this, xml, wctx);
+
+    rw::RWRegister::writer()->writeItem(this, xml);
+
     xml.endElement();
     buffer.close();
     return buffer.data();

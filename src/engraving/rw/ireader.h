@@ -69,7 +69,7 @@ public:
     static void check_supported_static(T item)
     {
         if constexpr (std::is_same<T, EngravingItem*>::value) {
-            // noop
+            // supported
         } else {
             Supported check(item);
             (void)check;

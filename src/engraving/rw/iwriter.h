@@ -23,12 +23,16 @@
 #define MU_ENGRAVING_IWRITER_H
 
 #include <memory>
+#include <variant>
 
 #include "global/io/iodevice.h"
+#include "xmlwriter.h"
 
 namespace mu::engraving {
 class Score;
-class XmlWriter;
+class EngravingItem;
+class Segment;
+class SelectionFilter;
 }
 
 namespace mu::engraving::rw {
@@ -39,6 +43,35 @@ public:
     virtual ~IWriter() = default;
 
     virtual bool writeScore(Score* score, io::IODevice* device, bool onlySelection, WriteInOutData* out = nullptr) = 0;
+
+    using Supported = std::variant<std::monostate
+                                   >;
+
+    template<typename T>
+    static void check_supported_static(T item)
+    {
+        if constexpr (std::is_same<T, const EngravingItem*>::value || std::is_same<T, EngravingItem*>::value) {
+            // supported
+        } else {
+            Supported check(item);
+            (void)check;
+        }
+    }
+
+    template<typename T>
+    void writeItem(const T item, XmlWriter& xml)
+    {
+#ifndef NDEBUG
+        check_supported_static(item);
+#endif
+        doWriteItem(static_cast<const EngravingItem*>(item), xml);
+    }
+
+    virtual void writeSegments(XmlWriter& xml, SelectionFilter* filter, track_idx_t st, track_idx_t et, Segment* sseg, Segment* eseg, bool,
+                               bool, Fraction& curTick) = 0;
+
+private:
+    virtual void doWriteItem(const EngravingItem* item, XmlWriter& xml) = 0;
 };
 
 using IWriterPtr = std::shared_ptr<IWriter>;

@@ -28,7 +28,7 @@
 #include "containers.h"
 #include "io/buffer.h"
 
-#include "rw/write/twrite.h"
+#include "rw/rwregister.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -841,10 +841,11 @@ ByteArray Selection::staffMimeData() const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    write::WriteContext wctx;
+
     xml.startDocument();
-    wctx.setClipboardmode(true);
-    wctx.setFilter(selectionFilter());
+
+    SelectionFilter filter = selectionFilter();
+    Fraction curTick;
 
     Fraction ticks  = tickEnd() - tickStart();
     int staves = static_cast<int>(staffEnd() - staffStart());
@@ -875,14 +876,14 @@ ByteArray Selection::staffMimeData() const
         }
         xml.startElement("voiceOffset");
         for (voice_idx_t voice = 0; voice < VOICES; voice++) {
-            if (hasElementInTrack(seg1, seg2, startTrack + voice) && wctx.canWriteVoice(voice)) {
+            if (hasElementInTrack(seg1, seg2, startTrack + voice) && filter.canSelectVoice(voice)) {
                 Fraction offset = firstElementInTrack(seg1, seg2, startTrack + voice) - tickStart();
                 xml.tag("voice", { { "id", voice } }, offset.ticks());
             }
         }
         xml.endElement();     // </voiceOffset>
-        wctx.setCurTrack(startTrack);
-        write::TWrite::writeSegments(xml, wctx, startTrack, endTrack, seg1, seg2, false, false);
+
+        rw::RWRegister::writer()->writeSegments(xml, &filter, startTrack, endTrack, seg1, seg2, false, false, curTick);
         xml.endElement();
     }
 
@@ -900,9 +901,8 @@ ByteArray Selection::symbolListMimeData() const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    write::WriteContext wctx;
+
     xml.startDocument();
-    wctx.setClipboardmode(true);
 
     track_idx_t topTrack    = 1000000;
     track_idx_t bottomTrack = 0;
@@ -1123,7 +1123,7 @@ ByteArray Selection::symbolListMimeData() const
             }
         }
         xml.tag("segDelta", numSegs);
-        write::TWrite::writeItem(iter->second.e, xml, wctx);
+        rw::RWRegister::writer()->writeItem(iter->second.e, xml);
     }
 
     xml.endElement();

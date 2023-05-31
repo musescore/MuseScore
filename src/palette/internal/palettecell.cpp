@@ -25,7 +25,6 @@
 #include "mimedatautils.h"
 
 #include "engraving/rw/rwregister.h"
-#include "engraving/rw/write/twrite.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/fret.h"
@@ -268,12 +267,10 @@ void PaletteCell::write(XmlWriter& xml, bool pasteMode) const
         xml.tag("mag", mag);
     }
 
-    write::WriteContext wctx;
-    wctx.setClipboardmode(pasteMode);
     if (untranslatedElement) {
-        write::TWrite::writeItem(untranslatedElement.get(), xml, wctx);
+        rw::RWRegister::writer()->writeItem(untranslatedElement.get(), xml);
     } else {
-        write::TWrite::writeItem(element.get(), xml, wctx);
+        rw::RWRegister::writer()->writeItem(element.get(), xml);
     }
     xml.endElement();
 }

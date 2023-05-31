@@ -113,9 +113,8 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    write::WriteContext wctx;
     xml.startDocument();
-    write::TWrite::writeItem(element, xml, wctx);
+    rw::RWRegister::writer()->writeItem(element, xml);
     xml.flush();
     buffer.close();
 
