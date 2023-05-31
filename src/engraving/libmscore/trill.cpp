@@ -36,6 +36,7 @@
 #include "score.h"
 #include "staff.h"
 #include "system.h"
+#include "undo.h"
 
 #include "log.h"
 
@@ -222,6 +223,16 @@ Trill::Trill(const Trill& t)
     _ornamentStyle = t._ornamentStyle;
     _playArticulation = t._playArticulation;
     initElementStyle(&trillStyle);
+}
+
+EngravingItem* Trill::linkedClone()
+{
+    Trill* linkedTrill = clone();
+    Ornament* linkedOrnament = toOrnament(_ornament->linkedClone());
+    linkedTrill->setOrnament(linkedOrnament);
+    linkedTrill->setAutoplace(true);
+    score()->undo(new Link(linkedTrill, this));
+    return linkedTrill;
 }
 
 Trill::~Trill()

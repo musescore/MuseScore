@@ -300,7 +300,7 @@ Chord::Chord(const Chord& c, bool link)
         add(nc);
     }
     for (Articulation* a : c._articulations) {      // make deep copy
-        Articulation* na = new Articulation(*a);
+        Articulation* na = a->clone();
         if (link) {
             score()->undo(new Link(na, a));
         }
