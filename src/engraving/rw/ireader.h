@@ -28,16 +28,21 @@
 
 #include "engravingerrors.h"
 #include "types/types.h"
+#include "xmlreader.h"
 
 namespace mu::engraving {
-class XmlReader;
 class Score;
 class EngravingItem;
 
+class Accidental;
 class ChordRest;
 class Harmony;
-class Tuplet;
 class Segment;
+class Spanner;
+class StaffTypeChange;
+class Symbol;
+class Text;
+class Tuplet;
 }
 
 namespace mu::engraving::rw {
@@ -50,8 +55,13 @@ public:
     virtual Err readScore(Score* score, XmlReader& xml, rw::ReadInOutData* out) = 0;
 
     using Supported = std::variant<std::monostate,
+                                   Accidental*,
                                    ChordRest*,
                                    Harmony*,
+                                   Spanner*,
+                                   StaffTypeChange*,
+                                   Symbol*,
+                                   Text*,
                                    Tuplet*
                                    >;
 

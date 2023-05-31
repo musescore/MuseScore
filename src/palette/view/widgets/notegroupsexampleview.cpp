@@ -25,7 +25,7 @@
 #include <cmath>
 #include <QMimeData>
 
-#include "engraving/rw/read400/tread.h"
+#include "engraving/rw/rwregister.h"
 #include "engraving/layout/v0/tlayout.h"
 
 #include "libmscore/engravingitem.h"
@@ -59,7 +59,6 @@ void NoteGroupsExampleView::dragEnterEvent(QDragEnterEvent* event)
 // LOGD("NoteGroupsExampleView::dragEnterEvent Symbol: <%s>", a.data());
 
         XmlReader e(ByteArray::fromQByteArrayNoCopy(a));
-        read400::ReadContext rctx;
         PointF dragOffset;
         Fraction duration;      // dummy
         ElementType type = EngravingItem::readType(e, &dragOffset, &duration);
@@ -67,7 +66,7 @@ void NoteGroupsExampleView::dragEnterEvent(QDragEnterEvent* event)
         m_dragElement = Factory::createItem(type, m_score->dummy());
         if (m_dragElement) {
             m_dragElement->resetExplicitParent();
-            read400::TRead::readItem(m_dragElement, e, rctx);
+            rw::RWRegister::reader()->readItem(m_dragElement, e);
             layout::v0::LayoutContext lctx(m_dragElement->score());
             layout::v0::TLayout::layoutItem(m_dragElement, lctx);
         }

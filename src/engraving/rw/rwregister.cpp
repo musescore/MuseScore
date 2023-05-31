@@ -33,13 +33,13 @@ using namespace mu::engraving::rw;
 
 static const int LATEST_VERSION(400);
 
-static IReaderPtr makeReader(int version, bool testMode)
+static IReaderPtr makeReader(int version)
 {
     if (version <= 114) {
         return std::make_shared<read114::Read114>();
     } else if (version <= 207) {
         return std::make_shared<read206::Read206>();
-    } else if (version < 400 || testMode) {
+    } else if (version < 400) {
         return std::make_shared<read302::Read302>();
     }
 
@@ -48,12 +48,10 @@ static IReaderPtr makeReader(int version, bool testMode)
 
 IReaderPtr RWRegister::reader(int version)
 {
-    return makeReader(version, MScore::testMode);
-}
-
-IReaderPtr RWRegister::latestReader()
-{
-    return makeReader(LATEST_VERSION, false);
+    if (version < 0) {
+        version = LATEST_VERSION;
+    }
+    return makeReader(version);
 }
 
 IWriterPtr RWRegister::writer()
