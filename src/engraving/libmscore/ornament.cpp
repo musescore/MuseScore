@@ -271,7 +271,8 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
             score()->transpose(note, interval, true);
         }
 
-        note->updateAccidental(accState);
+        AccidentalState copyOfAccState = *accState;
+        note->updateAccidental(&copyOfAccState);
 
         // Second: if the "Accidental visibility" property is different than default,
         // force the implicit accidentals to be visible when appropriate
