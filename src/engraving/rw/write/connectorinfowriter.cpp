@@ -40,7 +40,7 @@ ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, WriteContext* ctx, cons
                                          const EngravingItem* connector,
                                          int track,
                                          Fraction frac)
-    : ConnectorInfo(current, track, frac), m_xml(&xml), m_ctx(ctx), _connector(connector)
+    : ConnectorInfo(current, track, frac), _connector(connector), m_xml(&xml), m_ctx(ctx)
 {
     IF_ASSERT_FAILED(current) {
         return;

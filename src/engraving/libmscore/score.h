@@ -70,12 +70,14 @@ class Read302;
 
 namespace mu::engraving::read400 {
 class Read400;
-class ReadContext;
+}
+
+namespace mu::engraving::read410 {
+class Read410;
 }
 
 namespace mu::engraving::write {
 class Writer;
-class WriteContext;
 }
 
 namespace mu::engraving::compat {
@@ -391,6 +393,7 @@ private:
 
     friend class read302::Read302;
     friend class read400::Read400;
+    friend class read410::Read410;
     friend class write::Writer;
     friend class layout::v0::ScoreLayout;
 

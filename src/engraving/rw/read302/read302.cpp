@@ -330,7 +330,7 @@ bool Read302::pasteStaff(XmlReader&, Segment*, staff_idx_t, Fraction)
     UNREACHABLE;
 }
 
-void Read302::pasteSymbols(XmlReader& e, ChordRest* dst)
+void Read302::pasteSymbols(XmlReader&, ChordRest*)
 {
     UNREACHABLE;
 }

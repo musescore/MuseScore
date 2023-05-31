@@ -60,6 +60,7 @@ set(MODULE_SRC
 
     ${LIBMSCORE_SRC}
 
+    ${CMAKE_CURRENT_LIST_DIR}/rw/README.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/ireader.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/iwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/rwregister.cpp
@@ -109,6 +110,19 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/read400/tread.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/read400/connectorinforeader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read400/connectorinforeader.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/read410.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/read410.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/staffread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/staffread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/measureread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/measureread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/readcontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/readcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/tread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/tread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/connectorinforeader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/connectorinforeader.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h

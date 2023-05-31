@@ -25,13 +25,14 @@
 #include "read206/read206.h"
 #include "read302/read302.h"
 #include "read400/read400.h"
+#include "read410/read410.h"
 
 #include "write/writer.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
-static const int LATEST_VERSION(400);
+static const int LATEST_VERSION(410);
 
 IReaderPtr RWRegister::reader(int version)
 {
@@ -45,9 +46,11 @@ IReaderPtr RWRegister::reader(int version)
         return std::make_shared<read206::Read206>();
     } else if (version < 400) {
         return std::make_shared<read302::Read302>();
+    } else if (version < 410) {
+        return std::make_shared<read400::Read400>();
     }
 
-    return std::make_shared<read400::Read400>();
+    return std::make_shared<read410::Read410>();
 }
 
 IWriterPtr RWRegister::writer()
