@@ -27,7 +27,10 @@
 
 namespace mu::midi {
 class MidiConfiguration;
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX)
+class AlsaMidiOutPort;
+class AlsaMidiInPort;
+#elif defined(Q_OS_FREEBSD)
 class AlsaMidiOutPort;
 class AlsaMidiInPort;
 #elif defined(Q_OS_WIN)
@@ -53,7 +56,7 @@ public:
 private:
     std::shared_ptr<MidiConfiguration> m_configuration;
 
-    #ifdef Q_OS_LINUX
+    #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     std::shared_ptr<AlsaMidiOutPort> m_midiOutPort;
     std::shared_ptr<AlsaMidiInPort> m_midiInPort;
 

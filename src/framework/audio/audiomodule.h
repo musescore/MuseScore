@@ -83,6 +83,9 @@ private:
     #ifdef Q_OS_LINUX
     std::shared_ptr<IAudioDriver> m_audioDriver;
     #endif
+    #ifdef Q_OS_FREEBSD
+    std::shared_ptr<IAudioDriver> m_audioDriver;
+    #endif
 
     #ifdef Q_OS_WIN
     //std::shared_ptr<IAudioDriver> m_audioDriver;
