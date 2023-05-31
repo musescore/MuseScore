@@ -1982,6 +1982,8 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
                                                   Qt::KeyboardModifiers modifiers,
                                                   PointF pt, bool pasteMode)
 {
+    UNUSED(pasteMode);
+
     if (!target) {
         return;
     }

@@ -227,6 +227,8 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
 
 void PaletteCell::write(XmlWriter& xml, bool pasteMode) const
 {
+    UNUSED(pasteMode);
+
     if (!element) {
         xml.tag("Cell");
         return;

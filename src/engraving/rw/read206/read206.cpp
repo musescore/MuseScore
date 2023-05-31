@@ -3466,7 +3466,7 @@ bool Read206::pasteStaff(XmlReader&, Segment*, staff_idx_t, Fraction)
     UNREACHABLE;
 }
 
-void Read206::pasteSymbols(XmlReader& e, ChordRest* dst)
+void Read206::pasteSymbols(XmlReader&, ChordRest*)
 {
     UNREACHABLE;
 }
