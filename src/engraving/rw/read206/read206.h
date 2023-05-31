@@ -69,6 +69,7 @@ public:
     Err readScore(Score* score, XmlReader& e, rw::ReadInOutData* out) override;
 
     bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
+    void pasteSymbols(XmlReader& e, ChordRest* dst) override;
 
     static EngravingItem* readArticulation(EngravingItem*, XmlReader&, read400::ReadContext& ctx);
     static void readAccidental206(Accidental*, XmlReader&, read400::ReadContext& ctx);
