@@ -346,6 +346,9 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             e.skipCurrentElement();
         } else if (tag == "pedalListStyle") { // pre-3.6.3/4.0 typo
             set(Sid::pedalLineStyle, TConv::fromXml(e.readAsciiText(), LineType::SOLID));
+        } else if (tag == "chordlineThickness" && defaultStyleVersion() <= 400) {
+            // Ignoring pre-4.1 value as it was wrong (it wasn't user-editable anyway)
+            e.skipCurrentElement();
         } else if (!readProperties(e)) {
             e.unknown();
         }
