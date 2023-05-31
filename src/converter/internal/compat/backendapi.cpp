@@ -222,15 +222,18 @@ RetVal<project::INotationProjectPtr> BackendApi::openProject(const io::path_t& p
         return make_ret(Ret::Code::InternalError);
     }
 
-    INotationPtr notation = notationProject->masterNotation()->notation();
+    IMasterNotationPtr masterNotation = notationProject->masterNotation();
+    if (!masterNotation) {
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    INotationPtr notation = masterNotation->notation();
     if (!notation) {
         return make_ret(Ret::Code::InternalError);
     }
 
-    notation->setViewMode(ViewMode::PAGE);
-    for (IExcerptNotationPtr excerpt : notationProject->masterNotation()->excerpts().val) {
-        excerpt->notation()->setViewMode(ViewMode::PAGE);
-    }
+    switchToPageView(masterNotation);
+    renderExcerptsContents(masterNotation);
 
     return RetVal<INotationProjectPtr>::make_ok(notationProject);
 }
@@ -578,7 +581,10 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
 
     QJsonArray partsArray;
     QJsonArray partsNamesArray;
-    for (IExcerptNotationPtr e : masterNotation->excerpts().val) {
+
+    ExcerptNotationList excerpts = allExcerpts(masterNotation);
+
+    for (IExcerptNotationPtr e : excerpts) {
         QJsonValue partNameVal(e->name());
         partsNamesArray.append(partNameVal);
 
@@ -741,6 +747,48 @@ Ret BackendApi::applyTranspose(const INotationPtr notation, const std::string& o
     }
 
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
+}
+
+void BackendApi::switchToPageView(IMasterNotationPtr masterNotation)
+{
+    //! NOTE: All operations must be done in page view mode
+    masterNotation->notation()->setViewMode(ViewMode::PAGE);
+    for (IExcerptNotationPtr excerpt : masterNotation->excerpts().val) {
+        excerpt->notation()->setViewMode(ViewMode::PAGE);
+    }
+}
+
+void BackendApi::renderExcerptsContents(IMasterNotationPtr masterNotation)
+{
+    //! NOTE: Due to optimization, only the master score is layouted
+    //!       Let's layout all the scores of the excerpts
+    for (IExcerptNotationPtr excerpt : masterNotation->excerpts().val) {
+        Score* score = excerpt->notation()->elements()->msScore();
+        if (!score->autoLayoutEnabled()) {
+            score->doLayout();
+        }
+    }
+}
+
+ExcerptNotationList BackendApi::allExcerpts(notation::IMasterNotationPtr masterNotation)
+{
+    initPotentialExcerpts(masterNotation);
+
+    ExcerptNotationList excerpts = masterNotation->excerpts().val;
+    ExcerptNotationList potentialExcerpts = masterNotation->potentialExcerpts();
+    excerpts.insert(excerpts.end(), potentialExcerpts.begin(), potentialExcerpts.end());
+
+    masterNotation->sortExcerpts(excerpts);
+
+    return excerpts;
+}
+
+void BackendApi::initPotentialExcerpts(notation::IMasterNotationPtr masterNotation)
+{
+    ExcerptNotationList potentialExcerpts = masterNotation->potentialExcerpts();
+
+    masterNotation->initExcerpts(potentialExcerpts);
+    renderExcerptsContents(masterNotation);
 }
 
 Ret BackendApi::updateSource(const io::path_t& in, const std::string& newSource, bool forceMode)

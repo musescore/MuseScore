@@ -90,6 +90,12 @@ private:
 
     static RetVal<notation::TransposeOptions> parseTransposeOptions(const std::string& optionsJson);
     static Ret applyTranspose(const notation::INotationPtr notation, const std::string& optionsJson);
+
+    static void switchToPageView(notation::IMasterNotationPtr masterNotation);
+    static void renderExcerptsContents(notation::IMasterNotationPtr masterNotation);
+
+    static notation::ExcerptNotationList allExcerpts(notation::IMasterNotationPtr masterNotation);
+    static void initPotentialExcerpts(notation::IMasterNotationPtr masterNotation);
 };
 }
 

@@ -5728,6 +5728,11 @@ void Score::connectTies(bool silent)
     }
 }
 
+bool Score::autoLayoutEnabled() const
+{
+    return isOpen();
+}
+
 //---------------------------------------------------------
 //   doLayout
 //    do a complete (re-) layout

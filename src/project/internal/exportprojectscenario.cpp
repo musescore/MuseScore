@@ -112,7 +112,7 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
     // Scores that are closed may have never been laid out, so we lay them out now
     for (INotationPtr notation : notations) {
         mu::engraving::Score* score = notation->elements()->msScore();
-        if (!score->isOpen()) {
+        if (!score->autoLayoutEnabled()) {
             score->doLayout();
         }
     }
