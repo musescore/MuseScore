@@ -64,9 +64,25 @@ public:
     bool canWrite(const EngravingItem*) const;
     bool canWriteVoice(track_idx_t track) const;
 
+    inline bool operator==(const WriteContext& c) const
+    {
+        return _curTick == c._curTick
+               && _tickDiff == c._tickDiff
+               && _curTrack == c._curTrack
+               && _trackDiff == c._trackDiff
+               && _clipboardmode == c._clipboardmode
+               && _excerptmode == c._excerptmode
+               && _msczMode == c._msczMode
+               && _writeTrack == c._writeTrack
+               && _writePosition == c._writePosition
+               && _filter == c._filter
+               && m_linksIndexer == c.m_linksIndexer
+               && m_lidLocalIndices == c.m_lidLocalIndices;
+    }
+
+    inline bool operator!=(const WriteContext& c) const { return !this->operator==(c); }
+
 private:
-    LinksIndexer m_linksIndexer;
-    std::map<int, int> m_lidLocalIndices;
 
     Fraction _curTick    { 0, 1 };           // used to optimize output
     Fraction _tickDiff   { 0, 1 };
@@ -80,6 +96,9 @@ private:
     bool _writePosition  { false };
 
     SelectionFilter _filter;
+
+    LinksIndexer m_linksIndexer;
+    std::map<int, int> m_lidLocalIndices;
 };
 }
 

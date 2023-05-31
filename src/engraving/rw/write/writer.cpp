@@ -258,3 +258,22 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
         score->endCmd(true);
     }
 }
+
+void Writer::writeSegments(XmlWriter& xml, SelectionFilter* filter, track_idx_t strack, track_idx_t etrack,
+                           Segment* sseg, Segment* eseg, bool writeSystemElements, bool forceTimeSig, Fraction& curTick)
+{
+    WriteContext ctx;
+    ctx.setClipboardmode(true);
+    ctx.setFilter(*filter);
+    ctx.setCurTrack(strack);
+    ctx.setCurTick(curTick);
+    TWrite::writeSegments(xml, ctx, strack, etrack, sseg, eseg, writeSystemElements, forceTimeSig);
+    curTick = ctx.curTick();
+}
+
+void Writer::doWriteItem(const EngravingItem* item, XmlWriter& xml)
+{
+    WriteContext ctx;
+    ctx.setClipboardmode(true);
+    TWrite::writeItem(item, xml, ctx);
+}
