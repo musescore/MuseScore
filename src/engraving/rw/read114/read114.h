@@ -35,6 +35,8 @@ public:
     //---------------------------------------------------------
     Err readScore(Score* masterScore, XmlReader& e, rw::ReadInOutData* out) override;
 
+    bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
+
 private:
     void doReadItem(EngravingItem* item, XmlReader& xml) override;
 };

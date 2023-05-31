@@ -27,6 +27,7 @@
 #include <variant>
 
 #include "engravingerrors.h"
+#include "types/types.h"
 
 namespace mu::engraving {
 class XmlReader;
@@ -36,6 +37,7 @@ class EngravingItem;
 class ChordRest;
 class Harmony;
 class Tuplet;
+class Segment;
 }
 
 namespace mu::engraving::rw {
@@ -72,6 +74,10 @@ public:
 #endif
         doReadItem(static_cast<EngravingItem*>(item), xml);
     }
+
+    //! NOTE Needs refactoring - reading should be separated from insertion
+    //! (we read the elements into some structure, then inserted them)
+    virtual bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) = 0;
 
 private:
     virtual void doReadItem(EngravingItem* item, XmlReader& xml) = 0;
