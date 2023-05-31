@@ -12,6 +12,7 @@
         <file>qml/MuseScore/UiComponents/ExpandableBlankSection.qml</file>
         <file>qml/MuseScore/UiComponents/ExpandableBlank.qml</file>
         <file>qml/MuseScore/UiComponents/RadioButtonGroup.qml</file>
+        <file>qml/MuseScore/UiComponents/FlatRadioButtonList.qml</file>
         <file>qml/MuseScore/UiComponents/TextInputField.qml</file>
         <file>qml/MuseScore/UiComponents/ValueAdjustControl.qml</file>
         <file>qml/MuseScore/UiComponents/Icon.qml</file>
