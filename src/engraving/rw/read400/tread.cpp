@@ -4142,8 +4142,8 @@ void TRead::read(Trill* t, XmlReader& e, ReadContext& ctx)
                 ornament = Factory::createOrnament(toChordRest(t->parentItem(true)));
                 t->setOrnament(ornament);
             }
-            TRead::read(ornament, e, ctx);
             ornament->setSymId(Ornament::fromTrillType(t->trillType()));
+            TRead::read(ornament, e, ctx);
             ornament->setTrack(t->track());
         } else if (tag == "Accidental") {
             Accidental* accidental = Factory::createAccidental(t);
