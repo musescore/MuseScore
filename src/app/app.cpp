@@ -424,6 +424,10 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, fra
         startupScenario()->setStartupType(options.startup.type);
         startupScenario()->setStartupScorePath(options.startup.scorePath);
     }
+
+    if (options.app.loggerLevel) {
+        globalModule.setLoggerLevel(options.app.loggerLevel.value());
+    }
 }
 
 int App::processConverter(const CommandLineParser::ConverterTask& task)

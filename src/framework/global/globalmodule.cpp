@@ -103,11 +103,15 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 
     logger->addDest(logFile);
 
+    if (m_loggerLevel) {
+        logger->setLevel(m_loggerLevel.value());
+    } else {
 #ifdef MUE_ENABLE_LOGGER_DEBUGLEVEL
-    logger->setLevel(haw::logger::Debug);
+        logger->setLevel(haw::logger::Debug);
 #else
-    logger->setLevel(haw::logger::Normal);
+        logger->setLevel(haw::logger::Normal);
 #endif
+    }
 
     LOGI() << "log path: " << logFile->filePath();
     LOGI() << "=== Started MuseScore " << framework::MUVersion::fullVersion() << ", build number " << MUSESCORE_BUILD_NUMBER << " ===";
@@ -166,4 +170,9 @@ void GlobalModule::onDeinit()
 void GlobalModule::invokeQueuedCalls()
 {
     s_asyncInvoker->invokeQueuedCalls();
+}
+
+void GlobalModule::setLoggerLevel(const haw::logger::Level& level)
+{
+    m_loggerLevel = level;
 }
