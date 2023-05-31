@@ -258,6 +258,14 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
         // Second: if the "Accidental visibility" property is different than default,
         // force the implicit accidentals to be visible when appropriate
         AccidentalVal accidentalValue = tpc2alter(note->tpc());
+        AccidentalType accidentalType = Accidental::value2subtype(accidentalValue);
+        if (accidentalType == AccidentalType::NONE) {
+            accidentalType = AccidentalType::NATURAL;
+        }
+        if (note->accidentalType() == accidentalType) {
+            continue;
+        }
+
         bool show = false;
         if (_showAccidental == OrnamentShowAccidental::ALWAYS) {
             show = true;
@@ -270,10 +278,6 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
             show = accidentalValue != unalteredAccidentalVal;
         }
         if (show) {
-            AccidentalType accidentalType = Accidental::value2subtype(accidentalValue);
-            if (accidentalType == AccidentalType::NONE) {
-                accidentalType = AccidentalType::NATURAL;
-            }
             note->setAccidentalType(accidentalType);
             note->accidental()->setRole(AccidentalRole::AUTO);
         }
