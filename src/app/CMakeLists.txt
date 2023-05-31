@@ -25,7 +25,6 @@
 ###########################################
 # Common
 ###########################################
-
 set(EXECUTABLE_NAME mscore)
 
 ###########################################
@@ -108,6 +107,14 @@ elseif(OS_IS_WASM)
         -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
         -O3 \
     ")
+elseif(OS_IS_FBSD)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L /usr/local/lib -lasound -lpthread")
+    set(MSCORE_OUTPUT_NAME "${EXECUTABLE_NAME}")
+
+    set(CMAKE_INSTALL_RPATH "${QT_INSTALL_LIBS}")
+    if (BUILD_SHARED_LIBS)
+        set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH};${SHARED_LIBS_INSTALL_DESTINATION}")
+    endif(BUILD_SHARED_LIBS)
 else()
     message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
@@ -397,6 +404,12 @@ elseif(OS_IS_LIN)
        add_custom_target(mscore_alias ALL COMMAND echo "No symlink aliases will be created." VERBATIM )
     endif (LN_EXECUTABLE)
 
+elseif(OS_IS_FBSD)
+###########################################
+# FreeBSD
+###########################################
+    install(TARGETS ${EXECUTABLE_NAME} RUNTIME DESTINATION bin )
+    install(FILES ${PROJECT_BINARY_DIR}/src/app/musescore DESTINATION bin)
 ###########################################
 # MacOS
 ###########################################

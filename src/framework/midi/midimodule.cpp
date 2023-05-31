@@ -34,7 +34,7 @@
 
 using namespace mu::midi;
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
 #include "internal/platform/lin/alsamidioutport.h"
 #include "internal/platform/lin/alsamidiinport.h"
 #elif defined(Q_OS_WIN)
@@ -57,7 +57,7 @@ void MidiModule::registerExports()
 {
     m_configuration = std::make_shared<MidiConfiguration>();
 
-    #ifdef Q_OS_LINUX
+    #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     m_midiOutPort = std::make_shared<AlsaMidiOutPort>();
     m_midiInPort = std::make_shared<AlsaMidiInPort>();
     #elif defined(Q_OS_WIN)

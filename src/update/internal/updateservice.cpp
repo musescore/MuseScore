@@ -48,6 +48,8 @@ static std::string platformFileSuffix()
     return "dmg";
 #elif defined(Q_OS_LINUX)
     return "appimage";
+#else
+    return "";
 #endif
 }
 

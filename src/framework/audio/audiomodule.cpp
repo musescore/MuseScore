@@ -64,6 +64,9 @@ using namespace mu::audio::fx;
 #include "internal/platform/lin/linuxaudiodriver.h"
 #endif
 
+#ifdef Q_OS_FREEBSD
+#include "internal/platform/lin/linuxaudiodriver.h"
+#endif
 #ifdef Q_OS_WIN
 //#include "internal/platform/win/winmmdriver.h"
 //#include "internal/platform/win/wincoreaudiodriver.h"
@@ -105,7 +108,7 @@ void AudioModule::registerExports()
     m_soundFontRepository = std::make_shared<SoundFontRepository>();
     m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>();
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     m_audioDriver = std::shared_ptr<IAudioDriver>(new LinuxAudioDriver());
 #endif
 

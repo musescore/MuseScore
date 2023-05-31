@@ -252,7 +252,7 @@ int App::run(int argc, char** argv)
         const QString mainQmlFile = "/platform/win/Main.qml";
 #elif defined(Q_OS_MACOS)
         const QString mainQmlFile = "/platform/mac/Main.qml";
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
         const QString mainQmlFile = "/platform/linux/Main.qml";
 #elif defined(Q_OS_WASM)
         const QString mainQmlFile = "/Main.wasm.qml";
