@@ -910,11 +910,18 @@ int Note::transposeTpc(int tpc) const
 
 int Note::playingTpc() const
 {
+    int result = tpc();
+
     if (!concertPitch() && transposition()) {
-        return transposeTpc(tpc());
+        result = transposeTpc(result);
     }
 
-    return tpc();
+    int steps = ottaveCapoFret();
+    if (steps != 0) {
+        result = mu::engraving::transposeTpc(result, Interval(steps), true);
+    }
+
+    return result;
 }
 
 //---------------------------------------------------------
