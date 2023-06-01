@@ -51,9 +51,18 @@ int CapoSettingsModel::capoPlacement() const
     return m_item ? static_cast<int>(m_item->placement()) : 0;
 }
 
-QString CapoSettingsModel::capoText() const
+bool CapoSettingsModel::capoTextSpecifiedByUser() const
 {
-    return "";
+    return m_item && !m_item->getProperty(mu::engraving::Pid::CAPO_GENERATE_TEXT).toBool();
+}
+
+QString CapoSettingsModel::userCapoText() const
+{
+    if (!capoTextSpecifiedByUser()) {
+        return QString();
+    }
+
+    return m_item ? m_item->getProperty(mu::engraving::Pid::TEXT).value<String>().toQString() : QString();
 }
 
 void CapoSettingsModel::init()
@@ -96,7 +105,8 @@ void CapoSettingsModel::init()
     emit fretPositionChanged(fretPosition());
     emit stringsChanged(m_strings);
     emit capoPlacementChanged(capoPlacement());
-    emit capoTextChanged(capoText());
+    emit capoTextSpecifiedByUserChanged(capoTextSpecifiedByUser());
+    emit userCapoTextChanged(userCapoText());
 }
 
 void CapoSettingsModel::toggleCapoForString(int stringIndex)
@@ -172,9 +182,24 @@ void CapoSettingsModel::setCapoPlacement(int position)
     emit capoPlacementChanged(position);
 }
 
-void CapoSettingsModel::setCapoText(const QString& text)
+void CapoSettingsModel::setCapoTextSpecifiedByUser(bool value)
 {
-    emit capoTextChanged(text);
+    if (capoTextSpecifiedByUser() == value) {
+        return;
+    }
+
+    changeItemProperty(mu::engraving::Pid::CAPO_GENERATE_TEXT, !value);
+    emit capoTextSpecifiedByUserChanged(value);
+}
+
+void CapoSettingsModel::setUserCapoText(const QString& text)
+{
+    if (userCapoText() == text) {
+        return;
+    }
+
+    changeItemProperty(mu::engraving::Pid::TEXT, String::fromQString(text));
+    emit userCapoTextChanged(text);
 }
 
 const mu::engraving::CapoParams& CapoSettingsModel::params() const

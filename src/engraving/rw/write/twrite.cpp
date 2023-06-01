@@ -893,6 +893,7 @@ void TWrite::write(const Capo* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     writeProperty(item, xml, Pid::ACTIVE);
     writeProperty(item, xml, Pid::CAPO_FRET_POSITION);
+    writeProperty(item, xml, Pid::CAPO_GENERATE_TEXT);
 
     std::set<string_idx_t> orderedStrings;
     for (string_idx_t idx : item->params().ignoredStrings) {

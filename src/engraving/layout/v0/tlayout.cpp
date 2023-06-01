@@ -1380,6 +1380,17 @@ void TLayout::layout(Clef* item, LayoutContext&)
 
 void TLayout::layout(Capo* item, LayoutContext& ctx)
 {
+    if (item->shouldAutomaticallyGenerateText() || item->empty()) {
+        if (const Part* part = item->part()) {
+            if (const Instrument* instrument = part->instrument(item->tick())) {
+                if (const StringData* stringData = instrument->stringData()) {
+                    String text = item->generateText(stringData->strings());
+                    item->setXmlText(text);
+                }
+            }
+        }
+    }
+
     layoutTextBase(item, ctx);
     item->autoplaceSegmentElement();
 }

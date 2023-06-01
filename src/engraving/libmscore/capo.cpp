@@ -22,7 +22,7 @@
 
 #include "capo.h"
 
-#include "segment.h"
+#include "translation.h"
 
 using namespace mu::engraving;
 
@@ -58,6 +58,8 @@ PropertyValue Capo::getProperty(Pid id) const
         }
 
         return ignoredStrings;
+    } else if (id == Pid::CAPO_GENERATE_TEXT) {
+        return m_shouldAutomaticallyGenerateText;
     }
 
     return StaffTextBase::getProperty(id);
@@ -71,6 +73,8 @@ PropertyValue Capo::propertyDefault(Pid id) const
         return 1;
     } else if (id == Pid::CAPO_IGNORED_STRINGS) {
         return std::vector<int>();
+    } else if (id == Pid::CAPO_GENERATE_TEXT) {
+        return true;
     }
 
     return StaffTextBase::propertyDefault(id);
@@ -84,9 +88,15 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
         m_params.fretPosition = val.toInt();
     } else if (id == Pid::CAPO_IGNORED_STRINGS) {
         m_params.ignoredStrings.clear();
-        std::vector<int> ignoredStrings = val.value<std::vector<int>>();
+        std::vector<int> ignoredStrings = val.value<std::vector<int> >();
         for (int string : ignoredStrings) {
             m_params.ignoredStrings.insert(static_cast<string_idx_t>(string));
+        }
+    } else if (id == Pid::CAPO_GENERATE_TEXT) {
+        m_shouldAutomaticallyGenerateText = val.toBool();
+
+        if (!m_shouldAutomaticallyGenerateText) {
+            setXmlText(m_customText);
         }
     } else {
         return StaffTextBase::setProperty(id, val);
@@ -94,6 +104,15 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
 
     triggerLayout();
     return true;
+}
+
+void Capo::setXmlText(const String& text)
+{
+    if (!m_shouldAutomaticallyGenerateText) {
+        m_customText = text;
+    }
+
+    StaffTextBase::setXmlText(text);
 }
 
 bool Capo::isEditable() const
@@ -109,4 +128,40 @@ const CapoParams& Capo::params() const
 void Capo::setParams(const CapoParams& params)
 {
     m_params = params;
+}
+
+bool Capo::shouldAutomaticallyGenerateText() const
+{
+    return m_shouldAutomaticallyGenerateText;
+}
+
+mu::String Capo::generateText(size_t stringCount) const
+{
+    if (!m_params.active || m_params.fretPosition == 0) {
+        return mtrc("engraving", "No capo");
+    }
+
+    if (m_params.ignoredStrings.empty()) {
+        return mtrc("engraving", "Capo %1").arg(m_params.fretPosition);
+    }
+
+    StringList stringsToApply;
+
+    for (string_idx_t idx = 0; idx < stringCount; ++idx) {
+        if (mu::contains(m_params.ignoredStrings, idx)) {
+            continue;
+        }
+
+        stringsToApply.emplace_back(String::number(idx + 1));
+    }
+
+    if (stringsToApply.empty()) {
+        return mtrc("engraving", "No capo");
+    }
+
+    String text = mtrc("engraving", "Partial capo:\nFret %1 on strings %2")
+                  .arg(m_params.fretPosition)
+                  .arg(stringsToApply.join(u", "));
+
+    return text;
 }

@@ -1858,7 +1858,7 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     }
 
     auto capo = makeElement<Capo>(gpaletteScore);
-    capo->setXmlText(QT_TRANSLATE_NOOP("palette", "Capo"));
+    capo->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Capo")));
     sp->appendElement(capo, QT_TRANSLATE_NOOP("palette", "Capo"))->setElementTranslated(true);
 
     const char* finger = "pimac";

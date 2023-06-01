@@ -39,14 +39,20 @@ public:
     PropertyValue getProperty(Pid id) const override;
     PropertyValue propertyDefault(Pid id) const override;
     bool setProperty(Pid id, const PropertyValue& val) override;
+    void setXmlText(const String& text) override;
 
     bool isEditable() const override;
 
     const CapoParams& params() const;
     void setParams(const CapoParams& params);
 
+    bool shouldAutomaticallyGenerateText() const;
+    String generateText(size_t stringCount) const;
+
 private:
     CapoParams m_params;
+    bool m_shouldAutomaticallyGenerateText = true;
+    String m_customText;
 };
 }
 

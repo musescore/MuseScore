@@ -403,6 +403,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::CAPO_FRET_POSITION,      true,  "fretPosition",          P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "fret position") },
     { Pid::CAPO_IGNORED_STRINGS,    true,  "ignoredStrings",        P_TYPE::INT_VEC,        DUMMY_QT_TR_NOOP("propertyName", "ignored strings") },
+    { Pid::CAPO_GENERATE_TEXT,      true,  "generateText",          P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "automatically generate text") },
 
     { Pid::END,                     false, "++end++",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };

@@ -2631,6 +2631,8 @@ void TRead::read(Capo* c, XmlReader& xml, ReadContext& ctx)
                     xml.unknown();
                 }
             }
+        } else if (tag == "generateText") {
+            c->setProperty(Pid::CAPO_GENERATE_TEXT, xml.readBool());
         } else if (!readProperties(static_cast<StaffTextBase*>(c), xml, ctx)) {
             xml.unknown();
         }

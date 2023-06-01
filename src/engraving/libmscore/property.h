@@ -412,6 +412,7 @@ enum class Pid {
 
     CAPO_FRET_POSITION,
     CAPO_IGNORED_STRINGS,
+    CAPO_GENERATE_TEXT,
 
     END
 };

@@ -41,7 +41,9 @@ class CapoSettingsModel : public AbstractElementPopupModel
     Q_PROPERTY(int fretPosition READ fretPosition WRITE setFretPosition NOTIFY fretPositionChanged)
     Q_PROPERTY(QList<StringItem*> strings READ strings NOTIFY stringsChanged)
     Q_PROPERTY(int capoPlacement READ capoPlacement WRITE setCapoPlacement NOTIFY capoPlacementChanged)
-    Q_PROPERTY(QString capoText READ capoText WRITE setCapoText NOTIFY capoTextChanged)
+    Q_PROPERTY(
+        bool capoTextSpecifiedByUser READ capoTextSpecifiedByUser WRITE setCapoTextSpecifiedByUser NOTIFY capoTextSpecifiedByUserChanged)
+    Q_PROPERTY(QString userCapoText READ userCapoText WRITE setUserCapoText NOTIFY userCapoTextChanged)
 
 public:
     explicit CapoSettingsModel(QObject* parent = nullptr);
@@ -50,7 +52,8 @@ public:
     int fretPosition() const;
     QList<StringItem*> strings() const;
     int capoPlacement() const;
-    QString capoText() const;
+    bool capoTextSpecifiedByUser() const;
+    QString userCapoText() const;
 
     Q_INVOKABLE void init() override;
     Q_INVOKABLE void toggleCapoForString(int stringIndex);
@@ -61,14 +64,16 @@ public slots:
     void setCapoIsOn(bool isOn);
     void setFretPosition(int position);
     void setCapoPlacement(int position);
-    void setCapoText(const QString& text);
+    void setCapoTextSpecifiedByUser(bool value);
+    void setUserCapoText(const QString& text);
 
 signals:
     void capoIsOnChanged(bool isOn);
     void fretPositionChanged(int position);
     void stringsChanged(QList<StringItem*> strings);
     void capoPlacementChanged(int position);
-    void capoTextChanged(QString text);
+    void capoTextSpecifiedByUserChanged(bool value);
+    void userCapoTextChanged(QString text);
 
 private:
     const mu::engraving::CapoParams& params() const;

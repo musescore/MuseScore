@@ -165,10 +165,10 @@ StyledPopupView {
 
             text: qsTrc("notation", "Manually specify instruction text")
 
-            checked: capoModel.capoText.length > 0
+            checked: capoModel.capoTextSpecifiedByUser
 
             onClicked: {
-                checked = !checked
+                capoModel.capoTextSpecifiedByUser = !checked
             }
         }
 
@@ -177,7 +177,12 @@ StyledPopupView {
 
             visible: specifyInstructionTextCheckBox.checked
 
-            currentText: capoModel.capoText
+            currentText: capoModel.userCapoText
+            maximumLength: 40
+
+            onTextEditingFinished: function(newTextValue) {
+                capoModel.userCapoText = newTextValue
+            }
         }
 
         StyledTextLabel {
