@@ -3171,6 +3171,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 bool Read114::pasteStaff(XmlReader&, Segment*, staff_idx_t, Fraction)
 {
     UNREACHABLE;
+    return false;
 }
 
 void Read114::pasteSymbols(XmlReader&, ChordRest*)

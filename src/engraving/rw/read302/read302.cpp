@@ -328,6 +328,7 @@ void Read302::fixInstrumentId(Instrument* instrument)
 bool Read302::pasteStaff(XmlReader&, Segment*, staff_idx_t, Fraction)
 {
     UNREACHABLE;
+    return false;
 }
 
 void Read302::pasteSymbols(XmlReader&, ChordRest*)
