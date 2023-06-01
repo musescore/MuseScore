@@ -73,11 +73,12 @@ public:
 
     void setTrillOldCompatAccidental(Accidental* a) { _trillOldCompatAccidental = a; }
 
+    Note* noteAbove() const { return _notesAboveAndBelow[0]; }
+    Note* noteBelow() const { return _notesAboveAndBelow[1]; }
+
 private:
     void updateAccidentalsAboveAndBelow();
     void updateCueNote();
-    Note* noteAbove() const { return _notesAboveAndBelow[0]; }
-    Note* noteBelow() const { return _notesAboveAndBelow[1]; }
 
 private:
     M_PROPERTY(OrnamentInterval, intervalAbove, setIntervalAbove)
