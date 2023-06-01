@@ -64,11 +64,11 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
 
     if (m_staffText->swing()) {
         setSwingBox->setChecked(true);
-        if (m_staffText->swingParameters().swingUnit == Constants::division / 2) {
+        if (m_staffText->swingParameters().swingUnit == Constants::DIVISION / 2) {
             swingBox->setEnabled(true);
             swingEighth->setChecked(true);
             swingBox->setValue(m_staffText->swingParameters().swingRatio);
-        } else if (m_staffText->swingParameters().swingUnit == Constants::division / 4) {
+        } else if (m_staffText->swingParameters().swingUnit == Constants::DIVISION / 4) {
             swingBox->setEnabled(true);
             swingSixteenth->setChecked(true);
             swingBox->setValue(m_staffText->swingParameters().swingRatio);
@@ -147,10 +147,10 @@ void StaffTextPropertiesDialog::saveValues()
             m_staffText->setSwingParameters(0, swingBox->value());
             swingBox->setEnabled(false);
         } else if (swingEighth->isChecked()) {
-            m_staffText->setSwingParameters(Constants::division / 2, swingBox->value());
+            m_staffText->setSwingParameters(Constants::DIVISION / 2, swingBox->value());
             swingBox->setEnabled(true);
         } else if (swingSixteenth->isChecked()) {
-            m_staffText->setSwingParameters(Constants::division / 4, swingBox->value());
+            m_staffText->setSwingParameters(Constants::DIVISION / 4, swingBox->value());
             swingBox->setEnabled(true);
         }
     }

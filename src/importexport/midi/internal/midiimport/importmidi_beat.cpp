@@ -424,7 +424,7 @@ void adjustChordsToBeats(std::multimap<int, MTrack>& tracks)
 
         Q_ASSERT_X(beats.size() > 1, "MidiBeat::adjustChordsToBeats", "Human beat count < 2");
 
-        const auto newBeatLen = ReducedFraction::fromTicks(engraving::Constants::division);
+        const auto newBeatLen = ReducedFraction::fromTicks(engraving::Constants::DIVISION);
 
         for (auto trackIt = tracks.begin(); trackIt != tracks.end(); ++trackIt) {
             auto& chords = trackIt->second.chords;

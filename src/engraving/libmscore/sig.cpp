@@ -33,8 +33,8 @@ namespace mu::engraving {
 
 int ticks_beat(int n)
 {
-    int m = (Constants::division * 4) / n;
-    if ((Constants::division* 4) % n) {
+    int m = (Constants::DIVISION * 4) / n;
+    if ((Constants::DIVISION* 4) % n) {
         ASSERT_X(String(u"Mscore: ticks_beat(): bad divisor %1").arg(n));
     }
     return m;
@@ -46,7 +46,7 @@ int ticks_beat(int n)
 
 static int ticks_measure(const Fraction& f)
 {
-    return (Constants::division * 4 * f.numerator()) / f.denominator();
+    return (Constants::DIVISION * 4 * f.numerator()) / f.denominator();
 }
 
 //---------------------------------------------------------
@@ -496,6 +496,6 @@ void TimeSigMap::dump() const
 
 int TimeSigFrac::dUnitTicks() const
 {
-    return (4 * Constants::division) / denominator();
+    return (4 * Constants::DIVISION) / denominator();
 }
 }

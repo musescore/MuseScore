@@ -238,7 +238,7 @@ public:
         // Constants::division * 4 - ticks per whole note
         // result: rounded (Constants::division * 4 * m_numerator * 1.0 / m_denominator) value
         const int sgn = (m_numerator < 0) ? -1 : 1;
-        const auto result = sgn * (static_cast<int_least64_t>(sgn * m_numerator) * Constants::division * 4 + (m_denominator / 2))
+            const auto result = sgn * (static_cast<int_least64_t>(sgn * m_numerator) * Constants::DIVISION * 4 + (m_denominator / 2))
                             / m_denominator;
         return static_cast<int>(result);
     }
@@ -248,11 +248,11 @@ public:
         if (ticks == -1) {
             return Fraction(-1, 1);        // HACK
         }
-        return Fraction(ticks, Constants::division * 4).reduced();
+            return Fraction(ticks, Constants::DIVISION * 4).reduced();
     }
 
     // A very small fraction, corresponds to 1 MIDI tick
-    static Fraction eps() { return Fraction(1, Constants::division * 4); }
+            static Fraction eps() { return Fraction(1, Constants::DIVISION * 4); }
 
     String toString() const { return String(u"%1/%2").arg(m_numerator, m_denominator); }
     static Fraction fromString(const String& str)

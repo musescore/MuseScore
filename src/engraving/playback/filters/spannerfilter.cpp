@@ -59,7 +59,7 @@ int SpannerFilter::spannerActualDurationTicks(const Spanner* spanner, const int 
     if (spanner->type() == ElementType::PEDAL) {
         const Pedal* pedal = toPedal(spanner);
         if (pedal->endHookType() == HookType::HOOK_45) {
-            return nominalDurationTicks - Constants::division / 4;
+            return nominalDurationTicks - Constants::DIVISION / 4;
         }
     }
 

@@ -323,7 +323,7 @@ Score::Score()
 
     m_engravingFont = engravingFonts()->fontByName("Leland");
 
-    _fileDivision = Constants::division;
+    _fileDivision = Constants::DIVISION;
     m_style = DefaultStyle::defaultStyle();
 
     m_rootItem = new RootItem(this);
@@ -622,7 +622,7 @@ void Score::setUpTempoMap()
         }
 
         if (tempomap()->empty()) {
-            tempomap()->setTempo(0, Constants::defaultTempo);
+            tempomap()->setTempo(0, Constants::DEFAULT_TEMPO);
         }
     }
 
@@ -4263,7 +4263,7 @@ void Score::resetTempoRange(const Fraction& tick1, const Fraction& tick2)
     const bool zeroInRange = (tick1 <= Fraction(0, 1) && tick2 > Fraction(0, 1));
     tempomap()->clearRange(tick1.ticks(), tick2.ticks());
     if (zeroInRange) {
-        tempomap()->setTempo(0, Constants::defaultTempo);
+        tempomap()->setTempo(0, Constants::DEFAULT_TEMPO);
     }
     sigmap()->clearRange(tick1.ticks(), tick2.ticks());
     if (zeroInRange) {

@@ -117,7 +117,7 @@ static bool graceNotesMerged(Chord* chord);
 //---------------------------------------------------------
 int toMilliseconds(float tempo, float midiTime)
 {
-    float ticksPerSecond = (float)Constants::division * tempo;
+    float ticksPerSecond = (float)Constants::DIVISION * tempo;
     int time = (int)((midiTime / ticksPerSecond) * 1000.0f);
     if (time > 0x7fff) { //maximum possible value
         time = 0x7fff;
@@ -379,7 +379,7 @@ static void collectNote(EventMap* events, const Note* note, const CollectNotePar
         int off = on + (ticks * e.len()) / 1000 - 1;
 
         if (note->deadNote()) {
-            const double ticksPerSecond = chord->score()->tempo(chord->tick()).val * Constants::division;
+            const double ticksPerSecond = chord->score()->tempo(chord->tick()).val * Constants::DIVISION;
             constexpr double deadNoteDurationInSec = 0.05;
             const double deadNoteDurationInTicks = ticksPerSecond * deadNoteDurationInSec;
             if (off - on > deadNoteDurationInTicks) {
@@ -885,26 +885,26 @@ static VibratoParams getVibratoParams(VibratoType type)
         // guitar vibrato, up only
         params.lowPitch = 0;
         params.highPitch = 10;
-        params.period = Constants::division / 3;
+        params.period = Constants::DIVISION / 3;
         break;
 
     case VibratoType::GUITAR_VIBRATO_WIDE:
         params.lowPitch = 0;         // 100 is a semitone
         params.highPitch = 20;
-        params.period = Constants::division / 2.5;
+        params.period = Constants::DIVISION / 2.5;
         break;
 
     case VibratoType::VIBRATO_SAWTOOTH_WIDE:
         // vibrato with whammy bar up and down
         params.lowPitch = -25;         // 1/16
         params.highPitch = 25;
-        params.period = Constants::division / 2;
+        params.period = Constants::DIVISION / 2;
         break;
 
     case VibratoType::VIBRATO_SAWTOOTH:
         params.lowPitch = -12;
         params.highPitch = 12;
-        params.period = Constants::division / 2;
+        params.period = Constants::DIVISION / 2;
         break;
 
     default:
@@ -1018,7 +1018,7 @@ struct OrnamentExcursion {
 std::set<OrnamentStyle> baroque  = { OrnamentStyle::BAROQUE };
 std::set<OrnamentStyle> defstyle = { OrnamentStyle::DEFAULT };
 std::set<OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
-int _16th = Constants::division / 4;
+int _16th = Constants::DIVISION / 4;
 int _32nd = _16th / 2;
 
 std::vector<OrnamentExcursion> excursions = {

@@ -21,6 +21,8 @@
  */
 #include "rwregister.h"
 
+#include "types/constants.h"
+
 #include "read114/read114.h"
 #include "read206/read206.h"
 #include "read302/read302.h"
@@ -32,12 +34,10 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
-static const int LATEST_VERSION(410);
-
 IReaderPtr RWRegister::reader(int version)
 {
     if (version < 0) {
-        version = LATEST_VERSION;
+        version = Constants::MSC_VERSION;
     }
 
     if (version <= 114) {

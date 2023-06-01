@@ -25,8 +25,10 @@
  Implementation of class Selection plus other selection related functions.
 */
 
-#include "containers.h"
-#include "io/buffer.h"
+#include "global/containers.h"
+#include "global/io/buffer.h"
+
+#include "types/types.h"
 
 #include "rw/rwregister.h"
 
@@ -850,7 +852,7 @@ ByteArray Selection::staffMimeData() const
     Fraction ticks  = tickEnd() - tickStart();
     int staves = static_cast<int>(staffEnd() - staffStart());
 
-    xml.startElement("StaffList", { { "version", (MScore::testMode ? "2.00" : MSC_VERSION) },
+    xml.startElement("StaffList", { { "version", (MScore::testMode ? "2.00" : Constants::MSC_VERSION_STR) },
                          { "tick", tickStart().toString() },
                          { "len", ticks.toString() },
                          { "staff", staffStart() },
@@ -1067,7 +1069,7 @@ ByteArray Selection::symbolListMimeData() const
         map.insert(std::pair<int64_t, MapData>(((int64_t)track << 32) + seg->tick().ticks(), mapData));
     }
 
-    xml.startElement("SymbolList", { { "version", MSC_VERSION },
+    xml.startElement("SymbolList", { { "version", Constants::MSC_VERSION_STR },
                          { "fromtrack", topTrack },
                          { "totrack", bottomTrack } });
 

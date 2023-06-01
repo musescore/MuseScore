@@ -173,7 +173,7 @@ BeamMode Groups::beamMode(int tick, DurationType d) const
     default:
         return BeamMode::AUTO;
     }
-    const int dm = Constants::division / 8;
+    const int dm = Constants::DIVISION / 8;
     for (const GroupNode& e : m_nodes) {
         if (e.pos * dm < tick) {
             continue;

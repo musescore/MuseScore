@@ -27,6 +27,8 @@
 #include "global/io/buffer.h"
 #include "global/types/retval.h"
 
+#include "types/types.h"
+
 #include "../libmscore/masterscore.h"
 #include "../libmscore/audio.h"
 #include "../libmscore/excerpt.h"
@@ -49,7 +51,7 @@ using namespace mu::engraving::rw;
 static RetVal<IReaderPtr> makeReader(int version, bool ignoreVersionError)
 {
     if (!ignoreVersionError) {
-        if (version > MSCVERSION) {
+        if (version > Constants::MSC_VERSION) {
             return RetVal<IReaderPtr>(make_ret(Err::FileTooNew));
         }
 

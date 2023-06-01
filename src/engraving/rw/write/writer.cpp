@@ -21,6 +21,8 @@
  */
 #include "writer.h"
 
+#include "types/types.h"
+
 #include "libmscore/score.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/part.h"
@@ -46,7 +48,7 @@ bool Writer::writeScore(Score* score, io::IODevice* device, bool onlySelection, 
 
     xml.startDocument();
 
-    xml.startElement("museScore", { { "version", MSC_VERSION } });
+    xml.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
 
     if (!MScore::testMode) {
         xml.tag("programVersion", MUSESCORE_VERSION);
@@ -62,7 +64,7 @@ bool Writer::writeScore(Score* score, io::IODevice* device, bool onlySelection, 
         //update version values for i.e. plugin access
         score->_mscoreVersion = String::fromAscii(MUSESCORE_VERSION);
         score->_mscoreRevision = AsciiStringView(MUSESCORE_REVISION).toInt(nullptr, 16);
-        score->_mscVersion = MSCVERSION;
+        score->_mscVersion = Constants::MSC_VERSION;
     }
 
     if (inout) {
@@ -146,7 +148,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
     if (score->pageNumberOffset()) {
         xml.tag("page-offset", score->pageNumberOffset());
     }
-    xml.tag("Division", Constants::division);
+    xml.tag("Division", Constants::DIVISION);
     ctx.setCurTrack(mu::nidx);
 
     hook.onWriteStyle302(score, xml);

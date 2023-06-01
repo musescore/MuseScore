@@ -36,7 +36,7 @@ static const Settings::Key EXPAND_REPEATS_KEY("iex_midi", "io/midi/expandRepeats
 
 void MidiConfiguration::init()
 {
-    settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(mu::engraving::Constants::division / 4));
+    settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(mu::engraving::Constants::DIVISION / 4));
     settings()->setDefaultValue(EXPAND_REPEATS_KEY, Val(true));
     settings()->setDefaultValue(EXPORTRPNS_KEY, Val(true));
 }
