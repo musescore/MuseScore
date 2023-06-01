@@ -268,15 +268,10 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
 
 bool MStyle::read(IODevice* device, bool ign)
 {
+    UNUSED(ign);
     XmlReader e(device);
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
-            String version = e.attribute("version");
-            StringList sl  = version.split('.');
-            int mscVersion  = sl[0].toInt() * 100 + sl[1].toInt();
-            if (mscVersion != Constants::MSC_VERSION && !ign) {
-                return false;
-            }
             while (e.readNextStartElement()) {
                 if (e.name() == "Style") {
                     read(e, nullptr);
