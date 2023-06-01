@@ -22,8 +22,10 @@
 #include "glissandoplaybackmodel.h"
 
 #include "translation.h"
+#include "dom/glissando.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 GlissandoPlaybackModel::GlissandoPlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -52,6 +54,17 @@ void GlissandoPlaybackModel::loadProperties()
 void GlissandoPlaybackModel::resetProperties()
 {
     m_styleType->resetToDefault();
+}
+
+bool GlissandoPlaybackModel::isHarpGliss() const
+{
+    for (mu::engraving::EngravingItem* element : selection()->elements()) {
+        if (element->isGlissandoSegment()) {
+            Glissando* gliss = toGlissando(element);
+            return gliss->isHarpGliss();
+        }
+    }
+    return false;
 }
 
 PropertyItem* GlissandoPlaybackModel::styleType() const

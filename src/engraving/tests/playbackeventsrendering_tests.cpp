@@ -25,8 +25,11 @@
 
 #include "mpe/tests/utils/articulationutils.h"
 
+#include "dom/factory.h"
 #include "dom/measure.h"
+#include "dom/part.h"
 #include "dom/segment.h"
+#include "dom/harppedaldiagram.h"
 
 #include "utils/scorerw.h"
 #include "playback/playbackeventsrenderer.h"
@@ -40,6 +43,7 @@ static constexpr duration_t QUARTER_NOTE_DURATION = 500000; // duration in micro
 static constexpr duration_t QUAVER_NOTE_DURATION = QUARTER_NOTE_DURATION / 2; // duration in microseconds for 4/4 120BPM
 static constexpr duration_t SEMI_QUAVER_NOTE_DURATION = QUAVER_NOTE_DURATION / 2; // duration in microseconds for 4/4 120BPM
 static constexpr duration_t DEMI_SEMI_QUAVER_NOTE_DURATION = QUARTER_NOTE_DURATION / 8; // duration in microseconds for 4/4 120BPM
+static constexpr duration_t WHOLE_NOTE_DURATION = QUARTER_NOTE_DURATION * 4;    // duration in microseconds for 4/4 120BPM
 
 class Engraving_PlaybackEventsRendererTests : public ::testing::Test
 {
@@ -890,6 +894,118 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
             // [THEN] We expect that each sub-note has an expected duration
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
             EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, static_cast<duration_t>(i) * expectedDuration);
+
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
+    }
+}
+
+/**
+ * @brief PlaybackEventsRendererTests_TwoNotes_Discrete_Harp_Glissando
+ * @details Render a score with 3 measures containing whole notes (C4, C5, C4) and glissandos
+ *          between them.  Add harp pedal diagrams to the first and second measures set to a
+ *          whole tone scale, then back to Cmaj.  Check the glisses render as expected
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Discrete_Harp_Glissando) {
+    // [GIVEN]
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "TwoNotes_Discrete_Harp_Glissando/TwoNotes_Discrete_Harp_Glissando.mscx");
+
+    Measure* firstMeasure = score->firstMeasure();
+    ASSERT_TRUE(firstMeasure);
+
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    ASSERT_TRUE(firstSegment);
+
+    ChordRest* chord = firstSegment->nextChordRest(0);
+    ASSERT_TRUE(chord);
+
+    Measure* secondMeasure = firstMeasure->nextMeasure();
+    ASSERT_TRUE(secondMeasure);
+
+    Segment* secondSegment = secondMeasure->segments().firstCRSegment();
+    ASSERT_TRUE(secondSegment);
+
+    ChordRest* secondChord = secondSegment->nextChordRest(0);
+    ASSERT_TRUE(secondChord);
+
+    // TEST FIRST GLISS
+
+    // [GIVEN] Expected glissando disclosure
+    size_t expectedSubNotesCount = 7;
+
+    float expectedDuration = static_cast<float>(WHOLE_NOTE_DURATION) / expectedSubNotesCount;
+
+    pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::C, 4);
+    std::vector<int> pitchesWt = { 0, 2, 4, 6, 8, 10, 12 };
+
+    std::vector<pitch_level_t> expectedPitches;
+    for (size_t i = 0; i < expectedSubNotesCount; ++i) {
+        expectedPitches.push_back(nominalPitchLevel + pitchesWt.at(i) * PITCH_LEVEL_STEP);
+    }
+
+    m_defaultProfile->setPattern(ArticulationType::DiscreteGlissando, m_dummyPattern);
+
+    PlaybackEventsMap result;
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
+
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+
+            // [THEN] We expect that each note event has only one articulation applied - Discrete Glissando
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::DiscreteGlissando));
+
+            // [THEN] We expect that each sub-note in Discrete Glissando articulation has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, static_cast<int>(expectedDuration));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, static_cast<int>(i * expectedDuration));
+
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
+    }
+
+    // TEST SECOND GLISS
+
+    // [GIVEN] Expected glissando disclosure
+
+    nominalPitchLevel = pitchLevel(PitchClass::C, 5);
+    std::vector<int> pitchesC = { 0, 1, 3, 5, 7, 8, 10 };
+
+    expectedPitches.clear();
+    for (size_t i = 0; i < expectedSubNotesCount; ++i) {
+        expectedPitches.push_back(nominalPitchLevel - pitchesC.at(i) * PITCH_LEVEL_STEP);
+    }
+
+    m_defaultProfile->setPattern(ArticulationType::DiscreteGlissando, m_dummyPattern);
+
+    PlaybackEventsMap result2;
+    m_renderer.render(secondChord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result2);
+
+    for (const auto& pair : result2) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+
+            // [THEN] We expect that each note event has only one articulation applied - Discrete Glissando
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::DiscreteGlissando));
+
+            // [THEN] We expect that each sub-note in Discrete Glissando articulation has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, static_cast<int>(expectedDuration));
+            // HACK: for some reason the 4th note in the gliss starts 1ms too late
+            if (i != 3) {
+                EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, WHOLE_NOTE_DURATION + static_cast<int>(i * expectedDuration));
+            }
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));

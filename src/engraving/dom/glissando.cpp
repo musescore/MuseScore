@@ -37,8 +37,10 @@ NICE-TO-HAVE TODO:
 #include "types/typesconv.h"
 
 #include "chord.h"
+#include "harppedaldiagram.h"
 #include "measure.h"
 #include "note.h"
+#include "part.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -136,6 +138,14 @@ const TranslatableString& Glissando::glissandoTypeName() const
     return TConv::userName(glissandoType());
 }
 
+bool Glissando::isHarpGliss() const
+{
+    if (!staff() || !part()) {
+        return false;
+    }
+    return staff()->part()->instrumentId(tick()) == "harp";
+}
+
 //---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
@@ -195,6 +205,41 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
     int direction = pitchEnd > pitchStart ? 1 : -1;
     pitchOffsets.clear();
     if (glissandoStyle == GlissandoStyle::DIATONIC) {
+        // Obey harp pedal diagrams if on a harp staff
+        if (glissando->isHarpGliss()) {
+            HarpPedalDiagram* hd = spanner->part()->currentHarpDiagram(spanner->tick());
+            std::set<int> playableTpcs = hd ? hd->getPlayableTpcs() : std::set<int>({ 14, 16, 18, 13, 15, 17, 19 });
+            std::vector<int> playablePitches;
+            for (int t : playableTpcs) {
+                playablePitches.push_back(tpc2pitch(t) % PITCH_DELTA_OCTAVE);
+            }
+
+            // Check for enharmonic on the next string
+            int en = noteStart->tpc() + TPC_DELTA_ENHARMONIC * -direction;
+            // Harp pedalling will only have 1 flat or sharp
+            if (en >= TPC_F_B && en <= TPC_B_S && playableTpcs.find(en) != playableTpcs.end()) {
+                pitchOffsets.push_back(PITCH_DELTA_OCTAVE * noteStart->octave() + tpc2pitch(en) - pitchStart);
+            }
+            pitchOffsets.push_back(pitchStart - pitchStart);
+
+            for (int p = pitchStart + direction; p != pitchEnd; p += direction) {
+                // Count times pitch occurs in harp pedalling - this accounts for enharmonics
+                int pitchOccurrences = std::count(playablePitches.begin(), playablePitches.end(), p % PITCH_DELTA_OCTAVE);
+                if (pitchOccurrences > 0) {
+                    pitchOffsets.insert(pitchOffsets.end(), pitchOccurrences, p - pitchStart);
+                }
+            }
+
+            // Check for enharmonic at end, in correct direction
+            en = noteEnd->tpc() + TPC_DELTA_ENHARMONIC * direction;
+            if (en >= TPC_F_B && en <= TPC_B_S && playableTpcs.find(en) != playableTpcs.end()) {
+                pitchOffsets.push_back(PITCH_DELTA_OCTAVE * noteEnd->octave() + tpc2pitch(en) - pitchStart);
+            }
+
+            return pitchOffsets.size() > 0;
+        }
+
+        // Regular diatonic mode
         int lineStart = noteStart->line();
         // scale obeying accidentals
         for (int line = lineStart, pitch = pitchStart; (direction == 1) ? (pitch < pitchEnd) : (pitch > pitchEnd); line -= direction) {
@@ -523,7 +568,7 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
     case Pid::GLISS_SHOW_TEXT:
         return true;
     case Pid::GLISS_STYLE:
-        return GlissandoStyle::CHROMATIC;
+        return isHarpGliss() ? GlissandoStyle::DIATONIC : GlissandoStyle::CHROMATIC;
     case Pid::GLISS_SHIFT:
         return false;
     case Pid::GLISS_EASEIN:

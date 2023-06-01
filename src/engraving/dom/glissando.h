@@ -88,6 +88,8 @@ public:
 
     const TranslatableString& glissandoTypeName() const;
 
+    bool isHarpGliss() const;
+
     // overridden inherited methods
     Glissando* clone() const override { return new Glissando(*this); }
 

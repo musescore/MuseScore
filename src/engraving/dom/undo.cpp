@@ -854,6 +854,11 @@ void AddElement::endUndoRedo(bool isUndo) const
     } else if (element->isKeySig()) {
         element->triggerLayout();
         element->score()->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
+    } else if (element->isHarpPedalDiagram()) {
+        HarpPedalDiagram* nextHd = element->part()->nextHarpDiagram(element->tick());
+        Fraction nextHdTick = nextHd ? nextHd->tick() : element->score()->endTick();
+        element->score()->setLayout(element->tick(), nextHdTick, element->part()->staves().front()->idx(),
+                                    element->part()->staves().back()->idx());
     }
 }
 
@@ -1030,6 +1035,11 @@ void RemoveElement::undo(EditData*)
         score->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
     } else if (element->isKeySig()) {
         score->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
+    } else if (element->isHarpPedalDiagram()) {
+        HarpPedalDiagram* nextHd = element->part()->nextHarpDiagram(element->tick());
+        Fraction nextHdTick = nextHd ? nextHd->tick() : score->endTick();
+        score->setLayout(element->tick(), nextHdTick, element->part()->staves().front()->idx(),
+                         element->part()->staves().back()->idx());
     }
 }
 
@@ -1059,6 +1069,11 @@ void RemoveElement::redo(EditData*)
         score->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
     } else if (element->isKeySig()) {
         score->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
+    } else if (element->isHarpPedalDiagram()) {
+        HarpPedalDiagram* nextHd = element->part()->nextHarpDiagram(element->tick());
+        Fraction nextHdTick = nextHd ? nextHd->tick() : score->endTick();
+        score->setLayout(element->tick(), nextHdTick, element->part()->staves().front()->idx(),
+                         element->part()->staves().back()->idx());
     }
 }
 
@@ -2996,7 +3011,14 @@ void ChangeHarpPedalState::flip(EditData*)
     diagram->setPedalState(pedalState);
     pedalState = f_state;
 
-    diagram->triggerLayout();
+    Part* part = diagram->part();
+
+    if (part && diagram->score()) {
+        HarpPedalDiagram* nextHd = part->nextHarpDiagram(diagram->tick());
+        Fraction nextHdTick = nextHd ? nextHd->tick() : diagram->score()->endTick();
+        diagram->score()->setLayout(diagram->tick(), nextHdTick, part->staves().front()->idx(),
+                                    part->staves().back()->idx());
+    }
 }
 
 void ChangeSingleHarpPedal::flip(EditData*)
@@ -3010,6 +3032,14 @@ void ChangeSingleHarpPedal::flip(EditData*)
     diagram->setPedal(type, pos);
     type = f_type;
     pos = f_pos;
-    diagram->triggerLayout();
+
+    Part* part = diagram->part();
+
+    if (part && diagram->score()) {
+        HarpPedalDiagram* nextHd = part->nextHarpDiagram(diagram->tick());
+        Fraction nextHdTick = nextHd ? nextHd->tick() : diagram->score()->endTick();
+        diagram->score()->setLayout(diagram->tick(), nextHdTick, part->staves().front()->idx(),
+                                    part->staves().back()->idx());
+    }
 }
 }

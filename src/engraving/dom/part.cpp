@@ -669,7 +669,7 @@ HarpPedalDiagram* Part::currentHarpDiagram(const Fraction& tick) const
 
 HarpPedalDiagram* Part::nextHarpDiagram(const Fraction& tick) const
 {
-    auto i = harpDiagrams.lower_bound(tick.ticks());
+    auto i = harpDiagrams.upper_bound(tick.ticks());
     return (i == harpDiagrams.end()) ? nullptr : i->second;
 }
 

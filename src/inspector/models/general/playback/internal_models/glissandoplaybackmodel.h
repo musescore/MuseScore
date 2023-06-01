@@ -30,11 +30,13 @@ class GlissandoPlaybackModel : public AbstractInspectorModel
     Q_OBJECT
 
     Q_PROPERTY(PropertyItem * styleType READ styleType CONSTANT)
+    Q_PROPERTY(bool isHarpGliss READ isHarpGliss CONSTANT)
 
 public:
     explicit GlissandoPlaybackModel(QObject* parent, IElementRepositoryService* repository);
 
     PropertyItem* styleType() const;
+    bool isHarpGliss() const;
 
 protected:
     void createProperties() override;
