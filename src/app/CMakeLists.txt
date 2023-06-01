@@ -409,7 +409,12 @@ elseif(OS_IS_FBSD)
 # FreeBSD
 ###########################################
     install(TARGETS ${EXECUTABLE_NAME} RUNTIME DESTINATION bin )
-    install(FILES ${PROJECT_BINARY_DIR}/src/app/musescore DESTINATION bin)
+    add_custom_target(mscore_alias ALL
+           COMMAND echo "Creating symlink alias for mscore executable."
+           COMMAND ln -sfv "mscore" "musescore"
+           )
+   install(FILES ${PROJECT_BINARY_DIR}/src/app/musescore DESTINATION bin)
+
 ###########################################
 # MacOS
 ###########################################
