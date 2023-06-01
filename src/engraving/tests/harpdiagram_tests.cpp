@@ -76,7 +76,7 @@ TEST_F(Engraving_HarpDiagramTests, harpdiagram)
 TEST_F(Engraving_HarpDiagramTests, textdiagrams)
 {
     const String initFile(HARPDIAGRAM_DATA_DIR + u"harpdiagram-blank.mscx");
-    const String ref(HARPDIAGRAM_DATA_DIR + u"textdiagram01.mscx");
+    const String ref(HARPDIAGRAM_DATA_DIR + u"textdiagram01-ref.mscx");
     const String write(u"textdiagram-test01.mscx");
 
     MasterScore* score = ScoreRW::readScore(initFile);
