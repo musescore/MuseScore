@@ -963,8 +963,8 @@ bool Staff::isPrimaryStaff() const
     if (!_links) {
         return true;
     }
-    std::list<Staff*> s;
-    std::list<Staff*> ss;
+    std::vector<Staff*> s;
+    std::vector<Staff*> ss;
     for (auto e : *_links) {
         Staff* staff = toStaff(e);
         if (staff->score() == score()) {

@@ -803,8 +803,10 @@ public:
 
     const std::vector<Part*>& parts() const;
     int visiblePartCount() const;
-    std::set<ID> partIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const;
-    std::set<staff_idx_t> staffIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const;
+
+    using StaffAccepted = std::function<bool (const Staff&)>;
+    std::set<staff_idx_t> staffIdxSetFromRange(const track_idx_t trackFrom, const track_idx_t trackTo,
+                                               StaffAccepted staffAccepted = StaffAccepted()) const;
 
     void appendPart(const InstrumentTemplate*);
     void updateStaffIndex();
