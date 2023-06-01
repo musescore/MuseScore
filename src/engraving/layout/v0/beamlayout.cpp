@@ -642,7 +642,7 @@ void BeamLayout::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                 if (mcr == 0) {
                     continue;
                 }
-                int beat = (mcr->rtick() * stretch).ticks() / Constants::division;
+                int beat = (mcr->rtick() * stretch).ticks() / Constants::DIVISION;
                 if (mu::contains(beatSubdivision, beat)) {
                     beatSubdivision[beat] = std::min(beatSubdivision[beat], mcr->durationType());
                 } else {
@@ -712,8 +712,8 @@ void BeamLayout::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                 if (checkBeats && cr->rtick().isNotZero()) {
                     Fraction tick = cr->rtick() * stretch;
                     // check if on the beat
-                    if ((tick.ticks() % Constants::division) == 0) {
-                        int beat = tick.ticks() / Constants::division;
+                    if ((tick.ticks() % Constants::DIVISION) == 0) {
+                        int beat = tick.ticks() / Constants::DIVISION;
                         // get minimum duration for this & previous beat
                         TDuration minDuration = std::min(beatSubdivision[beat], beatSubdivision[beat - 1]);
                         // re-calculate beam as if this were the duration of current chordrest

@@ -1037,7 +1037,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
         }
 
         int grace_pitch = note->staff()->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr);
-        auto gnote = score->setGraceNote(note->chord(), grace_pitch, note_type, Constants::division / 2);
+        auto gnote = score->setGraceNote(note->chord(), grace_pitch, note_type, Constants::DIVISION / 2);
         score->deselect(gnote);
         gnote->setString(note->string());
         auto sd = note->part()->instrument()->stringData();

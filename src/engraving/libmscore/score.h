@@ -32,13 +32,14 @@
 #include <memory>
 
 #include "async/channel.h"
-#include "io/iodevice.h"
 #include "types/ret.h"
 #include "compat/midi/midirender.h"
 
 #include "modularity/ioc.h"
 #include "draw/iimageprovider.h"
 #include "iengravingfontsprovider.h"
+
+#include "types/constants.h"
 
 #include "layout/ilayout.h"
 #include "layout/layoutoptions.h"
@@ -447,9 +448,9 @@ private:
     bool _savedCapture          { false };        ///< True if we saved an image capture
 
     ScoreOrder _scoreOrder;                     ///< used for score ordering
-    bool _resetAutoplace{ false };
-    bool _resetDefaults{ false };
-    int _mscVersion { MSCVERSION };     ///< version of current loading *.msc file
+    bool _resetAutoplace = false;
+    bool _resetDefaults = false;
+    int _mscVersion = Constants::MSC_VERSION;     ///< version of current loading *.msc file
 
     bool _isOpen { false };
     bool _needSetUpTempoMap { true };
@@ -869,7 +870,7 @@ public:
     MeasureBase* getNextPrevSectionBreak(MeasureBase*, bool) const;
     EngravingItem* getScoreElementOfMeasureBase(MeasureBase*) const;
 
-    int fileDivision(int t) const { return static_cast<int>(((int64_t)t * Constants::division + _fileDivision / 2) / _fileDivision); }
+    int fileDivision(int t) const { return static_cast<int>(((int64_t)t * Constants::DIVISION + _fileDivision / 2) / _fileDivision); }
     void setFileDivision(int t) { _fileDivision = t; }
 
     bool dirty() const;

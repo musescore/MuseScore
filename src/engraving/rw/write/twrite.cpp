@@ -2370,9 +2370,9 @@ void TWrite::write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
     }
     if (item->swing()) {
         DurationType swingUnit;
-        if (item->swingParameters().swingUnit == Constants::division / 2) {
+        if (item->swingParameters().swingUnit == Constants::DIVISION / 2) {
             swingUnit = DurationType::V_EIGHTH;
-        } else if (item->swingParameters().swingUnit == Constants::division / 4) {
+        } else if (item->swingParameters().swingUnit == Constants::DIVISION / 4) {
             swingUnit = DurationType::V_16TH;
         } else {
             swingUnit = DurationType::V_ZERO;

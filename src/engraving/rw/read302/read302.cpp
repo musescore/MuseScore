@@ -225,7 +225,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->connectTies();
 
-    score->_fileDivision = Constants::division;
+    score->_fileDivision = Constants::DIVISION;
 
     if (score->mscVersion() == 302) {
         // MuseScore 3.6.x scores had some wrong instrument IDs

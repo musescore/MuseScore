@@ -1192,7 +1192,7 @@ void ExportMusicXml::calcDivisions()
     // init
     integers.clear();
     primes.clear();
-    integers.append(Constants::division);
+    integers.append(Constants::DIVISION);
     primes.append(2);
     primes.append(3);
     primes.append(5);
@@ -1266,7 +1266,7 @@ void ExportMusicXml::calcDivisions()
         }
     }
 
-    div = Constants::division / integers[0];
+    div = Constants::DIVISION / integers[0];
 #ifdef DEBUG_TICK
     LOGD("divisions=%d div=%d", integers[0], div);
 #endif
@@ -7303,7 +7303,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     // output attributes with the first actual measure (pickup or regular)
     if (isFirstActualMeasure) {
         _attr.doAttr(_xml, true);
-        _xml.tag("divisions", Constants::division / div);
+        _xml.tag("divisions", Constants::DIVISION / div);
     }
 
     // output attributes at start of measure: key, time

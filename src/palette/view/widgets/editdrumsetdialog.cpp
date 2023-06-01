@@ -26,6 +26,7 @@
 
 #include "engraving/infrastructure/smufl.h"
 
+#include "engraving/types/constants.h"
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
 
@@ -643,7 +644,7 @@ void EditDrumsetDialog::load()
     m_editedDrumset.clear();
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
-            if (e.attribute("version") != MSC_VERSION) {
+            if (e.attribute("version") != Constants::MSC_VERSION_STR) {
                 auto result = interactive()->warning(
                     mu::trc("palette", "Drumset file too old"),
                     mu::trc("palette", "MuseScore may not be able to load this drumset file."), {
@@ -692,7 +693,7 @@ void EditDrumsetDialog::save()
     valueChanged();    //save last changes in name
     XmlWriter xml(&f);
     xml.startDocument();
-    xml.startElement("museScore", { { "version", MSC_VERSION } });
+    xml.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
     m_editedDrumset.save(xml);
     xml.endElement();
     if (f.error() != File::NoError) {

@@ -1368,7 +1368,7 @@ void GPConverter::addFermatas()
     for (const auto& fr : _fermatas) {
         const auto& measure = fr.first;
         const auto& gpFermata = fr.second;
-        Fraction tick = Fraction::fromTicks(mu::engraving::Constants::division * gpFermata.offsetNum / gpFermata.offsetDenom);
+        Fraction tick = Fraction::fromTicks(mu::engraving::Constants::DIVISION * gpFermata.offsetNum / gpFermata.offsetDenom);
         // bellow how gtp fermata timeStretch converting to MU timeStretch
         float convertingLength = 1.5f - gpFermata.length * 0.5f + gpFermata.length * gpFermata.length * 3;
         Segment* seg = measure->getSegmentR(SegmentType::ChordRest, tick);
@@ -1415,7 +1415,7 @@ void GPConverter::addTempoMap()
         measureIdx++;
         for (auto tempIt = range.first; tempIt != range.second; tempIt++) {
             Fraction tick = m->tick() + Fraction::fromTicks(
-                tempIt->second.position * Constants::division * 4 * m->ticks().numerator() / m->ticks().denominator());
+                        tempIt->second.position * Constants::DIVISION * 4 * m->ticks().numerator() / m->ticks().denominator());
             Segment* segment = m->getSegment(SegmentType::ChordRest, tick);
             int realTemp = realTempo(tempIt->second);
             TempoText* tt = Factory::createTempoText(segment);
@@ -1507,7 +1507,7 @@ void GPConverter::addInstrumentChanges()
 
             if (position != 0) {
                 // searching for correct segment to put instrument change
-                Fraction tick = m->tick() + Fraction::fromTicks(position * Constants::division);
+                Fraction tick = m->tick() + Fraction::fromTicks(position * Constants::DIVISION);
                 Segment* positionedSegment = m->findSegment(SegmentType::ChordRest, tick);
                 if (positionedSegment) {
                     seg = positionedSegment;

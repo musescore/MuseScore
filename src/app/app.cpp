@@ -379,7 +379,7 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, fra
 
     if (runMode == framework::IApplication::RunMode::ConsoleApp) {
         project::MigrationOptions migration;
-        migration.appVersion = mu::engraving::MSCVERSION;
+        migration.appVersion = mu::engraving::Constants::MSC_VERSION;
 
         //! NOTE Don't ask about migration in convert mode
         migration.isAskAgain = false;

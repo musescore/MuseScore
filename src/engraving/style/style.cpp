@@ -22,6 +22,7 @@
 
 #include "style.h"
 
+#include "types/constants.h"
 #include "compat/pageformat.h"
 #include "rw/compat/readchordlisthook.h"
 #include "rw/xmlreader.h"
@@ -273,7 +274,7 @@ bool MStyle::read(IODevice* device, bool ign)
             String version = e.attribute("version");
             StringList sl  = version.split('.');
             int mscVersion  = sl[0].toInt() * 100 + sl[1].toInt();
-            if (mscVersion != MSCVERSION && !ign) {
+            if (mscVersion != Constants::MSC_VERSION && !ign) {
                 return false;
             }
             while (e.readNextStartElement()) {
@@ -363,7 +364,7 @@ bool MStyle::write(IODevice* device)
 {
     XmlWriter xml(device);
     xml.startDocument();
-    xml.startElement("museScore", { { "version", MSC_VERSION } });
+    xml.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
     save(xml, false);
     xml.endElement();
     return true;

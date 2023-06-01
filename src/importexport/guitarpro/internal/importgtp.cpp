@@ -1970,13 +1970,13 @@ bool GuitarPro1::readNote(int string, Note* note)
             int transition = readUInt8();                  // grace transition
             int duration = readUInt8();                  // grace duration
 
-            int grace_len = Constants::division / 8;
+            int grace_len = Constants::DIVISION / 8;
             if (duration == 1) {
-                grace_len = Constants::division / 8;       //32nd
+                grace_len = Constants::DIVISION / 8;       //32nd
             } else if (duration == 2) {
-                grace_len = Constants::division / 6;       //24th
+                grace_len = Constants::DIVISION / 6;       //24th
             } else if (duration == 3) {
-                grace_len = Constants::division / 4;       //16th
+                grace_len = Constants::DIVISION / 4;       //16th
             }
             Note* gn = Factory::createNote(score->dummy()->chord());
 
@@ -2001,7 +2001,7 @@ bool GuitarPro1::readNote(int string, Note* note)
                 gc = Factory::createChord(score->dummy()->segment());
                 TDuration d;
                 d.setVal(grace_len);
-                if (grace_len == Constants::division / 6) {
+                if (grace_len == Constants::DIVISION / 6) {
                     d.setDots(1);
                 }
                 gc->setDurationType(d);

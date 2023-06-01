@@ -456,7 +456,7 @@ static void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell, int& on
 
     // render tremolo with multiple events
     if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
-        int t = Constants::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
+        int t = Constants::DIVISION / (1 << (tremolo->lines() + chord->durationType().hooks()));
         if (t == 0) {   // avoid crash on very short tremolo
             t = 1;
         }
@@ -532,7 +532,7 @@ static void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell, int& on
             events->clear();
         }
     } else if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {
-        int t = Constants::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
+        int t = Constants::DIVISION / (1 << (tremolo->lines() + chord->durationType().hooks()));
         if (t == 0) {   // avoid crash on very short tremolo
             t = 1;
         }
@@ -581,7 +581,7 @@ void renderArpeggio(Chord* chord, std::vector<NoteEventList>& ell)
         NoteEventList* events = &(ell)[i];
         events->clear();
 
-        auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick().ticks()).val / Constants::defaultTempo.val;
+        auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
         int ot = (l * j * 1000) / chord->upNote()->playTicks()
                  * tempoRatio * chord->arpeggio()->Stretch();
 
@@ -665,7 +665,7 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
 
     Fraction tick = chord->tick();
     BeatsPerSecond tempo = chord->score()->tempo(tick);
-    int ticksPerSecond = tempo.val * Constants::division;
+    int ticksPerSecond = tempo.val * Constants::DIVISION;
 
     int minTicksPerNote = int(ticksPerSecond / fastestFreq);
     int maxTicksPerNote = (0 == slowestFreq) ? 0 : int(ticksPerSecond / slowestFreq);
@@ -898,7 +898,7 @@ namespace {
 std::set<OrnamentStyle> baroque  = { OrnamentStyle::BAROQUE };
 std::set<OrnamentStyle> defstyle = { OrnamentStyle::DEFAULT };
 std::set<OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
-int _16th = Constants::division / 4;
+int _16th = Constants::DIVISION / 4;
 int _32nd = _16th / 2;
 
 std::vector<OrnamentExcursion> excursions = {
@@ -990,7 +990,7 @@ static void renderGlissando(NoteEventList* events, Note* notestart, double grace
         if (spanner->type() == ElementType::GLISSANDO
             && toGlissando(spanner)->playGlissando()
             && Glissando::pitchSteps(spanner, body)) {
-            renderNoteArticulation(events, notestart, true, Constants::division, empty, body, false, true, empty, 16, 0,
+            renderNoteArticulation(events, notestart, true, Constants::DIVISION, empty, body, false, true, empty, 16, 0,
                                    graceOnBeatProportion, tremoloBefore);
         }
     }
@@ -1264,7 +1264,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
 
     int graceDuration = 0;
     bool drumset = (getDrumset(chord) != nullptr);
-    const double ticksPerSecond = tempo(tick).val * Constants::division;
+    const double ticksPerSecond = tempo(tick).val * Constants::DIVISION;
     const double chordTimeMS = (chord->actualTicks().ticks() / ticksPerSecond) * 1000;
     if (drumset) {
         int flamDuration = 15;     //ms

@@ -3951,7 +3951,7 @@ void NotationInteraction::addGraceNotesToSelectedNotes(GraceNoteType type)
     }
 
     startEdit();
-    score()->cmdAddGrace(type, mu::engraving::Constants::division / denominator);
+    score()->cmdAddGrace(type, mu::engraving::Constants::DIVISION / denominator);
     apply();
 }
 

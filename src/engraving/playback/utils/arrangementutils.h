@@ -41,17 +41,17 @@ inline int timestampToTick(const Score* score, const mpe::timestamp_t timestamp)
     return score->repeatList().utime2utick(timestamp / 1000000.f);
 }
 
-inline mpe::duration_t durationFromTicks(const double beatsPerSecond, const int durationTicks, const int ticksPerBeat = Constants::division)
+inline mpe::duration_t durationFromTicks(const double beatsPerSecond, const int durationTicks, const int ticksPerBeat = Constants::DIVISION)
 {
     float beatsNumber = static_cast<float>(durationTicks) / static_cast<float>(ticksPerBeat);
 
     return (beatsNumber / beatsPerSecond) * 1000000;
 }
 
-static constexpr int CROTCHET_TICKS = Constants::division;
-static constexpr int QUAVER_TICKS = Constants::division / 2;
-static constexpr int SEMIQUAVER_TICKS = Constants::division / 4;
-static constexpr int DEMISEMIQUAVER_TICKS = Constants::division / 8;
+static constexpr int CROTCHET_TICKS = Constants::DIVISION;
+static constexpr int QUAVER_TICKS = Constants::DIVISION / 2;
+static constexpr int SEMIQUAVER_TICKS = Constants::DIVISION / 4;
+static constexpr int DEMISEMIQUAVER_TICKS = Constants::DIVISION / 8;
 
 static const double PRESTISSIMO_BPS_BOUND = RealRound(200 /*bpm*/ / 60.f /*secs*/, 2);
 static const double PRESTO_BPS_BOUND = RealRound(168 /*bpm*/ / 60.f /*secs*/, 2);

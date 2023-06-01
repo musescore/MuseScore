@@ -3357,7 +3357,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->connectTies();
 
-    score->setFileDivision(Constants::division);
+    score->setFileDivision(Constants::DIVISION);
 
     score->setUpTempoMap();
 

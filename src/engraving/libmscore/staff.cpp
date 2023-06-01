@@ -805,9 +805,9 @@ SwingParameters Staff::swing(const Fraction& tick) const
     DurationType unit = TConv::fromXml(ba.constChar(), DurationType::V_INVALID);
     int swingRatio = score()->styleI(Sid::swingRatio);
     if (unit == DurationType::V_EIGHTH) {
-        swingUnit = Constants::division / 2;
+        swingUnit = Constants::DIVISION / 2;
     } else if (unit == DurationType::V_16TH) {
-        swingUnit = Constants::division / 4;
+        swingUnit = Constants::DIVISION / 4;
     } else if (unit == DurationType::V_ZERO) {
         swingUnit = 0;
     }

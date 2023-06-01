@@ -24,6 +24,8 @@
 
 #include "draw/types/geometry.h"
 
+#include "types/constants.h"
+
 #include "libmscore/articulation.h"
 #include "libmscore/mscore.h"
 #include "libmscore/realizedharmony.h"
@@ -1572,5 +1574,5 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::chordlineThickness, "chordlineThickness", Spatium(0.16) },
 
     { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
-    { Sid::defaultsVersion,               "defaultsVersion",               MSCVERSION }
+    { Sid::defaultsVersion,               "defaultsVersion",               Constants::MSC_VERSION }
 } };

@@ -47,7 +47,7 @@ namespace mu::iex::midi {
 namespace Quantize {
 ReducedFraction quantValueToFraction(MidiOperations::QuantValue quantValue)
 {
-    const auto division = ReducedFraction::fromTicks(Constants::division);
+    const auto division = ReducedFraction::fromTicks(Constants::DIVISION);
     ReducedFraction fraction;
 
     switch (quantValue) {
@@ -88,7 +88,7 @@ ReducedFraction quantValueToFraction(MidiOperations::QuantValue quantValue)
 
 MidiOperations::QuantValue fractionToQuantValue(const ReducedFraction& fraction)
 {
-    const auto division = ReducedFraction::fromTicks(Constants::division);
+    const auto division = ReducedFraction::fromTicks(Constants::DIVISION);
     MidiOperations::QuantValue quantValue = MidiOperations::QuantValue::Q_4;
 
     if (fraction == division) {
@@ -122,7 +122,7 @@ MidiOperations::QuantValue fractionToQuantValue(const ReducedFraction& fraction)
 MidiOperations::QuantValue defaultQuantValueFromPreferences()
 {
     auto conf = mu::modularity::ioc()->resolve<mu::iex::midi::IMidiImportExportConfiguration>("iex_midi");
-    int ticks = conf ? conf->midiShortestNote() : (Constants::division / 4);
+    int ticks = conf ? conf->midiShortestNote() : (Constants::DIVISION / 4);
     const auto fraction = ReducedFraction::fromTicks(ticks);
     MidiOperations::QuantValue quantValue = fractionToQuantValue(fraction);
     if (quantValue == MidiOperations::QuantValue::Q_INVALID) {
@@ -136,7 +136,7 @@ ReducedFraction shortestQuantizedNoteInRange(
     const std::multimap<ReducedFraction, MidiChord>::const_iterator& beg,
     const std::multimap<ReducedFraction, MidiChord>::const_iterator& end)
 {
-    const auto division = ReducedFraction::fromTicks(Constants::division);
+    const auto division = ReducedFraction::fromTicks(Constants::DIVISION);
     auto minDuration = division;
     for (auto it = beg; it != end; ++it) {
         for (const auto& note: it->second.notes) {
@@ -404,7 +404,7 @@ bool isHumanPerformance(
         return false;
     }
 
-    const auto basicQuant = ReducedFraction::fromTicks(Constants::division) / 4;      // 1/16
+    const auto basicQuant = ReducedFraction::fromTicks(Constants::DIVISION) / 4;      // 1/16
     int matches = 0;
     int count = 0;
 
@@ -476,7 +476,7 @@ void setIfHumanPerformance(
         if (opers.maxVoiceCount.canRedefineDefaultLater()) {
             opers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_2);
         }
-        const double ticksPerSec = MidiTempo::findBasicTempo(tracks, true) * Constants::division;
+        const double ticksPerSec = MidiTempo::findBasicTempo(tracks, true) * Constants::DIVISION;
         MidiBeat::findBeatLocations(allChords, sigmap, ticksPerSec);          // and set time sig
     }
 }

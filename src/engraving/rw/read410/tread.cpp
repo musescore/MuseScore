@@ -483,7 +483,7 @@ void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "tempo") {
-            t->setTempo(TConv::fromXml(e.readAsciiText(), Constants::defaultTempo));
+            t->setTempo(TConv::fromXml(e.readAsciiText(), Constants::DEFAULT_TEMPO));
         } else if (tag == "followText") {
             t->setFollowText(e.readInt());
         } else if (!readProperties(static_cast<TextBase*>(t), e, ctx)) {
@@ -561,9 +561,9 @@ bool TRead::readProperties(StaffTextBase* t, XmlReader& e, ReadContext& ctx)
         DurationType swingUnit = TConv::fromXml(e.asciiAttribute("unit"), DurationType::V_INVALID);
         int unit = 0;
         if (swingUnit == DurationType::V_EIGHTH) {
-            unit = Constants::division / 2;
+            unit = Constants::DIVISION / 2;
         } else if (swingUnit == DurationType::V_16TH) {
-            unit = Constants::division / 4;
+            unit = Constants::DIVISION / 4;
         } else if (swingUnit == DurationType::V_ZERO) {
             unit = 0;
         }
@@ -3958,7 +3958,7 @@ void TRead::read(TimeSigMap* item, XmlReader& e, ReadContext& ctx)
 int TRead::read(SigEvent* item, XmlReader& e, int fileDivision)
 {
     int tick  = e.intAttribute("tick", 0);
-    tick      = tick * Constants::division / fileDivision;
+    tick      = tick * Constants::DIVISION / fileDivision;
 
     int numerator = 1;
     int denominator = 1;

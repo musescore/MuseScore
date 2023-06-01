@@ -258,7 +258,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->connectTies();
 
-    score->_fileDivision = Constants::division;
+    score->_fileDivision = Constants::DIVISION;
 
     // Make sure every instrument has an instrumentId set.
     for (Part* part : score->parts()) {
@@ -317,7 +317,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
         }
         String version = e.attribute("version", u"NONE");
         if (!MScore::testMode) {
-            if (version != MSC_VERSION) {
+            if (version != Constants::MSC_VERSION_STR) {
                 LOGD("pasteStaff: bad version");
                 break;
             }
@@ -777,7 +777,7 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
             break;
         }
         String version = e.attribute("version", u"NONE");
-        if (version != MSC_VERSION) {
+        if (version != Constants::MSC_VERSION_STR) {
             break;
         }
 

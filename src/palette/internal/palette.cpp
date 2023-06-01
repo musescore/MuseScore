@@ -496,7 +496,7 @@ bool Palette::writeToFile(const QString& p) const
         cbuf1.open(IODevice::ReadWrite);
         XmlWriter xml1(&cbuf1);
         xml1.startDocument();
-        xml1.startElement("museScore", { { "version", MSC_VERSION } });
+        xml1.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
         write(xml1, false);
         xml1.endElement();
         cbuf1.close();
