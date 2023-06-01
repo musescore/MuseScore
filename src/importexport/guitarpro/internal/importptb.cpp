@@ -51,7 +51,7 @@
 
 using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 bool PowerTab::readBoolean()
 {
     return readUInt8() != 0;
@@ -1279,4 +1279,4 @@ Err PowerTab::read()
     }
     return Err::NoError;
 }
-}
+} // namespace mu::iex::guitarpro

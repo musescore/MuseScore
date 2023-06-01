@@ -1,12 +1,12 @@
-#ifndef GPTRACK_H
-#define GPTRACK_H
+#ifndef MU_IMPORTEXPORT_GPTRACK_H
+#define MU_IMPORTEXPORT_GPTRACK_H
 
 #include <unordered_map>
 #include <string>
 
 #include "types/string.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 class GPTrack
 {
 public:
@@ -167,5 +167,5 @@ public:
 
 private:
 };
-}
-#endif // GPTRACK_H
+} // namespace mu::iex::guitarpro
+#endif // MU_IMPORTEXPORT_GPTRACK_H

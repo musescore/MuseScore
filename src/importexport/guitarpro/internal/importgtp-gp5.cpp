@@ -72,7 +72,7 @@
 using namespace mu::io;
 using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 static TremoloType tremoloType(int division)
 {
     static std::map<int, TremoloType> types {
@@ -842,10 +842,10 @@ bool GuitarPro5::read(IODevice* io)
             tdenominator = readUInt8();
         }
         if (barBits & SCORE_REPEAT_START) {
-            bar.repeatFlags = bar.repeatFlags | Repeat::START;
+            bar.repeatFlags = bar.repeatFlags | mu::engraving::Repeat::START;
         }
         if (barBits & SCORE_REPEAT_END) {                    // number of repeats
-            bar.repeatFlags = bar.repeatFlags | Repeat::END;
+            bar.repeatFlags = bar.repeatFlags | mu::engraving::Repeat::END;
             bar.repeats = readUInt8();
         }
         if (barBits & SCORE_MARKER) {
@@ -1590,4 +1590,4 @@ int GuitarPro5::readArtificialHarmonic()
     }
     return type;
 }
-}
+} // namespace mu::iex::guitarpro

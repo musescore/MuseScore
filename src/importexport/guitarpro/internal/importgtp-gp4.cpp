@@ -70,7 +70,7 @@
 using namespace mu::io;
 using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 //---------------------------------------------------------
 //   readMixChange
 //---------------------------------------------------------
@@ -662,10 +662,10 @@ bool GuitarPro4::read(IODevice* io)
             tdenominator = readUInt8();
         }
         if (barBits & SCORE_REPEAT_START) {
-            bar.repeatFlags = bar.repeatFlags | Repeat::START;
+            bar.repeatFlags = bar.repeatFlags | mu::engraving::Repeat::START;
         }
         if (barBits & SCORE_REPEAT_END) {                    // number of repeats
-            bar.repeatFlags = bar.repeatFlags | Repeat::END;
+            bar.repeatFlags = bar.repeatFlags | mu::engraving::Repeat::END;
             bar.repeats = readUInt8() + 1;
         }
         if (barBits & SCORE_VOLTA) {                          // a volta
@@ -1144,4 +1144,4 @@ bool GuitarPro4::read(IODevice* io)
     StretchedBend::prepareBends(m_stretchedBends);
     return true;
 }
-}
+} // namespace mu::iex::guitarpro

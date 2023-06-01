@@ -1,13 +1,14 @@
-#ifndef GPDOMBUILDER_H
-#define GPDOMBUILDER_H
+#ifndef MU_IMPORTEXPORT_GP67DOMBUILDER_H
+#define MU_IMPORTEXPORT_GP67DOMBUILDER_H
 
 #include <memory>
 
 #include "igpdombuilder.h"
 #include "gpdommodel.h"
 #include "inoteproperty.h"
+#include "gptrack.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 class GP67DomBuilder : public IGPDomBuilder
 {
 public:
@@ -35,7 +36,6 @@ protected:
     virtual std::pair<int, std::unique_ptr<GPTrack> > createGPTrack(XmlDomNode* trackNode) = 0;
 
     std::unique_ptr<GPMasterTracks> createGPMasterTrack(XmlDomNode* metadata);
-    std::unique_ptr<GPAudioTrack> createGPAudioTrack(XmlDomNode* metadata);
     std::unique_ptr<GPMasterBar> createGPMasterBar(XmlDomNode* masterBarNode);
     std::pair<int, std::unique_ptr<GPBar> > createGPBar(XmlDomNode* barNode);
     std::pair<int, std::unique_ptr<GPVoice> > createGPVoice(XmlDomNode* voiceNode);
@@ -72,5 +72,5 @@ protected:
 
     std::unique_ptr<GPDomModel> _gpDom;
 };
-} // end Ms namespace
-#endif // GPDOMBUILDER_H
+} // mu::iex::guitarpro
+#endif // MU_IMPORTEXPORT_GP67DOMBUILDER_H

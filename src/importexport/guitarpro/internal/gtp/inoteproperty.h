@@ -1,9 +1,7 @@
-#ifndef INOTEPROPERTY_H
-#define INOTEPROPERTY_H
+#ifndef MU_IMPORTEXPORT_INOTEPROPERTY_H
+#define MU_IMPORTEXPORT_INOTEPROPERTY_H
 
-#pragma once
-
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 class INoteProperty
 {
 public:
@@ -40,5 +38,5 @@ private:
     float _originOffset{ -1 };
     float _originValue{ -1 };
 };
-} // end Ms namespace
-#endif // INOTEPROPERTY_H
+} // namespace mu::iex::guitarpro
+#endif // MU_IMPORTEXPORT_INOTEPROPERTY_H
