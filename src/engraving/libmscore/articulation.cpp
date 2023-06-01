@@ -675,7 +675,7 @@ void Articulation::doAutoplace()
                     }
                 }
                 movePosY(yd);
-                r.translate(PointF(0.0, yd));
+                thisShape.translateY(yd);
             }
         }
     }
