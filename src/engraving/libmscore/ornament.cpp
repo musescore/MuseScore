@@ -257,7 +257,7 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
                 }
                 _trillOldCompatAccidental = nullptr;
             } else {
-                int pitchLine = absStep(note->tpc(), note->epitch() + note->ottaveCapoFret());
+                int pitchLine = absStep(note->tpc(), note->epitch());
                 AccidentalVal accidentalVal = accState->accidentalVal(pitchLine);
                 AccidentalVal noteAccidentalVal = tpc2alter(note->tpc());
                 int accidentalDiff = static_cast<int>(accidentalVal) - static_cast<int>(noteAccidentalVal);
@@ -273,6 +273,10 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
 
         AccidentalState copyOfAccState = *accState;
         note->updateAccidental(&copyOfAccState);
+        if (note->accidental()) {
+            int pitchLine = absStep(note->tpc(), note->epitch());
+            accState->setForceRestateAccidental(pitchLine, true);
+        }
 
         // Second: if the "Accidental visibility" property is different than default,
         // force the implicit accidentals to be visible when appropriate

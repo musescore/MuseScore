@@ -365,6 +365,7 @@ void AccidentalState::init(const KeySigEvent& keySig)
             }
         }
     }
+    m_forceRestateAccidental.fill(false);
 }
 
 //---------------------------------------------------------
@@ -375,6 +376,12 @@ AccidentalVal AccidentalState::accidentalVal(int line) const
 {
     assert(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
     return AccidentalVal((state[line] & 0x0f) + int(AccidentalVal::MIN));
+}
+
+bool AccidentalState::forceRestateAccidental(int line) const
+{
+    assert(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
+    return m_forceRestateAccidental[line];
 }
 
 //---------------------------------------------------------
@@ -397,6 +404,12 @@ void AccidentalState::setAccidentalVal(int line, AccidentalVal val, bool tieCont
     // casts needed to work around a bug in Xcode 4.2 on Mac, see #25910
     assert(int(val) >= int(AccidentalVal::MIN) && int(val) <= int(AccidentalVal::MAX));
     state[line] = (int(val) - int(AccidentalVal::MIN)) | (tieContext ? TIE_CONTEXT : 0);
+}
+
+void AccidentalState::setForceRestateAccidental(int line, bool forceRestate)
+{
+    assert(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
+    m_forceRestateAccidental[line] = forceRestate;
 }
 
 //---------------------------------------------------------

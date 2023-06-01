@@ -24,6 +24,7 @@
 #define __KEY__H__
 
 #include <vector>
+#include <array>
 
 #include "types/types.h"
 
@@ -110,6 +111,7 @@ static const int MAX_ACC_STATE = 75;
 class AccidentalState
 {
     uint8_t state[MAX_ACC_STATE] = {};      // (0 -- 4) | TIE_CONTEXT
+    std::array<bool, MAX_ACC_STATE> m_forceRestateAccidental;
 
 public:
     AccidentalState() {}
@@ -117,8 +119,10 @@ public:
     void init(const KeySigEvent&);
     AccidentalVal accidentalVal(int line, bool& error) const;
     AccidentalVal accidentalVal(int line) const;
+    bool forceRestateAccidental(int line) const;
     bool tieContext(int line) const;
     void setAccidentalVal(int line, AccidentalVal val, bool tieContext = false);
+    void setForceRestateAccidental(int line, bool forceRestate);
 };
 
 struct Interval;
