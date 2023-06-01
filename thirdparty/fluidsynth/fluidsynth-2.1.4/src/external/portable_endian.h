@@ -52,10 +52,10 @@
 
 #	include <sys/endian.h>
 
-#elif defined(__NetBSD__) || defined(__DragonFly__)
+#elif defined(__NetBSD__) || defined(__DragonFly__) || defined(__FreeBSD__)
 
-#x	include <sys/endian.h>
-
+#	include <sys/endian.h>
+#ifndef __FreeBSD__
 #	define be16toh(x) betoh16(x)
 #	define le16toh(x) letoh16(x)
 
@@ -64,14 +64,12 @@
 
 #	define be64toh(x) betoh64(x)
 #	define le64toh(x) letoh64(x)
-#elif defined(__FreeBSD__)
-#       include <sys/endian.h>
+#else
+/*__FreeBSD__*/
 #       define __BYTE_ORDER _BYTE_ORDER
 #	define __BIG_ENDIAN    _BIG_ENDIAN
 #	define __LITTLE_ENDIAN _LITTLE_ENDIAN
-
-
-
+#endif 
 #elif defined(__WINDOWS__)
 
 #ifdef _MSC_VER
