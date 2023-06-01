@@ -1,9 +1,9 @@
-#ifndef GPSCORE_H
-#define GPSCORE_H
+#ifndef MU_IMPORTEXPORT_GPSCORE_H
+#define MU_IMPORTEXPORT_GPSCORE_H
 
 #include "types/string.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 class GPScore
 {
 public:
@@ -32,6 +32,6 @@ private:
     String _composer;
     bool _multiVoice = false;
 };
-}
+} // namespace mu::iex::guitarpro
 
-#endif // GPSCORE_H
+#endif // MU_IMPORTEXPORT_GPSCORE_H

@@ -1,5 +1,5 @@
-#ifndef GPNOTE_H
-#define GPNOTE_H
+#ifndef MU_IMPORTEXPORT_GPNOTE_H
+#define MU_IMPORTEXPORT_GPNOTE_H
 
 #include <unordered_set>
 #include <memory>
@@ -9,7 +9,7 @@
 
 #include "inoteproperty.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 class GPNote
 {
 public:
@@ -190,6 +190,6 @@ private:
     PickScrape _pickScrape{ PickScrape::None };
     bool m_showStringNumber = false;
 };
-}
+} // namespace mu::iex::guitarpro
 
-#endif // GPNOTE_H
+#endif // MU_IMPORTEXPORT_GPNOTE_H

@@ -87,7 +87,7 @@
 using namespace mu::io;
 using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 //---------------------------------------------------------
 //   errmsg
 //---------------------------------------------------------
@@ -155,7 +155,7 @@ void GuitarPro::createTuningString(int strings, int tuning[])
 
 void GuitarPro::initDynamics(size_t stavesNum)
 {
-    previousDynamicByTrack.resize(stavesNum * VOICES);
+    previousDynamicByTrack.resize(stavesNum * mu::engraving::VOICES);
     std::fill(previousDynamicByTrack.begin(), previousDynamicByTrack.end(), INVALID_DYNAMIC);
 }
 
@@ -286,7 +286,9 @@ int GuitarPro::readInt()
 
 void GuitarPro::initGuitarProDrumset()
 {
-    gpDrumset = new Drumset;
+    using namespace mu::engraving;
+
+    gpDrumset = new Drumset();
     for (int i = 0; i < 128; ++i) {
         gpDrumset->drum(i).notehead = NoteHeadGroup::HEAD_INVALID;
         gpDrumset->drum(i).line     = 0;
@@ -376,8 +378,10 @@ void GuitarPro::initGuitarProDrumset()
 //   addPalmMate
 //---------------------------------------------------------
 
-void GuitarPro::addPalmMute(Note* note)
+void GuitarPro::addPalmMute(mu::engraving::Note* note)
 {
+    using namespace mu::engraving;
+
     track_idx_t track = note->track();
     while (_palmMutes.size() < track + 1) {
         _palmMutes.push_back(0);
@@ -385,7 +389,7 @@ void GuitarPro::addPalmMute(Note* note)
 
     Chord* chord = note->chord();
     if (_palmMutes[track]) {
-        PalmMute* pm = _palmMutes[track];
+        mu::engraving::PalmMute* pm = _palmMutes[track];
         Chord* lastChord = toChord(pm->endCR());
         if (lastChord == note->chord()) {
             return;
@@ -402,7 +406,7 @@ void GuitarPro::addPalmMute(Note* note)
         }
     }
     if (!_palmMutes[track]) {
-        PalmMute* pm = new PalmMute(score->dummy());
+        mu::engraving::PalmMute* pm = mu::engraving::Factory::createPalmMute(score->dummy());
         _palmMutes[track] = pm;
         Segment* segment = chord->segment();
         Fraction tick = segment->tick();
@@ -753,8 +757,6 @@ std::vector<PitchValue> GuitarPro::readBendDataFromFile()
 
 void GuitarPro::createBend(Note* note, std::vector<PitchValue>& bendData)
 {
-    using namespace mu::engraving;
-
     if (bendData.empty()) {
         return;
     }
@@ -1042,18 +1044,18 @@ void GuitarPro::createMeasures()
             }
         }
         readVolta(&bars[i].volta, m);
-        m->setRepeatEnd(bars[i].repeatFlags == Repeat::END);
-        m->setRepeatStart(bars[i].repeatFlags == Repeat::START);
-        m->setRepeatJump(bars[i].repeatFlags == Repeat::JUMP);
+        m->setRepeatEnd(bars[i].repeatFlags == mu::engraving::Repeat::END);
+        m->setRepeatStart(bars[i].repeatFlags == mu::engraving::Repeat::START);
+        m->setRepeatJump(bars[i].repeatFlags == mu::engraving::Repeat::JUMP);
         //            m->setRepeatFlags(bars[i].repeatFlags);
         m->setRepeatCount(bars[i].repeats);           // supported in gp5
 
         // reset the volta sequence if we have an opening repeat
-        if (bars[i].repeatFlags == Repeat::START) {
+        if (bars[i].repeatFlags == mu::engraving::Repeat::START) {
             voltaSequence = 1;
         }
         // otherwise, if we see an end repeat symbol, only reset if the bar after it does not contain a volta
-        else if (bars[i].repeatFlags == Repeat::END && i < bars.size() - 1) {
+        else if (bars[i].repeatFlags == mu::engraving::Repeat::END && i < bars.size() - 1) {
             if (bars[i + 1].volta.voltaInfo.size() == 0) {
                 voltaSequence = 1;              // reset  the volta count
             }
@@ -1591,10 +1593,10 @@ bool GuitarPro2::read(IODevice* io)
             tdenominator = readUInt8();
         }
         if (barBits & SCORE_REPEAT_START) {
-            bar.repeatFlags = bar.repeatFlags | Repeat::START;
+            bar.repeatFlags = bar.repeatFlags | mu::engraving::Repeat::START;
         }
         if (barBits & SCORE_REPEAT_END) {
-            bar.repeatFlags = bar.repeatFlags | Repeat::END;
+            bar.repeatFlags = bar.repeatFlags | mu::engraving::Repeat::END;
             bar.repeats = readUInt8() + 1;
         }
         if (barBits & SCORE_VOLTA) {
@@ -2276,10 +2278,10 @@ bool GuitarPro3::read(IODevice* io)
             tdenominator = readUInt8();
         }
         if (barBits & SCORE_REPEAT_START) {
-            bar.repeatFlags = bar.repeatFlags | Repeat::START;
+            bar.repeatFlags = bar.repeatFlags | mu::engraving::Repeat::START;
         }
         if (barBits & SCORE_REPEAT_END) {                    // number of repeats
-            bar.repeatFlags = bar.repeatFlags | Repeat::END;
+            bar.repeatFlags = bar.repeatFlags | mu::engraving::Repeat::END;
             bar.repeats = readUInt8() + 1;
         }
         if (barBits & SCORE_VOLTA) {                          // a volta
@@ -2351,18 +2353,18 @@ bool GuitarPro3::read(IODevice* io)
         }
 
         readVolta(&bars[i].volta, m);
-        m->setRepeatEnd(bars[i].repeatFlags == Repeat::END);
-        m->setRepeatStart(bars[i].repeatFlags == Repeat::START);
-        m->setRepeatJump(bars[i].repeatFlags == Repeat::JUMP);
+        m->setRepeatEnd(bars[i].repeatFlags == mu::engraving::Repeat::END);
+        m->setRepeatStart(bars[i].repeatFlags == mu::engraving::Repeat::START);
+        m->setRepeatJump(bars[i].repeatFlags == mu::engraving::Repeat::JUMP);
         //            m->setRepeatFlags(bars[i].repeatFlags);
         m->setRepeatCount(bars[i].repeats);
 
         // reset the volta sequence if we have an opening repeat
-        if (bars[i].repeatFlags == Repeat::START) {
+        if (bars[i].repeatFlags == mu::engraving::Repeat::START) {
             voltaSequence = 1;
         }
         // otherwise, if we see an end repeat symbol, only reset if the bar after it does not contain a volta
-        else if (bars[i].repeatFlags == Repeat::END && i < bars.size() - 1) {
+        else if (bars[i].repeatFlags == mu::engraving::Repeat::END && i < bars.size() - 1) {
             if (bars[i + 1].volta.voltaInfo.size() == 0) {
                 voltaSequence = 1;
             }
@@ -3150,4 +3152,4 @@ Err importGTP(MasterScore* score, mu::io::IODevice* io, bool createLinkedTabForc
 
     return Err::NoError;
 }
-}
+} // namespace mu::iex::guitarpro

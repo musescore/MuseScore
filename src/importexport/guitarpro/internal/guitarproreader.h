@@ -34,6 +34,6 @@ class GuitarProReader : public project::INotationReader
 public:
     Ret read(mu::engraving::MasterScore* score, const io::path_t& path, const Options& options = Options()) override;
 };
-}
+} // namespace mu::iex::guitarpro
 
 #endif // MU_IMPORTEXPORT_GUITARPROREADER_H

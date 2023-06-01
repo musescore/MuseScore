@@ -27,7 +27,7 @@
 #include "serialization/xmldom.h"
 #include "gpdommodel.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 class IGPDomBuilder
 {
 public:
@@ -35,5 +35,5 @@ public:
     virtual void buildGPDomModel(XmlDomElement* domElem) = 0;
     virtual std::unique_ptr<GPDomModel> getGPDomModel() = 0;
 };
-}
+} // namespace mu::iex::guitarpro
 #endif // MU_IMPORTEXPORT_IGPDOMBUILDER_H

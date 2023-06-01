@@ -27,7 +27,6 @@
 #include "serialization/xmldom.h"
 
 #include "gtp/gp6dombuilder.h"
-#include "gtp/gp7dombuilder.h"
 #include "gtp/gpconverter.h"
 
 #include "libmscore/factory.h"
@@ -83,7 +82,7 @@ using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 const std::map<std::string, std::string> GuitarPro6::instrumentMapping = {
     { "2Mrcs",           "maracas" },
     { "a-bass4",         "acoustic-bass" },
@@ -482,4 +481,4 @@ bool GuitarPro6::read(IODevice* io)
 
     return true;
 }
-}
+} // namespace mu::iex::guitarpro

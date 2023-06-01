@@ -2,8 +2,7 @@
 
 #include "log.h"
 
-using namespace mu::engraving;
-
+namespace mu::iex::guitarpro {
 void GPDrumSetResolver::initGPDrum()
 {
     addDrum(GPDrum(35, 0, 0));
@@ -187,3 +186,4 @@ void GPDrumSetResolver::addDrum(const GPDrum& drum)
 {
     _drum[drum._name].push_back(drum);
 }
+} // namespace mu::iex::guitarpro

@@ -36,7 +36,7 @@
 using namespace mu::io;
 using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
@@ -90,4 +90,4 @@ std::unique_ptr<IGPDomBuilder> GuitarPro7::createGPDomBuilder() const
 {
     return std::make_unique<GP7DomBuilder>();
 }
-}
+} // namespace mu::iex::guitarpro
