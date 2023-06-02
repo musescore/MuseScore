@@ -164,7 +164,7 @@ void AppShellModule::registerUiTypes()
 
 #if defined(Q_OS_MACOS)
     qmlRegisterType<AppMenuModel>("MuseScore.AppShell", 1, 0, "PlatformAppMenuModel");
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     qmlRegisterType<AppMenuModel>("MuseScore.AppShell", 1, 0, "PlatformAppMenuModel");
     qmlRegisterType<NavigableAppMenuModel>("MuseScore.AppShell", 1, 0, "AppMenuModel");
 #else
