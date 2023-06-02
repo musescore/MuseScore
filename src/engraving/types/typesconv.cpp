@@ -1608,8 +1608,8 @@ static const std::vector<Item<BeamMode> > BEAMMODE_TYPES = {
     { BeamMode::MID, "mid" },
     { BeamMode::END, "end" },
     { BeamMode::NONE, "no" },
-    { BeamMode::BEGIN32, "begin32" },
-    { BeamMode::BEGIN64, "begin64" },
+    { BeamMode::BEGIN16, "begin32" },
+    { BeamMode::BEGIN32, "begin64" },
     { BeamMode::INVALID, "invalid" }
 };
 

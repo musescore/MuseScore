@@ -374,10 +374,10 @@ EngravingItem* ChordRest::drop(EditData& data)
             undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN);
             break;
         case ActionIconType::BEAM_BREAK_INNER_8TH:
-            undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN32);
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN16);
             break;
         case ActionIconType::BEAM_BREAK_INNER_16TH:
-            undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN64);
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN32);
             break;
         case ActionIconType::BEAM_JOIN:
             undoChangeProperty(Pid::BEAM_MODE, BeamMode::MID);

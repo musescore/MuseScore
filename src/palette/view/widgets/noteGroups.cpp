@@ -167,10 +167,10 @@ void NoteGroups::beamPropertyDropped(Chord* chord, ActionIcon* icon)
         updateBeams(chord, BeamMode::BEGIN);
         break;
     case ActionIconType::BEAM_BREAK_INNER_8TH:
-        updateBeams(chord, BeamMode::BEGIN32);
+        updateBeams(chord, BeamMode::BEGIN16);
         break;
     case ActionIconType::BEAM_BREAK_INNER_16TH:
-        updateBeams(chord, BeamMode::BEGIN64);
+        updateBeams(chord, BeamMode::BEGIN32);
         break;
     default:
         break;
