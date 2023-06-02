@@ -929,6 +929,7 @@ void BeamLayout::createBeamSegments(Beam* item, const std::vector<ChordRest*>& c
     bool levelHasBeam = false;
     int level = 0;
     constexpr size_t noLastChord = std::numeric_limits<size_t>::max();
+    size_t numCr = chordRests.size();
     do {
         levelHasBeam = false;
         ChordRest* startCr = nullptr;
@@ -938,10 +939,10 @@ void BeamLayout::createBeamSegments(Beam* item, const std::vector<ChordRest*>& c
         bool previousBreak64 = false;
         size_t lastChordIndex = noLastChord;
 
-        for (size_t i = 0; i < chordRests.size(); i++) {
+        for (size_t i = 0; i < numCr; i++) {
             ChordRest* chordRest = chordRests[i];
             ChordRest* prevChordRest = i < 1 ? nullptr : chordRests[i - 1];
-            ChordRest* nextChordRest = i + 1 >= chordRests.size() ? nullptr : chordRests[i + 1];
+            ChordRest* nextChordRest = i + 1 >= numCr ? nullptr : chordRests[i + 1];
 
             if (level < chordRest->beams()) {
                 levelHasBeam = true;
@@ -952,8 +953,29 @@ void BeamLayout::createBeamSegments(Beam* item, const std::vector<ChordRest*>& c
             // updates isBroken32 and isBroken64
             item->calcBeamBreaks(chordRest, prevChordRest, level, isBroken32, isBroken64);
             breakBeam = isBroken32 || isBroken64;
-
-            if (level < chordRest->beams() && !breakBeam) {
+            bool skipRest = false;
+            BeamMode beamMode = chordRest->beamMode();
+            if (chordRest->isRest() && level >= chordRest->beams()
+                && (beamMode == BeamMode::MID || beamMode == BeamMode::BEGIN32 || beamMode == BeamMode::BEGIN64)) {
+                // if the level is lower than both the previous and next real chords, don't break here
+                size_t nextChordIndex = i + 1;
+                while (nextChordIndex < numCr && chordRests[nextChordIndex]->isRest()) {
+                    ++nextChordIndex;
+                }
+                if (lastChordIndex < numCr && nextChordIndex < numCr) {
+                    Chord* lastChord = toChord(chordRests[lastChordIndex]);
+                    Chord* nextChord = toChord(chordRests[nextChordIndex]);
+                    // we have both chords (not rests) on either side of this rest, so if the level is lower than both we can
+                    // just continue the beam through here
+                    // this creates situations where we can have the second beam of a pair of 16th notes continuing through
+                    // an 8th rest, for example, even though an 8th note would very obviously break the beam
+                    // this is desired for BeamType::MID on rests.
+                    if (level < lastChord->beams() && level < nextChord->beams()) {
+                        skipRest = (isBroken32 && level < 1) || (isBroken64 && level < 2) || (!isBroken32 && !isBroken64);
+                    }
+                }
+            }
+            if ((level < chordRest->beams() && !breakBeam) || skipRest) {
                 endCr = chordRest;
                 if (!startCr || (startCr->isRest() && startCr != item->elements().front())) {
                     startCr = chordRest;
