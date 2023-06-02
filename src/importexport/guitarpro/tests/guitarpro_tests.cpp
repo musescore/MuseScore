@@ -38,9 +38,8 @@ using namespace mu::engraving;
 
 static const String GUITARPRO_DIR(u"data/");
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 extern Err importGTP(MasterScore*, mu::io::IODevice* io, bool createLinkedTabForce = false);
-}
 
 class GuitarPro_Tests : public ::testing::Test
 {
@@ -54,7 +53,7 @@ void GuitarPro_Tests::gpReadTest(const char* file, const char* ext)
 
     auto importFunc = [](MasterScore* score, const io::path_t& path) -> Err {
         mu::io::File file(path);
-        return mu::engraving::importGTP(score, &file);
+        return importGTP(score, &file);
     };
 
     MasterScore* score = ScoreRW::readScore(GUITARPRO_DIR + fileName, false, importFunc);
@@ -731,4 +730,5 @@ TEST_F(GuitarPro_Tests, gpxInstrumentChange1beat) {
 }
 TEST_F(GuitarPro_Tests, gpFixEmptyMeasures) {
     gpReadTest("mmrest", "gp");
+}
 }

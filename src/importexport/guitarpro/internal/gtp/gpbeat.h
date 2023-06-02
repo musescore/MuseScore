@@ -1,5 +1,5 @@
-#ifndef GPBEAT_H
-#define GPBEAT_H
+#ifndef MU_IMPORTEXPORT_GPBEAT_H
+#define MU_IMPORTEXPORT_GPBEAT_H
 
 #include <map>
 #include <memory>
@@ -8,7 +8,7 @@
 #include "gpnote.h"
 #include "gprhythm.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 class GPBeat
 {
 public:
@@ -275,6 +275,6 @@ private:
     StemOrientation m_stemOrientation;
     BeamMode m_beamMode = BeamMode::AUTO;
 };
-}
+} // namespace mu::iex::guitarpro
 
-#endif // GPBEAT_H
+#endif // MU_IMPORTEXPORT_GPBEAT_H

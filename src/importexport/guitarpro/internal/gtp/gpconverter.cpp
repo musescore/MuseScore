@@ -58,8 +58,8 @@
 
 using namespace mu::engraving;
 
-namespace mu::engraving {
-static JumpType jumpType(const String& typeString)
+namespace mu::iex::guitarpro {
+static mu::engraving::JumpType jumpType(const String& typeString)
 {
     static std::map<String, JumpType> types {
         { u"DaCapo", JumpType::DC },
@@ -84,8 +84,10 @@ static JumpType jumpType(const String& typeString)
     return JumpType::USER;
 }
 
-static MarkerType markerType(const String& typeString)
+static mu::engraving::MarkerType markerType(const String& typeString)
 {
+    using namespace mu::engraving;
+
     static std::map<String, MarkerType> types {
         { u"Segno", MarkerType::SEGNO },
         { u"SegnoSegno", MarkerType::VARSEGNO },
@@ -122,8 +124,10 @@ static String harmonicText(const GPBeat::HarmonicMarkType& type)
     return String();
 }
 
-static TripletFeelType tripletFeelType(GPMasterBar::TripletFeelType tf)
+static mu::engraving::TripletFeelType tripletFeelType(GPMasterBar::TripletFeelType tf)
 {
+    using namespace mu::engraving;
+
     static std::map<GPMasterBar::TripletFeelType, TripletFeelType> types {
         { GPMasterBar::TripletFeelType::Triplet8th, TripletFeelType::TRIPLET_8TH },
         { GPMasterBar::TripletFeelType::Triplet16th, TripletFeelType::TRIPLET_16TH },
@@ -141,8 +145,10 @@ static TripletFeelType tripletFeelType(GPMasterBar::TripletFeelType tf)
     return TripletFeelType::NONE;
 }
 
-static std::pair<bool, OttavaType> ottavaType(GPBeat::OttavaType t)
+static std::pair<bool, mu::engraving::OttavaType> ottavaType(GPBeat::OttavaType t)
 {
+    using namespace mu::engraving;
+
     static std::map<GPBeat::OttavaType, mu::engraving::OttavaType> types {
         { GPBeat::OttavaType::va8,  OttavaType::OTTAVA_8VA },
         { GPBeat::OttavaType::vb8,  OttavaType::OTTAVA_8VB },
@@ -221,7 +227,7 @@ static GPConverter::LineImportType hairpinToImportType(GPBeat::Hairpin t)
     return GPConverter::LineImportType::NONE;
 }
 
-static void setPitchByOttavaType(Note* note, OttavaType type)
+static void setPitchByOttavaType(mu::engraving::Note* note, mu::engraving::OttavaType type)
 {
     int pitch = note->pitch();
 
@@ -3105,4 +3111,4 @@ void GPConverter::setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measur
 
     m_previousBeamMode = beamMode;
 }
-} //end Ms namespace
+} // namespace mu::iex::guitarpro

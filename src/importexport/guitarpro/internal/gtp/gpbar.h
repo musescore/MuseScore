@@ -1,9 +1,9 @@
-#ifndef GPBAR_H
-#define GPBAR_H
+#ifndef MU_IMPORTEXPORT_GPBAR_H
+#define MU_IMPORTEXPORT_GPBAR_H
 
 #include "gpvoice.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 class GPBar
 {
 public:
@@ -45,6 +45,6 @@ private:
     Clef _clef;
     SimileMark _simileMark;
 };
-}
+} // namespace mu::iex::guitarpro
 
-#endif // GPBAR_H
+#endif // MU_IMPORTEXPORT_GPBAR_H

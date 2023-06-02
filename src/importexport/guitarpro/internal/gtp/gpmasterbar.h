@@ -1,9 +1,9 @@
-#ifndef GPMASTERBAR_H
-#define GPMASTERBAR_H
+#ifndef MU_IMPORTEXPORT_GPMASTERBAR_H
+#define MU_IMPORTEXPORT_GPMASTERBAR_H
 
 #include "gpbar.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 class GPMasterBar
 {
 public:
@@ -114,6 +114,6 @@ private:
     std::pair<String, String> _section;
     Direction _direction;
 };
-}
+} // namespace mu::iex::guitarpro
 
-#endif // GPMASTERBAR_H
+#endif // MU_IMPORTEXPORT_GPMASTERBAR_H

@@ -19,7 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
+#ifndef MU_IMPORTEXPORT_IMPORTPTB_H
+#define MU_IMPORTEXPORT_IMPORTPTB_H
 
 #include "io/file.h"
 
@@ -42,11 +43,13 @@
 
 namespace mu::engraving {
 class PalmMute;
+} // namespace mu::engraving
 
+namespace mu::iex::guitarpro {
 class PowerTab
 {
     mu::io::IODevice* _file = nullptr;
-    MasterScore* score = nullptr;
+    mu::engraving::MasterScore* score = nullptr;
 
     bool              readBoolean();
     unsigned char     readUInt8();
@@ -378,8 +381,8 @@ class PowerTab
     int repeatCount{ 0 };
     void              addToScore(ptSection& sec);
 
-    Measure* createMeasure(ptBar* bar, const Fraction& tick);
-    void              fillMeasure(tBeatList& elist, Measure* measure, int staff, std::vector<Note*>&);
+    mu::engraving::Measure* createMeasure(ptBar* bar, const mu::engraving::Fraction& tick);
+    void              fillMeasure(tBeatList& elist, mu::engraving::Measure* measure, int staff, std::vector<mu::engraving::Note*>&);
 
     int staves{ 0 };
 
@@ -389,12 +392,14 @@ class PowerTab
 
     ptSection* cur_section;
 
-    std::vector<PalmMute*> _palmMutes;
-    void addPalmMute(Chord*);
+    std::vector<mu::engraving::PalmMute*> _palmMutes;
+    void addPalmMute(mu::engraving::Chord*);
 
 public:
-    PowerTab(mu::io::IODevice* f, MasterScore* s)
+    PowerTab(mu::io::IODevice* f, mu::engraving::MasterScore* s)
         : _file(f), score(s) {}
-    Err read();
+    mu::engraving::Err read();
 };
-}
+} // namespace mu::iex::guitarpro
+
+#endif // MU_IMPORTEXPORT_IMPORTPTB_H

@@ -5,7 +5,7 @@
 #include "global/log.h"
 #include "types/constants.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 GP67DomBuilder::GP67DomBuilder()
 {
     _gpDom = std::make_unique<GPDomModel>();
@@ -300,12 +300,6 @@ std::unique_ptr<GPMasterTracks> GP67DomBuilder::createGPMasterTrack(XmlDomNode* 
 {
     UNUSED(metadata);
     return std::make_unique<GPMasterTracks>();
-}
-
-std::unique_ptr<GPAudioTrack> GP67DomBuilder::createGPAudioTrack(XmlDomNode* metadata)
-{
-    UNUSED(metadata);
-    return nullptr;
 }
 
 std::unique_ptr<GPMasterBar> GP67DomBuilder::createGPMasterBar(XmlDomNode* masterBarNode)
@@ -1402,4 +1396,4 @@ std::vector<GPMasterBar::Direction> GP67DomBuilder::readRepeatsJumps(XmlDomNode*
 
     return repeatsJumps;
 }
-} //end Ms namespace
+} // namespace mu::iex::guitarpro

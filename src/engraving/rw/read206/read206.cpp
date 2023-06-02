@@ -3464,6 +3464,7 @@ Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 bool Read206::pasteStaff(XmlReader&, Segment*, staff_idx_t, Fraction)
 {
     UNREACHABLE;
+    return false;
 }
 
 void Read206::pasteSymbols(XmlReader&, ChordRest*)
