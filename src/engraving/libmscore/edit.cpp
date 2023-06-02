@@ -3349,6 +3349,9 @@ ChordRest* Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, trac
 void Score::cmdDeleteSelection()
 {
     ChordRest* cr = 0;              // select something after deleting notes
+    KeySig* keySig = 0;             // select a key signature after attempting to delete notes
+
+    bool tryDeleteFirstTimeSig = false;
 
     if (selection().isRange()) {
         Segment* s1 = selection().startSegment();
@@ -3431,6 +3434,8 @@ void Score::cmdDeleteSelection()
             // logically incorrect and leads to a state of undefined key/transposition. The correct
             // action is for the user to set an atonal/custom keySig as needed.
             if (e->isKeySig() && e->tick() == Fraction(0, 1)) {
+                tryDeleteFirstTimeSig = true;
+                keySig = toKeySig(e);
                 continue;
             }
 
@@ -3462,7 +3467,14 @@ void Score::cmdDeleteSelection()
         }
     }
 
+    if (tryDeleteFirstTimeSig) {
+        MessageBox::error(mtrc("engraving", "This key signature cannot be deleted").toStdString(),
+                          mtrc("engraving", "Please replace it with a key signature from the palettes instead.").toStdString(),
+                          { MessageBox::Ok }, true, true);
+    }
+
     deselectAll();
+
     // make new selection if appropriate
     if (noteEntryMode()) {
         if (cr) {
@@ -3477,6 +3489,9 @@ void Score::cmdDeleteSelection()
         } else {
             select(cr, SelectType::SINGLE);
         }
+    }
+    if (keySig) {
+        select(keySig, SelectType::SINGLE);
     }
 }
 

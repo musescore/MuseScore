@@ -25,7 +25,20 @@
 
 using namespace mu::engraving;
 
-MessageBox::Button MessageBox::warning(const std::string& title, const std::string& text, const std::set<Button>& buttons)
+MessageBox::Button MessageBox::warning(const std::string& title, const std::string& text, const std::set<Button>& buttons,
+                                       bool withIcon, bool withDontShowAgainCheckBox)
+{
+    return MessageBox::openDialog("WARNING", title, text, buttons, withIcon, withDontShowAgainCheckBox);
+}
+
+MessageBox::Button MessageBox::error(const std::string& title, const std::string& text, const std::set<Button>& buttons,
+                                     bool withIcon, bool withDontShowAgainCheckBox)
+{
+    return MessageBox::openDialog("ERROR", title, text, buttons, withIcon, withDontShowAgainCheckBox);
+}
+
+MessageBox::Button MessageBox::openDialog(const std::string& type, const std::string& title, const std::string& text,
+                                          const std::set<Button>& buttons, bool withIcon, bool withDontShowAgainCheckBox)
 {
 #ifndef ENGRAVING_NO_INTERACTIVE
     using namespace mu::framework;
@@ -38,7 +51,24 @@ MessageBox::Button MessageBox::warning(const std::string& title, const std::stri
         realButtons.push_back(IInteractive::Button::Ok);
     }
 
-    IInteractive::Result res = interactive()->warning(title, text, realButtons);
+    IInteractive::Options options = {};
+    if (withIcon) {
+        options |= IInteractive::Option::WithIcon;
+    }
+
+    if (withDontShowAgainCheckBox) {
+        options |= IInteractive::Option::WithDontShowAgainCheckBox;
+    }
+
+    IInteractive::Result res;
+    if (type == "WARNING") {
+        res = interactive()->warning(title, text, realButtons, IInteractive::Button::Ok, options);
+    } else if (type == "ERROR") {
+        res = interactive()->error(title, text, realButtons, IInteractive::Button::Ok, options);
+    } else {
+        res = int(IInteractive::Button::Cancel);
+    }
+
     if (res.standardButton() == IInteractive::Button::Ok) {
         return MessageBox::Button::Ok;
     }

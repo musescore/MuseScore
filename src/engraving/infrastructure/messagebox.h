@@ -43,7 +43,14 @@ public:
         Cancel
     };
 
-    static Button warning(const std::string& title, const std::string& text, const std::set<Button>& buttons = { Ok, Cancel });
+    static Button warning(const std::string& title, const std::string& text, const std::set<Button>& buttons = { Ok, Cancel },
+                          bool withIcon = true, bool withDontShowAgainCheckBox = false);
+    static Button error(const std::string& title, const std::string& text, const std::set<Button>& buttons = { Ok }, bool withIcon = true,
+                        bool withDontShowAgainCheckBox = false);
+private:
+    static Button openDialog(const std::string& type, const std::string& title, const std::string& text,
+                             const std::set<Button>& buttons = { Ok, Cancel }, bool withIcon = true,
+                             bool withDontShowAgainCheckBox = false);
 };
 }
 
