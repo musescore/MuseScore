@@ -609,7 +609,7 @@ void Score::setUpTempoMap()
 
             std::map<int, double> tempoCurve = TConv::easingValueCurve(tempoChange->ticks().ticks(),
                                                                        4 /*stepsCount*/,
-                                                                       newBps.val - currentBps.val,
+                                                                       (newBps.val - currentBps.val) / 2,
                                                                        tempoChange->easingMethod());
 
             for (const auto& pair : tempoCurve) {

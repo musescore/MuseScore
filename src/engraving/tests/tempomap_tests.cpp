@@ -172,7 +172,7 @@ TEST_F(Engraving_TempoMapTests, GRADUAL_TEMPO_CHANGE_ACCELERANDO)
     // [GIVEN] Expected tempomap
     std::map<int, BeatsPerSecond> expectedTempoMap = {
         { 0, BeatsPerSecond::fromBPM(BeatsPerMinute(120.f)) }, // beginning of the first measure
-        { 6 * 4 * Constants::DIVISION, BeatsPerSecond::fromBPM(BeatsPerMinute(159.6f)) } // beginning of the last measure
+        { 6 * 4 * Constants::DIVISION, BeatsPerSecond::fromBPM(BeatsPerMinute(139.8f)) } // beginning of the last measure
     };
 
     // [WHEN] We request score's tempomap its size matches with our expectations
@@ -201,7 +201,7 @@ TEST_F(Engraving_TempoMapTests, GRADUAL_TEMPO_CHANGE_RALLENTANDO)
     // [GIVEN] Expected tempomap
     std::map<int, BeatsPerSecond> expectedTempoMap = {
         { 0, BeatsPerSecond::fromBPM(BeatsPerMinute(120.f)) }, // beginning of the first measure
-        { 6 * 4 * Constants::DIVISION, BeatsPerSecond::fromBPM(BeatsPerMinute(90.f)) } // beginning of the last measure
+        { 6 * 4 * Constants::DIVISION, BeatsPerSecond::fromBPM(BeatsPerMinute(105.f)) } // beginning of the last measure
     };
 
     // [WHEN] We request score's tempomap its size matches with our expectations
@@ -237,12 +237,12 @@ TEST_F(Engraving_TempoMapTests, GRADUAL_TEMPO_CHANGE_DOESNT_OVERWRITE_OTHER_TEMP
     std::map<int, BeatsPerSecond> expectedTempoMap = {
         // ritardando (beginning of the first measure)
         { 0, BeatsPerSecond::fromBPM(BeatsPerMinute(120.f)) },
-        { 960, BeatsPerSecond::fromBPM(BeatsPerMinute(112.5f)) },
+        { 960, BeatsPerSecond::fromBPM(BeatsPerMinute(116.25f)) },
         // tempo marking (80 BPM, the first measure)
         { 1440, BeatsPerSecond::fromBPM(BeatsPerMinute(80.f)) },
         // ritardando (the second measure)
-        { 1920, BeatsPerSecond::fromBPM(BeatsPerMinute(105.f)) },
-        { 2880, BeatsPerSecond::fromBPM(BeatsPerMinute(97.5f)) },
+        { 1920, BeatsPerSecond::fromBPM(BeatsPerMinute(112.5f)) },
+        { 2880, BeatsPerSecond::fromBPM(BeatsPerMinute(108.75f)) },
         // presto (beginning of the third measure)
         { 3840, BeatsPerSecond::fromBPM(BeatsPerMinute(187.2f)) },
     };
