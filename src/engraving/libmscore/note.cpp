@@ -2448,13 +2448,19 @@ void Note::setHeadGroup(NoteHeadGroup val)
 
 int Note::ottaveCapoFret() const
 {
-    Chord* ch = chord();
-    int capoFretId = staff()->capo(ch->segment()->tick()).fretPosition;
-    if (capoFretId != 0) {
-        capoFretId -= 1;
+    const Chord* ch = chord();
+    Fraction segmentTick = ch->segment()->tick();
+
+    const CapoParams& capo = staff()->capo(segmentTick);
+    int capoFret = 0;
+
+    if (capo.active) {
+        if (capo.ignoredStrings.empty() || !mu::contains(capo.ignoredStrings, static_cast<string_idx_t>(_string))) {
+            capoFret = capo.fretPosition;
+        }
     }
 
-    return staff()->pitchOffset(ch->segment()->tick()) + capoFretId;
+    return staff()->pitchOffset(segmentTick) + capoFret;
 }
 
 //---------------------------------------------------------
