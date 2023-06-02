@@ -316,7 +316,26 @@ void Beam::setTremAnchors()
 void Beam::calcBeamBreaks(const ChordRest* cr, const ChordRest* prevCr, int level, bool& isBroken32, bool& isBroken64) const
 {
     BeamMode beamMode = cr->beamMode();
-
+    if (cr->isRest() && (beamMode == BeamMode::MID || beamMode == BeamMode::BEGIN32 || beamMode == BeamMode::BEGIN64)) {
+        // when a rest has beamMode MID we can just ignore it entirely and allow any beams to continue through
+        switch (beamMode) {
+        case BeamMode::MID:
+            isBroken32 = isBroken64 = false;
+            break;
+        case BeamMode::BEGIN32:
+            isBroken32 = level > 0;
+            isBroken64 = false;
+            break;
+        case BeamMode::BEGIN64:
+            isBroken32 = false;
+            isBroken64 = level > 1;
+            break;
+        default:
+            // should be unreachable
+            assert(false);
+        }
+        return;
+    }
     // get default beam mode -- based on time signature preferences
     const Groups& group = cr->staff()->group(cr->measure()->tick());
     BeamMode defaultBeamMode = group.endBeam(cr, prevCr);
