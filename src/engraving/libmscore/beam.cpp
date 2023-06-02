@@ -313,22 +313,22 @@ void Beam::setTremAnchors()
     }
 }
 
-void Beam::calcBeamBreaks(const ChordRest* cr, const ChordRest* prevCr, int level, bool& isBroken32, bool& isBroken64) const
+void Beam::calcBeamBreaks(const ChordRest* cr, const ChordRest* prevCr, int level, bool& isBroken16, bool& isBroken32) const
 {
     BeamMode beamMode = cr->beamMode();
-    if (cr->isRest() && (beamMode == BeamMode::MID || beamMode == BeamMode::BEGIN32 || beamMode == BeamMode::BEGIN64)) {
+    if (cr->isRest() && (beamMode == BeamMode::MID || beamMode == BeamMode::BEGIN16 || beamMode == BeamMode::BEGIN32)) {
         // when a rest has beamMode MID we can just ignore it entirely and allow any beams to continue through
         switch (beamMode) {
         case BeamMode::MID:
-            isBroken32 = isBroken64 = false;
+            isBroken16 = isBroken32 = false;
+            break;
+        case BeamMode::BEGIN16:
+            isBroken16 = level > 0;
+            isBroken32 = false;
             break;
         case BeamMode::BEGIN32:
-            isBroken32 = level > 0;
-            isBroken64 = false;
-            break;
-        case BeamMode::BEGIN64:
-            isBroken32 = false;
-            isBroken64 = level > 1;
+            isBroken16 = false;
+            isBroken32 = level > 1;
             break;
         default:
             // should be unreachable
@@ -340,13 +340,13 @@ void Beam::calcBeamBreaks(const ChordRest* cr, const ChordRest* prevCr, int leve
     const Groups& group = cr->staff()->group(cr->measure()->tick());
     BeamMode defaultBeamMode = group.endBeam(cr, prevCr);
 
-    bool isManuallyBroken32 = level >= 1 && beamMode == BeamMode::BEGIN32;
-    bool isManuallyBroken64 = level >= 2 && beamMode == BeamMode::BEGIN64;
-    bool isDefaultBroken32 = beamMode == BeamMode::AUTO && level >= 1 && defaultBeamMode == BeamMode::BEGIN32;
-    bool isDefaultBroken64 = beamMode == BeamMode::AUTO && level >= 2 && defaultBeamMode == BeamMode::BEGIN64;
+    bool isManuallyBroken16 = level >= 1 && beamMode == BeamMode::BEGIN16;
+    bool isManuallyBroken32 = level >= 2 && beamMode == BeamMode::BEGIN32;
+    bool isDefaultBroken16 = beamMode == BeamMode::AUTO && level >= 1 && defaultBeamMode == BeamMode::BEGIN16;
+    bool isDefaultBroken32 = beamMode == BeamMode::AUTO && level >= 2 && defaultBeamMode == BeamMode::BEGIN32;
 
+    isBroken16 = isManuallyBroken16 || isDefaultBroken16;
     isBroken32 = isManuallyBroken32 || isDefaultBroken32;
-    isBroken64 = isManuallyBroken64 || isDefaultBroken64;
 
     // deal with beam-embedded triplets by breaking beams as if they are their underlying durations
     // note that we use max(hooks, 1) here because otherwise we'd end up breaking the main (level 0) beam for
@@ -356,15 +356,15 @@ void Beam::calcBeamBreaks(const ChordRest* cr, const ChordRest* prevCr, int leve
             // this cr starts a tuplet
             int beams = std::max(TDuration(cr->tuplet()->ticks()).hooks(), 1);
             if (beams <= level) {
-                isBroken32 = level == 1;
-                isBroken64 = level >= 2;
+                isBroken16 = level == 1;
+                isBroken32 = level >= 2;
             }
         } else if (prevCr->tuplet() && prevCr->tuplet() != cr->tuplet()) {
             // this is a non-tuplet cr that is first after a tuplet
             int beams = std::max(TDuration(prevCr->tuplet()->ticks()).hooks(), 1);
             if (beams <= level) {
-                isBroken32 = level == 1;
-                isBroken64 = level >= 2;
+                isBroken16 = level == 1;
+                isBroken32 = level >= 2;
             }
         }
     }
@@ -838,9 +838,9 @@ ActionIconType Beam::actionIconTypeForBeamMode(BeamMode mode)
         return ActionIconType::BEAM_NONE;
     case BeamMode::BEGIN:
         return ActionIconType::BEAM_BREAK_LEFT;
-    case BeamMode::BEGIN32:
+    case BeamMode::BEGIN16:
         return ActionIconType::BEAM_BREAK_INNER_8TH;
-    case BeamMode::BEGIN64:
+    case BeamMode::BEGIN32:
         return ActionIconType::BEAM_BREAK_INNER_16TH;
     case BeamMode::MID:
         return ActionIconType::BEAM_JOIN;

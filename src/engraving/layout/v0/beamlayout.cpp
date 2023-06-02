@@ -534,7 +534,7 @@ static bool beamNoContinue(BeamMode mode)
     return mode == BeamMode::END || mode == BeamMode::NONE || mode == BeamMode::INVALID;
 }
 
-#define beamModeMid(a) (a == BeamMode::MID || a == BeamMode::BEGIN32 || a == BeamMode::BEGIN64)
+#define beamModeMid(a) (a == BeamMode::MID || a == BeamMode::BEGIN16 || a == BeamMode::BEGIN32)
 
 //---------------------------------------------------------
 //   beamGraceNotes
@@ -668,7 +668,7 @@ void BeamLayout::createBeams(Score* score, LayoutContext& ctx, Measure* measure)
                 firstCR = false;
                 // Handle cross-measure beams
                 BeamMode mode = cr->beamMode();
-                if (mode == BeamMode::MID || mode == BeamMode::END || mode == BeamMode::BEGIN32 || mode == BeamMode::BEGIN64) {
+                if (mode == BeamMode::MID || mode == BeamMode::END || mode == BeamMode::BEGIN16 || mode == BeamMode::BEGIN32) {
                     ChordRest* prevCR = score->findCR(measure->tick() - Fraction::fromTicks(1), track);
                     if (prevCR) {
                         Beam* prevBeam = prevCR->beam();
@@ -935,8 +935,8 @@ void BeamLayout::createBeamSegments(Beam* item, const std::vector<ChordRest*>& c
         ChordRest* startCr = nullptr;
         ChordRest* endCr = nullptr;
         bool breakBeam = false;
+        bool previousBreak16 = false;
         bool previousBreak32 = false;
-        bool previousBreak64 = false;
         size_t lastChordIndex = noLastChord;
 
         for (size_t i = 0; i < numCr; i++) {
@@ -947,16 +947,16 @@ void BeamLayout::createBeamSegments(Beam* item, const std::vector<ChordRest*>& c
             if (level < chordRest->beams()) {
                 levelHasBeam = true;
             }
+            bool isBroken16 = false;
             bool isBroken32 = false;
-            bool isBroken64 = false;
 
-            // updates isBroken32 and isBroken64
-            item->calcBeamBreaks(chordRest, prevChordRest, level, isBroken32, isBroken64);
-            breakBeam = isBroken32 || isBroken64;
+            // updates isBroken16 and isBroken32
+            item->calcBeamBreaks(chordRest, prevChordRest, level, isBroken16, isBroken32);
+            breakBeam = isBroken16 || isBroken32;
             bool skipRest = false;
             BeamMode beamMode = chordRest->beamMode();
             if (chordRest->isRest() && level >= chordRest->beams()
-                && (beamMode == BeamMode::MID || beamMode == BeamMode::BEGIN32 || beamMode == BeamMode::BEGIN64)) {
+                && (beamMode == BeamMode::MID || beamMode == BeamMode::BEGIN16 || beamMode == BeamMode::BEGIN32)) {
                 // if the level is lower than both the previous and next real chords, don't break here
                 size_t nextChordIndex = i + 1;
                 while (nextChordIndex < numCr && chordRests[nextChordIndex]->isRest()) {
@@ -971,7 +971,7 @@ void BeamLayout::createBeamSegments(Beam* item, const std::vector<ChordRest*>& c
                     // an 8th rest, for example, even though an 8th note would very obviously break the beam
                     // this is desired for BeamType::MID on rests.
                     if (level < lastChord->beams() && level < nextChord->beams()) {
-                        skipRest = (isBroken32 && level < 1) || (isBroken64 && level < 2) || (!isBroken32 && !isBroken64);
+                        skipRest = (isBroken16 && level < 1) || (isBroken32 && level < 2) || (!isBroken16 && !isBroken32);
                     }
                 }
             }
@@ -995,8 +995,8 @@ void BeamLayout::createBeamSegments(Beam* item, const std::vector<ChordRest*>& c
                                                                    toChord(startCr),
                                                                    beamletIndex,
                                                                    level,
-                                                                   previousBreak32,
-                                                                   previousBreak64);
+                                                                   previousBreak16,
+                                                                   previousBreak32);
                         createBeamletSegment(item, toChord(startCr), isBeamletBefore, level);
                     } else {
                         createBeamSegment(item, startCr, endCr, level);
@@ -1006,8 +1006,8 @@ void BeamLayout::createBeamSegments(Beam* item, const std::vector<ChordRest*>& c
                 startCr = setCr ? chordRest : nullptr;
                 endCr = setCr ? chordRest : nullptr;
             }
+            previousBreak16 = isBroken16;
             previousBreak32 = isBroken32;
-            previousBreak64 = isBroken64;
             if (chordRest && chordRest->isChord()) {
                 lastChordIndex = i;
             }
@@ -1027,7 +1027,7 @@ void BeamLayout::createBeamSegments(Beam* item, const std::vector<ChordRest*>& c
     } while (levelHasBeam);
 }
 
-bool BeamLayout::calcIsBeamletBefore(const Beam* item, Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break)
+bool BeamLayout::calcIsBeamletBefore(const Beam* item, Chord* chord, int i, int level, bool isAfter16Break, bool isAfter32Break)
 {
     // if first or last chord in beam group
     if (i == 0) {
@@ -1048,13 +1048,13 @@ bool BeamLayout::calcIsBeamletBefore(const Beam* item, Chord* chord, int i, int 
     ChordRest* currChordRest = item->_elements[i];
     ChordRest* prevChordRest = item->_elements[i - 1];
     if (nextChordRest->isChord()) {
+        bool nextBreak16 = false;
         bool nextBreak32 = false;
-        bool nextBreak64 = false;
+        bool currBreak16 = false;
         bool currBreak32 = false;
-        bool currBreak64 = false;
-        item->calcBeamBreaks(currChordRest, prevChordRest, prevChordRest->beams(), currBreak32, currBreak64);
-        item->calcBeamBreaks(nextChordRest, currChordRest, level, nextBreak32, nextBreak64);
-        if ((nextBreak32 && level >= 1) || (!currBreak32 && nextBreak64 && level >= 2)) {
+        item->calcBeamBreaks(currChordRest, prevChordRest, prevChordRest->beams(), currBreak16, currBreak32);
+        item->calcBeamBreaks(nextChordRest, currChordRest, level, nextBreak16, nextBreak32);
+        if ((nextBreak16 && level >= 1) || (!currBreak16 && nextBreak32 && level >= 2)) {
             return true;
         }
     }
@@ -1067,9 +1067,9 @@ bool BeamLayout::calcIsBeamletBefore(const Beam* item, Chord* chord, int i, int 
         ChordRest* previous = item->_elements[i - previousOffset];
         if (previous->isChord()) {
             previousChordLevel = toChord(previous)->beams();
-            if (isAfter32Break) {
+            if (isAfter16Break) {
                 previousChordLevel = std::min(previousChordLevel, 1);
-            } else if (isAfter64Break) {
+            } else if (isAfter32Break) {
                 previousChordLevel = std::min(previousChordLevel, 2);
             }
             break;
