@@ -731,4 +731,13 @@ TEST_F(GuitarPro_Tests, gpxInstrumentChange1beat) {
 TEST_F(GuitarPro_Tests, gpFixEmptyMeasures) {
     gpReadTest("mmrest", "gp");
 }
+TEST_F(GuitarPro_Tests, gpLineElements) {
+    gpReadTest("line_elements", "gp");
+}
+TEST_F(GuitarPro_Tests, gp5LineElements) {
+    gpReadTest("line_elements", "gp5");
+}
+TEST_F(GuitarPro_Tests, gp5LetRingTied) {
+    gpReadTest("let-ring-tied", "gp5");
+}
 }

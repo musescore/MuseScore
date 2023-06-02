@@ -35,6 +35,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importptb.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importptb.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/continiouselementsbuilder.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/continiouselementsbuilder.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp6dombuilder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp6dombuilder.h
