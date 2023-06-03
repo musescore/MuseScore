@@ -4336,7 +4336,6 @@ static void beatUnit(XmlWriter& xml, const TDuration dur)
 
 static void wordsMetronome(XmlWriter& xml, Score* s, TextBase const* const text, const int offset)
 {
-    //LOGD("wordsMetronome('%s')", qPrintable(text->xmlText()));
     const std::list<TextFragment> list = text->fragmentList();
     std::list<TextFragment> wordsLeft;          // words left of metronome
     bool hasParen;                          // parenthesis
