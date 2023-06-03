@@ -613,6 +613,9 @@ TEST_F(Musicxml_Tests, instrumentChangeMIDIportExport) {
 TEST_F(Musicxml_Tests, instrumentSound) {
     mxmlIoTestRef("testInstrumentSound");
 }
+TEST_F(Musicxml_Tests, invalidLayout) {
+    mxmlMscxExportTestRef("testInvalidLayout");
+}
 TEST_F(Musicxml_Tests, invalidTimesig) {
     mxmlIoTestRef("testInvalidTimesig");
 }
