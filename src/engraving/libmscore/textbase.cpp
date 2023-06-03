@@ -2298,6 +2298,45 @@ void TextBase::resetFormatting()
 }
 
 //---------------------------------------------------------
+//   fragmentList
+//---------------------------------------------------------
+
+/*
+ Return the text as a single list of TextFragment
+ Used by the MusicXML formatted export to avoid parsing the xml text format
+ */
+
+std::list<TextFragment> TextBase::fragmentList() const
+{
+    std::list<TextFragment> res;
+
+    const TextBase* text = this;
+    std::unique_ptr<TextBase> tmpText;
+    if (layoutInvalid()) {
+        // Create temporary text object to avoid side effects
+        // of createLayout() call.
+        tmpText.reset(toTextBase(this->clone()));
+        tmpText->createLayout();
+        text = tmpText.get();
+    }
+
+    for (const TextBlock& block : text->m_blocks) {
+        for (const TextFragment& f : block.fragments()) {
+            /* TODO TBD
+            if (f.text.empty())                     // skip empty fragments, not to
+                  continue;                           // insert extra HTML formatting
+             */
+            res.push_back(f);
+            if (block.eol()) {
+                // simply append a newline
+                res.back().text += u"\n";
+            }
+        }
+    }
+    return res;
+}
+
+//---------------------------------------------------------
 //   plainText
 //    return plain text with symbols
 //---------------------------------------------------------
@@ -2446,34 +2485,6 @@ int TextBase::subtype() const
 TranslatableString TextBase::subtypeUserName() const
 {
     return score() ? score()->getTextStyleUserName(textStyleType()) : TConv::userName(textStyleType());
-}
-
-//---------------------------------------------------------
-//   fragmentList
-//---------------------------------------------------------
-
-/*
- Return the text as a single list of TextFragment
- Used by the MusicXML formatted export to avoid parsing the xml text format
- */
-
-std::list<TextFragment> TextBase::fragmentList() const
-{
-    std::list<TextFragment> res;
-    for (const TextBlock& block : m_blocks) {
-        for (const TextFragment& f : block.fragments()) {
-            /* TODO TBD
-            if (f.text.empty())                     // skip empty fragments, not to
-                  continue;                           // insert extra HTML formatting
-             */
-            res.push_back(f);
-            if (block.eol()) {
-                // simply append a newline
-                res.back().text += u"\n";
-            }
-        }
-    }
-    return res;
 }
 
 //---------------------------------------------------------
