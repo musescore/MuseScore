@@ -32,7 +32,7 @@ using namespace mu::ui;
 using namespace mu::draw;
 using namespace mu::notation;
 
-static constexpr qreal SCROLL_LIMIT_OFF_OFFSET = 0.75;
+static constexpr qreal SCROLL_LIMIT_OFF_OFFSET = 0.33;
 static constexpr qreal SCROLL_LIMIT_ON_OFFSET = 0.02;
 
 AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
