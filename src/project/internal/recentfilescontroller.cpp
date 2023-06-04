@@ -94,6 +94,24 @@ void RecentFilesController::prependRecentFile(const RecentFile& newFile)
     prependPlatformRecentFile(newFile);
 }
 
+void RecentFilesController::moveRecentFile(const io::path_t& before, const RecentFile& after)
+{
+    bool moved = false;
+    RecentFilesList newList = m_recentFilesList;
+
+    for (RecentFile& file : newList) {
+        if (file == before) {
+            file = after;
+            moved = true;
+            break;
+        }
+    }
+
+    if (moved) {
+        setRecentFilesList(newList, true);
+    }
+}
+
 void RecentFilesController::clearRecentFiles()
 {
     setRecentFilesList({}, true);

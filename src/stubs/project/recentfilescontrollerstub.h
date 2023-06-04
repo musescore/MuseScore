@@ -34,6 +34,7 @@ public:
     async::Notification recentFilesListChanged() const override;
 
     void prependRecentFile(const RecentFile& file) override;
+    void moveRecentFile(const io::path_t& before, const RecentFile& after) override;
     void clearRecentFiles() override;
 
     async::Promise<QPixmap> thumbnail(const RecentFile& file) const override;

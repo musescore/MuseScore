@@ -40,6 +40,10 @@ void RecentFilesControllerStub::prependRecentFile(const RecentFile&)
 {
 }
 
+void RecentFilesControllerStub::moveRecentFile(const io::path_t&, const RecentFile&)
+{
+}
+
 void RecentFilesControllerStub::clearRecentFiles()
 {
 }

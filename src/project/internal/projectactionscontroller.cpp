@@ -1233,12 +1233,15 @@ void ProjectActionsController::revertCorruptedScoreToLastSaved()
 
 void ProjectActionsController::moveProject(INotationProjectPtr project, const io::path_t& newPath, bool replace)
 {
-    if (project->path() == newPath) {
+    io::path_t oldPath = project->path();
+    if (oldPath == newPath) {
         return;
     }
 
-    fileSystem()->move(project->path(), newPath, replace);
+    fileSystem()->move(oldPath, newPath, replace);
     project->setPath(newPath);
+
+    recentFilesController()->moveRecentFile(oldPath, newPath);
 }
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const String& projectName)

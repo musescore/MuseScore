@@ -43,6 +43,7 @@ public:
     virtual async::Notification recentFilesListChanged() const = 0;
 
     virtual void prependRecentFile(const RecentFile& file) = 0;
+    virtual void moveRecentFile(const io::path_t& before, const RecentFile& after) = 0;
     virtual void clearRecentFiles() = 0;
 
     virtual async::Promise<QPixmap> thumbnail(const RecentFile& file) const = 0;
