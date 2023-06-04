@@ -375,6 +375,7 @@ void MScore::init()
             ":/fonts/FreeSerifBoldItalic.ttf",
             ":/fonts/mscoreTab.ttf",
             ":/fonts/mscore-BC.ttf",
+            ":/fonts/leland/Leland.otf",
             ":/fonts/leland/LelandText.otf",
             ":/fonts/bravura/BravuraText.otf",
             ":/fonts/gootville/GootvilleText.otf",
