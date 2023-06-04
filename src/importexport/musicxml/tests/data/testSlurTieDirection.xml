@@ -53,7 +53,7 @@
         <type>quarter</type>
         <stem>down</stem>
         <notations>
-          <slur type="start" number="1"/>
+          <slur type="start" placement="below" number="1"/>
           </notations>
         </note>
       <note>
@@ -67,7 +67,7 @@
         <type>quarter</type>
         <stem>down</stem>
         <notations>
-          <tied type="start"/>
+          <tied type="start" placement="below"/>
           </notations>
         </note>
       <note>
@@ -109,7 +109,7 @@
         <type>quarter</type>
         <stem>down</stem>
         <notations>
-          <slur line-type="dotted" type="start" number="1"/>
+          <slur type="start" placement="above" number="1"/>
           </notations>
         </note>
       <note>
@@ -123,7 +123,7 @@
         <type>quarter</type>
         <stem>down</stem>
         <notations>
-          <tied type="start" line-type="dotted"/>
+          <tied type="start" placement="above"/>
           </notations>
         </note>
       <note>
@@ -165,7 +165,7 @@
         <type>quarter</type>
         <stem>down</stem>
         <notations>
-          <slur line-type="dashed" type="start" number="1"/>
+          <slur type="start" number="1"/>
           </notations>
         </note>
       <note>
@@ -179,7 +179,7 @@
         <type>quarter</type>
         <stem>down</stem>
         <notations>
-          <tied type="start" line-type="dashed"/>
+          <tied type="start"/>
           </notations>
         </note>
       <note>

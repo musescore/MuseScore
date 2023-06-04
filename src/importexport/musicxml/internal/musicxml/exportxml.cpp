@@ -847,8 +847,11 @@ void SlurHandler::doSlurStart(const Slur* s, Notations& notations, XmlWriter& xm
     QString tagName = "slur";
     tagName += slurTieLineStyle(s);   // define line type
     tagName += color2xml(s);
-    tagName += QString(" type=\"start\" placement=\"%1\"")
-               .arg(s->up() ? "above" : "below");
+    tagName += QString(" type=\"start\"");
+    if (s->slurDirection() != DirectionV::AUTO || ExportMusicXml::configuration()->musicxmlExportLayout()) {
+        tagName += QString(" placement=\"%1\"").arg(s->up() ? "above" : "below");
+        tagName += QString(" orientation=\"%1\"").arg(s->up() ? "over" : "under");
+    }
     tagName += ExportMusicXml::positioningAttributes(s, true);
 
     if (i >= 0) {
@@ -4023,6 +4026,7 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
             QString rest = slurTieLineStyle(tieFor);
             if (tieFor->slurDirection() != DirectionV::AUTO || configuration()->musicxmlExportLayout()) {
                 rest += QString(" placement=\"%1\"").arg(tieFor->up() ? "above" : "below");
+                rest += QString(" orientation=\"%1\"").arg(tieFor->up() ? "over" : "under");
             }
             _xml.tagRaw(QString("tied type=\"start\"%1").arg(rest));
         }

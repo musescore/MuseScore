@@ -374,7 +374,7 @@
         <type>quarter</type>
         <stem>up</stem>
         <notations>
-          <slur type="start" placement="below" number="1"/>
+          <slur type="start" number="1"/>
           </notations>
         </note>
       <note>

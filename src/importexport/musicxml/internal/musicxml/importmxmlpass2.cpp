@@ -5768,11 +5768,22 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
             }
             newSlur->setTick(Fraction::fromTicks(tick));
             newSlur->setStartElement(cr);
-            const auto pl = notation.attribute("placement");
-            if (pl == "above") {
-                newSlur->setSlurDirection(DirectionV::UP);
-            } else if (pl == "below") {
-                newSlur->setSlurDirection(DirectionV::DOWN);
+            if (configuration()->musicxmlImportLayout()) {
+                const auto pl = notation.attribute("placement");
+
+                if (pl == "above") {
+                    newSlur->setSlurDirection(DirectionV::UP);
+                } else if (pl == "below") {
+                    newSlur->setSlurDirection(DirectionV::DOWN);
+                }
+
+                const auto ori = notation.attribute("orientation");
+
+                if (ori == "over") {
+                    newSlur->setSlurDirection(DirectionV::UP);
+                } else if (ori == "under") {
+                    newSlur->setSlurDirection(DirectionV::DOWN);
+                }
             }
             newSlur->setTrack(track);
             newSlur->setTrack2(track);
@@ -6214,7 +6225,6 @@ static void addTie(const Notation& notation, Score* score, Note* note, const tra
     }
 
     const QString& type = notation.attribute("type");
-    const QString& orientation = notation.attribute("orientation");
     const QString& lineType = notation.attribute("line-type");
 
     if (type == "") {
@@ -6227,18 +6237,6 @@ static void addTie(const Notation& notation, Score* score, Note* note, const tra
         note->setTieFor(tie);
         tie->setStartNote(note);
         tie->setTrack(track);
-
-        if (orientation == "over") {
-            tie->setSlurDirection(DirectionV::UP);
-        } else if (orientation == "under") {
-            tie->setSlurDirection(DirectionV::DOWN);
-        } else if (orientation == "auto") {
-            // ignore
-        } else if (orientation == "") {
-            // ignore
-        } else {
-            logger->logError(QString("unknown tied orientation: %1").arg(orientation), xmlreader);
-        }
 
         if (configuration()->musicxmlImportLayout()) {
             const QString& placement = notation.attribute("placement");
@@ -6253,6 +6251,20 @@ static void addTie(const Notation& notation, Score* score, Note* note, const tra
                 // ignore
             } else {
                 logger->logError(QString("unknown tied placement: %1").arg(placement), xmlreader);
+            }
+
+            const QString& orientation = notation.attribute("orientation");
+
+            if (orientation == "over") {
+                tie->setSlurDirection(DirectionV::UP);
+            } else if (orientation == "under") {
+                tie->setSlurDirection(DirectionV::DOWN);
+            } else if (orientation == "auto") {
+                // ignore
+            } else if (orientation == "") {
+                // ignore
+            } else {
+                logger->logError(QString("unknown tied orientation: %1").arg(orientation), xmlreader);
             }
         }
 

@@ -58,7 +58,7 @@
         <type>eighth</type>
         <stem>up</stem>
         <notations>
-          <slur type="start" placement="below" number="1"/>
+          <slur type="start" number="1"/>
           </notations>
         </note>
       <note>
@@ -85,7 +85,7 @@
         <type>eighth</type>
         <stem>up</stem>
         <notations>
-          <slur type="start" placement="below" number="1"/>
+          <slur type="start" number="1"/>
           </notations>
         </note>
       <note>
@@ -121,7 +121,7 @@
         <voice>1</voice>
         <type>whole</type>
         <notations>
-          <slur type="start" placement="below" number="1"/>
+          <slur type="start" number="1"/>
           </notations>
         </note>
       <note>
@@ -149,7 +149,7 @@
         <type>quarter</type>
         <stem>up</stem>
         <notations>
-          <slur type="start" placement="below" number="1"/>
+          <slur type="start" number="1"/>
           </notations>
         </note>
       <note>
@@ -162,7 +162,7 @@
         <type>whole</type>
         <notations>
           <slur type="stop" number="1"/>
-          <slur type="start" placement="below" number="1"/>
+          <slur type="start" number="1"/>
           </notations>
         </note>
       <note>
@@ -191,7 +191,7 @@
         <stem>up</stem>
         <beam number="1">begin</beam>
         <notations>
-          <slur type="start" placement="below" number="1"/>
+          <slur type="start" number="1"/>
           </notations>
         </note>
       <note>
@@ -250,7 +250,7 @@
         <stem>up</stem>
         <beam number="1">begin</beam>
         <notations>
-          <slur type="start" placement="below" number="1"/>
+          <slur type="start" number="1"/>
           </notations>
         </note>
       <note>
@@ -291,7 +291,7 @@
         <stem>up</stem>
         <beam number="1">begin</beam>
         <notations>
-          <slur type="start" placement="below" number="1"/>
+          <slur type="start" number="1"/>
           </notations>
         </note>
       <note>
@@ -328,7 +328,7 @@
         <voice>1</voice>
         <type>whole</type>
         <notations>
-          <slur type="start" placement="below" number="1"/>
+          <slur type="start" number="1"/>
           </notations>
         </note>
       <note>
