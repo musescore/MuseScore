@@ -260,7 +260,7 @@ io::path_t ProjectConfiguration::cloudProjectSavingPath(int scoreId) const
 
     do {
         path = newCloudProjectsPath()
-               .appendingComponent(QStringLiteral("not_uploaded_") + QString::number(counter))
+               .appendingComponent(QStringLiteral("not_uploaded_") + QString::number(counter++))
                .appendingSuffix(DEFAULT_FILE_SUFFIX);
     } while (fileSystem()->exists(path));
 

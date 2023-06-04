@@ -254,6 +254,12 @@ Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
 
 void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
 {
+    if (!scoreId) {
+        // TODO(cloud): error handling?
+        // Might happen when user tries to open score that saved as a cloud score but upload did not fully succeed?
+        return;
+    }
+
     // TODO(cloud): conflict checking (don't recklessly overwrite the existing file)
     io::path_t localPath = configuration()->cloudProjectPath(scoreId);
     QFile* projectData = new QFile(localPath.toQString());
