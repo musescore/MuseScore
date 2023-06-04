@@ -159,6 +159,7 @@ private slots:
       void inferredTransposition() { mxmlImportTestRef("testInferredTransposition"); }
       void instrumentChangeMIDIportExport() { mxmlMscxExportTestRef("testInstrumentChangeMIDIportExport"); }
       void instrumentSound() { mxmlIoTestRef("testInstrumentSound"); }
+      void invalidLayout() { mxmlMscxExportTestRef("testInvalidLayout"); }
       void invalidTimesig() { mxmlIoTestRef("testInvalidTimesig"); }
       void invisibleElements() { mxmlIoTest("testInvisibleElements"); }
       void keysig1() { mxmlIoTest("testKeysig1"); }

@@ -2383,6 +2383,44 @@ void TextBase::setXmlText(const QString& s)
       }
 
 //---------------------------------------------------------
+//   fragmentList
+//---------------------------------------------------------
+
+/*
+ Return the text as a single list of TextFragment
+ Used by the MusicXML formatted export to avoid parsing the xml text format
+ */
+
+QList<TextFragment> TextBase::fragmentList() const
+      {
+      QList<TextFragment> res;
+
+      const TextBase* text = this;
+      std::unique_ptr<TextBase> tmpText;
+      if (layoutInvalid) {
+            // Create temporary text object to avoid side effects
+            // of createLayout() call.
+            tmpText.reset(toTextBase(this->clone()));
+            tmpText->createLayout();
+            text = tmpText.get();
+            }
+      for (const TextBlock& block : text->_layout) {
+            for (const TextFragment& f : block.fragments()) {
+                  /* TODO TBD
+                  if (f.text.empty())                     // skip empty fragments, not to
+                        continue;                           // insert extra HTML formatting
+                   */
+                  res.append(f);
+                  if (block.eol()) {
+                        // simply append a newline
+                        res.last().text += "\n";
+                        }
+                  }
+            }
+      return res;
+      }
+
+//---------------------------------------------------------
 //   plainText
 //    return plain text with symbols
 //---------------------------------------------------------
@@ -2648,34 +2686,6 @@ int TextBase::subtype() const
 QString TextBase::subtypeName() const
       {
       return score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
-      }
-
-//---------------------------------------------------------
-//   fragmentList
-//---------------------------------------------------------
-
-/*
- Return the text as a single list of TextFragment
- Used by the MusicXML formatted export to avoid parsing the xml text format
- */
-
-QList<TextFragment> TextBase::fragmentList() const
-      {
-      QList<TextFragment> res;
-      for (const TextBlock& block : _layout) {
-            for (const TextFragment& f : block.fragments()) {
-                  /* TODO TBD
-                  if (f.text.empty())                     // skip empty fragments, not to
-                        continue;                           // insert extra HTML formatting
-                   */
-                  res.append(f);
-                  if (block.eol()) {
-                        // simply append a newline
-                        res.last().text += "\n";
-                        }
-                  }
-            }
-      return res;
       }
 
 //---------------------------------------------------------

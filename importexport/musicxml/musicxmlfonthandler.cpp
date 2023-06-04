@@ -233,7 +233,7 @@ bool MScoreTextToMXML::split(const QList<TextFragment>& in, const int pos, const
 
 void MScoreTextToMXML::writeTextFragments(const QList<TextFragment>& fr, XmlWriter& xml)
       {
-      //qDebug("MScoreTextToMXML::writeTextFragments defFmt %s", qPrintable(charFormat2QString(oldFormat)));
+      //qDebug("MScoreTextToMXML::writeTextFragments");
       //dumpText(fr);
       bool firstTime = true; // write additional attributes only the first time characters are written
       for (const TextFragment& f : fr) {

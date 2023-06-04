@@ -3991,6 +3991,7 @@ static void beatUnit(XmlWriter& xml, const TDuration dur)
 static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text, const int offset)
       {
       //qDebug("wordsMetrome('%s')", qPrintable(text->xmlText()));
+      //qDebug("isTextInvalid %d isLayoutInvalid %d", text->isTextInvalid(), text->isLayoutInvalid());
       const QList<TextFragment> list = text->fragmentList();
       QList<TextFragment>       wordsLeft;  // words left of metronome
       bool hasParen;                        // parenthesis
