@@ -6240,6 +6240,22 @@ static void addTie(const Notation& notation, Score* score, Note* note, const tra
             logger->logError(QString("unknown tied orientation: %1").arg(orientation), xmlreader);
         }
 
+        if (configuration()->musicxmlImportLayout()) {
+            const QString& placement = notation.attribute("placement");
+
+            if (placement == "above") {
+                tie->setSlurDirection(DirectionV::UP);
+            } else if (placement == "below") {
+                tie->setSlurDirection(DirectionV::DOWN);
+            } else if (placement == "auto") {
+                // ignore
+            } else if (placement == "") {
+                // ignore
+            } else {
+                logger->logError(QString("unknown tied placement: %1").arg(placement), xmlreader);
+            }
+        }
+
         if (lineType == "dotted") {
             tie->setStyleType(SlurStyleType::Dotted);
         } else if (lineType == "dashed") {
