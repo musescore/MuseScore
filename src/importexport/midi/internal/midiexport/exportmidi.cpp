@@ -239,7 +239,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     m_pauseMap.calculate(m_score);
     writeHeader();
 
-    int staffIdx = 0;
+    staff_idx_t staffIdx = 0;
     for (auto& track: tracks) {
         Staff* staff = m_score->staff(staffIdx);
         Part* part   = staff->part();
@@ -311,10 +311,10 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                                                                                    event.pitch(), 0));
                     }
 
-                    int equivalentStaffIdx = staffIdx;
+                    staff_idx_t equivalentStaffIdx = staffIdx;
                     for (Staff* st : m_score->masterScore()->staves()) {
                         if (staff->id() == st->id()) {
-                            equivalentStaffIdx = static_cast <int>(st->idx());
+                            equivalentStaffIdx = st->idx();
                         }
                     }
 
