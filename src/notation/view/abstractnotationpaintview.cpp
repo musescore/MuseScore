@@ -205,11 +205,7 @@ void AbstractNotationPaintView::onCurrentNotationChanged()
         onUnloadNotation(m_notation);
     }
 
-    m_notation = globalContext()->currentNotation();
-    m_continuousPanel->setNotation(m_notation);
-    m_playbackCursor->setNotation(m_notation);
-    m_loopInMarker->setNotation(m_notation);
-    m_loopOutMarker->setNotation(m_notation);
+    setNotation(globalContext()->currentNotation());
 
     if (!m_notation) {
         return;
@@ -1202,6 +1198,10 @@ void AbstractNotationPaintView::setNotation(INotationPtr notation)
 {
     clear();
     m_notation = notation;
+    m_continuousPanel->setNotation(m_notation);
+    m_playbackCursor->setNotation(m_notation);
+    m_loopInMarker->setNotation(m_notation);
+    m_loopOutMarker->setNotation(m_notation);
     redraw();
 }
 
