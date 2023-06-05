@@ -308,9 +308,9 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         // extend slur
         //
         ChordRest* e = searchNote(is.tick(), is.track());
-        if (e) {
+        EngravingItem* ee = is.slur()->startElement();
+        if (e && ee) {
             Fraction stick = Fraction(0, 1);
-            EngravingItem* ee = is.slur()->startElement();
             if (ee->isChordRest()) {
                 stick = toChordRest(ee)->tick();
             } else if (ee->isNote()) {
