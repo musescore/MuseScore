@@ -174,12 +174,12 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                         s->setEnabled(true);
                     }
                 }
-                m->addSystemHeader(ctx.firstSystem);
+                MeasureLayout::addSystemHeader(m, ctx.firstSystem, ctx);
                 firstMeasure = false;
                 createHeader = false;
             } else {
                 if (createHeader) {
-                    m->addSystemHeader(false);
+                    MeasureLayout::addSystemHeader(m, false, ctx);
                     createHeader = false;
                 } else if (m->header()) {
                     m->removeSystemHeader();
@@ -367,7 +367,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                 bool localFirstSystem = pbmb->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
                 MeasureBase* nm = breakMeasure ? breakMeasure : m;
                 if (curHeader) {
-                    m->addSystemHeader(localFirstSystem);
+                    MeasureLayout::addSystemHeader(m, localFirstSystem, ctx);
                 } else {
                     m->removeSystemHeader();
                 }
