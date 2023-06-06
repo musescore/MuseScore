@@ -185,7 +185,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
         mixOutputFromChannel(outBuffer, trackBuffer.data(), samplesPerChannel);
         masterChannelSampleCount = std::max(samplesPerChannel, masterChannelSampleCount);
 
-        const AuxSendsParams& auxSends = m_trackChannels.at(trackIdx)->outputParams().auxSends;
+        const AuxSendsParams& auxSends = m_trackChannels.at(static_cast<TrackId>(trackIdx))->outputParams().auxSends;
         writeTrackToAuxBuffers(auxSends, trackBuffer.data(), samplesPerChannel);
     }
 
