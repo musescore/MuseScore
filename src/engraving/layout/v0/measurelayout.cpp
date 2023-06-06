@@ -1471,3 +1471,179 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
 
     return m->width() - oldWidth;
 }
+
+//-------------------------------------------------------------------
+//   addSystemHeader
+///   Add elements to make this measure suitable as the first measure
+///   of a system.
+//    The system header can contain a starting BarLine, a Clef,
+//    and a KeySig
+//-------------------------------------------------------------------
+
+void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContext& ctx)
+{
+    int staffIdx = 0;
+    Segment* kSegment = m->findFirstR(SegmentType::KeySig, Fraction(0, 1));
+    Segment* cSegment = m->findFirstR(SegmentType::HeaderClef, Fraction(0, 1));
+
+    for (const Staff* staff : m->score()->staves()) {
+        const int track = staffIdx * VOICES;
+
+        if (isFirstSystem || m->score()->styleB(Sid::genClef)) {
+            // find the clef type at the previous tick
+            ClefTypeList cl = staff->clefType(m->tick() - Fraction::fromTicks(1));
+            bool showCourtesy = true;
+            Segment* s = nullptr;
+            if (m->prevMeasure()) {
+                // look for a clef change at the end of the previous measure
+                s = m->prevMeasure()->findSegment(SegmentType::Clef, m->tick());
+            } else if (m->isMMRest()) {
+                // look for a header clef at the beginning of the first underlying measure
+                s = m->mmRestFirst()->findFirstR(SegmentType::HeaderClef, Fraction(0, 1));
+            }
+            if (s) {
+                Clef* c = toClef(s->element(track));
+                if (c) {
+                    cl = c->clefTypeList();
+                    showCourtesy = c->showCourtesy();
+                }
+            }
+            Clef* clef = nullptr;
+            if (!cSegment) {
+                cSegment = Factory::createSegment(m, SegmentType::HeaderClef, Fraction(0, 1));
+                cSegment->setHeader(true);
+                m->add(cSegment);
+            } else {
+                clef = toClef(cSegment->element(track));
+            }
+            if (staff->staffTypeForElement(m)->genClef()) {
+                if (!clef) {
+                    //
+                    // create missing clef
+                    //
+                    clef = Factory::createClef(cSegment);
+                    clef->setTrack(track);
+                    clef->setGenerated(true);
+                    clef->setParent(cSegment);
+                    clef->setIsHeader(true);
+                    clef->setShowCourtesy(showCourtesy);
+                    cSegment->add(clef);
+                }
+                if (clef->generated()) {
+                    clef->setClefType(cl);
+                }
+                clef->setSmall(false);
+                TLayout::layout(clef, ctx);
+            } else if (clef) {
+                clef->parentItem()->remove(clef);
+                if (clef->generated()) {
+                    delete clef;
+                }
+            }
+            //cSegment->createShape(staffIdx);
+            cSegment->setEnabled(true);
+        } else {
+            if (cSegment) {
+                cSegment->setEnabled(false);
+            }
+        }
+
+        // keep key sigs in TABs: TABs themselves should hide them
+        bool needKeysig = isFirstSystem || m->score()->styleB(Sid::genKeysig);
+
+        // If we need a Key::C KeySig (which would be invisible) and there is
+        // a courtesy key sig, don’t create it and switch generated flags.
+        // This avoids creating an invisible KeySig which can distort layout.
+
+        KeySigEvent keyIdx = staff->keySigEvent(m->tick());
+        KeySig* ksAnnounce = 0;
+        if (needKeysig && (keyIdx.key() == Key::C)) {
+            Measure* pm = m->prevMeasure();
+            if (pm && pm->hasCourtesyKeySig()) {
+                Segment* ks = pm->first(SegmentType::KeySigAnnounce);
+                if (ks) {
+                    ksAnnounce = toKeySig(ks->element(track));
+                    if (ksAnnounce) {
+                        needKeysig = false;
+//                                    if (keysig) {
+//                                          ksAnnounce->setGenerated(false);
+//TODO                                      keysig->setGenerated(true);
+//                                          }
+                    }
+                }
+            }
+        }
+
+        needKeysig = needKeysig && (keyIdx.key() != Key::C || keyIdx.custom() || keyIdx.isAtonal());
+        bool isPitchedStaff = staff->isPitchedStaff(m->tick());
+
+        if (needKeysig && isPitchedStaff) {
+            KeySig* keysig;
+            if (!kSegment) {
+                kSegment = Factory::createSegment(m, SegmentType::KeySig, Fraction(0, 1));
+                kSegment->setHeader(true);
+                m->add(kSegment);
+                keysig = 0;
+            } else {
+                keysig  = toKeySig(kSegment->element(track));
+            }
+            if (!keysig) {
+                //
+                // create missing key signature
+                //
+                keysig = Factory::createKeySig(kSegment);
+                keysig->setTrack(track);
+                keysig->setGenerated(true);
+                keysig->setParent(kSegment);
+                kSegment->add(keysig);
+            }
+            keysig->setKeySigEvent(keyIdx);
+            TLayout::layout(keysig, ctx);
+            //kSegment->createShape(staffIdx);
+            kSegment->setEnabled(true);
+        } else if (kSegment && isPitchedStaff) {
+            // do not disable user modified keysigs
+            bool disable = true;
+            for (size_t i = 0; i < m->score()->nstaves(); ++i) {
+                EngravingItem* e = kSegment->element(i * VOICES);
+                Key key = m->score()->staff(i)->key(m->tick());
+                if ((e && !e->generated()) || (key != keyIdx.key())) {
+                    disable = false;
+                } else if (e && e->generated() && key == keyIdx.key() && keyIdx.key() == Key::C) {
+                    // If a key sig segment is disabled, it may be re-enabled if there is
+                    // a transposing instrument using a different key sig.
+                    // To prevent this from making the wrong key sig display, remove any key
+                    // sigs on staves where the key in this measure is C.
+                    kSegment->remove(e);
+                }
+            }
+
+            if (disable) {
+                kSegment->setEnabled(false);
+            } else {
+                EngravingItem* e = kSegment->element(track);
+                if (e && e->isKeySig()) {
+                    KeySig* keysig = toKeySig(e);
+                    TLayout::layout(keysig, ctx);
+                }
+            }
+        } else if (kSegment && !isPitchedStaff) {
+            EngravingItem* e = kSegment->element(track);
+            if (e && e->isKeySig()) {
+                kSegment->remove(e);
+            }
+        }
+
+        ++staffIdx;
+    }
+    if (cSegment) {
+        cSegment->createShapes();
+    }
+    if (kSegment) {
+        kSegment->createShapes();
+    }
+
+    m->createSystemBeginBarLine();
+
+    m->checkHeader();
+}

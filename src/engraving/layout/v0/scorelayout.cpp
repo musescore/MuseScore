@@ -336,7 +336,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
                         s->setEnabled(true);
                     }
                 }
-                m->addSystemHeader(true);
+                MeasureLayout::addSystemHeader(m, true, ctx);
                 pos.rx() += system->leftMargin();
                 firstMeasure = false;
             } else if (m->header()) {

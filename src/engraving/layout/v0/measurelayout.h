@@ -49,6 +49,7 @@ public:
     static void layoutMeasureElements(Measure* m, LayoutContext& ctx);
 
     static double createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
+    static void addSystemHeader(Measure* m, bool isFirstSystem, LayoutContext& ctx);
 
 private:
 

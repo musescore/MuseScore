@@ -337,7 +337,6 @@ public:
     AccessibleItemPtr createAccessible() override;
 #endif
 
-    void addSystemHeader(bool firstSystem);
     void addSystemTrailer(Measure* nm);
     void removeSystemHeader();
     void removeSystemTrailer();
