@@ -348,12 +348,12 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
             if (m->tick() >= ctx.startTick && m->tick() <= ctx.endTick) {
                 // for measures in range, do full layout
                 if (options.isMode(LayoutMode::HORIZONTAL_FIXED)) {
-                    m->createEndBarLines(true);
+                    MeasureLayout::createEndBarLines(m, true, ctx);
                     m->layoutSegmentsInPracticeMode(visibleParts);
                     ww = m->width();
                     m->stretchMeasureInPracticeMode(ww);
                 } else {
-                    m->createEndBarLines(false);
+                    MeasureLayout::createEndBarLines(m, false, ctx);
                     m->computeWidth(minTicks, maxTicks, 1);
                     ww = m->width();
                     MeasureLayout::layoutMeasureElements(m, ctx);
