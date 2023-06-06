@@ -83,7 +83,7 @@ void VstAudioClient::setVolumeGain(const audio::gain_t newVolumeGain)
     m_volumeGain = newVolumeGain;
 }
 
-audio::samples_t VstAudioClient::process(float* output, audio::samples_t samplesPerChannel)
+audio::samples_t VstAudioClient::process(float* output, samples_t samplesPerChannel)
 {
     IAudioProcessorPtr processor = pluginProcessor();
     if (!processor || !output) {
@@ -313,7 +313,7 @@ void VstAudioClient::updateProcessSetup()
     flushBuffers();
 }
 
-void VstAudioClient::extractInputSamples(const audio::samples_t& sampleCount, const float* sourceBuffer)
+void VstAudioClient::extractInputSamples(samples_t sampleCount, const float* sourceBuffer)
 {
     if (!m_processData.inputs || !sourceBuffer) {
         return;
@@ -321,14 +321,16 @@ void VstAudioClient::extractInputSamples(const audio::samples_t& sampleCount, co
 
     Steinberg::Vst::AudioBusBuffers& bus = m_processData.inputs[0];
 
-    for (unsigned int i = 0; i < sampleCount; ++i) {
-        for (audio::audioch_t s = 0; s < bus.numChannels; ++s) {
-            bus.channelBuffers32[s][i] = sourceBuffer[i * m_audioChannelsCount + s];
+    for (samples_t sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
+        size_t offset = sampleIndex * m_audioChannelsCount;
+
+        for (audioch_t audioChannelIndex = 0; audioChannelIndex < bus.numChannels; ++audioChannelIndex) {
+            bus.channelBuffers32[audioChannelIndex][sampleIndex] = sourceBuffer[offset + audioChannelIndex];
         }
     }
 }
 
-bool VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
+bool VstAudioClient::fillOutputBuffer(samples_t sampleCount, float* output)
 {
     bool hasMeaningSamples = false;
 
@@ -336,24 +338,28 @@ bool VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
         return hasMeaningSamples;
     }
 
+    bool isInstrument = m_type == AudioPluginType::Instrument;
+
     for (const int busIndex : m_activeOutputBusses) {
         Steinberg::Vst::AudioBusBuffers bus = m_processData.outputs[busIndex];
 
-        for (audio::samples_t sampleIndex = 0; sampleIndex < samples; ++sampleIndex) {
-            for (audio::audioch_t audioChannelIndex = 0; audioChannelIndex < bus.numChannels; ++audioChannelIndex) {
+        for (samples_t sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
+            size_t offset = sampleIndex * m_audioChannelsCount;
+
+            for (audioch_t audioChannelIndex = 0; audioChannelIndex < bus.numChannels; ++audioChannelIndex) {
                 float sample = bus.channelBuffers32[audioChannelIndex][sampleIndex];
 
-                if (m_type == AudioPluginType::Instrument) {
-                    output[sampleIndex * m_audioChannelsCount + audioChannelIndex] += sample * m_volumeGain;
+                if (isInstrument) {
+                    output[offset + audioChannelIndex] += sample * m_volumeGain;
                 } else {
-                    output[sampleIndex * m_audioChannelsCount + audioChannelIndex] = sample * m_volumeGain;
+                    output[offset + audioChannelIndex] = sample * m_volumeGain;
                 }
 
                 if (hasMeaningSamples) {
                     continue;
                 }
 
-                if (!RealIsEqual(sample, 0)) {
+                if (!RealIsNull(sample)) {
                     hasMeaningSamples = true;
                 }
             }

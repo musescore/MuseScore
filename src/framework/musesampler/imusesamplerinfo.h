@@ -25,6 +25,10 @@
 
 #include "modularity/imoduleinterface.h"
 
+namespace mu {
+class String;
+}
+
 namespace mu::musesampler {
 class IMuseSamplerInfo : MODULE_EXPORT_INTERFACE
 {
@@ -35,6 +39,8 @@ public:
 
     virtual std::string version() const = 0;
     virtual bool isInstalled() const = 0;
+
+    virtual float defaultReverbLevel(const String& instrumentSoundId) const = 0;
 };
 }
 

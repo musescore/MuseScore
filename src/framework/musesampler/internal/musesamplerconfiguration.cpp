@@ -22,10 +22,20 @@
 
 #include "musesamplerconfiguration.h"
 
+#include "settings.h"
+
 #include <cstdlib>
 
 using namespace mu;
 using namespace mu::musesampler;
+using namespace mu::framework;
+
+static const Settings::Key USER_MUSESAMPLER_PATH("musesampler", "application/paths/museSampler");
+
+void MuseSamplerConfiguration::init()
+{
+    settings()->setDefaultValue(USER_MUSESAMPLER_PATH, Val(""));
+}
 
 #if defined(Q_OS_LINUX)
 static const io::path_t LIB_NAME("libMuseSamplerCoreLib.so");
@@ -62,6 +72,11 @@ io::path_t MuseSamplerConfiguration::userLibraryPath() const
     // Override for testing/dev:
     if (const char* path = std::getenv("MUSESAMPLER_PATH")) {
         return io::path_t(path);
+    }
+
+    io::path_t path = settings()->value(USER_MUSESAMPLER_PATH).toString();
+    if (!path.empty()) {
+        return path;
     }
 
     return defaultPath();

@@ -103,7 +103,9 @@ samples_t MuseSamplerWrapper::process(float* buffer, audio::samples_t samplesPer
         return 0;
     }
 
-    if (!isActive()) {
+    bool active = isActive();
+
+    if (!active) {
         msecs_t nextMicros = samplesToMsecs(samplesPerChannel, m_sampleRate);
 
         const MuseSamplerSequencer::EventSequence& sequence = m_sequencer.eventsToBePlayed(nextMicros);
@@ -121,9 +123,10 @@ samples_t MuseSamplerWrapper::process(float* buffer, audio::samples_t samplesPer
             return 0;
         }
     }
+
     extractOutputSamples(samplesPerChannel, buffer);
 
-    if (isActive()) {
+    if (active) {
         m_currentPosition += samplesPerChannel;
     }
 
@@ -314,9 +317,11 @@ void MuseSamplerWrapper::setCurrentPosition(const audio::samples_t samples)
 void MuseSamplerWrapper::extractOutputSamples(audio::samples_t samples, float* output)
 {
     for (audio::samples_t sampleIndex = 0; sampleIndex < samples; ++sampleIndex) {
+        size_t offset = sampleIndex * m_bus._num_channels;
+
         for (audio::audioch_t audioChannelIndex = 0; audioChannelIndex < m_bus._num_channels; ++audioChannelIndex) {
             float sample = m_bus._channels[audioChannelIndex][sampleIndex];
-            output[sampleIndex * m_bus._num_channels + audioChannelIndex] += sample;
+            output[offset + audioChannelIndex] += sample;
         }
     }
 }

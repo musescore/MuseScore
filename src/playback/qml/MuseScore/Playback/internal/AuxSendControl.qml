@@ -54,7 +54,7 @@ Item {
         KnobControl {
             id: audioSignalAmountKnob
 
-            radius: root.height / 2
+            radius: root.height / 2 + 2
 
             from: 0
             to: 100
@@ -76,22 +76,31 @@ Item {
         }
 
         FlatButton {
-            readonly property bool isHovering: mouseArea.containsMouse
+            id: bypassBtn
+
+            readonly property bool isHovering: bypassBtn.mouseArea.containsMouse
 
             Layout.fillWidth: true
             Layout.fillHeight: true
 
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 1
-            navigation.accessible.name: isHovering ? root.accessibleName + " " + root.title + " " + qsTrc("playback", "Bypass") : root.title
+            navigation.accessible.name: bypassBtn.isHovering ? root.accessibleName + " " + root.title + " " + qsTrc("playback", "Bypass") : root.title
             navigation.onActiveChanged: {
                 if (navigation.active) {
                     root.navigateControlIndexChanged({row: navigation.row, column: navigation.column})
                 }
             }
 
-            text: isHovering ? "" : root.title
-            icon: isHovering ? IconCode.BYPASS : IconCode.NONE
+            text: {
+                if (audioSignalAmountKnob.mouseArea.pressed) {
+                    return audioSignalAmountKnob.value + "%"
+                }
+
+                return bypassBtn.isHovering ? "" : root.title
+            }
+
+            icon: bypassBtn.isHovering ? IconCode.BYPASS : IconCode.NONE
 
             accentButton: root.auxSendItemModel.isActive
 

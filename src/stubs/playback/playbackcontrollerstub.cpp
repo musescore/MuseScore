@@ -86,10 +86,10 @@ const IPlaybackController::InstrumentTrackIdMap& PlaybackControllerStub::instrum
     return m;
 }
 
-const mu::audio::TrackIdList& PlaybackControllerStub::auxTrackIdList() const
+const IPlaybackController::AuxTrackIdMap& PlaybackControllerStub::auxTrackIdMap() const
 {
-    static const mu::audio::TrackIdList l;
-    return l;
+    static const AuxTrackIdMap m;
+    return m;
 }
 
 mu::async::Channel<mu::audio::TrackId> PlaybackControllerStub::trackAdded() const

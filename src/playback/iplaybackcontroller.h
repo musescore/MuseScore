@@ -60,7 +60,9 @@ public:
 
     using InstrumentTrackIdMap = std::unordered_map<engraving::InstrumentTrackId, audio::TrackId>;
     virtual const InstrumentTrackIdMap& instrumentTrackIdMap() const = 0;
-    virtual const audio::TrackIdList& auxTrackIdList() const = 0;
+
+    using AuxTrackIdMap = std::map<audio::aux_channel_idx_t, audio::TrackId>;
+    virtual const AuxTrackIdMap& auxTrackIdMap() const = 0;
 
     virtual async::Channel<audio::TrackId> trackAdded() const = 0;
     virtual async::Channel<audio::TrackId> trackRemoved() const = 0;

@@ -232,12 +232,12 @@ void MixerChannelItem::loadInputParams(AudioInputParams&& newParams)
 
 void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
 {
-    if (m_outParams.volume != newParams.volume) {
+    if (!RealIsEqual(m_outParams.volume, newParams.volume)) {
         m_outParams.volume = newParams.volume;
         emit volumeLevelChanged(newParams.volume);
     }
 
-    if (m_outParams.balance != newParams.balance) {
+    if (!RealIsEqual(m_outParams.balance, newParams.balance)) {
         m_outParams.balance = newParams.balance;
         emit balanceChanged(newParams.balance);
     }
@@ -322,16 +322,26 @@ void MixerChannelItem::loadAuxSendItems(const AuxSendsParams& auxSends)
         return;
     }
 
-    qDeleteAll(m_auxSendItems);
-    m_auxSendItems.clear();
+    QMap<aux_channel_idx_t, AuxSendItem*> newItems;
 
     for (aux_channel_idx_t i = 0; i < auxSends.size(); ++i) {
-        if (configuration()->isAuxSendVisible(i)) {
-            m_auxSendItems.insert(i, buildAuxSendItem(i, m_outParams.auxSends[i]));
+        if (!configuration()->isAuxSendVisible(i)) {
+            continue;
+        }
+
+        auto it = m_auxSendItems.find(i);
+
+        if (it != m_auxSendItems.end()) {
+            newItems.insert(it.key(), it.value());
+        } else {
+            newItems.insert(i, buildAuxSendItem(i, auxSends[i]));
         }
     }
 
-    emit auxSendItemListChanged();
+    if (m_auxSendItems != newItems) {
+        m_auxSendItems = std::move(newItems);
+        emit auxSendItemListChanged();
+    }
 }
 
 void MixerChannelItem::loadSoloMuteState(project::IProjectAudioSettings::SoloMuteState&& newState)
@@ -463,9 +473,25 @@ InputResourceItem* MixerChannelItem::buildInputResourceItem()
     InputResourceItem* newItem = new InputResourceItem(this);
 
     connect(newItem, &InputResourceItem::inputParamsChanged, this, [this, newItem]() {
-        m_inputParams = newItem->params();
+        bool audioSourceChanged = m_inputParams.type() != newItem->params().type();
 
+        m_inputParams = newItem->params();
         emit inputParamsChanged(m_inputParams);
+
+        if (!audioSourceChanged) {
+            return;
+        }
+
+        for (aux_channel_idx_t idx = 0; idx < static_cast<size_t>(m_auxSendItems.size()); ++idx) {
+            auto it = m_auxSendItems.find(idx);
+            if (it == m_auxSendItems.end()) {
+                continue;
+            }
+
+            const String& soundId = m_inputParams.resourceMeta.attributeVal(PLAYBACK_SETUP_DATA_ATTRIBUTE);
+            int newAudioSignalPercentage = configuration()->defaultAuxSendValue(idx, m_inputParams.type(), soundId) * 100.f;
+            it.value()->setAudioSignalPercentage(newAudioSignalPercentage);
+        }
     });
 
     connect(newItem, &InputResourceItem::isBlankChanged, this, &MixerChannelItem::inputResourceItemChanged);

@@ -209,6 +209,7 @@ typedef struct ms_LivePlayStopNoteEvent
 } ms_LivePlayStopNoteEvent;
 
 typedef ms_Result (* ms_init)();
+typedef ms_Result (* ms_disable_reverb)();
 typedef int (* ms_contains_instrument)(const char* mpe_id, const char* musicxml_id);
 typedef int (* ms_get_matching_instrument_id)(const char* pack, const char* name);
 typedef ms_InstrumentList (* ms_get_instrument_list)();
@@ -221,6 +222,7 @@ typedef const char*(* ms_Instrument_get_category)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_package)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_musicxml_sound)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_mpe_sound)(ms_InstrumentInfo);
+typedef float (* ms_Instrument_get_reverb_level)(ms_InstrumentInfo);
 
 typedef ms_PresetList (* ms_Instrument_get_preset_list)(ms_InstrumentInfo);
 typedef const char*(* ms_PresetList_get_next)(ms_PresetList);

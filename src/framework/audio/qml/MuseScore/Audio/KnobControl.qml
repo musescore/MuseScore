@@ -34,6 +34,8 @@ Dial {
 
     property bool isBalanceKnob: false
 
+    property alias mouseArea: mouseArea
+
     implicitWidth: root.radius * 2
     implicitHeight: implicitWidth
 

@@ -29,6 +29,7 @@
 
 namespace mu::playback {
 static constexpr audio::aux_channel_idx_t AUX_CHANNEL_NUM = 2;
+static constexpr audio::aux_channel_idx_t REVERB_CHANNEL_IDX = 0;
 
 enum class PlaybackCursorType {
     SMOOTH,

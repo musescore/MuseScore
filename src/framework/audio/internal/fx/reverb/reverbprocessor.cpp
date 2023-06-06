@@ -337,8 +337,10 @@ void ReverbProcessor::process(float* buffer, unsigned int sampleCount)
     }
 
     for (samples_t sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
+        size_t offset = sampleIndex * m_processor._audioChannelsCount;
+
         for (audioch_t audioChannelIndex = 0; audioChannelIndex < m_processor._audioChannelsCount; ++audioChannelIndex) {
-            m_signalBuffers[audioChannelIndex][sampleIndex] = buffer[sampleIndex * m_processor._audioChannelsCount + audioChannelIndex];
+            m_signalBuffers[audioChannelIndex][sampleIndex] = buffer[offset + audioChannelIndex];
         }
     }
 
@@ -354,8 +356,10 @@ void ReverbProcessor::process(float* buffer, unsigned int sampleCount)
     }
 
     for (samples_t sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
+        size_t offset = sampleIndex * m_processor._audioChannelsCount;
+
         for (audioch_t audioChannelIndex = 0; audioChannelIndex < m_processor._audioChannelsCount; ++audioChannelIndex) {
-            buffer[sampleIndex * m_processor._audioChannelsCount + audioChannelIndex] = m_signalBuffers[audioChannelIndex][sampleIndex];
+            buffer[offset + audioChannelIndex] = m_signalBuffers[audioChannelIndex][sampleIndex];
         }
     }
 }
