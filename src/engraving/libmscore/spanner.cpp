@@ -934,7 +934,7 @@ Chord* Spanner::findStartChord() const
 {
     assert(_anchor == Anchor::CHORD);
     ChordRest* cr = score()->findCR(tick(), track());
-    return cr->isChord() ? toChord(cr) : nullptr;
+    return cr && cr->isChord() ? toChord(cr) : nullptr;
 }
 
 //---------------------------------------------------------
