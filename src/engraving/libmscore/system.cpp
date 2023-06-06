@@ -1037,7 +1037,8 @@ void System::layout2(LayoutContext& ctx)
                 ChordRest* ecr = sp->endCR();
                 staff_idx_t idx = sp->vStaffIdx();
                 if (scr && ecr && (scr->vStaffIdx() != idx || ecr->vStaffIdx() != idx)) {
-                    sp->layoutSystem(this);
+                    LayoutContext ctx(score());
+                    TLayout::layoutSystem(sp, this, ctx);
                 }
             }
         }

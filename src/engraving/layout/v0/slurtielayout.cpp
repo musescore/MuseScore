@@ -205,7 +205,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
-    SlurSegment* slurSegment = toSlurSegment(item->getNextLayoutSystemSegment(system, [](System* parent) {
+    SlurSegment* slurSegment = toSlurSegment(TLayout::getNextLayoutSystemSegment(item, system, [](System* parent) {
         return new SlurSegment(parent);
     }));
 

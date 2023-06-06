@@ -5292,3 +5292,257 @@ void TLayout::layout(WhammyBarSegment* item, LayoutContext& ctx)
     layoutTextLineBaseSegment(item, ctx);
     item->autoplaceSpannerSegment();
 }
+
+using LayoutSystemTypes = rtti::TypeList<LyricsLine, Slur, Volta>;
+
+class LayoutSystemVisitor : public rtti::Visitor<LayoutSystemVisitor>
+{
+public:
+    template<typename T>
+    static bool doVisit(Spanner* item, System* system, LayoutContext& ctx, SpannerSegment** segOut)
+    {
+        if (T::classof(item)) {
+            *segOut = TLayout::layoutSystem(static_cast<T*>(item), system, ctx);
+            return true;
+        }
+        return false;
+    }
+};
+
+SpannerSegment* TLayout::layoutSystem(Spanner* item, System* system, LayoutContext& ctx)
+{
+    SpannerSegment* seg = nullptr;
+    bool found = LayoutSystemVisitor::visit(LayoutSystemTypes {}, item, system, ctx, &seg);
+    if (!found) {
+        SLine* line = dynamic_cast<SLine*>(item);
+        if (line) {
+            LOGW() << "used base method for item: " << item->typeName();
+            seg = layoutSystemSLine(line, system, ctx);
+        } else {
+            DO_ASSERT(found);
+        }
+    }
+    return seg;
+}
+
+SpannerSegment* TLayout::getNextLayoutSystemSegment(Spanner* spanner, System* system,
+                                                    std::function<SpannerSegment* (System* parent)> createSegment)
+{
+    SpannerSegment* seg = nullptr;
+    for (SpannerSegment* ss : spanner->spannerSegments()) {
+        if (!ss->system()) {
+            seg = ss;
+            break;
+        }
+    }
+    if (!seg) {
+        if ((seg = spanner->popUnusedSegment())) {
+            spanner->reuse(seg);
+        } else {
+            seg = createSegment(system);
+            assert(seg);
+            spanner->add(seg);
+        }
+    }
+    seg->setSystem(system);
+    seg->setSpanner(spanner);
+    seg->setTrack(spanner->track());
+    seg->setVisible(spanner->visible());
+    return seg;
+}
+
+// layout spannersegment for system
+SpannerSegment* TLayout::layoutSystemSLine(SLine* line, System* system, LayoutContext& ctx)
+{
+    Fraction stick = system->firstMeasure()->tick();
+    Fraction etick = system->lastMeasure()->endTick();
+
+    LineSegment* lineSegm = toLineSegment(TLayout::getNextLayoutSystemSegment(line, system, [line](System* parent) {
+        return line->createLineSegment(parent);
+    }));
+
+    SpannerSegmentType sst;
+    if (line->tick() >= stick) {
+        //
+        // this is the first call to layoutSystem,
+        // processing the first line segment
+        //
+        line->computeStartElement();
+        line->computeEndElement();
+        sst = line->tick2() <= etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
+    } else if (line->tick() < stick && line->tick2() > etick) {
+        sst = SpannerSegmentType::MIDDLE;
+    } else {
+        //
+        // this is the last call to layoutSystem
+        // processing the last line segment
+        //
+        sst = SpannerSegmentType::END;
+    }
+    lineSegm->setSpannerSegmentType(sst);
+
+    switch (sst) {
+    case SpannerSegmentType::SINGLE: {
+        System* s;
+        PointF p1 = line->linePos(Grip::START, &s);
+        PointF p2 = line->linePos(Grip::END,   &s);
+        double len = p2.x() - p1.x();
+        lineSegm->setPos(p1);
+        lineSegm->setPos2(PointF(len, p2.y() - p1.y()));
+    }
+    break;
+    case SpannerSegmentType::BEGIN: {
+        System* s;
+        PointF p1 = line->linePos(Grip::START, &s);
+        lineSegm->setPos(p1);
+        double x2 = system->endingXForOpenEndedLines();
+        lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
+    }
+    break;
+    case SpannerSegmentType::MIDDLE: {
+        double x1 = system->firstNoteRestSegmentX(true);
+        double x2 = system->endingXForOpenEndedLines();
+        System* s;
+        PointF p1 = line->linePos(Grip::START, &s);
+        lineSegm->setPos(PointF(x1, p1.y()));
+        lineSegm->setPos2(PointF(x2 - x1, 0.0));
+    }
+    break;
+    case SpannerSegmentType::END: {
+        System* s;
+        PointF p2 = line->linePos(Grip::END,   &s);
+        double x1 = system->firstNoteRestSegmentX(true);
+        double len = p2.x() - x1;
+        lineSegm->setPos(PointF(p2.x() - len, p2.y()));
+        lineSegm->setPos2(PointF(len, 0.0));
+    }
+    break;
+    }
+
+    layout(lineSegm, ctx);
+
+    return lineSegm;
+}
+
+SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutContext& ctx)
+{
+    Fraction stick = system->firstMeasure()->tick();
+    Fraction etick = system->lastMeasure()->endTick();
+
+    LyricsLineSegment* lineSegm = toLyricsLineSegment(TLayout::getNextLayoutSystemSegment(line, system, [line](System* parent) {
+        return line->createLineSegment(parent);
+    }));
+
+    SpannerSegmentType sst;
+    if (line->tick() >= stick) {
+        TLayout::layout(line, ctx);
+        if (line->ticks().isZero() && line->isEndMelisma()) { // only do layout if some time span
+            // dash lines still need to be laid out, though
+            return nullptr;
+        }
+
+        TLayout::layoutLine(line, ctx);
+        //
+        // this is the first call to layoutSystem,
+        // processing the first line segment
+        //
+        line->computeStartElement();
+        line->computeEndElement();
+        sst = line->tick2() <= etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
+    } else if (line->tick() < stick && line->tick2() > etick) {
+        sst = SpannerSegmentType::MIDDLE;
+    } else {
+        //
+        // this is the last call to layoutSystem
+        // processing the last line segment
+        //
+        sst = SpannerSegmentType::END;
+    }
+    lineSegm->setSpannerSegmentType(sst);
+
+    switch (sst) {
+    case SpannerSegmentType::SINGLE: {
+        System* s;
+        PointF p1 = line->linePos(Grip::START, &s);
+        PointF p2 = line->linePos(Grip::END,   &s);
+        double len = p2.x() - p1.x();
+        lineSegm->setPos(p1);
+        lineSegm->setPos2(PointF(len, p2.y() - p1.y()));
+    }
+    break;
+    case SpannerSegmentType::BEGIN: {
+        System* s;
+        PointF p1 = line->linePos(Grip::START, &s);
+        lineSegm->setPos(p1);
+        double x2 = system->endingXForOpenEndedLines();
+        lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
+    }
+    break;
+    case SpannerSegmentType::MIDDLE: {
+        bool leading = (line->anchor() == Spanner::Anchor::SEGMENT || line->anchor() == Spanner::Anchor::MEASURE);
+        double x1 = system->firstNoteRestSegmentX(leading);
+        double x2 = system->endingXForOpenEndedLines();
+        System* s;
+        PointF p1 = line->linePos(Grip::START, &s);
+        lineSegm->setPos(PointF(x1, p1.y()));
+        lineSegm->setPos2(PointF(x2 - x1, 0.0));
+    }
+    break;
+    case SpannerSegmentType::END: {
+        System* s;
+        PointF p2 = line->linePos(Grip::END, &s);
+        bool leading = (line->anchor() == Spanner::Anchor::SEGMENT || line->anchor() == Spanner::Anchor::MEASURE);
+        double x1 = system->firstNoteRestSegmentX(leading);
+        double len = p2.x() - x1;
+        lineSegm->setPos(PointF(p2.x() - len, p2.y()));
+        lineSegm->setPos2(PointF(len, 0.0));
+    }
+    break;
+    }
+
+    TLayout::layout(lineSegm, ctx);
+
+    // if temp melisma extend the first line segment to be
+    // after the lyrics syllable (otherwise the melisma segment
+    // will be too short).
+    const bool tempMelismaTicks = (line->lyrics()->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
+    if (tempMelismaTicks && line->spannerSegments().size() > 0 && line->spannerSegments().front() == lineSegm) {
+        lineSegm->rxpos2() += line->lyrics()->width();
+    }
+    // avoid backwards melisma
+    if (lineSegm->pos2().x() < 0) {
+        lineSegm->rxpos2() = 0;
+    }
+    return lineSegm;
+}
+
+SpannerSegment* TLayout::layoutSystem(Volta* line, System* system, LayoutContext& ctx)
+{
+    SpannerSegment* voltaSegment = layoutSystemSLine(line, system, ctx);
+
+    // we need set tempo in layout because all tempos of score is set in layout
+    // so fermata in seconda volta works correct because fermata apply itself tempo during layouting
+    line->setTempo();
+
+    return voltaSegment;
+}
+
+SpannerSegment* TLayout::layoutSystem(Slur* line, System* system, LayoutContext& ctx)
+{
+    return SlurTieLayout::layoutSystem(line, system, ctx);
+}
+
+// Called after layout of all systems is done so precise
+// number of systems for this spanner becomes available.
+void TLayout::layoutSystemsDone(Spanner* item)
+{
+    std::vector<SpannerSegment*> validSegments;
+    for (SpannerSegment* seg : item->segments) {
+        if (seg->system()) {
+            validSegments.push_back(seg);
+        } else { // TODO: score()->selection().remove(ss); needed?
+            item->pushUnusedSegment(seg);
+        }
+    }
+    item->segments = std::move(validSegments);
+}

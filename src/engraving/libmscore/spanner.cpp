@@ -1372,64 +1372,6 @@ void Spanner::eraseSpannerSegments()
 }
 
 //---------------------------------------------------------
-//   layoutSystem
-//---------------------------------------------------------
-
-SpannerSegment* Spanner::layoutSystem(System*)
-{
-    LOGD(" %s", typeName());
-    return 0;
-}
-
-//---------------------------------------------------------
-//   getNextLayoutSystemSegment
-//---------------------------------------------------------
-
-SpannerSegment* Spanner::getNextLayoutSystemSegment(System* system, std::function<SpannerSegment* (System* parent)> createSegment)
-{
-    SpannerSegment* seg = nullptr;
-    for (SpannerSegment* ss : spannerSegments()) {
-        if (!ss->system()) {
-            seg = ss;
-            break;
-        }
-    }
-    if (!seg) {
-        if ((seg = popUnusedSegment())) {
-            reuse(seg);
-        } else {
-            seg = createSegment(system);
-            assert(seg);
-            add(seg);
-        }
-    }
-    seg->setSystem(system);
-    seg->setSpanner(this);
-    seg->setTrack(track());
-    seg->setVisible(visible());
-    return seg;
-}
-
-//---------------------------------------------------------
-//   layoutSystemsDone
-//    Called after layout of all systems is done so precise
-//    number of systems for this spanner becomes available.
-//---------------------------------------------------------
-
-void Spanner::layoutSystemsDone()
-{
-    std::vector<SpannerSegment*> validSegments;
-    for (SpannerSegment* seg : segments) {
-        if (seg->system()) {
-            validSegments.push_back(seg);
-        } else { // TODO: score()->selection().remove(ss); needed?
-            pushUnusedSegment(seg);
-        }
-    }
-    segments = std::move(validSegments);
-}
-
-//---------------------------------------------------------
 //   autoplaceSpannerSegment
 //---------------------------------------------------------
 

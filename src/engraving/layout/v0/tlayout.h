@@ -123,6 +123,7 @@ class ShadowNote;
 class SLine;
 class Slur;
 class Spacer;
+class SpannerSegment;
 class StaffLines;
 class StaffState;
 class StaffText;
@@ -325,7 +326,17 @@ public:
 
     static RectF layoutRect(const BarLine* item, LayoutContext& ctx);
 
+    // layoutSystem;
+    static SpannerSegment* layoutSystem(Spanner* item, System* system, LayoutContext& ctx); // factory
+    static SpannerSegment* layoutSystem(LyricsLine* line, System* system, LayoutContext& ctx);
+    static SpannerSegment* layoutSystem(Volta* line, System* system, LayoutContext& ctx);
+    static SpannerSegment* layoutSystem(Slur* line, System* system, LayoutContext& ctx);
+    static void layoutSystemsDone(Spanner* item);
+
 private:
+
+    friend class SlurTieLayout;
+
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
     static void layoutMultiGlyphAccidental(Accidental* item, LayoutContext& ctx);
 
@@ -342,6 +353,10 @@ private:
     static void layoutRestDots(Rest* item, LayoutContext& ctx);
 
     static void doLayout(StretchedBend* item, LayoutContext& ctx, bool stretchedMode);
+
+    static SpannerSegment* layoutSystemSLine(SLine* line, System* system, LayoutContext& ctx);
+    static SpannerSegment* getNextLayoutSystemSegment(Spanner* spanner, System* system,
+                                                      std::function<SpannerSegment* (System* parent)> createSegment);
 };
 }
 
