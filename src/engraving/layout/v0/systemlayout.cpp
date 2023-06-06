@@ -380,7 +380,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                     }
                     m->computeWidth(m->system()->minSysTicks(), m->system()->maxSysTicks(), oldStretch);
                     m->stretchToTargetWidth(oldWidth);
-                    m->layoutMeasureElements();
+                    MeasureLayout::layoutMeasureElements(m, ctx);
                     BeamLayout::restoreBeams(m);
                     if (m == nm || !m->noBreak()) {
                         break;
@@ -461,7 +461,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
             mb->setPos(pos);
             mb->setParent(system);
             Measure* m = toMeasure(mb);
-            m->layoutMeasureElements();
+            MeasureLayout::layoutMeasureElements(m, ctx);
             MeasureLayout::layoutStaffLines(m, ctx);
             if (createBrackets) {
                 system->addBrackets(ctx, toMeasure(mb));
@@ -700,7 +700,7 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
         }
         Measure* m = toMeasure(mb);
         MeasureLayout::layoutMeasureNumber(m, ctx);
-        m->layoutMMRestRange();
+        MeasureLayout::layoutMMRestRange(m, ctx);
 
         // in continuous view, entire score is one system
         // but we only need to process the range

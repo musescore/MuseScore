@@ -3433,7 +3433,7 @@ void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
 
         const StaffType* staffType = item->staffType();
 
-        // Only need to set y position here; x position is handled in Measure::layoutMeasureElements()
+        // Only need to set y position here; x position is handled in MeasureLayout::layoutMeasureElements()
         item->setPos(0, std::floor(staffType->middleLine() / 2.0) * staffType->lineDistance().val() * item->spatium() + offset);
     }
 
@@ -3488,7 +3488,7 @@ void TLayout::layout(MMRest* item, LayoutContext& ctx)
         item->setbbox(RectF(0.0, -(vStrokeHeight * .5), item->m_width, vStrokeHeight));
     }
 
-    // Only need to set y position here; x position is handled in Measure::layoutMeasureElements()
+    // Only need to set y position here; x position is handled in MeasureLayout::layoutMeasureElements()
     const StaffType* staffType = item->staffType();
     item->setPos(0, (staffType->middleLine() / 2.0) * staffType->lineDistance().val() * item->spatium());
 
