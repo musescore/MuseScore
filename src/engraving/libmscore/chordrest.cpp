@@ -203,7 +203,7 @@ EngravingItem* ChordRest::drop(EditData& data)
                 l->setParent(seg);
                 score->undoAddElement(l);
 
-                layout()->layoutOnChordRestDrop(l);
+                layout()->layoutItem(l);
             }
         }
         delete e;

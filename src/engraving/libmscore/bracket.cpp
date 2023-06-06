@@ -266,7 +266,7 @@ void Bracket::editDrag(EditData& ed)
 {
     h2 += ed.delta.y() * .5;
 
-    layout()->layoutOnEditDrag(this);
+    layout()->layoutItem(this);
 }
 
 //---------------------------------------------------------

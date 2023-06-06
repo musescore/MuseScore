@@ -143,12 +143,12 @@ void Box::editDrag(EditData& ed)
         triggerLayout();
     }
 
-    layout()->layoutOnEditDrag(this);
+    layout()->layoutItem(this);
 }
 
 void Box::endEdit(EditData&)
 {
-    layout()->layoutOnEndEdit(this);
+    layout()->layoutItem(this);
 }
 
 //---------------------------------------------------------
