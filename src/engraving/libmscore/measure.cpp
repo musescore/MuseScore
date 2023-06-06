@@ -3842,10 +3842,10 @@ void Measure::createSystemBeginBarLine()
                 bl->setParent(s);
                 bl->setBarLineType(BarLineType::NORMAL);
                 bl->setSpanStaff(true);
-                LayoutContext ctx(score());
-                TLayout::layout(bl, ctx);
                 s->add(bl);
             }
+            LayoutContext ctx(score());
+            TLayout::layout(bl, ctx);
         }
         s->createShapes();
         s->setEnabled(true);
