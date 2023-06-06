@@ -581,61 +581,6 @@ bool Measure::showsMeasureNumber()
     }
 }
 
-//---------------------------------------------------------
-//   layoutMeasureNumber
-///    Layouts the Measure Numbers according to the Measure's MeasureNumberMode
-//---------------------------------------------------------
-
-void Measure::layoutMeasureNumber()
-{
-    LayoutContext ctx(score());
-    bool smn = showsMeasureNumber();
-
-    String s;
-    if (smn) {
-        s = String::number(no() + 1);
-    }
-
-    unsigned nn = 1;
-    bool nas = score()->styleB(Sid::measureNumberAllStaves);
-
-    if (!nas) {
-        //find first non invisible staff
-        for (unsigned staffIdx = 0; staffIdx < m_mstaves.size(); ++staffIdx) {
-            if (visible(staffIdx)) {
-                nn = staffIdx;
-                break;
-            }
-        }
-    }
-    for (unsigned staffIdx = 0; staffIdx < m_mstaves.size(); ++staffIdx) {
-        MStaff* ms       = m_mstaves[staffIdx];
-        MeasureNumber* t = ms->noText();
-        if (t) {
-            t->setTrack(staffIdx * VOICES);
-        }
-        if (smn && ((staffIdx == nn) || nas)) {
-            if (t == 0) {
-                t = new MeasureNumber(this);
-                t->setTrack(staffIdx * VOICES);
-                t->setGenerated(true);
-                t->setParent(this);
-                add(t);
-            }
-            t->setXmlText(s);
-            TLayout::layout(t, ctx);
-        } else {
-            if (t) {
-                if (t->generated()) {
-                    score()->removeElement(t);
-                } else {
-                    score()->undo(new RemoveElement(t));
-                }
-            }
-        }
-    }
-}
-
 void Measure::layoutMMRestRange()
 {
     LayoutContext ctx(score());

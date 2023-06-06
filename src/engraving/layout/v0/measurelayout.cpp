@@ -30,6 +30,7 @@
 #include "libmscore/lyrics.h"
 #include "libmscore/marker.h"
 #include "libmscore/measure.h"
+#include "libmscore/measurenumber.h"
 #include "libmscore/mmrest.h"
 #include "libmscore/ornament.h"
 #include "libmscore/part.h"
@@ -1049,5 +1050,54 @@ void MeasureLayout::layoutStaffLines(Measure* m, LayoutContext& ctx)
             TLayout::layout(ms->lines(), ctx);
         }
         staffIdx += 1;
+    }
+}
+
+void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
+{
+    bool smn = m->showsMeasureNumber();
+
+    String s;
+    if (smn) {
+        s = String::number(m->no() + 1);
+    }
+
+    unsigned nn = 1;
+    bool nas = m->score()->styleB(Sid::measureNumberAllStaves);
+
+    if (!nas) {
+        //find first non invisible staff
+        for (unsigned staffIdx = 0; staffIdx < m->m_mstaves.size(); ++staffIdx) {
+            if (m->visible(staffIdx)) {
+                nn = staffIdx;
+                break;
+            }
+        }
+    }
+    for (unsigned staffIdx = 0; staffIdx < m->m_mstaves.size(); ++staffIdx) {
+        MStaff* ms       = m->m_mstaves[staffIdx];
+        MeasureNumber* t = ms->noText();
+        if (t) {
+            t->setTrack(staffIdx * VOICES);
+        }
+        if (smn && ((staffIdx == nn) || nas)) {
+            if (t == 0) {
+                t = new MeasureNumber(m);
+                t->setTrack(staffIdx * VOICES);
+                t->setGenerated(true);
+                t->setParent(m);
+                m->add(t);
+            }
+            t->setXmlText(s);
+            TLayout::layout(t, ctx);
+        } else {
+            if (t) {
+                if (t->generated()) {
+                    m->score()->removeElement(t);
+                } else {
+                    m->score()->undo(new RemoveElement(t));
+                }
+            }
+        }
     }
 }

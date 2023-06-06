@@ -43,6 +43,7 @@ public:
     static void computePreSpacingItems(Measure* m, LayoutContext& ctx);
 
     static void layoutStaffLines(Measure* m, LayoutContext& ctx);
+    static void layoutMeasureNumber(Measure* m, LayoutContext& ctx);
 
 private:
 
