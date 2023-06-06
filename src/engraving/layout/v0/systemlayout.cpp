@@ -699,7 +699,7 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
             continue;
         }
         Measure* m = toMeasure(mb);
-        m->layoutMeasureNumber();
+        MeasureLayout::layoutMeasureNumber(m, ctx);
         m->layoutMMRestRange();
 
         // in continuous view, entire score is one system

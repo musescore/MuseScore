@@ -226,7 +226,7 @@ public:
 
     bool showsMeasureNumber();
     bool showsMeasureNumberInAutoMode();
-    void layoutMeasureNumber();
+
     void layoutMMRestRange();
 
     Chord* findChord(Fraction tick, track_idx_t track);
