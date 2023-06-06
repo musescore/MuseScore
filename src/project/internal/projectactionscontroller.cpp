@@ -1294,7 +1294,11 @@ io::path_t ProjectActionsController::selectScoreOpeningFile()
     io::path_t defaultDir = configuration()->lastOpenedProjectsPath();
 
     if (defaultDir.empty()) {
-        defaultDir = configuration()->defaultProjectsPath();
+        defaultDir = configuration()->userProjectsPath();
+    }
+
+    if (defaultDir.empty()) {
+        defaultDir = configuration()->defaultUserProjectsPath();
     }
 
     io::path_t filePath = interactive()->selectOpeningFile(qtrc("project", "Open"), defaultDir, filter);
