@@ -356,7 +356,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
                     m->createEndBarLines(false);
                     m->computeWidth(minTicks, maxTicks, 1);
                     ww = m->width();
-                    m->layoutMeasureElements();
+                    MeasureLayout::layoutMeasureElements(m, ctx);
                 }
             } else {
                 // for measures not in range, use existing layout

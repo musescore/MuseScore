@@ -217,7 +217,6 @@ public:
     void setLayoutStretch(double stretchCoeff) { m_layoutStretch = stretchCoeff; }
     double layoutStretch() const { return m_layoutStretch; }
 
-    void layoutMeasureElements();
     Fraction computeTicks();
     Fraction shortestChordRest() const;
     Fraction maxTicks() const;
@@ -226,8 +225,6 @@ public:
 
     bool showsMeasureNumber();
     bool showsMeasureNumberInAutoMode();
-
-    void layoutMMRestRange();
 
     Chord* findChord(Fraction tick, track_idx_t track);
     ChordRest* findChordRest(Fraction tick, track_idx_t track);

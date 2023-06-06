@@ -31,7 +31,9 @@
 #include "libmscore/marker.h"
 #include "libmscore/measure.h"
 #include "libmscore/measurenumber.h"
+#include "libmscore/measurerepeat.h"
 #include "libmscore/mmrest.h"
+#include "libmscore/mmrestrange.h"
 #include "libmscore/ornament.h"
 #include "libmscore/part.h"
 #include "libmscore/spacer.h"
@@ -1096,6 +1098,159 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
                     m->score()->removeElement(t);
                 } else {
                     m->score()->undo(new RemoveElement(t));
+                }
+            }
+        }
+    }
+}
+
+void MeasureLayout::layoutMMRestRange(Measure* m, LayoutContext& ctx)
+{
+    if (!m->isMMRest() || !m->score()->styleB(Sid::mmRestShowMeasureNumberRange)) {
+        // Remove existing
+        for (unsigned staffIdx = 0; staffIdx < m->m_mstaves.size(); ++staffIdx) {
+            MStaff* ms = m->m_mstaves[staffIdx];
+            MMRestRange* rr = ms->mmRangeText();
+            if (rr) {
+                if (rr->generated()) {
+                    m->score()->removeElement(rr);
+                } else {
+                    m->score()->undo(new RemoveElement(rr));
+                }
+            }
+        }
+
+        return;
+    }
+
+    String s;
+    if (m->mmRestCount() > 1) {
+        // middle char is an en dash (not em)
+        s = String(u"%1–%2").arg(m->no() + 1).arg(m->no() + m->mmRestCount());
+    } else {
+        // If the minimum range to create a mmrest is set to 1,
+        // then simply show the measure number as there is no range
+        s = String::number(m->no() + 1);
+    }
+
+    for (unsigned staffIdx = 0; staffIdx < m->m_mstaves.size(); ++staffIdx) {
+        MStaff* ms = m->m_mstaves[staffIdx];
+        MMRestRange* rr = ms->mmRangeText();
+        if (!rr) {
+            rr = new MMRestRange(m);
+            rr->setTrack(staffIdx * VOICES);
+            rr->setGenerated(true);
+            rr->setParent(m);
+            m->add(rr);
+        }
+        // setXmlText is reimplemented to take care of brackets
+        rr->setXmlText(s);
+        TLayout::layout(rr, ctx);
+    }
+}
+
+//-----------------------------------------------------------------------------
+//  layoutMeasureElements()
+//  lays out all the element of a measure
+//  LEGACY: this method used to be called stretchMeasure() and was used to
+//  distribute the remaining space at the end of a system. That task is now
+//  performed elsewhere and only the layout tasks are kept.
+//-----------------------------------------------------------------------------
+
+void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
+{
+    //---------------------------------------------------
+    //    layout individual elements
+    //---------------------------------------------------
+
+    for (Segment& s : m->m_segments) {
+        if (!s.enabled()) {
+            continue;
+        }
+
+        // After the rest of the spacing is calculated we position grace-notes-after.
+        ChordLayout::repositionGraceNotesAfter(&s);
+
+        for (EngravingItem* e : s.elist()) {
+            if (!e) {
+                continue;
+            }
+            staff_idx_t staffIdx = e->staffIdx();
+            bool modernMMRest = e->isMMRest() && !m->score()->styleB(Sid::oldStyleMultiMeasureRests);
+            if ((e->isRest() && toRest(e)->isFullMeasureRest()) || e->isMMRest() || e->isMeasureRepeat()) {
+                //
+                // element has to be centered in free space
+                //    x1 - left measure position of free space
+                //    x2 - right measure position of free space
+
+                Segment* s1;
+                for (s1 = s.prevActive(); s1 && s1->allElementsInvisible(); s1 = s1->prevActive()) {
+                }
+                Segment* s2;
+                if (modernMMRest) {
+                    for (s2 = s.nextActive(); s2; s2 = s2->nextActive()) {
+                        if (!s2->isChordRestType() && s2->element(staffIdx * VOICES)) {
+                            break;
+                        }
+                    }
+                } else {
+                    // Ignore any stuff before the end bar line (such as courtesy clefs)
+                    s2 = m->findSegment(SegmentType::EndBarLine, m->endTick());
+                }
+
+                double x1 = s1 ? s1->x() + s1->minRight() : 0;
+                double x2 = s2 ? s2->x() - s2->minLeft() : m->width();
+
+                if (e->isMMRest()) {
+                    MMRest* mmrest = toMMRest(e);
+                    // center multimeasure rest
+                    double d = m->score()->styleMM(Sid::multiMeasureRestMargin);
+                    double w = x2 - x1 - 2 * d;
+                    bool headerException = m->header() && s.prev() && !s.prev()->isStartRepeatBarLineType();
+                    if (headerException) { //needs this exception on header bar
+                        x1 = s1 ? s1->x() + s1->width() : 0;
+                        w = x2 - x1 - d;
+                    }
+                    mmrest->setWidth(w);
+                    TLayout::layout(mmrest, ctx);
+                    mmrest->setPosX(headerException ? (x1 - s.x()) : (x1 - s.x() + d));
+                } else if (e->isMeasureRepeat() && !(toMeasureRepeat(e)->numMeasures() % 2)) {
+                    // two- or four-measure repeat, center on following barline
+                    double measureWidth = x2 - s.x() + .5 * (m->styleP(Sid::barWidth));
+                    e->setPosX(measureWidth - .5 * e->width());
+                } else {
+                    // full measure rest or one-measure repeat, center within this measure
+                    TLayout::layoutItem(e, ctx);
+                    e->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->bbox().x());
+                }
+                s.createShape(staffIdx);            // DEBUG
+            } else if (e->isRest()) {
+                e->setPosX(0);
+            } else if (e->isChord()) {
+                Chord* c = toChord(e);
+                if (c->tremolo()) {
+                    Tremolo* tr = c->tremolo();
+                    Chord* c1 = tr->chord1();
+                    Chord* c2 = tr->chord2();
+                    if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
+                        TLayout::layout(tr, ctx);
+                    }
+                }
+                for (Chord* g : c->graceNotes()) {
+                    if (g->tremolo()) {
+                        Tremolo* tr = g->tremolo();
+                        Chord* c1 = tr->chord1();
+                        Chord* c2 = tr->chord2();
+                        if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
+                            TLayout::layout(tr, ctx);
+                        }
+                    }
+                }
+            } else if (e->isBarLine()) {
+                e->setPosY(0.0);
+                // for end barlines, x position was set in createEndBarLines
+                if (s.segmentType() != SegmentType::EndBarLine) {
+                    e->setPosX(0.0);
                 }
             }
         }
