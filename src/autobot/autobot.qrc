@@ -5,9 +5,9 @@
         <file>qml/MuseScore/Autobot/BatchTestsDialog.qml</file>
         <file>qml/MuseScore/Autobot/ScriptsPanel.qml</file>
         <file>qml/MuseScore/Autobot/ScriptsDialog.qml</file>
-        <file>examples/New Score.js</file>
-        <file>examples/Put Note.js</file>
-        <file>examples/Simple Zoom.js</file>
+        <file>examples/NewScore.js</file>
+        <file>examples/PutNote.js</file>
+        <file>examples/SimpleZoom.js</file>
         <file>examples/steps/NewScore.js</file>
         <file>qml/MuseScore/Autobot/TestCaseRunPanel.qml</file>
         <file>qml/MuseScore/Autobot/AutobotSelectFileDialog.qml</file>

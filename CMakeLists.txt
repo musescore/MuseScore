@@ -106,10 +106,6 @@ option(MUE_BUILD_UNIT_TESTS "Build unit tests" ON)
 option(MUE_BUILD_ASAN "Enable Address Sanitizer" OFF)
 
 # === Tools ===
-option(MUE_BUILD_CRASHPAD_CLIENT "Build crashpad client" ON)
-set(MUE_CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
-option(MUE_CRASHPAD_HANDLER_PATH "Path to custom crashpad_handler executable (optional)" "")
-
 option(MUE_ENABLE_CUSTOM_ALLOCATOR "Enable custom allocator (used for engraving)" OFF)
 
 # === Compile ===
@@ -142,6 +138,13 @@ set(THIRDPARTY_DIR ${PROJECT_SOURCE_DIR}/thirdparty)
 
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)
+if(OS_IS_FBSD)
+    option(MUE_BUILD_CRASHPAD_CLIENT "Build crashpad client" OFF)
+else()
+    option(MUE_BUILD_CRASHPAD_CLIENT "Build crashpad client" ON)
+    set(MUE_CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
+    option(MUE_CRASHPAD_HANDLER_PATH "Path to custom crashpad_handler executable (optional)" "")
+endif()
 if (MUE_COMPILE_USE_CCACHE)
     include(TryUseCcache)
 endif(MUE_COMPILE_USE_CCACHE)
