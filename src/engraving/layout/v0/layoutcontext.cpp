@@ -25,6 +25,8 @@
 #include "libmscore/score.h"
 #include "libmscore/spanner.h"
 
+#include "tlayout.h"
+
 using namespace mu::engraving::layout::v0;
 
 LayoutContext::LayoutContext(Score* score)
@@ -36,7 +38,7 @@ LayoutContext::LayoutContext(Score* score)
 LayoutContext::~LayoutContext()
 {
     for (Spanner* s : processedSpanners) {
-        s->layoutSystemsDone();
+        TLayout::layoutSystemsDone(s);
     }
 
     for (MuseScoreView* v : score()->getViewer()) {

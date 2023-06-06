@@ -1015,17 +1015,6 @@ bool Slur::isDirectionMixture(Chord* c1, Chord* c2)
     return false;
 }
 
-//---------------------------------------------------------
-//   layoutSystem
-//    layout slurSegment for system
-//---------------------------------------------------------
-
-SpannerSegment* Slur::layoutSystem(System* system)
-{
-    layout::v0::LayoutContext ctx(score());
-    return layout::v0::SlurTieLayout::layoutSystem(this, system, ctx);
-}
-
 void Slur::computeUp()
 {
     switch (_slurDirection) {

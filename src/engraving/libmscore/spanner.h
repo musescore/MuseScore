@@ -145,35 +145,7 @@ public:
     enum class Anchor {
         SEGMENT, MEASURE, CHORD, NOTE
     };
-private:
 
-    EngravingItem* _startElement = nullptr;
-    EngravingItem* _endElement = nullptr;
-
-    Anchor _anchor         { Anchor::SEGMENT };
-    Fraction _tick         { Fraction(-1, 1) };
-    Fraction _ticks        { Fraction(0, 1) };
-    track_idx_t _track2 = mu::nidx;
-    bool _broken           { false };
-
-    std::vector<SpannerSegment*> segments;
-    std::deque<SpannerSegment*> unusedSegments;   // Currently unused segments which can be reused later.
-                                                  // We cannot just delete them as they can be referenced
-                                                  // in undo stack or other places already.
-protected:
-
-    Spanner(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
-    Spanner(const Spanner&);
-
-    void pushUnusedSegment(SpannerSegment* seg);
-    SpannerSegment* popUnusedSegment();
-    void reuse(SpannerSegment* seg);              // called when segment from unusedSegments
-                                                  // is added back to the spanner.
-    int reuseSegments(int number);
-    SpannerSegment* getNextLayoutSystemSegment(System* system, std::function<SpannerSegment* (System*)> createSegment);
-    void fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* (System*)> createSegment);
-
-public:
     // Score Tree functions
     virtual EngravingObject* scanParent() const override;
     virtual EngravingObjectList scanChildren() const override;
@@ -212,9 +184,6 @@ public:
     bool segmentsEmpty() const { return segments.empty(); }
     void eraseSpannerSegments();
     bool eitherEndVisible() const;
-
-    virtual SpannerSegment* layoutSystem(System*);
-    virtual void layoutSystemsDone();
 
     virtual void triggerLayout() const override;
     virtual void triggerLayoutAll() const override;
@@ -271,6 +240,36 @@ public:
 
     friend class SpannerSegment;
     using EngravingObject::undoChangeProperty;
+
+protected:
+
+    Spanner(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
+    Spanner(const Spanner&);
+
+    friend class layout::v0::TLayout;
+
+    void pushUnusedSegment(SpannerSegment* seg);
+    SpannerSegment* popUnusedSegment();
+    void reuse(SpannerSegment* seg);              // called when segment from unusedSegments
+                                                  // is added back to the spanner.
+    int reuseSegments(int number);
+    void fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* (System*)> createSegment);
+
+private:
+
+    EngravingItem* _startElement = nullptr;
+    EngravingItem* _endElement = nullptr;
+
+    Anchor _anchor         { Anchor::SEGMENT };
+    Fraction _tick         { Fraction(-1, 1) };
+    Fraction _ticks        { Fraction(0, 1) };
+    track_idx_t _track2 = mu::nidx;
+    bool _broken           { false };
+
+    std::vector<SpannerSegment*> segments;
+    std::deque<SpannerSegment*> unusedSegments;   // Currently unused segments which can be reused later.
+                                                  // We cannot just delete them as they can be referenced
+                                                  // in undo stack or other places already.
 };
 } // namespace mu::engraving
 #endif

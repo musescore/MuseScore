@@ -22,13 +22,9 @@
 
 #include "lyrics.h"
 
-#include "translation.h"
 #include "types/translatablestring.h"
 
-#include "layout/v0/tlayout.h"
-
 #include "measure.h"
-#include "mscoreview.h"
 #include "navigate.h"
 #include "score.h"
 #include "segment.h"

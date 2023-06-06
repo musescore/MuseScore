@@ -1060,7 +1060,7 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
         if (sp->tick() >= etick || sp->tick2() <= stick) {
             continue;
         }
-        sp->layoutSystem(system);
+        TLayout::layoutSystem(sp, system, ctx);
     }
 
     //-------------------------------------------------------------
@@ -1286,8 +1286,9 @@ void SystemLayout::doLayoutTies(System* system, std::vector<Segment*> sl, const 
 void SystemLayout::processLines(System* system, std::vector<Spanner*> lines, bool align)
 {
     std::vector<SpannerSegment*> segments;
+    LayoutContext ctx(system->score());
     for (Spanner* sp : lines) {
-        SpannerSegment* ss = sp->layoutSystem(system);         // create/layout spanner segment for this system
+        SpannerSegment* ss = TLayout::layoutSystem(sp, system, ctx);        // create/layout spanner segment for this system
         if (ss->autoplace()) {
             segments.push_back(ss);
         }
