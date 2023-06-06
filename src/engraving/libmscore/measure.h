@@ -269,7 +269,7 @@ public:
     void connectTremolo();
 
     double createEndBarLines(bool);
-    void barLinesSetSpan(Segment*);
+
     void setEndBarLineType(BarLineType val, track_idx_t track, bool visible = true, mu::draw::Color color = mu::draw::Color());
 
     void createSystemBeginBarLine();

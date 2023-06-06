@@ -953,7 +953,7 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         if (!seg) {
             seg = measure->getSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
         }
-        measure->barLinesSetSpan(seg);          // this also creates necessary barlines
+        barLinesSetSpan(measure, seg, ctx);          // this also creates necessary barlines
         for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             BarLine* b = toBarLine(seg->element(staffIdx * VOICES));
             if (b) {
@@ -1254,5 +1254,31 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 }
             }
         }
+    }
+}
+
+void MeasureLayout::barLinesSetSpan(Measure* m, Segment* seg, LayoutContext& ctx)
+{
+    int track = 0;
+    for (Staff* staff : m->score()->staves()) {
+        BarLine* bl = toBarLine(seg->element(track));      // get existing bar line for this staff, if any
+        if (bl) {
+            if (bl->generated()) {
+                bl->setSpanStaff(staff->barLineSpan());
+                bl->setSpanFrom(staff->barLineFrom());
+                bl->setSpanTo(staff->barLineTo());
+            }
+        } else {
+            bl = Factory::createBarLine(seg);
+            bl->setParent(seg);
+            bl->setTrack(track);
+            bl->setGenerated(true);
+            bl->setSpanStaff(staff->barLineSpan());
+            bl->setSpanFrom(staff->barLineFrom());
+            bl->setSpanTo(staff->barLineTo());
+            TLayout::layout(bl, ctx);
+            m->score()->addElement(bl);
+        }
+        track += VOICES;
     }
 }
