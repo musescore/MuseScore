@@ -403,8 +403,7 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
         if (_ticks <= Fraction(0, 1)) {
             // if no ticks, we have to relayout in order to remove invalid melisma segments
             setRemoveInvalidSegments();
-            layout::v0::LayoutContext ctx(score());
-            layout::v0::TLayout::layout(this, ctx);
+            layout()->layoutItem(this);
         }
         break;
     case Pid::VERSE:

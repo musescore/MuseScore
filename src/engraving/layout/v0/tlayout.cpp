@@ -158,7 +158,8 @@ using namespace mu::engraving;
 using namespace mu::engraving::layout::v0;
 
 using LayoutTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
-                                   BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,  HBox, VBox, FBox, TBox, Bracket, Breath,
+                                   BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,
+                                   HBox, VBox, FBox, TBox, Bracket, Breath,
                                    Chord, ChordLine, Clef,
                                    Dynamic, Expression,
                                    Fermata, FiguredBass, Fingering, FretDiagram,

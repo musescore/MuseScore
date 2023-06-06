@@ -236,8 +236,7 @@ double Dynamic::customTextOffset()
 
     Dynamic referenceDynamic(*this);
     referenceDynamic.setXmlText(referenceString);
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(toTextBase(&referenceDynamic), ctx);
+    layout()->layoutItem(toTextBase(&referenceDynamic));
 
     TextFragment referenceFragment;
     if (!referenceDynamic.textBlockList().empty()) {
@@ -247,8 +246,8 @@ double Dynamic::customTextOffset()
         }
     }
 
-    for (TextBlock block : textBlockList()) {
-        for (TextFragment fragment : block.fragments()) {
+    for (const TextBlock& block : textBlockList()) {
+        for (const TextFragment& fragment : block.fragments()) {
             if (fragment.text == referenceFragment.text) {
                 return fragment.pos.x() - referenceFragment.pos.x();
             }
@@ -509,8 +508,9 @@ mu::RectF Dynamic::drag(EditData& ed)
             PointF pos1(canvasPos());
             score()->undo(new ChangeParent(this, seg, si));
             setOffset(PointF());
-            layout::v0::LayoutContext ctx(score());
-            layout::v0::TLayout::layout(this, ctx);
+
+            layout()->layoutItem(this);
+
             PointF pos2(canvasPos());
             const PointF newOffset = pos1 - pos2;
             setOffset(newOffset);

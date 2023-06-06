@@ -38,21 +38,11 @@ public:
     void layoutRange(Score* score, const LayoutOptions& options, const Fraction& st, const Fraction& et) override;
 
     // Layout Elements on Edit
-    void layoutOnEditDrag(Arpeggio* item) override;
     void layoutOnEdit(Arpeggio* item) override;
 
-    void layoutOnEditDrag(Box* item) override;
-    void layoutOnEndEdit(Box* item) override;
-
-    void layoutOnEditDrag(Bracket* item) override;
-
-    // Layout Elements on Drop and Drag
-    void layoutOnChordRestDrop(BarLine* item) override;
-
-    // Layout others
-    //! TODO Need to find out why
-    void layoutOnAddLedgerLines(LedgerLine* item) override;
-    void regenerateDisplayText(FiguredBassItem* item) override;
+private:
+    // Layout Single Item
+    void doLayoutItem(EngravingItem* item) override;
 };
 }
 

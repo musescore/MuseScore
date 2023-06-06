@@ -43,62 +43,17 @@ void Layout::layoutRange(Score* score, const LayoutOptions& options, const Fract
     ScoreLayout::layoutRange(score, options, st, et);
 }
 
+void Layout::doLayoutItem(EngravingItem* item)
+{
+    LayoutContext ctx(item->score());
+    TLayout::layoutItem(item, ctx);
+}
+
 // ===============================================================
 // Layout Elements on Edit
 // ===============================================================
-void Layout::layoutOnEditDrag(Arpeggio* item)
-{
-    LayoutContext ctx(item->score());
-    ArpeggioLayout::layoutOnEditDrag(item, ctx);
-}
-
 void Layout::layoutOnEdit(Arpeggio* item)
 {
     LayoutContext ctx(item->score());
     ArpeggioLayout::layoutOnEdit(item, ctx);
-}
-
-void Layout::layoutOnEditDrag(Box* item)
-{
-    LayoutContext ctx(item->score());
-    TLayout::layout(item, ctx);
-}
-
-void Layout::layoutOnEndEdit(Box* item)
-{
-    LayoutContext ctx(item->score());
-    TLayout::layout(item, ctx);
-}
-
-void Layout::layoutOnEditDrag(Bracket* item)
-{
-    LayoutContext ctx(item->score());
-    TLayout::layout(item, ctx);
-}
-
-// ===============================================================
-// Layout Elements on Drop and Drag
-// ===============================================================
-
-void Layout::layoutOnChordRestDrop(BarLine* item)
-{
-    LayoutContext ctx(item->score());
-    TLayout::layout(item, ctx);
-}
-
-// ===============================================================
-// Layout others
-// ===============================================================
-
-void Layout::layoutOnAddLedgerLines(LedgerLine* item)
-{
-    LayoutContext ctx(item->score());
-    TLayout::layout(item, ctx);
-}
-
-void Layout::regenerateDisplayText(FiguredBassItem* item)
-{
-    // re-generate displayText
-    LayoutContext ctx(item->score());
-    TLayout::layout(item, ctx);
 }

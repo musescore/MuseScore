@@ -628,7 +628,7 @@ PropertyValue FiguredBassItem::propertyDefault(Pid id) const
 void FiguredBassItem::regenerateDisplayText()
 {
     // re-generate displayText
-    layout()->regenerateDisplayText(this);
+    layout()->layoutItem(this);
 }
 
 //---------------------------------------------------------

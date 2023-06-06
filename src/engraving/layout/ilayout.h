@@ -22,18 +22,36 @@
 #ifndef MU_ENGRAVING_ILAYOUT_H
 #define MU_ENGRAVING_ILAYOUT_H
 
+#include <variant>
+
 #include "modularity/imoduleinterface.h"
 
 #include "layoutoptions.h"
 
 namespace mu::engraving {
 class Score;
+class EngravingItem;
+
 class Arpeggio;
-class Box;
+
 class BarLine;
+class Box;
 class Bracket;
-class LedgerLine;
+
+class Clef;
+
+class Dynamic;
+
 class FiguredBassItem;
+
+class Image;
+
+class LedgerLine;
+class SLine;
+class LineSegment;
+class Lyrics;
+
+class TextBase;
 }
 
 namespace mu::engraving::layout {
@@ -47,22 +65,48 @@ public:
     // Layout Score
     virtual void layoutRange(Score* score, const LayoutOptions& options, const Fraction&, const Fraction&) = 0;
 
+    using Supported = std::variant<std::monostate,
+                                   Arpeggio*,
+                                   BarLine*,
+                                   Box*,
+                                   Bracket*,
+                                   Clef*,
+                                   Dynamic*,
+                                   FiguredBassItem*,
+                                   Image*,
+                                   LedgerLine*,
+                                   SLine*,
+                                   LineSegment*,
+                                   Lyrics*,
+                                   TextBase*
+                                   >;
+
+    template<typename T>
+    static void check_supported_static(T item)
+    {
+        if constexpr (std::is_same<T, EngravingItem*>::value) {
+            // supported
+        } else {
+            Supported check(item);
+            (void)check;
+        }
+    }
+
+    template<typename T>
+    void layoutItem(T item)
+    {
+#ifndef NDEBUG
+        check_supported_static(item);
+#endif
+        doLayoutItem(static_cast<EngravingItem*>(item));
+    }
+
     // Layout Elements on Edit
-    virtual void layoutOnEditDrag(Arpeggio* item) = 0;
     virtual void layoutOnEdit(Arpeggio* item) = 0;
 
-    virtual void layoutOnEditDrag(Box* item) = 0;
-    virtual void layoutOnEndEdit(Box* item) = 0;
-
-    virtual void layoutOnEditDrag(Bracket* item) = 0;
-
-    // Layout Elements on Drop and Drag
-    virtual void layoutOnChordRestDrop(BarLine* item) = 0;
-
-    // Layout others
-    //! TODO Need to find out why
-    virtual void layoutOnAddLedgerLines(LedgerLine* item) = 0;
-    virtual void regenerateDisplayText(FiguredBassItem* item) = 0;
+private:
+    // Layout Single Item
+    virtual void doLayoutItem(EngravingItem* item) = 0;
 };
 }
 

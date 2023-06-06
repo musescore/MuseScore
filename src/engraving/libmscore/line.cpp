@@ -383,8 +383,7 @@ bool LineSegment::edit(EditData& ed)
     }
     triggerLayout();
     // recompute segment list, segment type may change
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(l, ctx);
+    layout()->layoutItem(l);
 
     LineSegment* nls = 0;
     if (st == SpannerSegmentType::SINGLE) {
@@ -543,8 +542,7 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
     }
 
     if (newSeg->system() != oldSystem) {
-        layout::v0::LayoutContext ctx(score());
-        layout::v0::TLayout::layout(l, ctx);
+        layout()->layoutItem(l);
         return left ? l->frontSegment() : l->backSegment();
     } else if (anchorChanged) {
         const PointF delta = left ? deltaRebaseLeft(oldSeg, newSeg) : deltaRebaseRight(oldSeg, newSeg, track2staff(l->effectiveTrack2()));
@@ -1163,8 +1161,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
     break;
     }
 
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(lineSegm, ctx);
+    layout()->layoutItem(lineSegm);
 
     return lineSegm;
 }

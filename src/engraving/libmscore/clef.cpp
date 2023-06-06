@@ -241,8 +241,7 @@ ClefType Clef::clefType() const
 void Clef::spatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::spatiumChanged(oldValue, newValue);
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+    layout()->layoutItem(this);
 }
 
 //---------------------------------------------------------
