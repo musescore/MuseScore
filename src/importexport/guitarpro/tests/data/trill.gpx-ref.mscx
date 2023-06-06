@@ -119,6 +119,9 @@
           <Spanner type="Trill">
             <Trill>
               <subtype>trill</subtype>
+              <Ornament>
+                <subtype>ornamentTrill</subtype>
+                </Ornament>
               </Trill>
             <next>
               <location>

@@ -47,6 +47,7 @@
 #include "libmscore/tie.h"
 #include "libmscore/timesig.h"
 #include "libmscore/tremolo.h"
+#include "libmscore/trill.h"
 #include "libmscore/tripletfeel.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
@@ -1737,6 +1738,22 @@ void GPConverter::addTrill(const GPNote* gpnote, Note* note)
 void GPConverter::addTrill(const GPBeat* gpbeat, ChordRest* cr)
 {
     buildContiniousElement(cr, m_trillElements, ElementType::TRILL, LineImportType::TRILL, gpbeat->trill(), true);
+
+    if (!cr->isChord()) {
+        return;
+    }
+
+    SLine* lineElem = m_trillElements[cr->track()];
+    if (lineElem) {
+        Trill* trill = dynamic_cast<Trill*>(lineElem);
+
+        if (!trill) {
+            LOGE() << "trill not found";
+            return;
+        }
+
+        trill->setTrillType(TrillType::TRILL_LINE);
+    }
 }
 
 void GPConverter::addOrnament(const GPNote* gpnote, Note* note)
