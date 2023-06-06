@@ -2217,7 +2217,7 @@ void Note::updateAccidental(AccidentalState* as)
             LOGD("error accidentalVal()");
             return;
         }
-        if ((accVal != relLineAccVal) || hidden() || as->tieContext(eRelLine)) {
+        if ((accVal != relLineAccVal) || hidden() || as->tieContext(eRelLine) || as->forceRestateAccidental(eRelLine)) {
             as->setAccidentalVal(eRelLine, accVal, _tieBack != 0 && _accidental == 0);
             acci = Accidental::value2subtype(accVal);
             // if previous tied note has same tpc, don't show accidental
@@ -2273,6 +2273,7 @@ void Note::updateAccidental(AccidentalState* as)
         as->setAccidentalVal(relLine, accVal, _tieBack != 0 && _accidental == 0);
     }
 
+    as->setForceRestateAccidental(relLine, false);
     updateRelLine(relLine, true);
 }
 

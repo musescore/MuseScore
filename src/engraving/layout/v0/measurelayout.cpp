@@ -31,13 +31,16 @@
 #include "libmscore/marker.h"
 #include "libmscore/measure.h"
 #include "libmscore/mmrest.h"
+#include "libmscore/ornament.h"
 #include "libmscore/part.h"
 #include "libmscore/spacer.h"
 #include "libmscore/score.h"
 #include "libmscore/stem.h"
 #include "libmscore/system.h"
 #include "libmscore/timesig.h"
+#include "libmscore/trill.h"
 #include "libmscore/undo.h"
+#include "libmscore/utils.h"
 
 #include "tlayout.h"
 #include "layoutcontext.h"
@@ -806,6 +809,22 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
             = staff->part()->instrument(measure->tick())->useDrumset() ? staff->part()->instrument(measure->tick())->drumset() : 0;
         AccidentalState as;          // list of already set accidentals for this measure
         as.init(staff->keySigEvent(measure->tick()));
+
+        // Trills may carry an accidental into this measure that requires a force-restate
+        int ticks = measure->tick().ticks();
+        auto spanners = score->spannerMap().findOverlapping(ticks, ticks, true);
+        for (auto iter : spanners) {
+            Spanner* spanner = iter.value;
+            if (spanner->staffIdx() != staffIdx || !spanner->isTrill() || spanner->tick2() == measure->tick()) {
+                continue;
+            }
+            Ornament* ornament = toTrill(spanner)->ornament();
+            Note* trillNote = ornament ? ornament->noteAbove() : nullptr;
+            if (trillNote && trillNote->accidental() && ornament->showAccidental() == OrnamentShowAccidental::DEFAULT) {
+                int line = absStep(trillNote->tpc(), trillNote->epitch());
+                as.setForceRestateAccidental(line, true);
+            }
+        }
 
         for (Segment& segment : measure->segments()) {
             // TODO? maybe we do need to process it here to make it possible to enable later
