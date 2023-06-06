@@ -807,6 +807,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::stringNumberFrameFgColor,      "stringNumberFrameFgColor",      PropertyValue::fromValue(Color::BLACK) },
     { Sid::stringNumberFrameBgColor,      "stringNumberFrameBgColor",      PropertyValue::fromValue(Color::transparent) },
     { Sid::stringNumberOffset,            "stringNumberOffset",            PointF(0.0, 0.0) },
+    { Sid::preferSameStringForTranspose,  "preferSameStringForTranspose",  false },
 
     { Sid::harpPedalDiagramFontFace,          "harpPedalDiagramFontFace",          "Edwin" },
     { Sid::harpPedalDiagramFontSize,          "harpPedalDiagramFontSize",          10.0 },

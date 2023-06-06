@@ -447,6 +447,7 @@ int StringData::fret(int pitch, int string, int pitchOffset) const
 void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int pitchOffset, int* count) const
 {
     int capoFret = chord->staff()->part()->capoFret();
+    bool useSameString = chord->style()->styleB(Sid::preferSameStringForTranspose);
 
     for (Note* note : chord->notes()) {
         if (note->displayFret() != Note::DisplayFretOption::NoHarmonic) {
@@ -459,11 +460,17 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
         // if note not fretted yet or current fretting no longer valid,
         // use most convenient string as key
         int pitch = getPitch(string, fret + capoFret, pitchOffset);
-        if (!note->negativeFretUsed() && (string <= INVALID_STRING_INDEX || fret <= INVALID_FRET_INDEX
-                                          || (pitchIsValid(pitch) && pitch != note->pitch()))) {
-            note->setString(INVALID_STRING_INDEX);
-            note->setFret(INVALID_FRET_INDEX);
-            convertPitch(note->pitch(), pitchOffset, &string, &fret);
+        if (useSameString) {
+            if (pitch != note->pitch()) {
+                note->setFret(fret + note->pitch() - pitch);
+            }
+        } else {
+            if (!note->negativeFretUsed() && (string <= INVALID_STRING_INDEX || fret <= INVALID_FRET_INDEX
+                                              || (pitchIsValid(pitch) && pitch != note->pitch()))) {
+                note->setString(INVALID_STRING_INDEX);
+                note->setFret(INVALID_FRET_INDEX);
+                convertPitch(note->pitch(), pitchOffset, &string, &fret);
+            }
         }
 
         int key = string * 100000;
