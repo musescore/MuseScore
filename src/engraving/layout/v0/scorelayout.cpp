@@ -383,7 +383,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
                 }
             }
             m->setPos(pos);
-            m->layoutStaffLines();
+            MeasureLayout::layoutStaffLines(m, ctx);
         } else if (ctx.curMeasure->isHBox()) {
             ctx.curMeasure->setPos(pos + PointF(toHBox(ctx.curMeasure)->topGap(), 0.0));
             TLayout::layoutMeasureBase(ctx.curMeasure, ctx);

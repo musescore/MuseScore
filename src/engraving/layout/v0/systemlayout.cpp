@@ -462,7 +462,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
             mb->setParent(system);
             Measure* m = toMeasure(mb);
             m->layoutMeasureElements();
-            m->layoutStaffLines();
+            MeasureLayout::layoutStaffLines(m, ctx);
             if (createBrackets) {
                 system->addBrackets(ctx, toMeasure(mb));
                 createBrackets = false;
