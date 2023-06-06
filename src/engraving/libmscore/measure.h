@@ -357,7 +357,6 @@ public:
     void stretchToTargetWidth(double targetWidth);
     void checkHeader();
     void checkTrailer();
-    void layoutStaffLines();
 
     bool isWidthLocked() const { return _isWidthLocked; }
     // A measure is widthLocked if its width has been locked by the minMeasureWidth (or minMMRestWidth)

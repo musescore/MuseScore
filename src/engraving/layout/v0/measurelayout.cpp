@@ -35,7 +35,7 @@
 #include "libmscore/part.h"
 #include "libmscore/spacer.h"
 #include "libmscore/score.h"
-#include "libmscore/stem.h"
+#include "libmscore/stafflines.h"
 #include "libmscore/system.h"
 #include "libmscore/timesig.h"
 #include "libmscore/trill.h"
@@ -1029,5 +1029,25 @@ void MeasureLayout::computePreSpacingItems(Measure* m, LayoutContext& ctx)
         }
         seg.createShapes();
         isFirstChordInMeasure = false;
+    }
+}
+
+void MeasureLayout::layoutStaffLines(Measure* m, LayoutContext& ctx)
+{
+    int staffIdx = 0;
+    for (MStaff* ms : m->m_mstaves) {
+        if (m->isCutawayClef(staffIdx) && (m->score()->staff(staffIdx)->cutaway() || !m->visible(staffIdx))) {
+            // draw short staff lines for a courtesy clef on a hidden measure
+            Segment* clefSeg = m->findSegmentR(SegmentType::Clef, m->ticks());
+            double staffMag = m->score()->staff(staffIdx)->staffMag(m->tick());
+            double partialWidth = clefSeg
+                                  ? m->width() - clefSeg->x() + clefSeg->minLeft() + m->score()->styleMM(Sid::clefLeftMargin) * staffMag
+                                  : 0.0;
+            ms->lines()->layoutPartialWidth(m->width(), partialWidth / (m->spatium() * staffMag), true);
+        } else {
+            // normal staff lines
+            TLayout::layout(ms->lines(), ctx);
+        }
+        staffIdx += 1;
     }
 }
