@@ -186,7 +186,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                 }
             }
 
-            m->createEndBarLines(true);
+            MeasureLayout::createEndBarLines(m, true, ctx);
             // measures with nobreak cannot end a system
             // thus they will not contain a trailer
             if (m->noBreak()) {
@@ -291,7 +291,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
             // but at this point we have no choice but to assume it isn't
             // since we don't know yet if another true measure will fit
             // worst that happens is we don't get the automatic double bar before a courtesy key signature
-            curSysWidth += m->createEndBarLines(false);          // create final barLine
+            curSysWidth += MeasureLayout::createEndBarLines(m, false, ctx);          // create final barLine
         }
 
         MeasureBase* mb = ctx.curMeasure;
@@ -402,7 +402,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
     if (ctx.prevMeasure && ctx.prevMeasure->isMeasure()) {
         Measure* pm = toMeasure(ctx.prevMeasure);
         BeamLayout::breakCrossMeasureBeams(pm, ctx);
-        pm->createEndBarLines(true);
+        MeasureLayout::createEndBarLines(pm, true, ctx);
     }
 
     // hide empty staves

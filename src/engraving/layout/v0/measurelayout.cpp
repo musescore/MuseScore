@@ -1282,3 +1282,192 @@ void MeasureLayout::barLinesSetSpan(Measure* m, Segment* seg, LayoutContext& ctx
         track += VOICES;
     }
 }
+
+//---------------------------------------------------------
+//   createEndBarLines
+//    actually creates or modifies barlines
+//    return the width change for measure
+//---------------------------------------------------------
+
+double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx)
+{
+    size_t nstaves  = m->score()->nstaves();
+    Segment* seg = m->findSegmentR(SegmentType::EndBarLine, m->ticks());
+    Measure* nm  = m->nextMeasure();
+    double blw    = 0.0;
+
+    double oldWidth = m->width();
+
+    if (nm && nm->repeatStart() && !m->repeatEnd() && !isLastMeasureInSystem && m->next() == nm) {
+        // we may skip barline at end of a measure immediately before a start repeat:
+        // next measure is repeat start, this measure is not a repeat end,
+        // this is not last measure of system, no intervening frame
+        if (!seg) {
+            return 0.0;
+        }
+        seg->setEnabled(false);
+    } else {
+        BarLineType t = nm ? BarLineType::NORMAL : BarLineType::END;
+        if (!seg) {
+            seg = m->getSegmentR(SegmentType::EndBarLine, m->ticks());
+        }
+        seg->setEnabled(true);
+        //
+        //  Set flag "hasCourtesyKeySig" if this measure needs a courtesy key sig.
+        //  This flag is later used to set a double end bar line and to actually
+        //  create the courtesy key sig.
+        //
+
+        bool show = m->score()->styleB(Sid::genCourtesyKeysig) && !m->sectionBreak() && nm;
+
+        m->setHasCourtesyKeySig(false);
+
+        if (isLastMeasureInSystem && show) {
+            Fraction tick = m->endTick();
+            for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+                Staff* staff     = m->score()->staff(staffIdx);
+                KeySigEvent key1 = staff->keySigEvent(tick - Fraction::fromTicks(1));
+                KeySigEvent key2 = staff->keySigEvent(tick);
+                if (!(key1 == key2)) {
+                    // locate a key sig. in next measure and, if found,
+                    // check if it has court. sig turned off
+                    Segment* s = nm->findSegment(SegmentType::KeySig, tick);
+                    if (s) {
+                        KeySig* ks = toKeySig(s->element(staffIdx * VOICES));
+                        if (ks && !ks->showCourtesy()) {
+                            continue;
+                        }
+                    }
+                    m->setHasCourtesyKeySig(true);
+                    t = BarLineType::DOUBLE;
+                    break;
+                }
+            }
+        }
+
+        bool force = false;
+        if (m->repeatEnd()) {
+            t = BarLineType::END_REPEAT;
+            force = true;
+        } else if (isLastMeasureInSystem && m->nextMeasure() && m->nextMeasure()->repeatStart()) {
+            t = BarLineType::NORMAL;
+//                  force = true;
+        }
+
+        for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+            track_idx_t track = staffIdx * VOICES;
+            BarLine* bl  = toBarLine(seg->element(track));
+            Staff* staff = m->score()->staff(staffIdx);
+            if (!bl) {
+                bl = Factory::createBarLine(seg);
+                bl->setParent(seg);
+                bl->setTrack(track);
+                bl->setGenerated(true);
+                bl->setSpanStaff(staff->barLineSpan());
+                bl->setSpanFrom(staff->barLineFrom());
+                bl->setSpanTo(staff->barLineTo());
+                bl->setBarLineType(t);
+                m->score()->addElement(bl);
+            } else {
+                // do not change bar line type if bar line is user modified
+                // and its not a repeat start/end barline (forced)
+
+                if (bl->generated()) {
+                    bl->setSpanStaff(staff->barLineSpan());
+                    bl->setSpanFrom(staff->barLineFrom());
+                    bl->setSpanTo(staff->barLineTo());
+                    bl->setBarLineType(t);
+                } else {
+                    if (bl->barLineType() != t) {
+                        if (force) {
+                            bl->undoChangeProperty(Pid::BARLINE_TYPE, PropertyValue::fromValue(t));
+                            bl->setGenerated(true);
+                        }
+                    }
+                }
+            }
+
+            TLayout::layout(bl, ctx);
+            blw = std::max(blw, bl->width());
+        }
+        // right align within segment
+        for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+            track_idx_t track = staffIdx * VOICES;
+            BarLine* bl = toBarLine(seg->element(track));
+            if (bl) {
+                bl->movePosX(blw - bl->width());
+            }
+        }
+        seg->createShapes();
+    }
+
+    // set relative position of end barline and clef
+    // if end repeat, clef goes after, otherwise clef goes before
+    Segment* clefSeg = m->findSegmentR(SegmentType::Clef, m->ticks());
+    ClefToBarlinePosition clefToBarlinePosition = ClefToBarlinePosition::AUTO;
+    if (clefSeg) {
+        bool wasVisible = clefSeg->visible();
+        int visibleInt = 0;
+        for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+            if (!m->score()->staff(staffIdx)->show()) {
+                continue;
+            }
+            track_idx_t track = staffIdx * VOICES;
+            Clef* clef = toClef(clefSeg->element(track));
+            if (clef) {
+                clefToBarlinePosition = clef->clefToBarlinePosition();
+                bool showCourtesy = m->score()->genCourtesyClef() && clef->showCourtesy();         // normally show a courtesy clef
+                // check if the measure is the last measure of the system or the last measure before a frame
+                bool lastMeasure = isLastMeasureInSystem || (nm ? !(m->next() == nm) : true);
+                if (!nm || m->isFinalMeasureOfSection() || (lastMeasure && !showCourtesy)) {
+                    // hide the courtesy clef in the final measure of a section, or if the measure is the final measure of a system
+                    // and the score style or the clef style is set to "not show courtesy clef",
+                    // or if the clef is at the end of the very last measure of the score
+                    clef->clear();
+                    clefSeg->createShape(staffIdx);
+                    if (visibleInt == 0) {
+                        visibleInt = 1;
+                    }
+                } else {
+                    TLayout::layout(clef, ctx);
+                    clefSeg->createShape(staffIdx);
+                    visibleInt = 2;
+                }
+            }
+        }
+        if (visibleInt == 2) {         // there is at least one visible clef in the clef segment
+            clefSeg->setVisible(true);
+        } else if (visibleInt == 1) {  // all (courtesy) clefs in the clef segment are not visible
+            clefSeg->setVisible(false);
+        } else { // should never happen
+            LOGD("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
+        }
+        if ((wasVisible != clefSeg->visible()) && m->system()) {   // recompute the width only if necessary
+            m->computeWidth(m->system()->minSysTicks(), m->system()->maxSysTicks(), m->layoutStretch());
+        }
+        if (seg) {
+            Segment* s1;
+            Segment* s2;
+            if (m->repeatEnd() && clefToBarlinePosition != ClefToBarlinePosition::BEFORE) {
+                s1 = seg;
+                s2 = clefSeg;
+            } else {
+                s1 = clefSeg;
+                s2 = seg;
+            }
+            if (s1->next() != s2) {
+                m->m_segments.remove(s1);
+                m->m_segments.insert(s1, s2);
+            }
+        }
+    }
+
+    // fix segment layout
+    Segment* s = seg->prevActive();
+    if (s) {
+        double x = s->xpos();
+        m->computeWidth(s, x, false, m->system()->minSysTicks(), m->system()->maxSysTicks(), m->layoutStretch());
+    }
+
+    return m->width() - oldWidth;
+}
