@@ -76,6 +76,8 @@ public:
     Note* noteAbove() const { return _notesAboveAndBelow[0]; }
     Note* noteBelow() const { return _notesAboveAndBelow[1]; }
 
+    void setTrack(track_idx_t val) override;
+
 private:
     void updateAccidentalsAboveAndBelow();
     void updateCueNote();
