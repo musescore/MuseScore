@@ -3152,37 +3152,6 @@ void Measure::setEndBarLineType(BarLineType val, track_idx_t track, bool visible
 }
 
 //---------------------------------------------------------
-//   barLinesSetSpan
-//---------------------------------------------------------
-
-void Measure::barLinesSetSpan(Segment* seg)
-{
-    int track = 0;
-    for (Staff* staff : score()->staves()) {
-        BarLine* bl = toBarLine(seg->element(track));      // get existing bar line for this staff, if any
-        if (bl) {
-            if (bl->generated()) {
-                bl->setSpanStaff(staff->barLineSpan());
-                bl->setSpanFrom(staff->barLineFrom());
-                bl->setSpanTo(staff->barLineTo());
-            }
-        } else {
-            bl = Factory::createBarLine(seg);
-            bl->setParent(seg);
-            bl->setTrack(track);
-            bl->setGenerated(true);
-            bl->setSpanStaff(staff->barLineSpan());
-            bl->setSpanFrom(staff->barLineFrom());
-            bl->setSpanTo(staff->barLineTo());
-            LayoutContext ctx(score());
-            TLayout::layout(bl, ctx);
-            score()->addElement(bl);
-        }
-        track += VOICES;
-    }
-}
-
-//---------------------------------------------------------
 //   createEndBarLines
 //    actually creates or modifies barlines
 //    return the width change for measure

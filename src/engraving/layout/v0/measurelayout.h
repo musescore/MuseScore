@@ -29,6 +29,7 @@ namespace mu::engraving {
 class Measure;
 class MeasureBase;
 class Score;
+class Segment;
 }
 
 namespace mu::engraving::layout::v0 {
@@ -52,6 +53,8 @@ private:
     static void createMMRest(const LayoutOptions& options, Score* score, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);
 
     static int adjustMeasureNo(LayoutContext& lc, MeasureBase* m);
+
+    static void barLinesSetSpan(Measure* m, Segment* seg, LayoutContext& ctx);
 };
 }
 
