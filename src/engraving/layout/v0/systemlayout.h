@@ -59,7 +59,7 @@ private:
     static void justifySystem(System* system, double curSysWidth, double targetSystemWidth);
     static void updateCrossBeams(System* system, LayoutContext& ctx);
     static void restoreTies(System* system);
-    static void manageNarrowSpacing(System* system, double& curSysWidth, double targetSysWidth, const Fraction minTicks,
+    static void manageNarrowSpacing(System* system, LayoutContext& ctx, double& curSysWidth, double targetSysWidth, const Fraction minTicks,
                                     const Fraction maxTicks);
 
     static double instrumentNamesWidth(System* system, bool isFirstSystem, LayoutContext& ctx);

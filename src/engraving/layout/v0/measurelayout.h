@@ -52,11 +52,14 @@ public:
     static void addSystemHeader(Measure* m, bool isFirstSystem, LayoutContext& ctx);
     static void removeSystemHeader(Measure* m);
     static void addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx);
-    static void removeSystemTrailer(Measure* m);
+    static void removeSystemTrailer(Measure* m, LayoutContext& ctx);
 
     static void createSystemBeginBarLine(Measure* m, LayoutContext& ctx);
 
     static void stretchMeasureInPracticeMode(Measure* m, double targetWidth, LayoutContext& ctx);
+
+    static void computeWidth(Measure* m, LayoutContext& ctx, Fraction minTicks, Fraction maxTicks, double stretchCoeff,
+                             bool overrideMinMeasureWidth = false);
 
 private:
 
@@ -65,6 +68,9 @@ private:
     static int adjustMeasureNo(LayoutContext& lc, MeasureBase* m);
 
     static void barLinesSetSpan(Measure* m, Segment* seg, LayoutContext& ctx);
+
+    static void computeWidth(Measure* m, Segment* s, double x, bool isSystemHeader, Fraction minTicks, Fraction maxTicks,
+                             double stretchCoeff, bool overrideMinMeasureWidth = false);
 };
 }
 
