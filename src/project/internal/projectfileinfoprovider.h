@@ -39,6 +39,8 @@ public:
     io::path_t fileName(bool includingExtension = true) const override;
     io::path_t absoluteDirPath() const override;
 
+    String displayName() const override;
+
     DateTime birthTime() const override;
     DateTime lastModified() const override;
 

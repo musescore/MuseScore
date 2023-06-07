@@ -157,6 +157,8 @@ private:
 
     void revertCorruptedScoreToLastSaved();
 
+    RecentFile makeRecentFile(INotationProjectPtr project);
+
     void moveProject(INotationProjectPtr project, const io::path_t& newPath, bool replace);
 
     void importPdf();
@@ -170,7 +172,9 @@ private:
     io::path_t selectScoreOpeningFile();
     io::path_t selectScoreSavingFile(const io::path_t& defaultFilePath, const QString& saveTitle);
 
+    RetVal<INotationProjectPtr> loadProject(const io::path_t& filePath);
     Ret doOpenProject(const io::path_t& filePath);
+    Ret doOpenCloudProject(const io::path_t& filePath, const CloudProjectInfo& info);
 
     Ret openPageIfNeed(Uri pageUri);
 

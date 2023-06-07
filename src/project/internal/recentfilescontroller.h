@@ -54,7 +54,7 @@ public:
     void moveRecentFile(const io::path_t& before, const RecentFile& after) override;
     void clearRecentFiles() override;
 
-    async::Promise<QPixmap> thumbnail(const RecentFile& file) const override;
+    async::Promise<QPixmap> thumbnail(const io::path_t& file) const override;
 
 protected:
     virtual void prependPlatformRecentFile(const io::path_t& path);

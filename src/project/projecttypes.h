@@ -246,12 +246,36 @@ struct Template
 
 using Templates = QList<Template>;
 
-//struct RecentFile {
-//    io::path_t path;
-//    QString displayName;
-//};
+struct RecentFile {
+    io::path_t path;
+    QString displayNameOverride = {};
 
-using RecentFile = io::path_t;
+    QString displayName(bool includingExtension) const
+    {
+        if (!displayNameOverride.isEmpty()) {
+            return displayNameOverride;
+        }
+
+        return io::filename(path, includingExtension).toQString();
+    }
+
+    bool isValid() const
+    {
+        return !path.empty();
+    }
+
+    bool operator == (const RecentFile& other) const
+    {
+        return path == other.path
+               && displayNameOverride == other.displayNameOverride;
+    }
+
+    bool operator != (const RecentFile& other) const
+    {
+        return !(*this == other);
+    }
+};
+
 using RecentFilesList = std::vector<RecentFile>;
 
 struct ProjectBeingDownloaded {

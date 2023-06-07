@@ -244,7 +244,7 @@ Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
     if (isNewlyCreated) {
         project->markAsNewlyCreated();
     } else {
-        recentFilesController()->prependRecentFile(filePath);
+        recentFilesController()->prependRecentFile(makeRecentFile(project));
     }
 
     globalContext()->setCurrentProject(project);
@@ -619,13 +619,18 @@ bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveM
 
 bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, SaveMode saveMode)
 {
-    Ret ret = currentNotationProject()->save(filePath, saveMode);
+    INotationProjectPtr project = currentNotationProject();
+    if (!project) {
+        return false;
+    }
+
+    Ret ret = project->save(filePath, saveMode);
     if (!ret) {
         LOGE() << ret.toString();
         return false;
     }
 
-    recentFilesController()->prependRecentFile(filePath);
+    recentFilesController()->prependRecentFile(makeRecentFile(project));
     return true;
 }
 
@@ -1231,6 +1236,18 @@ void ProjectActionsController::revertCorruptedScoreToLastSaved()
     }
 }
 
+RecentFile ProjectActionsController::makeRecentFile(INotationProjectPtr project)
+{
+    RecentFile file;
+    file.path = project->path();
+
+    if (project->isCloudProject()) {
+        file.displayNameOverride = project->cloudInfo().name;
+    }
+
+    return file;
+}
+
 void ProjectActionsController::moveProject(INotationProjectPtr project, const io::path_t& newPath, bool replace)
 {
     io::path_t oldPath = project->path();
@@ -1241,7 +1258,7 @@ void ProjectActionsController::moveProject(INotationProjectPtr project, const io
     fileSystem()->move(oldPath, newPath, replace);
     project->setPath(newPath);
 
-    recentFilesController()->moveRecentFile(oldPath, newPath);
+    recentFilesController()->moveRecentFile(oldPath, makeRecentFile(project));
 }
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const String& projectName)
@@ -1325,7 +1342,7 @@ void ProjectActionsController::continueLastSession()
         return;
     }
 
-    io::path_t lastScorePath = recentScorePaths.front();
+    io::path_t lastScorePath = recentScorePaths.front().path;
     openProject(lastScorePath);
 }
 

@@ -73,14 +73,14 @@ void RecentScoresModel::updateRecentScores()
     for (const RecentFile& file : recentScores) {
         QVariantMap obj;
 
-        std::string suffix = io::suffix(file);
+        std::string suffix = io::suffix(file.path);
         bool isSuffixInteresting = suffix != engraving::MSCZ;
-        obj[NAME_KEY] = io::filename(file, isSuffixInteresting).toQString();
-        obj[PATH_KEY] = file.toQString();
+        obj[NAME_KEY] = file.displayName(isSuffixInteresting);
+        obj[PATH_KEY] = file.path.toQString();
         obj[SUFFIX_KEY] = QString::fromStdString(suffix);
-        obj[IS_CLOUD_KEY] = configuration()->isNewCloudProject(file) || configuration()->isOldCloudProject(file);
-        obj[CLOUD_SCORE_ID_KEY] = configuration()->cloudScoreIdFromPath(file);
-        obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(file).lastModified().date()).toQString();
+        obj[IS_CLOUD_KEY] = configuration()->isNewCloudProject(file.path) || configuration()->isOldCloudProject(file.path);
+        obj[CLOUD_SCORE_ID_KEY] = configuration()->cloudScoreIdFromPath(file.path);
+        obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(file.path).lastModified().date()).toQString();
         obj[IS_CREATE_NEW_KEY] = false;
         obj[IS_NO_RESULT_FOUND_KEY] = false;
 

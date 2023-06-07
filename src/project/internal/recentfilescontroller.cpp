@@ -73,7 +73,7 @@ Notification RecentFilesController::recentFilesListChanged() const
 
 void RecentFilesController::prependRecentFile(const RecentFile& newFile)
 {
-    if (newFile.empty()) {
+    if (!newFile.isValid()) {
         return;
     }
 
@@ -84,14 +84,14 @@ void RecentFilesController::prependRecentFile(const RecentFile& newFile)
     newList.push_back(newFile);
 
     for (const RecentFile& file : m_recentFilesList) {
-        if (file != newFile && fileSystem()->exists(file)) {
+        if (file.path != newFile.path && fileSystem()->exists(file.path)) {
             newList.push_back(file);
         }
     }
 
     setRecentFilesList(newList, true);
 
-    prependPlatformRecentFile(newFile);
+    prependPlatformRecentFile(newFile.path);
 }
 
 void RecentFilesController::moveRecentFile(const io::path_t& before, const RecentFile& after)
@@ -100,7 +100,7 @@ void RecentFilesController::moveRecentFile(const io::path_t& before, const Recen
     RecentFilesList newList = m_recentFilesList;
 
     for (RecentFile& file : newList) {
-        if (file == before) {
+        if (file.path == before) {
             file = after;
             moved = true;
             break;
@@ -156,7 +156,17 @@ void RecentFilesController::loadRecentFilesList()
     }
 
     for (const QJsonValue val : jsonDoc.array()) {
-        newList.push_back(val.toString());
+        if (val.isString()) {
+            newList.push_back(RecentFile { io::path_t(val.toString()) });
+        } else if (val.isObject()) {
+            QJsonObject obj = val.toObject();
+            RecentFile file;
+            file.path = obj["path"].toString();
+            file.displayNameOverride = obj["displayName"].toString();
+            newList.push_back(file);
+        } else {
+            continue;
+        }
     }
 }
 
@@ -168,7 +178,7 @@ void RecentFilesController::removeNonexistentFiles()
     newList.reserve(m_recentFilesList.size());
 
     for (const RecentFile& file : m_recentFilesList) {
-        if (fileSystem()->exists(file)) {
+        if (fileSystem()->exists(file.path)) {
             newList.push_back(file);
         } else {
             removed = true;
@@ -215,7 +225,14 @@ void RecentFilesController::saveRecentFilesList()
 
     QJsonArray jsonArray;
     for (const RecentFile& file : m_recentFilesList) {
-        jsonArray << file.toQString();
+        if (!file.displayNameOverride.isEmpty()) {
+            QJsonObject obj;
+            obj["path"] = file.path.toQString();
+            obj["displayName"] = file.displayNameOverride;
+            jsonArray << obj;
+        } else {
+            jsonArray << file.path.toQString();
+        }
     }
 
     QJsonDocument jsonDoc(jsonArray);
@@ -228,7 +245,7 @@ void RecentFilesController::saveRecentFilesList()
     }
 }
 
-Promise<QPixmap> RecentFilesController::thumbnail(const RecentFile& file) const
+Promise<QPixmap> RecentFilesController::thumbnail(const io::path_t& file) const
 {
     return Promise<QPixmap>([this, file](auto resolve, auto reject) {
         if (file.empty()) {
@@ -273,9 +290,9 @@ void RecentFilesController::cleanUpThumbnailCache(const RecentFilesList& files)
             std::map<io::path_t, CachedThumbnail> cleanedCache;
 
             for (const RecentFile& file : files) {
-                auto it = m_thumbnailCache.find(file);
+                auto it = m_thumbnailCache.find(file.path);
                 if (it != m_thumbnailCache.cend()) {
-                    cleanedCache[file] = it->second;
+                    cleanedCache[file.path] = it->second;
                 }
             }
 

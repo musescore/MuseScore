@@ -405,7 +405,7 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
 
         UiAction action;
         action.code = "file-open";
-        action.title = TranslatableString::untranslatable(io::filename(file).toString());
+        action.title = TranslatableString::untranslatable(file.displayName(true));
         item->setAction(action);
 
         item->setId(makeId(item->action().code, index++));
@@ -415,7 +415,7 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
         item->setState(state);
 
         item->setSelectable(true);
-        item->setArgs(ActionData::make_arg1<io::path_t>(file));
+        item->setArgs(ActionData::make_arg1<io::path_t>(file.path));
 
         items << item;
     }
