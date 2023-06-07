@@ -51,6 +51,8 @@ public:
     static double createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
     static void addSystemHeader(Measure* m, bool isFirstSystem, LayoutContext& ctx);
 
+    static void createSystemBeginBarLine(Measure* m, LayoutContext& ctx);
+
 private:
 
     static void createMMRest(const LayoutOptions& options, Score* score, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);

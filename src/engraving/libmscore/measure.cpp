@@ -3179,49 +3179,6 @@ double Measure::basicWidth() const
     return w;
 }
 
-void Measure::createSystemBeginBarLine()
-{
-    if (!system()) {
-        return;
-    }
-    Segment* s  = findSegment(SegmentType::BeginBarLine, tick());
-    size_t n = 0;
-    if (system()) {
-        for (SysStaff* sysStaff : system()->staves()) {
-            if (sysStaff->show()) {
-                ++n;
-            }
-        }
-    }
-    if ((n > 1 && score()->styleB(Sid::startBarlineMultiple))
-        || (n == 1 && (score()->styleB(Sid::startBarlineSingle) || system()->brackets().size()))) {
-        if (!s) {
-            s = Factory::createSegment(this, SegmentType::BeginBarLine, Fraction(0, 1));
-            add(s);
-        }
-        for (track_idx_t track = 0; track < score()->ntracks(); track += VOICES) {
-            BarLine* bl = toBarLine(s->element(track));
-            if (!bl) {
-                bl = Factory::createBarLine(s);
-                bl->setTrack(track);
-                bl->setGenerated(true);
-                bl->setParent(s);
-                bl->setBarLineType(BarLineType::NORMAL);
-                bl->setSpanStaff(true);
-                s->add(bl);
-            }
-            LayoutContext ctx(score());
-            TLayout::layout(bl, ctx);
-        }
-        s->createShapes();
-        s->setEnabled(true);
-        s->setHeader(true);
-        setHeader(true);
-    } else if (s) {
-        s->setEnabled(false);
-    }
-}
-
 //---------------------------------------------------------
 //   addSystemTrailer
 //---------------------------------------------------------
