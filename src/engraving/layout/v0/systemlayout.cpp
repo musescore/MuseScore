@@ -195,7 +195,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
             if (m->noBreak()) {
                 m->removeSystemTrailer();
             } else {
-                m->addSystemTrailer(m->nextMeasure());
+                MeasureLayout::addSystemTrailer(m, m->nextMeasure(), ctx);
             }
             m->computeWidth(minTicks, maxTicks, 1);
             ww = m->width();
@@ -377,7 +377,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                 for (;;) {
                     // TODO: what if the nobreak group takes the entire system - is this correct?
                     if (curTrailer && !m->noBreak()) {
-                        m->addSystemTrailer(m->nextMeasure());
+                        MeasureLayout::addSystemTrailer(m, m->nextMeasure(), ctx);
                     } else {
                         m->removeSystemTrailer();
                     }
@@ -420,7 +420,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
     if (lm) {
         Measure* nm = lm->nextMeasure();
         if (nm) {
-            lm->addSystemTrailer(nm);
+            MeasureLayout::addSystemTrailer(lm, nm, ctx);
         }
     }
 
