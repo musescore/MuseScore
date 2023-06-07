@@ -269,30 +269,6 @@ void System::adjustStavesNumber(size_t nstaves)
 }
 
 //---------------------------------------------------------
-//   setMeasureHeight
-//---------------------------------------------------------
-
-void System::setMeasureHeight(double height)
-{
-    double _spatium { spatium() };
-    LayoutContext lctx(score());
-    for (MeasureBase* m : ml) {
-        if (m->isMeasure()) {
-            // note that the factor 2 * _spatium must be corrected for when exporting
-            // system distance in MusicXML (issue #24733)
-            m->bbox().setRect(0.0, -_spatium, m->width(), height + 2.0 * _spatium);
-        } else if (m->isHBox()) {
-            m->bbox().setRect(0.0, 0.0, m->width(), height);
-            TLayout::layout2(toHBox(m), lctx);
-        } else if (m->isTBox()) {
-            TLayout::layout(toTBox(m), lctx);
-        } else {
-            LOGD("unhandled measure type %s", m->typeName());
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   layoutBracketsVertical
 //---------------------------------------------------------
 
