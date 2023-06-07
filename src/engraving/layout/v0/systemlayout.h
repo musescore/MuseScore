@@ -57,6 +57,7 @@ private:
 
     static double instrumentNamesWidth(System* system, bool isFirstSystem, LayoutContext& ctx);
     static double totalBracketOffset(LayoutContext& ctx);
+    static double layoutBrackets(System* system, const LayoutContext& ctx);
 };
 }
 
