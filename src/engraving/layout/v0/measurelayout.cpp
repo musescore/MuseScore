@@ -1648,6 +1648,139 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
     m->checkHeader();
 }
 
+void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx)
+{
+    Fraction _rtick = m->ticks();
+    bool isFinalMeasure = m->isFinalMeasureOfSection();
+
+    // locate a time sig. in the next measure and, if found,
+    // check if it has court. sig. turned off
+    TimeSig* ts = nullptr;
+    bool showCourtesySig = false;
+    Segment* s = m->findSegmentR(SegmentType::TimeSigAnnounce, _rtick);
+    if (s) {
+        s->setTrailer(true);
+    }
+    if (nm && m->score()->genCourtesyTimesig() && !isFinalMeasure && !m->score()->layoutOptions().isMode(LayoutMode::FLOAT)) {
+        Segment* tss = nm->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+        if (tss) {
+            size_t nstaves = m->score()->nstaves();
+            for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
+                ts = toTimeSig(tss->element(track));
+                if (ts) {
+                    break;
+                }
+            }
+            if (ts && ts->showCourtesySig()) {
+                showCourtesySig = true;
+                // if due, create a new courtesy time signature for each staff
+                if (!s) {
+                    s  = Factory::createSegment(m, SegmentType::TimeSigAnnounce, _rtick);
+                    s->setTrailer(true);
+                    m->add(s);
+                }
+
+                s->setEnabled(true);
+
+                for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
+                    TimeSig* nts = toTimeSig(tss->element(track));
+                    if (!nts) {
+                        continue;
+                    }
+                    ts = toTimeSig(s->element(track));
+                    if (!ts) {
+                        ts = Factory::createTimeSig(s);
+                        ts->setTrack(track);
+                        ts->setGenerated(true);
+                        ts->setParent(s);
+                        m->score()->undoAddElement(ts);
+                        s->setTrailer(true);
+                    }
+                    ts->setFrom(nts);
+                    TLayout::layout(ts, ctx);
+                    //s->createShape(track / VOICES);
+                }
+                s->createShapes();
+            }
+        }
+    }
+    if (!showCourtesySig && s) {
+        // remove any existing time signatures
+        s->setEnabled(false);
+    }
+
+    // courtesy key signatures, clefs
+
+    size_t n   = m->score()->nstaves();
+    bool show  = m->hasCourtesyKeySig();
+    s          = m->findSegmentR(SegmentType::KeySigAnnounce, _rtick);
+
+    Segment* clefSegment = m->findSegmentR(SegmentType::Clef, m->ticks());
+
+    for (staff_idx_t staffIdx = 0; staffIdx < n; ++staffIdx) {
+        track_idx_t track = staffIdx * VOICES;
+        Staff* staff = m->score()->staff(staffIdx);
+        bool staffIsPitchedAtNextMeas = m->nextMeasure() && staff->isPitchedStaff(m->nextMeasure()->tick());
+
+        if (show) {
+            if (!s) {
+                s = Factory::createSegment(m, SegmentType::KeySigAnnounce, _rtick);
+                s->setTrailer(true);
+                m->add(s);
+            }
+
+            if (staffIsPitchedAtNextMeas) {
+                KeySig* ks = toKeySig(s->element(track));
+                KeySigEvent key2 = staff->keySigEvent(m->endTick());
+
+                if (!ks) {
+                    ks = Factory::createKeySig(s);
+                    ks->setTrack(track);
+                    ks->setGenerated(true);
+                    ks->setParent(s);
+                    s->add(ks);
+                    s->setTrailer(true);
+                }
+                //else if (!(ks->keySigEvent() == key2)) {
+                //      score()->undo(new ChangeKeySig(ks, key2, ks->showCourtesy()));
+                //      }
+                ks->setKeySigEvent(key2);
+                TLayout::layout(ks, ctx);
+                //s->createShape(track / VOICES);
+                s->setEnabled(true);
+            } else { /// !staffIsPitchedAtNextMeas
+                KeySig* keySig = nullptr;
+                EngravingItem* keySigElem = s->element(track);
+                if (keySigElem && keySigElem->isKeySig()) {
+                    keySig = toKeySig(keySigElem);
+                }
+                if (keySig) {
+                    s->remove(keySig);
+                }
+            }
+        } else { /// !show
+            // remove any existent courtesy key signature
+            if (s) {
+                s->setEnabled(false);
+            }
+        }
+        if (clefSegment) {
+            Clef* clef = toClef(clefSegment->element(track));
+            if (clef) {
+                clef->setSmall(true);
+            }
+        }
+    }
+    if (s) {
+        s->createShapes();
+    }
+    if (clefSegment) {
+        clefSegment->createShapes();
+    }
+
+    m->checkTrailer();
+}
+
 void MeasureLayout::createSystemBeginBarLine(Measure* m, LayoutContext& ctx)
 {
     if (!m->system()) {
