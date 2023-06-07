@@ -2033,7 +2033,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     //  layout brackets vertical position
     //---------------------------------------------------
 
-    system->layoutBracketsVertical();
+    SystemLayout::layoutBracketsVertical(system, ctx);
 
     //---------------------------------------------------
     //  layout instrument names
@@ -2095,5 +2095,37 @@ void SystemLayout::setMeasureHeight(System* system, double height, LayoutContext
         } else {
             LOGD("unhandled measure type %s", m->typeName());
         }
+    }
+}
+
+void SystemLayout::layoutBracketsVertical(System* system, LayoutContext& ctx)
+{
+    for (Bracket* b : system->_brackets) {
+        int staffIdx1 = static_cast<int>(b->firstStaff());
+        int staffIdx2 = static_cast<int>(b->lastStaff());
+        double sy = 0;                           // assume bracket not visible
+        double ey = 0;
+        // if start staff not visible, try next staff
+        while (staffIdx1 <= staffIdx2 && !system->_staves[staffIdx1]->show()) {
+            ++staffIdx1;
+        }
+        // if end staff not visible, try prev staff
+        while (staffIdx1 <= staffIdx2 && !system->_staves[staffIdx2]->show()) {
+            --staffIdx2;
+        }
+        // if the score doesn't have "alwaysShowBracketsWhenEmptyStavesAreHidden" as true,
+        // the bracket will be shown IF:
+        // it spans at least 2 visible staves (staffIdx1 < staffIdx2) OR
+        // it spans just one visible staff (staffIdx1 == staffIdx2) but it is required to do so
+        // (the second case happens at least when the bracket is initially dropped)
+        bool notHidden = system->score()->styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden)
+                         ? (staffIdx1 <= staffIdx2) : (staffIdx1 < staffIdx2) || (b->span() == 1 && staffIdx1 == staffIdx2);
+        if (notHidden) {                        // set vert. pos. and height to visible spanned staves
+            sy = system->_staves[staffIdx1]->bbox().top();
+            ey = system->_staves[staffIdx2]->bbox().bottom();
+        }
+        b->setPosY(sy);
+        b->setHeight(ey - sy);
+        TLayout::layout(b, ctx);
     }
 }
