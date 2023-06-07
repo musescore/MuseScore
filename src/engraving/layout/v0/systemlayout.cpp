@@ -44,6 +44,7 @@
 #include "libmscore/rest.h"
 #include "libmscore/score.h"
 #include "libmscore/slur.h"
+#include "libmscore/spacer.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafflines.h"
 #include "libmscore/stretchedbend.h"
@@ -208,7 +209,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
         } else {
             // vbox:
             MeasureLayout::getNextMeasure(options, ctx);
-            system->layout2(ctx);         // compute staff distances
+            SystemLayout::layout2(system, ctx);         // compute staff distances
             return system;
         }
 
@@ -484,7 +485,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
     system->setWidth(pos.x());
 
     layoutSystemElements(options, ctx, score, system);
-    system->layout2(ctx);     // compute staff distances
+    SystemLayout::layout2(system, ctx);     // compute staff distances
     for (MeasureBase* mb : system->measures()) {
         mb->layoutCrossStaff();
     }
@@ -1467,7 +1468,7 @@ void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick)
 
 void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
 {
-    system->layout2(ctx); // Computes staff distances, essential for the rest of the calculations
+    SystemLayout::layout2(system, ctx); // Computes staff distances, essential for the rest of the calculations
     // Update grace cross beams
     for (MeasureBase* mb : system->measures()) {
         if (!mb->isMeasure()) {
@@ -1897,4 +1898,169 @@ double SystemLayout::layoutBrackets(System* system, const LayoutContext& ctx)
     }
 
     return totalBracketWidth;
+}
+
+//---------------------------------------------------------
+//   layout2
+//    called after measure layout
+//    adjusts staff distance
+//---------------------------------------------------------
+
+void SystemLayout::layout2(System* system, LayoutContext& ctx)
+{
+    Box* vb = system->vbox();
+    if (vb) {
+        TLayout::layout(vb, ctx);
+        system->setbbox(vb->bbox());
+        return;
+    }
+
+    system->setPos(0.0, 0.0);
+    std::list<std::pair<size_t, SysStaff*> > visibleStaves;
+
+    for (size_t i = 0; i < system->_staves.size(); ++i) {
+        Staff* s  = system->score()->staff(i);
+        SysStaff* ss = system->_staves[i];
+        if (s->show() && ss->show()) {
+            visibleStaves.push_back(std::pair<size_t, SysStaff*>(i, ss));
+        } else {
+            ss->setbbox(RectF());        // already done in layout() ?
+        }
+    }
+
+    double _spatium            = system->spatium();
+    double y                   = 0.0;
+    double minVerticalDistance = system->score()->styleMM(Sid::minVerticalDistance);
+    double staffDistance       = system->score()->styleMM(Sid::staffDistance);
+    double akkoladeDistance    = system->score()->styleMM(Sid::akkoladeDistance);
+    if (system->score()->enableVerticalSpread()) {
+        staffDistance       = system->score()->styleMM(Sid::minStaffSpread);
+        akkoladeDistance    = system->score()->styleMM(Sid::minStaffSpread);
+    }
+
+    if (visibleStaves.empty()) {
+        return;
+    }
+
+    for (auto i = visibleStaves.begin();; ++i) {
+        SysStaff* ss  = i->second;
+        staff_idx_t si1 = i->first;
+        Staff* staff  = system->score()->staff(si1);
+        auto ni       = std::next(i);
+
+        double dist = staff->height();
+        double yOffset;
+        double h;
+        if (staff->lines(Fraction(0, 1)) == 1) {
+            yOffset = _spatium * BARLINE_SPAN_1LINESTAFF_TO * 0.5;
+            h = _spatium * (BARLINE_SPAN_1LINESTAFF_TO - BARLINE_SPAN_1LINESTAFF_FROM) * 0.5;
+        } else {
+            yOffset = 0.0;
+            h = staff->height();
+        }
+        if (ni == visibleStaves.end()) {
+            ss->setYOff(yOffset);
+            ss->bbox().setRect(system->_leftMargin, y - yOffset, system->width() - system->_leftMargin, h);
+            ss->saveLayout();
+            break;
+        }
+
+        staff_idx_t si2 = ni->first;
+        Staff* staff2  = system->score()->staff(si2);
+
+        if (staff->part() == staff2->part()) {
+            Measure* m = system->firstMeasure();
+            double mag = m ? staff->staffMag(m->tick()) : 1.0;
+            dist += akkoladeDistance * mag;
+        } else {
+            dist += staffDistance;
+        }
+        dist += staff2->userDist();
+        bool fixedSpace = false;
+        for (MeasureBase* mb : system->ml) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+            Measure* m = toMeasure(mb);
+            Spacer* sp = m->vspacerDown(si1);
+            if (sp) {
+                if (sp->spacerType() == SpacerType::FIXED) {
+                    dist = staff->height() + sp->gap();
+                    fixedSpace = true;
+                    break;
+                } else {
+                    dist = std::max(dist, staff->height() + sp->gap());
+                }
+            }
+            sp = m->vspacerUp(si2);
+            if (sp) {
+                dist = std::max(dist, sp->gap() + staff->height());
+            }
+        }
+        if (!fixedSpace) {
+            // check minimum distance to next staff
+            // note that in continuous view, we normally only have a partial skyline for the system
+            // a full one is only built when triggering a full layout
+            // therefore, we don't know the value we get from minDistance will actually be enough
+            // so we remember the value between layouts and increase it when necessary
+            // (the first layout on switching to continuous view gives us good initial values)
+            // the result is space is good to start and grows as needed
+            // it does not, however, shrink when possible - only by trigger a full layout
+            // (such as by toggling to page view and back)
+            double d = ss->skyline().minDistance(system->System::staff(si2)->skyline());
+            if (system->score()->lineMode()) {
+                double previousDist = ss->continuousDist();
+                if (d > previousDist) {
+                    ss->setContinuousDist(d);
+                } else {
+                    d = previousDist;
+                }
+            }
+            dist = std::max(dist, d + minVerticalDistance);
+        }
+        ss->setYOff(yOffset);
+        ss->bbox().setRect(system->_leftMargin, y - yOffset, system->width() - system->_leftMargin, h);
+        ss->saveLayout();
+        y += dist;
+    }
+
+    system->_systemHeight = system->staff(visibleStaves.back().first)->bbox().bottom();
+    system->setHeight(system->_systemHeight);
+
+    system->setMeasureHeight(system->_systemHeight);
+
+    //---------------------------------------------------
+    //  layout brackets vertical position
+    //---------------------------------------------------
+
+    system->layoutBracketsVertical();
+
+    //---------------------------------------------------
+    //  layout instrument names
+    //---------------------------------------------------
+
+    system->layoutInstrumentNames();
+
+    //---------------------------------------------------
+    //  layout cross-staff slurs and ties
+    //---------------------------------------------------
+
+    Fraction stick = system->measures().front()->tick();
+    Fraction etick = system->measures().back()->endTick();
+    auto spanners = ctx.score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks());
+
+    std::vector<Spanner*> spanner;
+    for (auto interval : spanners) {
+        Spanner* sp = interval.value;
+        if (sp->tick() < etick && sp->tick2() >= stick) {
+            if (sp->isSlur()) {
+                ChordRest* scr = sp->startCR();
+                ChordRest* ecr = sp->endCR();
+                staff_idx_t idx = sp->vStaffIdx();
+                if (scr && ecr && (scr->vStaffIdx() != idx || ecr->vStaffIdx() != idx)) {
+                    TLayout::layoutSystem(sp, system, ctx);
+                }
+            }
+        }
+    }
 }

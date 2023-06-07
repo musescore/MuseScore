@@ -403,7 +403,7 @@ void ScoreLayout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
 
     SystemLayout::layoutSystemElements(options, ctx, ctx.score(), system);
 
-    system->layout2(ctx);     // compute staff distances
+    SystemLayout::layout2(system, ctx);     // compute staff distances
 
     for (MeasureBase* mb : system->measures()) {
         if (!mb->isMeasure()) {

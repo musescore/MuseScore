@@ -128,7 +128,6 @@ public:
 
     void addBrackets(const layout::v0::LayoutContext& ctx, Measure* measure);
 
-    void layout2(layout::v0::LayoutContext& ctx); ///< Called after Measure layout.
     void restoreLayout2();
     void clear(); ///< Clear measure list.
 
