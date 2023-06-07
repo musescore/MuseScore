@@ -38,12 +38,17 @@ StyledPopupView {
     showArrow: false
 
     function updatePosition(pos, size) {
+        var h = Math.max(root.contentHeight, capoModel.capoIsOn ? 360 : 160)
         root.x = pos.x + size.x + 12
-        root.y = pos.y - root.contentHeight / 2
+        root.y = pos.y - h / 2
     }
 
     CapoSettingsModel {
         id: capoModel
+
+        onItemRectChanged: function(rect) {
+            updatePosition(Qt.point(rect.x, rect.y), Qt.point(rect.width, rect.height))
+        }
     }
 
     Component.onCompleted: {
@@ -91,7 +96,7 @@ StyledPopupView {
         IncrementalPropertyControl {
             id: fretPositionControl
 
-            Layout.preferredWidth: parent.width / 2
+            Layout.preferredWidth: parent.width / 2 - content.columnsSpacing / 2
 
             visible: capoModel.capoIsOn
 
@@ -110,7 +115,7 @@ StyledPopupView {
             text: qsTrc("notation", "Apply to")
             horizontalAlignment: Text.AlignLeft
 
-            visible: capoModel.capoIsOn
+            visible: capoModel.capoIsOn && repeaterStrings.count > 0
         }
 
         GridLayout {
@@ -152,7 +157,7 @@ StyledPopupView {
                         anchors.leftMargin: 4
                         anchors.verticalCenter: parent.verticalCenter
 
-                        text: qsTrc("notation", "String") + " " + (model.index + 1)
+                        text: qsTrc("notation", "String %1").arg(model.index + 1)
                     }
                 }
             }

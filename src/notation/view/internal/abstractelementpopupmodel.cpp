@@ -35,29 +35,19 @@ AbstractElementPopupModel::AbstractElementPopupModel(PopupModelType modelType, Q
 {
 }
 
-QString AbstractElementPopupModel::title() const
-{
-    return m_title;
-}
-
 PopupModelType AbstractElementPopupModel::modelType() const
 {
     return m_modelType;
 }
 
+QRect AbstractElementPopupModel::itemRect() const
+{
+    return m_itemRect;
+}
+
 PopupModelType AbstractElementPopupModel::modelTypeFromElement(const engraving::ElementType& elementType)
 {
     return ELEMENT_POPUP_TYPES.value(elementType, PopupModelType::TYPE_UNDEFINED);
-}
-
-void AbstractElementPopupModel::setTitle(QString title)
-{
-    if (m_title == title) {
-        return;
-    }
-
-    m_title = title;
-    emit titleChanged();
 }
 
 mu::PointF AbstractElementPopupModel::fromLogical(PointF point) const
@@ -169,11 +159,24 @@ void AbstractElementPopupModel::init()
     undoStack->changesChannel().onReceive(this, [this] (const ChangesRange& range) {
         if (contains(range.changedTypes, elementType())) {
             emit dataChanged();
+            updateItemRect();
         }
     });
+
+    updateItemRect();
 }
 
 mu::engraving::ElementType AbstractElementPopupModel::elementType() const
 {
     return ELEMENT_POPUP_TYPES.key(m_modelType, ElementType::INVALID);
+}
+
+void AbstractElementPopupModel::updateItemRect()
+{
+    QRect rect = m_item ? fromLogical(m_item->canvasBoundingRect()).toQRect() : QRect();
+
+    if (m_itemRect != rect) {
+        m_itemRect = rect;
+        emit itemRectChanged(rect);
+    }
 }

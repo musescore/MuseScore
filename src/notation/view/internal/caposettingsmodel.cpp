@@ -168,18 +168,18 @@ void CapoSettingsModel::setFretPosition(int position)
     emit fretPositionChanged(position);
 }
 
-void CapoSettingsModel::setCapoPlacement(int position)
+void CapoSettingsModel::setCapoPlacement(int placement)
 {
     IF_ASSERT_FAILED(m_item) {
         return;
     }
 
-    if (m_item->placement() == static_cast<mu::engraving::PlacementV>(position)) {
+    if (m_item->placement() == static_cast<mu::engraving::PlacementV>(placement)) {
         return;
     }
 
-    changeItemProperty(mu::engraving::Pid::PLACEMENT, position);
-    emit capoPlacementChanged(position);
+    changeItemProperty(mu::engraving::Pid::PLACEMENT, placement);
+    emit capoPlacementChanged(placement);
 }
 
 void CapoSettingsModel::setCapoTextSpecifiedByUser(bool value)

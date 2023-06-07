@@ -30,7 +30,6 @@ using namespace mu::notation;
 HarpPedalPopupModel::HarpPedalPopupModel(QObject* parent)
     : AbstractElementPopupModel(PopupModelType::TYPE_HARP_DIAGRAM, parent)
 {
-    setTitle("Harp pedal");
 }
 
 void HarpPedalPopupModel::init()
@@ -118,25 +117,6 @@ void HarpPedalPopupModel::setPopupPedalState(std::array<mu::engraving::PedalPosi
 bool HarpPedalPopupModel::isDiagram() const
 {
     return m_isDiagram;
-}
-
-QPointF HarpPedalPopupModel::pos() const
-{
-    if (!m_item) {
-        return QPointF();
-    }
-
-    return fromLogical(m_item->canvasPos()).toQPointF();
-}
-
-QPointF HarpPedalPopupModel::size() const
-{
-    if (!m_item) {
-        return QPointF();
-    }
-
-    RectF elemRect = fromLogical(m_item->canvasBoundingRect());
-    return QPointF(elemRect.width(), elemRect.height());
 }
 
 bool HarpPedalPopupModel::belowStave() const

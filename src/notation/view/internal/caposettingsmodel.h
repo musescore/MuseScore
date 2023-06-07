@@ -63,7 +63,7 @@ public:
 public slots:
     void setCapoIsOn(bool isOn);
     void setFretPosition(int position);
-    void setCapoPlacement(int position);
+    void setCapoPlacement(int placement);
     void setCapoTextSpecifiedByUser(bool value);
     void setUserCapoText(const QString& text);
 
@@ -71,7 +71,7 @@ signals:
     void capoIsOnChanged(bool isOn);
     void fretPositionChanged(int position);
     void stringsChanged(QList<StringItem*> strings);
-    void capoPlacementChanged(int position);
+    void capoPlacementChanged(int placement);
     void capoTextSpecifiedByUserChanged(bool value);
     void userCapoTextChanged(QString text);
 

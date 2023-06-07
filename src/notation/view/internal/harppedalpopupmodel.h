@@ -39,8 +39,6 @@ class HarpPedalPopupModel : public AbstractElementPopupModel
     Q_PROPERTY(bool isDiagram READ isDiagram WRITE setIsDiagram NOTIFY isDiagramChanged)
     Q_PROPERTY(
         QVector<mu::notation::HarpPedalPopupModel::Position> pedalState READ pedalState WRITE setDiagramPedalState NOTIFY pedalStateChanged)
-    Q_PROPERTY(QPointF pos READ pos CONSTANT)
-    Q_PROPERTY(QPointF size READ size CONSTANT)
     Q_PROPERTY(QRectF staffPos READ staffPos CONSTANT)
     Q_PROPERTY(bool belowStave READ belowStave CONSTANT)
 
@@ -57,10 +55,6 @@ public:
     explicit HarpPedalPopupModel(QObject* parent = nullptr);
 
     bool isDiagram() const;
-
-    QPointF pos() const;
-
-    QPointF size() const;
 
     QRectF staffPos() const;
 

@@ -39,8 +39,8 @@ class AbstractElementPopupModel : public QObject, public async::Asyncable, publi
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(context::IGlobalContext, globalContext)
 
-    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(PopupModelType modelType READ modelType CONSTANT)
+    Q_PROPERTY(QRect itemRect READ itemRect NOTIFY itemRectChanged)
 
 public:
     enum class PopupModelType {
@@ -51,19 +51,17 @@ public:
     Q_ENUM(PopupModelType)
 
     AbstractElementPopupModel(PopupModelType modelType, QObject* parent = nullptr);
-    QString title() const;
+
     PopupModelType modelType() const;
+    QRect itemRect() const;
 
     static PopupModelType modelTypeFromElement(const mu::engraving::ElementType& elementType);
 
     virtual void init();
 
-public slots:
-    void setTitle(QString title);
-
 signals:
-    void titleChanged();
     void dataChanged();
+    void itemRectChanged(QRect rect);
 
 protected:
     PointF fromLogical(PointF point) const;
@@ -87,8 +85,10 @@ private:
 
     engraving::ElementType elementType() const;
 
-    QString m_title;
+    void updateItemRect();
+
     PopupModelType m_modelType = PopupModelType::TYPE_UNDEFINED;
+    QRect m_itemRect;
 };
 
 using PopupModelType = AbstractElementPopupModel::PopupModelType;
