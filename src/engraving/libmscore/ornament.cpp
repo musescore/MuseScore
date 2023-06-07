@@ -226,6 +226,8 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
             note->setTpc2(mainNote->tpc2());
             note->setPitch(mainNote->pitch());
         }
+        note->setTrack(track());
+
         if ((above && _intervalAbove.type == IntervalType::AUTO)
             || (!above && _intervalBelow.type == IntervalType::AUTO)) {
             // NOTE: In AUTO mode, the ornament note should match not only any alteration from the
