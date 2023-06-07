@@ -1678,7 +1678,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
     system->layoutBrackets(ctx);
     double maxBracketsWidth = system->totalBracketOffset(ctx);
 
-    double maxNamesWidth = system->instrumentNamesWidth(isFirstSystem);
+    double maxNamesWidth = SystemLayout::instrumentNamesWidth(system, isFirstSystem, ctx);
 
     double indent = maxNamesWidth > 0 ? maxNamesWidth + instrumentNameOffset : 0.0;
     if (isFirstSystem && firstSystemIndent) {
@@ -1755,4 +1755,23 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
             MeasureLayout::createSystemBeginBarLine(m, ctx);
         }
     }
+}
+
+double SystemLayout::instrumentNamesWidth(System* system, bool isFirstSystem, LayoutContext& ctx)
+{
+    double namesWidth = 0.0;
+
+    for (staff_idx_t staffIdx = 0; staffIdx < system->score()->nstaves(); ++staffIdx) {
+        const SysStaff* staff = system->staff(staffIdx);
+        if (!staff || (isFirstSystem && !staff->show())) {
+            continue;
+        }
+
+        for (InstrumentName* name : staff->instrumentNames) {
+            TLayout::layout(name, ctx);
+            namesWidth = std::max(namesWidth, name->width());
+        }
+    }
+
+    return namesWidth;
 }

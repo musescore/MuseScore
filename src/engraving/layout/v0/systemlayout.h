@@ -54,6 +54,8 @@ private:
     static void restoreTies(System* system);
     static void manageNarrowSpacing(System* system, double& curSysWidth, double targetSysWidth, const Fraction minTicks,
                                     const Fraction maxTicks);
+
+    static double instrumentNamesWidth(System* system, bool isFirstSystem, LayoutContext& ctx);
 };
 }
 

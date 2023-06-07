@@ -269,30 +269,6 @@ void System::adjustStavesNumber(size_t nstaves)
 }
 
 //---------------------------------------------------------
-//   instrumentNamesWidth
-//---------------------------------------------------------
-
-double System::instrumentNamesWidth(const bool isFirstSystem)
-{
-    double namesWidth = 0.0;
-
-    for (staff_idx_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-        const SysStaff* staff = this->staff(staffIdx);
-        if (!staff || (isFirstSystem && !staff->show())) {
-            continue;
-        }
-
-        LayoutContext ctx(score());
-        for (InstrumentName* name : staff->instrumentNames) {
-            TLayout::layout(name, ctx);
-            namesWidth = std::max(namesWidth, name->width());
-        }
-    }
-
-    return namesWidth;
-}
-
-//---------------------------------------------------------
 //   layoutBrackets
 //---------------------------------------------------------
 
