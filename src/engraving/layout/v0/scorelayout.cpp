@@ -329,7 +329,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
                 m->mmRest()->resetExplicitParent();
             }
             if (firstMeasure) {
-                system->layoutSystem(ctx, pos.rx());
+                SystemLayout::layoutSystem(system, ctx, pos.rx());
                 if (m->repeatStart()) {
                     Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {

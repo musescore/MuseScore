@@ -19,8 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "realfn.h"
 #include "systemlayout.h"
+
+#include "realfn.h"
+
+#include "style/defaultstyle.h"
 
 #include "libmscore/barline.h"
 #include "libmscore/beam.h"
@@ -28,7 +31,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/dynamic.h"
 #include "libmscore/factory.h"
-#include "libmscore/fingering.h"
+#include "libmscore/instrumentname.h"
 #include "libmscore/layoutbreak.h"
 #include "libmscore/measure.h"
 #include "libmscore/measurenumber.h"
@@ -163,7 +166,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
 
             if (firstMeasure) {
                 layoutSystemMinWidth = curSysWidth;
-                system->layoutSystem(ctx, curSysWidth, ctx.firstSystem, ctx.firstSystemIndent);
+                SystemLayout::layoutSystem(system, ctx, curSysWidth, ctx.firstSystem, ctx.firstSystemIndent);
                 if (system->hasCrossStaffOrModifiedBeams()) {
                     updateCrossBeams(system, ctx);
                 }
@@ -409,7 +412,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
     hideEmptyStaves(score, system, ctx.firstSystem);
     // Relayout system to account for newly hidden/unhidden staves
     curSysWidth -= system->leftMargin();
-    system->layoutSystem(ctx, layoutSystemMinWidth, ctx.firstSystem, ctx.firstSystemIndent);
+    SystemLayout::layoutSystem(system, ctx, layoutSystemMinWidth, ctx.firstSystem, ctx.firstSystemIndent);
     curSysWidth += system->leftMargin();
 
     // add system trailer if needed (cautionary time/key signatures etc)
@@ -1635,5 +1638,121 @@ void SystemLayout::manageNarrowSpacing(System* system, double& curSysWidth, doub
             curSysWidth += m->width() - prevWidth;
         }
         widthReduction -= smallerStep;
+    }
+}
+
+void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, const bool isFirstSystem, bool firstSystemIndent)
+{
+    if (system->_staves.empty()) {                 // ignore vbox
+        return;
+    }
+
+    // Get standard instrument name distance
+    double instrumentNameOffset = system->score()->styleMM(Sid::instrumentNameOffset);
+    // Now scale it depending on the text size (which also may not follow staff scaling)
+    double textSizeScaling = 1.0;
+    double actualSize = 0.0;
+    double defaultSize = 0.0;
+    bool followStaffSize = true;
+    if (ctx.startWithLongNames) {
+        actualSize = system->score()->styleD(Sid::longInstrumentFontSize);
+        defaultSize = DefaultStyle::defaultStyle().value(Sid::longInstrumentFontSize).toDouble();
+        followStaffSize = system->score()->styleB(Sid::longInstrumentFontSpatiumDependent);
+    } else {
+        actualSize = system->score()->styleD(Sid::shortInstrumentFontSize);
+        defaultSize = DefaultStyle::defaultStyle().value(Sid::shortInstrumentFontSize).toDouble();
+        followStaffSize = system->score()->styleB(Sid::shortInstrumentFontSpatiumDependent);
+    }
+    textSizeScaling = actualSize / defaultSize;
+    if (!followStaffSize) {
+        textSizeScaling *= DefaultStyle::defaultStyle().value(Sid::spatium).toDouble() / system->score()->styleD(Sid::spatium);
+    }
+    textSizeScaling = std::max(textSizeScaling, 1.0);
+    instrumentNameOffset *= textSizeScaling;
+
+    size_t nstaves  = system->_staves.size();
+
+    //---------------------------------------------------
+    //  find x position of staves
+    //---------------------------------------------------
+    system->layoutBrackets(ctx);
+    double maxBracketsWidth = system->totalBracketOffset(ctx);
+
+    double maxNamesWidth = system->instrumentNamesWidth(isFirstSystem);
+
+    double indent = maxNamesWidth > 0 ? maxNamesWidth + instrumentNameOffset : 0.0;
+    if (isFirstSystem && firstSystemIndent) {
+        indent = std::max(indent, system->styleP(Sid::firstSystemIndentationValue) * system->mag() - maxBracketsWidth);
+        maxNamesWidth = indent - instrumentNameOffset;
+    }
+
+    if (RealIsNull(indent)) {
+        if (system->score()->styleB(Sid::alignSystemToMargin)) {
+            system->_leftMargin = 0.0;
+        } else {
+            system->_leftMargin = maxBracketsWidth;
+        }
+    } else {
+        system->_leftMargin = indent + maxBracketsWidth;
+    }
+
+    for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        SysStaff* s  = system->_staves[staffIdx];
+        Staff* staff = system->score()->staff(staffIdx);
+        if (!staff->show() || !s->show()) {
+            s->setbbox(RectF());
+            continue;
+        }
+
+        double staffMag = staff->staffMag(Fraction(0, 1));         // ??? TODO
+        int staffLines = staff->lines(Fraction(0, 1));
+        if (staffLines <= 1) {
+            double h = staff->lineDistance(Fraction(0, 1)) * staffMag * system->spatium();
+            s->bbox().setRect(system->_leftMargin + xo1, -h, 0.0, 2 * h);
+        } else {
+            double h = (staffLines - 1) * staff->lineDistance(Fraction(0, 1));
+            h = h * staffMag * system->spatium();
+            s->bbox().setRect(system->_leftMargin + xo1, 0.0, 0.0, h);
+        }
+    }
+
+    //---------------------------------------------------
+    //  layout brackets
+    //---------------------------------------------------
+
+    system->setBracketsXPosition(xo1 + system->_leftMargin);
+
+    //---------------------------------------------------
+    //  layout instrument names x position
+    //     at this point it is not clear which staves will
+    //     be hidden, so layout all instrument names
+    //---------------------------------------------------
+
+    for (SysStaff* s : system->_staves) {
+        for (InstrumentName* t : s->instrumentNames) {
+            TLayout::layout(t, ctx);
+
+            switch (t->align().horizontal) {
+            case AlignH::LEFT:
+                t->setPosX(0);
+                break;
+            case AlignH::HCENTER:
+                t->setPosX(maxNamesWidth * .5);
+                break;
+            case AlignH::RIGHT:
+                t->setPosX(maxNamesWidth);
+                break;
+            }
+        }
+    }
+
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        Measure* m = toMeasure(mb);
+        if (m == system->measures().front() || (m->prev() && m->prev()->isHBox())) {
+            m->createSystemBeginBarLine();
+        }
     }
 }
