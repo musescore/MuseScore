@@ -340,10 +340,10 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
                 pos.rx() += system->leftMargin();
                 firstMeasure = false;
             } else if (m->header()) {
-                m->removeSystemHeader();
+                MeasureLayout::removeSystemHeader(m);
             }
             if (m->trailer()) {
-                m->removeSystemTrailer();
+                MeasureLayout::removeSystemTrailer(m);
             }
             if (m->tick() >= ctx.startTick && m->tick() <= ctx.endTick) {
                 // for measures in range, do full layout

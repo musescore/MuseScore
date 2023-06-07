@@ -155,7 +155,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
                 s->setRtick(len);
             }
         }
-        mmrMeasure->removeSystemTrailer();
+        MeasureLayout::removeSystemTrailer(mmrMeasure);
     } else {
         mmrMeasure = Factory::createMeasure(score->dummy()->system());
         mmrMeasure->setTicks(len);
@@ -1648,6 +1648,20 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
     m->checkHeader();
 }
 
+void MeasureLayout::removeSystemHeader(Measure* m)
+{
+    if (!m->header()) {
+        return;
+    }
+    for (Segment* seg = m->first(); seg; seg = seg->next()) {
+        if (!seg->header()) {
+            break;
+        }
+        seg->setEnabled(false);
+    }
+    m->setHeader(false);
+}
+
 void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx)
 {
     Fraction _rtick = m->ticks();
@@ -1779,6 +1793,24 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
     }
 
     m->checkTrailer();
+}
+
+void MeasureLayout::removeSystemTrailer(Measure* m)
+{
+    bool changed = false;
+    for (Segment* seg = m->last(); seg != m->first(); seg = seg->prev()) {
+        if (!seg->trailer()) {
+            break;
+        }
+        if (seg->enabled()) {
+            seg->setEnabled(false);
+        }
+        changed = true;
+    }
+    m->setTrailer(false);
+    if (m->system() && changed) {
+        m->computeWidth(m->system()->minSysTicks(), m->system()->maxSysTicks(), m->layoutStretch());
+    }
 }
 
 void MeasureLayout::createSystemBeginBarLine(Measure* m, LayoutContext& ctx)

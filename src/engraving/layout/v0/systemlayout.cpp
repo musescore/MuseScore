@@ -188,7 +188,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                     MeasureLayout::addSystemHeader(m, false, ctx);
                     createHeader = false;
                 } else if (m->header()) {
-                    m->removeSystemHeader();
+                    MeasureLayout::removeSystemHeader(m);
                 }
             }
 
@@ -196,7 +196,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
             // measures with nobreak cannot end a system
             // thus they will not contain a trailer
             if (m->noBreak()) {
-                m->removeSystemTrailer();
+                MeasureLayout::removeSystemTrailer(m);
             } else {
                 MeasureLayout::addSystemTrailer(m, m->nextMeasure(), ctx);
             }
@@ -273,7 +273,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
             // since it seems to be disabled somewhere else
             if (m->trailer()) {
                 double ow = m->width();
-                m->removeSystemTrailer();
+                MeasureLayout::removeSystemTrailer(m);
                 curSysWidth += m->width() - ow;
             }
             // if the prev measure is an end repeat and the cur measure
@@ -375,14 +375,14 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                 if (curHeader) {
                     MeasureLayout::addSystemHeader(m, localFirstSystem, ctx);
                 } else {
-                    m->removeSystemHeader();
+                    MeasureLayout::removeSystemHeader(m);
                 }
                 for (;;) {
                     // TODO: what if the nobreak group takes the entire system - is this correct?
                     if (curTrailer && !m->noBreak()) {
                         MeasureLayout::addSystemTrailer(m, m->nextMeasure(), ctx);
                     } else {
-                        m->removeSystemTrailer();
+                        MeasureLayout::removeSystemTrailer(m);
                     }
                     m->computeWidth(m->system()->minSysTicks(), m->system()->maxSysTicks(), oldStretch);
                     m->stretchToTargetWidth(oldWidth);
