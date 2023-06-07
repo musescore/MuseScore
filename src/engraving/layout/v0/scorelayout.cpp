@@ -343,7 +343,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
                 MeasureLayout::removeSystemHeader(m);
             }
             if (m->trailer()) {
-                MeasureLayout::removeSystemTrailer(m);
+                MeasureLayout::removeSystemTrailer(m, ctx);
             }
             if (m->tick() >= ctx.startTick && m->tick() <= ctx.endTick) {
                 // for measures in range, do full layout
@@ -354,7 +354,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
                     MeasureLayout::stretchMeasureInPracticeMode(m, ww, ctx);
                 } else {
                     MeasureLayout::createEndBarLines(m, false, ctx);
-                    m->computeWidth(minTicks, maxTicks, 1);
+                    MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, 1);
                     ww = m->width();
                     MeasureLayout::layoutMeasureElements(m, ctx);
                 }

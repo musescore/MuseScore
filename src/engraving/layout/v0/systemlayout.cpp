@@ -160,7 +160,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                     if (mb->isMeasure()) {
                         Measure* mm = toMeasure(mb);
                         double prevWidth = mm->width();
-                        mm->computeWidth(minTicks, maxTicks, 1);
+                        MeasureLayout::computeWidth(mm, ctx, minTicks, maxTicks, 1);
                         double newWidth = mm->width();
                         curSysWidth += newWidth - prevWidth;
                     }
@@ -196,11 +196,11 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
             // measures with nobreak cannot end a system
             // thus they will not contain a trailer
             if (m->noBreak()) {
-                MeasureLayout::removeSystemTrailer(m);
+                MeasureLayout::removeSystemTrailer(m, ctx);
             } else {
                 MeasureLayout::addSystemTrailer(m, m->nextMeasure(), ctx);
             }
-            m->computeWidth(minTicks, maxTicks, 1);
+            MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, 1);
             ww = m->width();
         } else if (ctx.curMeasure->isHBox()) {
             ctx.curMeasure->computeMinWidth();
@@ -252,7 +252,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                 for (MeasureBase* mb : system->measures()) {
                     if (mb->isMeasure()) {
                         double prevWidth = toMeasure(mb)->width();
-                        toMeasure(mb)->computeWidth(minTicks, maxTicks, 1);
+                        MeasureLayout::computeWidth(toMeasure(mb), ctx, minTicks, maxTicks, 1);
                         double newWidth = toMeasure(mb)->width();
                         curSysWidth += newWidth - prevWidth;
                     }
@@ -273,7 +273,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
             // since it seems to be disabled somewhere else
             if (m->trailer()) {
                 double ow = m->width();
-                MeasureLayout::removeSystemTrailer(m);
+                MeasureLayout::removeSystemTrailer(m, ctx);
                 curSysWidth += m->width() - ow;
             }
             // if the prev measure is an end repeat and the cur measure
@@ -286,7 +286,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                     Segment* s = m1->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
                         s->setEnabled(true);
-                        m1->computeWidth(minTicks, maxTicks, 1);
+                        MeasureLayout::computeWidth(m1, ctx, minTicks, maxTicks, 1);
                         ww = m1->width();
                     }
                 }
@@ -382,9 +382,9 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                     if (curTrailer && !m->noBreak()) {
                         MeasureLayout::addSystemTrailer(m, m->nextMeasure(), ctx);
                     } else {
-                        MeasureLayout::removeSystemTrailer(m);
+                        MeasureLayout::removeSystemTrailer(m, ctx);
                     }
-                    m->computeWidth(m->system()->minSysTicks(), m->system()->maxSysTicks(), oldStretch);
+                    MeasureLayout::computeWidth(m, ctx, m->system()->minSysTicks(), m->system()->maxSysTicks(), oldStretch);
                     m->stretchToTargetWidth(oldWidth);
                     MeasureLayout::layoutMeasureElements(m, ctx);
                     BeamLayout::restoreBeams(m);
@@ -437,12 +437,12 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
         }
         Measure* m = toMeasure(mb);
         double oldWidth = m->width();
-        m->computeWidth(minTicks, maxTicks, preStretch);
+        MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, preStretch);
         curSysWidth += m->width() - oldWidth;
     }
 
     if (curSysWidth > targetSystemWidth) {
-        manageNarrowSpacing(system, curSysWidth, targetSystemWidth, minTicks, maxTicks);
+        manageNarrowSpacing(system, ctx, curSysWidth, targetSystemWidth, minTicks, maxTicks);
     }
 
     // JUSTIFY SYSTEM
@@ -1545,7 +1545,8 @@ void SystemLayout::restoreTies(System* system)
     doLayoutTies(system, segList, stick, etick);
 }
 
-void SystemLayout::manageNarrowSpacing(System* system, double& curSysWidth, double targetSysWidth, const Fraction minTicks,
+void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, double& curSysWidth, double targetSysWidth,
+                                       const Fraction minTicks,
                                        const Fraction maxTicks)
 {
     static constexpr double step = 0.2; // We'll try reducing the spacing in steps of 20%
@@ -1561,7 +1562,7 @@ void SystemLayout::manageNarrowSpacing(System* system, double& curSysWidth, doub
             }
             Measure* m = toMeasure(mb);
             double prevWidth = m->width();
-            m->computeWidth(minTicks, maxTicks, stretchCoeff, /*overrideMinMeasureWidth*/ true);
+            MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, stretchCoeff, /*overrideMinMeasureWidth*/ true);
             curSysWidth += m->width() - prevWidth;
         }
         stretchCoeff -= step;
@@ -1589,7 +1590,7 @@ void SystemLayout::manageNarrowSpacing(System* system, double& curSysWidth, doub
                     shape.setSqueezeFactor(squeezeFactor);
                 }
             }
-            m->computeWidth(minTicks, maxTicks, stretchCoeff,  /*overrideMinMeasureWidth*/ true);
+            MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, stretchCoeff,  /*overrideMinMeasureWidth*/ true);
 
             // Reduce other distances that don't depend on paddings
             Segment* first = m->firstEnabled();
