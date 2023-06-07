@@ -606,24 +606,6 @@ staff_idx_t System::firstVisibleStaff() const
 }
 
 //---------------------------------------------------------
-//   restoreLayout2
-//---------------------------------------------------------
-
-void System::restoreLayout2()
-{
-    if (vbox()) {
-        return;
-    }
-
-    for (SysStaff* s : _staves) {
-        s->restoreLayout();
-    }
-
-    setHeight(_systemHeight);
-    setMeasureHeight(_systemHeight);
-}
-
-//---------------------------------------------------------
 //   setInstrumentNames
 //---------------------------------------------------------
 

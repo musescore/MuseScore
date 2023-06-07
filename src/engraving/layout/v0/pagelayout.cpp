@@ -126,7 +126,7 @@ void PageLayout::collectPage(const LayoutOptions& options, LayoutContext& ctx)
     // (they may have been filled on previous layout)
     size_t pSystems = ctx.page->systems().size();
     if (pSystems > 0) {
-        ctx.page->system(0)->restoreLayout2();
+        SystemLayout::restoreLayout2(ctx.page->system(0));
         y = ctx.page->system(0)->y() + ctx.page->system(0)->height();
     } else {
         y = ctx.page->tm();
@@ -137,7 +137,7 @@ void PageLayout::collectPage(const LayoutOptions& options, LayoutContext& ctx)
         double distance = ps->minDistance(cs);
         y += distance;
         cs->setPos(ctx.page->lm(), y);
-        cs->restoreLayout2();
+        SystemLayout::restoreLayout2(cs);
         y += cs->height();
     }
 
@@ -185,7 +185,7 @@ void PageLayout::collectPage(const LayoutOptions& options, LayoutContext& ctx)
 
         y += distance;
         ctx.curSystem->setPos(ctx.page->lm(), y);
-        ctx.curSystem->restoreLayout2();
+        SystemLayout::restoreLayout2(ctx.curSystem);
         ctx.page->appendSystem(ctx.curSystem);
         y += ctx.curSystem->height();
 
