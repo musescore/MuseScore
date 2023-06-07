@@ -1752,7 +1752,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
         }
         Measure* m = toMeasure(mb);
         if (m == system->measures().front() || (m->prev() && m->prev()->isHBox())) {
-            m->createSystemBeginBarLine();
+            MeasureLayout::createSystemBeginBarLine(m, ctx);
         }
     }
 }

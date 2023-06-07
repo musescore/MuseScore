@@ -1643,7 +1643,50 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
         kSegment->createShapes();
     }
 
-    m->createSystemBeginBarLine();
+    MeasureLayout::createSystemBeginBarLine(m, ctx);
 
     m->checkHeader();
+}
+
+void MeasureLayout::createSystemBeginBarLine(Measure* m, LayoutContext& ctx)
+{
+    if (!m->system()) {
+        return;
+    }
+    Segment* s  = m->findSegment(SegmentType::BeginBarLine, m->tick());
+    size_t n = 0;
+    if (m->system()) {
+        for (SysStaff* sysStaff : m->system()->staves()) {
+            if (sysStaff->show()) {
+                ++n;
+            }
+        }
+    }
+    if ((n > 1 && m->score()->styleB(Sid::startBarlineMultiple))
+        || (n == 1 && (m->score()->styleB(Sid::startBarlineSingle) || m->system()->brackets().size()))) {
+        if (!s) {
+            s = Factory::createSegment(m, SegmentType::BeginBarLine, Fraction(0, 1));
+            m->add(s);
+        }
+        for (track_idx_t track = 0; track < m->score()->ntracks(); track += VOICES) {
+            BarLine* bl = toBarLine(s->element(track));
+            if (!bl) {
+                bl = Factory::createBarLine(s);
+                bl->setTrack(track);
+                bl->setGenerated(true);
+                bl->setParent(s);
+                bl->setBarLineType(BarLineType::NORMAL);
+                bl->setSpanStaff(true);
+                s->add(bl);
+            }
+
+            TLayout::layout(bl, ctx);
+        }
+        s->createShapes();
+        s->setEnabled(true);
+        s->setHeader(true);
+        m->setHeader(true);
+    } else if (s) {
+        s->setEnabled(false);
+    }
 }
