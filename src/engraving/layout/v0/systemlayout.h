@@ -56,6 +56,7 @@ private:
                                     const Fraction maxTicks);
 
     static double instrumentNamesWidth(System* system, bool isFirstSystem, LayoutContext& ctx);
+    static double totalBracketOffset(LayoutContext& ctx);
 };
 }
 
