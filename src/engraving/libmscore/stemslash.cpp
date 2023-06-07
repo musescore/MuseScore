@@ -50,26 +50,4 @@ void StemSlash::draw(mu::draw::Painter* painter) const
     painter->setPen(Pen(curColor(), m_width, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLine(m_line);
 }
-
-KerningType StemSlash::doComputeKerningType(const EngravingItem* nextItem) const
-{
-    if (!this->chord() || !this->chord()->beam() || !nextItem || !nextItem->parentItem()) {
-        return KerningType::KERNING;
-    }
-    EngravingItem* nextParent = nextItem->parentItem();
-    Chord* nextChord = nullptr;
-    if (nextParent->isChord()) {
-        nextChord = toChord(nextParent);
-    } else if (nextParent->isNote()) {
-        nextChord = toChord(nextParent->parentItem());
-    }
-    if (!nextChord) {
-        return KerningType::KERNING;
-    }
-    if (nextChord->beam() && nextChord->beam() == this->chord()->beam()) {
-        // Stem slash is allowed to collide with items from the same grace notes group
-        return KerningType::ALLOW_COLLISION;
-    }
-    return KerningType::KERNING;
-}
 } // namespace mu::engraving

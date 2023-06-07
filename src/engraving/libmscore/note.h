@@ -174,9 +174,6 @@ public:
 
     std::vector<const Note*> compoundNotes() const;
 
-    double computePadding(const EngravingItem* nextItem) const override;
-    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
-
     Note& operator=(const Note&) = delete;
     virtual Note* clone() const override { return new Note(*this, false); }
 
@@ -466,8 +463,6 @@ private:
     void normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned);
 
     static String tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full = false);
-
-    bool sameVoiceKerningLimited() const override { return true; }
 
     void getNoteListForDots(std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes, std::vector<int>& anchoredDots);
 

@@ -509,14 +509,6 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
     TextBase::undoChangeProperty(id, v, ps);
 }
 
-KerningType Lyrics::doComputeKerningType(const EngravingItem* nextItem) const
-{
-    if (nextItem->isLyrics() || nextItem->isBarLine()) {
-        return KerningType::NON_KERNING;
-    }
-    return KerningType::KERNING;
-}
-
 //---------------------------------------------------------
 //   removeInvalidSegments
 //

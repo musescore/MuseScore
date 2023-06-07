@@ -70,8 +70,6 @@ public:
 
     virtual ~BarLine();
 
-    KerningType doComputeKerningType(const EngravingItem*) const override { return KerningType::NON_KERNING; }
-
     BarLine& operator=(const BarLine&) = delete;
 
     void setParent(Segment* parent);
@@ -162,8 +160,6 @@ private:
     bool isTop() const;
     bool isBottom() const;
     void drawEditMode(mu::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
-
-    bool neverKernable() const override { return true; }
 
     int _spanStaff          { 0 };         // span barline to next staff if true, values > 1 are used for importing from 2.x
     int _spanFrom           { 0 };         // line number on start and end staves

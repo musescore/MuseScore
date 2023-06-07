@@ -86,8 +86,6 @@ private:
     friend class Factory;
     Breath(Segment* parent);
 
-    bool sameVoiceKerningLimited() const override { return true; }
-
     double _pause;
     SymId _symId;
 };

@@ -42,9 +42,13 @@ class Clef;
 
 class Dynamic;
 
+class EngravingItem;
+
 class FiguredBassItem;
 
 class Image;
+
+enum class KerningType;
 
 class LedgerLine;
 class SLine;
@@ -103,6 +107,10 @@ public:
 
     // Layout Elements on Edit
     virtual void layoutOnEdit(Arpeggio* item) = 0;
+
+    // Horizontal spacing
+    virtual double computePadding(const EngravingItem* item1, const EngravingItem* item2) = 0;
+    virtual KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2) = 0;
 
 private:
     // Layout Single Item

@@ -150,8 +150,6 @@ private:
     friend class Factory;
     Clef(Segment* parent);
 
-    bool neverKernable() const override { return true; }
-
     SymId m_symId;
     bool _showCourtesy = true;
     bool m_isSmall = false;

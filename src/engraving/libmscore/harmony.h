@@ -133,8 +133,6 @@ public:
     Harmony(const Harmony&);
     ~Harmony();
 
-    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
-
     Harmony* clone() const override { return new Harmony(*this); }
 
     void setId(int d) { _id = d; }

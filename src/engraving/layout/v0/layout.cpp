@@ -32,6 +32,7 @@
 #include "layoutcontext.h"
 #include "scorelayout.h"
 #include "arpeggiolayout.h"
+#include "horizontalspacing.h"
 
 #include "log.h"
 
@@ -56,4 +57,14 @@ void Layout::layoutOnEdit(Arpeggio* item)
 {
     LayoutContext ctx(item->score());
     ArpeggioLayout::layoutOnEdit(item, ctx);
+}
+
+double Layout::computePadding(const EngravingItem* item1, const EngravingItem* item2)
+{
+    return HorizontalSpacing::computePadding(item1, item2);
+}
+
+KerningType Layout::computeKerning(const EngravingItem* item1, const EngravingItem* item2)
+{
+    return HorizontalSpacing::computeKerning(item1, item2);
 }
