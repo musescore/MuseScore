@@ -7,14 +7,21 @@ on:
         description: 'Publish to Transifex (on/off)'
         required: false
         default: 'off'
+      create_pr:
+        description: 'Create pull request (on/off)'
+        required: false
+        default: 'off'
       cleanup_obsolete:
         description: 'Clean up obsolete strings (on/off)'
         required: true
         default: 'off'
+  schedule: 
+    - cron: "0 12 * * Sun"
 
 jobs:
   lupdate:
     runs-on: ubuntu-20.04
+    if: (github.event_name == 'schedule' && github.repository == 'musescore/MuseScore') || (github.event_name != 'schedule')    
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
@@ -24,7 +31,7 @@ jobs:
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
-        if [ "${{ github.event.inputs.publish }}" == "on" ]; then 
+        if [[ "${{ github.event_name }}" != "schedule" && "${{ github.event.inputs.publish }}" == "on" ]]; then 
           DO_PUBLISH='true'
           if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then 
             echo "warning: not set TRANSIFEX_API_TOKEN, publish disabled" 
@@ -32,13 +39,24 @@ jobs:
           fi   
         fi
 
+        DO_CREATE_PR='false'
+        if [[ "${{ github.event_name }}" == "schedule" || "${{ github.event.inputs.create_pr }}" == "on" ]]; then 
+          DO_CREATE_PR='true'
+          if [ -z "${{ secrets.GITHUB_TOKEN }}" ]; then 
+            echo "warning: not set GITHUB_TOKEN, create pull request disabled" 
+            DO_PUBLISH='false'
+          fi   
+        fi
+
         LUPDATE_ARGS=''
-        if [ "${{ github.event.inputs.cleanup_obsolete }}" == "on" ]; then
+        if [[ "${{ github.event_name }}" == "schedule" || "${{ github.event.inputs.cleanup_obsolete }}" == "on" ]]; then
           LUPDATE_ARGS='-no-obsolete'
         fi
 
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
+        echo "DO_CREATE_PR=$DO_CREATE_PR" >> $GITHUB_ENV
+        echo "DO_CREATE_PR: $DO_CREATE_PR"
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
         echo "BUILD_NUMBER: $BUILD_NUMBER"
         echo "LUPDATE_ARGS=$LUPDATE_ARGS" >> $GITHUB_ENV
@@ -55,6 +73,18 @@ jobs:
       run: |
         sudo bash ./build/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
         sudo bash ./build/ci/translation/tx_push.sh
+    - name: Create Pull Request
+      if: env.DO_CREATE_PR == 'true'
+      uses: peter-evans/create-pull-request@v5
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: "Run lupdate"
+        branch: "ci_run_lupdate"
+        add-paths: share/locale/*
+        title: "Update in-repo translation source files"
+        body: "Run `lupdate` with arguments `${{ env.LUPDATE_ARGS }}`"
+        labels: strings
+        reviewers: cbjeukendrup
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v3
       with:
