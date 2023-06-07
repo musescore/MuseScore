@@ -269,59 +269,6 @@ void System::adjustStavesNumber(size_t nstaves)
 }
 
 //---------------------------------------------------------
-//   layoutBrackets
-//---------------------------------------------------------
-
-double System::layoutBrackets(const LayoutContext& ctx)
-{
-    size_t nstaves  = _staves.size();
-    size_t columns = getBracketsColumnsCount();
-
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-    double bracketWidth[columns];
-#else
-    // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-    //    heap allocation is slow, an optimization might be used.
-    std::vector<double> bracketWidth(columns);
-#endif
-    for (size_t i = 0; i < columns; ++i) {
-        bracketWidth[i] = 0.0;
-    }
-
-    std::vector<Bracket*> bl;
-    bl.swap(_brackets);
-
-    for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        Staff* s = score()->staff(staffIdx);
-        for (size_t i = 0; i < columns; ++i) {
-            for (auto bi : s->brackets()) {
-                if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
-                    continue;
-                }
-                Bracket* b = createBracket(ctx, bi, i, static_cast<int>(staffIdx), bl, this->firstMeasure());
-                if (b != nullptr) {
-                    bracketWidth[i] = std::max(bracketWidth[i], b->width());
-                }
-            }
-        }
-    }
-
-    for (Bracket* b : bl) {
-        delete b;
-    }
-
-    double totalBracketWidth = 0.0;
-
-    if (!_brackets.empty()) {
-        for (double w : bracketWidth) {
-            totalBracketWidth += w;
-        }
-    }
-
-    return totalBracketWidth;
-}
-
-//---------------------------------------------------------
 //   setMeasureHeight
 //---------------------------------------------------------
 

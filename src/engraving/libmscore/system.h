@@ -224,8 +224,6 @@ private:
     Bracket* createBracket(const layout::v0::LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
                            std::vector<Bracket*>& bl, Measure* measure);
 
-    double layoutBrackets(const layout::v0::LayoutContext& ctx);
-
     SystemDivider* _systemDividerLeft    { nullptr };       // to the next system
     SystemDivider* _systemDividerRight   { nullptr };
 
