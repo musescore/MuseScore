@@ -44,6 +44,8 @@ class Dynamic;
 
 class FiguredBassItem;
 
+class Harmony;
+
 class Image;
 
 class LedgerLine;
@@ -51,7 +53,17 @@ class SLine;
 class LineSegment;
 class Lyrics;
 
+class NoteDot;
+
+class Rest;
+
+class Spanner;
+class Slur;
+class SlurTie;
+class Stem;
+
 class TextBase;
+class Text;
 }
 
 namespace mu::engraving::layout {
@@ -73,12 +85,20 @@ public:
                                    Clef*,
                                    Dynamic*,
                                    FiguredBassItem*,
+                                   Harmony*,
                                    Image*,
                                    LedgerLine*,
                                    SLine*,
                                    LineSegment*,
                                    Lyrics*,
-                                   TextBase*
+                                   NoteDot*,
+                                   Rest*,
+                                   Spanner*,
+                                   Slur*,
+                                   SlurTie*,
+                                   Stem*,
+                                   TextBase*,
+                                   Text*
                                    >;
 
     template<typename T>

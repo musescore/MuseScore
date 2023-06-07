@@ -2150,9 +2150,8 @@ void Note::setDotY(DirectionV pos)
         }
     }
 
-    layout::v0::LayoutContext ctx(score());
     for (NoteDot* dot : _dots) {
-        layout::v0::TLayout::layout(dot, ctx);
+        layout()->layoutItem(dot);
         dot->setPosY(y);
     }
 }
