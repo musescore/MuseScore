@@ -1786,27 +1786,27 @@ bool NotationActionController::isNotNoteInputMode() const
 
 void NotationActionController::openTupletOtherDialog()
 {
-    interactive()->open("musescore://notation/othertupletdialog");
+    interactive()->open("musescore://notation/othertupletdialog?sync=false");
 }
 
 void NotationActionController::openStaffTextPropertiesDialog()
 {
-    interactive()->open("musescore://notation/stafftextproperties");
+    interactive()->open("musescore://notation/stafftextproperties?sync=false");
 }
 
 void NotationActionController::openMeasurePropertiesDialog()
 {
-    interactive()->open("musescore://notation/measureproperties");
+    interactive()->open("musescore://notation/measureproperties?sync=false");
 }
 
 void NotationActionController::openEditGridSizeDialog()
 {
-    interactive()->open("musescore://notation/editgridsize");
+    interactive()->open("musescore://notation/editgridsize?sync=false");
 }
 
 void NotationActionController::openRealizeChordSymbolsDialog()
 {
-    interactive()->open("musescore://notation/realizechordsymbols");
+    interactive()->open("musescore://notation/realizechordsymbols?sync=false");
 }
 
 void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
