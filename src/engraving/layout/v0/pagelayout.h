@@ -41,7 +41,7 @@ public:
 private:
     static void layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding);
     static void checkDivider(LayoutContext& ctx, bool left, System* s, double yOffset, bool remove = false);
-    static void distributeStaves(const LayoutContext& ctx, Page* page, double footerPadding);
+    static void distributeStaves(LayoutContext& ctx, Page* page, double footerPadding);
 };
 }
 

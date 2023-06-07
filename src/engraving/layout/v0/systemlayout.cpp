@@ -2027,7 +2027,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     system->_systemHeight = system->staff(visibleStaves.back().first)->bbox().bottom();
     system->setHeight(system->_systemHeight);
 
-    system->setMeasureHeight(system->_systemHeight);
+    SystemLayout::setMeasureHeight(system, system->_systemHeight, ctx);
 
     //---------------------------------------------------
     //  layout brackets vertical position
@@ -2065,7 +2065,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     }
 }
 
-void SystemLayout::restoreLayout2(System* system)
+void SystemLayout::restoreLayout2(System* system, LayoutContext& ctx)
 {
     if (system->vbox()) {
         return;
@@ -2076,5 +2076,24 @@ void SystemLayout::restoreLayout2(System* system)
     }
 
     system->setHeight(system->_systemHeight);
-    system->setMeasureHeight(system->_systemHeight);
+    SystemLayout::setMeasureHeight(system, system->_systemHeight, ctx);
+}
+
+void SystemLayout::setMeasureHeight(System* system, double height, LayoutContext& ctx)
+{
+    double _spatium = system->spatium();
+    for (MeasureBase* m : system->ml) {
+        if (m->isMeasure()) {
+            // note that the factor 2 * _spatium must be corrected for when exporting
+            // system distance in MusicXML (issue #24733)
+            m->bbox().setRect(0.0, -_spatium, m->width(), height + 2.0 * _spatium);
+        } else if (m->isHBox()) {
+            m->bbox().setRect(0.0, 0.0, m->width(), height);
+            TLayout::layout2(toHBox(m), ctx);
+        } else if (m->isTBox()) {
+            TLayout::layout(toTBox(m), ctx);
+        } else {
+            LOGD("unhandled measure type %s", m->typeName());
+        }
+    }
 }

@@ -122,7 +122,6 @@ public:
 
     Page* page() const { return (Page*)explicitParent(); }
 
-    void setMeasureHeight(double height);
     void layoutBracketsVertical();
     void layoutInstrumentNames();
 
