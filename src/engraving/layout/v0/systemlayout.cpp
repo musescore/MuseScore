@@ -28,6 +28,8 @@
 #include "libmscore/barline.h"
 #include "libmscore/beam.h"
 #include "libmscore/box.h"
+#include "libmscore/bracket.h"
+#include "libmscore/bracketItem.h"
 #include "libmscore/chord.h"
 #include "libmscore/dynamic.h"
 #include "libmscore/factory.h"
@@ -1676,7 +1678,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
     //  find x position of staves
     //---------------------------------------------------
     system->layoutBrackets(ctx);
-    double maxBracketsWidth = system->totalBracketOffset(ctx);
+    double maxBracketsWidth = SystemLayout::totalBracketOffset(ctx);
 
     double maxNamesWidth = SystemLayout::instrumentNamesWidth(system, isFirstSystem, ctx);
 
@@ -1774,4 +1776,76 @@ double SystemLayout::instrumentNamesWidth(System* system, bool isFirstSystem, La
     }
 
     return namesWidth;
+}
+
+/// Calculates the total width of all brackets together that
+/// would be visible when all staves are visible.
+/// The logic in this method is closely related to the logic in
+/// System::layoutBrackets and System::createBracket.
+double SystemLayout::totalBracketOffset(LayoutContext& ctx)
+{
+    if (ctx.totalBracketsWidth >= 0) {
+        return ctx.totalBracketsWidth;
+    }
+
+    size_t columns = 0;
+    for (const Staff* staff : ctx.score()->staves()) {
+        for (const BracketItem* bi : staff->brackets()) {
+            columns = std::max(columns, bi->column() + 1);
+        }
+    }
+
+    size_t nstaves = ctx.score()->nstaves();
+    std::vector < double > bracketWidth(nstaves, 0.0);
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        const Staff* staff = ctx.score()->staff(staffIdx);
+        for (auto bi : staff->brackets()) {
+            if (bi->bracketType() == BracketType::NO_BRACKET || !bi->visible()) {
+                continue;
+            }
+
+            //! This logic is partially copied from System::createBracket.
+            //! Of course, we don't need to worry about invisible staves,
+            //! but we do need to worry about brackets that span past the
+            //! last staff.
+            staff_idx_t firstStaff = staffIdx;
+            staff_idx_t lastStaff = staffIdx + bi->bracketSpan() - 1;
+            if (lastStaff >= nstaves) {
+                lastStaff = nstaves - 1;
+            }
+
+            for (; firstStaff <= lastStaff; ++firstStaff) {
+                if (ctx.score()->staff(firstStaff)->show()) {
+                    break;
+                }
+            }
+            for (; lastStaff >= firstStaff; --lastStaff) {
+                if (ctx.score()->staff(lastStaff)->show()) {
+                    break;
+                }
+            }
+
+            size_t span = lastStaff - firstStaff + 1;
+            if (span > 1
+                || (bi->bracketSpan() == span)
+                || (span == 1 && ctx.score()->styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden))) {
+                Bracket* dummyBr = Factory::createBracket(ctx.score()->dummy(), /*isAccessibleEnabled=*/ false);
+                dummyBr->setBracketItem(bi);
+                dummyBr->setStaffSpan(firstStaff, lastStaff);
+                TLayout::layout(dummyBr, ctx);
+                for (staff_idx_t stfIdx = firstStaff; stfIdx <= lastStaff; ++stfIdx) {
+                    bracketWidth[stfIdx] += dummyBr->width();
+                }
+                delete dummyBr;
+            }
+        }
+    }
+
+    double totalBracketsWidth = 0.0;
+    for (double w : bracketWidth) {
+        totalBracketsWidth = std::max(totalBracketsWidth, w);
+    }
+    ctx.totalBracketsWidth = totalBracketsWidth;
+
+    return ctx.totalBracketsWidth;
 }
