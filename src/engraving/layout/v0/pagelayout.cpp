@@ -729,7 +729,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
 
     for (System* system : systems) {
         SystemLayout::setMeasureHeight(system, system->height(), ctx);
-        system->layoutBracketsVertical();
+        SystemLayout::layoutBracketsVertical(system, ctx);
         system->layoutInstrumentNames();
     }
     vgdl.deleteAll();
