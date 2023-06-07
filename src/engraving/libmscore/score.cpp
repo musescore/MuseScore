@@ -2371,8 +2371,7 @@ void Score::splitStaff(staff_idx_t staffIdx, int splitPoint)
     clef->setParent(seg);
     clef->setIsHeader(true);
     undoAddElement(clef);
-    layout::v0::LayoutContext ctx(this);
-    layout::v0::TLayout::layout(clef, ctx);
+    layout()->layoutItem(clef);
 
     undoChangeKeySig(ns, Fraction(0, 1), st->keySigEvent(Fraction(0, 1)));
 
