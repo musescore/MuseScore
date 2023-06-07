@@ -42,6 +42,7 @@ public:
     static System* collectSystem(const LayoutOptions& options, LayoutContext& lc, Score* score);
     static void layoutSystemElements(const LayoutOptions& options, LayoutContext& ctx, Score* score, System* system);
 
+    static void layoutSystem(System* system, LayoutContext& ctx, double xo1, bool isFirstSystem = false, bool firstSystemIndent = false);
 private:
     static System* getNextSystem(LayoutContext& lc);
     static void hideEmptyStaves(Score* score, System* system, bool isFirstSystem);

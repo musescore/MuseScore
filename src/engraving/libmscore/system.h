@@ -151,8 +151,6 @@ public:
 
     Page* page() const { return (Page*)explicitParent(); }
 
-    void layoutSystem(layout::v0::LayoutContext& ctx, double xo1, const bool isFirstSystem = false, bool firstSystemIndent = false);
-
     void setMeasureHeight(double height);
     void layoutBracketsVertical();
     void layoutInstrumentNames();
