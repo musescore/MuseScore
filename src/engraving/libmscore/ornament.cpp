@@ -75,6 +75,19 @@ void Ornament::remove(EngravingItem* e)
     }
 }
 
+void Ornament::setTrack(track_idx_t val)
+{
+    for (Note* note : _notesAboveAndBelow) {
+        if (note) {
+            note->setTrack(val);
+        }
+    }
+    if (_cueNoteChord) {
+        _cueNoteChord->setTrack(val);
+    }
+    _track = val;
+}
+
 void Ornament::draw(draw::Painter* painter) const
 {
     Articulation::draw(painter);
@@ -361,15 +374,16 @@ void Ornament::updateCueNote()
     // If needed, create cue note
     if (!_cueNoteChord) {
         _cueNoteChord = Factory::createChord(parentChord->segment());
-        _cueNoteChord->setTrack(track());
         _cueNoteChord->setSmall(true);
         cueNote->setHeadHasParentheses(true);
         cueNote->setHeadType(NoteHeadType::HEAD_QUARTER);
         _cueNoteChord->add(cueNote);
         cueNote->setParent(_cueNoteChord);
     }
-    cueNote->setIsTrillCueNote(true);
+    _cueNoteChord->setTrack(track());
     _cueNoteChord->setParent(parentChord->segment());
+    cueNote->updateLine();
+    cueNote->setIsTrillCueNote(true);
 }
 
 Shape Ornament::shape() const
