@@ -102,6 +102,10 @@ endif()
 if (WIN_PORTABLE)
     set(MUE_BUILD_UPDATE_MODULE OFF)
 endif()
+if (OS_IS_FBSD)
+    message(WARNING "Not building unsupported chrashpad client on FreeBSD")
+    set(MUE_BUILD_CRASHPAD_CLIENT OFF)
+endif()
 
 ###########################################
 # CONFIGURE: VTest
