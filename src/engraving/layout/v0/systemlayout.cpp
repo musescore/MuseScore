@@ -2039,7 +2039,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     //  layout instrument names
     //---------------------------------------------------
 
-    system->layoutInstrumentNames();
+    SystemLayout::layoutInstrumentNames(system);
 
     //---------------------------------------------------
     //  layout cross-staff slurs and ties
@@ -2127,5 +2127,77 @@ void SystemLayout::layoutBracketsVertical(System* system, LayoutContext& ctx)
         b->setPosY(sy);
         b->setHeight(ey - sy);
         TLayout::layout(b, ctx);
+    }
+}
+
+void SystemLayout::layoutInstrumentNames(System* system)
+{
+    staff_idx_t staffIdx = 0;
+
+    for (Part* p : system->score()->parts()) {
+        SysStaff* s = system->staff(staffIdx);
+        SysStaff* s2;
+        size_t nstaves = p->nstaves();
+
+        staff_idx_t visible = system->firstVisibleSysStaffOfPart(p);
+        if (visible != mu::nidx) {
+            // The top staff might be invisible but this top staff contains the instrument names.
+            // To make sure these instrument name are drawn, even when the top staff is invisible,
+            // move the InstrumentName elements to the first visible staff of the part.
+            if (visible != staffIdx) {
+                SysStaff* vs = system->staff(visible);
+                for (InstrumentName* t : s->instrumentNames) {
+                    t->setTrack(visible * VOICES);
+                    t->setSysStaff(vs);
+                    vs->instrumentNames.push_back(t);
+                }
+                s->instrumentNames.clear();
+                s = vs;
+            }
+
+            for (InstrumentName* t : s->instrumentNames) {
+                //
+                // override Text->layout()
+                //
+                double y1, y2;
+                switch (t->layoutPos()) {
+                default:
+                case 0:                         // center at part
+                    y1 = s->bbox().top();
+                    s2 = system->staff(staffIdx);
+                    for (int i = static_cast<int>(staffIdx + nstaves - 1); i > 0; --i) {
+                        SysStaff* s3 = system->staff(i);
+                        if (s3->show()) {
+                            s2 = s3;
+                            break;
+                        }
+                    }
+                    y2 = s2->bbox().bottom();
+                    break;
+                case 1:                         // center at first staff
+                    y1 = s->bbox().top();
+                    y2 = s->bbox().bottom();
+                    break;
+                case 2:                         // center between first and second staff
+                    y1 = s->bbox().top();
+                    y2 = system->staff(staffIdx + 1)->bbox().bottom();
+                    break;
+                case 3:                         // center at second staff
+                    y1 = system->staff(staffIdx + 1)->bbox().top();
+                    y2 = system->staff(staffIdx + 1)->bbox().bottom();
+                    break;
+                case 4:                         // center between first and second staff
+                    y1 = system->staff(staffIdx + 1)->bbox().top();
+                    y2 = system->staff(staffIdx + 2)->bbox().bottom();
+                    break;
+                case 5:                         // center at third staff
+                    y1 = system->staff(staffIdx + 2)->bbox().top();
+                    y2 = system->staff(staffIdx + 2)->bbox().bottom();
+                    break;
+                }
+                t->setPosY(y1 + (y2 - y1) * .5 + t->offset().y());
+            }
+        }
+        staffIdx += nstaves;
     }
 }
