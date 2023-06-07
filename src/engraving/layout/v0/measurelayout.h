@@ -50,7 +50,9 @@ public:
 
     static double createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
     static void addSystemHeader(Measure* m, bool isFirstSystem, LayoutContext& ctx);
+    static void removeSystemHeader(Measure* m);
     static void addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx);
+    static void removeSystemTrailer(Measure* m);
 
     static void createSystemBeginBarLine(Measure* m, LayoutContext& ctx);
 

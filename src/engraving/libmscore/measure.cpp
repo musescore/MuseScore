@@ -3180,46 +3180,6 @@ double Measure::basicWidth() const
 }
 
 //---------------------------------------------------------
-//   removeSystemHeader
-//---------------------------------------------------------
-
-void Measure::removeSystemHeader()
-{
-    if (!header()) {
-        return;
-    }
-    for (Segment* seg = first(); seg; seg = seg->next()) {
-        if (!seg->header()) {
-            break;
-        }
-        seg->setEnabled(false);
-    }
-    setHeader(false);
-}
-
-//---------------------------------------------------------
-//   removeSystemTrailer
-//---------------------------------------------------------
-
-void Measure::removeSystemTrailer()
-{
-    bool changed = false;
-    for (Segment* seg = last(); seg != first(); seg = seg->prev()) {
-        if (!seg->trailer()) {
-            break;
-        }
-        if (seg->enabled()) {
-            seg->setEnabled(false);
-        }
-        changed = true;
-    }
-    setTrailer(false);
-    if (system() && changed) {
-        computeWidth(system()->minSysTicks(), system()->maxSysTicks(), layoutStretch());
-    }
-}
-
-//---------------------------------------------------------
 //   checkHeader
 //---------------------------------------------------------
 

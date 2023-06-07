@@ -335,9 +335,6 @@ public:
     AccessibleItemPtr createAccessible() override;
 #endif
 
-    void removeSystemHeader();
-    void removeSystemTrailer();
-
     const BarLine* endBarLine() const;
     BarLineType endBarLineType() const;
     bool endBarLineVisible() const;
