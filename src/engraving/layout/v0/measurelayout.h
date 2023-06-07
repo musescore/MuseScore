@@ -71,6 +71,8 @@ private:
 
     static void computeWidth(Measure* m, Segment* s, double x, bool isSystemHeader, Fraction minTicks, Fraction maxTicks,
                              double stretchCoeff, bool overrideMinMeasureWidth = false);
+
+    static double computeMinMeasureWidth(Measure* m);
 };
 }
 
