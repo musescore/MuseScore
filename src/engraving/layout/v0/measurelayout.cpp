@@ -2211,11 +2211,44 @@ void MeasureLayout::computeWidth(Measure* m, Segment* s, double x, bool isSystem
     m->spaceRightAlignedSegments();
 
     // Check against minimum width and increase if needed (MMRest minWidth is guaranteed elsewhere)
-    double minWidth = m->computeMinMeasureWidth();
+    double minWidth = computeMinMeasureWidth(m);
     if (m->width() < minWidth && !overrideMinMeasureWidth) {
         m->stretchToTargetWidth(minWidth);
         m->setWidthLocked(true);
     } else {
         m->setWidthLocked(false);
     }
+}
+
+double MeasureLayout::computeMinMeasureWidth(Measure* m)
+{
+    double minWidth = m->score()->styleMM(Sid::minMeasureWidth);
+    double maxWidth = m->system()->width() - m->system()->leftMargin(); // maximum available system width (left margin accounts for possible indentation)
+    if (maxWidth <= 0) {
+        // System width may not yet be available for the linear mode (e.g. continuous view)
+        // Will use the minimum width from the style in this case
+        maxWidth = minWidth;
+    }
+    minWidth = std::min(minWidth, maxWidth); // Accounts for a case where the user may set the minMeasureWidth to a value larger than the available system width
+    if (m->ticks() < m->timesig()) { // Accounts for shortened measure (e.g. anacrusis)
+        minWidth *= (m->ticks() / m->timesig()).toDouble();
+    }
+    Segment* firstCRSegment = m->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+    if (!firstCRSegment) {
+        return minWidth;
+    }
+    if (firstCRSegment == m->firstEnabled()) {
+        return minWidth;
+    }
+    // If there is a header, don't count the width of the header.
+    // Start counting from the "virtual" position of the preceding barline if there wasn't the header.
+    double startPosition = firstCRSegment->x() - firstCRSegment->minLeft();
+    if (firstCRSegment->hasAccidentals()) {
+        startPosition -= m->score()->styleMM(Sid::barAccidentalDistance);
+    } else {
+        startPosition -= m->score()->styleMM(Sid::barNoteDistance);
+    }
+    minWidth += startPosition;
+    minWidth = std::min(minWidth, maxWidth);
+    return minWidth;
 }

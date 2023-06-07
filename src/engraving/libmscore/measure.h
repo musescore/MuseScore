@@ -380,7 +380,7 @@ private:
     void push_front(Segment* e);
 
     void fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests = true);
-    double computeMinMeasureWidth() const;
+
     void spaceRightAlignedSegments();
 
     MStaff* mstaff(staff_idx_t staffIndex) const;
