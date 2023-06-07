@@ -2064,3 +2064,17 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
         }
     }
 }
+
+void SystemLayout::restoreLayout2(System* system)
+{
+    if (system->vbox()) {
+        return;
+    }
+
+    for (SysStaff* s : system->_staves) {
+        s->restoreLayout();
+    }
+
+    system->setHeight(system->_systemHeight);
+    system->setMeasureHeight(system->_systemHeight);
+}

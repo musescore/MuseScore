@@ -45,6 +45,7 @@ public:
     static void layoutSystem(System* system, LayoutContext& ctx, double xo1, bool isFirstSystem = false, bool firstSystemIndent = false);
 
     static void layout2(System* system, LayoutContext& ctx);
+    static void restoreLayout2(System* system);
 
 private:
     static System* getNextSystem(LayoutContext& lc);

@@ -128,7 +128,6 @@ public:
 
     void addBrackets(const layout::v0::LayoutContext& ctx, Measure* measure);
 
-    void restoreLayout2();
     void clear(); ///< Clear measure list.
 
     mu::RectF bboxStaff(int staff) const { return _staves[staff]->bbox(); }
