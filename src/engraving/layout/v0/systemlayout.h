@@ -48,6 +48,7 @@ public:
     static void restoreLayout2(System* system, LayoutContext& ctx);
     static void setMeasureHeight(System* system, double height, LayoutContext& ctx);
     static void layoutBracketsVertical(System* system, LayoutContext& ctx);
+    static void layoutInstrumentNames(System* system);
 
 private:
     static System* getNextSystem(LayoutContext& lc);

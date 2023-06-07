@@ -122,8 +122,6 @@ public:
 
     Page* page() const { return (Page*)explicitParent(); }
 
-    void layoutInstrumentNames();
-
     void addBrackets(const layout::v0::LayoutContext& ctx, Measure* measure);
 
     void clear(); ///< Clear measure list.
