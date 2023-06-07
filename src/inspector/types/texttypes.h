@@ -77,6 +77,7 @@ public:
         TEXT_TYPE_MEASURE_NUMBER,
         TEXT_TYPE_MMREST_RANGE,
         TEXT_TYPE_TEMPO,
+        TEXT_TYPE_TEMPO_CHANGE,
         TEXT_TYPE_METRONOME,
         TEXT_TYPE_REPEAT_LEFT,       // align to start of measure
         TEXT_TYPE_REPEAT_RIGHT,      // align to end of measure
