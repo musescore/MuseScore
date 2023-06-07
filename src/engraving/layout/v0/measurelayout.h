@@ -54,6 +54,8 @@ public:
 
     static void createSystemBeginBarLine(Measure* m, LayoutContext& ctx);
 
+    static void stretchMeasureInPracticeMode(Measure* m, double targetWidth, LayoutContext& ctx);
+
 private:
 
     static void createMMRest(const LayoutOptions& options, Score* score, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);

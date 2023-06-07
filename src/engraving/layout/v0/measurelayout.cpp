@@ -1823,3 +1823,152 @@ void MeasureLayout::createSystemBeginBarLine(Measure* m, LayoutContext& ctx)
         s->setEnabled(false);
     }
 }
+
+void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth, LayoutContext& ctx)
+{
+    m->bbox().setWidth(targetWidth);
+
+    //---------------------------------------------------
+    //    compute stretch
+    //---------------------------------------------------
+
+    std::multimap<double, Segment*> springs;
+
+    Segment* seg = m->first();
+    while (seg && !seg->enabled()) {
+        seg = seg->next();
+    }
+    double minimumWidth = seg ? seg->x() : 0.0;
+    for (Segment& s : m->m_segments) {
+        s.setStretch(1);
+
+//        if (!s.enabled() || !s.visible())
+//            ;continue;
+        Fraction t = s.ticks();
+        if (t.isNotZero()) {
+            springs.insert(std::pair<double, Segment*>(0, &s));
+        }
+        minimumWidth += s.width() + s.spacing();
+    }
+
+    //---------------------------------------------------
+    //    compute 1/Force for a given Extend
+    //---------------------------------------------------
+
+    if (targetWidth > minimumWidth) {
+        double chordRestSegmentsWidth{ 0 };
+        for (auto i = springs.begin(); i != springs.end(); i++) {
+            chordRestSegmentsWidth += i->second->width() + i->second->spacing();
+        }
+
+        double stretch = 1 + (targetWidth - minimumWidth) / chordRestSegmentsWidth;
+
+        //---------------------------------------------------
+        //    distribute stretch to segments
+        //---------------------------------------------------
+
+        for (auto& i : springs) {
+            i.second->setStretch(stretch);
+        }
+
+        //---------------------------------------------------
+        //    move segments to final position
+        //---------------------------------------------------
+
+        Segment* s = m->first();
+        while (s && !s->enabled()) {
+            s = s->next();
+        }
+
+        double x = s->pos().x();
+        while (s) {
+//            if (!s->enabled() || !s->visible()) {
+//                s = s->nextEnabled();
+//                continue;
+//            }
+
+            double spacing = s->spacing();
+            double widthWithoutSpacing = s->width() - spacing;
+            double segmentStretch = s->stretch();
+            x += spacing * (RealIsNull(segmentStretch) ? 1 : segmentStretch);
+            s->setPosX(x);
+            x += widthWithoutSpacing * (RealIsNull(segmentStretch) ? 1 : segmentStretch);
+            s = s->nextEnabled();
+        }
+    }
+
+    //---------------------------------------------------
+    //    layout individual elements
+    //---------------------------------------------------
+
+    for (Segment& s : m->m_segments) {
+        if (!s.enabled()) {
+            continue;
+        }
+        // After the rest of the spacing is calculated we position grace-notes-after.
+        ChordLayout::repositionGraceNotesAfter(&s);
+        for (EngravingItem* e : s.elist()) {
+            if (!e) {
+                continue;
+            }
+            ElementType t = e->type();
+            staff_idx_t staffIdx = e->staffIdx();
+            if (t == ElementType::MEASURE_REPEAT || (t == ElementType::REST && (m->isMMRest() || toRest(e)->isFullMeasureRest()))) {
+                //
+                // element has to be centered in free space
+                //    x1 - left measure position of free space
+                //    x2 - right measure position of free space
+
+                Segment* s1;
+                for (s1 = s.prev(); s1 && !s1->enabled(); s1 = s1->prev()) {
+                }
+                Segment* s2;
+                for (s2 = s.next(); s2; s2 = s2->next()) {
+                    if (s2->enabled() && !s2->isChordRestType() && s2->element(staffIdx * VOICES)) {
+                        break;
+                    }
+                }
+                double x1 = s1 ? s1->x() + s1->minRight() : 0;
+                double x2 = s2 ? s2->x() - s2->minLeft() : targetWidth;
+
+                if (m->isMMRest()) {
+                    Rest* mmrest = toMMRest(e);
+                    //
+                    // center multi measure rest
+                    //
+                    double d = m->score()->styleMM(Sid::multiMeasureRestMargin);
+                    double w = x2 - x1 - 2 * d;
+
+                    mmrest->setWidth(w);
+                    TLayout::layout(mmrest, ctx);
+                    e->setPos(x1 - s.x() + d, e->staff()->height() * .5);   // center vertically in measure
+                    s.createShape(staffIdx);
+                } else { // if (rest->isFullMeasureRest()) {
+                    //
+                    // center full measure rest
+                    //
+                    e->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->bbox().x());
+                    s.createShape(staffIdx);  // DEBUG
+                }
+            } else if (t == ElementType::REST) {
+                e->setPosX(0);
+            } else if (t == ElementType::CHORD) {
+                Chord* c = toChord(e);
+                if (c->tremolo()) {
+                    Tremolo* tr = c->tremolo();
+                    Chord* c1 = tr->chord1();
+                    Chord* c2 = tr->chord2();
+                    if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
+                        TLayout::layout(tr, ctx);
+                    }
+                }
+            } else if (t == ElementType::BAR_LINE) {
+                e->setPosY(0.0);
+                // for end barlines, x position was set in createEndBarLines
+                if (s.segmentType() != SegmentType::EndBarLine) {
+                    e->setPosX(0.0);
+                }
+            }
+        }
+    }
+}

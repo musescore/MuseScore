@@ -365,7 +365,6 @@ public:
 
     Fraction quantumOfSegmentCell() const;
 
-    void stretchMeasureInPracticeMode(double stretch);
     double squeezableSpace() const { return _isWidthLocked ? 0.0 : _squeezableSpace; }
 
     void respaceSegments();

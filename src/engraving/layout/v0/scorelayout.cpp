@@ -351,7 +351,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
                     MeasureLayout::createEndBarLines(m, true, ctx);
                     m->layoutSegmentsInPracticeMode(visibleParts);
                     ww = m->width();
-                    m->stretchMeasureInPracticeMode(ww);
+                    MeasureLayout::stretchMeasureInPracticeMode(m, ww, ctx);
                 } else {
                     MeasureLayout::createEndBarLines(m, false, ctx);
                     m->computeWidth(minTicks, maxTicks, 1);
