@@ -155,11 +155,6 @@ class EngravingItem : public EngravingObject
 
     bool m_colorsInversionEnabled = true;
 
-    virtual bool sameVoiceKerningLimited() const { return false; }
-    virtual bool neverKernable() const { return false; }
-    virtual bool alwaysKernable() const { return false; }
-    KerningType _userSetKerning = KerningType::NOT_SET;
-
     std::vector<Spanner*> _startingSpanners; ///< spanners starting on this item
     std::vector<Spanner*> _endingSpanners; ///< spanners ending on this item
 
@@ -177,14 +172,9 @@ protected:
     void notifyAboutNameChanged();
 #endif
 
-    virtual KerningType doComputeKerningType(const EngravingItem*) const { return KerningType::KERNING; }
-
 public:
 
     virtual ~EngravingItem();
-
-    KerningType computeKerningType(const EngravingItem* nextItem) const;
-    virtual double computePadding(const EngravingItem* nextItem) const;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     virtual void setupAccessible();

@@ -40,6 +40,10 @@ public:
     // Layout Elements on Edit
     void layoutOnEdit(Arpeggio* item) override;
 
+    // Horizontal spacing
+    double computePadding(const EngravingItem* item1, const EngravingItem* item2) override;
+    KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2) override;
+
 private:
     // Layout Single Item
     void doLayoutItem(EngravingItem* item) override;

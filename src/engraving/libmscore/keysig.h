@@ -99,8 +99,6 @@ private:
 
     void addLayout(SymId sym, int line);
 
-    bool neverKernable() const override { return true; }
-
     bool _showCourtesy;
     bool _hideNaturals;       // used in layout to override score style (needed for the Continuous panel)
     KeySigEvent _sig;

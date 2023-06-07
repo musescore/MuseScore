@@ -59,8 +59,6 @@ public:
 public:
     ~Lyrics();
 
-    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
-
     Lyrics* clone() const override { return new Lyrics(*this); }
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;

@@ -208,6 +208,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/layout/v0/slurtielayout.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/v0/arpeggiolayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/v0/arpeggiolayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/horizontalspacing.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/horizontalspacing.h
 
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderingcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext.cpp
