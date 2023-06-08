@@ -33,6 +33,9 @@ class Score;
 class Segment;
 class Spanner;
 class System;
+class Measure;
+class Bracket;
+class BracketItem;
 }
 
 namespace mu::engraving::layout::v0 {
@@ -65,6 +68,9 @@ private:
     static double instrumentNamesWidth(System* system, bool isFirstSystem, LayoutContext& ctx);
     static double totalBracketOffset(LayoutContext& ctx);
     static double layoutBrackets(System* system, const LayoutContext& ctx);
+    static void addBrackets(System* system, Measure* measure, const LayoutContext& ctx);
+    static Bracket* createBracket(System* system, const LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
+                                  std::vector<Bracket*>& bl, Measure* measure);
 };
 }
 

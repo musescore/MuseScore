@@ -122,8 +122,6 @@ public:
 
     Page* page() const { return (Page*)explicitParent(); }
 
-    void addBrackets(const layout::v0::LayoutContext& ctx, Measure* measure);
-
     void clear(); ///< Clear measure list.
 
     mu::RectF bboxStaff(int staff) const { return _staves[staff]->bbox(); }
@@ -215,8 +213,6 @@ private:
 
     size_t getBracketsColumnsCount();
     void setBracketsXPosition(const double xOffset);
-    Bracket* createBracket(const layout::v0::LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
-                           std::vector<Bracket*>& bl, Measure* measure);
 
     SystemDivider* _systemDividerLeft    { nullptr };       // to the next system
     SystemDivider* _systemDividerRight   { nullptr };
