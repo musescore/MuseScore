@@ -4090,6 +4090,9 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                         }
                     }
                 }
+            } else if (!measureInsert && tick == Fraction(0, 1)) {
+                // If inserting measure into an empty score, restore default C key signature
+                score->restoreInitialKeySig();
             }
 
             //
@@ -4158,6 +4161,34 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
     }
 
     return result;
+}
+
+void Score::restoreInitialKeySig()
+{
+    Measure* firstMeas = firstMeasure();
+    for (Staff* staff : _staves) {
+        Key concertKey = Key::C;
+        Key transposedKey = concertKey;
+        Part* part = staff->part();
+        Instrument* instrument = part->instrument();
+        int transpose = -instrument->transpose().chromatic;
+        if (!styleB(Sid::concertPitch)) {
+            transposedKey = mu::engraving::transposeKey(transposedKey, transpose, part->preferSharpFlat());
+        }
+
+        Segment* keySegment = firstMeas->undoGetSegment(SegmentType::KeySig, Fraction(0, 1));
+        KeySig* newKeySig = Factory::createKeySig(keySegment);
+        newKeySig->setTrack(staff->idx() * VOICES);
+        newKeySig->setKey(transposedKey);
+        keySegment->add(newKeySig);
+        undoAddElement(newKeySig);
+
+        KeySigEvent keySigEvent;
+        keySigEvent.setConcertKey(concertKey);
+        keySigEvent.setKey(transposedKey);
+        newKeySig->setKeySigEvent(keySigEvent);
+        staff->setKey(Fraction(0, 1), keySigEvent);
+    }
 }
 
 //---------------------------------------------------------

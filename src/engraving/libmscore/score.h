@@ -754,6 +754,7 @@ public:
 
     void deleteItem(EngravingItem*);
     void deleteMeasures(MeasureBase* firstMeasure, MeasureBase* lastMeasure, bool preserveTies = false);
+    void restoreInitialKeySig();
     void reconnectSlurs(MeasureBase* mbStart, MeasureBase* mbLast);
     void cmdDeleteSelection();
     void cmdFullMeasureRest();
