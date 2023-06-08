@@ -1161,19 +1161,20 @@ int Chord::calcMinStemLength()
         }
     }
     if (_beam || (_tremolo && _tremolo->twoNotes())) {
-        int beamCount = (_beam ? beams() : 0) + (_tremolo ? _tremolo->lines() : 0);
+        int beamCount = (_beam ? beams() : 0) + ((_tremolo && _tremolo->twoNotes()) ? _tremolo->lines() : 0);
         static const int minInnerStemLengths[4] = { 10, 9, 8, 7 };
         int innerStemLength = minInnerStemLengths[std::min(beamCount, 3)];
         int beamsHeight = beamCount * (score()->styleB(Sid::useWideBeams) ? 4 : 3) - 1;
-        minStemLength = std::max(minStemLength, innerStemLength);
-        minStemLength += beamsHeight;
+        int newMinStemLength = std::max(minStemLength, innerStemLength);
+        newMinStemLength += beamsHeight;
         // for 4+ beams, there are a few situations where we need to lengthen the stem by 1
         int noteLine = line();
         int staffLines = staff()->lines(tick());
         bool noteInStaff = (_up && noteLine > 0) || (!_up && noteLine < (staffLines - 1) * 2);
         if (beamCount >= 4 && noteInStaff) {
-            minStemLength++;
+            newMinStemLength++;
         }
+        minStemLength = std::max(minStemLength, newMinStemLength);
     }
     return minStemLength;
 }
@@ -1184,7 +1185,7 @@ int Chord::stemLengthBeamAddition() const
     if (_hook) {
         return 0;
     }
-    int beamCount = (_beam ? beams() : 0) + (_tremolo ? _tremolo->lines() : 0);
+    int beamCount = (_beam ? beams() : 0) + ((_tremolo && _tremolo->twoNotes()) ? _tremolo->lines() : 0);
     switch (beamCount) {
     case 0:
     case 1:
@@ -1348,7 +1349,7 @@ double Chord::calcDefaultStemLength()
     int staffLineCount = staffItem ? staffItem->lines(tick()) : 5;
     int shortStemStart = score()->styleI(Sid::shortStemStartLocation) * quarterSpacesPerLine + 1;
     bool useWideBeams = score()->styleB(Sid::useWideBeams);
-    int beamCount = (_tremolo ? _tremolo->lines() : 0) + (_beam ? beams() : 0);
+    int beamCount = ((_tremolo && _tremolo->twoNotes()) ? _tremolo->lines() : 0) + (_beam ? beams() : 0);
     int middleLine
         = minStaffOverlap(_up, staffLineCount, beamCount, !!_hook, useWideBeams ? 4 : 3, useWideBeams, !(isGrace() || isSmall()));
     if (up()) {
