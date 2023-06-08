@@ -101,8 +101,6 @@ public:
     Measure* nextMeasureMM() const;
     Measure* prevMeasureMM() const;
 
-    virtual void layoutCrossStaff() {}
-
     ElementList& el() { return _el; }
     const ElementList& el() const { return _el; }
 

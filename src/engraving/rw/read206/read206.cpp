@@ -34,7 +34,7 @@
 
 #include "style/style.h"
 #include "style/textstyle.h"
-#include "layout/v0/tlayout.h"
+
 #include "types/symnames.h"
 #include "types/typesconv.h"
 
@@ -2503,8 +2503,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             }
             segment = m->getSegment(st, ctx.tick());
             segment->add(bl);
-            layout::v0::LayoutContext lctx(bl->score());
-            layout::v0::TLayout::layout(bl, lctx);
+            EngravingItem::layout()->layoutItem(bl);
             if (fermataAbove) {
                 segment->add(fermataAbove);
             }

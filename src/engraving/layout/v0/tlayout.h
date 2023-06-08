@@ -253,7 +253,6 @@ public:
     static void layout(MMRestRange* item, LayoutContext& ctx);
 
     static void layout(Note* item, LayoutContext& ctx);
-    static void layout2(Note* item, LayoutContext& ctx);
     static void layout(NoteDot* item, LayoutContext& ctx);
 
     static void layout(Ornament* item, LayoutContext& ctx);

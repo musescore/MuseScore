@@ -35,7 +35,6 @@
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
-#include "layout/v0/tlayout.h"
 
 #include "accidental.h"
 #include "actionicon.h"
@@ -2154,17 +2153,6 @@ void Note::setDotY(DirectionV pos)
         layout()->layoutItem(dot);
         dot->setPosY(y);
     }
-}
-
-//---------------------------------------------------------
-//   layout2
-//    called after final position of note is set
-//---------------------------------------------------------
-
-void Note::layout2()
-{
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout2(this, ctx);
 }
 
 //---------------------------------------------------------

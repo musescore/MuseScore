@@ -27,8 +27,7 @@
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
 
-#include "layout/v0/tlayout.h"
-#include "layout/v0/slurtielayout.h"
+#include "layout/v0/layoutcontext.h"
 #include "layout/v0/chordlayout.h"
 
 #include "beam.h"

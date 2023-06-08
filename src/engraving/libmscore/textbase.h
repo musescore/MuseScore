@@ -343,7 +343,7 @@ protected:
     mu::draw::Color textColor() const;
     mu::RectF frame;             // calculated in layout()
     void layoutFrame();
-    void layoutEdit();
+
     void createLayout();
     void insertSym(EditData& ed, SymId id);
     void prepareFormat(const String& token, TextCursor& cursor);

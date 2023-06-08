@@ -114,7 +114,7 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
         }
     }
 
-    item->layoutCrossStaff();
+    MeasureLayout::layoutCrossStaff(item, ctx);
 }
 
 //---------------------------------------------------------
@@ -1257,6 +1257,50 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
     }
 }
 
+//---------------------------------------------------
+//    layoutCrossStaff()
+//    layout all elements that require knowledge of staff
+//    distances (determined in System::layout2), such as cross-staff beams
+//---------------------------------------------------
+void MeasureLayout::layoutCrossStaff(MeasureBase* mb, LayoutContext& ctx)
+{
+    if (!mb->isMeasure()) {
+        return;
+    }
+
+    Measure* m = toMeasure(mb);
+    if (!m) {
+        return;
+    }
+
+    for (Segment& s : m->m_segments) {
+        if (!s.enabled()) {
+            continue;
+        }
+        for (EngravingItem* e : s.elist()) {
+            if (!e) {
+                continue;
+            }
+            if (e->isChord()) {
+                Chord* c = toChord(e);
+                Beam* beam = c->beam();
+                Tremolo* tremolo = c->tremolo();
+                if ((beam && (beam->cross() || beam->userModified()))
+                    || (tremolo && tremolo->twoNotes() && tremolo->userModified())) {
+                    ChordLayout::computeUp(c, ctx); // for cross-staff beams
+                }
+                if (!c->graceNotes().empty()) {
+                    for (Chord* grace : c->graceNotes()) {
+                        if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
+                            ChordLayout::computeUp(grace, ctx); // for cross-staff beams
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 void MeasureLayout::barLinesSetSpan(Measure* m, Segment* seg, LayoutContext& ctx)
 {
     int track = 0;
@@ -1443,7 +1487,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
             LOGD("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
         }
         if ((wasVisible != clefSeg->visible()) && m->system()) {   // recompute the width only if necessary
-            MeasureLayout::computeWidth(m, ctx, m->system()->minSysTicks(), m->system()->maxSysTicks(), m->layoutStretch());
+            computeWidth(m, ctx, m->system()->minSysTicks(), m->system()->maxSysTicks(), m->layoutStretch());
         }
         if (seg) {
             Segment* s1 = nullptr;

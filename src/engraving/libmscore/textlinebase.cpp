@@ -26,12 +26,10 @@
 
 #include "draw/types/pen.h"
 
-#include "style/style.h"
 #include "layout/v0/tlayout.h"
 
 #include "factory.h"
 #include "score.h"
-#include "staff.h"
 #include "system.h"
 #include "text.h"
 

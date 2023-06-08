@@ -50,9 +50,7 @@
 #include "mscore.h"
 #include "page.h"
 #include "score.h"
-#include "system.h"
 #include "textedit.h"
-#include "textframe.h"
 #include "undo.h"
 
 #include "log.h"
@@ -2264,26 +2262,6 @@ bool TextBase::mousePress(EditData& ed)
 
     score()->setUpdateAll();
     return true;
-}
-
-//---------------------------------------------------------
-//   layoutEdit
-//---------------------------------------------------------
-
-void TextBase::layoutEdit()
-{
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
-    if (explicitParent() && explicitParent()->type() == ElementType::TBOX) {
-        TBox* tbox = toTBox(explicitParent());
-        layout::v0::TLayout::layout(tbox, ctx);
-        System* system = tbox->system();
-        system->setHeight(tbox->height());
-        triggerLayout();
-    } else {
-        static const double w = 2.0;     // 8.0 / view->matrix().m11();
-        score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
-    }
 }
 
 //---------------------------------------------------------

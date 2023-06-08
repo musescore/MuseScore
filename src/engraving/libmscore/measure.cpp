@@ -29,10 +29,6 @@
 
 #include <cmath>
 
-#include "realfn.h"
-#include "layout/v0/tlayout.h"
-#include "layout/v0/chordlayout.h"
-
 #include "accidental.h"
 #include "actionicon.h"
 #include "barline.h"
@@ -52,7 +48,6 @@
 #include "measure.h"
 #include "measurenumber.h"
 #include "measurerepeat.h"
-#include "mmrest.h"
 #include "mmrestrange.h"
 #include "mscoreview.h"
 #include "note.h"
@@ -83,8 +78,6 @@
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
 #endif
-
-#include "layout/v0/chordlayout.h"
 
 #include "log.h"
 
@@ -2992,43 +2985,6 @@ EngravingItem* Measure::prevElementStaff(staff_idx_t staff)
 String Measure::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), String::number(no() + 1));
-}
-
-//---------------------------------------------------
-//    layoutCrossStaff()
-//    layout all elements that require knowledge of staff
-//    distances (determined in System::layout2), such as cross-staff beams
-//---------------------------------------------------
-
-void Measure::layoutCrossStaff()
-{
-    layout::v0::LayoutContext ctx(score());
-    for (Segment& s : m_segments) {
-        if (!s.enabled()) {
-            continue;
-        }
-        for (EngravingItem* e : s.elist()) {
-            if (!e) {
-                continue;
-            }
-            if (e->isChord()) {
-                Chord* c = toChord(e);
-                Beam* beam = c->beam();
-                Tremolo* tremolo = c->tremolo();
-                if ((beam && (beam->cross() || beam->userModified()))
-                    || (tremolo && tremolo->twoNotes() && tremolo->userModified())) {
-                    layout::v0::ChordLayout::computeUp(c, ctx); // for cross-staff beams
-                }
-                if (!c->graceNotes().empty()) {
-                    for (Chord* grace : c->graceNotes()) {
-                        if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
-                            layout::v0::ChordLayout::computeUp(grace, ctx); // for cross-staff beams
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 
 //---------------------------------------------------

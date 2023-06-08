@@ -38,6 +38,10 @@
 #include "symbol.h"
 #include "types.h"
 
+namespace mu::engraving::layout::v0 {
+class ChordLayout;
+}
+
 namespace mu::engraving {
 class Factory;
 class Tie;
@@ -189,7 +193,6 @@ public:
     double mag() const override;
     EngravingItem* elementBase() const override;
 
-    void layout2();
     //setter is used only in drumset tools to setup the notehead preview in the drumset editor and the palette
     void setCachedNoteheadSym(SymId i) { _cachedNoteheadSym = i; }
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
@@ -441,6 +444,7 @@ public:
 private:
 
     friend class layout::v0::TLayout;
+    friend class layout::v0::ChordLayout;
     friend class Factory;
     Note(Chord* ch = 0);
     Note(const Note&, bool link = false);

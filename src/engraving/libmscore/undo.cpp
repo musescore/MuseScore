@@ -35,7 +35,7 @@
 #include "undo.h"
 
 #include "iengravingfont.h"
-#include "layout/v0/tlayout.h"
+
 
 #include "bend.h"
 #include "bracket.h"
@@ -2421,8 +2421,7 @@ void ChangeClefType::flip(EditData*)
     concertClef     = ocl;
     transposingClef = otc;
     // layout the clef to align the currentClefType with the actual one immediately
-    layout::v0::LayoutContext ctx(clef->score());
-    layout::v0::TLayout::layout(clef, ctx);
+    EngravingItem::layout()->layoutItem(clef);
 }
 
 //---------------------------------------------------------

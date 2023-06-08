@@ -27,15 +27,9 @@
 
 #include "system.h"
 
-#include "realfn.h"
-
 #include "style/style.h"
-#include "style/defaultstyle.h"
-
 #include "layout/v0/tlayout.h"
-#include "layout/v0/layoutcontext.h"
 
-#include "barline.h"
 #include "beam.h"
 #include "box.h"
 #include "bracket.h"
