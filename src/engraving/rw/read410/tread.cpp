@@ -1160,7 +1160,7 @@ void TRead::read(KeyList* item, XmlReader& e, ReadContext& ctx)
                 k = Key(e.intAttribute("idx"));
             }
             KeySigEvent ke;
-            ke.setKey(k);
+            ke.setConcertKey(k);
             (*item)[ctx.fileDivision(tick)] = ke;
             e.readNext();
         } else {
@@ -1173,6 +1173,7 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
 {
     KeySigEvent sig;
     int subtype = 0;
+    Part* p = s->part();
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -1228,7 +1229,20 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
             s->setShowCourtesy(e.readInt());
         } else if (tag == "showNaturals") {           // obsolete
             e.readInt();
-        } else if (tag == "accidental") {
+        } else if (tag == "accidental") {             // older files; we need to guess proper concert key
+            Key key = Key(e.readInt());
+            Key cKey = key;
+            if (p && !s->concertPitch()) {
+                Interval v = p->instrument(s->tick())->transpose();
+                if (!v.isZero()) {
+                    cKey = transposeKey(key, v);
+                }
+            }
+            sig.setConcertKey(cKey);
+            sig.setKey(key);
+        } else if (tag == "concertKey") {
+            sig.setConcertKey(Key(e.readInt()));
+        } else if (tag == "actualKey") {
             sig.setKey(Key(e.readInt()));
         } else if (tag == "natural") {                // obsolete
             e.readInt();
@@ -1263,7 +1277,7 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
         } else if (tag == "subtype") {
             subtype = e.readInt();
         } else if (tag == "forInstrumentChange") {
-            s->setForInstrumentChange(e.readBool());
+            sig.setForInstrumentChange(e.readBool());
         } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
         }
@@ -3298,7 +3312,16 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
     } else if (tag == "soloist") {
         p->setSoloist(e.readInt());
     } else if (tag == "preferSharpFlat") {
-        p->setPreferSharpFlat(e.readText() == "sharps" ? PreferSharpFlat::SHARPS : PreferSharpFlat::FLATS);
+        String val = e.readText();
+        if (val == "sharps") {
+            p->setPreferSharpFlat(PreferSharpFlat::SHARPS);
+        } else if (val == "flats") {
+            p->setPreferSharpFlat(PreferSharpFlat::FLATS);
+        } else if (val == "none") {
+            p->setPreferSharpFlat(PreferSharpFlat::NONE);
+        } else {
+            p->setPreferSharpFlat(PreferSharpFlat::AUTO);
+        }
     } else {
         return false;
     }

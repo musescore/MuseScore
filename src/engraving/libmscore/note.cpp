@@ -744,14 +744,7 @@ int Note::tpc1default(int p) const
     Key key = Key::C;
     if (staff() && chord()) {
         Fraction tick = chord()->tick();
-        key = staff()->key(tick);
-        if (!concertPitch()) {
-            Interval interval = part()->instrument(tick)->transpose();
-            if (!interval.isZero()) {
-                interval.flip();
-                key = transposeKey(key, interval);
-            }
-        }
+        key = staff()->concertKey(tick);
     }
     return pitch2tpc(p, key, Prefer::NEAREST);
 }
@@ -769,6 +762,7 @@ int Note::tpc2default(int p) const
         if (concertPitch()) {
             Interval interval = part()->instrument(tick)->transpose();
             if (!interval.isZero()) {
+                interval.flip();
                 key = transposeKey(key, interval);
             }
         }
@@ -784,14 +778,10 @@ void Note::setTpcFromPitch()
 {
     // works best if note is already added to score, otherwise we can't determine transposition or key
     Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
-    Interval v = staff() ? part()->instrument(tick)->transpose() : Interval();
-    Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
-    // convert key to concert pitch
-    if (!concertPitch() && !v.isZero()) {
-        key = transposeKey(key, v);
-    }
+    Interval v = staff() ? staff()->transpose(tick) : Interval();
+    Key cKey = (staff() && chord()) ? staff()->concertKey(chord()->tick()) : Key::C;
     // set concert pitch tpc
-    _tpc[0] = pitch2tpc(_pitch, key, Prefer::NEAREST);
+    _tpc[0] = pitch2tpc(_pitch, cKey, Prefer::NEAREST);
     // set transposed tpc
     if (v.isZero()) {
         _tpc[1] = _tpc[0];
@@ -907,7 +897,7 @@ String Note::tpcUserName(const bool explicitAccidental, bool full) const
 int Note::transposeTpc(int tpc) const
 {
     Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
-    Interval v = part()->instrument(tick)->transpose();
+    Interval v = staff()->transpose(tick);
     if (v.isZero()) {
         return tpc;
     }
@@ -1510,7 +1500,7 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
     }
     if (!(tpcIsValid(_tpc[0]) && tpcIsValid(_tpc[1]))) {
         Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
-        Interval v = staff() ? part()->instrument(tick)->transpose() : Interval();
+        Interval v = staff() ? staff()->transpose(tick) : Interval();
         if (tpcIsValid(_tpc[0])) {
             v.flip();
             if (v.isZero()) {
@@ -1542,7 +1532,7 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
             _pitch += tpc1Pitch - soundingPitch;
         }
         if (staff()) {
-            Interval v = staff()->part()->instrument(ctxTick)->transpose();
+            Interval v = staff()->transpose(ctxTick);
             int writtenPitch = (_pitch - v.chromatic) % 12;
             if (tpc2Pitch != writtenPitch) {
                 LOGD("bad tpc2 - writtenPitch = %d, tpc2 = %d", writtenPitch, tpc2Pitch);
@@ -1853,7 +1843,7 @@ EngravingItem* Note::drop(EditData& data)
     {
         // calculate correct transposed tpc
         Note* n = toNote(e);
-        Interval v = part()->instrument(ch->tick())->transpose();
+        Interval v = staff()->transpose(ch->tick());
         v.flip();
         n->setTpc2(mu::engraving::transposeTpc(n->tpc1(), v, true));
         // replace this note with new note
@@ -2673,15 +2663,19 @@ void Note::verticalDrag(EditData& ed)
         }
     } else {
         Key key = staff()->key(_tick);
+        Key cKey = staff()->concertKey(_tick);
         staff_idx_t idx = chord()->vStaffIdx();
+        Interval interval = staff()->part()->instrument(_tick)->transpose();
         int newPitch = line2pitch(ned->line + lineOffset, score()->staff(idx)->clef(_tick), key);
 
         if (!concertPitch()) {
-            Interval interval = staff()->part()->instrument(_tick)->transpose();
             newPitch += interval.chromatic;
+        } else {
+            interval.flip();
+            key = transposeKey(cKey, interval, staff()->part()->preferSharpFlat());
         }
 
-        int newTpc1 = pitch2tpc(newPitch, key, Prefer::NEAREST);
+        int newTpc1 = pitch2tpc(newPitch, cKey, Prefer::NEAREST);
         int newTpc2 = pitch2tpc(newPitch - transposition(), key, Prefer::NEAREST);
         for (Note* nn : tiedNotes()) {
             nn->setPitch(newPitch, newTpc1, newTpc2);
@@ -2811,12 +2805,9 @@ void Note::setNval(const NoteVal& nval, Fraction tick)
     if (tick == Fraction(-1, 1) && chord()) {
         tick = chord()->tick();
     }
-    Interval v = part()->instrument(tick)->transpose();
+    Interval v = staff()->transpose(tick);
     if (nval.tpc1 == Tpc::TPC_INVALID) {
-        Key key = staff()->key(tick);
-        if (!concertPitch() && !v.isZero()) {
-            key = transposeKey(key, v);
-        }
+        Key key = staff()->concertKey(tick);
         _tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
     }
     if (nval.tpc2 == Tpc::TPC_INVALID) {

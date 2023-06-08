@@ -295,7 +295,7 @@ PalettePtr PaletteCreator::newKeySigPalette()
 
     // atonal key signature
     KeySigEvent nke;
-    nke.setKey(Key::C);
+    nke.setConcertKey(Key::C);
     nke.setCustom(true);
     nke.setMode(KeyMode::NONE);
     auto nk = Factory::makeKeySig(mu::engraving::gpaletteScore->dummy()->segment());

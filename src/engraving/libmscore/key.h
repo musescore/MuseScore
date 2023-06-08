@@ -68,14 +68,16 @@ public:
     bool operator==(const KeySigEvent& e) const;
     bool operator!=(const KeySigEvent& e) const { return !(*this == e); }
 
+    void setConcertKey(Key v);
     void setKey(Key v);
+    void setCustom(bool val);
     void print() const;
 
+    Key concertKey() const { return _concertKey; }
     Key key() const { return _key; }
     KeyMode mode() const { return _mode; }
     void setMode(KeyMode m) { _mode = m; }
     bool custom() const { return _custom; }
-    void setCustom(bool val) { _custom = val; _key = (_key == Key::INVALID ? Key::C : _key); }
     bool isValid() const { return _key != Key::INVALID; }
     bool isAtonal() const { return _mode == KeyMode::NONE; }
     void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
@@ -89,14 +91,15 @@ public:
     const std::vector<CustDef>& customKeyDefs() const { return _customKeyDefs; }
 
 private:
-    Key _key            { Key::INVALID };                // -7 -> +7
+    Key _concertKey     { Key::INVALID };               // -7 -> +7
+    Key _key            { Key::INVALID };               // actual key, depends on staff transposition
     KeyMode _mode       { KeyMode::UNKNOWN };
     bool _custom        { false };
     bool _forInstrumentChange{ false };
     std::vector<CustDef> _customKeyDefs;
     std::vector<KeySym> _keySymbols;
 
-    void enforceLimits();
+    void enforceLimits(bool transposing = false);       // if true, enforce only trnasposing, otherways both
 };
 
 //---------------------------------------------------------

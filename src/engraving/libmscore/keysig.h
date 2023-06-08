@@ -52,14 +52,17 @@ public:
 
     double mag() const override;
 
-    //@ sets the key of the key signature
-    void setKey(Key);
+    //@ sets the key of the key signature (concert key and transposing key)
+    void setKey(Key cKey, Key tKey);
+    void setKey(Key key);
 
     Segment* segment() const { return (Segment*)explicitParent(); }
     Measure* measure() const { return explicitParent() ? (Measure*)explicitParent()->explicitParent() : nullptr; }
 
-    //@ returns the key of the key signature (from -7 (flats) to +7 (sharps) )
+    //@ returns the key of the actual key signature (from -7 (flats) to +7 (sharps) )
     Key key() const { return _sig.key(); }
+    //@ returns the key of the concert key signature
+    Key concertKey() const { return _sig.concertKey(); }
     const std::vector<CustDef>& customKeyDefs() const { return _sig.customKeyDefs(); }
     bool isCustom() const { return _sig.custom(); }
     bool isAtonal() const { return _sig.isAtonal(); }

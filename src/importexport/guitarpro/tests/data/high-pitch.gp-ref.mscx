@@ -73,7 +73,7 @@ Puki Kuki</text>
             </Clef>
           <KeySig>
             <linkedMain/>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <linkedMain/>
@@ -354,7 +354,7 @@ Puki Kuki</text>
             <KeySig>
               <linked>
                 </linked>
-              <accidental>0</accidental>
+              <concertKey>0</concertKey>
               </KeySig>
             <TimeSig>
               <linked>
@@ -573,7 +573,7 @@ Puki Kuki</text>
               <linked>
                 <indexDiff>4</indexDiff>
                 </linked>
-              <accidental>0</accidental>
+              <concertKey>0</concertKey>
               </KeySig>
             <Chord>
               <linked>

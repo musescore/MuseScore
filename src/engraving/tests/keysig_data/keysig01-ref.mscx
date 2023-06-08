@@ -96,7 +96,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>2</accidental>
+            <concertKey>2</concertKey>
             </KeySig>
           <Chord>
             <durationType>whole</durationType>

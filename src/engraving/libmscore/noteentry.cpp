@@ -136,7 +136,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
         } else {
             nval.pitch += instr->transpose().chromatic;
             nval.tpc2 = step2tpc(step % 7, acci);
-            Interval v = st->part()->instrument(tick)->transpose();
+            Interval v = st->transpose(tick);
             if (v.isZero()) {
                 nval.tpc1 = nval.tpc2;
             } else {

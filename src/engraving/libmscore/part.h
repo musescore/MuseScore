@@ -43,7 +43,7 @@ class InstrumentTemplate;
 //---------------------------------------------------------
 
 enum class PreferSharpFlat : char {
-    DEFAULT, SHARPS, FLATS
+    NONE, SHARPS, FLATS, AUTO
 };
 
 //---------------------------------------------------------
@@ -203,7 +203,7 @@ private:
 
     int _color = 0;                  ///User specified color for helping to label parts
 
-    PreferSharpFlat _preferSharpFlat = PreferSharpFlat::DEFAULT;
+    PreferSharpFlat _preferSharpFlat = PreferSharpFlat::AUTO;
 };
 } // namespace mu::engraving
 #endif

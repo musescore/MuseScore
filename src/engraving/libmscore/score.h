@@ -488,7 +488,7 @@ private:
     bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, staff_idx_t staffIdx);
     bool rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffIdx);
     std::list<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
-    void pasteChordRest(ChordRest* cr, const Fraction& tick, const Interval&);
+    void pasteChordRest(ChordRest* cr, const Fraction& tick);
 
     void doSelect(EngravingItem* e, SelectType type, staff_idx_t staffIdx);
     void selectSingle(EngravingItem* e, staff_idx_t staffIdx);
@@ -640,8 +640,7 @@ public:
     void addRemoveBreaks(int interval, bool lock);
 
     bool transpose(Note* n, Interval, bool useSharpsFlats);
-    void transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& tickStart, const Fraction& tickEnd, const Interval&,
-                       bool useInstrument = false, bool flip = false);
+    void transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& tickStart, const Fraction& tickEnd, bool flip = false);
     bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval, bool trKeys, bool transposeChordNames,
                    bool useDoubleSharpsFlats);
 
@@ -954,7 +953,7 @@ public:
     void pasteSymbols(XmlReader& e, ChordRest* dst);
     void renderMidi(EventMap* events, const MidiRenderer::Context& ctx, bool expandRepeats);
 
-    static void transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick);
+    static void transposeChord(Chord* c, const Fraction& tick);
 
     BeatType tick2beatType(const Fraction& tick) const;
 

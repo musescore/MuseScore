@@ -97,7 +97,7 @@ solo concert</text>
       <Measure>
         <voice>
           <KeySig>
-            <accidental>1</accidental>
+            <concertKey>1</concertKey>
             </KeySig>
           <StaffText>
             <text>Free time</text>

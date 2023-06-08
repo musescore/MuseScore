@@ -556,13 +556,20 @@ Err importBB(MasterScore* score, const QString& name)
     foreach (Staff* staff, score->staves()) {
         Fraction tick = Fraction(0, 1);
         KeySigEvent ke;
-        ke.setKey(Key(bb.key()));
+        Key key = Key(bb.key());
+        Key cKey = key;
+        Interval v = staff->part()->instrument(tick)->transpose();
+        if (!v.isZero() && !score->styleB(Sid::concertPitch)) {
+            cKey = transposeKey(key, v);
+        }
+        ke.setConcertKey(cKey);
+        ke.setKey(key);
         staff->setKey(tick, ke);
         Measure* mks = score->tick2measure(tick);
         Segment* sks = mks->getSegment(SegmentType::KeySig, tick);
         KeySig* keysig = Factory::createKeySig(sks);
         keysig->setTrack((static_cast<int>(score->staffIdx(staff->part())) + staff->rstaff()) * VOICES);
-        keysig->setKey(Key(bb.key()));
+        keysig->setKey(cKey, key);
         sks->add(keysig);
     }
     score->setUpTempoMap();

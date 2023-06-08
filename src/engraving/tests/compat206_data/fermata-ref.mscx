@@ -100,7 +100,7 @@
         <stretch>0.9</stretch>
         <voice>
           <KeySig>
-            <accidental>6</accidental>
+            <concertKey>6</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>

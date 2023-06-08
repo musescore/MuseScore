@@ -356,7 +356,8 @@
           <irregular>1</irregular>
           <voice>
             <KeySig>
-              <accidental>2</accidental>
+              <concertKey>0</concertKey>
+              <actualKey>2</actualKey>
               </KeySig>
             <TimeSig>
               <linked>

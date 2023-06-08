@@ -150,7 +150,7 @@
         <voice>
           <KeySig>
             <linkedMain/>
-            <accidental>-4</accidental>
+            <concertKey>-4</concertKey>
             </KeySig>
           <TimeSig>
             <linkedMain/>
@@ -1002,7 +1002,7 @@
             <KeySig>
               <linked>
                 </linked>
-              <accidental>-4</accidental>
+              <concertKey>-4</concertKey>
               </KeySig>
             <TimeSig>
               <linked>

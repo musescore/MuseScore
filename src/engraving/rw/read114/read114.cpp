@@ -845,7 +845,7 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
     }
     if (!(tpcIsValid(note->tpc1()) && tpcIsValid(note->tpc2()))) {
         Fraction tick = note->chord() ? note->chord()->tick() : Fraction(-1, 1);
-        Interval v = note->staff() ? note->part()->instrument(tick)->transpose() : Interval();
+        Interval v = note->staff() ? note->staff()->transpose(tick) : Interval();
         if (tpcIsValid(note->tpc1())) {
             v.flip();
             if (v.isZero()) {
@@ -876,7 +876,7 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
             LOGD("bad tpc1 - concertPitch = %d, tpc1 = %d", concertPitch, tpc1Pitch);
             note->setPitch(note->pitch() + tpc1Pitch - concertPitch);
         }
-        Interval v = note->staff()->part()->instrument(ctx.tick())->transpose();
+        Interval v = note->staff()->transpose(ctx.tick());
         int transposedPitch = (note->pitch() - v.chromatic) % 12;
         if (tpc2Pitch != transposedPitch) {
             LOGD("bad tpc2 - transposedPitch = %d, tpc2 = %d", transposedPitch, tpc2Pitch);

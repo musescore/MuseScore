@@ -58,9 +58,14 @@ void MuseData::musicalAttribute(QString s, Part* part)
     QStringList al = s.mid(2).split(" ", Qt::SkipEmptyParts);
     foreach (QString item, al) {
         if (item.startsWith("K:")) {
-            int key = item.midRef(2).toInt();
+            Key key = Key(item.midRef(2).toInt());
             KeySigEvent ke;
-            ke.setKey(Key(key));
+            Interval v = part->instrument(curTick)->transpose();
+            ke.setConcertKey(key);
+            if (!v.isZero() && !score->styleB(Sid::concertPitch)) {
+                v.flip();
+                ke.setKey(transposeKey(key, v));
+            }
             for (Staff* staff : part->staves()) {
                 staff->setKey(curTick, ke);
             }

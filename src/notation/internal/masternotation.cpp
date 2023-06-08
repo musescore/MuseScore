@@ -176,7 +176,7 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
         ks.setCustom(true);
         ks.setMode(KeyMode::NONE);
     } else {
-        ks.setKey(scoreOptions.key);
+        ks.setConcertKey(scoreOptions.key);
     }
 
     for (int i = 0; i < measures; ++i) {
@@ -214,10 +214,10 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
                         // transpose key
                         //
                         mu::engraving::KeySigEvent nKey = ks;
-                        if (!nKey.isAtonal() && part->instrument()->transpose().chromatic
-                            && !score->styleB(mu::engraving::Sid::concertPitch)) {
-                            int diff = -part->instrument()->transpose().chromatic;
-                            nKey.setKey(mu::engraving::transposeKey(nKey.key(), diff, part->preferSharpFlat()));
+                        mu::engraving::Interval v = part->instrument()->transpose();
+                        if (!nKey.isAtonal() && !v.isZero() && !score->styleB(mu::engraving::Sid::concertPitch)) {
+                            v.flip();
+                            nKey.setKey(mu::engraving::transposeKey(nKey.concertKey(), v, part->preferSharpFlat()));
                         }
                         staff->setKey(mu::engraving::Fraction(0, 1), nKey);
                         mu::engraving::Segment* ss

@@ -1372,7 +1372,7 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
             // parent can be a fret diagram
             Segment* segment = item->getParentSeg();
             Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
-            const Interval& interval = item->part()->instrument(tick)->transpose();
+            const Interval& interval = item->staff()->transpose(tick);
             if (ctx.clipboardmode() && !item->score()->styleB(Sid::concertPitch) && interval.chromatic) {
                 rRootTpc = transposeTpc(item->rootTpc(), interval, true);
                 rBaseTpc = transposeTpc(item->baseTpc(), interval, true);
@@ -1788,17 +1788,20 @@ void TWrite::write(const KeySig* item, XmlWriter& xml, WriteContext& ctx)
     writeItemProperties(item, xml, ctx);
     if (item->isAtonal()) {
         xml.tag("custom", 1);
-    } else if (item->isCustom()) {
-        xml.tag("accidental", int(item->key()));
-        xml.tag("custom", 1);
-        for (const CustDef& cd : item->customKeyDefs()) {
-            xml.startElement("CustDef");
-            xml.tag("sym", SymNames::nameForSymId(cd.sym));
-            xml.tag("def", { { "degree", cd.degree }, { "xAlt", cd.xAlt }, { "octAlt", cd.octAlt } });
-            xml.endElement();
-        }
     } else {
-        xml.tag("accidental", int(item->key()));
+        xml.tag("concertKey", int(item->concertKey()));
+        if (item->concertKey() != item->key()) {
+            xml.tag("actualKey", int(item->key()));
+        }
+        if (item->isCustom()) {
+            xml.tag("custom", 1);
+            for (const CustDef& cd : item->customKeyDefs()) {
+                xml.startElement("CustDef");
+                xml.tag("sym", SymNames::nameForSymId(cd.sym));
+                xml.tag("def", { { "degree", cd.degree }, { "xAlt", cd.xAlt }, { "octAlt", cd.octAlt } });
+                xml.endElement();
+            }
+        }
     }
 
     if (item->mode() != KeyMode::UNKNOWN) {
@@ -2077,8 +2080,22 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("color", item->color());
     }
 
-    if (item->preferSharpFlat() != PreferSharpFlat::DEFAULT) {
-        xml.tag("preferSharpFlat", item->preferSharpFlat() == PreferSharpFlat::SHARPS ? "sharps" : "flats");
+    if (item->preferSharpFlat() != PreferSharpFlat::AUTO) {
+        switch (item->preferSharpFlat()) {
+        case PreferSharpFlat::AUTO:
+            break;
+        case PreferSharpFlat::FLATS:
+            xml.tag("preferSharpFlat", "flats");
+            break;
+        case PreferSharpFlat::SHARPS:
+            xml.tag("preferSharpFlat", "flats");
+            break;
+        case PreferSharpFlat::NONE:
+            xml.tag("preferSharpFlat", "none");
+            break;
+        default:
+            break;
+        }
     }
 
     write(item->instrument(), xml, ctx, item);
@@ -2960,9 +2977,10 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                 voiceTagWritten |= writeVoiceMove(xml, ctx, segment, startTick, track, &lastTrackWritten);
                 // we will miss a key sig!
                 if (!keySigWritten) {
-                    Key k = score->staff(track2staff(track))->key(segment->tick());
+                    Key ck = score->staff(track2staff(track))->concertKey(segment->tick());
+                    Key tk = score->staff(track2staff(track))->key(segment->tick());
                     KeySig* ks = Factory::createKeySig(score->dummy()->segment());
-                    ks->setKey(k);
+                    ks->setKey(ck, tk);
                     TWrite::write(ks, xml, ctx);
                     delete ks;
                     keySigWritten = true;

@@ -133,7 +133,8 @@ TEST_F(Engraving_MeasureTests, insertBfKeyChange)
     score->undoRedo(true, 0);
 
     EXPECT_TRUE(score->checkKeys());
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key_undo.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_key.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key_undo.mscx",
+                                            MEASURE_DATA_DIR + u"measure-insert_bf_key_undo-ref.mscx"));
 
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd();
@@ -146,7 +147,8 @@ TEST_F(Engraving_MeasureTests, insertBfKeyChange)
     score->undoRedo(true, 0);
 
     EXPECT_TRUE(score->checkKeys());
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key_undo.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_key.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key_undo.mscx",
+                                            MEASURE_DATA_DIR + u"measure-insert_bf_key_undo-ref.mscx"));
     delete score;
 }
 

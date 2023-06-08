@@ -148,12 +148,12 @@ void ExportMidi::writeHeader()
             for (auto ik = sk; ik != ek; ++ik) {
                 MidiEvent ev;
                 ev.setType(ME_META);
-                Key key       = ik->second.key();           // -7 -- +7
+                Key key = ik->second.concertKey();           // -7 -- +7
                 ev.setMetaType(META_KEY_SIGNATURE);
                 ev.setLen(2);
                 unsigned char* data = new unsigned char[2];
-                data[0]   = int(key);
-                data[1]   = 0;          // major
+                data[0] = int(key);
+                data[1] = 0;          // major
                 ev.setEData(data);
                 int tick = ik->first + tickOffset;
                 track1.insert(m_pauseMap.addPauseTicks(tick), ev);

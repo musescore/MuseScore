@@ -866,8 +866,15 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             LOGD("   <Key>");
             CapKey* o = static_cast<CapKey*>(no);
             KeySigEvent key = score->staff(staffIdx)->keySigEvent(tick);
-            KeySigEvent okey;
-            okey.setKey(Key(o->signature));
+            KeySigEvent okey = key;
+            Key tKey = Key(o->signature);
+            Key cKey = tKey;
+            Interval v = score->staff(staffIdx)->part()->instrument(tick)->transpose();
+            if (!v.isZero() && score->styleB(mu::engraving::Sid::concertPitch)) {
+                cKey = transposeKey(tKey, v);
+            }
+            okey.setConcertKey(cKey);
+            okey.setKey(tKey);
             if (!(key == okey)) {
                 score->staff(staffIdx)->setKey(tick, okey);
                 Measure* m = score->getCreateMeasure(tick);

@@ -1857,13 +1857,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                     {
                         mu::engraving::KeySig* okeysig = engraving::Factory::createKeySig(score->dummy()->segment());
                         okeysig->setKeySigEvent(staff->keySigEvent(tick1));
-                        if (!score->styleB(mu::engraving::Sid::concertPitch) && !okeysig->isAtonal()) {
-                            mu::engraving::Interval v = staff->part()->instrument(tick1)->transpose();
-                            if (!v.isZero()) {
-                                Key k = okeysig->key();
-                                okeysig->setKey(transposeKey(k, v, okeysig->part()->preferSharpFlat()));
-                            }
-                        }
+                        Key ck = okeysig->concertKey();
+                        okeysig->setKey(ck);
                         oelement = okeysig;
                         break;
                     }
