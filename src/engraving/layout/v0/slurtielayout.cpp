@@ -37,6 +37,7 @@
 
 #include "tlayout.h"
 #include "chordlayout.h"
+#include "tremololayout.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::layout::v0;
@@ -712,7 +713,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
             } else if (trem && trem->twoNotes() && trem->chord2() != sc && sc->up() == item->_up) {
                 TLayout::layout(trem, ctx);
                 Note* note = item->_up ? sc->upNote() : sc->downNote();
-                double stemHeight = stem1 ? stem1->length() : trem->defaultStemLengthStart();
+                double stemHeight = stem1 ? stem1->length() : defaultStemLengthStart(trem);
                 double offset = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
                 double sh = stemHeight + offset;
 
@@ -846,7 +847,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
                     // in these cases, layout end of slur to stem
                     double beamWidthSp = beam2 ? item->score()->styleS(Sid::beamWidth).val() : 0;
                     Note* note = item->_up ? sc->upNote() : sc->downNote();
-                    double stemHeight = stem2 ? stem2->length() + (beamWidthSp / 2) : trem->defaultStemLengthEnd();
+                    double stemHeight = stem2 ? stem2->length() + (beamWidthSp / 2) : defaultStemLengthEnd(trem);
                     double offset = std::max(beamClearance * ec->intrinsicMag(), minOffset) * _spatium;
                     double sh = stemHeight + offset;
 
@@ -1317,4 +1318,18 @@ void SlurTieLayout::computeUp(Slur* slur, LayoutContext& ctx)
     }
     break;
     }
+}
+
+double SlurTieLayout::defaultStemLengthStart(Tremolo* tremolo)
+{
+    return TremoloLayout::extendedStemLenWithTwoNoteTremolo(tremolo,
+                                                            tremolo->chord1()->defaultStemLength(),
+                                                            tremolo->chord2()->defaultStemLength()).first;
+}
+
+double SlurTieLayout::defaultStemLengthEnd(Tremolo* tremolo)
+{
+    return TremoloLayout::extendedStemLenWithTwoNoteTremolo(tremolo,
+                                                            tremolo->chord1()->defaultStemLength(),
+                                                            tremolo->chord2()->defaultStemLength()).second;
 }
