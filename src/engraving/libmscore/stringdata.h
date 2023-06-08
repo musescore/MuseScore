@@ -61,6 +61,7 @@ class StringData
     int         fret(int pitch, int string, int pitchOffset) const;
     int         getPitch(int string, int fret, int pitchOffset) const;
     void        sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int pitchOffset, int* count) const;
+    void        sortChordNotesUseSameString(const Chord* chord, int pitchOffset) const;
 
 public:
     StringData() {}
