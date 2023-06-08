@@ -22,8 +22,6 @@
 
 #include "ledgerline.h"
 
-
-
 #include "chord.h"
 #include "measure.h"
 #include "score.h"

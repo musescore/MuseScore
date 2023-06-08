@@ -23,8 +23,6 @@
 
 #include "translation.h"
 
-
-
 #include "../libmscore/ambitus.h"
 #include "../libmscore/barline.h"
 #include "../libmscore/beam.h"

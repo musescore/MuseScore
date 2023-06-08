@@ -31,7 +31,6 @@
 
 #include "types/typesconv.h"
 
-
 #include "ambitus.h"
 #include "factory.h"
 #include "measure.h"

@@ -25,7 +25,6 @@
 
 #include "infrastructure/messagebox.h"
 
-
 #include "accidental.h"
 #include "articulation.h"
 #include "barline.h"

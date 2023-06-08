@@ -36,7 +36,6 @@
 
 #include "iengravingfont.h"
 
-
 #include "bend.h"
 #include "bracket.h"
 #include "chord.h"

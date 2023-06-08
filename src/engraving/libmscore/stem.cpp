@@ -25,8 +25,6 @@
 
 #include "draw/types/brush.h"
 
-
-
 #include "beam.h"
 #include "chord.h"
 #include "hook.h"

@@ -29,8 +29,6 @@
 #include "draw/types/transform.h"
 #include "draw/svgrenderer.h"
 
-
-
 #include "imageStore.h"
 #include "masterscore.h"
 #include "mscore.h"

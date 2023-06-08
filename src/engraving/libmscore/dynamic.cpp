@@ -24,7 +24,6 @@
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
-
 #include "dynamichairpingroup.h"
 #include "expression.h"
 #include "measure.h"
