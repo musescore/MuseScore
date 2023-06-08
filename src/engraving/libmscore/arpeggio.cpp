@@ -28,7 +28,6 @@
 
 #include "iengravingfont.h"
 #include "types/typesconv.h"
-#include "layout/v0/tlayout.h"
 
 #include "accidental.h"
 #include "chord.h"
@@ -39,8 +38,6 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
-
-#include "layout/v0/arpeggiolayout.h"
 
 #include "log.h"
 

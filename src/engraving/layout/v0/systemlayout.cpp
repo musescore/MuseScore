@@ -487,7 +487,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
     layoutSystemElements(options, ctx, score, system);
     SystemLayout::layout2(system, ctx);     // compute staff distances
     for (MeasureBase* mb : system->measures()) {
-        mb->layoutCrossStaff();
+        MeasureLayout::layoutCrossStaff(mb, ctx);
     }
     // TODO: now that the code at the top of this function does this same backwards search,
     // we might be able to eliminate this block

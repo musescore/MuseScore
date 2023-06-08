@@ -114,8 +114,7 @@ void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect,
 
     ActionIcon* action = toActionIcon(element);
     action->setFontSize(ActionIcon::DEFAULT_FONT_SIZE * m_cell->mag * m_extraMag);
-    layout::v0::LayoutContext lctx(action->score());
-    layout::v0::TLayout::layout(action, lctx);
+    EngravingItem::layout()->layoutItem(action);
 
     painter.translate(rect.center() - action->bbox().center());
     action->draw(&painter);
@@ -172,8 +171,7 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* e
     painter.scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size
 
     // calculate bbox
-    layout::v0::LayoutContext lctx(element->score());
-    layout::v0::TLayout::layoutItem(element, lctx);
+    EngravingItem::layout()->layoutItem(element);
 
     PointF origin = element->bbox().center();
 

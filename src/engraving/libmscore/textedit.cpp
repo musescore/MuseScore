@@ -24,7 +24,7 @@
 
 #include "iengravingfont.h"
 #include "types/symnames.h"
-#include "layout/v0/tlayout.h"
+
 
 #include "mscoreview.h"
 #include "navigate.h"
@@ -101,8 +101,7 @@ void TextBase::startEdit(EditData& ed)
     ted->startUndoIdx = score()->undoStack()->getCurIdx();
 
     if (layoutInvalid) {
-        layout::v0::LayoutContext ctx(score());
-        layout::v0::TLayout::layout(this, ctx);
+        layout()->layoutItem(this);
     }
     if (!ted->cursor()->set(ed.startMove)) {
         resetFormatting();
@@ -196,8 +195,7 @@ void TextBase::endEdit(EditData& ed)
             Lyrics* prev = prevLyrics(toLyrics(this));
             if (prev) {
                 prev->setRemoveInvalidSegments();
-                layout::v0::LayoutContext ctx(score());
-                layout::v0::TLayout::layout(prev, ctx);
+                layout()->layoutItem(prev);
             }
         }
         return;

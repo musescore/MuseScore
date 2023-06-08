@@ -32,6 +32,8 @@ namespace mu::engraving {
 class Score;
 class EngravingItem;
 
+class Accidental;
+class ActionIcon;
 class Arpeggio;
 
 class BarLine;
@@ -51,6 +53,7 @@ class Harmony;
 class Image;
 
 enum class KerningType;
+class KeySig;
 
 class LedgerLine;
 class SLine;
@@ -61,13 +64,16 @@ class NoteDot;
 
 class Rest;
 
+class ShadowNote;
 class Spanner;
 class Slur;
 class SlurTie;
+class StaffText;
 class Stem;
 
 class TextBase;
 class Text;
+class TimeSig;
 }
 
 namespace mu::engraving::layout {
@@ -82,6 +88,8 @@ public:
     virtual void layoutRange(Score* score, const LayoutOptions& options, const Fraction&, const Fraction&) = 0;
 
     using Supported = std::variant<std::monostate,
+                                   Accidental*,
+                                   ActionIcon*,
                                    Arpeggio*,
                                    BarLine*,
                                    Box*,
@@ -91,18 +99,22 @@ public:
                                    FiguredBassItem*,
                                    Harmony*,
                                    Image*,
+                                   KeySig*,
                                    LedgerLine*,
                                    SLine*,
                                    LineSegment*,
                                    Lyrics*,
                                    NoteDot*,
                                    Rest*,
+                                   ShadowNote*,
                                    Spanner*,
                                    Slur*,
                                    SlurTie*,
+                                   StaffText*,
                                    Stem*,
                                    TextBase*,
-                                   Text*
+                                   Text*,
+                                   TimeSig*
                                    >;
 
     template<typename T>

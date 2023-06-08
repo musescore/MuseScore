@@ -28,13 +28,6 @@
 
 #include "containers.h"
 
-#include "style/style.h"
-
-#include "layout/v0/tlayout.h"
-#include "layout/v0/slurtielayout.h"
-#include "layout/v0/chordlayout.h"
-#include "layout/v0/beamlayout.h"
-
 #include "accidental.h"
 #include "arpeggio.h"
 #include "articulation.h"
@@ -42,7 +35,6 @@
 #include "chordline.h"
 #include "drumset.h"
 #include "factory.h"
-#include "fingering.h"
 #include "hook.h"
 #include "key.h"
 #include "ledgerline.h"
@@ -1713,47 +1705,6 @@ void Chord::scanElements(void* data, void (* func)(void*, EngravingItem*), bool 
         e->scanElements(data, func, all);
     }
     ChordRest::scanElements(data, func, all);
-}
-
-//---------------------------------------------------------
-//   crossMeasureSetup
-//---------------------------------------------------------
-
-void Chord::crossMeasureSetup(bool on)
-{
-    if (!on) {
-        if (_crossMeasure != CrossMeasure::UNKNOWN) {
-            _crossMeasure = CrossMeasure::UNKNOWN;
-            layout::v0::LayoutContext lctx(score());
-            ChordLayout::layoutStem(this, lctx);
-        }
-        return;
-    }
-    if (_crossMeasure == CrossMeasure::UNKNOWN) {
-        CrossMeasure tempCross = CrossMeasure::NONE;      // assume no cross-measure modification
-        // if chord has only one note and note is tied forward
-        if (notes().size() == 1 && _notes[0]->tieFor()) {
-            Chord* tiedChord = _notes[0]->tieFor()->endNote()->chord();
-            // if tied note belongs to another measure and to a single-note chord
-            if (tiedChord->measure() != measure() && tiedChord->notes().size() == 1) {
-                // get total duration
-                std::vector<TDuration> durList = toDurationList(
-                    actualDurationType().fraction()
-                    + tiedChord->actualDurationType().fraction(), true);
-                // if duration can be expressed as a single duration
-                // apply cross-measure modification
-                if (durList.size() == 1) {
-                    _crossMeasure = tempCross = CrossMeasure::FIRST;
-                    _crossMeasureTDur = durList[0];
-                    layout::v0::LayoutContext lctx(score());
-                    ChordLayout::layoutStem(this, lctx);
-                }
-            }
-            _crossMeasure = tempCross;
-            tiedChord->setCrossMeasure(tempCross == CrossMeasure::FIRST
-                                       ? CrossMeasure::SECOND : CrossMeasure::NONE);
-        }
-    }
 }
 
 //---------------------------------------------------------

@@ -26,20 +26,16 @@
 #include "draw/types/pen.h"
 #include "draw/types/transform.h"
 
-#include "style/style.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-
 #include "layout/v0/tremololayout.h"
 
 #include "beam.h"
 #include "chord.h"
-#include "measure.h"
-#include "note.h"
 #include "score.h"
-#include "staff.h"
 #include "stem.h"
 #include "system.h"
+#include "stafftype.h"
 
 #include "log.h"
 

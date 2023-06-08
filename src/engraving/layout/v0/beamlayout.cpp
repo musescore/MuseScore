@@ -612,7 +612,7 @@ void BeamLayout::beamGraceNotes(Score* score, Chord* mainNote, bool after)
     }
 }
 
-void BeamLayout::createBeams(Score* score, LayoutContext& lc, Measure* measure)
+void BeamLayout::createBeams(Score* score, LayoutContext& ctx, Measure* measure)
 {
     bool crossMeasure = score->styleB(Sid::crossMeasureValues);
 
@@ -675,7 +675,7 @@ void BeamLayout::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                         const Measure* pm = prevCR->measure();
                         if (!beamNoContinue(prevCR->beamMode())
                             && !pm->lineBreak() && !pm->pageBreak() && !pm->sectionBreak()
-                            && lc.prevMeasure
+                            && ctx.prevMeasure
                             && !(prevCR->isChord() && prevCR->durationType().type() <= DurationType::V_QUARTER)) {
                             beam = prevBeam;
                             //a1 = beam ? beam->elements().front() : prevCR;
@@ -704,7 +704,7 @@ void BeamLayout::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                 // set up for cross-measure values as soon as possible
                 // to have all computations (stems, hooks, ...) consistent with it
                 if (!chord->isGrace()) {
-                    chord->crossMeasureSetup(crossMeasure);
+                    ChordLayout::crossMeasureSetup(chord, crossMeasure, ctx);
                 }
             }
 

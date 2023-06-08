@@ -22,8 +22,6 @@
 
 #include "stafflines.h"
 
-#include "layout/v0/tlayout.h"
-
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
@@ -83,16 +81,6 @@ PointF StaffLines::canvasPos() const
         e = e->parentItem();
     }
     return p;
-}
-
-//---------------------------------------------------------
-//   layoutForWidth
-//---------------------------------------------------------
-
-void StaffLines::layoutForWidth(double w)
-{
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layoutForWidth(this, w, ctx);
 }
 
 //---------------------------------------------------------

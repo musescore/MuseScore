@@ -24,8 +24,8 @@
 
 #include "translation.h"
 
-#include "style/style.h"
 #include "types/typesconv.h"
+
 #include "layout/v0/tlayout.h"
 #include "layout/v0/chordlayout.h"
 
@@ -34,11 +34,8 @@
 #include "barline.h"
 #include "beam.h"
 #include "breath.h"
-
 #include "chord.h"
 #include "clef.h"
-#include "connector.h"
-
 #include "factory.h"
 #include "figuredbass.h"
 #include "harmony.h"
@@ -54,7 +51,6 @@
 #include "rehearsalmark.h"
 #include "score.h"
 #include "segment.h"
-#include "sig.h"
 #include "slur.h"
 #include "staff.h"
 #include "stafftype.h"

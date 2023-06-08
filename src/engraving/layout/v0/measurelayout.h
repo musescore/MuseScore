@@ -47,6 +47,7 @@ public:
     static void layoutMeasureNumber(Measure* m, LayoutContext& ctx);
     static void layoutMMRestRange(Measure* m, LayoutContext& ctx);
     static void layoutMeasureElements(Measure* m, LayoutContext& ctx);
+    static void layoutCrossStaff(MeasureBase* mb, LayoutContext& ctx);
 
     static double createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
     static void addSystemHeader(Measure* m, bool isFirstSystem, LayoutContext& ctx);

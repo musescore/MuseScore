@@ -39,10 +39,7 @@
 #include "iengravingfont.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "layout/v0/tlayout.h"
-#include "layout/v0/layout.h"
 
-#include "articulation.h"
 #include "audio.h"
 #include "beam.h"
 #include "box.h"

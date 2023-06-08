@@ -152,8 +152,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
         painter.restore();
     }
     clef->setPos(0.0, 0.0);
-    layout::v0::LayoutContext lctx(clef->score());
-    layout::v0::TLayout::layoutItem(clef, lctx);
+    EngravingItem::layout()->layoutItem(clef);
 
     painter.translate(clef->pagePos());
     clef->draw(&painter);
@@ -231,9 +230,7 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
         dragElement->resetExplicitParent();
 
         rw::RWRegister::reader()->readItem(dragElement, e);
-
-        layout::v0::LayoutContext lctx(dragElement->score());
-        layout::v0::TLayout::layoutItem(dragElement, lctx);
+        EngravingItem::layout()->layoutItem(dragElement);
     } else {
         if (MScore::debugMode) {
             LOGD("KeyCanvas::dragEnterEvent: formats:");

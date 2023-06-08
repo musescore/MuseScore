@@ -49,7 +49,7 @@ public:
 
     static bool isTopBeam(ChordRest* cr);
     static bool notTopBeam(ChordRest* cr);
-    static void createBeams(Score* score, LayoutContext& lc, Measure* measure);
+    static void createBeams(Score* score, LayoutContext& ctx, Measure* measure);
     static void restoreBeams(Measure* m);
     static void breakCrossMeasureBeams(Measure* measure, LayoutContext& ctx);
     static void layoutNonCrossBeams(Segment* s, LayoutContext& ctx);
