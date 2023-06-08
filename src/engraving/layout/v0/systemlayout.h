@@ -53,6 +53,8 @@ public:
     static void layoutBracketsVertical(System* system, LayoutContext& ctx);
     static void layoutInstrumentNames(System* system);
 
+    static void setInstrumentNames(System* system, const LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
+
 private:
     static System* getNextSystem(LayoutContext& lc);
     static void hideEmptyStaves(Score* score, System* system, bool isFirstSystem);

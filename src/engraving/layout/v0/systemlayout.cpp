@@ -94,9 +94,9 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
 
     System* system = getNextSystem(ctx);
     Fraction lcmTick = ctx.curMeasure->tick();
-    system->setInstrumentNames(ctx, ctx.startWithLongNames, lcmTick);
+    SystemLayout::setInstrumentNames(system, ctx, ctx.startWithLongNames, lcmTick);
 
-    double curSysWidth    = 0.0;
+    double curSysWidth = 0.0;
     double layoutSystemMinWidth = 0.0;
     bool firstMeasure = true;
     bool createHeader = false;
@@ -2326,5 +2326,71 @@ void SystemLayout::layoutInstrumentNames(System* system)
             }
         }
         staffIdx += nstaves;
+    }
+}
+
+void SystemLayout::setInstrumentNames(System* system, const LayoutContext& ctx, bool longName, Fraction tick)
+{
+    //
+    // remark: add/remove instrument names is not undo/redoable
+    //         as add/remove of systems is not undoable
+    //
+    if (system->vbox()) {                 // ignore vbox
+        return;
+    }
+    if (!system->score()->showInstrumentNames()
+        || (system->style()->styleB(Sid::hideInstrumentNameIfOneInstrument) && system->score()->visiblePartCount() <= 1)) {
+        for (SysStaff* staff : system->_staves) {
+            for (InstrumentName* t : staff->instrumentNames) {
+                ctx.score()->removeElement(t);
+            }
+        }
+        return;
+    }
+
+    int staffIdx = 0;
+    for (SysStaff* staff : system->_staves) {
+        Staff* s = system->score()->staff(staffIdx);
+        Part* part = s->part();
+
+        bool atLeastOneVisibleStaff = false;
+        for (Staff* partStaff : part->staves()) {
+            if (partStaff->show()) {
+                atLeastOneVisibleStaff = true;
+                break;
+            }
+        }
+
+        bool showName = part->show() && atLeastOneVisibleStaff;
+        if (!s->isTop() || !showName) {
+            for (InstrumentName* t : staff->instrumentNames) {
+                ctx.score()->removeElement(t);
+            }
+            ++staffIdx;
+            continue;
+        }
+
+        const std::list<StaffName>& names = longName ? part->longNames(tick) : part->shortNames(tick);
+
+        size_t idx = 0;
+        for (const StaffName& sn : names) {
+            InstrumentName* iname = mu::value(staff->instrumentNames, idx);
+            if (iname == 0) {
+                iname = new InstrumentName(system);
+                // iname->setGenerated(true);
+                iname->setParent(system);
+                iname->setSysStaff(staff);
+                iname->setTrack(staffIdx * VOICES);
+                iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
+                iname->setLayoutPos(sn.pos());
+                ctx.score()->addElement(iname);
+            }
+            iname->setXmlText(sn.name());
+            ++idx;
+        }
+        for (; idx < staff->instrumentNames.size(); ++idx) {
+            ctx.score()->removeElement(staff->instrumentNames[idx]);
+        }
+        ++staffIdx;
     }
 }
