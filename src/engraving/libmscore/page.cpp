@@ -22,8 +22,6 @@
 
 #include "page.h"
 
-
-
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
 #endif

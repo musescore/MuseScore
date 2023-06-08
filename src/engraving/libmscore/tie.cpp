@@ -27,8 +27,6 @@
 #include "draw/types/pen.h"
 #include "draw/types/transform.h"
 
-
-
 #include "accidental.h"
 #include "chord.h"
 #include "fretcircle.h"

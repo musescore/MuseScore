@@ -25,7 +25,6 @@
 #include "iengravingfont.h"
 #include "types/symnames.h"
 
-
 #include "mscoreview.h"
 #include "navigate.h"
 #include "score.h"

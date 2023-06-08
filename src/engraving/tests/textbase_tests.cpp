@@ -25,8 +25,6 @@
 
 #include <gtest/gtest.h>
 
-
-
 #include "libmscore/chordrest.h"
 #include "libmscore/dynamic.h"
 #include "libmscore/masterscore.h"
