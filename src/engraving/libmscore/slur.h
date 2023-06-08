@@ -98,8 +98,6 @@ public:
 
     void setTrack(track_idx_t val) override;
 
-    void computeUp();
-
     void setSourceStemArrangement(int v) { _sourceStemArrangement = v; }
 
     SlurSegment* frontSegment() { return toSlurSegment(Spanner::frontSegment()); }

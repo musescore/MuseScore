@@ -44,6 +44,8 @@ public:
     static TieSegment* tieLayoutFor(Tie* item, System* system);
     static TieSegment* tieLayoutBack(Tie* item, System* system);
 
+    static void computeUp(Slur* slur, LayoutContext& ctx);
+
 private:
     static void slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx);
     static void fixArticulations(Slur* item, PointF& pt, Chord* c, double up, bool stemSide);

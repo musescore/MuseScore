@@ -27,9 +27,6 @@
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
 
-#include "layout/v0/layoutcontext.h"
-#include "layout/v0/chordlayout.h"
-
 #include "beam.h"
 #include "chord.h"
 #include "measure.h"
@@ -1009,77 +1006,6 @@ bool Slur::isDirectionMixture(Chord* c1, Chord* c2)
         }
     }
     return false;
-}
-
-void Slur::computeUp()
-{
-    switch (_slurDirection) {
-    case DirectionV::UP:
-        _up = true;
-        break;
-    case DirectionV::DOWN:
-        _up = false;
-        break;
-    case DirectionV::AUTO:
-    {
-        //
-        // assumption:
-        // slurs have only chords or rests as start/end elements
-        //
-        ChordRest* chordRest1 = startCR();
-        ChordRest* chordRest2 = endCR();
-        if (chordRest1 == 0 || chordRest2 == 0) {
-            _up = true;
-            break;
-        }
-        Chord* chord1 = startCR()->isChord() ? toChord(startCR()) : 0;
-        Chord* chord2 = endCR()->isChord() ? toChord(endCR()) : 0;
-        if (chord2 && startCR()->measure()->system() != endCR()->measure()->system()) {
-            // HACK: if the end chord is in a different system, it may have never been laid out yet.
-            // But we need to know its direction to decide slur direction, so need to compute it here.
-            for (Note* note : chord2->notes()) {
-                note->updateLine(); // because chord direction is based on note lines
-            }
-            layout::v0::LayoutContext ctx(score());
-            layout::v0::ChordLayout::computeUp(chord2, ctx);
-        }
-
-        if (chord1 && chord1->beam() && chord1->beam()->cross()) {
-            // TODO: stem direction is not finalized, so we cannot use it here
-            _up = true;
-            break;
-        }
-
-        _up = !(chordRest1->up());
-
-        // Check if multiple voices
-        bool multipleVoices = false;
-        Measure* m1 = chordRest1->measure();
-        while (m1 && m1->tick() <= chordRest2->tick()) {
-            if ((m1->hasVoices(chordRest1->staffIdx(), tick(), ticks() + chordRest2->ticks()))
-                && chord1) {
-                multipleVoices = true;
-                break;
-            }
-            m1 = m1->nextMeasure();
-        }
-        if (multipleVoices) {
-            // slurs go on the stem side
-            if (chordRest1->voice() > 0 || chordRest2->voice() > 0) {
-                _up = false;
-            } else {
-                _up = true;
-            }
-        } else if (chord1 && chord2 && !chord1->isGrace() && isDirectionMixture(chord1, chord2)) {
-            // slurs go above if there are mixed direction stems between c1 and c2
-            // but grace notes are exceptions
-            _up = true;
-        } else if (chord1 && chord2 && chord1->isGrace() && chord2 != chord1->parent() && isDirectionMixture(chord1, chord2)) {
-            _up = true;
-        }
-    }
-    break;
-    }
 }
 
 //---------------------------------------------------------

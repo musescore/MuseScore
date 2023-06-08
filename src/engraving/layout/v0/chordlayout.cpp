@@ -3146,7 +3146,7 @@ void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)
             continue;
         }
         Slur* slur = toSlur(spanner);
-        slur->computeUp();
+        SlurTieLayout::computeUp(slur, ctx);
         if (slur->up()) {
             chord->_startEndSlurs.startUp = true;
         } else {
