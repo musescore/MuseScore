@@ -28,7 +28,6 @@
 
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "layout/v0/tremololayout.h"
 
 #include "beam.h"
 #include "chord.h"
@@ -437,26 +436,6 @@ PointF Tremolo::pagePos() const
     System* s = toSystem(e);
     double yp = y() + s->staff(staffIdx())->y() + s->y();
     return PointF(pageX(), yp);
-}
-
-//---------------------------------------------------------
-//   defaultStemLengthStart
-//---------------------------------------------------------
-
-double Tremolo::defaultStemLengthStart()
-{
-    return layout::v0::TremoloLayout::extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(),
-                                                                        _chord2->defaultStemLength()).first;
-}
-
-//---------------------------------------------------------
-//   defaultStemLengthEnd
-//---------------------------------------------------------
-
-double Tremolo::defaultStemLengthEnd()
-{
-    return layout::v0::TremoloLayout::extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(),
-                                                                        _chord2->defaultStemLength()).second;
 }
 
 //---------------------------------------------------------
