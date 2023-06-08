@@ -470,7 +470,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
             MeasureLayout::layoutMeasureElements(m, ctx);
             MeasureLayout::layoutStaffLines(m, ctx);
             if (createBrackets) {
-                system->addBrackets(ctx, toMeasure(mb));
+                SystemLayout::addBrackets(system, toMeasure(mb), ctx);
                 createBrackets = false;
             }
         } else if (mb->isHBox()) {
@@ -1878,7 +1878,7 @@ double SystemLayout::layoutBrackets(System* system, const LayoutContext& ctx)
                 if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
                     continue;
                 }
-                Bracket* b = system->createBracket(ctx, bi, i, static_cast<int>(staffIdx), bl, system->firstMeasure());
+                Bracket* b = SystemLayout::createBracket(system, ctx, bi, i, static_cast<int>(staffIdx), bl, system->firstMeasure());
                 if (b != nullptr) {
                     bracketWidth[i] = std::max(bracketWidth[i], b->width());
                 }
@@ -1899,6 +1899,132 @@ double SystemLayout::layoutBrackets(System* system, const LayoutContext& ctx)
     }
 
     return totalBracketWidth;
+}
+
+void SystemLayout::addBrackets(System* system, Measure* measure, const LayoutContext& ctx)
+{
+    if (system->_staves.empty()) {                 // ignore vbox
+        return;
+    }
+
+    size_t nstaves = system->_staves.size();
+
+    //---------------------------------------------------
+    //  find x position of staves
+    //    create brackets
+    //---------------------------------------------------
+
+    size_t columns = system->getBracketsColumnsCount();
+
+    std::vector<Bracket*> bl;
+    bl.swap(system->_brackets);
+
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        Staff* s = system->score()->staff(staffIdx);
+        for (size_t i = 0; i < columns; ++i) {
+            for (auto bi : s->brackets()) {
+                if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
+                    continue;
+                }
+                SystemLayout::createBracket(system, ctx, bi, i, staffIdx, bl, measure);
+            }
+        }
+        if (!system->staff(staffIdx)->show()) {
+            continue;
+        }
+    }
+
+    //---------------------------------------------------
+    //  layout brackets
+    //---------------------------------------------------
+
+    system->setBracketsXPosition(measure->x());
+
+    mu::join(system->_brackets, bl);
+}
+
+//---------------------------------------------------------
+//   createBracket
+//   Create a bracket if it spans more then one visible system
+//   If measure is NULL adds the bracket in front of the system, else in front of the measure.
+//   Returns the bracket if it got created, else NULL
+//---------------------------------------------------------
+
+Bracket* SystemLayout::createBracket(System* system, const LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
+                                     std::vector<Bracket*>& bl,
+                                     Measure* measure)
+{
+    size_t nstaves = system->_staves.size();
+    staff_idx_t firstStaff = staffIdx;
+    staff_idx_t lastStaff = staffIdx + bi->bracketSpan() - 1;
+    if (lastStaff >= nstaves) {
+        lastStaff = nstaves - 1;
+    }
+
+    for (; firstStaff <= lastStaff; ++firstStaff) {
+        if (system->staff(firstStaff)->show()) {
+            break;
+        }
+    }
+    for (; lastStaff >= firstStaff; --lastStaff) {
+        if (system->staff(lastStaff)->show()) {
+            break;
+        }
+    }
+    size_t span = lastStaff - firstStaff + 1;
+    //
+    // do not show bracket if it only spans one
+    // system due to some invisible staves
+    //
+    if (span > 1
+        || (bi->bracketSpan() == span)
+        || (span == 1 && system->score()->styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden)
+            && bi->bracketType() != BracketType::SQUARE)
+        || (span == 1 && system->score()->styleB(Sid::alwaysShowSquareBracketsWhenEmptyStavesAreHidden)
+            && bi->bracketType() == BracketType::SQUARE)) {
+        //
+        // this bracket is visible
+        //
+        Bracket* b = 0;
+        track_idx_t track = staffIdx * VOICES;
+        for (size_t k = 0; k < bl.size(); ++k) {
+            if (bl[k]->track() == track && bl[k]->column() == column && bl[k]->bracketType() == bi->bracketType()
+                && bl[k]->measure() == measure) {
+                b = mu::takeAt(bl, k);
+                break;
+            }
+        }
+        if (b == 0) {
+            b = Factory::createBracket(ctx.score()->dummy());
+            b->setBracketItem(bi);
+            b->setGenerated(true);
+            b->setTrack(track);
+            b->setMeasure(measure);
+        }
+        system->add(b);
+
+        if (bi->selected()) {
+            bool needSelect = true;
+
+            std::vector<EngravingItem*> brackets = system->score()->selection().elements(ElementType::BRACKET);
+            for (const EngravingItem* element : brackets) {
+                if (toBracket(element)->bracketItem() == bi) {
+                    needSelect = false;
+                    break;
+                }
+            }
+
+            if (needSelect) {
+                system->score()->select(b, SelectType::ADD);
+            }
+        }
+
+        b->setStaffSpan(firstStaff, lastStaff);
+
+        return b;
+    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
