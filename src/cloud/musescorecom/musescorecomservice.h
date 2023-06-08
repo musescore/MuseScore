@@ -53,6 +53,7 @@ public:
     framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) override;
 
     RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) override;
+    RetVal<ScoreInfo> downloadScoreInfo(int scoreId) override;
 
     async::Promise<ScoresList> downloadScoresList(int scoresPerBatch, int batchNumber) override;
 
@@ -66,8 +67,6 @@ private:
     bool doUpdateTokens() override;
 
     network::RequestHeaders headers() const;
-
-    RetVal<ScoreInfo> downloadScoreInfo(int scoreId);
 
     Ret doDownloadScore(network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData);
 

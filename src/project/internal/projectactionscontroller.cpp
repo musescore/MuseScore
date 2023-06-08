@@ -203,7 +203,7 @@ Ret ProjectActionsController::openProject(const io::path_t& projectPath_)
     return doOpenProject(projectPath);
 }
 
-Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
+RetVal<INotationProjectPtr> ProjectActionsController::loadProject(const io::path_t& filePath)
 {
     TRACEFUNC;
 
@@ -243,7 +243,45 @@ Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
     bool isNewlyCreated = projectAutoSaver()->isAutosaveOfNewlyCreatedProject(filePath);
     if (isNewlyCreated) {
         project->markAsNewlyCreated();
-    } else {
+    }
+
+    return RetVal<INotationProjectPtr>::make_ok(project);
+}
+
+Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
+{
+    TRACEFUNC;
+
+    RetVal<INotationProjectPtr> rv = loadProject(filePath);
+    if (!rv.ret) {
+        return rv.ret;
+    }
+
+    INotationProjectPtr project = rv.val;
+
+    bool isNewlyCreated = projectAutoSaver()->isAutosaveOfNewlyCreatedProject(filePath);
+    if (!isNewlyCreated) {
+        recentFilesController()->prependRecentFile(makeRecentFile(project));
+    }
+
+    globalContext()->setCurrentProject(project);
+
+    return openPageIfNeed(NOTATION_PAGE_URI);
+}
+
+Ret ProjectActionsController::doOpenCloudProject(const io::path_t& filePath, const CloudProjectInfo& info)
+{
+    RetVal<INotationProjectPtr> rv = loadProject(filePath);
+    if (!rv.ret) {
+        return rv.ret;
+    }
+
+    INotationProjectPtr project = rv.val;
+
+    project->setCloudInfo(info);
+
+    bool isNewlyCreated = projectAutoSaver()->isAutosaveOfNewlyCreatedProject(filePath);
+    if (!isNewlyCreated) {
         recentFilesController()->prependRecentFile(makeRecentFile(project));
     }
 
@@ -260,6 +298,18 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
         return;
     }
 
+    RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
+    if (!scoreInfo.ret) {
+        // TODO(cloud): show error dialog?
+        return;
+    }
+
+    CloudProjectInfo info;
+    info.name = scoreInfo.val.title;
+    info.visibility = scoreInfo.val.visibility;
+    info.sourceUrl = scoreInfo.val.url;
+    info.revisionId = scoreInfo.val.revisionId;
+
     // TODO(cloud): conflict checking (don't recklessly overwrite the existing file)
     io::path_t localPath = configuration()->cloudProjectPath(scoreId);
     QFile* projectData = new QFile(localPath.toQString());
@@ -271,7 +321,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
     m_projectBeingDownloaded.scoreId = scoreId;
     m_projectBeingDownloaded.progress = museScoreComService()->downloadScore(scoreId, *projectData);
 
-    m_projectBeingDownloaded.progress->finished.onReceive(this, [this, localPath, projectData](const ProgressResult& res) {
+    m_projectBeingDownloaded.progress->finished.onReceive(this, [this, localPath, info, projectData](const ProgressResult& res) {
         projectData->deleteLater();
 
         m_projectBeingDownloaded = {};
@@ -285,7 +335,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
             return;
         }
 
-        doOpenProject(localPath);
+        doOpenCloudProject(localPath, info);
     });
 
     m_projectBeingDownloadedChanged.notify();
