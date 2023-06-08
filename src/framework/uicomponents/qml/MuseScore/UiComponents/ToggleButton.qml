@@ -35,9 +35,6 @@ FocusScope {
     property string toolTipDescription: ""
     property string toolTipShortcut: ""
 
-    readonly property string checkedAccessibleString: root.checked ? qsTrc("ui", "checked", "checkstate")
-                                                                   : qsTrc("ui", "unchecked", "checkstate")
-
     signal toggled()
 
     implicitHeight: 20

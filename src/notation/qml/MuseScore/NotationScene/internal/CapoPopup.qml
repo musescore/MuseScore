@@ -30,7 +30,7 @@ StyledPopupView {
     id: root
 
     property int navigationOrderStart: 0
-    property int navigationOrderEnd: 0
+    property int navigationOrderEnd: capoSettingsNavPanel.order
 
     contentWidth: content.width
     contentHeight: content.height
@@ -64,15 +64,32 @@ StyledPopupView {
 
         readonly property int columnsSpacing: 6
 
+        NavigationPanel {
+            id: capoSettingsNavPanel
+            name: "CapoSettings"
+            direction: NavigationPanel.Vertical
+            section: root.navigationSection
+            order: root.navigationOrderStart
+            accessible.name: qsTrc("notation", "Capo settings")
+        }
+
         StyledTextLabel {
+            id: titleLabel
+
             text: qsTrc("notation", "Capo")
             horizontalAlignment: Text.AlignLeft
         }
 
         FlatRadioButtonList {
+            id: capoOnOffButtons
+
             Layout.fillWidth: true
 
             spacing: content.columnsSpacing
+
+            navigationPanel: capoSettingsNavPanel
+            navigationRowStart: root.navigationOrderStart
+            accessibleName: titleLabel.text
 
             currentValue: capoModel.capoIsOn
 
@@ -87,6 +104,8 @@ StyledPopupView {
         }
 
         StyledTextLabel {
+            id: fretLabel
+
             text: qsTrc("notation", "Fret")
             horizontalAlignment: Text.AlignLeft
 
@@ -94,11 +113,16 @@ StyledPopupView {
         }
 
         IncrementalPropertyControl {
-            id: fretPositionControl
+            id: fretControl
 
             Layout.preferredWidth: parent.width / 2 - content.columnsSpacing / 2
 
             visible: capoModel.capoIsOn
+
+            navigation.name: "FretControl"
+            navigation.panel: capoSettingsNavPanel
+            navigation.row: capoOnOffButtons.navigationRowEnd + 1
+            navigation.accessible.name: fretLabel.text + " " + fretControl.currentValue
 
             currentValue: capoModel.fretPosition
             decimals: 0
@@ -112,6 +136,8 @@ StyledPopupView {
         }
 
         StyledTextLabel {
+            id: applyToLabel
+
             text: qsTrc("notation", "Apply to")
             horizontalAlignment: Text.AlignLeft
 
@@ -120,6 +146,9 @@ StyledPopupView {
 
         GridLayout {
             id: applyToStringsGrid
+
+            readonly property int navigationRowStart: fretControl.navigation.row + 1
+            readonly property int navigationRowEnd: applyToStringsGrid.navigationRowStart + repeaterStrings.count
 
             Layout.fillWidth: true
 
@@ -133,6 +162,8 @@ StyledPopupView {
             flow: GridLayout.TopToBottom
 
             Repeater {
+                id: repeaterStrings
+
                 model: capoModel.strings
 
                 Item {
@@ -145,6 +176,11 @@ StyledPopupView {
                         anchors.left: parent.left
                         anchors.top: parent.top
 
+                        navigation.name: "String" + model.index + "Control"
+                        navigation.panel: capoSettingsNavPanel
+                        navigation.row: applyToStringsGrid.navigationRowStart + model.index
+                        navigation.accessible.name: applyToLabel.text + " " + stringLabel.text
+
                         checked: modelData.applyCapo
 
                         onToggled: {
@@ -153,6 +189,8 @@ StyledPopupView {
                     }
 
                     StyledTextLabel {
+                        id: stringLabel
+
                         anchors.left: toggleBtn.right
                         anchors.leftMargin: 4
                         anchors.verticalCenter: parent.verticalCenter
@@ -168,6 +206,9 @@ StyledPopupView {
 
             Layout.fillWidth: true
 
+            navigation.panel: capoSettingsNavPanel
+            navigation.row: applyToStringsGrid.navigationRowEnd + 1
+
             text: qsTrc("notation", "Manually specify instruction text")
 
             checked: capoModel.capoTextSpecifiedByUser
@@ -178,9 +219,14 @@ StyledPopupView {
         }
 
         TextInputField {
+            id: capoTextField
+
             Layout.fillWidth: true
 
             visible: specifyInstructionTextCheckBox.checked
+
+            navigation.panel: capoSettingsNavPanel
+            navigation.row: specifyInstructionTextCheckBox.navigation.row + 1
 
             currentText: capoModel.userCapoText
             maximumLength: 40
@@ -199,6 +245,10 @@ StyledPopupView {
             Layout.fillWidth: true
 
             spacing: content.columnsSpacing
+
+            navigationPanel: capoSettingsNavPanel
+            navigationRowStart: capoTextField.navigation.row + 1
+            accessibleName: qsTrc("notation", "Capo position")
 
             currentValue: capoModel.capoPlacement
             model: capoModel.possibleCapoPlacements()
