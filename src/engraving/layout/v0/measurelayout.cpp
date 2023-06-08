@@ -1027,7 +1027,7 @@ void MeasureLayout::computePreSpacingItems(Measure* m, LayoutContext& ctx)
             }
 
             ChordLayout::layoutArticulations(chord, ctx);
-            chord->checkStartEndSlurs();
+            ChordLayout::checkStartEndSlurs(chord, ctx);
             chord->computeKerningExceptions();
         }
         seg.createShapes();
