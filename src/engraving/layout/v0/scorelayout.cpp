@@ -297,7 +297,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
     }
 
     System* system = ctx.score()->systems().front();
-    system->setInstrumentNames(ctx, /* longNames */ true);
+    SystemLayout::setInstrumentNames(system, ctx, /* longNames */ true);
 
     PointF pos;
     bool firstMeasure = true;       //lc.startTick.isZero();
