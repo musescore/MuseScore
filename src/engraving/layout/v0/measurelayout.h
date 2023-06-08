@@ -30,6 +30,7 @@ class Measure;
 class MeasureBase;
 class Score;
 class Segment;
+class StaffLines;
 }
 
 namespace mu::engraving::layout::v0 {
@@ -74,6 +75,8 @@ private:
                              double stretchCoeff, bool overrideMinMeasureWidth = false);
 
     static double computeMinMeasureWidth(Measure* m);
+
+    static void layoutPartialWidth(StaffLines* lines, double w, double wPartial, bool alignLeft);
 };
 }
 

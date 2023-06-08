@@ -1046,7 +1046,7 @@ void MeasureLayout::layoutStaffLines(Measure* m, LayoutContext& ctx)
             double partialWidth = clefSeg
                                   ? m->width() - clefSeg->x() + clefSeg->minLeft() + m->score()->styleMM(Sid::clefLeftMargin) * staffMag
                                   : 0.0;
-            ms->lines()->layoutPartialWidth(m->width(), partialWidth / (m->spatium() * staffMag), true);
+            layoutPartialWidth(ms->lines(), m->width(), partialWidth / (m->spatium() * staffMag), true);
         } else {
             // normal staff lines
             TLayout::layout(ms->lines(), ctx);
@@ -2295,4 +2295,51 @@ double MeasureLayout::computeMinMeasureWidth(Measure* m)
     minWidth += startPosition;
     minWidth = std::min(minWidth, maxWidth);
     return minWidth;
+}
+
+//---------------------------------------------------------
+//   layoutPartialWidth
+///   Layout staff lines for the specified width only, aligned
+///   to the left or right of the measure
+//---------------------------------------------------------
+
+void MeasureLayout::layoutPartialWidth(StaffLines* lines, double w, double wPartial, bool alignRight)
+{
+    const Staff* s = lines->staff();
+    double _spatium = lines->spatium();
+    wPartial *= _spatium;
+    double dist     = _spatium;
+    lines->setPos(PointF(0.0, 0.0));
+    int _lines;
+    if (s) {
+        lines->setMag(s->staffMag(lines->measure()->tick()));
+        lines->setColor(s->color(lines->measure()->tick()));
+        const StaffType* st = s->staffType(lines->measure()->tick());
+        dist         *= st->lineDistance().val();
+        _lines        = st->lines();
+        lines->setPosY(st->yoffset().val() * _spatium);
+    } else {
+        _lines = 5;
+        lines->setColor(EngravingItem::engravingConfiguration()->defaultColor());
+    }
+    lines->m_lw = lines->score()->styleS(Sid::staffLineWidth).val() * _spatium;
+    double x1 = lines->pos().x();
+    double x2 = x1 + w;
+    double y  = lines->pos().y();
+    lines->bbox().setRect(x1, -lines->m_lw * .5 + y, w, (_lines - 1) * dist + lines->m_lw);
+
+    if (_lines == 1) {
+        double extraSize = _spatium;
+        lines->bbox().adjust(0, -extraSize, 0, extraSize);
+    }
+
+    lines->m_lines.clear();
+    for (int i = 0; i < _lines; ++i) {
+        if (alignRight) {
+            lines->m_lines.push_back(LineF(x2 - wPartial, y, x2, y));
+        } else {
+            lines->m_lines.push_back(LineF(x1, y, x1 + wPartial, y));
+        }
+        y += dist;
+    }
 }
