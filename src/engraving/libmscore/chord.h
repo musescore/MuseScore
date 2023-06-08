@@ -266,7 +266,6 @@ public:
 
     void styleChanged() override;
 
-    void checkStartEndSlurs();
     bool allowKerningAbove() const { return _allowKerningAbove; }
     bool allowKerningBelow() const { return _allowKerningBelow; }
     void computeKerningExceptions();

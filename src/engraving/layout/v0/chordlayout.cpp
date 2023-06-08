@@ -3137,3 +3137,39 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         }
     }
 }
+
+void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)
+{
+    chord->_startEndSlurs.reset();
+    for (Spanner* spanner : chord->_startingSpanners) {
+        if (!spanner->isSlur()) {
+            continue;
+        }
+        Slur* slur = toSlur(spanner);
+        slur->computeUp();
+        if (slur->up()) {
+            chord->_startEndSlurs.startUp = true;
+        } else {
+            chord->_startEndSlurs.startDown = true;
+        }
+        // Check if end chord has been connected to this slur. If not, connect it.
+        if (!slur->endChord()) {
+            continue;
+        }
+        std::vector<Spanner*>& endingSp = slur->endChord()->endingSpanners();
+        if (std::find(endingSp.begin(), endingSp.end(), slur) == endingSp.end()) {
+            // Slur not added. Add it now.
+            endingSp.push_back(slur);
+        }
+    }
+    for (Spanner* spanner : chord->_endingSpanners) {
+        if (!spanner->isSlur()) {
+            continue;
+        }
+        if (toSlur(spanner)->up()) {
+            chord->_startEndSlurs.endUp = true;
+        } else {
+            chord->_startEndSlurs.endDown = true;
+        }
+    }
+}

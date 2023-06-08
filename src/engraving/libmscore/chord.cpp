@@ -2824,42 +2824,6 @@ void Chord::undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFl
     EngravingItem::undoChangeProperty(id, newValue, ps);
 }
 
-void Chord::checkStartEndSlurs()
-{
-    _startEndSlurs.reset();
-    for (Spanner* spanner : _startingSpanners) {
-        if (!spanner->isSlur()) {
-            continue;
-        }
-        Slur* slur = toSlur(spanner);
-        slur->computeUp();
-        if (slur->up()) {
-            _startEndSlurs.startUp = true;
-        } else {
-            _startEndSlurs.startDown = true;
-        }
-        // Check if end chord has been connected to this slur. If not, connect it.
-        if (!slur->endChord()) {
-            continue;
-        }
-        std::vector<Spanner*>& endingSp = slur->endChord()->endingSpanners();
-        if (std::find(endingSp.begin(), endingSp.end(), slur) == endingSp.end()) {
-            // Slur not added. Add it now.
-            endingSp.push_back(slur);
-        }
-    }
-    for (Spanner* spanner : _endingSpanners) {
-        if (!spanner->isSlur()) {
-            continue;
-        }
-        if (toSlur(spanner)->up()) {
-            _startEndSlurs.endUp = true;
-        } else {
-            _startEndSlurs.endDown = true;
-        }
-    }
-}
-
 std::set<SymId> Chord::articulationSymbolIds() const
 {
     std::set<SymId> result;

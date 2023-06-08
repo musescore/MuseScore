@@ -77,6 +77,8 @@ public:
 
     static void crossMeasureSetup(Chord* chord, bool on, LayoutContext& ctx);
 
+    static void checkStartEndSlurs(Chord* chord, LayoutContext& ctx);
+
 private:
     static void layoutPitched(Chord* item, LayoutContext& ctx);
     static void layoutTablature(Chord* item, LayoutContext& ctx);
