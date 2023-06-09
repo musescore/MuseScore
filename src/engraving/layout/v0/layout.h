@@ -44,6 +44,10 @@ public:
     double computePadding(const EngravingItem* item1, const EngravingItem* item2) override;
     KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2) override;
 
+    // Other
+    //! TODO Investigation is required, probably these functions or their calls should not be.
+    void layoutTextLineBaseSegment(TextLineBaseSegment* item) override;
+
 private:
     // Layout Single Item
     void doLayoutItem(EngravingItem* item) override;

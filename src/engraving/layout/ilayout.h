@@ -73,6 +73,7 @@ class Stem;
 
 class TextBase;
 class Text;
+class TextLineBaseSegment;
 class TimeSig;
 }
 
@@ -143,6 +144,10 @@ public:
     // Horizontal spacing
     virtual double computePadding(const EngravingItem* item1, const EngravingItem* item2) = 0;
     virtual KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2) = 0;
+
+    // Other
+    //! TODO Investigation is required, probably these functions or their calls should not be.
+    virtual void layoutTextLineBaseSegment(TextLineBaseSegment* item) = 0;
 
 private:
     // Layout Single Item
