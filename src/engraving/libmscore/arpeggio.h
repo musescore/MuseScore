@@ -25,6 +25,10 @@
 
 #include "engravingitem.h"
 
+namespace mu::engraving::layout::v0 {
+class ArpeggioLayout;
+}
+
 namespace mu::engraving {
 class Factory;
 class Chord;
@@ -76,7 +80,6 @@ public:
     double Stretch() const { return _stretch; }
     void setStretch(double val) { _stretch = val; }
 
-    void symbolLine(SymId start, SymId fill);
     const SymIdList& symbols() { return m_symbols; }
 
     PropertyValue getProperty(Pid propertyId) const override;
@@ -92,17 +95,14 @@ public:
 
 private:
 
-    friend class layout::v0::TLayout;
     friend class Factory;
+    friend class layout::v0::ArpeggioLayout;
     Arpeggio(Chord* parent);
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
     std::vector<mu::LineF> dragAnchorLines() const override;
     std::vector<mu::LineF> gripAnchorLines(Grip) const override;
     void startEdit(EditData&) override;
-
-    double calcTop() const;
-    double calcBottom() const;
 
     double insetTop() const;
     double insetBottom() const;
