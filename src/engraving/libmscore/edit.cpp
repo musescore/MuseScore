@@ -3964,6 +3964,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
     Fraction ticks   = { 0, 1 };
 
     MeasureBase* result = nullptr;
+    bool isBeginning = tick.isZero();
 
     std::list<Score*> scores;
     if (options.addToAllScores) {
@@ -4033,6 +4034,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
             std::vector<KeySig*> keySigList;
             std::vector<Clef*> clefList;
             std::vector<Clef*> previousClefList;
+            std::list<Clef*> specialCaseClefs;
 
             //
             // remove clef, time and key signatures
@@ -4058,9 +4060,23 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                             continue;
                         }
                         EngravingItem* e = s->element(staffIdx * VOICES);
-                        if (!e || e->generated()) {
-                            continue;
+                        // if it's a clef, we only add if it's a header clef
+                        bool moveClef = s->isHeaderClefType() && e && e->isClef();
+                        // otherwise, we only add if e exists and is generated
+                        bool moveOther = e && !e->isClef() && (!e->generated() || tick.isZero());
+                        bool specialCase = false;
+                        if (e && e->isClef() && !moveClef && isBeginning
+                            && toClef(e)->clefToBarlinePosition() != ClefToBarlinePosition::AFTER) {
+                            // special case:
+                            // there is a non-header clef at global tick 0, and we are inserting at the beginning of the score.
+                            // this clef will be moved with the measure it accompanies, but it will be moved before the barline.
+                            specialCase = true;
+                            moveClef = true;
                         }
+                        if (!moveClef && !moveOther) {
+                            continue; // this item will remain with the old measure
+                        }
+                        // otherwise, this item is moved back to the new measure
                         EngravingItem* ee = 0;
                         if (e->isKeySig()) {
                             KeySig* ks = toKeySig(e);
@@ -4083,7 +4099,10 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                             timeSigList.push_back(ts);
                             ee = e;
                         }
-                        if (tick.isZero() && e->isClef()) {
+                        if (specialCase) {
+                            specialCaseClefs.push_back(toClef(e));
+                            ee = e;
+                        } else if (tick.isZero() && e->isClef()) {
                             Clef* clef = toClef(e);
                             clefList.push_back(clef);
                             ee = e;
@@ -4127,6 +4146,12 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
             for (Clef* clef : previousClefList) {
                 Clef* nClef = Factory::copyClef(*clef);
                 Segment* s  = pm->undoGetSegment(SegmentType::Clef, tick);
+                nClef->setParent(s);
+                undoAddElement(nClef);
+            }
+            for (Clef* clef : specialCaseClefs) {
+                Clef* nClef = Factory::copyClef(*clef);
+                Segment* s  = newMeasure->undoGetSegmentR(SegmentType::Clef, newMeasure->ticks());
                 nClef->setParent(s);
                 undoAddElement(nClef);
             }
