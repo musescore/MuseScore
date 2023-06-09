@@ -450,9 +450,9 @@ void StringData::sortChordNotesUseSameString(const Chord* chord, int pitchOffset
 
     auto fixFretting = [&](const std::vector<Note*>& notes) {
         size_t notesCount = notes.size();
-        for (int i = notesCount - 1; i >= 0; --i) {
+        for (int i = static_cast<int>(notesCount) - 1; i >= 0; --i) {
             if (notes.at(i)->fret() < 0) {
-                for (int indx = usedStrings.size() - 1; indx > 0; --indx) {
+                for (size_t indx = usedStrings.size() - 1; indx > 0; --indx) {
                     if (usedStrings.at(indx - 1) && !usedStrings.at(indx)) {
                         usedStrings.at(indx) = usedStrings.at(indx - 1);
                         usedStrings.at(indx - 1) = nullptr;
