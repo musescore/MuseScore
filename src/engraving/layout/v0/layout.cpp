@@ -27,6 +27,7 @@
 #include "libmscore/bracket.h"
 #include "libmscore/ledgerline.h"
 #include "libmscore/figuredbass.h"
+#include "libmscore/textlinebase.h"
 
 #include "tlayout.h"
 #include "layoutcontext.h"
@@ -67,4 +68,10 @@ double Layout::computePadding(const EngravingItem* item1, const EngravingItem* i
 KerningType Layout::computeKerning(const EngravingItem* item1, const EngravingItem* item2)
 {
     return HorizontalSpacing::computeKerning(item1, item2);
+}
+
+void Layout::layoutTextLineBaseSegment(TextLineBaseSegment* item)
+{
+    LayoutContext ctx(item->score());
+    TLayout::layoutTextLineBaseSegment(item, ctx);
 }
