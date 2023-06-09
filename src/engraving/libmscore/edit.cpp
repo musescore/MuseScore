@@ -2908,7 +2908,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
 
     // get the last deleted timesig & keysig in order to restore after deletion
     std::map<staff_idx_t, TimeSig*> lastDeletedTimeSigs;
-    KeySig* lastDeletedKeySig = 0;
+    KeySigEvent lastDeletedKeySigEvent = score()->staff(0)->keySigEvent(mbEnd->tick());
 
     for (MeasureBase* mb = mbEnd;; mb = mb->prev()) {
         if (mb->isMeasure()) {
@@ -2926,10 +2926,8 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
             }
 
             sts = m->findSegment(SegmentType::KeySig, m->tick());
-            if (sts && !lastDeletedKeySig) {
-                lastDeletedKeySig = toKeySig(sts->element(0));
-            }
-            if (lastDeletedTimeSigs.size() == nstaves() && lastDeletedKeySig) {
+
+            if (lastDeletedTimeSigs.size() == nstaves()) {
                 break;
             }
         }
@@ -2987,23 +2985,42 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
         }
 
         // insert correct keysig if necessary
-        if (mAfterSel && !mBeforeSel && lastDeletedKeySig) {
+        if (mAfterSel && !mBeforeSel) {
             Segment* s = mAfterSel->findSegment(SegmentType::KeySig, mAfterSel->tick());
             if (!s) {
-                Segment* ns = mAfterSel->undoGetSegment(SegmentType::KeySig, mAfterSel->tick());
-                for (size_t staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
-                    KeySigEvent nkse = lastDeletedKeySig->keySigEvent();
-                    if (!styleB(Sid::concertPitch) && !nkse.isAtonal()) {
-                        Interval v = score->staff(staffIdx)->part()->instrument(Fraction(0, 1))->transpose();
-                        v.flip();
-                        nkse.setKey(transposeKey(nkse.concertKey(), v, score->staff(staffIdx)->part()->preferSharpFlat()));
-                    }
-                    KeySig* nks = Factory::createKeySig(ns);
+                s = mAfterSel->undoGetSegment(SegmentType::KeySig, mAfterSel->tick());
+            }
+
+            bool userCustomizedKeySig = false;
+            for (EngravingItem* e : s->elist()) {
+                if (e && e->isKeySig() && !toKeySig(e)->generated()) {
+                    userCustomizedKeySig = true;
+                    break;
+                }
+            }
+            if (userCustomizedKeySig) {
+                continue;
+            }
+
+            for (size_t staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
+                KeySigEvent nkse = lastDeletedKeySigEvent;
+                if (!styleB(Sid::concertPitch) && !nkse.isAtonal()) {
+                    Interval v = score->staff(staffIdx)->part()->instrument(Fraction(0, 1))->transpose();
+                    v.flip();
+                    nkse.setKey(transposeKey(nkse.concertKey(), v, score->staff(staffIdx)->part()->preferSharpFlat()));
+                }
+
+                KeySig* nks = (KeySig*)s->elementAt(staff2track(staffIdx));
+                if (!nks) {
+                    nks = Factory::createKeySig(s);
                     nks->setTrack(staffIdx * VOICES);
-                    nks->setParent(ns);
-                    nks->setKeySigEvent(nkse);
+                    nks->setKey(nkse.key());
                     score->undoAddElement(nks);
                 }
+
+                nks->setGenerated(false);
+                nks->setKeySigEvent(nkse);
+                score->staff(staffIdx)->setKey(mAfterSel->tick(), nkse);
             }
         }
     }
