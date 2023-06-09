@@ -66,6 +66,7 @@ public:
     int span() const { return _span; }
     void setSpan(int val) { _span = val; }
     void setHeight(double) override;
+    double height() const override { return _height; }
 
     double userLen1() const { return _userLen1; }
     double userLen2() const { return _userLen2; }
@@ -80,6 +81,7 @@ public:
     double Stretch() const { return _stretch; }
     void setStretch(double val) { _stretch = val; }
 
+    void setSymbols(const SymIdList& sl) { m_symbols = sl; }
     const SymIdList& symbols() { return m_symbols; }
 
     PropertyValue getProperty(Pid propertyId) const override;
@@ -96,7 +98,7 @@ public:
 private:
 
     friend class Factory;
-    friend class layout::v0::ArpeggioLayout;
+
     Arpeggio(Chord* parent);
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;

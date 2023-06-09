@@ -162,19 +162,21 @@ void ArpeggioLayout::symbolLine(Arpeggio* item, SymId end, SymId fill)
     double mag = item->magS();
     IEngravingFontPtr f = item->score()->engravingFont();
 
-    item->m_symbols.clear();
+    SymIdList symbols;
     double w1 = f->advance(end, mag);
     double w2 = f->advance(fill, mag);
     int n    = lrint((w - w1) / w2);
     for (int i = 0; i < n; ++i) {
-        item->m_symbols.push_back(fill);
+        symbols.push_back(fill);
     }
-    item->m_symbols.push_back(end);
+    symbols.push_back(end);
+
+    item->setSymbols(symbols);
 }
 
 double ArpeggioLayout::calcTop(Arpeggio* item)
 {
-    double top = -item->_userLen1;
+    double top = -item->userLen1();
     if (!item->explicitParent()) {
         return top;
     }
@@ -209,8 +211,8 @@ double ArpeggioLayout::calcTop(Arpeggio* item)
 
 double ArpeggioLayout::calcBottom(Arpeggio* item)
 {
-    double top = -item->_userLen1;
-    double bottom = item->_height + item->_userLen2;
+    double top = -item->userLen1();
+    double bottom = item->height() + item->userLen2();
     if (!item->explicitParent()) {
         return bottom;
     }
