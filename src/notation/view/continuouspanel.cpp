@@ -356,8 +356,8 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             newStaffLines.setParent(parent->measure());
             newStaffLines.setTrack(e->track());
             {
-                mu::engraving::layout::v0::LayoutContext ctx(newStaffLines.score());
-                mu::engraving::layout::v0::TLayout::layoutForWidth(&newStaffLines, bg.width(), ctx);
+                mu::engraving::layout::v0::LayoutContext cntx(newStaffLines.score());
+                mu::engraving::layout::v0::TLayout::layoutForWidth(&newStaffLines, bg.width(), cntx);
             }
             newStaffLines.setColor(color);
             newStaffLines.draw(&painter);

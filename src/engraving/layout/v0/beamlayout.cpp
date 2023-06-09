@@ -748,8 +748,8 @@ void BeamLayout::createBeams(Score* score, LayoutContext& ctx, Measure* measure)
             if ((cr->durationType().type() <= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
                 bool removeBeam = true;
                 if (beam) {
-                    LayoutContext ctx(score);
-                    layout1(beam, ctx);
+                    LayoutContext cntx(score);
+                    layout1(beam, cntx);
                     removeBeam = (beam->elements().size() <= 1 || beam->hasAllRests());
                     beam = 0;
                 }
@@ -771,8 +771,8 @@ void BeamLayout::createBeams(Score* score, LayoutContext& ctx, Measure* measure)
                     beamEnd = (bm == BeamMode::END);
                 }
                 if (beamEnd) {
-                    LayoutContext ctx(score);
-                    layout1(beam, ctx);
+                    LayoutContext cntx(score);
+                    layout1(beam, cntx);
                     beam = 0;
                 }
             }
@@ -806,8 +806,8 @@ void BeamLayout::createBeams(Score* score, LayoutContext& ctx, Measure* measure)
             }
         }
         if (beam) {
-            LayoutContext ctx(score);
-            layout1(beam, ctx);
+            LayoutContext cntx(score);
+            layout1(beam, cntx);
         } else if (a1) {
             Fraction nextTick = a1->tick() + a1->actualTicks();
             Measure* m = (nextTick >= measure->endTick() ? measure->nextMeasure() : measure);
