@@ -12871,7 +12871,7 @@ By default, they will be placed such as that their right end are at the same lev
                  <item row="3" column="0">
                   <widget class="QLabel" name="label_206">
                    <property name="text">
-                    <string>Margin:</string>
+                    <string>Padding:</string>
                    </property>
                    <property name="buddy">
                     <cstring>textStyleFramePadding</cstring>
@@ -12913,7 +12913,7 @@ By default, they will be placed such as that their right end are at the same lev
                     <string>Reset to default</string>
                    </property>
                    <property name="accessibleName">
-                    <string>Reset 'Margin' value</string>
+                    <string>Reset 'Padding' value</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>
