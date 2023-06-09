@@ -596,13 +596,11 @@ void ChordRest::removeDeleteBeam(bool beamed)
         if (b->empty()) {
             score()->undoRemoveElement(b);
         } else {
-            layout::v0::LayoutContext lctx(score());
-            layout::v0::TLayout::layout1(b, lctx);
+            layout()->layoutBeam1(b);
         }
     }
     if (!beamed && isChord()) {
-        layout::v0::LayoutContext lctx(score());
-        layout::v0::ChordLayout::layoutStem(toChord(this), lctx);
+        layout()->layoutStem(toChord(this));
     }
 }
 

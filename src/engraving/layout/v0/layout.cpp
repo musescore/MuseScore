@@ -22,15 +22,13 @@
 #include "layout.h"
 
 #include "libmscore/arpeggio.h"
-#include "libmscore/box.h"
-#include "libmscore/barline.h"
-#include "libmscore/bracket.h"
-#include "libmscore/ledgerline.h"
-#include "libmscore/figuredbass.h"
+#include "libmscore/beam.h"
 #include "libmscore/textlinebase.h"
 #include "libmscore/harmony.h"
+#include "libmscore/chord.h"
 
 #include "tlayout.h"
+#include "chordlayout.h"
 #include "layoutcontext.h"
 #include "scorelayout.h"
 #include "arpeggiolayout.h"
@@ -87,4 +85,16 @@ void Layout::layoutTextLineBaseSegment(TextLineBaseSegment* item)
 {
     LayoutContext ctx(item->score());
     TLayout::layoutTextLineBaseSegment(item, ctx);
+}
+
+void Layout::layoutBeam1(Beam* item)
+{
+    LayoutContext ctx(item->score());
+    TLayout::layout1(item, ctx);
+}
+
+void Layout::layoutStem(Chord* item)
+{
+    LayoutContext ctx(item->score());
+    ChordLayout::layoutStem(item, ctx);
 }

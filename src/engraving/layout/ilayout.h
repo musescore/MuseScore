@@ -37,9 +37,11 @@ class ActionIcon;
 class Arpeggio;
 
 class BarLine;
+class Beam;
 class Box;
 class Bracket;
 
+class Chord;
 class Clef;
 
 class Dynamic;
@@ -152,6 +154,8 @@ public:
     // Other
     //! TODO Investigation is required, probably these functions or their calls should not be.
     virtual void layoutTextLineBaseSegment(TextLineBaseSegment* item) = 0;
+    virtual void layoutBeam1(Beam* item) = 0;
+    virtual void layoutStem(Chord* item) = 0;
 
 private:
     // Layout Single Item
