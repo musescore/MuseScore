@@ -1258,15 +1258,20 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     auto pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setBeginText(Pedal::PEDAL_SYMBOL);
+    pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
     pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
+    pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
     pedal->setEndHookType(HookType::HOOK_90);
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and line)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setBeginText(Pedal::PEDAL_SYMBOL);
+    pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
     pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
+    pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
     pedal->setEndText(Pedal::STAR_SYMBOL);
+    pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
     pedal->setLineVisible(false);
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and asterisk)"));
 
@@ -1931,15 +1936,20 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     auto pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setBeginText(Pedal::PEDAL_SYMBOL);
+    pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
     pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
+    pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
     pedal->setEndText(Pedal::STAR_SYMBOL);
+    pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
     pedal->setLineVisible(false);
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and asterisk)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setBeginText(Pedal::PEDAL_SYMBOL);
+    pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
     pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
+    pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
     pedal->setEndHookType(HookType::HOOK_90);
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and line)"));
 
