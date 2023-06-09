@@ -941,14 +941,23 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             interaction->moveLyrics(direction);
         } else if (selectedElement && (selectedElement->isTextBase() || selectedElement->isArticulationFamily())) {
             interaction->nudge(direction, quickly);
-        } else if (interaction->noteInput()->isNoteInputMode()
-                   && interaction->noteInput()->state().staffGroup == mu::engraving::StaffGroup::TAB) {
-            interaction->moveSelection(direction, MoveSelectionType::String);
-            return;
         } else if (interaction->selection()->isNone()) {
             interaction->selectFirstElement(false);
         } else {
+            bool isTab = interaction->noteInput()->isNoteInputMode()
+                         && interaction->noteInput()->state().staffGroup == mu::engraving::StaffGroup::TAB;
+            bool isNote = isTab && selectedElement->isNote();
+            int oldString = isNote ? toNote(selectedElement)->string() : -1;
+
             interaction->movePitch(direction, quickly ? PitchMode::OCTAVE : PitchMode::CHROMATIC);
+
+            if (isNote) {
+                int newString = toNote(selectedElement)->string();
+                if (oldString != newString) {
+                    interaction->moveSelection(direction, MoveSelectionType::String);
+                    return;
+                }
+            }
         }
         break;
     case MoveDirection::Right:
