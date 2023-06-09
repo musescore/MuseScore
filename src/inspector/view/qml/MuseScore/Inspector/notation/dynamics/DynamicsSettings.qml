@@ -87,11 +87,11 @@ Column {
             CheckBoxPropertyView {
                 id: avoidBarLines
 
-                navigation.name: "Avoid bar lines"
+                navigation.name: "Avoid barlines"
                 navigation.panel: root.navigationPanel
                 navigation.row: dynamicSize.navigationRowEnd + 1
 
-                text: qsTrc("inspector", "Avoid bar lines")
+                text: qsTrc("inspector", "Avoid barlines")
                 propertyItem: root.model ? root.model.avoidBarLines : null
                 height: implicitHeight
             }

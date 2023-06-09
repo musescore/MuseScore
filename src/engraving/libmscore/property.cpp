@@ -343,7 +343,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::END_FONT_STYLE,          false, "endFontStyle",          P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName",  "end font style") },
     { Pid::END_TEXT_OFFSET,         false, "endTextOffset",         P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "end text offset") },
 
-    { Pid::AVOID_BARLINES,          false, "avoidBarLines",         P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "avoid bar lines") },
+    { Pid::AVOID_BARLINES,          false, "avoidBarLines",         P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "avoid barlines") },
     { Pid::DYNAMICS_SIZE,           false, "dynamicsSize",          P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "dynamic size") },
     { Pid::CENTER_ON_NOTEHEAD,      false, "centerOnNotehead",      P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "use text alignment") },
     { Pid::SNAP_TO_DYNAMICS,         false, "snapToDynamics",        P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "snap expression") },
