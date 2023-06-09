@@ -48,6 +48,9 @@ public:
     //! TODO Investigation is required, probably these functions or their calls should not be.
     void layoutTextLineBaseSegment(TextLineBaseSegment* item) override;
 
+    // Layout Text 1
+    void layoutText1(TextBase* item, bool base = false) override;
+
 private:
     // Layout Single Item
     void doLayoutItem(EngravingItem* item) override;

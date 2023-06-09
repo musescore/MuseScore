@@ -88,6 +88,7 @@ public:
     // Layout Score
     virtual void layoutRange(Score* score, const LayoutOptions& options, const Fraction&, const Fraction&) = 0;
 
+    // Layout Item
     using Supported = std::variant<std::monostate,
                                    Accidental*,
                                    ActionIcon*,
@@ -137,6 +138,9 @@ public:
 #endif
         doLayoutItem(static_cast<EngravingItem*>(item));
     }
+
+    // Layout Text 1
+    virtual void layoutText1(TextBase* item, bool base = false) = 0;
 
     // Layout Elements on Edit
     virtual void layoutOnEdit(Arpeggio* item) = 0;

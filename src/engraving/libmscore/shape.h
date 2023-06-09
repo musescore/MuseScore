@@ -24,8 +24,6 @@
 #define __SHAPE_H__
 
 #include "global/allocator.h"
-#include "modularity/ioc.h"
-#include "layout/ilayout.h"
 #include "draw/types/geometry.h"
 
 namespace mu::draw {
@@ -60,7 +58,6 @@ public:
 class Shape : public std::vector<ShapeElement>
 {
     OBJECT_ALLOCATOR(engraving, Shape)
-    INJECT_STATIC(layout::ILayout, layout)
 private:
     double _spatium = 0.0;
     double _squeezeFactor = 1.0;

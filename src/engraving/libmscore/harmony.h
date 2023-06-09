@@ -168,7 +168,6 @@ public:
                                    NoteCaseType& baseCase);
 
     void textChanged();
-    void layout1() override;
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override;
