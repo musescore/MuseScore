@@ -206,7 +206,7 @@ void TextBase::endEdit(EditData& ed)
         resetFormatting();
         undoChangeProperty(Pid::TEXT, actualXmlText);       // change property to set text to actual value again
                                                             // this also changes text of linked elements
-        layout1();
+        layout()->layoutText1(this);
         triggerLayout();                                    // force relayout even if text did not change
     } else {
         triggerLayout();
@@ -1028,7 +1028,7 @@ void ChangeTextProperties::undo(EditData*)
     cursor().text()->resetFormatting();
     cursor().text()->setXmlText(xmlText);
     restoreSelection();
-    cursor().text()->layout1();
+    EngravingItem::layout()->layoutText1(cursor().text());
 }
 
 void ChangeTextProperties::redo(EditData*)

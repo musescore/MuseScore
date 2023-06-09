@@ -822,7 +822,7 @@ void FiguredBass::startEdit(EditData& ed)
 {
     DeleteAll(m_items);
     m_items.clear();
-    layout1();   // re-layout without F.B.-specific formatting.
+    layout()->layoutText1(this);   // re-layout without F.B.-specific formatting.
     TextBase::startEdit(ed);
 }
 

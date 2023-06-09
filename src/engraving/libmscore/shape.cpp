@@ -22,9 +22,9 @@
 
 #include "shape.h"
 
-#include "score.h"
-
 #include "draw/painter.h"
+
+#include "engravingitem.h"
 
 #include "log.h"
 
@@ -121,10 +121,10 @@ double Shape::minHorizontalDistance(const Shape& a) const
             double padding = 0;
             KerningType kerningType = KerningType::NON_KERNING;
             if (item1 && item2) {
-                padding = layout()->computePadding(item1, item2);
+                padding = EngravingItem::layout()->computePadding(item1, item2);
                 padding *= _squeezeFactor;
                 padding = std::max(padding, absoluteMinPadding);
-                kerningType = layout()->computeKerning(item1, item2);
+                kerningType = EngravingItem::layout()->computeKerning(item1, item2);
             }
             if ((intersection && kerningType != KerningType::ALLOW_COLLISION)
                 || (r1.width() == 0 || r2.width() == 0)  // Temporary hack: shapes of zero-width are assumed to collide with everyghin

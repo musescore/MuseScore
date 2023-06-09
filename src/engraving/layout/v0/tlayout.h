@@ -345,7 +345,7 @@ private:
 
     static void layoutLines(FiguredBass* item, LayoutContext& ctx);
 
-    static PointF calculateBoundingRect(Harmony* item);
+    static PointF calculateBoundingRect(Harmony* item, LayoutContext& ctx);
 
     static void keySigAddLayout(KeySig* item, SymId sym, int line);
 

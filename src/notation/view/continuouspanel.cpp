@@ -325,7 +325,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
     newElement->setFamily(u"FreeSans");
     newElement->setSizeIsSpatiumDependent(true);
     newElement->setColor(color);
-    newElement->layout1();
+    EngravingItem::layout()->layoutText1(newElement);
     pos = PointF(styleMM(mu::engraving::Sid::clefLeftMargin) + widthClef, y + newElement->height());
     painter.translate(pos);
     newElement->draw(&painter);

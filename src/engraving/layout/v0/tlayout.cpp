@@ -1727,7 +1727,7 @@ void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
     item->setPos(PointF(0.0, y));
 
     // BOUNDING BOX and individual item layout (if required)
-    item->TextBase::layout1();   // prepare structs and data expected by Text methods
+    layout1TextBase(item, ctx);  // prepare structs and data expected by Text methods
     // if element could be parsed into items, layout each element
     // Items list will be empty in edit mode (see FiguredBass::startEdit).
     // TODO: consider disabling specific layout in case text style is changed (tid() != TextStyleName::FIGURED_BASS).
@@ -2658,22 +2658,22 @@ void TLayout::layout(HarmonicMarkSegment* item, LayoutContext& ctx)
     item->autoplaceSpannerSegment();
 }
 
-void TLayout::layout(Harmony* item, LayoutContext&)
+void TLayout::layout(Harmony* item, LayoutContext& ctx)
 {
     if (!item->explicitParent()) {
         item->setPos(0.0, 0.0);
         item->setOffset(0.0, 0.0);
-        item->layout1();
+        layout1(item, ctx);
         return;
     }
     //if (isStyled(Pid::OFFSET))
     //      setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
 
-    item->layout1();
-    item->setPos(calculateBoundingRect(item));
+    layout1(item, ctx);
+    item->setPos(calculateBoundingRect(item, ctx));
 }
 
-void TLayout::layout1(Harmony* item, LayoutContext&)
+void TLayout::layout1(Harmony* item, LayoutContext& ctx)
 {
     if (item->isLayoutInvalid()) {
         item->createLayout();
@@ -2683,7 +2683,7 @@ void TLayout::layout1(Harmony* item, LayoutContext&)
         item->textBlockList().push_back(TextBlock());
     }
 
-    calculateBoundingRect(item);
+    calculateBoundingRect(item, ctx);
 
     if (item->hasFrame()) {
         item->layoutFrame();
@@ -2692,7 +2692,7 @@ void TLayout::layout1(Harmony* item, LayoutContext&)
     item->score()->addRefresh(item->canvasBoundingRect());
 }
 
-PointF TLayout::calculateBoundingRect(Harmony* item)
+PointF TLayout::calculateBoundingRect(Harmony* item, LayoutContext& ctx)
 {
     const double ypos = (item->placeBelow() && item->staff()) ? item->staff()->height() : 0.0;
     const FretDiagram* fd = (item->explicitParent() && item->explicitParent()->isFretDiagram())
@@ -2705,7 +2705,7 @@ PointF TLayout::calculateBoundingRect(Harmony* item)
     double newPosY = 0.0;
 
     if (item->textList.empty()) {
-        item->TextBase::layout1();
+        layout1TextBase(item, ctx);
 
         if (fd) {
             newPosY = item->ypos();
@@ -3231,7 +3231,7 @@ void TLayout::layout(MeasureNumber* item, LayoutContext& ctx)
     layoutMeasureNumberBase(item, ctx);
 }
 
-void TLayout::layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext&)
+void TLayout::layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext& ctx)
 {
     item->setPos(PointF());
     if (!item->explicitParent()) {
@@ -3240,7 +3240,7 @@ void TLayout::layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext&)
 
     // TextBase::layout1() needs to be called even if there's no measure attached to it.
     // This happens for example in the palettes.
-    item->TextBase::layout1();
+    layout1TextBase(item, ctx);
     // this could be if (!measure()) but it is the same as current and slower
     // See implementation of MeasureNumberBase::measure().
     if (!item->explicitParent()) {

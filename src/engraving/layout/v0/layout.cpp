@@ -28,6 +28,7 @@
 #include "libmscore/ledgerline.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/textlinebase.h"
+#include "libmscore/harmony.h"
 
 #include "tlayout.h"
 #include "layoutcontext.h"
@@ -49,6 +50,18 @@ void Layout::doLayoutItem(EngravingItem* item)
 {
     LayoutContext ctx(item->score());
     TLayout::layoutItem(item, ctx);
+}
+
+void Layout::layoutText1(TextBase* item, bool base)
+{
+    LayoutContext ctx(item->score());
+    if (base) {
+        TLayout::layout1TextBase(item, ctx);
+    } else if (Harmony::classof(item)) {
+        TLayout::layout1(static_cast<Harmony*>(item), ctx);
+    } else {
+        TLayout::layout1TextBase(item, ctx);
+    }
 }
 
 // ===============================================================

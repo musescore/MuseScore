@@ -323,7 +323,8 @@ void TextCursor::changeSelectionFormat(FormatId id, const FormatValue& val)
             t.changeFormat(id, val, 0, static_cast<int>(t.columns()));
         }
     }
-    _text->layout1();
+
+    EngravingItem::layout()->layoutText1(_text);
 }
 
 const CharFormat TextCursor::selectedFragmentsFormat() const
@@ -1866,16 +1867,6 @@ void TextBase::prepareFormat(const String& token, TextCursor& cursor)
     if (prepareFormat(token, *cursor.format()) && cursor.format()->fontFamily() != propertyDefault(Pid::FONT_FACE).value<String>()) {
         setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
     }
-}
-
-//---------------------------------------------------------
-//   layout1
-//---------------------------------------------------------
-
-void TextBase::layout1()
-{
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout1TextBase(this, ctx);
 }
 
 //---------------------------------------------------------
