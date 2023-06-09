@@ -77,7 +77,18 @@ void TextBase::editInsertText(TextCursor* cursor, const String& s)
             ++col;
         }
     }
-    cursor->curLine().insert(cursor, s);
+
+    TextBlock& block = _layout[cursor->row()];
+    const CharFormat* previousFormat = block.formatAt(std::max(int(cursor->column()) - 1, 0));
+    if (previousFormat && previousFormat->fontFamily() == "ScoreText" && s == " ") {
+        // This space would be ignored by the xml parser (see #15629)
+        // We must use the nonBreaking space character instead
+        String nonBreakingSpace = String(Char(0xa0));
+        cursor->curLine().insert(cursor, nonBreakingSpace);
+    } else {
+        cursor->curLine().insert(cursor, s);
+    }
+
     cursor->setColumn(cursor->column() + col);
     cursor->clearSelection();
 
@@ -234,10 +245,8 @@ void TextBase::insertSym(EditData& ed, SymId id)
 
     deleteSelectedText(ed);
     String s = score()->engravingFont()->toString(id);
-    CharFormat fmt = *cursor->format();    // save format
     cursor->format()->setFontFamily(u"ScoreText");
     score()->undo(new InsertText(_cursor, s), &ed);
-    cursor->setFormat(fmt);    // restore format
 }
 
 //---------------------------------------------------------
@@ -382,6 +391,7 @@ bool TextBase::edit(EditData& ed)
         return false;
     }
     TextCursor* cursor = ted->cursor();
+    CharFormat* currentFormat = cursor->format();
 
     String s         = ed.s;
     bool ctrlPressed  = ed.modifiers & ControlModifier;
@@ -575,8 +585,8 @@ bool TextBase::edit(EditData& ed)
             break;
 
         case Key_Space:
-            if (ed.modifiers & TextEditingControlModifier) {
-                s = String(Char(0xa0));               // non-breaking space
+            if ((ed.modifiers & TextEditingControlModifier) || currentFormat->fontFamily() == u"ScoreText") {
+                s = String(Char(0xa0)); // non-breaking space
             } else {
                 if (isFingering() && ed.view()) {
                     score()->endCmd();
@@ -682,6 +692,9 @@ bool TextBase::edit(EditData& ed)
         }
     }
     if (!s.isEmpty()) {
+        if (currentFormat->fontFamily() == u"ScoreText") {
+            currentFormat->setFontFamily(propertyDefault(Pid::FONT_FACE).value<String>());
+        }
         deleteSelectedText(ed);
         score()->undo(new InsertText(_cursor, s), &ed);
 
