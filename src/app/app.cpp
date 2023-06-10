@@ -144,6 +144,7 @@ int App::run(int argc, char** argv)
     }
 
     globalModule.resolveImports();
+    globalModule.onPreInit(runMode);
     for (mu::modularity::IModuleSetup* m : m_modules) {
         m->registerUiTypes();
         m->resolveImports();
@@ -158,7 +159,6 @@ int App::run(int argc, char** argv)
     // ====================================================
     // Setup modules: onPreInit
     // ====================================================
-    globalModule.onPreInit(runMode);
     for (mu::modularity::IModuleSetup* m : m_modules) {
         m->onPreInit(runMode);
     }
