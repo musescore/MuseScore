@@ -354,7 +354,7 @@ QVariant Preferences::defaultValue(const QString key) const
 QSettings* Preferences::settings() const
       {
       if (!_initialized) {
-            qDebug("Preferences is not initialized. Call init() to initialize.");
+            qDebug("Preferences are not initialized. Call init() to initialize.");
             Q_ASSERT(_initialized);
             }
 

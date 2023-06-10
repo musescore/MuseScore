@@ -459,6 +459,7 @@ void updateExternalValuesFromPreferences() {
             dir.mkpath(preferences.getString(PREF_APP_PATHS_MYTEMPLATES));
             dir.mkpath(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
             dir.mkpath(preferences.getString(PREF_APP_PATHS_MYPLUGINS));
+            dir.mkpath(preferences.getString(PREF_APP_PATHS_MYSCOREFONTS));
             foreach (QString path, preferences.getString(PREF_APP_PATHS_MYSOUNDFONTS).split(";"))
                   dir.mkpath(path);
                   }
@@ -8188,6 +8189,7 @@ void MuseScore::init(QStringList& argv)
                   preferences.setToDefaultValue(PREF_APP_PATHS_MYIMAGES);
                   preferences.setToDefaultValue(PREF_APP_PATHS_MYTEMPLATES);
                   preferences.setToDefaultValue(PREF_APP_PATHS_MYPLUGINS);
+                  preferences.setToDefaultValue(PREF_APP_PATHS_MYSCOREFONTS);
                   preferences.setToDefaultValue(PREF_APP_PATHS_MYSOUNDFONTS);
                   preferences.setToDefaultValue(PREF_APP_PATHS_MYEXTENSIONS);
                   updateExternalValuesFromPreferences();
