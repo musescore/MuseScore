@@ -748,6 +748,7 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
         generateAudio = need.val;
     }
 
+    // TODO(cloud): is this correct for all save modes?
     project->setCloudInfo(info);
 
     io::path_t savingPath;
@@ -943,27 +944,26 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
 
         LOGD() << "Source url received: " << newSourceUrl;
 
+        CloudProjectInfo cpinfo = project->cloudInfo();
+        if (cpinfo.sourceUrl != newSourceUrl || cpinfo.revisionId != newRevisionId) {
+            // TODO(cloud): does this work correctly with different save modes?
+            cpinfo.sourceUrl = newSourceUrl;
+            cpinfo.revisionId = newRevisionId;
+            project->setCloudInfo(cpinfo);
+
+            if (!project->isNewlyCreated()) {
+                project->save();
+            }
+
+            if (project->isCloudProject()) {
+                moveProject(project, configuration()->cloudProjectPath(cloud::scoreIdFromSourceUrl(cpinfo.sourceUrl)), true);
+            }
+        }
+
         if (audio.isValid()) {
             uploadAudio(audio, newSourceUrl, editUrl, isFirstSave);
         } else {
             onProjectSuccessfullyUploaded(editUrl, isFirstSave);
-        }
-
-        CloudProjectInfo cpinfo = project->cloudInfo();
-        if (cpinfo.sourceUrl == newSourceUrl && cpinfo.revisionId == newRevisionId) {
-            return;
-        }
-
-        cpinfo.sourceUrl = newSourceUrl;
-        cpinfo.revisionId = newRevisionId;
-        project->setCloudInfo(cpinfo);
-
-        if (!project->isNewlyCreated()) {
-            project->save();
-        }
-
-        if (project->isCloudProject()) {
-            moveProject(project, configuration()->cloudProjectPath(cloud::scoreIdFromSourceUrl(cpinfo.sourceUrl)), true);
         }
     });
 }

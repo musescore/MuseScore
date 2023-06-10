@@ -171,7 +171,7 @@ void NotationSwitchListModel::listenProjectSavingStatusChanged()
         emit dataChanged(modelIndex, modelIndex, { RoleNeedSave, RoleIsCloud });
     });
 
-    currentProject->pathChanged().onNotify(this, [this]() {
+    currentProject->displayNameChanged().onNotify(this, [this]() {
         INotationProjectPtr project = context()->currentProject();
         if (!project) {
             return;

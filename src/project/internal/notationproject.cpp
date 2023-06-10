@@ -230,16 +230,22 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
     masterScore->setLayoutAll();
     masterScore->update();
 
-    // Load other stuff from the project file
+    // Load audio settings
     ret = m_projectAudioSettings->read(reader);
     if (!ret) {
-        //applyed compat audio settings
+        // Apply compat audio settings
         if (!settingsCompat.audioSettings.empty()) {
             for (const auto& audioCompat : settingsCompat.audioSettings) {
                 IProjectAudioSettings::SoloMuteState state = { audioCompat.second.mute, audioCompat.second.solo };
                 m_projectAudioSettings->setSoloMuteState(audioCompat.second.instrumentId, state);
             }
         }
+    }
+
+    // Load cloud info
+    {
+        m_cloudInfo.sourceUrl = masterScore->metaTags()[SOURCE_TAG].toQString();
+        m_cloudInfo.revisionId = masterScore->metaTags()[SOURCE_REVISION_ID_TAG].toInt();
     }
 
     // Set current if all success
@@ -389,6 +395,7 @@ void NotationProject::setPath(const io::path_t& path)
 
     m_path = path;
     m_pathChanged.notify();
+    m_displayNameChanged.notify();
 }
 
 async::Notification NotationProject::pathChanged() const
@@ -417,6 +424,11 @@ QString NotationProject::displayName() const
     return io::filename(m_path, isSuffixInteresting).toQString();
 }
 
+async::Notification NotationProject::displayNameChanged() const
+{
+    return m_displayNameChanged;
+}
+
 bool NotationProject::isCloudProject() const
 {
     return configuration()->isNewCloudProject(m_path) || configuration()->isOldCloudProject(m_path);
@@ -424,12 +436,6 @@ bool NotationProject::isCloudProject() const
 
 const CloudProjectInfo& NotationProject::cloudInfo() const
 {
-    if (!m_cloudInfo.isValid()) {
-        m_cloudInfo.name = io::filename(m_path, false).toQString();
-        m_cloudInfo.sourceUrl = m_masterNotation->masterScore()->metaTags()[SOURCE_TAG].toQString();
-        m_cloudInfo.revisionId = m_masterNotation->masterScore()->metaTags()[SOURCE_REVISION_ID_TAG].toInt();
-    }
-
     return m_cloudInfo;
 }
 
@@ -438,6 +444,8 @@ void NotationProject::setCloudInfo(const CloudProjectInfo& info)
     m_cloudInfo = info;
     m_masterNotation->masterScore()->setMetaTag(SOURCE_TAG, info.sourceUrl.toString());
     m_masterNotation->masterScore()->setMetaTag(SOURCE_REVISION_ID_TAG, String::number(info.revisionId));
+
+    m_displayNameChanged.notify();
 }
 
 mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)

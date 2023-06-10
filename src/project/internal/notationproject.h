@@ -67,6 +67,7 @@ public:
     async::Notification pathChanged() const override;
 
     QString displayName() const override;
+    async::Notification displayNameChanged() const override;
 
     bool isCloudProject() const override;
     const CloudProjectInfo& cloudInfo() const override;
@@ -115,6 +116,7 @@ private:
 
     io::path_t m_path;
     async::Notification m_pathChanged;
+    async::Notification m_displayNameChanged;
 
     async::Notification m_needSaveNotification;
     bool m_needSaveNotificationBlocked = false;
