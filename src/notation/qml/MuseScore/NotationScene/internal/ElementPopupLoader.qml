@@ -52,6 +52,7 @@ Item {
             case Notation.TYPE_HARP_DIAGRAM: return harpPedalComp
             case Notation.TYPE_CAPO: return capoComp
             case Notation.TYPE_STRING_TUNINGS: return stringTuningsComp
+            case Notation.TYPE_TEXT: return textStyleComp
             }
 
             return null
@@ -129,6 +130,19 @@ Item {
         StringTuningsPopup {
             onClosed: {
                 prv.unloadPopup()
+            }
+        }
+    }
+
+    Component {
+        id: textStyleComp
+        TextStylePopup {
+            navigationSection: container.navigationSection
+            navigationOrderStart: container.navigationOrderStart
+
+            onClosed: {
+                prv.resetOpenedPopup()
+                loader.sourceComponent = null
             }
         }
     }
