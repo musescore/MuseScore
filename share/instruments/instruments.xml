@@ -344,7 +344,7 @@
             <name>Bandurrias</name>
       </Family>
       <Family id="lauds">
-            <name>Lauds</name>
+            <name>Laúds</name>
       </Family>
       <Family id="strings">
             <name>Strings</name>
@@ -13166,7 +13166,7 @@
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="laud">
-                  <family>lauds</family>
+                  <family>Laúds</family>
                   <trackName>Laúd</trackName>
                   <longName>Laúd</longName>
                   <shortName>Laúd</shortName>
@@ -13194,7 +13194,7 @@
             </Instrument>
             <Instrument id="laud-tablature">
                   <init>laud</init>
-                  <family>lauds</family>
+                  <family>Laúds</family>
                   <trackName>Laúd (tablature)</trackName>
                   <longName>Laúd</longName>
                   <description>Spanish lute similar to the bandurria. (Tablature).</description>
