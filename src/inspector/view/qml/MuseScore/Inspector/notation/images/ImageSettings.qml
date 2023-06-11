@@ -69,6 +69,7 @@ Column {
 
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: heightControl.verticalCenter
+            anchors.verticalCenterOffset: 14
 
             height: 20
             width: 20
