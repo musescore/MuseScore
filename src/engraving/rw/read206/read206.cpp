@@ -2278,7 +2278,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
             case SymId::fermataVeryLongAbove:
             case SymId::fermataVeryLongBelow: {
                 Fermata* fe = Factory::createFermata(ctx.dummy());
-                fe->setSymId(sym);
+                fe->setSymIdAndTimeStretch(sym);
                 el = fe;
             } break;
             default:
@@ -2316,7 +2316,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
     // Special case for "no type" = ufermata, with missing subtype tag
     if (!el) {
         Fermata* f = Factory::createFermata(ctx.dummy());
-        f->setSymId(sym);
+        f->setSymIdAndTimeStretch(sym);
         el = f;
     }
     if (el->isFermata()) {

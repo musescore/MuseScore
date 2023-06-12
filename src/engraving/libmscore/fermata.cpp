@@ -58,7 +58,7 @@ Fermata::Fermata(EngravingItem* parent)
     : EngravingItem(ElementType::FERMATA, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setPlacement(PlacementV::ABOVE);
-    _symId         = SymId::noSym;
+    m_symId         = SymId::noSym;
     setPlay(true);
     initElementStyle(&fermataStyle);
 }
@@ -69,11 +69,11 @@ Fermata::Fermata(EngravingItem* parent)
 
 int Fermata::subtype() const
 {
-    String s = String::fromAscii(SymNames::nameForSymId(_symId).ascii());
+    String s = String::fromAscii(SymNames::nameForSymId(m_symId).ascii());
     if (s.endsWith(u"Below")) {
         return int(SymNames::symIdByName(s.left(s.size() - 5) + u"Above"));
     } else {
-        return int(_symId);
+        return int(m_symId);
     }
 }
 
@@ -94,7 +94,7 @@ void Fermata::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;
     painter->setPen(curColor());
-    drawSymbol(_symId, painter, PointF(-0.5 * width(), 0.0));
+    drawSymbol(m_symId, painter, PointF(-0.5 * width(), 0.0));
 }
 
 //---------------------------------------------------------
@@ -158,7 +158,7 @@ PropertyValue Fermata::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SYMBOL:
-        return PropertyValue::fromValue(_symId);
+        return PropertyValue::fromValue(m_symId);
     case Pid::TIME_STRETCH:
         return timeStretch();
     case Pid::PLAY:
@@ -176,16 +176,16 @@ bool Fermata::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SYMBOL:
-        setSymId(v.value<SymId>());
+        setSymIdAndTimeStretch(v.value<SymId>());
         break;
     case Pid::PLACEMENT: {
         PlacementV p = v.value<PlacementV>();
         if (p != placement()) {
-            String s = String::fromAscii(SymNames::nameForSymId(_symId).ascii());
+            String s = String::fromAscii(SymNames::nameForSymId(m_symId).ascii());
             bool up = placeAbove();
             if (s.endsWith(up ? u"Above" : u"Below")) {
                 String s2 = s.left(s.size() - 5) + (up ? u"Below" : u"Above");
-                _symId = SymNames::symIdByName(s2);
+                m_symId = SymNames::symIdByName(s2);
             }
             setPlacement(p);
         }
@@ -277,10 +277,10 @@ double Fermata::mag() const
     return staff() ? staff()->staffMag(tick()) * score()->styleD(Sid::articulationMag) : 1.0;
 }
 
-void Fermata::setSymId(SymId id)
+void Fermata::setSymIdAndTimeStretch(SymId id)
 {
-    _symId  = id;
-    _timeStretch = _timeStretch == -1 ? propertyDefault(Pid::TIME_STRETCH).value<double>() : -1;
+    m_symId  = id;
+    m_timeStretch = m_timeStretch == -1 ? propertyDefault(Pid::TIME_STRETCH).value<double>() : -1;
 }
 
 FermataType Fermata::fermataType() const
