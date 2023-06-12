@@ -1396,21 +1396,22 @@ void TLayout::layout(DeadSlapped* item, LayoutContext&)
         PointF bottomLeft = topLeft + PointF(0, height);
         PointF offsetX = PointF(crossThickness, 0);
 
-        item->m_path1 = mu::draw::PainterPath();
+        mu::draw::PainterPath path1;
+        path1.moveTo(topLeft);
+        path1.lineTo(topLeft + offsetX);
+        path1.lineTo(bottomRight);
+        path1.lineTo(bottomRight - offsetX);
+        path1.lineTo(topLeft);
 
-        item->m_path1.moveTo(topLeft);
-        item->m_path1.lineTo(topLeft + offsetX);
-        item->m_path1.lineTo(bottomRight);
-        item->m_path1.lineTo(bottomRight - offsetX);
-        item->m_path1.lineTo(topLeft);
+        mu::draw::PainterPath path2;
+        path2.moveTo(topRight);
+        path2.lineTo(topRight - offsetX);
+        path2.lineTo(bottomLeft);
+        path2.lineTo(bottomLeft + offsetX);
+        path2.lineTo(topRight);
 
-        item->m_path2 = mu::draw::PainterPath();
-
-        item->m_path2.moveTo(topRight);
-        item->m_path2.lineTo(topRight - offsetX);
-        item->m_path2.lineTo(bottomLeft);
-        item->m_path2.lineTo(bottomLeft + offsetX);
-        item->m_path2.lineTo(topRight);
+        item->setPath1(path1);
+        item->setPath2(path2);
     }
 }
 
