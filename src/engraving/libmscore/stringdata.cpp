@@ -44,20 +44,21 @@ namespace mu::engraving {
 
 bool StringData::bFretting = false;
 
-StringData::StringData(int numFrets, int numStrings, int strings[])
+StringData::StringData(int numFrets, int numStrings, int strings[], bool useFlats)
 {
     instrString strg = { 0, false, 0 };
-    _frets = numFrets;
+    m_frets = numFrets;
 
     for (int i = 0; i < numStrings; i++) {
         strg.pitch = strings[i];
         m_stringTable.push_back(strg);
     }
+    m_useFlats = useFlats;
 }
 
 StringData::StringData(int numFrets, std::vector<instrString>& strings)
 {
-    _frets = numFrets;
+    m_frets = numFrets;
 
     m_stringTable.clear();
     for (const instrString& i : strings) {
@@ -335,7 +336,7 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
     pitch += pitchOffset;
 
     // if above max fret on highest string, fret on first string, but return failure
-    if (pitch > m_stringTable.at(strings - 1).pitch + _frets) {
+    if (pitch > m_stringTable.at(strings - 1).pitch + m_frets) {
         *string = 0;
         *fret   = 0;
         return false;
@@ -427,7 +428,7 @@ int StringData::fret(int pitch, int string, int pitchOffset) const
     }
 
     // fret number is invalid or string cannot be fretted
-    if (fret < 0 || fret > _frets || (fret > 0 && strg.open)) {
+    if (fret < 0 || fret > m_frets || (fret > 0 && strg.open)) {
         return INVALID_FRET_INDEX;
     }
     return fret;
@@ -535,7 +536,7 @@ void StringData::configBanjo5thString()
     // banjo 5th string (pitch 67 == G)
     instrString& strg5 = m_stringTable[0];
 
-    _frets = 24; // not needed after bug #316931 is fixed
+    m_frets = 24; // not needed after bug #316931 is fixed
 
     // adjust startFret if using a 5th string capo (6..12)
     if (strg5.pitch > 67 && strg5.pitch < 74) {

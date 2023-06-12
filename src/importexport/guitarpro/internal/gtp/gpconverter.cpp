@@ -1159,6 +1159,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
         part->setCapoFret(capoFret);
 
         auto tunning = staffProperty[0].tunning;
+        bool useFlats = staffProperty[0].useFlats;
         auto fretCount = staffProperty[0].fretCount;
 
         if (tunning.empty()) {
@@ -1170,7 +1171,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
             t -= transpose;
         }
 
-        StringData stringData = StringData(fretCount, static_cast<int>(tunning.size()), tunning.data());
+        StringData stringData = StringData(fretCount, static_cast<int>(tunning.size()), tunning.data(), useFlats);
         instr->setStringData(stringData);
     } else if (!instr->useDrumset()) {
         StringData stringData = StringData(24, static_cast<int>(standartTuning.size()), standartTuning.data());
