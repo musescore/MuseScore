@@ -156,7 +156,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
 
     samples_t masterChannelSampleCount = 0;
 
-    std::vector<std::future<std::vector<float> > > futureList;
+    std::map < TrackId, std::future<std::vector<float> > > futures;
 
     for (const auto& pair : m_trackChannels) {
         MixerChannelPtr channel = pair.second;
@@ -174,18 +174,18 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
             return buffer;
         });
 
-        futureList.emplace_back(std::move(future));
+        futures.emplace(pair.first, std::move(future));
     }
 
     prepareAuxBuffers(outBufferSize);
 
-    for (size_t trackIdx = 0; trackIdx < futureList.size(); ++trackIdx) {
-        const std::vector<float>& trackBuffer = futureList.at(trackIdx).get();
+    for (auto& pair : futures) {
+        const std::vector<float>& trackBuffer = pair.second.get();
 
         mixOutputFromChannel(outBuffer, trackBuffer.data(), samplesPerChannel);
         masterChannelSampleCount = std::max(samplesPerChannel, masterChannelSampleCount);
 
-        const AuxSendsParams& auxSends = m_trackChannels.at(static_cast<TrackId>(trackIdx))->outputParams().auxSends;
+        const AuxSendsParams& auxSends = m_trackChannels.at(pair.first)->outputParams().auxSends;
         writeTrackToAuxBuffers(auxSends, trackBuffer.data(), samplesPerChannel);
     }
 
