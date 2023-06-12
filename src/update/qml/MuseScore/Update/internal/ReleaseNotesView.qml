@@ -21,25 +21,26 @@
  */
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-ColumnLayout {
+Item {
     id: root
 
     property alias notes: notesLabel.text
 
-    spacing: 16
-
     QtObject {
         id: prv
 
-        readonly property int sideMargin: 36
+        readonly property int sideMargin: 24
     }
 
     StyledTextLabel {
-        Layout.fillWidth: true
+        id: titleLabel
+        anchors.left: parent.left
+        anchors.right: parent.right
 
         text: qsTrc("update", "Release notes")
 
@@ -47,11 +48,22 @@ ColumnLayout {
         font: ui.theme.bodyBoldFont
     }
 
-    SeparatorLine { Layout.leftMargin: -prv.sideMargin; Layout.rightMargin: -prv.sideMargin }
+    SeparatorLine {
+        anchors.leftMargin: -prv.sideMargin
+        anchors.rightMargin: -prv.sideMargin
+        anchors.bottom: flickable.top
+        anchors.bottomMargin: 16
+    }
 
     StyledFlickable {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        id: flickable
+
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: titleLabel.bottom
+        anchors.topMargin: 32
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 16
 
         contentHeight: notesLabel.implicitHeight
 
@@ -66,7 +78,22 @@ ColumnLayout {
             wrapMode: Text.WordWrap
             textFormat: Text.MarkdownText
         }
+
+        ScrollBar.vertical: scrollBar
     }
 
-    SeparatorLine { Layout.leftMargin: -prv.sideMargin; Layout.rightMargin: -prv.sideMargin }
+    StyledScrollBar {
+        id: scrollBar
+        anchors.top: flickable.top
+        anchors.right: flickable.right
+        anchors.rightMargin: -prv.sideMargin
+        anchors.bottom: flickable.bottom
+    }
+
+    SeparatorLine {
+        anchors.top: flickable.bottom
+        anchors.topMargin: 16
+        anchors.leftMargin: -prv.sideMargin
+        anchors.rightMargin: -prv.sideMargin
+    }
 }
