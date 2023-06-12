@@ -1625,46 +1625,46 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
     int font = 0;
     int style = item->score()->styleI(Sid::figuredBassStyle);
 
-    if (item->m_parenth[0] != FiguredBassItem::Parenthesis::NONE) {
-        str.append(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->m_parenth[0])]);
+    if (item->parenth1() != FiguredBassItem::Parenthesis::NONE) {
+        str.append(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->parenth1())]);
     }
 
     // prefix
-    if (item->_prefix != FiguredBassItem::Modifier::NONE) {
+    if (item->prefix() != FiguredBassItem::Modifier::NONE) {
         // if no digit, the string created so far 'hangs' to the left of the note
-        if (item->_digit == FBIDigitNone) {
+        if (item->digit() == FBIDigitNone) {
             x1 = fm.width(str);
         }
-        str.append(FiguredBass::FBFonts().at(font).displayAccidental[int(item->_prefix)]);
+        str.append(FiguredBass::FBFonts().at(font).displayAccidental[int(item->prefix())]);
         // if no digit, the string from here onward 'hangs' to the right of the note
-        if (item->_digit == FBIDigitNone) {
+        if (item->digit() == FBIDigitNone) {
             x2 = fm.width(str);
         }
     }
 
-    if (item->m_parenth[1] != FiguredBassItem::Parenthesis::NONE) {
-        str.append(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->m_parenth[1])]);
+    if (item->parenth2() != FiguredBassItem::Parenthesis::NONE) {
+        str.append(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->parenth2())]);
     }
 
     // digit
-    if (item->_digit != FBIDigitNone) {
+    if (item->digit() != FBIDigitNone) {
         // if some digit, the string created so far 'hangs' to the left of the note
         x1 = fm.width(str);
         // if suffix is a combining shape, combine it with digit (multi-digit numbers cannot be combined)
         // unless there is a parenthesis in between
-        if ((item->_digit < 10)
-            && (item->_suffix == FiguredBassItem::Modifier::CROSS
-                || item->_suffix == FiguredBassItem::Modifier::BACKSLASH
-                || item->_suffix == FiguredBassItem::Modifier::SLASH)
-            && item->m_parenth[2] == FiguredBassItem::Parenthesis::NONE) {
-            str.append(FiguredBass::FBFonts().at(font).displayDigit[style][item->_digit][int(item->_suffix)
-                                                                                         - (int(FiguredBassItem::Modifier::CROSS)
-                                                                                            - 1)]);
+        if ((item->digit() < 10)
+            && (item->suffix() == FiguredBassItem::Modifier::CROSS
+                || item->suffix() == FiguredBassItem::Modifier::BACKSLASH
+                || item->suffix() == FiguredBassItem::Modifier::SLASH)
+            && item->parenth3() == FiguredBassItem::Parenthesis::NONE) {
+            str.append(FiguredBass::FBFonts().at(font).displayDigit[style][item->digit()][int(item->suffix())
+                                                                                          - (int(FiguredBassItem::Modifier::CROSS)
+                                                                                             - 1)]);
         }
         // if several digits or no shape combination, convert _digit to font styled chars
         else {
             String digits;
-            int digit = item->_digit;
+            int digit = item->digit();
             while (true) {
                 digits.prepend(FiguredBass::FBFonts().at(font).displayDigit[style][(digit % 10)][0]);
                 digit /= 10;
@@ -1678,23 +1678,23 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
         x2 = fm.width(str);
     }
 
-    if (item->m_parenth[2] != FiguredBassItem::Parenthesis::NONE) {
-        str.append(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->m_parenth[2])]);
+    if (item->parenth3() != FiguredBassItem::Parenthesis::NONE) {
+        str.append(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->parenth3())]);
     }
 
     // suffix
     // append only if non-combining shape or cannot combine (no digit or parenthesis in between)
-    if (item->_suffix != FiguredBassItem::Modifier::NONE
-        && ((item->_suffix != FiguredBassItem::Modifier::CROSS
-             && item->_suffix != FiguredBassItem::Modifier::BACKSLASH
-             && item->_suffix != FiguredBassItem::Modifier::SLASH)
-            || item->_digit == FBIDigitNone
-            || item->m_parenth[2] != FiguredBassItem::Parenthesis::NONE)) {
-        str.append(FiguredBass::FBFonts().at(font).displayAccidental[int(item->_suffix)]);
+    if (item->suffix() != FiguredBassItem::Modifier::NONE
+        && ((item->suffix() != FiguredBassItem::Modifier::CROSS
+             && item->suffix() != FiguredBassItem::Modifier::BACKSLASH
+             && item->suffix() != FiguredBassItem::Modifier::SLASH)
+            || item->digit() == FBIDigitNone
+            || item->parenth3() != FiguredBassItem::Parenthesis::NONE)) {
+        str.append(FiguredBass::FBFonts().at(font).displayAccidental[int(item->suffix())]);
     }
 
-    if (item->m_parenth[3] != FiguredBassItem::Parenthesis::NONE) {
-        str.append(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->m_parenth[3])]);
+    if (item->parenth4() != FiguredBassItem::Parenthesis::NONE) {
+        str.append(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->parenth4())]);
     }
 
     item->setDisplayText(str);                  // this text will be displayed
@@ -1708,18 +1708,18 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
     h = fm.lineSpacing();
     h *= item->score()->styleD(Sid::figuredBassLineHeight);
     if (item->score()->styleI(Sid::figuredBassAlignment) == 0) {          // top alignment: stack down from first item
-        y = h * item->m_ord;
+        y = h * item->ord();
     } else {                                                      // bottom alignment: stack up from last item
-        y = -h * (item->figuredBass()->numOfItems() - item->m_ord);
+        y = -h * (item->figuredBass()->itemsCount() - item->ord());
     }
     item->setPos(x, y);
     // determine bbox from text width
 //      w = fm.width(str);
     w = fm.width(str);
-    item->m_textWidth = w;
+    item->setTextWidth(w);
     // if there is a cont.line, extend width to cover the whole FB element duration line
     int lineLen;
-    if (item->_contLine != FiguredBassItem::ContLine::NONE && (lineLen = item->figuredBass()->lineLength(0)) > w) {
+    if (item->contLine() != FiguredBassItem::ContLine::NONE && (lineLen = item->figuredBass()->lineLength(0)) > w) {
         w = lineLen;
     }
     item->bbox().setRect(0, 0, w, h);
@@ -1752,15 +1752,17 @@ void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
 
 void TLayout::layoutLines(FiguredBass* item, LayoutContext&)
 {
-    if (item->_ticks <= Fraction(0, 1) || !item->segment()) {
-        item->_lineLengths.resize(1);                             // be sure to always have
-        item->_lineLengths[0] = 0;                                // at least 1 item in array
+    std::vector<double> lineLengths = item->lineLengths();
+    if (item->ticks() <= Fraction(0, 1) || !item->segment()) {
+        lineLengths.resize(1);                             // be sure to always have
+        lineLengths[0] = 0;                                // at least 1 item in array
+        item->setLineLengths(lineLengths);
         return;
     }
 
     ChordRest* lastCR  = nullptr;                         // the last ChordRest of this
     Segment* nextSegm = nullptr;                          // the Segment beyond this' segment
-    Fraction nextTick = item->segment()->tick() + item->_ticks;       // the tick beyond this' duration
+    Fraction nextTick = item->segment()->tick() + item->ticks();       // the tick beyond this' duration
 
     // locate the measure containing the last tick of this; it is either:
     // the same measure containing nextTick, if nextTick is not the first tick of a measure
@@ -1796,14 +1798,16 @@ void TLayout::layoutLines(FiguredBass* item, LayoutContext&)
     }
     if (!m || !nextSegm) {
         LOGD("FiguredBass layout: no segment found for tick %d", nextTick.ticks());
-        item->_lineLengths.resize(1);                             // be sure to always have
-        item->_lineLengths[0] = 0;                                // at least 1 item in array
+        lineLengths.resize(1);                             // be sure to always have
+        lineLengths[0] = 0;                                // at least 1 item in array
+        item->setLineLengths(lineLengths);
         return;
     }
 
     // get length of printed lines from horiz. page position of lastCR
     // (enter a bit 'into' the ChordRest for clarity)
-    item->_printedLineLength = lastCR ? lastCR->pageX() - item->pageX() + 1.5 * item->spatium() : 3 * item->spatium();
+    double printedLineLength = lastCR ? lastCR->pageX() - item->pageX() + 1.5 * item->spatium() : 3 * item->spatium();
+    item->setPrintedLineLength(printedLineLength);
 
     // get duration indicator line(s) from page position of nextSegm
     const std::vector<System*>& systems = item->score()->systems();
@@ -1843,16 +1847,18 @@ void TLayout::layoutLines(FiguredBass* item, LayoutContext&)
             LOGD("FiguredBass: duration indicator end line not implemented");
         }
         // store length item, reusing array items if already present
-        if (item->_lineLengths.size() <= segIdx) {
-            item->_lineLengths.push_back(len);
+        if (lineLengths.size() <= segIdx) {
+            lineLengths.push_back(len);
         } else {
-            item->_lineLengths[segIdx] = len;
+            lineLengths[segIdx] = len;
         }
     }
     // if more array items than needed, truncate array
-    if (item->_lineLengths.size() > segIdx) {
-        item->_lineLengths.resize(segIdx);
+    if (lineLengths.size() > segIdx) {
+        lineLengths.resize(segIdx);
     }
+
+    item->setLineLengths(lineLengths);
 }
 
 void TLayout::layout(Fingering* item, LayoutContext& ctx)
