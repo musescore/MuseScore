@@ -141,9 +141,6 @@ public:
         doLayoutItem(static_cast<EngravingItem*>(item));
     }
 
-    // Layout Text 1
-    virtual void layoutText1(TextBase* item, bool base = false) = 0;
-
     // Layout Elements on Edit
     virtual void layoutOnEdit(Arpeggio* item) = 0;
 
@@ -151,11 +148,14 @@ public:
     virtual double computePadding(const EngravingItem* item1, const EngravingItem* item2) = 0;
     virtual KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2) = 0;
 
-    // Other
     //! TODO Investigation is required, probably these functions or their calls should not be.
+    // Other
     virtual void layoutTextLineBaseSegment(TextLineBaseSegment* item) = 0;
     virtual void layoutBeam1(Beam* item) = 0;
     virtual void layoutStem(Chord* item) = 0;
+
+    // Layout Text 1
+    virtual void layoutText1(TextBase* item, bool base = false) = 0;
 
 private:
     // Layout Single Item
