@@ -1377,7 +1377,7 @@ void GPConverter::addFermatas()
         for (size_t staffIdx = 0; staffIdx < _score->staves().size(); staffIdx++) {
             Fermata* fermata = mu::engraving::Factory::createFermata(seg);
             SymId type = fermataType(fr.second);
-            fermata->setSymId(type);
+            fermata->setSymIdAndTimeStretch(type);
             fermata->setTimeStretch(convertingLength);
             fermata->setTrack(staffIdx * VOICES);
             seg->add(fermata);

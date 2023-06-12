@@ -1551,9 +1551,9 @@ void TLayout::layout(Fermata* item, LayoutContext&)
 {
     const StaffType* stType = item->staffType();
 
-    item->_skipDraw = false;
+    item->setSkipDraw(false);
     if (stType && stType->isHiddenElementOnTab(item->score(), Sid::fermataShowTabCommon, Sid::fermataShowTabSimple)) {
-        item->_skipDraw = true;
+        item->setSkipDraw(true);
         return;
     }
 
@@ -1581,18 +1581,18 @@ void TLayout::layout(Fermata* item, LayoutContext&)
         }
     }
 
-    String name = String::fromAscii(SymNames::nameForSymId(item->_symId).ascii());
+    String name = String::fromAscii(SymNames::nameForSymId(item->symId()).ascii());
     if (item->placeAbove()) {
         if (name.endsWith(u"Below")) {
-            item->_symId = SymNames::symIdByName(name.left(name.size() - 5) + u"Above");
+            item->setSymId(SymNames::symIdByName(name.left(name.size() - 5) + u"Above"));
         }
     } else {
         item->movePosY(item->staff()->height());
         if (name.endsWith(u"Above")) {
-            item->_symId = SymNames::symIdByName(name.left(name.size() - 5) + u"Below");
+            item->setSymId(SymNames::symIdByName(name.left(name.size() - 5) + u"Below"));
         }
     }
-    RectF b(item->symBbox(item->_symId));
+    RectF b(item->symBbox(item->symId()));
     item->setbbox(b.translated(-0.5 * b.width(), 0.0));
     item->autoplaceSegmentElement();
 }
