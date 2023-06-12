@@ -182,8 +182,8 @@ bool FiguredBassItem::parse(String& str)
     // prefix, digit, suffix and cont.line cannot be ALL empty
     // suffix cannot combine with empty digit
     if ((m_prefix != Modifier::NONE && m_suffix != Modifier::NONE)
-            || (m_prefix == Modifier::NONE && m_digit == FBIDigitNone && m_suffix == Modifier::NONE && m_contLine == ContLine::NONE)
-            || ((m_suffix == Modifier::CROSS || m_suffix == Modifier::BACKSLASH || m_suffix == Modifier::SLASH)
+        || (m_prefix == Modifier::NONE && m_digit == FBIDigitNone && m_suffix == Modifier::NONE && m_contLine == ContLine::NONE)
+        || ((m_suffix == Modifier::CROSS || m_suffix == Modifier::BACKSLASH || m_suffix == Modifier::SLASH)
             && m_digit == FBIDigitNone)) {
         return false;
     }

@@ -114,6 +114,7 @@ public:
     static const std::vector<Dyn>& dynamicList() { return DYN_LIST; }
 
 private:
+
     M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)
     M_PROPERTY(double, dynamicsSize, setDynamicsSize)
     M_PROPERTY(bool, centerOnNotehead, setCenterOnNotehead)
