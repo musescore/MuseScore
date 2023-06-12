@@ -73,7 +73,7 @@ FocusScope {
             Layout.fillWidth: true
 
             navigationPanel.section: navSec
-            navigationPanel.order: notationView.navigationPanel.order + 1
+            navigationPanel.order: popUpLoader.navigationOrderEnd + 1
         }
 
         SeparatorLine { visible: tabPanel.visible }
@@ -165,7 +165,7 @@ FocusScope {
                         id: popUpLoader
 
                         navigationSection: navSec
-                        navigationOrderStart: 2
+                        navigationOrderStart: notationView.navigationPanel.order + 1
 
                         onOpened: paintView.setIsPopupOpen(true)
                         onClosed: paintView.setIsPopupOpen(false)
