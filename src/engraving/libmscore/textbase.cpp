@@ -246,15 +246,12 @@ void TextCursor::updateCursorFormat()
 {
     TextBlock* block = &_text->_layout[_row];
     size_t col = hasSelection() ? selectColumn() : column();
-    const CharFormat* format = block->formatAt(static_cast<int>(col));
+    // Get format at the LEFT of the cursor position
+    const CharFormat* format = block->formatAt(std::max(static_cast<int>(col) - 1, 0));
     if (!format) {
         init();
     } else {
-        CharFormat updated = *format;
-        if (updated.fontFamily() == "ScoreText") {
-            updated.setFontFamily(_format.fontFamily());
-        }
-        setFormat(updated);
+        setFormat(*format);
     }
 }
 

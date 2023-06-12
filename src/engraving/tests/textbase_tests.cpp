@@ -81,9 +81,10 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextAfter)
     MasterScore* score = ScoreRW::readScore(u"test.mscx");
     Dynamic* dynamic = addDynamic(score);
     EditData ed;
+    ed.s = String(u" ma non troppo");
     dynamic->startEdit(ed);
     dynamic->cursor()->moveCursorToEnd();
-    score->undo(new InsertText(dynamic->cursor(), String(u" ma non troppo")), &ed);
+    dynamic->edit(ed);
     dynamic->endEdit(ed);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextAfter.mscx", TEXTBASE_DATA_DIR + u"dynamicAddTextAfter-ref.mscx"));
 }
@@ -126,7 +127,7 @@ TEST_F(Engraving_TextBaseTests, getFontStyleProperty)
     staffText->cursor()->movePosition(TextCursor::MoveOperation::End, TextCursor::MoveMode::KeepAnchor);
     EXPECT_EQ(staffText->getProperty(Pid::FONT_STYLE), PropertyValue::fromValue(0));
     staffText->cursor()->movePosition(TextCursor::MoveOperation::WordLeft, TextCursor::MoveMode::MoveAnchor);
-    EXPECT_EQ(staffText->getProperty(Pid::FONT_STYLE), PropertyValue::fromValue(static_cast<int>(FontStyle::Bold)));
+    EXPECT_EQ(staffText->getProperty(Pid::FONT_STYLE), PropertyValue::fromValue(static_cast<int>(FontStyle::Normal)));
     staffText->cursor()->movePosition(TextCursor::MoveOperation::NextWord, TextCursor::MoveMode::KeepAnchor);
     EXPECT_EQ(staffText->getProperty(Pid::FONT_STYLE), PropertyValue::fromValue(static_cast<int>(FontStyle::Bold)));
     staffText->endEdit(ed);
