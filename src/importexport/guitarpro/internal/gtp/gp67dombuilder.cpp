@@ -1170,7 +1170,7 @@ void GP67DomBuilder::readBeatProperties(const XmlDomNode& propertiesNode, GPBeat
         } else if (propertyName == u"Brush") {
             beat->setBrush(brushType(propertyNode.firstChild().toElement().text()));
         } else if (propertyName == u"VibratoWTremBar") {
-            beat->setVibrato(vibratoType(propertyNode.firstChild().toElement().text()));
+            beat->setVibratoWTremBar(vibratoType(propertyNode.firstChild().toElement().text()));
         } else if (propertyName == u"Rasgueado") {
             beat->setRasgueado(rasgueadoType(propertyNode.firstChild().toElement().text()));
         } else if (propertyName == u"PickStroke") {

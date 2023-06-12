@@ -26,14 +26,14 @@
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Dis. Rhy.</trackName>
-      <Instrument id="electric-guitar">
-        <longName>Dis. Rhy.</longName>
+      <trackName>Track 1</trackName>
+      <Instrument id="cavaquinho">
+        <longName>Track 1</longName>
         <trackName></trackName>
-        <instrumentId>pluck.guitar.electric</instrumentId>
+        <instrumentId>pluck.guitar</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
-          <frets>30</frets>
+          <frets>24</frets>
           <string>40</string>
           <string>45</string>
           <string>50</string>
@@ -70,30 +70,13 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="30"/>
-          <controller ctrl="7" value="39"/>
+          <program value="25"/>
+          <controller ctrl="7" value="103"/>
           <controller ctrl="10" value="63"/>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
-      <VBox>
-        <height>10</height>
-        <Text>
-          <style>title</style>
-          <text>Cemetary Gates</text>
-          </Text>
-        <Text>
-          <style>subtitle</style>
-          <text>:)
-Pantera
-Cowboys From Hell</text>
-          </Text>
-        <Text>
-          <style>composer</style>
-          <text>Pantera</text>
-          </Text>
-        </VBox>
       <Measure>
         <voice>
           <KeySig>
@@ -107,40 +90,89 @@ Cowboys From Hell</text>
             <subtype>f</subtype>
             <velocity>96</velocity>
             </Dynamic>
-          <Spanner type="HarmonicMark">
-            <HarmonicMark>
-              <beginText>AH</beginText>
+          <Spanner type="LetRing">
+            <LetRing>
               <beginTextOffset x="0" y="0"/>
-              <continueText>AH</continueText>
-              </HarmonicMark>
+              </LetRing>
             <next>
               <location>
                 <fractions>1/2</fractions>
                 </location>
               </next>
             </Spanner>
+          <Beam>
+            <l1>44</l1>
+            <l2>38</l2>
+            </Beam>
           <Chord>
-            <durationType>half</durationType>
+            <durationType>eighth</durationType>
             <Note>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
-              <play>0</play>
-              <fret>4</fret>
-              <string>2</string>
-              </Note>
-            <Note>
-              <Bend>
-                <point time="0" pitch="50" vibrato="0"/>
-                <point time="60" pitch="50" vibrato="0"/>
-                </Bend>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              <head>diamond</head>
-              <fret>4</fret>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              <fret>0</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <Spanner type="HarmonicMark">
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/8</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              <fret>3</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/8</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/8</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              <fret>3</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/8</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              <fret>3</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Spanner type="LetRing">
             <prev>
               <location>
                 <fractions>-1/2</fractions>
@@ -148,7 +180,10 @@ Cowboys From Hell</text>
               </prev>
             </Spanner>
           <Rest>
-            <durationType>half</durationType>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>

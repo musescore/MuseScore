@@ -90,19 +90,23 @@
             <subtype>mf</subtype>
             <velocity>80</velocity>
             </Dynamic>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
           <Tempo>
             <tempo>2</tempo>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
+          <Spanner type="HarmonicMark">
+            <HarmonicMark>
+              <beginText>AH</beginText>
+              <beginTextOffset x="0" y="0"/>
+              <continueText>AH</continueText>
+              </HarmonicMark>
+            <next>
+              <location>
+                <measures>1</measures>
+                <fractions>1/4</fractions>
+                </location>
+              </next>
+            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -214,165 +218,6 @@
               <string>1</string>
               </Note>
             </Chord>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <Spanner type="Tie">
-                <Tie>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>56</pitch>
-              <tpc>22</tpc>
-              <play>0</play>
-              <fret>6</fret>
-              <string>3</string>
-              </Note>
-            <Note>
-              <Spanner type="Tie">
-                <Tie>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>61</pitch>
-              <tpc>21</tpc>
-              <play>0</play>
-              <fret>6</fret>
-              <string>2</string>
-              </Note>
-            <Note>
-              <Spanner type="Tie">
-                <Tie>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
-              <play>0</play>
-              <fret>6</fret>
-              <string>1</string>
-              </Note>
-            <Note>
-              <Spanner type="Tie">
-                <Tie>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>68</pitch>
-              <tpc>22</tpc>
-              <head>diamond</head>
-              <fret>6</fret>
-              <string>3</string>
-              </Note>
-            <Note>
-              <Spanner type="Tie">
-                <Tie>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>73</pitch>
-              <tpc>21</tpc>
-              <head>diamond</head>
-              <fret>6</fret>
-              <string>2</string>
-              </Note>
-            <Note>
-              <Spanner type="Tie">
-                <Tie>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>77</pitch>
-              <tpc>13</tpc>
-              <head>diamond</head>
-              <fret>6</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -514,15 +359,147 @@
               <string>1</string>
               </Note>
             </Chord>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>56</pitch>
+              <tpc>22</tpc>
+              <play>0</play>
+              <fret>6</fret>
+              <string>3</string>
+              </Note>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              <play>0</play>
+              <fret>6</fret>
+              <string>2</string>
+              </Note>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <play>0</play>
+              <fret>6</fret>
+              <string>1</string>
+              </Note>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>68</pitch>
+              <tpc>22</tpc>
+              <head>diamond</head>
+              <fret>6</fret>
+              <string>3</string>
+              </Note>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>73</pitch>
+              <tpc>21</tpc>
+              <head>diamond</head>
+              <fret>6</fret>
+              <string>2</string>
+              </Note>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>77</pitch>
+              <tpc>13</tpc>
+              <head>diamond</head>
+              <fret>6</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -674,15 +651,6 @@
         </Measure>
       <Measure>
         <voice>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -776,6 +744,14 @@
               <string>1</string>
               </Note>
             </Chord>
+          <Spanner type="HarmonicMark">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>-1/4</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
