@@ -47,32 +47,40 @@ public:
 
     Bracket* clone() const override { return new Bracket(*this); }
 
-    void setBracketItem(BracketItem* i) { _bi = i; }
-    BracketItem* bracketItem() const { return _bi; }
+    void setBracketItem(BracketItem* i) { m_bi = i; }
+    BracketItem* bracketItem() const { return m_bi; }
 
-    BracketType bracketType() const { return _bi->bracketType(); }
+    BracketType bracketType() const { return m_bi->bracketType(); }
 
-    size_t firstStaff() const { return _firstStaff; }
-    size_t lastStaff() const { return _lastStaff; }
+    size_t firstStaff() const { return m_firstStaff; }
+    size_t lastStaff() const { return m_lastStaff; }
     void setStaffSpan(size_t a, size_t b);
 
-    SymId braceSymbol() const { return _braceSymbol; }
-    void setBraceSymbol(const SymId& sym) { _braceSymbol = sym; }
-    size_t column() const { return _bi->column(); }
-    size_t span() const { return _bi->bracketSpan(); }
-    double magx() const { return _magx; }
+    SymId braceSymbol() const { return m_braceSymbol; }
+    void setBraceSymbol(const SymId& sym) { m_braceSymbol = sym; }
+    size_t column() const { return m_bi->column(); }
+    size_t span() const { return m_bi->bracketSpan(); }
+    double magx() const { return m_magx; }
 
     System* system() const { return (System*)explicitParent(); }
 
-    Measure* measure() const { return _measure; }
-    void setMeasure(Measure* measure) { _measure = measure; }
+    Measure* measure() const { return m_measure; }
+    void setMeasure(Measure* measure) { m_measure = measure; }
 
     Fraction playTick() const override;
 
     void setHeight(double) override;
     double width() const override;
 
-    Shape shape() const override { return _shape; }
+    void setShape(const Shape& sh) { m_shape = sh; }
+    Shape shape() const override { return m_shape; }
+
+    draw::PainterPath path() const { return m_path; }
+    void setPath(const draw::PainterPath& p) { m_path = p; }
+
+    double h2() const { return m_h2; }
+
+    const BracketItem* bi() const { return m_bi; }
 
     void draw(mu::draw::Painter*) const override;
 
@@ -85,7 +93,7 @@ public:
     void editDrag(EditData&) override;
     void endEditDrag(EditData&) override;
 
-    mu::draw::Color color() const override { return _bi->color(); }
+    mu::draw::Color color() const override { return m_bi->color(); }
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
@@ -105,26 +113,25 @@ public:
     void setSelected(bool f) override;
 
 private:
-    BracketItem* _bi;
-    double ay1;
-    double h2;
+    friend class Factory;
 
-    size_t _firstStaff = 0;
-    size_t _lastStaff = 0;
+    Bracket(EngravingItem* parent);
 
-    mu::draw::PainterPath path;
-    SymId _braceSymbol;
-    Shape _shape;
+    BracketItem* m_bi = nullptr;
+    double m_ay1 = 0.0;
+    double m_h2 = 0.0;
+
+    size_t m_firstStaff = 0;
+    size_t m_lastStaff = 0;
+
+    draw::PainterPath m_path;
+    SymId m_braceSymbol = SymId::noSym;
+    Shape m_shape;
 
     // horizontal scaling factor for brace symbol. Cannot be equal to magY or depend on h
     // because layout needs width of brace before knowing height of system...
-    double _magx;
-    Measure* _measure = nullptr;
-
-    friend class Factory;
-    friend class layout::v0::TLayout;
-
-    Bracket(EngravingItem* parent);
+    double m_magx = 0.0;
+    Measure* m_measure = nullptr;
 };
 } // namespace mu::engraving
 #endif
