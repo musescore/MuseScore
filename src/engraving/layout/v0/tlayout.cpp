@@ -2118,21 +2118,22 @@ void TLayout::layout(FretCircle* item, LayoutContext&)
     }
 
     double lw = item->spatium() * FretCircle::CIRCLE_WIDTH / 2;
-    item->m_rect = item->ellipseRect();
+    item->setRect(item->ellipseRect());
 
     RectF chordRect;
-    double minWidth = item->m_chord->upNote()->width();
-    for (const Note* note : item->m_chord->notes()) {
+    double minWidth = item->chord()->upNote()->width();
+    for (const Note* note : item->chord()->notes()) {
         chordRect |= note->bbox();
         minWidth = std::min(minWidth, note->width());
     }
 
-    item->_offsetFromUpNote = (item->m_rect.height() - chordRect.height()
-                               - (item->m_chord->downNote()->pos().y() - item->m_chord->upNote()->pos().y())
+    double offsetFromUpNote = (item->rect().height() - chordRect.height()
+                               - (item->chord()->downNote()->pos().y() - item->chord()->upNote()->pos().y())
                                ) / 2;
-    item->_sideOffset = (item->m_rect.width() - minWidth) / 2;
+    item->setOffsetFromUpNote(offsetFromUpNote);
+    item->setSideOffset((item->rect().width() - minWidth) / 2);
 
-    item->setbbox(item->m_rect.adjusted(-lw, -lw, lw, lw));
+    item->setbbox(item->rect().adjusted(-lw, -lw, lw, lw));
 }
 
 void TLayout::layout(Glissando* item, LayoutContext& ctx)
