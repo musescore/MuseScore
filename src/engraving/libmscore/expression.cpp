@@ -85,7 +85,7 @@ void Expression::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlag
     TextBase::undoChangeProperty(id, v, ps);
     if (m_snappedDynamic) {
         if ((id == Pid::OFFSET && m_snappedDynamic->offset() != v.value<PointF>())
-                || (id == Pid::PLACEMENT && m_snappedDynamic->placement() != v.value<PlacementV>())) {
+            || (id == Pid::PLACEMENT && m_snappedDynamic->placement() != v.value<PlacementV>())) {
             m_snappedDynamic->undoChangeProperty(id, v, ps);
         }
     }

@@ -56,6 +56,13 @@ public:
 
     Hairpin* hairpin() const { return (Hairpin*)spanner(); }
 
+    bool drawCircledTip() const { return m_drawCircledTip; }
+    void setDrawCircledTip(bool arg) { m_drawCircledTip = arg; }
+    double circledTipRadius() const { return m_circledTipRadius; }
+    void setCircledTipRadius(double r) { m_circledTipRadius = r; }
+    mu::PointF circledTip() const { return m_circledTip; }
+    void setCircledTip(const mu::PointF& p) { m_circledTip = p; }
+
     EngravingItem* propertyDelegate(Pid) override;
 
     Shape shape() const override;
@@ -66,8 +73,6 @@ public:
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
 
 private:
-
-    friend class layout::v0::TLayout;
 
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;

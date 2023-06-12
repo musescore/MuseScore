@@ -1513,7 +1513,7 @@ void TLayout::layout(Expression* item, LayoutContext& ctx)
     }
 
     item->setSnappedDynamic(nullptr);
-    if (!item->snappedDynamic()) {
+    if (!item->snapToDynamics()) {
         item->autoplaceSegmentElement();
         return;
     }
@@ -2435,8 +2435,8 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
     if (item->hairpin()->isLineType()) {
         item->m_twoLines = false;
         layoutTextLineBaseSegment(item, ctx);
-        item->m_drawCircledTip   = false;
-        item->m_circledTipRadius = 0.0;
+        item->setDrawCircledTip(false);
+        item->setCircledTipRadius(0.0);
     } else {
         item->m_twoLines  = true;
 
@@ -2464,8 +2464,8 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
         double len = sqrt(x * x + y * y);
         t.rotateRadians(asin(y / len));
 
-        item->m_drawCircledTip   = item->hairpin()->hairpinCircledTip();
-        item->m_circledTipRadius = item->m_drawCircledTip ? 0.6 * _spatium * .5 : 0.0;
+        item->setDrawCircledTip(item->hairpin()->hairpinCircledTip());
+        item->setCircledTipRadius(item->drawCircledTip() ? 0.6 * _spatium * .5 : 0.0);
 
         LineF l1, l2;
 
@@ -2473,16 +2473,18 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
         case HairpinType::CRESC_HAIRPIN: {
             switch (item->spannerSegmentType()) {
             case SpannerSegmentType::SINGLE:
-            case SpannerSegmentType::BEGIN:
-                l1.setLine(x1 + item->m_circledTipRadius * 2.0, 0.0, len, h1);
-                l2.setLine(x1 + item->m_circledTipRadius * 2.0, 0.0, len, -h1);
-                item->m_circledTip.setX(x1 + item->m_circledTipRadius);
-                item->m_circledTip.setY(0.0);
-                break;
+            case SpannerSegmentType::BEGIN: {
+                l1.setLine(x1 + item->circledTipRadius() * 2.0, 0.0, len, h1);
+                l2.setLine(x1 + item->circledTipRadius() * 2.0, 0.0, len, -h1);
+                PointF circledTip;
+                circledTip.setX(x1 + item->circledTipRadius());
+                circledTip.setY(0.0);
+                item->setCircledTip(circledTip);
+            } break;
 
             case SpannerSegmentType::MIDDLE:
             case SpannerSegmentType::END:
-                item->m_drawCircledTip = false;
+                item->setDrawCircledTip(false);
                 l1.setLine(x1,  h2, len, h1);
                 l2.setLine(x1, -h2, len, -h1);
                 break;
@@ -2492,15 +2494,17 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
         case HairpinType::DECRESC_HAIRPIN: {
             switch (item->spannerSegmentType()) {
             case SpannerSegmentType::SINGLE:
-            case SpannerSegmentType::END:
-                l1.setLine(x1,  h1, len - item->m_circledTipRadius * 2, 0.0);
-                l2.setLine(x1, -h1, len - item->m_circledTipRadius * 2, 0.0);
-                item->m_circledTip.setX(len - item->m_circledTipRadius);
-                item->m_circledTip.setY(0.0);
-                break;
+            case SpannerSegmentType::END: {
+                l1.setLine(x1,  h1, len - item->circledTipRadius() * 2, 0.0);
+                l2.setLine(x1, -h1, len - item->circledTipRadius() * 2, 0.0);
+                PointF circledTip;
+                circledTip.setX(len - item->circledTipRadius());
+                circledTip.setY(0.0);
+                item->setCircledTip(circledTip);
+            } break;
             case SpannerSegmentType::BEGIN:
             case SpannerSegmentType::MIDDLE:
-                item->m_drawCircledTip = false;
+                item->setDrawCircledTip(false);
                 l1.setLine(x1,  h1, len, +h2);
                 l2.setLine(x1, -h1, len, -h2);
                 break;
@@ -2514,8 +2518,8 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
         // Do Coord rotation
         l1 = t.map(l1);
         l2 = t.map(l2);
-        if (item->m_drawCircledTip) {
-            item->m_circledTip = t.map(item->m_circledTip);
+        if (item->drawCircledTip()) {
+            item->setCircledTip(t.map(item->circledTip()));
         }
 
         item->m_points[0] = l1.p1();
