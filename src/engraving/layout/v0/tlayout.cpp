@@ -1512,8 +1512,8 @@ void TLayout::layout(Expression* item, LayoutContext& ctx)
         }
     }
 
-    item->_snappedDynamic = nullptr;
-    if (!item->_snapToDynamics) {
+    item->setSnappedDynamic(nullptr);
+    if (!item->snappedDynamic()) {
         item->autoplaceSegmentElement();
         return;
     }
@@ -1524,7 +1524,7 @@ void TLayout::layout(Expression* item, LayoutContext& ctx)
         return;
     }
 
-    item->_snappedDynamic = dynamic;
+    item->setSnappedDynamic(dynamic);
     dynamic->setSnappedExpression(item);
 
     // If there is a dynamic on same segment and track, lock this expression to it

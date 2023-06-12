@@ -54,12 +54,12 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     void mapPropertiesFromOldExpressions(StaffText* staffText);
 
-    Dynamic* snappedDynamic() const { return _snappedDynamic; }
+    Dynamic* snappedDynamic() const { return m_snappedDynamic; }
+    void setSnappedDynamic(Dynamic* d) { m_snappedDynamic = d; }
 
 private:
-    friend class layout::v0::TLayout;
 
-    Dynamic* _snappedDynamic = nullptr;
+    Dynamic* m_snappedDynamic = nullptr;
 };
 } // namespace mu::engraving
 #endif // MU_ENGRAVING_EXPRESSION_H
