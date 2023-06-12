@@ -1417,7 +1417,7 @@ void TLayout::layout(DeadSlapped* item, LayoutContext&)
 
 void TLayout::layout(Dynamic* item, LayoutContext& ctx)
 {
-    item->_snappedExpression = nullptr; // Here we reset it. It will become known again when we layout expression
+    item->setSnappedExpression(nullptr); // Here we reset it. It will become known again when we layout expression
 
     const StaffType* stType = item->staffType();
 
@@ -1430,7 +1430,7 @@ void TLayout::layout(Dynamic* item, LayoutContext& ctx)
     layoutTextBase(item, ctx);
 
     Segment* s = item->segment();
-    if (!s || (!item->_centerOnNotehead && item->align().horizontal == AlignH::LEFT)) {
+    if (!s || (!item->centerOnNotehead() && item->align().horizontal == AlignH::LEFT)) {
         return;
     }
 
@@ -1456,14 +1456,14 @@ void TLayout::layout(Dynamic* item, LayoutContext& ctx)
     }
 
     Chord* chord = toChord(itemToAlign);
-    bool centerOnNote = item->_centerOnNotehead || (!item->_centerOnNotehead && item->align().horizontal == AlignH::HCENTER);
+    bool centerOnNote = item->centerOnNotehead() || (!item->centerOnNotehead() && item->align().horizontal == AlignH::HCENTER);
 
     // Move to center of notehead width
     Note* note = chord->notes().at(0);
     double noteHeadWidth = note->headWidth();
     item->movePosX(noteHeadWidth * (centerOnNote ? 0.5 : 1));
 
-    if (!item->_centerOnNotehead) {
+    if (!item->centerOnNotehead()) {
         return;
     }
 
