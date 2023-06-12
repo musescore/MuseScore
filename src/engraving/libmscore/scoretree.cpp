@@ -630,7 +630,7 @@ EngravingObjectList BarLine::scanChildren() const
 {
     EngravingObjectList children;
 
-    for (EngravingItem* element : _el) {
+    for (EngravingItem* element : m_el) {
         children.push_back(element);
     }
 
