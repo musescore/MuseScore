@@ -22,7 +22,9 @@
 
 #include "textstylepopupmodel.h"
 
+using namespace mu::notation;
+
 TextStylePopupModel::TextStylePopupModel(QObject* parent)
-    : AbstractElementPopupModel(PopupModelType::TYPE_TEXT, parent)
+    : AbstractElementPopupModel(parent)
 {
 }

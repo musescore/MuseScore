@@ -28,7 +28,8 @@
 namespace mu::notation {
 class TextStylePopupModel : public AbstractElementPopupModel
 {
-
+public:
+    explicit TextStylePopupModel(QObject* parent = nullptr);
 };
 }
 
