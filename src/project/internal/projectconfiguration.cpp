@@ -354,6 +354,16 @@ void ProjectConfiguration::setShouldWarnBeforeSavingPubliclyToCloud(bool shouldW
     settings()->setSharedValue(SHOULD_WARN_BEFORE_SAVING_PUBLICLY_TO_CLOUD, Val(shouldWarn));
 }
 
+int ProjectConfiguration::homeScoresPageTabIndex() const
+{
+    return m_homeScoresPageTabIndex;
+}
+
+void ProjectConfiguration::setHomeScoresPageTabIndex(int index)
+{
+    m_homeScoresPageTabIndex = index;
+}
+
 QColor ProjectConfiguration::templatePreviewBackgroundColor() const
 {
     return notationConfiguration()->backgroundColor();

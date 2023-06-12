@@ -53,6 +53,11 @@ FocusScope {
         id: scoresPageModel
     }
 
+    Component.onCompleted: {
+        tabBar.currentIndex = scoresPageModel.tabIndex
+        tabBar.completed = true
+    }
+
     Rectangle {
         id: background
 
@@ -118,7 +123,15 @@ FocusScope {
         StyledTabBar {
             id: tabBar
 
+            property bool completed: false
+
             Layout.fillWidth: true
+
+            onCurrentIndexChanged: {
+                if (completed) {
+                    scoresPageModel.tabIndex = currentIndex
+                }
+            }
 
             NavigationPanel {
                 id: navTabPanel
@@ -185,7 +198,13 @@ FocusScope {
         anchors.right: parent.right
         anchors.bottom: buttonsPanel.top
 
-        sourceComponent: [newAndRecentComp, onlineScoresComp][tabBar.currentIndex]
+        sourceComponent: {
+            if (!tabBar.completed || tabBar.currentIndex < 0) {
+                return null
+            }
+
+            return [newAndRecentComp, onlineScoresComp][tabBar.currentIndex]
+        }
     }
 
     Component {

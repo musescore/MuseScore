@@ -25,6 +25,7 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
+#include "iprojectconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 #include "iinteractive.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
@@ -34,9 +35,12 @@ class ScoresPageModel : public QObject
 {
     Q_OBJECT
 
+    INJECT(IProjectConfiguration, configuration)
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(framework::IInteractive, interactive)
     INJECT(cloud::IMuseScoreComService, museScoreComService)
+
+    Q_PROPERTY(int tabIndex READ tabIndex WRITE setTabIndex NOTIFY tabIndexChanged)
 
 public:
     explicit ScoresPageModel(QObject* parent = nullptr);
@@ -45,6 +49,12 @@ public:
     Q_INVOKABLE void openOther();
     Q_INVOKABLE void openScore(const QString& scorePath);
     Q_INVOKABLE void openScoreManager();
+
+    int tabIndex() const;
+    void setTabIndex(int index);
+
+signals:
+    void tabIndexChanged();
 };
 }
 

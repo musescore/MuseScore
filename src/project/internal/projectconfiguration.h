@@ -88,6 +88,9 @@ public:
     bool shouldWarnBeforeSavingPubliclyToCloud() const override;
     void setShouldWarnBeforeSavingPubliclyToCloud(bool shouldWarn) override;
 
+    int homeScoresPageTabIndex() const override;
+    void setHomeScoresPageTabIndex(int index) override;
+
     QColor templatePreviewBackgroundColor() const override;
     async::Notification templatePreviewBackgroundChanged() const override;
 
@@ -140,6 +143,9 @@ private:
 
     async::Channel<io::path_t> m_userTemplatesPathChanged;
     async::Channel<io::path_t> m_userScoresPathChanged;
+
+    int m_homeScoresPageTabIndex = 0;
+    async::Notification m_homeScoresPageTabIndexChanged;
 
     async::Channel<bool> m_autoSaveEnabledChanged;
     async::Channel<int> m_autoSaveIntervalChanged;

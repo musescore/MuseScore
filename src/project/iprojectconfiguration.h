@@ -82,6 +82,9 @@ public:
     virtual bool shouldWarnBeforeSavingPubliclyToCloud() const = 0;
     virtual void setShouldWarnBeforeSavingPubliclyToCloud(bool shouldWarn) = 0;
 
+    virtual int homeScoresPageTabIndex() const = 0;
+    virtual void setHomeScoresPageTabIndex(int index) = 0;
+
     virtual QColor templatePreviewBackgroundColor() const = 0;
     virtual async::Notification templatePreviewBackgroundChanged() const = 0;
 
