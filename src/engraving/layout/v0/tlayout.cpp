@@ -2003,33 +2003,33 @@ void TLayout::layout(Fingering* item, LayoutContext& ctx)
 
 void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
 {
-    double _spatium  = item->spatium() * item->_userMag;
-    item->m_stringLw        = _spatium * 0.08;
-    item->m_nutLw           = (item->_fretOffset || !item->_showNut) ? item->m_stringLw : _spatium * 0.2;
-    item->m_stringDist      = item->score()->styleMM(Sid::fretStringSpacing) * item->_userMag;
-    item->m_fretDist        = item->score()->styleMM(Sid::fretFretSpacing) * item->_userMag;
-    item->m_markerSize      = item->m_stringDist * .8;
+    double _spatium  = item->spatium() * item->userMag();
+    item->setStringLw(_spatium * 0.08);
+    item->setNutLw((item->fretOffset() || !item->showNut()) ? item->stringLw() : _spatium * 0.2);
+    item->setStringDist(item->score()->styleMM(Sid::fretStringSpacing) * item->userMag());
+    item->setFretDist(item->score()->styleMM(Sid::fretFretSpacing) * item->userMag());
+    item->setMarkerSize(item->stringDist() * .8);
 
-    double w    = item->m_stringDist * (item->_strings - 1) + item->m_markerSize;
-    double h    = (item->_frets + 1) * item->m_fretDist + item->m_markerSize;
-    double y    = -(item->m_markerSize * .5 + item->m_fretDist);
-    double x    = -(item->m_markerSize * .5);
+    double w    = item->stringDist() * (item->strings() - 1) + item->markerSize();
+    double h    = (item->frets() + 1) * item->fretDist() + item->markerSize();
+    double y    = -(item->markerSize() * .5 + item->fretDist());
+    double x    = -(item->markerSize() * .5);
 
     // Allocate space for fret offset number
-    if (item->_fretOffset > 0) {
-        mu::draw::Font scaledFont(item->m_font);
-        scaledFont.setPointSizeF(item->m_font.pointSizeF() * item->_userMag);
+    if (item->fretOffset() > 0) {
+        mu::draw::Font scaledFont(item->font());
+        scaledFont.setPointSizeF(item->font().pointSizeF() * item->userMag());
 
         double fretNumMag = item->score()->styleD(Sid::fretNumMag);
         scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
         mu::draw::FontMetrics fm2(scaledFont);
-        double numw = fm2.width(String::number(item->_fretOffset + 1));
-        double xdiff = numw + item->m_stringDist * .4;
+        double numw = fm2.width(String::number(item->fretOffset() + 1));
+        double xdiff = numw + item->stringDist() * .4;
         w += xdiff;
-        x += (item->_numPos == 0) == (item->_orientation == Orientation::VERTICAL) ? -xdiff : 0;
+        x += (item->numPos() == 0) == (item->orientation() == Orientation::VERTICAL) ? -xdiff : 0;
     }
 
-    if (item->_orientation == Orientation::HORIZONTAL) {
+    if (item->orientation() == Orientation::HORIZONTAL) {
         double tempW = w,
                tempX = x;
         w = h;
@@ -2065,10 +2065,10 @@ void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
     }
 
     double mainWidth = 0.0;
-    if (item->_orientation == Orientation::VERTICAL) {
-        mainWidth = item->m_stringDist * (item->_strings - 1);
-    } else if (item->_orientation == Orientation::HORIZONTAL) {
-        mainWidth = item->m_fretDist * (item->_frets + 0.5);
+    if (item->orientation() == Orientation::VERTICAL) {
+        mainWidth = item->stringDist() * (item->strings() - 1);
+    } else if (item->orientation() == Orientation::HORIZONTAL) {
+        mainWidth = item->fretDist() * (item->frets() + 0.5);
     }
     item->setPos((noteheadWidth - mainWidth) / 2, -(h + item->styleP(Sid::fretY)));
 
@@ -2079,28 +2079,30 @@ void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
         return;
     }
 
-    if (item->_harmony) {
-        layout(item->_harmony, ctx);
+    Harmony* harmony = item->harmony();
+    if (harmony) {
+        layout(harmony, ctx);
     }
-    if (item->_harmony && item->_harmony->autoplace() && item->_harmony->explicitParent()) {
+
+    if (harmony && harmony->autoplace() && harmony->explicitParent()) {
         Segment* s = toSegment(item->explicitParent());
         Measure* m = s->measure();
         staff_idx_t si = item->staffIdx();
 
         SysStaff* ss = m->system()->staff(si);
-        RectF r = item->_harmony->bbox().translated(m->pos() + s->pos() + item->pos() + item->_harmony->pos());
+        RectF r = harmony->bbox().translated(m->pos() + s->pos() + item->pos() + harmony->pos());
 
-        double minDistance = item->_harmony->minDistance().val() * item->spatium();
+        double minDistance = harmony->minDistance().val() * item->spatium();
         SkylineLine sk(false);
         sk.add(r.x(), r.bottom(), r.width());
         double d = sk.minDistance(ss->skyline().north());
         if (d > -minDistance) {
             double yd = d + minDistance;
             yd *= -1.0;
-            item->_harmony->movePosY(yd);
+            harmony->movePosY(yd);
             r.translate(PointF(0.0, yd));
         }
-        if (item->_harmony->addToSkyline()) {
+        if (harmony->addToSkyline()) {
             ss->skyline().add(r);
         }
     }
