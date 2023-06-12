@@ -771,7 +771,7 @@ void TLayout::layout2(BarLine* item, LayoutContext&)
         }
     }
 
-    item->getY();
+    item->calcY();
     item->bbox().setTop(item->y1());
     item->bbox().setBottom(item->y2());
 
@@ -5138,7 +5138,6 @@ SpannerSegment* TLayout::layoutSystem(Spanner* item, System* system, LayoutConte
     if (!found) {
         SLine* line = dynamic_cast<SLine*>(item);
         if (line) {
-            LOGW() << "used base method for item: " << item->typeName();
             seg = layoutSystemSLine(line, system, ctx);
         } else {
             DO_ASSERT(found);
