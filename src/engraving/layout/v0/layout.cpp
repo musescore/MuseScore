@@ -81,6 +81,11 @@ KerningType Layout::computeKerning(const EngravingItem* item1, const EngravingIt
     return HorizontalSpacing::computeKerning(item1, item2);
 }
 
+double Layout::segmentMinHorizontalDistance(const Segment* segment1, const Segment* segment2, bool isSystemHeaderGap)
+{
+    return HorizontalSpacing::segmentMinHorizontalDistance(segment1, segment2, isSystemHeaderGap);
+}
+
 void Layout::layoutTextLineBaseSegment(TextLineBaseSegment* item)
 {
     LayoutContext ctx(item->score());

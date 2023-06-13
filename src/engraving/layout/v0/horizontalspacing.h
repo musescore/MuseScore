@@ -6,6 +6,7 @@ class Chord;
 class EngravingItem;
 class Note;
 class Rest;
+class Segment;
 class Shape;
 class StemSlash;
 enum class ElementType;
@@ -18,6 +19,8 @@ class HorizontalSpacing
 public:
     static double computePadding(const EngravingItem* item1, const EngravingItem* item2);
     static KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2);
+
+    static double segmentMinHorizontalDistance(const Segment* segment1, const Segment* segment2, bool systemHeaderGap);
 
 private:
     static bool isSpecialNotePaddingType(ElementType type);

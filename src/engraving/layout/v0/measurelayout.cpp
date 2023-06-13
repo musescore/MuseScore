@@ -49,6 +49,7 @@
 #include "layoutcontext.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
+#include "horizontalspacing.h"
 #include "tremololayout.h"
 
 #include "log.h"
@@ -2149,10 +2150,10 @@ void MeasureLayout::computeWidth(Measure* m, Segment* s, double x, bool isSystem
         if (ns) {
             if (isSystemHeader && (ns->isStartRepeatBarLineType() || ns->isChordRestType() || (ns->isClefType() && !ns->header()))) {
                 // this is the system header gap
-                w = s->minHorizontalDistance(ns, true);
+                w = HorizontalSpacing::segmentMinHorizontalDistance(s, ns, true);
                 isSystemHeader = false;
             } else {
-                w = s->minHorizontalDistance(ns, false);
+                w = HorizontalSpacing::segmentMinHorizontalDistance(s, ns, false);
                 if (s->isChordRestType()) {
                     Segment* ps = s->prevActive();
                     double durStretch = s->computeDurationStretch(ps, minTicks, maxTicks);

@@ -6,6 +6,7 @@
 #include "libmscore/note.h"
 #include "libmscore/rest.h"
 #include "libmscore/score.h"
+#include "libmscore/segment.h"
 #include "libmscore/stemslash.h"
 
 using namespace mu::engraving;
@@ -238,4 +239,107 @@ KerningType HorizontalSpacing::computeStemSlashKerningType(const StemSlash* stem
     }
 
     return KerningType::KERNING;
+}
+
+double HorizontalSpacing::segmentMinHorizontalDistance(const Segment* segment1, const Segment* segment2, bool systemHeaderGap)
+{
+    if (!segment1 || !segment2) {
+        return 0.0;
+    }
+
+    if (segment1->isBeginBarLineType() && segment2->isStartRepeatBarLineType()) {
+        return 0.0;
+    }
+
+    double result = 0.0;
+    double distance = 0.0;
+    for (unsigned staffIdx = 0; staffIdx < segment1->shapes().size(); ++staffIdx) {
+        Shape shape1 = segment1->staffShape(staffIdx);
+        Shape shape2 = segment2->staffShape(staffIdx);
+        distance = shape1.minHorizontalDistance(shape2);
+
+        if (systemHeaderGap) {
+            distance = std::max(distance, shape1.right());
+        }
+
+        result = std::max(result, distance);
+    }
+
+    double spatium = segment1->spatium();
+    double minRight = segment1->minRight();
+    Score* score = segment1->score();
+
+    // Header exceptions that need additional space (more than the padding)
+    double absoluteMinHeaderDist = 1.5 * spatium;
+    if (systemHeaderGap) {
+        if (segment1->isTimeSigType()) {
+            result = std::max(result, minRight + score->styleMM(Sid::systemHeaderTimeSigDistance));
+        } else {
+            result = std::max(result, minRight + score->styleMM(Sid::systemHeaderDistance));
+        }
+        if (segment2 && segment2->isStartRepeatBarLineType()) {
+            // Align the thin barline of the start repeat to the header
+            result -= score->styleMM(Sid::endBarWidth) + score->styleMM(Sid::endBarDistance);
+        }
+        double diff = result - minRight - segment2->minLeft();
+        if (diff < absoluteMinHeaderDist) {
+            result += absoluteMinHeaderDist - diff;
+        }
+    }
+
+    // Multimeasure rest exceptions that need special handling
+    Measure* measure = segment1->measure();
+    if (measure && measure->isMMRest()) {
+        if (segment2->isChordRestType()) {
+            double minDist = minRight;
+            if (segment1->isClefType()) {
+                minDist += score->paddingTable().at(ElementType::CLEF).at(ElementType::REST);
+            } else if (segment1->isKeySigType()) {
+                minDist += score->paddingTable().at(ElementType::KEYSIG).at(ElementType::REST);
+            } else if (segment1->isTimeSigType()) {
+                minDist += score->paddingTable().at(ElementType::TIMESIG).at(ElementType::REST);
+            }
+            result = std::max(result, minDist);
+        } else if (segment1->isChordRestType()) {
+            double minWidth = score->styleMM(Sid::minMMRestWidth).val();
+            if (!score->styleB(Sid::oldStyleMultiMeasureRests)) {
+                minWidth += score->styleMM(Sid::multiMeasureRestMargin).val();
+            }
+            result = std::max(result, minWidth);
+        }
+    }
+
+    // Allocate space to ensure minimum length of "dangling" ties or gliss at start of system
+    if (systemHeaderGap && segment2 && segment2->isChordRestType()) {
+        for (EngravingItem* e : segment2->elist()) {
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            double headerTieMargin = score->styleMM(Sid::HeaderToLineStartDistance);
+            for (Note* note : toChord(e)->notes()) {
+                bool tieOrGlissBack = note->spannerBack().size() || note->tieBack();
+                if (!tieOrGlissBack || note->lineAttachPoints().empty()) {
+                    continue;
+                }
+                const EngravingItem* attachedLine = note->lineAttachPoints().front().line();
+                double minLength = 0.0;
+                if (attachedLine->isTie()) {
+                    minLength = score->styleMM(Sid::MinTieLength);
+                } else if (attachedLine->isGlissando()) {
+                    bool straight = toGlissando(attachedLine)->glissandoType() == GlissandoType::STRAIGHT;
+                    minLength = straight ? score->styleMM(Sid::MinStraightGlissandoLength)
+                                : score->styleMM(Sid::MinWigglyGlissandoLength);
+                }
+                double tieStartPointX = minRight + headerTieMargin;
+                double notePosX = result + note->pos().x() + toChord(e)->pos().x() + note->headWidth() / 2;
+                double tieEndPointX = notePosX + note->lineAttachPoints().at(0).pos().x();
+                double tieLength = tieEndPointX - tieStartPointX;
+                if (tieLength < minLength) {
+                    result += minLength - tieLength;
+                }
+            }
+        }
+    }
+
+    return result;
 }

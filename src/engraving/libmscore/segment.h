@@ -275,7 +275,6 @@ public:
     double minRight() const;
     double minLeft(const Shape&) const;
     double minLeft() const;
-    double minHorizontalDistance(Segment*, bool isSystemGap) const;
     double minHorizontalCollidingDistance(Segment* ns) const;
 
     double widthOffset() const { return _widthOffset; }
