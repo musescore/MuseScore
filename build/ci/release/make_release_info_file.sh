@@ -49,3 +49,8 @@ RELEASE_INFO=$(curl \
 mkdir -p $ARTIFACTS_DIR
 echo $RELEASE_INFO > $ARTIFACTS_DIR/release_info.json
 cat $ARTIFACTS_DIR/release_info.json
+
+pip install markdown
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+python3 $HERE/correct_release_info.py ${ARTIFACTS_DIR}/release_info.json
