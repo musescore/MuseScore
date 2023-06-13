@@ -209,7 +209,7 @@ bool Ornament::hasFullIntervalChoice() const
 void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
 {
     Chord* parentChord = explicitParent() ? toChord(parent()) : nullptr;
-    Note* mainNote = parentChord ? parentChord->upNote() : nullptr;
+    const Note* mainNote = parentChord ? parentChord->upNote() : nullptr;
 
     if (!mainNote) {
         return;
