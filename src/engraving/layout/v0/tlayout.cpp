@@ -2740,17 +2740,17 @@ PointF TLayout::calculateBoundingRect(Harmony* item, LayoutContext& ctx)
     double newPosX = 0.0;
     double newPosY = 0.0;
 
-    if (item->textList.empty()) {
+    if (item->textList().empty()) {
         layout1TextBase(item, ctx);
 
         if (fd) {
             newPosY = item->ypos();
         } else {
-            newPosY = ypos - ((item->align() == AlignV::BOTTOM) ? item->_harmonyHeight - item->bbox().height() : 0.0);
+            newPosY = ypos - ((item->align() == AlignV::BOTTOM) ? item->harmonyHeight() - item->bbox().height() : 0.0);
         }
     } else {
         RectF bb;
-        for (TextSegment* ts : item->textList) {
+        for (TextSegment* ts : item->textList()) {
             bb.unite(ts->tightBoundingRect().translated(ts->x, ts->y));
         }
 
@@ -2782,12 +2782,12 @@ PointF TLayout::calculateBoundingRect(Harmony* item, LayoutContext& ctx)
             newPosY = ypos;
         }
 
-        for (TextSegment* ts : item->textList) {
+        for (TextSegment* ts : item->textList()) {
             ts->offset = PointF(xx, yy);
         }
 
         item->setbbox(bb.translated(xx, yy));
-        item->_harmonyHeight = item->bbox().height();
+        item->setHarmonyHeight(item->bbox().height());
     }
 
     if (fd) {
