@@ -78,22 +78,11 @@ bool NavigationSection::enabled() const
         return false;
     }
 
-    bool enbl = true;
-
-    QWindow* sectionWindow = window();
-    QWindow* topWindow = application()->focusWindow();
-
-    if (sectionWindow && (topWindow != sectionWindow)) {
-        enbl = type() == INavigationSection::Type::Exclusive;
-    }
-
-    if (enbl) {
-        enbl = false;
-        for (INavigationPanel* p : m_panels) {
-            if (p->enabled()) {
-                enbl = true;
-                break;
-            }
+    bool enbl = false;
+    for (INavigationPanel* p : m_panels) {
+        if (p->enabled()) {
+            enbl = true;
+            break;
         }
     }
 
