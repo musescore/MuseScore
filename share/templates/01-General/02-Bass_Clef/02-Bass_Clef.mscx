@@ -70,8 +70,6 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
-        <bracket type="1" span="2" col="2"/>
-        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument id="piano">
