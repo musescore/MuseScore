@@ -81,6 +81,11 @@ KerningType Layout::computeKerning(const EngravingItem* item1, const EngravingIt
     return HorizontalSpacing::computeKerning(item1, item2);
 }
 
+void Layout::createPaddingTable(PaddingTable& paddingTable, Score* score)
+{
+    HorizontalSpacing::createPaddingTable(paddingTable, score);
+}
+
 void Layout::layoutTextLineBaseSegment(TextLineBaseSegment* item)
 {
     LayoutContext ctx(item->score());

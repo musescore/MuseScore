@@ -12,6 +12,186 @@
 using namespace mu::engraving;
 using namespace mu::engraving::layout::v0;
 
+void HorizontalSpacing::createPaddingTable(PaddingTable& paddingTable, Score* score)
+{
+    const double spatium = score->spatium();
+    const double minimumPaddingUnit = 0.1 * spatium;
+    const double ledgerPad = 0.25 * spatium;
+    const double ledgerLength = score->styleMM(Sid::ledgerLineLength);
+
+    for (size_t i=0; i < TOT_ELEMENT_TYPES; ++i) {
+        for (size_t j=0; j < TOT_ELEMENT_TYPES; ++j) {
+            paddingTable[i][j] = minimumPaddingUnit;
+        }
+    }
+
+    /* NOTE: the padding value for note->note is NOT minNoteDistance, because minNoteDistance
+     * should only apply to notes of the same voice. Notes from different voices should be
+     * allowed to get much closer. So we set the general padding at minimumPaddingUnit,
+     * but we introduce an appropriate exception for same-voice cases in Shape::minHorizontalDistance().
+     */
+    paddingTable[ElementType::NOTE][ElementType::NOTE] = minimumPaddingUnit;
+    paddingTable[ElementType::NOTE][ElementType::LEDGER_LINE] = 0.35 * spatium;
+    paddingTable[ElementType::NOTE][ElementType::ACCIDENTAL]
+        = std::max(static_cast<double>(score->styleMM(Sid::accidentalNoteDistance)), 0.35 * spatium);
+    paddingTable[ElementType::NOTE][ElementType::REST] = score->styleMM(Sid::minNoteDistance);
+    paddingTable[ElementType::NOTE][ElementType::CLEF] = 1.0 * spatium;
+    paddingTable[ElementType::NOTE][ElementType::ARPEGGIO] = 0.6 * spatium;
+    paddingTable[ElementType::NOTE][ElementType::BAR_LINE] = score->styleMM(Sid::noteBarDistance);
+    paddingTable[ElementType::NOTE][ElementType::KEYSIG] = 0.75 * spatium;
+    paddingTable[ElementType::NOTE][ElementType::TIMESIG] = 0.75 * spatium;
+
+    paddingTable[ElementType::LEDGER_LINE][ElementType::NOTE] = paddingTable[ElementType::NOTE][ElementType::LEDGER_LINE];
+    paddingTable[ElementType::LEDGER_LINE][ElementType::LEDGER_LINE] = ledgerPad;
+    paddingTable[ElementType::LEDGER_LINE][ElementType::ACCIDENTAL]
+        = std::max(static_cast<double>(score->styleMM(
+                                           Sid::accidentalNoteDistance)),
+                   paddingTable[ElementType::NOTE][ElementType::ACCIDENTAL] - ledgerLength / 2);
+    paddingTable[ElementType::LEDGER_LINE][ElementType::REST] = paddingTable[ElementType::LEDGER_LINE][ElementType::NOTE];
+    paddingTable[ElementType::LEDGER_LINE][ElementType::CLEF]
+        = std::max(paddingTable[ElementType::NOTE][ElementType::CLEF] - ledgerLength / 2, ledgerPad);
+    paddingTable[ElementType::LEDGER_LINE][ElementType::ARPEGGIO] = 0.5 * spatium;
+    paddingTable[ElementType::LEDGER_LINE][ElementType::BAR_LINE]
+        = std::max(paddingTable[ElementType::NOTE][ElementType::BAR_LINE] - ledgerLength, ledgerPad);
+    paddingTable[ElementType::LEDGER_LINE][ElementType::KEYSIG]
+        = std::max(paddingTable[ElementType::NOTE][ElementType::KEYSIG] - ledgerLength / 2, ledgerPad);
+    paddingTable[ElementType::LEDGER_LINE][ElementType::TIMESIG]
+        = std::max(paddingTable[ElementType::NOTE][ElementType::TIMESIG] - ledgerLength / 2, ledgerPad);
+
+    paddingTable[ElementType::HOOK][ElementType::NOTE] = 0.5 * spatium;
+    paddingTable[ElementType::HOOK][ElementType::LEDGER_LINE]
+        = std::max(paddingTable[ElementType::HOOK][ElementType::NOTE] - ledgerLength, ledgerPad);
+    paddingTable[ElementType::HOOK][ElementType::ACCIDENTAL] = 0.35 * spatium;
+    paddingTable[ElementType::HOOK][ElementType::REST] = paddingTable[ElementType::HOOK][ElementType::NOTE];
+    paddingTable[ElementType::HOOK][ElementType::CLEF] = 0.5 * spatium;
+    paddingTable[ElementType::HOOK][ElementType::ARPEGGIO] = 0.35 * spatium;
+    paddingTable[ElementType::HOOK][ElementType::BAR_LINE] = 1 * spatium;
+    paddingTable[ElementType::HOOK][ElementType::KEYSIG] = 1.15 * spatium;
+    paddingTable[ElementType::HOOK][ElementType::TIMESIG] = 1.15 * spatium;
+
+    paddingTable[ElementType::NOTEDOT][ElementType::NOTE]
+        = std::max(score->styleMM(Sid::dotNoteDistance), score->styleMM(Sid::dotDotDistance));
+    paddingTable[ElementType::NOTEDOT][ElementType::LEDGER_LINE]
+        = std::max(paddingTable[ElementType::NOTEDOT][ElementType::NOTE] - ledgerLength, ledgerPad);
+    paddingTable[ElementType::NOTEDOT][ElementType::ACCIDENTAL] = paddingTable[ElementType::NOTEDOT][ElementType::NOTE];
+    paddingTable[ElementType::NOTEDOT][ElementType::REST] = paddingTable[ElementType::NOTEDOT][ElementType::NOTE];
+    paddingTable[ElementType::NOTEDOT][ElementType::CLEF] = 1.0 * spatium;
+    paddingTable[ElementType::NOTEDOT][ElementType::ARPEGGIO] = 0.5 * spatium;
+    paddingTable[ElementType::NOTEDOT][ElementType::BAR_LINE] = 0.8 * spatium;
+    paddingTable[ElementType::NOTEDOT][ElementType::KEYSIG] = 1.35 * spatium;
+    paddingTable[ElementType::NOTEDOT][ElementType::TIMESIG] = 1.35 * spatium;
+
+    paddingTable[ElementType::REST][ElementType::NOTE] = paddingTable[ElementType::NOTE][ElementType::REST];
+    paddingTable[ElementType::REST][ElementType::LEDGER_LINE]
+        = std::max(paddingTable[ElementType::REST][ElementType::NOTE] - ledgerLength / 2, ledgerPad);
+    paddingTable[ElementType::REST][ElementType::ACCIDENTAL] = 0.45 * spatium;
+    paddingTable[ElementType::REST][ElementType::REST] = paddingTable[ElementType::REST][ElementType::NOTE];
+    paddingTable[ElementType::REST][ElementType::CLEF] = paddingTable[ElementType::NOTE][ElementType::CLEF];
+    paddingTable[ElementType::REST][ElementType::BAR_LINE] = 1.65 * spatium;
+    paddingTable[ElementType::REST][ElementType::KEYSIG] = 1.5 * spatium;
+    paddingTable[ElementType::REST][ElementType::TIMESIG] = 1.5 * spatium;
+
+    paddingTable[ElementType::CLEF][ElementType::NOTE] = score->styleMM(Sid::clefKeyRightMargin);
+    paddingTable[ElementType::CLEF][ElementType::LEDGER_LINE]
+        = std::max(paddingTable[ElementType::CLEF][ElementType::NOTE] - ledgerLength / 2, ledgerPad);
+    paddingTable[ElementType::CLEF][ElementType::ACCIDENTAL] = 0.75 * spatium;
+    paddingTable[ElementType::CLEF][ElementType::REST] = 1.35 * spatium;
+    paddingTable[ElementType::CLEF][ElementType::CLEF] = 0.75 * spatium;
+    paddingTable[ElementType::CLEF][ElementType::ARPEGGIO] = 1.15 * spatium;
+    paddingTable[ElementType::CLEF][ElementType::BAR_LINE] = score->styleMM(Sid::clefBarlineDistance);
+    paddingTable[ElementType::CLEF][ElementType::KEYSIG] = score->styleMM(Sid::clefKeyDistance);
+    paddingTable[ElementType::CLEF][ElementType::TIMESIG] = score->styleMM(Sid::clefTimesigDistance);
+
+    paddingTable[ElementType::BAR_LINE][ElementType::NOTE] = score->styleMM(Sid::barNoteDistance);
+    paddingTable[ElementType::BAR_LINE][ElementType::LEDGER_LINE]
+        = std::max(paddingTable[ElementType::BAR_LINE][ElementType::NOTE] - ledgerLength, ledgerPad);
+    paddingTable[ElementType::BAR_LINE][ElementType::ACCIDENTAL] = score->styleMM(Sid::barAccidentalDistance);
+    paddingTable[ElementType::BAR_LINE][ElementType::REST] = score->styleMM(Sid::barNoteDistance);
+    paddingTable[ElementType::BAR_LINE][ElementType::CLEF] = score->styleMM(Sid::clefLeftMargin);
+    paddingTable[ElementType::BAR_LINE][ElementType::ARPEGGIO] = 0.65 * spatium;
+    paddingTable[ElementType::BAR_LINE][ElementType::BAR_LINE] = 1.35 * spatium;
+    paddingTable[ElementType::BAR_LINE][ElementType::KEYSIG] = score->styleMM(Sid::keysigLeftMargin);
+    paddingTable[ElementType::BAR_LINE][ElementType::TIMESIG] = score->styleMM(Sid::timesigLeftMargin);
+
+    paddingTable[ElementType::KEYSIG][ElementType::NOTE] = 1.75 * spatium;
+    paddingTable[ElementType::KEYSIG][ElementType::LEDGER_LINE]
+        = std::max(paddingTable[ElementType::KEYSIG][ElementType::NOTE] - ledgerLength, ledgerPad);
+    paddingTable[ElementType::KEYSIG][ElementType::ACCIDENTAL] = 1.6 * spatium;
+    paddingTable[ElementType::KEYSIG][ElementType::REST] = paddingTable[ElementType::KEYSIG][ElementType::NOTE];
+    paddingTable[ElementType::KEYSIG][ElementType::CLEF] = 1.0 * spatium;
+    paddingTable[ElementType::KEYSIG][ElementType::ARPEGGIO] = 1.35 * spatium;
+    paddingTable[ElementType::KEYSIG][ElementType::BAR_LINE] = score->styleMM(Sid::keyBarlineDistance);
+    paddingTable[ElementType::KEYSIG][ElementType::KEYSIG] = 1 * spatium;
+    paddingTable[ElementType::KEYSIG][ElementType::TIMESIG] = score->styleMM(Sid::keyTimesigDistance);
+
+    paddingTable[ElementType::TIMESIG][ElementType::NOTE] = 1.35 * spatium;
+    paddingTable[ElementType::TIMESIG][ElementType::LEDGER_LINE]
+        = std::max(paddingTable[ElementType::TIMESIG][ElementType::NOTE] - ledgerLength, ledgerPad);
+    paddingTable[ElementType::TIMESIG][ElementType::ACCIDENTAL] = 0.8 * spatium;
+    paddingTable[ElementType::TIMESIG][ElementType::REST] = paddingTable[ElementType::TIMESIG][ElementType::NOTE];
+    paddingTable[ElementType::TIMESIG][ElementType::CLEF] = 1.0 * spatium;
+    paddingTable[ElementType::TIMESIG][ElementType::ARPEGGIO] = 1.35 * spatium;
+    paddingTable[ElementType::TIMESIG][ElementType::BAR_LINE] = score->styleMM(Sid::timesigBarlineDistance);
+    paddingTable[ElementType::TIMESIG][ElementType::KEYSIG] = score->styleMM(Sid::keyTimesigDistance);
+    paddingTable[ElementType::TIMESIG][ElementType::TIMESIG] = 1.0 * spatium;
+
+    // Obtain the Stem -> * and * -> Stem values from the note equivalents
+    paddingTable[ElementType::STEM] = paddingTable[ElementType::NOTE];
+    for (auto& elem: paddingTable) {
+        elem[ElementType::STEM] = elem[ElementType::NOTE];
+    }
+
+    paddingTable[ElementType::STEM][ElementType::NOTE] = score->styleMM(Sid::minNoteDistance);
+    paddingTable[ElementType::STEM][ElementType::STEM] = 0.85 * spatium;
+    paddingTable[ElementType::STEM][ElementType::ACCIDENTAL] = 0.35 * spatium;
+    paddingTable[ElementType::STEM][ElementType::LEDGER_LINE] = 0.35 * spatium;
+    paddingTable[ElementType::LEDGER_LINE][ElementType::STEM] = 0.35 * spatium;
+
+    // Ambitus
+    paddingTable[ElementType::AMBITUS].fill(score->styleMM(Sid::ambitusMargin));
+    for (auto& elem: paddingTable) {
+        elem[ElementType::AMBITUS] = score->styleMM(Sid::ambitusMargin);
+    }
+
+    // Breath
+    paddingTable[ElementType::BREATH].fill(1.0 * spatium);
+    for (auto& elem: paddingTable) {
+        elem[ElementType::BREATH] = 1.0 * spatium;
+    }
+
+    // Temporary hack, because some padding is already constructed inside the lyrics themselves.
+    paddingTable[ElementType::BAR_LINE][ElementType::LYRICS] = 0.0 * spatium;
+
+    // Harmony
+    paddingTable[ElementType::BAR_LINE][ElementType::HARMONY] = 0.5 * score->styleMM(Sid::minHarmonyDistance);
+    paddingTable[ElementType::HARMONY][ElementType::HARMONY] = score->styleMM(Sid::minHarmonyDistance);
+
+    // Chordlines
+    paddingTable[ElementType::CHORDLINE].fill(0.35 * spatium);
+    for (auto& elem: paddingTable) {
+        elem[ElementType::CHORDLINE] = 0.35 * spatium;
+    }
+    paddingTable[ElementType::BAR_LINE][ElementType::CHORDLINE] = 0.65 * spatium;
+    paddingTable[ElementType::CHORDLINE][ElementType::BAR_LINE] = 0.65 * spatium;
+
+    // For the x -> fingering padding use the same values as x -> accidental
+    for (auto& elem : paddingTable) {
+        elem[ElementType::FINGERING] = elem[ElementType::ACCIDENTAL];
+    }
+
+    // This is needed for beamlets, not beams themselves
+    paddingTable[ElementType::BEAM][ElementType::BEAM] = 0.4 * spatium;
+
+    // Symbols (semi-hack: the only symbol for which
+    // this is relevant is noteHead parenthesis)
+    paddingTable[ElementType::SYMBOL] = paddingTable[ElementType::NOTE];
+    paddingTable[ElementType::SYMBOL][ElementType::NOTE] = 0.35 * spatium;
+    for (auto& elem : paddingTable) {
+        elem[ElementType::SYMBOL] = elem[ElementType::ACCIDENTAL];
+    }
+    paddingTable[ElementType::NOTEDOT][ElementType::SYMBOL] = 0.2 * spatium;
+}
+
 double HorizontalSpacing::computePadding(const EngravingItem* item1, const EngravingItem* item2)
 {
     const PaddingTable& paddingTable = item1->score()->paddingTable();

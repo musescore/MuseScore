@@ -5,7 +5,9 @@ namespace mu::engraving {
 class Chord;
 class EngravingItem;
 class Note;
+struct PaddingTable;
 class Rest;
+class Score;
 class Segment;
 class Shape;
 class StemSlash;
@@ -17,6 +19,8 @@ namespace mu::engraving::layout::v0 {
 class HorizontalSpacing
 {
 public:
+    static void createPaddingTable(PaddingTable& paddingTable, Score* score);
+
     static double computePadding(const EngravingItem* item1, const EngravingItem* item2);
     static KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2);
 

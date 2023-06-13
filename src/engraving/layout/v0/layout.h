@@ -43,6 +43,7 @@ public:
     // Horizontal spacing
     double computePadding(const EngravingItem* item1, const EngravingItem* item2) override;
     KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2) override;
+    void createPaddingTable(PaddingTable& paddingTable, Score* score) override;
 
     //! TODO Investigation is required, probably these functions or their calls should not be.
     // Other
