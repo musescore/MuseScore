@@ -241,6 +241,7 @@ FocusScope {
             authorDescription: author.description
             authorAvatarUrl: author.avatarUrl
             authorOrganizationName: author.organizationName
+            authorOrganizationUrl: author.organizationUrl
 
             navigation.section: navSec
             navigation.order: 5

@@ -36,7 +36,7 @@ FocusScope {
     property string authorDescription: ""
     property string authorOrganizationName: ""
     property string authorAvatarUrl: ""
-    property string authorArganizationUrl: ""
+    property string authorOrganizationUrl: ""
 
     property alias navigation: navPanel
     property int sideMargin: 46
@@ -194,7 +194,7 @@ FocusScope {
                 }
 
                 onClicked: {
-                    api.launcher.openUrl(root.authorArganizationUrl)
+                    api.launcher.openUrl(root.authorOrganizationUrl)
                 }
             }
         }
