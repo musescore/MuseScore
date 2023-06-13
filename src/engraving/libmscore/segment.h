@@ -285,11 +285,6 @@ public:
     double elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const;
     double elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const;
 
-    /*! \brief callulate width of segment and additional spacing of segment depends on duration of segment
-     *  \return pair of {spacing, width}
-     */
-    std::pair<double, double> computeCellWidth(const std::vector<int>& visibleParts) const;
-
     /*! \brief get among all ChordRests of segment the ChordRest with minimum ticks,
     * take into account visibleParts
     */

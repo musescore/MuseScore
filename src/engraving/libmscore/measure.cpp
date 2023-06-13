@@ -3225,11 +3225,6 @@ void Measure::stretchToTargetWidth(double targetWidth)
     respaceSegments();
 }
 
-void Measure::layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts)
-{
-    layoutSegmentsWithDuration(visibleParts);
-}
-
 double Measure::computeFirstSegmentXPosition(Segment* segment)
 {
     double x = 0;
@@ -3278,50 +3273,6 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
     }
     x += segment->extraLeadingSpace().val() * spatium();
     return x;
-}
-
-static Segment* findFirstEnabledSegment(Measure* measure)
-{
-    Segment* current = measure->first();
-    while (current && !current->enabled()) {
-        current = current->next();
-    }
-
-    return current;
-}
-
-void Measure::layoutSegmentsWithDuration(const std::vector<int>& visibleParts)
-{
-    calculateQuantumCell(visibleParts);
-
-    double currentXPos = 0;
-
-    Segment* current = findFirstEnabledSegment(this);
-
-    auto [spacing, width] = current->computeCellWidth(visibleParts);
-    currentXPos = computeFirstSegmentXPosition(current);
-    current->setPosX(currentXPos);
-    current->setWidth(width);
-    current->setSpacing(spacing);
-    currentXPos += width;
-
-    current = current->next();
-    while (current) {
-//        if (!current->enabled() || !current->visible()) {
-//            current = current->next();
-//            continue;
-//        }
-
-        auto [spacing, width] = current->computeCellWidth(visibleParts);
-        current->setWidth(width + spacing);
-        current->setSpacing(spacing);
-        currentXPos += spacing;
-        current->setPosX(currentXPos);
-        currentXPos += width;
-        current = current->next();
-    }
-
-    setWidth(currentXPos);
 }
 
 void Measure::calculateQuantumCell(const std::vector<int>& visibleParts)

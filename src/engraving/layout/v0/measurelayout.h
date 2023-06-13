@@ -63,6 +63,8 @@ public:
     static void computeWidth(Measure* m, LayoutContext& ctx, Fraction minTicks, Fraction maxTicks, double stretchCoeff,
                              bool overrideMinMeasureWidth = false);
 
+    static void layoutSegmentsInPracticeMode(Measure* measure, const std::vector<int>& visibleParts);
+
 private:
 
     static void createMMRest(const LayoutOptions& options, Score* score, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);
@@ -77,6 +79,8 @@ private:
     static double computeMinMeasureWidth(Measure* m);
 
     static void layoutPartialWidth(StaffLines* lines, double w, double wPartial, bool alignLeft);
+
+    static std::pair<double, double> computeSegmentCellWidth(Segment* segment, const std::vector<int>& visibleParts);
 };
 }
 

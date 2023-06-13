@@ -148,7 +148,6 @@ public:
     // Horizontal spacing
     virtual double computePadding(const EngravingItem* item1, const EngravingItem* item2) = 0;
     virtual KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2) = 0;
-    virtual double segmentMinHorizontalDistance(const Segment* segment1, const Segment* segment2, bool isSystemHeaderGap) = 0;
 
     //! TODO Investigation is required, probably these functions or their calls should not be.
     // Other

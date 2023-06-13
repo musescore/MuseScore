@@ -43,7 +43,6 @@ public:
     // Horizontal spacing
     double computePadding(const EngravingItem* item1, const EngravingItem* item2) override;
     KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2) override;
-    double segmentMinHorizontalDistance(const Segment* segment1, const Segment* segment2, bool isSystemHeaderGap) override;
 
     //! TODO Investigation is required, probably these functions or their calls should not be.
     // Other

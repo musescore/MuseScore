@@ -349,7 +349,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
                 // for measures in range, do full layout
                 if (options.isMode(LayoutMode::HORIZONTAL_FIXED)) {
                     MeasureLayout::createEndBarLines(m, true, ctx);
-                    m->layoutSegmentsInPracticeMode(visibleParts);
+                    MeasureLayout::layoutSegmentsInPracticeMode(m, visibleParts);
                     ww = m->width();
                     MeasureLayout::stretchMeasureInPracticeMode(m, ww, ctx);
                 } else {

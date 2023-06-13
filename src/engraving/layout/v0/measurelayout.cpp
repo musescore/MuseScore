@@ -2095,6 +2095,117 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
     MeasureLayout::computeWidth(m, s, x, isSystemHeader, minTicks, maxTicks, stretchCoeff, overrideMinMeasureWidth);
 }
 
+void MeasureLayout::layoutSegmentsInPracticeMode(Measure* measure, const std::vector<int>& visibleParts)
+{
+    measure->calculateQuantumCell(visibleParts);
+
+    double currentXPos = 0;
+
+    Segment* current = measure->firstEnabled();
+
+    auto [spacing, width] = computeSegmentCellWidth(current, visibleParts);
+    currentXPos = measure->computeFirstSegmentXPosition(current);
+    current->setPosX(currentXPos);
+    current->setWidth(width);
+    current->setSpacing(spacing);
+    currentXPos += width;
+
+    current = current->next();
+    while (current) {
+//        if (!current->enabled() || !current->visible()) {
+//            current = current->next();
+//            continue;
+//        }
+
+        auto [spacing, width] = computeSegmentCellWidth(current, visibleParts);
+        current->setWidth(width + spacing);
+        current->setSpacing(spacing);
+        currentXPos += spacing;
+        current->setPosX(currentXPos);
+        currentXPos += width;
+        current = current->next();
+    }
+
+    measure->setWidth(currentXPos);
+}
+
+std::pair<double, double> MeasureLayout::computeSegmentCellWidth(Segment* segment, const std::vector<int>& visibleParts)
+{
+    if (!segment->enabled()) {
+        return { 0, 0 };
+    }
+
+    auto calculateWidth = [measure = segment->measure(), sc = segment->score()->masterScore()](ChordRest* cr) {
+        auto quantum = measure->quantumOfSegmentCell();
+        return sc->widthOfSegmentCell()
+               * sc->spatium()
+               * cr->globalTicks().numerator() / cr->globalTicks().denominator()
+               * quantum.denominator() / quantum.numerator();
+    };
+
+    if (segment->isChordRestType()) {
+        float width{ 0 };
+        float spacing{ 0 };
+
+        ChordRest* cr{ nullptr };
+
+        cr = Segment::ChordRestWithMinDuration(segment, visibleParts);
+
+        if (cr) {
+            width = calculateWidth(cr);
+
+            if (cr->type() == ElementType::REST) {
+                //spacing = 0; //!not necessary. It is to more clearly understanding code
+            } else if (cr->type() == ElementType::CHORD) {
+                Chord* ch = toChord(cr);
+
+                //! check that gracenote exist. If exist add additional spacing
+                //! to avoid colliding between grace note and previous chord
+                if (!ch->graceNotes().empty()) {
+                    Segment* prevSeg = segment->prev();
+                    if (prevSeg && prevSeg->segmentType() == SegmentType::ChordRest) {
+                        ChordRest* prevCR = Segment::ChordRestWithMinDuration(prevSeg, visibleParts);
+
+                        if (prevCR && prevCR->globalTicks() < segment->measure()->quantumOfSegmentCell()) {
+                            spacing = calculateWidth(prevCR);
+                            return { spacing, width };
+                        }
+                    }
+                }
+
+                //! check that accidental exist in the chord. If exist add additional spacing
+                //! to avoid colliding between grace note and previous chord
+                for (auto note : ch->notes()) {
+                    if (note->accidental()) {
+                        Segment* prevSeg = segment->prev();
+                        if (prevSeg && prevSeg->segmentType() == SegmentType::ChordRest) {
+                            ChordRest* prevCR = Segment::ChordRestWithMinDuration(prevSeg, visibleParts);
+
+                            if (prevCR && prevCR->globalTicks() < segment->measure()->quantumOfSegmentCell()) {
+                                spacing = calculateWidth(prevCR);
+                                return { spacing, width };
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return { spacing, width };
+    }
+
+    Segment* nextSeg = segment->nextActive();
+    if (!nextSeg) {
+        nextSeg = segment->next(SegmentType::BarLineType);
+    }
+
+    if (nextSeg) {
+        return { 0, HorizontalSpacing::segmentMinHorizontalDistance(segment, nextSeg, false) };
+    }
+
+    return { 0, segment->minRight() };
+}
+
 //---------------------------------------------------------
 //   computeWidth
 //   Computes the width of a measure depending on note durations

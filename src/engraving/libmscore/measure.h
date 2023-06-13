@@ -348,12 +348,7 @@ public:
     // parameter, meaning it can't be any narrower than it currently is.
     void setWidthLocked(bool b) { _isWidthLocked = b; }
 
-    //! puts segments on the positions according to their length
-    void layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts);
-
     double computeFirstSegmentXPosition(Segment* segment);
-
-    void layoutSegmentsWithDuration(const std::vector<int>& visibleParts);
 
     void calculateQuantumCell(const std::vector<int>& visibleParts);
 
