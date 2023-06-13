@@ -241,7 +241,9 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
         switch (scoreInfo.ret.code()) {
         case int(Ret::Code::Ok):
             defaultName = scoreInfo.val.title;
-            defaultVisibility = scoreInfo.val.visibility;
+            if (!isPublish) {
+                defaultVisibility = scoreInfo.val.visibility;
+            }
             break;
 
         case int(cloud::Err::AccountNotActivated):
