@@ -49,8 +49,6 @@ StyledPopupView {
 
     margins: 0
 
-    openPolicy: PopupView.NoActivateFocus
-
     showArrow: false
 
     function updatePosition(pos, size) {
