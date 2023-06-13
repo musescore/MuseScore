@@ -41,10 +41,6 @@ using namespace mu::engraving;
 
 void PaletteCompat::migrateOldPaletteItemIfNeeded(ElementPtr& element, Score* paletteScore)
 {
-    if (paletteScore->mscVersion() >= 410) {
-        return;
-    }
-
     EngravingItem* item = element.get();
 
     if (item->isArticulation()) {
