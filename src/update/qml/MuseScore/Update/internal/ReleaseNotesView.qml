@@ -64,7 +64,7 @@ ColumnLayout {
             horizontalAlignment: Text.AlignLeft
             font: ui.theme.largeBodyFont
             wrapMode: Text.WordWrap
-            lineHeight: 2.0
+            textFormat: Text.MarkdownText
         }
     }
 
