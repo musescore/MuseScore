@@ -45,6 +45,11 @@ QRect AbstractElementPopupModel::itemRect() const
     return m_itemRect;
 }
 
+bool AbstractElementPopupModel::supportsPopup(const engraving::ElementType& elementType)
+{
+    return modelTypeFromElement(elementType) != PopupModelType::TYPE_UNDEFINED;
+}
+
 PopupModelType AbstractElementPopupModel::modelTypeFromElement(const engraving::ElementType& elementType)
 {
     return ELEMENT_POPUP_TYPES.value(elementType, PopupModelType::TYPE_UNDEFINED);
@@ -134,27 +139,21 @@ INotationSelectionPtr AbstractElementPopupModel::selection() const
     return interaction ? interaction->selection() : nullptr;
 }
 
-const INotationInteraction::HitElementContext& AbstractElementPopupModel::hitElementContext() const
-{
-    if (INotationInteractionPtr interaction = this->interaction()) {
-        return interaction->hitElementContext();
-    }
-
-    static INotationInteraction::HitElementContext dummy;
-    return dummy;
-}
-
 void AbstractElementPopupModel::init()
 {
-    m_item = hitElementContext().element;
-    if (!m_item) {
-        m_item = selection()->element();
+    m_item = nullptr;
+
+    INotationSelectionPtr selection = this->selection();
+    if (!selection) {
+        return;
     }
 
-    auto undoStack = this->undoStack();
+    INotationUndoStackPtr undoStack = this->undoStack();
     if (!undoStack) {
         return;
     }
+
+    m_item = selection->element();
 
     undoStack->changesChannel().onReceive(this, [this] (const ChangesRange& range) {
         if (contains(range.changedTypes, elementType())) {

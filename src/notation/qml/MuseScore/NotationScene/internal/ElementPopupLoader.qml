@@ -80,7 +80,6 @@ Item {
     function show(elementType, viewPos, size) {
         if (isPopupOpened) {
             prv.closeOpenedPopup()
-            return
         }
         opened()
         var popup = loader.createPopup(prv.componentByType(elementType), viewPos, size)

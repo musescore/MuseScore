@@ -55,6 +55,7 @@ public:
     PopupModelType modelType() const;
     QRect itemRect() const;
 
+    static bool supportsPopup(const mu::engraving::ElementType& elementType);
     static PopupModelType modelTypeFromElement(const mu::engraving::ElementType& elementType);
 
     virtual void init();
@@ -81,7 +82,6 @@ protected:
 private:
     INotationInteractionPtr interaction() const;
     INotationSelectionPtr selection() const;
-    const INotationInteraction::HitElementContext& hitElementContext() const;
 
     engraving::ElementType elementType() const;
 
