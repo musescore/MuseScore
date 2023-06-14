@@ -49,16 +49,16 @@ namespace mu::engraving {
 KeySig::KeySig(Segment* s)
     : EngravingItem(ElementType::KEYSIG, s, ElementFlag::ON_STAFF)
 {
-    _showCourtesy = true;
-    _hideNaturals = false;
+    m_showCourtesy = true;
+    m_hideNaturals = false;
 }
 
 KeySig::KeySig(const KeySig& k)
     : EngravingItem(k)
 {
-    _showCourtesy = k._showCourtesy;
-    _sig          = k._sig;
-    _hideNaturals = false;
+    m_showCourtesy = k.m_showCourtesy;
+    m_sig          = k.m_sig;
+    m_hideNaturals = false;
 }
 
 //---------------------------------------------------------
@@ -84,7 +84,7 @@ void KeySig::draw(mu::draw::Painter* painter) const
     int lines = staff() ? staff()->staffTypeForElement(this)->lines() : 5;
     double ledgerLineWidth = score()->styleMM(Sid::ledgerLineWidth) * mag();
     double ledgerExtraLen = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
-    for (const KeySym& ks: _sig.keySymbols()) {
+    for (const KeySym& ks: m_sig.keySymbols()) {
         double x = ks.xPos * _spatium;
         double y = ks.line * step;
         drawSymbol(ks.sym, painter, PointF(x, y));
@@ -102,7 +102,7 @@ void KeySig::draw(mu::draw::Painter* painter) const
             painter->drawLine(LineF(x1, y, x2, y));
         }
     }
-    if (!explicitParent() && (isAtonal() || isCustom()) && _sig.keySymbols().empty()) {
+    if (!explicitParent() && (isAtonal() || isCustom()) && m_sig.keySymbols().empty()) {
         // empty custom or atonal key signature - draw something for palette
         painter->setPen(engravingConfiguration()->formattingMarksColor());
         drawSymbol(SymId::timeSigX, painter, PointF(symWidth(SymId::timeSigX) * -0.5, 2.0 * spatium()));
@@ -182,7 +182,7 @@ void KeySig::setKey(Key cKey, Key tKey)
 
 bool KeySig::operator==(const KeySig& k) const
 {
-    return _sig == k._sig;
+    return m_sig == k.m_sig;
 }
 
 //---------------------------------------------------------
@@ -207,7 +207,7 @@ bool KeySig::isChange() const
 
 void KeySig::changeKeySigEvent(const KeySigEvent& t)
 {
-    if (_sig == t) {
+    if (m_sig == t) {
         return;
     }
     setKeySigEvent(t);
@@ -262,7 +262,7 @@ bool KeySig::setProperty(Pid propertyId, const PropertyValue& v)
         if (generated()) {
             return false;
         }
-        setKey(_sig.concertKey(), Key(v.toInt()));
+        setKey(m_sig.concertKey(), Key(v.toInt()));
         break;
     case Pid::KEY_CONCERT:
         if (generated()) {
