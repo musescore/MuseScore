@@ -19,23 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "projectstubmodule.h"
+#ifndef MU_PROJECT_RECENTFILESCONTROLLERSTUB_H
+#define MU_PROJECT_RECENTFILESCONTROLLERSTUB_H
 
-#include "modularity/ioc.h"
+#include "project/irecentfilescontroller.h"
 
-#include "projectconfigurationstub.h"
-#include "recentfilescontrollerstub.h"
-
-using namespace mu::project;
-using namespace mu::modularity;
-
-std::string ProjectModule::moduleName() const
+namespace mu::project {
+class RecentFilesControllerStub : public IRecentFilesController
 {
-    return "notation_stub";
+public:
+    RecentFilesControllerStub() = default;
+
+    const RecentFilesList& recentFilesList() const override;
+    async::Notification recentFilesListChanged() const override;
+
+    void prependRecentFile(const RecentFile& file) override;
+    void clearRecentFiles() override;
+
+    async::Promise<QPixmap> thumbnail(const RecentFile& file) const override;
+};
 }
 
-void ProjectModule::registerExports()
-{
-    ioc()->registerExport<IProjectConfiguration>(moduleName(), new ProjectConfigurationStub());
-    ioc()->registerExport<IRecentFilesController>(moduleName(), new RecentFilesControllerStub());
-}
+#endif // MU_PROJECT_RECENTFILESCONTROLLERSTUB_H

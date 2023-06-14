@@ -19,23 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "projectstubmodule.h"
+import QtQuick 2.15
 
-#include "modularity/ioc.h"
+import MuseScore.UiComponents 1.0
 
-#include "projectconfigurationstub.h"
-#include "recentfilescontrollerstub.h"
+Rectangle {
+    color: ui.theme.backgroundPrimaryColor
 
-using namespace mu::project;
-using namespace mu::modularity;
-
-std::string ProjectModule::moduleName() const
-{
-    return "notation_stub";
-}
-
-void ProjectModule::registerExports()
-{
-    ioc()->registerExport<IProjectConfiguration>(moduleName(), new ProjectConfigurationStub());
-    ioc()->registerExport<IRecentFilesController>(moduleName(), new RecentFilesControllerStub());
+    StyledTextLabel {
+        anchors.centerIn: parent
+        text: "Scores Page Stub"
+    }
 }
