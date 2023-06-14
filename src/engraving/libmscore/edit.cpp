@@ -45,6 +45,7 @@
 #include "instrchange.h"
 #include "instrumentname.h"
 #include "key.h"
+#include "keylist.h"
 #include "keysig.h"
 #include "layoutbreak.h"
 #include "linkedobjects.h"
@@ -2908,7 +2909,8 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
 
     // get the last deleted timesig & keysig in order to restore after deletion
     std::map<staff_idx_t, TimeSig*> lastDeletedTimeSigs;
-    KeySigEvent lastDeletedKeySigEvent = score()->staff(0)->keySigEvent(mbEnd->tick());
+
+    KeySigEvent lastDeletedKeySigEvent = score()->keyList().key(mbEnd->tick().ticks());
 
     for (MeasureBase* mb = mbEnd;; mb = mb->prev()) {
         if (mb->isMeasure()) {
@@ -3002,12 +3004,15 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                 continue;
             }
 
-            for (size_t staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
+            bool concertPitch = score->styleB(Sid::concertPitch);
+            for (Staff* staff : score->staves()) {
+                staff_idx_t staffIdx = staff->idx();
+                Part* part = staff->part();
                 KeySigEvent nkse = lastDeletedKeySigEvent;
-                if (!styleB(Sid::concertPitch) && !nkse.isAtonal()) {
-                    Interval v = score->staff(staffIdx)->part()->instrument(Fraction(0, 1))->transpose();
+                if (!concertPitch && !nkse.isAtonal()) {
+                    Interval v = part->instrument(Fraction(0, 1))->transpose();
                     v.flip();
-                    nkse.setKey(transposeKey(nkse.concertKey(), v, score->staff(staffIdx)->part()->preferSharpFlat()));
+                    nkse.setKey(transposeKey(nkse.concertKey(), v, part->preferSharpFlat()));
                 }
 
                 KeySig* nks = (KeySig*)s->elementAt(staff2track(staffIdx));
@@ -3020,7 +3025,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
 
                 nks->setGenerated(false);
                 nks->setKeySigEvent(nkse);
-                score->staff(staffIdx)->setKey(mAfterSel->tick(), nkse);
+                staff->setKey(mAfterSel->tick(), nkse);
             }
         }
     }
@@ -3953,8 +3958,8 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
     }
 
     Fraction currentTimeSig = sigmap()->timesig(tick.ticks()).nominal();   // use nominal time signature of current measure
-    Measure* localMeasure = 0; // measure base in "this" score
-    MeasureBase* linkedMasterMeasure = 0; // measure base in root score (for linking)
+    Measure* localMeasure = nullptr; // measure base in "this" score
+    MeasureBase* linkedMasterMeasure = nullptr; // measure base in root score (for linking)
     Fraction ticks   = { 0, 1 };
 
     MeasureBase* result = nullptr;
@@ -4023,10 +4028,10 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                 localMeasure = newMeasure;
             }
 
-            std::list<TimeSig*> timeSigList;
-            std::list<KeySig*> keySigList;
-            std::list<Clef*> clefList;
-            std::list<Clef*> previousClefList;
+            std::vector<TimeSig*> timeSigList;
+            std::vector<KeySig*> keySigList;
+            std::vector<Clef*> clefList;
+            std::vector<Clef*> previousClefList;
 
             //
             // remove clef, time and key signatures
@@ -4165,18 +4170,21 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
 
 void Score::restoreInitialKeySig()
 {
+    bool concertPitch = styleB(Sid::concertPitch);
+    static constexpr Fraction startTick = Fraction(0, 1);
+
     Measure* firstMeas = firstMeasure();
     for (Staff* staff : _staves) {
         Key concertKey = Key::C;
         Key transposedKey = concertKey;
-        Part* part = staff->part();
-        Instrument* instrument = part->instrument();
+        const Part* part = staff->part();
+        const Instrument* instrument = part->instrument();
         int transpose = -instrument->transpose().chromatic;
-        if (!styleB(Sid::concertPitch)) {
+        if (!concertPitch) {
             transposedKey = mu::engraving::transposeKey(transposedKey, transpose, part->preferSharpFlat());
         }
 
-        Segment* keySegment = firstMeas->undoGetSegment(SegmentType::KeySig, Fraction(0, 1));
+        Segment* keySegment = firstMeas->undoGetSegment(SegmentType::KeySig, startTick);
         KeySig* newKeySig = Factory::createKeySig(keySegment);
         newKeySig->setTrack(staff->idx() * VOICES);
         newKeySig->setKey(transposedKey);
