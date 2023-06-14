@@ -54,7 +54,7 @@ public:
 
     RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) override;
 
-    RetVal<ScoresList> downloadScoresList(int pageSize, int pageNumber) override;
+    RetVal<ScoresList> downloadScoresList(int scoresPerBatch, int batchNumber) override;
 
 private:
     ServerConfig serverConfig() const override;

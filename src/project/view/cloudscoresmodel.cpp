@@ -135,7 +135,7 @@ void CloudScoresModel::loadItemsIfNecessary()
             endInsertRows();
         }
 
-        m_totalItems = rv.val.meta.totalCount;
+        m_totalItems = rv.val.meta.totalScoresCount;
         emit hasMoreChanged();
     }
 

@@ -128,11 +128,12 @@ struct ScoresList {
 
     std::vector<Item> items;
 
+    /// See explanation at `IMuseScoreComService::downloadScoresList`
     struct Meta {
-        int totalCount = 0;
-        int pageCount = 0;
-        int currentPage = 0;
-        int perPage = 0;
+        int totalScoresCount = 0;
+        int batchesCount = 0;
+        int thisBatchNumber = 0;
+        int scoresPerBatch = 0;
     } meta;
 };
 }

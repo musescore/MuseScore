@@ -251,13 +251,13 @@ mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
     return result;
 }
 
-RetVal<ScoresList> MuseScoreComService::downloadScoresList(int pageSize, int pageNumber)
+mu::RetVal<ScoresList> MuseScoreComService::downloadScoresList(int scoresPerBatch, int batchNumber)
 {
     RetVal<ScoresList> result = RetVal<ScoresList>::make_ok(ScoresList());
 
     QVariantMap params;
-    params["per-page"] = pageSize;
-    params["page"] = pageNumber;
+    params["per-page"] = scoresPerBatch;
+    params["page"] = batchNumber;
 
     RetVal<QUrl> scoresListUrl = prepareUrlForRequest(MUSESCORECOM_SCORES_LIST_API_URL, params);
     if (!scoresListUrl.ret) {
@@ -279,12 +279,12 @@ RetVal<ScoresList> MuseScoreComService::downloadScoresList(int pageSize, int pag
     QJsonObject obj = document.object();
 
     QJsonObject metaObj = obj.value("_meta").toObject();
-    result.val.meta.totalCount = metaObj.value("totalCount").toInt();
-    result.val.meta.pageCount = metaObj.value("pageCount").toInt();
-    result.val.meta.currentPage = metaObj.value("currentPage").toInt();
-    result.val.meta.perPage = metaObj.value("perPage").toInt();
+    result.val.meta.totalScoresCount = metaObj.value("totalCount").toInt();
+    result.val.meta.batchesCount = metaObj.value("pageCount").toInt();
+    result.val.meta.thisBatchNumber = metaObj.value("currentPage").toInt();
+    result.val.meta.scoresPerBatch = metaObj.value("perPage").toInt();
 
-    if (result.val.meta.currentPage < pageNumber) {
+    if (result.val.meta.thisBatchNumber < batchNumber) {
         // This happens when the requested page number was too high.
         // In this situation, the API just returns the last page and the items from that page.
         // We will return just an empty list, in order not to confuse the caller.

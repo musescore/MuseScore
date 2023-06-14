@@ -52,7 +52,11 @@ public:
 
     virtual RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) = 0;
 
-    virtual RetVal<ScoresList> downloadScoresList(int pageSize, int pageNumber) = 0;
+    /// The MuseScore.com API is a so-called paginated API, which means that
+    /// you don't request all scores at once, but you request them in batches.
+    /// It is similar to e.g. the list of issues on GitHub: you don't have one
+    /// big list of all issues, but you have many pages, with 25 issues per page.
+    virtual RetVal<ScoresList> downloadScoresList(int scoresPerBatch, int batchNumber) = 0;
 };
 }
 
