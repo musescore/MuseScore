@@ -5394,33 +5394,26 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
     setLayoutAll();
 }
 
-std::set<ID> Score::partIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const
-{
-    std::set<ID> result;
-
-    for (const Part* part : m_score->parts()) {
-        if (trackTo < part->startTrack() || trackFrom >= part->endTrack()) {
-            continue;
-        }
-
-        result.insert(part->id());
-    }
-
-    return result;
-}
-
-std::set<staff_idx_t> Score::staffIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const
+std::set<staff_idx_t> Score::staffIdxSetFromRange(const track_idx_t trackFrom, const track_idx_t trackTo, StaffAccepted staffAccepted) const
 {
     std::set<staff_idx_t> result;
 
-    for (const Part* part : m_score->parts()) {
-        if (trackTo < part->startTrack() || trackFrom >= part->endTrack()) {
+    staff_idx_t staffIdxFrom = track2staff(trackFrom);
+    staff_idx_t staffIdxTo = std::min(track2staff(trackTo) + 1, _staves.size());
+
+    for (staff_idx_t idx = staffIdxFrom; idx < staffIdxTo; ++idx) {
+        const Staff* staff = _staves.at(idx);
+        if (!staff) {
             continue;
         }
 
-        std::set<staff_idx_t> staffIdxList = part->staveIdxList();
-
-        result.insert(staffIdxList.cbegin(), staffIdxList.cend());
+        if (staffAccepted) {
+            if (staffAccepted(*staff)) {
+                result.insert(idx);
+            }
+        } else {
+            result.insert(idx);
+        }
     }
 
     return result;

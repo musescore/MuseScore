@@ -81,8 +81,6 @@ AbstractNotationPaintView::~AbstractNotationPaintView()
         m_notation->accessibility()->setMapToScreenFunc(nullptr);
         m_notation->interaction()->setGetViewRectFunc(nullptr);
     }
-
-    m_previousSelectedElement = nullptr;
 }
 
 void AbstractNotationPaintView::load()
@@ -240,14 +238,6 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 
     interaction->selectionChanged().onNotify(this, [this]() {
         redraw();
-
-        EngravingItem* selectedElement = notationInteraction()->selection()->element();
-        if (selectedElement != m_previousSelectedElement) {
-            hideElementPopup();
-            hideContextMenu();
-        }
-
-        m_previousSelectedElement = selectedElement;
     });
 
     interaction->showItemRequested().onReceive(this, [this](const INotationInteraction::ShowItemRequest& request) {
@@ -497,7 +487,10 @@ void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, 
 void AbstractNotationPaintView::hideContextMenu()
 {
     TRACEFUNC;
-    emit hideContextMenuRequested();
+
+    if (m_isContextMenuOpen) {
+        emit hideContextMenuRequested();
+    }
 }
 
 void AbstractNotationPaintView::showElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size, bool activateFocus)
@@ -516,8 +509,6 @@ void AbstractNotationPaintView::showElementPopup(const ElementType& elementType,
 
     emit showElementPopupRequested(modelType, pos, elemSize);
 
-    setIsPopupOpen(true);
-
     if (activateFocus) {
         dispatcher()->dispatch("nav-first-control");
     }
@@ -526,32 +517,21 @@ void AbstractNotationPaintView::showElementPopup(const ElementType& elementType,
 void AbstractNotationPaintView::hideElementPopup()
 {
     TRACEFUNC;
-    emit hideElementPopupRequested();
-    setIsPopupOpen(false);
+
+    if (m_isPopupOpen) {
+        emit hideElementPopupRequested();
+    }
 }
 
 void AbstractNotationPaintView::toggleElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size,
                                                    bool activateFocus)
 {
-    if (isPopupOpen()) {
+    if (m_isPopupOpen) {
         hideElementPopup();
         return;
     }
+
     showElementPopup(elementType, pos, size, activateFocus);
-}
-
-bool AbstractNotationPaintView::isPopupOpen() const
-{
-    return m_isPopupOpen;
-}
-
-void AbstractNotationPaintView::setIsPopupOpen(bool isPopupOpen)
-{
-    if (isPopupOpen == m_isPopupOpen) {
-        return;
-    }
-    m_isPopupOpen = isPopupOpen;
-    emit isPopupOpenChanged(m_isPopupOpen);
 }
 
 void AbstractNotationPaintView::paint(QPainter* qp)
@@ -1059,6 +1039,16 @@ void AbstractNotationPaintView::forceFocusIn()
     setFocus(true);
     emit activeFocusRequested();
     forceActiveFocus();
+}
+
+void AbstractNotationPaintView::onContextMenuIsOpenChanged(bool open)
+{
+    m_isContextMenuOpen = open;
+}
+
+void AbstractNotationPaintView::onElementPopupIsOpenChanged(bool open)
+{
+    m_isPopupOpen = open;
 }
 
 void AbstractNotationPaintView::mousePressEvent(QMouseEvent* event)

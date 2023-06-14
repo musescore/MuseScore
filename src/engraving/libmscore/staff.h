@@ -52,17 +52,6 @@ class TimeSig;
 enum class Key;
 
 //---------------------------------------------------------
-//   SwingParameters
-//---------------------------------------------------------
-
-struct SwingParameters {
-    int swingUnit = 0;
-    int swingRatio = 0;
-
-    bool isOn() const { return swingUnit != 0; }
-};
-
-//---------------------------------------------------------
 //    Staff
 ///    Global staff data not directly related to drawing.
 //---------------------------------------------------------
@@ -103,7 +92,7 @@ private:
 
     std::map<int, int> _channelList[VOICES];
     std::map<int, SwingParameters> _swingList;
-    std::map<int, int> _capoList;
+    std::map<int, CapoParams> _capoMap;
     bool _playbackVoice[VOICES] { true, true, true, true };
     std::array<bool, VOICES> _visibilityVoices { true, true, true, true };
 
@@ -218,9 +207,6 @@ public:
 
     int channel(const Fraction&, voice_idx_t voice) const;
 
-    std::list<Note*> getNotes() const;
-    void addChord(std::list<Note*>& list, Chord* chord, voice_idx_t voice) const;
-
     void clearChannelList(voice_idx_t voice) { _channelList[voice].clear(); }
     void insertIntoChannelList(voice_idx_t voice, const Fraction& tick, int channelId)
     {
@@ -231,9 +217,9 @@ public:
     void clearSwingList() { _swingList.clear(); }
     void insertIntoSwingList(const Fraction& tick, SwingParameters sp) { _swingList.insert({ tick.ticks(), sp }); }
 
-    int capo(const Fraction&) const;
-    void clearCapoList() { _capoList.clear(); }
-    void insertIntoCapoList(const Fraction& tick, int fretId) { _capoList.insert({ tick.ticks(), fretId }); }
+    const CapoParams& capo(const Fraction&) const;
+    void insertCapoParams(const Fraction& tick, const CapoParams& params);
+    void clearCapoParams();
 
     //==== staff type helper function
     const StaffType* staffType(const Fraction& = Fraction(0, 1)) const;

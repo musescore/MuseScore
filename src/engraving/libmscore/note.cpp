@@ -910,11 +910,18 @@ int Note::transposeTpc(int tpc) const
 
 int Note::playingTpc() const
 {
+    int result = tpc();
+
     if (!concertPitch() && transposition()) {
-        return transposeTpc(tpc());
+        result = transposeTpc(result);
     }
 
-    return tpc();
+    int steps = ottaveCapoFret();
+    if (steps != 0) {
+        result = mu::engraving::transposeTpc(result, Interval(steps), true);
+    }
+
+    return result;
 }
 
 //---------------------------------------------------------
@@ -1688,6 +1695,7 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::BAR_LINE)
            || (type == ElementType::STAFF_TEXT)
            || (type == ElementType::PLAYTECH_ANNOTATION)
+           || (type == ElementType::CAPO)
            || (type == ElementType::SYSTEM_TEXT)
            || (type == ElementType::TRIPLET_FEEL)
            || (type == ElementType::STICKING)
@@ -2447,13 +2455,19 @@ void Note::setHeadGroup(NoteHeadGroup val)
 
 int Note::ottaveCapoFret() const
 {
-    Chord* ch = chord();
-    int capoFretId = staff()->capo(ch->segment()->tick());
-    if (capoFretId != 0) {
-        capoFretId -= 1;
+    const Chord* ch = chord();
+    Fraction segmentTick = ch->segment()->tick();
+
+    const CapoParams& capo = staff()->capo(segmentTick);
+    int capoFret = 0;
+
+    if (capo.active) {
+        if (capo.ignoredStrings.empty() || !mu::contains(capo.ignoredStrings, static_cast<string_idx_t>(_string))) {
+            capoFret = capo.fretPosition;
+        }
     }
 
-    return staff()->pitchOffset(ch->segment()->tick()) + capoFretId;
+    return staff()->pitchOffset(segmentTick) + capoFret;
 }
 
 //---------------------------------------------------------

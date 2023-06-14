@@ -520,6 +520,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
         } else if (tag == "Sticking"
                    || tag == "SystemText"
                    || tag == "PlayTechAnnotation"
+                   || tag == "Capo"
                    || tag == "RehearsalMark"
                    || tag == "InstrumentChange"
                    || tag == "StaffState"

@@ -35,6 +35,7 @@
 #include "../../libmscore/tempotext.h"
 #include "../../libmscore/stafftext.h"
 #include "../../libmscore/stafftextbase.h"
+#include "../../libmscore/capo.h"
 
 #include "../../libmscore/drumset.h"
 #include "../../libmscore/dynamic.h"
@@ -146,7 +147,7 @@ using namespace mu::engraving::read410;
 
 using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
                                  BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,  HBox, VBox, FBox, TBox, Bracket, Breath,
-                                 Chord, ChordLine, Clef,
+                                 Chord, ChordLine, Clef, Capo,
                                  Dynamic, Expression,
                                  Fermata, FiguredBass, Fingering, FretDiagram,
                                  Glissando, GradualTempoChange,
@@ -2602,6 +2603,42 @@ void TRead::read(Clef* c, XmlReader& e, ReadContext& ctx)
     if (c->clefType() == ClefType::INVALID) {
         c->setClefType(ClefType::G);
     }
+}
+
+void TRead::read(Capo* c, XmlReader& xml, ReadContext& ctx)
+{
+    CapoParams params = c->params();
+
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+
+        if (tag == "active") {
+            params.active = xml.readBool();
+        } else if (tag == "fretPosition") {
+            params.fretPosition = xml.readInt();
+        } else if (tag == "string") {
+            string_idx_t idx = static_cast<string_idx_t>(xml.intAttribute("no"));
+
+            while (xml.readNextStartElement()) {
+                const AsciiStringView stringTag(xml.name());
+
+                if (stringTag == "apply") {
+                    bool apply = xml.readBool();
+                    if (!apply) {
+                        params.ignoredStrings.insert(idx);
+                    }
+                } else {
+                    xml.unknown();
+                }
+            }
+        } else if (tag == "generateText") {
+            c->setProperty(Pid::CAPO_GENERATE_TEXT, xml.readBool());
+        } else if (!readProperties(static_cast<StaffTextBase*>(c), xml, ctx)) {
+            xml.unknown();
+        }
+    }
+
+    c->setParams(params);
 }
 
 bool TRead::readProperties(Clef* c, XmlReader& xml, ReadContext& ctx)

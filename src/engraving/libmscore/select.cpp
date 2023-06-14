@@ -1018,6 +1018,7 @@ ByteArray Selection::symbolListMimeData() const
             }
             continue;
         case ElementType::PLAYTECH_ANNOTATION:
+        case ElementType::CAPO:
         case ElementType::STAFF_TEXT:
             seg = toStaffTextBase(e)->segment();
             break;

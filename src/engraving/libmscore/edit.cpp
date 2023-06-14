@@ -2279,6 +2279,7 @@ void Score::cmdFlip()
                    || e->isMeasureNumber()
                    || e->isInstrumentChange()
                    || e->isPlayTechAnnotation()
+                   || e->isCapo()
                    || e->isSticking()
                    || e->isFingering()
                    || e->isDynamic()
@@ -5842,6 +5843,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::SYSTEM_TEXT
             && et != ElementType::TRIPLET_FEEL
             && et != ElementType::PLAYTECH_ANNOTATION
+            && et != ElementType::CAPO
             && et != ElementType::STICKING
             && et != ElementType::TREMOLO
             && et != ElementType::ARPEGGIO
@@ -5912,6 +5914,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                            || element->isExpression()
                            || element->isStaffText()
                            || element->isPlayTechAnnotation()
+                           || element->isCapo()
                            || element->isSticking()
                            || element->isFretDiagram()
                            || element->isHarmony()
@@ -5939,6 +5942,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     case ElementType::SYSTEM_TEXT:
                     case ElementType::TRIPLET_FEEL:
                     case ElementType::PLAYTECH_ANNOTATION:
+                    case ElementType::CAPO:
                     case ElementType::FRET_DIAGRAM:
                     case ElementType::HARMONY:
                     case ElementType::FIGURED_BASS:
@@ -6040,6 +6044,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                      || element->isExpression()
                      || element->isStaffText()
                      || element->isPlayTechAnnotation()
+                     || element->isCapo()
                      || element->isSticking()
                      || element->isFretDiagram()
                      || element->isFermata()

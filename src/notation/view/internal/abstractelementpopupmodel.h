@@ -39,32 +39,30 @@ class AbstractElementPopupModel : public QObject, public async::Asyncable, publi
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(context::IGlobalContext, globalContext)
 
-    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(PopupModelType modelType READ modelType CONSTANT)
+    Q_PROPERTY(QRect itemRect READ itemRect NOTIFY itemRectChanged)
 
 public:
     enum class PopupModelType {
         TYPE_UNDEFINED = -1,
-        TYPE_HARP_DIAGRAM
+        TYPE_HARP_DIAGRAM,
+        TYPE_CAPO,
     };
     Q_ENUM(PopupModelType)
 
-    explicit AbstractElementPopupModel(QObject* parent = nullptr);
-    QString title() const;
-    PopupModelType modelType() const;
-    EngravingItem* getElement();
+    AbstractElementPopupModel(PopupModelType modelType, QObject* parent = nullptr);
 
+    PopupModelType modelType() const;
+    QRect itemRect() const;
+
+    static bool supportsPopup(const mu::engraving::ElementType& elementType);
     static PopupModelType modelTypeFromElement(const mu::engraving::ElementType& elementType);
 
     virtual void init();
 
-public slots:
-    void setTitle(QString title);
-    void setModelType(mu::notation::AbstractElementPopupModel::PopupModelType modelType);
-
 signals:
-    void titleChanged();
     void dataChanged();
+    void itemRectChanged(QRect rect);
 
 protected:
     PointF fromLogical(PointF point) const;
@@ -76,15 +74,21 @@ protected:
     void updateNotation();
     notation::INotationPtr currentNotation() const;
 
+    void changeItemProperty(mu::engraving::Pid id, const PropertyValue& value);
+    void changeItemProperty(mu::engraving::Pid id, const PropertyValue& value, engraving::PropertyFlags flags);
+
+    EngravingItem* m_item = nullptr;
+
 private:
     INotationInteractionPtr interaction() const;
     INotationSelectionPtr selection() const;
-    const INotationInteraction::HitElementContext& hitElementContext() const;
 
     engraving::ElementType elementType() const;
 
-    QString m_title;
+    void updateItemRect();
+
     PopupModelType m_modelType = PopupModelType::TYPE_UNDEFINED;
+    QRect m_itemRect;
 };
 
 using PopupModelType = AbstractElementPopupModel::PopupModelType;

@@ -705,6 +705,7 @@ bool EngravingObject::isTextBase() const
            || type() == ElementType::SYSTEM_TEXT
            || type() == ElementType::TRIPLET_FEEL
            || type() == ElementType::PLAYTECH_ANNOTATION
+           || type() == ElementType::CAPO
            || type() == ElementType::REHEARSAL_MARK
            || type() == ElementType::INSTRUMENT_CHANGE
            || type() == ElementType::FIGURED_BASS

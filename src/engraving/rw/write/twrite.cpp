@@ -60,6 +60,7 @@
 #include "../../libmscore/chordline.h"
 #include "../../libmscore/chordrest.h"
 #include "../../libmscore/clef.h"
+#include "../../libmscore/capo.h"
 
 #include "../../libmscore/drumset.h"
 #include "../../libmscore/dynamic.h"
@@ -162,7 +163,7 @@ using namespace mu::engraving::write;
 
 using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
                                   BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,  HBox, VBox, FBox, TBox, Bracket, Breath,
-                                  Chord, ChordLine, Clef,
+                                  Chord, ChordLine, Clef, Capo,
                                   Dynamic, Expression,
                                   Fermata, FiguredBass, Fingering, FretDiagram,
                                   Glissando, GradualTempoChange,
@@ -884,6 +885,28 @@ void TWrite::write(const Clef* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("forInstrumentChange", item->forInstrumentChange());
     }
     writeItemProperties(item, xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const Capo* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::ACTIVE);
+    writeProperty(item, xml, Pid::CAPO_FRET_POSITION);
+    writeProperty(item, xml, Pid::CAPO_GENERATE_TEXT);
+
+    std::set<string_idx_t> orderedStrings;
+    for (string_idx_t idx : item->params().ignoredStrings) {
+        orderedStrings.insert(idx);
+    }
+
+    for (string_idx_t idx : orderedStrings) {
+        xml.startElement("string", { { "no", idx } });
+        xml.tag("apply", false);
+        xml.endElement();
+    }
+
+    writeProperties(static_cast<const StaffTextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
 
@@ -2397,9 +2420,6 @@ void TWrite::write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
         int swingRatio = item->swingParameters().swingRatio;
         xml.tag("swing", { { "unit", TConv::toXml(swingUnit) }, { "ratio", swingRatio } });
     }
-    if (item->capo() != 0) {
-        xml.tag("capo", { { "fretId", item->capo() } });
-    }
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
 
     xml.endElement();
@@ -2914,6 +2934,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                         || (et == ElementType::SYSTEM_TEXT)
                         || (et == ElementType::TRIPLET_FEEL)
                         || (et == ElementType::PLAYTECH_ANNOTATION)
+                        || (et == ElementType::CAPO)
                         || (et == ElementType::JUMP)
                         || (et == ElementType::MARKER)
                         || (et == ElementType::TEMPO_TEXT)

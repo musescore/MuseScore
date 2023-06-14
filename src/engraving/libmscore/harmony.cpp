@@ -1193,10 +1193,17 @@ const ChordDescription* Harmony::getDescription(const String& name, const Parsed
 
 const RealizedHarmony& Harmony::getRealizedHarmony() const
 {
-    Staff* st = staff();
-    int capo = st->capo(tick()) - 1;
-    int offset = (capo < 0 ? 0 : capo);   //semitone offset for pitch adjustment
-    Interval interval = st->part()->instrument(tick())->transpose();
+    Fraction tick = this->tick();
+    const Staff* st = staff();
+
+    const CapoParams& capo = st->capo(tick);
+
+    int offset = 0;
+    if (capo.active) {
+        offset = capo.fretPosition;
+    }
+
+    Interval interval = st->part()->instrument(tick)->transpose();
     if (!score()->styleB(Sid::concertPitch)) {
         offset += interval.chromatic;
     }
@@ -1204,7 +1211,7 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
     //Adjust for Nashville Notation, might be temporary
     // TODO: set dirty on add/remove of keysig
     if (_harmonyType == HarmonyType::NASHVILLE && !_realizedHarmony.valid()) {
-        Key key = staff()->key(tick());
+        Key key = staff()->key(tick);
         //parse root
         int rootTpc = function2Tpc(_function, key);
 
@@ -1220,6 +1227,7 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
     } else {
         _realizedHarmony.update(_rootTpc, _baseTpc, offset);
     }
+
     return _realizedHarmony;
 }
 

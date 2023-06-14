@@ -54,6 +54,8 @@ using system_idx_t = size_t;
 using part_idx_t = size_t;
 using page_idx_t = size_t;
 
+using string_idx_t = size_t;
+
 using semitone_t = int8_t;
 
 //-------------------------------------------------------------------
@@ -113,6 +115,7 @@ enum class ElementType {
     STAFF_TEXT,
     SYSTEM_TEXT,
     PLAYTECH_ANNOTATION,
+    CAPO,
     TRIPLET_FEEL,
     REHEARSAL_MARK,
     INSTRUMENT_CHANGE,
@@ -996,6 +999,19 @@ static inline bool operator==(const Key a, const Key b) { return int(a) == int(b
 static inline bool operator!=(const Key a, const Key b) { return static_cast<int>(a) != static_cast<int>(b); }
 static inline Key operator+=(Key& a, const Key& b) { return a = Key(static_cast<int>(a) + static_cast<int>(b)); }
 static inline Key operator-=(Key& a, const Key& b) { return a = Key(static_cast<int>(a) - static_cast<int>(b)); }
+
+struct SwingParameters {
+    int swingUnit = 0;
+    int swingRatio = 0;
+
+    bool isOn() const { return swingUnit != 0; }
+};
+
+struct CapoParams {
+    bool active = false;
+    int fretPosition = 0;
+    std::unordered_set<string_idx_t> ignoredStrings;
+};
 
 struct PartAudioSettingsCompat {
     InstrumentTrackId instrumentId;

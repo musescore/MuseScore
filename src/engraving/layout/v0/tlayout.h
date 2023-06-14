@@ -50,6 +50,7 @@ class Breath;
 class Chord;
 class ChordLine;
 class Clef;
+class Capo;
 
 class DeadSlapped;
 class Dynamic;
@@ -199,6 +200,7 @@ public:
     static void layout(Chord* item, LayoutContext& ctx);
     static void layout(ChordLine* item, LayoutContext& ctx);
     static void layout(Clef* item, LayoutContext& ctx);
+    static void layout(Capo* item, LayoutContext& ctx);
 
     static void layout(DeadSlapped* item, LayoutContext& ctx);
     static void layout(Dynamic* item, LayoutContext& ctx);

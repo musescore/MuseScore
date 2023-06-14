@@ -129,6 +129,7 @@ void MasterNotation::setMasterScore(mu::engraving::MasterScore* score)
 
     setScore(score);
     score->updateSwing();
+    score->updateCapo();
     m_notationPlayback->init(m_undoStack);
     initExcerptNotations(masterScore()->excerpts());
 }
@@ -286,6 +287,7 @@ mu::Ret MasterNotation::setupNewScore(mu::engraving::MasterScore* score, const S
 
     score->checkChordList();
     score->updateSwing();
+    score->updateCapo();
 
     applyOptions(score, scoreOptions);
 

@@ -69,6 +69,7 @@
 #include "undo.h"
 #include "utils.h"
 #include "volta.h"
+#include "capo.h"
 
 #include "log.h"
 
@@ -123,29 +124,29 @@ void Score::updateSwing()
 void Score::updateCapo()
 {
     for (Staff* s : _staves) {
-        s->clearCapoList();
+        s->clearCapoParams();
     }
+
     Measure* fm = firstMeasure();
     if (!fm) {
         return;
     }
+
     for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+        Fraction segmentTick = s->tick();
+
         for (EngravingItem* e : s->annotations()) {
             if (e->isHarmony()) {
                 toHarmony(e)->realizedHarmony().setDirty(true);
             }
-            if (!e->isStaffTextBase()) {
+
+            if (!e->isCapo()) {
                 continue;
             }
-            const StaffTextBase* st = toStaffTextBase(e);
-            if (st->xmlText().isEmpty()) {
-                continue;
+
+            for (Staff* staff : e->staff()->staffList()) {
+                staff->insertCapoParams(segmentTick, toCapo(e)->params());
             }
-            Staff* staff = st->staff();
-            if (st->capo() == 0) {
-                continue;
-            }
-            staff->insertIntoCapoList(s->tick(), st->capo());
         }
     }
 }

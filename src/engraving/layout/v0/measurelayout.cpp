@@ -415,7 +415,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
         for (EngravingItem* e : underlyingSeg->annotations()) {
             // look at elements in underlying measure
             if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isTripletFeel()
-                  || e->isPlayTechAnnotation() || e->isInstrumentChange())) {
+                  || e->isPlayTechAnnotation() || e->isCapo() || e->isInstrumentChange())) {
                 continue;
             }
             // try to find a match in mmr
@@ -439,7 +439,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
         const auto annotations = s->annotations(); // make a copy since we alter the list
         for (EngravingItem* e : annotations) { // look at elements in mmr
             if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isTripletFeel()
-                  || e->isPlayTechAnnotation() || e->isInstrumentChange())) {
+                  || e->isPlayTechAnnotation() || e->isCapo() || e->isInstrumentChange())) {
                 continue;
             }
             // try to find a match in underlying measure
@@ -481,7 +481,7 @@ static bool validMMRestMeasure(const LayoutContext& ctx, Measure* m)
                 continue;
             }
             if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isTripletFeel()
-                  || e->isPlayTechAnnotation() || e->isInstrumentChange())) {
+                  || e->isPlayTechAnnotation() || e->isCapo() || e->isInstrumentChange())) {
                 return false;
             }
         }
@@ -617,6 +617,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
         ElementType::SYSTEM_TEXT,
         ElementType::TRIPLET_FEEL,
         ElementType::PLAYTECH_ANNOTATION,
+        ElementType::CAPO,
         ElementType::INSTRUMENT_CHANGE
     };
 
