@@ -1988,6 +1988,13 @@ void Measure::connectTremolo()
                         break;
                     }
                 }
+
+                if (!tremolo->chord2()) {
+                    // this is an invalid tremolo! a continued tremolo was started on one note without a valid next note in that measure
+                    // remove the tremolo entirely
+                    c->setTremolo(nullptr);
+                    score()->removeElement(tremolo);
+                }
             }
         }
     }
