@@ -81,6 +81,8 @@ public:
 private:
     void updateAccidentalsAboveAndBelow();
     void updateCueNote();
+    void mapOldTrillAccidental(Note* note, const Note* mainNote);
+    void manageAccidentalVisibilityRules(Note* note);
 
 private:
     M_PROPERTY(OrnamentInterval, intervalAbove, setIntervalAbove)
