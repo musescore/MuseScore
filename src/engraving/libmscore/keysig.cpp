@@ -149,16 +149,16 @@ EngravingItem* KeySig::drop(EditData& data)
 //   setKey
 //---------------------------------------------------------
 
-void KeySig::setKey(Key key)
+void KeySig::setKey(Key cKey)
 {
     KeySigEvent e;
-    e.setConcertKey(key);
+    e.setConcertKey(cKey);
     if (staff() && !score()->styleB(Sid::concertPitch)) {
         Interval v = staff()->part()->instrument(tick())->transpose();
         if (!v.isZero()) {
             v.flip();
-            key = transposeKey(key, v, staff()->part()->preferSharpFlat());
-            e.setKey(key);
+            Key tKey = transposeKey(cKey, v, staff()->part()->preferSharpFlat());
+            e.setKey(tKey);
         }
     }
     setKeySigEvent(e);

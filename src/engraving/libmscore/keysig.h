@@ -54,7 +54,7 @@ public:
 
     //@ sets the key of the key signature (concert key and transposing key)
     void setKey(Key cKey, Key tKey);
-    void setKey(Key key);
+    void setKey(Key cKey);
 
     Segment* segment() const { return (Segment*)explicitParent(); }
     Measure* measure() const { return explicitParent() ? (Measure*)explicitParent()->explicitParent() : nullptr; }
