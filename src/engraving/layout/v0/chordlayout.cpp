@@ -2736,12 +2736,14 @@ void ChordLayout::resolveVerticalRestConflicts(Score* score, Segment* segment, s
 
     collectChordsAndRest(segment, staffIdx, chords, rests);
 
-    for (Rest* rest : rests) {
-        rest->verticalClearance().reset();
-    }
-
     if (rests.empty()) {
         return;
+    }
+
+    collectChordsOverlappingRests(segment, staffIdx, chords);
+
+    for (Rest* rest : rests) {
+        rest->verticalClearance().reset();
     }
 
     if (!chords.empty()) {
@@ -2763,7 +2765,7 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
     int lines = staff->lines(tick);
     double spatium = staff->spatium(tick);
     double lineDistance = staff->lineDistance(tick) * spatium;
-    const double minRestToChordClearance = 0.35 * spatium;
+    double minRestToChordClearance = 0.35 * spatium;
 
     for (Rest* rest : rests) {
         if (!rest->visible() || !rest->autoplace()) {
@@ -2774,14 +2776,25 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
             if (!chord->visible() || !chord->autoplace()) {
                 continue;
             }
+
             bool restAbove = rest->voice() < chord->voice() || (chord->slash() && !(rest->voice() % 2));
             int upSign = restAbove ? -1 : 1;
             double restYOffset = rest->offset().y();
             bool ignoreYOffset = (restAbove && restYOffset > 0) || (!restAbove && restYOffset < 0);
             PointF offset = ignoreYOffset ? PointF(0, restYOffset) : PointF(0, 0);
+
+            double clearance = 0.0;
             Shape restShape = rest->shape().translated(rest->pos() - offset);
-            Shape chordShape = chord->shape().translated(chord->pos());
-            double clearance = restAbove ? restShape.verticalClearance(chordShape) : chordShape.verticalClearance(restShape);
+            if (chord->segment() == rest->segment()) {
+                Shape chordShape = chord->shape().translated(chord->pos());
+                clearance = restAbove ? restShape.verticalClearance(chordShape) : chordShape.verticalClearance(restShape);
+            } else {
+                Note* limitNote = restAbove ? chord->upNote() : chord->downNote();
+                Shape noteShape = limitNote->shape().translate(limitNote->pos());
+                clearance = restAbove ? noteShape.top() - restShape.bottom() : restShape.top() - noteShape.bottom();
+                minRestToChordClearance = 0.0;
+            }
+
             double margin = clearance - minRestToChordClearance;
             int marginInSteps = floor(margin / lineDistance);
             if (restAbove) {
@@ -2792,6 +2805,7 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
             if (margin > 0) {
                 continue;
             }
+
             rest->verticalClearance().setLocked(true);
             bool isWholeOrHalf = rest->isWholeRest() || rest->durationType() == DurationType::V_HALF;
             bool outAboveStaff = restAbove && restShape.bottom() + margin < minRestToChordClearance;
