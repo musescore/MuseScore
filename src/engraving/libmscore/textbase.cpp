@@ -765,27 +765,8 @@ void TextFragment::draw(mu::draw::Painter* p, const TextBase* t) const
 {
     mu::draw::Font f(font(t));
     f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
-#ifndef Q_OS_MACOS
-    TextBase::drawTextWorkaround(p, f, pos, text);
-#else
     p->setFont(f);
     p->drawText(pos, text);
-#endif
-}
-
-//---------------------------------------------------------
-//   drawTextWorkaround
-//---------------------------------------------------------
-
-void TextBase::drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const mu::PointF& pos, const String& text)
-{
-    double mm = p->worldTransform().m11();
-    if (!(MScore::pdfPrinting) && (mm < 1.0) && f.bold() && !(f.underline() || f.strike())) {
-        p->drawTextWorkaround(f, pos, text);
-    } else {
-        p->setFont(f);
-        p->drawText(pos, text);
-    }
 }
 
 //---------------------------------------------------------

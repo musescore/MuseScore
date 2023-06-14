@@ -300,12 +300,6 @@ void BufferedPaintProvider::drawText(const RectF& rect, int flags, const String&
     editableData().texts.push_back(DrawText { DrawText::Rect, rect, flags, text });
 }
 
-void BufferedPaintProvider::drawTextWorkaround(const Font& f, const PointF& pos, const String& text)
-{
-    setFont(f);
-    drawText(pos, text);
-}
-
 void BufferedPaintProvider::drawSymbol(const PointF& point, char32_t ucs4Code)
 {
     drawText(point, String::fromUcs4(&ucs4Code, 1));

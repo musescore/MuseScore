@@ -1299,12 +1299,8 @@ void Harmony::draw(mu::draw::Painter* painter) const
     for (const TextSegment* ts : m_textList) {
         mu::draw::Font f(ts->m_font);
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
-#ifndef Q_OS_MACOS
-        TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text);
-#else
         painter->setFont(f);
         painter->drawText(ts->pos(), ts->text);
-#endif
     }
 }
 

@@ -144,17 +144,6 @@ public:
     //! Fractions are also passed to this method, and, accordingly, the fractional part is discarded.
     inline void drawText(int x, int y, const String& text);
 
-    //! NOTE workaround for https://musescore.org/en/node/284218
-    //! and https://musescore.org/en/node/281601
-    //! only needed for certain artificially emboldened fonts
-    //! see https://musescore.org/en/node/281601#comment-900261
-    //! in Qt 5.12.x this workaround should be no more necessary if
-    //! env variable QT_MAX_CACHED_GLYPH_SIZE is set to 1.
-    //! The workaround works badly if the text is at the same time
-    //! bold and underlined or struck out.
-    //! (moved from TextBase::drawTextWorkaround)
-    void drawTextWorkaround(Font& f, const PointF pos, const String& text);
-
     void drawSymbol(const PointF& point, char32_t ucs4Code);
 
     void fillRect(const RectF& rect, const Brush& brush);

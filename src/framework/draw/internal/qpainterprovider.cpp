@@ -240,67 +240,6 @@ void QPainterProvider::drawText(const RectF& rect, int flags, const String& text
     m_painter->drawText(rect.toQRectF(), flags, text);
 }
 
-void QPainterProvider::drawTextWorkaround(const Font& f, const PointF& pos, const String& text)
-{
-    m_painter->save();
-    double mm = m_painter->worldTransform().m11();
-    double dx = m_painter->worldTransform().dx();
-    double dy = m_painter->worldTransform().dy();
-    // diagonal elements will now be changed to 1.0
-    m_painter->setWorldTransform(QTransform(1.0, 0.0, 0.0, 1.0, dx, dy));
-
-    // correction factor for bold text drawing, due to the change of the diagonal elements
-    double factor = 1.0 / mm;
-    QFont fnew(f.toQFont(), m_painter->device());
-    fnew.setPointSizeF(f.pointSizeF() / factor);
-    QRawFont fRaw = QRawFont::fromFont(fnew);
-    QTextLayout textLayout(text, f.toQFont(), m_painter->device());
-    textLayout.beginLayout();
-    while (true) {
-        QTextLine line = textLayout.createLine();
-        if (!line.isValid()) {
-            break;
-        }
-    }
-    textLayout.endLayout();
-    // glyphruns with correct positions, but potentially wrong glyphs
-    // (see bug https://musescore.org/en/node/117191 regarding positions and DPI)
-    QList<QGlyphRun> glyphruns = textLayout.glyphRuns();
-    double offset = 0;
-    // glyphrun drawing has an offset equal to the max ascent of the text fragment
-    for (int i = 0; i < glyphruns.length(); i++) {
-        double value = glyphruns.at(i).rawFont().ascent() / factor;
-        if (value > offset) {
-            offset = value;
-        }
-    }
-    for (int i = 0; i < glyphruns.length(); i++) {
-        QVector<QPointF> positions1 = glyphruns.at(i).positions();
-        QVector<QPointF> positions2;
-        // calculate the new positions for the scaled geometry
-        for (int j = 0; j < positions1.length(); j++) {
-            QPointF newPoint = positions1.at(j) / factor;
-            positions2.append(newPoint);
-        }
-        QGlyphRun glyphrun2 = glyphruns.at(i);
-        glyphrun2.setPositions(positions2);
-        // change the glyphs with the correct glyphs
-        // and account for glyph substitution
-        if (glyphrun2.rawFont().familyName() != fnew.family()) {
-            QFont f2(fnew);
-            f2.setFamily(glyphrun2.rawFont().familyName());
-            glyphrun2.setRawFont(QRawFont::fromFont(f2));
-        } else {
-            glyphrun2.setRawFont(fRaw);
-        }
-        m_painter->drawGlyphRun(QPointF(pos.x() / factor, pos.y() / factor - offset), glyphrun2);
-        positions2.clear();
-    }
-    // Restore the QPainter to its former state
-    m_painter->setWorldTransform(QTransform(mm, 0.0, 0.0, mm, dx, dy));
-    m_painter->restore();
-}
-
 void QPainterProvider::drawSymbol(const PointF& point, char32_t ucs4Code)
 {
     static QHash<char32_t, QString> cache;

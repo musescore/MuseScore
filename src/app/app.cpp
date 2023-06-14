@@ -64,6 +64,16 @@ int App::run(int argc, char** argv)
     qputenv("QT_STYLE_OVERRIDE", "Fusion");
     qputenv("QML_DISABLE_DISK_CACHE", "true");
 
+    //! NOTE workaround for https://musescore.org/en/node/284218
+    //! and https://musescore.org/en/node/281601
+    //! only needed for certain artificially emboldened fonts
+    //! see https://musescore.org/en/node/281601#comment-900261
+    //! after Qt 5.12.x the use of env variable QT_MAX_CACHED_GLYPH_SIZE
+    //! set to 1 is a workaround to avoid the bug
+#ifndef Q_OS_MACOS
+    qputenv("QT_MAX_CACHED_GLYPH_SIZE", "1");
+#endif
+
 #ifdef Q_OS_LINUX
     if (qEnvironmentVariable("QT_QPA_PLATFORM") != "offscreen") {
         qputenv("QT_QPA_PLATFORMTHEME", "gtk3");

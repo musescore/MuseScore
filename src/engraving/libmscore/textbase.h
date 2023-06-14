@@ -295,7 +295,6 @@ public:
 
     virtual void draw(mu::draw::Painter*) const override;
     virtual void drawEditMode(mu::draw::Painter* p, EditData& ed, double currentViewScaling) override;
-    static void drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const mu::PointF& pos, const String& text);
 
     Align align() const { return m_align; }
     void setAlign(Align a) { m_align = a; }
