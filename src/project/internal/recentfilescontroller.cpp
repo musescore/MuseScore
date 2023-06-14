@@ -39,11 +39,6 @@ void RecentFilesController::init()
     configuration()->rawRecentFilesDataChanged().onNotify(this, [this]() {
         if (!m_reloadingBlocked) {
             m_dirty = true;
-
-            {
-                std::lock_guard lock(m_thumbnailCacheMutex);
-                m_thumbnailCache.clear();
-            }
         }
 
         m_recentFilesListChanged.notify();
@@ -163,10 +158,7 @@ void RecentFilesController::setRecentFilesList(const RecentFilesList& list, bool
 
     m_recentFilesList = list;
 
-    {
-        std::lock_guard lock(m_thumbnailCacheMutex);
-        m_thumbnailCache.clear();
-    }
+    cleanUpThumbnailCache(list);
 
     if (save) {
         saveRecentFilesList();
@@ -195,24 +187,55 @@ void RecentFilesController::saveRecentFilesList()
 Promise<QPixmap> RecentFilesController::thumbnail(const RecentFile& file) const
 {
     return Promise<QPixmap>([this, file](auto resolve, auto reject) {
+        if (file.empty()) {
+            return reject(int(Ret::Code::UnknownError), "Invalid file specified");
+        }
+
         QtConcurrent::run([this, file, resolve, reject]() {
             std::lock_guard lock(m_thumbnailCacheMutex);
 
-            if (mu::contains(m_thumbnailCache, file)) {
-                (void)resolve(m_thumbnailCache.at(file));
-                return;
+            DateTime lastModified = fileSystem()->lastModified(file);
+
+            auto it = m_thumbnailCache.find(file);
+            if (it != m_thumbnailCache.cend()) {
+                if (lastModified == it->second.lastModified) {
+                    (void)resolve(it->second.thumbnail);
+                    return;
+                }
             }
 
             RetVal<ProjectMeta> rv = mscMetaReader()->readMeta(file);
             if (!rv.ret) {
-                m_thumbnailCache[file] = QPixmap();
+                m_thumbnailCache[file] = CachedThumbnail();
                 (void)reject(rv.ret.code(), rv.ret.toString());
             } else {
-                m_thumbnailCache[file] = rv.val.thumbnail;
+                m_thumbnailCache[file] = CachedThumbnail { rv.val.thumbnail, lastModified };
                 (void)resolve(rv.val.thumbnail);
             }
         });
 
         return Promise<QPixmap>::Result::unchecked();
     }, Promise<QPixmap>::AsynchronyType::ProvidedByBody);
+}
+
+void RecentFilesController::cleanUpThumbnailCache(const RecentFilesList& files)
+{
+    QtConcurrent::run([this, files] {
+        std::lock_guard lock(m_thumbnailCacheMutex);
+
+        if (files.empty()) {
+            m_thumbnailCache.clear();
+        } else {
+            std::map<io::path_t, CachedThumbnail> cleanedCache;
+
+            for (const RecentFile& file : files) {
+                auto it = m_thumbnailCache.find(file);
+                if (it != m_thumbnailCache.cend()) {
+                    cleanedCache[file] = it->second;
+                }
+            }
+
+            m_thumbnailCache = cleanedCache;
+        }
+    });
 }

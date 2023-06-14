@@ -63,13 +63,20 @@ private:
     void setRecentFilesList(const RecentFilesList& list, bool save);
     void saveRecentFilesList();
 
+    void cleanUpThumbnailCache(const RecentFilesList& files);
+
     mutable bool m_dirty = true;
     mutable RecentFilesList m_recentFilesList;
     async::Notification m_recentFilesListChanged;
     mutable bool m_reloadingBlocked = false;
 
+    struct CachedThumbnail {
+        QPixmap thumbnail;
+        DateTime lastModified;
+    };
+
     mutable std::mutex m_thumbnailCacheMutex;
-    mutable std::map<io::path_t, QPixmap> m_thumbnailCache;
+    mutable std::map<io::path_t, CachedThumbnail> m_thumbnailCache;
 };
 }
 
