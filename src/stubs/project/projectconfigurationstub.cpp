@@ -24,19 +24,14 @@
 using namespace mu;
 using namespace mu::project;
 
-ByteArray ProjectConfigurationStub::rawRecentProjectsData() const
+io::path_t ProjectConfigurationStub::recentFilesJsonPath() const
+{
+    return io::path_t();
+}
+
+ByteArray ProjectConfigurationStub::compatRecentFilesData() const
 {
     return ByteArray();
-}
-
-void ProjectConfigurationStub::setRawRecentProjectData(const ByteArray&)
-{
-}
-
-async::Notification ProjectConfigurationStub::rawRecentProjectsDataChanged() const
-{
-    static async::Notification n;
-    return n;
 }
 
 io::path_t ProjectConfigurationStub::myFirstProjectPath() const

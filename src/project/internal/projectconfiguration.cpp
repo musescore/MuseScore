@@ -39,7 +39,7 @@ using namespace mu::notation;
 
 static const std::string module_name("project");
 
-static const Settings::Key RECENT_FILES_PATHS(module_name, "project/recentList");
+static const Settings::Key COMPAT_RECENT_FILES_DATA(module_name, "project/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
 static const Settings::Key LAST_OPENED_PROJECTS_PATH(module_name, "application/paths/lastOpenedProjectsPath");
 static const Settings::Key LAST_SAVED_PROJECTS_PATH(module_name, "application/paths/lastSavedProjectsPath");
@@ -73,10 +73,6 @@ void ProjectConfiguration::init()
 
     settings()->valueChanged(USER_PROJECTS_PATH).onReceive(nullptr, [this](const Val& val) {
         m_userScoresPathChanged.send(val.toPath());
-    });
-
-    settings()->valueChanged(RECENT_FILES_PATHS).onReceive(nullptr, [this](const Val&) {
-        m_rawRecentFilesDataChanged.notify();
     });
 
     Val preferredScoreCreationMode = Val(PreferredScoreCreationMode::FromInstruments);
@@ -114,21 +110,16 @@ void ProjectConfiguration::init()
     fileSystem()->makePath(cloudProjectsPath());
 }
 
-ByteArray ProjectConfiguration::rawRecentFilesData() const
+io::path_t ProjectConfiguration::recentFilesJsonPath() const
 {
-    std::string data = settings()->value(RECENT_FILES_PATHS).toString();
+    return globalConfiguration()->userAppDataPath().appendingComponent("recent_files.json");
+}
+
+ByteArray ProjectConfiguration::compatRecentFilesData() const
+{
+    std::string data = settings()->value(COMPAT_RECENT_FILES_DATA).toString();
 
     return ByteArray(data.data(), data.size());
-}
-
-void ProjectConfiguration::setRawRecentFilesData(const ByteArray& data)
-{
-    settings()->setSharedValue(RECENT_FILES_PATHS, Val(std::string(data.constChar(), data.size())));
-}
-
-async::Notification ProjectConfiguration::rawRecentFilesDataChanged() const
-{
-    return m_rawRecentFilesDataChanged;
 }
 
 io::paths_t ProjectConfiguration::scanCloudProjects() const

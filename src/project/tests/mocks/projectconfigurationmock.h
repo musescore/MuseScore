@@ -30,9 +30,8 @@ namespace mu::project {
 class ProjectConfigurationMock : public project::IProjectConfiguration
 {
 public:
-    MOCK_METHOD(ByteArray, rawRecentFilesData, (), (const, override));
-    MOCK_METHOD(void, setRawRecentFilesData, (const ByteArray&), (override));
-    MOCK_METHOD(async::Notification, rawRecentFilesDataChanged, (), (const, override));
+    MOCK_METHOD(io::path_t, recentFilesJsonPath, (), (const, override));
+    MOCK_METHOD(ByteArray, compatRecentFilesData, (), (const, override));
 
     MOCK_METHOD(io::path_t, myFirstProjectPath, (), (const, override));
 

@@ -34,6 +34,7 @@
 #include "iprojectconfiguration.h"
 #include "imscmetareader.h"
 #include "io/ifilesystem.h"
+#include "multiinstances/imultiinstancesprovider.h"
 
 namespace mu::project {
 class RecentFilesController : public IRecentFilesController, public async::Asyncable
@@ -41,6 +42,7 @@ class RecentFilesController : public IRecentFilesController, public async::Async
     INJECT(IProjectConfiguration, configuration)
     INJECT(IMscMetaReader, mscMetaReader)
     INJECT(io::IFileSystem, fileSystem)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     void init();

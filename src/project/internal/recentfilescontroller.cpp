@@ -29,19 +29,27 @@
 #include "async/async.h"
 #include "defer.h"
 
+#include "multiinstances/resourcelockguard.h"
+
 using namespace mu::project;
 using namespace mu::async;
 
+static const std::string RECENT_FILES_RESOURCE_NAME("RECENT_FILES");
+
 void RecentFilesController::init()
 {
+    TRACEFUNC;
+
     m_dirty = true;
 
-    configuration()->rawRecentFilesDataChanged().onNotify(this, [this]() {
-        if (!m_reloadingBlocked) {
-            m_dirty = true;
-        }
+    multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
+        if (resourceName == RECENT_FILES_RESOURCE_NAME) {
+            if (!m_reloadingBlocked) {
+                m_dirty = true;
+            }
 
-        m_recentFilesListChanged.notify();
+            m_recentFilesListChanged.notify();
+        }
     });
 }
 
@@ -99,20 +107,28 @@ void RecentFilesController::clearPlatformRecentFiles() {}
 
 void RecentFilesController::loadRecentFilesList()
 {
-    ByteArray data = configuration()->rawRecentFilesData();
-
     RecentFilesList newList;
 
     DEFER {
         setRecentFilesList(newList, false);
     };
 
-    if (data.empty()) {
+    RetVal<ByteArray> data;
+    {
+        mi::ReadResourceLockGuard lock_guard(multiInstancesProvider(), RECENT_FILES_RESOURCE_NAME);
+        data = fileSystem()->readFile(configuration()->recentFilesJsonPath());
+    }
+
+    if (!data.ret || data.val.empty()) {
+        data.val = configuration()->compatRecentFilesData();
+    }
+
+    if (data.val.empty()) {
         return;
     }
 
     QJsonParseError err;
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toQByteArrayNoCopy(), &err);
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.val.toQByteArrayNoCopy(), &err);
     if (err.error != QJsonParseError::NoError) {
         return;
     }
@@ -181,7 +197,13 @@ void RecentFilesController::saveRecentFilesList()
     }
 
     QJsonDocument jsonDoc(jsonArray);
-    configuration()->setRawRecentFilesData(ByteArray::fromQByteArrayNoCopy(jsonDoc.toJson(QJsonDocument::Compact)));
+    QByteArray json = jsonDoc.toJson(QJsonDocument::Compact);
+
+    mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), RECENT_FILES_RESOURCE_NAME);
+    Ret ret = fileSystem()->writeFile(configuration()->recentFilesJsonPath(), ByteArray::fromQByteArrayNoCopy(json));
+    if (!ret) {
+        LOGE() << "Failed to save recent files list: " << ret.toString();
+    }
 }
 
 Promise<QPixmap> RecentFilesController::thumbnail(const RecentFile& file) const

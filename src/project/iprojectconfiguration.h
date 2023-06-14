@@ -41,9 +41,8 @@ class IProjectConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IProjectConfiguration() = default;
 
-    virtual ByteArray rawRecentFilesData() const = 0;
-    virtual void setRawRecentFilesData(const ByteArray& data) = 0;
-    virtual async::Notification rawRecentFilesDataChanged() const = 0;
+    virtual io::path_t recentFilesJsonPath() const = 0;
+    virtual ByteArray compatRecentFilesData() const = 0;
 
     virtual io::path_t myFirstProjectPath() const = 0;
 

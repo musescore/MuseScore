@@ -30,9 +30,8 @@ class ProjectConfigurationStub : public IProjectConfiguration
 public:
     ProjectConfigurationStub() = default;
 
-    ByteArray rawRecentProjectsData() const override;
-    void setRawRecentProjectData(const ByteArray& data) override;
-    async::Notification rawRecentProjectsDataChanged() const override;
+    io::path_t recentFilesJsonPath() const override;
+    ByteArray compatRecentFilesData() const override;
 
     io::path_t myFirstProjectPath() const override;
 

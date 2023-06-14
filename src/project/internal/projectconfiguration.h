@@ -47,9 +47,8 @@ class ProjectConfiguration : public IProjectConfiguration
 public:
     void init();
 
-    ByteArray rawRecentFilesData() const override;
-    void setRawRecentFilesData(const ByteArray& data) override;
-    async::Notification rawRecentFilesDataChanged() const override;
+    io::path_t recentFilesJsonPath() const override;
+    ByteArray compatRecentFilesData() const override;
 
     io::path_t myFirstProjectPath() const override;
 
@@ -139,7 +138,6 @@ private:
     io::path_t appTemplatesPath() const;
     io::path_t cloudProjectsPath() const;
 
-    async::Notification m_rawRecentFilesDataChanged;
     async::Channel<io::path_t> m_userTemplatesPathChanged;
     async::Channel<io::path_t> m_userScoresPathChanged;
 
