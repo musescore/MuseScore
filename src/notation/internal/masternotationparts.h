@@ -34,6 +34,8 @@ public:
 
     void setExcerpts(ExcerptNotationList excerpts);
 
+    void setParts(const PartInstrumentList& parts, const ScoreOrder& order) override;
+
     void removeParts(const IDList& partsIds) override;
     void removeStaves(const IDList& stavesIds) override;
 

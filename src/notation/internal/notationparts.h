@@ -88,6 +88,8 @@ protected:
     virtual void onPartsRemoved(const std::vector<Part*>& parts);
 
 private:
+    friend class MasterNotationParts;
+
     void doSetScoreOrder(const ScoreOrder& order);
     void doRemoveParts(const std::vector<Part*>& parts);
     void doAppendStaff(Staff* staff, Part* destinationPart);
