@@ -681,6 +681,10 @@ void NavigationController::goToNextSection()
     if (!nextSec) { // active is last
         nextSec = firstEnabled(m_sections); // the first to be the next
     }
+    if (!nextSec) {
+        LOGI() << "no enabled sections!";
+        return;
+    }
 
     LOGI() << "nextSec: " << nextSec->name() << ", enabled: " << nextSec->enabled();
 
