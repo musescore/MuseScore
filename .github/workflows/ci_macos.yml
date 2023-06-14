@@ -74,6 +74,12 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
     
+    - name: Free disk space
+      if: env.DO_BUILD == 'true'
+      run: |
+        sudo rm -rf "/Applications/Visual Studio.app"
+        sudo rm -rf "/Applications/Visual Studio 2019.app"
+        sudo rm -rf "/Users/runner/Library/Android/sdk"
     - name: Setup environment
       if: env.DO_BUILD == 'true'
       run: |
