@@ -138,7 +138,6 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
         init(COMMON_GENRE_ID, NONE_GROUP_ID);
     } else {
         init(COMMON_GENRE_ID, resolveInstrumentGroupId(currentInstrumentId));
-        focusOnInstrument(currentInstrumentId);
     }
 }
 
@@ -184,21 +183,6 @@ QString InstrumentListModel::resolveInstrumentGroupId(const String& instrumentId
     }
 
     return NONE_GROUP_ID;
-}
-
-void InstrumentListModel::focusOnInstrument(const String& instrumentId)
-{
-    TRACEFUNC;
-
-    for (int i = 0; i < m_instruments.size(); ++i) {
-        for (const InstrumentTemplate* templ : m_instruments[i].templates) {
-            if (templ->id == instrumentId) {
-                selectInstrument(i);
-                emit focusRequested(currentGroupIndex(), i);
-                return;
-            }
-        }
-    }
 }
 
 void InstrumentListModel::loadGenres()
