@@ -77,15 +77,15 @@ MasterNotation::MasterNotation()
     async::NotifyList<const Part*> partList = m_parts->partList();
 
     partList.onChanged(this, [this]() {
-        m_hasPartsChanged.notify();
+        onPartsChanged();
     });
 
     partList.onItemAdded(this, [this](const Part*) {
-        m_hasPartsChanged.notify();
+        onPartsChanged();
     });
 
     partList.onItemRemoved(this, [this](const Part*) {
-        m_hasPartsChanged.notify();
+        onPartsChanged();
     });
 
     undoStack()->stackChanged().onNotify(this, [this]() {
@@ -710,12 +710,15 @@ void MasterNotation::updatePotentialExcerpts() const
             continue;
         }
 
-        auto it = findExcerptByPart(m_potentialExcerpts, part);
-        if (it == m_potentialExcerpts.cend()) {
-            partsWithoutExcerpt.push_back(part);
-        } else {
-            potentialExcerpts.push_back(*it);
+        if (!m_potentialExcerptsForcedDirty) {
+            auto it = findExcerptByPart(m_potentialExcerpts, part);
+            if (it != m_potentialExcerpts.cend()) {
+                potentialExcerpts.push_back(*it);
+                continue;
+            }
         }
+
+        partsWithoutExcerpt.push_back(part);
     }
 
     std::vector<mu::engraving::Excerpt*> excerpts = mu::engraving::Excerpt::createExcerptsFromParts(partsWithoutExcerpt);
@@ -726,6 +729,7 @@ void MasterNotation::updatePotentialExcerpts() const
     }
 
     m_potentialExcerpts = std::move(potentialExcerpts);
+    m_potentialExcerptsForcedDirty = false;
 }
 
 bool MasterNotation::containsExcerpt(const mu::engraving::Excerpt* excerpt) const
@@ -737,6 +741,12 @@ bool MasterNotation::containsExcerpt(const mu::engraving::Excerpt* excerpt) cons
     }
 
     return false;
+}
+
+void MasterNotation::onPartsChanged()
+{
+    m_hasPartsChanged.notify();
+    m_potentialExcerptsForcedDirty = true;
 }
 
 void MasterNotation::notifyAboutNeedSaveChanged()
