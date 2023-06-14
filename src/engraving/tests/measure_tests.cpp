@@ -83,6 +83,19 @@ TEST_F(Engraving_MeasureTests, DISABLED_insertMeasureEnd) // TODO: verify progra
     delete score;
 }
 
+TEST_F(Engraving_MeasureTests, insertAtBeginning)
+{
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-insert_beginning.mscx");
+    EXPECT_TRUE(score);
+    Measure* m = score->firstMeasure();
+    score->startCmd();
+    score->insertMeasure(ElementType::MEASURE, m);
+    score->endCmd();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_beginning.mscx",
+                                            MEASURE_DATA_DIR + u"measure-insert_beginning-ref.mscx"));
+    delete score;
+}
+
 TEST_F(Engraving_MeasureTests, insertBfClefChange)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-insert_bf_clef.mscx");
