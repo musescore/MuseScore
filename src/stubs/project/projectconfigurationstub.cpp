@@ -69,15 +69,6 @@ async::Channel<io::path_t> ProjectConfigurationStub::userTemplatesPathChanged() 
     return ch;
 }
 
-io::path_t ProjectConfigurationStub::defaultProjectsPath() const
-{
-    return io::path_t();
-}
-
-void ProjectConfigurationStub::setDefaultProjectsPath(const io::path_t&)
-{
-}
-
 io::path_t ProjectConfigurationStub::lastOpenedProjectsPath() const
 {
     return io::path_t();
@@ -109,6 +100,11 @@ async::Channel<io::path_t> ProjectConfigurationStub::userProjectsPathChanged() c
 {
     static async::Channel<io::path_t> ch;
     return ch;
+}
+
+io::path_t ProjectConfigurationStub::defaultUserProjectsPath() const
+{
+    return io::path_t();
 }
 
 bool ProjectConfigurationStub::shouldAskSaveLocationType() const

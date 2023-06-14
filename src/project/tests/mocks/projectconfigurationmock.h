@@ -43,9 +43,6 @@ public:
     MOCK_METHOD(void, setUserTemplatesPath, (const io::path_t&), (override));
     MOCK_METHOD(async::Channel<io::path_t>, userTemplatesPathChanged, (), (const, override));
 
-    MOCK_METHOD(io::path_t, defaultProjectsPath, (), (const, override));
-    MOCK_METHOD(void, setDefaultProjectsPath, (const io::path_t&), (override));
-
     MOCK_METHOD(io::path_t, lastOpenedProjectsPath, (), (const, override));
     MOCK_METHOD(void, setLastOpenedProjectsPath, (const io::path_t&), (override));
 
@@ -55,6 +52,7 @@ public:
     MOCK_METHOD(io::path_t, userProjectsPath, (), (const, override));
     MOCK_METHOD(void, setUserProjectsPath, (const io::path_t&), (override));
     MOCK_METHOD(async::Channel<io::path_t>, userProjectsPathChanged, (), (const, override));
+    MOCK_METHOD(io::path_t, defaultUserProjectsPath, (), (const, override));
 
     MOCK_METHOD(bool, shouldAskSaveLocationType, (), (const, override));
     MOCK_METHOD(void, setShouldAskSaveLocationType, (bool), (override));

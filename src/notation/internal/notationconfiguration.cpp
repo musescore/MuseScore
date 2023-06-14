@@ -151,7 +151,10 @@ void NotationConfiguration::init()
     settings()->valueChanged(USER_STYLES_PATH).onReceive(nullptr, [this](const Val& val) {
         m_userStylesPathChanged.send(val.toPath());
     });
-    fileSystem()->makePath(userStylesPath());
+
+    if (!userStylesPath().empty()) {
+        fileSystem()->makePath(userStylesPath());
+    }
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(true));
