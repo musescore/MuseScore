@@ -174,7 +174,7 @@ ScoresView {
                         section: root.navigationSection
                         order: root.navigationOrder
                         direction: NavigationPanel.Horizontal
-                        accessible.name: qsTrc("appshell", "Sign in buttons")
+                        accessible.name: qsTrc("cloud", "Sign in buttons")
                     }
 
                     FlatButton {

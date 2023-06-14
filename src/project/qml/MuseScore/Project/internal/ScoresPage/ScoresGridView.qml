@@ -63,7 +63,7 @@ Item {
         id: navPanel
         name: "RecentScores"
         direction: NavigationPanel.Both
-        accessible.name: qsTrc("appshell", "Recent scores grid")
+        accessible.name: qsTrc("project", "Recent scores grid")
     }
 
     Rectangle {
