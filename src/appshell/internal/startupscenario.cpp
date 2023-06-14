@@ -60,14 +60,14 @@ void StartupScenario::setStartupType(const std::optional<std::string>& type)
     m_startupTypeStr = type ? type.value() : "";
 }
 
-mu::io::path_t StartupScenario::startupScorePath() const
+mu::project::ProjectFile StartupScenario::startupScoreFile() const
 {
-    return m_startupScorePath;
+    return m_startupScoreFile;
 }
 
-void StartupScenario::setStartupScorePath(const std::optional<io::path_t>& path)
+void StartupScenario::setStartupScoreFile(const std::optional<project::ProjectFile>& path)
 {
-    m_startupScorePath = path ? path.value() : "";
+    m_startupScoreFile = path ? path.value() : project::ProjectFile();
 }
 
 void StartupScenario::run()
@@ -113,7 +113,7 @@ bool StartupScenario::startupCompleted() const
 
 StartupModeType StartupScenario::resolveStartupModeType() const
 {
-    if (!m_startupScorePath.empty()) {
+    if (m_startupScoreFile.isValid()) {
         return StartupModeType::StartWithScore;
     }
 
@@ -138,9 +138,9 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
         restoreLastSession();
         break;
     case StartupModeType::StartWithScore: {
-        io::path_t path = m_startupScorePath.empty() ? configuration()->startupScorePath()
-                          : m_startupScorePath;
-        openScore(path);
+        project::ProjectFile file
+            = m_startupScoreFile.isValid() ? m_startupScoreFile : project::ProjectFile { configuration()->startupScorePath() };
+        openScore(file);
     } break;
     }
 
@@ -164,9 +164,9 @@ mu::Uri StartupScenario::startupPageUri(StartupModeType modeType) const
     return HOME_URI;
 }
 
-void StartupScenario::openScore(const io::path_t& path)
+void StartupScenario::openScore(const project::ProjectFile& file)
 {
-    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path_t>(path));
+    dispatcher()->dispatch("file-open-projectfile", ActionData::make_arg1<project::ProjectFile>(file));
 }
 
 void StartupScenario::restoreLastSession()

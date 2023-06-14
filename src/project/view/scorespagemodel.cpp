@@ -23,7 +23,8 @@
 #include "scorespagemodel.h"
 
 #include "actions/actiontypes.h"
-#include "io/path.h"
+
+#include "projecttypes.h"
 
 using namespace mu::project;
 using namespace mu::actions;
@@ -43,9 +44,9 @@ void ScoresPageModel::openOther()
     dispatcher()->dispatch("file-open");
 }
 
-void ScoresPageModel::openScore(const QString& scorePath)
+void ScoresPageModel::openScore(const QString& scorePath, const QString& displayNameOverride)
 {
-    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path_t>(io::path_t(scorePath)));
+    dispatcher()->dispatch("file-open-projectfile", ActionData::make_arg1<ProjectFile>({ io::path_t(scorePath), displayNameOverride }));
 }
 
 void ScoresPageModel::openScoreManager()

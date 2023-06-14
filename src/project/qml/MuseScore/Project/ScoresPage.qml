@@ -226,8 +226,8 @@ FocusScope {
                 scoresPageModel.createNewScore()
             }
 
-            onOpenScoreRequested: function(scorePath) {
-                Qt.callLater(scoresPageModel.openScore, scorePath)
+            onOpenScoreRequested: function(scorePath, displayName) {
+                Qt.callLater(scoresPageModel.openScore, scorePath, displayName)
             }
         }
     }
@@ -252,8 +252,8 @@ FocusScope {
                 scoresPageModel.createNewScore()
             }
 
-            onOpenScoreRequested: function(scorePath) {
-                Qt.callLater(scoresPageModel.openScore, scorePath)
+            onOpenScoreRequested: function(scorePath, displayName) {
+                Qt.callLater(scoresPageModel.openScore, scorePath, displayName)
             }
 
             Connections {

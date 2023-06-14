@@ -76,7 +76,8 @@ public:
     bool canReceiveAction(const actions::ActionCode& code) const override;
 
     bool isFileSupported(const io::path_t& path) const override;
-    Ret openProject(const io::path_t& projectPath) override;
+    Ret openProject(const io::path_t& path) override;
+    Ret openProject(const ProjectFile& file) override;
     bool closeOpenedProject(bool quitApp = false) override;
     bool isProjectOpened(const io::path_t& scorePath) const override;
     bool isAnyProjectOpened() const override;
@@ -96,7 +97,8 @@ private:
 
     void newProject();
 
-    void openProject(const actions::ActionData& args);
+    void action_openProject(const actions::ActionData& args);
+    void action_openProjectFile(const actions::ActionData& args);
     void doOpenProject(const io::path_t& path, int scoreId);
     void downloadAndOpenCloudProject(int scoreId);
 
@@ -157,7 +159,7 @@ private:
 
     void revertCorruptedScoreToLastSaved();
 
-    RecentFile makeRecentFile(INotationProjectPtr project);
+    ProjectFile makeRecentFile(INotationProjectPtr project);
 
     void moveProject(INotationProjectPtr project, const io::path_t& newPath, bool replace);
 

@@ -136,6 +136,9 @@ void CommandLineParser::init()
     m_parser.addOption(QCommandLineOption("register-audio-plugin",
                                           "Check an audio plugin for compatibility with the application and register it", "path"));
     m_parser.addOption(QCommandLineOption("register-failed-audio-plugin", "Register an incompatible audio plugin", "path"));
+
+    // Internal
+    m_parser.addOption(QCommandLineOption("score-display-name-override", "", "name"));
 }
 
 void CommandLineParser::parse(int argc, char** argv)
@@ -452,6 +455,11 @@ void CommandLineParser::parse(int argc, char** argv)
     if (m_runMode == IApplication::RunMode::GuiApp) {
         if (!scorefiles.isEmpty()) {
             m_options.startup.scorePath = scorefiles[0].toStdString();
+        }
+
+        if (m_parser.isSet("score-display-name-override")) {
+            LOGD() << m_parser.value("score-display-name-override");
+            m_options.startup.scoreDisplayNameOverride = m_parser.value("score-display-name-override");
         }
     }
 }

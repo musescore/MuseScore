@@ -40,7 +40,7 @@ Item {
     property alias navigation: navPanel
 
     signal createNewScoreRequested()
-    signal openScoreRequested(var scorePath)
+    signal openScoreRequested(var scorePath, var displayName)
 
     clip: true
 
@@ -163,7 +163,7 @@ Item {
                     if (isCreateNew) {
                         root.createNewScoreRequested()
                     } else if (!isNoResultFound) {
-                        root.openScoreRequested(score.path)
+                        root.openScoreRequested(score.path, score.name)
                     }
                 }
             }

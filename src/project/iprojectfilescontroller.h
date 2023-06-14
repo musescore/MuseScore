@@ -38,6 +38,7 @@ public:
 
     virtual bool isFileSupported(const io::path_t& path) const = 0;
     virtual Ret openProject(const io::path_t& path) = 0;
+    virtual Ret openProject(const ProjectFile& file) = 0;
     virtual bool closeOpenedProject(bool quitApp = false) = 0;
     virtual bool isProjectOpened(const io::path_t& path) const = 0;
     virtual bool isAnyProjectOpened() const = 0;

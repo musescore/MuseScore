@@ -50,7 +50,8 @@ static mu::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress");
 void ProjectActionsController::init()
 {
     dispatcher()->reg(this, "file-new", this, &ProjectActionsController::newProject);
-    dispatcher()->reg(this, "file-open", this, &ProjectActionsController::openProject);
+    dispatcher()->reg(this, "file-open", this, &ProjectActionsController::action_openProject);
+    dispatcher()->reg(this, "file-open-projectfile", this, &ProjectActionsController::action_openProjectFile);
 
     dispatcher()->reg(this, "file-close", [this]() {
         bool quitApp = multiInstancesProvider()->instances().size() > 1;
@@ -107,8 +108,9 @@ bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
 {
     if (!currentNotationProject()) {
         static const std::unordered_set<ActionCode> DONT_REQUIRE_OPEN_PROJECT {
-            "file-open",
             "file-new",
+            "file-open",
+            "file-open-projectfile",
             "file-import-pdf",
             "continue-last-session",
             "clear-recent",
@@ -140,13 +142,24 @@ bool ProjectActionsController::isFileSupported(const io::path_t& path) const
     return false;
 }
 
-void ProjectActionsController::openProject(const actions::ActionData& args)
+void ProjectActionsController::action_openProject(const actions::ActionData& args)
 {
     io::path_t projectPath = !args.empty() ? args.arg<io::path_t>(0) : "";
     openProject(projectPath);
 }
 
-Ret ProjectActionsController::openProject(const io::path_t& projectPath_)
+void ProjectActionsController::action_openProjectFile(const actions::ActionData& args)
+{
+    ProjectFile file = !args.empty() ? args.arg<ProjectFile>(0) : ProjectFile();
+    openProject(file);
+}
+
+Ret ProjectActionsController::openProject(const io::path_t& path)
+{
+    return openProject(ProjectFile { path });
+}
+
+Ret ProjectActionsController::openProject(const ProjectFile& file)
 {
     //! NOTE This method is synchronous,
     //! but inside `multiInstancesProvider` there can be an event loop
@@ -164,7 +177,7 @@ Ret ProjectActionsController::openProject(const io::path_t& projectPath_)
     };
 
     //! Step 1. If no path is specified, ask the user to select a project
-    io::path_t projectPath = fileSystem()->absoluteFilePath(projectPath_);
+    io::path_t projectPath = fileSystem()->absoluteFilePath(file.path);
     if (projectPath.empty()) {
         projectPath = selectScoreOpeningFile();
 
@@ -189,6 +202,11 @@ Ret ProjectActionsController::openProject(const io::path_t& projectPath_)
     if (globalContext()->currentProject()) {
         QStringList args;
         args << projectPath.toQString();
+
+        if (!file.displayNameOverride.isEmpty()) {
+            args << "--score-display-name-override" << file.displayNameOverride;
+        }
+
         multiInstancesProvider()->openNewAppInstance(args);
         return make_ret(Ret::Code::Ok);
     }
@@ -1286,9 +1304,9 @@ void ProjectActionsController::revertCorruptedScoreToLastSaved()
     }
 }
 
-RecentFile ProjectActionsController::makeRecentFile(INotationProjectPtr project)
+ProjectFile ProjectActionsController::makeRecentFile(INotationProjectPtr project)
 {
-    RecentFile file;
+    ProjectFile file;
     file.path = project->path();
 
     if (project->isCloudProject()) {
@@ -1386,7 +1404,7 @@ void ProjectActionsController::clearRecentScores()
 
 void ProjectActionsController::continueLastSession()
 {
-    const RecentFilesList& recentScorePaths = recentFilesController()->recentFilesList();
+    const ProjectFilesList& recentScorePaths = recentFilesController()->recentFilesList();
 
     if (recentScorePaths.empty()) {
         return;
