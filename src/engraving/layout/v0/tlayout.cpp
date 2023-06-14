@@ -2883,7 +2883,7 @@ void TLayout::layout(KeySig* item, LayoutContext&)
 
     item->setbbox(RectF());
 
-    item->_sig.keySymbols().clear();
+    item->keySymbols().clear();
     if (item->staff() && !item->staff()->staffType(item->tick())->genKeysig()) {
         return;
     }
@@ -2908,15 +2908,15 @@ void TLayout::layout(KeySig* item, LayoutContext&)
         }
     }
 
-    int t1 = int(item->_sig.key());
+    int t1 = int(item->key());
 
     if (item->isCustom() && !item->isAtonal()) {
         double accidentalGap = item->score()->styleS(Sid::keysigAccidentalDistance).val();
         // add standard key accidentals first, if necessary
         for (int i = 1; i <= abs(t1) && abs(t1) <= 7; ++i) {
             bool drop = false;
-            for (CustDef& cd: item->_sig.customKeyDefs()) {
-                int degree = item->_sig.degInKey(cd.degree);
+            for (const CustDef& cd: item->customKeyDefs()) {
+                int degree = item->degInKey(cd.degree);
                 // if custom keysig accidental takes place, don't create tonal accidental
                 if ((degree * 2 + 2) % 7 == (t1 < 0 ? 8 - i : i) % 7) {
                     drop = true;
@@ -2928,27 +2928,27 @@ void TLayout::layout(KeySig* item, LayoutContext&)
                 int lineIndexOffset = t1 > 0 ? -1 : 6;
                 ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
                 ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
-                if (item->_sig.keySymbols().size() > 0) {
-                    KeySym& previous = item->_sig.keySymbols().back();
+                if (item->keySymbols().size() > 0) {
+                    KeySym& previous = item->keySymbols().back();
                     double previousWidth = item->symWidth(previous.sym) / _spatium;
                     ks.xPos = previous.xPos + previousWidth + accidentalGap;
                 } else {
                     ks.xPos = 0;
                 }
                 // TODO octave metters?
-                item->_sig.keySymbols().push_back(ks);
+                item->keySymbols().push_back(ks);
             }
         }
-        for (CustDef& cd : item->_sig.customKeyDefs()) {
-            SymId sym = item->_sig.symInKey(cd.sym, cd.degree);
-            int degree = item->_sig.degInKey(cd.degree);
+        for (const CustDef& cd : item->customKeyDefs()) {
+            SymId sym = item->symInKey(cd.sym, cd.degree);
+            int degree = item->degInKey(cd.degree);
             bool flat = std::string(SymNames::nameForSymId(sym).ascii()).find("Flat") != std::string::npos;
             int accIdx = (degree * 2 + 1) % 7; // C D E F ... index to F C G D index
             accIdx = flat ? 13 - accIdx : accIdx;
             int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
             double xpos = cd.xAlt;
-            if (item->_sig.keySymbols().size() > 0) {
-                KeySym& previous = item->_sig.keySymbols().back();
+            if (item->keySymbols().size() > 0) {
+                KeySym& previous = item->keySymbols().back();
                 double previousWidth = item->symWidth(previous.sym) / _spatium;
                 xpos += previous.xPos + previousWidth + accidentalGap;
             }
@@ -2965,7 +2965,7 @@ void TLayout::layout(KeySig* item, LayoutContext&)
                     ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
                     sym = cd.sym;
                 }
-                item->_sig.keySymbols().push_back(ks);
+                item->keySymbols().push_back(ks);
                 xpos += t1 < 0 ? 0.7 : 1; // flats closer
             }
             // create symbol; natural only if is user defined
@@ -2974,7 +2974,7 @@ void TLayout::layout(KeySig* item, LayoutContext&)
                 ks.sym = sym;
                 ks.line = line;
                 ks.xPos = xpos;
-                item->_sig.keySymbols().push_back(ks);
+                item->keySymbols().push_back(ks);
             }
         }
     } else {
@@ -3010,7 +3010,7 @@ void TLayout::layout(KeySig* item, LayoutContext&)
         Measure* prevMeasure = item->measure() ? item->measure()->prevMeasure() : 0;
 
         // If we're not force hiding naturals (Continuous panel), use score style settings
-        if (!item->_hideNaturals) {
+        if (!item->hideNaturals()) {
             const bool newSection = (!item->segment()
                                      || (item->segment()->rtick().isZero() && (!prevMeasure || prevMeasure->sectionBreak()))
                                      );
@@ -3112,7 +3112,7 @@ void TLayout::layout(KeySig* item, LayoutContext&)
     }
 
     // compute bbox
-    for (KeySym& ks : item->_sig.keySymbols()) {
+    for (const KeySym& ks : item->keySymbols()) {
         double x = ks.xPos * _spatium;
         double y = ks.line * step;
         item->addbbox(item->symBbox(ks.sym).translated(x, y));
@@ -3126,8 +3126,8 @@ void TLayout::keySigAddLayout(KeySig* item, SymId sym, int line)
     KeySym ks;
     ks.sym = sym;
     double x = 0.0;
-    if (item->_sig.keySymbols().size() > 0) {
-        KeySym& previous = item->_sig.keySymbols().back();
+    if (item->keySymbols().size() > 0) {
+        KeySym& previous = item->keySymbols().back();
         double accidentalGap = item->score()->styleS(Sid::keysigAccidentalDistance).val();
         if (previous.sym != sym) {
             accidentalGap *= 2;
@@ -3148,7 +3148,7 @@ void TLayout::keySigAddLayout(KeySig* item, SymId sym, int line)
     }
     ks.xPos = x;
     ks.line = line;
-    item->_sig.keySymbols().push_back(ks);
+    item->keySymbols().push_back(ks);
 }
 
 void TLayout::layout(LayoutBreak* item, LayoutContext&)
