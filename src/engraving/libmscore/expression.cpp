@@ -157,5 +157,12 @@ void Expression::mapPropertiesFromOldExpressions(StaffText* staffText)
         setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         setPropertyFlags(Pid::SNAP_TO_DYNAMICS, PropertyFlags::UNSTYLED);
     }
+    if (staffText->frameType() != FrameType::NO_FRAME) {
+        setFrameType(staffText->frameType());
+        setFrameWidth(staffText->frameWidth());
+        setFrameColor(staffText->frameColor());
+        setBgColor(staffText->bgColor());
+        setFrameRound(staffText->frameRound());
+    }
 }
 } // namespace mu::engraving
