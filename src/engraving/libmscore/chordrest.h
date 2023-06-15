@@ -197,6 +197,7 @@ public:
 
 protected:
 
+    friend class layout::v0::TLayout;
     friend class layout::v0::ChordLayout;
 
     std::vector<Lyrics*> _lyrics;

@@ -3713,7 +3713,7 @@ void TLayout::layout(RehearsalMark* item, LayoutContext& ctx)
 
 void TLayout::layout(Rest* item, LayoutContext& ctx)
 {
-    if (item->m_gap) {
+    if (item->isGap()) {
         return;
     }
     for (EngravingItem* e : item->el()) {
@@ -3721,7 +3721,7 @@ void TLayout::layout(Rest* item, LayoutContext& ctx)
     }
 
     item->setSkipDraw(false);
-    if (item->_deadSlapped) {
+    if (item->deadSlapped()) {
         item->setSkipDraw(true);
         return;
     }
@@ -3764,7 +3764,7 @@ void TLayout::layout(Rest* item, LayoutContext& ctx)
         }
     }
 
-    item->m_dotline = Rest::getDotline(item->durationType().type());
+    item->setDotLine(Rest::getDotline(item->durationType().type()));
 
     double yOff = item->offset().y();
     const Staff* stf = item->staff();
@@ -3778,11 +3778,11 @@ void TLayout::layout(Rest* item, LayoutContext& ctx)
     int wholeRestOffset = item->computeWholeRestOffset(voiceOffset, lines);
     int finalLine = naturalLine + voiceOffset + wholeRestOffset;
 
-    item->m_sym = item->getSymbol(item->durationType().type(), finalLine + userLine, lines);
+    item->setSym(item->getSymbol(item->durationType().type(), finalLine + userLine, lines));
 
     item->setPosY(finalLine * lineDist * _spatium);
     if (!item->shouldNotBeDrawn()) {
-        item->setbbox(item->symBbox(item->m_sym));
+        item->setbbox(item->symBbox(item->sym()));
     }
     layoutRestDots(item, ctx);
 }
@@ -3792,8 +3792,8 @@ void TLayout::layoutRestDots(Rest* item, LayoutContext& ctx)
     item->checkDots();
     double x = item->symWidthNoLedgerLines() + item->score()->styleMM(Sid::dotNoteDistance) * item->mag();
     double dx = item->score()->styleMM(Sid::dotDotDistance) * item->mag();
-    double y = item->m_dotline * item->spatium() * .5;
-    for (NoteDot* dot : item->m_dots) {
+    double y = item->dotLine() * item->spatium() * .5;
+    for (NoteDot* dot : item->dotList()) {
         layout(dot, ctx);
         dot->setPos(x, y);
         x += dx;
