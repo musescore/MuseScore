@@ -155,10 +155,11 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
                 qreal lastX =  lastSL->bbox().right()
                               + lastSL->pagePos().x()
                               - firstSL->pagePos().x();
-                std::vector<mu::LineF>& lines = firstSL->getLines();
+                std::vector<mu::LineF> lines = firstSL->lines();
                 for (size_t l = 0, c = lines.size(); l < c; l++) {
                     lines[l].setP2(mu::PointF(lastX, lines[l].p2().y()));
                 }
+                firstSL->setLines(lines);
 
                 printer.setElement(firstSL);
                 engraving::Paint::paintElement(painter, firstSL);
