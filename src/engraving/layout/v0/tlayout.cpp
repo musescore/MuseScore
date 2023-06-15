@@ -3808,14 +3808,14 @@ void TLayout::layout(ShadowNote* item, LayoutContext&)
     }
     double _spatium = item->spatium();
     RectF newBbox;
-    RectF noteheadBbox = item->symBbox(item->m_noteheadSymbol);
+    RectF noteheadBbox = item->symBbox(item->noteheadSymbol());
     bool up = item->computeUp();
 
     // TODO: Take into account accidentals and articulations?
 
     // Layout dots
     double dotWidth = 0;
-    if (item->m_duration.dots() > 0) {
+    if (item->duration().dots() > 0) {
         double noteheadWidth = noteheadBbox.width();
         double d  = item->score()->styleMM(Sid::dotNoteDistance) * item->mag();
         double dd = item->score()->styleMM(Sid::dotDotDistance) * item->mag();
@@ -3823,7 +3823,7 @@ void TLayout::layout(ShadowNote* item, LayoutContext&)
         if (item->hasFlag() && up) {
             dotWidth = std::max(dotWidth, noteheadWidth + item->symBbox(item->flagSym()).right());
         }
-        for (int i = 0; i < item->m_duration.dots(); i++) {
+        for (int i = 0; i < item->duration().dots(); i++) {
             dotWidth += dd * i;
         }
     }
@@ -3836,7 +3836,7 @@ void TLayout::layout(ShadowNote* item, LayoutContext&)
 
         double stemWidth = item->score()->styleMM(Sid::stemWidth);
         double stemLength = (up ? -3.5 : 3.5) * _spatium;
-        double stemAnchor = item->symSmuflAnchor(item->m_noteheadSymbol, up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
+        double stemAnchor = item->symSmuflAnchor(item->noteheadSymbol(), up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
         newBbox |= RectF(up ? x + w - stemWidth : x,
                          stemAnchor,
                          stemWidth,
@@ -3852,7 +3852,7 @@ void TLayout::layout(ShadowNote* item, LayoutContext&)
     }
 
     // Layout ledger lines if needed
-    if (!item->m_isRest && item->m_lineIndex < 100 && item->m_lineIndex > -100) {
+    if (!item->isRest() && item->lineIndex() < 100 && item->lineIndex() > -100) {
         double extraLen = item->score()->styleMM(Sid::ledgerLineLength) * item->mag();
         double step = 0.5 * _spatium * item->staffType()->lineDistance().val();
         double x = noteheadBbox.x() - extraLen;
@@ -3861,12 +3861,12 @@ void TLayout::layout(ShadowNote* item, LayoutContext&)
         double lw = item->score()->styleMM(Sid::ledgerLineWidth);
 
         RectF r(x, -lw * .5, w, lw);
-        for (int i = -2; i >= item->m_lineIndex; i -= 2) {
-            newBbox |= r.translated(PointF(0, step * (i - item->m_lineIndex)));
+        for (int i = -2; i >= item->lineIndex(); i -= 2) {
+            newBbox |= r.translated(PointF(0, step * (i - item->lineIndex())));
         }
         int l = item->staffType()->lines() * 2; // first ledger line below staff
-        for (int i = l; i <= item->m_lineIndex; i += 2) {
-            newBbox |= r.translated(PointF(0, step * (i - item->m_lineIndex)));
+        for (int i = l; i <= item->lineIndex(); i += 2) {
+            newBbox |= r.translated(PointF(0, step * (i - item->lineIndex())));
         }
     }
     item->setbbox(newBbox);

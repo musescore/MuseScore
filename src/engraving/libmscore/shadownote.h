@@ -26,9 +26,6 @@
 #include "engravingitem.h"
 #include "durationtype.h"
 
-#include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
-
 namespace mu::engraving {
 //---------------------------------------------------------
 //   ShadowNote
@@ -57,6 +54,10 @@ public:
     int lineIndex() const { return m_lineIndex; }
     void setLineIndex(int n) { m_lineIndex = n; }
 
+    bool isRest() const { return m_isRest; }
+
+    const TDuration& duration() const { return m_duration; }
+
     void setState(SymId noteSymbol, TDuration duration, bool isRest, double segmentSkylineTopY, double segmentSkylineBottomY);
 
     void draw(mu::draw::Painter*) const override;
@@ -71,16 +72,15 @@ public:
     SymId flagSym() const;
 
 private:
-    friend class layout::v0::TLayout;
 
     Fraction m_tick;
-    int m_lineIndex;
-    SymId m_noteheadSymbol;
+    int m_lineIndex = -1;
+    SymId m_noteheadSymbol = SymId::noSym;
     TDuration m_duration;
-    bool m_isRest;
+    bool m_isRest = false;
 
-    double m_segmentSkylineTopY = 0;
-    double m_segmentSkylineBottomY = 0;
+    double m_segmentSkylineTopY = 0.0;
+    double m_segmentSkylineBottomY = 0.0;
 };
 } // namespace mu::engraving
 #endif
