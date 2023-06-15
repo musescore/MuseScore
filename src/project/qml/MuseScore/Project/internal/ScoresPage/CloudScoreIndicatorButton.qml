@@ -37,6 +37,12 @@ Item {
     width: 26
     height: 26
 
+    QtObject {
+        id: prv
+
+        readonly property string toolTipText: root.isProgress ? qsTrc("project", "Stop download") : qsTrc("project", "Download score")
+    }
+
     NavigationControl {
         id: navCtrl
 
@@ -44,7 +50,7 @@ Item {
         enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.Button
-        accessible.name: root.isProgress ? qsTrc("project", "Cancel download") : qsTrc("project", "Download score")
+        accessible.name: prv.toolTipText
         accessible.visualItem: root
         accessible.enabled: navCtrl.enabled
 
@@ -148,6 +154,18 @@ Item {
         anchors.fill: root
 
         hoverEnabled: true
+
+        onContainsMouseChanged: {
+            if (mouseArea.containsMouse) {
+                ui.tooltip.show(root, prv.toolTipText)
+            } else {
+                ui.tooltip.hide(root)
+            }
+        }
+
+        onPressed: {
+            ui.tooltip.hide(root, true)
+        }
 
         onClicked: {
             root.clicked()
