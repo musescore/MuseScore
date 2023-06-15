@@ -333,6 +333,8 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
     QFile* projectData = new QFile(localPath.toQString());
     if (!projectData->open(QIODevice::WriteOnly)) {
         // TODO(cloud): show error dialog?
+
+        delete projectData;
         return;
     }
 
