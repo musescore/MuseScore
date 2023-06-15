@@ -447,16 +447,16 @@ EngravingObjectList Note::scanChildren() const
 {
     EngravingObjectList children;
 
-    if (_accidental) {
-        children.push_back(_accidental);
+    if (m_accidental) {
+        children.push_back(m_accidental);
     }
 
-    for (NoteDot* noteDot : _dots) {
+    for (NoteDot* noteDot : m_dots) {
         children.push_back(noteDot);
     }
 
-    if (_tieFor) {
-        children.push_back(_tieFor);
+    if (m_tieFor) {
+        children.push_back(m_tieFor);
     }
 
     for (EngravingItem* element : el()) {
