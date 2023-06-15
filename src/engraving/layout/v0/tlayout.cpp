@@ -3421,18 +3421,18 @@ void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
 
 void TLayout::layout(MMRest* item, LayoutContext& ctx)
 {
-    item->m_number = item->measure()->mmRestCount();
-    item->m_numberSym = timeSigSymIdsFromString(String::number(item->m_number));
+    item->setNumber(item->measure()->mmRestCount());
+    item->setNumberSym(item->number());
 
     for (EngravingItem* e : item->el()) {
         layoutItem(e, ctx);
     }
 
     if (item->score()->styleB(Sid::oldStyleMultiMeasureRests)) {
-        item->m_restSyms.clear();
-        item->m_symsWidth = 0;
+        SymIdList restSyms;
+        double symsWidth = 0.0;
 
-        int remaining = item->m_number;
+        int remaining = item->number();
         double spacing = item->score()->styleMM(Sid::mmRestOldStyleSpacing);
         SymId sym;
 
@@ -3448,26 +3448,29 @@ void TLayout::layout(MMRest* item, LayoutContext& ctx)
                 remaining -= 1;
             }
 
-            item->m_restSyms.push_back(sym);
-            item->m_symsWidth += item->symBbox(sym).width();
+            restSyms.push_back(sym);
+            symsWidth += item->symBbox(sym).width();
 
             if (remaining > 0) { // do not add spacing after last symbol
-                item->m_symsWidth += spacing;
+                symsWidth += spacing;
             }
         }
 
-        double symHeight = item->symBbox(item->m_restSyms[0]).height();
-        item->setbbox(RectF((item->m_width - item->m_symsWidth) * .5, -item->spatium(), item->m_symsWidth, symHeight));
+        item->setRestSyms(restSyms);
+        item->setSymsWidth(symsWidth);
+
+        double symHeight = item->symBbox(item->restSyms().at(0)).height();
+        item->setbbox(RectF((item->width() - item->symsWidth()) * .5, -item->spatium(), item->symsWidth(), symHeight));
     } else { // H-bar
         double vStrokeHeight = item->score()->styleMM(Sid::mmRestHBarVStrokeHeight);
-        item->setbbox(RectF(0.0, -(vStrokeHeight * .5), item->m_width, vStrokeHeight));
+        item->setbbox(RectF(0.0, -(vStrokeHeight * .5), item->width(), vStrokeHeight));
     }
 
     // Only need to set y position here; x position is handled in MeasureLayout::layoutMeasureElements()
     const StaffType* staffType = item->staffType();
     item->setPos(0, (staffType->middleLine() / 2.0) * staffType->lineDistance().val() * item->spatium());
 
-    if (item->m_numberVisible) {
+    if (item->numberVisible()) {
         item->addbbox(item->numberRect());
     }
 }
