@@ -3743,24 +3743,24 @@ void TLayout::layout(Rest* item, LayoutContext& ctx)
                 dots           = dur.dots();
             }
             // symbol needed; if not exist, create, if exists, update duration
-            if (!item->_tabDur) {
-                item->_tabDur = new TabDurationSymbol(item, stt, type, dots);
+            if (!item->tabDur()) {
+                item->setTabDur(new TabDurationSymbol(item, stt, type, dots));
             } else {
-                item->_tabDur->setDuration(type, dots, stt);
+                item->tabDur()->setDuration(type, dots, stt);
             }
-            item->_tabDur->setParent(item);
+            item->tabDur()->setParent(item);
 // needed?        _tabDur->setTrack(track());
-            layout(item->_tabDur, ctx);
-            item->setbbox(item->_tabDur->bbox());
+            layout(item->tabDur(), ctx);
+            item->setbbox(item->tabDur()->bbox());
             item->setPos(0.0, 0.0);                   // no rest is drawn: reset any position might be set for it
             return;
         }
         // if no rests or no duration symbols, delete any dur. symbol and chain into standard staff mngmt
         // this is to ensure horiz space is reserved for rest, even if they are not displayed
         // Rest::draw() will skip their drawing, if not needed
-        if (item->_tabDur) {
-            delete item->_tabDur;
-            item->_tabDur = 0;
+        if (item->tabDur()) {
+            delete item->tabDur();
+            item->setTabDur(nullptr);
         }
     }
 

@@ -62,7 +62,7 @@ Rest::Rest(Segment* parent)
 Rest::Rest(const ElementType& type, Segment* parent)
     : ChordRest(type, parent)
 {
-    _beamMode  = BeamMode::NONE;
+    m_beamMode  = BeamMode::NONE;
     m_sym      = SymId::restQuarter;
 }
 
@@ -74,7 +74,7 @@ Rest::Rest(Segment* parent, const TDuration& d)
 Rest::Rest(const ElementType& type, Segment* parent, const TDuration& d)
     : ChordRest(type, parent)
 {
-    _beamMode  = BeamMode::NONE;
+    m_beamMode  = BeamMode::NONE;
     m_sym      = SymId::restQuarter;
     setDurationType(d);
     if (d.fraction().isValid()) {
@@ -677,7 +677,7 @@ PointF Rest::stemPos() const
 PointF Rest::stemPosBeam() const
 {
     PointF p(pagePos());
-    if (_up) {
+    if (m_up) {
         p.ry() += bbox().top() + spatium() * 1.5;
     } else {
         p.ry() += bbox().bottom() - spatium() * 1.5;
@@ -691,7 +691,7 @@ PointF Rest::stemPosBeam() const
 
 double Rest::stemPosX() const
 {
-    if (_up) {
+    if (m_up) {
         return bbox().right();
     } else {
         return bbox().left();

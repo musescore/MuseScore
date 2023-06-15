@@ -76,19 +76,19 @@ public:
 
     virtual Segment* segment() const { return (Segment*)explicitParent(); }
 
-    void setBeamMode(BeamMode m) { _beamMode = m; }
+    void setBeamMode(BeamMode m) { m_beamMode = m; }
     void undoSetBeamMode(BeamMode m);
-    BeamMode beamMode() const { return _beamMode; }
+    BeamMode beamMode() const { return m_beamMode; }
 
     void setBeam(Beam* b);
     void setBeamlet(BeamSegment* b);
     virtual Beam* beam() const final;
-    int beams() const { return _durationType.hooks(); }
+    int beams() const { return m_durationType.hooks(); }
     virtual double upPos()   const = 0;
     virtual double downPos() const = 0;
 
     int line(bool up) const { return up ? upLine() : downLine(); }
-    int line() const { return _up ? upLine() : downLine(); }
+    int line() const { return m_up ? upLine() : downLine(); }
     virtual int upLine() const = 0;
     virtual int downLine() const = 0;
     virtual mu::PointF stemPos() const = 0;
@@ -96,49 +96,50 @@ public:
     virtual mu::PointF stemPosBeam() const = 0;
     virtual double rightEdge() const = 0;
 
-    void setUp(bool val) { _up = val; }
-    bool up() const { return _up; }
-    bool usesAutoUp() const { return _usesAutoUp; }
+    void setUp(bool val) { m_up = val; }
+    bool up() const { return m_up; }
+    bool usesAutoUp() const { return m_usesAutoUp; }
+    void setUsesAutoUp(bool val) { m_usesAutoUp = val; }
 
     bool isSmall() const { return m_isSmall; }
     void setSmall(bool val) { m_isSmall = val; }
     void undoSetSmall(bool val);
 
-    int staffMove() const { return _staffMove; }
-    int storedStaffMove() const { return _storedStaffMove; }
-    void setStaffMove(int val) { _staffMove = val; }
-    staff_idx_t vStaffIdx() const override { return staffIdx() + _staffMove; }
+    int staffMove() const { return m_staffMove; }
+    void setStaffMove(int val) { m_staffMove = val; }
+    int storedStaffMove() const { return m_storedStaffMove; }
+    staff_idx_t vStaffIdx() const override { return staffIdx() + m_staffMove; }
     void checkStaffMoveValidity();
 
     const TDuration durationType() const
     {
-        return _crossMeasure == CrossMeasure::FIRST
-               ? _crossMeasureTDur : _durationType;
+        return m_crossMeasure == CrossMeasure::FIRST
+               ? m_crossMeasureTDur : m_durationType;
     }
 
-    const TDuration actualDurationType() const { return _durationType; }
+    const TDuration actualDurationType() const { return m_durationType; }
     void setDurationType(DurationType t);
     void setDurationType(const Fraction& ticks);
     void setDurationType(TDuration v);
-    void setDots(int n) { _durationType.setDots(n); }
+    void setDots(int n) { m_durationType.setDots(n); }
     int dots() const
     {
-        return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.dots()
-               : (_crossMeasure == CrossMeasure::SECOND ? 0 : _durationType.dots());
+        return m_crossMeasure == CrossMeasure::FIRST ? m_crossMeasureTDur.dots()
+               : (m_crossMeasure == CrossMeasure::SECOND ? 0 : m_durationType.dots());
     }
 
-    int actualDots() const { return _durationType.dots(); }
+    int actualDots() const { return m_durationType.dots(); }
     Fraction durationTypeTicks() const
     {
-        return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.ticks() : _durationType.ticks();
+        return m_crossMeasure == CrossMeasure::FIRST ? m_crossMeasureTDur.ticks() : m_durationType.ticks();
     }
 
     String durationUserName() const;
 
     void setTrack(track_idx_t val) override;
 
-    const std::vector<Lyrics*>& lyrics() const { return _lyrics; }
-    std::vector<Lyrics*>& lyrics() { return _lyrics; }
+    const std::vector<Lyrics*>& lyrics() const { return m_lyrics; }
+    std::vector<Lyrics*>& lyrics() { return m_lyrics; }
     Lyrics* lyrics(int verse) const;
     Lyrics* lyrics(int verse, PlacementV) const;
     int lastVerse(PlacementV) const;
@@ -150,18 +151,18 @@ public:
     void removeDeleteBeam(bool beamed);
     void replaceBeam(Beam* newBeam);
 
-    ElementList& el() { return _el; }
-    const ElementList& el() const { return _el; }
+    ElementList& el() { return m_el; }
+    const ElementList& el() const { return m_el; }
 
     Slur* slur(const ChordRest* secondChordRest = nullptr) const;
 
-    CrossMeasure crossMeasure() const { return _crossMeasure; }
-    void setCrossMeasure(CrossMeasure val) { _crossMeasure = val; }
+    CrossMeasure crossMeasure() const { return m_crossMeasure; }
+    void setCrossMeasure(CrossMeasure val) { m_crossMeasure = val; }
 
     // the following two functions should not be used, unless absolutely necessary;
     // the cross-measure duration is best managed through setDuration() and crossMeasureSetup()
-    TDuration crossMeasureDurationType() const { return _crossMeasureTDur; }
-    void setCrossMeasureDurationType(TDuration v) { _crossMeasureTDur = v; }
+    TDuration crossMeasureDurationType() const { return m_crossMeasureTDur; }
+    void setCrossMeasureDurationType(TDuration v) { m_crossMeasureTDur = v; }
 
     void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue getProperty(Pid propertyId) const override;
@@ -186,7 +187,7 @@ public:
     virtual Shape shape() const override;
     virtual void computeUp();
 
-    bool isFullMeasureRest() const { return _durationType == DurationType::V_MEASURE; }
+    bool isFullMeasureRest() const { return m_durationType == DurationType::V_MEASURE; }
     virtual void removeMarkings(bool keepTremolo = false);
 
     bool isBefore(const ChordRest*) const;
@@ -195,34 +196,34 @@ public:
 
     virtual double intrinsicMag() const = 0;
 
+    TabDurationSymbol* tabDur() const { return m_tabDur; }
+    void setTabDur(TabDurationSymbol* s) { m_tabDur = s; }
+
 protected:
 
-    friend class layout::v0::TLayout;
-    friend class layout::v0::ChordLayout;
+    std::vector<Lyrics*> m_lyrics;
+    TabDurationSymbol* m_tabDur = nullptr;  // stores a duration symbol in tablature staves
 
-    std::vector<Lyrics*> _lyrics;
-    TabDurationSymbol* _tabDur;           // stores a duration symbol in tablature staves
-
-    Beam* _beam;
-    BeamSegment* _beamlet = nullptr;
-    BeamMode _beamMode;
-    bool _up;                             // actual stem direction
-    bool _usesAutoUp;
-    bool m_isSmall;
-    bool _melismaEnd;
+    Beam* m_beam = nullptr;
+    BeamSegment* m_beamlet = nullptr;
+    BeamMode m_beamMode = BeamMode::INVALID;
+    bool m_up = false;                      // actual stem direction
+    bool m_usesAutoUp = false;
+    bool m_isSmall = false;
+    bool m_melismaEnd = false;
 
     // CrossMeasure: combine 2 tied notes if across a bar line and can be combined in a single duration
-    CrossMeasure _crossMeasure;           ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
-    TDuration _crossMeasureTDur;          ///< the total Duration type of the combined notes
+    CrossMeasure m_crossMeasure = CrossMeasure::UNKNOWN;           ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
+    TDuration m_crossMeasureTDur;          ///< the total Duration type of the combined notes
 
 private:
 
     void processSiblings(std::function<void(EngravingItem*)> func);
 
-    ElementList _el;
-    TDuration _durationType;
-    int _staffMove; // -1, 0, +1, used for crossbeaming
-    int _storedStaffMove = 0; // used to remember and re-apply staff move if needed
+    ElementList m_el;
+    TDuration m_durationType;
+    int m_staffMove = 0; // -1, 0, +1, used for crossbeaming
+    int m_storedStaffMove = 0; // used to remember and re-apply staff move if needed
 };
 } // namespace mu::engraving
 #endif
