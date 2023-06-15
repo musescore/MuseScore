@@ -1669,7 +1669,7 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
         } else if (kSegment && !isPitchedStaff) {
             EngravingItem* e = kSegment->element(track);
             if (e && e->isKeySig()) {
-                kSegment->remove(e);
+                kSegment->setVisible(false);
             }
         }
 
