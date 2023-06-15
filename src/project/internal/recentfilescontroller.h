@@ -62,7 +62,7 @@ protected:
 private:
     void loadRecentFilesList();
     void removeNonexistentFiles();
-    void setRecentFilesList(const RecentFilesList& list, bool save);
+    void setRecentFilesList(const RecentFilesList& list, bool saveAndNotify);
     void saveRecentFilesList();
 
     void cleanUpThumbnailCache(const RecentFilesList& files);
@@ -70,7 +70,7 @@ private:
     mutable bool m_dirty = true;
     mutable RecentFilesList m_recentFilesList;
     async::Notification m_recentFilesListChanged;
-    mutable bool m_reloadingBlocked = false;
+    mutable bool m_isSaving = false;
 
     struct CachedThumbnail {
         QPixmap thumbnail;

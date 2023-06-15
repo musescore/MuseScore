@@ -44,11 +44,11 @@ void RecentFilesController::init()
 
     multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
         if (resourceName == RECENT_FILES_RESOURCE_NAME) {
-            if (!m_reloadingBlocked) {
+            if (!m_isSaving) {
                 m_dirty = true;
-            }
 
-            m_recentFilesListChanged.notify();
+                m_recentFilesListChanged.notify();
+            }
         }
     });
 }
@@ -162,11 +162,13 @@ void RecentFilesController::removeNonexistentFiles()
 
         async::Async::call(nullptr, [this, newList]() {
             saveRecentFilesList();
+
+            m_recentFilesListChanged.notify();
         });
     }
 }
 
-void RecentFilesController::setRecentFilesList(const RecentFilesList& list, bool save)
+void RecentFilesController::setRecentFilesList(const RecentFilesList& list, bool saveAndNotify)
 {
     if (m_recentFilesList == list) {
         return;
@@ -176,8 +178,10 @@ void RecentFilesController::setRecentFilesList(const RecentFilesList& list, bool
 
     cleanUpThumbnailCache(list);
 
-    if (save) {
+    if (saveAndNotify) {
         saveRecentFilesList();
+
+        m_recentFilesListChanged.notify();
     }
 }
 
@@ -185,10 +189,10 @@ void RecentFilesController::saveRecentFilesList()
 {
     TRACEFUNC;
 
-    m_reloadingBlocked = true;
+    m_isSaving = true;
 
     DEFER {
-        m_reloadingBlocked = false;
+        m_isSaving = false;
     };
 
     QJsonArray jsonArray;
