@@ -293,7 +293,7 @@ mu::Ret AudioComService::doUploadAudio(network::INetworkManagerPtr uploadManager
     if (!ret) {
         printServerReply(receivedData);
         notifyServerAboutFailUpload(fail, token);
-        ret = uploadingRetFromRawUploadingRet(ret);
+        ret = uploadingDownloadingRetFromRawRet(ret);
     } else {
         notifyServerAboutSuccessUpload(success, token);
     }
@@ -324,7 +324,7 @@ Ret AudioComService::doCreateAudio(network::INetworkManagerPtr manager, const QS
 
     if (!ret) {
         printServerReply(receivedData);
-        ret = uploadingRetFromRawUploadingRet(ret);
+        ret = uploadingDownloadingRetFromRawRet(ret);
         return ret;
     }
 

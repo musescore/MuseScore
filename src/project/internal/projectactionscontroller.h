@@ -102,6 +102,8 @@ private:
     void doOpenProject(const io::path_t& path, int scoreId);
     void downloadAndOpenCloudProject(int scoreId);
 
+    void showScoreDownloadError(const Ret& ret);
+
     bool checkCanIgnoreError(const Ret& ret, const String& projectName);
     bool askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText);
     bool askIfUserAgreesToOpenCorruptedProject(const String& projectName, const std::string& errorText);

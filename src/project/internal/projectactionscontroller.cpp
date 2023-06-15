@@ -29,8 +29,10 @@
 #include "translation.h"
 #include "async/async.h"
 
+#include "cloud/clouderrors.h"
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
+#include "network/networkerrors.h"
 #include "projecterrors.h"
 
 #include "log.h"
@@ -311,14 +313,16 @@ Ret ProjectActionsController::doOpenCloudProject(const io::path_t& filePath, con
 void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
 {
     if (!scoreId) {
-        // TODO(cloud): error handling?
-        // Might happen when user tries to open score that saved as a cloud score but upload did not fully succeed?
+        // Might happen when user tries to open score that saved as a cloud score but upload did not fully succeed
+        LOGE() << "invalid cloud score id";
+        showScoreDownloadError(make_ret(Err::InvalidCloudScoreId));
         return;
     }
 
     RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
     if (!scoreInfo.ret) {
-        // TODO(cloud): show error dialog?
+        LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
+        showScoreDownloadError(scoreInfo.ret);
         return;
     }
 
@@ -332,7 +336,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
     io::path_t localPath = configuration()->cloudProjectPath(scoreId);
     QFile* projectData = new QFile(localPath.toQString());
     if (!projectData->open(QIODevice::WriteOnly)) {
-        // TODO(cloud): show error dialog?
+        showScoreDownloadError(make_ret(Err::FileOpenError));
 
         delete projectData;
         return;
@@ -351,7 +355,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
 
         if (!res.ret) {
             LOGE() << res.ret.toString();
-            // TODO(cloud): show error dialog?
+            showScoreDownloadError(res.ret);
             return;
         }
 
@@ -1329,6 +1333,41 @@ void ProjectActionsController::moveProject(INotationProjectPtr project, const io
     project->setPath(newPath);
 
     recentFilesController()->moveRecentFile(oldPath, makeRecentFile(project));
+}
+
+void ProjectActionsController::showScoreDownloadError(const Ret& ret)
+{
+    std::string title = trc("project", "Your score could not be opened");
+    std::string message;
+
+    switch (ret.code()) {
+    case int(Err::InvalidCloudScoreId):
+        message = trc("project", "This score is invalid.");
+        break;
+    case int(Err::FileOpenError):
+        message = trc("project", "The file could not be downloaded to your disk.");
+        break;
+    case int(network::Err::NetworkError):
+        message = trc("project", "Could not connect to <a href=\"https://musescore.com\">musescore.com</a>. "
+                                 "Please check your internet connection, or try again later.");
+        break;
+    case int(cloud::Err::AccountNotActivated):
+        message = trc("project", "Your musescore.com account needs to be verified first. "
+                                 "Please activate your account via the link in the activation email.");
+        break;
+    case int(cloud::Err::NetworkError):
+        message = cloud::cloudNetworkErrorUserDescription(ret);
+        if (!message.empty()) {
+            message += "\n\n" + trc("project/save", "Please try again later.");
+            break;
+        }
+    // FALLTHROUGH
+    default:
+        message = trc("project/save", "Please try again later.");
+        break;
+    }
+
+    interactive()->warning(title, message);
 }
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const String& projectName)

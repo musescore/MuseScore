@@ -333,13 +333,8 @@ mu::Ret MuseScoreComService::doDownloadScore(network::INetworkManagerPtr downloa
     }
 
     Ret ret = downloadManager->get(downloadUrl.val, &scoreData, headers());
-//    if (!ret) {
-//        printServerReply(receivedData);
 
-//        return uploadingRetFromRawUploadingRet(ret, isScoreAlreadyUploaded);
-//    }
-
-    return ret;
+    return uploadingDownloadingRetFromRawRet(ret);
 }
 
 ProgressPtr MuseScoreComService::uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility, const QUrl& sourceUrl,
@@ -483,7 +478,7 @@ mu::RetVal<mu::ValMap> MuseScoreComService::doUploadScore(INetworkManagerPtr upl
     if (!ret) {
         printServerReply(receivedData);
 
-        result.ret = uploadingRetFromRawUploadingRet(ret, isScoreAlreadyUploaded);
+        result.ret = uploadingDownloadingRetFromRawRet(ret, isScoreAlreadyUploaded);
 
         return result;
     }
