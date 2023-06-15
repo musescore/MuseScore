@@ -103,9 +103,12 @@ public:
     double symWidthNoLedgerLines() const;
     NoteDot* dot(int n);
     const std::vector<NoteDot*>& dotList() const;
-    int getDotline() const { return m_dotline; }
+    int dotLine() const { return m_dotline; }
+    void setDotLine(int l) { m_dotline = l; }
+
     static int getDotline(DurationType durationType);
     SymId sym() const { return m_sym; }
+    void setSym(SymId s) { m_sym = s; }
     bool accent();
     void setAccent(bool flag);
 
@@ -113,6 +116,8 @@ public:
     int computeVoiceOffset(int lines); // Vertical displacement in multi-voice cases
     int computeWholeRestOffset(int voiceOffset, int lines);
     bool isWholeRest() const;
+
+    DeadSlapped* deadSlapped() const { return m_deadSlapped; }
 
     int upLine() const override;
     int downLine() const override;
@@ -150,24 +155,23 @@ protected:
 
 private:
 
-    friend class layout::v0::TLayout;
     friend class Factory;
     Rest(Segment* parent);
     Rest(Segment* parent, const TDuration&);
-
-    // values calculated by layout:
-    SymId m_sym;
-    int m_dotline   { -1 };          // depends on rest symbol
-    bool m_gap      { false };       // invisible and not selectable for user
-    std::vector<NoteDot*> m_dots;
-    DeadSlapped* _deadSlapped = nullptr;
-
-    RestVerticalClearance m_verticalClearance;
 
     mu::RectF drag(EditData&) override;
     double upPos() const override;
     double downPos() const override;
     void setOffset(const mu::PointF& o) override;
+
+    // values calculated by layout:
+    SymId m_sym = SymId::noSym;
+    int m_dotline = -1;             // depends on rest symbol
+    bool m_gap = false;             // invisible and not selectable for user
+    std::vector<NoteDot*> m_dots;
+    DeadSlapped* m_deadSlapped = nullptr;
+
+    RestVerticalClearance m_verticalClearance;
 
     std::vector<Rest*> m_mergedRests; // Rests from other voices that may be merged with this
 };

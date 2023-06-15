@@ -96,11 +96,11 @@ Rest::Rest(const Rest& r, bool link)
         add(Factory::copyNoteDot(*dot));
     }
 
-    if (r._deadSlapped) {
-        DeadSlapped* ndc = Factory::copyDeadSlapped(*r._deadSlapped);
+    if (r.m_deadSlapped) {
+        DeadSlapped* ndc = Factory::copyDeadSlapped(*r.m_deadSlapped);
         add(ndc);
         if (link) {
-            score()->undo(new Link(ndc, r._deadSlapped));
+            score()->undo(new Link(ndc, r.m_deadSlapped));
         }
     }
 }
@@ -779,7 +779,7 @@ void Rest::add(EngravingItem* e)
         e->added();
         break;
     case ElementType::DEAD_SLAPPED:
-        _deadSlapped = toDeadSlapped(e);
+        m_deadSlapped = toDeadSlapped(e);
     // fallthrough
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
@@ -804,7 +804,7 @@ void Rest::remove(EngravingItem* e)
         e->removed();
         break;
     case ElementType::DEAD_SLAPPED:
-        _deadSlapped = nullptr;
+        m_deadSlapped = nullptr;
     // fallthrough
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
