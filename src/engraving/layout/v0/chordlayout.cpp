@@ -3044,19 +3044,19 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     bool isTabStaff = staffType && staffType->isTabStaff();
     // First, for tab staves that have show back-tied fret marks option, we add parentheses to the tied note if
     // the tie spans a system boundary. This can't be done in layout as the system of each note is not decided yet
-    bool useParens = isTabStaff && !staffType->showBackTied() && !item->_fixed;
+    bool useParens = isTabStaff && !staffType->showBackTied() && !item->fixed();
     if (useParens
         && item->tieBack()
         && (
             item->chord()->measure()->system() != item->tieBack()->startNote()->chord()->measure()->system()
             || !item->el().empty()
             )) {
-        item->_fretString = String(u"(%1)").arg(item->_fretString);
+        item->setFretString(String(u"(%1)").arg(item->fretString()));
         double w = item->tabHeadWidth(staffType);     // !! use _fretString
         item->bbox().setRect(0, staffType->fretBoxY() * item->magS(), w, staffType->fretBoxH() * item->magS());
     }
     int dots = item->chord()->dots();
-    if (dots && !item->_dots.empty()) {
+    if (dots && !item->dots().empty()) {
         // if chords have notes with different mag, dots must still  align
         double correctMag = item->chord()->notes().size() > 1 ? item->chord()->mag() : item->mag();
         double d  = item->score()->point(item->score()->styleS(Sid::dotNoteDistance)) * correctMag;
@@ -3092,14 +3092,14 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         }
         // apply to dots
         double xx = x + d;
-        for (NoteDot* dot : item->_dots) {
+        for (NoteDot* dot : item->dots()) {
             dot->setPosX(xx);
             xx += dd;
         }
     }
 
     // layout elements attached to note
-    for (EngravingItem* e : item->_el) {
+    for (EngravingItem* e : item->el()) {
         if (!item->score()->tagIsValid(e->tag())) {
             continue;
         }
