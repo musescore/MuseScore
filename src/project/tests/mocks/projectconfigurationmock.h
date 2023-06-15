@@ -56,8 +56,8 @@ public:
     MOCK_METHOD(bool, shouldAskSaveLocationType, (), (const, override));
     MOCK_METHOD(void, setShouldAskSaveLocationType, (bool), (override));
 
-    MOCK_METHOD(bool, isOldCloudProject, (const io::path_t& projectPath), (const, override));
-    MOCK_METHOD(bool, isNewCloudProject, (const io::path_t& projectPath), (const, override));
+    MOCK_METHOD(bool, isCloudProject, (const io::path_t& projectPath), (const, override));
+    MOCK_METHOD(bool, isLegacyCloudProject, (const io::path_t& projectPath), (const, override));
     MOCK_METHOD(io::path_t, cloudProjectPath, (int scoreId), (const, override));
     MOCK_METHOD(int, cloudScoreIdFromPath, (const io::path_t& projectPath), (const, override));
 

@@ -109,7 +109,7 @@ void ProjectConfiguration::init()
         fileSystem()->makePath(userProjectsPath());
     }
 
-    fileSystem()->makePath(newCloudProjectsPath());
+    fileSystem()->makePath(cloudProjectsPath());
 }
 
 io::path_t ProjectConfiguration::recentFilesJsonPath() const
@@ -219,29 +219,30 @@ void ProjectConfiguration::setShouldAskSaveLocationType(bool shouldAsk)
     settings()->setSharedValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(shouldAsk));
 }
 
-io::path_t ProjectConfiguration::oldCloudProjectsPath() const
+io::path_t ProjectConfiguration::legacyCloudProjectsPath() const
 {
     return globalConfiguration()->userDataPath() + "/Cloud Scores";
 }
 
-io::path_t ProjectConfiguration::newCloudProjectsPath() const
+io::path_t ProjectConfiguration::cloudProjectsPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/cloud_scores";
 }
 
-bool ProjectConfiguration::isOldCloudProject(const io::path_t& projectPath) const
+bool ProjectConfiguration::isCloudProject(const io::path_t& projectPath) const
 {
-    return io::dirpath(projectPath) == oldCloudProjectsPath();
+    io::path_t dirpath = io::dirpath(projectPath);
+    return dirpath == legacyCloudProjectsPath() || dirpath == cloudProjectsPath();
 }
 
-bool ProjectConfiguration::isNewCloudProject(const io::path_t& projectPath) const
+bool ProjectConfiguration::isLegacyCloudProject(const io::path_t& projectPath) const
 {
-    return io::dirpath(projectPath) == newCloudProjectsPath();
+    return io::dirpath(projectPath) == legacyCloudProjectsPath();
 }
 
 io::path_t ProjectConfiguration::cloudProjectPath(int scoreId) const
 {
-    return newCloudProjectsPath().appendingComponent(QString::number(scoreId)).appendingSuffix(DEFAULT_FILE_SUFFIX);
+    return cloudProjectsPath().appendingComponent(QString::number(scoreId)).appendingSuffix(DEFAULT_FILE_SUFFIX);
 }
 
 int ProjectConfiguration::cloudScoreIdFromPath(const io::path_t& projectPath) const
@@ -259,7 +260,7 @@ io::path_t ProjectConfiguration::cloudProjectSavingPath(int scoreId) const
     int counter = 0;
 
     do {
-        path = newCloudProjectsPath()
+        path = cloudProjectsPath()
                .appendingComponent(QStringLiteral("not_uploaded_") + QString::number(counter++))
                .appendingSuffix(DEFAULT_FILE_SUFFIX);
     } while (fileSystem()->exists(path));

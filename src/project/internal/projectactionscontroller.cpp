@@ -214,7 +214,7 @@ Ret ProjectActionsController::openProject(const ProjectFile& file)
     }
 
     //! Step 5. If it's a cloud project, download the latest version
-    if (configuration()->isNewCloudProject(projectPath)) {
+    if (configuration()->isCloudProject(projectPath) && !configuration()->isLegacyCloudProject(projectPath)) {
         downloadAndOpenCloudProject(configuration()->cloudScoreIdFromPath(projectPath));
         return make_ret(Ret::Code::Ok);
     }

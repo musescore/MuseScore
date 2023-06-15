@@ -431,7 +431,7 @@ async::Notification NotationProject::displayNameChanged() const
 
 bool NotationProject::isCloudProject() const
 {
-    return configuration()->isNewCloudProject(m_path) || configuration()->isOldCloudProject(m_path);
+    return configuration()->isCloudProject(m_path);
 }
 
 const CloudProjectInfo& NotationProject::cloudInfo() const

@@ -73,8 +73,8 @@ public:
     bool shouldAskSaveLocationType() const override;
     void setShouldAskSaveLocationType(bool shouldAsk) override;
 
-    bool isOldCloudProject(const io::path_t& projectPath) const override;
-    bool isNewCloudProject(const io::path_t& projectPath) const override;
+    bool isCloudProject(const io::path_t& projectPath) const override;
+    bool isLegacyCloudProject(const io::path_t& projectPath) const override;
     io::path_t cloudProjectPath(int scoreId) const override;
     int cloudScoreIdFromPath(const io::path_t& projectPath) const override;
 
@@ -141,8 +141,8 @@ public:
 
 private:
     io::path_t appTemplatesPath() const;
-    io::path_t oldCloudProjectsPath() const;
-    io::path_t newCloudProjectsPath() const;
+    io::path_t legacyCloudProjectsPath() const;
+    io::path_t cloudProjectsPath() const;
 
     async::Channel<io::path_t> m_userTemplatesPathChanged;
     async::Channel<io::path_t> m_userScoresPathChanged;
