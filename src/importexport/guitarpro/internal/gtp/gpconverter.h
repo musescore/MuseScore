@@ -8,9 +8,11 @@
 #include "gpbeat.h"
 #include "gpdrumsetresolver.h"
 #include "gpmastertracks.h"
+#include "../continiouselementsbuilder.h"
 #include "types/fraction.h"
 
 #include "libmscore/vibrato.h"
+#include "libmscore/ottava.h"
 
 #include "iengravingconfiguration.h"
 
@@ -29,35 +31,6 @@ public:
     void convertGP();
 
     const std::unique_ptr<GPDomModel>& gpDom() const;
-
-    enum class LineImportType {
-        NONE,
-        LET_RING,
-        PALM_MUTE,
-        WHAMMY_BAR,
-        RASGUEADO,
-        PICK_SCRAPE,
-
-        /// harmonics
-        HARMONIC_ARTIFICIAL,
-        HARMONIC_PINCH,
-        HARMONIC_TAP,
-        HARMONIC_SEMI,
-        HARMONIC_FEEDBACK,
-
-        /// ottavas
-        OTTAVA_MA15,
-        OTTAVA_VA8,
-        OTTAVA_VB8,
-        OTTAVA_MB15,
-
-        /// trill
-        TRILL,
-
-        /// hairpin
-        CRESCENDO,
-        DIMINUENDO,
-    };
 
 private:
 
@@ -117,7 +90,6 @@ private:
     ChordRest* addChordRest(const GPBeat* beats, const Context& ctx);
     void addOrnament(const GPNote* gpnote, Note* note);
     void addVibratoLeftHand(const GPNote* gpnote, Note* note);
-    void addVibratoByType(const Note* note, mu::engraving::VibratoType type);
     void addTrill(const GPNote* gpnote, Note* note);
     Note* addHarmonic(const GPNote* gpnote, Note* note);
     void addFingering(const GPNote* gpnote, Note* note);
@@ -156,6 +128,7 @@ private:
     void addHarmonicMark(const GPBeat* gpbeat, ChordRest* cr);
     void setupTupletStyle(mu::engraving::Tuplet* tuplet);
     void addVibratoWTremBar(const GPBeat* beat, ChordRest* cr);
+    void addVibratoLeftHand(const GPBeat* beat, ChordRest* cr);
     void addFadding(const GPBeat* beat, ChordRest* cr);
     void addHairPin(const GPBeat* beat, ChordRest* cr);
     void addRasgueado(const GPBeat* beat, ChordRest* cr);
@@ -176,20 +149,6 @@ private:
     int getStringNumberFor(Note* pNote, int pitch) const;
     void fillTuplet();
     bool tupletParamsChanged(const GPBeat* beat, const ChordRest* cr);
-
-    /**
-     * Making the current element of continious type (octave, let ring, trill etc.. inherited from SLine) longer or starting a new one
-     *
-     * @param cr ChordRest to which element will be added
-     * @param elements vector storing current continious elements for each existing track
-     * @param muType type from MU
-     * @param importType type of imported element
-     * @param elemExists indicates if element exists in imported file on current beat
-     * @param splitByRests indicates if continious elements of current type should be split by rests
-     */
-    void buildContiniousElement(ChordRest* cr, std::vector<mu::engraving::SLine*>& elements, mu::engraving::ElementType muType,
-                                LineImportType importType, bool elemExists, bool splitByRests = false);
-
     void setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measure, Fraction tick);
 
     mu::engraving::Score* _score;
@@ -215,25 +174,6 @@ private:
     std::unordered_map<track_idx_t, mu::engraving::Slur*> _slurs; // map(track, slur)
 
     mutable GPBeat* m_currentGPBeat = nullptr; // used for passing info from notes
-    std::unordered_map<track_idx_t, std::unordered_map<mu::engraving::ElementType, LineImportType> > m_lastImportTypes;
-
-    struct ContiniousElement {
-        std::vector<mu::engraving::SLine*> elements;
-        bool endedOnRest = false;
-    };
-
-    std::unordered_map<track_idx_t, std::unordered_map<LineImportType, ContiniousElement> > m_elementsToAddToScore;
-
-    std::vector<mu::engraving::SLine*> m_palmMutes;
-    std::vector<mu::engraving::SLine*> m_letRings;
-    std::vector<mu::engraving::SLine*> m_dives;
-    std::vector<mu::engraving::SLine*> m_pickScrapes;
-    std::vector<mu::engraving::SLine*> m_rasgueados;
-    std::vector<mu::engraving::Vibrato*> _vibratos;
-    std::unordered_map<GPBeat::HarmonicMarkType, std::vector<mu::engraving::SLine*> > m_harmonicMarks;
-    std::unordered_map<GPBeat::OttavaType, std::vector<mu::engraving::SLine*> > m_ottavas;
-    std::unordered_map<GPBeat::Hairpin, std::vector<mu::engraving::SLine*> > m_hairpins;
-    std::vector<mu::engraving::SLine*> m_trillElements;
 
     std::map<uint16_t, uint16_t > _drumExtension;
     mu::engraving::Volta* _lastVolta = nullptr;
@@ -268,6 +208,7 @@ private:
     mu::engraving::BeamMode m_previousBeamMode = mu::engraving::BeamMode::AUTO;
 
     std::unique_ptr<GPDrumSetResolver> _drumResolver;
+    std::unique_ptr<ContiniousElementsBuilder> m_continiousElementsBuilder;
 };
 } // namespace mu::iex::guitarpro
 #endif // MU_IMPORTEXPORT_GPCONVERTER_H

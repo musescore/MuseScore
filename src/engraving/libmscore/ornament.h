@@ -73,11 +73,16 @@ public:
 
     void setTrillOldCompatAccidental(Accidental* a) { _trillOldCompatAccidental = a; }
 
+    Note* noteAbove() const { return _notesAboveAndBelow[0]; }
+    Note* noteBelow() const { return _notesAboveAndBelow[1]; }
+
+    void setTrack(track_idx_t val) override;
+
 private:
     void updateAccidentalsAboveAndBelow();
     void updateCueNote();
-    Note* noteAbove() const { return _notesAboveAndBelow[0]; }
-    Note* noteBelow() const { return _notesAboveAndBelow[1]; }
+    void mapOldTrillAccidental(Note* note, const Note* mainNote);
+    void manageAccidentalVisibilityRules(Note* note);
 
 private:
     M_PROPERTY(OrnamentInterval, intervalAbove, setIntervalAbove)

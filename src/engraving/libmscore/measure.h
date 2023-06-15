@@ -217,17 +217,12 @@ public:
     void setLayoutStretch(double stretchCoeff) { m_layoutStretch = stretchCoeff; }
     double layoutStretch() const { return m_layoutStretch; }
 
-    void layoutMeasureElements();
     Fraction computeTicks();
     Fraction shortestChordRest() const;
     Fraction maxTicks() const;
 
-    void layoutCrossStaff() override;
-
     bool showsMeasureNumber();
     bool showsMeasureNumberInAutoMode();
-    void layoutMeasureNumber();
-    void layoutMMRestRange();
 
     Chord* findChord(Fraction tick, track_idx_t track);
     ChordRest* findChordRest(Fraction tick, track_idx_t track);
@@ -271,11 +266,7 @@ public:
 
     void connectTremolo();
 
-    double createEndBarLines(bool);
-    void barLinesSetSpan(Segment*);
     void setEndBarLineType(BarLineType val, track_idx_t track, bool visible = true, mu::draw::Color color = mu::draw::Color());
-
-    void createSystemBeginBarLine();
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void createVoice(int track);
@@ -342,22 +333,15 @@ public:
     AccessibleItemPtr createAccessible() override;
 #endif
 
-    void addSystemHeader(bool firstSystem);
-    void addSystemTrailer(Measure* nm);
-    void removeSystemHeader();
-    void removeSystemTrailer();
-
     const BarLine* endBarLine() const;
     BarLineType endBarLineType() const;
     bool endBarLineVisible() const;
     void triggerLayout() const override;
     double basicStretch() const;
     double basicWidth() const;
-    void computeWidth(Fraction minTicks, Fraction maxTicks, double stretchCoeff, bool overrideMinMeasureWidth = false);
     void stretchToTargetWidth(double targetWidth);
     void checkHeader();
     void checkTrailer();
-    void layoutStaffLines();
 
     bool isWidthLocked() const { return _isWidthLocked; }
     // A measure is widthLocked if its width has been locked by the minMeasureWidth (or minMMRestWidth)
@@ -375,7 +359,6 @@ public:
 
     Fraction quantumOfSegmentCell() const;
 
-    void stretchMeasureInPracticeMode(double stretch);
     double squeezableSpace() const { return _isWidthLocked ? 0.0 : _squeezableSpace; }
 
     void respaceSegments();
@@ -395,9 +378,7 @@ private:
     void push_front(Segment* e);
 
     void fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests = true);
-    void computeWidth(Segment* s, double x, bool isSystemHeader, Fraction minTicks, Fraction maxTicks, double stretchCoeff,
-                      bool overrideMinMeasureWidth = false);
-    double computeMinMeasureWidth() const;
+
     void spaceRightAlignedSegments();
 
     MStaff* mstaff(staff_idx_t staffIndex) const;

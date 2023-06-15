@@ -27,10 +27,6 @@
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
 
-#include "layout/v0/tlayout.h"
-#include "layout/v0/slurtielayout.h"
-#include "layout/v0/chordlayout.h"
-
 #include "beam.h"
 #include "chord.h"
 #include "measure.h"
@@ -184,8 +180,7 @@ bool SlurSegment::edit(EditData& ed)
 
     if (ed.key == Key_Home && !ed.modifiers) {
         ups(ed.curGrip).off = PointF();
-        layout::v0::LayoutContext ctx(score());
-        layout::v0::TLayout::layout(sl, ctx);
+        layout()->layoutItem(sl);
         triggerLayout();
         return true;
     }
@@ -230,7 +225,6 @@ bool SlurSegment::edit(EditData& ed)
 
 void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
 {
-    layout::v0::LayoutContext ctx(score());
     ChordRest* cr = element->isChordRest() ? toChordRest(element) : nullptr;
     ChordRest* scr = spanner()->startCR();
     ChordRest* ecr = spanner()->endCR();
@@ -294,13 +288,13 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
                 }
             }
             score()->undo(new ChangeStartEndSpanner(sp, se, ee));
-            layout::v0::TLayout::layout(sp, ctx);
+            layout()->layoutItem(sp);
         }
     }
 
     const size_t segments  = spanner()->spannerSegments().size();
     ups(ed.curGrip).off = PointF();
-    layout::v0::TLayout::layout(spanner(), ctx);
+    layout()->layoutItem(spanner());
     if (spanner()->spannerSegments().size() != segments) {
         const std::vector<SpannerSegment*>& ss = spanner()->spannerSegments();
         const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::DRAG;
@@ -316,8 +310,7 @@ void SlurSegment::editDrag(EditData& ed)
     System* startSys = slur()->startCR()->measure()->system();
     System* endSys = slur()->endCR()->measure()->system();
     if (startSys && endSys && startSys == endSys) {
-        layout::v0::LayoutContext ctx(score());
-        layout::v0::TLayout::layout(slur(), ctx);
+        layout()->layoutItem(slur());
     }
 }
 
@@ -1013,88 +1006,6 @@ bool Slur::isDirectionMixture(Chord* c1, Chord* c2)
         }
     }
     return false;
-}
-
-//---------------------------------------------------------
-//   layoutSystem
-//    layout slurSegment for system
-//---------------------------------------------------------
-
-SpannerSegment* Slur::layoutSystem(System* system)
-{
-    layout::v0::LayoutContext ctx(score());
-    return layout::v0::SlurTieLayout::layoutSystem(this, system, ctx);
-}
-
-void Slur::computeUp()
-{
-    switch (_slurDirection) {
-    case DirectionV::UP:
-        _up = true;
-        break;
-    case DirectionV::DOWN:
-        _up = false;
-        break;
-    case DirectionV::AUTO:
-    {
-        //
-        // assumption:
-        // slurs have only chords or rests as start/end elements
-        //
-        ChordRest* chordRest1 = startCR();
-        ChordRest* chordRest2 = endCR();
-        if (chordRest1 == 0 || chordRest2 == 0) {
-            _up = true;
-            break;
-        }
-        Chord* chord1 = startCR()->isChord() ? toChord(startCR()) : 0;
-        Chord* chord2 = endCR()->isChord() ? toChord(endCR()) : 0;
-        if (chord2 && startCR()->measure()->system() != endCR()->measure()->system()) {
-            // HACK: if the end chord is in a different system, it may have never been laid out yet.
-            // But we need to know its direction to decide slur direction, so need to compute it here.
-            for (Note* note : chord2->notes()) {
-                note->updateLine(); // because chord direction is based on note lines
-            }
-            layout::v0::LayoutContext ctx(score());
-            layout::v0::ChordLayout::computeUp(chord2, ctx);
-        }
-
-        if (chord1 && chord1->beam() && chord1->beam()->cross()) {
-            // TODO: stem direction is not finalized, so we cannot use it here
-            _up = true;
-            break;
-        }
-
-        _up = !(chordRest1->up());
-
-        // Check if multiple voices
-        bool multipleVoices = false;
-        Measure* m1 = chordRest1->measure();
-        while (m1 && m1->tick() <= chordRest2->tick()) {
-            if ((m1->hasVoices(chordRest1->staffIdx(), tick(), ticks() + chordRest2->ticks()))
-                && chord1) {
-                multipleVoices = true;
-                break;
-            }
-            m1 = m1->nextMeasure();
-        }
-        if (multipleVoices) {
-            // slurs go on the stem side
-            if (chordRest1->voice() > 0 || chordRest2->voice() > 0) {
-                _up = false;
-            } else {
-                _up = true;
-            }
-        } else if (chord1 && chord2 && !chord1->isGrace() && isDirectionMixture(chord1, chord2)) {
-            // slurs go above if there are mixed direction stems between c1 and c2
-            // but grace notes are exceptions
-            _up = true;
-        } else if (chord1 && chord2 && chord1->isGrace() && chord2 != chord1->parent() && isDirectionMixture(chord1, chord2)) {
-            _up = true;
-        }
-    }
-    break;
-    }
 }
 
 //---------------------------------------------------------

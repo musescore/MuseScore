@@ -33,11 +33,18 @@ class ArpeggioLayout
 {
 public:
 
+    static void layout(Arpeggio* item, LayoutContext& ctx);
+
     static void layoutArpeggio2(Arpeggio* item, LayoutContext& ctx);
     static void computeHeight(Arpeggio* item, bool includeCrossStaffHeight = false);
 
     static void layoutOnEditDrag(Arpeggio* item, LayoutContext& ctx);
     static void layoutOnEdit(Arpeggio* item, LayoutContext& ctx);
+
+private:
+    static void symbolLine(Arpeggio* item, SymId end, SymId fill);
+    static double calcTop(Arpeggio* item);
+    static double calcBottom(Arpeggio* item);
 };
 }
 

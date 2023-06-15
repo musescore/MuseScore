@@ -70,8 +70,6 @@ public:
 
     virtual ~BarLine();
 
-    KerningType doComputeKerningType(const EngravingItem*) const override { return KerningType::NON_KERNING; }
-
     BarLine& operator=(const BarLine&) = delete;
 
     void setParent(Segment* parent);
@@ -102,13 +100,13 @@ public:
     void setY1(double v) { m_y1 = v; }
     void setY2(double v) { m_y2 = v; }
 
-    void setSpanStaff(int val) { _spanStaff = val; }
-    void setSpanFrom(int val) { _spanFrom = val; }
-    void setSpanTo(int val) { _spanTo = val; }
+    void setSpanStaff(int val) { m_spanStaff = val; }
+    void setSpanFrom(int val) { m_spanFrom = val; }
+    void setSpanTo(int val) { m_spanTo = val; }
     void setShowTips(bool val);
-    int spanStaff() const { return _spanStaff; }
-    int spanFrom() const { return _spanFrom; }
-    int spanTo() const { return _spanTo; }
+    int spanStaff() const { return m_spanStaff; }
+    int spanFrom() const { return m_spanFrom; }
+    int spanTo() const { return m_spanTo; }
     bool showTips() const;
 
     void startEdit(EditData& ed) override;
@@ -118,14 +116,17 @@ public:
     void endEditDrag(EditData&) override;
     Shape shape() const override;
 
-    const ElementList* el() const { return &_el; }
+    const ElementList* el() const { return &m_el; }
 
     static String translatedUserTypeName(BarLineType);
 
-    void setBarLineType(BarLineType i) { _barLineType = i; }
-    BarLineType barLineType() const { return _barLineType; }
+    void setBarLineType(BarLineType i) { m_barLineType = i; }
+    BarLineType barLineType() const { return m_barLineType; }
 
-    int subtype() const override { return int(_barLineType); }
+    bool isTop() const;
+    bool isBottom() const;
+
+    int subtype() const override { return int(m_barLineType); }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -149,29 +150,26 @@ public:
 
     static const std::vector<BarLineTableItem> barLineTable;
 
+    void calcY() const;
+
 private:
 
-    friend class layout::v0::TLayout;
     friend class Factory;
     BarLine(Segment* parent);
     BarLine(const BarLine&);
 
-    void getY() const;
     void drawDots(mu::draw::Painter* painter, double x) const;
     void drawTips(mu::draw::Painter* painter, bool reversed, double x) const;
-    bool isTop() const;
-    bool isBottom() const;
+
     void drawEditMode(mu::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
 
-    bool neverKernable() const override { return true; }
-
-    int _spanStaff          { 0 };         // span barline to next staff if true, values > 1 are used for importing from 2.x
-    int _spanFrom           { 0 };         // line number on start and end staves
-    int _spanTo             { 0 };
-    BarLineType _barLineType { BarLineType::NORMAL };
+    int m_spanStaff = 0;         // span barline to next staff if true, values > 1 are used for importing from 2.x
+    int m_spanFrom = 0;         // line number on start and end staves
+    int m_spanTo = 0;
+    BarLineType m_barLineType = BarLineType::NORMAL;
     mutable double m_y1 = 0.0;
     mutable double m_y2 = 0.0;
-    ElementList _el;          ///< fermata or other articulations
+    ElementList m_el;          ///< fermata or other articulations
 };
 } // namespace mu::engraving
 

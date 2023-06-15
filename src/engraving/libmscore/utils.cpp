@@ -35,6 +35,7 @@
 #include "page.h"
 #include "part.h"
 #include "pitchspelling.h"
+#include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "sig.h"
@@ -1223,6 +1224,53 @@ void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Ch
             chords.push_back(toChord(e));
         } else if (e->isRest() && !toChordRest(e)->staffMove()) {
             rests.push_back(toRest(e));
+        }
+    }
+}
+
+void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords)
+{
+    // Check if previous segments contain chords in other voices
+    // whose duration overlaps with rests on this segment
+
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack = startTrack + VOICES;
+
+    std::set<track_idx_t> tracksToCheck;
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
+        EngravingItem* item = segment->elementAt(track);
+        if (!item || !item->isRest()) {
+            tracksToCheck.insert(track);
+        }
+    }
+
+    Fraction curTick = segment->rtick();
+    for (Segment* prevSeg = segment->prev(); prevSeg; prevSeg = prevSeg->prev()) {
+        if (!prevSeg->isChordRestType()) {
+            continue;
+        }
+        Fraction prevSegTick = prevSeg->rtick();
+        for (track_idx_t track : tracksToCheck) {
+            EngravingItem* e = prevSeg->elementAt(track);
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            Chord* chord = toChord(e);
+            Fraction chordEndTick = prevSegTick + chord->actualTicks();
+            if (chordEndTick <= curTick) {
+                continue;
+            }
+            Measure* measure = segment->measure();
+            Segment* endSegment = measure->findSegmentR(SegmentType::ChordRest, chordEndTick);
+            if (!endSegment) {
+                continue;
+            }
+            EngravingItem* endItem = endSegment->elementAt(track);
+            if (!endItem || !endItem->isChord()) {
+                continue;
+            }
+
+            chords.push_back(chord);
         }
     }
 }

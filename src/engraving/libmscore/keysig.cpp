@@ -34,6 +34,7 @@
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
+#include "part.h"
 
 #include "log.h"
 
@@ -148,10 +149,30 @@ EngravingItem* KeySig::drop(EditData& data)
 //   setKey
 //---------------------------------------------------------
 
-void KeySig::setKey(Key key)
+void KeySig::setKey(Key cKey)
 {
     KeySigEvent e;
-    e.setKey(key);
+    e.setConcertKey(cKey);
+    if (staff() && !score()->styleB(Sid::concertPitch)) {
+        Interval v = staff()->part()->instrument(tick())->transpose();
+        if (!v.isZero()) {
+            v.flip();
+            Key tKey = transposeKey(cKey, v, staff()->part()->preferSharpFlat());
+            e.setKey(tKey);
+        }
+    }
+    setKeySigEvent(e);
+}
+
+//---------------------------------------------------------
+//   setKey
+//---------------------------------------------------------
+
+void KeySig::setKey(Key cKey, Key tKey)
+{
+    KeySigEvent e;
+    e.setConcertKey(cKey);
+    e.setKey(tKey);
     setKeySigEvent(e);
 }
 
@@ -219,6 +240,8 @@ PropertyValue KeySig::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::KEY:
         return int(key());
+    case Pid::KEY_CONCERT:
+        return int(concertKey());
     case Pid::SHOW_COURTESY:
         return int(showCourtesy());
     case Pid::KEYSIG_MODE:
@@ -236,6 +259,12 @@ bool KeySig::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::KEY:
+        if (generated()) {
+            return false;
+        }
+        setKey(_sig.concertKey(), Key(v.toInt()));
+        break;
+    case Pid::KEY_CONCERT:
         if (generated()) {
             return false;
         }
@@ -273,6 +302,8 @@ PropertyValue KeySig::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::KEY:
+        return int(Key::INVALID);
+    case Pid::KEY_CONCERT:
         return int(Key::INVALID);
     case Pid::SHOW_COURTESY:
         return true;

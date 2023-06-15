@@ -23,8 +23,6 @@
 
 #include "translation.h"
 
-#include "layout/v0/tlayout.h"
-
 #include "../libmscore/ambitus.h"
 #include "../libmscore/barline.h"
 #include "../libmscore/beam.h"
@@ -33,6 +31,7 @@
 #include "../libmscore/dynamic.h"
 #include "../libmscore/expression.h"
 #include "../libmscore/factory.h"
+#include "../libmscore/instrchange.h"
 #include "../libmscore/fermata.h"
 #include "../libmscore/fret.h"
 #include "../libmscore/keysig.h"
@@ -42,6 +41,7 @@
 #include "../libmscore/measurerepeat.h"
 #include "../libmscore/mmrest.h"
 #include "../libmscore/mmrestrange.h"
+#include "../libmscore/part.h"
 #include "../libmscore/score.h"
 #include "../libmscore/segment.h"
 #include "../libmscore/spacer.h"
@@ -258,8 +258,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             if (barLine) {
                 segment = measure->getSegmentR(st, t);
                 segment->add(barLine);
-                layout::v0::LayoutContext lctx(barLine->score());
-                layout::v0::TLayout::layout(barLine, lctx);
+                EngravingItem::layout()->layoutItem(barLine);
             }
             if (fermata) {
                 segment->add(fermata);
@@ -541,6 +540,25 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 el->setTrack(0); // original system object always goes on top
             }
             segment->add(el);
+            if (el->type() == ElementType::INSTRUMENT_CHANGE) {
+                Fraction tick = ctx.tick();
+                Key key = staff->key(tick);
+                Key cKey = staff->concertKey(tick);
+                Interval vi = staff->part()->instrument(tick)->transpose();
+                Interval vk = calculateInterval(cKey, key);
+                bool concertPitch = measure->score()->styleB(Sid::concertPitch);
+                if (!concertPitch && vk.chromatic != abs(vi.chromatic)) {
+                    InstrumentChange* ic = toInstrumentChange(el);
+                    for (KeySig* ks : ic->keySigs(true)) {
+                        KeySigEvent ke = ks->keySigEvent();
+                        ke.setConcertKey(transposeKey(key, vi));
+                        ke.setKey(key);
+                        ks->setKeySigEvent(ke);
+                        //segment->add(ks);
+                        staff->setKey(tick, ke);
+                    }
+                }
+            }
         } else if (tag == "Fermata") {
             fermata = Factory::createFermata(ctx.dummy());
             fermata->setTrack(ctx.track());

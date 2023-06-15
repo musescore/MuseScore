@@ -76,7 +76,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>-5</accidental>
+            <concertKey>-5</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>

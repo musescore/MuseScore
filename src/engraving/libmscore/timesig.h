@@ -126,8 +126,6 @@ private:
     friend class Factory;
     TimeSig(Segment* parent = 0);
 
-    bool neverKernable() const override { return true; }
-
     String _numeratorString;       // calculated from actualSig() if !customText
     String _denominatorString;
 

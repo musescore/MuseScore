@@ -1071,7 +1071,7 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
     const SymId articSym = notation.symId();
     const QString direction = notation.attribute("type");
     Fermata* na = Factory::createFermata(cr);
-    na->setSymId(articSym);
+    na->setSymIdAndTimeStretch(articSym);
     na->setTrack(cr->track());
     if (!direction.isNull()) { // Only for case where XML attribute is present (isEmpty wouldn't work)
         na->setPlacement(direction == "inverted" ? PlacementV::BELOW : PlacementV::ABOVE);
@@ -1676,8 +1676,7 @@ static void addBarlineToMeasure(Measure* measure, const Fraction tick, std::uniq
         st = SegmentType::BeginBarLine;
     }
     const auto segment = measure->getSegment(st, tick);
-    layout::v0::LayoutContext ctx(barline->score());
-    layout::v0::TLayout::layout(barline.get(), ctx);
+    EngravingItem::layout()->layoutItem(barline.get());
     segment->add(barline.release());
 }
 
@@ -3822,7 +3821,14 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "fifths") {
-            key.setKey(Key(_e.readElementText().toInt()));
+            Key tKey = Key(_e.readElementText().toInt());
+            Key cKey = tKey;
+            Interval v = _pass1.getPart(partId)->instrument()->transpose();
+            if (!v.isZero() && !_score->styleB(Sid::concertPitch)) {
+                cKey = transposeKey(tKey, v);
+            }
+            key.setConcertKey(cKey);
+            key.setKey(tKey);
         } else if (_e.name() == "mode") {
             QString m = _e.readElementText();
             if (m == "none") {

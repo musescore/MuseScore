@@ -22,8 +22,6 @@
 
 #include "stafflines.h"
 
-#include "layout/v0/tlayout.h"
-
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
@@ -83,63 +81,6 @@ PointF StaffLines::canvasPos() const
         e = e->parentItem();
     }
     return p;
-}
-
-//---------------------------------------------------------
-//   layoutForWidth
-//---------------------------------------------------------
-
-void StaffLines::layoutForWidth(double w)
-{
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layoutForWidth(this, w, ctx);
-}
-
-//---------------------------------------------------------
-//   layoutPartialWidth
-///   Layout staff lines for the specified width only, aligned
-///   to the left or right of the measure
-//---------------------------------------------------------
-
-void StaffLines::layoutPartialWidth(double w, double wPartial, bool alignRight)
-{
-    const Staff* s = staff();
-    double _spatium = spatium();
-    wPartial *= spatium();
-    double dist     = _spatium;
-    setPos(PointF(0.0, 0.0));
-    int _lines;
-    if (s) {
-        setMag(s->staffMag(measure()->tick()));
-        setColor(s->color(measure()->tick()));
-        const StaffType* st = s->staffType(measure()->tick());
-        dist         *= st->lineDistance().val();
-        _lines        = st->lines();
-        setPosY(st->yoffset().val() * _spatium);
-    } else {
-        _lines = 5;
-        setColor(engravingConfiguration()->defaultColor());
-    }
-    m_lw       = score()->styleS(Sid::staffLineWidth).val() * _spatium;
-    double x1 = pos().x();
-    double x2 = x1 + w;
-    double y  = pos().y();
-    bbox().setRect(x1, -m_lw * .5 + y, w, (_lines - 1) * dist + m_lw);
-
-    if (_lines == 1) {
-        double extraSize = _spatium;
-        bbox().adjust(0, -extraSize, 0, extraSize);
-    }
-
-    m_lines.clear();
-    for (int i = 0; i < _lines; ++i) {
-        if (alignRight) {
-            m_lines.push_back(LineF(x2 - wPartial, y, x2, y));
-        } else {
-            m_lines.push_back(LineF(x1, y, x1 + wPartial, y));
-        }
-        y += dist;
-    }
 }
 
 RectF StaffLines::hitBBox() const

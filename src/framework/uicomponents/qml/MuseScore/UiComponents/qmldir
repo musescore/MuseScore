@@ -12,7 +12,9 @@ ExpandableBlank 1.0 ExpandableBlank.qml
 ExpandableBlankSection 1.0 ExpandableBlankSection.qml
 FlatButton 1.0 FlatButton.qml
 FlatRadioButton 1.0 FlatRadioButton.qml
+FlatRadioButtonList 1.0 FlatRadioButtonList.qml
 FlatToggleButton 1.0 FlatToggleButton.qml
+ToggleButton 1.0 ToggleButton.qml
 IncrementalPropertyControl 1.0 IncrementalPropertyControl.qml
 RadioButtonGroup 1.0 RadioButtonGroup.qml
 SeparatorLine 1.0 SeparatorLine.qml

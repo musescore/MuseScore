@@ -31,23 +31,13 @@
 
 #include "draw/types/brush.h"
 
-#include "layout/v0/tlayout.h"
-#include "layout/v0/beamlayout.h"
-
 #include "actionicon.h"
 #include "chord.h"
 #include "groups.h"
 #include "measure.h"
-#include "mscore.h"
-#include "note.h"
-#include "rest.h"
 #include "score.h"
 #include "segment.h"
-#include "spanner.h"
 #include "staff.h"
-#include "stafftype.h"
-#include "stem.h"
-#include "stemslash.h"
 #include "system.h"
 #include "tremolo.h"
 #include "tuplet.h"

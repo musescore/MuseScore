@@ -297,7 +297,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
     }
 
     System* system = ctx.score()->systems().front();
-    system->setInstrumentNames(ctx, /* longNames */ true);
+    SystemLayout::setInstrumentNames(system, ctx, /* longNames */ true);
 
     PointF pos;
     bool firstMeasure = true;       //lc.startTick.isZero();
@@ -329,34 +329,34 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
                 m->mmRest()->resetExplicitParent();
             }
             if (firstMeasure) {
-                system->layoutSystem(ctx, pos.rx());
+                SystemLayout::layoutSystem(system, ctx, pos.rx());
                 if (m->repeatStart()) {
                     Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
                         s->setEnabled(true);
                     }
                 }
-                m->addSystemHeader(true);
+                MeasureLayout::addSystemHeader(m, true, ctx);
                 pos.rx() += system->leftMargin();
                 firstMeasure = false;
             } else if (m->header()) {
-                m->removeSystemHeader();
+                MeasureLayout::removeSystemHeader(m);
             }
             if (m->trailer()) {
-                m->removeSystemTrailer();
+                MeasureLayout::removeSystemTrailer(m, ctx);
             }
             if (m->tick() >= ctx.startTick && m->tick() <= ctx.endTick) {
                 // for measures in range, do full layout
                 if (options.isMode(LayoutMode::HORIZONTAL_FIXED)) {
-                    m->createEndBarLines(true);
+                    MeasureLayout::createEndBarLines(m, true, ctx);
                     m->layoutSegmentsInPracticeMode(visibleParts);
                     ww = m->width();
-                    m->stretchMeasureInPracticeMode(ww);
+                    MeasureLayout::stretchMeasureInPracticeMode(m, ww, ctx);
                 } else {
-                    m->createEndBarLines(false);
-                    m->computeWidth(minTicks, maxTicks, 1);
+                    MeasureLayout::createEndBarLines(m, false, ctx);
+                    MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, 1);
                     ww = m->width();
-                    m->layoutMeasureElements();
+                    MeasureLayout::layoutMeasureElements(m, ctx);
                 }
             } else {
                 // for measures not in range, use existing layout
@@ -383,7 +383,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
                 }
             }
             m->setPos(pos);
-            m->layoutStaffLines();
+            MeasureLayout::layoutStaffLines(m, ctx);
         } else if (ctx.curMeasure->isHBox()) {
             ctx.curMeasure->setPos(pos + PointF(toHBox(ctx.curMeasure)->topGap(), 0.0));
             TLayout::layoutMeasureBase(ctx.curMeasure, ctx);
@@ -403,7 +403,7 @@ void ScoreLayout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
 
     SystemLayout::layoutSystemElements(options, ctx, ctx.score(), system);
 
-    system->layout2(ctx);     // compute staff distances
+    SystemLayout::layout2(system, ctx);     // compute staff distances
 
     for (MeasureBase* mb : system->measures()) {
         if (!mb->isMeasure()) {

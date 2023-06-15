@@ -30,7 +30,6 @@
 #include "translation.h"
 
 #include "types/typesconv.h"
-#include "layout/v0/tlayout.h"
 
 #include "ambitus.h"
 #include "factory.h"
@@ -241,8 +240,7 @@ ClefType Clef::clefType() const
 void Clef::spatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::spatiumChanged(oldValue, newValue);
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+    layout()->layoutItem(this);
 }
 
 //---------------------------------------------------------

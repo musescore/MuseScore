@@ -553,7 +553,11 @@ bool BeamTremoloLayout::calculateAnchors(const std::vector<ChordRest*>& chordRes
         dictator = m_up ? std::min(pointer, dictator) : std::max(pointer, dictator);
         pointer = dictator;
     } else {
-        pointer = dictator + slant;
+        if (dictator > pointer != (isStartDictator ? startNote > endNote : endNote > startNote)) {
+            dictator = pointer - slant;
+        } else {
+            pointer = dictator + slant;
+        }
     }
     bool isAscending = startNote > endNote;
     int beamCountD = strokeCount(isStartDictator ? startChord : endChord);

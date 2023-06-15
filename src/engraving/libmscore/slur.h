@@ -96,10 +96,7 @@ public:
 
     Slur* clone() const override { return new Slur(*this); }
 
-    SpannerSegment* layoutSystem(System*) override;
     void setTrack(track_idx_t val) override;
-
-    void computeUp();
 
     void setSourceStemArrangement(int v) { _sourceStemArrangement = v; }
 

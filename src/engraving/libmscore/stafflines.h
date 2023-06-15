@@ -27,6 +27,11 @@
 
 #include "engravingitem.h"
 
+namespace mu::engraving::layout::v0 {
+class MeasureLayout;
+class TLayout;
+}
+
 namespace mu::engraving {
 //-------------------------------------------------------------------
 //   @@ StaffLines
@@ -51,12 +56,12 @@ public:
     std::vector<mu::LineF>& getLines() { return m_lines; }
     Measure* measure() const { return (Measure*)explicitParent(); }
     double y1() const;
-    void layoutForWidth(double width);
-    void layoutPartialWidth(double w, double wPartial, bool alignLeft);
+
     RectF hitBBox() const override;
     Shape hitShape() const override;
 
 private:
+    friend class layout::v0::MeasureLayout;
     friend class layout::v0::TLayout;
     friend class Factory;
     StaffLines(Measure* parent);

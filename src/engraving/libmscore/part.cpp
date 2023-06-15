@@ -55,7 +55,7 @@ Part::Part(Score* s)
     _show    = true;
     _soloist = false;
     _instruments.setInstrument(new Instrument, -1);     // default instrument
-    _preferSharpFlat = PreferSharpFlat::DEFAULT;
+    _preferSharpFlat = PreferSharpFlat::AUTO;
 }
 
 //---------------------------------------------------------

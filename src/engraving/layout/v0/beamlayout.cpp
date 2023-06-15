@@ -107,6 +107,13 @@ void BeamLayout::layout(Beam* item, LayoutContext& ctx)
             item->addbbox(r);
         }
     }
+
+    // The beam may have changed shape. one-note trems within this beam need to be layed out here
+    for (ChordRest* cr : item->_elements) {
+        if (cr->isChord() && toChord(cr)->tremolo() && !toChord(cr)->tremolo()->twoNotes()) {
+            TLayout::layout(toChord(cr)->tremolo(), ctx);
+        }
+    }
 }
 
 void BeamLayout::layoutIfNeed(Beam* item, LayoutContext& ctx)
@@ -605,7 +612,7 @@ void BeamLayout::beamGraceNotes(Score* score, Chord* mainNote, bool after)
     }
 }
 
-void BeamLayout::createBeams(Score* score, LayoutContext& lc, Measure* measure)
+void BeamLayout::createBeams(Score* score, LayoutContext& ctx, Measure* measure)
 {
     bool crossMeasure = score->styleB(Sid::crossMeasureValues);
 
@@ -668,7 +675,7 @@ void BeamLayout::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                         const Measure* pm = prevCR->measure();
                         if (!beamNoContinue(prevCR->beamMode())
                             && !pm->lineBreak() && !pm->pageBreak() && !pm->sectionBreak()
-                            && lc.prevMeasure
+                            && ctx.prevMeasure
                             && !(prevCR->isChord() && prevCR->durationType().type() <= DurationType::V_QUARTER)) {
                             beam = prevBeam;
                             //a1 = beam ? beam->elements().front() : prevCR;
@@ -697,7 +704,7 @@ void BeamLayout::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                 // set up for cross-measure values as soon as possible
                 // to have all computations (stems, hooks, ...) consistent with it
                 if (!chord->isGrace()) {
-                    chord->crossMeasureSetup(crossMeasure);
+                    ChordLayout::crossMeasureSetup(chord, crossMeasure, ctx);
                 }
             }
 
@@ -741,8 +748,8 @@ void BeamLayout::createBeams(Score* score, LayoutContext& lc, Measure* measure)
             if ((cr->durationType().type() <= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
                 bool removeBeam = true;
                 if (beam) {
-                    LayoutContext ctx(score);
-                    layout1(beam, ctx);
+                    LayoutContext cntx(score);
+                    layout1(beam, cntx);
                     removeBeam = (beam->elements().size() <= 1 || beam->hasAllRests());
                     beam = 0;
                 }
@@ -764,8 +771,8 @@ void BeamLayout::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                     beamEnd = (bm == BeamMode::END);
                 }
                 if (beamEnd) {
-                    LayoutContext ctx(score);
-                    layout1(beam, ctx);
+                    LayoutContext cntx(score);
+                    layout1(beam, cntx);
                     beam = 0;
                 }
             }
@@ -799,8 +806,8 @@ void BeamLayout::createBeams(Score* score, LayoutContext& lc, Measure* measure)
             }
         }
         if (beam) {
-            LayoutContext ctx(score);
-            layout1(beam, ctx);
+            LayoutContext cntx(score);
+            layout1(beam, cntx);
         } else if (a1) {
             Fraction nextTick = a1->tick() + a1->actualTicks();
             Measure* m = (nextTick >= measure->endTick() ? measure->nextMeasure() : measure);

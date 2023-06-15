@@ -24,8 +24,8 @@
 
 #include "translation.h"
 
-#include "style/style.h"
 #include "types/typesconv.h"
+
 #include "layout/v0/tlayout.h"
 #include "layout/v0/chordlayout.h"
 
@@ -34,11 +34,8 @@
 #include "barline.h"
 #include "beam.h"
 #include "breath.h"
-
 #include "chord.h"
 #include "clef.h"
-#include "connector.h"
-
 #include "factory.h"
 #include "figuredbass.h"
 #include "harmony.h"
@@ -54,7 +51,6 @@
 #include "rehearsalmark.h"
 #include "score.h"
 #include "segment.h"
-#include "sig.h"
 #include "slur.h"
 #include "staff.h"
 #include "stafftype.h"
@@ -203,7 +199,7 @@ EngravingItem* ChordRest::drop(EditData& data)
                 l->setParent(seg);
                 score->undoAddElement(l);
 
-                layout()->layoutOnChordRestDrop(l);
+                layout()->layoutItem(l);
             }
         }
         delete e;
@@ -274,7 +270,7 @@ EngravingItem* ChordRest::drop(EditData& data)
     {
         // transpose
         Harmony* harmony = toHarmony(e);
-        Interval interval = staff()->part()->instrument(tick())->transpose();
+        Interval interval = staff()->transpose(tick());
         if (!score()->styleB(Sid::concertPitch) && !interval.isZero()) {
             interval.flip();
             int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
@@ -290,6 +286,7 @@ EngravingItem* ChordRest::drop(EditData& data)
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
     case ElementType::STICKING:
     case ElementType::STAFF_STATE:
     case ElementType::HARP_DIAGRAM:
@@ -327,14 +324,21 @@ EngravingItem* ChordRest::drop(EditData& data)
             ic->setParent(segment());
             ic->setTrack(trackZeroVoice(track()));
 
-            const Instrument* instr = part()->instrument(tick());
-            IF_ASSERT_FAILED(instr) {
+            const Instrument* prevInstr = part()->instrument(tick());
+            const Instrument instr = *ic->instrument();
+
+            IF_ASSERT_FAILED(prevInstr) {
                 delete e;
                 return nullptr;
             }
 
-            ic->setInstrument(*instr);
+            // temporarily set previous instrument, for correct transposition calculation
+            ic->setInstrument(*prevInstr);
             score()->undoAddElement(ic);
+
+            if (!fromPalette) {
+                ic->setupInstrument(&instr);
+            }
             return e;
         }
     case ElementType::FIGURED_BASS:
@@ -593,13 +597,11 @@ void ChordRest::removeDeleteBeam(bool beamed)
         if (b->empty()) {
             score()->undoRemoveElement(b);
         } else {
-            layout::v0::LayoutContext lctx(score());
-            layout::v0::TLayout::layout1(b, lctx);
+            layout()->layoutBeam1(b);
         }
     }
     if (!beamed && isChord()) {
-        layout::v0::LayoutContext lctx(score());
-        layout::v0::ChordLayout::layoutStem(toChord(this), lctx);
+        layout()->layoutStem(toChord(this));
     }
 }
 

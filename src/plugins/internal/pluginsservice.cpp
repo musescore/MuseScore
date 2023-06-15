@@ -122,6 +122,7 @@ PluginInfoMap PluginsService::readPlugins() const
         info.version = view.version();
         info.enabled = pluginsConfigurationHash.value(info.codeKey).enabled;
         info.categoryCode = view.categoryCode();
+        info.requiresScore = view.requiresScore();
 
         QString thumbnailName = view.thumbnailName();
         if (!thumbnailName.isEmpty()) {

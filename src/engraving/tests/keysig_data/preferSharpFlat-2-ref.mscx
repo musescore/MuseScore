@@ -93,7 +93,8 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>-7</accidental>
+            <concertKey>7</concertKey>
+            <actualKey>-7</actualKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>

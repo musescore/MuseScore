@@ -530,8 +530,8 @@ EngravingObjectList FretDiagram::scanChildren() const
 {
     EngravingObjectList children;
 
-    if (_harmony) {
-        children.push_back(_harmony);
+    if (m_harmony) {
+        children.push_back(m_harmony);
     }
 
     return children;
@@ -630,7 +630,7 @@ EngravingObjectList BarLine::scanChildren() const
 {
     EngravingObjectList children;
 
-    for (EngravingItem* element : _el) {
+    for (EngravingItem* element : m_el) {
         children.push_back(element);
     }
 

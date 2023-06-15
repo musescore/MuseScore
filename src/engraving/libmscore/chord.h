@@ -232,8 +232,6 @@ public:
     void updateArticulations(const std::set<SymId>& newArticulationIds,
                              ArticulationsUpdateMode replaceMode = ArticulationsUpdateMode::Insert);
 
-    void crossMeasureSetup(bool on) override;
-
     void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -268,7 +266,6 @@ public:
 
     void styleChanged() override;
 
-    void checkStartEndSlurs();
     bool allowKerningAbove() const { return _allowKerningAbove; }
     bool allowKerningBelow() const { return _allowKerningBelow; }
     void computeKerningExceptions();

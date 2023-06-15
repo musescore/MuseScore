@@ -82,16 +82,16 @@ static constexpr double FB_CONTLINE_THICKNESS         = 0.09375;   // (3/32sp) t
 
 // used for indexed access to parenthesis chars
 // (these is no normAccidToChar[], as accidentals may use mult. chars in normalized display):
-const Char FiguredBassItem::normParenthToChar[int(FiguredBassItem::Parenthesis::NUMOF)] =
+const Char FiguredBassItem::NORM_PARENTH_TO_CHAR[int(FiguredBassItem::Parenthesis::NUMOF)] =
 { 0, '(', ')', '[', ']' };
 
 FiguredBassItem::FiguredBassItem(FiguredBass* parent, int l)
     : EngravingItem(ElementType::INVALID, parent), m_ord(l)
 {
-    _prefix     = _suffix = Modifier::NONE;
-    _digit      = FBIDigitNone;
+    m_prefix     = m_suffix = Modifier::NONE;
+    m_digit      = FBIDigitNone;
     m_parenth[0]  = m_parenth[1] = m_parenth[2] = m_parenth[3] = m_parenth[4] = Parenthesis::NONE;
-    _contLine   = ContLine::NONE;
+    m_contLine   = ContLine::NONE;
     m_textWidth   = 0;
 }
 
@@ -99,17 +99,17 @@ FiguredBassItem::FiguredBassItem(const FiguredBassItem& item)
     : EngravingItem(item)
 {
     m_ord         = item.m_ord;
-    _prefix     = item._prefix;
-    _digit      = item._digit;
-    _suffix     = item._suffix;
+    m_prefix     = item.m_prefix;
+    m_digit      = item.m_digit;
+    m_suffix     = item.m_suffix;
     m_parenth[0]  = item.m_parenth[0];
     m_parenth[1]  = item.m_parenth[1];
     m_parenth[2]  = item.m_parenth[2];
     m_parenth[3]  = item.m_parenth[3];
     m_parenth[4]  = item.m_parenth[4];
-    _contLine   = item._contLine;
+    m_contLine   = item.m_contLine;
     m_textWidth   = item.m_textWidth;
-    _displayText= item._displayText;
+    m_displayText= item.m_displayText;
 }
 
 FiguredBassItem::~FiguredBassItem()
@@ -144,31 +144,31 @@ bool FiguredBassItem::parse(String& str)
     }
     parseParenthesis(str, 3);
     // check for a possible cont. line symbol(s)
-    _contLine = ContLine::NONE;                         // contLine
+    m_contLine = ContLine::NONE;                         // contLine
     if (!str.empty() && (str.at(0) == u'-' || str.at(0) == u'_')) {             // 1 symbol: simple continuation
-        _contLine = ContLine::SIMPLE;
+        m_contLine = ContLine::SIMPLE;
         str.remove(0, 1);
     }
     while (!str.empty() && (str.at(0) == u'-' || str.at(0) == u'_')) {          // more than 1 symbol: extended continuation
-        _contLine = ContLine::EXTENDED;
+        m_contLine = ContLine::EXTENDED;
         str.remove(0, 1);
     }
     parseParenthesis(str, 4);
 
     // remove useless parentheses, moving external parentheses toward central digit element
-    if (_prefix == Modifier::NONE && m_parenth[1] == Parenthesis::NONE) {
+    if (m_prefix == Modifier::NONE && m_parenth[1] == Parenthesis::NONE) {
         m_parenth[1] = m_parenth[0];
         m_parenth[0] = Parenthesis::NONE;
     }
-    if (_digit == FBIDigitNone && m_parenth[2] == Parenthesis::NONE) {
+    if (m_digit == FBIDigitNone && m_parenth[2] == Parenthesis::NONE) {
         m_parenth[2] = m_parenth[1];
         m_parenth[1] = Parenthesis::NONE;
     }
-    if (_contLine == ContLine::NONE && m_parenth[3] == Parenthesis::NONE) {
+    if (m_contLine == ContLine::NONE && m_parenth[3] == Parenthesis::NONE) {
         m_parenth[3] = m_parenth[4];
         m_parenth[4] = Parenthesis::NONE;
     }
-    if (_suffix == Modifier::NONE && m_parenth[2] == Parenthesis::NONE) {
+    if (m_suffix == Modifier::NONE && m_parenth[2] == Parenthesis::NONE) {
         m_parenth[2] = m_parenth[3];
         m_parenth[3] = Parenthesis::NONE;
     }
@@ -181,10 +181,10 @@ bool FiguredBassItem::parse(String& str)
     // can't have BOTH prefix and suffix
     // prefix, digit, suffix and cont.line cannot be ALL empty
     // suffix cannot combine with empty digit
-    if ((_prefix != Modifier::NONE && _suffix != Modifier::NONE)
-        || (_prefix == Modifier::NONE && _digit == FBIDigitNone && _suffix == Modifier::NONE && _contLine == ContLine::NONE)
-        || ((_suffix == Modifier::CROSS || _suffix == Modifier::BACKSLASH || _suffix == Modifier::SLASH)
-            && _digit == FBIDigitNone)) {
+    if ((m_prefix != Modifier::NONE && m_suffix != Modifier::NONE)
+        || (m_prefix == Modifier::NONE && m_digit == FBIDigitNone && m_suffix == Modifier::NONE && m_contLine == ContLine::NONE)
+        || ((m_suffix == Modifier::CROSS || m_suffix == Modifier::BACKSLASH || m_suffix == Modifier::SLASH)
+            && m_digit == FBIDigitNone)) {
         return false;
     }
     return true;
@@ -202,7 +202,7 @@ bool FiguredBassItem::parse(String& str)
 
 int FiguredBassItem::parsePrefixSuffix(String& str, bool bPrefix)
 {
-    Modifier* dest  = bPrefix ? &_prefix : &_suffix;
+    Modifier* dest  = bPrefix ? &m_prefix : &m_suffix;
     bool done  = false;
     size_t size  = str.size();
     str = str.trimmed();
@@ -248,16 +248,16 @@ int FiguredBassItem::parsePrefixSuffix(String& str, bool bPrefix)
             break;
         // '\\' and '/' go into the suffix
         case '\\':
-            if (_suffix != Modifier::NONE) {            // cannot combine with any other accidental
+            if (m_suffix != Modifier::NONE) {            // cannot combine with any other accidental
                 return -1;
             }
-            _suffix = Modifier::BACKSLASH;
+            m_suffix = Modifier::BACKSLASH;
             break;
         case '/':
-            if (_suffix != Modifier::NONE) {            // cannot combine with any other accidental
+            if (m_suffix != Modifier::NONE) {            // cannot combine with any other accidental
                 return -1;
             }
-            _suffix = Modifier::SLASH;
+            m_suffix = Modifier::SLASH;
             break;
         default:                                     // any other char: no longer in prefix/suffix
             done = true;
@@ -287,15 +287,15 @@ int FiguredBassItem::parseDigit(String& str)
     size_t size   = str.size();
     str        = str.trimmed();
 
-    _digit = FBIDigitNone;
+    m_digit = FBIDigitNone;
 
     while (str.size()) {
         // any digit acceptable
         if (str.at(0) >= u'0' && str.at(0) <= u'9') {
-            if (_digit == FBIDigitNone) {
-                _digit = 0;
+            if (m_digit == FBIDigitNone) {
+                m_digit = 0;
             }
-            _digit = _digit * 10 + (str.at(0).unicode() - '0');
+            m_digit = m_digit * 10 + (str.at(0).unicode() - '0');
             str.remove(0, 1);
         }
         // anything else: no longer in digit part
@@ -359,11 +359,11 @@ String FiguredBassItem::normalizedText() const
 {
     String str;
     if (m_parenth[0] != Parenthesis::NONE) {
-        str.append(normParenthToChar[int(m_parenth[0])]);
+        str.append(NORM_PARENTH_TO_CHAR[int(m_parenth[0])]);
     }
 
-    if (_prefix != Modifier::NONE) {
-        switch (_prefix) {
+    if (m_prefix != Modifier::NONE) {
+        switch (m_prefix) {
         case Modifier::FLAT:
             str.append(u'b');
             break;
@@ -388,21 +388,21 @@ String FiguredBassItem::normalizedText() const
     }
 
     if (m_parenth[1] != Parenthesis::NONE) {
-        str.append(normParenthToChar[int(m_parenth[1])]);
+        str.append(NORM_PARENTH_TO_CHAR[int(m_parenth[1])]);
     }
 
     // digit
-    if (_digit != FBIDigitNone) {
-        str.append(String::number(_digit));
+    if (m_digit != FBIDigitNone) {
+        str.append(String::number(m_digit));
     }
 
     if (m_parenth[2] != Parenthesis::NONE) {
-        str.append(normParenthToChar[int(m_parenth[2])]);
+        str.append(NORM_PARENTH_TO_CHAR[int(m_parenth[2])]);
     }
 
     // suffix
-    if (_suffix != Modifier::NONE) {
-        switch (_suffix) {
+    if (m_suffix != Modifier::NONE) {
+        switch (m_suffix) {
         case Modifier::FLAT:
             str.append(u'b');
             break;
@@ -433,16 +433,16 @@ String FiguredBassItem::normalizedText() const
     }
 
     if (m_parenth[3] != Parenthesis::NONE) {
-        str.append(normParenthToChar[int(m_parenth[3])]);
+        str.append(NORM_PARENTH_TO_CHAR[int(m_parenth[3])]);
     }
-    if (_contLine > ContLine::NONE) {
+    if (m_contLine > ContLine::NONE) {
         str.append('_');
-        if (_contLine > ContLine::SIMPLE) {
+        if (m_contLine > ContLine::SIMPLE) {
             str.append('_');
         }
     }
     if (m_parenth[4] != Parenthesis::NONE) {
-        str.append(normParenthToChar[int(m_parenth[4])]);
+        str.append(NORM_PARENTH_TO_CHAR[int(m_parenth[4])]);
     }
 
     return str;
@@ -473,7 +473,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
 
     // continuation line
     double lineEndX = 0.0;
-    if (_contLine != ContLine::NONE) {
+    if (m_contLine != ContLine::NONE) {
         double lineStartX  = m_textWidth;                           // by default, line starts right after text
         if (lineStartX > 0.0) {
             lineStartX += _spatium * FB_CONTLINE_LEFT_PADDING;          // if some text, give some room after it
@@ -484,7 +484,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
         }
 
         // if extended cont.line and no closing parenthesis: look at next FB element
-        if (_contLine > ContLine::SIMPLE && m_parenth[4] == Parenthesis::NONE) {
+        if (m_contLine > ContLine::SIMPLE && m_parenth[4] == Parenthesis::NONE) {
             FiguredBass* nextFB;
             // if there is a contiguous FB element
             if ((nextFB=figuredBass()->nextFiguredBass()) != 0) {
@@ -525,13 +525,13 @@ PropertyValue FiguredBassItem::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::FBPREFIX:
-        return int(_prefix);
+        return int(m_prefix);
     case Pid::FBDIGIT:
-        return _digit;
+        return m_digit;
     case Pid::FBSUFFIX:
-        return int(_suffix);
+        return int(m_suffix);
     case Pid::FBCONTINUATIONLINE:
-        return int(_contLine);
+        return int(m_contLine);
     case Pid::FBPARENTHESIS1:
         return int(m_parenth[0]);
     case Pid::FBPARENTHESIS2:
@@ -556,22 +556,22 @@ bool FiguredBassItem::setProperty(Pid propertyId, const PropertyValue& v)
         if (val < int(Modifier::NONE) || val >= int(Modifier::NUMOF)) {
             return false;
         }
-        _prefix = (Modifier)val;
+        m_prefix = (Modifier)val;
         break;
     case Pid::FBDIGIT:
         if (val < 1 || val > 9) {
             return false;
         }
-        _digit = val;
+        m_digit = val;
         break;
     case Pid::FBSUFFIX:
         if (val < int(Modifier::NONE) || val >= int(Modifier::NUMOF)) {
             return false;
         }
-        _suffix = (Modifier)val;
+        m_suffix = (Modifier)val;
         break;
     case Pid::FBCONTINUATIONLINE:
-        _contLine = (ContLine)val;
+        m_contLine = (ContLine)val;
         break;
     case Pid::FBPARENTHESIS1:
         if (val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF)) {
@@ -628,7 +628,7 @@ PropertyValue FiguredBassItem::propertyDefault(Pid id) const
 void FiguredBassItem::regenerateDisplayText()
 {
     // re-generate displayText
-    layout()->regenerateDisplayText(this);
+    layout()->layoutItem(this);
 }
 
 //---------------------------------------------------------
@@ -640,7 +640,7 @@ void FiguredBassItem::undoSetPrefix(Modifier pref)
     if (pref <= Modifier::CROSS) {
         undoChangeProperty(Pid::FBPREFIX, (int)pref);
         // if setting some prefix and there is a suffix already, clear suffix
-        if (pref != Modifier::NONE && _suffix != Modifier::NONE) {
+        if (pref != Modifier::NONE && m_suffix != Modifier::NONE) {
             undoChangeProperty(Pid::FBSUFFIX, int(Modifier::NONE));
         }
         regenerateDisplayText();
@@ -659,7 +659,7 @@ void FiguredBassItem::undoSetSuffix(Modifier suff)
 {
     undoChangeProperty(Pid::FBSUFFIX, int(suff));
     // if setting some suffix and there is a prefix already, clear prefix
-    if (suff != Modifier::NONE && _prefix != Modifier::NONE) {
+    if (suff != Modifier::NONE && m_prefix != Modifier::NONE) {
         undoChangeProperty(Pid::FBPREFIX, int(Modifier::NONE));
     }
     regenerateDisplayText();
@@ -707,13 +707,13 @@ void FiguredBassItem::undoSetParenth5(Parenthesis par)
 
 bool FiguredBassItem::startsWithParenthesis() const
 {
-    if (_prefix != Modifier::NONE) {
+    if (m_prefix != Modifier::NONE) {
         return m_parenth[0] != Parenthesis::NONE;
     }
-    if (_digit != FBIDigitNone) {
+    if (m_digit != FBIDigitNone) {
         return m_parenth[1] != Parenthesis::NONE;
     }
-    if (_suffix != Modifier::NONE) {
+    if (m_suffix != Modifier::NONE) {
         return m_parenth[2] != Parenthesis::NONE;
     }
     return false;
@@ -789,7 +789,7 @@ void FiguredBass::draw(mu::draw::Painter* painter) const
     using namespace mu::draw;
     // if not printing, draw duration line(s)
     if (!score()->printing() && score()->showUnprintable()) {
-        for (double len : _lineLengths) {
+        for (double len : m_lineLengths) {
             if (len > 0) {
                 painter->setPen(Pen(engravingConfiguration()->formattingMarksColor(), 3));
                 painter->drawLine(0.0, -2, len, -2);              // -2: 2 rast. un. above digits
@@ -822,7 +822,7 @@ void FiguredBass::startEdit(EditData& ed)
 {
     DeleteAll(m_items);
     m_items.clear();
-    layout1();   // re-layout without F.B.-specific formatting.
+    layout()->layoutText1(this);   // re-layout without F.B.-specific formatting.
     TextBase::startEdit(ed);
 }
 
@@ -918,11 +918,11 @@ void FiguredBass::setVisible(bool flag)
 
 FiguredBass* FiguredBass::nextFiguredBass() const
 {
-    if (_ticks <= Fraction(0, 1)) {                                      // if _ticks unset, no clear idea of when 'this' ends
+    if (m_ticks <= Fraction(0, 1)) {                                      // if _ticks unset, no clear idea of when 'this' ends
         return 0;
     }
     Segment* nextSegm;                                   // the Segment beyond this' segment
-    Fraction nextTick = segment()->tick() + _ticks;      // the tick beyond this' duration
+    Fraction nextTick = segment()->tick() + m_ticks;      // the tick beyond this' duration
 
     // locate the ChordRest segment right after this' end
     nextSegm = score()->tick2segment(nextTick, true, SegmentType::ChordRest);

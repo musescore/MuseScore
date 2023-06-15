@@ -169,8 +169,6 @@ private:
     double downPos() const override;
     void setOffset(const mu::PointF& o) override;
 
-    bool sameVoiceKerningLimited() const override { return true; }
-
     std::vector<Rest*> m_mergedRests; // Rests from other voices that may be merged with this
 };
 } // namespace mu::engraving

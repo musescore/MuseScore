@@ -101,10 +101,6 @@ private:
     ChordLine(Chord* parent);
     ChordLine(const ChordLine&);
 
-    bool sameVoiceKerningLimited() const override { return true; }
-    bool alwaysKernable() const override { return true; }
-    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
-
     bool m_straight = false;
     bool m_wavy = false;
 

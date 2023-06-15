@@ -23,8 +23,6 @@
 
 #include "translation.h"
 
-#include "layout/v0/tlayout.h"
-
 #include "../libmscore/ambitus.h"
 #include "../libmscore/barline.h"
 #include "../libmscore/beam.h"
@@ -257,8 +255,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             if (barLine) {
                 segment = measure->getSegmentR(st, t);
                 segment->add(barLine);
-                layout::v0::LayoutContext lctx(barLine->score());
-                layout::v0::TLayout::layout(barLine, lctx);
+                EngravingItem::layout()->layoutItem(barLine);
             }
             if (fermata) {
                 segment->add(fermata);
@@ -523,6 +520,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
         } else if (tag == "Sticking"
                    || tag == "SystemText"
                    || tag == "PlayTechAnnotation"
+                   || tag == "Capo"
                    || tag == "RehearsalMark"
                    || tag == "InstrumentChange"
                    || tag == "StaffState"

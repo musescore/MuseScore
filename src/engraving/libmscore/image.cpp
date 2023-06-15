@@ -29,8 +29,6 @@
 #include "draw/types/transform.h"
 #include "draw/svgrenderer.h"
 
-#include "layout/v0/tlayout.h"
-
 #include "imageStore.h"
 #include "masterscore.h"
 #include "mscore.h"
@@ -411,8 +409,7 @@ void Image::editDrag(EditData& ed)
         }
     }
 
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+    layout()->layoutItem(this);
 }
 
 //---------------------------------------------------------

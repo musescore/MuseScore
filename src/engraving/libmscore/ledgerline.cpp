@@ -22,8 +22,6 @@
 
 #include "ledgerline.h"
 
-#include "layout/v0/tlayout.h"
-
 #include "chord.h"
 #include "measure.h"
 #include "score.h"
@@ -102,7 +100,6 @@ void LedgerLine::spatiumChanged(double oldValue, double newValue)
 {
     _width = (_width / oldValue) * newValue;
     _len   = (_len / oldValue) * newValue;
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+    layout()->layoutItem(this);
 }
 }

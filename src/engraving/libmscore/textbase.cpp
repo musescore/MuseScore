@@ -50,9 +50,7 @@
 #include "mscore.h"
 #include "page.h"
 #include "score.h"
-#include "system.h"
 #include "textedit.h"
-#include "textframe.h"
 #include "undo.h"
 
 #include "log.h"
@@ -248,15 +246,12 @@ void TextCursor::updateCursorFormat()
 {
     TextBlock* block = &_text->_layout[_row];
     size_t col = hasSelection() ? selectColumn() : column();
-    const CharFormat* format = block->formatAt(static_cast<int>(col));
+    // Get format at the LEFT of the cursor position
+    const CharFormat* format = block->formatAt(std::max(static_cast<int>(col) - 1, 0));
     if (!format) {
         init();
     } else {
-        CharFormat updated = *format;
-        if (updated.fontFamily() == "ScoreText") {
-            updated.setFontFamily(_format.fontFamily());
-        }
-        setFormat(updated);
+        setFormat(*format);
     }
 }
 
@@ -325,7 +320,8 @@ void TextCursor::changeSelectionFormat(FormatId id, const FormatValue& val)
             t.changeFormat(id, val, 0, static_cast<int>(t.columns()));
         }
     }
-    _text->layout1();
+
+    EngravingItem::layout()->layoutText1(_text);
 }
 
 const CharFormat TextCursor::selectedFragmentsFormat() const
@@ -1871,16 +1867,6 @@ void TextBase::prepareFormat(const String& token, TextCursor& cursor)
 }
 
 //---------------------------------------------------------
-//   layout1
-//---------------------------------------------------------
-
-void TextBase::layout1()
-{
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout1TextBase(this, ctx);
-}
-
-//---------------------------------------------------------
 //   layoutFrame
 //---------------------------------------------------------
 
@@ -2264,26 +2250,6 @@ bool TextBase::mousePress(EditData& ed)
 
     score()->setUpdateAll();
     return true;
-}
-
-//---------------------------------------------------------
-//   layoutEdit
-//---------------------------------------------------------
-
-void TextBase::layoutEdit()
-{
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
-    if (explicitParent() && explicitParent()->type() == ElementType::TBOX) {
-        TBox* tbox = toTBox(explicitParent());
-        layout::v0::TLayout::layout(tbox, ctx);
-        System* system = tbox->system();
-        system->setHeight(tbox->height());
-        triggerLayout();
-    } else {
-        static const double w = 2.0;     // 8.0 / view->matrix().m11();
-        score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
-    }
 }
 
 //---------------------------------------------------------

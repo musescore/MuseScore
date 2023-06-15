@@ -75,8 +75,6 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
 
-    SpannerSegment* layoutSystem(System* system) override;
-
     void setVelocity() const;
     void setChannel() const;
     void setTempo() const;

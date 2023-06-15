@@ -39,10 +39,7 @@
 #include "iengravingfont.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "layout/v0/tlayout.h"
-#include "layout/v0/layout.h"
 
-#include "articulation.h"
 #include "audio.h"
 #include "beam.h"
 #include "box.h"
@@ -2371,8 +2368,7 @@ void Score::splitStaff(staff_idx_t staffIdx, int splitPoint)
     clef->setParent(seg);
     clef->setIsHeader(true);
     undoAddElement(clef);
-    layout::v0::LayoutContext ctx(this);
-    layout::v0::TLayout::layout(clef, ctx);
+    layout()->layoutItem(clef);
 
     undoChangeKeySig(ns, Fraction(0, 1), st->keySigEvent(Fraction(0, 1)));
 
@@ -2794,18 +2790,18 @@ void Score::adjustKeySigs(track_idx_t sidx, track_idx_t eidx, KeyList km)
             if (staff->isDrumStaff(tick)) {
                 continue;
             }
-            KeySigEvent oKey = i->second;
-            KeySigEvent nKey = oKey;
-            int diff = -staff->part()->instrument(tick)->transpose().chromatic;
-            if (diff != 0 && !styleB(Sid::concertPitch) && !oKey.isAtonal()) {
-                nKey.setKey(transposeKey(nKey.key(), diff, staff->part()->preferSharpFlat()));
+            KeySigEvent key = i->second;
+            Interval v = staff->part()->instrument(tick)->transpose();
+            if (!v.isZero() && !styleB(Sid::concertPitch) && !key.isAtonal()) {
+                v.flip();
+                key.setKey(transposeKey(key.concertKey(), v, staff->part()->preferSharpFlat()));
             }
-            staff->setKey(tick, nKey);
+            staff->setKey(tick, key);
 
             Segment* s = measure->getSegment(SegmentType::KeySig, tick);
             KeySig* keysig = Factory::createKeySig(s);
             keysig->setTrack(staffIdx * VOICES);
-            keysig->setKeySigEvent(nKey);
+            keysig->setKeySigEvent(key);
             s->add(keysig);
         }
     }
@@ -2848,7 +2844,7 @@ KeyList Score::keyList() const
                     break;
                 }
                 if (key.first == (*currKey).first) {
-                    // there is a matching time sig on this staff
+                    // there is a matching key sig on this staff
                     ++currKey;
                     kl.insert(key);
                     if (currKey == km->end()) {
@@ -2860,26 +2856,33 @@ KeyList Score::keyList() const
             tmpKeymap.insert(kl.begin(), kl.end());
         }
     }
-
     Key normalizedC = Key::C;
+    bool needNormalize = firstStaff && !masterScore()->styleB(Sid::concertPitch)
+                         && (firstStaff->part()->instrument()->transpose().chromatic || firstStaff->part()->instruments().size() > 1);
     // normalize the keyevents to concert pitch if necessary
-    if (firstStaff && !masterScore()->styleB(Sid::concertPitch) && firstStaff->part()->instrument()->transpose().chromatic) {
+    KeyList nkl;
+    for (auto key : tmpKeymap) {
+        if (firstStaff && !key.second.forInstrumentChange()) {
+            if (needNormalize) {
+                Key cKey = key.second.concertKey();
+                key.second.setKey(cKey);
+            }
+            nkl.insert(key);
+        }
+    }
+    if (firstStaff && !masterScore()->styleB(Sid::concertPitch)
+        && (firstStaff->part()->instrument()->transpose().chromatic || firstStaff->part()->instruments().size() > 1)) {
         int interval = firstStaff->part()->instrument()->transpose().chromatic;
         normalizedC = transposeKey(normalizedC, interval);
-        for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
-            int tick = i->first;
-            Key oKey = i->second.key();
-            tmpKeymap[tick].setKey(transposeKey(oKey, interval));
-        }
     }
 
     // create initial keyevent for transposing instrument if necessary
-    auto i = tmpKeymap.begin();
-    if (i == tmpKeymap.end() || i->first != 0) {
-        tmpKeymap[0].setKey(normalizedC);
+    auto i = nkl.begin();
+    if (i == nkl.end() || i->first != 0) {
+        nkl[0].setConcertKey(normalizedC);
     }
 
-    return tmpKeymap;
+    return nkl;
 }
 
 //---------------------------------------------------------
@@ -3072,10 +3075,10 @@ void Score::cmdConcertPitchChanged(bool flag)
         track_idx_t startTrack = staffIdx * VOICES;
         track_idx_t endTrack   = startTrack + VOICES;
 
-        transposeKeys(staffIdx, staffIdx + 1, Fraction(0, 1), lastSegment()->tick(), interval, true, !flag);
+        transposeKeys(staffIdx, staffIdx + 1, Fraction(0, 1), lastSegment()->tick(), !flag);
 
         for (Segment* segment = firstSegment(SegmentType::ChordRest); segment; segment = segment->next1(SegmentType::ChordRest)) {
-            interval = staff->part()->instrument(segment->tick())->transpose();
+            interval = staff->transpose(segment->tick());
             if (!flag) {
                 interval.flip();
             }
@@ -5084,15 +5087,12 @@ int Score::keysig()
     for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
         Staff* st = staff(staffIdx);
         constexpr Fraction t(0, 1);
-        Key key = st->key(t);
+        Key key = st->concertKey(t);
         if (st->staffType(t)->group() == StaffGroup::PERCUSSION || st->keySigEvent(t).isAtonal()) {         // ignore percussion and custom / atonal key
             continue;
         }
         result = key;
-        int diff = st->part()->instrument()->transpose().chromatic; //TODO keySigs and pitched to unpitched instr changes
-        if (!styleB(Sid::concertPitch) && diff) {
-            result = transposeKey(key, diff, st->part()->preferSharpFlat());
-        }
+        //TODO keySigs and pitched to unpitched instr changes (Igor Korsukov 2021-02-05) ??? why here?
         break;
     }
     return int(result);
@@ -5394,33 +5394,26 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
     setLayoutAll();
 }
 
-std::set<ID> Score::partIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const
-{
-    std::set<ID> result;
-
-    for (const Part* part : m_score->parts()) {
-        if (trackTo < part->startTrack() || trackFrom >= part->endTrack()) {
-            continue;
-        }
-
-        result.insert(part->id());
-    }
-
-    return result;
-}
-
-std::set<staff_idx_t> Score::staffIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const
+std::set<staff_idx_t> Score::staffIdxSetFromRange(const track_idx_t trackFrom, const track_idx_t trackTo, StaffAccepted staffAccepted) const
 {
     std::set<staff_idx_t> result;
 
-    for (const Part* part : m_score->parts()) {
-        if (trackTo < part->startTrack() || trackFrom >= part->endTrack()) {
+    staff_idx_t staffIdxFrom = track2staff(trackFrom);
+    staff_idx_t staffIdxTo = std::min(track2staff(trackTo) + 1, _staves.size());
+
+    for (staff_idx_t idx = staffIdxFrom; idx < staffIdxTo; ++idx) {
+        const Staff* staff = _staves.at(idx);
+        if (!staff) {
             continue;
         }
 
-        std::set<staff_idx_t> staffIdxList = part->staveIdxList();
-
-        result.insert(staffIdxList.cbegin(), staffIdxList.cend());
+        if (staffAccepted) {
+            if (staffAccepted(*staff)) {
+                result.insert(idx);
+            }
+        } else {
+            result.insert(idx);
+        }
     }
 
     return result;

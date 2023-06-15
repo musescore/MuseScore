@@ -120,10 +120,10 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BOX_AUTOSIZE,            false, "boxAutoSize",           P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "autosize frame") },
     { Pid::TOP_GAP,                 false, "topGap",                P_TYPE::MILLIMETRE,     DUMMY_QT_TR_NOOP("propertyName", "top gap") },
     { Pid::BOTTOM_GAP,              false, "bottomGap",             P_TYPE::MILLIMETRE,     DUMMY_QT_TR_NOOP("propertyName", "bottom gap") },
-    { Pid::LEFT_MARGIN,             false, "leftMargin",            P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "left margin") },
-    { Pid::RIGHT_MARGIN,            false, "rightMargin",           P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "right margin") },
-    { Pid::TOP_MARGIN,              false, "topMargin",             P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "top margin") },
-    { Pid::BOTTOM_MARGIN,           false, "bottomMargin",          P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "bottom margin") },
+    { Pid::LEFT_MARGIN,             false, "leftMargin",            P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "left padding") },
+    { Pid::RIGHT_MARGIN,            false, "rightMargin",           P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "right padding") },
+    { Pid::TOP_MARGIN,              false, "topMargin",             P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "top padding") },
+    { Pid::BOTTOM_MARGIN,           false, "bottomMargin",          P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "bottom padding") },
     { Pid::LAYOUT_BREAK,            false, "subtype",               P_TYPE::LAYOUTBREAK_TYPE, DUMMY_QT_TR_NOOP("propertyName", "subtype") },
     { Pid::AUTOSCALE,               false, "autoScale",             P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "autoscale") },
     { Pid::SIZE,                    false, "size",                  P_TYPE::SIZE,           DUMMY_QT_TR_NOOP("propertyName", "size") },
@@ -343,7 +343,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::END_FONT_STYLE,          false, "endFontStyle",          P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName",  "end font style") },
     { Pid::END_TEXT_OFFSET,         false, "endTextOffset",         P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "end text offset") },
 
-    { Pid::AVOID_BARLINES,          false, "avoidBarLines",         P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "avoid bar lines") },
+    { Pid::AVOID_BARLINES,          false, "avoidBarLines",         P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "avoid barlines") },
     { Pid::DYNAMICS_SIZE,           false, "dynamicsSize",          P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "dynamic size") },
     { Pid::CENTER_ON_NOTEHEAD,      false, "centerOnNotehead",      P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "use text alignment") },
     { Pid::SNAP_TO_DYNAMICS,         false, "snapToDynamics",        P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "snap expression") },
@@ -364,7 +364,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::CLEF_TYPE_TRANSPOSING,   true,  "transposingClefType",   P_TYPE::CLEF_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "transposing clef type") },
     { Pid::CLEF_TO_BARLINE_POS,     true,  "clefToBarlinePos",      P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "clef to barline position") },
     { Pid::IS_HEADER,               true,  "isHeader",              P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "is header")},
-    { Pid::KEY,                     true,  "accidental",            P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "key") },
+    { Pid::KEY_CONCERT,             true,  "concertKey",            P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "concert key") },
+    { Pid::KEY,                     true,  "actualKey",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "key") },
     { Pid::ACTION,                  false, "action",                P_TYPE::STRING,         0 },
     { Pid::MIN_DISTANCE,            false, "minDistance",           P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "autoplace minimum distance") },
 
@@ -397,6 +398,12 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::TEMPO_CHANGE_FACTOR,     true,  "tempoChangeFactor",     P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "tempo change factor") },
 
     { Pid::HARP_IS_DIAGRAM,         false,  "isDiagram",            P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "is diagram") },
+
+    { Pid::ACTIVE,                  true,  "active",                P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "active") },
+
+    { Pid::CAPO_FRET_POSITION,      true,  "fretPosition",          P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "fret position") },
+    { Pid::CAPO_IGNORED_STRINGS,    true,  "ignoredStrings",        P_TYPE::INT_VEC,        DUMMY_QT_TR_NOOP("propertyName", "ignored strings") },
+    { Pid::CAPO_GENERATE_TEXT,      true,  "generateText",          P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "automatically generate text") },
 
     { Pid::END,                     false, "++end++",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };

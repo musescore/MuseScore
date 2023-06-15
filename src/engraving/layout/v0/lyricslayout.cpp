@@ -31,6 +31,8 @@
 #include "libmscore/stafftype.h"
 #include "libmscore/system.h"
 
+#include "tlayout.h"
+
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::layout::v0;
@@ -59,11 +61,11 @@ static Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, Pla
     return l;
 }
 
-void LyricsLayout::layout(Lyrics* item, LayoutContext&)
+void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
 {
     if (!item->explicitParent()) {   // palette & clone trick
         item->setPos(PointF());
-        item->TextBase::layout1();
+        TLayout::layout1TextBase(item, ctx);
         return;
     }
 
@@ -174,7 +176,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext&)
     // Negate ChordRest offset
     double x = o.x() - cr->x();
 
-    item->TextBase::layout1();
+    TLayout::layout1TextBase(item, ctx);
 
     double centerAdjust = 0.0;
     double leftAdjust   = 0.0;

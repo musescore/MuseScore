@@ -175,7 +175,6 @@ if (NOT CC_IS_EMSCRIPTEN)
         set(LINK_LIB ${LINK_LIB}
             iex_musicxml
             iex_bb
-            iex_braille
             iex_bww
             iex_capella
             iex_guitarpro
@@ -200,6 +199,10 @@ endif()
 
 if (MUE_BUILD_AUTOBOT_MODULE) 
     list(APPEND LINK_LIB autobot)
+endif()
+
+if (MUE_BUILD_BRAILLE_MODULE)
+    list(APPEND LINK_LIB braille)
 endif()
 
 if (MUE_BUILD_MUSESAMPLER_MODULE)

@@ -25,7 +25,6 @@
 
 #include "layout/v0/beamtremololayout.h"
 #include "engravingitem.h"
-#include "durationtype.h"
 #include "property.h"
 
 namespace mu::engraving::layout::v0 {

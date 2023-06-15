@@ -35,7 +35,6 @@
 #include "chord.h"
 #include "clef.h"
 #include "engravingitem.h"
-#include "factory.h"
 #include "glissando.h"
 #include "harmony.h"
 #include "harppedaldiagram.h"
@@ -44,7 +43,6 @@
 #include "keysig.h"
 #include "masterscore.h"
 #include "measure.h"
-#include "mmrest.h"
 #include "mscore.h"
 #include "note.h"
 #include "ornament.h"
@@ -597,6 +595,7 @@ void Segment::add(EngravingItem* el)
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -776,6 +775,7 @@ void Segment::remove(EngravingItem* el)
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
     case ElementType::SYMBOL:
     case ElementType::TAB_DURATION_SYMBOL:
     case ElementType::TEMPO_TEXT:
@@ -904,6 +904,7 @@ void Segment::sortStaves(std::vector<staff_idx_t>& dst)
             ElementType::SYSTEM_TEXT,
             ElementType::TRIPLET_FEEL,
             ElementType::PLAYTECH_ANNOTATION,
+            ElementType::CAPO,
             ElementType::JUMP,
             ElementType::MARKER,
             ElementType::TEMPO_TEXT,
@@ -1796,6 +1797,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -1941,6 +1943,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -2313,8 +2316,7 @@ void Segment::createShape(staff_idx_t staffIdx)
 
         if (e->isHarmony()) {
             // use same spacing calculation as for chordrest
-            layout::v0::LayoutContext ctx(score());
-            layout::v0::TLayout::layout(toHarmony(e), ctx);
+            layout()->layoutItem(toHarmony(e));
 
             double x1 = e->bbox().x() + e->pos().x();
             double x2 = e->bbox().x() + e->bbox().width() + e->pos().x();
@@ -2335,7 +2337,8 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isFermata()
                    && !e->isStaffText()
                    && !e->isHarpPedalDiagram()
-                   && !e->isPlayTechAnnotation()) {
+                   && !e->isPlayTechAnnotation()
+                   && !e->isCapo()) {
             // annotations added here are candidates for collision detection
             // lyrics, ...
             s.add(e->shape().translate(e->pos()));

@@ -25,20 +25,15 @@
 #include "draw/types/pen.h"
 
 #include "style/textstyle.h"
-#include "types/typesconv.h"
-#include "layout/v0/tupletlayout.h"
 
 #include "beam.h"
 #include "chord.h"
 #include "engravingitem.h"
 #include "factory.h"
 #include "measure.h"
-#include "note.h"
 #include "rest.h"
 #include "score.h"
 #include "stafftype.h"
-#include "stem.h"
-#include "system.h"
 #include "text.h"
 
 #include "log.h"

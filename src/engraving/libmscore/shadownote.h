@@ -42,6 +42,7 @@ namespace mu::engraving {
 class ShadowNote final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, ShadowNote)
+    DECLARE_CLASSOF(ElementType::SHADOW_NOTE)
 
 public:
     ShadowNote(Score*);

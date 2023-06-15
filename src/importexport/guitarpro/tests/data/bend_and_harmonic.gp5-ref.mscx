@@ -97,7 +97,7 @@ Cowboys From Hell</text>
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -107,9 +107,18 @@ Cowboys From Hell</text>
             <subtype>f</subtype>
             <velocity>96</velocity>
             </Dynamic>
-          <StaffText>
-            <text>AH</text>
-            </StaffText>
+          <Spanner type="HarmonicMark">
+            <HarmonicMark>
+              <beginText>AH</beginText>
+              <beginTextOffset x="0" y="0"/>
+              <continueText>AH</continueText>
+              </HarmonicMark>
+            <next>
+              <location>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
           <Chord>
             <durationType>half</durationType>
             <Note>
@@ -131,6 +140,13 @@ Cowboys From Hell</text>
               <string>2</string>
               </Note>
             </Chord>
+          <Spanner type="HarmonicMark">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Rest>
             <durationType>half</durationType>
             </Rest>

@@ -711,7 +711,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
                 ntpc = pitch2tpc(npitch, key, Prefer::NEAREST);
             }
 
-            Interval v = on->part()->instrument(tick)->transpose();
+            Interval v = estaff->transpose(tick);
             if (v.isZero()) {
                 ntpc1 = ntpc2 = ntpc;
             } else {

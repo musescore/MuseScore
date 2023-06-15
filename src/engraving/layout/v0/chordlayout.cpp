@@ -229,7 +229,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     item->_spaceRw = rrr;
 
     for (Note* note : item->_notes) {
-        note->layout2();
+        layoutNote2(note, ctx);
     }
 
     for (EngravingItem* e : item->el()) {
@@ -630,7 +630,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     }
 
     for (size_t i = 0; i < numOfNotes; ++i) {
-        item->_notes.at(i)->layout2();
+        layoutNote2(item->_notes.at(i), ctx);
     }
     RectF bb;
     item->processSiblings([&bb](EngravingItem* e) { bb.unite(e->bbox().translated(e->pos())); }, true);
@@ -2736,12 +2736,14 @@ void ChordLayout::resolveVerticalRestConflicts(Score* score, Segment* segment, s
 
     collectChordsAndRest(segment, staffIdx, chords, rests);
 
-    for (Rest* rest : rests) {
-        rest->verticalClearance().reset();
-    }
-
     if (rests.empty()) {
         return;
+    }
+
+    collectChordsOverlappingRests(segment, staffIdx, chords);
+
+    for (Rest* rest : rests) {
+        rest->verticalClearance().reset();
     }
 
     if (!chords.empty()) {
@@ -2763,7 +2765,7 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
     int lines = staff->lines(tick);
     double spatium = staff->spatium(tick);
     double lineDistance = staff->lineDistance(tick) * spatium;
-    const double minRestToChordClearance = 0.35 * spatium;
+    double minRestToChordClearance = 0.35 * spatium;
 
     for (Rest* rest : rests) {
         if (!rest->visible() || !rest->autoplace()) {
@@ -2774,14 +2776,25 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
             if (!chord->visible() || !chord->autoplace()) {
                 continue;
             }
+
             bool restAbove = rest->voice() < chord->voice() || (chord->slash() && !(rest->voice() % 2));
             int upSign = restAbove ? -1 : 1;
             double restYOffset = rest->offset().y();
             bool ignoreYOffset = (restAbove && restYOffset > 0) || (!restAbove && restYOffset < 0);
             PointF offset = ignoreYOffset ? PointF(0, restYOffset) : PointF(0, 0);
+
+            double clearance = 0.0;
             Shape restShape = rest->shape().translated(rest->pos() - offset);
-            Shape chordShape = chord->shape().translated(chord->pos());
-            double clearance = restAbove ? restShape.verticalClearance(chordShape) : chordShape.verticalClearance(restShape);
+            if (chord->segment() == rest->segment()) {
+                Shape chordShape = chord->shape().translated(chord->pos());
+                clearance = restAbove ? restShape.verticalClearance(chordShape) : chordShape.verticalClearance(restShape);
+            } else {
+                Note* limitNote = restAbove ? chord->upNote() : chord->downNote();
+                Shape noteShape = limitNote->shape().translate(limitNote->pos());
+                clearance = restAbove ? noteShape.top() - restShape.bottom() : restShape.top() - noteShape.bottom();
+                minRestToChordClearance = 0.0;
+            }
+
             double margin = clearance - minRestToChordClearance;
             int marginInSteps = floor(margin / lineDistance);
             if (restAbove) {
@@ -2792,6 +2805,7 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
             if (margin > 0) {
                 continue;
             }
+
             rest->verticalClearance().setLocked(true);
             bool isWholeOrHalf = rest->isWholeRest() || rest->durationType() == DurationType::V_HALF;
             bool outAboveStaff = restAbove && restShape.bottom() + margin < minRestToChordClearance;
@@ -2983,5 +2997,193 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
     }
     for (staff_idx_t staffIdx : shapesToRecreate) {
         segment->createShape(staffIdx);
+    }
+}
+
+void ChordLayout::crossMeasureSetup(Chord* chord, bool on, LayoutContext& ctx)
+{
+    if (!on) {
+        if (chord->_crossMeasure != CrossMeasure::UNKNOWN) {
+            chord->_crossMeasure = CrossMeasure::UNKNOWN;
+            layoutStem(chord, ctx);
+        }
+        return;
+    }
+    if (chord->_crossMeasure == CrossMeasure::UNKNOWN) {
+        CrossMeasure tempCross = CrossMeasure::NONE;      // assume no cross-measure modification
+        // if chord has only one note and note is tied forward
+        if (chord->notes().size() == 1 && chord->_notes[0]->tieFor()) {
+            Chord* tiedChord = chord->_notes[0]->tieFor()->endNote()->chord();
+            // if tied note belongs to another measure and to a single-note chord
+            if (tiedChord->measure() != chord->measure() && tiedChord->notes().size() == 1) {
+                // get total duration
+                std::vector<TDuration> durList = toDurationList(
+                    chord->actualDurationType().fraction()
+                    + tiedChord->actualDurationType().fraction(), true);
+                // if duration can be expressed as a single duration
+                // apply cross-measure modification
+                if (durList.size() == 1) {
+                    chord->_crossMeasure = tempCross = CrossMeasure::FIRST;
+                    chord->_crossMeasureTDur = durList[0];
+                    layoutStem(chord, ctx);
+                }
+            }
+            chord->_crossMeasure = tempCross;
+            tiedChord->setCrossMeasure(tempCross == CrossMeasure::FIRST
+                                       ? CrossMeasure::SECOND : CrossMeasure::NONE);
+        }
+    }
+}
+
+// called after final position of note is set
+void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
+{
+    const StaffType* staffType = item->staff()->staffTypeForElement(item);
+    // for standard staves this is done in Score::layoutChords3()
+    // so that the results are available there
+    bool isTabStaff = staffType && staffType->isTabStaff();
+    // First, for tab staves that have show back-tied fret marks option, we add parentheses to the tied note if
+    // the tie spans a system boundary. This can't be done in layout as the system of each note is not decided yet
+    bool useParens = isTabStaff && !staffType->showBackTied() && !item->_fixed;
+    if (useParens
+        && item->tieBack()
+        && (
+            item->chord()->measure()->system() != item->tieBack()->startNote()->chord()->measure()->system()
+            || !item->el().empty()
+            )) {
+        item->_fretString = String(u"(%1)").arg(item->_fretString);
+        double w = item->tabHeadWidth(staffType);     // !! use _fretString
+        item->bbox().setRect(0, staffType->fretBoxY() * item->magS(), w, staffType->fretBoxH() * item->magS());
+    }
+    int dots = item->chord()->dots();
+    if (dots && !item->_dots.empty()) {
+        // if chords have notes with different mag, dots must still  align
+        double correctMag = item->chord()->notes().size() > 1 ? item->chord()->mag() : item->mag();
+        double d  = item->score()->point(item->score()->styleS(Sid::dotNoteDistance)) * correctMag;
+        double dd = item->score()->point(item->score()->styleS(Sid::dotDotDistance)) * correctMag;
+        double x  = item->chord()->dotPosX() - item->pos().x() - item->chord()->pos().x();
+        // in case of dots with different size, center-align them
+        if (item->mag() != item->chord()->mag() && item->chord()->notes().size() > 1) {
+            double relativeMag = item->mag() / item->chord()->mag();
+            double centerAlignOffset = item->dot(0)->width() * (1 / relativeMag - 1) / 2;
+            x += centerAlignOffset;
+        }
+        // adjust dot distance for hooks
+        if (item->chord()->hook() && item->chord()->up()) {
+            double hookRight = item->chord()->hook()->width() + item->chord()->hook()->x() + item->chord()->pos().x();
+            double hookBottom = item->chord()->hook()->height() + item->chord()->hook()->y() + item->chord()->pos().y()
+                                + (0.25 * item->spatium());
+            // the top dot in the chord, not the dot for this particular note:
+            double dotY = item->chord()->notes().back()->y() + item->chord()->notes().back()->dots().front()->pos().y();
+            if (item->chord()->dotPosX() < hookRight && dotY < hookBottom) {
+                d = item->chord()->hook()->width();
+            }
+        }
+        // if TAB and stems through staff
+        if (isTabStaff && staffType->stemThrough()) {
+            // with TAB's, dot Y is not calculated during layoutChords3(),
+            // as layoutChords3() is not even called for TAB's;
+            // setDotY() actually also manages creation/deletion of NoteDot's
+            item->setDotY(DirectionV::AUTO);
+
+            // use TAB default note-to-dot spacing
+            dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * item->spatium();
+            d = dd * 0.5;
+        }
+        // apply to dots
+        double xx = x + d;
+        for (NoteDot* dot : item->_dots) {
+            dot->setPosX(xx);
+            xx += dd;
+        }
+    }
+
+    // layout elements attached to note
+    for (EngravingItem* e : item->_el) {
+        if (!item->score()->tagIsValid(e->tag())) {
+            continue;
+        }
+        if (e->isSymbol()) {
+            e->setMag(item->mag());
+            Shape noteShape = item->shape();
+            mu::remove_if(noteShape, [e](ShapeElement& s) { return s.toItem == e || s.toItem->isBend() || s.toItem->isStretchedBend(); });
+            LedgerLine* ledger = item->line() < -1 || item->line() > item->staff()->lines(item->tick())
+                                 ? item->chord()->ledgerLines() : nullptr;
+            if (ledger) {
+                noteShape.add(ledger->shape().translate(ledger->pos() - item->pos()));
+            }
+            double right = noteShape.right();
+            double left = noteShape.left();
+            Symbol* sym = toSymbol(e);
+            TLayout::layoutItem(e, ctx);
+            double parenthesisPadding = item->score()->styleMM(Sid::bracketedAccidentalPadding) * item->mag();
+            if (sym->sym() == SymId::noteheadParenthesisRight) {
+                if (isTabStaff) {
+                    const Staff* st = item->staff();
+                    const StaffType* tab = st->staffTypeForElement(item);
+                    right = item->tabHeadWidth(tab);
+                }
+
+                if (Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround() && item->staff()->isTabStaff(e->tick())) {
+                    e->movePosX(right + item->symWidth(SymId::noteheadParenthesisRight));
+                } else {
+                    e->setPosX(right + parenthesisPadding);
+                }
+            } else if (sym->sym() == SymId::noteheadParenthesisLeft) {
+                if (!Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround() || !item->staff()->isTabStaff(e->tick())) {
+                    e->setPosX(-left - e->width() - parenthesisPadding);
+                }
+            }
+        } else if (e->isFingering()) {
+            // don't set mag; fingerings should not scale with note
+            Fingering* f = toFingering(e);
+            if (f->propertyFlags(Pid::PLACEMENT) == PropertyFlags::STYLED) {
+                f->setPlacement(f->calculatePlacement());
+            }
+            // layout fingerings that are placed relative to notehead
+            // fingerings placed relative to chord will be laid out later
+            if (f->layoutType() == ElementType::NOTE) {
+                TLayout::layout(f, ctx);
+            }
+        } else {
+            e->setMag(item->mag());
+            TLayout::layoutItem(e, ctx);
+        }
+    }
+}
+
+void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)
+{
+    chord->_startEndSlurs.reset();
+    for (Spanner* spanner : chord->_startingSpanners) {
+        if (!spanner->isSlur()) {
+            continue;
+        }
+        Slur* slur = toSlur(spanner);
+        SlurTieLayout::computeUp(slur, ctx);
+        if (slur->up()) {
+            chord->_startEndSlurs.startUp = true;
+        } else {
+            chord->_startEndSlurs.startDown = true;
+        }
+        // Check if end chord has been connected to this slur. If not, connect it.
+        if (!slur->endChord()) {
+            continue;
+        }
+        std::vector<Spanner*>& endingSp = slur->endChord()->endingSpanners();
+        if (std::find(endingSp.begin(), endingSp.end(), slur) == endingSp.end()) {
+            // Slur not added. Add it now.
+            endingSp.push_back(slur);
+        }
+    }
+    for (Spanner* spanner : chord->_endingSpanners) {
+        if (!spanner->isSlur()) {
+            continue;
+        }
+        if (toSlur(spanner)->up()) {
+            chord->_startEndSlurs.endUp = true;
+        } else {
+            chord->_startEndSlurs.endDown = true;
+        }
     }
 }

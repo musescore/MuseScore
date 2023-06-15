@@ -58,6 +58,7 @@ class Chord;
 class ChordRest;
 class ChordLine;
 class Clef;
+class Capo;
 
 class DurationElement;
 class Dynamic;
@@ -197,6 +198,7 @@ public:
     static void write(const Chord* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const ChordLine* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Clef* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Capo* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Expression* item, XmlWriter& xml, WriteContext& ctx);

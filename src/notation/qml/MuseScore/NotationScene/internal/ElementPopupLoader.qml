@@ -50,6 +50,7 @@ Item {
         function componentByType(type) {
             switch (type) {
             case Notation.TYPE_HARP_DIAGRAM: return harpPedalComp
+            case Notation.TYPE_CAPO: return capoComp
             }
 
             return null
@@ -79,7 +80,6 @@ Item {
     function show(elementType, viewPos, size) {
         if (isPopupOpened) {
             prv.closeOpenedPopup()
-            return
         }
         opened()
         var popup = loader.createPopup(prv.componentByType(elementType), viewPos, size)
@@ -106,6 +106,19 @@ Item {
     Component {
         id: harpPedalComp
         HarpPedalPopup {
+            navigationSection: container.navigationSection
+            navigationOrderStart: container.navigationOrderStart
+
+            onClosed: {
+                prv.resetOpenedPopup()
+                loader.sourceComponent = null
+            }
+        }
+    }
+
+    Component {
+        id: capoComp
+        CapoPopup {
             navigationSection: container.navigationSection
             navigationOrderStart: container.navigationOrderStart
 

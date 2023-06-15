@@ -81,7 +81,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -119,6 +119,9 @@
           <Spanner type="Trill">
             <Trill>
               <subtype>trill</subtype>
+              <Ornament>
+                <subtype>ornamentTrill</subtype>
+                </Ornament>
               </Trill>
             <next>
               <location>

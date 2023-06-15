@@ -525,8 +525,7 @@ void NotationInteraction::showShadowNote(const PointF& pos)
         shadowNote.setState(symNotehead, duration, false, segmentSkylineTopY, segmentSkylineBottomY);
     }
 
-    layout::v0::LayoutContext lctx(shadowNote.score());
-    layout::v0::TLayout::layout(&shadowNote, lctx);
+    EngravingItem::layout()->layoutItem(&shadowNote);
 
     shadowNote.setPos(position.pos);
 }
@@ -1284,8 +1283,7 @@ void NotationInteraction::startDrop(const QByteArray& edata)
 
         rw::RWRegister::reader()->readItem(m_dropData.ed.dropElement, e);
 
-        layout::v0::LayoutContext lctx(m_dropData.ed.dropElement->score());
-        layout::v0::TLayout::layoutItem(m_dropData.ed.dropElement, lctx);
+        EngravingItem::layout()->layoutItem(m_dropData.ed.dropElement);
     }
 }
 
@@ -1306,8 +1304,7 @@ bool NotationInteraction::startDrop(const QUrl& url)
     m_dropData.ed.dragOffset = QPointF();
     m_dropData.ed.dropElement->setParent(nullptr);
 
-    layout::v0::LayoutContext lctx(m_dropData.ed.dropElement->score());
-    layout::v0::TLayout::layoutItem(m_dropData.ed.dropElement, lctx);
+    mu::engraving::EngravingItem::layout()->layoutItem(m_dropData.ed.dropElement);
 
     return true;
 }
@@ -1362,6 +1359,7 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
     case ElementType::NOTEHEAD:
     case ElementType::TREMOLO:
     case ElementType::LAYOUT_BREAK:
@@ -1519,6 +1517,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
     case ElementType::NOTEHEAD:
     case ElementType::TREMOLO:
     case ElementType::LAYOUT_BREAK:
@@ -1857,13 +1856,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                     {
                         mu::engraving::KeySig* okeysig = engraving::Factory::createKeySig(score->dummy()->segment());
                         okeysig->setKeySigEvent(staff->keySigEvent(tick1));
-                        if (!score->styleB(mu::engraving::Sid::concertPitch) && !okeysig->isAtonal()) {
-                            mu::engraving::Interval v = staff->part()->instrument(tick1)->transpose();
-                            if (!v.isZero()) {
-                                Key k = okeysig->key();
-                                okeysig->setKey(transposeKey(k, v, okeysig->part()->preferSharpFlat()));
-                            }
-                        }
+                        Key ck = okeysig->concertKey();
+                        okeysig->setKey(ck);
                         oelement = okeysig;
                         break;
                     }
@@ -2956,7 +2950,7 @@ void NotationInteraction::editText(QInputMethodEvent* event)
             cursor->updateCursorFormat();
             text->editInsertText(cursor, preeditString);
             text->setTextInvalid();
-            text->layout1();
+            EngravingItem::layout()->layoutText1(text);
             score()->update();
         }
     }

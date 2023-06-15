@@ -35,6 +35,7 @@
 #include "../../libmscore/tempotext.h"
 #include "../../libmscore/stafftext.h"
 #include "../../libmscore/stafftextbase.h"
+#include "../../libmscore/capo.h"
 
 #include "../../libmscore/drumset.h"
 #include "../../libmscore/dynamic.h"
@@ -146,7 +147,7 @@ using namespace mu::engraving::read410;
 
 using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
                                  BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,  HBox, VBox, FBox, TBox, Bracket, Breath,
-                                 Chord, ChordLine, Clef,
+                                 Chord, ChordLine, Clef, Capo,
                                  Dynamic, Expression,
                                  Fermata, FiguredBass, Fingering, FretDiagram,
                                  Glissando, GradualTempoChange,
@@ -1160,7 +1161,7 @@ void TRead::read(KeyList* item, XmlReader& e, ReadContext& ctx)
                 k = Key(e.intAttribute("idx"));
             }
             KeySigEvent ke;
-            ke.setKey(k);
+            ke.setConcertKey(k);
             (*item)[ctx.fileDivision(tick)] = ke;
             e.readNext();
         } else {
@@ -1173,6 +1174,7 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
 {
     KeySigEvent sig;
     int subtype = 0;
+    Part* p = s->part();
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -1228,7 +1230,20 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
             s->setShowCourtesy(e.readInt());
         } else if (tag == "showNaturals") {           // obsolete
             e.readInt();
-        } else if (tag == "accidental") {
+        } else if (tag == "accidental") {             // older files; we need to guess proper concert key
+            Key key = Key(e.readInt());
+            Key cKey = key;
+            if (p && !s->concertPitch()) {
+                Interval v = p->instrument(s->tick())->transpose();
+                if (!v.isZero()) {
+                    cKey = transposeKey(key, v);
+                }
+            }
+            sig.setConcertKey(cKey);
+            sig.setKey(key);
+        } else if (tag == "concertKey") {
+            sig.setConcertKey(Key(e.readInt()));
+        } else if (tag == "actualKey") {
             sig.setKey(Key(e.readInt()));
         } else if (tag == "natural") {                // obsolete
             e.readInt();
@@ -1263,7 +1278,7 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
         } else if (tag == "subtype") {
             subtype = e.readInt();
         } else if (tag == "forInstrumentChange") {
-            s->setForInstrumentChange(e.readBool());
+            sig.setForInstrumentChange(e.readBool());
         } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
         }
@@ -1391,7 +1406,7 @@ bool TRead::readProperties(Fermata* f, XmlReader& xml, ReadContext& ctx)
     if (tag == "subtype") {
         AsciiStringView s = xml.readAsciiText();
         SymId id = SymNames::symIdByName(s);
-        f->setSymId(id);
+        f->setSymIdAndTimeStretch(id);
     } else if (tag == "play") {
         f->setPlay(xml.readBool());
     } else if (tag == "timeStretch") {
@@ -2590,6 +2605,42 @@ void TRead::read(Clef* c, XmlReader& e, ReadContext& ctx)
     }
 }
 
+void TRead::read(Capo* c, XmlReader& xml, ReadContext& ctx)
+{
+    CapoParams params = c->params();
+
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+
+        if (tag == "active") {
+            params.active = xml.readBool();
+        } else if (tag == "fretPosition") {
+            params.fretPosition = xml.readInt();
+        } else if (tag == "string") {
+            string_idx_t idx = static_cast<string_idx_t>(xml.intAttribute("no"));
+
+            while (xml.readNextStartElement()) {
+                const AsciiStringView stringTag(xml.name());
+
+                if (stringTag == "apply") {
+                    bool apply = xml.readBool();
+                    if (!apply) {
+                        params.ignoredStrings.insert(idx);
+                    }
+                } else {
+                    xml.unknown();
+                }
+            }
+        } else if (tag == "generateText") {
+            c->setProperty(Pid::CAPO_GENERATE_TEXT, xml.readBool());
+        } else if (!readProperties(static_cast<StaffTextBase*>(c), xml, ctx)) {
+            xml.unknown();
+        }
+    }
+
+    c->setParams(params);
+}
+
 bool TRead::readProperties(Clef* c, XmlReader& xml, ReadContext& ctx)
 {
     return readItemProperties(c, xml, ctx);
@@ -3298,7 +3349,16 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
     } else if (tag == "soloist") {
         p->setSoloist(e.readInt());
     } else if (tag == "preferSharpFlat") {
-        p->setPreferSharpFlat(e.readText() == "sharps" ? PreferSharpFlat::SHARPS : PreferSharpFlat::FLATS);
+        String val = e.readText();
+        if (val == "sharps") {
+            p->setPreferSharpFlat(PreferSharpFlat::SHARPS);
+        } else if (val == "flats") {
+            p->setPreferSharpFlat(PreferSharpFlat::FLATS);
+        } else if (val == "none") {
+            p->setPreferSharpFlat(PreferSharpFlat::NONE);
+        } else {
+            p->setPreferSharpFlat(PreferSharpFlat::AUTO);
+        }
     } else {
         return false;
     }

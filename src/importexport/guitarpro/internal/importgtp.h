@@ -29,6 +29,7 @@
 #include "io/file.h"
 
 #include "gtp/gp67dombuilder.h"
+#include "continiouselementsbuilder.h"
 #include "libmscore/score.h"
 #include "libmscore/vibrato.h"
 #include "libmscore/articulation.h"
@@ -150,6 +151,20 @@ protected:
         std::vector<TabImportOption> partsImportOptions;
     };
 
+    struct ReadNoteResult {
+        bool slur = false;
+        bool letRing = false;
+        bool palmMute = false;
+        bool trill = false;
+        bool vibrato = false;
+
+        /// harmonic marks
+        bool harmonicArtificial = false;
+        bool harmonicPinch = false;
+        bool harmonicTap = false;
+        bool harmonicSemi = false;
+    };
+
     GPProperties m_properties;
 
     std::list<Note*> slideList;   //list of start slide notes
@@ -167,6 +182,7 @@ protected:
     static const uint8_t EFFECT_ARTIFICIAL_HARMONIC = 0x10;
     static const uint8_t EFFECT_TRILL = 0x20;
     static const uint8_t EFFECT_GHOST = 0x01;
+    static const uint8_t EFFECT_VIBRATO = 0x40;
 
     // arpeggio direction masks
     static const uint8_t ARPEGGIO_UP = 0xa;
@@ -184,6 +200,7 @@ protected:
     static const uint8_t NOTE_APPOGIATURA = 0x02;  //1
 
     // beat bit masks
+    static const uint8_t BEAT_RASGUEADO = 0x01;
     static const uint8_t BEAT_VIBRATO_TREMOLO = 0x02;
     static const uint8_t BEAT_FADE = 0x10;
     static const uint8_t BEAT_EFFECT = 0x20;
@@ -225,16 +242,15 @@ protected:
 
     static const int MAX_PITCH = 127;
     static const char* const errmsg[];
-    int version;
-    int key { 0 };
+    int version = 0;
+    int key = 0;
 
-    mu::engraving::Segment* last_segment   { nullptr };
-    Measure* last_measure   { nullptr };
-    int last_tempo          { -1 };
+    mu::engraving::Segment* last_segment = nullptr;
+    Measure* last_measure = nullptr;
+    int last_tempo = -1;
 
-    std::map<int, std::vector<GPFermata>*> fermatas;
-    std::vector<mu::engraving::Ottava*> ottava;
-    mu::engraving::Hairpin** hairpins = nullptr;
+    std::vector<mu::engraving::Ottava*> ottava; /// will be removed
+    mu::engraving::Hairpin** hairpins = nullptr; /// will be removed
     mu::engraving::MasterScore* score = nullptr;
     mu::io::IODevice* f = nullptr;
     int curPos = 0;
@@ -242,16 +258,13 @@ protected:
     std::vector<int> previousDynamicByTrack;
     constexpr static int INVALID_DYNAMIC = -1;
     constexpr static int DEFAULT_DYNAMIC = 0;
-    std::vector<int> ottavaFound;
-    std::vector<String> ottavaValue;
-    std::map<int, std::pair<int, bool> > tempoMap;
     int tempo = -1;
     std::map<int, int> slides;
 
     GPLyrics gpLyrics;
     int slide = 0;
     int voltaSequence = 0;
-    mu::engraving::Slur** slurs       { nullptr };
+    mu::engraving::Slur** slurs = nullptr;
     std::vector<mu::engraving::Bend*> m_bends;
     std::vector<mu::engraving::StretchedBend*> m_stretchedBends;
 
@@ -278,29 +291,27 @@ protected:
     Fraction len2fraction(int len);
     void addDynamic(Note*, int d);
     void createMeasures();
-    void applyBeatEffects(mu::engraving::Chord*, int beatEffects);
+    void applyBeatEffects(mu::engraving::Chord*, int beatEffects, bool& hasVibratoLeftHand, bool& hasVibratoWTremBar);
     void readTremoloBar(int track, mu::engraving::Segment*);
     void readChord(mu::engraving::Segment* seg, int track, int numStrings, String name, bool gpHeader);
     void restsForEmptyBeats(mu::engraving::Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track, const Fraction& tick);
     void createSlur(bool hasSlur, staff_idx_t staffIdx, ChordRest* cr);
-    void createOttava(bool hasOttava, int track, ChordRest* cr, String value);
     void createSlide(int slide, ChordRest* cr, int staffIdx, Note* note = nullptr);
-    void createCrecDim(int staffIdx, int track, const Fraction& tick, bool crec);
     void addTextToNote(String text, Note* note);
     void addTextArticulation(Note* note, mu::engraving::ArticulationTextType type);
-    void addPalmMute(Note*);
-    void addLetRing(Note*);
-    void addVibrato(Note*, mu::engraving::VibratoType type = mu::engraving::VibratoType::GUITAR_VIBRATO);
+    void addPalmMute(ChordRest* cr, bool hasPalmMute);
+    void addLetRing(ChordRest* cr, bool hasPalmMute);
+    void addTrill(ChordRest* cr, bool hasTrill);
+    void addRasgueado(ChordRest* cr, bool hasRasgueado);
+    void addVibratoLeftHand(ChordRest* cr, bool hasVibratoLeftHand);
+    void addVibratoWTremBar(ChordRest* cr, bool hasVibratoWTremBar);
+    void addHarmonicMarks(ChordRest* cr, bool hasHarmonicArtificial, bool hasHarmonicPinch, bool hasHarmonicTap, bool hasHarmonicSemi);
     void addTap(Note*);
     void addSlap(Note*);
     void addPop(Note*);
     void createTuningString(int strings, int tuning[]);
     virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const { return nullptr; }
     void initDynamics(size_t stavesNum);
-
-    std::vector<mu::engraving::PalmMute*> _palmMutes;
-    std::vector<mu::engraving::LetRing*> _letRings;
-    std::vector<mu::engraving::Vibrato*> _vibratos;
 
 public:
     std::vector<std::string> tunings;
@@ -309,12 +320,12 @@ public:
     void setTempo(int n, Measure* measure);
     void initGuitarProDrumset();
     String title, subtitle, artist, album, composer;
-    String transcriber, instructions;
     StringList comments;
     GpTrack channelDefaults[GP_MAX_TRACK_NUMBER * 2];
     size_t staves = 0;
     size_t measures = 0;
     std::vector<GpBar> bars;
+    std::unique_ptr<ContiniousElementsBuilder> m_continiousElementsBuilder;
 
     enum class GuitarProError : char {
         GP_NO_ERROR, GP_UNKNOWN_FORMAT,
@@ -334,7 +345,7 @@ public:
 class GuitarPro1 : public GuitarPro
 {
 protected:
-    bool readNote(int string, mu::engraving::Note* note);
+    ReadNoteResult readNote(int string, mu::engraving::Note* note);
     int readBeatEffects(int track, mu::engraving::Segment*) override;
 
 public:
@@ -378,7 +389,7 @@ class GuitarPro4 : public GuitarPro
     std::vector<int> curDynam;
     std::vector<int> tupleKind;
     void readInfo();
-    bool readNote(int string, int staffIdx, Note* note);
+    ReadNoteResult readNote(int string, int staffIdx, Note* note);
     int readBeatEffects(int track, mu::engraving::Segment* segment) override;
     bool readMixChange(mu::engraving::Measure* measure) override;
     int convertGP4SlideNum(int slide);
@@ -399,18 +410,19 @@ class GuitarPro5 : public GuitarPro
     int _beat_counter{ 0 };
     std::unordered_map<mu::engraving::Chord*, mu::engraving::TremoloType> m_tremolosInChords; // for adding tremolo for tied notes
     std::unordered_map<Note*, Note*> m_harmonicNotes; // for adding ties for harmonic notes
+    bool m_currentBeatHasRasgueado = false;
+    std::unordered_set<ChordRest*> m_letRingForChords; // fixing gp5 bug with no storing let ring for tied notes
 
     void readInfo();
     void readPageSetup();
     int readBeatEffects(int track, mu::engraving::Segment* segment) override;
-    bool readNote(int string, Note* note);
+    ReadNoteResult readNote(int string, Note* note);
     bool readMixChange(Measure* measure) override;
     void readMeasure(Measure* measure, int staffIdx, mu::engraving::Tuplet*[], bool mixChange);
-    int readArtificialHarmonic();
     bool readTracks();
     void readMeasures(int startingTempo);
     Fraction readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, mu::engraving::Tuplet** tuplets, bool mixChange);
-    bool readNoteEffects(Note*);
+    ReadNoteResult readNoteEffects(Note*);
     float naturalHarmonicFromFret(int fret);
 
 public:

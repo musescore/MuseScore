@@ -22,13 +22,9 @@
 
 #include "lyrics.h"
 
-#include "translation.h"
 #include "types/translatablestring.h"
 
-#include "layout/v0/tlayout.h"
-
 #include "measure.h"
-#include "mscoreview.h"
 #include "navigate.h"
 #include "score.h"
 #include "segment.h"
@@ -403,8 +399,7 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
         if (_ticks <= Fraction(0, 1)) {
             // if no ticks, we have to relayout in order to remove invalid melisma segments
             setRemoveInvalidSegments();
-            layout::v0::LayoutContext ctx(score());
-            layout::v0::TLayout::layout(this, ctx);
+            layout()->layoutItem(this);
         }
         break;
     case Pid::VERSE:
@@ -512,14 +507,6 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
     }
 
     TextBase::undoChangeProperty(id, v, ps);
-}
-
-KerningType Lyrics::doComputeKerningType(const EngravingItem* nextItem) const
-{
-    if (nextItem->isLyrics() || nextItem->isBarLine()) {
-        return KerningType::NON_KERNING;
-    }
-    return KerningType::KERNING;
 }
 
 //---------------------------------------------------------

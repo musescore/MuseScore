@@ -73,7 +73,7 @@ FocusScope {
             Layout.fillWidth: true
 
             navigationPanel.section: navSec
-            navigationPanel.order: notationView.navigationPanel.order + 1
+            navigationPanel.order: popUpLoader.navigationOrderEnd + 1
         }
 
         SeparatorLine { visible: tabPanel.visible }
@@ -142,7 +142,7 @@ FocusScope {
                     }
 
                     onShowElementPopupRequested: function (popupType, viewPos, elemSize) {
-                        popUpLoader.show(popupType, viewPos, elemSize)
+                        Qt.callLater(popUpLoader.show, popupType, viewPos, elemSize)
                     }
 
                     onHideElementPopupRequested: {
@@ -159,16 +159,19 @@ FocusScope {
                         onHandleMenuItem: function(itemId) {
                             contextMenuModel.handleMenuItem(itemId)
                         }
+
+                        onOpened: paintView.onContextMenuIsOpenChanged(true)
+                        onClosed: paintView.onContextMenuIsOpenChanged(false)
                     }
 
                     ElementPopupLoader {
                         id: popUpLoader
 
                         navigationSection: navSec
-                        navigationOrderStart: 2
+                        navigationOrderStart: notationView.navigationPanel.order + 1
 
-                        onOpened: paintView.setIsPopupOpen(true)
-                        onClosed: paintView.setIsPopupOpen(false)
+                        onOpened: paintView.onElementPopupIsOpenChanged(true)
+                        onClosed: paintView.onElementPopupIsOpenChanged(false)
                     }
                 }
             }

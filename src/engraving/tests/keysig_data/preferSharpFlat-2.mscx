@@ -98,7 +98,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>-2</accidental>
+			<accidental>-2</accidental>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>

@@ -42,7 +42,6 @@ static const std::string module_name("project");
 
 static const Settings::Key RECENT_PROJECTS_PATHS(module_name, "project/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
-static const Settings::Key DEFAULT_PROJECTS_PATH(module_name, "application/paths/defaultProjectsPath");
 static const Settings::Key LAST_OPENED_PROJECTS_PATH(module_name, "application/paths/lastOpenedProjectsPath");
 static const Settings::Key LAST_SAVED_PROJECTS_PATH(module_name, "application/paths/lastSavedProjectsPath");
 static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/myScores");
@@ -71,7 +70,7 @@ void ProjectConfiguration::init()
         m_userTemplatesPathChanged.send(val.toPath());
     });
 
-    settings()->setDefaultValue(DEFAULT_PROJECTS_PATH, Val(globalConfiguration()->userDataPath() + "/Scores"));
+    settings()->setDefaultValue(USER_PROJECTS_PATH, Val(globalConfiguration()->userDataPath() + "/Scores"));
 
     settings()->valueChanged(USER_PROJECTS_PATH).onReceive(nullptr, [this](const Val& val) {
         m_userScoresPathChanged.send(val.toPath());
@@ -108,8 +107,12 @@ void ProjectConfiguration::init()
     settings()->setDefaultValue(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY, Val(10));
     settings()->setDefaultValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(true));
 
-    fileSystem()->makePath(userTemplatesPath());
-    fileSystem()->makePath(defaultProjectsPath());
+    if (!userTemplatesPath().empty()) {
+        fileSystem()->makePath(userTemplatesPath());
+    }
+    if (!userProjectsPath().empty()) {
+        fileSystem()->makePath(userProjectsPath());
+    }
     fileSystem()->makePath(cloudProjectsPath());
 }
 
@@ -250,16 +253,6 @@ async::Channel<io::path_t> ProjectConfiguration::userTemplatesPathChanged() cons
     return m_userTemplatesPathChanged;
 }
 
-io::path_t ProjectConfiguration::defaultProjectsPath() const
-{
-    return settings()->value(DEFAULT_PROJECTS_PATH).toPath();
-}
-
-void ProjectConfiguration::setDefaultProjectsPath(const io::path_t& path)
-{
-    settings()->setSharedValue(DEFAULT_PROJECTS_PATH, Val(path));
-}
-
 io::path_t ProjectConfiguration::lastOpenedProjectsPath() const
 {
     return settings()->value(LAST_OPENED_PROJECTS_PATH).toPath();
@@ -293,6 +286,11 @@ void ProjectConfiguration::setUserProjectsPath(const io::path_t& path)
 async::Channel<io::path_t> ProjectConfiguration::userProjectsPathChanged() const
 {
     return m_userScoresPathChanged;
+}
+
+io::path_t ProjectConfiguration::defaultUserProjectsPath() const
+{
+    return settings()->defaultValue(USER_PROJECTS_PATH).toPath();
 }
 
 bool ProjectConfiguration::shouldAskSaveLocationType() const
@@ -379,7 +377,7 @@ io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr proje
     }
 
     if (folderPath.empty()) {
-        folderPath = defaultProjectsPath();
+        folderPath = defaultUserProjectsPath();
     }
 
     if (filename.empty()) {

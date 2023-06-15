@@ -819,6 +819,7 @@ enum class Sid {
     stringNumberFrameFgColor,
     stringNumberFrameBgColor,
     stringNumberOffset,
+    preferSameStringForTranspose,
 
     harpPedalDiagramFontFace,
     harpPedalDiagramFontSize,

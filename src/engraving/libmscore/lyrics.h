@@ -59,8 +59,6 @@ public:
 public:
     ~Lyrics();
 
-    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
-
     Lyrics* clone() const override { return new Lyrics(*this); }
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
@@ -129,6 +127,7 @@ private:
 class LyricsLine final : public SLine
 {
     OBJECT_ALLOCATOR(engraving, LyricsLine)
+    DECLARE_CLASSOF(ElementType::LYRICSLINE)
 
 public:
     LyricsLine(EngravingItem* parent);
@@ -145,7 +144,6 @@ public:
     bool isEndMelisma() const { return lyrics()->ticks().isNotZero(); }
     bool isDash() const { return !isEndMelisma(); }
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
-    SpannerSegment* layoutSystem(System*) override;
 
 protected:
     friend class layout::v0::LyricsLayout;

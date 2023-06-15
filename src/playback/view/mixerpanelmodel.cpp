@@ -56,22 +56,7 @@ void MixerPanelModel::load()
     m_currentTrackSequenceId = sequenceId;
 
     controller()->trackAdded().onReceive(this, [this](const TrackId trackId) {
-        const TrackIdList& auxTrackIdList = controller()->auxTrackIdList();
-        if (mu::contains(auxTrackIdList, trackId)) {
-            MixerChannelItem* item = buildAuxChannelItem(trackId);
-            addItem(item, m_mixerChannelList.size() - 1);
-            return;
-        }
-
-        const IPlaybackController::InstrumentTrackIdMap& instrumentTracks = controller()->instrumentTrackIdMap();
-        InstrumentTrackId instrumentTrackId = mu::key(instrumentTracks, trackId);
-
-        const Part* part = masterNotationParts()->part(instrumentTrackId.partId);
-        bool isPrimary = part ? part->instrument()->id().toStdString() == instrumentTrackId.instrumentId : true;
-        MixerChannelItem* item = buildInstrumentChannelItem(trackId, instrumentTrackId, isPrimary);
-        int index = resolveInsertIndex(instrumentTrackId);
-
-        addItem(item, index);
+        onTrackAdded(trackId);
     });
 
     controller()->trackRemoved().onReceive(this, [this](const TrackId trackId) {
@@ -165,9 +150,11 @@ void MixerPanelModel::loadItems()
         }
     }
 
-    const TrackIdList& auxTrackIdList = controller()->auxTrackIdList();
-    for (const TrackId& auxTrackId : auxTrackIdList) {
-        m_mixerChannelList.push_back(buildAuxChannelItem(auxTrackId));
+    const auto& auxTrackIdMap = controller()->auxTrackIdMap();
+    for (auto it = auxTrackIdMap.cbegin(); it != auxTrackIdMap.cend(); ++it) {
+        if (configuration()->isAuxChannelVisible(it->first)) {
+            m_mixerChannelList.push_back(buildAuxChannelItem(it->second));
+        }
     }
 
     m_masterChannelItem = buildMasterChannelItem();
@@ -175,6 +162,38 @@ void MixerPanelModel::loadItems()
 
     updateItemsPanelsOrder();
     setupConnections();
+}
+
+void MixerPanelModel::onTrackAdded(const TrackId& trackId)
+{
+    TRACEFUNC;
+
+    const IPlaybackController::InstrumentTrackIdMap& instrumentTracks = controller()->instrumentTrackIdMap();
+    auto instrumentIt = std::find_if(instrumentTracks.cbegin(), instrumentTracks.cend(), [trackId](const auto& pair) {
+        return pair.second == trackId;
+    });
+
+    if (instrumentIt != instrumentTracks.end()) {
+        const InstrumentTrackId& instrumentTrackId = instrumentIt->first;
+        const Part* part = masterNotationParts()->part(instrumentTrackId.partId);
+        bool isPrimary = part ? part->instrument()->id().toStdString() == instrumentTrackId.instrumentId : true;
+        MixerChannelItem* item = buildInstrumentChannelItem(trackId, instrumentTrackId, isPrimary);
+        int index = resolveInsertIndex(instrumentTrackId);
+
+        addItem(item, index);
+        return;
+    }
+
+    const IPlaybackController::AuxTrackIdMap& auxTracks = controller()->auxTrackIdMap();
+    auto auxIt = std::find_if(auxTracks.begin(), auxTracks.end(), [trackId](const auto& pair) {
+        return pair.second == trackId;
+    });
+
+    if (auxIt != auxTracks.end()) {
+        if (configuration()->isAuxChannelVisible(auxIt->first)) {
+            addItem(buildAuxChannelItem(trackId), m_mixerChannelList.size() - 1);
+        }
+    }
 }
 
 void MixerPanelModel::addItem(MixerChannelItem* item, int index)
@@ -208,6 +227,8 @@ void MixerPanelModel::removeItem(const audio::TrackId trackId)
     updateItemsPanelsOrder();
 
     endRemoveRows();
+
+    updateOutputResourceItemCount();
 
     emit rowCountChanged();
 }
@@ -297,6 +318,16 @@ void MixerPanelModel::setupConnections()
             if (it != items.end()) {
                 it.value()->setTitle(QString::fromStdString(name));
             }
+        }
+    });
+
+    configuration()->isAuxChannelVisibleChanged().onReceive(this, [this](aux_channel_idx_t index, bool visible) {
+        TrackId trackId = mu::value(controller()->auxTrackIdMap(), index);
+
+        if (visible) {
+            addItem(buildAuxChannelItem(trackId), m_mixerChannelList.size() - 1);
+        } else {
+            removeItem(trackId);
         }
     });
 }

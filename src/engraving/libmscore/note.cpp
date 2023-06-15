@@ -35,7 +35,6 @@
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
-#include "layout/v0/tlayout.h"
 
 #include "accidental.h"
 #include "actionicon.h"
@@ -744,14 +743,7 @@ int Note::tpc1default(int p) const
     Key key = Key::C;
     if (staff() && chord()) {
         Fraction tick = chord()->tick();
-        key = staff()->key(tick);
-        if (!concertPitch()) {
-            Interval interval = part()->instrument(tick)->transpose();
-            if (!interval.isZero()) {
-                interval.flip();
-                key = transposeKey(key, interval);
-            }
-        }
+        key = staff()->concertKey(tick);
     }
     return pitch2tpc(p, key, Prefer::NEAREST);
 }
@@ -769,6 +761,7 @@ int Note::tpc2default(int p) const
         if (concertPitch()) {
             Interval interval = part()->instrument(tick)->transpose();
             if (!interval.isZero()) {
+                interval.flip();
                 key = transposeKey(key, interval);
             }
         }
@@ -784,14 +777,10 @@ void Note::setTpcFromPitch()
 {
     // works best if note is already added to score, otherwise we can't determine transposition or key
     Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
-    Interval v = staff() ? part()->instrument(tick)->transpose() : Interval();
-    Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
-    // convert key to concert pitch
-    if (!concertPitch() && !v.isZero()) {
-        key = transposeKey(key, v);
-    }
+    Interval v = staff() ? staff()->transpose(tick) : Interval();
+    Key cKey = (staff() && chord()) ? staff()->concertKey(chord()->tick()) : Key::C;
     // set concert pitch tpc
-    _tpc[0] = pitch2tpc(_pitch, key, Prefer::NEAREST);
+    _tpc[0] = pitch2tpc(_pitch, cKey, Prefer::NEAREST);
     // set transposed tpc
     if (v.isZero()) {
         _tpc[1] = _tpc[0];
@@ -907,7 +896,7 @@ String Note::tpcUserName(const bool explicitAccidental, bool full) const
 int Note::transposeTpc(int tpc) const
 {
     Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
-    Interval v = part()->instrument(tick)->transpose();
+    Interval v = staff()->transpose(tick);
     if (v.isZero()) {
         return tpc;
     }
@@ -921,11 +910,18 @@ int Note::transposeTpc(int tpc) const
 
 int Note::playingTpc() const
 {
+    int result = tpc();
+
     if (!concertPitch() && transposition()) {
-        return transposeTpc(tpc());
+        result = transposeTpc(result);
     }
 
-    return tpc();
+    int steps = ottaveCapoFret();
+    if (steps != 0) {
+        result = mu::engraving::transposeTpc(result, Interval(steps), true);
+    }
+
+    return result;
 }
 
 //---------------------------------------------------------
@@ -1510,7 +1506,7 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
     }
     if (!(tpcIsValid(_tpc[0]) && tpcIsValid(_tpc[1]))) {
         Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
-        Interval v = staff() ? part()->instrument(tick)->transpose() : Interval();
+        Interval v = staff() ? staff()->transpose(tick) : Interval();
         if (tpcIsValid(_tpc[0])) {
             v.flip();
             if (v.isZero()) {
@@ -1542,7 +1538,7 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
             _pitch += tpc1Pitch - soundingPitch;
         }
         if (staff()) {
-            Interval v = staff()->part()->instrument(ctxTick)->transpose();
+            Interval v = staff()->transpose(ctxTick);
             int writtenPitch = (_pitch - v.chromatic) % 12;
             if (tpc2Pitch != writtenPitch) {
                 LOGD("bad tpc2 - writtenPitch = %d, tpc2 = %d", writtenPitch, tpc2Pitch);
@@ -1699,6 +1695,7 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::BAR_LINE)
            || (type == ElementType::STAFF_TEXT)
            || (type == ElementType::PLAYTECH_ANNOTATION)
+           || (type == ElementType::CAPO)
            || (type == ElementType::SYSTEM_TEXT)
            || (type == ElementType::TRIPLET_FEEL)
            || (type == ElementType::STICKING)
@@ -1853,7 +1850,7 @@ EngravingItem* Note::drop(EditData& data)
     {
         // calculate correct transposed tpc
         Note* n = toNote(e);
-        Interval v = part()->instrument(ch->tick())->transpose();
+        Interval v = staff()->transpose(ch->tick());
         v.flip();
         n->setTpc2(mu::engraving::transposeTpc(n->tpc1(), v, true));
         // replace this note with new note
@@ -2150,22 +2147,10 @@ void Note::setDotY(DirectionV pos)
         }
     }
 
-    layout::v0::LayoutContext ctx(score());
     for (NoteDot* dot : _dots) {
-        layout::v0::TLayout::layout(dot, ctx);
+        layout()->layoutItem(dot);
         dot->setPosY(y);
     }
-}
-
-//---------------------------------------------------------
-//   layout2
-//    called after final position of note is set
-//---------------------------------------------------------
-
-void Note::layout2()
-{
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout2(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -2217,7 +2202,7 @@ void Note::updateAccidental(AccidentalState* as)
             LOGD("error accidentalVal()");
             return;
         }
-        if ((accVal != relLineAccVal) || hidden() || as->tieContext(eRelLine)) {
+        if ((accVal != relLineAccVal) || hidden() || as->tieContext(eRelLine) || as->forceRestateAccidental(eRelLine)) {
             as->setAccidentalVal(eRelLine, accVal, _tieBack != 0 && _accidental == 0);
             acci = Accidental::value2subtype(accVal);
             // if previous tied note has same tpc, don't show accidental
@@ -2273,6 +2258,7 @@ void Note::updateAccidental(AccidentalState* as)
         as->setAccidentalVal(relLine, accVal, _tieBack != 0 && _accidental == 0);
     }
 
+    as->setForceRestateAccidental(relLine, false);
     updateRelLine(relLine, true);
 }
 
@@ -2469,13 +2455,19 @@ void Note::setHeadGroup(NoteHeadGroup val)
 
 int Note::ottaveCapoFret() const
 {
-    Chord* ch = chord();
-    int capoFretId = staff()->capo(ch->segment()->tick());
-    if (capoFretId != 0) {
-        capoFretId -= 1;
+    const Chord* ch = chord();
+    Fraction segmentTick = ch->segment()->tick();
+
+    const CapoParams& capo = staff()->capo(segmentTick);
+    int capoFret = 0;
+
+    if (capo.active) {
+        if (capo.ignoredStrings.empty() || !mu::contains(capo.ignoredStrings, static_cast<string_idx_t>(_string))) {
+            capoFret = capo.fretPosition;
+        }
     }
 
-    return staff()->pitchOffset(ch->segment()->tick()) + capoFretId;
+    return staff()->pitchOffset(segmentTick) + capoFret;
 }
 
 //---------------------------------------------------------
@@ -2673,15 +2665,19 @@ void Note::verticalDrag(EditData& ed)
         }
     } else {
         Key key = staff()->key(_tick);
+        Key cKey = staff()->concertKey(_tick);
         staff_idx_t idx = chord()->vStaffIdx();
+        Interval interval = staff()->part()->instrument(_tick)->transpose();
         int newPitch = line2pitch(ned->line + lineOffset, score()->staff(idx)->clef(_tick), key);
 
         if (!concertPitch()) {
-            Interval interval = staff()->part()->instrument(_tick)->transpose();
             newPitch += interval.chromatic;
+        } else {
+            interval.flip();
+            key = transposeKey(cKey, interval, staff()->part()->preferSharpFlat());
         }
 
-        int newTpc1 = pitch2tpc(newPitch, key, Prefer::NEAREST);
+        int newTpc1 = pitch2tpc(newPitch, cKey, Prefer::NEAREST);
         int newTpc2 = pitch2tpc(newPitch - transposition(), key, Prefer::NEAREST);
         for (Note* nn : tiedNotes()) {
             nn->setPitch(newPitch, newTpc1, newTpc2);
@@ -2811,12 +2807,9 @@ void Note::setNval(const NoteVal& nval, Fraction tick)
     if (tick == Fraction(-1, 1) && chord()) {
         tick = chord()->tick();
     }
-    Interval v = part()->instrument(tick)->transpose();
+    Interval v = staff()->transpose(tick);
     if (nval.tpc1 == Tpc::TPC_INVALID) {
-        Key key = staff()->key(tick);
-        if (!concertPitch() && !v.isZero()) {
-            key = transposeKey(key, v);
-        }
+        Key key = staff()->concertKey(tick);
         _tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
     }
     if (nval.tpc2 == Tpc::TPC_INVALID) {
@@ -3709,80 +3702,6 @@ bool Note::hasSlideToNote() const
 bool Note::hasSlideFromNote() const
 {
     return m_slideFromType != SlideType::Undefined;
-}
-
-double Note::computePadding(const EngravingItem* nextItem) const
-{
-    double scaling = (mag() + nextItem->mag()) / 2;
-    double padding = score()->paddingTable().at(type()).at(nextItem->type());
-
-    if ((nextItem->isNote() || nextItem->isStem()) && track() == nextItem->track()
-        && (shape().translate(pos())).intersects(nextItem->shape().translate(nextItem->pos()))) {
-        padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::minNoteDistance)));
-    }
-
-    padding *= scaling;
-
-    // Grace-to-grace
-    if (isGrace() && nextItem->isNote() && toNote(nextItem)->isGrace()) {
-        padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::graceToGraceNoteDist)));
-    }
-    // Grace-to-main
-    if (isGrace() && (nextItem->isRest() || (nextItem->isNote() && !toNote(nextItem)->isGrace()))) {
-        padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::graceToMainNoteDist)));
-    }
-    // Main-to-grace
-    if (!isGrace() && nextItem->isNote() && toNote(nextItem)->isGrace()) {
-        padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::graceToMainNoteDist)));
-    }
-
-    if (nextItem->isNote() && !(_lineAttachPoints.empty() || toNote(nextItem)->lineAttachPoints().empty())) {
-        // This is where space for minTieLength and minGlissandoLength is allocated by making sure
-        // there is enough distance between the attach points
-        double minEndPointsDistance = 0.0;
-        for (LineAttachPoint thisLAP : lineAttachPoints()) {
-            for (LineAttachPoint nextLAP : toNote(nextItem)->lineAttachPoints()) {
-                if (thisLAP.line() != nextLAP.line()) {
-                    continue;
-                }
-                if (thisLAP.line()->isTie()) {
-                    minEndPointsDistance = score()->styleMM(Sid::MinTieLength);
-                }
-                if (thisLAP.line()->isGlissando()) {
-                    bool straight = toGlissando(thisLAP.line())->glissandoType() == GlissandoType::STRAIGHT;
-                    double minGlissandoLength = straight ? score()->styleMM(Sid::MinStraightGlissandoLength)
-                                                : score()->styleMM(Sid::MinWigglyGlissandoLength);
-                    minEndPointsDistance = minGlissandoLength;
-                }
-                double lapPadding = (thisLAP.pos().x() - headWidth()) + minEndPointsDistance - nextLAP.pos().x();
-                lapPadding *= scaling;
-                padding = std::max(padding, lapPadding);
-            }
-        }
-    }
-
-    return padding;
-}
-
-KerningType Note::doComputeKerningType(const EngravingItem* nextItem) const
-{
-    EngravingItem* nextParent = nextItem->parentItem(true);
-    if (nextParent && nextParent->isNote() && toNote(nextParent)->isTrillCueNote()) {
-        return KerningType::NON_KERNING;
-    }
-
-    Chord* c = chord();
-    if (!c || (c->allowKerningAbove() && c->allowKerningBelow())) {
-        return KerningType::KERNING;
-    }
-    bool kerningAbove = nextItem->canvasPos().y() < canvasPos().y();
-    if (kerningAbove && !c->allowKerningAbove()) {
-        return KerningType::NON_KERNING;
-    }
-    if (!kerningAbove && !c->allowKerningBelow()) {
-        return KerningType::NON_KERNING;
-    }
-    return KerningType::KERNING;
 }
 
 mu::PointF Note::posInStaffCoordinates()

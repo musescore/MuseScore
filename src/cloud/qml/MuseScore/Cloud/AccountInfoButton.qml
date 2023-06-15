@@ -39,7 +39,7 @@ PageTabButton {
     spacing: 22
     leftPadding: spacing
 
-    title: Boolean(root.cloudInfo) ? root.cloudInfo.userName : qsTrc("cloud", "My account")
+    title: Boolean(root.cloudInfo) ? root.cloudInfo.userName : qsTrc("cloud", "My accounts")
     iconComponent: AccountAvatar {
         url: Boolean(root.cloudInfo) ? root.cloudInfo.userAvatarUrl : null
         side: 32

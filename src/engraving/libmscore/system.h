@@ -34,6 +34,7 @@
 
 namespace mu::engraving::layout::v0 {
 class LayoutContext;
+class SystemLayout;
 }
 
 namespace mu::engraving {
@@ -98,36 +99,6 @@ class System final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, System)
     DECLARE_CLASSOF(ElementType::SYSTEM)
 
-    SystemDivider* _systemDividerLeft    { nullptr };       // to the next system
-    SystemDivider* _systemDividerRight   { nullptr };
-
-    std::vector<MeasureBase*> ml;
-    std::vector<SysStaff*> _staves;
-    std::vector<Bracket*> _brackets;
-    std::list<SpannerSegment*> _spannerSegments;
-
-    double _leftMargin              { 0.0 };     ///< left margin for instrument name, brackets etc.
-    mutable bool fixedDownDistance { false };
-    double _distance                { 0.0 };     /// temp. variable used during layout
-    double _systemHeight            { 0.0 };
-
-    friend class Factory;
-    System(Page* parent);
-
-    staff_idx_t firstVisibleSysStaff() const;
-    staff_idx_t lastVisibleSysStaff() const;
-
-    staff_idx_t firstVisibleStaffFrom(staff_idx_t startStaffIdx) const;
-
-    size_t getBracketsColumnsCount();
-    void setBracketsXPosition(const double xOffset);
-    Bracket* createBracket(const layout::v0::LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
-                           std::vector<Bracket*>& bl, Measure* measure);
-
-    double instrumentNamesWidth(const bool isFirstSystem);
-    double layoutBrackets(const layout::v0::LayoutContext& ctx);
-    static double totalBracketOffset(layout::v0::LayoutContext& ctx);
-
 public:
     ~System();
 
@@ -151,16 +122,6 @@ public:
 
     Page* page() const { return (Page*)explicitParent(); }
 
-    void layoutSystem(layout::v0::LayoutContext& ctx, double xo1, const bool isFirstSystem = false, bool firstSystemIndent = false);
-
-    void setMeasureHeight(double height);
-    void layoutBracketsVertical();
-    void layoutInstrumentNames();
-
-    void addBrackets(const layout::v0::LayoutContext& ctx, Measure* measure);
-
-    void layout2(layout::v0::LayoutContext& ctx); ///< Called after Measure layout.
-    void restoreLayout2();
     void clear(); ///< Clear measure list.
 
     mu::RectF bboxStaff(int staff) const { return _staves[staff]->bbox(); }
@@ -178,7 +139,6 @@ public:
 
     int y2staff(double y) const;
     staff_idx_t searchStaff(double y, staff_idx_t preferredStaff = mu::nidx, double spacingFactor = 0.5) const;
-    void setInstrumentNames(const layout::v0::LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
     Fraction snap(const Fraction& tick, const mu::PointF p) const;
     Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
 
@@ -239,6 +199,32 @@ public:
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
 #endif
+
+private:
+    friend class Factory;
+    friend class layout::v0::SystemLayout;
+    System(Page* parent);
+
+    staff_idx_t firstVisibleSysStaff() const;
+    staff_idx_t lastVisibleSysStaff() const;
+
+    staff_idx_t firstVisibleStaffFrom(staff_idx_t startStaffIdx) const;
+
+    size_t getBracketsColumnsCount();
+    void setBracketsXPosition(const double xOffset);
+
+    SystemDivider* _systemDividerLeft    { nullptr };       // to the next system
+    SystemDivider* _systemDividerRight   { nullptr };
+
+    std::vector<MeasureBase*> ml;
+    std::vector<SysStaff*> _staves;
+    std::vector<Bracket*> _brackets;
+    std::list<SpannerSegment*> _spannerSegments;
+
+    double _leftMargin              { 0.0 };     ///< left margin for instrument name, brackets etc.
+    mutable bool fixedDownDistance { false };
+    double _distance                { 0.0 };     /// temp. variable used during layout
+    double _systemHeight            { 0.0 };
 };
 
 typedef std::vector<System*>::iterator iSystem;

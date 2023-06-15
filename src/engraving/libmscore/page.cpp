@@ -22,8 +22,6 @@
 
 #include "page.h"
 
-#include "layout/v0/tlayout.h"
-
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
 #endif
@@ -206,8 +204,7 @@ Text* Page::layoutHeaderFooter(int area, const String& ss) const
     }
     text->setAlign(align);
     text->setXmlText(s);
-    layout::v0::LayoutContext ctx(text->score());
-    layout::v0::TLayout::layout(text, ctx);
+    layout()->layoutItem(text);
     return text;
 }
 

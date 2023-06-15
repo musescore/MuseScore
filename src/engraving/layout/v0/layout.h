@@ -38,21 +38,24 @@ public:
     void layoutRange(Score* score, const LayoutOptions& options, const Fraction& st, const Fraction& et) override;
 
     // Layout Elements on Edit
-    void layoutOnEditDrag(Arpeggio* item) override;
     void layoutOnEdit(Arpeggio* item) override;
 
-    void layoutOnEditDrag(Box* item) override;
-    void layoutOnEndEdit(Box* item) override;
+    // Horizontal spacing
+    double computePadding(const EngravingItem* item1, const EngravingItem* item2) override;
+    KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2) override;
 
-    void layoutOnEditDrag(Bracket* item) override;
+    //! TODO Investigation is required, probably these functions or their calls should not be.
+    // Other
+    void layoutTextLineBaseSegment(TextLineBaseSegment* item) override;
+    void layoutBeam1(Beam* item) override;
+    void layoutStem(Chord* item) override;
 
-    // Layout Elements on Drop and Drag
-    void layoutOnChordRestDrop(BarLine* item) override;
+    // Layout Text 1
+    void layoutText1(TextBase* item, bool base = false) override;
 
-    // Layout others
-    //! TODO Need to find out why
-    void layoutOnAddLedgerLines(LedgerLine* item) override;
-    void regenerateDisplayText(FiguredBassItem* item) override;
+private:
+    // Layout Single Item
+    void doLayoutItem(EngravingItem* item) override;
 };
 }
 

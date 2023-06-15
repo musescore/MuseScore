@@ -106,8 +106,7 @@ PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const QStr
 {
     if (element) {
         // layout may be important for comparing cells, e.g. filtering "More" popup content
-        layout::v0::LayoutContext lctx(element->score());
-        layout::v0::TLayout::layoutItem(element.get(), lctx);
+        EngravingItem::layout()->layoutItem(element.get());
     }
 
     PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, offset, tag, this);
@@ -131,8 +130,7 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, q
 {
     if (element) {
         // layout may be important for comparing cells, e.g. filtering "More" popup content
-        layout::v0::LayoutContext ctx(element->score());
-        layout::v0::TLayout::layoutItem(element.get(), ctx);
+        EngravingItem::layout()->layoutItem(element.get());
     }
 
     PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, offset, tag, this);

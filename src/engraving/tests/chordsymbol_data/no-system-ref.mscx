@@ -155,7 +155,8 @@
             </Clef>
           <KeySig>
             <linkedMain/>
-            <accidental>3</accidental>
+            <concertKey>0</concertKey>
+            <actualKey>3</actualKey>
             </KeySig>
           <TimeSig>
             <linkedMain/>
@@ -383,7 +384,8 @@
             <KeySig>
               <linked>
                 </linked>
-              <accidental>3</accidental>
+              <concertKey>0</concertKey>
+              <actualKey>3</actualKey>
               </KeySig>
             <TimeSig>
               <linked>

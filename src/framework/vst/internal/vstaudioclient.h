@@ -65,8 +65,8 @@ private:
 
     void setUpProcessData();
     void updateProcessSetup();
-    void extractInputSamples(const audio::samples_t& sampleCount, const float* sourceBuffer);
-    bool fillOutputBuffer(unsigned int samples, float* output);
+    void extractInputSamples(audio::samples_t sampleCount, const float* sourceBuffer);
+    bool fillOutputBuffer(audio::samples_t sampleCount, float* output);
 
     void ensureActivity();
     void disableActivity();

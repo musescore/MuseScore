@@ -90,6 +90,8 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         Fraction tickStart = segment()->tick();
         Part* part = staff()->part();
         Interval oldV = part->instrument(tickStart)->transpose();
+        Interval oldKv = staff()->transpose(tickStart);
+        Interval v = instrument->transpose();
         bool concPitch = score()->styleB(Sid::concertPitch);
 
         // change the clef for each staff
@@ -107,16 +109,18 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         }
 
         // Change key signature if necessary. CAUTION: not necessary in case of octave-transposing!
-        if ((instrument->transpose().chromatic - oldV.chromatic) % 12) {
+        if ((v.chromatic - oldV.chromatic) % 12) {
             for (size_t i = 0; i < part->nstaves(); i++) {
                 if (!part->staff(i)->keySigEvent(tickStart).isAtonal()) {
                     KeySigEvent ks;
-                    ks.setForInstrumentChange(true);
-                    Key key = part->staff(i)->key(tickStart);
-                    if (!score()->styleB(Sid::concertPitch)) {
-                        key = transposeKey(key, oldV);
-                    }
-                    ks.setKey(key);
+                    // Check, if some key signature is already there, if no, mark new one "for instrument change"
+                    Segment* seg = segment()->prev1(SegmentType::KeySig);
+                    voice_idx_t voice = part->staff(i)->idx() * VOICES;
+                    KeySig* ksig = toKeySig(seg->element(voice));
+                    bool forInstChange = ksig && ksig->tick() != tickStart;
+                    ks.setForInstrumentChange(forInstChange);
+                    Key cKey = part->staff(i)->concertKey(tickStart);
+                    ks.setConcertKey(cKey);
                     score()->undoChangeKeySig(part->staff(i), tickStart, ks);
                 }
             }
@@ -139,7 +143,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             } else {
                 tickEnd = Fraction::fromTicks(i->first);
             }
-            score()->transpositionChanged(part, oldV, tickStart, tickEnd);
+            score()->transpositionChanged(part, oldKv, tickStart, tickEnd);
         }
 
         //: The text of an "instrument change" marking. It is an instruction to the player to switch to another instrument.
@@ -152,7 +156,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
 //   keySigs
 //---------------------------------------------------------
 
-std::vector<KeySig*> InstrumentChange::keySigs() const
+std::vector<KeySig*> InstrumentChange::keySigs(bool all) const
 {
     std::vector<KeySig*> keysigs;
     Segment* seg = segment()->prev1(SegmentType::KeySig);
@@ -162,7 +166,7 @@ std::vector<KeySig*> InstrumentChange::keySigs() const
         Fraction t = tick();
         for (voice_idx_t i = startVoice; i <= endVoice; i += VOICES) {
             KeySig* ks = toKeySig(seg->element(i));
-            if (ks && ks->forInstrumentChange() && ks->tick() == t) {
+            if (ks && (all || ks->forInstrumentChange()) && ks->tick() == t) {
                 keysigs.push_back(ks);
             }
         }

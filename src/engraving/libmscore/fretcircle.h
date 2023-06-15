@@ -40,26 +40,31 @@ public:
 
     void draw(mu::draw::Painter*) const override;
 
-    double offsetFromUpNote() const { return _offsetFromUpNote; }
-    double sideOffset() const { return _sideOffset; }
+    double offsetFromUpNote() const { return m_offsetFromUpNote; }
+    void setOffsetFromUpNote(double o) { m_offsetFromUpNote = o; }
+    double sideOffset() const { return m_sideOffset; }
+    void setSideOffset(double o) { m_sideOffset = o; }
+
+    const mu::RectF& rect() const { return m_rect; }
+    void setRect(const mu::RectF& r) { m_rect = r; }
+
+    Chord* chord() const { return m_chord; }
+
+    bool tabEllipseEnabled() const;
+    RectF ellipseRect() const;
 
 private:
 
-    friend class layout::v0::TLayout;
     friend class Factory;
 
     FretCircle(Chord* ch = 0);
     FretCircle* clone() const override { return new FretCircle(*this); }
 
-    RectF ellipseRect() const;
-
-    bool tabEllipseEnabled() const;
-
     Chord* m_chord = nullptr;
     mu::RectF m_rect;
 
-    double _offsetFromUpNote = 0;
-    double _sideOffset = 0;
+    double m_offsetFromUpNote = 0;
+    double m_sideOffset = 0;
 };
 } // namespace mu::engraving
 #endif

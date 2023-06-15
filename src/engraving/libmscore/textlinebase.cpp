@@ -26,12 +26,10 @@
 
 #include "draw/types/pen.h"
 
-#include "style/style.h"
 #include "layout/v0/tlayout.h"
 
 #include "factory.h"
 #include "score.h"
-#include "staff.h"
 #include "system.h"
 #include "text.h"
 
@@ -64,8 +62,7 @@ TextLineBaseSegment::TextLineBaseSegment(const TextLineBaseSegment& seg)
     m_text->setParent(this);
     m_endText->setParent(this);
     // set the right _text
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+    layout()->layoutTextLineBaseSegment(this);
 }
 
 TextLineBaseSegment::~TextLineBaseSegment()

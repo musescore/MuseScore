@@ -1442,7 +1442,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Percussion</trackName>
-      <Instrument id="drumset">
+      <Instrument id="percussion">
         <longName>Percussion</longName>
         <shortName>Perc.</shortName>
         <trackName>Percussion</trackName>

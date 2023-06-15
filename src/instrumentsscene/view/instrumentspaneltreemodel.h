@@ -33,6 +33,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "shortcuts/ishortcutsregister.h"
+#include "iinteractive.h"
 
 namespace mu::uicomponents {
 class ItemMultiSelectionModel;
@@ -49,6 +50,7 @@ class InstrumentsPanelTreeModel : public QAbstractItemModel, public async::Async
     INJECT(notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(framework::IInteractive, interactive)
 
     Q_PROPERTY(bool isMovingUpAvailable READ isMovingUpAvailable NOTIFY isMovingUpAvailableChanged)
     Q_PROPERTY(bool isMovingDownAvailable READ isMovingDownAvailable NOTIFY isMovingDownAvailableChanged)
@@ -119,6 +121,7 @@ private:
 
     void initPartOrders();
     void onBeforeChangeNotation();
+    void setLoadingBlocked(bool blocked);
 
     void sortParts(notation::PartList& parts);
 
@@ -136,6 +139,8 @@ private:
 
     void setItemsSelected(const QModelIndexList& indexes, bool selected);
 
+    bool warnAboutRemovingInstrumentsIfNecessary(int count);
+
     AbstractInstrumentsPanelTreeItem* loadMasterPart(const notation::Part* masterPart);
     AbstractInstrumentsPanelTreeItem* buildPartItem(const mu::notation::Part* masterPart);
     AbstractInstrumentsPanelTreeItem* buildMasterStaffItem(const mu::notation::Staff* masterStaff, QObject* parent);
@@ -145,8 +150,9 @@ private:
     bool m_isMovingUpAvailable = false;
     bool m_isMovingDownAvailable = false;
     bool m_isRemovingAvailable = false;
-    bool m_isLoadingBlocked = false;
     bool m_isInstrumentSelected = false;
+    bool m_isLoadingBlocked = false;
+    bool m_notationChangedWhileLoadingWasBlocked = false;
 
     AbstractInstrumentsPanelTreeItem* m_rootItem = nullptr;
     uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;

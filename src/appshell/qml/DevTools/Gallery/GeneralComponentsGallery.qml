@@ -72,6 +72,7 @@ Rectangle {
                     { textRole: "RoundedRadioButton", componentRole: roundedRadioButtonSample },
                     { textRole: "IncrementalPropertyControl (Hidden icon, Icon left, Icon right)", componentRole: incrementalPropertyControlSample },
                     { textRole: "FlatToggleButton", componentRole: flatToggleButtonSample },
+                    { textRole: "ToggleButton", componentRole: toggleButtonSample },
                     { textRole: "RoundedRectangle (which allows to round the particular corners)", componentRole: roundedRectangleSample },
                     { textRole: "TextInputField", componentRole: textInputFieldSample },
                     { textRole: "SearchField", componentRole: searchFieldSample },
@@ -593,6 +594,18 @@ Rectangle {
             width: 20
 
             icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
+
+            onToggled: {
+                checked = !checked
+            }
+        }
+    }
+
+    Component {
+        id: toggleButtonSample
+
+        ToggleButton {
+            id: toggleButton
 
             onToggled: {
                 checked = !checked

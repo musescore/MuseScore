@@ -27,16 +27,12 @@ using namespace mu::notation;
 
 static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPES = {
     { mu::engraving::ElementType::HARP_DIAGRAM, PopupModelType::TYPE_HARP_DIAGRAM },
+    { mu::engraving::ElementType::CAPO, PopupModelType::TYPE_CAPO },
 };
 
-AbstractElementPopupModel::AbstractElementPopupModel(QObject* parent)
-    : QObject(parent)
+AbstractElementPopupModel::AbstractElementPopupModel(PopupModelType modelType, QObject* parent)
+    : QObject(parent), m_modelType(modelType)
 {
-}
-
-QString AbstractElementPopupModel::title() const
-{
-    return m_title;
 }
 
 PopupModelType AbstractElementPopupModel::modelType() const
@@ -44,31 +40,19 @@ PopupModelType AbstractElementPopupModel::modelType() const
     return m_modelType;
 }
 
-EngravingItem* AbstractElementPopupModel::getElement()
+QRect AbstractElementPopupModel::itemRect() const
 {
-    EngravingItem* hitElement = hitElementContext().element;
+    return m_itemRect;
+}
 
-    return hitElement ? hitElement : selection()->element();
+bool AbstractElementPopupModel::supportsPopup(const engraving::ElementType& elementType)
+{
+    return modelTypeFromElement(elementType) != PopupModelType::TYPE_UNDEFINED;
 }
 
 PopupModelType AbstractElementPopupModel::modelTypeFromElement(const engraving::ElementType& elementType)
 {
     return ELEMENT_POPUP_TYPES.value(elementType, PopupModelType::TYPE_UNDEFINED);
-}
-
-void AbstractElementPopupModel::setModelType(PopupModelType modelType)
-{
-    m_modelType = modelType;
-}
-
-void AbstractElementPopupModel::setTitle(QString title)
-{
-    if (m_title == title) {
-        return;
-    }
-
-    m_title = title;
-    emit titleChanged();
 }
 
 mu::PointF AbstractElementPopupModel::fromLogical(PointF point) const
@@ -114,6 +98,35 @@ INotationPtr AbstractElementPopupModel::currentNotation() const
     return globalContext()->currentNotation();
 }
 
+void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const PropertyValue& value)
+{
+    IF_ASSERT_FAILED(m_item) {
+        return;
+    }
+
+    mu::engraving::PropertyFlags flags = m_item->propertyFlags(id);
+    if (flags == mu::engraving::PropertyFlags::STYLED) {
+        flags = mu::engraving::PropertyFlags::UNSTYLED;
+    }
+
+    beginCommand();
+    m_item->undoChangeProperty(id, value, flags);
+    endCommand();
+    updateNotation();
+}
+
+void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const PropertyValue& value, mu::engraving::PropertyFlags flags)
+{
+    IF_ASSERT_FAILED(m_item) {
+        return;
+    }
+
+    beginCommand();
+    m_item->undoChangeProperty(id, value, flags);
+    endCommand();
+    updateNotation();
+}
+
 INotationInteractionPtr AbstractElementPopupModel::interaction() const
 {
     INotationPtr notation = globalContext()->currentNotation();
@@ -126,31 +139,43 @@ INotationSelectionPtr AbstractElementPopupModel::selection() const
     return interaction ? interaction->selection() : nullptr;
 }
 
-const INotationInteraction::HitElementContext& AbstractElementPopupModel::hitElementContext() const
-{
-    if (INotationInteractionPtr interaction = this->interaction()) {
-        return interaction->hitElementContext();
-    }
-
-    static INotationInteraction::HitElementContext dummy;
-    return dummy;
-}
-
 void AbstractElementPopupModel::init()
 {
-    auto undoStack = this->undoStack();
+    m_item = nullptr;
+
+    INotationSelectionPtr selection = this->selection();
+    if (!selection) {
+        return;
+    }
+
+    INotationUndoStackPtr undoStack = this->undoStack();
     if (!undoStack) {
         return;
     }
 
+    m_item = selection->element();
+
     undoStack->changesChannel().onReceive(this, [this] (const ChangesRange& range) {
         if (contains(range.changedTypes, elementType())) {
             emit dataChanged();
+            updateItemRect();
         }
     });
+
+    updateItemRect();
 }
 
 mu::engraving::ElementType AbstractElementPopupModel::elementType() const
 {
     return ELEMENT_POPUP_TYPES.key(m_modelType, ElementType::INVALID);
+}
+
+void AbstractElementPopupModel::updateItemRect()
+{
+    QRect rect = m_item ? fromLogical(m_item->canvasBoundingRect()).toQRect() : QRect();
+
+    if (m_itemRect != rect) {
+        m_itemRect = rect;
+        emit itemRectChanged(rect);
+    }
 }

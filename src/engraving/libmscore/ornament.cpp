@@ -25,8 +25,6 @@
 #include "engravingitem.h"
 #include "factory.h"
 #include "key.h"
-#include "layout/v0/tlayout.h"
-#include "layout/v0/chordlayout.h"
 #include "note.h"
 #include "ornament.h"
 #include "score.h"
@@ -40,7 +38,7 @@ Ornament::Ornament(ChordRest* parent)
 {
     _intervalAbove = OrnamentInterval(IntervalStep::SECOND, IntervalType::AUTO);
     _intervalBelow = OrnamentInterval(IntervalStep::SECOND, IntervalType::AUTO);
-    _showAccidental = OrnamentShowAccidental::ANY_ALTERATION;
+    _showAccidental = OrnamentShowAccidental::DEFAULT;
     _startOnUpperNote = false;
 }
 
@@ -73,6 +71,19 @@ void Ornament::remove(EngravingItem* e)
             }
         }
     }
+}
+
+void Ornament::setTrack(track_idx_t val)
+{
+    for (Note* note : _notesAboveAndBelow) {
+        if (note) {
+            note->setTrack(val);
+        }
+    }
+    if (_cueNoteChord) {
+        _cueNoteChord->setTrack(val);
+    }
+    _track = val;
 }
 
 void Ornament::draw(draw::Painter* painter) const
@@ -126,7 +137,7 @@ PropertyValue Ornament::propertyDefault(Pid id) const
     case Pid::INTERVAL_BELOW:
         return OrnamentInterval(IntervalStep::SECOND, IntervalType::AUTO);
     case Pid::ORNAMENT_SHOW_ACCIDENTAL:
-        return OrnamentShowAccidental::ANY_ALTERATION;
+        return OrnamentShowAccidental::DEFAULT;
     case Pid::START_ON_UPPER_NOTE:
         return false;
     case Pid::ARTICULATION_ANCHOR:
@@ -198,7 +209,7 @@ bool Ornament::hasFullIntervalChoice() const
 void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
 {
     Chord* parentChord = explicitParent() ? toChord(parent()) : nullptr;
-    Note* mainNote = parentChord ? parentChord->upNote() : nullptr;
+    const Note* mainNote = parentChord ? parentChord->upNote() : nullptr;
 
     if (!mainNote) {
         return;
@@ -217,7 +228,6 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
             continue;
         }
 
-        // First: get the right notes above or below as needed
         Note*& note = _notesAboveAndBelow.at(i);
         if (!note) {
             note = mainNote->clone();
@@ -226,36 +236,23 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
             note->setTpc2(mainNote->tpc2());
             note->setPitch(mainNote->pitch());
         }
-        if ((above && _intervalAbove.type == IntervalType::AUTO)
-            || (!above && _intervalBelow.type == IntervalType::AUTO)) {
-            // NOTE: In AUTO mode, the ornament note should match only alteration from the key signature
+        note->setTrack(track());
+
+        bool autoMode = (above && _intervalAbove.type == IntervalType::AUTO) || (!above && _intervalBelow.type == IntervalType::AUTO);
+        if (autoMode) {
+            // NOTE: In AUTO mode, the ornament note should match not only any alteration from the
+            // key signature, but also any alteration present in the measure before this point.
             int intervalSteps = above ? static_cast<int>(_intervalAbove.step) : -static_cast<int>(_intervalBelow.step);
             note->transposeDiatonic(intervalSteps, false, true);
-
             if (_trillOldCompatAccidental) {
-                // Compatibility with trills pre-4.1
-                AccidentalVal oldCompatValue = Accidental::subtype2value(_trillOldCompatAccidental->accidentalType());
-                AccidentalVal noteAccidentalVal = tpc2alter(note->tpc());
-                int accidentalDiff = static_cast<int>(oldCompatValue) - static_cast<int>(noteAccidentalVal);
-                score()->transpose(note, Interval(0, accidentalDiff), true);
-                int semitones = note->pitch() - mainNote->pitch();
-                switch (semitones) {
-                case 0:
-                    _intervalAbove.type = IntervalType::DIMINISHED;
-                    break;
-                case 1:
-                    _intervalAbove.type = IntervalType::MINOR;
-                    break;
-                case 2:
-                    _intervalAbove.type = IntervalType::MAJOR;
-                    break;
-                case 3:
-                    _intervalAbove.type = IntervalType::AUGMENTED;
-                    break;
-                default:
-                    break;
-                }
+                mapOldTrillAccidental(note, mainNote);
                 _trillOldCompatAccidental = nullptr;
+            } else {
+                int pitchLine = absStep(note->tpc(), note->epitch());
+                AccidentalVal accidentalVal = accState->accidentalVal(pitchLine);
+                AccidentalVal noteAccidentalVal = tpc2alter(note->tpc());
+                int accidentalDiff = static_cast<int>(accidentalVal) - static_cast<int>(noteAccidentalVal);
+                score()->transpose(note, Interval(0, accidentalDiff), true);
             }
         } else {
             Interval interval = Interval::fromOrnamentInterval(above ? _intervalAbove : _intervalBelow);
@@ -265,38 +262,51 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
             score()->transpose(note, interval, true);
         }
 
-        note->updateAccidental(accState);
-
-        // Second: if the "Accidental visibility" property is different than default,
-        // force the implicit accidentals to be visible when appropriate
-        AccidentalVal accidentalValue = tpc2alter(note->tpc());
-        AccidentalType accidentalType = Accidental::value2subtype(accidentalValue);
-        if (accidentalType == AccidentalType::NONE) {
-            accidentalType = AccidentalType::NATURAL;
-        }
-        if (note->accidentalType() == accidentalType) {
-            continue;
+        AccidentalState copyOfAccState = *accState;
+        note->updateAccidental(&copyOfAccState);
+        if (note->accidental()) {
+            int pitchLine = absStep(note->tpc(), note->epitch());
+            accState->setForceRestateAccidental(pitchLine, true);
         }
 
-        bool show = false;
-        if (_showAccidental == OrnamentShowAccidental::ALWAYS) {
-            show = true;
-        } else if (_showAccidental == OrnamentShowAccidental::ANY_ALTERATION) {
-            Key key = staff()->key(tick());
-            AccidentalState unalteredState;
-            unalteredState.init(key);
-            int pitchLine = absStep(note->tpc(), note->epitch() + note->ottaveCapoFret());
-            AccidentalVal unalteredAccidentalVal = unalteredState.accidentalVal(pitchLine);
-            show = accidentalValue != unalteredAccidentalVal;
-        }
-        if (show) {
-            note->setAccidentalType(accidentalType);
-            note->accidental()->setRole(AccidentalRole::AUTO);
-        }
+        manageAccidentalVisibilityRules(note);
     }
 
     updateAccidentalsAboveAndBelow();
     updateCueNote();
+}
+
+void Ornament::manageAccidentalVisibilityRules(Note* note)
+{
+    if (_showAccidental == OrnamentShowAccidental::DEFAULT) {
+        return;
+    }
+
+    AccidentalVal accidentalValue = tpc2alter(note->tpc());
+    AccidentalType accidentalType = Accidental::value2subtype(accidentalValue);
+    if (accidentalType == AccidentalType::NONE) {
+        accidentalType = AccidentalType::NATURAL;
+    }
+    if (note->accidentalType() == accidentalType) {
+        return;
+    }
+
+    bool show = false;
+    if (_showAccidental == OrnamentShowAccidental::ALWAYS) {
+        show = true;
+    } else if (_showAccidental == OrnamentShowAccidental::ANY_ALTERATION) {
+        Key key = staff()->key(tick());
+        AccidentalState unalteredState;
+        unalteredState.init(key);
+        int pitchLine = absStep(note->tpc(), note->epitch() + note->ottaveCapoFret());
+        AccidentalVal unalteredAccidentalVal = unalteredState.accidentalVal(pitchLine);
+        show = accidentalValue != unalteredAccidentalVal;
+    }
+
+    if (show) {
+        note->setAccidentalType(accidentalType);
+        note->accidental()->setRole(AccidentalRole::AUTO);
+    }
 }
 
 void Ornament::updateAccidentalsAboveAndBelow()
@@ -348,15 +358,16 @@ void Ornament::updateCueNote()
     // If needed, create cue note
     if (!_cueNoteChord) {
         _cueNoteChord = Factory::createChord(parentChord->segment());
-        _cueNoteChord->setTrack(track());
         _cueNoteChord->setSmall(true);
         cueNote->setHeadHasParentheses(true);
         cueNote->setHeadType(NoteHeadType::HEAD_QUARTER);
         _cueNoteChord->add(cueNote);
         cueNote->setParent(_cueNoteChord);
     }
-    cueNote->setIsTrillCueNote(true);
+    _cueNoteChord->setTrack(track());
     _cueNoteChord->setParent(parentChord->segment());
+    cueNote->updateLine();
+    cueNote->setIsTrillCueNote(true);
 }
 
 Shape Ornament::shape() const
@@ -384,6 +395,32 @@ SymId Ornament::fromTrillType(TrillType trillType)
         return SymId::ornamentTrill;
     default:
         return SymId::noSym;
+    }
+}
+
+void Ornament::mapOldTrillAccidental(Note* note, const Note* mainNote)
+{
+    // Compatibility with trills pre-4.1
+    AccidentalVal oldCompatValue = Accidental::subtype2value(_trillOldCompatAccidental->accidentalType());
+    AccidentalVal noteAccidentalVal = tpc2alter(note->tpc());
+    int accidentalDiff = static_cast<int>(oldCompatValue) - static_cast<int>(noteAccidentalVal);
+    score()->transpose(note, Interval(0, accidentalDiff), true);
+    int semitones = note->pitch() - mainNote->pitch();
+    switch (semitones) {
+    case 0:
+        _intervalAbove.type = IntervalType::DIMINISHED;
+        break;
+    case 1:
+        _intervalAbove.type = IntervalType::MINOR;
+        break;
+    case 2:
+        _intervalAbove.type = IntervalType::MAJOR;
+        break;
+    case 3:
+        _intervalAbove.type = IntervalType::AUGMENTED;
+        break;
+    default:
+        break;
     }
 }
 } // namespace mu::engraving

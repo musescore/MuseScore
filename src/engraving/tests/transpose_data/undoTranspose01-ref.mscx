@@ -66,7 +66,7 @@
             <isHeader>1</isHeader>
             </Clef>
           <KeySig>
-            <accidental>2</accidental>
+            <concertKey>2</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -336,7 +336,7 @@
             <isHeader>1</isHeader>
             </Clef>
           <KeySig>
-            <accidental>2</accidental>
+            <concertKey>2</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>

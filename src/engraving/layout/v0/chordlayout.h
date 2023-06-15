@@ -75,9 +75,15 @@ public:
                                   bool considerBeams = false);
     static void layoutChordBaseFingering(Chord* chord, System* system, LayoutContext& ctx);
 
+    static void crossMeasureSetup(Chord* chord, bool on, LayoutContext& ctx);
+
+    static void checkStartEndSlurs(Chord* chord, LayoutContext& ctx);
+
 private:
     static void layoutPitched(Chord* item, LayoutContext& ctx);
     static void layoutTablature(Chord* item, LayoutContext& ctx);
+
+    static void layoutNote2(Note* note, LayoutContext& ctx);
 };
 }
 

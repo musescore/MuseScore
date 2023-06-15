@@ -33,7 +33,10 @@ StyledPopupView {
     HarpPedalPopupModel {
         id: harpModel
 
-        onIsDiagramChanged: updatePosition(harpModel.pos, harpModel.size)
+        onIsDiagramChanged: {
+            var rect = harpModel.itemRect
+            updatePosition(Qt.point(rect.x, rect.y), Qt.point(rect.width, rect.height))
+        }
     }
 
     property QtObject model: harpModel
@@ -48,8 +51,6 @@ StyledPopupView {
     contentHeight: menuItems.height
 
     margins: 0
-
-    openPolicy: PopupView.NoActivateFocus
 
     showArrow: false
 

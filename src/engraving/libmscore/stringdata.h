@@ -53,18 +53,20 @@ class StringData
 //      std::vector<int>  stringTable { 40, 45, 50, 55, 59, 64 };   // guitar is default
 //      int         _frets = 19;
     std::vector<instrString> m_stringTable {  };                      // no strings by default
-    int _frets = 0;
+    int m_frets = 0;
 
     static bool bFretting;
+    bool m_useFlats = false;
 
     bool        convertPitch(int pitch, int pitchOffset, int* string, int* fret) const;
     int         fret(int pitch, int string, int pitchOffset) const;
     int         getPitch(int string, int fret, int pitchOffset) const;
     void        sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int pitchOffset, int* count) const;
+    void        sortChordNotesUseSameString(const Chord* chord, int pitchOffset) const;
 
 public:
     StringData() {}
-    StringData(int numFrets, int numStrings, int strings[]);
+    StringData(int numFrets, int numStrings, int strings[], bool useFlats = false);
     StringData(int numFrets, std::vector<instrString>& strings);
 
     bool isNull() const;
@@ -79,12 +81,13 @@ public:
     int         frettedStrings() const;
     const std::vector<instrString>& stringList() const { return m_stringTable; }
     std::vector<instrString>& stringList() { return m_stringTable; }
-    int         frets() const { return _frets; }
-    void        setFrets(int val) { _frets = val; }
-    bool operator==(const StringData& d) const { return d._frets == _frets && d.m_stringTable == m_stringTable; }
+    int         frets() const { return m_frets; }
+    void        setFrets(int val) { m_frets = val; }
+    bool operator==(const StringData& d) const { return d.m_frets == m_frets && d.m_stringTable == m_stringTable; }
     void        configBanjo5thString();
     int         adjustBanjo5thFret(int fret) const;
     bool        isFiveStringBanjo() const;
+    bool        useFlats() const { return m_useFlats; }
 };
 } // namespace mu::engraving
 #endif

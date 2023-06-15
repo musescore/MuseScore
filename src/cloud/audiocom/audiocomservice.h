@@ -24,6 +24,8 @@
 
 #include <memory>
 
+#include <QJsonObject>
+
 #include "modularity/ioc.h"
 #include "icloudconfiguration.h"
 #include "network/inetworkmanagercreator.h"
@@ -58,14 +60,15 @@ private:
 
     network::RequestHeaders headers(const QString& token = QString()) const;
 
-    Ret doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat,
-                      const QJsonObject& audioInfo);
-    Ret doCreateAudio(const QString& title, int size, const QString& audioFormat, Visibility visibility, QJsonObject& audioInfo);
+    Ret doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat);
+    Ret doCreateAudio(network::INetworkManagerPtr manager, const QString& title, int size, const QString& audioFormat,
+                      Visibility visibility);
 
     void notifyServerAboutFailUpload(const QUrl& failUrl, const QString& token);
     void notifyServerAboutSuccessUpload(const QUrl& successUrl, const QString& token);
 
     QString m_currentUploadingAudioSlug;
+    QJsonObject m_currentUploadingAudioInfo;
 };
 }
 

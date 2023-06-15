@@ -666,11 +666,24 @@ void NavigationController::goToNextSection()
         return;
     }
 
+    if (activeSec->type() == INavigationSection::Type::Exclusive) {
+        INavigationPanel* first = firstEnabled(activeSec->panels());
+        if (first) {
+            doActivatePanel(first);
+            m_navigationChanged.notify();
+        }
+        return;
+    }
+
     doDeactivateSection(activeSec);
 
     INavigationSection* nextSec = nextEnabled(m_sections, activeSec->index());
     if (!nextSec) { // active is last
         nextSec = firstEnabled(m_sections); // the first to be the next
+    }
+    if (!nextSec) {
+        LOGI() << "no enabled sections!";
+        return;
     }
 
     LOGI() << "nextSec: " << nextSec->name() << ", enabled: " << nextSec->enabled();
@@ -691,6 +704,15 @@ void NavigationController::goToPrevSection(bool isActivateLastPanel)
     INavigationSection* activeSec = findActive(m_sections);
     if (!activeSec) { // no any active
         doActivateLast();
+        return;
+    }
+
+    if (activeSec->type() == INavigationSection::Type::Exclusive) {
+        INavigationPanel* first = firstEnabled(activeSec->panels());
+        if (first) {
+            doActivatePanel(first);
+            m_navigationChanged.notify();
+        }
         return;
     }
 

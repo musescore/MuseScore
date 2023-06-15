@@ -50,6 +50,7 @@ class Breath;
 class Chord;
 class ChordLine;
 class Clef;
+class Capo;
 
 class DeadSlapped;
 class Dynamic;
@@ -123,6 +124,7 @@ class ShadowNote;
 class SLine;
 class Slur;
 class Spacer;
+class SpannerSegment;
 class StaffLines;
 class StaffState;
 class StaffText;
@@ -198,6 +200,7 @@ public:
     static void layout(Chord* item, LayoutContext& ctx);
     static void layout(ChordLine* item, LayoutContext& ctx);
     static void layout(Clef* item, LayoutContext& ctx);
+    static void layout(Capo* item, LayoutContext& ctx);
 
     static void layout(DeadSlapped* item, LayoutContext& ctx);
     static void layout(Dynamic* item, LayoutContext& ctx);
@@ -252,7 +255,6 @@ public:
     static void layout(MMRestRange* item, LayoutContext& ctx);
 
     static void layout(Note* item, LayoutContext& ctx);
-    static void layout2(Note* item, LayoutContext& ctx);
     static void layout(NoteDot* item, LayoutContext& ctx);
 
     static void layout(Ornament* item, LayoutContext& ctx);
@@ -325,7 +327,17 @@ public:
 
     static RectF layoutRect(const BarLine* item, LayoutContext& ctx);
 
+    // layoutSystem;
+    static SpannerSegment* layoutSystem(Spanner* item, System* system, LayoutContext& ctx); // factory
+    static SpannerSegment* layoutSystem(LyricsLine* line, System* system, LayoutContext& ctx);
+    static SpannerSegment* layoutSystem(Volta* line, System* system, LayoutContext& ctx);
+    static SpannerSegment* layoutSystem(Slur* line, System* system, LayoutContext& ctx);
+    static void layoutSystemsDone(Spanner* item);
+
 private:
+
+    friend class SlurTieLayout;
+
     static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
     static void layoutMultiGlyphAccidental(Accidental* item, LayoutContext& ctx);
 
@@ -335,13 +347,17 @@ private:
 
     static void layoutLines(FiguredBass* item, LayoutContext& ctx);
 
-    static PointF calculateBoundingRect(Harmony* item);
+    static PointF calculateBoundingRect(Harmony* item, LayoutContext& ctx);
 
     static void keySigAddLayout(KeySig* item, SymId sym, int line);
 
     static void layoutRestDots(Rest* item, LayoutContext& ctx);
 
     static void doLayout(StretchedBend* item, LayoutContext& ctx, bool stretchedMode);
+
+    static SpannerSegment* layoutSystemSLine(SLine* line, System* system, LayoutContext& ctx);
+    static SpannerSegment* getNextLayoutSystemSegment(Spanner* spanner, System* system,
+                                                      std::function<SpannerSegment* (System* parent)> createSegment);
 };
 }
 

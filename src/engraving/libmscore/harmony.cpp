@@ -679,7 +679,7 @@ void Harmony::startEdit(EditData& ed)
     }
 
     // layout as text, without position reset
-    TextBase::layout1();
+    layout()->layoutText1(this, true);
     triggerLayout();
 
     TextBase::startEdit(ed);
@@ -720,7 +720,7 @@ bool Harmony::edit(EditData& ed)
     bool rv = TextBase::edit(ed);
 
     // layout as text, without position reset
-    TextBase::layout1();
+    layout()->layoutText1(this, true);
     triggerLayout();
 
     // check spelling
@@ -791,10 +791,10 @@ void Harmony::endEdit(EditData& ed)
             // (as a result of TextBase::endEdit() calling setText() for linked elements)
             // we may now need to change the TPC's and the text, and re-render
             if (score()->styleB(Sid::concertPitch) != h->score()->styleB(Sid::concertPitch)) {
-                Part* partDest = h->part();
+                Staff* staffDest = h->staff();
                 Segment* segment = getParentSeg();
                 Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
-                Interval interval = partDest->instrument(tick)->transpose();
+                Interval interval = staffDest->transpose(tick);
                 if (!interval.isZero()) {
                     if (!h->score()->styleB(Sid::concertPitch)) {
                         interval.flip();
@@ -1193,10 +1193,17 @@ const ChordDescription* Harmony::getDescription(const String& name, const Parsed
 
 const RealizedHarmony& Harmony::getRealizedHarmony() const
 {
-    Staff* st = staff();
-    int capo = st->capo(tick()) - 1;
-    int offset = (capo < 0 ? 0 : capo);   //semitone offset for pitch adjustment
-    Interval interval = st->part()->instrument(tick())->transpose();
+    Fraction tick = this->tick();
+    const Staff* st = staff();
+
+    const CapoParams& capo = st->capo(tick);
+
+    int offset = 0;
+    if (capo.active) {
+        offset = capo.fretPosition;
+    }
+
+    Interval interval = st->part()->instrument(tick)->transpose();
     if (!score()->styleB(Sid::concertPitch)) {
         offset += interval.chromatic;
     }
@@ -1204,7 +1211,7 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
     //Adjust for Nashville Notation, might be temporary
     // TODO: set dirty on add/remove of keysig
     if (_harmonyType == HarmonyType::NASHVILLE && !_realizedHarmony.valid()) {
-        Key key = staff()->key(tick());
+        Key key = staff()->key(tick);
         //parse root
         int rootTpc = function2Tpc(_function, key);
 
@@ -1220,6 +1227,7 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
     } else {
         _realizedHarmony.update(_rootTpc, _baseTpc, offset);
     }
+
     return _realizedHarmony;
 }
 
@@ -1250,16 +1258,6 @@ const ChordDescription* Harmony::generateDescription()
     cd.parsedChords.clear();
     cl->insert({ cd.id, cd });
     return &cl->at(cd.id);
-}
-
-//---------------------------------------------------------
-//   layout1
-//---------------------------------------------------------
-
-void Harmony::layout1()
-{
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout1(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -1926,7 +1924,7 @@ EngravingItem* Harmony::drop(EditData& data)
         score()->undoAddElement(fd);
     } else if (e->isSymbol() || e->isFSymbol()) {
         TextBase::drop(data);
-        layout1();
+        layout()->layoutText1(this);
         e = 0;          // cannot select
     } else {
         LOGW("Harmony: cannot drop <%s>\n", e->typeName());
@@ -2069,13 +2067,5 @@ Sid Harmony::getPropertyStyle(Pid pid) const
         }
     }
     return TextBase::getPropertyStyle(pid);
-}
-
-KerningType Harmony::doComputeKerningType(const EngravingItem* nextItem) const
-{
-    if (nextItem->isHarmony()) {
-        return KerningType::NON_KERNING;
-    }
-    return KerningType::KERNING;
 }
 }

@@ -94,12 +94,12 @@ rm '/usr/local/bin/2to3'
 brew install ninja pkg-config
 
 # Qt
-export QT_SHORT_VERSION=5.15.2
+export QT_SHORT_VERSION=5.15.9
 export QT_PATH=$HOME/Qt
 export QT_MACOS=$QT_PATH/$QT_SHORT_VERSION/clang_64
 export PATH=$PATH:$QT_MACOS/bin
 echo "PATH=$PATH" >> $GITHUB_ENV
-wget -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/Qt5152_mac.zip
+wget -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/Qt5159_mac.zip
 mkdir -p $QT_MACOS
 unzip -qq qt5.zip -d $QT_MACOS
 rm qt5.zip

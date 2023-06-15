@@ -34,7 +34,7 @@
 
 #include "style/style.h"
 #include "style/textstyle.h"
-#include "layout/v0/tlayout.h"
+
 #include "types/symnames.h"
 #include "types/typesconv.h"
 
@@ -836,7 +836,7 @@ static void readNote206(Note* note, XmlReader& e, ReadContext& ctx)
     }
     if (!(tpcIsValid(note->tpc1()) && tpcIsValid(note->tpc2()))) {
         Fraction tick = note->chord() ? note->chord()->tick() : Fraction(-1, 1);
-        Interval v = note->staff() ? note->part()->instrument(tick)->transpose() : Interval();
+        Interval v = note->staff() ? note->staff()->transpose(tick) : Interval();
         if (tpcIsValid(note->tpc1())) {
             v.flip();
             if (v.isZero()) {
@@ -2278,7 +2278,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
             case SymId::fermataVeryLongAbove:
             case SymId::fermataVeryLongBelow: {
                 Fermata* fe = Factory::createFermata(ctx.dummy());
-                fe->setSymId(sym);
+                fe->setSymIdAndTimeStretch(sym);
                 el = fe;
             } break;
             default:
@@ -2316,7 +2316,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
     // Special case for "no type" = ufermata, with missing subtype tag
     if (!el) {
         Fermata* f = Factory::createFermata(ctx.dummy());
-        f->setSymId(sym);
+        f->setSymIdAndTimeStretch(sym);
         el = f;
     }
     if (el->isFermata()) {
@@ -2503,8 +2503,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             }
             segment = m->getSegment(st, ctx.tick());
             segment->add(bl);
-            layout::v0::LayoutContext lctx(bl->score());
-            layout::v0::TLayout::layout(bl, lctx);
+            EngravingItem::layout()->layoutItem(bl);
             if (fermataAbove) {
                 segment->add(fermataAbove);
             }

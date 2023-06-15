@@ -43,9 +43,6 @@ public:
     void setUserTemplatesPath(const io::path_t& path) override;
     async::Channel<io::path_t> userTemplatesPathChanged() const override;
 
-    io::path_t defaultProjectsPath() const override;
-    void setDefaultProjectsPath(const io::path_t& path) override;
-
     io::path_t lastOpenedProjectsPath() const override;
     void setLastOpenedProjectsPath(const io::path_t& path) override;
 
@@ -55,6 +52,7 @@ public:
     io::path_t userProjectsPath() const override;
     void setUserProjectsPath(const io::path_t& path) override;
     async::Channel<io::path_t> userProjectsPathChanged() const override;
+    io::path_t defaultUserProjectsPath() const override;
 
     bool shouldAskSaveLocationType() const override;
     void setShouldAskSaveLocationType(bool shouldAsk) override;

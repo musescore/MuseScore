@@ -57,6 +57,7 @@ public:
     QVersionNumber version() const;
     QString thumbnailName() const;
     QString categoryCode() const;
+    bool requiresScore() const;
 
     QmlPlugin* qmlPlugin() const;
 

@@ -334,8 +334,6 @@ class TextBase : public EngravingItem
     void notifyAboutTextInserted(int startPosition, int endPosition, const String& text);
     void notifyAboutTextRemoved(int startPosition, int endPosition, const String& text);
 
-    virtual bool alwaysKernable() const override { return true; }
-
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
              ElementFlags = ElementFlag::NOTHING);
@@ -345,7 +343,7 @@ protected:
     mu::draw::Color textColor() const;
     mu::RectF frame;             // calculated in layout()
     void layoutFrame();
-    void layoutEdit();
+
     void createLayout();
     void insertSym(EditData& ed, SymId id);
     void prepareFormat(const String& token, TextCursor& cursor);
@@ -379,7 +377,6 @@ public:
 
     void insertText(EditData&, const String&);
 
-    virtual void layout1();
     double lineSpacing() const;
     double lineHeight() const;
     virtual double baseLine() const override;

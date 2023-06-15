@@ -44,8 +44,7 @@ public:
     unsigned int sampleRate() const;
     unsigned int channelCount() const;
 
-    Windows::Devices::Enumeration::DeviceInformationCollection availableDevices() const;
-    hstring defaultDeviceId() const;
+    void setFallbackDevice(const hstring& deviceId);
 
     void asyncInitializeAudioDevice(const hstring& deviceId, bool useClosestSupportedFormat = false) noexcept;
     void startPlayback() noexcept;
@@ -72,6 +71,7 @@ private:
     void setStateAndNotify(const DeviceState newState, hresult resultCode);
 
     hstring m_deviceIdString;
+    hstring m_fallbackDeviceIdString;
     uint32_t m_bufferFrames = 0;
 
     // Event for sample ready or user stop

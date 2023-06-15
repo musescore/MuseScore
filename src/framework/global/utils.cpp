@@ -55,13 +55,13 @@ static constexpr const char* flatNotes[] = {
     QT_TRANSLATE_NOOP("global", "B")
 };
 
-std::string mu::pitchToString(int pitch, bool addoctave, bool useSharps /* = true */)
+std::string mu::pitchToString(int pitch, bool addoctave, bool useFlats /* = false */)
 {
     if (pitch < 0 || pitch > 127) {
         return std::string();
     }
 
-    auto source = useSharps ? sharpNotes : flatNotes;
+    auto source = useFlats ? flatNotes : sharpNotes;
 
     int i = pitch % 12;
     if (addoctave) {

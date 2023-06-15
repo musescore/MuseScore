@@ -22,16 +22,17 @@
 #include "layout.h"
 
 #include "libmscore/arpeggio.h"
-#include "libmscore/box.h"
-#include "libmscore/barline.h"
-#include "libmscore/bracket.h"
-#include "libmscore/ledgerline.h"
-#include "libmscore/figuredbass.h"
+#include "libmscore/beam.h"
+#include "libmscore/textlinebase.h"
+#include "libmscore/harmony.h"
+#include "libmscore/chord.h"
 
 #include "tlayout.h"
+#include "chordlayout.h"
 #include "layoutcontext.h"
 #include "scorelayout.h"
 #include "arpeggiolayout.h"
+#include "horizontalspacing.h"
 
 #include "log.h"
 
@@ -43,62 +44,57 @@ void Layout::layoutRange(Score* score, const LayoutOptions& options, const Fract
     ScoreLayout::layoutRange(score, options, st, et);
 }
 
+void Layout::doLayoutItem(EngravingItem* item)
+{
+    LayoutContext ctx(item->score());
+    TLayout::layoutItem(item, ctx);
+}
+
+void Layout::layoutText1(TextBase* item, bool base)
+{
+    LayoutContext ctx(item->score());
+    if (base) {
+        TLayout::layout1TextBase(item, ctx);
+    } else if (Harmony::classof(item)) {
+        TLayout::layout1(static_cast<Harmony*>(item), ctx);
+    } else {
+        TLayout::layout1TextBase(item, ctx);
+    }
+}
+
 // ===============================================================
 // Layout Elements on Edit
 // ===============================================================
-void Layout::layoutOnEditDrag(Arpeggio* item)
-{
-    LayoutContext ctx(item->score());
-    ArpeggioLayout::layoutOnEditDrag(item, ctx);
-}
-
 void Layout::layoutOnEdit(Arpeggio* item)
 {
     LayoutContext ctx(item->score());
     ArpeggioLayout::layoutOnEdit(item, ctx);
 }
 
-void Layout::layoutOnEditDrag(Box* item)
+double Layout::computePadding(const EngravingItem* item1, const EngravingItem* item2)
 {
-    LayoutContext ctx(item->score());
-    TLayout::layout(item, ctx);
+    return HorizontalSpacing::computePadding(item1, item2);
 }
 
-void Layout::layoutOnEndEdit(Box* item)
+KerningType Layout::computeKerning(const EngravingItem* item1, const EngravingItem* item2)
 {
-    LayoutContext ctx(item->score());
-    TLayout::layout(item, ctx);
+    return HorizontalSpacing::computeKerning(item1, item2);
 }
 
-void Layout::layoutOnEditDrag(Bracket* item)
+void Layout::layoutTextLineBaseSegment(TextLineBaseSegment* item)
 {
     LayoutContext ctx(item->score());
-    TLayout::layout(item, ctx);
+    TLayout::layoutTextLineBaseSegment(item, ctx);
 }
 
-// ===============================================================
-// Layout Elements on Drop and Drag
-// ===============================================================
-
-void Layout::layoutOnChordRestDrop(BarLine* item)
+void Layout::layoutBeam1(Beam* item)
 {
     LayoutContext ctx(item->score());
-    TLayout::layout(item, ctx);
+    TLayout::layout1(item, ctx);
 }
 
-// ===============================================================
-// Layout others
-// ===============================================================
-
-void Layout::layoutOnAddLedgerLines(LedgerLine* item)
+void Layout::layoutStem(Chord* item)
 {
     LayoutContext ctx(item->score());
-    TLayout::layout(item, ctx);
-}
-
-void Layout::regenerateDisplayText(FiguredBassItem* item)
-{
-    // re-generate displayText
-    LayoutContext ctx(item->score());
-    TLayout::layout(item, ctx);
+    ChordLayout::layoutStem(item, ctx);
 }

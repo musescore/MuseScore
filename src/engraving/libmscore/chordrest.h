@@ -157,7 +157,7 @@ public:
 
     CrossMeasure crossMeasure() const { return _crossMeasure; }
     void setCrossMeasure(CrossMeasure val) { _crossMeasure = val; }
-    virtual void crossMeasureSetup(bool /*on*/) { }
+
     // the following two functions should not be used, unless absolutely necessary;
     // the cross-measure duration is best managed through setDuration() and crossMeasureSetup()
     TDuration crossMeasureDurationType() const { return _crossMeasureTDur; }

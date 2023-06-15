@@ -148,12 +148,12 @@ void ExportMidi::writeHeader()
             for (auto ik = sk; ik != ek; ++ik) {
                 MidiEvent ev;
                 ev.setType(ME_META);
-                Key key       = ik->second.key();           // -7 -- +7
+                Key key = ik->second.concertKey();           // -7 -- +7
                 ev.setMetaType(META_KEY_SIGNATURE);
                 ev.setLen(2);
                 unsigned char* data = new unsigned char[2];
-                data[0]   = int(key);
-                data[1]   = 0;          // major
+                data[0] = int(key);
+                data[1] = 0;          // major
                 ev.setEData(data);
                 int tick = ik->first + tickOffset;
                 track1.insert(m_pauseMap.addPauseTicks(tick), ev);
@@ -239,7 +239,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     m_pauseMap.calculate(m_score);
     writeHeader();
 
-    int staffIdx = 0;
+    staff_idx_t staffIdx = 0;
     for (auto& track: tracks) {
         Staff* staff = m_score->staff(staffIdx);
         Part* part   = staff->part();
@@ -311,10 +311,10 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                                                                                    event.pitch(), 0));
                     }
 
-                    int equivalentStaffIdx = staffIdx;
+                    staff_idx_t equivalentStaffIdx = staffIdx;
                     for (Staff* st : m_score->masterScore()->staves()) {
                         if (staff->id() == st->id()) {
-                            equivalentStaffIdx = static_cast <int>(st->idx());
+                            equivalentStaffIdx = st->idx();
                         }
                     }
 

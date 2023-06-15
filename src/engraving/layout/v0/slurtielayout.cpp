@@ -36,6 +36,8 @@
 #include "libmscore/tie.h"
 
 #include "tlayout.h"
+#include "chordlayout.h"
+#include "tremololayout.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::layout::v0;
@@ -205,7 +207,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
-    SlurSegment* slurSegment = toSlurSegment(item->getNextLayoutSystemSegment(system, [](System* parent) {
+    SlurSegment* slurSegment = toSlurSegment(TLayout::getNextLayoutSystemSegment(item, system, [](System* parent) {
         return new SlurSegment(parent);
     }));
 
@@ -227,7 +229,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
             item->setEndElement(item->startCR());
             item->setTick2(item->tick());
         }
-        item->computeUp();
+        computeUp(item, ctx);
         if (item->_sourceStemArrangement != -1) {
             if (item->_sourceStemArrangement != item->calcStemArrangement(item->startCR(), item->endCR())) {
                 // copy & paste from incompatible stem arrangement, so reset bezier points
@@ -711,7 +713,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
             } else if (trem && trem->twoNotes() && trem->chord2() != sc && sc->up() == item->_up) {
                 TLayout::layout(trem, ctx);
                 Note* note = item->_up ? sc->upNote() : sc->downNote();
-                double stemHeight = stem1 ? stem1->length() : trem->defaultStemLengthStart();
+                double stemHeight = stem1 ? stem1->length() : defaultStemLengthStart(trem);
                 double offset = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
                 double sh = stemHeight + offset;
 
@@ -845,7 +847,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
                     // in these cases, layout end of slur to stem
                     double beamWidthSp = beam2 ? item->score()->styleS(Sid::beamWidth).val() : 0;
                     Note* note = item->_up ? sc->upNote() : sc->downNote();
-                    double stemHeight = stem2 ? stem2->length() + (beamWidthSp / 2) : trem->defaultStemLengthEnd();
+                    double stemHeight = stem2 ? stem2->length() + (beamWidthSp / 2) : defaultStemLengthEnd(trem);
                     double offset = std::max(beamClearance * ec->intrinsicMag(), minOffset) * _spatium;
                     double sh = stemHeight + offset;
 
@@ -1245,4 +1247,89 @@ void SlurTieLayout::tiePos(Tie* item, SlurPos* sp)
         adjustTie(sc, sp->p1, true);
         adjustTie(ec, sp->p2, false);
     }
+}
+
+void SlurTieLayout::computeUp(Slur* slur, LayoutContext& ctx)
+{
+    switch (slur->_slurDirection) {
+    case DirectionV::UP:
+        slur->_up = true;
+        break;
+    case DirectionV::DOWN:
+        slur->_up = false;
+        break;
+    case DirectionV::AUTO:
+    {
+        //
+        // assumption:
+        // slurs have only chords or rests as start/end elements
+        //
+        ChordRest* chordRest1 = slur->startCR();
+        ChordRest* chordRest2 = slur->endCR();
+        if (chordRest1 == 0 || chordRest2 == 0) {
+            slur->_up = true;
+            break;
+        }
+        Chord* chord1 = slur->startCR()->isChord() ? toChord(slur->startCR()) : 0;
+        Chord* chord2 = slur->endCR()->isChord() ? toChord(slur->endCR()) : 0;
+        if (chord2 && slur->startCR()->measure()->system() != slur->endCR()->measure()->system()) {
+            // HACK: if the end chord is in a different system, it may have never been laid out yet.
+            // But we need to know its direction to decide slur direction, so need to compute it here.
+            for (Note* note : chord2->notes()) {
+                note->updateLine(); // because chord direction is based on note lines
+            }
+
+            ChordLayout::computeUp(chord2, ctx);
+        }
+
+        if (chord1 && chord1->beam() && chord1->beam()->cross()) {
+            // TODO: stem direction is not finalized, so we cannot use it here
+            slur->_up = true;
+            break;
+        }
+
+        slur->_up = !(chordRest1->up());
+
+        // Check if multiple voices
+        bool multipleVoices = false;
+        Measure* m1 = chordRest1->measure();
+        while (m1 && m1->tick() <= chordRest2->tick()) {
+            if ((m1->hasVoices(chordRest1->staffIdx(), slur->tick(), slur->ticks() + chordRest2->ticks()))
+                && chord1) {
+                multipleVoices = true;
+                break;
+            }
+            m1 = m1->nextMeasure();
+        }
+        if (multipleVoices) {
+            // slurs go on the stem side
+            if (chordRest1->voice() > 0 || chordRest2->voice() > 0) {
+                slur->_up = false;
+            } else {
+                slur->_up = true;
+            }
+        } else if (chord1 && chord2 && !chord1->isGrace() && slur->isDirectionMixture(chord1, chord2)) {
+            // slurs go above if there are mixed direction stems between c1 and c2
+            // but grace notes are exceptions
+            slur->_up = true;
+        } else if (chord1 && chord2 && chord1->isGrace() && chord2 != chord1->parent() && slur->isDirectionMixture(chord1, chord2)) {
+            slur->_up = true;
+        }
+    }
+    break;
+    }
+}
+
+double SlurTieLayout::defaultStemLengthStart(Tremolo* tremolo)
+{
+    return TremoloLayout::extendedStemLenWithTwoNoteTremolo(tremolo,
+                                                            tremolo->chord1()->defaultStemLength(),
+                                                            tremolo->chord2()->defaultStemLength()).first;
+}
+
+double SlurTieLayout::defaultStemLengthEnd(Tremolo* tremolo)
+{
+    return TremoloLayout::extendedStemLenWithTwoNoteTremolo(tremolo,
+                                                            tremolo->chord1()->defaultStemLength(),
+                                                            tremolo->chord2()->defaultStemLength()).second;
 }

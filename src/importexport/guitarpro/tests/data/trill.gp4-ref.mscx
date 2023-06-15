@@ -80,7 +80,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -100,11 +100,21 @@
             <subtype>f</subtype>
             <velocity>96</velocity>
             </Dynamic>
+          <Spanner type="Trill">
+            <Trill>
+              <subtype>trill</subtype>
+              <Ornament>
+                <subtype>ornamentTrill</subtype>
+                </Ornament>
+              </Trill>
+            <next>
+              <location>
+                <fractions>1/4</fractions>
+                </location>
+              </next>
+            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>ornamentTrill</subtype>
-              </Articulation>
             <Note>
               <pitch>59</pitch>
               <tpc>19</tpc>
@@ -112,6 +122,13 @@
               <string>1</string>
               </Note>
             </Chord>
+          <Spanner type="Trill">
+            <prev>
+              <location>
+                <fractions>-1/4</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>

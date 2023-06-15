@@ -38,9 +38,9 @@
 #include "iengravingfont.h"
 
 #include "rw/rwregister.h"
-#include "rw/write/twrite.h"
 
 #include "types/typesconv.h"
+
 #include "layout/v0/tlayout.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -2414,21 +2414,6 @@ void EngravingItem::doInitAccessible()
 
 #endif // ENGRAVING_NO_ACCESSIBILITY
 
-KerningType EngravingItem::computeKerningType(const EngravingItem* nextItem) const
-{
-    if (_userSetKerning != KerningType::NOT_SET) {
-        return _userSetKerning;
-    }
-    if (sameVoiceKerningLimited() && nextItem->sameVoiceKerningLimited() && track() == nextItem->track()) {
-        return KerningType::NON_KERNING;
-    }
-    if ((neverKernable() || nextItem->neverKernable())
-        && !(alwaysKernable() || nextItem->alwaysKernable())) {
-        return KerningType::NON_KERNING;
-    }
-    return doComputeKerningType(nextItem);
-}
-
 String EngravingItem::formatBarsAndBeats() const
 {
     String result;
@@ -2443,23 +2428,5 @@ String EngravingItem::formatBarsAndBeats() const
     }
 
     return result;
-}
-
-double EngravingItem::computePadding(const EngravingItem* nextItem) const
-{
-    double scaling = (mag() + nextItem->mag()) / 2;
-    double padding = score()->paddingTable().at(type()).at(nextItem->type());
-    padding *= scaling;
-    if (!isLedgerLine() && nextItem->isRest()) {
-        const Rest* rest = toRest(nextItem);
-        SymId symbol = rest->sym();
-        if (symbol == SymId::restWholeLegerLine
-            || symbol == SymId::restDoubleWholeLegerLine
-            || symbol == SymId::restHalfLegerLine) {
-            // In this case the ledgerLine is included in the glyph itself, so we must ignore it
-            padding += rest->bbox().left();
-        }
-    }
-    return padding;
 }
 }

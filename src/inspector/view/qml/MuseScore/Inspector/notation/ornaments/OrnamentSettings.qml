@@ -47,6 +47,7 @@ Column {
     DropdownPropertyView {
         id: intervalAbove
         visible: root.model ? root.model.isIntervalAboveAvailable : false
+
         titleText: qsTrc("inspector", "Interval above")
         propertyItem: root.model ? root.model.intervalAbove : null
 
@@ -63,6 +64,7 @@ Column {
     DropdownPropertyView {
         id: intervalBelow
         visible: root.model ? root.model.isIntervalBelowAvailable : false
+
         titleText: qsTrc("inspector", "Interval below")
         propertyItem: root.model ? root.model.intervalBelow : null
 
@@ -79,6 +81,7 @@ Column {
     InspectorPropertyView {
         id: interval
         visible: root.model ? root.model.isFullIntervalChoiceAvailable : false
+
         titleText: qsTrc("inspector", "Interval")
         propertyItem: root.model ? root.model.intervalAbove : null
 
@@ -88,11 +91,14 @@ Column {
         }
 
         navigationName: "Interval"
-        navigationRowEnd: intervalType.navigation.row
+        navigationPanel: root.navigationPanel
+        navigationRowStart: intervalBelow.navigationRowEnd + 1
+        navigationRowEnd: intervalStep.navigation.row
 
         function focusOnFirst() {
             intervalType.navigation.requestActive()
         }
+
         Item {
             width: parent.width
             height: childrenRect.height
@@ -107,7 +113,7 @@ Column {
 
                 navigation.name: root.navigationName + " Dropdown"
                 navigation.panel: root.navigationPanel
-                navigation.row: root.navigationRowStart + 1
+                navigation.row: interval.navigationRowStart + 1
                 navigation.accessible.name: root.titleText + " " + currentText
 
                 model: root.model && root.model.isPerfectStep ? [
@@ -141,7 +147,7 @@ Column {
 
                 navigation.name: root.navigationName + " Dropdown"
                 navigation.panel: root.navigationPanel
-                navigation.row: root.navigationRowStart + 1
+                navigation.row: intervalType.navigation.row + 1
                 navigation.accessible.name: root.titleText + " " + currentText
 
                 model:  [
@@ -167,6 +173,7 @@ Column {
 
     DropdownPropertyView {
         id: showAccidental
+
         titleText: qsTrc("inspector", "Accidental visibility")
         propertyItem: root.model ? root.model.showAccidental : null
 
@@ -197,7 +204,8 @@ Column {
         propertyItem: root.model ? root.model.placement : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: performanceSection.navigationRowEnd + 1
+        navigationRowStart: startOnUpperNote.navigation.row + 1
+
         model: [
             { text: qsTrc("inspector", "Auto"), value: ArticulationTypes.TYPE_AUTO },
             { text: qsTrc("inspector", "Above"), value: ArticulationTypes.TYPE_TOP },

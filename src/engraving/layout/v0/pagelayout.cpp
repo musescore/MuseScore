@@ -126,7 +126,7 @@ void PageLayout::collectPage(const LayoutOptions& options, LayoutContext& ctx)
     // (they may have been filled on previous layout)
     size_t pSystems = ctx.page->systems().size();
     if (pSystems > 0) {
-        ctx.page->system(0)->restoreLayout2();
+        SystemLayout::restoreLayout2(ctx.page->system(0), ctx);
         y = ctx.page->system(0)->y() + ctx.page->system(0)->height();
     } else {
         y = ctx.page->tm();
@@ -137,7 +137,7 @@ void PageLayout::collectPage(const LayoutOptions& options, LayoutContext& ctx)
         double distance = ps->minDistance(cs);
         y += distance;
         cs->setPos(ctx.page->lm(), y);
-        cs->restoreLayout2();
+        SystemLayout::restoreLayout2(cs, ctx);
         y += cs->height();
     }
 
@@ -185,7 +185,7 @@ void PageLayout::collectPage(const LayoutOptions& options, LayoutContext& ctx)
 
         y += distance;
         ctx.curSystem->setPos(ctx.page->lm(), y);
-        ctx.curSystem->restoreLayout2();
+        SystemLayout::restoreLayout2(ctx.curSystem, ctx);
         ctx.page->appendSystem(ctx.curSystem);
         y += ctx.curSystem->height();
 
@@ -532,7 +532,7 @@ void PageLayout::checkDivider(LayoutContext& ctx, bool left, System* s, double y
     }
 }
 
-void PageLayout::distributeStaves(const LayoutContext& ctx, Page* page, double footerPadding)
+void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerPadding)
 {
     Score* score = ctx.score();
     VerticalGapDataList vgdl;
@@ -728,9 +728,9 @@ void PageLayout::distributeStaves(const LayoutContext& ctx, Page* page, double f
     }
 
     for (System* system : systems) {
-        system->setMeasureHeight(system->height());
-        system->layoutBracketsVertical();
-        system->layoutInstrumentNames();
+        SystemLayout::setMeasureHeight(system, system->height(), ctx);
+        SystemLayout::layoutBracketsVertical(system, ctx);
+        SystemLayout::layoutInstrumentNames(system);
     }
     vgdl.deleteAll();
 }

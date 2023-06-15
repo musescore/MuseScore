@@ -35,13 +35,12 @@
 #include "undo.h"
 
 #include "iengravingfont.h"
-#include "layout/v0/tlayout.h"
 
 #include "bend.h"
 #include "bracket.h"
 #include "chord.h"
 #include "clef.h"
-#include "clef.h"
+#include "capo.h"
 #include "engravingitem.h"
 #include "excerpt.h"
 #include "fret.h"
@@ -145,6 +144,17 @@ void updateNoteLines(Segment* segment, track_idx_t track)
                 }
             }
         }
+    }
+}
+
+static void updateStaffTextCache(const StaffTextBase* text, Score* score)
+{
+    TRACEFUNC;
+
+    if (text->isCapo()) {
+        score->updateCapo();
+    } else if (text->swing()) {
+        score->updateSwing();
     }
 }
 
@@ -860,7 +870,7 @@ void AddElement::undo(EditData*)
     }
 
     if (element->isStaffTextBase()) {
-        score->updateSwing();
+        updateStaffTextCache(toStaffTextBase(element), score);
     }
 
     endUndoRedo(true);
@@ -879,7 +889,7 @@ void AddElement::redo(EditData*)
     }
 
     if (element->isStaffTextBase()) {
-        score->updateSwing();
+        updateStaffTextCache(toStaffTextBase(element), score);
     }
 
     endUndoRedo(false);
@@ -1007,10 +1017,8 @@ void RemoveElement::undo(EditData*)
     }
 
     if (element->isStaffTextBase()) {
-        score->updateSwing();
-    }
-
-    if (element->isChordRest()) {
+        updateStaffTextCache(toStaffTextBase(element), score);
+    } else if (element->isChordRest()) {
         if (element->isChord()) {
             Chord* chord = toChord(element);
             for (Note* note : chord->notes()) {
@@ -1038,10 +1046,8 @@ void RemoveElement::redo(EditData*)
     }
 
     if (element->isStaffTextBase()) {
-        score->updateSwing();
-    }
-
-    if (element->isChordRest()) {
+        updateStaffTextCache(toStaffTextBase(element), score);
+    } else if (element->isChordRest()) {
         undoRemoveTuplet(toChordRest(element));
         if (element->isChord()) {
             Chord* chord = toChord(element);
@@ -1112,6 +1118,14 @@ void InsertPart::redo(EditData*)
     m_part->score()->insertPart(m_part, m_targetPartIdx);
 }
 
+void InsertPart::cleanup(bool undo)
+{
+    if (!undo) {
+        delete m_part;
+        m_part = nullptr;
+    }
+}
+
 //---------------------------------------------------------
 //   RemovePart
 //---------------------------------------------------------
@@ -1134,6 +1148,14 @@ void RemovePart::undo(EditData*)
 void RemovePart::redo(EditData*)
 {
     m_part->score()->removePart(m_part);
+}
+
+void RemovePart::cleanup(bool undo)
+{
+    if (undo) {
+        delete m_part;
+        m_part = nullptr;
+    }
 }
 
 //---------------------------------------------------------
@@ -1176,6 +1198,14 @@ void InsertStaff::redo(EditData*)
     staff->score()->insertStaff(staff, ridx);
 }
 
+void InsertStaff::cleanup(bool undo)
+{
+    if (!undo) {
+        delete staff;
+        staff = nullptr;
+    }
+}
+
 //---------------------------------------------------------
 //   RemoveStaff
 //---------------------------------------------------------
@@ -1198,6 +1228,14 @@ void RemoveStaff::undo(EditData*)
 void RemoveStaff::redo(EditData*)
 {
     staff->score()->removeStaff(staff);
+}
+
+void RemoveStaff::cleanup(bool undo)
+{
+    if (undo) {
+        delete staff;
+        staff = nullptr;
+    }
 }
 
 //---------------------------------------------------------
@@ -1397,7 +1435,7 @@ void ChangeElement::flip(EditData*)
     }
 
     if (newElement->isStaffTextBase()) {
-        score->updateSwing();
+        updateStaffTextCache(toStaffTextBase(newElement), score);
     }
 
     std::swap(oldElement, newElement);
@@ -2421,8 +2459,7 @@ void ChangeClefType::flip(EditData*)
     concertClef     = ocl;
     transposingClef = otc;
     // layout the clef to align the currentClefType with the actual one immediately
-    layout::v0::LayoutContext ctx(clef->score());
-    layout::v0::TLayout::layout(clef, ctx);
+    EngravingItem::layout()->layoutItem(clef);
 }
 
 //---------------------------------------------------------
@@ -2438,6 +2475,11 @@ void ChangeProperty::flip(EditData*)
 
     element->setProperty(id, property);
     element->setPropertyFlags(id, flags);
+
+    if (element->isStaffTextBase()) {
+        updateStaffTextCache(toStaffTextBase(element), element->score());
+    }
+
     property = v;
     flags = ps;
 }

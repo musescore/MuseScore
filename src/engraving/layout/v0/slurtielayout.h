@@ -32,6 +32,7 @@ class System;
 class Chord;
 class TieSegment;
 class Tie;
+class Tremolo;
 }
 
 namespace mu::engraving::layout::v0 {
@@ -44,11 +45,16 @@ public:
     static TieSegment* tieLayoutFor(Tie* item, System* system);
     static TieSegment* tieLayoutBack(Tie* item, System* system);
 
+    static void computeUp(Slur* slur, LayoutContext& ctx);
+
 private:
     static void slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx);
     static void fixArticulations(Slur* item, PointF& pt, Chord* c, double up, bool stemSide);
 
     static void tiePos(Tie* item, SlurPos* sp);
+
+    static double defaultStemLengthStart(Tremolo* tremolo);
+    static double defaultStemLengthEnd(Tremolo* tremolo);
 };
 }
 

@@ -29,8 +29,6 @@
 #include "realfn.h"
 #include "translation.h"
 
-#include "layout/v0/tlayout.h"
-
 #include "actionicon.h"
 #include "articulation.h"
 #include "chord.h"
@@ -172,8 +170,7 @@ mu::RectF Rest::drag(EditData& ed)
     }
     setOffset(PointF(s.x(), s.y()));
 
-    layout::v0::LayoutContext ctx(score());
-    layout::v0::TLayout::layout(this, ctx);
+    layout()->layoutItem(this);
 
     score()->rebuildBspTree();
     return abbox().united(r);
@@ -201,6 +198,7 @@ bool Rest::acceptDrop(EditData& data) const
         || (type == ElementType::TRIPLET_FEEL)
         || (type == ElementType::STAFF_TEXT)
         || (type == ElementType::PLAYTECH_ANNOTATION)
+        || (type == ElementType::CAPO)
         || (type == ElementType::BAR_LINE)
         || (type == ElementType::BREATH)
         || (type == ElementType::CHORD)
@@ -893,10 +891,9 @@ bool Rest::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::OFFSET:
         score()->addRefresh(canvasBoundingRect());
         setOffset(v.value<PointF>());
-        {
-            layout::v0::LayoutContext ctx(score());
-            layout::v0::TLayout::layout(this, ctx);
-        }
+
+        layout()->layoutItem(this);
+
         score()->addRefresh(canvasBoundingRect());
         if (measure() && durationType().type() == DurationType::V_MEASURE) {
             measure()->triggerLayout();

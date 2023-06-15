@@ -133,8 +133,6 @@ public:
     Harmony(const Harmony&);
     ~Harmony();
 
-    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
-
     Harmony* clone() const override { return new Harmony(*this); }
 
     void setId(int d) { _id = d; }
@@ -170,7 +168,6 @@ public:
                                    NoteCaseType& baseCase);
 
     void textChanged();
-    void layout1() override;
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override;

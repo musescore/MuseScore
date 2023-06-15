@@ -23,6 +23,7 @@ public:
         int fretCount{ 24 };
         int capoFret{ 0 };
         std::vector<int> tunning;
+        bool useFlats{ false };
     };
 
     struct InstrumentString {
