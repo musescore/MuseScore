@@ -1011,7 +1011,9 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
         for (EngravingItem* e : s->annotations()) {
             if (e->isExpression()) {
                 TLayout::layoutItem(e, ctx);
-                system->staff(e->staffIdx())->skyline().add(e->shape().translate(e->pos() + s->pos() + m->pos()));
+                if (e->addToSkyline()) {
+                    system->staff(e->staffIdx())->skyline().add(e->shape().translate(e->pos() + s->pos() + m->pos()));
+                }
             }
         }
     }
