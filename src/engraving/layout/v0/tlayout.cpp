@@ -3371,17 +3371,17 @@ void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
             }
             if (placeInSeries % item->score()->styleI(Sid::mrNumberEveryXMeasures) == 0) {
                 if (item->score()->styleB(Sid::mrNumberSeriesWithParentheses)) {
-                    item->m_numberSym = timeSigSymIdsFromString(String(u"(%1)").arg(placeInSeries));
+                    item->setNumberSym(String(u"(%1)").arg(placeInSeries));
                 } else {
                     item->setNumberSym(placeInSeries);
                 }
             } else {
-                item->m_numberSym.clear();
+                item->clearNumberSym();
             }
         } else if (item->score()->styleB(Sid::oneMeasureRepeatShow1)) {
             item->setNumberSym(1);
         } else {
-            item->m_numberSym.clear();
+            item->clearNumberSym();
         }
         break;
     }
@@ -3395,7 +3395,7 @@ void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
         break;
     default:
         item->setSymId(SymId::noSym); // should never happen
-        item->m_numberSym.clear();
+        item->clearNumberSym();
         break;
     }
 
@@ -3414,7 +3414,7 @@ void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
 
     item->setbbox(bbox);
 
-    if (item->track() != mu::nidx && !item->m_numberSym.empty()) {
+    if (item->track() != mu::nidx && !item->numberSym().empty()) {
         item->addbbox(item->numberRect());
     }
 }
