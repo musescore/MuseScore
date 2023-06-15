@@ -316,7 +316,7 @@ EngravingObjectList ChordRest::scanChildren() const
         children.push_back(_b);
     }
 
-    for (Lyrics* lyrics : _lyrics) {
+    for (Lyrics* lyrics : m_lyrics) {
         children.push_back(lyrics);
     }
 
@@ -326,11 +326,11 @@ EngravingObjectList ChordRest::scanChildren() const
         de = de->tuplet();
     }
 
-    if (auto tabDuration = _tabDur) {
+    if (auto tabDuration = m_tabDur) {
         children.push_back(tabDuration);
     }
 
-    for (EngravingItem* element : _el) {
+    for (EngravingItem* element : m_el) {
         children.push_back(element);
     }
 

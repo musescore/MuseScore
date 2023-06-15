@@ -271,7 +271,7 @@ Chord::Chord(Segment* parent)
     _playEventType    = PlayEventType::Auto;
     _spaceLw          = 0.;
     _spaceRw          = 0.;
-    _crossMeasure     = CrossMeasure::UNKNOWN;
+    m_crossMeasure    = CrossMeasure::UNKNOWN;
     _graceIndex   = 0;
 }
 
@@ -312,7 +312,7 @@ Chord::Chord(const Chord& c, bool link)
     _playEventType  = c._playEventType;
     _stemDirection  = c._stemDirection;
     _noteType       = c._noteType;
-    _crossMeasure   = CrossMeasure::UNKNOWN;
+    m_crossMeasure  = CrossMeasure::UNKNOWN;
 
     if (c._stem) {
         add(Factory::copyStem(*(c._stem)));
@@ -495,7 +495,7 @@ double Chord::stemPosX() const
     if (staffType && staffType->isTabStaff()) {
         return staffType->chordStemPosX(this) * spatium();
     }
-    return _up ? noteHeadWidth() : 0.0;
+    return m_up ? noteHeadWidth() : 0.0;
 }
 
 //! Returns page coordinates
@@ -507,7 +507,7 @@ PointF Chord::stemPos() const
         return pagePos() + staffType->chordStemPos(this) * spatium();
     }
 
-    if (_up) {
+    if (m_up) {
         const Note* downNote = this->downNote();
         double nhw = _notes.size() == 1 ? downNote->bboxRightPos() : noteHeadWidth();
         return pagePos() + PointF(nhw, downNote->pos().y());
@@ -527,7 +527,7 @@ PointF Chord::stemPosBeam() const
         return pagePos() + st->chordStemPosBeam(this) * spatium();
     }
 
-    if (_up) {
+    if (m_up) {
         double nhw = noteHeadWidth();
         return pagePos() + PointF(nhw, upNote()->pos().y());
     }
@@ -1111,7 +1111,7 @@ int Chord::calcMinStemLength()
         int outSidePadding = score()->styleMM(Sid::tremoloOutSidePadding).val() / _spatium * 4.0;
         int noteSidePadding = score()->styleMM(Sid::tremoloNoteSidePadding).val() / _spatium * 4.0;
 
-        Note* lineNote = _up ? upNote() : downNote();
+        Note* lineNote = m_up ? upNote() : downNote();
         if (lineNote->line() == INVALID_LINE) {
             lineNote->updateLine();
         }
@@ -1119,9 +1119,9 @@ int Chord::calcMinStemLength()
         int line = lineNote->line();
         line *= 2; // convert to quarter spaces
         int outsideStaffOffset = 0;
-        if (!_up && line < -2) {
+        if (!m_up && line < -2) {
             outsideStaffOffset = -line;
-        } else if (_up && line > staff()->lines(tick()) * 4) {
+        } else if (m_up && line > staff()->lines(tick()) * 4) {
             outsideStaffOffset = line - (staff()->lines(tick()) * 4) + 4;
         }
 
@@ -1129,7 +1129,7 @@ int Chord::calcMinStemLength()
 
         if (_hook) {
             bool straightFlags = score()->styleB(Sid::useStraightNoteFlags);
-            double smuflAnchor = _hook->smuflAnchor().y() * (_up ? 1 : -1);
+            double smuflAnchor = _hook->smuflAnchor().y() * (m_up ? 1 : -1);
             int hookOffset = floor((_hook->height() / intrinsicMag() + smuflAnchor) / _spatium * 4) - (straightFlags ? 0 : 2);
             // some fonts have hooks that extend very far down (making the height of the hook very large)
             // so we constrain to a reasonable maximum for hook length
@@ -1152,8 +1152,8 @@ int Chord::calcMinStemLength()
             // minStemLength = ceil(minStemLength / 2.0) * 2;
         }
     }
-    if (_beam || (_tremolo && _tremolo->twoNotes())) {
-        int beamCount = (_beam ? beams() : 0) + ((_tremolo && _tremolo->twoNotes()) ? _tremolo->lines() : 0);
+    if (m_beam || (_tremolo && _tremolo->twoNotes())) {
+        int beamCount = (m_beam ? beams() : 0) + ((_tremolo && _tremolo->twoNotes()) ? _tremolo->lines() : 0);
         static const int minInnerStemLengths[4] = { 10, 9, 8, 7 };
         int innerStemLength = minInnerStemLengths[std::min(beamCount, 3)];
         int beamsHeight = beamCount * (score()->styleB(Sid::useWideBeams) ? 4 : 3) - 1;
@@ -1162,7 +1162,7 @@ int Chord::calcMinStemLength()
         // for 4+ beams, there are a few situations where we need to lengthen the stem by 1
         int noteLine = line();
         int staffLines = staff()->lines(tick());
-        bool noteInStaff = (_up && noteLine > 0) || (!_up && noteLine < (staffLines - 1) * 2);
+        bool noteInStaff = (m_up && noteLine > 0) || (!m_up && noteLine < (staffLines - 1) * 2);
         if (beamCount >= 4 && noteInStaff) {
             newMinStemLength++;
         }
@@ -1177,7 +1177,7 @@ int Chord::stemLengthBeamAddition() const
     if (_hook) {
         return 0;
     }
-    int beamCount = (_beam ? beams() : 0) + ((_tremolo && _tremolo->twoNotes()) ? _tremolo->lines() : 0);
+    int beamCount = (m_beam ? beams() : 0) + ((_tremolo && _tremolo->twoNotes()) ? _tremolo->lines() : 0);
     switch (beamCount) {
     case 0:
     case 1:
@@ -1224,7 +1224,7 @@ int Chord::maxReduction(int extensionOutsideStaff) const
     };
     int beamCount = 0;
     if (!_hook) {
-        beamCount = _tremolo ? _tremolo->lines() + (_beam ? beams() : 0) : beams();
+        beamCount = _tremolo ? _tremolo->lines() + (m_beam ? beams() : 0) : beams();
     }
     bool hasTradHook = _hook && !score()->styleB(Sid::useStraightNoteFlags);
     if (_hook && !hasTradHook) {
@@ -1265,10 +1265,10 @@ int Chord::maxReduction(int extensionOutsideStaff) const
 // all values are in quarter spaces
 int Chord::stemOpticalAdjustment(int stemEndPosition) const
 {
-    if (_hook && !_beam) {
+    if (_hook && !m_beam) {
         return 0;
     }
-    int beamCount = (_tremolo ? _tremolo->lines() : 0) + (_beam ? beams() : 0);
+    int beamCount = (_tremolo ? _tremolo->lines() : 0) + (m_beam ? beams() : 0);
     if (beamCount == 0 || beamCount > 2) {
         return 0;
     }
@@ -1329,7 +1329,7 @@ double Chord::calcDefaultStemLength()
     }
     // extraHeight represents the extra vertical distance between notehead and stem start
     // eg. slashed noteheads etc
-    double extraHeight = (_up ? upNote()->stemUpSE().y() : downNote()->stemDownNW().y()) / intrinsicMag() / _spatium;
+    double extraHeight = (m_up ? upNote()->stemUpSE().y() : downNote()->stemDownNW().y()) / intrinsicMag() / _spatium;
     int shortestStem = score()->styleB(Sid::useWideBeams) ? 12 : (score()->styleD(Sid::shortestStem) + abs(extraHeight)) * 4;
     int quarterSpacesPerLine = std::floor(lineDistance * 2);
     int chordHeight = (downLine() - upLine()) * quarterSpacesPerLine; // convert to quarter spaces
@@ -1341,9 +1341,9 @@ double Chord::calcDefaultStemLength()
     int staffLineCount = staffItem ? staffItem->lines(tick()) : 5;
     int shortStemStart = score()->styleI(Sid::shortStemStartLocation) * quarterSpacesPerLine + 1;
     bool useWideBeams = score()->styleB(Sid::useWideBeams);
-    int beamCount = ((_tremolo && _tremolo->twoNotes()) ? _tremolo->lines() : 0) + (_beam ? beams() : 0);
+    int beamCount = ((_tremolo && _tremolo->twoNotes()) ? _tremolo->lines() : 0) + (m_beam ? beams() : 0);
     int middleLine
-        = minStaffOverlap(_up, staffLineCount, beamCount, !!_hook, useWideBeams ? 4 : 3, useWideBeams, !(isGrace() || isSmall()));
+        = minStaffOverlap(m_up, staffLineCount, beamCount, !!_hook, useWideBeams ? 4 : 3, useWideBeams, !(isGrace() || isSmall()));
     if (up()) {
         int stemEndPosition = upLine() * quarterSpacesPerLine - defaultStemLength;
         double stemEndPositionMag = (double)upLine() * quarterSpacesPerLine - (defaultStemLength * intrinsicMag());
@@ -1385,11 +1385,11 @@ double Chord::calcDefaultStemLength()
 
     double finalStemLength = (chordHeight / 4.0 * _spatium) + ((stemLength / 4.0 * _spatium) * intrinsicMag());
     double extraLength = 0.;
-    Note* startNote = _up ? downNote() : upNote();
+    Note* startNote = m_up ? downNote() : upNote();
     if (!startNote->fixed()) {
         // when the chord's magnitude is < 1, the stem length with mag can find itself below the middle line.
         // in those cases, we have to add the extra amount to it to bring it to a minimum.
-        double upValue = _up ? -1. : 1.;
+        double upValue = m_up ? -1. : 1.;
         double stemStart = startNote->pos().y();
         double stemEndMag = stemStart + (finalStemLength * upValue);
         double topLine = 0.0;
@@ -1400,23 +1400,23 @@ double Chord::calcDefaultStemLength()
         if (RealIsEqualOrMore(lineDistance / _spatium, 1.0)) {
             // need to extend to middle line, or to opposite line if staff is < 2sp tall
             if (bottomLine < 2 * _spatium) {
-                target = _up ? topLine : bottomLine;
+                target = m_up ? topLine : bottomLine;
             } else {
-                double twoSpIn = _up ? bottomLine - (2 * _spatium) : topLine + (2 * _spatium);
+                double twoSpIn = m_up ? bottomLine - (2 * _spatium) : topLine + (2 * _spatium);
                 target = RealIsEqual(lineDistance / _spatium, 1.0) ? midLine : twoSpIn;
             }
         } else {
             // need to extend to second line in staff, or to opposite line if staff has < 3 lines
             if (staffLineCount < 3) {
-                target = _up ? topLine : bottomLine;
+                target = m_up ? topLine : bottomLine;
             } else {
-                target = _up ? bottomLine - (2 * lineDistance) : topLine + (2 * lineDistance);
+                target = m_up ? bottomLine - (2 * lineDistance) : topLine + (2 * lineDistance);
             }
         }
         extraLength = 0.0;
-        if (_up && stemEndMag > target) {
+        if (m_up && stemEndMag > target) {
             extraLength = stemEndMag - target;
-        } else if (!_up && stemEndMag < target) {
+        } else if (!m_up && stemEndMag < target) {
             extraLength = target - stemEndMag;
         }
     }
@@ -2792,14 +2792,14 @@ Shape Chord::shape() const
     for (LedgerLine* l = _ledgerLines; l; l = l->next()) {
         shape.add(l->shape().translate(l->pos()));
     }
-    if (_beamlet) {
-        double xPos = _beamlet->line.p1().x() - _stem->xpos();
-        if (_beamlet->isBefore && !_up) {
+    if (m_beamlet) {
+        double xPos = m_beamlet->line.p1().x() - _stem->xpos();
+        if (m_beamlet->isBefore && !m_up) {
             xPos -= _stem->width();
-        } else if (!_beamlet->isBefore && _up) {
+        } else if (!m_beamlet->isBefore && m_up) {
             xPos += _stem->width();
         }
-        shape.add(_beamlet->shape().translated(PointF(-xPos, 0.0)));
+        shape.add(m_beamlet->shape().translated(PointF(-xPos, 0.0)));
     }
 
     return shape;
