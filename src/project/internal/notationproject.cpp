@@ -246,6 +246,10 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
     {
         m_cloudInfo.sourceUrl = masterScore->metaTags()[SOURCE_TAG].toQString();
         m_cloudInfo.revisionId = masterScore->metaTags()[SOURCE_REVISION_ID_TAG].toInt();
+
+        if (configuration()->isLegacyCloudProject(path)) {
+            m_cloudInfo.name = io::filename(path, false).toQString();
+        }
     }
 
     // Set current if all success
