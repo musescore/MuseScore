@@ -785,18 +785,18 @@ SLine::SLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
     : Spanner(type, parent, f)
 {
     setTrack(0);
-    _lineWidth = 0.15 * spatium();
+    m_lineWidth = 0.15 * spatium();
 }
 
 SLine::SLine(const SLine& s)
     : Spanner(s)
 {
-    _diagonal    = s._diagonal;
-    _lineWidth   = s._lineWidth;
-    _lineColor   = s._lineColor;
-    _lineStyle   = s._lineStyle;
-    _dashLineLen = s._dashLineLen;
-    _dashGapLen  = s._dashGapLen;
+    m_diagonal    = s.m_diagonal;
+    m_lineWidth   = s.m_lineWidth;
+    m_lineColor   = s.m_lineColor;
+    m_lineStyle   = s.m_lineStyle;
+    m_dashLineLen = s.m_dashLineLen;
+    m_dashGapLen  = s.m_dashGapLen;
 }
 
 //---------------------------------------------------------
@@ -1127,13 +1127,13 @@ PropertyValue SLine::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::DIAGONAL:
-        return _diagonal;
+        return m_diagonal;
     case Pid::COLOR:
-        return PropertyValue::fromValue(_lineColor);
+        return PropertyValue::fromValue(m_lineColor);
     case Pid::LINE_WIDTH:
-        return _lineWidth;
+        return m_lineWidth;
     case Pid::LINE_STYLE:
-        return _lineStyle;
+        return m_lineStyle;
     case Pid::DASH_LINE_LEN:
         return dashLineLen();
     case Pid::DASH_GAP_LEN:
@@ -1151,20 +1151,20 @@ bool SLine::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::DIAGONAL:
-        _diagonal = v.toBool();
+        m_diagonal = v.toBool();
         break;
     case Pid::COLOR:
-        _lineColor = v.value<mu::draw::Color>();
+        m_lineColor = v.value<mu::draw::Color>();
         break;
     case Pid::LINE_WIDTH:
         if (v.type() == P_TYPE::MILLIMETRE) {
-            _lineWidth = v.value<Millimetre>();
+            m_lineWidth = v.value<Millimetre>();
         } else if (v.type() == P_TYPE::SPATIUM) {
-            _lineWidth = v.value<Spatium>().toMM(spatium());
+            m_lineWidth = v.value<Spatium>().toMM(spatium());
         }
         break;
     case Pid::LINE_STYLE:
-        _lineStyle = v.value<LineType>();
+        m_lineStyle = v.value<LineType>();
         break;
     case Pid::DASH_LINE_LEN:
         setDashLineLen(v.toDouble());
