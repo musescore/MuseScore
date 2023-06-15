@@ -2414,8 +2414,13 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
                 }
             }
             if (sd && sd->addToSkyline() && sd->placement() == item->hairpin()->placement()) {
-                const double sdRight = sd->bbox().right() + sd->pos().x()
-                                       + sd->segment()->pos().x() + sd->measure()->pos().x();
+                double segmentXPos = sd->segment()->pos().x() + sd->measure()->pos().x();
+                double sdRight = sd->pos().x() + segmentXPos + sd->bbox().right();
+                if (sd->snappedExpression()) {
+                    Expression* expression = sd->snappedExpression();
+                    double exprRight = expression->pos().x() + segmentXPos + expression->bbox().right();
+                    sdRight = std::max(sdRight, exprRight);
+                }
                 const double dist    = std::max(sdRight - item->pos().x() + minDynamicsDistance, 0.0);
                 item->movePosX(dist);
                 item->rxpos2() -= dist;
@@ -2630,6 +2635,9 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
                 }
                 if (sd->ipos().y() != ny) {
                     sd->setPosY(ny);
+                    if (sd->snappedExpression()) {
+                        sd->snappedExpression()->setPosY(ny);
+                    }
                     if (sd->addToSkyline()) {
                         Segment* s = sd->segment();
                         Measure* m = s->measure();
@@ -2649,6 +2657,9 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
                 }
                 if (ed->ipos().y() != ny) {
                     ed->setPosY(ny);
+                    if (ed->snappedExpression()) {
+                        ed->snappedExpression()->setPosY(ny);
+                    }
                     if (ed->addToSkyline()) {
                         Segment* s = ed->segment();
                         Measure* m = s->measure();
