@@ -4019,17 +4019,18 @@ void TLayout::layoutForWidth(StaffLines* item, double w, LayoutContext&)
         _lines = 5;
         item->setColor(StaffLines::engravingConfiguration()->defaultColor());
     }
-    item->m_lw       = item->score()->styleS(Sid::staffLineWidth).val() * _spatium;
+    item->setLw(item->score()->styleS(Sid::staffLineWidth).val() * _spatium);
     double x1 = item->pos().x();
     double x2 = x1 + w;
     double y  = item->pos().y();
-    item->bbox().setRect(x1, -item->m_lw * .5 + y, w, (_lines - 1) * dist + item->m_lw);
+    item->bbox().setRect(x1, -item->lw() * .5 + y, w, (_lines - 1) * dist + item->lw());
 
-    item->m_lines.clear();
+    std::vector<mu::LineF> ll;
     for (int i = 0; i < _lines; ++i) {
-        item->m_lines.push_back(LineF(x1, y, x2, y));
+        ll.push_back(LineF(x1, y, x2, y));
         y += dist;
     }
+    item->setLines(ll);
 }
 
 void TLayout::layout(StaffState* item, LayoutContext&)

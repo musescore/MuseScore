@@ -2317,24 +2317,25 @@ void MeasureLayout::layoutPartialWidth(StaffLines* lines, double w, double wPart
         _lines = 5;
         lines->setColor(EngravingItem::engravingConfiguration()->defaultColor());
     }
-    lines->m_lw = lines->score()->styleS(Sid::staffLineWidth).val() * _spatium;
+    lines->setLw(lines->score()->styleS(Sid::staffLineWidth).val() * _spatium);
     double x1 = lines->pos().x();
     double x2 = x1 + w;
     double y  = lines->pos().y();
-    lines->bbox().setRect(x1, -lines->m_lw * .5 + y, w, (_lines - 1) * dist + lines->m_lw);
+    lines->bbox().setRect(x1, -lines->lw() * .5 + y, w, (_lines - 1) * dist + lines->lw());
 
     if (_lines == 1) {
         double extraSize = _spatium;
         lines->bbox().adjust(0, -extraSize, 0, extraSize);
     }
 
-    lines->m_lines.clear();
+    std::vector<mu::LineF> ll;
     for (int i = 0; i < _lines; ++i) {
         if (alignRight) {
-            lines->m_lines.push_back(LineF(x2 - wPartial, y, x2, y));
+            ll.push_back(LineF(x2 - wPartial, y, x2, y));
         } else {
-            lines->m_lines.push_back(LineF(x1, y, x1 + wPartial, y));
+            ll.push_back(LineF(x1, y, x1 + wPartial, y));
         }
         y += dist;
     }
+    lines->setLines(ll);
 }

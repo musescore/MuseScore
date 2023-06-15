@@ -88,7 +88,7 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
     m_staffMove    = cr.m_staffMove;
     m_beam         = 0;
     m_tabDur       = 0;    // tab sur. symb. depends upon context: can't be
-                          // simply copied from another CR
+                           // simply copied from another CR
 
     m_beamMode     = cr.m_beamMode;
     m_up           = cr.m_up;

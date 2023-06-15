@@ -27,11 +27,6 @@
 
 #include "engravingitem.h"
 
-namespace mu::engraving::layout::v0 {
-class MeasureLayout;
-class TLayout;
-}
-
 namespace mu::engraving {
 //-------------------------------------------------------------------
 //   @@ StaffLines
@@ -53,16 +48,19 @@ public:
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    std::vector<mu::LineF>& getLines() { return m_lines; }
+    const std::vector<mu::LineF>& lines() { return m_lines; }
+    void setLines(const std::vector<mu::LineF>& l) { m_lines = l; }
+
     Measure* measure() const { return (Measure*)explicitParent(); }
     double y1() const;
+
+    double lw() const { return m_lw; }
+    void setLw(double w) { m_lw = w; }
 
     RectF hitBBox() const override;
     Shape hitShape() const override;
 
 private:
-    friend class layout::v0::MeasureLayout;
-    friend class layout::v0::TLayout;
     friend class Factory;
     StaffLines(Measure* parent);
 
