@@ -368,12 +368,12 @@ Spanner::Spanner(const ElementType& type, EngravingItem* parent, ElementFlags f)
 Spanner::Spanner(const Spanner& s)
     : EngravingItem(s)
 {
-    _anchor       = s._anchor;
-    _startElement = s._startElement;
-    _endElement   = s._endElement;
-    _tick         = s._tick;
-    _ticks        = s._ticks;
-    _track2       = s._track2;
+    m_anchor       = s.m_anchor;
+    m_startElement = s.m_startElement;
+    m_endElement   = s.m_endElement;
+    m_tick         = s.m_tick;
+    m_ticks        = s.m_ticks;
+    m_track2       = s.m_track2;
     if (!s.startElement() && !spannerSegments().size()) {
         for (auto* segment : s.spannerSegments()) {
             add(segment->clone());
@@ -404,7 +404,7 @@ void Spanner::add(EngravingItem* e)
     ls->setSelected(selected());
     ls->setTrack(track());
 //      ls->setAutoplace(autoplace());
-    segments.push_back(ls);
+    m_segments.push_back(ls);
     e->added();
 }
 
@@ -418,7 +418,7 @@ void Spanner::remove(EngravingItem* e)
     if (ss->system()) {
         ss->system()->remove(ss);
     }
-    segments.erase(std::remove(segments.begin(), segments.end(), ss), segments.end());
+    m_segments.erase(std::remove(m_segments.begin(), m_segments.end(), ss), m_segments.end());
 }
 
 //---------------------------------------------------------
@@ -549,7 +549,7 @@ bool Spanner::eitherEndVisible() const
 void Spanner::setScore(Score* s)
 {
     EngravingItem::setScore(s);
-    for (SpannerSegment* seg : segments) {
+    for (SpannerSegment* seg : m_segments) {
         seg->setScore(s);
     }
 }
@@ -562,9 +562,9 @@ PropertyValue Spanner::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SPANNER_TICK:
-        return _tick;
+        return m_tick;
     case Pid::SPANNER_TICKS:
-        return _ticks;
+        return m_ticks;
     case Pid::SPANNER_TRACK2:
         return track2();
     case Pid::ANCHOR:
@@ -574,7 +574,7 @@ PropertyValue Spanner::getProperty(Pid propertyId) const
     case Pid::LOCATION_VOICES:
         return (track2() % VOICES) - (track() / VOICES);
     case Pid::LOCATION_FRACTIONS:
-        return _ticks;
+        return m_ticks;
     case Pid::LOCATION_MEASURES:
     case Pid::LOCATION_GRACE:
     case Pid::LOCATION_NOTE:
@@ -645,19 +645,19 @@ PropertyValue Spanner::propertyDefault(Pid propertyId) const
 
 void Spanner::computeStartElement()
 {
-    switch (_anchor) {
+    switch (m_anchor) {
     case Anchor::SEGMENT: {
         if (systemFlag()) {
-            _startElement = startSegment();
+            m_startElement = startSegment();
         } else {
             Segment* seg = score()->tick2segmentMM(tick(), false, SegmentType::ChordRest);
             track_idx_t strack = (track() / VOICES) * VOICES;
             track_idx_t etrack = strack + VOICES;
-            _startElement = 0;
+            m_startElement = 0;
             if (seg) {
                 for (track_idx_t t = strack; t < etrack; ++t) {
                     if (seg->element(t)) {
-                        _startElement = seg->element(t);
+                        m_startElement = seg->element(t);
                         break;
                     }
                 }
@@ -667,7 +667,7 @@ void Spanner::computeStartElement()
     break;
 
     case Anchor::MEASURE:
-        _startElement = score()->tick2measure(tick());
+        m_startElement = score()->tick2measure(tick());
         break;
 
     case Anchor::CHORD:
@@ -675,8 +675,8 @@ void Spanner::computeStartElement()
         break;
     }
 
-    if (_startElement && !mu::contains(_startElement->startingSpanners(), this)) {
-        _startElement->startingSpanners().push_back(this);
+    if (m_startElement && !mu::contains(m_startElement->startingSpanners(), this)) {
+        m_startElement->startingSpanners().push_back(this);
     }
 }
 
@@ -689,20 +689,20 @@ void Spanner::computeEndElement()
     if (score()->isPaletteScore()) {
         // return immediately to prevent lots of
         // "no element found" messages from appearing
-        _endElement = nullptr;
+        m_endElement = nullptr;
         return;
     }
 
-    switch (_anchor) {
+    switch (m_anchor) {
     case Anchor::SEGMENT: {
         if (track2() == mu::nidx) {
             setTrack2(track());
         }
         if (ticks().isZero() && isTextLine() && explicitParent()) {           // special case palette
-            setTicks(score()->lastSegment()->tick() - _tick);
+            setTicks(score()->lastSegment()->tick() - m_tick);
         }
         if (systemFlag()) {
-            _endElement = endSegment();
+            m_endElement = endSegment();
         } else if (isLyricsLine() && toLyricsLine(this)->isEndMelisma()) {
             // lyrics endTick should already indicate the segment we want
             // except for TEMP_MELISMA_TICKS case
@@ -717,25 +717,25 @@ void Spanner::computeEndElement()
             // take the first chordrest we can find;
             // linePos will substitute one in current voice if available
             for (voice_idx_t v = 0; v < VOICES; ++v) {
-                _endElement = s->element(t + v);
-                if (_endElement) {
+                m_endElement = s->element(t + v);
+                if (m_endElement) {
                     break;
                 }
             }
         } else {
             // find last cr on this staff that ends before tick2
-            _endElement = score()->findCRinStaff(tick2(), track2() / VOICES);
+            m_endElement = score()->findCRinStaff(tick2(), track2() / VOICES);
         }
-        if (!_endElement) {
+        if (!m_endElement) {
             LOGD("%s no end element for tick %d", typeName(), tick2().ticks());
             return;
         }
 
         if (endCR() && !endCR()->measure()->isMMRest() && !systemFlag()) {
             ChordRest* cr = endCR();
-            Fraction nticks = cr->tick() + cr->actualTicks() - _tick;
-            if ((_ticks - nticks) > Fraction(0, 1)) {
-                LOGD("%s ticks changed, %d -> %d", typeName(), _ticks.ticks(), nticks.ticks());
+            Fraction nticks = cr->tick() + cr->actualTicks() - m_tick;
+            if ((m_ticks - nticks) > Fraction(0, 1)) {
+                LOGD("%s ticks changed, %d -> %d", typeName(), m_ticks.ticks(), nticks.ticks());
                 setTicks(nticks);
                 if (isOttava()) {
                     staff()->updateOttava();
@@ -746,25 +746,25 @@ void Spanner::computeEndElement()
     break;
 
     case Anchor::MEASURE:
-        _endElement = score()->tick2measure(tick2() - Fraction(1, 1920));
-        if (!_endElement) {
+        m_endElement = score()->tick2measure(tick2() - Fraction(1, 1920));
+        if (!m_endElement) {
             LOGD("Spanner::computeEndElement(), measure not found for tick %d\n", tick2().ticks() - 1);
-            _endElement = score()->lastMeasure();
+            m_endElement = score()->lastMeasure();
         }
         break;
     case Anchor::NOTE:
-        if (!_endElement) {
+        if (!m_endElement) {
             ChordRest* cr = score()->findCR(tick2(), track2());
             if (cr && cr->isChord()) {
-                _endElement = toChord(cr)->upNote();
+                m_endElement = toChord(cr)->upNote();
             }
         }
     case Anchor::CHORD:
         break;
     }
 
-    if (_endElement && !mu::contains(_endElement->endingSpanners(), this)) {
-        _endElement->endingSpanners().push_back(this);
+    if (m_endElement && !mu::contains(m_endElement->endingSpanners(), this)) {
+        m_endElement->endingSpanners().push_back(this);
     }
 }
 
@@ -850,7 +850,7 @@ Note* Spanner::endElementFromSpanner(Spanner* sp, EngravingItem* newStart)
 
 void Spanner::setNoteSpan(Note* startNote, Note* endNote)
 {
-    if (_anchor != Anchor::NOTE) {
+    if (m_anchor != Anchor::NOTE) {
         return;
     }
 
@@ -870,13 +870,13 @@ void Spanner::setNoteSpan(Note* startNote, Note* endNote)
 
 Chord* Spanner::startChord()
 {
-    assert(_anchor == Anchor::CHORD);
-    if (!_startElement) {
-        _startElement = findStartChord();
+    assert(m_anchor == Anchor::CHORD);
+    if (!m_startElement) {
+        m_startElement = findStartChord();
     }
 
-    if (_startElement && _startElement->isChord()) {
-        return toChord(_startElement);
+    if (m_startElement && m_startElement->isChord()) {
+        return toChord(m_startElement);
     }
 
     return nullptr;
@@ -888,13 +888,13 @@ Chord* Spanner::startChord()
 
 Chord* Spanner::endChord()
 {
-    assert(_anchor == Anchor::CHORD);
-    if (!_endElement && type() == ElementType::SLUR) {
-        _endElement = findEndChord();
+    assert(m_anchor == Anchor::CHORD);
+    if (!m_endElement && type() == ElementType::SLUR) {
+        m_endElement = findEndChord();
     }
 
-    if (_endElement && _endElement->isChord()) {
-        return toChord(_endElement);
+    if (m_endElement && m_endElement->isChord()) {
+        return toChord(m_endElement);
     }
 
     return nullptr;
@@ -906,11 +906,11 @@ Chord* Spanner::endChord()
 
 ChordRest* Spanner::startCR()
 {
-    assert(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
-    if (!_startElement || _startElement->score() != score()) {
-        _startElement = findStartCR();
+    assert(m_anchor == Anchor::SEGMENT || m_anchor == Anchor::CHORD);
+    if (!m_startElement || m_startElement->score() != score()) {
+        m_startElement = findStartCR();
     }
-    return (_startElement && _startElement->isChordRest()) ? toChordRest(_startElement) : nullptr;
+    return (m_startElement && m_startElement->isChordRest()) ? toChordRest(m_startElement) : nullptr;
 }
 
 //---------------------------------------------------------
@@ -919,11 +919,11 @@ ChordRest* Spanner::startCR()
 
 ChordRest* Spanner::endCR()
 {
-    assert(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
-    if ((!_endElement || _endElement->score() != score())) {
-        _endElement = findEndCR();
+    assert(m_anchor == Anchor::SEGMENT || m_anchor == Anchor::CHORD);
+    if ((!m_endElement || m_endElement->score() != score())) {
+        m_endElement = findEndCR();
     }
-    return (_endElement && _endElement->isChordRest()) ? toChordRest(_endElement) : nullptr;
+    return (m_endElement && m_endElement->isChordRest()) ? toChordRest(m_endElement) : nullptr;
 }
 
 //---------------------------------------------------------
@@ -932,7 +932,7 @@ ChordRest* Spanner::endCR()
 
 Chord* Spanner::findStartChord() const
 {
-    assert(_anchor == Anchor::CHORD);
+    assert(m_anchor == Anchor::CHORD);
     ChordRest* cr = score()->findCR(tick(), track());
     return cr && cr->isChord() ? toChord(cr) : nullptr;
 }
@@ -943,7 +943,7 @@ Chord* Spanner::findStartChord() const
 
 Chord* Spanner::findEndChord() const
 {
-    assert(_anchor == Anchor::CHORD);
+    assert(m_anchor == Anchor::CHORD);
     Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
     ChordRest* endCR = s ? toChordRest(s->element(track2())) : nullptr;
     if (endCR && !endCR->isChord()) {
@@ -958,7 +958,7 @@ Chord* Spanner::findEndChord() const
 
 ChordRest* Spanner::findStartCR() const
 {
-    assert(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
+    assert(m_anchor == Anchor::SEGMENT || m_anchor == Anchor::CHORD);
     return score()->findCR(tick(), track());
 }
 
@@ -968,7 +968,7 @@ ChordRest* Spanner::findStartCR() const
 
 ChordRest* Spanner::findEndCR() const
 {
-    assert(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
+    assert(m_anchor == Anchor::SEGMENT || m_anchor == Anchor::CHORD);
     Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
     const track_idx_t tr2 = effectiveTrack2();
     ChordRest* endCR = s ? toChordRest(s->element(tr2)) : nullptr;
@@ -1000,7 +1000,7 @@ Segment* Spanner::endSegment() const
 
 Measure* Spanner::startMeasure() const
 {
-    return toMeasure(_startElement);
+    return toMeasure(m_startElement);
 }
 
 //---------------------------------------------------------
@@ -1009,7 +1009,7 @@ Measure* Spanner::startMeasure() const
 
 Measure* Spanner::endMeasure() const
 {
-    return toMeasure(_endElement);
+    return toMeasure(m_endElement);
 }
 
 //---------------------------------------------------------
@@ -1067,11 +1067,11 @@ void Spanner::setColor(const mu::draw::Color& col)
 void Spanner::setStartElement(EngravingItem* e)
 {
 #ifndef NDEBUG
-    if (_anchor == Anchor::NOTE) {
+    if (m_anchor == Anchor::NOTE) {
         assert(!e || e->type() == ElementType::NOTE);
     }
 #endif
-    _startElement = e;
+    m_startElement = e;
 }
 
 //---------------------------------------------------------
@@ -1081,13 +1081,13 @@ void Spanner::setStartElement(EngravingItem* e)
 void Spanner::setEndElement(EngravingItem* e)
 {
 #ifndef NDEBUG
-    if (_anchor == Anchor::NOTE) {
+    if (m_anchor == Anchor::NOTE) {
         assert(!e || e->type() == ElementType::NOTE);
     }
 #endif
-    _endElement = e;
-    if (e && ticks() == Fraction() && _tick >= Fraction()) {
-        setTicks(std::max(e->tick() - _tick, Fraction()));
+    m_endElement = e;
+    if (e && ticks() == Fraction() && m_tick >= Fraction()) {
+        setTicks(std::max(e->tick() - m_tick, Fraction()));
     }
 }
 
@@ -1192,11 +1192,11 @@ EngravingItem* Spanner::prevSegmentElement()
 
 void Spanner::setTick(const Fraction& v)
 {
-    if (_tick == v) {
+    if (m_tick == v) {
         return;
     }
 
-    _tick = v;
+    m_tick = v;
 
     Score* score = this->score();
 
@@ -1211,7 +1211,7 @@ void Spanner::setTick(const Fraction& v)
 
 void Spanner::setTick2(const Fraction& f)
 {
-    setTicks(f - _tick);
+    setTicks(f - m_tick);
 }
 
 //---------------------------------------------------------
@@ -1220,11 +1220,11 @@ void Spanner::setTick2(const Fraction& f)
 
 void Spanner::setTicks(const Fraction& f)
 {
-    if (_ticks == f) {
+    if (m_ticks == f) {
         return;
     }
 
-    _ticks = f;
+    m_ticks = f;
 
     Score* score = this->score();
 
@@ -1252,7 +1252,7 @@ void Spanner::triggerLayout() const
 {
     // Spanners do not have parent even when added to a score, so can't check parent here
     const track_idx_t tr2 = effectiveTrack2();
-    score()->setLayout(_tick, _tick + _ticks, staffIdx(), track2staff(tr2), this);
+    score()->setLayout(m_tick, m_tick + m_ticks, staffIdx(), track2staff(tr2), this);
 }
 
 void Spanner::triggerLayoutAll() const
@@ -1276,7 +1276,7 @@ void Spanner::pushUnusedSegment(SpannerSegment* seg)
         return;
     }
     seg->setSystem(nullptr);
-    unusedSegments.push_back(seg);
+    m_unusedSegments.push_back(seg);
 }
 
 //---------------------------------------------------------
@@ -1287,11 +1287,11 @@ void Spanner::pushUnusedSegment(SpannerSegment* seg)
 
 SpannerSegment* Spanner::popUnusedSegment()
 {
-    if (unusedSegments.empty()) {
+    if (m_unusedSegments.empty()) {
         return nullptr;
     }
-    SpannerSegment* seg = unusedSegments.front();
-    unusedSegments.pop_front();
+    SpannerSegment* seg = m_unusedSegments.front();
+    m_unusedSegments.pop_front();
     return seg;
 }
 
@@ -1350,8 +1350,8 @@ void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegm
     } else { // diff < 0
         const int nremove = -diff;
         for (int i = 0; i < nremove; ++i) {
-            SpannerSegment* seg = segments.back();
-            segments.pop_back();
+            SpannerSegment* seg = m_segments.back();
+            m_segments.pop_back();
             pushUnusedSegment(seg);
         }
     }
@@ -1365,10 +1365,10 @@ void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegm
 
 void Spanner::eraseSpannerSegments()
 {
-    DeleteAll(segments);
-    DeleteAll(unusedSegments);
-    segments.clear();
-    unusedSegments.clear();
+    DeleteAll(m_segments);
+    DeleteAll(m_unusedSegments);
+    m_segments.clear();
+    m_unusedSegments.clear();
 }
 
 //---------------------------------------------------------
@@ -1485,7 +1485,7 @@ void Spanner::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
         EngravingObject::undoChangeProperty(id, v, ps);
         // change offset of all segments if styled
 
-        for (SpannerSegment* s : segments) {
+        for (SpannerSegment* s : m_segments) {
             if (s->isStyled(Pid::OFFSET)) {
                 s->setOffset(s->propertyDefault(Pid::OFFSET).value<PointF>());
                 s->triggerLayout();

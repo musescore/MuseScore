@@ -154,34 +154,35 @@ public:
 
     virtual void setScore(Score* s) override;
 
-    virtual Fraction tick() const override { return _tick; }
-    Fraction tick2() const { return _tick + _ticks; }
-    Fraction ticks() const { return _ticks; }
+    virtual Fraction tick() const override { return m_tick; }
+    Fraction tick2() const { return m_tick + m_ticks; }
+    Fraction ticks() const { return m_ticks; }
 
     void setTick(const Fraction&);
     void setTick2(const Fraction&);
     void setTicks(const Fraction&);
 
     bool isVoiceSpecific() const;
-    track_idx_t track2() const { return _track2; }
-    void setTrack2(track_idx_t v) { _track2 = v; }
-    track_idx_t effectiveTrack2() const { return _track2 == mu::nidx ? track() : _track2; }
+    track_idx_t track2() const { return m_track2; }
+    void setTrack2(track_idx_t v) { m_track2 = v; }
+    track_idx_t effectiveTrack2() const { return m_track2 == mu::nidx ? track() : m_track2; }
 
-    bool broken() const { return _broken; }
-    void setBroken(bool v) { _broken = v; }
+    bool broken() const { return m_broken; }
+    void setBroken(bool v) { m_broken = v; }
 
-    Anchor anchor() const { return _anchor; }
-    void setAnchor(Anchor a) { _anchor = a; }
+    Anchor anchor() const { return m_anchor; }
+    void setAnchor(Anchor a) { m_anchor = a; }
 
-    const std::vector<SpannerSegment*>& spannerSegments() const { return segments; }
-    SpannerSegment* frontSegment() { return segments.front(); }
-    const SpannerSegment* frontSegment() const { return segments.front(); }
-    SpannerSegment* backSegment() { return segments.back(); }
-    const SpannerSegment* backSegment() const { return segments.back(); }
-    SpannerSegment* segmentAt(int n) { return segments[n]; }
-    const SpannerSegment* segmentAt(int n) const { return segments[n]; }
-    size_t nsegments() const { return segments.size(); }
-    bool segmentsEmpty() const { return segments.empty(); }
+    const std::vector<SpannerSegment*>& spannerSegments() const { return m_segments; }
+    void setSpannerSegments(const std::vector<SpannerSegment*>& s) { m_segments = s; }
+    SpannerSegment* frontSegment() { return m_segments.front(); }
+    const SpannerSegment* frontSegment() const { return m_segments.front(); }
+    SpannerSegment* backSegment() { return m_segments.back(); }
+    const SpannerSegment* backSegment() const { return m_segments.back(); }
+    SpannerSegment* segmentAt(int n) { return m_segments[n]; }
+    const SpannerSegment* segmentAt(int n) const { return m_segments[n]; }
+    size_t nsegments() const { return m_segments.size(); }
+    bool segmentsEmpty() const { return m_segments.empty(); }
     void eraseSpannerSegments();
     bool eitherEndVisible() const;
 
@@ -205,8 +206,8 @@ public:
     static Note* startElementFromSpanner(Spanner* sp, EngravingItem* newEnd);
     void setNoteSpan(Note* startNote, Note* endNote);
 
-    EngravingItem* startElement() const { return _startElement; }
-    EngravingItem* endElement() const { return _endElement; }
+    EngravingItem* startElement() const { return m_startElement; }
+    EngravingItem* endElement() const { return m_endElement; }
 
     Measure* startMeasure() const;
     Measure* endMeasure() const;
@@ -238,15 +239,7 @@ public:
     virtual EngravingItem* nextSegmentElement() override;
     virtual EngravingItem* prevSegmentElement() override;
 
-    friend class SpannerSegment;
     using EngravingObject::undoChangeProperty;
-
-protected:
-
-    Spanner(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
-    Spanner(const Spanner&);
-
-    friend class layout::v0::TLayout;
 
     void pushUnusedSegment(SpannerSegment* seg);
     SpannerSegment* popUnusedSegment();
@@ -255,21 +248,28 @@ protected:
     int reuseSegments(int number);
     void fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* (System*)> createSegment);
 
+protected:
+
+    Spanner(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
+    Spanner(const Spanner&);
+
 private:
 
-    EngravingItem* _startElement = nullptr;
-    EngravingItem* _endElement = nullptr;
+    friend class SpannerSegment;
 
-    Anchor _anchor         { Anchor::SEGMENT };
-    Fraction _tick         { Fraction(-1, 1) };
-    Fraction _ticks        { Fraction(0, 1) };
-    track_idx_t _track2 = mu::nidx;
-    bool _broken           { false };
+    EngravingItem* m_startElement = nullptr;
+    EngravingItem* m_endElement = nullptr;
 
-    std::vector<SpannerSegment*> segments;
-    std::deque<SpannerSegment*> unusedSegments;   // Currently unused segments which can be reused later.
-                                                  // We cannot just delete them as they can be referenced
-                                                  // in undo stack or other places already.
+    Anchor m_anchor = Anchor::SEGMENT;
+    Fraction m_tick = Fraction(-1, 1);
+    Fraction m_ticks = Fraction(0, 1);
+    track_idx_t m_track2 = mu::nidx;
+    bool m_broken = false;
+
+    std::vector<SpannerSegment*> m_segments;
+    std::deque<SpannerSegment*> m_unusedSegments;   // Currently unused segments which can be reused later.
+                                                    // We cannot just delete them as they can be referenced
+                                                    // in undo stack or other places already.
 };
 } // namespace mu::engraving
 #endif

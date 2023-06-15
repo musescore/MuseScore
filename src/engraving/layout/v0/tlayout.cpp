@@ -5397,12 +5397,12 @@ SpannerSegment* TLayout::layoutSystem(Slur* line, System* system, LayoutContext&
 void TLayout::layoutSystemsDone(Spanner* item)
 {
     std::vector<SpannerSegment*> validSegments;
-    for (SpannerSegment* seg : item->segments) {
+    for (SpannerSegment* seg : item->spannerSegments()) {
         if (seg->system()) {
             validSegments.push_back(seg);
         } else { // TODO: score()->selection().remove(ss); needed?
             item->pushUnusedSegment(seg);
         }
     }
-    item->segments = std::move(validSegments);
+    item->setSpannerSegments(validSegments);
 }
