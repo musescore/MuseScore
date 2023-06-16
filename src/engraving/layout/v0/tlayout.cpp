@@ -4047,8 +4047,7 @@ void TLayout::layoutForWidth(StaffLines* item, double w, LayoutContext&)
 void TLayout::layout(StaffState* item, LayoutContext&)
 {
     double _spatium = item->spatium();
-    item->m_path      = PainterPath();
-    item->m_lw        = _spatium * 0.3;
+    item->setLw(_spatium * 0.3);
     double h  = _spatium * 4;
     double w  = _spatium * 2.5;
 //      double w1 = w * .6;
@@ -4092,10 +4091,10 @@ void TLayout::layout(StaffState* item, LayoutContext&)
         break;
     }
 
-    item->m_path = path;
+    item->setPath(path);
 
     RectF bb(0, 0, w, h);
-    bb.adjust(-item->m_lw, -item->m_lw, item->m_lw, item->m_lw);
+    bb.adjust(-item->lw(), -item->lw(), item->lw(), item->lw());
     item->setbbox(bb);
     item->setPos(0.0, _spatium * -6.0);
 }
