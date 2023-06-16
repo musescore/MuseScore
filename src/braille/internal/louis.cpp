@@ -116,7 +116,7 @@ FUNC(const SRC_UNIT* s, size_t n, DST_UNIT* resultbuf, size_t* lengthp)
            u8_uctomb will verify uc anyway.  */
 
         /* Store it in the output string.  */
-        count = u8_uctomb(result + length, uc, allocated - length);
+        count = u8_uctomb(result + length, uc, static_cast<int>(allocated - length));
         if (count == -1) {
             if (!(result == resultbuf || result == NULL)) {
                 free(result);
@@ -150,7 +150,7 @@ FUNC(const SRC_UNIT* s, size_t n, DST_UNIT* resultbuf, size_t* lengthp)
                        length * sizeof(DST_UNIT));
             }
             result = memory;
-            count = u8_uctomb(result + length, uc, allocated - length);
+            count = u8_uctomb(result + length, uc, static_cast<int>(allocated - length));
             if (count < 0) {
                 abort();
             }
