@@ -117,6 +117,7 @@
 #include "../../libmscore/rehearsalmark.h"
 #include "../../libmscore/rest.h"
 
+#include "../../libmscore/sig.h"
 #include "../../libmscore/segment.h"
 #include "../../libmscore/slur.h"
 #include "../../libmscore/spacer.h"
@@ -139,7 +140,6 @@
 #include "../../libmscore/textbase.h"
 #include "../../libmscore/textline.h"
 #include "../../libmscore/textlinebase.h"
-#include "../../libmscore/chordtextlinebase.h"
 #include "../../libmscore/tie.h"
 #include "../../libmscore/timesig.h"
 #include "../../libmscore/tremolo.h"

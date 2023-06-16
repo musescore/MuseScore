@@ -55,11 +55,11 @@ TimeSig::TimeSig(Segment* parent)
 {
     initElementStyle(&timesigStyle);
 
-    _showCourtesySig = true;
-    _stretch.set(1, 1);
-    _sig.set(0, 1);                 // initialize to invalid
-    _timeSigType      = TimeSigType::NORMAL;
-    _largeParentheses = false;
+    m_showCourtesySig = true;
+    m_stretch.set(1, 1);
+    m_sig.set(0, 1);                 // initialize to invalid
+    m_timeSigType      = TimeSigType::NORMAL;
+    m_largeParentheses = false;
 }
 
 void TimeSig::setParent(Segment* parent)
@@ -83,11 +83,11 @@ double TimeSig::mag() const
 
 void TimeSig::setSig(const Fraction& f, TimeSigType st)
 {
-    _sig              = f;
-    _timeSigType      = st;
-    _largeParentheses = false;
-    _numeratorString.clear();
-    _denominatorString.clear();
+    m_sig              = f;
+    m_timeSigType      = st;
+    m_largeParentheses = false;
+    m_numeratorString.clear();
+    m_denominatorString.clear();
 }
 
 //---------------------------------------------------------
@@ -124,8 +124,8 @@ EngravingItem* TimeSig::drop(EditData& data)
 
 void TimeSig::setNumeratorString(const String& a)
 {
-    if (_timeSigType == TimeSigType::NORMAL) {
-        _numeratorString = a;
+    if (m_timeSigType == TimeSigType::NORMAL) {
+        m_numeratorString = a;
     }
 }
 
@@ -136,8 +136,8 @@ void TimeSig::setNumeratorString(const String& a)
 
 void TimeSig::setDenominatorString(const String& a)
 {
-    if (_timeSigType == TimeSigType::NORMAL) {
-        _denominatorString = a;
+    if (m_timeSigType == TimeSigType::NORMAL) {
+        m_denominatorString = a;
     }
 }
 
@@ -153,12 +153,12 @@ void TimeSig::draw(mu::draw::Painter* painter) const
     }
     painter->setPen(curColor());
 
-    drawSymbols(ns, painter, pz, _scale);
-    drawSymbols(ds, painter, pn, _scale);
+    drawSymbols(m_drawArgs.ns, painter, m_drawArgs.pz, m_scale);
+    drawSymbols(m_drawArgs.ds, painter, m_drawArgs.pn, m_scale);
 
-    if (_largeParentheses) {
-        drawSymbol(SymId::timeSigParensLeft,  painter, pointLargeLeftParen,  _scale.width());
-        drawSymbol(SymId::timeSigParensRight, painter, pointLargeRightParen, _scale.width());
+    if (m_largeParentheses) {
+        drawSymbol(SymId::timeSigParensLeft,  painter, m_drawArgs.pointLargeLeftParen,  m_scale.width());
+        drawSymbol(SymId::timeSigParensRight, painter, m_drawArgs.pointLargeRightParen, m_scale.width());
     }
 }
 
@@ -168,11 +168,11 @@ void TimeSig::draw(mu::draw::Painter* painter) const
 
 void TimeSig::setFrom(const TimeSig* ts)
 {
-    _timeSigType       = ts->timeSigType();
-    _numeratorString   = ts->_numeratorString;
-    _denominatorString = ts->_denominatorString;
-    _sig               = ts->_sig;
-    _stretch           = ts->_stretch;
+    m_timeSigType       = ts->timeSigType();
+    m_numeratorString   = ts->m_numeratorString;
+    m_denominatorString = ts->m_denominatorString;
+    m_sig               = ts->m_sig;
+    m_stretch           = ts->m_stretch;
 }
 
 //---------------------------------------------------------
@@ -181,7 +181,7 @@ void TimeSig::setFrom(const TimeSig* ts)
 
 String TimeSig::ssig() const
 {
-    return String(u"%1/%2").arg(_sig.numerator()).arg(_sig.denominator());
+    return String(u"%1/%2").arg(m_sig.numerator()).arg(m_sig.denominator());
 }
 
 //---------------------------------------------------------
@@ -192,8 +192,8 @@ void TimeSig::setSSig(const String& s)
 {
     StringList sl = s.split(u'/');
     if (sl.size() == 2) {
-        _sig.setNumerator(sl[0].toInt());
-        _sig.setDenominator(sl[1].toInt());
+        m_sig.setNumerator(sl[0].toInt());
+        m_sig.setDenominator(sl[1].toInt());
     }
 }
 
@@ -213,15 +213,15 @@ PropertyValue TimeSig::getProperty(Pid propertyId) const
     case Pid::GROUP_NODES:
         return groups().nodes();
     case Pid::TIMESIG:
-        return PropertyValue::fromValue(_sig);
+        return PropertyValue::fromValue(m_sig);
     case Pid::TIMESIG_GLOBAL:
         return PropertyValue::fromValue(globalSig());
     case Pid::TIMESIG_STRETCH:
         return PropertyValue::fromValue(stretch());
     case Pid::TIMESIG_TYPE:
-        return int(_timeSigType);
+        return int(m_timeSigType);
     case Pid::SCALE:
-        return _scale;
+        return m_scale;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -259,10 +259,10 @@ bool TimeSig::setProperty(Pid propertyId, const PropertyValue& v)
         setStretch(v.value<Fraction>());
         break;
     case Pid::TIMESIG_TYPE:
-        _timeSigType = (TimeSigType)(v.toInt());
+        m_timeSigType = (TimeSigType)(v.toInt());
         break;
     case Pid::SCALE:
-        _scale = v.value<ScaleF>();
+        m_scale = v.value<ScaleF>();
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
@@ -355,8 +355,8 @@ bool TimeSig::operator==(const TimeSig& ts) const
            && (sig().identical(ts.sig()))
            && (stretch() == ts.stretch())
            && (groups() == ts.groups())
-           && (_numeratorString == ts._numeratorString)
-           && (_denominatorString == ts._denominatorString)
+           && (m_numeratorString == ts.m_numeratorString)
+           && (m_denominatorString == ts.m_denominatorString)
     ;
 }
 
