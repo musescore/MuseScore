@@ -115,6 +115,7 @@ const char* PaletteCell::translationContext() const
     case ElementType::BREATH:
     case ElementType::FERMATA:
     case ElementType::MEASURE_REPEAT:
+    case ElementType::ORNAMENT:
     case ElementType::SYMBOL:
         return "engraving/sym";
     case ElementType::TIMESIG:
