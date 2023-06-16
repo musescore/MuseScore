@@ -214,7 +214,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
         for (const io::path_t& p : paths) {
             pr->reg("soundfonts", p);
         }
-        pr->reg("audio_plugins", m_configuration->knownAudioPluginsDir());
+        pr->reg("known_audio_plugins", m_configuration->knownAudioPluginsFilePath());
     }
 }
 
