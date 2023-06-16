@@ -68,8 +68,8 @@ TextCursor* TextEditData::cursor() const
 
 void TextBase::editInsertText(TextCursor* cursor, const String& s)
 {
-    assert(!layoutInvalid);
-    textInvalid = true;
+    assert(!m_layoutInvalid);
+    m_textInvalid = true;
 
     int col = 0;
     for (size_t i = 0; i < s.size(); ++i) {
@@ -78,7 +78,7 @@ void TextBase::editInsertText(TextCursor* cursor, const String& s)
         }
     }
 
-    TextBlock& block = _layout[cursor->row()];
+    TextBlock& block = m_blocks[cursor->row()];
     const CharFormat* previousFormat = block.formatAt(std::max(int(cursor->column()) - 1, 0));
     if (previousFormat && previousFormat->fontFamily() == "ScoreText" && s == " ") {
         // This space would be ignored by the xml parser (see #15629)
@@ -110,7 +110,7 @@ void TextBase::startEdit(EditData& ed)
     ted->oldXmlText = xmlText();
     ted->startUndoIdx = score()->undoStack()->getCurIdx();
 
-    if (layoutInvalid) {
+    if (m_layoutInvalid) {
         layout()->layoutItem(this);
     }
     if (!ted->cursor()->set(ed.startMove)) {
@@ -246,7 +246,7 @@ void TextBase::insertSym(EditData& ed, SymId id)
     deleteSelectedText(ed);
     String s = score()->engravingFont()->toString(id);
     cursor->format()->setFontFamily(u"ScoreText");
-    score()->undo(new InsertText(_cursor, s), &ed);
+    score()->undo(new InsertText(m_cursor, s), &ed);
 }
 
 //---------------------------------------------------------
@@ -401,7 +401,7 @@ bool TextBase::edit(EditData& ed)
     TextCursor::MoveMode mm = shiftPressed ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor;
 
     bool wasHex = false;
-    if (hexState >= 0) {
+    if (m_hexState >= 0) {
         if (ed.modifiers == (ControlModifier | ShiftModifier | KeypadModifier)) {
             switch (ed.key) {
             case Key_0:
@@ -415,7 +415,7 @@ bool TextBase::edit(EditData& ed)
             case Key_8:
             case Key_9:
                 s = Char::fromAscii(ed.key);
-                ++hexState;
+                ++m_hexState;
                 wasHex = true;
                 break;
             default:
@@ -430,7 +430,7 @@ bool TextBase::edit(EditData& ed)
             case Key_E:
             case Key_F:
                 s = Char::fromAscii(ed.key);
-                ++hexState;
+                ++m_hexState;
                 wasHex = true;
                 break;
             default:
@@ -488,7 +488,7 @@ bool TextBase::edit(EditData& ed)
                 String text = cursor->selectedText();
 
                 if (!deleteSelectedText(ed)) {
-                    if (cursor->column() == 0 && _cursor->row() != 0) {
+                    if (cursor->column() == 0 && m_cursor->row() != 0) {
                         score()->undo(new JoinText(cursor), &ed);
                     } else {
                         if (!cursor->movePosition(TextCursor::MoveOperation::Left)) {
@@ -504,7 +504,7 @@ bool TextBase::edit(EditData& ed)
         }
 
         case Key_Left:
-            if (!_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::WordLeft : TextCursor::MoveOperation::Left,
+            if (!m_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::WordLeft : TextCursor::MoveOperation::Left,
                                        mm) && type() == ElementType::LYRICS) {
                 return false;
             }
@@ -515,7 +515,7 @@ bool TextBase::edit(EditData& ed)
             break;
 
         case Key_Right:
-            if (!_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::NextWord : TextCursor::MoveOperation::Right,
+            if (!m_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::NextWord : TextCursor::MoveOperation::Right,
                                        mm) && type() == ElementType::LYRICS) {
                 return false;
             }
@@ -637,8 +637,8 @@ bool TextBase::edit(EditData& ed)
         if (ctrlPressed && shiftPressed) {
             switch (ed.key) {
             case Key_U:
-                if (hexState == -1) {
-                    hexState = 0;
+                if (m_hexState == -1) {
+                    m_hexState = 0;
                     s = u"u";
                 }
                 break;
@@ -696,7 +696,7 @@ bool TextBase::edit(EditData& ed)
             currentFormat->setFontFamily(propertyDefault(Pid::FONT_FACE).value<String>());
         }
         deleteSelectedText(ed);
-        score()->undo(new InsertText(_cursor, s), &ed);
+        score()->undo(new InsertText(m_cursor, s), &ed);
 
         int startPosition = cursor->currentPosition();
         notifyAboutTextInserted(startPosition, startPosition + static_cast<int>(s.size()), s);
@@ -948,13 +948,13 @@ void TextBase::endHexState(EditData& ed)
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
 
-    if (hexState >= 0) {
-        if (hexState > 0) {
+    if (m_hexState >= 0) {
+        if (m_hexState > 0) {
             size_t c2 = cursor->column();
-            size_t c1 = c2 - (hexState + 1);
+            size_t c1 = c2 - (m_hexState + 1);
 
-            TextBlock& t = _layout[cursor->row()];
-            String ss   = t.remove(static_cast<int>(c1), hexState + 1, cursor);
+            TextBlock& t = m_blocks[cursor->row()];
+            String ss   = t.remove(static_cast<int>(c1), m_hexState + 1, cursor);
             bool ok;
             char16_t code = ss.mid(1).toInt(&ok, 16);
             cursor->setColumn(c1);
@@ -963,10 +963,10 @@ void TextBase::endHexState(EditData& ed)
                 editInsertText(cursor, String(code));
             } else {
                 LOGD("cannot convert hex string <%s>, state %d (%zu-%zu)",
-                     muPrintable(ss.mid(1)), hexState, c1, c2);
+                     muPrintable(ss.mid(1)), m_hexState, c1, c2);
             }
         }
-        hexState = -1;
+        m_hexState = -1;
     }
 }
 
@@ -989,7 +989,7 @@ bool TextBase::deleteSelectedText(EditData& ed)
         // swap start end of selection
         r1 = cursor->row();
         c1 = cursor->column();
-        cursor->setRow(_cursor->selectLine());
+        cursor->setRow(m_cursor->selectLine());
         cursor->setColumn(cursor->selectColumn());
     }
 
@@ -1002,11 +1002,11 @@ bool TextBase::deleteSelectedText(EditData& ed)
             score()->undo(new JoinText(cursor), &ed);
         } else {
             // move cursor left:
-            if (!_cursor->movePosition(TextCursor::MoveOperation::Left)) {
+            if (!m_cursor->movePosition(TextCursor::MoveOperation::Left)) {
                 break;
             }
-            TextCursor undoCursor(*_cursor);
-            score()->undo(new RemoveText(&undoCursor, String(_cursor->currentCharacter())), &ed);
+            TextCursor undoCursor(*m_cursor);
+            score()->undo(new RemoveText(&undoCursor, String(m_cursor->currentCharacter())), &ed);
         }
     }
     return true;

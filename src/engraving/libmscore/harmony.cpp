@@ -1284,13 +1284,13 @@ void Harmony::draw(mu::draw::Painter* painter) const
         Color bg(bgColor());
         painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
         if (circle()) {
-            painter->drawArc(frame, 0, 5760);
+            painter->drawArc(m_frame, 0, 5760);
         } else {
             int r2 = frameRound();
             if (r2 > 99) {
                 r2 = 99;
             }
-            painter->drawRoundedRect(frame, frameRound(), r2);
+            painter->drawRoundedRect(m_frame, frameRound(), r2);
         }
     }
     painter->setBrush(BrushStyle::NoBrush);
