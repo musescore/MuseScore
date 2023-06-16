@@ -1106,7 +1106,6 @@ TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system)
 
 void SlurTieLayout::tiePos(Tie* item, SlurPos* sp)
 {
-    const double smallInset = item->isInside() ? 0.0 : 0.125; // 1/8 spatium, slight visual adjust so that ties don't hit the center
     const StaffType* staffType = item->staffType();
     bool useTablature = staffType->isTabStaff();
     double _spatium = item->spatium();
@@ -1133,15 +1132,13 @@ void SlurTieLayout::tiePos(Tie* item, SlurPos* sp)
     double x1, y1;
     double x2, y2;
 
-    // determine attachment points
-    // similar code is used in Chord::layoutPitched()
-    // to allocate extra space to enforce minTieLength
-    // so keep these in sync
     if (sc->notes().size() > 1 || (ec && ec->notes().size() > 1)) {
         item->_isInside = true;
     } else {
         item->_isInside = false;
     }
+    const double smallInset = item->isInside() ? 0.0 : 0.125; // 1/8 spatium, slight visual adjust so that ties don't hit the center
+
     sp->p1    = sc->pos() + sc->segment()->pos() + sc->measure()->pos();
 
     //------p1
