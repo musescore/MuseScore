@@ -4108,7 +4108,7 @@ void TLayout::layout(StaffText* item, LayoutContext& ctx)
 void TLayout::layout(StaffTypeChange* item, LayoutContext&)
 {
     double _spatium = item->score()->spatium();
-    item->setbbox(RectF(-item->m_lw * .5, -item->m_lw * .5, _spatium * 2.5 + item->m_lw, _spatium * 2.5 + item->m_lw));
+    item->setbbox(RectF(-item->lw() * .5, -item->lw() * .5, _spatium * 2.5 + item->lw(), _spatium * 2.5 + item->lw()));
     if (item->measure()) {
         double y = -1.5 * _spatium - item->height() + item->measure()->system()->staff(item->staffIdx())->y();
         item->setPos(_spatium * .8, y);
