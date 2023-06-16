@@ -191,8 +191,13 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
 
     // Init configuration
     m_configuration->init();
-    m_soundFontRepository->init();
     m_registerAudioPluginsScenario->init();
+
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
+    m_soundFontRepository->init();
 
     m_audioBuffer->init(m_configuration->audioChannelsCount(),
                         m_configuration->renderStep());
