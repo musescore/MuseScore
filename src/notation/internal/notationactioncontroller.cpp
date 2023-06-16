@@ -472,6 +472,7 @@ void NotationActionController::init()
     registerTabPadNoteAction("pad-note-256-TAB", Pad::NOTE256);
     registerTabPadNoteAction("pad-note-512-TAB", Pad::NOTE512);
     registerTabPadNoteAction("pad-note-1024-TAB", Pad::NOTE1024);
+    registerAction("rest-TAB", &Interaction::putRestToSelection);
 
     for (int i = 0; i < MAX_FRET; ++i) {
         registerAction("fret-" + std::to_string(i), [i, this]() { addFret(i); }, &Controller::isTablatureStaff);
