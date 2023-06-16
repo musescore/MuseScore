@@ -245,6 +245,14 @@ struct Template
 
 using Templates = QList<Template>;
 
+//struct RecentFile {
+//    io::path_t path;
+//    QString displayName;
+//};
+
+using RecentFile = io::path_t;
+using RecentFilesList = std::vector<RecentFile>;
+
 class GenerateAudioTimePeriod
 {
     Q_GADGET

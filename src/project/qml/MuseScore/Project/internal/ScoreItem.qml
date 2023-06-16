@@ -30,9 +30,9 @@ FocusScope {
     id: root
 
     property string name: ""
+    property string path: ""
     property string suffix: ""
     property alias timeSinceModified: timeSinceModified.text
-    property var thumbnail: null
     property bool isAdd: false
     property bool isNoResultFound: false
     property bool isCloud: false
@@ -88,11 +88,7 @@ FocusScope {
                         return noResultFoundComp
                     }
 
-                    if (root.thumbnail) {
-                        return scoreThumbnailComp
-                    }
-
-                    return genericThumbnailComp
+                    return scoreItemComp
                 }
 
                 layer.enabled: true
@@ -262,54 +258,72 @@ FocusScope {
     }
 
     Component {
-        id: scoreThumbnailComp
+        id: scoreItemComp
 
-        ScoreThumbnail {
-            anchors.fill: parent
-            thumbnail: root.thumbnail
-        }
-    }
+        Item {
+            ScoreThumbnailLoader {
+                id: thumbnailLoader
 
-    Component {
-        id: genericThumbnailComp
+                scorePath: root.path
+            }
 
-        Rectangle {
-            anchors.fill: parent
-            color: "white"
+            Loader {
+                anchors.fill: parent
 
-            Image {
-                anchors.centerIn: parent
+                sourceComponent: thumbnailLoader.isThumbnailValid ? scoreThumbnailComp : genericThumbnailComp
 
-                width: 80
-                height: 110
+                Component {
+                    id: scoreThumbnailComp
 
-                source: {
-                    switch (root.suffix) {
-                    case "gtp":
-                    case "gp3":
-                    case "gp4":
-                    case "gp5":
-                    case "gpx":
-                    case "gp":
-                    case "ptb":
-                        return "qrc:/resources/Placeholder_GP.png"
-                    case "mid":
-                    case "midi":
-                    case "kar":
-                        return "qrc:/resources/Placeholder_MIDI.png"
-                    case "mxl":
-                    case "musicxml":
-                    case "xml":
-                        return "qrc:/resources/Placeholder_MXML.png"
-                    default:
-                        return "qrc:/resources/Placeholder_Other.png"
+                    ScoreThumbnail {
+                        anchors.fill: parent
+                        thumbnail: thumbnailLoader.thumbnail
                     }
                 }
 
-                fillMode: Image.PreserveAspectFit
+                Component {
+                    id: genericThumbnailComp
 
-                // Prevent image from looking pixelated on low-res screens
-                mipmap: true
+                    Rectangle {
+                        anchors.fill: parent
+                        color: "white"
+
+                        Image {
+                            anchors.centerIn: parent
+
+                            width: 80
+                            height: 110
+
+                            source: {
+                                switch (root.suffix) {
+                                case "gtp":
+                                case "gp3":
+                                case "gp4":
+                                case "gp5":
+                                case "gpx":
+                                case "gp":
+                                case "ptb":
+                                    return "qrc:/resources/Placeholder_GP.png"
+                                case "mid":
+                                case "midi":
+                                case "kar":
+                                    return "qrc:/resources/Placeholder_MIDI.png"
+                                case "mxl":
+                                case "musicxml":
+                                case "xml":
+                                    return "qrc:/resources/Placeholder_MXML.png"
+                                default:
+                                    return "qrc:/resources/Placeholder_Other.png"
+                                }
+                            }
+
+                            fillMode: Image.PreserveAspectFit
+
+                            // Prevent image from looking pixelated on low-res screens
+                            mipmap: true
+                        }
+                    }
+                }
             }
         }
     }

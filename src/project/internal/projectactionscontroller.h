@@ -46,7 +46,7 @@
 
 #include "iprojectconfiguration.h"
 #include "iprojectcreator.h"
-#include "iplatformrecentfilescontroller.h"
+#include "irecentfilescontroller.h"
 #include "iprojectautosaver.h"
 
 namespace mu::project {
@@ -55,7 +55,7 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(IProjectConfiguration, configuration)
     INJECT(INotationReadersRegister, readers)
     INJECT(IProjectCreator, projectCreator)
-    INJECT(IPlatformRecentFilesController, platformRecentFilesController)
+    INJECT(IRecentFilesController, recentFilesController)
     INJECT(IProjectAutoSaver, projectAutoSaver)
     INJECT(ISaveProjectScenario, saveProjectScenario)
     INJECT(IExportProjectScenario, exportProjectScenario)
@@ -168,9 +168,6 @@ private:
 
     void exportScore();
     void printScore();
-
-    void prependToRecentScoreList(const io::path_t& filePath);
-    void removeFromRecentScoreList(const io::path_t& filePath);
 
     bool hasSelection() const;
 

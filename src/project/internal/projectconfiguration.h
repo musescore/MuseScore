@@ -47,9 +47,8 @@ class ProjectConfiguration : public IProjectConfiguration
 public:
     void init();
 
-    io::paths_t recentProjectPaths() const override;
-    void setRecentProjectPaths(const io::paths_t& recentScorePaths) override;
-    async::Channel<io::paths_t> recentProjectPathsChanged() const override;
+    io::path_t recentFilesJsonPath() const override;
+    ByteArray compatRecentFilesData() const override;
 
     io::path_t myFirstProjectPath() const override;
 
@@ -134,13 +133,11 @@ public:
     void setShowCloudIsNotAvailableWarning(bool show) override;
 
 private:
-    io::paths_t parseRecentProjectsPaths(const mu::Val& value) const;
     io::paths_t scanCloudProjects() const;
 
     io::path_t appTemplatesPath() const;
     io::path_t cloudProjectsPath() const;
 
-    async::Channel<io::paths_t> m_recentProjectPathsChanged;
     async::Channel<io::path_t> m_userTemplatesPathChanged;
     async::Channel<io::path_t> m_userScoresPathChanged;
 

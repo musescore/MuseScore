@@ -22,14 +22,14 @@
 #ifndef MU_PROJECT_MACOSRECENTFILESCONTROLLER_H
 #define MU_PROJECT_MACOSRECENTFILESCONTROLLER_H
 
-#include "internal/iplatformrecentfilescontroller.h"
+#include "internal/recentfilescontroller.h"
 
 namespace mu::project {
-class MacOSRecentFilesController : public IPlatformRecentFilesController
+class MacOSRecentFilesController : public RecentFilesController
 {
 public:
-    void addRecentFile(const io::path_t& path) override;
-    void clearRecentFiles() override;
+    void prependPlatformRecentFile(const io::path_t& path) override;
+    void clearPlatformRecentFiles() override;
 };
 }
 

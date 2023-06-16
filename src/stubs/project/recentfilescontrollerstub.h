@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,18 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_STUBRECENTFILESCONTROLLER_H
-#define MU_PROJECT_STUBRECENTFILESCONTROLLER_H
+#ifndef MU_PROJECT_RECENTFILESCONTROLLERSTUB_H
+#define MU_PROJECT_RECENTFILESCONTROLLERSTUB_H
 
-#include "internal/iplatformrecentfilescontroller.h"
+#include "project/irecentfilescontroller.h"
 
 namespace mu::project {
-class StubRecentFilesController : public IPlatformRecentFilesController
+class RecentFilesControllerStub : public IRecentFilesController
 {
 public:
-    void addRecentFile(const io::path_t& path) override;
+    RecentFilesControllerStub() = default;
+
+    const RecentFilesList& recentFilesList() const override;
+    async::Notification recentFilesListChanged() const override;
+
+    void prependRecentFile(const RecentFile& file) override;
     void clearRecentFiles() override;
+
+    async::Promise<QPixmap> thumbnail(const RecentFile& file) const override;
 };
 }
 
-#endif // MU_PROJECT_STUBRECENTFILESCONTROLLER_H
+#endif // MU_PROJECT_RECENTFILESCONTROLLERSTUB_H

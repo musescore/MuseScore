@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,14 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "stubrecentfilescontroller.h"
+#include "recentfilescontrollerstub.h"
 
+using namespace mu;
 using namespace mu::project;
 
-void StubRecentFilesController::addRecentFile(const io::path_t&)
+const RecentFilesList& RecentFilesControllerStub::recentFilesList() const
+{
+    static RecentFilesList l;
+    return l;
+}
+
+async::Notification RecentFilesControllerStub::recentFilesListChanged() const
+{
+    static async::Notification n;
+    return n;
+}
+
+void RecentFilesControllerStub::prependRecentFile(const RecentFile&)
 {
 }
 
-void StubRecentFilesController::clearRecentFiles()
+void RecentFilesControllerStub::clearRecentFiles()
 {
+}
+
+async::Promise<QPixmap> RecentFilesControllerStub::thumbnail(const RecentFile&) const
+{
+    return async::Promise<QPixmap>([](auto /*resolve*/, auto reject) {
+        return reject(int(Ret::Code::UnknownError), "stub");
+    });
 }

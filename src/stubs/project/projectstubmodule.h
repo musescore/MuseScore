@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_NOTATIONSTUBMODULE_H
-#define MU_PROJECT_NOTATIONSTUBMODULE_H
+#ifndef MU_PROJECT_PROJECTSTUBMODULE_H
+#define MU_PROJECT_PROJECTSTUBMODULE_H
 
 #include "modularity/imodulesetup.h"
 
@@ -35,4 +35,4 @@ public:
 };
 }
 
-#endif // MU_PROJECT_NOTATIONSTUBMODULE_H
+#endif // MU_PROJECT_PROJECTSTUBMODULE_H

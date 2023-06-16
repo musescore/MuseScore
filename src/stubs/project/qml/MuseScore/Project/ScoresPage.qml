@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,24 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_IRECENTPROJECTSPROVIDER_H
-#define MU_PROJECT_IRECENTPROJECTSPROVIDER_H
+import QtQuick 2.15
 
-#include "modularity/imoduleinterface.h"
-#include "projecttypes.h"
-#include "async/notification.h"
+import MuseScore.UiComponents 1.0
 
-namespace mu::project {
-class IRecentProjectsProvider : MODULE_EXPORT_INTERFACE
-{
-    INTERFACE_ID(IRecentProjectsProvider)
+Rectangle {
+    color: ui.theme.backgroundPrimaryColor
 
-public:
-    virtual ~IRecentProjectsProvider() = default;
-
-    virtual ProjectMetaList recentProjectList() const = 0;
-    virtual async::Notification recentProjectListChanged() const = 0;
-};
+    StyledTextLabel {
+        anchors.centerIn: parent
+        text: "Scores Page Stub"
+    }
 }
-
-#endif // MU_PROJECT_IRECENTPROJECTSPROVIDER_H

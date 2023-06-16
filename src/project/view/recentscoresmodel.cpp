@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "recentprojectsmodel.h"
+#include "recentscoresmodel.h"
 
 #include "translation.h"
 #include "actions/actiontypes.h"
@@ -42,19 +42,17 @@ static const QString ADD_NEW_KEY("isAddNew");
 static const QString NO_RESULT_FOUND_KEY("isNoResultFound");
 static const QString IS_CLOUD_KEY("isCloud");
 
-RecentProjectsModel::RecentProjectsModel(QObject* parent)
+RecentScoresModel::RecentScoresModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    ProjectMetaList recentProjects = recentProjectsProvider()->recentProjectList();
-    updateRecentScores(recentProjects);
+    updateRecentScores();
 
-    recentProjectsProvider()->recentProjectListChanged().onNotify(this, [this]() {
-        ProjectMetaList recentProjects = recentProjectsProvider()->recentProjectList();
-        updateRecentScores(recentProjects);
+    recentFilesController()->recentFilesListChanged().onNotify(this, [this]() {
+        updateRecentScores();
     });
 }
 
-QVariant RecentProjectsModel::data(const QModelIndex& index, int role) const
+QVariant RecentScoresModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
@@ -70,12 +68,12 @@ QVariant RecentProjectsModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-int RecentProjectsModel::rowCount(const QModelIndex&) const
+int RecentScoresModel::rowCount(const QModelIndex&) const
 {
     return m_recentScores.size();
 }
 
-QHash<int, QByteArray> RecentProjectsModel::roleNames() const
+QHash<int, QByteArray> RecentScoresModel::roleNames() const
 {
     return {
         { NameRole, "name" },
@@ -83,27 +81,27 @@ QHash<int, QByteArray> RecentProjectsModel::roleNames() const
     };
 }
 
-void RecentProjectsModel::addNewScore()
+void RecentScoresModel::addNewScore()
 {
     dispatcher()->dispatch("file-new");
 }
 
-void RecentProjectsModel::openScore()
+void RecentScoresModel::openScore()
 {
     dispatcher()->dispatch("file-open");
 }
 
-void RecentProjectsModel::openRecentScore(const QString& scorePath)
+void RecentScoresModel::openRecentScore(const QString& scorePath)
 {
     dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path_t>(io::path_t(scorePath)));
 }
 
-void RecentProjectsModel::openScoreManager()
+void RecentScoresModel::openScoreManager()
 {
     interactive()->openUrl(museScoreComService()->scoreManagerUrl());
 }
 
-void RecentProjectsModel::setRecentScores(const QVariantList& recentScores)
+void RecentScoresModel::setRecentScores(const QVariantList& recentScores)
 {
     if (m_recentScores == recentScores) {
         return;
@@ -114,7 +112,7 @@ void RecentProjectsModel::setRecentScores(const QVariantList& recentScores)
     endResetModel();
 }
 
-void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjectsList)
+void RecentScoresModel::updateRecentScores()
 {
     QVariantList recentScores;
 
@@ -125,21 +123,17 @@ void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjec
     addItem[IS_CLOUD_KEY] = false;
     recentScores << addItem;
 
-    for (const ProjectMeta& meta : recentProjectsList) {
+    for (const RecentFile& file : recentFilesController()->recentFilesList()) {
         QVariantMap obj;
 
-        std::string suffix = io::suffix(meta.filePath);
+        std::string suffix = io::suffix(file);
         bool isSuffixInteresting = suffix != engraving::MSCZ;
-        obj[NAME_KEY] = meta.fileName(isSuffixInteresting).toQString();
-        obj[PATH_KEY] = meta.filePath.toQString();
+        obj[NAME_KEY] = io::filename(file, isSuffixInteresting).toQString();
+        obj[PATH_KEY] = file.toQString();
         obj[SUFFIX_KEY] = QString::fromStdString(suffix);
-        obj[IS_CLOUD_KEY] = configuration()->isCloudProject(meta.filePath);
+        obj[IS_CLOUD_KEY] = configuration()->isCloudProject(file);
 
-        if (!meta.thumbnail.isNull()) {
-            obj[THUMBNAIL_KEY] = !meta.thumbnail.isNull() ? meta.thumbnail : QVariant();
-        }
-
-        obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(meta.filePath).lastModified().date()).toQString();
+        obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(file).lastModified().date()).toQString();
         obj[ADD_NEW_KEY] = false;
         obj[NO_RESULT_FOUND_KEY] = false;
 
