@@ -45,6 +45,8 @@ public:
     const StaffType* staffType() const { return m_staffType; }
     void setStaffType(StaffType* st, bool owned);
 
+    double lw() const { return m_lw; }
+
     Measure* measure() const { return toMeasure(explicitParent()); }
 
     PropertyValue getProperty(Pid propertyId) const override;
@@ -53,7 +55,6 @@ public:
 
 private:
 
-    friend class layout::v0::TLayout;
     friend class Factory;
     StaffTypeChange(MeasureBase* parent = 0);
     StaffTypeChange(const StaffTypeChange&);
@@ -61,7 +62,7 @@ private:
     void spatiumChanged(double oldValue, double newValue) override;
     void draw(mu::draw::Painter*) const override;
 
-    StaffType* m_staffType { nullptr };
+    StaffType* m_staffType = nullptr;
     bool m_ownsStaffType = false;
     double m_lw = 0.0;
 };
