@@ -64,6 +64,8 @@ ScoresView {
         id: gridComp
 
         ScoresView.Grid {
+            id: grid
+
             readonly property int fittingItems: view.columns * (view.rows + 1)
             readonly property bool almostAtEnd: view.contentHeight - (view.contentY + view.height) < 2 * view.cellHeight
 
@@ -84,6 +86,27 @@ ScoresView {
                     cloudScoresModel.desiredRowCount = Math.max(fittingItems,
                                                                 almostAtEnd ? cloudScoresModel.rowCount + view.columns : cloudScoresModel.rowCount)
                 })
+            }
+
+            view.footer: cloudScoresModel.state === CloudScoresModel.Loading
+                         ? busyIndicatorComp : null
+
+            Component {
+                id: busyIndicatorComp
+
+                Item {
+                    width: GridView.view ? GridView.view.width : 0
+                    height: indicator.implicitHeight + indicator.anchors.topMargin + indicator.anchors.bottomMargin
+
+                    StyledBusyIndicator {
+                        id: indicator
+
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        anchors.topMargin: grid.view.spacingBetweenRows / 2
+                        anchors.bottomMargin: grid.view.spacingBetweenRows / 2
+                    }
+                }
             }
         }
     }

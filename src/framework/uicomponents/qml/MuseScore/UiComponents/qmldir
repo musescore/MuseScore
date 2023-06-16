@@ -53,3 +53,4 @@ StyledFlickable 1.0 StyledFlickable.qml
 StyledListView 1.0 StyledListView.qml
 StyledGridView 1.0 StyledGridView.qml
 SelectMultipleDirectoriesDialog 1.0 SelectMultipleDirectoriesDialog.qml
+StyledBusyIndicator 1.0 StyledBusyIndicator.qml
