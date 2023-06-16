@@ -86,9 +86,7 @@ private:
 
     PolygonF m_arrowUp;
     PolygonF m_arrowDown;
-    double m_spatium = 0;
     double m_bendArrowWidth = 0;
-    mutable RectF m_boundingRect;
     bool m_releasedToInitial = false;
     bool m_skipFirstPoint = false;
 };
