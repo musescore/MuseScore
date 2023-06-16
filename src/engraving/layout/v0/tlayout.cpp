@@ -4597,7 +4597,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     }
 
     if (!tl->diagonal()) {
-        item->_offset2.setY(0);
+        item->setUserYoffset2(0);
     }
 
     auto alignBaseLine = [tl](Text* text, PointF& pp1, PointF& pp2) {
