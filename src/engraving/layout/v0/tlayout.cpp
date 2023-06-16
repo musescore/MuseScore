@@ -4229,10 +4229,12 @@ void TLayout::layout(StemSlash* item, LayoutContext&)
         endY = startY + up * length * sin(angle);
     }
 
-    item->m_line = LineF(PointF(startX, startY), PointF(endX, endY));
-    item->m_width = item->score()->styleMM(Sid::stemSlashThickness) * graceNoteMag;
-    item->setbbox(RectF(item->m_line.p1(), item->m_line.p2()).normalized().adjusted(-item->m_width / 2, -item->m_width / 2, item->m_width,
-                                                                                    item->m_width));
+    item->setLine(LineF(PointF(startX, startY), PointF(endX, endY)));
+    item->setStemWidth(item->score()->styleMM(Sid::stemSlashThickness) * graceNoteMag);
+
+    RectF bbox = RectF(item->line().p1(), item->line().p2()).normalized();
+    bbox = bbox.adjusted(-item->stemWidth() / 2, -item->stemWidth() / 2, item->stemWidth(), item->stemWidth());
+    item->setbbox(bbox);
 }
 
 void TLayout::layout(Sticking* item, LayoutContext& ctx)
