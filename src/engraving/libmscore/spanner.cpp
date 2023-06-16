@@ -47,7 +47,7 @@ namespace mu::engraving {
 SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
     : EngravingItem(type, parent, f)
 {
-    _spanner = sp;
+    m_spanner = sp;
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
 }
 
@@ -55,16 +55,16 @@ SpannerSegment::SpannerSegment(const ElementType& type, System* parent, ElementF
     : EngravingItem(type, parent, f)
 {
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
-    _spanner = 0;
+    m_spanner = 0;
 }
 
 SpannerSegment::SpannerSegment(const SpannerSegment& s)
     : EngravingItem(s)
 {
-    _spanner            = s._spanner;
-    _spannerSegmentType = s._spannerSegmentType;
-    _p2                 = s._p2;
-    _offset2            = s._offset2;
+    m_spanner            = s.m_spanner;
+    m_spannerSegmentType = s.m_spannerSegmentType;
+    m_p2                 = s.m_p2;
+    m_offset2            = s.m_offset2;
 }
 
 //---------------------------------------------------------
@@ -81,7 +81,7 @@ double SpannerSegment::mag() const
 
 Fraction SpannerSegment::tick() const
 {
-    return _spanner ? _spanner->tick() : Fraction(0, 1);
+    return m_spanner ? m_spanner->tick() : Fraction(0, 1);
 }
 
 //---------------------------------------------------------
@@ -110,7 +110,7 @@ void SpannerSegment::spatiumChanged(double ov, double nv)
 {
     EngravingItem::spatiumChanged(ov, nv);
     if (offsetIsSpatiumDependent()) {
-        _offset2 *= (nv / ov);
+        m_offset2 *= (nv / ov);
     }
 }
 
@@ -149,7 +149,7 @@ engraving::PropertyValue SpannerSegment::getProperty(Pid pid) const
     }
     switch (pid) {
     case Pid::OFFSET2:
-        return _offset2;
+        return m_offset2;
     default:
         return EngravingItem::getProperty(pid);
     }
@@ -166,7 +166,7 @@ bool SpannerSegment::setProperty(Pid pid, const PropertyValue& v)
     }
     switch (pid) {
     case Pid::OFFSET2:
-        _offset2 = v.value<PointF>();
+        m_offset2 = v.value<PointF>();
         triggerLayoutAll();
         break;
     default:
@@ -269,10 +269,10 @@ void SpannerSegment::undoChangeProperty(Pid pid, const PropertyValue& val, Prope
 
 void SpannerSegment::setSelected(bool f)
 {
-    for (SpannerSegment* ss : _spanner->spannerSegments()) {
+    for (SpannerSegment* ss : m_spanner->spannerSegments()) {
         ss->EngravingItem::setSelected(f);
     }
-    _spanner->setSelected(f);
+    m_spanner->setSelected(f);
 }
 
 //---------------------------------------------------------
@@ -281,11 +281,11 @@ void SpannerSegment::setSelected(bool f)
 
 void SpannerSegment::setVisible(bool f)
 {
-    if (_spanner) {
-        for (SpannerSegment* ss : _spanner->spannerSegments()) {
+    if (m_spanner) {
+        for (SpannerSegment* ss : m_spanner->spannerSegments()) {
             ss->EngravingItem::setVisible(f);
         }
-        _spanner->setVisible(f);
+        m_spanner->setVisible(f);
     } else {
         EngravingItem::setVisible(f);
     }
@@ -297,11 +297,11 @@ void SpannerSegment::setVisible(bool f)
 
 void SpannerSegment::setColor(const mu::draw::Color& col)
 {
-    if (_spanner) {
-        for (SpannerSegment* ss : _spanner->spannerSegments()) {
+    if (m_spanner) {
+        for (SpannerSegment* ss : m_spanner->spannerSegments()) {
             ss->_color = col;
         }
-        _spanner->_color = col;
+        m_spanner->_color = col;
     } else {
         _color = col;
     }
@@ -340,8 +340,8 @@ String SpannerSegment::accessibleInfo() const
 
 void SpannerSegment::triggerLayout() const
 {
-    if (_spanner) {
-        _spanner->triggerLayout();
+    if (m_spanner) {
+        m_spanner->triggerLayout();
     }
 }
 

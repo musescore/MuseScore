@@ -546,10 +546,10 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
         const PointF delta = left ? deltaRebaseLeft(oldSeg, newSeg) : deltaRebaseRight(oldSeg, newSeg, track2staff(l->effectiveTrack2()));
         if (left) {
             setOffset(offset() + delta);
-            _offset2 -= delta;
+            m_offset2 -= delta;
             setOffsetChanged(true);
         } else {
-            _offset2 += delta;
+            m_offset2 += delta;
         }
     }
 
@@ -596,7 +596,7 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
             if (newLineSegment != this) {
                 // Reset offset for the old line segment
                 if (left) {
-                    _offset2.rx() -= offset().x();
+                    m_offset2.rx() -= offset().x();
                     setOffset(PointF());
                 } else {
                     setUserOff2(PointF());
@@ -663,7 +663,7 @@ void LineSegment::editDrag(EditData& ed)
     switch (ed.curGrip) {
     case Grip::START:         // Resize the begin of element (left grip)
         setOffset(offset() + deltaResize);
-        _offset2 -= deltaResize;
+        m_offset2 -= deltaResize;
 
         if (isStyled(Pid::OFFSET)) {
             setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
@@ -672,7 +672,7 @@ void LineSegment::editDrag(EditData& ed)
         rebaseAnchors(ed, ed.curGrip);
         break;
     case Grip::END:         // Resize the end of element (right grip)
-        _offset2 += deltaResize;
+        m_offset2 += deltaResize;
         rebaseAnchors(ed, ed.curGrip);
         break;
     case Grip::MIDDLE: {         // Move the element (middle grip)
@@ -705,7 +705,7 @@ void LineSegment::editDrag(EditData& ed)
                 if (sNote && sNote->chord() && noteNew->chord() && sNote->chord()->tick() < noteNew->chord()->tick()) {
                     score()->undoChangeSpannerElements(l, sNote, noteNew);
 
-                    _offset2 += noteOld->canvasPos() - noteNew->canvasPos();
+                    m_offset2 += noteOld->canvasPos() - noteNew->canvasPos();
                 }
             } else if (ed.curGrip == Grip::START && e != l->startElement()) {
                 LOGD("LineSegment: move start anchor (not impl.)");
@@ -724,7 +724,7 @@ void LineSegment::spatiumChanged(double ov, double nv)
     EngravingItem::spatiumChanged(ov, nv);
     double scale = nv / ov;
     line()->setLineWidth(line()->lineWidth() * scale);
-    _offset2 *= scale;
+    m_offset2 *= scale;
 }
 
 //---------------------------------------------------------
@@ -734,7 +734,7 @@ void LineSegment::spatiumChanged(double ov, double nv)
 void LineSegment::localSpatiumChanged(double ov, double nv)
 {
     EngravingItem::localSpatiumChanged(ov, nv);
-    _offset2 *= nv / ov;
+    m_offset2 *= nv / ov;
 }
 
 //---------------------------------------------------------

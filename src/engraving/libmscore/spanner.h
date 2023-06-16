@@ -49,11 +49,11 @@ public:
     virtual double mag() const override;
     virtual Fraction tick() const override;
 
-    Spanner* spanner() const { return _spanner; }
-    Spanner* setSpanner(Spanner* val) { return _spanner = val; }
+    Spanner* spanner() const { return m_spanner; }
+    Spanner* setSpanner(Spanner* val) { return m_spanner = val; }
 
-    void setSpannerSegmentType(SpannerSegmentType s) { _spannerSegmentType = s; }
-    SpannerSegmentType spannerSegmentType() const { return _spannerSegmentType; }
+    void setSpannerSegmentType(SpannerSegmentType s) { m_spannerSegmentType = s; }
+    SpannerSegmentType spannerSegmentType() const { return m_spannerSegmentType; }
     bool isSingleType() const { return spannerSegmentType() == SpannerSegmentType::SINGLE; }
     bool isBeginType() const { return spannerSegmentType() == SpannerSegmentType::BEGIN; }
     bool isSingleBeginType() const { return isSingleType() || isBeginType(); }
@@ -64,20 +64,21 @@ public:
     void setSystem(System* s);
     System* system() const { return toSystem(explicitParent()); }
 
-    const mu::PointF& userOff2() const { return _offset2; }
-    void setUserOff2(const mu::PointF& o) { _offset2 = o; }
-    void setUserXoffset2(double x) { _offset2.setX(x); }
-    double& rUserXoffset2() { return _offset2.rx(); }
-    double& rUserYoffset2() { return _offset2.ry(); }
+    const mu::PointF& userOff2() const { return m_offset2; }
+    void setUserOff2(const mu::PointF& o) { m_offset2 = o; }
+    void setUserXoffset2(double x) { m_offset2.setX(x); }
+    void setUserYoffset2(double y) { m_offset2.setY(y); }
+    double& rUserXoffset2() { return m_offset2.rx(); }
+    double& rUserYoffset2() { return m_offset2.ry(); }
 
-    void setPos2(const mu::PointF& p) { _p2 = p; }
+    void setPos2(const mu::PointF& p) { m_p2 = p; }
     //TODO: rename to spanSegPosWithUserOffset()
-    mu::PointF pos2() const { return _p2 + _offset2; }
+    mu::PointF pos2() const { return m_p2 + m_offset2; }
     //TODO: rename to spanSegPos()
-    const mu::PointF& ipos2() const { return _p2; }
-    mu::PointF& rpos2() { return _p2; }
-    double& rxpos2() { return _p2.rx(); }
-    double& rypos2() { return _p2.ry(); }
+    const mu::PointF& ipos2() const { return m_p2; }
+    mu::PointF& rpos2() { return m_p2; }
+    double& rxpos2() { return m_p2.rx(); }
+    double& rypos2() { return m_p2.ry(); }
 
     bool isEditable() const override { return true; }
 
@@ -112,22 +113,20 @@ public:
 
 protected:
 
-    friend class layout::v0::TLayout;
-
     SpannerSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
     SpannerSegment(const ElementType& type, System* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
     SpannerSegment(const SpannerSegment&);
 
-    mu::PointF _p2;
-    mu::PointF _offset2;
+    mu::PointF m_p2;
+    mu::PointF m_offset2;
 
 private:
     String formatBarsAndBeats() const override;
     String formatStartBarsAndBeats(const Segment* segment) const;
     String formatEndBarsAndBeats(const Segment* segment) const;
 
-    Spanner* _spanner;
-    SpannerSegmentType _spannerSegmentType;
+    Spanner* m_spanner = nullptr;
+    SpannerSegmentType m_spannerSegmentType = SpannerSegmentType::SINGLE;
 };
 
 //----------------------------------------------------------------------------------
