@@ -72,9 +72,11 @@ public:
     bool play() const { return m_play; }
     void setPlay(bool val) { m_play = val; }
 
+    const mu::PolygonF& polygon() const { return m_polygon; }
+    void setPolygon(const mu::PolygonF& p) { m_polygon = p; }
+
 private:
 
-    friend class layout::v0::TLayout;
     friend class Factory;
     TremoloBar(EngravingItem* parent);
 
@@ -86,7 +88,6 @@ private:
     bool m_play = true;
 
     PitchValues m_points;
-
     mu::PolygonF m_polygon;                    // computed by layout
 };
 } // namespace mu::engraving

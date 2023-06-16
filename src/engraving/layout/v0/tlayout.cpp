@@ -4991,16 +4991,17 @@ void TLayout::layout(TremoloBar* item, LayoutContext&)
      *  consistently to values that make sense to draw with the
      *  Musescore scale. */
 
-    double timeFactor  = item->m_userMag / 1.0;
+    double timeFactor  = item->userMag() / 1.0;
     double pitchFactor = -_spatium * .02;
 
-    item->m_polygon.clear();
-    for (auto v : item->m_points) {
-        item->m_polygon << PointF(v.time * timeFactor, v.pitch * pitchFactor);
+    PolygonF polygon;
+    for (const PitchValue& v : item->points()) {
+        polygon << PointF(v.time * timeFactor, v.pitch * pitchFactor);
     }
+    item->setPolygon(polygon);
 
-    double w = item->m_lw.val();
-    item->setbbox(item->m_polygon.boundingRect().adjusted(-w, -w, w, w));
+    double w = item->lineWidth().val();
+    item->setbbox(item->polygon().boundingRect().adjusted(-w, -w, w, w));
 }
 
 void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
