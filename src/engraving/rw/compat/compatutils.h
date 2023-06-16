@@ -50,6 +50,7 @@ private:
     static void replaceOldWithNewOrnaments(MasterScore* score);
     static void replaceOldWithNewExpressions(MasterScore* score);
     static void reconstructTypeOfCustomDynamics(MasterScore* score);
+    static void splitArticulations(MasterScore* score);
     static DynamicType reconstructDynamicTypeFromString(Dynamic* dynamic);
     static void resetRestVerticalOffset(MasterScore* masterScore);
 };

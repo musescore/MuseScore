@@ -85,6 +85,7 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
         replaceOldWithNewExpressions(masterScore);
         replaceOldWithNewOrnaments(masterScore);
         resetRestVerticalOffset(masterScore);
+        splitArticulations(masterScore);
     }
 }
 
@@ -338,6 +339,104 @@ void CompatUtils::reconstructTypeOfCustomDynamics(MasterScore* score)
     for (Dynamic* dynamic : otherTypeDynamic) {
         DynamicType dynType = reconstructDynamicTypeFromString(dynamic);
         dynamic->setDynamicType(dynType);
+    }
+}
+
+void CompatUtils::splitArticulations(MasterScore* masterScore)
+{
+    std::set<Articulation*> toRemove;
+    for (Measure* meas = masterScore->firstMeasure(); meas; meas = meas->nextMeasure()) {
+        for (Segment& seg : meas->segments()) {
+            if (!seg.isChordRestType()) {
+                continue;
+            }
+            for (EngravingItem* item : seg.elist()) {
+                if (!item || !item->isChord()) {
+                    continue;
+                }
+                Chord* chord = toChord(item);
+                for (Articulation* a : chord->articulations()) {
+                    if (a->isLinked()) {
+                        continue; // only worry about main artics, links will be done later
+                    }
+                    std::set<SymId> ids = mu::engraving::splitArticulations({ a->symId() });
+                    if (ids.size() <= 1) {
+                        continue;
+                    }
+                    toRemove.insert(a);
+                }
+            }
+        }
+    }
+    // separate into individual articulations
+    for (Articulation* combinedArtic : toRemove) {
+        auto components = mu::engraving::splitArticulations({ combinedArtic->symId() });
+        Chord* parentChord = toChord(combinedArtic->parentItem());
+        for (SymId id : components) {
+            Articulation* newArtic = Factory::createArticulation(masterScore->dummy()->chord());
+            newArtic->setSymId(id);
+            if (parentChord->hasArticulation(newArtic)) {
+                delete newArtic;
+                continue;
+            }
+            newArtic->setParent(parentChord);
+            newArtic->setTrack(combinedArtic->track());
+            newArtic->setPos(combinedArtic->pos());
+            newArtic->setDirection(combinedArtic->direction());
+            newArtic->setAnchor(combinedArtic->anchor());
+            newArtic->setColor(combinedArtic->color());
+            newArtic->setPlayArticulation(combinedArtic->playArticulation());
+            newArtic->setVisible(combinedArtic->visible());
+            newArtic->setOrnamentStyle(combinedArtic->ornamentStyle());
+            LinkedObjects* links = new LinkedObjects(masterScore);
+            links->push_back(newArtic);
+            newArtic->setLinks(links);
+            parentChord->add(newArtic);
+
+            // newArtic is the main articulation
+            LinkedObjects* oldLinks = combinedArtic->links();
+            if (!oldLinks || oldLinks->empty()) {
+                continue;
+            }
+            for (EngravingObject* linkedItem : *oldLinks) {
+                IF_ASSERT_FAILED(linkedItem && linkedItem->isArticulation()) {
+                    continue;
+                }
+                if (linkedItem == combinedArtic) {
+                    continue;
+                }
+                Articulation* oldArtic = toArticulation(linkedItem);
+                Chord* oldParent = toChord(oldArtic->parentItem());
+                oldParent->add(newArtic->linkedClone());
+            }
+        }
+    }
+    // finally, remove the combined articulations
+    for (Articulation* combinedArtic : toRemove) {
+        LinkedObjects* links = combinedArtic->links();
+        if (!links || links->empty()) {
+            Chord* parentChord = toChord(combinedArtic->parentItem());
+            parentChord->remove(combinedArtic);
+            delete combinedArtic;
+            continue;
+        }
+        std::set<Articulation*> removeLinks;
+        for (auto linked : *links) {
+            IF_ASSERT_FAILED(linked && linked->isArticulation()) {
+                continue;
+            }
+            removeLinks.insert(toArticulation(linked));
+        }
+        for (Articulation* linkedArtic : removeLinks) {
+            if (linkedArtic != combinedArtic) {
+                Chord* linkedParent = toChord(linkedArtic->parentItem());
+                linkedParent->remove(linkedArtic);
+                delete linkedArtic;
+            }
+        }
+        Chord* parentChord = toChord(combinedArtic->parentItem());
+        parentChord->remove(combinedArtic);
+        delete combinedArtic;
     }
 }
 
