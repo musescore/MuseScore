@@ -47,39 +47,55 @@ protected:
         m_knownPlugins->setfileSystem(m_fileSystem);
         m_knownPlugins->setconfiguration(m_configuration);
 
-        m_knownAudioPluginsDir = "/test/some dir/audio_plugins";
-        ON_CALL(*m_configuration, knownAudioPluginsDir())
-        .WillByDefault(Return(m_knownAudioPluginsDir));
+        m_knownAudioPluginsFilePath = "/test/some dir/known_audio_plugins.json";
+        ON_CALL(*m_configuration, knownAudioPluginsFilePath())
+        .WillByDefault(Return(m_knownAudioPluginsFilePath));
     }
 
-    ByteArray pluginInfoToJson(const AudioPluginInfo& info) const
+    ByteArray pluginInfoListToJson(const std::vector<AudioPluginInfo>& infoList) const
     {
         const std::map<AudioResourceType, std::string> RESOURCE_TYPE_TO_STR {
             { AudioResourceType::VstPlugin, "VstPlugin" },
         };
 
-        JsonObject attributesObj;
-        for (auto it = info.meta.attributes.cbegin(); it != info.meta.attributes.cend(); ++it) {
-            attributesObj.set(it->first.toStdString(), it->second.toStdString());
+        JsonArray array;
+
+        for (const AudioPluginInfo& info : infoList) {
+            JsonObject attributesObj;
+            for (auto it = info.meta.attributes.cbegin(); it != info.meta.attributes.cend(); ++it) {
+                if (it->first == audio::PLAYBACK_SETUP_DATA_ATTRIBUTE) {
+                    continue;
+                }
+
+                attributesObj.set(it->first.toStdString(), it->second.toStdString());
+            }
+
+            JsonObject metaObj;
+            metaObj.set("id", info.meta.id);
+            metaObj.set("type", mu::value(RESOURCE_TYPE_TO_STR, info.meta.type, "Undefined"));
+            metaObj.set("hasNativeEditorSupport", info.meta.hasNativeEditorSupport);
+
+            if (!info.meta.vendor.empty()) {
+                metaObj.set("vendor", info.meta.vendor);
+            }
+
+            if (!attributesObj.empty()) {
+                metaObj.set("attributes", attributesObj);
+            }
+
+            JsonObject mainObj;
+            mainObj.set("meta", metaObj);
+            mainObj.set("path", info.path.toStdString());
+            mainObj.set("enabled", info.enabled);
+
+            if (info.errorCode != 0) {
+                mainObj.set("errorCode", info.errorCode);
+            }
+
+            array << mainObj;
         }
 
-        JsonObject metaObj;
-        metaObj.set("id", info.meta.id);
-        metaObj.set("type", mu::value(RESOURCE_TYPE_TO_STR, info.meta.type, "Undefined"));
-        metaObj.set("vendor", info.meta.vendor);
-        metaObj.set("attributes", attributesObj);
-        metaObj.set("hasNativeEditorSupport", info.meta.hasNativeEditorSupport);
-
-        JsonObject mainObj;
-        mainObj.set("meta", metaObj);
-        mainObj.set("path", info.path.toStdString());
-        mainObj.set("enabled", info.enabled);
-
-        if (info.errorCode != 0) {
-            mainObj.set("errorCode", info.errorCode);
-        }
-
-        return JsonDocument(mainObj).toJson();
+        return JsonDocument(array).toJson();
     }
 
     std::vector<AudioPluginInfo> setupTestData()
@@ -119,42 +135,18 @@ protected:
         disabledPluginInfo.errorCode = -1;
         plugins.push_back(disabledPluginInfo);
 
-        paths_t infoPaths;
-        for (const AudioPluginInfo& info : plugins) {
-            infoPaths.push_back(pluginInfoPath(info.meta.vendor, info.meta.id));
-        }
-
-        ON_CALL(*m_fileSystem, scanFiles(m_knownAudioPluginsDir, std::vector<std::string> { "*.json" }, ScanMode::FilesInCurrentDir))
-        .WillByDefault(Return(mu::RetVal<paths_t>::make_ok({ infoPaths })));
-
-        for (size_t i = 0; i < infoPaths.size(); ++i) {
-            mu::ByteArray data = pluginInfoToJson(plugins[i]);
-
-            ON_CALL(*m_fileSystem, readFile(infoPaths[i]))
-            .WillByDefault(Return(mu::RetVal<mu::ByteArray>::make_ok(data)));
-        }
+        mu::ByteArray data = pluginInfoListToJson(plugins);
+        ON_CALL(*m_fileSystem, readFile(m_knownAudioPluginsFilePath))
+        .WillByDefault(Return(mu::RetVal<mu::ByteArray>::make_ok(data)));
 
         return plugins;
-    }
-
-    io::path_t pluginInfoPath(const AudioResourceVendor& vendor, const AudioResourceId& resourceId) const
-    {
-        io::path_t fileName;
-
-        if (vendor.empty()) {
-            fileName = io::escapeFileName(resourceId);
-        } else {
-            fileName = io::escapeFileName(vendor + "_" + resourceId);
-        }
-
-        return m_knownAudioPluginsDir + "/" + fileName + ".json";
     }
 
     std::shared_ptr<KnownAudioPluginsRegister> m_knownPlugins;
     std::shared_ptr<FileSystemMock> m_fileSystem;
     std::shared_ptr<AudioConfigurationMock> m_configuration;
 
-    path_t m_knownAudioPluginsDir;
+    path_t m_knownAudioPluginsFilePath;
 };
 
 inline bool operator==(const AudioPluginInfo& info1, const AudioPluginInfo& info2)
@@ -174,8 +166,15 @@ TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
     // [GIVEN] All known plugins
     std::vector<AudioPluginInfo> expectedPluginInfoList = setupTestData();
 
+    // [GIVEN] File exists
+    ON_CALL(*m_fileSystem, exists(m_knownAudioPluginsFilePath))
+    .WillByDefault(Return(mu::make_ok()));
+
     // [WHEN] Load the info
-    m_knownPlugins->load();
+    mu::Ret ret = m_knownPlugins->load();
+
+    // [THEN] Successfully loaded the info
+    EXPECT_TRUE(ret);
 
     // [WHEN] Request the info
     std::vector<AudioPluginInfo> actualPluginInfoList = m_knownPlugins->pluginInfoList();
@@ -196,19 +195,19 @@ TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
     // [GIVEN] New plugin for registration
     AudioPluginInfo newPluginInfo;
     newPluginInfo.type = AudioPluginType::Instrument;
-    newPluginInfo.meta.id = "new/plugin";
+    newPluginInfo.meta.id = "DDD";
     newPluginInfo.meta.type = AudioResourceType::VstPlugin;
     newPluginInfo.path = "/path/to/new/plugin/plugin.vst";
     newPluginInfo.enabled = true;
     expectedPluginInfoList.push_back(newPluginInfo);
 
-    // [THEN] The plugin will be written to the corresponding file
-    mu::ByteArray expectedNewPluginData = pluginInfoToJson(newPluginInfo);
-    EXPECT_CALL(*m_fileSystem, writeFile(pluginInfoPath(newPluginInfo.meta.vendor, newPluginInfo.meta.id), expectedNewPluginData))
+    // [THEN] All the plugins will be written to the file
+    mu::ByteArray expectedNewPluginsData = pluginInfoListToJson(expectedPluginInfoList);
+    EXPECT_CALL(*m_fileSystem, writeFile(m_knownAudioPluginsFilePath, expectedNewPluginsData))
     .WillOnce(Return(mu::make_ok()));
 
     // [WHEN] Register it
-    mu::Ret ret = m_knownPlugins->registerPlugin(newPluginInfo);
+    ret = m_knownPlugins->registerPlugin(newPluginInfo);
 
     // [THEN] The plugin successfully registered
     EXPECT_TRUE(ret);
@@ -222,12 +221,15 @@ TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
         EXPECT_EQ(actualInfo.path, m_knownPlugins->pluginPath(actualInfo.meta.id));
     }
 
-    // [WHEN] Unregister the first plugin in the list
+    // [GIVEN] We want to unregister the first plugin in the list
     AudioPluginInfo unregisteredPlugin = mu::takeFirst(expectedPluginInfoList);
 
-    EXPECT_CALL(*m_fileSystem, remove(pluginInfoPath(unregisteredPlugin.meta.vendor, unregisteredPlugin.meta.id), false))
+    // [THEN] All the plugins will be written to the file (except the unregistered one)
+    expectedNewPluginsData = pluginInfoListToJson(expectedPluginInfoList);
+    EXPECT_CALL(*m_fileSystem, writeFile(m_knownAudioPluginsFilePath, expectedNewPluginsData))
     .WillOnce(Return(mu::make_ok()));
 
+    // [WHEN] Unregister the plugin
     ret = m_knownPlugins->unregisterPlugin(unregisteredPlugin.meta.id);
 
     // [THEN] The plugin successfully unregistered

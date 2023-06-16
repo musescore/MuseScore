@@ -60,7 +60,7 @@ public:
     async::Notification synthesizerStateChanged() const override;
     async::Notification synthesizerStateGroupChanged(const std::string& groupName) const override;
 
-    io::path_t knownAudioPluginsDir() const override;
+    io::path_t knownAudioPluginsFilePath() const override;
 };
 }
 
