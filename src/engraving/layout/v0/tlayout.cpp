@@ -4847,10 +4847,12 @@ void TLayout::layout(TimeSig* item, LayoutContext&)
     double _spatium = item->spatium();
 
     item->setbbox(RectF());                    // prepare for an empty time signature
-    item->pointLargeLeftParen = PointF();
-    item->pz = PointF();
-    item->pn = PointF();
-    item->pointLargeRightParen = PointF();
+
+    TimeSig::DrawArgs drawArgs;
+    drawArgs.pointLargeLeftParen = PointF();
+    drawArgs.pz = PointF();
+    drawArgs.pn = PointF();
+    drawArgs.pointLargeRightParen = PointF();
 
     double lineDist;
     int numOfLines;
@@ -4862,10 +4864,11 @@ void TLayout::layout(TimeSig* item, LayoutContext&)
         if (!_staff->staffTypeForElement(item)->genTimesig()) {
             // reset position and box sizes to 0
             // LOGD("staff: no time sig");
-            item->pointLargeLeftParen.rx() = 0.0;
-            item->pn.rx() = 0.0;
-            item->pz.rx() = 0.0;
-            item->pointLargeRightParen.rx() = 0.0;
+            drawArgs.pointLargeLeftParen.rx() = 0.0;
+            drawArgs.pn.rx() = 0.0;
+            drawArgs.pz.rx() = 0.0;
+            drawArgs.pointLargeRightParen.rx() = 0.0;
+            item->setDrawArgs(drawArgs);
             item->setbbox(RectF());
             // leave everything else as it is:
             // draw() will anyway skip any drawing if staff type has no time sigs
@@ -4887,52 +4890,52 @@ void TLayout::layout(TimeSig* item, LayoutContext&)
 
     // C and Ccut are placed at the middle of the staff: use yoff directly
     IEngravingFontPtr font = item->score()->engravingFont();
-    SizeF mag(item->magS() * item->_scale);
+    SizeF mag(item->magS() * item->scale());
 
     if (sigType == TimeSigType::FOUR_FOUR) {
-        item->pz = PointF(0.0, yoff);
+        drawArgs.pz = PointF(0.0, yoff);
         RectF bbox = font->bbox(SymId::timeSigCommon, mag);
-        item->setbbox(bbox.translated(item->pz));
-        item->ns.clear();
-        item->ns.push_back(SymId::timeSigCommon);
-        item->ds.clear();
+        item->setbbox(bbox.translated(drawArgs.pz));
+        drawArgs.ns.clear();
+        drawArgs.ns.push_back(SymId::timeSigCommon);
+        drawArgs.ds.clear();
     } else if (sigType == TimeSigType::ALLA_BREVE) {
-        item->pz = PointF(0.0, yoff);
+        drawArgs.pz = PointF(0.0, yoff);
         RectF bbox = font->bbox(SymId::timeSigCutCommon, mag);
-        item->setbbox(bbox.translated(item->pz));
-        item->ns.clear();
-        item->ns.push_back(SymId::timeSigCutCommon);
-        item->ds.clear();
+        item->setbbox(bbox.translated(drawArgs.pz));
+        drawArgs.ns.clear();
+        drawArgs.ns.push_back(SymId::timeSigCutCommon);
+        drawArgs.ds.clear();
     } else if (sigType == TimeSigType::CUT_BACH) {
-        item->pz = PointF(0.0, yoff);
+        drawArgs.pz = PointF(0.0, yoff);
         RectF bbox = font->bbox(SymId::timeSigCut2, mag);
-        item->setbbox(bbox.translated(item->pz));
-        item->ns.clear();
-        item->ns.push_back(SymId::timeSigCut2);
-        item->ds.clear();
+        item->setbbox(bbox.translated(drawArgs.pz));
+        drawArgs.ns.clear();
+        drawArgs.ns.push_back(SymId::timeSigCut2);
+        drawArgs.ds.clear();
     } else if (sigType == TimeSigType::CUT_TRIPLE) {
-        item->pz = PointF(0.0, yoff);
+        drawArgs.pz = PointF(0.0, yoff);
         RectF bbox = font->bbox(SymId::timeSigCut3, mag);
-        item->setbbox(bbox.translated(item->pz));
-        item->ns.clear();
-        item->ns.push_back(SymId::timeSigCut3);
-        item->ds.clear();
+        item->setbbox(bbox.translated(drawArgs.pz));
+        drawArgs.ns.clear();
+        drawArgs.ns.push_back(SymId::timeSigCut3);
+        drawArgs.ds.clear();
     } else {
-        if (item->_numeratorString.isEmpty()) {
-            item->ns = timeSigSymIdsFromString(item->_numeratorString.isEmpty()
-                                               ? String::number(item->_sig.numerator())
-                                               : item->_numeratorString);
+        if (item->numeratorString().isEmpty()) {
+            drawArgs.ns = timeSigSymIdsFromString(item->numeratorString().isEmpty()
+                                                  ? String::number(item->sig().numerator())
+                                                  : item->numeratorString());
 
-            item->ds = timeSigSymIdsFromString(item->_denominatorString.isEmpty()
-                                               ? String::number(item->_sig.denominator())
-                                               : item->_denominatorString);
+            drawArgs.ds = timeSigSymIdsFromString(item->denominatorString().isEmpty()
+                                                  ? String::number(item->sig().denominator())
+                                                  : item->denominatorString());
         } else {
-            item->ns = timeSigSymIdsFromString(item->_numeratorString);
-            item->ds = timeSigSymIdsFromString(item->_denominatorString);
+            drawArgs.ns = timeSigSymIdsFromString(item->numeratorString());
+            drawArgs.ds = timeSigSymIdsFromString(item->denominatorString());
         }
 
-        RectF numRect = font->bbox(item->ns, mag);
-        RectF denRect = font->bbox(item->ds, mag);
+        RectF numRect = font->bbox(drawArgs.ns, mag);
+        RectF denRect = font->bbox(drawArgs.ds, mag);
 
         // position numerator and denominator; vertical displacement:
         // number of lines is odd: 0.0 (strings are directly above and below the middle line)
@@ -4946,31 +4949,33 @@ void TLayout::layout(TimeSig* item, LayoutContext&)
 
         if (numRect.width() >= denRect.width()) {
             // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-            item->pz = PointF(0.0, pzY);
+            drawArgs.pz = PointF(0.0, pzY);
             // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-            item->pn = PointF((numRect.width() - denRect.width()) * .5, pnY);
+            drawArgs.pn = PointF((numRect.width() - denRect.width()) * .5, pnY);
         } else {
             // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-            item->pz = PointF((denRect.width() - numRect.width()) * .5, pzY);
+            drawArgs.pz = PointF((denRect.width() - numRect.width()) * .5, pzY);
             // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-            item->pn = PointF(0.0, pnY);
+            drawArgs.pn = PointF(0.0, pnY);
         }
 
         // centering of parenthesis so the middle of the parenthesis is at the divisor marking level
         int centerY = yoff / 2 + _spatium;
         int widestPortion = numRect.width() > denRect.width() ? numRect.width() : denRect.width();
-        item->pointLargeLeftParen = PointF(-_spatium, centerY);
-        item->pointLargeRightParen = PointF(widestPortion + _spatium, centerY);
+        drawArgs.pointLargeLeftParen = PointF(-_spatium, centerY);
+        drawArgs.pointLargeRightParen = PointF(widestPortion + _spatium, centerY);
 
-        item->setbbox(numRect.translated(item->pz));       // translate bounding boxes to actual string positions
-        item->addbbox(denRect.translated(item->pn));
-        if (item->_largeParentheses) {
-            item->addbbox(RectF(item->pointLargeLeftParen.x(), item->pointLargeLeftParen.y() - denRect.height(), _spatium / 2,
+        item->setbbox(numRect.translated(drawArgs.pz));       // translate bounding boxes to actual string positions
+        item->addbbox(denRect.translated(drawArgs.pn));
+        if (item->largeParentheses()) {
+            item->addbbox(RectF(drawArgs.pointLargeLeftParen.x(), drawArgs.pointLargeLeftParen.y() - denRect.height(), _spatium / 2,
                                 numRect.height() + denRect.height()));
-            item->addbbox(RectF(item->pointLargeRightParen.x(), item->pointLargeRightParen.y() - denRect.height(),  _spatium / 2,
+            item->addbbox(RectF(drawArgs.pointLargeRightParen.x(), drawArgs.pointLargeRightParen.y() - denRect.height(),  _spatium / 2,
                                 numRect.height() + denRect.height()));
         }
     }
+
+    item->setDrawArgs(drawArgs);
 }
 
 void TLayout::layout(Tremolo* item, LayoutContext& ctx)
