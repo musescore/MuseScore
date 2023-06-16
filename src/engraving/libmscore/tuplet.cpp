@@ -251,6 +251,39 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
 }
 
 //---------------------------------------------------------
+//   draw
+//---------------------------------------------------------
+
+void Tuplet::draw(mu::draw::Painter* painter) const
+{
+    TRACE_ITEM_DRAW;
+    using namespace mu::draw;
+    // if in a TAB without stems, tuplets are not shown
+    const StaffType* stt = staffType();
+    if (stt && stt->isTabStaff() && stt->stemless()) {
+        return;
+    }
+
+    Color color(curColor());
+    if (m_number) {
+        painter->setPen(color);
+        PointF pos(m_number->pos());
+        painter->translate(pos);
+        m_number->draw(painter);
+        painter->translate(-pos);
+    }
+    if (m_hasBracket) {
+        painter->setPen(Pen(color, m_bracketWidth.val() * mag()));
+        if (!m_number) {
+            painter->drawPolyline(m_bracketL, 4);
+        } else {
+            painter->drawPolyline(m_bracketL, 3);
+            painter->drawPolyline(m_bracketR, 3);
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   Rect
 //    helper class
 //---------------------------------------------------------
@@ -276,13 +309,13 @@ Shape Tuplet::shape() const
     Shape s;
     if (m_hasBracket) {
         double w = m_bracketWidth.val() * mag();
-        s.add(TupletRect(bracketL[0], bracketL[1], w));
-        s.add(TupletRect(bracketL[1], bracketL[2], w));
+        s.add(TupletRect(m_bracketL[0], m_bracketL[1], w));
+        s.add(TupletRect(m_bracketL[1], m_bracketL[2], w));
         if (m_number) {
-            s.add(TupletRect(bracketR[0], bracketR[1], w));
-            s.add(TupletRect(bracketR[1], bracketR[2], w));
+            s.add(TupletRect(m_bracketR[0], m_bracketR[1], w));
+            s.add(TupletRect(m_bracketR[1], m_bracketR[2], w));
         } else {
-            s.add(TupletRect(bracketL[2], bracketL[3], w));
+            s.add(TupletRect(m_bracketL[2], m_bracketL[3], w));
         }
     }
     if (m_number) {
@@ -437,6 +470,24 @@ void Tuplet::editDrag(EditData& ed)
     //layout();
     //score()->setUpdateAll();
     triggerLayout();
+}
+
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+EngravingItem* Tuplet::nextElement()
+{
+    return elements().front();
+}
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+EngravingItem* Tuplet::prevElement()
+{
+    return elements().back();
 }
 
 //---------------------------------------------------------

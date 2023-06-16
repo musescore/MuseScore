@@ -3110,6 +3110,8 @@ EngravingItem* Note::nextElement()
         return nullptr;
     }
     switch (e->type()) {
+    case ElementType::TUPLET:
+        return e;
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
     case ElementType::FINGERING:
@@ -3194,6 +3196,8 @@ EngravingItem* Note::prevElement()
         return nullptr;
     }
     switch (e->type()) {
+    case ElementType::TUPLET:
+        return e;
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
     case ElementType::FINGERING:

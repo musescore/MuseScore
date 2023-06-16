@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -63,7 +63,7 @@
 #include "beamlayout.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::stable;
+using namespace mu::engraving::layout::v0;
 
 void ChordLayout::layout(Chord* item, LayoutContext& ctx)
 {
@@ -1145,7 +1145,7 @@ void ChordLayout::layoutStem(Chord* item, LayoutContext& ctx)
         if (!item->stemSlash()) {
             item->add(Factory::createStemSlash(item));
         }
-        TLayout::layout(item->stemSlash(), ctx);
+        layout::v0::TLayout::layout(item->stemSlash(), ctx);
     } else if (item->stemSlash()) {
         item->remove(item->stemSlash());
     }
@@ -1158,7 +1158,7 @@ void ChordLayout::layoutHook(Chord* item, LayoutContext& ctx)
         computeUp(item, ctx);
     }
     item->hook()->setHookType(item->up() ? item->durationType().hooks() : -item->durationType().hooks());
-    TLayout::layout(item->hook(), ctx);
+    layout::v0::TLayout::layout(item->hook(), ctx);
 }
 
 void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
@@ -1274,8 +1274,8 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
             double noteX = item->stemPosX() + item->pagePos().x() - base.x();
             PointF startAnchor = PointF();
             PointF endAnchor = PointF();
-            startAnchor = BeamLayout::chordBeamAnchor(item->beam(), firstChord, ChordBeamAnchorType::Start);
-            endAnchor = BeamLayout::chordBeamAnchor(item->beam(), lastChord, ChordBeamAnchorType::End);
+            startAnchor = item->beam()->chordBeamAnchor(firstChord, BeamTremoloLayout::ChordBeamAnchorType::Start);
+            endAnchor = item->beam()->chordBeamAnchor(lastChord, BeamTremoloLayout::ChordBeamAnchorType::End);
 
             if (item == item->beam()->elements().front()) {
                 item->setUp(noteY > startAnchor.y());
@@ -1319,7 +1319,7 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
         }
         if (item->tremolo()->userModified()) {
             Note* baseNote = item->up() ? item->downNote() : item->upNote();
-            double tremY = item->tremolo()->chordBeamAnchor(item, ChordBeamAnchorType::Middle).y();
+            double tremY = item->tremolo()->chordBeamAnchor(item, BeamTremoloLayout::ChordBeamAnchorType::Middle).y();
             double noteY = baseNote->pagePos().y();
             item->setUp(noteY > tremY);
         } else if (cross) {
@@ -3108,14 +3108,14 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
 
             ChordRest* beam1Start = beam1->elements().front();
             ChordRest* beam1End = beam1->elements().back();
-            double y1Start = BeamLayout::chordBeamAnchorY(beam1, beam1Start) - beam1Start->pagePos().y();
-            double y1End = BeamLayout::chordBeamAnchorY(beam1, beam1End) - beam1End->pagePos().y();
+            double y1Start = beam1->chordBeamAnchorY(beam1Start) - beam1Start->pagePos().y();
+            double y1End = beam1->chordBeamAnchorY(beam1End) - beam1End->pagePos().y();
             double beam1Ymid = 0.5 * (y1Start + y1End);
 
             ChordRest* beam2Start = beam2->elements().front();
             ChordRest* beam2End = beam2->elements().back();
-            double y2Start = BeamLayout::chordBeamAnchorY(beam2, beam2Start) - beam2Start->pagePos().y();
-            double y2End = BeamLayout::chordBeamAnchorY(beam2, beam2End) - beam2End->pagePos().y();
+            double y2Start = beam2->chordBeamAnchorY(beam2Start) - beam2Start->pagePos().y();
+            double y2End = beam2->chordBeamAnchorY(beam2End) - beam2End->pagePos().y();
             double beam2Ymid = 0.5 * (y2Start + y2End);
 
             double centerY = 0.5 * (beam1Ymid + beam2Ymid);

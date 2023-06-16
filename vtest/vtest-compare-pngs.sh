@@ -25,7 +25,6 @@ CURRENT_DIR="./current_pngs"
 REFERENCE_DIR="./reference_pngs"
 OUTPUT_DIR="./comparison"
 GEN_GIF=1
-CI_MODE=0
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -33,7 +32,6 @@ while [[ "$#" -gt 0 ]]; do
         -r|--reference-dir) REFERENCE_DIR="$2"; shift ;;
         -o|--output-dir) OUTPUT_DIR="$2"; shift ;;
         -g|--gen-gif) GEN_GIF=$2; shift ;;
-        --ci) CI_MODE=$2; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -119,9 +117,5 @@ if [ "$VTEST_DIFF_FOUND" == "true" ]; then
     echo "  </body>" >> $HTML
     echo "</html>" >> $HTML
 
-    if [ $CI_MODE -eq 1 ]; then
-        exit 0
-    else
-        exit 1
-    fi
+    exit 1
 fi

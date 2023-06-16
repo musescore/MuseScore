@@ -117,7 +117,6 @@ option(MUE_ENABLE_CUSTOM_ALLOCATOR "Enable custom allocator (used for engraving)
 # === Compile ===
 option(MUE_COMPILE_BUILD_64 "Build 64 bit version of editor" ON)
 option(MUE_COMPILE_BUILD_MACOS_APPLE_SILICON "Build for Apple Silicon architecture. Only applicable on Macs with Apple Silicon, and requires suitable Qt version." OFF)
-option(MUE_COMPILE_INSTALL_QTQML_FILES "Whether to bundle qml files along with the installation (relevant on MacOS only)" ON)
 option(MUE_COMPILE_USE_PCH "Use precompiled headers." ON)
 option(MUE_COMPILE_USE_UNITY "Use unity build." ON)
 option(MUE_COMPILE_USE_CCACHE "Try use ccache" ON)
@@ -214,6 +213,6 @@ if (OS_IS_WIN)
 endif(OS_IS_WIN)
 
 ###########################################
-# Add VTest
+# Add VTest target
 ###########################################
 add_subdirectory(vtest)

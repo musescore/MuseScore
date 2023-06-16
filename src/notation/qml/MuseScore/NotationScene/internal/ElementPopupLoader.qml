@@ -109,6 +109,14 @@ Item {
             loader.item.notationViewNavigationSection = container.notationViewNavigationSection
             loader.item.navigationOrderStart = container.navigationOrderStart
 
+            //! NOTE: All navigation panels in popups must be in the notation view section.
+            //        This is necessary so that popups do not activate navigation in the new section,
+            //        but at the same time, when clicking on the component (text input), the focus in popup's window should be activated
+            loader.item.navigationSection = null
+
+            loader.item.notationViewNavigationSection = container.notationViewNavigationSection
+            loader.item.navigationOrderStart = container.navigationOrderStart
+
             return loader.item
         }
     }

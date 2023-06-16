@@ -39,15 +39,11 @@
 #define LOGD_T(tag) \
     IF_LOGLEVEL(haw::logger::Debug) \
     LOG(haw::logger::Logger::DEBG, tag, haw::logger::Logger::colorForType(haw::logger::Logger::DEBG))
-#define LOGDA_T(tag) \
-    IF_LOGLEVEL(haw::logger::Debug) \
-    LOG(haw::logger::Logger::DEBG, tag, haw::logger::Color::Cyan)
 
 #define LOGE LOGE_T(LOG_TAG)
 #define LOGW LOGW_T(LOG_TAG)
 #define LOGI LOGI_T(LOG_TAG)
 #define LOGD LOGD_T(LOG_TAG)
-#define LOGDA LOGDA_T(LOG_TAG)      // active debug
 #define LOGN if (0) LOGD_T(LOG_TAG) // compiling, but no output
 
 //! Helps
