@@ -4258,8 +4258,6 @@ void TLayout::doLayout(StretchedBend* item, LayoutContext&, bool stretchedMode)
 
     // preLayout
     {
-        item->m_spatium = item->spatium();
-        item->m_boundingRect = RectF();
         Note* note = toNote(item->explicitParent());
         item->m_notePos   = note->pos();
         item->m_noteWidth = note->width();
@@ -4275,8 +4273,8 @@ void TLayout::doLayout(StretchedBend* item, LayoutContext&, bool stretchedMode)
     // postLayout
     {
         double lw = item->lineWidth();
-        item->m_boundingRect.adjust(-lw, -lw, lw, lw);
-        item->setbbox(item->m_boundingRect);
+        RectF& bRect = item->bbox();
+        bRect.adjust(-lw, -lw, lw, lw);
         item->setPos(0.0, 0.0);
     }
 }
