@@ -40,19 +40,19 @@ namespace mu::engraving {
 StaffState::StaffState(EngravingItem* parent)
     : EngravingItem(ElementType::STAFF_STATE, parent)
 {
-    _staffStateType = StaffStateType::INSTRUMENT;
-    _instrument = new Instrument;
+    m_staffStateType = StaffStateType::INSTRUMENT;
+    m_instrument = new Instrument;
 }
 
 StaffState::StaffState(const StaffState& ss)
     : EngravingItem(ss)
 {
-    _instrument = new Instrument(*ss._instrument);
+    m_instrument = new Instrument(*ss.m_instrument);
 }
 
 StaffState::~StaffState()
 {
-    delete _instrument;
+    delete m_instrument;
 }
 
 //---------------------------------------------------------
