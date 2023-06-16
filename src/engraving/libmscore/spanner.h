@@ -41,17 +41,6 @@ class SpannerSegment : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, SpannerSegment)
 
-    Spanner* _spanner;
-    SpannerSegmentType _spannerSegmentType;
-
-protected:
-    mu::PointF _p2;
-    mu::PointF _offset2;
-
-    SpannerSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
-    SpannerSegment(const ElementType& type, System* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
-    SpannerSegment(const SpannerSegment&);
-
 public:
 
     // Score Tree functions
@@ -121,10 +110,24 @@ public:
     void triggerLayout() const override;
     void autoplaceSpannerSegment();
 
+protected:
+
+    friend class layout::v0::TLayout;
+
+    SpannerSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
+    SpannerSegment(const ElementType& type, System* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
+    SpannerSegment(const SpannerSegment&);
+
+    mu::PointF _p2;
+    mu::PointF _offset2;
+
 private:
     String formatBarsAndBeats() const override;
     String formatStartBarsAndBeats(const Segment* segment) const;
     String formatEndBarsAndBeats(const Segment* segment) const;
+
+    Spanner* _spanner;
+    SpannerSegmentType _spannerSegmentType;
 };
 
 //----------------------------------------------------------------------------------
