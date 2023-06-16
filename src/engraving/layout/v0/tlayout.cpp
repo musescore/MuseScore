@@ -1439,9 +1439,9 @@ void TLayout::layout(Dynamic* item, LayoutContext& ctx)
 
     const StaffType* stType = item->staffType();
 
-    item->_skipDraw = false;
+    item->setSkipDraw(false);
     if (stType && stType->isHiddenElementOnTab(item->score(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
-        item->_skipDraw = true;
+        item->setSkipDraw(true);
         return;
     }
 
@@ -4459,23 +4459,23 @@ void TLayout::layout1(TextBase* item, LayoutContext& ctx)
 
 void TLayout::layout1TextBase(TextBase* item, LayoutContext&)
 {
-    if (item->layoutInvalid) {
+    if (item->layoutInvalid()) {
         item->createLayout();
     }
-    if (item->_layout.empty()) {
-        item->_layout.push_back(TextBlock());
+    if (item->blocksRef().empty()) {
+        item->blocksRef().push_back(TextBlock());
     }
     RectF bb;
     double y = 0;
 
     // adjust the bounding box for the text item
     for (size_t i = 0; i < item->rows(); ++i) {
-        TextBlock* t = &item->_layout[i];
+        TextBlock* t = &item->blocksRef()[i];
         t->layout(item);
         const RectF* r = &t->boundingRect();
 
         if (r->height() == 0) {
-            r = &item->_layout[i - i].boundingRect();
+            r = &item->blocksRef()[i - i].boundingRect();
         }
         y += t->lineSpacing();
         t->setY(y);
@@ -4487,7 +4487,7 @@ void TLayout::layout1TextBase(TextBase* item, LayoutContext&)
         if (item->layoutToParentWidth()) {
             if (item->explicitParent()->isTBox()) {
                 // hack: vertical alignment is always TOP
-                item->_align = AlignV::TOP;
+                item->setAlign(AlignV::TOP);
             } else if (item->explicitParent()->isBox()) {
                 // consider inner margins of frame
                 Box* b = toBox(item->explicitParent());
@@ -4516,12 +4516,12 @@ void TLayout::layout1TextBase(TextBase* item, LayoutContext&)
     } else if (item->align() == AlignV::VCENTER) {
         yoff +=  (h - (bb.top() + bb.bottom())) * .5;
     } else if (item->align() == AlignV::BASELINE) {
-        yoff += h * .5 - item->_layout.front().lineSpacing();
+        yoff += h * .5 - item->blocksRef().front().lineSpacing();
     } else {
         yoff += -bb.top();
     }
 
-    for (TextBlock& t : item->_layout) {
+    for (TextBlock& t : item->blocksRef()) {
         t.setY(t.y() + yoff);
     }
 
