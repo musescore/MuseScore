@@ -454,26 +454,35 @@ public:
     void draw(mu::draw::Painter*) const override;
     bool isEditable() const override { return false; }
 
-    TabBeamGrid beamGrid() { return _beamGrid; }
+    TabBeamGrid beamGrid() { return m_beamGrid; }
+    void setBeamGrid(TabBeamGrid g) { m_beamGrid = g; }
+
+    double beamLength() const { return m_beamLength; }
+    void setBeamLength(double l) { m_beamLength = l; }
+    int beamLevel() const { return m_beamLevel; }
+    void setBeamLevel(int l) { m_beamLevel = l; }
+
     void layout2();                 // second step of layout: after horiz. pos. are defined, compute width of 'grid beams'
+
+    const StaffType* tab() const { return m_tab; }
+    const String& text() const { return m_text; }
     void setDuration(DurationType type, int dots, const StaffType* tab)
     {
-        _tab = tab;
-        _text = tab->durationString(type, dots);
+        m_tab = tab;
+        m_text = tab->durationString(type, dots);
     }
 
-    bool isRepeat() const { return _repeat; }
-    void setRepeat(bool val) { _repeat = val; }
+    bool isRepeat() const { return m_repeat; }
+    void setRepeat(bool val) { m_repeat = val; }
 
 private:
-    friend class layout::v0::TLayout;
 
-    double _beamLength { 0.0 };              // if _grid==MEDIALFINAL, length of the beam toward previous grid element
-    int _beamLevel  { 0 };                 // if _grid==MEDIALFINAL, the number of beams
-    TabBeamGrid _beamGrid   { TabBeamGrid::NONE };          // value for special 'English' grid display
-    const StaffType* _tab  { nullptr };
-    String _text;
-    bool _repeat     { false };
+    double m_beamLength = 0.0;                      // if _grid==MEDIALFINAL, length of the beam toward previous grid element
+    int m_beamLevel = 0;                            // if _grid==MEDIALFINAL, the number of beams
+    TabBeamGrid m_beamGrid = TabBeamGrid::NONE;     // value for special 'English' grid display
+    const StaffType* m_tab = nullptr;
+    String m_text;
+    bool m_repeat = false;
 };
 } // namespace mu::engraving
 #endif

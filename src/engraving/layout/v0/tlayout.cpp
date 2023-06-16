@@ -4347,7 +4347,7 @@ void TLayout::layout(TabDurationSymbol* item, LayoutContext&)
 {
     static constexpr double TAB_RESTSYMBDISPL = 2.0;
 
-    if (!item->_tab) {
+    if (!item->tab()) {
         item->setbbox(RectF());
         return;
     }
@@ -4355,19 +4355,19 @@ void TLayout::layout(TabDurationSymbol* item, LayoutContext&)
     double hbb, wbb, xbb, ybb;   // bbox sizes
     double xpos, ypos;           // position coords
 
-    item->_beamGrid = TabBeamGrid::NONE;
+    item->setBeamGrid(TabBeamGrid::NONE);
     Chord* chord = item->explicitParent() && item->explicitParent()->isChord() ? toChord(item->explicitParent()) : nullptr;
 // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
     if (!chord || !chord->isChord()
         || (chord->beamMode() != BeamMode::BEGIN && chord->beamMode() != BeamMode::MID
             && chord->beamMode() != BeamMode::END)) {
-        mu::draw::FontMetrics fm(item->_tab->durationFont());
-        hbb   = item->_tab->durationBoxH();
-        wbb   = fm.width(item->_text);
+        mu::draw::FontMetrics fm(item->tab()->durationFont());
+        hbb   = item->tab()->durationBoxH();
+        wbb   = fm.width(item->text());
         xbb   = 0.0;
         xpos  = 0.0;
-        ypos  = item->_tab->durationFontYOffset();
-        ybb   = item->_tab->durationBoxY() - ypos;
+        ypos  = item->tab()->durationFontYOffset();
+        ybb   = item->tab()->durationBoxY() - ypos;
         // with rests, move symbol down by half its displacement from staff
         if (item->explicitParent() && item->explicitParent()->isRest()) {
             ybb  += TAB_RESTSYMBDISPL * _spatium;
@@ -4376,19 +4376,19 @@ void TLayout::layout(TabDurationSymbol* item, LayoutContext&)
     }
 // if on a chord with special beam mode, layout an 'English'-style duration grid
     else {
-        TablatureDurationFont font = item->_tab->_durationFonts[item->_tab->_durationFontIdx];
+        TablatureDurationFont font = item->tab()->_durationFonts[item->tab()->_durationFontIdx];
         hbb   = font.gridStemHeight * _spatium;         // bbox height is stem height
         wbb   = font.gridStemWidth * _spatium;          // bbox width is stem width
         xbb   = -wbb * 0.5;                             // bbox is half at left and half at right of stem centre
         ybb   = -hbb;                                   // bbox top is at top of stem height
         xpos  = 0.75 * _spatium;                        // conventional centring of stem on fret marks
-        ypos  = item->_tab->durationGridYOffset();      // stem start is at bottom
+        ypos  = item->tab()->durationGridYOffset();      // stem start is at bottom
         if (chord->beamMode() == BeamMode::BEGIN) {
-            item->_beamGrid   = TabBeamGrid::INITIAL;
-            item->_beamLength = 0.0;
+            item->setBeamGrid(TabBeamGrid::INITIAL);
+            item->setBeamLength(0.0);
         } else if (chord->beamMode() == BeamMode::MID || chord->beamMode() == BeamMode::END) {
-            item->_beamLevel  = static_cast<int>(chord->durationType().type()) - static_cast<int>(font.zeroBeamLevel);
-            item->_beamGrid   = (item->_beamLevel < 1 ? TabBeamGrid::INITIAL : TabBeamGrid::MEDIALFINAL);
+            item->setBeamLevel(static_cast<int>(chord->durationType().type()) - static_cast<int>(font.zeroBeamLevel));
+            item->setBeamGrid(item->beamLevel() < 1 ? TabBeamGrid::INITIAL : TabBeamGrid::MEDIALFINAL);
             // _beamLength and bbox x and width will be set in layout2(),
             // once horiz. positions of chords are known
         }
