@@ -151,8 +151,6 @@ static bool shouldSplitByRests(mu::engraving::ElementType muType)
     default:
         return false;
     }
-
-    return false;
 }
 
 void ContiniousElementsBuilder::buildContiniousElement(ChordRest* cr, ElementType muType, ImportType importType, bool elemExists,
