@@ -308,8 +308,8 @@ std::string braille_long_translate(const char* table_name, std::string txt)
     std::string buffer = braille_translate(table_name, lines.front());
 
     for (size_t i = 1; i < lines.size(); i++) {
-        std::string txt = lines[i] + " ";
-        buffer.append(braille_translate(table_name, txt));
+        std::string text = lines[i] + " ";
+        buffer.append(braille_translate(table_name, text));
     }
     return buffer;
 }
