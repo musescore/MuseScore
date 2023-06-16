@@ -60,11 +60,21 @@ public:
 
     bool setProperty(Pid id, const PropertyValue& v) override;
 
-protected:
+    bool twoLines() const { return m_twoLines; }
+    void setTwoLines(bool val) { m_twoLines = val; }
 
-    friend class layout::v0::TLayout;
+    Text* text() const { return m_text; }
+    Text* endText() const { return m_endText; }
+
+    mu::PointF* pointsRef() { return &m_points[0]; }
+    int& npointsRef() { return m_npoints; }
+
+    double lineLength() const { return m_lineLength; }
+    void setLineLength(double l) { m_lineLength = l; }
 
     static RectF boundingBoxOfLine(const PointF& p1, const PointF& p2, double lw2, bool isDottedLine);
+
+protected:
 
     Text* m_text = nullptr;
     Text* m_endText = nullptr;

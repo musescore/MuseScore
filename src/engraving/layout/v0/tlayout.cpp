@@ -2451,20 +2451,20 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
 
     HairpinType type = item->hairpin()->hairpinType();
     if (item->hairpin()->isLineType()) {
-        item->m_twoLines = false;
+        item->setTwoLines(false);
         layoutTextLineBaseSegment(item, ctx);
         item->setDrawCircledTip(false);
         item->setCircledTipRadius(0.0);
     } else {
-        item->m_twoLines  = true;
+        item->setTwoLines(true);
 
         item->hairpin()->setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
         item->hairpin()->setEndTextAlign({ AlignH::RIGHT, AlignV::VCENTER });
 
         double x1 = 0.0;
         layoutTextLineBaseSegment(item, ctx);
-        if (!item->m_text->empty()) {
-            x1 = item->m_text->width() + _spatium * .5;
+        if (!item->text()->empty()) {
+            x1 = item->text()->width() + _spatium * .5;
         }
 
         Transform t;
@@ -2472,8 +2472,8 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
         double h2 = item->hairpin()->hairpinContHeight().val() * _spatium * .5;
 
         double x = item->pos2().x();
-        if (!item->m_endText->empty()) {
-            x -= (item->m_endText->width() + _spatium * .5);             // 0.5 spatium distance
+        if (!item->endText()->empty()) {
+            x -= (item->endText()->width() + _spatium * .5);             // 0.5 spatium distance
         }
         if (x < _spatium) {               // minimum size of hairpin
             x = _spatium;
@@ -2540,18 +2540,18 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
             item->setCircledTip(t.map(item->circledTip()));
         }
 
-        item->m_points[0] = l1.p1();
-        item->m_points[1] = l1.p2();
-        item->m_points[2] = l2.p1();
-        item->m_points[3] = l2.p2();
-        item->m_npoints   = 4;
+        item->pointsRef()[0] = l1.p1();
+        item->pointsRef()[1] = l1.p2();
+        item->pointsRef()[2] = l2.p1();
+        item->pointsRef()[3] = l2.p2();
+        item->npointsRef()   = 4;
 
         RectF r = RectF(l1.p1(), l1.p2()).normalized().united(RectF(l2.p1(), l2.p2()).normalized());
-        if (!item->m_text->empty()) {
-            r.unite(item->m_text->bbox());
+        if (!item->text()->empty()) {
+            r.unite(item->text()->bbox());
         }
-        if (!item->m_endText->empty()) {
-            r.unite(item->m_endText->bbox().translated(x + item->m_endText->bbox().width(), 0.0));
+        if (!item->endText()->empty()) {
+            r.unite(item->endText()->bbox().translated(x + item->endText()->bbox().width(), 0.0));
         }
         double w  = item->point(item->score()->styleS(Sid::hairpinLineWidth));
         item->setbbox(r.adjusted(-w * .5, -w * .5, w, w));
@@ -2581,7 +2581,7 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
         double sp = item->spatium();
 
         // TODO: in the future, there should be a minDistance style setting for hairpinLines as well as hairpins.
-        double minDist = item->m_twoLines ? item->minDistance().val() : item->score()->styleS(Sid::dynamicsMinDistance).val();
+        double minDist = item->twoLines() ? item->minDistance().val() : item->score()->styleS(Sid::dynamicsMinDistance).val();
         double md = minDist * sp;
 
         bool above = item->spanner()->placeAbove();
@@ -4583,7 +4583,7 @@ void TLayout::layoutTextLineBase(TextLineBase* item, LayoutContext& ctx)
 
 void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext& ctx)
 {
-    item->m_npoints      = 0;
+    item->npointsRef() = 0;
     TextLineBase* tl = item->textLineBase();
     double _spatium = tl->spatium();
 
@@ -4623,57 +4623,57 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     switch (item->spannerSegmentType()) {
     case SpannerSegmentType::SINGLE:
     case SpannerSegmentType::BEGIN:
-        item->m_text->setXmlText(tl->beginText());
-        item->m_text->setFamily(tl->beginFontFamily());
-        item->m_text->setSize(tl->beginFontSize());
-        item->m_text->setOffset(tl->beginTextOffset() * item->mag());
-        item->m_text->setAlign(tl->beginTextAlign());
-        item->m_text->setFontStyle(tl->beginFontStyle());
+        item->text()->setXmlText(tl->beginText());
+        item->text()->setFamily(tl->beginFontFamily());
+        item->text()->setSize(tl->beginFontSize());
+        item->text()->setOffset(tl->beginTextOffset() * item->mag());
+        item->text()->setAlign(tl->beginTextAlign());
+        item->text()->setFontStyle(tl->beginFontStyle());
         break;
     case SpannerSegmentType::MIDDLE:
     case SpannerSegmentType::END:
-        item->m_text->setXmlText(tl->continueText());
-        item->m_text->setFamily(tl->continueFontFamily());
-        item->m_text->setSize(tl->continueFontSize());
-        item->m_text->setOffset(tl->continueTextOffset() * item->mag());
-        item->m_text->setAlign(tl->continueTextAlign());
-        item->m_text->setFontStyle(tl->continueFontStyle());
+        item->text()->setXmlText(tl->continueText());
+        item->text()->setFamily(tl->continueFontFamily());
+        item->text()->setSize(tl->continueFontSize());
+        item->text()->setOffset(tl->continueTextOffset() * item->mag());
+        item->text()->setAlign(tl->continueTextAlign());
+        item->text()->setFontStyle(tl->continueFontStyle());
         break;
     }
-    item->m_text->setPlacement(PlacementV::ABOVE);
-    item->m_text->setTrack(item->track());
-    layout(item->m_text, ctx);
+    item->text()->setPlacement(PlacementV::ABOVE);
+    item->text()->setTrack(item->track());
+    layout(item->text(), ctx);
 
     if ((item->isSingleType() || item->isEndType())) {
-        item->m_endText->setXmlText(tl->endText());
-        item->m_endText->setFamily(tl->endFontFamily());
-        item->m_endText->setSize(tl->endFontSize());
-        item->m_endText->setOffset(tl->endTextOffset());
-        item->m_endText->setAlign(tl->endTextAlign());
-        item->m_endText->setFontStyle(tl->endFontStyle());
-        item->m_endText->setPlacement(PlacementV::ABOVE);
-        item->m_endText->setTrack(item->track());
-        layout(item->m_endText, ctx);
+        item->endText()->setXmlText(tl->endText());
+        item->endText()->setFamily(tl->endFontFamily());
+        item->endText()->setSize(tl->endFontSize());
+        item->endText()->setOffset(tl->endTextOffset());
+        item->endText()->setAlign(tl->endTextAlign());
+        item->endText()->setFontStyle(tl->endFontStyle());
+        item->endText()->setPlacement(PlacementV::ABOVE);
+        item->endText()->setTrack(item->track());
+        layout(item->endText(), ctx);
     } else {
-        item->m_endText->setXmlText(u"");
+        item->endText()->setXmlText(u"");
     }
 
     if (!item->textLineBase()->textSizeSpatiumDependent()) {
-        item->m_text->setSize(item->m_text->size() * SPATIUM20 / item->spatium());
-        item->m_endText->setSize(item->m_endText->size() * SPATIUM20 / item->spatium());
+        item->text()->setSize(item->text()->size() * SPATIUM20 / item->spatium());
+        item->endText()->setSize(item->endText()->size() * SPATIUM20 / item->spatium());
     }
 
     PointF pp1;
     PointF pp2(item->pos2());
 
     // line with no text or hooks - just use the basic rectangle for line
-    if (item->m_text->empty() && item->m_endText->empty()
+    if (item->text()->empty() && item->endText()->empty()
         && (!item->isSingleBeginType() || tl->beginHookType() == HookType::NONE)
         && (!item->isSingleEndType() || tl->endHookType() == HookType::NONE)) {
-        item->m_npoints = 2;
-        item->m_points[0] = pp1;
-        item->m_points[1] = pp2;
-        item->m_lineLength = sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1));
+        item->npointsRef() = 2;
+        item->pointsRef()[0] = pp1;
+        item->pointsRef()[1] = pp2;
+        item->setLineLength(sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1)));
 
         item->setbbox(TextLineBaseSegment::boundingBoxOfLine(pp1, pp2, tl->lineWidth() / 2, tl->lineStyle() == LineType::DOTTED));
         return;
@@ -4688,14 +4688,14 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     double y2 = std::max(0.0, pp2.y()) - y0;
 
     double l = 0.0;
-    if (!item->m_text->empty()) {
+    if (!item->text()->empty()) {
         double gapBetweenTextAndLine = _spatium * tl->gapBetweenTextAndLine().val();
         if ((item->isSingleBeginType() && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
             || (!item->isSingleBeginType() && (tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO))) {
-            l = item->m_text->pos().x() + item->m_text->bbox().width() + gapBetweenTextAndLine;
+            l = item->text()->pos().x() + item->text()->bbox().width() + gapBetweenTextAndLine;
         }
 
-        double h = item->m_text->height();
+        double h = item->text()->height();
         if (tl->beginTextPlace() == TextPlace::ABOVE) {
             y1 = std::min(y1, -h);
         } else if (tl->beginTextPlace() == TextPlace::BELOW) {
@@ -4704,7 +4704,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
             y1 = std::min(y1, -h * .5);
             y2 = std::max(y2, h * .5);
         }
-        x2 = std::max(x2, item->m_text->width());
+        x2 = std::max(x2, item->text()->width());
     }
 
     if (tl->endHookType() != HookType::NONE) {
@@ -4725,13 +4725,13 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         }
     }
     item->bbox().setRect(x1, y1, x2 - x1, y2 - y1);
-    if (!item->m_text->empty()) {
-        item->bbox() |= item->m_text->bbox().translated(item->m_text->pos());      // DEBUG
+    if (!item->text()->empty()) {
+        item->bbox() |= item->text()->bbox().translated(item->text()->pos());      // DEBUG
     }
     // set end text position and extend bbox
-    if (!item->m_endText->empty()) {
-        item->m_endText->movePosX(item->bbox().right());
-        item->bbox() |= item->m_endText->bbox().translated(item->m_endText->pos());
+    if (!item->endText()->empty()) {
+        item->endText()->movePosX(item->bbox().right());
+        item->bbox() |= item->endText()->bbox().translated(item->endText()->pos());
     }
 
     if (!(tl->lineVisible() || item->score()->showInvisible())) {
@@ -4746,13 +4746,13 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         bool alignContinueText = tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO;
         bool alignEndText = tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO;
         bool isSingleOrBegin = item->isSingleBeginType();
-        bool hasBeginText = !item->m_text->empty() && isSingleOrBegin;
-        bool hasContinueText = !item->m_text->empty() && !isSingleOrBegin;
-        bool hasEndText = !item->m_endText->empty() && item->isSingleEndType();
+        bool hasBeginText = !item->text()->empty() && isSingleOrBegin;
+        bool hasContinueText = !item->text()->empty() && !isSingleOrBegin;
+        bool hasEndText = !item->endText()->empty() && item->isSingleEndType();
         if ((hasBeginText && alignBeginText) || (hasContinueText && alignContinueText)) {
-            alignBaseLine(item->m_text, pp1, pp2);
+            alignBaseLine(item->text(), pp1, pp2);
         } else if (hasEndText && alignEndText) {
-            alignBaseLine(item->m_endText, pp1, pp2);
+            alignBaseLine(item->endText(), pp1, pp2);
         }
 
         double beginHookHeight = tl->beginHookHeight().val() * _spatium;
@@ -4771,22 +4771,22 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         }
 
         // don't draw backwards lines (or hooks) if text is longer than nominal line length
-        if (!item->m_text->empty() && pp1.x() > pp2.x() && !tl->diagonal()) {
+        if (!item->text()->empty() && pp1.x() > pp2.x() && !tl->diagonal()) {
             return;
         }
 
         if (item->isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
             // We use the term "endpoint" for the point that does not touch the main line.
-            const PointF& beginHookEndpoint = item->m_points[item->m_npoints++]
+            const PointF& beginHookEndpoint = item->pointsRef()[item->npointsRef()++]
                                                   = PointF(pp1.x() - beginHookWidth, pp1.y() + beginHookHeight);
 
             if (tl->beginHookType() == HookType::HOOK_90T) {
                 // A T-hook needs to be drawn separately, so we add an extra point
-                item->m_points[item->m_npoints++] = PointF(pp1.x() - beginHookWidth, pp1.y() - beginHookHeight);
+                item->pointsRef()[item->npointsRef()++] = PointF(pp1.x() - beginHookWidth, pp1.y() - beginHookHeight);
             } else if (tl->lineStyle() != LineType::SOLID) {
                 // For non-solid lines, we also draw the hook separately,
                 // so that we can distribute the dashes/dots for each linepiece individually
-                PointF& beginHookStartpoint = item->m_points[item->m_npoints++] = pp1;
+                PointF& beginHookStartpoint = item->pointsRef()[item->npointsRef()++] = pp1;
 
                 if (tl->lineStyle() == LineType::DASHED) {
                     // For dashes lines, we extend the lines somewhat,
@@ -4797,19 +4797,19 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
             }
         }
 
-        item->m_points[item->m_npoints++] = pp1;
-        PointF& pp22 = item->m_points[item->m_npoints++] = pp2; // Keep a reference so that we can modify later
+        item->pointsRef()[item->npointsRef()++] = pp1;
+        PointF& pp22 = item->pointsRef()[item->npointsRef()++] = pp2; // Keep a reference so that we can modify later
 
         if (item->isSingleEndType() && tl->endHookType() != HookType::NONE) {
             const PointF endHookEndpoint = PointF(pp2.x() + endHookWidth, pp2.y() + endHookHeight);
 
             if (tl->endHookType() == HookType::HOOK_90T) {
                 // A T-hook needs to be drawn separately, so we add an extra point
-                item->m_points[item->m_npoints++] = PointF(pp2.x() + endHookWidth, pp2.y() - endHookHeight);
+                item->pointsRef()[item->npointsRef()++] = PointF(pp2.x() + endHookWidth, pp2.y() - endHookHeight);
             } else if (tl->lineStyle() != LineType::SOLID) {
                 // For non-solid lines, we also draw the hook separately,
                 // so that we can distribute the dashes/dots for each linepiece individually
-                PointF& endHookStartpoint = item->m_points[item->m_npoints++] = pp2;
+                PointF& endHookStartpoint = item->pointsRef()[item->npointsRef()++] = pp2;
 
                 if (tl->lineStyle() == LineType::DASHED) {
                     bool checkAngle = tl->endHookType() == HookType::HOOK_45 || tl->diagonal();
@@ -4820,10 +4820,10 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
                 }
             }
 
-            item->m_points[item->m_npoints++] = endHookEndpoint;
+            item->pointsRef()[item->npointsRef()++] = endHookEndpoint;
         }
 
-        item->m_lineLength = sqrt(PointF::dotProduct(pp22 - pp1, pp22 - pp1));
+        item->setLineLength(sqrt(PointF::dotProduct(pp22 - pp1, pp22 - pp1)));
     }
 }
 
