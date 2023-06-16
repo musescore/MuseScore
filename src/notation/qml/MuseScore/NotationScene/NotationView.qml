@@ -26,6 +26,7 @@ import QtQuick.Controls 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.NotationScene 1.0
+import MuseScore.Braille 1.0
 
 import "internal"
 
@@ -73,7 +74,7 @@ FocusScope {
             Layout.fillWidth: true
 
             navigationPanel.section: navSec
-            navigationPanel.order: popUpLoader.navigationOrderEnd + 1
+            navigationPanel.order: 1
         }
 
         SeparatorLine { visible: tabPanel.visible }
@@ -99,7 +100,7 @@ FocusScope {
                         section: navSec
                         enabled: notationView.enabled && notationView.visible
                         direction: NavigationPanel.Both
-                        order: 1
+                        order: tabPanel.navigationPanel.order + 1
                     }
 
                     NavigationControl {
@@ -197,6 +198,17 @@ FocusScope {
                 }
             }
 
+            BrailleView {
+                id: brailleView
+
+                SplitView.fillWidth: true
+                SplitView.preferredHeight: 50
+                SplitView.minimumHeight: 30
+
+                navigationPanel.section: navSec
+                navigationPanel.order: popUpLoader.navigationOrderEnd + 1
+            }
+
             Component {
                 id: navigatorComp
 
@@ -251,7 +263,7 @@ FocusScope {
             Layout.fillWidth: true
 
             navigationPanel.section: navSec
-            navigationPanel.order: tabPanel.navigationPanel.order + 1
+            navigationPanel.order: brailleView.navigationPanel.order + 1
 
             onClosed: {
                 fakeNavCtrl.requestActive()

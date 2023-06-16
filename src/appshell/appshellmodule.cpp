@@ -56,6 +56,7 @@
 #include "view/preferences/importpreferencesmodel.h"
 #include "view/preferences/iopreferencesmodel.h"
 #include "view/preferences/commonaudioapiconfigurationmodel.h"
+#include "view/preferences/braillepreferencesmodel.h"
 #include "view/framelesswindow/framelesswindowmodel.h"
 #include "view/publish/publishtoolbarmodel.h"
 #include "view/windowdroparea.h"
@@ -161,6 +162,7 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<ImportPreferencesModel>("MuseScore.Preferences", 1, 0, "ImportPreferencesModel");
     qmlRegisterType<IOPreferencesModel>("MuseScore.Preferences", 1, 0, "IOPreferencesModel");
     qmlRegisterType<CommonAudioApiConfigurationModel>("MuseScore.Preferences", 1, 0, "CommonAudioApiConfigurationModel");
+    qmlRegisterType<BraillePreferencesModel>("MuseScore.Preferences", 1, 0, "BraillePreferencesModel");
 
 #if defined(Q_OS_MACOS)
     qmlRegisterType<AppMenuModel>("MuseScore.AppShell", 1, 0, "PlatformAppMenuModel");

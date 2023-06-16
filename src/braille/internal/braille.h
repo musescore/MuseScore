@@ -37,11 +37,13 @@ class ChordRest;
 class Clef;
 class DurationElement;
 class Dynamic;
+class EngravingItem;
 class Fermata;
 class Fingering;
 class Hairpin;
 class Jump;
 class KeySig;
+class Lyrics;
 class Marker;
 class Measure;
 class MeasureRepeat;
@@ -55,6 +57,36 @@ class TimeSig;
 class Tuplet;
 class Volta;
 
+class BrailleEngravingItems
+{
+public:
+    BrailleEngravingItems();
+    ~BrailleEngravingItems();
+
+    void clear();
+
+    void join(BrailleEngravingItems*, bool newline = true, bool del = true);
+    void join(const std::vector<BrailleEngravingItems*>&, bool newline = true, bool del = true);
+
+    QString brailleStr();
+    std::vector<std::pair<EngravingItem*, std::pair<int, int> > >* items();
+
+    void setBrailleStr(const QString& str);
+    void addPrefixStr(const QString& str);
+
+    void addEngravingItem(EngravingItem*, const QString& braille);
+    void addLyricsItem(Lyrics*);
+
+    bool isEmpty() { return m_braille_str.isEmpty(); }
+    EngravingItem* getEngravingItem(int pos);
+    std::pair<int, int> getBraillePos(EngravingItem* e);
+
+    void log();
+private:
+    QString m_braille_str;
+    std::vector<std::pair<EngravingItem*, std::pair<int, int> > > m_items;
+};
+
 //This class currently supports just a limited conversion from text to braille
 //TODO: enhance it to have full support from text to UEB, including contractions
 //http://www.brailleauthority.org/learn/braillebasic.pdf
@@ -64,7 +96,7 @@ class TextToUEBBraille
 public:
     TextToUEBBraille();
     QString braille(QChar c);
-    QString braille(QString text);
+    QString braille(const QString& text);
 
 private:
     const QString ASCII_PREFIX_CAPITAL_LETTER   = QString(",");
@@ -73,6 +105,12 @@ private:
     const QString ASCII_END_OF_CAPITALISATION   = QString(",");
     const QString ASCII_END_OF_NUMBER           = QString(";");
     QMap<QString, QString> textToBrailleASCII;
+};
+
+struct BrailleContext {
+    std::vector<Note*> previousNote;
+    std::vector<ClefType> currentClefType;
+    std::vector<Key> currentKey;
 };
 
 // Braille export is implemented according to Music Braille Code 2015
@@ -84,17 +122,14 @@ class Braille
 public:
     Braille(Score* s);
     bool write(QIODevice& device);
+    bool convertMeasure(Measure* m, BrailleEngravingItems* beis);
+    bool convertItem(EngravingItem* el, BrailleEngravingItems* beis);
 
 private:
     static constexpr int MAX_CHARS_PER_LINE = 40;
 
-    Score* score;
-
-    /* ------------ Context ------------ */
-    std::vector<Note*> previousNote;
-    std::vector<ClefType> currentCleffType;
-    std::vector<Key> currentKey;
-    /* --------------------------------- */
+    Score* m_score = nullptr;
+    BrailleContext m_context;
 
     void resetOctave(size_t stave);
     void resetOctaves();
@@ -117,6 +152,11 @@ private:
     BarLine* lastBarline(Measure* measure, track_idx_t track);
     /* --------------------------------------------------------------- */
 
+    void brailleMeasure(BrailleEngravingItems* res, Measure* measure, int staffCount);
+    bool brailleSingleItem(BrailleEngravingItems* beiz, EngravingItem* el);
+    void brailleMeasureItems(BrailleEngravingItems* res, Measure* measure, int staffCount);
+    void brailleMeasureLyrics(BrailleEngravingItems* res, Measure* measure, int staffCount);
+
     QString brailleAccidentalType(AccidentalType accidental);
     QString brailleArpeggio(Arpeggio* arpeggio);
     QString brailleArticulation(Articulation* articulation);
@@ -133,6 +173,7 @@ private:
     QString brailleGraceNoteMarking(Chord* chord);
     QString brailleJump(Jump* jump);
     QString brailleKeySig(KeySig* keySig);
+    QString brailleLyrics(Lyrics* lyrics);
     QString brailleMarker(Marker* marker);
     QString brailleMeasure(Measure* measure, int staffCount);
     QString brailleMeasureRepeat(MeasureRepeat* measureRepeat);

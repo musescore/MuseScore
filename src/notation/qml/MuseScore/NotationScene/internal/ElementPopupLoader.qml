@@ -42,7 +42,9 @@ Item {
 
     property NavigationSection navigationSection: null
     property int navigationOrderStart: 0
-    property int navigationOrderEnd: Boolean(loader.item) ? loader.item.navigationOrderEnd : 0
+    property int navigationOrderEnd: Boolean(loader.item)
+                                        ? loader.item.navigationOrderEnd
+                                        : navigationOrderStart
 
     QtObject {
         id: prv

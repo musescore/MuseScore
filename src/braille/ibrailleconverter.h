@@ -19,32 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_BRAILLE_BRAILLEMODULE_H
-#define MU_BRAILLE_BRAILLEMODULE_H
+#ifndef MU_BRAILLE_IBRAILLECONVERTER_H
+#define MU_BRAILLE_IBRAILLECONVERTER_H
 
-#include "modularity/imodulesetup.h"
+#include <QIODevice>
+
+#include "modularity/imoduleinterface.h"
 
 namespace mu::engraving {
-class NotationBraille;
-class BrailleConverter;
-class BrailleConfiguration;
+class Score;
 }
 
 namespace mu::braille {
-class BrailleModule : public modularity::IModuleSetup
+class IBrailleConverter : MODULE_EXPORT_INTERFACE
 {
-public:
-    std::string moduleName() const override;
-    void resolveImports() override;
-    void registerExports() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+    INTERFACE_ID(IBrailleConverter)
 
-private:
-    std::shared_ptr<engraving::BrailleConfiguration> m_brailleConfiguration;
-    std::shared_ptr<engraving::BrailleConverter> m_brailleConverter;
-    std::shared_ptr<engraving::NotationBraille> m_notationBraille;
+public:
+    virtual ~IBrailleConverter() = default;
+
+    virtual bool write(engraving::Score* score, QIODevice& device) = 0;
 };
 }
 
-#endif // MU_BRAILLE_BRAILLEMODULE_H
+#endif // MU_BRAILLE_IBRAILLECONVERTER_H
