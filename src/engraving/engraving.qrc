@@ -9,5 +9,6 @@
         <file alias="engraving/styles/migration-306-style-Edwin.mss">data/styles/migration-306-style-Edwin.mss</file>
         <file alias="engraving/styles/legacy-style-defaults-v302.mss">data/styles/legacy-style-defaults-v302.mss</file>
         <file alias="engraving/styles/gp-style.mss">data/styles/gp-style.mss</file>
+	<file alias="engraving/styles/gp-style-experimental.mss">data/styles/gp-style-experimental.mss</file>
     </qresource>
 </RCC>

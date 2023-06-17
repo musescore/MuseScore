@@ -39,7 +39,7 @@ using namespace mu::engraving;
 static const String GUITARPRO_DIR(u"data/");
 
 namespace mu::iex::guitarpro {
-extern Err importGTP(MasterScore*, mu::io::IODevice* io, bool createLinkedTabForce = false);
+extern Err importGTP(MasterScore*, mu::io::IODevice* io, bool createLinkedTabForce = false, bool experimental = false);
 
 class GuitarPro_Tests : public ::testing::Test
 {

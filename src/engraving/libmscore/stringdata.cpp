@@ -437,11 +437,11 @@ int StringData::fret(int pitch, int string, int pitchOffset) const
 void StringData::sortChordNotesUseSameString(const Chord* chord, int pitchOffset) const
 {
     int capoFret = chord->staff()->part()->capoFret();
-    std::vector<Note*> usedStrings(m_stringTable.size(), nullptr);
+    std::unordered_map<int, Note*> usedStrings;
     std::unordered_map<int, std::vector<int> > fretTable;
 
     for (auto note: chord->notes()) {
-        usedStrings.at(note->string()) = note;
+        usedStrings[note->string()] = note;
         int pitch = note->pitch() - capoFret;
         fretTable.insert_or_assign(pitch, std::vector<int>());
         for (size_t i = 0; i < usedStrings.size(); ++i) {
@@ -454,10 +454,10 @@ void StringData::sortChordNotesUseSameString(const Chord* chord, int pitchOffset
         for (int i = static_cast<int>(notesCount) - 1; i >= 0; --i) {
             if (notes.at(i)->fret() < 0) {
                 for (size_t indx = usedStrings.size() - 1; indx > 0; --indx) {
-                    if (usedStrings.at(indx - 1) && !usedStrings.at(indx)) {
-                        usedStrings.at(indx) = usedStrings.at(indx - 1);
-                        usedStrings.at(indx - 1) = nullptr;
-                        Note* n = usedStrings.at(indx);
+                    if (usedStrings[indx - 1] && !usedStrings[indx]) {
+                        usedStrings[indx] = usedStrings[indx - 1];
+                        usedStrings[indx - 1] = nullptr;
+                        Note* n = usedStrings[indx];
                         int pitch = n->pitch() - capoFret;
                         n->setFret(fretTable[pitch].at(n->string() + 1));
                         n->setString(n->string() + 1);
