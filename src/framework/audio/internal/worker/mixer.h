@@ -70,13 +70,22 @@ public:
     void setIsActive(bool arg) override;
 
 private:
-    void mixOutputFromChannel(float* outBuffer, size_t outBufferSize, audioch_t outChannels, const float* inBuffer,
-                              unsigned int samplesCount, audioch_t inChannels, gain_t signalAmount = 1.f);
-    void prepareAuxBuffers(size_t outBufferSize);
-    void writeTrackToAuxBuffers(const AuxSendsParams& auxSends, const float* trackBuffer, samples_t samplesPerChannel);
-    void processAuxChannels(float* buffer, size_t bufferSize, audioch_t bufferChannels, samples_t samplesPerChannel);
+    template<typename T>
+    struct BufferViewT
+    {
+        T* const data;
+        const size_t size;
+        const audioch_t channels;
+    };
+    using BufferView = BufferViewT<float>;
+    using ConstBufferView = BufferViewT<const float>;
 
-    void completeOutput(float* buffer, samples_t samplesPerChannel, audioch_t channels);
+    void mixOutputFromChannel(BufferView outBuffer, ConstBufferView inBuffer, unsigned int samplesCount, gain_t signalAmount = 1.f);
+    void prepareAuxBuffers(size_t outBufferSize);
+    void writeTrackToAuxBuffers(const AuxSendsParams& auxSends, ConstBufferView trackBuffer, samples_t samplesPerChannel);
+    void processAuxChannels(BufferView buffer, samples_t samplesPerChannel);
+
+    void completeOutput(BufferView buffer, samples_t samplesPerChannel);
     void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
 
     std::vector<float> m_writeCacheBuff;
