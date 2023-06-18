@@ -20,6 +20,10 @@
 
 add_subdirectory(framework)
 
+if (NOT MUE_BUILD_BRAILLE_MODULE)
+    add_subdirectory(braille)
+endif()
+
 if (NOT MUE_BUILD_CLOUD_MODULE)
     add_subdirectory(cloud)
 endif()

@@ -129,6 +129,7 @@ set(LINK_LIB
     fonts
     network
 
+    braille
     diagnostics
     engraving
     actions
@@ -199,10 +200,6 @@ endif()
 
 if (MUE_BUILD_AUTOBOT_MODULE) 
     list(APPEND LINK_LIB autobot)
-endif()
-
-if (MUE_BUILD_BRAILLE_MODULE)
-    list(APPEND LINK_LIB braille)
 endif()
 
 if (MUE_BUILD_MUSESAMPLER_MODULE)

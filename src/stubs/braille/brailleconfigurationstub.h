@@ -19,19 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_BRAILLE_BRAILLECONFIGURATION_H
-#define MU_BRAILLE_BRAILLECONFIGURATION_H
+#ifndef MU_BRAILLE_BRAILLECONFIGURATIONSTUB_H
+#define MU_BRAILLE_BRAILLECONFIGURATIONSTUB_H
 
-#include "async/asyncable.h"
+#include "braille/ibrailleconfiguration.h"
 
-#include "ibrailleconfiguration.h"
-
-namespace mu::engraving {
-class BrailleConfiguration : public mu::braille::IBrailleConfiguration, public async::Asyncable
+namespace mu::braille {
+class BrailleConfigurationStub : public IBrailleConfiguration
 {
 public:
-    void init();
-
     async::Notification braillePanelEnabledChanged() const override;
     bool braillePanelEnabled() const override;
     void setBraillePanelEnabled(const bool enabled) override;
@@ -41,11 +37,7 @@ public:
     void setBrailleTable(const QString table) override;
 
     QStringList brailleTableList() override;
-
-private:
-    async::Notification m_braillePanelEnabledChanged;
-    async::Notification m_brailleTableChanged;
 };
 }
 
-#endif // MU_BRAILLE_BRAILLECONFIGURATION_H
+#endif // MU_BRAILLE_BRAILLECONFIGURATIONSTUB_H

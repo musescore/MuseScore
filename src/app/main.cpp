@@ -94,6 +94,8 @@
 
 #ifdef MUE_BUILD_BRAILLE_MODULE
 #include "braille/braillemodule.h"
+#else
+#include "stubs/braille/braillestubmodule.h"
 #endif
 
 #ifdef MUE_BUILD_CLOUD_MODULE
@@ -255,9 +257,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::autobot::AutobotModule());
 #endif
 
-#ifdef MUE_BUILD_BRAILLE_MODULE
     app.addModule(new mu::braille::BrailleModule());
-#endif
 
     app.addModule(new mu::cloud::CloudModule());
     app.addModule(new mu::commonscene::CommonSceneModule());
