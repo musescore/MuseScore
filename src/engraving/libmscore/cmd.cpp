@@ -2737,7 +2737,7 @@ EngravingItem* Score::move(const String& cmd)
         }
         if (ftm) {
             if (score()->styleB(Sid::createMultiMeasureRests) && ftm->hasMMRest()) {
-                ftm = ftm->mmRest1();
+                ftm = ftm->coveringMMRestOrThis();
             }
             el = !cr ? ftm->first()->nextChordRest(0, false) : ftm->first()->nextChordRest(trackZeroVoice(cr->track()), false);
         }

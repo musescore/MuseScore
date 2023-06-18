@@ -173,7 +173,7 @@ EngravingObject* Measure::scanParent() const
     if (isMMRest()) {  // this is MMR
         return system();
     } else if (m_mmRestCount < 0) {  // this is part of MMR
-        return const_cast<Measure*>(mmRest1());
+        return const_cast<Measure*>(coveringMMRestOrThis());
     }
     // for a normal measure
     return system();

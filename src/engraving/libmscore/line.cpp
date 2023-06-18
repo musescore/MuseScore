@@ -1051,9 +1051,9 @@ PointF SLine::linePos(Grip grip, System** sys) const
                 }
             }
         }
-        if (score()->styleB(Sid::createMultiMeasureRests)) {
-            m = m->mmRest1();
-        }
+
+        m = m->coveringMMRestOrThis();
+
         assert(m->system());
         *sys = m->system();
     }

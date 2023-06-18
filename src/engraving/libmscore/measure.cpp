@@ -2729,27 +2729,36 @@ Measure* Measure::mmRestLast() const
 }
 
 //---------------------------------------------------------
-//   mmRest1
-//    return the multi measure rest this measure is covered
-//    by
+//   coveringMMRestOrThis
+//    if multi-measure rests are enabled,
+//        and this measure is covered by an MMRest,
+//            return that MMRest.
+//    otherwise, return the measure itself.
 //---------------------------------------------------------
 
-const Measure* Measure::mmRest1() const
+const Measure* Measure::coveringMMRestOrThis() const
 {
+    if (!score()->styleB(Sid::createMultiMeasureRests)) {
+        return this;
+    }
+
     if (m_mmRest) {
         return m_mmRest;
     }
+
     if (m_mmRestCount != -1) {
-        // return const_cast<Measure*>(this);
         return this;
     }
+
     const Measure* m = this;
     while (m && !m->m_mmRest) {
         m = m->prevMeasure();
     }
+
     if (m) {
-        return const_cast<Measure*>(m->m_mmRest);
+        return m->m_mmRest;
     }
+
     return 0;
 }
 
