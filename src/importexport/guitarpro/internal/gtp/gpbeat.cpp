@@ -31,4 +31,9 @@ void GPBeat::addHarmonicMarkType(GPBeat::HarmonicMarkType type)
         break;
     }
 }
+
+void GPBeat::sortGPNotes()
+{
+    std::sort(_notes.begin(), _notes.end(), comparePitch);
+}
 } // namespace mu::iex::guitarpro
