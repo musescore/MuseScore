@@ -49,6 +49,14 @@ LayoutContext::~LayoutContext()
     }
 }
 
+compat::DummyElement* LayoutContext::dummyParent() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return nullptr;
+    }
+    return m_score->dummy();
+}
+
 double LayoutContext::spatium() const
 {
     IF_ASSERT_FAILED(m_score) {
@@ -80,6 +88,14 @@ const Staff* LayoutContext::staff(staff_idx_t idx) const
         return nullptr;
     }
     return m_score->staff(idx);
+}
+
+size_t LayoutContext::ntracks() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return 0;
+    }
+    return m_score->ntracks();
 }
 
 void LayoutContext::setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e)

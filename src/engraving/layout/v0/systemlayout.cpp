@@ -387,7 +387,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                     MeasureLayout::computeWidth(m, ctx, m->system()->minSysTicks(), m->system()->maxSysTicks(), oldStretch);
                     m->stretchToTargetWidth(oldWidth);
                     MeasureLayout::layoutMeasureElements(m, ctx);
-                    BeamLayout::restoreBeams(m);
+                    BeamLayout::restoreBeams(m, ctx);
                     if (m == nm || !m->noBreak()) {
                         break;
                     }

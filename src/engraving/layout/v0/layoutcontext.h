@@ -41,6 +41,10 @@ class System;
 class Staff;
 }
 
+namespace mu::engraving::compat {
+class DummyElement;
+}
+
 namespace mu::engraving::layout::v0 {
 class LayoutContext
 {
@@ -50,13 +54,15 @@ public:
     LayoutContext& operator=(const LayoutContext&) = delete;
     ~LayoutContext();
 
-    Score* score() const { return m_score; }
-
     // Context
+    Score* score() const { return m_score; }
+    compat::DummyElement* dummyParent() const;
+
     double spatium() const;
     const MStyle& style() const;
     IEngravingFontPtr engravingFont() const;
     const Staff* staff(staff_idx_t idx) const;
+    size_t ntracks() const;
 
     // Mark
     void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e);

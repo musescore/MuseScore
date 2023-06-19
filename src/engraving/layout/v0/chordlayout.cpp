@@ -2746,22 +2746,21 @@ void ChordLayout::resolveVerticalRestConflicts(Score* score, Segment* segment, s
         rest->verticalClearance().reset();
     }
 
+    Staff* staff = score->staff(staffIdx);
     if (!chords.empty()) {
-        resolveRestVSChord(rests, chords, score, segment, staffIdx);
+        resolveRestVSChord(rests, chords, staff, segment);
     }
 
     if (rests.size() < 2) {
         return;
     }
 
-    resolveRestVSRest(rests, score, segment, staffIdx, ctx);
+    resolveRestVSRest(rests, staff, segment, ctx);
 }
 
-void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord*>& chords, Score* score, Segment* segment,
-                                     staff_idx_t staffIdx)
+void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord*>& chords, const Staff* staff, Segment* segment)
 {
     Fraction tick = segment->tick();
-    Staff* staff = score->staff(staffIdx);
     int lines = staff->lines(tick);
     double spatium = staff->spatium(tick);
     double lineDistance = staff->lineDistance(tick) * spatium;
@@ -2833,8 +2832,8 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
     }
 }
 
-void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, Score* score,
-                                    Segment* segment, staff_idx_t staffIdx, LayoutContext& ctx,
+void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staff,
+                                    Segment* segment, LayoutContext& ctx,
                                     bool considerBeams)
 {
     if (rests.empty()) {
@@ -2842,7 +2841,6 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, Score* score,
     }
 
     Fraction tick = segment->tick();
-    Staff* staff = score->staff(staffIdx);
     double spatium = staff->spatium(tick);
     double lineDistance = staff->lineDistance(tick) * spatium;
     int lines = staff->lines(tick);
