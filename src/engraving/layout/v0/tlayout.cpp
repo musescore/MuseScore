@@ -816,10 +816,10 @@ void TLayout::layout1(Beam* item, LayoutContext& ctx)
     BeamLayout::layout1(item, ctx);
 }
 
-void TLayout::layout(Bend* item, LayoutContext&)
+void TLayout::layout(Bend* item, LayoutContext& ctx)
 {
     // during mtest, there may be no score. If so, exit.
-    if (!item->score()) {
+    if (!ctx.score()) {
         return;
     }
 
@@ -976,7 +976,7 @@ void TLayout::layout(HBox* item, LayoutContext& ctx)
 
 void TLayout::layout2(HBox* item, LayoutContext& ctx)
 {
-    TLayout::layoutBox(item, ctx);
+    layoutBox(item, ctx);
 }
 
 void TLayout::layout(VBox* item, LayoutContext& ctx)
@@ -1015,7 +1015,7 @@ void TLayout::layout(VBox* item, LayoutContext& ctx)
 void TLayout::adjustLayoutWithoutImages(VBox* item, LayoutContext& ctx)
 {
     double calculatedVBoxHeight = 0;
-    const int padding = item->score()->spatium();
+    const int padding = ctx.spatium();
     auto elementList = item->el();
 
     for (auto pElement : elementList) {
@@ -1056,7 +1056,7 @@ void TLayout::layout(TBox* item, LayoutContext& ctx)
     layoutMeasureBase(item, ctx);   // layout LayoutBreak's
 }
 
-void TLayout::layout(Bracket* item, LayoutContext&)
+void TLayout::layout(Bracket* item, LayoutContext& ctx)
 {
     if (RealIsNull(item->h2())) {
         return;
@@ -1069,10 +1069,10 @@ void TLayout::layout(Bracket* item, LayoutContext&)
 
     switch (item->bracketType()) {
     case BracketType::BRACE: {
-        if (item->score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler"
-            || item->score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
+        String musicalSymbolFont = ctx.style().styleSt(Sid::MusicalSymbolFont);
+        if (musicalSymbolFont == "Emmentaler" || musicalSymbolFont == "Gonville") {
             item->setBraceSymbol(SymId::noSym);
-            double w = item->score()->styleMM(Sid::akkoladeWidth);
+            double w = ctx.style().styleMM(Sid::akkoladeWidth);
 
 #define XM(a) (a + 700) * w / 700
 #define YM(a) (a + 7100) * item->h2() / 7100
@@ -1113,10 +1113,10 @@ void TLayout::layout(Bracket* item, LayoutContext&)
     break;
     case BracketType::NORMAL: {
         double _spatium = item->spatium();
-        double w = item->score()->styleMM(Sid::bracketWidth) * .5;
+        double w = ctx.style().styleMM(Sid::bracketWidth) * .5;
         double x = -w;
 
-        double bd   = (item->score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
+        double bd   = (ctx.style().styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
         shape.add(RectF(x, -bd, w * 2, 2 * (item->h2() + bd)));
         shape.add(item->symBbox(SymId::bracketTop).translated(PointF(-w, -bd)));
         shape.add(item->symBbox(SymId::bracketBottom).translated(PointF(-w, bd + 2 * item->h2())));
@@ -1128,7 +1128,7 @@ void TLayout::layout(Bracket* item, LayoutContext&)
     }
     break;
     case BracketType::SQUARE: {
-        double w = item->score()->styleMM(Sid::staffLineWidth) * .5;
+        double w = ctx.style().styleMM(Sid::staffLineWidth) * .5;
         double x = -w;
         double y = -w;
         double h = (item->h2() + w) * 2;
@@ -1139,7 +1139,7 @@ void TLayout::layout(Bracket* item, LayoutContext&)
     break;
     case BracketType::LINE: {
         double _spatium = item->spatium();
-        double w = 0.67 * item->score()->styleMM(Sid::bracketWidth) * .5;
+        double w = 0.67 * ctx.style().styleMM(Sid::bracketWidth) * .5;
         double x = -w;
         double bd = _spatium * .25;
         double y = -bd;
