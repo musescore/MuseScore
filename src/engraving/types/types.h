@@ -304,13 +304,18 @@ enum class Orientation : signed char {
 
 // P_TYPE::BEAM_MODE
 //! Note: for historical reasons, these have strange names
+//!
 enum class BeamMode : signed char {
     INVALID = -1,
     AUTO,
     NONE,
     BEGIN,
+    // TODO:
+    // strange names aside, mscx files refer to BEGIN16 and BEGIN32 as begin32/begin64, which would describe the 3rd and 4th beams,
+    // which is wildly incorrect.These enum names are CORRECT, but I haven't touched the mscx files yet.
+    // changing this for the save files would necessitate some serious file version / import work. -A
+    BEGIN16,
     BEGIN32,
-    BEGIN64,
     MID,
     END
 };

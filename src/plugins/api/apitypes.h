@@ -408,8 +408,8 @@ enum class BeamMode {
     MID = int(mu::engraving::BeamMode::MID),
     END = int(mu::engraving::BeamMode::END),
     NONE = int(mu::engraving::BeamMode::NONE),
-    BEGIN32 = int(mu::engraving::BeamMode::BEGIN32),
-    BEGIN64 = int(mu::engraving::BeamMode::BEGIN64),
+    BEGIN32 = int(mu::engraving::BeamMode::BEGIN16), // these names for the beam modes are deprecated! this beam mode begins a 16th beam
+    BEGIN64 = int(mu::engraving::BeamMode::BEGIN32), // this one begins a 32nd beam
     INVALID = int(mu::engraving::BeamMode::INVALID),
 };
 Q_ENUM_NS(BeamMode);

@@ -2460,7 +2460,15 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
             }
         }
     } else if (tag == "BeamMode") {
-        ch->setBeamMode(TConv::fromXml(e.readAsciiText(), BeamMode::AUTO));
+        // 400 and previous used begin32/begin64 for beam mode
+        // 410 uses begin16/begin32
+        auto txt = e.readAsciiText();
+        if (txt == "begin64") {
+            txt = "begin32";
+        } else if (txt == "begin32") {
+            txt = "begin16";
+        }
+        ch->setBeamMode(TConv::fromXml(txt, BeamMode::AUTO));
     } else if (tag == "Articulation") {
         Articulation* atr = Factory::createArticulation(ch);
         atr->setTrack(ch->track());

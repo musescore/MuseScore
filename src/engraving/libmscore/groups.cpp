@@ -186,8 +186,8 @@ BeamMode Groups::beamMode(int tick, DurationType d) const
         switch (action) {
         case 0: return BeamMode::AUTO;
         case 1: return BeamMode::BEGIN;
-        case 2: return BeamMode::BEGIN32;
-        case 3: return BeamMode::BEGIN64;
+        case 2: return BeamMode::BEGIN16;
+        case 3: return BeamMode::BEGIN32;
         default:
             LOGD("   Groups::beamMode: bad action %d", action);
             return BeamMode::AUTO;
@@ -254,9 +254,9 @@ void Groups::addStop(int pos, DurationType d, BeamMode bm)
     int action;
     if (bm == BeamMode::BEGIN) {
         action = 1;
-    } else if (bm == BeamMode::BEGIN32) {
+    } else if (bm == BeamMode::BEGIN16) {
         action = 2;
-    } else if (bm == BeamMode::BEGIN64) {
+    } else if (bm == BeamMode::BEGIN32) {
         action = 3;
     } else {
         return;

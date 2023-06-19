@@ -1582,8 +1582,15 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
             }
         }
     } else if (tag == "BeamMode") {
-        BeamMode bm = TConv::fromXml(e.readAsciiText(), BeamMode::AUTO);
-        ch->setBeamMode(bm);
+        // 206 used begin32/begin64 for beam mode
+        // 410 uses begin16/begin32
+        auto txt = e.readAsciiText();
+        if (txt == "begin64") {
+            txt = "begin32";
+        } else if (txt == "begin32") {
+            txt = "begin16";
+        }
+        ch->setBeamMode(TConv::fromXml(txt, BeamMode::AUTO));
     } else if (tag == "Articulation") {
         EngravingItem* el = readArticulation(ch, e, ctx);
         if (el->isFermata()) {

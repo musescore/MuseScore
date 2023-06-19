@@ -3049,8 +3049,8 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
                         case BeamMode::NONE:
                             break;
                         case BeamMode::MID:
+                        case BeamMode::BEGIN16:
                         case BeamMode::BEGIN32:
-                        case BeamMode::BEGIN64:
                             cr->setBeamMode(BeamMode::BEGIN);
                             break;
                         case BeamMode::INVALID:
