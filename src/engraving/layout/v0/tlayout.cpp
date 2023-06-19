@@ -3440,12 +3440,12 @@ void TLayout::layout(MMRest* item, LayoutContext& ctx)
         layoutItem(e, ctx);
     }
 
-    if (item->score()->styleB(Sid::oldStyleMultiMeasureRests)) {
+    if (ctx.style().styleB(Sid::oldStyleMultiMeasureRests)) {
         SymIdList restSyms;
         double symsWidth = 0.0;
 
         int remaining = item->number();
-        double spacing = item->score()->styleMM(Sid::mmRestOldStyleSpacing);
+        double spacing = ctx.style().styleMM(Sid::mmRestOldStyleSpacing);
         SymId sym;
 
         while (remaining > 0) {
@@ -3474,7 +3474,7 @@ void TLayout::layout(MMRest* item, LayoutContext& ctx)
         double symHeight = item->symBbox(item->restSyms().at(0)).height();
         item->setbbox(RectF((item->width() - item->symsWidth()) * .5, -item->spatium(), item->symsWidth(), symHeight));
     } else { // H-bar
-        double vStrokeHeight = item->score()->styleMM(Sid::mmRestHBarVStrokeHeight);
+        double vStrokeHeight = ctx.style().styleMM(Sid::mmRestHBarVStrokeHeight);
         item->setbbox(RectF(0.0, -(vStrokeHeight * .5), item->width(), vStrokeHeight));
     }
 
@@ -3597,7 +3597,7 @@ void TLayout::layout(Ornament* item, LayoutContext& ctx)
     Chord* cueNoteChord = item->cueNoteChord();
 
     Note* cueNote = cueNoteChord->notes().front();
-    ChordLayout::layoutChords3(item->score()->style(), { cueNoteChord }, { cueNote }, item->staff(), ctx);
+    ChordLayout::layoutChords3(ctx.style(), { cueNoteChord }, { cueNote }, item->staff(), ctx);
     layout(cueNoteChord, ctx);
     Shape noteShape = cueNoteChord->shape();
     Shape parentChordShape = parentChord->shape();
@@ -3802,8 +3802,8 @@ void TLayout::layout(Rest* item, LayoutContext& ctx)
 void TLayout::layoutRestDots(Rest* item, LayoutContext& ctx)
 {
     item->checkDots();
-    double x = item->symWidthNoLedgerLines() + item->score()->styleMM(Sid::dotNoteDistance) * item->mag();
-    double dx = item->score()->styleMM(Sid::dotDotDistance) * item->mag();
+    double x = item->symWidthNoLedgerLines() + ctx.style().styleMM(Sid::dotNoteDistance) * item->mag();
+    double dx = ctx.style().styleMM(Sid::dotDotDistance) * item->mag();
     double y = item->dotLine() * item->spatium() * .5;
     for (NoteDot* dot : item->dotList()) {
         layout(dot, ctx);
@@ -3812,7 +3812,7 @@ void TLayout::layoutRestDots(Rest* item, LayoutContext& ctx)
     }
 }
 
-void TLayout::layout(ShadowNote* item, LayoutContext&)
+void TLayout::layout(ShadowNote* item, LayoutContext& ctx)
 {
     if (!item->isValid()) {
         item->setbbox(RectF());
@@ -3829,8 +3829,8 @@ void TLayout::layout(ShadowNote* item, LayoutContext&)
     double dotWidth = 0;
     if (item->duration().dots() > 0) {
         double noteheadWidth = noteheadBbox.width();
-        double d  = item->score()->styleMM(Sid::dotNoteDistance) * item->mag();
-        double dd = item->score()->styleMM(Sid::dotDotDistance) * item->mag();
+        double d  = ctx.style().styleMM(Sid::dotNoteDistance) * item->mag();
+        double dd = ctx.style().styleMM(Sid::dotDotDistance) * item->mag();
         dotWidth = (noteheadWidth + d);
         if (item->hasFlag() && up) {
             dotWidth = std::max(dotWidth, noteheadWidth + item->symBbox(item->flagSym()).right());
@@ -3846,7 +3846,7 @@ void TLayout::layout(ShadowNote* item, LayoutContext&)
         double x = noteheadBbox.x();
         double w = noteheadBbox.width();
 
-        double stemWidth = item->score()->styleMM(Sid::stemWidth);
+        double stemWidth = ctx.style().styleMM(Sid::stemWidth);
         double stemLength = (up ? -3.5 : 3.5) * _spatium;
         double stemAnchor = item->symSmuflAnchor(item->noteheadSymbol(), up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
         newBbox |= RectF(up ? x + w - stemWidth : x,
@@ -3865,12 +3865,12 @@ void TLayout::layout(ShadowNote* item, LayoutContext&)
 
     // Layout ledger lines if needed
     if (!item->isRest() && item->lineIndex() < 100 && item->lineIndex() > -100) {
-        double extraLen = item->score()->styleMM(Sid::ledgerLineLength) * item->mag();
+        double extraLen = ctx.style().styleMM(Sid::ledgerLineLength) * item->mag();
         double step = 0.5 * _spatium * item->staffType()->lineDistance().val();
         double x = noteheadBbox.x() - extraLen;
         double w = noteheadBbox.width() + 2 * extraLen;
 
-        double lw = item->score()->styleMM(Sid::ledgerLineWidth);
+        double lw = ctx.style().styleMM(Sid::ledgerLineWidth);
 
         RectF r(x, -lw * .5, w, lw);
         for (int i = -2; i >= item->lineIndex(); i -= 2) {
@@ -3886,7 +3886,7 @@ void TLayout::layout(ShadowNote* item, LayoutContext&)
 
 void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
 {
-    if (item->score()->isPaletteScore() || (item->tick() == Fraction(-1, 1)) || (item->tick2() == Fraction::fromTicks(1))) {
+    if (ctx.isPaletteMode() || (item->tick() == Fraction(-1, 1)) || (item->tick2() == Fraction::fromTicks(1))) {
         //
         // when used in a palette or while dragging from palette,
         // SLine has no parent and
@@ -3894,7 +3894,7 @@ void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
         // possible and needed
         //
         if (item->spannerSegments().empty()) {
-            item->setLen(item->score()->spatium() * 7);
+            item->setLen(ctx.spatium() * 7);
         }
 
         LineSegment* lineSegm = item->frontSegment();
@@ -4010,7 +4010,7 @@ void TLayout::layout(StaffLines* item, LayoutContext& ctx)
     layoutForWidth(item, item->measure()->width(), ctx);
 }
 
-void TLayout::layoutForWidth(StaffLines* item, double w, LayoutContext&)
+void TLayout::layoutForWidth(StaffLines* item, double w, LayoutContext& ctx)
 {
     const Staff* s = item->staff();
     double _spatium = item->spatium();
@@ -4031,7 +4031,7 @@ void TLayout::layoutForWidth(StaffLines* item, double w, LayoutContext&)
         _lines = 5;
         item->setColor(StaffLines::engravingConfiguration()->defaultColor());
     }
-    item->setLw(item->score()->styleS(Sid::staffLineWidth).val() * _spatium);
+    item->setLw(ctx.style().styleS(Sid::staffLineWidth).val() * _spatium);
     double x1 = item->pos().x();
     double x2 = x1 + w;
     double y  = item->pos().y();
@@ -4106,9 +4106,9 @@ void TLayout::layout(StaffText* item, LayoutContext& ctx)
     item->autoplaceSegmentElement();
 }
 
-void TLayout::layout(StaffTypeChange* item, LayoutContext&)
+void TLayout::layout(StaffTypeChange* item, LayoutContext& ctx)
 {
-    double _spatium = item->score()->spatium();
+    double _spatium = ctx.spatium();
     item->setbbox(RectF(-item->lw() * .5, -item->lw() * .5, _spatium * 2.5 + item->lw(), _spatium * 2.5 + item->lw()));
     if (item->measure()) {
         double y = -1.5 * _spatium - item->height() + item->measure()->system()->staff(item->staffIdx())->y();
