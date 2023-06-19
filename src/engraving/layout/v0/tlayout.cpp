@@ -2159,9 +2159,9 @@ void TLayout::layout(Glissando* item, LayoutContext& ctx)
 {
     double _spatium = item->spatium();
 
-    if (item->score()->isPaletteScore() || !item->startElement() || !item->endElement()) {    // for use in palettes or while dragging
+    if (ctx.isPaletteMode() || !item->startElement() || !item->endElement()) {    // for use in palettes or while dragging
         if (item->spannerSegments().empty()) {
-            item->add(item->createLineSegment(item->score()->dummy()->system()));
+            item->add(item->createLineSegment(ctx.dummyParent()->system()));
         }
         LineSegment* s = item->frontSegment();
         s->setPos(PointF(-_spatium * Glissando::GLISS_PALETTE_WIDTH / 2, _spatium * Glissando::GLISS_PALETTE_HEIGHT / 2));
