@@ -2025,8 +2025,8 @@ void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
     double _spatium  = item->spatium() * item->userMag();
     item->setStringLw(_spatium * 0.08);
     item->setNutLw((item->fretOffset() || !item->showNut()) ? item->stringLw() : _spatium * 0.2);
-    item->setStringDist(item->score()->styleMM(Sid::fretStringSpacing) * item->userMag());
-    item->setFretDist(item->score()->styleMM(Sid::fretFretSpacing) * item->userMag());
+    item->setStringDist(ctx.style().styleMM(Sid::fretStringSpacing) * item->userMag());
+    item->setFretDist(ctx.style().styleMM(Sid::fretFretSpacing) * item->userMag());
     item->setMarkerSize(item->stringDist() * .8);
 
     double w    = item->stringDist() * (item->strings() - 1) + item->markerSize();
@@ -2039,7 +2039,7 @@ void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
         mu::draw::Font scaledFont(item->font());
         scaledFont.setPointSizeF(item->font().pointSizeF() * item->userMag());
 
-        double fretNumMag = item->score()->styleD(Sid::fretNumMag);
+        double fretNumMag = ctx.style().styleD(Sid::fretNumMag);
         scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
         mu::draw::FontMetrics fm2(scaledFont);
         double numw = fm2.width(String::number(item->fretOffset() + 1));
