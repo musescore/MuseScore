@@ -67,16 +67,16 @@ private:
 
     static void createMMRest(const LayoutOptions& options, Score* score, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);
 
-    static int adjustMeasureNo(LayoutContext& lc, MeasureBase* m);
+    static int adjustMeasureNo(MeasureBase* m, LayoutContext& ctx);
 
-    static void barLinesSetSpan(Measure* m, Segment* seg, LayoutContext& ctx);
+    static void barLinesSetSpan(Segment* seg, LayoutContext& ctx);
 
-    static void computeWidth(Measure* m, Segment* s, double x, bool isSystemHeader, Fraction minTicks, Fraction maxTicks,
-                             double stretchCoeff, bool overrideMinMeasureWidth = false);
+    static void computeWidth(Measure* m, LayoutContext& ctx, Segment* s, double x, bool isSystemHeader, Fraction minTicks,
+                             Fraction maxTicks, double stretchCoeff, bool overrideMinMeasureWidth = false);
 
-    static double computeMinMeasureWidth(Measure* m);
+    static double computeMinMeasureWidth(Measure* m, LayoutContext& ctx);
 
-    static void layoutPartialWidth(StaffLines* lines, double w, double wPartial, bool alignLeft);
+    static void layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, double w, double wPartial, bool alignLeft);
 };
 }
 

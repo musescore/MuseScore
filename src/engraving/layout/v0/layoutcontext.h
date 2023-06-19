@@ -64,6 +64,7 @@ public:
     bool isPaletteMode() const;
     bool printingMode() const;
     bool lineMode() const;
+    bool floatMode() const;
 
     double spatium() const;
     double point(const Spatium sp) const;
@@ -76,14 +77,18 @@ public:
 
     const std::vector<System*>& systems() const;
     size_t nstaves() const;
+    const std::vector<Staff*>& staves() const;
     const Staff* staff(staff_idx_t idx) const;
     size_t ntracks() const;
     const Measure* tick2measure(const Fraction& tick) const;
 
     // Create/Remove
     compat::DummyElement* dummyParent() const;
+    void undoAddElement(EngravingItem* item, bool addToLinkedStaves = true, bool ctrlModifier = false);
     void undoRemoveElement(EngravingItem* item);
     void undo(UndoCommand* cmd, EditData* ed = nullptr) const;
+    void addElement(EngravingItem* item);
+    void removeElement(EngravingItem* item);
     void addUnmanagedSpanner(Spanner* s);
 
     // Mark

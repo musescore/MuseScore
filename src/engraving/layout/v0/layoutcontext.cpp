@@ -75,6 +75,14 @@ bool LayoutContext::lineMode() const
     return m_score->lineMode();
 }
 
+bool LayoutContext::floatMode() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return false;
+    }
+    return m_score->floatMode();
+}
+
 double LayoutContext::spatium() const
 {
     IF_ASSERT_FAILED(m_score) {
@@ -138,6 +146,15 @@ size_t LayoutContext::nstaves() const
     return m_score->nstaves();
 }
 
+const std::vector<Staff*>& LayoutContext::staves() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        static const std::vector<Staff*> dummy;
+        return dummy;
+    }
+    return m_score->staves();
+}
+
 const Staff* LayoutContext::staff(staff_idx_t idx) const
 {
     IF_ASSERT_FAILED(m_score) {
@@ -170,6 +187,14 @@ compat::DummyElement* LayoutContext::dummyParent() const
     return m_score->dummy();
 }
 
+void LayoutContext::undoAddElement(EngravingItem* item, bool addToLinkedStaves, bool ctrlModifier)
+{
+    IF_ASSERT_FAILED(m_score) {
+        return;
+    }
+    m_score->undoAddElement(item, addToLinkedStaves, ctrlModifier);
+}
+
 void LayoutContext::undoRemoveElement(EngravingItem* item)
 {
     IF_ASSERT_FAILED(m_score) {
@@ -184,6 +209,22 @@ void LayoutContext::undo(UndoCommand* cmd, EditData* ed) const
         return;
     }
     m_score->undo(cmd, ed);
+}
+
+void LayoutContext::addElement(EngravingItem* item)
+{
+    IF_ASSERT_FAILED(m_score) {
+        return;
+    }
+    m_score->addElement(item);
+}
+
+void LayoutContext::removeElement(EngravingItem* item)
+{
+    IF_ASSERT_FAILED(m_score) {
+        return;
+    }
+    m_score->removeElement(item);
 }
 
 void LayoutContext::addUnmanagedSpanner(Spanner* s)
