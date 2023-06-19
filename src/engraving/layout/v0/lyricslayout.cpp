@@ -84,7 +84,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     String leading;
     String trailing;
 
-    if (item->score()->styleB(Sid::lyricsAlignVerseNumber)) {
+    if (ctx.style().styleB(Sid::lyricsAlignVerseNumber)) {
         size_t leadingIdx = 0;
         for (size_t i = 0; i < text.size(); ++i) {
             Char ch = text.at(i);
@@ -137,9 +137,9 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
         item->removeInvalidSegments();
     } else if (item->_ticks > Fraction(0, 1) || item->_syllabic == LyricsSyllabic::BEGIN || item->_syllabic == LyricsSyllabic::MIDDLE) {
         if (!item->_separator) {
-            item->_separator = new LyricsLine(item->score()->dummy());
+            item->_separator = new LyricsLine(ctx.dummyParent());
             item->_separator->setTick(cr->tick());
-            item->score()->addUnmanagedSpanner(item->_separator);
+            ctx.addUnmanagedSpanner(item->_separator);
         }
         item->_separator->setParent(item);
         item->_separator->setTick(cr->tick());
@@ -162,7 +162,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     if (item->isMelisma() || hasNumber) {
         // use the melisma style alignment setting
         if (item->isStyled(Pid::ALIGN)) {
-            item->setAlign(item->score()->styleV(Sid::lyricsMelismaAlign).value<Align>());
+            item->setAlign(ctx.style().styleV(Sid::lyricsMelismaAlign).value<Align>());
         }
     } else {
         // use the text style alignment setting
@@ -181,7 +181,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     double centerAdjust = 0.0;
     double leftAdjust   = 0.0;
 
-    if (item->score()->styleB(Sid::lyricsAlignVerseNumber)) {
+    if (ctx.style().styleB(Sid::lyricsAlignVerseNumber)) {
         // Calculate leading and trailing parts widths. Lyrics
         // should have text layout to be able to do it correctly.
         DO_ASSERT(item->rows() != 0);
@@ -224,11 +224,11 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     }
 }
 
-void LyricsLayout::layout(LyricsLine* item, LayoutContext&)
+void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
 {
     bool tempMelismaTicks = (item->lyrics()->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
     if (item->isEndMelisma()) {           // melisma
-        item->setLineWidth(item->score()->styleMM(Sid::lyricsLineThickness));
+        item->setLineWidth(ctx.style().styleMM(Sid::lyricsLineThickness));
         // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
         if (tempMelismaTicks) {
             item->lyrics()->setTicks(Fraction(0, 1));
@@ -316,7 +316,7 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext&)
     }
 }
 
-void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext&)
+void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
 {
     item->ryoffset() = 0.0;
 
@@ -348,7 +348,7 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext&)
             double lyrXp       = lyr->pagePos().x();
             double sysXp       = sys->pagePos().x();
             toX               = lyrXp - sysXp + lyrX;             // syst.rel. X pos.
-            double offsetX     = toX - item->pos().x() - item->pos2().x() - item->score()->styleMM(Sid::lyricsDashPad);
+            double offsetX     = toX - item->pos().x() - item->pos2().x() - ctx.style().styleMM(Sid::lyricsDashPad);
             //                    delta from current end pos.| ending padding
             item->rxpos2()          += offsetX;
         }
@@ -364,7 +364,7 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext&)
         fromX             = lyrXp - sysXp + lyrX + lyrW;
         //               syst.rel. X pos. | lyr.advance
         double offsetX     = fromX - item->pos().x();
-        offsetX           += item->score()->styleMM(isEndMelisma ? Sid::lyricsMelismaPad : Sid::lyricsDashPad);
+        offsetX           += ctx.style().styleMM(isEndMelisma ? Sid::lyricsMelismaPad : Sid::lyricsDashPad);
 
         //               delta from curr.pos. | add initial padding
         item->movePosX(offsetX);
@@ -389,8 +389,8 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext&)
 
     // MELISMA vs. DASHES
     const double minMelismaLen = 1 * sp; // TODO: style setting
-    const double minDashLen  = item->score()->styleS(Sid::lyricsDashMinLength).val() * sp;
-    const double maxDashDist = item->score()->styleS(Sid::lyricsDashMaxDistance).val() * sp;
+    const double minDashLen  = ctx.style().styleS(Sid::lyricsDashMinLength).val() * sp;
+    const double maxDashDist = ctx.style().styleS(Sid::lyricsDashMaxDistance).val() * sp;
     double len = item->pos2().rx();
     if (isEndMelisma) {                   // melisma
         if (len < minMelismaLen) { // Omit the extender line if too short
@@ -402,16 +402,16 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext&)
         // if not final segment, shorten it (why? -AS)
         /*
         if (isBeginType() || isMiddleType()) {
-            rxpos2() -= score()->styleP(Sid::minNoteDistance) * mag();
+            rxpos2() -= ctx.style().styleP(Sid::minNoteDistance) * mag();
         }
         */
     } else {                              // dash(es)
         // set conventional dash Y pos
-        item->movePosY(-lyr->fontMetrics().xHeight() * item->score()->styleD(Sid::lyricsDashYposRatio));
-        item->_dashLength = item->score()->styleMM(Sid::lyricsDashMaxLength) * item->mag();      // and dash length
+        item->movePosY(-lyr->fontMetrics().xHeight() * ctx.style().styleD(Sid::lyricsDashYposRatio));
+        item->_dashLength = ctx.style().styleMM(Sid::lyricsDashMaxLength) * item->mag();      // and dash length
         if (len < minDashLen) {                                               // if no room for a dash
             // if at end of system or dash is forced
-            if (endOfSystem || item->score()->styleB(Sid::lyricsDashForce)) {
+            if (endOfSystem || ctx.style().styleB(Sid::lyricsDashForce)) {
                 item->rxpos2()          = minDashLen;                               //     draw minimal dash
                 item->_numOfDashes      = 1;
                 item->_dashLength       = minDashLen;

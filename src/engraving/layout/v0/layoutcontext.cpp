@@ -58,6 +58,15 @@ bool LayoutContext::isPaletteMode() const
     return m_score->isPaletteScore();
 }
 
+bool LayoutContext::printingMode() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return false;
+    }
+
+    return m_score->printing();
+}
+
 bool LayoutContext::lineMode() const
 {
     IF_ASSERT_FAILED(m_score) {
@@ -96,12 +105,29 @@ double LayoutContext::noteHeadWidth() const
     return m_score->noteHeadWidth();
 }
 
+bool LayoutContext::showInvisible() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return 0.0;
+    }
+    return m_score->showInvisible();
+}
+
 IEngravingFontPtr LayoutContext::engravingFont() const
 {
     IF_ASSERT_FAILED(m_score) {
         return nullptr;
     }
     return m_score->engravingFont();
+}
+
+const std::vector<System*>& LayoutContext::systems() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        static const std::vector<System*> dummy;
+        return dummy;
+    }
+    return m_score->systems();
 }
 
 size_t LayoutContext::nstaves() const
@@ -128,6 +154,14 @@ size_t LayoutContext::ntracks() const
     return m_score->ntracks();
 }
 
+const Measure* LayoutContext::tick2measure(const Fraction& tick) const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return nullptr;
+    }
+    return m_score->tick2measure(tick);
+}
+
 compat::DummyElement* LayoutContext::dummyParent() const
 {
     IF_ASSERT_FAILED(m_score) {
@@ -150,6 +184,14 @@ void LayoutContext::undo(UndoCommand* cmd, EditData* ed) const
         return;
     }
     m_score->undo(cmd, ed);
+}
+
+void LayoutContext::addUnmanagedSpanner(Spanner* s)
+{
+    IF_ASSERT_FAILED(m_score) {
+        return;
+    }
+    m_score->addUnmanagedSpanner(s);
 }
 
 void LayoutContext::setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e)
