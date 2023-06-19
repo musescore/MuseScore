@@ -171,12 +171,12 @@ size_t LayoutContext::ntracks() const
     return m_score->ntracks();
 }
 
-const Measure* LayoutContext::tick2measure(const Fraction& tick) const
+const Measure* LayoutContext::tick2measure(const Fraction& _tick) const
 {
     IF_ASSERT_FAILED(m_score) {
         return nullptr;
     }
-    return m_score->tick2measure(tick);
+    return m_score->tick2measure(_tick);
 }
 
 compat::DummyElement* LayoutContext::dummyParent() const
