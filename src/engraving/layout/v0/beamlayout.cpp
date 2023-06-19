@@ -993,7 +993,7 @@ void BeamLayout::createBeamSegments(Beam* item, const std::vector<ChordRest*>& c
                     if (startCr == endCr && startCr->isChord()) {
                         bool isBeamletBefore = calcIsBeamletBefore(item,
                                                                    toChord(startCr),
-                                                                   beamletIndex,
+                                                                   static_cast<int>(beamletIndex),
                                                                    level,
                                                                    previousBreak16,
                                                                    previousBreak32);
