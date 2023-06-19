@@ -75,6 +75,7 @@ private:
     bool needsLoading();
 
     State m_state = State::Fine;
+    bool m_isWaitingForPromise = false;
 
     size_t m_totalItems = mu::nidx;
 

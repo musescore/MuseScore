@@ -251,61 +251,61 @@ mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
     return result;
 }
 
-mu::RetVal<ScoresList> MuseScoreComService::downloadScoresList(int scoresPerBatch, int batchNumber)
+mu::async::Promise<ScoresList> MuseScoreComService::downloadScoresList(int scoresPerBatch, int batchNumber)
 {
-    RetVal<ScoresList> result = RetVal<ScoresList>::make_ok(ScoresList());
+    return async::Promise<ScoresList>([this, scoresPerBatch, batchNumber](auto resolve, auto reject) {
+        QVariantMap params;
+        params["per-page"] = scoresPerBatch;
+        params["page"] = batchNumber;
 
-    QVariantMap params;
-    params["per-page"] = scoresPerBatch;
-    params["page"] = batchNumber;
+        RetVal<QUrl> scoresListUrl = prepareUrlForRequest(MUSESCORECOM_SCORES_LIST_API_URL, params);
+        if (!scoresListUrl.ret) {
+            return reject(scoresListUrl.ret.code(), scoresListUrl.ret.toString());
+        }
 
-    RetVal<QUrl> scoresListUrl = prepareUrlForRequest(MUSESCORECOM_SCORES_LIST_API_URL, params);
-    if (!scoresListUrl.ret) {
-        result.ret = scoresListUrl.ret;
-        return result;
-    }
+        QBuffer receivedData;
+        INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+        Ret ret = manager->get(scoresListUrl.val, &receivedData, headers());
 
-    QBuffer receivedData;
-    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-    Ret ret = manager->get(scoresListUrl.val, &receivedData, headers());
+        if (!ret) {
+            printServerReply(receivedData);
+            return reject(ret.code(), ret.toString());
+        }
 
-    if (!ret) {
-        printServerReply(receivedData);
-        result.ret = ret;
-        return result;
-    }
+        ScoresList result;
 
-    QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
-    QJsonObject obj = document.object();
+        QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
+        QJsonObject obj = document.object();
 
-    QJsonObject metaObj = obj.value("_meta").toObject();
-    result.val.meta.totalScoresCount = metaObj.value("totalCount").toInt();
-    result.val.meta.batchesCount = metaObj.value("pageCount").toInt();
-    result.val.meta.thisBatchNumber = metaObj.value("currentPage").toInt();
-    result.val.meta.scoresPerBatch = metaObj.value("perPage").toInt();
+        QJsonObject metaObj = obj.value("_meta").toObject();
+        result.meta.totalScoresCount = metaObj.value("totalCount").toInt();
+        result.meta.batchesCount = metaObj.value("pageCount").toInt();
+        result.meta.thisBatchNumber = metaObj.value("currentPage").toInt();
+        result.meta.scoresPerBatch = metaObj.value("perPage").toInt();
 
-    if (result.val.meta.thisBatchNumber < batchNumber) {
-        // This happens when the requested page number was too high.
-        // In this situation, the API just returns the last page and the items from that page.
-        // We will return just an empty list, in order not to confuse the caller.
-        return result;
-    }
+        if (result.meta.thisBatchNumber < batchNumber) {
+            // This happens when the requested page number was too high.
+            // In this situation, the API just returns the last page and the items from that page.
+            // We will return just an empty list, in order not to confuse the caller.
+            return resolve(result);
+        }
 
-    QJsonArray items = obj.value("items").toArray();
+        QJsonArray items = obj.value("items").toArray();
 
-    for (const QJsonValue itemVal : items) {
-        QJsonObject itemObj = itemVal.toObject();
+        for (const QJsonValue itemVal : items) {
+            QJsonObject itemObj = itemVal.toObject();
 
-        ScoresList::Item item;
-        item.id = itemObj.value("id").toInt();
-        item.title = itemObj.value("title").toString();
-        item.lastModified = QDateTime::fromSecsSinceEpoch(itemObj.value("date_updated").toInt());
-        item.thumbnailUrl = itemObj.value("thumbnails").toObject().value("small").toString();
+            ScoresList::Item item;
+            item.id = itemObj.value("id").toInt();
+            item.title = itemObj.value("title").toString();
+            item.lastModified = QDateTime::fromSecsSinceEpoch(itemObj.value("date_updated").toInt());
+            item.thumbnailUrl = itemObj.value("thumbnails").toObject().value("small").toString();
 
-        result.val.items.push_back(item);
-    }
+            result.items.push_back(item);
+        }
 
-    return result;
+        return resolve(result);
+    });
 }
 
 ProgressPtr MuseScoreComService::uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility, const QUrl& sourceUrl,

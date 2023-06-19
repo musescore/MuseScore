@@ -27,7 +27,7 @@
 
 using namespace mu::project;
 
-static const int PAGE_SIZE = 20;
+static const int BATCH_SIZE = 20;
 
 CloudScoresModel::CloudScoresModel(QObject* parent)
     : AbstractScoresModel(parent)
@@ -101,45 +101,58 @@ void CloudScoresModel::setDesiredRowCount(int count)
 
 void CloudScoresModel::loadItemsIfNecessary()
 {
+    if (m_isWaitingForPromise) {
+        return;
+    }
+
     if (m_state == State::Error || m_state == State::NotSignedIn) {
         return;
     }
 
-    setState(State::Loading);
+    if (needsLoading()) {
+        setState(State::Loading);
 
-    while (needsLoading()) {
-        RetVal<cloud::ScoresList> rv = museScoreComService()->downloadScoresList(PAGE_SIZE, m_items.size() / PAGE_SIZE + 1);
-        if (!rv.ret) {
-            setState(State::Error);
-            return;
-        }
+        m_isWaitingForPromise = true;
 
-        if (!rv.val.items.empty()) {
-            beginInsertRows(QModelIndex(), static_cast<int>(m_items.size()), static_cast<int>(m_items.size() + rv.val.items.size()) - 1);
+        museScoreComService()->downloadScoresList(BATCH_SIZE, m_items.size() / BATCH_SIZE + 1)
+        .onResolve(this, [this](const cloud::ScoresList& scoresList) {
+            if (!scoresList.items.empty()) {
+                beginInsertRows(QModelIndex(), static_cast<int>(m_items.size()),
+                                static_cast<int>(m_items.size() + scoresList.items.size()) - 1);
 
-            for (const cloud::ScoresList::Item& item : rv.val.items) {
-                QVariantMap obj;
+                for (const cloud::ScoresList::Item& item : scoresList.items) {
+                    QVariantMap obj;
 
-                obj[NAME_KEY] = item.title;
-                obj[PATH_KEY] = "";
-                obj[SUFFIX_KEY] = "";
-                obj[IS_CLOUD_KEY] = true;
-                obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(Date::fromQDate(item.lastModified.date())).toQString();
-                obj[THUMBNAIL_URL_KEY] = item.thumbnailUrl;
-                obj[IS_CREATE_NEW_KEY] = false;
-                obj[IS_NO_RESULT_FOUND_KEY] = false;
+                    obj[NAME_KEY] = item.title;
+                    obj[PATH_KEY] = "";
+                    obj[SUFFIX_KEY] = "";
+                    obj[IS_CLOUD_KEY] = true;
+                    obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(Date::fromQDate(item.lastModified.date())).toQString();
+                    obj[THUMBNAIL_URL_KEY] = item.thumbnailUrl;
+                    obj[IS_CREATE_NEW_KEY] = false;
+                    obj[IS_NO_RESULT_FOUND_KEY] = false;
 
-                m_items.push_back(obj);
+                    m_items.push_back(obj);
+                }
+
+                endInsertRows();
             }
 
-            endInsertRows();
-        }
+            m_totalItems = scoresList.meta.totalScoresCount;
+            emit hasMoreChanged();
 
-        m_totalItems = rv.val.meta.totalScoresCount;
-        emit hasMoreChanged();
+            m_isWaitingForPromise = false;
+
+            loadItemsIfNecessary();
+        })
+        .onReject(this, [this](int code, const std::string& err) {
+            LOGE() << "Loading scores list failed: [" << code << "] " << err;
+            setState(State::Error);
+            m_isWaitingForPromise = false;
+        });
+    } else {
+        setState(State::Fine);
     }
-
-    setState(State::Fine);
 }
 
 bool CloudScoresModel::needsLoading()

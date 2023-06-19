@@ -25,6 +25,7 @@
 #include <QUrl>
 
 #include "modularity/imoduleinterface.h"
+#include "async/promise.h"
 #include "progress.h"
 
 #include "cloud/cloudtypes.h"
@@ -56,7 +57,7 @@ public:
     /// you don't request all scores at once, but you request them in batches.
     /// It is similar to e.g. the list of issues on GitHub: you don't have one
     /// big list of all issues, but you have many pages, with 25 issues per page.
-    virtual RetVal<ScoresList> downloadScoresList(int scoresPerBatch, int batchNumber) = 0;
+    virtual async::Promise<ScoresList> downloadScoresList(int scoresPerBatch, int batchNumber) = 0;
 };
 }
 
