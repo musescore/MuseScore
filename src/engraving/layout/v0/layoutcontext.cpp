@@ -49,6 +49,14 @@ LayoutContext::~LayoutContext()
     }
 }
 
+double LayoutContext::spatium() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return DefaultStyle::defaultStyle().styleD(Sid::spatium);
+    }
+    return m_score->spatium();
+}
+
 const MStyle& LayoutContext::style() const
 {
     IF_ASSERT_FAILED(m_score) {

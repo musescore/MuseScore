@@ -53,6 +53,7 @@ public:
     Score* score() const { return m_score; }
 
     // Context
+    double spatium() const;
     const MStyle& style() const;
     IEngravingFontPtr engravingFont() const;
     const Staff* staff(staff_idx_t idx) const;
