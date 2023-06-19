@@ -531,7 +531,7 @@ void TLayout::layout(Articulation* item, LayoutContext& ctx)
     }
 }
 
-void TLayout::layout(BagpipeEmbellishment* item, LayoutContext&)
+void TLayout::layout(BagpipeEmbellishment* item, LayoutContext& ctx)
 {
     /*
     if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
@@ -542,7 +542,7 @@ void TLayout::layout(BagpipeEmbellishment* item, LayoutContext&)
     SymId flagsym = SymId::flag32ndUp;
 
     noteList nl = item->getNoteList();
-    BagpipeEmbellishment::BEDrawingDataX dx(headsym, flagsym, item->magS(), item->score()->spatium(), static_cast<int>(nl.size()));
+    BagpipeEmbellishment::BEDrawingDataX dx(headsym, flagsym, item->magS(), ctx.spatium(), static_cast<int>(nl.size()));
 
     item->setbbox(RectF());
     /*
@@ -560,10 +560,11 @@ void TLayout::layout(BagpipeEmbellishment* item, LayoutContext&)
     double x = dx.xl;
     for (int note : nl) {
         int line = BagpipeEmbellishment::BagpipeNoteInfoList[note].line;
-        BagpipeEmbellishment::BEDrawingDataY dy(line, item->score()->spatium());
+        BagpipeEmbellishment::BEDrawingDataY dy(line, ctx.spatium());
 
         // head
-        item->addbbox(item->score()->engravingFont()->bbox(headsym, dx.mags).translated(PointF(x - dx.lw * .5 - dx.headw, dy.y2)));
+        RectF headBBox = ctx.engravingFont()->bbox(headsym, dx.mags);
+        item->addbbox(headBBox.translated(PointF(x - dx.lw * .5 - dx.headw, dy.y2)));
         /*
         if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
               printBBox(" notehead", bbox());
@@ -581,8 +582,8 @@ void TLayout::layout(BagpipeEmbellishment* item, LayoutContext&)
 
         // flag
         if (drawFlag) {
-            item->addbbox(item->score()->engravingFont()->bbox(flagsym,
-                                                               dx.mags).translated(PointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
+            RectF flagBBox = ctx.engravingFont()->bbox(flagsym, dx.mags);
+            item->addbbox(flagBBox.translated(PointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
             // printBBox(" notehead + stem + flag", bbox());
         }
 
