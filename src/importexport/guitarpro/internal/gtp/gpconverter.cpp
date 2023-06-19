@@ -958,10 +958,9 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
         if (!tick.isZero() && _lastKeySigs[staffIdx] == mB->keySig()) {
             continue;
         }
-        int capoFret = _score->staff(staffIdx)->part()->capoFret();
         int key = static_cast<int>(mB->keySig());
         bool useFlats = mB->useFlats() || key < 0;
-        size_t numSharps = getNumSharps(key) + capoFret;
+        size_t numSharps = getNumSharps(key);
         IF_ASSERT_FAILED(numSharps != nidx) {
             LOGE() << "Unprocessable key for key signature";
             numSharps = 0;
