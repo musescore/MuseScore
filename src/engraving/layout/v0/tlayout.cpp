@@ -4118,7 +4118,7 @@ void TLayout::layout(StaffTypeChange* item, LayoutContext& ctx)
     }
 }
 
-void TLayout::layout(Stem* item, LayoutContext&)
+void TLayout::layout(Stem* item, LayoutContext& ctx)
 {
     const bool up = item->up();
     const double _up = up ? -1.0 : 1.0;
@@ -4166,7 +4166,7 @@ void TLayout::layout(Stem* item, LayoutContext&)
         }
 
         if (item->chord()->beam()) {
-            y2 -= _up * item->point(item->score()->styleS(Sid::beamWidth)) * .5 * item->chord()->beam()->mag();
+            y2 -= _up * item->point(ctx.style().styleS(Sid::beamWidth)) * .5 * item->chord()->beam()->mag();
         }
     }
 
@@ -4178,13 +4178,13 @@ void TLayout::layout(Stem* item, LayoutContext&)
 
     // HACK: if there is a beam, extend the bounding box of the stem (NOT the stem itself) by half beam width.
     // This way the bbox of the stem covers also the beam position. Hugely helps with all the collision checks.
-    double beamCorrection = (item->chord() && item->chord()->beam()) ? _up * item->score()->styleMM(Sid::beamWidth) * item->mag() / 2 : 0.0;
+    double beamCorrection = (item->chord() && item->chord()->beam()) ? _up * ctx.style().styleMM(Sid::beamWidth) * item->mag() / 2 : 0.0;
     // compute line and bounding rectangle
     RectF rect(line.p1(), line.p2() + PointF(0.0, beamCorrection));
     item->setbbox(rect.normalized().adjusted(-lineWidthCorrection, 0, lineWidthCorrection, 0));
 }
 
-void TLayout::layout(StemSlash* item, LayoutContext&)
+void TLayout::layout(StemSlash* item, LayoutContext& ctx)
 {
     if (!item->chord() || !item->chord()->stem()) {
         return;
@@ -4200,25 +4200,25 @@ void TLayout::layout(StemSlash* item, LayoutContext&)
 
     double up = c->up() ? -1 : 1;
     double stemTipY = c->up() ? stem->bbox().translated(stem->pos()).top() : stem->bbox().translated(stem->pos()).bottom();
-    double leftHang = item->score()->noteHeadWidth() * item->score()->styleD(Sid::graceNoteMag) / 2;
-    double angle = item->score()->styleD(Sid::stemSlashAngle) * M_PI / 180; // converting to radians
-    bool straight = item->score()->styleB(Sid::useStraightNoteFlags);
-    double graceNoteMag = item->score()->styleD(Sid::graceNoteMag);
+    double leftHang = ctx.noteHeadWidth() * ctx.style().styleD(Sid::graceNoteMag) / 2;
+    double angle = ctx.style().styleD(Sid::stemSlashAngle) * M_PI / 180; // converting to radians
+    bool straight = ctx.style().styleB(Sid::useStraightNoteFlags);
+    double graceNoteMag = ctx.style().styleD(Sid::graceNoteMag);
 
     double startX = stem->bbox().translated(stem->pos()).right() - leftHang;
 
     double startY;
     if (straight || beam) {
-        startY = stemTipY - up * graceNoteMag * item->score()->styleMM(Sid::stemSlashPosition) * heightReduction;
+        startY = stemTipY - up * graceNoteMag * ctx.style().styleMM(Sid::stemSlashPosition) * heightReduction;
     } else {
-        startY = stemTipY - up * graceNoteMag * item->score()->styleMM(Sid::stemSlashPosition);
+        startY = stemTipY - up * graceNoteMag * ctx.style().styleMM(Sid::stemSlashPosition);
     }
 
     double endX = 0;
     double endY = 0;
 
     if (hook) {
-        auto musicFont = item->score()->styleSt(Sid::MusicalSymbolFont);
+        auto musicFont = ctx.style().styleSt(Sid::MusicalSymbolFont);
         // HACK: adjust slash angle for fonts with "fat" hooks. In future, we must use smufl cutOut
         if (c->beams() >= 2 && !straight
             && (musicFont == "Bravura" || musicFont == "Finale Maestro" || musicFont == "Gonville")) {
@@ -4242,7 +4242,7 @@ void TLayout::layout(StemSlash* item, LayoutContext&)
     }
 
     item->setLine(LineF(PointF(startX, startY), PointF(endX, endY)));
-    item->setStemWidth(item->score()->styleMM(Sid::stemSlashThickness) * graceNoteMag);
+    item->setStemWidth(ctx.style().styleMM(Sid::stemSlashThickness) * graceNoteMag);
 
     RectF bbox = RectF(item->line().p1(), item->line().p2()).normalized();
     bbox = bbox.adjusted(-item->stemWidth() / 2, -item->stemWidth() / 2, item->stemWidth(), item->stemWidth());
