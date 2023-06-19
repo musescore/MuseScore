@@ -40,11 +40,6 @@ namespace mu::engraving {
 class SlurSegment final : public SlurTieSegment
 {
     OBJECT_ALLOCATOR(engraving, SlurSegment)
-protected:
-    double _extraHeight = 0.0;
-    void changeAnchor(EditData&, EngravingItem*) override;
-    PointF _endPointOff1 = PointF(0.0, 0.0);
-    PointF _endPointOff2 = PointF(0.0, 0.0);
 
 public:
     SlurSegment(System* parent);
@@ -54,7 +49,8 @@ public:
     int subtype() const override { return static_cast<int>(spanner()->type()); }
     void draw(mu::draw::Painter*) const override;
 
-    void layoutSegment(const mu::PointF& p1, const mu::PointF& p2);
+    double extraHeight() const { return m_extraHeight; }
+    void setExtraHeight(double h) { m_extraHeight = h; }
 
     bool isEdited() const;
     bool isEndPointsEdited() const;
@@ -68,6 +64,12 @@ public:
     void computeBezier(mu::PointF so = mu::PointF()) override;
     Shape getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* endCR);
     void avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p4, mu::draw::Transform& toSystemCoordinates, double& slurAngle);
+
+protected:
+    void changeAnchor(EditData&, EngravingItem*) override;
+    double m_extraHeight = 0.0;
+    PointF m_endPointOff1 = PointF(0.0, 0.0);
+    PointF m_endPointOff2 = PointF(0.0, 0.0);
 };
 
 //---------------------------------------------------------

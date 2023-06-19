@@ -65,7 +65,7 @@ void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
             s = item->frontSegment();
         }
         s->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-        s->layoutSegment(PointF(0, 0), PointF(_spatium * 6, 0));
+        layoutSegment(s, ctx, PointF(0, 0), PointF(_spatium * 6, 0));
         item->setbbox(item->frontSegment()->bbox());
         return;
     }
@@ -169,13 +169,13 @@ void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
         // case 1: one segment
         if (sPos.system1 == sPos.system2) {
             segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-            segment->layoutSegment(sPos.p1, sPos.p2);
+            layoutSegment(segment, ctx, sPos.p1, sPos.p2);
         }
         // case 2: start segment
         else if (i == 0) {
             segment->setSpannerSegmentType(SpannerSegmentType::BEGIN);
             double x = system->bbox().width();
-            segment->layoutSegment(sPos.p1, PointF(x, sPos.p1.y()));
+            layoutSegment(segment, ctx, sPos.p1, PointF(x, sPos.p1.y()));
         }
         // case 3: middle segment
         else if (i != 0 && system != sPos.system2) {
@@ -183,13 +183,13 @@ void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
             double x1 = system->firstNoteRestSegmentX(true);
             double x2 = system->bbox().width();
             double y  = item->staffIdx() > system->staves().size() ? system->y() : system->staff(item->staffIdx())->y();
-            segment->layoutSegment(PointF(x1, y), PointF(x2, y));
+            layoutSegment(segment, ctx, PointF(x1, y), PointF(x2, y));
         }
         // case 4: end segment
         else {
             segment->setSpannerSegmentType(SpannerSegmentType::END);
             double x = system->firstNoteRestSegmentX(true);
-            segment->layoutSegment(PointF(x, sPos.p2.y()), sPos.p2);
+            layoutSegment(segment, ctx, PointF(x, sPos.p2.y()), sPos.p2);
         }
         if (system == sPos.system2) {
             break;
@@ -456,7 +456,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         p1.ry() = p2.y() + (0.25 * item->spatium() * (item->_up ? -1 : 1));
     }
 
-    slurSegment->layoutSegment(p1, p2);
+    layoutSegment(slurSegment, ctx, p1, p2);
 
     return slurSegment;
 }
@@ -1329,4 +1329,28 @@ double SlurTieLayout::defaultStemLengthEnd(Tremolo* tremolo)
     return TremoloLayout::extendedStemLenWithTwoNoteTremolo(tremolo,
                                                             tremolo->chord1()->defaultStemLength(),
                                                             tremolo->chord2()->defaultStemLength()).second;
+}
+
+void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2)
+{
+    const StaffType* stType = item->staffType();
+
+    item->setSkipDraw(false);
+    if (stType && stType->isHiddenElementOnTab(ctx.style(), Sid::slurShowTabCommon, Sid::slurShowTabSimple)) {
+        item->setSkipDraw(true);
+        return;
+    }
+
+    item->setPos(PointF());
+    item->ups(Grip::START).p = p1;
+    item->ups(Grip::END).p   = p2;
+    item->setExtraHeight(0.0);
+
+    //Adjust Y pos to staff type yOffset before other calculations
+    if (item->staffType()) {
+        item->movePosY(item->staffType()->yoffset().val() * item->spatium());
+    }
+
+    item->computeBezier();
+    item->setbbox(item->path().boundingRect());
 }

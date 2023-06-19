@@ -26,6 +26,7 @@
 
 namespace mu::engraving {
 class Slur;
+class SlurSegment;
 struct SlurPos;
 class SpannerSegment;
 class System;
@@ -55,6 +56,8 @@ private:
 
     static double defaultStemLengthStart(Tremolo* tremolo);
     static double defaultStemLengthEnd(Tremolo* tremolo);
+
+    static void layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2);
 };
 }
 
