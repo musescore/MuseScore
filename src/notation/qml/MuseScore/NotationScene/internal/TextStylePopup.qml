@@ -37,4 +37,10 @@ StyledPopupView {
 
     showArrow: false
 
+    function updatePosition(pos, size) {
+        var h = root.contentHeight
+        root.x = pos.x + size.x + 12
+        root.y = pos.y - h / 2
+    }
+
 }
