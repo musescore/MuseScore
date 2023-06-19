@@ -2942,13 +2942,16 @@ static void createLinkedTabs(MasterScore* score)
 //   importScore
 //---------------------------------------------------------
 
-static Err importScore(MasterScore* score, mu::io::IODevice* io)
+static Err importScore(MasterScore* score, mu::io::IODevice* io, bool experimental = false)
 {
     if (!io->open(IODevice::ReadOnly)) {
         return Err::FileOpenError;
     }
 
     score->loadStyle(u":/engraving/styles/gp-style.mss");
+    if (experimental) {
+        score->loadStyle(u":/engraving/styles/gp-style-experimental.mss");
+    }
 
     score->checkChordList();
     io->seek(0);
@@ -3070,9 +3073,9 @@ static Err importScore(MasterScore* score, mu::io::IODevice* io)
 //   importGTP
 //---------------------------------------------------------
 
-Err importGTP(MasterScore* score, mu::io::IODevice* io, bool createLinkedTabForce)
+Err importGTP(MasterScore* score, mu::io::IODevice* io, bool createLinkedTabForce, bool experimental)
 {
-    Err error = importScore(score, io);
+    Err error = importScore(score, io, experimental);
 
     if (error != Err::NoError) {
         return error;
