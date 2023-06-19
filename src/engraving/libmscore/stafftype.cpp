@@ -287,9 +287,9 @@ bool StaffType::isCommonTabStaff() const
 //   isHiddenElementOnTab
 //---------------------------------------------------------
 
-bool StaffType::isHiddenElementOnTab(const Score* score, Sid commonTabStyle, Sid simpleTabStyle) const
+bool StaffType::isHiddenElementOnTab(const MStyle& style, Sid commonTabStyle, Sid simpleTabStyle) const
 {
-    return (isCommonTabStaff() && !score->styleB(commonTabStyle)) || (isSimpleTabStaff() && !score->styleB(simpleTabStyle));
+    return (isCommonTabStaff() && !style.styleB(commonTabStyle)) || (isSimpleTabStaff() && !style.styleB(simpleTabStyle));
 }
 
 //---------------------------------------------------------
