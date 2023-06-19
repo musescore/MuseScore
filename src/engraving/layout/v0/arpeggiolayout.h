@@ -42,9 +42,9 @@ public:
     static void layoutOnEdit(Arpeggio* item, LayoutContext& ctx);
 
 private:
-    static void symbolLine(Arpeggio* item, SymId end, SymId fill);
-    static double calcTop(Arpeggio* item);
-    static double calcBottom(Arpeggio* item);
+    static void symbolLine(Arpeggio* item, LayoutContext& ctx, SymId end, SymId fill);
+    static double calcTop(Arpeggio* item, LayoutContext& ctx);
+    static double calcBottom(Arpeggio* item, LayoutContext& ctx);
 };
 }
 

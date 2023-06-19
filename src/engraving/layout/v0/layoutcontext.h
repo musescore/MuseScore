@@ -32,6 +32,7 @@
 #include "iengravingfont.h"
 
 namespace mu::engraving {
+class EngravingItem;
 class MeasureBase;
 class Page;
 class Score;
@@ -51,10 +52,15 @@ public:
 
     Score* score() const { return m_score; }
 
+    // Context
     const MStyle& style() const;
     IEngravingFontPtr engravingFont() const;
     const Staff* staff(staff_idx_t idx) const;
 
+    // Mark
+    void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e);
+
+    // State
     bool startWithLongNames = true;
     bool firstSystem = true;
     bool firstSystemIndent = true;
