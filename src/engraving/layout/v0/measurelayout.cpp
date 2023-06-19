@@ -1170,7 +1170,7 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
         }
 
         // After the rest of the spacing is calculated we position grace-notes-after.
-        ChordLayout::repositionGraceNotesAfter(&s);
+        ChordLayout::repositionGraceNotesAfter(&s, ctx.ntracks());
 
         for (EngravingItem* e : s.elist()) {
             if (!e) {
@@ -1972,7 +1972,7 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
             continue;
         }
         // After the rest of the spacing is calculated we position grace-notes-after.
-        ChordLayout::repositionGraceNotesAfter(&s);
+        ChordLayout::repositionGraceNotesAfter(&s, ctx.ntracks());
         for (EngravingItem* e : s.elist()) {
             if (!e) {
                 continue;

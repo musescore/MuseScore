@@ -64,7 +64,7 @@ public:
     static double layoutChords2(std::vector<Note*>& notes, bool up, LayoutContext& ctx);
     static void layoutChords3(const MStyle& style, const std::vector<Chord*>&, const std::vector<Note*>&, const Staff*, LayoutContext& ctx);
     static void updateGraceNotes(Measure* measure, LayoutContext& ctx);
-    static void repositionGraceNotesAfter(Segment* segment);
+    static void repositionGraceNotesAfter(Segment* segment, size_t tracks);
     static void appendGraceNotes(Chord* chord);
     static void clearLineAttachPoints(Measure* measure);
     static void updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, LayoutContext& ctx);
