@@ -2737,7 +2737,7 @@ void TLayout::layout1(Harmony* item, LayoutContext& ctx)
         item->layoutFrame();
     }
 
-    item->score()->addRefresh(item->canvasBoundingRect());
+    ctx.addRefresh(item->canvasBoundingRect());
 }
 
 PointF TLayout::calculateBoundingRect(Harmony* item, LayoutContext& ctx)
@@ -2789,7 +2789,7 @@ PointF TLayout::calculateBoundingRect(Harmony* item, LayoutContext& ctx)
         }
 
         if (fd) {
-            newPosY = ypos - yy - item->score()->styleMM(Sid::harmonyFretDist);
+            newPosY = ypos - yy - ctx.style().styleMM(Sid::harmonyFretDist);
         } else {
             newPosY = ypos;
         }
@@ -2888,7 +2888,7 @@ void TLayout::layout(Jump* item, LayoutContext& ctx)
     item->autoplaceMeasureElement();
 }
 
-void TLayout::layout(KeySig* item, LayoutContext&)
+void TLayout::layout(KeySig* item, LayoutContext& ctx)
 {
     double _spatium = item->spatium();
     double step = _spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
@@ -2923,7 +2923,7 @@ void TLayout::layout(KeySig* item, LayoutContext&)
     int t1 = int(item->key());
 
     if (item->isCustom() && !item->isAtonal()) {
-        double accidentalGap = item->score()->styleS(Sid::keysigAccidentalDistance).val();
+        double accidentalGap = ctx.style().styleS(Sid::keysigAccidentalDistance).val();
         // add standard key accidentals first, if necessary
         for (int i = 1; i <= abs(t1) && abs(t1) <= 7; ++i) {
             bool drop = false;
@@ -3026,7 +3026,7 @@ void TLayout::layout(KeySig* item, LayoutContext&)
             const bool newSection = (!item->segment()
                                      || (item->segment()->rtick().isZero() && (!prevMeasure || prevMeasure->sectionBreak()))
                                      );
-            naturalsOn = !newSection && (item->score()->styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0));
+            naturalsOn = !newSection && (ctx.style().styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0));
         }
 
         // Don't repeat naturals if shown in courtesy
@@ -3083,7 +3083,7 @@ void TLayout::layout(KeySig* item, LayoutContext&)
         // OR going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
 
         bool prefixNaturals = naturalsOn
-                              && (item->score()->styleI(Sid::keySigNaturals) == int(KeySigNatural::BEFORE)
+                              && (ctx.style().styleI(Sid::keySigNaturals) == int(KeySigNatural::BEFORE)
                                   || t1 * int(t2) < 0);
 
         // naturals should go AFTER accidentals if they should not go before!
@@ -3094,7 +3094,7 @@ void TLayout::layout(KeySig* item, LayoutContext&)
         if (prefixNaturals) {
             for (int i = 0; i < 7; ++i) {
                 if (naturals & (1 << i)) {
-                    keySigAddLayout(item, SymId::accidentalNatural, lines[i + coffset]);
+                    keySigAddLayout(item, ctx, SymId::accidentalNatural, lines[i + coffset]);
                 }
             }
         }
@@ -3102,7 +3102,7 @@ void TLayout::layout(KeySig* item, LayoutContext&)
             SymId symbol = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
             int lineIndexOffset = t1 > 0 ? 0 : 7;
             for (int i = 0; i < abs(t1); ++i) {
-                keySigAddLayout(item, symbol, lines[lineIndexOffset + i]);
+                keySigAddLayout(item, ctx, symbol, lines[lineIndexOffset + i]);
             }
         } else {
             LOGD("illegal t1 key %d", t1);
@@ -3112,7 +3112,7 @@ void TLayout::layout(KeySig* item, LayoutContext&)
         if (suffixNaturals) {
             for (int i = 0; i < 7; ++i) {
                 if (naturals & (1 << i)) {
-                    keySigAddLayout(item, SymId::accidentalNatural, lines[i + coffset]);
+                    keySigAddLayout(item, ctx, SymId::accidentalNatural, lines[i + coffset]);
                 }
             }
         }
@@ -3131,7 +3131,7 @@ void TLayout::layout(KeySig* item, LayoutContext&)
     }
 }
 
-void TLayout::keySigAddLayout(KeySig* item, SymId sym, int line)
+void TLayout::keySigAddLayout(KeySig* item, LayoutContext& ctx, SymId sym, int line)
 {
     double _spatium = item->spatium();
     double step = _spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
@@ -3140,11 +3140,11 @@ void TLayout::keySigAddLayout(KeySig* item, SymId sym, int line)
     double x = 0.0;
     if (item->keySymbols().size() > 0) {
         KeySym& previous = item->keySymbols().back();
-        double accidentalGap = item->score()->styleS(Sid::keysigAccidentalDistance).val();
+        double accidentalGap = ctx.style().styleS(Sid::keysigAccidentalDistance).val();
         if (previous.sym != sym) {
             accidentalGap *= 2;
         } else if (previous.sym == SymId::accidentalNatural && sym == SymId::accidentalNatural) {
-            accidentalGap = item->score()->styleS(Sid::keysigNaturalDistance).val();
+            accidentalGap = ctx.style().styleS(Sid::keysigNaturalDistance).val();
         }
         double previousWidth = item->symWidth(previous.sym) / _spatium;
         x = previous.xPos + previousWidth + accidentalGap;
