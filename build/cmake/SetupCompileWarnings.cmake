@@ -52,7 +52,7 @@ function(target_no_warning TARGET WNAME)
     elseif(WNAME STREQUAL "-Wno-attributes")
 
     elseif(WNAME STREQUAL "-w")
-        set(MSVC_Warning /w)
+        set(MSVC_Warning /W0)
 
     # Only MSVC warnings
     elseif(WNAME STREQUAL "-WMSVC-no-translation-unit-is-empty")
