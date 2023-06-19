@@ -1217,6 +1217,8 @@ void GP67DomBuilder::readTrackProperties(XmlDomNode* propertiesNode, GPTrack* tr
             }
             property.tunning.swap(tunning);
             property.useFlats = !propertyNode.firstChildElement("Flat").isNull();
+        } else if (propertyName == u"TuningFlat") {
+            property.useFlats = !propertyNode.firstChildElement("Enable").isNull();
         } else if (propertyName == u"DiagramCollection" || propertyName == u"DiagramWorkingSet") {
             readDiagram(propertyNode.firstChild(), track);
         }
