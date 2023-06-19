@@ -21,12 +21,15 @@
  */
 #include "layoutcontext.h"
 
+#include "style/defaultstyle.h"
+
 #include "libmscore/mscoreview.h"
 #include "libmscore/score.h"
 #include "libmscore/spanner.h"
 
 #include "tlayout.h"
 
+using namespace mu::engraving;
 using namespace mu::engraving::layout::v0;
 
 LayoutContext::LayoutContext(Score* score)
@@ -44,4 +47,17 @@ LayoutContext::~LayoutContext()
     for (MuseScoreView* v : score()->getViewer()) {
         v->layoutChanged();
     }
+}
+
+const MStyle& LayoutContext::style() const
+{
+    if (m_score) {
+        return m_score->style();
+    }
+    return DefaultStyle::defaultStyle();
+}
+
+IEngravingFontPtr LayoutContext::engravingFont() const
+{
+    return m_score ? m_score->engravingFont() : nullptr;
 }

@@ -897,8 +897,8 @@ public:
     const ChordList* chordList() const { return &_chordList; }
     void checkChordList() { _chordList.checkChordList(style()); }
 
-    virtual MStyle& style() { return m_style; }
-    virtual const MStyle& style() const { return m_style; }
+    MStyle& style() { return m_style; }
+    const MStyle& style() const { return m_style; }
 
     PageSizeGetAccessor pageSize() const { return PageSizeGetAccessor(m_style); }
     PageSizeSetAccessor pageSize() { return PageSizeSetAccessor(m_style); }
