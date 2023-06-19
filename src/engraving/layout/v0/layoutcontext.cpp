@@ -51,18 +51,33 @@ LayoutContext::~LayoutContext()
 
 const MStyle& LayoutContext::style() const
 {
-    if (m_score) {
-        return m_score->style();
+    IF_ASSERT_FAILED(m_score) {
+        return DefaultStyle::defaultStyle();
     }
-    return DefaultStyle::defaultStyle();
+
+    return m_score->style();
 }
 
 IEngravingFontPtr LayoutContext::engravingFont() const
 {
-    return m_score ? m_score->engravingFont() : nullptr;
+    IF_ASSERT_FAILED(m_score) {
+        return nullptr;
+    }
+    return m_score->engravingFont();
 }
 
 const Staff* LayoutContext::staff(staff_idx_t idx) const
 {
-    return m_score ? m_score->staff(idx) : nullptr;
+    IF_ASSERT_FAILED(m_score) {
+        return nullptr;
+    }
+    return m_score->staff(idx);
+}
+
+void LayoutContext::setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e)
+{
+    IF_ASSERT_FAILED(m_score) {
+        return;
+    }
+    m_score->setLayout(tick1, tick2, staff1, staff2, e);
 }

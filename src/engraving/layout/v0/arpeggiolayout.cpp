@@ -25,7 +25,6 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/segment.h"
-#include "libmscore/score.h"
 #include "libmscore/staff.h"
 
 #include "tlayout.h"
@@ -33,14 +32,14 @@
 using namespace mu::engraving;
 using namespace mu::engraving::layout::v0;
 
-void ArpeggioLayout::layout(Arpeggio* item, LayoutContext&)
+void ArpeggioLayout::layout(Arpeggio* item, LayoutContext& ctx)
 {
-    double top = calcTop(item);
-    double bottom = calcBottom(item);
-    if (item->score()->styleB(Sid::ArpeggioHiddenInStdIfTab)) {
+    double top = calcTop(item, ctx);
+    double bottom = calcBottom(item, ctx);
+    if (ctx.style().styleB(Sid::ArpeggioHiddenInStdIfTab)) {
         if (item->staff() && item->staff()->isPitchedStaff(item->tick())) {
             for (Staff* s : item->staff()->staffList()) {
-                if (s->score() == item->score() && s->isTabStaff(item->tick()) && s->visible()) {
+                if (s->onSameScore(item) && s->isTabStaff(item->tick()) && s->visible()) {
                     item->setbbox(RectF());
                     return;
                 }
@@ -52,7 +51,7 @@ void ArpeggioLayout::layout(Arpeggio* item, LayoutContext&)
     }
     switch (item->arpeggioType()) {
     case ArpeggioType::NORMAL: {
-        ArpeggioLayout::symbolLine(item, SymId::wiggleArpeggiatoUp, SymId::wiggleArpeggiatoUp);
+        ArpeggioLayout::symbolLine(item, ctx, SymId::wiggleArpeggiatoUp, SymId::wiggleArpeggiatoUp);
         // string is rotated -90 degrees
         RectF r(item->symBbox(item->symbols()));
         item->setbbox(RectF(0.0, -r.x() + top, r.height(), r.width()));
@@ -60,7 +59,7 @@ void ArpeggioLayout::layout(Arpeggio* item, LayoutContext&)
     break;
 
     case ArpeggioType::UP: {
-        ArpeggioLayout::symbolLine(item, SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
+        ArpeggioLayout::symbolLine(item, ctx, SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
         // string is rotated -90 degrees
         RectF r(item->symBbox(item->symbols()));
         item->setbbox(RectF(0.0, -r.x() + top, r.height(), r.width()));
@@ -68,7 +67,7 @@ void ArpeggioLayout::layout(Arpeggio* item, LayoutContext&)
     break;
 
     case ArpeggioType::DOWN: {
-        ArpeggioLayout::symbolLine(item, SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
+        ArpeggioLayout::symbolLine(item, ctx, SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
         // string is rotated +90 degrees (so that UpArrow turns into a DownArrow)
         RectF r(item->symBbox(item->symbols()));
         item->setbbox(RectF(0.0, r.x() + top, r.height(), r.width()));
@@ -93,7 +92,7 @@ void ArpeggioLayout::layout(Arpeggio* item, LayoutContext&)
 
     case ArpeggioType::BRACKET: {
         double _spatium = item->spatium();
-        double w  = item->score()->styleS(Sid::ArpeggioHookLen).val() * _spatium;
+        double w  = ctx.style().styleS(Sid::ArpeggioHookLen).val() * _spatium;
         item->setbbox(RectF(0.0, top, w, bottom));
         break;
     }
@@ -134,12 +133,12 @@ void ArpeggioLayout::computeHeight(Arpeggio* item, bool includeCrossStaffHeight)
 
 void ArpeggioLayout::layoutOnEditDrag(Arpeggio* item, LayoutContext& ctx)
 {
-    TLayout::layout(item, ctx);
+    ArpeggioLayout::layout(item, ctx);
 }
 
 void ArpeggioLayout::layoutOnEdit(Arpeggio* item, LayoutContext& ctx)
 {
-    TLayout::layout(item, ctx);
+    ArpeggioLayout::layout(item, ctx);
 
     Chord* c = item->chord();
     item->setPosX(-(item->width() + item->spatium() * .5));
@@ -147,20 +146,20 @@ void ArpeggioLayout::layoutOnEdit(Arpeggio* item, LayoutContext& ctx)
     layoutArpeggio2(c->arpeggio(), ctx);
     Fraction _tick = item->tick();
 
-    ctx.score()->setLayout(_tick, _tick, item->staffIdx(), item->staffIdx() + item->span(), item);
+    ctx.setLayout(_tick, _tick, item->staffIdx(), item->staffIdx() + item->span(), item);
 }
 
 //---------------------------------------------------------
 //   symbolLine
 //    construct a string of symbols approximating width w
 //---------------------------------------------------------
-void ArpeggioLayout::symbolLine(Arpeggio* item, SymId end, SymId fill)
+void ArpeggioLayout::symbolLine(Arpeggio* item, LayoutContext& ctx, SymId end, SymId fill)
 {
-    double top = calcTop(item);
-    double bottom = calcBottom(item);
+    double top = calcTop(item, ctx);
+    double bottom = calcBottom(item, ctx);
     double w   = bottom - top;
     double mag = item->magS();
-    IEngravingFontPtr f = item->score()->engravingFont();
+    IEngravingFontPtr f = ctx.engravingFont();
 
     SymIdList symbols;
     double w1 = f->advance(end, mag);
@@ -174,7 +173,7 @@ void ArpeggioLayout::symbolLine(Arpeggio* item, SymId end, SymId fill)
     item->setSymbols(symbols);
 }
 
-double ArpeggioLayout::calcTop(Arpeggio* item)
+double ArpeggioLayout::calcTop(Arpeggio* item, LayoutContext& ctx)
 {
     double top = -item->userLen1();
     if (!item->explicitParent()) {
@@ -182,7 +181,7 @@ double ArpeggioLayout::calcTop(Arpeggio* item)
     }
     switch (item->arpeggioType()) {
     case ArpeggioType::BRACKET: {
-        double lineWidth = item->score()->styleMM(Sid::ArpeggioLineWidth);
+        double lineWidth = ctx.style().styleMM(Sid::ArpeggioLineWidth);
         return top - lineWidth / 2.0;
     }
     case ArpeggioType::NORMAL:
@@ -209,7 +208,7 @@ double ArpeggioLayout::calcTop(Arpeggio* item)
     }
 }
 
-double ArpeggioLayout::calcBottom(Arpeggio* item)
+double ArpeggioLayout::calcBottom(Arpeggio* item, LayoutContext& ctx)
 {
     double top = -item->userLen1();
     double bottom = item->height() + item->userLen2();
@@ -218,7 +217,7 @@ double ArpeggioLayout::calcBottom(Arpeggio* item)
     }
     switch (item->arpeggioType()) {
     case ArpeggioType::BRACKET: {
-        double lineWidth = item->score()->styleMM(Sid::ArpeggioLineWidth);
+        double lineWidth = ctx.style().styleMM(Sid::ArpeggioLineWidth);
         return bottom - top + lineWidth;
     }
     case ArpeggioType::NORMAL:
