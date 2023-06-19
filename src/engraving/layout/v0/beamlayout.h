@@ -50,7 +50,7 @@ public:
     static bool isTopBeam(ChordRest* cr);
     static bool notTopBeam(ChordRest* cr);
     static void createBeams(Score* score, LayoutContext& ctx, Measure* measure);
-    static void restoreBeams(Measure* m);
+    static void restoreBeams(Measure* m, LayoutContext& ctx);
     static void breakCrossMeasureBeams(Measure* measure, LayoutContext& ctx);
     static void layoutNonCrossBeams(Segment* s, LayoutContext& ctx);
     static void verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext& ctx);
@@ -60,12 +60,12 @@ private:
 
     static void layout2(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag);
 
-    static void createBeamSegments(Beam* item, const std::vector<ChordRest*>& chordRests);
+    static void createBeamSegments(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests);
     static bool calcIsBeamletBefore(const Beam* item, Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break);
     static void createBeamSegment(Beam* item, ChordRest* startChord, ChordRest* endChord, int level);
-    static void createBeamletSegment(Beam* item, ChordRest* chord, bool isBefore, int level);
+    static void createBeamletSegment(Beam* item, LayoutContext& ctx, ChordRest* chord, bool isBefore, int level);
 
-    static bool layout2Cross(Beam* item, const std::vector<ChordRest*>& chordRests, int frag);
+    static bool layout2Cross(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, int frag);
 };
 }
 
