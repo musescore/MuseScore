@@ -3168,9 +3168,9 @@ void TLayout::layout(LayoutBreak* item, LayoutContext&)
     UNUSED(item);
 }
 
-void TLayout::layout(LedgerLine* item, LayoutContext&)
+void TLayout::layout(LedgerLine* item, LayoutContext& ctx)
 {
-    item->setLineWidth(item->score()->styleMM(Sid::ledgerLineWidth) * item->chord()->mag());
+    item->setLineWidth(ctx.style().styleMM(Sid::ledgerLineWidth) * item->chord()->mag());
     if (item->staff()) {
         item->setColor(item->staff()->staffType(item->tick())->color());
     }
@@ -3234,7 +3234,7 @@ void TLayout::layout(Marker* item, LayoutContext& ctx)
     // although normally laid out to parent (measure) width,
     // force to center over barline if left-aligned
 
-    if (!item->score()->isPaletteScore() && item->layoutToParentWidth() && item->align() == AlignH::LEFT) {
+    if (!ctx.isPaletteMode() && item->layoutToParentWidth() && item->align() == AlignH::LEFT) {
         item->movePosX(-item->width() * 0.5);
     }
 
@@ -3259,9 +3259,9 @@ void TLayout::layoutMeasureBase(MeasureBase* item, LayoutContext& ctx)
             double x;
             double y;
             if (toLayoutBreak(element)->isNoBreak()) {
-                x = item->width() + item->score()->styleMM(Sid::barWidth) - element->width() * .5;
+                x = item->width() + ctx.style().styleMM(Sid::barWidth) - element->width() * .5;
             } else {
-                x = item->width() + item->score()->styleMM(Sid::barWidth) - element->width()
+                x = item->width() + ctx.style().styleMM(Sid::barWidth) - element->width()
                     - breakCount * (element->width() + _spatium * .5);
                 breakCount++;
             }
@@ -3373,7 +3373,7 @@ void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
     case 1:
     {
         item->setSymId(SymId::repeat1Bar);
-        if (item->score()->styleB(Sid::mrNumberSeries) && item->track() != mu::nidx) {
+        if (ctx.style().styleB(Sid::mrNumberSeries) && item->track() != mu::nidx) {
             int placeInSeries = 2; // "1" would be the measure actually being repeated
             staff_idx_t staffIdx = item->staffIdx();
             Measure* m = item->measure();
@@ -3381,8 +3381,8 @@ void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
                 placeInSeries++;
                 m = m->prevMeasure();
             }
-            if (placeInSeries % item->score()->styleI(Sid::mrNumberEveryXMeasures) == 0) {
-                if (item->score()->styleB(Sid::mrNumberSeriesWithParentheses)) {
+            if (placeInSeries % ctx.style().styleI(Sid::mrNumberEveryXMeasures) == 0) {
+                if (ctx.style().styleB(Sid::mrNumberSeriesWithParentheses)) {
                     item->setNumberSym(String(u"(%1)").arg(placeInSeries));
                 } else {
                     item->setNumberSym(placeInSeries);
@@ -3390,7 +3390,7 @@ void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
             } else {
                 item->clearNumberSym();
             }
-        } else if (item->score()->styleB(Sid::oneMeasureRepeatShow1)) {
+        } else if (ctx.style().styleB(Sid::oneMeasureRepeatShow1)) {
             item->setNumberSym(1);
         } else {
             item->clearNumberSym();
