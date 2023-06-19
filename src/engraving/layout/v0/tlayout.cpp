@@ -1178,7 +1178,7 @@ void TLayout::layout(Chord* item, LayoutContext& ctx)
     ChordLayout::layout(item, ctx);
 }
 
-void TLayout::layout(ChordLine* item, LayoutContext&)
+void TLayout::layout(ChordLine* item, LayoutContext& ctx)
 {
     item->setMag(item->chord() ? item->chord()->mag() : 1);
     if (!item->modified()) {
@@ -1260,7 +1260,7 @@ void TLayout::layout(ChordLine* item, LayoutContext&)
         height = r.height();
         item->bbox().setRect(x1, y1, width, height);
     } else {
-        RectF r(item->score()->engravingFont()->bbox(ChordLine::WAVE_SYMBOLS, item->magS()));
+        RectF r = ctx.engravingFont()->bbox(ChordLine::WAVE_SYMBOLS, item->magS());
         double angle = ChordLine::WAVE_ANGEL * M_PI / 180;
 
         r.setHeight(r.height() + r.width() * sin(angle));
@@ -1441,7 +1441,7 @@ void TLayout::layout(Dynamic* item, LayoutContext& ctx)
     const StaffType* stType = item->staffType();
 
     item->setSkipDraw(false);
-    if (stType && stType->isHiddenElementOnTab(item->score(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
+    if (stType && stType->isHiddenElementOnTab(ctx.style(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
         item->setSkipDraw(true);
         return;
     }
@@ -1566,12 +1566,12 @@ void TLayout::layout(Expression* item, LayoutContext& ctx)
     }
 }
 
-void TLayout::layout(Fermata* item, LayoutContext&)
+void TLayout::layout(Fermata* item, LayoutContext& ctx)
 {
     const StaffType* stType = item->staffType();
 
     item->setSkipDraw(false);
-    if (stType && stType->isHiddenElementOnTab(item->score(), Sid::fermataShowTabCommon, Sid::fermataShowTabSimple)) {
+    if (stType && stType->isHiddenElementOnTab(ctx.style(), Sid::fermataShowTabCommon, Sid::fermataShowTabSimple)) {
         item->setSkipDraw(true);
         return;
     }
@@ -2385,7 +2385,7 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
     const StaffType* stType = item->staffType();
 
     item->setSkipDraw(false);
-    if (stType && stType->isHiddenElementOnTab(item->score(), Sid::hairpinShowTabCommon, Sid::hairpinShowTabSimple)) {
+    if (stType && stType->isHiddenElementOnTab(ctx.style(), Sid::hairpinShowTabCommon, Sid::hairpinShowTabSimple)) {
         item->setSkipDraw(true);
         return;
     }
@@ -2696,7 +2696,7 @@ void TLayout::layout(HarmonicMarkSegment* item, LayoutContext& ctx)
     item->setSkipDraw(false);
     if (stType
         && (!stType->isTabStaff()
-            || stType->isHiddenElementOnTab(item->score(), Sid::harmonicMarkShowTabCommon, Sid::harmonicMarkShowTabSimple))) {
+            || stType->isHiddenElementOnTab(ctx.style(), Sid::harmonicMarkShowTabCommon, Sid::harmonicMarkShowTabSimple))) {
         item->setSkipDraw(true);
         return;
     }
@@ -3198,7 +3198,7 @@ void TLayout::layout(LetRingSegment* item, LayoutContext& ctx)
     const StaffType* stType = item->staffType();
 
     item->setSkipDraw(false);
-    if (stType && stType->isHiddenElementOnTab(item->score(), Sid::letRingShowTabCommon, Sid::letRingShowTabSimple)) {
+    if (stType && stType->isHiddenElementOnTab(ctx.style(), Sid::letRingShowTabCommon, Sid::letRingShowTabSimple)) {
         item->setSkipDraw(true);
         return;
     }
@@ -3635,7 +3635,7 @@ void TLayout::layout(PalmMuteSegment* item, LayoutContext& ctx)
     const StaffType* stType = item->staffType();
 
     item->setSkipDraw(false);
-    if (stType && stType->isHiddenElementOnTab(item->score(), Sid::palmMuteShowTabCommon, Sid::palmMuteShowTabSimple)) {
+    if (stType && stType->isHiddenElementOnTab(ctx.style(), Sid::palmMuteShowTabCommon, Sid::palmMuteShowTabSimple)) {
         item->setSkipDraw(true);
         return;
     }
@@ -3675,7 +3675,7 @@ void TLayout::layout(RasgueadoSegment* item, LayoutContext& ctx)
     const StaffType* stType = item->staffType();
 
     item->setSkipDraw(false);
-    if (stType && stType->isHiddenElementOnTab(item->score(), Sid::rasgueadoShowTabCommon, Sid::rasgueadoShowTabSimple)) {
+    if (stType && stType->isHiddenElementOnTab(ctx.style(), Sid::rasgueadoShowTabCommon, Sid::rasgueadoShowTabSimple)) {
         item->setSkipDraw(true);
         return;
     }

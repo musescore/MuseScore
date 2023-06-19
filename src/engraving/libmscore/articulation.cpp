@@ -241,7 +241,7 @@ bool Articulation::isHiddenOnTabStaff() const
         return false;
     }
 
-    return stType->isHiddenElementOnTab(score(), m_showOnTabStyles.first, m_showOnTabStyles.second);
+    return stType->isHiddenElementOnTab(score()->style(), m_showOnTabStyles.first, m_showOnTabStyles.second);
 }
 
 //---------------------------------------------------------

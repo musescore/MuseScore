@@ -420,7 +420,7 @@ public:
 
     bool isSimpleTabStaff() const;
     bool isCommonTabStaff() const;
-    bool isHiddenElementOnTab(const Score* score, Sid commonTabStyle, Sid simpleTabStyle) const;
+    bool isHiddenElementOnTab(const MStyle& style, Sid commonTabStyle, Sid simpleTabStyle) const;
 
     // static functions for font config files
     static std::vector<String> fontNames(bool bDuration);
