@@ -2317,7 +2317,7 @@ void TLayout::layout(GlissandoSegment* item, LayoutContext&)
     item->setbbox(r.adjusted(-lw, -lw, lw, lw));
 }
 
-void TLayout::layout(GraceNotesGroup* item, LayoutContext&)
+void TLayout::layout(GraceNotesGroup* item, LayoutContext& ctx)
 {
     Shape _shape;
     for (size_t i = item->size() - 1; i != mu::nidx; --i) {
@@ -2361,7 +2361,7 @@ void TLayout::layout(GraceNotesGroup* item, LayoutContext&)
         xPos = std::min(xPos, xPosCross);
     }
     // Safety net in case the shape checks don't succeed
-    xPos = std::min(xPos, -double(item->score()->styleMM(Sid::graceToMainNoteDist) + firstGN->notes().front()->headWidth() / 2));
+    xPos = std::min(xPos, -double(ctx.style().styleMM(Sid::graceToMainNoteDist) + firstGN->notes().front()->headWidth() / 2));
     item->setPos(xPos, 0.0);
 }
 
@@ -2395,11 +2395,11 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
     Dynamic* sd = nullptr;
     Dynamic* ed = nullptr;
     double dymax = item->hairpin()->placeBelow() ? -10000.0 : 10000.0;
-    if (item->autoplace() && !item->score()->isPaletteScore()) {
+    if (item->autoplace() && !ctx.isPaletteMode()) {
         Segment* start = item->hairpin()->startSegment();
         Segment* end = item->hairpin()->endSegment();
         // Try to fit between adjacent dynamics
-        double minDynamicsDistance = item->score()->styleMM(Sid::autoplaceHairpinDynamicsDistance) * item->staff()->staffMag(item->tick());
+        double minDynamicsDistance = ctx.style().styleMM(Sid::autoplaceHairpinDynamicsDistance) * item->staff()->staffMag(item->tick());
         const System* sys = item->system();
         if (item->isSingleType() || item->isBeginType()) {
             if (start && start->system() == sys) {
@@ -2559,7 +2559,7 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
         if (!item->endText()->empty()) {
             r.unite(item->endText()->bbox().translated(x + item->endText()->bbox().width(), 0.0));
         }
-        double w  = item->point(item->score()->styleS(Sid::hairpinLineWidth));
+        double w  = item->point(ctx.style().styleS(Sid::hairpinLineWidth));
         item->setbbox(r.adjusted(-w * .5, -w * .5, w, w));
     }
 
@@ -2587,7 +2587,7 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
         double sp = item->spatium();
 
         // TODO: in the future, there should be a minDistance style setting for hairpinLines as well as hairpins.
-        double minDist = item->twoLines() ? item->minDistance().val() : item->score()->styleS(Sid::dynamicsMinDistance).val();
+        double minDist = item->twoLines() ? item->minDistance().val() : ctx.style().styleS(Sid::dynamicsMinDistance).val();
         double md = minDist * sp;
 
         bool above = item->spanner()->placeAbove();
