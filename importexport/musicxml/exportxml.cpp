@@ -1804,7 +1804,7 @@ static void writeBarlineFermata(const BarLine* const barline, XmlWriter& xml, co
 
 void ExportMusicXml::barlineRight(const Measure* const m, const int strack, const int etrack)
       {
-      const Measure* mmR1 = m->mmRest1(); // the multi measure rest this measure is covered by
+      const Measure* mmR1 = m->coveringMMRestOrThis(); // the multi measure rest this measure is covered by
       const Measure* mmRLst = mmR1->isMMRest() ? mmR1->mmRestLast() : 0; // last measure of replaced sequence of empty measures
       // note: use barlinetype as found in multi measure rest for last measure of replaced sequence
       BarLineType bst = m == mmRLst ? mmR1->endBarLineType() : m->endBarLineType();
@@ -5161,7 +5161,7 @@ static bool elementRighter(const Element* e1, const Element* e2)
 
 static void measureStyle(XmlWriter& xml, Attributes& attr, const Measure* const m)
       {
-      const Measure* mmR1 = m->mmRest1();
+      const Measure* mmR1 = m->coveringMMRestOrThis();
       if (m != mmR1 && m == mmR1->mmRestFirst()) {
             attr.doAttr(xml, true);
             xml.stag("measure-style");
@@ -5808,7 +5808,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                   // in the replacing measure
                   // note: for a normal measure, mmRest1 is the measure itself,
                   // for a multi-meaure rest, it is the replacing measure
-                  const Measure* mmR1 = m->mmRest1();
+                  const Measure* mmR1 = m->coveringMMRestOrThis();
                   const System* system = mmR1->system();
 
                   // Put the system print suggestions only for the first part in a score...
@@ -6433,7 +6433,7 @@ static System* findLastSystemWithMeasures(const Page* const page)
 
 static bool isFirstMeasureInSystem(const Measure* const measure)
       {
-      const auto system = measure->mmRest1()->system();
+      const auto system = measure->coveringMMRestOrThis()->system();
       const auto firstMeasureInSystem = system->firstMeasure();
       const auto realFirstMeasureInSystem = firstMeasureInSystem->isMMRest() ? firstMeasureInSystem->mmRestFirst() : firstMeasureInSystem;
       return measure == realFirstMeasureInSystem;
@@ -6444,12 +6444,12 @@ static bool isFirstMeasureInSystem(const Measure* const measure)
 
 static bool isFirstMeasureInLastSystem(const Measure* const measure)
       {
-      const auto system = measure->mmRest1()->system();
+      const auto system = measure->coveringMMRestOrThis()->system();
       const auto page = system->page();
 
       /*
        Notes on multi-measure rest handling:
-       Function mmRest1() returns either the measure itself (if not part of multi-measure rest)
+       Function coveringMMRestOrThis() returns either the measure itself (if not part of multi-measure rest)
        or the replacing multi-measure rest measure.
        Using this is required as a measure that is covered by a multi-measure rest has no system.
        Furthermore, the first measure in a system starting with a multi-measure rest is the a multi-
@@ -6479,7 +6479,7 @@ static bool systemHasMeasures(const System* const system)
 
 static std::vector<TBox*> findTextFramesToWriteAsWordsAbove(const Measure* const measure)
       {
-      const auto system = measure->mmRest1()->system();
+      const auto system = measure->coveringMMRestOrThis()->system();
       const auto page = system->page();
       const auto systemIndex = page->systems().indexOf(system);
       std::vector<TBox*> tboxes;
@@ -6503,7 +6503,7 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsAbove(const Measure* const
 
 static std::vector<TBox*> findTextFramesToWriteAsWordsBelow(const Measure* const measure)
       {
-      const auto system = measure->mmRest1()->system();
+      const auto system = measure->coveringMMRestOrThis()->system();
       const auto page = system->page();
       const auto systemIndex = page->systems().indexOf(system);
       std::vector<TBox*> tboxes;
@@ -6574,17 +6574,17 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                         const bool isLastPart = (partIndex == (_score->parts().size() - 1));
                         if (!tboxesAboveWritten && isFirstPart) {
                               for (const auto tbox : tboxesAbove) {
-                                    // note: use mmRest1() to get at a possible multi-measure rest,
+                                    // note: use coveringMMRestOrThis() to get at a possible multi-measure rest,
                                     // as the covered measure would be positioned at 0,0.
-                                    tboxTextAsWords(tbox->text(), 0, tbox->text()->canvasPos() - m->mmRest1()->canvasPos());
+                                    tboxTextAsWords(tbox->text(), 0, tbox->text()->canvasPos() - m->coveringMMRestOrThis()->canvasPos());
                                     }
                               tboxesAboveWritten = true;
                               }
                         if (!tboxesBelowWritten && isLastPart && (etrack - VOICES) <= st) {
                               for (const auto tbox : tboxesBelow) {
                                     const auto lastStaffNr = st / VOICES;
-                                    const auto sys = m->mmRest1()->system();
-                                    auto textPos = tbox->text()->canvasPos() - m->mmRest1()->canvasPos();
+                                    const auto sys = m->coveringMMRestOrThis()->system();
+                                    auto textPos = tbox->text()->canvasPos() - m->coveringMMRestOrThis()->canvasPos();
                                     if (lastStaffNr < sys->staves()->size()) {
                                           // convert to position relative to last staff of system
                                           textPos.setY(textPos.y() - (sys->staffCanvasYpage(lastStaffNr) - sys->staffCanvasYpage(0)));

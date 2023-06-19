@@ -989,8 +989,9 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     }
                               }
                         }
-                  if (score()->styleB(Sid::createMultiMeasureRests))
-                        m = m->mmRest1();
+
+                  m = m->coveringMMRestOrThis();
+
                   Q_ASSERT(m->system());
                   *sys = m->system();
                   }

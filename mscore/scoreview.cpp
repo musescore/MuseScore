@@ -1462,7 +1462,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   // segment is in a measure that has not been laid out yet
                   // this can happen in mmrests
                   // first chordrest segment of mmrest instead
-                  const Measure* mmr = ss->measure()->mmRest1();
+                  const Measure* mmr = ss->measure()->coveringMMRestOrThis();
                   if (mmr && mmr->system())
                         ss = mmr->first(SegmentType::ChordRest);
                   else
@@ -1515,7 +1515,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   system2  = s->measure()->system();
                   if (!system2) {
                         // as before, use mmrest if necessary
-                        const Measure* mmr = s->measure()->mmRest1();
+                        const Measure* mmr = s->measure()->coveringMMRestOrThis();
                         if (mmr)
                               system2 = mmr->system();
                         if (!system2)

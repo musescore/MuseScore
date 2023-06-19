@@ -1708,12 +1708,7 @@ Measure* Score::lastMeasure() const
 Measure* Score::lastMeasureMM() const
       {
       Measure* m = lastMeasure();
-      if (m && styleB(Sid::createMultiMeasureRests)) {
-            Measure* m1 = const_cast<Measure*>(toMeasure(m->mmRest1()));
-            if (m1)
-                  return m1;
-            }
-      return m;
+      return m ? const_cast<Measure*>(m->coveringMMRestOrThis()) : nullptr;
       }
 
 //---------------------------------------------------------
@@ -4050,7 +4045,7 @@ ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
       {
       auto newCR = cr;
       auto currentMeasure = cr->measure();
-      auto currentSystem = currentMeasure->system() ? currentMeasure->system() : currentMeasure->mmRest1()->system();
+      auto currentSystem = currentMeasure->system() ? currentMeasure->system() : currentMeasure->coveringMMRestOrThis()->system();
       if (!currentSystem)
             return cr;
       auto destinationMeasure = currentSystem->firstMeasure();
@@ -4060,7 +4055,9 @@ ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
       if (next) {
             if ((destinationMeasure = currentSystem->lastMeasure()->nextMeasure())) {
                   // There is a next system present: get it and accommodate for MMRest
-                  currentSystem = destinationMeasure->system() ? destinationMeasure->system() : destinationMeasure->mmRest1()->system();
+                  currentSystem = destinationMeasure->system()
+                                  ? destinationMeasure->system()
+                                  : destinationMeasure->coveringMMRestOrThis()->system();
                   if ((destinationMeasure = currentSystem->firstMeasure()))
                         if ((newCR = destinationMeasure->first()->nextChordRest(trackZeroVoice(cr->track()), false)))
                               cr = newCR;
@@ -4089,7 +4086,9 @@ ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
                   if (!(destinationMeasure = destinationMeasure->prevMeasure()))
                         if (!(destinationMeasure = destinationMeasure->prevMeasureMM()))
                               return cr;
-                  if (!(currentSystem = destinationMeasure->system() ? destinationMeasure->system() : destinationMeasure->mmRest1()->system()))
+                  if (!(currentSystem = destinationMeasure->system()
+                                        ? destinationMeasure->system()
+                                        : destinationMeasure->coveringMMRestOrThis()->system()))
                         return cr;
                   destinationMeasure = currentSystem->firstMeasure();
                   }
@@ -4220,7 +4219,7 @@ Element* Score::getScoreElementOfMeasureBase(MeasureBase* mb) const
             else if ((currentMeasure = mb->findMeasure())) {
                   // Accommodate for MMRest
                   if (score()->styleB(Sid::createMultiMeasureRests) && currentMeasure->hasMMRest())
-                        currentMeasure = currentMeasure->mmRest1();
+                        currentMeasure = currentMeasure->coveringMMRestOrThis();
                   if ((cr = currentMeasure->first()->nextChordRest(0, false)))
                         el = cr;
                   }
@@ -4309,7 +4308,7 @@ ChordRest* Score::cmdTopStaff(ChordRest* cr)
       if (destinationMeasure) {
             // Accommodate for MMRest
             if (score()->styleB(Sid::createMultiMeasureRests) && destinationMeasure->hasMMRest())
-                  destinationMeasure = destinationMeasure->mmRest1();
+                  destinationMeasure = destinationMeasure->coveringMMRestOrThis();
             // Get first ChordRest of top staff
             cr = destinationMeasure->first()->nextChordRest(0, false);
             }

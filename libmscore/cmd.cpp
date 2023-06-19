@@ -2522,7 +2522,7 @@ Element* Score::move(const QString& cmd)
                   ftm = firstTrailingMeasure(&cr) ? firstTrailingMeasure(&cr) : lastMeasure();
             if (ftm) {
                   if (score()->styleB(Sid::createMultiMeasureRests) && ftm->hasMMRest())
-                        ftm = ftm->mmRest1();
+                        ftm = ftm->coveringMMRestOrThis();
                   el = !cr ? ftm->first()->nextChordRest(0, false) : ftm->first()->nextChordRest(trackZeroVoice(cr->track()), false);
                   }
             // Note: Due to the nature of this command as being preparatory for input,
