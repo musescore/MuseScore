@@ -28,6 +28,9 @@
 #include "types/fraction.h"
 #include "types/types.h"
 
+#include "style/style.h"
+#include "iengravingfont.h"
+
 namespace mu::engraving {
 class MeasureBase;
 class Page;
@@ -46,6 +49,9 @@ public:
     ~LayoutContext();
 
     Score* score() const { return m_score; }
+
+    const MStyle& style() const;
+    IEngravingFontPtr engravingFont() const;
 
     bool startWithLongNames = true;
     bool firstSystem = true;

@@ -259,7 +259,7 @@ void TLayout::layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx)
         default:
             break;
         }
-        if (!item->score()->engravingFont()->isValid(s)) {
+        if (!ctx.engravingFont()->isValid(s)) {
             layoutMultiGlyphAccidental(item, ctx);
             return;
         }
@@ -271,9 +271,9 @@ void TLayout::layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx)
     item->setbbox(r);
 }
 
-void TLayout::layoutMultiGlyphAccidental(Accidental* item, LayoutContext&)
+void TLayout::layoutMultiGlyphAccidental(Accidental* item, LayoutContext& ctx)
 {
-    double margin = item->score()->styleMM(Sid::bracketedAccidentalPadding);
+    double margin = ctx.style().styleMM(Sid::bracketedAccidentalPadding);
     RectF r;
     double x = 0.0;
 
