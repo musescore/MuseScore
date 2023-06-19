@@ -616,6 +616,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(XmlDomNode
                 note = _notes.at(idx);
                 beat->addGPNote(note);
             }
+            beat->sortGPNotes();
         } else if (nodeName == u"GraceNotes") {
             beat->setGraceNotes(graceNotes(innerNode.toElement().text()));
         } else if (nodeName == u"Arpeggio") {

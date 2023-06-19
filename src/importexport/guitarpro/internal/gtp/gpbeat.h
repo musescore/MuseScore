@@ -92,7 +92,17 @@ public:
         BROKEN2_JOINED
     };
 
+    struct {
+        bool operator()(const std::shared_ptr<GPNote>& a, const std::shared_ptr<GPNote>& b) const
+        {
+            auto aPitch = a->midiPitch().octave * 12 + a->midiPitch().tone;
+            auto bPitch = b->midiPitch().octave * 12 + b->midiPitch().tone;
+            return aPitch > bPitch;
+        }
+    } comparePitch;
+
     void addGPNote(const std::shared_ptr<GPNote>& n) { _notes.push_back(n); }
+    void sortGPNotes();
     void addGPRhythm(const std::shared_ptr<GPRhythm>& n) { _rhythm = n; }
     void setDynamic(GPBeat::DynamicType t) { _dynamic = t; }
     void setLegatoType(GPBeat::LegatoType t) { _legato = t; }
