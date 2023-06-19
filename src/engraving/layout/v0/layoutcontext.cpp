@@ -61,3 +61,8 @@ IEngravingFontPtr LayoutContext::engravingFont() const
 {
     return m_score ? m_score->engravingFont() : nullptr;
 }
+
+const Staff* LayoutContext::staff(staff_idx_t idx) const
+{
+    return m_score ? m_score->staff(idx) : nullptr;
+}
