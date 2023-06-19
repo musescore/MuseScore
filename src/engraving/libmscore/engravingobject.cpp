@@ -28,15 +28,12 @@
 #include "style/textstyle.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "rw/400/connectorinforeader.h"
 
 #include "bracketItem.h"
-#include "factory.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
 #include "score.h"
 #include "undo.h"
-#include "connector.h"
 
 #include "log.h"
 
@@ -487,16 +484,16 @@ void EngravingObject::linkTo(EngravingObject* element)
     assert(!_links);
 
     if (element->links()) {
-        _links = element->_links;
+        setLinks(element->_links);
         assert(_links->contains(element));
     } else {
         if (isStaff()) {
-            _links = new LinkedObjects(score(), -1);       // don’t use lid
+            setLinks(new LinkedObjects(score(), -1));       // don’t use lid
         } else {
-            _links = new LinkedObjects(score());
+            setLinks(new LinkedObjects(score()));
         }
         _links->push_back(element);
-        element->_links = _links;
+        element->setLinks(_links);
     }
     assert(!_links->contains(this));
     _links->push_back(this);
@@ -569,6 +566,11 @@ void EngravingObject::undoUnlink()
     if (_links) {
         score()->undo(new Unlink(this));
     }
+}
+
+void EngravingObject::setLinks(LinkedObjects* le)
+{
+    _links = le;
 }
 
 //---------------------------------------------------------
@@ -703,6 +705,7 @@ bool EngravingObject::isTextBase() const
            || type() == ElementType::SYSTEM_TEXT
            || type() == ElementType::TRIPLET_FEEL
            || type() == ElementType::PLAYTECH_ANNOTATION
+           || type() == ElementType::CAPO
            || type() == ElementType::REHEARSAL_MARK
            || type() == ElementType::INSTRUMENT_CHANGE
            || type() == ElementType::FIGURED_BASS
@@ -711,6 +714,7 @@ bool EngravingObject::isTextBase() const
            || type() == ElementType::MEASURE_NUMBER
            || type() == ElementType::MMREST_RANGE
            || type() == ElementType::STICKING
+           || type() == ElementType::HARP_DIAGRAM
     ;
 }
 

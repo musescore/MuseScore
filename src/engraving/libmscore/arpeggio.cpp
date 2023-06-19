@@ -27,9 +27,7 @@
 #include "containers.h"
 
 #include "iengravingfont.h"
-
 #include "types/typesconv.h"
-#include "layout/tlayout.h"
 
 #include "accidental.h"
 #include "chord.h"
@@ -74,129 +72,6 @@ const TranslatableString& Arpeggio::arpeggioTypeName() const
 void Arpeggio::setHeight(double h)
 {
     _height = h;
-}
-
-//---------------------------------------------------------
-//   symbolLine
-//    construct a string of symbols approximating width w
-//---------------------------------------------------------
-
-void Arpeggio::symbolLine(SymId end, SymId fill)
-{
-    double top = calcTop();
-    double bottom = calcBottom();
-    double w   = bottom - top;
-    double mag = magS();
-    IEngravingFontPtr f = score()->engravingFont();
-
-    m_symbols.clear();
-    double w1 = f->advance(end, mag);
-    double w2 = f->advance(fill, mag);
-    int n    = lrint((w - w1) / w2);
-    for (int i = 0; i < n; ++i) {
-        m_symbols.push_back(fill);
-    }
-    m_symbols.push_back(end);
-}
-
-//---------------------------------------------------------
-//   calcTop
-//---------------------------------------------------------
-
-double Arpeggio::calcTop() const
-{
-    double top = -_userLen1;
-    if (!explicitParent()) {
-        return top;
-    }
-    switch (arpeggioType()) {
-    case ArpeggioType::BRACKET: {
-        double lineWidth = score()->styleMM(Sid::ArpeggioLineWidth);
-        return top - lineWidth / 2.0;
-    }
-    case ArpeggioType::NORMAL:
-    case ArpeggioType::UP:
-    case ArpeggioType::DOWN: {
-        // if the top is in the staff on a space, move it up
-        // if the bottom note is on a line, the distance is 0.25 spaces
-        // if the bottom note is on a space, the distance is 0.5 spaces
-        int topNoteLine = chord()->upNote()->line();
-        int lines = staff()->lines(tick());
-        int bottomLine = (lines - 1) * 2;
-        if (topNoteLine <= 0 || topNoteLine % 2 == 0 || topNoteLine >= bottomLine) {
-            return top;
-        }
-        int downNoteLine = chord()->downNote()->line();
-        if (downNoteLine % 2 == 1 && downNoteLine < bottomLine) {
-            return top - 0.4 * spatium();
-        }
-        return top - 0.25 * spatium();
-    }
-    default: {
-        return top - spatium() / 4;
-    }
-    }
-}
-
-//---------------------------------------------------------
-//   computeHeight
-//---------------------------------------------------------
-
-void Arpeggio::computeHeight(bool includeCrossStaffHeight)
-{
-    Chord* topChord = chord();
-    if (!topChord) {
-        return;
-    }
-    double y = topChord->upNote()->pagePos().y() - topChord->upNote()->headHeight() * .5;
-
-    Note* bottomNote = topChord->downNote();
-    if (includeCrossStaffHeight) {
-        track_idx_t bottomTrack = track() + (_span - 1) * VOICES;
-        EngravingItem* element = topChord->segment()->element(bottomTrack);
-        Chord* bottomChord = (element && element->isChord()) ? toChord(element) : topChord;
-        bottomNote = bottomChord->downNote();
-    }
-
-    double h = bottomNote->pagePos().y() + bottomNote->headHeight() * .5 - y;
-    setHeight(h);
-}
-
-//---------------------------------------------------------
-//   calcBottom
-//---------------------------------------------------------
-
-double Arpeggio::calcBottom() const
-{
-    double top = -_userLen1;
-    double bottom = _height + _userLen2;
-    if (!explicitParent()) {
-        return bottom;
-    }
-    switch (arpeggioType()) {
-    case ArpeggioType::BRACKET: {
-        double lineWidth = score()->styleMM(Sid::ArpeggioLineWidth);
-        return bottom - top + lineWidth;
-    }
-    case ArpeggioType::NORMAL:
-    case ArpeggioType::UP:
-    case ArpeggioType::DOWN: {
-        return bottom;
-    }
-    default: {
-        return bottom - top + spatium() / 2;
-    }
-    }
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Arpeggio::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -293,7 +168,8 @@ void Arpeggio::editDrag(EditData& ed)
     } else if (ed.curGrip == Grip::END) {
         _userLen2 += d;
     }
-    layout();
+
+    layout()->layoutItem(this);
 }
 
 //---------------------------------------------------------
@@ -390,12 +266,8 @@ bool Arpeggio::edit(EditData& ed)
         }
     }
 
-    layout();
-    Chord* c = chord();
-    setPosX(-(width() + spatium() * .5));
-    c->layoutArpeggio2();
-    Fraction _tick = tick();
-    score()->setLayout(_tick, _tick, staffIdx(), staffIdx() + _span, this);
+    layout()->layoutOnEdit(this);
+
     return true;
 }
 

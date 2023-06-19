@@ -60,8 +60,6 @@ const std::vector<JumpTypeTableItem> jumpTypeTable {
     { JumpType::DSS_AL_CODA,    "D.S.S. al Coda",        "varsegno", "coda",  "codab" },
     { JumpType::DSS_AL_DBLCODA, "D.S.S. al Double Coda", "varsegno", "varcoda", "codab" },
     { JumpType::DSS_AL_FINE,    "D.S.S. al Fine",        "varsegno", "fine",  "" },
-    { JumpType::DCODA,          "Da Coda",               "coda", "end",  "" },
-    { JumpType::DDBLCODA,       "Da Double Coda",        "varcoda", "end",  "" }
 };
 
 //---------------------------------------------------------
@@ -111,16 +109,6 @@ JumpType Jump::jumpType() const
 String Jump::jumpTypeUserName() const
 {
     return TConv::translatedUserName(jumpType());
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Jump::layout()
-{
-    TextBase::layout();
-    autoplaceMeasureElement();
 }
 
 //---------------------------------------------------------

@@ -33,7 +33,7 @@
 namespace mu::notation {
 class LoopMarker
 {
-    INJECT(notation, INotationConfiguration, configuration)
+    INJECT(INotationConfiguration, configuration)
 
 public:
     LoopMarker(LoopBoundaryType type);

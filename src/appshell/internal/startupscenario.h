@@ -37,16 +37,18 @@
 namespace mu::appshell {
 class StartupScenario : public IStartupScenario, public async::Asyncable
 {
-    INJECT(appshell, framework::IInteractive, interactive)
-    INJECT(appshell, actions::IActionsDispatcher, dispatcher)
-    INJECT(appshell, mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(appshell, IAppShellConfiguration, configuration)
-    INJECT(appshell, ISessionsManager, sessionsManager)
-    INJECT(appshell, project::IProjectAutoSaver, projectAutoSaver)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(IAppShellConfiguration, configuration)
+    INJECT(ISessionsManager, sessionsManager)
+    INJECT(project::IProjectAutoSaver, projectAutoSaver)
 
 public:
 
     void setStartupType(const std::optional<std::string>& type) override;
+
+    io::path_t startupScorePath() const override;
     void setStartupScorePath(const std::optional<io::path_t>& path) override;
 
     void run() override;

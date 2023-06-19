@@ -44,11 +44,6 @@ class Jump final : public TextBase
     OBJECT_ALLOCATOR(engraving, Jump)
     DECLARE_CLASSOF(ElementType::JUMP)
 
-    String _jumpTo;
-    String _playUntil;
-    String _continueAt;
-    bool _playRepeats;
-
 public:
 
     Jump(Measure* parent);
@@ -62,8 +57,6 @@ public:
     int subtype() const override { return int(jumpType()); }
 
     Measure* measure() const { return toMeasure(explicitParent()); }
-
-    void layout() override;
 
     String jumpTo() const { return _jumpTo; }
     String playUntil() const { return _playUntil; }
@@ -84,6 +77,12 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
+
+private:
+    String _jumpTo;
+    String _playUntil;
+    String _continueAt;
+    bool _playRepeats;
 };
 
 struct JumpTypeTableItem {

@@ -41,7 +41,6 @@ public:
 
     PropertyValue propertyDefault(Pid id) const override;
 
-    void layout() override;
     double computeDynamicExpressionDistance() const;
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
@@ -55,11 +54,12 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     void mapPropertiesFromOldExpressions(StaffText* staffText);
 
-    Dynamic* snappedDynamic() const { return _snappedDynamic; }
-private:
-    friend class v0::TLayout;
+    Dynamic* snappedDynamic() const { return m_snappedDynamic; }
+    void setSnappedDynamic(Dynamic* d) { m_snappedDynamic = d; }
 
-    Dynamic* _snappedDynamic = nullptr;
+private:
+
+    Dynamic* m_snappedDynamic = nullptr;
 };
 } // namespace mu::engraving
 #endif // MU_ENGRAVING_EXPRESSION_H

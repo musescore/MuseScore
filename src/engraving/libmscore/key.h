@@ -24,6 +24,7 @@
 #define __KEY__H__
 
 #include <vector>
+#include <array>
 
 #include "types/types.h"
 
@@ -61,29 +62,22 @@ struct CustDef {
 
 class KeySigEvent
 {
-    Key _key            { Key::INVALID };                // -7 -> +7
-    KeyMode _mode       { KeyMode::UNKNOWN };
-    bool _custom        { false };
-    bool _forInstrumentChange{ false };
-    std::vector<CustDef> _customKeyDefs;
-    std::vector<KeySym> _keySymbols;
-
-    void enforceLimits();
-
 public:
     KeySigEvent() = default;
 
     bool operator==(const KeySigEvent& e) const;
     bool operator!=(const KeySigEvent& e) const { return !(*this == e); }
 
+    void setConcertKey(Key v);
     void setKey(Key v);
+    void setCustom(bool val);
     void print() const;
 
+    Key concertKey() const { return _concertKey; }
     Key key() const { return _key; }
     KeyMode mode() const { return _mode; }
     void setMode(KeyMode m) { _mode = m; }
     bool custom() const { return _custom; }
-    void setCustom(bool val) { _custom = val; _key = (_key == Key::INVALID ? Key::C : _key); }
     bool isValid() const { return _key != Key::INVALID; }
     bool isAtonal() const { return _mode == KeyMode::NONE; }
     void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
@@ -95,6 +89,17 @@ public:
     const std::vector<KeySym>& keySymbols() const { return _keySymbols; }
     std::vector<CustDef>& customKeyDefs() { return _customKeyDefs; }
     const std::vector<CustDef>& customKeyDefs() const { return _customKeyDefs; }
+
+private:
+    Key _concertKey     { Key::INVALID };               // -7 -> +7
+    Key _key            { Key::INVALID };               // actual key, depends on staff transposition
+    KeyMode _mode       { KeyMode::UNKNOWN };
+    bool _custom        { false };
+    bool _forInstrumentChange{ false };
+    std::vector<CustDef> _customKeyDefs;
+    std::vector<KeySym> _keySymbols;
+
+    void enforceLimits(bool transposing = false);       // if true, enforce only trnasposing, otherways both
 };
 
 //---------------------------------------------------------
@@ -109,6 +114,7 @@ static const int MAX_ACC_STATE = 75;
 class AccidentalState
 {
     uint8_t state[MAX_ACC_STATE] = {};      // (0 -- 4) | TIE_CONTEXT
+    std::array<bool, MAX_ACC_STATE> m_forceRestateAccidental;
 
 public:
     AccidentalState() {}
@@ -116,8 +122,10 @@ public:
     void init(const KeySigEvent&);
     AccidentalVal accidentalVal(int line, bool& error) const;
     AccidentalVal accidentalVal(int line) const;
+    bool forceRestateAccidental(int line) const;
     bool tieContext(int line) const;
     void setAccidentalVal(int line, AccidentalVal val, bool tieContext = false);
+    void setForceRestateAccidental(int line, bool forceRestate);
 };
 
 struct Interval;

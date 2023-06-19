@@ -136,63 +136,6 @@ void MMRest::draw(mu::draw::Painter* painter) const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void MMRest::layout()
-{
-    m_number = measure()->mmRestCount();
-    m_numberSym = timeSigSymIdsFromString(String::number(m_number));
-
-    for (EngravingItem* e : el()) {
-        e->layout();
-    }
-
-    if (score()->styleB(Sid::oldStyleMultiMeasureRests)) {
-        m_restSyms.clear();
-        m_symsWidth = 0;
-
-        int remaining = m_number;
-        double spacing = score()->styleMM(Sid::mmRestOldStyleSpacing);
-        SymId sym;
-
-        while (remaining > 0) {
-            if (remaining >= 4) {
-                sym = SymId::restLonga;
-                remaining -= 4;
-            } else if (remaining >= 2) {
-                sym = SymId::restDoubleWhole;
-                remaining -= 2;
-            } else {
-                sym = SymId::restWhole;
-                remaining -= 1;
-            }
-
-            m_restSyms.push_back(sym);
-            m_symsWidth += symBbox(sym).width();
-
-            if (remaining > 0) { // do not add spacing after last symbol
-                m_symsWidth += spacing;
-            }
-        }
-
-        double symHeight = symBbox(m_restSyms[0]).height();
-        setbbox(RectF((m_width - m_symsWidth) * .5, -spatium(), m_symsWidth, symHeight));
-    } else { // H-bar
-        double vStrokeHeight = score()->styleMM(Sid::mmRestHBarVStrokeHeight);
-        setbbox(RectF(0.0, -(vStrokeHeight * .5), m_width, vStrokeHeight));
-    }
-
-    // Only need to set y position here; x position is handled in Measure::layoutMeasureElements()
-    const StaffType* staffType = this->staffType();
-    setPos(0, (staffType->middleLine() / 2.0) * staffType->lineDistance().val() * spatium());
-
-    if (m_numberVisible) {
-        addbbox(numberRect());
-    }
-}
-
-//---------------------------------------------------------
 //   numberRect
 ///   returns the mmrest number's bounding rectangle
 //---------------------------------------------------------

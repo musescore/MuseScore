@@ -30,8 +30,8 @@
 namespace mu::palette {
 class PaletteWorkspaceSetup : public async::Asyncable
 {
-    INJECT(palette, workspace::IWorkspacesDataProvider, workspacesDataProvider)
-    INJECT(palette, IPaletteProvider, paletteProvider)
+    INJECT(workspace::IWorkspacesDataProvider, workspacesDataProvider)
+    INJECT(IPaletteProvider, paletteProvider)
 
 public:
     void setup();

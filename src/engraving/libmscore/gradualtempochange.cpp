@@ -22,8 +22,6 @@
 
 #include "gradualtempochange.h"
 
-#include "layout/tlayout.h"
-
 #include "measure.h"
 #include "score.h"
 #include "segment.h"
@@ -299,12 +297,6 @@ Sid GradualTempoChangeSegment::getPropertyStyle(Pid id) const
         }
     }
     return TextLineBaseSegment::getPropertyStyle(id);
-}
-
-void GradualTempoChangeSegment::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 void GradualTempoChangeSegment::endEdit(EditData& editData)

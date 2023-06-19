@@ -32,6 +32,7 @@
 
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
+#include "layout/ilayout.h"
 
 #include "types/fraction.h"
 #include "types/symid.h"
@@ -40,7 +41,7 @@
 #include "shape.h"
 #include "editdata.h"
 
-namespace mu::engraving::v0 {
+namespace mu::engraving::layout::v0 {
 class TLayout;
 }
 
@@ -137,7 +138,8 @@ public:
 
 class EngravingItem : public EngravingObject
 {
-    INJECT_STATIC(engraving, IEngravingConfiguration, engravingConfiguration)
+    INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
+    INJECT_STATIC(layout::ILayout, layout)
 
     mutable mu::RectF _bbox;  ///< Bounding box relative to _pos + _offset
     double _mag;                     ///< standard magnification (derived value)
@@ -152,11 +154,6 @@ class EngravingItem : public EngravingObject
     unsigned int _tag;                    ///< tag bitmask
 
     bool m_colorsInversionEnabled = true;
-
-    virtual bool sameVoiceKerningLimited() const { return false; }
-    virtual bool neverKernable() const { return false; }
-    virtual bool alwaysKernable() const { return false; }
-    KerningType _userSetKerning = KerningType::NOT_SET;
 
     std::vector<Spanner*> _startingSpanners; ///< spanners starting on this item
     std::vector<Spanner*> _endingSpanners; ///< spanners ending on this item
@@ -175,14 +172,9 @@ protected:
     void notifyAboutNameChanged();
 #endif
 
-    virtual KerningType doComputeKerningType(const EngravingItem*) const { return KerningType::KERNING; }
-
 public:
 
     virtual ~EngravingItem();
-
-    KerningType computeKerningType(const EngravingItem* nextItem) const;
-    virtual double computePadding(const EngravingItem* nextItem) const;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     virtual void setupAccessible();
@@ -410,7 +402,6 @@ public:
     virtual void removed() {}
     virtual void change(EngravingItem* o, EngravingItem* n);
 
-    virtual void layout() {}
     virtual void spatiumChanged(double /*oldValue*/, double /*newValue*/);
     virtual void localSpatiumChanged(double /*oldValue*/, double /*newValue*/);
 

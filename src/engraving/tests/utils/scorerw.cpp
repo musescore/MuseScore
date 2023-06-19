@@ -27,11 +27,12 @@
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
-#include "engraving/compat/writescorehook.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
-#include "engraving/rw/400/tread.h"
-#include "engraving/rw/400/twrite.h"
+#include "engraving/rw/read400/tread.h"
+#include "engraving/rw/write/twrite.h"
+#include "engraving/rw/rwregister.h"
 #include "engraving/libmscore/factory.h"
+#include "engraving/rw/rwregister.h"
 
 #include "log.h"
 
@@ -71,11 +72,11 @@ MasterScore* ScoreRW::readScore(const String& name, bool isAbsolutePath, ImportF
     if (rv != Err::NoError) {
         LOGE() << "can't load score, path: " << path;
         delete score;
-        score = nullptr;
-    } else {
-        for (Score* s : score->scoreList()) {
-            s->doLayout();
-        }
+        return nullptr;
+    }
+
+    for (Score* s : score->scoreList()) {
+        s->doLayout();
     }
 
     // While reading the score, some elements might use `score->repeatList()` (which is incorrect
@@ -100,8 +101,8 @@ bool ScoreRW::saveScore(Score* score, const String& name)
     if (!file.open(IODevice::ReadWrite)) {
         return false;
     }
-    compat::WriteScoreHook hook;
-    return score->writeScore(&file, false, false, hook);
+
+    return rw::RWRegister::writer()->writeScore(score, &file, false);
 }
 
 EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
@@ -113,7 +114,7 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
     xml.startDocument();
-    rw400::TWrite::writeItem(element, xml, *xml.context());
+    rw::RWRegister::writer()->writeItem(element, xml);
     xml.flush();
     buffer.close();
 
@@ -124,7 +125,7 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     XmlReader e(buffer.data());
     e.readNextStartElement();
     element = Factory::createItemByName(e.name(), element->score()->dummy());
-    rw400::TRead::readItem(element, e, *e.context());
+    rw::RWRegister::reader()->readItem(element, e);
     return element;
 }
 

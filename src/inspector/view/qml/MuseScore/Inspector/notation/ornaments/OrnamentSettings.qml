@@ -41,36 +41,175 @@ Column {
     spacing: 12
 
     function focusOnFirst() {
-        performanceSection.focusOnFirst()
+        intervalAbove.focusOnFirst()
     }
 
-    FlatRadioButtonGroupPropertyView {
-        id: performanceSection
-        titleText: qsTrc("inspector", "Performance")
-        propertyItem: root.model ? root.model.performanceType : null
+    DropdownPropertyView {
+        id: intervalAbove
+        visible: root.model ? root.model.isIntervalAboveAvailable : false
+
+        titleText: qsTrc("inspector", "Interval above")
+        propertyItem: root.model ? root.model.intervalAbove : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: root.navigationRowStart + 1
+        navigationRowStart: root.navigationRowStart
 
         model: [
-            { text: qsTrc("inspector", "Standard"), value: OrnamentTypes.STYLE_STANDARD },
-            { text: qsTrc("inspector", "Baroque"), value: OrnamentTypes.STYLE_BAROQUE }
+            { text: qsTrc("inspector", "Auto (diatonic)"), value: OrnamentTypes.TYPE_AUTO_DIATONIC},
+            { text: qsTrc("inspector", "Minor second"), value: OrnamentTypes.TYPE_MINOR_SECOND},
+            { text: qsTrc("inspector", "Major second"), value: OrnamentTypes.TYPE_MAJOR_SECOND},
         ]
     }
 
     DropdownPropertyView {
+        id: intervalBelow
+        visible: root.model ? root.model.isIntervalBelowAvailable : false
+
+        titleText: qsTrc("inspector", "Interval below")
+        propertyItem: root.model ? root.model.intervalBelow : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: intervalAbove.navigationRowEnd + 1
+
+        model: [
+            { text: qsTrc("inspector", "Auto (diatonic)"), value: OrnamentTypes.TYPE_AUTO_DIATONIC},
+            { text: qsTrc("inspector", "Minor second"), value: OrnamentTypes.TYPE_MINOR_SECOND},
+            { text: qsTrc("inspector", "Major second"), value: OrnamentTypes.TYPE_MAJOR_SECOND},
+        ]
+    }
+
+    InspectorPropertyView {
+        id: interval
+        visible: root.model ? root.model.isFullIntervalChoiceAvailable : false
+
+        titleText: qsTrc("inspector", "Interval")
+        propertyItem: root.model ? root.model.intervalAbove : null
+
+        onRequestResetToDefault: {
+            root.model.intervalStep.resetToDefault()
+            root.model.intervalType.resetToDefault()
+        }
+
+        navigationName: "Interval"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: intervalBelow.navigationRowEnd + 1
+        navigationRowEnd: intervalStep.navigation.row
+
+        function focusOnFirst() {
+            intervalType.navigation.requestActive()
+        }
+
+        Item {
+            width: parent.width
+            height: childrenRect.height
+
+            StyledDropdown {
+                id: intervalType
+
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.horizontalCenter
+                anchors.rightMargin: 2
+
+                navigation.name: root.navigationName + " Dropdown"
+                navigation.panel: root.navigationPanel
+                navigation.row: interval.navigationRowStart + 1
+                navigation.accessible.name: root.titleText + " " + currentText
+
+                model: root.model && root.model.isPerfectStep ? [
+                    { text: qsTrc("inspector", "Auto (diatonic)"), value: OrnamentTypes.TYPE_AUTO},
+                    { text: qsTrc("inspector", "Augmented"), value: OrnamentTypes.TYPE_AUGMENTED},
+                    { text: qsTrc("inspector", "Perfect"), value: OrnamentTypes.TYPE_PERFECT},
+                    { text: qsTrc("inspector", "Diminished"), value: OrnamentTypes.TYPE_DIMINISHED},
+                ] : [
+                    { text: qsTrc("inspector", "Auto (diatonic)"), value: OrnamentTypes.TYPE_AUTO},
+                    { text: qsTrc("inspector", "Augmented"), value: OrnamentTypes.TYPE_AUGMENTED},
+                    { text: qsTrc("inspector", "Major"), value: OrnamentTypes.TYPE_MAJOR},
+                    { text: qsTrc("inspector", "Minor"), value: OrnamentTypes.TYPE_MINOR},
+                    { text: qsTrc("inspector", "Diminished"), value: OrnamentTypes.TYPE_DIMINISHED},
+                ]
+
+                currentIndex: root.model.intervalType && !root.model.intervalType.isUndefined
+                              ? indexOfValue(root.model.intervalType.value) : -1
+
+                onActivated: function(index, value) {
+                    root.model.intervalType.value = value
+                }
+            }
+
+            StyledDropdown {
+                id: intervalStep
+
+                anchors.top: parent.top
+                anchors.right: parent.right
+                anchors.left: parent.horizontalCenter
+                anchors.leftMargin: 2
+
+                navigation.name: root.navigationName + " Dropdown"
+                navigation.panel: root.navigationPanel
+                navigation.row: intervalType.navigation.row + 1
+                navigation.accessible.name: root.titleText + " " + currentText
+
+                model:  [
+                    { text: qsTrc("inspector", "Unison"), value: OrnamentTypes.STEP_UNISON},
+                    { text: qsTrc("inspector", "Second"), value: OrnamentTypes.STEP_SECOND},
+                    { text: qsTrc("inspector", "Third"), value: OrnamentTypes.STEP_THIRD},
+                    { text: qsTrc("inspector", "Fourth"), value: OrnamentTypes.STEP_FOURTH},
+                    { text: qsTrc("inspector", "Fifth"), value: OrnamentTypes.STEP_FIFTH},
+                    { text: qsTrc("inspector", "Sixth"), value: OrnamentTypes.STEP_SIXTH},
+                    { text: qsTrc("inspector", "Seventh"), value: OrnamentTypes.STEP_SEVENTH},
+                    { text: qsTrc("inspector", "Octave"), value: OrnamentTypes.STEP_OCTAVE},
+                ]
+
+                currentIndex: root.model.intervalStep && !root.model.intervalStep.isUndefined
+                              ? indexOfValue(root.model.intervalStep.value) : -1
+
+                onActivated: function(index, value) {
+                    root.model.intervalStep.value = value
+                }
+            }
+        }
+    }
+
+    DropdownPropertyView {
+        id: showAccidental
+
+        titleText: qsTrc("inspector", "Accidental visibility")
+        propertyItem: root.model ? root.model.showAccidental : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: interval.navigationRowEnd + 1
+
+        model: [
+            { text: qsTrc("inspector", "Default"), value: OrnamentTypes.SHOW_ACCIDENTAL_DEFAULT},
+            { text: qsTrc("inspector", "Show any alteration"), value: OrnamentTypes.SHOW_ACCIDENTAL_ANY_ALTERATION},
+            { text: qsTrc("inspector", "Always display an accidental"), value: OrnamentTypes.SHOW_ACCIDENTAL_ALWAYS},
+        ]
+    }
+
+    CheckBoxPropertyView {
+        id: startOnUpperNote
+        visible: false // prepared for future option but not implemented yet
+
+        navigation.name: "StartOnUpperNote"
+        navigation.panel: root.navigationPanel
+        navigation.row: showAccidental.navigationRowEnd + 1
+
+        text: qsTrc("inspector", "Start on upper note")
+        propertyItem: root.model ? root.model.startOnUpperNote : null
+    }
+
+    PlacementSection {
         titleText: qsTrc("inspector", "Placement")
         propertyItem: root.model ? root.model.placement : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: performanceSection.navigationRowEnd + 1
+        navigationRowStart: startOnUpperNote.navigation.row + 1
 
         model: [
-            { text: qsTrc("inspector", "Above staff"), value: ArticulationTypes.TYPE_ABOVE_STAFF },
-            { text: qsTrc("inspector", "Below staff"), value: ArticulationTypes.TYPE_BELOW_STAFF },
-            { text: qsTrc("inspector", "Chord automatic"), value: ArticulationTypes.TYPE_CHORD_AUTO },
-            { text: qsTrc("inspector", "Above chord"), value: ArticulationTypes.TYPE_ABOVE_CHORD },
-            { text: qsTrc("inspector", "Below chord"), value: ArticulationTypes.TYPE_BELOW_CHORD }
+            { text: qsTrc("inspector", "Auto"), value: ArticulationTypes.TYPE_AUTO },
+            { text: qsTrc("inspector", "Above"), value: ArticulationTypes.TYPE_TOP },
+            { text: qsTrc("inspector", "Below"), value: ArticulationTypes.TYPE_BOTTOM }
         ]
     }
 }

@@ -24,7 +24,7 @@
 
 #include <string>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "shortcutstypes.h"
 
 namespace mu::shortcuts {

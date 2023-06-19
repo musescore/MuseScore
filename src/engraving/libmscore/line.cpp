@@ -108,7 +108,7 @@ PointF LineSegment::leftAnchorPosition(const double& systemPositionY) const
 PointF LineSegment::rightAnchorPosition(const double& systemPositionY) const
 {
     if (isMiddleType() || isBeginType()) {
-        return PointF(system()->lastNoteRestSegmentX(true), systemPositionY);
+        return PointF(system()->endingXForOpenEndedLines(), systemPositionY);
     }
 
     PointF result;
@@ -380,7 +380,8 @@ bool LineSegment::edit(EditData& ed)
     }
     }
     triggerLayout();
-    l->layout();              // recompute segment list, segment type may change
+    // recompute segment list, segment type may change
+    layout()->layoutItem(l);
 
     LineSegment* nls = 0;
     if (st == SpannerSegmentType::SINGLE) {
@@ -539,16 +540,16 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
     }
 
     if (newSeg->system() != oldSystem) {
-        l->layout();
+        layout()->layoutItem(l);
         return left ? l->frontSegment() : l->backSegment();
     } else if (anchorChanged) {
         const PointF delta = left ? deltaRebaseLeft(oldSeg, newSeg) : deltaRebaseRight(oldSeg, newSeg, track2staff(l->effectiveTrack2()));
         if (left) {
             setOffset(offset() + delta);
-            _offset2 -= delta;
+            m_offset2 -= delta;
             setOffsetChanged(true);
         } else {
-            _offset2 += delta;
+            m_offset2 += delta;
         }
     }
 
@@ -595,7 +596,7 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
             if (newLineSegment != this) {
                 // Reset offset for the old line segment
                 if (left) {
-                    _offset2.rx() -= offset().x();
+                    m_offset2.rx() -= offset().x();
                     setOffset(PointF());
                 } else {
                     setUserOff2(PointF());
@@ -662,7 +663,7 @@ void LineSegment::editDrag(EditData& ed)
     switch (ed.curGrip) {
     case Grip::START:         // Resize the begin of element (left grip)
         setOffset(offset() + deltaResize);
-        _offset2 -= deltaResize;
+        m_offset2 -= deltaResize;
 
         if (isStyled(Pid::OFFSET)) {
             setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
@@ -671,7 +672,7 @@ void LineSegment::editDrag(EditData& ed)
         rebaseAnchors(ed, ed.curGrip);
         break;
     case Grip::END:         // Resize the end of element (right grip)
-        _offset2 += deltaResize;
+        m_offset2 += deltaResize;
         rebaseAnchors(ed, ed.curGrip);
         break;
     case Grip::MIDDLE: {         // Move the element (middle grip)
@@ -704,7 +705,7 @@ void LineSegment::editDrag(EditData& ed)
                 if (sNote && sNote->chord() && noteNew->chord() && sNote->chord()->tick() < noteNew->chord()->tick()) {
                     score()->undoChangeSpannerElements(l, sNote, noteNew);
 
-                    _offset2 += noteOld->canvasPos() - noteNew->canvasPos();
+                    m_offset2 += noteOld->canvasPos() - noteNew->canvasPos();
                 }
             } else if (ed.curGrip == Grip::START && e != l->startElement()) {
                 LOGD("LineSegment: move start anchor (not impl.)");
@@ -723,7 +724,7 @@ void LineSegment::spatiumChanged(double ov, double nv)
     EngravingItem::spatiumChanged(ov, nv);
     double scale = nv / ov;
     line()->setLineWidth(line()->lineWidth() * scale);
-    _offset2 *= scale;
+    m_offset2 *= scale;
 }
 
 //---------------------------------------------------------
@@ -733,7 +734,7 @@ void LineSegment::spatiumChanged(double ov, double nv)
 void LineSegment::localSpatiumChanged(double ov, double nv)
 {
     EngravingItem::localSpatiumChanged(ov, nv);
-    _offset2 *= nv / ov;
+    m_offset2 *= nv / ov;
 }
 
 //---------------------------------------------------------
@@ -784,18 +785,18 @@ SLine::SLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
     : Spanner(type, parent, f)
 {
     setTrack(0);
-    _lineWidth = 0.15 * spatium();
+    m_lineWidth = 0.15 * spatium();
 }
 
 SLine::SLine(const SLine& s)
     : Spanner(s)
 {
-    _diagonal    = s._diagonal;
-    _lineWidth   = s._lineWidth;
-    _lineColor   = s._lineColor;
-    _lineStyle   = s._lineStyle;
-    _dashLineLen = s._dashLineLen;
-    _dashGapLen  = s._dashGapLen;
+    m_diagonal    = s.m_diagonal;
+    m_lineWidth   = s.m_lineWidth;
+    m_lineColor   = s.m_lineColor;
+    m_lineStyle   = s.m_lineStyle;
+    m_dashLineLen = s.m_dashLineLen;
+    m_dashGapLen  = s.m_dashGapLen;
 }
 
 //---------------------------------------------------------
@@ -1089,191 +1090,6 @@ PointF SLine::linePos(Grip grip, System** sys) const
 }
 
 //---------------------------------------------------------
-//   layoutSystem
-//    layout spannersegment for system
-//---------------------------------------------------------
-
-SpannerSegment* SLine::layoutSystem(System* system)
-{
-    Fraction stick = system->firstMeasure()->tick();
-    Fraction etick = system->lastMeasure()->endTick();
-
-    LineSegment* lineSegm = toLineSegment(getNextLayoutSystemSegment(system, [this](System* parent) { return createLineSegment(parent); }));
-
-    SpannerSegmentType sst;
-    if (tick() >= stick) {
-        //
-        // this is the first call to layoutSystem,
-        // processing the first line segment
-        //
-        computeStartElement();
-        computeEndElement();
-        sst = tick2() <= etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
-    } else if (tick() < stick && tick2() > etick) {
-        sst = SpannerSegmentType::MIDDLE;
-    } else {
-        //
-        // this is the last call to layoutSystem
-        // processing the last line segment
-        //
-        sst = SpannerSegmentType::END;
-    }
-    lineSegm->setSpannerSegmentType(sst);
-
-    switch (sst) {
-    case SpannerSegmentType::SINGLE: {
-        System* s;
-        PointF p1 = linePos(Grip::START, &s);
-        PointF p2 = linePos(Grip::END,   &s);
-        double len = p2.x() - p1.x();
-        lineSegm->setPos(p1);
-        lineSegm->setPos2(PointF(len, p2.y() - p1.y()));
-    }
-    break;
-    case SpannerSegmentType::BEGIN: {
-        System* s;
-        PointF p1 = linePos(Grip::START, &s);
-        lineSegm->setPos(p1);
-        double x2 = system->lastNoteRestSegmentX(true);
-        lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
-    }
-    break;
-    case SpannerSegmentType::MIDDLE: {
-        double x1 = system->firstNoteRestSegmentX(true);
-        double x2 = system->lastNoteRestSegmentX(true);
-        System* s;
-        PointF p1 = linePos(Grip::START, &s);
-        lineSegm->setPos(PointF(x1, p1.y()));
-        lineSegm->setPos2(PointF(x2 - x1, 0.0));
-    }
-    break;
-    case SpannerSegmentType::END: {
-        System* s;
-        PointF p2 = linePos(Grip::END,   &s);
-        double x1 = system->firstNoteRestSegmentX(true);
-        double len = p2.x() - x1;
-        lineSegm->setPos(PointF(p2.x() - len, p2.y()));
-        lineSegm->setPos2(PointF(len, 0.0));
-    }
-    break;
-    }
-    lineSegm->layout();
-    return lineSegm;
-}
-
-//---------------------------------------------------------
-//   layout
-//    compute segments from tick1 tick2
-//    (used for palette, edit mode, and layout of note lines and glissandi)
-//---------------------------------------------------------
-
-void SLine::layout()
-{
-    if (score()->isPaletteScore() || (tick() == Fraction(-1, 1)) || (tick2() == Fraction::fromTicks(1))) {
-        //
-        // when used in a palette or while dragging from palette,
-        // SLine has no parent and
-        // tick and tick2 has no meaning so no layout is
-        // possible and needed
-        //
-        if (spannerSegments().empty()) {
-            setLen(score()->spatium() * 7);
-        }
-
-        LineSegment* lineSegm = frontSegment();
-        lineSegm->layout();
-        setbbox(lineSegm->bbox());
-        return;
-    }
-
-    computeStartElement();
-    computeEndElement();
-
-    System* s1;
-    System* s2;
-    PointF p1(linePos(Grip::START, &s1));
-    PointF p2(linePos(Grip::END,   &s2));
-
-    const std::vector<System*>& systems = score()->systems();
-    system_idx_t sysIdx1 = mu::indexOf(systems, s1);
-    system_idx_t sysIdx2 = mu::indexOf(systems, s2);
-    int segmentsNeeded = 0;
-
-    if (sysIdx1 == mu::nidx || sysIdx2 == mu::nidx) {
-        return;
-    }
-
-    for (system_idx_t i = sysIdx1; i <= sysIdx2; ++i) {
-        if (systems.at(i)->vbox()) {
-            continue;
-        }
-        ++segmentsNeeded;
-    }
-
-    int segCount = int(spannerSegments().size());
-
-    if (segmentsNeeded != segCount) {
-        fixupSegments(segmentsNeeded, [this](System* parent) { return createLineSegment(parent); });
-        if (segmentsNeeded > segCount) {
-            for (int i = segCount; i < segmentsNeeded; ++i) {
-                LineSegment* lineSegm = segmentAt(i);
-                // set user offset to previous segment's offset
-                if (segCount > 0) {
-                    lineSegm->setOffset(PointF(0, segmentAt(i - 1)->offset().y()));
-                } else {
-                    lineSegm->setOffset(PointF(0, offset().y()));
-                }
-            }
-        }
-    }
-
-    int segIdx = 0;
-    for (system_idx_t i = sysIdx1; i <= sysIdx2; ++i) {
-        System* system = systems.at(i);
-        if (system->vbox()) {
-            continue;
-        }
-        LineSegment* lineSegm = segmentAt(segIdx++);
-        lineSegm->setTrack(track());           // DEBUG
-        lineSegm->setSystem(system);
-
-        if (sysIdx1 == sysIdx2) {
-            // single segment
-            lineSegm->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-            double len = p2.x() - p1.x();
-            // enforcing a minimum length would be possible but inadvisable
-            // the line length calculations are tuned well enough that this should not be needed
-            //if (anchor() == Anchor::SEGMENT && type() != ElementType::PEDAL)
-            //      len = std::max(1.0 * spatium(), len);
-            lineSegm->setPos(p1);
-            lineSegm->setPos2(PointF(len, p2.y() - p1.y()));
-        } else if (i == sysIdx1) {
-            // start segment
-            lineSegm->setSpannerSegmentType(SpannerSegmentType::BEGIN);
-            lineSegm->setPos(p1);
-            double x2 = system->lastNoteRestSegmentX(true);
-            lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
-        } else if (i > 0 && i != sysIdx2) {
-            // middle segment
-            lineSegm->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
-            double x1 = system->firstNoteRestSegmentX(true);
-            double x2 = system->lastNoteRestSegmentX(true);
-            lineSegm->setPos(PointF(x1, p1.y()));
-            lineSegm->setPos2(PointF(x2 - x1, 0.0));
-        } else if (i == sysIdx2) {
-            // end segment
-            double minLen = 0.0;
-            double x1 = system->firstNoteRestSegmentX(true);
-            double len = std::max(minLen, p2.x() - x1);
-            lineSegm->setSpannerSegmentType(SpannerSegmentType::END);
-            lineSegm->setPos(PointF(p2.x() - len, p2.y()));
-            lineSegm->setPos2(PointF(len, 0.0));
-        }
-        lineSegm->layout();
-    }
-}
-
-//---------------------------------------------------------
 //   setLen
 //    used to create an element suitable for palette
 //---------------------------------------------------------
@@ -1311,13 +1127,13 @@ PropertyValue SLine::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::DIAGONAL:
-        return _diagonal;
+        return m_diagonal;
     case Pid::COLOR:
-        return PropertyValue::fromValue(_lineColor);
+        return PropertyValue::fromValue(m_lineColor);
     case Pid::LINE_WIDTH:
-        return _lineWidth;
+        return m_lineWidth;
     case Pid::LINE_STYLE:
-        return _lineStyle;
+        return m_lineStyle;
     case Pid::DASH_LINE_LEN:
         return dashLineLen();
     case Pid::DASH_GAP_LEN:
@@ -1335,20 +1151,20 @@ bool SLine::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::DIAGONAL:
-        _diagonal = v.toBool();
+        m_diagonal = v.toBool();
         break;
     case Pid::COLOR:
-        _lineColor = v.value<mu::draw::Color>();
+        m_lineColor = v.value<mu::draw::Color>();
         break;
     case Pid::LINE_WIDTH:
         if (v.type() == P_TYPE::MILLIMETRE) {
-            _lineWidth = v.value<Millimetre>();
+            m_lineWidth = v.value<Millimetre>();
         } else if (v.type() == P_TYPE::SPATIUM) {
-            _lineWidth = v.value<Spatium>().toMM(spatium());
+            m_lineWidth = v.value<Spatium>().toMM(spatium());
         }
         break;
     case Pid::LINE_STYLE:
-        _lineStyle = v.value<LineType>();
+        m_lineStyle = v.value<LineType>();
         break;
     case Pid::DASH_LINE_LEN:
         setDashLineLen(v.toDouble());

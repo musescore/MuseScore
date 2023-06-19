@@ -30,9 +30,8 @@ class ProjectConfigurationStub : public IProjectConfiguration
 public:
     ProjectConfigurationStub() = default;
 
-    io::paths_t recentProjectPaths() const override;
-    void setRecentProjectPaths(const io::paths_t& recentScorePaths) override;
-    async::Channel<io::paths_t> recentProjectPathsChanged() const override;
+    io::path_t recentFilesJsonPath() const override;
+    ByteArray compatRecentFilesData() const override;
 
     io::path_t myFirstProjectPath() const override;
 
@@ -43,9 +42,6 @@ public:
     void setUserTemplatesPath(const io::path_t& path) override;
     async::Channel<io::path_t> userTemplatesPathChanged() const override;
 
-    io::path_t defaultProjectsPath() const override;
-    void setDefaultProjectsPath(const io::path_t& path) override;
-
     io::path_t lastOpenedProjectsPath() const override;
     void setLastOpenedProjectsPath(const io::path_t& path) override;
 
@@ -55,6 +51,7 @@ public:
     io::path_t userProjectsPath() const override;
     void setUserProjectsPath(const io::path_t& path) override;
     async::Channel<io::path_t> userProjectsPathChanged() const override;
+    io::path_t defaultUserProjectsPath() const override;
 
     bool shouldAskSaveLocationType() const override;
     void setShouldAskSaveLocationType(bool shouldAsk) override;
@@ -98,7 +95,6 @@ public:
     bool shouldDestinationFolderBeOpenedOnExport() const override;
     void setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport) override;
 
-    QUrl scoreManagerUrl() const override;
     QUrl supportForumUrl() const override;
 
     bool openDetailedProjectUploadedDialog() const override;

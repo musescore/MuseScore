@@ -39,7 +39,7 @@ namespace mu::notation {
 class SelectDialog : public QDialog, Ui::SelectDialog
 {
     Q_OBJECT
-    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(context::IGlobalContext, globalContext)
 
 public:
     SelectDialog(QWidget* parent = nullptr);

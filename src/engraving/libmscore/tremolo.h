@@ -31,6 +31,10 @@
 #include "beam.h"
 #include "chord.h"
 
+namespace mu::engraving::layout::v0 {
+class TremoloLayout;
+}
+
 namespace mu::engraving {
 class Chord;
 
@@ -47,38 +51,6 @@ class Tremolo final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Tremolo)
     DECLARE_CLASSOF(ElementType::TREMOLO)
-
-    TremoloType _tremoloType { TremoloType::R8 };
-    Chord* _chord1 { nullptr };
-    Chord* _chord2 { nullptr };
-    TDuration _durationType;
-    bool _up{ true };
-    bool _userModified[2]{ false };                // 0: auto/down  1: up
-    DirectionV _direction;
-    mu::draw::PainterPath path;
-    std::vector<BeamSegment*> _beamSegments;
-    BeamTremoloLayout _layoutInfo;
-    mu::PointF _startAnchor;
-    mu::PointF _endAnchor;
-
-    int _lines = 0;         // derived from _subtype
-    TremoloStyle _style { TremoloStyle::DEFAULT };
-    // for _startAnchor and _slope, once we decide to change trems so that they can
-    // continue from one system to the other (or indeed, one measure to the other)
-    // we will want a vector of fragments similar to Beam's _beamFragments structure.
-    // for now, a single fragment is sufficient
-    BeamFragment _beamFragment;
-
-    friend class Factory;
-    Tremolo(Chord* parent);
-    Tremolo(const Tremolo&);
-
-    mu::draw::PainterPath basePath(double stretch = 0) const;
-    void computeShape();
-    void layoutOneNoteTremolo(double x, double y, double h, double spatium);
-    void layoutTwoNotesTremolo(double x, double y, double h, double spatium);
-    void createBeamSegments();
-    void setBeamPos(const PairF& bp);
 
 public:
 
@@ -103,13 +75,13 @@ public:
     double minHeight() const;
     void reset() override;
 
-    PointF chordBeamAnchor(const ChordRest* chord, BeamTremoloLayout::ChordBeamAnchorType anchorType) const;
+    PointF chordBeamAnchor(const ChordRest* chord, layout::v0::BeamTremoloLayout::ChordBeamAnchorType anchorType) const;
 
     double chordMag() const;
     double mag() const override;
     RectF drag(EditData&) override;
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
+
     void layout2();
 
     Chord* chord1() const { return _chord1; }
@@ -152,8 +124,6 @@ public:
     void setBeamFragment(const BeamFragment& bf) { _beamFragment = bf; }
     const BeamFragment& beamFragment() const { return _beamFragment; }
 
-    double defaultStemLengthStart();
-    double defaultStemLengthEnd();
     bool customStyleApplicable() const;
 
     PropertyValue getProperty(Pid propertyId) const override;
@@ -173,6 +143,39 @@ public:
     void startEdit(EditData&) override {}
     void endEdit(EditData&) override;
     void editDrag(EditData&) override;
+
+private:
+    friend class Factory;
+    friend class layout::v0::TremoloLayout;
+
+    Tremolo(Chord* parent);
+    Tremolo(const Tremolo&);
+
+    mu::draw::PainterPath basePath(double stretch = 0) const;
+    void computeShape();
+    void createBeamSegments();
+    void setBeamPos(const PairF& bp);
+
+    TremoloType _tremoloType { TremoloType::R8 };
+    Chord* _chord1 { nullptr };
+    Chord* _chord2 { nullptr };
+    TDuration _durationType;
+    bool _up{ true };
+    bool _userModified[2]{ false };                // 0: auto/down  1: up
+    DirectionV _direction;
+    mu::draw::PainterPath path;
+    std::vector<BeamSegment*> _beamSegments;
+    layout::v0::BeamTremoloLayout _layoutInfo;
+    mu::PointF _startAnchor;
+    mu::PointF _endAnchor;
+
+    int _lines = 0;         // derived from _subtype
+    TremoloStyle _style { TremoloStyle::DEFAULT };
+    // for _startAnchor and _slope, once we decide to change trems so that they can
+    // continue from one system to the other (or indeed, one measure to the other)
+    // we will want a vector of fragments similar to Beam's _beamFragments structure.
+    // for now, a single fragment is sufficient
+    BeamFragment _beamFragment;
 };
 } // namespace mu::engraving
 #endif

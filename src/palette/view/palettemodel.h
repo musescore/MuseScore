@@ -102,7 +102,7 @@ class PaletteTreeModel : public QAbstractItemModel, public mu::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(palette, IPaletteConfiguration, configuration)
+    INJECT(IPaletteConfiguration, configuration)
 
 public:
     enum PaletteTreeModelRoles {

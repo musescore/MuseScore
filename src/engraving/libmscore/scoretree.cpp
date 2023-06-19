@@ -316,7 +316,7 @@ EngravingObjectList ChordRest::scanChildren() const
         children.push_back(_b);
     }
 
-    for (Lyrics* lyrics : _lyrics) {
+    for (Lyrics* lyrics : m_lyrics) {
         children.push_back(lyrics);
     }
 
@@ -326,11 +326,11 @@ EngravingObjectList ChordRest::scanChildren() const
         de = de->tuplet();
     }
 
-    if (auto tabDuration = _tabDur) {
+    if (auto tabDuration = m_tabDur) {
         children.push_back(tabDuration);
     }
 
-    for (EngravingItem* element : _el) {
+    for (EngravingItem* element : m_el) {
         children.push_back(element);
     }
 
@@ -447,16 +447,16 @@ EngravingObjectList Note::scanChildren() const
 {
     EngravingObjectList children;
 
-    if (_accidental) {
-        children.push_back(_accidental);
+    if (m_accidental) {
+        children.push_back(m_accidental);
     }
 
-    for (NoteDot* noteDot : _dots) {
+    for (NoteDot* noteDot : m_dots) {
         children.push_back(noteDot);
     }
 
-    if (_tieFor) {
-        children.push_back(_tieFor);
+    if (m_tieFor) {
+        children.push_back(m_tieFor);
     }
 
     for (EngravingItem* element : el()) {
@@ -530,8 +530,8 @@ EngravingObjectList FretDiagram::scanChildren() const
 {
     EngravingObjectList children;
 
-    if (_harmony) {
-        children.push_back(_harmony);
+    if (m_harmony) {
+        children.push_back(m_harmony);
     }
 
     return children;
@@ -630,7 +630,7 @@ EngravingObjectList BarLine::scanChildren() const
 {
     EngravingObjectList children;
 
-    for (EngravingItem* element : _el) {
+    for (EngravingItem* element : m_el) {
         children.push_back(element);
     }
 

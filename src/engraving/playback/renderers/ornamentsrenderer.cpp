@@ -24,11 +24,59 @@
 
 #include "realfn.h"
 
+#include "libmscore/ornament.h"
 #include "libmscore/utils.h"
+
 #include "playback/metaparsers/notearticulationsparser.h"
 
 using namespace mu::engraving;
 using namespace mu::mpe;
+
+namespace mu::engraving {
+struct IntervalsInfo {
+    bool intervalBelowIsAuto = false;
+    bool intervalAboveIsAuto = false;
+
+    Interval intervalBelow;
+    Interval intervalAbove;
+};
+
+struct DisclosurePattern {
+    int prefixDurationTicks = 0;
+    std::vector<mpe::pitch_level_t> prefixPitchOffsets;
+
+    bool isAlterationsRepeatAllowed = false;
+    std::vector<mpe::pitch_level_t> alterationStepPitchOffsets;
+
+    int suffixDurationTicks = 0;
+    std::vector<mpe::pitch_level_t> suffixPitchOffsets;
+
+    struct DurationBoundaries {
+        float lowTempoDurationTicks = 0.f;
+        float mediumTempoDurationTicks = 0.f;
+        float highTempoDurationTicks = 0.f;
+    };
+
+    DurationBoundaries boundaries;
+
+    float subNoteDurationTicks(const double bps) const;
+    DisclosurePattern buildActualPattern(const Note* note, const IntervalsInfo& intervalsInfo, const double bps) const;
+
+private:
+    void updatePitchOffsets(const Note* note, const IntervalsInfo& intervalsInfo, std::vector<mpe::pitch_level_t>& pitchOffsets);
+};
+
+static IntervalsInfo makeIntervalsInfo(const OrnamentInterval& below, const OrnamentInterval& above)
+{
+    IntervalsInfo result;
+    result.intervalBelowIsAuto = below.type == IntervalType::AUTO;
+    result.intervalAboveIsAuto = above.type == IntervalType::AUTO;
+    result.intervalBelow = Interval::fromOrnamentInterval(below);
+    result.intervalAbove = Interval::fromOrnamentInterval(above);
+
+    return result;
+}
+}
 
 static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_RULES = {
     {
@@ -259,6 +307,11 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
         return;
     }
 
+    IntervalsInfo intervalsInfo;
+    if (const Ornament* ornament = chord->findOrnament()) {
+        intervalsInfo = makeIntervalsInfo(ornament->intervalBelow(), ornament->intervalAbove());
+    }
+
     const DisclosurePattern& nominalPattern = search->second;
 
     for (const Note* note : chord->notes()) {
@@ -269,7 +322,8 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
         NominalNoteCtx noteCtx(note, context);
         NoteArticulationsParser::buildNoteArticulationMap(note, noteCtx.chordCtx, noteCtx.chordCtx.commonArticulations);
 
-        convert(preferredType, nominalPattern.buildActualPattern(note, context.beatsPerSecond.val), std::move(noteCtx), result);
+        convert(preferredType, nominalPattern.buildActualPattern(note, intervalsInfo, context.beatsPerSecond.val),
+                std::move(noteCtx), result);
     }
 }
 
@@ -277,7 +331,7 @@ void OrnamentsRenderer::convert(const ArticulationType type, const DisclosurePat
                                 mpe::PlaybackEventList& result)
 {
     if (noteCtx.chordCtx.nominalDurationTicks <= pattern.boundaries.lowTempoDurationTicks) {
-        result.push_back(buildNoteEvent(std::move(noteCtx)));
+        result.emplace_back(buildNoteEvent(std::move(noteCtx)));
         return;
     }
 
@@ -298,7 +352,7 @@ void OrnamentsRenderer::convert(const ArticulationType type, const DisclosurePat
         }
 
         if (alterationsCount == 0) {
-            result.push_back(buildNoteEvent(std::move(noteCtx)));
+            result.emplace_back(buildNoteEvent(std::move(noteCtx)));
         } else {
             createEvents(type, noteCtx, alterationsCount,
                          noteCtx.chordCtx.nominalDurationTicks - pattern.prefixDurationTicks - pattern.suffixDurationTicks,
@@ -362,13 +416,13 @@ float DisclosurePattern::subNoteDurationTicks(const double bps) const
     return boundaries.lowTempoDurationTicks;
 }
 
-DisclosurePattern DisclosurePattern::buildActualPattern(const Note* note, const double bps) const
+DisclosurePattern DisclosurePattern::buildActualPattern(const Note* note, const IntervalsInfo& intervalsInfo, const double bps) const
 {
     DisclosurePattern result = *this;
 
-    result.updatePitchOffsets(note, result.prefixPitchOffsets);
-    result.updatePitchOffsets(note, result.alterationStepPitchOffsets);
-    result.updatePitchOffsets(note, result.suffixPitchOffsets);
+    result.updatePitchOffsets(note, intervalsInfo, result.prefixPitchOffsets);
+    result.updatePitchOffsets(note, intervalsInfo, result.alterationStepPitchOffsets);
+    result.updatePitchOffsets(note, intervalsInfo, result.suffixPitchOffsets);
 
     float subNoteTicks = subNoteDurationTicks(bps);
 
@@ -378,9 +432,30 @@ DisclosurePattern DisclosurePattern::buildActualPattern(const Note* note, const 
     return result;
 }
 
-void DisclosurePattern::updatePitchOffsets(const Note* note, std::vector<mpe::pitch_level_t>& pitchOffsets)
+void DisclosurePattern::updatePitchOffsets(const Note* note, const IntervalsInfo& intervalsInfo,
+                                           std::vector<mpe::pitch_level_t>& pitchOffsets)
 {
-    for (auto& pitchOffset : pitchOffsets) {
-        pitchOffset *= std::abs(chromaticPitchSteps(note, note, pitchOffset / mpe::PITCH_LEVEL_STEP));
+    for (pitch_level_t& pitchOffset : pitchOffsets) {
+        if (pitchOffset == 0) {
+            continue;
+        }
+
+        semitone_t semitones = 0;
+
+        if (pitchOffset < 0) {
+            if (intervalsInfo.intervalBelowIsAuto) {
+                semitones = std::abs(chromaticPitchSteps(note, note, -intervalsInfo.intervalBelow.diatonic));
+            } else {
+                semitones = intervalsInfo.intervalBelow.chromatic;
+            }
+        } else if (pitchOffset > 0) {
+            if (intervalsInfo.intervalAboveIsAuto) {
+                semitones = std::abs(chromaticPitchSteps(note, note, intervalsInfo.intervalAbove.diatonic));
+            } else {
+                semitones = intervalsInfo.intervalAbove.chromatic;
+            }
+        }
+
+        pitchOffset *= semitones;
     }
 }

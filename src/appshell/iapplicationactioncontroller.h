@@ -27,7 +27,7 @@
 #include <QDragMoveEvent>
 #include <QEvent>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 namespace mu::appshell {
 class IApplicationActionController : MODULE_EXPORT_INTERFACE

@@ -34,9 +34,9 @@
 namespace mu::palette {
 class PaletteActionsController : public actions::Actionable, public async::Asyncable
 {
-    INJECT(palette, actions::IActionsDispatcher, dispatcher)
-    INJECT(palette, framework::IInteractive, interactive)
-    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(context::IGlobalContext, globalContext)
 
 public:
     void init();

@@ -5,7 +5,7 @@
 #include "global/log.h"
 #include "types/constants.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 GP67DomBuilder::GP67DomBuilder()
 {
     _gpDom = std::make_unique<GPDomModel>();
@@ -302,12 +302,6 @@ std::unique_ptr<GPMasterTracks> GP67DomBuilder::createGPMasterTrack(XmlDomNode* 
     return std::make_unique<GPMasterTracks>();
 }
 
-std::unique_ptr<GPAudioTrack> GP67DomBuilder::createGPAudioTrack(XmlDomNode* metadata)
-{
-    UNUSED(metadata);
-    return nullptr;
-}
-
 std::unique_ptr<GPMasterBar> GP67DomBuilder::createGPMasterBar(XmlDomNode* masterBarNode)
 {
     static const std::set<String> sUnused = {
@@ -350,7 +344,7 @@ std::unique_ptr<GPMasterBar> GP67DomBuilder::createGPMasterBar(XmlDomNode* maste
         } else if (nodeName == u"AlternateEndings") {
             masterBar->setAlternativeEnding(readEnding(&innerNode));
         } else if (nodeName == u"Key") {
-            masterBar->setKeySig(readKeySig(&innerNode));
+            masterBar->setKeySig(readKeySig(&innerNode), readUseFlats(&innerNode));
         } else if (nodeName == u"Bars") {
             const String& barsElement = innerNode.toElement().text();
             const StringList& bars = barsElement.split(u' ');
@@ -861,6 +855,15 @@ GPMasterBar::KeySig GP67DomBuilder::readKeySig(XmlDomNode* keyNode) const
     return GPMasterBar::KeySig(keyCount);
 }
 
+bool GP67DomBuilder::readUseFlats(XmlDomNode* keyNode) const
+{
+    const auto& transposeAs = keyNode->firstChildElement("TransposeAs");
+    if (transposeAs.isNull()) {
+        return false;
+    }
+    return transposeAs.toElement().text() == "Flats";
+}
+
 GPMasterBar::TimeSig GP67DomBuilder::readTimeSig(XmlDomNode* timeNode) const
 {
     const String time = timeNode->toElement().text();
@@ -1001,7 +1004,7 @@ void GP67DomBuilder::readBeatXProperties(const XmlDomNode& propertiesNode, GPBea
 
         if (propertyId == 687931393 || propertyId == 687935489) {
             // arpeggio/brush ticks
-            beat->setArpeggioStretch(propertyNode.firstChild().toElement().text().toDouble() / mu::engraving::Constants::division);
+            beat->setArpeggioStretch(propertyNode.firstChild().toElement().text().toDouble() / mu::engraving::Constants::DIVISION);
         } else if (propertyId == 1124204546) {
             int beamData = propertyNode.firstChild().toElement().text().toInt();
 
@@ -1167,7 +1170,7 @@ void GP67DomBuilder::readBeatProperties(const XmlDomNode& propertiesNode, GPBeat
         } else if (propertyName == u"Brush") {
             beat->setBrush(brushType(propertyNode.firstChild().toElement().text()));
         } else if (propertyName == u"VibratoWTremBar") {
-            beat->setVibrato(vibratoType(propertyNode.firstChild().toElement().text()));
+            beat->setVibratoWTremBar(vibratoType(propertyNode.firstChild().toElement().text()));
         } else if (propertyName == u"Rasgueado") {
             beat->setRasgueado(rasgueadoType(propertyNode.firstChild().toElement().text()));
         } else if (propertyName == u"PickStroke") {
@@ -1213,6 +1216,7 @@ void GP67DomBuilder::readTrackProperties(XmlDomNode* propertiesNode, GPTrack* tr
                 tunning.push_back(val.toInt());
             }
             property.tunning.swap(tunning);
+            property.useFlats = !propertyNode.firstChildElement("Flat").isNull();
         } else if (propertyName == u"DiagramCollection" || propertyName == u"DiagramWorkingSet") {
             readDiagram(propertyNode.firstChild(), track);
         }
@@ -1382,10 +1386,15 @@ std::vector<GPMasterBar::Direction> GP67DomBuilder::readRepeatsJumps(XmlDomNode*
         repeatJump.type = (innerNode.nodeName() == "Jump" ? GPMasterBar::Direction::Type::Jump : GPMasterBar::Direction::Type::Repeat);
         repeatJump.name = innerNode.toElement().text();
 
+        // GP encodes "To Coda" instructions as Jumps, but MuseScore uses Markers for that
+        if ((repeatJump.name == u"DaCoda") || (repeatJump.name == u"DaDoubleCoda")) {
+            repeatJump.type = GPMasterBar::Direction::Type::Marker;
+        }
+
         repeatsJumps.push_back(repeatJump);
         innerNode = innerNode.nextSibling();
     }
 
     return repeatsJumps;
 }
-} //end Ms namespace
+} // namespace mu::iex::guitarpro

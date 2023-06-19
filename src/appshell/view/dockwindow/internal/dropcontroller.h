@@ -37,7 +37,7 @@ class DockToolBarView;
 class DockPageView;
 class DropController : public KDDockWidgets::DropIndicatorOverlayInterface
 {
-    INJECT(dock, IDockWindowProvider, dockWindowProvider)
+    INJECT(IDockWindowProvider, dockWindowProvider)
 
 public:
     explicit DropController(KDDockWidgets::DropArea* dropArea);

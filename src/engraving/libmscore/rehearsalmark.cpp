@@ -89,49 +89,6 @@ void RehearsalMark::styleChanged()
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void RehearsalMark::layout()
-{
-    TextBase::layout();
-
-    Segment* s = segment();
-    if (s) {
-        if (s->rtick().isZero()) {
-            // first CR of measure, alignment is hcenter or right (the usual cases)
-            // align with barline, point just after header, or start of measure depending on context
-
-            Measure* m = s->measure();
-            Segment* header = s->prev();        // possibly just a start repeat
-            double measureX = -s->x();
-            Segment* repeat = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
-            double barlineX = repeat ? repeat->x() - s->x() : measureX;
-            System* sys = m->system();
-            bool systemFirst = (sys && m->isFirstInSystem());
-
-            if (!header || repeat || !systemFirst) {
-                // no header, or header with repeat, or header mid-system - align with barline
-                setPosX(barlineX);
-            } else {
-                // header at start of system
-                // align to a point just after the header
-                EngravingItem* e = header->element(track());
-                double w = e ? e->width() : header->width();
-                setPosX(header->x() + w - s->x());
-
-                // special case for right aligned rehearsal marks at start of system
-                // left align with start of measure if that is further left
-                if (align() == AlignH::RIGHT) {
-                    setPosX(std::min(xpos(), measureX + width()));
-                }
-            }
-        }
-        autoplaceSegmentElement();
-    }
-}
-
-//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 

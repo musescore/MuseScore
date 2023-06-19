@@ -107,13 +107,8 @@ void* ObjectAllocator::alloc(size_t size)
     return freeChunk;
 }
 
-void ObjectAllocator::free(void* chunk, size_t size)
+void ObjectAllocator::free(void* chunk)
 {
-#ifdef NDEBUG
-    UNUSED(size);
-#endif
-    assert(m_chunkSize == size);
-
     // The freed chunk's next pointer points to the
     // current allocation pointer:
     reinterpret_cast<Chunk*>(chunk)->next = m_free;

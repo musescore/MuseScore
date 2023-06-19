@@ -41,9 +41,9 @@ class Score;
 namespace mu::notation {
 class NotationMidiInput : public INotationMidiInput
 {
-    INJECT(notation, playback::IPlaybackController, playbackController)
-    INJECT(notation, actions::IActionsDispatcher, dispatcher)
-    INJECT(notation, INotationConfiguration, configuration)
+    INJECT(playback::IPlaybackController, playbackController)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(INotationConfiguration, configuration)
 
 public:
     NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction, INotationUndoStackPtr undoStack);

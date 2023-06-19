@@ -35,14 +35,14 @@ class WhammyBar;
 class WhammyBarSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, WhammyBarSegment)
+    DECLARE_CLASSOF(ElementType::WHAMMY_BAR_SEGMENT)
+
 public:
     WhammyBarSegment(WhammyBar* sp, System* parent);
 
     WhammyBarSegment* clone() const override { return new WhammyBarSegment(*this); }
 
     WhammyBar* whammyBar() const { return (WhammyBar*)spanner(); }
-
-    void layout() override;
 
     friend class WhammyBar;
 };

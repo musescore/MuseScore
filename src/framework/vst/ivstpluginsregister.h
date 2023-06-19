@@ -1,7 +1,7 @@
 #ifndef MU_VST_IVSTPLUGINSREGISTER_H
 #define MU_VST_IVSTPLUGINSREGISTER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "audio/audiotypes.h"
 
 #include "vsttypes.h"

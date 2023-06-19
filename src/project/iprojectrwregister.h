@@ -23,7 +23,7 @@
 #define MU_PROJECT_IPROJECTRWREGISTER_H
 
 #include <string>
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "iprojectwriter.h"
 
 namespace mu::project {

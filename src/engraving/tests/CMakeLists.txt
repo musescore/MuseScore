@@ -49,6 +49,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/exchangevoices_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/expression_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/hairpin_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/harpdiagram_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/implodeexplode_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/instrumentchange_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/join_tests.cpp
@@ -81,6 +82,8 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tuplet_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/unrollrepeats_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/changevisibility_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/midirenderer_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/scoreutils_tests.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/mocks/engravingconfigurationmock.h
 )

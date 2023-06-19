@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -59,12 +59,16 @@
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Articulation name="marcato">
+        <Articulation name="accent">
           <velocity>120</velocity>
           <gateTime>67</gateTime>
           </Articulation>
+        <Articulation name="marcato">
+          <velocity>144</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
         <Articulation name="sforzato">
-          <velocity>120</velocity>
+          <velocity>169</velocity>
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
@@ -82,7 +86,7 @@
           </Marker>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -245,7 +249,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -267,7 +272,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -289,7 +295,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -311,7 +318,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -341,7 +349,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -371,7 +380,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -401,7 +411,8 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -423,18 +434,17 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <Jump>
+        <Marker>
           <style>repeat_right</style>
           <text>Da Coda</text>
-          <jumpTo>coda</jumpTo>
-          <playUntil>end</playUntil>
-          <continueAt></continueAt>
-          </Jump>
+          <label>coda</label>
+          </Marker>
         <voice>
           <Rest>
             <durationType>measure</durationType>
@@ -445,18 +455,17 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <Jump>
+        <Marker>
           <style>repeat_right</style>
           <text>Da Double Coda</text>
-          <jumpTo>varcoda</jumpTo>
-          <playUntil>end</playUntil>
-          <continueAt></continueAt>
-          </Jump>
+          <label>coda</label>
+          </Marker>
         <voice>
           <Rest>
             <durationType>measure</durationType>

@@ -236,6 +236,15 @@ EditStyle::EditStyle(QWidget* parent)
     fbStyle->addButton(radioFBModern, 0);
     fbStyle->addButton(radioFBHistoric, 1);
 
+    QButtonGroup* articulationStemSide = new QButtonGroup(this);
+    articulationStemSide->addButton(radioArticAlignStem, int(ArticulationStemSideAlign::STEM));
+    articulationStemSide->addButton(radioArticAlignNoteHead, int(ArticulationStemSideAlign::NOTEHEAD));
+    articulationStemSide->addButton(radioArticAlignCenter, int(ArticulationStemSideAlign::AVERAGE));
+
+    QButtonGroup* articulationKeepTogether = new QButtonGroup(this);
+    articulationKeepTogether->addButton(radioArticKeepTogether, 1);
+    articulationKeepTogether->addButton(radioArticAllowSeparate, 0);
+
     // ====================================================
     // Style widgets
     // ====================================================
@@ -408,6 +417,8 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::propertyDistanceHead,    false, articNoteHeadDist,       resetArticNoteHeadDist },
         { StyleId::propertyDistanceStem,    false, articStemDist,           resetArticStemDist },
         { StyleId::propertyDistance,        false, articStaffDist,          resetArticStaffDist },
+        { StyleId::articulationStemHAlign,  false, articulationStemSide,    0 },
+        { StyleId::articulationKeepTogether, false, articulationKeepTogether, 0 },
         { StyleId::voltaPosAbove,           false, voltaPosAbove,           resetVoltaPosAbove },
         { StyleId::voltaHook,               false, voltaHook,               resetVoltaHook },
         { StyleId::voltaLineWidth,          false, voltaLineWidth,          resetVoltaLineWidth },
@@ -1543,6 +1554,9 @@ PropertyValue EditStyle::getValue(StyleId idx)
         if (sw.idx == StyleId::harmonyVoiceLiteral) { // special case for bool represented by a two-item combobox
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
             v = cb->currentIndex();
+        } else if (sw.idx == StyleId::articulationKeepTogether) { // special case for bool represented by a two-item buttonGroup
+            QButtonGroup* bg = qobject_cast<QButtonGroup*>(sw.widget);
+            v = bool(bg->checkedId());
         } else {
             v = sw.widget->property("checked");
             if (!v.isValid()) {
@@ -1648,6 +1662,9 @@ void EditStyle::setValues()
             bool value = val.toBool();
             if (sw.idx == StyleId::harmonyVoiceLiteral) { // special case for bool represented by a two-item combobox
                 voicingSelectWidget->interpretBox->setCurrentIndex(value);
+            } else if (sw.idx == StyleId::articulationKeepTogether) { // special case for bool represented by a two-item buttonGroup
+                qobject_cast<QButtonGroup*>(sw.widget)->button(1)->setChecked(value);
+                qobject_cast<QButtonGroup*>(sw.widget)->button(0)->setChecked(!value);
             } else {
                 if (!sw.widget->setProperty("checked", value)) {
                     unhandledType(sw);
@@ -2082,8 +2099,8 @@ void EditStyle::valueChanged(int i)
     PropertyValue val  = getValue(idx);
     bool setValue = false;
     if (idx == StyleId::MusicalSymbolFont) {
-        bool dynamicsOverrideFont = getValue(StyleId::dynamicsOverrideFont).toBool();
-        if (!dynamicsOverrideFont) {
+        bool overrideDynamicsFont = getValue(StyleId::dynamicsOverrideFont).toBool();
+        if (!overrideDynamicsFont) {
             setStyleValue(StyleId::dynamicsFont, val); // Match dynamics font
         }
         if (optimizeStyleCheckbox->isChecked()) {

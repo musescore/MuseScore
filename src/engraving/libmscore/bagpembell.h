@@ -61,13 +61,6 @@ class BagpipeEmbellishment final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, BagpipeEmbellishment)
     DECLARE_CLASSOF(ElementType::BAGPIPE_EMBELLISHMENT)
 
-    struct BEDrawingDataX;
-    struct BEDrawingDataY;
-
-    EmbellishmentType _embelType;
-    void drawGraceNote(mu::draw::Painter*, const BagpipeEmbellishment::BEDrawingDataX&, const BagpipeEmbellishment::BEDrawingDataY&, SymId,
-                       const double x, const bool drawFlag) const;
-
 public:
     BagpipeEmbellishment(EngravingItem* parent)
         : EngravingItem(ElementType::BAGPIPE_EMBELLISHMENT, parent), _embelType(EmbellishmentType(0)) { }
@@ -78,7 +71,6 @@ public:
     void setEmbelType(EmbellishmentType val) { _embelType = val; }
     double mag() const override;
 
-    void layout() override;
     void draw(mu::draw::Painter*) const override;
     static BagpipeNoteInfo BagpipeNoteInfoList[];
     noteList getNoteList() const;
@@ -118,6 +110,12 @@ public:
 
         BEDrawingDataY(const int l, const double s);
     };
+
+private:
+
+    EmbellishmentType _embelType;
+    void drawGraceNote(mu::draw::Painter*, const BagpipeEmbellishment::BEDrawingDataX&, const BagpipeEmbellishment::BEDrawingDataY&, SymId,
+                       const double x, const bool drawFlag) const;
 };
 } // namespace mu::engraving
 

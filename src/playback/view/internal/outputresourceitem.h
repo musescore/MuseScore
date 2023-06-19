@@ -48,7 +48,7 @@ class OutputResourceItem : public AbstractAudioResourceItem, public async::Async
     Q_PROPERTY(QString id READ id NOTIFY fxParamsChanged)
     Q_PROPERTY(bool isActive READ isActive WRITE setIsActive NOTIFY isActiveChanged)
 
-    INJECT(playback, audio::IPlayback, playback)
+    INJECT(audio::IPlayback, playback)
 
 public:
     explicit OutputResourceItem(QObject* parent, const audio::AudioFxParams& params);

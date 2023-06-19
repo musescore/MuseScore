@@ -32,8 +32,8 @@
 namespace mu::audio {
 class KnownAudioPluginsRegister : public IKnownAudioPluginsRegister
 {
-    INJECT(audio, IAudioConfiguration, configuration)
-    INJECT(audio, io::IFileSystem, fileSystem)
+    INJECT(IAudioConfiguration, configuration)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     Ret load() override;

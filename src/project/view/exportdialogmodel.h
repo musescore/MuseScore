@@ -47,15 +47,15 @@ class ExportDialogModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(project, framework::IInteractive, interactive)
-    INJECT(project, context::IGlobalContext, context)
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, INotationWritersRegister, writers)
-    INJECT(project, iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
-    INJECT(project, iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
-    INJECT(project, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
-    INJECT(project, iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
-    INJECT(project, IExportProjectScenario, exportProjectScenario)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(context::IGlobalContext, context)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(INotationWritersRegister, writers)
+    INJECT(iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
+    INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
+    INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
+    INJECT(iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
+    INJECT(IExportProjectScenario, exportProjectScenario)
 
     Q_PROPERTY(int selectionLength READ selectionLength NOTIFY selectionChanged)
 
@@ -145,6 +145,8 @@ public:
     bool shouldDestinationFolderBeOpenedOnExport() const;
     void setShouldDestinationFolderBeOpenedOnExport(bool enabled);
 
+    Q_INVOKABLE void updateExportInfo();
+
 signals:
     void selectionChanged();
 
@@ -179,11 +181,14 @@ private:
     bool isMainNotation(notation::INotationPtr notation) const;
     notation::IMasterNotationPtr masterNotation() const;
 
+    void selectSavedNotations();
+
     QList<notation::INotationPtr> m_notations {};
     QItemSelectionModel* m_selectionModel = nullptr;
 
     ExportTypeList m_exportTypeList {};
     ExportType m_selectedExportType = ExportType();
+    io::path_t m_exportPath;
     project::INotationWriter::UnitType m_selectedUnitType = project::INotationWriter::UnitType::PER_PART;
 };
 }

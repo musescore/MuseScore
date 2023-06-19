@@ -22,6 +22,8 @@
 
 #include "shadownote.h"
 
+#include "draw/types/pen.h"
+
 #include "accidental.h"
 #include "articulation.h"
 #include "hook.h"
@@ -29,8 +31,6 @@
 #include "rest.h"
 #include "score.h"
 #include "stafftype.h"
-
-#include "draw/types/pen.h"
 
 using namespace mu;
 
@@ -264,82 +264,5 @@ void ShadowNote::drawArticulation(mu::draw::Painter* painter, const SymId& artic
     }
 
     drawSymbol(artic, painter, coord);
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void ShadowNote::layout()
-{
-    if (!isValid()) {
-        setbbox(RectF());
-        return;
-    }
-    double _spatium = spatium();
-    RectF newBbox;
-    RectF noteheadBbox = symBbox(m_noteheadSymbol);
-    bool up = computeUp();
-
-    // TODO: Take into account accidentals and articulations?
-
-    // Layout dots
-    double dotWidth = 0;
-    if (m_duration.dots() > 0) {
-        double noteheadWidth = noteheadBbox.width();
-        double d  = score()->styleMM(Sid::dotNoteDistance) * mag();
-        double dd = score()->styleMM(Sid::dotDotDistance) * mag();
-        dotWidth = (noteheadWidth + d);
-        if (hasFlag() && up) {
-            dotWidth = std::max(dotWidth, noteheadWidth + symBbox(flagSym()).right());
-        }
-        for (int i = 0; i < m_duration.dots(); i++) {
-            dotWidth += dd * i;
-        }
-    }
-    newBbox.setRect(noteheadBbox.x(), noteheadBbox.y(), noteheadBbox.width() + dotWidth, noteheadBbox.height());
-
-    // Layout stem and flag
-    if (hasStem()) {
-        double x = noteheadBbox.x();
-        double w = noteheadBbox.width();
-
-        double stemWidth = score()->styleMM(Sid::stemWidth);
-        double stemLength = (up ? -3.5 : 3.5) * _spatium;
-        double stemAnchor = symSmuflAnchor(m_noteheadSymbol, up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
-        newBbox |= RectF(up ? x + w - stemWidth : x,
-                         stemAnchor,
-                         stemWidth,
-                         stemLength - stemAnchor);
-
-        if (hasFlag()) {
-            RectF flagBbox = symBbox(flagSym());
-            newBbox |= RectF(up ? x + w - stemWidth : x,
-                             stemAnchor + stemLength + flagBbox.y(),
-                             flagBbox.width(),
-                             flagBbox.height());
-        }
-    }
-
-    // Layout ledger lines if needed
-    if (!m_isRest && m_lineIndex < 100 && m_lineIndex > -100) {
-        double extraLen = score()->styleMM(Sid::ledgerLineLength) * mag();
-        double step = 0.5 * _spatium * staffType()->lineDistance().val();
-        double x = noteheadBbox.x() - extraLen;
-        double w = noteheadBbox.width() + 2 * extraLen;
-
-        double lw = score()->styleMM(Sid::ledgerLineWidth);
-
-        InputState ps = score()->inputState();
-        RectF r(x, -lw * .5, w, lw);
-        for (int i = -2; i >= m_lineIndex; i -= 2) {
-            newBbox |= r.translated(PointF(0, step * (i - m_lineIndex)));
-        }
-        int l = staffType()->lines() * 2; // first ledger line below staff
-        for (int i = l; i <= m_lineIndex; i += 2) {
-            newBbox |= r.translated(PointF(0, step * (i - m_lineIndex)));
-        }
-    }
-    setbbox(newBbox);
 }
 }

@@ -39,8 +39,8 @@ class DrumsetPalette : public PaletteScrollArea
 {
     Q_OBJECT
 
-    INJECT(palette, actions::IActionsDispatcher, dispatcher)
-    INJECT(palette, playback::IPlaybackController, playback)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(playback::IPlaybackController, playback)
 
 public:
     explicit DrumsetPalette(QWidget* parent = nullptr);

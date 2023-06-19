@@ -63,24 +63,6 @@ LetRingSegment::LetRingSegment(LetRing* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void LetRingSegment::layout()
-{
-    const StaffType* stType = staffType();
-
-    _skipDraw = false;
-    if (stType && stType->isHiddenElementOnTab(score(), Sid::letRingShowTabCommon, Sid::letRingShowTabSimple)) {
-        _skipDraw = true;
-        return;
-    }
-
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
-}
-
-//---------------------------------------------------------
 //   LetRing
 //---------------------------------------------------------
 

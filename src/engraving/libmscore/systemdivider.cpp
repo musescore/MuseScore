@@ -56,23 +56,6 @@ SystemDivider::SystemDivider(const SystemDivider& sd)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void SystemDivider::layout()
-{
-    SymId sid;
-
-    if (_dividerType == SystemDivider::Type::LEFT) {
-        sid = SymNames::symIdByName(score()->styleSt(Sid::dividerLeftSym));
-    } else {
-        sid = SymNames::symIdByName(score()->styleSt(Sid::dividerRightSym));
-    }
-    setSym(sid, score()->engravingFont());
-    Symbol::layout();
-}
-
-//---------------------------------------------------------
 //   setDividerType
 //---------------------------------------------------------
 

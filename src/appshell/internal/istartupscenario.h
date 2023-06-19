@@ -35,6 +35,8 @@ public:
     virtual ~IStartupScenario() = default;
 
     virtual void setStartupType(const std::optional<std::string>& type) = 0;
+
+    virtual io::path_t startupScorePath() const = 0;
     virtual void setStartupScorePath(const std::optional<io::path_t>& path) = 0;
 
     virtual void run() = 0;

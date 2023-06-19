@@ -1,9 +1,9 @@
-#ifndef GPMASTERBAR_H
-#define GPMASTERBAR_H
+#ifndef MU_IMPORTEXPORT_GPMASTERBAR_H
+#define MU_IMPORTEXPORT_GPMASTERBAR_H
 
 #include "gpbar.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 class GPMasterBar
 {
 public:
@@ -51,7 +51,7 @@ public:
 
     struct Direction {
         enum class Type {
-            Repeat, Jump
+            Repeat, Jump, Marker
         };
 
         Type type = Type::Repeat;
@@ -63,8 +63,9 @@ public:
     void addGPBar(std::unique_ptr<GPBar>&& b) { _bars.push_back(std::move(b)); }
     void setTimeSig(const GPMasterBar::TimeSig& sig) { _timeSig = sig; }
     TimeSig timeSig() const { return _timeSig; }
+    bool useFlats() const { return _useFlats; }
 
-    void setKeySig(GPMasterBar::KeySig sig) { _keySig = sig; }
+    void setKeySig(GPMasterBar::KeySig sig, bool useFlats = false) { _keySig = sig; _useFlats = useFlats; }
     KeySig keySig() const { return _keySig; }
 
     void setFermatas(std::vector<Fermata>&& f) { _fermatas.swap(f); }
@@ -104,6 +105,7 @@ private:
     std::vector<Direction> _directions;
     TimeSig _timeSig;
     KeySig _keySig;
+    bool _useFlats = false;
     Repeat _repeat;
     std::vector<int> _alternateEndings;
     TripletFeelType _tripletFeel = TripletFeelType::None;
@@ -112,6 +114,6 @@ private:
     std::pair<String, String> _section;
     Direction _direction;
 };
-}
+} // namespace mu::iex::guitarpro
 
-#endif // GPMASTERBAR_H
+#endif // MU_IMPORTEXPORT_GPMASTERBAR_H

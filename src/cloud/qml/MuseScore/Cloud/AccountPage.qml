@@ -22,12 +22,19 @@
 import QtQuick 2.15
 
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 import MuseScore.Cloud 1.0
 
 import "internal"
 
 FocusScope {
     id: root
+
+    QtObject {
+        id: prv
+
+        readonly property int sideMargin: 46
+    }
 
     NavigationSection {
         id: navSec
@@ -41,50 +48,60 @@ FocusScope {
         }
     }
 
-    AccountModel {
-        id: accountModel
+    Rectangle {
+        id: background
+        anchors.fill: parent
+        color: ui.theme.backgroundSecondaryColor
+    }
+
+    CloudsModel {
+        id: cloudsModel
     }
 
     Component.onCompleted: {
-        accountModel.load()
+        cloudsModel.load()
     }
 
-    Loader {
-        anchors.fill: parent
+    StyledTextLabel {
+        id: pageTitle
 
-        sourceComponent: accountModel.userAuthorized ? accountDetailsComp : authorizationComp
+        anchors.top: parent.top
+        anchors.topMargin: prv.sideMargin
+        anchors.left: parent.left
+        anchors.leftMargin: prv.sideMargin
+        anchors.right: parent.right
+        anchors.rightMargin: prv.sideMargin
+
+        text: qsTrc("appshell", "Accounts")
+        font: ui.theme.titleBoldFont
+        horizontalAlignment: Text.AlignLeft
     }
 
-    Component {
-        id: authorizationComp
+    CloudsListView {
+        id: view
 
-        AuthorizationPage {
-            navigationSection: navSec
+        anchors.top: pageTitle.bottom
+        anchors.topMargin: prv.sideMargin
+        anchors.left: parent.left
+        anchors.leftMargin: prv.sideMargin - spacingBetweenColumns / 2
+        anchors.right: parent.right
+        anchors.rightMargin: prv.sideMargin - spacingBetweenColumns / 2
+        anchors.bottom: parent.bottom
 
-            onSignInRequested: {
-                accountModel.signIn()
-            }
+        model: cloudsModel
 
-            onCreateAccountRequested: {
-                accountModel.createAccount()
-            }
+        navigationSection: navSec
+
+        onSignInRequested: {
+            cloudsModel.signIn(cloudCode)
         }
-    }
 
-    Component {
-        id: accountDetailsComp
+        onSignOutRequested: {
+            cloudsModel.signOut(cloudCode)
+        }
 
-        AccountDetailsPage {
-            userName: accountModel.accountInfo.userName
-            avatarUrl: accountModel.accountInfo.avatarUrl
-            profileUrl: accountModel.accountInfo.profileUrl
-            sheetmusicUrl: accountModel.accountInfo.sheetmusicUrl
-
-            navigationSection: navSec
-
-            onSignOutRequested: {
-                accountModel.signOut()
-            }
+        onCreateAccountRequested: {
+            cloudsModel.createAccount(cloudCode)
         }
     }
 }

@@ -40,12 +40,12 @@ class AutobotApi : public ApiObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(api, autobot::IAutobot, autobot)
-    INJECT(api, autobot::IAutobotConfiguration, autobotConfiguration)
-    INJECT(api, project::IProjectFilesController, projectFilesController)
-    INJECT(api, framework::IInteractive, interactive)
-    INJECT(api, io::IFileSystem, fileSystem)
-    INJECT(api, ui::IMainWindow, mainWindow)
+    INJECT(autobot::IAutobot, autobot)
+    INJECT(autobot::IAutobotConfiguration, autobotConfiguration)
+    INJECT(project::IProjectFilesController, projectFilesController)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(io::IFileSystem, fileSystem)
+    INJECT(ui::IMainWindow, mainWindow)
 
 public:
     explicit AutobotApi(IApiEngine* e);

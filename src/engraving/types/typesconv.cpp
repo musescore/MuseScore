@@ -165,6 +165,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::MEASURE_REPEAT,       "MeasureRepeat",        TranslatableString("engraving", "Measure repeat") },
     { ElementType::TIE,                  "Tie",                  TranslatableString("engraving", "Tie") },
     { ElementType::ARTICULATION,         "Articulation",         TranslatableString("engraving", "Articulation") },
+    { ElementType::ORNAMENT,             "Ornament",             TranslatableString("engraving", "Ornament") },
     { ElementType::FERMATA,              "Fermata",              TranslatableString("engraving", "Fermata") },
     { ElementType::CHORDLINE,            "ChordLine",            TranslatableString("engraving", "Chord line") },
     { ElementType::DYNAMIC,              "Dynamic",              TranslatableString("engraving", "Dynamic") },
@@ -182,12 +183,14 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::STAFF_TEXT,           "StaffText",            TranslatableString("engraving", "Staff text") },
     { ElementType::SYSTEM_TEXT,          "SystemText",           TranslatableString("engraving", "System text") },
     { ElementType::PLAYTECH_ANNOTATION,  "PlayTechAnnotation",   TranslatableString("engraving", "Playing technique annotation") },
+    { ElementType::CAPO,                 "Capo",                 TranslatableString("engraving", "Capo") },
     { ElementType::TRIPLET_FEEL,         "TripletFeel",          TranslatableString("engraving", "Triplet feel") },
     { ElementType::REHEARSAL_MARK,       "RehearsalMark",        TranslatableString("engraving", "Rehearsal mark") },
     { ElementType::INSTRUMENT_CHANGE,    "InstrumentChange",     TranslatableString("engraving", "Instrument change") },
     { ElementType::STAFFTYPE_CHANGE,     "StaffTypeChange",      TranslatableString("engraving", "Staff type change") },
     { ElementType::HARMONY,              "Harmony",              TranslatableString("engraving", "Chord symbol") },
     { ElementType::FRET_DIAGRAM,         "FretDiagram",          TranslatableString("engraving", "Fretboard diagram") },
+    { ElementType::HARP_DIAGRAM,         "HarpPedalDiagram",     TranslatableString("engraving", "Harp pedal diagram") },
     { ElementType::BEND,                 "Bend",                 TranslatableString("engraving", "Bend") },
     { ElementType::STRETCHED_BEND,       "Bend",                 TranslatableString("engraving", "Bend") },
     { ElementType::TREMOLOBAR,           "TremoloBar",           TranslatableString("engraving", "Tremolo bar") },
@@ -322,6 +325,58 @@ Align TConv::fromXml(const String& str, Align def)
     a.horizontal = findTypeByXmlTag<AlignH>(ALIGN_H, sl.at(0), def.horizontal);
     a.vertical = findTypeByXmlTag<AlignV>(ALIGN_V, sl.at(1), def.vertical);
     return a;
+}
+
+static const std::vector<Item<IntervalStep> > INTERVAL_STEP = {
+    { IntervalStep::UNISON, "unison" },
+    { IntervalStep::SECOND, "second" },
+    { IntervalStep::THIRD, "third" },
+    { IntervalStep::FOURTH, "fourth" },
+    { IntervalStep::FIFTH, "fifth" },
+    { IntervalStep::SIXTH, "sixth" },
+    { IntervalStep::SEVENTH, "seventh" },
+    { IntervalStep::OCTAVE, "octave" }
+};
+
+static const std::vector<Item<IntervalType> > INTERVAL_TYPE = {
+    { IntervalType::AUTO, "auto" },
+    { IntervalType::MINOR, "minor" },
+    { IntervalType::MAJOR, "major" },
+    { IntervalType::PERFECT, "perfect" },
+    { IntervalType::DIMINISHED, "diminished" },
+    { IntervalType::AUGMENTED, "augmented" },
+};
+
+String TConv::toXml(OrnamentInterval interval)
+{
+    StringList sl;
+    sl << String::fromAscii(findXmlTagByType<IntervalStep>(INTERVAL_STEP, interval.step).ascii());
+    sl << String::fromAscii(findXmlTagByType<IntervalType>(INTERVAL_TYPE, interval.type).ascii());
+    return sl.join(u",");
+}
+
+OrnamentInterval TConv::fromXml(const String& str, OrnamentInterval def)
+{
+    StringList sl = str.split(',');
+    if (sl.size() != 2) {
+        LOGD() << "bad ornament interval value: " << str;
+        return def;
+    }
+
+    OrnamentInterval interval;
+    interval.step = findTypeByXmlTag<IntervalStep>(INTERVAL_STEP, sl.at(0), def.step);
+    interval.type = findTypeByXmlTag<IntervalType>(INTERVAL_TYPE, sl.at(1), def.type);
+    return interval;
+}
+
+IntervalStep TConv::fromXml(const AsciiStringView& tag, IntervalStep def)
+{
+    return findTypeByXmlTag<IntervalStep>(INTERVAL_STEP, tag, def);
+}
+
+IntervalType TConv::fromXml(const AsciiStringView& tag, IntervalType def)
+{
+    return findTypeByXmlTag<IntervalType>(INTERVAL_TYPE, tag, def);
 }
 
 String TConv::translatedUserName(SymId v)
@@ -972,6 +1027,8 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::LH_GUITAR_FINGERING, "guitar_fingering_lh", TranslatableString("engraving", "LH guitar fingering") },
     { TextStyleType::RH_GUITAR_FINGERING, "guitar_fingering_rh", TranslatableString("engraving", "RH guitar fingering") },
     { TextStyleType::STRING_NUMBER,     "string_number",        TranslatableString("engraving", "String number") },
+    { TextStyleType::HARP_PEDAL_DIAGRAM, "harp_pedal_diagram",  TranslatableString("engraving", "Harp pedal diagram") },
+    { TextStyleType::HARP_PEDAL_TEXT_DIAGRAM, "harp_pedal_text_diagram", TranslatableString("engraving", "Harp pedal text diagram") },
 
     { TextStyleType::TEXTLINE,          "textline",             TranslatableString("engraving", "Text line") },
     { TextStyleType::VOLTA,             "volta",                TranslatableString("engraving", "Volta") },
@@ -2220,8 +2277,6 @@ static const std::vector<Item<JumpType> > JUMP_TYPES = {
     { JumpType::DSS_AL_CODA,    "", TranslatableString("engraving", "Dal Segno Segno al Coda") },
     { JumpType::DSS_AL_DBLCODA, "", TranslatableString("engraving", "Dal Segno Segno al Double Coda") },
     { JumpType::DSS_AL_FINE,    "", TranslatableString("engraving", "Dal Segno Segno al Fine") },
-    { JumpType::DCODA,          "", TranslatableString("engraving", "Da Coda") },
-    { JumpType::DDBLCODA,       "", TranslatableString("engraving", "Da Double Coda") },
 
     { JumpType::USER,           "", TranslatableString("engraving", "Custom") }
 };
@@ -2236,7 +2291,7 @@ String TConv::translatedUserName(JumpType v)
     return findUserNameByType<JumpType>(JUMP_TYPES, v).translated();
 }
 
-static const std::array<Item<MarkerType>, 9> MARKER_TYPES = { {
+static const std::array<Item<MarkerType>, 11> MARKER_TYPES = { {
     { MarkerType::SEGNO,        "segno",    TranslatableString("engraving", "Segno") },
     { MarkerType::VARSEGNO,     "varsegno", TranslatableString("engraving", "Segno variation") },
     { MarkerType::CODA,         "codab",    TranslatableString("engraving", "Coda") },
@@ -2245,6 +2300,8 @@ static const std::array<Item<MarkerType>, 9> MARKER_TYPES = { {
     { MarkerType::FINE,         "fine",     TranslatableString("engraving", "Fine") },
     { MarkerType::TOCODA,       "coda",     TranslatableString("engraving", "To coda") },
     { MarkerType::TOCODASYM,    "",         TranslatableString("engraving", "To coda (symbol)") },
+    { MarkerType::DA_CODA,      "",         TranslatableString("engraving", "Da Coda") },
+    { MarkerType::DA_DBLCODA,   "",         TranslatableString("engraving", "Da Double Coda") },
     { MarkerType::USER,         "",         TranslatableString("engraving", "Custom") }
 } };
 

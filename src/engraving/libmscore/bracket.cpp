@@ -24,11 +24,7 @@
 
 #include "draw/types/brush.h"
 
-#include "types/typesconv.h"
-#include "layout/tlayout.h"
-
 #include "bracketItem.h"
-#include "factory.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
@@ -48,13 +44,13 @@ namespace mu::engraving {
 Bracket::Bracket(EngravingItem* parent)
     : EngravingItem(ElementType::BRACKET, parent)
 {
-    ay1          = 0;
-    h2           = 3.5 * spatium();
-    _firstStaff  = 0;
-    _lastStaff   = 0;
-    _bi          = 0;
-    _braceSymbol = SymId::noSym;
-    _magx        = 1.;
+    m_ay1          = 0;
+    m_h2           = 3.5 * spatium();
+    m_firstStaff  = 0;
+    m_lastStaff   = 0;
+    m_bi          = 0;
+    m_braceSymbol = SymId::noSym;
+    m_magx        = 1.;
     setGenerated(true);       // brackets are not saved
 }
 
@@ -86,7 +82,7 @@ Fraction Bracket::playTick() const
 
 void Bracket::setHeight(double h)
 {
-    h2 = h * .5;
+    m_h2 = h * .5;
 }
 
 //---------------------------------------------------------
@@ -101,7 +97,7 @@ double Bracket::width() const
         if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
             w = score()->styleMM(Sid::akkoladeWidth) + score()->styleMM(Sid::akkoladeBarDistance);
         } else {
-            w = (symWidth(_braceSymbol) * _magx) + score()->styleMM(Sid::akkoladeBarDistance);
+            w = (symWidth(m_braceSymbol) * m_magx) + score()->styleMM(Sid::akkoladeBarDistance);
         }
         break;
     case BracketType::NORMAL:
@@ -127,15 +123,15 @@ double Bracket::width() const
 
 void Bracket::setStaffSpan(size_t a, size_t b)
 {
-    _firstStaff = a;
-    _lastStaff = b;
+    m_firstStaff = a;
+    m_lastStaff = b;
 
     if (bracketType() == BracketType::BRACE
         && score()->styleSt(Sid::MusicalSymbolFont) != "Emmentaler" && score()->styleSt(Sid::MusicalSymbolFont) != "Gonville") {
-        int v = static_cast<int>(_lastStaff - _firstStaff + 1);
+        int v = static_cast<int>(m_lastStaff - m_firstStaff + 1);
 
         // if staves inner staves are hidden, decrease span
-        for (size_t staffIndex = _firstStaff; staffIndex <= _lastStaff; ++staffIndex) {
+        for (size_t staffIndex = m_firstStaff; staffIndex <= m_lastStaff; ++staffIndex) {
             if (system() && !system()->staff(staffIndex)->show()) {
                 --v;
             }
@@ -146,28 +142,18 @@ void Bracket::setStaffSpan(size_t a, size_t b)
         }
 
         // 1.625 is a "magic" number based on akkoladeDistance/4.0 (default value 6.5).
-        _magx = v + ((v - 1) * 1.625);
+        m_magx = v + ((v - 1) * 1.625);
 
         if (v == 1) {
-            _braceSymbol = SymId::braceSmall;
+            m_braceSymbol = SymId::braceSmall;
         } else if (v <= 2) {
-            _braceSymbol = SymId::brace;
+            m_braceSymbol = SymId::brace;
         } else if (v <= 3) {
-            _braceSymbol = SymId::braceLarge;
+            m_braceSymbol = SymId::braceLarge;
         } else {
-            _braceSymbol = SymId::braceLarger;
+            m_braceSymbol = SymId::braceLarger;
         }
     }
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Bracket::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -177,28 +163,28 @@ void Bracket::layout()
 void Bracket::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;
-    if (h2 == 0.0) {
+    if (m_h2 == 0.0) {
         return;
     }
     switch (bracketType()) {
     case BracketType::BRACE: {
-        if (_braceSymbol == SymId::noSym) {
+        if (m_braceSymbol == SymId::noSym) {
             painter->setNoPen();
             painter->setBrush(Brush(curColor()));
-            painter->drawPath(path);
+            painter->drawPath(m_path);
         } else {
-            double h        = 2 * h2;
+            double h        = 2 * m_h2;
             double mag      = h / (100 * magS());
             painter->setPen(curColor());
             painter->save();
-            painter->scale(_magx, mag);
-            drawSymbol(_braceSymbol, painter, PointF(0, 100 * magS()));
+            painter->scale(m_magx, mag);
+            drawSymbol(m_braceSymbol, painter, PointF(0, 100 * magS()));
             painter->restore();
         }
     }
     break;
     case BracketType::NORMAL: {
-        double h        = 2 * h2;
+        double h        = 2 * m_h2;
         double _spatium = spatium();
         double w        = score()->styleMM(Sid::bracketWidth);
         double bd       = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
@@ -213,7 +199,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
     }
     break;
     case BracketType::SQUARE: {
-        double h = 2 * h2;
+        double h = 2 * m_h2;
         double lineW = score()->styleMM(Sid::staffLineWidth);
         double bracketWidth = width() - lineW / 2;
         Pen pen(curColor(), lineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
@@ -224,7 +210,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
     }
     break;
     case BracketType::LINE: {
-        double h = 2 * h2;
+        double h = 2 * m_h2;
         double w = 0.67 * score()->styleMM(Sid::bracketWidth);
         Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
@@ -254,7 +240,7 @@ bool Bracket::needStartEditingAfterSelecting() const
 void Bracket::startEdit(EditData& ed)
 {
     EngravingItem::startEdit(ed);
-    ay1 = pagePos().y();
+    m_ay1 = pagePos().y();
 }
 
 //---------------------------------------------------------
@@ -263,7 +249,7 @@ void Bracket::startEdit(EditData& ed)
 
 std::vector<PointF> Bracket::gripsPositions(const EditData&) const
 {
-    return { PointF(0.0, h2 * 2) + pagePos() };
+    return { PointF(0.0, m_h2 * 2) + pagePos() };
 }
 
 //---------------------------------------------------------
@@ -276,14 +262,11 @@ void Bracket::endEdit(EditData& ed)
     ed.clear(); // score layout invalidates element
 }
 
-//---------------------------------------------------------
-//   editDrag
-//---------------------------------------------------------
-
 void Bracket::editDrag(EditData& ed)
 {
-    h2 += ed.delta.y() * .5;
-    layout();
+    m_h2 += ed.delta.y() * .5;
+
+    layout()->layoutItem(this);
 }
 
 //---------------------------------------------------------
@@ -293,7 +276,7 @@ void Bracket::editDrag(EditData& ed)
 
 void Bracket::endEditDrag(EditData&)
 {
-    double ay2 = ay1 + h2 * 2;
+    double ay2 = m_ay1 + m_h2 * 2;
 
     staff_idx_t staffIdx1 = staffIdx();
     staff_idx_t staffIdx2;
@@ -318,7 +301,7 @@ void Bracket::endEditDrag(EditData&)
 
     double sy = system()->staff(staffIdx1)->y();
     double ey = system()->staff(staffIdx2)->y() + score()->staff(staffIdx2)->height();
-    h2 = (ey - sy) * .5;
+    m_h2 = (ey - sy) * .5;
     bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, staffIdx2 - staffIdx1 + 1);
 }
 
@@ -352,7 +335,7 @@ bool Bracket::isEditAllowed(EditData& ed) const
     if (ed.key == Key_Up && span() > 1) {
         return true;
     }
-    if (ed.key == Key_Down && _lastStaff < system()->staves().size() - 1) {
+    if (ed.key == Key_Down && m_lastStaff < system()->staves().size() - 1) {
         return true;
     }
 
@@ -388,7 +371,7 @@ bool Bracket::edit(EditData& ed)
         bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, static_cast<int>(span()) - 1);
         return true;
     }
-    if (ed.key == Key_Down && _lastStaff < system()->staves().size() - 1) {
+    if (ed.key == Key_Down && m_lastStaff < system()->staves().size() - 1) {
         bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, static_cast<int>(span()) + 1);
         return true;
     }
@@ -415,7 +398,7 @@ PropertyValue Bracket::getProperty(Pid id) const
 {
     PropertyValue v = EngravingItem::getProperty(id);
     if (!v.isValid()) {
-        v = _bi->getProperty(id);
+        v = m_bi->getProperty(id);
     }
     return v;
 }
@@ -426,7 +409,7 @@ PropertyValue Bracket::getProperty(Pid id) const
 
 bool Bracket::setProperty(Pid id, const PropertyValue& v)
 {
-    return _bi->setProperty(id, v);
+    return m_bi->setProperty(id, v);
 }
 
 //---------------------------------------------------------
@@ -440,7 +423,7 @@ PropertyValue Bracket::propertyDefault(Pid id) const
     }
     PropertyValue v = EngravingItem::propertyDefault(id);
     if (!v.isValid()) {
-        v = _bi->propertyDefault(id);
+        v = m_bi->propertyDefault(id);
     }
     return v;
 }
@@ -467,7 +450,7 @@ void Bracket::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
 
 void Bracket::setSelected(bool f)
 {
-    _bi->setSelected(f);
+    m_bi->setSelected(f);
     EngravingItem::setSelected(f);
 }
 }

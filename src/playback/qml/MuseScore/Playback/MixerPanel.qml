@@ -36,7 +36,7 @@ ColumnLayout {
     property alias contextMenuModel: contextMenuModel
 
     property NavigationSection navigationSection: null
-    property int navigationPanelOrderStart: 0
+    property NavigationPanel navigationPanel: mixerPanelModel.count > 0 ? mixerPanelModel.get(0).channelItem.panel : null // first panel
 
     signal resizeRequested(var newWidth, var newHeight)
 
@@ -71,8 +71,10 @@ ColumnLayout {
     MixerPanelModel {
         id: mixerPanelModel
 
+        navigationSection: root.navigationSection
+
         Component.onCompleted: {
-            mixerPanelModel.load(root.navigationSection, root.navigationPanelOrderStart)
+            mixerPanelModel.load()
         }
 
         onModelReset: {
@@ -209,6 +211,26 @@ ColumnLayout {
                 }
             }
 
+            MixerAuxSendsSection {
+                id: auxSendsSection
+
+                visible: contextMenuModel.auxSendsSectionVisible
+                headerVisible: contextMenuModel.labelsSectionVisible
+                headerWidth: prv.headerWidth
+
+                channelItemWidth: prv.channelItemWidth
+                spacingAbove: 8
+
+                model: mixerPanelModel
+
+                navigationRowStart: 200
+                needReadChannelName: prv.isPanelActivated
+
+                onNavigateControlIndexChanged: function(index) {
+                    prv.setNavigateControlIndex(index)
+                }
+            }
+
             MixerBalanceSection {
                 id: balanceSection
 
@@ -219,7 +241,7 @@ ColumnLayout {
 
                 model: mixerPanelModel
 
-                navigationRowStart: 200
+                navigationRowStart: 300
                 needReadChannelName: prv.isPanelActivated
 
                 onNavigateControlIndexChanged: function(index) {
@@ -237,7 +259,7 @@ ColumnLayout {
 
                 model: mixerPanelModel
 
-                navigationRowStart: 300
+                navigationRowStart: 400
                 needReadChannelName: prv.isPanelActivated
 
                 onNavigateControlIndexChanged: function(index) {
@@ -257,7 +279,7 @@ ColumnLayout {
 
                 model: mixerPanelModel
 
-                navigationRowStart: 400
+                navigationRowStart: 500
                 needReadChannelName: prv.isPanelActivated
 
                 onNavigateControlIndexChanged: function(index) {
@@ -275,7 +297,7 @@ ColumnLayout {
 
                 model: mixerPanelModel
 
-                navigationRowStart: 500
+                navigationRowStart: 600
                 needReadChannelName: prv.isPanelActivated
 
                 onNavigateControlIndexChanged: function(index) {
@@ -295,7 +317,7 @@ ColumnLayout {
 
                 model: mixerPanelModel
 
-                navigationRowStart: 600
+                navigationRowStart: 700
                 needReadChannelName: prv.isPanelActivated
 
                 onNavigateControlIndexChanged: function(index) {

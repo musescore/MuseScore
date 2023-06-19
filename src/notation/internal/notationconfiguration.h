@@ -35,10 +35,10 @@
 namespace mu::notation {
 class NotationConfiguration : public INotationConfiguration, public async::Asyncable
 {
-    INJECT(notation, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(notation, io::IFileSystem, fileSystem)
-    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
-    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(io::IFileSystem, fileSystem)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
 
 public:
     void init();

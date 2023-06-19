@@ -33,12 +33,14 @@
 #include "mixerchannel.h"
 #include "internal/dsp/limiter.h"
 #include "ifxresolver.h"
+#include "iaudioconfiguration.h"
 #include "iclock.h"
 
 namespace mu::audio {
 class Mixer : public AbstractAudioSource, public std::enable_shared_from_this<Mixer>, public async::Asyncable
 {
-    INJECT(audio, fx::IFxResolver, fxResolver)
+    INJECT(fx::IFxResolver, fxResolver)
+    INJECT(IAudioConfiguration, configuration)
 public:
     Mixer();
     ~Mixer();
@@ -68,18 +70,22 @@ public:
     void setIsActive(bool arg) override;
 
 private:
-    void mixOutputFromChannel(float* outBuffer, float* inBuffer, unsigned int samplesCount);
+    void mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount, gain_t signalAmount = 1.f);
+    void prepareAuxBuffers(size_t outBufferSize);
+    void writeTrackToAuxBuffers(const AuxSendsParams& auxSends, const float* trackBuffer, samples_t samplesPerChannel);
+    void processAuxChannels(float* buffer, samples_t samplesPerChannel);
     void completeOutput(float* buffer, samples_t samplesPerChannel);
     void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
 
     std::vector<float> m_writeCacheBuff;
+    std::vector<std::vector<float> > m_auxBuffers;
 
     AudioOutputParams m_masterParams;
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
     std::vector<IFxProcessorPtr> m_masterFxProcessors = {};
 
     std::map<TrackId, MixerChannelPtr> m_trackChannels = {};
-    std::map<TrackId, MixerChannelPtr> m_auxChannels = {};
+    std::vector<MixerChannelPtr> m_auxChannels = {};
 
     dsp::LimiterPtr m_limiter = nullptr;
 

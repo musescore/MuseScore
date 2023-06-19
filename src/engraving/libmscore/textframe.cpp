@@ -23,8 +23,6 @@
 
 #include "draw/fontmetrics.h"
 
-#include "layout/tlayout.h"
-
 #include "box.h"
 #include "factory.h"
 #include "mscore.h"
@@ -59,18 +57,6 @@ TBox::TBox(const TBox& tbox)
 TBox::~TBox()
 {
     delete m_text;
-}
-
-//---------------------------------------------------------
-//   layout
-///   The text box layout() adjusts the frame height to text
-///   height.
-//---------------------------------------------------------
-
-void TBox::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

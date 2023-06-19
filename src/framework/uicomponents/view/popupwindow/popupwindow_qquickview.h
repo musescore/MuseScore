@@ -39,9 +39,9 @@ class PopupWindow_QQuickView : public IPopupWindow, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(uicomponents, ui::IInteractiveProvider, interactiveProvider)
-    INJECT(uicomponents, ui::IMainWindow, mainWindow)
-    INJECT(uicomponents, ui::IUiConfiguration, uiConfiguration)
+    INJECT(ui::IInteractiveProvider, interactiveProvider)
+    INJECT(ui::IMainWindow, mainWindow)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
 
 public:
     explicit PopupWindow_QQuickView(QObject* parent = nullptr);

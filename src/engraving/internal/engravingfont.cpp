@@ -28,6 +28,7 @@
 #include "types/symnames.h"
 
 #include "libmscore/mscore.h"
+#include "libmscore/shape.h"
 
 #include "smufl.h"
 
@@ -590,6 +591,22 @@ RectF EngravingFont::bbox(const SymIdList& s, const SizeF& mag) const
         pos.rx() += advance(id, mag.width());
     }
     return r;
+}
+
+Shape EngravingFont::shape(const SymIdList& s, double mag) const
+{
+    return shape(s, SizeF(mag, mag));
+}
+
+Shape EngravingFont::shape(const SymIdList& s, const SizeF& mag) const
+{
+    Shape sh;
+    PointF pos(0.0, 0.0);
+    for (SymId id : s) {
+        sh.add(Shape(bbox(id, mag)).translate(pos));
+        pos.rx() += advance(id, mag.width());
+    }
+    return sh;
 }
 
 // =============================================

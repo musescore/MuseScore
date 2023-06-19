@@ -30,7 +30,7 @@
 namespace mu::workspace {
 class WorkspaceUiActions : public ui::IUiActionsModule
 {
-    INJECT(workspace, context::IUiContextResolver, uicontextResolver)
+    INJECT(context::IUiContextResolver, uicontextResolver)
 public:
     WorkspaceUiActions(std::shared_ptr<WorkspaceActionController> controller);
 

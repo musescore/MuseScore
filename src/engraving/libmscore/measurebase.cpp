@@ -283,38 +283,6 @@ double MeasureBase::pause() const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void MeasureBase::layout()
-{
-    int breakCount = 0;
-
-    for (EngravingItem* element : _el) {
-        if (!score()->tagIsValid(element->tag())) {
-            continue;
-        }
-        if (element->isLayoutBreak()) {
-            double _spatium = spatium();
-            double x;
-            double y;
-            if (toLayoutBreak(element)->isNoBreak()) {
-                x = width() + score()->styleMM(Sid::barWidth) - element->width() * .5;
-            } else {
-                x = width() + score()->styleMM(Sid::barWidth) - element->width()
-                    - breakCount * (element->width() + _spatium * .5);
-                breakCount++;
-            }
-            y = -2.5 * _spatium - element->height();
-            element->setPos(x, y);
-        } else if (element->isMarker() || element->isJump()) {
-        } else {
-            element->layout();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   top
 //---------------------------------------------------------
 
@@ -639,8 +607,12 @@ int MeasureBase::measureIndex() const
 {
     int idx = 0;
     MeasureBase* m = score()->firstMeasure();
+    Measure* mmRestFirst = nullptr;
+    if (isMeasure() && toMeasure(this)->isMMRest()) {
+        mmRestFirst = toMeasure(this)->mmRestFirst();
+    }
     while (m) {
-        if (m == this) {
+        if (m == this || m == mmRestFirst) {
             return idx;
         }
         m = m->next();

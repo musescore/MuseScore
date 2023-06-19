@@ -32,7 +32,7 @@
 namespace mu::playback {
 class PlaybackUiActions : public ui::IUiActionsModule, public async::Asyncable
 {
-    INJECT(playback, context::IUiContextResolver, uicontextResolver)
+    INJECT(context::IUiContextResolver, uicontextResolver)
 
 public:
     PlaybackUiActions(std::shared_ptr<PlaybackController> controller);

@@ -22,9 +22,12 @@
 #ifndef MU_CONTEXT_CONTEXTMODULE_H
 #define MU_CONTEXT_CONTEXTMODULE_H
 
+#include <memory>
 #include "modularity/imodulesetup.h"
 
 namespace mu::context {
+class GlobalContext;
+class UiContextResolver;
 class ContextModule : public modularity::IModuleSetup
 {
 public:
@@ -33,6 +36,10 @@ public:
     void registerExports() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
     void onDeinit() override;
+
+private:
+    std::shared_ptr<GlobalContext> m_globalContext;
+    std::shared_ptr<UiContextResolver> m_uicontextResolver;
 };
 }
 

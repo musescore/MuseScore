@@ -22,7 +22,7 @@
 #ifndef MU_DIAGNOSTICS_IDIAGNOSTICSCONFIGURATION_H
 #define MU_DIAGNOSTICS_IDIAGNOSTICSCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "io/path.h"
 

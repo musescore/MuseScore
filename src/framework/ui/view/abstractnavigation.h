@@ -53,7 +53,7 @@ class AbstractNavigation : public QObject, public QQmlParserStatus, public async
 
     Q_INTERFACES(QQmlParserStatus)
 
-    INJECT(ui, INavigationController, navigationController)
+    INJECT(INavigationController, navigationController)
 
 public:
     explicit AbstractNavigation(QObject* parent = nullptr);
@@ -65,6 +65,7 @@ public:
     QString name() const;
 
     const INavigation::Index& index() const;
+    void setIndex(const INavigation::Index& index);
     async::Channel<INavigation::Index> indexChanged() const;
 
     bool enabled() const;

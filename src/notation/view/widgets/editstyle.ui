@@ -9209,6 +9209,91 @@ By default, they will be placed such as that their right end are at the same lev
          </widget>
         </item>
         <item>
+         <spacer name="verticalSpacer_38">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_stemSideArticAlign">
+          <property name="title">
+           <string>Articulation alignment when positioned at the stem</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_42">
+           <item>
+            <widget class="QRadioButton" name="radioArticAlignStem">
+             <property name="text">
+              <string>Align with stem</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioArticAlignNoteHead">
+             <property name="text">
+              <string>Align with notehead</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioArticAlignCenter">
+             <property name="text">
+              <string>Center between stem and notehead</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_41">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_combinedArtic">
+          <property name="title">
+           <string>Combined articulation</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_43">
+           <item>
+            <widget class="QRadioButton" name="radioArticKeepTogether">
+             <property name="text">
+              <string>Always keep together</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioArticAllowSeparate">
+             <property name="text">
+              <string>Prefer closeness to notehead (combined articulations may become separated)</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
          <spacer name="verticalSpacer_25">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -10516,8 +10601,14 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="1" column="2">
             <widget class="QToolButton" name="resetAvoidBarLines">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Avoid barlines' setting</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -10562,8 +10653,14 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="2">
             <widget class="QToolButton" name="resetDynamicsSize">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Scale' value</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -10609,7 +10706,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="1" column="0">
             <widget class="QCheckBox" name="avoidBarLines">
              <property name="text">
-              <string>Avoid bar lines:</string>
+              <string>Avoid barlines:</string>
              </property>
             </widget>
            </item>
@@ -10655,7 +10752,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="2" column="0">
             <widget class="QLabel" name="label_62">
              <property name="text">
-              <string>Size:</string>
+              <string>Scale:</string>
              </property>
              <property name="margin">
               <number>0</number>
@@ -10732,7 +10829,7 @@ By default, they will be placed such as that their right end are at the same lev
       <widget class="QWidget" name="PageExpression">
        <layout class="QVBoxLayout" name="verticalLayout_37">
         <item>
-         <widget class="QGroupBox" name="groupBox">
+         <widget class="QGroupBox" name="groupBox_expression">
           <property name="title">
            <string>Expression</string>
           </property>
@@ -10759,8 +10856,14 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="0" column="1">
             <widget class="QToolButton" name="resetSnapExpression">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Snap to dynamics' setting</string>
+             </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -12768,7 +12871,7 @@ By default, they will be placed such as that their right end are at the same lev
                  <item row="3" column="0">
                   <widget class="QLabel" name="label_206">
                    <property name="text">
-                    <string>Margin:</string>
+                    <string>Padding:</string>
                    </property>
                    <property name="buddy">
                     <cstring>textStyleFramePadding</cstring>
@@ -12810,7 +12913,7 @@ By default, they will be placed such as that their right end are at the same lev
                     <string>Reset to default</string>
                    </property>
                    <property name="accessibleName">
-                    <string>Reset 'Margin' value</string>
+                    <string>Reset 'Padding' value</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>

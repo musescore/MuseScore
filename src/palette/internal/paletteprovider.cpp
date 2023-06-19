@@ -988,20 +988,20 @@ mu::async::Channel<ElementPtr> PaletteProvider::addCustomItemRequested() const
     return m_addCustomItemRequested;
 }
 
-void PaletteProvider::write(XmlWriter& xml) const
+void PaletteProvider::write(XmlWriter& xml, bool pasteMode) const
 {
     if (!m_userPaletteModel) {
         return;
     }
     if (const PaletteTree* tree = m_userPaletteModel->paletteTree()) {
-        tree->write(xml);
+        tree->write(xml, pasteMode);
     }
 }
 
-bool PaletteProvider::read(XmlReader& e)
+bool PaletteProvider::read(XmlReader& e, bool pasteMode)
 {
     PaletteTreePtr tree = std::make_shared<PaletteTree>();
-    if (!tree->read(e)) {
+    if (!tree->read(e, pasteMode)) {
         return false;
     }
 

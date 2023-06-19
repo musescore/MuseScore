@@ -22,7 +22,7 @@
 #ifndef MU_AUTOBOT_IAUTOBOTCONFIGURATION_H
 #define MU_AUTOBOT_IAUTOBOTCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 
 namespace mu::autobot {

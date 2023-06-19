@@ -38,13 +38,14 @@ class Measure;
 class VoltaSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, VoltaSegment)
+    DECLARE_CLASSOF(ElementType::VOLTA_SEGMENT)
+
 public:
     VoltaSegment(Volta*, System* parent);
 
     VoltaSegment* clone() const override { return new VoltaSegment(*this); }
 
     Volta* volta() const { return (Volta*)spanner(); }
-    void layout() override;
 
     EngravingItem* propertyDelegate(Pid) override;
 };
@@ -73,8 +74,6 @@ public:
     Volta* clone() const override { return new Volta(*this); }
 
     LineSegment* createLineSegment(System* parent) override;
-
-    SpannerSegment* layoutSystem(System* system) override;
 
     void setVelocity() const;
     void setChannel() const;

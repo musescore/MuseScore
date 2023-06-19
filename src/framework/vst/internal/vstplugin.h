@@ -43,8 +43,8 @@ namespace mu::vst {
 class VstPluginProvider;
 class VstPlugin : public async::Asyncable
 {
-    INJECT_STATIC(vst, audio::IAudioThreadSecurer, threadSecurer)
-    INJECT_STATIC(vst, IVstModulesRepository, modulesRepo)
+    INJECT_STATIC(audio::IAudioThreadSecurer, threadSecurer)
+    INJECT_STATIC(IVstModulesRepository, modulesRepo)
 
 public:
     VstPlugin(const audio::AudioResourceId& resourceId);

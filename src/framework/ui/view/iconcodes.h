@@ -162,7 +162,6 @@ public:
         AMBITUS_LEANING_RIGHT = 0xEF7B,
         BRACKET_PARENTHESES = 0xEF7C,
         BRACKET_PARENTHESES_SQUARE = 0xEF7D,
-        STAFF_TYPE_CHANGE = 0xEF7E,
         SPLIT_VIEW_HORIZONTAL = 0xEF7F,
         SPLIT_VIEW_VERTICAL = 0xEF80,
         KEY_SIGNATURE = 0xEF81,
@@ -369,6 +368,7 @@ public:
         MEASURE_REPEAT = 0xF431,
 
         INSERT_ONE_MEASURE = 0xF432,
+        STAFF_TYPE_CHANGE = 0xF433,
 
         CLOUD = 0xF435,
 
@@ -380,6 +380,8 @@ public:
         LYRICS = 0xF441,
 
         QUAVER_REST = 0xF44C,
+
+        SHARE_AUDIO = 0xF44F,
 
         DYNAMIC_CENTER_1 = 0xF451,
         DYNAMIC_CENTER_2 = 0xF452,

@@ -30,7 +30,7 @@
 namespace mu::accessibility {
 class AccessibilityConfiguration : public IAccessibilityConfiguration
 {
-    INJECT(accessibility, ui::INavigationController, navigationController)
+    INJECT(ui::INavigationController, navigationController)
 
 public:
     AccessibilityConfiguration() = default;

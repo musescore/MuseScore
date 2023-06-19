@@ -32,6 +32,7 @@
 #include "diagnostics/idiagnosticdrawprovider.h"
 #include "autobot/iautobot.h"
 #include "audio/iregisteraudiopluginsscenario.h"
+#include "multiinstances/imultiinstancesprovider.h"
 
 #include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
@@ -49,21 +50,22 @@
 namespace mu::app {
 class App
 {
-    INJECT(app, framework::IApplication, muapplication)
-    INJECT(app, converter::IConverterController, converter)
-    INJECT(app, diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
-    INJECT(app, autobot::IAutobot, autobot)
-    INJECT(app, audio::IRegisterAudioPluginsScenario, registerAudioPluginsScenario)
-    INJECT(app, ui::IUiConfiguration, uiConfiguration)
-    INJECT(app, appshell::IAppShellConfiguration, appshellConfiguration)
-    INJECT(app, appshell::IStartupScenario, startupScenario)
-    INJECT(app, notation::INotationConfiguration, notationConfiguration)
-    INJECT(app, project::IProjectConfiguration, projectConfiguration)
-    INJECT(app, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
-    INJECT(app, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
-    INJECT(app, iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
-    INJECT(app, iex::videoexport::IVideoExportConfiguration, videoExportConfiguration)
-    INJECT(app, iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
+    INJECT(framework::IApplication, muapplication)
+    INJECT(converter::IConverterController, converter)
+    INJECT(diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
+    INJECT(autobot::IAutobot, autobot)
+    INJECT(audio::IRegisterAudioPluginsScenario, registerAudioPluginsScenario)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(appshell::IAppShellConfiguration, appshellConfiguration)
+    INJECT(appshell::IStartupScenario, startupScenario)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(project::IProjectConfiguration, projectConfiguration)
+    INJECT(iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
+    INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
+    INJECT(iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
+    INJECT(iex::videoexport::IVideoExportConfiguration, videoExportConfiguration)
+    INJECT(iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
 
 public:
     App();

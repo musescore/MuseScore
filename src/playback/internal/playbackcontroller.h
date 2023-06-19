@@ -48,13 +48,13 @@
 namespace mu::playback {
 class PlaybackController : public IPlaybackController, public actions::Actionable, public async::Asyncable
 {
-    INJECT_STATIC(playback, actions::IActionsDispatcher, dispatcher)
-    INJECT_STATIC(playback, context::IGlobalContext, globalContext)
-    INJECT_STATIC(playback, IPlaybackConfiguration, configuration)
-    INJECT_STATIC(playback, notation::INotationConfiguration, notationConfiguration)
-    INJECT_STATIC(playback, audio::IPlayback, playback)
-    INJECT_STATIC(playback, ISoundProfilesRepository, profilesRepo)
-    INJECT_STATIC(playback, framework::IInteractive, interactive)
+    INJECT_STATIC(actions::IActionsDispatcher, dispatcher)
+    INJECT_STATIC(context::IGlobalContext, globalContext)
+    INJECT_STATIC(IPlaybackConfiguration, configuration)
+    INJECT_STATIC(notation::INotationConfiguration, notationConfiguration)
+    INJECT_STATIC(audio::IPlayback, playback)
+    INJECT_STATIC(ISoundProfilesRepository, profilesRepo)
+    INJECT_STATIC(framework::IInteractive, interactive)
 
 public:
     void init();
@@ -78,10 +78,13 @@ public:
     async::Notification currentTrackSequenceIdChanged() const override;
 
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
-    const audio::TrackIdList& auxTrackIdList() const override;
+    const AuxTrackIdMap& auxTrackIdMap() const override;
 
     async::Channel<audio::TrackId> trackAdded() const override;
     async::Channel<audio::TrackId> trackRemoved() const override;
+
+    std::string auxChannelName(audio::aux_channel_idx_t index) const override;
+    async::Channel<audio::aux_channel_idx_t, std::string> auxChannelNameChanged() const override;
 
     void playElements(const std::vector<const notation::EngravingItem*>& elements) override;
     void playMetronome(int tick) override;
@@ -214,8 +217,10 @@ private:
     async::Channel<audio::TrackId> m_trackAdded;
     async::Channel<audio::TrackId> m_trackRemoved;
 
+    async::Channel<audio::aux_channel_idx_t, std::string> m_auxChannelNameChanged;
+
     InstrumentTrackIdMap m_instrumentTrackIdMap;
-    audio::TrackIdList m_auxTrackIdList;
+    AuxTrackIdMap m_auxTrackIdMap;
 
     framework::Progress m_loadingProgress;
     size_t m_loadingTrackCount = 0;

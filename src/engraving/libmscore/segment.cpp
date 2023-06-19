@@ -27,6 +27,7 @@
 #include "translation.h"
 
 #include "types/typesconv.h"
+#include "layout/v0/tlayout.h"
 
 #include "accidental.h"
 #include "barline.h"
@@ -34,16 +35,17 @@
 #include "chord.h"
 #include "clef.h"
 #include "engravingitem.h"
-#include "factory.h"
+#include "glissando.h"
 #include "harmony.h"
+#include "harppedaldiagram.h"
 #include "hook.h"
 #include "instrchange.h"
 #include "keysig.h"
 #include "masterscore.h"
 #include "measure.h"
-#include "mmrest.h"
 #include "mscore.h"
 #include "note.h"
+#include "ornament.h"
 #include "part.h"
 #include "rest.h"
 #include "score.h"
@@ -593,6 +595,7 @@ void Segment::add(EngravingItem* el)
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -621,6 +624,15 @@ void Segment::add(EngravingItem* el)
         _annotations.push_back(el);
         break;
     }
+
+    case ElementType::HARP_DIAGRAM:
+        // already a diagram in this segment
+        if (el->part()->harpDiagrams.count(toHarpPedalDiagram(el)->segment()->tick().ticks()) > 0) {
+            break;
+        }
+        el->part()->addHarpDiagram(toHarpPedalDiagram(el));
+        _annotations.push_back(el);
+        break;
 
     case ElementType::CLEF:
         assert(_segmentType == SegmentType::Clef || _segmentType == SegmentType::HeaderClef);
@@ -763,6 +775,7 @@ void Segment::remove(EngravingItem* el)
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
     case ElementType::SYMBOL:
     case ElementType::TAB_DURATION_SYMBOL:
     case ElementType::TEMPO_TEXT:
@@ -787,6 +800,11 @@ void Segment::remove(EngravingItem* el)
         Part* part = is->part();
         part->removeInstrument(tick());
     }
+        removeAnnotation(el);
+        break;
+
+    case ElementType::HARP_DIAGRAM:
+        el->part()->removeHarpDiagram(toHarpPedalDiagram(el));
         removeAnnotation(el);
         break;
 
@@ -886,6 +904,7 @@ void Segment::sortStaves(std::vector<staff_idx_t>& dst)
             ElementType::SYSTEM_TEXT,
             ElementType::TRIPLET_FEEL,
             ElementType::PLAYTECH_ANNOTATION,
+            ElementType::CAPO,
             ElementType::JUMP,
             ElementType::MARKER,
             ElementType::TEMPO_TEXT,
@@ -1778,6 +1797,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -1787,6 +1807,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::FIGURED_BASS:
     case ElementType::STAFF_STATE:
     case ElementType::INSTRUMENT_CHANGE:
+    case ElementType::HARP_DIAGRAM:
     case ElementType::STICKING: {
         EngravingItem* next = nullptr;
         if (e->explicitParent() == this) {
@@ -1922,6 +1943,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -1931,6 +1953,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::FIGURED_BASS:
     case ElementType::STAFF_STATE:
     case ElementType::INSTRUMENT_CHANGE:
+    case ElementType::HARP_DIAGRAM:
     case ElementType::STICKING: {
         EngravingItem* prev = nullptr;
         if (e->explicitParent() == this) {
@@ -2240,7 +2263,8 @@ void Segment::createShape(staff_idx_t staffIdx)
         setVisible(true);
         BarLine* bl = toBarLine(element(staffIdx * VOICES));
         if (bl) {
-            RectF r = bl->layoutRect();
+            layout::v0::LayoutContext lctx(score());
+            RectF r = layout::v0::TLayout::layoutRect(bl, lctx);
             s.add(r.translated(bl->pos()), bl);
         }
         s.addHorizontalSpacing(bl, 0, 0);
@@ -2270,6 +2294,14 @@ void Segment::createShape(staff_idx_t staffIdx)
             if (e->addToSkyline()) {
                 s.add(e->shape().translate(e->isClef() ? e->ipos() : e->pos()));
             }
+            // Non-standard trills display a cue note that we must add to shape here
+            if (e->isChord()) {
+                Ornament* orn = toChord(e)->findOrnament();
+                Chord* cueNoteChord = orn ? orn->cueNoteChord() : nullptr;
+                if (cueNoteChord && cueNoteChord->upNote()->visible()) {
+                    s.add(cueNoteChord->shape().translate(cueNoteChord->pos()));
+                }
+            }
         }
     }
 
@@ -2284,7 +2316,8 @@ void Segment::createShape(staff_idx_t staffIdx)
 
         if (e->isHarmony()) {
             // use same spacing calculation as for chordrest
-            toHarmony(e)->layout();
+            layout()->layoutItem(toHarmony(e));
+
             double x1 = e->bbox().x() + e->pos().x();
             double x2 = e->bbox().x() + e->bbox().width() + e->pos().x();
             s.addHorizontalSpacing(e, x1, x2);
@@ -2300,10 +2333,12 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isSystemText()
                    && !e->isTripletFeel()
                    && !e->isInstrumentChange()
-                   && !e->isArticulation()
+                   && !e->isArticulationFamily()
                    && !e->isFermata()
                    && !e->isStaffText()
-                   && !e->isPlayTechAnnotation()) {
+                   && !e->isHarpPedalDiagram()
+                   && !e->isPlayTechAnnotation()
+                   && !e->isCapo()) {
             // annotations added here are candidates for collision detection
             // lyrics, ...
             s.add(e->shape().translate(e->pos()));
@@ -2500,6 +2535,10 @@ double Segment::spacing() const
 
 double Segment::minHorizontalCollidingDistance(Segment* ns) const
 {
+    if (isBeginBarLineType() && ns->isStartRepeatBarLineType()) {
+        return 0.0;
+    }
+
     double w = -100000.0; // This can remain negative in some cases (for instance, mid-system clefs)
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
         double d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx));
@@ -2581,6 +2620,10 @@ double Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
 
 double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
 {
+    if (isBeginBarLineType() && ns->isStartRepeatBarLineType()) {
+        return 0.0;
+    }
+
     double ww = -1000000.0;          // can remain negative
     double d = 0.0;
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
@@ -2633,7 +2676,7 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
         }
     }
 
-    // Allocate space to ensure minimum length of "dangling" ties at start of system
+    // Allocate space to ensure minimum length of "dangling" ties or gliss at start of system
     if (systemHeaderGap && ns && ns->isChordRestType()) {
         for (EngravingItem* e : ns->elist()) {
             if (!e || !e->isChord()) {
@@ -2641,15 +2684,25 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
             }
             double headerTieMargin = score()->styleMM(Sid::HeaderToLineStartDistance);
             for (Note* note : toChord(e)->notes()) {
-                if (!note->tieBack() || note->lineAttachPoints().empty()) {
+                bool tieOrGlissBack = note->spannerBack().size() || note->tieBack();
+                if (!tieOrGlissBack || note->lineAttachPoints().empty()) {
                     continue;
+                }
+                const EngravingItem* attachedLine = note->lineAttachPoints().front().line();
+                double minLength = 0.0;
+                if (attachedLine->isTie()) {
+                    minLength = score()->styleMM(Sid::MinTieLength);
+                } else if (attachedLine->isGlissando()) {
+                    bool straight = toGlissando(attachedLine)->glissandoType() == GlissandoType::STRAIGHT;
+                    minLength = straight ? score()->styleMM(Sid::MinStraightGlissandoLength)
+                                : score()->styleMM(Sid::MinWigglyGlissandoLength);
                 }
                 double tieStartPointX = minRight() + headerTieMargin;
                 double notePosX = w + note->pos().x() + toChord(e)->pos().x() + note->headWidth() / 2;
                 double tieEndPointX = notePosX + note->lineAttachPoints().at(0).pos().x();
                 double tieLength = tieEndPointX - tieStartPointX;
-                if (tieLength < score()->styleMM(Sid::MinTieLength)) {
-                    w += score()->styleMM(Sid::MinTieLength) - tieLength;
+                if (tieLength < minLength) {
+                    w += minLength - tieLength;
                 }
             }
         }

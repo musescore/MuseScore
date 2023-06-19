@@ -70,6 +70,8 @@ private:
 class GradualTempoChangeSegment : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, GradualTempoChangeSegment)
+    DECLARE_CLASSOF(ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT)
+
 public:
     GradualTempoChangeSegment(GradualTempoChange* annotation, System* parent);
 
@@ -77,7 +79,6 @@ public:
 
     GradualTempoChange* tempoChange() const;
 
-    void layout() override;
     void endEdit(EditData& editData) override;
     void added() override;
     void removed() override;

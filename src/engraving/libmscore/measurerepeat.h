@@ -48,7 +48,9 @@ public:
     void setSymId(SymId id) { m_symId = id; }
     SymId symId() const { return m_symId; }
     void setNumberSym(int n) { m_numberSym = timeSigSymIdsFromString(String::number(n)); }
-    SymIdList numberSym() const { return m_numberSym; }
+    void setNumberSym(const String& s) { m_numberSym = timeSigSymIdsFromString(s); }
+    const SymIdList& numberSym() const { return m_numberSym; }
+    void clearNumberSym() { m_numberSym.clear(); }
     void setNumberPos(double d) { m_numberPos = d; }
     double numberPos() const { return m_numberPos; }
 
@@ -56,7 +58,7 @@ public:
     const Measure* referringMeasure() const;
 
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
+
     Fraction ticks() const override;
     Fraction actualTicks() const { return Rest::ticks(); }
 
@@ -70,16 +72,18 @@ public:
 
     bool placeMultiple() const override { return numMeasures() == 1; }     // prevent overlapping additions with range selection
 
+    mu::RectF numberRect() const override;
+
 private:
+
     Sid getPropertyStyle(Pid) const override;
 
     mu::PointF numberPosition(const mu::RectF& numberBbox) const;
-    mu::RectF numberRect() const override;
 
-    int m_numMeasures;
+    int m_numMeasures = 0;
     SymIdList m_numberSym;
-    double m_numberPos;
-    SymId m_symId;
+    double m_numberPos = 0.0;
+    SymId m_symId = SymId::noSym;
 };
 } // namespace mu::engraving
 #endif

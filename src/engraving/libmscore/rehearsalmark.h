@@ -46,7 +46,7 @@ public:
     RehearsalMark* clone() const override { return new RehearsalMark(*this); }
 
     Segment* segment() const { return (Segment*)explicitParent(); }
-    void layout() override;
+
     PropertyValue propertyDefault(Pid id) const override;
 
     void setType(Type type);

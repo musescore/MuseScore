@@ -23,7 +23,6 @@
 #include "breath.h"
 
 #include "types/symnames.h"
-#include "layout/tlayout.h"
 
 #include "measure.h"
 #include "score.h"
@@ -47,6 +46,7 @@ const std::vector<BreathType> Breath::breathList {
     { SymId::caesuraShort,         true,  2.0 },
     { SymId::caesuraThick,         true,  2.0 },
     { SymId::chantCaesura,         true,  2.0 },
+    { SymId::caesuraSingleStroke,  true,  2.0 },
 };
 
 //---------------------------------------------------------
@@ -72,16 +72,6 @@ bool Breath::isCaesura() const
         }
     }
     return false;
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Breath::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

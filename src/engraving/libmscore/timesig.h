@@ -26,7 +26,6 @@
 #include "engravingitem.h"
 
 #include "groups.h"
-#include "sig.h"
 
 namespace mu::engraving {
 class Segment;
@@ -53,30 +52,6 @@ class TimeSig final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, TimeSig)
     DECLARE_CLASSOF(ElementType::TIMESIG)
 
-    String _numeratorString;       // calculated from actualSig() if !customText
-    String _denominatorString;
-
-    SymIdList ns;
-    SymIdList ds;
-
-    mu::PointF pz;
-    mu::PointF pn;
-    mu::PointF pointLargeLeftParen;
-    mu::PointF pointLargeRightParen;
-    Fraction _sig;
-    Fraction _stretch;        // localSig / globalSig
-    Groups _groups;
-
-    mu::ScaleF _scale;
-    TimeSigType _timeSigType;
-    bool _showCourtesySig;
-    bool _largeParentheses;
-
-    friend class Factory;
-    TimeSig(Segment* parent = 0);
-
-    bool neverKernable() const override { return true; }
-
 public:
 
     void setParent(Segment* parent);
@@ -86,7 +61,7 @@ public:
 
     TimeSig* clone() const override { return new TimeSig(*this); }
 
-    TimeSigType timeSigType() const { return _timeSigType; }
+    TimeSigType timeSigType() const { return m_timeSigType; }
 
     bool operator==(const TimeSig&) const;
     bool operator!=(const TimeSig& ts) const { return !(*this == ts); }
@@ -94,17 +69,15 @@ public:
     double mag() const override;
     void draw(mu::draw::Painter*) const override;
 
-    void layout() override;
-
-    Fraction sig() const { return _sig; }
+    Fraction sig() const { return m_sig; }
     void setSig(const Fraction& f, TimeSigType st = TimeSigType::NORMAL);
-    int numerator() const { return _sig.numerator(); }
-    int denominator() const { return _sig.denominator(); }
+    int numerator() const { return m_sig.numerator(); }
+    int denominator() const { return m_sig.denominator(); }
 
-    Fraction stretch() const { return _stretch; }
-    void setStretch(const Fraction& s) { _stretch = s; }
-    int numeratorStretch() const { return _stretch.numerator(); }
-    int denominatorStretch() const { return _stretch.denominator(); }
+    Fraction stretch() const { return m_stretch; }
+    void setStretch(const Fraction& s) { m_stretch = s; }
+    int numeratorStretch() const { return m_stretch.numerator(); }
+    int denominatorStretch() const { return m_stretch.denominator(); }
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
@@ -112,18 +85,20 @@ public:
     Segment* segment() const { return (Segment*)explicitParent(); }
     Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
-    bool showCourtesySig() const { return _showCourtesySig; }
-    void setShowCourtesySig(bool v) { _showCourtesySig = v; }
+    bool showCourtesySig() const { return m_showCourtesySig; }
+    void setShowCourtesySig(bool v) { m_showCourtesySig = v; }
 
-    String numeratorString() const { return _numeratorString; }
+    const String& numeratorString() const { return m_numeratorString; }
     void setNumeratorString(const String&);
 
-    String denominatorString() const { return _denominatorString; }
+    const String& denominatorString() const { return m_denominatorString; }
     void setDenominatorString(const String&);
 
-    void setLargeParentheses(bool v) { _largeParentheses = v; }
+    bool largeParentheses() const { return m_largeParentheses; }
+    void setLargeParentheses(bool v) { m_largeParentheses = v; }
 
-    void setScale(const mu::ScaleF& s) { _scale = s; }
+    const mu::ScaleF& scale() const { return m_scale; }
+    void setScale(const mu::ScaleF& s) { m_scale = s; }
 
     void setFrom(const TimeSig*);
 
@@ -131,21 +106,52 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    const Groups& groups() const { return _groups; }
-    void setGroups(const Groups& e) { _groups = e; }
+    const Groups& groups() const { return m_groups; }
+    void setGroups(const Groups& e) { m_groups = e; }
 
-    Fraction globalSig() const { return (_sig * _stretch).reduced(); }
-    void setGlobalSig(const Fraction& f) { _stretch = (_sig / f).reduced(); }
+    Fraction globalSig() const { return (m_sig * m_stretch).reduced(); }
+    void setGlobalSig(const Fraction& f) { m_stretch = (m_sig / f).reduced(); }
 
-    bool isLocal() const { return _stretch != Fraction(1, 1); }
+    bool isLocal() const { return m_stretch != Fraction(1, 1); }
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
 
+    struct DrawArgs {
+        SymIdList ns;
+        SymIdList ds;
+        mu::PointF pz;
+        mu::PointF pn;
+        mu::PointF pointLargeLeftParen;
+        mu::PointF pointLargeRightParen;
+    };
+
+    const DrawArgs& drawArgs() { return m_drawArgs; }
+    void setDrawArgs(const DrawArgs& args) { m_drawArgs = args; }
+
 protected:
     void added() override;
     void removed() override;
+
+private:
+
+    friend class Factory;
+    TimeSig(Segment* parent = 0);
+
+    String m_numeratorString;       // calculated from actualSig() if !customText
+    String m_denominatorString;
+
+    DrawArgs m_drawArgs;
+
+    Fraction m_sig;
+    Fraction m_stretch;        // localSig / globalSig
+    Groups m_groups;
+
+    mu::ScaleF m_scale;
+    TimeSigType m_timeSigType = TimeSigType::NORMAL;
+    bool m_showCourtesySig = false;
+    bool m_largeParentheses = false;
 };
 } // namespace mu::engraving
 #endif

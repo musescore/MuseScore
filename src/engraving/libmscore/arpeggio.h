@@ -25,6 +25,10 @@
 
 #include "engravingitem.h"
 
+namespace mu::engraving::layout::v0 {
+class ArpeggioLayout;
+}
+
 namespace mu::engraving {
 class Factory;
 class Chord;
@@ -38,33 +42,6 @@ class Arpeggio final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Arpeggio)
     DECLARE_CLASSOF(ElementType::ARPEGGIO)
 
-    ArpeggioType _arpeggioType;
-    double _userLen1;
-    double _userLen2;
-    double _height;
-    int _span;                // spanning staves
-    SymIdList m_symbols;
-    bool _playArpeggio;
-
-    double _stretch;
-
-    friend class Factory;
-    Arpeggio(Chord* parent);
-
-    void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
-    std::vector<mu::LineF> dragAnchorLines() const override;
-    std::vector<mu::LineF> gripAnchorLines(Grip) const override;
-    void startEdit(EditData&) override;
-
-    double calcTop() const;
-    double calcBottom() const;
-
-private:
-
-    double insetTop() const;
-    double insetBottom() const;
-    double insetWidth() const;
-
 public:
 
     Arpeggio* clone() const override { return new Arpeggio(*this); }
@@ -77,7 +54,7 @@ public:
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
-    void layout() override;
+
     void draw(mu::draw::Painter* painter) const override;
     bool isEditable() const override { return true; }
     void editDrag(EditData&) override;
@@ -89,7 +66,7 @@ public:
     int span() const { return _span; }
     void setSpan(int val) { _span = val; }
     void setHeight(double) override;
-    void computeHeight(bool includeCrossStaffHeight = false);
+    double height() const override { return _height; }
 
     double userLen1() const { return _userLen1; }
     double userLen2() const { return _userLen2; }
@@ -104,7 +81,7 @@ public:
     double Stretch() const { return _stretch; }
     void setStretch(double val) { _stretch = val; }
 
-    void symbolLine(SymId start, SymId fill);
+    void setSymbols(const SymIdList& sl) { m_symbols = sl; }
     const SymIdList& symbols() { return m_symbols; }
 
     PropertyValue getProperty(Pid propertyId) const override;
@@ -117,6 +94,31 @@ public:
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
+
+private:
+
+    friend class Factory;
+
+    Arpeggio(Chord* parent);
+
+    void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
+    std::vector<mu::LineF> dragAnchorLines() const override;
+    std::vector<mu::LineF> gripAnchorLines(Grip) const override;
+    void startEdit(EditData&) override;
+
+    double insetTop() const;
+    double insetBottom() const;
+    double insetWidth() const;
+
+    ArpeggioType _arpeggioType;
+    double _userLen1;
+    double _userLen2;
+    double _height;
+    int _span;                // spanning staves
+    SymIdList m_symbols;
+    bool _playArpeggio;
+
+    double _stretch;
 };
 } // namespace mu::engraving
 

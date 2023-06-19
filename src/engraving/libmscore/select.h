@@ -133,6 +133,9 @@ public:
     SelectionFilter() = default;
     SelectionFilter(SelectionFilterType type);
 
+    inline bool operator==(const SelectionFilter& f) const { return m_filteredTypes == f.m_filteredTypes; }
+    inline bool operator!=(const SelectionFilter& f) const { return !this->operator==(f); }
+
     int filteredTypes() const;
     bool isFiltered(SelectionFilterType type) const;
     void setFiltered(SelectionFilterType type, bool filtered);

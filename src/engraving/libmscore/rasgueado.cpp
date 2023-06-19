@@ -60,24 +60,6 @@ RasgueadoSegment::RasgueadoSegment(Rasgueado* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void RasgueadoSegment::layout()
-{
-    const StaffType* stType = staffType();
-
-    _skipDraw = false;
-    if (stType && stType->isHiddenElementOnTab(score(), Sid::rasgueadoShowTabCommon, Sid::rasgueadoShowTabSimple)) {
-        _skipDraw = true;
-        return;
-    }
-
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
-}
-
-//---------------------------------------------------------
 //   Rasgueado
 //---------------------------------------------------------
 

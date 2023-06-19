@@ -48,11 +48,7 @@ class Symbol : public BSymbol
     OBJECT_ALLOCATOR(engraving, Symbol)
     DECLARE_CLASSOF(ElementType::SYMBOL)
 
-    INJECT(engraving, IEngravingFontsProvider, engravingFonts)
-
-protected:
-    SymId _sym;
-    std::shared_ptr<IEngravingFont> _scoreFont = nullptr;
+    INJECT(IEngravingFontsProvider, engravingFonts)
 
 public:
     Symbol(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::MOVABLE);
@@ -72,13 +68,15 @@ public:
 
     void draw(mu::draw::Painter*) const override;
 
-    void layout() override;
-
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
 
     double baseLine() const override { return 0.0; }
     virtual Segment* segment() const { return (Segment*)explicitParent(); }
+
+protected:
+    SymId _sym = SymId::noSym;
+    std::shared_ptr<IEngravingFont> _scoreFont = nullptr;
 };
 
 //---------------------------------------------------------
@@ -105,11 +103,9 @@ public:
 
     void draw(mu::draw::Painter*) const override;
 
-    void layout() override;
-
     double baseLine() const override { return 0.0; }
     Segment* segment() const { return (Segment*)explicitParent(); }
-    mu::draw::Font font() const { return _font; }
+    const mu::draw::Font& font() const { return _font; }
     char32_t code() const { return _code; }
     void setFont(const mu::draw::Font& f);
     void setCode(char32_t val) { _code = val; }

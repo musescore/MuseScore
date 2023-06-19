@@ -22,13 +22,13 @@
 
 #include "stretchedbend.h"
 
+#include "draw/fontmetrics.h"
+
 #include "chord.h"
 #include "note.h"
 #include "score.h"
 #include "segment.h"
 #include "tie.h"
-
-#include "draw/fontmetrics.h"
 
 #include "log.h"
 
@@ -37,17 +37,6 @@ using namespace mu::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-//---------------------------------------------------------
-//   label
-//---------------------------------------------------------
-
-static const char* label[] = {
-    "",     "\u00BC",   "\u00BD",   "\u00BE",  /// 0,   1/4, 1/2, 3/4
-    "full", "1\u00BC", "1\u00BD", "1\u00BE",   /// 1, 1+1/4...
-    "2",    "2\u00BC", "2\u00BD", "2\u00BE",   /// 2, ...
-    "3"                                        /// 3
-};
-
 //---------------------------------------------------------
 //   textFlags
 //---------------------------------------------------------
@@ -67,7 +56,7 @@ static int bendTone(int notePitch);
 //   static values
 //---------------------------------------------------------
 
-static constexpr double s_bendHeightMultiplier = .2; /// how much height differs for bend pitches
+static constexpr double BEND_HEIGHT_MULTIPLIER = .2; /// how much height differs for bend pitches
 
 //---------------------------------------------------------
 //   StretchedBend
@@ -89,16 +78,7 @@ void StretchedBend::fillDrawPoints()
     }
 
     m_drawPoints.clear();
-
-    if (Tie* tie = toNote(parent())->tieBack()) {
-        Note* backTied = tie->startNote();
-        if (StretchedBend* lastBend = (backTied ? backTied->bend() : nullptr)) {
-            auto lastBendPoints = lastBend->m_drawPoints;
-            if (!lastBendPoints.empty() && lastBendPoints.back() == m_points[0].pitch) {
-                m_skipFirstPoint = true;
-            }
-        }
-    }
+    m_skipFirstPoint = firstPointShouldBeSkipped();
 
     for (size_t i = 0; i < m_points.size(); i++) {
         m_drawPoints.push_back(m_points[i].pitch);
@@ -118,22 +98,24 @@ void StretchedBend::fillSegments()
         return;
     }
 
+    double sp = spatium();
     bool isPrevBendUp = false;
-    PointF upBendDefaultSrc = PointF(m_noteWidth + m_spatium * .8, 0);
-    PointF downBendDefaultSrc = PointF(m_noteWidth * .5, -m_noteHeight * .5 - m_spatium * .2);
+    PointF upBendDefaultSrc = PointF(m_noteWidth + sp * .8, 0);
+    PointF downBendDefaultSrc = PointF(m_noteWidth * .5, -m_noteHeight * .5 - sp * .2);
 
-    PointF src = m_drawPoints[0] == 0 ? upBendDefaultSrc : downBendDefaultSrc;
+    PointF src = m_drawPoints.at(0) == 0 ? upBendDefaultSrc : downBendDefaultSrc;
     PointF dest(0, 0);
 
     int lastPointPitch = m_drawPoints.back();
     m_releasedToInitial = (0 == lastPointPitch);
 
-    double baseBendHeight = m_spatium * 1.5;
+    double baseBendHeight = sp * 1.5;
+    int prevTone = 0;
     BendSegmentType prevLineType = BendSegmentType::NO_TYPE;
 
     for (size_t pt = 0; pt < n - 1; pt++) {
-        int pitch = m_drawPoints[pt];
-        int nextPitch = m_drawPoints[pt + 1];
+        int pitch = m_drawPoints.at(pt);
+        int nextPitch = m_drawPoints.at(pt + 1);
 
         BendSegmentType type = BendSegmentType::NO_TYPE;
         int tone = bendTone(nextPitch);
@@ -159,7 +141,7 @@ void StretchedBend::fillSegments()
             bool bendUp = pitch < nextPitch;
             if (bendUp && isPrevBendUp && pt > 0) {
                 // prevent double bendUp rendering
-                int prevBendPitch = m_drawPoints[pt - 1];
+                int prevBendPitch = m_drawPoints.at(pt - 1);
                 // remove prev segment if there are two bendup in a row
                 if (!m_bendSegments.empty()) {
                     m_bendSegments.pop_back();
@@ -181,7 +163,7 @@ void StretchedBend::fillSegments()
                 if (m_releasedToInitial) {
                     dest.ry() = 0;
                 } else {
-                    dest.ry() = src.y() + baseBendHeight;
+                    dest.ry() = src.y() + bendHeight(prevTone) + baseBendHeight;
                 }
 
                 type = BendSegmentType::CURVE_DOWN;
@@ -198,6 +180,7 @@ void StretchedBend::fillSegments()
 
         src = dest;
         prevLineType = type;
+        prevTone = tone;
     }
 }
 
@@ -212,8 +195,9 @@ void StretchedBend::stretchSegments()
     }
     size_t segsSize = m_bendSegments.size();
 
+    double sp = spatium();
     double bendStart = m_bendSegments[0].src.x();
-    double bendEnd = m_stretchedMode ? nextSegmentX() : m_spatium * 6;
+    double bendEnd = m_stretchedMode ? nextSegmentX() : sp * 6;
 
     if (bendStart > bendEnd) {
         m_bendSegments.clear();
@@ -234,37 +218,6 @@ void StretchedBend::stretchSegments()
             prevSeg.dest.rx() = bendEnd;
         }
     }
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void StretchedBend::layout()
-{
-    m_stretchedMode = false;
-    doLayout();
-}
-
-//---------------------------------------------------------
-//   layoutStretched
-//---------------------------------------------------------
-
-void StretchedBend::layoutStretched()
-{
-    m_stretchedMode = true;
-    doLayout();
-}
-
-//---------------------------------------------------------
-//   doLayout
-//---------------------------------------------------------
-
-void StretchedBend::doLayout()
-{
-    preLayout();
-    layoutDraw(true);
-    postLayout();
 }
 
 //---------------------------------------------------------
@@ -289,7 +242,8 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
         return;
     }
 
-    // For chained bends we need to draw text at least once
+    double sp = spatium();
+    RectF bRect;
     bool isTextDrawn = false;
 
     for (const BendSegment& bendSegment : m_bendSegments) {
@@ -301,20 +255,20 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
         case BendSegmentType::LINE_UP:
         {
             if (layoutMode) {
-                m_boundingRect.unite(RectF(src.x(), src.y(), dest.x() - src.x(), dest.y() - src.y()));
-                m_boundingRect.unite(m_arrowUp.translated(dest).boundingRect());
+                bRect.unite(RectF(src.x(), src.y(), dest.x() - src.x(), dest.y() - src.y()));
+                bRect.unite(m_arrowUp.translated(dest).boundingRect());
 
-                mu::draw::FontMetrics fm(font(m_spatium));
-                m_boundingRect.unite(textBoundingRect(fm, dest, text));
+                mu::draw::FontMetrics fm(font(sp));
+                bRect.unite(textBoundingRect(fm, dest, text));
                 /// TODO: remove after fixing bRect
-                m_boundingRect.setHeight(m_boundingRect.height() + m_spatium);
-                m_boundingRect.setY(m_boundingRect.y() - m_spatium);
+                bRect.setHeight(bRect.height() + sp);
+                bRect.setY(bRect.y() - sp);
             } else {
                 painter->drawLine(LineF(src, dest));
                 painter->setBrush(curColor());
                 painter->drawPolygon(m_arrowUp.translated(dest));
                 /// TODO: remove substraction after fixing bRect
-                drawText(painter, dest - PointF(0, m_spatium * 0.5), text);
+                drawText(painter, dest - PointF(0, sp * 0.5), text);
             }
 
             break;
@@ -330,8 +284,8 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
             const auto& arrowPath = (bendUp ? m_arrowUp : m_arrowDown);
 
             if (layoutMode) {
-                m_boundingRect.unite(path.boundingRect());
-                m_boundingRect.unite(arrowPath.translated(dest).boundingRect());
+                bRect.unite(path.boundingRect());
+                bRect.unite(arrowPath.translated(dest).boundingRect());
             } else {
                 painter->setBrush(BrushStyle::NoBrush);
                 painter->drawPath(path);
@@ -339,23 +293,17 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
                 painter->drawPolygon(arrowPath.translated(dest));
             }
 
-            if (!isTextDrawn || (bendUp && !m_releasedToInitial)) {
+            if (bendUp && !isTextDrawn) {
                 if (layoutMode) {
-                    mu::draw::FontMetrics fm(font(m_spatium));
-                    m_boundingRect.unite(textBoundingRect(fm, dest - PointF(m_spatium, 0), text));
+                    mu::draw::FontMetrics fm(font(sp));
+                    bRect.unite(textBoundingRect(fm, dest - PointF(sp, 0), text));
                     /// TODO: remove after fixing bRect
-                    m_boundingRect.setHeight(m_boundingRect.height() + m_spatium);
-                    m_boundingRect.setY(m_boundingRect.y() - m_spatium);
+                    bRect.setHeight(bRect.height() + sp);
+                    bRect.setY(bRect.y() - sp);
                 } else {
-                    // We need to draw text only for bendup elems
-                    if (bendUp) {
-                        double textLabelOffset = (!bendUp && !m_releasedToInitial ? m_spatium : 0);
-                        PointF textPoint = dest + PointF(textLabelOffset, -textLabelOffset);
-                        /// TODO: remove substraction after fixing bRect
-                        drawText(painter, textPoint - PointF(0, m_spatium * 0.5), text);
-                    }
+                    /// TODO: remove subtraction after fixing bRect
+                    drawText(painter, dest - PointF(0, sp * 0.5), text);
                 }
-
                 isTextDrawn = true;
             }
 
@@ -365,7 +313,7 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
         case BendSegmentType::LINE_STROKED:
         {
             if (layoutMode) {
-                m_boundingRect.unite(RectF(src.x(), src.y(), dest.x() - src.x(), dest.y() - src.y()));
+                bRect.unite(RectF(src.x(), src.y(), dest.x() - src.x(), dest.y() - src.y()));
             } else {
                 PainterPath path;
                 path.moveTo(src + PointF(m_bendArrowWidth, 0));
@@ -382,36 +330,10 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
             break;
         }
     }
-}
 
-//---------------------------------------------------------
-//   preLayout
-//---------------------------------------------------------
-
-void StretchedBend::preLayout()
-{
-    m_spatium = spatium();
-    m_boundingRect = RectF();
-    Note* note = toNote(explicitParent());
-    m_notePos   = note->pos();
-    m_noteWidth = note->width();
-    m_noteHeight = note->height();
-
-    fillArrows();
-    fillSegments();
-    stretchSegments();
-}
-
-//---------------------------------------------------------
-//   postLayout
-//---------------------------------------------------------
-
-void StretchedBend::postLayout()
-{
-    double lw = lineWidth();
-    m_boundingRect.adjust(-lw, -lw, lw, lw);
-    setbbox(m_boundingRect);
-    setPos(0.0, 0.0);
+    if (layoutMode) {
+        setbbox(bRect);
+    }
 }
 
 //---------------------------------------------------------
@@ -426,64 +348,6 @@ void StretchedBend::setupPainter(mu::draw::Painter* painter) const
 
     mu::draw::Font f = font(spatium() * MScore::pixelRatio);
     painter->setFont(f);
-}
-
-//---------------------------------------------------------
-//   glueNeighbor
-//---------------------------------------------------------
-
-void StretchedBend::prepareBends(std::vector<StretchedBend*>& bends)
-{
-#if 0
-    /// glueing extra bends together
-    for (StretchedBend* bend : bends) {
-        bend->glueNeighbor();
-    }
-
-    /// deleting reduntant bends
-    auto reduntantIt = std::partition(bends.begin(), bends.end(), [](StretchedBend* bend) { return bend->m_reduntant; });
-
-    for (auto bendIt = bends.begin(); bendIt != reduntantIt; bendIt++) {
-        StretchedBend* bendToRemove = *bendIt;
-        EngravingObject* parentObj = bendToRemove->parent();
-        if (Note* note = dynamic_cast<Note*>(parentObj)) {
-            note->remove(bendToRemove);
-        }
-
-        delete bendToRemove;
-        bendToRemove = nullptr;
-    }
-#endif
-    for (StretchedBend* bend : bends) {
-        bend->fillDrawPoints();
-    }
-}
-
-//---------------------------------------------------------
-//   glueNeighbor
-//---------------------------------------------------------
-
-void StretchedBend::glueNeighbor()
-{
-    if (m_reduntant) {
-        return;
-    }
-
-    std::vector<Note*> ties = toNote(parent())->tiedNotes();
-    for (Note* t : ties) {
-        assert(!!t);
-        if (t->bend() && t != parent()) {
-            auto bend = t->bend();
-
-            auto& lastPoints = bend->points();
-            for (size_t i = 1; i < lastPoints.size(); ++i) {
-                m_points.push_back(lastPoints[i]);
-            }
-
-            t->remove(bend);
-            bend->m_reduntant = true;
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -546,11 +410,11 @@ double StretchedBend::nextSegmentX() const
         return 0;
     }
 
-    return nextSeg->pagePos().x() - pagePos().x() - m_spatium;
+    return nextSeg->pagePos().x() - pagePos().x() - spatium();
 }
 
 //---------------------------------------------------------
-//   bendPitch
+//   bendTone
 //---------------------------------------------------------
 
 int bendTone(int notePitch)
@@ -564,6 +428,40 @@ int bendTone(int notePitch)
 
 double StretchedBend::bendHeight(int bendIdx) const
 {
-    return m_spatium * (bendIdx + 1) * s_bendHeightMultiplier;
+    return spatium() * (bendIdx + 1) * BEND_HEIGHT_MULTIPLIER;
+}
+
+//---------------------------------------------------------
+//   prepareBends
+//---------------------------------------------------------
+
+void StretchedBend::prepareBends(std::vector<StretchedBend*>& bends)
+{
+    for (StretchedBend* bend : bends) {
+        bend->fillDrawPoints();
+    }
+}
+
+//---------------------------------------------------------
+//   firstPointShouldBeSkipped
+//---------------------------------------------------------
+
+bool StretchedBend::firstPointShouldBeSkipped() const
+{
+    if (Tie* tie = toNote(parent())->tieBack()) {
+        Note* backTied = tie->startNote();
+        if (Bend* lastBend = (backTied ? backTied->bend() : nullptr)) {
+            if (lastBend && lastBend->isStretchedBend()) {
+                StretchedBend* lastStretchedBend = toStretchedBend(lastBend);
+
+                const auto& lastBendPoints = lastStretchedBend->m_drawPoints;
+                if (!lastBendPoints.empty() && lastBendPoints.back() == m_points.at(0).pitch) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
 }
 }

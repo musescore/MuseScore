@@ -23,6 +23,8 @@
 
 #include "continuouspanel.h"
 
+#include "engraving/layout/v0/tlayout.h"
+
 #include "libmscore/barline.h"
 #include "libmscore/factory.h"
 #include "libmscore/instrument.h"
@@ -198,16 +200,16 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             newName->setTrack(e->track());
             newName->setFamily(u"FreeSans");
             newName->setSizeIsSpatiumDependent(true);
-            newName->layout();
+            mu::engraving::EngravingItem::layout()->layoutItem(newName);
             newName->setPlainText(newName->plainText());
-            newName->layout();
+            mu::engraving::EngravingItem::layout()->layoutItem(newName);
 
             // Find maximum width for the current Clef
             mu::engraving::Clef* newClef = engraving::Factory::createClef(parent, ACCESSIBILITY_DISABLED);
             mu::engraving::ClefType currentClef = currentStaff->clef(mu::engraving::Fraction::fromTicks(tick));
             newClef->setClefType(currentClef);
             newClef->setTrack(e->track());
-            newClef->layout();
+            mu::engraving::EngravingItem::layout()->layoutItem(newClef);
             if (newClef->width() > widthClef) {
                 widthClef = newClef->width();
             }
@@ -220,7 +222,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             // This also adds naturals to the key signature (if set in the score style)
             newKs->setTrack(e->track());
             newKs->setHideNaturals(true);
-            newKs->layout();
+            mu::engraving::EngravingItem::layout()->layoutItem(newKs);
             if (newKs->width() > widthKeySig) {
                 widthKeySig = newKs->width();
             }
@@ -236,7 +238,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
                 newTs->setSig(Fraction(currentTimeSigFraction.numerator(), currentTimeSigFraction.denominator()), TimeSigType::NORMAL);
             }
             newTs->setTrack(e->track());
-            newTs->layout();
+            mu::engraving::EngravingItem::layout()->layoutItem(newTs);
 
             if ((newName->width() > lineWidthName) && (newName->xmlText() != "")) {
                 lineWidthName = newName->width();
@@ -323,7 +325,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
     newElement->setFamily(u"FreeSans");
     newElement->setSizeIsSpatiumDependent(true);
     newElement->setColor(color);
-    newElement->layout1();
+    EngravingItem::layout()->layoutText1(newElement);
     pos = PointF(styleMM(mu::engraving::Sid::clefLeftMargin) + widthClef, y + newElement->height());
     painter.translate(pos);
     newElement->draw(&painter);
@@ -353,7 +355,10 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             mu::engraving::StaffLines newStaffLines(*toStaffLines(e));
             newStaffLines.setParent(parent->measure());
             newStaffLines.setTrack(e->track());
-            newStaffLines.layoutForWidth(bg.width());
+            {
+                mu::engraving::layout::v0::LayoutContext cntx(newStaffLines.score());
+                mu::engraving::layout::v0::TLayout::layoutForWidth(&newStaffLines, bg.width(), cntx);
+            }
             newStaffLines.setColor(color);
             newStaffLines.draw(&painter);
 
@@ -364,7 +369,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             barLine->setSpanStaff(currentStaff->barLineSpan());
             barLine->setSpanFrom(currentStaff->barLineFrom());
             barLine->setSpanTo(currentStaff->barLineTo());
-            barLine->layout();
+            mu::engraving::EngravingItem::layout()->layoutItem(barLine);
             barLine->setColor(color);
             barLine->draw(&painter);
 
@@ -385,9 +390,9 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             newName->setColor(color);
             newName->setFamily(u"FreeSans");
             newName->setSizeIsSpatiumDependent(true);
-            newName->layout();
+            mu::engraving::EngravingItem::layout()->layoutItem(newName);
             newName->setPlainText(newName->plainText());
-            newName->layout();
+            mu::engraving::EngravingItem::layout()->layoutItem(newName);
 
             if (currentStaff->part()->staff(0) == currentStaff) {
                 const double spatium = score->spatium();
@@ -405,7 +410,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             clef->setClefType(currentStaff->clef(mu::engraving::Fraction::fromTicks(tick)));
             clef->setTrack(e->track());
             clef->setColor(color);
-            clef->layout();
+            mu::engraving::EngravingItem::layout()->layoutItem(clef);
             posX += styleMM(mu::engraving::Sid::clefLeftMargin);
             clef->drawAt(&painter, PointF(posX, clef->pos().y()));
             posX += widthClef;
@@ -419,7 +424,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             newKs->setTrack(e->track());
             newKs->setColor(color);
             newKs->setHideNaturals(true);
-            newKs->layout();
+            mu::engraving::EngravingItem::layout()->layoutItem(newKs);
             posX += styleMM(mu::engraving::Sid::keysigLeftMargin);
             newKs->drawAt(&painter, PointF(posX, 0.0));
 
@@ -434,7 +439,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
                 newTs->setFrom(currentTimeSig);
                 newTs->setTrack(e->track());
                 newTs->setColor(color);
-                newTs->layout();
+                mu::engraving::EngravingItem::layout()->layoutItem(newTs);
                 posX += styleMM(mu::engraving::Sid::timesigLeftMargin);
                 newTs->drawAt(&painter, PointF(posX, 0.0));
             }

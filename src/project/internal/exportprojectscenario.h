@@ -36,24 +36,30 @@
 namespace mu::project {
 class ExportProjectScenario : public IExportProjectScenario, public async::Asyncable
 {
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, framework::IInteractive, interactive)
-    INJECT(project, INotationWritersRegister, writers)
-    INJECT(project, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
-    INJECT(project, context::IGlobalContext, context)
-    INJECT(project, io::IFileSystem, fileSystem)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(INotationWritersRegister, writers)
+    INJECT(iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
+    INJECT(context::IGlobalContext, context)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     std::vector<INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;
 
     RetVal<io::path_t> askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
-                                     INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART) const override;
+                                     INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                                     io::path_t defaultPath = "") const override;
 
-    bool exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
+    bool exportScores(const notation::INotationPtrList& notations, const io::path_t destinationPath,
                       INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                       bool openDestinationFolderOnExport = false) const override;
 
+    const ExportInfo& exportInfo() const override;
+    void setExportInfo(const ExportInfo& exportInfo) override;
+
 private:
+    ExportInfo m_exportInfo;
+
     enum class FileConflictPolicy {
         Undefined,
         SkipAll,

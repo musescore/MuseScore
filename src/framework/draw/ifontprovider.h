@@ -23,7 +23,7 @@
 #ifndef MU_DRAW_IFONTPROVIDER_H
 #define MU_DRAW_IFONTPROVIDER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "io/path.h"
 #include "types/string.h"

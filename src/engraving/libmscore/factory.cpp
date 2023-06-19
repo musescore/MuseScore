@@ -38,6 +38,7 @@
 #include "breath.h"
 #include "chord.h"
 #include "chordline.h"
+#include "capo.h"
 #include "deadslapped.h"
 #include "dynamic.h"
 #include "expression.h"
@@ -51,6 +52,7 @@
 #include "hairpin.h"
 #include "harmonicmark.h"
 #include "harmony.h"
+#include "harppedaldiagram.h"
 #include "image.h"
 #include "instrchange.h"
 #include "instrumentname.h"
@@ -67,6 +69,7 @@
 #include "mmrestrange.h"
 #include "note.h"
 #include "noteline.h"
+#include "ornament.h"
 #include "ottava.h"
 #include "page.h"
 #include "palmmute.h"
@@ -152,6 +155,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::GLISSANDO:         return new Glissando(parent);
     case ElementType::BRACKET:           return new Bracket(parent);
     case ElementType::ARTICULATION:      return new Articulation(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
+    case ElementType::ORNAMENT:          return new Ornament(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
     case ElementType::FERMATA:           return new Fermata(parent);
     case ElementType::CHORDLINE:         return new ChordLine(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::ACCIDENTAL:        return new Accidental(parent);
@@ -163,6 +167,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::INSTRUMENT_NAME:   return new InstrumentName(parent->isSystem() ? toSystem(parent) : dummy->system());
     case ElementType::STAFF_TEXT:        return new StaffText(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::PLAYTECH_ANNOTATION: return new PlayTechAnnotation(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::CAPO:              return new Capo(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::SYSTEM_TEXT:       return new SystemText(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::REHEARSAL_MARK:    return new RehearsalMark(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(parent);
@@ -195,6 +200,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::TEMPO_TEXT:        return new TempoText(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::HARMONY:           return new Harmony(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::FRET_DIAGRAM:      return new FretDiagram(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::HARP_DIAGRAM:      return new HarpPedalDiagram(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::BEND:              return new Bend(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::STRETCHED_BEND:    return new StretchedBend(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::TREMOLOBAR:        return new TremoloBar(parent);
@@ -315,6 +321,9 @@ MAKE_ITEM_IMPL(Arpeggio, Chord)
 CREATE_ITEM_IMPL(Articulation, ElementType::ARTICULATION, ChordRest, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Articulation, ChordRest)
 
+CREATE_ITEM_IMPL(Ornament, ElementType::ORNAMENT, ChordRest, isAccessibleEnabled)
+MAKE_ITEM_IMPL(Ornament, ChordRest)
+
 CREATE_ITEM_IMPL(BarLine, ElementType::BAR_LINE, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(BarLine)
 MAKE_ITEM_IMPL(BarLine, Segment)
@@ -394,6 +403,10 @@ MAKE_ITEM_IMPL(FiguredBass, Segment)
 CREATE_ITEM_IMPL(FretDiagram, ElementType::FRET_DIAGRAM, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(FretDiagram)
 MAKE_ITEM_IMPL(FretDiagram, Segment)
+
+CREATE_ITEM_IMPL(HarpPedalDiagram, ElementType::HARP_DIAGRAM, Segment, isAccessibleEnabled)
+COPY_ITEM_IMPL(HarpPedalDiagram)
+MAKE_ITEM_IMPL(HarpPedalDiagram, Segment);
 
 CREATE_ITEM_IMPL(KeySig, ElementType::KEYSIG, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(KeySig)

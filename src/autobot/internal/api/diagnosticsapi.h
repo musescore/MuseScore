@@ -35,7 +35,7 @@ class DiagnosticsApi : public ApiObject
 {
     Q_OBJECT
 
-    INJECT(api, diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
+    INJECT(diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
 
 public:
     DiagnosticsApi(IApiEngine* e);

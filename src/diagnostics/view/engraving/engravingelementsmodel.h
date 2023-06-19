@@ -36,8 +36,8 @@ class EngravingElementsModel : public QAbstractItemModel
     Q_PROPERTY(QString info READ info NOTIFY infoChanged)
     Q_PROPERTY(QString summary READ summary NOTIFY summaryChanged)
 
-    INJECT(diagnostics, IEngravingElementsProvider, elementsProvider)
-    INJECT(diagnostics, actions::IActionsDispatcher, dispatcher)
+    INJECT(IEngravingElementsProvider, elementsProvider)
+    INJECT(actions::IActionsDispatcher, dispatcher)
 
 public:
     EngravingElementsModel(QObject* parent = 0);

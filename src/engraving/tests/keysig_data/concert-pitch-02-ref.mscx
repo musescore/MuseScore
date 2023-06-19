@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -132,7 +132,8 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>3</accidental>
+            <concertKey>0</concertKey>
+            <actualKey>3</actualKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -147,7 +148,8 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>-1</accidental>
+            <concertKey>-4</concertKey>
+            <actualKey>-1</actualKey>
             </KeySig>
           <Rest>
             <durationType>measure</durationType>
@@ -158,7 +160,8 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>3</accidental>
+            <concertKey>0</concertKey>
+            <actualKey>3</actualKey>
             </KeySig>
           <Rest>
             <durationType>measure</durationType>
@@ -169,7 +172,8 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>2</accidental>
+            <concertKey>-1</concertKey>
+            <actualKey>2</actualKey>
             </KeySig>
           <Rest>
             <durationType>measure</durationType>
@@ -194,7 +198,8 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>2</accidental>
+            <concertKey>0</concertKey>
+            <actualKey>2</actualKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -209,7 +214,8 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>-2</accidental>
+            <concertKey>-4</concertKey>
+            <actualKey>-2</actualKey>
             </KeySig>
           <Rest>
             <durationType>measure</durationType>
@@ -220,7 +226,8 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>2</accidental>
+            <concertKey>0</concertKey>
+            <actualKey>2</actualKey>
             </KeySig>
           <Rest>
             <durationType>measure</durationType>
@@ -231,7 +238,8 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>1</accidental>
+            <concertKey>-1</concertKey>
+            <actualKey>1</actualKey>
             </KeySig>
           <Rest>
             <durationType>measure</durationType>

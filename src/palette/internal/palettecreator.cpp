@@ -41,6 +41,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/chordline.h"
 #include "libmscore/chordrest.h"
+#include "libmscore/capo.h"
 #include "libmscore/clef.h"
 #include "libmscore/drumset.h"
 #include "libmscore/dynamic.h"
@@ -51,6 +52,7 @@
 #include "libmscore/glissando.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/harmony.h"
+#include "libmscore/harppedaldiagram.h"
 #include "libmscore/instrchange.h"
 #include "libmscore/jump.h"
 #include "libmscore/keysig.h"
@@ -63,6 +65,7 @@
 #include "libmscore/measurenumber.h"
 #include "libmscore/measurerepeat.h"
 #include "libmscore/note.h"
+#include "libmscore/ornament.h"
 #include "libmscore/ottava.h"
 #include "libmscore/palmmute.h"
 #include "libmscore/pedal.h"
@@ -108,6 +111,7 @@ MAKE_ELEMENT(TempoText, score->dummy()->segment())
 MAKE_ELEMENT(StaffText, score->dummy()->segment())
 MAKE_ELEMENT(Expression, score->dummy()->segment())
 MAKE_ELEMENT(PlayTechAnnotation, score->dummy()->segment())
+MAKE_ELEMENT(Capo, score->dummy()->segment())
 MAKE_ELEMENT(RehearsalMark, score->dummy()->segment())
 
 MAKE_ELEMENT(Jump, score->dummy()->measure())
@@ -147,6 +151,7 @@ PaletteTreePtr PaletteCreator::newMasterPaletteTree()
     tree->append(newBagpipeEmbellishmentPalette());
     tree->append(newBeamPalette());
     tree->append(newLinesPalette());
+    tree->append(newHarpPalette());
 
     return tree;
 }
@@ -182,6 +187,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newBagpipeEmbellishmentPalette());
     defaultPalette->append(newBeamPalette());
     defaultPalette->append(newLinesPalette(true));
+    defaultPalette->append(newHarpPalette());
 
     return defaultPalette;
 }
@@ -291,7 +297,7 @@ PalettePtr PaletteCreator::newKeySigPalette()
 
     // atonal key signature
     KeySigEvent nke;
-    nke.setKey(Key::C);
+    nke.setConcertKey(Key::C);
     nke.setCustom(true);
     nke.setMode(KeyMode::NONE);
     auto nk = Factory::makeKeySig(mu::engraving::gpaletteScore->dummy()->segment());
@@ -352,7 +358,7 @@ PalettePtr PaletteCreator::newBarLinePalette(bool defaultPalette)
             int from, to;
             const char* userName;
         } spans[] = {
-            { BARLINE_SPAN_TICK1_FROM,  BARLINE_SPAN_TICK1_TO,  SymNames::userNameForSymId(SymId::barlineDashed) },
+            { BARLINE_SPAN_TICK1_FROM,  BARLINE_SPAN_TICK1_TO,  SymNames::userNameForSymId(SymId::barlineTick) },
             { BARLINE_SPAN_TICK2_FROM,  BARLINE_SPAN_TICK2_TO,  QT_TRANSLATE_NOOP("engraving/sym", "Tick barline 2") },  // Not in SMuFL
             { BARLINE_SPAN_SHORT1_FROM, BARLINE_SPAN_SHORT1_TO, SymNames::userNameForSymId(SymId::barlineShort) },
             { BARLINE_SPAN_SHORT2_FROM, BARLINE_SPAN_SHORT2_TO, QT_TRANSLATE_NOOP("engraving/sym", "Short barline 2") }, // Not in SMuFL
@@ -412,6 +418,8 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         MarkerType::FINE,
         MarkerType::TOCODA,
         MarkerType::TOCODASYM,
+        MarkerType::DA_CODA,
+        MarkerType::DA_DBLCODA,
         MarkerType::USER
     };
 
@@ -534,7 +542,7 @@ PalettePtr PaletteCreator::newLayoutPalette()
 
     lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
     lb->setLayoutBreakType(LayoutBreakType::NOBREAK);
-    cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Group measures"));
+    cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Keep measures on the same system"));
     cell->mag = 1.2;
 
     qreal _spatium = gpaletteScore->spatium();
@@ -556,15 +564,13 @@ PalettePtr PaletteCreator::newLayoutPalette()
     cell = sp->appendElement(spacer, QT_TRANSLATE_NOOP("palette", "Staff spacer fixed down"));
     cell->mag = .7;
 
-    auto stc = Factory::makeStaffTypeChange(gpaletteScore->dummy()->measure());
-    sp->appendElement(stc, QT_TRANSLATE_NOOP("palette", "Staff type change"));
-
     sp->appendActionIcon(ActionIconType::VFRAME, "insert-vbox");
     sp->appendActionIcon(ActionIconType::HFRAME, "insert-hbox");
     sp->appendActionIcon(ActionIconType::TFRAME, "insert-textframe");
     if (configuration()->enableExperimental()) {
         sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
     }
+    sp->appendActionIcon(ActionIconType::STAFF_TYPE_CHANGE, "insert-staff-type-change");
     sp->appendActionIcon(ActionIconType::MEASURE, "insert-measure");
 
     return sp;
@@ -639,6 +645,19 @@ PalettePtr PaletteCreator::newTremoloPalette()
         tremolo->setTremoloType(TremoloType(i));
         sp->appendElement(tremolo, tremolo->subtypeUserName());
     }
+
+    static const SymIdList dots {
+        SymId::tremoloDivisiDots2,
+        SymId::tremoloDivisiDots3,
+        SymId::tremoloDivisiDots4,
+        SymId::tremoloDivisiDots6
+    };
+    // include additional symbol-based tremolo articulations, implemented as articulations
+    for (auto i : dots) {
+        auto s = Factory::makeArticulation(gpaletteScore->dummy()->chord());
+        s->setSymId(i);
+        sp->appendElement(s, s->typeUserName());
+    }
     return sp;
 }
 
@@ -677,6 +696,7 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
     auto slur = Factory::makeSlur(gpaletteScore->dummy());
     sp->appendElement(slur, QT_TRANSLATE_NOOP("palette", "Slur"));
 
+    // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
     static const SymIdList defaultArticulations {
         SymId::articAccentAbove,
         SymId::articStaccatoAbove,
@@ -773,7 +793,6 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
     static const SymIdList defaultOrnaments {
         SymId::ornamentTurnInverted,
         SymId::ornamentTurn,
@@ -798,11 +817,15 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
         SymId::ornamentPrallDown,
         SymId::ornamentPrallUp,
         SymId::ornamentLinePrall,
-        SymId::ornamentPrecompSlide
+        SymId::ornamentPrecompSlide,
+        SymId::ornamentShake3,
+        SymId::ornamentShakeMuffat1,
+        SymId::ornamentTremblementCouperin,
+        SymId::ornamentPinceCouperin
     };
 
     for (auto ornamentType : defaultPalette ? defaultOrnaments : masterOrnaments) {
-        auto ornament = Factory::makeArticulation(gpaletteScore->dummy()->chord());
+        auto ornament = Factory::makeOrnament(gpaletteScore->dummy()->chord());
         ornament->setSymId(ornamentType);
         qreal mag = ornament->symId() == SymId::ornamentTrill ? 1.0 : 1.2;
         sp->appendElement(ornament, ornament->typeUserName(), mag);
@@ -833,8 +856,7 @@ PalettePtr PaletteCreator::newAccordionPalette()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
-    static SymIdList art {
+    static const SymIdList art {
         SymId::accdnCombDot,
         SymId::accdnCombLH2RanksEmpty,
         SymId::accdnCombLH3RanksEmptySquare,
@@ -966,12 +988,12 @@ PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
 
     for (auto i : defaultPalette ? defaultFermatas : masterFermatas) {
         auto f = Factory::makeFermata(gpaletteScore->dummy());
-        f->setSymId(i);
+        f->setSymIdAndTimeStretch(i);
         sp->appendElement(f, f->typeUserName());
     }
 
     for (BreathType breath : Breath::breathList) {
-        if (breath.id == SymId::chantCaesura && defaultPalette) {
+        if ((breath.id == SymId::chantCaesura || breath.id == SymId::caesuraSingleStroke) && defaultPalette) {
             continue;
         }
         auto a = Factory::makeBreath(gpaletteScore->dummy()->segment());
@@ -1835,6 +1857,10 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         sp->appendElement(vibrato, TConv::userName(vibratoType));
     }
 
+    auto capo = makeElement<Capo>(gpaletteScore);
+    capo->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Capo")));
+    sp->appendElement(capo, QT_TRANSLATE_NOOP("palette", "Capo"))->setElementTranslated(true);
+
     const char* finger = "pimac";
     for (unsigned i = 0; i < strlen(finger); ++i) {
         auto f = makeElement<Fingering>(gpaletteScore);
@@ -1998,6 +2024,24 @@ PalettePtr PaletteCreator::newPitchPalette(bool defaultPalette)
 
     auto a = Factory::makeAmbitus(gpaletteScore->dummy()->segment());
     sp->appendElement(a, QT_TRANSLATE_NOOP("palette", "Ambitus"));
+    return sp;
+}
+
+PalettePtr PaletteCreator::newHarpPalette()
+{
+    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Harp);
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Harp notation"));
+    sp->setGridSize(90, 30);
+    sp->setDrawGrid(true);
+    sp->setVisible(true);
+
+    auto pedalDiagram = Factory::makeHarpPedalDiagram(gpaletteScore->dummy()->segment());
+    sp->appendElement(pedalDiagram, QT_TRANSLATE_NOOP("palette", "Harp pedal diagram"));
+
+    auto pedalTextDiagram = Factory::makeHarpPedalDiagram(gpaletteScore->dummy()->segment());
+    pedalTextDiagram->setIsDiagram(false);
+
+    sp->appendElement(pedalTextDiagram, QT_TRANSLATE_NOOP("palette", "Harp pedal text diagram"));
 
     return sp;
 }

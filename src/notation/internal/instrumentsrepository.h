@@ -33,7 +33,7 @@
 namespace mu::notation {
 class InstrumentsRepository : public IInstrumentsRepository, public async::Asyncable
 {
-    INJECT(notation, INotationConfiguration, configuration)
+    INJECT(INotationConfiguration, configuration)
 
 public:
     void init();

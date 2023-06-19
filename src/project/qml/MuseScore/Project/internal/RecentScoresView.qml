@@ -90,7 +90,6 @@ StyledGridView {
         width: root.cellWidth
 
         ScoreItem {
-
             anchors.centerIn: parent
 
             height: 272
@@ -106,8 +105,8 @@ StyledGridView {
             }
 
             name: score.name
+            path: score.path ?? ""
             suffix: score.suffix ?? ""
-            thumbnail: score.thumbnail ?? null
             isAdd: score.isAddNew
             isNoResultFound: score.isNoResultFound
             isCloud: score.isCloud

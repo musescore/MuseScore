@@ -22,8 +22,6 @@
 
 #include "keylist.h"
 
-#include "rw/400/readcontext.h"
-
 using namespace mu;
 
 namespace mu::engraving {
@@ -36,7 +34,7 @@ namespace mu::engraving {
 KeySigEvent KeyList::key(int tick) const
 {
     KeySigEvent ke;
-    ke.setKey(Key::C);
+    ke.setConcertKey(Key::C);
 
     if (empty()) {
         return ke;
@@ -87,7 +85,7 @@ int KeyList::nextKeyTick(int tick) const
 KeySigEvent KeyList::prevKey(int tick) const
 {
     KeySigEvent kc;
-    kc.setKey(Key::C);
+    kc.setConcertKey(Key::C);
 
     if (empty()) {
         return kc;

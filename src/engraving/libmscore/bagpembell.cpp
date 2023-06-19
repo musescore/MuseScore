@@ -25,7 +25,7 @@
 #include "draw/types/pen.h"
 
 #include "types/typesconv.h"
-#include "layout/tlayout.h"
+
 #include "iengravingfont.h"
 
 #include "score.h"
@@ -137,17 +137,6 @@ static void symMetrics(const char* name, const Sym& headsym)
 double BagpipeEmbellishment::mag() const
 {
     return 0.7;
-}
-
-//---------------------------------------------------------
-//   layout
-//      calculate and set bounding box
-//---------------------------------------------------------
-
-void BagpipeEmbellishment::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

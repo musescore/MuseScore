@@ -60,8 +60,6 @@ public:
     void undoSetFollowText(bool v);
     void updateRelative();
 
-    void layout() override;
-
     TDuration duration() const;
 
     static int findTempoDuration(const String& s, int& len, TDuration& dur);

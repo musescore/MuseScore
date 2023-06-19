@@ -59,7 +59,6 @@ public:
 
     static const char* label[13];
 
-    void layout() override;
     void draw(mu::draw::Painter*) const override;
 
     PitchValues& points() { return m_points; }
@@ -74,6 +73,8 @@ public:
     void setNotePos(const PointF& v) { m_notePos = v; }
     const PointF& notePos() const { return m_notePos; }
 
+    mu::draw::Font font(double) const;
+
     // property methods
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -81,11 +82,9 @@ public:
 
 protected: /// TODO: bring back "private" keyword after removing StretchedBend class
     friend class Factory;
-    friend class v0::TLayout;
 
     Bend(Note* parent, ElementType type = ElementType::BEND);
 
-    mu::draw::Font font(double) const;
     BendType parseBendTypeFromCurve() const;
     void updatePointsByBendType(const BendType bendType);
 

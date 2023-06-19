@@ -39,6 +39,10 @@
 
 #include "draw/types/color.h"
 
+namespace mu::engraving::layout::v0 {
+class ChordLayout;
+}
+
 namespace mu::engraving {
 class AccidentalState;
 class Arpeggio;
@@ -64,7 +68,7 @@ public:
 
     Chord* parent() const { return _parent; }
     Shape shape() const override;
-    void layout() override;
+
     void setPos(double x, double y) override;
     Segment* appendedSegment() const { return _appendedSegment; }
     void setAppendedSegment(Segment* s) { _appendedSegment = s; }
@@ -94,86 +98,6 @@ class Chord final : public ChordRest
 {
     OBJECT_ALLOCATOR(engraving, Chord)
     DECLARE_CLASSOF(ElementType::CHORD)
-
-private:
-
-    std::vector<Note*> _notes;           // sorted to decreasing line step
-    LedgerLine* _ledgerLines = nullptr;  // single linked list
-
-    Stem* _stem = nullptr;
-    Hook* _hook = nullptr;
-    StemSlash* _stemSlash = nullptr;     // for acciacatura
-
-    Arpeggio* _arpeggio = nullptr;
-    Tremolo* _tremolo = nullptr;
-    bool _endsGlissando;                 ///< true if this chord is the ending point of a glissando (needed for layout)
-    std::vector<Chord*> _graceNotes; // storage for all grace notes
-    mutable GraceNotesGroup _graceNotesBefore = GraceNotesGroup(this); // will store before-chord grace notes
-    mutable GraceNotesGroup _graceNotesAfter = GraceNotesGroup(this); // will store after-chord grace notes
-    size_t _graceIndex;                     ///< if this is a grace note, index in parent list
-
-    DirectionV _stemDirection;
-    NoteType _noteType;                  ///< mark grace notes: acciaccatura and appoggiatura
-    bool _noStem;
-    PlayEventType _playEventType;        ///< play events were modified by user
-
-    double _spaceLw;
-    double _spaceRw;
-
-    double _defaultStemLength;
-    double _minStemLength;
-
-    bool _isUiItem = false;
-
-    double _dotPosX = 0.0;
-
-    struct StartEndSlurs {
-        bool startUp = false;
-        bool startDown = false;
-        bool endUp = false;
-        bool endDown = false;
-        void reset()
-        {
-            startUp = false;
-            startDown = false;
-            endUp = false;
-            endDown = false;
-        }
-    } _startEndSlurs;
-
-    bool _allowKerningAbove = true;
-    bool _allowKerningBelow = true;
-
-    std::vector<Articulation*> _articulations;
-
-    friend class Factory;
-    friend class ChordLayout;
-
-    Chord(Segment* parent = 0);
-    Chord(const Chord&, bool link = false);
-
-    double upPos()   const override;
-    double downPos() const override;
-    double centerX() const;
-    void addLedgerLines();
-
-    // `includeTemporarySiblings`: whether items that are deleted & recreated during every layout should also be processed
-    void processSiblings(std::function<void(EngravingItem*)> func, bool includeTemporarySiblings) const;
-
-    bool shouldHaveStem() const;
-    bool shouldHaveHook() const;
-
-    void createStem();
-    void removeStem();
-    void createHook();
-    void layoutHook();
-
-    int stemLengthBeamAddition() const;
-    int maxReduction(int extensionOutsideStaff) const;
-    int stemOpticalAdjustment(int stemEndPosition) const;
-    int calcMinStemLength();
-    int calc4BeamsException(int stemLength) const;
-    double calcDefaultStemLength();
 
 public:
 
@@ -216,11 +140,6 @@ public:
     void setBeamExtension(double extension);
     static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, double beamSpacing, bool useWideBeams,
                                bool isFullSize);
-
-    void layoutStem();
-    void layoutArpeggio2();
-    void layoutSpanners();
-    void layoutSpanners(System* system, const Fraction& stick);
 
     std::vector<Note*>& notes() { return _notes; }
     const std::vector<Note*>& notes() const { return _notes; }
@@ -280,7 +199,7 @@ public:
     void remove(EngravingItem*) override;
 
     Note* selectedNote() const;
-    void layout() override;
+
     mu::PointF pagePos() const override;        ///< position in page coordinates
     void cmdUpdateNotes(AccidentalState*);
 
@@ -290,9 +209,6 @@ public:
     void toGraceAfter();
 
     void setTrack(track_idx_t val) override;
-
-    void computeUp() override;
-    static int computeAutoStemDirection(const std::vector<int>& noteDistances);
 
     double dotPosX() const { return _dotPosX; }
     void setDotPosX(double x) { _dotPosX = x; }
@@ -307,10 +223,6 @@ public:
 
     TremoloChordType tremoloChordType() const;
 
-    void layoutArticulations();
-    void layoutArticulations2(bool layoutOnCrossBeamSide = false);
-    void layoutArticulations3(Slur* s);
-
     std::vector<Articulation*>& articulations() { return _articulations; }
     const std::vector<Articulation*>& articulations() const { return _articulations; }
     std::set<SymId> articulationSymbolIds() const;
@@ -319,8 +231,6 @@ public:
 
     void updateArticulations(const std::set<SymId>& newArticulationIds,
                              ArticulationsUpdateMode replaceMode = ArticulationsUpdateMode::Insert);
-
-    void crossMeasureSetup(bool on) override;
 
     void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue getProperty(Pid propertyId) const override;
@@ -355,11 +265,93 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps) override;
 
     void styleChanged() override;
-    StartEndSlurs& startEndSlurs() { return _startEndSlurs; }
-    void checkStartEndSlurs();
+
     bool allowKerningAbove() const { return _allowKerningAbove; }
     bool allowKerningBelow() const { return _allowKerningBelow; }
     void computeKerningExceptions();
+
+    Ornament* findOrnament() const;
+
+private:
+
+    friend class Factory;
+    friend class layout::v0::ChordLayout;
+
+    Chord(Segment* parent = 0);
+    Chord(const Chord&, bool link = false);
+
+    double upPos()   const override;
+    double downPos() const override;
+    double centerX() const;
+    void addLedgerLines();
+
+    // `includeTemporarySiblings`: whether items that are deleted & recreated during every layout should also be processed
+    void processSiblings(std::function<void(EngravingItem*)> func, bool includeTemporarySiblings) const;
+
+    bool shouldHaveStem() const;
+    bool shouldHaveHook() const;
+
+    void createStem();
+    void removeStem();
+    void createHook();
+
+    int stemLengthBeamAddition() const;
+    int maxReduction(int extensionOutsideStaff) const;
+    int stemOpticalAdjustment(int stemEndPosition) const;
+    int calcMinStemLength();
+    int calc4BeamsException(int stemLength) const;
+    double calcDefaultStemLength();
+
+    std::vector<Note*> _notes;           // sorted to decreasing line step
+    LedgerLine* _ledgerLines = nullptr;  // single linked list
+
+    Stem* _stem = nullptr;
+    Hook* _hook = nullptr;
+    StemSlash* _stemSlash = nullptr;     // for acciacatura
+
+    Arpeggio* _arpeggio = nullptr;
+    Tremolo* _tremolo = nullptr;
+    bool _endsGlissando;                 ///< true if this chord is the ending point of a glissando (needed for layout)
+    std::vector<Chord*> _graceNotes; // storage for all grace notes
+    mutable GraceNotesGroup _graceNotesBefore = GraceNotesGroup(this); // will store before-chord grace notes
+    mutable GraceNotesGroup _graceNotesAfter = GraceNotesGroup(this); // will store after-chord grace notes
+    size_t _graceIndex;                     ///< if this is a grace note, index in parent list
+
+    DirectionV _stemDirection;
+    NoteType _noteType;                  ///< mark grace notes: acciaccatura and appoggiatura
+    bool _noStem;
+    PlayEventType _playEventType;        ///< play events were modified by user
+
+    double _spaceLw;
+    double _spaceRw;
+
+    double _defaultStemLength;
+    double _minStemLength;
+
+    bool _isUiItem = false;
+
+    double _dotPosX = 0.0;
+
+    struct StartEndSlurs {
+        bool startUp = false;
+        bool startDown = false;
+        bool endUp = false;
+        bool endDown = false;
+        void reset()
+        {
+            startUp = false;
+            startDown = false;
+            endUp = false;
+            endDown = false;
+        }
+    } _startEndSlurs;
+
+    // StartEndSlurs& startEndSlurs() { return _startEndSlurs; }
+
+    bool _allowKerningAbove = true;
+    bool _allowKerningBelow = true;
+
+    std::vector<Articulation*> _articulations;
 };
 } // namespace mu::engraving
 #endif

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Style>
     <musicalSymbolFont>Leland</musicalSymbolFont>
     <musicalTextFont>Leland Text</musicalTextFont>

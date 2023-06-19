@@ -32,7 +32,7 @@ class AudioGenerationSettingsModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(project, IProjectConfiguration, configuration)
+    INJECT(IProjectConfiguration, configuration)
 
     Q_PROPERTY(int timePeriodType READ timePeriodType WRITE setTimePeriodType NOTIFY timePeriodTypeChanged)
     Q_PROPERTY(int numberOfSaves READ numberOfSaves WRITE setNumberOfSaves NOTIFY numberOfSavesChanged)

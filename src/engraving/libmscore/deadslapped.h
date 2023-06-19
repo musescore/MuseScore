@@ -23,7 +23,7 @@
 #ifndef __DEADSLAPPED_H__
 #define __DEADSLAPPED_H__
 
-#include "durationelement.h"
+#include "engravingitem.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -42,12 +42,15 @@ public:
 
     void draw(mu::draw::Painter*) const override;
 
-    void layout() override;
+    const mu::draw::PainterPath& path1() const { return m_path1; }
+    void setPath1(const mu::draw::PainterPath& p) { m_path1 = p; }
+
+    const mu::draw::PainterPath& path2() const { return m_path2; }
+    void setPath2(const mu::draw::PainterPath& p) { m_path2 = p; }
 
 private:
 
     friend class Factory;
-    friend class v0::TLayout;
 
     DeadSlapped(Rest* parent);
 

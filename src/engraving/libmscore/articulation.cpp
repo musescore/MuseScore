@@ -27,7 +27,6 @@
 #include "types/symnames.h"
 #include "types/typesconv.h"
 #include "types/translatablestring.h"
-#include "layout/tlayout.h"
 
 #include "beam.h"
 #include "chord.h"
@@ -60,11 +59,11 @@ static const ElementStyle articulationStyle {
 //   Articulation
 //---------------------------------------------------------
 
-Articulation::Articulation(ChordRest* parent)
-    : EngravingItem(ElementType::ARTICULATION, parent, ElementFlag::MOVABLE)
+Articulation::Articulation(ChordRest* parent, ElementType type)
+    : EngravingItem(type, parent, ElementFlag::MOVABLE)
 {
     _symId         = SymId::noSym;
-    _anchor        = ArticulationAnchor::TOP_STAFF;
+    _anchor        = ArticulationAnchor::AUTO;
     _direction     = DirectionV::AUTO;
     _up            = true;
     _ornamentStyle = OrnamentStyle::DEFAULT;
@@ -177,7 +176,7 @@ void Articulation::draw(mu::draw::Painter* painter) const
         painter->setFont(scaledFont);
         painter->drawText(bbox(), draw::TextDontClip | draw::AlignLeft | draw::AlignTop, TConv::text(m_textType));
     } else {
-        drawSymbol(_symId, painter, PointF(-0.5 * width(), 0.0));
+        drawSymbol(symId(), painter, PointF(-0.5 * width(), 0.0));
     }
 }
 
@@ -228,16 +227,6 @@ Page* Articulation::page() const
 {
     System* s = system();
     return toPage(s ? s->explicitParent() : 0);
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Articulation::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 bool Articulation::isHiddenOnTabStaff() const
@@ -411,6 +400,12 @@ Articulation::AnchorGroup Articulation::anchorGroup(SymId symId)
     case SymId::luteFingeringRHThird:
         return AnchorGroup::LUTE_FINGERING;
 
+    case SymId::tremoloDivisiDots2:
+    case SymId::tremoloDivisiDots3:
+    case SymId::tremoloDivisiDots4:
+    case SymId::tremoloDivisiDots6:
+        return AnchorGroup::ARTICULATION;
+
     default:
         break;
     }
@@ -434,6 +429,10 @@ String Articulation::symId2ArticulationName(SymId symId)
 
     case SymId::articStaccatoAbove:
     case SymId::articStaccatoBelow:
+    case SymId::tremoloDivisiDots2:
+    case SymId::tremoloDivisiDots3:
+    case SymId::tremoloDivisiDots4:
+    case SymId::tremoloDivisiDots6:
         return u"staccato";
 
     case SymId::articAccentStaccatoAbove:
@@ -466,6 +465,10 @@ String Articulation::symId2ArticulationName(SymId symId)
 
     case SymId::articAccentAbove:
     case SymId::articAccentBelow:
+        return u"accent";
+
+    case SymId::dynamicSforzato:
+    case SymId::dynamicSforzando:
         return u"sforzato";
 
     case SymId::brassMuteOpen:
@@ -569,7 +572,9 @@ void Articulation::computeCategories()
                          _symId == SymId::articStaccatoAbove || _symId == SymId::articStaccatoBelow
                          || _symId == SymId::articMarcatoStaccatoAbove || _symId == SymId::articMarcatoStaccatoBelow
                          || _symId == SymId::articTenutoStaccatoAbove || _symId == SymId::articTenutoStaccatoBelow
-                         || _symId == SymId::articAccentStaccatoAbove || _symId == SymId::articAccentStaccatoBelow);
+                         || _symId == SymId::articAccentStaccatoAbove || _symId == SymId::articAccentStaccatoBelow
+                         || _symId == SymId::tremoloDivisiDots2 || _symId == SymId::tremoloDivisiDots3
+                         || _symId == SymId::tremoloDivisiDots4 || _symId == SymId::tremoloDivisiDots6);
 
     m_categories.setFlag(ArticulationCategory::ACCENT,
                          _symId == SymId::articAccentAbove || _symId == SymId::articAccentBelow
@@ -586,40 +591,26 @@ void Articulation::computeCategories()
                          || _symId == SymId::luteFingeringRHThird);
 }
 
-//---------------------------------------------------------
-//   isOrnament
-//---------------------------------------------------------
-
-bool Articulation::isOrnament() const
+bool Articulation::isBasicArticulation() const
 {
-    return isOrnament(subtype());
-}
+    static const std::set<SymId> articulations{
+        SymId::articAccentAbove, SymId::articAccentBelow,
+        SymId::articStaccatoAbove, SymId::articStaccatoBelow,
+        SymId::articTenutoAbove, SymId::articTenutoBelow,
+        SymId::articMarcatoAbove, SymId::articMarcatoBelow,
 
-bool Articulation::isOrnament(int subtype)
-{
-    static const std::set<SymId> ornaments {
-        SymId::ornamentTurn,
-        SymId::ornamentTurnInverted,
-        SymId::ornamentTurnSlash,
-        SymId::ornamentTrill,
-        SymId::brassMuteClosed,
-        SymId::ornamentMordent,
-        SymId::ornamentShortTrill,
-        SymId::ornamentTremblement,
-        SymId::ornamentPrallMordent,
-        SymId::ornamentLinePrall,
-        SymId::ornamentUpPrall,
-        SymId::ornamentUpMordent,
-        SymId::ornamentPrecompMordentUpperPrefix,
-        SymId::ornamentDownMordent,
-        SymId::ornamentPrallUp,
-        SymId::ornamentPrallDown,
-        SymId::ornamentPrecompSlide
+        SymId::articAccentStaccatoAbove, SymId::articAccentStaccatoBelow,
+        SymId::articMarcatoStaccatoAbove, SymId::articMarcatoStaccatoBelow,
+        SymId::articMarcatoTenutoAbove, SymId::articMarcatoTenutoBelow,
+        SymId::articTenutoStaccatoAbove, SymId::articTenutoStaccatoBelow,
+        SymId::articTenutoAccentAbove, SymId::articTenutoAccentBelow,
+        SymId::articStaccatissimoAbove, SymId::articStaccatissimoBelow,
+        SymId::articStaccatissimoStrokeAbove, SymId::articStaccatissimoStrokeBelow,
+        SymId::articStaccatissimoWedgeAbove, SymId::articStaccatissimoWedgeBelow,
+        SymId::articStressAbove, SymId::articStressBelow
     };
-
-    SymId symId = static_cast<SymId>(subtype);
-
-    return ornaments.find(symId) != ornaments.end();
+    SymId symId = static_cast<SymId>(subtype());
+    return articulations.find(symId) != articulations.end();
 }
 
 //---------------------------------------------------------
@@ -653,34 +644,39 @@ void Articulation::doAutoplace()
         double md = minDistance().val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
-        RectF r = bbox().translated(chordRest()->pos() + m->pos() + s->pos() + pos());
 
-        double d;
-        bool above = up();     // (anchor() == ArticulationAnchor::TOP_STAFF || anchor() == ArticulationAnchor::TOP_CHORD);
-        SkylineLine sk(!above);
-        if (above) {
-            sk.add(r.x(), r.bottom(), r.width());
-            d = sk.minDistance(ss->skyline().north());
-        } else {
-            sk.add(r.x(), r.top(), r.width());
-            d = ss->skyline().south().minDistance(sk);
-        }
+        Shape thisShape = shape().translate(chordRest()->pos() + m->pos() + s->pos() + pos());
 
-        if (d > -md) {
-            double yd = d + md;
+        for (ShapeElement& shapeEl : thisShape) {
+            RectF r = shapeEl;
+
+            double d = 0.0;
+            bool above = up();
+            SkylineLine sk(!above);
             if (above) {
-                yd *= -1.0;
+                sk.add(r.x(), r.bottom(), r.width());
+                d = sk.minDistance(ss->skyline().north());
+            } else {
+                sk.add(r.x(), r.top(), r.width());
+                d = ss->skyline().south().minDistance(sk);
             }
-            if (offsetChanged() != OffsetChange::NONE) {
-                // user moved element within the skyline
-                // we may need to adjust minDistance, yd, and/or offset
-                //bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
-                if (rebaseMinDistance(md, yd, sp, rebase, above, true)) {
-                    r.translate(0.0, rebase);
+
+            if (d > -md) {
+                double yd = d + md;
+                if (above) {
+                    yd *= -1.0;
                 }
+                if (offsetChanged() != OffsetChange::NONE) {
+                    // user moved element within the skyline
+                    // we may need to adjust minDistance, yd, and/or offset
+                    //bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
+                    if (rebaseMinDistance(md, yd, sp, rebase, above, true)) {
+                        r.translate(0.0, rebase);
+                    }
+                }
+                movePosY(yd);
+                thisShape.translateY(yd);
             }
-            movePosY(yd);
-            r.translate(PointF(0.0, yd));
         }
     }
     setOffsetChanged(false);
@@ -721,10 +717,10 @@ void Articulation::setupShowOnTabStyles()
 
 void Articulation::styleChanged()
 {
-    bool isGolpeThumb = _symId == SymId::guitarGolpe && _anchor == ArticulationAnchor::BOTTOM_STAFF;
+    bool isGolpeThumb = _symId == SymId::guitarGolpe && _anchor == ArticulationAnchor::BOTTOM;
     EngravingItem::styleChanged();
     if (isGolpeThumb) {
-        setAnchor(ArticulationAnchor::BOTTOM_STAFF);
+        setAnchor(ArticulationAnchor::BOTTOM);
     }
 }
 
@@ -766,6 +762,14 @@ static std::map<SymId, ArticulationGroup> articulationAboveSplitGroups = {
     { SymId::articMarcatoTenutoAbove, { SymId::articTenutoAbove, SymId::articMarcatoAbove } },
 };
 
+static std::map<SymId, ArticulationGroup> articulationBelowSplitGroups = {
+    { SymId::articAccentStaccatoBelow, { SymId::articStaccatoBelow, SymId::articAccentBelow } },
+    { SymId::articTenutoAccentBelow, { SymId::articTenutoBelow, SymId::articAccentBelow } },
+    { SymId::articTenutoStaccatoBelow, { SymId::articTenutoBelow, SymId::articStaccatoBelow } },
+    { SymId::articMarcatoStaccatoBelow, { SymId::articStaccatoBelow, SymId::articMarcatoBelow } },
+    { SymId::articMarcatoTenutoBelow, { SymId::articTenutoBelow, SymId::articMarcatoBelow } },
+};
+
 static std::map<ArticulationGroup, SymId> articulationAboveJoinGroups = {
     { { SymId::articStaccatoAbove, SymId::articAccentAbove }, SymId::articAccentStaccatoAbove },
     { { SymId::articTenutoAbove, SymId::articAccentAbove }, SymId::articTenutoAccentAbove },
@@ -795,11 +799,20 @@ std::set<SymId> splitArticulations(const std::set<SymId>& articulationSymbolIds)
     for (const SymId& articulationSymbolId: articulationSymbolIds) {
         auto artic = articulationAboveSplitGroups.find(articulationSymbolId);
         if (artic != articulationAboveSplitGroups.end()) {
+            // check above
             ArticulationGroup group = articulationAboveSplitGroups[articulationSymbolId];
             result.insert(group.first);
             result.insert(group.second);
         } else {
-            result.insert(articulationSymbolId);
+            // check below
+            artic = articulationBelowSplitGroups.find(articulationSymbolId);
+            if (artic != articulationBelowSplitGroups.end()) {
+                ArticulationGroup group = articulationBelowSplitGroups[articulationSymbolId];
+                result.insert(group.first);
+                result.insert(group.second);
+            } else {
+                result.insert(articulationSymbolId);
+            }
         }
     }
 
@@ -911,8 +924,9 @@ std::set<SymId> updateArticulations(const std::set<SymId>& articulationSymbolIds
     default:
         break;
     }
-
-    return joinArticulations(splittedArticulations);
+    // we no longer want to join articulations when adding or removing individual ones. combined articulations can still
+    // be added by the palette (which doesn't perform any of this splitting)
+    return splittedArticulations;
 }
 
 std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, PlacementV placement)

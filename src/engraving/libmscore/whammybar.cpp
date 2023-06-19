@@ -59,16 +59,6 @@ WhammyBarSegment::WhammyBarSegment(WhammyBar* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void WhammyBarSegment::layout()
-{
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
-}
-
-//---------------------------------------------------------
 //   WhammyBar
 //---------------------------------------------------------
 

@@ -33,7 +33,7 @@ class NotationContextMenuModel : public uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(context::IGlobalContext, globalContext)
 
 public:
     Q_INVOKABLE void loadItems(int elementType);

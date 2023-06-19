@@ -33,7 +33,7 @@
 namespace mu::musesampler {
 class MuseSamplerResolver : public audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo
 {
-    INJECT(musesampler, IMuseSamplerConfiguration, configuration)
+    INJECT(IMuseSamplerConfiguration, configuration)
 
 public:
     void init();
@@ -46,6 +46,8 @@ public:
 
     std::string version() const override;
     bool isInstalled() const override;
+
+    float defaultReverbLevel(const String& instrumentSoundId) const override;
 
 private:
     bool checkLibrary() const;

@@ -256,7 +256,7 @@ TEST_F(Engraving_SpannersTests, spanners04)
     newStaff->setDefaultClefType(ClefTypeList(ClefType::G));
 
     KeySigEvent ke;
-    ke.setKey(Key::C);
+    ke.setConcertKey(Key::C);
     newStaff->setKey(Fraction(0, 1), ke);
 
     score->undoInsertStaff(newStaff, 1, false);

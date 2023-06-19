@@ -64,19 +64,6 @@ PedalSegment::PedalSegment(Pedal* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void PedalSegment::layout()
-{
-    TextLineBaseSegment::layout();
-    if (isStyled(Pid::OFFSET)) {
-        roffset() = pedal()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
-    autoplaceSpannerSegment();
-}
-
-//---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
 

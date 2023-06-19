@@ -47,13 +47,13 @@ class MscWriter;
 namespace mu::project {
 class NotationProject : public INotationProject, public async::Asyncable
 {
-    INJECT(project, io::IFileSystem, fileSystem)
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, notation::INotationConfiguration, notationConfiguration)
-    INJECT(project, notation::INotationCreator, notationCreator)
-    INJECT(project, INotationReadersRegister, readers)
-    INJECT(project, INotationWritersRegister, writers)
-    INJECT(project, IProjectMigrator, migrator)
+    INJECT(io::IFileSystem, fileSystem)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(notation::INotationCreator, notationCreator)
+    INJECT(INotationReadersRegister, readers)
+    INJECT(INotationWritersRegister, writers)
+    INJECT(IProjectMigrator, migrator)
 
 public:
     ~NotationProject() override;

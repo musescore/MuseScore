@@ -26,8 +26,6 @@
 #include "draw/types/brush.h"
 #include "draw/fontmetrics.h"
 
-#include "layout/tlayout.h"
-
 #include "note.h"
 #include "score.h"
 #include "staff.h"
@@ -148,16 +146,6 @@ void Bend::updatePointsByBendType(const BendType bendType)
     default:
         break;
     }
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Bend::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

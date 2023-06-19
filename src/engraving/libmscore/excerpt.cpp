@@ -416,11 +416,11 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             if (score->lastSegment()) {
                 endTick = score->lastSegment()->tick();
             }
-            score->transposeKeys(staffIdx, staffIdx + 1, Fraction(0, 1), endTick, interval, true, flip);
+            score->transposeKeys(staffIdx, staffIdx + 1, Fraction(0, 1), endTick, flip);
 
             for (auto segment = score->firstSegmentMM(SegmentType::ChordRest); segment;
                  segment = segment->next1MM(SegmentType::ChordRest)) {
-                interval = staff->part()->instrument(segment->tick())->transpose();
+                interval = staff->transpose(segment->tick());
                 if (interval.isZero()) {
                     continue;
                 }
@@ -1211,6 +1211,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                         case ElementType::SYSTEM_TEXT:
                         case ElementType::TRIPLET_FEEL:
                         case ElementType::PLAYTECH_ANNOTATION:
+                        case ElementType::CAPO:
                         case ElementType::FRET_DIAGRAM:
                         case ElementType::HARMONY:
                         case ElementType::FIGURED_BASS:
@@ -1563,7 +1564,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             interval.flip();
         }
 
-        score->transposeKeys(dstStaffIdx, dstStaffIdx + 1, startTick, endTick, interval, true, !scoreConcertPitch);
+        score->transposeKeys(dstStaffIdx, dstStaffIdx + 1, startTick, endTick, !scoreConcertPitch);
     }
 }
 

@@ -32,7 +32,7 @@ class PlaybackToolBarModel : public uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
-    INJECT(playback, IPlaybackController, playbackController)
+    INJECT(IPlaybackController, playbackController)
 
     Q_PROPERTY(bool isToolbarFloating READ isToolbarFloating WRITE setIsToolbarFloating NOTIFY isToolbarFloatingChanged)
     Q_PROPERTY(bool isPlayAllowed READ isPlayAllowed NOTIFY isPlayAllowedChanged)

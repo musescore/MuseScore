@@ -48,14 +48,6 @@ class Breath final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Breath)
     DECLARE_CLASSOF(ElementType::BREATH)
 
-    double _pause;
-    SymId _symId;
-
-    friend class Factory;
-    Breath(Segment* parent);
-
-    bool sameVoiceKerningLimited() const override { return true; }
-
 public:
 
     Breath* clone() const override { return new Breath(*this); }
@@ -70,7 +62,6 @@ public:
     Segment* segment() const { return (Segment*)explicitParent(); }
 
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
 
     mu::PointF pagePos() const override;        ///< position in page coordinates
 
@@ -89,6 +80,14 @@ public:
 protected:
     void added() override;
     void removed() override;
+
+private:
+
+    friend class Factory;
+    Breath(Segment* parent);
+
+    double _pause;
+    SymId _symId;
 };
 } // namespace mu::engraving
 #endif

@@ -23,14 +23,11 @@
 
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "layout/tlayout.h"
 
-#include "chord.h"
 #include "dynamichairpingroup.h"
 #include "expression.h"
 #include "measure.h"
 #include "mscore.h"
-#include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "system.h"
@@ -48,16 +45,8 @@ namespace mu::engraving {
 //    see: http://en.wikipedia.org/wiki/File:Dynamic's_Note_Velocity.svg
 //-----------------------------------------------------------------------------
 
-struct Dyn {
-    DynamicType type;
-    int velocity;        ///< associated midi velocity (0-127, -1 = none)
-    int changeInVelocity;
-    bool accent;         ///< if true add velocity to current chord velocity
-    const char* text;    // utf8 text of dynamic
-};
-
 // variant with ligatures, works for both emmentaler and bravura:
-static Dyn dynList[] = {
+const std::vector<Dyn> Dynamic::DYN_LIST = {
     // dynamic:
     { DynamicType::OTHER,  -1, 0,   true, "" },
     { DynamicType::PPPPPP,  1, 0,   false,
@@ -126,22 +115,22 @@ static const ElementStyle dynamicsStyle {
 Dynamic::Dynamic(Segment* parent)
     : TextBase(ElementType::DYNAMIC, parent, TextStyleType::DYNAMICS, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-    _velocity    = -1;
-    _dynRange    = DynamicRange::PART;
-    _dynamicType = DynamicType::OTHER;
-    _changeInVelocity = 128;
-    _velChangeSpeed = DynamicSpeed::NORMAL;
+    m_velocity    = -1;
+    m_dynRange    = DynamicRange::PART;
+    m_dynamicType = DynamicType::OTHER;
+    m_changeInVelocity = 128;
+    m_velChangeSpeed = DynamicSpeed::NORMAL;
     initElementStyle(&dynamicsStyle);
 }
 
 Dynamic::Dynamic(const Dynamic& d)
     : TextBase(d)
 {
-    _dynamicType = d._dynamicType;
-    _velocity    = d._velocity;
-    _dynRange    = d._dynRange;
-    _changeInVelocity = d._changeInVelocity;
-    _velChangeSpeed = d._velChangeSpeed;
+    m_dynamicType = d.m_dynamicType;
+    m_velocity    = d.m_velocity;
+    m_dynRange    = d.m_dynRange;
+    m_changeInVelocity = d.m_changeInVelocity;
+    m_velChangeSpeed = d.m_velChangeSpeed;
     _avoidBarLines = d._avoidBarLines;
     _dynamicsSize = d._dynamicsSize;
     _centerOnNotehead = d._centerOnNotehead;
@@ -153,7 +142,7 @@ Dynamic::Dynamic(const Dynamic& d)
 
 int Dynamic::velocity() const
 {
-    return _velocity <= 0 ? dynList[int(dynamicType())].velocity : _velocity;
+    return m_velocity <= 0 ? DYN_LIST[int(dynamicType())].velocity : m_velocity;
 }
 
 //---------------------------------------------------------
@@ -162,7 +151,7 @@ int Dynamic::velocity() const
 
 int Dynamic::changeInVelocity() const
 {
-    return _changeInVelocity >= 128 ? dynList[int(dynamicType())].changeInVelocity : _changeInVelocity;
+    return m_changeInVelocity >= 128 ? DYN_LIST[int(dynamicType())].changeInVelocity : m_changeInVelocity;
 }
 
 //---------------------------------------------------------
@@ -171,10 +160,10 @@ int Dynamic::changeInVelocity() const
 
 void Dynamic::setChangeInVelocity(int val)
 {
-    if (dynList[int(dynamicType())].changeInVelocity == val) {
-        _changeInVelocity = 128;
+    if (DYN_LIST[int(dynamicType())].changeInVelocity == val) {
+        m_changeInVelocity = 128;
     } else {
-        _changeInVelocity = val;
+        m_changeInVelocity = val;
     }
 }
 
@@ -189,7 +178,7 @@ Fraction Dynamic::velocityChangeLength() const
         return Fraction::fromTicks(0);
     }
 
-    double ratio = score()->tempomap()->tempo(segment()->tick().ticks()).val / Constants::defaultTempo.val;
+    double ratio = score()->tempomap()->tempo(segment()->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
     double speedMult;
     switch (velChangeSpeed()) {
     case DynamicSpeed::SLOW:
@@ -204,7 +193,7 @@ Fraction Dynamic::velocityChangeLength() const
         break;
     }
 
-    return Fraction::fromTicks(int(ratio * (speedMult * double(Constants::division))));
+    return Fraction::fromTicks(int(ratio * (speedMult * double(Constants::DIVISION))));
 }
 
 //---------------------------------------------------------
@@ -233,30 +222,21 @@ bool Dynamic::isVelocityChangeAvailable() const
     }
 }
 
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Dynamic::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
 double Dynamic::customTextOffset()
 {
-    if (!_centerOnNotehead || _dynamicType == DynamicType::OTHER) {
+    if (!_centerOnNotehead || m_dynamicType == DynamicType::OTHER) {
         return 0.0;
     }
 
-    String referenceString = String::fromUtf8(dynList[int(_dynamicType)].text);
+    String referenceString = String::fromUtf8(DYN_LIST[int(m_dynamicType)].text);
     if (xmlText() == referenceString) {
         return 0.0;
     }
 
     Dynamic referenceDynamic(*this);
     referenceDynamic.setXmlText(referenceString);
-    toTextBase(&referenceDynamic)->layout();
+    layout()->layoutItem(toTextBase(&referenceDynamic));
+
     TextFragment referenceFragment;
     if (!referenceDynamic.textBlockList().empty()) {
         TextBlock referenceBlock = referenceDynamic.textBlockList().front();
@@ -265,8 +245,8 @@ double Dynamic::customTextOffset()
         }
     }
 
-    for (TextBlock block : textBlockList()) {
-        for (TextFragment fragment : block.fragments()) {
+    for (const TextBlock& block : textBlockList()) {
+        for (const TextFragment& fragment : block.fragments()) {
             if (fragment.text == referenceFragment.text) {
                 return fragment.pos.x() - referenceFragment.pos.x();
             }
@@ -407,11 +387,11 @@ void Dynamic::manageBarlineCollisions()
 void Dynamic::setDynamicType(const String& tag)
 {
     std::string utf8Tag = tag.toStdString();
-    int n = sizeof(dynList) / sizeof(*dynList);
-    for (int i = 0; i < n; ++i) {
-        if (TConv::toXml(DynamicType(i)).ascii() == utf8Tag || dynList[i].text == utf8Tag) {
+    size_t n = DYN_LIST.size();
+    for (size_t i = 0; i < n; ++i) {
+        if (TConv::toXml(DynamicType(i)).ascii() == utf8Tag || DYN_LIST[i].text == utf8Tag) {
             setDynamicType(DynamicType(i));
-            setXmlText(String::fromUtf8(dynList[i].text));
+            setXmlText(String::fromUtf8(DYN_LIST[i].text));
             return;
         }
     }
@@ -422,7 +402,7 @@ void Dynamic::setDynamicType(const String& tag)
 
 String Dynamic::dynamicText(DynamicType t)
 {
-    return String::fromUtf8(dynList[int(t)].text);
+    return String::fromUtf8(DYN_LIST[int(t)].text);
 }
 
 bool Dynamic::acceptDrop(EditData& ed) const
@@ -474,8 +454,8 @@ void Dynamic::startEdit(EditData& ed)
 void Dynamic::endEdit(EditData& ed)
 {
     TextBase::endEdit(ed);
-    if (!xmlText().contains(String::fromUtf8(dynList[int(_dynamicType)].text))) {
-        _dynamicType = DynamicType::OTHER;
+    if (!xmlText().contains(String::fromUtf8(DYN_LIST[int(m_dynamicType)].text))) {
+        m_dynamicType = DynamicType::OTHER;
     }
 }
 
@@ -527,7 +507,9 @@ mu::RectF Dynamic::drag(EditData& ed)
             PointF pos1(canvasPos());
             score()->undo(new ChangeParent(this, seg, si));
             setOffset(PointF());
-            layout();
+
+            layout()->layoutItem(this);
+
             PointF pos2(canvasPos());
             const PointF newOffset = pos1 - pos2;
             setOffset(newOffset);
@@ -555,13 +537,13 @@ PropertyValue Dynamic::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::DYNAMIC_TYPE:
-        return _dynamicType;
+        return m_dynamicType;
     case Pid::DYNAMIC_RANGE:
-        return _dynRange;
+        return m_dynRange;
     case Pid::VELOCITY:
         return velocity();
     case Pid::SUBTYPE:
-        return int(_dynamicType);
+        return int(m_dynamicType);
     case Pid::VELO_CHANGE:
         if (isVelocityChangeAvailable()) {
             return changeInVelocity();
@@ -569,7 +551,7 @@ PropertyValue Dynamic::getProperty(Pid propertyId) const
             return PropertyValue();
         }
     case Pid::VELO_CHANGE_SPEED:
-        return _velChangeSpeed;
+        return m_velChangeSpeed;
     case Pid::AVOID_BARLINES:
         return avoidBarLines();
     case Pid::DYNAMICS_SIZE:
@@ -589,16 +571,16 @@ bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::DYNAMIC_TYPE:
-        _dynamicType = v.value<DynamicType>();
+        m_dynamicType = v.value<DynamicType>();
         break;
     case Pid::DYNAMIC_RANGE:
-        _dynRange = v.value<DynamicRange>();
+        m_dynRange = v.value<DynamicRange>();
         break;
     case Pid::VELOCITY:
-        _velocity = v.toInt();
+        m_velocity = v.toInt();
         break;
     case Pid::SUBTYPE:
-        _dynamicType = v.value<DynamicType>();
+        m_dynamicType = v.value<DynamicType>();
         break;
     case Pid::VELO_CHANGE:
         if (isVelocityChangeAvailable()) {
@@ -606,7 +588,7 @@ bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
         }
         break;
     case Pid::VELO_CHANGE_SPEED:
-        _velChangeSpeed = v.value<DynamicSpeed>();
+        m_velChangeSpeed = v.value<DynamicSpeed>();
         break;
     case Pid::AVOID_BARLINES:
         setAvoidBarLines(v.toBool());
@@ -642,7 +624,7 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
         return -1;
     case Pid::VELO_CHANGE:
         if (isVelocityChangeAvailable()) {
-            return dynList[int(dynamicType())].changeInVelocity;
+            return DYN_LIST[int(dynamicType())].changeInVelocity;
         } else {
             return PropertyValue();
         }
@@ -656,10 +638,10 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
 void Dynamic::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     TextBase::undoChangeProperty(id, v, ps);
-    if (_snappedExpression) {
-        if ((id == Pid::OFFSET && _snappedExpression->offset() != v.value<PointF>())
-            || (id == Pid::PLACEMENT && _snappedExpression->placement() != v.value<PlacementV>())) {
-            _snappedExpression->undoChangeProperty(id, v, ps);
+    if (m_snappedExpression) {
+        if ((id == Pid::OFFSET && m_snappedExpression->offset() != v.value<PointF>())
+            || (id == Pid::PLACEMENT && m_snappedExpression->placement() != v.value<PlacementV>())) {
+            m_snappedExpression->undoChangeProperty(id, v, ps);
         }
     }
 }

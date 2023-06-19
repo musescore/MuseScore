@@ -77,6 +77,7 @@ Column {
         }
 
         InspectorTabButton {
+            visible: root.headModel ? !root.headModel.isTrillCueNote : true
             text: root.stemModel ? root.stemModel.title : ""
 
             navigation.name: "StemTab"
@@ -85,6 +86,7 @@ Column {
         }
 
         InspectorTabButton {
+            visible: root.headModel ? !root.headModel.isTrillCueNote : true
             text: root.beamModel ? root.beamModel.title : ""
 
             navigation.name: "BeamTab"

@@ -25,7 +25,7 @@
 #include "io/path.h"
 #include "network/networktypes.h"
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 namespace mu::update {
 class IUpdateConfiguration : MODULE_EXPORT_INTERFACE

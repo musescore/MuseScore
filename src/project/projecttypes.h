@@ -31,7 +31,9 @@
 #include "log.h"
 
 #include "cloud/cloudtypes.h"
+#include "notation/inotation.h"
 #include "notation/notationtypes.h"
+#include "inotationwriter.h"
 
 namespace mu::project {
 struct ProjectCreateOptions
@@ -78,6 +80,18 @@ enum class SaveLocationType
 
 struct CloudProjectInfo {
     QUrl sourceUrl;
+    int revisionId = 0;
+    QString name;
+
+    cloud::Visibility visibility = cloud::Visibility::Private;
+
+    bool isValid() const
+    {
+        return !sourceUrl.isEmpty();
+    }
+};
+
+struct CloudAudioInfo {
     QString name;
 
     cloud::Visibility visibility = cloud::Visibility::Private;
@@ -85,6 +99,28 @@ struct CloudProjectInfo {
     bool isValid() const
     {
         return !name.isEmpty();
+    }
+};
+
+struct ExportInfo {
+    QString id;
+    io::path_t projectPath;
+    io::path_t exportPath;
+    INotationWriter::UnitType unitType;
+    std::vector<notation::INotationPtr> notations;
+
+    bool operator==(const ExportInfo& other) const
+    {
+        return id == other.id
+               && projectPath == other.projectPath
+               && exportPath == other.exportPath
+               && unitType == other.unitType
+               && notations == other.notations;
+    }
+
+    bool operator!=(const ExportInfo other) const
+    {
+        return !(*this == other);
     }
 };
 
@@ -208,6 +244,14 @@ struct Template
 };
 
 using Templates = QList<Template>;
+
+//struct RecentFile {
+//    io::path_t path;
+//    QString displayName;
+//};
+
+using RecentFile = io::path_t;
+using RecentFilesList = std::vector<RecentFile>;
 
 class GenerateAudioTimePeriod
 {

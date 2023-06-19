@@ -56,12 +56,6 @@ PlayTechAnnotation* PlayTechAnnotation::clone() const
     return new PlayTechAnnotation(*this);
 }
 
-void PlayTechAnnotation::layout()
-{
-    StaffTextBase::layout();
-    autoplaceSegmentElement();
-}
-
 PropertyValue PlayTechAnnotation::getProperty(Pid id) const
 {
     switch (id) {

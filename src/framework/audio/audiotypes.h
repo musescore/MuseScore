@@ -159,7 +159,7 @@ struct AudioResourceMeta {
 using AudioResourceMetaList = std::vector<AudioResourceMeta>;
 using AudioResourceMetaSet = std::set<AudioResourceMeta>;
 
-static const AudioResourceId MUSE_REVERB_ID("Reverb");
+static const AudioResourceId MUSE_REVERB_ID("Muse Reverb");
 
 inline AudioResourceMeta makeReverbMeta()
 {

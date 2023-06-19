@@ -41,18 +41,6 @@ class Box : public MeasureBase
 {
     OBJECT_ALLOCATOR(engraving, Box)
 
-    Spatium _boxWidth             { Spatium(0) };      // only valid for HBox
-    Spatium _boxHeight            { Spatium(0) };      // only valid for VBox
-    Millimetre _topGap            { Millimetre(0.0) }; // distance from previous system (left border for hbox)
-                                                       // initialized with Sid::systemFrameDistance
-    Millimetre _bottomGap         { Millimetre(0.0) }; // distance to next system (right border for hbox)
-                                                       // initialized with Sid::frameSystemDistance
-    double _leftMargin             { 0.0 };
-    double _rightMargin            { 0.0 };             // inner margins in metric mm
-    double _topMargin              { 0.0 };
-    double _bottomMargin           { 0.0 };
-    bool _isAutoSizeEnabled       { true };
-
 public:
     Box(const ElementType& type, System* parent);
 
@@ -64,8 +52,6 @@ public:
     virtual void startEditDrag(EditData&) override;
     virtual void editDrag(EditData&) override;
     virtual void endEdit(EditData&) override;
-
-    virtual void layout() override;
 
     virtual bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;
@@ -104,6 +90,19 @@ public:
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override { return { mu::PointF() }; }   // overridden in descendants
+
+private:
+    Spatium _boxWidth             { Spatium(0) };      // only valid for HBox
+    Spatium _boxHeight            { Spatium(0) };      // only valid for VBox
+    Millimetre _topGap            { Millimetre(0.0) }; // distance from previous system (left border for hbox)
+                                                       // initialized with Sid::systemFrameDistance
+    Millimetre _bottomGap         { Millimetre(0.0) }; // distance to next system (right border for hbox)
+                                                       // initialized with Sid::frameSystemDistance
+    double _leftMargin             { 0.0 };
+    double _rightMargin            { 0.0 };             // inner margins in metric mm
+    double _topMargin              { 0.0 };
+    double _bottomMargin           { 0.0 };
+    bool _isAutoSizeEnabled       { true };
 };
 
 //---------------------------------------------------------
@@ -116,18 +115,14 @@ class HBox final : public Box
     OBJECT_ALLOCATOR(engraving, HBox)
     DECLARE_CLASSOF(ElementType::HBOX)
 
-    bool _createSystemHeader { true };
-
 public:
     HBox(System* parent);
     virtual ~HBox() {}
 
     HBox* clone() const override { return new HBox(*this); }
 
-    void layout() override;
-
     mu::RectF drag(EditData&) override;
-    void layout2();
+
     bool isMovable() const override;
     void computeMinWidth() override;
 
@@ -139,6 +134,10 @@ public:
     PropertyValue propertyDefault(Pid) const override;
 
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+
+private:
+
+    bool _createSystemHeader { true };
 };
 
 //---------------------------------------------------------
@@ -162,7 +161,6 @@ public:
     double maxHeight() const;
 
     PropertyValue getProperty(Pid propertyId) const override;
-    void layout() override;
 
     void startEditDrag(EditData&) override;
 
@@ -186,7 +184,6 @@ public:
 
     FBox* clone() const override { return new FBox(*this); }
 
-    void layout() override;
     void add(EngravingItem*) override;
 };
 } // namespace mu::engraving

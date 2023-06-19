@@ -40,35 +40,28 @@ class StretchedBend final : public Bend
 public:
     StretchedBend* clone() const override { return new StretchedBend(*this); }
 
-    void layout() override;
-    void layoutStretched();
     void draw(mu::draw::Painter*) const override;
     bool stretchedMode() const { return m_stretchedMode; }
 
     static void prepareBends(std::vector<StretchedBend*>& bends);
-    static void layoutBends(const std::vector<Segment*>& sl);
 
 private:
-    friend class mu::engraving::Factory;
+    friend class layout::v0::TLayout;
+    friend class Factory;
 
     StretchedBend(Note* parent);
 
     void fillDrawPoints(); // filling the points which specify how bend will be drawn
     void fillSegments(); // converting points from file to bend segments
     void stretchSegments(); // stretching until end of chord duration
-    void glueNeighbor(); // fixing the double appearance of some bends
 
     void layoutDraw(const bool layoutMode, mu::draw::Painter* painter = nullptr) const; /// loop for both layout and draw logic
-    void preLayout();
-    void postLayout();
-    void doLayout();
 
     void setupPainter(mu::draw::Painter* painter) const;
     void fillArrows();
     double nextSegmentX() const;
     double bendHeight(int bendIdx) const;
-
-    bool m_reduntant = false; // marks that the bend was 'glued' to neighbour and is now unnecessary
+    bool firstPointShouldBeSkipped() const;
 
     bool m_stretchedMode = false; // layout with fixed size or stretched to next segment
 
@@ -93,9 +86,7 @@ private:
 
     PolygonF m_arrowUp;
     PolygonF m_arrowDown;
-    double m_spatium = 0;
     double m_bendArrowWidth = 0;
-    mutable RectF m_boundingRect;
     bool m_releasedToInitial = false;
     bool m_skipFirstPoint = false;
 };

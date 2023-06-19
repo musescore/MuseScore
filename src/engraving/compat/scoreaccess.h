@@ -36,8 +36,6 @@ public:
     static MasterScore* createMasterScoreWithBaseStyle();
     static MasterScore* createMasterScoreWithDefaultStyle();
     static MasterScore* createMasterScore(const MStyle& style);
-
-    static bool exportPart(MscWriter& mscWriter, Score* partScore);
 };
 }
 

@@ -22,7 +22,7 @@
 #ifndef MU_DIAGNOSTICS_IDIAGNOSTICDRAWPROVIDER_H
 #define MU_DIAGNOSTICS_IDIAGNOSTICDRAWPROVIDER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "global/types/ret.h"
 #include "global/io/path.h"
 #include "diagnosticstypes.h"

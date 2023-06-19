@@ -50,7 +50,7 @@ static PaletteTreePtr readPalette(const ByteArray& data)
 
         if (reader.name() == PALETTE_XML_TAG) {
             PaletteTreePtr tree = std::make_shared<PaletteTree>();
-            tree->read(reader);
+            tree->read(reader, false);
             return tree;
         }
     }
@@ -63,7 +63,7 @@ static void writePalette(const PaletteTreePtr& tree, QByteArray& data)
     Buffer buf;
     buf.open(IODevice::WriteOnly);
     mu::engraving::XmlWriter writer(&buf);
-    tree->write(writer);
+    tree->write(writer, false);
     data = buf.data().toQByteArray();
 }
 

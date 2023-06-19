@@ -22,6 +22,10 @@
 
 #include "page.h"
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+#include "accessibility/accessibleitem.h"
+#endif
+
 #include "factory.h"
 #include "masterscore.h"
 #include "measurebase.h"
@@ -29,10 +33,6 @@
 #include "score.h"
 #include "system.h"
 #include "text.h"
-
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-#include "accessibility/accessibleitem.h"
-#endif
 
 #include "log.h"
 
@@ -204,7 +204,7 @@ Text* Page::layoutHeaderFooter(int area, const String& ss) const
     }
     text->setAlign(align);
     text->setXmlText(s);
-    text->layout();
+    layout()->layoutItem(text);
     return text;
 }
 
@@ -452,14 +452,14 @@ String Page::replaceTextMacros(const String& s) const
             }
             break;
             case 'm':
-                if (score()->dirty()) {
+                if (score()->dirty() || !masterScore()->saved()) {
                     d += Time::currentTime().toString(DateFormat::ISODate);
                 } else {
                     d += masterScore()->fileInfo()->lastModified().time().toString(DateFormat::ISODate);
                 }
                 break;
             case 'M':
-                if (score()->dirty()) {
+                if (score()->dirty() || !masterScore()->saved()) {
                     d += Date::currentDate().toString(DateFormat::ISODate);
                 } else {
                     d += masterScore()->fileInfo()->lastModified().date().toString(DateFormat::ISODate);

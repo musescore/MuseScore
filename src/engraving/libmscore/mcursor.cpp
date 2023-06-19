@@ -36,6 +36,7 @@
 #include "segment.h"
 #include "staff.h"
 #include "timesig.h"
+#include "sig.h"
 
 #include "log.h"
 

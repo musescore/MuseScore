@@ -34,7 +34,7 @@ class CanvasPreferencesModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
 
     Q_PROPERTY(QVariantMap defaultZoom READ defaultZoom NOTIFY defaultZoomChanged)
     Q_PROPERTY(int mouseZoomPrecision READ mouseZoomPrecision WRITE setMouseZoomPrecision NOTIFY mouseZoomPrecisionChanged)

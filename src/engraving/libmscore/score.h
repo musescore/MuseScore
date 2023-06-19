@@ -32,7 +32,6 @@
 #include <memory>
 
 #include "async/channel.h"
-#include "io/iodevice.h"
 #include "types/ret.h"
 #include "compat/midi/midirender.h"
 
@@ -40,7 +39,9 @@
 #include "draw/iimageprovider.h"
 #include "iengravingfontsprovider.h"
 
-#include "layout/layout.h"
+#include "types/constants.h"
+
+#include "layout/ilayout.h"
 #include "layout/layoutoptions.h"
 
 #include "style/style.h"
@@ -58,16 +59,34 @@
 
 namespace mu::engraving {
 class IMimeData;
-class WriteContext;
 }
 
-namespace mu::engraving::rw400 {
+namespace mu::engraving::read114 {
+class Read114;
+}
+
+namespace mu::engraving::read302 {
+class Read302;
+}
+
+namespace mu::engraving::read400 {
 class Read400;
 }
 
+namespace mu::engraving::read410 {
+class Read410;
+}
+
+namespace mu::engraving::write {
+class Writer;
+}
+
 namespace mu::engraving::compat {
-class Read302;
 class WriteScoreHook;
+}
+
+namespace mu::engraving::layout::v0 {
+class ScoreLayout;
 }
 
 namespace mu::engraving {
@@ -364,15 +383,20 @@ class Score : public EngravingObject
     OBJECT_ALLOCATOR(engraving, Score)
     DECLARE_CLASSOF(ElementType::SCORE)
 
-    INJECT(engraving, draw::IImageProvider, imageProvider)
-    INJECT(engraving, IEngravingConfiguration, configuration)
-    INJECT(engraving, IEngravingFontsProvider, engravingFonts)
+    INJECT(draw::IImageProvider, imageProvider)
+    INJECT(IEngravingConfiguration, configuration)
+    INJECT(IEngravingFontsProvider, engravingFonts)
+
+    // internal
+    INJECT(layout::ILayout, layout)
 
 private:
 
-    friend class compat::Read302;
-    friend class rw400::Read400;
-    friend class Layout;
+    friend class read302::Read302;
+    friend class read400::Read400;
+    friend class read410::Read410;
+    friend class write::Writer;
+    friend class layout::v0::ScoreLayout;
 
     static std::set<Score*> validScores;
     int _linkId { 0 };
@@ -424,9 +448,9 @@ private:
     bool _savedCapture          { false };        ///< True if we saved an image capture
 
     ScoreOrder _scoreOrder;                     ///< used for score ordering
-    bool _resetAutoplace{ false };
-    bool _resetDefaults{ false };
-    int _mscVersion { MSCVERSION };     ///< version of current loading *.msc file
+    bool _resetAutoplace = false;
+    bool _resetDefaults = false;
+    int _mscVersion = Constants::MSC_VERSION;     ///< version of current loading *.msc file
 
     bool _isOpen { false };
     bool _needSetUpTempoMap { true };
@@ -441,7 +465,6 @@ private:
     double _noteHeadWidth { 0.0 };         // cached value
 
     RootItem* m_rootItem = nullptr;
-    Layout m_layout;
     LayoutOptions m_layoutOptions;
 
     mu::async::Channel<EngravingItem*> m_elementDestroyed;
@@ -465,7 +488,7 @@ private:
     bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, staff_idx_t staffIdx);
     bool rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffIdx);
     std::list<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
-    void pasteChordRest(ChordRest* cr, const Fraction& tick, const Interval&);
+    void pasteChordRest(ChordRest* cr, const Fraction& tick);
 
     void doSelect(EngravingItem* e, SelectType type, staff_idx_t staffIdx);
     void selectSingle(EngravingItem* e, staff_idx_t staffIdx);
@@ -617,20 +640,12 @@ public:
     void addRemoveBreaks(int interval, bool lock);
 
     bool transpose(Note* n, Interval, bool useSharpsFlats);
-    void transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& tickStart, const Fraction& tickEnd, const Interval&,
-                       bool useInstrument = false, bool flip = false);
+    void transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& tickStart, const Fraction& tickEnd, bool flip = false);
     bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval, bool trKeys, bool transposeChordNames,
                    bool useDoubleSharpsFlats);
 
     bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
     bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
-
-    void write(XmlWriter&, bool onlySelection, compat::WriteScoreHook& hook);
-    bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook);
-    bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook, WriteContext& ctx);
-
-    bool read400(XmlReader& e);
-    bool readScore400(XmlReader& e);
 
     const std::vector<Staff*>& staves() const { return _staves; }
     size_t nstaves() const { return _staves.size(); }
@@ -730,6 +745,7 @@ public:
     Note* addMidiPitch(int pitch, bool addFlag);
     Note* addNote(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {},
                   InputState* externalInputState = nullptr);
+    Note* addNoteToTiedChord(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {});
 
     NoteVal noteValForPosition(Position pos, AccidentalType at, bool& error);
 
@@ -738,6 +754,7 @@ public:
 
     void deleteItem(EngravingItem*);
     void deleteMeasures(MeasureBase* firstMeasure, MeasureBase* lastMeasure, bool preserveTies = false);
+    void restoreInitialKeySig();
     void reconnectSlurs(MeasureBase* mbStart, MeasureBase* mbLast);
     void cmdDeleteSelection();
     void cmdFullMeasureRest();
@@ -785,10 +802,12 @@ public:
 
     void changeSelectedNotesVoice(voice_idx_t);
 
-    const std::vector<Part*>& parts() const { return _parts; }
+    const std::vector<Part*>& parts() const;
     int visiblePartCount() const;
-    std::set<ID> partIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const;
-    std::set<staff_idx_t> staffIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const;
+
+    using StaffAccepted = std::function<bool (const Staff&)>;
+    std::set<staff_idx_t> staffIdxSetFromRange(const track_idx_t trackFrom, const track_idx_t trackTo,
+                                               StaffAccepted staffAccepted = StaffAccepted()) const;
 
     void appendPart(const InstrumentTemplate*);
     void updateStaffIndex();
@@ -853,7 +872,7 @@ public:
     MeasureBase* getNextPrevSectionBreak(MeasureBase*, bool) const;
     EngravingItem* getScoreElementOfMeasureBase(MeasureBase*) const;
 
-    int fileDivision(int t) const { return static_cast<int>(((int64_t)t * Constants::division + _fileDivision / 2) / _fileDivision); }
+    int fileDivision(int t) const { return static_cast<int>(((int64_t)t * Constants::DIVISION + _fileDivision / 2) / _fileDivision); }
     void setFileDivision(int t) { _fileDivision = t; }
 
     bool dirty() const;
@@ -936,6 +955,8 @@ public:
     bool pasteStaff(XmlReader&, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
     void pasteSymbols(XmlReader& e, ChordRest* dst);
     void renderMidi(EventMap* events, const MidiRenderer::Context& ctx, bool expandRepeats);
+
+    static void transposeChord(Chord* c, const Fraction& tick);
 
     BeatType tick2beatType(const Fraction& tick) const;
 
@@ -1053,6 +1074,8 @@ public:
     void cmdCreateTuplet(ChordRest*, Tuplet*);
     void removeAudio();
 
+    bool autoLayoutEnabled() const;
+
     void doLayout();
     void doLayoutRange(const Fraction& st, const Fraction& et);
 
@@ -1153,7 +1176,7 @@ public:
     void addSpanner(Spanner*);
     void cmdAddSpanner(Spanner* spanner, const mu::PointF& pos, bool systemStavesOnly = false);
     void cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment, Segment* endSegment);
-    void checkSpanner(const Fraction& startTick, const Fraction& lastTick);
+    void checkSpanner(const Fraction& startTick, const Fraction& lastTick, bool removeOrphans = true);
     const std::set<Spanner*> unmanagedSpanners() { return _unmanagedSpanner; }
     void addUnmanagedSpanner(Spanner*);
     void removeUnmanagedSpanner(Spanner*);

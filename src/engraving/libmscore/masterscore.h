@@ -34,15 +34,8 @@ class MscWriter;
 class MscLoader;
 }
 
-namespace mu::engraving::rw400 {
-class Read400;
-}
-
 namespace mu::engraving::compat {
 class ScoreAccess;
-class Read114;
-class Read206;
-class Read302;
 class ReadStyleHook;
 }
 
@@ -123,16 +116,11 @@ class MasterScore : public Score
 
     friend class EngravingProject;
     friend class compat::ScoreAccess;
-    friend class compat::Read114;
-    friend class compat::Read206;
-    friend class compat::Read302;
-    friend class rw400::Read400;
+    friend class read114::Read114;
+    friend class read400::Read400;
 
     MasterScore(std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
     MasterScore(const MStyle&, std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
-
-    bool writeMscz(MscWriter& mscWriter, bool onlySelection = false, bool createThumbnail = true);
-    bool exportPart(MscWriter& mscWriter, Score* partScore);
 
     void initParts(Excerpt*);
 

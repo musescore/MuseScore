@@ -28,18 +28,25 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/cloudmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/cloudmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iauthorizationservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/icloudprojectsservice.h
     ${CMAKE_CURRENT_LIST_DIR}/icloudconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/cloudtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/clouderrors.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/accountmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/accountmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/cloudservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/cloudservice.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/cloudconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/cloudconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/cloudsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/cloudsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/oauthhttpserverreplyhandler.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/oauthhttpserverreplyhandler.cpp
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractcloudservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractcloudservice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/musescorecom/imusescorecomservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/musescorecom/musescorecomservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/musescorecom/musescorecomservice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/audiocom/iaudiocomservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/audiocom/audiocomservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/audiocom/audiocomservice.cpp
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/cloudconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/cloudconfiguration.cpp
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

@@ -24,6 +24,7 @@
 #include "modularity/ioc.h"
 
 #include "projectconfigurationstub.h"
+#include "recentfilescontrollerstub.h"
 
 using namespace mu::project;
 using namespace mu::modularity;
@@ -36,4 +37,5 @@ std::string ProjectModule::moduleName() const
 void ProjectModule::registerExports()
 {
     ioc()->registerExport<IProjectConfiguration>(moduleName(), new ProjectConfigurationStub());
+    ioc()->registerExport<IRecentFilesController>(moduleName(), new RecentFilesControllerStub());
 }

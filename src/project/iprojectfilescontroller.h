@@ -22,7 +22,7 @@
 #ifndef MU_PROJECT_IPROJECTFILESCONTROLLER_H
 #define MU_PROJECT_IPROJECTFILESCONTROLLER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "types/ret.h"
 #include "io/path.h"
 

@@ -26,8 +26,6 @@
 
 #include "draw/types/pen.h"
 
-#include "layout/tlayout.h"
-
 #include "accidental.h"
 #include "chord.h"
 #include "factory.h"
@@ -252,16 +250,6 @@ void Ambitus::setBottomTpc(int val, bool applyLogic)
     _bottomPitch= newPitch;
     _bottomTpc  = val;
     normalize();
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Ambitus::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

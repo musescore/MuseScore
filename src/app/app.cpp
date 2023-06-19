@@ -30,7 +30,7 @@
 #include <QThreadPool>
 #endif
 
-#include "appshell/view/internal/splashscreen.h"
+#include "appshell/view/internal/splashscreen/splashscreen.h"
 #include "appshell/view/dockwindow/docksetup.h"
 
 #include "modularity/ioc.h"
@@ -126,6 +126,8 @@ int App::run(int argc, char** argv)
     QGuiApplication::setDesktopFileName("org.musescore.MuseScore" MUSESCORE_INSTALL_SUFFIX ".desktop");
 #endif
 
+    commandLineParser.processBuiltinArgs(*app);
+
     // ====================================================
     // Setup modules: Resources, Exports, Imports, UiTypes
     // ====================================================
@@ -164,7 +166,13 @@ int App::run(int argc, char** argv)
 #ifdef MUE_BUILD_APPSHELL_MODULE
     SplashScreen* splashScreen = nullptr;
     if (runMode == framework::IApplication::RunMode::GuiApp) {
-        splashScreen = new SplashScreen();
+        if (multiInstancesProvider()->isMainInstance()) {
+            splashScreen = new SplashScreen(SplashScreen::Default);
+        } else {
+            QString fileName = io::filename(startupScenario()->startupScorePath(), true /* includingExtension */).toQString();
+            splashScreen = new SplashScreen(SplashScreen::ForNewInstance, fileName);
+        }
+
         splashScreen->show();
     }
 #endif
@@ -244,7 +252,7 @@ int App::run(int argc, char** argv)
         const QString mainQmlFile = "/platform/win/Main.qml";
 #elif defined(Q_OS_MACOS)
         const QString mainQmlFile = "/platform/mac/Main.qml";
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
         const QString mainQmlFile = "/platform/linux/Main.qml";
 #elif defined(Q_OS_WASM)
         const QString mainQmlFile = "/Main.wasm.qml";
@@ -371,7 +379,7 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, fra
 
     if (runMode == framework::IApplication::RunMode::ConsoleApp) {
         project::MigrationOptions migration;
-        migration.appVersion = mu::engraving::MSCVERSION;
+        migration.appVersion = mu::engraving::Constants::MSC_VERSION;
 
         //! NOTE Don't ask about migration in convert mode
         migration.isAskAgain = false;
@@ -391,7 +399,7 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, fra
 
 #ifdef MUE_BUILD_IMAGESEXPORT_MODULE
     imagesExportConfiguration()->setTrimMarginPixelSize(options.exportImage.trimMarginPixelSize);
-    imagesExportConfiguration()->setExportPngDpiResolution(options.exportImage.pngDpiResolution);
+    imagesExportConfiguration()->setExportPngDpiResolutionOverride(options.exportImage.pngDpiResolution);
 #endif
 
 #ifdef MUE_BUILD_VIDEOEXPORT_MODULE
@@ -402,7 +410,7 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, fra
 #endif
 
 #ifdef MUE_BUILD_IMPORTEXPORT_MODULE
-    audioExportConfiguration()->setExportMp3Bitrate(options.exportAudio.mp3Bitrate);
+    audioExportConfiguration()->setExportMp3BitrateOverride(options.exportAudio.mp3Bitrate);
     midiImportExportConfiguration()->setMidiImportOperationsFile(options.importMidi.operationsFile);
     guitarProConfiguration()->setLinkedTabStaffCreated(options.guitarPro.linkedTabStaffCreated);
     guitarProConfiguration()->setExperimental(options.guitarPro.experimental);
@@ -415,6 +423,10 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, fra
     if (runMode == framework::IApplication::RunMode::GuiApp) {
         startupScenario()->setStartupType(options.startup.type);
         startupScenario()->setStartupScorePath(options.startup.scorePath);
+    }
+
+    if (options.app.loggerLevel) {
+        globalModule.setLoggerLevel(options.app.loggerLevel.value());
     }
 }
 

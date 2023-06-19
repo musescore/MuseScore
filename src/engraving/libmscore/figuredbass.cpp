@@ -26,11 +26,9 @@
 
 #include "rw/xmlreader.h"
 
-#include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
 
 #include "style/textstyle.h"
-#include "layout/tlayout.h"
 
 #include "chord.h"
 #include "factory.h"
@@ -39,7 +37,6 @@
 #include "rest.h"
 #include "score.h"
 #include "segment.h"
-#include "system.h"
 
 #include "log.h"
 
@@ -85,16 +82,16 @@ static constexpr double FB_CONTLINE_THICKNESS         = 0.09375;   // (3/32sp) t
 
 // used for indexed access to parenthesis chars
 // (these is no normAccidToChar[], as accidentals may use mult. chars in normalized display):
-const Char FiguredBassItem::normParenthToChar[int(FiguredBassItem::Parenthesis::NUMOF)] =
+const Char FiguredBassItem::NORM_PARENTH_TO_CHAR[int(FiguredBassItem::Parenthesis::NUMOF)] =
 { 0, '(', ')', '[', ']' };
 
 FiguredBassItem::FiguredBassItem(FiguredBass* parent, int l)
     : EngravingItem(ElementType::INVALID, parent), m_ord(l)
 {
-    _prefix     = _suffix = Modifier::NONE;
-    _digit      = FBIDigitNone;
+    m_prefix     = m_suffix = Modifier::NONE;
+    m_digit      = FBIDigitNone;
     m_parenth[0]  = m_parenth[1] = m_parenth[2] = m_parenth[3] = m_parenth[4] = Parenthesis::NONE;
-    _contLine   = ContLine::NONE;
+    m_contLine   = ContLine::NONE;
     m_textWidth   = 0;
 }
 
@@ -102,17 +99,17 @@ FiguredBassItem::FiguredBassItem(const FiguredBassItem& item)
     : EngravingItem(item)
 {
     m_ord         = item.m_ord;
-    _prefix     = item._prefix;
-    _digit      = item._digit;
-    _suffix     = item._suffix;
+    m_prefix     = item.m_prefix;
+    m_digit      = item.m_digit;
+    m_suffix     = item.m_suffix;
     m_parenth[0]  = item.m_parenth[0];
     m_parenth[1]  = item.m_parenth[1];
     m_parenth[2]  = item.m_parenth[2];
     m_parenth[3]  = item.m_parenth[3];
     m_parenth[4]  = item.m_parenth[4];
-    _contLine   = item._contLine;
+    m_contLine   = item.m_contLine;
     m_textWidth   = item.m_textWidth;
-    _displayText= item._displayText;
+    m_displayText= item.m_displayText;
 }
 
 FiguredBassItem::~FiguredBassItem()
@@ -147,47 +144,47 @@ bool FiguredBassItem::parse(String& str)
     }
     parseParenthesis(str, 3);
     // check for a possible cont. line symbol(s)
-    _contLine = ContLine::NONE;                         // contLine
-    if (str.at(0) == u'-' || str.at(0) == u'_') {             // 1 symbol: simple continuation
-        _contLine = ContLine::SIMPLE;
+    m_contLine = ContLine::NONE;                         // contLine
+    if (!str.empty() && (str.at(0) == u'-' || str.at(0) == u'_')) {             // 1 symbol: simple continuation
+        m_contLine = ContLine::SIMPLE;
         str.remove(0, 1);
     }
-    while (str.at(0) == u'-' || str.at(0) == u'_') {          // more than 1 symbol: extended continuation
-        _contLine = ContLine::EXTENDED;
+    while (!str.empty() && (str.at(0) == u'-' || str.at(0) == u'_')) {          // more than 1 symbol: extended continuation
+        m_contLine = ContLine::EXTENDED;
         str.remove(0, 1);
     }
     parseParenthesis(str, 4);
 
     // remove useless parentheses, moving external parentheses toward central digit element
-    if (_prefix == Modifier::NONE && m_parenth[1] == Parenthesis::NONE) {
+    if (m_prefix == Modifier::NONE && m_parenth[1] == Parenthesis::NONE) {
         m_parenth[1] = m_parenth[0];
         m_parenth[0] = Parenthesis::NONE;
     }
-    if (_digit == FBIDigitNone && m_parenth[2] == Parenthesis::NONE) {
+    if (m_digit == FBIDigitNone && m_parenth[2] == Parenthesis::NONE) {
         m_parenth[2] = m_parenth[1];
         m_parenth[1] = Parenthesis::NONE;
     }
-    if (_contLine == ContLine::NONE && m_parenth[3] == Parenthesis::NONE) {
+    if (m_contLine == ContLine::NONE && m_parenth[3] == Parenthesis::NONE) {
         m_parenth[3] = m_parenth[4];
         m_parenth[4] = Parenthesis::NONE;
     }
-    if (_suffix == Modifier::NONE && m_parenth[2] == Parenthesis::NONE) {
+    if (m_suffix == Modifier::NONE && m_parenth[2] == Parenthesis::NONE) {
         m_parenth[2] = m_parenth[3];
         m_parenth[3] = Parenthesis::NONE;
     }
 
     // some checks:
     // if some extra input, str is not conformant
-    if (str.size()) {
+    if (!str.empty()) {
         return false;
     }
     // can't have BOTH prefix and suffix
     // prefix, digit, suffix and cont.line cannot be ALL empty
     // suffix cannot combine with empty digit
-    if ((_prefix != Modifier::NONE && _suffix != Modifier::NONE)
-        || (_prefix == Modifier::NONE && _digit == FBIDigitNone && _suffix == Modifier::NONE && _contLine == ContLine::NONE)
-        || ((_suffix == Modifier::CROSS || _suffix == Modifier::BACKSLASH || _suffix == Modifier::SLASH)
-            && _digit == FBIDigitNone)) {
+    if ((m_prefix != Modifier::NONE && m_suffix != Modifier::NONE)
+        || (m_prefix == Modifier::NONE && m_digit == FBIDigitNone && m_suffix == Modifier::NONE && m_contLine == ContLine::NONE)
+        || ((m_suffix == Modifier::CROSS || m_suffix == Modifier::BACKSLASH || m_suffix == Modifier::SLASH)
+            && m_digit == FBIDigitNone)) {
         return false;
     }
     return true;
@@ -205,7 +202,7 @@ bool FiguredBassItem::parse(String& str)
 
 int FiguredBassItem::parsePrefixSuffix(String& str, bool bPrefix)
 {
-    Modifier* dest  = bPrefix ? &_prefix : &_suffix;
+    Modifier* dest  = bPrefix ? &m_prefix : &m_suffix;
     bool done  = false;
     size_t size  = str.size();
     str = str.trimmed();
@@ -251,16 +248,16 @@ int FiguredBassItem::parsePrefixSuffix(String& str, bool bPrefix)
             break;
         // '\\' and '/' go into the suffix
         case '\\':
-            if (_suffix != Modifier::NONE) {            // cannot combine with any other accidental
+            if (m_suffix != Modifier::NONE) {            // cannot combine with any other accidental
                 return -1;
             }
-            _suffix = Modifier::BACKSLASH;
+            m_suffix = Modifier::BACKSLASH;
             break;
         case '/':
-            if (_suffix != Modifier::NONE) {            // cannot combine with any other accidental
+            if (m_suffix != Modifier::NONE) {            // cannot combine with any other accidental
                 return -1;
             }
-            _suffix = Modifier::SLASH;
+            m_suffix = Modifier::SLASH;
             break;
         default:                                     // any other char: no longer in prefix/suffix
             done = true;
@@ -290,15 +287,15 @@ int FiguredBassItem::parseDigit(String& str)
     size_t size   = str.size();
     str        = str.trimmed();
 
-    _digit = FBIDigitNone;
+    m_digit = FBIDigitNone;
 
     while (str.size()) {
         // any digit acceptable
         if (str.at(0) >= u'0' && str.at(0) <= u'9') {
-            if (_digit == FBIDigitNone) {
-                _digit = 0;
+            if (m_digit == FBIDigitNone) {
+                m_digit = 0;
             }
-            _digit = _digit * 10 + (str.at(0).unicode() - '0');
+            m_digit = m_digit * 10 + (str.at(0).unicode() - '0');
             str.remove(0, 1);
         }
         // anything else: no longer in digit part
@@ -321,6 +318,10 @@ int FiguredBassItem::parseDigit(String& str)
 
 int FiguredBassItem::parseParenthesis(String& str, int parenthIdx)
 {
+    if (str.empty()) {
+        return 0;
+    }
+
     char16_t c = str.at(0).unicode();
     Parenthesis code = Parenthesis::NONE;
     switch (c) {
@@ -358,11 +359,11 @@ String FiguredBassItem::normalizedText() const
 {
     String str;
     if (m_parenth[0] != Parenthesis::NONE) {
-        str.append(normParenthToChar[int(m_parenth[0])]);
+        str.append(NORM_PARENTH_TO_CHAR[int(m_parenth[0])]);
     }
 
-    if (_prefix != Modifier::NONE) {
-        switch (_prefix) {
+    if (m_prefix != Modifier::NONE) {
+        switch (m_prefix) {
         case Modifier::FLAT:
             str.append(u'b');
             break;
@@ -387,21 +388,21 @@ String FiguredBassItem::normalizedText() const
     }
 
     if (m_parenth[1] != Parenthesis::NONE) {
-        str.append(normParenthToChar[int(m_parenth[1])]);
+        str.append(NORM_PARENTH_TO_CHAR[int(m_parenth[1])]);
     }
 
     // digit
-    if (_digit != FBIDigitNone) {
-        str.append(String::number(_digit));
+    if (m_digit != FBIDigitNone) {
+        str.append(String::number(m_digit));
     }
 
     if (m_parenth[2] != Parenthesis::NONE) {
-        str.append(normParenthToChar[int(m_parenth[2])]);
+        str.append(NORM_PARENTH_TO_CHAR[int(m_parenth[2])]);
     }
 
     // suffix
-    if (_suffix != Modifier::NONE) {
-        switch (_suffix) {
+    if (m_suffix != Modifier::NONE) {
+        switch (m_suffix) {
         case Modifier::FLAT:
             str.append(u'b');
             break;
@@ -432,31 +433,19 @@ String FiguredBassItem::normalizedText() const
     }
 
     if (m_parenth[3] != Parenthesis::NONE) {
-        str.append(normParenthToChar[int(m_parenth[3])]);
+        str.append(NORM_PARENTH_TO_CHAR[int(m_parenth[3])]);
     }
-    if (_contLine > ContLine::NONE) {
+    if (m_contLine > ContLine::NONE) {
         str.append('_');
-        if (_contLine > ContLine::SIMPLE) {
+        if (m_contLine > ContLine::SIMPLE) {
             str.append('_');
         }
     }
     if (m_parenth[4] != Parenthesis::NONE) {
-        str.append(normParenthToChar[int(m_parenth[4])]);
+        str.append(NORM_PARENTH_TO_CHAR[int(m_parenth[4])]);
     }
 
     return str;
-}
-
-//---------------------------------------------------------
-//   FiguredBassItem layout()
-//    creates the display text (set as element text) and computes
-//    the horiz. offset needed to align the right part as well as the vert. offset
-//---------------------------------------------------------
-
-void FiguredBassItem::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -484,7 +473,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
 
     // continuation line
     double lineEndX = 0.0;
-    if (_contLine != ContLine::NONE) {
+    if (m_contLine != ContLine::NONE) {
         double lineStartX  = m_textWidth;                           // by default, line starts right after text
         if (lineStartX > 0.0) {
             lineStartX += _spatium * FB_CONTLINE_LEFT_PADDING;          // if some text, give some room after it
@@ -495,7 +484,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
         }
 
         // if extended cont.line and no closing parenthesis: look at next FB element
-        if (_contLine > ContLine::SIMPLE && m_parenth[4] == Parenthesis::NONE) {
+        if (m_contLine > ContLine::SIMPLE && m_parenth[4] == Parenthesis::NONE) {
             FiguredBass* nextFB;
             // if there is a contiguous FB element
             if ((nextFB=figuredBass()->nextFiguredBass()) != 0) {
@@ -536,13 +525,13 @@ PropertyValue FiguredBassItem::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::FBPREFIX:
-        return int(_prefix);
+        return int(m_prefix);
     case Pid::FBDIGIT:
-        return _digit;
+        return m_digit;
     case Pid::FBSUFFIX:
-        return int(_suffix);
+        return int(m_suffix);
     case Pid::FBCONTINUATIONLINE:
-        return int(_contLine);
+        return int(m_contLine);
     case Pid::FBPARENTHESIS1:
         return int(m_parenth[0]);
     case Pid::FBPARENTHESIS2:
@@ -567,22 +556,22 @@ bool FiguredBassItem::setProperty(Pid propertyId, const PropertyValue& v)
         if (val < int(Modifier::NONE) || val >= int(Modifier::NUMOF)) {
             return false;
         }
-        _prefix = (Modifier)val;
+        m_prefix = (Modifier)val;
         break;
     case Pid::FBDIGIT:
         if (val < 1 || val > 9) {
             return false;
         }
-        _digit = val;
+        m_digit = val;
         break;
     case Pid::FBSUFFIX:
         if (val < int(Modifier::NONE) || val >= int(Modifier::NUMOF)) {
             return false;
         }
-        _suffix = (Modifier)val;
+        m_suffix = (Modifier)val;
         break;
     case Pid::FBCONTINUATIONLINE:
-        _contLine = (ContLine)val;
+        m_contLine = (ContLine)val;
         break;
     case Pid::FBPARENTHESIS1:
         if (val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF)) {
@@ -636,6 +625,12 @@ PropertyValue FiguredBassItem::propertyDefault(Pid id) const
     }
 }
 
+void FiguredBassItem::regenerateDisplayText()
+{
+    // re-generate displayText
+    layout()->layoutItem(this);
+}
+
 //---------------------------------------------------------
 //   UNDOABLE PROPERTY SETTERS
 //---------------------------------------------------------
@@ -645,10 +640,10 @@ void FiguredBassItem::undoSetPrefix(Modifier pref)
     if (pref <= Modifier::CROSS) {
         undoChangeProperty(Pid::FBPREFIX, (int)pref);
         // if setting some prefix and there is a suffix already, clear suffix
-        if (pref != Modifier::NONE && _suffix != Modifier::NONE) {
+        if (pref != Modifier::NONE && m_suffix != Modifier::NONE) {
             undoChangeProperty(Pid::FBSUFFIX, int(Modifier::NONE));
         }
-        layout();                         // re-generate displayText
+        regenerateDisplayText();
     }
 }
 
@@ -656,7 +651,7 @@ void FiguredBassItem::undoSetDigit(int digit)
 {
     if (digit >= 0 && digit <= 9) {
         undoChangeProperty(Pid::FBDIGIT, digit);
-        layout();                         // re-generate displayText
+        regenerateDisplayText();
     }
 }
 
@@ -664,46 +659,46 @@ void FiguredBassItem::undoSetSuffix(Modifier suff)
 {
     undoChangeProperty(Pid::FBSUFFIX, int(suff));
     // if setting some suffix and there is a prefix already, clear prefix
-    if (suff != Modifier::NONE && _prefix != Modifier::NONE) {
+    if (suff != Modifier::NONE && m_prefix != Modifier::NONE) {
         undoChangeProperty(Pid::FBPREFIX, int(Modifier::NONE));
     }
-    layout();                       // re-generate displayText
+    regenerateDisplayText();
 }
 
 void FiguredBassItem::undoSetContLine(ContLine val)
 {
     undoChangeProperty(Pid::FBCONTINUATIONLINE, int(val));
-    layout();                       // re-generate displayText
+    regenerateDisplayText();
 }
 
 void FiguredBassItem::undoSetParenth1(Parenthesis par)
 {
     undoChangeProperty(Pid::FBPARENTHESIS1, int(par));
-    layout();                       // re-generate displayText
+    regenerateDisplayText();
 }
 
 void FiguredBassItem::undoSetParenth2(Parenthesis par)
 {
     undoChangeProperty(Pid::FBPARENTHESIS2, int(par));
-    layout();                       // re-generate displayText
+    regenerateDisplayText();
 }
 
 void FiguredBassItem::undoSetParenth3(Parenthesis par)
 {
     undoChangeProperty(Pid::FBPARENTHESIS3, int(par));
-    layout();                       // re-generate displayText
+    regenerateDisplayText();
 }
 
 void FiguredBassItem::undoSetParenth4(Parenthesis par)
 {
     undoChangeProperty(Pid::FBPARENTHESIS4, int(par));
-    layout();                       // re-generate displayText
+    regenerateDisplayText();
 }
 
 void FiguredBassItem::undoSetParenth5(Parenthesis par)
 {
     undoChangeProperty(Pid::FBPARENTHESIS5, int(par));
-    layout();                       // re-generate displayText
+    regenerateDisplayText();
 }
 
 //---------------------------------------------------------
@@ -712,13 +707,13 @@ void FiguredBassItem::undoSetParenth5(Parenthesis par)
 
 bool FiguredBassItem::startsWithParenthesis() const
 {
-    if (_prefix != Modifier::NONE) {
+    if (m_prefix != Modifier::NONE) {
         return m_parenth[0] != Parenthesis::NONE;
     }
-    if (_digit != FBIDigitNone) {
+    if (m_digit != FBIDigitNone) {
         return m_parenth[1] != Parenthesis::NONE;
     }
-    if (_suffix != Modifier::NONE) {
+    if (m_suffix != Modifier::NONE) {
         return m_parenth[2] != Parenthesis::NONE;
     }
     return false;
@@ -786,144 +781,6 @@ Sid FiguredBass::getPropertyStyle(Pid id) const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void FiguredBass::layout()
-{
-    // VERTICAL POSITION:
-    const double y = score()->styleD(Sid::figuredBassYOffset) * spatium();
-    setPos(PointF(0.0, y));
-
-    // BOUNDING BOX and individual item layout (if required)
-    TextBase::layout1();   // prepare structs and data expected by Text methods
-    // if element could be parsed into items, layout each element
-    // Items list will be empty in edit mode (see FiguredBass::startEdit).
-    // TODO: consider disabling specific layout in case text style is changed (tid() != TextStyleName::FIGURED_BASS).
-    if (m_items.size() > 0) {
-        layoutLines();
-        bbox().setRect(0, 0, _lineLengths.at(0), 0);
-        // layout each item and enlarge bbox to include items bboxes
-        for (FiguredBassItem* item : m_items) {
-            item->layout();
-            addbbox(item->bbox().translated(item->pos()));
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   layoutLines
-//
-//    lays out the duration indicator line(s), filling the _lineLengths array
-//    and the length of printed lines (used by continuation lines)
-//---------------------------------------------------------
-
-void FiguredBass::layoutLines()
-{
-    if (_ticks <= Fraction(0, 1) || !segment()) {
-        _lineLengths.resize(1);                             // be sure to always have
-        _lineLengths[0] = 0;                                // at least 1 item in array
-        return;
-    }
-
-    ChordRest* lastCR  = nullptr;                         // the last ChordRest of this
-    Segment* nextSegm = nullptr;                          // the Segment beyond this' segment
-    Fraction nextTick = segment()->tick() + _ticks;       // the tick beyond this' duration
-
-    // locate the measure containing the last tick of this; it is either:
-    // the same measure containing nextTick, if nextTick is not the first tick of a measure
-    //    (and line should stop right before it)
-    // or the previous measure, if nextTick is the first tick of a measure
-    //    (and line should stop before any measure terminal segment (bar, clef, ...) )
-
-    Measure* m = score()->tick2measure(nextTick - Fraction::fromTicks(1));
-    if (m) {
-        // locate the first segment (of ANY type) right after this' last tick
-        for (nextSegm = m->first(SegmentType::All); nextSegm; nextSegm = nextSegm->next()) {
-            if (nextSegm->tick() >= nextTick) {
-                break;
-            }
-        }
-        // locate the last ChordRest of this
-        if (nextSegm) {
-            track_idx_t startTrack = trackZeroVoice(track());
-            track_idx_t endTrack = startTrack + VOICES;
-            for (const Segment* seg = nextSegm->prev1(); seg; seg = seg->prev1()) {
-                for (track_idx_t t = startTrack; t < endTrack; ++t) {
-                    EngravingItem* el = seg->element(t);
-                    if (el && el->isChordRest()) {
-                        lastCR = toChordRest(el);
-                        break;
-                    }
-                }
-                if (lastCR) {
-                    break;
-                }
-            }
-        }
-    }
-    if (!m || !nextSegm) {
-        LOGD("FiguredBass layout: no segment found for tick %d", nextTick.ticks());
-        _lineLengths.resize(1);                             // be sure to always have
-        _lineLengths[0] = 0;                                // at least 1 item in array
-        return;
-    }
-
-    // get length of printed lines from horiz. page position of lastCR
-    // (enter a bit 'into' the ChordRest for clarity)
-    _printedLineLength = lastCR ? lastCR->pageX() - pageX() + 1.5 * spatium() : 3 * spatium();
-
-    // get duration indicator line(s) from page position of nextSegm
-    const std::vector<System*>& systems = score()->systems();
-    System* s1  = segment()->measure()->system();
-    System* s2  = nextSegm->measure()->system();
-    system_idx_t sysIdx1 = mu::indexOf(systems, s1);
-    system_idx_t sysIdx2 = mu::indexOf(systems, s2);
-
-    if (sysIdx2 == mu::nidx || sysIdx2 < sysIdx1) {
-        sysIdx2 = sysIdx1;
-        nextSegm = segment()->next1();
-        // TODO
-        // During layout of figured bass next systems' numbers may be still
-        // undefined (then sysIdx2 == mu::nidx) or change in the future.
-        // A layoutSystem() approach similar to that for spanners should
-        // probably be implemented.
-    }
-
-    system_idx_t i;
-    int len;
-    size_t segIdx = 0;
-    for (i = sysIdx1, segIdx = 0; i <= sysIdx2; ++i, ++segIdx) {
-        len = 0;
-        if (sysIdx1 == sysIdx2 || i == sysIdx1) {
-            // single line
-            len = nextSegm->pageX() - pageX() - 4;               // stop 4 raster units before next segm
-        } else if (i == sysIdx1) {
-            // initial line
-            double w   = s1->staff(staffIdx())->bbox().right();
-            double x   = s1->pageX() + w;
-            len = x - pageX();
-        } else if (i > 0 && i != sysIdx2) {
-            // middle line
-            LOGD("FiguredBass: duration indicator middle line not implemented");
-        } else if (i == sysIdx2) {
-            // end line
-            LOGD("FiguredBass: duration indicator end line not implemented");
-        }
-        // store length item, reusing array items if already present
-        if (_lineLengths.size() <= segIdx) {
-            _lineLengths.push_back(len);
-        } else {
-            _lineLengths[segIdx] = len;
-        }
-    }
-    // if more array items than needed, truncate array
-    if (_lineLengths.size() > segIdx) {
-        _lineLengths.resize(segIdx);
-    }
-}
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -932,7 +789,7 @@ void FiguredBass::draw(mu::draw::Painter* painter) const
     using namespace mu::draw;
     // if not printing, draw duration line(s)
     if (!score()->printing() && score()->showUnprintable()) {
-        for (double len : _lineLengths) {
+        for (double len : m_lineLengths) {
             if (len > 0) {
                 painter->setPen(Pen(engravingConfiguration()->formattingMarksColor(), 3));
                 painter->drawLine(0.0, -2, len, -2);              // -2: 2 rast. un. above digits
@@ -965,13 +822,17 @@ void FiguredBass::startEdit(EditData& ed)
 {
     DeleteAll(m_items);
     m_items.clear();
-    layout1();   // re-layout without F.B.-specific formatting.
+    layout()->layoutText1(this);   // re-layout without F.B.-specific formatting.
     TextBase::startEdit(ed);
 }
 
 bool FiguredBass::isEditAllowed(EditData& ed) const
 {
     if (isTextNavigationKey(ed.key, ed.modifiers)) {
+        return false;
+    }
+
+    if ((ed.key == Key_Left || ed.key == Key_Right) && (ed.modifiers & ControlModifier)) {
         return false;
     }
 
@@ -1057,11 +918,11 @@ void FiguredBass::setVisible(bool flag)
 
 FiguredBass* FiguredBass::nextFiguredBass() const
 {
-    if (_ticks <= Fraction(0, 1)) {                                      // if _ticks unset, no clear idea of when 'this' ends
+    if (m_ticks <= Fraction(0, 1)) {                                      // if _ticks unset, no clear idea of when 'this' ends
         return 0;
     }
     Segment* nextSegm;                                   // the Segment beyond this' segment
-    Fraction nextTick = segment()->tick() + _ticks;      // the tick beyond this' duration
+    Fraction nextTick = segment()->tick() + m_ticks;      // the tick beyond this' duration
 
     // locate the ChordRest segment right after this' end
     nextSegm = score()->tick2segment(nextTick, true, SegmentType::ChordRest);

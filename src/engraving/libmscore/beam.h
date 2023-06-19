@@ -23,10 +23,13 @@
 #ifndef __BEAM_H__
 #define __BEAM_H__
 
-#include "layout/beamtremololayout.h"
+#include "layout/v0/beamtremololayout.h"
 #include "engravingitem.h"
-#include "durationtype.h"
 #include "property.h"
+
+namespace mu::engraving::layout::v0 {
+class BeamLayout;
+}
 
 namespace mu::engraving {
 class Chord;
@@ -84,55 +87,6 @@ class Beam final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Beam)
     DECLARE_CLASSOF(ElementType::BEAM)
 
-    friend class BeamLayout;
-
-    std::vector<ChordRest*> _elements;          // must be sorted by tick
-    std::vector<BeamSegment*> _beamSegments;
-    DirectionV _direction    { DirectionV::AUTO };
-
-    bool _up                { true };
-
-    bool _userModified[2]   { false };                // 0: auto/down  1: up
-    bool _isGrace           { false };
-    bool _cross             { false };
-
-    double _grow1            { 1.0f };                     // define "feather" beams
-    double _grow2            { 1.0f };
-    double _beamDist         { 0.0f };
-    int _beamSpacing        { 3 }; // how far apart beams are spaced in quarter spaces
-    double _beamWidth        { 0.0f }; // how wide each beam is
-    mu::PointF _startAnchor;
-    mu::PointF _endAnchor;
-    BeamTremoloLayout _layoutInfo;
-
-    // for tabs
-    bool _isBesideTabStaff  { false };
-    StaffType const* _tab         { nullptr };
-
-    std::vector<BeamFragment*> fragments;       // beam splits across systems
-
-    mutable int _id         { 0 };          // used in read()/write()
-
-    int _minMove             { 0 };                // set in layout1()
-    int _maxMove             { 0 };
-
-    bool _noSlope = false;
-    double _slope             { 0.0 };
-
-    std::vector<int> _notes;
-    std::vector<TremAnchor> _tremAnchors;
-
-    friend class Factory;
-    friend class BeamSegment;
-    Beam(System* parent);
-    Beam(const Beam&);
-
-    void addChordRest(ChordRest* a);
-    void removeChordRest(ChordRest* a);
-
-    const Chord* findChordWithCustomStemDirection() const;
-    void setTremAnchors();
-
 public:
     ~Beam();
 
@@ -158,10 +112,7 @@ public:
 
     System* system() const { return toSystem(explicitParent()); }
 
-    void layout() override;
-    void layoutIfNeed();
-
-    PointF chordBeamAnchor(const ChordRest* chord, BeamTremoloLayout::ChordBeamAnchorType anchorType) const;
+    PointF chordBeamAnchor(const ChordRest* chord, layout::v0::BeamTremoloLayout::ChordBeamAnchorType anchorType) const;
     double chordBeamAnchorY(const ChordRest* chord) const;
 
     const std::vector<ChordRest*>& elements() const { return _elements; }
@@ -245,9 +196,58 @@ public:
     void addBeamFragment(BeamFragment* f) { fragments.push_back(f); }
 
 private:
+
+    friend class layout::v0::BeamLayout;
+    friend class Factory;
+    friend class BeamSegment;
+    Beam(System* parent);
+    Beam(const Beam&);
+
     void initBeamEditData(EditData& ed);
 
     static constexpr std::array _maxSlopes = { 0, 1, 2, 3, 4, 5, 6, 7 };
+
+    void addChordRest(ChordRest* a);
+    void removeChordRest(ChordRest* a);
+
+    const Chord* findChordWithCustomStemDirection() const;
+    void setTremAnchors();
+
+    std::vector<ChordRest*> _elements;          // must be sorted by tick
+    std::vector<BeamSegment*> _beamSegments;
+    DirectionV _direction    { DirectionV::AUTO };
+
+    bool _up                { true };
+
+    bool _userModified[2]   { false };                // 0: auto/down  1: up
+    bool _isGrace           { false };
+    bool _cross             { false };
+
+    double _grow1            { 1.0f };                     // define "feather" beams
+    double _grow2            { 1.0f };
+    double _beamDist         { 0.0f };
+    int _beamSpacing        { 3 }; // how far apart beams are spaced in quarter spaces
+    double _beamWidth        { 0.0f }; // how wide each beam is
+    mu::PointF _startAnchor;
+    mu::PointF _endAnchor;
+    layout::v0::BeamTremoloLayout _layoutInfo;
+
+    // for tabs
+    bool _isBesideTabStaff  { false };
+    StaffType const* _tab         { nullptr };
+
+    std::vector<BeamFragment*> fragments;       // beam splits across systems
+
+    mutable int _id         { 0 };          // used in read()/write()
+
+    int _minMove             { 0 };                // set in layout1()
+    int _maxMove             { 0 };
+
+    bool _noSlope = false;
+    double _slope             { 0.0 };
+
+    std::vector<int> _notes;
+    std::vector<TremAnchor> _tremAnchors;
 };
 } // namespace mu::engraving
 #endif

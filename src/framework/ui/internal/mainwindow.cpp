@@ -25,6 +25,7 @@
 #include <QWindow>
 
 #include "view/mainwindowbridge.h"
+#include "async/notification.h"
 
 #include "log.h"
 
@@ -39,6 +40,10 @@ void MainWindow::init(MainWindowBridge* bridge)
     }
 
     m_bridge = bridge;
+
+    m_bridge->isFullScreenChanged().onNotify(this, [this]() {
+        m_isFullScreenChanged.notify();
+    });
 }
 
 void MainWindow::deinit()
@@ -86,4 +91,9 @@ void MainWindow::toggleFullScreen()
 QScreen* MainWindow::screen() const
 {
     return m_bridge ? m_bridge->screen() : nullptr;
+}
+
+mu::async::Notification MainWindow::isFullScreenChanged() const
+{
+    return m_isFullScreenChanged;
 }

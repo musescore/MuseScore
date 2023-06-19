@@ -24,8 +24,6 @@
 
 #include "translation.h"
 
-#include "layout/tlayout.h"
-
 #include "beam.h"
 #include "chord.h"
 #include "measure.h"
@@ -98,16 +96,6 @@ PlacementV Fingering::calculatePlacement() const
     bool voices  = chord->measure()->hasVoices(staff->idx(), chord->tick(), chord->actualTicks());
     bool below   = voices ? !chord->up() : (nstaves > 1) && (staff->rstaff() == nstaves - 1);
     return below ? PlacementV::BELOW : PlacementV::ABOVE;
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Fingering::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

@@ -60,26 +60,6 @@ HarmonicMarkSegment::HarmonicMarkSegment(HarmonicMark* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void HarmonicMarkSegment::layout()
-{
-    const StaffType* stType = staffType();
-
-    _skipDraw = false;
-    if (stType
-        && (!stType->isTabStaff()
-            || stType->isHiddenElementOnTab(score(), Sid::harmonicMarkShowTabCommon, Sid::harmonicMarkShowTabSimple))) {
-        _skipDraw = true;
-        return;
-    }
-
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
-}
-
-//---------------------------------------------------------
 //   HarmonicMark
 //---------------------------------------------------------
 

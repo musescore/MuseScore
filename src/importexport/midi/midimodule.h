@@ -22,9 +22,12 @@
 #ifndef MU_IMPORTEXPORT_MIDIMODULE_H
 #define MU_IMPORTEXPORT_MIDIMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::midi {
+class MidiConfiguration;
 class MidiModule : public modularity::IModuleSetup
 {
 public:
@@ -33,6 +36,9 @@ public:
     void registerExports() override;
     void resolveImports() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<MidiConfiguration> m_configuration;
 };
 }
 

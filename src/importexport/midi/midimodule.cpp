@@ -35,8 +35,6 @@
 using namespace mu::iex::midi;
 using namespace mu::project;
 
-static std::shared_ptr<MidiConfiguration> s_configuration = std::make_shared<MidiConfiguration>();
-
 std::string MidiModule::moduleName() const
 {
     return "iex_midi";
@@ -44,7 +42,9 @@ std::string MidiModule::moduleName() const
 
 void MidiModule::registerExports()
 {
-    modularity::ioc()->registerExport<IMidiImportExportConfiguration>(moduleName(), s_configuration);
+    m_configuration = std::make_shared<MidiConfiguration>();
+
+    modularity::ioc()->registerExport<IMidiImportExportConfiguration>(moduleName(), m_configuration);
 }
 
 void MidiModule::resolveImports()
@@ -66,5 +66,5 @@ void MidiModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
-    s_configuration->init();
+    m_configuration->init();
 }

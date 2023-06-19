@@ -40,11 +40,11 @@ class GeneralPreferencesModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(appshell, framework::IInteractive, interactive)
-    INJECT(appshell, languages::ILanguagesConfiguration, languagesConfiguration)
-    INJECT(appshell, languages::ILanguagesService, languagesService)
-    INJECT(appshell, shortcuts::IShortcutsConfiguration, shortcutsConfiguration)
-    INJECT(appshell, project::IProjectConfiguration, projectConfiguration)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(languages::ILanguagesConfiguration, languagesConfiguration)
+    INJECT(languages::ILanguagesService, languagesService)
+    INJECT(shortcuts::IShortcutsConfiguration, shortcutsConfiguration)
+    INJECT(project::IProjectConfiguration, projectConfiguration)
 
     Q_PROPERTY(QVariantList languages READ languages NOTIFY languagesChanged)
     Q_PROPERTY(QString currentLanguageCode READ currentLanguageCode WRITE setCurrentLanguageCode NOTIFY currentLanguageCodeChanged)

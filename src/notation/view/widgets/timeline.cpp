@@ -1299,24 +1299,21 @@ void Timeline::keyMeta(Segment* seg, int* stagger, int pos)
 
         Key globalKey;
         if (seg) {
-            globalKey = stave->key(seg->tick());
+            globalKey = stave->concertKey(seg->tick());
         } else {
-            globalKey = stave->key(Fraction(0, 1));
+            globalKey = stave->concertKey(Fraction(0, 1));
         }
         if (currKeySig) {
             if (currKeySig->generated()) {
                 return;
             }
-            globalKey = currKeySig->key();
+            globalKey = currKeySig->concertKey();
         }
 
         if (currKeySig && currKeySig->isAtonal()) {
             globalKey = Key::INVALID;
         } else if (currKeySig && currKeySig->isCustom()) {
             globalKey = Key::NUM_OF;
-        } else {
-            const Interval currInterval = stave->part()->instrument()->transpose();
-            globalKey = transposeKey(globalKey, currInterval, stave->part()->preferSharpFlat());
         }
 
         std::map<Key, int>::iterator it = keyFrequencies.find(globalKey);
@@ -1460,7 +1457,10 @@ void Timeline::jumpMarkerMeta(Segment* seg, int* stagger, int pos)
         measure = marker->measure();
         if (marker->markerType() == MarkerType::FINE
             || marker->markerType() == MarkerType::TOCODA
-            || marker->markerType() == MarkerType::TOCODASYM) {
+            || marker->markerType() == MarkerType::TOCODASYM
+            || marker->markerType() == MarkerType::DA_CODA
+            || marker->markerType() == MarkerType::DA_DBLCODA
+            ) {
             elementType = ElementType::MARKER;
             std::get<2>(_repeatInfo) = std::get<3>(_repeatInfo);
             std::get<3>(_repeatInfo) = nullptr;

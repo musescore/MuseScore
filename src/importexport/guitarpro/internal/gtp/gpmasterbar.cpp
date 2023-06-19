@@ -1,6 +1,4 @@
 #include "gpmasterbar.h"
 
-namespace mu::engraving {
-namespace  {
-}
-}
+namespace mu::iex::guitarpro {
+} // namespace mu::iex::guitarpro

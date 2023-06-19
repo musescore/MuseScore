@@ -27,6 +27,10 @@
 
 #include "global/allocator.h"
 
+namespace mu::engraving::layout::v0 {
+class SlurTieLayout;
+}
+
 namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ SlurSegment
@@ -75,8 +79,8 @@ class Slur final : public SlurTie
     OBJECT_ALLOCATOR(engraving, Slur)
     DECLARE_CLASSOF(ElementType::SLUR)
 
-    void slurPosChord(SlurPos*);
-    int _sourceStemArrangement = -1;
+public:
+
     struct StemFloated
     {
         bool left = false;
@@ -87,23 +91,12 @@ class Slur final : public SlurTie
             right = false;
         }
     };
-    StemFloated _stemFloated; // end point position is attached to stem but floated towards the note
 
-    friend class Factory;
-    Slur(EngravingItem* parent);
-    Slur(const Slur&);
-
-public:
     ~Slur() {}
 
     Slur* clone() const override { return new Slur(*this); }
 
-    void layout() override;
-    SpannerSegment* layoutSystem(System*) override;
     void setTrack(track_idx_t val) override;
-    void slurPos(SlurPos*) override;
-    void fixArticulations(PointF& pt, Chord* c, double up, bool stemSide);
-    void computeUp();
 
     void setSourceStemArrangement(int v) { _sourceStemArrangement = v; }
 
@@ -124,6 +117,19 @@ public:
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
 
     static int calcStemArrangement(EngravingItem* start, EngravingItem* end);
+    static bool isDirectionMixture(Chord* c1, Chord* c2);
+
+private:
+    void slurPosChord(SlurPos*);
+
+    friend class layout::v0::SlurTieLayout;
+    friend class Factory;
+    Slur(EngravingItem* parent);
+    Slur(const Slur&);
+
+    int _sourceStemArrangement = -1;
+
+    StemFloated _stemFloated; // end point position is attached to stem but floated towards the note
 };
 } // namespace mu::engraving
 #endif

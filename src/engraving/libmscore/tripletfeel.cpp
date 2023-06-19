@@ -126,27 +126,27 @@ void TripletFeel::setTripletProperty()
 
     switch (m_tripletFeelType) {
     case TripletFeelType::TRIPLET_8TH:
-        setSwingParameters(Constants::division / eightDivision, tripletRatio);
+        setSwingParameters(Constants::DIVISION / eightDivision, tripletRatio);
         break;
 
     case TripletFeelType::TRIPLET_16TH:
-        setSwingParameters(Constants::division / sixteenthDivision, tripletRatio);
+        setSwingParameters(Constants::DIVISION / sixteenthDivision, tripletRatio);
         break;
 
     case TripletFeelType::DOTTED_8TH:
-        setSwingParameters(Constants::division / eightDivision, dottedRatio);
+        setSwingParameters(Constants::DIVISION / eightDivision, dottedRatio);
         break;
 
     case TripletFeelType::DOTTED_16TH:
-        setSwingParameters(Constants::division / sixteenthDivision, dottedRatio);
+        setSwingParameters(Constants::DIVISION / sixteenthDivision, dottedRatio);
         break;
 
     case TripletFeelType::SCOTTISH_8TH:
-        setSwingParameters(Constants::division / eightDivision, scottishRatio);
+        setSwingParameters(Constants::DIVISION / eightDivision, scottishRatio);
         break;
 
     case TripletFeelType::SCOTTISH_16TH:
-        setSwingParameters(Constants::division / sixteenthDivision, scottishRatio);
+        setSwingParameters(Constants::DIVISION / sixteenthDivision, scottishRatio);
         break;
 
     case TripletFeelType::NONE:

@@ -22,7 +22,7 @@
 #ifndef MU_API_IAPIREGISTER_H
 #define MU_API_IAPIREGISTER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "iapiengine.h"
 #include "apiobject.h"
 

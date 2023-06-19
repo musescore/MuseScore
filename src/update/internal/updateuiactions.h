@@ -32,7 +32,7 @@
 namespace mu::update {
 class UpdateUiActions : public ui::IUiActionsModule
 {
-    INJECT(update, context::IUiContextResolver, uicontextResolver)
+    INJECT(context::IUiContextResolver, uicontextResolver)
 
 public:
     UpdateUiActions(std::shared_ptr<UpdateActionController> controller);

@@ -91,7 +91,7 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
 
 int TremoloRenderer::stepDurationTicks(const Chord* chord, const Tremolo* tremolo)
 {
-    int ticks = Constants::division / (1 << (chord->beams() + tremolo->lines()));
+    int ticks = Constants::DIVISION / (1 << (chord->beams() + tremolo->lines()));
     if (ticks <= 0) {
         return 1;
     }

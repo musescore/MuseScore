@@ -26,30 +26,32 @@
 #include <memory>
 #include "modulesioc.h"
 
-#define INJECT(Module, Interface, getter) \
+#define INJECT(Interface, getter) \
 private: \
-    mutable std::shared_ptr<Interface> _##getter = nullptr; \
+    mutable std::shared_ptr<Interface> m_##getter = nullptr; \
 public: \
     std::shared_ptr<Interface> getter() const {  \
-        if (!_##getter) { \
-            _##getter = mu::modularity::ioc()->resolve<Interface>(#Module); \
+        if (!m_##getter) { \
+            static const std::string_view sig(IOC_FUNC_SIG); \
+            m_##getter = mu::modularity::ioc()->resolve<Interface>(mu::modularity::moduleNameBySig(sig), sig); \
         } \
-        return _##getter; \
+        return m_##getter; \
     } \
-    void set##getter(std::shared_ptr<Interface> impl) { _##getter = impl; } \
+    void set##getter(std::shared_ptr<Interface> impl) { m_##getter = impl; } \
 
-#define INJECT_STATIC(Module, Interface, getter) \
+#define INJECT_STATIC(Interface, getter) \
 public: \
     static std::shared_ptr<Interface>& getter() {  \
-        static std::shared_ptr<Interface> _static##getter = nullptr; \
-        if (!_static##getter) { \
-            _static##getter = mu::modularity::ioc()->resolve<Interface>(#Module); \
+        static std::shared_ptr<Interface> s_##getter = nullptr; \
+        if (!s_##getter) { \
+            static const std::string_view sig(IOC_FUNC_SIG); \
+            s_##getter = mu::modularity::ioc()->resolve<Interface>(mu::modularity::moduleNameBySig(sig), sig); \
         } \
-        return _static##getter; \
+        return s_##getter; \
     } \
     static void set##getter(std::shared_ptr<Interface> impl) { \
-        std::shared_ptr<Interface>& _static##getter = getter(); \
-        _static##getter = impl; \
+        std::shared_ptr<Interface>& s_##getter = getter(); \
+        s_##getter = impl; \
     } \
 
 namespace mu::modularity {

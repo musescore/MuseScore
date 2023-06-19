@@ -29,6 +29,14 @@ namespace mu::engraving {
 class Measure;
 class Segment;
 
+struct Dyn {
+    DynamicType type;
+    int velocity;        ///< associated midi velocity (0-127, -1 = none)
+    int changeInVelocity;
+    bool accent;         ///< if true add velocity to current chord velocity
+    const char* text;    // utf8 text of dynamic
+};
+
 //-----------------------------------------------------------------------------
 //   @@ Dynamic
 ///    dynamics marker; determines midi velocity
@@ -42,48 +50,25 @@ class Dynamic final : public TextBase
     DECLARE_CLASSOF(ElementType::DYNAMIC)
 
 public:
-
     struct ChangeSpeedItem {
         DynamicSpeed speed;
         const char* name;
     };
 
-private:
-
-    friend class v0::TLayout;
-
-    DynamicType _dynamicType;
-    Expression* _snappedExpression = nullptr;
-
-    M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)
-    M_PROPERTY(double, dynamicsSize, setDynamicsSize)
-    M_PROPERTY(bool, centerOnNotehead, setCenterOnNotehead)
-
-    mutable mu::PointF dragOffset;
-    int _velocity;       // associated midi velocity 0-127
-    DynamicRange _dynRange;     // STAFF, PART, SYSTEM
-
-    int _changeInVelocity         { 128 };
-    DynamicSpeed _velChangeSpeed         { DynamicSpeed::NORMAL };
-
-    mu::RectF drag(EditData&) override;
-
-public:
     Dynamic(Segment* parent);
     Dynamic(const Dynamic&);
     Dynamic* clone() const override { return new Dynamic(*this); }
     Segment* segment() const { return (Segment*)explicitParent(); }
     Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
-    void setDynamicType(DynamicType val) { _dynamicType = val; }
+    void setDynamicType(DynamicType val) { m_dynamicType = val; }
     void setDynamicType(const String&);
 
-    DynamicType dynamicType() const { return _dynamicType; }
-    int subtype() const override { return static_cast<int>(_dynamicType); }
+    DynamicType dynamicType() const { return m_dynamicType; }
+    int subtype() const override { return static_cast<int>(m_dynamicType); }
     TranslatableString subtypeUserName() const override;
     String translatedSubtypeUserName() const override;
 
-    void layout() override;
     double customTextOffset();
 
     bool isEditable() const override { return true; }
@@ -91,10 +76,10 @@ public:
     void endEdit(EditData&) override;
     void reset() override;
 
-    void setVelocity(int v) { _velocity = v; }
+    void setVelocity(int v) { m_velocity = v; }
     int velocity() const;
-    DynamicRange dynRange() const { return _dynRange; }
-    void setDynRange(DynamicRange t) { _dynRange = t; }
+    DynamicRange dynRange() const { return m_dynRange; }
+    void setDynRange(DynamicRange t) { m_dynRange = t; }
     void undoSetDynRange(DynamicRange t);
 
     int changeInVelocity() const;
@@ -102,8 +87,8 @@ public:
     Fraction velocityChangeLength() const;
     bool isVelocityChangeAvailable() const;
 
-    DynamicSpeed velChangeSpeed() const { return _velChangeSpeed; }
-    void setVelChangeSpeed(DynamicSpeed val) { _velChangeSpeed = val; }
+    DynamicSpeed velChangeSpeed() const { return m_velChangeSpeed; }
+    void setVelChangeSpeed(DynamicSpeed val) { m_velChangeSpeed = val; }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -118,13 +103,35 @@ public:
     void manageBarlineCollisions();
 
     static String dynamicText(DynamicType t);
-    bool hasCustomText() const { return dynamicText(_dynamicType) != xmlText(); }
+    bool hasCustomText() const { return dynamicText(m_dynamicType) != xmlText(); }
 
-    void setSnappedExpression(Expression* e) { _snappedExpression = e; }
-    Expression* snappedExpression() const { return _snappedExpression; }
+    void setSnappedExpression(Expression* e) { m_snappedExpression = e; }
+    Expression* snappedExpression() const { return m_snappedExpression; }
 
     bool acceptDrop(EditData& ed) const override;
     EngravingItem* drop(EditData& ed) override;
+
+    static const std::vector<Dyn>& dynamicList() { return DYN_LIST; }
+
+private:
+
+    M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)
+    M_PROPERTY(double, dynamicsSize, setDynamicsSize)
+    M_PROPERTY(bool, centerOnNotehead, setCenterOnNotehead)
+
+    DynamicType m_dynamicType = DynamicType::OTHER;
+    Expression* m_snappedExpression = nullptr;
+
+    mutable mu::PointF m_dragOffset;
+    int m_velocity = -1;           // associated midi velocity 0-127
+    DynamicRange m_dynRange = DynamicRange::PART; // STAFF, PART, SYSTEM
+
+    int m_changeInVelocity = 128;
+    DynamicSpeed m_velChangeSpeed = DynamicSpeed::NORMAL;
+
+    mu::RectF drag(EditData&) override;
+
+    static const std::vector<Dyn> DYN_LIST;
 };
 } // namespace mu::engraving
 

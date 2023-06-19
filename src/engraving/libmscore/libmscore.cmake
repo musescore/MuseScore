@@ -68,6 +68,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/clef.h
     ${CMAKE_CURRENT_LIST_DIR}/cleflist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/cleflist.h
+    ${CMAKE_CURRENT_LIST_DIR}/capo.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/capo.h
     ${CMAKE_CURRENT_LIST_DIR}/cmd.cpp
     ${CMAKE_CURRENT_LIST_DIR}/connector.cpp
     ${CMAKE_CURRENT_LIST_DIR}/connector.h
@@ -124,6 +126,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/harmonicmark.h
     ${CMAKE_CURRENT_LIST_DIR}/harmony.cpp
     ${CMAKE_CURRENT_LIST_DIR}/harmony.h
+    ${CMAKE_CURRENT_LIST_DIR}/harppedaldiagram.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/harppedaldiagram.h
     ${CMAKE_CURRENT_LIST_DIR}/hook.cpp
     ${CMAKE_CURRENT_LIST_DIR}/hook.h
     ${CMAKE_CURRENT_LIST_DIR}/image.cpp
@@ -205,6 +209,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/noteline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/noteline.h
     ${CMAKE_CURRENT_LIST_DIR}/notifier.h
+    ${CMAKE_CURRENT_LIST_DIR}/ornament.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/ornament.h
     ${CMAKE_CURRENT_LIST_DIR}/ottava.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ottava.h
     ${CMAKE_CURRENT_LIST_DIR}/page.cpp

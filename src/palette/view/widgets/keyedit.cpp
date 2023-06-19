@@ -31,7 +31,7 @@
 #include "commonscene/commonscenetypes.h"
 #include "translation.h"
 
-#include "engraving/rw/400/tread.h"
+#include "engraving/rw/rwregister.h"
 #include "engraving/libmscore/accidental.h"
 #include "engraving/libmscore/clef.h"
 #include "engraving/libmscore/keysig.h"
@@ -40,6 +40,7 @@
 #include "engraving/libmscore/factory.h"
 #include "engraving/style/defaultstyle.h"
 #include "engraving/compat/dummyelement.h"
+#include "engraving/layout/v0/tlayout.h"
 
 #include "types/symnames.h"
 
@@ -151,7 +152,8 @@ void KeyCanvas::paintEvent(QPaintEvent*)
         painter.restore();
     }
     clef->setPos(0.0, 0.0);
-    clef->layout();
+    EngravingItem::layout()->layoutItem(clef);
+
     painter.translate(clef->pagePos());
     clef->draw(&painter);
 }
@@ -226,9 +228,9 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
         event->acceptProposedAction();
         dragElement = static_cast<Accidental*>(Factory::createItem(type, gpaletteScore->dummy()));
         dragElement->resetExplicitParent();
-        rw400::TRead::readItem(dragElement, e, *e.context());
 
-        dragElement->layout();
+        rw::RWRegister::reader()->readItem(dragElement, e);
+        EngravingItem::layout()->layoutItem(dragElement);
     } else {
         if (MScore::debugMode) {
             LOGD("KeyCanvas::dragEnterEvent: formats:");

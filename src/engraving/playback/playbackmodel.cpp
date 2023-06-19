@@ -28,6 +28,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/measurerepeat.h"
 #include "libmscore/part.h"
+#include "libmscore/staff.h"
 #include "libmscore/repeatlist.h"
 #include "libmscore/segment.h"
 #include "libmscore/tempo.h"
@@ -316,7 +317,7 @@ void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
     trackData.dynamicLevelMap = ctx.dynamicLevelMap(m_score);
 }
 
-void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& changedStaffIdSet,
+void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& staffIdxSet,
                                    ChangedTrackIdSet* trackChanges)
 {
     int segmentStartTick = segment->tick().ticks();
@@ -332,7 +333,7 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
         }
 
         staff_idx_t staffIdx = item->staffIdx();
-        if (changedStaffIdSet.find(staffIdx) == changedStaffIdSet.cend()) {
+        if (staffIdxSet.find(staffIdx) == staffIdxSet.cend()) {
             continue;
         }
 
@@ -358,8 +359,7 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
         }
 
         staff_idx_t staffIdx = item->staffIdx();
-
-        if (changedStaffIdSet.find(staffIdx) == changedStaffIdSet.cend()) {
+        if (staffIdxSet.find(staffIdx) == staffIdxSet.cend()) {
             continue;
         }
 
@@ -408,7 +408,9 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
 {
     TRACEFUNC;
 
-    std::set<staff_idx_t> changedStaffIdSet = m_score->staffIdsFromRange(trackFrom, trackTo);
+    std::set<staff_idx_t> staffToProcessIdxSet = m_score->staffIdxSetFromRange(trackFrom, trackTo, [](const Staff& staff) {
+        return staff.isPrimaryStaff(); // skip linked staves
+    });
 
     for (const RepeatSegment* repeatSegment : repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
@@ -439,7 +441,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                     continue;
                 }
 
-                processSegment(tickPositionOffset, segment, changedStaffIdSet, trackChanges);
+                processSegment(tickPositionOffset, segment, staffToProcessIdxSet, trackChanges);
             }
 
             m_renderer.renderMetronome(m_score, measureStartTick, measureEndTick, tickPositionOffset,
@@ -453,6 +455,7 @@ bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) con
 {
     static const std::unordered_set<ElementType> REQUIRED_TYPES = {
         ElementType::PLAYTECH_ANNOTATION,
+        ElementType::CAPO,
         ElementType::DYNAMIC,
         ElementType::HAIRPIN,
         ElementType::HAIRPIN_SEGMENT,

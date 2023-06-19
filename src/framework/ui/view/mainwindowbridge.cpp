@@ -24,6 +24,9 @@
 
 #include <QWindow>
 
+#include "modularity/ioc.h"
+#include "async/notification.h"
+
 #include "log.h"
 
 using namespace mu::ui;
@@ -60,6 +63,15 @@ void MainWindowBridge::setWindow(QWindow* window)
 void MainWindowBridge::init()
 {
     mainWindow()->init(this);
+
+    connect(m_window, &QWindow::windowStateChanged, this, [this]() {
+        m_isFullScreenChanged.notify();
+    });
+}
+
+mu::async::Notification MainWindowBridge::isFullScreenChanged() const
+{
+    return m_isFullScreenChanged;
 }
 
 QString MainWindowBridge::filePath() const

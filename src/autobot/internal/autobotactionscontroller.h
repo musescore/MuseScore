@@ -30,8 +30,8 @@
 namespace mu::autobot {
 class AutobotActionsController : public actions::Actionable
 {
-    INJECT(diagnostics, actions::IActionsDispatcher, dispatcher)
-    INJECT(diagnostics, framework::IInteractive, interactive)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(framework::IInteractive, interactive)
 
 public:
     AutobotActionsController() = default;

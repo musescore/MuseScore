@@ -43,27 +43,6 @@ class Ambitus final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Ambitus)
     DECLARE_CLASSOF(ElementType::AMBITUS)
 
-    NoteHeadGroup _noteHeadGroup;
-    NoteHeadType _noteHeadType;
-    DirectionH _dir;
-    bool _hasLine;
-    Spatium _lineWidth;
-    Accidental* _topAccid = nullptr;
-    Accidental* _bottomAccid = nullptr;
-    int _topPitch, _bottomPitch;
-    int _topTpc, _bottomTpc;
-
-    // internally managed, to optimize layout / drawing
-    PointF _topPos;       // position of top note symbol
-    PointF _bottomPos;    // position of bottom note symbol
-    LineF _line;          // the drawn line
-
-    friend class Factory;
-    Ambitus(Segment* parent);
-    Ambitus(const Ambitus& a);
-
-    void normalize();
-
 public:
     ~Ambitus();
 
@@ -130,7 +109,7 @@ public:
 
     // re-implemented virtual functions
     void      draw(mu::draw::Painter* painter) const override;
-    void      layout() override;
+
     mu::PointF pagePos() const override;        ///< position in page coordinates
     void      scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void      setTrack(track_idx_t val) override;
@@ -149,6 +128,12 @@ public:
 
 private:
 
+    friend class Factory;
+    Ambitus(Segment* parent);
+    Ambitus(const Ambitus& a);
+
+    void normalize();
+
     struct Ranges {
         int topTpc = Tpc::TPC_INVALID;
         int bottomTpc = Tpc::TPC_INVALID;
@@ -157,6 +142,21 @@ private:
     };
 
     Ranges estimateRanges() const;                // scan staff up to next section break and update range pitches
+
+    NoteHeadGroup _noteHeadGroup;
+    NoteHeadType _noteHeadType;
+    DirectionH _dir;
+    bool _hasLine;
+    Spatium _lineWidth;
+    Accidental* _topAccid = nullptr;
+    Accidental* _bottomAccid = nullptr;
+    int _topPitch, _bottomPitch;
+    int _topTpc, _bottomTpc;
+
+    // internally managed, to optimize layout / drawing
+    PointF _topPos;       // position of top note symbol
+    PointF _bottomPos;    // position of bottom note symbol
+    LineF _line;          // the drawn line
 };
 } // namespace mu::engraving
 

@@ -152,6 +152,24 @@ bool MuseSamplerResolver::isInstalled() const
     return false;
 }
 
+float MuseSamplerResolver::defaultReverbLevel(const String& instrumentSoundId) const
+{
+    if (!m_libHandler || !m_libHandler->getReverbLevel || instrumentSoundId.empty()) {
+        return 0.f;
+    }
+
+    auto instrumentList = m_libHandler->getInstrumentList();
+    while (auto instrument = m_libHandler->getNextInstrument(instrumentList)) {
+        String soundId = String::fromUtf8(m_libHandler->getMpeSoundId(instrument));
+
+        if (instrumentSoundId == soundId) {
+            return m_libHandler->getReverbLevel(instrument) / 100.f;
+        }
+    }
+
+    return 0.f;
+}
+
 bool MuseSamplerResolver::checkLibrary() const
 {
     if (!m_libHandler->isValid()) {

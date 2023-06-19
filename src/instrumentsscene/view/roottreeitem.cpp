@@ -89,7 +89,7 @@ void RootTreeItem::removeChildren(int row, int count, bool deleteChild)
     }
 
     if (deleteChild) {
-        notation()->parts()->removeParts(partIds);
+        masterNotation()->notation()->parts()->removeParts(partIds);
     }
 
     AbstractInstrumentsPanelTreeItem::removeChildren(row, count, deleteChild);

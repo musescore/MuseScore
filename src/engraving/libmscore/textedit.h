@@ -108,6 +108,7 @@ class ChangeText : public TextEditUndoCommand
     OBJECT_ALLOCATOR(engraving, ChangeText)
 
     String s;
+    CharFormat format;
 
 protected:
     void insertText(EditData*);
@@ -115,7 +116,7 @@ protected:
 
 public:
     ChangeText(const TextCursor* tc, const String& t)
-        : TextEditUndoCommand(*tc), s(t) {}
+        : TextEditUndoCommand(*tc), s(t), format(*tc->format()) {}
     virtual void undo(EditData*) override = 0;
     virtual void redo(EditData*) override = 0;
     const String& string() const { return s; }

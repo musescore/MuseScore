@@ -67,24 +67,6 @@ PalmMuteSegment::PalmMuteSegment(PalmMute* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void PalmMuteSegment::layout()
-{
-    const StaffType* stType = staffType();
-
-    _skipDraw = false;
-    if (stType && stType->isHiddenElementOnTab(score(), Sid::palmMuteShowTabCommon, Sid::palmMuteShowTabSimple)) {
-        _skipDraw = true;
-        return;
-    }
-
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
-}
-
-//---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
 

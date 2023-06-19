@@ -56,7 +56,6 @@ public:
     void add(EngravingItem* e) override;
     void remove(EngravingItem* el) override;
 
-    void layout() override;
     String accessibleExtraInfo() const override;
 
     int gripsCount() const override;

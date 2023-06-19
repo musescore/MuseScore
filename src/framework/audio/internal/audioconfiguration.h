@@ -30,8 +30,8 @@
 namespace mu::audio {
 class AudioConfiguration : public IAudioConfiguration
 {
-    INJECT(audio, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(audio, io::IFileSystem, fileSystem)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(io::IFileSystem, fileSystem)
 public:
     AudioConfiguration() = default;
 

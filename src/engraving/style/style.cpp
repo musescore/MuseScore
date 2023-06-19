@@ -22,6 +22,7 @@
 
 #include "style.h"
 
+#include "types/constants.h"
 #include "compat/pageformat.h"
 #include "rw/compat/readchordlisthook.h"
 #include "rw/xmlreader.h"
@@ -267,15 +268,10 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
 
 bool MStyle::read(IODevice* device, bool ign)
 {
+    UNUSED(ign);
     XmlReader e(device);
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
-            String version = e.attribute("version");
-            StringList sl  = version.split('.');
-            int mscVersion  = sl[0].toInt() * 100 + sl[1].toInt();
-            if (mscVersion != MSCVERSION && !ign) {
-                return false;
-            }
             while (e.readNextStartElement()) {
                 if (e.name() == "Style") {
                     read(e, nullptr);
@@ -344,6 +340,11 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
                    && defaultStyleVersion() < 400) {
             // Ignoring pre-4.0 brackets distance settings. Using the new defaults instead.
             e.skipCurrentElement();
+        } else if (tag == "pedalListStyle") { // pre-3.6.3/4.0 typo
+            set(Sid::pedalLineStyle, TConv::fromXml(e.readAsciiText(), LineType::SOLID));
+        } else if (tag == "chordlineThickness" && defaultStyleVersion() <= 400) {
+            // Ignoring pre-4.1 value as it was wrong (it wasn't user-editable anyway)
+            e.skipCurrentElement();
         } else if (!readProperties(e)) {
             e.unknown();
         }
@@ -358,7 +359,7 @@ bool MStyle::write(IODevice* device)
 {
     XmlWriter xml(device);
     xml.startDocument();
-    xml.startElement("museScore", { { "version", MSC_VERSION } });
+    xml.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
     save(xml, false);
     xml.endElement();
     return true;

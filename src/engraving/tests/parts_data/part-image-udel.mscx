@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -131,7 +131,7 @@
               <linkedMain/>
               <Image>
                 <Image>
-                  <z>8099</z>
+                  <z>8399</z>
                   <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
                   <linkPath>schnee.png</linkPath>
                   </Image>
@@ -876,7 +876,7 @@
                   </linked>
                 <Image>
                   <Image>
-                    <z>8099</z>
+                    <z>8399</z>
                     <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
                     <linkPath>schnee.png</linkPath>
                     </Image>

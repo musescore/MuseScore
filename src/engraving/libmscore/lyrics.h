@@ -27,6 +27,10 @@
 #include "line.h"
 #include "textbase.h"
 
+namespace mu::engraving::layout::v0 {
+class LyricsLayout;
+}
+
 namespace mu::engraving {
 //---------------------------------------------------------
 //   Lyrics
@@ -52,29 +56,8 @@ public:
     // WORD_MIN_DISTANCE has never been implemented
     // static constexpr double  LYRICS_WORD_MIN_DISTANCE = 0.33;     // min. distance between lyrics from different words
 
-private:
-    Fraction _ticks;          ///< if > 0 then draw an underline to tick() + _ticks
-                              ///< (melisma)
-    LyricsSyllabic _syllabic;
-    LyricsLine* _separator;
-    bool _removeInvalidSegments = false;
-
-    friend class Factory;
-    Lyrics(ChordRest* parent);
-    Lyrics(const Lyrics&);
-
-    bool isMelisma() const;
-    void removeInvalidSegments();
-    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
-
-protected:
-    int _no;                  ///< row index
-    bool _even;
-
 public:
     ~Lyrics();
-
-    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
 
     Lyrics* clone() const override { return new Lyrics(*this); }
     bool acceptDrop(EditData&) const override;
@@ -84,7 +67,6 @@ public:
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()->explicitParent()); }
     ChordRest* chordRest() const { return toChordRest(explicitParent()); }
 
-    void layout() override;
     void layout2(int);
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
@@ -114,6 +96,27 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
     void triggerLayout() const override;
+
+protected:
+    int _no;                  ///< row index
+    bool _even;
+
+private:
+
+    friend class layout::v0::LyricsLayout;
+    friend class Factory;
+    Lyrics(ChordRest* parent);
+    Lyrics(const Lyrics&);
+
+    bool isMelisma() const;
+    void removeInvalidSegments();
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
+
+    Fraction _ticks;          ///< if > 0 then draw an underline to tick() + _ticks
+                              ///< (melisma)
+    LyricsSyllabic _syllabic;
+    LyricsLine* _separator;
+    bool _removeInvalidSegments = false;
 };
 
 //---------------------------------------------------------
@@ -124,15 +127,14 @@ public:
 class LyricsLine final : public SLine
 {
     OBJECT_ALLOCATOR(engraving, LyricsLine)
-protected:
-    Lyrics* _nextLyrics;
+    DECLARE_CLASSOF(ElementType::LYRICSLINE)
 
 public:
     LyricsLine(EngravingItem* parent);
     LyricsLine(const LyricsLine&);
 
     LyricsLine* clone() const override { return new LyricsLine(*this); }
-    void layout() override;
+
     LineSegment* createLineSegment(System* parent) override;
     void removeUnmanaged() override;
     void styleChanged() override;
@@ -142,7 +144,11 @@ public:
     bool isEndMelisma() const { return lyrics()->ticks().isNotZero(); }
     bool isDash() const { return !isEndMelisma(); }
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
-    SpannerSegment* layoutSystem(System*) override;
+
+protected:
+    friend class layout::v0::LyricsLayout;
+
+    Lyrics* _nextLyrics;
 };
 
 //---------------------------------------------------------
@@ -153,19 +159,22 @@ public:
 class LyricsLineSegment final : public LineSegment
 {
     OBJECT_ALLOCATOR(engraving, LyricsLineSegment)
-protected:
-    int _numOfDashes = 0;
-    double _dashLength = 0;
+    DECLARE_CLASSOF(ElementType::LYRICSLINE_SEGMENT)
 
 public:
     LyricsLineSegment(LyricsLine*, System* parent);
 
     LyricsLineSegment* clone() const override { return new LyricsLineSegment(*this); }
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
+
     // helper functions
     LyricsLine* lyricsLine() const { return toLyricsLine(spanner()); }
     Lyrics* lyrics() const { return lyricsLine()->lyrics(); }
+
+protected:
+    friend class layout::v0::LyricsLayout;
+    int _numOfDashes = 0;
+    double _dashLength = 0;
 };
 } // namespace mu::engraving
 #endif

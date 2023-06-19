@@ -121,19 +121,6 @@ EngravingItem* TextLineSegment::propertyDelegate(Pid pid)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void TextLineSegment::layout()
-{
-    TextLineBaseSegment::layout();
-    if (isStyled(Pid::OFFSET)) {
-        roffset() = textLine()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
-    autoplaceSpannerSegment();
-}
-
-//---------------------------------------------------------
 //   TextLine
 //---------------------------------------------------------
 

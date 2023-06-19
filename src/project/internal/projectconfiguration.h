@@ -37,19 +37,18 @@
 namespace mu::project {
 class ProjectConfiguration : public IProjectConfiguration
 {
-    INJECT(project, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(project, notation::INotationConfiguration, notationConfiguration)
-    INJECT(project, cloud::ICloudConfiguration, cloudConfiguration)
-    INJECT(project, accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
-    INJECT(project, io::IFileSystem, fileSystem)
-    INJECT(project, languages::ILanguagesService, languagesService)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(cloud::ICloudConfiguration, cloudConfiguration)
+    INJECT(accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
+    INJECT(io::IFileSystem, fileSystem)
+    INJECT(languages::ILanguagesService, languagesService)
 
 public:
     void init();
 
-    io::paths_t recentProjectPaths() const override;
-    void setRecentProjectPaths(const io::paths_t& recentScorePaths) override;
-    async::Channel<io::paths_t> recentProjectPathsChanged() const override;
+    io::path_t recentFilesJsonPath() const override;
+    ByteArray compatRecentFilesData() const override;
 
     io::path_t myFirstProjectPath() const override;
 
@@ -60,9 +59,6 @@ public:
     void setUserTemplatesPath(const io::path_t& path) override;
     async::Channel<io::path_t> userTemplatesPathChanged() const override;
 
-    io::path_t defaultProjectsPath() const override;
-    void setDefaultProjectsPath(const io::path_t& path) override;
-
     io::path_t lastOpenedProjectsPath() const override;
     void setLastOpenedProjectsPath(const io::path_t& path) override;
 
@@ -72,6 +68,7 @@ public:
     io::path_t userProjectsPath() const override;
     void setUserProjectsPath(const io::path_t& path) override;
     async::Channel<io::path_t> userProjectsPathChanged() const override;
+    io::path_t defaultUserProjectsPath() const override;
 
     bool shouldAskSaveLocationType() const override;
     void setShouldAskSaveLocationType(bool shouldAsk) override;
@@ -115,7 +112,6 @@ public:
     bool shouldDestinationFolderBeOpenedOnExport() const override;
     void setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport) override;
 
-    QUrl scoreManagerUrl() const override;
     QUrl supportForumUrl() const override;
 
     bool openDetailedProjectUploadedDialog() const override;
@@ -137,13 +133,11 @@ public:
     void setShowCloudIsNotAvailableWarning(bool show) override;
 
 private:
-    io::paths_t parseRecentProjectsPaths(const mu::Val& value) const;
     io::paths_t scanCloudProjects() const;
 
     io::path_t appTemplatesPath() const;
     io::path_t cloudProjectsPath() const;
 
-    async::Channel<io::paths_t> m_recentProjectPathsChanged;
     async::Channel<io::path_t> m_userTemplatesPathChanged;
     async::Channel<io::path_t> m_userScoresPathChanged;
 

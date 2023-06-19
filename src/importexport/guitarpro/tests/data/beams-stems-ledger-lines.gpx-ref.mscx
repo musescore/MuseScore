@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -59,12 +59,16 @@
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Articulation name="marcato">
+        <Articulation name="accent">
           <velocity>120</velocity>
           <gateTime>67</gateTime>
           </Articulation>
+        <Articulation name="marcato">
+          <velocity>144</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
         <Articulation name="sforzato">
-          <velocity>120</velocity>
+          <velocity>169</velocity>
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
@@ -77,7 +81,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>12</sigN>
@@ -87,9 +91,11 @@
             <subtype>f</subtype>
             <velocity>96</velocity>
             </Dynamic>
-          <StaffText>
-            <text>Dadd11/F#</text>
-            </StaffText>
+          <Harmony>
+            <root>16</root>
+            <name>add11</name>
+            <base>20</base>
+            </Harmony>
           <RehearsalMark>
             <text>Verse 1</text>
             </RehearsalMark>
@@ -439,9 +445,11 @@
             <subtype>f</subtype>
             <velocity>96</velocity>
             </Dynamic>
-          <StaffText>
-            <text>Gadd9/E</text>
-            </StaffText>
+          <Harmony>
+            <root>15</root>
+            <name>add9</name>
+            <base>18</base>
+            </Harmony>
           <Beam>
             <l1>-16</l1>
             <l2>-16</l2>

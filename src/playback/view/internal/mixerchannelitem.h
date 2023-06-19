@@ -25,28 +25,33 @@
 
 #include <QObject>
 
-#include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "audio/audiotypes.h"
+
+#include "modularity/ioc.h"
+#include "iplaybackconfiguration.h"
 #include "iinteractive.h"
+
+#include "audio/audiotypes.h"
 #include "ui/view/navigationpanel.h"
 #include "project/iprojectaudiosettings.h"
 
 #include "inputresourceitem.h"
 #include "outputresourceitem.h"
+#include "auxsenditem.h"
 
 namespace mu::playback {
 class MixerChannelItem : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
-    Q_PROPERTY(bool isPrimaryChannel READ isPrimaryChannel CONSTANT)
-
+    Q_PROPERTY(Type type READ type CONSTANT)
     Q_PROPERTY(bool outputOnly READ outputOnly CONSTANT)
+
+    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
 
     Q_PROPERTY(InputResourceItem * inputResourceItem READ inputResourceItem NOTIFY inputResourceItemChanged)
     Q_PROPERTY(QList<OutputResourceItem*> outputResourceItemList READ outputResourceItemList NOTIFY outputResourceItemListChanged)
+    Q_PROPERTY(QList<AuxSendItem*> auxSendItemList READ auxSendItemList NOTIFY auxSendItemListChanged)
 
     Q_PROPERTY(float leftChannelPressure READ leftChannelPressure NOTIFY leftChannelPressureChanged)
     Q_PROPERTY(float rightChannelPressure READ rightChannelPressure NOTIFY rightChannelPressureChanged)
@@ -60,7 +65,8 @@ class MixerChannelItem : public QObject, public async::Asyncable
 
     Q_PROPERTY(mu::ui::NavigationPanel * panel READ panel NOTIFY panelChanged)
 
-    INJECT(playback, framework::IInteractive, interactive)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(IPlaybackConfiguration, configuration)
 
 public:
     enum class Type {
@@ -70,8 +76,11 @@ public:
         Aux,
         Master,
     };
+    Q_ENUM(Type)
 
-    explicit MixerChannelItem(QObject* parent, Type type, bool outputOnly = false, audio::TrackId trackId = -1);
+    MixerChannelItem() = default;
+    MixerChannelItem(QObject* parent, Type type, bool outputOnly = false, audio::TrackId trackId = -1);
+
     ~MixerChannelItem() override;
 
     Type type() const;
@@ -82,7 +91,6 @@ public:
     void setInstrumentTrackId(const engraving::InstrumentTrackId& instrumentTrackId);
 
     QString title() const;
-    bool isPrimaryChannel() const;
 
     float leftChannelPressure() const;
     float rightChannelPressure() const;
@@ -98,6 +106,8 @@ public:
     void setPanelOrder(int panelOrder);
     void setPanelSection(ui::INavigationSection* section);
 
+    void setOutputResourceItemCount(size_t count);
+
     void loadInputParams(audio::AudioInputParams&& newParams);
     void loadOutputParams(audio::AudioOutputParams&& newParams);
     void loadSoloMuteState(project::IProjectAudioSettings::SoloMuteState&& newState);
@@ -106,8 +116,14 @@ public:
 
     bool outputOnly() const;
 
+    const audio::AudioInputParams& inputParams() const;
+    const audio::AudioOutputParams& outputParams() const;
+
     InputResourceItem* inputResourceItem() const;
     QList<OutputResourceItem*> outputResourceItemList() const;
+    QList<AuxSendItem*> auxSendItemList() const;
+
+    const QMap<audio::aux_channel_idx_t, AuxSendItem*>& auxSendItems() const;
 
 public slots:
     void setTitle(QString title);
@@ -141,6 +157,7 @@ signals:
 
     void inputResourceItemChanged();
     void outputResourceItemListChanged();
+    void auxSendItemListChanged();
 
 protected:
     void setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue);
@@ -148,13 +165,16 @@ protected:
 
     void applyMuteToOutputParams(const bool isMuted);
 
+    void loadOutputResourceItems(const audio::AudioFxChain& fxChain);
+    void loadAuxSendItems(const audio::AuxSendsParams& auxSends);
+
     InputResourceItem* buildInputResourceItem();
     OutputResourceItem* buildOutputResourceItem(const audio::AudioFxParams& fxParams);
+    AuxSendItem* buildAuxSendItem(audio::aux_channel_idx_t index, const audio::AuxSendParams& params);
 
-    void removeRedundantEmptySlots();
-    QList<audio::AudioFxChainOrder> emptySlotsToRemove() const;
+    void addBlankSlots(size_t count);
+    void removeBlankSlotsFromEnd(size_t count);
 
-    void ensureBlankOutputResourceSlot();
     audio::AudioFxChainOrder resolveNewBlankOutputResourceItemOrder() const;
 
     void openEditor(AbstractAudioResourceItem* item, const UriQuery& editorUri);
@@ -171,6 +191,7 @@ protected:
 
     InputResourceItem* m_inputResourceItem = nullptr;
     QMap<audio::AudioFxChainOrder, OutputResourceItem*> m_outputResourceItems;
+    QMap<audio::aux_channel_idx_t, AuxSendItem*> m_auxSendItems;
 
     audio::AudioSignalChanges m_audioSignalChanges;
 
@@ -181,6 +202,8 @@ protected:
     float m_rightChannelPressure = 0.0;
 
     ui::NavigationPanel* m_panel = nullptr;
+
+    bool m_outputResourceItemsLoading = false;
 };
 }
 

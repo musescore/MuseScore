@@ -59,16 +59,6 @@ PickScrapeSegment::PickScrapeSegment(PickScrape* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void PickScrapeSegment::layout()
-{
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
-}
-
-//---------------------------------------------------------
 //   PickScrape
 //---------------------------------------------------------
 

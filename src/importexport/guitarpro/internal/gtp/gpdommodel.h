@@ -1,5 +1,5 @@
-#ifndef GPDOMMODEL_H
-#define GPDOMMODEL_H
+#ifndef MU_IMPORTEXPORT_GPDOMMODEL_H
+#define MU_IMPORTEXPORT_GPDOMMODEL_H
 
 #include <map>
 #include <memory>
@@ -15,10 +15,9 @@
 #include "gpnote.h"
 #include "gpscore.h"
 #include "gptrack.h"
-#include "gpaudiotrack.h"
 #include "inoteproperty.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 class GPDomModel
 {
 public:
@@ -44,9 +43,8 @@ private:
 
     std::unique_ptr<GPScore> _score;
     std::unique_ptr<GPMasterTracks> _masterTracks;
-    std::map<int, std::unique_ptr<GPAudioTrack> > _audiotracks;
     std::map<int, std::unique_ptr<GPTrack> > _tracks;
     std::vector<std::unique_ptr<GPMasterBar> > _masterBars;
 };
-} // end Ms namespace
-#endif // GPDOMMODEL_H
+} // namespace mu::iex::guitarpro
+#endif // MU_IMPORTEXPORT_GPDOMMODEL_H

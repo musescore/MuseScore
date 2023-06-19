@@ -28,6 +28,10 @@
 #include "durationelement.h"
 #include "property.h"
 
+namespace mu::engraving::layout::v0 {
+class TupletLayout;
+}
+
 namespace mu::engraving {
 class Text;
 class Spanner;
@@ -48,40 +52,6 @@ class Tuplet final : public DurationElement
 {
     OBJECT_ALLOCATOR(engraving, Tuplet)
     DECLARE_CLASSOF(ElementType::TUPLET)
-
-    // All DurationElements where `tuplet()` returns this tuplet
-    std::set<DurationElement*> _allElements;
-
-    // Those DurationElements that are currently really part of this tuplet
-    std::vector<DurationElement*> _currentElements;
-
-    bool _beingDestructed = false;
-
-    DirectionV _direction;
-    TupletNumberType _numberType;
-    TupletBracketType _bracketType;
-    Millimetre _bracketWidth;
-
-    bool _hasBracket;
-    Fraction _ratio;
-    TDuration _baseLen;        // 1/8 for a triplet of 1/8
-
-    bool _isUp;
-    bool _isSmall;
-
-    Fraction _tick;
-
-    mu::PointF p1, p2;
-    mu::PointF _p1, _p2;         // user offset
-    mutable int _id;          // used during read/write
-
-    Text* _number;
-    mu::PointF bracketL[4];
-    mu::PointF bracketR[3];
-
-    Fraction addMissingElement(const Fraction& startTick, const Fraction& endTick);
-
-    bool calcHasBracket(const DurationElement* cr1, const DurationElement* cr2) const;
 
 public:
     Tuplet(Measure* parent);
@@ -135,7 +105,6 @@ public:
         return std::find(_currentElements.begin(), _currentElements.end(), el) != _currentElements.end();
     }
 
-    void layout() override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     void reset() override;
@@ -180,9 +149,45 @@ public:
     static int computeTupletDenominator(int numerator, Fraction totalDuration);
 
 private:
+    friend class layout::v0::TupletLayout;
     friend class DurationElement;
+
     void addDurationElement(DurationElement* de);
     void removeDurationElement(DurationElement* de);
+
+    Fraction addMissingElement(const Fraction& startTick, const Fraction& endTick);
+
+    bool calcHasBracket(const DurationElement* cr1, const DurationElement* cr2) const;
+
+    // All DurationElements where `tuplet()` returns this tuplet
+    std::set<DurationElement*> _allElements;
+
+    // Those DurationElements that are currently really part of this tuplet
+    std::vector<DurationElement*> _currentElements;
+
+    bool _beingDestructed = false;
+
+    DirectionV _direction;
+    TupletNumberType _numberType;
+    TupletBracketType _bracketType;
+    Millimetre _bracketWidth;
+
+    bool _hasBracket;
+    Fraction _ratio;
+    TDuration _baseLen;        // 1/8 for a triplet of 1/8
+
+    bool _isUp;
+    bool _isSmall;
+
+    Fraction _tick;
+
+    mu::PointF p1, p2;
+    mu::PointF _p1, _p2;         // user offset
+    mutable int _id;          // used during read/write
+
+    Text* _number = nullptr;
+    mu::PointF bracketL[4];
+    mu::PointF bracketR[3];
 };
 } // namespace mu::engraving
 #endif

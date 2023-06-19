@@ -32,7 +32,7 @@ class FilePickerModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(uicomponents, framework::IInteractive, interactive)
+    INJECT(framework::IInteractive, interactive)
 
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString dir READ dir WRITE setDir NOTIFY dirChanged)

@@ -22,8 +22,6 @@
 
 #include "fretcircle.h"
 
-#include "layout/tlayout.h"
-
 #include "chord.h"
 #include "note.h"
 #include "staff.h"
@@ -58,16 +56,6 @@ void FretCircle::draw(mu::draw::Painter* painter) const
     painter->setBrush(mu::draw::BrushStyle::NoBrush);
     painter->drawEllipse(m_rect);
     painter->restore();
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void FretCircle::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

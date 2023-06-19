@@ -35,10 +35,10 @@
 namespace mu::update {
 class UpdateService : public IUpdateService, public async::Asyncable
 {
-    INJECT(update, framework::IInteractive, interactive)
-    INJECT(update, network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(update, IUpdateConfiguration, configuration)
-    INJECT(update, io::IFileSystem, fileSystem)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(network::INetworkManagerCreator, networkManagerCreator)
+    INJECT(IUpdateConfiguration, configuration)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     RetVal<ReleaseInfo> checkForUpdate() override;

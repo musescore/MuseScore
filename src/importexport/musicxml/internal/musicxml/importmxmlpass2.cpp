@@ -91,6 +91,8 @@
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "engraving/iengravingfontsprovider.h"
 
+#include "engraving/layout/v0/tlayout.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -1045,10 +1047,10 @@ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
     // when setting anchor, assume type up/down without explicit placement
     // implies placement above/below
     if (place == "above" || (dir == "up" && place == "")) {
-        na->setAnchor(ArticulationAnchor::TOP_CHORD);
+        na->setAnchor(ArticulationAnchor::TOP);
         na->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
     } else if (place == "below" || (dir == "down" && place == "")) {
-        na->setAnchor(ArticulationAnchor::BOTTOM_CHORD);
+        na->setAnchor(ArticulationAnchor::BOTTOM);
         na->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
     }
 
@@ -1069,7 +1071,7 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
     const SymId articSym = notation.symId();
     const QString direction = notation.attribute("type");
     Fermata* na = Factory::createFermata(cr);
-    na->setSymId(articSym);
+    na->setSymIdAndTimeStretch(articSym);
     na->setTrack(cr->track());
     if (!direction.isNull()) { // Only for case where XML attribute is present (isEmpty wouldn't work)
         na->setPlacement(direction == "inverted" ? PlacementV::BELOW : PlacementV::ABOVE);
@@ -1129,6 +1131,30 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
     } else {
         LOGD("unknown ornament: name '%s' long '%s' approach '%s' departure '%s'",
              qPrintable(name), qPrintable(attrLong), qPrintable(attrAppr), qPrintable(attrDep));        // TODO
+    }
+}
+
+//---------------------------------------------------------
+//   addOtherOrnamentToChord
+//---------------------------------------------------------
+
+/**
+ Add Other Ornament to Chord.
+ */
+
+static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
+{
+    const QString name = notation.name();
+    const QString symname = notation.attribute("smufl");
+    SymId sym = SymId::noSym;   // legal but impossible ArticulationType value here indicating "not found"
+    sym = SymNames::symIdByName(symname);
+
+    if (sym != SymId::noSym) {
+        Articulation* na = Factory::createArticulation(cr);
+        na->setSymId(sym);
+        cr->add(na);
+    } else {
+        LOGD("unknown ornament: name '%s': '%s'.", qPrintable(name), qPrintable(symname));
     }
 }
 
@@ -1650,7 +1676,7 @@ static void addBarlineToMeasure(Measure* measure, const Fraction tick, std::uniq
         st = SegmentType::BeginBarLine;
     }
     const auto segment = measure->getSegment(st, tick);
-    barline->layout();
+    EngravingItem::layout()->layoutItem(barline.get());
     segment->add(barline.release());
 }
 
@@ -1727,6 +1753,17 @@ void MusicXMLParserPass2::scorePart()
             skipLogCurrElem();
         }
     }
+}
+
+//---------------------------------------------------------
+//   createSegmentChordRest
+//---------------------------------------------------------
+
+static void createSegmentChordRest(Score* score, Fraction tick)
+{
+    // getSegment() creates the segment if it does not yet exist
+    const auto measure = score->tick2measure(tick);
+    measure->getSegment(SegmentType::ChordRest, tick);
 }
 
 //---------------------------------------------------------
@@ -1817,10 +1854,17 @@ void MusicXMLParserPass2::part()
         auto sp = i.key();
         Fraction tick1 = Fraction::fromTicks(i.value().first);
         Fraction tick2 = Fraction::fromTicks(i.value().second);
-        //LOGD("spanner %p tp %d tick1 %s tick2 %s track1 %d track2 %d",
-        //       sp, sp->type(), qPrintable(tick1.print()), qPrintable(tick2.print()), sp->track(), sp->track2());
+        //LOGD("spanner %p tp %d isHairpin %d tick1 %s tick2 %s track1 %d track2 %d start %p end %p",
+        //       sp, sp->type(), sp->isHairpin(), qPrintable(tick1.toString()), qPrintable(tick2.toString()),
+        //       sp->track(), sp->track2(), sp->startElement(), sp->endElement());
         if (incompleteSpanners.find(sp) == incompleteSpanners.end()) {
-            // complete spanner -> add to score
+            // complete spanner found
+            // PlaybackContext::handleSpanners() requires hairpins to have a valid start segment
+            // always create start segment to prevent crash in case no note starts at this tick
+            if (sp->isHairpin()) {
+                createSegmentChordRest(_score, tick1);
+            }
+            // add to score
             sp->setTick(tick1);
             sp->setTick2(tick2);
             sp->score()->addElement(sp);
@@ -2074,7 +2118,7 @@ static bool canAddTempoText(const TempoMap* const tempoMap, const int tick)
         return true;
     }
 
-    return tempoMap->tempo(tick) == Constants::defaultTempo;
+    return tempoMap->tempo(tick) == Constants::DEFAULT_TEMPO;
 }
 
 //---------------------------------------------------------
@@ -2406,12 +2450,7 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
 
     staff_idx_t staffIdx = _score->staffIdx(part) + n;
 
-    StringData* t = nullptr;
-    if (_score->staff(staffIdx)->isTabStaff(Fraction(0, 1))) {
-        t = new StringData;
-        t->setFrets(25);      // sensible default
-    }
-
+    StringData* t = new StringData;
     QString visible = _e.attributes().value("print-object").toString();
     if (visible == "no") {
         _score->staff(staffIdx)->setVisible(false);
@@ -2445,13 +2484,17 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
 
     if (t) {
         Instrument* i = part->instrument();
-        if (i->stringData()->strings() == 0) {
-            // string data not set yet
-            if (t->strings() > 0) {
-                i->setStringData(*t);
+        if (_score->staff(staffIdx)->isTabStaff(Fraction(0, 1))) {
+            if (i->stringData()->frets() == 0) {
+                t->setFrets(25);
             } else {
-                _logger->logError("trying to change string data (not supported)", &_e);
+                t->setFrets(i->stringData()->frets());
             }
+        }
+        if (t->strings() > 0) {
+            i->setStringData(*t);
+        } else {
+            _logger->logError("trying to change string data (not supported)", &_e);
         }
     }
 }
@@ -3778,7 +3821,14 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "fifths") {
-            key.setKey(Key(_e.readElementText().toInt()));
+            Key tKey = Key(_e.readElementText().toInt());
+            Key cKey = tKey;
+            Interval v = _pass1.getPart(partId)->instrument()->transpose();
+            if (!v.isZero() && !_score->styleB(Sid::concertPitch)) {
+                cKey = transposeKey(tKey, v);
+            }
+            key.setConcertKey(cKey);
+            key.setKey(tKey);
         } else if (_e.name() == "mode") {
             QString m = _e.readElementText();
             if (m == "none") {
@@ -5776,9 +5826,17 @@ void MusicXMLParserNotations::articulations()
             _notations.push_back(artic);
             _e.skipCurrentElement();  // skip but don't log
         } else if (_e.name() == "breath-mark") {
-            _breath = SymId::breathMarkComma;
-            _e.readElementText();
-            // TODO: handle value read (note: encoding unknown, only "comma" found)
+            auto value = _e.readElementText();
+            if (value == "tick") {
+                _breath = SymId::breathMarkTick;
+            } else if (value == "upbow") {
+                _breath = SymId::breathMarkUpbow;
+            } else if (value == "salzedo") {
+                _breath = SymId::breathMarkSalzedo;
+            } else {
+                // Use comma as the default symbol
+                _breath = SymId::breathMarkComma;
+            }
         } else if (_e.name() == "caesura") {
             _breath = SymId::caesura;
             _e.skipCurrentElement();  // skip but don't log
@@ -5843,6 +5901,11 @@ void MusicXMLParserNotations::ornaments()
         } else if (_e.name() == "inverted-mordent"
                    || _e.name() == "mordent") {
             mordentNormalOrInverted();
+        } else if (_e.name() == "other-ornament") {
+            Notation notation = Notation::notationWithAttributes(_e.name().toString(),
+                                                                 _e.attributes(), "ornaments");
+            _notations.push_back(notation);
+            _e.skipCurrentElement();  // skip but don't log
         } else {
             skipLogCurrElem();
         }
@@ -6534,6 +6597,8 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
     } else if (notation.parent() == "ornaments") {
         if (notation.name() == "mordent" || notation.name() == "inverted-mordent") {
             addMordentToChord(notation, cr);
+        } else if (notation.name() == "other-ornament") {
+            addOtherOrnamentToChord(notation, cr);
         }
     } else if (notation.parent() == "articulations") {
         if (note && notation.name() == "chord-line") {

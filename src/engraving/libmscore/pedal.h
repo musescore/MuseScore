@@ -35,6 +35,7 @@ class Pedal;
 class PedalSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, PedalSegment)
+    DECLARE_CLASSOF(ElementType::PEDAL_SEGMENT)
 
     Sid getPropertyStyle(Pid) const override;
 
@@ -43,7 +44,6 @@ public:
 
     PedalSegment* clone() const override { return new PedalSegment(*this); }
     Pedal* pedal() const { return toPedal(spanner()); }
-    void layout() override;
 
     friend class Pedal;
 };

@@ -49,9 +49,9 @@ class Notation;
 class NotationSelection;
 class NotationInteraction : public INotationInteraction, public async::Asyncable
 {
-    INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, ISelectInstrumentsScenario, selectInstrumentScenario)
-    INJECT(notation, framework::IInteractive, interactive)
+    INJECT(INotationConfiguration, configuration)
+    INJECT(ISelectInstrumentsScenario, selectInstrumentScenario)
+    INJECT(framework::IInteractive, interactive)
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);

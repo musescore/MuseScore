@@ -23,7 +23,7 @@
 #define MU_DIAGNOSTICS_IENGRAVINGELEMENTSPROVIDER_H
 
 #include <unordered_set>
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/channel.h"
 
 namespace mu::engraving {

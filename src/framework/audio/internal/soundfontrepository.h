@@ -33,9 +33,9 @@
 namespace mu::audio {
 class SoundFontRepository : public ISoundFontRepository, public async::Asyncable
 {
-    INJECT(audio, framework::IInteractive, interactive)
-    INJECT(audio, IAudioConfiguration, configuration)
-    INJECT(audio, io::IFileSystem, fileSystem)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(IAudioConfiguration, configuration)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     void init();

@@ -42,7 +42,7 @@ class Score;
 
 class ImageStoreItem
 {
-    INJECT(engraving, ICryptographicHash, cryptographicHash)
+    INJECT(ICryptographicHash, cryptographicHash)
 
     std::list<Image*> _references;
     io::path_t _path;                  // original location of image
@@ -74,7 +74,7 @@ public:
 
 class ImageStore
 {
-    INJECT(engraving, ICryptographicHash, cryptographicHash)
+    INJECT(ICryptographicHash, cryptographicHash)
 
     typedef std::vector<ImageStoreItem*> ItemList;
     ItemList _items;

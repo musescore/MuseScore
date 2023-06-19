@@ -33,7 +33,7 @@
 #include "style/style.h"
 
 #include "rw/xmlreader.h"
-#include "rw/400/readcontext.h"
+#include "rw/read400/readcontext.h"
 
 #include "accidental.h"
 #include "articulation.h"
@@ -659,8 +659,31 @@ void Score::addInterval(int val, const std::vector<Note*>& notes)
 {
     std::vector<Note*> newNotes;
 
-    for (Note* on : notes) {
+    // Prepare note selection in case there are not selected tied notes and sort them
+    std::vector<Note*> tmpnl;
+    bool shouldSelectFirstNote = notes.size() == 1 && notes[0]->tieFor();
+    for (auto n : notes) {
+        if (std::find(tmpnl.begin(), tmpnl.end(), n) != tmpnl.end()) {
+            continue;
+        }
+        tmpnl.push_back(n);
+        if (n->tieFor()
+            && (std::find(tmpnl.begin(), tmpnl.end(), n->tieFor()->endNote()) == tmpnl.end())) {
+            Note* currNote = n->tieFor()->endNote();
+            do {
+                tmpnl.push_back(currNote);
+                currNote = currNote->tieFor() ? currNote->tieFor()->endNote() : nullptr;
+            }while (currNote);
+        }
+    }
+
+    Note* prevTied = nullptr;
+    Chord* firstChord = nullptr;
+    for (Note* on : tmpnl) {
         Chord* chord = on->chord();
+        if (!firstChord) {
+            firstChord = chord;
+        }
         Note* note = Factory::createNote(chord);
         newNotes.push_back(note);
         note->setParent(chord);
@@ -691,7 +714,7 @@ void Score::addInterval(int val, const std::vector<Note*>& notes)
                 ntpc = pitch2tpc(npitch, key, Prefer::NEAREST);
             }
 
-            Interval v = on->part()->instrument(tick)->transpose();
+            Interval v = estaff->transpose(tick);
             if (v.isZero()) {
                 ntpc1 = ntpc2 = ntpc;
             } else {
@@ -729,9 +752,29 @@ void Score::addInterval(int val, const std::vector<Note*>& notes)
             a->setParent(note);
             undoAddElement(a);
         }
-        setPlayNote(true);
+        if (on->tieBack() && prevTied) {
+            Tie* tie = prevTied->tieFor();
+            tie->setEndNote(note);
+            tie->setTick2(note->tick());
+            note->setTieBack(tie);
+            undoAddElement(tie);
+        }
+        if (on->tieFor()) {
+            Tie* tie = Factory::createTie(this->dummy());
+            tie->setStartNote(note);
+            tie->setTick(note->tick());
+            tie->setTrack(note->track());
+            note->setTieFor(tie);
+            prevTied = note;
+        }
 
-        select(note, SelectType::SINGLE, 0);
+        setPlayNote(true);
+        if (shouldSelectFirstNote && firstChord && !firstChord->notes().empty()) {
+            Note* noteToSelect = firstChord->notes()[firstChord->notes().size() - 1];
+            select(noteToSelect, SelectType::SINGLE, 0);
+        } else {
+            select(note, SelectType::SINGLE, 0);
+        }
     }
     unsigned i = 0;
     for (Note* on : notes) {
@@ -753,7 +796,9 @@ void Score::addInterval(int val, const std::vector<Note*>& notes)
     if (_is.noteEntryMode()) {
         _is.setAccidentalType(AccidentalType::NONE);
     }
-    _is.moveToNextInputPos();
+    if (!shouldSelectFirstNote) {
+        _is.moveToNextInputPos();
+    }
 }
 
 //---------------------------------------------------------
@@ -2875,9 +2920,18 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
 
     // if measure rest is selected as input, then the correct initialDuration will be the
     // duration of the measure's time signature, else is just the input state's duration
-    TDuration initialDuration
-        = (cr->durationType() == DurationType::V_MEASURE) ? TDuration(cr->measure()->timesig()) : _is.duration();
-    TDuration d = initialDuration.shiftRetainDots(nSteps, stepDotted);
+    TDuration initialDuration;
+    if (cr->durationType() == DurationType::V_MEASURE) {
+        initialDuration = TDuration(cr->measure()->timesig(), true);
+
+        if (initialDuration.fraction() < cr->measure()->timesig() && nSteps > 0) {
+            // Duration already shortened by truncation; shorten one step less
+            --nSteps;
+        }
+    } else {
+        initialDuration = _is.duration();
+    }
+    TDuration d = (nSteps != 0) ? initialDuration.shiftRetainDots(nSteps, stepDotted) : initialDuration;
     if (!d.isValid()) {
         return;
     }
@@ -3225,8 +3279,6 @@ void Score::cmdExplode()
             ChordRest* cr = toChordRest(firstCRSegment->element(track));
             if (cr) {
                 XmlReader e(mimeData);
-                e.context()->setScore(cr->score());
-                e.context()->setPasteMode(true);
                 pasteStaff(e, cr->segment(), cr->staffIdx());
             }
         }
@@ -3985,7 +4037,7 @@ void Score::cmdPitchUp()
     EngravingItem* el = selection().element();
     if (el && el->isLyrics()) {
         cmdMoveLyrics(toLyrics(el), DirectionV::UP);
-    } else if (el && (el->isArticulation() || el->isTextBase())) {
+    } else if (el && (el->isArticulationFamily() || el->isTextBase())) {
         el->undoChangeProperty(Pid::OFFSET, el->offset() + PointF(0.0, -MScore::nudgeStep * el->spatium()), PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
         cmdMoveRest(toRest(el), DirectionV::UP);
@@ -4003,7 +4055,7 @@ void Score::cmdPitchDown()
     EngravingItem* el = selection().element();
     if (el && el->isLyrics()) {
         cmdMoveLyrics(toLyrics(el), DirectionV::DOWN);
-    } else if (el && (el->isArticulation() || el->isTextBase())) {
+    } else if (el && (el->isArticulationFamily() || el->isTextBase())) {
         el->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(el->offset() + PointF(0.0, MScore::nudgeStep * el->spatium())),
                                PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
@@ -4020,7 +4072,7 @@ void Score::cmdPitchDown()
 void Score::cmdPitchUpOctave()
 {
     EngravingItem* el = selection().element();
-    if (el && (el->isArticulation() || el->isTextBase())) {
+    if (el && (el->isArticulationFamily() || el->isTextBase())) {
         el->undoChangeProperty(Pid::OFFSET,
                                PropertyValue::fromValue(el->offset() + PointF(0.0, -MScore::nudgeStep10 * el->spatium())),
                                PropertyFlags::UNSTYLED);
@@ -4036,7 +4088,7 @@ void Score::cmdPitchUpOctave()
 void Score::cmdPitchDownOctave()
 {
     EngravingItem* el = selection().element();
-    if (el && (el->isArticulation() || el->isTextBase())) {
+    if (el && (el->isArticulationFamily() || el->isTextBase())) {
         el->undoChangeProperty(Pid::OFFSET, el->offset() + PointF(0.0, MScore::nudgeStep10 * el->spatium()), PropertyFlags::UNSTYLED);
     } else {
         upDown(false, UpDownMode::OCTAVE);

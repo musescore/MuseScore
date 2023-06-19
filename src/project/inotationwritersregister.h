@@ -23,7 +23,7 @@
 #ifndef MU_PROJECT_INOTATIONWRITERSREGISTER_H
 #define MU_PROJECT_INOTATIONWRITERSREGISTER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "inotationwriter.h"
 
 namespace mu::project {

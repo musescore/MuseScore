@@ -23,11 +23,16 @@
 #ifndef MU_UI_LINUXPLATFORMTHEME_H
 #define MU_UI_LINUXPLATFORMTHEME_H
 
+#include <QtDBus/QDBusReply>
+
 #include "internal/iplatformtheme.h"
 
+class QDBusVariant;
+
 namespace mu::ui {
-class LinuxPlatformTheme : public IPlatformTheme
+class LinuxPlatformTheme : public QObject, public IPlatformTheme
 {
+    Q_OBJECT
 public:
     LinuxPlatformTheme();
 
@@ -44,8 +49,16 @@ public:
     void applyPlatformStyleOnAppForTheme(const ThemeCode& themeCode) override;
     void applyPlatformStyleOnWindowForTheme(QWindow* window, const ThemeCode& themeCode) override;
 
+private slots:
+    void processSettingChange(const QString& group, const QString& key, const QDBusVariant& value);
+
 private:
+    bool isSystemThemeCurrentlyDark() const;
+    QDBusReply<QVariant> getSystemTheme() const;
+
     async::Notification m_platformThemeChanged;
+    bool m_isListening = false;
+    bool m_isSystemThemeDark = false;
 };
 }
 

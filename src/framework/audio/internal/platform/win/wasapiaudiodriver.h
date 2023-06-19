@@ -58,6 +58,8 @@ private:
 
     void reopen();
 
+    AudioDeviceID defaultDeviceId() const;
+
     bool m_isOpened = false;
 
     AudioDeviceID m_deviceId;

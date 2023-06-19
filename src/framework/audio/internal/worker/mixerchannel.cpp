@@ -43,10 +43,17 @@ MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const 
     setSampleRate(sampleRate);
 }
 
-MixerChannel::MixerChannel(const TrackId trackId, const unsigned int sampleRate)
+MixerChannel::MixerChannel(const TrackId trackId, const unsigned int sampleRate, unsigned int audioChannelsCount)
     : MixerChannel(trackId, nullptr, sampleRate)
 {
     ONLY_AUDIO_WORKER_THREAD;
+
+    m_audioChannelsCount = audioChannelsCount;
+}
+
+TrackId MixerChannel::trackId() const
+{
+    return m_trackId;
 }
 
 const AudioOutputParams& MixerChannel::outputParams() const
@@ -146,7 +153,7 @@ unsigned int MixerChannel::audioChannelsCount() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    return m_audioSource ? m_audioSource->audioChannelsCount() : 0;
+    return m_audioSource ? m_audioSource->audioChannelsCount() : m_audioChannelsCount;
 }
 
 async::Channel<unsigned int> MixerChannel::audioChannelsCountChanged() const

@@ -34,6 +34,7 @@
 #include "engraving/libmscore/part.h"
 #include "engraving/libmscore/timesig.h"
 #include "engraving/compat/dummyelement.h"
+#include "engraving/layout/v0/tlayout.h"
 
 #include "translation.h"
 
@@ -82,7 +83,9 @@ TimeDialog::TimeDialog(QWidget* parent)
         sp->setCellReadOnly(i, false);
     }
 
-    sp->elementForCellAt(2)->layout();
+    ElementPtr el = sp->elementForCellAt(2);
+    EngravingItem::layout()->layoutItem(el.get());
+
     sp->setSelected(2);
     paletteChanged(2);
 

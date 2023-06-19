@@ -35,6 +35,7 @@ Rectangle {
     property QtObject frameCpp
     readonly property QtObject titleBarCpp: Boolean(frameCpp) ? frameCpp.actualTitleBar : null
     readonly property int nonContentsHeight: titleBar.visible ? titleBar.heightWhenVisible + tabsPanel.height : 0
+    property int titleBarNavigationPanelOrder: 1
     //! ---
 
     anchors.fill: parent
@@ -67,7 +68,7 @@ Rectangle {
         name: root.objectName+"PanelTabs"
         enabled: root.enabled && root.visible
         section: frameModel.navigationSection
-        order: 1
+        order: root.titleBarNavigationPanelOrder
 
         onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.AboutActive && tabsPanel.visible) {

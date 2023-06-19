@@ -54,6 +54,10 @@ using system_idx_t = size_t;
 using part_idx_t = size_t;
 using page_idx_t = size_t;
 
+using string_idx_t = size_t;
+
+using semitone_t = int8_t;
+
 //-------------------------------------------------------------------
 ///   The value of this enum determines the "stacking order"
 ///   of elements on the canvas.
@@ -93,6 +97,7 @@ enum class ElementType {
     MEASURE_REPEAT,
     TIE,
     ARTICULATION,
+    ORNAMENT,
     FERMATA,
     CHORDLINE,
     DYNAMIC,
@@ -110,12 +115,14 @@ enum class ElementType {
     STAFF_TEXT,
     SYSTEM_TEXT,
     PLAYTECH_ANNOTATION,
+    CAPO,
     TRIPLET_FEEL,
     REHEARSAL_MARK,
     INSTRUMENT_CHANGE,
     STAFFTYPE_CHANGE,
     HARMONY,
     FRET_DIAGRAM,
+    HARP_DIAGRAM,
     BEND,
     STRETCHED_BEND,
     TREMOLOBAR,
@@ -608,6 +615,61 @@ enum class ArpeggioType : unsigned char {
     NORMAL, UP, DOWN, BRACKET, UP_STRAIGHT, DOWN_STRAIGHT
 };
 
+enum class IntervalStep {
+    UNISON,
+    SECOND,
+    THIRD,
+    FOURTH,
+    FIFTH,
+    SIXTH,
+    SEVENTH,
+    OCTAVE
+};
+
+enum class IntervalType {
+    AUTO,
+    AUGMENTED,
+    MAJOR,
+    PERFECT,
+    MINOR,
+    DIMINISHED
+};
+
+struct OrnamentInterval
+{
+    IntervalStep step = IntervalStep::SECOND;
+    IntervalType type = IntervalType::AUTO;
+
+    OrnamentInterval() = default;
+    OrnamentInterval(IntervalStep s, IntervalType t)
+        : step(s), type(t) {}
+
+    inline bool operator ==(const OrnamentInterval& interval) const { return step == interval.step && type == interval.type; }
+    inline bool operator !=(const OrnamentInterval& interval) const { return !operator ==(interval); }
+
+    static bool isPerfectStep(IntervalStep step)
+    {
+        static const std::unordered_set<IntervalStep> perfectSteps {
+            IntervalStep::UNISON,
+            IntervalStep::FOURTH,
+            IntervalStep::FIFTH,
+            IntervalStep::OCTAVE
+        };
+        return mu::contains(perfectSteps, step);
+    }
+
+    bool isPerfect() const
+    {
+        return isPerfectStep(step);
+    }
+};
+
+enum class OrnamentShowAccidental {
+    DEFAULT,
+    ANY_ALTERATION,
+    ALWAYS,
+};
+
 //-------------------------------------------------------------------
 //   Tid
 ///   Enumerates the list of built-in text substyles
@@ -664,6 +726,8 @@ enum class TextStyleType {
     LH_GUITAR_FINGERING,
     RH_GUITAR_FINGERING,
     STRING_NUMBER,
+    HARP_PEDAL_DIAGRAM,
+    HARP_PEDAL_TEXT_DIAGRAM,
 
     // Line-oriented styles
     TEXTLINE,
@@ -855,8 +919,6 @@ enum class JumpType : char {
     DSS_AL_CODA,
     DSS_AL_DBLCODA,
     DSS_AL_FINE,
-    DCODA,
-    DDBLCODA,
     USER
 };
 
@@ -869,6 +931,8 @@ enum class MarkerType : char {
     FINE,
     TOCODA,
     TOCODASYM,
+    DA_CODA,
+    DA_DBLCODA,
     USER
 };
 
@@ -935,6 +999,19 @@ static inline bool operator==(const Key a, const Key b) { return int(a) == int(b
 static inline bool operator!=(const Key a, const Key b) { return static_cast<int>(a) != static_cast<int>(b); }
 static inline Key operator+=(Key& a, const Key& b) { return a = Key(static_cast<int>(a) + static_cast<int>(b)); }
 static inline Key operator-=(Key& a, const Key& b) { return a = Key(static_cast<int>(a) - static_cast<int>(b)); }
+
+struct SwingParameters {
+    int swingUnit = 0;
+    int swingRatio = 0;
+
+    bool isOn() const { return swingUnit != 0; }
+};
+
+struct CapoParams {
+    bool active = false;
+    int fretPosition = 0;
+    std::unordered_set<string_idx_t> ignoredStrings;
+};
 
 struct PartAudioSettingsCompat {
     InstrumentTrackId instrumentId;

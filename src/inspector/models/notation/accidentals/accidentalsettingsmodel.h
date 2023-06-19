@@ -30,6 +30,8 @@ class AccidentalSettingsModel : public AbstractInspectorModel
     Q_OBJECT
 
     Q_PROPERTY(PropertyItem * bracketType READ bracketType CONSTANT)
+    Q_PROPERTY(PropertyItem * isSmall READ isSmall CONSTANT)
+
 public:
     explicit AccidentalSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -39,9 +41,11 @@ public:
     void resetProperties() override;
 
     PropertyItem* bracketType() const;
+    PropertyItem* isSmall() const;
 
 private:
     PropertyItem* m_bracketType = nullptr;
+    PropertyItem* m_isSmall = nullptr;
 };
 }
 

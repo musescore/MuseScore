@@ -76,16 +76,6 @@ VoltaSegment::VoltaSegment(Volta* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void VoltaSegment::layout()
-{
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
-}
-
-//---------------------------------------------------------
 //   propertyDelegate
 //---------------------------------------------------------
 
@@ -271,21 +261,6 @@ PropertyValue Volta::propertyDefault(Pid propertyId) const
     default:
         return TextLineBase::propertyDefault(propertyId);
     }
-}
-
-//---------------------------------------------------------
-//   layoutSystem
-//---------------------------------------------------------
-
-SpannerSegment* Volta::layoutSystem(System* system)
-{
-    SpannerSegment* voltaSegment = TextLineBase::layoutSystem(system);
-
-    // we need set tempo in layout because all tempos of score is set in layout
-    // so fermata in seconda volta works correct because fermata apply itself tempo during layouting
-    setTempo();
-
-    return voltaSegment;
 }
 
 //---------------------------------------------------------

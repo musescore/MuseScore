@@ -19,26 +19,68 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
+import QtQuick 2.15
 import QtGraphicalEffects 1.0
 
-Image {
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+
+Item {
     id: root
 
-    property alias url: root.source
-    property alias side: root.width
+    property string url: ""
+    property int side: 0
+    property bool withBackground: true
 
-    height: width
+    width: side
+    height: side
 
-    fillMode: Image.PreserveAspectCrop
+    Rectangle {
+        id: background
+        anchors.fill: parent
 
-    layer.enabled: true
-    layer.effect: OpacityMask {
-        maskSource: Rectangle {
-            width: root.width
-            height: root.height
-            radius: width / 2
-            visible: false
+        color: ui.theme.backgroundSecondaryColor
+        radius: root.side / 2
+        border.width: 1
+        border.color: ui.theme.strokeColor
+
+        visible: Boolean(root.withBackground)
+    }
+
+    Loader {
+        anchors.fill: parent
+        anchors.margins: Boolean(root.withBackground) ? background.border.width : 0
+
+        sourceComponent: Boolean(root.url) ? avatarComp : stubAvatarComp
+    }
+
+    Component {
+        id: stubAvatarComp
+        StyledIconLabel {
+            anchors.centerIn: parent.centerIn
+            iconCode: IconCode.ACCOUNT
+            font.pixelSize: root.side / 2
+        }
+    }
+
+    Component {
+        id: avatarComp
+        Image {
+            source: root.url
+            sourceSize: Qt.size(width, height)
+            fillMode: Image.PreserveAspectCrop
+
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    width: root.side
+                    height: root.side
+                    radius: width / 2
+                    visible: false
+                }
+            }
         }
     }
 }
+
+

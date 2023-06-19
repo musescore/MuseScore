@@ -34,9 +34,9 @@ class QJsonDocument;
 namespace mu::learn {
 class LearnService : public ILearnService
 {
-    INJECT(learn, ILearnConfiguration, configuration)
-    INJECT(learn, network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(learn, framework::IInteractive, interactive)
+    INJECT(ILearnConfiguration, configuration)
+    INJECT(network::INetworkManagerCreator, networkManagerCreator)
+    INJECT(framework::IInteractive, interactive)
 
 public:
     void refreshPlaylists() override;

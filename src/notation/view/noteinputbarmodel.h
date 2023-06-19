@@ -34,9 +34,9 @@ class NoteInputBarModel : public uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, context)
-    INJECT(notation, playback::IPlaybackController, playbackController)
-    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
+    INJECT(context::IGlobalContext, context)
+    INJECT(playback::IPlaybackController, playbackController)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
 
     Q_PROPERTY(bool isInputAllowed READ isInputAllowed NOTIFY isInputAllowedChanged)
 

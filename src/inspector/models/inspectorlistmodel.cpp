@@ -63,6 +63,11 @@ void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& sel
 
 void InspectorListModel::buildModelsForEmptySelection()
 {
+    if (context()->currentNotation() == nullptr) {
+        removeUnusedModels({}, false /*isRangeSelection*/);
+        return;
+    }
+
     static const QList<InspectorSectionType> persistentSectionList {
         InspectorSectionType::SECTION_SCORE_DISPLAY,
         InspectorSectionType::SECTION_SCORE_APPEARANCE
@@ -78,6 +83,10 @@ void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem
     TRACEFUNC;
 
     if (!m_modelList.isEmpty()) {
+        if (context()->currentNotation() == nullptr) {
+            buildModelsForEmptySelection();
+        }
+
         if (!m_repository->needUpdateElementList(selectedElementList, selectionState)) {
             return;
         }

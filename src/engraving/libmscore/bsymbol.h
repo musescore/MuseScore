@@ -51,7 +51,6 @@ public:
     void remove(EngravingItem*) override;
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
-    void layout() override;
     mu::RectF drag(EditData&) override;
 
     Align align() const { return _align; }

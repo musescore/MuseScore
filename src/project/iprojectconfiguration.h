@@ -25,12 +25,13 @@
 #include <QStringList>
 #include <QColor>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 #include "async/channel.h"
 #include "async/notification.h"
 #include "inotationproject.h"
 #include "projecttypes.h"
+#include "types/bytearray.h"
 
 namespace mu::project {
 class IProjectConfiguration : MODULE_EXPORT_INTERFACE
@@ -40,9 +41,8 @@ class IProjectConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IProjectConfiguration() = default;
 
-    virtual io::paths_t recentProjectPaths() const = 0;
-    virtual void setRecentProjectPaths(const io::paths_t& recentScorePaths) = 0;
-    virtual async::Channel<io::paths_t> recentProjectPathsChanged() const = 0;
+    virtual io::path_t recentFilesJsonPath() const = 0;
+    virtual ByteArray compatRecentFilesData() const = 0;
 
     virtual io::path_t myFirstProjectPath() const = 0;
 
@@ -53,9 +53,6 @@ public:
     virtual void setUserTemplatesPath(const io::path_t& path) = 0;
     virtual async::Channel<io::path_t> userTemplatesPathChanged() const = 0;
 
-    virtual io::path_t defaultProjectsPath() const = 0;
-    virtual void setDefaultProjectsPath(const io::path_t& path) = 0;
-
     virtual io::path_t lastOpenedProjectsPath() const = 0;
     virtual void setLastOpenedProjectsPath(const io::path_t& path) = 0;
 
@@ -65,6 +62,7 @@ public:
     virtual io::path_t userProjectsPath() const = 0;
     virtual void setUserProjectsPath(const io::path_t& path) = 0;
     virtual async::Channel<io::path_t> userProjectsPathChanged() const = 0;
+    virtual io::path_t defaultUserProjectsPath() const = 0;
 
     virtual bool shouldAskSaveLocationType() const = 0;
     virtual void setShouldAskSaveLocationType(bool shouldAsk) = 0;
@@ -113,7 +111,6 @@ public:
     virtual bool shouldDestinationFolderBeOpenedOnExport() const = 0;
     virtual void setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport) = 0;
 
-    virtual QUrl scoreManagerUrl() const = 0;
     virtual QUrl supportForumUrl() const = 0;
 
     virtual bool openDetailedProjectUploadedDialog() const = 0;

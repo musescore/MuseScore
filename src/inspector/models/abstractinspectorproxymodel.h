@@ -38,7 +38,7 @@ class AbstractInspectorProxyModel : public AbstractInspectorModel
 
     Q_PROPERTY(InspectorModelType defaultSubModelType READ defaultSubModelType NOTIFY defaultSubModelTypeChanged)
 
-    INJECT(inspector, IInspectorModelCreator, inspectorModelCreator)
+    INJECT(IInspectorModelCreator, inspectorModelCreator)
 
 public:
     explicit AbstractInspectorProxyModel(QObject* parent, IElementRepositoryService* repository);

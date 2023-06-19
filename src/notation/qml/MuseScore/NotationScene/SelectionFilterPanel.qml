@@ -31,9 +31,7 @@ Item {
     enabled: selectionFilterModel.enabled
 
     property NavigationSection navigationSection: null
-
-    NavigationPanel {
-        id: navPanel
+    property NavigationPanel navigationPanel: NavigationPanel {
         name: "SelectionFilter"
         section: root.navigationSection
         direction: NavigationPanel.Vertical
@@ -64,7 +62,7 @@ Item {
 
             text: model.title
 
-            navigation.panel: navPanel
+            navigation.panel: root.navigationPanel
             navigation.order: model.index
 
             checked: model.isSelected

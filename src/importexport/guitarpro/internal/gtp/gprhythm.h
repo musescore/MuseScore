@@ -1,9 +1,9 @@
-#ifndef GPRHYTHM_H
-#define GPRHYTHM_H
+#ifndef MU_IMPORTEXPORT_GPRHYTHM_H
+#define MU_IMPORTEXPORT_GPRHYTHM_H
 
 #include <utility>
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 class GPRhythm
 {
 public:
@@ -32,5 +32,5 @@ private:
     Tuplet _tuplet;
     int _dotCount{ 0 };
 };
-}
-#endif // GPRHYTHM_H
+} // namespace mu::iex::guitarpro
+#endif // MU_IMPORTEXPORT_GPRHYTHM_H

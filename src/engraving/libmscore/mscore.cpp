@@ -147,7 +147,8 @@ std::string MScore::errorToString(MsError err)
     case MsError::DEST_TREMOLO: return "DEST_TREMOLO";
     case MsError::NO_MIME: return "NO_MIME";
     case MsError::DEST_NO_CR: return "DEST_NO_CR";
-    case MsError::CANNOT_CHANGE_LOCAL_TIMESIG: return "CANNOT_CHANGE_LOCAL_TIMESIG";
+    case MsError::CANNOT_CHANGE_LOCAL_TIMESIG_MEASURE_NOT_EMPTY: return "CANNOT_CHANGE_LOCAL_TIMESIG_MEASURE_NOT_EMPTY";
+    case MsError::CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS: return "CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS";
     case MsError::CORRUPTED_MEASURE: return "CORRUPTED_MEASURE";
     }
 

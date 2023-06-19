@@ -418,6 +418,9 @@ TEST_F(Musicxml_Tests, DISABLED_breaksPage) { // fail after sync with 3.x
 TEST_F(Musicxml_Tests, breaksSystem) {
     mxmlMscxExportTestRefBreaks("testBreaksSystem");
 }
+TEST_F(Musicxml_Tests, breathMarks) {
+    mxmlIoTest("testBreathMarks");
+}
 TEST_F(Musicxml_Tests, changeTranspose) {
     mxmlIoTest("testChangeTranspose");
 }
@@ -697,6 +700,9 @@ TEST_F(Musicxml_Tests, multiMeasureRest4) {
 TEST_F(Musicxml_Tests, multipleNotations) {
     mxmlIoTestRef("testMultipleNotations");
 }
+TEST_F(Musicxml_Tests, negativeOctave) {
+    mxmlMscxExportTestRef("testNegativeOctave");
+}
 TEST_F(Musicxml_Tests, nonStandardKeySig1) {
     mxmlIoTest("testNonStandardKeySig1");
 }
@@ -780,6 +786,9 @@ TEST_F(Musicxml_Tests, specialCharacters) {
 }
 TEST_F(Musicxml_Tests, staffTwoKeySigs) {
     mxmlIoTest("testStaffTwoKeySigs");
+}
+TEST_F(Musicxml_Tests, stringData) {
+    mxmlIoTest("testStringData");
 }
 TEST_F(Musicxml_Tests, stringVoiceName) {
     mxmlIoTestRef("testStringVoiceName");
@@ -948,6 +957,9 @@ TEST_F(Musicxml_Tests, wedge3) {
 }
 TEST_F(Musicxml_Tests, wedge4) {
     mxmlMscxExportTestRef("testWedge4");
+}
+TEST_F(Musicxml_Tests, wedge5) {
+    mxmlIoTestRef("testWedge5");
 }
 TEST_F(Musicxml_Tests, words1) {
     mxmlIoTest("testWords1");

@@ -22,27 +22,11 @@
 
 #include "instrument.h"
 
-#include "infrastructure/htmlparser.h"
-#include "types/typesconv.h"
-
-#include "rw/xmlreader.h"
-#include "rw/xmlwriter.h"
-#include "rw/400/readcontext.h"
-#include "rw/400/tread.h"
-#include "rw/400/twrite.h"
-
-#include "compat/midi/event.h"
-//#include "compat/midi/midipatch.h"
-
 #include "drumset.h"
 #include "instrtemplate.h"
 #include "masterscore.h"
-#include "mscore.h"
-#include "part.h"
-#include "score.h"
 #include "stringdata.h"
 #include "textbase.h"
-#include "utils.h"
 
 #include "log.h"
 
@@ -761,7 +745,10 @@ void Instrument::updateGateTime(int* gateTime, int /*channelIdx*/, const String&
 {
     for (const MidiArticulation& a : _articulation) {
         if (a.name == name) {
-            *gateTime = a.gateTime;
+            // Imagine ["staccato", "accent"] articulations
+            // accent will override the gate time,
+            // so we have to take the minimum value from all articulations
+            *gateTime = std::min(*gateTime, a.gateTime);
             break;
         }
     }

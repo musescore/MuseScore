@@ -62,7 +62,7 @@ TEST_F(PitchWheelRender_Tests, simpleLinear)
         return (int)y;
     };
     func.func = linearFunc;
-    render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
+    render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
 
     EventMap events = render.renderPitchWheel();
 
@@ -91,7 +91,7 @@ TEST_F(PitchWheelRender_Tests, twoReverseFunctions)
         return (int)y;
     };
     func.func = linearFunc;
-    render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
+    render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
 
     auto reverseLinearFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
         float x = (float)(tick - startTick);
@@ -99,7 +99,7 @@ TEST_F(PitchWheelRender_Tests, twoReverseFunctions)
         return (int)y;
     };
     func.func = reverseLinearFunc;
-    render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
+    render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
 
     EventMap events = render.renderPitchWheel();
     EXPECT_EQ(events.size(), 0);
@@ -123,8 +123,8 @@ TEST_F(PitchWheelRender_Tests, channelTest)
         return (int)y;
     };
     func.func = linearFunc;
-    render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
-    render.addPitchWheelFunction(func, 1, MidiInstrumentEffect::NONE);
+    render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
+    render.addPitchWheelFunction(func, 1, 0, MidiInstrumentEffect::NONE);
 
     EventMap events = render.renderPitchWheel();
     std::set<int> channels;
@@ -156,7 +156,7 @@ TEST_F(PitchWheelRender_Tests, twoConnectedFunctions)
             return (int)y;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     {
@@ -173,7 +173,7 @@ TEST_F(PitchWheelRender_Tests, twoConnectedFunctions)
             return (int)y;
         };
         func.func = secondFunc;
-        render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     EventMap events = render.renderPitchWheel();
@@ -204,7 +204,7 @@ TEST_F(PitchWheelRender_Tests, twoDevidedFunctions)
             return (int)y;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     {
@@ -221,7 +221,7 @@ TEST_F(PitchWheelRender_Tests, twoDevidedFunctions)
             return (int)y;
         };
         func.func = secondFunc;
-        render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     EventMap events = render.renderPitchWheel();
@@ -254,7 +254,7 @@ TEST_F(PitchWheelRender_Tests, twoOverlappedFunctions)
             return (int)y;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     {
@@ -271,7 +271,7 @@ TEST_F(PitchWheelRender_Tests, twoOverlappedFunctions)
             return (int)y;
         };
         func.func = secondFunc;
-        render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     EventMap events = render.renderPitchWheel();
@@ -301,7 +301,7 @@ TEST_F(PitchWheelRender_Tests, threeDevidedFunctions)
             return 10;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     {
@@ -313,7 +313,7 @@ TEST_F(PitchWheelRender_Tests, threeDevidedFunctions)
             return 20;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     {
@@ -325,7 +325,7 @@ TEST_F(PitchWheelRender_Tests, threeDevidedFunctions)
             return 30;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     EventMap events = render.renderPitchWheel();
@@ -354,7 +354,7 @@ TEST_F(PitchWheelRender_Tests, threeOverLappedFunctions)
             return 10;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     {
@@ -366,7 +366,7 @@ TEST_F(PitchWheelRender_Tests, threeOverLappedFunctions)
             return 10;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     {
@@ -378,7 +378,7 @@ TEST_F(PitchWheelRender_Tests, threeOverLappedFunctions)
             return 10;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0, MidiInstrumentEffect::NONE);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     EventMap events = render.renderPitchWheel();

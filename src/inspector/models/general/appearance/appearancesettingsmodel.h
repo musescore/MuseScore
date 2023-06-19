@@ -31,7 +31,7 @@ class AppearanceSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    INJECT(inspector, notation::INotationConfiguration, notationConfiguration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
 
     Q_PROPERTY(PropertyItem * leadingSpace READ leadingSpace CONSTANT)
     Q_PROPERTY(PropertyItem * measureWidth READ measureWidth CONSTANT)

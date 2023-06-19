@@ -77,7 +77,7 @@ bool AppMenuModel::isGlobalMenuAvailable()
 
 void AppMenuModel::setupConnections()
 {
-    recentProjectsProvider()->recentProjectListChanged().onNotify(this, [this]() {
+    recentFilesController()->recentFilesListChanged().onNotify(this, [this]() {
         MenuItem& recentScoreListItem = findMenu("menu-file-open");
 
         MenuItemList recentScoresList = makeRecentScoresItems();
@@ -146,9 +146,9 @@ MenuItem* AppMenuModel::makeFileMenu()
         makeSeparator(),
         makeMenuItem("file-import-pdf"),
         makeMenuItem("file-export"),
+        makeMenuItem("file-share-audio"),
         makeSeparator(),
         makeMenuItem("project-properties"),
-        makeMenuItem("parts"),
         makeSeparator(),
         makeMenuItem("print"),
         makeSeparator(),
@@ -397,15 +397,15 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
 MenuItemList AppMenuModel::makeRecentScoresItems()
 {
     MenuItemList items;
-    ProjectMetaList recentProjects = recentProjectsProvider()->recentProjectList();
+    RecentFilesList recentFiles = recentFilesController()->recentFilesList();
 
     int index = 0;
-    for (const ProjectMeta& meta : recentProjects) {
+    for (const RecentFile& file : recentFiles) {
         MenuItem* item = new MenuItem(this);
 
         UiAction action;
         action.code = "file-open";
-        action.title = TranslatableString::untranslatable(meta.fileName().toString());
+        action.title = TranslatableString::untranslatable(io::filename(file).toString());
         item->setAction(action);
 
         item->setId(makeId(item->action().code, index++));
@@ -415,7 +415,7 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
         item->setState(state);
 
         item->setSelectable(true);
-        item->setArgs(ActionData::make_arg1<io::path_t>(meta.filePath));
+        item->setArgs(ActionData::make_arg1<io::path_t>(file));
 
         items << item;
     }

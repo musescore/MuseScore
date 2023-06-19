@@ -62,7 +62,7 @@ Rest::Rest(Segment* parent)
 Rest::Rest(const ElementType& type, Segment* parent)
     : ChordRest(type, parent)
 {
-    _beamMode  = BeamMode::NONE;
+    m_beamMode  = BeamMode::NONE;
     m_sym      = SymId::restQuarter;
 }
 
@@ -74,7 +74,7 @@ Rest::Rest(Segment* parent, const TDuration& d)
 Rest::Rest(const ElementType& type, Segment* parent, const TDuration& d)
     : ChordRest(type, parent)
 {
-    _beamMode  = BeamMode::NONE;
+    m_beamMode  = BeamMode::NONE;
     m_sym      = SymId::restQuarter;
     setDurationType(d);
     if (d.fraction().isValid()) {
@@ -96,11 +96,11 @@ Rest::Rest(const Rest& r, bool link)
         add(Factory::copyNoteDot(*dot));
     }
 
-    if (r._deadSlapped) {
-        DeadSlapped* ndc = Factory::copyDeadSlapped(*r._deadSlapped);
+    if (r.m_deadSlapped) {
+        DeadSlapped* ndc = Factory::copyDeadSlapped(*r.m_deadSlapped);
         add(ndc);
         if (link) {
-            score()->undo(new Link(ndc, r._deadSlapped));
+            score()->undo(new Link(ndc, r.m_deadSlapped));
         }
     }
 }
@@ -169,7 +169,9 @@ mu::RectF Rest::drag(EditData& ed)
         s.rx() = xDragRange * (s.x() < 0 ? -1.0 : 1.0);
     }
     setOffset(PointF(s.x(), s.y()));
-    layout();
+
+    layout()->layoutItem(this);
+
     score()->rebuildBspTree();
     return abbox().united(r);
 }
@@ -196,6 +198,7 @@ bool Rest::acceptDrop(EditData& data) const
         || (type == ElementType::TRIPLET_FEEL)
         || (type == ElementType::STAFF_TEXT)
         || (type == ElementType::PLAYTECH_ANNOTATION)
+        || (type == ElementType::CAPO)
         || (type == ElementType::BAR_LINE)
         || (type == ElementType::BREATH)
         || (type == ElementType::CHORD)
@@ -211,6 +214,7 @@ bool Rest::acceptDrop(EditData& data) const
         || (type == ElementType::TREMOLOBAR)
         || (type == ElementType::IMAGE)
         || (type == ElementType::SYMBOL)
+        || (type == ElementType::HARP_DIAGRAM)
         || (type == ElementType::MEASURE_REPEAT && durationType().type() == DurationType::V_MEASURE)
         ) {
         return true;
@@ -331,103 +335,6 @@ SymId Rest::getSymbol(DurationType type, int line, int lines)
 void Rest::updateSymbol(int line, int lines)
 {
     m_sym = getSymbol(durationType().type(), line, lines);
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Rest::layout()
-{
-    if (m_gap) {
-        return;
-    }
-    for (EngravingItem* e : el()) {
-        e->layout();
-    }
-
-    _skipDraw = false;
-    if (_deadSlapped) {
-        _skipDraw = true;
-        return;
-    }
-
-    double _spatium = spatium();
-
-    setPosX(0.0);
-    const StaffType* stt = staffType();
-    if (stt && stt->isTabStaff()) {
-        // if rests are shown and note values are shown as duration symbols
-        if (stt->showRests() && stt->genDurations()) {
-            DurationType type = durationType().type();
-            int dots = durationType().dots();
-            // if rest is whole measure, convert into actual type and dot values
-            if (type == DurationType::V_MEASURE && measure()) {
-                Fraction ticks = measure()->ticks();
-                TDuration dur  = TDuration(ticks).type();
-                type           = dur.type();
-                dots           = dur.dots();
-            }
-            // symbol needed; if not exist, create, if exists, update duration
-            if (!_tabDur) {
-                _tabDur = new TabDurationSymbol(this, stt, type, dots);
-            } else {
-                _tabDur->setDuration(type, dots, stt);
-            }
-            _tabDur->setParent(this);
-// needed?        _tabDur->setTrack(track());
-            _tabDur->layout();
-            setbbox(_tabDur->bbox());
-            setPos(0.0, 0.0);                   // no rest is drawn: reset any position might be set for it
-            return;
-        }
-        // if no rests or no duration symbols, delete any dur. symbol and chain into standard staff mngmt
-        // this is to ensure horiz space is reserved for rest, even if they are not displayed
-        // Rest::draw() will skip their drawing, if not needed
-        if (_tabDur) {
-            delete _tabDur;
-            _tabDur = 0;
-        }
-    }
-
-    m_dotline = Rest::getDotline(durationType().type());
-
-    double yOff       = offset().y();
-    const Staff* stf = staff();
-    const StaffType* st = stf ? stf->staffTypeForElement(this) : 0;
-    double lineDist = st ? st->lineDistance().val() : 1.0;
-    int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * _spatium));
-    int lines      = st ? st->lines() : 5;
-
-    int naturalLine = computeNaturalLine(lines); // Measured in 1sp steps
-    int voiceOffset = computeVoiceOffset(lines); // Measured in 1sp steps
-    int wholeRestOffset = computeWholeRestOffset(voiceOffset, lines);
-    int finalLine = naturalLine + voiceOffset + wholeRestOffset;
-
-    m_sym = getSymbol(durationType().type(), finalLine + userLine, lines);
-
-    setPosY(finalLine * lineDist * _spatium);
-    if (!shouldNotBeDrawn()) {
-        setbbox(symBbox(m_sym));
-    }
-    layoutDots();
-}
-
-//---------------------------------------------------------
-//   layoutDots
-//---------------------------------------------------------
-
-void Rest::layoutDots()
-{
-    checkDots();
-    double x = symWidthNoLedgerLines() + score()->styleMM(Sid::dotNoteDistance) * mag();
-    double dx = score()->styleMM(Sid::dotDotDistance) * mag();
-    double y = m_dotline * spatium() * .5;
-    for (NoteDot* dot : m_dots) {
-        dot->layout();
-        dot->setPos(x, y);
-        x += dx;
-    }
 }
 
 double Rest::symWidthNoLedgerLines() const
@@ -770,7 +677,7 @@ PointF Rest::stemPos() const
 PointF Rest::stemPosBeam() const
 {
     PointF p(pagePos());
-    if (_up) {
+    if (m_up) {
         p.ry() += bbox().top() + spatium() * 1.5;
     } else {
         p.ry() += bbox().bottom() - spatium() * 1.5;
@@ -784,7 +691,7 @@ PointF Rest::stemPosBeam() const
 
 double Rest::stemPosX() const
 {
-    if (_up) {
+    if (m_up) {
         return bbox().right();
     } else {
         return bbox().left();
@@ -872,7 +779,7 @@ void Rest::add(EngravingItem* e)
         e->added();
         break;
     case ElementType::DEAD_SLAPPED:
-        _deadSlapped = toDeadSlapped(e);
+        m_deadSlapped = toDeadSlapped(e);
     // fallthrough
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
@@ -897,7 +804,7 @@ void Rest::remove(EngravingItem* e)
         e->removed();
         break;
     case ElementType::DEAD_SLAPPED:
-        _deadSlapped = nullptr;
+        m_deadSlapped = nullptr;
     // fallthrough
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
@@ -984,7 +891,9 @@ bool Rest::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::OFFSET:
         score()->addRefresh(canvasBoundingRect());
         setOffset(v.value<PointF>());
-        layout();
+
+        layout()->layoutItem(this);
+
         score()->addRefresh(canvasBoundingRect());
         if (measure() && durationType().type() == DurationType::V_MEASURE) {
             measure()->triggerLayout();

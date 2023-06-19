@@ -4,6 +4,7 @@
 *.autosave
 .qped
 .directory
+.idea
 /builds
 /build_overrides.cmake
 build.release

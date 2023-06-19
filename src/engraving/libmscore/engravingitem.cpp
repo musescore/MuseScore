@@ -36,12 +36,12 @@
 
 #include "draw/types/pen.h"
 #include "iengravingfont.h"
-#include "style/style.h"
 
-#include "rw/400/tread.h"
-#include "rw/400/twrite.h"
+#include "rw/rwregister.h"
 
 #include "types/typesconv.h"
+
+#include "layout/v0/tlayout.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -50,7 +50,6 @@
 
 #include "chord.h"
 #include "factory.h"
-#include "fret.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
 #include "measure.h"
@@ -894,10 +893,12 @@ void Compound::addElement(EngravingItem* e, double x, double y)
 
 void Compound::layout()
 {
+    UNREACHABLE;
     setbbox(RectF());
+    layout::v0::LayoutContext lctx(score());
     for (auto i = elements.begin(); i != elements.end(); ++i) {
         EngravingItem* e = *i;
-        e->layout();
+        layout::v0::TLayout::layoutItem(e, lctx);
         addbbox(e->bbox().translated(e->pos()));
     }
 }
@@ -966,7 +967,7 @@ ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    xml.context()->setClipboardmode(true);
+
     xml.startElement("EngravingItem");
     if (isNote()) {
         xml.tagFraction("duration", toNote(this)->chord()->ticks());
@@ -974,7 +975,9 @@ ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
     if (!dragOffset.isNull()) {
         xml.tagPoint("dragOffset", dragOffset);
     }
-    rw400::TWrite::writeItem(this, xml, *xml.context());
+
+    rw::RWRegister::writer()->writeItem(this, xml);
+
     xml.endElement();
     buffer.close();
     return buffer.data();
@@ -1017,10 +1020,8 @@ ElementType EngravingItem::readType(XmlReader& e, PointF* dragOffset, Fraction* 
 EngravingItem* EngravingItem::readMimeData(Score* score, const ByteArray& data, PointF* dragOffset, Fraction* duration)
 {
     XmlReader e(data);
-    const ElementType type = EngravingItem::readType(e, dragOffset, duration);
-    e.context()->setScore(score);
-    e.context()->setPasteMode(true);
 
+    const ElementType type = EngravingItem::readType(e, dragOffset, duration);
     if (type == ElementType::INVALID) {
         LOGD("cannot read type");
         return nullptr;
@@ -1028,7 +1029,7 @@ EngravingItem* EngravingItem::readMimeData(Score* score, const ByteArray& data, 
 
     EngravingItem* el = Factory::createItem(type, score->dummy(), false);
     if (el) {
-        rw400::TRead::readItem(el, e, *e.context());
+        rw::RWRegister::reader()->readItem(el, e);
     }
 
     return el;
@@ -2413,21 +2414,6 @@ void EngravingItem::doInitAccessible()
 
 #endif // ENGRAVING_NO_ACCESSIBILITY
 
-KerningType EngravingItem::computeKerningType(const EngravingItem* nextItem) const
-{
-    if (_userSetKerning != KerningType::NOT_SET) {
-        return _userSetKerning;
-    }
-    if (sameVoiceKerningLimited() && nextItem->sameVoiceKerningLimited() && track() == nextItem->track()) {
-        return KerningType::NON_KERNING;
-    }
-    if ((neverKernable() || nextItem->neverKernable())
-        && !(alwaysKernable() || nextItem->alwaysKernable())) {
-        return KerningType::NON_KERNING;
-    }
-    return doComputeKerningType(nextItem);
-}
-
 String EngravingItem::formatBarsAndBeats() const
 {
     String result;
@@ -2442,23 +2428,5 @@ String EngravingItem::formatBarsAndBeats() const
     }
 
     return result;
-}
-
-double EngravingItem::computePadding(const EngravingItem* nextItem) const
-{
-    double scaling = (mag() + nextItem->mag()) / 2;
-    double padding = score()->paddingTable().at(type()).at(nextItem->type());
-    padding *= scaling;
-    if (!isLedgerLine() && nextItem->isRest()) {
-        const Rest* rest = toRest(nextItem);
-        SymId symbol = rest->sym();
-        if (symbol == SymId::restWholeLegerLine
-            || symbol == SymId::restDoubleWholeLegerLine
-            || symbol == SymId::restHalfLegerLine) {
-            // In this case the ledgerLine is included in the glyph itself, so we must ignore it
-            padding += rest->bbox().left();
-        }
-    }
-    return padding;
 }
 }

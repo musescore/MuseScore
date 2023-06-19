@@ -123,9 +123,10 @@ void ProjectAudioSettings::setTrackOutputParams(const InstrumentTrackId& partId,
     bool needSave = it == m_trackOutputParamsMap.cend();
 
     if (!needSave) {
-        needSave |= (it->second.volume != params.volume);
-        needSave |= (it->second.balance != params.balance);
+        needSave |= !RealIsEqual(it->second.volume, params.volume);
+        needSave |= !RealIsEqual(it->second.balance, params.balance);
         needSave |= (it->second.fxChain != params.fxChain);
+        needSave |= (it->second.auxSends != params.auxSends);
     }
 
     m_trackOutputParamsMap.insert_or_assign(partId, params);
@@ -302,7 +303,7 @@ AudioOutputParams ProjectAudioSettings::outputParamsFromJson(const QJsonObject& 
     result.fxChain = fxChainFromJson(object.value("fxChain").toObject());
     result.balance = object.value("balance").toVariant().toFloat();
     result.volume = object.value("volumeDb").toVariant().toFloat();
-    result.auxSends = auxSendsFromJson(object.value("auxSends").toObject());
+    result.auxSends = auxSendsFromJson(object.value("auxSends").toArray());
 
     return result;
 }
@@ -339,12 +340,12 @@ AudioFxParams ProjectAudioSettings::fxParamsFromJson(const QJsonObject& object) 
     return result;
 }
 
-AuxSendsParams ProjectAudioSettings::auxSendsFromJson(const QJsonObject& object) const
+AuxSendsParams ProjectAudioSettings::auxSendsFromJson(const QJsonArray& objectList) const
 {
     AuxSendsParams result;
 
-    for (const QString& key : object.keys()) {
-        AuxSendParams params = auxSendParamsFromJson(object.value(key).toObject());
+    for (const QJsonValue value : objectList) {
+        AuxSendParams params = auxSendParamsFromJson(value.toObject());
         result.emplace_back(std::move(params));
     }
 

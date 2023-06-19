@@ -45,8 +45,8 @@ class AbstractInspectorModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(inspector, context::IGlobalContext, context)
-    INJECT(inspector, actions::IActionsDispatcher, dispatcher)
+    INJECT(context::IGlobalContext, context)
+    INJECT(actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(int icon READ icon CONSTANT)

@@ -22,7 +22,7 @@
 #ifndef MU_PLAYBACK_IPLAYBACKCONFIGURATION_H
 #define MU_PLAYBACK_IPLAYBACKCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "types/retval.h"
 #include "playbacktypes.h"
 
@@ -47,6 +47,17 @@ public:
 
     virtual bool isMixerSectionVisible(MixerSectionType sectionType) const = 0;
     virtual void setMixerSectionVisible(MixerSectionType sectionType, bool visible) = 0;
+
+    virtual bool isAuxSendVisible(audio::aux_channel_idx_t index) const = 0;
+    virtual void setAuxSendVisible(audio::aux_channel_idx_t index, bool visible) = 0;
+    virtual async::Channel<audio::aux_channel_idx_t, bool> isAuxSendVisibleChanged() const = 0;
+
+    virtual bool isAuxChannelVisible(audio::aux_channel_idx_t index) const = 0;
+    virtual void setAuxChannelVisible(audio::aux_channel_idx_t index, bool visible) const = 0;
+    virtual async::Channel<audio::aux_channel_idx_t, bool> isAuxChannelVisibleChanged() const = 0;
+
+    virtual audio::gain_t defaultAuxSendValue(audio::aux_channel_idx_t index, audio::AudioSourceType sourceType,
+                                              const String& instrumentSoundId) const = 0;
 
     virtual const SoundProfileName& basicSoundProfileName() const = 0;
     virtual const SoundProfileName& museSoundProfileName() const = 0;

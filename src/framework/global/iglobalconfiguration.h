@@ -22,7 +22,7 @@
 #ifndef MU_FRAMEWORK_IGLOBALCONFIGURATION_H
 #define MU_FRAMEWORK_IGLOBALCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 
 namespace mu::framework {

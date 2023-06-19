@@ -22,9 +22,6 @@
 
 #include "durationelement.h"
 
-#include "rw/400/twrite.h"
-#include "realfn.h"
-
 #include "property.h"
 #include "score.h"
 #include "staff.h"

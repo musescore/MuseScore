@@ -43,7 +43,6 @@ using namespace mu::io;
 using namespace mu::engraving;
 
 #define TAB_DEFAULT_LINE_SP   (1.5)
-#define TAB_RESTSYMBDISPL     2.0
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -799,87 +798,26 @@ TabDurationSymbol::TabDurationSymbol(ChordRest* parent)
     : EngravingItem(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
-    _beamGrid   = TabBeamGrid::NONE;
-    _beamLength = 0.0;
-    _tab        = 0;
-    _text       = String();
+    m_beamGrid   = TabBeamGrid::NONE;
+    m_beamLength = 0.0;
+    m_tab        = 0;
+    m_text       = String();
 }
 
 TabDurationSymbol::TabDurationSymbol(ChordRest* parent, const StaffType* tab, DurationType type, int dots)
     : EngravingItem(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
-    _beamGrid   = TabBeamGrid::NONE;
-    _beamLength = 0.0;
+    m_beamGrid   = TabBeamGrid::NONE;
+    m_beamLength = 0.0;
     setDuration(type, dots, tab);
 }
 
 TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
     : EngravingItem(e)
 {
-    _tab = e._tab;
-    _text = e._text;
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void TabDurationSymbol::layout()
-{
-    if (!_tab) {
-        setbbox(RectF());
-        return;
-    }
-    double _spatium    = spatium();
-    double hbb, wbb, xbb, ybb;       // bbox sizes
-    double xpos, ypos;               // position coords
-
-    _beamGrid = TabBeamGrid::NONE;
-    Chord* chord = explicitParent() && explicitParent()->isChord() ? toChord(explicitParent()) : nullptr;
-    // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
-    if (!chord || !chord->isChord()
-        || (chord->beamMode() != BeamMode::BEGIN && chord->beamMode() != BeamMode::MID
-            && chord->beamMode() != BeamMode::END)) {
-        mu::draw::FontMetrics fm(_tab->durationFont());
-        hbb   = _tab->durationBoxH();
-        wbb   = fm.width(_text);
-        xbb   = 0.0;
-        xpos  = 0.0;
-        ypos  = _tab->durationFontYOffset();
-        ybb   = _tab->durationBoxY() - ypos;
-        // with rests, move symbol down by half its displacement from staff
-        if (explicitParent() && explicitParent()->isRest()) {
-            ybb  += TAB_RESTSYMBDISPL * _spatium;
-            ypos += TAB_RESTSYMBDISPL * _spatium;
-        }
-    }
-    // if on a chord with special beam mode, layout an 'English'-style duration grid
-    else {
-        TablatureDurationFont font = _tab->_durationFonts[_tab->_durationFontIdx];
-        hbb   = font.gridStemHeight * _spatium;             // bbox height is stem height
-        wbb   = font.gridStemWidth * _spatium;              // bbox width is stem width
-        xbb   = -wbb * 0.5;                                 // bbox is half at left and half at right of stem centre
-        ybb   = -hbb;                                       // bbox top is at top of stem height
-        xpos  = 0.75 * _spatium;                            // conventional centring of stem on fret marks
-        ypos  = _tab->durationGridYOffset();                // stem start is at bottom
-        if (chord->beamMode() == BeamMode::BEGIN) {
-            _beamGrid   = TabBeamGrid::INITIAL;
-            _beamLength = 0.0;
-        } else if (chord->beamMode() == BeamMode::MID || chord->beamMode() == BeamMode::END) {
-            _beamLevel  = static_cast<int>(chord->durationType().type()) - static_cast<int>(font.zeroBeamLevel);
-            _beamGrid   = (_beamLevel < 1 ? TabBeamGrid::INITIAL : TabBeamGrid::MEDIALFINAL);
-            // _beamLength and bbox x and width will be set in layout2(),
-            // once horiz. positions of chords are known
-        }
-    }
-    // set this' mag from parent chord mag (include staff mag)
-    double mag = chord != nullptr ? chord->mag() : 1.0;
-    setMag(mag);
-    mag = magS();             // local mag * score mag
-    // set magnified bbox and position
-    bbox().setRect(xbb * mag, ybb * mag, wbb * mag, hbb * mag);
-    setPos(xpos * mag, ypos * mag);
+    m_tab = e.m_tab;
+    m_text = e.m_text;
 }
 
 //---------------------------------------------------------
@@ -892,7 +830,7 @@ void TabDurationSymbol::layout()
 void TabDurationSymbol::layout2()
 {
     // if not within a TAB or not a MEDIALFINAL grid element, do nothing
-    if (!_tab || _beamGrid != TabBeamGrid::MEDIALFINAL) {
+    if (!m_tab || m_beamGrid != TabBeamGrid::MEDIALFINAL) {
         return;
     }
 
@@ -906,11 +844,11 @@ void TabDurationSymbol::layout2()
     double beamLen     = prevChord->pagePos().x() - chord->pagePos().x();            // negative
     // page pos. difference already includes any magnification in effect:
     // scale it down, as it will be magnified again during drawing
-    _beamLength = beamLen / mags;
+    m_beamLength = beamLen / mags;
     // update bbox x and w, but keep current y and h
     bbox().setLeft(beamLen);
     // set bbox width to half a stem width (magnified) plus beam length (already magnified)
-    bbox().setWidth(_tab->_durationFonts[_tab->_durationFontIdx].gridStemWidth * spatium() * 0.5 * mags - beamLen);
+    bbox().setWidth(m_tab->_durationFonts[m_tab->_durationFontIdx].gridStemWidth * spatium() * 0.5 * mags - beamLen);
 }
 
 //---------------------------------------------------------
@@ -921,11 +859,11 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;
     using namespace mu::draw;
-    if (!_tab) {
+    if (!m_tab) {
         return;
     }
 
-    if (_repeat && (_tab->symRepeat() == TablatureSymbolRepeat::SYSTEM)) {
+    if (m_repeat && (m_tab->symRepeat() == TablatureSymbolRepeat::SYSTEM)) {
         Chord* chord = toChord(explicitParent());
         ChordRest* prevCR = prevChordRest(chord);
         if (prevCR && (chord->measure()->system() == prevCR->measure()->system())) {
@@ -939,15 +877,15 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
     Pen pen(curColor());
     painter->setPen(pen);
     painter->scale(mag, mag);
-    if (_beamGrid == TabBeamGrid::NONE) {
+    if (m_beamGrid == TabBeamGrid::NONE) {
         // if no beam grid, draw symbol
-        mu::draw::Font f(_tab->durationFont());
+        mu::draw::Font f(m_tab->durationFont());
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
         painter->setFont(f);
-        painter->drawText(PointF(0.0, 0.0), _text);
+        painter->drawText(PointF(0.0, 0.0), m_text);
     } else {
         // if beam grid, draw stem line
-        TablatureDurationFont& font = _tab->_durationFonts[_tab->_durationFontIdx];
+        TablatureDurationFont& font = m_tab->_durationFonts[m_tab->_durationFontIdx];
         double _spatium = spatium();
         pen.setCapStyle(PenCapStyle::FlatCap);
         pen.setWidthF(font.gridStemWidth * _spatium);
@@ -957,7 +895,7 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
         painter->drawLine(PointF(0.0, h), PointF(0.0, 0.0));
         // if beam grid is medial/final, draw beam lines too: lines go from mid of
         // previous stem (delta x stored in _beamLength) to mid of this' stem (0.0)
-        if (_beamGrid == TabBeamGrid::MEDIALFINAL) {
+        if (m_beamGrid == TabBeamGrid::MEDIALFINAL) {
             pen.setWidthF(font.gridBeamWidth * _spatium);
             painter->setPen(pen);
             // lower height available to beams by half a beam width,
@@ -965,10 +903,10 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
             h += (font.gridBeamWidth * _spatium) * 0.5;
             // draw beams equally spaced within the stem height (this is
             // different from modern engraving, but common in historic prints)
-            double step  = -h / _beamLevel;
+            double step  = -h / m_beamLevel;
             double y     = h;
-            for (int i = 0; i < _beamLevel; i++, y += step) {
-                painter->drawLine(PointF(_beamLength, y), PointF(0.0, y));
+            for (int i = 0; i < m_beamLevel; i++, y += step) {
+                painter->drawLine(PointF(m_beamLength, y), PointF(0.0, y));
             }
         }
     }

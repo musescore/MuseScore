@@ -40,7 +40,7 @@ namespace mu::notation {
 class ScoreCallbacks;
 class NotationNoteInput : public INotationNoteInput, public async::Asyncable
 {
-    INJECT(notation, INotationConfiguration, configuration)
+    INJECT(INotationConfiguration, configuration)
 
 public:
     NotationNoteInput(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack);

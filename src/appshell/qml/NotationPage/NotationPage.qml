@@ -126,11 +126,11 @@ DockPage {
             contentBottomPadding: 2
 
             NotationToolBar {
-                navigation.section: root.topToolKeyNavSec
-                navigation.order: 2
+                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.order: 2
 
                 onActiveFocusRequested: {
-                    if (navigation.active) {
+                    if (navigationPanel.active) {
                         notationToolBar.forceActiveFocus()
                     }
                 }
@@ -154,8 +154,8 @@ DockPage {
             ]
 
             PlaybackToolBar {
-                navigation.section: root.topToolKeyNavSec
-                navigation.order: 3
+                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.order: 3
 
                 floating: playbackToolBar.floating
             }
@@ -174,8 +174,8 @@ DockPage {
             contentBottomPadding: 2
 
             UndoRedoToolBar {
-                navigation.section: root.topToolKeyNavSec
-                navigation.order: 4
+                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.order: 4
             }
         }
     ]
@@ -203,8 +203,8 @@ DockPage {
                 maximumWidth: noteInputBar.width
                 maximumHeight: noteInputBar.height
 
-                navigation.section: root.noteInputKeyNavSec
-                navigation.order: 1
+                navigationPanel.section: root.noteInputKeyNavSec
+                navigationPanel.order: 1
             }
         }
     ]
@@ -333,7 +333,6 @@ DockPage {
 
             MixerPanel {
                 navigationSection: mixerPanel.navigationSection
-                navigationPanelOrderStart: mixerPanel.navigationPanelOrderStart
 
                 Component.onCompleted: {
                     mixerPanel.contextMenuModel = contextMenuModel
@@ -364,7 +363,11 @@ DockPage {
 
             dropDestinations: root.horizontalPanelDropDestinations
 
+            navigationSection: root.navigationPanelSec(pianoKeyboardPanel.location)
+
             PianoKeyboardPanel {
+                navigationSection: pianoKeyboardPanel.navigationSection
+
                 Component.onCompleted: {
                     pianoKeyboardPanel.contextMenuModel = contextMenuModel
                 }
@@ -390,7 +393,11 @@ DockPage {
 
             dropDestinations: root.horizontalPanelDropDestinations
 
-            Timeline {}
+            navigationSection: root.navigationPanelSec(timelinePanel.location)
+
+            Timeline {
+                navigationSection: timelinePanel.navigationSection
+            }
         },
 
         DockPanel {
@@ -411,7 +418,11 @@ DockPage {
 
             location: Location.Bottom
 
-            DrumsetPanel {}
+            navigationSection: root.navigationPanelSec(drumsetPanel.location)
+
+            DrumsetPanel {
+                navigationSection: timelinePanel.navigationSection
+            }
         }
     ]
 
@@ -436,6 +447,10 @@ DockPage {
     statusBar: DockStatusBar {
         objectName: pageModel.statusBarName()
 
-        NotationStatusBar {}
+        contentNavigationPanel: content.navigationPanel
+
+        NotationStatusBar {
+            id: content
+        }
     }
 }

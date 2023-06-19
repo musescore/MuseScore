@@ -94,42 +94,29 @@ class SLine : public Spanner
 {
     OBJECT_ALLOCATOR(engraving, SLine)
 
-    Millimetre _lineWidth;
-    mu::draw::Color _lineColor { engravingConfiguration()->defaultColor() };
-    LineType _lineStyle { LineType::SOLID };
-    double _dashLineLen      { 5.0 };
-    double _dashGapLen       { 5.0 };
-    bool _diagonal          { false };
-
-protected:
-    virtual mu::PointF linePos(Grip, System** system) const;
-
 public:
     SLine(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
     SLine(const SLine&);
-
-    virtual void layout() override;
-    virtual SpannerSegment* layoutSystem(System*) override;
 
     virtual LineSegment* createLineSegment(System* parent) = 0;
     void setLen(double l);
     using EngravingItem::bbox;
     const mu::RectF& bbox() const override;
 
-    bool diagonal() const { return _diagonal; }
-    void setDiagonal(bool v) { _diagonal = v; }
+    bool diagonal() const { return m_diagonal; }
+    void setDiagonal(bool v) { m_diagonal = v; }
 
-    Millimetre lineWidth() const { return _lineWidth; }
-    mu::draw::Color lineColor() const { return _lineColor; }
-    LineType lineStyle() const { return _lineStyle; }
-    void setLineWidth(const Millimetre& v) { _lineWidth = v; }
-    void setLineColor(const mu::draw::Color& v) { _lineColor = v; }
-    void setLineStyle(LineType v) { _lineStyle = v; }
+    Millimetre lineWidth() const { return m_lineWidth; }
+    mu::draw::Color lineColor() const { return m_lineColor; }
+    LineType lineStyle() const { return m_lineStyle; }
+    void setLineWidth(const Millimetre& v) { m_lineWidth = v; }
+    void setLineColor(const mu::draw::Color& v) { m_lineColor = v; }
+    void setLineStyle(LineType v) { m_lineStyle = v; }
 
-    double dashLineLen() const { return _dashLineLen; }
-    void setDashLineLen(double val) { _dashLineLen = val; }
-    double dashGapLen() const { return _dashGapLen; }
-    void setDashGapLen(double val) { _dashGapLen = val; }
+    double dashLineLen() const { return m_dashLineLen; }
+    void setDashLineLen(double val) { m_dashLineLen = val; }
+    double dashGapLen() const { return m_dashGapLen; }
+    void setDashGapLen(double val) { m_dashGapLen = val; }
 
     LineSegment* frontSegment() { return toLineSegment(Spanner::frontSegment()); }
     const LineSegment* frontSegment() const { return toLineSegment(Spanner::frontSegment()); }
@@ -142,7 +129,18 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
 
+    virtual mu::PointF linePos(Grip, System** system) const;
+
+private:
+
     friend class LineSegment;
+
+    Millimetre m_lineWidth;
+    mu::draw::Color m_lineColor { engravingConfiguration()->defaultColor() };
+    LineType m_lineStyle = LineType::SOLID;
+    double m_dashLineLen = 5.0;
+    double m_dashGapLen = 5.0;
+    bool m_diagonal = false;
 };
 } // namespace mu::engraving
 #endif

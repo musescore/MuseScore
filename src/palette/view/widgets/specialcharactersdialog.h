@@ -43,7 +43,7 @@ class SpecialCharactersDialog : public mu::uicomponents::TopLevelDialog, public 
 {
     Q_OBJECT
 
-    INJECT(Ms, mu::context::IGlobalContext, globalContext)
+    INJECT(mu::context::IGlobalContext, globalContext)
 
 public:
     SpecialCharactersDialog(QWidget* parent = nullptr);

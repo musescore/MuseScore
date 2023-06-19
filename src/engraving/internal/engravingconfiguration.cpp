@@ -206,6 +206,11 @@ Color EngravingConfiguration::noteBackgroundColor() const
     return Color::WHITE;
 }
 
+Color EngravingConfiguration::fontPrimaryColor() const
+{
+    return Color(uiConfiguration()->currentTheme().values[ui::ThemeStyleKey::FONT_PRIMARY_COLOR].toString());
+}
+
 double EngravingConfiguration::guiScaling() const
 {
     return uiConfiguration()->guiScaling();

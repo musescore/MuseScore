@@ -42,26 +42,26 @@ static constexpr const char* sharpNotes[] = {
 
 static constexpr const char* flatNotes[] = {
     QT_TRANSLATE_NOOP("global", "C"),
-    QT_TRANSLATE_NOOP("global", "Db"),
+    QT_TRANSLATE_NOOP("global", "D♭"),
     QT_TRANSLATE_NOOP("global", "D"),
-    QT_TRANSLATE_NOOP("global", "Eb"),
+    QT_TRANSLATE_NOOP("global", "E♭"),
     QT_TRANSLATE_NOOP("global", "E"),
     QT_TRANSLATE_NOOP("global", "F"),
-    QT_TRANSLATE_NOOP("global", "Gb"),
+    QT_TRANSLATE_NOOP("global", "G♭"),
     QT_TRANSLATE_NOOP("global", "G"),
-    QT_TRANSLATE_NOOP("global", "Ab"),
+    QT_TRANSLATE_NOOP("global", "A♭"),
     QT_TRANSLATE_NOOP("global", "A"),
-    QT_TRANSLATE_NOOP("global", "Bb"),
+    QT_TRANSLATE_NOOP("global", "B♭"),
     QT_TRANSLATE_NOOP("global", "B")
 };
 
-std::string mu::pitchToString(int pitch, bool addoctave, bool useSharps /* = true */)
+std::string mu::pitchToString(int pitch, bool addoctave, bool useFlats /* = false */)
 {
     if (pitch < 0 || pitch > 127) {
         return std::string();
     }
 
-    auto source = useSharps ? sharpNotes : flatNotes;
+    auto source = useFlats ? flatNotes : sharpNotes;
 
     int i = pitch % 12;
     if (addoctave) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -450,7 +450,7 @@
               <direction>down</direction>
               <subtype>articAccentStaccatoBelow</subtype>
               <ornamentStyle>baroque</ornamentStyle>
-              <anchor>4</anchor>
+              <anchor>1</anchor>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -2254,23 +2254,25 @@
           </Measure>
         <Measure>
           <voice>
+            <StaffText>
+              <linked>
+                </linked>
+              <text>Test that articulations properties are preserved after conversion (at least if they are not contradictory)</text>
+              </StaffText>
             <Chord>
               <linked>
-                <indexDiff>1</indexDiff>
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
                 <direction>down</direction>
                 <subtype>articAccentStaccatoBelow</subtype>
                 <ornamentStyle>baroque</ornamentStyle>
-                <anchor>4</anchor>
+                <anchor>1</anchor>
                 <linked>
-                  <indexDiff>1</indexDiff>
                   </linked>
                 </Articulation>
               <Note>
                 <linked>
-                  <indexDiff>1</indexDiff>
                   </linked>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
@@ -2327,17 +2329,6 @@
                 <tpc>14</tpc>
                 </Note>
               </Chord>
-            <location>
-              <fractions>31/1</fractions>
-              </location>
-            <StaffText>
-              <linked>
-                <location>
-                  <fractions>-32/1</fractions>
-                  </location>
-                </linked>
-              <text>Test that articulations properties are preserved after conversion (at least if they are not contradictory)</text>
-              </StaffText>
             </voice>
           </Measure>
         <Measure>

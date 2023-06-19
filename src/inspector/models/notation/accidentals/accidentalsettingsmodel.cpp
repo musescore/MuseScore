@@ -37,6 +37,7 @@ AccidentalSettingsModel::AccidentalSettingsModel(QObject* parent, IElementReposi
 void AccidentalSettingsModel::createProperties()
 {
     m_bracketType = buildPropertyItem(mu::engraving::Pid::ACCIDENTAL_BRACKET);
+    m_isSmall = buildPropertyItem(mu::engraving::Pid::SMALL);
 }
 
 void AccidentalSettingsModel::requestElements()
@@ -47,6 +48,7 @@ void AccidentalSettingsModel::requestElements()
 void AccidentalSettingsModel::loadProperties()
 {
     loadPropertyItem(m_bracketType);
+    loadPropertyItem(m_isSmall);
 }
 
 void AccidentalSettingsModel::resetProperties()
@@ -57,4 +59,9 @@ void AccidentalSettingsModel::resetProperties()
 PropertyItem* AccidentalSettingsModel::bracketType() const
 {
     return m_bracketType;
+}
+
+PropertyItem* AccidentalSettingsModel::isSmall() const
+{
+    return m_isSmall;
 }

@@ -74,23 +74,6 @@ class MeasureBase : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, MeasureBase)
 
-    MeasureBase* _next    { 0 };
-    MeasureBase* _prev    { 0 };
-
-    ElementList _el;                      ///< Measure(/tick) relative -elements: with defined start time
-                                          ///< but outside the staff
-    Fraction _tick         { Fraction(0, 1) };
-    int _no                { 0 };         ///< Measure number, counting from zero
-    int _noOffset          { 0 };         ///< Offset to measure number
-    double m_oldWidth       { 0 };         ///< Used to restore layout during recalculations in Score::collectSystem()
-
-protected:
-
-    MeasureBase(const ElementType& type, System* system = 0);
-    MeasureBase(const MeasureBase&);
-
-    Fraction _len  { Fraction(0, 1) };    ///< actual length of measure
-
 public:
 
     ~MeasureBase();
@@ -117,9 +100,6 @@ public:
     Measure* prevMeasure() const;
     Measure* nextMeasureMM() const;
     Measure* prevMeasureMM() const;
-
-    virtual void layout() override;
-    virtual void layoutCrossStaff() {}
 
     ElementList& el() { return _el; }
     const ElementList& el() const { return _el; }
@@ -198,6 +178,24 @@ public:
 
     void setOldWidth(double n) { m_oldWidth = n; }
     double oldWidth() const { return m_oldWidth; }
+
+protected:
+
+    MeasureBase(const ElementType& type, System* system = 0);
+    MeasureBase(const MeasureBase&);
+
+    Fraction _len  { Fraction(0, 1) };    ///< actual length of measure
+
+private:
+    MeasureBase* _next    { 0 };
+    MeasureBase* _prev    { 0 };
+
+    ElementList _el;                      ///< Measure(/tick) relative -elements: with defined start time
+                                          ///< but outside the staff
+    Fraction _tick         { Fraction(0, 1) };
+    int _no                { 0 };         ///< Measure number, counting from zero
+    int _noOffset          { 0 };         ///< Offset to measure number
+    double m_oldWidth       { 0 };         ///< Used to restore layout during recalculations in Score::collectSystem()
 };
 } // namespace mu::engraving
 #endif

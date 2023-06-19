@@ -77,6 +77,8 @@ MixerPanelSection {
                 icon: IconCode.SOLO
                 checked: channelItem.solo
 
+                enabled: !channelItem.muted
+
                 navigation.name: "SoloButton"
                 navigation.panel: channelItem.panel
                 navigation.row: root.navigationRowStart + 1

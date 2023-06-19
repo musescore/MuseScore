@@ -687,6 +687,46 @@ void Staff::clearTimeSig()
 }
 
 //---------------------------------------------------------
+//   Staff::transpose
+//
+//    actual staff transposioton at tick
+//    (taking key into account)
+//---------------------------------------------------------
+
+Interval Staff::transpose(const Fraction& tick) const
+{
+    // get real transposition
+
+    Interval v = part()->instrument(tick)->transpose();
+    if (v.isZero()) {
+        return v;
+    }
+    Key cKey = concertKey(tick);
+    v.flip();
+    Key tKey = transposeKey(cKey, v, part()->preferSharpFlat());
+    v.flip();
+
+    int chromatic = (7 * (static_cast<int>(cKey) - static_cast<int>(tKey))) % 12;
+    if (chromatic < 0) {
+        chromatic += 12;
+    }
+    int diatonic = (4 * (static_cast<int>(cKey) - static_cast<int>(tKey))) % 7;
+    if (diatonic < 0) {
+        diatonic += 7;
+    }
+
+    if (v.chromatic < 0 || v.diatonic < 0) {
+        chromatic -= 12;
+        diatonic -= 7;
+    }
+
+    v.chromatic = v.chromatic - (v.chromatic % 12) + chromatic;
+    v.diatonic = v.diatonic - (v.diatonic % 7) + diatonic;
+
+    return v;
+}
+
+//---------------------------------------------------------
 //   Staff::keySigEvent
 //
 //    locates the key sig currently in effect at tick
@@ -805,9 +845,9 @@ SwingParameters Staff::swing(const Fraction& tick) const
     DurationType unit = TConv::fromXml(ba.constChar(), DurationType::V_INVALID);
     int swingRatio = score()->styleI(Sid::swingRatio);
     if (unit == DurationType::V_EIGHTH) {
-        swingUnit = Constants::division / 2;
+        swingUnit = Constants::DIVISION / 2;
     } else if (unit == DurationType::V_16TH) {
-        swingUnit = Constants::division / 4;
+        swingUnit = Constants::DIVISION / 4;
     } else if (unit == DurationType::V_ZERO) {
         swingUnit = 0;
     }
@@ -826,64 +866,31 @@ SwingParameters Staff::swing(const Fraction& tick) const
     return _swingList.at(*it);
 }
 
-//---------------------------------------------------------
-//   capo
-//---------------------------------------------------------
-
-int Staff::capo(const Fraction& tick) const
+const CapoParams& Staff::capo(const Fraction& tick) const
 {
-    if (_capoList.empty()) {
-        return 0;
+    static const CapoParams dummy;
+
+    if (_capoMap.empty()) {
+        return dummy;
     }
 
-    std::vector<int> ticks = mu::keys(_capoList);
+    std::vector<int> ticks = mu::keys(_capoMap);
     auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick.ticks());
     if (it == ticks.cbegin()) {
-        return 0;
+        return dummy;
     }
     --it;
-    return _capoList.at(*it);
+    return _capoMap.at(*it);
 }
 
-//---------------------------------------------------------
-//   getNotes
-//---------------------------------------------------------
-
-std::list<Note*> Staff::getNotes() const
+void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
 {
-    std::list<Note*> list;
-
-    staff_idx_t staffIdx = idx();
-
-    SegmentType st = SegmentType::ChordRest;
-    for (Segment* s = score()->firstSegment(st); s; s = s->next1(st)) {
-        for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-            track_idx_t track = voice + staffIdx * VOICES;
-            EngravingItem* e = s->element(track);
-            if (e && e->isChord()) {
-                addChord(list, toChord(e), voice);
-            }
-        }
-    }
-
-    return list;
+    _capoMap.insert_or_assign(tick.ticks(), params);
 }
 
-//---------------------------------------------------------
-//   addChord
-//---------------------------------------------------------
-
-void Staff::addChord(std::list<Note*>& list, Chord* chord, voice_idx_t voice) const
+void Staff::clearCapoParams()
 {
-    for (Chord* c : chord->graceNotes()) {
-        addChord(list, c, voice);
-    }
-    for (Note* note : chord->notes()) {
-        if (note->tieBack()) {
-            continue;
-        }
-        list.push_back(note);
-    }
+    _capoMap.clear();
 }
 
 //---------------------------------------------------------
@@ -956,8 +963,8 @@ bool Staff::isPrimaryStaff() const
     if (!_links) {
         return true;
     }
-    std::list<Staff*> s;
-    std::list<Staff*> ss;
+    std::vector<Staff*> s;
+    std::vector<Staff*> ss;
     for (auto e : *_links) {
         Staff* staff = toStaff(e);
         if (staff->score() == score()) {

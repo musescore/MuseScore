@@ -203,11 +203,7 @@ void AbstractNotationPaintView::onCurrentNotationChanged()
         onUnloadNotation(m_notation);
     }
 
-    m_notation = globalContext()->currentNotation();
-    m_continuousPanel->setNotation(m_notation);
-    m_playbackCursor->setNotation(m_notation);
-    m_loopInMarker->setNotation(m_notation);
-    m_loopOutMarker->setNotation(m_notation);
+    setNotation(globalContext()->currentNotation());
 
     if (!m_notation) {
         return;
@@ -491,7 +487,51 @@ void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, 
 void AbstractNotationPaintView::hideContextMenu()
 {
     TRACEFUNC;
-    emit hideContextMenuRequested();
+
+    if (m_isContextMenuOpen) {
+        emit hideContextMenuRequested();
+    }
+}
+
+void AbstractNotationPaintView::showElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size, bool activateFocus)
+{
+    TRACEFUNC;
+
+    QPointF _pos = pos;
+    if (_pos.isNull()) {
+        _pos = QPointF(width() / 2, height() / 2);
+    }
+
+    RectF elemRect = fromLogical(size);
+    QPointF elemSize = QPointF(elemRect.width(), elemRect.height());
+
+    PopupModelType modelType = AbstractElementPopupModel::modelTypeFromElement(elementType);
+
+    emit showElementPopupRequested(modelType, pos, elemSize);
+
+    if (activateFocus) {
+        dispatcher()->dispatch("nav-first-control");
+    }
+}
+
+void AbstractNotationPaintView::hideElementPopup()
+{
+    TRACEFUNC;
+
+    if (m_isPopupOpen) {
+        emit hideElementPopupRequested();
+    }
+}
+
+void AbstractNotationPaintView::toggleElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size,
+                                                   bool activateFocus)
+{
+    if (m_isPopupOpen) {
+        hideElementPopup();
+        return;
+    }
+
+    showElementPopup(elementType, pos, size, activateFocus);
 }
 
 void AbstractNotationPaintView::paint(QPainter* qp)
@@ -867,6 +907,8 @@ bool AbstractNotationPaintView::moveCanvas(qreal dx, qreal dy)
 
         m_autoScrollEnabled = false;
         m_enableAutoScrollTimer.start(2000);
+
+        hideElementPopup();
     }
 
     return moved;
@@ -929,6 +971,8 @@ void AbstractNotationPaintView::setScaling(qreal scaling, const PointF& pos, boo
     if (!m_notation) {
         return;
     }
+
+    hideElementPopup();
 
     qreal currentScaling = this->currentScaling();
 
@@ -995,6 +1039,16 @@ void AbstractNotationPaintView::forceFocusIn()
     setFocus(true);
     emit activeFocusRequested();
     forceActiveFocus();
+}
+
+void AbstractNotationPaintView::onContextMenuIsOpenChanged(bool open)
+{
+    m_isContextMenuOpen = open;
+}
+
+void AbstractNotationPaintView::onElementPopupIsOpenChanged(bool open)
+{
+    m_isPopupOpen = open;
 }
 
 void AbstractNotationPaintView::mousePressEvent(QMouseEvent* event)
@@ -1134,6 +1188,10 @@ void AbstractNotationPaintView::setNotation(INotationPtr notation)
 {
     clear();
     m_notation = notation;
+    m_continuousPanel->setNotation(m_notation);
+    m_playbackCursor->setNotation(m_notation);
+    m_loopInMarker->setNotation(m_notation);
+    m_loopOutMarker->setNotation(m_notation);
     redraw();
 }
 

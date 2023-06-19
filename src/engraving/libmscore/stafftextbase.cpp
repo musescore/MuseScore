@@ -40,7 +40,7 @@ namespace mu::engraving {
 StaffTextBase::StaffTextBase(const ElementType& type, Segment* parent, TextStyleType tid, ElementFlags flags)
     : TextBase(type, parent, tid, flags)
 {
-    setSwingParameters(Constants::division / 2, 60);
+    setSwingParameters(Constants::DIVISION / 2, 60);
 }
 
 void StaffTextBase::clear()

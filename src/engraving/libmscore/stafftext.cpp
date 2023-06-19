@@ -45,16 +45,6 @@ StaffText::StaffText(Segment* parent, TextStyleType tid)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void StaffText::layout()
-{
-    TextBase::layout();
-    autoplaceSegmentElement();
-}
-
-//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 

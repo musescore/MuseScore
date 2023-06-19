@@ -28,8 +28,6 @@
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
-#include "layout/tlayout.h"
-
 #include "actionicon.h"
 #include "note.h"
 #include "score.h"
@@ -269,6 +267,11 @@ SymId Accidental::symbol() const
     return accList[int(accidentalType())].sym;
 }
 
+bool Accidental::parentNoteHasParentheses() const
+{
+    return explicitParent() && parentItem()->isNote() ? toNote(parentItem())->headHasParentheses() : false;
+}
+
 //---------------------------------------------------------
 //   subtype2value
 //    returns the resulting pitch offset
@@ -327,14 +330,13 @@ void Accidental::setSubtype(const AsciiStringView& tag)
     setAccidentalType(name2subtype(tag));
 }
 
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Accidental::layout()
+void Accidental::computeMag()
 {
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
+    double m = explicitParent() ? parentItem()->mag() : 1.0;
+    if (isSmall()) {
+        m *= score()->styleD(Sid::smallNoteMag);
+    }
+    setMag(m);
 }
 
 //---------------------------------------------------------

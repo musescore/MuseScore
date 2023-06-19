@@ -48,11 +48,6 @@ void Hook::setHookType(int i)
     setSym(symIdForHookIndex(i, straight));
 }
 
-void Hook::layout()
-{
-    setbbox(symBbox(_sym));
-}
-
 void Hook::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;

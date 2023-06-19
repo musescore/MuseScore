@@ -29,14 +29,15 @@ StyledDialogView {
     id: root
 
     property alias text: content.text
+    property string cloudCode: ""
 
     contentWidth: content.implicitWidth
     contentHeight: content.implicitHeight
 
     margins: 16
 
-    AccountModel {
-        id: accountModel
+    CloudsModel {
+        id: cloudsModel
 
         onUserAuthorizedChanged: {
             if (userAuthorized) {
@@ -46,7 +47,7 @@ StyledDialogView {
     }
 
     Component.onCompleted: {
-        accountModel.load()
+        cloudsModel.load()
     }
 
     enum ButtonId {
@@ -75,10 +76,10 @@ StyledDialogView {
                 root.hide()
                 return
             case RequireAuthorizationDialog.CreateAccount:
-                accountModel.createAccount()
+                cloudsModel.createAccount(root.cloudCode)
                 return
             case RequireAuthorizationDialog.Login:
-                accountModel.signIn()
+                cloudsModel.signIn(root.cloudCode)
                 return
             }
         }

@@ -32,7 +32,7 @@ class EditGridSizeDialogModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(notation, INotationConfiguration, configuration)
+    INJECT(INotationConfiguration, configuration)
 
     Q_PROPERTY(
         int verticalGridSizeSpatium READ verticalGridSizeSpatium WRITE setVerticalGridSizeSpatium NOTIFY verticalGridSizeSpatiumChanged)

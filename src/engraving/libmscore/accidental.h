@@ -73,16 +73,6 @@ class Accidental final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Accidental)
     DECLARE_CLASSOF(ElementType::ACCIDENTAL)
 
-    std::vector<SymElement> el;
-    AccidentalType _accidentalType { AccidentalType::NONE };
-    bool m_isSmall                    { false };
-    AccidentalBracket _bracket     { AccidentalBracket::NONE };
-    AccidentalRole _role           { AccidentalRole::AUTO };
-
-    friend class Factory;
-
-    Accidental(EngravingItem* parent);
-
 public:
 
     Accidental* clone() const override { return new Accidental(*this); }
@@ -104,7 +94,6 @@ public:
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
-    void layout() override;
 
     void draw(mu::draw::Painter*) const override;
     bool isEditable() const override { return true; }
@@ -115,6 +104,7 @@ public:
 
     AccidentalBracket bracket() const { return _bracket; }
     void setBracket(AccidentalBracket val) { _bracket = val; }
+    bool parentNoteHasParentheses() const;
 
     void setRole(AccidentalRole r) { _role = r; }
 
@@ -135,6 +125,20 @@ public:
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
 
     String accessibleInfo() const override;
+
+    void computeMag();
+
+private:
+
+    friend class Factory;
+
+    Accidental(EngravingItem* parent);
+
+    std::vector<SymElement> el;
+    AccidentalType _accidentalType { AccidentalType::NONE };
+    bool m_isSmall                    { false };
+    AccidentalBracket _bracket     { AccidentalBracket::NONE };
+    AccidentalRole _role           { AccidentalRole::AUTO };
 };
 
 extern AccidentalVal sym2accidentalVal(SymId id);

@@ -32,8 +32,8 @@
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
 #include "multiinstances/imultiinstancesprovider.h"
-#include "cloud/icloudprojectsservice.h"
-#include "cloud/iauthorizationservice.h"
+#include "cloud/musescorecom/imusescorecomservice.h"
+#include "cloud/audiocom/iaudiocomservice.h"
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
 #include "inotationreadersregister.h"
@@ -46,30 +46,29 @@
 
 #include "iprojectconfiguration.h"
 #include "iprojectcreator.h"
-#include "iplatformrecentfilescontroller.h"
+#include "irecentfilescontroller.h"
 #include "iprojectautosaver.h"
 
 namespace mu::project {
 class ProjectActionsController : public IProjectFilesController, public QObject, public actions::Actionable, public async::Asyncable
 {
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, INotationReadersRegister, readers)
-    INJECT(project, IProjectCreator, projectCreator)
-    INJECT(project, IPlatformRecentFilesController, platformRecentFilesController)
-    INJECT(project, IProjectAutoSaver, projectAutoSaver)
-    INJECT(project, ISaveProjectScenario, saveProjectScenario)
-    INJECT(project, IExportProjectScenario, exportProjectScenario)
-
-    INJECT(project, actions::IActionsDispatcher, dispatcher)
-    INJECT(project, framework::IInteractive, interactive)
-    INJECT(project, context::IGlobalContext, globalContext)
-    INJECT(project, mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(project, cloud::IAuthorizationService, authorizationService)
-    INJECT(project, cloud::ICloudProjectsService, cloudProjectsService)
-    INJECT(project, notation::INotationConfiguration, notationConfiguration)
-    INJECT(project, playback::IPlaybackController, playbackController)
-    INJECT(project, print::IPrintProvider, printProvider)
-    INJECT(project, io::IFileSystem, fileSystem)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(INotationReadersRegister, readers)
+    INJECT(IProjectCreator, projectCreator)
+    INJECT(IRecentFilesController, recentFilesController)
+    INJECT(IProjectAutoSaver, projectAutoSaver)
+    INJECT(ISaveProjectScenario, saveProjectScenario)
+    INJECT(IExportProjectScenario, exportProjectScenario)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(cloud::IMuseScoreComService, museScoreComService)
+    INJECT(cloud::IAudioComService, audioComService)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(playback::IPlaybackController, playbackController)
+    INJECT(print::IPrintProvider, printProvider)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     void init();
@@ -106,6 +105,7 @@ private:
     bool saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
 
     void publish();
+    void shareAudio();
 
     bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
     bool saveProjectLocally(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save);
@@ -134,10 +134,12 @@ private:
     void uploadAudio(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen, bool isFirstSave);
 
     void onProjectSuccessfullyUploaded(const QUrl& urlToOpen = QUrl(), bool isFirstSave = true);
-    void onProjectUploadFailed(const Ret& ret, bool publishMode);
+    void onProjectUploadFailed(const Ret& ret, const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode);
+
+    void onAudioSuccessfullyUploaded(const QUrl& urlToOpen);
+    void onAudioUploadFailed(const Ret& ret);
 
     void warnCloudIsNotAvailable();
-    void warnPublishIsNotAvailable();
 
     bool askIfUserAgreesToSaveProjectWithErrors(const Ret& ret, const SaveLocation& location);
     void warnScoreWithoutPartsCannotBeSaved();
@@ -167,16 +169,16 @@ private:
     void exportScore();
     void printScore();
 
-    void prependToRecentScoreList(const io::path_t& filePath);
-    void removeFromRecentScoreList(const io::path_t& filePath);
-
     bool hasSelection() const;
+
+    QUrl scoreManagerUrl() const;
 
     bool m_isProjectSaving = false;
     bool m_isProjectClosing = false;
     bool m_isProjectProcessing = false;
     bool m_isProjectPublishing = false;
     bool m_isProjectUploading = false;
+    bool m_isAudioSharing = false;
 
     framework::ProgressPtr m_uploadingProjectProgress = nullptr;
     framework::ProgressPtr m_uploadingAudioProgress = nullptr;

@@ -37,7 +37,7 @@ NICE-TO-HAVE TODO:
 #include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
 #include "style/style.h"
-#include "layout/tlayout.h"
+
 #include "types/typesconv.h"
 #include "iengravingfont.h"
 
@@ -71,16 +71,6 @@ static const ElementStyle glissandoElementStyle {
 GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
     : LineSegment(ElementType::GLISSANDO_SEGMENT, sp, parent, ElementFlag::MOVABLE)
 {
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void GlissandoSegment::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -230,19 +220,10 @@ LineSegment* Glissando::createLineSegment(System* parent)
     return seg;
 }
 
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Glissando::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
 void Glissando::addLineAttachPoints()
 {
-    auto seg = toGlissandoSegment(frontSegment());
+    GlissandoSegment* frontSeg = toGlissandoSegment(frontSegment());
+    GlissandoSegment* backSeg = toGlissandoSegment(backSegment());
     Note* startNote = nullptr;
     Note* endNote = nullptr;
     if (startElement() && startElement()->isNote()) {
@@ -251,11 +232,11 @@ void Glissando::addLineAttachPoints()
     if (endElement() && endElement()->isNote()) {
         endNote = toNote(endElement());
     }
-    if (!seg || !startNote || !endNote || (startNote->findMeasure() != endNote->findMeasure())) {
+    if (!frontSeg || !backSeg || !startNote || !endNote) {
         return;
     }
-    double startX = seg->ipos().x();
-    double endX = seg->pos2().x() + seg->ipos().x(); // because pos2 is relative to ipos
+    double startX = frontSeg->ipos().x();
+    double endX = backSeg->pos2().x() + backSeg->ipos().x(); // because pos2 is relative to ipos
     // Here we don't pass y() because its value is unreliable during the first stages of layout.
     // The y() is irrelevant anyway for horizontal spacing.
     startNote->addLineAttachPoint(PointF(startX, 0.0), this);

@@ -77,35 +77,6 @@ String Symbol::accessibleInfo() const
 }
 
 //---------------------------------------------------------
-//   layout
-//    height() and width() should return sensible
-//    values when calling this method
-//---------------------------------------------------------
-
-void Symbol::layout()
-{
-    // foreach(EngravingItem* e, leafs())     done in BSymbol::layout() ?
-    //      e->layout();
-    setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
-    double w = width();
-    PointF p;
-    if (align() == AlignV::BOTTOM) {
-        p.setY(-height());
-    } else if (align() == AlignV::VCENTER) {
-        p.setY((-height()) * .5);
-    } else if (align() == AlignV::BASELINE) {
-        p.setY(-baseLine());
-    }
-    if (align() == AlignH::RIGHT) {
-        p.setX(-w);
-    } else if (align() == AlignH::HCENTER) {
-        p.setX(-(w * .5));
-    }
-    setPos(p);
-    BSymbol::layout();
-}
-
-//---------------------------------------------------------
 //   Symbol::draw
 //---------------------------------------------------------
 
@@ -206,11 +177,6 @@ void FSymbol::draw(mu::draw::Painter* painter) const
     painter->setFont(f);
     painter->setPen(curColor());
     painter->drawText(PointF(0, 0), toString());
-}
-
-void FSymbol::layout()
-{
-    setbbox(mu::draw::FontMetrics::boundingRect(_font, toString()));
 }
 
 //---------------------------------------------------------

@@ -35,13 +35,13 @@ class StaffText final : public StaffTextBase
     OBJECT_ALLOCATOR(engraving, StaffText)
     DECLARE_CLASSOF(ElementType::STAFF_TEXT)
 
-    PropertyValue propertyDefault(Pid id) const override;
-
 public:
     StaffText(Segment* parent = 0, TextStyleType = TextStyleType::STAFF);
 
     StaffText* clone() const override { return new StaffText(*this); }
-    void layout() override;
+
+private:
+    PropertyValue propertyDefault(Pid id) const override;
 };
 } // namespace mu::engraving
 #endif

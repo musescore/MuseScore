@@ -22,7 +22,7 @@
 #ifndef MU_CLOUD_ILEARNCONFIGURATION_H
 #define MU_CLOUD_ILEARNCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "network/networktypes.h"
 
 namespace mu::learn {

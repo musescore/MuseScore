@@ -33,6 +33,9 @@ StyledDialogView {
     property bool isPublish: false
     property string name
     property int visibility: CloudVisibility.Private
+    property string existingOnlineScoreUrl
+    property bool replaceExistingOnlineScore: true
+    property string cloudCode: ""
 
     contentWidth: contentItem.implicitWidth
     contentHeight: contentItem.implicitHeight
@@ -53,21 +56,27 @@ StyledDialogView {
     Item {
         id: contentItem
 
+        property var cloudInfo: null
+
         implicitWidth: Math.max(420, contentColumn.implicitWidth)
         implicitHeight: contentColumn.implicitHeight
 
         AccountAvatar {
+            id: avatar
+
             anchors.top: parent.top
             anchors.right: parent.right
 
             side: 38
-            url: accountModel.accountInfo.avatarUrl
+            url: Boolean(contentItem.cloudInfo) ? contentItem.cloudInfo.userAvatarUrl : null
 
-            AccountModel {
-                id: accountModel
+            CloudsModel {
+                id: cloudsModel
 
                 Component.onCompleted: {
                     load()
+
+                    contentItem.cloudInfo = cloudsModel.cloudInfo(root.cloudCode)
                 }
             }
         }
@@ -80,7 +89,7 @@ StyledDialogView {
             StyledTextLabel {
                 id: titleLabel
                 text: root.isPublish
-                      ? qsTrc("project/save", "Publish to MuseScore.com")
+                      ? qsTrc("project/save", "Publish to %1").arg(Boolean(contentItem.cloudInfo) ? contentItem.cloudInfo.cloudTitle : "")
                       : qsTrc("project/save", "Save to cloud")
                 font: ui.theme.largeBodyBoldFont
                 horizontalAlignment: Text.AlignLeft
@@ -153,6 +162,34 @@ StyledDialogView {
                         }
                     }
                 }
+
+                RadioButtonGroup {
+                    Layout.fillWidth: true
+
+                    orientation: ListView.Vertical
+                    spacing: 8
+
+                    visible: root.isPublish && Boolean(root.existingOnlineScoreUrl)
+
+                    model: [
+                        //: The text between `<a href=\"%1\">` and `</a>` will be a clickable link to the online score in question
+                        { text: qsTrc("project/save", "Replace the existing <a href=\"%1\">online score</a>").arg(root.existingOnlineScoreUrl), value: true },
+                        { text: qsTrc("project/save", "Publish as new online score"), value: false }
+                    ]
+
+                    delegate: RoundedRadioButton {
+                        checked: modelData.value === root.replaceExistingOnlineScore
+                        text: modelData.text
+
+                        navigation.name: modelData.text
+                        navigation.panel: optionsNavPanel
+                        navigation.row: 3 + model.index
+
+                        onToggled: {
+                            root.replaceExistingOnlineScore = modelData.value
+                        }
+                    }
+                }
             }
 
             RowLayout {
@@ -204,7 +241,8 @@ StyledDialogView {
                     onClicked: {
                         root.done(SaveToCloudResponse.Ok, {
                                       name: root.name,
-                                      visibility: root.visibility
+                                      visibility: root.visibility,
+                                      replaceExistingOnlineScore: root.replaceExistingOnlineScore
                                   })
                     }
                 }

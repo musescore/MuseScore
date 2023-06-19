@@ -25,7 +25,7 @@
 #include <string>
 
 namespace mu {
-std::string pitchToString(int pitch, bool addoctave=true, bool useSharps=true);
+std::string pitchToString(int pitch, bool addoctave=true, bool useFlats=false);
 }
 
 #endif // MU_FRAMEWORK_GLOBAL_H

@@ -35,7 +35,7 @@ class QWidget;
 namespace mu::ui {
 class WidgetUtils
 {
-    INJECT_STATIC(ui, IUiConfiguration, uiConfiguration)
+    INJECT_STATIC(IUiConfiguration, uiConfiguration)
 
 public:
     template<class W>

@@ -27,8 +27,6 @@
 #include "libmscore/engravingitem.h"
 #include "libmscore/property.h"
 
-#include "400/writecontext.h"
-
 #include "log.h"
 
 using namespace mu;
@@ -42,9 +40,6 @@ XmlWriter::XmlWriter(mu::io::IODevice* device)
 
 XmlWriter::~XmlWriter()
 {
-    if (m_selfContext) {
-        delete m_context;
-    }
 }
 
 void XmlWriter::startElementRaw(const String& s)
@@ -293,6 +288,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::TEMPOCHANGE_TYPE: {
         element(name, TConv::toXml(data.value<GradualTempoChangeType>()));
     } break;
+    case P_TYPE::ORNAMENT_INTERVAL: {
+        element(name, TConv::toXml(data.value<OrnamentInterval>()));
+    } break;
     default: {
         UNREACHABLE; //! TODO
     }
@@ -334,24 +332,5 @@ void XmlWriter::comment(const String& text)
 String XmlWriter::xmlString(const String& s)
 {
     return XmlStreamWriter::escapeString(s);
-}
-
-WriteContext* XmlWriter::context() const
-{
-    if (!m_context) {
-        m_context = new WriteContext();
-        m_selfContext = true;
-    }
-    return m_context;
-}
-
-void XmlWriter::setContext(WriteContext* context)
-{
-    if (m_context && m_selfContext) {
-        delete m_context;
-    }
-
-    m_context = context;
-    m_selfContext = false;
 }
 }

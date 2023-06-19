@@ -33,7 +33,7 @@ class MacOSMainWindowBridge : public MainWindowBridge, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(appshell, IUiConfiguration, uiConfiguration)
+    INJECT(IUiConfiguration, uiConfiguration)
 
 public:
     explicit MacOSMainWindowBridge(QObject* parent = nullptr);

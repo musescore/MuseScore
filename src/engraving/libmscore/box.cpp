@@ -24,17 +24,12 @@
 
 #include <cmath>
 
-#include "layout/tlayout.h"
-
 #include "actionicon.h"
 #include "factory.h"
-#include "fret.h"
-#include "image.h"
 #include "layoutbreak.h"
 #include "mscore.h"
 #include "score.h"
 #include "stafftext.h"
-#include "symbol.h"
 #include "system.h"
 #include "text.h"
 #include "textframe.h"
@@ -54,23 +49,9 @@ static const ElementStyle boxStyle {
 static const ElementStyle hBoxStyle {
 };
 
-//---------------------------------------------------------
-//   Box
-//---------------------------------------------------------
-
 Box::Box(const ElementType& type, System* parent)
     : MeasureBase(type, parent)
 {
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Box::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layoutBox(this, ctx);
 }
 
 //---------------------------------------------------------
@@ -140,10 +121,6 @@ void Box::startEditDrag(EditData& ed)
     }
 }
 
-//---------------------------------------------------------
-//   editDrag
-//---------------------------------------------------------
-
 void Box::editDrag(EditData& ed)
 {
     if (isVBox()) {
@@ -165,16 +142,13 @@ void Box::editDrag(EditData& ed)
         }
         triggerLayout();
     }
-    layout();
-}
 
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
+    layout()->layoutItem(this);
+}
 
 void Box::endEdit(EditData&)
 {
-    layout();
+    layout()->layoutItem(this);
 }
 
 //---------------------------------------------------------
@@ -344,26 +318,6 @@ HBox::HBox(System* parent)
 {
     initElementStyle(&hBoxStyle);
     setBoxWidth(Spatium(5.0));
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void HBox::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
-//   layout2
-//    height (bbox) is defined now
-//---------------------------------------------------------
-
-void HBox::layout2()
-{
-    Box::layout();
 }
 
 //---------------------------------------------------------
@@ -608,16 +562,6 @@ PropertyValue VBox::getProperty(Pid propertyId) const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void VBox::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
-//---------------------------------------------------------
 //   startEditDrag
 //---------------------------------------------------------
 
@@ -628,16 +572,6 @@ void VBox::startEditDrag(EditData& ed)
         setBoxHeight(Spatium(height() / spatium()));
     }
     Box::startEditDrag(ed);
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void FBox::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }
 
 //---------------------------------------------------------

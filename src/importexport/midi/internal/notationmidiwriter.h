@@ -32,8 +32,8 @@
 namespace mu::iex::midi {
 class NotationMidiWriter : public project::INotationWriter
 {
-    INJECT(midi, notation::INotationConfiguration, notationConfiguration)
-    INJECT(midi, IMidiImportExportConfiguration, midiImportExportConfiguration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(IMidiImportExportConfiguration, midiImportExportConfiguration)
 
 public:
 

@@ -297,6 +297,10 @@ MenuItem& AbstractMenuModel::item(MenuItemList& items, const ActionCode& actionC
 MenuItem& AbstractMenuModel::menu(MenuItemList& items, const QString& menuId)
 {
     for (MenuItem* item : items) {
+        if (!item) {
+            continue;
+        }
+
         if (item->id() == menuId) {
             return *item;
         }

@@ -219,6 +219,11 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations>
+          <ornaments>
+            <turn/>
+            </ornaments>
+          </notations>
         </note>
       <note>
         <pitch>

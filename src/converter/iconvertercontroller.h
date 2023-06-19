@@ -22,7 +22,7 @@
 #ifndef MU_CONVERTER_ICONVERTERCONTROLLER_H
 #define MU_CONVERTER_ICONVERTERCONTROLLER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "types/ret.h"
 #include "io/path.h"
 

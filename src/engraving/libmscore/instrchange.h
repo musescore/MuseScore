@@ -50,15 +50,13 @@ public:
 
     InstrumentChange* clone() const override { return new InstrumentChange(*this); }
 
-    void layout() override;
-
     Instrument* instrument() const { return _instrument; }
     void setInstrument(Instrument* i) { _instrument = i; }
     void setInstrument(Instrument&& i) { *_instrument = i; }
     void setInstrument(const Instrument& i);
     void setupInstrument(const Instrument* instrument);
 
-    std::vector<KeySig*> keySigs() const;
+    std::vector<KeySig*> keySigs(bool all=false) const;
     std::vector<Clef*> clefs() const;
 
     bool init() const { return _init; }

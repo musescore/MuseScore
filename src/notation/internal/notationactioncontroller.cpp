@@ -450,7 +450,7 @@ void NotationActionController::init()
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
-            registerAction("interval" + std::to_string(i), &Interaction::addIntervalToSelectedNotes, i);
+            registerAction("interval" + std::to_string(i), &Interaction::addIntervalToSelectedNotes, i, PlayMode::PlayChord);
         }
     }
 
@@ -472,6 +472,7 @@ void NotationActionController::init()
     registerTabPadNoteAction("pad-note-256-TAB", Pad::NOTE256);
     registerTabPadNoteAction("pad-note-512-TAB", Pad::NOTE512);
     registerTabPadNoteAction("pad-note-1024-TAB", Pad::NOTE1024);
+    registerAction("rest-TAB", &Interaction::putRestToSelection);
 
     for (int i = 0; i < MAX_FRET; ++i) {
         registerAction("fret-" + std::to_string(i), [i, this]() { addFret(i); }, &Controller::isTablatureStaff);
@@ -714,7 +715,7 @@ void NotationActionController::padNote(const Pad& pad)
     startNoteInputIfNeed();
 
     noteInput->padNote(pad);
-    if (currentNotationElements()->msScore()->inputState().usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
+    if (currentNotationElements()->msScore()->inputState().usingNoteEntryMethod(engraving::NoteEntryMethod::RHYTHM)) {
         playSelectedElement();
     }
 }
@@ -939,7 +940,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
     case MoveDirection::Down:
         if (!quickly && selectedElement && selectedElement->isLyrics()) {
             interaction->moveLyrics(direction);
-        } else if (selectedElement && (selectedElement->isTextBase() || selectedElement->isArticulation())) {
+        } else if (selectedElement && (selectedElement->isTextBase() || selectedElement->isArticulationFamily())) {
             interaction->nudge(direction, quickly);
         } else if (interaction->noteInput()->isNoteInputMode()
                    && interaction->noteInput()->state().staffGroup == mu::engraving::StaffGroup::TAB) {
@@ -1353,6 +1354,11 @@ void NotationActionController::startEditSelectedElement(const ActionData& args)
 
     if (element->isInstrumentName()) {
         openStaffProperties();
+        return;
+    }
+
+    if (elementHasPopup(element)) {
+        dispatcher()->dispatch("notation-popup-menu");
         return;
     }
 
@@ -1781,27 +1787,27 @@ bool NotationActionController::isNotNoteInputMode() const
 
 void NotationActionController::openTupletOtherDialog()
 {
-    interactive()->open("musescore://notation/othertupletdialog");
+    interactive()->open("musescore://notation/othertupletdialog?sync=false");
 }
 
 void NotationActionController::openStaffTextPropertiesDialog()
 {
-    interactive()->open("musescore://notation/stafftextproperties");
+    interactive()->open("musescore://notation/stafftextproperties?sync=false");
 }
 
 void NotationActionController::openMeasurePropertiesDialog()
 {
-    interactive()->open("musescore://notation/measureproperties");
+    interactive()->open("musescore://notation/measureproperties?sync=false");
 }
 
 void NotationActionController::openEditGridSizeDialog()
 {
-    interactive()->open("musescore://notation/editgridsize");
+    interactive()->open("musescore://notation/editgridsize?sync=false");
 }
 
 void NotationActionController::openRealizeChordSymbolsDialog()
 {
-    interactive()->open("musescore://notation/realizechordsymbols");
+    interactive()->open("musescore://notation/realizechordsymbols?sync=false");
 }
 
 void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
@@ -1933,6 +1939,15 @@ const mu::engraving::Harmony* NotationActionController::editedChordSymbol() cons
     }
 
     return toHarmony(text);
+}
+
+bool NotationActionController::elementHasPopup(EngravingItem* e)
+{
+    if (e->isHarpPedalDiagram()) {
+        return true;
+    }
+
+    return false;
 }
 
 bool NotationActionController::canUndo() const

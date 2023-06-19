@@ -22,9 +22,15 @@
 #ifndef MU_WORKSPACE_WORKSPACEMODULE_H
 #define MU_WORKSPACE_WORKSPACEMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::workspace {
+class WorkspaceManager;
+class WorkspaceConfiguration;
+class WorkspaceActionController;
+class WorkspacesDataProvider;
 class WorkspaceModule : public modularity::IModuleSetup
 {
 public:
@@ -35,6 +41,13 @@ public:
     void registerResources() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
     void onDeinit() override;
+
+private:
+
+    std::shared_ptr<WorkspaceManager> m_manager;
+    std::shared_ptr<WorkspaceConfiguration> m_configuration;
+    std::shared_ptr<WorkspaceActionController> m_actionController;
+    std::shared_ptr<WorkspacesDataProvider> m_provider;
 };
 }
 

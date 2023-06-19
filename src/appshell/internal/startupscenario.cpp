@@ -60,6 +60,11 @@ void StartupScenario::setStartupType(const std::optional<std::string>& type)
     m_startupTypeStr = type ? type.value() : "";
 }
 
+mu::io::path_t StartupScenario::startupScorePath() const
+{
+    return m_startupScorePath;
+}
+
 void StartupScenario::setStartupScorePath(const std::optional<io::path_t>& path)
 {
     m_startupScorePath = path ? path.value() : "";

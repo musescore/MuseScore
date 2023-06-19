@@ -22,8 +22,6 @@
 
 #include "deadslapped.h"
 
-#include "layout/tlayout.h"
-
 #include "rest.h"
 #include "staff.h"
 #include "log.h"
@@ -47,14 +45,4 @@ void DeadSlapped::draw(mu::draw::Painter* painter) const
     painter->setBrush(curColor());
     painter->drawPath(m_path1);
     painter->drawPath(m_path2);
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void DeadSlapped::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
 }

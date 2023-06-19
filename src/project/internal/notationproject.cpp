@@ -59,6 +59,7 @@ static const QString COMPOSER_TAG("composer");
 static const QString LYRICIST_TAG("lyricist");
 static const QString POET_TAG("poet");
 static const QString SOURCE_TAG("source");
+static const QString SOURCE_REVISION_ID_TAG("sourceRevisionId");
 static const QString COPYRIGHT_TAG("copyright");
 static const QString TRANSLATOR_TAG("translator");
 static const QString ARRANGER_TAG("arranger");
@@ -344,7 +345,7 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
         excerpt->notation()->viewState()->makeDefault();
     }
 
-    masterScore->setSaved(true);
+    masterScore->setSaved(false);
 
     m_isNewlyCreated = true;
 
@@ -426,6 +427,7 @@ const CloudProjectInfo& NotationProject::cloudInfo() const
     if (!m_cloudInfo.isValid()) {
         m_cloudInfo.name = io::filename(m_path, false).toQString();
         m_cloudInfo.sourceUrl = m_masterNotation->masterScore()->metaTags()[SOURCE_TAG].toQString();
+        m_cloudInfo.revisionId = m_masterNotation->masterScore()->metaTags()[SOURCE_REVISION_ID_TAG].toInt();
     }
 
     return m_cloudInfo;
@@ -435,6 +437,7 @@ void NotationProject::setCloudInfo(const CloudProjectInfo& info)
 {
     m_cloudInfo = info;
     m_masterNotation->masterScore()->setMetaTag(SOURCE_TAG, info.sourceUrl.toString());
+    m_masterNotation->masterScore()->setMetaTag(SOURCE_REVISION_ID_TAG, String::number(info.revisionId));
 }
 
 mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)

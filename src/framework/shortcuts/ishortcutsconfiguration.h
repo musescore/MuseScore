@@ -22,7 +22,7 @@
 #ifndef MU_SHORTCUTS_ISHORTCUTSCONFIGURATION_H
 #define MU_SHORTCUTS_ISHORTCUTSCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 #include "types/retval.h"
 

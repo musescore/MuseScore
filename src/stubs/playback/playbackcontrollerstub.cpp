@@ -86,10 +86,10 @@ const IPlaybackController::InstrumentTrackIdMap& PlaybackControllerStub::instrum
     return m;
 }
 
-const mu::audio::TrackIdList& PlaybackControllerStub::auxTrackIdList() const
+const IPlaybackController::AuxTrackIdMap& PlaybackControllerStub::auxTrackIdMap() const
 {
-    static const mu::audio::TrackIdList l;
-    return l;
+    static const AuxTrackIdMap m;
+    return m;
 }
 
 mu::async::Channel<mu::audio::TrackId> PlaybackControllerStub::trackAdded() const
@@ -98,6 +98,16 @@ mu::async::Channel<mu::audio::TrackId> PlaybackControllerStub::trackAdded() cons
 }
 
 mu::async::Channel<mu::audio::TrackId> PlaybackControllerStub::trackRemoved() const
+{
+    return {};
+}
+
+std::string PlaybackControllerStub::auxChannelName(audio::aux_channel_idx_t) const
+{
+    return "";
+}
+
+mu::async::Channel<mu::audio::aux_channel_idx_t, std::string> PlaybackControllerStub::auxChannelNameChanged() const
 {
     return {};
 }

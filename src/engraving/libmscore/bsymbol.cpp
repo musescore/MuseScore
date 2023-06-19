@@ -136,24 +136,6 @@ EngravingItem* BSymbol::drop(EditData& data)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void BSymbol::layout()
-{
-    if (staff()) {
-        setMag(staff()->staffMag(tick()));
-    }
-    if (!explicitParent()) {
-        setOffset(.0, .0);
-        setPos(.0, .0);
-    }
-    for (EngravingItem* e : _leafs) {
-        e->layout();
-    }
-}
-
-//---------------------------------------------------------
 //   drag
 //---------------------------------------------------------
 

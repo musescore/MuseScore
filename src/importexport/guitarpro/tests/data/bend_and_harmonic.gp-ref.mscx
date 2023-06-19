@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.10">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Dis. Rhy.</trackName>
+      <Instrument id="electric-guitar">
+        <longName>Dis. Rhy.</longName>
+        <shortName>dist.guit.</shortName>
+        <trackName></trackName>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+        <instrumentId>pluck.guitar.electric</instrumentId>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <StringData>
+          <frets>24</frets>
+          <string>52</string>
+          <string>57</string>
+          <string>62</string>
+          <string>67</string>
+          <string>71</string>
+          <string>76</string>
+          </StringData>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>30</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="accent">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>144</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>169</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="30"/>
+          <controller ctrl="7" value="71"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <Text>
+          <style>title</style>
+          <text>Cemetary Gates</text>
+          </Text>
+        <Text>
+          <style>subtitle</style>
+          <text>:)
+Pantera
+Cowboys From Hell</text>
+          </Text>
+        <Text>
+          <style>composer</style>
+          <text>Music by Pantera</text>
+          </Text>
+        <Text>
+          <style>poet</style>
+          <text>Words by Pantera</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <voice>
+          <KeySig>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
+          <Tempo>
+            <tempo>2.333333</tempo>
+            <text><sym>metNoteQuarterUp</sym> = 140</text>
+            </Tempo>
+          <Spanner type="HarmonicMark">
+            <HarmonicMark>
+              <beginText>AH</beginText>
+              <beginTextOffset x="0" y="0"/>
+              <continueText>AH</continueText>
+              </HarmonicMark>
+            <next>
+              <location>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              <play>0</play>
+              <fret>4</fret>
+              <string>2</string>
+              </Note>
+            <Note>
+              <Bend>
+                <point time="0" pitch="50" vibrato="0"/>
+                <point time="30" pitch="50" vibrato="0"/>
+                <point time="60" pitch="50" vibrato="0"/>
+                </Bend>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              <head>diamond</head>
+              <fret>4</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <Spanner type="HarmonicMark">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

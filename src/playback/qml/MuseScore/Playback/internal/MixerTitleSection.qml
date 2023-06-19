@@ -24,6 +24,7 @@ import QtQuick 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Audio 1.0
+import MuseScore.Playback 1.0
 
 MixerPanelSection {
     id: root
@@ -34,8 +35,32 @@ MixerPanelSection {
         width: root.channelItemWidth
         height: 22
 
-        color: Utils.colorWithAlpha(ui.theme.accentColor, channelItem.isPrimaryChannel ? 0.5 : 0.25)
-        border.color: ui.theme.accentColor
+        function resolveLabelColor() {
+            switch(channelItem.type) {
+            case MixerChannelItem.PrimaryInstrument:
+            case MixerChannelItem.SecondaryInstrument:
+                return ui.theme.accentColor
+            case MixerChannelItem.Aux:
+                return "#63D47B"
+            case MixerChannelItem.Master:
+                return "#F87BDC"
+            }
+
+            return ui.theme.accentColor
+        }
+
+        function resolveLabelColorOpacity() {
+            if (channelItem.type === MixerChannelItem.SecondaryInstrument) {
+                return 0.25
+            }
+
+            return 0.5
+        }
+
+        readonly property color labelColor: resolveLabelColor()
+
+        color: Utils.colorWithAlpha(labelColor, resolveLabelColorOpacity())
+        border.color: labelColor
         border.width: 1
 
         StyledTextLabel {

@@ -25,12 +25,10 @@
 #include <cmath>
 #include <QMimeData>
 
-#include "engraving/rw/400/tread.h"
+#include "engraving/rw/rwregister.h"
+#include "engraving/layout/v0/tlayout.h"
 
-#include "libmscore/masterscore.h"
 #include "libmscore/engravingitem.h"
-#include "libmscore/page.h"
-#include "libmscore/system.h"
 #include "libmscore/actionicon.h"
 #include "libmscore/chord.h"
 #include "libmscore/factory.h"
@@ -68,8 +66,8 @@ void NoteGroupsExampleView::dragEnterEvent(QDragEnterEvent* event)
         m_dragElement = Factory::createItem(type, m_score->dummy());
         if (m_dragElement) {
             m_dragElement->resetExplicitParent();
-            rw400::TRead::readItem(m_dragElement, e, *e.context());
-            m_dragElement->layout();
+            rw::RWRegister::reader()->readItem(m_dragElement, e);
+            EngravingItem::layout()->layoutItem(m_dragElement);
         }
         return;
     }

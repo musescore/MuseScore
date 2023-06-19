@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -112,17 +112,16 @@
         </VBox>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            <linkedMain/>
-            </Clef>
           <TimeSig>
             <linkedMain/>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <linkedMain/>
+            </Clef>
           <Chord>
             <linkedMain/>
             <durationType>whole</durationType>
@@ -229,17 +228,16 @@
     <Staff id="2">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            <linkedMain/>
-            </Clef>
           <TimeSig>
             <linkedMain/>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <linkedMain/>
+            </Clef>
           <Rest>
             <linkedMain/>
             <durationType>measure</durationType>
@@ -377,19 +375,18 @@
           </VBox>
         <Measure>
           <voice>
-            <Clef>
-              <concertClefType>G</concertClefType>
-              <transposingClefType>G</transposingClefType>
-              <isHeader>1</isHeader>
-              <linked>
-                </linked>
-              </Clef>
             <TimeSig>
               <linked>
                 </linked>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
             <Chord>
               <linked>
                 </linked>
@@ -584,19 +581,18 @@
           </VBox>
         <Measure>
           <voice>
-            <Clef>
-              <concertClefType>G</concertClefType>
-              <transposingClefType>G</transposingClefType>
-              <isHeader>1</isHeader>
-              <linked>
-                </linked>
-              </Clef>
             <TimeSig>
               <linked>
                 </linked>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
             <Rest>
               <linked>
                 </linked>

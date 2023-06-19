@@ -31,6 +31,11 @@
 
 using namespace mu::notation;
 
+static NotationParts* get_impl(const INotationPartsPtr& parts)
+{
+    return static_cast<NotationParts*>(parts.get());
+}
+
 MasterNotationParts::MasterNotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
     : NotationParts(getScore, interaction, undoStack)
 {
@@ -51,6 +56,43 @@ void MasterNotationParts::endGlobalEdit()
 {
     undoStack()->unlock();
     NotationParts::apply();
+}
+
+void MasterNotationParts::setParts(const PartInstrumentList& partList, const ScoreOrder& order)
+{
+    TRACEFUNC;
+
+    endInteractionWithScore();
+    startGlobalEdit();
+
+    doSetScoreOrder(order);
+    removeMissingParts(partList);
+    insertNewParts(partList);
+    updateSoloist(partList);
+    sortParts(partList);
+    setBracketsAndBarlines();
+
+    for (INotationPartsPtr excerptParts : excerptsParts()) {
+        auto impl = get_impl(excerptParts);
+
+        impl->removeMissingParts(partList);
+
+        PartInstrumentList excerptPartList;
+        for (mu::engraving::Part* part: impl->score()->parts()) {
+            PartInstrument pi;
+            pi.isExistingPart = true;
+            pi.partId = part->id();
+            excerptPartList << pi;
+        }
+
+        impl->sortParts(excerptPartList);
+
+        impl->setBracketsAndBarlines();
+    }
+
+    endGlobalEdit();
+
+    m_partChangedNotifier.changed();
 }
 
 void MasterNotationParts::removeParts(const IDList& partsIds)

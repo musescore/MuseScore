@@ -74,30 +74,6 @@ double LedgerLine::measureXPos() const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void LedgerLine::layout()
-{
-    setLineWidth(score()->styleMM(Sid::ledgerLineWidth) * chord()->mag());
-    if (staff()) {
-        setColor(staff()->staffType(tick())->color());
-    }
-    double w2 = _width * .5;
-
-    //Adjust Y position to staffType offset
-    if (staffType()) {
-        movePosY(staffType()->yoffset().val() * spatium());
-    }
-
-    if (m_vertical) {
-        bbox().setRect(-w2, 0, w2, _len);
-    } else {
-        bbox().setRect(0, -w2, _len, w2);
-    }
-}
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -124,6 +100,6 @@ void LedgerLine::spatiumChanged(double oldValue, double newValue)
 {
     _width = (_width / oldValue) * newValue;
     _len   = (_len / oldValue) * newValue;
-    layout();
+    layout()->layoutItem(this);
 }
 }

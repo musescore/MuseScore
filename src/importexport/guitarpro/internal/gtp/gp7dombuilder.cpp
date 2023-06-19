@@ -4,7 +4,7 @@
 
 #include "global/log.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNode* trackNode)
 {
     static const std::set<String> sUnused = {
@@ -130,4 +130,4 @@ GPTrack::SoundAutomation GP7DomBuilder::readTrackAutomation(XmlDomNode* automati
 
     return result;
 }
-} //end Ms namespace
+} // namespace mu::iex::guitarpro

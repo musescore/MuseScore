@@ -53,8 +53,8 @@ const mu::ui::UiActionList& PluginsUiActions::actionsList() const
     for (const PluginInfo& plugin : values(m_service->plugins().val)) {
         UiAction action;
         action.code = codeFromQString(plugin.codeKey);
-        action.uiCtx = mu::context::UiCtxNotationOpened;
-        action.scCtx = mu::context::CTX_NOTATION_OPENED;
+        action.uiCtx = plugin.requiresScore ? mu::context::UiCtxNotationOpened : mu::context::UiCtxAny;
+        action.scCtx = plugin.requiresScore ? mu::context::CTX_NOTATION_OPENED : mu::context::CTX_ANY;
         action.description = TranslatableString("plugins", "Run plugin %1").arg(plugin.codeKey);
         action.title = action.description;
 

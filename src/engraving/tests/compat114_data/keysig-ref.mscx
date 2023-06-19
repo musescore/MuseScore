@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -85,7 +85,7 @@
             <isHeader>1</isHeader>
             </Clef>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -124,7 +124,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>1</accidental>
+            <concertKey>1</concertKey>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -159,7 +159,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>2</accidental>
+            <concertKey>2</concertKey>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -194,7 +194,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>-3</accidental>
+            <concertKey>-3</concertKey>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>

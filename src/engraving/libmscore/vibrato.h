@@ -35,12 +35,7 @@ class Vibrato;
 class VibratoSegment final : public LineSegment
 {
     OBJECT_ALLOCATOR(engraving, VibratoSegment)
-
-    SymIdList _symbols;
-
-    void symbolLine(SymId start, SymId fill);
-    void symbolLine(SymId start, SymId fill, SymId end);
-    virtual Sid getPropertyStyle(Pid) const override;
+    DECLARE_CLASSOF(ElementType::VIBRATO_SEGMENT)
 
 public:
     VibratoSegment(Vibrato* sp, System* parent);
@@ -50,13 +45,20 @@ public:
     Vibrato* vibrato() const { return toVibrato(spanner()); }
 
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
 
     EngravingItem* propertyDelegate(Pid) override;
 
     Shape shape() const override;
     SymIdList symbols() const { return _symbols; }
     void setSymbols(const SymIdList& s) { _symbols = s; }
+
+    void symbolLine(SymId start, SymId fill);
+    void symbolLine(SymId start, SymId fill, SymId end);
+
+private:
+    virtual Sid getPropertyStyle(Pid) const override;
+
+    SymIdList _symbols;
 };
 
 //---------------------------------------------------------
@@ -80,7 +82,6 @@ public:
 
     Vibrato* clone() const override { return new Vibrato(*this); }
 
-    void layout() override;
     LineSegment* createLineSegment(System* parent) override;
 
     void undoSetVibratoType(VibratoType val);

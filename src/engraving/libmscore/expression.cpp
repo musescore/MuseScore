@@ -21,8 +21,6 @@
  */
 #include "expression.h"
 
-#include "layout/tlayout.h"
-
 #include "chord.h"
 #include "dynamic.h"
 #include "dynamichairpingroup.h"
@@ -60,23 +58,17 @@ PropertyValue Expression::propertyDefault(Pid id) const
     }
 }
 
-void Expression::layout()
-{
-    LayoutContext ctx(score());
-    v0::TLayout::layout(this, ctx);
-}
-
 double Expression::computeDynamicExpressionDistance() const
 {
-    if (!_snappedDynamic) {
+    if (!m_snappedDynamic) {
         return 0.0;
     }
     // We are essentially faking the kerning behaviour of dynamic VS expression text
     // There's no other way to do this because the dynamic is a different font.
-    String dynamicTextString = _snappedDynamic->xmlText();
+    String dynamicTextString = m_snappedDynamic->xmlText();
     String f = String::fromStdString("<sym>dynamicForte</sym>");
     double distance = (dynamicTextString.endsWith(f) ? 0.2 : 0.5) * spatium();
-    distance *= 0.5 * (_snappedDynamic->dynamicsSize() + (size() / 10));
+    distance *= 0.5 * (m_snappedDynamic->dynamicsSize() + (size() / 10));
     return distance;
 }
 
@@ -91,10 +83,10 @@ std::unique_ptr<ElementGroup> Expression::getDragGroup(std::function<bool(const 
 void Expression::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     TextBase::undoChangeProperty(id, v, ps);
-    if (_snappedDynamic) {
-        if ((id == Pid::OFFSET && _snappedDynamic->offset() != v.value<PointF>())
-            || (id == Pid::PLACEMENT && _snappedDynamic->placement() != v.value<PlacementV>())) {
-            _snappedDynamic->undoChangeProperty(id, v, ps);
+    if (m_snappedDynamic) {
+        if ((id == Pid::OFFSET && m_snappedDynamic->offset() != v.value<PointF>())
+            || (id == Pid::PLACEMENT && m_snappedDynamic->placement() != v.value<PlacementV>())) {
+            m_snappedDynamic->undoChangeProperty(id, v, ps);
         }
     }
 }
@@ -110,8 +102,8 @@ EngravingItem* Expression::drop(EditData& ed)
     if (!item->isDynamic()) {
         return nullptr;
     }
-    if (_snappedDynamic) {
-        return _snappedDynamic->drop(ed);
+    if (m_snappedDynamic) {
+        return m_snappedDynamic->drop(ed);
     }
     item->setTrack(track());
     item->setParent(segment());
@@ -164,6 +156,13 @@ void Expression::mapPropertiesFromOldExpressions(StaffText* staffText)
         setSnapToDynamics(false);
         setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         setPropertyFlags(Pid::SNAP_TO_DYNAMICS, PropertyFlags::UNSTYLED);
+    }
+    if (staffText->frameType() != FrameType::NO_FRAME) {
+        setFrameType(staffText->frameType());
+        setFrameWidth(staffText->frameWidth());
+        setFrameColor(staffText->frameColor());
+        setBgColor(staffText->bgColor());
+        setFrameRound(staffText->frameRound());
     }
 }
 } // namespace mu::engraving

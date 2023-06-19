@@ -35,14 +35,14 @@ class LetRing;
 class LetRingSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, LetRingSegment)
+    DECLARE_CLASSOF(ElementType::LET_RING_SEGMENT)
+
 public:
     LetRingSegment(LetRing* sp, System* parent);
 
     LetRingSegment* clone() const override { return new LetRingSegment(*this); }
 
     LetRing* letRing() const { return (LetRing*)spanner(); }
-
-    void layout() override;
 
     friend class LetRing;
 };

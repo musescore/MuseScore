@@ -180,7 +180,7 @@
             <family>voice-groups</family>
         </section>
         <section id="guitars" thinBrackets="false">
-            <family>plucked-strings</family>
+            <family>guitars</family>
         </section>
         <family>drums</family>
         <unsorted/>
