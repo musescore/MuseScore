@@ -113,7 +113,7 @@ void SlurSegment::draw(mu::draw::Painter* painter) const
         break;
     }
     painter->setPen(pen);
-    painter->drawPath(path);
+    painter->drawPath(m_path);
 }
 
 //---------------------------------------------------------
@@ -676,8 +676,8 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
     // If end point adjustment is locked, restore the endpoints to
     // where they were before
     if (isEndPointsEdited()) {
-        ups(Grip::START).off += _endPointOff1;
-        ups(Grip::END).off += _endPointOff2;
+        ups(Grip::START).off += m_endPointOff1;
+        ups(Grip::END).off += m_endPointOff2;
     }
     // Get start and end points (have been calculated before)
     PointF pp1 = ups(Grip::START).p + ups(Grip::START).off;
@@ -766,11 +766,11 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
     p4 -= difference;
     // Keep track of how much the end points position has changed
     if (!isEndPointsEdited()) {
-        _endPointOff1 = pp1 - oldp1;
-        _endPointOff2 = pp2 - oldp2;
+        m_endPointOff1 = pp1 - oldp1;
+        m_endPointOff2 = pp2 - oldp2;
     } else {
-        _endPointOff1 = PointF(0.0, 0.0);
-        _endPointOff2 = PointF(0.0, 0.0);
+        m_endPointOff1 = PointF(0.0, 0.0);
+        m_endPointOff2 = PointF(0.0, 0.0);
     }
     // Recompute the transformation because pp1 and pp1 may have changed
     toSlurCoordinates.reset();
@@ -800,23 +800,23 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
     PointF thick(0.0, w);
 
     // Set path
-    path = PainterPath();
-    path.moveTo(PointF());
-    path.cubicTo(p3 - thick, p4 - thick, p2);
+    m_path = PainterPath();
+    m_path.moveTo(PointF());
+    m_path.cubicTo(p3 - thick, p4 - thick, p2);
     if (slur()->styleType() == SlurStyleType::Solid) {
-        path.cubicTo(p4 + thick, p3 + thick, PointF());
+        m_path.cubicTo(p4 + thick, p3 + thick, PointF());
     }
     thick = PointF(0.0, 3.0 * w);
-    shapePath = PainterPath();
-    shapePath.moveTo(PointF());
-    shapePath.cubicTo(p3 - thick, p4 - thick, p2);
-    shapePath.cubicTo(p4 + thick, p3 + thick, PointF());
+    m_shapePath = PainterPath();
+    m_shapePath.moveTo(PointF());
+    m_shapePath.cubicTo(p3 - thick, p4 - thick, p2);
+    m_shapePath.cubicTo(p4 + thick, p3 + thick, PointF());
 
-    path = toSystemCoordinates.map(path);
-    shapePath = toSystemCoordinates.map(shapePath);
+    m_path = toSystemCoordinates.map(m_path);
+    m_shapePath = toSystemCoordinates.map(m_shapePath);
 
     // Create shape for the skyline
-    _shape.clear();
+    m_shape.clear();
     PointF start = pp1;
     int nbShapes  = 32;
     double minH    = abs(2 * w);
@@ -828,37 +828,9 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
             double d1 = (minH - re.height()) * .5;
             re.adjust(0.0, -d1, 0.0, d1);
         }
-        _shape.add(re);
+        m_shape.add(re);
         start = point;
     }
-}
-
-//---------------------------------------------------------
-//   layoutSegment
-//---------------------------------------------------------
-
-void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
-{
-    const StaffType* stType = staffType();
-
-    _skipDraw = false;
-    if (stType && stType->isHiddenElementOnTab(score()->style(), Sid::slurShowTabCommon, Sid::slurShowTabSimple)) {
-        _skipDraw = true;
-        return;
-    }
-
-    setPos(PointF());
-    ups(Grip::START).p = p1;
-    ups(Grip::END).p   = p2;
-    _extraHeight = 0.0;
-
-    //Adjust Y pos to staff type yOffset before other calculations
-    if (staffType()) {
-        movePosY(staffType()->yoffset().val() * spatium());
-    }
-
-    computeBezier();
-    setbbox(path.boundingRect());
 }
 
 //---------------------------------------------------------
@@ -868,7 +840,7 @@ void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
 bool SlurSegment::isEdited() const
 {
     for (int i = 0; i < int(Grip::GRIPS); ++i) {
-        if (!_ups[i].off.isNull()) {
+        if (!m_ups[i].off.isNull()) {
             return true;
         }
     }
@@ -877,7 +849,7 @@ bool SlurSegment::isEdited() const
 
 bool SlurSegment::isEndPointsEdited() const
 {
-    return !(_ups[int(Grip::START)].off.isNull() && _ups[int(Grip::END)].off.isNull());
+    return !(m_ups[int(Grip::START)].off.isNull() && m_ups[int(Grip::END)].off.isNull());
 }
 
 Slur::Slur(const Slur& s)

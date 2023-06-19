@@ -111,7 +111,7 @@ void TieSegment::draw(mu::draw::Painter* painter) const
         break;
     }
     painter->setPen(pen);
-    painter->drawPath(path);
+    painter->drawPath(m_path);
 }
 
 bool TieSegment::isEditAllowed(EditData& ed) const
@@ -314,32 +314,32 @@ void TieSegment::computeBezier(PointF shoulderOffset)
     tieShoulder = t.map(tieShoulder) + bezier1Final - shoulderOffset;
     //-----------------------------------
 
-    path = PainterPath();
-    path.moveTo(PointF());
-    path.cubicTo(bezier1 + bezier1Offset - tieThickness, bezier2 + bezier2Offset - tieThickness, tieEndNormalized);
+    m_path = PainterPath();
+    m_path.moveTo(PointF());
+    m_path.cubicTo(bezier1 + bezier1Offset - tieThickness, bezier2 + bezier2Offset - tieThickness, tieEndNormalized);
     if (tie()->styleType() == SlurStyleType::Solid) {
-        path.cubicTo(bezier2 + bezier2Offset + tieThickness, bezier1 + bezier1Offset + tieThickness, PointF());
+        m_path.cubicTo(bezier2 + bezier2Offset + tieThickness, bezier1 + bezier1Offset + tieThickness, PointF());
     }
 
     tieThickness = PointF(0.0, 3.0 * w);
-    shapePath = PainterPath();
-    shapePath.moveTo(PointF());
-    shapePath.cubicTo(bezier1 + bezier1Offset - tieThickness, bezier2 + bezier2Offset - tieThickness, tieEndNormalized);
-    shapePath.cubicTo(bezier2 + bezier2Offset + tieThickness, bezier1 + bezier1Offset + tieThickness, PointF());
+    m_shapePath = PainterPath();
+    m_shapePath.moveTo(PointF());
+    m_shapePath.cubicTo(bezier1 + bezier1Offset - tieThickness, bezier2 + bezier2Offset - tieThickness, tieEndNormalized);
+    m_shapePath.cubicTo(bezier2 + bezier2Offset + tieThickness, bezier1 + bezier1Offset + tieThickness, PointF());
 
     // translate back
     t.reset();
     t.translate(tieStart.x(), tieStart.y());
     t.rotateRadians(tieAngle);
-    path = t.map(path);
-    shapePath = t.map(shapePath);
+    m_path = t.map(m_path);
+    m_shapePath = t.map(m_shapePath);
     ups(Grip::BEZIER1).p = t.map(bezier1);
     ups(Grip::BEZIER2).p = t.map(bezier2);
     ups(Grip::END).p = t.map(tieEndNormalized) - ups(Grip::END).off;
     ups(Grip::DRAG).p = t.map(tieDrag);
     ups(Grip::SHOULDER).p = t.map(tieShoulder);
 
-    _shape.clear();
+    m_shape.clear();
     PointF start;
     start = t.map(start);
 
@@ -353,7 +353,7 @@ void TieSegment::computeBezier(PointF shoulderOffset)
             tieWidthInSp = (minH - re.height()) * .5;
             re.adjust(0.0, -tieWidthInSp, 0.0, tieWidthInSp);
         }
-        _shape.add(re);
+        m_shape.add(re);
         start = point;
     }
 }
@@ -422,7 +422,7 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
 #else
         // more correct, less efficient
         computeBezier();
-        bbox = path.boundingRect();
+        bbox = m_path.boundingRect();
 #endif
     } else {
         // don't adjust ties that aren't horizontal, just add offset
@@ -605,7 +605,7 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
 void TieSegment::finalizeSegment()
 {
     computeBezier();
-    setbbox(path.boundingRect());
+    setbbox(m_path.boundingRect());
 }
 
 //---------------------------------------------------------
@@ -810,11 +810,11 @@ void TieSegment::setAutoAdjust(const PointF& offset)
 {
     PointF diff = offset - autoAdjustOffset;
     if (!diff.isNull()) {
-        path.translate(diff);
-        shapePath.translate(diff);
-        _shape.translate(diff);
+        m_path.translate(diff);
+        m_shapePath.translate(diff);
+        m_shape.translate(diff);
         for (int i = 0; i < int(Grip::GRIPS); ++i) {
-            _ups[i].p += diff;
+            m_ups[i].p += diff;
         }
         autoAdjustOffset = offset;
     }
@@ -827,7 +827,7 @@ void TieSegment::setAutoAdjust(const PointF& offset)
 bool TieSegment::isEdited() const
 {
     for (int i = 0; i < int(Grip::GRIPS); ++i) {
-        if (!_ups[i].off.isNull()) {
+        if (!m_ups[i].off.isNull()) {
             return true;
         }
     }
