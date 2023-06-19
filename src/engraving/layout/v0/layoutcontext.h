@@ -67,6 +67,7 @@ public:
     double point(const Spatium sp) const;
 
     const MStyle& style() const;
+    double noteHeadWidth() const;
 
     IEngravingFontPtr engravingFont() const;
 

@@ -88,6 +88,14 @@ const MStyle& LayoutContext::style() const
     return m_score->style();
 }
 
+double LayoutContext::noteHeadWidth() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return 0.0;
+    }
+    return m_score->noteHeadWidth();
+}
+
 IEngravingFontPtr LayoutContext::engravingFont() const
 {
     IF_ASSERT_FAILED(m_score) {
