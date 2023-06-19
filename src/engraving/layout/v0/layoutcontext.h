@@ -37,6 +37,7 @@ class Page;
 class Score;
 class Spanner;
 class System;
+class Staff;
 }
 
 namespace mu::engraving::layout::v0 {
@@ -52,6 +53,7 @@ public:
 
     const MStyle& style() const;
     IEngravingFontPtr engravingFont() const;
+    const Staff* staff(staff_idx_t idx) const;
 
     bool startWithLongNames = true;
     bool firstSystem = true;

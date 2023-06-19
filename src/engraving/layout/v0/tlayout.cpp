@@ -338,16 +338,16 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
 {
     int bottomLine, topLine;
     ClefType clf;
-    double headWdt     = item->headWidth();
+    double headWdt = item->headWidth();
     Key key;
     double lineDist;
     int numOfLines;
-    Segment* segm        = item->segment();
-    double _spatium    = item->spatium();
-    Staff* stf         = nullptr;
+    Segment* segm = item->segment();
+    double _spatium = item->spatium();
+    const Staff* stf = nullptr;
     if (segm && item->track() != mu::nidx) {
         Fraction tick    = segm->tick();
-        stf         = item->score()->staff(item->staffIdx());
+        stf         = ctx.staff(item->staffIdx());
         lineDist    = stf->lineDistance(tick) * _spatium;
         numOfLines  = stf->lines(tick);
         clf         = stf->clef(tick);
@@ -431,7 +431,7 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
     //
     // Note: manages colliding accidentals
     //
-    double accNoteDist = item->point(item->score()->styleS(Sid::accidentalNoteDistance));
+    double accNoteDist = item->point(ctx.style().styleS(Sid::accidentalNoteDistance));
     xAccidOffTop      = item->topAccidental()->width() + accNoteDist;
     xAccidOffBottom   = item->bottomAccidental()->width() + accNoteDist;
 
