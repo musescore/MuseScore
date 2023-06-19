@@ -49,7 +49,6 @@
 #include "layoutcontext.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
-#include "tremololayout.h"
 
 #include "log.h"
 
@@ -64,16 +63,16 @@ using namespace mu::engraving::layout::v0;
 void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
 {
     assert(item->explicitParent());
-    assert(item->score()->nstaves() == item->m_mstaves.size());
+    assert(ctx.nstaves() == item->m_mstaves.size());
 
     double _spatium = item->spatium();
 
-    for (size_t staffIdx = 0; staffIdx < item->score()->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < ctx.nstaves(); ++staffIdx) {
         MStaff* ms = item->m_mstaves[staffIdx];
         Spacer* sp = ms->vspacerDown();
         if (sp) {
             TLayout::layout(sp, ctx);
-            Staff* staff = item->score()->staff(staffIdx);
+            const Staff* staff = ctx.staff(staffIdx);
             int n = staff->lines(item->tick()) - 1;
             double y = item->system()->staff(staffIdx)->y();
             sp->setPos(_spatium * .5, y + n * _spatium * staff->staffMag(item->tick()));
@@ -94,10 +93,10 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
     //---------------------------------------------------
 
     Fraction stick = item->system()->measures().front()->tick();
-    size_t tracks = item->score()->ntracks();
+    size_t tracks = ctx.ntracks();
     static const SegmentType st { SegmentType::ChordRest };
     for (track_idx_t track = 0; track < tracks; ++track) {
-        if (!item->score()->staff(track / VOICES)->show()) {
+        if (!ctx.staff(track / VOICES)->show()) {
             track += VOICES - 1;
             continue;
         }
@@ -487,9 +486,9 @@ static bool validMMRestMeasure(const LayoutContext& ctx, Measure* m)
         }
         if (s->isChordRestType()) {
             bool restFound = false;
-            size_t tracks = ctx.score()->ntracks();
+            size_t tracks = ctx.ntracks();
             for (track_idx_t track = 0; track < tracks; ++track) {
-                if ((track % VOICES) == 0 && !ctx.score()->staff(track / VOICES)->show()) {
+                if ((track % VOICES) == 0 && !ctx.staff(track / VOICES)->show()) {
                     track += VOICES - 1;
                     continue;
                 }
@@ -600,7 +599,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     }
 
     // break for MeasureRepeat group
-    for (size_t staffIdx = 0; staffIdx < ctx.score()->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < ctx.nstaves(); ++staffIdx) {
         if (m->isMeasureRepeatGroup(staffIdx)
             || (m->prevMeasure() && m->prevMeasure()->isMeasureRepeatGroup(staffIdx))) {
             return true;
@@ -660,8 +659,8 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
                 return true;
             }
         }
-        for (size_t staffIdx = 0; staffIdx < ctx.score()->nstaves(); ++staffIdx) {
-            if (!ctx.score()->staff(staffIdx)->show()) {
+        for (size_t staffIdx = 0; staffIdx < ctx.nstaves(); ++staffIdx) {
+            if (!ctx.staff(staffIdx)->show()) {
                 continue;
             }
             EngravingItem* e = s->element(staffIdx * VOICES);
@@ -684,7 +683,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     if (pm) {
         Segment* s = pm->findSegmentR(SegmentType::EndBarLine, pm->ticks());
         if (s) {
-            for (size_t staffIdx = 0; staffIdx < ctx.score()->nstaves(); ++staffIdx) {
+            for (size_t staffIdx = 0; staffIdx < ctx.nstaves(); ++staffIdx) {
                 BarLine* bl = toBarLine(s->element(staffIdx * VOICES));
                 if (bl) {
                     BarLineType t = bl->barLineType();
@@ -739,10 +738,10 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         return;
     }
 
-    int mno = adjustMeasureNo(ctx, ctx.curMeasure);
+    int mno = adjustMeasureNo(ctx.curMeasure, ctx);
 
     if (ctx.curMeasure->isMeasure()) {
-        if (ctx.score()->styleB(Sid::createMultiMeasureRests)) {
+        if (ctx.style().styleB(Sid::createMultiMeasureRests)) {
             Measure* m = toMeasure(ctx.curMeasure);
             Measure* nm = m;
             Measure* lm = nm;
@@ -755,7 +754,7 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                     break;
                 }
                 if (nm != m) {
-                    adjustMeasureNo(ctx, nm);
+                    adjustMeasureNo(nm, ctx);
                 }
                 ++n;
                 len += nm->ticks();
@@ -954,7 +953,7 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         if (!seg) {
             seg = measure->getSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
         }
-        barLinesSetSpan(measure, seg, ctx);          // this also creates necessary barlines
+        barLinesSetSpan(seg, ctx);          // this also creates necessary barlines
         for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             BarLine* b = toBarLine(seg->element(staffIdx * VOICES));
             if (b) {
@@ -985,20 +984,20 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
 //   adjustMeasureNo
 //---------------------------------------------------------
 
-int MeasureLayout::adjustMeasureNo(LayoutContext& lc, MeasureBase* m)
+int MeasureLayout::adjustMeasureNo(MeasureBase* m, LayoutContext& ctx)
 {
-    lc.measureNo += m->noOffset();
-    m->setNo(lc.measureNo);
+    ctx.measureNo += m->noOffset();
+    m->setNo(ctx.measureNo);
     if (!m->irregular()) {          // don’t count measure
-        ++lc.measureNo;
+        ++ctx.measureNo;
     }
 
     const LayoutBreak* layoutBreak = m->sectionBreakElement();
     if (layoutBreak && layoutBreak->startWithMeasureOne()) {
-        lc.measureNo = 0;
+        ctx.measureNo = 0;
     }
 
-    return lc.measureNo;
+    return ctx.measureNo;
 }
 
 /****************************************************************
@@ -1040,14 +1039,14 @@ void MeasureLayout::layoutStaffLines(Measure* m, LayoutContext& ctx)
 {
     int staffIdx = 0;
     for (MStaff* ms : m->m_mstaves) {
-        if (m->isCutawayClef(staffIdx) && (m->score()->staff(staffIdx)->cutaway() || !m->visible(staffIdx))) {
+        if (m->isCutawayClef(staffIdx) && (ctx.staff(staffIdx)->cutaway() || !m->visible(staffIdx))) {
             // draw short staff lines for a courtesy clef on a hidden measure
             Segment* clefSeg = m->findSegmentR(SegmentType::Clef, m->ticks());
-            double staffMag = m->score()->staff(staffIdx)->staffMag(m->tick());
+            double staffMag = ctx.staff(staffIdx)->staffMag(m->tick());
             double partialWidth = clefSeg
-                                  ? m->width() - clefSeg->x() + clefSeg->minLeft() + m->score()->styleMM(Sid::clefLeftMargin) * staffMag
+                                  ? m->width() - clefSeg->x() + clefSeg->minLeft() + ctx.style().styleMM(Sid::clefLeftMargin) * staffMag
                                   : 0.0;
-            layoutPartialWidth(ms->lines(), m->width(), partialWidth / (m->spatium() * staffMag), true);
+            layoutPartialWidth(ms->lines(), ctx, m->width(), partialWidth / (m->spatium() * staffMag), true);
         } else {
             // normal staff lines
             TLayout::layout(ms->lines(), ctx);
@@ -1066,7 +1065,7 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
     }
 
     unsigned nn = 1;
-    bool nas = m->score()->styleB(Sid::measureNumberAllStaves);
+    bool nas = ctx.style().styleB(Sid::measureNumberAllStaves);
 
     if (!nas) {
         //find first non invisible staff
@@ -1096,9 +1095,9 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
         } else {
             if (t) {
                 if (t->generated()) {
-                    m->score()->removeElement(t);
+                    ctx.removeElement(t);
                 } else {
-                    m->score()->undo(new RemoveElement(t));
+                    ctx.undo(new RemoveElement(t));
                 }
             }
         }
@@ -1107,16 +1106,16 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
 
 void MeasureLayout::layoutMMRestRange(Measure* m, LayoutContext& ctx)
 {
-    if (!m->isMMRest() || !m->score()->styleB(Sid::mmRestShowMeasureNumberRange)) {
+    if (!m->isMMRest() || !ctx.style().styleB(Sid::mmRestShowMeasureNumberRange)) {
         // Remove existing
         for (unsigned staffIdx = 0; staffIdx < m->m_mstaves.size(); ++staffIdx) {
             MStaff* ms = m->m_mstaves[staffIdx];
             MMRestRange* rr = ms->mmRangeText();
             if (rr) {
                 if (rr->generated()) {
-                    m->score()->removeElement(rr);
+                    ctx.removeElement(rr);
                 } else {
-                    m->score()->undo(new RemoveElement(rr));
+                    ctx.undo(new RemoveElement(rr));
                 }
             }
         }
@@ -1177,7 +1176,7 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 continue;
             }
             staff_idx_t staffIdx = e->staffIdx();
-            bool modernMMRest = e->isMMRest() && !m->score()->styleB(Sid::oldStyleMultiMeasureRests);
+            bool modernMMRest = e->isMMRest() && !ctx.style().styleB(Sid::oldStyleMultiMeasureRests);
             if ((e->isRest() && toRest(e)->isFullMeasureRest()) || e->isMMRest() || e->isMeasureRepeat()) {
                 //
                 // element has to be centered in free space
@@ -1205,7 +1204,7 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 if (e->isMMRest()) {
                     MMRest* mmrest = toMMRest(e);
                     // center multimeasure rest
-                    double d = m->score()->styleMM(Sid::multiMeasureRestMargin);
+                    double d = ctx.style().styleMM(Sid::multiMeasureRestMargin);
                     double w = x2 - x1 - 2 * d;
                     bool headerException = m->header() && s.prev() && !s.prev()->isStartRepeatBarLineType();
                     if (headerException) { //needs this exception on header bar
@@ -1302,10 +1301,10 @@ void MeasureLayout::layoutCrossStaff(MeasureBase* mb, LayoutContext& ctx)
     }
 }
 
-void MeasureLayout::barLinesSetSpan(Measure* m, Segment* seg, LayoutContext& ctx)
+void MeasureLayout::barLinesSetSpan(Segment* seg, LayoutContext& ctx)
 {
     int track = 0;
-    for (Staff* staff : m->score()->staves()) {
+    for (Staff* staff : ctx.staves()) {
         BarLine* bl = toBarLine(seg->element(track));      // get existing bar line for this staff, if any
         if (bl) {
             if (bl->generated()) {
@@ -1322,7 +1321,7 @@ void MeasureLayout::barLinesSetSpan(Measure* m, Segment* seg, LayoutContext& ctx
             bl->setSpanFrom(staff->barLineFrom());
             bl->setSpanTo(staff->barLineTo());
             TLayout::layout(bl, ctx);
-            m->score()->addElement(bl);
+            ctx.addElement(bl);
         }
         track += VOICES;
     }
@@ -1336,7 +1335,7 @@ void MeasureLayout::barLinesSetSpan(Measure* m, Segment* seg, LayoutContext& ctx
 
 double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx)
 {
-    size_t nstaves  = m->score()->nstaves();
+    size_t nstaves  = ctx.nstaves();
     Segment* seg = m->findSegmentR(SegmentType::EndBarLine, m->ticks());
     Measure* nm  = m->nextMeasure();
     double blw    = 0.0;
@@ -1363,14 +1362,14 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
         //  create the courtesy key sig.
         //
 
-        bool show = m->score()->styleB(Sid::genCourtesyKeysig) && !m->sectionBreak() && nm;
+        bool show = ctx.style().styleB(Sid::genCourtesyKeysig) && !m->sectionBreak() && nm;
 
         m->setHasCourtesyKeySig(false);
 
         if (isLastMeasureInSystem && show) {
             Fraction tick = m->endTick();
             for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-                Staff* staff     = m->score()->staff(staffIdx);
+                const Staff* staff     = ctx.staff(staffIdx);
                 KeySigEvent key1 = staff->keySigEvent(tick - Fraction::fromTicks(1));
                 KeySigEvent key2 = staff->keySigEvent(tick);
                 if (!(key1 == key2)) {
@@ -1402,7 +1401,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
         for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             track_idx_t track = staffIdx * VOICES;
             BarLine* bl  = toBarLine(seg->element(track));
-            Staff* staff = m->score()->staff(staffIdx);
+            const Staff* staff = ctx.staff(staffIdx);
             if (!bl) {
                 bl = Factory::createBarLine(seg);
                 bl->setParent(seg);
@@ -1412,7 +1411,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
                 bl->setSpanFrom(staff->barLineFrom());
                 bl->setSpanTo(staff->barLineTo());
                 bl->setBarLineType(t);
-                m->score()->addElement(bl);
+                ctx.addElement(bl);
             } else {
                 // do not change bar line type if bar line is user modified
                 // and its not a repeat start/end barline (forced)
@@ -1454,14 +1453,14 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
         bool wasVisible = clefSeg->visible();
         int visibleInt = 0;
         for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            if (!m->score()->staff(staffIdx)->show()) {
+            if (!ctx.staff(staffIdx)->show()) {
                 continue;
             }
             track_idx_t track = staffIdx * VOICES;
             Clef* clef = toClef(clefSeg->element(track));
             if (clef) {
                 clefToBarlinePosition = clef->clefToBarlinePosition();
-                bool showCourtesy = m->score()->genCourtesyClef() && clef->showCourtesy();         // normally show a courtesy clef
+                bool showCourtesy = ctx.score()->genCourtesyClef() && clef->showCourtesy();         // normally show a courtesy clef
                 // check if the measure is the last measure of the system or the last measure before a frame
                 bool lastMeasure = isLastMeasureInSystem || (nm ? !(m->next() == nm) : true);
                 if (!nm || m->isFinalMeasureOfSection() || (lastMeasure && !showCourtesy)) {
@@ -1511,7 +1510,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
     Segment* s = seg->prevActive();
     if (s) {
         double x = s->xpos();
-        MeasureLayout::computeWidth(m, s, x, false, m->system()->minSysTicks(), m->system()->maxSysTicks(), m->layoutStretch());
+        computeWidth(m, ctx, s, x, false, m->system()->minSysTicks(), m->system()->maxSysTicks(), m->layoutStretch());
     }
 
     return m->width() - oldWidth;
@@ -1531,10 +1530,10 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
     Segment* kSegment = m->findFirstR(SegmentType::KeySig, Fraction(0, 1));
     Segment* cSegment = m->findFirstR(SegmentType::HeaderClef, Fraction(0, 1));
 
-    for (const Staff* staff : m->score()->staves()) {
+    for (const Staff* staff : ctx.staves()) {
         const int track = staffIdx * VOICES;
 
-        if (isFirstSystem || m->score()->styleB(Sid::genClef)) {
+        if (isFirstSystem || ctx.style().styleB(Sid::genClef)) {
             // find the clef type at the previous tick
             ClefTypeList cl = staff->clefType(m->tick() - Fraction::fromTicks(1));
             bool showCourtesy = true;
@@ -1594,7 +1593,7 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
         }
 
         // keep key sigs in TABs: TABs themselves should hide them
-        bool needKeysig = isFirstSystem || m->score()->styleB(Sid::genKeysig);
+        bool needKeysig = isFirstSystem || ctx.style().styleB(Sid::genKeysig);
 
         // If we need a Key::C KeySig (which would be invisible) and there is
         // a courtesy key sig, don’t create it and switch generated flags.
@@ -1649,9 +1648,9 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
         } else if (kSegment && isPitchedStaff) {
             // do not disable user modified keysigs
             bool disable = true;
-            for (size_t i = 0; i < m->score()->nstaves(); ++i) {
+            for (size_t i = 0; i < ctx.nstaves(); ++i) {
                 EngravingItem* e = kSegment->element(i * VOICES);
-                Key key = m->score()->staff(i)->key(m->tick());
+                Key key = ctx.staff(i)->key(m->tick());
                 if ((e && !e->generated()) || (key != keyIdx.key())) {
                     disable = false;
                 }
@@ -1714,10 +1713,10 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
     if (s) {
         s->setTrailer(true);
     }
-    if (nm && m->score()->genCourtesyTimesig() && !isFinalMeasure && !m->score()->layoutOptions().isMode(LayoutMode::FLOAT)) {
+    if (nm && ctx.score()->genCourtesyTimesig() && !isFinalMeasure && !ctx.floatMode()) {
         Segment* tss = nm->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
         if (tss) {
-            size_t nstaves = m->score()->nstaves();
+            size_t nstaves = ctx.nstaves();
             for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
                 ts = toTimeSig(tss->element(track));
                 if (ts) {
@@ -1746,7 +1745,7 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
                         ts->setTrack(track);
                         ts->setGenerated(true);
                         ts->setParent(s);
-                        m->score()->undoAddElement(ts);
+                        ctx.undoAddElement(ts);
                         s->setTrailer(true);
                     }
                     ts->setFrom(nts);
@@ -1764,7 +1763,7 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
 
     // courtesy key signatures, clefs
 
-    size_t n   = m->score()->nstaves();
+    size_t n   = ctx.nstaves();
     bool show  = m->hasCourtesyKeySig();
     s          = m->findSegmentR(SegmentType::KeySigAnnounce, _rtick);
 
@@ -1772,7 +1771,7 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
 
     for (staff_idx_t staffIdx = 0; staffIdx < n; ++staffIdx) {
         track_idx_t track = staffIdx * VOICES;
-        Staff* staff = m->score()->staff(staffIdx);
+        const Staff* staff = ctx.staff(staffIdx);
         bool staffIsPitchedAtNextMeas = m->nextMeasure() && staff->isPitchedStaff(m->nextMeasure()->tick());
 
         if (show) {
@@ -1866,13 +1865,13 @@ void MeasureLayout::createSystemBeginBarLine(Measure* m, LayoutContext& ctx)
             }
         }
     }
-    if ((n > 1 && m->score()->styleB(Sid::startBarlineMultiple))
-        || (n == 1 && (m->score()->styleB(Sid::startBarlineSingle) || m->system()->brackets().size()))) {
+    if ((n > 1 && ctx.style().styleB(Sid::startBarlineMultiple))
+        || (n == 1 && (ctx.style().styleB(Sid::startBarlineSingle) || m->system()->brackets().size()))) {
         if (!s) {
             s = Factory::createSegment(m, SegmentType::BeginBarLine, Fraction(0, 1));
             m->add(s);
         }
-        for (track_idx_t track = 0; track < m->score()->ntracks(); track += VOICES) {
+        for (track_idx_t track = 0; track < ctx.ntracks(); track += VOICES) {
             BarLine* bl = toBarLine(s->element(track));
             if (!bl) {
                 bl = Factory::createBarLine(s);
@@ -2007,7 +2006,7 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
                     //
                     // center multi measure rest
                     //
-                    double d = m->score()->styleMM(Sid::multiMeasureRestMargin);
+                    double d = ctx.style().styleMM(Sid::multiMeasureRestMargin);
                     double w = x2 - x1 - 2 * d;
 
                     mmrest->setWidth(w);
@@ -2075,7 +2074,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
             Segment* seg = toMeasure(pmb)->last();
             // overlap end repeat barline with start repeat barline
             if (seg->isEndBarLineType()) {
-                x -= m->score()->styleMM(Sid::endBarWidth) * m->mag();
+                x -= ctx.style().styleMM(Sid::endBarWidth) * m->mag();
             }
         }
     }
@@ -2086,7 +2085,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
     bool isSystemHeader = s->header();
 
     m->_squeezableSpace = 0;
-    MeasureLayout::computeWidth(m, s, x, isSystemHeader, minTicks, maxTicks, stretchCoeff, overrideMinMeasureWidth);
+    computeWidth(m, ctx, s, x, isSystemHeader, minTicks, maxTicks, stretchCoeff, overrideMinMeasureWidth);
 }
 
 //---------------------------------------------------------
@@ -2098,7 +2097,8 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
 //   to compute the minimum non-collision distance between elements.
 //---------------------------------------------------------
 
-void MeasureLayout::computeWidth(Measure* m, Segment* s, double x, bool isSystemHeader, Fraction minTicks, Fraction maxTicks,
+void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, double x, bool isSystemHeader, Fraction minTicks,
+                                 Fraction maxTicks,
                                  double stretchCoeff,
                                  bool overrideMinMeasureWidth)
 {
@@ -2110,7 +2110,7 @@ void MeasureLayout::computeWidth(Measure* m, Segment* s, double x, bool isSystem
     const Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, m->spatium() * 4));
 
     static constexpr double spacingMultiplier = 1.2;
-    double minNoteSpace = m->score()->noteHeadWidth() + spacingMultiplier * m->score()->styleMM(Sid::minNoteDistance);
+    double minNoteSpace = ctx.noteHeadWidth() + spacingMultiplier * ctx.style().styleMM(Sid::minNoteDistance);
     double usrStretch = std::max(m->userStretch(), double(0.1)); // Avoids stretch going to zero
     usrStretch = std::min(usrStretch, double(10)); // Higher values may cause the spacing to break (10 is already ridiculously high and no user should even use that)
 
@@ -2164,7 +2164,7 @@ void MeasureLayout::computeWidth(Measure* m, Segment* s, double x, bool isSystem
             // Adjust spacing for cross-beam situations
             s->computeCrossBeamType(ns);
             CrossBeamType crossBeamType = s->crossBeamType();
-            double displacement = m->score()->noteHeadWidth() - m->score()->styleMM(Sid::stemWidth);
+            double displacement = ctx.noteHeadWidth() - ctx.style().styleMM(Sid::stemWidth);
             if (crossBeamType.upDown && crossBeamType.canBeAdjusted) {
                 s->setWidthOffset(s->widthOffset() + displacement);
                 w += displacement;
@@ -2242,7 +2242,7 @@ void MeasureLayout::computeWidth(Measure* m, Segment* s, double x, bool isSystem
         x += w;
         s = s->next();
     }
-    m->_squeezableSpace = std::max(0.0, std::min(m->_squeezableSpace, x - m->score()->styleMM(Sid::minMeasureWidth)));
+    m->_squeezableSpace = std::max(0.0, std::min(m->_squeezableSpace, x - ctx.style().styleMM(Sid::minMeasureWidth)));
     m->setLayoutStretch(stretchCoeff);
     m->setWidth(x);
 
@@ -2250,7 +2250,7 @@ void MeasureLayout::computeWidth(Measure* m, Segment* s, double x, bool isSystem
     m->spaceRightAlignedSegments();
 
     // Check against minimum width and increase if needed (MMRest minWidth is guaranteed elsewhere)
-    double minWidth = computeMinMeasureWidth(m);
+    double minWidth = computeMinMeasureWidth(m, ctx);
     if (m->width() < minWidth && !overrideMinMeasureWidth) {
         m->stretchToTargetWidth(minWidth);
         m->setWidthLocked(true);
@@ -2259,9 +2259,9 @@ void MeasureLayout::computeWidth(Measure* m, Segment* s, double x, bool isSystem
     }
 }
 
-double MeasureLayout::computeMinMeasureWidth(Measure* m)
+double MeasureLayout::computeMinMeasureWidth(Measure* m, LayoutContext& ctx)
 {
-    double minWidth = m->score()->styleMM(Sid::minMeasureWidth);
+    double minWidth = ctx.style().styleMM(Sid::minMeasureWidth);
     double maxWidth = m->system()->width() - m->system()->leftMargin(); // maximum available system width (left margin accounts for possible indentation)
     if (maxWidth <= 0) {
         // System width may not yet be available for the linear mode (e.g. continuous view)
@@ -2283,9 +2283,9 @@ double MeasureLayout::computeMinMeasureWidth(Measure* m)
     // Start counting from the "virtual" position of the preceding barline if there wasn't the header.
     double startPosition = firstCRSegment->x() - firstCRSegment->minLeft();
     if (firstCRSegment->hasAccidentals()) {
-        startPosition -= m->score()->styleMM(Sid::barAccidentalDistance);
+        startPosition -= ctx.style().styleMM(Sid::barAccidentalDistance);
     } else {
-        startPosition -= m->score()->styleMM(Sid::barNoteDistance);
+        startPosition -= ctx.style().styleMM(Sid::barNoteDistance);
     }
     minWidth += startPosition;
     minWidth = std::min(minWidth, maxWidth);
@@ -2298,7 +2298,7 @@ double MeasureLayout::computeMinMeasureWidth(Measure* m)
 ///   to the left or right of the measure
 //---------------------------------------------------------
 
-void MeasureLayout::layoutPartialWidth(StaffLines* lines, double w, double wPartial, bool alignRight)
+void MeasureLayout::layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, double w, double wPartial, bool alignRight)
 {
     const Staff* s = lines->staff();
     double _spatium = lines->spatium();
@@ -2317,7 +2317,7 @@ void MeasureLayout::layoutPartialWidth(StaffLines* lines, double w, double wPart
         _lines = 5;
         lines->setColor(EngravingItem::engravingConfiguration()->defaultColor());
     }
-    lines->setLw(lines->score()->styleS(Sid::staffLineWidth).val() * _spatium);
+    lines->setLw(ctx.style().styleS(Sid::staffLineWidth).val() * _spatium);
     double x1 = lines->pos().x();
     double x2 = x1 + w;
     double y  = lines->pos().y();
