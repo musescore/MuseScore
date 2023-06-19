@@ -49,6 +49,15 @@ LayoutContext::~LayoutContext()
     }
 }
 
+bool LayoutContext::isPaletteMode() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return false;
+    }
+
+    return m_score->isPaletteScore();
+}
+
 bool LayoutContext::lineMode() const
 {
     IF_ASSERT_FAILED(m_score) {

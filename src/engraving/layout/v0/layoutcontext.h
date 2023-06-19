@@ -60,6 +60,7 @@ public:
     // Context
     Score* score() const { return m_score; }
 
+    bool isPaletteMode() const;
     bool lineMode() const;
 
     double spatium() const;
