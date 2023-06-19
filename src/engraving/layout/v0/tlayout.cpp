@@ -614,7 +614,7 @@ void TLayout::layout(BarLine* item, LayoutContext& ctx)
         }
     }
 
-    item->setMag(item->score()->styleB(Sid::scaleBarlines) && item->staff() ? item->staff()->staffMag(item->tick()) : 1.0);
+    item->setMag(ctx.style().styleB(Sid::scaleBarlines) && item->staff() ? item->staff()->staffMag(item->tick()) : 1.0);
     // Note: the true values of y1 and y2 are computed in layout2() (can be done only
     // after staff distances are known). This is a temporary layout.
     double _spatium = item->spatium();
@@ -626,7 +626,7 @@ void TLayout::layout(BarLine* item, LayoutContext& ctx)
     double w = layoutWidth(item, ctx) * item->mag();
     RectF r(0.0, item->y1(), w, item->y2() - item->y1());
 
-    if (item->score()->styleB(Sid::repeatBarTips)) {
+    if (ctx.style().styleB(Sid::repeatBarTips)) {
         switch (item->barLineType()) {
         case BarLineType::START_REPEAT:
             r.unite(item->symBbox(SymId::bracketTop).translated(0, item->y1()));
@@ -669,54 +669,54 @@ void TLayout::layout(BarLine* item, LayoutContext& ctx)
     }
 }
 
-double TLayout::layoutWidth(const BarLine* item, LayoutContext&)
+double TLayout::layoutWidth(const BarLine* item, LayoutContext& ctx)
 {
     const double dotWidth = item->symWidth(SymId::repeatDot);
 
     double w { 0.0 };
     switch (item->barLineType()) {
     case BarLineType::DOUBLE:
-        w = item->score()->styleMM(Sid::doubleBarWidth) * 2.0
-            + item->score()->styleMM(Sid::doubleBarDistance);
+        w = ctx.style().styleMM(Sid::doubleBarWidth) * 2.0
+            + ctx.style().styleMM(Sid::doubleBarDistance);
         break;
     case BarLineType::DOUBLE_HEAVY:
-        w = item->score()->styleMM(Sid::endBarWidth) * 2.0
-            + item->score()->styleMM(Sid::endBarDistance);
+        w = ctx.style().styleMM(Sid::endBarWidth) * 2.0
+            + ctx.style().styleMM(Sid::endBarDistance);
         break;
     case BarLineType::END_START_REPEAT:
-        w = item->score()->styleMM(Sid::endBarWidth)
-            + item->score()->styleMM(Sid::barWidth) * 2.0
-            + item->score()->styleMM(Sid::endBarDistance) * 2.0
-            + item->score()->styleMM(Sid::repeatBarlineDotSeparation) * 2.0
+        w = ctx.style().styleMM(Sid::endBarWidth)
+            + ctx.style().styleMM(Sid::barWidth) * 2.0
+            + ctx.style().styleMM(Sid::endBarDistance) * 2.0
+            + ctx.style().styleMM(Sid::repeatBarlineDotSeparation) * 2.0
             + dotWidth * 2;
         break;
     case BarLineType::START_REPEAT:
     case BarLineType::END_REPEAT:
-        w = item->score()->styleMM(Sid::endBarWidth)
-            + item->score()->styleMM(Sid::barWidth)
-            + item->score()->styleMM(Sid::endBarDistance)
-            + item->score()->styleMM(Sid::repeatBarlineDotSeparation)
+        w = ctx.style().styleMM(Sid::endBarWidth)
+            + ctx.style().styleMM(Sid::barWidth)
+            + ctx.style().styleMM(Sid::endBarDistance)
+            + ctx.style().styleMM(Sid::repeatBarlineDotSeparation)
             + dotWidth;
         break;
     case BarLineType::END:
     case BarLineType::REVERSE_END:
-        w = item->score()->styleMM(Sid::endBarWidth)
-            + item->score()->styleMM(Sid::barWidth)
-            + item->score()->styleMM(Sid::endBarDistance);
+        w = ctx.style().styleMM(Sid::endBarWidth)
+            + ctx.style().styleMM(Sid::barWidth)
+            + ctx.style().styleMM(Sid::endBarDistance);
         break;
     case BarLineType::BROKEN:
     case BarLineType::NORMAL:
     case BarLineType::DOTTED:
-        w = item->score()->styleMM(Sid::barWidth);
+        w = ctx.style().styleMM(Sid::barWidth);
         break;
     case BarLineType::HEAVY:
-        w = item->score()->styleMM(Sid::endBarWidth);
+        w = ctx.style().styleMM(Sid::endBarWidth);
         break;
     }
     return w;
 }
 
-RectF TLayout::layoutRect(const BarLine* item, LayoutContext&)
+RectF TLayout::layoutRect(const BarLine* item, LayoutContext& ctx)
 {
     RectF bb = item->bbox();
     if (item->staff()) {
@@ -735,7 +735,7 @@ RectF TLayout::layoutRect(const BarLine* item, LayoutContext&)
         }
         double y = sp * sFrom * 0.5;
         double h = sp * (span + (sTo - sFrom) * 0.5);
-        if (item->score()->styleB(Sid::repeatBarTips)) {
+        if (ctx.style().styleB(Sid::repeatBarTips)) {
             switch (item->barLineType()) {
             case BarLineType::START_REPEAT:
             case BarLineType::END_REPEAT:
@@ -763,7 +763,7 @@ RectF TLayout::layoutRect(const BarLine* item, LayoutContext&)
 //---------------------------------------------------------
 //    called after system layout; set vertical dimensions
 //---------------------------------------------------------
-void TLayout::layout2(BarLine* item, LayoutContext&)
+void TLayout::layout2(BarLine* item, LayoutContext& ctx)
 {
     // barlines hidden on this staff
     if (item->staff() && item->segment()) {
@@ -778,7 +778,7 @@ void TLayout::layout2(BarLine* item, LayoutContext&)
     item->bbox().setTop(item->y1());
     item->bbox().setBottom(item->y2());
 
-    if (item->score()->styleB(Sid::repeatBarTips)) {
+    if (ctx.style().styleB(Sid::repeatBarTips)) {
         switch (item->barLineType()) {
         case BarLineType::START_REPEAT:
             item->bbox().unite(item->symBbox(SymId::bracketTop).translated(0, item->y1()));
