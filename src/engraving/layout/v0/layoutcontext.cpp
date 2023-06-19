@@ -49,12 +49,12 @@ LayoutContext::~LayoutContext()
     }
 }
 
-compat::DummyElement* LayoutContext::dummyParent() const
+bool LayoutContext::lineMode() const
 {
     IF_ASSERT_FAILED(m_score) {
-        return nullptr;
+        return false;
     }
-    return m_score->dummy();
+    return m_score->lineMode();
 }
 
 double LayoutContext::spatium() const
@@ -63,6 +63,11 @@ double LayoutContext::spatium() const
         return DefaultStyle::defaultStyle().styleD(Sid::spatium);
     }
     return m_score->spatium();
+}
+
+double LayoutContext::point(const Spatium sp) const
+{
+    return sp.val() * spatium();
 }
 
 const MStyle& LayoutContext::style() const
@@ -82,6 +87,14 @@ IEngravingFontPtr LayoutContext::engravingFont() const
     return m_score->engravingFont();
 }
 
+size_t LayoutContext::nstaves() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return 0;
+    }
+    return m_score->nstaves();
+}
+
 const Staff* LayoutContext::staff(staff_idx_t idx) const
 {
     IF_ASSERT_FAILED(m_score) {
@@ -96,6 +109,30 @@ size_t LayoutContext::ntracks() const
         return 0;
     }
     return m_score->ntracks();
+}
+
+compat::DummyElement* LayoutContext::dummyParent() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return nullptr;
+    }
+    return m_score->dummy();
+}
+
+void LayoutContext::undoRemoveElement(EngravingItem* item)
+{
+    IF_ASSERT_FAILED(m_score) {
+        return;
+    }
+    m_score->undoRemoveElement(item);
+}
+
+void LayoutContext::undo(UndoCommand* cmd, EditData* ed) const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return;
+    }
+    m_score->undo(cmd, ed);
 }
 
 void LayoutContext::setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e)

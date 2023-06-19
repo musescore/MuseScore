@@ -1156,14 +1156,14 @@ void TLayout::layout(Bracket* item, LayoutContext& ctx)
     item->setShape(shape);
 }
 
-void TLayout::layout(Breath* item, LayoutContext&)
+void TLayout::layout(Breath* item, LayoutContext& ctx)
 {
     bool palette = (!item->staff() || item->track() == mu::nidx);
     if (!palette) {
         int voiceOffset = item->placeBelow() * (item->staff()->lines(item->tick()) - 1) * item->spatium();
         if (item->isCaesura()) {
             item->setPos(item->xpos(), item->spatium() + voiceOffset);
-        } else if ((item->score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler")
+        } else if ((ctx.style().styleSt(Sid::MusicalSymbolFont) == "Emmentaler")
                    && (item->symId() == SymId::breathMarkComma)) {
             item->setPos(item->xpos(), 0.5 * item->spatium() + voiceOffset);
         } else {

@@ -39,6 +39,9 @@ class Score;
 class Spanner;
 class System;
 class Staff;
+
+class UndoCommand;
+class EditData;
 }
 
 namespace mu::engraving::compat {
@@ -56,13 +59,25 @@ public:
 
     // Context
     Score* score() const { return m_score; }
-    compat::DummyElement* dummyParent() const;
+
+    bool lineMode() const;
 
     double spatium() const;
+    double point(const Spatium sp) const;
+
     const MStyle& style() const;
+
     IEngravingFontPtr engravingFont() const;
+
+    size_t nstaves() const;
     const Staff* staff(staff_idx_t idx) const;
+
     size_t ntracks() const;
+
+    // Create/Remove
+    compat::DummyElement* dummyParent() const;
+    void undoRemoveElement(EngravingItem* item);
+    void undo(UndoCommand* cmd, EditData* ed = nullptr) const;
 
     // Mark
     void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e);
