@@ -39,6 +39,7 @@ class Score;
 class Spanner;
 class System;
 class Staff;
+class Measure;
 
 class UndoCommand;
 class EditData;
@@ -61,6 +62,7 @@ public:
     Score* score() const { return m_score; }
 
     bool isPaletteMode() const;
+    bool printingMode() const;
     bool lineMode() const;
 
     double spatium() const;
@@ -68,18 +70,21 @@ public:
 
     const MStyle& style() const;
     double noteHeadWidth() const;
+    bool showInvisible() const;
 
     IEngravingFontPtr engravingFont() const;
 
+    const std::vector<System*>& systems() const;
     size_t nstaves() const;
     const Staff* staff(staff_idx_t idx) const;
-
     size_t ntracks() const;
+    const Measure* tick2measure(const Fraction& tick) const;
 
     // Create/Remove
     compat::DummyElement* dummyParent() const;
     void undoRemoveElement(EngravingItem* item);
     void undo(UndoCommand* cmd, EditData* ed = nullptr) const;
+    void addUnmanagedSpanner(Spanner* s);
 
     // Mark
     void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e);

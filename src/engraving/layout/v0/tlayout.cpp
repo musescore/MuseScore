@@ -1769,7 +1769,7 @@ void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
 //    lays out the duration indicator line(s), filling the _lineLengths array
 //    and the length of printed lines (used by continuation lines)
 
-void TLayout::layoutLines(FiguredBass* item, LayoutContext&)
+void TLayout::layoutLines(FiguredBass* item, LayoutContext& ctx)
 {
     std::vector<double> lineLengths = item->lineLengths();
     if (item->ticks() <= Fraction(0, 1) || !item->segment()) {
@@ -1789,7 +1789,7 @@ void TLayout::layoutLines(FiguredBass* item, LayoutContext&)
     // or the previous measure, if nextTick is the first tick of a measure
     //    (and line should stop before any measure terminal segment (bar, clef, ...) )
 
-    Measure* m = item->score()->tick2measure(nextTick - Fraction::fromTicks(1));
+    const Measure* m = ctx.tick2measure(nextTick - Fraction::fromTicks(1));
     if (m) {
         // locate the first segment (of ANY type) right after this' last tick
         for (nextSegm = m->first(SegmentType::All); nextSegm; nextSegm = nextSegm->next()) {
@@ -1829,7 +1829,7 @@ void TLayout::layoutLines(FiguredBass* item, LayoutContext&)
     item->setPrintedLineLength(printedLineLength);
 
     // get duration indicator line(s) from page position of nextSegm
-    const std::vector<System*>& systems = item->score()->systems();
+    const std::vector<System*>& systems = ctx.systems();
     System* s1  = item->segment()->measure()->system();
     System* s2  = nextSegm->measure()->system();
     system_idx_t sysIdx1 = mu::indexOf(systems, s1);
@@ -3911,7 +3911,7 @@ void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
     PointF p1(item->linePos(Grip::START, &s1));
     PointF p2(item->linePos(Grip::END,   &s2));
 
-    const std::vector<System*>& systems = item->score()->systems();
+    const std::vector<System*>& systems = ctx.systems();
     system_idx_t sysIdx1 = mu::indexOf(systems, s1);
     system_idx_t sysIdx2 = mu::indexOf(systems, s2);
     int segmentsNeeded = 0;
@@ -4340,11 +4340,11 @@ void TLayout::layout(SystemDivider* item, LayoutContext& ctx)
     SymId sid;
 
     if (item->dividerType() == SystemDivider::Type::LEFT) {
-        sid = SymNames::symIdByName(item->score()->styleSt(Sid::dividerLeftSym));
+        sid = SymNames::symIdByName(ctx.style().styleSt(Sid::dividerLeftSym));
     } else {
-        sid = SymNames::symIdByName(item->score()->styleSt(Sid::dividerRightSym));
+        sid = SymNames::symIdByName(ctx.style().styleSt(Sid::dividerRightSym));
     }
-    item->setSym(sid, item->score()->engravingFont());
+    item->setSym(sid, ctx.engravingFont());
 
     layout(static_cast<Symbol*>(item), ctx);
 }
@@ -4467,7 +4467,7 @@ void TLayout::layout1(TextBase* item, LayoutContext& ctx)
     }
 }
 
-void TLayout::layout1TextBase(TextBase* item, LayoutContext&)
+void TLayout::layout1TextBase(TextBase* item, LayoutContext& ctx)
 {
     if (item->layoutInvalid()) {
         item->createLayout();
@@ -4541,7 +4541,7 @@ void TLayout::layout1TextBase(TextBase* item, LayoutContext&)
     if (item->hasFrame()) {
         item->layoutFrame();
     }
-    item->score()->addRefresh(item->canvasBoundingRect());
+    ctx.addRefresh(item->canvasBoundingRect());
 }
 
 void TLayout::layout(Text* item, LayoutContext& ctx)
@@ -4744,11 +4744,11 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->bbox() |= item->endText()->bbox().translated(item->endText()->pos());
     }
 
-    if (!(tl->lineVisible() || item->score()->showInvisible())) {
+    if (!(tl->lineVisible() || ctx.showInvisible())) {
         return;
     }
 
-    if (tl->lineVisible() || !item->score()->printing()) {
+    if (tl->lineVisible() || !ctx.printingMode()) {
         pp1 = PointF(l, 0.0);
 
         // Make sure baseline of text and line are properly aligned (accounting for line thickness)
@@ -4842,7 +4842,7 @@ void TLayout::layout(Tie* item, LayoutContext&)
     UNUSED(item);
 }
 
-void TLayout::layout(TimeSig* item, LayoutContext&)
+void TLayout::layout(TimeSig* item, LayoutContext& ctx)
 {
     item->setPos(0.0, 0.0);
     double _spatium = item->spatium();
@@ -4890,7 +4890,7 @@ void TLayout::layout(TimeSig* item, LayoutContext&)
     double yoff = _spatium * (numOfLines - 1) * .5 * lineDist;
 
     // C and Ccut are placed at the middle of the staff: use yoff directly
-    IEngravingFontPtr font = item->score()->engravingFont();
+    IEngravingFontPtr font = ctx.engravingFont();
     SizeF mag(item->magS() * item->scale());
 
     if (sigType == TimeSigType::FOUR_FOUR) {
@@ -5091,7 +5091,7 @@ void TLayout::layout(Trill* item, LayoutContext& ctx)
 {
     layoutLine(static_cast<SLine*>(item), ctx);
 
-    if (item->score()->isPaletteScore()) {
+    if (ctx.isPaletteMode()) {
         return;
     }
     if (item->spannerSegments().empty()) {
@@ -5146,7 +5146,7 @@ void TLayout::layout(Vibrato* item, LayoutContext& ctx)
 {
     layoutLine(static_cast<SLine*>(item), ctx);
 
-    if (item->score()->isPaletteScore()) {
+    if (ctx.isPaletteMode()) {
         return;
     }
     if (item->spannerSegments().empty()) {
