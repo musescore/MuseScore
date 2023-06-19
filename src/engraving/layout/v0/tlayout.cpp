@@ -1492,7 +1492,7 @@ void TLayout::layout(Dynamic* item, LayoutContext& ctx)
     if (symId != SymId::noSym && opticalCenter) {
         double symWidth = item->symBbox(symId).width();
         double offset = symWidth / 2 - opticalCenter + item->symBbox(symId).left();
-        double spatiumScaling = item->spatium() / item->score()->spatium();
+        double spatiumScaling = item->spatium() / ctx.spatium();
         offset *= spatiumScaling;
         item->movePosX(offset);
     }
@@ -1622,7 +1622,7 @@ void TLayout::layout(Fermata* item, LayoutContext& ctx)
 //    the horiz. offset needed to align the right part as well as the vert. offset
 //---------------------------------------------------------
 
-void TLayout::layout(FiguredBassItem* item, LayoutContext&)
+void TLayout::layout(FiguredBassItem* item, LayoutContext& ctx)
 {
     double h, w, x, x1, x2, y;
 
@@ -1632,7 +1632,7 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
 
     // font size in pixels, scaled according to spatium()
     // (use the same font selection as used in draw() below)
-    double m = item->score()->styleD(Sid::figuredBassFontSize) * item->spatium() / SPATIUM20;
+    double m = ctx.style().styleD(Sid::figuredBassFontSize) * item->spatium() / SPATIUM20;
     f.setPointSizeF(m);
     mu::draw::FontMetrics fm(f);
 
@@ -1642,7 +1642,7 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
 
     // create display text
     int font = 0;
-    int style = item->score()->styleI(Sid::figuredBassStyle);
+    int style = ctx.style().styleI(Sid::figuredBassStyle);
 
     if (item->parenth1() != FiguredBassItem::Parenthesis::NONE) {
         str.append(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->parenth1())]);
@@ -1725,8 +1725,8 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
     }
     // vertical position
     h = fm.lineSpacing();
-    h *= item->score()->styleD(Sid::figuredBassLineHeight);
-    if (item->score()->styleI(Sid::figuredBassAlignment) == 0) {          // top alignment: stack down from first item
+    h *= ctx.style().styleD(Sid::figuredBassLineHeight);
+    if (ctx.style().styleI(Sid::figuredBassAlignment) == 0) {          // top alignment: stack down from first item
         y = h * item->ord();
     } else {                                                      // bottom alignment: stack up from last item
         y = -h * (item->figuredBass()->itemsCount() - item->ord());
@@ -1747,7 +1747,7 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext&)
 void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
 {
     // VERTICAL POSITION:
-    const double y = item->score()->styleD(Sid::figuredBassYOffset) * item->spatium();
+    const double y = ctx.style().styleD(Sid::figuredBassYOffset) * item->spatium();
     item->setPos(PointF(0.0, y));
 
     // BOUNDING BOX and individual item layout (if required)
