@@ -1531,8 +1531,8 @@ void TLayout::layout(Expression* item, LayoutContext& ctx)
     }
 
     item->setSnappedDynamic(nullptr);
-    if (!item->snapToDynamics()) {
-        item->autoplaceSegmentElement();
+
+    if (!item->autoplace() || !item->snapToDynamics()) {
         return;
     }
 
