@@ -25,6 +25,6 @@
 using namespace mu::notation;
 
 TextStylePopupModel::TextStylePopupModel(QObject* parent)
-    : AbstractElementPopupModel(parent)
+    : AbstractElementPopupModel(PopupModelType::TYPE_TEXT, parent)
 {
 }
