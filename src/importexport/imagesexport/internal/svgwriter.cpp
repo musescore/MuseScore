@@ -49,6 +49,8 @@ std::vector<INotationWriter::UnitType> SvgWriter::supportedUnitTypes() const
 
 mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, const Options& options)
 {
+    TRACEFUNC;
+
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
     }
