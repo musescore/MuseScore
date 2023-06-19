@@ -941,7 +941,6 @@ void BeamLayout::createBeamSegments(Beam* item, LayoutContext& ctx, const std::v
         for (size_t i = 0; i < numCr; i++) {
             ChordRest* chordRest = chordRests[i];
             ChordRest* prevChordRest = i < 1 ? nullptr : chordRests[i - 1];
-            ChordRest* nextChordRest = i + 1 >= numCr ? nullptr : chordRests[i + 1];
 
             if (level < chordRest->beams()) {
                 levelHasBeam = true;
