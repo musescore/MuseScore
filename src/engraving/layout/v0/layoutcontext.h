@@ -66,6 +66,15 @@ public:
 
     // Mutable access
 
+    // Create/Remove
+    compat::DummyElement* dummyParent() const;
+    void undoAddElement(EngravingItem* item, bool addToLinkedStaves = true, bool ctrlModifier = false);
+    void undoRemoveElement(EngravingItem* item);
+    void undo(UndoCommand* cmd, EditData* ed = nullptr) const;
+    void addElement(EngravingItem* item);
+    void removeElement(EngravingItem* item);
+    void addUnmanagedSpanner(Spanner* s);
+
 private:
     Score* m_score = nullptr;
 };
@@ -96,15 +105,7 @@ public:
     IEngravingFontPtr engravingFont() const;
 
     const DomAccessor& dom() const;
-
-    // Create/Remove
-    compat::DummyElement* dummyParent() const;
-    void undoAddElement(EngravingItem* item, bool addToLinkedStaves = true, bool ctrlModifier = false);
-    void undoRemoveElement(EngravingItem* item);
-    void undo(UndoCommand* cmd, EditData* ed = nullptr) const;
-    void addElement(EngravingItem* item);
-    void removeElement(EngravingItem* item);
-    void addUnmanagedSpanner(Spanner* s);
+    DomAccessor& mutDom();
 
     // Mark
     void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e);

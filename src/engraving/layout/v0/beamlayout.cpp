@@ -509,7 +509,7 @@ void BeamLayout::breakCrossMeasureBeams(Measure* measure, LayoutContext& ctx)
 
         Beam* newBeam = nullptr;
         if (nextElements.size() > 1) {
-            newBeam = Factory::createBeam(ctx.dummyParent()->system());
+            newBeam = Factory::createBeam(ctx.mutDom().dummyParent()->system());
             newBeam->setGenerated(true);
             newBeam->setTrack(track);
         }

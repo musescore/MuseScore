@@ -137,9 +137,9 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
         item->removeInvalidSegments();
     } else if (item->_ticks > Fraction(0, 1) || item->_syllabic == LyricsSyllabic::BEGIN || item->_syllabic == LyricsSyllabic::MIDDLE) {
         if (!item->_separator) {
-            item->_separator = new LyricsLine(ctx.dummyParent());
+            item->_separator = new LyricsLine(ctx.mutDom().dummyParent());
             item->_separator->setTick(cr->tick());
-            ctx.addUnmanagedSpanner(item->_separator);
+            ctx.mutDom().addUnmanagedSpanner(item->_separator);
         }
         item->_separator->setParent(item);
         item->_separator->setTick(cr->tick());

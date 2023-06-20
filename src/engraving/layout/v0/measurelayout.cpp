@@ -1095,9 +1095,9 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
         } else {
             if (t) {
                 if (t->generated()) {
-                    ctx.removeElement(t);
+                    ctx.mutDom().removeElement(t);
                 } else {
-                    ctx.undo(new RemoveElement(t));
+                    ctx.mutDom().undo(new RemoveElement(t));
                 }
             }
         }
@@ -1113,9 +1113,9 @@ void MeasureLayout::layoutMMRestRange(Measure* m, LayoutContext& ctx)
             MMRestRange* rr = ms->mmRangeText();
             if (rr) {
                 if (rr->generated()) {
-                    ctx.removeElement(rr);
+                    ctx.mutDom().removeElement(rr);
                 } else {
-                    ctx.undo(new RemoveElement(rr));
+                    ctx.mutDom().undo(new RemoveElement(rr));
                 }
             }
         }
@@ -1321,7 +1321,7 @@ void MeasureLayout::barLinesSetSpan(Segment* seg, LayoutContext& ctx)
             bl->setSpanFrom(staff->barLineFrom());
             bl->setSpanTo(staff->barLineTo());
             TLayout::layout(bl, ctx);
-            ctx.addElement(bl);
+            ctx.mutDom().addElement(bl);
         }
         track += VOICES;
     }
@@ -1411,7 +1411,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
                 bl->setSpanFrom(staff->barLineFrom());
                 bl->setSpanTo(staff->barLineTo());
                 bl->setBarLineType(t);
-                ctx.addElement(bl);
+                ctx.mutDom().addElement(bl);
             } else {
                 // do not change bar line type if bar line is user modified
                 // and its not a repeat start/end barline (forced)
@@ -1740,7 +1740,7 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
                         ts->setTrack(track);
                         ts->setGenerated(true);
                         ts->setParent(s);
-                        ctx.undoAddElement(ts);
+                        ctx.mutDom().undoAddElement(ts);
                         s->setTrailer(true);
                     }
                     ts->setFrom(nts);

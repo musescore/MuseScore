@@ -214,7 +214,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     if (item->_hook) {
         if (item->beam()) {
-            ctx.undoRemoveElement(item->_hook);
+            ctx.mutDom().undoRemoveElement(item->_hook);
         } else {
             TLayout::layout(item->_hook, ctx);
             if (item->up() && item->stem()) {
@@ -413,12 +413,12 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             Stem* stem = Factory::createStem(item);
             stem->setParent(item);
             stem->setGenerated(true);
-            ctx.undo(new AddElement(stem));
+            ctx.mutDom().undo(new AddElement(stem));
         }
         item->_stem->setPos(tab->chordStemPos(item) * _spatium);
         if (item->_hook) {
             if (item->beam()) {
-                ctx.undoRemoveElement(item->_hook);
+                ctx.mutDom().undoRemoveElement(item->_hook);
             } else {
                 if (rrr < stemX + item->_hook->width()) {
                     rrr = stemX + item->_hook->width();
@@ -429,15 +429,15 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         }
     } else {
         if (item->_stem) {
-            ctx.undo(new RemoveElement(item->_stem));
+            ctx.mutDom().undo(new RemoveElement(item->_stem));
             item->remove(item->_stem);
         }
         if (item->_hook) {
-            ctx.undo(new RemoveElement(item->_hook));
+            ctx.mutDom().undo(new RemoveElement(item->_hook));
             item->remove(item->_hook);
         }
         if (item->m_beam) {
-            ctx.undo(new RemoveElement(item->m_beam));
+            ctx.mutDom().undo(new RemoveElement(item->m_beam));
             item->remove(item->m_beam);
         }
     }
@@ -528,7 +528,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
 
     if (item->_hook) {
         if (item->beam()) {
-            ctx.undoRemoveElement(item->_hook);
+            ctx.mutDom().undoRemoveElement(item->_hook);
         } else if (tab == 0) {
             TLayout::layout(item->_hook, ctx);
             if (item->up()) {
@@ -1090,7 +1090,7 @@ void ChordLayout::layoutStem(Chord* item, LayoutContext& ctx)
     if (item->shouldHaveHook()) {
         layoutHook(item, ctx);
     } else {
-        ctx.undoRemoveElement(item->_hook);
+        ctx.mutDom().undoRemoveElement(item->_hook);
     }
 
     // we should calculate default stem length for this chord even if it doesn't have a stem
