@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
@@ -242,8 +240,6 @@
       <Tracklist sTrack="5" dstTrack="5"/>
       <Tracklist sTrack="6" dstTrack="6"/>
       <Tracklist sTrack="7" dstTrack="7"/>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <lyricsMinBottomDistance>4</lyricsMinBottomDistance>

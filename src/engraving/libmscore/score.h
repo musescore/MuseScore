@@ -249,15 +249,6 @@ enum class PlayMode : char {
 };
 
 //---------------------------------------------------------
-//   Layer
-//---------------------------------------------------------
-
-struct Layer {
-    String name;
-    unsigned int tags = 0;
-};
-
-//---------------------------------------------------------
 //   UpdateMode
 //    There is an implied order from least invasive update
 //    to most invasive update. LayoutAll is fallback and
@@ -409,11 +400,6 @@ private:
 
     String _mscoreVersion;
     int _mscoreRevision;
-
-    String _layerTags[32];
-    String _layerTagComments[32];
-    std::vector<Layer> _layer;
-    int _currentLayer { 0 };
 
     std::shared_ptr<IEngravingFont> m_engravingFont = nullptr;
     int _pageNumberOffset { 0 };          ///< Offset for page numbers.
@@ -1108,15 +1094,6 @@ public:
     void setMscoreVersion(const String& val) { _mscoreVersion = val; }
     void setMscoreRevision(int val) { _mscoreRevision = val; }
 
-    unsigned int currentLayerMask() const { return _layer[_currentLayer].tags; }
-    void setCurrentLayer(int val) { _currentLayer = val; }
-    int currentLayer() const { return _currentLayer; }
-    String* layerTags() { return _layerTags; }
-    String* layerTagComments() { return _layerTagComments; }
-    std::vector<Layer>& layer() { return _layer; }
-    const std::vector<Layer>& layer() const { return _layer; }
-    bool tagIsValid(unsigned int tag) const { return tag & _layer[_currentLayer].tags; }
-
     void addViewer(MuseScoreView* v) { viewer.push_back(v); }
     void removeViewer(MuseScoreView* v) { viewer.remove(v); }
     const std::list<MuseScoreView*>& getViewer() const { return viewer; }
@@ -1164,7 +1141,7 @@ public:
     int getLinkId() const { return _linkId; }
 
     std::list<Score*> scoreList();
-    bool switchLayer(const String& s);
+
     //@ appends to the score a number of measures
     void appendMeasures(int);
 

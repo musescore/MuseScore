@@ -454,13 +454,7 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
     } else if (tag == "voice") {
         item->setVoice(e.readInt());
     } else if (tag == "tag") {
-        String val(e.readText());
-        for (int i = 1; i < MAX_TAGS; i++) {
-            if (ctx.score()->layerTags()[i] == val) {
-                item->setTag(1 << i);
-                break;
-            }
-        }
+        e.skipCurrentElement();
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::PLACEMENT)) {
     } else if (tag == "z") {
         item->setZ(e.readInt());

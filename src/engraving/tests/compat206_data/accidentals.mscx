@@ -3,8 +3,6 @@
   <programVersion>2.0.3</programVersion>
   <programRevision>3c7a69d</programRevision>
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Synthesizer>
       </Synthesizer>
     <Division>480</Division>

@@ -3210,21 +3210,11 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "playMode") {
             score->setPlayMode(PlayMode(e.readInt()));
         } else if (tag == "LayerTag") {
-            int id = e.intAttribute("id");
-            const String& t = e.attribute("tag");
-            String val(e.readText());
-            if (id >= 0 && id < 32) {
-                score->layerTags()[id] = t;
-                score->layerTagComments()[id] = val;
-            }
+            e.skipCurrentElement();
         } else if (tag == "Layer") {
-            Layer layer;
-            layer.name = e.attribute("name");
-            layer.tags = static_cast<unsigned int>(e.intAttribute("mask"));
-            score->layer().push_back(layer);
-            e.readNext();
+            e.skipCurrentElement();
         } else if (tag == "currentLayer") {
-            score->setCurrentLayer(e.readInt());
+            e.skipCurrentElement();
         } else if (tag == "Synthesizer") {
             score->synthesizerState().read(e);
         } else if (tag == "page-offset") {

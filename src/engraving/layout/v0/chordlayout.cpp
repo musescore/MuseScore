@@ -3095,9 +3095,6 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
 
     // layout elements attached to note
     for (EngravingItem* e : item->el()) {
-        if (!item->score()->tagIsValid(e->tag())) {
-            continue;
-        }
         if (e->isSymbol()) {
             e->setMag(item->mag());
             Shape noteShape = item->shape();

@@ -2306,9 +2306,7 @@ void Note::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
     //      if (_tieFor && !staff()->isTabStaff(chord->tick()))  // no ties in tablature
     //            _tieFor->scanElements(data, func, all);
     for (EngravingItem* e : m_el) {
-        if (score()->tagIsValid(e->tag())) {
-            e->scanElements(data, func, all);
-        }
+        e->scanElements(data, func, all);
     }
     for (Spanner* sp : m_spannerFor) {
         sp->scanElements(data, func, all);

@@ -339,14 +339,7 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
     if (ctx.writePosition()) {
         xml.tagProperty(Pid::POSITION, item->rtick());
     }
-    if (item->tag() != 0x1) {
-        for (int i = 1; i < MAX_TAGS; i++) {
-            if (item->tag() == ((unsigned)1 << i)) {
-                xml.tag("tag", item->score()->layerTags()[i]);
-                break;
-            }
-        }
-    }
+
     for (Pid pid : { Pid::OFFSET, Pid::COLOR, Pid::VISIBLE, Pid::Z, Pid::PLACEMENT }) {
         if (item->propertyFlags(pid) == PropertyFlags::NOSTYLE) {
             writeProperty(item, xml, pid);

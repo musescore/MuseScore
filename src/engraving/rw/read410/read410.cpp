@@ -124,21 +124,11 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "playMode") {
             score->_playMode = PlayMode(e.readInt());
         } else if (tag == "LayerTag") {
-            int id = e.intAttribute("id");
-            const String& t = e.attribute("tag");
-            String val(e.readText());
-            if (id >= 0 && id < 32) {
-                score->_layerTags[id] = t;
-                score->_layerTagComments[id] = val;
-            }
+            e.skipCurrentElement();
         } else if (tag == "Layer") {
-            Layer layer;
-            layer.name = e.attribute("name");
-            layer.tags = static_cast<unsigned int>(e.intAttribute("mask"));
-            score->_layer.push_back(layer);
-            e.readNext();
+            e.skipCurrentElement();
         } else if (tag == "currentLayer") {
-            score->_currentLayer = e.readInt();
+            e.skipCurrentElement();
         } else if (tag == "Synthesizer") {
             score->_synthesizerState.read(e);
         } else if (tag == "page-offset") {

@@ -151,7 +151,6 @@ class EngravingItem : public EngravingObject
     track_idx_t _track = mu::nidx; ///< staffIdx * VOICES + voice
     mutable ElementFlags _flags;
     ///< valid after call to layout()
-    unsigned int _tag;                    ///< tag bitmask
 
     bool m_colorsInversionEnabled = true;
 
@@ -486,9 +485,6 @@ public:
 
     bool enabled() const { return flag(ElementFlag::ENABLED); }
     void setEnabled(bool val) { setFlag(ElementFlag::ENABLED, val); }
-
-    unsigned int tag() const { return _tag; }
-    void setTag(unsigned int val) { _tag = val; }
 
     bool autoplace() const;
     virtual void setAutoplace(bool v) { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
