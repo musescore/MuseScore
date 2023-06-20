@@ -26,6 +26,14 @@
 #include <unordered_map>
 #include <vector>
 
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (push)
+#pragma warning (disable: 4996)
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 #include "public.sdk/source/vst/hosting/module.h"
 #include "public.sdk/source/vst/hosting/plugprovider.h"
 #include "public.sdk/source/vst/hosting/hostclasses.h"
@@ -39,6 +47,12 @@
 #include "pluginterfaces/vst/ivstaudioprocessor.h"
 #include "pluginterfaces/vst/ivsteditcontroller.h"
 #include "pluginterfaces/vst/ivstmidicontrollers.h"
+
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (pop)
+#else
+#pragma GCC diagnostic pop
+#endif
 
 #include "framework/midi/miditypes.h"
 #include "io/path.h"
