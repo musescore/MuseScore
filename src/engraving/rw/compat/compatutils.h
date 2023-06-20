@@ -51,6 +51,7 @@ private:
     static void replaceOldWithNewExpressions(MasterScore* score);
     static void reconstructTypeOfCustomDynamics(MasterScore* score);
     static DynamicType reconstructDynamicTypeFromString(Dynamic* dynamic);
+    static void resetRestVerticalOffset(MasterScore* masterScore);
 };
 }
 #endif // MU_ENGRAVING_COMPATUTILS_H
