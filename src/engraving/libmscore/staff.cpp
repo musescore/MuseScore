@@ -720,8 +720,8 @@ Interval Staff::transpose(const Fraction& tick) const
         diatonic -= 7;
     }
 
-    v.chromatic = v.chromatic - (v.chromatic % 12) + chromatic;
-    v.diatonic = v.diatonic - (v.diatonic % 7) + diatonic;
+    v.chromatic = v.chromatic - (v.chromatic % 12) + (chromatic % 12);
+    v.diatonic = v.diatonic - (v.diatonic % 7) + (diatonic % 7);
 
     return v;
 }
