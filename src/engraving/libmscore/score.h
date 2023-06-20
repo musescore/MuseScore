@@ -908,9 +908,6 @@ public:
     double spatium() const { return styleD(Sid::spatium); }
     void setSpatium(double v) { setStyleValue(Sid::spatium, v); }
 
-    bool genCourtesyTimesig() const { return styleB(Sid::genCourtesyTimesig); }
-    bool genCourtesyClef() const { return styleB(Sid::genCourtesyClef); }
-
     // These position are in ticks and not uticks
     Fraction playPos() const { return pos(POS::CURRENT); }
     void setPlayPos(const Fraction& tick) { setPos(POS::CURRENT, tick); }

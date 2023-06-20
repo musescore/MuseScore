@@ -65,7 +65,8 @@ public:
 
 private:
 
-    static void createMMRest(const LayoutOptions& options, Score* score, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);
+    static void createMMRest(const LayoutOptions& options, LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure,
+                             const Fraction& len);
 
     static int adjustMeasureNo(MeasureBase* m, LayoutContext& ctx);
 

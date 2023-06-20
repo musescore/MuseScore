@@ -31,15 +31,21 @@
 #include "style/style.h"
 #include "iengravingfont.h"
 
+#include "../layoutoptions.h"
+
 namespace mu::engraving {
 class EngravingItem;
+class RootItem;
 class MeasureBase;
+class Part;
 class Page;
 class Score;
 class Spanner;
+class SpannerMap;
 class System;
 class Staff;
 class Measure;
+class ChordRest;
 
 class UndoCommand;
 class EditData;
@@ -57,23 +63,46 @@ public:
     DomAccessor(Score* s);
 
     // Const access
+    const std::vector<Part*>& parts() const;
+
+    size_t npages() const;
+    const std::vector<Page*>& pages() const;
+
     const std::vector<System*>& systems() const;
+
     size_t nstaves() const;
     const std::vector<Staff*>& staves() const;
     const Staff* staff(staff_idx_t idx) const;
+
     size_t ntracks() const;
+
     const Measure* tick2measure(const Fraction& tick) const;
+    const Measure* firstMeasure() const;
+
+    const SpannerMap& spannerMap() const;
+
+    const ChordRest* findCR(Fraction tick, track_idx_t track) const;
 
     // Mutable access
+    std::vector<Page*>& pages();
+    std::vector<System*>& systems();
+
+    MeasureBase* first();
+    Measure* firstMeasure();
+
+    ChordRest* findCR(Fraction tick, track_idx_t track);
 
     // Create/Remove
+    RootItem* rootItem() const;
     compat::DummyElement* dummyParent() const;
     void undoAddElement(EngravingItem* item, bool addToLinkedStaves = true, bool ctrlModifier = false);
     void undoRemoveElement(EngravingItem* item);
     void undo(UndoCommand* cmd, EditData* ed = nullptr) const;
     void addElement(EngravingItem* item);
     void removeElement(EngravingItem* item);
+
     void addUnmanagedSpanner(Spanner* s);
+    const std::set<Spanner*> unmanagedSpanners();
 
 private:
     Score* m_score = nullptr;
@@ -83,16 +112,19 @@ class LayoutContext
 {
 public:
     LayoutContext(Score* s);
-    LayoutContext(const LayoutContext&) = delete;
-    LayoutContext& operator=(const LayoutContext&) = delete;
     ~LayoutContext();
 
-    // Context
-    Score* score() const { return m_score; }
+    LayoutContext(const LayoutContext&) = delete;
+    LayoutContext& operator=(const LayoutContext&) = delete;
 
+    bool isValid() const;
+
+    // Context
     bool isPaletteMode() const;
     bool printingMode() const;
+    LayoutMode layoutMode() const;
     bool lineMode() const;
+    bool linearMode() const;
     bool floatMode() const;
 
     double spatium() const;
@@ -101,9 +133,13 @@ public:
     const MStyle& style() const;
     double noteHeadWidth() const;
     bool showInvisible() const;
+    int pageNumberOffset() const;
+    bool enableVerticalSpread() const;
+    double maxSystemDistance() const;
 
     IEngravingFontPtr engravingFont() const;
 
+    // Dom access
     const DomAccessor& dom() const;
     DomAccessor& mutDom();
 

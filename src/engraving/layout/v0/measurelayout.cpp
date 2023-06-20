@@ -122,18 +122,16 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
 //    from firstMeasure to lastMeasure (inclusive)
 //---------------------------------------------------------
 
-void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Measure* firstMeasure, Measure* lastMeasure,
+void MeasureLayout::createMMRest(const LayoutOptions& options, LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure,
                                  const Fraction& len)
 {
-    LayoutContext ctx(score);
-
     int numMeasuresInMMRest = 1;
     if (firstMeasure != lastMeasure) {
         for (Measure* m = firstMeasure->nextMeasure(); m; m = m->nextMeasure()) {
             ++numMeasuresInMMRest;
             m->setMMRestCount(-1);
             if (m->mmRest()) {
-                score->undo(new ChangeMMRest(m, 0));
+                ctx.mutDom().undo(new ChangeMMRest(m, 0));
             }
             if (m == lastMeasure) {
                 break;
@@ -156,10 +154,10 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
         }
         MeasureLayout::removeSystemTrailer(mmrMeasure, ctx);
     } else {
-        mmrMeasure = Factory::createMeasure(score->dummy()->system());
+        mmrMeasure = Factory::createMeasure(ctx.mutDom().dummyParent()->system());
         mmrMeasure->setTicks(len);
         mmrMeasure->setTick(firstMeasure->tick());
-        score->undo(new ChangeMMRest(firstMeasure, mmrMeasure));
+        ctx.mutDom().undo(new ChangeMMRest(firstMeasure, mmrMeasure));
     }
     mmrMeasure->setTimesig(firstMeasure->timesig());
     mmrMeasure->setPageBreak(lastMeasure->pageBreak());
@@ -173,7 +171,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
     Segment* lastMeasureEndBarlineSeg = lastMeasure->findSegmentR(SegmentType::EndBarLine, lastMeasure->ticks());
     if (lastMeasureEndBarlineSeg) {
         Segment* mmrEndBarlineSeg = mmrMeasure->undoGetSegmentR(SegmentType::EndBarLine, mmrMeasure->ticks());
-        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
             EngravingItem* e = lastMeasureEndBarlineSeg->element(staffIdx * VOICES);
             if (e) {
                 bool generated = e->generated();
@@ -181,19 +179,19 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
                     EngravingItem* eClone = generated ? e->clone() : e->linkedClone();
                     eClone->setGenerated(generated);
                     eClone->setParent(mmrEndBarlineSeg);
-                    score->undoAddElement(eClone);
+                    ctx.mutDom().undoAddElement(eClone);
                 } else {
                     BarLine* mmrEndBarline = toBarLine(mmrEndBarlineSeg->element(staffIdx * VOICES));
                     BarLine* lastMeasureEndBarline = toBarLine(e);
                     if (!generated && !mmrEndBarline->links()) {
-                        score->undo(new Link(mmrEndBarline, lastMeasureEndBarline));
+                        ctx.mutDom().undo(new Link(mmrEndBarline, lastMeasureEndBarline));
                     }
                     if (mmrEndBarline->barLineType() != lastMeasureEndBarline->barLineType()) {
                         // change directly when generating mmrests, do not change underlying measures or follow links
-                        score->undo(new ChangeProperty(mmrEndBarline, Pid::BARLINE_TYPE,
-                                                       PropertyValue::fromValue(lastMeasureEndBarline->barLineType()),
-                                                       PropertyFlags::NOSTYLE));
-                        score->undo(new ChangeProperty(mmrEndBarline, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
+                        ctx.mutDom().undo(new ChangeProperty(mmrEndBarline, Pid::BARLINE_TYPE,
+                                                             PropertyValue::fromValue(lastMeasureEndBarline->barLineType()),
+                                                             PropertyFlags::NOSTYLE));
+                        ctx.mutDom().undo(new ChangeProperty(mmrEndBarline, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
                     }
                 }
             }
@@ -207,7 +205,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
                                                             lastMeasure->ticks());
     if (lastMeasureClefSeg) {
         Segment* mmrClefSeg = mmrMeasure->undoGetSegment(lastMeasureClefSeg->segmentType(), lastMeasure->endTick());
-        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
             const track_idx_t track = staff2track(staffIdx);
             EngravingItem* e = lastMeasureClefSeg->element(track);
             if (e && e->isClef()) {
@@ -216,7 +214,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
                     Clef* mmrClef = lastMeasureClef->generated() ? lastMeasureClef->clone() : toClef(
                         lastMeasureClef->linkedClone());
                     mmrClef->setParent(mmrClefSeg);
-                    score->undoAddElement(mmrClef);
+                    ctx.mutDom().undoAddElement(mmrClef);
                 } else {
                     Clef* mmrClef = toClef(mmrClefSeg->element(track));
                     mmrClef->setClefType(lastMeasureClef->clefType());
@@ -261,7 +259,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
         delete e;
     }
     Segment* s = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0, 1));
-    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
         track_idx_t track = staffIdx * VOICES;
         if (s->element(track) == 0) {
             MMRest* mmr = Factory::createMMRest(s);
@@ -269,7 +267,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
             mmr->setTicks(mmrMeasure->ticks());
             mmr->setTrack(track);
             mmr->setParent(s);
-            score->undo(new AddElement(mmr));
+            ctx.mutDom().undo(new AddElement(mmr));
         }
     }
 
@@ -284,7 +282,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
         }
         mmrSeg->setEnabled(underlyingSeg->enabled());
         mmrSeg->setTrailer(underlyingSeg->trailer());
-        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
             track_idx_t track = staffIdx * VOICES;
             Clef* clef = toClef(underlyingSeg->element(track));
             if (clef) {
@@ -297,7 +295,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
         }
     } else if (mmrSeg) {
         // TODO: remove elements from mmrSeg?
-        score->undo(new RemoveElement(mmrSeg));
+        ctx.mutDom().undo(new RemoveElement(mmrSeg));
     }
 
     //
@@ -311,7 +309,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
         }
         mmrSeg->setEnabled(underlyingSeg->enabled());
         mmrSeg->setHeader(underlyingSeg->header());
-        for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
             track_idx_t track = staffIdx * VOICES;
             TimeSig* underlyingTimeSig = toTimeSig(underlyingSeg->element(track));
             if (underlyingTimeSig) {
@@ -320,7 +318,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
                     mmrTimeSig = underlyingTimeSig->generated() ? underlyingTimeSig->clone() : toTimeSig(
                         underlyingTimeSig->linkedClone());
                     mmrTimeSig->setParent(mmrSeg);
-                    score->undo(new AddElement(mmrTimeSig));
+                    ctx.mutDom().undo(new AddElement(mmrTimeSig));
                 } else {
                     mmrTimeSig->setSig(underlyingTimeSig->sig(), underlyingTimeSig->timeSigType());
                     mmrTimeSig->setNumeratorString(underlyingTimeSig->numeratorString());
@@ -331,7 +329,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
         }
     } else if (mmrSeg) {
         // TODO: remove elements from mmrSeg?
-        score->undo(new RemoveElement(mmrSeg));
+        ctx.mutDom().undo(new RemoveElement(mmrSeg));
     }
 
     //
@@ -343,7 +341,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
         if (mmrSeg == 0) {
             mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::Ambitus, Fraction(0, 1));
         }
-        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
             track_idx_t track = staffIdx * VOICES;
             Ambitus* underlyingAmbitus = toAmbitus(underlyingSeg->element(track));
             if (underlyingAmbitus) {
@@ -351,7 +349,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
                 if (!mmrAmbitus) {
                     mmrAmbitus = underlyingAmbitus->clone();
                     mmrAmbitus->setParent(mmrSeg);
-                    score->undo(new AddElement(mmrAmbitus));
+                    ctx.mutDom().undo(new AddElement(mmrAmbitus));
                 } else {
                     mmrAmbitus->initFrom(underlyingAmbitus);
                     TLayout::layout(mmrAmbitus, ctx);
@@ -360,7 +358,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
         }
     } else if (mmrSeg) {
         // TODO: remove elements from mmrSeg?
-        score->undo(new RemoveElement(mmrSeg));
+        ctx.mutDom().undo(new RemoveElement(mmrSeg));
     }
 
     //
@@ -374,7 +372,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
         }
         mmrSeg->setEnabled(underlyingSeg->enabled());
         mmrSeg->setHeader(underlyingSeg->header());
-        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
             track_idx_t track = staffIdx * VOICES;
             KeySig* underlyingKeySig  = toKeySig(underlyingSeg->element(track));
             if (underlyingKeySig) {
@@ -384,12 +382,12 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
                         underlyingKeySig->linkedClone());
                     mmrKeySig->setParent(mmrSeg);
                     mmrKeySig->setGenerated(true);
-                    score->undo(new AddElement(mmrKeySig));
+                    ctx.mutDom().undo(new AddElement(mmrKeySig));
                 } else {
                     if (!(mmrKeySig->keySigEvent() == underlyingKeySig->keySigEvent())) {
                         bool addKey = underlyingKeySig->isChange();
-                        score->undo(new ChangeKeySig(mmrKeySig, underlyingKeySig->keySigEvent(), mmrKeySig->showCourtesy(),
-                                                     addKey));
+                        ctx.mutDom().undo(new ChangeKeySig(mmrKeySig, underlyingKeySig->keySigEvent(), mmrKeySig->showCourtesy(),
+                                                           addKey));
                     }
                 }
             }
@@ -429,7 +427,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
             if (!found) {
                 EngravingItem* eClone = e->linkedClone();
                 eClone->setParent(s);
-                score->undo(new AddElement(eClone));
+                ctx.mutDom().undo(new AddElement(eClone));
             }
         }
 
@@ -451,7 +449,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, Score* score, Mea
             }
             // remove from mmr if no match found
             if (!found) {
-                score->undo(new RemoveElement(e));
+                ctx.mutDom().undo(new RemoveElement(e));
             }
         }
     }
@@ -542,7 +540,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
         ElementType::TEXTLINE,
     };
     // Break for spanners/textLines in this measure
-    auto sl = ctx.score()->spannerMap().findOverlapping(m->tick().ticks(), m->endTick().ticks());
+    auto sl = ctx.dom().spannerMap().findOverlapping(m->tick().ticks(), m->endTick().ticks());
     for (auto i : sl) {
         Spanner* s = i.value;
         Fraction spannerStart = s->tick();
@@ -558,7 +556,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     // Break for spanners/textLines starting or ending mid-way inside the *previous* measure
     Measure* prevMeas = m->prevMeasure();
     if (prevMeas) {
-        auto prevMeasSpanners = ctx.score()->spannerMap().findOverlapping(prevMeas->tick().ticks(), prevMeas->endTick().ticks());
+        auto prevMeasSpanners = ctx.dom().spannerMap().findOverlapping(prevMeas->tick().ticks(), prevMeas->endTick().ticks());
         for (auto i : prevMeasSpanners) {
             Spanner* s = i.value;
             Fraction spannerStart = s->tick();
@@ -726,11 +724,10 @@ static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType
 
 void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& ctx)
 {
-    Score* score = ctx.score();
     ctx.prevMeasure = ctx.curMeasure;
     ctx.curMeasure  = ctx.nextMeasure;
     if (!ctx.curMeasure) {
-        ctx.nextMeasure = options.showVBox ? score->first() : score->firstMeasure();
+        ctx.nextMeasure = options.showVBox ? ctx.mutDom().first() : ctx.mutDom().firstMeasure();
     } else {
         ctx.nextMeasure = options.showVBox ? ctx.curMeasure->next() : ctx.curMeasure->nextMeasure();
     }
@@ -764,13 +761,13 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                 }
                 nm = toMeasure(mb);
             }
-            if (n >= score->styleI(Sid::minEmptyMeasures)) {
-                createMMRest(options, score, m, lm, len);
+            if (n >= ctx.style().styleI(Sid::minEmptyMeasures)) {
+                createMMRest(options, ctx, m, lm, len);
                 ctx.curMeasure  = m->mmRest();
                 ctx.nextMeasure = options.showVBox ? lm->next() : lm->nextMeasure();
             } else {
                 if (m->mmRest()) {
-                    score->undo(new ChangeMMRest(m, 0));
+                    ctx.mutDom().undo(new ChangeMMRest(m, 0));
                 }
                 m->setMMRestCount(0);
                 ctx.measureNo = mno;
@@ -792,7 +789,7 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
     Measure* measure = toMeasure(ctx.curMeasure);
     measure->moveTicks(ctx.tick - measure->tick());
 
-    if (score->linearMode() && (measure->tick() < ctx.startTick || measure->tick() > ctx.endTick)) {
+    if (ctx.linearMode() && (measure->tick() < ctx.startTick || measure->tick() > ctx.endTick)) {
         // needed to reset segment widths if they can change after measure width is computed
         //for (Segment& s : measure->segments())
         //      s.createShapes();
@@ -806,8 +803,8 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
     // calculate accidentals and note lines,
     // create stem and set stem direction
     //
-    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-        const Staff* staff     = score->Score::staff(staffIdx);
+    for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+        const Staff* staff = ctx.dom().staff(staffIdx);
         const Drumset* drumset
             = staff->part()->instrument(measure->tick())->useDrumset() ? staff->part()->instrument(measure->tick())->drumset() : 0;
         AccidentalState as;          // list of already set accidentals for this measure
@@ -815,7 +812,7 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
 
         // Trills may carry an accidental into this measure that requires a force-restate
         int ticks = measure->tick().ticks();
-        auto spanners = score->spannerMap().findOverlapping(ticks, ticks, true);
+        auto spanners = ctx.dom().spannerMap().findOverlapping(ticks, ticks, true);
         for (auto iter : spanners) {
             Spanner* spanner = iter.value;
             if (spanner->staffIdx() != staffIdx || !spanner->isTrill() || spanner->tick2() == measure->tick()) {
@@ -858,24 +855,24 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
 
                     double m = staff->staffMag(&segment);
                     if (cr->isSmall()) {
-                        m *= score->styleD(Sid::smallNoteMag);
+                        m *= ctx.style().styleD(Sid::smallNoteMag);
                     }
 
                     if (cr->isChord()) {
                         Chord* chord = toChord(cr);
                         chord->cmdUpdateNotes(&as);
                         for (Chord* c : chord->graceNotes()) {
-                            c->setMag(m * score->styleD(Sid::graceNoteMag));
+                            c->setMag(m * ctx.style().styleD(Sid::graceNoteMag));
                             c->setTrack(t);
                             ChordLayout::computeUp(c, ctx);
                             if (drumset) {
-                                layoutDrumsetChord(c, drumset, st, score->spatium());
+                                layoutDrumsetChord(c, drumset, st, ctx.spatium());
                             }
                             ChordLayout::layoutStem(c, ctx);
                             c->setBeamlet(nullptr); // Will be defined during beam layout
                         }
                         if (drumset) {
-                            layoutDrumsetChord(chord, drumset, st, score->spatium());
+                            layoutDrumsetChord(chord, drumset, st, ctx.spatium());
                         }
 
                         ChordLayout::computeUp(chord, ctx);
@@ -900,7 +897,7 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         }
     }
 
-    BeamLayout::createBeams(score, ctx, measure);
+    BeamLayout::createBeams(ctx, measure);
     /* HACK: The real beam layout is computed at much later stage (you can't do the beams until you know
      * horizontal spacing). However, horizontal spacing needs to know stems extensions to avoid collision
      * with stems, and stems extensions depend on beams. Solution: we compute dummy beams here, *before*
@@ -913,11 +910,11 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         BeamLayout::layoutNonCrossBeams(&s, ctx);
     }
 
-    for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+    for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
         for (Segment& segment : measure->segments()) {
             if (segment.isChordRestType()) {
-                ChordLayout::layoutChords1(score, &segment, staffIdx, ctx);
-                ChordLayout::resolveVerticalRestConflicts(score, &segment, staffIdx, ctx);
+                ChordLayout::layoutChords1(ctx, &segment, staffIdx);
+                ChordLayout::resolveVerticalRestConflicts(ctx, &segment, staffIdx);
                 for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
                     ChordRest* cr = segment.cr(staffIdx * VOICES + voice);
                     if (cr) {
@@ -954,7 +951,7 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
             seg = measure->getSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
         }
         barLinesSetSpan(seg, ctx);          // this also creates necessary barlines
-        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
             BarLine* b = toBarLine(seg->element(staffIdx * VOICES));
             if (b) {
                 b->setBarLineType(BarLineType::START_REPEAT);
@@ -962,7 +959,7 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
             }
         }
     } else if (seg) {
-        score->undoRemoveElement(seg);
+        ctx.mutDom().undoRemoveElement(seg);
     }
 
     for (Segment& s : measure->segments()) {
@@ -1460,7 +1457,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
             Clef* clef = toClef(clefSeg->element(track));
             if (clef) {
                 clefToBarlinePosition = clef->clefToBarlinePosition();
-                bool showCourtesy = ctx.score()->genCourtesyClef() && clef->showCourtesy();         // normally show a courtesy clef
+                bool showCourtesy = ctx.style().styleB(Sid::genCourtesyClef) && clef->showCourtesy();         // normally show a courtesy clef
                 // check if the measure is the last measure of the system or the last measure before a frame
                 bool lastMeasure = isLastMeasureInSystem || (nm ? !(m->next() == nm) : true);
                 if (!nm || m->isFinalMeasureOfSection() || (lastMeasure && !showCourtesy)) {
@@ -1708,7 +1705,7 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
     if (s) {
         s->setTrailer(true);
     }
-    if (nm && ctx.score()->genCourtesyTimesig() && !isFinalMeasure && !ctx.floatMode()) {
+    if (nm && ctx.style().styleB(Sid::genCourtesyTimesig) && !isFinalMeasure && !ctx.floatMode()) {
         Segment* tss = nm->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
         if (tss) {
             size_t nstaves = ctx.dom().nstaves();

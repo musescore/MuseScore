@@ -33,12 +33,57 @@ using namespace mu::engraving;
 using namespace mu::engraving::layout::v0;
 
 DomAccessor::DomAccessor(Score* s)
-    : m_score(s) {}
+    : m_score(s)
+{}
+
+const std::vector<Part*>& DomAccessor::parts() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        static const std::vector<Part*> dummy;
+        return dummy;
+    }
+    return m_score->parts();
+}
+
+size_t DomAccessor::npages() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return 0;
+    }
+    return m_score->npages();
+}
+
+const std::vector<Page*>& DomAccessor::pages() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        static const std::vector<Page*> dummy;
+        return dummy;
+    }
+    return m_score->pages();
+}
+
+std::vector<Page*>& DomAccessor::pages()
+{
+    IF_ASSERT_FAILED(m_score) {
+        static std::vector<Page*> dummy;
+        return dummy;
+    }
+    return m_score->pages();
+}
 
 const std::vector<System*>& DomAccessor::systems() const
 {
     IF_ASSERT_FAILED(m_score) {
         static const std::vector<System*> dummy;
+        return dummy;
+    }
+    return m_score->systems();
+}
+
+std::vector<System*>& DomAccessor::systems()
+{
+    IF_ASSERT_FAILED(m_score) {
+        static std::vector<System*> dummy;
         return dummy;
     }
     return m_score->systems();
@@ -77,12 +122,69 @@ size_t DomAccessor::ntracks() const
     return m_score->ntracks();
 }
 
-const Measure* DomAccessor::tick2measure(const Fraction& _tick) const
+const Measure* DomAccessor::tick2measure(const Fraction& tick) const
 {
     IF_ASSERT_FAILED(m_score) {
         return nullptr;
     }
-    return m_score->tick2measure(_tick);
+    return m_score->tick2measure(tick);
+}
+
+const Measure* DomAccessor::firstMeasure() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return nullptr;
+    }
+    return m_score->firstMeasure();
+}
+
+Measure* DomAccessor::firstMeasure()
+{
+    IF_ASSERT_FAILED(m_score) {
+        return nullptr;
+    }
+    return m_score->firstMeasure();
+}
+
+const SpannerMap& DomAccessor::spannerMap() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        static const SpannerMap dummy;
+        return dummy;
+    }
+    return m_score->spannerMap();
+}
+
+const ChordRest* DomAccessor::findCR(Fraction tick, track_idx_t track) const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return nullptr;
+    }
+    return m_score->findCR(tick, track);
+}
+
+ChordRest* DomAccessor::findCR(Fraction tick, track_idx_t track)
+{
+    IF_ASSERT_FAILED(m_score) {
+        return nullptr;
+    }
+    return m_score->findCR(tick, track);
+}
+
+MeasureBase* DomAccessor::first()
+{
+    IF_ASSERT_FAILED(m_score) {
+        return nullptr;
+    }
+    return m_score->first();
+}
+
+RootItem* DomAccessor::rootItem() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return nullptr;
+    }
+    return m_score->rootItem();
 }
 
 compat::DummyElement* DomAccessor::dummyParent() const
@@ -141,6 +243,15 @@ void DomAccessor::addUnmanagedSpanner(Spanner* s)
     m_score->addUnmanagedSpanner(s);
 }
 
+const std::set<Spanner*> DomAccessor::unmanagedSpanners()
+{
+    IF_ASSERT_FAILED(m_score) {
+        static const std::set<Spanner*> dummy;
+        return dummy;
+    }
+    return m_score->unmanagedSpanners();
+}
+
 // =============================================================
 // LayoutContext
 // =============================================================
@@ -157,9 +268,14 @@ LayoutContext::~LayoutContext()
         TLayout::layoutSystemsDone(s);
     }
 
-    for (MuseScoreView* v : score()->getViewer()) {
+    for (MuseScoreView* v : m_score->getViewer()) {
         v->layoutChanged();
     }
+}
+
+bool LayoutContext::isValid() const
+{
+    return m_score != nullptr;
 }
 
 bool LayoutContext::isPaletteMode() const
@@ -180,12 +296,28 @@ bool LayoutContext::printingMode() const
     return m_score->printing();
 }
 
+LayoutMode LayoutContext::layoutMode() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return LayoutMode::PAGE;
+    }
+    return m_score->layoutMode();
+}
+
 bool LayoutContext::lineMode() const
 {
     IF_ASSERT_FAILED(m_score) {
         return false;
     }
     return m_score->lineMode();
+}
+
+bool LayoutContext::linearMode() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return false;
+    }
+    return m_score->linearMode();
 }
 
 bool LayoutContext::floatMode() const
@@ -229,9 +361,33 @@ double LayoutContext::noteHeadWidth() const
 bool LayoutContext::showInvisible() const
 {
     IF_ASSERT_FAILED(m_score) {
-        return 0.0;
+        return false;
     }
     return m_score->showInvisible();
+}
+
+int LayoutContext::pageNumberOffset() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return 0;
+    }
+    return m_score->pageNumberOffset();
+}
+
+bool LayoutContext::enableVerticalSpread() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return 0;
+    }
+    return m_score->enableVerticalSpread();
+}
+
+double LayoutContext::maxSystemDistance() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return 0;
+    }
+    return m_score->maxSystemDistance();
 }
 
 IEngravingFontPtr LayoutContext::engravingFont() const

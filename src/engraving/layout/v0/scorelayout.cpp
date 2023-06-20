@@ -183,20 +183,20 @@ void ScoreLayout::layoutRange(Score* score, const LayoutOptions& options, const 
     ctx.prevMeasure = 0;
 
     MeasureLayout::getNextMeasure(options, ctx);
-    ctx.curSystem = SystemLayout::collectSystem(options, ctx, score);
+    ctx.curSystem = SystemLayout::collectSystem(options, ctx);
 
     doLayout(options, ctx);
 }
 
-void ScoreLayout::doLayout(const LayoutOptions& options, LayoutContext& lc)
+void ScoreLayout::doLayout(const LayoutOptions& options, LayoutContext& ctx)
 {
     MeasureBase* lmb;
     do {
-        PageLayout::getNextPage(options, lc);
-        PageLayout::collectPage(options, lc);
+        PageLayout::getNextPage(options, ctx);
+        PageLayout::collectPage(options, ctx);
 
-        if (lc.page && !lc.page->systems().empty()) {
-            lmb = lc.page->systems().back()->measures().back();
+        if (ctx.page && !ctx.page->systems().empty()) {
+            lmb = ctx.page->systems().back()->measures().back();
         } else {
             lmb = nullptr;
         }
@@ -210,26 +210,26 @@ void ScoreLayout::doLayout(const LayoutOptions& options, LayoutContext& lc)
         //    c) this page ends with the same measure as the previous layout
         //    pageOldMeasure will be last measure from previous layout if range was completed on or before this page
         //    it will be nullptr if this page was never laid out or if we collected a system for next page
-    } while (lc.curSystem && !(lc.rangeDone && lmb == lc.pageOldMeasure));
+    } while (ctx.curSystem && !(ctx.rangeDone && lmb == ctx.pageOldMeasure));
     // && page->system(0)->measures().back()->tick() > endTick // FIXME: perhaps the first measure was meant? Or last system?
 
-    if (!lc.curSystem) {
+    if (!ctx.curSystem) {
         // The end of the score. The remaining systems are not needed...
-        DeleteAll(lc.systemList);
-        lc.systemList.clear();
+        DeleteAll(ctx.systemList);
+        ctx.systemList.clear();
         // ...and the remaining pages too
-        while (lc.score()->npages() > lc.curPage) {
-            Page* p = lc.score()->pages().back();
-            lc.score()->pages().pop_back();
+        while (ctx.dom().npages() > ctx.curPage) {
+            Page* p = ctx.mutDom().pages().back();
+            ctx.mutDom().pages().pop_back();
             delete p;
         }
     } else {
-        Page* p = lc.curSystem->page();
-        if (p && (p != lc.page)) {
+        Page* p = ctx.curSystem->page();
+        if (p && (p != ctx.page)) {
             p->invalidateBspTree();
         }
     }
-    lc.score()->systems().insert(lc.score()->systems().end(), lc.systemList.begin(), lc.systemList.end());
+    ctx.mutDom().systems().insert(ctx.mutDom().systems().end(), ctx.systemList.begin(), ctx.systemList.end());
 }
 
 void ScoreLayout::layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& ctx)
@@ -245,43 +245,44 @@ void ScoreLayout::layoutLinear(bool layoutAll, const LayoutOptions& options, Lay
 //  which contains one system
 void ScoreLayout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutContext& ctx)
 {
+    DomAccessor& mutDom = ctx.mutDom();
     Page* page = 0;
     if (layoutAll) {
-        for (System* s : ctx.score()->_systems) {
+        for (System* s : mutDom.systems()) {
             for (SpannerSegment* ss : s->spannerSegments()) {
                 ss->resetExplicitParent();
             }
         }
-        DeleteAll(ctx.score()->_systems);
-        ctx.score()->_systems.clear();
-        DeleteAll(ctx.score()->pages());
-        ctx.score()->pages().clear();
-        if (!ctx.score()->firstMeasure()) {
+        DeleteAll(mutDom.systems());
+        mutDom.systems().clear();
+        DeleteAll(mutDom.pages());
+        mutDom.pages().clear();
+        if (!ctx.dom().firstMeasure()) {
             LOGD("no measures");
             return;
         }
 
-        for (MeasureBase* mb = ctx.score()->first(); mb; mb = mb->next()) {
+        for (MeasureBase* mb = ctx.mutDom().first(); mb; mb = mb->next()) {
             mb->resetExplicitParent();
         }
 
-        page = Factory::createPage(ctx.score()->rootItem());
-        ctx.score()->pages().push_back(page);
+        page = Factory::createPage(ctx.mutDom().rootItem());
+        ctx.mutDom().pages().push_back(page);
         page->bbox().setRect(0.0, 0.0, options.loWidth, options.loHeight);
         page->setNo(0);
 
         System* system = Factory::createSystem(page);
-        ctx.score()->_systems.push_back(system);
+        ctx.mutDom().systems().push_back(system);
         page->appendSystem(system);
-        system->adjustStavesNumber(static_cast<int>(ctx.score()->nstaves()));
+        system->adjustStavesNumber(ctx.dom().nstaves());
     } else {
-        if (ctx.score()->pages().empty()) {
+        if (ctx.dom().pages().empty()) {
             return;
         }
-        page = ctx.score()->pages().front();
-        System* system = ctx.score()->systems().front();
+        page = ctx.mutDom().pages().front();
+        System* system = ctx.mutDom().systems().front();
         system->clear();
-        system->adjustStavesNumber(static_cast<int>(ctx.score()->nstaves()));
+        system->adjustStavesNumber(ctx.dom().nstaves());
     }
     ctx.page = page;
 }
@@ -290,13 +291,13 @@ void ScoreLayout::resetSystems(bool layoutAll, const LayoutOptions& options, Lay
 void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ctx)
 {
     std::vector<int> visibleParts;
-    for (size_t partIdx = 0; partIdx < ctx.score()->parts().size(); partIdx++) {
-        if (ctx.score()->parts().at(partIdx)->show()) {
+    for (size_t partIdx = 0; partIdx < ctx.dom().parts().size(); partIdx++) {
+        if (ctx.dom().parts().at(partIdx)->show()) {
             visibleParts.push_back(static_cast<int>(partIdx));
         }
     }
 
-    System* system = ctx.score()->systems().front();
+    System* system = ctx.mutDom().systems().front();
     SystemLayout::setInstrumentNames(system, ctx, /* longNames */ true);
 
     PointF pos;
@@ -304,7 +305,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
 
     //set first measure to lc.nextMeasures for following
     //utilizing in getNextMeasure()
-    ctx.nextMeasure = ctx.score()->_measures.first();
+    ctx.nextMeasure = ctx.mutDom().first();
     ctx.tick = Fraction(0, 1);
     MeasureLayout::getNextMeasure(options, ctx);
 
@@ -370,8 +371,8 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
                         if (!s.isChordRestType()) {
                             continue;
                         }
-                        for (size_t track = 0; track < ctx.score()->ntracks(); ++track) {
-                            EngravingItem* e = s.element(static_cast<int>(track));
+                        for (size_t track = 0; track < ctx.dom().ntracks(); ++track) {
+                            EngravingItem* e = s.element(static_cast<track_idx_t>(track));
                             if (e) {
                                 ChordRest* cr = toChordRest(e);
                                 if (cr->beam() && cr->beam()->elements().front() == cr) {
@@ -399,9 +400,9 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
 
 void ScoreLayout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
 {
-    System* system = ctx.score()->systems().front();
+    System* system = ctx.mutDom().systems().front();
 
-    SystemLayout::layoutSystemElements(options, ctx, ctx.score(), system);
+    SystemLayout::layoutSystemElements(options, ctx, system);
 
     SystemLayout::layout2(system, ctx);     // compute staff distances
 
@@ -411,9 +412,9 @@ void ScoreLayout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
         }
         Measure* m = toMeasure(mb);
 
-        for (size_t track = 0; track < ctx.score()->ntracks(); ++track) {
+        for (size_t track = 0; track < ctx.dom().ntracks(); ++track) {
             for (Segment* segment = m->first(); segment; segment = segment->next()) {
-                EngravingItem* e = segment->element(static_cast<int>(track));
+                EngravingItem* e = segment->element(track);
                 if (!e) {
                     continue;
                 }
@@ -421,7 +422,7 @@ void ScoreLayout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
                     if (m->tick() < ctx.startTick || m->tick() > ctx.endTick) {
                         continue;
                     }
-                    if (!ctx.score()->staff(track2staff(static_cast<int>(track)))->show()) {
+                    if (!ctx.dom().staff(track2staff(track))->show()) {
                         continue;
                     }
                     ChordRest* cr = toChordRest(e);
@@ -471,9 +472,9 @@ void ScoreLayout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
     }
 
     const double lm = ctx.page->lm();
-    const double tm = ctx.page->tm() + ctx.score()->styleMM(Sid::staffUpperBorder);
+    const double tm = ctx.page->tm() + ctx.style().styleMM(Sid::staffUpperBorder);
     const double rm = ctx.page->rm();
-    const double bm = ctx.page->bm() + ctx.score()->styleMM(Sid::staffLowerBorder);
+    const double bm = ctx.page->bm() + ctx.style().styleMM(Sid::staffLowerBorder);
 
     ctx.page->setPos(0, 0);
     system->setPos(lm, tm);

@@ -42,8 +42,8 @@ namespace mu::engraving::layout::v0 {
 class SystemLayout
 {
 public:
-    static System* collectSystem(const LayoutOptions& options, LayoutContext& lc, Score* score);
-    static void layoutSystemElements(const LayoutOptions& options, LayoutContext& ctx, Score* score, System* system);
+    static System* collectSystem(const LayoutOptions& options, LayoutContext& ctx);
+    static void layoutSystemElements(const LayoutOptions& options, LayoutContext& ctx, System* system);
 
     static void layoutSystem(System* system, LayoutContext& ctx, double xo1, bool isFirstSystem = false, bool firstSystemIndent = false);
 
@@ -53,11 +53,11 @@ public:
     static void layoutBracketsVertical(System* system, LayoutContext& ctx);
     static void layoutInstrumentNames(System* system);
 
-    static void setInstrumentNames(System* system, const LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
+    static void setInstrumentNames(System* system, LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
 
 private:
     static System* getNextSystem(LayoutContext& lc);
-    static void hideEmptyStaves(Score* score, System* system, bool isFirstSystem);
+    static void hideEmptyStaves(System* system, LayoutContext& ctx, bool isFirstSystem);
     static void processLines(System* system, std::vector<Spanner*> lines, bool align);
     static void layoutTies(Chord* ch, System* system, const Fraction& stick);
     static void doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick);
@@ -69,9 +69,9 @@ private:
 
     static double instrumentNamesWidth(System* system, bool isFirstSystem, LayoutContext& ctx);
     static double totalBracketOffset(LayoutContext& ctx);
-    static double layoutBrackets(System* system, const LayoutContext& ctx);
-    static void addBrackets(System* system, Measure* measure, const LayoutContext& ctx);
-    static Bracket* createBracket(System* system, const LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
+    static double layoutBrackets(System* system, LayoutContext& ctx);
+    static void addBrackets(System* system, Measure* measure, LayoutContext& ctx);
+    static Bracket* createBracket(System* system, LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
                                   std::vector<Bracket*>& bl, Measure* measure);
 };
 }

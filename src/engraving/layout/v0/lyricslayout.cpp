@@ -616,16 +616,16 @@ static void applyLyricsMin(Measure* m, staff_idx_t staffIdx, double yMin)
 //
 //---------------------------------------------------------
 
-void LyricsLayout::layoutLyrics(const LayoutOptions& options, const Score* score, System* system)
+void LyricsLayout::layoutLyrics(const LayoutOptions& options, LayoutContext& ctx, System* system)
 {
     std::vector<staff_idx_t> visibleStaves;
-    for (staff_idx_t staffIdx = system->firstVisibleStaff(); staffIdx < score->nstaves();
+    for (staff_idx_t staffIdx = system->firstVisibleStaff(); staffIdx < ctx.dom().nstaves();
          staffIdx = system->nextVisibleStaff(staffIdx)) {
         visibleStaves.push_back(staffIdx);
     }
 
     //int nAbove[nstaves()];
-    std::vector<staff_idx_t> VnAbove(score->nstaves());
+    std::vector<staff_idx_t> VnAbove(ctx.dom().nstaves());
 
     for (staff_idx_t staffIdx : visibleStaves) {
         VnAbove[staffIdx] = 0;
@@ -693,8 +693,8 @@ void LyricsLayout::layoutLyrics(const LayoutOptions& options, const Score* score
             }
             Measure* m = toMeasure(mb);
             for (staff_idx_t staffIdx : visibleStaves) {
-                double yMax = findLyricsMaxY(score->style(), m, staffIdx);
-                applyLyricsMax(score->style(), m, staffIdx, yMax);
+                double yMax = findLyricsMaxY(ctx.style(), m, staffIdx);
+                applyLyricsMax(ctx.style(), m, staffIdx, yMax);
             }
         }
         break;
@@ -706,14 +706,14 @@ void LyricsLayout::layoutLyrics(const LayoutOptions& options, const Score* score
                 if (!mb->isMeasure()) {
                     continue;
                 }
-                yMax = std::max<double>(yMax, findLyricsMaxY(score->style(), toMeasure(mb), staffIdx));
-                yMin = std::min(yMin, findLyricsMinY(score->style(), toMeasure(mb), staffIdx));
+                yMax = std::max<double>(yMax, findLyricsMaxY(ctx.style(), toMeasure(mb), staffIdx));
+                yMin = std::min(yMin, findLyricsMinY(ctx.style(), toMeasure(mb), staffIdx));
             }
             for (MeasureBase* mb : system->measures()) {
                 if (!mb->isMeasure()) {
                     continue;
                 }
-                applyLyricsMax(score->style(), toMeasure(mb), staffIdx, yMax);
+                applyLyricsMax(ctx.style(), toMeasure(mb), staffIdx, yMax);
                 applyLyricsMin(toMeasure(mb), staffIdx, yMin);
             }
         }
@@ -726,8 +726,8 @@ void LyricsLayout::layoutLyrics(const LayoutOptions& options, const Score* score
             Measure* m = toMeasure(mb);
             for (staff_idx_t staffIdx : visibleStaves) {
                 for (Segment& s : m->segments()) {
-                    double yMax = findLyricsMaxY(score->style(), s, staffIdx);
-                    applyLyricsMax(score->style(), s, staffIdx, yMax);
+                    double yMax = findLyricsMaxY(ctx.style(), s, staffIdx);
+                    applyLyricsMax(ctx.style(), s, staffIdx, yMax);
                 }
             }
         }
