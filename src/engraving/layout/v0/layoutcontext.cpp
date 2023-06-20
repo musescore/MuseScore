@@ -32,8 +32,61 @@
 using namespace mu::engraving;
 using namespace mu::engraving::layout::v0;
 
+DomAccessor::DomAccessor(Score* s)
+    : m_score(s) {}
+
+const std::vector<System*>& DomAccessor::systems() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        static const std::vector<System*> dummy;
+        return dummy;
+    }
+    return m_score->systems();
+}
+
+size_t DomAccessor::nstaves() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return 0;
+    }
+    return m_score->nstaves();
+}
+
+const std::vector<Staff*>& DomAccessor::staves() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        static const std::vector<Staff*> dummy;
+        return dummy;
+    }
+    return m_score->staves();
+}
+
+const Staff* DomAccessor::staff(staff_idx_t idx) const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return nullptr;
+    }
+    return m_score->staff(idx);
+}
+
+size_t DomAccessor::ntracks() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return 0;
+    }
+    return m_score->ntracks();
+}
+
+const Measure* DomAccessor::tick2measure(const Fraction& _tick) const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return nullptr;
+    }
+    return m_score->tick2measure(_tick);
+}
+
 LayoutContext::LayoutContext(Score* score)
-    : m_score(score)
+    : m_score(score), m_dom(score)
 {
     firstSystemIndent = score && score->styleB(Sid::enableIndentationOnFirstSystem);
 }
@@ -129,54 +182,9 @@ IEngravingFontPtr LayoutContext::engravingFont() const
     return m_score->engravingFont();
 }
 
-const std::vector<System*>& LayoutContext::systems() const
+const DomAccessor& LayoutContext::dom() const
 {
-    IF_ASSERT_FAILED(m_score) {
-        static const std::vector<System*> dummy;
-        return dummy;
-    }
-    return m_score->systems();
-}
-
-size_t LayoutContext::nstaves() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return 0;
-    }
-    return m_score->nstaves();
-}
-
-const std::vector<Staff*>& LayoutContext::staves() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        static const std::vector<Staff*> dummy;
-        return dummy;
-    }
-    return m_score->staves();
-}
-
-const Staff* LayoutContext::staff(staff_idx_t idx) const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return nullptr;
-    }
-    return m_score->staff(idx);
-}
-
-size_t LayoutContext::ntracks() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return 0;
-    }
-    return m_score->ntracks();
-}
-
-const Measure* LayoutContext::tick2measure(const Fraction& _tick) const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return nullptr;
-    }
-    return m_score->tick2measure(_tick);
+    return m_dom;
 }
 
 compat::DummyElement* LayoutContext::dummyParent() const
