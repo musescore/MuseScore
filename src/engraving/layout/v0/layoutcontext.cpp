@@ -85,6 +85,66 @@ const Measure* DomAccessor::tick2measure(const Fraction& _tick) const
     return m_score->tick2measure(_tick);
 }
 
+compat::DummyElement* DomAccessor::dummyParent() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return nullptr;
+    }
+    return m_score->dummy();
+}
+
+void DomAccessor::undoAddElement(EngravingItem* item, bool addToLinkedStaves, bool ctrlModifier)
+{
+    IF_ASSERT_FAILED(m_score) {
+        return;
+    }
+    m_score->undoAddElement(item, addToLinkedStaves, ctrlModifier);
+}
+
+void DomAccessor::undoRemoveElement(EngravingItem* item)
+{
+    IF_ASSERT_FAILED(m_score) {
+        return;
+    }
+    m_score->undoRemoveElement(item);
+}
+
+void DomAccessor::undo(UndoCommand* cmd, EditData* ed) const
+{
+    IF_ASSERT_FAILED(m_score) {
+        return;
+    }
+    m_score->undo(cmd, ed);
+}
+
+void DomAccessor::addElement(EngravingItem* item)
+{
+    IF_ASSERT_FAILED(m_score) {
+        return;
+    }
+    m_score->addElement(item);
+}
+
+void DomAccessor::removeElement(EngravingItem* item)
+{
+    IF_ASSERT_FAILED(m_score) {
+        return;
+    }
+    m_score->removeElement(item);
+}
+
+void DomAccessor::addUnmanagedSpanner(Spanner* s)
+{
+    IF_ASSERT_FAILED(m_score) {
+        return;
+    }
+    m_score->addUnmanagedSpanner(s);
+}
+
+// =============================================================
+// LayoutContext
+// =============================================================
+
 LayoutContext::LayoutContext(Score* score)
     : m_score(score), m_dom(score)
 {
@@ -187,60 +247,9 @@ const DomAccessor& LayoutContext::dom() const
     return m_dom;
 }
 
-compat::DummyElement* LayoutContext::dummyParent() const
+DomAccessor& LayoutContext::mutDom()
 {
-    IF_ASSERT_FAILED(m_score) {
-        return nullptr;
-    }
-    return m_score->dummy();
-}
-
-void LayoutContext::undoAddElement(EngravingItem* item, bool addToLinkedStaves, bool ctrlModifier)
-{
-    IF_ASSERT_FAILED(m_score) {
-        return;
-    }
-    m_score->undoAddElement(item, addToLinkedStaves, ctrlModifier);
-}
-
-void LayoutContext::undoRemoveElement(EngravingItem* item)
-{
-    IF_ASSERT_FAILED(m_score) {
-        return;
-    }
-    m_score->undoRemoveElement(item);
-}
-
-void LayoutContext::undo(UndoCommand* cmd, EditData* ed) const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return;
-    }
-    m_score->undo(cmd, ed);
-}
-
-void LayoutContext::addElement(EngravingItem* item)
-{
-    IF_ASSERT_FAILED(m_score) {
-        return;
-    }
-    m_score->addElement(item);
-}
-
-void LayoutContext::removeElement(EngravingItem* item)
-{
-    IF_ASSERT_FAILED(m_score) {
-        return;
-    }
-    m_score->removeElement(item);
-}
-
-void LayoutContext::addUnmanagedSpanner(Spanner* s)
-{
-    IF_ASSERT_FAILED(m_score) {
-        return;
-    }
-    m_score->addUnmanagedSpanner(s);
+    return m_dom;
 }
 
 void LayoutContext::setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e)
