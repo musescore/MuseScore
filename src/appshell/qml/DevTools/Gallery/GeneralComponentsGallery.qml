@@ -84,7 +84,8 @@ Rectangle {
                     { textRole: "StyledSlider", componentRole: slidersSample },
                     { textRole: "NumberInputField", componentRole: numberInputFieldSample },
                     { textRole: "TimeInputField", componentRole: timeInputFieldSample },
-                    { textRole: "ValueList", componentRole: valueListSample }
+                    { textRole: "ValueList", componentRole: valueListSample },
+                    { textRole: "StyledBusyIndicator", componentRole: styledBusyIndicatorSample }
                 ]
 
                 delegate: Column {
@@ -982,6 +983,17 @@ Rectangle {
                     valueType: "Int"
                 }
             }
+        }
+    }
+
+    Component {
+        id: styledBusyIndicatorSample
+
+        Item {
+            width: childrenRect.width
+            height: childrenRect.height
+
+            StyledBusyIndicator {}
         }
     }
 }

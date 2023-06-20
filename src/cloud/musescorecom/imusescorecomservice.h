@@ -25,6 +25,7 @@
 #include <QUrl>
 
 #include "modularity/imoduleinterface.h"
+#include "async/promise.h"
 #include "progress.h"
 
 #include "cloud/cloudtypes.h"
@@ -50,7 +51,13 @@ public:
                                                const QUrl& sourceUrl = QUrl(), int revisionId = 0) = 0;
     virtual framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) = 0;
 
-    virtual RetVal<cloud::ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) = 0;
+    virtual RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) = 0;
+
+    /// The MuseScore.com API is a so-called paginated API, which means that
+    /// you don't request all scores at once, but you request them in batches.
+    /// It is similar to e.g. the list of issues on GitHub: you don't have one
+    /// big list of all issues, but you have many pages, with 25 issues per page.
+    virtual async::Promise<ScoresList> downloadScoresList(int scoresPerBatch, int batchNumber) = 0;
 };
 }
 

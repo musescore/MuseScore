@@ -22,6 +22,7 @@
 
 #include "musescorecomservice.h"
 
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QBuffer>
@@ -47,6 +48,7 @@ static const QUrl MUSESCORECOM_SCORE_MANAGER_URL(MUSESCORECOM_CLOUD_URL + "/my-s
 static const QUrl MUSESCORECOM_USER_INFO_API_URL(MUSESCORECOM_API_ROOT_URL + "/me");
 
 static const QUrl MUSESCORECOM_SCORE_INFO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/info");
+static const QUrl MUSESCORECOM_SCORES_LIST_API_URL(MUSESCORECOM_API_ROOT_URL + "/collection/scores");
 static const QUrl MUSESCORECOM_UPLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/upload");
 static const QUrl MUSESCORECOM_UPLOAD_AUDIO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/audio");
 
@@ -247,6 +249,63 @@ mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
     result.val.owner.profileUrl = owner.value("custom_url").toString();
 
     return result;
+}
+
+mu::async::Promise<ScoresList> MuseScoreComService::downloadScoresList(int scoresPerBatch, int batchNumber)
+{
+    return async::Promise<ScoresList>([this, scoresPerBatch, batchNumber](auto resolve, auto reject) {
+        QVariantMap params;
+        params["per-page"] = scoresPerBatch;
+        params["page"] = batchNumber;
+
+        RetVal<QUrl> scoresListUrl = prepareUrlForRequest(MUSESCORECOM_SCORES_LIST_API_URL, params);
+        if (!scoresListUrl.ret) {
+            return reject(scoresListUrl.ret.code(), scoresListUrl.ret.toString());
+        }
+
+        QBuffer receivedData;
+        INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+        Ret ret = manager->get(scoresListUrl.val, &receivedData, headers());
+
+        if (!ret) {
+            printServerReply(receivedData);
+            return reject(ret.code(), ret.toString());
+        }
+
+        ScoresList result;
+
+        QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
+        QJsonObject obj = document.object();
+
+        QJsonObject metaObj = obj.value("_meta").toObject();
+        result.meta.totalScoresCount = metaObj.value("totalCount").toInt();
+        result.meta.batchesCount = metaObj.value("pageCount").toInt();
+        result.meta.thisBatchNumber = metaObj.value("currentPage").toInt();
+        result.meta.scoresPerBatch = metaObj.value("perPage").toInt();
+
+        if (result.meta.thisBatchNumber < batchNumber) {
+            // This happens when the requested page number was too high.
+            // In this situation, the API just returns the last page and the items from that page.
+            // We will return just an empty list, in order not to confuse the caller.
+            return resolve(result);
+        }
+
+        QJsonArray items = obj.value("items").toArray();
+
+        for (const QJsonValue itemVal : items) {
+            QJsonObject itemObj = itemVal.toObject();
+
+            ScoresList::Item item;
+            item.id = itemObj.value("id").toInt();
+            item.title = itemObj.value("title").toString();
+            item.lastModified = QDateTime::fromSecsSinceEpoch(itemObj.value("date_updated").toInt());
+            item.thumbnailUrl = itemObj.value("thumbnails").toObject().value("small").toString();
+
+            result.items.push_back(item);
+        }
+
+        return resolve(result);
+    });
 }
 
 ProgressPtr MuseScoreComService::uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility, const QUrl& sourceUrl,

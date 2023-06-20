@@ -19,35 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_RECENTSCORESMODEL_H
-#define MU_PROJECT_RECENTSCORESMODEL_H
+#ifndef MU_CLOUD_MUSESCORECOMAUTHORIZATIONMODEL_H
+#define MU_CLOUD_MUSESCORECOMAUTHORIZATIONMODEL_H
 
-#include "abstractscoresmodel.h"
+#include <QObject>
 
+#include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "iprojectconfiguration.h"
-#include "irecentfilescontroller.h"
+#include "cloud/musescorecom/imusescorecomservice.h"
 
-namespace mu::project {
-class RecentScoresModel : public AbstractScoresModel, public async::Asyncable
+namespace mu::cloud {
+class MuseScoreComAuthorizationModel : public QObject, async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(IRecentFilesController, recentFilesController)
+    INJECT(IMuseScoreComService, museScoreComService)
+
+    Q_PROPERTY(bool userAuthorized READ userAuthorized NOTIFY userAuthorizedChanged)
 
 public:
-    RecentScoresModel(QObject* parent = nullptr);
+    explicit MuseScoreComAuthorizationModel(QObject* parent = nullptr);
 
-    void load() override;
+    Q_INVOKABLE void load();
 
-    QList<int> nonScoreItemIndices() const override;
+    bool userAuthorized() const;
 
-private:
-    void updateRecentScores();
-    void setRecentScores(const std::vector<QVariantMap>& items);
+    Q_INVOKABLE void createAccount();
+    Q_INVOKABLE void signIn();
+    Q_INVOKABLE void signOut();
+
+signals:
+    void userAuthorizedChanged();
 };
 }
 
-#endif // MU_PROJECT_RECENTSCORESMODEL_H
+#endif // MU_CLOUD_MUSESCORECOMAUTHORIZATIONMODEL_H

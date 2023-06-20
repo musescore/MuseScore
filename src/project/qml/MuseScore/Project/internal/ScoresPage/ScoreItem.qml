@@ -33,7 +33,8 @@ FocusScope {
     property string path: ""
     property string suffix: ""
     property alias timeSinceModified: timeSinceModified.text
-    property bool isAdd: false
+    property string thumbnailUrl: ""
+    property bool isCreateNew: false
     property bool isNoResultFound: false
     property bool isCloud: false
 
@@ -80,7 +81,7 @@ FocusScope {
                 anchors.fill: parent
 
                 sourceComponent: {
-                    if (root.isAdd) {
+                    if (root.isCreateNew) {
                         return addComp
                     }
 
@@ -185,7 +186,7 @@ FocusScope {
 
                 font.capitalization: Font.AllUppercase
 
-                visible: !root.isAdd && !root.isNoResultFound
+                visible: !root.isCreateNew && !root.isNoResultFound
             }
         }
     }
@@ -267,10 +268,25 @@ FocusScope {
                 scorePath: root.path
             }
 
+            Image {
+                id: image
+                anchors.fill: parent
+                visible: status == Image.Ready
+                source: root.thumbnailUrl
+            }
+
             Loader {
                 anchors.fill: parent
+                visible: !image.visible
+                active: visible
 
-                sourceComponent: thumbnailLoader.isThumbnailValid ? scoreThumbnailComp : genericThumbnailComp
+                sourceComponent: {
+                    if (thumbnailLoader.isThumbnailValid) {
+                        return scoreThumbnailComp
+                    }
+
+                    return genericThumbnailComp
+                }
 
                 Component {
                     id: scoreThumbnailComp

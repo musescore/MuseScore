@@ -22,7 +22,6 @@
 #include "recentscoresmodel.h"
 
 #include "translation.h"
-#include "actions/actiontypes.h"
 #include "dataformatter.h"
 #include "io/fileinfo.h"
 
@@ -31,19 +30,13 @@
 #include "log.h"
 
 using namespace mu::project;
-using namespace mu::actions;
-
-static const QString NAME_KEY("name");
-static const QString PATH_KEY("path");
-static const QString SUFFIX_KEY("suffix");
-static const QString THUMBNAIL_KEY("thumbnail");
-static const QString TIME_SINCE_MODIFIED_KEY("timeSinceModified");
-static const QString ADD_NEW_KEY("isAddNew");
-static const QString NO_RESULT_FOUND_KEY("isNoResultFound");
-static const QString IS_CLOUD_KEY("isCloud");
 
 RecentScoresModel::RecentScoresModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : AbstractScoresModel(parent)
+{
+}
+
+void RecentScoresModel::load()
 {
     updateRecentScores();
 
@@ -52,78 +45,32 @@ RecentScoresModel::RecentScoresModel(QObject* parent)
     });
 }
 
-QVariant RecentScoresModel::data(const QModelIndex& index, int role) const
+void RecentScoresModel::setRecentScores(const std::vector<QVariantMap>& items)
 {
-    if (!index.isValid()) {
-        return QVariant();
-    }
-
-    QVariantMap score = m_recentScores[index.row()].toMap();
-
-    switch (role) {
-    case NameRole: return QVariant::fromValue(score[NAME_KEY]);
-    case ScoreRole: return QVariant::fromValue(score);
-    }
-
-    return QVariant();
-}
-
-int RecentScoresModel::rowCount(const QModelIndex&) const
-{
-    return m_recentScores.size();
-}
-
-QHash<int, QByteArray> RecentScoresModel::roleNames() const
-{
-    return {
-        { NameRole, "name" },
-        { ScoreRole, "score" }
-    };
-}
-
-void RecentScoresModel::addNewScore()
-{
-    dispatcher()->dispatch("file-new");
-}
-
-void RecentScoresModel::openScore()
-{
-    dispatcher()->dispatch("file-open");
-}
-
-void RecentScoresModel::openRecentScore(const QString& scorePath)
-{
-    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path_t>(io::path_t(scorePath)));
-}
-
-void RecentScoresModel::openScoreManager()
-{
-    interactive()->openUrl(museScoreComService()->scoreManagerUrl());
-}
-
-void RecentScoresModel::setRecentScores(const QVariantList& recentScores)
-{
-    if (m_recentScores == recentScores) {
+    if (m_items == items) {
         return;
     }
 
     beginResetModel();
-    m_recentScores = recentScores;
+    m_items = items;
     endResetModel();
 }
 
 void RecentScoresModel::updateRecentScores()
 {
-    QVariantList recentScores;
+    const RecentFilesList& recentScores = recentFilesController()->recentFilesList();
+
+    std::vector<QVariantMap> items;
+    items.reserve(recentScores.size());
 
     QVariantMap addItem;
     addItem[NAME_KEY] = qtrc("project", "New score");
-    addItem[ADD_NEW_KEY] = true;
-    addItem[NO_RESULT_FOUND_KEY] = false;
+    addItem[IS_CREATE_NEW_KEY] = true;
+    addItem[IS_NO_RESULT_FOUND_KEY] = false;
     addItem[IS_CLOUD_KEY] = false;
-    recentScores << addItem;
+    items.push_back(addItem);
 
-    for (const RecentFile& file : recentFilesController()->recentFilesList()) {
+    for (const RecentFile& file : recentScores) {
         QVariantMap obj;
 
         std::string suffix = io::suffix(file);
@@ -132,20 +79,24 @@ void RecentScoresModel::updateRecentScores()
         obj[PATH_KEY] = file.toQString();
         obj[SUFFIX_KEY] = QString::fromStdString(suffix);
         obj[IS_CLOUD_KEY] = configuration()->isCloudProject(file);
-
         obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(file).lastModified().date()).toQString();
-        obj[ADD_NEW_KEY] = false;
-        obj[NO_RESULT_FOUND_KEY] = false;
+        obj[IS_CREATE_NEW_KEY] = false;
+        obj[IS_NO_RESULT_FOUND_KEY] = false;
 
-        recentScores << obj;
+        items.push_back(obj);
     }
 
     QVariantMap noResultsFoundItem;
     noResultsFoundItem[NAME_KEY] = "";
-    noResultsFoundItem[ADD_NEW_KEY] = false;
-    noResultsFoundItem[NO_RESULT_FOUND_KEY] = true;
+    noResultsFoundItem[IS_CREATE_NEW_KEY] = false;
+    noResultsFoundItem[IS_NO_RESULT_FOUND_KEY] = true;
     noResultsFoundItem[IS_CLOUD_KEY] = false;
-    recentScores << noResultsFoundItem;
+    items.push_back(noResultsFoundItem);
 
-    setRecentScores(recentScores);
+    setRecentScores(items);
+}
+
+QList<int> RecentScoresModel::nonScoreItemIndices() const
+{
+    return { 0, rowCount() - 1 };
 }

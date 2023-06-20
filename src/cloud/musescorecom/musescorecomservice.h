@@ -27,7 +27,6 @@
 #include "modularity/ioc.h"
 #include "icloudconfiguration.h"
 #include "network/inetworkmanagercreator.h"
-#include "multiinstances/imultiinstancesprovider.h"
 
 #include "internal/abstractcloudservice.h"
 
@@ -54,6 +53,8 @@ public:
     framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) override;
 
     RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) override;
+
+    async::Promise<ScoresList> downloadScoresList(int scoresPerBatch, int batchNumber) override;
 
 private:
     ServerConfig serverConfig() const override;

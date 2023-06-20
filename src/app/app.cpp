@@ -271,6 +271,7 @@ int App::run(int argc, char** argv)
                 if (!obj && url == objUrl) {
                     LOGE() << "failed Qml load\n";
                     QCoreApplication::exit(-1);
+                    return;
                 }
 
                 if (url == objUrl) {

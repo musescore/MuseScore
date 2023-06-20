@@ -70,6 +70,9 @@ public:
     MOCK_METHOD(bool, shouldWarnBeforeSavingPubliclyToCloud, (), (const, override));
     MOCK_METHOD(void, setShouldWarnBeforeSavingPubliclyToCloud, (bool), (override));
 
+    MOCK_METHOD(int, homeScoresPageTabIndex, (), (const, override));
+    MOCK_METHOD(void, setHomeScoresPageTabIndex, (int), (override));
+
     MOCK_METHOD(QColor, templatePreviewBackgroundColor, (), (const, override));
     MOCK_METHOD(async::Notification, templatePreviewBackgroundChanged, (), (const, override));
 
