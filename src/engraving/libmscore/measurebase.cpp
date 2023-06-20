@@ -336,21 +336,17 @@ void MeasureBase::scanElements(void* data, void (* func)(void*, EngravingItem*),
 {
     if (isMeasure()) {
         for (EngravingItem* e : _el) {
-            if (score()->tagIsValid(e->tag())) {
-                staff_idx_t staffIdx = e->staffIdx();
-                if (staffIdx != mu::nidx && staffIdx >= score()->staves().size()) {
-                    LOGD("MeasureBase::scanElements: bad staffIdx %zu in element %s", staffIdx, e->typeName());
-                }
-                if ((e->track() == mu::nidx) || e->systemFlag() || toMeasure(this)->visible(staffIdx)) {
-                    e->scanElements(data, func, all);
-                }
+            staff_idx_t staffIdx = e->staffIdx();
+            if (staffIdx != mu::nidx && staffIdx >= score()->staves().size()) {
+                LOGD("MeasureBase::scanElements: bad staffIdx %zu in element %s", staffIdx, e->typeName());
+            }
+            if ((e->track() == mu::nidx) || e->systemFlag() || toMeasure(this)->visible(staffIdx)) {
+                e->scanElements(data, func, all);
             }
         }
     } else {
         for (EngravingItem* e : _el) {
-            if (score()->tagIsValid(e->tag())) {
-                e->scanElements(data, func, all);
-            }
+            e->scanElements(data, func, all);
         }
     }
     if (isBox()) {

@@ -129,18 +129,6 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
         TWrite::write(score->_audio, xml, ctx);
     }
 
-    for (int i = 0; i < 32; ++i) {
-        if (!score->_layerTags[i].isEmpty()) {
-            xml.tag("LayerTag", { { "id", i }, { "tag", score->_layerTags[i] } }, score->_layerTagComments[i]);
-        }
-    }
-    size_t n = score->_layer.size();
-    for (size_t i = 1; i < n; ++i) {         // don’t save default variant
-        const Layer& l = score->_layer.at(i);
-        xml.tag("Layer",  { { "name", l.name }, { "mask", l.tags } });
-    }
-    xml.tag("currentLayer", score->_currentLayer);
-
     if (score->isMaster() && !MScore::testMode) {
         score->_synthesizerState.write(xml);
     }

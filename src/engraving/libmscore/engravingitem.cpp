@@ -88,7 +88,6 @@ EngravingItem::EngravingItem(const ElementType& type, EngravingObject* se, Eleme
     _flags         = f;
     _color         = engravingConfiguration()->defaultColor();
     _mag           = 1.0;
-    _tag           = 1;
     _z             = -1;
     _offsetChanged = OffsetChange::NONE;
     _minDistance   = Spatium(0.0);
@@ -104,7 +103,6 @@ EngravingItem::EngravingItem(const EngravingItem& e)
     _track      = e._track;
     _flags      = e._flags;
     setFlag(ElementFlag::SELECTED, false);
-    _tag        = e._tag;
     _z          = e._z;
     _color      = e._color;
     _offsetChanged = e._offsetChanged;

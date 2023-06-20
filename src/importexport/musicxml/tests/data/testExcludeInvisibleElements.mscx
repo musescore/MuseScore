@@ -3,8 +3,6 @@
   <programVersion>3.6.2</programVersion>
   <programRevision>4d55c83</programRevision>
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>

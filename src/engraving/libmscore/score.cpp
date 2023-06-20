@@ -312,11 +312,6 @@ Score::Score()
 {
     Score::validScores.insert(this);
     _masterScore = 0;
-    Layer l;
-    l.name          = u"default";
-    l.tags          = 1;
-    _layer.push_back(l);
-    _layerTags[0]   = u"default";
 
     m_engravingFont = engravingFonts()->fontByName("Leland");
 
@@ -4398,23 +4393,6 @@ std::list<Score*> Score::scoreList()
         }
     }
     return scores;
-}
-
-//---------------------------------------------------------
-//   switchLayer
-//---------------------------------------------------------
-
-bool Score::switchLayer(const String& s)
-{
-    int layerIdx = 0;
-    for (const Layer& l : layer()) {
-        if (s == l.name) {
-            setCurrentLayer(layerIdx);
-            return true;
-        }
-        ++layerIdx;
-    }
-    return false;
 }
 
 //---------------------------------------------------------

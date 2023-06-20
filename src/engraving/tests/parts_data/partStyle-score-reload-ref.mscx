@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <frameSystemDistance>21</frameSystemDistance>
@@ -306,8 +304,6 @@
       </Staff>
     <Score>
       <initialPartId>1</initialPartId>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <frameSystemDistance>21</frameSystemDistance>
@@ -502,8 +498,6 @@
       </Score>
     <Score>
       <initialPartId>2</initialPartId>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <frameSystemDistance>21</frameSystemDistance>

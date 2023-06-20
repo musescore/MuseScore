@@ -314,17 +314,6 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     std::vector<Part*>& parts = excerpt->parts();
     std::vector<staff_idx_t> srcStaves;
 
-    // clone layer:
-    for (int i = 0; i < 32; ++i) {
-        score->layerTags()[i] = masterScore->layerTags()[i];
-        score->layerTagComments()[i] = masterScore->layerTagComments()[i];
-    }
-    score->setCurrentLayer(masterScore->currentLayer());
-    score->layer().clear();
-    for (const Layer& l : masterScore->layer()) {
-        score->layer().push_back(l);
-    }
-
     score->setPageNumberOffset(masterScore->pageNumberOffset());
 
     // Set instruments and create linked staves

@@ -3,8 +3,6 @@
   <programVersion>4.0.0</programVersion>
   <programRevision>2c34155</programRevision>
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

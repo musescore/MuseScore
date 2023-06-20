@@ -3251,9 +3251,6 @@ void TLayout::layoutMeasureBase(MeasureBase* item, LayoutContext& ctx)
     int breakCount = 0;
 
     for (EngravingItem* element : item->el()) {
-        if (!item->score()->tagIsValid(element->tag())) {
-            continue;
-        }
         if (element->isLayoutBreak()) {
             double _spatium = item->spatium();
             double x;
