@@ -1389,9 +1389,9 @@ static void layoutSegmentElements(Segment* segment, track_idx_t startTrack, trac
 //    - offset as necessary to avoid conflict
 //---------------------------------------------------------
 
-void ChordLayout::layoutChords1(Score* score, Segment* segment, staff_idx_t staffIdx, LayoutContext& ctx)
+void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx)
 {
-    const Staff* staff = score->Score::staff(staffIdx);
+    const Staff* staff = ctx.dom().staff(staffIdx);
     const bool isTab = staff->isTabStaff(segment->tick());
     const track_idx_t startTrack = staffIdx * VOICES;
     const track_idx_t endTrack   = startTrack + VOICES;
@@ -1414,7 +1414,7 @@ void ChordLayout::layoutChords1(Score* score, Segment* segment, staff_idx_t staf
     std::vector<Note*> downStemNotes;
     int upVoices       = 0;
     int downVoices     = 0;
-    double nominalWidth = score->noteHeadWidth() * staff->staffMag(tick);
+    double nominalWidth = ctx.noteHeadWidth() * staff->staffMag(tick);
     double maxUpWidth   = 0.0;
     double maxDownWidth = 0.0;
     double maxUpMag     = 0.0;
@@ -1444,7 +1444,7 @@ void ChordLayout::layoutChords1(Score* score, Segment* segment, staff_idx_t staf
                     hasGraceBefore = true;
                 }
                 layoutChords2(c->notes(), c->up(), ctx); // layout grace note noteheads
-                layoutChords3(score->style(), { c }, c->notes(), staff, ctx); // layout grace note chords
+                layoutChords3(ctx.style(), { c }, c->notes(), staff, ctx); // layout grace note chords
             }
             if (chord->up()) {
                 ++upVoices;
@@ -1594,7 +1594,7 @@ void ChordLayout::layoutChords1(Score* score, Segment* segment, staff_idx_t staf
                                && bottomUpNote->chord()->durationType().headType() != NoteHeadType::HEAD_BREVIS) {
                         // stemless notes should be aligned as is they were stemmed
                         // (except in case of brevis, cause the notehead has the side bars)
-                        downOffset -= score->styleMM(Sid::stemWidth) * topDownNote->chord()->mag();
+                        downOffset -= ctx.style().styleMM(Sid::stemWidth) * topDownNote->chord()->mag();
                     }
                 }
             } else if (separation < 1) {
@@ -1795,10 +1795,10 @@ void ChordLayout::layoutChords1(Score* score, Segment* segment, staff_idx_t staf
                 }
                 double dotWidth = segment->symWidth(SymId::augmentationDot);
                 // first dot
-                dotAdjust = score->styleMM(Sid::dotNoteDistance) + dotWidth;
+                dotAdjust = ctx.style().styleMM(Sid::dotNoteDistance) + dotWidth;
                 // additional dots
                 if (dots > 1) {
-                    dotAdjust += score->styleMM(Sid::dotDotDistance).val() * (dots - 1);
+                    dotAdjust += ctx.style().styleMM(Sid::dotDotDistance).val() * (dots - 1);
                 }
                 dotAdjust *= mag;
                 // only by amount over threshold
@@ -1850,7 +1850,7 @@ void ChordLayout::layoutChords1(Score* score, Segment* segment, staff_idx_t staf
             std::sort(notes.begin(), notes.end(),
                       [](Note* n1, const Note* n2) ->bool { return n1->line() > n2->line(); });
         }
-        layoutChords3(score->style(), chords, notes, staff, ctx);
+        layoutChords3(ctx.style(), chords, notes, staff, ctx);
     }
 
     layoutSegmentElements(segment, partStartTrack, partEndTrack, staffIdx, ctx);
@@ -2726,7 +2726,7 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, La
     }
 }
 
-void ChordLayout::resolveVerticalRestConflicts(Score* score, Segment* segment, staff_idx_t staffIdx, LayoutContext& ctx)
+void ChordLayout::resolveVerticalRestConflicts(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx)
 {
     std::vector<Rest*> rests;
     std::vector<Chord*> chords;
@@ -2743,7 +2743,7 @@ void ChordLayout::resolveVerticalRestConflicts(Score* score, Segment* segment, s
         rest->verticalClearance().reset();
     }
 
-    Staff* staff = score->staff(staffIdx);
+    const Staff* staff = ctx.dom().staff(staffIdx);
     if (!chords.empty()) {
         resolveRestVSChord(rests, chords, staff, segment);
     }

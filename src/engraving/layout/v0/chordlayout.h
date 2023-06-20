@@ -60,7 +60,7 @@ public:
     static void computeUp(ChordRest* item, LayoutContext& ctx);
     static int computeAutoStemDirection(const std::vector<int>& noteDistances);
 
-    static void layoutChords1(Score* score, Segment* segment, staff_idx_t staffIdx, LayoutContext& ctx);
+    static void layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx);
     static double layoutChords2(std::vector<Note*>& notes, bool up, LayoutContext& ctx);
     static void layoutChords3(const MStyle& style, const std::vector<Chord*>&, const std::vector<Note*>&, const Staff*, LayoutContext& ctx);
     static void updateGraceNotes(Measure* measure, LayoutContext& ctx);
@@ -68,7 +68,7 @@ public:
     static void appendGraceNotes(Chord* chord);
     static void clearLineAttachPoints(Measure* measure);
     static void updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, LayoutContext& ctx);
-    static void resolveVerticalRestConflicts(Score* score, Segment* segment, staff_idx_t staffIdx, LayoutContext& ctx);
+    static void resolveVerticalRestConflicts(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx);
     static void resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord*>& chords, const Staff* staff, Segment* segment);
     static void resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staff, Segment* segment, LayoutContext& ctx,
                                   bool considerBeams = false);

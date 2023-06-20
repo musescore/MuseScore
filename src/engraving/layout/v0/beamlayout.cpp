@@ -539,7 +539,7 @@ static bool beamNoContinue(BeamMode mode)
 //   beamGraceNotes
 //---------------------------------------------------------
 
-void BeamLayout::beamGraceNotes(Score* score, Chord* mainNote, bool after)
+void BeamLayout::beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after)
 {
     ChordRest* a1    = 0;        // start of (potential) beam
     Beam* beam       = 0;        // current beam
@@ -555,7 +555,6 @@ void BeamLayout::beamGraceNotes(Score* score, Chord* mainNote, bool after)
         if ((cr->durationType().type() <= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
             if (beam) {
                 beam->setIsGrace(true);
-                LayoutContext ctx(score);
                 layout1(beam, ctx);
                 beam = 0;
             }
@@ -575,7 +574,6 @@ void BeamLayout::beamGraceNotes(Score* score, Chord* mainNote, bool after)
             }
             if (beamEnd) {
                 beam->setIsGrace(true);
-                LayoutContext ctx(score);
                 layout1(beam, ctx);
                 beam = 0;
             }
@@ -592,7 +590,7 @@ void BeamLayout::beamGraceNotes(Score* score, Chord* mainNote, bool after)
             } else {
                 beam = a1->beam();
                 if (beam == 0 || beam->elements().front() != a1) {
-                    beam = Factory::createBeam(score->dummy()->system());
+                    beam = Factory::createBeam(ctx.mutDom().dummyParent()->system());
                     beam->setGenerated(true);
                     beam->setTrack(mainNote->track());
                     a1->replaceBeam(beam);
@@ -604,19 +602,18 @@ void BeamLayout::beamGraceNotes(Score* score, Chord* mainNote, bool after)
     }
     if (beam) {
         beam->setIsGrace(true);
-        LayoutContext ctx(score);
         layout1(beam, ctx);
     } else if (a1) {
         a1->removeDeleteBeam(false);
     }
 }
 
-void BeamLayout::createBeams(Score* score, LayoutContext& ctx, Measure* measure)
+void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
 {
-    bool crossMeasure = score->styleB(Sid::crossMeasureValues);
+    bool crossMeasure = ctx.style().styleB(Sid::crossMeasureValues);
 
-    for (track_idx_t track = 0; track < score->ntracks(); ++track) {
-        Staff* stf = score->staff(track2staff(track));
+    for (track_idx_t track = 0; track < ctx.dom().ntracks(); ++track) {
+        const Staff* stf = ctx.dom().staff(track2staff(track));
 
         // don’t compute beams for invisible staves and tablature without stems
         if (!stf->show() || (stf->isTabStaff(measure->tick()) && stf->staffType(measure->tick())->stemless())) {
@@ -668,7 +665,7 @@ void BeamLayout::createBeams(Score* score, LayoutContext& ctx, Measure* measure)
                 // Handle cross-measure beams
                 BeamMode mode = cr->beamMode();
                 if (mode == BeamMode::MID || mode == BeamMode::END || mode == BeamMode::BEGIN16 || mode == BeamMode::BEGIN32) {
-                    ChordRest* prevCR = score->findCR(measure->tick() - Fraction::fromTicks(1), track);
+                    ChordRest* prevCR = ctx.mutDom().findCR(measure->tick() - Fraction::fromTicks(1), track);
                     if (prevCR) {
                         Beam* prevBeam = prevCR->beam();
                         const Measure* pm = prevCR->measure();
@@ -698,8 +695,8 @@ void BeamLayout::createBeams(Score* score, LayoutContext& ctx, Measure* measure)
             // (tied chords?)
             if (cr->isChord()) {
                 Chord* chord = toChord(cr);
-                beamGraceNotes(score, chord, false);         // grace before
-                beamGraceNotes(score, chord, true);          // grace after
+                beamGraceNotes(ctx, chord, false);         // grace before
+                beamGraceNotes(ctx, chord, true);          // grace after
                 // set up for cross-measure values as soon as possible
                 // to have all computations (stems, hooks, ...) consistent with it
                 if (!chord->isGrace()) {
@@ -747,8 +744,7 @@ void BeamLayout::createBeams(Score* score, LayoutContext& ctx, Measure* measure)
             if ((cr->durationType().type() <= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
                 bool removeBeam = true;
                 if (beam) {
-                    LayoutContext cntx(score);
-                    layout1(beam, cntx);
+                    layout1(beam, ctx);
                     removeBeam = (beam->elements().size() <= 1 || beam->hasAllRests());
                     beam = 0;
                 }
@@ -770,8 +766,7 @@ void BeamLayout::createBeams(Score* score, LayoutContext& ctx, Measure* measure)
                     beamEnd = (bm == BeamMode::END);
                 }
                 if (beamEnd) {
-                    LayoutContext cntx(score);
-                    layout1(beam, cntx);
+                    layout1(beam, ctx);
                     beam = 0;
                 }
             }
@@ -794,7 +789,7 @@ void BeamLayout::createBeams(Score* score, LayoutContext& ctx, Measure* measure)
                 } else {
                     beam = a1->beam();
                     if (beam == 0 || beam->elements().front() != a1) {
-                        beam = Factory::createBeam(score->dummy()->system());
+                        beam = Factory::createBeam(ctx.mutDom().dummyParent()->system());
                         beam->setGenerated(true);
                         beam->setTrack(track);
                         a1->replaceBeam(beam);
@@ -805,8 +800,7 @@ void BeamLayout::createBeams(Score* score, LayoutContext& ctx, Measure* measure)
             }
         }
         if (beam) {
-            LayoutContext cntx(score);
-            layout1(beam, cntx);
+            layout1(beam, ctx);
         } else if (a1) {
             Fraction nextTick = a1->tick() + a1->actualTicks();
             Measure* m = (nextTick >= measure->endTick() ? measure->nextMeasure() : measure);

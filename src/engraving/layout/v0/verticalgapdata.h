@@ -52,12 +52,12 @@ private:
     void  updateFactor(double factor);
 
 public:
-    MStyle* style { nullptr };
-    System* system { nullptr };
-    SysStaff* sysStaff { nullptr };
-    Staff* staff { nullptr };
+    const MStyle* style = nullptr;
+    System* system = nullptr;
+    SysStaff* sysStaff = nullptr;
+    const Staff* staff = nullptr;
 
-    VerticalGapData(MStyle* style, bool first, System* sys, Staff* st, SysStaff* sst, Spacer* nextSpacer, double y);
+    VerticalGapData(const MStyle* style, bool first, System* sys, const Staff* st, SysStaff* sst, Spacer* nextSpacer, double y);
 
     void addSpaceBetweenSections();
     void addSpaceAroundVBox(bool above);

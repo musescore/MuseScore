@@ -43,7 +43,7 @@ public:
     static void layout(LyricsLine* item, LayoutContext& ctx);
     static void layout(LyricsLineSegment* item, LayoutContext& ctx);
 
-    static void layoutLyrics(const LayoutOptions& options, const Score* score, System* system);
+    static void layoutLyrics(const LayoutOptions& options, LayoutContext& ctx, System* system);
 };
 }
 #endif // MU_ENGRAVING_LYRICSLAYOUT_H

@@ -49,14 +49,14 @@ public:
 
     static bool isTopBeam(ChordRest* cr);
     static bool notTopBeam(ChordRest* cr);
-    static void createBeams(Score* score, LayoutContext& ctx, Measure* measure);
+    static void createBeams(LayoutContext& ctx, Measure* measure);
     static void restoreBeams(Measure* m, LayoutContext& ctx);
     static void breakCrossMeasureBeams(Measure* measure, LayoutContext& ctx);
     static void layoutNonCrossBeams(Segment* s, LayoutContext& ctx);
     static void verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext& ctx);
 
 private:
-    static void beamGraceNotes(Score* score, Chord* mainNote, bool after);
+    static void beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after);
 
     static void layout2(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag);
 

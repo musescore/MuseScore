@@ -819,7 +819,7 @@ void TLayout::layout1(Beam* item, LayoutContext& ctx)
 void TLayout::layout(Bend* item, LayoutContext& ctx)
 {
     // during mtest, there may be no score. If so, exit.
-    if (!ctx.score()) {
+    if (!ctx.isValid()) {
         return;
     }
 
