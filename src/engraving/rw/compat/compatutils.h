@@ -40,16 +40,17 @@ namespace mu::engraving::compat {
 class CompatUtils
 {
 public:
-    static void doCompatibilityConversions(MasterScore* masterScore);
-    static void replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score);
     static void assignInitialPartToExcerpts(const std::vector<Excerpt*>& excerpts);
+    static void doCompatibilityConversions(MasterScore* masterScore);
+    static ArticulationAnchor translateToNewArticulationAnchor(int anchor);
+    static const std::set<SymId> ORNAMENT_IDS;
+
+private:
+    static void replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score);
     static void replaceOldWithNewOrnaments(MasterScore* score);
     static void replaceOldWithNewExpressions(MasterScore* score);
     static void reconstructTypeOfCustomDynamics(MasterScore* score);
     static DynamicType reconstructDynamicTypeFromString(Dynamic* dynamic);
-    static ArticulationAnchor translateToNewArticulationAnchor(int anchor);
-
-    static const std::set<SymId> ORNAMENT_IDS;
 };
 }
 #endif // MU_ENGRAVING_COMPATUTILS_H
