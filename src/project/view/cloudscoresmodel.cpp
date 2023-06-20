@@ -114,7 +114,7 @@ void CloudScoresModel::loadItemsIfNecessary()
 
         m_isWaitingForPromise = true;
 
-        museScoreComService()->downloadScoresList(BATCH_SIZE, m_items.size() / BATCH_SIZE + 1)
+        museScoreComService()->downloadScoresList(BATCH_SIZE, static_cast<int>(m_items.size()) / BATCH_SIZE + 1)
         .onResolve(this, [this](const cloud::ScoresList& scoresList) {
             if (!scoresList.items.empty()) {
                 beginInsertRows(QModelIndex(), static_cast<int>(m_items.size()),
