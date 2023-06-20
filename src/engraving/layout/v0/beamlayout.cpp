@@ -467,14 +467,14 @@ void BeamLayout::breakCrossMeasureBeams(Measure* measure, LayoutContext& ctx)
     }
 
     Measure* next = toMeasure(mbNext);
-    const size_t ntracks = ctx.ntracks();
+    const size_t ntracks = ctx.dom().ntracks();
     Segment* fstSeg = next->first(SegmentType::ChordRest);
     if (!fstSeg) {
         return;
     }
 
     for (size_t track = 0; track < ntracks; ++track) {
-        const Staff* stf = ctx.staff(track2staff(track));
+        const Staff* stf = ctx.dom().staff(track2staff(track));
 
         // don’t compute beams for invisible staves and tablature without stems
         if (!stf->show() || (stf->isTabStaff(measure->tick()) && stf->staffType(measure->tick())->stemless())) {
@@ -828,10 +828,10 @@ void BeamLayout::createBeams(Score* score, LayoutContext& ctx, Measure* measure)
 void BeamLayout::layoutNonCrossBeams(Segment* s, LayoutContext& ctx)
 {
     for (EngravingItem* e : s->elist()) {
-        if (!e || !e->isChordRest() || !ctx.staff(e->staffIdx())->show()) {
+        if (!e || !e->isChordRest() || !ctx.dom().staff(e->staffIdx())->show()) {
             // the beam and its system may still be referenced when selecting all,
             // even if the staff is invisible. The old system is invalid and does cause problems in #284012
-            if (e && e->isChordRest() && !ctx.staff(e->staffIdx())->show() && toChordRest(e)->beam()) {
+            if (e && e->isChordRest() && !ctx.dom().staff(e->staffIdx())->show() && toChordRest(e)->beam()) {
                 toChordRest(e)->beam()->resetExplicitParent();
             }
             continue;
@@ -909,7 +909,7 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
 
         Segment* segment = rest->segment();
         staff_idx_t staffIdx = rest->vStaffIdx();
-        const Staff* staff = ctx.staff(staffIdx);
+        const Staff* staff = ctx.dom().staff(staffIdx);
         std::vector<Chord*> chords;
         std::vector<Rest*> rests;
         collectChordsAndRest(segment, staffIdx, chords, rests);

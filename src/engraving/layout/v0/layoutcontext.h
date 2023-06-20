@@ -50,6 +50,26 @@ class DummyElement;
 }
 
 namespace mu::engraving::layout::v0 {
+class DomAccessor
+{
+public:
+
+    DomAccessor(Score* s);
+
+    // Const access
+    const std::vector<System*>& systems() const;
+    size_t nstaves() const;
+    const std::vector<Staff*>& staves() const;
+    const Staff* staff(staff_idx_t idx) const;
+    size_t ntracks() const;
+    const Measure* tick2measure(const Fraction& tick) const;
+
+    // Mutable access
+
+private:
+    Score* m_score = nullptr;
+};
+
 class LayoutContext
 {
 public:
@@ -75,12 +95,7 @@ public:
 
     IEngravingFontPtr engravingFont() const;
 
-    const std::vector<System*>& systems() const;
-    size_t nstaves() const;
-    const std::vector<Staff*>& staves() const;
-    const Staff* staff(staff_idx_t idx) const;
-    size_t ntracks() const;
-    const Measure* tick2measure(const Fraction& tick) const;
+    const DomAccessor& dom() const;
 
     // Create/Remove
     compat::DummyElement* dummyParent() const;
@@ -124,6 +139,7 @@ public:
 
 private:
     Score* m_score = nullptr;
+    DomAccessor m_dom;
 };
 }
 

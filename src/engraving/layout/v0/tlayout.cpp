@@ -347,7 +347,7 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
     const Staff* stf = nullptr;
     if (segm && item->track() != mu::nidx) {
         Fraction tick    = segm->tick();
-        stf         = ctx.staff(item->staffIdx());
+        stf         = ctx.dom().staff(item->staffIdx());
         lineDist    = stf->lineDistance(tick) * _spatium;
         numOfLines  = stf->lines(tick);
         clf         = stf->clef(tick);
@@ -1789,7 +1789,7 @@ void TLayout::layoutLines(FiguredBass* item, LayoutContext& ctx)
     // or the previous measure, if nextTick is the first tick of a measure
     //    (and line should stop before any measure terminal segment (bar, clef, ...) )
 
-    const Measure* m = ctx.tick2measure(nextTick - Fraction::fromTicks(1));
+    const Measure* m = ctx.dom().tick2measure(nextTick - Fraction::fromTicks(1));
     if (m) {
         // locate the first segment (of ANY type) right after this' last tick
         for (nextSegm = m->first(SegmentType::All); nextSegm; nextSegm = nextSegm->next()) {
@@ -1829,7 +1829,7 @@ void TLayout::layoutLines(FiguredBass* item, LayoutContext& ctx)
     item->setPrintedLineLength(printedLineLength);
 
     // get duration indicator line(s) from page position of nextSegm
-    const std::vector<System*>& systems = ctx.systems();
+    const std::vector<System*>& systems = ctx.dom().systems();
     System* s1  = item->segment()->measure()->system();
     System* s2  = nextSegm->measure()->system();
     system_idx_t sysIdx1 = mu::indexOf(systems, s1);
@@ -3908,7 +3908,7 @@ void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
     PointF p1(item->linePos(Grip::START, &s1));
     PointF p2(item->linePos(Grip::END,   &s2));
 
-    const std::vector<System*>& systems = ctx.systems();
+    const std::vector<System*>& systems = ctx.dom().systems();
     system_idx_t sysIdx1 = mu::indexOf(systems, s1);
     system_idx_t sysIdx2 = mu::indexOf(systems, s2);
     int segmentsNeeded = 0;

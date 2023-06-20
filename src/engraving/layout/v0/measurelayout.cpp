@@ -63,16 +63,16 @@ using namespace mu::engraving::layout::v0;
 void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
 {
     assert(item->explicitParent());
-    assert(ctx.nstaves() == item->m_mstaves.size());
+    assert(ctx.dom().nstaves() == item->m_mstaves.size());
 
     double _spatium = item->spatium();
 
-    for (size_t staffIdx = 0; staffIdx < ctx.nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
         MStaff* ms = item->m_mstaves[staffIdx];
         Spacer* sp = ms->vspacerDown();
         if (sp) {
             TLayout::layout(sp, ctx);
-            const Staff* staff = ctx.staff(staffIdx);
+            const Staff* staff = ctx.dom().staff(staffIdx);
             int n = staff->lines(item->tick()) - 1;
             double y = item->system()->staff(staffIdx)->y();
             sp->setPos(_spatium * .5, y + n * _spatium * staff->staffMag(item->tick()));
@@ -93,10 +93,10 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
     //---------------------------------------------------
 
     Fraction stick = item->system()->measures().front()->tick();
-    size_t tracks = ctx.ntracks();
+    size_t tracks = ctx.dom().ntracks();
     static const SegmentType st { SegmentType::ChordRest };
     for (track_idx_t track = 0; track < tracks; ++track) {
-        if (!ctx.staff(track / VOICES)->show()) {
+        if (!ctx.dom().staff(track / VOICES)->show()) {
             track += VOICES - 1;
             continue;
         }
@@ -486,9 +486,9 @@ static bool validMMRestMeasure(const LayoutContext& ctx, Measure* m)
         }
         if (s->isChordRestType()) {
             bool restFound = false;
-            size_t tracks = ctx.ntracks();
+            size_t tracks = ctx.dom().ntracks();
             for (track_idx_t track = 0; track < tracks; ++track) {
-                if ((track % VOICES) == 0 && !ctx.staff(track / VOICES)->show()) {
+                if ((track % VOICES) == 0 && !ctx.dom().staff(track / VOICES)->show()) {
                     track += VOICES - 1;
                     continue;
                 }
@@ -599,7 +599,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     }
 
     // break for MeasureRepeat group
-    for (size_t staffIdx = 0; staffIdx < ctx.nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
         if (m->isMeasureRepeatGroup(staffIdx)
             || (m->prevMeasure() && m->prevMeasure()->isMeasureRepeatGroup(staffIdx))) {
             return true;
@@ -659,8 +659,8 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
                 return true;
             }
         }
-        for (size_t staffIdx = 0; staffIdx < ctx.nstaves(); ++staffIdx) {
-            if (!ctx.staff(staffIdx)->show()) {
+        for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+            if (!ctx.dom().staff(staffIdx)->show()) {
                 continue;
             }
             EngravingItem* e = s->element(staffIdx * VOICES);
@@ -683,7 +683,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     if (pm) {
         Segment* s = pm->findSegmentR(SegmentType::EndBarLine, pm->ticks());
         if (s) {
-            for (size_t staffIdx = 0; staffIdx < ctx.nstaves(); ++staffIdx) {
+            for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
                 BarLine* bl = toBarLine(s->element(staffIdx * VOICES));
                 if (bl) {
                     BarLineType t = bl->barLineType();
@@ -1039,10 +1039,10 @@ void MeasureLayout::layoutStaffLines(Measure* m, LayoutContext& ctx)
 {
     int staffIdx = 0;
     for (MStaff* ms : m->m_mstaves) {
-        if (m->isCutawayClef(staffIdx) && (ctx.staff(staffIdx)->cutaway() || !m->visible(staffIdx))) {
+        if (m->isCutawayClef(staffIdx) && (ctx.dom().staff(staffIdx)->cutaway() || !m->visible(staffIdx))) {
             // draw short staff lines for a courtesy clef on a hidden measure
             Segment* clefSeg = m->findSegmentR(SegmentType::Clef, m->ticks());
-            double staffMag = ctx.staff(staffIdx)->staffMag(m->tick());
+            double staffMag = ctx.dom().staff(staffIdx)->staffMag(m->tick());
             double partialWidth = clefSeg
                                   ? m->width() - clefSeg->x() + clefSeg->minLeft() + ctx.style().styleMM(Sid::clefLeftMargin) * staffMag
                                   : 0.0;
@@ -1169,7 +1169,7 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
         }
 
         // After the rest of the spacing is calculated we position grace-notes-after.
-        ChordLayout::repositionGraceNotesAfter(&s, ctx.ntracks());
+        ChordLayout::repositionGraceNotesAfter(&s, ctx.dom().ntracks());
 
         for (EngravingItem* e : s.elist()) {
             if (!e) {
@@ -1304,7 +1304,7 @@ void MeasureLayout::layoutCrossStaff(MeasureBase* mb, LayoutContext& ctx)
 void MeasureLayout::barLinesSetSpan(Segment* seg, LayoutContext& ctx)
 {
     int track = 0;
-    for (Staff* staff : ctx.staves()) {
+    for (Staff* staff : ctx.dom().staves()) {
         BarLine* bl = toBarLine(seg->element(track));      // get existing bar line for this staff, if any
         if (bl) {
             if (bl->generated()) {
@@ -1335,7 +1335,7 @@ void MeasureLayout::barLinesSetSpan(Segment* seg, LayoutContext& ctx)
 
 double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx)
 {
-    size_t nstaves  = ctx.nstaves();
+    size_t nstaves  = ctx.dom().nstaves();
     Segment* seg = m->findSegmentR(SegmentType::EndBarLine, m->ticks());
     Measure* nm  = m->nextMeasure();
     double blw    = 0.0;
@@ -1369,7 +1369,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
         if (isLastMeasureInSystem && show) {
             Fraction tick = m->endTick();
             for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-                const Staff* staff     = ctx.staff(staffIdx);
+                const Staff* staff     = ctx.dom().staff(staffIdx);
                 KeySigEvent key1 = staff->keySigEvent(tick - Fraction::fromTicks(1));
                 KeySigEvent key2 = staff->keySigEvent(tick);
                 if (!(key1 == key2)) {
@@ -1401,7 +1401,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
         for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             track_idx_t track = staffIdx * VOICES;
             BarLine* bl  = toBarLine(seg->element(track));
-            const Staff* staff = ctx.staff(staffIdx);
+            const Staff* staff = ctx.dom().staff(staffIdx);
             if (!bl) {
                 bl = Factory::createBarLine(seg);
                 bl->setParent(seg);
@@ -1453,7 +1453,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
         bool wasVisible = clefSeg->visible();
         int visibleInt = 0;
         for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            if (!ctx.staff(staffIdx)->show()) {
+            if (!ctx.dom().staff(staffIdx)->show()) {
                 continue;
             }
             track_idx_t track = staffIdx * VOICES;
@@ -1530,7 +1530,7 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
     Segment* kSegment = m->findFirstR(SegmentType::KeySig, Fraction(0, 1));
     Segment* cSegment = m->findFirstR(SegmentType::HeaderClef, Fraction(0, 1));
 
-    for (const Staff* staff : ctx.staves()) {
+    for (const Staff* staff : ctx.dom().staves()) {
         const int track = staffIdx * VOICES;
 
         if (isFirstSystem || ctx.style().styleB(Sid::genClef)) {
@@ -1648,9 +1648,9 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
         } else if (kSegment && isPitchedStaff) {
             // do not disable user modified keysigs
             bool disable = true;
-            for (size_t i = 0; i < ctx.nstaves(); ++i) {
+            for (size_t i = 0; i < ctx.dom().nstaves(); ++i) {
                 EngravingItem* e = kSegment->element(i * VOICES);
-                Key key = ctx.staff(i)->key(m->tick());
+                Key key = ctx.dom().staff(i)->key(m->tick());
                 if ((e && !e->generated()) || (key != keyIdx.key())) {
                     disable = false;
                 }
@@ -1711,7 +1711,7 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
     if (nm && ctx.score()->genCourtesyTimesig() && !isFinalMeasure && !ctx.floatMode()) {
         Segment* tss = nm->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
         if (tss) {
-            size_t nstaves = ctx.nstaves();
+            size_t nstaves = ctx.dom().nstaves();
             for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
                 ts = toTimeSig(tss->element(track));
                 if (ts) {
@@ -1758,7 +1758,7 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
 
     // courtesy key signatures, clefs
 
-    size_t n   = ctx.nstaves();
+    size_t n   = ctx.dom().nstaves();
     bool show  = m->hasCourtesyKeySig();
     s          = m->findSegmentR(SegmentType::KeySigAnnounce, _rtick);
 
@@ -1766,7 +1766,7 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
 
     for (staff_idx_t staffIdx = 0; staffIdx < n; ++staffIdx) {
         track_idx_t track = staffIdx * VOICES;
-        const Staff* staff = ctx.staff(staffIdx);
+        const Staff* staff = ctx.dom().staff(staffIdx);
         bool staffIsPitchedAtNextMeas = m->nextMeasure() && staff->isPitchedStaff(m->nextMeasure()->tick());
 
         if (show) {
@@ -1866,7 +1866,7 @@ void MeasureLayout::createSystemBeginBarLine(Measure* m, LayoutContext& ctx)
             s = Factory::createSegment(m, SegmentType::BeginBarLine, Fraction(0, 1));
             m->add(s);
         }
-        for (track_idx_t track = 0; track < ctx.ntracks(); track += VOICES) {
+        for (track_idx_t track = 0; track < ctx.dom().ntracks(); track += VOICES) {
             BarLine* bl = toBarLine(s->element(track));
             if (!bl) {
                 bl = Factory::createBarLine(s);
@@ -1971,7 +1971,7 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
             continue;
         }
         // After the rest of the spacing is calculated we position grace-notes-after.
-        ChordLayout::repositionGraceNotesAfter(&s, ctx.ntracks());
+        ChordLayout::repositionGraceNotesAfter(&s, ctx.dom().ntracks());
         for (EngravingItem* e : s.elist()) {
             if (!e) {
                 continue;
