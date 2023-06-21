@@ -83,7 +83,7 @@ void VstAudioClient::setVolumeGain(const audio::gain_t newVolumeGain)
     m_volumeGain = newVolumeGain;
 }
 
-audio::samples_t VstAudioClient::process(float* output, samples_t samplesPerChannel)
+audio::samples_t VstAudioClient::process(float* output, size_t bufferSize, samples_t samplesPerChannel)
 {
     IAudioProcessorPtr processor = pluginProcessor();
     if (!processor || !output) {
@@ -91,6 +91,10 @@ audio::samples_t VstAudioClient::process(float* output, samples_t samplesPerChan
     }
 
     if (!m_isActive) {
+        return 0;
+    }
+
+    IF_ASSERT_FAILED(bufferSize >= samplesPerChannel * m_audioChannelsCount) {
         return 0;
     }
 

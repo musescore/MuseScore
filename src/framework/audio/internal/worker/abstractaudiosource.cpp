@@ -38,7 +38,8 @@ void AbstractAudioSource::setIsActive(bool isActive)
     m_isActive = isActive;
 }
 
-mu::async::Channel<unsigned int> AbstractAudioSource::audioChannelsCountChanged() const
+bool AbstractAudioSource::setAudioChannelsCount(unsigned int /*channels*/)
 {
-    return m_streamsCountChanged;
+    // Default implementation does not allow changing channel count
+    return false;
 }

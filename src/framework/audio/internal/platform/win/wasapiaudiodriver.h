@@ -24,6 +24,7 @@
 #define MU_AUDIO_WASAPIAUDIODRIVER_H
 
 #include <memory>
+#include <mutex>
 
 #include "async/asyncable.h"
 
@@ -51,6 +52,7 @@ public:
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
     async::Notification outputDeviceBufferSizeChanged() const override;
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+    Spec activeSpec() const override;
     void resume() override;
     void suspend() override;
 
@@ -69,6 +71,9 @@ private:
     async::Notification m_outputDeviceChanged;
     async::Notification m_availableOutputDevicesChanged;
     async::Notification m_outputDeviceBufferSizeChanged;
+
+    // Guards m_deviceId
+    mutable std::recursive_mutex m_mutex;
 
     Spec m_desiredSpec;
     Spec m_activeSpec;

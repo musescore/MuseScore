@@ -51,8 +51,6 @@ public:
     RetVal<MixerChannelPtr> addAuxChannel(const TrackId trackId);
     Ret removeChannel(const TrackId trackId);
 
-    void setAudioChannelsCount(const audioch_t count);
-
     void addClock(IClockPtr clock);
     void removeClock(IClockPtr clock);
 
@@ -66,15 +64,28 @@ public:
     // IAudioSource
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
-    samples_t process(float* outBuffer, samples_t samplesPerChannel) override;
+    bool setAudioChannelsCount(unsigned int channels) override;
+
+    samples_t process(float* outBuffer, size_t bufferSize, samples_t samplesPerChannel) override;
     void setIsActive(bool arg) override;
 
 private:
-    void mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount, gain_t signalAmount = 1.f);
+    template<typename T>
+    struct BufferViewT
+    {
+        T* const data;
+        const size_t size;
+        const audioch_t channels;
+    };
+    using BufferView = BufferViewT<float>;
+    using ConstBufferView = BufferViewT<const float>;
+
+    void mixOutputFromChannel(BufferView outBuffer, ConstBufferView inBuffer, unsigned int samplesCount, gain_t signalAmount = 1.f);
     void prepareAuxBuffers(size_t outBufferSize);
-    void writeTrackToAuxBuffers(const AuxSendsParams& auxSends, const float* trackBuffer, samples_t samplesPerChannel);
-    void processAuxChannels(float* buffer, samples_t samplesPerChannel);
-    void completeOutput(float* buffer, samples_t samplesPerChannel);
+    void writeTrackToAuxBuffers(const AuxSendsParams& auxSends, ConstBufferView trackBuffer, samples_t samplesPerChannel);
+    void processAuxChannels(BufferView buffer, samples_t samplesPerChannel);
+
+    void completeOutput(BufferView buffer, samples_t samplesPerChannel);
     void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
 
     std::vector<float> m_writeCacheBuff;

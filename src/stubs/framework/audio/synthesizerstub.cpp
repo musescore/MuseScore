@@ -39,12 +39,12 @@ unsigned int SynthesizerStub::audioChannelsCount() const
     return 2;
 }
 
-mu::async::Channel<unsigned int> SynthesizerStub::audioChannelsCountChanged() const
+bool SynthesizerStub::setAudioChannelsCount(unsigned int /*channels*/)
 {
-    return async::Channel<unsigned int>();
+    return false;
 }
 
-samples_t SynthesizerStub::process(float*, samples_t)
+samples_t SynthesizerStub::process(float*, size_t, samples_t)
 {
     return 0;
 }

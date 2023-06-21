@@ -95,10 +95,10 @@ bool WebAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
     web::context = AudioContext.new_();
     unsigned int sampleRate = web::context["sampleRate"].as<int>();
-    *activeSpec = spec;
-    activeSpec->format = Format::AudioF32;
-    activeSpec->sampleRate = sampleRate;
-    web::format = activeSpec;
+    m_activeSpec = spec;
+    m_activeSpec.format = Format::AudioF32;
+    m_activeSpec.sampleRate = sampleRate;
+    web::format = &m_activeSpec;
 
     auto audioNode = web::context.call<val>("createScriptProcessor", spec.samples, 0, spec.channels);
     if (!audioNode.as<bool>()) {
@@ -147,6 +147,11 @@ mu::async::Notification WebAudioDriver::availableOutputDevicesChanged() const
 {
     NOT_SUPPORTED;
     return mu::async::Notification();
+}
+
+IAudioDriver::Spec WebAudioDriver::activeSpec() const
+{
+    return m_activeSpec;
 }
 
 void WebAudioDriver::resume()

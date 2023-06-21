@@ -171,12 +171,12 @@ unsigned int VstSynthesiser::audioChannelsCount() const
     return config()->audioChannelsCount();
 }
 
-async::Channel<unsigned int> VstSynthesiser::audioChannelsCountChanged() const
+bool VstSynthesiser::setAudioChannelsCount(unsigned int /*channels*/)
 {
-    return m_streamsCountChanged;
+    return false;
 }
 
-audio::samples_t VstSynthesiser::process(float* buffer, audio::samples_t samplesPerChannel)
+audio::samples_t VstSynthesiser::process(float* buffer, size_t bufferSize, audio::samples_t samplesPerChannel)
 {
     if (!buffer) {
         return 0;
@@ -197,5 +197,5 @@ audio::samples_t VstSynthesiser::process(float* buffer, audio::samples_t samples
         }
     }
 
-    return m_vstAudioClient->process(buffer, samplesPerChannel);
+    return m_vstAudioClient->process(buffer, bufferSize, samplesPerChannel);
 }

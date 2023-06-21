@@ -24,7 +24,7 @@ public:
     void setSampleRate(unsigned int sampleRate) override;
     bool active() const override;
     void setActive(bool active) override;
-    void process(float* buffer, unsigned int sampleCount) override;
+    void process(float* buffer, size_t bufferSize, unsigned int sampleCount) override;
 
 private:
     bool m_inited = false;

@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "sinesource.h"
+
+#include "log.h"
 #include <cmath>
 
 using namespace mu::audio;
@@ -33,9 +35,13 @@ unsigned int SineSource::audioChannelsCount() const
     return 2;
 }
 
-samples_t SineSource::process(float* buffer, samples_t samplesPerChannel)
+samples_t SineSource::process(float* buffer, size_t bufferSize, samples_t samplesPerChannel)
 {
     auto streams = audioChannelsCount();
+    IF_ASSERT_FAILED(bufferSize >= streams * samplesPerChannel) {
+        return 0;
+    }
+
     for (unsigned int i = 0; i < samplesPerChannel; ++i) {
         m_phase += m_frequency / m_sampleRate * 2 * M_PI;
         if (m_phase > 2 * M_PI) {

@@ -52,7 +52,7 @@ public:
     {
         unsigned int sampleRate;      // frequency -- samples per second
         Format format;                // Audio data format
-        uint8_t channels;             // Number of channels: 1 mono, 2 stereo
+        uint8_t channels;             // Number of channels: 1 mono, 2 stereo, 6 surround
         uint16_t samples;             // Audio buffer size in sample FRAMES (total samples divided by channel count)
         Callback callback;            // Callback that feeds the audio device
         void* userdata;               // Userdata passed to callback (ignored for NULL callbacks).
@@ -78,6 +78,7 @@ public:
     virtual async::Notification outputDeviceBufferSizeChanged() const = 0;
 
     virtual std::vector<unsigned int> availableOutputDeviceBufferSizes() const = 0;
+    virtual Spec activeSpec() const = 0;
 
     virtual void resume() = 0;
     virtual void suspend() = 0;

@@ -40,7 +40,7 @@ public:
     virtual bool active() const = 0;
     virtual void setActive(bool active) = 0;
 
-    virtual void process(float* buffer, unsigned int sampleCount) = 0;
+    virtual void process(float* buffer, size_t bufferSize, unsigned int sampleCount) = 0;
 };
 
 using IFxProcessorPtr = std::shared_ptr<IFxProcessor>;

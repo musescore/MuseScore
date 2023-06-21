@@ -71,6 +71,7 @@ WasapiAudioDriver::WasapiAudioDriver()
 
         if (m_deviceId == DEFAULT_DEVICE_ID) {
             reopen();
+            m_outputDeviceChanged.notify();
         }
     });
 }
@@ -86,9 +87,12 @@ std::string WasapiAudioDriver::name() const
 
 bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
+    std::lock_guard lock(m_mutex);
     if (!s_data.wasapiClient.get()) {
         s_data.wasapiClient
             = make_self<WasapiAudioClient>(s_data.clientStartedEvent, s_data.clientFailedToStartEvent, s_data.clientStoppedEvent);
+        // Client is available now, cannot get output devices before this
+        m_availableOutputDevicesChanged.notify();
     }
 
     m_desiredSpec = spec;
@@ -136,6 +140,7 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
     m_activeSpec = m_desiredSpec;
     m_activeSpec.sampleRate = s_data.wasapiClient->sampleRate();
+    m_activeSpec.channels = s_data.wasapiClient->channelCount();
     *activeSpec = m_activeSpec;
 
     m_isOpened = true;
@@ -164,11 +169,13 @@ bool WasapiAudioDriver::isOpened() const
 
 AudioDeviceID WasapiAudioDriver::outputDevice() const
 {
+    std::lock_guard lock(m_mutex);
     return m_deviceId;
 }
 
 bool WasapiAudioDriver::selectOutputDevice(const AudioDeviceID& id)
 {
+    std::lock_guard lock(m_mutex);
     bool result = true;
 
     if (m_deviceId == id) {
@@ -202,6 +209,7 @@ mu::async::Notification WasapiAudioDriver::outputDeviceChanged() const
 AudioDeviceList WasapiAudioDriver::availableOutputDevices() const
 {
     using namespace Windows::Devices::Enumeration;
+    using namespace winrt::Windows::Foundation;
     using namespace winrt::Windows::Media::Devices;
 
     AudioDeviceList result;
@@ -274,6 +282,11 @@ std::vector<unsigned int> WasapiAudioDriver::availableOutputDeviceBufferSizes() 
     }
 
     return result;
+}
+
+IAudioDriver::Spec WasapiAudioDriver::activeSpec() const
+{
+    return m_activeSpec;
 }
 
 void WasapiAudioDriver::resume()

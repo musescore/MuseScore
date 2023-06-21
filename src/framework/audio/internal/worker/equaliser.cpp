@@ -43,8 +43,11 @@ void Equaliser::setActive(bool active)
     m_active = active;
 }
 
-void Equaliser::process(float* buffer, unsigned int sampleCount)
+void Equaliser::process(float* buffer, size_t bufferSize, unsigned int sampleCount)
 {
+    IF_ASSERT_FAILED(bufferSize >= sampleCount) {
+        return;
+    }
     for (unsigned int i = 0; i < sampleCount; ++i) {
         m_x[2] = m_x[1];
         m_x[1] = m_x[0];

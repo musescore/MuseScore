@@ -301,6 +301,11 @@ std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceBufferSizes() c
     return result;
 }
 
+IAudioDriver::Spec LinuxAudioDriver::activeSpec() const
+{
+    return s_format;
+}
+
 void LinuxAudioDriver::resume()
 {
 }

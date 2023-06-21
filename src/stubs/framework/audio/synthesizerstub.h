@@ -34,9 +34,9 @@ public:
 
     unsigned int audioChannelsCount() const override;
 
-    async::Channel<unsigned int> audioChannelsCountChanged() const override;
+    bool setAudioChannelsCount(unsigned int channels) override;
 
-    samples_t process(float* buffer, samples_t samplesPerChannel) override;
+    samples_t process(float* buffer, size_t bufferSize, samples_t samplesPerChannel) override;
 
     std::string name() const override;
     AudioSourceType type() const override;

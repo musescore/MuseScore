@@ -125,6 +125,7 @@ void AudioEngine::setAudioChannelsCount(const audioch_t count)
     }
 
     m_mixer->setAudioChannelsCount(count);
+    m_buffer->setAudioChannelsCount(count);
 }
 
 RenderMode AudioEngine::mode() const

@@ -21,6 +21,8 @@
  */
 #include "noisesource.h"
 #include <random>
+
+#include "log.h"
 using namespace mu::audio;
 
 NoiseSource::NoiseSource()
@@ -37,9 +39,12 @@ unsigned int NoiseSource::audioChannelsCount() const
     return 1;
 }
 
-samples_t NoiseSource::process(float* buffer, samples_t samplesPerChannel)
+samples_t NoiseSource::process(float* buffer, size_t bufferSize, samples_t samplesPerChannel)
 {
     auto streams = audioChannelsCount();
+    IF_ASSERT_FAILED(bufferSize >= streams * samplesPerChannel) {
+        return 0;
+    }
     std::uniform_real_distribution<float> distribution{ -1.f, 1.f };
     std::random_device randomDevice{};
     std::mt19937 gen{ randomDevice() };

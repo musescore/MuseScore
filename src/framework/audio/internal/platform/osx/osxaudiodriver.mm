@@ -358,6 +358,11 @@ std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() con
     return result;
 }
 
+IAudioDriver::Spec OSXAudioDriver::activeSpec() const
+{
+    return m_data->format;
+}
+
 bool OSXAudioDriver::audioQueueSetDeviceName(const AudioDeviceID& deviceId)
 {
     if (deviceId.empty() || deviceId == DEFAULT_DEVICE_ID) {
