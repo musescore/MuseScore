@@ -39,9 +39,9 @@
 using namespace mu::engraving;
 using namespace mu::engraving::layout::v0;
 
-void Layout::layoutRange(Score* score, const LayoutOptions& options, const Fraction& st, const Fraction& et)
+void Layout::layoutRange(Score* score, const Fraction& st, const Fraction& et)
 {
-    ScoreLayout::layoutRange(score, options, st, et);
+    ScoreLayout::layoutRange(score, st, et);
 }
 
 void Layout::doLayoutItem(EngravingItem* item)

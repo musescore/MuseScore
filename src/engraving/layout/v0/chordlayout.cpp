@@ -89,7 +89,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     double _spatium         = item->spatium();
     double mag_             = item->staff() ? item->staff()->staffMag(item) : 1.0;      // palette elements do not have a staff
-    double dotNoteDistance  = ctx.style().styleMM(Sid::dotNoteDistance) * mag_;
+    double dotNoteDistance  = ctx.conf().styleMM(Sid::dotNoteDistance) * mag_;
 
     double chordX           = (item->_noteType == NoteType::NORMAL) ? item->ipos().x() : 0.0;
 
@@ -154,7 +154,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             double x = accidental->pos().x() + note->pos().x() + chordX;
             // distance from accidental to note already taken into account
             // but here perhaps we create more padding in *front* of accidental?
-            x -= ctx.style().styleMM(Sid::accidentalDistance) * mag_;
+            x -= ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
             lll = std::max(lll, -x);
         }
 
@@ -180,13 +180,13 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         ArpeggioLayout::computeHeight(item->_arpeggio);
         TLayout::layout(item->_arpeggio, ctx);
 
-        double arpeggioNoteDistance = ctx.style().styleMM(Sid::ArpeggioNoteDistance) * mag_;
+        double arpeggioNoteDistance = ctx.conf().styleMM(Sid::ArpeggioNoteDistance) * mag_;
 
         double gapSize = arpeggioNoteDistance;
 
         if (chordAccidentals.size()) {
-            double arpeggioAccidentalDistance = ctx.style().styleMM(Sid::ArpeggioAccidentalDistance) * mag_;
-            double accidentalDistance = ctx.style().styleMM(Sid::accidentalDistance) * mag_;
+            double arpeggioAccidentalDistance = ctx.conf().styleMM(Sid::ArpeggioAccidentalDistance) * mag_;
+            double accidentalDistance = ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
             gapSize = arpeggioAccidentalDistance - accidentalDistance;
             gapSize -= item->_arpeggio->insetDistance(chordAccidentals, mag_);
         }
@@ -207,7 +207,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     if (item->dots()) {
         double x = item->dotPosX() + dotNoteDistance
-                   + double(item->dots() - 1) * ctx.style().styleMM(Sid::dotDotDistance) * mag_;
+                   + double(item->dots() - 1) * ctx.conf().styleMM(Sid::dotDotDistance) * mag_;
         x += item->symWidth(SymId::augmentationDot);
         rrr = std::max(rrr, x);
     }
@@ -278,9 +278,9 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
 {
     double _spatium          = item->spatium();
     double mag_ = item->staff() ? item->staff()->staffMag(item) : 1.0;    // palette elements do not have a staff
-    double dotNoteDistance = ctx.style().styleMM(Sid::dotNoteDistance) * mag_;
-    double minNoteDistance = ctx.style().styleMM(Sid::minNoteDistance) * mag_;
-    double minTieLength = ctx.style().styleMM(Sid::MinTieLength) * mag_;
+    double dotNoteDistance = ctx.conf().styleMM(Sid::dotNoteDistance) * mag_;
+    double minNoteDistance = ctx.conf().styleMM(Sid::minNoteDistance) * mag_;
+    double minTieLength = ctx.conf().styleMM(Sid::MinTieLength) * mag_;
 
     for (Chord* c : item->_graceNotes) {
         layoutTablature(c, ctx);
@@ -556,7 +556,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         // if stems are through staff, use dot position computed above on fret mark widths
         else {
             x = item->dotPosX() + dotNoteDistance
-                + (item->dots() - 1) * ctx.style().styleS(Sid::dotDotDistance).val() * _spatium;
+                + (item->dots() - 1) * ctx.conf().styleS(Sid::dotDotDistance).val() * _spatium;
         }
         x += item->symWidth(SymId::augmentationDot);
         rrr = std::max(rrr, x);
@@ -565,7 +565,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     item->_spaceLw = lll;
     item->_spaceRw = rrr;
 
-    double graceMag = ctx.style().styleD(Sid::graceNoteMag);
+    double graceMag = ctx.conf().styleD(Sid::graceNoteMag);
 
     std::vector<Chord*> graceNotesBefore = item->Chord::graceNotesBefore();
     size_t nb = graceNotesBefore.size();
@@ -697,12 +697,12 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
     }
     const Staff* st = item->staff();
     const StaffType* staffType = st->staffTypeForElement(item);
-    double mag            = (staffType->isSmall() ? ctx.style().styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
-    double _spatium       = ctx.spatium() * mag;
+    double mag            = (staffType->isSmall() ? ctx.conf().styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
+    double _spatium       = ctx.conf().spatium() * mag;
     double _lineDist       = _spatium * staffType->lineDistance().val() / 2;
-    const double minDist = ctx.style().styleMM(Sid::articulationMinDistance);
-    const ArticulationStemSideAlign articulationHAlign = ctx.style().styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
-    const bool keepArticsTogether = ctx.style().styleB(Sid::articulationKeepTogether);
+    const double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
+    const ArticulationStemSideAlign articulationHAlign = ctx.conf().styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
+    const bool keepArticsTogether = ctx.conf().styleB(Sid::articulationKeepTogether);
     int numCloseArtics = 0;
     bool hasStaffArticsUp = false;
     bool hasStaffArticsDown = false;
@@ -794,9 +794,9 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     y = line * _lineDist;
                     y -= a->height() * .5;
                 } else if (line == lines) {
-                    y = ctx.style().styleMM(Sid::propertyDistanceStem) + lines * _lineDist;
+                    y = ctx.conf().styleMM(Sid::propertyDistanceStem) + lines * _lineDist;
                 } else {
-                    y += ctx.style().styleMM(Sid::propertyDistanceStem);
+                    y += ctx.conf().styleMM(Sid::propertyDistanceStem);
                 }
             } else {
                 x = item->centerX();
@@ -810,7 +810,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     y = ((line & ~1) + 3) * _lineDist;
                     y -= a->height() * .5;
                 } else {
-                    y = item->downPos() + 0.5 * item->downNote()->headHeight() + ctx.style().styleMM(Sid::propertyDistanceHead);
+                    y = item->downPos() + 0.5 * item->downNote()->headHeight() + ctx.conf().styleMM(Sid::propertyDistanceHead);
                 }
             }
             if (prevArticulation && (prevArticulation->up() == a->up())) {
@@ -838,9 +838,9 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     y = line * _lineDist;
                     y += a->height() * .5;
                 } else if (line == 0) {
-                    y = -ctx.style().styleMM(Sid::propertyDistanceStem);
+                    y = -ctx.conf().styleMM(Sid::propertyDistanceStem);
                 } else {
-                    y -= ctx.style().styleMM(Sid::propertyDistanceStem);
+                    y -= ctx.conf().styleMM(Sid::propertyDistanceStem);
                 }
             } else {
                 x = item->centerX();
@@ -854,7 +854,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     y = (((line + 1) & ~1) - 3) * _lineDist;
                     y += a->height() * .5;
                 } else {
-                    y = item->upPos() - 0.5 * item->downNote()->headHeight() - ctx.style().styleMM(Sid::propertyDistanceHead);
+                    y = item->upPos() - 0.5 * item->downNote()->headHeight() - ctx.conf().styleMM(Sid::propertyDistanceHead);
                 }
             }
             if (prevArticulation && (prevArticulation->up() == a->up())) {
@@ -880,7 +880,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
 
 void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool layoutOnCrossBeamSide)
 {
-    ArticulationStemSideAlign articulationHAlign = ctx.style().styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
+    ArticulationStemSideAlign articulationHAlign = ctx.conf().styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
     for (Chord* gc : item->graceNotes()) {
         layoutArticulations2(gc, ctx);
     }
@@ -909,10 +909,10 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
     }
 
     double stacAccentKern = 0.2 * item->spatium();
-    double minDist = ctx.style().styleMM(Sid::articulationMinDistance);
-    double staffDist = ctx.style().styleMM(Sid::propertyDistance);
-    double stemDist = ctx.style().styleMM(Sid::propertyDistanceStem);
-    double noteDist = ctx.style().styleMM(Sid::propertyDistanceHead);
+    double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
+    double staffDist = ctx.conf().styleMM(Sid::propertyDistance);
+    double stemDist = ctx.conf().styleMM(Sid::propertyDistanceStem);
+    double noteDist = ctx.conf().styleMM(Sid::propertyDistanceHead);
 
     double chordTopY = item->upPos() - 0.5 * item->upNote()->headHeight();      // note position of highest note
     double chordBotY = item->downPos() + 0.5 * item->upNote()->headHeight();    // note position of lowest note
@@ -1030,7 +1030,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             //double w = std::min(r.width(), width());
             //r.translate((r.width() - w) * 0.5, 0.0);
             //r.setWidth(w);
-            if (!ctx.lineMode()) {
+            if (!ctx.conf().isLineMode()) {
                 s->staffShape(item->staffIdx()).add(sh);
             }
             sh.translate(s->pos() + m->pos());
@@ -1066,7 +1066,7 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
         Shape aShape = a->shape().translate(a->pos() + item->pos() + s->pos() + m->pos());
         Shape sShape = ss->shape().translate(ss->pos());
         if (aShape.intersects(sShape)) {
-            double d = ctx.style().styleS(Sid::articulationMinDistance).val() * item->spatium();
+            double d = ctx.conf().styleS(Sid::articulationMinDistance).val() * item->spatium();
             d += slur->up() ? std::max(aShape.minVerticalDistance(sShape), 0.0) : std::max(sShape.minVerticalDistance(aShape), 0.0);
             d *= slur->up() ? -1 : 1;
             for (auto iter2 = iter; iter2 != item->_articulations.end(); ++iter2) {
@@ -1414,7 +1414,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
     std::vector<Note*> downStemNotes;
     int upVoices       = 0;
     int downVoices     = 0;
-    double nominalWidth = ctx.noteHeadWidth() * staff->staffMag(tick);
+    double nominalWidth = ctx.conf().noteHeadWidth() * staff->staffMag(tick);
     double maxUpWidth   = 0.0;
     double maxDownWidth = 0.0;
     double maxUpMag     = 0.0;
@@ -1444,7 +1444,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                     hasGraceBefore = true;
                 }
                 layoutChords2(c->notes(), c->up(), ctx); // layout grace note noteheads
-                layoutChords3(ctx.style(), { c }, c->notes(), staff, ctx); // layout grace note chords
+                layoutChords3(ctx.conf().style(), { c }, c->notes(), staff, ctx); // layout grace note chords
             }
             if (chord->up()) {
                 ++upVoices;
@@ -1594,7 +1594,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                                && bottomUpNote->chord()->durationType().headType() != NoteHeadType::HEAD_BREVIS) {
                         // stemless notes should be aligned as is they were stemmed
                         // (except in case of brevis, cause the notehead has the side bars)
-                        downOffset -= ctx.style().styleMM(Sid::stemWidth) * topDownNote->chord()->mag();
+                        downOffset -= ctx.conf().styleMM(Sid::stemWidth) * topDownNote->chord()->mag();
                     }
                 }
             } else if (separation < 1) {
@@ -1795,10 +1795,10 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                 }
                 double dotWidth = segment->symWidth(SymId::augmentationDot);
                 // first dot
-                dotAdjust = ctx.style().styleMM(Sid::dotNoteDistance) + dotWidth;
+                dotAdjust = ctx.conf().styleMM(Sid::dotNoteDistance) + dotWidth;
                 // additional dots
                 if (dots > 1) {
-                    dotAdjust += ctx.style().styleMM(Sid::dotDotDistance).val() * (dots - 1);
+                    dotAdjust += ctx.conf().styleMM(Sid::dotDotDistance).val() * (dots - 1);
                 }
                 dotAdjust *= mag;
                 // only by amount over threshold
@@ -1850,7 +1850,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             std::sort(notes.begin(), notes.end(),
                       [](Note* n1, const Note* n2) ->bool { return n1->line() > n2->line(); });
         }
-        layoutChords3(ctx.style(), chords, notes, staff, ctx);
+        layoutChords3(ctx.conf().style(), chords, notes, staff, ctx);
     }
 
     layoutSegmentElements(segment, partStartTrack, partEndTrack, staffIdx, ctx);
@@ -3054,8 +3054,8 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     if (dots && !item->dots().empty()) {
         // if chords have notes with different mag, dots must still  align
         double correctMag = item->chord()->notes().size() > 1 ? item->chord()->mag() : item->mag();
-        double d  = ctx.point(ctx.style().styleS(Sid::dotNoteDistance)) * correctMag;
-        double dd = ctx.point(ctx.style().styleS(Sid::dotDotDistance)) * correctMag;
+        double d  = ctx.conf().point(ctx.conf().styleS(Sid::dotNoteDistance)) * correctMag;
+        double dd = ctx.conf().point(ctx.conf().styleS(Sid::dotDotDistance)) * correctMag;
         double x  = item->chord()->dotPosX() - item->pos().x() - item->chord()->pos().x();
         // in case of dots with different size, center-align them
         if (item->mag() != item->chord()->mag() && item->chord()->notes().size() > 1) {
@@ -3108,7 +3108,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             double left = noteShape.left();
             Symbol* sym = toSymbol(e);
             TLayout::layoutItem(e, ctx);
-            double parenthesisPadding = ctx.style().styleMM(Sid::bracketedAccidentalPadding) * item->mag();
+            double parenthesisPadding = ctx.conf().styleMM(Sid::bracketedAccidentalPadding) * item->mag();
             if (sym->sym() == SymId::noteheadParenthesisRight) {
                 if (isTabStaff) {
                     const Staff* st = item->staff();

@@ -23,7 +23,6 @@
 #define MU_ENGRAVING_LAYOUT_H
 
 #include "../ilayout.h"
-#include "../layoutoptions.h"
 
 namespace mu::engraving {
 class Score;
@@ -35,7 +34,7 @@ class Layout : public ILayout
 public:
 
     // Layout Score
-    void layoutRange(Score* score, const LayoutOptions& options, const Fraction& st, const Fraction& et) override;
+    void layoutRange(Score* score, const Fraction& st, const Fraction& et) override;
 
     // Layout Elements on Edit
     void layoutOnEdit(Arpeggio* item) override;

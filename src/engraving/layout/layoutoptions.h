@@ -39,7 +39,7 @@ struct LayoutOptions
 {
     LayoutMode mode = LayoutMode::PAGE;
 
-    bool showVBox = true;
+    bool isShowVBox = true;
 
     bool isMode(LayoutMode m) const { return mode == m; }
     bool isLinearMode() const { return mode == LayoutMode::LINE || mode == LayoutMode::HORIZONTAL_FIXED; }

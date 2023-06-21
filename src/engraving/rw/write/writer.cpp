@@ -117,10 +117,10 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
         }
     }
 
-    if (score->lineMode()) {
+    if (score->isLayoutMode(LayoutMode::LINE)) {
         xml.tag("layoutMode", "line");
     }
-    if (score->systemMode()) {
+    if (score->isLayoutMode(LayoutMode::SYSTEM)) {
         xml.tag("layoutMode", "system");
     }
 

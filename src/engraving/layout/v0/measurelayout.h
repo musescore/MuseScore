@@ -41,7 +41,7 @@ public:
 
     static void layout2(Measure* item, LayoutContext& ctx);
 
-    static void getNextMeasure(const LayoutOptions& options, LayoutContext& ctx);
+    static void getNextMeasure(LayoutContext& ctx);
     static void computePreSpacingItems(Measure* m, LayoutContext& ctx);
 
     static void layoutStaffLines(Measure* m, LayoutContext& ctx);
@@ -65,8 +65,7 @@ public:
 
 private:
 
-    static void createMMRest(const LayoutOptions& options, LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure,
-                             const Fraction& len);
+    static void createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);
 
     static int adjustMeasureNo(MeasureBase* m, LayoutContext& ctx);
 

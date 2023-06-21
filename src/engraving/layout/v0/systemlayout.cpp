@@ -72,7 +72,7 @@ using namespace mu::engraving::layout::v0;
 //   collectSystem
 //---------------------------------------------------------
 
-System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext& ctx)
+System* SystemLayout::collectSystem(LayoutContext& ctx)
 {
     TRACEFUNC;
 
@@ -87,7 +87,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
 
     if (measure) {
         const LayoutBreak* layoutBreak = measure->sectionBreakElement();
-        ctx.mutState().setFirstSystem(measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT));
+        ctx.mutState().setFirstSystem(measure->sectionBreak() && !ctx.conf().isFloatMode());
         ctx.mutState().setFirstSystemIndent(ctx.state().firstSystem()
                                             && ctx.conf().firstSystemIndent()
                                             && layoutBreak->firstSystemIndentation());
@@ -102,7 +102,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
     double layoutSystemMinWidth = 0.0;
     bool firstMeasure = true;
     bool createHeader = false;
-    double targetSystemWidth = ctx.style().styleD(Sid::pagePrintableWidth) * DPI;
+    double targetSystemWidth = ctx.conf().styleD(Sid::pagePrintableWidth) * DPI;
     system->setWidth(targetSystemWidth);
 
     // save state of measure
@@ -210,7 +210,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
             createHeader = toHBox(ctx.mutState().curMeasure())->createSystemHeader();
         } else {
             // vbox:
-            MeasureLayout::getNextMeasure(options, ctx);
+            MeasureLayout::getNextMeasure(ctx);
             SystemLayout::layout2(system, ctx);         // compute staff distances
             return system;
         }
@@ -304,7 +304,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
 
         const MeasureBase* mb = ctx.state().curMeasure();
         bool lineBreak  = false;
-        switch (options.mode) {
+        switch (ctx.conf().layoutMode()) {
         case LayoutMode::PAGE:
         case LayoutMode::SYSTEM:
             lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak();
@@ -319,7 +319,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
         // preserve state of next measure (which is about to become current measure)
         if (ctx.state().nextMeasure()) {
             MeasureBase* nmb = ctx.mutState().nextMeasure();
-            if (nmb->isMeasure() && ctx.style().styleB(Sid::createMultiMeasureRests)) {
+            if (nmb->isMeasure() && ctx.conf().styleB(Sid::createMultiMeasureRests)) {
                 Measure* nm = toMeasure(nmb);
                 if (nm->hasMMRest()) {
                     nmb = nm->mmRest();
@@ -341,7 +341,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
             }
         }
 
-        MeasureLayout::getNextMeasure(options, ctx);
+        MeasureLayout::getNextMeasure(ctx);
 
         curSysWidth += ww;
 
@@ -372,7 +372,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                     }
                 }
                 const MeasureBase* pbmb = ctx.state().prevMeasure()->findPotentialSectionBreak();
-                bool localFirstSystem = pbmb->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
+                bool localFirstSystem = pbmb->sectionBreak() && !ctx.conf().isMode(LayoutMode::FLOAT);
                 MeasureBase* nm = breakMeasure ? breakMeasure : m;
                 if (curHeader) {
                     MeasureLayout::addSystemHeader(m, localFirstSystem, ctx);
@@ -450,7 +450,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
     // JUSTIFY SYSTEM
     // Do not justify last system of a section if curSysWidth is < lastSystemFillLimit
     if (!((ctx.state().curMeasure() == nullptr || (lm && lm->sectionBreak()))
-          && ((curSysWidth / targetSystemWidth) < ctx.style().styleD(Sid::lastSystemFillLimit)))
+          && ((curSysWidth / targetSystemWidth) < ctx.conf().styleD(Sid::lastSystemFillLimit)))
         && !MScore::noHorizontalStretch) { // debug feature
         justifySystem(system, curSysWidth, targetSystemWidth);
     }
@@ -486,7 +486,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
     }
     system->setWidth(pos.x());
 
-    layoutSystemElements(options, ctx, system);
+    layoutSystemElements(system, ctx);
     SystemLayout::layout2(system, ctx);     // compute staff distances
     for (MeasureBase* mb : system->measures()) {
         MeasureLayout::layoutCrossStaff(mb, ctx);
@@ -502,7 +502,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
 
     if (measure) {
         const LayoutBreak* layoutBreak = measure->sectionBreakElement();
-        ctx.mutState().setFirstSystem(measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT));
+        ctx.mutState().setFirstSystem(measure->sectionBreak() && !ctx.conf().isMode(LayoutMode::FLOAT));
         ctx.mutState().setFirstSystemIndent(ctx.state().firstSystem()
                                             && ctx.conf().firstSystemIndent()
                                             && layoutBreak->firstSystemIndentation());
@@ -595,9 +595,9 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
         Staff::HideMode hideMode = staff->hideWhenEmpty();
 
         if (hideMode == Staff::HideMode::ALWAYS
-            || (ctx.style().styleB(Sid::hideEmptyStaves)
+            || (ctx.conf().styleB(Sid::hideEmptyStaves)
                 && (staves > 1)
-                && !(isFirstSystem && ctx.style().styleB(Sid::dontHideStavesInFirstSystem))
+                && !(isFirstSystem && ctx.conf().styleB(Sid::dontHideStavesInFirstSystem))
                 && hideMode != Staff::HideMode::NEVER)) {
             bool hideStaff = true;
             for (MeasureBase* m : system->measures()) {
@@ -692,7 +692,7 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
     }
 }
 
-void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutContext& ctx, System* system)
+void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 {
     if (ctx.dom().nstaves() == 0) {
         return;
@@ -713,7 +713,7 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
         // in continuous view, entire score is one system
         // but we only need to process the range
-        if (options.isLinearMode() && (m->tick() < ctx.state().startTick() || m->tick() > ctx.state().endTick())) {
+        if (ctx.conf().isLinearMode() && (m->tick() < ctx.state().startTick() || m->tick() > ctx.state().endTick())) {
             continue;
         }
         for (Segment* s = m->first(); s; s = s->next()) {
@@ -767,7 +767,7 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
             MeasureNumber* mno = m->noText(staffIdx);
             MMRestRange* mmrr  = m->mmRangeText(staffIdx);
             // no need to build skyline outside of range in continuous view
-            if (options.isLinearMode() && (m->tick() < ctx.state().startTick() || m->tick() > ctx.state().endTick())) {
+            if (ctx.conf().isLinearMode() && (m->tick() < ctx.state().startTick() || m->tick() > ctx.state().endTick())) {
                 continue;
             }
             if (mno && mno->addToSkyline()) {
@@ -1835,7 +1835,7 @@ double SystemLayout::totalBracketOffset(LayoutContext& ctx)
             size_t span = lastStaff - firstStaff + 1;
             if (span > 1
                 || (bi->bracketSpan() == span)
-                || (span == 1 && ctx.style().styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden))) {
+                || (span == 1 && ctx.conf().styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden))) {
                 Bracket* dummyBr = Factory::createBracket(ctx.mutDom().dummyParent(), /*isAccessibleEnabled=*/ false);
                 dummyBr->setBracketItem(bi);
                 dummyBr->setStaffSpan(firstStaff, lastStaff);
@@ -2140,7 +2140,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             // it does not, however, shrink when possible - only by trigger a full layout
             // (such as by toggling to page view and back)
             double d = ss->skyline().minDistance(system->System::staff(si2)->skyline());
-            if (system->score()->lineMode()) {
+            if (ctx.conf().isLineMode()) {
                 double previousDist = ss->continuousDist();
                 if (d > previousDist) {
                     ss->setContinuousDist(d);

@@ -40,7 +40,7 @@ public:
     ~CmdStateLocker() { m_score->cmdState().unlock(); }
 };
 
-void ScoreLayout::layoutRange(Score* score, const LayoutOptions& options, const Fraction& st, const Fraction& et)
+void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& et)
 {
     CmdStateLocker cmdStateLocker(score);
     LayoutContext ctx(score);
@@ -49,7 +49,7 @@ void ScoreLayout::layoutRange(Score* score, const LayoutOptions& options, const 
     Fraction etick(et);
     assert(!(stick == Fraction(-1, 1) && etick == Fraction(-1, 1)));
 
-    if (!score->last() || (options.isLinearMode() && !score->firstMeasure())) {
+    if (!score->last() || (ctx.conf().isLinearMode() && !score->firstMeasure())) {
         LOGD("empty score");
         DeleteAll(score->_systems);
         score->_systems.clear();
@@ -105,11 +105,11 @@ void ScoreLayout::layoutRange(Score* score, const LayoutOptions& options, const 
         m = toMeasure(m)->mmRest();
     }
 
-    if (options.isLinearMode()) {
+    if (ctx.conf().isLinearMode()) {
         ctx.mutState().setPrevMeasure(nullptr);
         ctx.mutState().setNextMeasure(m);         //_showVBox ? first() : firstMeasure();
         ctx.mutState().setStartTick(m->tick());
-        layoutLinear(layoutAll, options, ctx);
+        layoutLinear(ctx, layoutAll);
         return;
     }
 
@@ -125,7 +125,7 @@ void ScoreLayout::layoutRange(Score* score, const LayoutOptions& options, const 
         ctx.mutState().setSystemList(mu::mid(score->_systems, systemIndex));
 
         if (systemIndex == 0) {
-            ctx.mutState().setNextMeasure(options.showVBox ? score->first() : score->firstMeasure());
+            ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? score->first() : score->firstMeasure());
         } else {
             System* prevSystem = score->_systems[systemIndex - 1];
             ctx.mutState().setNextMeasure(prevSystem->measures().back()->next());
@@ -177,23 +177,23 @@ void ScoreLayout::layoutRange(Score* score, const LayoutOptions& options, const 
         DeleteAll(score->pages());
         score->pages().clear();
 
-        ctx.mutState().setNextMeasure(options.showVBox ? score->first() : score->firstMeasure());
+        ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? score->first() : score->firstMeasure());
     }
 
     ctx.mutState().setPrevMeasure(nullptr);
 
-    MeasureLayout::getNextMeasure(options, ctx);
-    ctx.mutState().setCurSystem(SystemLayout::collectSystem(options, ctx));
+    MeasureLayout::getNextMeasure(ctx);
+    ctx.mutState().setCurSystem(SystemLayout::collectSystem(ctx));
 
-    doLayout(options, ctx);
+    doLayout(ctx);
 }
 
-void ScoreLayout::doLayout(const LayoutOptions& options, LayoutContext& ctx)
+void ScoreLayout::doLayout(LayoutContext& ctx)
 {
     const MeasureBase* lmb = nullptr;
     do {
         PageLayout::getNextPage(ctx);
-        PageLayout::collectPage(options, ctx);
+        PageLayout::collectPage(ctx);
 
         if (ctx.state().page() && !ctx.state().page()->systems().empty()) {
             lmb = ctx.state().page()->systems().back()->measures().back();
@@ -232,13 +232,13 @@ void ScoreLayout::doLayout(const LayoutOptions& options, LayoutContext& ctx)
     ctx.mutDom().systems().insert(ctx.mutDom().systems().end(), ctx.state().systemList().begin(), ctx.state().systemList().end());
 }
 
-void ScoreLayout::layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& ctx)
+void ScoreLayout::layoutLinear(LayoutContext& ctx, bool layoutAll)
 {
     resetSystems(ctx, layoutAll);
 
-    collectLinearSystem(options, ctx);
+    collectLinearSystem(ctx);
 
-    layoutLinear(options, ctx);
+    layoutLinear(ctx);
 }
 
 //  in linear mode there is only one page
@@ -288,7 +288,7 @@ void ScoreLayout::resetSystems(LayoutContext& ctx, bool layoutAll)
 }
 
 // Append all measures to System. VBox is not included to System
-void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ctx)
+void ScoreLayout::collectLinearSystem(LayoutContext& ctx)
 {
     std::vector<int> visibleParts;
     for (size_t partIdx = 0; partIdx < ctx.dom().parts().size(); partIdx++) {
@@ -307,7 +307,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
     //utilizing in getNextMeasure()
     ctx.mutState().setNextMeasure(ctx.mutDom().first());
     ctx.mutState().setTick(Fraction(0, 1));
-    MeasureLayout::getNextMeasure(options, ctx);
+    MeasureLayout::getNextMeasure(ctx);
 
     static constexpr Fraction minTicks = Fraction(1, 16);
     static constexpr Fraction maxTicks = Fraction(4, 4);
@@ -320,7 +320,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
         double ww = 0.0;
         if (ctx.state().curMeasure()->isVBox() || ctx.state().curMeasure()->isTBox()) {
             ctx.mutState().curMeasure()->resetExplicitParent();
-            MeasureLayout::getNextMeasure(options, ctx);
+            MeasureLayout::getNextMeasure(ctx);
             continue;
         }
         system->appendMeasure(ctx.mutState().curMeasure());
@@ -348,7 +348,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
             }
             if (m->tick() >= ctx.state().startTick() && m->tick() <= ctx.state().endTick()) {
                 // for measures in range, do full layout
-                if (options.isMode(LayoutMode::HORIZONTAL_FIXED)) {
+                if (ctx.conf().isMode(LayoutMode::HORIZONTAL_FIXED)) {
                     MeasureLayout::createEndBarLines(m, true, ctx);
                     m->layoutSegmentsInPracticeMode(visibleParts);
                     ww = m->width();
@@ -392,17 +392,17 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
         }
         pos.rx() += ww;
 
-        MeasureLayout::getNextMeasure(options, ctx);
+        MeasureLayout::getNextMeasure(ctx);
     }
 
     system->setWidth(pos.x());
 }
 
-void ScoreLayout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
+void ScoreLayout::layoutLinear(LayoutContext& ctx)
 {
     System* system = ctx.mutDom().systems().front();
 
-    SystemLayout::layoutSystemElements(options, ctx, system);
+    SystemLayout::layoutSystemElements(system, ctx);
 
     SystemLayout::layout2(system, ctx);     // compute staff distances
 
@@ -472,9 +472,9 @@ void ScoreLayout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
     }
 
     const double lm = ctx.state().page()->lm();
-    const double tm = ctx.state().page()->tm() + ctx.style().styleMM(Sid::staffUpperBorder);
+    const double tm = ctx.state().page()->tm() + ctx.conf().styleMM(Sid::staffUpperBorder);
     const double rm = ctx.state().page()->rm();
-    const double bm = ctx.state().page()->bm() + ctx.style().styleMM(Sid::staffLowerBorder);
+    const double bm = ctx.state().page()->bm() + ctx.conf().styleMM(Sid::staffLowerBorder);
 
     ctx.mutState().page()->setPos(0, 0);
     system->setPos(lm, tm);

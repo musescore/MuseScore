@@ -122,8 +122,7 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
 //    from firstMeasure to lastMeasure (inclusive)
 //---------------------------------------------------------
 
-void MeasureLayout::createMMRest(const LayoutOptions& options, LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure,
-                                 const Fraction& len)
+void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len)
 {
     int numMeasuresInMMRest = 1;
     if (firstMeasure != lastMeasure) {
@@ -454,7 +453,7 @@ void MeasureLayout::createMMRest(const LayoutOptions& options, LayoutContext& ct
         }
     }
 
-    MeasureBase* nm = options.showVBox ? lastMeasure->next() : lastMeasure->nextMeasure();
+    MeasureBase* nm = ctx.conf().isShowVBox() ? lastMeasure->next() : lastMeasure->nextMeasure();
     mmrMeasure->setNext(nm);
     mmrMeasure->setPrev(firstMeasure->prev());
 }
@@ -722,14 +721,15 @@ static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType
     }
 }
 
-void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& ctx)
+void MeasureLayout::getNextMeasure(LayoutContext& ctx)
 {
     ctx.mutState().setPrevMeasure(ctx.mutState().curMeasure());
     ctx.mutState().setCurMeasure(ctx.mutState().nextMeasure());
     if (!ctx.state().curMeasure()) {
-        ctx.mutState().setNextMeasure(options.showVBox ? ctx.mutDom().first() : ctx.mutDom().firstMeasure());
+        ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? ctx.mutDom().first() : ctx.mutDom().firstMeasure());
     } else {
-        ctx.mutState().setNextMeasure(options.showVBox ? ctx.mutState().curMeasure()->next() : ctx.mutState().curMeasure()->nextMeasure());
+        MeasureBase* m = ctx.conf().isShowVBox() ? ctx.mutState().curMeasure()->next() : ctx.mutState().curMeasure()->nextMeasure();
+        ctx.mutState().setNextMeasure(m);
     }
     if (!ctx.state().curMeasure()) {
         return;
@@ -738,7 +738,7 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
     int mno = adjustMeasureNo(ctx.mutState().curMeasure(), ctx);
 
     if (ctx.state().curMeasure()->isMeasure()) {
-        if (ctx.style().styleB(Sid::createMultiMeasureRests)) {
+        if (ctx.conf().styleB(Sid::createMultiMeasureRests)) {
             Measure* m = toMeasure(ctx.mutState().curMeasure());
             Measure* nm = m;
             Measure* lm = nm;
@@ -746,7 +746,7 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
             Fraction len;
 
             while (validMMRestMeasure(ctx, nm)) {
-                MeasureBase* mb = options.showVBox ? nm->next() : nm->nextMeasure();
+                MeasureBase* mb = ctx.conf().isShowVBox() ? nm->next() : nm->nextMeasure();
                 if (breakMultiMeasureRest(ctx, nm) && n) {
                     break;
                 }
@@ -761,10 +761,10 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                 }
                 nm = toMeasure(mb);
             }
-            if (n >= ctx.style().styleI(Sid::minEmptyMeasures)) {
-                createMMRest(options, ctx, m, lm, len);
+            if (n >= ctx.conf().styleI(Sid::minEmptyMeasures)) {
+                createMMRest(ctx, m, lm, len);
                 ctx.mutState().setCurMeasure(m->mmRest());
-                ctx.mutState().setNextMeasure(options.showVBox ? lm->next() : lm->nextMeasure());
+                ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? lm->next() : lm->nextMeasure());
             } else {
                 if (m->mmRest()) {
                     ctx.mutDom().undo(new ChangeMMRest(m, 0));
@@ -790,7 +790,7 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
     Measure* measure = toMeasure(ctx.mutState().curMeasure());
     measure->moveTicks(ctx.state().tick() - measure->tick());
 
-    if (ctx.linearMode() && (measure->tick() < ctx.state().startTick() || measure->tick() > ctx.state().endTick())) {
+    if (ctx.conf().isLinearMode() && (measure->tick() < ctx.state().startTick() || measure->tick() > ctx.state().endTick())) {
         // needed to reset segment widths if they can change after measure width is computed
         //for (Segment& s : measure->segments())
         //      s.createShapes();
@@ -856,24 +856,24 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
 
                     double m = staff->staffMag(&segment);
                     if (cr->isSmall()) {
-                        m *= ctx.style().styleD(Sid::smallNoteMag);
+                        m *= ctx.conf().styleD(Sid::smallNoteMag);
                     }
 
                     if (cr->isChord()) {
                         Chord* chord = toChord(cr);
                         chord->cmdUpdateNotes(&as);
                         for (Chord* c : chord->graceNotes()) {
-                            c->setMag(m * ctx.style().styleD(Sid::graceNoteMag));
+                            c->setMag(m * ctx.conf().styleD(Sid::graceNoteMag));
                             c->setTrack(t);
                             ChordLayout::computeUp(c, ctx);
                             if (drumset) {
-                                layoutDrumsetChord(c, drumset, st, ctx.spatium());
+                                layoutDrumsetChord(c, drumset, st, ctx.conf().spatium());
                             }
                             ChordLayout::layoutStem(c, ctx);
                             c->setBeamlet(nullptr); // Will be defined during beam layout
                         }
                         if (drumset) {
-                            layoutDrumsetChord(chord, drumset, st, ctx.spatium());
+                            layoutDrumsetChord(chord, drumset, st, ctx.conf().spatium());
                         }
 
                         ChordLayout::computeUp(chord, ctx);
@@ -1045,7 +1045,7 @@ void MeasureLayout::layoutStaffLines(Measure* m, LayoutContext& ctx)
             Segment* clefSeg = m->findSegmentR(SegmentType::Clef, m->ticks());
             double staffMag = ctx.dom().staff(staffIdx)->staffMag(m->tick());
             double partialWidth = clefSeg
-                                  ? m->width() - clefSeg->x() + clefSeg->minLeft() + ctx.style().styleMM(Sid::clefLeftMargin) * staffMag
+                                  ? m->width() - clefSeg->x() + clefSeg->minLeft() + ctx.conf().styleMM(Sid::clefLeftMargin) * staffMag
                                   : 0.0;
             layoutPartialWidth(ms->lines(), ctx, m->width(), partialWidth / (m->spatium() * staffMag), true);
         } else {
@@ -1066,7 +1066,7 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
     }
 
     unsigned nn = 1;
-    bool nas = ctx.style().styleB(Sid::measureNumberAllStaves);
+    bool nas = ctx.conf().styleB(Sid::measureNumberAllStaves);
 
     if (!nas) {
         //find first non invisible staff
@@ -1107,7 +1107,7 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
 
 void MeasureLayout::layoutMMRestRange(Measure* m, LayoutContext& ctx)
 {
-    if (!m->isMMRest() || !ctx.style().styleB(Sid::mmRestShowMeasureNumberRange)) {
+    if (!m->isMMRest() || !ctx.conf().styleB(Sid::mmRestShowMeasureNumberRange)) {
         // Remove existing
         for (unsigned staffIdx = 0; staffIdx < m->m_mstaves.size(); ++staffIdx) {
             MStaff* ms = m->m_mstaves[staffIdx];
@@ -1177,7 +1177,7 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 continue;
             }
             staff_idx_t staffIdx = e->staffIdx();
-            bool modernMMRest = e->isMMRest() && !ctx.style().styleB(Sid::oldStyleMultiMeasureRests);
+            bool modernMMRest = e->isMMRest() && !ctx.conf().styleB(Sid::oldStyleMultiMeasureRests);
             if ((e->isRest() && toRest(e)->isFullMeasureRest()) || e->isMMRest() || e->isMeasureRepeat()) {
                 //
                 // element has to be centered in free space
@@ -1205,7 +1205,7 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 if (e->isMMRest()) {
                     MMRest* mmrest = toMMRest(e);
                     // center multimeasure rest
-                    double d = ctx.style().styleMM(Sid::multiMeasureRestMargin);
+                    double d = ctx.conf().styleMM(Sid::multiMeasureRestMargin);
                     double w = x2 - x1 - 2 * d;
                     bool headerException = m->header() && s.prev() && !s.prev()->isStartRepeatBarLineType();
                     if (headerException) { //needs this exception on header bar
@@ -1363,7 +1363,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
         //  create the courtesy key sig.
         //
 
-        bool show = ctx.style().styleB(Sid::genCourtesyKeysig) && !m->sectionBreak() && nm;
+        bool show = ctx.conf().styleB(Sid::genCourtesyKeysig) && !m->sectionBreak() && nm;
 
         m->setHasCourtesyKeySig(false);
 
@@ -1461,7 +1461,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
             Clef* clef = toClef(clefSeg->element(track));
             if (clef) {
                 clefToBarlinePosition = clef->clefToBarlinePosition();
-                bool showCourtesy = ctx.style().styleB(Sid::genCourtesyClef) && clef->showCourtesy();         // normally show a courtesy clef
+                bool showCourtesy = ctx.conf().styleB(Sid::genCourtesyClef) && clef->showCourtesy();         // normally show a courtesy clef
                 // check if the measure is the last measure of the system or the last measure before a frame
                 bool lastMeasure = isLastMeasureInSystem || (nm ? !(m->next() == nm) : true);
                 if (!nm || m->isFinalMeasureOfSection() || (lastMeasure && !showCourtesy)) {
@@ -1534,7 +1534,7 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
     for (const Staff* staff : ctx.dom().staves()) {
         const int track = staffIdx * VOICES;
 
-        if (isFirstSystem || ctx.style().styleB(Sid::genClef)) {
+        if (isFirstSystem || ctx.conf().styleB(Sid::genClef)) {
             // find the clef type at the previous tick
             ClefTypeList cl = staff->clefType(m->tick() - Fraction::fromTicks(1));
             bool showCourtesy = true;
@@ -1594,7 +1594,7 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
         }
 
         // keep key sigs in TABs: TABs themselves should hide them
-        bool needKeysig = isFirstSystem || ctx.style().styleB(Sid::genKeysig);
+        bool needKeysig = isFirstSystem || ctx.conf().styleB(Sid::genKeysig);
 
         // If we need a Key::C KeySig (which would be invisible) and there is
         // a courtesy key sig, don’t create it and switch generated flags.
@@ -1709,7 +1709,7 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
     if (s) {
         s->setTrailer(true);
     }
-    if (nm && ctx.style().styleB(Sid::genCourtesyTimesig) && !isFinalMeasure && !ctx.floatMode()) {
+    if (nm && ctx.conf().styleB(Sid::genCourtesyTimesig) && !isFinalMeasure && !ctx.conf().isFloatMode()) {
         Segment* tss = nm->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
         if (tss) {
             size_t nstaves = ctx.dom().nstaves();
@@ -1861,8 +1861,8 @@ void MeasureLayout::createSystemBeginBarLine(Measure* m, LayoutContext& ctx)
             }
         }
     }
-    if ((n > 1 && ctx.style().styleB(Sid::startBarlineMultiple))
-        || (n == 1 && (ctx.style().styleB(Sid::startBarlineSingle) || m->system()->brackets().size()))) {
+    if ((n > 1 && ctx.conf().styleB(Sid::startBarlineMultiple))
+        || (n == 1 && (ctx.conf().styleB(Sid::startBarlineSingle) || m->system()->brackets().size()))) {
         if (!s) {
             s = Factory::createSegment(m, SegmentType::BeginBarLine, Fraction(0, 1));
             m->add(s);
@@ -2002,7 +2002,7 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
                     //
                     // center multi measure rest
                     //
-                    double d = ctx.style().styleMM(Sid::multiMeasureRestMargin);
+                    double d = ctx.conf().styleMM(Sid::multiMeasureRestMargin);
                     double w = x2 - x1 - 2 * d;
 
                     mmrest->setWidth(w);
@@ -2070,7 +2070,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
             Segment* seg = toMeasure(pmb)->last();
             // overlap end repeat barline with start repeat barline
             if (seg->isEndBarLineType()) {
-                x -= ctx.style().styleMM(Sid::endBarWidth) * m->mag();
+                x -= ctx.conf().styleMM(Sid::endBarWidth) * m->mag();
             }
         }
     }
@@ -2106,7 +2106,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
     const Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, m->spatium() * 4));
 
     static constexpr double spacingMultiplier = 1.2;
-    double minNoteSpace = ctx.noteHeadWidth() + spacingMultiplier * ctx.style().styleMM(Sid::minNoteDistance);
+    double minNoteSpace = ctx.conf().noteHeadWidth() + spacingMultiplier * ctx.conf().styleMM(Sid::minNoteDistance);
     double usrStretch = std::max(m->userStretch(), double(0.1)); // Avoids stretch going to zero
     usrStretch = std::min(usrStretch, double(10)); // Higher values may cause the spacing to break (10 is already ridiculously high and no user should even use that)
 
@@ -2160,7 +2160,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
             // Adjust spacing for cross-beam situations
             s->computeCrossBeamType(ns);
             CrossBeamType crossBeamType = s->crossBeamType();
-            double displacement = ctx.noteHeadWidth() - ctx.style().styleMM(Sid::stemWidth);
+            double displacement = ctx.conf().noteHeadWidth() - ctx.conf().styleMM(Sid::stemWidth);
             if (crossBeamType.upDown && crossBeamType.canBeAdjusted) {
                 s->setWidthOffset(s->widthOffset() + displacement);
                 w += displacement;
@@ -2238,7 +2238,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
         x += w;
         s = s->next();
     }
-    m->_squeezableSpace = std::max(0.0, std::min(m->_squeezableSpace, x - ctx.style().styleMM(Sid::minMeasureWidth)));
+    m->_squeezableSpace = std::max(0.0, std::min(m->_squeezableSpace, x - ctx.conf().styleMM(Sid::minMeasureWidth)));
     m->setLayoutStretch(stretchCoeff);
     m->setWidth(x);
 
@@ -2257,7 +2257,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
 
 double MeasureLayout::computeMinMeasureWidth(Measure* m, LayoutContext& ctx)
 {
-    double minWidth = ctx.style().styleMM(Sid::minMeasureWidth);
+    double minWidth = ctx.conf().styleMM(Sid::minMeasureWidth);
     double maxWidth = m->system()->width() - m->system()->leftMargin(); // maximum available system width (left margin accounts for possible indentation)
     if (maxWidth <= 0) {
         // System width may not yet be available for the linear mode (e.g. continuous view)
@@ -2279,9 +2279,9 @@ double MeasureLayout::computeMinMeasureWidth(Measure* m, LayoutContext& ctx)
     // Start counting from the "virtual" position of the preceding barline if there wasn't the header.
     double startPosition = firstCRSegment->x() - firstCRSegment->minLeft();
     if (firstCRSegment->hasAccidentals()) {
-        startPosition -= ctx.style().styleMM(Sid::barAccidentalDistance);
+        startPosition -= ctx.conf().styleMM(Sid::barAccidentalDistance);
     } else {
-        startPosition -= ctx.style().styleMM(Sid::barNoteDistance);
+        startPosition -= ctx.conf().styleMM(Sid::barNoteDistance);
     }
     minWidth += startPosition;
     minWidth = std::min(minWidth, maxWidth);
@@ -2313,7 +2313,7 @@ void MeasureLayout::layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, do
         _lines = 5;
         lines->setColor(EngravingItem::engravingConfiguration()->defaultColor());
     }
-    lines->setLw(ctx.style().styleS(Sid::staffLineWidth).val() * _spatium);
+    lines->setLw(ctx.conf().styleS(Sid::staffLineWidth).val() * _spatium);
     double x1 = lines->pos().x();
     double x2 = x1 + w;
     double y  = lines->pos().y();

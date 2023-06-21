@@ -1470,7 +1470,7 @@ void Score::spatiumChanged(double oldValue, double newValue)
     for (Staff* staff : _staves) {
         staff->spatiumChanged(oldValue, newValue);
     }
-    _noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, newValue / SPATIUM20);
+    m_noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, newValue / SPATIUM20);
     createPaddingTable();
 }
 
@@ -3912,19 +3912,6 @@ void Score::setEnableVerticalSpread(bool val)
 }
 
 //---------------------------------------------------------
-//   maxSystemDistance
-//---------------------------------------------------------
-
-double Score::maxSystemDistance() const
-{
-    if (enableVerticalSpread()) {
-        return styleMM(Sid::maxSystemSpread);
-    } else {
-        return styleMM(Sid::maxSystemDistance);
-    }
-}
-
-//---------------------------------------------------------
 //   scoreOrder
 //---------------------------------------------------------
 
@@ -5719,9 +5706,9 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     TRACEFUNC;
 
     m_engravingFont = engravingFonts()->fontByName(style().value(Sid::MusicalSymbolFont).value<String>().toStdString());
-    _noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
+    m_noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
-    layout()->layoutRange(this, m_layoutOptions, st, et);
+    layout()->layoutRange(this, st, et);
 
     if (_resetAutoplace) {
         _resetAutoplace = false;

@@ -95,7 +95,7 @@ void PageLayout::getNextPage(LayoutContext& ctx)
         if (MScore::verticalOrientation()) {
             y = prevPage->pos().y() + ctx.state().page()->height() + MScore::verticalPageGap;
         } else {
-            double gap = (ctx.state().pageIdx() + ctx.pageNumberOffset())
+            double gap = (ctx.state().pageIdx() + ctx.conf().pageNumberOffset())
                          & 1 ? MScore::horizontalPageGapOdd : MScore::horizontalPageGapEven;
             x = prevPage->pos().x() + ctx.state().page()->width() + gap;
         }
@@ -108,15 +108,15 @@ void PageLayout::getNextPage(LayoutContext& ctx)
 //   collectPage
 //---------------------------------------------------------
 
-void PageLayout::collectPage(const LayoutOptions& options, LayoutContext& ctx)
+void PageLayout::collectPage(LayoutContext& ctx)
 {
     TRACEFUNC;
 
-    const double slb = ctx.style().styleMM(Sid::staffLowerBorder);
-    bool breakPages = ctx.layoutMode() != LayoutMode::SYSTEM;
+    const double slb = ctx.conf().styleMM(Sid::staffLowerBorder);
+    bool breakPages = ctx.conf().layoutMode() != LayoutMode::SYSTEM;
     double footerExtension = ctx.state().page()->footerExtension();
     double headerExtension = ctx.state().page()->headerExtension();
-    double headerFooterPadding = ctx.style().styleMM(Sid::staffHeaderFooterPadding);
+    double headerFooterPadding = ctx.conf().styleMM(Sid::staffHeaderFooterPadding);
     double endY = ctx.state().page()->height() - ctx.state().page()->bm();
     double y = 0.0;
 
@@ -156,7 +156,7 @@ void PageLayout::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                 // to avoid collisions
                 distance = headerExtension ? headerExtension + headerFooterPadding : 0.0;
             } else {
-                distance = ctx.style().styleMM(Sid::staffUpperBorder);
+                distance = ctx.conf().styleMM(Sid::staffUpperBorder);
                 bool fixedDistance = false;
                 for (MeasureBase* mb : ctx.mutState().curSystem()->measures()) {
                     if (mb->isMeasure()) {
@@ -208,7 +208,7 @@ void PageLayout::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                 }
             }
         } else {
-            nextSystem = SystemLayout::collectSystem(options, ctx);
+            nextSystem = SystemLayout::collectSystem(ctx);
             if (nextSystem) {
                 collected = true;
             }
@@ -344,7 +344,7 @@ void PageLayout::collectPage(const LayoutOptions& options, LayoutContext& ctx)
         }
     }
 
-    if (options.isMode(LayoutMode::SYSTEM)) {
+    if (ctx.conf().isMode(LayoutMode::SYSTEM)) {
         const System* s = ctx.state().page()->systems().back();
         double height = s ? s->pos().y() + s->height() + s->minBottom() : ctx.state().page()->tm();
         ctx.mutState().page()->bbox().setRect(0.0, 0.0, ctx.conf().loWidth(), height + ctx.state().page()->bm());
@@ -419,13 +419,13 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
     checkDivider(ctx, true, lastSystem, 0.0, true);        // remove
     checkDivider(ctx, false, lastSystem, 0.0, true);       // remove
 
-    if (sList.empty() || MScore::noVerticalStretch || ctx.enableVerticalSpread() || ctx.layoutMode() == LayoutMode::SYSTEM) {
-        if (ctx.layoutMode() == LayoutMode::FLOAT) {
+    if (sList.empty() || MScore::noVerticalStretch || ctx.conf().enableVerticalSpread() || ctx.conf().layoutMode() == LayoutMode::SYSTEM) {
+        if (ctx.conf().layoutMode() == LayoutMode::FLOAT) {
             double y = restHeight * .5;
             for (System* system : page->systems()) {
                 system->move(PointF(0.0, y));
             }
-        } else if ((ctx.layoutMode() != LayoutMode::SYSTEM) && ctx.enableVerticalSpread()) {
+        } else if ((ctx.conf().layoutMode() != LayoutMode::SYSTEM) && ctx.conf().enableVerticalSpread()) {
             distributeStaves(ctx, page, footerPadding);
         }
 
@@ -442,7 +442,7 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
         return;
     }
 
-    double maxDist = ctx.maxSystemDistance();
+    double maxDist = ctx.conf().maxSystemDistance();
 
     // allocate space as needed to normalize system distance (bottom of one system to top of next)
     std::sort(sList.begin(), sList.end(), [](System* a, System* b) { return a->distance() - a->height() < b->distance() - b->height(); });
@@ -504,7 +504,7 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
 void PageLayout::checkDivider(LayoutContext& ctx, bool left, System* s, double yOffset, bool remove)
 {
     SystemDivider* divider = left ? s->systemDividerLeft() : s->systemDividerRight();
-    if ((ctx.style().styleB(left ? Sid::dividerLeft : Sid::dividerRight)) && !remove) {
+    if ((ctx.conf().styleB(left ? Sid::dividerLeft : Sid::dividerRight)) && !remove) {
         if (!divider) {
             divider = new SystemDivider(s);
             divider->setDividerType(left ? SystemDivider::Type::LEFT : SystemDivider::Type::RIGHT);
@@ -514,12 +514,12 @@ void PageLayout::checkDivider(LayoutContext& ctx, bool left, System* s, double y
         TLayout::layout(divider, ctx);
         divider->setPosY(divider->height() * .5 + yOffset);
         if (left) {
-            divider->movePosY(ctx.style().styleD(Sid::dividerLeftY) * SPATIUM20);
-            divider->setPosX(ctx.style().styleD(Sid::dividerLeftX) * SPATIUM20);
+            divider->movePosY(ctx.conf().styleD(Sid::dividerLeftY) * SPATIUM20);
+            divider->setPosX(ctx.conf().styleD(Sid::dividerLeftX) * SPATIUM20);
         } else {
-            divider->movePosY(ctx.style().styleD(Sid::dividerRightY) * SPATIUM20);
-            divider->setPosX(ctx.style().styleD(Sid::pagePrintableWidth) * DPI - divider->width());
-            divider->movePosX(ctx.style().styleD(Sid::dividerRightX) * SPATIUM20);
+            divider->movePosY(ctx.conf().styleD(Sid::dividerRightY) * SPATIUM20);
+            divider->setPosX(ctx.conf().styleD(Sid::pagePrintableWidth) * DPI - divider->width());
+            divider->movePosX(ctx.conf().styleD(Sid::dividerRightX) * SPATIUM20);
         }
     } else if (divider) {
         if (divider->generated()) {
@@ -546,7 +546,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
     bool transferCurlyBracket  { false };
     for (System* system : page->systems()) {
         if (system->vbox()) {
-            VerticalGapData* vgd = new VerticalGapData(&ctx.style(), !ngaps++, system, nullptr, nullptr, nullptr, prevYBottom);
+            VerticalGapData* vgd = new VerticalGapData(&ctx.conf().style(), !ngaps++, system, nullptr, nullptr, nullptr, prevYBottom);
             vgd->addSpaceAroundVBox(true);
             prevYBottom = system->y();
             yBottom     = system->y() + system->height();
@@ -583,7 +583,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
                 }
 
                 VerticalGapData* vgd
-                    = new VerticalGapData(&ctx.style(), !ngaps++, system, staff, sysStaff, nextSpacer, prevYBottom);
+                    = new VerticalGapData(&ctx.conf().style(), !ngaps++, system, staff, sysStaff, nextSpacer, prevYBottom);
                 nextSpacer = system->downSpacer(staff->idx());
 
                 if (newSystem) {
@@ -618,7 +618,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
         }
     }
     --ngaps;
-    const double staffLowerBorder = ctx.style().styleMM(Sid::staffLowerBorder);
+    const double staffLowerBorder = ctx.conf().styleMM(Sid::staffLowerBorder);
     const double combinedBottomMargin = page->bm() + footerPadding;
     const double marginToStaff = page->bm() + staffLowerBorder;
     double spaceRemaining{ std::min(page->height() - combinedBottomMargin - yBottom, page->height() - marginToStaff - prevYBottom) };
@@ -677,7 +677,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
 
     // If there is still space left, distribute the space of the staves.
     // However, there is a limit on how much space is added per gap.
-    const double maxPageFill = ctx.style().styleMM(Sid::maxPageFillSpread);
+    const double maxPageFill = ctx.conf().styleMM(Sid::maxPageFillSpread);
     spaceRemaining = std::min(maxPageFill * static_cast<double>(vgdl.size()), spaceRemaining);
     pass = 0;
     ngaps = 1;

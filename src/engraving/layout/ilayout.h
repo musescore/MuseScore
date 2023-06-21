@@ -27,7 +27,6 @@
 #include "modularity/imoduleinterface.h"
 
 #include "types/fraction.h"
-#include "layoutoptions.h"
 
 namespace mu::engraving {
 class Score;
@@ -89,7 +88,7 @@ public:
     virtual ~ILayout() = default;
 
     // Layout Score
-    virtual void layoutRange(Score* score, const LayoutOptions& options, const Fraction&, const Fraction&) = 0;
+    virtual void layoutRange(Score* score, const Fraction& st, const Fraction& et) = 0;
 
     // Layout Item
     using Supported = std::variant<std::monostate,

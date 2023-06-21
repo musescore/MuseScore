@@ -42,8 +42,8 @@ namespace mu::engraving::layout::v0 {
 class SystemLayout
 {
 public:
-    static System* collectSystem(const LayoutOptions& options, LayoutContext& ctx);
-    static void layoutSystemElements(const LayoutOptions& options, LayoutContext& ctx, System* system);
+    static System* collectSystem(LayoutContext& ctx);
+    static void layoutSystemElements(System* system, LayoutContext& ctx);
 
     static void layoutSystem(System* system, LayoutContext& ctx, double xo1, bool isFirstSystem = false, bool firstSystemIndent = false);
 
