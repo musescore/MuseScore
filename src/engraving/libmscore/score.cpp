@@ -5723,7 +5723,6 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     m_engravingFont = engravingFonts()->fontByName(style().value(Sid::MusicalSymbolFont).value<String>().toStdString());
     _noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
-    m_layoutOptions.updateFromStyle(style());
     layout()->layoutRange(this, m_layoutOptions, st, et);
 
     if (_resetAutoplace) {

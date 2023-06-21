@@ -616,7 +616,7 @@ static void applyLyricsMin(Measure* m, staff_idx_t staffIdx, double yMin)
 //
 //---------------------------------------------------------
 
-void LyricsLayout::layoutLyrics(const LayoutOptions& options, LayoutContext& ctx, System* system)
+void LyricsLayout::layoutLyrics(LayoutContext& ctx, System* system)
 {
     std::vector<staff_idx_t> visibleStaves;
     for (staff_idx_t staffIdx = system->firstVisibleStaff(); staffIdx < ctx.dom().nstaves();
@@ -685,7 +685,7 @@ void LyricsLayout::layoutLyrics(const LayoutOptions& options, LayoutContext& ctx
         }
     }
 
-    switch (options.verticalAlignRange) {
+    switch (ctx.conf().verticalAlignRange()) {
     case VerticalAlignRange::MEASURE:
         for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure()) {

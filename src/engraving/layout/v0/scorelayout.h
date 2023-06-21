@@ -19,7 +19,7 @@ private:
     static void doLayoutRange(Score* score, const LayoutOptions& options, const Fraction&, const Fraction&);
     static void layoutLinear(const LayoutOptions& options, LayoutContext& ctx);
     static void layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& ctx);
-    static void resetSystems(bool layoutAll, const LayoutOptions& options, LayoutContext& ctx);
+    static void resetSystems(LayoutContext& ctx, bool layoutAll);
     static void collectLinearSystem(const LayoutOptions& options, LayoutContext& ctx);
 
     static void doLayout(const LayoutOptions& options, LayoutContext& lc);

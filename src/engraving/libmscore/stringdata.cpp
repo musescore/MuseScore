@@ -26,8 +26,7 @@
 
 #include "defer.h"
 
-#include "rw/xmlreader.h"
-#include "rw/xmlwriter.h"
+#include "style/style.h"
 
 #include "chord.h"
 #include "note.h"

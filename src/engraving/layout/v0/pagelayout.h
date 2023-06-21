@@ -35,7 +35,7 @@ class PageLayout
 {
 public:
 
-    static void getNextPage(const LayoutOptions& options, LayoutContext& ctx);
+    static void getNextPage(LayoutContext& ctx);
     static void collectPage(const LayoutOptions& options, LayoutContext& ctx);
 
 private:

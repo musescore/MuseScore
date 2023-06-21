@@ -64,7 +64,7 @@ using namespace mu::engraving::layout::v0;
 //   getNextPage
 //---------------------------------------------------------
 
-void PageLayout::getNextPage(const LayoutOptions& options, LayoutContext& ctx)
+void PageLayout::getNextPage(LayoutContext& ctx)
 {
     if (!ctx.state().page() || ctx.state().pageIdx() >= ctx.dom().npages()) {
         ctx.mutState().setPage(Factory::createPage(ctx.mutDom().rootItem()));
@@ -86,7 +86,7 @@ void PageLayout::getNextPage(const LayoutOptions& options, LayoutContext& ctx)
         }
         ctx.mutState().setPrevSystem(systems.empty() ? nullptr : systems.back());
     }
-    ctx.mutState().page()->bbox().setRect(0.0, 0.0, options.loWidth, options.loHeight);
+    ctx.mutState().page()->bbox().setRect(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
     ctx.mutState().page()->setNo(ctx.state().pageIdx());
     double x = 0.0;
     double y = 0.0;
@@ -347,7 +347,7 @@ void PageLayout::collectPage(const LayoutOptions& options, LayoutContext& ctx)
     if (options.isMode(LayoutMode::SYSTEM)) {
         const System* s = ctx.state().page()->systems().back();
         double height = s ? s->pos().y() + s->height() + s->minBottom() : ctx.state().page()->tm();
-        ctx.mutState().page()->bbox().setRect(0.0, 0.0, options.loWidth, height + ctx.state().page()->bm());
+        ctx.mutState().page()->bbox().setRect(0.0, 0.0, ctx.conf().loWidth(), height + ctx.state().page()->bm());
     }
 
     // HACK: we relayout here cross-staff slurs because only now the information
