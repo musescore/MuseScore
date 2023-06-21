@@ -45,6 +45,7 @@ StyledDialogView {
         switch (dialog.migrationType) {
         case MigrationType.Pre_3_6: return 556
         case MigrationType.Ver_3_6: return 208
+        case MigrationType.Ver_4_0: return 208
         case MigrationType.Unknown: return 0
         }
         return 600
@@ -54,6 +55,7 @@ StyledDialogView {
         switch (dialog.migrationType) {
         case MigrationType.Pre_3_6: return 600
         case MigrationType.Ver_3_6: return 480
+        case MigrationType.Ver_4_0: return 480
         case MigrationType.Unknown: return 0
         }
         return 600
@@ -68,6 +70,7 @@ StyledDialogView {
             loader.sourceComponent = migrComp
             break;
         case MigrationType.Ver_3_6:
+        case MigrationType.Ver_4_0:
             isApplyLeland = false
             isApplyEdwin = false
             loader.sourceComponent = noteComp
@@ -104,11 +107,10 @@ StyledDialogView {
         }
     }
 
-    //! NOTE for 3.6.2
     Component {
         id: noteComp
 
-        MigrationContentFor362 {
+        MigrationContentWithNoticeOnly {
             anchors.fill: parent
             anchors.margins: 16
 

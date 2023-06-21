@@ -57,7 +57,7 @@
         <file>resources/Placeholder_Other.png</file>
         <file>resources/CloudProject.svg</file>
         <file>resources/PublishScores.png</file>
-        <file>qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml</file>
+        <file>qml/MuseScore/Project/internal/Migration/MigrationContentWithNoticeOnly.qml</file>
         <file>qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml</file>
         <file>qml/MuseScore/Project/internal/Migration/migration.png</file>
         <file>qml/MuseScore/Project/UploadProgressDialog.qml</file>
