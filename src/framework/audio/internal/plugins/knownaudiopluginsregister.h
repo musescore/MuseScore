@@ -51,7 +51,7 @@ private:
     Ret writePluginsInfo();
 
     bool m_loaded = false;
-    std::map<AudioResourceId, AudioPluginInfo> m_pluginInfoMap;
+    std::multimap<AudioResourceId, AudioPluginInfo> m_pluginInfoMap;
     std::set<io::path_t> m_pluginPaths;
 };
 }
