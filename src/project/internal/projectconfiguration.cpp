@@ -393,6 +393,9 @@ static MigrationType migrationTypeFromString(const QString& str)
     if (str == "Ver_3_6") {
         return MigrationType::Ver_3_6;
     }
+    if (str == "Ver_4_0") {
+        return MigrationType::Ver_4_0;
+    }
     LOGE() << "Unknown migration type string: " << str;
     return MigrationType::Unknown;
 }
@@ -443,6 +446,8 @@ static QString migrationTypeToString(MigrationType type)
         return QStringLiteral("Pre_3_6");
     case MigrationType::Ver_3_6:
         return QStringLiteral("Ver_3_6");
+    case MigrationType::Ver_4_0:
+        return QStringLiteral("Ver_4_0");
     case MigrationType::Unknown:
         break;
     }

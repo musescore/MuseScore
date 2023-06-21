@@ -311,8 +311,9 @@ public:
     enum class Type
     {
         Unknown,
-        Pre_3_6,
-        Ver_3_6
+        Pre_3_6, // MSC_VERSION < 302
+        Ver_3_6, // MSC_VERSION < 400
+        Ver_4_0, // MSC_VERSION < 410
     };
     Q_ENUM(Type)
 };
@@ -323,7 +324,8 @@ inline std::vector<MigrationType> allMigrationTypes()
 {
     static const std::vector<MigrationType> types {
         MigrationType::Pre_3_6,
-        MigrationType::Ver_3_6
+        MigrationType::Ver_3_6,
+        MigrationType::Ver_4_0
     };
 
     return types;

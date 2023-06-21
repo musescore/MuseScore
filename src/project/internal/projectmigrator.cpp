@@ -50,15 +50,21 @@ static MigrationType migrationTypeFromMscVersion(int mscVersion)
         return MigrationType::Ver_3_6;
     }
 
+    if (mscVersion < 410) {
+        return MigrationType::Ver_4_0;
+    }
+
+    LOGE() << "Unhandled MSC_VERSION for migration: " << mscVersion;
     UNREACHABLE;
     return MigrationType::Unknown;
 }
 
 Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project)
 {
-    if (project->mscVersion() >= 400) {
+    if (project->mscVersion() >= engraving::Constants::MSC_VERSION) {
         return true;
     }
+
     //! NOTE If the migration is not done, then the default style for the score is determined by the version.
     //! When migrating, the version becomes the current one, so remember the version of the default style before migrating
     project->masterScore()->style().setDefaultStyleVersion(ReadStyleHook::styleDefaultByMscVersion(project->mscVersion()));
