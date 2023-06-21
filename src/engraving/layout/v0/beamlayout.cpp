@@ -671,7 +671,7 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                         const Measure* pm = prevCR->measure();
                         if (!beamNoContinue(prevCR->beamMode())
                             && !pm->lineBreak() && !pm->pageBreak() && !pm->sectionBreak()
-                            && ctx.state().prevMeasure
+                            && ctx.state().prevMeasure()
                             && !(prevCR->isChord() && prevCR->durationType().type() <= DurationType::V_QUARTER)) {
                             beam = prevBeam;
                             //a1 = beam ? beam->elements().front() : prevCR;

@@ -1011,7 +1011,7 @@ public:
     void cmdMirrorNoteHead();
 
     virtual size_t npages() const { return _pages.size(); }
-    virtual page_idx_t pageIdx(Page* page) const { return mu::indexOf(_pages, page); }
+    virtual page_idx_t pageIdx(const Page* page) const { return mu::indexOf(_pages, page); }
     virtual const std::vector<Page*>& pages() const { return _pages; }
     virtual std::vector<Page*>& pages() { return _pages; }
 
