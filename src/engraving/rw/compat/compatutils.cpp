@@ -34,6 +34,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/factory.h"
 #include "libmscore/ornament.h"
+#include "libmscore/rest.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftextbase.h"
 #include "libmscore/playtechannotation.h"
@@ -83,6 +84,7 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
         reconstructTypeOfCustomDynamics(masterScore);
         replaceOldWithNewExpressions(masterScore);
         replaceOldWithNewOrnaments(masterScore);
+        resetRestVerticalOffset(masterScore);
     }
 }
 
@@ -379,5 +381,28 @@ ArticulationAnchor CompatUtils::translateToNewArticulationAnchor(int anchor)
     default:
         return ArticulationAnchor::AUTO;
         break;
+    }
+}
+
+void CompatUtils::resetRestVerticalOffset(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+            for (Segment& segment : measure->segments()) {
+                if (!segment.isChordRestType()) {
+                    continue;
+                }
+                for (EngravingItem* item : segment.elist()) {
+                    if (!item || !item->isRest()) {
+                        continue;
+                    }
+                    Rest* rest = toRest(item);
+                    if (rest->offset().y() != 0) {
+                        PointF newOffset = PointF(rest->offset().x(), 0.0);
+                        rest->setProperty(Pid::OFFSET, newOffset);
+                    }
+                }
+            }
+        }
     }
 }
