@@ -272,6 +272,9 @@ public:
 
     Ornament* findOrnament() const;
 
+    std::vector<Spanner*>& startingSpanners() { return _startingSpanners; }
+    std::vector<Spanner*>& endingSpanners() { return _endingSpanners; }
+
 private:
 
     friend class Factory;
@@ -346,7 +349,8 @@ private:
         }
     } _startEndSlurs;
 
-    // StartEndSlurs& startEndSlurs() { return _startEndSlurs; }
+    std::vector<Spanner*> _startingSpanners; ///< spanners starting on this item
+    std::vector<Spanner*> _endingSpanners; ///< spanners ending on this item
 
     bool _allowKerningAbove = true;
     bool _allowKerningBelow = true;

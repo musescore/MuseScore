@@ -4448,11 +4448,15 @@ void Score::removeSpanner(Spanner* s)
 {
     _spanner.removeSpanner(s);
     s->removed();
-    if (s->startElement()) {
-        mu::remove_if(s->startElement()->startingSpanners(), [s](Spanner* sp) { return sp == s; });
+    EngravingItem* startElement = s->startElement();
+    Chord* startChord = startElement && startElement->isChord() ? toChord(startElement) : nullptr;
+    EngravingItem* endElement = s->endElement();
+    Chord* endChord = endElement && endElement->isChord() ? toChord(endElement) : nullptr;
+    if (startChord) {
+        mu::remove_if(startChord->startingSpanners(), [s](Spanner* sp) { return sp == s; });
     }
-    if (s->endElement()) {
-        mu::remove_if(s->endElement()->endingSpanners(), [s](Spanner* sp) { return sp == s; });
+    if (endChord) {
+        mu::remove_if(endChord->endingSpanners(), [s](Spanner* sp) { return sp == s; });
     }
 }
 
