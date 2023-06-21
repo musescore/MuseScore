@@ -68,11 +68,11 @@ Column {
             id: lockButton
 
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: heightControl.verticalCenter
-            anchors.verticalCenterOffset: 14
 
             height: 20
             width: 20
+
+            y: heightControl.spinBox.y + (heightControl.spinBox.height - height) / 2
 
             icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
 
