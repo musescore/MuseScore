@@ -405,7 +405,7 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
 
         UiAction action;
         action.code = "file-open";
-        action.title = TranslatableString::untranslatable(file.displayName(true));
+        action.title = TranslatableString::untranslatable(file.displayName(/*includingExtension*/ true));
         item->setAction(action);
 
         item->setId(makeId(item->action().code, index++));

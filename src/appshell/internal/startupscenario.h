@@ -48,7 +48,7 @@ public:
 
     void setStartupType(const std::optional<std::string>& type) override;
 
-    project::ProjectFile startupScoreFile() const override;
+    const project::ProjectFile& startupScoreFile() const override;
     void setStartupScoreFile(const std::optional<project::ProjectFile>& file) override;
 
     void run() override;

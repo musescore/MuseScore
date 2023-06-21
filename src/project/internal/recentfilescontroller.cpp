@@ -157,7 +157,7 @@ void RecentFilesController::loadRecentFilesList()
 
     for (const QJsonValue val : jsonDoc.array()) {
         if (val.isString()) {
-            newList.push_back(ProjectFile { io::path_t(val.toString()) });
+            newList.emplace_back(io::path_t(val.toString()));
         } else if (val.isObject()) {
             QJsonObject obj = val.toObject();
             ProjectFile file;
@@ -245,19 +245,19 @@ void RecentFilesController::saveRecentFilesList()
     }
 }
 
-Promise<QPixmap> RecentFilesController::thumbnail(const io::path_t& file) const
+Promise<QPixmap> RecentFilesController::thumbnail(const io::path_t& filePath) const
 {
-    return Promise<QPixmap>([this, file](auto resolve, auto reject) {
-        if (file.empty()) {
+    return Promise<QPixmap>([this, filePath](auto resolve, auto reject) {
+        if (filePath.empty()) {
             return reject(int(Ret::Code::UnknownError), "Invalid file specified");
         }
 
-        QtConcurrent::run([this, file, resolve, reject]() {
+        QtConcurrent::run([this, filePath, resolve, reject]() {
             std::lock_guard lock(m_thumbnailCacheMutex);
 
-            DateTime lastModified = fileSystem()->lastModified(file);
+            DateTime lastModified = fileSystem()->lastModified(filePath);
 
-            auto it = m_thumbnailCache.find(file);
+            auto it = m_thumbnailCache.find(filePath);
             if (it != m_thumbnailCache.cend()) {
                 if (lastModified == it->second.lastModified) {
                     (void)resolve(it->second.thumbnail);
@@ -265,12 +265,12 @@ Promise<QPixmap> RecentFilesController::thumbnail(const io::path_t& file) const
                 }
             }
 
-            RetVal<ProjectMeta> rv = mscMetaReader()->readMeta(file);
+            RetVal<ProjectMeta> rv = mscMetaReader()->readMeta(filePath);
             if (!rv.ret) {
-                m_thumbnailCache[file] = CachedThumbnail();
+                m_thumbnailCache[filePath] = CachedThumbnail();
                 (void)reject(rv.ret.code(), rv.ret.toString());
             } else {
-                m_thumbnailCache[file] = CachedThumbnail { rv.val.thumbnail, lastModified };
+                m_thumbnailCache[filePath] = CachedThumbnail { rv.val.thumbnail, lastModified };
                 (void)resolve(rv.val.thumbnail);
             }
         });

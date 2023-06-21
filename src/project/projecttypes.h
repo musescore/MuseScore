@@ -184,6 +184,11 @@ struct ProjectFile {
     io::path_t path;
     QString displayNameOverride = {};
 
+    ProjectFile() = default;
+
+    ProjectFile(const io::path_t& path, const QString& displayNameOverride = {})
+        : path(path), displayNameOverride(displayNameOverride) {}
+
     QString displayName(bool includingExtension) const
     {
         if (!displayNameOverride.isEmpty()) {

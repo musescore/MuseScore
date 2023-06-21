@@ -147,12 +147,12 @@ void ProjectActionsController::openProject(const actions::ActionData& args)
     io::path_t projectPath = !args.empty() ? args.arg<io::path_t>(0) : "";
     QString displayNameOverride = args.count() >= 2 ? args.arg<QString>(1) : QString();
 
-    openProject(ProjectFile { projectPath, displayNameOverride });
+    openProject(ProjectFile(projectPath, displayNameOverride));
 }
 
 Ret ProjectActionsController::openProject(const io::path_t& path)
 {
-    return openProject(ProjectFile { path });
+    return openProject(ProjectFile(path));
 }
 
 Ret ProjectActionsController::openProject(const ProjectFile& file)
@@ -359,7 +359,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
     m_projectBeingDownloadedChanged.notify();
 }
 
-ProjectBeingDownloaded ProjectActionsController::projectBeingDownloaded() const
+const ProjectBeingDownloaded& ProjectActionsController::projectBeingDownloaded() const
 {
     return m_projectBeingDownloaded;
 }

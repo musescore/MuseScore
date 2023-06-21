@@ -44,7 +44,7 @@ public:
     virtual bool isAnyProjectOpened() const = 0;
     virtual bool saveProject(const io::path_t& path = io::path_t()) = 0;
 
-    virtual ProjectBeingDownloaded projectBeingDownloaded() const = 0;
+    virtual const ProjectBeingDownloaded& projectBeingDownloaded() const = 0;
     virtual async::Notification projectBeingDownloadedChanged() const = 0;
 };
 }

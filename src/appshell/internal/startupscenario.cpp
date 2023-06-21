@@ -60,14 +60,14 @@ void StartupScenario::setStartupType(const std::optional<std::string>& type)
     m_startupTypeStr = type ? type.value() : "";
 }
 
-mu::project::ProjectFile StartupScenario::startupScoreFile() const
+const mu::project::ProjectFile& StartupScenario::startupScoreFile() const
 {
     return m_startupScoreFile;
 }
 
-void StartupScenario::setStartupScoreFile(const std::optional<project::ProjectFile>& path)
+void StartupScenario::setStartupScoreFile(const std::optional<project::ProjectFile>& file)
 {
-    m_startupScoreFile = path ? path.value() : project::ProjectFile();
+    m_startupScoreFile = file ? file.value() : project::ProjectFile();
 }
 
 void StartupScenario::run()
@@ -139,7 +139,7 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
         break;
     case StartupModeType::StartWithScore: {
         project::ProjectFile file
-            = m_startupScoreFile.isValid() ? m_startupScoreFile : project::ProjectFile { configuration()->startupScorePath() };
+            = m_startupScoreFile.isValid() ? m_startupScoreFile : project::ProjectFile(configuration()->startupScorePath());
         openScore(file);
     } break;
     }

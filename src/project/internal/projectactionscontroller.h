@@ -83,7 +83,7 @@ public:
     bool isAnyProjectOpened() const override;
     bool saveProject(const io::path_t& path = io::path_t()) override;
 
-    ProjectBeingDownloaded projectBeingDownloaded() const override;
+    const ProjectBeingDownloaded& projectBeingDownloaded() const override;
     async::Notification projectBeingDownloadedChanged() const override;
 
 private:
