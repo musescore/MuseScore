@@ -77,6 +77,7 @@ public:
 
     void remove(const mu::RectF&);
     void remove(const Shape&);
+    void removeInvisibles();
 
     void addHorizontalSpacing(EngravingItem* item, double left, double right);
 
