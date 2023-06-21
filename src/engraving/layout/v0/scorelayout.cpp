@@ -67,7 +67,7 @@ void ScoreLayout::layoutRange(Score* score, const LayoutOptions& options, const 
         etick = score->last()->endTick();
     }
 
-    ctx.mutState().endTick = etick;
+    ctx.mutState().setEndTick(etick);
 
     if (score->cmdState().layoutFlags & LayoutFlag::REBUILD_MIDI_MAPPING) {
         if (score->isMaster()) {
@@ -106,9 +106,9 @@ void ScoreLayout::layoutRange(Score* score, const LayoutOptions& options, const 
     }
 
     if (options.isLinearMode()) {
-        ctx.mutState().prevMeasure = 0;
-        ctx.mutState().nextMeasure = m;         //_showVBox ? first() : firstMeasure();
-        ctx.mutState().startTick   = m->tick();
+        ctx.mutState().setPrevMeasure(nullptr);
+        ctx.mutState().setNextMeasure(m);         //_showVBox ? first() : firstMeasure();
+        ctx.mutState().setStartTick(m->tick());
         layoutLinear(layoutAll, options, ctx);
         return;
     }
@@ -116,27 +116,27 @@ void ScoreLayout::layoutRange(Score* score, const LayoutOptions& options, const 
     if (!layoutAll && m->system()) {
         System* system = m->system();
         system_idx_t systemIndex = mu::indexOf(score->_systems, system);
-        ctx.mutState().page = system->page();
-        ctx.mutState().curPage = score->pageIdx(ctx.mutState().page);
-        if (ctx.mutState().curPage == mu::nidx) {
-            ctx.mutState().curPage = 0;
+        ctx.mutState().setPage(system->page());
+        ctx.mutState().setPageIdx(score->pageIdx(ctx.state().page()));
+        if (ctx.state().pageIdx() == mu::nidx) {
+            ctx.mutState().setPageIdx(0);
         }
-        ctx.mutState().curSystem   = system;
-        ctx.mutState().systemList  = mu::mid(score->_systems, systemIndex);
+        ctx.mutState().setCurSystem(system);
+        ctx.mutState().setSystemList(mu::mid(score->_systems, systemIndex));
 
         if (systemIndex == 0) {
-            ctx.mutState().nextMeasure = options.showVBox ? score->first() : score->firstMeasure();
+            ctx.mutState().setNextMeasure(options.showVBox ? score->first() : score->firstMeasure());
         } else {
             System* prevSystem = score->_systems[systemIndex - 1];
-            ctx.mutState().nextMeasure = prevSystem->measures().back()->next();
+            ctx.mutState().setNextMeasure(prevSystem->measures().back()->next());
         }
 
         score->_systems.erase(score->_systems.begin() + systemIndex, score->_systems.end());
-        if (!ctx.state().nextMeasure->prevMeasure()) {
-            ctx.mutState().measureNo = 0;
-            ctx.mutState().tick      = Fraction(0, 1);
+        if (!ctx.state().nextMeasure()->prevMeasure()) {
+            ctx.mutState().setMeasureNo(0);
+            ctx.mutState().setTick(Fraction(0, 1));
         } else {
-            const MeasureBase* mb = ctx.state().nextMeasure->prev();
+            const MeasureBase* mb = ctx.state().nextMeasure()->prev();
             if (mb) {
                 mb = mb->findPotentialSectionBreak();
             }
@@ -145,12 +145,12 @@ void ScoreLayout::layoutRange(Score* score, const LayoutOptions& options, const 
             // TODO: also use mb in else clause here?
             // probably not, only actual measures have meaningful numbers
             if (layoutBreak && layoutBreak->startWithMeasureOne()) {
-                ctx.mutState().measureNo = 0;
+                ctx.mutState().setMeasureNo(0);
             } else {
-                ctx.mutState().measureNo = ctx.state().nextMeasure->prevMeasure()->no()                             // will be adjusted later with respect
-                                           + (ctx.state().nextMeasure->prevMeasure()->irregular() ? 0 : 1); // to the user-defined offset.
+                ctx.mutState().setMeasureNo(ctx.state().nextMeasure()->prevMeasure()->no()                             // will be adjusted later with respect
+                                            + (ctx.state().nextMeasure()->prevMeasure()->irregular() ? 0 : 1)); // to the user-defined offset.
             }
-            ctx.mutState().tick = ctx.state().nextMeasure->tick();
+            ctx.mutState().setTick(ctx.state().nextMeasure()->tick());
         }
     } else {
         for (System* s : score->_systems) {
@@ -177,13 +177,13 @@ void ScoreLayout::layoutRange(Score* score, const LayoutOptions& options, const 
         DeleteAll(score->pages());
         score->pages().clear();
 
-        ctx.mutState().nextMeasure = options.showVBox ? score->first() : score->firstMeasure();
+        ctx.mutState().setNextMeasure(options.showVBox ? score->first() : score->firstMeasure());
     }
 
-    ctx.mutState().prevMeasure = 0;
+    ctx.mutState().setPrevMeasure(nullptr);
 
     MeasureLayout::getNextMeasure(options, ctx);
-    ctx.mutState().curSystem = SystemLayout::collectSystem(options, ctx);
+    ctx.mutState().setCurSystem(SystemLayout::collectSystem(options, ctx));
 
     doLayout(options, ctx);
 }
@@ -195,8 +195,8 @@ void ScoreLayout::doLayout(const LayoutOptions& options, LayoutContext& ctx)
         PageLayout::getNextPage(options, ctx);
         PageLayout::collectPage(options, ctx);
 
-        if (ctx.state().page && !ctx.state().page->systems().empty()) {
-            lmb = ctx.state().page->systems().back()->measures().back();
+        if (ctx.state().page() && !ctx.state().page()->systems().empty()) {
+            lmb = ctx.state().page()->systems().back()->measures().back();
         } else {
             lmb = nullptr;
         }
@@ -210,26 +210,26 @@ void ScoreLayout::doLayout(const LayoutOptions& options, LayoutContext& ctx)
         //    c) this page ends with the same measure as the previous layout
         //    pageOldMeasure will be last measure from previous layout if range was completed on or before this page
         //    it will be nullptr if this page was never laid out or if we collected a system for next page
-    } while (ctx.state().curSystem && !(ctx.state().rangeDone && lmb == ctx.state().pageOldMeasure));
+    } while (ctx.state().curSystem() && !(ctx.state().rangeDone() && lmb == ctx.state().pageOldMeasure()));
     // && page->system(0)->measures().back()->tick() > endTick // FIXME: perhaps the first measure was meant? Or last system?
 
-    if (!ctx.state().curSystem) {
+    if (!ctx.state().curSystem()) {
         // The end of the score. The remaining systems are not needed...
-        DeleteAll(ctx.mutState().systemList);
-        ctx.mutState().systemList.clear();
+        DeleteAll(ctx.mutState().systemList());
+        ctx.mutState().systemList().clear();
         // ...and the remaining pages too
-        while (ctx.dom().npages() > ctx.state().curPage) {
+        while (ctx.dom().npages() > ctx.state().pageIdx()) {
             Page* p = ctx.mutDom().pages().back();
             ctx.mutDom().pages().pop_back();
             delete p;
         }
     } else {
-        Page* p = ctx.mutState().curSystem->page();
-        if (p && (p != ctx.state().page)) {
+        Page* p = ctx.mutState().curSystem()->page();
+        if (p && (p != ctx.state().page())) {
             p->invalidateBspTree();
         }
     }
-    ctx.mutDom().systems().insert(ctx.mutDom().systems().end(), ctx.state().systemList.begin(), ctx.state().systemList.end());
+    ctx.mutDom().systems().insert(ctx.mutDom().systems().end(), ctx.state().systemList().begin(), ctx.state().systemList().end());
 }
 
 void ScoreLayout::layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& ctx)
@@ -284,7 +284,7 @@ void ScoreLayout::resetSystems(bool layoutAll, const LayoutOptions& options, Lay
         system->clear();
         system->adjustStavesNumber(ctx.dom().nstaves());
     }
-    ctx.mutState().page = page;
+    ctx.mutState().setPage(page);
 }
 
 // Append all measures to System. VBox is not included to System
@@ -305,8 +305,8 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
 
     //set first measure to lc.nextMeasures for following
     //utilizing in getNextMeasure()
-    ctx.mutState().nextMeasure = ctx.mutDom().first();
-    ctx.mutState().tick = Fraction(0, 1);
+    ctx.mutState().setNextMeasure(ctx.mutDom().first());
+    ctx.mutState().setTick(Fraction(0, 1));
     MeasureLayout::getNextMeasure(options, ctx);
 
     static constexpr Fraction minTicks = Fraction(1, 16);
@@ -316,16 +316,16 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
     // we simply assume a shortest note of 1/16 and longest of 4/4. This ensures perfect spacing consistency,
     // even if the actual values may be be different.
 
-    while (ctx.state().curMeasure) {
+    while (ctx.state().curMeasure()) {
         double ww = 0.0;
-        if (ctx.state().curMeasure->isVBox() || ctx.state().curMeasure->isTBox()) {
-            ctx.mutState().curMeasure->resetExplicitParent();
+        if (ctx.state().curMeasure()->isVBox() || ctx.state().curMeasure()->isTBox()) {
+            ctx.mutState().curMeasure()->resetExplicitParent();
             MeasureLayout::getNextMeasure(options, ctx);
             continue;
         }
-        system->appendMeasure(ctx.state().curMeasure);
-        if (ctx.state().curMeasure->isMeasure()) {
-            Measure* m = toMeasure(ctx.mutState().curMeasure);
+        system->appendMeasure(ctx.mutState().curMeasure());
+        if (ctx.state().curMeasure()->isMeasure()) {
+            Measure* m = toMeasure(ctx.mutState().curMeasure());
             if (m->mmRest()) {
                 m->mmRest()->resetExplicitParent();
             }
@@ -346,7 +346,7 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
             if (m->trailer()) {
                 MeasureLayout::removeSystemTrailer(m, ctx);
             }
-            if (m->tick() >= ctx.state().startTick && m->tick() <= ctx.state().endTick) {
+            if (m->tick() >= ctx.state().startTick() && m->tick() <= ctx.state().endTick()) {
                 // for measures in range, do full layout
                 if (options.isMode(LayoutMode::HORIZONTAL_FIXED)) {
                     MeasureLayout::createEndBarLines(m, true, ctx);
@@ -385,10 +385,10 @@ void ScoreLayout::collectLinearSystem(const LayoutOptions& options, LayoutContex
             }
             m->setPos(pos);
             MeasureLayout::layoutStaffLines(m, ctx);
-        } else if (ctx.state().curMeasure->isHBox()) {
-            ctx.mutState().curMeasure->setPos(pos + PointF(toHBox(ctx.state().curMeasure)->topGap(), 0.0));
-            TLayout::layoutMeasureBase(ctx.mutState().curMeasure, ctx);
-            ww = ctx.state().curMeasure->width();
+        } else if (ctx.state().curMeasure()->isHBox()) {
+            ctx.mutState().curMeasure()->setPos(pos + PointF(toHBox(ctx.state().curMeasure())->topGap(), 0.0));
+            TLayout::layoutMeasureBase(ctx.mutState().curMeasure(), ctx);
+            ww = ctx.state().curMeasure()->width();
         }
         pos.rx() += ww;
 
@@ -419,7 +419,7 @@ void ScoreLayout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
                     continue;
                 }
                 if (e->isChordRest()) {
-                    if (m->tick() < ctx.state().startTick || m->tick() > ctx.state().endTick) {
+                    if (m->tick() < ctx.state().startTick() || m->tick() > ctx.state().endTick()) {
                         continue;
                     }
                     if (!ctx.dom().staff(track2staff(track))->show()) {
@@ -471,14 +471,14 @@ void ScoreLayout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
         MeasureLayout::layout2(m, ctx);
     }
 
-    const double lm = ctx.state().page->lm();
-    const double tm = ctx.state().page->tm() + ctx.style().styleMM(Sid::staffUpperBorder);
-    const double rm = ctx.state().page->rm();
-    const double bm = ctx.state().page->bm() + ctx.style().styleMM(Sid::staffLowerBorder);
+    const double lm = ctx.state().page()->lm();
+    const double tm = ctx.state().page()->tm() + ctx.style().styleMM(Sid::staffUpperBorder);
+    const double rm = ctx.state().page()->rm();
+    const double bm = ctx.state().page()->bm() + ctx.style().styleMM(Sid::staffLowerBorder);
 
-    ctx.mutState().page->setPos(0, 0);
+    ctx.mutState().page()->setPos(0, 0);
     system->setPos(lm, tm);
-    ctx.mutState().page->setWidth(lm + system->width() + rm);
-    ctx.mutState().page->setHeight(tm + system->height() + bm);
-    ctx.mutState().page->invalidateBspTree();
+    ctx.mutState().page()->setWidth(lm + system->width() + rm);
+    ctx.mutState().page()->setHeight(tm + system->height() + bm);
+    ctx.mutState().page()->invalidateBspTree();
 }

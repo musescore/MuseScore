@@ -76,7 +76,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
 {
     TRACEFUNC;
 
-    if (!ctx.state().curMeasure) {
+    if (!ctx.state().curMeasure()) {
         return nullptr;
     }
 
@@ -87,14 +87,15 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
 
     if (measure) {
         const LayoutBreak* layoutBreak = measure->sectionBreakElement();
-        ctx.mutState().firstSystem        = measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
-        ctx.mutState().firstSystemIndent  = ctx.state().firstSystem && options.firstSystemIndent && layoutBreak->firstSystemIndentation();
-        ctx.mutState().startWithLongNames = ctx.state().firstSystem && layoutBreak->startWithLongNames();
+        ctx.mutState().setFirstSystem(measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT));
+        ctx.mutState().setFirstSystemIndent(ctx.state().firstSystem() && options.firstSystemIndent
+                                            && layoutBreak->firstSystemIndentation());
+        ctx.mutState().setStartWithLongNames(ctx.state().firstSystem() && layoutBreak->startWithLongNames());
     }
 
     System* system = getNextSystem(ctx);
-    Fraction lcmTick = ctx.state().curMeasure->tick();
-    SystemLayout::setInstrumentNames(system, ctx, ctx.state().startWithLongNames, lcmTick);
+    Fraction lcmTick = ctx.state().curMeasure()->tick();
+    SystemLayout::setInstrumentNames(system, ctx, ctx.state().startWithLongNames(), lcmTick);
 
     double curSysWidth = 0.0;
     double layoutSystemMinWidth = 0.0;
@@ -104,8 +105,8 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
     system->setWidth(targetSystemWidth);
 
     // save state of measure
-    bool curHeader = ctx.state().curMeasure->header();
-    bool curTrailer = ctx.state().curMeasure->trailer();
+    bool curHeader = ctx.state().curMeasure()->header();
+    bool curTrailer = ctx.state().curMeasure()->trailer();
     MeasureBase* breakMeasure = nullptr;
 
     Fraction minTicks = Fraction::max(); // Initializing at highest possible value
@@ -119,16 +120,16 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
     double oldWidth = 0.0;
     System* oldSystem = nullptr;
 
-    while (ctx.state().curMeasure) {      // collect measure for system
-        oldSystem = ctx.mutState().curMeasure->system();
-        system->appendMeasure(ctx.mutState().curMeasure);
+    while (ctx.state().curMeasure()) {      // collect measure for system
+        oldSystem = ctx.mutState().curMeasure()->system();
+        system->appendMeasure(ctx.mutState().curMeasure());
         if (system->hasCrossStaffOrModifiedBeams()) {
             updateCrossBeams(system, ctx);
         }
         double ww  = 0.0; // width of current measure
-        if (ctx.state().curMeasure->isMeasure()) {
-            Measure* m = toMeasure(ctx.mutState().curMeasure);
-            if (!(oldSystem && oldSystem->page() && oldSystem->page() != ctx.state().page)) {
+        if (ctx.state().curMeasure()->isMeasure()) {
+            Measure* m = toMeasure(ctx.mutState().curMeasure());
+            if (!(oldSystem && oldSystem->page() && oldSystem->page() != ctx.state().page())) {
                 // Construct information that is needed before horizontal spacing
                 // (unless the curMeasure we've just collected comes from the next page)
                 MeasureLayout::computePreSpacingItems(m, ctx);
@@ -169,7 +170,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
 
             if (firstMeasure) {
                 layoutSystemMinWidth = curSysWidth;
-                SystemLayout::layoutSystem(system, ctx, curSysWidth, ctx.state().firstSystem, ctx.state().firstSystemIndent);
+                SystemLayout::layoutSystem(system, ctx, curSysWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
                 if (system->hasCrossStaffOrModifiedBeams()) {
                     updateCrossBeams(system, ctx);
                 }
@@ -180,7 +181,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                         s->setEnabled(true);
                     }
                 }
-                MeasureLayout::addSystemHeader(m, ctx.state().firstSystem, ctx);
+                MeasureLayout::addSystemHeader(m, ctx.state().firstSystem(), ctx);
                 firstMeasure = false;
                 createHeader = false;
             } else {
@@ -202,10 +203,10 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
             }
             MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, 1);
             ww = m->width();
-        } else if (ctx.state().curMeasure->isHBox()) {
-            ctx.mutState().curMeasure->computeMinWidth();
-            ww = ctx.state().curMeasure->width();
-            createHeader = toHBox(ctx.mutState().curMeasure)->createSystemHeader();
+        } else if (ctx.state().curMeasure()->isHBox()) {
+            ctx.mutState().curMeasure()->computeMinWidth();
+            ww = ctx.state().curMeasure()->width();
+            createHeader = toHBox(ctx.mutState().curMeasure())->createSystemHeader();
         } else {
             // vbox:
             MeasureLayout::getNextMeasure(options, ctx);
@@ -217,28 +218,28 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
         // collect at least one measure and the break
         double acceptanceRange = squeezability * system->squeezableSpace();
         bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > targetSystemWidth + acceptanceRange)
-                       && !ctx.state().prevMeasure->noBreak();
+                       && !ctx.state().prevMeasure()->noBreak();
         /* acceptanceRange allows some systems to be initially slightly larger than the margins and be
          * justified by squeezing instead of stretching. Allows to make much better choices of how many
          * measures to fit per system. */
         if (doBreak) {
-            breakMeasure = ctx.mutState().curMeasure;
+            breakMeasure = ctx.mutState().curMeasure();
             system->removeLastMeasure();
-            ctx.mutState().curMeasure->setParent(oldSystem);
-            while (ctx.state().prevMeasure && ctx.state().prevMeasure->noBreak() && system->measures().size() > 1) {
+            ctx.mutState().curMeasure()->setParent(oldSystem);
+            while (ctx.state().prevMeasure() && ctx.state().prevMeasure()->noBreak() && system->measures().size() > 1) {
                 // remove however many measures are grouped with nobreak, working backwards
                 // but if too many are grouped, stop before we get 0 measures left on system
                 // TODO: intelligently break group into smaller groups instead
-                ctx.mutState().tick -= ctx.state().curMeasure->ticks();
-                ctx.mutState().measureNo = ctx.state().curMeasure->no();
+                ctx.mutState().setTick(ctx.state().tick() - ctx.state().curMeasure()->ticks());
+                ctx.mutState().setMeasureNo(ctx.state().curMeasure()->no());
 
-                ctx.mutState().nextMeasure = ctx.mutState().curMeasure;
-                ctx.mutState().curMeasure  = ctx.mutState().prevMeasure;
-                ctx.mutState().prevMeasure = ctx.mutState().curMeasure->prev();
+                ctx.mutState().setNextMeasure(ctx.mutState().curMeasure());
+                ctx.mutState().setCurMeasure(ctx.mutState().prevMeasure());
+                ctx.mutState().setPrevMeasure(ctx.mutState().curMeasure()->prev());
 
                 curSysWidth -= system->lastMeasure()->width();
                 system->removeLastMeasure();
-                ctx.mutState().curMeasure->setParent(oldSystem);
+                ctx.mutState().curMeasure()->setParent(oldSystem);
             }
             // If the last appended measure caused a re-layout of the previous measures, now that we are
             // removing it we need to re-layout the previous measures again.
@@ -261,12 +262,12 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
             break;
         }
 
-        if (ctx.state().prevMeasure && ctx.state().prevMeasure->isMeasure() && ctx.state().prevMeasure->system() == system) {
+        if (ctx.state().prevMeasure() && ctx.state().prevMeasure()->isMeasure() && ctx.state().prevMeasure()->system() == system) {
             //
             // now we know that the previous measure is not the last
             // measure in the system and we finally can create the end barline for it
 
-            Measure* m = toMeasure(ctx.mutState().prevMeasure);
+            Measure* m = toMeasure(ctx.mutState().prevMeasure());
             // TODO: if lc.curMeasure is a frame, removing the trailer may be premature
             // but merely skipping this code isn't good enough,
             // we need to find the right time to re-enable the trailer,
@@ -280,8 +281,8 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
             // is an repeat, the createEndBarLines() created an start-end repeat barline
             // and we can remove the start repeat barline of the current barline
 
-            if (ctx.state().curMeasure->isMeasure()) {
-                Measure* m1 = toMeasure(ctx.mutState().curMeasure);
+            if (ctx.state().curMeasure()->isMeasure()) {
+                Measure* m1 = toMeasure(ctx.mutState().curMeasure());
                 if (m1->repeatStart()) {
                     Segment* s = m1->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
@@ -300,7 +301,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
             curSysWidth += MeasureLayout::createEndBarLines(m, false, ctx);          // create final barLine
         }
 
-        const MeasureBase* mb = ctx.state().curMeasure;
+        const MeasureBase* mb = ctx.state().curMeasure();
         bool lineBreak  = false;
         switch (options.mode) {
         case LayoutMode::PAGE:
@@ -315,8 +316,8 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
         }
 
         // preserve state of next measure (which is about to become current measure)
-        if (ctx.state().nextMeasure) {
-            MeasureBase* nmb = ctx.mutState().nextMeasure;
+        if (ctx.state().nextMeasure()) {
+            MeasureBase* nmb = ctx.mutState().nextMeasure();
             if (nmb->isMeasure() && ctx.style().styleB(Sid::createMultiMeasureRests)) {
                 Measure* nm = toMeasure(nmb);
                 if (nm->hasMMRest()) {
@@ -327,7 +328,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                 oldStretch = toMeasure(nmb)->layoutStretch();
                 oldWidth = toMeasure(nmb)->width();
             }
-            if (!ctx.state().curMeasure->noBreak()) {
+            if (!ctx.state().curMeasure()->noBreak()) {
                 // current measure is not a nobreak,
                 // so next measure could possibly start a system
                 curHeader = nmb->header();
@@ -344,32 +345,32 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
         curSysWidth += ww;
 
         // ElementType nt = lc.curMeasure ? lc.curMeasure->type() : ElementType::INVALID;
-        mb = ctx.state().curMeasure;
+        mb = ctx.state().curMeasure();
         bool tooWide = false;     // curSysWidth + minMeasureWidth > systemWidth;  // TODO: noBreak
         if (lineBreak || !mb || mb->isVBox() || mb->isTBox() || mb->isFBox() || tooWide) {
             break;
         }
     }
 
-    assert(ctx.state().prevMeasure);
+    assert(ctx.state().prevMeasure());
 
-    if (ctx.state().endTick < ctx.state().prevMeasure->tick()) {
+    if (ctx.state().endTick() < ctx.state().prevMeasure()->tick()) {
         // we've processed the entire range
         // but we need to continue layout until we reach a system whose last measure is the same as previous layout
-        if (ctx.state().prevMeasure == ctx.state().systemOldMeasure) {
+        if (ctx.state().prevMeasure() == ctx.state().systemOldMeasure()) {
             // this system ends in the same place as the previous layout
             // ok to stop
-            if (ctx.state().curMeasure && ctx.state().curMeasure->isMeasure()) {
+            if (ctx.state().curMeasure() && ctx.state().curMeasure()->isMeasure()) {
                 // we may have previously processed first measure(s) of next system
                 // so now we must restore to original state
-                Measure* m = toMeasure(ctx.mutState().curMeasure);
+                Measure* m = toMeasure(ctx.mutState().curMeasure());
                 if (m->repeatStart()) {
                     Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
                         s->setEnabled(true);
                     }
                 }
-                const MeasureBase* pbmb = ctx.state().prevMeasure->findPotentialSectionBreak();
+                const MeasureBase* pbmb = ctx.state().prevMeasure()->findPotentialSectionBreak();
                 bool localFirstSystem = pbmb->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
                 MeasureBase* nm = breakMeasure ? breakMeasure : m;
                 if (curHeader) {
@@ -394,7 +395,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
                     m = m->nextMeasure();
                 }
             }
-            ctx.mutState().rangeDone = true;
+            ctx.mutState().setRangeDone(true);
         }
     }
 
@@ -405,17 +406,17 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
 
     // Brake cross-measure beams
     // Create end barlines
-    if (ctx.state().prevMeasure && ctx.state().prevMeasure->isMeasure()) {
-        Measure* pm = toMeasure(ctx.mutState().prevMeasure);
+    if (ctx.state().prevMeasure() && ctx.state().prevMeasure()->isMeasure()) {
+        Measure* pm = toMeasure(ctx.mutState().prevMeasure());
         BeamLayout::breakCrossMeasureBeams(pm, ctx);
         MeasureLayout::createEndBarLines(pm, true, ctx);
     }
 
     // hide empty staves
-    hideEmptyStaves(system, ctx, ctx.state().firstSystem);
+    hideEmptyStaves(system, ctx, ctx.state().firstSystem());
     // Relayout system to account for newly hidden/unhidden staves
     curSysWidth -= system->leftMargin();
-    SystemLayout::layoutSystem(system, ctx, layoutSystemMinWidth, ctx.state().firstSystem, ctx.state().firstSystemIndent);
+    SystemLayout::layoutSystem(system, ctx, layoutSystemMinWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
     curSysWidth += system->leftMargin();
 
     // add system trailer if needed (cautionary time/key signatures etc)
@@ -447,7 +448,7 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
 
     // JUSTIFY SYSTEM
     // Do not justify last system of a section if curSysWidth is < lastSystemFillLimit
-    if (!((ctx.state().curMeasure == nullptr || (lm && lm->sectionBreak()))
+    if (!((ctx.state().curMeasure() == nullptr || (lm && lm->sectionBreak()))
           && ((curSysWidth / targetSystemWidth) < ctx.style().styleD(Sid::lastSystemFillLimit)))
         && !MScore::noHorizontalStretch) { // debug feature
         justifySystem(system, curSysWidth, targetSystemWidth);
@@ -500,12 +501,13 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
 
     if (measure) {
         const LayoutBreak* layoutBreak = measure->sectionBreakElement();
-        ctx.mutState().firstSystem        = measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
-        ctx.mutState().firstSystemIndent  = ctx.state().firstSystem && options.firstSystemIndent && layoutBreak->firstSystemIndentation();
-        ctx.mutState().startWithLongNames = ctx.state().firstSystem && layoutBreak->startWithLongNames();
+        ctx.mutState().setFirstSystem(measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT));
+        ctx.mutState().setFirstSystemIndent(ctx.state().firstSystem() && options.firstSystemIndent
+                                            && layoutBreak->firstSystemIndentation());
+        ctx.mutState().setStartWithLongNames(ctx.state().firstSystem() && layoutBreak->startWithLongNames());
     }
 
-    if (oldSystem && !(oldSystem->page() && oldSystem->page() != ctx.state().page)) {
+    if (oldSystem && !(oldSystem->page() && oldSystem->page() != ctx.state().page())) {
         // We may have previously processed the ties of the next system (in LayoutChords::updateLineAttachPoints()).
         // We need to restore them to the correct state.
         SystemLayout::restoreTies(oldSystem);
@@ -558,14 +560,14 @@ void SystemLayout::justifySystem(System* system, double curSysWidth, double targ
 
 System* SystemLayout::getNextSystem(LayoutContext& ctx)
 {
-    bool isVBox = ctx.state().curMeasure->isVBox();
+    bool isVBox = ctx.state().curMeasure()->isVBox();
     System* system = nullptr;
-    if (ctx.state().systemList.empty()) {
+    if (ctx.state().systemList().empty()) {
         system = Factory::createSystem(ctx.mutDom().dummyParent()->page());
-        ctx.mutState().systemOldMeasure = nullptr;
+        ctx.mutState().setSystemOldMeasure(nullptr);
     } else {
-        system = mu::takeFirst(ctx.mutState().systemList);
-        ctx.mutState().systemOldMeasure = system->measures().empty() ? 0 : system->measures().back();
+        system = mu::takeFirst(ctx.mutState().systemList());
+        ctx.mutState().setSystemOldMeasure(system->measures().empty() ? 0 : system->measures().back());
         system->clear();       // remove measures from system
     }
     ctx.mutDom().systems().push_back(system);
@@ -709,7 +711,7 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
         // in continuous view, entire score is one system
         // but we only need to process the range
-        if (options.isLinearMode() && (m->tick() < ctx.state().startTick || m->tick() > ctx.state().endTick)) {
+        if (options.isLinearMode() && (m->tick() < ctx.state().startTick() || m->tick() > ctx.state().endTick())) {
             continue;
         }
         for (Segment* s = m->first(); s; s = s->next()) {
@@ -763,7 +765,7 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
             MeasureNumber* mno = m->noText(staffIdx);
             MMRestRange* mmrr  = m->mmRangeText(staffIdx);
             // no need to build skyline outside of range in continuous view
-            if (options.isLinearMode() && (m->tick() < ctx.state().startTick || m->tick() > ctx.state().endTick)) {
+            if (options.isLinearMode() && (m->tick() < ctx.state().startTick() || m->tick() > ctx.state().endTick())) {
                 continue;
             }
             if (mno && mno->addToSkyline()) {
@@ -921,8 +923,8 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //-------------------------------------------------------------
 
     bool useRange = false;    // TODO: lineMode();
-    Fraction stick = useRange ? ctx.state().startTick : system->measures().front()->tick();
-    Fraction etick = useRange ? ctx.state().endTick : system->measures().back()->endTick();
+    Fraction stick = useRange ? ctx.state().startTick() : system->measures().front()->tick();
+    Fraction etick = useRange ? ctx.state().endTick() : system->measures().back()->endTick();
     auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
 
     // ties
@@ -934,7 +936,7 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
         Spanner* sp = interval.value;
         sp->computeStartElement();
         sp->computeEndElement();
-        ctx.mutState().processedSpanners.insert(sp);
+        ctx.mutState().processedSpanners().insert(sp);
         if (sp->tick() < etick && sp->tick2() >= stick) {
             if (sp->isSlur() && !toSlur(sp)->isCrossStaff()) {
                 // skip cross-staff slurs, will be done after page layout
@@ -1659,7 +1661,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
     double actualSize = 0.0;
     double defaultSize = 0.0;
     bool followStaffSize = true;
-    if (ctx.state().startWithLongNames) {
+    if (ctx.state().startWithLongNames()) {
         actualSize = system->score()->styleD(Sid::longInstrumentFontSize);
         defaultSize = DefaultStyle::defaultStyle().value(Sid::longInstrumentFontSize).toDouble();
         followStaffSize = system->score()->styleB(Sid::longInstrumentFontSpatiumDependent);
@@ -1787,8 +1789,8 @@ double SystemLayout::instrumentNamesWidth(System* system, bool isFirstSystem, La
 /// System::layoutBrackets and System::createBracket.
 double SystemLayout::totalBracketOffset(LayoutContext& ctx)
 {
-    if (ctx.state().totalBracketsWidth >= 0) {
-        return ctx.state().totalBracketsWidth;
+    if (ctx.state().totalBracketsWidth() >= 0) {
+        return ctx.state().totalBracketsWidth();
     }
 
     size_t columns = 0;
@@ -1848,9 +1850,9 @@ double SystemLayout::totalBracketOffset(LayoutContext& ctx)
     for (double w : bracketWidth) {
         totalBracketsWidth = std::max(totalBracketsWidth, w);
     }
-    ctx.mutState().totalBracketsWidth = totalBracketsWidth;
+    ctx.mutState().setTotalBracketsWidth(totalBracketsWidth);
 
-    return ctx.state().totalBracketsWidth;
+    return totalBracketsWidth;
 }
 
 double SystemLayout::layoutBrackets(System* system, LayoutContext& ctx)

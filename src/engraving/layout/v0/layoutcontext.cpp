@@ -259,12 +259,14 @@ const std::set<Spanner*> DomAccessor::unmanagedSpanners()
 LayoutContext::LayoutContext(Score* score)
     : m_score(score), m_dom(score)
 {
-    m_state.firstSystemIndent = score && score->styleB(Sid::enableIndentationOnFirstSystem);
+    if (score) {
+        m_state.setFirstSystemIndent(score->style().styleB(Sid::enableIndentationOnFirstSystem));
+    }
 }
 
 LayoutContext::~LayoutContext()
 {
-    for (Spanner* s : m_state.processedSpanners) {
+    for (Spanner* s : m_state.processedSpanners()) {
         TLayout::layoutSystemsDone(s);
     }
 

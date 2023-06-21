@@ -775,7 +775,7 @@ EngravingItem* System::prevSegmentElement()
 //    s2   - bottom system
 //---------------------------------------------------------
 
-double System::minDistance(System* s2) const
+double System::minDistance(const System* s2) const
 {
     if (vbox() && !s2->vbox()) {
         return std::max(double(vbox()->bottomGap()), s2->minTop());
