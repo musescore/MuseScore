@@ -660,7 +660,7 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
         EngravingItem* startElement = (EngravingItem*)s->startElement()->findLinkedInScore(score);
         if (startElement && startElement->isChord()) {
             ns->setStartElement(startElement);
-            toChord(startElement)->startingSpanners().push_back(ns);
+            toChord(startElement)->addStartingSpanner(ns);
         }
     }
 
