@@ -48,6 +48,14 @@ static QStringList prepareArguments(int argc, char** argv)
     return args;
 }
 
+template<typename ... Args>
+QCommandLineOption internalCommandLineOption(Args&& ... args)
+{
+    QCommandLineOption option(std::forward<Args>(args)...);
+    option.setFlags(QCommandLineOption::HiddenFromHelp);
+    return option;
+}
+
 void CommandLineParser::init()
 {
     // Common
@@ -138,7 +146,8 @@ void CommandLineParser::init()
     m_parser.addOption(QCommandLineOption("register-failed-audio-plugin", "Register an incompatible audio plugin", "path"));
 
     // Internal
-    m_parser.addOption(QCommandLineOption("score-display-name-override", "", "name"));
+    m_parser.addOption(internalCommandLineOption("score-display-name-override",
+                                                 "Display name to be shown in splash screen for the score that is being opened", "name"));
 }
 
 void CommandLineParser::parse(int argc, char** argv)
