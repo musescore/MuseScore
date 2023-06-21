@@ -1336,7 +1336,7 @@ void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const P
     const StaffType* stType = item->staffType();
 
     item->setSkipDraw(false);
-    if (stType && stType->isHiddenElementOnTab(ctx.style(), Sid::slurShowTabCommon, Sid::slurShowTabSimple)) {
+    if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::slurShowTabCommon, Sid::slurShowTabSimple)) {
         item->setSkipDraw(true);
         return;
     }

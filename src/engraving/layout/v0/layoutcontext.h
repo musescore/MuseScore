@@ -71,23 +71,50 @@ class LayoutConfiguration
 public:
     LayoutConfiguration(IGetScoreInternal* s);
 
+    LayoutMode layoutMode() const { return options().mode; }
+    bool isMode(LayoutMode m) const { return options().isMode(m); }
+    bool isLineMode() const { return isMode(LayoutMode::LINE); }
+    bool isLinearMode() const { return options().isLinearMode(); }
+    bool isFloatMode() const { return isMode(LayoutMode::FLOAT); }
+    bool isPaletteMode() const;
+    bool isPrintingMode() const;
+
+    bool isShowVBox() const { return options().isShowVBox; }
+    double noteHeadWidth() const;
+    bool showInvisible() const;
+    int pageNumberOffset() const;
+    bool enableVerticalSpread() const;
+    double maxSystemDistance() const;
+
     const MStyle& style() const;
 
-    double loWidth() const { return style().styleD(Sid::pageWidth) * DPI; }
-    double loHeight() const { return style().styleD(Sid::pageHeight) * DPI; }
+    const PropertyValue& styleV(Sid idx) const { return style().styleV(idx); }
+    Spatium styleS(Sid idx) const { return style().styleS(idx); }
+    Millimetre styleMM(Sid idx) const { return style().styleMM(idx); }
+    String styleSt(Sid idx) const { return style().styleSt(idx); }
+    bool styleB(Sid idx) const { return style().styleB(idx); }
+    double styleD(Sid idx) const { return style().styleD(idx); }
+    int styleI(Sid idx) const { return style().styleI(idx); }
 
-    bool firstSystemIndent() const { return style().styleB(Sid::enableIndentationOnFirstSystem); }
+    double spatium() const { return styleD(Sid::spatium); }
+    double point(const Spatium sp) const { return sp.val() * spatium(); }
 
-    double maxChordShiftAbove() const { return style().styleMM(Sid::maxChordShiftAbove); }
-    double maxChordShiftBelow() const { return style().styleMM(Sid::maxChordShiftBelow); }
+    double loWidth() const { return styleD(Sid::pageWidth) * DPI; }
+    double loHeight() const { return styleD(Sid::pageHeight) * DPI; }
 
-    double maxFretShiftAbove() const { return style().styleMM(Sid::maxFretShiftAbove); }
-    double maxFretShiftBelow() const { return style().styleMM(Sid::maxFretShiftBelow); }
+    bool firstSystemIndent() const { return styleB(Sid::enableIndentationOnFirstSystem); }
+
+    double maxChordShiftAbove() const { return styleMM(Sid::maxChordShiftAbove); }
+    double maxChordShiftBelow() const { return styleMM(Sid::maxChordShiftBelow); }
+
+    double maxFretShiftAbove() const { return styleMM(Sid::maxFretShiftAbove); }
+    double maxFretShiftBelow() const { return styleMM(Sid::maxFretShiftBelow); }
 
     VerticalAlignRange verticalAlignRange() const { return style().value(Sid::autoplaceVerticalAlignRange).value<VerticalAlignRange>(); }
 
 private:
     const Score* score() const;
+    const LayoutOptions& options() const;
 
     IGetScoreInternal* m_getScore = nullptr;
 };
@@ -257,26 +284,8 @@ public:
 
     bool isValid() const;
 
-    // Context
-    bool isPaletteMode() const;
-    bool printingMode() const;
-    LayoutMode layoutMode() const;
-    bool lineMode() const;
-    bool linearMode() const;
-    bool floatMode() const;
-
-    double spatium() const;
-    double point(const Spatium sp) const;
-
-    const MStyle& style() const;
-    double noteHeadWidth() const;
-    bool showInvisible() const;
-    int pageNumberOffset() const;
-    bool enableVerticalSpread() const;
-    double maxSystemDistance() const;
-
+    // Conf
     IEngravingFontPtr engravingFont() const;
-
     const LayoutConfiguration& conf() const { return m_configuration; }
 
     // Dom access

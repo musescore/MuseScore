@@ -192,7 +192,7 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     item->_notes.clear();
     staff_idx_t staffIdx = mu::nidx;
     for (ChordRest* cr : item->_elements) {
-        double m = cr->isSmall() ? ctx.style().styleD(Sid::smallNoteMag) : 1.0;
+        double m = cr->isSmall() ? ctx.conf().styleD(Sid::smallNoteMag) : 1.0;
         mag = std::max(mag, m);
         if (cr->isChord()) {
             Chord* chord = toChord(cr);
@@ -304,16 +304,16 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
         return;
     }
 
-    item->_beamSpacing = ctx.style().styleB(Sid::useWideBeams) ? 4 : 3;
+    item->_beamSpacing = ctx.conf().styleB(Sid::useWideBeams) ? 4 : 3;
     item->_beamDist = (item->_beamSpacing / 4.0) * item->spatium() * item->mag();
-    item->_beamWidth = item->point(ctx.style().styleS(Sid::beamWidth)) * item->mag();
+    item->_beamWidth = item->point(ctx.conf().styleS(Sid::beamWidth)) * item->mag();
 
     item->_startAnchor = item->_layoutInfo.chordBeamAnchor(startChord, BeamTremoloLayout::ChordBeamAnchorType::Start);
     item->_endAnchor = item->_layoutInfo.chordBeamAnchor(endChord, BeamTremoloLayout::ChordBeamAnchorType::End);
 
     if (item->_isGrace) {
-        item->_beamDist *= ctx.style().styleD(Sid::graceNoteMag);
-        item->_beamWidth *= ctx.style().styleD(Sid::graceNoteMag);
+        item->_beamDist *= ctx.conf().styleD(Sid::graceNoteMag);
+        item->_beamWidth *= ctx.conf().styleD(Sid::graceNoteMag);
     }
 
     int fragmentIndex = (item->_direction == DirectionV::AUTO || item->_direction == DirectionV::DOWN) ? 0 : 1;
@@ -321,7 +321,7 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
         item->_layoutInfo = BeamTremoloLayout(item);
         double startY = item->fragments[frag]->py1[fragmentIndex];
         double endY = item->fragments[frag]->py2[fragmentIndex];
-        if (ctx.style().styleB(Sid::snapCustomBeamsToGrid)) {
+        if (ctx.conf().styleB(Sid::snapCustomBeamsToGrid)) {
             const double quarterSpace = item->spatium() / 4;
             startY = round(startY / quarterSpace) * quarterSpace;
             endY = round(endY / quarterSpace) * quarterSpace;
@@ -610,7 +610,7 @@ void BeamLayout::beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after)
 
 void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
 {
-    bool crossMeasure = ctx.style().styleB(Sid::crossMeasureValues);
+    bool crossMeasure = ctx.conf().styleB(Sid::crossMeasureValues);
 
     for (track_idx_t track = 0; track < ctx.dom().ntracks(); ++track) {
         const Staff* stf = ctx.dom().staff(track2staff(track));
@@ -1242,7 +1242,7 @@ void BeamLayout::createBeamletSegment(Beam* item, LayoutContext& ctx, ChordRest*
     const double startX = item->_layoutInfo.chordBeamAnchorX(cr,
                                                              isBefore ? BeamTremoloLayout::ChordBeamAnchorType::End : BeamTremoloLayout::ChordBeamAnchorType::Start);
 
-    const double beamletLength = ctx.style().styleMM(Sid::beamMinLen).val() * cr->mag();
+    const double beamletLength = ctx.conf().styleMM(Sid::beamMinLen).val() * cr->mag();
 
     const double endX = startX + (isBefore ? -beamletLength : beamletLength);
 

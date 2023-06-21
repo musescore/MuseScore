@@ -36,7 +36,7 @@ void ArpeggioLayout::layout(Arpeggio* item, LayoutContext& ctx)
 {
     double top = calcTop(item, ctx);
     double bottom = calcBottom(item, ctx);
-    if (ctx.style().styleB(Sid::ArpeggioHiddenInStdIfTab)) {
+    if (ctx.conf().styleB(Sid::ArpeggioHiddenInStdIfTab)) {
         if (item->staff() && item->staff()->isPitchedStaff(item->tick())) {
             for (Staff* s : item->staff()->staffList()) {
                 if (s->onSameScore(item) && s->isTabStaff(item->tick()) && s->visible()) {
@@ -92,7 +92,7 @@ void ArpeggioLayout::layout(Arpeggio* item, LayoutContext& ctx)
 
     case ArpeggioType::BRACKET: {
         double _spatium = item->spatium();
-        double w  = ctx.style().styleS(Sid::ArpeggioHookLen).val() * _spatium;
+        double w  = ctx.conf().styleS(Sid::ArpeggioHookLen).val() * _spatium;
         item->setbbox(RectF(0.0, top, w, bottom));
         break;
     }
@@ -181,7 +181,7 @@ double ArpeggioLayout::calcTop(Arpeggio* item, LayoutContext& ctx)
     }
     switch (item->arpeggioType()) {
     case ArpeggioType::BRACKET: {
-        double lineWidth = ctx.style().styleMM(Sid::ArpeggioLineWidth);
+        double lineWidth = ctx.conf().styleMM(Sid::ArpeggioLineWidth);
         return top - lineWidth / 2.0;
     }
     case ArpeggioType::NORMAL:
@@ -217,7 +217,7 @@ double ArpeggioLayout::calcBottom(Arpeggio* item, LayoutContext& ctx)
     }
     switch (item->arpeggioType()) {
     case ArpeggioType::BRACKET: {
-        double lineWidth = ctx.style().styleMM(Sid::ArpeggioLineWidth);
+        double lineWidth = ctx.conf().styleMM(Sid::ArpeggioLineWidth);
         return bottom - top + lineWidth;
     }
     case ArpeggioType::NORMAL:

@@ -208,7 +208,7 @@ public:
     int nmeasures() const { return static_cast<int>(score()->nmeasures()); }
     int npages() const { return static_cast<int>(score()->npages()); }
     int nstaves() const { return static_cast<int>(score()->nstaves()); }
-    int  ntracks() const { return static_cast<int>(score()->ntracks()); }
+    int ntracks() const { return static_cast<int>(score()->ntracks()); }
     /// \endcond
 
     /**

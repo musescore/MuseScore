@@ -448,10 +448,10 @@ private:
     Audio* _audio { nullptr };
     PlayMode _playMode { PlayMode::SYNTHESIZER };
 
-    double _noteHeadWidth { 0.0 };         // cached value
-
     RootItem* m_rootItem = nullptr;
     LayoutOptions m_layoutOptions;
+
+    double m_noteHeadWidth = 0.0;
 
     mu::async::Channel<EngravingItem*> m_elementDestroyed;
 
@@ -970,7 +970,6 @@ public:
 
     bool enableVerticalSpread() const;
     void setEnableVerticalSpread(bool val);
-    double maxSystemDistance() const;
 
     ScoreOrder scoreOrder() const;
     void setScoreOrder(ScoreOrder order);
@@ -1098,17 +1097,15 @@ public:
     //! NOTE Layout
     const LayoutOptions& layoutOptions() const { return m_layoutOptions; }
     void setLayoutMode(LayoutMode lm) { m_layoutOptions.mode = lm; }
-    void setShowVBox(bool v) { m_layoutOptions.showVBox = v; }
+    void setShowVBox(bool v) { m_layoutOptions.isShowVBox = v; }
+    double noteHeadWidth() const { return m_noteHeadWidth; }
+    void setNoteHeadWidth(double n) { m_noteHeadWidth = n; }
 
     // temporary methods
     bool isLayoutMode(LayoutMode lm) const { return m_layoutOptions.isMode(lm); }
     LayoutMode layoutMode() const { return m_layoutOptions.mode; }
-    bool floatMode() const { return m_layoutOptions.isMode(LayoutMode::FLOAT); }
-    bool pageMode() const { return m_layoutOptions.isMode(LayoutMode::PAGE); }
     bool lineMode() const { return m_layoutOptions.isMode(LayoutMode::LINE); }
-    bool systemMode() const { return m_layoutOptions.isMode(LayoutMode::SYSTEM); }
-    bool horizontalFixedMode() const { return m_layoutOptions.isMode(LayoutMode::HORIZONTAL_FIXED); }
-    bool linearMode() const { return lineMode() || horizontalFixedMode(); }
+    bool linearMode() const { return m_layoutOptions.isLinearMode(); }
     // ----
 
     void cmdSelectAll();
@@ -1164,9 +1161,6 @@ public:
 
     std::shared_ptr<IEngravingFont> engravingFont() const { return m_engravingFont; }
     void setEngravingFont(std::shared_ptr<IEngravingFont> f) { m_engravingFont = f; }
-
-    double noteHeadWidth() const { return _noteHeadWidth; }
-    void setNoteHeadWidth(double n) { _noteHeadWidth = n; }
 
     std::list<staff_idx_t> uniqueStaves() const;
 

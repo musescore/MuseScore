@@ -84,7 +84,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     String leading;
     String trailing;
 
-    if (ctx.style().styleB(Sid::lyricsAlignVerseNumber)) {
+    if (ctx.conf().styleB(Sid::lyricsAlignVerseNumber)) {
         size_t leadingIdx = 0;
         for (size_t i = 0; i < text.size(); ++i) {
             Char ch = text.at(i);
@@ -162,7 +162,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     if (item->isMelisma() || hasNumber) {
         // use the melisma style alignment setting
         if (item->isStyled(Pid::ALIGN)) {
-            item->setAlign(ctx.style().styleV(Sid::lyricsMelismaAlign).value<Align>());
+            item->setAlign(ctx.conf().styleV(Sid::lyricsMelismaAlign).value<Align>());
         }
     } else {
         // use the text style alignment setting
@@ -181,7 +181,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     double centerAdjust = 0.0;
     double leftAdjust   = 0.0;
 
-    if (ctx.style().styleB(Sid::lyricsAlignVerseNumber)) {
+    if (ctx.conf().styleB(Sid::lyricsAlignVerseNumber)) {
         // Calculate leading and trailing parts widths. Lyrics
         // should have text layout to be able to do it correctly.
         DO_ASSERT(item->rows() != 0);
@@ -228,7 +228,7 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
 {
     bool tempMelismaTicks = (item->lyrics()->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
     if (item->isEndMelisma()) {           // melisma
-        item->setLineWidth(ctx.style().styleMM(Sid::lyricsLineThickness));
+        item->setLineWidth(ctx.conf().styleMM(Sid::lyricsLineThickness));
         // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
         if (tempMelismaTicks) {
             item->lyrics()->setTicks(Fraction(0, 1));
@@ -348,7 +348,7 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
             double lyrXp       = lyr->pagePos().x();
             double sysXp       = sys->pagePos().x();
             toX               = lyrXp - sysXp + lyrX;             // syst.rel. X pos.
-            double offsetX     = toX - item->pos().x() - item->pos2().x() - ctx.style().styleMM(Sid::lyricsDashPad);
+            double offsetX     = toX - item->pos().x() - item->pos2().x() - ctx.conf().styleMM(Sid::lyricsDashPad);
             //                    delta from current end pos.| ending padding
             item->rxpos2()          += offsetX;
         }
@@ -364,7 +364,7 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
         fromX             = lyrXp - sysXp + lyrX + lyrW;
         //               syst.rel. X pos. | lyr.advance
         double offsetX     = fromX - item->pos().x();
-        offsetX           += ctx.style().styleMM(isEndMelisma ? Sid::lyricsMelismaPad : Sid::lyricsDashPad);
+        offsetX           += ctx.conf().styleMM(isEndMelisma ? Sid::lyricsMelismaPad : Sid::lyricsDashPad);
 
         //               delta from curr.pos. | add initial padding
         item->movePosX(offsetX);
@@ -389,8 +389,8 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
 
     // MELISMA vs. DASHES
     const double minMelismaLen = 1 * sp; // TODO: style setting
-    const double minDashLen  = ctx.style().styleS(Sid::lyricsDashMinLength).val() * sp;
-    const double maxDashDist = ctx.style().styleS(Sid::lyricsDashMaxDistance).val() * sp;
+    const double minDashLen  = ctx.conf().styleS(Sid::lyricsDashMinLength).val() * sp;
+    const double maxDashDist = ctx.conf().styleS(Sid::lyricsDashMaxDistance).val() * sp;
     double len = item->pos2().rx();
     if (isEndMelisma) {                   // melisma
         if (len < minMelismaLen) { // Omit the extender line if too short
@@ -402,16 +402,16 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
         // if not final segment, shorten it (why? -AS)
         /*
         if (isBeginType() || isMiddleType()) {
-            rxpos2() -= ctx.style().styleP(Sid::minNoteDistance) * mag();
+            rxpos2() -= ctx.conf().styleP(Sid::minNoteDistance) * mag();
         }
         */
     } else {                              // dash(es)
         // set conventional dash Y pos
-        item->movePosY(-lyr->fontMetrics().xHeight() * ctx.style().styleD(Sid::lyricsDashYposRatio));
-        item->_dashLength = ctx.style().styleMM(Sid::lyricsDashMaxLength) * item->mag();      // and dash length
+        item->movePosY(-lyr->fontMetrics().xHeight() * ctx.conf().styleD(Sid::lyricsDashYposRatio));
+        item->_dashLength = ctx.conf().styleMM(Sid::lyricsDashMaxLength) * item->mag();      // and dash length
         if (len < minDashLen) {                                               // if no room for a dash
             // if at end of system or dash is forced
-            if (endOfSystem || ctx.style().styleB(Sid::lyricsDashForce)) {
+            if (endOfSystem || ctx.conf().styleB(Sid::lyricsDashForce)) {
                 item->rxpos2()          = minDashLen;                               //     draw minimal dash
                 item->_numOfDashes      = 1;
                 item->_dashLength       = minDashLen;
@@ -693,8 +693,8 @@ void LyricsLayout::layoutLyrics(LayoutContext& ctx, System* system)
             }
             Measure* m = toMeasure(mb);
             for (staff_idx_t staffIdx : visibleStaves) {
-                double yMax = findLyricsMaxY(ctx.style(), m, staffIdx);
-                applyLyricsMax(ctx.style(), m, staffIdx, yMax);
+                double yMax = findLyricsMaxY(ctx.conf().style(), m, staffIdx);
+                applyLyricsMax(ctx.conf().style(), m, staffIdx, yMax);
             }
         }
         break;
@@ -706,14 +706,14 @@ void LyricsLayout::layoutLyrics(LayoutContext& ctx, System* system)
                 if (!mb->isMeasure()) {
                     continue;
                 }
-                yMax = std::max<double>(yMax, findLyricsMaxY(ctx.style(), toMeasure(mb), staffIdx));
-                yMin = std::min(yMin, findLyricsMinY(ctx.style(), toMeasure(mb), staffIdx));
+                yMax = std::max<double>(yMax, findLyricsMaxY(ctx.conf().style(), toMeasure(mb), staffIdx));
+                yMin = std::min(yMin, findLyricsMinY(ctx.conf().style(), toMeasure(mb), staffIdx));
             }
             for (MeasureBase* mb : system->measures()) {
                 if (!mb->isMeasure()) {
                     continue;
                 }
-                applyLyricsMax(ctx.style(), toMeasure(mb), staffIdx, yMax);
+                applyLyricsMax(ctx.conf().style(), toMeasure(mb), staffIdx, yMax);
                 applyLyricsMin(toMeasure(mb), staffIdx, yMin);
             }
         }
@@ -726,8 +726,8 @@ void LyricsLayout::layoutLyrics(LayoutContext& ctx, System* system)
             Measure* m = toMeasure(mb);
             for (staff_idx_t staffIdx : visibleStaves) {
                 for (Segment& s : m->segments()) {
-                    double yMax = findLyricsMaxY(ctx.style(), s, staffIdx);
-                    applyLyricsMax(ctx.style(), s, staffIdx, yMax);
+                    double yMax = findLyricsMaxY(ctx.conf().style(), s, staffIdx);
+                    applyLyricsMax(ctx.conf().style(), s, staffIdx, yMax);
                 }
             }
         }

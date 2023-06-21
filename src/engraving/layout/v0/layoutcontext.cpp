@@ -42,7 +42,34 @@ LayoutConfiguration::LayoutConfiguration(IGetScoreInternal* s)
 
 const Score* LayoutConfiguration::score() const
 {
-    return m_getScore->score();
+    const Score* score = m_getScore->score();
+    IF_ASSERT_FAILED(score) {
+        return nullptr;
+    }
+    return score;
+}
+
+const LayoutOptions& LayoutConfiguration::options() const
+{
+    return score()->layoutOptions();
+}
+
+bool LayoutConfiguration::isPaletteMode() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return false;
+    }
+
+    return score()->isPaletteScore();
+}
+
+bool LayoutConfiguration::isPrintingMode() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return false;
+    }
+
+    return score()->printing();
 }
 
 const MStyle& LayoutConfiguration::style() const
@@ -51,6 +78,47 @@ const MStyle& LayoutConfiguration::style() const
         return DefaultStyle::defaultStyle();
     }
     return score()->style();
+}
+
+double LayoutConfiguration::noteHeadWidth() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return 0.0;
+    }
+    return score()->noteHeadWidth();
+}
+
+bool LayoutConfiguration::showInvisible() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return false;
+    }
+    return score()->showInvisible();
+}
+
+int LayoutConfiguration::pageNumberOffset() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return 0;
+    }
+    return score()->pageNumberOffset();
+}
+
+bool LayoutConfiguration::enableVerticalSpread() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return 0;
+    }
+    return score()->enableVerticalSpread();
+}
+
+double LayoutConfiguration::maxSystemDistance() const
+{
+    if (enableVerticalSpread()) {
+        return style().styleMM(Sid::maxSystemSpread);
+    } else {
+        return style().styleMM(Sid::maxSystemDistance);
+    }
 }
 
 // ================================================
@@ -313,118 +381,6 @@ LayoutContext::~LayoutContext()
 bool LayoutContext::isValid() const
 {
     return m_score != nullptr;
-}
-
-bool LayoutContext::isPaletteMode() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return false;
-    }
-
-    return m_score->isPaletteScore();
-}
-
-bool LayoutContext::printingMode() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return false;
-    }
-
-    return m_score->printing();
-}
-
-LayoutMode LayoutContext::layoutMode() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return LayoutMode::PAGE;
-    }
-    return m_score->layoutMode();
-}
-
-bool LayoutContext::lineMode() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return false;
-    }
-    return m_score->lineMode();
-}
-
-bool LayoutContext::linearMode() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return false;
-    }
-    return m_score->linearMode();
-}
-
-bool LayoutContext::floatMode() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return false;
-    }
-    return m_score->floatMode();
-}
-
-double LayoutContext::spatium() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return DefaultStyle::defaultStyle().styleD(Sid::spatium);
-    }
-    return m_score->spatium();
-}
-
-double LayoutContext::point(const Spatium sp) const
-{
-    return sp.val() * spatium();
-}
-
-const MStyle& LayoutContext::style() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return DefaultStyle::defaultStyle();
-    }
-
-    return m_score->style();
-}
-
-double LayoutContext::noteHeadWidth() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return 0.0;
-    }
-    return m_score->noteHeadWidth();
-}
-
-bool LayoutContext::showInvisible() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return false;
-    }
-    return m_score->showInvisible();
-}
-
-int LayoutContext::pageNumberOffset() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return 0;
-    }
-    return m_score->pageNumberOffset();
-}
-
-bool LayoutContext::enableVerticalSpread() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return 0;
-    }
-    return m_score->enableVerticalSpread();
-}
-
-double LayoutContext::maxSystemDistance() const
-{
-    IF_ASSERT_FAILED(m_score) {
-        return 0;
-    }
-    return m_score->maxSystemDistance();
 }
 
 IEngravingFontPtr LayoutContext::engravingFont() const

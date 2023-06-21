@@ -22,7 +22,6 @@
 #ifndef MU_ENGRAVING_PAGELAYOUT_H
 #define MU_ENGRAVING_PAGELAYOUT_H
 
-#include "../layoutoptions.h"
 #include "layoutcontext.h"
 
 namespace mu::engraving {
@@ -36,7 +35,7 @@ class PageLayout
 public:
 
     static void getNextPage(LayoutContext& ctx);
-    static void collectPage(const LayoutOptions& options, LayoutContext& ctx);
+    static void collectPage(LayoutContext& ctx);
 
 private:
     static void layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding);
