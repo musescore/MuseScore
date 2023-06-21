@@ -117,7 +117,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     return true;
 }
 
-void ProjectMigrator::resetStyleSettingsPre400(mu::engraving::MasterScore* score)
+void ProjectMigrator::fixStyleSettingsPre400(mu::engraving::MasterScore* score)
 {
     // there are a few things that need to be updated no matter which version the score is from (#10499)
     // primarily, the differences made concerning barline thickness and distance
@@ -150,30 +150,30 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
     score->startCmd();
 
     bool ok = true;
-    bool needResetStylePre400 = true;
+    bool needFixStylePre400 = true;
 
     if (score->mscVersion() < 302 && opt.isApplyLeland) {
         ok = applyLelandStyle(score);
 
-        // The affected style settings are already reset by the Leland style sheet
-        needResetStylePre400 = false;
+        // The affected style settings are already overridden by the Leland style sheet
+        needFixStylePre400 = false;
     }
 
     if (ok && score->mscVersion() < 302 && opt.isApplyEdwin) {
         ok = applyEdwinStyle(score);
 
-        // The affected style settings are already reset by the Edwin style sheet
-        needResetStylePre400 = false;
+        // The affected style settings are already overridden by the Edwin style sheet
+        needFixStylePre400 = false;
     }
 
     if (ok && score->mscVersion() < 300) {
         ok = resetAllElementsPositions(score);
     }
 
-    if (ok && score->mscVersion() < 400 && needResetStylePre400) {
+    if (ok && score->mscVersion() < 400 && needFixStylePre400) {
         // TODO: this should happen while reading the file, and for every file!
         // Not as part of an optional migration process triggered from the UI
-        resetStyleSettingsPre400(score);
+        fixStyleSettingsPre400(score);
     }
 
     if (ok && score->mscVersion() != mu::engraving::Constants::MSC_VERSION) {
