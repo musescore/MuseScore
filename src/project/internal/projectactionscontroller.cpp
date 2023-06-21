@@ -52,8 +52,7 @@ static mu::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress");
 void ProjectActionsController::init()
 {
     dispatcher()->reg(this, "file-new", this, &ProjectActionsController::newProject);
-    dispatcher()->reg(this, "file-open", this, &ProjectActionsController::action_openProject);
-    dispatcher()->reg(this, "file-open-projectfile", this, &ProjectActionsController::action_openProjectFile);
+    dispatcher()->reg(this, "file-open", this, &ProjectActionsController::openProject);
 
     dispatcher()->reg(this, "file-close", [this]() {
         bool quitApp = multiInstancesProvider()->instances().size() > 1;
@@ -112,7 +111,6 @@ bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
         static const std::unordered_set<ActionCode> DONT_REQUIRE_OPEN_PROJECT {
             "file-new",
             "file-open",
-            "file-open-projectfile",
             "file-import-pdf",
             "continue-last-session",
             "clear-recent",
@@ -144,16 +142,12 @@ bool ProjectActionsController::isFileSupported(const io::path_t& path) const
     return false;
 }
 
-void ProjectActionsController::action_openProject(const actions::ActionData& args)
+void ProjectActionsController::openProject(const actions::ActionData& args)
 {
     io::path_t projectPath = !args.empty() ? args.arg<io::path_t>(0) : "";
-    openProject(projectPath);
-}
+    QString displayNameOverride = args.count() >= 2 ? args.arg<QString>(1) : QString();
 
-void ProjectActionsController::action_openProjectFile(const actions::ActionData& args)
-{
-    ProjectFile file = !args.empty() ? args.arg<ProjectFile>(0) : ProjectFile();
-    openProject(file);
+    openProject(ProjectFile { projectPath, displayNameOverride });
 }
 
 Ret ProjectActionsController::openProject(const io::path_t& path)

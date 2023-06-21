@@ -404,7 +404,7 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
         MenuItem* item = new MenuItem(this);
 
         UiAction action;
-        action.code = "file-open-projectfile";
+        action.code = "file-open";
         action.title = TranslatableString::untranslatable(file.displayName(true));
         item->setAction(action);
 
@@ -415,7 +415,7 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
         item->setState(state);
 
         item->setSelectable(true);
-        item->setArgs(ActionData::make_arg1<ProjectFile>(file));
+        item->setArgs(ActionData::make_arg2<io::path_t, QString>(file.path, file.displayNameOverride));
 
         items << item;
     }

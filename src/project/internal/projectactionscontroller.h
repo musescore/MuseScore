@@ -97,8 +97,7 @@ private:
 
     void newProject();
 
-    void action_openProject(const actions::ActionData& args);
-    void action_openProjectFile(const actions::ActionData& args);
+    void openProject(const actions::ActionData& args);
     void doOpenProject(const io::path_t& path, int scoreId);
     void downloadAndOpenCloudProject(int scoreId);
 

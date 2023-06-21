@@ -46,7 +46,7 @@ void ScoresPageModel::openOther()
 
 void ScoresPageModel::openScore(const QString& scorePath, const QString& displayNameOverride)
 {
-    dispatcher()->dispatch("file-open-projectfile", ActionData::make_arg1<ProjectFile>({ io::path_t(scorePath), displayNameOverride }));
+    dispatcher()->dispatch("file-open", ActionData::make_arg2<io::path_t, QString>(io::path_t(scorePath), displayNameOverride));
 }
 
 void ScoresPageModel::openScoreManager()
