@@ -58,7 +58,7 @@ void RecentScoresModel::setRecentScores(const std::vector<QVariantMap>& items)
 
 void RecentScoresModel::updateRecentScores()
 {
-    const RecentFilesList& recentScores = recentFilesController()->recentFilesList();
+    const ProjectFilesList& recentScores = recentFilesController()->recentFilesList();
 
     std::vector<QVariantMap> items;
     items.reserve(recentScores.size());
@@ -70,16 +70,17 @@ void RecentScoresModel::updateRecentScores()
     addItem[IS_CLOUD_KEY] = false;
     items.push_back(addItem);
 
-    for (const RecentFile& file : recentScores) {
+    for (const ProjectFile& file : recentScores) {
         QVariantMap obj;
 
-        std::string suffix = io::suffix(file);
+        std::string suffix = io::suffix(file.path);
         bool isSuffixInteresting = suffix != engraving::MSCZ;
-        obj[NAME_KEY] = io::filename(file, isSuffixInteresting).toQString();
-        obj[PATH_KEY] = file.toQString();
+        obj[NAME_KEY] = file.displayName(isSuffixInteresting);
+        obj[PATH_KEY] = file.path.toQString();
         obj[SUFFIX_KEY] = QString::fromStdString(suffix);
-        obj[IS_CLOUD_KEY] = configuration()->isCloudProject(file);
-        obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(file).lastModified().date()).toQString();
+        obj[IS_CLOUD_KEY] = configuration()->isCloudProject(file.path);
+        obj[CLOUD_SCORE_ID_KEY] = configuration()->cloudScoreIdFromPath(file.path);
+        obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(file.path).lastModified().date()).toQString();
         obj[IS_CREATE_NEW_KEY] = false;
         obj[IS_NO_RESULT_FOUND_KEY] = false;
 

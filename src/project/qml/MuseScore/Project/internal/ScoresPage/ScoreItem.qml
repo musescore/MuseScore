@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 import QtGraphicalEffects 1.0
 
 import MuseScore.Ui 1.0
@@ -37,6 +38,7 @@ FocusScope {
     property bool isCreateNew: false
     property bool isNoResultFound: false
     property bool isCloud: false
+    property int cloudScoreId: 0
 
     property alias navigation: navCtrl
 
@@ -59,105 +61,179 @@ FocusScope {
         onTriggered: root.clicked()
     }
 
+    MouseArea {
+        id: mouseArea
+
+        anchors.fill: parent
+
+        hoverEnabled: true
+
+        onClicked: {
+            root.clicked()
+        }
+    }
+
     Column {
         anchors.fill: parent
 
         spacing: 16
 
         Item {
-            id: scoreRect
-
             height: 224
             width: 172
 
-            opacity: 0.9
+            Item {
+                id: thumbnail
+                anchors.fill: parent
 
-            property int borderWidth: 0
-            readonly property int radius: 3
+                opacity: 0.9
+
+                property int borderWidth: 0
+                readonly property int radius: 3
+
+                Loader {
+                    id: loader
+
+                    anchors.fill: parent
+
+                    sourceComponent: {
+                        if (root.isCreateNew) {
+                            return addComp
+                        }
+
+                        if (root.isNoResultFound) {
+                            return noResultFoundComp
+                        }
+
+                        return scoreItemComp
+                    }
+
+                    layer.enabled: true
+                    layer.effect: OpacityMask {
+                        maskSource: Rectangle {
+                            width: thumbnail.width
+                            height: thumbnail.height
+                            radius: thumbnail.radius
+                        }
+                    }
+                }
+
+                Rectangle {
+                    anchors.fill: parent
+
+                    color: "transparent"
+                    radius: parent.radius
+
+                    NavigationFocusBorder {
+                        navigationCtrl: navCtrl
+
+                        padding: 2
+                    }
+
+                    border.color: ui.theme.strokeColor
+                    border.width: parent.borderWidth
+                }
+
+                states: [
+                    State {
+                        name: "NORMAL"
+                        when: !mouseArea.containsMouse && !mouseArea.pressed
+
+                        PropertyChanges {
+                            target: thumbnail
+                            borderWidth: ui.theme.borderWidth
+                        }
+                    },
+
+                    State {
+                        name: "HOVERED"
+                        when: mouseArea.containsMouse && !mouseArea.pressed
+
+                        PropertyChanges {
+                            target: thumbnail
+                            opacity: 1
+                            borderWidth: 1
+                        }
+                    },
+
+                    State {
+                        name: "PRESSED"
+                        when: mouseArea.pressed
+
+                        PropertyChanges {
+                            target: thumbnail
+                            opacity: 0.5
+                        }
+                    }
+                ]
+
+                RectangularGlow {
+                    anchors.fill: thumbnail
+                    z: -1
+
+                    glowRadius: 20
+                    color: "#08000000"
+                    cornerRadius: thumbnail.radius + glowRadius
+                }
+            }
 
             Loader {
-                id: loader
+                active: root.isCloud
 
-                anchors.fill: parent
+                anchors.left: parent.left
+                anchors.leftMargin: 8
+                anchors.right: parent.right
+                anchors.rightMargin: 8
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 8
 
-                sourceComponent: {
-                    if (root.isCreateNew) {
-                        return addComp
+                sourceComponent: RowLayout {
+                    visible: root.isCloud
+
+                    spacing: 8
+
+                    CloudScoreStatusWatcher {
+                        id: cloudScoreStatusWatcher
                     }
 
-                    if (root.isNoResultFound) {
-                        return noResultFoundComp
+                    Component.onCompleted: {
+                        cloudScoreStatusWatcher.load(cloudScoreId)
                     }
 
-                    return scoreItemComp
-                }
+                    ProgressBar {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 16
 
-                layer.enabled: true
-                layer.effect: OpacityMask {
-                    maskSource: Rectangle {
-                        width: scoreRect.width
-                        height: scoreRect.height
-                        radius: scoreRect.radius
+                        visible: cloudScoreStatusWatcher.isProgress
+
+                        from: 0
+                        to: cloudScoreStatusWatcher.progressTotal
+                        value: cloudScoreStatusWatcher.progressCurrent
+
+                        navigation.panel: root.navigation.panel
+                        navigation.row: root.navigation.row
+                        navigation.column: root.navigation.column + 1
                     }
-                }
-            }
 
-            Rectangle {
-                anchors.fill: parent
+                    CloudScoreIndicatorButton {
+                        Layout.alignment: Qt.AlignTrailing | Qt.AlignVCenter
 
-                color: "transparent"
-                radius: parent.radius
+                        isProgress: cloudScoreStatusWatcher.isProgress
+                        isDownloadedAndUpToDate: cloudScoreStatusWatcher.isDownloadedAndUpToDate
 
-                NavigationFocusBorder {
-                    navigationCtrl: navCtrl
+                        navigation.panel: root.navigation.panel
+                        navigation.row: root.navigation.row
+                        navigation.column: root.navigation.column + 2
 
-                    padding: 2
-                }
-
-                border.color: ui.theme.strokeColor
-                border.width: parent.borderWidth
-            }
-
-            states: [
-                State {
-                    name: "NORMAL"
-                    when: !mouseArea.containsMouse && !mouseArea.pressed
-
-                    PropertyChanges {
-                        target: scoreRect
-                        borderWidth: ui.theme.borderWidth
-                    }
-                },
-
-                State {
-                    name: "HOVERED"
-                    when: mouseArea.containsMouse && !mouseArea.pressed
-
-                    PropertyChanges {
-                        target: scoreRect
-                        opacity: 1
-                        borderWidth: 1
-                    }
-                },
-
-                State {
-                    name: "PRESSED"
-                    when: mouseArea.pressed
-
-                    PropertyChanges {
-                        target: scoreRect
-                        opacity: 0.5
+                        onClicked: {
+                            if (isProgress) {
+                                cloudScoreStatusWatcher.cancel()
+                            } else {
+                                root.clicked()
+                            }
+                        }
                     }
                 }
-            ]
-
-            RectangularGlow {
-                anchors.fill: scoreRect
-                z: -1
-
-                glowRadius: 20
-                color: "#08000000"
-                cornerRadius: scoreRect.radius + glowRadius
             }
         }
 
@@ -188,41 +264,6 @@ FocusScope {
 
                 visible: !root.isCreateNew && !root.isNoResultFound
             }
-        }
-    }
-
-    Rectangle {
-        anchors.top: parent.top
-        anchors.topMargin: -width / 2
-        anchors.left: parent.left
-        anchors.leftMargin: -width / 2
-
-        width: 36
-        height: width
-        radius: width / 2
-
-        color: ui.theme.accentColor
-        visible: root.isCloud
-
-        Image {
-            id: cloudProjectIcon
-
-            anchors.centerIn: parent
-
-            width: 24
-            height: 16
-
-            source: "qrc:/resources/CloudProject.svg"
-        }
-
-        StyledDropShadow {
-            anchors.fill: cloudProjectIcon
-
-            horizontalOffset: 0
-            verticalOffset: 1
-            radius: 4
-
-            source: cloudProjectIcon
         }
     }
 
@@ -341,18 +382,6 @@ FocusScope {
                     }
                 }
             }
-        }
-    }
-
-    MouseArea {
-        id: mouseArea
-
-        anchors.fill: parent
-
-        hoverEnabled: true
-
-        onClicked: {
-            root.clicked()
         }
     }
 }

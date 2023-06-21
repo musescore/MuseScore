@@ -45,10 +45,10 @@ SplashScreen::SplashScreen(SplashScreen::SplashScreenType type, const QVariant& 
 
     switch (type) {
     case SplashScreen::Default:
-        m_view = new LoadingScreenView();
+        m_view = new LoadingScreenView(this);
         break;
     case SplashScreen::ForNewInstance:
-        m_view = new NewInstanceLoadingScreenView(data.toString());
+        m_view = new NewInstanceLoadingScreenView(data.toString(), this);
         break;
     }
 

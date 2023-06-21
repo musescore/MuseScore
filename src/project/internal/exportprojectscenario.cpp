@@ -134,10 +134,8 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
             m_exportProgress.progressChanged.send(currentFileNum * total + current, fileCount * total, status);
         });
 
-        m_exportProgress.finished.onReceive(this, [writer](const ProgressResult& res) {
-            if (res.ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-                writer->abort();
-            }
+        m_exportProgress.cancelRequested.onNotify(this, [writer]() {
+            writer->abort();
         });
     }
 

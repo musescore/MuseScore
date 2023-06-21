@@ -48,6 +48,14 @@ static QStringList prepareArguments(int argc, char** argv)
     return args;
 }
 
+template<typename ... Args>
+QCommandLineOption internalCommandLineOption(Args&& ... args)
+{
+    QCommandLineOption option(std::forward<Args>(args)...);
+    option.setFlags(QCommandLineOption::HiddenFromHelp);
+    return option;
+}
+
 void CommandLineParser::init()
 {
     // Common
@@ -136,6 +144,10 @@ void CommandLineParser::init()
     m_parser.addOption(QCommandLineOption("register-audio-plugin",
                                           "Check an audio plugin for compatibility with the application and register it", "path"));
     m_parser.addOption(QCommandLineOption("register-failed-audio-plugin", "Register an incompatible audio plugin", "path"));
+
+    // Internal
+    m_parser.addOption(internalCommandLineOption("score-display-name-override",
+                                                 "Display name to be shown in splash screen for the score that is being opened", "name"));
 }
 
 void CommandLineParser::parse(int argc, char** argv)
@@ -452,6 +464,10 @@ void CommandLineParser::parse(int argc, char** argv)
     if (m_runMode == IApplication::RunMode::GuiApp) {
         if (!scorefiles.isEmpty()) {
             m_options.startup.scorePath = scorefiles[0].toStdString();
+        }
+
+        if (m_parser.isSet("score-display-name-override")) {
+            m_options.startup.scoreDisplayNameOverride = m_parser.value("score-display-name-override");
         }
     }
 }

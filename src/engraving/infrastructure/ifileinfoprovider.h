@@ -37,6 +37,8 @@ public:
     virtual io::path_t fileName(bool includingExtension = true) const = 0;
     virtual io::path_t absoluteDirPath() const = 0; //! Absolute path of the containing folder
 
+    virtual String displayName() const = 0;
+
     virtual DateTime birthTime() const = 0;
     virtual DateTime lastModified() const = 0;
 };

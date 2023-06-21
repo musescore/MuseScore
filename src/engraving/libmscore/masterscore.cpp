@@ -155,7 +155,7 @@ void MasterScore::setAutosaveDirty(bool v)
 
 String MasterScore::name() const
 {
-    return fileInfo()->fileName(false).toString();
+    return fileInfo()->displayName();
 }
 
 //---------------------------------------------------------

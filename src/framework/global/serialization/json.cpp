@@ -719,6 +719,11 @@ JsonDocument::JsonDocument(JsonObject o)
 {
 }
 
+JsonDocument::JsonDocument(JsonArray a)
+    : m_data(a.m_data)
+{
+}
+
 ByteArray JsonDocument::toJson(Format format) const
 {
     std::string json = m_data->val.serialize(format == Format::Indented);

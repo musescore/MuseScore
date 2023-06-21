@@ -33,6 +33,7 @@ const QString AbstractScoresModel::TIME_SINCE_MODIFIED_KEY("timeSinceModified");
 const QString AbstractScoresModel::IS_CREATE_NEW_KEY("isCreateNew");
 const QString AbstractScoresModel::IS_NO_RESULT_FOUND_KEY("isNoResultFound");
 const QString AbstractScoresModel::IS_CLOUD_KEY("isCloud");
+const QString AbstractScoresModel::CLOUD_SCORE_ID_KEY("scoreId");
 
 AbstractScoresModel::AbstractScoresModel(QObject* parent)
     : QAbstractListModel(parent)

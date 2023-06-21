@@ -35,10 +35,8 @@ void RegisterAudioPluginsScenario::init()
 {
     TRACEFUNC;
 
-    m_progress.finished.onReceive(this, [this](const ProgressResult& res) {
-        if (res.ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-            m_aborted = true;
-        }
+    m_progress.cancelRequested.onNotify(this, [this]() {
+        m_aborted = true;
     });
 
     Ret ret = knownPluginsRegister()->load();

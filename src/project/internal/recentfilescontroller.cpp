@@ -23,11 +23,10 @@
 
 #include <QtConcurrent>
 
-#include <QJsonArray>
-#include <QJsonDocument>
-
 #include "async/async.h"
 #include "defer.h"
+
+#include "serialization/json.h"
 
 #include "multiinstances/resourcelockguard.h"
 
@@ -53,7 +52,7 @@ void RecentFilesController::init()
     });
 }
 
-const RecentFilesList& RecentFilesController::recentFilesList() const
+const ProjectFilesList& RecentFilesController::recentFilesList() const
 {
     TRACEFUNC;
 
@@ -71,27 +70,45 @@ Notification RecentFilesController::recentFilesListChanged() const
     return m_recentFilesListChanged;
 }
 
-void RecentFilesController::prependRecentFile(const RecentFile& newFile)
+void RecentFilesController::prependRecentFile(const ProjectFile& newFile)
 {
-    if (newFile.empty()) {
+    if (!newFile.isValid()) {
         return;
     }
 
     TRACEFUNC;
 
-    RecentFilesList newList;
+    ProjectFilesList newList;
     newList.reserve(m_recentFilesList.size() + 1);
     newList.push_back(newFile);
 
-    for (const RecentFile& file : m_recentFilesList) {
-        if (file != newFile && fileSystem()->exists(file)) {
+    for (const ProjectFile& file : m_recentFilesList) {
+        if (file.path != newFile.path && fileSystem()->exists(file.path)) {
             newList.push_back(file);
         }
     }
 
     setRecentFilesList(newList, true);
 
-    prependPlatformRecentFile(newFile);
+    prependPlatformRecentFile(newFile.path);
+}
+
+void RecentFilesController::moveRecentFile(const io::path_t& before, const ProjectFile& after)
+{
+    bool moved = false;
+    ProjectFilesList newList = m_recentFilesList;
+
+    for (ProjectFile& file : newList) {
+        if (file.path == before) {
+            file = after;
+            moved = true;
+            break;
+        }
+    }
+
+    if (moved) {
+        setRecentFilesList(newList, true);
+    }
 }
 
 void RecentFilesController::clearRecentFiles()
@@ -107,7 +124,7 @@ void RecentFilesController::clearPlatformRecentFiles() {}
 
 void RecentFilesController::loadRecentFilesList()
 {
-    RecentFilesList newList;
+    ProjectFilesList newList;
 
     DEFER {
         setRecentFilesList(newList, false);
@@ -127,18 +144,32 @@ void RecentFilesController::loadRecentFilesList()
         return;
     }
 
-    QJsonParseError err;
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.val.toQByteArrayNoCopy(), &err);
-    if (err.error != QJsonParseError::NoError) {
+    std::string err;
+    const JsonDocument json = JsonDocument::fromJson(data.val, &err);
+    if (!err.empty()) {
+        LOGE() << "Loading JSON failed: " << err;
         return;
     }
 
-    if (!jsonDoc.isArray()) {
+    if (!json.isArray()) {
         return;
     }
 
-    for (const QJsonValue val : jsonDoc.array()) {
-        newList.push_back(val.toString());
+    const JsonArray array = json.rootArray();
+    for (size_t i = 0; i < array.size(); ++i) {
+        const JsonValue val = array.at(i);
+
+        if (val.isString()) {
+            newList.emplace_back(io::path_t(val.toStdString()));
+        } else if (val.isObject()) {
+            const JsonObject obj = val.toObject();
+            ProjectFile file;
+            file.path = obj["path"].toStdString();
+            file.displayNameOverride = QString::fromStdString(obj["displayName"].toStdString());
+            newList.push_back(file);
+        } else {
+            continue;
+        }
     }
 }
 
@@ -146,11 +177,11 @@ void RecentFilesController::removeNonexistentFiles()
 {
     bool removed = false;
 
-    RecentFilesList newList;
+    ProjectFilesList newList;
     newList.reserve(m_recentFilesList.size());
 
-    for (const RecentFile& file : m_recentFilesList) {
-        if (fileSystem()->exists(file)) {
+    for (const ProjectFile& file : m_recentFilesList) {
+        if (fileSystem()->exists(file.path)) {
             newList.push_back(file);
         } else {
             removed = true;
@@ -168,7 +199,7 @@ void RecentFilesController::removeNonexistentFiles()
     }
 }
 
-void RecentFilesController::setRecentFilesList(const RecentFilesList& list, bool saveAndNotify)
+void RecentFilesController::setRecentFilesList(const ProjectFilesList& list, bool saveAndNotify)
 {
     if (m_recentFilesList == list) {
         return;
@@ -195,34 +226,40 @@ void RecentFilesController::saveRecentFilesList()
         m_isSaving = false;
     };
 
-    QJsonArray jsonArray;
-    for (const RecentFile& file : m_recentFilesList) {
-        jsonArray << file.toQString();
+    JsonArray jsonArray;
+    for (const ProjectFile& file : m_recentFilesList) {
+        if (!file.displayNameOverride.isEmpty()) {
+            JsonObject obj;
+            obj["path"] = file.path.toStdString();
+            obj["displayName"] = file.displayNameOverride.toStdString();
+            jsonArray << obj;
+        } else {
+            jsonArray << file.path.toStdString();
+        }
     }
 
-    QJsonDocument jsonDoc(jsonArray);
-    QByteArray json = jsonDoc.toJson(QJsonDocument::Compact);
+    JsonDocument json(jsonArray);
 
     mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), RECENT_FILES_RESOURCE_NAME);
-    Ret ret = fileSystem()->writeFile(configuration()->recentFilesJsonPath(), ByteArray::fromQByteArrayNoCopy(json));
+    Ret ret = fileSystem()->writeFile(configuration()->recentFilesJsonPath(), json.toJson());
     if (!ret) {
         LOGE() << "Failed to save recent files list: " << ret.toString();
     }
 }
 
-Promise<QPixmap> RecentFilesController::thumbnail(const RecentFile& file) const
+Promise<QPixmap> RecentFilesController::thumbnail(const io::path_t& filePath) const
 {
-    return Promise<QPixmap>([this, file](auto resolve, auto reject) {
-        if (file.empty()) {
+    return Promise<QPixmap>([this, filePath](auto resolve, auto reject) {
+        if (filePath.empty()) {
             return reject(int(Ret::Code::UnknownError), "Invalid file specified");
         }
 
-        QtConcurrent::run([this, file, resolve, reject]() {
+        QtConcurrent::run([this, filePath, resolve, reject]() {
             std::lock_guard lock(m_thumbnailCacheMutex);
 
-            DateTime lastModified = fileSystem()->lastModified(file);
+            DateTime lastModified = fileSystem()->lastModified(filePath);
 
-            auto it = m_thumbnailCache.find(file);
+            auto it = m_thumbnailCache.find(filePath);
             if (it != m_thumbnailCache.cend()) {
                 if (lastModified == it->second.lastModified) {
                     (void)resolve(it->second.thumbnail);
@@ -230,12 +267,12 @@ Promise<QPixmap> RecentFilesController::thumbnail(const RecentFile& file) const
                 }
             }
 
-            RetVal<ProjectMeta> rv = mscMetaReader()->readMeta(file);
+            RetVal<ProjectMeta> rv = mscMetaReader()->readMeta(filePath);
             if (!rv.ret) {
-                m_thumbnailCache[file] = CachedThumbnail();
+                m_thumbnailCache[filePath] = CachedThumbnail();
                 (void)reject(rv.ret.code(), rv.ret.toString());
             } else {
-                m_thumbnailCache[file] = CachedThumbnail { rv.val.thumbnail, lastModified };
+                m_thumbnailCache[filePath] = CachedThumbnail { rv.val.thumbnail, lastModified };
                 (void)resolve(rv.val.thumbnail);
             }
         });
@@ -244,7 +281,7 @@ Promise<QPixmap> RecentFilesController::thumbnail(const RecentFile& file) const
     }, Promise<QPixmap>::AsynchronyType::ProvidedByBody);
 }
 
-void RecentFilesController::cleanUpThumbnailCache(const RecentFilesList& files)
+void RecentFilesController::cleanUpThumbnailCache(const ProjectFilesList& files)
 {
     QtConcurrent::run([this, files] {
         std::lock_guard lock(m_thumbnailCacheMutex);
@@ -254,10 +291,10 @@ void RecentFilesController::cleanUpThumbnailCache(const RecentFilesList& files)
         } else {
             std::map<io::path_t, CachedThumbnail> cleanedCache;
 
-            for (const RecentFile& file : files) {
-                auto it = m_thumbnailCache.find(file);
+            for (const ProjectFile& file : files) {
+                auto it = m_thumbnailCache.find(file.path);
                 if (it != m_thumbnailCache.cend()) {
-                    cleanedCache[file] = it->second;
+                    cleanedCache[file.path] = it->second;
                 }
             }
 

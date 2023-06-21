@@ -60,6 +60,7 @@ protected:
     static const QString IS_CREATE_NEW_KEY;
     static const QString IS_NO_RESULT_FOUND_KEY;
     static const QString IS_CLOUD_KEY;
+    static const QString CLOUD_SCORE_ID_KEY;
 
     std::vector<QVariantMap> m_items;
 };

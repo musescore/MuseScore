@@ -30,8 +30,8 @@
 
 using namespace mu::appshell;
 
-NewInstanceLoadingScreenView::NewInstanceLoadingScreenView(const QString& openingFileName)
-    : QWidget(nullptr)
+NewInstanceLoadingScreenView::NewInstanceLoadingScreenView(const QString& openingFileName, QWidget* parent)
+    : QWidget(parent)
 {
     setAttribute(Qt::WA_TranslucentBackground);
 

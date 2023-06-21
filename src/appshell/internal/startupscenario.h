@@ -48,8 +48,8 @@ public:
 
     void setStartupType(const std::optional<std::string>& type) override;
 
-    io::path_t startupScorePath() const override;
-    void setStartupScorePath(const std::optional<io::path_t>& path) override;
+    const project::ProjectFile& startupScoreFile() const override;
+    void setStartupScoreFile(const std::optional<project::ProjectFile>& file) override;
 
     void run() override;
     bool startupCompleted() const override;
@@ -60,13 +60,13 @@ private:
     StartupModeType resolveStartupModeType() const;
     Uri startupPageUri(StartupModeType modeType) const;
 
-    void openScore(const io::path_t& path);
+    void openScore(const project::ProjectFile& file);
 
     void restoreLastSession();
     void removeProjectsUnsavedChanges(const io::paths_t& projectsPaths);
 
     std::string m_startupTypeStr;
-    io::path_t m_startupScorePath;
+    project::ProjectFile m_startupScoreFile;
     bool m_startupCompleted = false;
 };
 }

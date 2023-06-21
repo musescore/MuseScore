@@ -41,7 +41,7 @@ Loader {
     property int navigationOrder
 
     signal createNewScoreRequested()
-    signal openScoreRequested(var scorePath)
+    signal openScoreRequested(var scorePath, var displayName)
 
     enum ViewType {
         ViewType_Grid,
@@ -65,8 +65,8 @@ Loader {
             root.createNewScoreRequested()
         }
 
-        onOpenScoreRequested: function(scorePath) {
-            root.openScoreRequested(scorePath)
+        onOpenScoreRequested: function(scorePath, displayName) {
+            root.openScoreRequested(scorePath, displayName)
         }
     }
 

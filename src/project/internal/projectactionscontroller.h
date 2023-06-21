@@ -76,11 +76,15 @@ public:
     bool canReceiveAction(const actions::ActionCode& code) const override;
 
     bool isFileSupported(const io::path_t& path) const override;
-    Ret openProject(const io::path_t& projectPath) override;
+    Ret openProject(const io::path_t& path) override;
+    Ret openProject(const ProjectFile& file) override;
     bool closeOpenedProject(bool quitApp = false) override;
     bool isProjectOpened(const io::path_t& scorePath) const override;
     bool isAnyProjectOpened() const override;
     bool saveProject(const io::path_t& path = io::path_t()) override;
+
+    const ProjectBeingDownloaded& projectBeingDownloaded() const override;
+    async::Notification projectBeingDownloadedChanged() const override;
 
 private:
     void setupConnections();
@@ -91,8 +95,13 @@ private:
     notation::INotationInteractionPtr currentInteraction() const;
     notation::INotationSelectionPtr currentNotationSelection() const;
 
-    void openProject(const actions::ActionData& args);
     void newProject();
+
+    void openProject(const actions::ActionData& args);
+    void doOpenProject(const io::path_t& path, int scoreId);
+    void downloadAndOpenCloudProject(int scoreId);
+
+    void showScoreDownloadError(const Ret& ret);
 
     bool checkCanIgnoreError(const Ret& ret, const String& projectName);
     bool askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText);
@@ -151,6 +160,10 @@ private:
 
     void revertCorruptedScoreToLastSaved();
 
+    ProjectFile makeRecentFile(INotationProjectPtr project);
+
+    void moveProject(INotationProjectPtr project, const io::path_t& newPath, bool replace);
+
     void importPdf();
 
     void clearRecentScores();
@@ -162,7 +175,9 @@ private:
     io::path_t selectScoreOpeningFile();
     io::path_t selectScoreSavingFile(const io::path_t& defaultFilePath, const QString& saveTitle);
 
+    RetVal<INotationProjectPtr> loadProject(const io::path_t& filePath);
     Ret doOpenProject(const io::path_t& filePath);
+    Ret doOpenCloudProject(const io::path_t& filePath, const CloudProjectInfo& info);
 
     Ret openPageIfNeed(Uri pageUri);
 
@@ -184,6 +199,9 @@ private:
     framework::ProgressPtr m_uploadingAudioProgress = nullptr;
 
     int m_numberOfSavesToCloud = 0;
+
+    ProjectBeingDownloaded m_projectBeingDownloaded;
+    async::Notification m_projectBeingDownloadedChanged;
 };
 }
 

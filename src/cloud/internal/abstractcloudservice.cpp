@@ -365,9 +365,16 @@ Ret AbstractCloudService::executeRequest(const RequestCallback& requestCallback)
     return ret;
 }
 
-Ret AbstractCloudService::uploadingRetFromRawUploadingRet(const Ret& rawRet, bool isAlreadyUploaded) const
+Ret AbstractCloudService::uploadingDownloadingRetFromRawRet(const Ret& rawRet, bool isAlreadyUploaded) const
 {
+    if (rawRet) {
+        return rawRet; // OK
+    }
+
     int code = statusCode(rawRet);
+    if (!code) {
+        return rawRet;
+    }
 
     if (!isAlreadyUploaded && code == FORBIDDEN_CODE) {
         return make_ret(cloud::Err::AccountNotActivated);

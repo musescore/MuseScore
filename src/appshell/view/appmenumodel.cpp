@@ -397,15 +397,15 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
 MenuItemList AppMenuModel::makeRecentScoresItems()
 {
     MenuItemList items;
-    RecentFilesList recentFiles = recentFilesController()->recentFilesList();
+    ProjectFilesList recentFiles = recentFilesController()->recentFilesList();
 
     int index = 0;
-    for (const RecentFile& file : recentFiles) {
+    for (const ProjectFile& file : recentFiles) {
         MenuItem* item = new MenuItem(this);
 
         UiAction action;
         action.code = "file-open";
-        action.title = TranslatableString::untranslatable(io::filename(file).toString());
+        action.title = TranslatableString::untranslatable(file.displayName(/*includingExtension*/ true));
         item->setAction(action);
 
         item->setId(makeId(item->action().code, index++));
@@ -415,7 +415,7 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
         item->setState(state);
 
         item->setSelectable(true);
-        item->setArgs(ActionData::make_arg1<io::path_t>(file));
+        item->setArgs(ActionData::make_arg2<io::path_t, QString>(file.path, file.displayNameOverride));
 
         items << item;
     }

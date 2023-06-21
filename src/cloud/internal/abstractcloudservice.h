@@ -100,7 +100,7 @@ protected:
     using RequestCallback = std::function<Ret()>;
     Ret executeRequest(const RequestCallback& requestCallback);
 
-    Ret uploadingRetFromRawUploadingRet(const Ret& rawRet, bool isAlreadyUploaded = false) const;
+    Ret uploadingDownloadingRetFromRawRet(const Ret& rawRet, bool isAlreadyUploaded = false) const;
     int statusCode(const mu::Ret& ret) const;
     void printServerReply(const QBuffer& reply) const;
 

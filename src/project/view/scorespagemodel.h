@@ -47,7 +47,7 @@ public:
 
     Q_INVOKABLE void createNewScore();
     Q_INVOKABLE void openOther();
-    Q_INVOKABLE void openScore(const QString& scorePath);
+    Q_INVOKABLE void openScore(const QString& scorePath, const QString& displayNameOverride);
     Q_INVOKABLE void openScoreManager();
 
     int tabIndex() const;

@@ -28,6 +28,7 @@
 #include <QUrl>
 
 #include "io/path.h"
+#include "progress.h"
 #include "log.h"
 
 #include "cloud/cloudtypes.h"
@@ -179,6 +180,43 @@ struct SaveLocation
         : type(SaveLocationType::Cloud), data(cloudInfo) {}
 };
 
+struct ProjectFile {
+    io::path_t path;
+    QString displayNameOverride = {};
+
+    ProjectFile() = default;
+
+    ProjectFile(const io::path_t& path, const QString& displayNameOverride = {})
+        : path(path), displayNameOverride(displayNameOverride) {}
+
+    QString displayName(bool includingExtension) const
+    {
+        if (!displayNameOverride.isEmpty()) {
+            return displayNameOverride;
+        }
+
+        return io::filename(path, includingExtension).toQString();
+    }
+
+    bool isValid() const
+    {
+        return !path.empty();
+    }
+
+    bool operator ==(const ProjectFile& other) const
+    {
+        return path == other.path
+               && displayNameOverride == other.displayNameOverride;
+    }
+
+    bool operator !=(const ProjectFile& other) const
+    {
+        return !(*this == other);
+    }
+};
+
+using ProjectFilesList = std::vector<ProjectFile>;
+
 struct ProjectMeta
 {
     io::path_t filePath;
@@ -245,13 +283,10 @@ struct Template
 
 using Templates = QList<Template>;
 
-//struct RecentFile {
-//    io::path_t path;
-//    QString displayName;
-//};
-
-using RecentFile = io::path_t;
-using RecentFilesList = std::vector<RecentFile>;
+struct ProjectBeingDownloaded {
+    int scoreId = 0;
+    framework::ProgressPtr progress;
+};
 
 class GenerateAudioTimePeriod
 {
