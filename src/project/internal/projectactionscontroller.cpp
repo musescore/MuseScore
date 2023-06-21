@@ -313,6 +313,12 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
         return;
     }
 
+    Ret ret = museScoreComService()->authorization()->ensureAuthorization(
+        trc("project/save", "Login or create a free account on musescore.com to open this score."));
+    if (!ret) {
+        return;
+    }
+
     RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
     if (!scoreInfo.ret) {
         LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
