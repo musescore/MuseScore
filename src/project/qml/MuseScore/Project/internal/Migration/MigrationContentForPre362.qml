@@ -47,7 +47,7 @@ Item {
     signal isApplyEdwinChangeRequested(bool applyEdwin)
 
     signal watchVideoRequested()
-    signal access()
+    signal acceptRequested()
 
     AccessibleItem {
         id: accessibleInfo
@@ -244,7 +244,7 @@ Item {
             }
 
             onClicked: {
-                root.access()
+                root.acceptRequested()
             }
         }
     }

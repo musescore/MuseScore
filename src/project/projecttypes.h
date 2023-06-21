@@ -54,7 +54,6 @@ struct MigrationOptions
 {
     // common
     int appVersion = 0;
-    bool isApplyMigration = false;
     bool isAskAgain = true;
 
     bool isApplyLeland = true;

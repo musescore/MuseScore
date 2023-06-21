@@ -45,7 +45,7 @@ ColumnLayout {
 
     signal isAskAgainChangeRequested(bool askAgain)
     signal watchVideoRequested()
-    signal access()
+    signal acceptRequested()
 
     AccessibleItem {
         id: accessibleInfo
@@ -142,7 +142,7 @@ ColumnLayout {
             }
 
             onClicked: {
-                root.access()
+                root.acceptRequested()
             }
         }
     }

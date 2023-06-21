@@ -424,7 +424,6 @@ MigrationOptions ProjectConfiguration::migrationOptions(MigrationType type) cons
 
         MigrationOptions opt;
         opt.appVersion = optionsObj["appVersion"].toInt(0);
-        opt.isApplyMigration = optionsObj["isApplyMigration"].toBool();
         opt.isAskAgain = optionsObj["isAskAgain"].toBool();
         opt.isApplyLeland = optionsObj["isApplyLeland"].toBool();
         opt.isApplyEdwin = optionsObj["isApplyEdwin"].toBool();
@@ -469,7 +468,6 @@ void ProjectConfiguration::setMigrationOptions(MigrationType type, const Migrati
 
         QJsonObject options;
         options["appVersion"] = o.appVersion;
-        options["isApplyMigration"] = o.isApplyMigration;
         options["isAskAgain"] = o.isAskAgain;
         options["isApplyLeland"] = o.isApplyLeland;
         options["isApplyEdwin"] = o.isApplyEdwin;

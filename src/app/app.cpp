@@ -387,7 +387,6 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, fra
 
         if (options.project.fullMigration) {
             bool isMigration = options.project.fullMigration.value();
-            migration.isApplyMigration = isMigration;
             migration.isApplyEdwin = isMigration;
             migration.isApplyLeland = isMigration;
         }

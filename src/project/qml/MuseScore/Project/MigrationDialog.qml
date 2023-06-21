@@ -80,18 +80,17 @@ StyledDialogView {
         }
     }
 
-    function makeRet(isApply) {
-        var ret = {
+    function acceptAndHide() {
+        dialog.ret = {
             errcode: 0,
             value: {
-                isApplyMigration: isApply,
                 isAskAgain: dialog.isAskAgain,
                 isApplyLeland: dialog.isApplyLeland,
                 isApplyEdwin: dialog.isApplyEdwin,
             }
         }
 
-        return ret
+        dialog.hide()
     }
 
     function watchVideo() {
@@ -127,9 +126,8 @@ StyledDialogView {
                 dialog.watchVideo()
             }
 
-            onAccess: {
-                dialog.ret = dialog.makeRet(true)
-                dialog.hide()
+            onAcceptRequested: {
+                dialog.acceptAndHide()
             }
         }
     }
@@ -165,9 +163,8 @@ StyledDialogView {
                 dialog.watchVideo()
             }
 
-            onAccess: {
-                dialog.ret = dialog.makeRet(true)
-                dialog.hide()
+            onAcceptRequested: {
+                dialog.acceptAndHide()
             }
         }
     }

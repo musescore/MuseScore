@@ -30,8 +30,6 @@
 
 #include "log.h"
 
-#include <QVersionNumber>
-
 using namespace mu;
 using namespace mu::project;
 using namespace mu::engraving::compat;
@@ -81,10 +79,6 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
         configuration()->setMigrationOptions(migrationType, migrationOptions);
     }
 
-    if (!migrationOptions.isApplyMigration) {
-        return true;
-    }
-
     Ret ret = migrateProject(project, migrationOptions);
     if (!ret) {
         LOGE() << "failed migration";
@@ -109,7 +103,6 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
 
     QVariantMap vals = rv.val.toQVariant().toMap();
     out.appVersion = mu::engraving::Constants::MSC_VERSION;
-    out.isApplyMigration = vals.value("isApplyMigration").toBool();
     out.isAskAgain = vals.value("isAskAgain").toBool();
     out.isApplyLeland = vals.value("isApplyLeland").toBool();
     out.isApplyEdwin = vals.value("isApplyEdwin").toBool();
@@ -171,8 +164,8 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
     }
 
     if (ok && score->mscVersion() < 400 && needFixStylePre400) {
-        // TODO: this should happen while reading the file, and for every file!
-        // Not as part of an optional migration process triggered from the UI
+        // TODO: this should actually happen inside the engraving module, when reading the file,
+        // so that it also happens in places where we don't work with the project module
         fixStyleSettingsPre400(score);
     }
 
