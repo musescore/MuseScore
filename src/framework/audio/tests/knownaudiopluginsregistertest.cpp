@@ -212,13 +212,28 @@ TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
     // [THEN] The plugin successfully registered
     EXPECT_TRUE(ret);
 
+    // [GIVEN] Same plugin (with the same resourceId) is installed in a different location
+    AudioPluginInfo duplicatedPluginInfo = newPluginInfo;
+    duplicatedPluginInfo.path = "/another/path/to/new/plugin/plugin.vst";
+    expectedPluginInfoList.push_back(duplicatedPluginInfo);
+
+    // [THEN] All the plugins will be written to the file
+    expectedNewPluginsData = pluginInfoListToJson(expectedPluginInfoList);
+    EXPECT_CALL(*m_fileSystem, writeFile(m_knownAudioPluginsFilePath, expectedNewPluginsData))
+    .WillOnce(Return(mu::make_ok()));
+
+    // [WHEN] Register it
+    ret = m_knownPlugins->registerPlugin(duplicatedPluginInfo);
+
+    // [THEN] The duplicated plugin successfully registered
+    EXPECT_TRUE(ret);
+
     actualPluginInfoList = m_knownPlugins->pluginInfoList();
     EXPECT_EQ(expectedPluginInfoList.size(), actualPluginInfoList.size());
     for (const AudioPluginInfo& actualInfo : actualPluginInfoList) {
         EXPECT_TRUE(mu::contains(expectedPluginInfoList, actualInfo));
         EXPECT_TRUE(m_knownPlugins->exists(actualInfo.path));
         EXPECT_TRUE(m_knownPlugins->exists(actualInfo.meta.id));
-        EXPECT_EQ(actualInfo.path, m_knownPlugins->pluginPath(actualInfo.meta.id));
     }
 
     // [GIVEN] We want to unregister the first plugin in the list

@@ -187,7 +187,14 @@ mu::Ret KnownAudioPluginsRegister::registerPlugin(const AudioPluginInfo& info)
         return false;
     }
 
-    m_pluginInfoMap[info.meta.id] = info;
+    auto it = m_pluginInfoMap.find(info.meta.id);
+    if (it != m_pluginInfoMap.end()) {
+        IF_ASSERT_FAILED(it->second.path != info.path) {
+            return false;
+        }
+    }
+
+    m_pluginInfoMap.emplace(info.meta.id, info);
     m_pluginPaths.insert(info.path);
 
     Ret ret = writePluginsInfo();
@@ -204,10 +211,13 @@ mu::Ret KnownAudioPluginsRegister::unregisterPlugin(const AudioResourceId& resou
         return make_ok();
     }
 
-    AudioPluginInfo info = m_pluginInfoMap[resourceId];
+    for (const auto& pair : m_pluginInfoMap) {
+        if (pair.first == resourceId) {
+            mu::remove(m_pluginPaths, pair.second.path);
+        }
+    }
 
-    mu::remove(m_pluginInfoMap, resourceId);
-    mu::remove(m_pluginPaths, info.path);
+    m_pluginInfoMap.erase(resourceId);
 
     Ret ret = writePluginsInfo();
     return ret;
