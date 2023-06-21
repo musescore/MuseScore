@@ -76,6 +76,9 @@ struct LayoutOptions
 
         verticalAlignRange = VerticalAlignRange(style.styleI(Sid::autoplaceVerticalAlignRange));
     }
+
+    bool resetAutoplace = false;
+    bool resetDefaultsPre400 = false;
 };
 }
 

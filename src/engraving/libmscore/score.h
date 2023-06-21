@@ -433,9 +433,7 @@ private:
     bool _printing              { false };        ///< True if we are drawing to a printer
     bool _savedCapture          { false };        ///< True if we saved an image capture
 
-    ScoreOrder _scoreOrder;                     ///< used for score ordering
-    bool _resetAutoplace = false;
-    bool _resetDefaults = false;
+    ScoreOrder _scoreOrder;                       ///< used for score ordering
     int _mscVersion = Constants::MSC_VERSION;     ///< version of current loading *.msc file
 
     bool _isOpen { false };
@@ -565,15 +563,13 @@ public:
     void removeStaff(Staff*);
     void addMeasure(MeasureBase*, MeasureBase*);
     void linkMeasures(Score* score);
-    void setResetAutoplace() { _resetAutoplace = true; }
-    void setResetDefaults() { _resetDefaults = true; }
 
     Excerpt* excerpt() { return _excerpt; }
     void setExcerpt(Excerpt* e) { _excerpt = e; }
 
     // methods for resetting elements for pre-4.0 score migration
     void resetAutoplace();
-    void resetDefaults();
+    void resetDefaultsPre400();
 
     void cmdAddBracket();
     void cmdAddParentheses();
@@ -1096,6 +1092,7 @@ public:
     const std::list<MuseScoreView*>& getViewer() const { return viewer; }
 
     //! NOTE Layout
+    LayoutOptions& mutLayoutOptions() { return m_layoutOptions; }
     const LayoutOptions& layoutOptions() const { return m_layoutOptions; }
     void setLayoutMode(LayoutMode lm) { m_layoutOptions.mode = lm; }
     void setShowVBox(bool v) { m_layoutOptions.showVBox = v; }

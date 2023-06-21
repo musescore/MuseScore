@@ -5724,14 +5724,14 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     m_layoutOptions.updateFromStyle(style());
     layout()->layoutRange(this, m_layoutOptions, st, et);
 
-    if (_resetAutoplace) {
-        _resetAutoplace = false;
+    if (m_layoutOptions.resetAutoplace) {
+        m_layoutOptions.resetAutoplace = false;
         resetAutoplace();
     }
 
-    if (_resetDefaults) {
-        _resetDefaults = false;
-        resetDefaults();
+    if (m_layoutOptions.resetDefaultsPre400) {
+        m_layoutOptions.resetDefaultsPre400 = false;
+        resetDefaultsPre400();
     }
 }
 

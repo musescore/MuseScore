@@ -167,7 +167,7 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
     }
 
     if (ok && score->mscVersion() < 300) {
-        ok = resetAllElementsPositions(score);
+        score->mutLayoutOptions().resetAutoplace = true;
     }
 
     if (ok && score->mscVersion() < 400 && needFixStylePre400) {
@@ -176,13 +176,16 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
         fixStyleSettingsPre400(score);
     }
 
+    if (ok && score->mscVersion() < 400) {
+        score->mutLayoutOptions().resetDefaultsPre400 = true;
+    }
+
     if (ok && score->mscVersion() != mu::engraving::Constants::MSC_VERSION) {
         // TODO: either this should happen automatically when *saving* the file,
         // or we should not store this info in meta tags at all
         score->undo(new mu::engraving::ChangeMetaText(score, u"mscVersion", String::fromAscii(mu::engraving::Constants::MSC_VERSION_STR)));
     }
 
-    score->setResetDefaults(); // some defaults need to be reset on first layout
     score->endCmd();
 
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
@@ -208,10 +211,4 @@ bool ProjectMigrator::applyEdwinStyle(mu::engraving::MasterScore* score)
     }
 
     return score->loadStyle(EDWIN_STYLE_PATH, /*ign*/ false, /*overlap*/ true);
-}
-
-bool ProjectMigrator::resetAllElementsPositions(mu::engraving::MasterScore* score)
-{
-    score->setResetAutoplace();
-    return true;
 }

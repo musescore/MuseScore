@@ -2413,11 +2413,11 @@ void Score::resetAutoplace()
 }
 
 //---------------------------------------------------------
-//   resetDefaults
+//   resetDefaultsPre400
 //    Resets all custom positioning stuff (except for direction). Used in score migration.
 //---------------------------------------------------------
 
-void Score::resetDefaults()
+void Score::resetDefaultsPre400()
 {
     TRACEFUNC;
 
