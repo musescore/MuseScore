@@ -173,7 +173,7 @@ mu::engraving::Segment* NotationSelectionRange::rangeStartSegment() const
     }
 
     if (!startSegment->measure()->system()) {
-        const Measure* mmr = startSegment->measure()->mmRest1();
+        const Measure* mmr = startSegment->measure()->coveringMMRestOrThis();
         if (!mmr || mmr->system()) {
             return nullptr;
         }
@@ -226,7 +226,7 @@ const
         mu::engraving::System* nextSegmentSystem = nextSegment->measure()->system();
 
         if (!nextSegmentSystem) {
-            const Measure* mmr = nextSegment->measure()->mmRest1();
+            const Measure* mmr = nextSegment->measure()->coveringMMRestOrThis();
             if (mmr) {
                 nextSegmentSystem = mmr->system();
             }

@@ -566,7 +566,7 @@ MeasureBase* MeasureBase::prevMM() const
     if (_prev
         && _prev->isMeasure()
         && score()->styleB(Sid::createMultiMeasureRests)) {
-        return const_cast<Measure*>(toMeasure(_prev)->mmRest1());
+        return const_cast<Measure*>(toMeasure(_prev)->coveringMMRestOrThis());
     }
     return _prev;
 }

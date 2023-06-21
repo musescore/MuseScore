@@ -304,7 +304,7 @@ public:
     bool hasMMRest() const { return m_mmRest != 0; }
     bool isMMRest() const { return m_mmRestCount > 0; }
     Measure* mmRest() const { return m_mmRest; }
-    const Measure* mmRest1() const;
+    const Measure* coveringMMRestOrThis() const;
     void setMMRest(Measure* m) { m_mmRest = m; }
     int mmRestCount() const { return m_mmRestCount; }            // number of measures m_mmRest spans
     void setMMRestCount(int n) { m_mmRestCount = n; }

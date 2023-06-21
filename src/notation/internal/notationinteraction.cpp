@@ -2637,7 +2637,7 @@ void NotationInteraction::selectEmptyTrailingMeasure()
     }
     if (ftm) {
         if (score()->styleB(mu::engraving::Sid::createMultiMeasureRests) && ftm->hasMMRest()) {
-            ftm = ftm->mmRest1();
+            ftm = ftm->coveringMMRestOrThis();
         }
         EngravingItem* el
             = !cr ? ftm->first()->nextChordRest(0, false) : ftm->first()->nextChordRest(mu::engraving::trackZeroVoice(cr->track()), false);
