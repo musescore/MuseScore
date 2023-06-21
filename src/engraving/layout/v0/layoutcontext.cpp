@@ -259,12 +259,12 @@ const std::set<Spanner*> DomAccessor::unmanagedSpanners()
 LayoutContext::LayoutContext(Score* score)
     : m_score(score), m_dom(score)
 {
-    firstSystemIndent = score && score->styleB(Sid::enableIndentationOnFirstSystem);
+    m_state.firstSystemIndent = score && score->styleB(Sid::enableIndentationOnFirstSystem);
 }
 
 LayoutContext::~LayoutContext()
 {
-    for (Spanner* s : processedSpanners) {
+    for (Spanner* s : m_state.processedSpanners) {
         TLayout::layoutSystemsDone(s);
     }
 
@@ -406,6 +406,16 @@ const DomAccessor& LayoutContext::dom() const
 DomAccessor& LayoutContext::mutDom()
 {
     return m_dom;
+}
+
+const LayoutState& LayoutContext::state() const
+{
+    return m_state;
+}
+
+LayoutState& LayoutContext::mutState()
+{
+    return m_state;
 }
 
 void LayoutContext::setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e)

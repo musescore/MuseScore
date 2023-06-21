@@ -108,6 +108,36 @@ private:
     Score* m_score = nullptr;
 };
 
+class LayoutState
+{
+public:
+    bool startWithLongNames = true;
+    bool firstSystem = true;
+    bool firstSystemIndent = true;
+    Page* page = nullptr;
+    page_idx_t curPage = 0; // index in Score->page()s
+    Fraction tick{ 0, 1 };
+
+    std::vector<System*> systemList; // reusable systems
+    std::set<Spanner*> processedSpanners;
+
+    System* prevSystem = nullptr; // used during page layout
+    System* curSystem = nullptr;
+
+    MeasureBase* systemOldMeasure = nullptr;
+    MeasureBase* pageOldMeasure = nullptr;
+    bool rangeDone = false;
+
+    MeasureBase* prevMeasure = nullptr;
+    MeasureBase* curMeasure = nullptr;
+    MeasureBase* nextMeasure = nullptr;
+    int measureNo = 0;
+    Fraction startTick;
+    Fraction endTick;
+
+    double totalBracketsWidth = -1.0;
+};
+
 class LayoutContext
 {
 public:
@@ -143,40 +173,18 @@ public:
     const DomAccessor& dom() const;
     DomAccessor& mutDom();
 
+    // State
+    const LayoutState& state() const;
+    LayoutState& mutState();
+
     // Mark
     void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e);
     void addRefresh(const mu::RectF& r);
 
-    // State
-    bool startWithLongNames = true;
-    bool firstSystem = true;
-    bool firstSystemIndent = true;
-    Page* page = nullptr;
-    page_idx_t curPage = 0; // index in Score->page()s
-    Fraction tick{ 0, 1 };
-
-    std::vector<System*> systemList; // reusable systems
-    std::set<Spanner*> processedSpanners;
-
-    System* prevSystem = nullptr; // used during page layout
-    System* curSystem = nullptr;
-
-    MeasureBase* systemOldMeasure = nullptr;
-    MeasureBase* pageOldMeasure = nullptr;
-    bool rangeDone = false;
-
-    MeasureBase* prevMeasure = nullptr;
-    MeasureBase* curMeasure = nullptr;
-    MeasureBase* nextMeasure = nullptr;
-    int measureNo = 0;
-    Fraction startTick;
-    Fraction endTick;
-
-    double totalBracketsWidth = -1.0;
-
 private:
     Score* m_score = nullptr;
     DomAccessor m_dom;
+    LayoutState m_state;
 };
 }
 

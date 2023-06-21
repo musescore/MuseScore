@@ -724,22 +724,22 @@ static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType
 
 void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& ctx)
 {
-    ctx.prevMeasure = ctx.curMeasure;
-    ctx.curMeasure  = ctx.nextMeasure;
-    if (!ctx.curMeasure) {
-        ctx.nextMeasure = options.showVBox ? ctx.mutDom().first() : ctx.mutDom().firstMeasure();
+    ctx.mutState().prevMeasure = ctx.mutState().curMeasure;
+    ctx.mutState().curMeasure  = ctx.mutState().nextMeasure;
+    if (!ctx.state().curMeasure) {
+        ctx.mutState().nextMeasure = options.showVBox ? ctx.mutDom().first() : ctx.mutDom().firstMeasure();
     } else {
-        ctx.nextMeasure = options.showVBox ? ctx.curMeasure->next() : ctx.curMeasure->nextMeasure();
+        ctx.mutState().nextMeasure = options.showVBox ? ctx.mutState().curMeasure->next() : ctx.mutState().curMeasure->nextMeasure();
     }
-    if (!ctx.curMeasure) {
+    if (!ctx.state().curMeasure) {
         return;
     }
 
-    int mno = adjustMeasureNo(ctx.curMeasure, ctx);
+    int mno = adjustMeasureNo(ctx.mutState().curMeasure, ctx);
 
-    if (ctx.curMeasure->isMeasure()) {
+    if (ctx.state().curMeasure->isMeasure()) {
         if (ctx.style().styleB(Sid::createMultiMeasureRests)) {
-            Measure* m = toMeasure(ctx.curMeasure);
+            Measure* m = toMeasure(ctx.mutState().curMeasure);
             Measure* nm = m;
             Measure* lm = nm;
             int n       = 0;
@@ -763,22 +763,22 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
             }
             if (n >= ctx.style().styleI(Sid::minEmptyMeasures)) {
                 createMMRest(options, ctx, m, lm, len);
-                ctx.curMeasure  = m->mmRest();
-                ctx.nextMeasure = options.showVBox ? lm->next() : lm->nextMeasure();
+                ctx.mutState().curMeasure  = m->mmRest();
+                ctx.mutState().nextMeasure = options.showVBox ? lm->next() : lm->nextMeasure();
             } else {
                 if (m->mmRest()) {
                     ctx.mutDom().undo(new ChangeMMRest(m, 0));
                 }
                 m->setMMRestCount(0);
-                ctx.measureNo = mno;
+                ctx.mutState().measureNo = mno;
             }
-        } else if (toMeasure(ctx.curMeasure)->isMMRest()) {
-            LOGD("mmrest: no %d += %d", ctx.measureNo, toMeasure(ctx.curMeasure)->mmRestCount());
-            ctx.measureNo += toMeasure(ctx.curMeasure)->mmRestCount() - 1;
+        } else if (toMeasure(ctx.state().curMeasure)->isMMRest()) {
+            LOGD("mmrest: no %d += %d", ctx.state().measureNo, toMeasure(ctx.state().curMeasure)->mmRestCount());
+            ctx.mutState().measureNo += toMeasure(ctx.state().curMeasure)->mmRestCount() - 1;
         }
     }
-    if (!ctx.curMeasure->isMeasure()) {
-        ctx.curMeasure->setTick(ctx.tick);
+    if (!ctx.state().curMeasure->isMeasure()) {
+        ctx.mutState().curMeasure->setTick(ctx.state().tick);
         return;
     }
 
@@ -786,14 +786,14 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
     //    process one measure
     //-----------------------------------------
 
-    Measure* measure = toMeasure(ctx.curMeasure);
-    measure->moveTicks(ctx.tick - measure->tick());
+    Measure* measure = toMeasure(ctx.mutState().curMeasure);
+    measure->moveTicks(ctx.state().tick - measure->tick());
 
-    if (ctx.linearMode() && (measure->tick() < ctx.startTick || measure->tick() > ctx.endTick)) {
+    if (ctx.linearMode() && (measure->tick() < ctx.state().startTick || measure->tick() > ctx.state().endTick)) {
         // needed to reset segment widths if they can change after measure width is computed
         //for (Segment& s : measure->segments())
         //      s.createShapes();
-        ctx.tick += measure->ticks();
+        ctx.mutState().tick += measure->ticks();
         return;
     }
 
@@ -974,7 +974,7 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
     measure->computeTicks(); // Must be called *after* Segment::createShapes() because it relies on the
     // Segment::visible() property, which is determined by Segment::createShapes().
 
-    ctx.tick += measure->ticks();
+    ctx.mutState().tick += measure->ticks();
 }
 
 //---------------------------------------------------------
@@ -983,18 +983,18 @@ void MeasureLayout::getNextMeasure(const LayoutOptions& options, LayoutContext& 
 
 int MeasureLayout::adjustMeasureNo(MeasureBase* m, LayoutContext& ctx)
 {
-    ctx.measureNo += m->noOffset();
-    m->setNo(ctx.measureNo);
+    ctx.mutState().measureNo += m->noOffset();
+    m->setNo(ctx.state().measureNo);
     if (!m->irregular()) {          // don’t count measure
-        ++ctx.measureNo;
+        ++ctx.mutState().measureNo;
     }
 
     const LayoutBreak* layoutBreak = m->sectionBreakElement();
     if (layoutBreak && layoutBreak->startWithMeasureOne()) {
-        ctx.measureNo = 0;
+        ctx.mutState().measureNo = 0;
     }
 
-    return ctx.measureNo;
+    return ctx.state().measureNo;
 }
 
 /****************************************************************
@@ -1942,7 +1942,7 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
             s = s->next();
         }
 
-        double x = s->pos().x();
+        double x = s ? s->pos().x() : 0.0;
         while (s) {
 //            if (!s->enabled() || !s->visible()) {
 //                s = s->nextEnabled();
