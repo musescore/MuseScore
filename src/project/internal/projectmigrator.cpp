@@ -69,7 +69,6 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
     //! When migrating, the version becomes the current one, so remember the version of the default style before migrating
     project->masterScore()->style().setDefaultStyleVersion(ReadStyleHook::styleDefaultByMscVersion(project->mscVersion()));
     MigrationType migrationType = migrationTypeFromMscVersion(project->mscVersion());
-    m_resetStyleSettings = true;
 
     MigrationOptions migrationOptions = configuration()->migrationOptions(migrationType);
     if (migrationOptions.isAskAgain) {
@@ -118,7 +117,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     return true;
 }
 
-void ProjectMigrator::resetStyleSettings(mu::engraving::MasterScore* score)
+void ProjectMigrator::resetStyleSettingsPre400(mu::engraving::MasterScore* score)
 {
     // there are a few things that need to be updated no matter which version the score is from (#10499)
     // primarily, the differences made concerning barline thickness and distance
@@ -151,27 +150,38 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
     score->startCmd();
 
     bool ok = true;
-    if (opt.isApplyLeland) {
+    bool needResetStylePre400 = true;
+
+    if (score->mscVersion() < 302 && opt.isApplyLeland) {
         ok = applyLelandStyle(score);
-        m_resetStyleSettings = false;
+
+        // The affected style settings are already reset by the Leland style sheet
+        needResetStylePre400 = false;
     }
 
-    if (ok && opt.isApplyEdwin) {
+    if (ok && score->mscVersion() < 302 && opt.isApplyEdwin) {
         ok = applyEdwinStyle(score);
-        m_resetStyleSettings = false;
+
+        // The affected style settings are already reset by the Edwin style sheet
+        needResetStylePre400 = false;
     }
 
     if (ok && score->mscVersion() < 300) {
         ok = resetAllElementsPositions(score);
     }
 
+    if (ok && score->mscVersion() < 400 && needResetStylePre400) {
+        // TODO: this should happen while reading the file, and for every file!
+        // Not as part of an optional migration process triggered from the UI
+        resetStyleSettingsPre400(score);
+    }
+
     if (ok && score->mscVersion() != mu::engraving::Constants::MSC_VERSION) {
+        // TODO: either this should happen automatically when *saving* the file,
+        // or we should not store this info in meta tags at all
         score->undo(new mu::engraving::ChangeMetaText(score, u"mscVersion", String::fromAscii(mu::engraving::Constants::MSC_VERSION_STR)));
     }
 
-    if (ok && m_resetStyleSettings) {
-        resetStyleSettings(score);
-    }
     score->setResetDefaults(); // some defaults need to be reset on first layout
     score->endCmd();
 

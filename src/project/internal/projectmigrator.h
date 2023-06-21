@@ -47,9 +47,7 @@ private:
     bool applyLelandStyle(mu::engraving::MasterScore* score);
     bool applyEdwinStyle(mu::engraving::MasterScore* score);
     bool resetAllElementsPositions(mu::engraving::MasterScore* score);
-    void resetStyleSettings(mu::engraving::MasterScore* score);
-
-    bool m_resetStyleSettings{ false };
+    void resetStyleSettingsPre400(mu::engraving::MasterScore* score);
 };
 }
 
