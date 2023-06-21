@@ -23,11 +23,10 @@
 
 #include <QtConcurrent>
 
-#include <QJsonArray>
-#include <QJsonDocument>
-
 #include "async/async.h"
 #include "defer.h"
+
+#include "serialization/json.h"
 
 #include "multiinstances/resourcelockguard.h"
 
@@ -145,24 +144,28 @@ void RecentFilesController::loadRecentFilesList()
         return;
     }
 
-    QJsonParseError err;
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.val.toQByteArrayNoCopy(), &err);
-    if (err.error != QJsonParseError::NoError) {
+    std::string err;
+    const JsonDocument json = JsonDocument::fromJson(data.val, &err);
+    if (!err.empty()) {
+        LOGE() << "Loading JSON failed: " << err;
         return;
     }
 
-    if (!jsonDoc.isArray()) {
+    if (!json.isArray()) {
         return;
     }
 
-    for (const QJsonValue val : jsonDoc.array()) {
+    const JsonArray array = json.rootArray();
+    for (size_t i = 0; i < array.size(); ++i) {
+        const JsonValue val = array.at(i);
+
         if (val.isString()) {
-            newList.emplace_back(io::path_t(val.toString()));
+            newList.emplace_back(io::path_t(val.toStdString()));
         } else if (val.isObject()) {
-            QJsonObject obj = val.toObject();
+            const JsonObject obj = val.toObject();
             ProjectFile file;
-            file.path = obj["path"].toString();
-            file.displayNameOverride = obj["displayName"].toString();
+            file.path = obj["path"].toStdString();
+            file.displayNameOverride = QString::fromStdString(obj["displayName"].toStdString());
             newList.push_back(file);
         } else {
             continue;
@@ -223,23 +226,22 @@ void RecentFilesController::saveRecentFilesList()
         m_isSaving = false;
     };
 
-    QJsonArray jsonArray;
+    JsonArray jsonArray;
     for (const ProjectFile& file : m_recentFilesList) {
         if (!file.displayNameOverride.isEmpty()) {
-            QJsonObject obj;
-            obj["path"] = file.path.toQString();
-            obj["displayName"] = file.displayNameOverride;
+            JsonObject obj;
+            obj["path"] = file.path.toStdString();
+            obj["displayName"] = file.displayNameOverride.toStdString();
             jsonArray << obj;
         } else {
-            jsonArray << file.path.toQString();
+            jsonArray << file.path.toStdString();
         }
     }
 
-    QJsonDocument jsonDoc(jsonArray);
-    QByteArray json = jsonDoc.toJson(QJsonDocument::Compact);
+    JsonDocument json(jsonArray);
 
     mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), RECENT_FILES_RESOURCE_NAME);
-    Ret ret = fileSystem()->writeFile(configuration()->recentFilesJsonPath(), ByteArray::fromQByteArrayNoCopy(json));
+    Ret ret = fileSystem()->writeFile(configuration()->recentFilesJsonPath(), json.toJson());
     if (!ret) {
         LOGE() << "Failed to save recent files list: " << ret.toString();
     }
