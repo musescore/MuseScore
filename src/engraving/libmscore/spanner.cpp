@@ -676,8 +676,8 @@ void Spanner::computeStartElement()
     }
 
     Chord* startChord = m_startElement && m_startElement->isChord() ? toChord(m_startElement) : nullptr;
-    if (startChord && !mu::contains(startChord->startingSpanners(), this)) {
-        startChord->startingSpanners().push_back(this);
+    if (startChord) {
+        startChord->addStartingSpanner(this);
     }
 }
 
@@ -765,8 +765,8 @@ void Spanner::computeEndElement()
     }
 
     Chord* endChord = m_endElement && m_endElement->isChord() ? toChord(m_endElement) : nullptr;
-    if (endChord && !mu::contains(endChord->endingSpanners(), this)) {
-        endChord->endingSpanners().push_back(this);
+    if (endChord) {
+        endChord->addEndingSpanner(this);
     }
 }
 
