@@ -24,7 +24,7 @@ on:
         default: ''
 
 env:
-  CURRENT_RELEASE_BRANCH: 4.0.2
+  CURRENT_RELEASE_BRANCH: 4.1.0
 
 jobs:
   build_mu4:
