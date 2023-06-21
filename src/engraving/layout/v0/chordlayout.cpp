@@ -2779,10 +2779,15 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
             bool ignoreYOffset = (restAbove && restYOffset > 0) || (!restAbove && restYOffset < 0);
             PointF offset = ignoreYOffset ? PointF(0, restYOffset) : PointF(0, 0);
 
+            Shape chordShape = chord->shape().translated(chord->pos());
+            chordShape.removeInvisibles();
+            if (chordShape.empty()) {
+                continue;
+            }
+
             double clearance = 0.0;
             Shape restShape = rest->shape().translated(rest->pos() - offset);
             if (chord->segment() == rest->segment()) {
-                Shape chordShape = chord->shape().translated(chord->pos());
                 clearance = restAbove ? restShape.verticalClearance(chordShape) : chordShape.verticalClearance(restShape);
             } else {
                 Note* limitNote = restAbove ? chord->upNote() : chord->downNote();
