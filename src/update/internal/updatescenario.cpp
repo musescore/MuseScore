@@ -40,7 +40,6 @@ using namespace mu::framework;
 static ValMap releaseInfoToValMap(const ReleaseInfo& info)
 {
     return {
-        { "title", Val(info.title) },
         { "notes", Val(info.notes) },
         { "fileName", Val(info.fileName) },
         { "fileUrl", Val(info.fileUrl) },
@@ -51,7 +50,6 @@ static ValMap releaseInfoToValMap(const ReleaseInfo& info)
 static ReleaseInfo releaseInfoFromValMap(const ValMap& map)
 {
     ReleaseInfo info;
-    info.title = map.at("title").toString();
     info.notes = map.at("notes").toString();
     info.fileName = map.at("fileName").toString();
     info.fileUrl = map.at("fileUrl").toString();
@@ -172,7 +170,6 @@ void UpdateScenario::showNoUpdateMsg()
 void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
 {
     QStringList params = {
-        "title=" + QString::fromStdString(info.title),
         "notes=" + QString::fromStdString(info.notes)
     };
 
