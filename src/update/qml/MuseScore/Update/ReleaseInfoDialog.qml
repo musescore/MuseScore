@@ -31,7 +31,6 @@ import "internal"
 StyledDialogView {
     id: root
 
-    property alias title: releaseTitleLabel.text
     property alias notes: view.notes
 
     contentWidth: 644
@@ -76,6 +75,7 @@ StyledDialogView {
 
             Layout.alignment: Qt.AlignTop
 
+            text: qsTrc("update", "A new version of MuseScore is available!")
             font: ui.theme.headerBoldFont
         }
 
