@@ -56,11 +56,19 @@ class DummyElement;
 }
 
 namespace mu::engraving::layout::v0 {
+class IGetScoreInternal
+{
+private:
+    friend class DomAccessor;
+
+    virtual Score* score() = 0;
+};
+
 class DomAccessor
 {
 public:
 
-    DomAccessor(Score* s);
+    DomAccessor(IGetScoreInternal* s);
 
     // Const access
     const std::vector<Part*>& parts() const;
@@ -105,7 +113,10 @@ public:
     const std::set<Spanner*> unmanagedSpanners();
 
 private:
-    Score* m_score = nullptr;
+    const Score* score() const;
+    Score* score();
+
+    IGetScoreInternal* m_getScore = nullptr;
 };
 
 class LayoutState
@@ -207,7 +218,7 @@ private:
     double m_totalBracketsWidth = -1.0;
 };
 
-class LayoutContext
+class LayoutContext : public IGetScoreInternal
 {
 public:
     LayoutContext(Score* s);
@@ -251,6 +262,9 @@ public:
     void addRefresh(const mu::RectF& r);
 
 private:
+
+    Score* score() override { return m_score; }
+
     Score* m_score = nullptr;
     DomAccessor m_dom;
     LayoutState m_state;
