@@ -22,7 +22,6 @@
 #ifndef MU_ENGRAVING_LYRICSLAYOUT_H
 #define MU_ENGRAVING_LYRICSLAYOUT_H
 
-#include "../layoutoptions.h"
 #include "layoutcontext.h"
 
 namespace mu::engraving {
@@ -43,7 +42,7 @@ public:
     static void layout(LyricsLine* item, LayoutContext& ctx);
     static void layout(LyricsLineSegment* item, LayoutContext& ctx);
 
-    static void layoutLyrics(const LayoutOptions& options, LayoutContext& ctx, System* system);
+    static void layoutLyrics(LayoutContext& ctx, System* system);
 };
 }
 #endif // MU_ENGRAVING_LYRICSLAYOUT_H

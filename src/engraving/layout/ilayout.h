@@ -26,6 +26,7 @@
 
 #include "modularity/imoduleinterface.h"
 
+#include "types/fraction.h"
 #include "layoutoptions.h"
 
 namespace mu::engraving {

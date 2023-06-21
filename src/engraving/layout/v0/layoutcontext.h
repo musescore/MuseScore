@@ -30,6 +30,7 @@
 
 #include "style/style.h"
 #include "iengravingfont.h"
+#include "libmscore/mscore.h"
 
 #include "../layoutoptions.h"
 
@@ -59,9 +60,36 @@ namespace mu::engraving::layout::v0 {
 class IGetScoreInternal
 {
 private:
+    friend class LayoutConfiguration;
     friend class DomAccessor;
 
     virtual Score* score() = 0;
+};
+
+class LayoutConfiguration
+{
+public:
+    LayoutConfiguration(IGetScoreInternal* s);
+
+    const MStyle& style() const;
+
+    double loWidth() const { return style().styleD(Sid::pageWidth) * DPI; }
+    double loHeight() const { return style().styleD(Sid::pageHeight) * DPI; }
+
+    bool firstSystemIndent() const { return style().styleB(Sid::enableIndentationOnFirstSystem); }
+
+    double maxChordShiftAbove() const { return style().styleMM(Sid::maxChordShiftAbove); }
+    double maxChordShiftBelow() const { return style().styleMM(Sid::maxChordShiftBelow); }
+
+    double maxFretShiftAbove() const { return style().styleMM(Sid::maxFretShiftAbove); }
+    double maxFretShiftBelow() const { return style().styleMM(Sid::maxFretShiftBelow); }
+
+    VerticalAlignRange verticalAlignRange() const { return style().value(Sid::autoplaceVerticalAlignRange).value<VerticalAlignRange>(); }
+
+private:
+    const Score* score() const;
+
+    IGetScoreInternal* m_getScore = nullptr;
 };
 
 class DomAccessor
@@ -249,6 +277,8 @@ public:
 
     IEngravingFontPtr engravingFont() const;
 
+    const LayoutConfiguration& conf() const { return m_configuration; }
+
     // Dom access
     const DomAccessor& dom() const;
     DomAccessor& mutDom();
@@ -266,6 +296,8 @@ private:
     Score* score() override { return m_score; }
 
     Score* m_score = nullptr;
+
+    LayoutConfiguration m_configuration;
     DomAccessor m_dom;
     LayoutState m_state;
 };

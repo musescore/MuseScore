@@ -32,6 +32,31 @@
 using namespace mu::engraving;
 using namespace mu::engraving::layout::v0;
 
+// ================================================
+// LayoutConfiguration
+// ================================================
+
+LayoutConfiguration::LayoutConfiguration(IGetScoreInternal* s)
+    : m_getScore(s)
+{}
+
+const Score* LayoutConfiguration::score() const
+{
+    return m_getScore->score();
+}
+
+const MStyle& LayoutConfiguration::style() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return DefaultStyle::defaultStyle();
+    }
+    return score()->style();
+}
+
+// ================================================
+// DomAccessor
+// ================================================
+
 DomAccessor::DomAccessor(IGetScoreInternal* s)
     : m_getScore(s)
 {}
@@ -267,7 +292,7 @@ const std::set<Spanner*> DomAccessor::unmanagedSpanners()
 // =============================================================
 
 LayoutContext::LayoutContext(Score* score)
-    : m_score(score), m_dom(this)
+    : m_score(score), m_configuration(this), m_dom(this)
 {
     if (score) {
         m_state.setFirstSystemIndent(score->style().styleB(Sid::enableIndentationOnFirstSystem));

@@ -55,7 +55,7 @@ void ScoreLayout::layoutRange(Score* score, const LayoutOptions& options, const 
         score->_systems.clear();
         DeleteAll(score->pages());
         score->pages().clear();
-        PageLayout::getNextPage(options, ctx);
+        PageLayout::getNextPage(ctx);
         return;
     }
 
@@ -192,7 +192,7 @@ void ScoreLayout::doLayout(const LayoutOptions& options, LayoutContext& ctx)
 {
     const MeasureBase* lmb = nullptr;
     do {
-        PageLayout::getNextPage(options, ctx);
+        PageLayout::getNextPage(ctx);
         PageLayout::collectPage(options, ctx);
 
         if (ctx.state().page() && !ctx.state().page()->systems().empty()) {
@@ -234,7 +234,7 @@ void ScoreLayout::doLayout(const LayoutOptions& options, LayoutContext& ctx)
 
 void ScoreLayout::layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& ctx)
 {
-    resetSystems(layoutAll, options, ctx);
+    resetSystems(ctx, layoutAll);
 
     collectLinearSystem(options, ctx);
 
@@ -243,7 +243,7 @@ void ScoreLayout::layoutLinear(bool layoutAll, const LayoutOptions& options, Lay
 
 //  in linear mode there is only one page
 //  which contains one system
-void ScoreLayout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutContext& ctx)
+void ScoreLayout::resetSystems(LayoutContext& ctx, bool layoutAll)
 {
     DomAccessor& mutDom = ctx.mutDom();
     Page* page = 0;
@@ -268,7 +268,7 @@ void ScoreLayout::resetSystems(bool layoutAll, const LayoutOptions& options, Lay
 
         page = Factory::createPage(ctx.mutDom().rootItem());
         ctx.mutDom().pages().push_back(page);
-        page->bbox().setRect(0.0, 0.0, options.loWidth, options.loHeight);
+        page->bbox().setRect(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
         page->setNo(0);
 
         System* system = Factory::createSystem(page);

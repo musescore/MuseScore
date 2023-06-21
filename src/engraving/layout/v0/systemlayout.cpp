@@ -88,7 +88,8 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
     if (measure) {
         const LayoutBreak* layoutBreak = measure->sectionBreakElement();
         ctx.mutState().setFirstSystem(measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT));
-        ctx.mutState().setFirstSystemIndent(ctx.state().firstSystem() && options.firstSystemIndent
+        ctx.mutState().setFirstSystemIndent(ctx.state().firstSystem()
+                                            && ctx.conf().firstSystemIndent()
                                             && layoutBreak->firstSystemIndentation());
         ctx.mutState().setStartWithLongNames(ctx.state().firstSystem() && layoutBreak->startWithLongNames());
     }
@@ -502,7 +503,8 @@ System* SystemLayout::collectSystem(const LayoutOptions& options, LayoutContext&
     if (measure) {
         const LayoutBreak* layoutBreak = measure->sectionBreakElement();
         ctx.mutState().setFirstSystem(measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT));
-        ctx.mutState().setFirstSystemIndent(ctx.state().firstSystem() && options.firstSystemIndent
+        ctx.mutState().setFirstSystemIndent(ctx.state().firstSystem()
+                                            && ctx.conf().firstSystemIndent()
                                             && layoutBreak->firstSystemIndentation());
         ctx.mutState().setStartWithLongNames(ctx.state().firstSystem() && layoutBreak->startWithLongNames());
     }
@@ -1062,7 +1064,7 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
     // Lyric
     //-------------------------------------------------------------
 
-    LyricsLayout::layoutLyrics(options, ctx, system);
+    LyricsLayout::layoutLyrics(ctx, system);
 
     // here are lyrics dashes and melisma
     for (Spanner* sp : ctx.mutDom().unmanagedSpanners()) {
@@ -1110,7 +1112,7 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
     if (!hasFretDiagram) {
         HarmonyLayout::layoutHarmonies(sl, ctx);
-        HarmonyLayout::alignHarmonies(system, sl, true, options.maxChordShiftAbove, options.maxChordShiftBelow);
+        HarmonyLayout::alignHarmonies(system, sl, true, ctx.conf().maxChordShiftAbove(), ctx.conf().maxChordShiftBelow());
     }
 
     //-------------------------------------------------------------
@@ -1217,7 +1219,7 @@ void SystemLayout::layoutSystemElements(const LayoutOptions& options, LayoutCont
         //-------------------------------------------------------------
 
         HarmonyLayout::layoutHarmonies(sl, ctx);
-        HarmonyLayout::alignHarmonies(system, sl, false, options.maxFretShiftAbove, options.maxFretShiftBelow);
+        HarmonyLayout::alignHarmonies(system, sl, false, ctx.conf().maxFretShiftAbove(), ctx.conf().maxFretShiftBelow());
     }
 
     //-------------------------------------------------------------
