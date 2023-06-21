@@ -63,7 +63,7 @@ cat $JSON_FILE
 echo "::endgroup::"
 
 echo "::group::Generating PNG files"
-$MSCORE_BIN -j $JSON_FILE -r $DPI 2>&1 | tee $LOG_FILE && SUCCESS="true"
+$MSCORE_BIN -j $JSON_FILE -r $DPI --migration none 2>&1 | tee $LOG_FILE && SUCCESS="true"
 echo "::endgroup::"
 
 if [ -z "$SUCCESS" ]; then
