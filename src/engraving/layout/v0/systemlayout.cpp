@@ -1857,7 +1857,7 @@ double SystemLayout::totalBracketOffset(LayoutContext& ctx)
 
 double SystemLayout::layoutBrackets(System* system, LayoutContext& ctx)
 {
-    size_t nstaves  = system->_staves.size();
+    size_t nstaves = system->_staves.size();
     size_t columns = system->getBracketsColumnsCount();
 
 #if (!defined (_MSCVER) && !defined (_MSC_VER))
