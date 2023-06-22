@@ -43,7 +43,7 @@ FocusScope {
 
     property alias defaultNavigationControl: fakeNavCtrl
 
-    property NavigationPanel navigationPanel: notationView.navigationPanel // first panel
+    property NavigationPanel navigationPanel: tabPanel.navigationPanel // first panel
 
     NavigationSection {
         id: navSec
@@ -108,7 +108,7 @@ FocusScope {
                         name: "Score"
                         enabled: notationView.enabled && notationView.visible
 
-                        panel: navigationPanel
+                        panel: notationView.navigationPanel
                         order: 1
 
                         onActiveChanged: {
@@ -263,7 +263,7 @@ FocusScope {
             Layout.fillWidth: true
 
             navigationPanel.section: navSec
-            navigationPanel.order: brailleView.navigationPanel.order + 1
+            navigationOrderStart: brailleView.navigationPanel.order + 1
 
             onClosed: {
                 fakeNavCtrl.requestActive()
