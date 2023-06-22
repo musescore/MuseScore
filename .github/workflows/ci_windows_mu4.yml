@@ -112,8 +112,10 @@ jobs:
         fi
 
         if [ $DO_BUILD == 'false' ]; then
-          DO_UPLOAD_SYMBOLS='false'
           DO_PUBLISH='false'
+          DO_UPDATE_TS='false'
+          DO_PLACEHOLDER_TRANSLATIONS='false'
+          DO_UPLOAD_SYMBOLS='false'
         fi
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
@@ -252,8 +254,24 @@ jobs:
 
         DO_PUBLISH='false'
 
-        if [ "${{ github.event_name }}" == "pull_request" ]; then PR_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${BUILD_NUMBER}_Win${PR_INFO}_portable")"
+        DO_UPDATE_TS='false'
+        if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
+            DO_UPDATE_TS='true'
+            if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then 
+              echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled" 
+              DO_UPDATE_TS='false'
+            fi 
+        fi
+
+        if [ $DO_BUILD == 'false' ]; then
+          DO_PUBLISH='false'
+          DO_UPDATE_TS='false'
+        fi
+
+        ADD_INFO="_${GITHUB_REF#refs/heads/}"
+        if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
+        if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${BUILD_NUMBER}_Win_portable${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
@@ -262,8 +280,10 @@ jobs:
         echo "BUILD_NUMBER: $BUILD_NUMBER"
         echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
         echo "DO_BUILD: $DO_BUILD"
+        echo "DO_UPDATE_TS=$DO_UPDATE_TS" >> $GITHUB_ENV
+        echo "DO_UPDATE_TS: $DO_UPDATE_TS"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
-        echo "DO_PUBLISH: $DO_PUBLISH"    
+        echo "DO_PUBLISH: $DO_PUBLISH"
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
@@ -276,6 +296,17 @@ jobs:
       shell: bash
       run: |
         bash ./build/ci/windows/make_environment.sh      
+    - name: Update .ts files
+      if: env.DO_UPDATE_TS == 'true'
+      shell: bash
+      run: |
+        bash ./build/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s windows
+        bash ./build/ci/translation/tx_pull.sh
+    - name: Generate .qm files
+      if: env.DO_BUILD == 'true'
+      shell: bash
+      run: |
+        bash ./build/ci/translation/run_lrelease.sh      
     - name: Build
       if: env.DO_BUILD == 'true'
       shell: cmd
