@@ -357,7 +357,7 @@ void StretchedBend::setupPainter(mu::draw::Painter* painter) const
 void StretchedBend::fillArrows()
 {
     double aw = 0;
-    m_bendArrowWidth = aw = score()->styleMM(Sid::bendArrowWidth);
+    m_bendArrowWidth = aw = style().styleMM(Sid::bendArrowWidth);
 
     m_arrowUp.clear();
     m_arrowDown.clear();

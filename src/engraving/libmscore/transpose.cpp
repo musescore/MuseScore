@@ -798,7 +798,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
         }
         scores.insert(score);
         Part* lp = ls->part();
-        if (!score->styleB(Sid::concertPitch)) {
+        if (!score->style().styleB(Sid::concertPitch)) {
             score->transposeKeys(lp->startTrack() / VOICES, lp->endTrack() / VOICES, tickStart, tickEnd, true);
         }
     }
@@ -844,7 +844,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
                     int rootTpc = transposeTpc(h->rootTpc(), diffV, false);
                     int baseTpc = transposeTpc(h->baseTpc(), diffV, false);
                     for (EngravingObject* scoreElement : h->linkList()) {
-                        if (!scoreElement->style()->styleB(Sid::concertPitch)) {
+                        if (!scoreElement->style().styleB(Sid::concertPitch)) {
                             undoTransposeHarmony(toHarmony(scoreElement), rootTpc, baseTpc);
                         }
                     }

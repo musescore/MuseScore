@@ -130,7 +130,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
         int step           = absStep(line, clef);
         int octave         = step / 7;
         nval.pitch         = step2pitch(step) + octave * 12 + int(acci);
-        if (styleB(Sid::concertPitch)) {
+        if (style().styleB(Sid::concertPitch)) {
             nval.tpc1 = step2tpc(step % 7, acci);
         } else {
             nval.pitch += instr->transpose().chromatic;
@@ -577,7 +577,7 @@ Ret Score::repitchNote(const Position& p, bool replace)
         int octave = step / 7;
         nval.pitch = step2pitch(step) + octave * 12 + int(acci);
 
-        if (styleB(Sid::concertPitch)) {
+        if (style().styleB(Sid::concertPitch)) {
             nval.tpc1 = step2tpc(step % 7, acci);
         } else {
             nval.pitch += st->part()->instrument(s->tick())->transpose().chromatic;
@@ -664,7 +664,7 @@ Ret Score::repitchNote(const Position& p, bool replace)
         forceAccidental = (nval.pitch == nval2.pitch);
     }
     if (forceAccidental) {
-        int tpc = styleB(Sid::concertPitch) ? nval.tpc1 : nval.tpc2;
+        int tpc = style().styleB(Sid::concertPitch) ? nval.tpc1 : nval.tpc2;
         AccidentalVal alter = tpc2alter(tpc);
         at = Accidental::value2subtype(alter);
         Accidental* a = Factory::createAccidental(note);

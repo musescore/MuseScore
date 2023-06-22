@@ -92,7 +92,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         Interval oldV = part->instrument(tickStart)->transpose();
         Interval oldKv = staff()->transpose(tickStart);
         Interval v = instrument->transpose();
-        bool concPitch = score()->styleB(Sid::concertPitch);
+        bool concPitch = style().styleB(Sid::concertPitch);
 
         // change the clef for each staff
         for (size_t i = 0; i < part->nstaves(); i++) {

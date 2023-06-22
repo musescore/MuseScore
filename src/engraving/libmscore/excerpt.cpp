@@ -380,7 +380,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     score->doLayout();
 
     // handle transposing instruments
-    if (masterScore->styleB(Sid::concertPitch) != score->styleB(Sid::concertPitch)) {
+    if (masterScore->style().styleB(Sid::concertPitch) != score->style().styleB(Sid::concertPitch)) {
         for (const Staff* staff : score->staves()) {
             if (staff->staffType(Fraction(0, 1))->group() == StaffGroup::PERCUSSION) {
                 continue;
@@ -392,7 +392,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                 continue;
             }
             bool flip = false;
-            if (masterScore->styleB(Sid::concertPitch)) {
+            if (masterScore->style().styleB(Sid::concertPitch)) {
                 interval.flip();          // flip the transposition for the original instrument
                 flip = true;              // transposeKeys() will flip transposition for each instrument change
             }
@@ -413,7 +413,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                 if (interval.isZero()) {
                     continue;
                 }
-                if (masterScore->styleB(Sid::concertPitch)) {
+                if (masterScore->style().styleB(Sid::concertPitch)) {
                     interval.flip();
                 }
 
@@ -441,8 +441,8 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     }
 
     // update style values if spatium different for part
-    if (masterScore->spatium() != score->spatium()) {
-        score->spatiumChanged(masterScore->spatium(), score->spatium());
+    if (masterScore->style().spatium() != score->style().spatium()) {
+        score->spatiumChanged(masterScore->style().spatium(), score->style().spatium());
         score->styleChanged();
     }
 
@@ -1539,8 +1539,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         cloneSpanner(s, score, dstTrack, dstTrack2);
     }
 
-    bool oscoreConcertPitch = oscore->styleB(Sid::concertPitch);
-    bool scoreConcertPitch = score->styleB(Sid::concertPitch);
+    bool oscoreConcertPitch = oscore->style().styleB(Sid::concertPitch);
+    bool scoreConcertPitch = score->style().styleB(Sid::concertPitch);
 
     if ((oscoreConcertPitch && !scoreConcertPitch)
         || (!oscoreConcertPitch && scoreConcertPitch)) {

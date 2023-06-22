@@ -175,12 +175,12 @@ PropertyValue GradualTempoChange::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::ALIGN:
-        return score()->styleV(Sid::tempoChangeAlign);
+        return style().styleV(Sid::tempoChangeAlign);
 
     case Pid::LINE_WIDTH:
-        return score()->styleV(Sid::tempoChangeLineWidth);
+        return style().styleV(Sid::tempoChangeLineWidth);
     case Pid::LINE_STYLE:
-        return score()->styleV(Sid::tempoChangeLineStyle);
+        return style().styleV(Sid::tempoChangeLineStyle);
     case Pid::LINE_VISIBLE:
         return true;
 
@@ -189,7 +189,7 @@ PropertyValue GradualTempoChange::propertyDefault(Pid propertyId) const
         return PropertyValue::fromValue(PointF(0, 0));
 
     case Pid::BEGIN_FONT_STYLE:
-        return score()->styleV(Sid::tempoChangeFontStyle);
+        return style().styleV(Sid::tempoChangeFontStyle);
 
     case Pid::BEGIN_TEXT:
     case Pid::CONTINUE_TEXT:

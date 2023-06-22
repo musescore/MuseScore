@@ -777,7 +777,7 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
         if (mustAddWordToVbox(w->type)) {
             const auto align = alignForCreditWords(w, pageSize.width());
             const auto tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : TextStyleType::DEFAULT;
-            double yoffs = (maxy - w->defaultY) * score->spatium() / 10;
+            double yoffs = (maxy - w->defaultY) * score->style().spatium() / 10;
             if (!vbox) {
                 vbox = createAndAddVBoxForCreditWords(score, miny, maxy);
             }
@@ -1518,7 +1518,7 @@ void MusicXMLParserPass1::defaults()
 {
     //_logger->logDebugTrace("MusicXMLParserPass1::defaults", &_e);
 
-    double millimeter = _score->spatium() / 10.0;
+    double millimeter = _score->style().spatium() / 10.0;
     double tenths = 1.0;
     QString lyricFontFamily;
     QString lyricFontSize;
@@ -1542,7 +1542,7 @@ void MusicXMLParserPass1::defaults()
             }
             double _spatium = DPMM * (millimeter * 10.0 / tenths);
             if (isImportLayout) {
-                _score->setSpatium(_spatium);
+                _score->style().setSpatium(_spatium);
             }
         } else if (_e.name() == "page-layout") {
             PageFormat pf;

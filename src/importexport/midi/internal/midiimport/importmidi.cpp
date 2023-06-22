@@ -332,7 +332,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
         Key cKey = tKey;
         Fraction t = Fraction::fromTicks(tick);
         Interval v = staff->part()->instrument(t)->transpose();
-        if (!v.isZero() && !cs->styleB(Sid::concertPitch)) {
+        if (!v.isZero() && !cs->style().styleB(Sid::concertPitch)) {
             cKey = transposeKey(tKey, v);
         }
         ke.setConcertKey(cKey);
@@ -624,7 +624,7 @@ void MTrack::createKeys(Key defaultKey, const KeyList& allKeyList)
             KeySigEvent ke;
             Interval v = staff->part()->instrument()->transpose();
             ke.setConcertKey(defaultKey);
-            if (!v.isZero() && !staff->score()->styleB(Sid::concertPitch)) {
+            if (!v.isZero() && !staff->score()->style().styleB(Sid::concertPitch)) {
                 v.flip();
                 Key tKey = transposeKey(defaultKey, v);
                 ke.setKey(tKey);

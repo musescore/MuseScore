@@ -2806,7 +2806,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         } else if (tag == "SyntiSettings") {
             masterScore->_synthesizerState.read(e);
         } else if (tag == "Spatium") {
-            masterScore->setSpatium(e.readDouble() * DPMM);
+            masterScore->style().setSpatium(e.readDouble() * DPMM);
         } else if (tag == "Division") {
             masterScore->_fileDivision = e.readInt();
         } else if (tag == "showInvisible") {
@@ -2816,19 +2816,19 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         } else if (tag == "showMargins") {
             masterScore->setShowPageborders(e.readInt());
         } else if (tag == "Style") {
-            double sp = masterScore->spatium();
+            double sp = masterScore->style().spatium();
             compat::ReadChordListHook clhook(masterScore);
             readStyle(&masterScore->style(), e, clhook);
             //style()->load(e);
             // adjust this now so chords render properly on read
             // other style adjustments can wait until reading is finished
-            if (masterScore->styleB(Sid::useGermanNoteNames)) {
+            if (masterScore->style().styleB(Sid::useGermanNoteNames)) {
                 masterScore->style().set(Sid::useStandardNoteNames, false);
             }
             if (masterScore->layoutMode() == LayoutMode::FLOAT) {
                 // style should not change spatium in
                 // float mode
-                masterScore->setSpatium(sp);
+                masterScore->style().setSpatium(sp);
             }
         } else if (tag == "TextStyle") {
             e.skipCurrentElement();
@@ -3011,7 +3011,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             } else if (s->isTrill()) {
                 yo = masterScore->styleValue(Pid::OFFSET, Sid::trillPosAbove).value<PointF>().y();
             } else if (s->isTextLine()) {
-                yo = -5.0 * masterScore->spatium();
+                yo = -5.0 * masterScore->style().spatium();
             }
             if (!s->spannerSegments().empty()) {
                 for (SpannerSegment* seg : s->spannerSegments()) {
@@ -3070,7 +3070,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     for (MeasureBase* mb = masterScore->first(); mb; mb = mb->next()) {
         if (mb->isVBox()) {
             VBox* b  = toVBox(mb);
-            Millimetre y = masterScore->styleMM(Sid::staffUpperBorder);
+            Millimetre y = masterScore->style().styleMM(Sid::staffUpperBorder);
             b->setBottomGap(y);
         }
     }
@@ -3092,17 +3092,17 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     }
 
     // adjust some styles
-    if (masterScore->styleB(Sid::hideEmptyStaves)) {        // http://musescore.org/en/node/16228
+    if (masterScore->style().styleB(Sid::hideEmptyStaves)) {        // http://musescore.org/en/node/16228
         masterScore->style().set(Sid::dontHideStavesInFirstSystem, false);
     }
-    if (masterScore->styleB(Sid::showPageNumberOne)) {      // http://musescore.org/en/node/21207
+    if (masterScore->style().styleB(Sid::showPageNumberOne)) {      // http://musescore.org/en/node/21207
         masterScore->style().set(Sid::evenFooterL, String(u"$P"));
         masterScore->style().set(Sid::oddFooterR, String(u"$P"));
     }
-    if (masterScore->styleI(Sid::minEmptyMeasures) == 0) {
+    if (masterScore->style().styleI(Sid::minEmptyMeasures) == 0) {
         masterScore->style().set(Sid::minEmptyMeasures, 1);
     }
-    masterScore->style().set(Sid::frameSystemDistance, masterScore->styleS(Sid::frameSystemDistance) + Spatium(6.0));
+    masterScore->style().set(Sid::frameSystemDistance, masterScore->style().styleS(Sid::frameSystemDistance) + Spatium(6.0));
     masterScore->resetStyleValue(Sid::measureSpacing);
 
     // add invisible tempo text if necessary
@@ -3150,7 +3150,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     // we'll force this and live with it for the score
     // but we wait until now to do it so parts don't have this issue
 
-    if (masterScore->styleV(Sid::voltaPosAbove) == DefaultStyle::baseStyle().value(Sid::voltaPosAbove)) {
+    if (masterScore->style().styleV(Sid::voltaPosAbove) == DefaultStyle::baseStyle().value(Sid::voltaPosAbove)) {
         masterScore->style().set(Sid::voltaPosAbove, PointF(0.0, -2.0f));
     }
 

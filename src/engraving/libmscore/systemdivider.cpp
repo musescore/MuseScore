@@ -63,9 +63,9 @@ void SystemDivider::setDividerType(SystemDivider::Type v)
 {
     _dividerType = v;
     if (v == SystemDivider::Type::LEFT) {
-        setOffset(PointF(score()->styleD(Sid::dividerLeftX), score()->styleD(Sid::dividerLeftY)));
+        setOffset(PointF(style().styleD(Sid::dividerLeftX), style().styleD(Sid::dividerLeftY)));
     } else {
-        setOffset(PointF(score()->styleD(Sid::dividerRightX), score()->styleD(Sid::dividerRightY)));
+        setOffset(PointF(style().styleD(Sid::dividerRightX), style().styleD(Sid::dividerRightY)));
     }
 }
 

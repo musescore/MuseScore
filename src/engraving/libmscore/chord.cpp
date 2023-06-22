@@ -855,7 +855,7 @@ void Chord::addLedgerLines()
     }
 
     // the extra length of a ledger line to be added on each side of the notehead
-    double extraLen = score()->styleMM(Sid::ledgerLineLength);
+    double extraLen = style().styleMM(Sid::ledgerLineLength);
     double hw;
     double minX, maxX;                           // note extrema in raster units
     int minLine, maxLine;
@@ -1108,8 +1108,8 @@ int Chord::calcMinStemLength()
         // so we need to multiply it by 2 to get the actual height
         int buzzRollMultiplier = _tremolo->isBuzzRoll() ? 2 : 1;
         minStemLength += ceil(_tremolo->minHeight() / intrinsicMag() * 4.0 * buzzRollMultiplier);
-        int outSidePadding = score()->styleMM(Sid::tremoloOutSidePadding).val() / _spatium * 4.0;
-        int noteSidePadding = score()->styleMM(Sid::tremoloNoteSidePadding).val() / _spatium * 4.0;
+        int outSidePadding = style().styleMM(Sid::tremoloOutSidePadding).val() / _spatium * 4.0;
+        int noteSidePadding = style().styleMM(Sid::tremoloNoteSidePadding).val() / _spatium * 4.0;
 
         Note* lineNote = m_up ? upNote() : downNote();
         if (lineNote->line() == INVALID_LINE) {
@@ -1128,7 +1128,7 @@ int Chord::calcMinStemLength()
         minStemLength += (outSidePadding + std::max(noteSidePadding, outsideStaffOffset));
 
         if (_hook) {
-            bool straightFlags = score()->styleB(Sid::useStraightNoteFlags);
+            bool straightFlags = style().styleB(Sid::useStraightNoteFlags);
             double smuflAnchor = _hook->smuflAnchor().y() * (m_up ? 1 : -1);
             int hookOffset = floor((_hook->height() / intrinsicMag() + smuflAnchor) / _spatium * 4) - (straightFlags ? 0 : 2);
             // some fonts have hooks that extend very far down (making the height of the hook very large)
@@ -1156,7 +1156,7 @@ int Chord::calcMinStemLength()
         int beamCount = (m_beam ? beams() : 0) + ((_tremolo && _tremolo->twoNotes()) ? _tremolo->lines() : 0);
         static const int minInnerStemLengths[4] = { 10, 9, 8, 7 };
         int innerStemLength = minInnerStemLengths[std::min(beamCount, 3)];
-        int beamsHeight = beamCount * (score()->styleB(Sid::useWideBeams) ? 4 : 3) - 1;
+        int beamsHeight = beamCount * (style().styleB(Sid::useWideBeams) ? 4 : 3) - 1;
         int newMinStemLength = std::max(minStemLength, innerStemLength);
         newMinStemLength += beamsHeight;
         // for 4+ beams, there are a few situations where we need to lengthen the stem by 1
@@ -1186,7 +1186,7 @@ int Chord::stemLengthBeamAddition() const
     case 3:
         return 2;
     default:
-        return (beamCount - 3) * (score()->styleB(Sid::useWideBeams) ? 4 : 3);
+        return (beamCount - 3) * (style().styleB(Sid::useWideBeams) ? 4 : 3);
     }
 }
 
@@ -1211,7 +1211,7 @@ int Chord::minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook,
 // all values are in quarter spaces
 int Chord::maxReduction(int extensionOutsideStaff) const
 {
-    if (!score()->styleB(Sid::shortenStem)) {
+    if (!style().styleB(Sid::shortenStem)) {
         return 0;
     }
     // [extensionOutsideStaff][beamCount]
@@ -1226,7 +1226,7 @@ int Chord::maxReduction(int extensionOutsideStaff) const
     if (!_hook) {
         beamCount = _tremolo ? _tremolo->lines() + (m_beam ? beams() : 0) : beams();
     }
-    bool hasTradHook = _hook && !score()->styleB(Sid::useStraightNoteFlags);
+    bool hasTradHook = _hook && !style().styleB(Sid::useStraightNoteFlags);
     if (_hook && !hasTradHook) {
         beamCount = std::min(beamCount, 2); // the straight glyphs extend outwards after 2 beams
     }
@@ -1322,7 +1322,7 @@ double Chord::calcDefaultStemLength()
         return tab->chordStemLength(this) * _spatium;
     }
 
-    int defaultStemLength = score()->styleD(Sid::stemLength) * 4;
+    int defaultStemLength = style().styleD(Sid::stemLength) * 4;
     defaultStemLength += stemLengthBeamAddition();
     if (tab) {
         defaultStemLength *= 1.5;
@@ -1330,7 +1330,7 @@ double Chord::calcDefaultStemLength()
     // extraHeight represents the extra vertical distance between notehead and stem start
     // eg. slashed noteheads etc
     double extraHeight = (m_up ? upNote()->stemUpSE().y() : downNote()->stemDownNW().y()) / intrinsicMag() / _spatium;
-    int shortestStem = score()->styleB(Sid::useWideBeams) ? 12 : (score()->styleD(Sid::shortestStem) + abs(extraHeight)) * 4;
+    int shortestStem = style().styleB(Sid::useWideBeams) ? 12 : (style().styleD(Sid::shortestStem) + abs(extraHeight)) * 4;
     int quarterSpacesPerLine = std::floor(lineDistance * 2);
     int chordHeight = (downLine() - upLine()) * quarterSpacesPerLine; // convert to quarter spaces
     int stemLength = defaultStemLength;
@@ -1339,8 +1339,8 @@ double Chord::calcDefaultStemLength()
     _minStemLength = minStemLengthQuarterSpaces / 4.0 * _spatium;
 
     int staffLineCount = staffItem ? staffItem->lines(tick()) : 5;
-    int shortStemStart = score()->styleI(Sid::shortStemStartLocation) * quarterSpacesPerLine + 1;
-    bool useWideBeams = score()->styleB(Sid::useWideBeams);
+    int shortStemStart = style().styleI(Sid::shortStemStartLocation) * quarterSpacesPerLine + 1;
+    bool useWideBeams = style().styleB(Sid::useWideBeams);
     int beamCount = ((_tremolo && _tremolo->twoNotes()) ? _tremolo->lines() : 0) + (m_beam ? beams() : 0);
     int middleLine
         = minStaffOverlap(m_up, staffLineCount, beamCount, !!_hook, useWideBeams ? 4 : 3, useWideBeams, !(isGrace() || isSmall()));
@@ -2301,10 +2301,10 @@ double Chord::intrinsicMag() const
 {
     double m = 1.0;
     if (isSmall()) {
-        m *= score()->styleD(Sid::smallNoteMag);
+        m *= style().styleD(Sid::smallNoteMag);
     }
     if (_noteType != NoteType::NORMAL) {
-        m *= score()->styleD(Sid::graceNoteMag);
+        m *= style().styleD(Sid::graceNoteMag);
     }
     return m;
 }

@@ -76,7 +76,7 @@ mu::RetVal<std::string> NotationMeta::metaJson(notation::INotationPtr notation)
     json["tempoText"] =  _tempo.second;
 
     json["parts"] =  partsJsonArray(score);
-    json["pageFormat"] = pageFormatJson(score);
+    json["pageFormat"] = pageFormatJson(score->style());
     json["textFramesData"] =  typeDataJson(score);
 
     RetVal<std::string> result;
@@ -212,12 +212,12 @@ QJsonArray NotationMeta::partsJsonArray(const mu::engraving::Score* score)
     return jsonPartsArray;
 }
 
-QJsonObject NotationMeta::pageFormatJson(const mu::engraving::Score* score)
+QJsonObject NotationMeta::pageFormatJson(const mu::engraving::MStyle& style)
 {
     QJsonObject format;
-    format.insert("height", round(score->styleD(mu::engraving::Sid::pageHeight) * mu::engraving::INCH));
-    format.insert("width", round(score->styleD(mu::engraving::Sid::pageWidth) * mu::engraving::INCH));
-    format.insert("twosided", boolToString(score->styleB(mu::engraving::Sid::pageTwosided)));
+    format.insert("height", round(style.styleD(mu::engraving::Sid::pageHeight) * mu::engraving::INCH));
+    format.insert("width", round(style.styleD(mu::engraving::Sid::pageWidth) * mu::engraving::INCH));
+    format.insert("twosided", boolToString(style.styleB(mu::engraving::Sid::pageTwosided)));
 
     return format;
 }

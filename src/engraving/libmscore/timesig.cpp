@@ -295,7 +295,7 @@ PropertyValue TimeSig::propertyDefault(Pid id) const
     case Pid::TIMESIG_TYPE:
         return int(TimeSigType::NORMAL);
     case Pid::SCALE:
-        return score()->styleV(Sid::timesigScale);
+        return style().styleV(Sid::timesigScale);
     default:
         return EngravingItem::propertyDefault(id);
     }

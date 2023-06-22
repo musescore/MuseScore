@@ -55,7 +55,7 @@ public:
     static void paintElement(draw::Painter& painter, const EngravingItem* element);
     static void paintElements(draw::Painter& painter, const std::vector<EngravingItem*>& elements, bool isPrinting);
 
-    static SizeF pageSizeInch(Score* score);
+    static SizeF pageSizeInch(const Score* score);
 
 private:
 };

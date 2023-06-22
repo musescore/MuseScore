@@ -83,7 +83,7 @@ void ChordLine::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;
     if (!m_wavy) {
-        painter->setPen(Pen(curColor(), score()->styleMM(Sid::chordlineThickness) * mag(), PenStyle::SolidLine));
+        painter->setPen(Pen(curColor(), style().styleMM(Sid::chordlineThickness) * mag(), PenStyle::SolidLine));
         painter->setBrush(BrushStyle::NoBrush);
         painter->drawPath(m_path);
     } else {

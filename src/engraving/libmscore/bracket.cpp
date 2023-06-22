@@ -94,20 +94,20 @@ double Bracket::width() const
     double w;
     switch (bracketType()) {
     case BracketType::BRACE:
-        if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
-            w = score()->styleMM(Sid::akkoladeWidth) + score()->styleMM(Sid::akkoladeBarDistance);
+        if (style().styleSt(Sid::MusicalSymbolFont) == "Emmentaler" || style().styleSt(Sid::MusicalSymbolFont) == "Gonville") {
+            w = style().styleMM(Sid::akkoladeWidth) + style().styleMM(Sid::akkoladeBarDistance);
         } else {
-            w = (symWidth(m_braceSymbol) * m_magx) + score()->styleMM(Sid::akkoladeBarDistance);
+            w = (symWidth(m_braceSymbol) * m_magx) + style().styleMM(Sid::akkoladeBarDistance);
         }
         break;
     case BracketType::NORMAL:
-        w = score()->styleMM(Sid::bracketWidth) + score()->styleMM(Sid::bracketDistance);
+        w = style().styleMM(Sid::bracketWidth) + style().styleMM(Sid::bracketDistance);
         break;
     case BracketType::SQUARE:
-        w = score()->styleMM(Sid::staffLineWidth) / 2 + 0.5 * spatium();
+        w = style().styleMM(Sid::staffLineWidth) / 2 + 0.5 * spatium();
         break;
     case BracketType::LINE:
-        w = 0.67 * score()->styleMM(Sid::bracketWidth) + score()->styleMM(Sid::bracketDistance);
+        w = 0.67 * style().styleMM(Sid::bracketWidth) + style().styleMM(Sid::bracketDistance);
         break;
     case BracketType::NO_BRACKET:
     default:
@@ -127,7 +127,7 @@ void Bracket::setStaffSpan(size_t a, size_t b)
     m_lastStaff = b;
 
     if (bracketType() == BracketType::BRACE
-        && score()->styleSt(Sid::MusicalSymbolFont) != "Emmentaler" && score()->styleSt(Sid::MusicalSymbolFont) != "Gonville") {
+        && style().styleSt(Sid::MusicalSymbolFont) != "Emmentaler" && style().styleSt(Sid::MusicalSymbolFont) != "Gonville") {
         int v = static_cast<int>(m_lastStaff - m_firstStaff + 1);
 
         // if staves inner staves are hidden, decrease span
@@ -137,7 +137,7 @@ void Bracket::setStaffSpan(size_t a, size_t b)
             }
         }
 
-        if (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") {
+        if (style().styleSt(Sid::MusicalSymbolFont) == "Leland") {
             v = std::min(4, v);
         }
 
@@ -186,8 +186,8 @@ void Bracket::draw(mu::draw::Painter* painter) const
     case BracketType::NORMAL: {
         double h        = 2 * m_h2;
         double _spatium = spatium();
-        double w        = score()->styleMM(Sid::bracketWidth);
-        double bd       = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
+        double w        = style().styleMM(Sid::bracketWidth);
+        double bd       = (style().styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
         Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.0, -bd - w * .5, 0.0, h + bd + w * .5));
@@ -200,7 +200,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
     break;
     case BracketType::SQUARE: {
         double h = 2 * m_h2;
-        double lineW = score()->styleMM(Sid::staffLineWidth);
+        double lineW = style().styleMM(Sid::staffLineWidth);
         double bracketWidth = width() - lineW / 2;
         Pen pen(curColor(), lineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
@@ -211,10 +211,10 @@ void Bracket::draw(mu::draw::Painter* painter) const
     break;
     case BracketType::LINE: {
         double h = 2 * m_h2;
-        double w = 0.67 * score()->styleMM(Sid::bracketWidth);
+        double w = 0.67 * style().styleMM(Sid::bracketWidth);
         Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
-        double bd = score()->styleMM(Sid::staffLineWidth) * 0.5;
+        double bd = style().styleMM(Sid::staffLineWidth) * 0.5;
         painter->drawLine(LineF(0.0, -bd, 0.0, h + bd));
     }
     break;

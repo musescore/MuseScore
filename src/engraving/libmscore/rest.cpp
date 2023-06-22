@@ -486,7 +486,7 @@ int Rest::computeVoiceOffset(int lines)
 
     bool up = voice() == 0 || voice() == 2;
     int upSign = up ? -1 : 1;
-    int voiceLineOffset = score()->styleB(Sid::multiVoiceRestTwoSpaceOffset) ? 2 : 1;
+    int voiceLineOffset = style().styleB(Sid::multiVoiceRestTwoSpaceOffset) ? 2 : 1;
 
     return voiceLineOffset * upSign;
 }
@@ -633,7 +633,7 @@ double Rest::intrinsicMag() const
 {
     double m = 1.0;
     if (isSmall()) {
-        m *= score()->styleD(Sid::smallNoteMag);
+        m *= style().styleD(Sid::smallNoteMag);
     }
     return m;
 }

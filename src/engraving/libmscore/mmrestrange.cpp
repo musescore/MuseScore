@@ -87,9 +87,9 @@ PropertyValue MMRestRange::propertyDefault(Pid id) const
     case Pid::TEXT_STYLE:
         return TextStyleType::MMREST_RANGE;
     case Pid::PLACEMENT:
-        return score()->styleV(Sid::mmRestRangeVPlacement);
+        return style().styleV(Sid::mmRestRangeVPlacement);
     case Pid::HPLACEMENT:
-        return score()->styleV(Sid::mmRestRangeHPlacement);
+        return style().styleV(Sid::mmRestRangeHPlacement);
     default:
         return MeasureNumberBase::propertyDefault(id);
     }

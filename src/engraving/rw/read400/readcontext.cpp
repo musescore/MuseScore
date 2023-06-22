@@ -107,6 +107,11 @@ const ReadContext* ReadContext::masterCtx() const
     return m_masterCtx;
 }
 
+const MStyle& ReadContext::style() const
+{
+    return score()->style();
+}
+
 String ReadContext::mscoreVersion() const
 {
     return m_score->mscoreVersion();
@@ -129,7 +134,7 @@ int ReadContext::fileDivision(int t) const
 
 double ReadContext::spatium() const
 {
-    return m_score->spatium();
+    return m_score->style().spatium();
 }
 
 compat::DummyElement* ReadContext::dummy() const

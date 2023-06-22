@@ -47,13 +47,13 @@ bool HorizontalSpacing::isSpecialNotePaddingType(ElementType type)
 
 void HorizontalSpacing::computeNotePadding(const Note* note, const EngravingItem* item2, double& padding, double scaling)
 {
-    Score* score = note->score();
+    const MStyle& style = note->style();
 
     bool sameVoiceNoteOrStem = (item2->isNote() || item2->isStem()) && note->track() == item2->track();
     if (sameVoiceNoteOrStem) {
         bool intersection = note->shape().translate(note->pos()).intersects(item2->shape().translate(item2->pos()));
         if (intersection) {
-            padding = std::max(padding, static_cast<double>(score->styleMM(Sid::minNoteDistance)));
+            padding = std::max(padding, static_cast<double>(style.styleMM(Sid::minNoteDistance)));
         }
     }
 
@@ -65,13 +65,13 @@ void HorizontalSpacing::computeNotePadding(const Note* note, const EngravingItem
 
     if (note->isGrace() && item2->isNote() && toNote(item2)->isGrace()) {
         // Grace-to-grace
-        padding = std::max(padding, static_cast<double>(score->styleMM(Sid::graceToGraceNoteDist)));
+        padding = std::max(padding, static_cast<double>(style.styleMM(Sid::graceToGraceNoteDist)));
     } else if (note->isGrace() && (item2->isRest() || (item2->isNote() && !toNote(item2)->isGrace()))) {
         // Grace-to-main
-        padding = std::max(padding, static_cast<double>(score->styleMM(Sid::graceToMainNoteDist)));
+        padding = std::max(padding, static_cast<double>(style.styleMM(Sid::graceToMainNoteDist)));
     } else if (!note->isGrace() && item2->isNote() && toNote(item2)->isGrace()) {
         // Main-to-grace
-        padding = std::max(padding, static_cast<double>(score->styleMM(Sid::graceToMainNoteDist)));
+        padding = std::max(padding, static_cast<double>(style.styleMM(Sid::graceToMainNoteDist)));
     }
 
     if (!item2->isNote()) {
@@ -92,11 +92,12 @@ void HorizontalSpacing::computeNotePadding(const Note* note, const EngravingItem
 
             double minEndPointsDistance = 0.0;
             if (laPoint1.line()->isTie()) {
-                minEndPointsDistance = score->styleMM(Sid::MinTieLength);
+                minEndPointsDistance = style.styleMM(Sid::MinTieLength);
             } else if (laPoint1.line()->isGlissando()) {
                 bool straight = toGlissando(laPoint1.line())->glissandoType() == GlissandoType::STRAIGHT;
-                double minGlissandoLength = straight ? score->styleMM(Sid::MinStraightGlissandoLength)
-                                            : score->styleMM(Sid::MinWigglyGlissandoLength);
+                double minGlissandoLength = straight
+                                            ? style.styleMM(Sid::MinStraightGlissandoLength)
+                                            : style.styleMM(Sid::MinWigglyGlissandoLength);
                 minEndPointsDistance = minGlissandoLength;
             }
 

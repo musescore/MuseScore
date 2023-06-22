@@ -204,7 +204,7 @@ void PageSettings::updateValues()
     pageWidth->setValue(w * f);
 
     double f1 = mm ? 1.0 / DPMM : 1.0 / DPI;
-    spatiumEntry->setValue(score()->spatium() * f1);
+    spatiumEntry->setValue(score()->style().spatium() * f1);
 
     bool _twosided = styleValueBool(Sid::pageTwosided);
     evenPageTopMargin->setEnabled(_twosided);

@@ -93,7 +93,7 @@ void DrumsetPalette::updateDrumset()
 
     TRACEFUNC;
 
-    double _spatium = gpaletteScore->spatium();
+    double _spatium = gpaletteScore->style().spatium();
 
     for (int pitch = 0; pitch < 128; ++pitch) {
         if (!m_drumset->isValid(pitch)) {

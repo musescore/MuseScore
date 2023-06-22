@@ -88,7 +88,7 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     double y1 = _bbox.top();
     double y2 = _bbox.bottom();
 
-    double lineWidth = score()->styleMM(Sid::ArpeggioLineWidth);
+    double lineWidth = style().styleMM(Sid::ArpeggioLineWidth);
 
     painter->setPen(Pen(curColor(), lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->save();
@@ -134,7 +134,7 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
 
     case ArpeggioType::BRACKET:
     {
-        double w = score()->styleS(Sid::ArpeggioHookLen).val() * _spatium;
+        double w = style().styleS(Sid::ArpeggioHookLen).val() * _spatium;
         painter->drawLine(LineF(0.0, y1, w, y1));
         painter->drawLine(LineF(0.0, y2, w, y2));
         painter->drawLine(LineF(0.0, y1 - lineWidth / 2, 0.0, y2 + lineWidth / 2));
@@ -394,12 +394,12 @@ double Arpeggio::insetWidth() const
     case ArpeggioType::UP_STRAIGHT:
     case ArpeggioType::DOWN_STRAIGHT:
     {
-        return (width() - score()->styleMM(Sid::ArpeggioLineWidth)) / 2;
+        return (width() - style().styleMM(Sid::ArpeggioLineWidth)) / 2;
     }
 
     case ArpeggioType::BRACKET:
     {
-        return width() - score()->styleMM(Sid::ArpeggioLineWidth) / 2;
+        return width() - style().styleMM(Sid::ArpeggioLineWidth) / 2;
     }
     }
     return 0.0;
@@ -450,8 +450,8 @@ double Arpeggio::insetDistance(std::vector<Accidental*>& accidentals, double mag
     double accidentalCutOutYTop = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutNW).y() * mag_;
     double accidentalCutOutYBottom = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutSW).y() * mag_;
 
-    double maximumInset = (score()->styleMM(Sid::ArpeggioAccidentalDistance)
-                           - score()->styleMM(Sid::ArpeggioAccidentalDistanceMin)) * mag_;
+    double maximumInset = (style().styleMM(Sid::ArpeggioAccidentalDistance)
+                           - style().styleMM(Sid::ArpeggioAccidentalDistanceMin)) * mag_;
 
     if (accidentalCutOutX > maximumInset) {
         accidentalCutOutX = maximumInset;

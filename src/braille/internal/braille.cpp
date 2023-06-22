@@ -818,7 +818,7 @@ bool Braille::write(QIODevice& device)
             currentLineLength += measureNumberLen;
         }
 
-        if (m->hasMMRest() && m_score->styleB(Sid::createMultiMeasureRests)) {
+        if (m->hasMMRest() && m_score->style().styleB(Sid::createMultiMeasureRests)) {
             mb = m = m->mmRest();
         }
 
@@ -928,7 +928,7 @@ bool Braille::convertMeasure(Measure* measure, BrailleEngravingItems* beiz)
         }
     }
     */
-    if (measure->hasMMRest() && m_score->styleB(Sid::createMultiMeasureRests)) {
+    if (measure->hasMMRest() && m_score->style().styleB(Sid::createMultiMeasureRests)) {
         measure = measure->mmRest();
     }
 

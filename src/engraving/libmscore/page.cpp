@@ -104,16 +104,16 @@ void Page::draw(mu::draw::Painter* painter) const
 
     String s1, s2, s3;
 
-    if (score()->styleB(Sid::showHeader) && (no() || score()->styleB(Sid::headerFirstPage))) {
-        bool odd = (n & 1) || !score()->styleB(Sid::headerOddEven);
+    if (style().styleB(Sid::showHeader) && (no() || style().styleB(Sid::headerFirstPage))) {
+        bool odd = (n & 1) || !style().styleB(Sid::headerOddEven);
         if (odd) {
-            s1 = score()->styleSt(Sid::oddHeaderL);
-            s2 = score()->styleSt(Sid::oddHeaderC);
-            s3 = score()->styleSt(Sid::oddHeaderR);
+            s1 = style().styleSt(Sid::oddHeaderL);
+            s2 = style().styleSt(Sid::oddHeaderC);
+            s3 = style().styleSt(Sid::oddHeaderR);
         } else {
-            s1 = score()->styleSt(Sid::evenHeaderL);
-            s2 = score()->styleSt(Sid::evenHeaderC);
-            s3 = score()->styleSt(Sid::evenHeaderR);
+            s1 = style().styleSt(Sid::evenHeaderL);
+            s2 = style().styleSt(Sid::evenHeaderC);
+            s3 = style().styleSt(Sid::evenHeaderR);
         }
 
         drawHeaderFooter(painter, 0, s1);
@@ -121,16 +121,16 @@ void Page::draw(mu::draw::Painter* painter) const
         drawHeaderFooter(painter, 2, s3);
     }
 
-    if (score()->styleB(Sid::showFooter) && (no() || score()->styleB(Sid::footerFirstPage))) {
-        bool odd = (n & 1) || !score()->styleB(Sid::footerOddEven);
+    if (style().styleB(Sid::showFooter) && (no() || style().styleB(Sid::footerFirstPage))) {
+        bool odd = (n & 1) || !style().styleB(Sid::footerOddEven);
         if (odd) {
-            s1 = score()->styleSt(Sid::oddFooterL);
-            s2 = score()->styleSt(Sid::oddFooterC);
-            s3 = score()->styleSt(Sid::oddFooterR);
+            s1 = style().styleSt(Sid::oddFooterL);
+            s2 = style().styleSt(Sid::oddFooterC);
+            s3 = style().styleSt(Sid::oddFooterR);
         } else {
-            s1 = score()->styleSt(Sid::evenFooterL);
-            s2 = score()->styleSt(Sid::evenFooterC);
-            s3 = score()->styleSt(Sid::evenFooterR);
+            s1 = style().styleSt(Sid::evenFooterL);
+            s2 = style().styleSt(Sid::evenFooterC);
+            s3 = style().styleSt(Sid::evenFooterR);
         }
 
         drawHeaderFooter(painter, 3, s1);
@@ -231,16 +231,16 @@ double Page::headerExtension() const
 
     String s1, s2, s3;
 
-    if (score()->styleB(Sid::showHeader) && (no() || score()->styleB(Sid::headerFirstPage))) {
-        bool odd = (n & 1) || !score()->styleB(Sid::headerOddEven);
+    if (style().styleB(Sid::showHeader) && (no() || style().styleB(Sid::headerFirstPage))) {
+        bool odd = (n & 1) || !style().styleB(Sid::headerOddEven);
         if (odd) {
-            s1 = score()->styleSt(Sid::oddHeaderL);
-            s2 = score()->styleSt(Sid::oddHeaderC);
-            s3 = score()->styleSt(Sid::oddHeaderR);
+            s1 = style().styleSt(Sid::oddHeaderL);
+            s2 = style().styleSt(Sid::oddHeaderC);
+            s3 = style().styleSt(Sid::oddHeaderR);
         } else {
-            s1 = score()->styleSt(Sid::evenHeaderL);
-            s2 = score()->styleSt(Sid::evenHeaderC);
-            s3 = score()->styleSt(Sid::evenHeaderR);
+            s1 = style().styleSt(Sid::evenHeaderL);
+            s2 = style().styleSt(Sid::evenHeaderC);
+            s3 = style().styleSt(Sid::evenHeaderR);
         }
 
         Text* headerLeft = layoutHeaderFooter(0, s1);
@@ -252,7 +252,7 @@ double Page::headerExtension() const
         double headerRightHeight = headerRight ? headerRight->height() : 0.0;
 
         double headerHeight = std::max(headerLeftHeight, std::max(headerCenterHeight, headerRightHeight));
-        double headerOffset = score()->styleV(Sid::headerOffset).value<PointF>().y() * DPMM;
+        double headerOffset = style().styleV(Sid::headerOffset).value<PointF>().y() * DPMM;
         return std::max(0.0, headerHeight - headerOffset);
     }
 
@@ -274,16 +274,16 @@ double Page::footerExtension() const
 
     String s1, s2, s3;
 
-    if (score()->styleB(Sid::showFooter) && (no() || score()->styleB(Sid::footerFirstPage))) {
-        bool odd = (n & 1) || !score()->styleB(Sid::footerOddEven);
+    if (style().styleB(Sid::showFooter) && (no() || style().styleB(Sid::footerFirstPage))) {
+        bool odd = (n & 1) || !style().styleB(Sid::footerOddEven);
         if (odd) {
-            s1 = score()->styleSt(Sid::oddFooterL);
-            s2 = score()->styleSt(Sid::oddFooterC);
-            s3 = score()->styleSt(Sid::oddFooterR);
+            s1 = style().styleSt(Sid::oddFooterL);
+            s2 = style().styleSt(Sid::oddFooterC);
+            s3 = style().styleSt(Sid::oddFooterR);
         } else {
-            s1 = score()->styleSt(Sid::evenFooterL);
-            s2 = score()->styleSt(Sid::evenFooterC);
-            s3 = score()->styleSt(Sid::evenFooterR);
+            s1 = style().styleSt(Sid::evenFooterL);
+            s2 = style().styleSt(Sid::evenFooterC);
+            s3 = style().styleSt(Sid::evenFooterR);
         }
 
         Text* footerLeft = layoutHeaderFooter(3, s1);
@@ -296,7 +296,7 @@ double Page::footerExtension() const
 
         double footerHeight = std::max(footerLeftHeight, std::max(footerCenterHeight, footerRightHeight));
 
-        double footerOffset = score()->styleV(Sid::footerOffset).value<PointF>().y() * DPMM;
+        double footerOffset = style().styleV(Sid::footerOffset).value<PointF>().y() * DPMM;
         return std::max(0.0, footerHeight - footerOffset);
     }
 
@@ -552,8 +552,8 @@ std::vector<EngravingItem*> Page::elements() const
 
 double Page::tm() const
 {
-    return ((!score()->styleB(Sid::pageTwosided) || isOdd())
-            ? score()->styleD(Sid::pageOddTopMargin) : score()->styleD(Sid::pageEvenTopMargin)) * DPI;
+    return ((!style().styleB(Sid::pageTwosided) || isOdd())
+            ? style().styleD(Sid::pageOddTopMargin) : style().styleD(Sid::pageEvenTopMargin)) * DPI;
 }
 
 //---------------------------------------------------------
@@ -562,8 +562,8 @@ double Page::tm() const
 
 double Page::bm() const
 {
-    return ((!score()->styleB(Sid::pageTwosided) || isOdd())
-            ? score()->styleD(Sid::pageOddBottomMargin) : score()->styleD(Sid::pageEvenBottomMargin)) * DPI;
+    return ((!style().styleB(Sid::pageTwosided) || isOdd())
+            ? style().styleD(Sid::pageOddBottomMargin) : style().styleD(Sid::pageEvenBottomMargin)) * DPI;
 }
 
 //---------------------------------------------------------
@@ -572,8 +572,8 @@ double Page::bm() const
 
 double Page::lm() const
 {
-    return ((!score()->styleB(Sid::pageTwosided) || isOdd())
-            ? score()->styleD(Sid::pageOddLeftMargin) : score()->styleD(Sid::pageEvenLeftMargin)) * DPI;
+    return ((!style().styleB(Sid::pageTwosided) || isOdd())
+            ? style().styleD(Sid::pageOddLeftMargin) : style().styleD(Sid::pageEvenLeftMargin)) * DPI;
 }
 
 //---------------------------------------------------------
@@ -582,7 +582,7 @@ double Page::lm() const
 
 double Page::rm() const
 {
-    return (score()->styleD(Sid::pageWidth) - score()->styleD(Sid::pagePrintableWidth)) * DPI - lm();
+    return (style().styleD(Sid::pageWidth) - style().styleD(Sid::pagePrintableWidth)) * DPI - lm();
 }
 
 //---------------------------------------------------------

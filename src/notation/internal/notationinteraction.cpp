@@ -477,7 +477,7 @@ void NotationInteraction::showShadowNote(const PointF& pos)
     // in any empty measure, pos will be right next to barline
     // so pad this by barNoteDistance
     qreal relX = position.pos.x() - position.segment->measure()->canvasPos().x();
-    position.pos.rx() -= qMin(relX - score()->styleMM(mu::engraving::Sid::barNoteDistance) * mag, 0.0);
+    position.pos.rx() -= qMin(relX - score()->style().styleMM(mu::engraving::Sid::barNoteDistance) * mag, 0.0);
 
     mu::engraving::NoteHeadGroup noteheadGroup = mu::engraving::NoteHeadGroup::HEAD_NORMAL;
     mu::engraving::NoteHeadType noteHead = inputState.duration().headType();
@@ -1275,7 +1275,7 @@ void NotationInteraction::startDrop(const QByteArray& edata)
     EngravingItem* el = engraving::Factory::createItem(type, score()->dummy());
     if (el) {
         if (type == ElementType::BAR_LINE || type == ElementType::ARPEGGIO || type == ElementType::BRACKET) {
-            double spatium = score()->spatium();
+            double spatium = score()->style().spatium();
             el->setHeight(spatium * 5);
         }
         m_dropData.ed.dropElement = el;
@@ -2636,7 +2636,7 @@ void NotationInteraction::selectEmptyTrailingMeasure()
         ftm = score()->lastMeasure();
     }
     if (ftm) {
-        if (score()->styleB(mu::engraving::Sid::createMultiMeasureRests) && ftm->hasMMRest()) {
+        if (score()->style().styleB(mu::engraving::Sid::createMultiMeasureRests) && ftm->hasMMRest()) {
             ftm = ftm->coveringMMRestOrThis();
         }
         EngravingItem* el
@@ -5669,7 +5669,7 @@ void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int s
     RectF mRect(m->canvasBoundingRect());
     RectF sysRect = mRect;
 
-    double _spatium    = score()->spatium();
+    double _spatium    = score()->style().spatium();
     const qreal border = _spatium * 3;
     RectF showRect;
     if (staffIndex == -1) {

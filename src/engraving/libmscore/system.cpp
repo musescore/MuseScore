@@ -175,7 +175,7 @@ void System::clear()
 
 void System::appendMeasure(MeasureBase* mb)
 {
-    assert(!mb->isMeasure() || !(score()->styleB(Sid::createMultiMeasureRests) && toMeasure(mb)->hasMMRest()));
+    assert(!mb->isMeasure() || !(style().styleB(Sid::createMultiMeasureRests) && toMeasure(mb)->hasMMRest()));
     mb->setParent(this);
     ml.push_back(mb);
 }
@@ -280,7 +280,7 @@ void System::setBracketsXPosition(const double xPosition)
         // For brackets that are drawn, we must correct for half line width
         double lineWidthCorrection = 0.0;
         if (bracketType == BracketType::NORMAL || bracketType == BracketType::LINE) {
-            lineWidthCorrection = score()->styleMM(Sid::bracketWidth) / 2;
+            lineWidthCorrection = style().styleMM(Sid::bracketWidth) / 2;
         }
         // Compute offset cause by other stacked brackets
         double xOffset = 0;
@@ -628,7 +628,7 @@ MeasureBase* System::nextMeasure(const MeasureBase* m) const
         return 0;
     }
     MeasureBase* nm = m->next();
-    if (nm->isMeasure() && score()->styleB(Sid::createMultiMeasureRests) && toMeasure(nm)->hasMMRest()) {
+    if (nm->isMeasure() && style().styleB(Sid::createMultiMeasureRests) && toMeasure(nm)->hasMMRest()) {
         nm = toMeasure(nm)->mmRest();
     }
     return nm;
@@ -963,7 +963,7 @@ Spacer* System::downSpacer(staff_idx_t staffIdx) const
 
 double System::firstNoteRestSegmentX(bool leading)
 {
-    double margin = score()->styleMM(Sid::HeaderToLineStartDistance);
+    double margin = style().styleMM(Sid::HeaderToLineStartDistance);
     for (const MeasureBase* mb : measures()) {
         if (mb->isMeasure()) {
             const Measure* measure = static_cast<const Measure*>(mb);
@@ -1012,7 +1012,7 @@ double System::firstNoteRestSegmentX(bool leading)
 
 double System::endingXForOpenEndedLines() const
 {
-    double margin = score()->spatium() / 4;  // TODO: this can be parameterizable
+    double margin = style().spatium() / 4;  // TODO: this can be parameterizable
     double systemEndX = bbox().width();
 
     Measure* lastMeas = lastMeasure();

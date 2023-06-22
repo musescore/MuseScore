@@ -904,7 +904,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                 if (cr && cr != toChordRest(startElement())) {
                     x = cr->rightEdge();
                 } else {
-                    x = spatium() - score()->styleMM(Sid::minNoteDistance);
+                    x = spatium() - style().styleMM(Sid::minNoteDistance);
                 }
             } else if (isHairpin() || isTrill() || isVibrato() || isTextLine() || isLyricsLine() || isGradualTempoChange()) {
                 // (for LYRICSLINE, this is hyphen; melisma line is handled above)
@@ -991,13 +991,13 @@ PointF SLine::linePos(Grip grip, System** sys) const
                 }
             }
             x = m->pos().x() + offset;
-            if (score()->styleB(Sid::createMultiMeasureRests) && m->hasMMRest()) {
+            if (style().styleB(Sid::createMultiMeasureRests) && m->hasMMRest()) {
                 x = m->mmRest()->pos().x();
             }
         } else {
             double _spatium = spatium();
 
-            if (score()->styleB(Sid::createMultiMeasureRests)) {
+            if (style().styleB(Sid::createMultiMeasureRests)) {
                 // find the actual measure where the volta should stop
                 m = startMeasure();
                 if (m->hasMMRest()) {
@@ -1033,19 +1033,19 @@ PointF SLine::linePos(Grip grip, System** sys) const
                     case BarLineType::END_REPEAT:
                         // skip dots
                         x += symWidth(SymId::repeatDot);
-                        x += score()->styleS(Sid::endBarDistance).val() * _spatium;
+                        x += style().styleS(Sid::endBarDistance).val() * _spatium;
                     // fall through
                     case BarLineType::DOUBLE:
                         // center on leftmost (thinner) barline
-                        x += score()->styleS(Sid::doubleBarWidth).val() * _spatium * 0.5;
+                        x += style().styleS(Sid::doubleBarWidth).val() * _spatium * 0.5;
                         break;
                     case BarLineType::START_REPEAT:
                         // center on leftmost (thicker) barline
-                        x += score()->styleS(Sid::endBarWidth).val() * _spatium * 0.5;
+                        x += style().styleS(Sid::endBarWidth).val() * _spatium * 0.5;
                         break;
                     default:
                         // center on barline
-                        x += score()->styleS(Sid::barWidth).val() * _spatium * 0.5;
+                        x += style().styleS(Sid::barWidth).val() * _spatium * 0.5;
                         break;
                     }
                 }

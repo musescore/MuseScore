@@ -170,7 +170,7 @@ void Bend::draw(mu::draw::Painter* painter) const
     double y  = -_spatium * .8;
     double x2, y2;
 
-    double aw = score()->styleMM(Sid::bendArrowWidth);
+    double aw = style().styleMM(Sid::bendArrowWidth);
     PolygonF arrowUp;
     arrowUp << PointF(0, 0) << PointF(aw * .5, aw) << PointF(-aw * .5, aw);
     PolygonF arrowDown;

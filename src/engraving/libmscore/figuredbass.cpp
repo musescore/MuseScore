@@ -462,7 +462,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
     mu::draw::Font f(g_FBFonts.at(font).family, draw::Font::Type::Tablature);
 
     // (use the same font selection as used in layout() above)
-    double m = score()->styleD(Sid::figuredBassFontSize) * spatium() / SPATIUM20;
+    double m = style().styleD(Sid::figuredBassFontSize) * spatium() / SPATIUM20;
     f.setPointSizeF(m * MScore::pixelRatio);
 
     painter->setFont(f);

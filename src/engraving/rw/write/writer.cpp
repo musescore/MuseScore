@@ -82,7 +82,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
 
     std::list<Part*> hiddenParts;
     bool unhide = false;
-    if (score->styleB(Sid::createMultiMeasureRests)) {
+    if (score->style().styleB(Sid::createMultiMeasureRests)) {
         for (Part* part : score->_parts) {
             if (!part->show()) {
                 if (!unhide) {

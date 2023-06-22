@@ -377,7 +377,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     if (ledgerLines > 0) {
 // there seems to be no need for widening 'ledger lines' beyond fret mark widths; more 'on the field'
 // tests and usage will show if this depends on the metrics of the specific fonts used or not.
-//            double extraLen    = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
+//            double extraLen    = style().styleS(Sid::ledgerLineLength).val() * _spatium;
         double extraLen    = 0;
         double llX         = stemX - (headWidth + extraLen) * 0.5;
         for (int i = 0; i < ledgerLines; i++) {

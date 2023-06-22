@@ -62,7 +62,7 @@ void MuseData::musicalAttribute(QString s, Part* part)
             KeySigEvent ke;
             Interval v = part->instrument(curTick)->transpose();
             ke.setConcertKey(key);
-            if (!v.isZero() && !score->styleB(Sid::concertPitch)) {
+            if (!v.isZero() && !score->style().styleB(Sid::concertPitch)) {
                 v.flip();
                 ke.setKey(transposeKey(key, v));
             }

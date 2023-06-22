@@ -131,10 +131,10 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        return score()->styleMM(Sid::pedalLineWidth);              // return point, not spatium
+        return style().styleMM(Sid::pedalLineWidth);              // return point, not spatium
 
     case Pid::LINE_STYLE:
-        return score()->styleV(Sid::pedalLineStyle);
+        return style().styleV(Sid::pedalLineStyle);
 
     case Pid::BEGIN_TEXT:
     case Pid::CONTINUE_TEXT:
@@ -154,7 +154,7 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
         return true;
 
     case Pid::PLACEMENT:
-        return score()->styleV(Sid::pedalPlacement);
+        return style().styleV(Sid::pedalPlacement);
 
     default:
         return TextLineBase::propertyDefault(propertyId);

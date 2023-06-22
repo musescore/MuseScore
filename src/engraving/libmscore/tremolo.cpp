@@ -47,7 +47,7 @@ namespace mu::engraving {
 //   tremoloStyle
 //---------------------------------------------------------
 
-static const ElementStyle tremoloStyle {
+static const ElementStyle TREMOLO_STYLE {
     { Sid::tremoloStyle, Pid::TREMOLO_STYLE }
 };
 
@@ -58,7 +58,7 @@ static const ElementStyle tremoloStyle {
 Tremolo::Tremolo(Chord* parent)
     : EngravingItem(ElementType::TREMOLO, parent, ElementFlag::MOVABLE)
 {
-    initElementStyle(&tremoloStyle);
+    initElementStyle(&TREMOLO_STYLE);
 }
 
 Tremolo::Tremolo(const Tremolo& t)
@@ -99,8 +99,8 @@ double Tremolo::mag() const
 
 double Tremolo::minHeight() const
 {
-    const double sw = score()->styleS(Sid::tremoloStrokeWidth).val() * chordMag();
-    const double td = score()->styleS(Sid::tremoloDistance).val() * chordMag();
+    const double sw = style().styleS(Sid::tremoloStrokeWidth).val() * chordMag();
+    const double td = style().styleS(Sid::tremoloDistance).val() * chordMag();
     return (lines() - 1) * td + sw;
 }
 
@@ -142,11 +142,11 @@ void Tremolo::createBeamSegments()
     mainStroke->line = LineF(startAnchor, endAnchor);
     _beamSegments.push_back(mainStroke);
     double bboxTop = _up ? std::min(mainStroke->line.y1(), mainStroke->line.y2()) : std::max(mainStroke->line.y1(), mainStroke->line.y2());
-    double halfWidth = score()->styleMM(Sid::beamWidth).val() / 2. * (_up ? -1. : 1.);
+    double halfWidth = style().styleMM(Sid::beamWidth).val() / 2. * (_up ? -1. : 1.);
     RectF bbox = RectF(mainStroke->line.x1(), bboxTop + halfWidth, mainStroke->line.x2() - mainStroke->line.x1(),
                        std::abs(mainStroke->line.y2() - mainStroke->line.y1()) - halfWidth * 2.);
-    PointF beamOffset = PointF(0., (_up ? 1 : -1) * spatium() * (score()->styleB(Sid::useWideBeams) ? 1. : 0.75));
-    beamOffset.setY(beamOffset.y() * mag() * (_isGrace ? score()->styleD(Sid::graceNoteMag) : 1.));
+    PointF beamOffset = PointF(0., (_up ? 1 : -1) * spatium() * (style().styleB(Sid::useWideBeams) ? 1. : 0.75));
+    beamOffset.setY(beamOffset.y() * mag() * (_isGrace ? style().styleD(Sid::graceNoteMag) : 1.));
     for (int i = 1; i < lines(); ++i) {
         BeamSegment* stroke = new BeamSegment(this);
         stroke->level = i;
@@ -160,7 +160,7 @@ void Tremolo::createBeamSegments()
     if (_chord1->stem() && _chord2->stem() && !(_chord1->beam() && _chord1->beam() == _chord2->beam())) {
         // we don't need to do anything if these chords are part of the same beam--their stems are taken care of
         // by the beam layout
-        int beamSpacing = score()->styleB(Sid::useWideBeams) ? 4 : 3;
+        int beamSpacing = style().styleB(Sid::useWideBeams) ? 4 : 3;
         for (ChordRest* cr : { _chord1, _chord2 }) {
             Chord* chord = toChord(cr);
             double addition = 0.0;
@@ -243,7 +243,7 @@ void Tremolo::draw(mu::draw::Painter* painter) const
         if (_beamSegments.size() > 1 && d > M_PI / 6.0) {
             d = M_PI / 6.0;
         }
-        double ww = (score()->styleMM(Sid::beamWidth).val() / 2.0) / sin(M_PI_2 - atan(d));
+        double ww = (style().styleMM(Sid::beamWidth).val() / 2.0) / sin(M_PI_2 - atan(d));
         painter->setBrush(Brush(curColor()));
         painter->setNoPen();
         for (const BeamSegment* bs1 : _beamSegments) {
@@ -260,7 +260,7 @@ void Tremolo::draw(mu::draw::Painter* painter) const
     // for palette
     if (!explicitParent() && !twoNotes()) {
         double x = 0.0;     // bbox().width() * .25;
-        Pen pen(curColor(), point(score()->styleS(Sid::stemWidth)));
+        Pen pen(curColor(), point(style().styleS(Sid::stemWidth)));
         painter->setPen(pen);
         const double sp = spatium();
         if (isBuzzRoll()) {
@@ -353,9 +353,9 @@ PainterPath Tremolo::basePath(double stretch) const
     const double sp = spatium() * chordMag();
 
     // overall width of two-note tremolos should not be changed if chordMag() isn't 1.0
-    double w2  = sp * score()->styleS(Sid::tremoloWidth).val() * .5 / (twoNotes() ? chordMag() : 1.0);
-    double lw  = sp * score()->styleS(Sid::tremoloStrokeWidth).val();
-    double td  = sp * score()->styleS(Sid::tremoloDistance).val();
+    double w2  = sp * style().styleS(Sid::tremoloWidth).val() * .5 / (twoNotes() ? chordMag() : 1.0);
+    double lw  = sp * style().styleS(Sid::tremoloStrokeWidth).val();
+    double td  = sp * style().styleS(Sid::tremoloDistance).val();
 
     PainterPath ppath;
 
@@ -712,7 +712,7 @@ bool Tremolo::setProperty(Pid propertyId, const PropertyValue& val)
         break;
     case Pid::TREMOLO_STYLE:
         if (customStyleApplicable()) {
-            setStyle(TremoloStyle(val.toInt()));
+            setTremoloStyle(TremoloStyle(val.toInt()));
         }
         break;
     case Pid::STEM_DIRECTION:
@@ -741,7 +741,7 @@ PropertyValue Tremolo::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TREMOLO_STYLE:
-        return score()->styleI(Sid::tremoloStyle);
+        return style().styleI(Sid::tremoloStyle);
     default:
         return EngravingItem::propertyDefault(propertyId);
     }

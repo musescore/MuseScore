@@ -302,15 +302,15 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCase
                                         NoteSpellingType& baseSpelling, NoteCaseType& baseCase)
 {
     // spelling
-    if (score()->styleB(Sid::useStandardNoteNames)) {
+    if (style().styleB(Sid::useStandardNoteNames)) {
         rootSpelling = NoteSpellingType::STANDARD;
-    } else if (score()->styleB(Sid::useGermanNoteNames)) {
+    } else if (style().styleB(Sid::useGermanNoteNames)) {
         rootSpelling = NoteSpellingType::GERMAN;
-    } else if (score()->styleB(Sid::useFullGermanNoteNames)) {
+    } else if (style().styleB(Sid::useFullGermanNoteNames)) {
         rootSpelling = NoteSpellingType::GERMAN_PURE;
-    } else if (score()->styleB(Sid::useSolfeggioNoteNames)) {
+    } else if (style().styleB(Sid::useSolfeggioNoteNames)) {
         rootSpelling = NoteSpellingType::SOLFEGGIO;
-    } else if (score()->styleB(Sid::useFrenchNoteNames)) {
+    } else if (style().styleB(Sid::useFrenchNoteNames)) {
         rootSpelling = NoteSpellingType::FRENCH;
     }
     baseSpelling = rootSpelling;
@@ -318,14 +318,14 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCase
     // case
 
     // always use case as typed if automatic capitalization is off
-    if (!score()->styleB(Sid::automaticCapitalization)) {
+    if (!style().styleB(Sid::automaticCapitalization)) {
         rootCase = m_rootCase;
         baseCase = m_baseCase;
         return;
     }
 
     // set default
-    if (score()->styleB(Sid::allCapsNoteNames)) {
+    if (style().styleB(Sid::allCapsNoteNames)) {
         rootCase = NoteCaseType::UPPER;
         baseCase = NoteCaseType::UPPER;
     } else {
@@ -334,12 +334,12 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCase
     }
 
     // override for bass note
-    if (score()->styleB(Sid::lowerCaseBassNotes)) {
+    if (style().styleB(Sid::lowerCaseBassNotes)) {
         baseCase = NoteCaseType::LOWER;
     }
 
     // override for minor chords
-    if (score()->styleB(Sid::lowerCaseMinorChords)) {
+    if (style().styleB(Sid::lowerCaseMinorChords)) {
         const ChordDescription* cd = descr();
         String quality;
         if (cd) {
@@ -578,7 +578,7 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int* root, int* 
 
     // pre-process for lower case minor chords
     bool preferMinor;
-    if (score()->styleB(Sid::lowerCaseMinorChords) && s.at(0).isLower()) {
+    if (style().styleB(Sid::lowerCaseMinorChords) && s.at(0).isLower()) {
         preferMinor = true;
     } else {
         preferMinor = false;
@@ -788,13 +788,13 @@ void Harmony::endEdit(EditData& ed)
             // at this point chord will already have been rendered in same key as original
             // (as a result of TextBase::endEdit() calling setText() for linked elements)
             // we may now need to change the TPC's and the text, and re-render
-            if (score()->styleB(Sid::concertPitch) != h->score()->styleB(Sid::concertPitch)) {
+            if (style().styleB(Sid::concertPitch) != h->style().styleB(Sid::concertPitch)) {
                 Staff* staffDest = h->staff();
                 Segment* segment = getParentSeg();
                 Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
                 Interval interval = staffDest->transpose(tick);
                 if (!interval.isZero()) {
-                    if (!h->score()->styleB(Sid::concertPitch)) {
+                    if (!h->style().styleB(Sid::concertPitch)) {
                         interval.flip();
                     }
                     int rootTpc = transposeTpc(h->rootTpc(), interval, true);
@@ -1202,7 +1202,7 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
     }
 
     Interval interval = st->part()->instrument(tick)->transpose();
-    if (!score()->styleB(Sid::concertPitch)) {
+    if (!style().styleB(Sid::concertPitch)) {
         offset += interval.chromatic;
     }
 
@@ -1506,7 +1506,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
 
 void Harmony::render()
 {
-    int capo = score()->styleI(Sid::capoPosition);
+    int capo = style().styleI(Sid::capoPosition);
 
     ChordList* chordList = score()->chordList();
 

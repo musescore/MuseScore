@@ -330,7 +330,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     }
 
     // dotd is the diameter of a dot
-    double dotd = _spatium * .49 * score()->styleD(Sid::fretDotSize);
+    double dotd = _spatium * .49 * style().styleD(Sid::fretDotSize);
 
     // Draw dots, sym pen is used to draw them (and markers)
     Pen symPen(pen);
@@ -411,7 +411,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
         double x1    = m_stringDist * startString;
         double newX2 = endString == -1 ? x2 : m_stringDist * endString;
         double y     = m_fretDist * (fret - 1) + m_fretDist * .5;
-        pen.setWidthF(dotd * score()->styleD(Sid::barreLineWidth));
+        pen.setWidthF(dotd * style().styleD(Sid::barreLineWidth));
         pen.setCapStyle(PenCapStyle::RoundCap);
         painter->setPen(pen);
         painter->drawLine(LineF(x1, y, newX2, y));
@@ -419,7 +419,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
 
     // Draw fret offset number
     if (m_fretOffset > 0) {
-        double fretNumMag = score()->styleD(Sid::fretNumMag);
+        double fretNumMag = style().styleD(Sid::fretNumMag);
         mu::draw::Font scaledFont(m_font);
         scaledFont.setPointSizeF(m_font.pointSizeF() * m_userMag * (spatium() / SPATIUM20) * MScore::pixelRatio * fretNumMag);
         painter->setFont(scaledFont);
@@ -928,9 +928,9 @@ PropertyValue FretDiagram::propertyDefault(Pid pid) const
     for (const StyledProperty& p : *styledProperties()) {
         if (p.pid == pid) {
             if (propertyType(pid) == P_TYPE::MILLIMETRE) {
-                return score()->styleMM(p.sid);
+                return style().styleMM(p.sid);
             }
-            return score()->styleV(p.sid);
+            return style().styleV(p.sid);
         }
     }
     return EngravingItem::propertyDefault(pid);

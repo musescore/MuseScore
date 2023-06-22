@@ -110,7 +110,7 @@ double Clef::mag() const
 {
     double mag = staff() ? staff()->staffMag(tick()) : 1.0;
     if (m_isSmall) {
-        mag *= score()->styleD(Sid::smallClefMag);
+        mag *= style().styleD(Sid::smallClefMag);
     }
     return mag;
 }

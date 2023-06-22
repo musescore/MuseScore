@@ -118,8 +118,8 @@ public:
     String accessibleInfo() const override;
     void triggerLayout() const override;
 
-    TremoloStyle style() const { return _style; }
-    void setStyle(TremoloStyle v) { _style = v; }
+    TremoloStyle tremoloStyle() const { return _style; }
+    void setTremoloStyle(TremoloStyle v) { _style = v; }
     void setBeamDirection(DirectionV v);
     void setBeamFragment(const BeamFragment& bf) { _beamFragment = bf; }
     const BeamFragment& beamFragment() const { return _beamFragment; }

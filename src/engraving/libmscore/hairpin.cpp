@@ -551,7 +551,7 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
         return ChangeMethod::NORMAL;
 
     case Pid::PLACEMENT:
-        return score()->styleV(Sid::hairpinPlacement);
+        return style().styleV(Sid::hairpinPlacement);
 
     default:
         return TextLineBase::propertyDefault(id);

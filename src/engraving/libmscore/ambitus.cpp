@@ -277,8 +277,8 @@ void Ambitus::draw(mu::draw::Painter* painter) const
         int numOfLines = staff->lines(tick);
         double step     = lineDist * _spatium;
         double stepTolerance    = step * 0.1;
-        double ledgerLineLength = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
-        double ledgerLineWidth  = score()->styleS(Sid::ledgerLineWidth).val() * _spatium;
+        double ledgerLineLength = style().styleS(Sid::ledgerLineLength).val() * _spatium;
+        double ledgerLineWidth  = style().styleS(Sid::ledgerLineWidth).val() * _spatium;
         painter->setPen(Pen(curColor(), ledgerLineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
 
         if (_topPos.y() - stepTolerance <= -step) {

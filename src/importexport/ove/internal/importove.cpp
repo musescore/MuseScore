@@ -737,7 +737,7 @@ void OveToMScore::convertTrackElements(int track)
                     }
 
                     if (y_off != 0) {
-                        ottava->setOffset(mu::PointF(0, y_off * m_score->spatium()));
+                        ottava->setOffset(mu::PointF(0, y_off * m_score->style().spatium()));
                     }
 
                     ottava->setTick(Fraction::fromTicks(absTick));
@@ -839,7 +839,7 @@ void OveToMScore::convertSignatures()
                             Key key = Key(keyValue);
                             Key cKey = key;
                             Interval v = staff.part()->instrument(tick)->transpose();
-                            if (!v.isZero() && !m_score->styleB(Sid::concertPitch)) {
+                            if (!v.isZero() && !m_score->style().styleB(Sid::concertPitch)) {
                                 cKey = transposeKey(key, v);
                             }
                             ke.setConcertKey(cKey);
@@ -1546,7 +1546,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     int stepOffset = cr->staff()->staffType(cr->tick())->stepOffset();
                     int lineOffset = static_cast<mu::engraving::Rest*>(cr)->computeVoiceOffset(5);
                     yOffset -= qreal(lineOffset + stepOffset);
-                    yOffset *= m_score->spatium() / 2.0;
+                    yOffset *= m_score->style().spatium() / 2.0;
                     cr->ryoffset() = yOffset;
                     cr->setAutoplace(false);
                 }

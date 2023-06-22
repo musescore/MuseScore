@@ -88,7 +88,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
     }
 
     mu::engraving::Segment* s = measure->first();
-    double spatium = score->spatium();
+    double spatium = score->style().spatium();
     if (m_width <= 0) {
         m_width = s->x();
     }
@@ -262,7 +262,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
     newWidth = widthClef + widthKeySig + widthTimeSig + leftMarginTotal + panelRightPadding;
     xPosMeasure -= offsetPanel;
 
-    lineWidthName += score->spatium() + styleMM(mu::engraving::Sid::clefLeftMargin) + widthClef;
+    lineWidthName += score->style().spatium() + styleMM(mu::engraving::Sid::clefLeftMargin) + widthClef;
     if (newWidth < lineWidthName) {
         newWidth = lineWidthName;
         oldWidth = 0;
@@ -395,7 +395,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             mu::engraving::EngravingItem::layout()->layoutItem(newName);
 
             if (currentStaff->part()->staff(0) == currentStaff) {
-                const double spatium = score->spatium();
+                const double spatium = score->style().spatium();
                 pos = PointF(styleMM(mu::engraving::Sid::clefLeftMargin) + widthClef, -spatium * 2);
                 painter.translate(pos);
                 newName->draw(&painter);
@@ -458,7 +458,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
 
 qreal ContinuousPanel::styleMM(const mu::engraving::Sid styleId) const
 {
-    return score()->styleMM(styleId).val();
+    return score()->style().styleMM(styleId).val();
 }
 
 const mu::engraving::Score* ContinuousPanel::score() const

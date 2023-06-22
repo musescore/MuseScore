@@ -2383,7 +2383,7 @@ double Note::mag() const
 {
     double m = chord() ? chord()->mag() : 1.0;
     if (m_isSmall) {
-        m *= score()->styleD(Sid::smallNoteMag);
+        m *= style().styleD(Sid::smallNoteMag);
     }
     return m;
 }
@@ -2705,7 +2705,7 @@ void Note::normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned)
     } else {
         Measure* measure = seg->measure();
 
-        double minDist = score()->styleMM(Sid::barNoteDistance);
+        double minDist = style().styleMM(Sid::barNoteDistance);
 
         double diff = (ed.pos.x()) - (measure->pageX() + minDist);
 

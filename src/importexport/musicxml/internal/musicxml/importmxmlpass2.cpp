@@ -3824,7 +3824,7 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
             Key tKey = Key(_e.readElementText().toInt());
             Key cKey = tKey;
             Interval v = _pass1.getPart(partId)->instrument()->transpose();
-            if (!v.isZero() && !_score->styleB(Sid::concertPitch)) {
+            if (!v.isZero() && !_score->style().styleB(Sid::concertPitch)) {
                 cKey = transposeKey(tKey, v);
             }
             key.setConcertKey(cKey);
@@ -4814,7 +4814,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                 cr->setColor(noteColor);
             }
             cr->setVisible(printObject);
-            handleDisplayStep(cr, mnp.displayStep(), mnp.displayOctave(), noteStartTime, _score->spatium());
+            handleDisplayStep(cr, mnp.displayStep(), mnp.displayOctave(), noteStartTime, _score->style().spatium());
         }
     } else {
         if (!grace) {

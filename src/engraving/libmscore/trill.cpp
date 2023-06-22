@@ -365,7 +365,7 @@ PropertyValue Trill::propertyDefault(Pid propertyId) const
     case Pid::PLAY:
         return true;
     case Pid::PLACEMENT:
-        return score()->styleV(Sid::trillPlacement);
+        return style().styleV(Sid::trillPlacement);
 
     default:
         return SLine::propertyDefault(propertyId);

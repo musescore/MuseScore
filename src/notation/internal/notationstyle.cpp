@@ -40,7 +40,7 @@ NotationStyle::NotationStyle(IGetScore* getScore, INotationUndoStackPtr undoStac
 
 PropertyValue NotationStyle::styleValue(const StyleId& styleId) const
 {
-    return score()->styleV(styleId);
+    return score()->style().styleV(styleId);
 }
 
 PropertyValue NotationStyle::defaultStyleValue(const StyleId& styleId) const

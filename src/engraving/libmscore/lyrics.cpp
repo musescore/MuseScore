@@ -168,7 +168,7 @@ void Lyrics::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 
 void Lyrics::layout2(int nAbove)
 {
-    double lh = lineSpacing() * score()->styleD(Sid::lyricsLineHeight);
+    double lh = lineSpacing() * style().styleD(Sid::lyricsLineHeight);
 
     if (placeBelow()) {
         double yo = segment()->measure()->system()->staff(staffIdx())->bbox().height();
@@ -425,7 +425,7 @@ PropertyValue Lyrics::propertyDefault(Pid id) const
     case Pid::TEXT_STYLE:
         return isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD;
     case Pid::PLACEMENT:
-        return score()->styleV(Sid::lyricsPlacement);
+        return style().styleV(Sid::lyricsPlacement);
     case Pid::SYLLABIC:
         return int(LyricsSyllabic::SINGLE);
     case Pid::LYRIC_TICKS:
@@ -434,7 +434,7 @@ PropertyValue Lyrics::propertyDefault(Pid id) const
         return 0;
     case Pid::ALIGN:
         if (isMelisma()) {
-            return score()->styleV(Sid::lyricsMelismaAlign);
+            return style().styleV(Sid::lyricsMelismaAlign);
         }
     // fall through
     default:

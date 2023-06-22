@@ -43,7 +43,7 @@ EngravingItem* Hook::elementBase() const
 
 void Hook::setHookType(int i)
 {
-    bool straight = score()->styleB(Sid::useStraightNoteFlags);
+    bool straight = style().styleB(Sid::useStraightNoteFlags);
     _hookType = i;
     setSym(symIdForHookIndex(i, straight));
 }

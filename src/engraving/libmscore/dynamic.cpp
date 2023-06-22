@@ -269,7 +269,7 @@ void Dynamic::doAutoplace()
         return;
     }
 
-    double minDistance = score()->styleS(Sid::dynamicsMinDistance).val() * spatium();
+    double minDistance = style().styleS(Sid::dynamicsMinDistance).val() * spatium();
     RectF r = bbox().translated(pos() + s->pos() + s->measure()->pos());
     double yOff = offset().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
     r.translate(0.0, -yOff);

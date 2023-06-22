@@ -100,13 +100,13 @@ PropertyValue WhammyBar::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        return score()->styleV(Sid::letRingLineWidth);
+        return style().styleV(Sid::letRingLineWidth);
 
     case Pid::ALIGN:
         return Align(AlignH::LEFT, AlignV::BASELINE);
 
     case Pid::LINE_STYLE:
-        return score()->styleV(Sid::letRingLineStyle);
+        return style().styleV(Sid::letRingLineStyle);
 
     case Pid::LINE_VISIBLE:
         return true;
@@ -116,7 +116,7 @@ PropertyValue WhammyBar::propertyDefault(Pid propertyId) const
         return PropertyValue::fromValue(PointF(0, 0));
 
     case Pid::BEGIN_FONT_STYLE:
-        return score()->styleV(Sid::letRingFontStyle);
+        return style().styleV(Sid::letRingFontStyle);
 
     case Pid::BEGIN_TEXT:
     case Pid::CONTINUE_TEXT:

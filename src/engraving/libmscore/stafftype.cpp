@@ -562,7 +562,7 @@ double StaffType::chordStemLength(const Chord* chord) const
     else {
         bool shrt = (minimStyle() == TablatureMinimStyle::SHORTER) && (chord->durationType().type() == DurationType::V_HALF);
         stemLen = (stemsDown() ? STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : STAFFTYPE_TAB_DEFAULTSTEMLEN_UP)
-                  * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0) * (chord->score()->styleB(Sid::useWideBeams) ? 1.25 : 1.0);
+                  * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0) * (chord->style().styleB(Sid::useWideBeams) ? 1.25 : 1.0);
     }
     // scale length by scale of parent chord, but relative to scale of context staff
     return stemLen * chord->mag() / chord->staff()->staffMag(chord->tick());
@@ -1285,8 +1285,8 @@ void StaffType::initStaffTypes()
 //   spatium
 //---------------------------------------------------------
 
-double StaffType::spatium(Score* score) const
+double StaffType::spatium(const MStyle& style) const
 {
-    return score->spatium() * (isSmall() ? score->styleD(Sid::smallStaffMag) : 1.0) * userMag();
+    return style.spatium() * (isSmall() ? style.styleD(Sid::smallStaffMag) : 1.0) * userMag();
 }
 } // namespace mu::engraving

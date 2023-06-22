@@ -156,13 +156,13 @@ PropertyValue PalmMute::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        return score()->styleV(Sid::palmMuteLineWidth);
+        return style().styleV(Sid::palmMuteLineWidth);
 
     case Pid::ALIGN:
         return Align(AlignH::LEFT, AlignV::BASELINE);
 
     case Pid::LINE_STYLE:
-        return score()->styleV(Sid::palmMuteLineStyle);
+        return style().styleV(Sid::palmMuteLineStyle);
 
     case Pid::LINE_VISIBLE:
         return true;
@@ -172,11 +172,11 @@ PropertyValue PalmMute::propertyDefault(Pid propertyId) const
         return PropertyValue::fromValue(PointF(0, 0));
 
 //TODOws            case Pid::BEGIN_FONT_ITALIC:
-//                  return score()->styleV(Sid::palmMuteFontItalic);
+//                  return style().styleV(Sid::palmMuteFontItalic);
 
     case Pid::BEGIN_TEXT:
     case Pid::CONTINUE_TEXT:
-        return score()->styleV(Sid::palmMuteText);
+        return style().styleV(Sid::palmMuteText);
     case Pid::END_TEXT:
         return "";
 

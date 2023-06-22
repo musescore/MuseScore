@@ -425,7 +425,7 @@ ClefTypeList Staff::clefType(const Fraction& tick) const
         switch (staffGroup) {
         case StaffGroup::TAB:
         {
-            ClefType sct = ClefType(score()->styleI(Sid::tabClef));
+            ClefType sct = ClefType(style().styleI(Sid::tabClef));
             ct = staffType(tick)->lines() <= 4 ? ClefTypeList(sct == ClefType::TAB ? ClefType::TAB4 : ClefType::TAB4_SERIF) : ClefTypeList(
                 sct == ClefType::TAB ? ClefType::TAB : ClefType::TAB_SERIF);
         }
@@ -448,7 +448,7 @@ ClefTypeList Staff::clefType(const Fraction& tick) const
 ClefType Staff::clef(const Fraction& tick) const
 {
     ClefTypeList c = clefType(tick);
-    return score()->styleB(Sid::concertPitch) ? c._concertClef : c._transposingClef;
+    return style().styleB(Sid::concertPitch) ? c._concertClef : c._transposingClef;
 }
 
 //---------------------------------------------------------
@@ -806,12 +806,12 @@ double Staff::height() const
 
 double Staff::spatium(const Fraction& tick) const
 {
-    return score()->spatium() * staffMag(tick);
+    return style().spatium() * staffMag(tick);
 }
 
 double Staff::spatium(const EngravingItem* e) const
 {
-    return score()->spatium() * staffMag(e);
+    return style().spatium() * staffMag(e);
 }
 
 //---------------------------------------------------------
@@ -820,7 +820,7 @@ double Staff::spatium(const EngravingItem* e) const
 
 double Staff::staffMag(const StaffType* stt) const
 {
-    return (stt->isSmall() ? score()->styleD(Sid::smallStaffMag) : 1.0) * stt->userMag();
+    return (stt->isSmall() ? style().styleD(Sid::smallStaffMag) : 1.0) * stt->userMag();
 }
 
 double Staff::staffMag(const Fraction& tick) const
@@ -841,9 +841,9 @@ SwingParameters Staff::swing(const Fraction& tick) const
 {
     SwingParameters sp;
     int swingUnit = 0;
-    ByteArray ba = score()->styleSt(Sid::swingUnit).toAscii();
+    ByteArray ba = style().styleSt(Sid::swingUnit).toAscii();
     DurationType unit = TConv::fromXml(ba.constChar(), DurationType::V_INVALID);
-    int swingRatio = score()->styleI(Sid::swingRatio);
+    int swingRatio = style().styleI(Sid::swingRatio);
     if (unit == DurationType::V_EIGHTH) {
         swingUnit = Constants::DIVISION / 2;
     } else if (unit == DurationType::V_16TH) {

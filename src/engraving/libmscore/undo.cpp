@@ -1850,10 +1850,10 @@ void ChangeStyle::flip(EditData*)
 {
     MStyle tmp = score->style();
 
-    if (score->styleV(Sid::concertPitch) != style.value(Sid::concertPitch)) {
+    if (score->style().styleV(Sid::concertPitch) != style.value(Sid::concertPitch)) {
         score->cmdConcertPitchChanged(style.value(Sid::concertPitch).toBool());
     }
-    if (score->styleV(Sid::MusicalSymbolFont) != style.value(Sid::MusicalSymbolFont)) {
+    if (score->style().styleV(Sid::MusicalSymbolFont) != style.value(Sid::MusicalSymbolFont)) {
         score->setEngravingFont(engravingFonts()->fontByName(style.styleSt(Sid::MusicalSymbolFont).toStdString()));
     }
 
@@ -1874,7 +1874,7 @@ void ChangeStyle::undo(EditData* ed)
 
 void ChangeStyleVal::flip(EditData*)
 {
-    PropertyValue v = score->styleV(idx);
+    PropertyValue v = score->style().styleV(idx);
     if (v != value) {
         score->style().set(idx, value);
         switch (idx) {
@@ -1883,17 +1883,18 @@ void ChangeStyleVal::flip(EditData*)
         case Sid::chordModifierMag:
         case Sid::chordModifierAdjust:
         case Sid::chordDescriptionFile: {
+            const MStyle& style = score->style();
             score->chordList()->unload();
-            double emag = score->styleD(Sid::chordExtensionMag);
-            double eadjust = score->styleD(Sid::chordExtensionAdjust);
-            double mmag = score->styleD(Sid::chordModifierMag);
-            double madjust = score->styleD(Sid::chordModifierAdjust);
+            double emag = style.styleD(Sid::chordExtensionMag);
+            double eadjust = style.styleD(Sid::chordExtensionAdjust);
+            double mmag = style.styleD(Sid::chordModifierMag);
+            double madjust = style.styleD(Sid::chordModifierAdjust);
             score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
-            if (score->styleB(Sid::chordsXmlFile)) {
+            if (score->style().styleB(Sid::chordsXmlFile)) {
                 score->chordList()->read(u"chords.xml");
             }
-            score->chordList()->read(score->styleSt(Sid::chordDescriptionFile));
-            score->chordList()->setCustomChordList(score->styleSt(Sid::chordStyle) == "custom");
+            score->chordList()->read(style.styleSt(Sid::chordDescriptionFile));
+            score->chordList()->setCustomChordList(style.styleSt(Sid::chordStyle) == "custom");
         }
         break;
         case Sid::spatium:
