@@ -794,17 +794,17 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
     sp->setVisible(false);
 
     static const SymIdList defaultOrnaments {
-        SymId::ornamentTurnInverted,
         SymId::ornamentTurn,
+        SymId::ornamentTurnInverted,
         SymId::ornamentTrill,
         SymId::ornamentShortTrill,
         SymId::ornamentMordent
     };
 
     static const SymIdList masterOrnaments {
+        SymId::ornamentTurn,
         SymId::ornamentTurnInverted,
         SymId::ornamentTurnSlash,
-        SymId::ornamentTurn,
         SymId::ornamentTrill,
         SymId::ornamentShortTrill,
         SymId::ornamentMordent,
