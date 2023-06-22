@@ -1932,7 +1932,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
     const GPNote::Bend* gpBend = gpnote->bend();
 
     bool bendHasMiddleValue = true;
-    if (gpBend->middleOffset1 == 12 || gpBend->middleOffset2 == 12) {
+    if (gpBend->middleOffset1 == 12 && gpBend->middleOffset2 == 12) {
         bendHasMiddleValue = false;
     }
 
