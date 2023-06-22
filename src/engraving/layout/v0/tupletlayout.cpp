@@ -25,12 +25,12 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/text.h"
 #include "libmscore/factory.h"
-#include "libmscore/score.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/stem.h"
 #include "libmscore/system.h"
+#include "libmscore/measure.h"
 
 #include "tlayout.h"
 
@@ -81,11 +81,11 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                 break;
             }
         }
-        item->_number->setMag(item->_isSmall ? item->score()->styleD(Sid::smallNoteMag) : 1.0);
+        item->_number->setMag(item->_isSmall ? ctx.conf().styleD(Sid::smallNoteMag) : 1.0);
     } else {
         if (item->_number) {
             if (item->_number->selected()) {
-                item->score()->deselect(item->_number);
+                ctx.deselect(item->_number);
             }
             delete item->_number;
             item->_number = 0;
@@ -147,15 +147,15 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     //
     //    calculate bracket start and end point p1 p2
     //
-    Score* s = item->score();
-    double maxSlope      = s->styleD(Sid::tupletMaxSlope);
-    bool outOfStaff      = s->styleB(Sid::tupletOufOfStaff);
-    double vHeadDistance = s->styleMM(Sid::tupletVHeadDistance) * item->mag();
-    double vStemDistance = s->styleMM(Sid::tupletVStemDistance) * item->mag();
-    double stemLeft      = (s->styleMM(Sid::tupletStemLeftDistance) - s->styleMM(Sid::tupletBracketWidth) / 2) * cr1->mag();
-    double stemRight     = (s->styleMM(Sid::tupletStemRightDistance) - s->styleMM(Sid::tupletBracketWidth) / 2) * cr2->mag();
-    double noteLeft      = (s->styleMM(Sid::tupletNoteLeftDistance) - s->styleMM(Sid::tupletBracketWidth) / 2) * cr1->mag();
-    double noteRight     = (s->styleMM(Sid::tupletNoteRightDistance) - s->styleMM(Sid::tupletBracketWidth) / 2) * cr2->mag();
+    const MStyle& style = ctx.conf().style();
+    double maxSlope      = style.styleD(Sid::tupletMaxSlope);
+    bool outOfStaff      = style.styleB(Sid::tupletOufOfStaff);
+    double vHeadDistance = style.styleMM(Sid::tupletVHeadDistance) * item->mag();
+    double vStemDistance = style.styleMM(Sid::tupletVStemDistance) * item->mag();
+    double stemLeft      = (style.styleMM(Sid::tupletStemLeftDistance) - style.styleMM(Sid::tupletBracketWidth) / 2) * cr1->mag();
+    double stemRight     = (style.styleMM(Sid::tupletStemRightDistance) - style.styleMM(Sid::tupletBracketWidth) / 2) * cr2->mag();
+    double noteLeft      = (style.styleMM(Sid::tupletNoteLeftDistance) - style.styleMM(Sid::tupletBracketWidth) / 2) * cr1->mag();
+    double noteRight     = (style.styleMM(Sid::tupletNoteRightDistance) - style.styleMM(Sid::tupletBracketWidth) / 2) * cr2->mag();
 
     int move = 0;
     item->setStaffIdx(cr1->vStaffIdx());
@@ -172,7 +172,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         }
     }
 
-    double l1  = item->score()->styleMM(Sid::tupletBracketHookHeight) * item->mag();
+    double l1  = style.styleMM(Sid::tupletBracketHookHeight) * item->mag();
     double l2l = vHeadDistance;      // left bracket vertical distance
     double l2r = vHeadDistance;      // right bracket vertical distance right
 
@@ -184,7 +184,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     item->p2      = cr2->pagePos();
 
     item->p1.rx() -= noteLeft;
-    item->p2.rx() += item->score()->noteHeadWidth() + noteRight;
+    item->p2.rx() += ctx.conf().noteHeadWidth() + noteRight;
     item->p1.ry() += vHeadDistance;          // TODO: Direction ?
     item->p2.ry() += vHeadDistance;
 

@@ -80,14 +80,6 @@ const MStyle& LayoutConfiguration::style() const
     return score()->style();
 }
 
-double LayoutConfiguration::noteHeadWidth() const
-{
-    IF_ASSERT_FAILED(score()) {
-        return 0.0;
-    }
-    return score()->noteHeadWidth();
-}
-
 bool LayoutConfiguration::showInvisible() const
 {
     IF_ASSERT_FAILED(score()) {
@@ -425,4 +417,12 @@ void LayoutContext::addRefresh(const mu::RectF& r)
         return;
     }
     m_score->addRefresh(r);
+}
+
+void LayoutContext::deselect(EngravingItem* el)
+{
+    IF_ASSERT_FAILED(m_score) {
+        return;
+    }
+    m_score->deselect(el);
 }
