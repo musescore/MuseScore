@@ -433,6 +433,9 @@ TEST_F(Musicxml_Tests, chordDiagrams1) {
 TEST_F(Musicxml_Tests, chordNoVoice) {
     mxmlIoTestRef("testChordNoVoice");
 }
+TEST_F(Musicxml_Tests, chordSymbols) {
+    mxmlMscxExportTestRef("testChordSymbols");
+}
 TEST_F(Musicxml_Tests, clefs1) {
     mxmlIoTest("testClefs1");
 }
