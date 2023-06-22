@@ -80,12 +80,12 @@ const MStyle& LayoutConfiguration::style() const
     return score()->style();
 }
 
-bool LayoutConfiguration::showInvisible() const
+bool LayoutConfiguration::isShowInvisible() const
 {
     IF_ASSERT_FAILED(score()) {
         return false;
     }
-    return score()->showInvisible();
+    return score()->isShowInvisible();
 }
 
 int LayoutConfiguration::pageNumberOffset() const
@@ -338,7 +338,7 @@ void DomAccessor::addUnmanagedSpanner(Spanner* s)
     score()->addUnmanagedSpanner(s);
 }
 
-const std::set<Spanner*> DomAccessor::unmanagedSpanners()
+const std::set<Spanner*>& DomAccessor::unmanagedSpanners() const
 {
     IF_ASSERT_FAILED(score()) {
         static const std::set<Spanner*> dummy;

@@ -165,7 +165,6 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
 
-    double minDistance(const System*) const;
     double topDistance(staff_idx_t staffIdx, const SkylineLine&) const;
     double bottomDistance(staff_idx_t staffIdx, const SkylineLine&) const;
     double minTop() const;

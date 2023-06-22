@@ -125,7 +125,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
     std::stable_sort(el.begin(), el.end(), mu::engraving::elementLessThan);
 
     const mu::engraving::Measure* currentMeasure = nullptr;
-    bool showInvisible = score->showInvisible();
+    bool showInvisible = score->isShowInvisible();
     for (const mu::engraving::EngravingItem* e : el) {
         e->itemDiscovered = false;
         if (!e->visible() && !showInvisible) {

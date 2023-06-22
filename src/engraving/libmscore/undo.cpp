@@ -2211,7 +2211,8 @@ void InsertRemoveMeasures::removeMeasures()
             clef->staff()->setClef(clef);
         }
 
-        for (Spanner* sp : score->unmanagedSpanners()) {
+        std::set<Spanner*> spannersCopy = score->unmanagedSpanners();
+        for (Spanner* sp : spannersCopy) {
             if ((sp->tick() >= tick1 && sp->tick() < tick2) || (sp->tick2() >= tick1 && sp->tick2() < tick2)) {
                 sp->removeUnmanaged();
             }
@@ -2657,8 +2658,8 @@ void InsertTime::undo(EditData*)
 void InsertTimeUnmanagedSpanner::flip(EditData*)
 {
     for (Score* s : score->scoreList()) {
-        const auto unmanagedSpanners(s->unmanagedSpanners());
-        for (Spanner* sp : unmanagedSpanners) {
+        std::set<Spanner*> spannersCopy = s->unmanagedSpanners();
+        for (Spanner* sp : spannersCopy) {
             sp->insertTimeUnmanaged(tick, len);
         }
     }

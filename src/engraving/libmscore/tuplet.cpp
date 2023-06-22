@@ -336,7 +336,7 @@ void Tuplet::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
         }
         child->scanElements(data, func, all);
     }
-    if (all || visible() || score()->showInvisible()) {
+    if (all || visible() || score()->isShowInvisible()) {
         func(data, this);
     }
 }

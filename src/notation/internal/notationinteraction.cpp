@@ -4477,7 +4477,7 @@ void NotationInteraction::resetShapesAndPosition()
 ScoreConfig NotationInteraction::scoreConfig() const
 {
     ScoreConfig config;
-    config.isShowInvisibleElements = score()->showInvisible();
+    config.isShowInvisibleElements = score()->isShowInvisible();
     config.isShowUnprintableElements = score()->showUnprintable();
     config.isShowFrames = score()->showFrames();
     config.isShowPageMargins = score()->showPageborders();
