@@ -70,9 +70,7 @@ If you omit the `-DCMAKE_BUILD_TYPE` option entirely then `RelWithDebInfo` is
 used by default, as it provides a useful compromise between Release and Debug.
 
 ### Testing
-See [mtest/README.md](/mtest/README.md) or [the developer handbook](https://musescore.org/handbook/developers-handbook/finding-your-way-around/automated-tests) for instructions on how to run the test suite.
-
-The new [script testing facility](https://musescore.org/node/278278) is also available to create your own automated tests. Please try it out!
+See the [Unit tests section](https://github.com/musescore/MuseScore/wiki/Unit-tests) of the [MuseScore Wiki](https://github.com/musescore/MuseScore/wiki) for instructions on how to run the test suite.
 
 ### Code Formatting
 
