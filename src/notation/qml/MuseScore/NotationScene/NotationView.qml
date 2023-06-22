@@ -168,7 +168,7 @@ FocusScope {
                     ElementPopupLoader {
                         id: popUpLoader
 
-                        navigationSection: navSec
+                        notationViewNavigationSection: navSec
                         navigationOrderStart: notationView.navigationPanel.order + 1
 
                         onOpened: paintView.onElementPopupIsOpenChanged(true)
