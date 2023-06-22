@@ -358,6 +358,8 @@ private:
     static SpannerSegment* layoutSystemSLine(SLine* line, System* system, LayoutContext& ctx);
     static SpannerSegment* getNextLayoutSystemSegment(Spanner* spanner, System* system,
                                                       std::function<SpannerSegment* (System* parent)> createSegment);
+
+    static void autoplaceSpannerSegment(SpannerSegment* item, LayoutContext& ctx);
 };
 }
 
