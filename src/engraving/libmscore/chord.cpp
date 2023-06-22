@@ -966,7 +966,7 @@ void Chord::addLedgerLines()
             double _spatium = spatium();
             double stepDistance = lineDistance * 0.5;
             for (auto lld : vecLines) {
-                LedgerLine* h = new LedgerLine(score());
+                LedgerLine* h = new LedgerLine(score()->dummy());
                 h->setParent(this);
                 h->setTrack(track);
                 h->setVisible(lld.visible && staffVisible);

@@ -381,7 +381,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         double extraLen    = 0;
         double llX         = stemX - (headWidth + extraLen) * 0.5;
         for (int i = 0; i < ledgerLines; i++) {
-            LedgerLine* ldgLin = new LedgerLine(item->score());
+            LedgerLine* ldgLin = new LedgerLine(ctx.mutDom().dummyParent());
             ldgLin->setParent(item);
             ldgLin->setTrack(item->track());
             ldgLin->setVisible(item->visible());

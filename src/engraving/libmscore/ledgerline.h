@@ -43,7 +43,7 @@ class LedgerLine final : public EngravingItem
     DECLARE_CLASSOF(ElementType::LEDGER_LINE)
 
 public:
-    LedgerLine(Score*);
+    LedgerLine(EngravingItem*);
     ~LedgerLine();
     LedgerLine& operator=(const LedgerLine&) = delete;
 

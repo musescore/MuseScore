@@ -24,7 +24,6 @@
 
 #include "chord.h"
 #include "measure.h"
-#include "score.h"
 #include "system.h"
 
 #include "log.h"
@@ -36,7 +35,7 @@ namespace mu::engraving {
 //   LedgerLine
 //---------------------------------------------------------
 
-LedgerLine::LedgerLine(Score* s)
+LedgerLine::LedgerLine(EngravingItem* s)
     : EngravingItem(ElementType::LEDGER_LINE, s)
 {
     setSelectable(false);

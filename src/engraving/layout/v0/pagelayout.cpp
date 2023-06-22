@@ -425,7 +425,8 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
     checkDivider(ctx, true, lastSystem, 0.0, true);        // remove
     checkDivider(ctx, false, lastSystem, 0.0, true);       // remove
 
-    if (sList.empty() || MScore::noVerticalStretch || ctx.conf().isVerticalSpreadEnabled() || ctx.conf().layoutMode() == LayoutMode::SYSTEM) {
+    if (sList.empty() || MScore::noVerticalStretch || ctx.conf().isVerticalSpreadEnabled()
+        || ctx.conf().layoutMode() == LayoutMode::SYSTEM) {
         if (ctx.conf().layoutMode() == LayoutMode::FLOAT) {
             double y = restHeight * .5;
             for (System* system : page->systems()) {
@@ -734,7 +735,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
     for (System* system : systems) {
         SystemLayout::setMeasureHeight(system, system->height(), ctx);
         SystemLayout::layoutBracketsVertical(system, ctx);
-        SystemLayout::layoutInstrumentNames(system);
+        SystemLayout::layoutInstrumentNames(system, ctx);
     }
     vgdl.deleteAll();
 }

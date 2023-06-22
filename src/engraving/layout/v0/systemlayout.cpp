@@ -946,7 +946,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             }
         }
     }
-    processLines(system, spanner, false);
+    processLines(system, ctx, spanner, false);
     for (auto s : spanner) {
         Slur* slur = toSlur(s);
         ChordRest* scr = s->startCR();
@@ -1055,10 +1055,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             }
         }
     }
-    processLines(system, hairpins, false);
-    processLines(system, spanner, false);
-    processLines(system, ottavas, false);
-    processLines(system, pedal,   true);
+    processLines(system, ctx, hairpins, false);
+    processLines(system, ctx, spanner, false);
+    processLines(system, ctx, ottavas, false);
+    processLines(system, ctx, pedal,   true);
 
     //-------------------------------------------------------------
     // Lyric
@@ -1155,7 +1155,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     // layout Voltas for current system
     //-------------------------------------------------------------
 
-    processLines(system, voltas, false);
+    processLines(system, ctx, voltas, false);
 
     //
     // vertical align volta segments
@@ -1233,7 +1233,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             }
         }
     }
-    processLines(system, tempoChangeLines, false);
+    processLines(system, ctx, tempoChangeLines, false);
 
     //-------------------------------------------------------------
     // Marker and Jump
@@ -1294,10 +1294,9 @@ void SystemLayout::doLayoutTies(System* system, std::vector<Segment*> sl, const 
     }
 }
 
-void SystemLayout::processLines(System* system, std::vector<Spanner*> lines, bool align)
+void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<Spanner*> lines, bool align)
 {
     std::vector<SpannerSegment*> segments;
-    LayoutContext ctx(system->score());
     for (Spanner* sp : lines) {
         SpannerSegment* ss = TLayout::layoutSystem(sp, system, ctx);        // create/layout spanner segment for this system
         if (ss->autoplace()) {
@@ -1578,7 +1577,7 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
     }
 
     // Now we are limited by the collision checks, so try to gradually squeeze everything without collisions
-    staff_idx_t nstaves = system->score()->nstaves();
+    staff_idx_t nstaves = ctx.dom().nstaves();
     double squeezeFactor = 1 - step;
     while (curSysWidth > targetSysWidth && RealIsEqualOrMore(squeezeFactor, 0.0)) {
         for (MeasureBase* mb : system->measures()) {
@@ -1657,24 +1656,24 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
     }
 
     // Get standard instrument name distance
-    double instrumentNameOffset = system->score()->styleMM(Sid::instrumentNameOffset);
+    double instrumentNameOffset = ctx.conf().styleMM(Sid::instrumentNameOffset);
     // Now scale it depending on the text size (which also may not follow staff scaling)
     double textSizeScaling = 1.0;
     double actualSize = 0.0;
     double defaultSize = 0.0;
     bool followStaffSize = true;
     if (ctx.state().startWithLongNames()) {
-        actualSize = system->score()->styleD(Sid::longInstrumentFontSize);
+        actualSize = ctx.conf().styleD(Sid::longInstrumentFontSize);
         defaultSize = DefaultStyle::defaultStyle().value(Sid::longInstrumentFontSize).toDouble();
-        followStaffSize = system->score()->styleB(Sid::longInstrumentFontSpatiumDependent);
+        followStaffSize = ctx.conf().styleB(Sid::longInstrumentFontSpatiumDependent);
     } else {
-        actualSize = system->score()->styleD(Sid::shortInstrumentFontSize);
+        actualSize = ctx.conf().styleD(Sid::shortInstrumentFontSize);
         defaultSize = DefaultStyle::defaultStyle().value(Sid::shortInstrumentFontSize).toDouble();
-        followStaffSize = system->score()->styleB(Sid::shortInstrumentFontSpatiumDependent);
+        followStaffSize = ctx.conf().styleB(Sid::shortInstrumentFontSpatiumDependent);
     }
     textSizeScaling = actualSize / defaultSize;
     if (!followStaffSize) {
-        textSizeScaling *= DefaultStyle::defaultStyle().value(Sid::spatium).toDouble() / system->score()->styleD(Sid::spatium);
+        textSizeScaling *= DefaultStyle::defaultStyle().value(Sid::spatium).toDouble() / ctx.conf().styleD(Sid::spatium);
     }
     textSizeScaling = std::max(textSizeScaling, 1.0);
     instrumentNameOffset *= textSizeScaling;
@@ -1687,7 +1686,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
     SystemLayout::layoutBrackets(system, ctx);
     double maxBracketsWidth = SystemLayout::totalBracketOffset(ctx);
 
-    double maxNamesWidth = SystemLayout::instrumentNamesWidth(system, isFirstSystem, ctx);
+    double maxNamesWidth = SystemLayout::instrumentNamesWidth(system, ctx, isFirstSystem);
 
     double indent = maxNamesWidth > 0 ? maxNamesWidth + instrumentNameOffset : 0.0;
     if (isFirstSystem && firstSystemIndent) {
@@ -1696,7 +1695,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
     }
 
     if (RealIsNull(indent)) {
-        if (system->score()->styleB(Sid::alignSystemToMargin)) {
+        if (ctx.conf().styleB(Sid::alignSystemToMargin)) {
             system->_leftMargin = 0.0;
         } else {
             system->_leftMargin = maxBracketsWidth;
@@ -1707,7 +1706,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
 
     for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         SysStaff* s  = system->_staves[staffIdx];
-        Staff* staff = system->score()->staff(staffIdx);
+        const Staff* staff = ctx.dom().staff(staffIdx);
         if (!staff->show() || !s->show()) {
             s->setbbox(RectF());
             continue;
@@ -1766,11 +1765,11 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
     }
 }
 
-double SystemLayout::instrumentNamesWidth(System* system, bool isFirstSystem, LayoutContext& ctx)
+double SystemLayout::instrumentNamesWidth(System* system, LayoutContext& ctx, bool isFirstSystem)
 {
     double namesWidth = 0.0;
 
-    for (staff_idx_t staffIdx = 0; staffIdx < system->score()->nstaves(); ++staffIdx) {
+    for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
         const SysStaff* staff = system->staff(staffIdx);
         if (!staff || (isFirstSystem && !staff->show())) {
             continue;
@@ -1877,7 +1876,7 @@ double SystemLayout::layoutBrackets(System* system, LayoutContext& ctx)
     bl.swap(system->_brackets);
 
     for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        Staff* s = system->score()->staff(staffIdx);
+        const Staff* s = ctx.dom().staff(staffIdx);
         for (size_t i = 0; i < columns; ++i) {
             for (auto bi : s->brackets()) {
                 if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
@@ -1925,7 +1924,7 @@ void SystemLayout::addBrackets(System* system, Measure* measure, LayoutContext& 
     bl.swap(system->_brackets);
 
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        Staff* s = system->score()->staff(staffIdx);
+        const Staff* s = ctx.dom().staff(staffIdx);
         for (size_t i = 0; i < columns; ++i) {
             for (auto bi : s->brackets()) {
                 if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
@@ -1983,9 +1982,9 @@ Bracket* SystemLayout::createBracket(System* system, LayoutContext& ctx, Bracket
     //
     if (span > 1
         || (bi->bracketSpan() == span)
-        || (span == 1 && system->score()->styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden)
+        || (span == 1 && ctx.conf().styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden)
             && bi->bracketType() != BracketType::SQUARE)
-        || (span == 1 && system->score()->styleB(Sid::alwaysShowSquareBracketsWhenEmptyStavesAreHidden)
+        || (span == 1 && ctx.conf().styleB(Sid::alwaysShowSquareBracketsWhenEmptyStavesAreHidden)
             && bi->bracketType() == BracketType::SQUARE)) {
         //
         // this bracket is visible
@@ -2011,7 +2010,7 @@ Bracket* SystemLayout::createBracket(System* system, LayoutContext& ctx, Bracket
         if (bi->selected()) {
             bool needSelect = true;
 
-            std::vector<EngravingItem*> brackets = system->score()->selection().elements(ElementType::BRACKET);
+            std::vector<EngravingItem*> brackets = ctx.selection().elements(ElementType::BRACKET);
             for (const EngravingItem* element : brackets) {
                 if (toBracket(element)->bracketItem() == bi) {
                     needSelect = false;
@@ -2020,7 +2019,7 @@ Bracket* SystemLayout::createBracket(System* system, LayoutContext& ctx, Bracket
             }
 
             if (needSelect) {
-                system->score()->select(b, SelectType::ADD);
+                ctx.select(b, SelectType::ADD);
             }
         }
 
@@ -2051,7 +2050,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     std::list<std::pair<size_t, SysStaff*> > visibleStaves;
 
     for (size_t i = 0; i < system->_staves.size(); ++i) {
-        Staff* s  = system->score()->staff(i);
+        const Staff* s  = ctx.dom().staff(i);
         SysStaff* ss = system->_staves[i];
         if (s->show() && ss->show()) {
             visibleStaves.push_back(std::pair<size_t, SysStaff*>(i, ss));
@@ -2062,12 +2061,12 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
 
     double _spatium            = system->spatium();
     double y                   = 0.0;
-    double minVerticalDistance = system->score()->styleMM(Sid::minVerticalDistance);
-    double staffDistance       = system->score()->styleMM(Sid::staffDistance);
-    double akkoladeDistance    = system->score()->styleMM(Sid::akkoladeDistance);
+    double minVerticalDistance = ctx.conf().styleMM(Sid::minVerticalDistance);
+    double staffDistance       = ctx.conf().styleMM(Sid::staffDistance);
+    double akkoladeDistance    = ctx.conf().styleMM(Sid::akkoladeDistance);
     if (ctx.conf().isVerticalSpreadEnabled()) {
-        staffDistance       = system->score()->styleMM(Sid::minStaffSpread);
-        akkoladeDistance    = system->score()->styleMM(Sid::minStaffSpread);
+        staffDistance       = ctx.conf().styleMM(Sid::minStaffSpread);
+        akkoladeDistance    = ctx.conf().styleMM(Sid::minStaffSpread);
     }
 
     if (visibleStaves.empty()) {
@@ -2077,8 +2076,8 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     for (auto i = visibleStaves.begin();; ++i) {
         SysStaff* ss  = i->second;
         staff_idx_t si1 = i->first;
-        Staff* staff  = system->score()->staff(si1);
-        auto ni       = std::next(i);
+        const Staff* staff  = ctx.dom().staff(si1);
+        auto ni = std::next(i);
 
         double dist = staff->height();
         double yOffset;
@@ -2098,7 +2097,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
         }
 
         staff_idx_t si2 = ni->first;
-        Staff* staff2  = system->score()->staff(si2);
+        const Staff* staff2  = ctx.dom().staff(si2);
 
         if (staff->part() == staff2->part()) {
             Measure* m = system->firstMeasure();
@@ -2171,7 +2170,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     //  layout instrument names
     //---------------------------------------------------
 
-    SystemLayout::layoutInstrumentNames(system);
+    SystemLayout::layoutInstrumentNames(system, ctx);
 
     //---------------------------------------------------
     //  layout cross-staff slurs and ties
@@ -2250,7 +2249,7 @@ void SystemLayout::layoutBracketsVertical(System* system, LayoutContext& ctx)
         // it spans at least 2 visible staves (staffIdx1 < staffIdx2) OR
         // it spans just one visible staff (staffIdx1 == staffIdx2) but it is required to do so
         // (the second case happens at least when the bracket is initially dropped)
-        bool notHidden = system->score()->styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden)
+        bool notHidden = ctx.conf().styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden)
                          ? (staffIdx1 <= staffIdx2) : (staffIdx1 < staffIdx2) || (b->span() == 1 && staffIdx1 == staffIdx2);
         if (notHidden) {                        // set vert. pos. and height to visible spanned staves
             sy = system->_staves[staffIdx1]->bbox().top();
@@ -2262,11 +2261,11 @@ void SystemLayout::layoutBracketsVertical(System* system, LayoutContext& ctx)
     }
 }
 
-void SystemLayout::layoutInstrumentNames(System* system)
+void SystemLayout::layoutInstrumentNames(System* system, LayoutContext& ctx)
 {
     staff_idx_t staffIdx = 0;
 
-    for (Part* p : system->score()->parts()) {
+    for (const Part* p : ctx.dom().parts()) {
         SysStaff* s = system->staff(staffIdx);
         SysStaff* s2;
         size_t nstaves = p->nstaves();
@@ -2343,8 +2342,8 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
     if (system->vbox()) {                 // ignore vbox
         return;
     }
-    if (!system->score()->showInstrumentNames()
-        || (system->style()->styleB(Sid::hideInstrumentNameIfOneInstrument) && system->score()->visiblePartCount() <= 1)) {
+    if (!ctx.conf().isShowInstrumentNames()
+        || (ctx.conf().styleB(Sid::hideInstrumentNameIfOneInstrument) && ctx.dom().visiblePartCount() <= 1)) {
         for (SysStaff* staff : system->_staves) {
             for (InstrumentName* t : staff->instrumentNames) {
                 ctx.mutDom().removeElement(t);
@@ -2355,7 +2354,7 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
 
     int staffIdx = 0;
     for (SysStaff* staff : system->_staves) {
-        Staff* s = system->score()->staff(staffIdx);
+        const Staff* s = ctx.dom().staff(staffIdx);
         Part* part = s->part();
 
         bool atLeastOneVisibleStaff = false;
@@ -2424,7 +2423,8 @@ double SystemLayout::minDistance(LayoutContext& ctx, const System* top, const Sy
     }
 
     double minVerticalDistance = ctx.conf().styleMM(Sid::minVerticalDistance);
-    double dist = ctx.conf().isVerticalSpreadEnabled() ? ctx.conf().styleMM(Sid::minSystemSpread) : ctx.conf().styleMM(Sid::minSystemDistance);
+    double dist = ctx.conf().isVerticalSpreadEnabled() ? ctx.conf().styleMM(Sid::minSystemSpread) : ctx.conf().styleMM(
+        Sid::minSystemDistance);
     size_t firstStaff = 0;
     size_t lastStaff = 0;
 

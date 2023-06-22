@@ -51,7 +51,7 @@ public:
     static void restoreLayout2(System* system, LayoutContext& ctx);
     static void setMeasureHeight(System* system, double height, LayoutContext& ctx);
     static void layoutBracketsVertical(System* system, LayoutContext& ctx);
-    static void layoutInstrumentNames(System* system);
+    static void layoutInstrumentNames(System* system, LayoutContext& ctx);
 
     static void setInstrumentNames(System* system, LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
 
@@ -60,7 +60,7 @@ public:
 private:
     static System* getNextSystem(LayoutContext& lc);
     static void hideEmptyStaves(System* system, LayoutContext& ctx, bool isFirstSystem);
-    static void processLines(System* system, std::vector<Spanner*> lines, bool align);
+    static void processLines(System* system, LayoutContext& ctx, std::vector<Spanner*> lines, bool align);
     static void layoutTies(Chord* ch, System* system, const Fraction& stick);
     static void doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick);
     static void justifySystem(System* system, double curSysWidth, double targetSystemWidth);
@@ -69,7 +69,7 @@ private:
     static void manageNarrowSpacing(System* system, LayoutContext& ctx, double& curSysWidth, double targetSysWidth, const Fraction minTicks,
                                     const Fraction maxTicks);
 
-    static double instrumentNamesWidth(System* system, bool isFirstSystem, LayoutContext& ctx);
+    static double instrumentNamesWidth(System* system, LayoutContext& ctx, bool isFirstSystem);
     static double totalBracketOffset(LayoutContext& ctx);
     static double layoutBrackets(System* system, LayoutContext& ctx);
     static void addBrackets(System* system, Measure* measure, LayoutContext& ctx);
