@@ -29,6 +29,8 @@ void GPBeat::addHarmonicMarkType(GPBeat::HarmonicMarkType type)
     case GPBeat::HarmonicMarkType::FeedBack:
         _harmonicMarkInfo.feedback = true;
         break;
+    case GPBeat::HarmonicMarkType::None:
+        break;
     }
 }
 
