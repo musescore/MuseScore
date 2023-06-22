@@ -29,6 +29,7 @@ import MuseScore.NotationScene 1.0
 StyledPopupView {
     id: root
 
+    property NavigationSection notationViewNavigationSection: null
     property int navigationOrderStart: 0
     property int navigationOrderEnd: capoSettingsNavPanel.order
 
@@ -68,7 +69,7 @@ StyledPopupView {
             id: capoSettingsNavPanel
             name: "CapoSettings"
             direction: NavigationPanel.Vertical
-            section: root.navigationSection
+            section: root.notationViewNavigationSection
             order: root.navigationOrderStart
             accessible.name: qsTrc("notation", "Capo settings")
         }
