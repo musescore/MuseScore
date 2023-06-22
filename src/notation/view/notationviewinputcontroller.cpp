@@ -77,7 +77,7 @@ void NotationViewInputController::init()
         dispatcher()->reg(this, "page-end", this, &NotationViewInputController::endOfScore);
 
         dispatcher()->reg(this, "notation-context-menu", [this]() {
-            m_view->showContextMenu(selectionType(), m_view->fromLogical(selectionElementPos()).toQPointF(), true);
+            m_view->showContextMenu(selectionType(), m_view->fromLogical(selectionElementPos()).toQPointF());
         });
 
         dispatcher()->reg(this, "notation-popup-menu", [this]() {
