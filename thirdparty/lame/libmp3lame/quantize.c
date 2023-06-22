@@ -1734,6 +1734,9 @@ VBR_new_iteration_loop(lame_internal_flags * gfc, const FLOAT pe[2][2],
         int     mean_bits, fullframebits;
         fullframebits = ResvFrameBegin(gfc, &mean_bits);
         assert(used_bits <= fullframebits);
+#ifdef NDEBUG
+        (void)fullframebits;
+#endif
         for (gr = 0; gr < cfg->mode_gr; gr++) {
             for (ch = 0; ch < cfg->channels_out; ch++) {
                 gr_info const *const cod_info = &l3_side->tt[gr][ch];
