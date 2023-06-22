@@ -104,7 +104,7 @@ void NotationViewInputController::onNotationChanged()
         const EngravingItem* selectedItem = notation->interaction()->selection()->element();
         ElementType type = selectedItem ? selectedItem->type() : ElementType::INVALID;
 
-        if (selectedItem == m_prevHitElement) {
+        if (selectedItem && selectedItem == m_prevHitElement) {
             return;
         }
 
