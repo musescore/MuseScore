@@ -148,6 +148,8 @@ if(BUILD_CONFIGURE MATCHES "VTEST")
 
     set(MUE_INSTALL_SOUNDFONT OFF)
 
+    set(MUE_BUILD_CRASHPAD_CLIENT OFF)
+
 endif()
 
 ###########################################
