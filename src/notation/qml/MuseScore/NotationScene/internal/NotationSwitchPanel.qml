@@ -37,7 +37,6 @@ Rectangle {
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "NotationViewTabs"
         enabled: root.enabled && root.visible
-        section: root.navigationSection
         direction: NavigationPanel.Horizontal
     }
 

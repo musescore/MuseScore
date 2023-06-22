@@ -40,7 +40,7 @@ Item {
     signal opened()
     signal closed()
 
-    property NavigationSection navigationSection: null
+    property NavigationSection notationViewNavigationSection: null
     property int navigationOrderStart: 0
     property int navigationOrderEnd: Boolean(loader.item)
                                         ? loader.item.navigationOrderEnd
@@ -101,6 +101,14 @@ Item {
             loader.item.parent = container
             loader.item.updatePosition(pos, size)
 
+            //! NOTE: All navigation panels in popups must be in the notation view section.
+            //        This is necessary so that popups do not activate navigation in the new section,
+            //        but at the same time, when clicking on the component (text input), the focus in popup's window should be activated
+            loader.item.navigationSection = null
+
+            loader.item.notationViewNavigationSection = container.notationViewNavigationSection
+            loader.item.navigationOrderStart = container.navigationOrderStart
+
             return loader.item
         }
     }
@@ -108,9 +116,6 @@ Item {
     Component {
         id: harpPedalComp
         HarpPedalPopup {
-            navigationSection: container.navigationSection
-            navigationOrderStart: container.navigationOrderStart
-
             onClosed: {
                 prv.resetOpenedPopup()
                 loader.sourceComponent = null
@@ -121,9 +126,6 @@ Item {
     Component {
         id: capoComp
         CapoPopup {
-            navigationSection: container.navigationSection
-            navigationOrderStart: container.navigationOrderStart
-
             onClosed: {
                 prv.resetOpenedPopup()
                 loader.sourceComponent = null

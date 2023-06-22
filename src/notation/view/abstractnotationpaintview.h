@@ -116,12 +116,12 @@ public:
     bool isNoteEnterMode() const override;
     void showShadowNote(const PointF& pos) override;
 
-    void showContextMenu(const ElementType& elementType, const QPointF& pos, bool activateFocus = false) override;
+    void showContextMenu(const ElementType& elementType, const QPointF& pos) override;
     void hideContextMenu() override;
 
-    void showElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size, bool activateFocus = false) override;
+    void showElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size) override;
     void hideElementPopup() override;
-    void toggleElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size, bool activateFocus = false) override;
+    void toggleElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size) override;
 
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
