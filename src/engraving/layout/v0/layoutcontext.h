@@ -80,7 +80,7 @@ public:
     bool isPrintingMode() const;
 
     bool isShowVBox() const { return options().isShowVBox; }
-    double noteHeadWidth() const;
+    double noteHeadWidth() const { return options().noteHeadWidth; }
     bool showInvisible() const;
     int pageNumberOffset() const;
     bool enableVerticalSpread() const;
@@ -299,6 +299,9 @@ public:
     // Mark
     void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e);
     void addRefresh(const mu::RectF& r);
+
+    // Other
+    void deselect(EngravingItem* el);
 
 private:
 

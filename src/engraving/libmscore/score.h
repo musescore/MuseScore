@@ -451,8 +451,6 @@ private:
     RootItem* m_rootItem = nullptr;
     LayoutOptions m_layoutOptions;
 
-    double m_noteHeadWidth = 0.0;
-
     mu::async::Channel<EngravingItem*> m_elementDestroyed;
 
     ShadowNote* m_shadowNote = nullptr;
@@ -1098,8 +1096,8 @@ public:
     const LayoutOptions& layoutOptions() const { return m_layoutOptions; }
     void setLayoutMode(LayoutMode lm) { m_layoutOptions.mode = lm; }
     void setShowVBox(bool v) { m_layoutOptions.isShowVBox = v; }
-    double noteHeadWidth() const { return m_noteHeadWidth; }
-    void setNoteHeadWidth(double n) { m_noteHeadWidth = n; }
+    double noteHeadWidth() const { return m_layoutOptions.noteHeadWidth; }
+    void setNoteHeadWidth(double n) { m_layoutOptions.noteHeadWidth = n; }
 
     // temporary methods
     bool isLayoutMode(LayoutMode lm) const { return m_layoutOptions.isMode(lm); }

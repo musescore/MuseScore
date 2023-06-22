@@ -40,6 +40,7 @@ struct LayoutOptions
     LayoutMode mode = LayoutMode::PAGE;
 
     bool isShowVBox = true;
+    double noteHeadWidth = 0.0;
 
     bool isMode(LayoutMode m) const { return mode == m; }
     bool isLinearMode() const { return mode == LayoutMode::LINE || mode == LayoutMode::HORIZONTAL_FIXED; }
