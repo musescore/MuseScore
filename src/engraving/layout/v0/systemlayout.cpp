@@ -2065,7 +2065,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     double minVerticalDistance = system->score()->styleMM(Sid::minVerticalDistance);
     double staffDistance       = system->score()->styleMM(Sid::staffDistance);
     double akkoladeDistance    = system->score()->styleMM(Sid::akkoladeDistance);
-    if (system->score()->enableVerticalSpread()) {
+    if (ctx.conf().isVerticalSpreadEnabled()) {
         staffDistance       = system->score()->styleMM(Sid::minStaffSpread);
         akkoladeDistance    = system->score()->styleMM(Sid::minStaffSpread);
     }
@@ -2424,7 +2424,7 @@ double SystemLayout::minDistance(LayoutContext& ctx, const System* top, const Sy
     }
 
     double minVerticalDistance = ctx.conf().styleMM(Sid::minVerticalDistance);
-    double dist = ctx.conf().enableVerticalSpread() ? ctx.conf().styleMM(Sid::minSystemSpread) : ctx.conf().styleMM(Sid::minSystemDistance);
+    double dist = ctx.conf().isVerticalSpreadEnabled() ? ctx.conf().styleMM(Sid::minSystemSpread) : ctx.conf().styleMM(Sid::minSystemDistance);
     size_t firstStaff = 0;
     size_t lastStaff = 0;
 

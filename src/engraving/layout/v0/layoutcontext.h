@@ -83,7 +83,7 @@ public:
     double noteHeadWidth() const { return options().noteHeadWidth; }
     bool isShowInvisible() const;
     int pageNumberOffset() const;
-    bool enableVerticalSpread() const;
+    bool isVerticalSpreadEnabled() const;
     double maxSystemDistance() const;
 
     const MStyle& style() const;
