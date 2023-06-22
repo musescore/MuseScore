@@ -553,7 +553,7 @@ bool BeamTremoloLayout::calculateAnchors(const std::vector<ChordRest*>& chordRes
         dictator = m_up ? std::min(pointer, dictator) : std::max(pointer, dictator);
         pointer = dictator;
     } else {
-        if (dictator > pointer != (isStartDictator ? startNote > endNote : endNote > startNote)) {
+        if ((dictator > pointer) != (isStartDictator ? startNote > endNote : endNote > startNote)) {
             dictator = pointer - slant;
         } else {
             pointer = dictator + slant;
