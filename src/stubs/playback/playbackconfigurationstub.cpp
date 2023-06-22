@@ -79,7 +79,7 @@ mu::async::Channel<mu::audio::aux_channel_idx_t, bool> PlaybackConfigurationStub
     return {};
 }
 
-bool PlaybackConfigurationStub::isAuxChannelVisible(audio::aux_channel_idx_t index) const
+bool PlaybackConfigurationStub::isAuxChannelVisible(audio::aux_channel_idx_t) const
 {
     return false;
 }
