@@ -24,9 +24,11 @@
 
 #include <QObject>
 
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "shortcuts/ishortcutsregister.h"
-#include "async/asyncable.h"
+#include "actions/iactionsdispatcher.h"
 
 namespace mu::uicomponents {
 class TextInputFieldModel : public QObject, public async::Asyncable
@@ -34,15 +36,18 @@ class TextInputFieldModel : public QObject, public async::Asyncable
     Q_OBJECT
 
     INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(actions::IActionsDispatcher, dispatcher)
 
 public:
     explicit TextInputFieldModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void init();
     Q_INVOKABLE bool isShortcutAllowedOverride(int key, Qt::KeyboardModifiers modifiers) const;
+    Q_INVOKABLE bool handleShortcut(int key, Qt::KeyboardModifiers modifiers);
 
 private:
     void loadShortcuts();
+    shortcuts::Shortcut shortcut(int key, Qt::KeyboardModifiers modifiers) const;
 
     shortcuts::ShortcutList m_notAllowedForOverrideShortcuts;
 };
