@@ -166,13 +166,21 @@ int App::run(int argc, char** argv)
 #ifdef MUE_BUILD_APPSHELL_MODULE
     SplashScreen* splashScreen = nullptr;
     if (runMode == framework::IApplication::RunMode::GuiApp) {
-        if (multiInstancesProvider()->isMainInstance()) {
-            splashScreen = new SplashScreen(SplashScreen::Default);
-        } else {
-            QString fileName = startupScenario()->startupScoreFile().displayName(true /* includingExtension */);
-            splashScreen = new SplashScreen(SplashScreen::ForNewInstance, fileName);
+        SplashScreen::SplashScreenType type = SplashScreen::Default;
+        QString fileName;
+
+        if (!multiInstancesProvider()->isMainInstance()) {
+            project::ProjectFile file = startupScenario()->startupScoreFile();
+
+            if (file.isValid()) {
+                type = SplashScreen::ForNewInstance;
+                fileName = file.displayName(true /* includingExtension */);
+            } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
+                type = SplashScreen::ForNewInstance;
+            }
         }
 
+        splashScreen = new SplashScreen(type, fileName);
         splashScreen->show();
     }
 #endif
