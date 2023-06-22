@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
     - master
+    - 4.1.0
     
   schedule:
     - cron: '0 3 */1 */1 *' # At 03:00 on every day-of-month for master
@@ -24,7 +25,7 @@ on:
         default: ''
 
 env:
-  CURRENT_RELEASE_BRANCH: 4.0.2
+  CURRENT_RELEASE_BRANCH: 4.1.0
 
 jobs:
   build_mu4:
