@@ -300,13 +300,13 @@ void Beam::setTremAnchors()
             double x = chordBeamAnchor(c, layout::v0::BeamTremoloLayout::ChordBeamAnchorType::Middle).x();
             double proportionAlongX = (x - _startAnchor.x()) / width;
             double y = _startAnchor.y() + (proportionAlongX * height);
-            y += regularBeams * (score()->styleB(Sid::useWideBeams) ? 1.0 : 0.75) * spatium() * (tremUp ? 1. : -1.);
+            y += regularBeams * (style().styleB(Sid::useWideBeams) ? 1.0 : 0.75) * spatium() * (tremUp ? 1. : -1.);
             tremAnchor.y1 = y;
             // find the right-side anchor
             x = chordBeamAnchor(t->chord2(), layout::v0::BeamTremoloLayout::ChordBeamAnchorType::Middle).x();
             proportionAlongX = (x - _startAnchor.x()) / width;
             y = _startAnchor.y() + (proportionAlongX * height);
-            y += regularBeams * (score()->styleB(Sid::useWideBeams) ? 1.0 : 0.75) * spatium() * (tremUp ? 1. : -1.);
+            y += regularBeams * (style().styleB(Sid::useWideBeams) ? 1.0 : 0.75) * spatium() * (tremUp ? 1. : -1.);
             tremAnchor.y2 = y;
             _tremAnchors.push_back(tremAnchor);
         }
@@ -758,7 +758,7 @@ void Beam::addSkyline(Skyline& sk)
     if (_beamSegments.empty() || !addToSkyline()) {
         return;
     }
-    double lw2 = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
+    double lw2 = point(style().styleS(Sid::beamWidth)) * .5 * mag();
     const LineF bs = _beamSegments.front()->line;
     double d  = (std::abs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
     if (_beamSegments.size() > 1 && d > M_PI / 6.0) {

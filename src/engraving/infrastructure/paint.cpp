@@ -164,7 +164,7 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
     }
 }
 
-SizeF Paint::pageSizeInch(Score* score)
+SizeF Paint::pageSizeInch(const Score* score)
 {
     if (!score) {
         return SizeF();
@@ -177,7 +177,7 @@ SizeF Paint::pageSizeInch(Score* score)
         return SizeF(page->bbox().width() / mu::engraving::DPI, page->bbox().height() / mu::engraving::DPI);
     }
 
-    return SizeF(score->styleD(Sid::pageWidth), score->styleD(Sid::pageHeight));
+    return SizeF(score->style().styleD(Sid::pageWidth), score->style().styleD(Sid::pageHeight));
 }
 
 void Paint::paintElement(mu::draw::Painter& painter, const EngravingItem* element)

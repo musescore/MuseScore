@@ -2026,7 +2026,7 @@ void Timeline::drawSelection()
         // ws: If style flag Sid::createMultiMeasureRests is not set, then
         // measure->mmRest() is not valid
 
-        if (measure->mmRest() && measure->score()->styleB(Sid::createMultiMeasureRests)) {
+        if (measure->mmRest() && measure->score()->style().styleB(Sid::createMultiMeasureRests)) {
             int mmrestCount = measure->mmRest()->mmRestCount();
             Measure* tmpMeasure = measure;
             for (int mmrestMeasure = 0; mmrestMeasure < mmrestCount; mmrestMeasure++) {
@@ -2646,7 +2646,7 @@ void Timeline::updateView()
     for (Measure* currMeasure = score()->firstMeasure(); currMeasure; currMeasure = currMeasure->nextMeasure(), ++measureIndex) {
         System* system = currMeasure->system();
 
-        if (currMeasure->mmRest() && score()->styleB(Sid::createMultiMeasureRests)) {
+        if (currMeasure->mmRest() && score()->style().styleB(Sid::createMultiMeasureRests)) {
             // Handle mmRests
             Measure* mmrestMeasure = currMeasure->mmRest();
             system = mmrestMeasure->system();

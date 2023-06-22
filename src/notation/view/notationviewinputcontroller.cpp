@@ -467,9 +467,8 @@ void NotationViewInputController::endOfScore()
     auto lmRect = lastMeasure->canvasBoundingRect();
     auto scale = m_view->currentScaling();
     qreal desiredX = std::max(-notationScreenPadding, lmRect.right() + notationScreenPadding - m_view->width() / scale);
-    qreal desiredY
-        = std::max(-notationScreenPadding, lmRect.bottom() + lastMeasure->score()->styleD(
-                       mu::engraving::Sid::spatium) * 5 - m_view->height() / scale);
+    qreal desiredY = std::max(-notationScreenPadding, lmRect.bottom()
+                              + lastMeasure->score()->style().styleD(mu::engraving::Sid::spatium) * 5 - m_view->height() / scale);
     auto offset = m_view->toLogical(QPoint());
     m_view->moveCanvas(offset.x() - desiredX, offset.y() - desiredY);
 }

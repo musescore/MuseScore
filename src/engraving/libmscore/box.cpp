@@ -275,9 +275,9 @@ PropertyValue Box::propertyDefault(Pid id) const
         return Spatium(0.0);
 
     case Pid::TOP_GAP:
-        return isHBox() ? Millimetre(0.0) : score()->styleMM(Sid::systemFrameDistance);
+        return isHBox() ? Millimetre(0.0) : style().styleMM(Sid::systemFrameDistance);
     case Pid::BOTTOM_GAP:
-        return isHBox() ? Millimetre(0.0) : score()->styleMM(Sid::frameSystemDistance);
+        return isHBox() ? Millimetre(0.0) : style().styleMM(Sid::frameSystemDistance);
 
     case Pid::LEFT_MARGIN:
     case Pid::RIGHT_MARGIN:

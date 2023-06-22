@@ -982,7 +982,7 @@ ChordRest* Spanner::findEndCR() const
 Segment* Spanner::startSegment() const
 {
     assert(score() != NULL);
-    return score()->tick2rightSegment(tick(), score()->styleB(Sid::createMultiMeasureRests));
+    return score()->tick2rightSegment(tick(), style().styleB(Sid::createMultiMeasureRests));
 }
 
 //---------------------------------------------------------
@@ -991,7 +991,7 @@ Segment* Spanner::startSegment() const
 
 Segment* Spanner::endSegment() const
 {
-    return score()->tick2leftSegment(tick2(), score()->styleB(Sid::createMultiMeasureRests));
+    return score()->tick2leftSegment(tick2(), style().styleB(Sid::createMultiMeasureRests));
 }
 
 //---------------------------------------------------------
@@ -1396,7 +1396,7 @@ void SpannerSegment::autoplaceSpannerSegment()
     }
 
     if (autoplace()) {
-        double sp = score()->spatium();
+        double sp = style().spatium();
         if (!systemFlag() && !spanner()->systemFlag()) {
             sp *= staff()->staffMag(spanner()->tick());
         }

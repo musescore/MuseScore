@@ -68,12 +68,12 @@ BeamTremoloLayout::BeamTremoloLayout(EngravingItem* e)
         isGrace = m_trem->chord1()->isGrace();
     }
     m_element = e;
-    m_spatium = e->score()->spatium();
+    m_spatium = e->style().spatium();
     m_tick = m_element->tick();
-    m_beamSpacing = e->score()->styleB(Sid::useWideBeams) ? 4 : 3;
+    m_beamSpacing = e->style().styleB(Sid::useWideBeams) ? 4 : 3;
     m_beamDist = (m_beamSpacing / 4.0) * m_spatium * e->mag()
-                 * (isGrace ? e->score()->styleD(Sid::graceNoteMag) : 1.);
-    m_beamWidth = (e->score()->styleS(Sid::beamWidth).val() * m_spatium) * e->mag();
+                 * (isGrace ? e->style().styleD(Sid::graceNoteMag) : 1.);
+    m_beamWidth = (e->style().styleS(Sid::beamWidth).val() * m_spatium) * e->mag();
     const StaffType* staffType = e->staffType();
     m_tab = (staffType && staffType->isTabStaff()) ? staffType : nullptr;
     m_isBesideTabStaff = m_tab && !m_tab->stemless() && !m_tab->stemThrough();
@@ -605,7 +605,7 @@ bool BeamTremoloLayout::calculateAnchors(const std::vector<ChordRest*>& chordRes
 
 bool BeamTremoloLayout::calculateAnchorsCross()
 {
-    double spatium = m_element->score()->spatium();
+    double spatium = m_element->style().spatium();
     //int fragmentIndex = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     ChordRest* startCr = m_elements.front();
     ChordRest* endCr = m_elements.back();
@@ -840,7 +840,7 @@ bool BeamTremoloLayout::noSlope()
 int BeamTremoloLayout::getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int staffLines) const
 {
     bool isFullSize = RealIsEqual(m_element->mag(), 1.0) && !m_isGrace;
-    bool useWideBeams = m_element->score()->styleB(Sid::useWideBeams);
+    bool useWideBeams = m_element->score()->style().styleB(Sid::useWideBeams);
     int startBeams = strokeCount(startChord);
     int endBeams = strokeCount(endChord);
     int startMiddleLine = Chord::minStaffOverlap(m_up, staffLines, startBeams, false, m_beamSpacing / 4.0, useWideBeams, isFullSize);

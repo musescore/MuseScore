@@ -179,7 +179,7 @@ void recognizeMainKeySig(QList<MTrack>& tracks)
             Interval v = track.staff->part()->instrument()->transpose();
             Score* score = track.staff->score();
             ke.setConcertKey(key);
-            if (!v.isZero() && !score->styleB(Sid::concertPitch)) {
+            if (!v.isZero() && !score->style().styleB(Sid::concertPitch)) {
                 v.flip();
                 ke.setKey(transposeKey(key, v));
             }

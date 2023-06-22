@@ -247,7 +247,7 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
         { HairpinType::DECRESC_HAIRPIN,  QT_TRANSLATE_NOOP("palette", "Diminuendo hairpin") }
     };
 
-    qreal w = gpaletteScore->spatium() * 8;
+    qreal w = gpaletteScore->style().spatium() * 8;
     for (std::pair<HairpinType, const char*> pair : hairpins) {
         auto hairpin = Factory::makeHairpin(gpaletteScore->dummy()->segment());
         hairpin->setHairpinType(pair.first);
@@ -465,7 +465,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         cell->drawStaff = false;
     }
 
-    qreal w = gpaletteScore->spatium() * 8;
+    qreal w = gpaletteScore->style().spatium() * 8;
     auto volta = makeElement<Volta>(gpaletteScore);
     volta->setVoltaType(Volta::Type::CLOSED);
     volta->setLen(w);
@@ -545,7 +545,7 @@ PalettePtr PaletteCreator::newLayoutPalette()
     cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Keep measures on the same system"));
     cell->mag = 1.2;
 
-    qreal _spatium = gpaletteScore->spatium();
+    qreal _spatium = gpaletteScore->style().spatium();
     auto spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
     spacer->setSpacerType(SpacerType::DOWN);
     spacer->setGap(Millimetre(3 * _spatium));
@@ -838,7 +838,7 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
     for (TrillType trillType : trillTypes) {
         auto trill = makeElement<Trill>(gpaletteScore);
         trill->setTrillType(trillType);
-        trill->setLen(gpaletteScore->spatium() * 8);
+        trill->setLen(gpaletteScore->style().spatium() * 8);
 
         qreal mag = (trillType == TrillType::TRILL_LINE || trillType == TrillType::PRALLPRALL_LINE) ? 1.0 : 0.8;
         sp->appendElement(trill, TConv::userName(trillType), mag);
@@ -1148,7 +1148,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    qreal w = gpaletteScore->spatium() * 8;
+    qreal w = gpaletteScore->style().spatium() * 8;
 
     auto slur = Factory::makeSlur(gpaletteScore->dummy());
     sp->appendElement(slur, QT_TRANSLATE_NOOP("palette", "Slur"));
@@ -1507,7 +1507,7 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
     // need to be true to enable the "Off" option
     stxt->setSwing(true);
     // 0 (swingUnit) turns of swing; swingRatio is set to default
-    stxt->setSwingParameters(0, stxt->score()->styleI(Sid::swingRatio));
+    stxt->setSwingParameters(0, stxt->style().styleI(Sid::swingRatio));
     /*: System text to switch from swing rhythm back to straight rhythm */
     cell = sp->appendElement(stxt, QT_TRANSLATE_NOOP("palette", "Straight"), 1.3);
     cell->yoffset = 0.4;
@@ -1527,7 +1527,7 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     st->setXmlText(QT_TRANSLATE_NOOP("palette", "Staff text"));
     sp->appendElement(st, QT_TRANSLATE_NOOP("palette", "Staff text"))->setElementTranslated(true);
 
-    qreal w = gpaletteScore->spatium() * 8;
+    qreal w = gpaletteScore->style().spatium() * 8;
     auto staffTextLine = makeElement<TextLine>(gpaletteScore);
     staffTextLine->setLen(w);
     staffTextLine->setBeginText(u"Staff");
@@ -1818,7 +1818,7 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    qreal w = gpaletteScore->spatium() * 8;
+    qreal w = gpaletteScore->style().spatium() * 8;
 
     auto capoLine = makeElement<TextLine>(gpaletteScore);
     capoLine->setLen(w);
@@ -1853,7 +1853,7 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     for (VibratoType vibratoType : vibratos) {
         auto vibrato = makeElement<Vibrato>(gpaletteScore);
         vibrato->setVibratoType(vibratoType);
-        vibrato->setLen(gpaletteScore->spatium() * 8);
+        vibrato->setLen(gpaletteScore->style().spatium() * 8);
         sp->appendElement(vibrato, TConv::userName(vibratoType));
     }
 
@@ -1926,7 +1926,7 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     sp->setGridSize(73, 30);
     sp->setDrawGrid(true);
 
-    qreal w = gpaletteScore->spatium() * 8;
+    qreal w = gpaletteScore->style().spatium() * 8;
 
     auto pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
@@ -1979,7 +1979,7 @@ PalettePtr PaletteCreator::newPitchPalette(bool defaultPalette)
     sp->setDrawGrid(true);
     sp->setMag(0.8);
 
-    qreal w = gpaletteScore->spatium() * 8;
+    qreal w = gpaletteScore->style().spatium() * 8;
 
     auto ottava = makeElement<Ottava>(gpaletteScore);
     ottava->setOttavaType(OttavaType::OTTAVA_8VA);

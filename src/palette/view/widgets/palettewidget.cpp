@@ -577,7 +577,7 @@ QRect PaletteWidget::rectForCellAt(int idx) const
 
 QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
 {
-    qreal _spatium = gpaletteScore->spatium();
+    qreal _spatium = gpaletteScore->style().spatium();
     qreal magS     = configuration()->paletteSpatium() * mag() * paletteScaling();
     qreal mag      = magS / _spatium;
 
@@ -946,10 +946,10 @@ void PaletteWidget::resizeEvent(QResizeEvent* e)
 
 void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
 {
-    qreal _spatium = gpaletteScore->spatium();
+    qreal _spatium = gpaletteScore->style().spatium();
     qreal magS     = configuration()->paletteSpatium() * mag() * paletteScaling();
     qreal mag      = magS / _spatium;
-    gpaletteScore->setSpatium(SPATIUM20);
+    gpaletteScore->style().setSpatium(SPATIUM20);
 
     mu::draw::Painter painter(this, "palette");
     painter.setAntialiasing(true);

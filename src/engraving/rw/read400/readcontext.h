@@ -49,6 +49,7 @@ class Score;
 class Spanner;
 class Staff;
 class Tuplet;
+class MStyle;
 }
 
 namespace mu::engraving::compat {
@@ -83,6 +84,8 @@ public:
     void setMasterCtx(ReadContext* ctx);
     ReadContext* masterCtx();
     const ReadContext* masterCtx() const;
+
+    const MStyle& style() const;
 
     bool pasteMode() const { return _pasteMode; }
     void setPasteMode(bool v) { _pasteMode = v; }

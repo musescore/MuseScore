@@ -221,10 +221,10 @@ void EngravingItem::localSpatiumChanged(double oldValue, double newValue)
 double EngravingItem::spatium() const
 {
     if (systemFlag() || (explicitParent() && parentItem()->systemFlag())) {
-        return score()->spatium();
+        return style().spatium();
     }
     Staff* s = staff();
-    return s ? s->spatium(this) : score()->spatium();
+    return s ? s->spatium(this) : style().spatium();
 }
 
 bool EngravingItem::isInteractionAvailable() const
@@ -251,7 +251,7 @@ bool EngravingItem::offsetIsSpatiumDependent() const
 
 double EngravingItem::magS() const
 {
-    return mag() * (score()->spatium() / SPATIUM20);
+    return mag() * (style().spatium() / SPATIUM20);
 }
 
 //---------------------------------------------------------
@@ -1093,7 +1093,7 @@ void collectElements(void* data, EngravingItem* e)
 
 bool EngravingItem::autoplace() const
 {
-    if (!score() || !score()->styleB(Sid::autoplaceEnabled)) {
+    if (!score() || !style().styleB(Sid::autoplaceEnabled)) {
         return false;
     }
     return !flag(ElementFlag::NO_AUTOPLACE);
@@ -1508,7 +1508,7 @@ bool EngravingItem::symIsValid(SymId id) const
 
 bool EngravingItem::concertPitch() const
 {
-    return score()->styleB(Sid::concertPitch);
+    return style().styleB(Sid::concertPitch);
 }
 
 //---------------------------------------------------------
@@ -2069,7 +2069,7 @@ void EngravingItem::endEdit(EditData&)
 
 double EngravingItem::styleP(Sid idx) const
 {
-    return score()->styleMM(idx);
+    return style().styleMM(idx);
 }
 
 bool EngravingItem::colorsInversionEnabled() const
@@ -2251,7 +2251,7 @@ void EngravingItem::autoplaceSegmentElement(bool above, bool add)
         Segment* s = toSegment(explicitParent());
         Measure* m = s->measure();
 
-        double sp = score()->spatium();
+        double sp = style().spatium();
         staff_idx_t si = staffIdxOrNextVisible();
 
         // if there's no good staff for this object, obliterate it
@@ -2330,7 +2330,7 @@ void EngravingItem::autoplaceMeasureElement(bool above, bool add)
             return;
         }
 
-        double sp = score()->spatium();
+        double sp = style().spatium();
         double minDistance = _minDistance.val() * sp;
 
         SysStaff* ss = m->system()->staff(si);

@@ -100,13 +100,13 @@ PropertyValue PickScrape::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        return score()->styleV(Sid::palmMuteLineWidth);
+        return style().styleV(Sid::palmMuteLineWidth);
 
     case Pid::ALIGN:
         return Align(AlignH::LEFT, AlignV::BASELINE);
 
     case Pid::LINE_STYLE:
-        return score()->styleV(Sid::palmMuteLineStyle);
+        return style().styleV(Sid::palmMuteLineStyle);
 
     case Pid::LINE_VISIBLE:
         return true;
@@ -116,7 +116,7 @@ PropertyValue PickScrape::propertyDefault(Pid propertyId) const
         return PropertyValue::fromValue(PointF(0, 0));
 
     case Pid::BEGIN_FONT_STYLE:
-        return score()->styleV(Sid::palmMuteFontStyle);
+        return style().styleV(Sid::palmMuteFontStyle);
 
     case Pid::BEGIN_TEXT:
     case Pid::CONTINUE_TEXT:

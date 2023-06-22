@@ -260,14 +260,14 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
     tuplet->setRatio(_ratio);
 
     tuplet->setNumberType(numberType);
-    if (tuplet->numberType() == TupletNumberType(tuplet->score()->styleI(Sid::tupletNumberType))) {
+    if (tuplet->numberType() == TupletNumberType(tuplet->style().styleI(Sid::tupletNumberType))) {
         tuplet->setPropertyFlags(Pid::NUMBER_TYPE, PropertyFlags::STYLED);
     } else {
         tuplet->setPropertyFlags(Pid::NUMBER_TYPE, PropertyFlags::UNSTYLED);
     }
 
     tuplet->setBracketType(bracketType);
-    if (tuplet->bracketType() == TupletBracketType(tuplet->score()->styleI(Sid::tupletBracketType))) {
+    if (tuplet->bracketType() == TupletBracketType(tuplet->style().styleI(Sid::tupletBracketType))) {
         tuplet->setPropertyFlags(Pid::BRACKET_TYPE, PropertyFlags::STYLED);
     } else {
         tuplet->setPropertyFlags(Pid::BRACKET_TYPE, PropertyFlags::UNSTYLED);
@@ -538,7 +538,7 @@ Note* Score::addNote(Chord* chord, const NoteVal& noteVal, bool forceAccidental,
     note->setNval(noteVal);
     undoAddElement(note);
     if (forceAccidental) {
-        int tpc = styleB(Sid::concertPitch) ? noteVal.tpc1 : noteVal.tpc2;
+        int tpc = style().styleB(Sid::concertPitch) ? noteVal.tpc1 : noteVal.tpc2;
         AccidentalVal alter = tpc2alter(tpc);
         AccidentalType at = Accidental::value2subtype(alter);
         Accidental* a = Factory::createAccidental(note);
@@ -658,7 +658,7 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
     SlurSegment* ss = new SlurSegment(firstChordRest->score()->dummy()->system());
     ss->setSpannerSegmentType(SpannerSegmentType::SINGLE);
     if (firstChordRest == secondChordRest) {
-        ss->setSlurOffset(Grip::END, PointF(3.0 * firstChordRest->score()->spatium(), 0.0));
+        ss->setSlurOffset(Grip::END, PointF(3.0 * firstChordRest->style().spatium(), 0.0));
     }
     slur->add(ss);
 
@@ -1562,7 +1562,7 @@ NoteVal Score::noteVal(int pitch) const
 
     // if transposing, interpret MIDI pitch as representing desired written pitch
     // set pitch based on corresponding sounding pitch
-    if (!styleB(Sid::concertPitch)) {
+    if (!style().styleB(Sid::concertPitch)) {
         nval.pitch += st->part()->instrument(inputState().tick())->transpose().chromatic;
     }
     // let addPitch calculate tpc values from pitch
@@ -2408,7 +2408,7 @@ void Score::deleteItem(EngravingItem* el)
             ke.setForInstrumentChange(true);
             Key cKey = k->staff()->keySigEvent(k->tick()).concertKey();
             Key tKey = cKey;
-            if (!score()->styleB(Sid::concertPitch)) {
+            if (!style().styleB(Sid::concertPitch)) {
                 Interval v = k->part()->instrument(k->tick())->transpose();
                 v.flip();
                 tKey = transposeKey(cKey, v, k->part()->preferSharpFlat());
@@ -3005,7 +3005,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                 continue;
             }
 
-            bool concertPitch = score->styleB(Sid::concertPitch);
+            bool concertPitch = score->style().styleB(Sid::concertPitch);
             for (Staff* staff : score->staves()) {
                 staff_idx_t staffIdx = staff->idx();
                 Part* part = staff->part();
@@ -3547,7 +3547,7 @@ void Score::cmdFullMeasureRest()
     } else if (selection().isRange()) {
         s1 = selection().startSegment();
         s2 = selection().endSegment();
-        if (styleB(Sid::createMultiMeasureRests)) {
+        if (style().styleB(Sid::createMultiMeasureRests)) {
             // use underlying measures
             if (s1 && s1->measure()->isMMRest()) {
                 s1 = tick2segment(stick1);
@@ -4196,7 +4196,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
 
 void Score::restoreInitialKeySig()
 {
-    bool concertPitch = styleB(Sid::concertPitch);
+    bool concertPitch = style().styleB(Sid::concertPitch);
     static constexpr Fraction startTick = Fraction(0, 1);
 
     Measure* firstMeas = firstMeasure();
@@ -4996,7 +4996,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
 
         Interval interval = staff->part()->instrument(tick)->transpose();
         KeySigEvent nkey  = key;
-        bool concertPitch = score->styleB(Sid::concertPitch);
+        bool concertPitch = score->style().styleB(Sid::concertPitch);
 
         if (interval.chromatic && !concertPitch && !nkey.isAtonal()) {
             interval.flip();
@@ -6107,11 +6107,11 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 // transpose harmony if necessary
                 if (element->isHarmony() && ne != element) {
                     Harmony* h = toHarmony(ne);
-                    if (score->styleB(Sid::concertPitch) != element->score()->styleB(Sid::concertPitch)) {
+                    if (score->style().styleB(Sid::concertPitch) != element->style().styleB(Sid::concertPitch)) {
                         Staff* staffDest = h->staff();
                         Interval interval = staffDest->transpose(tick);
                         if (!interval.isZero()) {
-                            if (!score->styleB(Sid::concertPitch)) {
+                            if (!score->style().styleB(Sid::concertPitch)) {
                                 interval.flip();
                             }
                             int rootTpc = transposeTpc(h->rootTpc(), interval, true);

@@ -149,7 +149,7 @@ void Stem::draw(mu::draw::Painter* painter) const
     if (nDots > 0 && !staffType->stemThrough()) {
         double x     = chord()->dotPosX();
         double y     = ((STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (isUp ? -1.0 : 1.0);
-        double step  = score()->styleS(Sid::dotDotDistance).val() * sp;
+        double step  = style().styleS(Sid::dotDotDistance).val() * sp;
         for (int dot = 0; dot < nDots; dot++, x += step) {
             drawSymbol(SymId::augmentationDot, painter, PointF(x, y));
         }

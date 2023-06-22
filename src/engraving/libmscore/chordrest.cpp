@@ -271,7 +271,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         // transpose
         Harmony* harmony = toHarmony(e);
         Interval interval = staff()->transpose(tick());
-        if (!score()->styleB(Sid::concertPitch) && !interval.isZero()) {
+        if (!style().styleB(Sid::concertPitch) && !interval.isZero()) {
             interval.flip();
             int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
             int baseTpc = transposeTpc(harmony->baseTpc(), interval, true);
@@ -1122,10 +1122,10 @@ Shape ChordRest::shape() const
             if (!l || !l->addToSkyline()) {
                 continue;
             }
-            double lmargin = score()->styleS(Sid::lyricsMinDistance).val() * spatium() * 0.5;
+            double lmargin = style().styleS(Sid::lyricsMinDistance).val() * spatium() * 0.5;
             double rmargin = lmargin;
             LyricsSyllabic syl = l->syllabic();
-            if ((syl == LyricsSyllabic::BEGIN || syl == LyricsSyllabic::MIDDLE) && score()->styleB(Sid::lyricsDashForce)) {
+            if ((syl == LyricsSyllabic::BEGIN || syl == LyricsSyllabic::MIDDLE) && style().styleB(Sid::lyricsDashForce)) {
                 rmargin = std::max(rmargin, styleP(Sid::lyricsDashMinLength));
             }
             // for horizontal spacing we only need the lyrics width:

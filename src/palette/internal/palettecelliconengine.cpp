@@ -167,7 +167,7 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* e
 
     mu::engraving::MScore::pixelRatio = mu::engraving::DPI / dpi;
 
-    const qreal sizeRatio = spatium / gpaletteScore->spatium();
+    const qreal sizeRatio = spatium / gpaletteScore->style().spatium();
     painter.scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size
 
     // calculate bbox

@@ -521,7 +521,7 @@ mu::RectF NotationNoteInput::cursorRect() const
     double h = 0.0;
 
     const mu::engraving::StaffType* staffType = staff->staffType(inputState.tick());
-    double spatium = score()->spatium();
+    double spatium = score()->style().spatium();
     double lineDist = staffType->lineDistance().val() * spatium;
     int lines = staffType->lines();
     int inputStateStringsCount = inputState.string();

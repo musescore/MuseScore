@@ -678,15 +678,15 @@ PropertyValue Tuplet::propertyDefault(Pid id) const
     case Pid::P2:
         return PointF();
     case Pid::ALIGN:
-        return score()->styleV(Sid::tupletAlign);
+        return style().styleV(Sid::tupletAlign);
     case Pid::FONT_FACE:
-        return score()->styleV(Sid::tupletFontFace);
+        return style().styleV(Sid::tupletFontFace);
     case Pid::FONT_SIZE:
-        return score()->styleV(Sid::tupletFontSize);
+        return style().styleV(Sid::tupletFontSize);
     case Pid::FONT_STYLE:
-        return score()->styleV(Sid::tupletFontStyle);
+        return style().styleV(Sid::tupletFontStyle);
     case Pid::SIZE_SPATIUM_DEPENDENT:
-        return score()->styleV(Sid::tupletFontSpatiumDependent);
+        return style().styleV(Sid::tupletFontSpatiumDependent);
     default:
         break;
     }

@@ -89,11 +89,11 @@ void MMRest::draw(mu::draw::Painter* painter) const
 
     numberBox.translate(numberPos);
 
-    if (score()->styleB(Sid::oldStyleMultiMeasureRests)
-        && m_number <= score()->styleI(Sid::mmRestOldStyleMaxMeasures)) {
+    if (style().styleB(Sid::oldStyleMultiMeasureRests)
+        && m_number <= style().styleI(Sid::mmRestOldStyleMaxMeasures)) {
         // draw rest symbols
         double x = (m_width - m_symsWidth) * 0.5;
-        double spacing = score()->styleMM(Sid::mmRestOldStyleSpacing);
+        double spacing = style().styleMM(Sid::mmRestOldStyleSpacing);
         for (SymId sym : m_restSyms) {
             double y = (sym == SymId::restWhole ? -spatium() : 0);
             drawSymbol(sym, painter, PointF(x, y));
@@ -105,13 +105,13 @@ void MMRest::draw(mu::draw::Painter* painter) const
         pen.setCapStyle(mu::draw::PenCapStyle::FlatCap);
 
         // draw horizontal line
-        double hBarThickness = score()->styleMM(Sid::mmRestHBarThickness) * mag;
+        double hBarThickness = style().styleMM(Sid::mmRestHBarThickness) * mag;
         if (hBarThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
             pen.setWidthF(hBarThickness);
             painter->setPen(pen);
             double halfHBarThickness = hBarThickness * .5;
             if (m_numberVisible // avoid painting line through number
-                && score()->styleB(Sid::mmRestNumberMaskHBar)
+                && style().styleB(Sid::mmRestNumberMaskHBar)
                 && numberBox.bottom() >= -halfHBarThickness
                 && numberBox.top() <= halfHBarThickness) {
                 double gapDistance = (numberBox.width() + _spatium) * .5;
@@ -124,11 +124,11 @@ void MMRest::draw(mu::draw::Painter* painter) const
         }
 
         // draw vertical lines
-        double vStrokeThickness = score()->styleMM(Sid::mmRestHBarVStrokeThickness) * mag;
+        double vStrokeThickness = style().styleMM(Sid::mmRestHBarVStrokeThickness) * mag;
         if (vStrokeThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
             pen.setWidthF(vStrokeThickness);
             painter->setPen(pen);
-            double halfVStrokeHeight = score()->styleMM(Sid::mmRestHBarVStrokeHeight) * .5 * mag;
+            double halfVStrokeHeight = style().styleMM(Sid::mmRestHBarVStrokeHeight) * .5 * mag;
             painter->drawLine(LineF(0.0, -halfVStrokeHeight, 0.0, halfVStrokeHeight));
             painter->drawLine(LineF(m_width, -halfVStrokeHeight, m_width, halfVStrokeHeight));
         }
@@ -166,7 +166,7 @@ PropertyValue MMRest::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::MMREST_NUMBER_POS:
-        return score()->styleV(Sid::mmRestNumberPos);
+        return style().styleV(Sid::mmRestNumberPos);
     case Pid::MMREST_NUMBER_VISIBLE:
         return true;
     default:
@@ -218,7 +218,7 @@ bool MMRest::setProperty(Pid propertyId, const PropertyValue& v)
 Shape MMRest::shape() const
 {
     Shape shape;
-    double vStrokeHeight = score()->styleMM(Sid::mmRestHBarVStrokeHeight);
+    double vStrokeHeight = style().styleMM(Sid::mmRestHBarVStrokeHeight);
     shape.add(RectF(0.0, -(vStrokeHeight * .5), m_width, vStrokeHeight));
     if (m_numberVisible) {
         shape.add(numberRect());

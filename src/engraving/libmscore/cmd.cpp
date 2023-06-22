@@ -33,7 +33,6 @@
 #include "style/style.h"
 
 #include "rw/xmlreader.h"
-#include "rw/read400/readcontext.h"
 
 #include "accidental.h"
 #include "articulation.h"
@@ -452,7 +451,7 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
             }
         } else if (cs.updateRange()) {
             // updateRange updates only current score
-            double d = spatium() * .5;
+            double d = style().spatium() * .5;
             _updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
             for (MuseScoreView* v : viewer) {
                 v->dataChanged(_updateState.refresh);
@@ -715,7 +714,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
             if (v.isZero()) {
                 ntpc1 = ntpc2 = ntpc;
             } else {
-                if (styleB(Sid::concertPitch)) {
+                if (style().styleB(Sid::concertPitch)) {
                     v.flip();
                     ntpc1 = ntpc;
                     ntpc2 = mu::engraving::transposeTpc(ntpc, v, true);
@@ -824,7 +823,7 @@ Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
     chord->setDurationType(d);
     chord->setTicks(d.fraction());
     chord->setNoteType(type);
-    chord->setMag(ch->staff()->staffMag(chord->tick()) * styleD(Sid::graceNoteMag));
+    chord->setMag(ch->staff()->staffMag(chord->tick()) * style().styleD(Sid::graceNoteMag));
 
     undoAddElement(chord);
     select(note, SelectType::SINGLE, 0);
@@ -947,7 +946,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
                 chord->add(note);
                 note->setNval(nval, tick);
                 if (forceAccidental) {
-                    int tpc = styleB(Sid::concertPitch) ? nval.tpc1 : nval.tpc2;
+                    int tpc = style().styleB(Sid::concertPitch) ? nval.tpc1 : nval.tpc2;
                     AccidentalVal alter = tpc2alter(tpc);
                     AccidentalType at = Accidental::value2subtype(alter);
                     Accidental* a = Factory::createAccidental(note);
@@ -1991,7 +1990,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
     }
     int tpc1;
     int tpc2 = n->transposeTpc(tpc);
-    if (score->styleB(Sid::concertPitch)) {
+    if (n->style().styleB(Sid::concertPitch)) {
         tpc1 = tpc;
     } else {
         tpc1 = tpc2;
@@ -2736,7 +2735,7 @@ EngravingItem* Score::move(const String& cmd)
             ftm = firstTrailingMeasure(&cr) ? firstTrailingMeasure(&cr) : lastMeasure();
         }
         if (ftm) {
-            if (score()->styleB(Sid::createMultiMeasureRests) && ftm->hasMMRest()) {
+            if (style().styleB(Sid::createMultiMeasureRests) && ftm->hasMMRest()) {
                 ftm = ftm->coveringMMRestOrThis();
             }
             el = !cr ? ftm->first()->nextChordRest(0, false) : ftm->first()->nextChordRest(trackZeroVoice(cr->track()), false);
@@ -2988,9 +2987,9 @@ void Score::cmdMoveRest(Rest* rest, DirectionV dir)
 {
     PointF pos(rest->offset());
     if (dir == DirectionV::UP) {
-        pos.ry() -= spatium();
+        pos.ry() -= style().spatium();
     } else if (dir == DirectionV::DOWN) {
-        pos.ry() += spatium();
+        pos.ry() += style().spatium();
     }
     rest->undoChangeProperty(Pid::OFFSET, pos);
 }
@@ -3694,7 +3693,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
         Segment* seg = h->explicitParent()->isSegment() ? toSegment(h->explicitParent()) : toSegment(h->explicitParent()->explicitParent());
         Fraction tick = seg->tick();
         Fraction duration = r.getActualDuration(tick.ticks(), durationType);
-        bool concertPitch = styleB(Sid::concertPitch);
+        bool concertPitch = style().styleB(Sid::concertPitch);
 
         Chord* chord = Factory::createChord(this->dummy()->segment());     //chord template
         chord->setTrack(h->track());     //set track so notes have a track to sit on
@@ -4315,7 +4314,7 @@ void Score::cmdAddStaffTypeChange(Measure* measure, staff_idx_t staffIdx, StaffT
 
 void Score::cmdToggleMmrest()
 {
-    bool val = !styleB(Sid::createMultiMeasureRests);
+    bool val = !style().styleB(Sid::createMultiMeasureRests);
     deselectAll();
     undo(new ChangeStyleVal(this, Sid::createMultiMeasureRests, val));
 }
@@ -4326,7 +4325,7 @@ void Score::cmdToggleMmrest()
 
 void Score::cmdToggleHideEmpty()
 {
-    bool val = !styleB(Sid::hideEmptyStaves);
+    bool val = !style().styleB(Sid::hideEmptyStaves);
     deselectAll();
     undo(new ChangeStyleVal(this, Sid::hideEmptyStaves, val));
 }
@@ -4562,7 +4561,7 @@ void Score::cmdAddFret(int fret)
 void Score::cmdToggleAutoplace(bool all)
 {
     if (all) {
-        bool val = !styleB(Sid::autoplaceEnabled);
+        bool val = !style().styleB(Sid::autoplaceEnabled);
         undoChangeStyleVal(Sid::autoplaceEnabled, val);
         setLayoutAll();
     } else {

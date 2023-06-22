@@ -195,7 +195,7 @@ void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
     SymId flagsym = SymId::flag32ndUp;
 
     noteList nl = getNoteList();
-    BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), static_cast<int>(nl.size()));
+    BEDrawingDataX dx(headsym, flagsym, magS(), style().spatium(), static_cast<int>(nl.size()));
 
     Pen pen(curColor(), dx.lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
@@ -207,7 +207,7 @@ void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
     double x = dx.xl;
     for (int note : nl) {
         int line = BagpipeNoteInfoList[note].line;
-        BEDrawingDataY dy(line, score()->spatium());
+        BEDrawingDataY dy(line, style().spatium());
         drawGraceNote(painter, dx, dy, flagsym, x, drawFlag);
 
         // draw the ledger line for high A
@@ -221,7 +221,7 @@ void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
 
     if (drawBeam) {
         // beam drawing setup
-        BEDrawingDataY dy(0, score()->spatium());
+        BEDrawingDataY dy(0, style().spatium());
         Pen beamPen(curColor(), dy.bw, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(beamPen);
         // draw the beams

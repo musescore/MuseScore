@@ -265,8 +265,8 @@ RectF TextCursor::cursorRect() const
     const TextFragment* fragment = tline.fragment(static_cast<int>(column()));
 
     mu::draw::Font _font  = fragment ? fragment->font(_text) : _text->font();
-    if (_font.family() == _text->score()->styleSt(Sid::MusicalSymbolFont)) {
-        _font.setFamily(_text->score()->styleSt(Sid::MusicalTextFont), draw::Font::Type::MusicSymbolText);
+    if (_font.family() == _text->style().styleSt(Sid::MusicalSymbolFont)) {
+        _font.setFamily(_text->style().styleSt(Sid::MusicalTextFont), draw::Font::Type::MusicSymbolText);
         if (fragment) {
             _font.setPointSizeF(fragment->format.fontSize());
         }
@@ -810,13 +810,13 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     draw::Font::Type fontType = draw::Font::Type::Unknown;
     if (format.fontFamily() == "ScoreText") {
         if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA || t->textStyleType() == TextStyleType::HARP_PEDAL_DIAGRAM) {
-            std::string fontName = engravingFonts()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont).toStdString())->family();
+            std::string fontName = engravingFonts()->fontByName(t->style().styleSt(Sid::MusicalSymbolFont).toStdString())->family();
             family = String::fromStdString(fontName);
             fontType = draw::Font::Type::MusicSymbol;
             if (t->isDynamic()) {
                 m = DYNAMICS_DEFAULT_FONT_SIZE * t->getProperty(Pid::DYNAMICS_SIZE).toDouble() * spatiumScaling;
-                if (t->score()->styleB(Sid::dynamicsOverrideFont)) {
-                    std::string fontName = engravingFonts()->fontByName(t->score()->styleSt(Sid::dynamicsFont).toStdString())->family();
+                if (t->style().styleB(Sid::dynamicsOverrideFont)) {
+                    std::string fontName = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
                     family = String::fromStdString(fontName);
                 }
             }
@@ -824,12 +824,12 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
             // but Smufl standard is 20pt so multiply x2 here.
             m *= 2;
         } else if (t->isTempoText()) {
-            family = t->score()->styleSt(Sid::MusicalTextFont);
+            family = t->style().styleSt(Sid::MusicalTextFont);
             fontType = draw::Font::Type::MusicSymbolText;
             // to keep desired size ratio (based on 20pt symbol size to 12pt text size)
             m *= 5.0 / 3.0;
         } else {
-            family = t->score()->styleSt(Sid::MusicalTextFont);
+            family = t->style().styleSt(Sid::MusicalTextFont);
             fontType = draw::Font::Type::MusicSymbolText;
         }
         // check if all symbols are available

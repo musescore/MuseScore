@@ -2375,10 +2375,10 @@ double Segment::minRight() const
         distance = std::max(distance, sh.right());
     }
     if (isClefType()) {
-        distance += score()->styleMM(Sid::clefBarlineDistance);
+        distance += style().styleMM(Sid::clefBarlineDistance);
     }
     if (trailer()) {
-        distance += score()->styleMM(Sid::systemTrailerRightMargin);
+        distance += style().styleMM(Sid::systemTrailerRightMargin);
     }
     return distance;
 }
@@ -2422,7 +2422,7 @@ std::pair<double, double> Segment::computeCellWidth(const std::vector<int>& visi
     auto calculateWidth = [measure = measure(), sc = score()->masterScore()](ChordRest* cr) {
         auto quantum = measure->quantumOfSegmentCell();
         return sc->widthOfSegmentCell()
-               * sc->spatium()
+               * sc->style().spatium()
                * cr->globalTicks().numerator() / cr->globalTicks().denominator()
                * quantum.denominator() / quantum.numerator();
     };
@@ -2641,13 +2641,13 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
     double absoluteMinHeaderDist = 1.5 * spatium();
     if (systemHeaderGap) {
         if (isTimeSigType()) {
-            w = std::max(w, minRight() + score()->styleMM(Sid::systemHeaderTimeSigDistance));
+            w = std::max(w, minRight() + style().styleMM(Sid::systemHeaderTimeSigDistance));
         } else {
-            w = std::max(w, minRight() + score()->styleMM(Sid::systemHeaderDistance));
+            w = std::max(w, minRight() + style().styleMM(Sid::systemHeaderDistance));
         }
         if (ns && ns->isStartRepeatBarLineType()) {
             // Align the thin barline of the start repeat to the header
-            w -= score()->styleMM(Sid::endBarWidth) + score()->styleMM(Sid::endBarDistance);
+            w -= style().styleMM(Sid::endBarWidth) + style().styleMM(Sid::endBarDistance);
         }
         double diff = w - minRight() - ns->minLeft();
         if (diff < absoluteMinHeaderDist) {
@@ -2668,9 +2668,9 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
             }
             w = std::max(w, minDist);
         } else if (isChordRestType()) {
-            double minWidth = score()->styleMM(Sid::minMMRestWidth).val();
-            if (!score()->styleB(Sid::oldStyleMultiMeasureRests)) {
-                minWidth += score()->styleMM(Sid::multiMeasureRestMargin).val();
+            double minWidth = style().styleMM(Sid::minMMRestWidth).val();
+            if (!style().styleB(Sid::oldStyleMultiMeasureRests)) {
+                minWidth += style().styleMM(Sid::multiMeasureRestMargin).val();
             }
             w = std::max(w, minWidth);
         }
@@ -2682,7 +2682,7 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
             if (!e || !e->isChord()) {
                 continue;
             }
-            double headerTieMargin = score()->styleMM(Sid::HeaderToLineStartDistance);
+            double headerTieMargin = style().styleMM(Sid::HeaderToLineStartDistance);
             for (Note* note : toChord(e)->notes()) {
                 bool tieOrGlissBack = note->spannerBack().size() || note->tieBack();
                 if (!tieOrGlissBack || note->lineAttachPoints().empty()) {
@@ -2691,11 +2691,11 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
                 const EngravingItem* attachedLine = note->lineAttachPoints().front().line();
                 double minLength = 0.0;
                 if (attachedLine->isTie()) {
-                    minLength = score()->styleMM(Sid::MinTieLength);
+                    minLength = style().styleMM(Sid::MinTieLength);
                 } else if (attachedLine->isGlissando()) {
                     bool straight = toGlissando(attachedLine)->glissandoType() == GlissandoType::STRAIGHT;
-                    minLength = straight ? score()->styleMM(Sid::MinStraightGlissandoLength)
-                                : score()->styleMM(Sid::MinWigglyGlissandoLength);
+                    minLength = straight ? style().styleMM(Sid::MinStraightGlissandoLength)
+                                : style().styleMM(Sid::MinWigglyGlissandoLength);
                 }
                 double tieStartPointX = minRight() + headerTieMargin;
                 double notePosX = w + note->pos().x() + toChord(e)->pos().x() + note->headWidth() / 2;
@@ -2858,7 +2858,7 @@ double Segment::computeDurationStretch(Segment* prevSeg, Fraction minTicks, Frac
 {
     auto doComputeDurationStretch = [&] (Fraction curTicks) -> double
     {
-        double slope = score()->styleD(Sid::measureSpacing);
+        double slope = style().styleD(Sid::measureSpacing);
 
         static constexpr double longNoteThreshold = Fraction(1, 16).toDouble();
 

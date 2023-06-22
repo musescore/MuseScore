@@ -247,7 +247,7 @@ PropertyValue Vibrato::propertyDefault(Pid propertyId) const
     case Pid::PLAY:
         return true;
     case Pid::PLACEMENT:
-        return score()->styleV(Sid::vibratoPlacement);
+        return style().styleV(Sid::vibratoPlacement);
     default:
         return SLine::propertyDefault(propertyId);
     }

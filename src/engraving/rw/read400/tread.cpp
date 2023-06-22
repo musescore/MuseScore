@@ -1198,7 +1198,7 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
                     e.readNext();
                 } else if (t == "pos") { // for older files
                     double prevx = 0;
-                    double accidentalGap = s->score()->styleS(Sid::keysigAccidentalDistance).val();
+                    double accidentalGap = ctx.score()->style().styleS(Sid::keysigAccidentalDistance).val();
                     double _spatium = s->spatium();
                     // count default x position
                     for (CustDef& cd : sig.customKeyDefs()) {
@@ -1500,9 +1500,9 @@ void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
         } else if (tag == "actualNotes") {
             ratio.setNumerator(e.readInt());
         } else if (tag == "p1") {
-            t->setUserPoint1(e.readPoint() * t->score()->spatium());
+            t->setUserPoint1(e.readPoint() * t->style().spatium());
         } else if (tag == "p2") {
-            t->setUserPoint2(e.readPoint() * t->score()->spatium());
+            t->setUserPoint2(e.readPoint() * t->style().spatium());
         } else if (tag == "baseNote") {
             baseLen = TDuration(TConv::fromXml(e.readAsciiText(), DurationType::V_INVALID));
         } else if (tag == "baseDots") {
@@ -1728,12 +1728,12 @@ void TRead::read(SystemDivider* d, XmlReader& e, ReadContext& ctx)
     if (e.attribute("type") == "left") {
         d->setDividerType(SystemDivider::Type::LEFT);
 
-        SymId sym = SymNames::symIdByName(d->score()->styleSt(Sid::dividerLeftSym));
+        SymId sym = SymNames::symIdByName(ctx.style().styleSt(Sid::dividerLeftSym));
         d->setSym(sym, d->score()->engravingFont());
     } else {
         d->setDividerType(SystemDivider::Type::RIGHT);
 
-        SymId sym = SymNames::symIdByName(d->score()->styleSt(Sid::dividerRightSym));
+        SymId sym = SymNames::symIdByName(ctx.style().styleSt(Sid::dividerRightSym));
         d->setSym(sym, d->score()->engravingFont());
     }
     TRead::read(static_cast<Symbol*>(d), e, ctx);
@@ -2046,14 +2046,14 @@ bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
         double gap = e.readDouble();
         b->setTopGap(Millimetre(gap));
         if (b->score()->mscVersion() >= 206) {
-            b->setTopGap(Millimetre(gap * b->score()->spatium()));
+            b->setTopGap(Millimetre(gap * b->style().spatium()));
         }
         b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
     } else if (tag == "bottomGap") {
         double gap = e.readDouble();
         b->setBottomGap(Millimetre(gap));
         if (b->score()->mscVersion() >= 206) {
-            b->setBottomGap(Millimetre(gap * b->score()->spatium()));
+            b->setBottomGap(Millimetre(gap * b->style().spatium()));
         }
         b->setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
     } else if (tag == "leftMargin") {
@@ -2952,7 +2952,7 @@ bool TRead::readProperties(LineSegment* l, XmlReader& e, ReadContext& ctx)
     if (tag == "subtype") {
         l->setSpannerSegmentType(SpannerSegmentType(e.readInt()));
     } else if (tag == "off2") {
-        l->setUserOff2(e.readPoint() * l->score()->spatium());
+        l->setUserOff2(e.readPoint() * l->style().spatium());
     }
 /*      else if (tag == "pos") {
             setOffset(PointF());
@@ -3508,7 +3508,7 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(SlurTieSegment* s, XmlReader& e, ReadContext& ctx)
 {
-    double _spatium = s->score()->spatium();
+    double _spatium = s->style().spatium();
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (s->score()->mscVersion() < 400 && (tag == "o1" || tag == "o2" || tag == "o3" || tag == "o4")) {
@@ -3713,7 +3713,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "barLineSpanTo") {
         s->setBarLineTo(e.readInt());
     } else if (tag == "distOffset") {
-        s->setUserDist(Millimetre(e.readDouble() * s->score()->spatium()));
+        s->setUserDist(Millimetre(e.readDouble() * s->style().spatium()));
     } else if (tag == "mag") {
         /*_userMag =*/
         e.readDouble(0.1, 10.0);
@@ -4027,7 +4027,7 @@ void TRead::read(Tremolo* t, XmlReader& e, ReadContext& ctx)
         // to avoid calling customStyleApplicable() in setProperty(),
         // which cannot be called now because durationType() isn't defined yet.
         else if (tag == "strokeStyle") {
-            t->setStyle(TremoloStyle(e.readInt()));
+            t->setTremoloStyle(TremoloStyle(e.readInt()));
             t->setPropertyFlags(Pid::TREMOLO_STYLE, PropertyFlags::UNSTYLED);
         } else if (tag == "Fragment") {
             BeamFragment f = BeamFragment();

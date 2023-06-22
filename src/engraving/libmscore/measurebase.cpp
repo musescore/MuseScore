@@ -207,7 +207,7 @@ Measure* MeasureBase::nextMeasure() const
 Measure* MeasureBase::nextMeasureMM() const
 {
     Measure* mm = nextMeasure();
-    if (mm && score()->styleB(Sid::createMultiMeasureRests) && mm->hasMMRest()) {
+    if (mm && style().styleB(Sid::createMultiMeasureRests) && mm->hasMMRest()) {
         return mm->mmRest();
     }
     return mm;
@@ -239,7 +239,7 @@ Measure* MeasureBase::prevMeasureMM() const
     while (m) {
         if (m->isMeasure()) {
             Measure* mm = toMeasure(m);
-            if (score()->styleB(Sid::createMultiMeasureRests)) {
+            if (style().styleB(Sid::createMultiMeasureRests)) {
                 if (mm->mmRestCount() >= 0) {
                     if (mm->hasMMRest()) {
                         return mm->mmRest();
@@ -550,7 +550,7 @@ MeasureBase* MeasureBase::nextMM() const
 {
     if (_next
         && _next->isMeasure()
-        && score()->styleB(Sid::createMultiMeasureRests)
+        && style().styleB(Sid::createMultiMeasureRests)
         && toMeasure(_next)->hasMMRest()) {
         return toMeasure(_next)->mmRest();
     }
@@ -565,7 +565,7 @@ MeasureBase* MeasureBase::prevMM() const
 {
     if (_prev
         && _prev->isMeasure()
-        && score()->styleB(Sid::createMultiMeasureRests)) {
+        && style().styleB(Sid::createMultiMeasureRests)) {
         return const_cast<Measure*>(toMeasure(_prev)->coveringMMRestOrThis());
     }
     return _prev;

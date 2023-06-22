@@ -92,7 +92,7 @@ void StaffTypeChange::draw(mu::draw::Painter* painter) const
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }
-    double _spatium = score()->spatium();
+    double _spatium = style().spatium();
     double h  = _spatium * 2.5;
     double w  = _spatium * 2.5;
     double lineDist = 0.35;           // line distance for the icon 'staff lines'

@@ -274,7 +274,7 @@ Sid Fermata::getPropertyStyle(Pid pid) const
 
 double Fermata::mag() const
 {
-    return staff() ? staff()->staffMag(tick()) * score()->styleD(Sid::articulationMag) : 1.0;
+    return staff() ? staff()->staffMag(tick()) * style().styleD(Sid::articulationMag) : 1.0;
 }
 
 void Fermata::setSymIdAndTimeStretch(SymId id)

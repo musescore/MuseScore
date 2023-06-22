@@ -216,7 +216,7 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
                         //
                         mu::engraving::KeySigEvent nKey = ks;
                         mu::engraving::Interval v = part->instrument()->transpose();
-                        if (!nKey.isAtonal() && !v.isZero() && !score->styleB(mu::engraving::Sid::concertPitch)) {
+                        if (!nKey.isAtonal() && !v.isZero() && !score->style().styleB(mu::engraving::Sid::concertPitch)) {
                             v.flip();
                             nKey.setKey(mu::engraving::transposeKey(nKey.concertKey(), v, part->preferSharpFlat()));
                         }
@@ -329,7 +329,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         bool isBaseHeight = (std::abs(score->style().styleD(Sid::pageHeight) - DefaultStyle::baseStyle().styleD(Sid::pageHeight)) < 0.1);
         if (isBaseWidth && isBaseHeight) {
             for (auto st : pageStyles()) {
-                score->setStyleValue(st, DefaultStyle::defaultStyle().value(st));
+                score->style().set(st, DefaultStyle::defaultStyle().value(st));
             }
         }
     }

@@ -67,6 +67,9 @@ public:
 
     void set(Sid idx, const PropertyValue& v);
 
+    double spatium() const { return styleD(Sid::spatium); }
+    void setSpatium(double v) { set(Sid::spatium, v); }
+
     bool isDefault(Sid idx) const;
     void setDefaultStyleVersion(const int defaultsVersion);
     int defaultStyleVersion() const;

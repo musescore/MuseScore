@@ -241,7 +241,7 @@ bool Articulation::isHiddenOnTabStaff() const
         return false;
     }
 
-    return stType->isHiddenElementOnTab(score()->style(), m_showOnTabStyles.first, m_showOnTabStyles.second);
+    return stType->isHiddenElementOnTab(style(), m_showOnTabStyles.first, m_showOnTabStyles.second);
 }
 
 //---------------------------------------------------------
@@ -551,7 +551,7 @@ void Articulation::resetProperty(Pid id)
 
 double Articulation::mag() const
 {
-    return explicitParent() ? parentItem()->mag() * score()->styleD(Sid::articulationMag) : 1.0;
+    return explicitParent() ? parentItem()->mag() * style().styleD(Sid::articulationMag) : 1.0;
 }
 
 void Articulation::computeCategories()
@@ -640,7 +640,7 @@ void Articulation::doAutoplace()
         Measure* m = measure();
         staff_idx_t si = staffIdx();
 
-        double sp = score()->spatium();
+        double sp = style().spatium();
         double md = minDistance().val() * sp;
 
         SysStaff* ss = m->system()->staff(si);

@@ -47,7 +47,7 @@ static void writeMeasure(XmlWriter& xml, WriteContext& ctx, MeasureBase* m,
         }
     }
 
-    if (m->score()->styleB(Sid::createMultiMeasureRests) && m->isMeasure() && toMeasure(m)->mmRest()) {
+    if (m->score()->style().styleB(Sid::createMultiMeasureRests) && m->isMeasure() && toMeasure(m)->mmRest()) {
         MeasureWrite::writeMeasure(toMeasure(m)->mmRest(), xml, ctx, staffIdx, writeSystemElements, forceTimeSig);
     }
 

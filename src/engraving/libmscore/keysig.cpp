@@ -82,8 +82,8 @@ void KeySig::draw(mu::draw::Painter* painter) const
     double _spatium = spatium();
     double step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
     int lines = staff() ? staff()->staffTypeForElement(this)->lines() : 5;
-    double ledgerLineWidth = score()->styleMM(Sid::ledgerLineWidth) * mag();
-    double ledgerExtraLen = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
+    double ledgerLineWidth = style().styleMM(Sid::ledgerLineWidth) * mag();
+    double ledgerExtraLen = style().styleS(Sid::ledgerLineLength).val() * _spatium;
     for (const KeySym& ks: m_sig.keySymbols()) {
         double x = ks.xPos * _spatium;
         double y = ks.line * step;
@@ -153,7 +153,7 @@ void KeySig::setKey(Key cKey)
 {
     KeySigEvent e;
     e.setConcertKey(cKey);
-    if (staff() && !score()->styleB(Sid::concertPitch)) {
+    if (staff() && !style().styleB(Sid::concertPitch)) {
         Interval v = staff()->part()->instrument(tick())->transpose();
         if (!v.isZero()) {
             v.flip();

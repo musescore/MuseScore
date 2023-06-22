@@ -88,6 +88,6 @@ EngravingItem* NoteDot::elementBase() const
 
 double NoteDot::mag() const
 {
-    return parentItem()->mag() * score()->styleD(Sid::dotMag);
+    return parentItem()->mag() * style().styleD(Sid::dotMag);
 }
 }

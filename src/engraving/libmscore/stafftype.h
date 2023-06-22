@@ -321,7 +321,7 @@ public:
     void setColor(const mu::draw::Color& val) { _color = val; }
     Spatium yoffset() const { return _yoffset; }
     void setYoffset(Spatium val) { _yoffset = val; }
-    double spatium(Score*) const;
+    double spatium(const MStyle& style) const;
 
     void setStemless(bool val) { _stemless = val; }
     bool stemless() const { return _stemless; }

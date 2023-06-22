@@ -523,7 +523,7 @@ double Measure::tick2pos(Fraction tck) const
 bool Measure::showsMeasureNumberInAutoMode()
 {
     // Check whether any measure number should be shown
-    if (!score()->styleB(Sid::showMeasureNumber)) {
+    if (!style().styleB(Sid::showMeasureNumber)) {
         return false;
     }
 
@@ -534,10 +534,10 @@ bool Measure::showsMeasureNumberInAutoMode()
 
     // Measure numbers should not show on first measure unless specified with Sid::showMeasureNumberOne
     if (!no()) {
-        return score()->styleB(Sid::showMeasureNumberOne);
+        return style().styleB(Sid::showMeasureNumberOne);
     }
 
-    if (score()->styleB(Sid::measureNumberSystem)) {
+    if (style().styleB(Sid::measureNumberSystem)) {
         // Show either if
         //   1) This is the first measure of the system OR
         //   2) The previous measure in the system is the first, and is irregular.
@@ -546,7 +546,7 @@ bool Measure::showsMeasureNumberInAutoMode()
     } else {
         // In the case of an interval, we should show the measure number either if:
         //   1) We should show them every measure
-        int interval = score()->styleI(Sid::measureNumberInterval);
+        int interval = style().styleI(Sid::measureNumberInterval);
         if (interval == 1) {
             return true;
         }
@@ -554,7 +554,7 @@ bool Measure::showsMeasureNumberInAutoMode()
         //   2) (measureNumber + 1) % interval == 0 (or 1 if measure number one is numbered.)
         // If measure number 1 is numbered, and the interval is let's say 5, then we should number #1, 6, 11, 16, etc.
         // If measure number 1 is not numbered, with the same interval (5), then we should number #5, 10, 15, 20, etc.
-        return ((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0);
+        return ((no() + 1) % style().styleI(Sid::measureNumberInterval)) == (style().styleB(Sid::showMeasureNumberOne) ? 1 : 0);
     }
 }
 
@@ -2738,7 +2738,7 @@ Measure* Measure::mmRestLast() const
 
 const Measure* Measure::coveringMMRestOrThis() const
 {
-    if (!score()->styleB(Sid::createMultiMeasureRests)) {
+    if (!style().styleB(Sid::createMultiMeasureRests)) {
         return this;
     }
 
@@ -3129,7 +3129,7 @@ void Measure::setEndBarLineType(BarLineType val, track_idx_t track, bool visible
 
 double Measure::basicStretch() const
 {
-    double stretch = userStretch() * score()->styleD(Sid::measureSpacing);
+    double stretch = userStretch() * style().styleD(Sid::measureSpacing);
     if (stretch < 1.0) {
         stretch = 1.0;
     }
@@ -3144,7 +3144,7 @@ double Measure::basicWidth() const
 {
     Segment* ls = last();
     double w = (ls->x() + ls->width()) * basicStretch();
-    double minMeasureWidth = score()->styleMM(Sid::minMeasureWidth);
+    double minMeasureWidth = style().styleMM(Sid::minMeasureWidth);
     if (w < minMeasureWidth) {
         w = minMeasureWidth;
     }
@@ -3266,25 +3266,25 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
     if (x <= 0) {
         x = segment->minLeft(ls);
         if (segment->isChordRestType()) {
-            x += score()->styleMM(segment->hasAccidentals() ? Sid::barAccidentalDistance : Sid::barNoteDistance);
+            x += style().styleMM(segment->hasAccidentals() ? Sid::barAccidentalDistance : Sid::barNoteDistance);
         } else if (segment->isClefType() || segment->isHeaderClefType()) {
-            x += score()->styleMM(Sid::clefLeftMargin);
+            x += style().styleMM(Sid::clefLeftMargin);
         } else if (segment->isKeySigType()) {
-            x = std::max(x, score()->styleMM(Sid::keysigLeftMargin).val());
+            x = std::max(x, style().styleMM(Sid::keysigLeftMargin).val());
         } else if (segment->isTimeSigType()) {
-            x = std::max(x, score()->styleMM(Sid::timesigLeftMargin).val());
+            x = std::max(x, style().styleMM(Sid::timesigLeftMargin).val());
         }
     }
 
     // Special case: the start-repeat should overlap the end-repeat of the previous measure
     bool prevIsEndRepeat = prevMeas && prevMeas->repeatEnd() && prevMeasEnd && prevMeasEnd->isEndBarLineType();
     if (prevIsEndRepeat && segment->isStartRepeatBarLineType() && (prevMeas->system() == system())) {
-        x -= score()->styleMM(Sid::endBarWidth);
+        x -= style().styleMM(Sid::endBarWidth);
     }
 
     // Do a final check of chord distances (invisible items may in some cases elude the 2 previous steps)
     if (segment->isChordRestType()) {
-        double barNoteDist = score()->styleMM(Sid::barNoteDistance).val();
+        double barNoteDist = style().styleMM(Sid::barNoteDistance).val();
         for (EngravingItem* e : segment->elist()) {
             if (!e || !e->isChordRest() || (e->staff() && e->staff()->isTabStaff(e->tick()))) {
                 continue;

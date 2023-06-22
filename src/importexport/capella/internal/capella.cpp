@@ -303,7 +303,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
 
             text->setPlainText(st->text());
             QPointF p(st->pos());
-            p = p / 32.0 * score->spatium();
+            p = p / 32.0 * score->style().spatium();
             // text->setUserOff(st->pos());
             text->setOffset(mu::PointF::fromQPointF(p));
             // LOGD("setText %s (%f %f)(%f %f) <%s>",
@@ -870,7 +870,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             Key tKey = Key(o->signature);
             Key cKey = tKey;
             Interval v = score->staff(staffIdx)->part()->instrument(tick)->transpose();
-            if (!v.isZero() && score->styleB(mu::engraving::Sid::concertPitch)) {
+            if (!v.isZero() && score->style().styleB(mu::engraving::Sid::concertPitch)) {
                 cKey = transposeKey(tKey, v);
             }
             okey.setConcertKey(cKey);
@@ -1172,7 +1172,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     }
 
     score->style().set(Sid::measureSpacing, 1.0);
-    score->setSpatium(cap->normalLineDist * DPMM);
+    score->style().setSpatium(cap->normalLineDist * DPMM);
     score->style().set(Sid::smallStaffMag, cap->smallLineDist / cap->normalLineDist);
     score->style().set(Sid::minSystemDistance, Spatium(8));
     score->style().set(Sid::maxSystemDistance, Spatium(12));

@@ -502,7 +502,7 @@ private:
     void updateStavesNumberForSystems();
 
     PaddingTable _paddingTable;
-    double _minimumPaddingUnit = 0.1 * spatium(); // Maybe style setting in future
+    double _minimumPaddingUnit = 0.1 * style().spatium(); // Maybe style setting in future
     bool _updatesLocked = false;
 
 protected:
@@ -893,18 +893,7 @@ public:
     bool loadStyle(const String&, bool ign = false, const bool overlap = false);
     bool saveStyle(const String&);
 
-    const PropertyValue& styleV(Sid idx) const { return style().styleV(idx); }
-    Spatium  styleS(Sid idx) const { return style().styleS(idx); }
-    Millimetre styleMM(Sid idx) const { return style().styleMM(idx); }
-    String styleSt(Sid idx) const { return style().styleSt(idx); }
-    bool styleB(Sid idx) const { return style().styleB(idx); }
-    double styleD(Sid idx) const { return style().styleD(idx); }
-    int styleI(Sid idx) const { return style().styleI(idx); }
-
-    void setStyleValue(Sid sid, const PropertyValue& value) { style().set(sid, value); }
     TranslatableString getTextStyleUserName(TextStyleType tid);
-    double spatium() const { return styleD(Sid::spatium); }
-    void setSpatium(double v) { setStyleValue(Sid::spatium, v); }
 
     // These position are in ticks and not uticks
     Fraction playPos() const { return pos(POS::CURRENT); }
@@ -1032,8 +1021,6 @@ public:
     Segment* lastSegmentMM() const;
 
     void connectTies(bool silent = false);
-
-    double point(const Spatium sp) const { return sp.val() * spatium(); }
 
     void scanElementsInRange(void* data, void (* func)(void*, EngravingItem*), bool all = true);
     int fileDivision() const { return _fileDivision; }   ///< division of current loading *.msc file

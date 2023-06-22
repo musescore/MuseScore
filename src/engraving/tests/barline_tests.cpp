@@ -76,7 +76,7 @@ TEST_F(Engraving_BarlineTests, barline01)
     EXPECT_TRUE(score);
 
     double height, heightMin, heightMax;
-    double spatium = score->spatium();
+    double spatium = score->style().spatium();
     int sysNo = 0;
     for (System* sys : score->systems()) {
         // check number of the brackets of each system

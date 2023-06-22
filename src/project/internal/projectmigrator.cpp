@@ -117,7 +117,7 @@ void ProjectMigrator::resetStyleSettings(mu::engraving::MasterScore* score)
     // there are a few things that need to be updated no matter which version the score is from (#10499)
     // primarily, the differences made concerning barline thickness and distance
     // these updates take place no matter whether or not the other migration options are checked
-    qreal sp = score->spatium();
+    qreal sp = score->style().spatium();
     mu::engraving::MStyle* style = &score->style();
     style->set(mu::engraving::Sid::dynamicsFontSize, 10.0);
     qreal doubleBarDistance = style->styleMM(mu::engraving::Sid::doubleBarDistance);

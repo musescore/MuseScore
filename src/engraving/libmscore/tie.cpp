@@ -89,23 +89,23 @@ void TieSegment::draw(mu::draw::Painter* painter) const
         painter->setBrush(Brush(pen.color()));
         pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setJoinStyle(PenJoinStyle::RoundJoin);
-        pen.setWidthF(score()->styleMM(Sid::SlurEndWidth) * mag);
+        pen.setWidthF(style().styleMM(Sid::SlurEndWidth) * mag);
         break;
     case SlurStyleType::Dotted:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setCapStyle(PenCapStyle::RoundCap);           // True dots
         pen.setDashPattern(dotted);
-        pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
+        pen.setWidthF(style().styleMM(Sid::SlurDottedWidth) * mag);
         break;
     case SlurStyleType::Dashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(dashed);
-        pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
+        pen.setWidthF(style().styleMM(Sid::SlurDottedWidth) * mag);
         break;
     case SlurStyleType::WideDashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(wideDashed);
-        pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
+        pen.setWidthF(style().styleMM(Sid::SlurDottedWidth) * mag);
         break;
     case SlurStyleType::Undefined:
         break;
@@ -285,7 +285,7 @@ void TieSegment::computeBezier(PointF shoulderOffset)
     PointF bezier1(bezier1X, -shoulderH);
     PointF bezier2(bezier2X, -shoulderH);
 
-    double w = score()->styleMM(Sid::SlurMidWidth) - score()->styleMM(Sid::SlurEndWidth);
+    double w = style().styleMM(Sid::SlurMidWidth) - style().styleMM(Sid::SlurEndWidth);
     if (staff()) {
         w *= staff()->staffMag(tie()->tick());
     }

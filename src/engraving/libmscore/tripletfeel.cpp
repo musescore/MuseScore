@@ -165,10 +165,10 @@ PropertyValue TripletFeel::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::FONT_SIZE:
-        return score()->styleV(Sid::subTitleFontSize);
+        return style().styleV(Sid::subTitleFontSize);
 
     case Pid::FONT_STYLE:
-        return score()->styleV(Sid::tempoFontStyle);
+        return style().styleV(Sid::tempoFontStyle);
 
     default:
         return SystemText::propertyDefault(propertyId);

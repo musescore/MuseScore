@@ -334,7 +334,7 @@ void Accidental::computeMag()
 {
     double m = explicitParent() ? parentItem()->mag() : 1.0;
     if (isSmall()) {
-        m *= score()->styleD(Sid::smallNoteMag);
+        m *= style().styleD(Sid::smallNoteMag);
     }
     setMag(m);
 }

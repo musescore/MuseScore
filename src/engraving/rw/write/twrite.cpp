@@ -247,7 +247,7 @@ void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid)
         if (d.isValid() && std::abs(f1 - d.toReal()) < 0.0001) {            // fuzzy compare
             return;
         }
-        p = PropertyValue(Spatium::fromMM(f1, item->score()->spatium()));
+        p = PropertyValue(Spatium::fromMM(f1, item->style().spatium()));
         d = PropertyValue();
     } else if (P_TYPE::POINT == type) {
         PointF p1 = p.value<PointF>();
@@ -257,7 +257,7 @@ void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid)
                 return;
             }
         }
-        double q = item->offsetIsSpatiumDependent() ? item->score()->spatium() : DPMM;
+        double q = item->offsetIsSpatiumDependent() ? item->style().spatium() : DPMM;
         p = PropertyValue(p1 / q);
         d = PropertyValue();
     }
@@ -273,11 +273,11 @@ void TWrite::writeStyledProperties(const EngravingItem* item, XmlWriter& xml)
 
 void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
 {
-    bool autoplaceEnabled = item->score()->styleB(Sid::autoplaceEnabled);
+    bool autoplaceEnabled = item->score()->style().styleB(Sid::autoplaceEnabled);
     if (!autoplaceEnabled) {
-        item->score()->setStyleValue(Sid::autoplaceEnabled, true);
+        item->score()->style().set(Sid::autoplaceEnabled, true);
         writeProperty(item, xml, Pid::AUTOPLACE);
-        item->score()->setStyleValue(Sid::autoplaceEnabled, autoplaceEnabled);
+        item->score()->style().set(Sid::autoplaceEnabled, autoplaceEnabled);
     } else {
         writeProperty(item, xml, Pid::AUTOPLACE);
     }
@@ -1289,7 +1289,7 @@ void TWrite::writeProperties(const SLine* item, XmlWriter& xml, WriteContext& ct
     //
     // write user modified layout and other segment properties
     //
-    double _spatium = item->score()->spatium();
+    double _spatium = item->style().spatium();
     for (const SpannerSegment* seg : item->spannerSegments()) {
         xml.startElement("Segment", seg);
         xml.tag("subtype", int(seg->spannerSegmentType()));
@@ -1389,7 +1389,7 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
             Segment* segment = item->getParentSeg();
             Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
             const Interval& interval = item->staff()->transpose(tick);
-            if (ctx.clipboardmode() && !item->score()->styleB(Sid::concertPitch) && interval.chromatic) {
+            if (ctx.clipboardmode() && !item->score()->style().styleB(Sid::concertPitch) && interval.chromatic) {
                 rRootTpc = transposeTpc(item->rootTpc(), interval, true);
                 rBaseTpc = transposeTpc(item->baseTpc(), interval, true);
             }
@@ -2255,7 +2255,7 @@ void TWrite::writeSlur(const SlurTieSegment* seg, XmlWriter& xml, WriteContext& 
 
     xml.startElement(seg, { { "no", no } });
 
-    double _spatium = seg->score()->spatium();
+    double _spatium = seg->style().spatium();
     if (!seg->ups(Grip::START).off.isNull()) {
         xml.tagPoint("o1", seg->ups(Grip::START).off / _spatium);
     }

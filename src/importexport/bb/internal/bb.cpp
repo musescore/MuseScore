@@ -559,7 +559,7 @@ Err importBB(MasterScore* score, const QString& name)
         Key key = Key(bb.key());
         Key cKey = key;
         Interval v = staff->part()->instrument(tick)->transpose();
-        if (!v.isZero() && !score->styleB(Sid::concertPitch)) {
+        if (!v.isZero() && !score->style().styleB(Sid::concertPitch)) {
             cKey = transposeKey(key, v);
         }
         ke.setConcertKey(cKey);

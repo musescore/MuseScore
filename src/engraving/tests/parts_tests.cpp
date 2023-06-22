@@ -36,9 +36,6 @@
 #include "libmscore/note.h"
 #include "libmscore/part.h"
 #include "libmscore/segment.h"
-#include "libmscore/staff.h"
-#include "libmscore/stafftype.h"
-#include "libmscore/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -266,7 +263,7 @@ TEST_F(Engraving_PartsTests, styleScore)
     ASSERT_TRUE(score);
 
     createParts(score);
-    score->setStyleValue(Sid::clefLeftMargin, 4.0);
+    score->style().set(Sid::clefLeftMargin, 4.0);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"partStyle-score-test.mscx", PARTS_DATA_DIR + u"partStyle-score-ref.mscx"));
     delete score;
 }

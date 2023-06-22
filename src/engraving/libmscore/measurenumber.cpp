@@ -46,7 +46,7 @@ MeasureNumber::MeasureNumber(Measure* parent, TextStyleType tid)
 {
     initElementStyle(&measureNumberStyle);
 
-    setHPlacement(score()->styleV(Sid::measureNumberHPlacement).value<PlacementH>());
+    setHPlacement(style().styleV(Sid::measureNumberHPlacement).value<PlacementH>());
 }
 
 //---------------------------------------------------------
@@ -70,9 +70,9 @@ engraving::PropertyValue MeasureNumber::propertyDefault(Pid id) const
     case Pid::TEXT_STYLE:
         return TextStyleType::MEASURE_NUMBER;
     case Pid::PLACEMENT:
-        return score()->styleV(Sid::measureNumberVPlacement);
+        return style().styleV(Sid::measureNumberVPlacement);
     case Pid::HPLACEMENT:
-        return score()->styleV(Sid::measureNumberHPlacement);
+        return style().styleV(Sid::measureNumberHPlacement);
     default:
         return MeasureNumberBase::propertyDefault(id);
     }
