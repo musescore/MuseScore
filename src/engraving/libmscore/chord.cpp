@@ -1111,20 +1111,22 @@ int Chord::calcMinStemLength()
         int outSidePadding = style().styleMM(Sid::tremoloOutSidePadding).val() / _spatium * 4.0;
         int noteSidePadding = style().styleMM(Sid::tremoloNoteSidePadding).val() / _spatium * 4.0;
 
-        Note* lineNote = m_up ? upNote() : downNote();
-        if (lineNote->line() == INVALID_LINE) {
-            lineNote->updateLine();
-        }
-
-        int line = lineNote->line();
-        line *= 2; // convert to quarter spaces
         int outsideStaffOffset = 0;
-        if (!m_up && line < -2) {
-            outsideStaffOffset = -line;
-        } else if (m_up && line > staff()->lines(tick()) * 4) {
-            outsideStaffOffset = line - (staff()->lines(tick()) * 4) + 4;
-        }
+        if (!staff()->isTabStaff(tick())) {
+            Note* lineNote = m_up ? upNote() : downNote();
+            if (lineNote->line() == INVALID_LINE) {
+                lineNote->updateLine();
+            }
 
+            int line = lineNote->line();
+            line *= 2; // convert to quarter spaces
+
+            if (!m_up && line < -2) {
+                outsideStaffOffset = -line;
+            } else if (m_up && line > staff()->lines(tick()) * 4) {
+                outsideStaffOffset = line - (staff()->lines(tick()) * 4) + 4;
+            }
+        }
         minStemLength += (outSidePadding + std::max(noteSidePadding, outsideStaffOffset));
 
         if (_hook) {
