@@ -468,7 +468,7 @@ void AbstractNotationPaintView::showShadowNote(const PointF& pos)
     redraw();
 }
 
-void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos, bool activateFocus)
+void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos)
 {
     TRACEFUNC;
 
@@ -478,10 +478,6 @@ void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, 
     }
 
     emit showContextMenuRequested(static_cast<int>(elementType), pos);
-
-    if (activateFocus) {
-        dispatcher()->dispatch("nav-first-control");
-    }
 }
 
 void AbstractNotationPaintView::hideContextMenu()
@@ -493,7 +489,7 @@ void AbstractNotationPaintView::hideContextMenu()
     }
 }
 
-void AbstractNotationPaintView::showElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size, bool activateFocus)
+void AbstractNotationPaintView::showElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size)
 {
     TRACEFUNC;
 
@@ -508,10 +504,6 @@ void AbstractNotationPaintView::showElementPopup(const ElementType& elementType,
     PopupModelType modelType = AbstractElementPopupModel::modelTypeFromElement(elementType);
 
     emit showElementPopupRequested(modelType, pos, elemSize);
-
-    if (activateFocus) {
-        dispatcher()->dispatch("nav-first-control");
-    }
 }
 
 void AbstractNotationPaintView::hideElementPopup()
@@ -523,15 +515,14 @@ void AbstractNotationPaintView::hideElementPopup()
     }
 }
 
-void AbstractNotationPaintView::toggleElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size,
-                                                   bool activateFocus)
+void AbstractNotationPaintView::toggleElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size)
 {
     if (m_isPopupOpen) {
         hideElementPopup();
         return;
     }
 
-    showElementPopup(elementType, pos, size, activateFocus);
+    showElementPopup(elementType, pos, size);
 }
 
 void AbstractNotationPaintView::paint(QPainter* qp)
@@ -1126,7 +1117,7 @@ bool AbstractNotationPaintView::event(QEvent* event)
 
     if (isContextMenuEvent) {
         showContextMenu(m_inputController->selectionType(),
-                        fromLogical(m_inputController->selectionElementPos()).toQPointF(), true);
+                        fromLogical(m_inputController->selectionElementPos()).toQPointF());
     } else if (eventType == QEvent::Type::ShortcutOverride) {
         bool shouldOverrideShortcut = shortcutOverride(keyEvent);
 
