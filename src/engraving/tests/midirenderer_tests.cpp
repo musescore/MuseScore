@@ -46,8 +46,17 @@ static NPlayEvent noteEvent(int pitch, int volume, int channel)
 
 static void checkEventInterval(EventMap& events, int tickStart, int tickEnd, int pitch, int volume, int channel = DEFAULT_CHANNEL)
 {
-    EXPECT_EQ(events.find(tickStart)->second, noteEvent(pitch, volume, channel));
-    EXPECT_EQ(events.find(tickEnd)->second, noteEvent(pitch, NOTE_OFF_VOLUME, channel));
+    auto it1 = events.find(tickStart);
+    auto it2 = events.find(tickEnd);
+
+    EXPECT_TRUE(it1 != events.end());
+    EXPECT_TRUE(it2 != events.end());
+
+    EXPECT_EQ(it1->second, noteEvent(pitch, volume, channel));
+    EXPECT_EQ(it2->second, noteEvent(pitch, NOTE_OFF_VOLUME, channel));
+
+    events.erase(it1);
+    events.erase(it2);
 }
 
 static EventMap renderMidiEvents(const String& fileName, bool eachStringHasChannel = false, bool instrumentsHaveEffects = false)
@@ -362,6 +371,19 @@ TEST_F(MidiRenderer_Tests, slideInAndOut)
     checkEventInterval(events, 720, 798, 61, glissVol);
     checkEventInterval(events, 799, 877, 62, glissVol);
     checkEventInterval(events, 879, 957, 63, glissVol);
+}
+
+TEST_F(MidiRenderer_Tests, sameStringDifferentStaves)
+{
+    constexpr int defVol = 80; // mf
+
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"same_string_diff_staves.mscx", true));
+
+    EXPECT_EQ(events.size(), 6);
+
+    checkEventInterval(events, 0, 239, 62, defVol, DEFAULT_CHANNEL);
+    checkEventInterval(events, 240, 479, 62, defVol, DEFAULT_CHANNEL);
+    checkEventInterval(events, 0, 1919, 35, defVol, DEFAULT_CHANNEL + 1);
 }
 
 /*****************************************************************************
