@@ -966,9 +966,6 @@ public:
 
     Text* getText(TextStyleType subtype) const;
 
-    bool enableVerticalSpread() const;
-    void setEnableVerticalSpread(bool val);
-
     ScoreOrder scoreOrder() const;
     void setScoreOrder(ScoreOrder order);
     void updateBracesAndBarlines(Part* part, size_t index);

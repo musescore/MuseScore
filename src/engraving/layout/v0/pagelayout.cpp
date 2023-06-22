@@ -425,13 +425,13 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
     checkDivider(ctx, true, lastSystem, 0.0, true);        // remove
     checkDivider(ctx, false, lastSystem, 0.0, true);       // remove
 
-    if (sList.empty() || MScore::noVerticalStretch || ctx.conf().enableVerticalSpread() || ctx.conf().layoutMode() == LayoutMode::SYSTEM) {
+    if (sList.empty() || MScore::noVerticalStretch || ctx.conf().isVerticalSpreadEnabled() || ctx.conf().layoutMode() == LayoutMode::SYSTEM) {
         if (ctx.conf().layoutMode() == LayoutMode::FLOAT) {
             double y = restHeight * .5;
             for (System* system : page->systems()) {
                 system->move(PointF(0.0, y));
             }
-        } else if ((ctx.conf().layoutMode() != LayoutMode::SYSTEM) && ctx.conf().enableVerticalSpread()) {
+        } else if ((ctx.conf().layoutMode() != LayoutMode::SYSTEM) && ctx.conf().isVerticalSpreadEnabled()) {
             distributeStaves(ctx, page, footerPadding);
         }
 

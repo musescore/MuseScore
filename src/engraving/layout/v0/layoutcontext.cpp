@@ -96,17 +96,14 @@ int LayoutConfiguration::pageNumberOffset() const
     return score()->pageNumberOffset();
 }
 
-bool LayoutConfiguration::enableVerticalSpread() const
+bool LayoutConfiguration::isVerticalSpreadEnabled() const
 {
-    IF_ASSERT_FAILED(score()) {
-        return 0;
-    }
-    return score()->enableVerticalSpread();
+    return styleB(Sid::enableVerticalSpread) && (layoutMode() != LayoutMode::SYSTEM);
 }
 
 double LayoutConfiguration::maxSystemDistance() const
 {
-    if (enableVerticalSpread()) {
+    if (isVerticalSpreadEnabled()) {
         return style().styleMM(Sid::maxSystemSpread);
     } else {
         return style().styleMM(Sid::maxSystemDistance);
