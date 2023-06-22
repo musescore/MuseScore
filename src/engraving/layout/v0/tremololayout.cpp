@@ -25,15 +25,15 @@
 #include "libmscore/stem.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/note.h"
-#include "libmscore/score.h"
 #include "libmscore/staff.h"
+#include "libmscore/measure.h"
 
 #include "chordlayout.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::layout::v0;
 
-void TremoloLayout::layout(Tremolo* item, LayoutContext&)
+void TremoloLayout::layout(Tremolo* item, LayoutContext& ctx)
 {
     item->path = item->basePath();
 
@@ -70,13 +70,13 @@ void TremoloLayout::layout(Tremolo* item, LayoutContext&)
             }
         }
         y = anchor1->y();
-        h = (item->score()->styleMM(Sid::tremoloNoteSidePadding).val() + item->bbox().height()) * item->_chord1->intrinsicMag();
+        h = (ctx.conf().styleMM(Sid::tremoloNoteSidePadding).val() + item->bbox().height()) * item->_chord1->intrinsicMag();
     }
 
     if (item->twoNotes()) {
-        layoutTwoNotesTremolo(item, x, y, h, item->spatium());
+        layoutTwoNotesTremolo(item, ctx, x, y, h, item->spatium());
     } else {
-        layoutOneNoteTremolo(item, x, y, h, item->spatium());
+        layoutOneNoteTremolo(item, ctx, x, y, h, item->spatium());
     }
 }
 
@@ -84,7 +84,7 @@ void TremoloLayout::layout(Tremolo* item, LayoutContext&)
 //   layoutOneNoteTremolo
 //---------------------------------------------------------
 
-void TremoloLayout::layoutOneNoteTremolo(Tremolo* item, double x, double y, double h, double spatium)
+void TremoloLayout::layoutOneNoteTremolo(Tremolo* item, LayoutContext& ctx, double x, double y, double h, double spatium)
 {
     assert(!item->twoNotes());
 
@@ -93,7 +93,7 @@ void TremoloLayout::layoutOneNoteTremolo(Tremolo* item, double x, double y, doub
     double mag = item->chord()->intrinsicMag();
     spatium *= mag;
 
-    double yOffset = h - item->score()->styleMM(Sid::tremoloOutSidePadding).val() * mag;
+    double yOffset = h - ctx.conf().styleMM(Sid::tremoloOutSidePadding).val() * mag;
 
     int beams = item->chord()->beams();
     if (item->chord()->hook()) {
@@ -101,7 +101,7 @@ void TremoloLayout::layoutOneNoteTremolo(Tremolo* item, double x, double y, doub
         // straight flags and traditional flags have different requirements because of their slopes
         // away from the stem. Straight flags have a shallower slope and a lot more space in general
         // so we can place the trem higher in that case
-        bool straightFlags = item->score()->styleB(Sid::useStraightNoteFlags);
+        bool straightFlags = ctx.conf().styleB(Sid::useStraightNoteFlags);
         if (straightFlags) {
             yOffset -= 0.75 * spatium;
         } else {
@@ -112,7 +112,7 @@ void TremoloLayout::layoutOneNoteTremolo(Tremolo* item, double x, double y, doub
         double beamOffset = straightFlags ? 0.75 : 0.5;
         yOffset -= beams >= 2 ? beamOffset * spatium : 0.0;
     } else if (beams) {
-        yOffset -= (beams * (item->score()->styleB(Sid::useWideBeams) ? 1.0 : 0.75) - 0.25) * spatium;
+        yOffset -= (beams * (ctx.conf().styleB(Sid::useWideBeams) ? 1.0 : 0.75) - 0.25) * spatium;
     }
     yOffset -= item->isBuzzRoll() && up ? 0.5 * spatium : 0.0;
     yOffset -= up ? 0.0 : item->minHeight() * spatium / mag;
@@ -133,7 +133,7 @@ void TremoloLayout::layoutOneNoteTremolo(Tremolo* item, double x, double y, doub
 //   layoutTwoNotesTremolo
 //---------------------------------------------------------
 
-void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, double x, double y, double h, double spatium)
+void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, double x, double y, double h, double spatium)
 {
     UNUSED(x);
     UNUSED(y);
@@ -181,7 +181,6 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, double x, double y, dou
         item->_chord1->setUp(item->_chord1->staffMove() == 0 ? isUp : !isUp); // if on a different staff, flip stem dir
         item->_chord2->setUp(item->_chord2->staffMove() == 0 ? isUp : !isUp);
 
-        LayoutContext ctx(item->score());
         ChordLayout::layoutStem(item->_chord1, ctx);
         ChordLayout::layoutStem(item->_chord2, ctx);
     }
@@ -195,7 +194,7 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, double x, double y, dou
         int idx = (item->_direction == DirectionV::AUTO || item->_direction == DirectionV::DOWN) ? 0 : 1;
         double startY = item->_beamFragment.py1[idx];
         double endY = item->_beamFragment.py2[idx];
-        if (item->score()->styleB(Sid::snapCustomBeamsToGrid)) {
+        if (ctx.conf().styleB(Sid::snapCustomBeamsToGrid)) {
             const double quarterSpace = item->EngravingItem::spatium() / 4;
             startY = round(startY / quarterSpace) * quarterSpace;
             endY = round(endY / quarterSpace) * quarterSpace;
@@ -206,7 +205,6 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, double x, double y, dou
         item->_endAnchor.setY(endY);
         item->_layoutInfo.setAnchors(item->_startAnchor, item->_endAnchor);
 
-        LayoutContext ctx(item->score());
         ChordLayout::layoutStem(item->_chord1, ctx);
         ChordLayout::layoutStem(item->_chord2, ctx);
 
@@ -220,7 +218,7 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, double x, double y, dou
 
     notes.clear();
     for (ChordRest* cr : chordRests) {
-        double m = cr->isSmall() ? item->score()->styleD(Sid::smallNoteMag) : 1.0;
+        double m = cr->isSmall() ? ctx.conf().styleD(Sid::smallNoteMag) : 1.0;
         mag = std::max(mag, m);
         if (cr->isChord()) {
             Chord* chord = toChord(cr);

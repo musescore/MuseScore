@@ -110,6 +110,11 @@ double LayoutConfiguration::maxSystemDistance() const
     }
 }
 
+bool LayoutConfiguration::isShowInstrumentNames() const
+{
+    return score()->showInstrumentNames();
+}
+
 // ================================================
 // DomAccessor
 // ================================================
@@ -135,6 +140,14 @@ const std::vector<Part*>& DomAccessor::parts() const
         return dummy;
     }
     return score()->parts();
+}
+
+int DomAccessor::visiblePartCount() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return 0;
+    }
+    return score()->visiblePartCount();
 }
 
 size_t DomAccessor::npages() const
@@ -245,6 +258,14 @@ const SpannerMap& DomAccessor::spannerMap() const
         return dummy;
     }
     return score()->spannerMap();
+}
+
+const Segment* DomAccessor::lastSegment() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->lastSegment();
 }
 
 const ChordRest* DomAccessor::findCR(Fraction tick, track_idx_t track) const
@@ -414,6 +435,23 @@ void LayoutContext::addRefresh(const mu::RectF& r)
         return;
     }
     m_score->addRefresh(r);
+}
+
+const Selection& LayoutContext::selection() const
+{
+    IF_ASSERT_FAILED(m_score) {
+        static const Selection dummy;
+        return dummy;
+    }
+    return m_score->selection();
+}
+
+void LayoutContext::select(EngravingItem* item, SelectType type, staff_idx_t staff)
+{
+    IF_ASSERT_FAILED(m_score) {
+        return;
+    }
+    m_score->select(item, type, staff);
 }
 
 void LayoutContext::deselect(EngravingItem* el)

@@ -217,7 +217,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
 
     if (item->_ticks.isNotZero()) {
         // set melisma end
-        ChordRest* ecr = item->score()->findCR(item->endTick(), item->track());
+        ChordRest* ecr = ctx.mutDom().findCR(item->endTick(), item->track());
         if (ecr) {
             ecr->setMelismaEnd(true);
         }
@@ -243,14 +243,14 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
         track_idx_t lyricsTrack  = item->lyrics()->track();
 
         // find segment with tick >= endTick
-        Segment* s = lyricsSegment;
+        const Segment* s = lyricsSegment;
         while (s && s->tick() < lyricsEndTick) {
             s = s->nextCR(lyricsTrack, true);
         }
         if (!s) {
             // user probably deleted measures at end of score, leaving this melisma too long
             // set s to last segment and reset lyricsEndTick to trigger FIXUP code below
-            s = item->score()->lastSegment();
+            s = ctx.dom().lastSegment();
             lyricsEndTick = Fraction(-1, 1);
         }
         EngravingItem* se = s->element(lyricsTrack);
@@ -259,7 +259,7 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
             // advance to next CR, or last segment if no next CR
             s = s->nextCR(lyricsTrack, true);
             if (!s) {
-                s = item->score()->lastSegment();
+                s = ctx.dom().lastSegment();
             }
         } else {
             // FIXUP - lyrics tick count not valid
@@ -267,8 +267,8 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
             // so let's fix it here
             // s is already pointing to segment past endTick (or to last segment)
             // we should shorten the lyrics tick count to make this work
-            Segment* ns = s;
-            Segment* ps = s->prev1(SegmentType::ChordRest);
+            const Segment* ns = s;
+            const Segment* ps = s->prev1(SegmentType::ChordRest);
             while (ps && ps != lyricsSegment) {
                 EngravingItem* pe = ps->element(lyricsTrack);
                 // we're looking for an actual chord on this track

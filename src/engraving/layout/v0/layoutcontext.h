@@ -47,9 +47,12 @@ class System;
 class Staff;
 class Measure;
 class ChordRest;
+class Segment;
 
 class UndoCommand;
 class EditData;
+
+class Selection;
 }
 
 namespace mu::engraving::compat {
@@ -85,6 +88,7 @@ public:
     int pageNumberOffset() const;
     bool isVerticalSpreadEnabled() const;
     double maxSystemDistance() const;
+    bool isShowInstrumentNames() const;
 
     const MStyle& style() const;
 
@@ -127,6 +131,7 @@ public:
 
     // Const access
     const std::vector<Part*>& parts() const;
+    int visiblePartCount() const;
 
     size_t npages() const;
     const std::vector<Page*>& pages() const;
@@ -143,6 +148,8 @@ public:
     const Measure* firstMeasure() const;
 
     const SpannerMap& spannerMap() const;
+
+    const Segment* lastSegment() const;
 
     const ChordRest* findCR(Fraction tick, track_idx_t track) const;
 
@@ -301,6 +308,8 @@ public:
     void addRefresh(const mu::RectF& r);
 
     // Other
+    const Selection& selection() const;
+    void select(EngravingItem* item, SelectType = SelectType::SINGLE, staff_idx_t staff = 0);
     void deselect(EngravingItem* el);
 
 private:

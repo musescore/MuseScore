@@ -40,8 +40,8 @@ public:
     static std::pair<double, double> extendedStemLenWithTwoNoteTremolo(Tremolo* tremolo, double stemLen1, double stemLen2);
 
 private:
-    static void layoutOneNoteTremolo(Tremolo* item, double x, double y, double h, double spatium);
-    static void layoutTwoNotesTremolo(Tremolo* item, double x, double y, double h, double spatium);
+    static void layoutOneNoteTremolo(Tremolo* item, LayoutContext& ctx, double x, double y, double h, double spatium);
+    static void layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, double x, double y, double h, double spatium);
 };
 }
 

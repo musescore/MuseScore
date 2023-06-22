@@ -50,7 +50,7 @@ void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
 
     double _spatium = item->spatium();
 
-    if (item->score()->isPaletteScore() || item->tick() == Fraction(-1, 1)) {
+    if (ctx.conf().isPaletteMode() || item->tick() == Fraction(-1, 1)) {
         //
         // when used in a palette, slur has no parent and
         // tick and tick2 has no meaning so no layout is
@@ -58,7 +58,7 @@ void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
         //
         SlurSegment* s;
         if (item->spannerSegments().empty()) {
-            s = new SlurSegment(item->score()->dummy()->system());
+            s = new SlurSegment(ctx.mutDom().dummyParent()->system());
             s->setTrack(item->track());
             item->add(s);
         } else {
@@ -126,7 +126,7 @@ void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
     SlurPos sPos;
     slurPos(item, &sPos, ctx);
 
-    const std::vector<System*>& sl = item->score()->systems();
+    const std::vector<System*>& sl = ctx.dom().systems();
     ciSystem is = sl.begin();
     while (is != sl.end()) {
         if (*is == sPos.system1) {
@@ -483,7 +483,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
     // Gonville and MuseJazz have really weirdly-shaped hooks compared to Leland and Bravura and Emmentaler,
     // so we need to adjust the slope of our hook-avoidance line. this will be unnecessary when hooks have
     // SMuFL anchors
-    bool bulkyHook = item->score()->engravingFont()->family() == "Gonville" || item->score()->engravingFont()->family() == "MuseJazz";
+    bool bulkyHook = ctx.engravingFont()->family() == "Gonville" || ctx.engravingFont()->family() == "MuseJazz";
     const double fakeCutoutSlope = bulkyHook ? 1.5 : 1.0;
 
     if (item->endCR() == 0) {
@@ -604,7 +604,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
         fixArticulations(item, pt, sc, __up, true);
         // adjust for hook
         double fakeCutout = 0.0;
-        if (!item->score()->styleB(Sid::useStraightNoteFlags)) {
+        if (!ctx.conf().styleB(Sid::useStraightNoteFlags)) {
             Hook* hook = sc->hook();
             // regular flags
 
@@ -694,7 +694,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
                 // and slur direction is same as start chord (stem side)
 
                 // in these cases, layout start of slur to stem
-                double beamWidthSp = item->score()->styleS(Sid::beamWidth).val() * beam1->magS();
+                double beamWidthSp = ctx.conf().styleS(Sid::beamWidth).val() * beam1->magS();
                 double offset = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
                 double sh = stem1->length() + (beamWidthSp / 2) + offset;
                 if (item->_up) {
@@ -845,7 +845,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
                     // and start chordrest is not a grace chord
 
                     // in these cases, layout end of slur to stem
-                    double beamWidthSp = beam2 ? item->score()->styleS(Sid::beamWidth).val() : 0;
+                    double beamWidthSp = beam2 ? ctx.conf().styleS(Sid::beamWidth).val() : 0;
                     Note* note = item->_up ? sc->upNote() : sc->downNote();
                     double stemHeight = stem2 ? stem2->length() + (beamWidthSp / 2) : defaultStemLengthEnd(trem);
                     double offset = std::max(beamClearance * ec->intrinsicMag(), minOffset) * _spatium;
