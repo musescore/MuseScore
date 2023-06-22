@@ -7758,6 +7758,18 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 s += " parentheses-degrees=\"yes\"";
             }
             _xml.tagRaw(s, h->xmlKind());
+
+            int baseTpc = h->baseTpc();
+            if (baseTpc != Tpc::TPC_INVALID) {
+                _xml.startElement("bass");
+                _xml.tag("bass-step", tpc2stepName(baseTpc));
+                alter = int(tpc2alter(baseTpc));
+                if (alter) {
+                    _xml.tag("bass-alter", alter);
+                }
+                _xml.endElement();
+            }
+
             StringList l = h->xmlDegrees();
             if (!l.empty()) {
                 for (const String& _tag : qAsConst(l)) {
@@ -7806,18 +7818,19 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             } else {
                 _xml.tag("kind", { { "text", h->extensionName() } }, "");
             }
+
+            int baseTpc = h->baseTpc();
+            if (baseTpc != Tpc::TPC_INVALID) {
+                _xml.startElement("bass");
+                _xml.tag("bass-step", tpc2stepName(baseTpc));
+                alter = int(tpc2alter(baseTpc));
+                if (alter) {
+                    _xml.tag("bass-alter", alter);
+                }
+                _xml.endElement();
+            }
         }
 
-        int baseTpc = h->baseTpc();
-        if (baseTpc != Tpc::TPC_INVALID) {
-            _xml.startElement("bass");
-            _xml.tag("bass-step", tpc2stepName(baseTpc));
-            alter = int(tpc2alter(baseTpc));
-            if (alter) {
-                _xml.tag("bass-alter", alter);
-            }
-            _xml.endElement();
-        }
         if (offset > 0) {
             _xml.tag("offset", offset);
         }
