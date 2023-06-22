@@ -1067,7 +1067,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     LyricsLayout::layoutLyrics(ctx, system);
 
     // here are lyrics dashes and melisma
-    for (Spanner* sp : ctx.mutDom().unmanagedSpanners()) {
+    for (Spanner* sp : ctx.dom().unmanagedSpanners()) {
         if (sp->tick() >= etick || sp->tick2() <= stick) {
             continue;
         }
@@ -2398,4 +2398,82 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
         }
         ++staffIdx;
     }
+}
+
+//---------------------------------------------------------
+//   minDistance
+//    Return the minimum distance between this system and s2
+//    without any element collisions.
+//
+//    top - top system
+//    bottom   - bottom system
+//---------------------------------------------------------
+
+double SystemLayout::minDistance(LayoutContext& ctx, const System* top, const System* bottom)
+{
+    if (top->vbox() && !bottom->vbox()) {
+        return std::max(double(top->vbox()->bottomGap()), bottom->minTop());
+    } else if (!top->vbox() && bottom->vbox()) {
+        return std::max(double(bottom->vbox()->topGap()), top->minBottom());
+    } else if (top->vbox() && bottom->vbox()) {
+        return double(bottom->vbox()->topGap() + top->vbox()->bottomGap());
+    }
+
+    if (top->staves().empty() || bottom->staves().empty()) {
+        return 0.0;
+    }
+
+    double minVerticalDistance = ctx.conf().styleMM(Sid::minVerticalDistance);
+    double dist = ctx.conf().enableVerticalSpread() ? ctx.conf().styleMM(Sid::minSystemSpread) : ctx.conf().styleMM(Sid::minSystemDistance);
+    size_t firstStaff = 0;
+    size_t lastStaff = 0;
+
+    for (firstStaff = 0; firstStaff < top->staves().size() - 1; ++firstStaff) {
+        if (ctx.dom().staff(firstStaff)->show() && bottom->staff(firstStaff)->show()) {
+            break;
+        }
+    }
+    for (lastStaff = top->staves().size() - 1; lastStaff > 0; --lastStaff) {
+        if (ctx.dom().staff(lastStaff)->show() && top->staff(lastStaff)->show()) {
+            break;
+        }
+    }
+
+    const Staff* staff = ctx.dom().staff(firstStaff);
+    double userDist = staff ? staff->userDist() : 0.0;
+    dist = std::max(dist, userDist);
+    top->fixedDownDistance = false;
+
+    for (MeasureBase* mb1 : top->ml) {
+        if (mb1->isMeasure()) {
+            Measure* m = toMeasure(mb1);
+            Spacer* sp = m->vspacerDown(lastStaff);
+            if (sp) {
+                if (sp->spacerType() == SpacerType::FIXED) {
+                    dist = sp->gap();
+                    top->fixedDownDistance = true;
+                    break;
+                } else {
+                    dist = std::max(dist, sp->gap().val());
+                }
+            }
+        }
+    }
+    if (!top->fixedDownDistance) {
+        for (const MeasureBase* mb2 : bottom->measures()) {
+            if (mb2->isMeasure()) {
+                const Measure* m = toMeasure(mb2);
+                Spacer* sp = m->vspacerUp(firstStaff);
+                if (sp) {
+                    dist = std::max(dist, sp->gap().val());
+                }
+            }
+        }
+
+        SysStaff* sysStaff = top->staff(lastStaff);
+        double sld = sysStaff ? sysStaff->skyline().minDistance(bottom->staff(firstStaff)->skyline()) : 0;
+        sld -= sysStaff ? sysStaff->bbox().height() - minVerticalDistance : 0;
+        dist = std::max(dist, sld);
+    }
+    return dist;
 }

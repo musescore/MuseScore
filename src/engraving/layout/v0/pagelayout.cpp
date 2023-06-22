@@ -135,7 +135,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
     for (int i = 1; i < static_cast<int>(pSystems); ++i) {
         System* cs = ctx.mutState().page()->system(i);
         System* ps = ctx.mutState().page()->system(i - 1);
-        double distance = ps->minDistance(cs);
+        double distance = SystemLayout::minDistance(ctx, ps, cs);
         y += distance;
         cs->setPos(ctx.state().page()->lm(), y);
         SystemLayout::restoreLayout2(cs, ctx);
@@ -148,7 +148,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
         //
         double distance;
         if (ctx.state().prevSystem()) {
-            distance = ctx.state().prevSystem()->minDistance(ctx.state().curSystem());
+            distance = SystemLayout::minDistance(ctx, ctx.state().prevSystem(), ctx.state().curSystem());
             if (ctx.conf().isPrintingMode()) {
                 double top = ctx.state().curSystem()->minTop();
                 double bottom = ctx.state().prevSystem()->minBottom();
@@ -225,7 +225,8 @@ void PageLayout::collectPage(LayoutContext& ctx)
         bool breakPage = !ctx.state().curSystem() || (breakPages && ctx.state().prevSystem()->pageBreak());
 
         if (!breakPage) {
-            double dist = ctx.state().prevSystem()->minDistance(ctx.state().curSystem()) + ctx.state().curSystem()->height();
+            double dist = SystemLayout::minDistance(ctx, ctx.state().prevSystem(), ctx.state().curSystem())
+                          + ctx.state().curSystem()->height();
             Box* vbox = ctx.state().curSystem()->vbox();
             if (vbox) {
                 dist += vbox->bottomGap();

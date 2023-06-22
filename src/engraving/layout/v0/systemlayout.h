@@ -55,6 +55,8 @@ public:
 
     static void setInstrumentNames(System* system, LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
 
+    static double minDistance(LayoutContext& ctx, const System* top, const System* bottom);
+
 private:
     static System* getNextSystem(LayoutContext& lc);
     static void hideEmptyStaves(System* system, LayoutContext& ctx, bool isFirstSystem);

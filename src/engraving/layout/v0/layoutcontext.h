@@ -81,7 +81,7 @@ public:
 
     bool isShowVBox() const { return options().isShowVBox; }
     double noteHeadWidth() const { return options().noteHeadWidth; }
-    bool showInvisible() const;
+    bool isShowInvisible() const;
     int pageNumberOffset() const;
     bool enableVerticalSpread() const;
     double maxSystemDistance() const;
@@ -165,7 +165,7 @@ public:
     void removeElement(EngravingItem* item);
 
     void addUnmanagedSpanner(Spanner* s);
-    const std::set<Spanner*> unmanagedSpanners();
+    const std::set<Spanner*>& unmanagedSpanners() const;
 
 private:
     const Score* score() const;

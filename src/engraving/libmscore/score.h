@@ -798,7 +798,7 @@ public:
     void sortSystemObjects(std::vector<staff_idx_t>& dst);
     void sortStaves(std::vector<staff_idx_t>& dst);
 
-    bool showInvisible() const { return _showInvisible; }
+    bool isShowInvisible() const { return _showInvisible; }
     bool showUnprintable() const { return _showUnprintable; }
     bool showFrames() const { return _showFrames; }
     bool showPageborders() const { return _showPageborders; }
@@ -1146,7 +1146,7 @@ public:
     void cmdAddSpanner(Spanner* spanner, const mu::PointF& pos, bool systemStavesOnly = false);
     void cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment, Segment* endSegment);
     void checkSpanner(const Fraction& startTick, const Fraction& lastTick, bool removeOrphans = true);
-    const std::set<Spanner*> unmanagedSpanners() { return _unmanagedSpanner; }
+    const std::set<Spanner*>& unmanagedSpanners() const { return _unmanagedSpanner; }
     void addUnmanagedSpanner(Spanner*);
     void removeUnmanagedSpanner(Spanner*);
 

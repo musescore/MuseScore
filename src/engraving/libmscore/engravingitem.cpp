@@ -229,7 +229,7 @@ double EngravingItem::spatium() const
 
 bool EngravingItem::isInteractionAvailable() const
 {
-    if (!visible() && (score()->printing() || !score()->showInvisible())) {
+    if (!visible() && (score()->printing() || !score()->isShowInvisible())) {
         return false;
     }
 
@@ -303,7 +303,7 @@ void EngravingItem::deleteLater()
 void EngravingItem::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     if (scanChildren().size() == 0) {
-        if (all || visible() || score()->showInvisible()) {
+        if (all || visible() || score()->isShowInvisible()) {
             func(data, this);
         }
     } else {

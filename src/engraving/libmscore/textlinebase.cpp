@@ -114,7 +114,7 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
         painter->translate(-m_endText->pos());
     }
 
-    if ((m_npoints == 0) || (score() && (score()->printing() || !score()->showInvisible()) && !tl->lineVisible())) {
+    if ((m_npoints == 0) || (score() && (score()->printing() || !score()->isShowInvisible()) && !tl->lineVisible())) {
         return;
     }
 

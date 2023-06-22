@@ -4741,7 +4741,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->bbox() |= item->endText()->bbox().translated(item->endText()->pos());
     }
 
-    if (!(tl->lineVisible() || ctx.conf().showInvisible())) {
+    if (!(tl->lineVisible() || ctx.conf().isShowInvisible())) {
         return;
     }
 
