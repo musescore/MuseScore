@@ -28,6 +28,7 @@
 #include "libmscore/instrument.h"
 #include "libmscore/measure.h"
 #include "libmscore/synthesizerstate.h"
+#include "types/types.h"
 #include "pitchwheelrenderer.h"
 
 namespace mu::engraving {
@@ -51,6 +52,7 @@ public:
             constexpr static int INVALID_STRING = -1;
 
             int32_t string = INVALID_STRING;
+            staff_idx_t staffIdx = 0;
             MidiInstrumentEffect effect = MidiInstrumentEffect::NONE;
 
             bool operator<(const LookupData& other) const;

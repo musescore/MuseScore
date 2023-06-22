@@ -1191,6 +1191,7 @@ uint32_t MidiRenderer::getChannel(const Instrument* instr, const Note* note, Mid
 
     if (_context.eachStringHasChannel && instr->hasStrings()) {
         lookupData.string = note->string();
+        lookupData.staffIdx = note->staffIdx();
     }
 
     return _context.channels->getChannel(channel, lookupData);
@@ -1211,6 +1212,6 @@ uint32_t MidiRenderer::ChannelLookup::getChannel(uint32_t instrumentChannel, con
 
 bool MidiRenderer::ChannelLookup::LookupData::operator<(const MidiRenderer::ChannelLookup::LookupData& other) const
 {
-    return std::tie(string, effect) < std::tie(other.string, other.effect);
+    return std::tie(string, staffIdx, effect) < std::tie(other.string, other.staffIdx, other.effect);
 }
 }
