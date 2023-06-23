@@ -54,6 +54,16 @@ MeasureRepeat::MeasureRepeat(Segment* parent)
     }
 }
 
+void MeasureRepeat::setNumMeasures(int n)
+{
+    IF_ASSERT_FAILED(n <= MAX_NUM_MEASURES) {
+        m_numMeasures = MAX_NUM_MEASURES;
+        return;
+    }
+
+    m_numMeasures = n;
+}
+
 //---------------------------------------------------------
 //   firstMeasureOfGroup
 //---------------------------------------------------------
@@ -65,7 +75,16 @@ Measure* MeasureRepeat::firstMeasureOfGroup() const
 
 const Measure* MeasureRepeat::referringMeasure(const Measure* measure) const
 {
-    Measure* referringMeasure = firstMeasureOfGroup()->prevMeasure();
+    IF_ASSERT_FAILED(measure) {
+        return nullptr;
+    }
+
+    const Measure* firstMeasure = firstMeasureOfGroup();
+    if (!firstMeasure) {
+        return nullptr;
+    }
+
+    const Measure* referringMeasure = firstMeasure->prevMeasure();
 
     int measuresBack = m_numMeasures - measure->measureRepeatCount(staffIdx());
 

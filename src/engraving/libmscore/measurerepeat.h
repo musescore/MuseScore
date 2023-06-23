@@ -45,7 +45,7 @@ public:
 
     static constexpr int MAX_NUM_MEASURES = 4;
 
-    void setNumMeasures(int n) { m_numMeasures = n; }
+    void setNumMeasures(int n);
     int numMeasures() const { return m_numMeasures; }
     void setSymId(SymId id) { m_symId = id; }
     SymId symId() const { return m_symId; }
