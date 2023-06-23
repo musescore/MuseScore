@@ -30,6 +30,8 @@
 #include "libmscore/score.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/part.h"
+#include "libmscore/stem.h"
+#include "libmscore/tremolo.h"
 #include "libmscore/linkedobjects.h"
 #include "libmscore/measure.h"
 #include "libmscore/factory.h"
@@ -86,6 +88,8 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
         replaceOldWithNewOrnaments(masterScore);
         resetRestVerticalOffset(masterScore);
         splitArticulations(masterScore);
+        resetArticulationOffsets(masterScore);
+        resetStemLengthsForTwoNoteTrems(masterScore);
     }
 }
 
@@ -499,6 +503,57 @@ void CompatUtils::resetRestVerticalOffset(MasterScore* masterScore)
                     if (rest->offset().y() != 0) {
                         PointF newOffset = PointF(rest->offset().x(), 0.0);
                         rest->setProperty(Pid::OFFSET, newOffset);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void CompatUtils::resetArticulationOffsets(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+            for (Segment& segment : measure->segments()) {
+                if (!segment.isChordRestType()) {
+                    continue;
+                }
+                for (EngravingItem* item : segment.elist()) {
+                    if (!item || !item->isChord()) {
+                        continue;
+                    }
+                    Chord* chord = toChord(item);
+                    for (Articulation* artic : chord->articulations()) {
+                        if (!artic) {
+                            continue;
+                        }
+                        artic->setProperty(Pid::OFFSET, PointF());
+                    }
+                }
+            }
+        }
+    }
+}
+
+void CompatUtils::resetStemLengthsForTwoNoteTrems(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+            for (Segment& segment : measure->segments()) {
+                if (!segment.isChordRestType()) {
+                    continue;
+                }
+                for (EngravingItem* item : segment.elist()) {
+                    if (!item || !item->isChord()) {
+                        continue;
+                    }
+                    Chord* chord = toChord(item);
+                    Tremolo* trem = chord->tremolo();
+                    Stem* stem = chord->stem();
+                    if (stem && trem && trem->twoNotes()) {
+                        if (stem->userLength() != Millimetre(0)) {
+                            stem->setUserLength(Millimetre(0));
+                        }
                     }
                 }
             }
