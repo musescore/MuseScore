@@ -68,14 +68,14 @@ IF %MODE% == "file" (
     ECHO.
     ECHO "=======================" 
     ECHO "Sign file: %FILE_PATH%"
-    %SIGNTOOL% sign /debug /f %SIGNCERT% /t %TIMESERVER1% /p %CERT_PASSWORD% /d %FILE_NAME% %FILE_PATH%
+    %SIGNTOOL% sign /debug /f %SIGNCERT% /t %TIMESERVER1% /p %CERT_PASSWORD% /d %FILE_NAME% /fd SHA256 %FILE_PATH%
     IF ERRORLEVEL 1 (
         ECHO "signtool return error level: %ERRORLEVEL%, try use TIMESERVER2"
-        %SIGNTOOL% sign /debug /f %SIGNCERT% /t %TIMESERVER2% /p %CERT_PASSWORD% /d %FILE_NAME% %FILE_PATH%
+        %SIGNTOOL% sign /debug /f %SIGNCERT% /t %TIMESERVER2% /p %CERT_PASSWORD% /d %FILE_NAME% /fd SHA256 %FILE_PATH%
     )
     IF ERRORLEVEL 1 (
         ECHO "signtool return error level: %ERRORLEVEL%, try use TIMESERVER3"
-        %SIGNTOOL% sign /debug /f %SIGNCERT% /t %TIMESERVER3% /p %CERT_PASSWORD% /d %FILE_NAME% %FILE_PATH%
+        %SIGNTOOL% sign /debug /f %SIGNCERT% /t %TIMESERVER3% /p %CERT_PASSWORD% /d %FILE_NAME% /fd SHA256 %FILE_PATH%
     )
     IF ERRORLEVEL 1 (
         ECHO "signtool return error level: %ERRORLEVEL%, sign failed"
