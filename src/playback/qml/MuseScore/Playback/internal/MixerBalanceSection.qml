@@ -53,6 +53,7 @@ MixerPanelSection {
                 value: channelItem.balance
                 stepSize: 1
                 isBalanceKnob: true
+                accentColor: ui.theme.accentColor
 
                 navigation.panel: channelItem.panel
                 navigation.row: root.navigationRowStart
