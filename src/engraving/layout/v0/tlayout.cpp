@@ -240,7 +240,7 @@ void TLayout::layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx)
 {
     RectF r;
 
-    SymId s = item->symbol();
+    SymId s = item->symId();
     if (item->bracket() == AccidentalBracket::PARENTHESIS && !item->parentNoteHasParentheses()) {
         switch (item->accidentalType()) {
         case AccidentalType::FLAT2:
@@ -301,7 +301,7 @@ void TLayout::layoutMultiGlyphAccidental(Accidental* item, LayoutContext& ctx)
         x += item->symAdvance(id) + margin;
     }
 
-    SymId s = item->symbol();
+    SymId s = item->symId();
     SymElement e(s, x, 0.0);
     item->addElement(e);
     r.unite(item->symBbox(s).translated(x, 0.0));

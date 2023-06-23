@@ -153,7 +153,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     }
     clef->setPos(0.0, 0.0);
 
-    PaletteLayout::layout(clef);
+    PaletteLayout::layoutItem(clef);
 
     painter.translate(clef->pagePos());
     clef->draw(&painter);
@@ -231,7 +231,7 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
         dragElement->resetExplicitParent();
 
         rw::RWRegister::reader()->readItem(dragElement, e);
-        PaletteLayout::layout(dragElement);
+        PaletteLayout::layoutItem(dragElement);
     } else {
         if (MScore::debugMode) {
             LOGD("KeyCanvas::dragEnterEvent: formats:");
@@ -290,7 +290,7 @@ void KeyCanvas::snap(Accidental* a)
         qreal accidentalGap = DefaultStyle::baseStyle().styleS(Sid::keysigAccidentalDistance).val();
         Accidental* prev = accidentals[i - 1];
         double prevX = prev->ipos().x();
-        qreal prevWidth = prev->symWidth(prev->symbol());
+        qreal prevWidth = prev->symWidth(prev->symId());
         if (!QGuiApplication::keyboardModifiers().testFlag(Qt::ControlModifier)) {
             a->setPosX(prevX + prevWidth + accidentalGap * _spatium);
         }
@@ -397,13 +397,13 @@ void KeyEditor::addClicked()
     for (int i = 0; i < al.size(); ++i) {
         Accidental* a = al[i];
         CustDef c;
-        c.sym = a->symbol();
+        c.sym = a->symId();
         PointF pos = a->ipos();
         c.xAlt = (pos.x() - xoff) / spatium;
         if (i > 0) {
             Accidental* prev = al[i - 1];
             PointF prevPos = prev->ipos();
-            qreal prevWidth = prev->symWidth(prev->symbol());
+            qreal prevWidth = prev->symWidth(prev->symId());
             c.xAlt -= (prevPos.x() - xoff + prevWidth) / spatium + accidentalGap;
         }
         int line = static_cast<int>(round((pos.y() / spatium) * 2));

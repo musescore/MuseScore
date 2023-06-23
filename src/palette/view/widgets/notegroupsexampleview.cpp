@@ -68,7 +68,7 @@ void NoteGroupsExampleView::dragEnterEvent(QDragEnterEvent* event)
         if (m_dragElement) {
             m_dragElement->resetExplicitParent();
             rw::RWRegister::reader()->readItem(m_dragElement, e);
-            PaletteLayout::layout(m_dragElement);
+            PaletteLayout::layoutItem(m_dragElement);
         }
         return;
     }

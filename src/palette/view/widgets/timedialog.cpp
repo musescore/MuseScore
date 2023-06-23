@@ -83,7 +83,7 @@ TimeDialog::TimeDialog(QWidget* parent)
 
     ElementPtr el = sp->elementForCellAt(2);
 
-    PaletteLayout::layout(el.get());
+    PaletteLayout::layoutItem(el.get());
 
     sp->setSelected(2);
     paletteChanged(2);
