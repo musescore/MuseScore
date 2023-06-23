@@ -73,6 +73,29 @@ Item {
             onNewValueRequested: function(newValue) {
                 root.auxSendItemModel.audioSignalPercentage = newValue
             }
+
+
+            states: [
+                State {
+                    name: "ON"
+                    when: root.auxSendItemModel.isActive
+
+                    PropertyChanges {
+                        target: audioSignalAmountKnob
+                        accentColor: ui.theme.accentColor
+                    }
+                },
+
+                State {
+                    name: "OFF"
+                    when: !root.auxSendItemModel.isActive
+
+                    PropertyChanges {
+                        target: audioSignalAmountKnob
+                        accentColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.4)
+                    }
+                }
+            ]
         }
 
         FlatButton {

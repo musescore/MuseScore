@@ -36,6 +36,8 @@ Dial {
 
     property alias mouseArea: mouseArea
 
+    property color accentColor: null
+
     implicitWidth: root.radius * 2
     implicitHeight: implicitWidth
 
@@ -63,9 +65,9 @@ Dial {
         readonly property real outerArcLineWidth: 3
         readonly property real innerArcLineWidth: 2
 
-        readonly property color valueArcColor: ui.theme.accentColor
         readonly property color outerArcColor: Utils.colorWithAlpha(ui.theme.buttonColor, 0.7)
         readonly property color innerArcColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
+        property color valueArcColor: accentColor
 
         readonly property real startValueArcAngle: root.isBalanceKnob ? 0 : -140
 
