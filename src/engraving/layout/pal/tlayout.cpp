@@ -148,17 +148,13 @@
 
 #include "../libmscore/whammybar.h"
 
-#include "arpeggiolayout.h"
-#include "beamlayout.h"
-#include "chordlayout.h"
-#include "lyricslayout.h"
-#include "slurtielayout.h"
-#include "tremololayout.h"
-#include "tupletlayout.h"
+#include "../v0/slurtielayout.h"
+#include "../v0/arpeggiolayout.h"
+#include "../v0/tremololayout.h"
 
 using namespace mu::draw;
 using namespace mu::engraving;
-using namespace mu::engraving::layout::v0;
+using namespace mu::engraving::layout::pal;
 
 using LayoutTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
                                    BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,
@@ -201,8 +197,6 @@ public:
 
 void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
 {
-    DO_ASSERT(!ctx.conf().isPaletteMode());
-
     bool found = LayoutVisitor::visit(LayoutTypes {}, item, ctx);
     if (!found) {
         LOGE() << "not found in lyaout types item: " << item->typeName();
@@ -503,7 +497,8 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
 
 void TLayout::layout(Arpeggio* item, LayoutContext& ctx)
 {
-    ArpeggioLayout::layout(item, ctx);
+    v0::LayoutContext ctxv0(ctx.score());
+    v0::ArpeggioLayout::layout(item, ctxv0);
 }
 
 void TLayout::layout(Articulation* item, LayoutContext& ctx)
@@ -810,12 +805,14 @@ void TLayout::layout2(BarLine* item, LayoutContext& ctx)
 
 void TLayout::layout(Beam* item, LayoutContext& ctx)
 {
-    BeamLayout::layout(item, ctx);
+    UNREACHABLE;
+    //BeamLayout::layout(item, ctx);
 }
 
 void TLayout::layout1(Beam* item, LayoutContext& ctx)
 {
-    BeamLayout::layout1(item, ctx);
+    UNREACHABLE;
+    //BeamLayout::layout1(item, ctx);
 }
 
 void TLayout::layout(Bend* item, LayoutContext& ctx)
@@ -1177,7 +1174,8 @@ void TLayout::layout(Breath* item, LayoutContext& ctx)
 
 void TLayout::layout(Chord* item, LayoutContext& ctx)
 {
-    ChordLayout::layout(item, ctx);
+    UNREACHABLE;
+    //ChordLayout::layout(item, ctx);
 }
 
 void TLayout::layout(ChordLine* item, LayoutContext& ctx)
@@ -3216,17 +3214,20 @@ void TLayout::layout(LineSegment* item, LayoutContext& ctx)
 
 void TLayout::layout(Lyrics* item, LayoutContext& ctx)
 {
-    LyricsLayout::layout(item, ctx);
+    UNREACHABLE;
+    //LyricsLayout::layout(item, ctx);
 }
 
 void TLayout::layout(LyricsLine* item, LayoutContext& ctx)
 {
-    LyricsLayout::layout(item, ctx);
+    UNREACHABLE;
+    //LyricsLayout::layout(item, ctx);
 }
 
 void TLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
 {
-    LyricsLayout::layout(item, ctx);
+    UNREACHABLE;
+    //LyricsLayout::layout(item, ctx);
 }
 
 void TLayout::layout(Marker* item, LayoutContext& ctx)
@@ -3595,12 +3596,10 @@ void TLayout::layout(Ornament* item, LayoutContext& ctx)
     Chord* parentChord = toChord(item->parentItem());
     Chord* cueNoteChord = item->cueNoteChord();
 
-    if (!cueNoteChord) {
-        return;
-    }
-
     Note* cueNote = cueNoteChord->notes().front();
-    ChordLayout::layoutChords3(ctx.conf().style(), { cueNoteChord }, { cueNote }, item->staff(), ctx);
+
+    UNREACHABLE;
+    //ChordLayout::layoutChords3(ctx.conf().style(), { cueNoteChord }, { cueNote }, item->staff(), ctx);
     layout(cueNoteChord, ctx);
     Shape noteShape = cueNoteChord->shape();
     Shape parentChordShape = parentChord->shape();
@@ -3995,7 +3994,8 @@ void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
 
 void TLayout::layout(Slur* item, LayoutContext& ctx)
 {
-    SlurTieLayout::layout(item, ctx);
+    v0::LayoutContext ctxv0(ctx.score());
+    v0::SlurTieLayout::layout(item, ctxv0);
 }
 
 void TLayout::layout(Spacer* item, LayoutContext&)
@@ -4270,29 +4270,30 @@ void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
 
 void TLayout::doLayout(StretchedBend* item, LayoutContext&, bool stretchedMode)
 {
-    item->m_stretchedMode = stretchedMode;
+    UNREACHABLE;
+//    item->m_stretchedMode = stretchedMode;
 
-    // preLayout
-    {
-        Note* note = toNote(item->explicitParent());
-        item->m_notePos   = note->pos();
-        item->m_noteWidth = note->width();
-        item->m_noteHeight = note->height();
+//    // preLayout
+//    {
+//        Note* note = toNote(item->explicitParent());
+//        item->m_notePos   = note->pos();
+//        item->m_noteWidth = note->width();
+//        item->m_noteHeight = note->height();
 
-        item->fillArrows();
-        item->fillSegments();
-        item->stretchSegments();
-    }
+//        item->fillArrows();
+//        item->fillSegments();
+//        item->stretchSegments();
+//    }
 
-    item->layoutDraw(true);
+//    item->layoutDraw(true);
 
-    // postLayout
-    {
-        double lw = item->lineWidth();
-        RectF& bRect = item->bbox();
-        bRect.adjust(-lw, -lw, lw, lw);
-        item->setPos(0.0, 0.0);
-    }
+//    // postLayout
+//    {
+//        double lw = item->lineWidth();
+//        RectF& bRect = item->bbox();
+//        bRect.adjust(-lw, -lw, lw, lw);
+//        item->setPos(0.0, 0.0);
+//    }
 }
 
 void TLayout::layoutBaseSymbol(BSymbol* item, LayoutContext& ctx)
@@ -4984,7 +4985,8 @@ void TLayout::layout(TimeSig* item, LayoutContext& ctx)
 
 void TLayout::layout(Tremolo* item, LayoutContext& ctx)
 {
-    TremoloLayout::layout(item, ctx);
+    v0::LayoutContext ctxv0(ctx.score());
+    v0::TremoloLayout::layout(item, ctxv0);
 }
 
 void TLayout::layout(TremoloBar* item, LayoutContext&)
@@ -5111,7 +5113,8 @@ void TLayout::layout(Trill* item, LayoutContext& ctx)
 
 void TLayout::layout(Tuplet* item, LayoutContext& ctx)
 {
-    TupletLayout::layout(item, ctx);
+    UNREACHABLE;
+    //TupletLayout::layout(item, ctx);
 }
 
 void TLayout::layout(VibratoSegment* item, LayoutContext& ctx)
@@ -5410,7 +5413,8 @@ SpannerSegment* TLayout::layoutSystem(Volta* line, System* system, LayoutContext
 
 SpannerSegment* TLayout::layoutSystem(Slur* line, System* system, LayoutContext& ctx)
 {
-    return SlurTieLayout::layoutSystem(line, system, ctx);
+    UNREACHABLE;
+    return nullptr; //SlurTieLayout::layoutSystem(line, system, ctx);
 }
 
 // Called after layout of all systems is done so precise
