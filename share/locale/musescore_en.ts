@@ -11456,12 +11456,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/spanner.cpp" line="1467"/>
+        <location filename="../../src/engraving/libmscore/spanner.cpp" line="1469"/>
         <source>Start measure: %1; Start beat: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/spanner.cpp" line="1474"/>
+        <location filename="../../src/engraving/libmscore/spanner.cpp" line="1476"/>
         <source>End measure: %1; End beat: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -25737,8 +25737,18 @@ failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml" line="153"/>
+        <source>Scores will appear here when you save a file to the cloud, or publish a score on &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml" line="177"/>
         <source>You are not signed in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml" line="178"/>
+        <source>Login or create a new account on &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt; to view online scores.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
