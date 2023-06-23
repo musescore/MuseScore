@@ -2408,7 +2408,7 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
 //    bottom   - bottom system
 //---------------------------------------------------------
 
-double SystemLayout::minDistance(LayoutContext& ctx, const System* top, const System* bottom)
+double SystemLayout::minDistance(const System* top, const System* bottom, LayoutContext& ctx)
 {
     if (top->vbox() && !bottom->vbox()) {
         return std::max(double(top->vbox()->bottomGap()), bottom->minTop());
