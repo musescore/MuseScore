@@ -430,7 +430,7 @@ double Arpeggio::insetDistance(std::vector<Accidental*>& accidentals, double mag
         if (furthestAccidental) {
             bool currentIsFurtherX = accidental->x() < furthestAccidental->x();
             bool currentIsSameX = accidental->x() == furthestAccidental->x();
-            auto accidentalBbox = symBbox(accidental->symbol());
+            auto accidentalBbox = symBbox(accidental->symId());
             double currentTop = accidental->note()->pos().y() + accidentalBbox.top() * mag_;
             double currentBottom = accidental->note()->pos().y() + accidentalBbox.bottom() * mag_;
             bool collidesWithTop = currentTop <= arpeggioTop && hasTopArrow;
@@ -446,9 +446,9 @@ double Arpeggio::insetDistance(std::vector<Accidental*>& accidentals, double mag
 
     // this cutout means the vertical lines for a ♯, ♭, and ♮ are in the same position
     // if an accidental does not have a cutout (e.g., ♭), this value is 0
-    double accidentalCutOutX = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutNW).x() * mag_;
-    double accidentalCutOutYTop = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutNW).y() * mag_;
-    double accidentalCutOutYBottom = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutSW).y() * mag_;
+    double accidentalCutOutX = symSmuflAnchor(furthestAccidental->symId(), SmuflAnchorId::cutOutNW).x() * mag_;
+    double accidentalCutOutYTop = symSmuflAnchor(furthestAccidental->symId(), SmuflAnchorId::cutOutNW).y() * mag_;
+    double accidentalCutOutYBottom = symSmuflAnchor(furthestAccidental->symId(), SmuflAnchorId::cutOutSW).y() * mag_;
 
     double maximumInset = (style().styleMM(Sid::ArpeggioAccidentalDistance)
                            - style().styleMM(Sid::ArpeggioAccidentalDistanceMin)) * mag_;
@@ -457,7 +457,7 @@ double Arpeggio::insetDistance(std::vector<Accidental*>& accidentals, double mag
         accidentalCutOutX = maximumInset;
     }
 
-    RectF bbox = symBbox(furthestAccidental->symbol());
+    RectF bbox = symBbox(furthestAccidental->symId());
     double center = furthestAccidental->note()->pos().y() * mag_;
     double top = center + bbox.top() * mag_;
     double bottom = center + bbox.bottom() * mag_;

@@ -595,7 +595,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
         cellMag = 1.0;
     }
 
-    PaletteLayout::layout(element.get());
+    PaletteLayout::layoutItem(element.get());
 
     RectF r = element->bbox();
     int w = lrint(r.width() * cellMag);
@@ -1058,7 +1058,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
             cellMag = 1.0;
         }
 
-        PaletteLayout::layout(el.get());
+        PaletteLayout::layoutItem(el.get());
 
         if (drawStaff) {
             qreal y = r.y() + vgridM * .5 - dy + yOffset() * _spatium * cellMag;

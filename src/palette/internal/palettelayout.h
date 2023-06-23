@@ -23,7 +23,12 @@
 #define MU_PALETTE_PALETTELAYOUT_H
 
 namespace mu::engraving {
+class MStyle;
 class EngravingItem;
+class Score;
+
+class Accidental;
+class Clef;
 }
 
 namespace mu::palette {
@@ -32,7 +37,20 @@ class PaletteLayout
 public:
     PaletteLayout() = default;
 
-    static void layout(engraving::EngravingItem* item);
+    static void layoutItem(engraving::EngravingItem* item);
+
+    struct Context {
+        Context(engraving::Score* s)
+            : m_score(s) {}
+
+        const engraving::MStyle& style() const;
+
+    private:
+        engraving::Score* m_score = nullptr;
+    };
+
+    static void layout(engraving::Accidental* item, const Context& ctx);
+    static void layout(engraving::Clef* item, const Context& ctx);
 };
 }
 

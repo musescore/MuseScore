@@ -2195,10 +2195,10 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
                 acel.top    = line * 0.5 * sp + ac->bbox().top();
                 acel.bottom = line * 0.5 * sp + ac->bbox().bottom();
                 acel.width  = ac->width();
-                PointF bboxNE = ac->symBbox(ac->symbol()).topRight();
-                PointF bboxSW = ac->symBbox(ac->symbol()).bottomLeft();
-                PointF cutOutNE = ac->symSmuflAnchor(ac->symbol(), SmuflAnchorId::cutOutNE);
-                PointF cutOutSW = ac->symSmuflAnchor(ac->symbol(), SmuflAnchorId::cutOutSW);
+                PointF bboxNE = ac->symBbox(ac->symId()).topRight();
+                PointF bboxSW = ac->symBbox(ac->symId()).bottomLeft();
+                PointF cutOutNE = ac->symSmuflAnchor(ac->symId(), SmuflAnchorId::cutOutNE);
+                PointF cutOutSW = ac->symSmuflAnchor(ac->symId(), SmuflAnchorId::cutOutSW);
                 if (!cutOutNE.isNull()) {
                     acel.ascent     = cutOutNE.y() - bboxNE.y();
                     acel.rightClear = bboxNE.x() - cutOutNE.x();
