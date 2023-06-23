@@ -81,6 +81,8 @@ AbstractNotationPaintView::~AbstractNotationPaintView()
         m_notation->accessibility()->setMapToScreenFunc(nullptr);
         m_notation->interaction()->setGetViewRectFunc(nullptr);
     }
+
+    clear();
 }
 
 void AbstractNotationPaintView::load()
@@ -101,6 +103,8 @@ void AbstractNotationPaintView::load()
         emit verticalScrollChanged();
         emit viewportChanged();
     });
+
+    redraw();
 }
 
 void AbstractNotationPaintView::initBackground()
@@ -1177,13 +1181,11 @@ void AbstractNotationPaintView::dropEvent(QDropEvent* event)
 
 void AbstractNotationPaintView::setNotation(INotationPtr notation)
 {
-    clear();
     m_notation = notation;
     m_continuousPanel->setNotation(m_notation);
     m_playbackCursor->setNotation(m_notation);
     m_loopInMarker->setNotation(m_notation);
     m_loopOutMarker->setNotation(m_notation);
-    redraw();
 }
 
 void AbstractNotationPaintView::setReadonly(bool readonly)
