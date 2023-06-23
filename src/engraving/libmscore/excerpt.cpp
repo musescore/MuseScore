@@ -656,6 +656,12 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
         if (!ns->endElement()) {
             LOGD("clone Slur: no end element");
         }
+    } else if (ns->isTrill()) {
+        EngravingItem* startElement = (EngravingItem*)s->startElement()->findLinkedInScore(score);
+        if (startElement && startElement->isChord()) {
+            ns->setStartElement(startElement);
+            toChord(startElement)->addStartingSpanner(ns);
+        }
     }
 
     if (!ns->startElement() || !ns->endElement()) {

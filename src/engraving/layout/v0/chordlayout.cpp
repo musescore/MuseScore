@@ -3162,11 +3162,7 @@ void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)
         if (!slur->endChord()) {
             continue;
         }
-        std::vector<Spanner*>& endingSp = slur->endChord()->endingSpanners();
-        if (std::find(endingSp.begin(), endingSp.end(), slur) == endingSp.end()) {
-            // Slur not added. Add it now.
-            endingSp.push_back(slur);
-        }
+        slur->endChord()->addEndingSpanner(slur);
     }
     for (Spanner* spanner : chord->_endingSpanners) {
         if (!spanner->isSlur()) {

@@ -3593,6 +3593,10 @@ void TLayout::layout(Ornament* item, LayoutContext& ctx)
     Chord* parentChord = toChord(item->parentItem());
     Chord* cueNoteChord = item->cueNoteChord();
 
+    if (!cueNoteChord) {
+        return;
+    }
+
     Note* cueNote = cueNoteChord->notes().front();
     ChordLayout::layoutChords3(ctx.style(), { cueNoteChord }, { cueNote }, item->staff(), ctx);
     layout(cueNoteChord, ctx);

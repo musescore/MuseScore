@@ -272,6 +272,13 @@ public:
 
     Ornament* findOrnament() const;
 
+    const std::set<Spanner*>& startingSpanners() const { return _startingSpanners; }
+    const std::set<Spanner*>& endingSpanners() const { return _endingSpanners; }
+    void addStartingSpanner(Spanner* spanner) { _startingSpanners.insert(spanner); }
+    void removeStartingSpanner(Spanner* spanner) { _startingSpanners.erase(spanner); }
+    void addEndingSpanner(Spanner* spanner) { _endingSpanners.insert(spanner); }
+    void removeEndingSpanner(Spanner* spanner) { _endingSpanners.erase(spanner); }
+
 private:
 
     friend class Factory;
@@ -346,7 +353,8 @@ private:
         }
     } _startEndSlurs;
 
-    // StartEndSlurs& startEndSlurs() { return _startEndSlurs; }
+    std::set<Spanner*> _startingSpanners; ///< spanners starting on this item
+    std::set<Spanner*> _endingSpanners; ///< spanners ending on this item
 
     bool _allowKerningAbove = true;
     bool _allowKerningBelow = true;
