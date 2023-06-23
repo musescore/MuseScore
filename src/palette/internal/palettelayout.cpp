@@ -22,13 +22,20 @@
 
 #include "palettelayout.h"
 
+#include "draw/fontmetrics.h"
+
+#include "engraving/types/typesconv.h"
+
 #include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/score.h"
 
 #include "engraving/libmscore/accidental.h"
+#include "engraving/libmscore/articulation.h"
 #include "engraving/libmscore/clef.h"
 
 #include "engraving/layout/pal/tlayout.h"
+
+#include "log.h"
 
 using namespace mu::engraving;
 using namespace mu::palette;
@@ -41,9 +48,12 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     switch (item->type()) {
     case ElementType::ACCIDENTAL:   layout(toAccidental(item), ctx);
         break;
+    case ElementType::ARTICULATION: layout(toArticulation(item), ctx);
+        break;
     case ElementType::CLEF:         layout(toClef(item), ctx);
         break;
     default:
+        //LOGI() << item->typeName();
         layout::pal::TLayout::layoutItem(item, ctxpal);
         break;
     }
@@ -64,6 +74,22 @@ void PaletteLayout::layout(Accidental* item, const Context&)
 
     RectF bbox = item->symBbox(s);
     item->setbbox(bbox);
+}
+
+void PaletteLayout::layout(Articulation* item, const Context&)
+{
+    RectF bbox;
+
+    if (item->textType() != ArticulationTextType::NO_TEXT) {
+        mu::draw::Font scaledFont(item->font());
+        scaledFont.setPointSizeF(item->font().pointSizeF() * item->magS());
+        mu::draw::FontMetrics fm(scaledFont);
+        bbox = fm.boundingRect(scaledFont, TConv::text(item->textType()));
+    } else {
+        bbox = item->symBbox(item->symId());
+    }
+
+    item->setbbox(bbox.translated(-0.5 * bbox.width(), 0.0));
 }
 
 void PaletteLayout::layout(Clef* item, const Context& ctx)
