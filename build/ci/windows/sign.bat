@@ -47,14 +47,14 @@ IF %MODE% == "dir" (
         ECHO.
         ECHO "======================="
         ECHO "Signing %%f"
-        %SIGNTOOL% sign /f %SIGNCERT% /t %TIMESERVER1% /p %CERT_PASSWORD% "%%f"
+        %SIGNTOOL% sign /f %SIGNCERT% /t %TIMESERVER1% /p %CERT_PASSWORD% /fd SHA256 "%%f"
         IF ERRORLEVEL 1 (
             ECHO "signtool return error level: %ERRORLEVEL%, try use TIMESERVER2"
-            CALL %SIGNTOOL% sign /f %SIGNCERT% /t %TIMESERVER2% /p %CERT_PASSWORD% "%%f"
+            CALL %SIGNTOOL% sign /f %SIGNCERT% /t %TIMESERVER2% /p %CERT_PASSWORD% /fd SHA256 "%%f"
         )
         IF ERRORLEVEL 1 (
             ECHO "signtool return error level: %ERRORLEVEL%, try use TIMESERVER3"
-            %SIGNTOOL% sign /f %SIGNCERT% /t %TIMESERVER3% /p %CERT_PASSWORD% "%%f"
+            %SIGNTOOL% sign /f %SIGNCERT% /t %TIMESERVER3% /p %CERT_PASSWORD% /fd SHA256 "%%f"
         )
         IF ERRORLEVEL 1 (
             ECHO "signtool return error level: %ERRORLEVEL%, sign failed"
@@ -89,4 +89,3 @@ IF %MODE% == "file" (
         exit /b 1 
     )
 )
-
