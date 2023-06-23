@@ -26,7 +26,6 @@
 #include <QMimeData>
 
 #include "engraving/rw/rwregister.h"
-#include "engraving/layout/v0/tlayout.h"
 
 #include "libmscore/engravingitem.h"
 #include "libmscore/actionicon.h"
@@ -34,6 +33,8 @@
 #include "libmscore/factory.h"
 
 #include "commonscene/commonscenetypes.h"
+
+#include "internal/palettelayout.h"
 
 #include "log.h"
 
@@ -67,7 +68,7 @@ void NoteGroupsExampleView::dragEnterEvent(QDragEnterEvent* event)
         if (m_dragElement) {
             m_dragElement->resetExplicitParent();
             rw::RWRegister::reader()->readItem(m_dragElement, e);
-            EngravingItem::layout()->layoutItem(m_dragElement);
+            PaletteLayout::layout(m_dragElement);
         }
         return;
     }
