@@ -278,9 +278,7 @@ void NotationBraille::setShortcut(const QString& sequence)
         interaction()->selectLastElement();
     } else if (seq == "Ctrl+Home") {
         interaction()->selectFirstElement();
-    }// else if(shortcutsController()->isRegistered(seq)) {
-     //   shortcutsController()->activate(seq);
-     //}
+    }
 }
 
 path_t NotationBraille::tablesDefaultDirPath() const
