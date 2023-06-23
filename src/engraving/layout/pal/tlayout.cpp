@@ -387,31 +387,10 @@ void TLayout::layout(Arpeggio* item, LayoutContext& ctx)
     v0::ArpeggioLayout::layout(item, ctxv0);
 }
 
-void TLayout::layout(Articulation* item, LayoutContext& ctx)
+void TLayout::layout(Articulation*, LayoutContext&)
 {
-    item->setSkipDraw(false);
-    if (item->isHiddenOnTabStaff()) {
-        item->setSkipDraw(true);
-        return;
-    }
-
-    RectF bRect;
-
-    if (item->textType() != ArticulationTextType::NO_TEXT) {
-        mu::draw::Font scaledFont(item->font());
-        scaledFont.setPointSizeF(item->font().pointSizeF() * item->magS());
-        mu::draw::FontMetrics fm(scaledFont);
-
-        bRect = fm.boundingRect(scaledFont, TConv::text(item->textType()));
-    } else {
-        bRect = item->symBbox(item->symId());
-    }
-
-    item->setbbox(bRect.translated(-0.5 * bRect.width(), 0.0));
-
-    if (item->isOrnament()) {
-        layout(toOrnament(item), ctx);
-    }
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(BagpipeEmbellishment* item, LayoutContext& ctx)
