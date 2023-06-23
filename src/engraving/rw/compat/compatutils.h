@@ -53,6 +53,8 @@ private:
     static void splitArticulations(MasterScore* score);
     static DynamicType reconstructDynamicTypeFromString(Dynamic* dynamic);
     static void resetRestVerticalOffset(MasterScore* masterScore);
+    static void resetArticulationOffsets(MasterScore* masterScore);
+    static void resetStemLengthsForTwoNoteTrems(MasterScore* masterScore);
 };
 }
 #endif // MU_ENGRAVING_COMPATUTILS_H
