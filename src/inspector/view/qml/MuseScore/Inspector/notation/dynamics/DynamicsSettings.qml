@@ -64,47 +64,23 @@ Column {
         maxValue: 1000
     }
 
-    InspectorPropertyView {
-        id: avoidBarLinesSection
-        titleText: ""
+    CheckBoxPropertyView {
+        id: avoidBarLines
+
+        navigationName: "Avoid barlines"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: dynamicSize.navigationRowEnd + 1
+
+        titleText: qsTrc("inspector", "Avoid barlines")
         propertyItem: root.model ? root.model.avoidBarLines : null
-
-        isModified: root.model ? root.model.avoidBarLines.isModified: false
-
-        onRequestResetToDefault: {
-            if (root.model) {
-                root.model.avoidBarLines.resetToDefault()
-            }
-        }
-
-        onRequestApplyToStyle: {
-            if (root.model) {
-                root.model.avoidBarLines.applyToStyle()
-            }
-        }
-
-        Item {
-            PropertyCheckBox {
-                id: avoidBarLines
-
-                navigation.name: "Avoid barlines"
-                navigation.panel: root.navigationPanel
-                navigation.row: dynamicSize.navigationRowEnd + 1
-
-                text: qsTrc("inspector", "Avoid barlines")
-                propertyItem: root.model ? root.model.avoidBarLines : null
-                height: implicitHeight
-            }
-        }
     }
-
 
     PlacementSection {
         id: dynamicsPlacementSection
         propertyItem: root.model ? root.model.placement : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: avoidBarLinesSection.navigationRowEnd + 1
+        navigationRowStart: avoidBarLines.navigationRowEnd + 1
     }
 
     ExpandableBlank {
@@ -123,6 +99,7 @@ Column {
 
             FlatRadioButtonGroupPropertyView {
                 id: dynamicAlignmentGroup
+
                 requestHeight: 55
                 requestIconFontSize: 32
 
@@ -130,7 +107,7 @@ Column {
                 propertyItem: root.model ? root.model.centerOnNotehead : null
 
                 navigationPanel: root.navigationPanel
-                navigationRowStart: showItem.navigationRowStart + 1
+                navigationRowStart: showItem.navigation.row + 1
 
                 model: [
                     { iconCode: IconCode.DYNAMIC_CENTER_1, value: true, title: qsTrc("inspector", "Center on notehead") },
@@ -142,7 +119,7 @@ Column {
                 id: frameSettings
 
                 navigationPanel: root.navigationPanel
-                navigationRowStart: parent.navigationRowEnd + 1
+                navigationRowStart: dynamicAlignmentGroup.navigationRowEnd + 1
 
                 frameTypePropertyItem: root.model ? root.model.frameType : null
                 frameBorderColorPropertyItem: root.model ? root.model.frameBorderColor : null
