@@ -35,6 +35,7 @@ Column {
     property string navigationName: "FrameSettings"
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
+    readonly property int navigationRowEnd: cornerRadiusSection.navigationRowEnd
 
     required property QtObject frameTypePropertyItem
     required property QtObject frameBorderColorPropertyItem
