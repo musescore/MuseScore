@@ -54,7 +54,7 @@ Column {
         navigationRowStart: root.navigationRowStart
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         id: showTextCheckBox
         text: qsTrc("inspector", "Show text")
         propertyItem: root.model ? root.model.showText : null

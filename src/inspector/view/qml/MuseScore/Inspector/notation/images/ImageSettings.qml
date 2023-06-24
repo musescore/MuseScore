@@ -106,7 +106,7 @@ Column {
 
     SeparatorLine { anchors.margins: -12 }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         text: qsTrc("inspector", "Scale to frame size")
         propertyItem: root.model ? root.model.shouldScaleToFrameSize : null
 
@@ -115,7 +115,7 @@ Column {
         navigation.row: imageWidthSection.navigationRowEnd + 1
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         id: staffSpaceUnitsCheckbox
         text: qsTrc("inspector", "Use staff space units")
         propertyItem: root.model ? root.model.isSizeInSpatiums : null

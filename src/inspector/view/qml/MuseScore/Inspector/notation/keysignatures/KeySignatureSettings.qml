@@ -43,7 +43,7 @@ Column {
         showCourtesyKeySignature.navigation.requestActive()
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         id: showCourtesyKeySignature
         text: qsTrc("inspector", "Show courtesy key signature on previous system")
         propertyItem: root.model ? root.model.hasToShowCourtesy : null

@@ -72,7 +72,7 @@ Column {
 
     SeparatorLine { anchors.margins: -12 }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         text: qsTrc("inspector", "Display brackets, clefs and key signatures in the next measure")
         propertyItem: root.model ? root.model.shouldDisplayKeysAndBrackets : null
 
