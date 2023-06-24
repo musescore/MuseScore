@@ -84,7 +84,7 @@ Column {
         }
 
         Item {
-            CheckBoxPropertyView {
+            PropertyCheckBox {
                 id: avoidBarLines
 
                 navigation.name: "Avoid barlines"

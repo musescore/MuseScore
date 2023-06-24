@@ -51,7 +51,7 @@ FocusableItem {
 
         spacing: 12
 
-        CheckBoxPropertyView {
+        PropertyCheckBox {
             text: qsTrc("inspector", "Stemless")
             propertyItem: root.chordModel ? root.chordModel.isStemless : null
 

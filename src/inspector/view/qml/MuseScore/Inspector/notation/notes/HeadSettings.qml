@@ -69,7 +69,7 @@ FocusableItem {
             navigationRowStart: noteHeadParenthesesView.navigationRowEnd + 1
         }
 
-        CheckBoxPropertyView {
+        PropertyCheckBox {
             id: hideNoteheadCheckBox
             visible: root.model ? !root.model.isTrillCueNote : true
 
@@ -81,7 +81,7 @@ FocusableItem {
             navigation.row: noteHeadSection.navigationRowEnd + 1
         }
 
-        CheckBoxPropertyView {
+        PropertyCheckBox {
             id: smallNoteheadCheckBox
 
             text: qsTrc("inspector", "Small notehead")

@@ -43,7 +43,7 @@ Column {
         showCourtesyClef.navigation.requestActive()
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         id: showCourtesyClef
 
         navigation.name: "ShowCourtesyClefCheckBox"
