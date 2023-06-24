@@ -102,5 +102,6 @@
         <file>qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/expressions/ExpressionsSettings.qml</file>
         <file>qml/MuseScore/Inspector/common/FrameSettings.qml</file>
+        <file>qml/MuseScore/Inspector/common/CheckBoxPropertyView.qml</file>
     </qresource>
 </RCC>
