@@ -69,6 +69,7 @@ private:
     void showEvent(QShowEvent*);
     void hideEvent(QHideEvent*);
     void changeEvent(QEvent*);
+    void keyPressEvent(QKeyEvent* event);
 
     void retranslate();
     void setHeaderFooterToolTip();
