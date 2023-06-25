@@ -114,6 +114,8 @@ FocusScope {
             navigation.panel: navSearchPanel
             navigation.order: 1
 
+            visible: tabBar.currentIndex !== 1 // Not visible for Classes tab
+
             onSearchTextChanged: {
                 pageModel.setSearchText(searchText)
             }

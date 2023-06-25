@@ -27,7 +27,7 @@ import QtGraphicalEffects 1.0
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-FocusScope {
+StyledGridView {
     id: root
 
     property string authorName: ""
@@ -60,141 +60,150 @@ FocusScope {
         }
     }
 
-    Rectangle {
+    header: Item {
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.leftMargin: root.sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: root.sideMargin
 
-        height: authorInfo.height
+        height: authorInfo.height + root.sideMargin
 
-        radius: 12
-
-        color: ui.theme.backgroundPrimaryColor
-
-        Column {
-            id: authorInfo
-
+        Rectangle {
             anchors.left: parent.left
-            anchors.leftMargin: 36
-            anchors.right: parent.horizontalCenter
-            anchors.top: parent.top
-            anchors.topMargin: 36
+            anchors.leftMargin: root.sideMargin
+            anchors.right: parent.right
+            anchors.rightMargin: root.sideMargin
 
-            height: childrenRect.height + 72
+            height: authorInfo.height
+            width: Math.min(1000, parent.width - root.sideMargin)
 
-            spacing: 30
+            radius: 12
 
-            AccessibleItem {
-                id: accessibleInfo
-                accessibleParent: root.navigation.accessible
-                visualItem: authorInfo
-                role: MUAccessible.Button
-                name: {
-                    var template = "%1 %2. %3. %4. %5"
+            color: ui.theme.backgroundPrimaryColor
 
-                    return template.arg(root.authorRole)
-                    .arg(root.authorName)
-                    .arg(root.authorPosition)
-                    .arg(root.authorDescription)
-                    .arg(openMoreInfoButton.text)
-                }
-            }
+            Column {
+                id: authorInfo
 
-            Row {
-                width: parent.width
-                height: childrenRect.height
+                anchors.left: parent.left
+                anchors.leftMargin: 36
+                anchors.right: parent.right
+                anchors.rightMargin: 36
+                anchors.top: parent.top
+                anchors.topMargin: 36
+
+                height: childrenRect.height + 72
 
                 spacing: 30
 
-                Image {
-                    id: avatar
+                AccessibleItem {
+                    id: accessibleInfo
+                    accessibleParent: root.navigation.accessible
+                    visualItem: authorInfo
+                    role: MUAccessible.Button
+                    name: {
+                        var template = "%1 %2. %3. %4. %5"
 
-                    height: implicitHeight
-
-                    source: root.authorAvatarUrl
-                    sourceSize: Qt.size(120, 120)
-
-                    fillMode: Image.PreserveAspectCrop
-
-                    layer.enabled: true
-                    layer.effect: OpacityMask {
-                        maskSource: Rectangle {
-                            width: avatar.width
-                            height: avatar.height
-                            radius: width / 2
-                            visible: false
-                        }
+                        return template.arg(root.authorRole)
+                        .arg(root.authorName)
+                        .arg(root.authorPosition)
+                        .arg(root.authorDescription)
+                        .arg(openMoreInfoButton.text)
                     }
                 }
 
-                Column {
+                Row {
+                    width: parent.width
                     height: childrenRect.height
-                    anchors.verticalCenter: avatar.verticalCenter
 
-                    spacing: 8
+                    spacing: 30
 
-                    StyledTextLabel {
+                    Image {
+                        id: avatar
+
                         height: implicitHeight
 
-                        text: root.authorRole
-                        horizontalAlignment: Text.AlignLeft
-                        font {
-                            family: ui.theme.bodyFont.family
-                            pixelSize: ui.theme.bodyFont.pixelSize
-                            capitalization: Font.AllUppercase
+                        source: root.authorAvatarUrl
+                        sourceSize: Qt.size(120, 120)
+
+                        fillMode: Image.PreserveAspectCrop
+
+                        layer.enabled: true
+                        layer.effect: OpacityMask {
+                            maskSource: Rectangle {
+                                width: avatar.width
+                                height: avatar.height
+                                radius: width / 2
+                                visible: false
+                            }
                         }
                     }
 
-                    StyledTextLabel {
-                        height: implicitHeight
+                    Column {
+                        height: childrenRect.height
+                        anchors.verticalCenter: avatar.verticalCenter
 
-                        text: root.authorName
-                        horizontalAlignment: Text.AlignLeft
-                        font: ui.theme.headerBoldFont
-                    }
+                        spacing: 8
 
-                    StyledTextLabel {
-                        height: implicitHeight
+                        StyledTextLabel {
+                            height: implicitHeight
 
-                        text: root.authorPosition
-                        horizontalAlignment: Text.AlignLeft
-                        font: ui.theme.largeBodyFont
-                    }
-                }
-            }
+                            text: root.authorRole
+                            horizontalAlignment: Text.AlignLeft
+                            font {
+                                family: ui.theme.bodyFont.family
+                                pixelSize: ui.theme.bodyFont.pixelSize
+                                capitalization: Font.AllUppercase
+                            }
+                        }
 
-            StyledTextLabel {
-                height: implicitHeight
-                width: parent.width
+                        StyledTextLabel {
+                            height: implicitHeight
 
-                text: root.authorDescription
-                horizontalAlignment: Text.AlignLeft
-                font: ui.theme.largeBodyFont
-                wrapMode: Text.Wrap
-            }
+                            text: root.authorName
+                            horizontalAlignment: Text.AlignLeft
+                            font: ui.theme.headerBoldFont
+                        }
 
-            FlatButton {
-                id: openMoreInfoButton
-                orientation: Qt.Horizontal
-                icon: IconCode.OPEN_LINK
-                text: qsTrc("learn", "Open %1").arg(root.authorOrganizationName)
-                accentButton: true
+                        StyledTextLabel {
+                            height: implicitHeight
 
-                navigation.panel: root.navigation
-                navigation.name: "OpenMoreInfoButton"
-                navigation.column: 1
-                navigation.accessible.ignored: true
-                navigation.onActiveChanged: {
-                    if (!navigation.active) {
-                        accessible.ignored = false
-                        accessibleInfo.ignored = true
+                            text: root.authorPosition
+                            horizontalAlignment: Text.AlignLeft
+                            font: ui.theme.largeBodyFont
+                        }
                     }
                 }
 
-                onClicked: {
-                    api.launcher.openUrl(root.authorOrganizationUrl)
+                StyledTextLabel {
+                    height: implicitHeight
+                    width: parent.width
+
+                    text: root.authorDescription
+                    horizontalAlignment: Text.AlignLeft
+                    font: ui.theme.largeBodyFont
+                    wrapMode: Text.Wrap
+                }
+
+                FlatButton {
+                    id: openMoreInfoButton
+                    orientation: Qt.Horizontal
+                    icon: IconCode.OPEN_LINK
+                    text: qsTrc("learn", "Open %1").arg(root.authorOrganizationName)
+                    accentButton: true
+
+                    navigation.panel: root.navigation
+                    navigation.name: "OpenMoreInfoButton"
+                    navigation.column: 1
+                    navigation.accessible.ignored: true
+                    navigation.onActiveChanged: {
+                        if (!navigation.active) {
+                            accessible.ignored = false
+                            accessibleInfo.ignored = true
+                        }
+                    }
+
+                    onClicked: {
+                        api.launcher.openUrl(root.authorOrganizationUrl)
+                    }
                 }
             }
         }
