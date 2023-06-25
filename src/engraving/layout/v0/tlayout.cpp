@@ -2200,7 +2200,7 @@ void TLayout::layout(Glissando* item, LayoutContext& ctx)
 
     // AVOID HORIZONTAL LINES
 
-    int upDown = (0 < (anchor2->pitch() - anchor1->pitch())) - ((anchor2->pitch() - anchor1->pitch()) < 0);
+    int upDown = (0 < (anchor2->ppitch() - anchor1->ppitch())) - ((anchor2->ppitch() - anchor1->ppitch()) < 0);
     // on TAB's, glissando are by necessity on the same string, this gives an horizontal glissando line;
     // make bottom end point lower and top ending point higher
     if (cr1->staff()->isTabStaff(cr1->tick())) {
