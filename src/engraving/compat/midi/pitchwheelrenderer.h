@@ -47,6 +47,8 @@ public:
 
     EventMap renderPitchWheel() const noexcept;
 
+    static void generateRanges(const std::list<PitchWheelFunction>& functions, std::map<int, int, std::greater<> >& ranges);
+
 private:
 
     struct PitchWheelFunctions
