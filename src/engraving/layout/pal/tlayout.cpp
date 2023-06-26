@@ -3374,7 +3374,7 @@ void TLayout::layout(Ornament* item, LayoutContext& ctx)
     Chord* parentChord = toChord(item->parentItem());
     Chord* cueNoteChord = item->cueNoteChord();
 
-    Note* cueNote = cueNoteChord->notes().front();
+    //Note* cueNote = cueNoteChord->notes().front();
 
     UNREACHABLE;
     //ChordLayout::layoutChords3(ctx.conf().style(), { cueNoteChord }, { cueNote }, item->staff(), ctx);
