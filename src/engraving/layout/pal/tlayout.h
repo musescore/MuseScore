@@ -181,7 +181,6 @@ public:
 
     static void layout(BagpipeEmbellishment* item, LayoutContext& ctx);
     static void layout(BarLine* item, LayoutContext& ctx);
-    static void layout2(BarLine* item, LayoutContext& ctx);
     static void layout(Beam* item, LayoutContext& ctx);
     static void layout1(Beam* item, LayoutContext& ctx);
     static void layout(Bend* item, LayoutContext& ctx);
@@ -325,8 +324,6 @@ public:
 
     static void layout(WhammyBarSegment* item, LayoutContext& ctx);
 
-    static RectF layoutRect(const BarLine* item, LayoutContext& ctx);
-
     // layoutSystem;
     static SpannerSegment* layoutSystem(Spanner* item, System* system, LayoutContext& ctx); // factory
     static SpannerSegment* layoutSystem(LyricsLine* line, System* system, LayoutContext& ctx);
@@ -337,8 +334,6 @@ public:
 private:
 
     friend class SlurTieLayout;
-
-    static double layoutWidth(const BarLine* item, LayoutContext& ctx);
 
     static void adjustLayoutWithoutImages(VBox* item, LayoutContext& ctx);
 

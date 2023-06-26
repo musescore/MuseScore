@@ -33,6 +33,8 @@ class Score;
 class Accidental;
 class Articulation;
 
+class BarLine;
+
 class Clef;
 
 class KeySig;
@@ -61,6 +63,9 @@ public:
 
     static void layout(engraving::Accidental* item, const Context& ctx);
     static void layout(engraving::Articulation* item, const Context& ctx);
+
+    static void layout(engraving::BarLine* item, const Context& ctx);
+
     static void layout(engraving::Clef* item, const Context& ctx);
 
     static void layout(engraving::KeySig* item, const Context& ctx);

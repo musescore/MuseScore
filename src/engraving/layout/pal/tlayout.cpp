@@ -466,217 +466,19 @@ void TLayout::layout(BagpipeEmbellishment* item, LayoutContext& ctx)
     }
 }
 
-void TLayout::layout(BarLine* item, LayoutContext& ctx)
+void TLayout::layout(BarLine*, LayoutContext&)
 {
-    item->setPos(PointF());
-    // barlines hidden on this staff
-    if (item->staff() && item->segment()) {
-        if ((!item->staff()->staffTypeForElement(item)->showBarlines() && item->segment()->segmentType() == SegmentType::EndBarLine)
-            || (item->staff()->hideSystemBarLine() && item->segment()->segmentType() == SegmentType::BeginBarLine)) {
-            item->setbbox(RectF());
-            return;
-        }
-    }
-
-    item->setMag(ctx.conf().styleB(Sid::scaleBarlines) && item->staff() ? item->staff()->staffMag(item->tick()) : 1.0);
-    // Note: the true values of y1 and y2 are computed in layout2() (can be done only
-    // after staff distances are known). This is a temporary layout.
-    double _spatium = item->spatium();
-    item->setY1(_spatium * .5 * item->spanFrom());
-    if (RealIsEqual(item->y2(), 0.0)) {
-        item->setY2(_spatium * .5 * (8.0 + item->spanTo()));
-    }
-
-    double w = layoutWidth(item, ctx) * item->mag();
-    RectF r(0.0, item->y1(), w, item->y2() - item->y1());
-
-    if (ctx.conf().styleB(Sid::repeatBarTips)) {
-        switch (item->barLineType()) {
-        case BarLineType::START_REPEAT:
-            r.unite(item->symBbox(SymId::bracketTop).translated(0, item->y1()));
-            // r |= symBbox(SymId::bracketBottom).translated(0, y2);
-            break;
-        case BarLineType::END_REPEAT: {
-            double w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
-            r.unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, item->y1()));
-            // r |= symBbox(SymId::reversedBracketBottom).translated(0, y2);
-        }
-        break;
-        case BarLineType::END_START_REPEAT: {
-            double w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
-            r.unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, item->y1()));
-            r.unite(item->symBbox(SymId::bracketTop).translated(0, item->y1()));
-            // r |= symBbox(SymId::reversedBracketBottom).translated(0, y2);
-        }
-        break;
-        default:
-            break;
-        }
-    }
-    item->setbbox(r);
-
-    for (EngravingItem* e : *item->el()) {
-        layoutItem(e, ctx);
-        if (e->isArticulationFamily()) {
-            Articulation* a  = toArticulation(e);
-            DirectionV dir    = a->direction();
-            double distance   = 0.5 * item->spatium();
-            double x          = item->width() * .5;
-            if (dir == DirectionV::DOWN) {
-                double botY = item->y2() + distance;
-                a->setPos(PointF(x, botY));
-            } else {
-                double topY = item->y1() - distance;
-                a->setPos(PointF(x, topY));
-            }
-        }
-    }
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
-double TLayout::layoutWidth(const BarLine* item, LayoutContext& ctx)
-{
-    const double dotWidth = item->symWidth(SymId::repeatDot);
-
-    double w { 0.0 };
-    switch (item->barLineType()) {
-    case BarLineType::DOUBLE:
-        w = ctx.conf().styleMM(Sid::doubleBarWidth) * 2.0
-            + ctx.conf().styleMM(Sid::doubleBarDistance);
-        break;
-    case BarLineType::DOUBLE_HEAVY:
-        w = ctx.conf().styleMM(Sid::endBarWidth) * 2.0
-            + ctx.conf().styleMM(Sid::endBarDistance);
-        break;
-    case BarLineType::END_START_REPEAT:
-        w = ctx.conf().styleMM(Sid::endBarWidth)
-            + ctx.conf().styleMM(Sid::barWidth) * 2.0
-            + ctx.conf().styleMM(Sid::endBarDistance) * 2.0
-            + ctx.conf().styleMM(Sid::repeatBarlineDotSeparation) * 2.0
-            + dotWidth * 2;
-        break;
-    case BarLineType::START_REPEAT:
-    case BarLineType::END_REPEAT:
-        w = ctx.conf().styleMM(Sid::endBarWidth)
-            + ctx.conf().styleMM(Sid::barWidth)
-            + ctx.conf().styleMM(Sid::endBarDistance)
-            + ctx.conf().styleMM(Sid::repeatBarlineDotSeparation)
-            + dotWidth;
-        break;
-    case BarLineType::END:
-    case BarLineType::REVERSE_END:
-        w = ctx.conf().styleMM(Sid::endBarWidth)
-            + ctx.conf().styleMM(Sid::barWidth)
-            + ctx.conf().styleMM(Sid::endBarDistance);
-        break;
-    case BarLineType::BROKEN:
-    case BarLineType::NORMAL:
-    case BarLineType::DOTTED:
-        w = ctx.conf().styleMM(Sid::barWidth);
-        break;
-    case BarLineType::HEAVY:
-        w = ctx.conf().styleMM(Sid::endBarWidth);
-        break;
-    }
-    return w;
-}
-
-RectF TLayout::layoutRect(const BarLine* item, LayoutContext& ctx)
-{
-    RectF bb = item->bbox();
-    if (item->staff()) {
-        // actual height may include span to next staff
-        // but this should not be included in shapes or skylines
-        double sp = item->spatium();
-        int span = item->staff()->lines(item->tick()) - 1;
-        int sFrom;
-        int sTo;
-        if (span == 0 && item->spanTo() == 0) {
-            sFrom = BARLINE_SPAN_1LINESTAFF_FROM;
-            sTo = item->spanStaff() ? 0 : BARLINE_SPAN_1LINESTAFF_TO;
-        } else {
-            sFrom = item->spanFrom();
-            sTo = item->spanStaff() ? 0 : item->spanTo();
-        }
-        double y = sp * sFrom * 0.5;
-        double h = sp * (span + (sTo - sFrom) * 0.5);
-        if (ctx.conf().styleB(Sid::repeatBarTips)) {
-            switch (item->barLineType()) {
-            case BarLineType::START_REPEAT:
-            case BarLineType::END_REPEAT:
-            case BarLineType::END_START_REPEAT: {
-                if (item->isTop()) {
-                    double top = item->symBbox(SymId::bracketTop).height();
-                    y -= top;
-                    h += top;
-                }
-                if (item->isBottom()) {
-                    double bottom = item->symBbox(SymId::bracketBottom).height();
-                    h += bottom;
-                }
-            }
-            default:
-                break;
-            }
-        }
-        bb.setTop(y);
-        bb.setHeight(h);
-    }
-    return bb;
-}
-
-//---------------------------------------------------------
-//    called after system layout; set vertical dimensions
-//---------------------------------------------------------
-void TLayout::layout2(BarLine* item, LayoutContext& ctx)
-{
-    // barlines hidden on this staff
-    if (item->staff() && item->segment()) {
-        if ((!item->staff()->staffTypeForElement(item)->showBarlines() && item->segment()->segmentType() == SegmentType::EndBarLine)
-            || (item->staff()->hideSystemBarLine() && item->segment()->segmentType() == SegmentType::BeginBarLine)) {
-            item->setbbox(RectF());
-            return;
-        }
-    }
-
-    item->calcY();
-    item->bbox().setTop(item->y1());
-    item->bbox().setBottom(item->y2());
-
-    if (ctx.conf().styleB(Sid::repeatBarTips)) {
-        switch (item->barLineType()) {
-        case BarLineType::START_REPEAT:
-            item->bbox().unite(item->symBbox(SymId::bracketTop).translated(0, item->y1()));
-            item->bbox().unite(item->symBbox(SymId::bracketBottom).translated(0, item->y2()));
-            break;
-        case BarLineType::END_REPEAT:
-        {
-            double w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
-            item->bbox().unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, item->y1()));
-            item->bbox().unite(item->symBbox(SymId::reversedBracketBottom).translated(-w1, item->y2()));
-            break;
-        }
-        case BarLineType::END_START_REPEAT:
-        {
-            double w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
-            item->bbox().unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, item->y1()));
-            item->bbox().unite(item->symBbox(SymId::reversedBracketBottom).translated(-w1, item->y2()));
-            item->bbox().unite(item->symBbox(SymId::bracketTop).translated(0, item->y1()));
-            item->bbox().unite(item->symBbox(SymId::bracketBottom).translated(0, item->y2()));
-            break;
-        }
-        default:
-            break;
-        }
-    }
-}
-
-void TLayout::layout(Beam* item, LayoutContext& ctx)
+void TLayout::layout(Beam*, LayoutContext&)
 {
     UNREACHABLE;
     //BeamLayout::layout(item, ctx);
 }
 
-void TLayout::layout1(Beam* item, LayoutContext& ctx)
+void TLayout::layout1(Beam*, LayoutContext&)
 {
     UNREACHABLE;
     //BeamLayout::layout1(item, ctx);
@@ -1039,7 +841,7 @@ void TLayout::layout(Breath* item, LayoutContext& ctx)
     item->setbbox(item->symBbox(item->symId()));
 }
 
-void TLayout::layout(Chord* item, LayoutContext& ctx)
+void TLayout::layout(Chord*, LayoutContext&)
 {
     UNREACHABLE;
     //ChordLayout::layout(item, ctx);
@@ -2711,19 +2513,19 @@ void TLayout::layout(LineSegment* item, LayoutContext& ctx)
     layoutItem(item, ctx);
 }
 
-void TLayout::layout(Lyrics* item, LayoutContext& ctx)
+void TLayout::layout(Lyrics*, LayoutContext&)
 {
     UNREACHABLE;
     //LyricsLayout::layout(item, ctx);
 }
 
-void TLayout::layout(LyricsLine* item, LayoutContext& ctx)
+void TLayout::layout(LyricsLine*, LayoutContext&)
 {
     UNREACHABLE;
     //LyricsLayout::layout(item, ctx);
 }
 
-void TLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
+void TLayout::layout(LyricsLineSegment*, LayoutContext&)
 {
     UNREACHABLE;
     //LyricsLayout::layout(item, ctx);
@@ -3095,7 +2897,7 @@ void TLayout::layout(Ornament* item, LayoutContext& ctx)
     Chord* parentChord = toChord(item->parentItem());
     Chord* cueNoteChord = item->cueNoteChord();
 
-    Note* cueNote = cueNoteChord->notes().front();
+    //Note* cueNote = cueNoteChord->notes().front();
 
     UNREACHABLE;
     //ChordLayout::layoutChords3(ctx.conf().style(), { cueNoteChord }, { cueNote }, item->staff(), ctx);
@@ -4340,9 +4142,9 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     }
 }
 
-void TLayout::layout(Tie*, LayoutContext&)
+void TLayout::layout(Tie* item, LayoutContext&)
 {
-    UNREACHABLE;
+    UNUSED(item);
 }
 
 void TLayout::layout(TimeSig*, LayoutContext&)
