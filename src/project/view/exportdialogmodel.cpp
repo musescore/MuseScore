@@ -82,7 +82,7 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
         ExportType::makeWithSuffixes({ "ogg" },
                                      qtrc("project/export", "OGG audio"),
                                      qtrc("project/export", "OGG audio files"),
-                                     "AudioSettingsPage.qml"),
+                                     "OggSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "flac" },
                                      qtrc("project/export", "FLAC audio"),
                                      qtrc("project/export", "FLAC audio files"),
