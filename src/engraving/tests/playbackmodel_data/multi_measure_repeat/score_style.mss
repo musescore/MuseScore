@@ -126,6 +126,8 @@
     <stemLengthSmall>2.25</stemLengthSmall>
     <shortStemStartLocation>1</shortStemStartLocation>
     <shortestStem>2.5</shortestStem>
+    <minStaffSizeForAutoStems>4</minStaffSizeForAutoStems>
+    <smallStaffStemDirection>1</smallStaffStemDirection>
     <beginRepeatLeftMargin>1</beginRepeatLeftMargin>
     <minNoteDistance>0.2</minNoteDistance>
     <barNoteDistance>1.3</barNoteDistance>
@@ -141,6 +143,9 @@
     <staffLineWidth>0.11</staffLineWidth>
     <ledgerLineWidth>0.16</ledgerLineWidth>
     <ledgerLineLength>0.35</ledgerLineLength>
+    <stemSlashPosition>2</stemSlashPosition>
+    <stemSlashAngle>40</stemSlashAngle>
+    <stemSlashThickness>0.125</stemSlashThickness>
     <accidentalDistance>0.22</accidentalDistance>
     <accidentalNoteDistance>0.25</accidentalNoteDistance>
     <bracketedAccidentalPadding>0.175</bracketedAccidentalPadding>
@@ -151,6 +156,7 @@
     <useWideBeams>0</useWideBeams>
     <beamMinLen>1.3</beamMinLen>
     <beamNoSlope>0</beamNoSlope>
+    <snapCustomBeamsToGrid>1</snapCustomBeamsToGrid>
     <dotMag>1</dotMag>
     <dotNoteDistance>0.5</dotNoteDistance>
     <dotRestDistance>0.25</dotRestDistance>
@@ -190,14 +196,19 @@
     <hairpinDecrescText>dim.</hairpinDecrescText>
     <hairpinCrescContText>(cresc.)</hairpinCrescContText>
     <hairpinDecrescContText>(dim.)</hairpinDecrescContText>
-    <hairpinLineStyle>1</hairpinLineStyle>
-    <hairpinLineLineStyle>6</hairpinLineLineStyle>
+    <hairpinLineStyle>solid</hairpinLineStyle>
+    <hairpinDashLineLen>3</hairpinDashLineLen>
+    <hairpinDashGapLen>3</hairpinDashGapLen>
+    <hairpinLineLineStyle>dashed</hairpinLineLineStyle>
+    <hairpinLineDashLineLen>6</hairpinLineDashLineLen>
+    <hairpinLineDashGapLen>9</hairpinLineDashGapLen>
     <pedalPlacement>1</pedalPlacement>
     <pedalPosAbove x="0" y="-1"/>
     <pedalPosBelow x="0" y="2.5"/>
     <pedalLineWidth>0.11</pedalLineWidth>
-    <pedalListStyle>1</pedalListStyle>
-    <pedalBeginTextOffset x="0" y="0.15"/>
+    <pedalListStyle>solid</pedalListStyle>
+    <pedalDashLineLen>4</pedalDashLineLen>
+    <pedalDashGapLen>4</pedalDashGapLen>
     <pedalHookHeight>-1.2</pedalHookHeight>
     <pedalFontFace>Edwin</pedalFontFace>
     <pedalFontSize>12</pedalFontSize>
@@ -315,6 +326,8 @@
     <measureNumberAllStaffs>0</measureNumberAllStaffs>
     <smallNoteMag>0.7</smallNoteMag>
     <graceNoteMag>0.7</graceNoteMag>
+    <graceToMainNoteDist>0.45</graceToMainNoteDist>
+    <graceToGraceNoteDist>0.3</graceToGraceNoteDist>
     <smallStaffMag>0.7</smallStaffMag>
     <smallClefMag>0.8</smallClefMag>
     <genClef>1</genClef>
@@ -358,6 +371,7 @@
     <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
     <firstSystemIndentationValue>5</firstSystemIndentationValue>
     <alwaysShowBracketsWhenEmptyStavesAreHidden>0</alwaysShowBracketsWhenEmptyStavesAreHidden>
+    <alwaysShowSquareBracketsWhenEmptyStavesAreHidden>0</alwaysShowSquareBracketsWhenEmptyStavesAreHidden>
     <hideInstrumentNameIfOneInstrument>1</hideInstrumentNameIfOneInstrument>
     <gateTime>100</gateTime>
     <tenutoGateTime>100</tenutoGateTime>
@@ -374,6 +388,7 @@
     <slurDottedWidth>0.1</slurDottedWidth>
     <minTieLength>1</minTieLength>
     <slurMinDistance>0.5</slurMinDistance>
+    <headerSlurTieDistance>1</headerSlurTieDistance>
     <sectionPause>3</sectionPause>
     <musicalSymbolFont>Leland</musicalSymbolFont>
     <musicalTextFont>Leland Text</musicalTextFont>
@@ -398,7 +413,9 @@
     <voltaPosAbove x="0" y="-3"/>
     <voltaHook>2.2</voltaHook>
     <voltaLineWidth>0.11</voltaLineWidth>
-    <voltaLineStyle>1</voltaLineStyle>
+    <voltaLineStyle>solid</voltaLineStyle>
+    <voltaDashLineLen>5</voltaDashLineLen>
+    <voltaDashGapLen>5</voltaDashGapLen>
     <voltaFontFace>Edwin</voltaFontFace>
     <voltaFontSize>11</voltaFontSize>
     <voltaLineSpacing>1</voltaLineSpacing>
@@ -448,7 +465,9 @@
     <ottavaHookAbove>1</ottavaHookAbove>
     <ottavaHookBelow>-1</ottavaHookBelow>
     <ottavaLineWidth>0.11</ottavaLineWidth>
-    <ottavaLineStyle>2</ottavaLineStyle>
+    <ottavaLineStyle>dashed</ottavaLineStyle>
+    <ottavaDashLineLen>6</ottavaDashLineLen>
+    <ottavaDashGapLen>6</ottavaDashGapLen>
     <ottavaNumbersOnly>1</ottavaNumbersOnly>
     <ottavaFontFace>Edwin</ottavaFontFace>
     <ottavaFontSize>10</ottavaFontSize>
@@ -456,7 +475,8 @@
     <ottavaFontSpatiumDependent>1</ottavaFontSpatiumDependent>
     <ottavaFontStyle>0</ottavaFontStyle>
     <ottavaColor r="0" g="0" b="0" a="255"/>
-    <ottavaTextAlign>left,center</ottavaTextAlign>
+    <ottavaTextAlignAbove>left,top</ottavaTextAlignAbove>
+    <ottavaTextAlignBelow>left,baseline</ottavaTextAlignBelow>
     <ottavaFrameType>0</ottavaFrameType>
     <ottavaFramePadding>0.2</ottavaFramePadding>
     <ottavaFrameWidth>0.1</ottavaFrameWidth>
@@ -755,6 +775,10 @@
     <tempoFrameRound>0</tempoFrameRound>
     <tempoFrameFgColor r="0" g="0" b="0" a="255"/>
     <tempoFrameBgColor r="255" g="255" b="255" a="0"/>
+    <tempoChangeLineWidth>0.15</tempoChangeLineWidth>
+    <tempoChangeLineStyle>dashed</tempoChangeLineStyle>
+    <tempoChangeDashLineLen>6</tempoChangeDashLineLen>
+    <tempoChangeDashGapLen>9</tempoChangeDashGapLen>
     <metronomeFontFace>Edwin</metronomeFontFace>
     <metronomeFontSize>12</metronomeFontSize>
     <metronomeLineSpacing>1</metronomeLineSpacing>
@@ -777,7 +801,7 @@
     <measureNumberFontStyle>2</measureNumberFontStyle>
     <measureNumberColor r="0" g="0" b="0" a="255"/>
     <measureNumberOffset x="0" y="-2"/>
-    <measureNumberPosBelow x="0" y="2"/>
+    <measureNumberPosBelow x="0" y="1"/>
     <measureNumberOffsetType>1</measureNumberOffsetType>
     <measureNumberVPlacement>0</measureNumberVPlacement>
     <measureNumberHPlacement>0</measureNumberHPlacement>
@@ -1237,8 +1261,9 @@
     <letRingPosAbove x="0" y="0"/>
     <letRingPosBelow x="0" y="0"/>
     <letRingLineWidth>0.15</letRingLineWidth>
-    <letRingLineStyle>2</letRingLineStyle>
-    <letRingBeginTextOffset x="0" y="0.15"/>
+    <letRingLineStyle>dashed</letRingLineStyle>
+    <letRingDashLineLen>5</letRingDashLineLen>
+    <letRingDashGapLen>5</letRingDashGapLen>
     <letRingText>let ring</letRingText>
     <letRingFrameType>0</letRingFrameType>
     <letRingFramePadding>0.2</letRingFramePadding>
@@ -1259,8 +1284,9 @@
     <palmMutePosAbove x="0" y="-4"/>
     <palmMutePosBelow x="0" y="4"/>
     <palmMuteLineWidth>0.15</palmMuteLineWidth>
-    <palmMuteLineStyle>2</palmMuteLineStyle>
-    <palmMuteBeginTextOffset x="0" y="0.15"/>
+    <palmMuteLineStyle>dashed</palmMuteLineStyle>
+    <palmMuteDashLineLen>5</palmMuteDashLineLen>
+    <palmMuteDashGapLen>5</palmMuteDashGapLen>
     <palmMuteText>P.M.</palmMuteText>
     <palmMuteFrameType>0</palmMuteFrameType>
     <palmMuteFramePadding>0.2</palmMuteFramePadding>
@@ -1288,6 +1314,35 @@
     <voltaMinDistance>1</voltaMinDistance>
     <figuredBassMinDistance>0.5</figuredBassMinDistance>
     <tupletMinDistance>0.5</tupletMinDistance>
+    <slurShowTabSimple>1</slurShowTabSimple>
+    <slurShowTabCommon>1</slurShowTabCommon>
+    <fermataShowTabSimple>1</fermataShowTabSimple>
+    <fermataShowTabCommon>1</fermataShowTabCommon>
+    <dynamicsShowTabSimple>1</dynamicsShowTabSimple>
+    <dynamicsShowTabCommon>1</dynamicsShowTabCommon>
+    <hairpinShowTabSimple>1</hairpinShowTabSimple>
+    <hairpinShowTabCommon>1</hairpinShowTabCommon>
+    <accentShowTabSimple>1</accentShowTabSimple>
+    <accentShowTabCommon>1</accentShowTabCommon>
+    <staccatoShowTabSimple>1</staccatoShowTabSimple>
+    <staccatoShowTabCommon>1</staccatoShowTabCommon>
+    <harmonicMarkShowTabSimple>1</harmonicMarkShowTabSimple>
+    <harmonicMarkShowTabCommon>1</harmonicMarkShowTabCommon>
+    <letRingShowTabSimple>1</letRingShowTabSimple>
+    <letRingShowTabCommon>1</letRingShowTabCommon>
+    <palmMuteShowTabSimple>1</palmMuteShowTabSimple>
+    <palmMuteShowTabCommon>1</palmMuteShowTabCommon>
+    <rasgueadoShowTabSimple>1</rasgueadoShowTabSimple>
+    <rasgueadoShowTabCommon>1</rasgueadoShowTabCommon>
+    <mordentShowTabSimple>1</mordentShowTabSimple>
+    <mordentShowTabCommon>1</mordentShowTabCommon>
+    <turnShowTabSimple>1</turnShowTabSimple>
+    <turnShowTabCommon>1</turnShowTabCommon>
+    <wahShowTabSimple>1</wahShowTabSimple>
+    <wahShowTabCommon>1</wahShowTabCommon>
+    <golpeShowTabSimple>1</golpeShowTabSimple>
+    <golpeShowTabCommon>1</golpeShowTabCommon>
+    <chordlineThickness>0.006</chordlineThickness>
     <autoplaceEnabled>1</autoplaceEnabled>
     <defaultsVersion>400</defaultsVersion>
     <Spatium>1.74978</Spatium>
