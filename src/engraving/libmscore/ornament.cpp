@@ -244,7 +244,6 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
 
         Note*& note = _notesAboveAndBelow.at(i);
         if (!note && above && _cueNoteChord) {
-            assert(_cueNoteChord->notes().size());
             note = _cueNoteChord->upNote();
         }
 
