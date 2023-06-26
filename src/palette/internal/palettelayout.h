@@ -22,8 +22,11 @@
 #ifndef MU_PALETTE_PALETTELAYOUT_H
 #define MU_PALETTE_PALETTELAYOUT_H
 
+#include <memory>
+
 namespace mu::engraving {
 class MStyle;
+class IEngravingFont;
 class EngravingItem;
 class Score;
 
@@ -33,6 +36,8 @@ class Articulation;
 class Clef;
 
 class KeySig;
+
+class TimeSig;
 }
 
 namespace mu::palette {
@@ -48,6 +53,7 @@ public:
             : m_score(s) {}
 
         const engraving::MStyle& style() const;
+        std::shared_ptr<engraving::IEngravingFont> engravingFont() const;
 
     private:
         engraving::Score* m_score = nullptr;
@@ -58,6 +64,7 @@ public:
     static void layout(engraving::Clef* item, const Context& ctx);
 
     static void layout(engraving::KeySig* item, const Context& ctx);
+    static void layout(engraving::TimeSig* item, const Context& ctx);
 };
 }
 
