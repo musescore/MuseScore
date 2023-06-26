@@ -31,6 +31,7 @@
 #include "importexport/guitarpro/iguitarproconfiguration.h"
 #include "importexport/ove/ioveconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
+#include "importexport/mei/imeiconfiguration.h"
 #include "notation/inotationconfiguration.h"
 
 namespace mu::appshell {
@@ -42,6 +43,7 @@ class ImportPreferencesModel : public QObject, public async::Asyncable
     INJECT(iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
     INJECT(iex::ove::IOveConfiguration, oveConfiguration)
     INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
+    INJECT(iex::mei::IMeiConfiguration, meiConfiguration)
     INJECT(notation::INotationConfiguration, notationConfiguration)
 
     Q_PROPERTY(QString styleFileImportPath READ styleFileImportPath WRITE setStyleFileImportPath NOTIFY styleFileImportPathChanged)
@@ -53,6 +55,8 @@ class ImportPreferencesModel : public QObject, public async::Asyncable
     Q_PROPERTY(bool importBreaks READ importBreaks WRITE setImportBreaks NOTIFY importBreaksChanged)
     Q_PROPERTY(bool needUseDefaultFont READ needUseDefaultFont WRITE setNeedUseDefaultFont NOTIFY needUseDefaultFontChanged)
 
+    Q_PROPERTY(bool meiImportLayout READ meiImportLayout WRITE setMeiImportLayout NOTIFY meiImportLayoutChanged)
+    
     Q_PROPERTY(int currentShortestNote READ currentShortestNote WRITE setCurrentShortestNote NOTIFY currentShortestNoteChanged)
 
     Q_PROPERTY(
@@ -79,6 +83,8 @@ public:
     int currentShortestNote() const;
 
     bool needAskAboutApplyingNewStyle() const;
+    
+    bool meiImportLayout() const;
 
 public slots:
     void setStyleFileImportPath(QString path);
@@ -91,6 +97,8 @@ public slots:
     void setCurrentShortestNote(int note);
 
     void setNeedAskAboutApplyingNewStyle(bool value);
+    
+    void setMeiImportLayout(bool import);
 
 signals:
     void styleFileImportPathChanged(QString styleFileImportPath);
@@ -100,6 +108,7 @@ signals:
     void needUseDefaultFontChanged(bool needUseDefaultFont);
     void currentShortestNoteChanged(int currentShortestNote);
     void needAskAboutApplyingNewStyleChanged(bool needAskAboutApplyingNewStyle);
+    void meiImportLayoutChanged(bool importLayout);
 };
 }
 

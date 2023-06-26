@@ -369,6 +369,8 @@ FocusScope {
                                 case "musicxml":
                                 case "xml":
                                     return "qrc:/resources/Placeholder_MXML.png"
+                                case "mei":
+                                    return "qrc:/resources/Placeholder_MEI.png"
                                 default:
                                     return "qrc:/resources/Placeholder_Other.png"
                                 }

@@ -129,5 +129,15 @@ PreferencesPage {
                 }
             }
         }
+
+        SeparatorLine { }
+
+        MeiSection {
+            meiImportLayout: importPreferencesModel.meiImportLayout
+
+            onMeiImportLayoutChangeRequested: function(meiImportLayout) {
+                importPreferencesModel.meiImportLayout = meiImportLayout
+            }
+        }
     }
 }

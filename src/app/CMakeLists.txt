@@ -184,6 +184,7 @@ if (NOT CC_IS_EMSCRIPTEN)
             iex_ove
             iex_audioexport
             iex_imagesexport
+            iex_mei
         )
 
         if (MUE_BUILD_VIDEOEXPORT_MODULE)

@@ -23,6 +23,7 @@
         <file>qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/MidiSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/MusicXmlSettingsPage.qml</file>
+        <file>qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml</file>
         <file>qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml</file>
         <file>qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml</file>
@@ -55,6 +56,7 @@
         <file>resources/Placeholder_MIDI.png</file>
         <file>resources/Placeholder_MXML.png</file>
         <file>resources/Placeholder_Other.png</file>
+        <file>resources/Placeholder_MEI.png</file>
         <file>resources/CloudProject.svg</file>
         <file>resources/PublishScores.png</file>
         <file>qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml</file>
