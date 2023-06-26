@@ -142,7 +142,6 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
         return make_ret(Ret::Code::InternalError);
     }
 
-    score->lockUpdates(false);
     score->startCmd();
 
     bool ok = true;
