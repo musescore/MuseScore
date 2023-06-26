@@ -2726,7 +2726,7 @@ void TLayout::layout(Harmony* item, LayoutContext& ctx)
 void TLayout::layout1(Harmony* item, LayoutContext& ctx)
 {
     if (item->isLayoutInvalid()) {
-        item->createLayout();
+        item->createBlocks();
     }
 
     if (item->textBlockList().empty()) {
@@ -4472,8 +4472,8 @@ void TLayout::layout1(TextBase* item, LayoutContext& ctx)
 
 void TLayout::layout1TextBase(TextBase* item, LayoutContext& ctx)
 {
-    if (item->layoutInvalid()) {
-        item->createLayout();
+    if (item->isBlockNotCreated()) {
+        item->createBlocks();
     }
     if (item->blocksRef().empty()) {
         item->blocksRef().push_back(TextBlock());

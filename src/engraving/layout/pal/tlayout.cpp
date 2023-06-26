@@ -1877,7 +1877,6 @@ void TLayout::layout(GradualTempoChangeSegment* item, LayoutContext& ctx)
     if (item->isStyled(Pid::OFFSET)) {
         item->roffset() = item->tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
-    autoplaceSpannerSegment(item, ctx);
 }
 
 void TLayout::layout(GradualTempoChange* item, LayoutContext& ctx)
@@ -2207,8 +2206,6 @@ void TLayout::layout(HarmonicMarkSegment* item, LayoutContext& ctx)
     }
 
     layoutTextLineBaseSegment(item, ctx);
-
-    autoplaceSpannerSegment(item, ctx);
 }
 
 void TLayout::layout(Harmony* item, LayoutContext& ctx)
@@ -2229,7 +2226,7 @@ void TLayout::layout(Harmony* item, LayoutContext& ctx)
 void TLayout::layout1(Harmony* item, LayoutContext& ctx)
 {
     if (item->isLayoutInvalid()) {
-        item->createLayout();
+        item->createBlocks();
     }
 
     if (item->textBlockList().empty()) {
@@ -2440,7 +2437,6 @@ void TLayout::layout(LetRingSegment* item, LayoutContext& ctx)
     }
 
     layoutTextLineBaseSegment(item, ctx);
-    autoplaceSpannerSegment(item, ctx);
 }
 
 void TLayout::layout(LineSegment* item, LayoutContext& ctx)
@@ -2860,7 +2856,6 @@ void TLayout::layout(Ottava* item, LayoutContext& ctx)
 void TLayout::layout(OttavaSegment* item, LayoutContext& ctx)
 {
     layoutTextLineBaseSegment(item, ctx);
-    autoplaceSpannerSegment(item, ctx);
 }
 
 void TLayout::layout(PalmMute* item, LayoutContext& ctx)
@@ -2879,7 +2874,6 @@ void TLayout::layout(PalmMuteSegment* item, LayoutContext& ctx)
     }
 
     layoutTextLineBaseSegment(item, ctx);
-    autoplaceSpannerSegment(item, ctx);
 }
 
 void TLayout::layout(Pedal* item, LayoutContext& ctx)
@@ -2893,13 +2887,11 @@ void TLayout::layout(PedalSegment* item, LayoutContext& ctx)
     if (item->isStyled(Pid::OFFSET)) {
         item->roffset() = item->pedal()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
-    autoplaceSpannerSegment(item, ctx);
 }
 
 void TLayout::layout(PickScrapeSegment* item, LayoutContext& ctx)
 {
     layoutTextLineBaseSegment(item, ctx);
-    autoplaceSpannerSegment(item, ctx);
 }
 
 void TLayout::layout(PlayTechAnnotation* item, LayoutContext& ctx)
@@ -2919,7 +2911,6 @@ void TLayout::layout(RasgueadoSegment* item, LayoutContext& ctx)
     }
 
     layoutTextLineBaseSegment(item, ctx);
-    autoplaceSpannerSegment(item, ctx);
 }
 
 void TLayout::layout(RehearsalMark* item, LayoutContext& ctx)
@@ -3124,108 +3115,13 @@ void TLayout::layout(ShadowNote* item, LayoutContext& ctx)
 
 void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
 {
-    if (ctx.conf().isPaletteMode() || (item->tick() == Fraction(-1, 1)) || (item->tick2() == Fraction::fromTicks(1))) {
-        //
-        // when used in a palette or while dragging from palette,
-        // SLine has no parent and
-        // tick and tick2 has no meaning so no layout is
-        // possible and needed
-        //
-        if (item->spannerSegments().empty()) {
-            item->setLen(ctx.conf().spatium() * 7);
-        }
-
-        LineSegment* lineSegm = item->frontSegment();
-        layout(lineSegm, ctx);
-        item->setbbox(lineSegm->bbox());
-        return;
+    if (item->spannerSegments().empty()) {
+        item->setLen(ctx.conf().spatium() * 7);
     }
 
-    item->computeStartElement();
-    item->computeEndElement();
-
-    System* s1;
-    System* s2;
-    PointF p1(item->linePos(Grip::START, &s1));
-    PointF p2(item->linePos(Grip::END,   &s2));
-
-    const std::vector<System*>& systems = ctx.dom().systems();
-    system_idx_t sysIdx1 = mu::indexOf(systems, s1);
-    system_idx_t sysIdx2 = mu::indexOf(systems, s2);
-    int segmentsNeeded = 0;
-
-    if (sysIdx1 == mu::nidx || sysIdx2 == mu::nidx) {
-        return;
-    }
-
-    for (system_idx_t i = sysIdx1; i <= sysIdx2; ++i) {
-        if (systems.at(i)->vbox()) {
-            continue;
-        }
-        ++segmentsNeeded;
-    }
-
-    int segCount = int(item->spannerSegments().size());
-
-    if (segmentsNeeded != segCount) {
-        item->fixupSegments(segmentsNeeded, [item](System* parent) { return item->createLineSegment(parent); });
-        if (segmentsNeeded > segCount) {
-            for (int i = segCount; i < segmentsNeeded; ++i) {
-                LineSegment* lineSegm = item->segmentAt(i);
-                // set user offset to previous segment's offset
-                if (segCount > 0) {
-                    lineSegm->setOffset(PointF(0, item->segmentAt(i - 1)->offset().y()));
-                } else {
-                    lineSegm->setOffset(PointF(0, item->offset().y()));
-                }
-            }
-        }
-    }
-
-    int segIdx = 0;
-    for (system_idx_t i = sysIdx1; i <= sysIdx2; ++i) {
-        System* system = systems.at(i);
-        if (system->vbox()) {
-            continue;
-        }
-        LineSegment* lineSegm = item->segmentAt(segIdx++);
-        lineSegm->setTrack(item->track());           // DEBUG
-        lineSegm->setSystem(system);
-
-        if (sysIdx1 == sysIdx2) {
-            // single segment
-            lineSegm->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-            double len = p2.x() - p1.x();
-            // enforcing a minimum length would be possible but inadvisable
-            // the line length calculations are tuned well enough that this should not be needed
-            //if (anchor() == Anchor::SEGMENT && type() != ElementType::PEDAL)
-            //      len = std::max(1.0 * spatium(), len);
-            lineSegm->setPos(p1);
-            lineSegm->setPos2(PointF(len, p2.y() - p1.y()));
-        } else if (i == sysIdx1) {
-            // start segment
-            lineSegm->setSpannerSegmentType(SpannerSegmentType::BEGIN);
-            lineSegm->setPos(p1);
-            double x2 = system->endingXForOpenEndedLines();
-            lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
-        } else if (i > 0 && i != sysIdx2) {
-            // middle segment
-            lineSegm->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
-            double x1 = system->firstNoteRestSegmentX(true);
-            double x2 = system->endingXForOpenEndedLines();
-            lineSegm->setPos(PointF(x1, p1.y()));
-            lineSegm->setPos2(PointF(x2 - x1, 0.0));
-        } else if (i == sysIdx2) {
-            // end segment
-            double minLen = 0.0;
-            double x1 = system->firstNoteRestSegmentX(true);
-            double len = std::max(minLen, p2.x() - x1);
-            lineSegm->setSpannerSegmentType(SpannerSegmentType::END);
-            lineSegm->setPos(PointF(p2.x() - len, p2.y()));
-            lineSegm->setPos2(PointF(len, 0.0));
-        }
-        layout(lineSegm, ctx);
-    }
+    LineSegment* lineSegm = item->frontSegment();
+    layout(lineSegm, ctx);
+    item->setbbox(lineSegm->bbox());
 }
 
 void TLayout::layout(Slur* item, LayoutContext& ctx)
@@ -3657,25 +3553,6 @@ void TLayout::layout(TabDurationSymbol* item, LayoutContext&)
 void TLayout::layout(TempoText* item, LayoutContext& ctx)
 {
     layoutTextBase(item, ctx);
-
-    Segment* s = item->segment();
-    if (!s) {                       // for use in palette
-        return;
-    }
-
-    // tempo text on first chordrest of measure should align over time sig if present
-    //
-    if (item->autoplace() && s->rtick().isZero()) {
-        Segment* p = item->segment()->prev(SegmentType::TimeSig);
-        if (p) {
-            item->movePosX(-(s->x() - p->x()));
-            EngravingItem* e = p->element(item->staffIdx() * VOICES);
-            if (e) {
-                item->movePosX(e->x());
-            }
-        }
-    }
-    item->autoplaceSegmentElement();
 }
 
 void TLayout::layout(TextBase* item, LayoutContext& ctx)
@@ -3686,20 +3563,12 @@ void TLayout::layout(TextBase* item, LayoutContext& ctx)
 void TLayout::layoutTextBase(TextBase* item, LayoutContext& ctx)
 {
     item->setPos(PointF());
-    if (!item->explicitParent()) {
-        item->setOffset(0.0, 0.0);
-    }
-//      else if (isStyled(Pid::OFFSET))                                   // TODO: should be set already
-//            setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
+    item->setOffset(0.0, 0.0);
+
     if (item->placeBelow()) {
-        item->setPosY(item->staff() ? item->staff()->height() : 0.0);
+        item->setPosY(0.0);
     }
 
-    layout1(item, ctx);
-}
-
-void TLayout::layout1(TextBase* item, LayoutContext& ctx)
-{
     if (Harmony::classof(item)) {
         layout1(static_cast<Harmony*>(item), ctx);
     } else {
@@ -3707,10 +3576,10 @@ void TLayout::layout1(TextBase* item, LayoutContext& ctx)
     }
 }
 
-void TLayout::layout1TextBase(TextBase* item, LayoutContext& ctx)
+void TLayout::layout1TextBase(TextBase* item, LayoutContext&)
 {
-    if (item->layoutInvalid()) {
-        item->createLayout();
+    if (item->isBlockNotCreated()) {
+        item->createBlocks();
     }
     if (item->blocksRef().empty()) {
         item->blocksRef().push_back(TextBlock());
@@ -3733,33 +3602,8 @@ void TLayout::layout1TextBase(TextBase* item, LayoutContext& ctx)
     }
     double yoff = 0;
     double h    = 0;
-    if (item->explicitParent()) {
-        if (item->layoutToParentWidth()) {
-            if (item->explicitParent()->isTBox()) {
-                // hack: vertical alignment is always TOP
-                item->setAlign(AlignV::TOP);
-            } else if (item->explicitParent()->isBox()) {
-                // consider inner margins of frame
-                Box* b = toBox(item->explicitParent());
-                yoff = b->topMargin() * DPMM;
 
-                if (b->height() < bb.bottom()) {
-                    h = b->height() / 2 + bb.height();
-                } else {
-                    h  = b->height() - yoff - b->bottomMargin() * DPMM;
-                }
-            } else if (item->explicitParent()->isPage()) {
-                Page* p = toPage(item->explicitParent());
-                h = p->height() - p->tm() - p->bm();
-                yoff = p->tm();
-            } else if (item->explicitParent()->isMeasure()) {
-            } else {
-                h  = item->parentItem()->height();
-            }
-        }
-    } else {
-        item->setPos(PointF());
-    }
+    item->setPos(PointF());
 
     if (item->align() == AlignV::BOTTOM) {
         yoff += h - bb.bottom();
@@ -3781,7 +3625,6 @@ void TLayout::layout1TextBase(TextBase* item, LayoutContext& ctx)
     if (item->hasFrame()) {
         item->layoutFrame();
     }
-    ctx.addRefresh(item->canvasBoundingRect());
 }
 
 void TLayout::layout(Text* item, LayoutContext& ctx)
@@ -3800,7 +3643,6 @@ void TLayout::layout(TextLineSegment* item, LayoutContext& ctx)
     if (item->isStyled(Pid::OFFSET)) {
         item->roffset() = item->textLine()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
-    autoplaceSpannerSegment(item, ctx);
 }
 
 // Extends lines to fill the corner between them.
@@ -3838,12 +3680,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     double _spatium = tl->spatium();
 
     if (item->spanner()->placeBelow()) {
-        item->setPosY(item->staff() ? item->staff()->height() : 0.0);
-    }
-
-    // adjust Y pos to staffType offset
-    if (const StaffType* st = item->staffType()) {
-        item->movePosY(st->yoffset().val() * item->spatium());
+        item->setPosY(0.0);
     }
 
     if (!tl->diagonal()) {
@@ -3891,7 +3728,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         break;
     }
     item->text()->setPlacement(PlacementV::ABOVE);
-    item->text()->setTrack(item->track());
+
     layout(item->text(), ctx);
 
     if ((item->isSingleType() || item->isEndType())) {
@@ -4188,8 +4025,6 @@ void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
     if (item->isStyled(Pid::OFFSET)) {
         item->roffset() = item->trill()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
-
-    autoplaceSpannerSegment(item, ctx);
 }
 
 void TLayout::layout(TripletFeel* item, LayoutContext& ctx)
@@ -4249,8 +4084,6 @@ void TLayout::layout(VibratoSegment* item, LayoutContext& ctx)
     if (item->isStyled(Pid::OFFSET)) {
         item->roffset() = item->vibrato()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
-
-    autoplaceSpannerSegment(item, ctx);
 }
 
 void TLayout::layout(Vibrato* item, LayoutContext& ctx)
@@ -4274,13 +4107,11 @@ void TLayout::layout(Volta* item, LayoutContext& ctx)
 void TLayout::layout(VoltaSegment* item, LayoutContext& ctx)
 {
     layoutTextLineBaseSegment(item, ctx);
-    autoplaceSpannerSegment(item, ctx);
 }
 
 void TLayout::layout(WhammyBarSegment* item, LayoutContext& ctx)
 {
     layoutTextLineBaseSegment(item, ctx);
-    autoplaceSpannerSegment(item, ctx);
 }
 
 using LayoutSystemTypes = rtti::TypeList<LyricsLine, Slur, Volta>;
@@ -4535,67 +4366,4 @@ void TLayout::layoutSystemsDone(Spanner* item)
         }
     }
     item->setSpannerSegments(validSegments);
-}
-
-void TLayout::autoplaceSpannerSegment(SpannerSegment* item, LayoutContext& ctx)
-{
-    if (!item->explicitParent()) {
-        item->setOffset(PointF());
-        return;
-    }
-    if (item->isStyled(Pid::OFFSET)) {
-        item->setOffset(item->spanner()->propertyDefault(Pid::OFFSET).value<PointF>());
-    }
-
-    if (item->spanner()->anchor() == Spanner::Anchor::NOTE) {
-        return;
-    }
-
-    // rebase vertical offset on drag
-    double rebase = 0.0;
-    if (item->offsetChanged() != OffsetChange::NONE) {
-        rebase = item->rebaseOffset();
-    }
-
-    if (item->autoplace()) {
-        double sp = ctx.conf().spatium();
-        if (!item->systemFlag() && !item->spanner()->systemFlag()) {
-            sp *= item->staff()->staffMag(item->spanner()->tick());
-        }
-        double md = item->minDistance().val() * sp;
-        bool above = item->spanner()->placeAbove();
-        SkylineLine sl(!above);
-        Shape sh = item->shape();
-        sl.add(sh.translated(item->pos()));
-        double yd = 0.0;
-        staff_idx_t stfIdx = item->systemFlag() ? item->staffIdxOrNextVisible() : item->staffIdx();
-        if (stfIdx == mu::nidx) {
-            item->setSkipDraw(true);
-            return;
-        } else {
-            item->setSkipDraw(false);
-        }
-        if (above) {
-            double d = item->system()->topDistance(stfIdx, sl);
-            if (d > -md) {
-                yd = -(d + md);
-            }
-        } else {
-            double d = item->system()->bottomDistance(stfIdx, sl);
-            if (d > -md) {
-                yd = d + md;
-            }
-        }
-        if (yd != 0.0) {
-            if (item->offsetChanged() != OffsetChange::NONE) {
-                // user moved element within the skyline
-                // we may need to adjust minDistance, yd, and/or offset
-                double adj = item->pos().y() + rebase;
-                bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < item->staff()->height();
-                item->rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
-            }
-            item->movePosY(yd);
-        }
-    }
-    item->setOffsetChanged(false);
 }

@@ -431,9 +431,9 @@ public:
     friend class TextCursor;
     using EngravingObject::undoChangeProperty;
 
-    bool layoutInvalid() const { return m_layoutInvalid; }
+    bool isBlockNotCreated() const { return m_layoutInvalid; }
     std::vector<TextBlock>& blocksRef() { return m_blocks; }
-    void createLayout();
+    void createBlocks();
     void layoutFrame();
 
 protected:

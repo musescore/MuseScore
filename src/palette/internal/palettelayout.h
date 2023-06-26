@@ -41,6 +41,8 @@ class Clef;
 class KeySig;
 
 class TimeSig;
+
+class Volta;
 }
 
 namespace mu::palette {
@@ -72,6 +74,8 @@ public:
 
     static void layout(engraving::KeySig* item, const Context& ctx);
     static void layout(engraving::TimeSig* item, const Context& ctx);
+
+    static void layout(engraving::Volta* item, const Context& ctx);
 };
 }
 

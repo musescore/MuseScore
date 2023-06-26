@@ -68,7 +68,7 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     default:
         LOGD() << item->typeName();
-        if (std::string("BagpipeEmbellishment") == item->typeName()) {
+        if (std::string("Volta") == item->typeName()) {
             int k = -1;
         }
         layout::pal::TLayout::layoutItem(item, ctxpal);
@@ -412,4 +412,9 @@ void PaletteLayout::layout(TimeSig* item, const Context& ctx)
     }
 
     item->setDrawArgs(drawArgs);
+}
+
+void PaletteLayout::layout(Volta* item, const Context& ctx)
+{
+    // layoutLine(item, ctx);
 }
