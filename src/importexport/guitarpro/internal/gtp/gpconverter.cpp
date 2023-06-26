@@ -424,10 +424,6 @@ void GPConverter::fixEmptyMeasures()
             for (size_t i = 0; i < lastIndex; ++i) {
                 segItemPairs.at(i).first->remove(segItemPairs.at(i).second);
             }
-
-            Segment* segment = toSegment(segItemPairs.at(lastIndex).first);
-            segment->setRtick(Fraction(0, 1));
-
             Rest* rest = toRest(segItemPairs.at(lastIndex).second);
             rest->setTicks(_lastMeasure->ticks());
             rest->setDurationType(DurationType::V_MEASURE);
