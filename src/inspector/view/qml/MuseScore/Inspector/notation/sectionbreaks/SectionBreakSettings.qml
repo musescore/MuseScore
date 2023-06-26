@@ -60,7 +60,7 @@ Column {
         navigationRowStart: root.navigationRowStart
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         id: startWithLongInstrNames
         text: qsTrc("inspector", "Start new section with long instrument names")
         propertyItem: root.model ? root.model.shouldStartWithLongInstrNames : null
@@ -70,7 +70,7 @@ Column {
         navigation.row: pauseBeforeStartsSection.navigationRowEnd + 1
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         text: qsTrc("inspector", "Reset measure numbers for new section")
         propertyItem: root.model ? root.model.shouldResetBarNums : null
 

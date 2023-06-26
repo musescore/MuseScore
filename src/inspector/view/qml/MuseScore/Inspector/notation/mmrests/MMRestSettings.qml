@@ -43,7 +43,7 @@ Column {
         numberVisibilityCheckBox.focusOnFirst()
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         id: numberVisibilityCheckBox
         text: qsTrc("inspector", "Show number")
         propertyItem: root.model ? root.model.isNumberVisible : null

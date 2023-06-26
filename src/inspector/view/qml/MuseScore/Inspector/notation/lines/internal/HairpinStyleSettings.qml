@@ -50,7 +50,7 @@ FocusableItem {
             height: childrenRect.height
             width: parent.width
 
-            CheckBoxPropertyView {
+            PropertyCheckBox {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -63,7 +63,7 @@ FocusableItem {
                 navigation.row: root.navigationRowStart + 1
             }
 
-            CheckBoxPropertyView {
+            PropertyCheckBox {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right

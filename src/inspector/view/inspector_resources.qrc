@@ -57,7 +57,7 @@
         <file>qml/MuseScore/Inspector/common/ColorSection.qml</file>
         <file>qml/MuseScore/Inspector/common/DropdownPropertyView.qml</file>
         <file>qml/MuseScore/Inspector/common/FlatRadioButtonGroupPropertyView.qml</file>
-        <file>qml/MuseScore/Inspector/common/CheckBoxPropertyView.qml</file>
+        <file>qml/MuseScore/Inspector/common/PropertyCheckBox.qml</file>
         <file>qml/MuseScore/Inspector/notation/NotationInspectorSectionLoader.qml</file>
         <file>qml/MuseScore/Inspector/notation/fermatas/FermataSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml</file>
@@ -102,5 +102,6 @@
         <file>qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/expressions/ExpressionsSettings.qml</file>
         <file>qml/MuseScore/Inspector/common/FrameSettings.qml</file>
+        <file>qml/MuseScore/Inspector/common/CheckBoxPropertyView.qml</file>
     </qresource>
 </RCC>
