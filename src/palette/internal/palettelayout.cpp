@@ -32,6 +32,7 @@
 #include "engraving/libmscore/accidental.h"
 #include "engraving/libmscore/articulation.h"
 #include "engraving/libmscore/clef.h"
+#include "engraving/libmscore/keysig.h"
 
 #include "engraving/layout/pal/tlayout.h"
 
@@ -52,8 +53,10 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::CLEF:         layout(toClef(item), ctx);
         break;
+    case ElementType::KEYSIG:       layout(toKeySig(item), ctx);
+        break;
     default:
-        //LOGI() << item->typeName();
+        LOGI() << item->typeName();
         layout::pal::TLayout::layoutItem(item, ctxpal);
         break;
     }
@@ -128,4 +131,54 @@ void PaletteLayout::layout(Clef* item, const Context& ctx)
 
     RectF bbox = item->symBbox(item->symId());
     item->setbbox(bbox);
+}
+
+void PaletteLayout::layout(KeySig* item, const Context& ctx)
+{
+    double spatium = item->spatium();
+    double step = spatium * 0.5;
+
+    item->setbbox(RectF());
+    item->keySymbols().clear();
+
+    Key key = item->key();
+    const signed char* lines = ClefInfo::lines(ClefType::G);
+
+    if (std::abs(int(key)) <= 7) {
+        SymId sym = key > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
+        double accidentalGap = ctx.style().styleS(Sid::keysigAccidentalDistance).val();
+        double previousWidth = item->symWidth(sym) / spatium;
+        int lineIndexOffset = int(key) > 0 ? 0 : 7;
+        for (int i = 0; i < std::abs(int(key)); ++i) {
+            int line = lines[lineIndexOffset + i];
+            KeySym ks;
+            ks.sym = sym;
+            double x = 0.0;
+            if (item->keySymbols().size() > 0) {
+                const KeySym& previous = item->keySymbols().back();
+                x = previous.xPos + previousWidth + accidentalGap;
+                bool isAscending = line < previous.line;
+                SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
+                SmuflAnchorId previousCutout = isAscending ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE;
+                PointF cutout = item->symSmuflAnchor(sym, currentCutout);
+                double currentCutoutY = line * step + cutout.y();
+                double previousCutoutY = previous.line * step + item->symSmuflAnchor(previous.sym, previousCutout).y();
+                if ((isAscending && currentCutoutY < previousCutoutY) || (!isAscending && currentCutoutY > previousCutoutY)) {
+                    x -= cutout.x() / spatium;
+                }
+            }
+            ks.xPos = x;
+            ks.line = line;
+            item->keySymbols().push_back(ks);
+        }
+    } else {
+        LOGD() << "illegal key:" << int(key);
+    }
+
+    // compute bbox
+    for (const KeySym& ks : item->keySymbols()) {
+        double x = ks.xPos * spatium;
+        double y = ks.line * step;
+        item->addbbox(item->symBbox(ks.sym).translated(x, y));
+    }
 }

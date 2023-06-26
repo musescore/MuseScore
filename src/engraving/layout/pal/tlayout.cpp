@@ -22,6 +22,8 @@
 
 #include "tlayout.h"
 
+#include <cmath>
+
 #include "global/realfn.h"
 #include "draw/fontmetrics.h"
 
@@ -2654,279 +2656,10 @@ void TLayout::layout(Jump* item, LayoutContext& ctx)
     item->autoplaceMeasureElement();
 }
 
-void TLayout::layout(KeySig* item, LayoutContext& ctx)
+void TLayout::layout(KeySig*, LayoutContext&)
 {
-    double _spatium = item->spatium();
-    double step = _spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
-
-    item->setbbox(RectF());
-
-    item->keySymbols().clear();
-    if (item->staff() && !item->staff()->staffType(item->tick())->genKeysig()) {
-        return;
-    }
-
-    // determine current clef for this staff
-    ClefType clef = ClefType::G;
-    if (item->staff()) {
-        // Look for a clef before the key signature at the same tick
-        Clef* c = nullptr;
-        if (item->segment()) {
-            for (Segment* seg = item->segment()->prev1(); !c && seg && seg->tick() == item->tick(); seg = seg->prev1()) {
-                if (seg->isClefType() || seg->isHeaderClefType()) {
-                    c = toClef(seg->element(item->track()));
-                }
-            }
-        }
-        if (c) {
-            clef = c->clefType();
-        } else {
-            // no clef found, so get the clef type from the clefs list, using the previous tick
-            clef = item->staff()->clef(item->tick() - Fraction::fromTicks(1));
-        }
-    }
-
-    int t1 = int(item->key());
-
-    if (item->isCustom() && !item->isAtonal()) {
-        double accidentalGap = ctx.conf().styleS(Sid::keysigAccidentalDistance).val();
-        // add standard key accidentals first, if necessary
-        for (int i = 1; i <= abs(t1) && abs(t1) <= 7; ++i) {
-            bool drop = false;
-            for (const CustDef& cd: item->customKeyDefs()) {
-                int degree = item->degInKey(cd.degree);
-                // if custom keysig accidental takes place, don't create tonal accidental
-                if ((degree * 2 + 2) % 7 == (t1 < 0 ? 8 - i : i) % 7) {
-                    drop = true;
-                    break;
-                }
-            }
-            if (!drop) {
-                KeySym ks;
-                int lineIndexOffset = t1 > 0 ? -1 : 6;
-                ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
-                ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
-                if (item->keySymbols().size() > 0) {
-                    KeySym& previous = item->keySymbols().back();
-                    double previousWidth = item->symWidth(previous.sym) / _spatium;
-                    ks.xPos = previous.xPos + previousWidth + accidentalGap;
-                } else {
-                    ks.xPos = 0;
-                }
-                // TODO octave metters?
-                item->keySymbols().push_back(ks);
-            }
-        }
-        for (const CustDef& cd : item->customKeyDefs()) {
-            SymId sym = item->symInKey(cd.sym, cd.degree);
-            int degree = item->degInKey(cd.degree);
-            bool flat = std::string(SymNames::nameForSymId(sym).ascii()).find("Flat") != std::string::npos;
-            int accIdx = (degree * 2 + 1) % 7; // C D E F ... index to F C G D index
-            accIdx = flat ? 13 - accIdx : accIdx;
-            int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
-            double xpos = cd.xAlt;
-            if (item->keySymbols().size() > 0) {
-                KeySym& previous = item->keySymbols().back();
-                double previousWidth = item->symWidth(previous.sym) / _spatium;
-                xpos += previous.xPos + previousWidth + accidentalGap;
-            }
-            // if translated symbol if out of range, add key accidental followed by untranslated symbol
-            if (sym == SymId::noSym) {
-                KeySym ks;
-                ks.line = line;
-                ks.xPos = xpos;
-                // for quadruple sharp use two double sharps
-                if (cd.sym == SymId::accidentalTripleSharp) {
-                    ks.sym = SymId::accidentalDoubleSharp;
-                    sym = SymId::accidentalDoubleSharp;
-                } else {
-                    ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
-                    sym = cd.sym;
-                }
-                item->keySymbols().push_back(ks);
-                xpos += t1 < 0 ? 0.7 : 1; // flats closer
-            }
-            // create symbol; natural only if is user defined
-            if (sym != SymId::accidentalNatural || sym == cd.sym) {
-                KeySym ks;
-                ks.sym = sym;
-                ks.line = line;
-                ks.xPos = xpos;
-                item->keySymbols().push_back(ks);
-            }
-        }
-    } else {
-        int accidentals = 0, naturals = 0;
-        switch (std::abs(t1)) {
-        case 7: accidentals = 0x7f;
-            break;
-        case 6: accidentals = 0x3f;
-            break;
-        case 5: accidentals = 0x1f;
-            break;
-        case 4: accidentals = 0xf;
-            break;
-        case 3: accidentals = 0x7;
-            break;
-        case 2: accidentals = 0x3;
-            break;
-        case 1: accidentals = 0x1;
-            break;
-        case 0: accidentals = 0;
-            break;
-        default:
-            LOGD("illegal t1 key %d", t1);
-            break;
-        }
-
-        // manage display of naturals:
-        // naturals are shown if there is some natural AND prev. measure has no section break
-        // AND style says they are not off
-        // OR key sig is CMaj/Amin (in which case they are always shown)
-
-        bool naturalsOn = false;
-        Measure* prevMeasure = item->measure() ? item->measure()->prevMeasure() : 0;
-
-        // If we're not force hiding naturals (Continuous panel), use score style settings
-        if (!item->hideNaturals()) {
-            const bool newSection = (!item->segment()
-                                     || (item->segment()->rtick().isZero() && (!prevMeasure || prevMeasure->sectionBreak()))
-                                     );
-            naturalsOn = !newSection && (ctx.conf().styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0));
-        }
-
-        // Don't repeat naturals if shown in courtesy
-        if (item->measure() && item->measure()->system() && item->measure()->isFirstInSystem()
-            && prevMeasure && prevMeasure->findSegment(SegmentType::KeySigAnnounce, item->tick())
-            && !item->segment()->isKeySigAnnounceType()) {
-            naturalsOn = false;
-        }
-        if (item->track() == mu::nidx) {
-            naturalsOn = false;
-        }
-
-        int coffset = 0;
-        Key t2      = Key::C;
-        if (naturalsOn) {
-            if (item->staff()) {
-                t2 = item->staff()->key(item->tick() - Fraction(1, 480 * 4));
-            }
-            if (t2 == Key::C) {
-                naturalsOn = false;
-            } else {
-                switch (std::abs(int(t2))) {
-                case 7: naturals = 0x7f;
-                    break;
-                case 6: naturals = 0x3f;
-                    break;
-                case 5: naturals = 0x1f;
-                    break;
-                case 4: naturals = 0xf;
-                    break;
-                case 3: naturals = 0x7;
-                    break;
-                case 2: naturals = 0x3;
-                    break;
-                case 1: naturals = 0x1;
-                    break;
-                case 0: naturals = 0;
-                    break;
-                default:
-                    LOGD("illegal t2 key %d", int(t2));
-                    break;
-                }
-                // remove redundant naturals
-                if (!((t1 > 0) ^ (t2 > 0))) {
-                    naturals &= ~accidentals;
-                }
-                if (t2 < 0) {
-                    coffset = 7;
-                }
-            }
-        }
-
-        // naturals should go BEFORE accidentals if style says so
-        // OR going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
-
-        bool prefixNaturals = naturalsOn
-                              && (ctx.conf().styleI(Sid::keySigNaturals) == int(KeySigNatural::BEFORE)
-                                  || t1 * int(t2) < 0);
-
-        // naturals should go AFTER accidentals if they should not go before!
-        bool suffixNaturals = naturalsOn && !prefixNaturals;
-
-        const signed char* lines = ClefInfo::lines(clef);
-
-        if (prefixNaturals) {
-            for (int i = 0; i < 7; ++i) {
-                if (naturals & (1 << i)) {
-                    keySigAddLayout(item, ctx, SymId::accidentalNatural, lines[i + coffset]);
-                }
-            }
-        }
-        if (abs(t1) <= 7) {
-            SymId symbol = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
-            int lineIndexOffset = t1 > 0 ? 0 : 7;
-            for (int i = 0; i < abs(t1); ++i) {
-                keySigAddLayout(item, ctx, symbol, lines[lineIndexOffset + i]);
-            }
-        } else {
-            LOGD("illegal t1 key %d", t1);
-        }
-
-        // add suffixed naturals, if any
-        if (suffixNaturals) {
-            for (int i = 0; i < 7; ++i) {
-                if (naturals & (1 << i)) {
-                    keySigAddLayout(item, ctx, SymId::accidentalNatural, lines[i + coffset]);
-                }
-            }
-        }
-
-        // Follow stepOffset
-        if (item->staffType()) {
-            item->setPosY(item->staffType()->stepOffset() * 0.5 * _spatium);
-        }
-    }
-
-    // compute bbox
-    for (const KeySym& ks : item->keySymbols()) {
-        double x = ks.xPos * _spatium;
-        double y = ks.line * step;
-        item->addbbox(item->symBbox(ks.sym).translated(x, y));
-    }
-}
-
-void TLayout::keySigAddLayout(KeySig* item, LayoutContext& ctx, SymId sym, int line)
-{
-    double _spatium = item->spatium();
-    double step = _spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
-    KeySym ks;
-    ks.sym = sym;
-    double x = 0.0;
-    if (item->keySymbols().size() > 0) {
-        KeySym& previous = item->keySymbols().back();
-        double accidentalGap = ctx.conf().styleS(Sid::keysigAccidentalDistance).val();
-        if (previous.sym != sym) {
-            accidentalGap *= 2;
-        } else if (previous.sym == SymId::accidentalNatural && sym == SymId::accidentalNatural) {
-            accidentalGap = ctx.conf().styleS(Sid::keysigNaturalDistance).val();
-        }
-        double previousWidth = item->symWidth(previous.sym) / _spatium;
-        x = previous.xPos + previousWidth + accidentalGap;
-        bool isAscending = line < previous.line;
-        SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
-        SmuflAnchorId previousCutout = isAscending ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE;
-        PointF cutout = item->symSmuflAnchor(sym, currentCutout);
-        double currentCutoutY = line * step + cutout.y();
-        double previousCutoutY = previous.line * step + item->symSmuflAnchor(previous.sym, previousCutout).y();
-        if ((isAscending && currentCutoutY < previousCutoutY) || (!isAscending && currentCutoutY > previousCutoutY)) {
-            x -= cutout.x() / _spatium;
-        }
-    }
-    ks.xPos = x;
-    ks.line = line;
-    item->keySymbols().push_back(ks);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(LayoutBreak* item, LayoutContext&)
@@ -4034,7 +3767,7 @@ void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
     doLayout(item, ctx, true);
 }
 
-void TLayout::doLayout(StretchedBend* item, LayoutContext&, bool stretchedMode)
+void TLayout::doLayout(StretchedBend*, LayoutContext&, bool)
 {
     UNREACHABLE;
 //    item->m_stretchedMode = stretchedMode;
@@ -4877,7 +4610,7 @@ void TLayout::layout(Trill* item, LayoutContext& ctx)
     }
 }
 
-void TLayout::layout(Tuplet* item, LayoutContext& ctx)
+void TLayout::layout(Tuplet*, LayoutContext&)
 {
     UNREACHABLE;
     //TupletLayout::layout(item, ctx);
@@ -5177,7 +4910,7 @@ SpannerSegment* TLayout::layoutSystem(Volta* line, System* system, LayoutContext
     return voltaSegment;
 }
 
-SpannerSegment* TLayout::layoutSystem(Slur* line, System* system, LayoutContext& ctx)
+SpannerSegment* TLayout::layoutSystem(Slur*, System*, LayoutContext&)
 {
     UNREACHABLE;
     return nullptr; //SlurTieLayout::layoutSystem(line, system, ctx);

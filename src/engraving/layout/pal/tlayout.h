@@ -346,8 +346,6 @@ private:
 
     static PointF calculateBoundingRect(Harmony* item, LayoutContext& ctx);
 
-    static void keySigAddLayout(KeySig* item, LayoutContext& ctx, SymId sym, int line);
-
     static void layoutRestDots(Rest* item, LayoutContext& ctx);
 
     static void doLayout(StretchedBend* item, LayoutContext& ctx, bool stretchedMode);
