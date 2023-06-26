@@ -31,6 +31,7 @@
 
 #include "engraving/libmscore/accidental.h"
 #include "engraving/libmscore/articulation.h"
+#include "engraving/libmscore/bagpembell.h"
 #include "engraving/libmscore/barline.h"
 #include "engraving/libmscore/clef.h"
 #include "engraving/libmscore/keysig.h"
@@ -55,6 +56,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::ARTICULATION: layout(toArticulation(item), ctx);
         break;
+    case ElementType::BAGPIPE_EMBELLISHMENT: layout(toBagpipeEmbellishment(item), ctx);
+        break;
     case ElementType::BAR_LINE:     layout(toBarLine(item), ctx);
         break;
     case ElementType::CLEF:         layout(toClef(item), ctx);
@@ -64,7 +67,10 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::TIMESIG:      layout(toTimeSig(item), ctx);
         break;
     default:
-        LOGI() << item->typeName();
+        LOGD() << item->typeName();
+        if (std::string("BagpipeEmbellishment") == item->typeName()) {
+            int k = -1;
+        }
         layout::pal::TLayout::layoutItem(item, ctxpal);
         break;
     }
@@ -106,6 +112,49 @@ void PaletteLayout::layout(Articulation* item, const Context&)
     }
 
     item->setbbox(bbox.translated(-0.5 * bbox.width(), 0.0));
+}
+
+void PaletteLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
+{
+    SymId headsym = SymId::noteheadBlack;
+    SymId flagsym = SymId::flag32ndUp;
+
+    noteList nl = item->getNoteList();
+    BagpipeEmbellishment::BEDrawingDataX dx(headsym, flagsym, item->magS(), ctx.style().spatium(), static_cast<int>(nl.size()));
+
+    item->setbbox(RectF());
+
+    bool drawFlag = nl.size() == 1;
+
+    // draw the notes including stem, (optional) flag and (optional) ledger line
+    double x = dx.xl;
+    for (int note : nl) {
+        int line = BagpipeEmbellishment::BagpipeNoteInfoList[note].line;
+        BagpipeEmbellishment::BEDrawingDataY dy(line, ctx.style().spatium());
+
+        // head
+        RectF headBBox = ctx.engravingFont()->bbox(headsym, dx.mags);
+        item->addbbox(headBBox.translated(PointF(x - dx.lw * .5 - dx.headw, dy.y2)));
+
+        // stem
+        // highest top of stems actually used is y1b
+        item->addbbox(RectF(x - dx.lw * .5 - dx.headw, dy.y1b, dx.lw, dy.y2 - dy.y1b));
+
+        // flag
+        if (drawFlag) {
+            RectF flagBBox = ctx.engravingFont()->bbox(flagsym, dx.mags);
+            item->addbbox(flagBBox.translated(PointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
+            // printBBox(" notehead + stem + flag", bbox());
+        }
+
+        // draw the ledger line for high A
+        if (line == -2) {
+            item->addbbox(RectF(x - dx.headw * 1.5 - dx.lw * .5, dy.y2 - dx.lw * 2, dx.headw * 2, dx.lw));
+        }
+
+        // move x to next note x position
+        x += dx.headp;
+    }
 }
 
 void PaletteLayout::layout(BarLine* item, const Context& ctx)
