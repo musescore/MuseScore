@@ -395,75 +395,10 @@ void TLayout::layout(Articulation*, LayoutContext&)
     UNREACHABLE;
 }
 
-void TLayout::layout(BagpipeEmbellishment* item, LayoutContext& ctx)
+void TLayout::layout(BagpipeEmbellishment*, LayoutContext&)
 {
-    /*
-    if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
-          LOGD("BagpipeEmbellishment::layout st %d", _embelType);
-          }
-     */
-    SymId headsym = SymId::noteheadBlack;
-    SymId flagsym = SymId::flag32ndUp;
-
-    noteList nl = item->getNoteList();
-    BagpipeEmbellishment::BEDrawingDataX dx(headsym, flagsym, item->magS(), ctx.conf().spatium(), static_cast<int>(nl.size()));
-
-    item->setbbox(RectF());
-    /*
-    if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
-          symMetrics("headsym", headsym);
-          symMetrics("flagsym", flagsym);
-          LOGD("mags %f headw %f headp %f spatium %f xl %f",
-                 dx.mags, dx.headw, dx.headp, dx.spatium, dx.xl);
-          }
-     */
-
-    bool drawFlag = nl.size() == 1;
-
-    // draw the notes including stem, (optional) flag and (optional) ledger line
-    double x = dx.xl;
-    for (int note : nl) {
-        int line = BagpipeEmbellishment::BagpipeNoteInfoList[note].line;
-        BagpipeEmbellishment::BEDrawingDataY dy(line, ctx.conf().spatium());
-
-        // head
-        RectF headBBox = ctx.engravingFont()->bbox(headsym, dx.mags);
-        item->addbbox(headBBox.translated(PointF(x - dx.lw * .5 - dx.headw, dy.y2)));
-        /*
-        if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
-              printBBox(" notehead", bbox());
-              }
-         */
-
-        // stem
-        // highest top of stems actually used is y1b
-        item->addbbox(RectF(x - dx.lw * .5 - dx.headw, dy.y1b, dx.lw, dy.y2 - dy.y1b));
-        /*
-        if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
-              printBBox(" notehead + stem", bbox());
-              }
-         */
-
-        // flag
-        if (drawFlag) {
-            RectF flagBBox = ctx.engravingFont()->bbox(flagsym, dx.mags);
-            item->addbbox(flagBBox.translated(PointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
-            // printBBox(" notehead + stem + flag", bbox());
-        }
-
-        // draw the ledger line for high A
-        if (line == -2) {
-            item->addbbox(RectF(x - dx.headw * 1.5 - dx.lw * .5, dy.y2 - dx.lw * 2, dx.headw * 2, dx.lw));
-            /*
-            if (_embelType == 8) {
-                  printBBox(" notehead + stem + ledger line", bbox());
-                  }
-             */
-        }
-
-        // move x to next note x position
-        x += dx.headp;
-    }
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(BarLine*, LayoutContext&)
