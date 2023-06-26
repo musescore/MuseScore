@@ -300,7 +300,6 @@ public:
 
     static void layout(TextBase* item, LayoutContext& ctx);          // factory
     static void layoutTextBase(TextBase* item, LayoutContext& ctx);  // base class
-    static void layout1(TextBase* item, LayoutContext& ctx);         // factory
     static void layout1TextBase(TextBase* item, LayoutContext& ctx); // base class
     static void layout(Text* item, LayoutContext& ctx);
 
@@ -348,8 +347,6 @@ private:
     static SpannerSegment* layoutSystemSLine(SLine* line, System* system, LayoutContext& ctx);
     static SpannerSegment* getNextLayoutSystemSegment(Spanner* spanner, System* system,
                                                       std::function<SpannerSegment* (System* parent)> createSegment);
-
-    static void autoplaceSpannerSegment(SpannerSegment* item, LayoutContext& ctx);
 };
 }
 

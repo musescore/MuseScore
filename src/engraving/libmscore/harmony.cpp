@@ -279,7 +279,7 @@ void Harmony::afterRead()
         // this removes any user-applied formatting,
         // but we no longer support user-applied formatting for chord symbols anyhow
         // with any luck, the resulting text will be parseable now, so give it a shot
-        createLayout();
+        createBlocks();
         String s = plainText();
         if (!s.isEmpty()) {
             setHarmony(s);
