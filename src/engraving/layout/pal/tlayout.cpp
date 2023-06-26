@@ -670,12 +670,16 @@ void TLayout::layout2(BarLine* item, LayoutContext& ctx)
 
 void TLayout::layout(Beam* item, LayoutContext& ctx)
 {
+    UNUSED(item);
+    UNUSED(ctx);
     UNREACHABLE;
     //BeamLayout::layout(item, ctx);
 }
 
 void TLayout::layout1(Beam* item, LayoutContext& ctx)
 {
+    UNUSED(item);
+    UNUSED(ctx);
     UNREACHABLE;
     //BeamLayout::layout1(item, ctx);
 }
@@ -1039,6 +1043,8 @@ void TLayout::layout(Breath* item, LayoutContext& ctx)
 
 void TLayout::layout(Chord* item, LayoutContext& ctx)
 {
+    UNUSED(item);
+    UNUSED(ctx);
     UNREACHABLE;
     //ChordLayout::layout(item, ctx);
 }
@@ -2980,18 +2986,24 @@ void TLayout::layout(LineSegment* item, LayoutContext& ctx)
 
 void TLayout::layout(Lyrics* item, LayoutContext& ctx)
 {
+    UNUSED(item);
+    UNUSED(ctx);
     UNREACHABLE;
     //LyricsLayout::layout(item, ctx);
 }
 
 void TLayout::layout(LyricsLine* item, LayoutContext& ctx)
 {
+    UNUSED(item);
+    UNUSED(ctx);
     UNREACHABLE;
     //LyricsLayout::layout(item, ctx);
 }
 
 void TLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
 {
+    UNUSED(item);
+    UNUSED(ctx);
     UNREACHABLE;
     //LyricsLayout::layout(item, ctx);
 }
@@ -4036,6 +4048,8 @@ void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
 
 void TLayout::doLayout(StretchedBend* item, LayoutContext&, bool stretchedMode)
 {
+    UNUSED(item);
+    UNUSED(stretchedMode);
     UNREACHABLE;
 //    item->m_stretchedMode = stretchedMode;
 
@@ -4879,6 +4893,8 @@ void TLayout::layout(Trill* item, LayoutContext& ctx)
 
 void TLayout::layout(Tuplet* item, LayoutContext& ctx)
 {
+    UNUSED(item);
+    UNUSED(ctx);
     UNREACHABLE;
     //TupletLayout::layout(item, ctx);
 }
@@ -5179,6 +5195,9 @@ SpannerSegment* TLayout::layoutSystem(Volta* line, System* system, LayoutContext
 
 SpannerSegment* TLayout::layoutSystem(Slur* line, System* system, LayoutContext& ctx)
 {
+    UNUSED(line);
+    UNUSED(system);
+    UNUSED(ctx);
     UNREACHABLE;
     return nullptr; //SlurTieLayout::layoutSystem(line, system, ctx);
 }
