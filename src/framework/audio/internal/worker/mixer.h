@@ -70,7 +70,7 @@ public:
     void setIsActive(bool arg) override;
 
 private:
-    void mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount, gain_t signalAmount = 1.f);
+    void mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount, bool& outBufferIsSilent);
     void prepareAuxBuffers(size_t outBufferSize);
     void writeTrackToAuxBuffers(const AuxSendsParams& auxSends, const float* trackBuffer, samples_t samplesPerChannel);
     void processAuxChannels(float* buffer, samples_t samplesPerChannel);
@@ -93,6 +93,8 @@ private:
     audioch_t m_audioChannelsCount = 0;
 
     mutable AudioSignalsNotifier m_audioSignalNotifier;
+
+    bool m_isSilence = false;
 };
 
 using MixerPtr = std::shared_ptr<Mixer>;
