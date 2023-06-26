@@ -29,8 +29,6 @@ import MuseScore.UiComponents 1.0
 
 StyledFlickable {
     id: root
-    contentWidth: parent.width
-    contentHeight: authorInfo.height + sideMargin
 
     property string authorName: ""
     property string authorRole: ""
@@ -42,6 +40,9 @@ StyledFlickable {
 
     property alias navigation: navPanel
     property int sideMargin: 46
+
+    contentWidth: parent.width
+    contentHeight: authorInfo.height + sideMargin
 
     NavigationPanel {
         id: navPanel
@@ -65,11 +66,9 @@ StyledFlickable {
     Rectangle {
         anchors.left: parent.left
         anchors.leftMargin: root.sideMargin
-        anchors.right: parent.right
-        anchors.rightMargin: root.sideMargin
 
         height: authorInfo.height
-        width: Math.min(1000, parent.width - root.sideMargin)
+        width: Math.min(1000, parent.width - 2 * root.sideMargin)
 
         radius: 12
 
