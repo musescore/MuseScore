@@ -215,10 +215,12 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
 
     // Migration
     if (migrator()) {
+        masterScore->lockUpdates(false); // because migration needs a second layout
         ret = migrator()->migrateEngravingProjectIfNeed(m_engravingProject);
         if (!ret) {
             return ret;
         }
+        masterScore->lockUpdates(true);
     }
 
     // Load style if present
