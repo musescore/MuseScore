@@ -3463,6 +3463,11 @@ void Score::cmdDeleteSelection()
                 }
             }
 
+            // Don't allow deleting the trill cue note
+            if (e->isNote() && toNote(e)->isTrillCueNote()) {
+                continue;
+            }
+
             // delete element if we have not done so already
             if (deletedElements.find(e) == deletedElements.end()) {
                 // do not delete two spanner segments from the same spanner
