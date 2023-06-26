@@ -31,6 +31,7 @@
 
 #include "engraving/libmscore/accidental.h"
 #include "engraving/libmscore/articulation.h"
+#include "engraving/libmscore/barline.h"
 #include "engraving/libmscore/clef.h"
 #include "engraving/libmscore/keysig.h"
 #include "engraving/libmscore/timesig.h"
@@ -53,6 +54,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::ACCIDENTAL:   layout(toAccidental(item), ctx);
         break;
     case ElementType::ARTICULATION: layout(toArticulation(item), ctx);
+        break;
+    case ElementType::BAR_LINE:     layout(toBarLine(item), ctx);
         break;
     case ElementType::CLEF:         layout(toClef(item), ctx);
         break;
@@ -103,6 +106,66 @@ void PaletteLayout::layout(Articulation* item, const Context&)
     }
 
     item->setbbox(bbox.translated(-0.5 * bbox.width(), 0.0));
+}
+
+void PaletteLayout::layout(BarLine* item, const Context& ctx)
+{
+    item->setPos(PointF());
+    item->setMag(1.0);
+
+    double spatium = item->spatium();
+    item->setY1(spatium * .5 * item->spanFrom());
+    if (RealIsEqual(item->y2(), 0.0)) {
+        item->setY2(spatium * .5 * (8.0 + item->spanTo()));
+    }
+
+    auto layoutWidth = [](BarLine* item, const Context& ctx) {
+        const double dotWidth = item->symWidth(SymId::repeatDot);
+
+        double w = 0.0;
+        switch (item->barLineType()) {
+        case BarLineType::DOUBLE:
+            w = ctx.style().styleMM(Sid::doubleBarWidth) * 2.0 + ctx.style().styleMM(Sid::doubleBarDistance);
+            break;
+        case BarLineType::DOUBLE_HEAVY:
+            w = ctx.style().styleMM(Sid::endBarWidth) * 2.0 + ctx.style().styleMM(Sid::endBarDistance);
+            break;
+        case BarLineType::END_START_REPEAT:
+            w = ctx.style().styleMM(Sid::endBarWidth)
+                + ctx.style().styleMM(Sid::barWidth) * 2.0
+                + ctx.style().styleMM(Sid::endBarDistance) * 2.0
+                + ctx.style().styleMM(Sid::repeatBarlineDotSeparation) * 2.0
+                + dotWidth * 2;
+            break;
+        case BarLineType::START_REPEAT:
+        case BarLineType::END_REPEAT:
+            w = ctx.style().styleMM(Sid::endBarWidth)
+                + ctx.style().styleMM(Sid::barWidth)
+                + ctx.style().styleMM(Sid::endBarDistance)
+                + ctx.style().styleMM(Sid::repeatBarlineDotSeparation)
+                + dotWidth;
+            break;
+        case BarLineType::END:
+        case BarLineType::REVERSE_END:
+            w = ctx.style().styleMM(Sid::endBarWidth)
+                + ctx.style().styleMM(Sid::barWidth)
+                + ctx.style().styleMM(Sid::endBarDistance);
+            break;
+        case BarLineType::BROKEN:
+        case BarLineType::NORMAL:
+        case BarLineType::DOTTED:
+            w = ctx.style().styleMM(Sid::barWidth);
+            break;
+        case BarLineType::HEAVY:
+            w = ctx.style().styleMM(Sid::endBarWidth);
+            break;
+        }
+        return w;
+    };
+
+    double w = layoutWidth(item, ctx) * item->mag();
+    RectF bbox(0.0, item->y1(), w, item->y2() - item->y1());
+    item->setbbox(bbox);
 }
 
 void PaletteLayout::layout(Clef* item, const Context& ctx)
