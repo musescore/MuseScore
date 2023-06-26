@@ -5646,7 +5646,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
     } else if (e->isTempoText()) {
         exp->tempoText(toTempoText(e), sstaff);
     } else if (e->isPlayTechAnnotation() || e->isCapo() || e->isStaffText() || e->isSystemText() || e->isTripletFeel() || e->isText()
-               || (e->isInstrumentChange() && e->visible())) {
+               || e->isExpression() || (e->isInstrumentChange() && e->visible())) {
         exp->words(toTextBase(e), sstaff);
     } else if (e->isDynamic()) {
         exp->dynamic(toDynamic(e), sstaff);
