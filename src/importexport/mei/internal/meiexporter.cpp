@@ -54,7 +54,6 @@
 
 #include "log.h"
 
-
 using namespace mu::iex::mei;
 using namespace mu::engraving;
 
@@ -73,7 +72,7 @@ using namespace mu::engraving;
 bool MeiExporter::write(QIODevice& destinationDevice)
 {
     QTextStream out(&destinationDevice);
-    
+
     out << "<mei>Hello World!</mei>";
 
     out.flush();

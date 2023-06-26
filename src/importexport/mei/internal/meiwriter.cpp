@@ -65,4 +65,3 @@ mu::Ret MeiWriter::writeList(const notation::INotationPtrList&, QIODevice&, cons
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);
 }
-

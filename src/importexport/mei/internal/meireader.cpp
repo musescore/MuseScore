@@ -54,26 +54,25 @@ static int meiImportErrorDialog(QString text, QString detailedText)
     return errorDialog.exec();
 }
 
-
 mu::Ret MeiReader::read(MasterScore* score, const io::path_t& path, const Options& options)
 {
     if (!QFileInfo::exists(path.toQString())) {
         return make_ret(Err::FileNotFound, path);
     }
-    
+
     MeiImporter importer(score);
     if (!importer.read(path.toQString())) {
         return make_ret(Err::FileCriticallyCorrupted, path);
     }
-    
+
     bool forceMode = false;
     if (options.count(INotationReader::OptionKey::ForceMode)) {
         Val val = options.at(INotationReader::OptionKey::ForceMode);
         forceMode = (!val.isNull() && val.toBool());
     }
-    
+
     // Unused for now
     UNUSED(forceMode);
-    
+
     return make_ok();
 }

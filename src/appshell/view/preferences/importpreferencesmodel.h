@@ -56,7 +56,7 @@ class ImportPreferencesModel : public QObject, public async::Asyncable
     Q_PROPERTY(bool needUseDefaultFont READ needUseDefaultFont WRITE setNeedUseDefaultFont NOTIFY needUseDefaultFontChanged)
 
     Q_PROPERTY(bool meiImportLayout READ meiImportLayout WRITE setMeiImportLayout NOTIFY meiImportLayoutChanged)
-    
+
     Q_PROPERTY(int currentShortestNote READ currentShortestNote WRITE setCurrentShortestNote NOTIFY currentShortestNoteChanged)
 
     Q_PROPERTY(
@@ -83,7 +83,7 @@ public:
     int currentShortestNote() const;
 
     bool needAskAboutApplyingNewStyle() const;
-    
+
     bool meiImportLayout() const;
 
 public slots:
@@ -97,7 +97,7 @@ public slots:
     void setCurrentShortestNote(int note);
 
     void setNeedAskAboutApplyingNewStyle(bool value);
-    
+
     void setMeiImportLayout(bool import);
 
 signals:

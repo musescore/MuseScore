@@ -48,13 +48,12 @@ class MeiExporter
 public:
     MeiExporter(engraving::Score* s) { m_score = s; }
     bool write(QIODevice& destinationDevice);
-    
-    engraving::Score *m_score = nullptr;
-    
+
+    engraving::Score* m_score = nullptr;
+
 private:
     //
 };
-
 } // namespace
 
 #endif // MU_IMPORTEXPORT_MEIEXPORTER_H

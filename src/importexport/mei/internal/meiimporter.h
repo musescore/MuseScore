@@ -49,18 +49,17 @@ enum GraceReading {
 class MeiImporter
 {
     INJECT_STATIC(mu::iex::mei::IMeiConfiguration, configuration)
-    
+
 public:
     MeiImporter(engraving::Score* s) { m_score = s; }
     bool read(const QString&);
     void convert();
-    
-    engraving::Score *m_score = nullptr;
-    
+
+    engraving::Score* m_score = nullptr;
+
 private:
     //
 };
-
 } // namespace
 
 #endif // MU_IMPORTEXPORT_MEIIMPORTER_H

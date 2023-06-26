@@ -25,13 +25,11 @@
 #include "project/inotationreader.h"
 
 namespace mu::iex::mei {
-
 class MeiReader : public project::INotationReader
 {
 public:
     Ret read(mu::engraving::MasterScore* score, const io::path_t& path, const Options& options = Options()) override;
 };
-
 } // namespace
 
 #endif // MU_IMPORTEXPORT_MEIREADER_H

@@ -49,12 +49,12 @@ void MeiModule::registerExports()
 void MeiModule::resolveImports()
 {
     s_configuration->init();
-    
+
     auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "mei" }, std::make_shared<MeiReader>());
     }
-    
+
     auto writers = modularity::ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
         writers->reg({ "mei" }, std::make_shared<MeiWriter>());

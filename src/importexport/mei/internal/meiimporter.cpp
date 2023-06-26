@@ -71,11 +71,10 @@ bool MeiImporter::read(const QString& name)
         return false;
     }
     QByteArray byteArray = fp.readAll();
-    
+
     bool success = true;
-    
+
     fp.close();
-    
+
     return success;
 }
-
