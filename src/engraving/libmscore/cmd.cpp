@@ -557,7 +557,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStaves
 
 void Score::cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment, Segment* endSegment)
 {
-    track_idx_t track = spanner->systemFlag() ? 0 : staffIdx * VOICES; // system lines always on top staff
+    track_idx_t track = staffIdx * VOICES;
     spanner->setTrack(track);
     spanner->setTrack2(track);
     for (auto ss : spanner->spannerSegments()) {
