@@ -147,6 +147,7 @@ void GPDrumSetResolver::initGPDrum()
 
     addDrum(GPDrum(108, 0, 1,  u"cngKit"));
     addDrum(GPDrum(109, 0, 2,  u"cngKit"));
+    addDrum(GPDrum(110, 1, 1,  u"cngKit"));
     addDrum(GPDrum(111, 0, 2,  u"tmbrn"));
     addDrum(GPDrum(112, 0, 3,  u"tmbrn"));
 
