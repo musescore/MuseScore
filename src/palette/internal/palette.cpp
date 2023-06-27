@@ -512,8 +512,8 @@ bool Palette::writeToFile(const QString& p) const
 
 void Palette::showWritingPaletteError(const QString& path) const
 {
-    std::string title = trc("palette", "Writing Palette file");
-    std::string message = qtrc("palette", "Writing Palette file\n%1\nfailed.").arg(path).toStdString();
+    std::string title = trc("palette", "Writing palette file");
+    std::string message = qtrc("palette", "Writing palette file\n%1\nfailed.").arg(path).toStdString();
     interactive()->error(title, message);
 }
 
