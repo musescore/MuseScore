@@ -34,7 +34,7 @@ StyledDialogView {
     title: qsTrc("appshell/preferences", "Preferences")
 
     contentWidth: 880
-    contentHeight: 600
+    contentHeight: 640
     resizable: true
 
     property string currentPageId: ""
