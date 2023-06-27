@@ -227,10 +227,15 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
         skip(17);
         String name;
         {
-            readUInt8();
+            uint8_t charsCount = readUInt8();
             char c[21];
             f->read((uint8_t*)(c), 21);
-            c[20] = 0;
+            // Just in case
+            if (charsCount <= 20) {
+                c[charsCount] = '\0';
+            } else {
+                c[20] = '\0';
+            }
             name = String::fromUtf8(c);
         }
         skip(4);
