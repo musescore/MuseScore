@@ -31,6 +31,7 @@ class EngravingItem;
 class Score;
 
 class Accidental;
+class ActionIcon;
 class Ambitus;
 class Articulation;
 
@@ -69,6 +70,7 @@ public:
     };
 
     static void layout(engraving::Accidental* item, const Context& ctx);
+    static void layout(engraving::ActionIcon* item, const Context& ctx);
     static void layout(engraving::Ambitus* item, const Context& ctx);
     static void layout(engraving::Articulation* item, const Context& ctx);
 

@@ -212,10 +212,10 @@ void TLayout::layout(Accidental*, LayoutContext&)
     UNREACHABLE;
 }
 
-void TLayout::layout(ActionIcon* item, LayoutContext&)
+void TLayout::layout(ActionIcon*, LayoutContext&)
 {
-    FontMetrics fontMetrics(item->iconFont());
-    item->setbbox(fontMetrics.boundingRect(Char(item->icon())));
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(Ambitus*, LayoutContext&)

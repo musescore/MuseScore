@@ -30,6 +30,7 @@
 #include "engraving/libmscore/score.h"
 
 #include "engraving/libmscore/accidental.h"
+#include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/ambitus.h"
 #include "engraving/libmscore/articulation.h"
 #include "engraving/libmscore/bagpembell.h"
@@ -46,6 +47,7 @@
 
 #include "log.h"
 
+using namespace mu::draw;
 using namespace mu::engraving;
 using namespace mu::palette;
 
@@ -56,6 +58,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
 
     switch (item->type()) {
     case ElementType::ACCIDENTAL:   layout(toAccidental(item), ctx);
+        break;
+    case ElementType::ACTION_ICON:  layout(toActionIcon(item), ctx);
         break;
     case ElementType::AMBITUS:      layout(toAmbitus(item), ctx);
         break;
@@ -105,6 +109,12 @@ void PaletteLayout::layout(Accidental* item, const Context&)
 
     RectF bbox = item->symBbox(s);
     item->setbbox(bbox);
+}
+
+void PaletteLayout::layout(ActionIcon* item, const Context&)
+{
+    FontMetrics fontMetrics(item->iconFont());
+    item->setbbox(fontMetrics.boundingRect(Char(item->icon())));
 }
 
 void PaletteLayout::layout(Ambitus* item, const Context& ctx)
