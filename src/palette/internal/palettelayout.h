@@ -41,6 +41,8 @@ class Bracket;
 
 class Clef;
 
+class FretDiagram;
+
 class KeySig;
 
 class Symbol;
@@ -79,6 +81,8 @@ public:
     static void layout(engraving::Bracket* item, const Context& ctx);
 
     static void layout(engraving::Clef* item, const Context& ctx);
+
+    static void layout(engraving::FretDiagram* item, const Context& ctx);
 
     static void layout(engraving::KeySig* item, const Context& ctx);
 

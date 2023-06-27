@@ -1368,17 +1368,17 @@ void TLayout::layout(Fingering* item, LayoutContext& ctx)
 
 void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
 {
-    double _spatium  = item->spatium() * item->userMag();
-    item->setStringLw(_spatium * 0.08);
-    item->setNutLw((item->fretOffset() || !item->showNut()) ? item->stringLw() : _spatium * 0.2);
-    item->setStringDist(ctx.conf().styleMM(Sid::fretStringSpacing) * item->userMag());
-    item->setFretDist(ctx.conf().styleMM(Sid::fretFretSpacing) * item->userMag());
-    item->setMarkerSize(item->stringDist() * .8);
+    double spatium  = item->spatium();
+    item->setStringLw(spatium * 0.08);
+    item->setNutLw((item->fretOffset() || !item->showNut()) ? item->stringLw() : spatium * 0.2);
+    item->setStringDist(ctx.conf().styleMM(Sid::fretStringSpacing));
+    item->setFretDist(ctx.conf().styleMM(Sid::fretFretSpacing));
+    item->setMarkerSize(item->stringDist() * 0.8);
 
-    double w    = item->stringDist() * (item->strings() - 1) + item->markerSize();
-    double h    = (item->frets() + 1) * item->fretDist() + item->markerSize();
-    double y    = -(item->markerSize() * .5 + item->fretDist());
-    double x    = -(item->markerSize() * .5);
+    double w = item->stringDist() * (item->strings() - 1) + item->markerSize();
+    double h = (item->frets() + 1) * item->fretDist() + item->markerSize();
+    double y = -(item->markerSize() * 0.5 + item->fretDist());
+    double x = -(item->markerSize() * 0.5);
 
     // Allocate space for fret offset number
     if (item->fretOffset() > 0) {
@@ -1395,8 +1395,8 @@ void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
     }
 
     if (item->orientation() == Orientation::HORIZONTAL) {
-        double tempW = w,
-               tempX = x;
+        double tempW = w;
+        double tempX = x;
         w = h;
         h = tempW;
         x = y;
@@ -1405,72 +1405,6 @@ void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
 
     // When changing how bbox is calculated, don't forget to update the centerX and rightX methods too.
     item->bbox().setRect(x, y, w, h);
-
-    if (!item->explicitParent() || !item->explicitParent()->isSegment()) {
-        item->setPos(PointF());
-        return;
-    }
-
-    // We need to get the width of the notehead/rest in order to position the fret diagram correctly
-    Segment* pSeg = toSegment(item->explicitParent());
-    double noteheadWidth = 0;
-    if (pSeg->isChordRestType()) {
-        staff_idx_t idx = item->staff()->idx();
-        for (EngravingItem* e = pSeg->firstElementOfSegment(pSeg, idx); e; e = pSeg->nextElementOfSegment(pSeg, e, idx)) {
-            if (e->isRest()) {
-                Rest* r = toRest(e);
-                noteheadWidth = item->symWidth(r->sym());
-                break;
-            } else if (e->isNote()) {
-                Note* n = toNote(e);
-                noteheadWidth = n->headWidth();
-                break;
-            }
-        }
-    }
-
-    double mainWidth = 0.0;
-    if (item->orientation() == Orientation::VERTICAL) {
-        mainWidth = item->stringDist() * (item->strings() - 1);
-    } else if (item->orientation() == Orientation::HORIZONTAL) {
-        mainWidth = item->fretDist() * (item->frets() + 0.5);
-    }
-    item->setPos((noteheadWidth - mainWidth) / 2, -(h + item->styleP(Sid::fretY)));
-
-    item->autoplaceSegmentElement();
-
-    // don't display harmony in palette
-    if (!item->explicitParent()) {
-        return;
-    }
-
-    Harmony* harmony = item->harmony();
-    if (harmony) {
-        layout(harmony, ctx);
-    }
-
-    if (harmony && harmony->autoplace() && harmony->explicitParent()) {
-        Segment* s = toSegment(item->explicitParent());
-        Measure* m = s->measure();
-        staff_idx_t si = item->staffIdx();
-
-        SysStaff* ss = m->system()->staff(si);
-        RectF r = harmony->bbox().translated(m->pos() + s->pos() + item->pos() + harmony->pos());
-
-        double minDistance = harmony->minDistance().val() * item->spatium();
-        SkylineLine sk(false);
-        sk.add(r.x(), r.bottom(), r.width());
-        double d = sk.minDistance(ss->skyline().north());
-        if (d > -minDistance) {
-            double yd = d + minDistance;
-            yd *= -1.0;
-            harmony->movePosY(yd);
-            r.translate(PointF(0.0, yd));
-        }
-        if (harmony->addToSkyline()) {
-            ss->skyline().add(r);
-        }
-    }
 }
 
 void TLayout::layout(FretCircle* item, LayoutContext&)

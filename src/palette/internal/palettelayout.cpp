@@ -37,6 +37,7 @@
 #include "engraving/libmscore/barline.h"
 #include "engraving/libmscore/bracket.h"
 #include "engraving/libmscore/clef.h"
+#include "engraving/libmscore/fret.h"
 #include "engraving/libmscore/keysig.h"
 #include "engraving/libmscore/symbol.h"
 #include "engraving/libmscore/timesig.h"
@@ -72,6 +73,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::BRACKET:      layout(toBracket(item), ctx);
         break;
     case ElementType::CLEF:         layout(toClef(item), ctx);
+        break;
+    case ElementType::FRET_DIAGRAM: layout(toFretDiagram(item), ctx);
         break;
     case ElementType::KEYSIG:       layout(toKeySig(item), ctx);
         break;
@@ -410,6 +413,46 @@ void PaletteLayout::layout(Clef* item, const Context& ctx)
 
     RectF bbox = item->symBbox(item->symId());
     item->setbbox(bbox);
+}
+
+void PaletteLayout::layout(FretDiagram* item, const Context& ctx)
+{
+    double spatium  = item->spatium();
+    item->setStringLw(spatium * 0.08);
+    item->setNutLw((item->fretOffset() || !item->showNut()) ? item->stringLw() : spatium * 0.2);
+    item->setStringDist(ctx.style().styleMM(Sid::fretStringSpacing));
+    item->setFretDist(ctx.style().styleMM(Sid::fretFretSpacing));
+    item->setMarkerSize(item->stringDist() * 0.8);
+
+    double w = item->stringDist() * (item->strings() - 1) + item->markerSize();
+    double h = (item->frets() + 1) * item->fretDist() + item->markerSize();
+    double y = -(item->markerSize() * 0.5 + item->fretDist());
+    double x = -(item->markerSize() * 0.5);
+
+    // Allocate space for fret offset number
+    if (item->fretOffset() > 0) {
+        mu::draw::Font scaledFont(item->font());
+        scaledFont.setPointSizeF(item->font().pointSizeF() * item->userMag());
+
+        double fretNumMag = ctx.style().styleD(Sid::fretNumMag);
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
+        mu::draw::FontMetrics fm2(scaledFont);
+        double numw = fm2.width(String::number(item->fretOffset() + 1));
+        double xdiff = numw + item->stringDist() * .4;
+        w += xdiff;
+        x += (item->numPos() == 0) == (item->orientation() == engraving::Orientation::VERTICAL) ? -xdiff : 0;
+    }
+
+    if (item->orientation() == engraving::Orientation::HORIZONTAL) {
+        double tempW = w;
+        double tempX = x;
+        w = h;
+        h = tempW;
+        x = y;
+        y = tempX;
+    }
+
+    item->bbox().setRect(x, y, w, h);
 }
 
 void PaletteLayout::layout(KeySig* item, const Context& ctx)
