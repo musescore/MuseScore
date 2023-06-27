@@ -36,6 +36,7 @@
 #include "engraving/libmscore/barline.h"
 #include "engraving/libmscore/clef.h"
 #include "engraving/libmscore/keysig.h"
+#include "engraving/libmscore/symbol.h"
 #include "engraving/libmscore/timesig.h"
 
 #include "engraving/libmscore/utils.h"
@@ -67,11 +68,13 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::KEYSIG:       layout(toKeySig(item), ctx);
         break;
+    case ElementType::SYMBOL:       layout(toSymbol(item), ctx);
+        break;
     case ElementType::TIMESIG:      layout(toTimeSig(item), ctx);
         break;
     default:
         LOGD() << item->typeName();
-        if (std::string("Volta") == item->typeName()) {
+        if (std::string("Symbol") == item->typeName()) {
             int k = -1;
         }
         layout::pal::TLayout::layoutItem(item, ctxpal);
@@ -385,6 +388,13 @@ void PaletteLayout::layout(KeySig* item, const Context& ctx)
         double y = ks.line * step;
         item->addbbox(item->symBbox(ks.sym).translated(x, y));
     }
+}
+
+void PaletteLayout::layout(Symbol* item, const Context&)
+{
+    item->setbbox(item->scoreFont() ? item->scoreFont()->bbox(item->sym(), item->magS()) : item->symBbox(item->sym()));
+    item->setOffset(0.0, 0.0);
+    item->setPos(0.0, 0.0);
 }
 
 void PaletteLayout::layout(TimeSig* item, const Context& ctx)

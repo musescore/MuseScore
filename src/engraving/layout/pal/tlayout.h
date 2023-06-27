@@ -288,7 +288,6 @@ public:
     static void layout(StretchedBend* item, LayoutContext& ctx);
     static void layoutStretched(StretchedBend* item, LayoutContext& ctx);
 
-    static void layoutBaseSymbol(BSymbol* item, LayoutContext& ctx);
     static void layout(Symbol* item, LayoutContext& ctx);
     static void layout(FSymbol* item, LayoutContext& ctx);
 
