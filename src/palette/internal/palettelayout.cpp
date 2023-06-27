@@ -34,6 +34,7 @@
 #include "engraving/libmscore/articulation.h"
 #include "engraving/libmscore/bagpembell.h"
 #include "engraving/libmscore/barline.h"
+#include "engraving/libmscore/bracket.h"
 #include "engraving/libmscore/clef.h"
 #include "engraving/libmscore/keysig.h"
 #include "engraving/libmscore/symbol.h"
@@ -63,6 +64,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::BAGPIPE_EMBELLISHMENT: layout(toBagpipeEmbellishment(item), ctx);
         break;
     case ElementType::BAR_LINE:     layout(toBarLine(item), ctx);
+        break;
+    case ElementType::BRACKET:      layout(toBracket(item), ctx);
         break;
     case ElementType::CLEF:         layout(toClef(item), ctx);
         break;
@@ -300,6 +303,65 @@ void PaletteLayout::layout(BarLine* item, const Context& ctx)
     double w = layoutWidth(item, ctx) * item->mag();
     RectF bbox(0.0, item->y1(), w, item->y2() - item->y1());
     item->setbbox(bbox);
+}
+
+void PaletteLayout::layout(Bracket* item, const Context& ctx)
+{
+    Shape shape;
+
+    switch (item->bracketType()) {
+    case BracketType::BRACE: {
+        if (item->braceSymbol() == SymId::noSym) {
+            item->setBraceSymbol(SymId::brace);
+        }
+        double h = item->h2() * 2;
+        double w = item->symWidth(item->braceSymbol()) * item->magx();
+        item->bbox().setRect(0, 0, w, h);
+        shape.add(item->bbox());
+    }
+    break;
+    case BracketType::NORMAL: {
+        double spatium = item->spatium();
+        double w = ctx.style().styleMM(Sid::bracketWidth) * 0.5;
+        double x = -w;
+
+        double bd = spatium * 0.5;
+        shape.add(RectF(x, -bd, w * 2, 2 * (item->h2() + bd)));
+        shape.add(item->symBbox(SymId::bracketTop).translated(PointF(-w, -bd)));
+        shape.add(item->symBbox(SymId::bracketBottom).translated(PointF(-w, bd + 2 * item->h2())));
+
+        w += item->symWidth(SymId::bracketTop);
+        double y = -item->symHeight(SymId::bracketTop) - bd;
+        double h = (-y + item->h2()) * 2;
+        item->bbox().setRect(x, y, w, h);
+    }
+    break;
+    case BracketType::SQUARE: {
+        double w = ctx.style().styleMM(Sid::staffLineWidth) * .5;
+        double x = -w;
+        double y = -w;
+        double h = (item->h2() + w) * 2;
+        w += (.5 * item->spatium() + 3 * w);
+        item->bbox().setRect(x, y, w, h);
+        shape.add(item->bbox());
+    }
+    break;
+    case BracketType::LINE: {
+        double spatium = item->spatium();
+        double w = 0.67 * ctx.style().styleMM(Sid::bracketWidth) * 0.5;
+        double x = -w;
+        double bd = spatium * 0.25;
+        double y = -bd;
+        double h = (-y + item->h2()) * 2;
+        item->bbox().setRect(x, y, w, h);
+        shape.add(item->bbox());
+    }
+    break;
+    case BracketType::NO_BRACKET:
+        break;
+    }
+
+    item->setShape(shape);
 }
 
 void PaletteLayout::layout(Clef* item, const Context& ctx)
