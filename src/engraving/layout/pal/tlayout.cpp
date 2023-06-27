@@ -1228,142 +1228,7 @@ void TLayout::layoutLines(FiguredBass* item, LayoutContext& ctx)
 
 void TLayout::layout(Fingering* item, LayoutContext& ctx)
 {
-    if (item->explicitParent()) {
-        Fraction tick = item->parentItem()->tick();
-        const Staff* st = item->staff();
-        item->setSkipDraw(false);
-        if (st && st->isTabStaff(tick)
-            && (!st->staffType(tick)->showTabFingering() || item->textStyleType() == TextStyleType::STRING_NUMBER)) {
-            item->setSkipDraw(true);
-            return;
-        }
-    }
-
     layoutTextBase(item, ctx);
-    item->setPosY(0.0);      // handle placement below
-
-    if (item->autoplace() && item->note()) {
-        Note* n      = item->note();
-        Chord* chord = n->chord();
-        bool voices  = chord->measure()->hasVoices(chord->staffIdx(), chord->tick(), chord->actualTicks());
-        bool tight   = voices && chord->notes().size() == 1 && !chord->beam() && item->textStyleType() != TextStyleType::STRING_NUMBER;
-
-        double headWidth = n->bboxRightPos();
-
-        // update offset after drag
-        double rebase = 0.0;
-        if (item->offsetChanged() != OffsetChange::NONE && !tight) {
-            rebase = item->rebaseOffset();
-        }
-
-        // temporarily exclude self from chord shape
-        item->setAutoplace(false);
-
-        if (item->layoutType() == ElementType::CHORD) {
-            bool above = item->placeAbove();
-            Stem* stem = chord->stem();
-            Segment* s = chord->segment();
-            Measure* m = s->measure();
-            double sp = item->spatium();
-            double md = item->minDistance().val() * sp;
-            SysStaff* ss = m->system()->staff(chord->vStaffIdx());
-            Staff* vStaff = chord->staff();           // TODO: use current height at tick
-
-            if (n->mirror()) {
-                item->movePosX(-n->ipos().x());
-            }
-            item->movePosX(headWidth * .5);
-            if (above) {
-                if (tight) {
-                    if (chord->stem()) {
-                        item->movePosX(-0.8 * sp);
-                    }
-                    item->movePosY(-1.5 * sp);
-                } else {
-                    RectF r = item->bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + item->pos());
-                    SkylineLine sk(false);
-                    sk.add(r.x(), r.bottom(), r.width());
-                    double d = sk.minDistance(ss->skyline().north());
-                    double yd = 0.0;
-                    if (d > 0.0 && item->isStyled(Pid::MIN_DISTANCE)) {
-                        yd -= d + item->height() * .25;
-                    }
-                    // force extra space above staff & chord (but not other fingerings)
-                    double top;
-                    if (chord->up() && chord->beam() && stem) {
-                        top = stem->y() + stem->bbox().top();
-                    } else {
-                        Note* un = chord->upNote();
-                        top = std::min(0.0, un->y() + un->bbox().top());
-                    }
-                    top -= md;
-                    double diff = (item->bbox().bottom() + item->ipos().y() + yd + n->y()) - top;
-                    if (diff > 0.0) {
-                        yd -= diff;
-                    }
-                    if (item->offsetChanged() != OffsetChange::NONE) {
-                        // user moved element within the skyline
-                        // we may need to adjust minDistance, yd, and/or offset
-                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->height();
-                        item->rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
-                    }
-                    item->movePosY(yd);
-                }
-            } else {
-                if (tight) {
-                    if (chord->stem()) {
-                        item->movePosX(0.8 * sp);
-                    }
-                    item->movePosY(1.5 * sp);
-                } else {
-                    RectF r = item->bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + item->pos());
-                    SkylineLine sk(true);
-                    sk.add(r.x(), r.top(), r.width());
-                    double d = ss->skyline().south().minDistance(sk);
-                    double yd = 0.0;
-                    if (d > 0.0 && item->isStyled(Pid::MIN_DISTANCE)) {
-                        yd += d + item->height() * .25;
-                    }
-                    // force extra space below staff & chord (but not other fingerings)
-                    double bottom;
-                    if (!chord->up() && chord->beam() && stem) {
-                        bottom = stem->y() + stem->bbox().bottom();
-                    } else {
-                        Note* dn = chord->downNote();
-                        bottom = std::max(vStaff->height(), dn->y() + dn->bbox().bottom());
-                    }
-                    bottom += md;
-                    double diff = bottom - (item->bbox().top() + item->ipos().y() + yd + n->y());
-                    if (diff > 0.0) {
-                        yd += diff;
-                    }
-                    if (item->offsetChanged() != OffsetChange::NONE) {
-                        // user moved element within the skyline
-                        // we may need to adjust minDistance, yd, and/or offset
-                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->height();
-                        item->rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
-                    }
-                    item->movePosY(yd);
-                }
-            }
-        } else if (item->textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
-            // place to left of note
-            double left = n->shape().left();
-            if (left - n->x() > 0.0) {
-                item->movePosX(-left);
-            } else {
-                item->movePosX(-n->x());
-            }
-        }
-        // for other fingering styles, do not autoplace
-
-        // restore autoplace
-        item->setAutoplace(true);
-    } else if (item->offsetChanged() != OffsetChange::NONE) {
-        // rebase horizontally too, as autoplace may have adjusted it
-        item->rebaseOffset(false);
-    }
-    item->setOffsetChanged(false);
 }
 
 void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
@@ -1985,17 +1850,9 @@ void TLayout::layout(HarmonicMarkSegment* item, LayoutContext& ctx)
 
 void TLayout::layout(Harmony* item, LayoutContext& ctx)
 {
-    if (!item->explicitParent()) {
-        item->setPos(0.0, 0.0);
-        item->setOffset(0.0, 0.0);
-        layout1(item, ctx);
-        return;
-    }
-    //if (isStyled(Pid::OFFSET))
-    //      setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
-
+    item->setPos(0.0, 0.0);
+    item->setOffset(0.0, 0.0);
     layout1(item, ctx);
-    item->setPos(calculateBoundingRect(item, ctx));
 }
 
 void TLayout::layout1(Harmony* item, LayoutContext& ctx)
@@ -2240,13 +2097,6 @@ void TLayout::layout(LyricsLineSegment*, LayoutContext&)
 void TLayout::layout(Marker* item, LayoutContext& ctx)
 {
     layoutTextBase(item, ctx);
-
-    // although normally laid out to parent (measure) width,
-    // force to center over barline if left-aligned
-
-    if (!ctx.conf().isPaletteMode() && item->layoutToParentWidth() && item->align() == AlignH::LEFT) {
-        item->movePosX(-item->width() * 0.5);
-    }
 
     item->autoplaceMeasureElement();
 }
@@ -3287,11 +3137,7 @@ void TLayout::layoutTextBase(TextBase* item, LayoutContext& ctx)
         item->setPosY(0.0);
     }
 
-    if (Harmony::classof(item)) {
-        layout1(static_cast<Harmony*>(item), ctx);
-    } else {
-        layout1TextBase(item, ctx);
-    }
+    layout1TextBase(item, ctx);
 }
 
 void TLayout::layout1TextBase(TextBase* item, LayoutContext&)
