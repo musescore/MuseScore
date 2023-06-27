@@ -38,6 +38,8 @@
 #include "engraving/libmscore/barline.h"
 #include "engraving/libmscore/bracket.h"
 #include "engraving/libmscore/clef.h"
+#include "engraving/libmscore/harppedaldiagram.h"
+#include "engraving/libmscore/fingering.h"
 #include "engraving/libmscore/fret.h"
 #include "engraving/libmscore/keysig.h"
 #include "engraving/libmscore/symbol.h"
@@ -76,7 +78,11 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::CLEF:         layout(toClef(item), ctx);
         break;
+    case ElementType::FINGERING:    layout(toFingering(item), ctx);
+        break;
     case ElementType::FRET_DIAGRAM: layout(toFretDiagram(item), ctx);
+        break;
+    case ElementType::HARP_DIAGRAM: layout(toHarpPedalDiagram(item), ctx);
         break;
     case ElementType::KEYSIG:       layout(toKeySig(item), ctx);
         break;
@@ -419,6 +425,11 @@ void PaletteLayout::layout(Clef* item, const Context& ctx)
     item->setbbox(bbox);
 }
 
+void PaletteLayout::layout(Fingering* item, const Context& ctx)
+{
+    layoutTextBase(item, ctx);
+}
+
 void PaletteLayout::layout(FretDiagram* item, const Context& ctx)
 {
     double spatium  = item->spatium();
@@ -453,6 +464,12 @@ void PaletteLayout::layout(FretDiagram* item, const Context& ctx)
     }
 
     item->bbox().setRect(x, y, w, h);
+}
+
+void PaletteLayout::layout(HarpPedalDiagram* item, const Context& ctx)
+{
+    item->updateDiagramText();
+    layoutTextBase(item, ctx);
 }
 
 void PaletteLayout::layout(KeySig* item, const Context& ctx)
