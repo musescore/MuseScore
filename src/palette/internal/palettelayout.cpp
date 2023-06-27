@@ -30,6 +30,7 @@
 #include "engraving/libmscore/score.h"
 
 #include "engraving/libmscore/accidental.h"
+#include "engraving/libmscore/ambitus.h"
 #include "engraving/libmscore/articulation.h"
 #include "engraving/libmscore/bagpembell.h"
 #include "engraving/libmscore/barline.h"
@@ -53,6 +54,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
 
     switch (item->type()) {
     case ElementType::ACCIDENTAL:   layout(toAccidental(item), ctx);
+        break;
+    case ElementType::AMBITUS:      layout(toAmbitus(item), ctx);
         break;
     case ElementType::ARTICULATION: layout(toArticulation(item), ctx);
         break;
@@ -96,6 +99,85 @@ void PaletteLayout::layout(Accidental* item, const Context&)
 
     RectF bbox = item->symBbox(s);
     item->setbbox(bbox);
+}
+
+void PaletteLayout::layout(Ambitus* item, const Context& ctx)
+{
+    double headWdt = item->headWidth();
+    double spatium = item->spatium();
+
+    double lineDist    = spatium;
+    int numOfLines  = 3;
+
+    //
+    // NOTEHEADS Y POS
+    //
+    // if pitch == INVALID_PITCH or tpc == Tpc::TPC_INVALID, set to some default:
+    // for use in palettes and when actual range cannot be calculated (new ambitus or no notes in staff)
+    //
+
+    // top notehead
+    item->setTopPosY(0.0);
+
+    // bottom notehead
+    item->setBottomPosY((numOfLines - 1) * lineDist);
+
+    //
+    // NOTEHEAD X POS
+    //
+    // Note: manages colliding accidentals
+    //
+    double accNoteDist = item->point(ctx.style().styleS(Sid::accidentalNoteDistance));
+    double xAccidOffTop = item->topAccidental()->width() + accNoteDist;
+    double xAccidOffBottom = item->bottomAccidental()->width() + accNoteDist;
+
+    switch (item->direction()) {
+    case DirectionH::AUTO:                       // noteheads one above the other
+        // left align noteheads and right align accidentals 'hanging' on the left
+        item->setTopPosX(0.0);
+        item->setBottomPosX(0.0);
+        item->topAccidental()->setPosX(-xAccidOffTop);
+        item->bottomAccidental()->setPosX(-xAccidOffBottom);
+        break;
+    case DirectionH::LEFT:                       // top notehead at the left of bottom notehead
+        // place top notehead at left margin; bottom notehead at right of top head;
+        // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
+        item->setTopPosX(0.0);
+        item->setBottomPosX(headWdt);
+        item->topAccidental()->setPosX(-xAccidOffTop);
+        item->bottomAccidental()->setPosX(headWdt - xAccidOffBottom);
+        break;
+    case DirectionH::RIGHT:                      // top notehead at the right of bottom notehead
+        // bottom notehead at left margin; top notehead at right of bottomnotehead
+        // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
+        item->setBottomPosX(0.0);
+        item->setTopPosX(headWdt);
+        item->bottomAccidental()->setPosX(-xAccidOffBottom);
+        item->topAccidental()->setPosX(headWdt - xAccidOffTop);
+        break;
+    }
+
+    // compute line from top note centre to bottom note centre
+    LineF fullLine(item->topPos().x() + headWdt * 0.5,
+                   item->topPos().y(),
+                   item->bottomPos().x() + headWdt * 0.5,
+                   item->bottomPos().y());
+    // shorten line on each side by offsets
+    double yDelta = item->bottomPos().y() - item->topPos().y();
+    if (yDelta != 0.0) {
+        double off = spatium * Ambitus::LINEOFFSET_DEFAULT;
+        PointF p1 = fullLine.pointAt(off / yDelta);
+        PointF p2 = fullLine.pointAt(1 - (off / yDelta));
+        item->setLine(LineF(p1, p2));
+    } else {
+        item->setLine(fullLine);
+    }
+
+    RectF headRect(0, -0.5 * spatium, headWdt, 1 * spatium);
+    item->setbbox(headRect.translated(item->topPos()).united(headRect.translated(item->bottomPos()))
+                  .united(item->topAccidental()->bbox().translated(item->topAccidental()->ipos()))
+                  .united(item->bottomAccidental()->bbox().translated(item->bottomAccidental()->ipos()))
+                  );
 }
 
 void PaletteLayout::layout(Articulation* item, const Context&)
@@ -414,7 +496,7 @@ void PaletteLayout::layout(TimeSig* item, const Context& ctx)
     item->setDrawArgs(drawArgs);
 }
 
-void PaletteLayout::layout(Volta* item, const Context& ctx)
+void PaletteLayout::layout(Volta*, const Context&)
 {
     // layoutLine(item, ctx);
 }
