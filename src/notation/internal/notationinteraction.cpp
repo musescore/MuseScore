@@ -364,6 +364,10 @@ void NotationInteraction::checkAndShowMScoreError() const
     case MsError::CORRUPTED_MEASURE:
         title = trc("notation", "Cannot change time signature in front of a corrupted measure");
         break;
+    case MsError::CANNOT_REMOVE_KEY_SIG:
+        title = trc("notation", "This key signature cannot be deleted");
+        message = trc("notation", "Please replace it with a key signature from the palettes instead.");
+        break;
     }
 
     IInteractive::Result result
@@ -3755,6 +3759,7 @@ void NotationInteraction::deleteSelection()
         score()->cmdDeleteSelection();
     }
 
+    checkAndShowMScoreError();
     apply();
     resetHitElementContext();
 }

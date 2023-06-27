@@ -3402,7 +3402,6 @@ void Score::cmdDeleteSelection()
         // so we don't try to delete them twice if they are also in selection
         std::set<Spanner*> deletedSpanners;
 
-        bool allertInstrChange = true;
         for (EngravingItem* e : el) {
             // these are the linked elements we are about to delete
             std::list<EngravingObject*> links;
@@ -3458,16 +3457,8 @@ void Score::cmdDeleteSelection()
             // Also instrument change key signatures should be undeletable.
             // The correct action is for the user to set an atonal/custom keySig as needed.
             if (e->isKeySig()) {
-                if (e->tick() == Fraction(0, 1)) {
-                    continue;
-                } else if (toKeySig(e)->forInstrumentChange()) {
-                    if (allertInstrChange) {
-                        MessageBox::warning(mtrc("engraving", "Instrument change key signature cannot be deleted").toStdString(),
-                                            mtrc("engraving",
-                                                 "Please replace it with a key signature from the palettes instead.").toStdString(),
-                                            { MessageBox::Ok });
-                        allertInstrChange = false;
-                    }
+                if (e->tick() == Fraction(0, 1) || toKeySig(e)->forInstrumentChange()) {
+                    MScore::setError(MsError::CANNOT_REMOVE_KEY_SIG);
                     continue;
                 }
             }
