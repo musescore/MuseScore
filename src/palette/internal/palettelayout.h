@@ -51,6 +51,7 @@ class KeySig;
 class PlayTechAnnotation;
 
 class Symbol;
+class SystemText;
 
 class TempoText;
 class TextBase;
@@ -99,6 +100,7 @@ public:
     static void layout(engraving::PlayTechAnnotation* item, const Context& ctx);
 
     static void layout(engraving::Symbol* item, const Context& ctx);
+    static void layout(engraving::SystemText* item, const Context& ctx);
 
     static void layout(engraving::TempoText* item, const Context& ctx);
     static void layout(engraving::TimeSig* item, const Context& ctx);

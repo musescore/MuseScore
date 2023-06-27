@@ -3055,8 +3055,8 @@ void TLayout::layout(SystemDivider* item, LayoutContext& ctx)
 
 void TLayout::layout(SystemText* item, LayoutContext& ctx)
 {
-    layoutTextBase(item, ctx);
-    item->autoplaceSegmentElement();
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(TabDurationSymbol* item, LayoutContext&)

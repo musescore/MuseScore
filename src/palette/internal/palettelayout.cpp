@@ -44,6 +44,7 @@
 #include "engraving/libmscore/keysig.h"
 #include "engraving/libmscore/playtechannotation.h"
 #include "engraving/libmscore/symbol.h"
+#include "engraving/libmscore/systemtext.h"
 #include "engraving/libmscore/tempotext.h"
 #include "engraving/libmscore/timesig.h"
 
@@ -90,6 +91,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::PLAYTECH_ANNOTATION: layout(toPlayTechAnnotation(item), ctx);
         break;
     case ElementType::SYMBOL:       layout(toSymbol(item), ctx);
+        break;
+    case ElementType::SYSTEM_TEXT:  layout(toSystemText(item), ctx);
         break;
     case ElementType::TEMPO_TEXT:   layout(toTempoText(item), ctx);
         break;
@@ -608,6 +611,11 @@ void PaletteLayout::layout(Symbol* item, const Context&)
     item->setbbox(item->scoreFont() ? item->scoreFont()->bbox(item->sym(), item->magS()) : item->symBbox(item->sym()));
     item->setOffset(0.0, 0.0);
     item->setPos(0.0, 0.0);
+}
+
+void PaletteLayout::layout(SystemText* item, const Context& ctx)
+{
+    layoutTextBase(item, ctx);
 }
 
 void PaletteLayout::layoutTextBase(TextBase* item, const Context& ctx)
