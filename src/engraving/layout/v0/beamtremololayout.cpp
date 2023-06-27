@@ -546,9 +546,9 @@ bool BeamTremoloLayout::calculateAnchors(const std::vector<ChordRest*>& chordRes
 
     int slant = computeDesiredSlant(startNote, endNote, middleLine, dictator, pointer);
     bool isFlat = slant == 0;
-    int specialSlant = isFlat ? isSlopeConstrained(startNote, endNote) : -1;
-    bool forceFlat = specialSlant == 0;
-    bool smallSlant = specialSlant == 1;
+    SlopeConstraint specialSlant = isFlat ? getSlopeConstraint(startNote, endNote) : SlopeConstraint::NO_CONSTRAINT;
+    bool forceFlat = specialSlant == SlopeConstraint::FLAT;
+    bool smallSlant = specialSlant == SlopeConstraint::SMALL_SLOPE;
     if (isFlat) {
         dictator = m_up ? std::min(pointer, dictator) : std::max(pointer, dictator);
         pointer = dictator;
@@ -874,10 +874,10 @@ int BeamTremoloLayout::computeDesiredSlant(int startNote, int endNote, int middl
     if (startNote == endNote) {
         return 0;
     }
-    int slopeConstrained = isSlopeConstrained(startNote, endNote);
-    if (slopeConstrained == 0) {
+    SlopeConstraint slopeConstrained = getSlopeConstraint(startNote, endNote);
+    if (slopeConstrained == SlopeConstraint::FLAT) {
         return 0;
-    } else if (slopeConstrained == 1) {
+    } else if (slopeConstrained == SlopeConstraint::SMALL_SLOPE) {
         return dictator > pointer ? -1 : 1;
     }
 
@@ -889,77 +889,80 @@ int BeamTremoloLayout::computeDesiredSlant(int startNote, int endNote, int middl
     return std::min(maxSlope, _maxSlopes[interval]) * (m_up ? 1 : -1);
 }
 
-int BeamTremoloLayout::isSlopeConstrained(int startNote, int endNote) const
+SlopeConstraint BeamTremoloLayout::getSlopeConstraint(int startNote, int endNote) const
 {
     // 0 to constrain to flat, 1 to constrain to 0.25, <0 for no constraint
     if (startNote == endNote) {
-        return 0;
+        return SlopeConstraint::FLAT;
+    } else if (m_beamType == BeamType::TREMOLO) {
+        // tremolos don't need the small slope constraint since they only have two notes
+        return SlopeConstraint::NO_CONSTRAINT;
     }
     // if a note is more extreme than the endpoints, slope is 0
     // p.s. _notes is a sorted vector
-    if (m_notes.size() > 2) {
+    if (m_elements.size() > 2) {
         if (m_up) {
             int higherEnd = std::min(startNote, endNote);
             if (higherEnd > m_notes[0]) {
-                return 0; // a note is higher in the staff than the highest end
+                return SlopeConstraint::FLAT; // a note is higher in the staff than the highest end
             }
             if (higherEnd == m_notes[0] && higherEnd >= m_notes[1]) {
                 if (higherEnd > m_notes[1]) {
-                    return 0; // a note is higher in the staff than the highest end
+                    return SlopeConstraint::FLAT; // a note is higher in the staff than the highest end
                 }
                 size_t chordCount = m_elements.size();
                 if (chordCount >= 3 && m_notes.size() >= 3) {
                     bool middleNoteHigherThanHigherEnd = higherEnd >= m_notes[2];
                     if (middleNoteHigherThanHigherEnd) {
-                        return 0; // two notes are the same as the highest end (notes [0] [1] and [2] higher than or same as higherEnd)
+                        return SlopeConstraint::FLAT; // two notes are the same as the highest end (notes [0] [1] and [2] higher than or same as higherEnd)
                     }
                     bool secondNoteSameHeightAsHigherEnd = startNote < endNote && m_elements[1]->isChord()
                                                            && toChord(m_elements[1])->upLine() == higherEnd;
                     bool secondToLastNoteSameHeightAsHigherEnd = endNote < startNote && m_elements[chordCount - 2]->isChord() && toChord(
                         m_elements[chordCount - 2])->upLine() == higherEnd;
                     if (!(secondNoteSameHeightAsHigherEnd || secondToLastNoteSameHeightAsHigherEnd)) {
-                        return 0; // only one note same as higher end, but it is not a neighbor
+                        return SlopeConstraint::FLAT; // only one note same as higher end, but it is not a neighbor
                     } else {
                         // there is a single note next to the highest one with equivalent height
                         // and they are neighbors. this is our exception, so
                         // the slope may be a max of 0.25.
-                        return 1;
+                        return SlopeConstraint::SMALL_SLOPE;
                     }
                 } else {
-                    return 0; // only two notes in entire beam, in this case startNote == endNote
+                    return SlopeConstraint::FLAT; // only two notes in entire beam, in this case startNote == endNote
                 }
             }
         } else {
             int lowerEnd = std::max(startNote, endNote);
             if (lowerEnd < m_notes[m_notes.size() - 1]) {
-                return 0;
+                return SlopeConstraint::FLAT;
             }
             if (lowerEnd == m_notes[m_notes.size() - 1] && lowerEnd <= m_notes[m_notes.size() - 2]) {
                 if (lowerEnd < m_notes[m_notes.size() - 2]) {
-                    return 0;
+                    return SlopeConstraint::FLAT;
                 }
                 size_t chordCount = m_elements.size();
                 if (chordCount >= 3 && m_notes.size() >= 3) {
                     bool middleNoteLowerThanLowerEnd = lowerEnd <= m_notes[m_notes.size() - 3];
                     if (middleNoteLowerThanLowerEnd) {
-                        return 0;
+                        return SlopeConstraint::FLAT;
                     }
                     bool secondNoteSameHeightAsLowerEnd = startNote > endNote && m_elements[1]->isChord()
                                                           && toChord(m_elements[1])->downLine() == lowerEnd;
                     bool secondToLastNoteSameHeightAsLowerEnd = endNote > startNote && m_elements[chordCount - 2]->isChord() && toChord(
                         m_elements[chordCount - 2])->downLine() == lowerEnd;
                     if (!(secondNoteSameHeightAsLowerEnd || secondToLastNoteSameHeightAsLowerEnd)) {
-                        return 0;
+                        return SlopeConstraint::FLAT;
                     } else {
-                        return 1;
+                        return SlopeConstraint::SMALL_SLOPE;
                     }
                 } else {
-                    return 0;
+                    return SlopeConstraint::FLAT;
                 }
             }
         }
     }
-    return -1;
+    return SlopeConstraint::NO_CONSTRAINT;
 }
 
 int BeamTremoloLayout::getMaxSlope() const
