@@ -1827,7 +1827,7 @@ void TLayout::layout(Hairpin* item, LayoutContext& ctx)
     layoutTextLineBase(item, ctx);
 }
 
-void TLayout::layout(HarpPedalDiagram* item, LayoutContext& ctx)
+void TLayout::layout(HarpPedalDiagram*, LayoutContext&)
 {
     //! NOTE Moved to PaletteLayout
     UNREACHABLE;
@@ -2493,10 +2493,10 @@ void TLayout::layout(PickScrapeSegment* item, LayoutContext& ctx)
     layoutTextLineBaseSegment(item, ctx);
 }
 
-void TLayout::layout(PlayTechAnnotation* item, LayoutContext& ctx)
+void TLayout::layout(PlayTechAnnotation*, LayoutContext&)
 {
-    layoutTextBase(item, ctx);
-    item->autoplaceSegmentElement();
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(RasgueadoSegment* item, LayoutContext& ctx)
@@ -3600,20 +3600,6 @@ void TLayout::layout(TripletFeel* item, LayoutContext& ctx)
 void TLayout::layout(Trill* item, LayoutContext& ctx)
 {
     layoutLine(static_cast<SLine*>(item), ctx);
-
-    if (ctx.conf().isPaletteMode()) {
-        return;
-    }
-    if (item->spannerSegments().empty()) {
-        return;
-    }
-    TrillSegment* ls = toTrillSegment(item->frontSegment());
-    if (item->spannerSegments().empty()) {
-        LOGD("Trill: no segments");
-    }
-    if (item->accidental()) {
-        item->accidental()->setParent(ls);
-    }
 }
 
 void TLayout::layout(Tuplet*, LayoutContext&)
