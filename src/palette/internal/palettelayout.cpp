@@ -25,6 +25,7 @@
 #include "draw/fontmetrics.h"
 
 #include "engraving/types/typesconv.h"
+#include "engraving/types/symnames.h"
 
 #include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/score.h"
@@ -83,10 +84,11 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::TIMESIG:      layout(toTimeSig(item), ctx);
         break;
     default:
-        LOGD() << item->typeName();
-        if (std::string("Symbol") == item->typeName()) {
-            int k = -1;
-        }
+        //! TODO Still need
+//        LOGD() << item->typeName();
+//        if (std::string("Symbol") == item->typeName()) {
+//            int k = -1;
+//        }
         layout::pal::TLayout::layoutItem(item, ctxpal);
         break;
     }
@@ -125,8 +127,8 @@ void PaletteLayout::layout(Ambitus* item, const Context& ctx)
     double headWdt = item->headWidth();
     double spatium = item->spatium();
 
-    double lineDist    = spatium;
-    int numOfLines  = 3;
+    double lineDist = spatium;
+    constexpr int numOfLines = 3;
 
     //
     // NOTEHEADS Y POS
@@ -245,7 +247,6 @@ void PaletteLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
         if (drawFlag) {
             RectF flagBBox = ctx.engravingFont()->bbox(flagsym, dx.mags);
             item->addbbox(flagBBox.translated(PointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
-            // printBBox(" notehead + stem + flag", bbox());
         }
 
         // draw the ledger line for high A
@@ -354,7 +355,7 @@ void PaletteLayout::layout(Bracket* item, const Context& ctx)
         double x = -w;
         double y = -w;
         double h = (item->h2() + w) * 2;
-        w += (.5 * item->spatium() + 3 * w);
+        w += (0.5 * item->spatium() + 3 * w);
         item->bbox().setRect(x, y, w, h);
         shape.add(item->bbox());
     }
@@ -379,8 +380,8 @@ void PaletteLayout::layout(Bracket* item, const Context& ctx)
 
 void PaletteLayout::layout(Clef* item, const Context& ctx)
 {
-    int lines = 5;
-    double lineDist = 1.0;
+    constexpr int lines = 5;
+    constexpr double lineDist = 1.0;
     double spatium = ctx.style().spatium();
     double yoff = 0.0;
 
@@ -444,12 +445,8 @@ void PaletteLayout::layout(FretDiagram* item, const Context& ctx)
     }
 
     if (item->orientation() == engraving::Orientation::HORIZONTAL) {
-        double tempW = w;
-        double tempX = x;
-        w = h;
-        h = tempW;
-        x = y;
-        y = tempX;
+        std::swap(w, h);
+        std::swap(x, y);
     }
 
     item->bbox().setRect(x, y, w, h);
@@ -461,40 +458,113 @@ void PaletteLayout::layout(KeySig* item, const Context& ctx)
     double step = spatium * 0.5;
 
     item->setbbox(RectF());
+
     item->keySymbols().clear();
 
-    Key key = item->key();
-    const signed char* lines = ClefInfo::lines(ClefType::G);
+    // determine current clef for this staff
+    ClefType clef = ClefType::G;
 
-    if (std::abs(int(key)) <= 7) {
-        SymId sym = key > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
+    int key = int(item->key());
+
+    if (item->isCustom() && !item->isAtonal()) {
         double accidentalGap = ctx.style().styleS(Sid::keysigAccidentalDistance).val();
-        double previousWidth = item->symWidth(sym) / spatium;
-        int lineIndexOffset = int(key) > 0 ? 0 : 7;
-        for (int i = 0; i < std::abs(int(key)); ++i) {
-            int line = lines[lineIndexOffset + i];
-            KeySym ks;
-            ks.sym = sym;
-            double x = 0.0;
-            if (item->keySymbols().size() > 0) {
-                const KeySym& previous = item->keySymbols().back();
-                x = previous.xPos + previousWidth + accidentalGap;
-                bool isAscending = line < previous.line;
-                SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
-                SmuflAnchorId previousCutout = isAscending ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE;
-                PointF cutout = item->symSmuflAnchor(sym, currentCutout);
-                double currentCutoutY = line * step + cutout.y();
-                double previousCutoutY = previous.line * step + item->symSmuflAnchor(previous.sym, previousCutout).y();
-                if ((isAscending && currentCutoutY < previousCutoutY) || (!isAscending && currentCutoutY > previousCutoutY)) {
-                    x -= cutout.x() / spatium;
+        // add standard key accidentals first, if necessary
+        for (int i = 1; i <= abs(key) && abs(key) <= 7; ++i) {
+            bool drop = false;
+            for (const CustDef& cd: item->customKeyDefs()) {
+                int degree = item->degInKey(cd.degree);
+                // if custom keysig accidental takes place, don't create tonal accidental
+                if ((degree * 2 + 2) % 7 == (key < 0 ? 8 - i : i) % 7) {
+                    drop = true;
+                    break;
                 }
             }
-            ks.xPos = x;
-            ks.line = line;
-            item->keySymbols().push_back(ks);
+            if (!drop) {
+                KeySym ks;
+                int lineIndexOffset = key > 0 ? -1 : 6;
+                ks.sym = key > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
+                ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
+                if (item->keySymbols().size() > 0) {
+                    KeySym& previous = item->keySymbols().back();
+                    double previousWidth = item->symWidth(previous.sym) / spatium;
+                    ks.xPos = previous.xPos + previousWidth + accidentalGap;
+                } else {
+                    ks.xPos = 0;
+                }
+                // TODO octave metters?
+                item->keySymbols().push_back(ks);
+            }
+        }
+        for (const CustDef& cd : item->customKeyDefs()) {
+            SymId sym = item->symInKey(cd.sym, cd.degree);
+            int degree = item->degInKey(cd.degree);
+            bool flat = std::string(SymNames::nameForSymId(sym).ascii()).find("Flat") != std::string::npos;
+            int accIdx = (degree * 2 + 1) % 7; // C D E F ... index to F C G D index
+            accIdx = flat ? 13 - accIdx : accIdx;
+            int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
+            double xpos = cd.xAlt;
+            if (item->keySymbols().size() > 0) {
+                KeySym& previous = item->keySymbols().back();
+                double previousWidth = item->symWidth(previous.sym) / spatium;
+                xpos += previous.xPos + previousWidth + accidentalGap;
+            }
+            // if translated symbol if out of range, add key accidental followed by untranslated symbol
+            if (sym == SymId::noSym) {
+                KeySym ks;
+                ks.line = line;
+                ks.xPos = xpos;
+                // for quadruple sharp use two double sharps
+                if (cd.sym == SymId::accidentalTripleSharp) {
+                    ks.sym = SymId::accidentalDoubleSharp;
+                    sym = SymId::accidentalDoubleSharp;
+                } else {
+                    ks.sym = key > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
+                    sym = cd.sym;
+                }
+                item->keySymbols().push_back(ks);
+                xpos += key < 0 ? 0.7 : 1; // flats closer
+            }
+            // create symbol; natural only if is user defined
+            if (sym != SymId::accidentalNatural || sym == cd.sym) {
+                KeySym ks;
+                ks.sym = sym;
+                ks.line = line;
+                ks.xPos = xpos;
+                item->keySymbols().push_back(ks);
+            }
         }
     } else {
-        LOGD() << "illegal key:" << int(key);
+        if (std::abs(key) <= 7) {
+            const signed char* lines = ClefInfo::lines(clef);
+            SymId sym = key > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
+            double accidentalGap = ctx.style().styleS(Sid::keysigAccidentalDistance).val();
+            double previousWidth = item->symWidth(sym) / spatium;
+            int lineIndexOffset = key > 0 ? 0 : 7;
+            for (int i = 0; i < std::abs(key); ++i) {
+                int line = lines[lineIndexOffset + i];
+                KeySym ks;
+                ks.sym = sym;
+                double x = 0.0;
+                if (item->keySymbols().size() > 0) {
+                    const KeySym& previous = item->keySymbols().back();
+                    x = previous.xPos + previousWidth + accidentalGap;
+                    bool isAscending = line < previous.line;
+                    SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
+                    SmuflAnchorId previousCutout = isAscending ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE;
+                    PointF cutout = item->symSmuflAnchor(sym, currentCutout);
+                    double currentCutoutY = line * step + cutout.y();
+                    double previousCutoutY = previous.line * step + item->symSmuflAnchor(previous.sym, previousCutout).y();
+                    if ((isAscending && currentCutoutY < previousCutoutY) || (!isAscending && currentCutoutY > previousCutoutY)) {
+                        x -= cutout.x() / spatium;
+                    }
+                }
+                ks.xPos = x;
+                ks.line = line;
+                item->keySymbols().push_back(ks);
+            }
+        } else {
+            LOGD() << "illegal key:" << key;
+        }
     }
 
     // compute bbox
@@ -521,15 +591,15 @@ void PaletteLayout::layout(TimeSig* item, const Context& ctx)
 
     TimeSig::DrawArgs drawArgs;
 
-    double lineDist = 1.0;
-    int numOfLines = 5;
+    constexpr double lineDist = 1.0;
+    constexpr int numOfLines = 5;
     TimeSigType sigType = item->timeSigType();
 
     // if some symbol
     // compute vert. displacement to center in the staff height
     // determine middle staff position:
 
-    double yoff = spatium * (numOfLines - 1) * .5 * lineDist;
+    double yoff = spatium * (numOfLines - 1) * 0.5 * lineDist;
 
     // C and Ccut are placed at the middle of the staff: use yoff directly
     IEngravingFontPtr font = ctx.engravingFont();
@@ -587,17 +657,17 @@ void PaletteLayout::layout(TimeSig* item, const Context& ctx)
         double displ = (numOfLines & 1) ? 0.0 : (0.05 * spatium);
 
         //align on the wider
-        double pzY = yoff - (denRect.width() < 0.01 ? 0.0 : (displ + numRect.height() * .5));
-        double pnY = yoff + displ + denRect.height() * .5;
+        double pzY = yoff - (denRect.width() < 0.01 ? 0.0 : (displ + numRect.height() * 0.5));
+        double pnY = yoff + displ + denRect.height() * 0.5;
 
         if (numRect.width() >= denRect.width()) {
             // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
             drawArgs.pz = PointF(0.0, pzY);
             // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-            drawArgs.pn = PointF((numRect.width() - denRect.width()) * .5, pnY);
+            drawArgs.pn = PointF((numRect.width() - denRect.width()) * 0.5, pnY);
         } else {
             // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-            drawArgs.pz = PointF((denRect.width() - numRect.width()) * .5, pzY);
+            drawArgs.pz = PointF((denRect.width() - numRect.width()) * 0.5, pzY);
             // denominator: horiz: centred around centre of numerator | vert: one space below centre line
             drawArgs.pn = PointF(0.0, pnY);
         }
@@ -621,6 +691,7 @@ void PaletteLayout::layout(TimeSig* item, const Context& ctx)
     item->setDrawArgs(drawArgs);
 }
 
+//! TODO
 void PaletteLayout::layout(Volta*, const Context&)
 {
     // layoutLine(item, ctx);
