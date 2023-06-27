@@ -301,6 +301,15 @@ SymId Accidental::subtype2symbol(AccidentalType st)
 }
 
 //---------------------------------------------------------
+//   subtype2centoffset
+//---------------------------------------------------------
+
+double Accidental::subtype2centOffset(AccidentalType st)
+{
+    return accList[int(st)].centOffset;
+}
+
+//---------------------------------------------------------
 //   name2subtype
 //---------------------------------------------------------
 

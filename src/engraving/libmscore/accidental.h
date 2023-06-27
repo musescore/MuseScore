@@ -124,6 +124,7 @@ public:
     static AccidentalType value2subtype(AccidentalVal);
     static AccidentalType name2subtype(const mu::AsciiStringView&);
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
+    static double subtype2centOffset(AccidentalType);
 
     String accessibleInfo() const override;
 

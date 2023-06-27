@@ -2202,7 +2202,24 @@ void TLayout::layout(Glissando* item, LayoutContext& ctx)
 
     // AVOID HORIZONTAL LINES
 
-    int upDown = (0 < (anchor2->pitch() - anchor1->pitch())) - ((anchor2->pitch() - anchor1->pitch()) < 0);
+    // for microtonality read tuning, or check note accidental
+    double tune1 = anchor1->tuning();
+    double tune2 = anchor2->tuning();
+    AccidentalType acc1 = anchor1->accidentalType();
+    AccidentalType acc2 = anchor2->accidentalType();
+    if (RealIsNull(tune1) && Accidental::isMicrotonal(acc1)) {
+        tune1 = Accidental::subtype2centOffset(acc1);
+    }
+    if (RealIsNull(tune2) && Accidental::isMicrotonal(acc2)) {
+        tune2 = Accidental::subtype2centOffset(acc2);
+    }
+
+    int upDown = (0 < (anchor2->ppitch() - anchor1->ppitch())) - ((anchor2->ppitch() - anchor1->ppitch()) < 0);
+    // same note, so compare tunings
+    if (upDown == 0) {
+        upDown = (0 < (tune2 - tune1)) - ((tune2 - tune1) < 0);
+    }
+
     // on TAB's, glissando are by necessity on the same string, this gives an horizontal glissando line;
     // make bottom end point lower and top ending point higher
     if (cr1->staff()->isTabStaff(cr1->tick())) {
