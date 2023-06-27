@@ -1226,9 +1226,10 @@ void TLayout::layoutLines(FiguredBass* item, LayoutContext& ctx)
     item->setLineLengths(lineLengths);
 }
 
-void TLayout::layout(Fingering* item, LayoutContext& ctx)
+void TLayout::layout(Fingering*, LayoutContext&)
 {
-    layoutTextBase(item, ctx);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
@@ -1828,9 +1829,8 @@ void TLayout::layout(Hairpin* item, LayoutContext& ctx)
 
 void TLayout::layout(HarpPedalDiagram* item, LayoutContext& ctx)
 {
-    item->updateDiagramText();
-    layoutTextBase(item, ctx);
-    item->autoplaceSegmentElement();
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(HarmonicMarkSegment* item, LayoutContext& ctx)
@@ -3118,9 +3118,10 @@ void TLayout::layout(TabDurationSymbol* item, LayoutContext&)
     item->setPos(xpos * mag, ypos * mag);
 }
 
-void TLayout::layout(TempoText* item, LayoutContext& ctx)
+void TLayout::layout(TempoText*, LayoutContext&)
 {
-    layoutTextBase(item, ctx);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(TextBase* item, LayoutContext& ctx)
