@@ -37,8 +37,8 @@ public:
 
     virtual bool isAppUpdatable() const = 0;
 
-    virtual bool isTestingMode() const = 0;
-    virtual void setIsTestingMode(bool isTesting) = 0;
+    virtual bool allowUpdateOnPreRelease() const = 0;
+    virtual void setAllowUpdateOnPreRelease(bool allow) = 0;
 
     virtual bool needCheckForUpdate() const = 0;
     virtual void setNeedCheckForUpdate(bool needCheck) = 0;
