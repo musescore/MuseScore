@@ -49,6 +49,20 @@ Ornament::Ornament(const Ornament& o)
     _intervalBelow = o._intervalBelow;
     _showAccidental = o._showAccidental;
     _startOnUpperNote = o._startOnUpperNote;
+
+    if (o._cueNoteChord) {
+        _cueNoteChord = o._cueNoteChord->clone();
+    }
+
+    for (size_t i = 0; i < _accidentalsAboveAndBelow.size(); ++i) {
+        Accidental* oldAccidental = o._accidentalsAboveAndBelow[i];
+        if (!oldAccidental) {
+            continue;
+        }
+        Accidental* newAccidental = oldAccidental->clone();
+        newAccidental->setParent(this);
+        _accidentalsAboveAndBelow[i] = newAccidental;
+    }
 }
 
 Ornament::~Ornament()
@@ -229,6 +243,10 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
         }
 
         Note*& note = _notesAboveAndBelow.at(i);
+        if (!note && above && _cueNoteChord) {
+            note = _cueNoteChord->upNote();
+        }
+
         if (!note) {
             note = mainNote->clone();
         } else {
