@@ -80,6 +80,7 @@ apt_packages_runtime=(
   libegl1-mesa-dev
   libodbc1
   libpq-dev
+  libssl1.0.0
   libxcomposite-dev
   libxcursor-dev
   libxi-dev
