@@ -59,7 +59,7 @@ Column {
         ]
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         id: smallAccidentalCheckBox
 
         text: qsTrc("inspector", "Small accidental")

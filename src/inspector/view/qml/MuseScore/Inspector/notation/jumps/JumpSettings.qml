@@ -71,7 +71,7 @@ Column {
         navigationRowStart: playUntil.navigationRowEnd + 1
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         text: qsTrc("inspector", "Play repeats")
         propertyItem: root.model ? root.model.hasToPlayRepeats : null
 

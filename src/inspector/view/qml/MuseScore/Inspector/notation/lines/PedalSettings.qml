@@ -74,7 +74,7 @@ Column {
         navigationRowStart: root.navigationRowStart + 1
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         id: showLineCheckBox
         visible: root.model && root.model.isChangingLineVisibilityAllowed
 
