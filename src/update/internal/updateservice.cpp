@@ -84,6 +84,14 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
 
     Version current(MUVersion::fullVersion());
     Version update(String::fromStdString(releaseInfo.val.version));
+
+    bool allowUpdateOnPreRelease = configuration()->allowUpdateOnPreRelease();
+    bool isPreRelease = update.preRelease();
+
+    if (!allowUpdateOnPreRelease && isPreRelease) {
+        return result;
+    }
+
     if (update <= current) {
         return result;
     }
