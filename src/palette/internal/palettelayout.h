@@ -47,6 +47,8 @@ class KeySig;
 
 class Symbol;
 
+class TempoText;
+class TextBase;
 class TimeSig;
 
 class Volta;
@@ -88,9 +90,14 @@ public:
 
     static void layout(engraving::Symbol* item, const Context& ctx);
 
+    static void layout(engraving::TempoText* item, const Context& ctx);
     static void layout(engraving::TimeSig* item, const Context& ctx);
 
     static void layout(engraving::Volta* item, const Context& ctx);
+
+private:
+    static void layoutTextBase(engraving::TextBase* item, const Context& ctx);
+    static void layout1TextBase(engraving::TextBase* item, const Context& ctx);
 };
 }
 
