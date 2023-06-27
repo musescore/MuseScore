@@ -208,9 +208,11 @@ extern void domNotImplemented(const QDomElement&);
 
 
 extern QString accSymId2MxmlString(const SymId id);
+extern QString accSymId2SmuflMxmlString(const SymId id);
 extern QString accidentalType2MxmlString(const AccidentalType type);
-extern AccidentalType mxmlString2accidentalType(const QString mxmlName);
-extern SymId mxmlString2accSymId(const QString mxmlName);
+extern QString accidentalType2SmuflMxmlString(const AccidentalType type);
+extern AccidentalType mxmlString2accidentalType(const QString mxmlName, const QString smufl);
+extern SymId mxmlString2accSymId(const QString mxmlName, const QString smufl = "");
 extern AccidentalType microtonalGuess(double val);
 extern bool isLaissezVibrer(const SymId id);
 extern bool hasLaissezVibrer(const Chord* const chord);
