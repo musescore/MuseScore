@@ -5093,20 +5093,6 @@ void TLayout::layout(TripletFeel* item, LayoutContext& ctx)
 void TLayout::layout(Trill* item, LayoutContext& ctx)
 {
     layoutLine(static_cast<SLine*>(item), ctx);
-
-    if (ctx.conf().isPaletteMode()) {
-        return;
-    }
-    if (item->spannerSegments().empty()) {
-        return;
-    }
-    TrillSegment* ls = toTrillSegment(item->frontSegment());
-    if (item->spannerSegments().empty()) {
-        LOGD("Trill: no segments");
-    }
-    if (item->accidental()) {
-        item->accidental()->setParent(ls);
-    }
 }
 
 void TLayout::layout(Tuplet* item, LayoutContext& ctx)
