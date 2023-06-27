@@ -37,33 +37,10 @@ Item {
         readonly property int sideMargin: 24
     }
 
-    StyledTextLabel {
-        id: titleLabel
-        anchors.left: parent.left
-        anchors.right: parent.right
-
-        text: qsTrc("update", "Release notes")
-
-        horizontalAlignment: Qt.AlignLeft
-        font: ui.theme.bodyBoldFont
-    }
-
-    SeparatorLine {
-        anchors.leftMargin: -prv.sideMargin
-        anchors.rightMargin: -prv.sideMargin
-        anchors.bottom: flickable.top
-        anchors.bottomMargin: 16
-    }
-
     StyledFlickable {
         id: flickable
 
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: titleLabel.bottom
-        anchors.topMargin: 32
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 16
+        anchors.fill: parent
 
         contentHeight: notesLabel.implicitHeight
 
@@ -77,6 +54,7 @@ Item {
             font: ui.theme.largeBodyFont
             wrapMode: Text.WordWrap
             textFormat: Text.MarkdownText
+            lineHeight: 1.2
         }
 
         ScrollBar.vertical: scrollBar
@@ -88,12 +66,5 @@ Item {
         anchors.right: flickable.right
         anchors.rightMargin: -prv.sideMargin
         anchors.bottom: flickable.bottom
-    }
-
-    SeparatorLine {
-        anchors.top: flickable.bottom
-        anchors.topMargin: 16
-        anchors.leftMargin: -prv.sideMargin
-        anchors.rightMargin: -prv.sideMargin
     }
 }

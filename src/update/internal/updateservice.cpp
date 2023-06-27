@@ -159,9 +159,7 @@ mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) cons
     QString version = tagName.replace("v", "");
     result.val.version = version.toStdString();
 
-    result.val.notes = QString("### MuseScore %1\n\n%2")
-                       .arg(version, release.value("bodyMarkdown").toString())
-                       .toStdString();
+    result.val.notes = release.value("bodyMarkdown").toString().toStdString();
 
     std::string fileSuffix = platformFileSuffix();
 

@@ -36,7 +36,7 @@ StyledDialogView {
     contentWidth: 644
     contentHeight: 474
 
-    margins: 24
+    margins: 22
 
     onNavigationActivateRequested: {
         buttons.focusOnFirst()
@@ -70,13 +70,30 @@ StyledDialogView {
              }
          }
 
-        StyledTextLabel {
-            id: releaseTitleLabel
-
+        Column {
             Layout.alignment: Qt.AlignTop
 
-            text: qsTrc("update", "A new version of MuseScore is available!")
-            font: ui.theme.headerBoldFont
+            spacing: 8
+
+            StyledTextLabel {
+                id: releaseTitleLabel
+
+                text: qsTrc("update", "A new version of MuseScore is available!")
+                font: ui.theme.headerBoldFont
+            }
+
+            StyledTextLabel {
+                id: releaseNotesLabel
+
+                text: qsTrc("update", "Release notes")
+                font: ui.theme.largeBodyBoldFont
+                horizontalAlignment: Qt.AlignLeft
+            }
+        }
+
+        SeparatorLine {
+            Layout.leftMargin: -root.margins
+            Layout.rightMargin: -root.margins
         }
 
         ReleaseNotesView {
@@ -84,6 +101,11 @@ StyledDialogView {
 
             Layout.fillWidth: true
             Layout.fillHeight: true
+        }
+
+        SeparatorLine {
+            Layout.leftMargin: -root.margins
+            Layout.rightMargin: -root.margins
         }
 
         ReleaseInfoBottomPanel {
