@@ -48,6 +48,8 @@ class HarpPedalDiagram;
 
 class KeySig;
 
+class PlayTechAnnotation;
+
 class Symbol;
 
 class TempoText;
@@ -93,6 +95,8 @@ public:
     static void layout(engraving::FretDiagram* item, const Context& ctx);
 
     static void layout(engraving::KeySig* item, const Context& ctx);
+
+    static void layout(engraving::PlayTechAnnotation* item, const Context& ctx);
 
     static void layout(engraving::Symbol* item, const Context& ctx);
 
