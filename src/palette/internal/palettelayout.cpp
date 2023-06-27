@@ -41,6 +41,7 @@
 #include "engraving/libmscore/fret.h"
 #include "engraving/libmscore/keysig.h"
 #include "engraving/libmscore/symbol.h"
+#include "engraving/libmscore/tempotext.h"
 #include "engraving/libmscore/timesig.h"
 
 #include "engraving/libmscore/utils.h"
@@ -81,11 +82,13 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::SYMBOL:       layout(toSymbol(item), ctx);
         break;
+    case ElementType::TEMPO_TEXT:   layout(toTempoText(item), ctx);
+        break;
     case ElementType::TIMESIG:      layout(toTimeSig(item), ctx);
         break;
     default:
         //! TODO Still need
-//        LOGD() << item->typeName();
+        LOGD() << item->typeName();
 //        if (std::string("Symbol") == item->typeName()) {
 //            int k = -1;
 //        }
@@ -580,6 +583,75 @@ void PaletteLayout::layout(Symbol* item, const Context&)
     item->setbbox(item->scoreFont() ? item->scoreFont()->bbox(item->sym(), item->magS()) : item->symBbox(item->sym()));
     item->setOffset(0.0, 0.0);
     item->setPos(0.0, 0.0);
+}
+
+void PaletteLayout::layoutTextBase(TextBase* item, const Context& ctx)
+{
+    item->setPos(PointF());
+    item->setOffset(0.0, 0.0);
+
+    if (item->placeBelow()) {
+        item->setPosY(0.0);
+    }
+
+    layout1TextBase(item, ctx);
+}
+
+void PaletteLayout::layout1TextBase(TextBase* item, const Context&)
+{
+    if (item->isBlockNotCreated()) {
+        item->createBlocks();
+    }
+    if (item->blocksRef().empty()) {
+        item->blocksRef().push_back(TextBlock());
+    }
+
+    RectF bb;
+    double y = 0;
+
+    // adjust the bounding box for the text item
+    for (size_t i = 0; i < item->rows(); ++i) {
+        TextBlock* t = &item->blocksRef()[i];
+        t->layout(item);
+        const RectF* r = &t->boundingRect();
+
+        if (r->height() == 0) {
+            r = &item->blocksRef()[i - i].boundingRect();
+        }
+        y += t->lineSpacing();
+        t->setY(y);
+        bb |= r->translated(0.0, y);
+    }
+    double yoff = 0;
+    double h    = 0;
+
+    item->setPos(PointF());
+
+    if (item->align() == AlignV::BOTTOM) {
+        yoff += h - bb.bottom();
+    } else if (item->align() == AlignV::VCENTER) {
+        yoff +=  (h - (bb.top() + bb.bottom())) * .5;
+    } else if (item->align() == AlignV::BASELINE) {
+        yoff += h * .5 - item->blocksRef().front().lineSpacing();
+    } else {
+        yoff += -bb.top();
+    }
+
+    for (TextBlock& t : item->blocksRef()) {
+        t.setY(t.y() + yoff);
+    }
+
+    bb.translate(0.0, yoff);
+
+    item->setbbox(bb);
+    if (item->hasFrame()) {
+        item->layoutFrame();
+    }
+}
+
+void PaletteLayout::layout(TempoText* item, const Context& ctx)
+{
+    layoutTextBase(item, ctx);
 }
 
 void PaletteLayout::layout(TimeSig* item, const Context& ctx)
