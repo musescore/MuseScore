@@ -41,6 +41,8 @@ class Clef;
 
 class KeySig;
 
+class Symbol;
+
 class TimeSig;
 
 class Volta;
@@ -75,6 +77,9 @@ public:
     static void layout(engraving::Clef* item, const Context& ctx);
 
     static void layout(engraving::KeySig* item, const Context& ctx);
+
+    static void layout(engraving::Symbol* item, const Context& ctx);
+
     static void layout(engraving::TimeSig* item, const Context& ctx);
 
     static void layout(engraving::Volta* item, const Context& ctx);
