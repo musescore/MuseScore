@@ -2661,32 +2661,6 @@ void TLayout::layout(Ornament* item, LayoutContext& ctx)
         }
         return;
     }
-
-    if (!item->explicitParent()) {
-        return;
-    }
-
-    Chord* parentChord = toChord(item->parentItem());
-    Chord* cueNoteChord = item->cueNoteChord();
-
-    //Note* cueNote = cueNoteChord->notes().front();
-
-    UNREACHABLE;
-    //ChordLayout::layoutChords3(ctx.conf().style(), { cueNoteChord }, { cueNote }, item->staff(), ctx);
-    layout(cueNoteChord, ctx);
-    Shape noteShape = cueNoteChord->shape();
-    Shape parentChordShape = parentChord->shape();
-    double minDist = parentChordShape.minHorizontalDistance(noteShape);
-    // Check for possible other chords in same segment
-    staff_idx_t startStaff = staff2track(parentChord->staffIdx());
-    for (staff_idx_t staff = startStaff; staff < startStaff + VOICES; ++staff) {
-        Segment* segment = parentChord->segment();
-        ChordRest* cr = segment->elementAt(staff) ? toChordRest(segment->elementAt(staff)) : nullptr;
-        if (cr) {
-            minDist = std::max(minDist, cr->shape().minHorizontalDistance(noteShape));
-        }
-    }
-    cueNoteChord->setPosX(minDist);
 }
 
 void TLayout::layout(Ottava* item, LayoutContext& ctx)
