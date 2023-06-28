@@ -43,6 +43,7 @@
 #include "engraving/libmscore/fingering.h"
 #include "engraving/libmscore/fret.h"
 #include "engraving/libmscore/harppedaldiagram.h"
+#include "engraving/libmscore/instrchange.h"
 #include "engraving/libmscore/jump.h"
 #include "engraving/libmscore/keysig.h"
 #include "engraving/libmscore/marker.h"
@@ -95,6 +96,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::FRET_DIAGRAM: layout(toFretDiagram(item), ctx);
         break;
     case ElementType::HARP_DIAGRAM: layout(toHarpPedalDiagram(item), ctx);
+        break;
+    case ElementType::INSTRUMENT_CHANGE: layout(toInstrumentChange(item), ctx);
         break;
     case ElementType::JUMP:         layout(toJump(item), ctx);
         break;
@@ -503,6 +506,11 @@ void PaletteLayout::layout(Dynamic* item, const Context& ctx)
 void PaletteLayout::layout(HarpPedalDiagram* item, const Context& ctx)
 {
     item->updateDiagramText();
+    layoutTextBase(item, ctx);
+}
+
+void PaletteLayout::layout(InstrumentChange* item, const Context& ctx)
+{
     layoutTextBase(item, ctx);
 }
 
