@@ -54,7 +54,7 @@ Item {
         KnobControl {
             id: audioSignalAmountKnob
 
-            radius: root.height / 2 + 2
+            radius: root.height / 2 + 1.5
 
             from: 0
             to: 100
@@ -81,7 +81,8 @@ Item {
             readonly property bool isHovering: bypassBtn.mouseArea.containsMouse
 
             Layout.fillWidth: true
-            Layout.fillHeight: true
+            Layout.preferredHeight: audioSignalAmountKnob.backgroundHeight
+            Layout.alignment: Qt.AlignTop
 
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 1
