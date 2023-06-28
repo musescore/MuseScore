@@ -721,6 +721,40 @@ static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType
     }
 }
 
+static void updateUnwrappedMeasureAccidentals(Measure* measure, AccidentalState* as, staff_idx_t staffIdx)
+{
+    assert(!measure->isMMRest());
+    for (Segment& segment : measure->segments()) {
+        if (segment.isChordRestType()) {
+            track_idx_t track     = staffIdx * VOICES;
+            track_idx_t endTrack  = track + VOICES;
+
+            for (track_idx_t t = track; t < endTrack; ++t) {
+                ChordRest* cr = segment.cr(t);
+
+                if (cr && cr->isChord()) {
+                    toChord(cr)->cmdUpdateNotes(as);
+                }
+            }
+        }
+    }
+}
+
+static void updateMeasureAccidentals(Measure* measure, AccidentalState* as, staff_idx_t staffIdx)
+{
+    std::vector<Measure*> measuresToIterate;
+    if (measure->isMMRest()) {
+        for (Measure* mm = measure->mmRestFirst(); mm; mm = mm->nextMeasure()) {
+            updateUnwrappedMeasureAccidentals(mm, as, staffIdx);
+            if (mm == measure->mmRestLast()) {
+                break;
+            }
+        }
+    } else {
+        updateUnwrappedMeasureAccidentals(measure, as, staffIdx);
+    }
+}
+
 void MeasureLayout::getNextMeasure(LayoutContext& ctx)
 {
     ctx.mutState().setPrevMeasure(ctx.mutState().curMeasure());
@@ -827,6 +861,8 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
             }
         }
 
+        updateMeasureAccidentals(measure, &as, staffIdx);
+
         for (Segment& segment : measure->segments()) {
             // TODO? maybe we do need to process it here to make it possible to enable later
             //if (!segment.enabled())
@@ -861,7 +897,6 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
 
                     if (cr->isChord()) {
                         Chord* chord = toChord(cr);
-                        chord->cmdUpdateNotes(&as);
                         for (Chord* c : chord->graceNotes()) {
                             c->setMag(m * ctx.conf().styleD(Sid::graceNoteMag));
                             c->setTrack(t);
