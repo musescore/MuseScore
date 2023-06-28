@@ -51,6 +51,8 @@ class HarpPedalDiagram;
 
 class KeySig;
 
+class Marker;
+
 class PlayTechAnnotation;
 
 class RehearsalMark;
@@ -105,6 +107,8 @@ public:
     static void layout(engraving::HarpPedalDiagram* item, const Context& ctx);
 
     static void layout(engraving::KeySig* item, const Context& ctx);
+
+    static void layout(engraving::Marker* item, const Context& ctx);
 
     static void layout(engraving::PlayTechAnnotation* item, const Context& ctx);
 
