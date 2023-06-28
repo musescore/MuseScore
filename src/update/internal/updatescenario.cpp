@@ -60,7 +60,7 @@ static ReleaseInfo releaseInfoFromValMap(const ValMap& map)
 
 void UpdateScenario::delayedInit()
 {
-    if (configuration()->needCheckForUpdate()) {
+    if (configuration()->needCheckForUpdate() && multiInstancesProvider()->instances().size() == 1) {
         QTimer::singleShot(AUTO_CHECK_UPDATE_INTERVAL, [this]() {
             doCheckForUpdate(false);
         });
