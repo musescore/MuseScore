@@ -57,6 +57,8 @@ class Jump;
 
 class KeySig;
 
+class LetRing;
+class LetRingSegment;
 class SLine;
 class LineSegment;
 
@@ -127,6 +129,8 @@ public:
 
     static void layout(engraving::KeySig* item, const Context& ctx);
 
+    static void layout(engraving::LetRing* item, const Context& ctx);
+
     static void layout(engraving::Marker* item, const Context& ctx);
 
     static void layout(engraving::PalmMute* item, const Context& ctx);
@@ -144,6 +148,7 @@ public:
     static void layout(engraving::Volta* item, const Context& ctx);
 
 private:
+    static void layout(engraving::LetRingSegment* item, const Context& ctx);
     static void layout(engraving::PalmMuteSegment* item, const Context& ctx);
 
     static void layout(engraving::Text* item, const Context& ctx);

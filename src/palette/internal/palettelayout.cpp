@@ -47,6 +47,7 @@
 #include "engraving/libmscore/instrchange.h"
 #include "engraving/libmscore/jump.h"
 #include "engraving/libmscore/keysig.h"
+#include "engraving/libmscore/letring.h"
 #include "engraving/libmscore/line.h"
 #include "engraving/libmscore/marker.h"
 #include "engraving/libmscore/palmmute.h"
@@ -110,7 +111,11 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::KEYSIG:       layout(toKeySig(item), ctx);
         break;
+    case ElementType::LET_RING:     layout(toLetRing(item), ctx);
+        break;
     case ElementType::MARKER:       layout(toMarker(item), ctx);
+        break;
+    case ElementType::PALM_MUTE:    layout(toPalmMute(item), ctx);
         break;
     case ElementType::PLAYTECH_ANNOTATION: layout(toPlayTechAnnotation(item), ctx);
         break;
@@ -651,6 +656,16 @@ void PaletteLayout::layout(KeySig* item, const Context& ctx)
     }
 }
 
+void PaletteLayout::layout(LetRing* item, const Context& ctx)
+{
+    layoutLine(item, ctx);
+}
+
+void PaletteLayout::layout(LetRingSegment* item, const Context& ctx)
+{
+    layoutTextLineBaseSegment(item, ctx);
+}
+
 void PaletteLayout::layout(Marker* item, const Context& ctx)
 {
     layoutTextBase(item, ctx);
@@ -897,6 +912,8 @@ void PaletteLayout::layoutLineSegment(LineSegment* item, const Context& ctx)
 {
     switch (item->type()) {
     case ElementType::PALM_MUTE_SEGMENT: layout(toPalmMuteSegment(item), ctx);
+        break;
+    case ElementType::LET_RING_SEGMENT:  layout(toLetRingSegment(item), ctx);
         break;
     default:
         UNREACHABLE;
