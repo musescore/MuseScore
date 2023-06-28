@@ -1933,10 +1933,10 @@ void TLayout::layout(Image* item, LayoutContext&)
     item->setbbox(RectF(PointF(), item->size2pixel(imageSize)));
 }
 
-void TLayout::layout(InstrumentChange* item, LayoutContext& ctx)
+void TLayout::layout(InstrumentChange*, LayoutContext&)
 {
-    layoutTextBase(item, ctx);
-    item->autoplaceSegmentElement();
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(InstrumentName* item, LayoutContext& ctx)
