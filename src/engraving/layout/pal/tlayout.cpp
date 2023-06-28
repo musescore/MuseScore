@@ -2762,10 +2762,10 @@ void TLayout::layout(StaffState* item, LayoutContext&)
     item->setPos(0.0, _spatium * -6.0);
 }
 
-void TLayout::layout(StaffText* item, LayoutContext& ctx)
+void TLayout::layout(StaffText*, LayoutContext&)
 {
-    layoutTextBase(item, ctx);
-    item->autoplaceSegmentElement();
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(StaffTypeChange* item, LayoutContext& ctx)
@@ -2981,7 +2981,7 @@ void TLayout::layout(SystemDivider* item, LayoutContext& ctx)
     layout(static_cast<Symbol*>(item), ctx);
 }
 
-void TLayout::layout(SystemText* item, LayoutContext& ctx)
+void TLayout::layout(SystemText*, LayoutContext&)
 {
     //! NOTE Moved to PaletteLayout
     UNREACHABLE;
