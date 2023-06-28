@@ -375,21 +375,6 @@ bool ExportDialogModel::exportScores()
 
     m_exportPath = exportPath.val;
 
-    ExcerptNotationList excerptsToInit;
-    ExcerptNotationList potentialExcerpts = masterNotation()->potentialExcerpts();
-
-    for (const INotationPtr& notation : notations) {
-        auto it = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
-            return excerpt->notation() == notation;
-        });
-
-        if (it != potentialExcerpts.cend()) {
-            excerptsToInit.push_back(*it);
-        }
-    }
-
-    masterNotation()->initExcerpts(excerptsToInit);
-
     QMetaObject::invokeMethod(qApp, [this, notations]() {
         exportProjectScenario()->exportScores(notations, m_exportPath, m_selectedUnitType,
                                               shouldDestinationFolderBeOpenedOnExport());
