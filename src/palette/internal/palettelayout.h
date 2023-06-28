@@ -57,8 +57,13 @@ class Jump;
 
 class KeySig;
 
+class SLine;
+class LineSegment;
+
 class Marker;
 
+class PalmMute;
+class PalmMuteSegment;
 class PlayTechAnnotation;
 
 class RehearsalMark;
@@ -68,7 +73,9 @@ class Symbol;
 class SystemText;
 
 class TempoText;
+class Text;
 class TextBase;
+class TextLineBaseSegment;
 class TimeSig;
 
 class Volta;
@@ -122,6 +129,7 @@ public:
 
     static void layout(engraving::Marker* item, const Context& ctx);
 
+    static void layout(engraving::PalmMute* item, const Context& ctx);
     static void layout(engraving::PlayTechAnnotation* item, const Context& ctx);
 
     static void layout(engraving::RehearsalMark* item, const Context& ctx);
@@ -136,8 +144,15 @@ public:
     static void layout(engraving::Volta* item, const Context& ctx);
 
 private:
+    static void layout(engraving::PalmMuteSegment* item, const Context& ctx);
+
+    static void layout(engraving::Text* item, const Context& ctx);
     static void layoutTextBase(engraving::TextBase* item, const Context& ctx);
     static void layout1TextBase(engraving::TextBase* item, const Context& ctx);
+
+    static void layoutLine(engraving::SLine* item, const Context& ctx);
+    static void layoutLineSegment(engraving::LineSegment* item, const Context& ctx);
+    static void layoutTextLineBaseSegment(engraving::TextLineBaseSegment* item, const Context& ctx);
 };
 }
 

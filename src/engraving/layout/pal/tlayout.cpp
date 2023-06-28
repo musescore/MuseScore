@@ -2326,22 +2326,16 @@ void TLayout::layout(OttavaSegment* item, LayoutContext& ctx)
     layoutTextLineBaseSegment(item, ctx);
 }
 
-void TLayout::layout(PalmMute* item, LayoutContext& ctx)
+void TLayout::layout(PalmMute*, LayoutContext&)
 {
-    layoutLine(item, ctx);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
-void TLayout::layout(PalmMuteSegment* item, LayoutContext& ctx)
+void TLayout::layout(PalmMuteSegment*, LayoutContext&)
 {
-    const StaffType* stType = item->staffType();
-
-    item->setSkipDraw(false);
-    if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::palmMuteShowTabCommon, Sid::palmMuteShowTabSimple)) {
-        item->setSkipDraw(true);
-        return;
-    }
-
-    layoutTextLineBaseSegment(item, ctx);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(Pedal* item, LayoutContext& ctx)
@@ -3078,7 +3072,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
 {
     item->npointsRef() = 0;
     TextLineBase* tl = item->textLineBase();
-    double _spatium = tl->spatium();
+    double spatium = tl->spatium();
 
     if (item->spanner()->placeBelow()) {
         item->setPosY(0.0);
@@ -3177,7 +3171,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
 
     double l = 0.0;
     if (!item->text()->empty()) {
-        double gapBetweenTextAndLine = _spatium * tl->gapBetweenTextAndLine().val();
+        double gapBetweenTextAndLine = spatium * tl->gapBetweenTextAndLine().val();
         if ((item->isSingleBeginType() && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
             || (!item->isSingleBeginType() && (tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO))) {
             l = item->text()->pos().x() + item->text()->bbox().width() + gapBetweenTextAndLine;
@@ -3196,7 +3190,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     }
 
     if (tl->endHookType() != HookType::NONE) {
-        double h = pp2.y() + tl->endHookHeight().val() * _spatium;
+        double h = pp2.y() + tl->endHookHeight().val() * spatium;
         if (h > y2) {
             y2 = h;
         } else if (h < y1) {
@@ -3205,7 +3199,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     }
 
     if (tl->beginHookType() != HookType::NONE) {
-        double h = tl->beginHookHeight().val() * _spatium;
+        double h = tl->beginHookHeight().val() * spatium;
         if (h > y2) {
             y2 = h;
         } else if (h < y1) {
@@ -3243,8 +3237,8 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
             alignBaseLine(item->endText(), pp1, pp2);
         }
 
-        double beginHookHeight = tl->beginHookHeight().val() * _spatium;
-        double endHookHeight = tl->endHookHeight().val() * _spatium;
+        double beginHookHeight = tl->beginHookHeight().val() * spatium;
+        double endHookHeight = tl->endHookHeight().val() * spatium;
         double beginHookWidth = 0.0;
         double endHookWidth = 0.0;
 
