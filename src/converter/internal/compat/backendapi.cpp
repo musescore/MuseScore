@@ -131,12 +131,10 @@ Ret BackendApi::exportScoreParts(const io::path_t& in, const io::path_t& out, co
         return prj.ret;
     }
 
-    INotationPtr notation = prj.val->masterNotation()->notation();
-
     QFile outputFile;
     openOutputFile(outputFile, out);
 
-    Ret ret = doExportScoreParts(notation, outputFile);
+    Ret ret = doExportScoreParts(prj.val->masterNotation(), outputFile);
 
     outputFile.close();
 
@@ -529,16 +527,16 @@ mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, 
     return result;
 }
 
-Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, QIODevice& destinationDevice)
+Ret BackendApi::doExportScoreParts(const IMasterNotationPtr masterNotation, QIODevice& destinationDevice)
 {
-    mu::engraving::MasterScore* score = notation->elements()->msScore()->masterScore();
-
     QJsonArray partsObjList;
     QJsonArray partsMetaList;
     QJsonArray partsTitles;
 
-    for (const mu::engraving::Excerpt* excerpt : score->excerpts()) {
-        mu::engraving::Score* part = excerpt->excerptScore();
+    ExcerptNotationList excerpts = allExcerpts(masterNotation);
+
+    for (IExcerptNotationPtr excerpt : excerpts) {
+        mu::engraving::Score* part = excerpt->notation()->elements()->msScore();
         std::map<String, String> partMetaTags = part->metaTags();
 
         QJsonValue partTitle(part->name());
