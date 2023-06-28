@@ -1923,22 +1923,16 @@ void TLayout::layout(LedgerLine* item, LayoutContext& ctx)
     }
 }
 
-void TLayout::layout(LetRing* item, LayoutContext& ctx)
+void TLayout::layout(LetRing*, LayoutContext&)
 {
-    layoutLine(item, ctx);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
-void TLayout::layout(LetRingSegment* item, LayoutContext& ctx)
+void TLayout::layout(LetRingSegment*, LayoutContext&)
 {
-    const StaffType* stType = item->staffType();
-
-    item->setSkipDraw(false);
-    if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::letRingShowTabCommon, Sid::letRingShowTabSimple)) {
-        item->setSkipDraw(true);
-        return;
-    }
-
-    layoutTextLineBaseSegment(item, ctx);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(LineSegment* item, LayoutContext& ctx)
