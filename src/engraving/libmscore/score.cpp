@@ -5374,21 +5374,26 @@ std::set<staff_idx_t> Score::staffIdxSetFromRange(const track_idx_t trackFrom, c
 {
     std::set<staff_idx_t> result;
 
-    staff_idx_t staffIdxFrom = track2staff(trackFrom);
-    staff_idx_t staffIdxTo = std::min(track2staff(trackTo) + 1, _staves.size());
-
-    for (staff_idx_t idx = staffIdxFrom; idx < staffIdxTo; ++idx) {
-        const Staff* staff = _staves.at(idx);
-        if (!staff) {
+    for (const Part* part : m_score->parts()) {
+        if (trackTo < part->startTrack() || trackFrom >= part->endTrack()) {
             continue;
         }
 
-        if (staffAccepted) {
+        std::set<staff_idx_t> staffIdxList = part->staveIdxList();
+        if (!staffAccepted) {
+            result.insert(staffIdxList.cbegin(), staffIdxList.cend());
+            continue;
+        }
+
+        for (staff_idx_t idx : staffIdxList) {
+            const Staff* staff = m_score->staff(idx);
+            if (!staff) {
+                continue;
+            }
+
             if (staffAccepted(*staff)) {
                 result.insert(idx);
             }
-        } else {
-            result.insert(idx);
         }
     }
 
