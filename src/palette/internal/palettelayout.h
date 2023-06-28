@@ -49,6 +49,8 @@ class FretDiagram;
 
 class HarpPedalDiagram;
 
+class Jump;
+
 class KeySig;
 
 class Marker;
@@ -105,6 +107,8 @@ public:
     static void layout(engraving::FretDiagram* item, const Context& ctx);
 
     static void layout(engraving::HarpPedalDiagram* item, const Context& ctx);
+
+    static void layout(engraving::Jump* item, const Context& ctx);
 
     static void layout(engraving::KeySig* item, const Context& ctx);
 
