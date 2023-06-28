@@ -210,7 +210,7 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
     case P_TYPE::ORNAMENT_STYLE:
         return PropertyValue::fromValue(TConv::fromXml(e.readAsciiText(), OrnamentStyle::DEFAULT));
     case P_TYPE::ORNAMENT_INTERVAL:
-        return PropertyValue(TConv::fromXml(e.readText(), OrnamentInterval()));
+        return PropertyValue(TConv::fromXml(e.readText(), DEFAULT_ORNAMENT_INTERVAL));
     case P_TYPE::POINT:
         return PropertyValue::fromValue(e.readPoint());
     case P_TYPE::SCALE:
