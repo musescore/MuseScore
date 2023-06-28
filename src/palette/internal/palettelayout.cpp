@@ -39,9 +39,10 @@
 #include "engraving/libmscore/bracket.h"
 #include "engraving/libmscore/capo.h"
 #include "engraving/libmscore/clef.h"
-#include "engraving/libmscore/harppedaldiagram.h"
+#include "engraving/libmscore/dynamic.h"
 #include "engraving/libmscore/fingering.h"
 #include "engraving/libmscore/fret.h"
+#include "engraving/libmscore/harppedaldiagram.h"
 #include "engraving/libmscore/keysig.h"
 #include "engraving/libmscore/playtechannotation.h"
 #include "engraving/libmscore/symbol.h"
@@ -82,6 +83,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::CAPO:         layout(toCapo(item), ctx);
         break;
     case ElementType::CLEF:         layout(toClef(item), ctx);
+        break;
+    case ElementType::DYNAMIC:      layout(toDynamic(item), ctx);
         break;
     case ElementType::FINGERING:    layout(toFingering(item), ctx);
         break;
@@ -478,6 +481,11 @@ void PaletteLayout::layout(FretDiagram* item, const Context& ctx)
     }
 
     item->bbox().setRect(x, y, w, h);
+}
+
+void PaletteLayout::layout(Dynamic* item, const Context& ctx)
+{
+    layoutTextBase(item, ctx);
 }
 
 void PaletteLayout::layout(HarpPedalDiagram* item, const Context& ctx)

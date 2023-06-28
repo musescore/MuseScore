@@ -769,71 +769,10 @@ void TLayout::layout(DeadSlapped* item, LayoutContext&)
     }
 }
 
-void TLayout::layout(Dynamic* item, LayoutContext& ctx)
+void TLayout::layout(Dynamic*, LayoutContext&)
 {
-    item->setSnappedExpression(nullptr); // Here we reset it. It will become known again when we layout expression
-
-    const StaffType* stType = item->staffType();
-
-    item->setSkipDraw(false);
-    if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
-        item->setSkipDraw(true);
-        return;
-    }
-
-    layoutTextBase(item, ctx);
-
-    Segment* s = item->segment();
-    if (!s || (!item->centerOnNotehead() && item->align().horizontal == AlignH::LEFT)) {
-        return;
-    }
-
-    EngravingItem* itemToAlign = nullptr;
-    track_idx_t startTrack = staff2track(item->staffIdx());
-    track_idx_t endTrack = startTrack + VOICES;
-    for (track_idx_t track = startTrack; track < endTrack; ++track) {
-        EngravingItem* e = s->elementAt(track);
-        if (!e || (e->isRest() && toRest(e)->ticks() >= item->measure()->ticks() && item->measure()->hasVoices(e->staffIdx()))) {
-            continue;
-        }
-        itemToAlign = e;
-        break;
-    }
-
-    if (!itemToAlign) {
-        return;
-    }
-
-    if (!itemToAlign->isChord()) {
-        item->movePosX(itemToAlign->width() * 0.5);
-        return;
-    }
-
-    Chord* chord = toChord(itemToAlign);
-    bool centerOnNote = item->centerOnNotehead() || (!item->centerOnNotehead() && item->align().horizontal == AlignH::HCENTER);
-
-    // Move to center of notehead width
-    Note* note = chord->notes().at(0);
-    double noteHeadWidth = note->headWidth();
-    item->movePosX(noteHeadWidth * (centerOnNote ? 0.5 : 1));
-
-    if (!item->centerOnNotehead()) {
-        return;
-    }
-
-    // Use Smufl optical center for dynamic if available
-    SymId symId = TConv::symId(item->dynamicType());
-    double opticalCenter = item->symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x();
-    if (symId != SymId::noSym && opticalCenter) {
-        double symWidth = item->symBbox(symId).width();
-        double offset = symWidth / 2 - opticalCenter + item->symBbox(symId).left();
-        double spatiumScaling = item->spatium() / ctx.conf().spatium();
-        offset *= spatiumScaling;
-        item->movePosX(offset);
-    }
-
-    // If the dynamic contains custom text, keep it aligned
-    item->movePosX(-item->customTextOffset());
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(Expression* item, LayoutContext& ctx)
