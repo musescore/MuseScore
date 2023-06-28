@@ -725,21 +725,10 @@ void TLayout::layout(Clef*, LayoutContext&)
     UNREACHABLE;
 }
 
-void TLayout::layout(Capo* item, LayoutContext& ctx)
+void TLayout::layout(Capo*, LayoutContext&)
 {
-    if (item->shouldAutomaticallyGenerateText() || item->empty()) {
-        if (const Part* part = item->part()) {
-            if (const Instrument* instrument = part->instrument(item->tick())) {
-                if (const StringData* stringData = instrument->stringData()) {
-                    String text = item->generateText(stringData->strings());
-                    item->setXmlText(text);
-                }
-            }
-        }
-    }
-
-    layoutTextBase(item, ctx);
-    item->autoplaceSegmentElement();
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(DeadSlapped* item, LayoutContext&)

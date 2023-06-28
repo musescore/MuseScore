@@ -37,6 +37,7 @@
 #include "engraving/libmscore/bagpembell.h"
 #include "engraving/libmscore/barline.h"
 #include "engraving/libmscore/bracket.h"
+#include "engraving/libmscore/capo.h"
 #include "engraving/libmscore/clef.h"
 #include "engraving/libmscore/harppedaldiagram.h"
 #include "engraving/libmscore/fingering.h"
@@ -77,6 +78,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::BAR_LINE:     layout(toBarLine(item), ctx);
         break;
     case ElementType::BRACKET:      layout(toBracket(item), ctx);
+        break;
+    case ElementType::CAPO:         layout(toCapo(item), ctx);
         break;
     case ElementType::CLEF:         layout(toClef(item), ctx);
         break;
@@ -391,6 +394,11 @@ void PaletteLayout::layout(Bracket* item, const Context& ctx)
     }
 
     item->setShape(shape);
+}
+
+void PaletteLayout::layout(Capo* item, const Context& ctx)
+{
+    layoutTextBase(item, ctx);
 }
 
 void PaletteLayout::layout(Clef* item, const Context& ctx)
