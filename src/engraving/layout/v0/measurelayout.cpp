@@ -806,6 +806,10 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
     //
     for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
         const Staff* staff = ctx.dom().staff(staffIdx);
+        if (!staff->show()) {
+            continue;
+        }
+
         const Drumset* drumset
             = staff->part()->instrument(measure->tick())->useDrumset() ? staff->part()->instrument(measure->tick())->drumset() : 0;
         AccidentalState as;          // list of already set accidentals for this measure
@@ -912,6 +916,11 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
     }
 
     for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+        const Staff* staff = ctx.dom().staff(staffIdx);
+        if (!staff->show()) {
+            continue;
+        }
+
         for (Segment& segment : measure->segments()) {
             if (segment.isChordRestType()) {
                 ChordLayout::layoutChords1(ctx, &segment, staffIdx);
