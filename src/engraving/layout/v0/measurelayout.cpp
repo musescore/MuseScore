@@ -1694,6 +1694,21 @@ void MeasureLayout::removeSystemHeader(Measure* m)
         seg->setEnabled(false);
     }
     m->setHeader(false);
+
+    // remove all "generated" key signatures
+    Segment* kSeg = m->findFirstR(SegmentType::KeySig, Fraction(0, 1));
+    if (!kSeg) {
+        return;
+    }
+    for (EngravingItem* e : kSeg->elist()) {
+        if (e && e->generated()) {
+            kSeg->elist().at(e->track()) = 0;
+        }
+    }
+    kSeg->checkEmpty();
+    if (kSeg->empty()) {
+        m->remove(kSeg);
+    }
 }
 
 void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx)
