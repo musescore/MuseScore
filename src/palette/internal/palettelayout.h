@@ -44,6 +44,8 @@ class Clef;
 
 class Dynamic;
 
+class Expression;
+
 class Fingering;
 class FretDiagram;
 
@@ -104,6 +106,8 @@ public:
     static void layout(engraving::Clef* item, const Context& ctx);
 
     static void layout(engraving::Dynamic* item, const Context& ctx);
+
+    static void layout(engraving::Expression* item, const Context& ctx);
 
     static void layout(engraving::Fingering* item, const Context& ctx);
     static void layout(engraving::FretDiagram* item, const Context& ctx);

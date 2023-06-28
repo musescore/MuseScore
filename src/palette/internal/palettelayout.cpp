@@ -40,6 +40,7 @@
 #include "engraving/libmscore/capo.h"
 #include "engraving/libmscore/clef.h"
 #include "engraving/libmscore/dynamic.h"
+#include "engraving/libmscore/expression.h"
 #include "engraving/libmscore/fingering.h"
 #include "engraving/libmscore/fret.h"
 #include "engraving/libmscore/harppedaldiagram.h"
@@ -91,6 +92,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::DYNAMIC:      layout(toDynamic(item), ctx);
         break;
+    case ElementType::EXPRESSION:   layout(toExpression(item), ctx);
+        break;
     case ElementType::FINGERING:    layout(toFingering(item), ctx);
         break;
     case ElementType::FRET_DIAGRAM: layout(toFretDiagram(item), ctx);
@@ -121,10 +124,7 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     default:
         //! TODO Still need
-        LOGD() << item->typeName();
-//        if (std::string("Symbol") == item->typeName()) {
-//            int k = -1;
-//        }
+//        LOGD() << item->typeName();
         layout::pal::TLayout::layoutItem(item, ctxpal);
         break;
     }
@@ -455,6 +455,11 @@ void PaletteLayout::layout(Clef* item, const Context& ctx)
 
     RectF bbox = item->symBbox(item->symId());
     item->setbbox(bbox);
+}
+
+void PaletteLayout::layout(Expression* item, const Context& ctx)
+{
+    layoutTextBase(item, ctx);
 }
 
 void PaletteLayout::layout(Fingering* item, const Context& ctx)
