@@ -1944,10 +1944,10 @@ void TLayout::layout(InstrumentName* item, LayoutContext& ctx)
     layoutTextBase(item, ctx);
 }
 
-void TLayout::layout(Jump* item, LayoutContext& ctx)
+void TLayout::layout(Jump*, LayoutContext&)
 {
-    layoutTextBase(item, ctx);
-    item->autoplaceMeasureElement();
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(KeySig*, LayoutContext&)
