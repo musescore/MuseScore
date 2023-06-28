@@ -44,6 +44,7 @@
 #include "engraving/libmscore/fret.h"
 #include "engraving/libmscore/harppedaldiagram.h"
 #include "engraving/libmscore/keysig.h"
+#include "engraving/libmscore/marker.h"
 #include "engraving/libmscore/playtechannotation.h"
 #include "engraving/libmscore/rehearsalmark.h"
 #include "engraving/libmscore/stafftext.h"
@@ -95,6 +96,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::HARP_DIAGRAM: layout(toHarpPedalDiagram(item), ctx);
         break;
     case ElementType::KEYSIG:       layout(toKeySig(item), ctx);
+        break;
+    case ElementType::MARKER:       layout(toMarker(item), ctx);
         break;
     case ElementType::PLAYTECH_ANNOTATION: layout(toPlayTechAnnotation(item), ctx);
         break;
@@ -621,6 +624,11 @@ void PaletteLayout::layout(KeySig* item, const Context& ctx)
         double y = ks.line * step;
         item->addbbox(item->symBbox(ks.sym).translated(x, y));
     }
+}
+
+void PaletteLayout::layout(Marker* item, const Context& ctx)
+{
+    layoutTextBase(item, ctx);
 }
 
 void PaletteLayout::layout(PlayTechAnnotation* item, const Context& ctx)

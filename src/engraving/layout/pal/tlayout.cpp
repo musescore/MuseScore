@@ -2022,11 +2022,10 @@ void TLayout::layout(LyricsLineSegment*, LayoutContext&)
     //LyricsLayout::layout(item, ctx);
 }
 
-void TLayout::layout(Marker* item, LayoutContext& ctx)
+void TLayout::layout(Marker*, LayoutContext&)
 {
-    layoutTextBase(item, ctx);
-
-    item->autoplaceMeasureElement();
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(MeasureBase* item, LayoutContext& ctx)
