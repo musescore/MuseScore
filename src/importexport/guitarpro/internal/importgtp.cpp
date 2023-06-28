@@ -135,15 +135,29 @@ void GuitarPro::skip(int64_t len)
 //---------------------------------------------------------
 //   createTuningString
 //---------------------------------------------------------
+static const std::unordered_map<uint64_t, std::string> flatPresets = {
+    // 63 58 54 49 44 39
+    { 0x3f3a36312c27, { "Eb Ab Db Gb Bb Eb" } },
+    // 60 55 51 46 41 36
+    { 0x3c37332e2924, { "C F Bb Eb G C" } },
+    // 63 58 54 49 44 37
+    { 0x3f3a36312c25, { "Db Ab Db Gb Bb Eb" } },
+};
 
 void GuitarPro::createTuningString(int strings, int tuning[])
 {
     const char* tune[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     //TODO-ws  score->tuning.clear();
     std::vector<int> pitch;
+    uint64_t key = 0;
     for (int i = 0; i < strings; ++i) {
         pitch.push_back(tuning[i]);
+        key |= (uint64_t)tuning[i] << 8 * i;
         //score->tuning += tune[tuning[i] % 12];
+    }
+    if (auto preset = flatPresets.find(key); preset != flatPresets.end()) {
+        tunings.push_back(preset->second);
+        return;
     }
     std::string t;
     for (auto i : pitch) {
