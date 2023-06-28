@@ -775,69 +775,10 @@ void TLayout::layout(Dynamic*, LayoutContext&)
     UNREACHABLE;
 }
 
-void TLayout::layout(Expression* item, LayoutContext& ctx)
+void TLayout::layout(Expression*, LayoutContext&)
 {
-    layoutTextBase(item, ctx);
-
-    Segment* segment = item->explicitParent() ? toSegment(item->explicitParent()) : nullptr;
-    if (!segment) {
-        return;
-    }
-
-    if (item->align().horizontal != AlignH::LEFT) {
-        Chord* chordToAlign = nullptr;
-        // Look for chord in this staff
-        track_idx_t startTrack = track2staff(item->staffIdx());
-        track_idx_t endTrack = startTrack + VOICES;
-        for (track_idx_t track = startTrack; track < endTrack; ++track) {
-            EngravingItem* engravingItem = segment->elementAt(track);
-            if (engravingItem && engravingItem->isChord()) {
-                chordToAlign = toChord(item);
-                break;
-            }
-        }
-
-        if (chordToAlign) {
-            Note* note = chordToAlign->notes().at(0);
-            double headWidth = note->headWidth();
-            bool center = item->align().horizontal == AlignH::HCENTER;
-            item->movePosX(headWidth * (center ? 0.5 : 1));
-        }
-    }
-
-    item->setSnappedDynamic(nullptr);
-
-    if (!item->autoplace() || !item->snapToDynamics()) {
-        return;
-    }
-
-    Dynamic* dynamic = toDynamic(segment->findAnnotation(ElementType::DYNAMIC, item->track(), item->track()));
-    if (!dynamic || dynamic->placeAbove() != item->placeAbove()) {
-        item->autoplaceSegmentElement();
-        return;
-    }
-
-    item->setSnappedDynamic(dynamic);
-    dynamic->setSnappedExpression(item);
-
-    // If there is a dynamic on same segment and track, lock this expression to it
-    double padding = item->computeDynamicExpressionDistance();
-    double dynamicRight = dynamic->shape().translate(dynamic->pos()).right();
-    double expressionLeft = item->bbox().translated(item->pos()).left();
-    double difference = expressionLeft - dynamicRight - padding;
-    item->movePosX(-difference);
-
-    // Keep expression and dynamic vertically aligned
-    item->autoplaceSegmentElement();
-    bool above = item->placeAbove();
-    double yExpression = item->pos().y();
-    double yDynamic = dynamic->pos().y();
-    bool expressionIsOuter = above ? yExpression < yDynamic : yExpression > yDynamic;
-    if (expressionIsOuter) {
-        dynamic->movePosY((yExpression - yDynamic));
-    } else {
-        item->movePosY((yDynamic - yExpression));
-    }
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(Fermata* item, LayoutContext& ctx)
@@ -1941,6 +1882,7 @@ void TLayout::layout(InstrumentChange*, LayoutContext&)
 
 void TLayout::layout(InstrumentName* item, LayoutContext& ctx)
 {
+    UNREACHABLE;
     layoutTextBase(item, ctx);
 }
 
@@ -2879,8 +2821,8 @@ void TLayout::layout(StemSlash* item, LayoutContext& ctx)
 
 void TLayout::layout(Sticking* item, LayoutContext& ctx)
 {
+    UNREACHABLE;
     layoutTextBase(item, ctx);
-    item->autoplaceSegmentElement();
 }
 
 void TLayout::layout(StretchedBend* item, LayoutContext& ctx)
