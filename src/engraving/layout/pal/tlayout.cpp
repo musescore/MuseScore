@@ -2440,43 +2440,10 @@ void TLayout::layout(RasgueadoSegment* item, LayoutContext& ctx)
     layoutTextLineBaseSegment(item, ctx);
 }
 
-void TLayout::layout(RehearsalMark* item, LayoutContext& ctx)
+void TLayout::layout(RehearsalMark*, LayoutContext&)
 {
-    layoutTextBase(item, ctx);
-
-    Segment* s = item->segment();
-    if (s) {
-        if (s->rtick().isZero()) {
-            // first CR of measure, alignment is hcenter or right (the usual cases)
-            // align with barline, point just after header, or start of measure depending on context
-
-            Measure* m = s->measure();
-            Segment* header = s->prev();        // possibly just a start repeat
-            double measureX = -s->x();
-            Segment* repeat = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
-            double barlineX = repeat ? repeat->x() - s->x() : measureX;
-            System* sys = m->system();
-            bool systemFirst = (sys && m->isFirstInSystem());
-
-            if (!header || repeat || !systemFirst) {
-                // no header, or header with repeat, or header mid-system - align with barline
-                item->setPosX(barlineX);
-            } else {
-                // header at start of system
-                // align to a point just after the header
-                EngravingItem* e = header->element(item->track());
-                double w = e ? e->width() : header->width();
-                item->setPosX(header->x() + w - s->x());
-
-                // special case for right aligned rehearsal marks at start of system
-                // left align with start of measure if that is further left
-                if (item->align() == AlignH::RIGHT) {
-                    item->setPosX(std::min(item->xpos(), measureX + item->width()));
-                }
-            }
-        }
-        item->autoplaceSegmentElement();
-    }
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(Rest* item, LayoutContext& ctx)

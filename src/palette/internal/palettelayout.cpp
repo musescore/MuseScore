@@ -45,6 +45,7 @@
 #include "engraving/libmscore/harppedaldiagram.h"
 #include "engraving/libmscore/keysig.h"
 #include "engraving/libmscore/playtechannotation.h"
+#include "engraving/libmscore/rehearsalmark.h"
 #include "engraving/libmscore/stafftext.h"
 #include "engraving/libmscore/symbol.h"
 #include "engraving/libmscore/systemtext.h"
@@ -96,6 +97,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::KEYSIG:       layout(toKeySig(item), ctx);
         break;
     case ElementType::PLAYTECH_ANNOTATION: layout(toPlayTechAnnotation(item), ctx);
+        break;
+    case ElementType::REHEARSAL_MARK: layout(toRehearsalMark(item), ctx);
         break;
     case ElementType::STAFF_TEXT:   layout(toStaffText(item), ctx);
         break;
@@ -621,6 +624,11 @@ void PaletteLayout::layout(KeySig* item, const Context& ctx)
 }
 
 void PaletteLayout::layout(PlayTechAnnotation* item, const Context& ctx)
+{
+    layoutTextBase(item, ctx);
+}
+
+void PaletteLayout::layout(RehearsalMark* item, const Context& ctx)
 {
     layoutTextBase(item, ctx);
 }
