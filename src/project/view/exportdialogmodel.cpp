@@ -354,15 +354,16 @@ bool ExportDialogModel::exportScores()
     }
 
     INotationProjectPtr project = context()->currentProject();
-    io::path_t filename;
-    if (project && project->path() == exportProjectScenario()->exportInfo().projectPath) {
-        filename = io::filename(m_exportPath);
-    } else {
-        filename = io::filename(project->path());
-    }
+    io::path_t filename = io::filename(project->path());
+    // TODO: only restore filename if exactly the same notations are selected and the same unit type.
+    // These settings may namely cause extra things to be added to the name, but these extra things
+    // are not applicable to other values of these settings.
+    //if (project && project->path() == exportProjectScenario()->exportInfo().projectPath) {
+    //    filename = io::filename(m_exportPath);
+    //}
     io::path_t defaultPath;
     if (m_exportPath != "" && filename != "") {
-        defaultPath = io::absolutePath(m_exportPath)
+        defaultPath = io::absoluteDirpath(m_exportPath)
                       .appendingComponent(io::filename(filename, false))
                       .appendingSuffix(m_selectedExportType.suffixes[0]);
     }
