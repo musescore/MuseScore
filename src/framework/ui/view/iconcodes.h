@@ -390,6 +390,7 @@ public:
         EXPRESSION = 0xF453,
 
         CLOUD_FILL = 0xF454,
+        BRAILLE = 0xF455,
 
         NONE = 0xFFFF
     };
