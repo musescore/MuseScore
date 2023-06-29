@@ -1380,18 +1380,16 @@ void TLayout::layout(GraceNotesGroup* item, LayoutContext& ctx)
     item->setPos(xPos, 0.0);
 }
 
-void TLayout::layout(GradualTempoChangeSegment* item, LayoutContext& ctx)
+void TLayout::layout(GradualTempoChangeSegment*, LayoutContext&)
 {
-    layoutTextLineBaseSegment(item, ctx);
-
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
-void TLayout::layout(GradualTempoChange* item, LayoutContext& ctx)
+void TLayout::layout(GradualTempoChange*, LayoutContext&)
 {
-    layoutLine(item, ctx);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)

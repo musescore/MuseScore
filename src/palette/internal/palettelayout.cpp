@@ -43,6 +43,7 @@
 #include "engraving/libmscore/expression.h"
 #include "engraving/libmscore/fingering.h"
 #include "engraving/libmscore/fret.h"
+#include "engraving/libmscore/gradualtempochange.h"
 #include "engraving/libmscore/harppedaldiagram.h"
 #include "engraving/libmscore/instrchange.h"
 #include "engraving/libmscore/jump.h"
@@ -108,6 +109,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::FRET_DIAGRAM: layout(toFretDiagram(item), ctx);
         break;
+    case ElementType::GRADUAL_TEMPO_CHANGE: layout(toGradualTempoChange(item), ctx);
+        break;
     case ElementType::HARP_DIAGRAM: layout(toHarpPedalDiagram(item), ctx);
         break;
     case ElementType::INSTRUMENT_CHANGE: layout(toInstrumentChange(item), ctx);
@@ -157,6 +160,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
 void PaletteLayout::layoutLineSegment(LineSegment* item, const Context& ctx)
 {
     switch (item->type()) {
+    case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT: layout(toGradualTempoChangeSegment(item), ctx);
+        break;
     case ElementType::LET_RING_SEGMENT:  layout(toLetRingSegment(item), ctx);
         break;
     case ElementType::OTTAVA_SEGMENT:    layout(toOttavaSegment(item), ctx);
@@ -553,6 +558,17 @@ void PaletteLayout::layout(FretDiagram* item, const Context& ctx)
 void PaletteLayout::layout(Dynamic* item, const Context& ctx)
 {
     layoutTextBase(item, ctx);
+}
+
+void PaletteLayout::layout(GradualTempoChange* item, const Context& ctx)
+{
+    layoutLine(item, ctx);
+}
+
+void PaletteLayout::layout(GradualTempoChangeSegment* item, const Context& ctx)
+{
+    layoutTextLineBaseSegment(item, ctx);
+    item->setOffset(PointF());
 }
 
 void PaletteLayout::layout(HarpPedalDiagram* item, const Context& ctx)

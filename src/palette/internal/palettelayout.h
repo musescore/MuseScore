@@ -49,6 +49,9 @@ class Expression;
 class Fingering;
 class FretDiagram;
 
+class GradualTempoChange;
+class GradualTempoChangeSegment;
+
 class HarpPedalDiagram;
 
 class InstrumentChange;
@@ -131,6 +134,8 @@ public:
     static void layout(engraving::Fingering* item, const Context& ctx);
     static void layout(engraving::FretDiagram* item, const Context& ctx);
 
+    static void layout(engraving::GradualTempoChange* item, const Context& ctx);
+
     static void layout(engraving::HarpPedalDiagram* item, const Context& ctx);
 
     static void layout(engraving::InstrumentChange* item, const Context& ctx);
@@ -163,6 +168,7 @@ public:
     static void layout(engraving::Volta* item, const Context& ctx);
 
 private:
+    static void layout(engraving::GradualTempoChangeSegment* item, const Context& ctx);
     static void layout(engraving::LetRingSegment* item, const Context& ctx);
     static void layout(engraving::OttavaSegment* item, const Context& ctx);
     static void layout(engraving::PalmMuteSegment* item, const Context& ctx);
