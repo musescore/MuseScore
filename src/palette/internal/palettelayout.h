@@ -40,6 +40,7 @@ class BarLine;
 class Bracket;
 
 class Capo;
+class ChordLine;
 class Clef;
 
 class Dynamic;
@@ -130,6 +131,7 @@ public:
     static void layout(engraving::Bracket* item, const Context& ctx);
 
     static void layout(engraving::Capo* item, const Context& ctx);
+    static void layout(engraving::ChordLine* item, const Context& ctx);
     static void layout(engraving::Clef* item, const Context& ctx);
 
     static void layout(engraving::Dynamic* item, const Context& ctx);
