@@ -51,6 +51,7 @@
 #include "engraving/libmscore/line.h"
 #include "engraving/libmscore/marker.h"
 #include "engraving/libmscore/palmmute.h"
+#include "engraving/libmscore/pedal.h"
 #include "engraving/libmscore/playtechannotation.h"
 #include "engraving/libmscore/rehearsalmark.h"
 #include "engraving/libmscore/stafftext.h"
@@ -117,6 +118,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::PALM_MUTE:    layout(toPalmMute(item), ctx);
         break;
+    case ElementType::PEDAL:        layout(toPedal(item), ctx);
+        break;
     case ElementType::PLAYTECH_ANNOTATION: layout(toPlayTechAnnotation(item), ctx);
         break;
     case ElementType::REHEARSAL_MARK: layout(toRehearsalMark(item), ctx);
@@ -133,8 +136,23 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     default:
         //! TODO Still need
-//        LOGD() << item->typeName();
+        //LOGD() << item->typeName();
         layout::pal::TLayout::layoutItem(item, ctxpal);
+        break;
+    }
+}
+
+void PaletteLayout::layoutLineSegment(LineSegment* item, const Context& ctx)
+{
+    switch (item->type()) {
+    case ElementType::PALM_MUTE_SEGMENT: layout(toPalmMuteSegment(item), ctx);
+        break;
+    case ElementType::LET_RING_SEGMENT:  layout(toLetRingSegment(item), ctx);
+        break;
+    case ElementType::PEDAL_SEGMENT:     layout(toPedalSegment(item), ctx);
+        break;
+    default:
+        UNREACHABLE;
         break;
     }
 }
@@ -681,6 +699,17 @@ void PaletteLayout::layout(PalmMuteSegment* item, const Context& ctx)
     layoutTextLineBaseSegment(item, ctx);
 }
 
+void PaletteLayout::layout(Pedal* item, const Context& ctx)
+{
+    layoutLine(item, ctx);
+}
+
+void PaletteLayout::layout(PedalSegment* item, const Context& ctx)
+{
+    layoutTextLineBaseSegment(item, ctx);
+    item->setOffset(PointF());
+}
+
 void PaletteLayout::layout(PlayTechAnnotation* item, const Context& ctx)
 {
     layoutTextBase(item, ctx);
@@ -906,19 +935,6 @@ void PaletteLayout::layoutLine(SLine* item, const Context& ctx)
     LineSegment* lineSegm = item->frontSegment();
     layoutLineSegment(lineSegm, ctx);
     item->setbbox(lineSegm->bbox());
-}
-
-void PaletteLayout::layoutLineSegment(LineSegment* item, const Context& ctx)
-{
-    switch (item->type()) {
-    case ElementType::PALM_MUTE_SEGMENT: layout(toPalmMuteSegment(item), ctx);
-        break;
-    case ElementType::LET_RING_SEGMENT:  layout(toLetRingSegment(item), ctx);
-        break;
-    default:
-        UNREACHABLE;
-        break;
-    }
 }
 
 void PaletteLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Context& ctx)

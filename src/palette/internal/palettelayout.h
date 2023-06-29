@@ -66,6 +66,8 @@ class Marker;
 
 class PalmMute;
 class PalmMuteSegment;
+class Pedal;
+class PedalSegment;
 class PlayTechAnnotation;
 
 class RehearsalMark;
@@ -134,6 +136,7 @@ public:
     static void layout(engraving::Marker* item, const Context& ctx);
 
     static void layout(engraving::PalmMute* item, const Context& ctx);
+    static void layout(engraving::Pedal* item, const Context& ctx);
     static void layout(engraving::PlayTechAnnotation* item, const Context& ctx);
 
     static void layout(engraving::RehearsalMark* item, const Context& ctx);
@@ -150,6 +153,7 @@ public:
 private:
     static void layout(engraving::LetRingSegment* item, const Context& ctx);
     static void layout(engraving::PalmMuteSegment* item, const Context& ctx);
+    static void layout(engraving::PedalSegment* item, const Context& ctx);
 
     static void layout(engraving::Text* item, const Context& ctx);
     static void layoutTextBase(engraving::TextBase* item, const Context& ctx);
