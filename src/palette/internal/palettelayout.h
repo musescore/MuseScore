@@ -52,6 +52,8 @@ class FretDiagram;
 class GradualTempoChange;
 class GradualTempoChangeSegment;
 
+class Hairpin;
+class HairpinSegment;
 class HarpPedalDiagram;
 
 class InstrumentChange;
@@ -136,6 +138,7 @@ public:
 
     static void layout(engraving::GradualTempoChange* item, const Context& ctx);
 
+    static void layout(engraving::Hairpin* item, const Context& ctx);
     static void layout(engraving::HarpPedalDiagram* item, const Context& ctx);
 
     static void layout(engraving::InstrumentChange* item, const Context& ctx);
@@ -169,6 +172,7 @@ public:
 
 private:
     static void layout(engraving::GradualTempoChangeSegment* item, const Context& ctx);
+    static void layout(engraving::HairpinSegment* item, const Context& ctx);
     static void layout(engraving::LetRingSegment* item, const Context& ctx);
     static void layout(engraving::OttavaSegment* item, const Context& ctx);
     static void layout(engraving::PalmMuteSegment* item, const Context& ctx);
