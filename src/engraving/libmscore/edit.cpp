@@ -3374,14 +3374,15 @@ ChordRest* Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, trac
 
 void Score::cmdDeleteSelection()
 {
-    ChordRest* cr = 0;              // select something after deleting notes
+    ChordRest* crSelectedAfterDeletion = 0;              // select something after deleting notes
 
     if (selection().isRange()) {
         Segment* s1 = selection().startSegment();
         Segment* s2 = selection().endSegment();
         const Fraction stick1 = selection().tickStart();
         const Fraction stick2 = selection().tickEnd();
-        cr = deleteRange(s1, s2, staff2track(selection().staffStart()), staff2track(selection().staffEnd()), selectionFilter());
+        crSelectedAfterDeletion = deleteRange(s1, s2, staff2track(selection().staffStart()),
+                                              staff2track(selection().staffEnd()), selectionFilter());
         s1 = tick2segment(stick1);
         s2 = tick2segment(stick2, true);
         if (s1 == 0 || s2 == 0) {
@@ -3415,7 +3416,7 @@ void Score::cmdDeleteSelection()
             // or of spanner or parent if that is more valid
             Fraction tick  = { -1, 1 };
             track_idx_t track = mu::nidx;
-            if (!cr) {
+            if (!crSelectedAfterDeletion) {
                 if (e->isNote()) {
                     tick = toNote(e)->chord()->tick();
                 } else if (e->isRest() || e->isMMRest()) {
@@ -3449,7 +3450,7 @@ void Score::cmdDeleteSelection()
                 track = e->track();
             }
 
-            bool needFindCR = !cr && tick >= Fraction(0, 1) && track != mu::nidx;
+            bool needFindCR = !crSelectedAfterDeletion && tick >= Fraction(0, 1) && track != mu::nidx;
 
             // We should not allow deleting the very first keySig of the piece, because it is
             // logically incorrect and leads to a state of undefined key/transposition.
@@ -3459,7 +3460,7 @@ void Score::cmdDeleteSelection()
                 if (e->tick() == Fraction(0, 1) || toKeySig(e)->forInstrumentChange()) {
                     MScore::setError(MsError::CANNOT_REMOVE_KEY_SIG);
                     if (needFindCR) {
-                        cr = findCR(tick, track);
+                        crSelectedAfterDeletion = findCR(tick, track);
                     }
                     continue;
                 }
@@ -3468,7 +3469,7 @@ void Score::cmdDeleteSelection()
             // Don't allow deleting the trill cue note
             if (e->isNote() && toNote(e)->isTrillCueNote()) {
                 if (needFindCR) {
-                    cr = findCR(tick, track);
+                    crSelectedAfterDeletion = findCR(tick, track);
                 }
                 continue;
             }
@@ -3496,7 +3497,7 @@ void Score::cmdDeleteSelection()
             }
 
             if (needFindCR) {
-                cr = findCR(tick, track);
+                crSelectedAfterDeletion = findCR(tick, track);
             }
 
             // add these linked elements to list of already-deleted elements
@@ -3509,17 +3510,17 @@ void Score::cmdDeleteSelection()
     deselectAll();
     // make new selection if appropriate
     if (noteEntryMode()) {
-        if (cr) {
-            _is.setSegment(cr->segment());
+        if (crSelectedAfterDeletion) {
+            _is.setSegment(crSelectedAfterDeletion->segment());
         } else {
-            cr = _is.cr();
+            crSelectedAfterDeletion = _is.cr();
         }
     }
-    if (cr) {
-        if (cr->isChord()) {
-            select(toChord(cr)->upNote(), SelectType::SINGLE);
+    if (crSelectedAfterDeletion) {
+        if (crSelectedAfterDeletion->isChord()) {
+            select(toChord(crSelectedAfterDeletion)->upNote(), SelectType::SINGLE);
         } else {
-            select(cr, SelectType::SINGLE);
+            select(crSelectedAfterDeletion, SelectType::SINGLE);
         }
     }
 }
