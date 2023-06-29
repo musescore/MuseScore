@@ -2310,14 +2310,16 @@ void TLayout::layout(Ornament* item, LayoutContext& ctx)
     }
 }
 
-void TLayout::layout(Ottava* item, LayoutContext& ctx)
+void TLayout::layout(Ottava*, LayoutContext&)
 {
-    layoutLine(item, ctx);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
-void TLayout::layout(OttavaSegment* item, LayoutContext& ctx)
+void TLayout::layout(OttavaSegment*, LayoutContext&)
 {
-    layoutTextLineBaseSegment(item, ctx);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(PalmMute*, LayoutContext&)
