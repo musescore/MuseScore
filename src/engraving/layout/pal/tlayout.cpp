@@ -3433,38 +3433,16 @@ void TLayout::layout(Tuplet*, LayoutContext&)
     //TupletLayout::layout(item, ctx);
 }
 
-void TLayout::layout(VibratoSegment* item, LayoutContext&)
+void TLayout::layout(Vibrato*, LayoutContext&)
 {
-    if (item->staff()) {
-        item->setMag(item->staff()->staffMag(item->tick()));
-    }
-    if (item->spanner()->placeBelow()) {
-        item->setPosY(item->staff() ? item->staff()->height() : 0.0);
-    }
-
-    switch (item->vibrato()->vibratoType()) {
-    case VibratoType::GUITAR_VIBRATO:
-        item->symbolLine(SymId::guitarVibratoStroke, SymId::guitarVibratoStroke);
-        break;
-    case VibratoType::GUITAR_VIBRATO_WIDE:
-        item->symbolLine(SymId::guitarWideVibratoStroke, SymId::guitarWideVibratoStroke);
-        break;
-    case VibratoType::VIBRATO_SAWTOOTH:
-        item->symbolLine(SymId::wiggleSawtooth, SymId::wiggleSawtooth);
-        break;
-    case VibratoType::VIBRATO_SAWTOOTH_WIDE:
-        item->symbolLine(SymId::wiggleSawtoothWide, SymId::wiggleSawtoothWide);
-        break;
-    }
-
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->vibrato()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
-void TLayout::layout(Vibrato* item, LayoutContext& ctx)
+void TLayout::layout(VibratoSegment*, LayoutContext&)
 {
-    layoutLine(static_cast<SLine*>(item), ctx);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(Volta* item, LayoutContext& ctx)

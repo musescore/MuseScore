@@ -85,6 +85,8 @@ class TextBase;
 class TextLineBaseSegment;
 class TimeSig;
 
+class Vibrato;
+class VibratoSegment;
 class Volta;
 }
 
@@ -153,6 +155,7 @@ public:
     static void layout(engraving::TempoText* item, const Context& ctx);
     static void layout(engraving::TimeSig* item, const Context& ctx);
 
+    static void layout(engraving::Vibrato* item, const Context& ctx);
     static void layout(engraving::Volta* item, const Context& ctx);
 
 private:
@@ -160,6 +163,7 @@ private:
     static void layout(engraving::OttavaSegment* item, const Context& ctx);
     static void layout(engraving::PalmMuteSegment* item, const Context& ctx);
     static void layout(engraving::PedalSegment* item, const Context& ctx);
+    static void layout(engraving::VibratoSegment* item, const Context& ctx);
 
     static void layout(engraving::Text* item, const Context& ctx);
     static void layoutTextBase(engraving::TextBase* item, const Context& ctx);
