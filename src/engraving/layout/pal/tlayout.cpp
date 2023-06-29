@@ -3022,17 +3022,16 @@ void TLayout::layout(Text* item, LayoutContext& ctx)
     layoutTextBase(static_cast<TextBase*>(item), ctx);
 }
 
-void TLayout::layout(TextLine* item, LayoutContext& ctx)
+void TLayout::layout(TextLine*, LayoutContext&)
 {
-    layoutLine(item, ctx);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
-void TLayout::layout(TextLineSegment* item, LayoutContext& ctx)
+void TLayout::layout(TextLineSegment*, LayoutContext&)
 {
-    layoutTextLineBaseSegment(item, ctx);
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->textLine()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 // Extends lines to fill the corner between them.

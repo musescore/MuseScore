@@ -60,6 +60,7 @@
 #include "engraving/libmscore/systemtext.h"
 #include "engraving/libmscore/tempotext.h"
 #include "engraving/libmscore/text.h"
+#include "engraving/libmscore/textline.h"
 #include "engraving/libmscore/textlinebase.h"
 #include "engraving/libmscore/timesig.h"
 #include "engraving/libmscore/vibrato.h"
@@ -137,6 +138,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::TEMPO_TEXT:   layout(toTempoText(item), ctx);
         break;
+    case ElementType::TEXTLINE:     layout(toTextLine(item), ctx);
+        break;
     case ElementType::TIMESIG:      layout(toTimeSig(item), ctx);
         break;
     case ElementType::VIBRATO:      layout(toVibrato(item), ctx);
@@ -161,6 +164,8 @@ void PaletteLayout::layoutLineSegment(LineSegment* item, const Context& ctx)
     case ElementType::PALM_MUTE_SEGMENT: layout(toPalmMuteSegment(item), ctx);
         break;
     case ElementType::PEDAL_SEGMENT:     layout(toPedalSegment(item), ctx);
+        break;
+    case ElementType::TEXTLINE_SEGMENT:  layout(toTextLineSegment(item), ctx);
         break;
     case ElementType::VIBRATO_SEGMENT:   layout(toVibratoSegment(item), ctx);
         break;
@@ -765,6 +770,17 @@ void PaletteLayout::layout(SystemText* item, const Context& ctx)
 void PaletteLayout::layout(TempoText* item, const Context& ctx)
 {
     layoutTextBase(item, ctx);
+}
+
+void PaletteLayout::layout(TextLine* item, const Context& ctx)
+{
+    layoutLine(item, ctx);
+}
+
+void PaletteLayout::layout(TextLineSegment* item, const Context& ctx)
+{
+    layoutTextLineBaseSegment(item, ctx);
+    item->setOffset(PointF());
 }
 
 void PaletteLayout::layout(TimeSig* item, const Context& ctx)
