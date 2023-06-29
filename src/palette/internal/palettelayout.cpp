@@ -38,6 +38,7 @@
 #include "engraving/libmscore/barline.h"
 #include "engraving/libmscore/bracket.h"
 #include "engraving/libmscore/capo.h"
+#include "engraving/libmscore/chordline.h"
 #include "engraving/libmscore/clef.h"
 #include "engraving/libmscore/dynamic.h"
 #include "engraving/libmscore/expression.h"
@@ -101,6 +102,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::BRACKET:      layout(toBracket(item), ctx);
         break;
     case ElementType::CAPO:         layout(toCapo(item), ctx);
+        break;
+    case ElementType::CHORDLINE:    layout(toChordLine(item), ctx);
         break;
     case ElementType::CLEF:         layout(toClef(item), ctx);
         break;
@@ -480,6 +483,61 @@ void PaletteLayout::layout(Bracket* item, const Context& ctx)
 void PaletteLayout::layout(Capo* item, const Context& ctx)
 {
     layoutTextBase(item, ctx);
+}
+
+void PaletteLayout::layout(ChordLine* item, const Context& ctx)
+{
+    item->setMag(1.0);
+    if (!item->modified()) {
+        double x2 = 0;
+        double y2 = 0;
+        double baseLength = item->spatium();
+        double horBaseLength = 1.2 * baseLength;     // let the symbols extend a bit more horizontally
+        x2 += item->isToTheLeft() ? -horBaseLength : horBaseLength;
+        y2 += item->isBelow() ? baseLength : -baseLength;
+        if (item->chordLineType() != ChordLineType::NOTYPE && !item->isWavy()) {
+            PainterPath path;
+            if (!item->isToTheLeft()) {
+                if (item->isStraight()) {
+                    path.lineTo(x2, y2);
+                } else {
+                    path.cubicTo(x2 / 2, 0.0, x2, y2 / 2, x2, y2);
+                }
+            } else {
+                if (item->isStraight()) {
+                    path.lineTo(x2, y2);
+                } else {
+                    path.cubicTo(0.0, y2 / 2, x2 / 2, y2, x2, y2);
+                }
+            }
+            item->setPath(path);
+        }
+    }
+
+    item->setPos(0.0, 0.0);
+
+    if (!item->isWavy()) {
+        RectF r = item->path().boundingRect();
+        int x1 = 0, y1 = 0, width = 0, height = 0;
+
+        x1 = r.x();
+        y1 = r.y();
+        width = r.width();
+        height = r.height();
+        item->bbox().setRect(x1, y1, width, height);
+    } else {
+        RectF r = ctx.engravingFont()->bbox(ChordLine::WAVE_SYMBOLS, item->magS());
+        double angle = ChordLine::WAVE_ANGEL * M_PI / 180;
+
+        r.setHeight(r.height() + r.width() * sin(angle));
+
+        /// TODO: calculate properly the rect for wavy type
+        if (item->chordLineType() == ChordLineType::DOIT) {
+            r.setY(item->y() - r.height() * (item->onTabStaff() ? 1.25 : 1));
+        }
+
+        item->setbbox(r);
+    }
 }
 
 void PaletteLayout::layout(Clef* item, const Context& ctx)
