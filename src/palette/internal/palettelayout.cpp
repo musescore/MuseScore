@@ -27,6 +27,8 @@
 #include "engraving/types/typesconv.h"
 #include "engraving/types/symnames.h"
 
+#include "engraving/compat/dummyelement.h"
+
 #include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/score.h"
 
@@ -44,6 +46,7 @@
 #include "engraving/libmscore/expression.h"
 #include "engraving/libmscore/fingering.h"
 #include "engraving/libmscore/fret.h"
+#include "engraving/libmscore/glissando.h"
 #include "engraving/libmscore/gradualtempochange.h"
 #include "engraving/libmscore/hairpin.h"
 #include "engraving/libmscore/harppedaldiagram.h"
@@ -114,6 +117,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::FINGERING:    layout(toFingering(item), ctx);
         break;
     case ElementType::FRET_DIAGRAM: layout(toFretDiagram(item), ctx);
+        break;
+    case ElementType::GLISSANDO:    layout(toGlissando(item), ctx);
         break;
     case ElementType::GRADUAL_TEMPO_CHANGE: layout(toGradualTempoChange(item), ctx);
         break;
@@ -204,6 +209,11 @@ const MStyle& PaletteLayout::Context::style() const
 std::shared_ptr<IEngravingFont> PaletteLayout::Context::engravingFont() const
 {
     return m_score->engravingFont();
+}
+
+compat::DummyElement* PaletteLayout::Context::dummyParent() const
+{
+    return m_score->dummy();
 }
 
 void PaletteLayout::layout(Accidental* item, const Context&)
@@ -627,6 +637,31 @@ void PaletteLayout::layout(FretDiagram* item, const Context& ctx)
 void PaletteLayout::layout(Dynamic* item, const Context& ctx)
 {
     layoutTextBase(item, ctx);
+}
+
+void PaletteLayout::layout(Glissando* item, const Context& ctx)
+{
+    double spatium = item->spatium();
+
+    if (item->spannerSegments().empty()) {
+        item->add(item->createLineSegment(ctx.dummyParent()->system()));
+    }
+    LineSegment* s = item->frontSegment();
+    s->setPos(PointF(-spatium * Glissando::GLISS_PALETTE_WIDTH / 2, spatium * Glissando::GLISS_PALETTE_HEIGHT / 2));
+    s->setPos2(PointF(spatium * Glissando::GLISS_PALETTE_WIDTH, -spatium * Glissando::GLISS_PALETTE_HEIGHT));
+    layout(static_cast<GlissandoSegment*>(s), ctx);
+}
+
+void PaletteLayout::layout(GlissandoSegment* item, const Context&)
+{
+    if (item->pos2().x() <= 0) {
+        item->setbbox(RectF());
+        return;
+    }
+
+    RectF r = RectF(0.0, 0.0, item->pos2().x(), item->pos2().y()).normalized();
+    double lw = item->glissando()->lineWidth() * .5;
+    item->setbbox(r.adjusted(-lw, -lw, lw, lw));
 }
 
 void PaletteLayout::layout(GradualTempoChange* item, const Context& ctx)
