@@ -3448,10 +3448,8 @@ void Score::cmdDeleteSelection()
                 //else tick < 0
                 track = e->track();
             }
-            // find element to select
-            if (!cr && tick >= Fraction(0, 1) && track != mu::nidx) {
-                cr = findCR(tick, track);
-            }
+
+            bool needFindCR = !cr && tick >= Fraction(0, 1) && track != mu::nidx;
 
             // We should not allow deleting the very first keySig of the piece, because it is
             // logically incorrect and leads to a state of undefined key/transposition.
@@ -3460,12 +3458,18 @@ void Score::cmdDeleteSelection()
             if (e->isKeySig()) {
                 if (e->tick() == Fraction(0, 1) || toKeySig(e)->forInstrumentChange()) {
                     MScore::setError(MsError::CANNOT_REMOVE_KEY_SIG);
+                    if (needFindCR) {
+                        cr = findCR(tick, track);
+                    }
                     continue;
                 }
             }
 
             // Don't allow deleting the trill cue note
             if (e->isNote() && toNote(e)->isTrillCueNote()) {
+                if (needFindCR) {
+                    cr = findCR(tick, track);
+                }
                 continue;
             }
 
@@ -3490,6 +3494,11 @@ void Score::cmdDeleteSelection()
                 }
                 deleteItem(e);
             }
+
+            if (needFindCR) {
+                cr = findCR(tick, track);
+            }
+
             // add these linked elements to list of already-deleted elements
             for (EngravingObject* se : links) {
                 deletedElements.insert(se);
