@@ -3058,80 +3058,21 @@ void TLayout::layout(TremoloBar* item, LayoutContext&)
     item->setbbox(item->polygon().boundingRect().adjusted(-w, -w, w, w));
 }
 
-void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
+void TLayout::layout(Trill*, LayoutContext&)
 {
-    if (item->staff()) {
-        item->setMag(item->staff()->staffMag(item->tick()));
-    }
-    if (item->spanner()->placeBelow()) {
-        item->setPosY(item->staff() ? item->staff()->height() : 0.0);
-    }
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
+}
 
-    bool accidentalGoesBelow = item->trill()->trillType() == TrillType::DOWNPRALL_LINE;
-    Trill* trill = item->trill();
-    Ornament* ornament = trill->ornament();
-    if (ornament) {
-        if (item->isSingleBeginType()) {
-            TLayout::layout(ornament, ctx);
-        }
-        trill->setAccidental(accidentalGoesBelow ? ornament->accidentalBelow() : ornament->accidentalAbove());
-        trill->setCueNoteChord(ornament->cueNoteChord());
-        ArticulationAnchor anchor = ornament->anchor();
-        if (anchor == ArticulationAnchor::AUTO) {
-            trill->setPlacement(trill->track() % 2 ? PlacementV::BELOW : PlacementV::ABOVE);
-        } else {
-            trill->setPlacement(anchor == ArticulationAnchor::TOP ? PlacementV::ABOVE : PlacementV::BELOW);
-        }
-        trill->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::STYLED); // Ensures that the property isn't written (it is written by the ornamnent)
-    }
-
-    if (item->isSingleType() || item->isBeginType()) {
-        switch (item->trill()->trillType()) {
-        case TrillType::TRILL_LINE:
-            item->symbolLine(SymId::ornamentTrill, SymId::wiggleTrill);
-            break;
-        case TrillType::PRALLPRALL_LINE:
-            item->symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
-            break;
-        case TrillType::UPPRALL_LINE:
-            item->symbolLine(SymId::ornamentBottomLeftConcaveStroke,
-                             SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
-            break;
-        case TrillType::DOWNPRALL_LINE:
-            item->symbolLine(SymId::ornamentLeftVerticalStroke,
-                             SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
-            break;
-        }
-        Accidental* a = item->trill()->accidental();
-        if (a) {
-            double vertMargin = 0.35 * item->spatium();
-            RectF box = item->symBbox(item->symbols().front());
-            double x = 0;
-            double y = 0;
-            x = 0.5 * (box.width() - a->width());
-            double minVertDist = accidentalGoesBelow ? Shape(box).minVerticalDistance(a->shape())
-                                 : a->shape().minVerticalDistance(Shape(box));
-            y = accidentalGoesBelow ? minVertDist + vertMargin : -minVertDist - vertMargin;
-            a->setPos(x, y);
-            a->setParent(item);
-        }
-    } else {
-        item->symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
-    }
-
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->trill()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
+void TLayout::layout(TrillSegment*, LayoutContext&)
+{
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(TripletFeel* item, LayoutContext& ctx)
 {
     layout(static_cast<SystemText*>(item), ctx);
-}
-
-void TLayout::layout(Trill* item, LayoutContext& ctx)
-{
-    layoutLine(static_cast<SLine*>(item), ctx);
 }
 
 void TLayout::layout(Tuplet*, LayoutContext&)
