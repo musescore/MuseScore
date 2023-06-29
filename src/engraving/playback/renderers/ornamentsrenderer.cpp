@@ -310,6 +310,8 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
     IntervalsInfo intervalsInfo;
     if (const Ornament* ornament = chord->findOrnament()) {
         intervalsInfo = makeIntervalsInfo(ornament->intervalBelow(), ornament->intervalAbove());
+    } else {
+        intervalsInfo = makeIntervalsInfo(DEFAULT_ORNAMENT_INTERVAL, DEFAULT_ORNAMENT_INTERVAL);
     }
 
     const DisclosurePattern& nominalPattern = search->second;
