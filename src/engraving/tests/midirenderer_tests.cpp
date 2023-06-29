@@ -125,7 +125,7 @@ TEST_F(MidiRenderer_Tests, graceBeforeBeat)
 
     EventMap events = renderMidiEvents(u"grace_before_beat.mscx");
 
-    EXPECT_EQ(events.size(), 6);
+    EXPECT_EQ(events.size(), 8);
 
     checkEventInterval(events, 0, 239, 59, defVol);
     checkEventInterval(events, 240, 479, 55, defVol);
@@ -138,7 +138,7 @@ TEST_F(MidiRenderer_Tests, graceOnBeat)
 
     EventMap events = renderMidiEvents(u"grace_on_beat.mscx");
 
-    EXPECT_EQ(events.size(), 6);
+    EXPECT_EQ(events.size(), 8);
 
     checkEventInterval(events, 0, 479, 59, defVol);
     checkEventInterval(events, 480, 719, 55, defVol);
@@ -152,7 +152,7 @@ TEST_F(MidiRenderer_Tests, ghostNote)
 
     EventMap events = renderMidiEvents(u"ghost_note.mscx");
 
-    EXPECT_EQ(events.size(), 4);
+    EXPECT_EQ(events.size(), 5);
 
     checkEventInterval(events, 0, 479, 59, defVol);
     checkEventInterval(events, 480, 959, 57, ghostVol);
@@ -164,7 +164,7 @@ TEST_F(MidiRenderer_Tests, simpleTremolo)
 
     EventMap events = renderMidiEvents(u"simple_tremolo.mscx");
 
-    EXPECT_EQ(events.size(), 8);
+    EXPECT_EQ(events.size(), 11);
 
     checkEventInterval(events, 0, 239, 59, defVol);
     checkEventInterval(events, 240, 479, 59, defVol);
@@ -179,7 +179,7 @@ TEST_F(MidiRenderer_Tests, simpleGlissando)
 
     EventMap events = renderMidiEvents(u"simple_glissando.mscx");
 
-    EXPECT_EQ(events.size(), 10);
+    EXPECT_EQ(events.size(), 14);
 
     checkEventInterval(events, 0, 599, 59, defVol);
     checkEventInterval(events, 600, 719, 58, glissVol);
@@ -243,7 +243,7 @@ TEST_F(MidiRenderer_Tests, tremoloAndGlissando)
 
     EventMap events = renderMidiEvents(u"tremolo_and_glissando.mscx");
 
-    EXPECT_EQ(events.size(), 14);
+    EXPECT_EQ(events.size(), 20);
 
     checkEventInterval(events, 0, 239, 59, defVol);
     checkEventInterval(events, 240, 479, 59, defVol);
@@ -261,7 +261,7 @@ TEST_F(MidiRenderer_Tests, slideInFromBelow)
 
     EventMap events = renderMidiEvents(u"slide_in_from_below.mscx");
 
-    EXPECT_EQ(events.size(), 10);
+    EXPECT_EQ(events.size(), 14);
 
     checkEventInterval(events, 0, 239, 60, defVol);
     checkEventInterval(events, 240, 318, 57, glissVol);
@@ -277,7 +277,7 @@ TEST_F(MidiRenderer_Tests, slideInFromAbove)
 
     EventMap events = renderMidiEvents(u"slide_in_from_above.mscx");
 
-    EXPECT_EQ(events.size(), 10);
+    EXPECT_EQ(events.size(), 14);
 
     checkEventInterval(events, 0, 239, 60, defVol);
     checkEventInterval(events, 240, 318, 63, glissVol);
@@ -293,7 +293,7 @@ TEST_F(MidiRenderer_Tests, slideOutFromAbove)
 
     EventMap events = renderMidiEvents(u"slide_out_from_above.mscx");
 
-    EXPECT_EQ(events.size(), 10);
+    EXPECT_EQ(events.size(), 14);
 
     checkEventInterval(events, 0, 239, 60, defVol);
     checkEventInterval(events, 240, 318, 59, glissVol);
@@ -309,7 +309,7 @@ TEST_F(MidiRenderer_Tests, slideOutFromBelow)
 
     EventMap events = renderMidiEvents(u"slide_out_from_below.mscx");
 
-    EXPECT_EQ(events.size(), 10);
+    EXPECT_EQ(events.size(), 14);
 
     checkEventInterval(events, 0, 239, 60, defVol);
     checkEventInterval(events, 240, 318, 61, glissVol);
@@ -325,7 +325,7 @@ TEST_F(MidiRenderer_Tests, tremoloSlideIn)
 
     EventMap events = renderMidiEvents(u"tremolo_and_slide_in.mscx");
 
-    EXPECT_EQ(events.size(), 16);
+    EXPECT_EQ(events.size(), 23);
 
     checkEventInterval(events, 0, 119, 59, defVol);
     checkEventInterval(events, 120, 239, 59, defVol);
@@ -344,7 +344,7 @@ TEST_F(MidiRenderer_Tests, tremoloSlideOut)
 
     EventMap events = renderMidiEvents(u"tremolo_and_slide_out.mscx");
 
-    EXPECT_EQ(events.size(), 14);
+    EXPECT_EQ(events.size(), 20);
 
     checkEventInterval(events, 0, 239, 59, defVol);
     checkEventInterval(events, 240, 479, 59, defVol);
@@ -362,7 +362,7 @@ TEST_F(MidiRenderer_Tests, slideInAndOut)
 
     EventMap events = renderMidiEvents(u"slide_in_and_out.mscx");
 
-    EXPECT_EQ(events.size(), 14);
+    EXPECT_EQ(events.size(), 21);
 
     checkEventInterval(events, 240, 318, 57, glissVol);
     checkEventInterval(events, 320, 398, 58, glissVol);

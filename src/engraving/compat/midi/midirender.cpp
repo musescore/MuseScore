@@ -209,9 +209,11 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
         return;
     }
     // We need to set Pitch Value to initial in case previous note was with bendUp
-    PitchWheelSpecs specs;
-    NPlayEvent pwReset(ME_PITCHBEND, params.channel, specs.mLimit % 128, specs.mLimit / 128);
-    events->insert(std::pair<int, NPlayEvent>(std::max(0, params.onTime - params.offset - 1), pwReset));
+    if (params.onTime - params.offset - 1 > 0) {
+        PitchWheelSpecs specs;
+        NPlayEvent pwReset(ME_PITCHBEND, params.channel, specs.mLimit % 128, specs.mLimit / 128);
+        events->insert(std::pair<int, NPlayEvent>(std::max(0, params.onTime - params.offset - 1), pwReset));
+    }
 
     events->insert(std::pair<int, NPlayEvent>(std::max(0, params.onTime - params.offset), ev));
     // adds portamento for continuous glissando
