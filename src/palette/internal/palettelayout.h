@@ -50,6 +50,8 @@ class Expression;
 class Fingering;
 class FretDiagram;
 
+class Glissando;
+class GlissandoSegment;
 class GradualTempoChange;
 class GradualTempoChangeSegment;
 
@@ -102,6 +104,10 @@ class Volta;
 class VoltaSegment;
 }
 
+namespace mu::engraving::compat {
+class DummyElement;
+}
+
 namespace mu::palette {
 class PaletteLayout
 {
@@ -116,6 +122,7 @@ public:
 
         const engraving::MStyle& style() const;
         std::shared_ptr<engraving::IEngravingFont> engravingFont() const;
+        engraving::compat::DummyElement* dummyParent() const;
 
     private:
         engraving::Score* m_score = nullptr;
@@ -141,6 +148,7 @@ public:
     static void layout(engraving::Fingering* item, const Context& ctx);
     static void layout(engraving::FretDiagram* item, const Context& ctx);
 
+    static void layout(engraving::Glissando* item, const Context& ctx);
     static void layout(engraving::GradualTempoChange* item, const Context& ctx);
 
     static void layout(engraving::Hairpin* item, const Context& ctx);
@@ -178,6 +186,7 @@ public:
     static void layout(engraving::Volta* item, const Context& ctx);
 
 private:
+    static void layout(engraving::GlissandoSegment* item, const Context& ctx);
     static void layout(engraving::GradualTempoChangeSegment* item, const Context& ctx);
     static void layout(engraving::HairpinSegment* item, const Context& ctx);
     static void layout(engraving::LetRingSegment* item, const Context& ctx);
