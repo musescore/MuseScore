@@ -56,8 +56,7 @@ mu::RetVal<mu::io::path_t> ExportProjectScenario::askExportPath(const INotationP
     // types in the save dialog and therefore we can put the file dialog in charge of
     // asking the user whether an existing file should be overridden. Otherwise, we
     // will take care of that ourselves.
-    size_t fileCount = exportFileCount(notations, unitType);
-    bool isCreatingOnlyOneFile = fileCount == 1;
+    bool isCreatingOnlyOneFile = guessIsCreatingOnlyOneFile(notations, unitType);
     bool isExportingOnlyOneScore = notations.size() == 1;
 
     if (unitType == INotationWriter::UnitType::MULTI_PART && !isExportingOnlyOneScore) {
@@ -109,6 +108,26 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
         return false;
     }
 
+    // Make sure we do this in the same as we did it in `askExportPath`, so before initializing notations
+    bool isCreatingOnlyOneFile = guessIsCreatingOnlyOneFile(notations, unitType);
+    bool isExportingOnlyOneScore = notations.size() == 1;
+
+    // The user might have selected not-yet-inited excerpts
+    ExcerptNotationList excerptsToInit;
+    ExcerptNotationList potentialExcerpts = masterNotation()->potentialExcerpts();
+
+    for (const INotationPtr& notation : notations) {
+        auto it = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
+            return excerpt->notation() == notation;
+        });
+
+        if (it != potentialExcerpts.cend()) {
+            excerptsToInit.push_back(*it);
+        }
+    }
+
+    masterNotation()->initExcerpts(excerptsToInit);
+
     // Scores that are closed may have never been laid out, so we lay them out now
     for (INotationPtr notation : notations) {
         mu::engraving::Score* score = notation->elements()->msScore();
@@ -153,7 +172,6 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
     // If isCreatingOnlyOneFile, the save dialog has already asked whether to replace
     // any existing files. If the user cancels, the filepath will be empty, so we would
     // not reach this point. But if we do, existing files should be overridden.
-    bool isCreatingOnlyOneFile = fileCount == 1;
     m_fileConflictPolicy = isCreatingOnlyOneFile ? FileConflictPolicy::ReplaceAll : FileConflictPolicy::Undefined;
 
     INotationWriter::Options options {
@@ -172,7 +190,7 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
 
                 io::path_t definitivePath = isCreatingOnlyOneFile
                                             ? destinationPath
-                                            : completeExportPath(destinationPath, notation, isMain,
+                                            : completeExportPath(destinationPath, notation, isMain, isExportingOnlyOneScore,
                                                                  static_cast<int>(page));
 
                 auto exportFunction = [writer, notation, options](QIODevice& destinationDevice) {
@@ -192,7 +210,7 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
         for (INotationPtr notation : notations) {
             io::path_t definitivePath = isCreatingOnlyOneFile
                                         ? destinationPath
-                                        : completeExportPath(destinationPath, notation, isMainNotation(notation));
+                                        : completeExportPath(destinationPath, notation, isMainNotation(notation), isExportingOnlyOneScore);
 
             auto exportFunction = [writer, notation, options](QIODevice& destinationDevice) {
                     return writer->write(notation, destinationDevice, options);
@@ -239,6 +257,37 @@ void ExportProjectScenario::setExportInfo(const ExportInfo& exportInfo)
     m_exportInfo = exportInfo;
 }
 
+bool ExportProjectScenario::guessIsCreatingOnlyOneFile(const notation::INotationPtrList& notations,
+                                                       INotationWriter::UnitType unitType) const
+{
+    switch (unitType) {
+    case INotationWriter::UnitType::PER_PAGE: {
+        if (notations.size() == 1) {
+            // Check if it is not a potential (not-yet-initialized) excerpt
+            ExcerptNotationList potentialExcerpts = masterNotation()->potentialExcerpts();
+
+            auto it
+                = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(),
+                               [notation = notations.front()](const IExcerptNotationPtr& excerpt) {
+                    return excerpt->notation() == notation;
+                });
+
+            if (it == potentialExcerpts.cend()) {
+                return notations.front()->elements()->pages().size();
+            }
+        }
+
+        return false;
+    };
+    case INotationWriter::UnitType::PER_PART:
+        return notations.size() == 1;
+    case INotationWriter::UnitType::MULTI_PART:
+        return true;
+    }
+
+    return false;
+}
+
 size_t ExportProjectScenario::exportFileCount(const INotationPtrList& notations, INotationWriter::UnitType unitType) const
 {
     switch (unitType) {
@@ -262,15 +311,20 @@ size_t ExportProjectScenario::exportFileCount(const INotationPtrList& notations,
 
 bool ExportProjectScenario::isMainNotation(INotationPtr notation) const
 {
-    return context()->currentMasterNotation()->notation() == notation;
+    return masterNotation()->notation() == notation;
+}
+
+IMasterNotationPtr ExportProjectScenario::masterNotation() const
+{
+    return context()->currentMasterNotation();
 }
 
 mu::io::path_t ExportProjectScenario::completeExportPath(const io::path_t& basePath, INotationPtr notation, bool isMain,
-                                                         int pageIndex) const
+                                                         bool isExportingOnlyOneScore, int pageIndex) const
 {
     io::path_t result = io::dirpath(basePath) + "/" + io::completeBasename(basePath);
 
-    if (!isMain) {
+    if (!isMain && !isExportingOnlyOneScore) {
         result += "-" + io::escapeFileName(notation->name()).toStdString();
     }
 
