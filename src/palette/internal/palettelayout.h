@@ -38,6 +38,7 @@ class Articulation;
 class BagpipeEmbellishment;
 class BarLine;
 class Bracket;
+class Breath;
 
 class Capo;
 class ChordLine;
@@ -138,6 +139,7 @@ public:
     static void layout(engraving::BagpipeEmbellishment* item, const Context& ctx);
     static void layout(engraving::BarLine* item, const Context& ctx);
     static void layout(engraving::Bracket* item, const Context& ctx);
+    static void layout(engraving::Breath* item, const Context&);
 
     static void layout(engraving::Capo* item, const Context& ctx);
     static void layout(engraving::ChordLine* item, const Context& ctx);
