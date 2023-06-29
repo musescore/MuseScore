@@ -6,7 +6,7 @@ on:
       mode:
         description: 'Mode: stable, testing'
         required: true
-        default: 'stable'
+        default: 'testing'
       tag:
         description: 'Release tag (latest stable by default)'
         required: false
