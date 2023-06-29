@@ -1792,33 +1792,29 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
                 m->add(s);
             }
 
-            if (staffIsPitchedAtNextMeas) {
-                KeySig* ks = toKeySig(s->element(track));
-                KeySigEvent key2 = staff->keySigEvent(m->endTick());
-                bool needCourtesy = staff->key(m->tick()) != key2.key();
+            KeySig* keySig = nullptr;
+            EngravingItem* keySigElem = s->element(track);
+            if (keySigElem && keySigElem->isKeySig()) {
+                keySig = toKeySig(keySigElem);
+            }
 
-                if (needCourtesy) {
-                    if (!ks) {
-                        ks = Factory::createKeySig(s);
-                        ks->setTrack(track);
-                        ks->setGenerated(true);
-                        ks->setParent(s);
-                        s->add(ks);
-                        s->setTrailer(true);
-                    }
-                    ks->setKeySigEvent(key2);
-                    TLayout::layout(ks, ctx);
-                    //s->createShape(track / VOICES);
-                    s->setEnabled(true);
-                } else if (ks) {
-                    s->remove(ks);
+            KeySigEvent key2 = staff->keySigEvent(m->endTick());
+            bool needsCourtesy = staff->key(m->tick()) != key2.key();
+
+            if (staffIsPitchedAtNextMeas && needsCourtesy) {
+                if (!keySig) {
+                    keySig = Factory::createKeySig(s);
+                    keySig->setTrack(track);
+                    keySig->setGenerated(true);
+                    keySig->setParent(s);
+                    s->add(keySig);
+                    s->setTrailer(true);
                 }
-            } else { /// !staffIsPitchedAtNextMeas
-                KeySig* keySig = nullptr;
-                EngravingItem* keySigElem = s->element(track);
-                if (keySigElem && keySigElem->isKeySig()) {
-                    keySig = toKeySig(keySigElem);
-                }
+                keySig->setKeySigEvent(key2);
+                TLayout::layout(keySig, ctx);
+                //s->createShape(track / VOICES);
+                s->setEnabled(true);
+            } else { /// !staffIsPitchedAtNextMeas || !needsCourtesy
                 if (keySig) {
                     s->remove(keySig);
                 }
