@@ -69,6 +69,7 @@ class LineSegment;
 
 class Marker;
 
+class Ornament;
 class Ottava;
 class OttavaSegment;
 
@@ -91,6 +92,8 @@ class TextLine;
 class TextLineSegment;
 class TextLineBaseSegment;
 class TimeSig;
+class Trill;
+class TrillSegment;
 
 class Vibrato;
 class VibratoSegment;
@@ -151,6 +154,7 @@ public:
 
     static void layout(engraving::Marker* item, const Context& ctx);
 
+    static void layout(engraving::Ornament* item, const Context& ctx);
     static void layout(engraving::Ottava* item, const Context& ctx);
 
     static void layout(engraving::PalmMute* item, const Context& ctx);
@@ -166,6 +170,7 @@ public:
     static void layout(engraving::TempoText* item, const Context& ctx);
     static void layout(engraving::TextLine* item, const Context& ctx);
     static void layout(engraving::TimeSig* item, const Context& ctx);
+    static void layout(engraving::Trill* item, const Context& ctx);
 
     static void layout(engraving::Vibrato* item, const Context& ctx);
     static void layout(engraving::Volta* item, const Context& ctx);
@@ -178,6 +183,7 @@ private:
     static void layout(engraving::PalmMuteSegment* item, const Context& ctx);
     static void layout(engraving::PedalSegment* item, const Context& ctx);
     static void layout(engraving::TextLineSegment* item, const Context& ctx);
+    static void layout(engraving::TrillSegment* item, const Context& ctx);
     static void layout(engraving::VibratoSegment* item, const Context& ctx);
     static void layout(engraving::VoltaSegment* item, const Context& ctx);
 

@@ -52,6 +52,7 @@
 #include "engraving/libmscore/letring.h"
 #include "engraving/libmscore/line.h"
 #include "engraving/libmscore/marker.h"
+#include "engraving/libmscore/ornament.h"
 #include "engraving/libmscore/ottava.h"
 #include "engraving/libmscore/palmmute.h"
 #include "engraving/libmscore/pedal.h"
@@ -65,6 +66,7 @@
 #include "engraving/libmscore/textline.h"
 #include "engraving/libmscore/textlinebase.h"
 #include "engraving/libmscore/timesig.h"
+#include "engraving/libmscore/trill.h"
 #include "engraving/libmscore/vibrato.h"
 #include "engraving/libmscore/volta.h"
 
@@ -148,13 +150,15 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::TIMESIG:      layout(toTimeSig(item), ctx);
         break;
+    case ElementType::TRILL:        layout(toTrill(item), ctx);
+        break;
     case ElementType::VIBRATO:      layout(toVibrato(item), ctx);
         break;
     case ElementType::VOLTA:        layout(toVolta(item), ctx);
         break;
     default:
         //! TODO Still need
-        // LOGD() << item->typeName();
+        LOGD() << item->typeName();
         layout::pal::TLayout::layoutItem(item, ctxpal);
         break;
     }
@@ -176,6 +180,8 @@ void PaletteLayout::layoutLineSegment(LineSegment* item, const Context& ctx)
     case ElementType::PEDAL_SEGMENT:     layout(toPedalSegment(item), ctx);
         break;
     case ElementType::TEXTLINE_SEGMENT:  layout(toTextLineSegment(item), ctx);
+        break;
+    case ElementType::TRILL_SEGMENT:     layout(toTrillSegment(item), ctx);
         break;
     case ElementType::VIBRATO_SEGMENT:   layout(toVibratoSegment(item), ctx);
         break;
@@ -852,6 +858,32 @@ void PaletteLayout::layout(Marker* item, const Context& ctx)
     layoutTextBase(item, ctx);
 }
 
+void PaletteLayout::layout(Ornament* item, const Context& ctx)
+{
+    double spatium = item->spatium();
+    double vertMargin = 0.35 * spatium;
+    constexpr double ornamentAccidentalMag = 0.6; // TODO: style?
+
+    if (!item->showCueNote()) {
+        for (size_t i = 0; i < item->accidentalsAboveAndBelow().size(); ++i) {
+            bool above = (i == 0);
+            Accidental* accidental = item->accidentalsAboveAndBelow()[i];
+            if (!accidental) {
+                continue;
+            }
+            accidental->computeMag();
+            accidental->setMag(accidental->mag() * ornamentAccidentalMag);
+            layout(accidental, ctx);
+            Shape accidentalShape = accidental->shape();
+            double minVertDist = above
+                                 ? accidentalShape.minVerticalDistance(item->bbox())
+                                 : Shape(item->bbox()).minVerticalDistance(accidentalShape);
+            accidental->setPos(-0.5 * accidental->width(), above ? (-minVertDist - vertMargin) : (minVertDist + vertMargin));
+        }
+        return;
+    }
+}
+
 void PaletteLayout::layout(Ottava* item, const Context& ctx)
 {
     layoutLine(item, ctx);
@@ -1035,6 +1067,73 @@ void PaletteLayout::layout(TimeSig* item, const Context& ctx)
     item->setDrawArgs(drawArgs);
 }
 
+void PaletteLayout::layout(Trill* item, const Context& ctx)
+{
+    layoutLine(static_cast<SLine*>(item), ctx);
+}
+
+void PaletteLayout::layout(TrillSegment* item, const Context& ctx)
+{
+    if (item->spanner()->placeBelow()) {
+        item->setPosY(0.0);
+    }
+
+    bool accidentalGoesBelow = item->trill()->trillType() == TrillType::DOWNPRALL_LINE;
+    Trill* trill = item->trill();
+    Ornament* ornament = trill->ornament();
+    if (ornament) {
+        if (item->isSingleBeginType()) {
+            layout(ornament, ctx);
+        }
+        trill->setAccidental(accidentalGoesBelow ? ornament->accidentalBelow() : ornament->accidentalAbove());
+        trill->setCueNoteChord(ornament->cueNoteChord());
+        ArticulationAnchor anchor = ornament->anchor();
+        if (anchor == ArticulationAnchor::AUTO) {
+            trill->setPlacement(trill->track() % 2 ? PlacementV::BELOW : PlacementV::ABOVE);
+        } else {
+            trill->setPlacement(anchor == ArticulationAnchor::TOP ? PlacementV::ABOVE : PlacementV::BELOW);
+        }
+        trill->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::STYLED); // Ensures that the property isn't written (it is written by the ornamnent)
+    }
+
+    if (item->isSingleType() || item->isBeginType()) {
+        switch (item->trill()->trillType()) {
+        case TrillType::TRILL_LINE:
+            item->symbolLine(SymId::ornamentTrill, SymId::wiggleTrill);
+            break;
+        case TrillType::PRALLPRALL_LINE:
+            item->symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
+            break;
+        case TrillType::UPPRALL_LINE:
+            item->symbolLine(SymId::ornamentBottomLeftConcaveStroke,
+                             SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+            break;
+        case TrillType::DOWNPRALL_LINE:
+            item->symbolLine(SymId::ornamentLeftVerticalStroke,
+                             SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+            break;
+        }
+        Accidental* a = item->trill()->accidental();
+        if (a) {
+            double vertMargin = 0.35 * item->spatium();
+            RectF box = item->symBbox(item->symbols().front());
+            double x = 0;
+            double y = 0;
+            x = 0.5 * (box.width() - a->width());
+            double minVertDist = accidentalGoesBelow
+                                 ? Shape(box).minVerticalDistance(a->shape())
+                                 : a->shape().minVerticalDistance(Shape(box));
+            y = accidentalGoesBelow ? minVertDist + vertMargin : -minVertDist - vertMargin;
+            a->setPos(x, y);
+            a->setParent(item);
+        }
+    } else {
+        item->symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
+    }
+
+    item->setOffset(PointF());
+}
+
 void PaletteLayout::layout(Vibrato* item, const Context& ctx)
 {
     layoutLine(static_cast<SLine*>(item), ctx);
@@ -1043,7 +1142,7 @@ void PaletteLayout::layout(Vibrato* item, const Context& ctx)
 void PaletteLayout::layout(VibratoSegment* item, const Context&)
 {
     if (item->spanner()->placeBelow()) {
-        item->setPosY(item->staff() ? item->staff()->height() : 0.0);
+        item->setPosY(0.0);
     }
 
     switch (item->vibrato()->vibratoType()) {
