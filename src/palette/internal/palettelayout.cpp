@@ -62,6 +62,8 @@
 #include "engraving/libmscore/text.h"
 #include "engraving/libmscore/textlinebase.h"
 #include "engraving/libmscore/timesig.h"
+#include "engraving/libmscore/vibrato.h"
+#include "engraving/libmscore/volta.h"
 
 #include "engraving/libmscore/utils.h"
 
@@ -137,9 +139,11 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::TIMESIG:      layout(toTimeSig(item), ctx);
         break;
+    case ElementType::VIBRATO:      layout(toVibrato(item), ctx);
+        break;
     default:
         //! TODO Still need
-        //LOGD() << item->typeName();
+        LOGD() << item->typeName();
         layout::pal::TLayout::layoutItem(item, ctxpal);
         break;
     }
@@ -155,6 +159,8 @@ void PaletteLayout::layoutLineSegment(LineSegment* item, const Context& ctx)
     case ElementType::PALM_MUTE_SEGMENT: layout(toPalmMuteSegment(item), ctx);
         break;
     case ElementType::PEDAL_SEGMENT:     layout(toPedalSegment(item), ctx);
+        break;
+    case ElementType::VIBRATO_SEGMENT:   layout(toVibratoSegment(item), ctx);
         break;
     default:
         UNREACHABLE;
@@ -864,6 +870,35 @@ void PaletteLayout::layout(TimeSig* item, const Context& ctx)
     }
 
     item->setDrawArgs(drawArgs);
+}
+
+void PaletteLayout::layout(Vibrato* item, const Context& ctx)
+{
+    layoutLine(static_cast<SLine*>(item), ctx);
+}
+
+void PaletteLayout::layout(VibratoSegment* item, const Context&)
+{
+    if (item->spanner()->placeBelow()) {
+        item->setPosY(item->staff() ? item->staff()->height() : 0.0);
+    }
+
+    switch (item->vibrato()->vibratoType()) {
+    case VibratoType::GUITAR_VIBRATO:
+        item->symbolLine(SymId::guitarVibratoStroke, SymId::guitarVibratoStroke);
+        break;
+    case VibratoType::GUITAR_VIBRATO_WIDE:
+        item->symbolLine(SymId::guitarWideVibratoStroke, SymId::guitarWideVibratoStroke);
+        break;
+    case VibratoType::VIBRATO_SAWTOOTH:
+        item->symbolLine(SymId::wiggleSawtooth, SymId::wiggleSawtooth);
+        break;
+    case VibratoType::VIBRATO_SAWTOOTH_WIDE:
+        item->symbolLine(SymId::wiggleSawtoothWide, SymId::wiggleSawtoothWide);
+        break;
+    }
+
+    item->setOffset(PointF());
 }
 
 //! TODO
