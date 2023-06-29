@@ -2332,17 +2332,16 @@ void TLayout::layout(PalmMuteSegment*, LayoutContext&)
     UNREACHABLE;
 }
 
-void TLayout::layout(Pedal* item, LayoutContext& ctx)
+void TLayout::layout(Pedal*, LayoutContext&)
 {
-    layoutLine(item, ctx);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
-void TLayout::layout(PedalSegment* item, LayoutContext& ctx)
+void TLayout::layout(PedalSegment*, LayoutContext&)
 {
-    layoutTextLineBaseSegment(item, ctx);
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->pedal()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(PickScrapeSegment* item, LayoutContext& ctx)

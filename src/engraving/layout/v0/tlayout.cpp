@@ -201,7 +201,7 @@ public:
 
 void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
 {
-    DO_ASSERT(!ctx.conf().isPaletteMode());
+    //DO_ASSERT(!ctx.conf().isPaletteMode());
 
     bool found = LayoutVisitor::visit(LayoutTypes {}, item, ctx);
     if (!found) {
