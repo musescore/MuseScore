@@ -68,7 +68,7 @@ BeamTremoloLayout::BeamTremoloLayout(EngravingItem* e)
         isGrace = m_trem->chord1()->isGrace();
     }
     m_element = e;
-    m_spatium = e->style().spatium();
+    m_spatium = e->spatium();
     m_tick = m_element->tick();
     m_beamSpacing = e->style().styleB(Sid::useWideBeams) ? 4 : 3;
     m_beamDist = (m_beamSpacing / 4.0) * m_spatium * e->mag()
