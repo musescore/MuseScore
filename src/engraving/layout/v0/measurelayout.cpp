@@ -1780,22 +1780,22 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
             if (staffIsPitchedAtNextMeas) {
                 KeySig* ks = toKeySig(s->element(track));
                 KeySigEvent key2 = staff->keySigEvent(m->endTick());
+                bool needCourtesy = staff->key(m->tick()) != key2.key();
 
-                if (!ks) {
-                    ks = Factory::createKeySig(s);
-                    ks->setTrack(track);
-                    ks->setGenerated(true);
-                    ks->setParent(s);
-                    s->add(ks);
-                    s->setTrailer(true);
+                if (needCourtesy) {
+                    if (!ks) {
+                        ks = Factory::createKeySig(s);
+                        ks->setTrack(track);
+                        ks->setGenerated(true);
+                        ks->setParent(s);
+                        s->add(ks);
+                        s->setTrailer(true);
+                    }
+                    ks->setKeySigEvent(key2);
+                    TLayout::layout(ks, ctx);
+                    //s->createShape(track / VOICES);
+                    s->setEnabled(true);
                 }
-                //else if (!(ks->keySigEvent() == key2)) {
-                //      score()->undo(new ChangeKeySig(ks, key2, ks->showCourtesy()));
-                //      }
-                ks->setKeySigEvent(key2);
-                TLayout::layout(ks, ctx);
-                //s->createShape(track / VOICES);
-                s->setEnabled(true);
             } else { /// !staffIsPitchedAtNextMeas
                 KeySig* keySig = nullptr;
                 EngravingItem* keySigElem = s->element(track);
