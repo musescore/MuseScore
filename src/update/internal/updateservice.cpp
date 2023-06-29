@@ -71,6 +71,7 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
     }
 
     QByteArray json = buff.data();
+    LOGD() << "json: " << json;
 
     RetVal<ReleaseInfo> releaseInfo = parseRelease(json);
     if (!releaseInfo.ret) {
@@ -153,11 +154,12 @@ mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) cons
     result.ret = make_ok();
 
     QJsonObject release = jsonDoc.object();
-    result.val.title = release.value("name").toString().toStdString();
-    result.val.notes = release.value("body").toString().toStdString();
 
     QString tagName = release.value("tag_name").toString();
-    result.val.version = tagName.replace("v", "").toStdString();
+    QString version = tagName.replace("v", "");
+    result.val.version = version.toStdString();
+
+    result.val.notes = release.value("bodyMarkdown").toString().toStdString();
 
     std::string fileSuffix = platformFileSuffix();
 

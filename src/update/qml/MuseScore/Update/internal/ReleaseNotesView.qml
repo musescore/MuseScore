@@ -21,37 +21,26 @@
  */
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-ColumnLayout {
+Item {
     id: root
 
     property alias notes: notesLabel.text
 
-    spacing: 16
-
     QtObject {
         id: prv
 
-        readonly property int sideMargin: 36
+        readonly property int sideMargin: 24
     }
-
-    StyledTextLabel {
-        Layout.fillWidth: true
-
-        text: qsTrc("update", "Release notes")
-
-        horizontalAlignment: Qt.AlignLeft
-        font: ui.theme.bodyBoldFont
-    }
-
-    SeparatorLine { Layout.leftMargin: -prv.sideMargin; Layout.rightMargin: -prv.sideMargin }
 
     StyledFlickable {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        id: flickable
+
+        anchors.fill: parent
 
         contentHeight: notesLabel.implicitHeight
 
@@ -64,9 +53,18 @@ ColumnLayout {
             horizontalAlignment: Text.AlignLeft
             font: ui.theme.largeBodyFont
             wrapMode: Text.WordWrap
-            lineHeight: 2.0
+            textFormat: Text.MarkdownText
+            lineHeight: 1.2
         }
+
+        ScrollBar.vertical: scrollBar
     }
 
-    SeparatorLine { Layout.leftMargin: -prv.sideMargin; Layout.rightMargin: -prv.sideMargin }
+    StyledScrollBar {
+        id: scrollBar
+        anchors.top: flickable.top
+        anchors.right: flickable.right
+        anchors.rightMargin: -prv.sideMargin
+        anchors.bottom: flickable.bottom
+    }
 }
