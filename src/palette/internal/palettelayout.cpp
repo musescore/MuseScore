@@ -44,6 +44,7 @@
 #include "engraving/libmscore/fingering.h"
 #include "engraving/libmscore/fret.h"
 #include "engraving/libmscore/gradualtempochange.h"
+#include "engraving/libmscore/hairpin.h"
 #include "engraving/libmscore/harppedaldiagram.h"
 #include "engraving/libmscore/instrchange.h"
 #include "engraving/libmscore/jump.h"
@@ -111,6 +112,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::GRADUAL_TEMPO_CHANGE: layout(toGradualTempoChange(item), ctx);
         break;
+    case ElementType::HAIRPIN:      layout(toHairpin(item), ctx);
+        break;
     case ElementType::HARP_DIAGRAM: layout(toHarpPedalDiagram(item), ctx);
         break;
     case ElementType::INSTRUMENT_CHANGE: layout(toInstrumentChange(item), ctx);
@@ -151,7 +154,7 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     default:
         //! TODO Still need
-        LOGD() << item->typeName();
+        // LOGD() << item->typeName();
         layout::pal::TLayout::layoutItem(item, ctxpal);
         break;
     }
@@ -161,6 +164,8 @@ void PaletteLayout::layoutLineSegment(LineSegment* item, const Context& ctx)
 {
     switch (item->type()) {
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT: layout(toGradualTempoChangeSegment(item), ctx);
+        break;
+    case ElementType::HAIRPIN_SEGMENT:   layout(toHairpinSegment(item), ctx);
         break;
     case ElementType::LET_RING_SEGMENT:  layout(toLetRingSegment(item), ctx);
         break;
@@ -568,6 +573,128 @@ void PaletteLayout::layout(GradualTempoChange* item, const Context& ctx)
 void PaletteLayout::layout(GradualTempoChangeSegment* item, const Context& ctx)
 {
     layoutTextLineBaseSegment(item, ctx);
+    item->setOffset(PointF());
+}
+
+void PaletteLayout::layout(Hairpin* item, const Context& ctx)
+{
+    item->setPos(0.0, 0.0);
+    layoutLine(item, ctx);
+}
+
+void PaletteLayout::layout(HairpinSegment* item, const Context& ctx)
+{
+    const double spatium = item->spatium();
+
+    HairpinType type = item->hairpin()->hairpinType();
+    if (item->hairpin()->isLineType()) {
+        item->setTwoLines(false);
+        layoutTextLineBaseSegment(item, ctx);
+        item->setDrawCircledTip(false);
+        item->setCircledTipRadius(0.0);
+    } else {
+        item->setTwoLines(true);
+
+        item->hairpin()->setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
+        item->hairpin()->setEndTextAlign({ AlignH::RIGHT, AlignV::VCENTER });
+
+        double x1 = 0.0;
+        layoutTextLineBaseSegment(item, ctx);
+        if (!item->text()->empty()) {
+            x1 = item->text()->width() + spatium * .5;
+        }
+
+        Transform t;
+        double h1 = item->hairpin()->hairpinHeight().val() * spatium * .5;
+        double h2 = item->hairpin()->hairpinContHeight().val() * spatium * .5;
+
+        double x = item->pos2().x();
+        if (!item->endText()->empty()) {
+            x -= (item->endText()->width() + spatium * .5);             // 0.5 spatium distance
+        }
+        if (x < spatium) {               // minimum size of hairpin
+            x = spatium;
+        }
+        double y = item->pos2().y();
+        double len = sqrt(x * x + y * y);
+        t.rotateRadians(asin(y / len));
+
+        item->setDrawCircledTip(item->hairpin()->hairpinCircledTip());
+        item->setCircledTipRadius(item->drawCircledTip() ? 0.6 * spatium * .5 : 0.0);
+
+        LineF l1, l2;
+
+        switch (type) {
+        case HairpinType::CRESC_HAIRPIN: {
+            switch (item->spannerSegmentType()) {
+            case SpannerSegmentType::SINGLE:
+            case SpannerSegmentType::BEGIN: {
+                l1.setLine(x1 + item->circledTipRadius() * 2.0, 0.0, len, h1);
+                l2.setLine(x1 + item->circledTipRadius() * 2.0, 0.0, len, -h1);
+                PointF circledTip;
+                circledTip.setX(x1 + item->circledTipRadius());
+                circledTip.setY(0.0);
+                item->setCircledTip(circledTip);
+            } break;
+
+            case SpannerSegmentType::MIDDLE:
+            case SpannerSegmentType::END:
+                item->setDrawCircledTip(false);
+                l1.setLine(x1,  h2, len, h1);
+                l2.setLine(x1, -h2, len, -h1);
+                break;
+            }
+        }
+        break;
+        case HairpinType::DECRESC_HAIRPIN: {
+            switch (item->spannerSegmentType()) {
+            case SpannerSegmentType::SINGLE:
+            case SpannerSegmentType::END: {
+                l1.setLine(x1,  h1, len - item->circledTipRadius() * 2, 0.0);
+                l2.setLine(x1, -h1, len - item->circledTipRadius() * 2, 0.0);
+                PointF circledTip;
+                circledTip.setX(len - item->circledTipRadius());
+                circledTip.setY(0.0);
+                item->setCircledTip(circledTip);
+            } break;
+            case SpannerSegmentType::BEGIN:
+            case SpannerSegmentType::MIDDLE:
+                item->setDrawCircledTip(false);
+                l1.setLine(x1,  h1, len, +h2);
+                l2.setLine(x1, -h1, len, -h2);
+                break;
+            }
+        }
+        break;
+        default:
+            break;
+        }
+
+        // Do Coord rotation
+        l1 = t.map(l1);
+        l2 = t.map(l2);
+        if (item->drawCircledTip()) {
+            item->setCircledTip(t.map(item->circledTip()));
+        }
+
+        item->pointsRef()[0] = l1.p1();
+        item->pointsRef()[1] = l1.p2();
+        item->pointsRef()[2] = l2.p1();
+        item->pointsRef()[3] = l2.p2();
+        item->npointsRef()   = 4;
+
+        RectF r = RectF(l1.p1(), l1.p2()).normalized().united(RectF(l2.p1(), l2.p2()).normalized());
+        if (!item->text()->empty()) {
+            r.unite(item->text()->bbox());
+        }
+        if (!item->endText()->empty()) {
+            r.unite(item->endText()->bbox().translated(x + item->endText()->bbox().width(), 0.0));
+        }
+        double w = item->point(ctx.style().styleS(Sid::hairpinLineWidth));
+        item->setbbox(r.adjusted(-w * .5, -w * .5, w, w));
+    }
+
+    item->setPos(PointF());
     item->setOffset(PointF());
 }
 
