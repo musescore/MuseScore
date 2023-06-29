@@ -36,8 +36,8 @@ namespace mu::engraving {
 Ornament::Ornament(ChordRest* parent)
     : Articulation(parent, ElementType::ORNAMENT)
 {
-    _intervalAbove = OrnamentInterval(IntervalStep::SECOND, IntervalType::AUTO);
-    _intervalBelow = OrnamentInterval(IntervalStep::SECOND, IntervalType::AUTO);
+    _intervalAbove = DEFAULT_ORNAMENT_INTERVAL;
+    _intervalBelow = DEFAULT_ORNAMENT_INTERVAL;
     _showAccidental = OrnamentShowAccidental::DEFAULT;
     _startOnUpperNote = false;
 }
@@ -149,7 +149,7 @@ PropertyValue Ornament::propertyDefault(Pid id) const
     switch (id) {
     case Pid::INTERVAL_ABOVE:
     case Pid::INTERVAL_BELOW:
-        return OrnamentInterval(IntervalStep::SECOND, IntervalType::AUTO);
+        return DEFAULT_ORNAMENT_INTERVAL;
     case Pid::ORNAMENT_SHOW_ACCIDENTAL:
         return OrnamentShowAccidental::DEFAULT;
     case Pid::START_ON_UPPER_NOTE:
