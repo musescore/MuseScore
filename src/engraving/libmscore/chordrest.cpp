@@ -400,6 +400,7 @@ EngravingItem* ChordRest::drop(EditData& data)
             delete ks;
         } else {
             // apply to all staves, at the beginning of the measure
+            data.pos = canvasPos(); // measure->drop() expects to receive canvas pos
             return m->drop(data);
         }
     }
