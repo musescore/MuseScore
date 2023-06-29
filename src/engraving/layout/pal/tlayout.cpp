@@ -3445,14 +3445,16 @@ void TLayout::layout(VibratoSegment*, LayoutContext&)
     UNREACHABLE;
 }
 
-void TLayout::layout(Volta* item, LayoutContext& ctx)
+void TLayout::layout(Volta*, LayoutContext&)
 {
-    layoutLine(item, ctx);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
-void TLayout::layout(VoltaSegment* item, LayoutContext& ctx)
+void TLayout::layout(VoltaSegment*, LayoutContext&)
 {
-    layoutTextLineBaseSegment(item, ctx);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(WhammyBarSegment* item, LayoutContext& ctx)

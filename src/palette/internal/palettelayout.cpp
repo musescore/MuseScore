@@ -141,6 +141,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::VIBRATO:      layout(toVibrato(item), ctx);
         break;
+    case ElementType::VOLTA:        layout(toVolta(item), ctx);
+        break;
     default:
         //! TODO Still need
         LOGD() << item->typeName();
@@ -161,6 +163,8 @@ void PaletteLayout::layoutLineSegment(LineSegment* item, const Context& ctx)
     case ElementType::PEDAL_SEGMENT:     layout(toPedalSegment(item), ctx);
         break;
     case ElementType::VIBRATO_SEGMENT:   layout(toVibratoSegment(item), ctx);
+        break;
+    case ElementType::VOLTA_SEGMENT:     layout(toVoltaSegment(item), ctx);
         break;
     default:
         UNREACHABLE;
@@ -901,10 +905,16 @@ void PaletteLayout::layout(VibratoSegment* item, const Context&)
     item->setOffset(PointF());
 }
 
-//! TODO
-void PaletteLayout::layout(Volta*, const Context&)
+void PaletteLayout::layout(Volta* item, const Context& ctx)
 {
-    // layoutLine(item, ctx);
+    layoutLine(item, ctx);
+}
+
+void PaletteLayout::layout(VoltaSegment* item, const Context& ctx)
+{
+    layoutTextLineBaseSegment(item, ctx);
+    item->setOffset(PointF());
+    item->text()->setOffset(PointF(10.0, 54.0)); //! TODO
 }
 
 void PaletteLayout::layout(Text* item, const Context& ctx)
@@ -915,7 +925,7 @@ void PaletteLayout::layout(Text* item, const Context& ctx)
 void PaletteLayout::layoutTextBase(TextBase* item, const Context& ctx)
 {
     item->setPos(PointF());
-    item->setOffset(0.0, 0.0);
+    item->setOffset(PointF());
 
     if (item->placeBelow()) {
         item->setPosY(0.0);
