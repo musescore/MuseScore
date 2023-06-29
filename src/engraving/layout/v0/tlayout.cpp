@@ -2395,7 +2395,9 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
     Dynamic* sd = nullptr;
     Dynamic* ed = nullptr;
     double dymax = item->hairpin()->placeBelow() ? -10000.0 : 10000.0;
-    if (item->autoplace() && !ctx.isPaletteMode()) {
+    if (item->autoplace() && !ctx.isPaletteMode()
+        && item->explicitParent() // TODO: remove this line (this might happen when Ctrl+Shift+Dragging an item)
+        ) {
         Segment* start = item->hairpin()->startSegment();
         Segment* end = item->hairpin()->endSegment();
         // Try to fit between adjacent dynamics
