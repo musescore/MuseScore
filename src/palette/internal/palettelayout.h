@@ -82,6 +82,8 @@ class SystemText;
 class TempoText;
 class Text;
 class TextBase;
+class TextLine;
+class TextLineSegment;
 class TextLineBaseSegment;
 class TimeSig;
 
@@ -154,6 +156,7 @@ public:
     static void layout(engraving::SystemText* item, const Context& ctx);
 
     static void layout(engraving::TempoText* item, const Context& ctx);
+    static void layout(engraving::TextLine* item, const Context& ctx);
     static void layout(engraving::TimeSig* item, const Context& ctx);
 
     static void layout(engraving::Vibrato* item, const Context& ctx);
@@ -164,6 +167,7 @@ private:
     static void layout(engraving::OttavaSegment* item, const Context& ctx);
     static void layout(engraving::PalmMuteSegment* item, const Context& ctx);
     static void layout(engraving::PedalSegment* item, const Context& ctx);
+    static void layout(engraving::TextLineSegment* item, const Context& ctx);
     static void layout(engraving::VibratoSegment* item, const Context& ctx);
     static void layout(engraving::VoltaSegment* item, const Context& ctx);
 
