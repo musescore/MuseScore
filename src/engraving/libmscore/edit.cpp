@@ -6300,8 +6300,6 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
 
     SegmentType segmentType = SegmentType::ChordRest;
 
-    Tuplet* crTuplet = cr->tuplet();
-
     // For linked staves the length of staffList is always > 1 since the list contains the staff itself too!
     const bool linked = ostaff->staffList().size() > 1;
 
@@ -6370,41 +6368,26 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
                 }
             }
 #endif
-            if (crTuplet && staff != ostaff) {
-                // In case of nested tuplets, get the parent tuplet.
-                Tuplet* parTuplet { nullptr };
-                if (crTuplet->tuplet()) {
-                    // Look for a tuplet, linked to the parent tuplet of crTuplet but
-                    // which is on the same staff as the new ChordRest.
-                    for (auto e : crTuplet->tuplet()->linkList()) {
-                        Tuplet* t = toTuplet(e);
-                        if (t->staff() == newcr->staff()) {
-                            parTuplet = t;
-                            break;
-                        }
-                    }
+            // Climb up the (possibly nested) tuplets from this chordRest
+            // Make sure all tuplets are cloned and correctly nested
+            DurationElement* elementBelow = cr;
+            Tuplet* tupletAbove = elementBelow->tuplet();
+            while (tupletAbove) {
+                DurationElement* linkedElementBelow = (DurationElement*)elementBelow->findLinkedInScore(score);
+                if (!linkedElementBelow) { // shouldn't happen
+                    break;
                 }
-
-                // Look for a tuplet linked to crTuplet but is on the same staff as
-                // the new ChordRest. Create a new tuplet if not found.
-                Tuplet* newTuplet { nullptr };
-                for (auto e : crTuplet->linkList()) {
-                    Tuplet* t = toTuplet(e);
-                    if (t->staff() == newcr->staff()) {
-                        newTuplet = t;
-                        break;
-                    }
+                Tuplet* linkedTuplet = (Tuplet*)tupletAbove->findLinkedInScore(score);
+                if (!linkedTuplet) {
+                    linkedTuplet = toTuplet(tupletAbove->linkedClone());
+                    linkedTuplet->setScore(score);
+                    linkedTuplet->setTrack(newcr->track());
+                    linkedTuplet->setParent(m);
                 }
+                linkedElementBelow->setTuplet(linkedTuplet);
 
-                if (!newTuplet) {
-                    newTuplet = toTuplet(crTuplet->linkedClone());
-                    newTuplet->setTuplet(parTuplet);
-                    newTuplet->setScore(score);
-                    newTuplet->setTrack(newcr->track());
-                    newTuplet->setParent(m);
-                }
-
-                newcr->setTuplet(newTuplet);
+                elementBelow = tupletAbove;
+                tupletAbove = tupletAbove->tuplet();
             }
 
             if (newcr->isRest() && (toRest(newcr)->isGap()) && !(toRest(newcr)->track() % VOICES)) {
