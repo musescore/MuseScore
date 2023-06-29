@@ -50,6 +50,7 @@
 #include "engraving/libmscore/letring.h"
 #include "engraving/libmscore/line.h"
 #include "engraving/libmscore/marker.h"
+#include "engraving/libmscore/ottava.h"
 #include "engraving/libmscore/palmmute.h"
 #include "engraving/libmscore/pedal.h"
 #include "engraving/libmscore/playtechannotation.h"
@@ -116,6 +117,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::MARKER:       layout(toMarker(item), ctx);
         break;
+    case ElementType::OTTAVA:       layout(toOttava(item), ctx);
+        break;
     case ElementType::PALM_MUTE:    layout(toPalmMute(item), ctx);
         break;
     case ElementType::PEDAL:        layout(toPedal(item), ctx);
@@ -145,9 +148,11 @@ void PaletteLayout::layoutItem(EngravingItem* item)
 void PaletteLayout::layoutLineSegment(LineSegment* item, const Context& ctx)
 {
     switch (item->type()) {
-    case ElementType::PALM_MUTE_SEGMENT: layout(toPalmMuteSegment(item), ctx);
-        break;
     case ElementType::LET_RING_SEGMENT:  layout(toLetRingSegment(item), ctx);
+        break;
+    case ElementType::OTTAVA_SEGMENT:    layout(toOttavaSegment(item), ctx);
+        break;
+    case ElementType::PALM_MUTE_SEGMENT: layout(toPalmMuteSegment(item), ctx);
         break;
     case ElementType::PEDAL_SEGMENT:     layout(toPedalSegment(item), ctx);
         break;
@@ -687,6 +692,16 @@ void PaletteLayout::layout(LetRingSegment* item, const Context& ctx)
 void PaletteLayout::layout(Marker* item, const Context& ctx)
 {
     layoutTextBase(item, ctx);
+}
+
+void PaletteLayout::layout(Ottava* item, const Context& ctx)
+{
+    layoutLine(item, ctx);
+}
+
+void PaletteLayout::layout(OttavaSegment* item, const Context& ctx)
+{
+    layoutTextLineBaseSegment(item, ctx);
 }
 
 void PaletteLayout::layout(PalmMute* item, const Context& ctx)
