@@ -88,6 +88,7 @@ class TimeSig;
 class Vibrato;
 class VibratoSegment;
 class Volta;
+class VoltaSegment;
 }
 
 namespace mu::palette {
@@ -164,6 +165,7 @@ private:
     static void layout(engraving::PalmMuteSegment* item, const Context& ctx);
     static void layout(engraving::PedalSegment* item, const Context& ctx);
     static void layout(engraving::VibratoSegment* item, const Context& ctx);
+    static void layout(engraving::VoltaSegment* item, const Context& ctx);
 
     static void layout(engraving::Text* item, const Context& ctx);
     static void layoutTextBase(engraving::TextBase* item, const Context& ctx);
