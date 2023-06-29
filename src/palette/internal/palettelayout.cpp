@@ -56,6 +56,7 @@
 #include "engraving/libmscore/letring.h"
 #include "engraving/libmscore/line.h"
 #include "engraving/libmscore/marker.h"
+#include "engraving/libmscore/note.h"
 #include "engraving/libmscore/ornament.h"
 #include "engraving/libmscore/ottava.h"
 #include "engraving/libmscore/palmmute.h"
@@ -135,6 +136,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::LET_RING:     layout(toLetRing(item), ctx);
         break;
     case ElementType::MARKER:       layout(toMarker(item), ctx);
+        break;
+    case ElementType::NOTEHEAD:     layout(toNoteHead(item), ctx);
         break;
     case ElementType::OTTAVA:       layout(toOttava(item), ctx);
         break;
@@ -944,6 +947,11 @@ void PaletteLayout::layout(LetRing* item, const Context& ctx)
 void PaletteLayout::layout(LetRingSegment* item, const Context& ctx)
 {
     layoutTextLineBaseSegment(item, ctx);
+}
+
+void PaletteLayout::layout(NoteHead* item, const Context& ctx)
+{
+    layout(static_cast<Symbol*>(item), ctx);
 }
 
 void PaletteLayout::layout(Marker* item, const Context& ctx)
