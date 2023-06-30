@@ -36,6 +36,13 @@ enum class ActionIconType;
 enum class SpannerSegmentType;
 }
 
+enum class SlopeConstraint
+{
+    NO_CONSTRAINT,
+    FLAT,
+    SMALL_SLOPE,
+};
+
 namespace mu::engraving::layout::v0 {
 class BeamTremoloLayout
 {
@@ -88,7 +95,7 @@ private:
 
     int getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int staffLines) const;
     int computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const;
-    int isSlopeConstrained(int startNote, int endNote) const;
+    SlopeConstraint getSlopeConstraint(int startNote, int endNote) const;
     void offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, int staffLines,
                                         bool isStartDictator, int stemLengthDictator) const;
     bool isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines, bool isOuter) const;

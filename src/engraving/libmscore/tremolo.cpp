@@ -122,7 +122,7 @@ void Tremolo::createBeamSegments()
     // inset trem from stems for default style
     double slope = (endAnchor.y() - startAnchor.y()) / (endAnchor.x() - startAnchor.x());
     double gapSp = stemGapSp;
-    if (defaultStyle) {
+    if (defaultStyle || _style == TremoloStyle::TRADITIONAL_ALTERNATE) {
         // we can eat into the stemGapSp margin if the anchorpoints are sufficiently close together
         double widthSp = (endAnchor.x() - startAnchor.x()) / spatium() - (stemGapSp * 2);
         if (!RealIsEqualOrMore(widthSp, 0.6)) {
@@ -132,14 +132,24 @@ void Tremolo::createBeamSegments()
     } else {
         gapSp = 0.0;
     }
-    double offset = gapSp * spatium();
-    startAnchor.rx() += offset;
-    endAnchor.rx() -= offset;
-    startAnchor.ry() += offset * slope;
-    endAnchor.ry() -= offset * slope;
     BeamSegment* mainStroke = new BeamSegment(this);
+    PointF xOffset = PointF(gapSp * spatium(), 0);
+    PointF yOffset = PointF(0, gapSp * spatium() * slope);
+    if (_style == TremoloStyle::TRADITIONAL_ALTERNATE) {
+        mainStroke->line = LineF(startAnchor, endAnchor);
+        startAnchor += xOffset;
+        endAnchor -= xOffset;
+        startAnchor += yOffset;
+        endAnchor -= yOffset;
+    } else {
+        startAnchor += xOffset;
+        endAnchor -= xOffset;
+        startAnchor += yOffset;
+        endAnchor -= yOffset;
+        mainStroke->line = LineF(startAnchor, endAnchor);
+    }
     mainStroke->level = 0;
-    mainStroke->line = LineF(startAnchor, endAnchor);
+
     _beamSegments.push_back(mainStroke);
     double bboxTop = _up ? std::min(mainStroke->line.y1(), mainStroke->line.y2()) : std::max(mainStroke->line.y1(), mainStroke->line.y2());
     double halfWidth = style().styleMM(Sid::beamWidth).val() / 2. * (_up ? -1. : 1.);
