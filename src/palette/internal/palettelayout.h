@@ -93,6 +93,7 @@ class PlayTechAnnotation;
 
 class RehearsalMark;
 
+class Slur;
 class Spacer;
 class StaffText;
 class Symbol;
@@ -197,6 +198,7 @@ public:
 
     static void layout(engraving::RehearsalMark* item, const Context& ctx);
 
+    static void layout(engraving::Slur* item, const Context& ctx);
     static void layout(engraving::Spacer* item, const Context&);
     static void layout(engraving::StaffText* item, const Context& ctx);
     static void layout(engraving::Symbol* item, const Context& ctx);
