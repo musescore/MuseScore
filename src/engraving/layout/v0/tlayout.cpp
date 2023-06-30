@@ -4222,10 +4222,10 @@ void TLayout::layout(StemSlash* item, LayoutContext& ctx)
 
     double up = c->up() ? -1 : 1;
     double stemTipY = c->up() ? stem->bbox().translated(stem->pos()).top() : stem->bbox().translated(stem->pos()).bottom();
-    double leftHang = ctx.conf().noteHeadWidth() * ctx.conf().styleD(Sid::graceNoteMag) / 2;
+    double leftHang = ctx.conf().noteHeadWidth() * c->mag() / 2;
     double angle = ctx.conf().styleD(Sid::stemSlashAngle) * M_PI / 180; // converting to radians
     bool straight = ctx.conf().styleB(Sid::useStraightNoteFlags);
-    double graceNoteMag = ctx.conf().styleD(Sid::graceNoteMag);
+    double graceNoteMag = c->mag();
 
     double startX = stem->bbox().translated(stem->pos()).right() - leftHang;
 
