@@ -59,6 +59,7 @@
 #include "engraving/libmscore/letring.h"
 #include "engraving/libmscore/line.h"
 #include "engraving/libmscore/marker.h"
+#include "engraving/libmscore/measurenumber.h"
 #include "engraving/libmscore/measurerepeat.h"
 #include "engraving/libmscore/note.h"
 #include "engraving/libmscore/ornament.h"
@@ -148,11 +149,15 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::MARKER:       layout(toMarker(item), ctx);
         break;
+    case ElementType::MEASURE_NUMBER: layout(toMeasureNumber(item), ctx);
+        break;
     case ElementType::MEASURE_REPEAT: layout(toMeasureRepeat(item), ctx);
         break;
     case ElementType::NOTEHEAD:     layout(toNoteHead(item), ctx);
         break;
     case ElementType::OTTAVA:       layout(toOttava(item), ctx);
+        break;
+    case ElementType::ORNAMENT:     layout(toOrnament(item), ctx);
         break;
     case ElementType::PALM_MUTE:    layout(toPalmMute(item), ctx);
         break;
@@ -1074,6 +1079,14 @@ void PaletteLayout::layout(NoteHead* item, const Context& ctx)
 void PaletteLayout::layout(Marker* item, const Context& ctx)
 {
     layoutTextBase(item, ctx);
+}
+
+void PaletteLayout::layout(MeasureNumber* item, const Context& ctx)
+{
+    item->setPos(PointF());
+    item->setOffset(PointF());
+
+    layout1TextBase(item, ctx);
 }
 
 void PaletteLayout::layout(MeasureRepeat* item, const Context& ctx)

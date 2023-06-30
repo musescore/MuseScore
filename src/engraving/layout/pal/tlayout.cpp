@@ -1304,93 +1304,18 @@ void TLayout::layoutMeasureBase(MeasureBase* item, LayoutContext& ctx)
     }
 }
 
-void TLayout::layout(MeasureNumber* item, LayoutContext& ctx)
+void TLayout::layout(MeasureNumber*, LayoutContext&)
 {
-    layoutMeasureNumberBase(item, ctx);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext& ctx)
 {
     item->setPos(PointF());
-    if (!item->explicitParent()) {
-        item->setOffset(0.0, 0.0);
-    }
+    item->setOffset(PointF());
 
-    // TextBase::layout1() needs to be called even if there's no measure attached to it.
-    // This happens for example in the palettes.
     layout1TextBase(item, ctx);
-    // this could be if (!measure()) but it is the same as current and slower
-    // See implementation of MeasureNumberBase::measure().
-    if (!item->explicitParent()) {
-        return;
-    }
-
-    if (item->placeBelow()) {
-        double yoff = item->bbox().height();
-
-        // If there is only one line, the barline spans outside the staff lines, so the default position is not correct.
-        if (item->staff()->constStaffType(item->measure()->tick())->lines() == 1) {
-            yoff += 2.0 * item->spatium();
-        } else {
-            yoff += item->staff()->height();
-        }
-
-        item->setPosY(yoff);
-    } else {
-        double yoff = 0.0;
-
-        // If there is only one line, the barline spans outside the staff lines, so the default position is not correct.
-        if (item->staff()->constStaffType(item->measure()->tick())->lines() == 1) {
-            yoff -= 2.0 * item->spatium();
-        }
-
-        item->setPosY(yoff);
-    }
-
-    if (item->hPlacement() == PlacementH::CENTER) {
-        // measure numbers should be centered over where there can be notes.
-        // This means that header and trailing segments should be ignored,
-        // which includes all timesigs, clefs, keysigs, etc.
-        // This is how it should be centered:
-        // |bb 4/4 notes-chords #| other measure |
-        // |      ------18------ | other measure |
-
-        //    x1 - left measure position of free space
-        //    x2 - right measure position of free space
-
-        const Measure* mea = item->measure();
-
-        // find first chordrest
-        Segment* chordRest = mea->first(SegmentType::ChordRest);
-
-        Segment* s1 = chordRest->prevActive();
-        // unfortunately, using !s1->header() does not work
-        while (s1 && (s1->isChordRestType()
-                      || s1->isBreathType()
-                      || s1->isClefType()
-                      || s1->isBarLineType()
-                      || !s1->element(item->staffIdx() * VOICES))) {
-            s1 = s1->prevActive();
-        }
-
-        Segment* s2 = chordRest->next();
-        // unfortunately, using !s1->trailer() does not work
-        while (s2 && (s2->isChordRestType()
-                      || s2->isBreathType()
-                      || s2->isClefType()
-                      || s2->isBarLineType()
-                      || !s2->element(item->staffIdx() * VOICES))) {
-            s2 = s2->nextActive();
-        }
-
-        // if s1/s2 does not exist, it means there is no header/trailer segment. Align with start/end of measure.
-        double x1 = s1 ? s1->x() + s1->minRight() : 0;
-        double x2 = s2 ? s2->x() - s2->minLeft() : mea->width();
-
-        item->setPosX((x1 + x2) * 0.5);
-    } else if (item->hPlacement() == PlacementH::RIGHT) {
-        item->setPosX(item->measure()->width());
-    }
 }
 
 void TLayout::layout(MeasureRepeat*, LayoutContext&)
@@ -1533,29 +1458,10 @@ void TLayout::layout(NoteDot* item, LayoutContext&)
     item->setbbox(item->symBbox(SymId::augmentationDot));
 }
 
-void TLayout::layout(Ornament* item, LayoutContext& ctx)
+void TLayout::layout(Ornament*, LayoutContext&)
 {
-    double _spatium = item->spatium();
-    double vertMargin = 0.35 * _spatium;
-    static constexpr double ornamentAccidentalMag = 0.6; // TODO: style?
-
-    if (!item->showCueNote()) {
-        for (size_t i = 0; i < item->accidentalsAboveAndBelow().size(); ++i) {
-            bool above = (i == 0);
-            Accidental* accidental = item->accidentalsAboveAndBelow()[i];
-            if (!accidental) {
-                continue;
-            }
-            accidental->computeMag();
-            accidental->setMag(accidental->mag() * ornamentAccidentalMag);
-            layout(accidental, ctx);
-            Shape accidentalShape = accidental->shape();
-            double minVertDist = above ? accidentalShape.minVerticalDistance(item->bbox()) : Shape(item->bbox()).minVerticalDistance(
-                accidentalShape);
-            accidental->setPos(-0.5 * accidental->width(), above ? (-minVertDist - vertMargin) : (minVertDist + vertMargin));
-        }
-        return;
-    }
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(Ottava*, LayoutContext&)
