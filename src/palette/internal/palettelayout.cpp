@@ -68,6 +68,7 @@
 #include "engraving/libmscore/pedal.h"
 #include "engraving/libmscore/playtechannotation.h"
 #include "engraving/libmscore/rehearsalmark.h"
+#include "engraving/libmscore/slur.h"
 #include "engraving/libmscore/stafftext.h"
 #include "engraving/libmscore/symbol.h"
 #include "engraving/libmscore/systemtext.h"
@@ -172,6 +173,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::PLAYTECH_ANNOTATION: layout(toPlayTechAnnotation(item), ctx);
         break;
     case ElementType::REHEARSAL_MARK: layout(toRehearsalMark(item), ctx);
+        break;
+    case ElementType::SLUR:         layout(toSlur(item), ctx);
         break;
     case ElementType::SPACER:       layout(toSpacer(item), ctx);
         break;
@@ -1206,6 +1209,31 @@ void PaletteLayout::layout(PlayTechAnnotation* item, const Context& ctx)
 void PaletteLayout::layout(RehearsalMark* item, const Context& ctx)
 {
     layoutTextBase(item, ctx);
+}
+
+void PaletteLayout::layout(Slur* item, const Context& ctx)
+{
+    double spatium = item->spatium();
+    SlurSegment* s = nullptr;
+    if (item->spannerSegments().empty()) {
+        s = new SlurSegment(ctx.dummyParent()->system());
+        s->setTrack(item->track());
+        item->add(s);
+    } else {
+        s = item->frontSegment();
+    }
+
+    s->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+
+    s->setPos(PointF());
+    s->ups(Grip::START).p = PointF(0, 0);
+    s->ups(Grip::END).p   = PointF(spatium * 6, 0);
+    s->setExtraHeight(0.0);
+
+    s->computeBezier();
+    s->setbbox(s->path().boundingRect());
+
+    item->setbbox(s->bbox());
 }
 
 void PaletteLayout::layout(Spacer* item, const Context&)

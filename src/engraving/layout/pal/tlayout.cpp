@@ -1703,10 +1703,10 @@ void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
     item->setbbox(lineSegm->bbox());
 }
 
-void TLayout::layout(Slur* item, LayoutContext& ctx)
+void TLayout::layout(Slur*, LayoutContext&)
 {
-    v0::LayoutContext ctxv0(ctx.score());
-    v0::SlurTieLayout::layout(item, ctxv0);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(Spacer*, LayoutContext&)
