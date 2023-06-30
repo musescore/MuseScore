@@ -138,7 +138,7 @@ public:
         engraving::compat::DummyElement* dummyParent() const;
 
         //! NOTE Temporarily, do not use
-        engraving::Score* donUseScore() const { return m_score; }
+        engraving::Score* dontUseScore() const { return m_score; }
 
     private:
         engraving::Score* m_score = nullptr;

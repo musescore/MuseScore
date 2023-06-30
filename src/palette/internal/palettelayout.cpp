@@ -84,9 +84,9 @@
 
 #include "engraving/libmscore/utils.h"
 
+#include "engraving/layout/v0/tlayout.h"
 #include "engraving/layout/v0/tremololayout.h"
 #include "engraving/layout/v0/arpeggiolayout.h"
-#include "engraving/layout/pal/tlayout.h"
 
 #include "log.h"
 
@@ -96,7 +96,6 @@ using namespace mu::palette;
 
 void PaletteLayout::layoutItem(EngravingItem* item)
 {
-    layout::pal::LayoutContext ctxpal(item->score());
     Context ctx(item->score());
 
     switch (item->type()) {
@@ -201,9 +200,11 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::VOLTA:        layout(toVolta(item), ctx);
         break;
     default:
-        //! TODO Still need
-        LOGD() << item->typeName();
-        layout::pal::TLayout::layoutItem(item, ctxpal);
+        IF_ASSERT_FAILED(false) {
+            LOGE() << "Not handled: " << item->typeName();
+            layout::v0::LayoutContext ctxv0(item->score());
+            layout::v0::TLayout::layoutItem(item, ctxv0);
+        }
         break;
     }
 }
@@ -351,7 +352,7 @@ void PaletteLayout::layout(Ambitus* item, const Context& ctx)
 
 void PaletteLayout::layout(Arpeggio* item, const Context& ctx)
 {
-    engraving::layout::v0::LayoutContext ctxv0(ctx.donUseScore());
+    engraving::layout::v0::LayoutContext ctxv0(ctx.dontUseScore());
     engraving::layout::v0::ArpeggioLayout::layout(item, ctxv0);
 }
 
@@ -1386,7 +1387,7 @@ void PaletteLayout::layout(TimeSig* item, const Context& ctx)
 void PaletteLayout::layout(Tremolo* item, const Context& ctx)
 {
     //! TODO
-    engraving::layout::v0::LayoutContext ctxv0(ctx.donUseScore());
+    engraving::layout::v0::LayoutContext ctxv0(ctx.dontUseScore());
     engraving::layout::v0::TremoloLayout::layout(item, ctxv0);
 }
 

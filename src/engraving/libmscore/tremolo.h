@@ -134,7 +134,7 @@ public:
     // only need grips for two-note trems
     bool needStartEditingAfterSelecting() const override;
     int gripsCount() const override;
-    Grip initialEditModeGrip() const;
+    Grip initialEditModeGrip() const override;
     Grip defaultGrip() const override;
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
     bool isMovable() const override { return true; }
