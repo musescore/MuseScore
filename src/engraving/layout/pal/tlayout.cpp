@@ -1208,9 +1208,10 @@ void TLayout::layout(KeySig*, LayoutContext&)
     UNREACHABLE;
 }
 
-void TLayout::layout(LayoutBreak* item, LayoutContext&)
+void TLayout::layout(LayoutBreak*, LayoutContext&)
 {
-    UNUSED(item);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(LedgerLine* item, LayoutContext& ctx)

@@ -145,6 +145,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::KEYSIG:       layout(toKeySig(item), ctx);
         break;
+    case ElementType::LAYOUT_BREAK: layout(toLayoutBreak(item), ctx);
+        break;
     case ElementType::LET_RING:     layout(toLetRing(item), ctx);
         break;
     case ElementType::MARKER:       layout(toMarker(item), ctx);
@@ -1059,6 +1061,11 @@ void PaletteLayout::layout(KeySig* item, const Context& ctx)
         double y = ks.line * step;
         item->addbbox(item->symBbox(ks.sym).translated(x, y));
     }
+}
+
+void PaletteLayout::layout(LayoutBreak* item, const Context&)
+{
+    UNUSED(item);
 }
 
 void PaletteLayout::layout(LetRing* item, const Context& ctx)

@@ -68,6 +68,7 @@ class Jump;
 
 class KeySig;
 
+class LayoutBreak;
 class LetRing;
 class LetRingSegment;
 class SLine;
@@ -171,6 +172,7 @@ public:
 
     static void layout(engraving::KeySig* item, const Context& ctx);
 
+    static void layout(engraving::LayoutBreak* item, const Context& ctx);
     static void layout(engraving::LetRing* item, const Context& ctx);
 
     static void layout(engraving::NoteHead* item, const Context& ctx);
