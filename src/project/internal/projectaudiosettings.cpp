@@ -136,11 +136,11 @@ void ProjectAudioSettings::setTrackOutputParams(const InstrumentTrackId& partId,
     }
 }
 
-IProjectAudioSettings::SoloMuteState ProjectAudioSettings::soloMuteState(const InstrumentTrackId& partId) const
+IProjectAudioSettings::SoloMuteState ProjectAudioSettings::trackSoloMuteState(const InstrumentTrackId& partId) const
 {
-    auto search = m_soloMuteStatesMap.find(partId);
+    auto search = m_trackSoloMuteStatesMap.find(partId);
 
-    if (search == m_soloMuteStatesMap.end()) {
+    if (search == m_trackSoloMuteStatesMap.end()) {
         return {};
     }
 
@@ -148,20 +148,20 @@ IProjectAudioSettings::SoloMuteState ProjectAudioSettings::soloMuteState(const I
 }
 
 mu::async::Channel<mu::engraving::InstrumentTrackId,
-                   IProjectAudioSettings::SoloMuteState> ProjectAudioSettings::soloMuteStateChanged() const
+                   IProjectAudioSettings::SoloMuteState> ProjectAudioSettings::trackSoloMuteStateChanged() const
 {
-    return m_soloMuteStateChanged;
+    return m_trackSoloMuteStateChanged;
 }
 
-void ProjectAudioSettings::setSoloMuteState(const InstrumentTrackId& partId, const SoloMuteState& state)
+void ProjectAudioSettings::setTrackSoloMuteState(const InstrumentTrackId& partId, const SoloMuteState& state)
 {
-    auto it = m_soloMuteStatesMap.find(partId);
-    if (it != m_soloMuteStatesMap.end() && it->second == state) {
+    auto it = m_trackSoloMuteStatesMap.find(partId);
+    if (it != m_trackSoloMuteStatesMap.end() && it->second == state) {
         return;
     }
 
-    m_soloMuteStatesMap.insert_or_assign(partId, state);
-    m_soloMuteStateChanged.send(partId, state);
+    m_trackSoloMuteStatesMap.insert_or_assign(partId, state);
+    m_trackSoloMuteStateChanged.send(partId, state);
     setNeedSave(true);
 }
 
@@ -179,9 +179,9 @@ void ProjectAudioSettings::removeTrackParams(const InstrumentTrackId& partId)
         setNeedSave(true);
     }
 
-    auto soloMuteSearch = m_soloMuteStatesMap.find(partId);
-    if (soloMuteSearch != m_soloMuteStatesMap.end()) {
-        m_soloMuteStatesMap.erase(soloMuteSearch);
+    auto soloMuteSearch = m_trackSoloMuteStatesMap.find(partId);
+    if (soloMuteSearch != m_trackSoloMuteStatesMap.end()) {
+        m_trackSoloMuteStatesMap.erase(soloMuteSearch);
         setNeedSave(true);
     }
 }
@@ -246,7 +246,7 @@ mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
 
         m_trackInputParamsMap.emplace(id, std::move(inParams));
         m_trackOutputParamsMap.emplace(id, std::move(outParams));
-        m_soloMuteStatesMap.emplace(id, std::move(soloMuteState));
+        m_trackSoloMuteStatesMap.emplace(id, std::move(soloMuteState));
     }
 
     m_activeSoundProfileName = rootObj.value("activeSoundProfile").toString();
@@ -575,8 +575,8 @@ QJsonObject ProjectAudioSettings::buildTrackObject(const InstrumentTrackId& id) 
         result.insert("out", outputParamsToJson(outputParamsSearch->second));
     }
 
-    auto soloMuteSearch = m_soloMuteStatesMap.find(id);
-    if (soloMuteSearch != m_soloMuteStatesMap.end()) {
+    auto soloMuteSearch = m_trackSoloMuteStatesMap.find(id);
+    if (soloMuteSearch != m_trackSoloMuteStatesMap.end()) {
         result.insert("soloMuteState", soloMuteStateToJson(soloMuteSearch->second));
     }
 
