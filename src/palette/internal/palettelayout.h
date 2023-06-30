@@ -73,6 +73,7 @@ class SLine;
 class LineSegment;
 
 class Marker;
+class MeasureRepeat;
 
 class NoteHead;
 
@@ -171,6 +172,7 @@ public:
     static void layout(engraving::NoteHead* item, const Context& ctx);
 
     static void layout(engraving::Marker* item, const Context& ctx);
+    static void layout(engraving::MeasureRepeat* item, const Context& ctx);
 
     static void layout(engraving::Ornament* item, const Context& ctx);
     static void layout(engraving::Ottava* item, const Context& ctx);
