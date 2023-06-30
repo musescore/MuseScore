@@ -51,9 +51,9 @@ public:
     audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& partId) const override;
     void setTrackOutputParams(const engraving::InstrumentTrackId& partId, const audio::AudioOutputParams& params) override;
 
-    SoloMuteState soloMuteState(const engraving::InstrumentTrackId& trackId) const override;
-    void setSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& soloMuteState) override;
-    async::Channel<engraving::InstrumentTrackId, SoloMuteState> soloMuteStateChanged() const override;
+    SoloMuteState trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const override;
+    void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& state) override;
+    async::Channel<engraving::InstrumentTrackId, SoloMuteState> trackSoloMuteStateChanged() const override;
 
     void removeTrackParams(const engraving::InstrumentTrackId& partId) override;
 
@@ -111,9 +111,8 @@ private:
 
     std::unordered_map<engraving::InstrumentTrackId, audio::AudioInputParams> m_trackInputParamsMap;
     std::unordered_map<engraving::InstrumentTrackId, audio::AudioOutputParams> m_trackOutputParamsMap;
-    std::unordered_map<engraving::InstrumentTrackId, SoloMuteState> m_soloMuteStatesMap;
-
-    async::Channel<engraving::InstrumentTrackId, SoloMuteState> m_soloMuteStateChanged;
+    std::unordered_map<engraving::InstrumentTrackId, SoloMuteState> m_trackSoloMuteStatesMap;
+    async::Channel<engraving::InstrumentTrackId, SoloMuteState> m_trackSoloMuteStateChanged;
 
     bool m_needSave = false;
     async::Notification m_needSaveNotification;

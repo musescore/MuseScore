@@ -239,7 +239,7 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
         if (!settingsCompat.audioSettings.empty()) {
             for (const auto& audioCompat : settingsCompat.audioSettings) {
                 IProjectAudioSettings::SoloMuteState state = { audioCompat.second.mute, audioCompat.second.solo };
-                m_projectAudioSettings->setSoloMuteState(audioCompat.second.instrumentId, state);
+                m_projectAudioSettings->setTrackSoloMuteState(audioCompat.second.instrumentId, state);
             }
         }
     }

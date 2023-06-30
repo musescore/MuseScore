@@ -270,7 +270,7 @@ void MixerPanelModel::clear()
 
 void MixerPanelModel::setupConnections()
 {
-    audioSettings()->soloMuteStateChanged().onReceive(
+    audioSettings()->trackSoloMuteStateChanged().onReceive(
         this, [this](const engraving::InstrumentTrackId& changedInstrumentTrackId,
                      project::IProjectAudioSettings::SoloMuteState newSoloMuteState) {
         const IPlaybackController::InstrumentTrackIdMap& instrumentTrackIdMap = controller()->instrumentTrackIdMap();
@@ -406,7 +406,7 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const audio::Track
     MixerChannelItem* item = new MixerChannelItem(this, type, false /*outputOnly*/, trackId);
     item->setInstrumentTrackId(instrumentTrackId);
     item->setPanelSection(m_navigationSection);
-    item->loadSoloMuteState(audioSettings()->soloMuteState(instrumentTrackId));
+    item->loadSoloMuteState(audioSettings()->trackSoloMuteState(instrumentTrackId));
 
     playback()->tracks()->inputParams(m_currentTrackSequenceId, trackId)
     .onResolve(this, [this, trackId](AudioInputParams inParams) {
@@ -469,7 +469,7 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const audio::Track
 
     connect(item, &MixerChannelItem::soloMuteStateChanged, this,
             [this, instrumentTrackId](const project::IProjectAudioSettings::SoloMuteState& state) {
-        audioSettings()->setSoloMuteState(instrumentTrackId, state);
+        audioSettings()->setTrackSoloMuteState(instrumentTrackId, state);
     });
 
     return item;
