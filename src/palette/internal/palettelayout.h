@@ -33,6 +33,7 @@ class Score;
 class Accidental;
 class ActionIcon;
 class Ambitus;
+class Arpeggio;
 class Articulation;
 
 class BagpipeEmbellishment;
@@ -145,6 +146,7 @@ public:
     static void layout(engraving::Accidental* item, const Context& ctx);
     static void layout(engraving::ActionIcon* item, const Context& ctx);
     static void layout(engraving::Ambitus* item, const Context& ctx);
+    static void layout(engraving::Arpeggio* item, const Context& ctx);
     static void layout(engraving::Articulation* item, const Context& ctx);
 
     static void layout(engraving::BagpipeEmbellishment* item, const Context& ctx);

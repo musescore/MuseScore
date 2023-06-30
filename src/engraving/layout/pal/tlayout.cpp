@@ -224,10 +224,10 @@ void TLayout::layout(Ambitus*, LayoutContext&)
     UNREACHABLE;
 }
 
-void TLayout::layout(Arpeggio* item, LayoutContext& ctx)
+void TLayout::layout(Arpeggio*, LayoutContext&)
 {
-    v0::LayoutContext ctxv0(ctx.score());
-    v0::ArpeggioLayout::layout(item, ctxv0);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(Articulation*, LayoutContext&)
