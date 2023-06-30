@@ -104,6 +104,7 @@ class TextLine;
 class TextLineSegment;
 class TextLineBaseSegment;
 class TimeSig;
+class Tremolo;
 class TremoloBar;
 class Trill;
 class TrillSegment;
@@ -133,6 +134,9 @@ public:
         const engraving::MStyle& style() const;
         std::shared_ptr<engraving::IEngravingFont> engravingFont() const;
         engraving::compat::DummyElement* dummyParent() const;
+
+        //! NOTE Temporarily, do not use
+        engraving::Score* donUseScore() const { return m_score; }
 
     private:
         engraving::Score* m_score = nullptr;
@@ -199,6 +203,7 @@ public:
     static void layout(engraving::TempoText* item, const Context& ctx);
     static void layout(engraving::TextLine* item, const Context& ctx);
     static void layout(engraving::TimeSig* item, const Context& ctx);
+    static void layout(engraving::Tremolo* item, const Context& ctx);
     static void layout(engraving::TremoloBar* item, const Context& ctx);
     static void layout(engraving::Trill* item, const Context& ctx);
 

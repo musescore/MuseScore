@@ -83,6 +83,7 @@
 
 #include "engraving/libmscore/utils.h"
 
+#include "engraving/layout/v0/tremololayout.h"
 #include "engraving/layout/pal/tlayout.h"
 
 #include "log.h"
@@ -182,6 +183,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::TEXTLINE:     layout(toTextLine(item), ctx);
         break;
     case ElementType::TIMESIG:      layout(toTimeSig(item), ctx);
+        break;
+    case ElementType::TREMOLO:      layout(toTremolo(item), ctx);
         break;
     case ElementType::TREMOLOBAR:   layout(toTremoloBar(item), ctx);
         break;
@@ -1341,6 +1344,13 @@ void PaletteLayout::layout(TimeSig* item, const Context& ctx)
     }
 
     item->setDrawArgs(drawArgs);
+}
+
+void PaletteLayout::layout(Tremolo* item, const Context& ctx)
+{
+    //! TODO
+    engraving::layout::v0::LayoutContext ctxv0(ctx.donUseScore());
+    engraving::layout::v0::TremoloLayout::layout(item, ctxv0);
 }
 
 void PaletteLayout::layout(TremoloBar* item, const Context&)
