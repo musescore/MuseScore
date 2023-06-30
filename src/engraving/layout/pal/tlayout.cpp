@@ -1709,9 +1709,10 @@ void TLayout::layout(Slur* item, LayoutContext& ctx)
     v0::SlurTieLayout::layout(item, ctxv0);
 }
 
-void TLayout::layout(Spacer* item, LayoutContext&)
+void TLayout::layout(Spacer*, LayoutContext&)
 {
-    UNUSED(item);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(Spanner* item, LayoutContext& ctx)

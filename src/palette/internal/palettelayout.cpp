@@ -169,6 +169,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::REHEARSAL_MARK: layout(toRehearsalMark(item), ctx);
         break;
+    case ElementType::SPACER:       layout(toSpacer(item), ctx);
+        break;
     case ElementType::STAFF_TEXT:   layout(toStaffText(item), ctx);
         break;
     case ElementType::SYMBOL:       layout(toSymbol(item), ctx);
@@ -1192,6 +1194,11 @@ void PaletteLayout::layout(PlayTechAnnotation* item, const Context& ctx)
 void PaletteLayout::layout(RehearsalMark* item, const Context& ctx)
 {
     layoutTextBase(item, ctx);
+}
+
+void PaletteLayout::layout(Spacer* item, const Context&)
+{
+    UNUSED(item);
 }
 
 void PaletteLayout::layout(StaffText* item, const Context& ctx)
