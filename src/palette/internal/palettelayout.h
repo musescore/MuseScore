@@ -101,6 +101,7 @@ class TextLine;
 class TextLineSegment;
 class TextLineBaseSegment;
 class TimeSig;
+class TremoloBar;
 class Trill;
 class TrillSegment;
 
@@ -192,6 +193,7 @@ public:
     static void layout(engraving::TempoText* item, const Context& ctx);
     static void layout(engraving::TextLine* item, const Context& ctx);
     static void layout(engraving::TimeSig* item, const Context& ctx);
+    static void layout(engraving::TremoloBar* item, const Context& ctx);
     static void layout(engraving::Trill* item, const Context& ctx);
 
     static void layout(engraving::Vibrato* item, const Context& ctx);

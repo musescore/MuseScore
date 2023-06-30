@@ -75,6 +75,7 @@
 #include "engraving/libmscore/textline.h"
 #include "engraving/libmscore/textlinebase.h"
 #include "engraving/libmscore/timesig.h"
+#include "engraving/libmscore/tremolobar.h"
 #include "engraving/libmscore/trill.h"
 #include "engraving/libmscore/vibrato.h"
 #include "engraving/libmscore/volta.h"
@@ -172,6 +173,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::TEXTLINE:     layout(toTextLine(item), ctx);
         break;
     case ElementType::TIMESIG:      layout(toTimeSig(item), ctx);
+        break;
+    case ElementType::TREMOLOBAR:   layout(toTremoloBar(item), ctx);
         break;
     case ElementType::TRILL:        layout(toTrill(item), ctx);
         break;
@@ -1311,6 +1314,25 @@ void PaletteLayout::layout(TimeSig* item, const Context& ctx)
     }
 
     item->setDrawArgs(drawArgs);
+}
+
+void PaletteLayout::layout(TremoloBar* item, const Context&)
+{
+    double spatium = item->spatium();
+
+    item->setPos(PointF());
+
+    double timeFactor  = item->userMag() / 1.0;
+    double pitchFactor = -spatium * 0.02;
+
+    PolygonF polygon;
+    for (const PitchValue& v : item->points()) {
+        polygon << PointF(v.time * timeFactor, v.pitch * pitchFactor);
+    }
+    item->setPolygon(polygon);
+
+    double w = item->lineWidth().val();
+    item->setbbox(item->polygon().boundingRect().adjusted(-w, -w, w, w));
 }
 
 void PaletteLayout::layout(Trill* item, const Context& ctx)

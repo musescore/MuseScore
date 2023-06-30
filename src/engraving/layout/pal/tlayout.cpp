@@ -2568,34 +2568,10 @@ void TLayout::layout(Tremolo* item, LayoutContext& ctx)
     v0::TremoloLayout::layout(item, ctxv0);
 }
 
-void TLayout::layout(TremoloBar* item, LayoutContext&)
+void TLayout::layout(TremoloBar*, LayoutContext&)
 {
-    double _spatium = item->spatium();
-    if (item->explicitParent()) {
-        item->setPos(0.0, -_spatium * 3.0);
-    } else {
-        item->setPos(PointF());
-    }
-
-    /* we place the tremolo bars starting slightly before the
-     *  notehead, and end it slightly after, drawing above the
-     *  note. The values specified in Guitar Pro are very large, too
-     *  large for the scale used in Musescore. We used the
-     *  timeFactor and pitchFactor below to reduce these values down
-     *  consistently to values that make sense to draw with the
-     *  Musescore scale. */
-
-    double timeFactor  = item->userMag() / 1.0;
-    double pitchFactor = -_spatium * .02;
-
-    PolygonF polygon;
-    for (const PitchValue& v : item->points()) {
-        polygon << PointF(v.time * timeFactor, v.pitch * pitchFactor);
-    }
-    item->setPolygon(polygon);
-
-    double w = item->lineWidth().val();
-    item->setbbox(item->polygon().boundingRect().adjusted(-w, -w, w, w));
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(Trill*, LayoutContext&)
