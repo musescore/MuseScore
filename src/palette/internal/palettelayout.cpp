@@ -45,6 +45,7 @@
 #include "engraving/libmscore/clef.h"
 #include "engraving/libmscore/dynamic.h"
 #include "engraving/libmscore/expression.h"
+#include "engraving/libmscore/fermata.h"
 #include "engraving/libmscore/fingering.h"
 #include "engraving/libmscore/fret.h"
 #include "engraving/libmscore/glissando.h"
@@ -117,6 +118,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::DYNAMIC:      layout(toDynamic(item), ctx);
         break;
     case ElementType::EXPRESSION:   layout(toExpression(item), ctx);
+        break;
+    case ElementType::FERMATA:      layout(toFermata(item), ctx);
         break;
     case ElementType::FINGERING:    layout(toFingering(item), ctx);
         break;
@@ -602,6 +605,14 @@ void PaletteLayout::layout(Clef* item, const Context& ctx)
 void PaletteLayout::layout(Expression* item, const Context& ctx)
 {
     layoutTextBase(item, ctx);
+}
+
+void PaletteLayout::layout(Fermata* item, const Context&)
+{
+    item->setPos(PointF());
+    item->setOffset(PointF());
+    RectF b(item->symBbox(item->symId()));
+    item->setbbox(b.translated(-0.5 * b.width(), 0.0));
 }
 
 void PaletteLayout::layout(Fingering* item, const Context& ctx)

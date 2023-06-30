@@ -48,6 +48,7 @@ class Dynamic;
 
 class Expression;
 
+class Fermata;
 class Fingering;
 class FretDiagram;
 
@@ -149,6 +150,7 @@ public:
 
     static void layout(engraving::Expression* item, const Context& ctx);
 
+    static void layout(engraving::Fermata* item, const Context& ctx);
     static void layout(engraving::Fingering* item, const Context& ctx);
     static void layout(engraving::FretDiagram* item, const Context& ctx);
 

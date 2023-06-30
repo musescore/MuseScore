@@ -680,54 +680,10 @@ void TLayout::layout(Expression*, LayoutContext&)
     UNREACHABLE;
 }
 
-void TLayout::layout(Fermata* item, LayoutContext& ctx)
+void TLayout::layout(Fermata*, LayoutContext&)
 {
-    const StaffType* stType = item->staffType();
-
-    item->setSkipDraw(false);
-    if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::fermataShowTabCommon, Sid::fermataShowTabSimple)) {
-        item->setSkipDraw(true);
-        return;
-    }
-
-    Segment* s = item->segment();
-    item->setPos(PointF());
-    if (!s) {            // for use in palette
-        item->setOffset(0.0, 0.0);
-        RectF b(item->symBbox(item->symId()));
-        item->setbbox(b.translated(-0.5 * b.width(), 0.0));
-        return;
-    }
-
-    if (item->isStyled(Pid::OFFSET)) {
-        item->setOffset(item->propertyDefault(Pid::OFFSET).value<PointF>());
-    }
-    EngravingItem* e = s->element(item->track());
-    if (e) {
-        if (e->isChord()) {
-            Chord* chord = toChord(e);
-            Note* note = chord->up() ? chord->downNote() : chord->upNote();
-            double offset = chord->xpos() + note->xpos() + note->headWidth() / 2;
-            item->movePosX(offset);
-        } else {
-            item->movePosX(e->x() - e->shape().left() + e->width() * item->staff()->staffMag(Fraction(0, 1)) * .5);
-        }
-    }
-
-    String name = String::fromAscii(SymNames::nameForSymId(item->symId()).ascii());
-    if (item->placeAbove()) {
-        if (name.endsWith(u"Below")) {
-            item->setSymId(SymNames::symIdByName(name.left(name.size() - 5) + u"Above"));
-        }
-    } else {
-        item->movePosY(item->staff()->height());
-        if (name.endsWith(u"Above")) {
-            item->setSymId(SymNames::symIdByName(name.left(name.size() - 5) + u"Below"));
-        }
-    }
-    RectF b(item->symBbox(item->symId()));
-    item->setbbox(b.translated(-0.5 * b.width(), 0.0));
-    item->autoplaceSegmentElement();
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
