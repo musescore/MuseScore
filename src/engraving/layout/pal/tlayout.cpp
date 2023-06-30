@@ -2470,10 +2470,10 @@ void TLayout::layout(TimeSig*, LayoutContext&)
     UNREACHABLE;
 }
 
-void TLayout::layout(Tremolo* item, LayoutContext& ctx)
+void TLayout::layout(Tremolo*, LayoutContext&)
 {
-    v0::LayoutContext ctxv0(ctx.score());
-    v0::TremoloLayout::layout(item, ctxv0);
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(TremoloBar*, LayoutContext&)
