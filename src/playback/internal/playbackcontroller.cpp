@@ -1114,6 +1114,11 @@ void PlaybackController::setupSequenceTracks()
         updateMuteStates();
     });
 
+    audioSettings()->auxSoloMuteStateChanged().onReceive(
+        this, [this](aux_channel_idx_t, const project::IProjectAudioSettings::SoloMuteState&) {
+        updateMuteStates();
+    });
+
     m_isPlayAllowedChanged.notify();
 }
 
@@ -1152,6 +1157,8 @@ void PlaybackController::updateMuteStates()
     if (!audioSettings() || !playback()) {
         return;
     }
+
+    TRACEFUNC;
 
     InstrumentTrackIdSet existingTrackIdSet = notationPlayback()->existingTrackIdSet();
     bool hasSolo = false;
@@ -1198,6 +1205,23 @@ void PlaybackController::updateMuteStates()
 
         audio::TrackId trackId = m_instrumentTrackIdMap.at(instrumentTrackId);
         playback()->audioOutput()->setOutputParams(m_currentSequenceId, trackId, std::move(params));
+    }
+
+    updateAuxMuteStates();
+}
+
+void PlaybackController::updateAuxMuteStates()
+{
+    for (const auto& pair : m_auxTrackIdMap) {
+        auto soloMuteState = audioSettings()->auxSoloMuteState(pair.first);
+
+        AudioOutputParams params = audioSettings()->auxOutputParams(pair.first);
+        if (params.muted == soloMuteState.mute) {
+            continue;
+        }
+
+        params.muted = soloMuteState.mute;
+        playback()->audioOutput()->setOutputParams(m_currentSequenceId, pair.second, std::move(params));
     }
 }
 
