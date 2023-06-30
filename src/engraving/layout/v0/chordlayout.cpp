@@ -1278,7 +1278,8 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
         Chord* c1 = item->_tremolo->chord1();
         Chord* c2 = item->_tremolo->chord2();
         bool cross = c1->staffMove() != c2->staffMove();
-        if (cross && item == c1) {
+        if (item == c1) {
+            // we have to lay out the tremolo because it hasn't been laid out at all yet, and we need its direction
             TLayout::layout(item->_tremolo, ctx);
         }
         Measure* measure = item->findMeasure();

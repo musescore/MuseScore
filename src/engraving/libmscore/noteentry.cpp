@@ -722,6 +722,20 @@ Ret Score::insertChordByInsertingTime(const Position& pos)
         return make_ret(Ret::Code::UnknownError);
     }
 
+    // remove all two-note tremolos that end on this tick
+    for (EngravingItem* e : seg->_elist) {
+        if (!e || !e->isChord()) {
+            continue;
+        }
+        Chord* c = toChord(e);
+        Tremolo* t = c->tremolo();
+        if (t && t->twoNotes() && t->chord2() == c) {
+            // we have to remove this tremolo because we are adding time in the middle of it
+            // (if c is chord1 then we're inserting before the trem so it's fine)
+            undoRemoveElement(t);
+        }
+    }
+
     const TDuration duration = _is.duration();
     const Fraction fraction  = duration.fraction();
     const Fraction len       = fraction;
