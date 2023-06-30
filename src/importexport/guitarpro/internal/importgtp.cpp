@@ -149,10 +149,10 @@ void GuitarPro::createTuningString(int strings, int tuning[])
     const char* tune[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     //TODO-ws  score->tuning.clear();
     std::vector<int> pitch;
-    uint64_t key = 0;
+    uint64_t k = 0;
     for (int i = 0; i < strings; ++i) {
         pitch.push_back(tuning[i]);
-        key |= (uint64_t)tuning[i] << 8 * i;
+        k |= (uint64_t)tuning[i] << 8 * i;
         //score->tuning += tune[tuning[i] % 12];
     }
     if (auto preset = flatPresets.find(key); preset != flatPresets.end()) {
