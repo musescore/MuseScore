@@ -1496,72 +1496,10 @@ void TLayout::layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext& ct
     }
 }
 
-void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
+void TLayout::layout(MeasureRepeat*, LayoutContext&)
 {
-    for (EngravingItem* e : item->el()) {
-        layoutItem(e, ctx);
-    }
-
-    switch (item->numMeasures()) {
-    case 1:
-    {
-        item->setSymId(SymId::repeat1Bar);
-        if (ctx.conf().styleB(Sid::mrNumberSeries) && item->track() != mu::nidx) {
-            int placeInSeries = 2; // "1" would be the measure actually being repeated
-            staff_idx_t staffIdx = item->staffIdx();
-            Measure* m = item->measure();
-            while (m && m->isOneMeasureRepeat(staffIdx) && m->prevIsOneMeasureRepeat(staffIdx)) {
-                placeInSeries++;
-                m = m->prevMeasure();
-            }
-            if (placeInSeries % ctx.conf().styleI(Sid::mrNumberEveryXMeasures) == 0) {
-                if (ctx.conf().styleB(Sid::mrNumberSeriesWithParentheses)) {
-                    item->setNumberSym(String(u"(%1)").arg(placeInSeries));
-                } else {
-                    item->setNumberSym(placeInSeries);
-                }
-            } else {
-                item->clearNumberSym();
-            }
-        } else if (ctx.conf().styleB(Sid::oneMeasureRepeatShow1)) {
-            item->setNumberSym(1);
-        } else {
-            item->clearNumberSym();
-        }
-        break;
-    }
-    case 2:
-        item->setSymId(SymId::repeat2Bars);
-        item->setNumberSym(item->numMeasures());
-        break;
-    case 4:
-        item->setSymId(SymId::repeat4Bars);
-        item->setNumberSym(item->numMeasures());
-        break;
-    default:
-        item->setSymId(SymId::noSym); // should never happen
-        item->clearNumberSym();
-        break;
-    }
-
-    RectF bbox = item->symBbox(item->symId());
-
-    if (item->track() != mu::nidx) { // if this is in score rather than a palette cell
-        // For unknown reasons, the symbol has some offset in almost all SMuFL fonts
-        // We compensate for it, to make sure the symbol is visually centered around the staff line
-        double offset = (-bbox.top() - bbox.bottom()) / 2.0;
-
-        const StaffType* staffType = item->staffType();
-
-        // Only need to set y position here; x position is handled in MeasureLayout::layoutMeasureElements()
-        item->setPos(0, std::floor(staffType->middleLine() / 2.0) * staffType->lineDistance().val() * item->spatium() + offset);
-    }
-
-    item->setbbox(bbox);
-
-    if (item->track() != mu::nidx && !item->numberSym().empty()) {
-        item->addbbox(item->numberRect());
-    }
+    //! NOTE Moved to PaletteLayout
+    UNREACHABLE;
 }
 
 void TLayout::layout(MMRest* item, LayoutContext& ctx)

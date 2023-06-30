@@ -58,6 +58,7 @@
 #include "engraving/libmscore/letring.h"
 #include "engraving/libmscore/line.h"
 #include "engraving/libmscore/marker.h"
+#include "engraving/libmscore/measurerepeat.h"
 #include "engraving/libmscore/note.h"
 #include "engraving/libmscore/ornament.h"
 #include "engraving/libmscore/ottava.h"
@@ -142,6 +143,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::LET_RING:     layout(toLetRing(item), ctx);
         break;
     case ElementType::MARKER:       layout(toMarker(item), ctx);
+        break;
+    case ElementType::MEASURE_REPEAT: layout(toMeasureRepeat(item), ctx);
         break;
     case ElementType::NOTEHEAD:     layout(toNoteHead(item), ctx);
         break;
@@ -976,6 +979,37 @@ void PaletteLayout::layout(NoteHead* item, const Context& ctx)
 void PaletteLayout::layout(Marker* item, const Context& ctx)
 {
     layoutTextBase(item, ctx);
+}
+
+void PaletteLayout::layout(MeasureRepeat* item, const Context& ctx)
+{
+    switch (item->numMeasures()) {
+    case 1:
+    {
+        item->setSymId(SymId::repeat1Bar);
+        if (ctx.style().styleB(Sid::oneMeasureRepeatShow1)) {
+            item->setNumberSym(1);
+        } else {
+            item->clearNumberSym();
+        }
+        break;
+    }
+    case 2:
+        item->setSymId(SymId::repeat2Bars);
+        item->setNumberSym(item->numMeasures());
+        break;
+    case 4:
+        item->setSymId(SymId::repeat4Bars);
+        item->setNumberSym(item->numMeasures());
+        break;
+    default:
+        item->setSymId(SymId::noSym); // should never happen
+        item->clearNumberSym();
+        break;
+    }
+
+    RectF bbox = item->symBbox(item->symId());
+    item->setbbox(bbox);
 }
 
 void PaletteLayout::layout(Ornament* item, const Context& ctx)
