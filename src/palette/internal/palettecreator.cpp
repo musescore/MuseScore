@@ -144,6 +144,7 @@ PaletteTreePtr PaletteCreator::newMasterPaletteTree()
     tree->append(newNoteHeadsPalette());
     tree->append(newArpeggioPalette());
     tree->append(newTremoloPalette());
+    tree->append(newHarpPalette());
     tree->append(newGuitarPalette());
     tree->append(newFingeringPalette());
     tree->append(newFretboardDiagramPalette());
@@ -151,7 +152,6 @@ PaletteTreePtr PaletteCreator::newMasterPaletteTree()
     tree->append(newBagpipeEmbellishmentPalette());
     tree->append(newBeamPalette());
     tree->append(newLinesPalette());
-    tree->append(newHarpPalette());
 
     return tree;
 }
@@ -180,6 +180,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newNoteHeadsPalette());
     defaultPalette->append(newArpeggioPalette());
     defaultPalette->append(newTremoloPalette());
+    defaultPalette->append(newHarpPalette());
     defaultPalette->append(newGuitarPalette(true));
     defaultPalette->append(newFingeringPalette(true));
     defaultPalette->append(newFretboardDiagramPalette());
@@ -187,7 +188,6 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newBagpipeEmbellishmentPalette());
     defaultPalette->append(newBeamPalette());
     defaultPalette->append(newLinesPalette(true));
-    defaultPalette->append(newHarpPalette());
 
     return defaultPalette;
 }
@@ -2030,10 +2030,10 @@ PalettePtr PaletteCreator::newPitchPalette(bool defaultPalette)
 PalettePtr PaletteCreator::newHarpPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Harp);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Harp notation"));
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Harp"));
     sp->setGridSize(90, 30);
     sp->setDrawGrid(true);
-    sp->setVisible(true);
+    sp->setVisible(false);
 
     auto pedalDiagram = Factory::makeHarpPedalDiagram(gpaletteScore->dummy()->segment());
     sp->appendElement(pedalDiagram, QT_TRANSLATE_NOOP("palette", "Harp pedal diagram"));
