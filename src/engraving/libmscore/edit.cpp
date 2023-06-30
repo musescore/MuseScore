@@ -35,6 +35,7 @@
 #include "chordline.h"
 #include "clef.h"
 #include "excerpt.h"
+#include "expression.h"
 #include "factory.h"
 #include "fingering.h"
 #include "glissando.h"
@@ -736,9 +737,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement, 
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createStaffText(dummy()->segment(), TextStyleType::EXPRESSION);
-        textBox->setPlacement(PlacementV::BELOW);
-        textBox->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+        textBox = Factory::createExpression(dummy()->segment());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
