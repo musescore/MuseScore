@@ -77,6 +77,13 @@ void TrackList::appendTuplet(Tuplet* srcTuplet, Tuplet* dstTuplet)
                   Tuplet* dt = toTuplet(e);
                   appendTuplet(st, dt);
                   }
+            else if (de->parent() && de->parent()->isSegment()) {
+                  Segment* seg = toSegment(de->parent());
+                  for (Element* ee : seg->annotations()) {
+                        if (ee->track() == e->track())
+                              _range->annotations.push_back({ e->tick(), ee->clone() });
+                        }
+                  }
             }
       }
 
