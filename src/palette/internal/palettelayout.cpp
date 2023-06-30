@@ -84,6 +84,7 @@
 #include "engraving/libmscore/utils.h"
 
 #include "engraving/layout/v0/tremololayout.h"
+#include "engraving/layout/v0/arpeggiolayout.h"
 #include "engraving/layout/pal/tlayout.h"
 
 #include "log.h"
@@ -103,6 +104,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::ACTION_ICON:  layout(toActionIcon(item), ctx);
         break;
     case ElementType::AMBITUS:      layout(toAmbitus(item), ctx);
+        break;
+    case ElementType::ARPEGGIO:     layout(toArpeggio(item), ctx);
         break;
     case ElementType::ARTICULATION: layout(toArticulation(item), ctx);
         break;
@@ -341,6 +344,12 @@ void PaletteLayout::layout(Ambitus* item, const Context& ctx)
                   .united(item->topAccidental()->bbox().translated(item->topAccidental()->ipos()))
                   .united(item->bottomAccidental()->bbox().translated(item->bottomAccidental()->ipos()))
                   );
+}
+
+void PaletteLayout::layout(Arpeggio* item, const Context& ctx)
+{
+    engraving::layout::v0::LayoutContext ctxv0(ctx.donUseScore());
+    engraving::layout::v0::ArpeggioLayout::layout(item, ctxv0);
 }
 
 void PaletteLayout::layout(Articulation* item, const Context&)
