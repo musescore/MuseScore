@@ -38,6 +38,7 @@
 #include "engraving/libmscore/articulation.h"
 #include "engraving/libmscore/bagpembell.h"
 #include "engraving/libmscore/barline.h"
+#include "engraving/libmscore/bend.h"
 #include "engraving/libmscore/bracket.h"
 #include "engraving/libmscore/breath.h"
 #include "engraving/libmscore/capo.h"
@@ -105,6 +106,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::BAGPIPE_EMBELLISHMENT: layout(toBagpipeEmbellishment(item), ctx);
         break;
     case ElementType::BAR_LINE:     layout(toBarLine(item), ctx);
+        break;
+    case ElementType::BEND:         layout(toBend(item), ctx);
         break;
     case ElementType::BRACKET:      layout(toBracket(item), ctx);
         break;
@@ -441,6 +444,95 @@ void PaletteLayout::layout(BarLine* item, const Context& ctx)
     double w = layoutWidth(item, ctx) * item->mag();
     RectF bbox(0.0, item->y1(), w, item->y2() - item->y1());
     item->setbbox(bbox);
+}
+
+void PaletteLayout::layout(Bend* item, const Context&)
+{
+    double spatium = item->spatium();
+    double lw = item->lineWidth();
+
+    item->setNoteWidth(0.0);
+    item->setNotePos(PointF());
+
+    RectF bb;
+
+    mu::draw::FontMetrics fm(item->font(spatium));
+
+    size_t n   = item->points().size();
+    double x = item->noteWidth();
+    double y = -spatium * .8;
+    double x2, y2;
+
+    double aw = spatium * .5;
+    PolygonF arrowUp;
+    arrowUp << PointF(0, 0) << PointF(aw * .5, aw) << PointF(-aw * .5, aw);
+    PolygonF arrowDown;
+    arrowDown << PointF(0, 0) << PointF(aw * .5, -aw) << PointF(-aw * .5, -aw);
+
+    for (size_t pt = 0; pt < n; ++pt) {
+        if (pt == (n - 1)) {
+            break;
+        }
+        int pitch = item->points().at(pt).pitch;
+        if (pt == 0 && pitch) {
+            y2 = -item->notePos().y() - spatium * 2;
+            x2 = x;
+            bb.unite(RectF(x, y, x2 - x, y2 - y));
+
+            bb.unite(arrowUp.translated(x2, y2 + spatium * .2).boundingRect());
+
+            int idx = (pitch + 12) / 25;
+            const char* l = Bend::label[idx];
+            bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
+                                     draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
+                                     String::fromAscii(l)));
+            y = y2;
+        }
+        if (pitch == item->points().at(pt + 1).pitch) {
+            if (pt == (n - 2)) {
+                break;
+            }
+            x2 = x + spatium;
+            y2 = y;
+            bb.unite(RectF(x, y, x2 - x, y2 - y));
+        } else if (pitch < item->points().at(pt + 1).pitch) {
+            // up
+            x2 = x + spatium * .5;
+            y2 = -item->notePos().y() - spatium * 2;
+            double dx = x2 - x;
+            double dy = y2 - y;
+
+            PainterPath path;
+            path.moveTo(x, y);
+            path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
+            bb.unite(path.boundingRect());
+            bb.unite(arrowUp.translated(x2, y2 + spatium * .2).boundingRect());
+
+            int idx = (item->points().at(pt + 1).pitch + 12) / 25;
+            const char* l = Bend::label[idx];
+            bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
+                                     draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
+                                     String::fromAscii(l)));
+        } else {
+            // down
+            x2 = x + spatium * .5;
+            y2 = y + spatium * 3;
+            double dx = x2 - x;
+            double dy = y2 - y;
+
+            PainterPath path;
+            path.moveTo(x, y);
+            path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
+            bb.unite(path.boundingRect());
+
+            bb.unite(arrowDown.translated(x2, y2 - spatium * .2).boundingRect());
+        }
+        x = x2;
+        y = y2;
+    }
+    bb.adjust(-lw, -lw, lw, lw);
+    item->setbbox(bb);
+    item->setPos(0.0, 0.0);
 }
 
 void PaletteLayout::layout(Bracket* item, const Context& ctx)
