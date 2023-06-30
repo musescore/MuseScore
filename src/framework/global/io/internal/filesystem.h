@@ -45,7 +45,7 @@ public:
                                   ScanMode mode = ScanMode::FilesInCurrentDirAndSubdirs) const override;
 
     RetVal<ByteArray> readFile(const io::path_t& filePath) const override;
-    bool readFile(const io::path_t& filePath, ByteArray& data) const override;
+    Ret readFile(const io::path_t& filePath, ByteArray& data) const override;
     Ret writeFile(const io::path_t& filePath, const ByteArray& data) const override;
 
     void setAttribute(const io::path_t& path, Attribute attribute) const override;
@@ -56,7 +56,7 @@ public:
     io::path_t absoluteFilePath(const io::path_t& filePath) const override;
     DateTime birthTime(const io::path_t& filePath) const override;
     DateTime lastModified(const io::path_t& filePath) const override;
-    bool isWritable(const path_t& filePath) const override;
+    Ret isWritable(const path_t& filePath) const override;
 
 private:
     Ret removeFile(const io::path_t& path) const;
