@@ -201,7 +201,7 @@ public:
         CLEF_TREBLE = 0xF31A,
 
         AUTO_TEXT = 0xF329,
-        NOTE_HEAD_EIGHTH = 0xF33A,
+        BEAM_NONE = 0xF33A,
         BEAM_BREAK_LEFT = 0xF33B,
         BEAM_JOIN = 0xF33D,
         BEAM_BREAK_INNER_8TH = 0xF33E,
@@ -381,7 +381,7 @@ public:
 
         STOP_FILL = 0xF447,
 
-        QUAVER_REST = 0xF44C,
+        REST_8TH = 0xF44C,
 
         SHARE_AUDIO = 0xF44F,
 
