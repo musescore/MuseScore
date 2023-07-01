@@ -60,9 +60,13 @@ public:
         }
     };
 
-    virtual SoloMuteState soloMuteState(const engraving::InstrumentTrackId& trackId) const = 0;
-    virtual void setSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& soloMuteState) = 0;
-    virtual async::Channel<engraving::InstrumentTrackId, SoloMuteState> soloMuteStateChanged() const = 0;
+    virtual SoloMuteState trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const = 0;
+    virtual void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& state) = 0;
+    virtual async::Channel<engraving::InstrumentTrackId, SoloMuteState> trackSoloMuteStateChanged() const = 0;
+
+    virtual SoloMuteState auxSoloMuteState(audio::aux_channel_idx_t index) const = 0;
+    virtual void setAuxSoloMuteState(audio::aux_channel_idx_t index, const SoloMuteState& state) = 0;
+    virtual async::Channel<audio::aux_channel_idx_t, SoloMuteState> auxSoloMuteStateChanged() const = 0;
 
     virtual void removeTrackParams(const engraving::InstrumentTrackId& trackId) = 0;
 

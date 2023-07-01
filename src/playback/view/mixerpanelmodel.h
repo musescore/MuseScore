@@ -87,7 +87,7 @@ private:
 
     MixerChannelItem* buildInstrumentChannelItem(const audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId,
                                                  bool isPrimary = true);
-    MixerChannelItem* buildAuxChannelItem(const audio::TrackId trackId);
+    MixerChannelItem* buildAuxChannelItem(audio::aux_channel_idx_t index, const audio::TrackId trackId);
     MixerChannelItem* buildMasterChannelItem();
 
     MixerChannelItem* findChannelItem(const audio::TrackId& trackId) const;
