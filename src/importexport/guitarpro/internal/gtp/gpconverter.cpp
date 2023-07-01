@@ -4,7 +4,7 @@
 
 #include "translation.h"
 
-#include "../importgtp.h"
+#include "internal/importgtp.h"
 #include "gpdommodel.h"
 #include "gpdrumsetresolver.h"
 
@@ -253,6 +253,7 @@ GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
     _drumResolver = std::make_unique<GPDrumSetResolver>();
     _drumResolver->initGPDrum();
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(_score);
+    m_restsBuilder = std::make_unique<RestsBuilder>(_score, VOICES);
     m_useStretchedBends = engravingConfiguration()->guitarProImportExperimental();
 }
 
@@ -361,98 +362,55 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
 void GPConverter::convertMasterBar(const GPMasterBar* mB, Context ctx)
 {
     Measure* measure = addMeasure(mB);
+    m_restsBuilder->setMeasure(measure);
 
     addTimeSig(mB, measure);
-
     addKeySig(mB, measure);
-
     addBarline(mB, measure);
-
     addRepeat(mB, measure);
-
     collectFermatas(mB, measure);
-
     convertBars(mB->bars(), ctx);
-
     addTripletFeel(mB, measure);
-
     addSection(mB, measure);
-
     addDirection(mB, measure);
 
     _lastMeasure = measure;
-
-    fixEmptyMeasures();
-}
-
-void GPConverter::fixEmptyMeasures()
-{
-    // Get all ChordRest elems and sort them by staves
-    // Also store root Segment ptr will need it later to delete some rest elems
-    std::map<track_idx_t, std::vector<std::pair<Segment*, EngravingItem*> > > elems;
-
-    auto ntracks = _score->ntracks();
-    auto type = SegmentType::ChordRest;
-
-    for (Segment* s = _lastMeasure->segments().first(type); s; s = s->next(type)) {
-        for (track_idx_t i = 0; i < ntracks; ++i) {
-            auto e = s->element(i);
-            if (!e) {
-                continue;
-            }
-            elems[i / VOICES].push_back({ s, e });
-        }
-    }
-
-    for (const auto& [staffIdx, segItemPairs] : elems) {
-        bool shouldClear = true;
-        for (auto p : segItemPairs) {
-            // Don't need to do anything if there is not "rest" elem on a staff
-            if (!p.second->isRest()) {
-                shouldClear = false;
-                break;
-            }
-        }
-        if (shouldClear) {
-            // Keep only one rest element in a bar and make its duration V_MEASURE
-            // that way layout can recognize this bar as "empty"
-            // and properly render mmrests
-            size_t lastIndex = segItemPairs.size() - 1;
-            if (segItemPairs.empty()) {
-                continue;
-            }
-            for (size_t i = 0; i < lastIndex; ++i) {
-                segItemPairs.at(i).first->remove(segItemPairs.at(i).second);
-            }
-            Rest* rest = toRest(segItemPairs.at(lastIndex).second);
-            rest->setTicks(_lastMeasure->ticks());
-            rest->setDurationType(DurationType::V_MEASURE);
-        }
-    }
 }
 
 void GPConverter::convertBars(const std::vector<std::unique_ptr<GPBar> >& bars, Context ctx)
 {
     ctx.curTrack = 0;
     for (const auto& bar : bars) {
+        m_restsBuilder->setStartTrack(ctx.curTrack);
         convertBar(bar.get(), ctx);
+
+        if (m_nextTupletInfo.tuplet) {
+            fillTuplet();
+        }
+
+        for (size_t trackIdx = ctx.curTrack; trackIdx < ctx.curTrack + VOICES; trackIdx++) {
+            RestsBuilder::RestsStateInMeasure state = m_restsBuilder->addRestsToScore(trackIdx);
+
+            if (state == RestsBuilder::RestsStateInMeasure::UNCOMPLETE) {
+                m_continiousElementsBuilder->notifyUncompletedMeasure();
+            }
+        }
+
+        m_restsBuilder->hideRestsInEmptyMeasures();
         ctx.curTrack += VOICES;
     }
 }
 
 void GPConverter::convertBar(const GPBar* bar, Context ctx)
 {
-    addClef(bar, static_cast<int>(ctx.curTrack));
+    addClef(bar, ctx.curTrack);
 
-    if (addSimileMark(bar, static_cast<int>(ctx.curTrack))) {
+    if (addSimileMark(bar, ctx.curTrack)) {
+        m_restsBuilder->notifySimileMarkExists();
         return;
     }
 
     convertVoices(bar->voices(), ctx);
-
-    for (track_idx_t i = ctx.curTrack; i < ctx.curTrack + VOICES; i++) {
-        hideRestsInEmptyMeasures(i);
-    }
 }
 
 void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
@@ -509,7 +467,7 @@ void GPConverter::convertVoices(const std::vector<std::unique_ptr<GPVoice> >& vo
 {
     if (voices.empty()) {
         ctx.curTick = _score->lastMeasure()->tick();
-        fillUncompletedMeasure(ctx);
+        return;
     }
 
     for (const auto& voice : voices) {
@@ -532,7 +490,6 @@ void GPConverter::convertBeats(const std::vector<std::shared_ptr<GPBeat> >& beat
         ctx.curTick = convertBeat(beat.get(), graceChords, ctx);
     }
 
-    fillUncompletedMeasure(ctx);
     clearDefectedGraceChord(graceChords);
 }
 
@@ -544,7 +501,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
         return ctx.curTick;
     }
 
-    auto curSegment = lastMeasure->getSegment(SegmentType::ChordRest, ctx.curTick);
+    Segment* curSegment = lastMeasure->getSegment(SegmentType::ChordRest, ctx.curTick);
 
     ChordRest* cr = addChordRest(beat, ctx);
     if (engravingConfiguration()->guitarProImportExperimental() && beat->deadSlapped() && cr->isRest()) {
@@ -567,14 +524,16 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
             return ctx.curTick;
         }
 
-        curSegment->add(cr);
+        if (cr->isChord() || beat->tuplet().num != -1) {
+            curSegment->add(cr);
+        } else if (cr->isRest()) {
+            m_restsBuilder->addRest(toRest(cr), curSegment);
+        }
 
         if (cr->isChord()) {
-            m_chordsInMeasureByVoice[lastMeasure][cr->voice()]++;
-            m_chordsInMeasure[lastMeasure]++;
-
+            m_restsBuilder->notifyChordExists(cr->voice());
             if (beat->stemOrientationUserDefined()) {
-                static_cast<Chord*>(cr)->setStemDirection(beat->stemOrientationUp() ? DirectionV::UP : DirectionV::DOWN);
+                toChord(cr)->setStemDirection(beat->stemOrientationUp() ? DirectionV::UP : DirectionV::DOWN);
             }
 
             setBeamMode(beat, cr, lastMeasure, ctx.curTick);
@@ -633,6 +592,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
     }
 
     ctx.curTick += cr->actualTicks();
+    m_restsBuilder->updateLastTick(ctx.curTrack % VOICES, ctx.curTick);
 
     return ctx.curTick;
 }
@@ -988,7 +948,9 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
 
 void GPConverter::setUpGPScore(const GPScore* gpscore)
 {
-    engravingConfiguration()->setGuitarProMultivoiceEnabled(gpscore->multiVoice());
+    bool multiVoice = gpscore->multiVoice();
+    engravingConfiguration()->setGuitarProMultivoiceEnabled(multiVoice);
+    m_restsBuilder->setMultiVoice(multiVoice);
 
     std::vector<String> fieldNames = { gpscore->title(), gpscore->subTitle(), gpscore->artist(),
                                        gpscore->album(), gpscore->composer(), gpscore->poet() };
@@ -1171,36 +1133,6 @@ void GPConverter::collectFermatas(const GPMasterBar* mB, Measure* measure)
 {
     for (const auto& ferm : mB->fermatas()) {
         _fermatas.push_back(std::make_pair(measure, ferm));
-    }
-}
-
-void GPConverter::fillUncompletedMeasure(const Context& ctx)
-{
-    if (m_nextTupletInfo.tuplet) {
-        fillTuplet();
-    }
-
-    Measure* lastMeasure = _score->lastMeasure();
-    int tickOffset = lastMeasure->ticks().ticks() + lastMeasure->tick().ticks() - ctx.curTick.ticks();
-    if (tickOffset > 0) {
-        _score->setRest(ctx.curTick, ctx.curTrack, Fraction::fromTicks(tickOffset), true, nullptr);
-        m_continiousElementsBuilder->notifyUncompletedMeasure();
-    }
-}
-
-void GPConverter::hideRestsInEmptyMeasures(track_idx_t track)
-{
-    Measure* lastMeasure = _score->lastMeasure();
-    for (Segment* segment = lastMeasure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
-        EngravingItem* element = segment->element(track);
-        if (element && element->isRest()) {
-            if (m_chordsInMeasureByVoice[lastMeasure][element->voice()] == 0) {
-                bool measureHasChords = m_chordsInMeasure[lastMeasure] != 0;
-                if (measureHasChords || (!measureHasChords && element->voice() != 0)) {
-                    toRest(element)->setGap(true);
-                }
-            }
-        }
     }
 }
 
@@ -1489,7 +1421,7 @@ void GPConverter::addInstrumentChanges()
     }
 }
 
-bool GPConverter::addSimileMark(const GPBar* bar, int curTrack)
+bool GPConverter::addSimileMark(const GPBar* bar, engraving::track_idx_t curTrack)
 {
     if (bar->simileMark() == GPBar::SimileMark::None) {
         return false;
@@ -1533,7 +1465,7 @@ bool GPConverter::addSimileMark(const GPBar* bar, int curTrack)
     return true;
 }
 
-void GPConverter::addClef(const GPBar* bar, int curTrack)
+void GPConverter::addClef(const GPBar* bar, engraving::track_idx_t curTrack)
 {
     auto convertClef = [](GPBar::Clef cl) {
         if (cl.type == GPBar::ClefType::Neutral) {
@@ -1635,7 +1567,7 @@ ChordRest* GPConverter::addChordRest(const GPBeat* beat, const Context& ctx)
         }
     };
 
-    ChordRest* cr{ nullptr };
+    ChordRest* cr = nullptr;
     if (beat->isRest()) {
         cr = Factory::createRest(_score->dummy()->segment());
     } else {

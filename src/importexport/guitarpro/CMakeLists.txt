@@ -37,7 +37,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/importptb.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/continiouselementsbuilder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/continiouselementsbuilder.h
-
+    ${CMAKE_CURRENT_LIST_DIR}/internal/restsbuilder.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/restsbuilder.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp6dombuilder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp6dombuilder.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp7dombuilder.cpp
@@ -80,6 +81,8 @@ set(MODULE_SRC ${MODULE_SRC}
 set(MODULE_LINK
     engraving
     )
+
+set(MODULE_INCLUDE ${CMAKE_CURRENT_LIST_DIR})
 
 include(SetupModule)
 

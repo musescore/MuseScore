@@ -159,17 +159,6 @@
             <subtype>end</subtype>
             </BarLine>
           </voice>
-        <voice>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
-          </voice>
         </Measure>
       </Staff>
     </Score>

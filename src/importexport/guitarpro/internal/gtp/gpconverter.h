@@ -8,9 +8,9 @@
 #include "gpbeat.h"
 #include "gpdrumsetresolver.h"
 #include "gpmastertracks.h"
-#include "../continiouselementsbuilder.h"
+#include "internal/continiouselementsbuilder.h"
+#include "internal/restsbuilder.h"
 #include "types/fraction.h"
-
 #include "libmscore/vibrato.h"
 #include "libmscore/ottava.h"
 
@@ -81,8 +81,8 @@ private:
     void addRepeat(const GPMasterBar* mB, Measure* measure);
     void addVolta(const GPMasterBar* mB, Measure* measure);
     void doAddVolta(const GPMasterBar* mB, Measure* measure);
-    void addClef(const GPBar* bar, int curTrack);
-    bool addSimileMark(const GPBar* bar, int curTrack);
+    void addClef(const GPBar* bar, track_idx_t curTrack);
+    bool addSimileMark(const GPBar* bar, track_idx_t curTrack);
     void addBarline(const GPMasterBar* mB, Measure* measure);
 
     void addTie(const GPNote* gpnote, Note* note, TieMap& ties);
@@ -144,8 +144,6 @@ private:
     void addFermatas();
     void addTempoMap();
     void addInstrumentChanges();
-    void fillUncompletedMeasure(const Context& ctx);
-    void hideRestsInEmptyMeasures(track_idx_t track);
     int getStringNumberFor(Note* pNote, int pitch) const;
     void fillTuplet();
     bool tupletParamsChanged(const GPBeat* beat, const ChordRest* cr);
@@ -203,12 +201,12 @@ private:
 
     Measure* _lastMeasure = nullptr;
     bool m_showCapo = true; // TODO-gp : settings
-    std::unordered_map<Measure*, std::array<int, VOICES> > m_chordsInMeasureByVoice; /// if measure has any chord for specific voice, rests are hidden
-    std::unordered_map<Measure*, size_t> m_chordsInMeasure;
+
     mu::engraving::BeamMode m_previousBeamMode = mu::engraving::BeamMode::AUTO;
 
     std::unique_ptr<GPDrumSetResolver> _drumResolver;
     std::unique_ptr<ContiniousElementsBuilder> m_continiousElementsBuilder;
+    std::unique_ptr<RestsBuilder> m_restsBuilder; // adding rests to the score after importing 1 master bar
 };
 } // namespace mu::iex::guitarpro
 #endif // MU_IMPORTEXPORT_GPCONVERTER_H
