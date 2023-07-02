@@ -648,7 +648,12 @@ RetVal<QByteArray> BackendApi::scorePartJson(mu::engraving::Score* score, const 
     if (!ok) {
         LOGW() << "Error save mscz file";
     }
+
     mscWriter.close();
+    if (mscWriter.hasError()) {
+        ok = false;
+        LOGW() << "Error write mscz file";
+    }
 
     QByteArray ba = QByteArray::fromRawData(reinterpret_cast<const char*>(scoreData.constData()), static_cast<int>(scoreData.size()));
 
