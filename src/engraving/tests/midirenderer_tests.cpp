@@ -46,17 +46,29 @@ static NPlayEvent noteEvent(int pitch, int volume, int channel)
 
 static void checkEventInterval(EventMap& events, int tickStart, int tickEnd, int pitch, int volume, int channel = DEFAULT_CHANNEL)
 {
-    auto it1 = events.find(tickStart);
-    auto it2 = events.find(tickEnd);
+    auto it = events.find(tickStart);
+    EXPECT_TRUE(it != events.end());
+    if (it == events.end()) {
+        return;
+    }
 
-    EXPECT_TRUE(it1 != events.end());
-    EXPECT_TRUE(it2 != events.end());
+    EXPECT_EQ(it->second.pitch(), pitch);
+    EXPECT_EQ(it->second.velo(), volume);
+    EXPECT_EQ(it->second.channel(), channel);
 
-    EXPECT_EQ(it1->second, noteEvent(pitch, volume, channel));
-    EXPECT_EQ(it2->second, noteEvent(pitch, NOTE_OFF_VOLUME, channel));
+    events.erase(it);
 
-    events.erase(it1);
-    events.erase(it2);
+    it = events.find(tickEnd);
+    EXPECT_TRUE(it != events.end());
+    if (it == events.end()) {
+        return;
+    }
+
+    EXPECT_EQ(it->second.pitch(), pitch);
+    EXPECT_EQ(it->second.velo(), NOTE_OFF_VOLUME);
+    EXPECT_EQ(it->second.channel(), channel);
+
+    events.erase(it);
 }
 
 static EventMap renderMidiEvents(const String& fileName, bool eachStringHasChannel = false, bool instrumentsHaveEffects = false)
@@ -384,6 +396,26 @@ TEST_F(MidiRenderer_Tests, sameStringDifferentStaves)
     checkEventInterval(events, 0, 239, 62, defVol, DEFAULT_CHANNEL);
     checkEventInterval(events, 240, 479, 62, defVol, DEFAULT_CHANNEL);
     checkEventInterval(events, 0, 1919, 35, defVol, DEFAULT_CHANNEL + 1);
+}
+
+TEST_F(MidiRenderer_Tests, trillOnHiddenStaff)
+{
+    constexpr int mfVol = 80;
+    constexpr int fVol = 96;
+
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"trill_on_hidden_staff.mscx"));
+
+    EXPECT_EQ(events.size(), 18);
+
+    checkEventInterval(events, 0, 1919, 60, mfVol, DEFAULT_CHANNEL);
+    checkEventInterval(events, 1920, 1979, 79, fVol, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 1980, 2039, 81, fVol, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 2040, 2099, 79, fVol, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 2100, 2159, 81, fVol, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 2160, 2219, 79, fVol, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 2220, 2279, 81, fVol, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 2280, 2339, 79, fVol, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 2340, 2399, 81, fVol, DEFAULT_CHANNEL + 1);
 }
 
 /*****************************************************************************
