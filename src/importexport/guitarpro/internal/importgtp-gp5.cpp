@@ -580,8 +580,8 @@ bool GuitarPro5::readTracks()
         for (int k = 0; k < strings; ++k) {
             tuning2[strings - k - 1] = tuning[k];
         }
-        StringData stringData(frets, strings, &tuning2[0]);
-        createTuningString(strings, &tuning2[0]);
+        bool useFlats = createTuningString(strings, &tuning2[0]);
+        StringData stringData(frets, strings, &tuning2[0], useFlats);
         Instrument* instr = part->instrument();
         instr->setStringData(stringData);
         instr->setSingleNoteDynamics(false);
