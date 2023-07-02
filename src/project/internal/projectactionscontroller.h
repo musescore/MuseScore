@@ -103,8 +103,9 @@ private:
 
     void showScoreDownloadError(const Ret& ret);
 
-    bool checkCanIgnoreError(const Ret& ret, const String& projectName);
+    bool checkCanIgnoreError(const Ret& ret, const io::path_t& filepath);
     bool askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText);
+    void warnFileTooNew(const io::path_t& filepath);
     bool askIfUserAgreesToOpenCorruptedProject(const String& projectName, const std::string& errorText);
     void warnProjectCannotBeOpened(const String& projectName, const std::string& errorText);
 
