@@ -67,7 +67,7 @@ const MscWriter::Params& MscWriter::params() const
     return m_params;
 }
 
-bool MscWriter::open()
+Ret MscWriter::open()
 {
     return writer()->open(m_params.device, m_params.filePath);
 }
@@ -75,9 +75,10 @@ bool MscWriter::open()
 void MscWriter::close()
 {
     if (m_writer) {
-        writeMeta();
-
-        m_writer->close();
+        if (m_writer->isOpened()) {
+            writeMeta();
+            m_writer->close();
+        }
 
         delete m_writer;
         m_writer = nullptr;
@@ -253,7 +254,7 @@ MscWriter::ZipFileWriter::~ZipFileWriter()
     }
 }
 
-bool MscWriter::ZipFileWriter::open(io::IODevice* device, const path_t& filePath)
+Ret MscWriter::ZipFileWriter::open(io::IODevice* device, const path_t& filePath)
 {
     m_device = device;
     if (!m_device) {
@@ -264,7 +265,7 @@ bool MscWriter::ZipFileWriter::open(io::IODevice* device, const path_t& filePath
     if (!m_device->isOpen()) {
         if (!m_device->open(IODevice::WriteOnly)) {
             LOGE() << "failed open file: " << filePath;
-            return false;
+            return make_ret(m_device->error(), m_device->errorString());
         }
     }
 
@@ -303,7 +304,7 @@ bool MscWriter::ZipFileWriter::addFileData(const String& fileName, const ByteArr
     return true;
 }
 
-bool MscWriter::DirWriter::open(io::IODevice* device, const io::path_t& filePath)
+Ret MscWriter::DirWriter::open(io::IODevice* device, const io::path_t& filePath)
 {
     if (device) {
         NOT_SUPPORTED;
@@ -318,14 +319,16 @@ bool MscWriter::DirWriter::open(io::IODevice* device, const io::path_t& filePath
     m_rootPath = containerPath(filePath);
 
     Dir dir(m_rootPath);
-    if (!dir.removeRecursively()) {
+    Ret ret = dir.removeRecursively();
+    if (!ret) {
         LOGE() << "failed clear dir: " << dir.absolutePath();
-        return false;
+        return ret;
     }
 
-    if (!dir.mkpath(dir.absolutePath())) {
+    ret = dir.mkpath(dir.absolutePath());
+    if (!ret) {
         LOGE() << "failed make path: " << dir.absolutePath();
-        return false;
+        return ret;
     }
 
     return true;
@@ -375,7 +378,7 @@ MscWriter::XmlFileWriter::~XmlFileWriter()
     }
 }
 
-bool MscWriter::XmlFileWriter::open(io::IODevice* device, const path_t& filePath)
+Ret MscWriter::XmlFileWriter::open(io::IODevice* device, const path_t& filePath)
 {
     m_device = device;
     if (!m_device) {
@@ -386,7 +389,7 @@ bool MscWriter::XmlFileWriter::open(io::IODevice* device, const path_t& filePath
     if (!m_device->isOpen()) {
         if (!m_device->open(IODevice::WriteOnly)) {
             LOGE() << "failed open file: " << filePath;
-            return false;
+            return make_ret(m_device->error(), m_device->errorString());
         }
     }
 
