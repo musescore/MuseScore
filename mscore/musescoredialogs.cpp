@@ -181,7 +181,7 @@ void AboutBoxDialog::copyRevisionToClipboard()
       if (strlen(BUILD_NUMBER))
             sysinfo += QString(".") + QString(BUILD_NUMBER);
       sysinfo += ", revision: ";
-      sysinfo += "github-musescore-musescore-";
+      sysinfo += "GitHub-Jojo-Schmitz-MuseScore-";
       sysinfo += revision;
       cb->setText(sysinfo);
       }
