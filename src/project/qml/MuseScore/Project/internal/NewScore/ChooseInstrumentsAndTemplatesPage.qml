@@ -174,8 +174,6 @@ Item {
 
         ChooseInstrumentsPage {
             navigationSection: root.navigationSection
-
-            Component.onCompleted: focusOnFirst()
         }
     }
 
