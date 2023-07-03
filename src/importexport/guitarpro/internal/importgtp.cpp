@@ -144,8 +144,9 @@ static const std::unordered_map<uint64_t, std::string> flatPresets = {
     { 0x3f3a36312c25, { "Db Ab Db Gb Bb Eb" } },
 };
 
-void GuitarPro::createTuningString(int strings, int tuning[])
+bool GuitarPro::createTuningString(int strings, int tuning[])
 {
+    bool useFlats = false;
     const char* tune[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     //TODO-ws  score->tuning.clear();
     std::vector<int> pitch;
@@ -157,7 +158,8 @@ void GuitarPro::createTuningString(int strings, int tuning[])
     }
     if (auto preset = flatPresets.find(key); preset != flatPresets.end()) {
         tunings.push_back(preset->second);
-        return;
+        useFlats = true;
+        return useFlats;
     }
     std::string t;
     for (auto i : pitch) {
@@ -165,6 +167,7 @@ void GuitarPro::createTuningString(int strings, int tuning[])
         t += " ";
     }
     tunings.push_back(t);
+    return useFlats;
 }
 
 void GuitarPro::initDynamics(size_t stavesNum)
