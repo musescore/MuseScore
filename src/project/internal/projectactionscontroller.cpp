@@ -701,7 +701,7 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, Sa
     Ret ret = project->save(filePath, saveMode);
     if (!ret) {
         LOGE() << ret.toString();
-        warnScoreCouldnotBeSaved(ret.text());
+        warnScoreCouldnotBeSaved(ret);
         return false;
     }
 
@@ -1135,11 +1135,6 @@ void ProjectActionsController::warnCloudIsNotAvailable()
 
 bool ProjectActionsController::askIfUserAgreesToSaveProjectWithErrors(const Ret& ret, const SaveLocation& location)
 {
-    auto masterNotation = currentMasterNotation();
-    if (!masterNotation) {
-        return false;
-    }
-
     switch (static_cast<Err>(ret.code())) {
     case Err::NoPartsError:
         warnScoreCouldnotBeSaved(trc("project/save", "Please add at least one instrument to enable saving."));
@@ -1273,6 +1268,16 @@ void ProjectActionsController::showErrCorruptedScoreCannotBeSaved(const SaveLoca
     if (btn == getHelpBtn.btn) {
         interactive()->openUrl(configuration()->supportForumUrl());
     }
+}
+
+void ProjectActionsController::warnScoreCouldnotBeSaved(const Ret& ret)
+{
+    std::string message = ret.text();
+    if (message.empty()) {
+        message = trc("project/save", "An unknown error occurred while saving this file.");
+    }
+
+    warnScoreCouldnotBeSaved(message);
 }
 
 void ProjectActionsController::warnScoreCouldnotBeSaved(const std::string& errorText)

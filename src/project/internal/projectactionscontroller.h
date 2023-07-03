@@ -158,6 +158,7 @@ private:
     bool askIfUserAgreesToSaveCorruptedScoreUponOpenning(const SaveLocation& location, const std::string& errorText);
     void showErrCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText);
 
+    void warnScoreCouldnotBeSaved(const Ret& ret);
     void warnScoreCouldnotBeSaved(const std::string& errorText);
 
     void revertCorruptedScoreToLastSaved();
