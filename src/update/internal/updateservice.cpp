@@ -71,7 +71,6 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
     }
 
     QByteArray json = buff.data();
-    LOGD() << "json: " << json;
 
     RetVal<ReleaseInfo> releaseInfo = parseRelease(json);
     if (!releaseInfo.ret) {
