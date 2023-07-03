@@ -1390,10 +1390,15 @@ bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::pat
         return false;
     case engraving::Err::FileCorrupted:
         return askIfUserAgreesToOpenCorruptedProject(io::filename(filepath).toString(), ret.text());
-    default:
-        warnProjectCannotBeOpened(io::filename(filepath).toString(), ret.text());
+    case engraving::Err::FileCriticallyCorrupted:
+        warnProjectCriticallyCorrupted(io::filename(filepath).toString(), ret.text());
         return false;
+    default:
+        break;
     }
+
+    warnProjectCannotBeOpened(ret, filepath);
+    return false;
 }
 
 bool ProjectActionsController::askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText)
@@ -1430,7 +1435,7 @@ bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const Strin
     return btn == openAnywayBtn.btn;
 }
 
-void ProjectActionsController::warnProjectCannotBeOpened(const String& projectName, const std::string& errorText)
+void ProjectActionsController::warnProjectCriticallyCorrupted(const String& projectName, const std::string& errorText)
 {
     std::string title = mtrc("project", "File “%1” is corrupted and cannot be opened").arg(projectName).toStdString();
     std::string body = trc("project", "Get help for this issue on musescore.org.");
@@ -1445,6 +1450,29 @@ void ProjectActionsController::warnProjectCannotBeOpened(const String& projectNa
     if (btn == getHelpBtn.btn) {
         interactive()->openUrl(configuration()->supportForumUrl());
     }
+}
+
+void ProjectActionsController::warnProjectCannotBeOpened(const Ret& ret, const io::path_t& filepath)
+{
+    std::string title = mtrc("project", "Cannot read file %1").arg(io::toNativeSeparators(filepath).toString()).toStdString();
+    std::string body;
+
+    switch (ret.code()) {
+    case int(engraving::Err::FileNotFound):
+        body = trc("project", "This file does not exist or cannot be accessed at the moment.");
+        break;
+    case int(engraving::Err::FileOpenError):
+        body = trc("project", "This file could not be opened. Please make sure that MuseScore has permission to read this file.");
+        break;
+    default:
+        if (!ret.text().empty()) {
+            body = ret.text();
+        } else {
+            body = trc("project", "An error occurred while reading this file.");
+        }
+    }
+
+    interactive()->error(title, body);
 }
 
 void ProjectActionsController::importPdf()
