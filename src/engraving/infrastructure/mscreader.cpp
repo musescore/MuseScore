@@ -258,25 +258,25 @@ Ret MscReader::ZipFileReader::open(IODevice* device, const path_t& filePath)
 {
     m_device = device;
     if (!m_device) {
-        m_device = new File(filePath);
-        m_selfDeviceOwner = true;
-
         if (!FileInfo::exists(filePath)) {
-            LOGD() << "not exists path: " << filePath;
+            LOGE() << "path does not exist: " << filePath;
             return make_ret(Err::FileNotFound, filePath);
         }
+
+        m_device = new File(filePath);
+        m_selfDeviceOwner = true;
     }
 
     if (!m_device->isOpen()) {
         if (!m_device->open(IODevice::ReadOnly)) {
-            LOGD() << "failed open file: " << filePath;
+            LOGE() << "failed open file: " << filePath;
             return make_ret(Err::FileOpenError, filePath);
         }
     }
 
     m_zip = new ZipReader(m_device);
 
-    return make_ret(Err::NoError, filePath);
+    return true;
 }
 
 void MscReader::ZipFileReader::close()
@@ -309,7 +309,7 @@ StringList MscReader::ZipFileReader::fileList() const
     StringList files;
     std::vector<ZipReader::FileInfo> fileInfoList = m_zip->fileInfoList();
     if (m_zip->hasError()) {
-        LOGD() << "failed read meta";
+        LOGE() << "failed read meta";
     }
 
     for (const ZipReader::FileInfo& fi : fileInfoList) {
@@ -338,7 +338,7 @@ ByteArray MscReader::ZipFileReader::fileData(const String& fileName) const
 
     ByteArray data = m_zip->fileData(fileName.toStdString());
     if (m_zip->hasError()) {
-        LOGD() << "failed read data";
+        LOGE() << "failed read data for filename " << fileName;
         return ByteArray();
     }
     return data;
@@ -352,13 +352,13 @@ Ret MscReader::DirReader::open(IODevice* device, const path_t& filePath)
     }
 
     if (!FileInfo::exists(filePath)) {
-        LOGD() << "not exists path: " << filePath;
+        LOGE() << "path does not exist: " << filePath;
         return make_ret(Err::FileNotFound, filePath);
     }
 
     m_rootPath = containerPath(filePath);
 
-    return make_ret(Err::NoError, filePath);
+    return make_ok();
 }
 
 void MscReader::DirReader::close()
@@ -406,7 +406,7 @@ ByteArray MscReader::DirReader::fileData(const String& fileName) const
     io::path_t filePath = m_rootPath + "/" + fileName;
     File file(filePath);
     if (!file.open(IODevice::ReadOnly)) {
-        LOGD() << "failed open file: " << filePath;
+        LOGE() << "failed open file: " << filePath;
         return ByteArray();
     }
 
@@ -417,23 +417,23 @@ Ret MscReader::XmlFileReader::open(IODevice* device, const path_t& filePath)
 {
     m_device = device;
     if (!m_device) {
-        m_device = new File(filePath);
-        m_selfDeviceOwner = true;
-
         if (!FileInfo::exists(filePath)) {
-            LOGD() << "not exists path: " << filePath;
+            LOGE() << "path does not exist: " << filePath;
             return make_ret(Err::FileNotFound, filePath);
         }
+
+        m_device = new File(filePath);
+        m_selfDeviceOwner = true;
     }
 
     if (!m_device->isOpen()) {
         if (!m_device->open(IODevice::ReadOnly)) {
-            LOGD() << "failed open file: " << filePath;
+            LOGE() << "failed open file: " << filePath;
             return make_ret(Err::FileOpenError, filePath);
         }
     }
 
-    return make_ret(Err::NoError, filePath);
+    return make_ok();
 }
 
 void MscReader::XmlFileReader::close()

@@ -184,16 +184,16 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
     }
 
     MscReader reader(params);
-    Ret openResult = reader.open();
-    if (openResult != make_ret(mu::engraving::Err::NoError)) {
-        return openResult;
+    Ret ret = reader.open();
+    if (!ret) {
+        return ret;
     }
 
     // Load engraving project
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
 
     SettingsCompat settingsCompat;
-    Ret ret = m_engravingProject->loadMscz(reader, settingsCompat, forceMode);
+    ret = m_engravingProject->loadMscz(reader, settingsCompat, forceMode);
     if (!ret) {
         return ret;
     }
