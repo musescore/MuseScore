@@ -429,6 +429,9 @@
                  </item>
                  <item row="2" column="1">
                   <widget class="QDoubleSpinBox" name="staffLineWidth">
+                   <property name="keyboardTracking">
+                    <bool>false</bool>
+                   </property>
                    <property name="suffix">
                     <string extracomment="spatium unit">sp</string>
                    </property>
@@ -489,6 +492,9 @@
                   </item>
                   <item>
                    <widget class="QDoubleSpinBox" name="indentationValue">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -665,6 +671,9 @@
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
+                      <property name="keyboardTracking">
+                       <bool>false</bool>
+                      </property>
                       <property name="suffix">
                        <string>%</string>
                       </property>
@@ -717,6 +726,9 @@
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
                     </property>
                     <property name="suffix">
                      <string>sp</string>
@@ -903,6 +915,9 @@
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -968,6 +983,9 @@
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -1016,6 +1034,9 @@
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
                  </property>
                  <property name="suffix">
                   <string>sp</string>
@@ -1125,6 +1146,9 @@
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -1149,6 +1173,9 @@
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
                  </property>
                  <property name="suffix">
                   <string notr="true">%</string>
@@ -1192,6 +1219,9 @@
                  <layout class="QGridLayout" name="gridLayout_50">
                   <item row="5" column="5">
                    <widget class="QDoubleSpinBox" name="maxPageFillSpread">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -1220,6 +1250,9 @@
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
                     </property>
                     <property name="suffix">
                      <string>sp</string>
@@ -1266,6 +1299,9 @@
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string/>
                     </property>
@@ -1298,6 +1334,9 @@
                   </item>
                   <item row="4" column="5">
                    <widget class="QDoubleSpinBox" name="maxAkkoladeDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -1412,6 +1451,9 @@
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -1436,6 +1478,9 @@
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
                     </property>
                     <property name="suffix">
                      <string/>
@@ -1492,6 +1537,9 @@
                   </item>
                   <item row="1" column="5">
                    <widget class="QDoubleSpinBox" name="maxSystemSpread">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -1521,6 +1569,9 @@
                   </item>
                   <item row="0" column="5">
                    <widget class="QDoubleSpinBox" name="minSystemSpread">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -1562,6 +1613,9 @@
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
                     </property>
                     <property name="suffix">
                      <string/>
@@ -1641,6 +1695,9 @@
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
                     </property>
                     <property name="suffix">
                      <string>sp</string>
@@ -1748,6 +1805,9 @@
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -1805,6 +1865,9 @@
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -1858,6 +1921,9 @@
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
                     </property>
                     <property name="suffix">
                      <string>sp</string>
@@ -1937,6 +2003,9 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string notr="true">%</string>
              </property>
@@ -2001,6 +2070,9 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string notr="true">%</string>
              </property>
@@ -2052,6 +2124,9 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string notr="true">%</string>
              </property>
@@ -2102,6 +2177,9 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string notr="true">%</string>
@@ -2853,6 +2931,9 @@
              </item>
              <item>
               <widget class="QSpinBox" name="intervalMeasureNumber">
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
                <property name="minimum">
                 <number>1</number>
                </property>
@@ -3202,6 +3283,9 @@
           <layout class="QGridLayout" name="gridLayout_44">
            <item row="0" column="1">
             <widget class="QDoubleSpinBox" name="bracketWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -3236,6 +3320,9 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -3281,6 +3368,9 @@
                <height>0</height>
               </size>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -3309,6 +3399,9 @@
                <width>0</width>
                <height>0</height>
               </size>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -3432,6 +3525,9 @@
                   <height>20</height>
                  </size>
                 </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
                 <property name="suffix">
                  <string>sp</string>
                 </property>
@@ -3447,6 +3543,9 @@
                   <width>0</width>
                   <height>20</height>
                  </size>
+                </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
                 </property>
                 <property name="suffix">
                  <string>sp</string>
@@ -3548,6 +3647,9 @@
                   <height>20</height>
                  </size>
                 </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
                 <property name="suffix">
                  <string>sp</string>
                 </property>
@@ -3583,6 +3685,9 @@
                   <width>0</width>
                   <height>20</height>
                  </size>
+                </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
                 </property>
                 <property name="suffix">
                  <string>sp</string>
@@ -3737,6 +3842,9 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="accessibleName">
               <string>Set value for padding inside parentheses around accidentals</string>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -3918,6 +4026,9 @@ By default, they will be placed such as that their right end are at the same lev
               <layout class="QGridLayout" name="gridLayout_56">
                <item row="1" column="1">
                 <widget class="QDoubleSpinBox" name="measureSpacing">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="decimals">
                   <number>3</number>
                  </property>
@@ -4016,6 +4127,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="13" column="1">
                    <widget class="QDoubleSpinBox" name="barGraceDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4039,6 +4153,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="12" column="1">
                    <widget class="QDoubleSpinBox" name="barAccidentalDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4102,6 +4219,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="21" column="1">
                    <widget class="QDoubleSpinBox" name="timesigLeftMargin">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4112,6 +4232,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="16" column="1">
                    <widget class="QDoubleSpinBox" name="clefBarlineDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -4145,6 +4268,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="clefTimesigDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -4188,6 +4314,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="clefKeyDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -4244,6 +4373,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="15" column="1">
                    <widget class="QDoubleSpinBox" name="clefLeftMargin">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4267,6 +4399,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="4" column="1">
                    <widget class="QDoubleSpinBox" name="keyTimesigDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -4297,6 +4432,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="10" column="1">
                    <widget class="QDoubleSpinBox" name="noteBarDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4307,6 +4445,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="5" column="1">
                    <widget class="QDoubleSpinBox" name="clefKeyRightMargin">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4350,6 +4491,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="22" column="1">
                    <widget class="QDoubleSpinBox" name="timesigBarlineDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4396,6 +4540,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="11" column="1">
                    <widget class="QDoubleSpinBox" name="barNoteDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4419,6 +4566,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="18" column="1">
                    <widget class="QDoubleSpinBox" name="keysigLeftMargin">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4429,6 +4579,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="19" column="1">
                    <widget class="QDoubleSpinBox" name="keyBarlineDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -4481,6 +4634,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="0" column="1">
                 <widget class="QDoubleSpinBox" name="minMeasureWidth_2">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string extracomment="spatium unit">sp</string>
                  </property>
@@ -4553,6 +4709,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="2" column="1">
                 <widget class="QDoubleSpinBox" name="minNoteDistance">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -4602,6 +4761,9 @@ By default, they will be placed such as that their right end are at the same lev
                  <layout class="QGridLayout" name="gridLayout_59">
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="systemHeaderTimeSigDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -4612,6 +4774,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="systemHeaderDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -4727,6 +4892,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="4" column="1">
             <widget class="QDoubleSpinBox" name="barWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -4796,6 +4964,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="7" column="1">
             <widget class="QDoubleSpinBox" name="doubleBarWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -4806,6 +4977,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="8" column="1">
             <widget class="QDoubleSpinBox" name="doubleBarDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -4829,6 +5003,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="9" column="1">
             <widget class="QDoubleSpinBox" name="repeatBarlineDotSeparation">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -4872,6 +5049,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="6" column="1">
             <widget class="QDoubleSpinBox" name="endBarDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -4938,6 +5118,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="5" column="1">
             <widget class="QDoubleSpinBox" name="endBarWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5090,6 +5273,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5116,6 +5302,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5131,6 +5320,9 @@ By default, they will be placed such as that their right end are at the same lev
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -5148,6 +5340,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5163,6 +5358,9 @@ By default, they will be placed such as that their right end are at the same lev
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -5180,6 +5378,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5195,6 +5396,9 @@ By default, they will be placed such as that their right end are at the same lev
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -5246,6 +5450,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="1">
             <widget class="QSpinBox" name="dotMag">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string notr="true">%</string>
              </property>
@@ -5374,6 +5581,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="0" column="1">
             <widget class="QSpinBox" name="minEmptyMeasures">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <number>1</number>
              </property>
@@ -5400,6 +5610,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="0" column="4">
             <widget class="QDoubleSpinBox" name="minMeasureWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5439,6 +5652,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="mmRestNumberPos">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5486,6 +5702,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="mmRestHBarThickness">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5519,6 +5738,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5549,6 +5771,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="mmRestHBarVStrokeThickness">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5576,6 +5801,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="4">
             <widget class="QDoubleSpinBox" name="mmRestHBarVStrokeHeight">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5634,10 +5862,17 @@ By default, they will be placed such as that their right end are at the same lev
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QSpinBox" name="mmRestOldStyleMaxMeasures"/>
+               <widget class="QSpinBox" name="mmRestOldStyleMaxMeasures">
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
+               </widget>
               </item>
               <item row="1" column="1">
                <widget class="QDoubleSpinBox" name="mmRestOldStyleSpacing">
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
                 <property name="suffix">
                  <string>sp</string>
                 </property>
@@ -5730,6 +5965,9 @@ By default, they will be placed such as that their right end are at the same lev
               </item>
               <item row="0" column="1">
                <widget class="QSpinBox" name="mrNumberEveryXMeasures">
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
                 <property name="minimum">
                  <number>1</number>
                 </property>
@@ -5811,6 +6049,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="measureRepeatNumberPos">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5977,6 +6218,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="0" column="1">
                    <widget class="QDoubleSpinBox" name="tupletMaxSlope">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -6022,6 +6266,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="tupletVHeadDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6070,6 +6317,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="tupletVStemDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6294,6 +6544,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="tupletBracketHookHeight">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6342,6 +6595,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="0" column="1">
                    <widget class="QDoubleSpinBox" name="tupletBracketWidth">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6415,6 +6671,9 @@ By default, they will be placed such as that their right end are at the same lev
                  <layout class="QGridLayout" name="gridLayout_17">
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="tupletNoteLeftDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6441,6 +6700,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="0" column="1">
                    <widget class="QDoubleSpinBox" name="tupletStemLeftDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6460,6 +6722,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="tupletStemRightDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6556,6 +6821,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="3" column="1">
                    <widget class="QDoubleSpinBox" name="tupletNoteRightDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6666,6 +6934,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="0" column="1">
             <widget class="QDoubleSpinBox" name="arpeggioNoteDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -6679,6 +6950,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="arpeggioHookLen">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -6692,6 +6966,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="arpeggioLineWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -6783,6 +7060,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -6808,6 +7088,9 @@ By default, they will be placed such as that their right end are at the same lev
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -6839,6 +7122,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="minTieLength">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -6867,6 +7153,9 @@ By default, they will be placed such as that their right end are at the same lev
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -6903,6 +7192,9 @@ By default, they will be placed such as that their right end are at the same lev
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -7024,6 +7316,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="5" column="1">
             <widget class="QDoubleSpinBox" name="hairpinHeight">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -7121,6 +7416,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="6" column="1">
             <widget class="QDoubleSpinBox" name="hairpinContinueHeight">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -7131,6 +7429,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="7" column="1">
             <widget class="QDoubleSpinBox" name="autoplaceHairpinDynamicsDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -7265,6 +7566,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="8" column="1">
             <widget class="QDoubleSpinBox" name="hairpinLineWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -7412,6 +7716,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="voltaHook">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -7448,6 +7755,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="voltaLineWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -7484,6 +7794,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="5" column="1">
             <widget class="QDoubleSpinBox" name="voltaLineStyleDashSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -7588,6 +7901,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="6" column="1">
             <widget class="QDoubleSpinBox" name="voltaLineStyleGapSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -7679,6 +7995,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="5">
             <widget class="QDoubleSpinBox" name="ottavaHookBelow">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -7781,6 +8100,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="5">
             <widget class="QDoubleSpinBox" name="ottavaHookAbove">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -7943,6 +8265,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="6" column="1">
             <widget class="QDoubleSpinBox" name="ottavaLineWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -7957,6 +8282,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="8" column="1">
             <widget class="QDoubleSpinBox" name="ottavaLineStyleDashSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -7970,6 +8298,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="9" column="1">
             <widget class="QDoubleSpinBox" name="ottavaLineStyleGapSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -8061,6 +8392,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="4" column="1">
             <widget class="QDoubleSpinBox" name="pedalLineWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -8272,6 +8606,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="6" column="1">
             <widget class="QDoubleSpinBox" name="pedalLineStyleDashSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -8285,6 +8622,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="7" column="1">
             <widget class="QDoubleSpinBox" name="pedalLineStyleGapSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -8680,6 +9020,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="0" column="1">
             <widget class="QDoubleSpinBox" name="bendLineWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -8699,6 +9042,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="bendArrowWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -9063,6 +9409,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="articNoteHeadDist">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string comment="space unit">sp</string>
              </property>
@@ -9093,6 +9442,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="articStaffDist">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string comment="space unit">sp</string>
              </property>
@@ -9103,6 +9455,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="4" column="1">
             <widget class="QSpinBox" name="articulationMag">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string notr="true">%</string>
              </property>
@@ -9119,6 +9474,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="articStemDist">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string comment="space unit">sp</string>
              </property>
@@ -9190,6 +9548,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="0" column="1">
             <widget class="QDoubleSpinBox" name="articMinVerticalDist">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -9328,6 +9689,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="fermataMinDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -9510,6 +9874,9 @@ By default, they will be placed such as that their right end are at the same lev
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -9776,6 +10143,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -9888,6 +10258,9 @@ By default, they will be placed such as that their right end are at the same lev
               <layout class="QGridLayout" name="gridLayout_24">
                <item row="0" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsDashMinLength">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -9904,6 +10277,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="4" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsDashPad">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -9956,6 +10332,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="2" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsDashMaxDistance">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -9987,10 +10366,17 @@ By default, they will be placed such as that their right end are at the same lev
                 </widget>
                </item>
                <item row="5" column="1">
-                <widget class="QDoubleSpinBox" name="lyricsDashYposRatio"/>
+                <widget class="QDoubleSpinBox" name="lyricsDashYposRatio">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                </widget>
                </item>
                <item row="3" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsDashLineThickness">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -10116,6 +10502,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="1" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsDashMaxLength">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -10144,6 +10533,9 @@ By default, they will be placed such as that their right end are at the same lev
               <layout class="QGridLayout" name="gridLayout_23">
                <item row="5" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsMinBottomDistance">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -10207,6 +10599,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="6" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsMinDistance">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -10386,6 +10781,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="3" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsLineHeight">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>%</string>
                  </property>
@@ -10424,6 +10822,9 @@ By default, they will be placed such as that their right end are at the same lev
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
                  </property>
                  <property name="suffix">
                   <string>sp</string>
@@ -10473,6 +10874,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="0" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsLineThickness">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -10525,6 +10929,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="1" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsMelismaPad">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -10578,6 +10985,9 @@ By default, they will be placed such as that their right end are at the same lev
           <layout class="QGridLayout" name="gridLayout_22">
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="dynamicsSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>%</string>
              </property>
@@ -10761,6 +11171,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="6" column="1">
             <widget class="QDoubleSpinBox" name="dynamicsMinDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -10994,6 +11407,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -11091,6 +11507,9 @@ By default, they will be placed such as that their right end are at the same lev
              </item>
              <item row="1" column="1">
               <widget class="QDoubleSpinBox" name="doubleSpinFBSize">
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
                <property name="suffix">
                 <string>pt</string>
                </property>
@@ -11134,6 +11553,9 @@ By default, they will be placed such as that their right end are at the same lev
              </item>
              <item row="2" column="1">
               <widget class="QDoubleSpinBox" name="doubleSpinFBVertPos">
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
                <property name="suffix">
                 <string>sp</string>
                </property>
@@ -11166,6 +11588,9 @@ By default, they will be placed such as that their right end are at the same lev
              </item>
              <item row="3" column="1">
               <widget class="QSpinBox" name="spinFBLineHeight">
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
                <property name="suffix">
                 <string notr="true">%</string>
                </property>
@@ -11335,6 +11760,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="2" column="2">
                 <widget class="QSpinBox" name="capoPosition">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="maximum">
                   <number>11</number>
                  </property>
@@ -11363,6 +11791,9 @@ By default, they will be placed such as that their right end are at the same lev
                  <layout class="QGridLayout" name="gridLayout_45">
                   <item row="1" column="4">
                    <widget class="QDoubleSpinBox" name="modifierMag">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="singleStep">
                      <double>0.100000000000000</double>
                     </property>
@@ -11370,6 +11801,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="2" column="4">
                    <widget class="QDoubleSpinBox" name="modifierAdjust">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="minimum">
                      <double>-99.989999999999995</double>
                     </property>
@@ -11377,6 +11811,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="extensionMag">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="singleStep">
                      <double>0.100000000000000</double>
                     </property>
@@ -11384,6 +11821,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="extensionAdjust">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="minimum">
                      <double>-99.989999999999995</double>
                     </property>
@@ -11718,6 +12158,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="maxHarmonyBarDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -11767,6 +12210,9 @@ By default, they will be placed such as that their right end are at the same lev
                     <property name="enabled">
                      <bool>true</bool>
                     </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -11786,6 +12232,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="minHarmonyDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -11805,6 +12254,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="4" column="1">
                    <widget class="QDoubleSpinBox" name="maxChordShiftBelow">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -11815,6 +12267,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="3" column="1">
                    <widget class="QDoubleSpinBox" name="maxChordShiftAbove">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -11890,6 +12345,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="8" column="1">
             <widget class="QDoubleSpinBox" name="maxFretShiftAbove">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -11910,6 +12368,9 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="accessibleName">
               <string>Fret number font size</string>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string notr="true">%</string>
              </property>
@@ -11928,6 +12389,9 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QDoubleSpinBox" name="fretFretSpacing">
              <property name="accessibleName">
               <string>Fret spacing</string>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -11971,6 +12435,9 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="accessibleName">
               <string>Scale</string>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -12006,6 +12473,9 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QDoubleSpinBox" name="fretY">
              <property name="accessibleName">
               <string>Default vertical position</string>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -12052,6 +12522,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="9" column="1">
             <widget class="QDoubleSpinBox" name="maxFretShiftBelow">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -12062,6 +12535,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="4" column="1">
             <widget class="QDoubleSpinBox" name="barreLineWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -12115,6 +12591,9 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="accessibleName">
               <string>String spacing</string>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -12149,6 +12628,9 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QDoubleSpinBox" name="fretDotSize">
              <property name="accessibleName">
               <string>Relative dot size</string>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="minimum">
               <double>0.100000000000000</double>
@@ -12837,6 +13319,9 @@ By default, they will be placed such as that their right end are at the same lev
                  </item>
                  <item row="4" column="1">
                   <widget class="QDoubleSpinBox" name="textStyleFrameBorderRadius">
+                   <property name="keyboardTracking">
+                    <bool>false</bool>
+                   </property>
                    <property name="decimals">
                     <number>0</number>
                    </property>
@@ -12902,7 +13387,11 @@ By default, they will be placed such as that their right end are at the same lev
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QDoubleSpinBox" name="textStyleFramePadding"/>
+                  <widget class="QDoubleSpinBox" name="textStyleFramePadding">
+                   <property name="keyboardTracking">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
                  </item>
                  <item row="1" column="1">
                   <widget class="Awl::ColorLabel" name="textStyleFrameBackground"/>
@@ -12921,7 +13410,11 @@ By default, they will be placed such as that their right end are at the same lev
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QDoubleSpinBox" name="textStyleFrameBorder"/>
+                  <widget class="QDoubleSpinBox" name="textStyleFrameBorder">
+                   <property name="keyboardTracking">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
                  </item>
                  <item row="0" column="0">
                   <widget class="QLabel" name="label_203">
@@ -12987,6 +13480,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="textStyleFontSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>pt</string>
              </property>
@@ -13184,6 +13680,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="textStyleLineSpacing">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>li</string>
              </property>
