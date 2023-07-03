@@ -891,6 +891,10 @@ int BeamTremoloLayout::computeDesiredSlant(int startNote, int endNote, int middl
 
 SlopeConstraint BeamTremoloLayout::getSlopeConstraint(int startNote, int endNote) const
 {
+    if (m_notes.empty()) {
+        return SlopeConstraint::NO_CONSTRAINT;
+    }
+
     // 0 to constrain to flat, 1 to constrain to 0.25, <0 for no constraint
     if (startNote == endNote) {
         return SlopeConstraint::FLAT;
