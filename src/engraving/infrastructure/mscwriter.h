@@ -56,6 +56,7 @@ public:
     Ret open();
     void close();
     bool isOpened() const;
+    bool hasError() const;
 
     void writeStyleFile(const ByteArray& data);
     void writeScoreFile(const ByteArray& data);
@@ -76,6 +77,7 @@ private:
         virtual Ret open(io::IODevice* device, const io::path_t& filePath) = 0;
         virtual void close() = 0;
         virtual bool isOpened() const = 0;
+        virtual bool hasError() const = 0;
         virtual bool addFileData(const String& fileName, const ByteArray& data) = 0;
     };
 
@@ -85,6 +87,7 @@ private:
         Ret open(io::IODevice* device, const io::path_t& filePath) override;
         void close() override;
         bool isOpened() const override;
+        bool hasError() const override;
         bool addFileData(const String& fileName, const ByteArray& data) override;
 
     private:
@@ -98,9 +101,11 @@ private:
         Ret open(io::IODevice* device, const io::path_t& filePath) override;
         void close() override;
         bool isOpened() const override;
+        bool hasError() const override;
         bool addFileData(const String& fileName, const ByteArray& data) override;
     private:
         io::path_t m_rootPath;
+        bool m_hasError = false;
     };
 
     struct XmlFileWriter : public IWriter
@@ -109,6 +114,7 @@ private:
         Ret open(io::IODevice* device, const io::path_t& filePath) override;
         void close() override;
         bool isOpened() const override;
+        bool hasError() const override;
         bool addFileData(const String& fileName, const ByteArray& data) override;
     private:
         io::IODevice* m_device = nullptr;
@@ -136,6 +142,7 @@ private:
     Params m_params;
     mutable IWriter* m_writer = nullptr;
     Meta m_meta;
+    bool m_hadError = false;
 };
 }
 
