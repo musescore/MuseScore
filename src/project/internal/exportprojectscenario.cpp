@@ -266,14 +266,13 @@ bool ExportProjectScenario::guessIsCreatingOnlyOneFile(const notation::INotation
             // Check if it is not a potential (not-yet-initialized) excerpt
             ExcerptNotationList potentialExcerpts = masterNotation()->potentialExcerpts();
 
-            auto it
-                = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(),
-                               [notation = notations.front()](const IExcerptNotationPtr& excerpt) {
+            auto it = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(),
+                                   [notation = notations.front()](const IExcerptNotationPtr& excerpt) {
                     return excerpt->notation() == notation;
                 });
 
             if (it == potentialExcerpts.cend()) {
-                return notations.front()->elements()->pages().size();
+                return notations.front()->elements()->pages().size() == 1;
             }
         }
 
