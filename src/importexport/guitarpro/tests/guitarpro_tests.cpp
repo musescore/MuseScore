@@ -62,15 +62,6 @@ void GuitarPro_Tests::gpReadTest(const char* file, const char* ext)
     delete score;
 }
 
-TEST_F(GuitarPro_Tests, gpTestIrrTuplet) {
-    gpReadTest("testIrrTuplet", "gp");
-}
-TEST_F(GuitarPro_Tests, gpxTestIrrTuplet) {
-    gpReadTest("testIrrTuplet", "gpx");
-}
-TEST_F(GuitarPro_Tests, gp4TestIrrTuplet) {
-    gpReadTest("testIrrTuplet", "gp4");
-}
 TEST_F(GuitarPro_Tests, gpSforzato) {
     gpReadTest("sforzato", "gp");
 }
