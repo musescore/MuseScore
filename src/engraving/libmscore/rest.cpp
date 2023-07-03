@@ -522,6 +522,10 @@ int Rest::computeWholeRestOffset(int voiceOffset, int lines)
             }
             Chord* chord = toChord(item);
             Shape chordShape = chord->shape().translated(chord->pos());
+            chordShape.removeInvisibles();
+            if (chordShape.empty()) {
+                continue;
+            }
             if (track < thisTrack) {
                 hasNotesAbove = true;
                 bottomY = std::max(bottomY, chordShape.bottom());
