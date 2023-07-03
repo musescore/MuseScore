@@ -740,4 +740,7 @@ TEST_F(GuitarPro_Tests, gp5LineElements) {
 TEST_F(GuitarPro_Tests, gp5LetRingTied) {
     gpReadTest("let-ring-tied", "gp5");
 }
+TEST_F(GuitarPro_Tests, gpPercussionBeams) {
+    gpReadTest("percussion-beams", "gp");
+}
 }
