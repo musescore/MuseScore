@@ -78,7 +78,7 @@ MixerPanelSection {
                 icon: IconCode.SOLO
                 checked: channelItem.solo
 
-                enabled: channelItem.type !== MixerChannelItem.Aux && !channelItem.muted
+                enabled: channelItem.type !== MixerChannelItem.Aux && (!channelItem.mutedManually || channelItem.solo)
                 visible: channelItem.type !== MixerChannelItem.Master
 
                 navigation.name: "SoloButton"
