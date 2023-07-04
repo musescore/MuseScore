@@ -735,9 +735,13 @@ void BarLine::draw(Painter* painter) const
     break;
     }
     Segment* s = segment();
-    if (s && s->isEndBarLineType() && !score()->printing() && score()->showUnprintable()) {
+    if (s && !score()->printing() && score()->showUnprintable() && score()->markIrregularMeasures()) {
         Measure* m = s->measure();
-        if (m->isIrregular() && score()->markIrregularMeasures() && !m->isMMRest()) {
+        if ((barLineType() & BarLineType::START_REPEAT) && m->prevMeasure()
+            && (m->prevMeasure()->endBarLineType() != BarLineType::END_REPEAT)) {
+            m = m->prevMeasure();
+        }
+        if (m->isIrregular() && !m->isMMRest()) {
             painter->setPen(engravingConfiguration()->formattingMarksColor());
             draw::Font f(u"Edwin", Font::Type::Text);
             f.setPointSizeF(12 * spatium() / SPATIUM20);
