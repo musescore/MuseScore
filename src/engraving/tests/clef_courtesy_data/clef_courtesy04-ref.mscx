@@ -7,7 +7,6 @@
       <frameSystemDistance>0</frameSystemDistance>
       <barWidth>0.2</barWidth>
       <endBarWidth>0.4</endBarWidth>
-      <bracketDistance>0.4</bracketDistance>
       <stemWidth>0.2</stemWidth>
       <staffLineWidth>0.15</staffLineWidth>
       <measureNumberInterval>1</measureNumberInterval>

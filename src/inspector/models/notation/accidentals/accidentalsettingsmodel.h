@@ -31,6 +31,7 @@ class AccidentalSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(PropertyItem * bracketType READ bracketType CONSTANT)
     Q_PROPERTY(PropertyItem * isSmall READ isSmall CONSTANT)
+    Q_PROPERTY(bool isSmallAvailable READ isSmallAvailable NOTIFY isSmallAvailableChanged)
 
 public:
     explicit AccidentalSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -43,9 +44,19 @@ public:
     PropertyItem* bracketType() const;
     PropertyItem* isSmall() const;
 
+    bool isSmallAvailable() const;
+
+signals:
+    void isSmallAvailableChanged(bool available);
+
 private:
     PropertyItem* m_bracketType = nullptr;
     PropertyItem* m_isSmall = nullptr;
+    bool m_isSmallAvailable = true;
+
+private:
+    void updateIsSmallAvailable();
+    void setIsSmallAvailable(bool available);
 };
 }
 

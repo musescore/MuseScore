@@ -838,6 +838,11 @@ EngravingItem* TextBase::drop(EditData& ed)
         String s = toFSymbol(e)->toString();
         delete e;
 
+        CharFormat* currentFormat = cursor->format();
+        if (currentFormat->fontFamily() == u"ScoreText") {
+            currentFormat->setFontFamily(propertyDefault(Pid::FONT_FACE).value<String>());
+        }
+
         deleteSelectedText(ed);
         score()->undo(new InsertText(cursor, s), &ed);
     }
