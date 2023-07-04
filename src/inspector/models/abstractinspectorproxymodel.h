@@ -74,6 +74,8 @@ protected:
     void setModels(const QList<AbstractInspectorModel*>& models);
 
 private:
+    void onCurrentNotationChanged() override;
+
     QHash<InspectorModelType, AbstractInspectorModel*> m_modelsHash;
     InspectorModelType m_defaultSubModelType = InspectorModelType::TYPE_UNDEFINED;
 };
