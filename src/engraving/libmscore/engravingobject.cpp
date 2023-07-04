@@ -553,7 +553,7 @@ EngravingObject* EngravingObject::findLinkedInScore(Score* score) const
         return nullptr;
     }
     auto findElem = std::find_if(_links->begin(), _links->end(),
-                                 [score](EngravingObject* engObj) { return engObj && engObj->score() == score; });
+                                 [this, score](EngravingObject* engObj) { return engObj && engObj != this && engObj->score() == score; });
     return findElem != _links->end() ? *findElem : nullptr;
 }
 
