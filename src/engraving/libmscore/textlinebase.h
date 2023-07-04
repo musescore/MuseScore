@@ -67,6 +67,7 @@ public:
     Text* endText() const { return m_endText; }
 
     mu::PointF* pointsRef() { return &m_points[0]; }
+    mu::PolygonF& polygonRef() { return m_joinedHairpin; }
     int& npointsRef() { return m_npoints; }
 
     double lineLength() const { return m_lineLength; }
@@ -79,6 +80,7 @@ protected:
     Text* m_text = nullptr;
     Text* m_endText = nullptr;
     mu::PointF m_points[6];
+    mu::PolygonF m_joinedHairpin;
     int m_npoints = 0;
     double m_lineLength = 0;
     bool m_twoLines = false;
