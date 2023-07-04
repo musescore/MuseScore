@@ -2751,11 +2751,10 @@ void Note::horizontalDrag(EditData& ed)
 
 void Note::updateRelLine(int relLine, bool undoable)
 {
-    if (!staff()) {
+    if (!staff() || staffIdx() != chord()->staffIdx()) {
         return;
     }
     // int idx      = staffIdx() + chord()->staffMove();
-    assert(staffIdx() == chord()->staffIdx());
     staff_idx_t idx      = chord()->vStaffIdx();
 
     const Staff* staff  = score()->staff(idx);
