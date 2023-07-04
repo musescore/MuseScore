@@ -64,13 +64,14 @@ mu::RetVal<AudioResourceMetaList> VstPluginMetaReader::readMeta(const io::path_t
         }
 
         audio::AudioResourceMeta meta;
-        meta.id = classInfo.name();
+        meta.id = io::completeBasename(pluginPath).toStdString();
         meta.type = audio::AudioResourceType::VstPlugin;
         meta.attributes.emplace(audio::CATEGORIES_ATTRIBUTE, String::fromStdString(classInfo.subCategoriesString()));
         meta.vendor = classInfo.vendor();
         meta.hasNativeEditorSupport = hasNativeEditorSupport();
 
         result.emplace_back(std::move(meta));
+        break;
     }
 
     return RetVal<AudioResourceMetaList>::make_ok(result);
