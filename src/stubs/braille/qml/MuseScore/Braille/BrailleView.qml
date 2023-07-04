@@ -29,13 +29,10 @@ Item {
     id: root
 
     property NavigationPanel navigationPanel: NavigationPanel {
-        name: "BrailleView"
-        enabled: root.enabled && root.visible
+        name: "BrailleViewStub"
+        enabled: false
         direction: NavigationPanel.Both
     }
 
-    StyledTextLabel {
-        anchors.centerIn: parent
-        text: "BrailleView stub"
-    }
+    visible: false
 }
