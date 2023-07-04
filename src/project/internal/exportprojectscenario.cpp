@@ -263,17 +263,24 @@ bool ExportProjectScenario::guessIsCreatingOnlyOneFile(const notation::INotation
     switch (unitType) {
     case INotationWriter::UnitType::PER_PAGE: {
         if (notations.size() == 1) {
+            INotationPtr notation = notations.front();
+
             // Check if it is not a potential (not-yet-initialized) excerpt
             ExcerptNotationList potentialExcerpts = masterNotation()->potentialExcerpts();
 
-            auto it
-                = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(),
-                               [notation = notations.front()](const IExcerptNotationPtr& excerpt) {
+            auto it = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
                     return excerpt->notation() == notation;
                 });
 
             if (it == potentialExcerpts.cend()) {
-                return notations.front()->elements()->pages().size();
+                ViewMode viewMode = notation->painting()->viewMode();
+                notation->painting()->setViewMode(ViewMode::PAGE);
+
+                bool onePage = notations.front()->elements()->pages().size() == 1;
+
+                notation->painting()->setViewMode(viewMode);
+
+                return onePage;
             }
         }
 
