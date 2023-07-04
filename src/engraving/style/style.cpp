@@ -266,12 +266,19 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
     return true;
 }
 
+void MStyle::readVersion(String versionTag)
+{
+    versionTag.remove(u".");
+    m_version = versionTag.toInt();
+}
+
 bool MStyle::read(IODevice* device, bool ign)
 {
     UNUSED(ign);
     XmlReader e(device);
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
+            readVersion(e.attribute("version"));
             while (e.readNextStartElement()) {
                 if (e.name() == "Style") {
                     read(e, nullptr);
@@ -333,16 +340,16 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
                     || tag == "propertyDistanceHead"
                     || tag == "propertyDistanceStem"
                     || tag == "propertyDistance")
-                   && defaultStyleVersion() < 400) {
+                   && m_version < 400) {
             // Ignoring pre-4.0 articulation style settings. Using the new defaults instead
             e.skipCurrentElement();
         } else if ((tag == "bracketDistance")
-                   && defaultStyleVersion() < 400) {
+                   && m_version < 400) {
             // Ignoring pre-4.0 brackets distance settings. Using the new defaults instead.
             e.skipCurrentElement();
         } else if (tag == "pedalListStyle") { // pre-3.6.3/4.0 typo
             set(Sid::pedalLineStyle, TConv::fromXml(e.readAsciiText(), LineType::SOLID));
-        } else if (tag == "chordlineThickness" && defaultStyleVersion() <= 400) {
+        } else if (tag == "chordlineThickness" && m_version < 410) {
             // Ignoring pre-4.1 value as it was wrong (it wasn't user-editable anyway)
             e.skipCurrentElement();
         } else if (!readProperties(e)) {
