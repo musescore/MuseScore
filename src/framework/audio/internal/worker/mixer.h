@@ -72,20 +72,26 @@ public:
 private:
     void mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount, bool& outBufferIsSilent);
     void prepareAuxBuffers(size_t outBufferSize);
-    void writeTrackToAuxBuffers(const AuxSendsParams& auxSends, const float* trackBuffer, samples_t samplesPerChannel);
+    void writeTrackToAuxBuffers(const float* trackBuffer, const AuxSendsParams& auxSends, samples_t samplesPerChannel);
     void processAuxChannels(float* buffer, samples_t samplesPerChannel);
     void completeOutput(float* buffer, samples_t samplesPerChannel);
     void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
 
     std::vector<float> m_writeCacheBuff;
-    std::vector<std::vector<float> > m_auxBuffers;
 
     AudioOutputParams m_masterParams;
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
     std::vector<IFxProcessorPtr> m_masterFxProcessors = {};
 
     std::map<TrackId, MixerChannelPtr> m_trackChannels = {};
-    std::vector<MixerChannelPtr> m_auxChannels = {};
+
+    struct AuxChannelInfo {
+        MixerChannelPtr channel;
+        std::vector<float> buffer;
+        bool receivedAudioSignal = false;
+    };
+
+    std::vector<AuxChannelInfo> m_auxChannelInfoList;
 
     dsp::LimiterPtr m_limiter = nullptr;
 
