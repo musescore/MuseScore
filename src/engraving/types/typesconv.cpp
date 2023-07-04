@@ -1036,8 +1036,8 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::GLISSANDO,         "glissando",            TranslatableString("engraving", "Glissando") },
     { TextStyleType::PEDAL,             "pedal",                TranslatableString("engraving", "Pedal") },
     { TextStyleType::BEND,              "bend",                 TranslatableString("engraving", "Bend") },
-    { TextStyleType::LET_RING,          "let_ring",             TranslatableString("engraving", "Let Ring") },
-    { TextStyleType::PALM_MUTE,         "palm_mute",            TranslatableString("engraving", "Palm Mute") },
+    { TextStyleType::LET_RING,          "let_ring",             TranslatableString("engraving", "Let ring") },
+    { TextStyleType::PALM_MUTE,         "palm_mute",            TranslatableString("engraving", "Palm mute") },
 
     { TextStyleType::USER1,             "user_1",               TranslatableString("engraving", "User-1") },
     { TextStyleType::USER2,             "user_2",               TranslatableString("engraving", "User-2") },

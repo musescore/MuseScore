@@ -92,13 +92,13 @@ StyledPopupView {
     function getNoteName(string, state) {
 
         var noteNames = [
-                [qsTrc("notation", "D Flat"), qsTrc("notation", "D Natural"), qsTrc("notation", "D Sharp")],
-                [qsTrc("notation", "C Flat"), qsTrc("notation", "C Natural"), qsTrc("notation", "C Sharp")],
-                [qsTrc("notation", "B Flat"), qsTrc("notation", "B Natural"), qsTrc("notation", "B Sharp")],
-                [qsTrc("notation", "E Flat"), qsTrc("notation", "E Natural"), qsTrc("notation", "E Sharp")],
-                [qsTrc("notation", "F Flat"), qsTrc("notation", "F Natural"), qsTrc("notation", "F Sharp")],
-                [qsTrc("notation", "G Flat"), qsTrc("notation", "G Natural"), qsTrc("notation", "G Sharp")],
-                [qsTrc("notation", "A Flat"), qsTrc("notation", "A Natural"), qsTrc("notation", "A Sharp")]
+                [qsTrc("notation", "D flat"), qsTrc("notation", "D natural"), qsTrc("notation", "D sharp")],
+                [qsTrc("notation", "C flat"), qsTrc("notation", "C natural"), qsTrc("notation", "C sharp")],
+                [qsTrc("notation", "B flat"), qsTrc("notation", "B natural"), qsTrc("notation", "B sharp")],
+                [qsTrc("notation", "E flat"), qsTrc("notation", "E natural"), qsTrc("notation", "E sharp")],
+                [qsTrc("notation", "F flat"), qsTrc("notation", "F natural"), qsTrc("notation", "F sharp")],
+                [qsTrc("notation", "G flat"), qsTrc("notation", "G natural"), qsTrc("notation", "G sharp")],
+                [qsTrc("notation", "A flat"), qsTrc("notation", "A natural"), qsTrc("notation", "A sharp")]
         ]
 
         return noteNames[string][state]
@@ -121,7 +121,7 @@ StyledPopupView {
             direction: NavigationPanel.Vertical
             section: root.notationViewNavigationSection
             order: root.navigationOrderStart
-            accessible.name: qsTrc("notation", "Pedal Settings buttons")
+            accessible.name: qsTrc("notation", "Pedal settings buttons")
         }
 
         // Accidental symbols
