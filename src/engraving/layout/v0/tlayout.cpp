@@ -201,6 +201,8 @@ public:
 
 void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
 {
+    //DO_ASSERT(!ctx.conf().isPaletteMode());
+
     bool found = LayoutVisitor::visit(LayoutTypes {}, item, ctx);
     if (!found) {
         LOGE() << "not found in lyaout types item: " << item->typeName();
@@ -238,7 +240,7 @@ void TLayout::layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx)
 {
     RectF r;
 
-    SymId s = item->symbol();
+    SymId s = item->symId();
     if (item->bracket() == AccidentalBracket::PARENTHESIS && !item->parentNoteHasParentheses()) {
         switch (item->accidentalType()) {
         case AccidentalType::FLAT2:
@@ -299,7 +301,7 @@ void TLayout::layoutMultiGlyphAccidental(Accidental* item, LayoutContext& ctx)
         x += item->symAdvance(id) + margin;
     }
 
-    SymId s = item->symbol();
+    SymId s = item->symId();
     SymElement e(s, x, 0.0);
     item->addElement(e);
     r.unite(item->symBbox(s).translated(x, 0.0));
@@ -2200,7 +2202,24 @@ void TLayout::layout(Glissando* item, LayoutContext& ctx)
 
     // AVOID HORIZONTAL LINES
 
-    int upDown = (0 < (anchor2->pitch() - anchor1->pitch())) - ((anchor2->pitch() - anchor1->pitch()) < 0);
+    // for microtonality read tuning, or check note accidental
+    double tune1 = anchor1->tuning();
+    double tune2 = anchor2->tuning();
+    AccidentalType acc1 = anchor1->accidentalType();
+    AccidentalType acc2 = anchor2->accidentalType();
+    if (RealIsNull(tune1) && Accidental::isMicrotonal(acc1)) {
+        tune1 = Accidental::subtype2centOffset(acc1);
+    }
+    if (RealIsNull(tune2) && Accidental::isMicrotonal(acc2)) {
+        tune2 = Accidental::subtype2centOffset(acc2);
+    }
+
+    int upDown = (0 < (anchor2->ppitch() - anchor1->ppitch())) - ((anchor2->ppitch() - anchor1->ppitch()) < 0);
+    // same note, so compare tunings
+    if (upDown == 0) {
+        upDown = (0 < (tune2 - tune1)) - ((tune2 - tune1) < 0);
+    }
+
     // on TAB's, glissando are by necessity on the same string, this gives an horizontal glissando line;
     // make bottom end point lower and top ending point higher
     if (cr1->staff()->isTabStaff(cr1->tick())) {
@@ -2395,7 +2414,9 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
     Dynamic* sd = nullptr;
     Dynamic* ed = nullptr;
     double dymax = item->hairpin()->placeBelow() ? -10000.0 : 10000.0;
-    if (item->autoplace() && !ctx.conf().isPaletteMode()) {
+    if (item->autoplace() && !ctx.conf().isPaletteMode()
+        && item->explicitParent() // TODO: remove this line (this might happen when Ctrl+Shift+Dragging an item)
+        ) {
         Segment* start = item->hairpin()->startSegment();
         Segment* end = item->hairpin()->endSegment();
         // Try to fit between adjacent dynamics
@@ -2551,6 +2572,15 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
         item->pointsRef()[2] = l2.p1();
         item->pointsRef()[3] = l2.p2();
         item->npointsRef()   = 4;
+
+        item->polygonRef().clear();
+        if (item->spannerSegmentType() != SpannerSegmentType::MIDDLE) {
+            if (type == HairpinType::DECRESC_HAIRPIN && item->spannerSegmentType() != SpannerSegmentType::BEGIN) {
+                item->polygonRef() << item->pointsRef()[0] << item->pointsRef()[1] << item->pointsRef()[2]; // [top-left, joint, bottom-left]
+            } else if (type == HairpinType::CRESC_HAIRPIN && item->spannerSegmentType() != SpannerSegmentType::END) {
+                item->polygonRef() << item->pointsRef()[1] << item->pointsRef()[0] << item->pointsRef()[3]; // [top-right, joint, bottom-right]
+            }
+        }
 
         RectF r = RectF(l1.p1(), l1.p2()).normalized().united(RectF(l2.p1(), l2.p2()).normalized());
         if (!item->text()->empty()) {
@@ -2718,26 +2748,26 @@ void TLayout::layout(Harmony* item, LayoutContext& ctx)
     //      setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
 
     layout1(item, ctx);
-    item->setPos(calculateBoundingRect(item, ctx));
 }
 
 void TLayout::layout1(Harmony* item, LayoutContext& ctx)
 {
     if (item->isLayoutInvalid()) {
-        item->createLayout();
+        item->createBlocks();
     }
 
     if (item->textBlockList().empty()) {
         item->textBlockList().push_back(TextBlock());
     }
 
-    calculateBoundingRect(item, ctx);
+    auto positionPoint = calculateBoundingRect(item, ctx);
 
     if (item->hasFrame()) {
         item->layoutFrame();
     }
 
     ctx.addRefresh(item->canvasBoundingRect());
+    item->setPos(positionPoint);
 }
 
 PointF TLayout::calculateBoundingRect(Harmony* item, LayoutContext& ctx)
@@ -4198,13 +4228,14 @@ void TLayout::layout(StemSlash* item, LayoutContext& ctx)
     static constexpr double heightReduction = 0.66;
     static constexpr double angleIncrease = 1.2;
     static constexpr double lengthIncrease = 1.1;
+    const double mag = c->mag();
 
     double up = c->up() ? -1 : 1;
     double stemTipY = c->up() ? stem->bbox().translated(stem->pos()).top() : stem->bbox().translated(stem->pos()).bottom();
-    double leftHang = ctx.conf().noteHeadWidth() * ctx.conf().styleD(Sid::graceNoteMag) / 2;
+    double leftHang = ctx.conf().noteHeadWidth() * mag / 2;
     double angle = ctx.conf().styleD(Sid::stemSlashAngle) * M_PI / 180; // converting to radians
     bool straight = ctx.conf().styleB(Sid::useStraightNoteFlags);
-    double graceNoteMag = ctx.conf().styleD(Sid::graceNoteMag);
+    double graceNoteMag = mag;
 
     double startX = stem->bbox().translated(stem->pos()).right() - leftHang;
 
@@ -4470,8 +4501,8 @@ void TLayout::layout1(TextBase* item, LayoutContext& ctx)
 
 void TLayout::layout1TextBase(TextBase* item, LayoutContext& ctx)
 {
-    if (item->layoutInvalid()) {
-        item->createLayout();
+    if (item->isBlockNotCreated()) {
+        item->createBlocks();
     }
     if (item->blocksRef().empty()) {
         item->blocksRef().push_back(TextBlock());
@@ -5091,20 +5122,6 @@ void TLayout::layout(TripletFeel* item, LayoutContext& ctx)
 void TLayout::layout(Trill* item, LayoutContext& ctx)
 {
     layoutLine(static_cast<SLine*>(item), ctx);
-
-    if (ctx.conf().isPaletteMode()) {
-        return;
-    }
-    if (item->spannerSegments().empty()) {
-        return;
-    }
-    TrillSegment* ls = toTrillSegment(item->frontSegment());
-    if (item->spannerSegments().empty()) {
-        LOGD("Trill: no segments");
-    }
-    if (item->accidental()) {
-        item->accidental()->setParent(ls);
-    }
 }
 
 void TLayout::layout(Tuplet* item, LayoutContext& ctx)

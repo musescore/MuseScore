@@ -35,6 +35,7 @@
 #include "chordline.h"
 #include "clef.h"
 #include "excerpt.h"
+#include "expression.h"
 #include "factory.h"
 #include "fingering.h"
 #include "glissando.h"
@@ -736,9 +737,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement, 
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createStaffText(dummy()->segment(), TextStyleType::EXPRESSION);
-        textBox->setPlacement(PlacementV::BELOW);
-        textBox->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+        textBox = Factory::createExpression(dummy()->segment());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -3374,14 +3373,15 @@ ChordRest* Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, trac
 
 void Score::cmdDeleteSelection()
 {
-    ChordRest* cr = 0;              // select something after deleting notes
+    ChordRest* crSelectedAfterDeletion = 0;              // select something after deleting notes
 
     if (selection().isRange()) {
         Segment* s1 = selection().startSegment();
         Segment* s2 = selection().endSegment();
         const Fraction stick1 = selection().tickStart();
         const Fraction stick2 = selection().tickEnd();
-        cr = deleteRange(s1, s2, staff2track(selection().staffStart()), staff2track(selection().staffEnd()), selectionFilter());
+        crSelectedAfterDeletion = deleteRange(s1, s2, staff2track(selection().staffStart()),
+                                              staff2track(selection().staffEnd()), selectionFilter());
         s1 = tick2segment(stick1);
         s2 = tick2segment(stick2, true);
         if (s1 == 0 || s2 == 0) {
@@ -3403,7 +3403,6 @@ void Score::cmdDeleteSelection()
         // so we don't try to delete them twice if they are also in selection
         std::set<Spanner*> deletedSpanners;
 
-        bool allertInstrChange = true;
         for (EngravingItem* e : el) {
             // these are the linked elements we are about to delete
             std::list<EngravingObject*> links;
@@ -3416,7 +3415,7 @@ void Score::cmdDeleteSelection()
             // or of spanner or parent if that is more valid
             Fraction tick  = { -1, 1 };
             track_idx_t track = mu::nidx;
-            if (!cr) {
+            if (!crSelectedAfterDeletion) {
                 if (e->isNote()) {
                     tick = toNote(e)->chord()->tick();
                 } else if (e->isRest() || e->isMMRest()) {
@@ -3449,28 +3448,29 @@ void Score::cmdDeleteSelection()
                 //else tick < 0
                 track = e->track();
             }
-            // find element to select
-            if (!cr && tick >= Fraction(0, 1) && track != mu::nidx) {
-                cr = findCR(tick, track);
-            }
+
+            bool needFindCR = !crSelectedAfterDeletion && tick >= Fraction(0, 1) && track != mu::nidx;
 
             // We should not allow deleting the very first keySig of the piece, because it is
             // logically incorrect and leads to a state of undefined key/transposition.
             // Also instrument change key signatures should be undeletable.
             // The correct action is for the user to set an atonal/custom keySig as needed.
             if (e->isKeySig()) {
-                if (e->tick() == Fraction(0, 1)) {
-                    continue;
-                } else if (toKeySig(e)->forInstrumentChange()) {
-                    if (allertInstrChange) {
-                        MessageBox::warning(mtrc("engraving", "Instrument change key signature cannot be deleted").toStdString(),
-                                            mtrc("engraving",
-                                                 "Please replace it with a key signature from the palettes instead.").toStdString(),
-                                            { MessageBox::Ok });
-                        allertInstrChange = false;
+                if (e->tick() == Fraction(0, 1) || toKeySig(e)->forInstrumentChange()) {
+                    MScore::setError(MsError::CANNOT_REMOVE_KEY_SIG);
+                    if (needFindCR) {
+                        crSelectedAfterDeletion = findCR(tick, track);
                     }
                     continue;
                 }
+            }
+
+            // Don't allow deleting the trill cue note
+            if (e->isNote() && toNote(e)->isTrillCueNote()) {
+                if (needFindCR) {
+                    crSelectedAfterDeletion = findCR(tick, track);
+                }
+                continue;
             }
 
             // delete element if we have not done so already
@@ -3494,6 +3494,11 @@ void Score::cmdDeleteSelection()
                 }
                 deleteItem(e);
             }
+
+            if (needFindCR) {
+                crSelectedAfterDeletion = findCR(tick, track);
+            }
+
             // add these linked elements to list of already-deleted elements
             for (EngravingObject* se : links) {
                 deletedElements.insert(se);
@@ -3504,17 +3509,17 @@ void Score::cmdDeleteSelection()
     deselectAll();
     // make new selection if appropriate
     if (noteEntryMode()) {
-        if (cr) {
-            _is.setSegment(cr->segment());
+        if (crSelectedAfterDeletion) {
+            _is.setSegment(crSelectedAfterDeletion->segment());
         } else {
-            cr = _is.cr();
+            crSelectedAfterDeletion = _is.cr();
         }
     }
-    if (cr) {
-        if (cr->isChord()) {
-            select(toChord(cr)->upNote(), SelectType::SINGLE);
+    if (crSelectedAfterDeletion) {
+        if (crSelectedAfterDeletion->isChord()) {
+            select(toChord(crSelectedAfterDeletion)->upNote(), SelectType::SINGLE);
         } else {
-            select(cr, SelectType::SINGLE);
+            select(crSelectedAfterDeletion, SelectType::SINGLE);
         }
     }
 }
@@ -6300,8 +6305,6 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
 
     SegmentType segmentType = SegmentType::ChordRest;
 
-    Tuplet* crTuplet = cr->tuplet();
-
     // For linked staves the length of staffList is always > 1 since the list contains the staff itself too!
     const bool linked = ostaff->staffList().size() > 1;
 
@@ -6370,41 +6373,26 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
                 }
             }
 #endif
-            if (crTuplet && staff != ostaff) {
-                // In case of nested tuplets, get the parent tuplet.
-                Tuplet* parTuplet { nullptr };
-                if (crTuplet->tuplet()) {
-                    // Look for a tuplet, linked to the parent tuplet of crTuplet but
-                    // which is on the same staff as the new ChordRest.
-                    for (auto e : crTuplet->tuplet()->linkList()) {
-                        Tuplet* t = toTuplet(e);
-                        if (t->staff() == newcr->staff()) {
-                            parTuplet = t;
-                            break;
-                        }
-                    }
+            // Climb up the (possibly nested) tuplets from this chordRest
+            // Make sure all tuplets are cloned and correctly nested
+            DurationElement* elementBelow = cr;
+            Tuplet* tupletAbove = elementBelow->tuplet();
+            while (tupletAbove) {
+                DurationElement* linkedElementBelow = (DurationElement*)elementBelow->findLinkedInScore(score);
+                if (!linkedElementBelow) { // shouldn't happen
+                    break;
                 }
-
-                // Look for a tuplet linked to crTuplet but is on the same staff as
-                // the new ChordRest. Create a new tuplet if not found.
-                Tuplet* newTuplet { nullptr };
-                for (auto e : crTuplet->linkList()) {
-                    Tuplet* t = toTuplet(e);
-                    if (t->staff() == newcr->staff()) {
-                        newTuplet = t;
-                        break;
-                    }
+                Tuplet* linkedTuplet = (Tuplet*)tupletAbove->findLinkedInScore(score);
+                if (!linkedTuplet) {
+                    linkedTuplet = toTuplet(tupletAbove->linkedClone());
+                    linkedTuplet->setScore(score);
+                    linkedTuplet->setTrack(newcr->track());
+                    linkedTuplet->setParent(m);
                 }
+                linkedElementBelow->setTuplet(linkedTuplet);
 
-                if (!newTuplet) {
-                    newTuplet = toTuplet(crTuplet->linkedClone());
-                    newTuplet->setTuplet(parTuplet);
-                    newTuplet->setScore(score);
-                    newTuplet->setTrack(newcr->track());
-                    newTuplet->setParent(m);
-                }
-
-                newcr->setTuplet(newTuplet);
+                elementBelow = tupletAbove;
+                tupletAbove = tupletAbove->tuplet();
             }
 
             if (newcr->isRest() && (toRest(newcr)->isGap()) && !(toRest(newcr)->track() % VOICES)) {

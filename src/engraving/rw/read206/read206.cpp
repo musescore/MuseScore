@@ -3447,13 +3447,6 @@ Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 
     compat::CompatUtils::doCompatibilityConversions(score->masterScore());
 
-    // fix positions
-    //    offset = saved offset - layout position
-    score->doLayout();
-    for (auto i : ctx.fixOffsets()) {
-        i.first->setOffset(i.second - i.first->pos());
-    }
-
     return Err::NoError;
 }
 

@@ -374,6 +374,13 @@ void Shape::remove(const Shape& s)
     }
 }
 
+void Shape::removeInvisibles()
+{
+    mu::remove_if(*this, [](ShapeElement& shapeElement) {
+        return !shapeElement.toItem || !shapeElement.toItem->visible();
+    });
+}
+
 //---------------------------------------------------------
 //   contains
 //---------------------------------------------------------

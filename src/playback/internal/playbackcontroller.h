@@ -179,6 +179,7 @@ private:
     void setupSequencePlayer();
 
     void updateMuteStates();
+    void updateAuxMuteStates();
 
     void setCurrentPlaybackTime(audio::msecs_t msecs);
 

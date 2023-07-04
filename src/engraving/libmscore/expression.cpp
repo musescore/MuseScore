@@ -93,23 +93,25 @@ void Expression::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlag
 
 bool Expression::acceptDrop(EditData& ed) const
 {
-    return ed.dropElement->type() == ElementType::DYNAMIC;
+    return ed.dropElement->type() == ElementType::DYNAMIC || TextBase::acceptDrop(ed);
 }
 
 EngravingItem* Expression::drop(EditData& ed)
 {
     EngravingItem* item = ed.dropElement;
-    if (!item->isDynamic()) {
-        return nullptr;
+    if (item->isDynamic()) {
+        if (m_snappedDynamic) {
+            return m_snappedDynamic->drop(ed);
+        }
+
+        item->setTrack(track());
+        item->setParent(segment());
+        score()->undoAddElement(item);
+        item->undoChangeProperty(Pid::PLACEMENT, placement(), PropertyFlags::UNSTYLED);
+        return item;
     }
-    if (m_snappedDynamic) {
-        return m_snappedDynamic->drop(ed);
-    }
-    item->setTrack(track());
-    item->setParent(segment());
-    score()->undoAddElement(item);
-    item->undoChangeProperty(Pid::PLACEMENT, placement(), PropertyFlags::UNSTYLED);
-    return item;
+
+    return TextBase::drop(ed);
 }
 
 PropertyValue Expression::getProperty(Pid propertyId) const

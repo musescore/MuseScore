@@ -45,11 +45,11 @@ inline Ret make_ret(Err e)
     switch (e) {
     case Err::Undefined: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
-    case Err::NoPluginModule: return Ret(retCode, trc("vst", "Could not create VstModule"));
-    case Err::NoPluginFactory: return Ret(retCode, trc("vst", "Could not get Vst Plugin Factory from file"));
-    case Err::NoPluginProvider: return Ret(retCode, trc("vst", "No VST3 Audio Module Class found"));
-    case Err::NoPluginController: return Ret(retCode, trc("vst", "No VST3 Editor Controller Class found"));
-    case Err::NoPluginWithId: return Ret(retCode, trc("vst", "VST3 plugin is not found"));
+    case Err::NoPluginModule: return Ret(retCode, "Could not create VstModule");
+    case Err::NoPluginFactory: return Ret(retCode, "Could not get VST plugin factory from file");
+    case Err::NoPluginProvider: return Ret(retCode, "No VST3 audio module class found");
+    case Err::NoPluginController: return Ret(retCode, "No VST3 editor controller class found");
+    case Err::NoPluginWithId: return Ret(retCode, "VST3 plugin is not found");
     }
 
     return Ret(retCode);

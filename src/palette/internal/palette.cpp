@@ -31,8 +31,6 @@
 #include "translation.h"
 #include "mimedatautils.h"
 
-#include "engraving/layout/v0/tlayout.h"
-
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/articulation.h"
 #include "engraving/libmscore/bracket.h"
@@ -40,6 +38,8 @@
 #include "engraving/libmscore/image.h"
 #include "engraving/libmscore/imageStore.h"
 #include "engraving/libmscore/masterscore.h"
+
+#include "palettelayout.h"
 
 #include "palettecell.h"
 
@@ -106,7 +106,7 @@ PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const QStr
 {
     if (element) {
         // layout may be important for comparing cells, e.g. filtering "More" popup content
-        EngravingItem::layout()->layoutItem(element.get());
+        PaletteLayout::layoutItem(element.get());
     }
 
     PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, offset, tag, this);
@@ -130,7 +130,7 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, q
 {
     if (element) {
         // layout may be important for comparing cells, e.g. filtering "More" popup content
-        EngravingItem::layout()->layoutItem(element.get());
+        PaletteLayout::layoutItem(element.get());
     }
 
     PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, offset, tag, this);
@@ -512,8 +512,8 @@ bool Palette::writeToFile(const QString& p) const
 
 void Palette::showWritingPaletteError(const QString& path) const
 {
-    std::string title = trc("palette", "Writing Palette file");
-    std::string message = qtrc("palette", "Writing Palette file\n%1\nfailed.").arg(path).toStdString();
+    std::string title = trc("palette", "Writing palette file");
+    std::string message = qtrc("palette", "Writing palette file\n%1\nfailed.").arg(path).toStdString();
     interactive()->error(title, message);
 }
 

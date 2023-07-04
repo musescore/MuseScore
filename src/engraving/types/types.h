@@ -669,6 +669,8 @@ struct OrnamentInterval
     }
 };
 
+static const OrnamentInterval DEFAULT_ORNAMENT_INTERVAL = OrnamentInterval(IntervalStep::SECOND, IntervalType::AUTO);
+
 enum class OrnamentShowAccidental {
     DEFAULT,
     ANY_ALTERATION,

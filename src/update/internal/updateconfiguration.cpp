@@ -29,7 +29,7 @@ using namespace mu::framework;
 static const std::string module_name("update");
 
 static const Settings::Key CHECK_FOR_UPDATE_KEY(module_name, "application/checkForUpdate");
-static const Settings::Key CHECK_FOR_UPDATE_TESTING_MODE_KEY(module_name, "application/checkForUpdateTestingMode");
+static const Settings::Key ALLOW_UPDATE_ON_PRERELEASE(module_name, "application/allowUpdateOnPreRelease");
 static const Settings::Key SKIPPED_VERSION_KEY(module_name, "application/skippedVersion");
 
 static const std::string PRIVACY_POLICY_URL_PATH("/about/desktop-privacy-policy");
@@ -56,7 +56,13 @@ void UpdateConfiguration::init()
 {
     settings()->setDefaultValue(CHECK_FOR_UPDATE_KEY, Val(isAppUpdatable()));
 
-    settings()->setDefaultValue(CHECK_FOR_UPDATE_TESTING_MODE_KEY, Val(false));
+    bool allowUpdateOnPreRelease = false;
+#ifdef MUSESCORE_ALLOW_UPDATE_ON_PRERELEASE
+    allowUpdateOnPreRelease = true;
+#else
+    allowUpdateOnPreRelease = false;
+#endif
+    settings()->setDefaultValue(ALLOW_UPDATE_ON_PRERELEASE, Val(allowUpdateOnPreRelease));
 }
 
 bool UpdateConfiguration::isAppUpdatable() const
@@ -64,14 +70,14 @@ bool UpdateConfiguration::isAppUpdatable() const
     return true;
 }
 
-bool UpdateConfiguration::isTestingMode() const
+bool UpdateConfiguration::allowUpdateOnPreRelease() const
 {
-    return settings()->value(CHECK_FOR_UPDATE_TESTING_MODE_KEY).toBool();
+    return settings()->value(ALLOW_UPDATE_ON_PRERELEASE).toBool();
 }
 
-void UpdateConfiguration::setIsTestingMode(bool isTesting)
+void UpdateConfiguration::setAllowUpdateOnPreRelease(bool allow)
 {
-    settings()->setSharedValue(CHECK_FOR_UPDATE_TESTING_MODE_KEY, Val(isTesting));
+    settings()->setSharedValue(ALLOW_UPDATE_ON_PRERELEASE, Val(allow));
 }
 
 bool UpdateConfiguration::needCheckForUpdate() const
@@ -96,7 +102,8 @@ void UpdateConfiguration::setSkippedReleaseVersion(const std::string& version) c
 
 std::string UpdateConfiguration::checkForUpdateUrl() const
 {
-    return !isTestingMode() ? "https://updates.musescore.org/feed/latest.xml" : "https://updates.musescore.org/feed/latest.test.xml";
+    return !allowUpdateOnPreRelease() ? "https://updates.musescore.org/feed/latest.xml"
+           : "https://updates.musescore.org/feed/latest.test.xml";
 }
 
 mu::network::RequestHeaders UpdateConfiguration::checkForUpdateHeaders() const

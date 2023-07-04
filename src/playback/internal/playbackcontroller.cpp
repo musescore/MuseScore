@@ -1109,8 +1109,13 @@ void PlaybackController::setupSequenceTracks()
         updateMuteStates();
     });
 
-    audioSettings()->soloMuteStateChanged().onReceive(
+    audioSettings()->trackSoloMuteStateChanged().onReceive(
         this, [this](const InstrumentTrackId&, const project::IProjectAudioSettings::SoloMuteState&) {
+        updateMuteStates();
+    });
+
+    audioSettings()->auxSoloMuteStateChanged().onReceive(
+        this, [this](aux_channel_idx_t, const project::IProjectAudioSettings::SoloMuteState&) {
         updateMuteStates();
     });
 
@@ -1153,11 +1158,13 @@ void PlaybackController::updateMuteStates()
         return;
     }
 
+    TRACEFUNC;
+
     InstrumentTrackIdSet existingTrackIdSet = notationPlayback()->existingTrackIdSet();
     bool hasSolo = false;
 
     for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
-        if (audioSettings()->soloMuteState(instrumentTrackId).solo) {
+        if (audioSettings()->trackSoloMuteState(instrumentTrackId).solo) {
             hasSolo = true;
             break;
         }
@@ -1179,7 +1186,7 @@ void PlaybackController::updateMuteStates()
         const Part* part = notationParts->part(instrumentTrackId.partId);
         bool isPartVisible = part && part->show();
 
-        auto soloMuteState = audioSettings()->soloMuteState(instrumentTrackId);
+        auto soloMuteState = audioSettings()->trackSoloMuteState(instrumentTrackId);
 
         bool shouldBeMuted = soloMuteState.mute
                              || (hasSolo && !soloMuteState.solo)
@@ -1198,6 +1205,23 @@ void PlaybackController::updateMuteStates()
 
         audio::TrackId trackId = m_instrumentTrackIdMap.at(instrumentTrackId);
         playback()->audioOutput()->setOutputParams(m_currentSequenceId, trackId, std::move(params));
+    }
+
+    updateAuxMuteStates();
+}
+
+void PlaybackController::updateAuxMuteStates()
+{
+    for (const auto& pair : m_auxTrackIdMap) {
+        auto soloMuteState = audioSettings()->auxSoloMuteState(pair.first);
+
+        AudioOutputParams params = audioSettings()->auxOutputParams(pair.first);
+        if (params.muted == soloMuteState.mute) {
+            continue;
+        }
+
+        params.muted = soloMuteState.mute;
+        playback()->audioOutput()->setOutputParams(m_currentSequenceId, pair.second, std::move(params));
     }
 }
 

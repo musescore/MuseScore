@@ -34,7 +34,7 @@ RestSettingsProxyModel::RestSettingsProxyModel(QObject* parent, IElementReposito
 {
     setModelType(InspectorModelType::TYPE_REST);
     setTitle(qtrc("inspector", "Rest"));
-    setIcon(ui::IconCode::Code::QUAVER_REST);
+    setIcon(ui::IconCode::Code::REST_8TH);
 
     QList<AbstractInspectorModel*> models;
     for (InspectorModelType modelType : REST_PART_TYPES) {

@@ -70,7 +70,9 @@ void NotationBraille::init()
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         if (notation()) {
-            doBraille(true);
+            notation()->notationChanged().onNotify(this, [this]() {
+                doBraille(true);
+            });
 
             notation()->interaction()->selectionChanged().onNotify(this, [this]() {
                 doBraille();

@@ -135,6 +135,11 @@ void Version::setSuffix(const String& suffix)
     m_suffixVersion = versionSuffix.second;
 }
 
+bool Version::preRelease() const
+{
+    return !suffix().isEmpty();
+}
+
 mu::String Version::toString()
 {
     String res = String(u"%1.%2.%3").arg(m_major, m_minor, m_patch);

@@ -5006,8 +5006,9 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
     tagName += positioningAttributes(dyn);
     _xml.startElementRaw(tagName);
     const QString dynTypeName = TConv::toXml(dyn->dynamicType()).ascii();
+    bool hasCustomText = dyn->hasCustomText();
 
-    if (set.contains(dynTypeName)) {
+    if (set.contains(dynTypeName) && !hasCustomText) {
         _xml.tagRaw(dynTypeName);
     } else if (dynTypeName != "") {
         std::map<ushort, QChar> map;
@@ -5020,7 +5021,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
         map[0xE526] = 'n';
 
         QString dynText = dynTypeName;
-        if (dyn->dynamicType() == DynamicType::OTHER) {
+        if (dyn->dynamicType() == DynamicType::OTHER || hasCustomText) {
             dynText = dyn->plainText();
         }
 
@@ -5646,7 +5647,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
     } else if (e->isTempoText()) {
         exp->tempoText(toTempoText(e), sstaff);
     } else if (e->isPlayTechAnnotation() || e->isCapo() || e->isStaffText() || e->isSystemText() || e->isTripletFeel() || e->isText()
-               || (e->isInstrumentChange() && e->visible())) {
+               || e->isExpression() || (e->isInstrumentChange() && e->visible())) {
         exp->words(toTextBase(e), sstaff);
     } else if (e->isDynamic()) {
         exp->dynamic(toDynamic(e), sstaff);

@@ -56,7 +56,7 @@ FocusableItem {
             navigationRowStart: root.navigationRowStart
         }
 
-        CheckBoxPropertyView {
+        PropertyCheckBox {
             id: showNumbersOnlyCheckBox
             text: qsTrc("inspector", "Show numbers only")
             propertyItem: root.model ? root.model.showNumbersOnly : null

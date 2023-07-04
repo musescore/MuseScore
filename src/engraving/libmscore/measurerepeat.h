@@ -43,7 +43,9 @@ public:
     MeasureRepeat* clone() const override { return new MeasureRepeat(*this); }
     EngravingItem* linkedClone() override { return EngravingItem::linkedClone(); }
 
-    void setNumMeasures(int n) { m_numMeasures = n; }
+    static constexpr int MAX_NUM_MEASURES = 4;
+
+    void setNumMeasures(int n);
     int numMeasures() const { return m_numMeasures; }
     void setSymId(SymId id) { m_symId = id; }
     SymId symId() const { return m_symId; }
@@ -55,7 +57,7 @@ public:
     double numberPos() const { return m_numberPos; }
 
     Measure* firstMeasureOfGroup() const;
-    const Measure* referringMeasure() const;
+    const Measure* referringMeasure(const Measure* measure) const;
 
     void draw(mu::draw::Painter*) const override;
 

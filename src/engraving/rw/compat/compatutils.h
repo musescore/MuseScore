@@ -50,8 +50,11 @@ private:
     static void replaceOldWithNewOrnaments(MasterScore* score);
     static void replaceOldWithNewExpressions(MasterScore* score);
     static void reconstructTypeOfCustomDynamics(MasterScore* score);
+    static void splitArticulations(MasterScore* score);
     static DynamicType reconstructDynamicTypeFromString(Dynamic* dynamic);
     static void resetRestVerticalOffset(MasterScore* masterScore);
+    static void resetArticulationOffsets(MasterScore* masterScore);
+    static void resetStemLengthsForTwoNoteTrems(MasterScore* masterScore);
 };
 }
 #endif // MU_ENGRAVING_COMPATUTILS_H

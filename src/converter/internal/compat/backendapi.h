@@ -81,7 +81,7 @@ private:
     static mu::RetVal<QByteArray> processWriter(const std::string& writerName, const notation::INotationPtrList notations,
                                                 const project::INotationWriter::Options& options);
 
-    static Ret doExportScoreParts(const notation::INotationPtr notation, QIODevice& destinationDevice);
+    static Ret doExportScoreParts(const notation::IMasterNotationPtr notation, QIODevice& destinationDevice);
     static Ret doExportScorePartsPdfs(const notation::IMasterNotationPtr notation, QIODevice& destinationDevice,
                                       const std::string& scoreFileName);
     static Ret doExportScoreTranspose(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);

@@ -559,7 +559,7 @@ static void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell, int& on
 //   renderArpeggio
 //---------------------------------------------------------
 
-void renderArpeggio(Chord* chord, std::vector<NoteEventList>& ell)
+void renderArpeggio(Chord* chord, std::vector<NoteEventList>& ell, int ontime)
 {
     int notes = int(chord->notes().size());
     int l = 64;
@@ -585,6 +585,7 @@ void renderArpeggio(Chord* chord, std::vector<NoteEventList>& ell)
         auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
         int ot = (l * j * 1000) / chord->upNote()->playTicks()
                  * tempoRatio * chord->arpeggio()->Stretch();
+        ot = std::clamp(ot + ontime, ot, 1000);
 
         events->push_back(NoteEvent(0, ot, 1000 - ot));
         j++;
@@ -1197,7 +1198,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, in
     bool tremolo = false;
 
     if (chord->arpeggio() && chord->arpeggio()->playArpeggio()) {
-        renderArpeggio(chord, ell);
+        renderArpeggio(chord, ell, ontime);
         arpeggio = true;
     } else {
         if (chord->tremolo()) {
