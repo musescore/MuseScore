@@ -74,5 +74,9 @@ mu::RetVal<AudioResourceMetaList> VstPluginMetaReader::readMeta(const io::path_t
         break;
     }
 
+    if (result.empty()) {
+        return make_ret(Err::NoAudioEffect);
+    }
+
     return RetVal<AudioResourceMetaList>::make_ok(result);
 }
