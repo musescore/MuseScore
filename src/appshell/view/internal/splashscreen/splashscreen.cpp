@@ -87,7 +87,7 @@ void SplashScreen::setSize(const QSize& size)
         resize(m_view->size());
 
         if (screen()) {
-            move(screen()->geometry().center() - QPoint(size.width() / 2, size.height() / 2));
+            move(screen()->availableGeometry().center() - QPoint(size.width() / 2, size.height() / 2));
         }
     }
 }

@@ -63,6 +63,8 @@ StyledDialogView {
 
         spacing: 16
 
+        onHeightChanged: root.updateGeometryOnHeightChange = true
+
         StyledTextLabel {
             id: titleLabel
 

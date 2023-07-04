@@ -43,13 +43,13 @@ public:
     Q_INVOKABLE void accept();
     Q_INVOKABLE void reject(int code = -1);
 
+    Q_INVOKABLE void updateGeometry() override;
+
 private:
     bool isDialog() const override;
     void onHidden() override;
 
     QScreen* resolveScreen() const override;
-
-    void updateGeometry() override;
 
     QRect viewGeometry() const override;
 
