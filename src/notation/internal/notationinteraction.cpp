@@ -912,7 +912,8 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
         bool draggable = isDraggable(e);
 
         if (!draggable && e->isSpanner()) {
-            draggable = isDraggable(toSpanner(e)->frontSegment());
+            Spanner* s = toSpanner(e);
+            draggable = !s->segmentsEmpty() && isDraggable(s->frontSegment());
         }
 
         if (!draggable) {
