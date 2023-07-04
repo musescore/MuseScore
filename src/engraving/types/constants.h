@@ -83,6 +83,7 @@ struct Constants
 //       - A bunch of new options for dynamics
 //       - Clefs carry a "header" tag in the file (istead of trying to guess it from context)
 //       - New "Ornament" item with new properties and options
+//       - New "Capo" item
 
     constexpr static int DIVISION = 480;
     constexpr static BeatsPerSecond DEFAULT_TEMPO = 2.0; //default tempo is equal 120 bpm

@@ -34,7 +34,11 @@
 #include "libmscore/ornament.h"
 #include "libmscore/score.h"
 #include "libmscore/stafftext.h"
+#include "libmscore/capo.h"
 #include "engraving/types/symid.h"
+
+#include "palette.h"
+#include "palettecell.h"
 
 using namespace mu::palette;
 using namespace mu::engraving;
@@ -67,5 +71,31 @@ void PaletteCompat::migrateOldPaletteItemIfNeeded(ElementPtr& element, Score* pa
             newExpression->setXmlText(oldExpression->xmlText());
         }
         element.reset(newExpression);
+    }
+}
+
+void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
+{
+    if (palette.type() == Palette::Type::Guitar) {
+        addNewGuitarItems(palette, paletteScore);
+    }
+}
+
+void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScore)
+{
+    bool containsCapo = false;
+
+    for (const PaletteCellPtr& cell : guitarPalette.cells()) {
+        if (cell->element && cell->element->isCapo()) {
+            containsCapo = true;
+            break;
+        }
+    }
+
+    if (!containsCapo) {
+        auto capo = std::make_shared<Capo>(paletteScore->dummy()->segment());
+        capo->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Capo")));
+        int defaultPosition = std::min(7, guitarPalette.cellsCount());
+        guitarPalette.insertElement(defaultPosition, capo, QT_TRANSLATE_NOOP("palette", "Capo"))->setElementTranslated(true);
     }
 }

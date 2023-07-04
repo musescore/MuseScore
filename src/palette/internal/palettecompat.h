@@ -26,10 +26,15 @@
 #include "libmscore/engravingitem.h"
 
 namespace mu::palette {
+class Palette;
 class PaletteCompat
 {
 public:
     static void migrateOldPaletteItemIfNeeded(engraving::ElementPtr& element, engraving::Score* paletteScore);
+    static void addNewItemsIfNeeded(Palette& palette, engraving::Score* paletteScore);
+
+private:
+    static void addNewGuitarItems(Palette& guitarPalette, engraving::Score* paletteScore);
 };
 } // namespace mu::palette
 #endif // MU_PALETTE_PALETTECOMPAT_H
