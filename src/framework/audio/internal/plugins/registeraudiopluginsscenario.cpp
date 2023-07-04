@@ -152,7 +152,7 @@ mu::Ret RegisterAudioPluginsScenario::registerFailedPlugin(const io::path_t& plu
     }
 
     AudioPluginInfo info;
-    info.meta.id = io::filename(pluginPath).toStdString();
+    info.meta.id = io::completeBasename(pluginPath).toStdString();
 
     std::string ext = io::suffix(pluginPath);
     if (ext.find("vst") != std::string::npos) {
