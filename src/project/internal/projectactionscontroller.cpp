@@ -1410,7 +1410,7 @@ bool ProjectActionsController::askIfUserAgreesToOpenProjectWithIncompatibleVersi
 
 void ProjectActionsController::warnFileTooNew(const io::path_t& filepath)
 {
-    interactive()->error(qtrc("project", "Cannot read file %1").arg(filepath.toQString()).toStdString(),
+    interactive()->error(qtrc("project", "Cannot read file %1").arg(io::toNativeSeparators(filepath).toQString()).toStdString(),
                          trc("project", "This file was saved using a newer version of MuseScore. "
                                         "Please visit <a href=\"https://musescore.org\">musescore.org</a> to obtain the latest version."));
 }
