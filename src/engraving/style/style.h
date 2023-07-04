@@ -94,6 +94,9 @@ private:
 
     std::array<PropertyValue, size_t(Sid::STYLES)> m_values;
     std::array<Millimetre, size_t(Sid::STYLES)> m_precomputedValues;
+
+    void readVersion(String versionTag);
+    int m_version = 0;
 };
 } // namespace mu::engraving
 
