@@ -720,4 +720,11 @@ inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::RectX<T>&
     return s;
 }
 
+template<typename T>
+inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::PointX<T>& p)
+{
+    s << "{x: " << p.x() << ", y: " << p.y() << "}";
+    return s;
+}
+
 #endif // MU_DRAW_GEOMETRY_H

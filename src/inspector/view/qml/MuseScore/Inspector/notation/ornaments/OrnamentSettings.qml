@@ -187,7 +187,7 @@ Column {
         ]
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         id: startOnUpperNote
         visible: false // prepared for future option but not implemented yet
 

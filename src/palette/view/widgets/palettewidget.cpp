@@ -46,7 +46,7 @@
 #include "draw/types/pen.h"
 
 #include "engraving/rw/rwregister.h"
-#include "engraving/layout/v0/tlayout.h"
+
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/chord.h"
 #include "engraving/libmscore/engravingitem.h"
@@ -61,6 +61,7 @@
 #include "engraving/compat/dummyelement.h"
 
 #include "internal/palettecelliconengine.h"
+#include "internal/palettelayout.h"
 
 #include "log.h"
 
@@ -594,7 +595,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
         cellMag = 1.0;
     }
 
-    EngravingItem::layout()->layoutItem(element.get());
+    PaletteLayout::layoutItem(element.get());
 
     RectF r = element->bbox();
     int w = lrint(r.width() * cellMag);
@@ -1057,7 +1058,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
             cellMag = 1.0;
         }
 
-        EngravingItem::layout()->layoutItem(el.get());
+        PaletteLayout::layoutItem(el.get());
 
         if (drawStaff) {
             qreal y = r.y() + vgridM * .5 - dy + yOffset() * _spatium * cellMag;

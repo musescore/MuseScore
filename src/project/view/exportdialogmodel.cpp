@@ -82,7 +82,7 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
         ExportType::makeWithSuffixes({ "ogg" },
                                      qtrc("project/export", "OGG audio"),
                                      qtrc("project/export", "OGG audio files"),
-                                     "AudioSettingsPage.qml"),
+                                     "OggSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "flac" },
                                      qtrc("project/export", "FLAC audio"),
                                      qtrc("project/export", "FLAC audio files"),
@@ -354,15 +354,16 @@ bool ExportDialogModel::exportScores()
     }
 
     INotationProjectPtr project = context()->currentProject();
-    io::path_t filename;
-    if (project && project->path() == exportProjectScenario()->exportInfo().projectPath) {
-        filename = io::filename(m_exportPath);
-    } else {
-        filename = io::filename(project->path());
-    }
+    io::path_t filename = io::filename(project->path());
+    // TODO: only restore filename if exactly the same notations are selected and the same unit type.
+    // These settings may namely cause extra things to be added to the name, but these extra things
+    // are not applicable to other values of these settings.
+    //if (project && project->path() == exportProjectScenario()->exportInfo().projectPath) {
+    //    filename = io::filename(m_exportPath);
+    //}
     io::path_t defaultPath;
     if (m_exportPath != "" && filename != "") {
-        defaultPath = io::absolutePath(m_exportPath)
+        defaultPath = io::absoluteDirpath(m_exportPath)
                       .appendingComponent(io::filename(filename, false))
                       .appendingSuffix(m_selectedExportType.suffixes[0]);
     }
@@ -374,21 +375,6 @@ bool ExportDialogModel::exportScores()
     }
 
     m_exportPath = exportPath.val;
-
-    ExcerptNotationList excerptsToInit;
-    ExcerptNotationList potentialExcerpts = masterNotation()->potentialExcerpts();
-
-    for (const INotationPtr& notation : notations) {
-        auto it = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
-            return excerpt->notation() == notation;
-        });
-
-        if (it != potentialExcerpts.cend()) {
-            excerptsToInit.push_back(*it);
-        }
-    }
-
-    masterNotation()->initExcerpts(excerptsToInit);
 
     QMetaObject::invokeMethod(qApp, [this, notations]() {
         exportProjectScenario()->exportScores(notations, m_exportPath, m_selectedUnitType,

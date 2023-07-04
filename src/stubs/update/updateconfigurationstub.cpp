@@ -28,12 +28,12 @@ bool UpdateConfigurationStub::isAppUpdatable() const
     return false;
 }
 
-bool UpdateConfigurationStub::isTestingMode() const
+bool UpdateConfigurationStub::allowUpdateOnPreRelease() const
 {
     return false;
 }
 
-void UpdateConfigurationStub::setIsTestingMode(bool)
+void UpdateConfigurationStub::setAllowUpdateOnPreRelease(bool)
 {
 }
 

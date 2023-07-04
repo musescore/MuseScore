@@ -133,7 +133,7 @@ FocusableItem {
             }
         }
 
-        CheckBoxPropertyView {
+        PropertyCheckBox {
             id: multipleDotsCheckbox
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter

@@ -703,6 +703,8 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
     const double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
     const ArticulationStemSideAlign articulationHAlign = ctx.conf().styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
     const bool keepArticsTogether = ctx.conf().styleB(Sid::articulationKeepTogether);
+    const double stemSideDistance = ctx.conf().styleMM(Sid::propertyDistanceStem);
+
     int numCloseArtics = 0;
     bool hasStaffArticsUp = false;
     bool hasStaffArticsDown = false;
@@ -777,8 +779,10 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
         } else {
             x = item->centerX();
         }
+
         if (bottom) {
             if (!headSide && item->stem()) {
+                double stemBottom = item->stem()->bbox().translated(item->stem()->pos()).bottom();
                 // Check if there's a hook, because the tip of the hook always extends slightly past the end of the stem
                 if (item->hook()) {
                     y = item->hook()->bbox().translated(item->hook()->pos()).bottom();
@@ -790,13 +794,22 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                 if (line < lines && !(line % 2)) {
                     line += 1;
                 }
+                double dist = (line * _lineDist) - stemBottom;
+                bool hasBeam = item->beam() || (item->tremolo() && item->tremolo()->twoNotes());
+                if (line < lines && hasBeam && dist < stemSideDistance) {
+                    // beams can give stems weird unpredictable lengths, so we should enforce min
+                    // distance even inside the staff
+
+                    // adjust downwards a space but stop at the bottom of the staff
+                    line = std::min(line + 2, lines);
+                }
                 if (line < lines) {        // align between staff lines
                     y = line * _lineDist;
                     y -= a->height() * .5;
                 } else if (line == lines) {
-                    y = ctx.conf().styleMM(Sid::propertyDistanceStem) + lines * _lineDist;
+                    y = stemSideDistance + (lines * _lineDist);
                 } else {
-                    y += ctx.conf().styleMM(Sid::propertyDistanceStem);
+                    y += stemSideDistance;
                 }
             } else {
                 x = item->centerX();
@@ -822,25 +835,36 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                 }
             }
             // center symbol
-        } else {
+        } else { // topside
             if (!headSide && item->stem()) {
+                double stemTop = item->stem()->bbox().translated(item->stem()->pos()).top();
                 // Check if there's a hook, because the tip of the hook always extends slightly past the end of the stem
                 if (item->hook()) {
                     y = item->hook()->bbox().translated(item->hook()->pos()).top();
                 } else {
                     y = item->stem()->bbox().translated(item->stem()->pos()).top();
                 }
-                int line   = round((y - _lineDist) / _lineDist);
+                int line = round((y - _lineDist) / _lineDist);
                 if (line > 0 && !(line % 2)) {
                     line -= 1;
                 }
+                double dist = stemTop - (line * _lineDist);
+                bool hasBeam = item->beam() || (item->tremolo() && item->tremolo()->twoNotes());
+                if (line > 0 && hasBeam && dist < stemSideDistance) {
+                    // beams can give stems weird unpredictable lengths, so we should enforce min
+                    // distance even inside the staff
+
+                    // adjust upwards a space but stop at the top of the staff
+                    line = std::max(line - 2, 0);
+                }
+
                 if (line > 0) {        // align between staff lines
                     y = line * _lineDist;
                     y += a->height() * .5;
                 } else if (line == 0) {
-                    y = -ctx.conf().styleMM(Sid::propertyDistanceStem);
+                    y = -stemSideDistance;
                 } else {
-                    y -= ctx.conf().styleMM(Sid::propertyDistanceStem);
+                    y -= stemSideDistance;
                 }
             } else {
                 x = item->centerX();
@@ -1278,7 +1302,8 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
         Chord* c1 = item->_tremolo->chord1();
         Chord* c2 = item->_tremolo->chord2();
         bool cross = c1->staffMove() != c2->staffMove();
-        if (cross && item == c1) {
+        if (item == c1) {
+            // we have to lay out the tremolo because it hasn't been laid out at all yet, and we need its direction
             TLayout::layout(item->_tremolo, ctx);
         }
         Measure* measure = item->findMeasure();
@@ -2195,10 +2220,10 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
                 acel.top    = line * 0.5 * sp + ac->bbox().top();
                 acel.bottom = line * 0.5 * sp + ac->bbox().bottom();
                 acel.width  = ac->width();
-                PointF bboxNE = ac->symBbox(ac->symbol()).topRight();
-                PointF bboxSW = ac->symBbox(ac->symbol()).bottomLeft();
-                PointF cutOutNE = ac->symSmuflAnchor(ac->symbol(), SmuflAnchorId::cutOutNE);
-                PointF cutOutSW = ac->symSmuflAnchor(ac->symbol(), SmuflAnchorId::cutOutSW);
+                PointF bboxNE = ac->symBbox(ac->symId()).topRight();
+                PointF bboxSW = ac->symBbox(ac->symId()).bottomLeft();
+                PointF cutOutNE = ac->symSmuflAnchor(ac->symId(), SmuflAnchorId::cutOutNE);
+                PointF cutOutSW = ac->symSmuflAnchor(ac->symId(), SmuflAnchorId::cutOutSW);
                 if (!cutOutNE.isNull()) {
                     acel.ascent     = cutOutNE.y() - bboxNE.y();
                     acel.rightClear = bboxNE.x() - cutOutNE.x();
@@ -2779,10 +2804,15 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
             bool ignoreYOffset = (restAbove && restYOffset > 0) || (!restAbove && restYOffset < 0);
             PointF offset = ignoreYOffset ? PointF(0, restYOffset) : PointF(0, 0);
 
+            Shape chordShape = chord->shape().translated(chord->pos());
+            chordShape.removeInvisibles();
+            if (chordShape.empty()) {
+                continue;
+            }
+
             double clearance = 0.0;
             Shape restShape = rest->shape().translated(rest->pos() - offset);
             if (chord->segment() == rest->segment()) {
-                Shape chordShape = chord->shape().translated(chord->pos());
                 clearance = restAbove ? restShape.verticalClearance(chordShape) : chordShape.verticalClearance(restShape);
             } else {
                 Note* limitNote = restAbove ? chord->upNote() : chord->downNote();

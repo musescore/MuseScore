@@ -85,7 +85,7 @@ Column {
         ]
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         id: spanToNextStaffCheckBox
 
         navigation.name: "SpanToStaffCheckBox"

@@ -287,8 +287,6 @@ private:
     void apply();
     void rollback();
 
-    void checkAndShowMScoreError() const;
-
     bool needStartEditGrip(QKeyEvent* event) const;
     bool handleKeyPress(QKeyEvent* event);
 

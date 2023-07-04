@@ -59,8 +59,9 @@ Column {
         ]
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         id: smallAccidentalCheckBox
+        enabled: root.model ? root.model.isSmallAvailable : false
 
         text: qsTrc("inspector", "Small accidental")
         propertyItem: root.model ? root.model.isSmall : null

@@ -1698,7 +1698,7 @@ static double parseNumProperty(const String& s)
 //    create layout from text
 //---------------------------------------------------------
 
-void TextBase::createLayout()
+void TextBase::createBlocks()
 {
     // reset all previous formatting information
     m_blocks.clear();
@@ -2312,7 +2312,7 @@ String TextBase::plainText() const
         // Create temporary text object to avoid side effects
         // of createLayout() call.
         tmpText.reset(toTextBase(this->clone()));
-        tmpText->createLayout();
+        tmpText->createBlocks();
         text = tmpText.get();
     }
 

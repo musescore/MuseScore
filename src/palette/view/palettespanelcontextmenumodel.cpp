@@ -61,7 +61,7 @@ MenuItem* PalettesPanelContextMenuModel::createIsSingleClickToOpenPaletteItem()
     item->setId(QString::fromStdString(TOGGLE_SINGLE_CLICK_CODE));
 
     UiAction action;
-    action.title = TranslatableString("palette", "Single-click to open a Palette");
+    action.title = TranslatableString("palette", "Single-click to open a palette");
     action.code = TOGGLE_SINGLE_CLICK_CODE;
     action.checkable = Checkable::Yes;
     item->setAction(action);
@@ -93,7 +93,7 @@ MenuItem* PalettesPanelContextMenuModel::createIsSinglePaletteItem()
     item->setId(QString::fromStdString(TOGGLE_SINGLE_PALETTE_CODE));
 
     UiAction action;
-    action.title = TranslatableString("palette", "Open only one Palette at a time");
+    action.title = TranslatableString("palette", "Open only one palette at a time");
     action.code = TOGGLE_SINGLE_PALETTE_CODE;
     action.checkable = Checkable::Yes;
     item->setAction(action);
@@ -125,8 +125,8 @@ MenuItem* PalettesPanelContextMenuModel::createExpandCollapseAllItem(bool expand
     item->setId(QString::fromStdString(expand ? EXPAND_ALL_CODE : COLLAPSE_ALL_CODE));
 
     UiAction action;
-    action.title = expand ? TranslatableString("palette", "Expand all Palettes")
-                   : TranslatableString("palette", "Collapse all Palettes");
+    action.title = expand ? TranslatableString("palette", "Expand all palettes")
+                   : TranslatableString("palette", "Collapse all palettes");
     action.code = expand ? EXPAND_ALL_CODE : COLLAPSE_ALL_CODE;
     item->setAction(action);
 

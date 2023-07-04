@@ -136,6 +136,10 @@ void AccessibilityController::unreg(IAccessible* aitem)
         m_lastFocused = nullptr;
     }
 
+    if (m_itemForRestoreFocus == item.item) {
+        m_itemForRestoreFocus = nullptr;
+    }
+
     if (m_children.contains(aitem)) {
         m_children.removeOne(aitem);
     }
@@ -353,7 +357,10 @@ void AccessibilityController::triggerRevoicingOfChangedName(IAccessible* item)
             m_lastFocused->setState(State::Focused, false);
         }
 
-        m_itemForRestoreFocus->setState(State::Focused, true);
+        if (m_itemForRestoreFocus) {
+            m_itemForRestoreFocus->setState(State::Focused, true);
+        }
+
         m_ignorePanelChangingVoice = false;
     });
 }

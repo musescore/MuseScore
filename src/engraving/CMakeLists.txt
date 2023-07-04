@@ -174,6 +174,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/layout/README.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/ilayout.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutoptions.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/layout/pal/tlayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layout/pal/tlayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/layout/pal/layoutcontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layout/pal/layoutcontext.h
+
     ${CMAKE_CURRENT_LIST_DIR}/layout/v0/tlayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/v0/tlayout.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/v0/layout.cpp

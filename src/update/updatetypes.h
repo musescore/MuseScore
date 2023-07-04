@@ -26,7 +26,6 @@
 
 namespace mu::update {
 struct ReleaseInfo {
-    std::string title;
     std::string notes;
     std::string fileName;
     std::string fileUrl;

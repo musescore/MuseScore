@@ -149,9 +149,13 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
             pen.setDashPattern({ dash, gap });
         }
 
+        pen.setJoinStyle(PenJoinStyle::BevelJoin);
         painter->setPen(pen);
-        painter->drawLines(&m_points[0], 1);
-        painter->drawLines(&m_points[2], 1);
+        if (!m_joinedHairpin.empty() && !isNonSolid) {
+            painter->drawPolyline(m_joinedHairpin);
+        } else {
+            painter->drawLines(&m_points[0], 2);
+        }
         return;
     }
 

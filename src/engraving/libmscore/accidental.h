@@ -89,6 +89,7 @@ public:
 
     int subtype() const override { return (int)_accidentalType; }
 
+    const std::vector<SymElement>& elements() const { return el; }
     void clearElements() { el.clear(); }
     void addElement(const SymElement& e) { el.push_back(e); }
 
@@ -99,7 +100,7 @@ public:
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override { setGenerated(false); }
 
-    SymId symbol() const;
+    SymId symId() const;
     Note* note() const { return (explicitParent() && explicitParent()->isNote()) ? toNote(explicitParent()) : 0; }
 
     AccidentalBracket bracket() const { return _bracket; }
@@ -123,6 +124,7 @@ public:
     static AccidentalType value2subtype(AccidentalVal);
     static AccidentalType name2subtype(const mu::AsciiStringView&);
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
+    static double subtype2centOffset(AccidentalType);
 
     String accessibleInfo() const override;
 

@@ -324,7 +324,7 @@ PalettePtr PaletteCreator::newAccidentalsPalette(bool defaultPalette)
     for (int i = int(AccidentalType::FLAT); i < end; ++i) {
         auto ac = Factory::makeAccidental(gpaletteScore->dummy());
         ac->setAccidentalType(AccidentalType(i));
-        if (ac->symbol() != SymId::noSym) {
+        if (ac->symId() != SymId::noSym) {
             sp->appendElement(ac, ac->subtypeUserName());
         }
     }

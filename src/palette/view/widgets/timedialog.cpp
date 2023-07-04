@@ -24,19 +24,17 @@
 
 #include "timedialog.h"
 
+#include "translation.h"
+
 #include "palettewidget.h"
 #include "internal/palettecreator.h"
 
 #include "engraving/libmscore/factory.h"
-#include "engraving/libmscore/chord.h"
 #include "engraving/libmscore/masterscore.h"
-#include "engraving/libmscore/mcursor.h"
-#include "engraving/libmscore/part.h"
 #include "engraving/libmscore/timesig.h"
 #include "engraving/compat/dummyelement.h"
-#include "engraving/layout/v0/tlayout.h"
 
-#include "translation.h"
+#include "internal/palettelayout.h"
 
 using namespace mu::palette;
 using namespace mu::engraving;
@@ -84,7 +82,8 @@ TimeDialog::TimeDialog(QWidget* parent)
     }
 
     ElementPtr el = sp->elementForCellAt(2);
-    EngravingItem::layout()->layoutItem(el.get());
+
+    PaletteLayout::layoutItem(el.get());
 
     sp->setSelected(2);
     paletteChanged(2);

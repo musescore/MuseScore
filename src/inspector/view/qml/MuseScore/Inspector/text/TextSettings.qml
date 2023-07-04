@@ -47,7 +47,7 @@ Column {
         height: childrenRect.height
         width: parent.width
 
-        CheckBoxPropertyView {
+        PropertyCheckBox {
             id: matchStaffSize
             anchors.left: parent.left
             anchors.right: subscriptOptionsButtonList.left
