@@ -118,11 +118,13 @@ HRESULT AudioDevicesListener::OnDefaultDeviceChanged(EDataFlow flow, ERole role,
         return S_OK;
     }
 
-    if (m_previousIdString == new_default_device_id) {
+    winrt::hstring newDefaultDeviceIdString = new_default_device_id ? new_default_device_id : winrt::hstring();
+
+    if (m_previousDefaultDeviceId == newDefaultDeviceIdString) {
         return S_OK;
     }
 
-    m_previousIdString = new_default_device_id;
+    m_previousDefaultDeviceId = newDefaultDeviceIdString;
 
     m_defaultDeviceChanged.notify();
     m_devicesChanged.notify();
