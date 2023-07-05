@@ -734,4 +734,10 @@ TEST_F(GuitarPro_Tests, gp5LetRingTied) {
 TEST_F(GuitarPro_Tests, gpPercussionBeams) {
     gpReadTest("percussion-beams", "gp");
 }
+TEST_F(GuitarPro_Tests, gpSpannerInUncompleteMeasure) {
+    gpReadTest("spanner-in-uncomplete-measure", "gp");
+}
+TEST_F(GuitarPro_Tests, gp5SpannerInUncompleteMeasure) {
+    gpReadTest("spanner-in-uncomplete-measure", "gp5");
+}
 }

@@ -1103,6 +1103,7 @@ bool GuitarPro4::read(IODevice* io)
             }
             if (measureLen < measure->ticks()) {
                 score->setRest(tick, track, measure->ticks() - measureLen, false, nullptr, false);
+                m_continiousElementsBuilder->notifyUncompletedMeasure();
             }
         }
 
