@@ -42,6 +42,7 @@
 #include "engraving/libmscore/masterscore.h"
 
 #include "palettecell.h"
+#include "palettecompat.h"
 
 #include "log.h"
 
@@ -316,6 +317,8 @@ bool Palette::read(XmlReader& e, bool pasteMode)
     if (m_type == Type::Unknown) {
         m_type = guessType();
     }
+
+    PaletteCompat::addNewItemsIfNeeded(*this, gpaletteScore);
 
     return true;
 }
