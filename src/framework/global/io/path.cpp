@@ -21,6 +21,10 @@
  */
 #include "path.h"
 
+#ifndef NO_QT_SUPPORT
+#include <QDir>
+#endif
+
 #include "stringutils.h"
 #include "fileinfo.h"
 
@@ -272,4 +276,13 @@ std::string mu::io::pathsToString(const paths_t& ps, const std::string& delim)
     }
 
     return result;
+}
+
+path_t mu::io::toNativeSeparators(const path_t& path)
+{
+#ifndef NO_QT_SUPPORT
+    return QDir::toNativeSeparators(path.toQString());
+#else
+    return path;
+#endif
 }
