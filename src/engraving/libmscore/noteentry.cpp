@@ -445,7 +445,7 @@ Ret Score::putNote(const Position& p, bool replace)
     ChordRest* cr = _is.cr();
 
     auto checkTied = [&](){
-        if (!cr->isChord()) {
+        if (!cr || !cr->isChord()) {
             return false;
         }
         auto ch = toChord(cr);
