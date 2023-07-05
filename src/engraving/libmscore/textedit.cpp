@@ -223,24 +223,9 @@ void TextBase::endEdit(EditData& ed)
         triggerLayout();
     }
     if (isLyrics()) {
-        Lyrics* prev = prevLyrics(toLyrics(this));
-        if (prev) {
-            if (prev->tick() + prev->ticks() >= tick()) {
-                // the previous lyric has a spanner attached that goes through this one
-                // we need to shorten it
-                Segment* s = score()->tick2segment(tick());
-                if (s) {
-                    s = s->prev1(SegmentType::ChordRest);
-                    if (s->tick() > prev->tick()) {
-                        prev->undoChangeProperty(Pid::LYRIC_TICKS, s->tick() - prev->tick());
-                    } else {
-                        prev->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(1));
-                    }
-                }
-            }
-            prev->setRemoveInvalidSegments();
-            prev->triggerLayout();
-        }
+        // we must adjust previous lyrics before the call to commitText(), in order to make the adjustments
+        // part of the same undo command. there is logic above that will skip this call if the text is empty
+        toLyrics(this)->adjustPrevious();
     }
 
     static const double w = 2.0;

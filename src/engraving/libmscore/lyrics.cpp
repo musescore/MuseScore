@@ -313,6 +313,29 @@ bool Lyrics::isEditAllowed(EditData& ed) const
     return TextBase::isEditAllowed(ed);
 }
 
+void Lyrics::adjustPrevious()
+{
+    Lyrics* prev = prevLyrics(toLyrics(this));
+    if (prev) {
+        // search for lyric spanners to split at this point if necessary
+        if (prev->tick() + prev->ticks() >= tick()) {
+            // the previous lyric has a spanner attached that goes through this one
+            // we need to shorten it
+            Segment* s = score()->tick2segment(tick());
+            if (s) {
+                s = s->prev1(SegmentType::ChordRest);
+                if (s->tick() > prev->tick()) {
+                    prev->undoChangeProperty(Pid::LYRIC_TICKS, s->tick() - prev->tick());
+                } else {
+                    prev->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(1));
+                }
+            }
+        }
+        prev->setRemoveInvalidSegments();
+        prev->triggerLayout();
+    }
+}
+
 //---------------------------------------------------------
 //   endEdit
 //---------------------------------------------------------
@@ -320,6 +343,7 @@ bool Lyrics::isEditAllowed(EditData& ed) const
 void Lyrics::endEdit(EditData& ed)
 {
     TextBase::endEdit(ed);
+
     triggerLayoutAll();
 }
 

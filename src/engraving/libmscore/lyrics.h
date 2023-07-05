@@ -88,6 +88,7 @@ public:
     Fraction endTick() const;
     void removeFromScore();
     void setRemoveInvalidSegments() { _removeInvalidSegments = true; }
+    void adjustPrevious();
 
     using EngravingObject::undoChangeProperty;
     void paste(EditData& ed, const String& txt) override;
