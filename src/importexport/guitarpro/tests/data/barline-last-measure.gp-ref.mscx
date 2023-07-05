@@ -86,7 +86,7 @@
       <trackName>Electric Guitar</trackName>
       <Instrument id="electric-guitar">
         <longName>Electric Guitar</longName>
-        <shortName>jz.guit.</shortName>
+        <shortName>el.guit.</shortName>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
@@ -130,7 +130,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="26"/>
+          <program value="27"/>
           <controller ctrl="7" value="101"/>
           <midiPort>0</midiPort>
           <midiChannel>2</midiChannel>
@@ -143,6 +143,9 @@
           <KeySig>
             <concertKey>0</concertKey>
             </KeySig>
+          <StaffText>
+            <text>Free time</text>
+            </StaffText>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -151,27 +154,13 @@
             <tempo>2</tempo>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          </voice>
-        <voice>
-          <Dynamic>
-            <subtype>mf</subtype>
-            <velocity>80</velocity>
-            </Dynamic>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              <fret>3</fret>
-              <string>0</string>
-              </Note>
-            </Chord>
           <Rest>
-            <durationType>quarter</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
-          <Rest>
-            <durationType>half</durationType>
-            </Rest>
+          <BarLine>
+            <subtype>dashed</subtype>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -181,19 +170,37 @@
             <velocity>80</velocity>
             </Dynamic>
           <Chord>
-            <durationType>half</durationType>
+            <durationType>quarter</durationType>
             <Note>
-              <Accidental>
-                <subtype>accidentalSharp</subtype>
-                </Accidental>
-              <pitch>63</pitch>
-              <tpc>23</tpc>
-              <fret>8</fret>
-              <string>2</string>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <fret>1</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
             <durationType>half</durationType>
+            </Rest>
+          <BarLine>
+            <subtype>double</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <StaffText>
+            <text>Free time</text>
+            </StaffText>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -204,33 +211,42 @@
           <KeySig>
             <concertKey>0</concertKey>
             </KeySig>
+          <StaffText>
+            <text>Free time</text>
+            </StaffText>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <durationType>quarter</durationType>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
-          <Dynamic>
-            <subtype>mf</subtype>
-            <velocity>80</velocity>
-            </Dynamic>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
-              <fret>0</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
+          <BarLine>
+            <subtype>dashed</subtype>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
         <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>double</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <StaffText>
+            <text>Free time</text>
+            </StaffText>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>

@@ -45,8 +45,8 @@ private:
     using TieMap = std::unordered_map<track_idx_t, std::vector<mu::engraving::Tie*> >;
 
     struct Context {
-        int32_t masterBarIndex{ 0 };
-        track_idx_t curTrack{ 0 };
+        int32_t masterBarIndex = 0;
+        track_idx_t curTrack = 0;
         Fraction curTick;
     };
 
@@ -83,7 +83,7 @@ private:
     void doAddVolta(const GPMasterBar* mB, Measure* measure);
     void addClef(const GPBar* bar, track_idx_t curTrack);
     bool addSimileMark(const GPBar* bar, track_idx_t curTrack);
-    void addBarline(const GPMasterBar* mB, Measure* measure);
+    void addBarline(const GPMasterBar* mB, Measure* measure, int32_t masterBarIndex);
 
     void addTie(const GPNote* gpnote, Note* note, TieMap& ties);
     void addFretDiagram(const GPBeat* gpnote, ChordRest* note, const Context& ctx, bool asHarmony = true);
@@ -199,7 +199,6 @@ private:
 
     static constexpr mu::engraving::voice_idx_t VOICES = 4;
 
-    Measure* _lastMeasure = nullptr;
     bool m_showCapo = true; // TODO-gp : settings
 
     mu::engraving::BeamMode m_previousBeamMode = mu::engraving::BeamMode::AUTO;

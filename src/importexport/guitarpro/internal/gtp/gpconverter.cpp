@@ -345,13 +345,6 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
     // glueing line segment elements separated with rests
     m_continiousElementsBuilder->addElementsToScore();
 
-    // fixing last measure barline
-    if (_lastMeasure) {
-        for (size_t staffIdx = 0; staffIdx < _score->staves().size(); staffIdx++) {
-            _lastMeasure->setEndBarLineType(mu::engraving::BarLineType::FINAL, staffIdx * VOICES);
-        }
-    }
-
     addTempoMap();
     addInstrumentChanges();
     StretchedBend::prepareBends(m_stretchedBends);
@@ -366,15 +359,13 @@ void GPConverter::convertMasterBar(const GPMasterBar* mB, Context ctx)
 
     addTimeSig(mB, measure);
     addKeySig(mB, measure);
-    addBarline(mB, measure);
+    addBarline(mB, measure, ctx.masterBarIndex);
     addRepeat(mB, measure);
     collectFermatas(mB, measure);
     convertBars(mB->bars(), ctx);
     addTripletFeel(mB, measure);
     addSection(mB, measure);
     addDirection(mB, measure);
-
-    _lastMeasure = measure;
 }
 
 void GPConverter::convertBars(const std::vector<std::unique_ptr<GPBar> >& bars, Context ctx)
@@ -413,12 +404,13 @@ void GPConverter::convertBar(const GPBar* bar, Context ctx)
     convertVoices(bar->voices(), ctx);
 }
 
-void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
+void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure, int32_t masterBarIndex)
 {
     static bool insideFreeTime = false;
     size_t staves = _score->staves().size();
+    bool lastMeasure = (masterBarIndex == _gpDom->masterBars().size() - 1);
 
-    if (mB->barlineType() == GPMasterBar::BarlineType::DOUBLE) {
+    if (!lastMeasure && mB->barlineType() == GPMasterBar::BarlineType::DOUBLE) {
         for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
             measure->setEndBarLineType(mu::engraving::BarLineType::DOUBLE, staffIdx * VOICES);
         }
@@ -428,7 +420,7 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
     auto scoreTimeSig = Fraction(sig.numerator, sig.denominator);
 
     if (mB->freeTime()) {
-        if (mB->barlineType() != GPMasterBar::BarlineType::DOUBLE) {
+        if (!lastMeasure && mB->barlineType() != GPMasterBar::BarlineType::DOUBLE) {
             for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
                 measure->setEndBarLineType(mu::engraving::BarLineType::BROKEN, staffIdx * VOICES);
             }
@@ -2805,13 +2797,7 @@ void GPConverter::setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measur
         }
     }
 
-    cr->setBeamMode(beamMode);
-
-    /// last chord of the measure has always type BeamMode::AUTO, which makes layout incorrect
-    if (measure != _lastMeasure) {
-        cr->setBeamMode(m_previousBeamMode);
-    }
-
+    cr->setBeamMode(m_previousBeamMode);
     m_previousBeamMode = beamMode;
 }
 } // namespace mu::iex::guitarpro

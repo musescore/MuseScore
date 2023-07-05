@@ -746,4 +746,10 @@ TEST_F(GuitarPro_Tests, gpSpannerInUncompleteMeasure) {
 TEST_F(GuitarPro_Tests, gp5SpannerInUncompleteMeasure) {
     gpReadTest("spanner-in-uncomplete-measure", "gp5");
 }
+TEST_F(GuitarPro_Tests, gpBarlineLastMeasure) {
+    gpReadTest("barline-last-measure", "gp");
+}
+TEST_F(GuitarPro_Tests, gpBeamModes) {
+    gpReadTest("beam-modes", "gp");
+}
 }

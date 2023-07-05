@@ -138,9 +138,6 @@
               <subtype>r32</subtype>
               </Tremolo>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>

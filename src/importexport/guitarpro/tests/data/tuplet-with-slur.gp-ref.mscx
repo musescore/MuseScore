@@ -165,9 +165,6 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
