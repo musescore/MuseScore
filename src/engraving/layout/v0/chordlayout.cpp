@@ -2162,6 +2162,98 @@ static std::pair<double, double> layoutAccidental(const MStyle& style, AcEl* me,
 }
 
 //---------------------------------------------------------
+//   placeDots
+//---------------------------------------------------------
+
+void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector<Note*>& notes)
+{
+    Chord* chord = nullptr;
+    for (Chord* c : chords) {
+        if (c->dots() > 0) {
+            chord = c;
+            break;
+        }
+    }
+    if (!chord || chord->staff()->isTabStaff(chord->tick())) {
+        return;
+    }
+    std::vector<Note*> topDownNotes;
+    std::vector<Note*> bottomUpNotes;
+    std::vector<int> anchoredDots;
+    // construct combined chords using the notes from overlapping chords
+    getNoteListForDots(chord, topDownNotes, bottomUpNotes, anchoredDots);
+
+    for (Note* note : notes) {
+        bool onLine = !(note->line() & 1);
+        if (onLine) {
+            std::unordered_map<int, Note*> alreadyAdded;
+            bool finished = false;
+            for (Note* otherNote : bottomUpNotes) {
+                int dotMove = otherNote->dotPosition() == DirectionV::UP ? -1 : 1;
+                int otherDotLoc = otherNote->line() + dotMove;
+                bool added = alreadyAdded.count(otherDotLoc);
+                if (!added && mu::contains(anchoredDots, otherDotLoc)) {
+                    dotMove = -dotMove; // if the desired space is taken, adjust opposite
+                } else if (added && alreadyAdded[otherDotLoc] != otherNote) {
+                    dotMove = -dotMove;
+                }
+                // set y for this note
+                if (note == otherNote) {
+                    note->setDotRelativeLine(dotMove);
+                    finished = true;
+                    anchoredDots.push_back(note->line() + dotMove);
+                    alreadyAdded[otherNote->line() + dotMove] = otherNote;
+                    break;
+                }
+            }
+            if (!finished) {
+                alreadyAdded.clear();
+                for (Note* otherNote : topDownNotes) {
+                    int dotMove = otherNote->dotPosition() == DirectionV::DOWN ? 1 : -1;
+                    int otherDotLoc = otherNote->line() + dotMove;
+                    bool added = alreadyAdded.count(otherDotLoc);
+                    if (!added && mu::contains(anchoredDots, otherDotLoc)) {
+                        dotMove = -dotMove;
+                    } else if (added && alreadyAdded[otherDotLoc] != otherNote) {
+                        dotMove = -dotMove;
+                    }
+                    // set y for this note
+                    if (note == otherNote) {
+                        note->setDotRelativeLine(dotMove);
+                        finished = true;
+                        anchoredDots.push_back(note->line() + dotMove);
+                        break;
+                    }
+                    if (!added) {
+                        alreadyAdded[otherNote->line() + dotMove] = otherNote;
+                    }
+                }
+            }
+            IF_ASSERT_FAILED(finished)
+            {
+                // this should never happen
+                // the note is on a line and topDownNotes and bottomUpNotes are all of the lined notes
+                note->setDotRelativeLine(0);
+            }
+        } else {
+            // on a space; usually this means the dot is on this same line, but there is an exception
+            // for a unison within the same chord.
+            for (Note* otherNote : note->chord()->notes()) {
+                if (note == otherNote) {
+                    note->setDotRelativeLine(0); // same space as notehead
+                    break;
+                }
+                if (note->line() == otherNote->line()) {
+                    bool adjustDown = (note->chord()->voice() & 1) && !note->chord()->up();
+                    note->setDotRelativeLine(adjustDown ? 2 : -2);
+                    break;
+                }
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   layoutChords3
 //    - calculate positions of notes, accidentals, dots
 //---------------------------------------------------------
@@ -2300,6 +2392,11 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
 
         double xx = x + note->headBodyWidth() + chord->pos().x();
 
+        //---------------------------------------------------
+        //    layout dots simply
+        //     we will check for conflicts after all the notes have been processed
+        //---------------------------------------------------
+
         DirectionV dotPosition = note->userDotPosition();
         if (chord->dots()) {
             if (chord->up()) {
@@ -2312,12 +2409,12 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
                 // resolve dot conflicts
                 int line = note->line();
                 Note* above = (i < nNotes - 1) ? notes[i + 1] : 0;
-                if (above && (!above->visible() || above->dotsHidden())) {
+                if (above && (!above->visible() || above->dotsHidden() || above->chord()->dots() == 0)) {
                     above = 0;
                 }
                 int intervalAbove = above ? line - above->line() : 1000;
                 Note* below = (i > 0) ? notes[i - 1] : 0;
-                if (below && (!below->visible() || below->dotsHidden())) {
+                if (below && (!below->visible() || below->dotsHidden() || below->chord()->dots() == 0)) {
                     below = 0;
                 }
                 int intervalBelow = below ? below->line() - line : 1000;
@@ -2327,22 +2424,19 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
                         dotPosition = DirectionV::DOWN;
                     } else if (intervalBelow == 1 && intervalAbove != 1) {
                         dotPosition = DirectionV::UP;
-                    } else if (intervalAbove == 0 && above->chord()->dots()) {
+                    } else if (intervalAbove == 0 || intervalBelow == 0) {
                         // unison
-                        if (((above->voice() & 1) == (note->voice() & 1))) {
-                            above->setDotY(DirectionV::UP);
-                            dotPosition = DirectionV::DOWN;
-                        }
+                        dotPosition = DirectionV::AUTO; // unison conflicts taken care of later
                     }
                 } else {
                     // space
                     if (intervalAbove == 0 && above->chord()->dots()) {
                         // unison
                         if (!(note->voice() & 1)) {
-                            dotPosition = DirectionV::UP;
+                            dotPosition = DirectionV::UP; // space, doesn't matter
                         } else {
                             if (!(above->voice() & 1)) {
-                                above->setDotY(DirectionV::UP);
+                                above->setDotPosition(DirectionV::UP);
                             } else {
                                 dotPosition = DirectionV::DOWN;
                             }
@@ -2351,8 +2445,13 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
                 }
             }
         }
-        note->setDotY(dotPosition);      // also removes invalid dots
+        if (dotPosition == DirectionV::AUTO) {
+            dotPosition = note->voice() & 1 ? DirectionV::DOWN : DirectionV::UP;
+        }
+        note->setDotPosition(dotPosition);
     }
+    // Now, we can resolve note conflicts as a superchord
+    placeDots(chords, notes);
 
     // if there are no non-mirrored notes in a downstem chord,
     // then use the stem X position as X origin for accidental layout
@@ -2586,6 +2685,70 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
         double x    = e.x + lx - (note->x() + note->chord()->x());
         note->accidental()->setPos(x, 0);
     }
+}
+
+//---------------------------------------------------------
+//   getNoteListForDots
+//      This method populates three lists: one for chord notes that need to be checked from the top down,
+//      one for chords from the bottom up, and one for spaces (where the dot will be in that space)
+//---------------------------------------------------------
+
+void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes,
+                                     std::vector<int>& anchoredDots)
+{
+    bool hasVoices = c->measure()->hasVoices(c->staffIdx(), c->tick(), c->ticks());
+    if (!hasVoices) {
+        // only this voice, so topDownNotes is just the notes in the chord
+        for (Note* note : c->notes()) {
+            if (note->line() & 1) {
+                int newOffset = 0;
+                bool adjustDown = (c->voice() & 1) && !c->up();
+                if (!anchoredDots.empty() && anchoredDots.back() == note->line()) {
+                    if (anchoredDots.size() >= 2 && anchoredDots[anchoredDots.size() - 2] == note->line() + (adjustDown ? 2 : -2)) {
+                        newOffset = adjustDown ? -2 : 2;
+                    } else {
+                        newOffset = adjustDown ? 2 : -2;
+                    }
+                }
+                anchoredDots.push_back(note->line() + newOffset);
+            } else {
+                topDownNotes.push_back(note);
+            }
+        }
+    } else {
+        // Get a list of notes in this staff that adjust dots from top down,
+        // bottom up, and also start our locked-in dot list by adding all lines where dots are
+        // guaranteed
+        Measure* m = c->measure();
+        size_t firstVoice = c->track() - c->voice();
+        for (size_t i = firstVoice; i < firstVoice + VOICES; ++i) {
+            if (Chord* voiceChord = m->findChord(c->tick(), i)) {
+                bool startFromTop = !((voiceChord->voice() & 1) && !voiceChord->up());
+                if (startFromTop) {
+                    for (Note* note : voiceChord->notes()) {
+                        if (note->line() & 1) {
+                            anchoredDots.push_back(note->line());
+                        } else {
+                            topDownNotes.push_back(note);
+                        }
+                    }
+                } else {
+                    for (Note* note : voiceChord->notes()) {
+                        if (note->line() & 1) {
+                            anchoredDots.push_back(note->line());
+                        } else {
+                            bottomUpNotes.push_back(note);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // our two lists now contain only notes that are on lines
+    std::sort(topDownNotes.begin(), topDownNotes.end(),
+              [](Note* n1, Note* n2) { return n1->line() < n2->line(); });
+    std::sort(bottomUpNotes.begin(), bottomUpNotes.end(),
+              [](Note* n1, Note* n2) { return n1->line() > n2->line(); });
 }
 
 /* updateGraceNotes()
@@ -3108,8 +3271,8 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         if (isTabStaff && staffType->stemThrough()) {
             // with TAB's, dot Y is not calculated during layoutChords3(),
             // as layoutChords3() is not even called for TAB's;
-            // setDotY() actually also manages creation/deletion of NoteDot's
-            item->setDotY(DirectionV::AUTO);
+            // setDotRelativeLine() actually also manages creation/deletion of NoteDot's
+            item->setDotRelativeLine(0);
 
             // use TAB default note-to-dot spacing
             dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * item->spatium();
