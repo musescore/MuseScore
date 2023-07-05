@@ -238,7 +238,7 @@ RetVal<INotationProjectPtr> ProjectActionsController::loadProject(const io::path
             return ret;
         }
 
-        if (checkCanIgnoreError(ret, io::filename(loadPath).toString())) {
+        if (checkCanIgnoreError(ret, loadPath)) {
             ret = project->load(loadPath, "" /*stylePath*/, true /*forceMode*/, format);
         }
 
@@ -1375,7 +1375,7 @@ void ProjectActionsController::showScoreDownloadError(const Ret& ret)
     interactive()->warning(title, message);
 }
 
-bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const String& projectName)
+bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path_t& filepath)
 {
     if (ret) {
         return true;
@@ -1383,13 +1383,15 @@ bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const String&
 
     switch (static_cast<engraving::Err>(ret.code())) {
     case engraving::Err::FileTooOld:
-    case engraving::Err::FileTooNew:
     case engraving::Err::FileOld300Format:
         return askIfUserAgreesToOpenProjectWithIncompatibleVersion(ret.text());
+    case engraving::Err::FileTooNew:
+        warnFileTooNew(filepath);
+        return false;
     case engraving::Err::FileCorrupted:
-        return askIfUserAgreesToOpenCorruptedProject(projectName, ret.text());
+        return askIfUserAgreesToOpenCorruptedProject(io::filename(filepath).toString(), ret.text());
     default:
-        warnProjectCannotBeOpened(projectName, ret.text());
+        warnProjectCannotBeOpened(io::filename(filepath).toString(), ret.text());
         return false;
     }
 }
@@ -1404,6 +1406,13 @@ bool ProjectActionsController::askIfUserAgreesToOpenProjectWithIncompatibleVersi
     }, openAnywayBtn.btn).button();
 
     return btn == openAnywayBtn.btn;
+}
+
+void ProjectActionsController::warnFileTooNew(const io::path_t& filepath)
+{
+    interactive()->error(qtrc("project", "Cannot read file %1").arg(io::toNativeSeparators(filepath).toQString()).toStdString(),
+                         trc("project", "This file was saved using a newer version of MuseScore. "
+                                        "Please visit <a href=\"https://musescore.org\">musescore.org</a> to obtain the latest version."));
 }
 
 bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const String& projectName, const std::string& errorText)
