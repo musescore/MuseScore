@@ -326,7 +326,7 @@ InspectorSectionView {
             id: showItem
             isExpanded: false
 
-            title: isExpanded ? qsTrc("inpsector", "Show less") : qsTrc("inspector", "Show more")
+            title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
 
             visible: root.model ? !root.model.isEmpty : false
             width: parent.width
