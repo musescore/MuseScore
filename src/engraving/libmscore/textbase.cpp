@@ -2312,11 +2312,11 @@ std::list<TextFragment> TextBase::fragmentList() const
 
     const TextBase* text = this;
     std::unique_ptr<TextBase> tmpText;
-    if (layoutInvalid()) {
+    if (m_layoutInvalid) {
         // Create temporary text object to avoid side effects
         // of createLayout() call.
         tmpText.reset(toTextBase(this->clone()));
-        tmpText->createLayout();
+        tmpText->createBlocks();
         text = tmpText.get();
     }
 
