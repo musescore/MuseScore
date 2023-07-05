@@ -31,6 +31,7 @@ Dial {
     property alias navigation: navCtrl
 
     property real radius: 16
+    property real backgroundHeight: radius + radius * Math.sin(prv.startAngle)
 
     property bool isBalanceKnob: false
 
@@ -62,6 +63,9 @@ Dial {
 
         readonly property real outerArcLineWidth: 3
         readonly property real innerArcLineWidth: 2
+
+        readonly property real startAngle: -140 * (Math.PI/180) - Math.PI/2
+        readonly property real endAngle: 140 * (Math.PI/180) - Math.PI/2
 
         readonly property color valueArcColor: ui.theme.accentColor
         readonly property color outerArcColor: Utils.colorWithAlpha(ui.theme.buttonColor, 0.7)
@@ -140,7 +144,7 @@ Dial {
 
             ctx.strokeStyle = prv.outerArcColor
             ctx.beginPath()
-            ctx.arc(width/2, height/2, root.radius - prv.outerArcLineWidth/2, -140 * (Math.PI/180) - Math.PI/2, 140 * (Math.PI/180) - Math.PI/2, false)
+            ctx.arc(width/2, height/2, root.radius - prv.outerArcLineWidth/2, prv.startAngle, prv.endAngle, false)
             ctx.stroke()
 
             ctx.strokeStyle = prv.valueArcColor

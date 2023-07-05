@@ -199,7 +199,6 @@ ColumnLayout {
                 headerVisible: contextMenuModel.labelsSectionVisible
                 headerWidth: prv.headerWidth
                 channelItemWidth: prv.channelItemWidth
-                spacingAbove: 8
 
                 model: mixerPanelModel
 
@@ -219,7 +218,6 @@ ColumnLayout {
                 headerWidth: prv.headerWidth
 
                 channelItemWidth: prv.channelItemWidth
-                spacingAbove: 8
 
                 model: mixerPanelModel
 
