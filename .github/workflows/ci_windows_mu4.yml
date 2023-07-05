@@ -253,6 +253,13 @@ jobs:
         fi
 
         DO_PUBLISH='false'
+        if [[ "${{ github.event.inputs.publish }}" == "on" ]]; then 
+          DO_PUBLISH='true'
+          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
+            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
+            DO_PUBLISH='false'
+          fi  
+        fi
 
         DO_UPDATE_TS='false'
         if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
@@ -327,9 +334,9 @@ jobs:
         bash ./build/ci/tools/checksum.sh     
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
+      shell: bash
       run: |
-        build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
-      shell: cmd
+        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 4
     - name: Upload artifacts on GitHub
       if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v3
