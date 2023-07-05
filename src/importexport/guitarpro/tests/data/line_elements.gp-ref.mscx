@@ -283,7 +283,6 @@
             </Tempo>
           <Spanner type="LetRing">
             <LetRing>
-              <beginTextOffset x="0" y="0"/>
               </LetRing>
             <next>
               <location>
@@ -342,7 +341,6 @@
             </Rest>
           <Spanner type="PalmMute">
             <PalmMute>
-              <beginTextOffset x="0" y="0"/>
               </PalmMute>
             <next>
               <location>
@@ -552,7 +550,6 @@
             </Chord>
           <Spanner type="LetRing">
             <LetRing>
-              <beginTextOffset x="0" y="0"/>
               </LetRing>
             <next>
               <location>
