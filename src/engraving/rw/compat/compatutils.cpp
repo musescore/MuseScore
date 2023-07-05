@@ -40,6 +40,7 @@
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftextbase.h"
 #include "libmscore/playtechannotation.h"
+#include "libmscore/capo.h"
 
 #include "types/string.h"
 
@@ -74,6 +75,8 @@ const std::set<SymId> CompatUtils::ORNAMENT_IDS {
 
 void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
 {
+    TRACEFUNC;
+
     if (!masterScore) {
         return;
     }
@@ -90,6 +93,7 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
         splitArticulations(masterScore);
         resetArticulationOffsets(masterScore);
         resetStemLengthsForTwoNoteTrems(masterScore);
+        replaceStaffTextWithCapo(masterScore);
     }
 }
 
@@ -558,5 +562,67 @@ void CompatUtils::resetStemLengthsForTwoNoteTrems(MasterScore* masterScore)
                 }
             }
         }
+    }
+}
+
+void CompatUtils::replaceStaffTextWithCapo(MasterScore* score)
+{
+    TRACEFUNC;
+
+    std::set<StaffTextBase*> oldCapoSet;
+
+    for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (Segment* segment = measure->first(); segment; segment = segment->next()) {
+            for (EngravingItem* annotation : segment->annotations()) {
+                if (!annotation || !annotation->isStaffTextBase()) {
+                    continue;
+                }
+
+                StaffTextBase* text = toStaffTextBase(annotation);
+
+                if (text->capo() > 0) {
+                    oldCapoSet.insert(text);
+                } else {
+                    continue;
+                }
+
+                LinkedObjects* links = text->links();
+                if (!links || links->empty()) {
+                    continue;
+                }
+
+                for (EngravingObject* linked : *links) {
+                    if (linked != text && linked && linked->isStaffTextBase()) {
+                        oldCapoSet.insert(toStaffTextBase(linked));
+                    }
+                }
+            }
+        }
+    }
+
+    for (StaffTextBase* oldCapo : oldCapoSet) {
+        Segment* parentSegment = oldCapo->segment();
+        Capo* newCapo = Factory::createCapo(parentSegment);
+
+        int capoFretPosition = oldCapo->capo() - 1;
+
+        CapoParams params;
+        params.active = capoFretPosition > 0;
+        params.fretPosition = capoFretPosition;
+
+        newCapo->setTrack(oldCapo->track());
+        newCapo->setParams(params);
+        newCapo->setProperty(Pid::PLACEMENT, oldCapo->placement());
+
+        LinkedObjects* links = oldCapo->links();
+        newCapo->setLinks(links);
+        if (links) {
+            links->push_back(newCapo);
+        }
+
+        parentSegment->add(newCapo);
+        parentSegment->removeAnnotation(oldCapo);
+
+        delete oldCapo;
     }
 }
