@@ -131,6 +131,8 @@ public:
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr,
                                     mu::engraving::ElementType elementType = mu::engraving::ElementType::INVALID);
 
+    void init();
+
     Q_INVOKABLE virtual void requestResetToDefaults();
 
     QString title() const;
@@ -150,6 +152,8 @@ public:
     virtual void resetProperties() = 0;
 
     virtual void requestElements();
+
+    virtual void onCurrentNotationChanged();
 
 public slots:
     void setTitle(QString title);
@@ -201,7 +205,6 @@ protected:
 
     notation::INotationSelectionPtr selection() const;
 
-    virtual void onCurrentNotationChanged();
     virtual void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
                                    const mu::engraving::StyleIdSet& changedStyleIdSet);
 
@@ -215,8 +218,6 @@ protected slots:
     void updateProperties();
 
 private:
-    void setupCurrentNotationChangedConnection();
-
     void initPropertyItem(PropertyItem* propertyItem, std::function<void(const mu::engraving::Pid propertyId,
                                                                          const QVariant& newValue)> onPropertyChangedCallBack = nullptr,
                           std::function<void(const mu::engraving::Sid styleId,
