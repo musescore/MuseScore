@@ -32,7 +32,7 @@ void LogRemover::removeLogs(const io::path_t& logsDir, int olderThanDays, const 
 {
     //! NOTE If the pattern changes,
     //! then we need to change the implementation of `scanDir` and `parseDate` functions.
-    IF_ASSERT_FAILED(pattern == u"MuseScore_yyMMdd_HHmmss.log") {
+    IF_ASSERT_FAILED(pattern.endsWith(u"_yyMMdd.log") || pattern.endsWith(u"_yyMMdd_HHmmss.log")) {
         return;
     }
 
@@ -43,7 +43,7 @@ void LogRemover::removeLogs(const io::path_t& logsDir, int olderThanDays, const 
 
     io::paths_t toRemoveFiles;
     for (const io::path_t& file : files) {
-        Date date = parseDate(file.toString());
+        Date date = parseDate(io::filename(file).toString());
         if (date.isNull()) {
             continue;
         }
@@ -59,17 +59,13 @@ void LogRemover::removeLogs(const io::path_t& logsDir, int olderThanDays, const 
 
 mu::Date LogRemover::parseDate(const String& fileName)
 {
-    size_t endIdx = fileName.lastIndexOf(u'_');
-    if (endIdx == mu::nidx) {
+    size_t dateStartIdx = fileName.indexOf(u'_');
+    if (dateStartIdx == mu::nidx) {
         return Date();
     }
 
-    size_t startIdx = fileName.lastIndexOf(u'_', endIdx - 1);
-    if (startIdx == mu::nidx) {
-        return Date();
-    }
+    String dateStr = fileName.mid(dateStartIdx + 1, fileName.size() - 1);
 
-    String dateStr = fileName.mid(startIdx + 1, (endIdx - startIdx - 1));
     // "yyMMdd"
     String yy = dateStr.mid(0, 2);
     bool ok = false;
@@ -77,16 +73,19 @@ mu::Date LogRemover::parseDate(const String& fileName)
     if (!ok || !(y > 0)) {
         return Date();
     }
+
     String mm = dateStr.mid(2, 2);
     int m = mm.toInt(&ok);
     if (!ok || !(m > 0 && m <= 12)) {
         return Date();
     }
+
     String dd = dateStr.mid(4, 2);
     int d = dd.toInt(&ok);
     if (!ok || !(d > 0 && d <= 31)) {
         return Date();
     }
+
     Date date(2000 + y, m, d);
     return date;
 }

@@ -108,10 +108,6 @@ void VstPlugin::load()
                 continue;
             }
 
-            if (classInfo.name() != m_resourceId) {
-                continue;
-            }
-
             m_pluginProvider = std::make_unique<VstPluginProvider>(factory, classInfo);
             m_classInfo = classInfo;
             break;

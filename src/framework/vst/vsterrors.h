@@ -35,7 +35,8 @@ enum class Err {
     NoPluginFactory = 1402,
     NoPluginProvider = 1403,
     NoPluginController = 1404,
-    NoPluginWithId = 1405
+    NoPluginWithId = 1405,
+    NoAudioEffect = 1406,
 };
 
 inline Ret make_ret(Err e)
@@ -50,6 +51,7 @@ inline Ret make_ret(Err e)
     case Err::NoPluginProvider: return Ret(retCode, "No VST3 audio module class found");
     case Err::NoPluginController: return Ret(retCode, "No VST3 editor controller class found");
     case Err::NoPluginWithId: return Ret(retCode, "VST3 plugin is not found");
+    case Err::NoAudioEffect: return Ret(retCode, "VST3 file contains no audio effect");
     }
 
     return Ret(retCode);

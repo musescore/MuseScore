@@ -61,7 +61,7 @@ public:
     MOCK_METHOD(async::Notification, synthesizerStateChanged, (), (const, override));
     MOCK_METHOD(async::Notification, synthesizerStateGroupChanged, (const std::string&), (const, override));
 
-    MOCK_METHOD(io::path_t, knownAudioPluginsDir, (), (const, override));
+    MOCK_METHOD(io::path_t, knownAudioPluginsFilePath, (), (const, override));
 };
 }
 

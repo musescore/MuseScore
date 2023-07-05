@@ -38,7 +38,7 @@ static JsonObject attributesToJson(const AudioResourceAttributes& attributes)
     JsonObject result;
 
     for (auto it = attributes.cbegin(); it != attributes.cend(); ++it) {
-        if (it->second == audio::PLAYBACK_SETUP_DATA_ATTRIBUTE) {
+        if (it->first == audio::PLAYBACK_SETUP_DATA_ATTRIBUTE) {
             continue;
         }
 
@@ -54,9 +54,16 @@ static JsonObject metaToJson(const AudioResourceMeta& meta)
 
     result.set("id", meta.id);
     result.set("type", mu::value(RESOURCE_TYPE_TO_STRING_MAP, meta.type, "Undefined"));
-    result.set("vendor", meta.vendor);
-    result.set("attributes", attributesToJson(meta.attributes));
     result.set("hasNativeEditorSupport", meta.hasNativeEditorSupport);
+
+    if (!meta.vendor.empty()) {
+        result.set("vendor", meta.vendor);
+    }
+
+    JsonObject attributesJson = attributesToJson(meta.attributes);
+    if (!attributesJson.empty()) {
+        result.set("attributes", attributesJson);
+    }
 
     return result;
 }
@@ -79,8 +86,12 @@ static AudioResourceMeta metaFromJson(const JsonObject& object)
     result.id = object.value("id").toStdString();
     result.type = mu::key(RESOURCE_TYPE_TO_STRING_MAP, object.value("type").toStdString());
     result.vendor = object.value("vendor").toStdString();
-    result.attributes = attributesFromJson(object.value("attributes").toObject());
     result.hasNativeEditorSupport = object.value("hasNativeEditorSupport").toBool();
+
+    JsonValue attributes = object.value("attributes");
+    if (attributes.isObject()) {
+        result.attributes = attributesFromJson(attributes.toObject());
+    }
 
     return result;
 }
@@ -90,50 +101,45 @@ mu::Ret KnownAudioPluginsRegister::load()
 {
     TRACEFUNC;
 
-    io::path_t knownAudioPluginsDir = configuration()->knownAudioPluginsDir();
-
-    if (!fileSystem()->exists(knownAudioPluginsDir)) {
-        fileSystem()->makePath(knownAudioPluginsDir);
-    }
-
-    RetVal<io::paths_t> paths = fileSystem()->scanFiles(knownAudioPluginsDir,
-                                                        { "*.json" },
-                                                        io::ScanMode::FilesInCurrentDir);
-    if (!paths.ret) {
-        return paths.ret;
-    }
-
+    m_loaded = false;
     m_pluginInfoMap.clear();
     m_pluginPaths.clear();
 
-    for (const io::path_t& infoPath : paths.val) {
-        RetVal<ByteArray> file = fileSystem()->readFile(infoPath);
-        if (!file.ret) {
-            LOGE() << file.ret.toString();
-            continue;
-        }
+    io::path_t knownAudioPluginsPath = configuration()->knownAudioPluginsFilePath();
+    if (!fileSystem()->exists(knownAudioPluginsPath)) {
+        m_loaded = true;
+        return make_ok();
+    }
 
-        std::string err;
-        JsonDocument json = JsonDocument::fromJson(file.val, &err);
-        if (!err.empty()) {
-            LOGE() << err;
-            continue;
-        }
+    RetVal<ByteArray> file = fileSystem()->readFile(knownAudioPluginsPath);
+    if (!file.ret) {
+        return file.ret;
+    }
 
-        JsonObject object = json.rootObject();
+    std::string err;
+    JsonDocument json = JsonDocument::fromJson(file.val, &err);
+    if (!err.empty()) {
+        return Ret(static_cast<int>(Ret::Code::UnknownError), err);
+    }
+
+    JsonArray array = json.rootArray();
+
+    for (size_t i = 0; i < array.size(); ++i) {
+        JsonObject object = array.at(i).toObject();
 
         AudioPluginInfo info;
         info.meta = metaFromJson(object.value("meta").toObject());
-        info.meta.attributes.insert({ audio::PLAYBACK_SETUP_DATA_ATTRIBUTE, mpe::GENERIC_SETUP_DATA_STRING });
-        info.type = audioPluginTypeFromCategoriesString(info.meta.attributeVal(audio::CATEGORIES_ATTRIBUTE).toStdString());
+        info.meta.attributes.emplace(audio::PLAYBACK_SETUP_DATA_ATTRIBUTE, mpe::GENERIC_SETUP_DATA_STRING);
+        info.type = audioPluginTypeFromCategoriesString(info.meta.attributeVal(audio::CATEGORIES_ATTRIBUTE));
         info.path = object.value("path").toString();
         info.enabled = object.value("enabled").toBool();
         info.errorCode = object.value("errorCode").toInt();
 
-        m_pluginInfoMap[info.meta.id] = info;
         m_pluginPaths.insert(info.path);
+        m_pluginInfoMap.emplace(info.meta.id, std::move(info));
     }
 
+    m_loaded = true;
     return make_ok();
 }
 
@@ -177,60 +183,69 @@ bool KnownAudioPluginsRegister::exists(const AudioResourceId& resourceId) const
 
 mu::Ret KnownAudioPluginsRegister::registerPlugin(const AudioPluginInfo& info)
 {
-    TRACEFUNC;
-
-    JsonObject obj;
-    obj.set("meta", metaToJson(info.meta));
-    obj.set("path", info.path.toStdString());
-    obj.set("enabled", info.enabled);
-
-    if (info.errorCode != 0) {
-        obj.set("errorCode", info.errorCode);
+    IF_ASSERT_FAILED(m_loaded) {
+        return false;
     }
 
-    io::path_t path = pluginInfoPath(info.meta.vendor, info.meta.id);
-    Ret ret = fileSystem()->writeFile(path, JsonDocument(obj).toJson());
-    if (!ret) {
-        return ret;
+    auto it = m_pluginInfoMap.find(info.meta.id);
+    if (it != m_pluginInfoMap.end()) {
+        IF_ASSERT_FAILED(it->second.path != info.path) {
+            return false;
+        }
     }
 
-    m_pluginInfoMap[info.meta.id] = info;
+    m_pluginInfoMap.emplace(info.meta.id, info);
     m_pluginPaths.insert(info.path);
 
-    return make_ok();
+    Ret ret = writePluginsInfo();
+    return ret;
 }
 
 mu::Ret KnownAudioPluginsRegister::unregisterPlugin(const AudioResourceId& resourceId)
 {
-    TRACEFUNC;
+    IF_ASSERT_FAILED(m_loaded) {
+        return false;
+    }
 
     if (!exists(resourceId)) {
         return make_ok();
     }
 
-    AudioPluginInfo info = m_pluginInfoMap[resourceId];
-    io::path_t path = pluginInfoPath(info.meta.vendor, resourceId);
-
-    Ret ret = fileSystem()->remove(path);
-    if (!ret) {
-        return ret;
+    for (const auto& pair : m_pluginInfoMap) {
+        if (pair.first == resourceId) {
+            mu::remove(m_pluginPaths, pair.second.path);
+        }
     }
 
-    mu::remove(m_pluginInfoMap, resourceId);
-    mu::remove(m_pluginPaths, info.path);
+    m_pluginInfoMap.erase(resourceId);
 
-    return make_ok();
+    Ret ret = writePluginsInfo();
+    return ret;
 }
 
-mu::io::path_t KnownAudioPluginsRegister::pluginInfoPath(const AudioResourceVendor& vendor, const AudioResourceId& resourceId) const
+mu::Ret KnownAudioPluginsRegister::writePluginsInfo()
 {
-    io::path_t fileName;
+    TRACEFUNC;
 
-    if (vendor.empty()) {
-        fileName = io::escapeFileName(resourceId);
-    } else {
-        fileName = io::escapeFileName(vendor + "_" + resourceId);
+    JsonArray array;
+
+    for (const auto& pair : m_pluginInfoMap) {
+        const AudioPluginInfo& info = pair.second;
+
+        JsonObject obj;
+        obj.set("meta", metaToJson(info.meta));
+        obj.set("path", info.path.toStdString());
+        obj.set("enabled", info.enabled);
+
+        if (info.errorCode != 0) {
+            obj.set("errorCode", info.errorCode);
+        }
+
+        array << obj;
     }
 
-    return configuration()->knownAudioPluginsDir() + "/" + fileName + ".json";
+    io::path_t knownAudioPluginsPath = configuration()->knownAudioPluginsFilePath();
+    Ret ret = fileSystem()->writeFile(knownAudioPluginsPath, JsonDocument(array).toJson());
+
+    return ret;
 }
