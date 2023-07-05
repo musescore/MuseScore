@@ -96,6 +96,8 @@ Err Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
         ex->setTracksMapping(ctx.tracks());
     }
 
+    ctx.clearOrphanedConnectors();
+
     if (data) {
         data->links = ctx.readLinks();
         data->settingsCompat = ctx.settingCompat();

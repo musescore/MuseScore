@@ -175,6 +175,7 @@ public:
     void addConnectorInfoLater(std::shared_ptr<ConnectorInfoReader> c);   // add connector info to be checked after calling checkConnectors()
     void checkConnectors();
     void reconnectBrokenConnectors();
+    void clearOrphanedConnectors();
 
 private:
 
