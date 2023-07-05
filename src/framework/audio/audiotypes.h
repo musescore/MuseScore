@@ -186,15 +186,15 @@ struct AudioPluginInfo {
     int errorCode = 0;
 };
 
-inline AudioPluginType audioPluginTypeFromCategoriesString(const std::string& categoriesStr)
+inline AudioPluginType audioPluginTypeFromCategoriesString(const String& categoriesStr)
 {
-    static const std::map<std::string, AudioPluginType> STRING_TO_PLUGIN_TYPE_MAP = {
-        { "Fx", AudioPluginType::Fx },
-        { "Instrument", AudioPluginType::Instrument },
+    static const std::map<String, AudioPluginType> STRING_TO_PLUGIN_TYPE_MAP = {
+        { u"Fx", AudioPluginType::Fx },
+        { u"Instrument", AudioPluginType::Instrument },
     };
 
     for (auto it = STRING_TO_PLUGIN_TYPE_MAP.cbegin(); it != STRING_TO_PLUGIN_TYPE_MAP.cend(); ++it) {
-        if (categoriesStr.find(it->first) != std::string::npos) {
+        if (categoriesStr.contains(it->first)) {
             return it->second;
         }
     }

@@ -36,6 +36,8 @@ public:
 
     virtual void setStartupType(const std::optional<std::string>& type) = 0;
 
+    virtual bool isStartWithNewFileAsSecondaryInstance() const = 0;
+
     virtual const project::ProjectFile& startupScoreFile() const = 0;
     virtual void setStartupScoreFile(const std::optional<project::ProjectFile>& file) = 0;
 

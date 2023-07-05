@@ -44,6 +44,8 @@ InspectorListModel::InspectorListModel(QObject* parent)
     listenSelectionChanged();
     context()->currentNotationChanged().onNotify(this, [this]() {
         listenSelectionChanged();
+
+        notifyModelsAboutNotationChanged();
     });
 }
 
@@ -157,27 +159,34 @@ void InspectorListModel::createModelsBySectionType(const QList<InspectorSectionT
 
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
+        AbstractInspectorModel* newModel = nullptr;
+
         switch (sectionType) {
         case InspectorSectionType::SECTION_GENERAL:
-            m_modelList << new GeneralSettingsModel(this, m_repository);
+            newModel = new GeneralSettingsModel(this, m_repository);
             break;
         case InspectorSectionType::SECTION_MEASURES:
-            m_modelList << new MeasuresSettingsModel(this, m_repository);
+            newModel = new MeasuresSettingsModel(this, m_repository);
             break;
         case InspectorSectionType::SECTION_NOTATION:
-            m_modelList << new NotationSettingsProxyModel(this, m_repository, selectedElementKeySet);
+            newModel = new NotationSettingsProxyModel(this, m_repository, selectedElementKeySet);
             break;
         case InspectorSectionType::SECTION_TEXT:
-            m_modelList << new TextSettingsModel(this, m_repository);
+            newModel = new TextSettingsModel(this, m_repository);
             break;
         case InspectorSectionType::SECTION_SCORE_DISPLAY:
-            m_modelList << new ScoreSettingsModel(this, m_repository);
+            newModel = new ScoreSettingsModel(this, m_repository);
             break;
         case InspectorSectionType::SECTION_SCORE_APPEARANCE:
-            m_modelList << new ScoreAppearanceSettingsModel(this, m_repository);
+            newModel = new ScoreAppearanceSettingsModel(this, m_repository);
             break;
         case AbstractInspectorModel::InspectorSectionType::SECTION_UNDEFINED:
             break;
+        }
+
+        if (newModel) {
+            newModel->init();
+            m_modelList << newModel;
         }
 
         endInsertRows();
@@ -270,6 +279,15 @@ AbstractInspectorModel* InspectorListModel::modelBySectionType(InspectorSectionT
     }
 
     return nullptr;
+}
+
+void InspectorListModel::notifyModelsAboutNotationChanged()
+{
+    TRACEFUNC;
+
+    for (AbstractInspectorModel* model : m_modelList) {
+        model->onCurrentNotationChanged();
+    }
 }
 
 void InspectorListModel::listenSelectionChanged()

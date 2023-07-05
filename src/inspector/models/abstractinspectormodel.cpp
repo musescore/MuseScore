@@ -121,19 +121,14 @@ AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementReposito
         return;
     }
 
-    setupCurrentNotationChangedConnection();
-
     connect(m_repository->getQObject(), SIGNAL(elementsUpdated(const QList<mu::engraving::EngravingItem*>&)), this,
             SLOT(updateProperties()));
     connect(this, &AbstractInspectorModel::requestReloadPropertyItems, this, &AbstractInspectorModel::updateProperties);
 }
 
-void AbstractInspectorModel::setupCurrentNotationChangedConnection()
+void AbstractInspectorModel::init()
 {
     onCurrentNotationChanged();
-    currentNotationChanged().onNotify(this, [this]() {
-        onCurrentNotationChanged();
-    });
 }
 
 void AbstractInspectorModel::onCurrentNotationChanged()
