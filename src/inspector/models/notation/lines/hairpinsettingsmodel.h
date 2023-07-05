@@ -49,7 +49,6 @@ private:
     void requestElements() override;
     void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
                            const mu::engraving::StyleIdSet& changedStyleIdSet) override;
-    bool isTextVisible(TextType type) const override;
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 

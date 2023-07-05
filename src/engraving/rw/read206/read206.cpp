@@ -1987,16 +1987,19 @@ static bool readTextLineProperties(XmlReader& e, ReadContext& ctx, TextLineBase*
         Text* text = Factory::createText(ctx.dummy(), TextStyleType::DEFAULT, false);
         readText206(e, ctx, text, tl);
         tl->setBeginText(text->xmlText());
+        tl->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
         delete text;
     } else if (tag == "continueText") {
         Text* text = Factory::createText(ctx.dummy(), TextStyleType::DEFAULT, false);
         readText206(e, ctx, text, tl);
         tl->setContinueText(text->xmlText());
+        tl->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
         delete text;
     } else if (tag == "endText") {
         Text* text = Factory::createText(ctx.dummy(), TextStyleType::DEFAULT, false);
         readText206(e, ctx, text, tl);
         tl->setEndText(text->xmlText());
+        tl->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
         delete text;
     } else if (tag == "beginHook") {
         tl->setBeginHookType(e.readBool() ? HookType::HOOK_90 : HookType::NONE);

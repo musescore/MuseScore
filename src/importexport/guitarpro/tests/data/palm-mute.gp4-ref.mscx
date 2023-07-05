@@ -94,7 +94,6 @@
             </Dynamic>
           <Spanner type="PalmMute">
             <PalmMute>
-              <beginTextOffset x="0" y="0"/>
               </PalmMute>
             <next>
               <location>
