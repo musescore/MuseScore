@@ -175,7 +175,7 @@ String HarpPedalDiagram::createDiagramText()
                 PedalPosition::UNSET, PedalPosition::UNSET };
         std::array<PedalPosition, HARP_STRING_NO> prevState;
         HarpPedalDiagram* prevDiagram = nullptr;
-        if (part()) {
+        if (part() && segment()) {
             prevDiagram = part()->prevHarpDiagram(segment()->tick());
         }
 
