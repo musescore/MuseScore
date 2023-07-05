@@ -137,13 +137,13 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
         return style().styleV(Sid::pedalLineStyle);
 
     case Pid::BEGIN_TEXT:
-        return score()->styleV(Sid::pedalText);
+        return style().styleV(Sid::pedalText);
 
     case Pid::CONTINUE_TEXT:
-        return score()->styleV(Sid::pedalContinueText);
+        return style().styleV(Sid::pedalContinueText);
 
     case Pid::END_TEXT:
-        return score()->styleV(Sid::pedalEndText);
+        return style().styleV(Sid::pedalEndText);
 
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
