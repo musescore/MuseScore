@@ -1379,18 +1379,21 @@ static void readPedal114(XmlReader& e, ReadContext& ctx, Pedal* pedal)
                                     text.at(0).isDigit()
                                     ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
                                     : text));
+            pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
         } else if (tag == "continueSymbol") {
             String text(e.readText());
             pedal->setContinueText(String(u"<sym>%1</sym>").arg(
                                        text.at(0).isDigit()
                                        ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
                                        : text));
+            pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
         } else if (tag == "endSymbol") {
             String text(e.readText());
             pedal->setEndText(String(u"<sym>%1</sym>").arg(
                                   text.at(0).isDigit()
                                   ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
                                   : text));
+            pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
         } else if (tag == "beginSymbolOffset") { // obsolete
             e.readPoint();
         } else if (tag == "continueSymbolOffset") { // obsolete

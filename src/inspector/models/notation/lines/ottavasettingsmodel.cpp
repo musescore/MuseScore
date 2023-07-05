@@ -111,8 +111,3 @@ void OttavaSettingsModel::resetProperties()
     m_ottavaType->resetToDefault();
     m_showNumbersOnly->resetToDefault();
 }
-
-bool OttavaSettingsModel::isTextVisible(TextType) const
-{
-    return true;
-}

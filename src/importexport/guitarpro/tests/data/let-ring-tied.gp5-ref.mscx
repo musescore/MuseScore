@@ -90,7 +90,6 @@
             </Dynamic>
           <Spanner type="LetRing">
             <LetRing>
-              <beginTextOffset x="0" y="0"/>
               </LetRing>
             <next>
               <location>
