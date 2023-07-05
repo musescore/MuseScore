@@ -1296,6 +1296,7 @@ bool GuitarPro1::read(IODevice* io)
             }
             if (measureLen < measure->ticks()) {
                 score->setRest(fraction, track, measure->ticks() - measureLen, false, nullptr, false);
+                m_continiousElementsBuilder->notifyUncompletedMeasure();
             }
         }
         if (bar == 1 && !mixChange) {
@@ -1810,6 +1811,7 @@ bool GuitarPro2::read(IODevice* io)
             }
             if (measureLen < measure->ticks()) {
                 score->setRest(fraction, track, measure->ticks() - measureLen, false, nullptr, false);
+                m_continiousElementsBuilder->notifyUncompletedMeasure();
             }
         }
         if (bar == 1 && !mixChange) {
@@ -2626,6 +2628,7 @@ bool GuitarPro3::read(IODevice* io)
             }
             if (measureLen < measure->ticks()) {
                 score->setRest(fraction, track, measure->ticks() - measureLen, false, nullptr, false);
+                m_continiousElementsBuilder->notifyUncompletedMeasure();
             }
             bool removeRests = true;
             int counter = 0;

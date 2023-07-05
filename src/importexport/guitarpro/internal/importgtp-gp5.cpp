@@ -463,6 +463,7 @@ void GuitarPro5::readMeasure(Measure* measure, int staffIdx, Tuplet** tuplets, b
         }
         if (measureLen < measure->ticks()) {
             score->setRest(tick, staffIdx * VOICES + voice, measure->ticks() - measureLen, false, nullptr, false);
+            m_continiousElementsBuilder->notifyUncompletedMeasure();
         }
     }
 }
