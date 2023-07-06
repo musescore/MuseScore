@@ -1718,6 +1718,7 @@ void MusicXMLParserPass1::partList(MusicXmlPartGroupList& partGroupList)
 static void createPart(Score* score, const QString& id, PartMap& pm)
 {
     Part* part = new Part(score);
+    part->setPreferSharpFlat(PreferSharpFlat::NONE);
     pm.insert(id, part);
     score->appendPart(part);
     Staff* staff = Factory::createStaff(part);
