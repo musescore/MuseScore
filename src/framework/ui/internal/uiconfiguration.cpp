@@ -648,9 +648,16 @@ double UiConfiguration::physicalDpi() const
         return m_customDPI.value();
     }
 
+    constexpr double DEFAULT_DPI = 96;
     const QScreen* screen = mainWindow() ? mainWindow()->screen() : nullptr;
     if (!screen) {
-        constexpr double DEFAULT_DPI = 96;
+        return DEFAULT_DPI;
+    }
+
+    auto physicalSize = screen->physicalSize();
+    // Work around xrandr reporting a 1x1mm size if
+    // the screen doesn't have a valid physical size
+    if (physicalSize.height() <= 1 && physicalSize.width() <= 1) {
         return DEFAULT_DPI;
     }
 
