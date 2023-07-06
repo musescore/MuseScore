@@ -2172,6 +2172,10 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
         if (c->dots() > 0) {
             chord = c;
             break;
+        } else {
+            for (Note* note : c->notes()) {
+                note->setDotRelativeLine(0); // this manages the deletion of dots
+            }
         }
     }
     if (!chord || chord->staff()->isTabStaff(chord->tick())) {
