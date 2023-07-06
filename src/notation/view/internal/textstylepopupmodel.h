@@ -30,6 +30,8 @@ class TextStylePopupModel : public AbstractElementPopupModel
 {
 public:
     explicit TextStylePopupModel(QObject* parent = nullptr);
+
+    Q_INVOKABLE void init() override;
 };
 }
 

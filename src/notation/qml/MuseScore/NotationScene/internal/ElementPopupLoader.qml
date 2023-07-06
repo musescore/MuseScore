@@ -137,9 +137,6 @@ Item {
     Component {
         id: textStyleComp
         TextStylePopup {
-            navigationSection: container.navigationSection
-            navigationOrderStart: container.navigationOrderStart
-
             onClosed: {
                 prv.resetOpenedPopup()
                 loader.sourceComponent = null

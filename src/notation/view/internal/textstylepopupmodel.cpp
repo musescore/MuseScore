@@ -28,3 +28,8 @@ TextStylePopupModel::TextStylePopupModel(QObject* parent)
     : AbstractElementPopupModel(PopupModelType::TYPE_TEXT, parent)
 {
 }
+
+void TextStylePopupModel::init()
+{
+    AbstractElementPopupModel::init();
+}
