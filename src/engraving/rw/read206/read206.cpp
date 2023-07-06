@@ -750,6 +750,7 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
 
 void Read206::readPart206(Part* part, XmlReader& e, ReadContext& ctx)
 {
+    part->setPreferSharpFlat(PreferSharpFlat::NONE);
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "Instrument") {

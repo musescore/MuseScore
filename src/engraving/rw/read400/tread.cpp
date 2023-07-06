@@ -3280,6 +3280,7 @@ void TRead::read(PalmMute* p, XmlReader& e, ReadContext& ctx)
 void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
 {
     p->setId(e.intAttribute("id", 0));
+    p->setPreferSharpFlat(PreferSharpFlat::NONE);
 
     while (e.readNextStartElement()) {
         if (!readProperties(p, e, ctx)) {
@@ -3324,7 +3325,7 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
         } else if (val == "flats") {
             p->setPreferSharpFlat(PreferSharpFlat::FLATS);
         } else {
-            p->setPreferSharpFlat(PreferSharpFlat::AUTO);
+            p->setPreferSharpFlat(PreferSharpFlat::NONE);
         }
     } else {
         return false;
