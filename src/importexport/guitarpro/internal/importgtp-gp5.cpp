@@ -1074,9 +1074,15 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
         int fret = readUInt8();                // grace fret
         /*int dynamic =*/ readUInt8();                // grace dynamic
         int transition = readUInt8();                // grace transition
-        /*int duration =*/ readUInt8();                // grace duration
+        int duration = readUInt8();                // grace duration
         int gflags = readUInt8();
 
+        int grace_len = Constants::DIVISION / 8;
+        if (duration == 2) {
+            grace_len = Constants::DIVISION / 6;       //24th
+        } else if (duration == 3) {
+            grace_len = Constants::DIVISION / 4;       //16th
+        }
         NoteType note_type = NoteType::ACCIACCATURA;
 
         if (gflags & NOTE_APPOGIATURA) {   //on beat
@@ -1084,8 +1090,14 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
         }
 
         int grace_pitch = note->staff()->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr);
-        auto gnote = score->setGraceNote(note->chord(), grace_pitch, note_type, Constants::DIVISION / 2);
+
+        auto gnote = score->setGraceNote(note->chord(), grace_pitch, note_type, grace_len);
         score->deselect(gnote);
+
+        // gp5 not supports more than one grace note,
+        // so it's always should be shown as eight note
+        gnote->chord()->setDurationType(Fraction { 1, 8 });
+
         gnote->setString(note->string());
         auto sd = note->part()->instrument()->stringData();
         gnote->setFret(grace_pitch - sd->stringList().at(sd->stringList().size() - note->string() - 1).pitch);
