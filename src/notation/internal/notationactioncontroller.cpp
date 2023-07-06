@@ -944,6 +944,9 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             interaction->nudge(direction, quickly);
         } else if (interaction->noteInput()->isNoteInputMode()
                    && interaction->noteInput()->state().staffGroup == mu::engraving::StaffGroup::TAB) {
+            if (quickly) {
+                interaction->movePitch(direction, PitchMode::OCTAVE);
+            }
             interaction->moveSelection(direction, MoveSelectionType::String);
             return;
         } else if (interaction->selection()->isNone()) {
