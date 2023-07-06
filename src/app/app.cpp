@@ -174,6 +174,8 @@ int App::run(int argc, char** argv)
                 splashScreen = new SplashScreen(SplashScreen::ForNewInstance, file.displayName(true /* includingExtension */));
             } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
                 splashScreen = new SplashScreen(SplashScreen::ForNewInstance);
+            } else {
+                splashScreen = new SplashScreen(SplashScreen::Default);
             }
         }
     }
