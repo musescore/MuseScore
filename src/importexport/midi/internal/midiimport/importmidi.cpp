@@ -334,6 +334,10 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
         Interval v = staff->part()->instrument(t)->transpose();
         if (!v.isZero() && !cs->styleB(Sid::concertPitch)) {
             cKey = transposeKey(tKey, v);
+            // if there are more than 6 accidentals in transposing key, it cannot be PreferSharpFlat::AUTO
+            if ((tKey > 6 || tKey < -6) && staff->part()->preferSharpFlat() == PreferSharpFlat::AUTO) {
+                staff->part()->setPreferSharpFlat(PreferSharpFlat::NONE);
+            }
         }
         ke.setConcertKey(cKey);
         ke.setKey(tKey);

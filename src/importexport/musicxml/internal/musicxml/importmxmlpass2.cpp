@@ -3826,6 +3826,11 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
             Interval v = _pass1.getPart(partId)->instrument()->transpose();
             if (!v.isZero() && !_score->styleB(Sid::concertPitch)) {
                 cKey = transposeKey(tKey, v);
+                // if there are more than 6 accidentals in transposing key, it cannot be PreferSharpFlat::AUTO
+                Part* part = _pass1.getPart(partId);
+                if ((tKey > 6 || tKey < -6) && part->preferSharpFlat() == PreferSharpFlat::AUTO) {
+                    part->setPreferSharpFlat(PreferSharpFlat::NONE);
+                }
             }
             key.setConcertKey(cKey);
             key.setKey(tKey);

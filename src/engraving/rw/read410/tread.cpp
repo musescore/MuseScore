@@ -1284,6 +1284,11 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
     if (sig.custom() && sig.customKeyDefs().empty()) {
         sig.setMode(KeyMode::NONE);
     }
+    // if there are more than 6 accidentals in transposing key, it cannot be PreferSharpFlat::AUTO
+    if (p && !s->concertPitch() && (sig.key() > 6 || sig.key() < -6)
+        && p->preferSharpFlat() == PreferSharpFlat::AUTO && !p->instrument(s->tick())->transpose().isZero()) {
+        p->setPreferSharpFlat(PreferSharpFlat::NONE);
+    }
 
     s->setKeySigEvent(sig);
 }
