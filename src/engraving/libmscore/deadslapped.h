@@ -34,6 +34,8 @@ namespace mu::engraving {
 class DeadSlapped : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, DeadSlapped)
+    DECLARE_CLASSOF(ElementType::DEAD_SLAPPED)
+
 public:
 
     ~DeadSlapped() {}

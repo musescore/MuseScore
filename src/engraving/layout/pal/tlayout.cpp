@@ -201,7 +201,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
 {
     bool found = LayoutVisitor::visit(LayoutTypes {}, item, ctx);
     if (!found) {
-        LOGE() << "not found in lyaout types item: " << item->typeName();
+        LOGE() << "not found in layout types item: " << item->typeName();
         DO_ASSERT(found);
     }
 }
