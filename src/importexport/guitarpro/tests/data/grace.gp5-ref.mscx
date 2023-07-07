@@ -95,6 +95,7 @@
             </Tempo>
           <Chord>
             <durationType>eighth</durationType>
+            <duration>1/32</duration>
             <acciaccatura/>
             <Note>
               <Accidental>
@@ -126,6 +127,7 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
+            <duration>7/128</duration>
             <appoggiatura/>
             <Note>
               <Accidental>
@@ -161,6 +163,7 @@
         <voice>
           <Chord>
             <durationType>eighth</durationType>
+            <duration>1/32</duration>
             <acciaccatura/>
             <Note>
               <Accidental>
@@ -192,6 +195,7 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
+            <duration>1/16</duration>
             <Spanner type="Slur">
               <Slur>
                 </Slur>
@@ -245,6 +249,7 @@
         <voice>
           <Chord>
             <durationType>eighth</durationType>
+            <duration>1/16</duration>
             <acciaccatura/>
             <Note>
               <Accidental>
