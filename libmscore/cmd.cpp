@@ -4161,6 +4161,47 @@ void Score::cmdToggleAutoplace(bool all)
             }
       }
 
+//   cmdApplyInputState
+//---------------------------------------------------------
+
+//---------------------------------------------------------
+void Score::cmdApplyInputState()
+      {
+      if (!noteEntryMode())
+            return;
+
+      // get current note/rest
+      Element* e = selection().element();
+      if (!e)
+            return;
+      Note* n = nullptr;
+      ChordRest* cr = nullptr;
+      if (e->isNote()) {
+            n = toNote(e);
+            cr = n->chord();
+            }
+      else if (e->isRest()) {
+            cr = toRest(e);
+            }
+      if (!cr)
+            return;
+
+      // apply accidental state
+      AccidentalType acc = _is.accidentalType();
+      if (acc != AccidentalType::NONE && e->isNote()) {
+            Note* n = toNote(e);
+            n->setAccidentalType(acc);
+            _is.setAccidentalType(AccidentalType::NONE);
+            }
+
+      // apply duration
+      TDuration d = _is.duration();
+      if (cr->durationType() != d) {
+            changeCRlen(cr, d);
+            _is.moveToNextInputPos();
+            }
+      }
+
 //---------------------------------------------------------
 //   cmd
 //---------------------------------------------------------
@@ -4338,6 +4379,7 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "relayout",                   [](Score* cs, EditData&){ cs->cmdRelayout();                                              }},
             { "toggle-autoplace",           [](Score* cs, EditData&){ cs->cmdToggleAutoplace(false);                                  }},
             { "autoplace-enabled",          [](Score* cs, EditData&){ cs->cmdToggleAutoplace(true);                                   }},
+            { "apply-input-state",          [](Score* cs, EditData&){ cs->cmdApplyInputState();                                       }},
             };
 
       for (const auto& c : cmdList) {

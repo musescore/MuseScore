@@ -771,6 +771,7 @@ class Score : public QObject, public ScoreElement {
 
       void cmdRelayout();
       void cmdToggleAutoplace(bool all);
+      void cmdApplyInputState();
 
       bool playNote() const                 { return _updateState._playNote; }
       void setPlayNote(bool v)              { _updateState._playNote = v;    }
