@@ -132,15 +132,13 @@ public:
     void setUp(bool up) { _up = up; }
 
     // only need grips for two-note trems
-    bool needStartEditingAfterSelecting() const override { return twoNotes(); }
-    int gripsCount() const override { return 3; }
-    Grip initialEditModeGrip() const override { return Grip::END; }
-    Grip defaultGrip() const override { return Grip::MIDDLE; }
+    bool needStartEditingAfterSelecting() const override;
+    int gripsCount() const override;
+    Grip initialEditModeGrip() const;
+    Grip defaultGrip() const override;
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
     bool isMovable() const override { return true; }
-    void startDrag(EditData&) override {}
     bool isEditable() const override { return true; }
-    void startEdit(EditData&) override {}
     void endEdit(EditData&) override;
     void editDrag(EditData&) override;
 
