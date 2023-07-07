@@ -417,14 +417,14 @@ void GPConverter::fixEmptyMeasures()
             // Keep only one rest element in a bar and make its duration V_MEASURE
             // that way layout can recognize this bar as "empty"
             // and properly render mmrests
-            size_t lastIndex = segItemPairs.size() - 1;
             if (segItemPairs.empty()) {
                 continue;
             }
-            for (size_t i = 0; i < lastIndex; ++i) {
+            for (size_t i = 1; i < segItemPairs.size(); ++i) {
                 segItemPairs.at(i).first->remove(segItemPairs.at(i).second);
             }
-            Rest* rest = toRest(segItemPairs.at(lastIndex).second);
+
+            Rest* rest = toRest(segItemPairs.at(0).second);
             rest->setTicks(_lastMeasure->ticks());
             rest->setDurationType(DurationType::V_MEASURE);
         }
