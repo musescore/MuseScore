@@ -720,8 +720,12 @@ bool BeamTremoloLayout::calculateAnchorsCross()
             minY = std::max(minY, chordBeamAnchorY(toChord(c)));
         }
     }
+
     m_startAnchor.ry() = (maxY + minY) / 2;
     m_endAnchor.ry() = (maxY + minY) / 2;
+    m_startAnchor.setX(chordBeamAnchorX(startCr, ChordBeamAnchorType::Start));
+    m_endAnchor.setX(chordBeamAnchorX(endCr, ChordBeamAnchorType::End));
+
     m_slope = 0;
 
     if (!noSlope()) {
@@ -825,8 +829,6 @@ bool BeamTremoloLayout::calculateAnchorsCross()
                 // nothing needs to be done, the beam is already horizontal and placed nicely
             }
         }
-        m_startAnchor.setX(chordBeamAnchorX(startCr, ChordBeamAnchorType::Start));
-        m_endAnchor.setX(chordBeamAnchorX(endCr, ChordBeamAnchorType::End));
         m_slope = (m_endAnchor.y() - m_startAnchor.y()) / (m_endAnchor.x() - m_startAnchor.x());
     }
     return true;
