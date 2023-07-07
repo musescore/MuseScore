@@ -600,6 +600,26 @@ void Tremolo::triggerLayout() const
     }
 }
 
+bool Tremolo::needStartEditingAfterSelecting() const
+{
+    return twoNotes();
+}
+
+int Tremolo::gripsCount() const
+{
+    return twoNotes() ? 3 : 0;
+}
+
+Grip Tremolo::initialEditModeGrip() const
+{
+    return twoNotes() ? Grip::END : Grip::NO_GRIP;
+}
+
+Grip Tremolo::defaultGrip() const
+{
+    return twoNotes() ? Grip::MIDDLE : Grip::NO_GRIP;
+}
+
 //---------------------------------------------------------
 //   gripsPositions
 //---------------------------------------------------------
