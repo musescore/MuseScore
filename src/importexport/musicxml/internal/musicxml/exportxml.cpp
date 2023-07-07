@@ -2182,7 +2182,12 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, staff_idx_t staff, bo
             //LOGD(" keysym sym %d -> line %d step %d", ksym.sym, ksym.line, step);
             _xml.tag("key-step", QString(QChar(table2[step])));
             _xml.tag("key-alter", accSymId2alter(ksym.sym));
-            _xml.tag("key-accidental", accSymId2MxmlString(ksym.sym));
+            XmlWriter::Attributes accidentalAttrs;
+            QString s = accSymId2MxmlString(ksym.sym);
+            if (s == "other") {
+                accidentalAttrs = { { "smufl", accSymId2SmuflMxmlString(ksym.sym) } };
+            }
+            _xml.tag("key-accidental", accidentalAttrs, s);
         }
     } else {
         // traditional key signature
@@ -2556,11 +2561,15 @@ static void writeAccidental(XmlWriter& xml, const QString& tagName, const Accide
     if (acc) {
         QString s = accidentalType2MxmlString(acc->accidentalType());
         if (s != "") {
+            XmlWriter::Attributes attrs;
+            if (s == "other") {
+                attrs = { { "smufl", accidentalType2SmuflMxmlString(acc->accidentalType()) } };
+            }
             QString tag = tagName;
             if (acc->bracket() != AccidentalBracket::NONE) {
-                tag += " parentheses=\"yes\"";
+                attrs.emplace_back(std::make_pair("parentheses", "yes"));
             }
-            xml.tagRaw(tag, s);
+            xml.tag(AsciiStringView(tag.toStdString()), attrs, s);
         }
     }
 }

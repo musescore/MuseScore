@@ -3701,18 +3701,24 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure, cons
  Add a symbol defined as key-step \a step , -alter \a alter and -accidental \a accid to \a sig.
  */
 
-static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& alter, const QString& accid)
+static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& alter, const QString& accid,
+                        const QString& smufl)
 {
     //LOGD("addSymToSig(step '%s' alt '%s' acc '%s')",
     //       qPrintable(step), qPrintable(alter), qPrintable(accid));
 
-    SymId id = mxmlString2accSymId(accid);
+    SymId id = mxmlString2accSymId(accid, smufl);
+
     if (id == SymId::noSym) {
         bool ok;
         double d;
         d = alter.toDouble(&ok);
         AccidentalType accTpAlter = ok ? microtonalGuess(d) : AccidentalType::NONE;
-        id = mxmlString2accSymId(accidentalType2MxmlString(accTpAlter));
+        QString s = accidentalType2MxmlString(accTpAlter);
+        if (s == "other") {
+            s = accidentalType2SmuflMxmlString(accTpAlter);
+        }
+        id = mxmlString2accSymId(s);
     }
 
     if (step.size() == 1 && id != SymId::noSym) {
@@ -3762,7 +3768,7 @@ static void addKey(const KeySigEvent key, const bool printObj, Score* score, Mea
  Clear key-step, -alter, -accidental.
  */
 
-static void flushAlteredTone(KeySigEvent& kse, QString& step, QString& alt, QString& acc)
+static void flushAlteredTone(KeySigEvent& kse, QString& step, QString& alt, QString& acc, QString& smufl)
 {
     //LOGD("flushAlteredTone(step '%s' alt '%s' acc '%s')",
     //       qPrintable(step), qPrintable(alt), qPrintable(acc));
@@ -3772,7 +3778,7 @@ static void flushAlteredTone(KeySigEvent& kse, QString& step, QString& alt, QStr
     }
     // step and alt are required, but also accept step and acc
     if (step != "" && (alt != "" || acc != "")) {
-        addSymToSig(kse, step, alt, acc);
+        addSymToSig(kse, step, alt, acc, smufl);
     } else {
         LOGD("flushAlteredTone invalid combination of step '%s' alt '%s' acc '%s')",
              qPrintable(step), qPrintable(alt), qPrintable(acc));       // TODO
@@ -3818,6 +3824,7 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
     QString keyStep;
     QString keyAlter;
     QString keyAccidental;
+    QString smufl;
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "fifths") {
@@ -3863,17 +3870,18 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
         } else if (_e.name() == "cancel") {
             skipLogCurrElem();        // TODO ??
         } else if (_e.name() == "key-step") {
-            flushAlteredTone(key, keyStep, keyAlter, keyAccidental);
+            flushAlteredTone(key, keyStep, keyAlter, keyAccidental, smufl);
             keyStep = _e.readElementText();
         } else if (_e.name() == "key-alter") {
             keyAlter = _e.readElementText();
         } else if (_e.name() == "key-accidental") {
+            smufl = _e.attributes().value("smufl").toString();
             keyAccidental = _e.readElementText();
         } else {
             skipLogCurrElem();
         }
     }
-    flushAlteredTone(key, keyStep, keyAlter, keyAccidental);
+    flushAlteredTone(key, keyStep, keyAlter, keyAccidental, smufl);
 
     size_t nstaves = _pass1.getPart(partId)->nstaves();
     staff_idx_t staffIdx = _pass1.trackForPart(partId) / VOICES;
