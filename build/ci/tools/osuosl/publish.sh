@@ -118,7 +118,9 @@ if [ "$BUILD_MODE" == "nightly_build" ]; then
     echo "Delete old MuseScoreNightly files"
     number_to_keep=42 # includes the one we just uploaded and the symlink to it
     if [ "$OS" == "linux" ]; then
-      ((++number_to_keep)) # one extra for the zsync file
+        ((++number_to_keep)) # one extra for the zsync file
+    elif [ "$OS" == "windows" ]; then
+        ((number_to_keep *= 2)) # two nightlies each night, namely portable and normal
     fi
     ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH; ls MuseScoreNightly* -t | tail -n +${number_to_keep} | xargs rm -f"
 fi
