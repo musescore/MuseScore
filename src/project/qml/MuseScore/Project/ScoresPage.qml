@@ -229,6 +229,10 @@ FocusScope {
             onOpenScoreRequested: function(scorePath, displayName) {
                 Qt.callLater(scoresPageModel.openScore, scorePath, displayName)
             }
+
+            onRemoveScoreRequested: function(scorePath) {
+                Qt.callLater(scoresPageModel.removeScore, scorePath)
+            }
         }
     }
 

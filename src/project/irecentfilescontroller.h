@@ -44,6 +44,7 @@ public:
 
     virtual void prependRecentFile(const ProjectFile& file) = 0;
     virtual void moveRecentFile(const io::path_t& before, const ProjectFile& after) = 0;
+    virtual void removeRecentFile(const io::path_t& filePath) = 0;
     virtual void clearRecentFiles() = 0;
 
     virtual async::Promise<QPixmap> thumbnail(const io::path_t& filePath) const = 0;

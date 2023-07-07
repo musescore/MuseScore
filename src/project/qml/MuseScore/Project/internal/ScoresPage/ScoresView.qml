@@ -42,6 +42,7 @@ Loader {
 
     signal createNewScoreRequested()
     signal openScoreRequested(var scorePath, var displayName)
+    signal removeScoreRequested(var scorePath)
 
     enum ViewType {
         ViewType_Grid,
@@ -67,6 +68,10 @@ Loader {
 
         onOpenScoreRequested: function(scorePath, displayName) {
             root.openScoreRequested(scorePath, displayName)
+        }
+
+        onRemoveScoreRequested: function(scorePath) {
+            root.removeScoreRequested(scorePath)
         }
     }
 

@@ -49,6 +49,11 @@ void ScoresPageModel::openScore(const QString& scorePath, const QString& display
     dispatcher()->dispatch("file-open", ActionData::make_arg2<io::path_t, QString>(io::path_t(scorePath), displayNameOverride));
 }
 
+void ScoresPageModel::removeScore(const QString& scorePath)
+{
+    recentFilesController()->removeRecentFile(scorePath);
+}
+
 void ScoresPageModel::openScoreManager()
 {
     interactive()->openUrl(museScoreComService()->scoreManagerUrl());

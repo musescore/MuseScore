@@ -43,6 +43,7 @@ FocusScope {
     property alias navigation: navCtrl
 
     signal clicked()
+    signal removeRequested()
 
     NavigationControl {
         id: navCtrl
@@ -59,18 +60,6 @@ FocusScope {
         }
 
         onTriggered: root.clicked()
-    }
-
-    MouseArea {
-        id: mouseArea
-
-        anchors.fill: parent
-
-        hoverEnabled: true
-
-        onClicked: {
-            root.clicked()
-        }
     }
 
     Column {
@@ -174,6 +163,31 @@ FocusScope {
                     glowRadius: 20
                     color: "#08000000"
                     cornerRadius: thumbnail.radius + glowRadius
+                }
+            }
+    
+            MouseArea {
+                id: mouseArea
+
+                anchors.fill: parent
+
+                hoverEnabled: true
+
+                onClicked: {
+                    root.clicked()
+                }
+
+                FlatButton {
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+
+                    icon: IconCode.CLOSE_X_ROUNDED
+                    visible: root.path != "" && parent.containsMouse
+                    transparent: true
+
+                    onClicked: {
+                        root.removeRequested()
+                    }
                 }
             }
 

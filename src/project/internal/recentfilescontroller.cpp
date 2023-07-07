@@ -111,6 +111,22 @@ void RecentFilesController::moveRecentFile(const io::path_t& before, const Proje
     }
 }
 
+void RecentFilesController::removeRecentFile(const io::path_t& filePath)
+{
+    TRACEFUNC;
+
+    ProjectFilesList newList;
+    newList.reserve(m_recentFilesList.size() - 1);
+
+    for (const ProjectFile& file : m_recentFilesList) {
+        if (file.path != filePath && fileSystem()->exists(file.path)) {
+            newList.push_back(file);
+        }
+    }
+
+    setRecentFilesList(newList, true);
+}
+
 void RecentFilesController::clearRecentFiles()
 {
     setRecentFilesList({}, true);

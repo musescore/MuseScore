@@ -26,6 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
+#include "irecentfilescontroller.h"
 #include "actions/iactionsdispatcher.h"
 #include "iinteractive.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
@@ -36,6 +37,7 @@ class ScoresPageModel : public QObject
     Q_OBJECT
 
     INJECT(IProjectConfiguration, configuration)
+    INJECT(IRecentFilesController, recentFilesController)
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(framework::IInteractive, interactive)
     INJECT(cloud::IMuseScoreComService, museScoreComService)
@@ -48,6 +50,7 @@ public:
     Q_INVOKABLE void createNewScore();
     Q_INVOKABLE void openOther();
     Q_INVOKABLE void openScore(const QString& scorePath, const QString& displayNameOverride);
+    Q_INVOKABLE void removeScore(const QString& scorePath);
     Q_INVOKABLE void openScoreManager();
 
     int tabIndex() const;

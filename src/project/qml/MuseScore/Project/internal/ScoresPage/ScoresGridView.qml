@@ -41,6 +41,7 @@ Item {
 
     signal createNewScoreRequested()
     signal openScoreRequested(var scorePath, var displayName)
+    signal removeScoreRequested(var scorePath)
 
     clip: true
 
@@ -165,6 +166,10 @@ Item {
                     } else if (!isNoResultFound) {
                         root.openScoreRequested(score.path, score.name)
                     }
+                }
+
+                onRemoveRequested: {
+                    root.removeScoreRequested(score.path)
                 }
             }
         }

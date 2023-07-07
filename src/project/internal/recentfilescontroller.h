@@ -52,6 +52,7 @@ public:
 
     void prependRecentFile(const ProjectFile& file) override;
     void moveRecentFile(const io::path_t& before, const ProjectFile& after) override;
+    void removeRecentFile(const io::path_t& path) override;
     void clearRecentFiles() override;
 
     async::Promise<QPixmap> thumbnail(const io::path_t& file) const override;
