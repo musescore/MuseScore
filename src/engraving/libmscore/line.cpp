@@ -565,6 +565,15 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
     if (line()->anchor() != Spanner::Anchor::SEGMENT) {
         return;
     }
+
+    if (isTrillSegment()) {
+        EngravingItem* startElement = spanner()->startElement();
+        if (startElement && startElement->isChord() && toChord(startElement)->staffMove() != 0) {
+            // This trill is on a cross-staff chord. Don't try to rebase its anchors when dragging.
+            return;
+        }
+    }
+
     // don't change anchors on keyboard adjustment or if Ctrl is pressed
     // (Ctrl+Left/Right is handled elsewhere!)
     if (ed.key == Key_Left || ed.key == Key_Right || ed.modifiers & ControlModifier) {
