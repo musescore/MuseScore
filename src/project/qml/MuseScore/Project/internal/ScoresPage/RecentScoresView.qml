@@ -42,7 +42,9 @@ ScoresView {
     Component {
         id: gridComp
 
-        ScoresView.Grid {}
+        ScoresView.Grid {
+            isRemovingScoresAllowed: true
+        }
     }
 
     Component {

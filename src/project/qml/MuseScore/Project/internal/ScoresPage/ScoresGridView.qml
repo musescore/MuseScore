@@ -39,6 +39,8 @@ Item {
 
     property alias navigation: navPanel
 
+    property bool isRemovingScoresAllowed: false
+
     signal createNewScoreRequested()
     signal openScoreRequested(var scorePath, var displayName)
     signal removeScoreRequested(var scorePath)
@@ -159,6 +161,7 @@ Item {
                 isCloud: score.isCloud
                 cloudScoreId: score.scoreId ?? 0
                 timeSinceModified: score.timeSinceModified ?? ""
+                isRemovingScoresAllowed: root.isRemovingScoresAllowed
 
                 onClicked: {
                     if (isCreateNew) {

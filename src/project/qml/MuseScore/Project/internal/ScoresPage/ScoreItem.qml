@@ -39,6 +39,7 @@ FocusScope {
     property bool isNoResultFound: false
     property bool isCloud: false
     property int cloudScoreId: 0
+    property bool isRemovingScoresAllowed: false
 
     property alias navigation: navCtrl
 
@@ -182,7 +183,7 @@ FocusScope {
                     anchors.right: parent.right
 
                     icon: IconCode.CLOSE_X_ROUNDED
-                    visible: root.path != "" && parent.containsMouse
+                    visible: root.path != "" && root.isRemovingScoresAllowed && parent.containsMouse
                     transparent: true
 
                     onClicked: {
