@@ -963,22 +963,31 @@ bool Staff::isPrimaryStaff() const
     if (!_links) {
         return true;
     }
-    std::vector<Staff*> s;
-    std::vector<Staff*> ss;
-    for (auto e : *_links) {
-        Staff* staff = toStaff(e);
+
+    std::vector<const Staff*> linkedStavesInThisScore;
+    std::vector<const Staff*> linkedNonTabStavesInThisScore;
+
+    for (const EngravingObject* linked : *_links) {
+        const Staff* staff = toStaff(linked);
+
         if (staff->score() == score()) {
-            s.push_back(staff);
+            linkedStavesInThisScore.push_back(staff);
+
             if (!staff->isTabStaff(Fraction(0, 1))) {
-                ss.push_back(staff);
+                linkedNonTabStavesInThisScore.push_back(staff);
             }
         }
     }
-    if (s.size() == 1) { // the linked staves are in different scores
-        return s.front() == this;
-    } else { // return a non tab linked staff in this score
-        return ss.front() == this;
+
+    IF_ASSERT_FAILED(!linkedStavesInThisScore.empty()) {
+        return true;
     }
+
+    if (!linkedNonTabStavesInThisScore.empty()) {
+        return linkedNonTabStavesInThisScore.front() == this;
+    }
+
+    return linkedStavesInThisScore.front() == this;
 }
 
 //---------------------------------------------------------
