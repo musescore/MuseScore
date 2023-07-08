@@ -252,6 +252,9 @@ jobs:
         if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
           DO_BUILD='true'  
         fi
+        if [[ "$BUILD_MODE" == "nightly_build" && "${{ github.repository }}" == "musescore/MuseScore" ]]; then 
+          DO_BUILD='true'
+        fi
 
         DO_PUBLISH='false'
         if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly_build" ]]; then 
