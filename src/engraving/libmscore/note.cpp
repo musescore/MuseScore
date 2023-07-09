@@ -913,7 +913,12 @@ int Note::playingTpc() const
     int result = tpc();
 
     if (!concertPitch() && transposition()) {
-        result = transposeTpc(result);
+        int tpc1 = this->tpc1();
+        if (tpc1 == Tpc::TPC_INVALID) {
+            result = transposeTpc(result);
+        } else {
+            result = tpc1;
+        }
     }
 
     int steps = ottaveCapoFret();
