@@ -17509,12 +17509,12 @@ Fret %1 on strings %2</source>
 <context>
     <name>iex_capella</name>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2820"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2825"/>
         <source>Import Capella</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2821"/>
+        <location filename="../../src/importexport/capella/internal/capella.cpp" line="2826"/>
         <source>Import failed: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17541,12 +17541,12 @@ Fret %1 on strings %2</source>
 <context>
     <name>iex_midi</name>
     <message>
-        <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1272"/>
+        <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1276"/>
         <source>Import MIDI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1273"/>
+        <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1277"/>
         <source>Import failed: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17767,37 +17767,37 @@ pickup measure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="192"/>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="243"/>
         <source>Debug message:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="194"/>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="245"/>
         <source>Warning:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="196"/>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="247"/>
         <source>Critical error:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="198"/>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="249"/>
         <source>Fatal error:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="200"/>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="251"/>
         <source>Unknown error:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="283"/>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="334"/>
         <source>line %1, column %2:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="296"/>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="347"/>
         <source>expected token type and name &apos;EndElement %1&apos;, actual &apos;%2 %3&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20303,7 +20303,7 @@ pickup measure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/view/instrumentlistmodel.cpp" line="194"/>
+        <location filename="../../src/instrumentsscene/view/instrumentlistmodel.cpp" line="201"/>
         <source>All instruments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20817,73 +20817,73 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1216"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1219"/>
         <source>All Supported Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1217"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1220"/>
         <source>Scalable Vector Graphics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1218"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1221"/>
         <source>JPEG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1219"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1222"/>
         <source>PNG Bitmap Graphic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1221"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1224"/>
         <source>Insert Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1543"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1546"/>
         <source>MuseScore style files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1544"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1547"/>
         <source>MuseScore style file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1547"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1550"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1861"/>
         <source>Load style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1548"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1551"/>
         <source>Save style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1558"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1561"/>
         <source>The style file could not be loaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1563"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1566"/>
         <source>Since this style file is from a different version of MuseScore, your score is not guaranteed to display correctly.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1565"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1568"/>
         <source>Click OK to load anyway.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1579"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1582"/>
         <source>The style file could not be saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1580"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1583"/>
         <source>An error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
