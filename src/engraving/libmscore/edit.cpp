@@ -4980,6 +4980,7 @@ void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int 
 void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent key)
 {
     KeySig* lks = 0;
+    bool needsUpdate = false;
 
     for (Staff* staff : ostaff->staffList()) {
         if (staff->isDrumStaff(tick)) {
@@ -5000,12 +5001,14 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
         KeySig* ks   = toKeySig(s->element(track));
 
         Interval interval = staff->part()->instrument(tick)->transpose();
+        Interval oldStaffInterval = staff->transpose(tick);
         KeySigEvent nkey  = key;
         bool concertPitch = score->style().styleB(Sid::concertPitch);
 
         if (interval.chromatic && !concertPitch && !nkey.isAtonal()) {
             interval.flip();
             nkey.setKey(transposeKey(key.concertKey(), interval, staff->part()->preferSharpFlat()));
+            interval.flip();
         }
 
         updateInstrumentChangeTranspositions(key, staff, tick);
@@ -5024,6 +5027,13 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
                 lks = nks;
             }
         }
+        if (interval != staff->transpose(tick) || interval != oldStaffInterval) {
+            needsUpdate = true;
+        }
+    }
+    if (needsUpdate) {
+        Fraction tickEnd = Fraction::fromTicks(ostaff->keyList()->nextKeyTick(tick.ticks()));
+        transpositionChanged(ostaff->part(), ostaff->transpose(tick), tick, tickEnd);
     }
 }
 
