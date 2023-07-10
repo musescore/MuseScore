@@ -52,20 +52,20 @@ void LogApi::debug(const QString& message)
 
 void LogApi::error(const QString& tag, const QString& message)
 {
-    LOGE_T(tag.toStdString(), haw::logger::Red)() << message;
+    LOGE_T(tag.toStdString())() << message;
 }
 
 void LogApi::warn(const QString& tag, const QString& message)
 {
-    LOGW_T(tag.toStdString(), haw::logger::Yellow)() << message;
+    LOGW_T(tag.toStdString())() << message;
 }
 
 void LogApi::info(const QString& tag, const QString& message)
 {
-    LOGI_T(tag.toStdString(), haw::logger::Green)() << message;
+    LOGI_T(tag.toStdString())() << message;
 }
 
 void LogApi::debug(const QString& tag, const QString& message)
 {
-    LOGD_T(tag.toStdString(), haw::logger::None)() << message;
+    LOGD_T(tag.toStdString())() << message;
 }
