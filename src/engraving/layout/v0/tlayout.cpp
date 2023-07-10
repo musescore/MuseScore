@@ -2693,8 +2693,10 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
                 }
                 if (ed->ipos().y() != ny) {
                     ed->setPosY(ny);
-                    if (ed->snappedExpression()) {
-                        ed->snappedExpression()->setPosY(ny);
+                    Expression* snappedExpression = ed->snappedExpression();
+                    if (snappedExpression) {
+                        double yOffsetDiff = snappedExpression->offset().y() - ed->offset().y();
+                        snappedExpression->setPosY(ny - yOffsetDiff);
                     }
                     if (ed->addToSkyline()) {
                         Segment* s = ed->segment();
