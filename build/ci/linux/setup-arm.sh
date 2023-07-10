@@ -92,6 +92,7 @@ apt_packages=(
   argagg-dev
   libgcrypt20-dev
   libcurl4-openssl-dev
+  libgpg-error-dev
   )
 
 # MuseScore compiles without these but won't run without them
@@ -287,22 +288,46 @@ git checkout --recurse-submodules 2.0.0-alpha-1-20220512
 git submodule update --init --recursive
 mkdir -p build
 cd build
-# switch to using pkgconf
-# the following is a super ugly hack that exists upstream
-apt-get install -y --no-install-recommends pkgconf
 
 if [ "$PACKARCH" == "armv7l" ]; then
   cp ../ci/libgcrypt.pc /usr/lib/arm-linux-gnueabihf/pkgconfig/libgcrypt.pc
   sed -i 's|x86_64-linux-gnu|arm-linux-gnueabihf|g' /usr/lib/arm-linux-gnueabihf/pkgconfig/libgcrypt.pc
   sed -i 's|x86_64-pc-linux-gnu|arm-pc-linux-gnueabihf|g' /usr/lib/arm-linux-gnueabihf/pkgconfig/libgcrypt.pc
+  echo 'prefix=/usr
+exec_prefix=${prefix}
+includedir=${prefix}/include
+libdir=${prefix}/lib/arm-linux-gnueabihf
+host=arm-unknown-linux-gnueabihf
+mtcflags=
+mtlibs=
+
+Name: gpg-error
+Description: GPG Runtime
+Version: 1.27
+Cflags:
+Libs: -L${libdir} -lgpg-error
+Libs.private:
+URL: https://www.gnupg.org/software/libgpg-error/index.html' > /usr/lib/arm-linux-gnueabihf/pkgconfig/gpg-error.pc
 else
   cp ../ci/libgcrypt.pc /usr/lib/aarch64-linux-gnu/pkgconfig/libgcrypt.pc
   sed -i 's|x86_64|aarch64|g' /usr/lib/aarch64-linux-gnu/pkgconfig/libgcrypt.pc
+  echo 'prefix=/usr
+exec_prefix=${prefix}
+includedir=${prefix}/include
+libdir=${prefix}/lib/aarch64-linux-gnu
+host=aarch64-unknown-linux-gnu
+mtcflags=
+mtlibs=
+
+Name: gpg-error
+Description: GPG Runtime
+Version: 1.27
+Cflags:
+Libs: -L${libdir} -lgpg-error
+Libs.private:
+URL: https://www.gnupg.org/software/libgpg-error/index.html' > /usr/lib/aarch64-linux-gnu/pkgconfig/gpg-error.pc
 fi
 
-# the hack uses pkgconf to produce a partial makefile and then installs back pkg-config to finish producing the makefile
-cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo .. || true
-apt-get install -y --no-install-recommends pkg-config
 cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
 make -j"$(nproc)"
 # create the extracted appimage directory
