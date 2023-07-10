@@ -2755,6 +2755,8 @@ Sid TextBase::offsetSid() const
     switch (textStyleType()) {
     case TextStyleType::DYNAMICS:
         return above ? Sid::dynamicsPosAbove : Sid::dynamicsPosBelow;
+    case TextStyleType::EXPRESSION:
+        return above ? Sid::expressionPosAbove : Sid::expressionPosBelow;
     case TextStyleType::LYRICS_ODD:
     case TextStyleType::LYRICS_EVEN:
         return above ? Sid::lyricsPosAbove : Sid::lyricsPosBelow;
