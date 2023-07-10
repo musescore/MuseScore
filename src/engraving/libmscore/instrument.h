@@ -66,8 +66,6 @@ public:
     void setPos(int p) { _pos = p; }
     String name() const { return _name; }
     void setName(const String& n) { _name = n; }
-
-    void xmlReplaceAccidentals();
 };
 
 //---------------------------------------------------------

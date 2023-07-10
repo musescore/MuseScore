@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
@@ -53,6 +53,34 @@ static int musicXMLImportErrorDialog(QString text, QString detailedText)
     return errorDialog.exec();
 }
 
+void updateNamesForAccidentals(Instrument* inst)
+{
+    auto replace = [](String name) {
+        name = name.replace(std::regex(
+                                R"(((?:^|\s)([A-Ga-g]|[Uu][Tt]|[Dd][Oo]|[Rr][EeÉé]|[MmSsTt][Ii]|[FfLl][Aa]|[Ss][Oo][Ll]))b(?=\s|$))"),
+                            String::fromStdString(R"($1♭)"));
+
+        name = name.replace(std::regex(
+                                R"(((?:^|\s)([A-Ga-g]|[Uu][Tt]|[Dd][Oo]|[Rr][EeÉé]|[MmSsTt][Ii]|[FfLl][Aa]|[Ss][Oo][Ll]))#(?=\s|$))"),
+                            String::fromStdString(R"($1♯)"));
+
+        return name;
+    };
+    // change staff names from simple text (eg 'Eb') to text using accidental symbols (eg 'E♭')
+
+    // Instrument::longNames() is const af so we need to make a deep copy, update it, and then set it again
+    StaffNameList longNamesCopy = inst->longNames();
+    for (StaffName& sn : longNamesCopy) {
+        sn.setName(replace(sn.name()));
+    }
+    StaffNameList shortNamesCopy = inst->shortNames();
+    for (StaffName& sn : shortNamesCopy) {
+        sn.setName(replace(sn.name()));
+    }
+    inst->setLongNames(longNamesCopy);
+    inst->setShortNames(shortNamesCopy);
+}
+
 //---------------------------------------------------------
 //   importMusicXMLfromBuffer
 //---------------------------------------------------------
@@ -83,7 +111,7 @@ Err importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* d
     for (const Part* part : score->parts()) {
         for (const auto& pair : part->instruments()) {
             pair.second->updateInstrumentId();
-            pair.second->updateNamesForAccidentals();
+            updateNamesForAccidentals(pair.second);
         }
     }
 

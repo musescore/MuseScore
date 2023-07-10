@@ -150,18 +150,6 @@ StaffName::StaffName(const String& xmlText, int pos)
     TextBase::validateText(_name); // enforce HTML encoding
 }
 
-void StaffName::xmlReplaceAccidentals()
-{
-    // instrument names in some musicXML use 'b' instead of '♭' for flat, so we need to convert them.
-    // i don't know if there is a valid reason for # to be in a staff name, but we convert it too just in case.
-
-    _name.replace(std::regex(R"(((?:^|\s)([A-Ga-g]|[Uu][Tt]|[Dd][Oo]|[Rr][EeÉé]|[MmSsTt][Ii]|[FfLl][Aa]|[Ss][Oo][Ll]))b(?=\s|$))"),
-                  String::fromStdString(R"($1♭)"));
-
-    _name.replace(std::regex(R"(((?:^|\s)([A-Ga-g]|[Uu][Tt]|[Dd][Oo]|[Rr][EeÉé]|[MmSsTt][Ii]|[FfLl][Aa]|[Ss][Oo][Ll]))#(?=\s|$))"),
-                  String::fromStdString(R"($1♯)"));
-}
-
 String Instrument::recognizeMusicXmlId() const
 {
     static const String defaultMusicXmlId(u"keyboard.piano");
@@ -1215,17 +1203,6 @@ void Instrument::updateInstrumentId()
 
     if (_id.isEmpty()) {
         _id = recognizeId();
-    }
-}
-
-void Instrument::updateNamesForAccidentals()
-{
-    // change staff names from simple text (eg 'Eb') to text using accidental symbols (eg 'E♭')
-    for (StaffName& sn : _longNames) {
-        sn.xmlReplaceAccidentals();
-    }
-    for (StaffName& sn : _shortNames) {
-        sn.xmlReplaceAccidentals();
     }
 }
 
