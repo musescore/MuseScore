@@ -930,6 +930,8 @@ enum class Sid {
     expressionAlign,
     expressionPlacement,
     expressionOffset,
+    expressionPosAbove,
+    expressionPosBelow,
     expressionFrameType,
     expressionFramePadding,
     expressionFrameWidth,

@@ -400,6 +400,8 @@
         <voice>
           <Expression>
             <placement>above</placement>
+            <snapToDynamics>0</snapToDynamics>
+            <offset x="0" y="3.5"/>
             <text>technique</text>
             </Expression>
           <Rest>
