@@ -921,6 +921,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::expressionAlign,               "expressionAlign",              Align(AlignH::LEFT, AlignV::BASELINE) },
     { Sid::expressionPlacement,           "expressionPlacement",          PlacementV::BELOW },
     { Sid::expressionOffset,              "expressionOffset",             PointF(.0, 2.5) },
+    { Sid::expressionPosAbove,            "expressionPosAbove",           PointF(.0, -1.5) },
+    { Sid::expressionPosBelow,            "expressionPosBelow",           PointF(.0, 2.5) },
     { Sid::expressionFrameType,           "expressionFrameType",          int(FrameType::NO_FRAME) },
     { Sid::expressionFramePadding,        "expressionFramePadding",       0.2 },
     { Sid::expressionFrameWidth,          "expressionFrameWidth",         0.1 },
