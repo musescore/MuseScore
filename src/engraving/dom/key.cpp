@@ -27,6 +27,7 @@
 #include "pitchspelling.h"
 #include "score.h"
 #include "utils.h"
+#include "types/symnames.h"
 
 #include "log.h"
 
@@ -396,20 +397,33 @@ void AccidentalState::init(Key key)
 //   init
 //---------------------------------------------------------
 
-void AccidentalState::init(const KeySigEvent& keySig)
+void AccidentalState::init(const KeySigEvent& keySig, ClefType clef)
 {
     init(keySig.key());
     if (keySig.custom()) {
+        int used[7] = { 0 };
+        for (const CustDef& d : keySig.customKeyDefs()) {
+            int degree = keySig.degInKey(d.degree);
+            ++used[degree];
+        }
         for (const CustDef& d : keySig.customKeyDefs()) {
             SymId sym = keySig.symInKey(d.sym, d.degree);
             int degree = keySig.degInKey(d.degree);
             AccidentalVal a = sym2accidentalVal(sym);
-            for (int octave = 0; octave < (11 * 7); octave += 7) {
-                int i = degree + octave;
-                if (i >= MAX_ACC_STATE) {
-                    break;
+            if (used[degree] > 1) {
+                bool flat = std::string(mu::engraving::SymNames::nameForSymId(sym).ascii()).find("Flat") != std::string::npos;
+                int accIdx = (degree * 2 + 1) % 7; // C D E F ... index to F C G D index
+                accIdx = flat ? 13 - accIdx : accIdx;
+                int absLine = absStep(ClefInfo::lines(clef)[accIdx] + d.octAlt * 7, clef);
+                m_state[absLine] = static_cast<uint8_t>(int(a) - int(AccidentalVal::MIN));
+            } else {
+                for (int octave = 0; octave < (11 * 7); octave += 7) {
+                    int i = degree + octave;
+                    if (i >= MAX_ACC_STATE) {
+                        break;
+                    }
+                    m_state[i] = static_cast<uint8_t>(int(a) - int(AccidentalVal::MIN));
                 }
-                m_state[i] = static_cast<uint8_t>(int(a) - int(AccidentalVal::MIN));
             }
         }
     }
