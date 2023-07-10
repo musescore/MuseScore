@@ -156,6 +156,8 @@ public:
     static const Type INFO;
     static const Type DEBG;
 
+    static Color colorForType(const Type& type);
+
     void setupDefault();
 
     void setLevel(Level level);
