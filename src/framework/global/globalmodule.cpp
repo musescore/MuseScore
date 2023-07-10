@@ -134,8 +134,8 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     using namespace haw::profiler;
     struct MyPrinter : public Profiler::Printer
     {
-        void printDebug(const std::string& str) override { LOG_STREAM(Logger::DEBG, "Profiler", "")() << str; }
-        void printInfo(const std::string& str) override { LOG_STREAM(Logger::INFO, "Profiler", "")() << str; }
+        void printDebug(const std::string& str) override { LOG_STREAM(Logger::DEBG, "Profiler", "", None)() << str; }
+        void printInfo(const std::string& str) override { LOG_STREAM(Logger::INFO, "Profiler", "", None)() << str; }
     };
 
     Profiler::Options profOpt;
