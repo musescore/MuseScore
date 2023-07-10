@@ -43,6 +43,7 @@ class Bracket;
 class Breath;
 
 class Capo;
+class Chord;
 class ChordLine;
 class Clef;
 
@@ -157,6 +158,7 @@ public:
     static void layout(engraving::Breath* item, const Context&);
 
     static void layout(engraving::Capo* item, const Context& ctx);
+    static void layout(engraving::Chord* item, const Context& ctx);
     static void layout(engraving::ChordLine* item, const Context& ctx);
     static void layout(engraving::Clef* item, const Context& ctx);
 

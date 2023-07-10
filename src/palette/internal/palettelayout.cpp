@@ -87,6 +87,7 @@
 #include "engraving/layout/v0/tlayout.h"
 #include "engraving/layout/v0/tremololayout.h"
 #include "engraving/layout/v0/arpeggiolayout.h"
+#include "engraving/layout/v0/chordlayout.h"
 
 #include "log.h"
 
@@ -199,9 +200,12 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::VOLTA:        layout(toVolta(item), ctx);
         break;
+    // drumset
+    case ElementType::CHORD:        layout(toChord(item), ctx);
+        break;
     default:
+        LOGE() << "Not handled: " << item->typeName();
         IF_ASSERT_FAILED(false) {
-            LOGE() << "Not handled: " << item->typeName();
             layout::v0::LayoutContext ctxv0(item->score());
             layout::v0::TLayout::layoutItem(item, ctxv0);
         }
@@ -630,6 +634,12 @@ void PaletteLayout::layout(Breath* item, const Context&)
 void PaletteLayout::layout(Capo* item, const Context& ctx)
 {
     layoutTextBase(item, ctx);
+}
+
+void PaletteLayout::layout(Chord* item, const Context& ctx)
+{
+    layout::v0::LayoutContext ctxv0(ctx.dontUseScore());
+    layout::v0::ChordLayout::layout(item, ctxv0);
 }
 
 void PaletteLayout::layout(ChordLine* item, const Context& ctx)
