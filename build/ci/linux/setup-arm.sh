@@ -328,7 +328,7 @@ Libs.private:
 URL: https://www.gnupg.org/software/libgpg-error/index.html' > /usr/lib/aarch64-linux-gnu/pkgconfig/gpg-error.pc
 fi
 
-cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_SYSTEM_NAME=Linux ..
 make -j"$(nproc)"
 # create the extracted appimage directory
 mkdir -p $BUILD_TOOLS/appimageupdatetool
