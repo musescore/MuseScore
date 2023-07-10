@@ -5327,6 +5327,9 @@ SpannerSegment* TLayout::layoutSystemSLine(SLine* line, System* system, LayoutCo
 
 SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutContext& ctx)
 {
+    if (!line->lyrics()) {
+        return nullptr; // a lyrics line with no lyrics shouldn't exist
+    }
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
@@ -5402,7 +5405,10 @@ SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutCo
     }
 
     TLayout::layout(lineSegm, ctx);
-
+    if (!line->lyrics()) {
+        // this line could have been removed in the process of laying out surrounding lyrics
+        return nullptr;
+    }
     // if temp melisma extend the first line segment to be
     // after the lyrics syllable (otherwise the melisma segment
     // will be too short).

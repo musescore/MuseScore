@@ -222,6 +222,11 @@ void TextBase::endEdit(EditData& ed)
     } else {
         triggerLayout();
     }
+    if (isLyrics()) {
+        // we must adjust previous lyrics before the call to commitText(), in order to make the adjustments
+        // part of the same undo command. there is logic above that will skip this call if the text is empty
+        toLyrics(this)->adjustPrevious();
+    }
 
     static const double w = 2.0;
     score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));

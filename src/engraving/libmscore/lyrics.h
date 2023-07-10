@@ -88,6 +88,7 @@ public:
     Fraction endTick() const;
     void removeFromScore();
     void setRemoveInvalidSegments() { _removeInvalidSegments = true; }
+    void adjustPrevious();
 
     using EngravingObject::undoChangeProperty;
     void paste(EditData& ed, const String& txt) override;
@@ -141,7 +142,7 @@ public:
 
     Lyrics* lyrics() const { return toLyrics(explicitParent()); }
     Lyrics* nextLyrics() const { return _nextLyrics; }
-    bool isEndMelisma() const { return lyrics()->ticks().isNotZero(); }
+    bool isEndMelisma() const { return lyrics() && lyrics()->ticks().isNotZero(); }
     bool isDash() const { return !isEndMelisma(); }
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
 

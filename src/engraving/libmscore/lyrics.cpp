@@ -313,6 +313,29 @@ bool Lyrics::isEditAllowed(EditData& ed) const
     return TextBase::isEditAllowed(ed);
 }
 
+void Lyrics::adjustPrevious()
+{
+    Lyrics* prev = prevLyrics(toLyrics(this));
+    if (prev) {
+        // search for lyric spanners to split at this point if necessary
+        if (prev->tick() + prev->ticks() >= tick()) {
+            // the previous lyric has a spanner attached that goes through this one
+            // we need to shorten it
+            Segment* s = score()->tick2segment(tick());
+            if (s) {
+                s = s->prev1(SegmentType::ChordRest);
+                if (s->tick() > prev->tick()) {
+                    prev->undoChangeProperty(Pid::LYRIC_TICKS, s->tick() - prev->tick());
+                } else {
+                    prev->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(1));
+                }
+            }
+        }
+        prev->setRemoveInvalidSegments();
+        prev->triggerLayout();
+    }
+}
+
 //---------------------------------------------------------
 //   endEdit
 //---------------------------------------------------------
@@ -320,6 +343,7 @@ bool Lyrics::isEditAllowed(EditData& ed) const
 void Lyrics::endEdit(EditData& ed)
 {
     TextBase::endEdit(ed);
+
     triggerLayoutAll();
 }
 
@@ -373,6 +397,9 @@ PropertyValue Lyrics::getProperty(Pid propertyId) const
 
 bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
 {
+    ChordRest* scr = nullptr;
+    ChordRest* ecr = nullptr;
+
     switch (propertyId) {
     case Pid::PLACEMENT:
         setPlacement(v.value<PlacementV>());
@@ -389,14 +416,14 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
             // endTick info is wrong.
             // Somehow we need to fix this.
             // See https://musescore.org/en/node/285304 and https://musescore.org/en/node/311289
-            ChordRest* ecr = score()->findCR(endTick(), track());
+            ecr = score()->findCR(endTick(), track());
             if (ecr) {
                 ecr->setMelismaEnd(false);
             }
         }
-
+        scr = score()->findCR(tick(), track());
         _ticks = v.value<Fraction>();
-        if (_ticks <= Fraction(0, 1)) {
+        if (scr && _ticks <= scr->ticks()) {
             // if no ticks, we have to relayout in order to remove invalid melisma segments
             setRemoveInvalidSegments();
             layout()->layoutItem(this);
@@ -520,8 +547,8 @@ void Lyrics::removeInvalidSegments()
     _removeInvalidSegments = false;
     if (_separator && isMelisma() && _ticks < _separator->startCR()->ticks()) {
         setTicks(Fraction(0, 1));
+        _separator->setTicks(Fraction(0, 1));
         _separator->removeUnmanaged();
-        delete _separator;
         _separator = nullptr;
         setAlign(propertyDefault(Pid::ALIGN).value<Align>());
         if (_syllabic == LyricsSyllabic::BEGIN || _syllabic == LyricsSyllabic::SINGLE) {
