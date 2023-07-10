@@ -50,7 +50,7 @@
         </attributes>
       <direction placement="above">
         <direction-type>
-          <words font-weight="bold" font-size="12">Largo </words>
+          <words font-weight="bold" font-size="12">Largo</words>
           </direction-type>
         <direction-type>
           <metronome parentheses="no">
@@ -237,8 +237,9 @@
     <measure number="5">
       <direction placement="above">
         <direction-type>
-          <words>Vivace</words>
+          <words font-weight="bold" font-size="12">Vivace</words>
           </direction-type>
+        <sound tempo="126"/>
         </direction>
       <direction placement="above">
         <direction-type>
