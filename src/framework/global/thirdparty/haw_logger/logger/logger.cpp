@@ -424,8 +424,8 @@ void Logger::setIsCatchQtMsg(bool arg)
 
 #endif
 
-LogInput::LogInput(const Type& type, const std::string& tag, const std::string& funcInfo)
-    : m_msg(type, tag), m_funcInfo(funcInfo)
+LogInput::LogInput(const Type& type, const std::string& tag, const std::string& funcInfo, const Color& color)
+    : m_msg(type, tag, color), m_funcInfo(funcInfo)
 {
 }
 
