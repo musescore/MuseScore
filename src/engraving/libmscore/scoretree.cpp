@@ -129,7 +129,7 @@ EngravingObjectList System::scanChildren() const
         children.push_back(dividerRight);
     }
 
-    for (SysStaff* staff : _staves) {
+    for (SysStaff* staff : m_staves) {
         for (InstrumentName* instrName : staff->instrumentNames) {
             children.push_back(instrName);
         }
