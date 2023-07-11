@@ -100,7 +100,8 @@ public:
 
     void setTrack(track_idx_t val) override;
 
-    void setSourceStemArrangement(int v) { _sourceStemArrangement = v; }
+    int sourceStemArrangement() const { return m_sourceStemArrangement; }
+    void setSourceStemArrangement(int v) { m_sourceStemArrangement = v; }
 
     SlurSegment* frontSegment() { return toSlurSegment(Spanner::frontSegment()); }
     const SlurSegment* frontSegment() const { return toSlurSegment(Spanner::frontSegment()); }
@@ -114,7 +115,8 @@ public:
     bool stemSideForBeam(bool start);
     bool stemSideStartForBeam() { return stemSideForBeam(true); }
     bool stemSideEndForBeam() { return stemSideForBeam(false); }
-    const StemFloated& stemFloated() const { return _stemFloated; }
+    const StemFloated& stemFloated() const { return m_stemFloated; }
+    StemFloated& stemFloated() { return m_stemFloated; }
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
 
@@ -122,16 +124,16 @@ public:
     static bool isDirectionMixture(Chord* c1, Chord* c2);
 
 private:
-    void slurPosChord(SlurPos*);
 
-    friend class layout::v0::SlurTieLayout;
     friend class Factory;
     Slur(EngravingItem* parent);
     Slur(const Slur&);
 
-    int _sourceStemArrangement = -1;
+    void slurPosChord(SlurPos*);
 
-    StemFloated _stemFloated; // end point position is attached to stem but floated towards the note
+    int m_sourceStemArrangement = -1;
+
+    StemFloated m_stemFloated; // end point position is attached to stem but floated towards the note
 };
 } // namespace mu::engraving
 #endif
