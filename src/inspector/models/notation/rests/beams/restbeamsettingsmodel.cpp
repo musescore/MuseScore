@@ -32,7 +32,11 @@ RestBeamSettingsModel::RestBeamSettingsModel(QObject* parent, IElementRepository
 {
     setModelType(InspectorModelType::TYPE_BEAM);
     setTitle(qtrc("inspector", "Beam"));
-    setBeamModesModel(new BeamModesModel(this, repository));
+
+    BeamModesModel* modesModel = new BeamModesModel(this, repository);
+    modesModel->init();
+
+    setBeamModesModel(modesModel);
 }
 
 QObject* RestBeamSettingsModel::beamModesModel() const
