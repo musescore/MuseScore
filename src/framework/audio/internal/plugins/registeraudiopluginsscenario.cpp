@@ -24,6 +24,7 @@
 
 #include <QApplication>
 
+#include "audioutils.h"
 #include "audioerrors.h"
 #include "translation.h"
 #include "log.h"
