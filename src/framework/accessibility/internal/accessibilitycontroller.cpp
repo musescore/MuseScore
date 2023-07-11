@@ -34,7 +34,6 @@
 #include "accessibleobject.h"
 #include "accessiblestub.h"
 #include "accessibleiteminterface.h"
-#include "async/async.h"
 
 #include "log.h"
 

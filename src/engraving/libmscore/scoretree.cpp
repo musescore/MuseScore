@@ -369,12 +369,12 @@ EngravingObjectList Chord::scanChildren() const
         children.push_back(note);
     }
 
-    if (_arpeggio) {
-        children.push_back(_arpeggio);
+    if (m_arpeggio) {
+        children.push_back(m_arpeggio);
     }
 
-    if (_tremolo && _tremolo->chord1() == this) {
-        children.push_back(_tremolo);
+    if (m_tremolo && m_tremolo->chord1() == this) {
+        children.push_back(m_tremolo);
     }
 
     for (Chord* chord : graceNotes()) {
@@ -385,19 +385,19 @@ EngravingObjectList Chord::scanChildren() const
         children.push_back(art);
     }
 
-    if (_stem) {
-        children.push_back(_stem);
+    if (m_stem) {
+        children.push_back(m_stem);
     }
 
-    if (_hook) {
-        children.push_back(_hook);
+    if (m_hook) {
+        children.push_back(m_hook);
     }
 
-    if (_stemSlash) {
-        children.push_back(_stemSlash);
+    if (m_stemSlash) {
+        children.push_back(m_stemSlash);
     }
 
-    LedgerLine* ledgerLines = _ledgerLines;
+    LedgerLine* ledgerLines = m_ledgerLines;
     while (ledgerLines) {
         children.push_back(ledgerLines);
         ledgerLines = ledgerLines->next();

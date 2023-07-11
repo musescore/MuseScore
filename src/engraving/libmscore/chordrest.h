@@ -113,8 +113,7 @@ public:
 
     const TDuration durationType() const
     {
-        return m_crossMeasure == CrossMeasure::FIRST
-               ? m_crossMeasureTDur : m_durationType;
+        return m_crossMeasure == CrossMeasure::FIRST ? m_crossMeasureTDur : m_durationType;
     }
 
     const TDuration actualDurationType() const { return m_durationType; }
@@ -124,7 +123,8 @@ public:
     void setDots(int n) { m_durationType.setDots(n); }
     int dots() const
     {
-        return m_crossMeasure == CrossMeasure::FIRST ? m_crossMeasureTDur.dots()
+        return m_crossMeasure == CrossMeasure::FIRST
+               ? m_crossMeasureTDur.dots()
                : (m_crossMeasure == CrossMeasure::SECOND ? 0 : m_durationType.dots());
     }
 
