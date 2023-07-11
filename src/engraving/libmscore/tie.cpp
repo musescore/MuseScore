@@ -879,25 +879,25 @@ void Tie::calculateDirection()
     Measure* m1 = c1->measure();
     Measure* m2 = c2->measure();
 
-    if (_slurDirection == DirectionV::AUTO) {
+    if (m_slurDirection == DirectionV::AUTO) {
         std::vector<Note*> notes = c1->notes();
         size_t n = notes.size();
         StaffType* st = staff()->staffType(startNote() ? startNote()->tick() : Fraction(0, 1));
         bool simpleException = st && st->isSimpleTabStaff();
         // if there are multiple voices, the tie direction goes on stem side
         if (m1->hasVoices(c1->staffIdx(), c1->tick(), c1->actualTicks())) {
-            _up = simpleException ? isUpVoice(c1->voice()) : c1->up();
+            m_up = simpleException ? isUpVoice(c1->voice()) : c1->up();
         } else if (m2->hasVoices(c2->staffIdx(), c2->tick(), c2->actualTicks())) {
-            _up = simpleException ? isUpVoice(c2->voice()) : c2->up();
+            m_up = simpleException ? isUpVoice(c2->voice()) : c2->up();
         } else if (n == 1) {
             //
             // single note
             //
             if (c1->up() != c2->up()) {
                 // if stem direction is mixed, always up
-                _up = true;
+                m_up = true;
             } else {
-                _up = !c1->up();
+                m_up = !c1->up();
             }
         } else {
             //
@@ -960,27 +960,27 @@ void Tie::calculateDirection()
                 if (tiesAbove == 0 && tiesBelow == 0 && unisonTies == 0) {
                     // this is the only tie in the chord.
                     if (notesAbove == notesBelow) {
-                        _up = !c1->up();
+                        m_up = !c1->up();
                     } else {
-                        _up = (notesAbove < notesBelow);
+                        m_up = (notesAbove < notesBelow);
                     }
                 } else if (tiesAbove == tiesBelow) {
                     // this note is dead center, so its tie should go counter to the stem direction
-                    _up = !c1->up();
+                    m_up = !c1->up();
                 } else {
-                    _up = (tiesAbove < tiesBelow);
+                    m_up = (tiesAbove < tiesBelow);
                 }
             } else if (pivotPoint == startNote()) {
                 // the current note is the lower of the only second or unison in the chord; tie goes down.
-                _up = false;
+                m_up = false;
             } else {
                 // if lower than the pivot, tie goes down, otherwise up
                 int noteDiff = compareNotesPos(startNote(), pivotPoint);
-                _up = (noteDiff >= 0);
+                m_up = (noteDiff >= 0);
             }
         }
     } else {
-        _up = _slurDirection == DirectionV::UP ? true : false;
+        m_up = m_slurDirection == DirectionV::UP ? true : false;
     }
 }
 

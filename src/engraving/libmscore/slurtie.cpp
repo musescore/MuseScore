@@ -366,17 +366,17 @@ void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed, double /*c
 SlurTie::SlurTie(const ElementType& type, EngravingItem* parent)
     : Spanner(type, parent)
 {
-    _slurDirection = DirectionV::AUTO;
-    _up            = true;
-    _styleType     = SlurStyleType::Solid;
+    m_slurDirection = DirectionV::AUTO;
+    m_up            = true;
+    m_styleType     = SlurStyleType::Solid;
 }
 
 SlurTie::SlurTie(const SlurTie& t)
     : Spanner(t)
 {
-    _up            = t._up;
-    _slurDirection = t._slurDirection;
-    _styleType     = t._styleType;
+    m_up            = t.m_up;
+    m_slurDirection = t.m_slurDirection;
+    m_styleType     = t.m_styleType;
 }
 
 //---------------------------------------------------------
