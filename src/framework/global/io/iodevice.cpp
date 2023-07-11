@@ -227,12 +227,12 @@ size_t IODevice::write(const QByteArray& ba)
     return write(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
 }
 
+#endif
+
 bool IODevice::hasError() const
 {
     return m_error != 0;
 }
-
-#endif
 
 int IODevice::error() const
 {
