@@ -389,7 +389,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
     bool prvThnBracket { false };
     bool prvBarLineSpan { false };
     String prvSection;
-    int prvInstrument { 0 };
+    int prvInstrument { -1 };
     Staff* prvStaff { nullptr };
 
     Staff* thkBracketStaff { nullptr };
@@ -440,7 +440,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                 thkBracketSpan += static_cast<int>(part->nstaves());
             }
 
-            if (!staffIdx || (ii.instrIndex != prvInstrument)) {
+            if (prvInstrument == -1 || (ii.instrIndex != prvInstrument)) {
                 if (thnBracketStaff && (thnBracketSpan > 1)) {
                     score->undoAddBracket(thnBracketStaff, 1, BracketType::SQUARE, thnBracketSpan);
                 }
