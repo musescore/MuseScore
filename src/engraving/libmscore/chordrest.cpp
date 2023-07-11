@@ -976,7 +976,14 @@ EngravingItem* ChordRest::prevElement()
     }
     }
     staff_idx_t staffId = e->staffIdx();
-    return segment()->prevElement(staffId);
+    EngravingItem* prevItem = segment()->prevElement(staffId);
+    if (prevItem && prevItem->isNote()) {
+        const Chord* prevChord = toNote(prevItem)->chord();
+        if (prevChord && !prevChord->articulations().empty()) {
+            return prevChord->articulations().back();
+        }
+    }
+    return prevItem;
 }
 
 //---------------------------------------------------------
