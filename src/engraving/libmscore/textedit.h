@@ -45,6 +45,8 @@ public:
     bool deleteText = false;
 
     String selectedText;
+    String selectedPlainText;
+    static constexpr const char* mimeRichTextFormat = "application/musescore/richtext";
 
     TextEditData(TextBase* t)
         : _textBase(t) {}

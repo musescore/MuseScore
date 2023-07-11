@@ -3463,7 +3463,10 @@ void NotationInteraction::copySelection()
         m_editData.element->editCopy(m_editData);
         mu::engraving::TextEditData* ted = static_cast<mu::engraving::TextEditData*>(m_editData.getData(m_editData.element).get());
         if (!ted->selectedText.isEmpty()) {
-            QGuiApplication::clipboard()->setText(ted->selectedText);
+            QMimeData* mimeData = new QMimeData();
+            mimeData->setData(TextEditData::mimeRichTextFormat, ted->selectedText.toQString().toUtf8());
+            mimeData->setText(ted->selectedPlainText);
+            QGuiApplication::clipboard()->setMimeData(mimeData);
         }
     } else {
         QMimeData* mimeData = selection()->mimeData();
@@ -3535,25 +3538,31 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     startEdit();
 
     if (isTextEditingStarted()) {
-        QString clipboardText = QGuiApplication::clipboard()->text();
-        QString textForPaste = clipboardText;
-        if ((!clipboardText.startsWith('<') || !clipboardText.contains('>')) && m_editData.element->isLyrics()) {
-            textForPaste = extractSyllable(clipboardText);
-        }
-
-        toTextBase(m_editData.element)->paste(m_editData, textForPaste);
-
-        if (!textForPaste.isEmpty() && m_editData.element->isLyrics()) {
-            if (textForPaste.endsWith('-')) {
-                navigateToNextSyllable();
-            } else if (textForPaste.endsWith('_')) {
-                addMelisma();
-            } else {
-                navigateToLyrics(false, false, false);
+        const QMimeData* mimeData = QApplication::clipboard()->mimeData();
+        if (mimeData->hasFormat(TextEditData::mimeRichTextFormat)) {
+            const QString txt = QString::fromUtf8(mimeData->data(TextEditData::mimeRichTextFormat));
+            toTextBase(m_editData.element)->paste(m_editData, txt);
+        } else {
+            QString clipboardText = mimeData->text();
+            QString textForPaste = clipboardText;
+            if ((!clipboardText.startsWith('<') || !clipboardText.contains('>')) && m_editData.element->isLyrics()) {
+                textForPaste = extractSyllable(clipboardText);
             }
 
-            QString textForNextPaste = clipboardText.remove(0, clipboardText.indexOf(textForPaste) + textForPaste.size());
-            QGuiApplication::clipboard()->setText(textForNextPaste);
+            toTextBase(m_editData.element)->paste(m_editData, textForPaste);
+
+            if (!textForPaste.isEmpty() && m_editData.element->isLyrics()) {
+                if (textForPaste.endsWith('-')) {
+                    navigateToNextSyllable();
+                } else if (textForPaste.endsWith('_')) {
+                    addMelisma();
+                } else {
+                    navigateToLyrics(false, false, false);
+                }
+
+                QString textForNextPaste = clipboardText.remove(0, clipboardText.indexOf(textForPaste) + textForPaste.size());
+                QGuiApplication::clipboard()->setText(textForNextPaste);
+            }
         }
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
