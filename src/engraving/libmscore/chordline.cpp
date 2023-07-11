@@ -198,12 +198,11 @@ std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
         return {};
     }
 
-    double sp = spatium();
     auto n   = m_path.elementCount();
     PointF cp(pagePos());
     if (m_straight) {
         // limit the number of grips to one
-        double offset = 0.5 * sp;
+        double offset = 0.5;
         PointF p;
 
         if (m_chordLineType == ChordLineType::FALL) {
@@ -217,7 +216,7 @@ std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
         }
 
         // translate on the length and height - stops the grips from going past boundaries of slide
-        p += (cp + PointF(m_path.elementAt(1).x * sp, m_path.elementAt(1).y * sp));
+        p += (cp + PointF(m_path.elementAt(1).x, m_path.elementAt(1).y));
         return { p };
     } else {
         std::vector<PointF> grips(n);
