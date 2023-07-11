@@ -1015,17 +1015,17 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
         if (item->slurDirection() == DirectionV::AUTO) {
             bool simpleException = st && st->isSimpleTabStaff();
             if (st && st->isSimpleTabStaff()) {
-                item->m_up = isUpVoice(c1->voice());
+                item->setUp(isUpVoice(c1->voice()));
             } else {
                 if (c1->measure()->hasVoices(c1->staffIdx(), c1->tick(), c1->actualTicks())) {
                     // in polyphonic passage, ties go on the stem side
-                    item->m_up = simpleException ? isUpVoice(c1->voice()) : c1->up();
+                    item->setUp(simpleException ? isUpVoice(c1->voice()) : c1->up());
                 } else {
-                    item->m_up = !c1->up();
+                    item->setUp(!c1->up());
                 }
             }
         } else {
-            item->m_up = item->m_slurDirection == DirectionV::UP ? true : false;
+            item->setUp(item->slurDirection() == DirectionV::UP ? true : false);
         }
         item->fixupSegments(1);
         TieSegment* segment = item->segmentAt(0);
@@ -1133,13 +1133,13 @@ void SlurTieLayout::tiePos(Tie* item, SlurPos* sp)
     double x2, y2;
 
     if (sc->notes().size() > 1 || (ec && ec->notes().size() > 1)) {
-        item->_isInside = true;
+        item->setIsInside(true);
     } else {
-        item->_isInside = false;
+        item->setIsInside(false);
     }
     const double smallInset = item->isInside() ? 0.0 : 0.125; // 1/8 spatium, slight visual adjust so that ties don't hit the center
 
-    sp->p1    = sc->pos() + sc->segment()->pos() + sc->measure()->pos();
+    sp->p1 = sc->pos() + sc->segment()->pos() + sc->measure()->pos();
 
     //------p1
     y1 = item->startNote()->pos().y();
@@ -1168,20 +1168,20 @@ void SlurTieLayout::tiePos(Tie* item, SlurPos* sp)
 
     // ensure that horizontal ties remain horizontal
     if (isHorizontal) {
-        y1 = item->m_up ? std::min(y1, y2) : std::max(y1, y2);
-        y2 = item->m_up ? std::min(y1, y2) : std::max(y1, y2);
+        y1 = item->up() ? std::min(y1, y2) : std::max(y1, y2);
+        y2 = item->up() ? std::min(y1, y2) : std::max(y1, y2);
     }
 
-    if (item->_isInside) {
+    if (item->isInside()) {
         x1 = item->startNote()->pos().x() + hw;  // the offset for these will be decided in TieSegment::adjustX()
     } else {
-        if (sc->stem() && sc->stem()->visible() && sc->up() && item->m_up) {
+        if (sc->stem() && sc->stem()->visible() && sc->up() && item->up()) {
             // usually, outside ties start in the middle of the notehead, but
             // for up-ties on up-stems, we'll start at the end of the notehead
             // to avoid the stem
             x1 = item->startNote()->pos().x() + hw;
         } else {
-            x1 = item->startNote()->outsideTieAttachX(item->m_up);
+            x1 = item->startNote()->outsideTieAttachX(item->up());
         }
     }
     if (!(item->up() && sc->up())) {
@@ -1201,11 +1201,11 @@ void SlurTieLayout::tiePos(Tie* item, SlurPos* sp)
     if (item->isInside()) {
         x2 = item->endNote()->x();
     } else {
-        if (ec->stem() && ec->stem()->visible() && !ec->up() && !item->m_up) {
+        if (ec->stem() && ec->stem()->visible() && !ec->up() && !item->up()) {
             // as before, xo should account for stems that could get in the way
             x2 = item->endNote()->x();
         } else {
-            x2 = item->endNote()->outsideTieAttachX(item->m_up);
+            x2 = item->endNote()->outsideTieAttachX(item->up());
         }
     }
     if (!(!item->up() && !ec->up())) {
