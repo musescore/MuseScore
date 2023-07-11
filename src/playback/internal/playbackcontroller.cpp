@@ -23,6 +23,7 @@
 
 #include "playbacktypes.h"
 
+#include "audio/audioutils.h"
 #include "containers.h"
 #include "defer.h"
 #include "log.h"
