@@ -39,7 +39,7 @@ using namespace mu::engraving::layout::v0;
 
 void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 {
-    if (item->_currentElements.empty()) {
+    if (item->m_currentElements.empty()) {
         LOGD("Tuplet::layout(): tuplet is empty");
         return;
     }
@@ -53,50 +53,50 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     // create tuplet number if necessary
     //
     double _spatium = item->spatium();
-    if (item->_numberType != TupletNumberType::NO_TEXT) {
-        if (item->_number == 0) {
-            item->_number = Factory::createText(item, TextStyleType::TUPLET);
-            item->_number->setComposition(true);
-            item->_number->setTrack(item->track());
-            item->_number->setParent(item);
-            item->_number->setVisible(item->visible());
+    if (item->m_numberType != TupletNumberType::NO_TEXT) {
+        if (item->m_number == 0) {
+            item->m_number = Factory::createText(item, TextStyleType::TUPLET);
+            item->m_number->setComposition(true);
+            item->m_number->setTrack(item->track());
+            item->m_number->setParent(item);
+            item->m_number->setVisible(item->visible());
             item->resetNumberProperty();
         }
         // tuplet properties are propagated to number automatically by setProperty()
         // but we need to make sure flags are as well
-        item->_number->setPropertyFlags(Pid::FONT_FACE, item->propertyFlags(Pid::FONT_FACE));
-        item->_number->setPropertyFlags(Pid::FONT_SIZE, item->propertyFlags(Pid::FONT_SIZE));
-        item->_number->setPropertyFlags(Pid::FONT_STYLE, item->propertyFlags(Pid::FONT_STYLE));
-        item->_number->setPropertyFlags(Pid::ALIGN, item->propertyFlags(Pid::ALIGN));
-        if (item->_numberType == TupletNumberType::SHOW_NUMBER) {
-            item->_number->setXmlText(String(u"%1").arg(item->_ratio.numerator()));
+        item->m_number->setPropertyFlags(Pid::FONT_FACE, item->propertyFlags(Pid::FONT_FACE));
+        item->m_number->setPropertyFlags(Pid::FONT_SIZE, item->propertyFlags(Pid::FONT_SIZE));
+        item->m_number->setPropertyFlags(Pid::FONT_STYLE, item->propertyFlags(Pid::FONT_STYLE));
+        item->m_number->setPropertyFlags(Pid::ALIGN, item->propertyFlags(Pid::ALIGN));
+        if (item->m_numberType == TupletNumberType::SHOW_NUMBER) {
+            item->m_number->setXmlText(String(u"%1").arg(item->m_ratio.numerator()));
         } else {
-            item->_number->setXmlText(String(u"%1:%2").arg(item->_ratio.numerator(), item->_ratio.denominator()));
+            item->m_number->setXmlText(String(u"%1:%2").arg(item->m_ratio.numerator(), item->m_ratio.denominator()));
         }
 
-        item->_isSmall = true;
-        for (const DurationElement* e : item->_currentElements) {
+        item->m_isSmall = true;
+        for (const DurationElement* e : item->m_currentElements) {
             if ((e->isChordRest() && !toChordRest(e)->isSmall()) || (e->isTuplet() && !toTuplet(e)->isSmall())) {
-                item->_isSmall = false;
+                item->m_isSmall = false;
                 break;
             }
         }
-        item->_number->setMag(item->_isSmall ? ctx.conf().styleD(Sid::smallNoteMag) : 1.0);
+        item->m_number->setMag(item->m_isSmall ? ctx.conf().styleD(Sid::smallNoteMag) : 1.0);
     } else {
-        if (item->_number) {
-            if (item->_number->selected()) {
-                ctx.deselect(item->_number);
+        if (item->m_number) {
+            if (item->m_number->selected()) {
+                ctx.deselect(item->m_number);
             }
-            delete item->_number;
-            item->_number = 0;
+            delete item->m_number;
+            item->m_number = 0;
         }
     }
     //
     // find out main direction
     //
-    if (item->_direction == DirectionV::AUTO) {
+    if (item->m_direction == DirectionV::AUTO) {
         int up = 0;
-        for (const DurationElement* e : item->_currentElements) {
+        for (const DurationElement* e : item->m_currentElements) {
             if (e->isChord()) {
                 const Chord* c = toChord(e);
                 if (c->stemDirection() != DirectionV::AUTO) {
@@ -115,16 +115,16 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                 up = 1;         // default up
             }
         }
-        item->_isUp = up > 0;
+        item->m_isUp = up > 0;
     } else {
-        item->_isUp = item->_direction == DirectionV::UP;
+        item->m_isUp = item->m_direction == DirectionV::UP;
     }
 
     //
     // find first and last chord of tuplet
     // (tuplets can be nested)
     //
-    const DurationElement* cr1 = item->_currentElements.front();
+    const DurationElement* cr1 = item->m_currentElements.front();
     while (cr1->isTuplet()) {
         const Tuplet* t = toTuplet(cr1);
         if (t->elements().empty()) {
@@ -132,7 +132,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         }
         cr1 = t->elements().front();
     }
-    const DurationElement* cr2 = item->_currentElements.back();
+    const DurationElement* cr2 = item->m_currentElements.back();
     while (cr2->isTuplet()) {
         const Tuplet* t = toTuplet(cr2);
         if (t->elements().empty()) {
@@ -141,7 +141,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         cr2 = t->elements().back();
     }
 
-    item->_hasBracket = item->calcHasBracket(cr1, cr2);
+    item->m_hasBracket = item->calcHasBracket(cr1, cr2);
     item->setMag((cr1->mag() + cr2->mag()) / 2);
 
     //
@@ -176,19 +176,19 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     double l2l = vHeadDistance;      // left bracket vertical distance
     double l2r = vHeadDistance;      // right bracket vertical distance right
 
-    if (item->_isUp) {
+    if (item->m_isUp) {
         vHeadDistance = -vHeadDistance;
     }
 
-    item->p1      = cr1->pagePos();
-    item->p2      = cr2->pagePos();
+    item->m_p1      = cr1->pagePos();
+    item->m_p2      = cr2->pagePos();
 
-    item->p1.rx() -= noteLeft;
-    item->p2.rx() += ctx.conf().noteHeadWidth() + noteRight;
-    item->p1.ry() += vHeadDistance;          // TODO: Direction ?
-    item->p2.ry() += vHeadDistance;
+    item->m_p1.rx() -= noteLeft;
+    item->m_p2.rx() += ctx.conf().noteHeadWidth() + noteRight;
+    item->m_p1.ry() += vHeadDistance;          // TODO: Direction ?
+    item->m_p2.ry() += vHeadDistance;
 
-    double xx1 = item->p1.x();   // use to center the number on the beam
+    double xx1 = item->m_p1.x();   // use to center the number on the beam
 
     double leftNoteEdge = 0.0; // page coordinates
     double rightNoteEdge = 0.0;
@@ -201,7 +201,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         rightNoteEdge = chord2->up() ? chord2->downNote()->abbox().right() : chord2->upNote()->abbox().right();
     }
 
-    if (item->_isUp) {
+    if (item->m_isUp) {
         if (cr1->isChord()) {
             const Chord* chord1 = toChord(cr1);
             Stem* stem = chord1->stem();
@@ -209,12 +209,12 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                 xx1 = stem->abbox().x();
             }
             if (chord1->up() && stem) {
-                item->p1.ry() = stem->abbox().y();
+                item->m_p1.ry() = stem->abbox().y();
                 l2l = vStemDistance;
-                item->p1.rx() = stem->abbox().left() - stemLeft;
+                item->m_p1.rx() = stem->abbox().left() - stemLeft;
             } else {
-                item->p1.ry() = chord1->upNote()->abbox().top();
-                item->p1.rx() = leftNoteEdge - noteLeft;
+                item->m_p1.ry() = chord1->upNote()->abbox().top();
+                item->m_p1.rx() = leftNoteEdge - noteLeft;
             }
         }
 
@@ -222,12 +222,12 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             const Chord* chord2 = toChord(cr2);
             Stem* stem = chord2->stem();
             if (stem && chord2->up()) {
-                item->p2.ry() = stem->abbox().top();
+                item->m_p2.ry() = stem->abbox().top();
                 l2r = vStemDistance;
-                item->p2.rx() = stem->abbox().right() + stemRight;
+                item->m_p2.rx() = stem->abbox().right() + stemRight;
             } else {
-                item->p2.ry() = chord2->upNote()->abbox().top();
-                item->p2.rx() = rightNoteEdge + noteRight;
+                item->m_p2.ry() = chord2->upNote()->abbox().top();
+                item->m_p2.rx() = rightNoteEdge + noteRight;
             }
         }
         //
@@ -235,49 +235,49 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         // a rest
         //
         if (!cr1->isChord() && cr2->isChord()) {
-            if (item->p2.y() < item->p1.y()) {
-                item->p1.setY(item->p2.y());
+            if (item->m_p2.y() < item->m_p1.y()) {
+                item->m_p1.setY(item->m_p2.y());
             } else {
-                item->p2.setY(item->p1.y());
+                item->m_p2.setY(item->m_p1.y());
             }
         } else if (cr1->isChord() && !cr2->isChord()) {
-            if (item->p1.y() < item->p2.y()) {
-                item->p2.setY(item->p1.y());
+            if (item->m_p1.y() < item->m_p2.y()) {
+                item->m_p2.setY(item->m_p1.y());
             } else {
-                item->p1.setY(item->p2.y());
+                item->m_p1.setY(item->m_p2.y());
             }
         }
 
         // outOfStaff
         if (outOfStaff) {
             double min = cr1->measure()->staffabbox(cr1->staffIdx() + move).y();
-            if (min < item->p1.y()) {
-                item->p1.ry() = min;
+            if (min < item->m_p1.y()) {
+                item->m_p1.ry() = min;
                 l2l = vStemDistance;
             }
             min = cr2->measure()->staffabbox(cr2->staffIdx() + move).y();
-            if (min < item->p2.y()) {
-                item->p2.ry() = min;
+            if (min < item->m_p2.y()) {
+                item->m_p2.ry() = min;
                 l2r = vStemDistance;
             }
         }
 
         // check that slope is no more than max
-        double d = (item->p2.y() - item->p1.y()) / (item->p2.x() - item->p1.x());
+        double d = (item->m_p2.y() - item->m_p1.y()) / (item->m_p2.x() - item->m_p1.x());
         if (d < -maxSlope) {
             // move p1 y up
-            item->p1.ry() = item->p2.y() + maxSlope * (item->p2.x() - item->p1.x());
+            item->m_p1.ry() = item->m_p2.y() + maxSlope * (item->m_p2.x() - item->m_p1.x());
         } else if (d > maxSlope) {
             // move p2 y up
-            item->p2.ry() = item->p1.ry() + maxSlope * (item->p2.x() - item->p1.x());
+            item->m_p2.ry() = item->m_p1.ry() + maxSlope * (item->m_p2.x() - item->m_p1.x());
         }
 
         // check for collisions
-        size_t n = item->_currentElements.size();
+        size_t n = item->m_currentElements.size();
         if (n >= 3) {
-            d = (item->p2.y() - item->p1.y()) / (item->p2.x() - item->p1.x());
+            d = (item->m_p2.y() - item->m_p1.y()) / (item->m_p2.x() - item->m_p1.x());
             for (size_t i = 1; i < (n - 1); ++i) {
-                EngravingItem* e = item->_currentElements[i];
+                EngravingItem* e = item->m_currentElements[i];
                 if (e->isChord()) {
                     const Chord* chord = toChord(e);
                     const Stem* stem = chord->stem();
@@ -285,11 +285,11 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                         RectF r(chord->up() ? stem->abbox() : chord->upNote()->abbox());
                         double y3 = r.top();
                         double x3 = r.x() + r.width() * .5;
-                        double y0 = item->p1.y() + (x3 - item->p1.x()) * d;
+                        double y0 = item->m_p1.y() + (x3 - item->m_p1.x()) * d;
                         double c  = y0 - y3;
                         if (c > 0) {
-                            item->p1.ry() -= c;
-                            item->p2.ry() -= c;
+                            item->m_p1.ry() -= c;
+                            item->m_p2.ry() -= c;
                         }
                     }
                 }
@@ -303,12 +303,12 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                 xx1 = stem->abbox().x();
             }
             if (!chord1->up() && stem) {
-                item->p1.ry() = stem->abbox().bottom();
+                item->m_p1.ry() = stem->abbox().bottom();
                 l2l = vStemDistance;
-                item->p1.rx() = stem->abbox().left() - stemLeft;
+                item->m_p1.rx() = stem->abbox().left() - stemLeft;
             } else {
-                item->p1.ry() = chord1->downNote()->abbox().bottom();
-                item->p1.rx() = leftNoteEdge - noteLeft;
+                item->m_p1.ry() = chord1->downNote()->abbox().bottom();
+                item->m_p1.rx() = leftNoteEdge - noteLeft;
             }
         }
 
@@ -316,12 +316,12 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             const Chord* chord2 = toChord(cr2);
             Stem* stem = chord2->stem();
             if (stem && !chord2->up()) {
-                item->p2.ry() = stem->abbox().bottom();
+                item->m_p2.ry() = stem->abbox().bottom();
                 l2r = vStemDistance;
-                item->p2.rx() = stem->abbox().right() + stemRight;
+                item->m_p2.rx() = stem->abbox().right() + stemRight;
             } else {
-                item->p2.ry() = chord2->downNote()->abbox().bottom();
-                item->p2.rx() = rightNoteEdge + noteRight;
+                item->m_p2.ry() = chord2->downNote()->abbox().bottom();
+                item->m_p2.rx() = rightNoteEdge + noteRight;
             }
         }
         //
@@ -329,47 +329,47 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         // a rest
         //
         if (!cr1->isChord() && cr2->isChord()) {
-            if (item->p2.y() > item->p1.y()) {
-                item->p1.setY(item->p2.y());
+            if (item->m_p2.y() > item->m_p1.y()) {
+                item->m_p1.setY(item->m_p2.y());
             } else {
-                item->p2.setY(item->p1.y());
+                item->m_p2.setY(item->m_p1.y());
             }
         } else if (cr1->isChord() && !cr2->isChord()) {
-            if (item->p1.y() > item->p2.y()) {
-                item->p2.setY(item->p1.y());
+            if (item->m_p1.y() > item->m_p2.y()) {
+                item->m_p2.setY(item->m_p1.y());
             } else {
-                item->p1.setY(item->p2.y());
+                item->m_p1.setY(item->m_p2.y());
             }
         }
         // outOfStaff
         if (outOfStaff) {
             double max = cr1->measure()->staffabbox(cr1->staffIdx() + move).bottom();
-            if (max > item->p1.y()) {
-                item->p1.ry() = max;
+            if (max > item->m_p1.y()) {
+                item->m_p1.ry() = max;
                 l2l = vStemDistance;
             }
             max = cr2->measure()->staffabbox(cr2->staffIdx() + move).bottom();
-            if (max > item->p2.y()) {
-                item->p2.ry() = max;
+            if (max > item->m_p2.y()) {
+                item->m_p2.ry() = max;
                 l2r = vStemDistance;
             }
         }
         // check that slope is no more than max
-        double d = (item->p2.y() - item->p1.y()) / (item->p2.x() - item->p1.x());
+        double d = (item->m_p2.y() - item->m_p1.y()) / (item->m_p2.x() - item->m_p1.x());
         if (d < -maxSlope) {
             // move p1 y up
-            item->p2.ry() = item->p1.y() - maxSlope * (item->p2.x() - item->p1.x());
+            item->m_p2.ry() = item->m_p1.y() - maxSlope * (item->m_p2.x() - item->m_p1.x());
         } else if (d > maxSlope) {
             // move p2 y up
-            item->p1.ry() = item->p2.ry() - maxSlope * (item->p2.x() - item->p1.x());
+            item->m_p1.ry() = item->m_p2.ry() - maxSlope * (item->m_p2.x() - item->m_p1.x());
         }
 
         // check for collisions
-        size_t n = item->_currentElements.size();
+        size_t n = item->m_currentElements.size();
         if (n >= 3) {
-            d  = (item->p2.y() - item->p1.y()) / (item->p2.x() - item->p1.x());
+            d  = (item->m_p2.y() - item->m_p1.y()) / (item->m_p2.x() - item->m_p1.x());
             for (size_t i = 1; i < (n - 1); ++i) {
-                EngravingItem* e = item->_currentElements[i];
+                EngravingItem* e = item->m_currentElements[i];
                 if (e->isChord()) {
                     const Chord* chord = toChord(e);
                     const Stem* stem = chord->stem();
@@ -377,11 +377,11 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                         RectF r(chord->up() ? chord->downNote()->abbox() : stem->abbox());
                         double y3 = r.bottom();
                         double x3 = r.x() + r.width() * .5;
-                        double y0 = item->p1.y() + (x3 - item->p1.x()) * d;
+                        double y0 = item->m_p1.y() + (x3 - item->m_p1.x()) * d;
                         double c  = y0 - y3;
                         if (c < 0) {
-                            item->p1.ry() -= c;
-                            item->p2.ry() -= c;
+                            item->m_p1.ry() -= c;
+                            item->m_p2.ry() -= c;
                         }
                     }
                 }
@@ -390,10 +390,10 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     }
 
     if (!cr1->isChord()) {
-        item->p1.rx() = cr1->abbox().left() - noteLeft;
+        item->m_p1.rx() = cr1->abbox().left() - noteLeft;
     }
     if (!cr2->isChord()) {
-        item->p2.rx() = cr2->abbox().right() + noteRight;
+        item->m_p2.rx() = cr2->abbox().right() + noteRight;
     }
 
     item->setPos(0.0, 0.0);
@@ -404,115 +404,115 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             mp.ry() += s->staff(item->staffIdx())->y();
         }
     }
-    item->p1 -= mp;
-    item->p2 -= mp;
+    item->m_p1 -= mp;
+    item->m_p2 -= mp;
 
-    item->p1 += item->_p1;
-    item->p2 += item->_p2;
+    item->m_p1 += item->m_userP1;
+    item->m_p2 += item->m_userP2;
     xx1 -= mp.x();
 
-    item->p1.ry() -= l2l * (item->_isUp ? 1.0 : -1.0);
-    item->p2.ry() -= l2r * (item->_isUp ? 1.0 : -1.0);
+    item->m_p1.ry() -= l2l * (item->m_isUp ? 1.0 : -1.0);
+    item->m_p2.ry() -= l2r * (item->m_isUp ? 1.0 : -1.0);
 
     // l2l l2r, mp, _p1, _p2 const
 
     // center number
     double x3 = 0.0;
     double numberWidth = 0.0;
-    if (item->_number) {
-        TLayout::layout(item->_number, ctx);
-        numberWidth = item->_number->bbox().width();
+    if (item->m_number) {
+        TLayout::layout(item->m_number, ctx);
+        numberWidth = item->m_number->bbox().width();
 
-        double y3 = item->p1.y() + (item->p2.y() - item->p1.y()) * .5 - l1 * (item->_isUp ? 1.0 : -1.0);
+        double y3 = item->m_p1.y() + (item->m_p2.y() - item->m_p1.y()) * .5 - l1 * (item->m_isUp ? 1.0 : -1.0);
         // for beamed tuplets, center number on beam - if they don't have a bracket
-        if (cr1->beam() && cr2->beam() && cr1->beam() == cr2->beam() && !item->_hasBracket) {
+        if (cr1->beam() && cr2->beam() && cr1->beam() == cr2->beam() && !item->m_hasBracket) {
             const ChordRest* crr = toChordRest(cr1);
-            if (item->_isUp == crr->up()) {
+            if (item->m_isUp == crr->up()) {
                 double deltax = cr2->pagePos().x() - cr1->pagePos().x();
                 x3 = xx1 + deltax * .5;
             } else {
-                double deltax = item->p2.x() - item->p1.x();
-                x3 = item->p1.x() + deltax * .5;
+                double deltax = item->m_p2.x() - item->m_p1.x();
+                x3 = item->m_p1.x() + deltax * .5;
             }
         } else {
             // otherwise center on the bracket (TODO: make centering rules customizable?)
-            double deltax = item->p2.x() - item->p1.x();
-            x3 = item->p1.x() + deltax * .5;
+            double deltax = item->m_p2.x() - item->m_p1.x();
+            x3 = item->m_p1.x() + deltax * .5;
         }
 
-        item->_number->setPos(PointF(x3, y3) - item->ipos());
+        item->m_number->setPos(PointF(x3, y3) - item->ipos());
     }
 
-    if (item->_hasBracket) {
-        double slope = (item->p2.y() - item->p1.y()) / (item->p2.x() - item->p1.x());
+    if (item->m_hasBracket) {
+        double slope = (item->m_p2.y() - item->m_p1.y()) / (item->m_p2.x() - item->m_p1.x());
 
-        if (item->_isUp) {
-            if (item->_number) {
+        if (item->m_isUp) {
+            if (item->m_number) {
                 //set width of bracket hole
                 double x     = x3 - numberWidth * .5 - _spatium * .5;
-                item->p1.rx() = std::min(item->p1.rx(), x - 0.5 * l1); // ensure enough space for the number
-                double y     = item->p1.y() + (x - item->p1.x()) * slope;
-                item->bracketL[0] = PointF(item->p1.x(), item->p1.y());
-                item->bracketL[1] = PointF(item->p1.x(), item->p1.y() - l1);
-                item->bracketL[2] = PointF(x,   y - l1);
+                item->m_p1.rx() = std::min(item->m_p1.rx(), x - 0.5 * l1); // ensure enough space for the number
+                double y     = item->m_p1.y() + (x - item->m_p1.x()) * slope;
+                item->m_bracketL[0] = PointF(item->m_p1.x(), item->m_p1.y());
+                item->m_bracketL[1] = PointF(item->m_p1.x(), item->m_p1.y() - l1);
+                item->m_bracketL[2] = PointF(x,   y - l1);
 
                 //set width of bracket hole
                 x           = x3 + numberWidth * .5 + _spatium * .5;
-                item->p2.rx() = std::max(item->p2.rx(), x + 0.5 * l1); // ensure enough space for the number
-                y           = item->p1.y() + (x - item->p1.x()) * slope;
-                item->bracketR[0] = PointF(x,   y - l1);
-                item->bracketR[1] = PointF(item->p2.x(), item->p2.y() - l1);
-                item->bracketR[2] = PointF(item->p2.x(), item->p2.y());
+                item->m_p2.rx() = std::max(item->m_p2.rx(), x + 0.5 * l1); // ensure enough space for the number
+                y           = item->m_p1.y() + (x - item->m_p1.x()) * slope;
+                item->m_bracketR[0] = PointF(x,   y - l1);
+                item->m_bracketR[1] = PointF(item->m_p2.x(), item->m_p2.y() - l1);
+                item->m_bracketR[2] = PointF(item->m_p2.x(), item->m_p2.y());
             } else {
-                item->bracketL[0] = PointF(item->p1.x(), item->p1.y());
-                item->bracketL[1] = PointF(item->p1.x(), item->p1.y() - l1);
-                item->bracketL[2] = PointF(item->p2.x(), item->p2.y() - l1);
-                item->bracketL[3] = PointF(item->p2.x(), item->p2.y());
+                item->m_bracketL[0] = PointF(item->m_p1.x(), item->m_p1.y());
+                item->m_bracketL[1] = PointF(item->m_p1.x(), item->m_p1.y() - l1);
+                item->m_bracketL[2] = PointF(item->m_p2.x(), item->m_p2.y() - l1);
+                item->m_bracketL[3] = PointF(item->m_p2.x(), item->m_p2.y());
             }
         } else {
-            if (item->_number) {
+            if (item->m_number) {
                 //set width of bracket hole
                 double x     = x3 - numberWidth * .5 - _spatium * .5;
-                item->p1.rx() = std::min(item->p1.rx(), x - 0.5 * l1); // ensure enough space for the number
-                double y     = item->p1.y() + (x - item->p1.x()) * slope;
-                item->bracketL[0] = PointF(item->p1.x(), item->p1.y());
-                item->bracketL[1] = PointF(item->p1.x(), item->p1.y() + l1);
-                item->bracketL[2] = PointF(x,   y + l1);
+                item->m_p1.rx() = std::min(item->m_p1.rx(), x - 0.5 * l1); // ensure enough space for the number
+                double y     = item->m_p1.y() + (x - item->m_p1.x()) * slope;
+                item->m_bracketL[0] = PointF(item->m_p1.x(), item->m_p1.y());
+                item->m_bracketL[1] = PointF(item->m_p1.x(), item->m_p1.y() + l1);
+                item->m_bracketL[2] = PointF(x,   y + l1);
 
                 //set width of bracket hole
                 x           = x3 + numberWidth * .5 + _spatium * .5;
-                item->p2.rx() = std::max(item->p2.rx(), x + 0.5 * l1);
-                y           = item->p1.y() + (x - item->p1.x()) * slope;
-                item->bracketR[0] = PointF(x,   y + l1);
-                item->bracketR[1] = PointF(item->p2.x(), item->p2.y() + l1);
-                item->bracketR[2] = PointF(item->p2.x(), item->p2.y());
+                item->m_p2.rx() = std::max(item->m_p2.rx(), x + 0.5 * l1);
+                y           = item->m_p1.y() + (x - item->m_p1.x()) * slope;
+                item->m_bracketR[0] = PointF(x,   y + l1);
+                item->m_bracketR[1] = PointF(item->m_p2.x(), item->m_p2.y() + l1);
+                item->m_bracketR[2] = PointF(item->m_p2.x(), item->m_p2.y());
             } else {
-                item->bracketL[0] = PointF(item->p1.x(), item->p1.y());
-                item->bracketL[1] = PointF(item->p1.x(), item->p1.y() + l1);
-                item->bracketL[2] = PointF(item->p2.x(), item->p2.y() + l1);
-                item->bracketL[3] = PointF(item->p2.x(), item->p2.y());
+                item->m_bracketL[0] = PointF(item->m_p1.x(), item->m_p1.y());
+                item->m_bracketL[1] = PointF(item->m_p1.x(), item->m_p1.y() + l1);
+                item->m_bracketL[2] = PointF(item->m_p2.x(), item->m_p2.y() + l1);
+                item->m_bracketL[3] = PointF(item->m_p2.x(), item->m_p2.y());
             }
         }
     }
 
     // collect bounding box
     RectF r;
-    if (item->_number) {
-        r |= item->_number->bbox().translated(item->_number->pos());
-        if (item->_hasBracket) {
+    if (item->m_number) {
+        r |= item->m_number->bbox().translated(item->m_number->pos());
+        if (item->m_hasBracket) {
             RectF b;
-            b.setCoords(item->bracketL[1].x(), item->bracketL[1].y(), item->bracketR[2].x(), item->bracketR[2].y());
+            b.setCoords(item->m_bracketL[1].x(), item->m_bracketL[1].y(), item->m_bracketR[2].x(), item->m_bracketR[2].y());
             r |= b;
         }
-    } else if (item->_hasBracket) {
+    } else if (item->m_hasBracket) {
         RectF b;
-        b.setCoords(item->bracketL[1].x(), item->bracketL[1].y(), item->bracketL[3].x(), item->bracketL[3].y());
+        b.setCoords(item->m_bracketL[1].x(), item->m_bracketL[1].y(), item->m_bracketL[3].x(), item->m_bracketL[3].y());
         r |= b;
     }
     item->setbbox(r);
 
     if (outOfStaff && !item->cross()) {
-        item->autoplaceMeasureElement(item->_isUp, /* add to skyline */ true);
+        item->autoplaceMeasureElement(item->m_isUp, /* add to skyline */ true);
     }
 }
 

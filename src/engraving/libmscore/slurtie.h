@@ -27,10 +27,6 @@
 
 #include "draw/types/painterpath.h"
 
-namespace mu::engraving::layout::v0 {
-class SlurTieLayout;
-}
-
 namespace mu::engraving {
 //---------------------------------------------------------
 //   SlurPos

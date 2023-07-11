@@ -63,7 +63,7 @@ DurationElement::~DurationElement()
         // Note that this sanity check is different from and unrelated to the next `if` condition.
         // See tuplet.h for the difference between `_tuplet->contains` (which involves `_tuplet->
         // _currentElements`) and `tuplet->_allElements`.
-        assert(mu::contains(_tuplet->_allElements, this));
+        assert(mu::contains(_tuplet->m_allElements, this));
 
         if (_tuplet->contains(this)) {
             while (Tuplet* t = topTuplet()) { // delete tuplets from top to bottom

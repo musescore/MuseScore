@@ -27,10 +27,6 @@
 
 #include "global/allocator.h"
 
-namespace mu::engraving::layout::v0 {
-class SlurTieLayout;
-}
-
 namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ SlurSegment
