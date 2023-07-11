@@ -2530,6 +2530,9 @@ void TRead::read(ChordLine* l, XmlReader& e, ReadContext& ctx)
                     int type = e.intAttribute("type");
                     double x  = e.doubleAttribute("x");
                     double y  = e.doubleAttribute("y");
+                    double spatium = ctx.spatium();
+                    x *= spatium;
+                    y *= spatium;
                     switch (PainterPath::ElementType(type)) {
                     case PainterPath::ElementType::MoveToElement:
                         path.moveTo(x, y);
