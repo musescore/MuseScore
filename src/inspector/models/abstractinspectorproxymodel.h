@@ -63,6 +63,8 @@ public:
 
     void updateModels(const ElementKeySet& newElementKeySet);
 
+    void onCurrentNotationChanged() override;
+
 public slots:
     void setDefaultSubModelType(mu::inspector::InspectorModelType modelType);
 
@@ -74,8 +76,6 @@ protected:
     void setModels(const QList<AbstractInspectorModel*>& models);
 
 private:
-    void onCurrentNotationChanged() override;
-
     QHash<InspectorModelType, AbstractInspectorModel*> m_modelsHash;
     InspectorModelType m_defaultSubModelType = InspectorModelType::TYPE_UNDEFINED;
 };
