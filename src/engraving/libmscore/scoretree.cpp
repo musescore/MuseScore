@@ -610,8 +610,8 @@ EngravingObjectList Tuplet::scanChildren() const
 {
     EngravingObjectList children;
 
-    if (_number) {
-        children.push_back(_number);
+    if (m_number) {
+        children.push_back(m_number);
     }
 
     return children;
