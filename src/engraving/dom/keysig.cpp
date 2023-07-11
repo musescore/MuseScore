@@ -27,6 +27,7 @@
 #include "masterscore.h"
 #include "score.h"
 #include "segment.h"
+#include "system.h"
 #include "staff.h"
 #include "part.h"
 
@@ -154,6 +155,15 @@ bool KeySig::isChange() const
     }
     Fraction keyTick = tick();
     return staff()->currentKeyTick(keyTick) == keyTick;
+}
+
+bool KeySig::isFirstSystemKeySig()
+{
+    System* sys = measure()->system();
+    if (!sys) {
+        return false;
+    }
+    return tick().ticks() == sys->firstMeasure()->tick().ticks();
 }
 
 //---------------------------------------------------------

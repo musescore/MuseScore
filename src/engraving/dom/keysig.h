@@ -69,6 +69,7 @@ public:
     bool isAtonal() const { return m_sig.isAtonal(); }
     bool isChange() const;
     const KeySigEvent& keySigEvent() const { return m_sig; }
+    bool isFirstSystemKeySig();
     bool operator==(const KeySig&) const;
     void changeKeySigEvent(const KeySigEvent&);
     void setKeySigEvent(const KeySigEvent& e) { m_sig = e; }
