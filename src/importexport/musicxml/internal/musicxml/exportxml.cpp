@@ -2136,6 +2136,10 @@ static double accSymId2alter(SymId id)
         break;
     case SymId::accidentalDoubleSharp:                     res =  2;
         break;
+    case SymId::accidentalSori:                            res =  0.5;
+        break;
+    case SymId::accidentalKoron:                           res =  -0.5;
+        break;
     default: LOGD("accSymId2alter: unsupported sym %s", SymNames::nameForSymId(id).ascii());
     }
     return res;
