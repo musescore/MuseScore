@@ -32,6 +32,7 @@ set(MODULE_TEST_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/knownaudiopluginsregistertest.cpp
     ${CMAKE_CURRENT_LIST_DIR}/registeraudiopluginsscenariotest.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/audioutilstest.cpp
 )
 
 set(MODULE_TEST_LINK audio)
