@@ -139,9 +139,6 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </MeasureRepeat>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>

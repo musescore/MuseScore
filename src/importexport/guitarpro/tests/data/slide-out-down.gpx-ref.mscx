@@ -145,9 +145,6 @@
                 </ChordLine>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         <voice>
           <location>

@@ -177,9 +177,6 @@ Innuendo</text>
                 </Spanner>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
