@@ -43,5 +43,9 @@ PlaybackProxyModel::PlaybackProxyModel(QObject* parent, IElementRepositoryServic
         new GradualTempoChangePlaybackModel(this, repository)
     };
 
+    for (AbstractInspectorModel* model : models) {
+        model->init();
+    }
+
     setModels(models);
 }
