@@ -79,12 +79,11 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
 
             PointF pagePos = page->pos();
             RectF pageRect = page->bbox();
-            RectF pageContentRect = pageRect.adjusted(page->lm(), page->tm(), -page->rm(), -page->bm());
 
             //! NOTE Trim page margins, if need
             if (opt.trimMarginPixelSize >= 0) {
-                double trimSize = static_cast<double>(opt.trimMarginPixelSize);
-                pageRect = pageContentRect.adjusted(-trimSize, -trimSize, trimSize, trimSize);
+                double trimMargin = static_cast<double>(opt.trimMarginPixelSize);
+                pageRect = page->tbbox().adjusted(-trimMargin, -trimMargin, trimMargin, trimMargin);
             }
 
             //! NOTE Check draw rect, usually for optimisation drawing on screen (draw only what we see)
@@ -116,11 +115,13 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
 
             if (opt.isMultiPage) {
                 painter->translate(pagePos);
+            } else if (opt.trimMarginPixelSize >= 0) {
+                painter->translate(-pageRect.topLeft());
             }
 
             // Draw page sheet
             if (opt.onPaintPageSheet) {
-                opt.onPaintPageSheet(painter, pageRect, pageContentRect, page->isOdd());
+                opt.onPaintPageSheet(painter, page, pageRect);
             } else if (opt.printPageBackground) {
                 painter->fillRect(pageRect, Color::WHITE);
             }
@@ -151,6 +152,8 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
 
             if (opt.isMultiPage) {
                 painter->translate(-pagePos);
+            } else if (opt.trimMarginPixelSize >= 0) {
+                painter->translate(pageRect.topLeft());
             }
 
             if ((copy + 1) < opt.copyCount) {
@@ -178,6 +181,30 @@ SizeF Paint::pageSizeInch(const Score* score)
     }
 
     return SizeF(score->style().styleD(Sid::pageWidth), score->style().styleD(Sid::pageHeight));
+}
+
+SizeF Paint::pageSizeInch(const Score* score, const Options& opt)
+{
+    if (!score) {
+        return SizeF();
+    }
+
+    int pageNo = opt.fromPage >= 0 ? opt.fromPage : 0;
+    if (pageNo >= int(score->npages())) {
+        return SizeF();
+    }
+
+    const Page* page = score->pages().at(pageNo);
+
+    RectF pageRect = page->bbox();
+
+    //! NOTE Trim page margins, if need
+    if (opt.trimMarginPixelSize >= 0) {
+        double trimMargin = static_cast<double>(opt.trimMarginPixelSize);
+        pageRect = page->tbbox().adjusted(-trimMargin, -trimMargin, trimMargin, trimMargin);
+    }
+
+    return pageRect.size() / mu::engraving::DPI;
 }
 
 void Paint::paintElement(mu::draw::Painter& painter, const EngravingItem* element)

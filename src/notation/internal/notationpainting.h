@@ -51,6 +51,7 @@ public:
 
     int pageCount() const override;
     SizeF pageSizeInch() const override;
+    SizeF pageSizeInch(const Options& opt) const override;
 
     void paintView(draw::Painter* painter, const RectF& frameRect, bool isPrinting) override;
     void paintPdf(draw::Painter* painter, const Options& opt) override;
@@ -63,8 +64,7 @@ private:
     bool isPaintPageBorder() const;
     void doPaint(draw::Painter* painter, const Options& opt);
     void paintPageBorder(draw::Painter* painter, const mu::engraving::Page* page) const;
-    void paintPageSheet(mu::draw::Painter* painter, const RectF& pageRect, const RectF& pageContentRect, bool isOdd,
-                        bool printPageBackground) const;
+    void paintPageSheet(mu::draw::Painter* painter, const engraving::Page* page, const RectF& pageRect, bool printPageBackground) const;
 
     Notation* m_notation = nullptr;
 };
