@@ -24,31 +24,26 @@
 
 #include "models/abstractinspectormodel.h"
 #include "models/notation/beams/beammodesmodel.h"
-#include "types/beamtypes.h"
 
 namespace mu::inspector {
 class RestBeamSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QObject * beamModesModel READ beamModesModel NOTIFY beamModesModelChanged)
+    Q_PROPERTY(QObject * beamModesModel READ beamModesModel CONSTANT)
 
 public:
     explicit RestBeamSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     QObject* beamModesModel() const;
 
-public slots:
-    void setBeamModesModel(BeamModesModel* beamModesModel);
-
-signals:
-    void beamModesModelChanged(QObject* beamModesModel);
-
 private:
     void createProperties() override {}
     void requestElements() override;
     void loadProperties() override {}
     void resetProperties() override {}
+
+    void onCurrentNotationChanged() override;
 
     BeamModesModel* m_beamModesModel = nullptr;
 };
