@@ -203,6 +203,7 @@ public:
     static void layout(engraving::Slur* item, const Context& ctx);
     static void layout(engraving::Spacer* item, const Context&);
     static void layout(engraving::StaffText* item, const Context& ctx);
+    static void layout(engraving::StaffTypeChange* item, const Context& ctx);
     static void layout(engraving::Symbol* item, const Context& ctx);
     static void layout(engraving::SystemText* item, const Context& ctx);
 
