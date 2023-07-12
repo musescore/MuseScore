@@ -39,6 +39,8 @@ set(CMAKE_MODULE_PATH
 ###########################################
 # Setup option and build settings
 ###########################################
+include(GetPaths)
+
 set(MUSESCORE_BUILD_CONFIGURATION "app" CACHE STRING "Build configuration")
 # Possible MUSESCORE_BUILD_CONFIGURATION values:
 # - app             - for desktop app
@@ -103,6 +105,7 @@ option(MUE_INSTALL_SOUNDFONT "Install sound font" ON)
 
 # === Tests ===
 option(MUE_BUILD_UNIT_TESTS "Build unit tests" ON)
+set(MUE_VTEST_MSCORE_REF_BIN "${CMAKE_CURRENT_LIST_DIR}/../MU_ORIGIN/MuseScore/build.debug/install/${INSTALL_SUBDIR}/mscore" CACHE PATH "Path to mscore ref bin")
 option(MUE_BUILD_ASAN "Enable Address Sanitizer" OFF)
 option(MUE_BUILD_CRASHPAD_CLIENT "Build crashpad client" ON)
 set(MUE_CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
@@ -208,3 +211,8 @@ endif(OS_IS_LIN)
 if (OS_IS_WIN)
     include(Packaging)
 endif(OS_IS_WIN)
+
+###########################################
+# Add VTest target
+###########################################
+add_subdirectory(vtest)

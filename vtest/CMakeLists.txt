@@ -4,7 +4,7 @@
 # MuseScore
 # Music Composition & Notation
 #
-# Copyright (C) 2022 MuseScore BVBA and others
+# Copyright (C) 2021 MuseScore BVBA and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -18,12 +18,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE_TEST draw_tests)
+set(MODULE_TEST vtests)
 
 set(MODULE_TEST_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/painter_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/vtest_gtest_runner.cpp
 )
 
-set(MODULE_TEST_LINK draw)
+set(MODULE_TEST_DEF
+    -DVTEST_ROOT_DIR="${CMAKE_CURRENT_LIST_DIR}"
+    -DVTEST_MSCORE_REF_BIN="${MUE_VTEST_MSCORE_REF_BIN}"
+    -DVTEST_MSCORE_BIN="${INSTALL_BIN_DIR}/mscore"
+    )
 
-include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
+set(ADD_VTEST OFF)
+if (MUE_BUILD_UNIT_TESTS)
+    set(ADD_VTEST ON)
+    if (NOT EXISTS "${MUE_VTEST_MSCORE_REF_BIN}")
+        set(ADD_VTEST OFF)
+    endif()
+endif()
+
+if (ADD_VTEST)
+    include(SetupGTest)
+endif()
