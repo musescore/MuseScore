@@ -41,6 +41,13 @@ namespace mu::engraving {
 //   textFlags
 //---------------------------------------------------------
 
+static const char* stretchedBendlabel[] = {
+    "",     "\u00BC",   "\u00BD",   "\u00BE",  /// 0,   1/4, 1/2, 3/4
+    "full", "1\u00BC", "1\u00BD", "1\u00BE",   /// 1, 1+1/4...
+    "2",    "2\u00BC", "2\u00BD", "2\u00BE",   /// 2, ...
+    "3"                                        /// 3
+};
+
 static int textFlags = draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip;
 
 //---------------------------------------------------------
@@ -249,7 +256,7 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
     for (const BendSegment& bendSegment : m_bendSegments) {
         const PointF& src = bendSegment.src;
         const PointF& dest = bendSegment.dest;
-        const String& text = String::fromUtf8(label[bendSegment.tone]);
+        const String& text = String::fromUtf8(stretchedBendlabel[bendSegment.tone]);
 
         switch (bendSegment.type) {
         case BendSegmentType::LINE_UP:
