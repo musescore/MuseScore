@@ -51,6 +51,12 @@ Buffer::Buffer(ByteArray* ba)
     }
 }
 
+Buffer::Buffer(ByteArray&& ba)
+{
+    m_ba = std::move(ba);
+    m_ref = &m_ba;
+}
+
 const ByteArray& Buffer::data() const
 {
     return *m_ref;
