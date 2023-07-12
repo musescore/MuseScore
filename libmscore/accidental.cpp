@@ -33,7 +33,8 @@ struct Acc {
       Acc(AccidentalVal o, int o2, SymId s) : offset(o), centOffset(o2), sym(s) {}
       };
 
-// NOTE: keep this in sync with with AccidentalType enum in types.h, watch out for isMicrotonal()
+// NOTE: Keep this in sync with with AccidentalType enum in types.h, watch out for isMicrotonal().
+//       Also keep in sync with `static double accSymId2alter(SymId id)` in exportxml.cpp.
 static Acc accList[] = {
       Acc(AccidentalVal::NATURAL,    0, SymId::noSym),                  // NONE
       Acc(AccidentalVal::FLAT,       0, SymId::accidentalFlat),         // FLAT
@@ -56,8 +57,8 @@ static Acc accList[] = {
       Acc(AccidentalVal::NATURAL,    50, SymId::accidentalQuarterToneSharpArrowDown),     // SHARP_ARROW_DOWN
       Acc(AccidentalVal::NATURAL,   250, SymId::accidentalFiveQuarterTonesSharpArrowUp),    // SHARP2_ARROW_UP
       Acc(AccidentalVal::NATURAL,   150, SymId::accidentalThreeQuarterTonesSharpArrowDown), // SHARP2_ARROW_DOWN
-      Acc(AccidentalVal::NATURAL,  -250, SymId::accidentalThreeQuarterTonesFlatArrowUp),    // FLAT2_ARROW_UP
-      Acc(AccidentalVal::NATURAL,  -150, SymId::accidentalFiveQuarterTonesFlatArrowDown),   // FLAT2_ARROW_DOWN
+      Acc(AccidentalVal::NATURAL,  -150, SymId::accidentalThreeQuarterTonesFlatArrowUp),    // FLAT2_ARROW_UP
+      Acc(AccidentalVal::NATURAL,  -250, SymId::accidentalFiveQuarterTonesFlatArrowDown),   // FLAT2_ARROW_DOWN
       Acc(AccidentalVal::NATURAL,   -50, SymId::accidentalArrowDown), // ARROW_DOWN
       Acc(AccidentalVal::NATURAL,    50, SymId::accidentalArrowUp),   // ARROW_UP
 

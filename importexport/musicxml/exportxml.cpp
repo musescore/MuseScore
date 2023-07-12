@@ -1974,16 +1974,169 @@ void ExportMusicXml::timesig(TimeSig* tsig)
 static double accSymId2alter(SymId id)
       {
       double res = 0;
-      switch (id) {
-            case SymId::accidentalDoubleFlat:                      res = -2;   break;
-            case SymId::accidentalThreeQuarterTonesFlatZimmermann: res = -1.5; break;
-            case SymId::accidentalFlat:                            res = -1;   break;
-            case SymId::accidentalQuarterToneFlatStein:            res = -0.5; break;
-            case SymId::accidentalNatural:                         res =  0;   break;
-            case SymId::accidentalQuarterToneSharpStein:           res =  0.5; break;
-            case SymId::accidentalSharp:                           res =  1;   break;
-            case SymId::accidentalThreeQuarterTonesSharpStein:     res =  1.5; break;
-            case SymId::accidentalDoubleSharp:                     res =  2;   break;
+      switch (id) {// keep in sync with `static Acc accList[]` in accidental.cpp
+            case SymId::accidentalFlat:                            res = -1;    break;
+            case SymId::accidentalNatural:                         res =  0;    break;
+            case SymId::accidentalSharp:                           res =  1;    break;
+            case SymId::accidentalDoubleSharp:                     res =  2;    break;
+            case SymId::accidentalDoubleFlat:                      res = -2;    break;
+            case SymId::accidentalTripleSharp:                     res =  3;    break;
+            case SymId::accidentalTripleFlat:                      res = -3;    break;
+            case SymId::accidentalNaturalFlat:                     res = -1;    break;
+            case SymId::accidentalNaturalSharp:                    res =  1;    break;
+            case SymId::accidentalSharpSharp:                      res =  2;    break;
+
+            // Gould arrow quartertone
+            case SymId::accidentalQuarterToneFlatArrowUp:          res = -0.5;  break;
+            case SymId::accidentalThreeQuarterTonesFlatArrowDown:  res = -1.5;  break;
+            case SymId::accidentalQuarterToneSharpNaturalArrowUp:  res =  0.5;  break;
+            case SymId::accidentalQuarterToneFlatNaturalArrowDown: res = -0.5;  break;
+            case SymId::accidentalThreeQuarterTonesSharpArrowUp:   res =  1.5;  break;
+            case SymId::accidentalQuarterToneSharpArrowDown:       res =  0.5;  break;
+            case SymId::accidentalFiveQuarterTonesSharpArrowUp:    res =  2.5;  break;
+            case SymId::accidentalThreeQuarterTonesSharpArrowDown: res =  1.5;  break;
+            case SymId::accidentalThreeQuarterTonesFlatArrowUp:    res = -1.5;  break;
+            case SymId::accidentalFiveQuarterTonesFlatArrowDown:   res = -2.5;  break;
+            case SymId::accidentalArrowDown:                       res = -0.5;  break;
+            case SymId::accidentalArrowUp:                         res =  0.5;  break;
+
+            // Stein-Zimmermann
+            case SymId::accidentalQuarterToneFlatStein:            res = -0.5;  break;
+            case SymId::accidentalThreeQuarterTonesFlatZimmermann: res = -1.5;  break;
+            case SymId::accidentalQuarterToneSharpStein:           res =  0.5;  break;
+            case SymId::accidentalThreeQuarterTonesSharpStein:     res =  1.5;  break;
+
+            // Arel-Ezgi-Uzdilek (AEU)
+            case SymId::accidentalBuyukMucennebFlat:               res = -0.89; break;
+            case SymId::accidentalBakiyeFlat:                      res = -0.44; break;
+            case SymId::accidentalKucukMucennebSharp:              res =  0.56; break;
+            case SymId::accidentalBuyukMucennebSharp:              res =  0.89; break;
+
+            // Extended Helmholtz-Ellis accidentals (just intonation)
+            case SymId::accidentalDoubleFlatOneArrowDown:           res =  0.0;  break;
+            case SymId::accidentalFlatOneArrowDown:                 res =  0.0;  break;
+            case SymId::accidentalNaturalOneArrowDown:              res =  0.0;  break;
+            case SymId::accidentalSharpOneArrowDown:                res =  0.0;  break;
+            case SymId::accidentalDoubleSharpOneArrowDown:          res =  0.0;  break;
+            case SymId::accidentalDoubleFlatOneArrowUp:             res =  0.0;  break;
+            case SymId::accidentalFlatOneArrowUp:                   res =  0.0;  break;
+            case SymId::accidentalNaturalOneArrowUp:                res =  0.0;  break;
+            case SymId::accidentalSharpOneArrowUp:                  res =  0.0;  break;
+            case SymId::accidentalDoubleSharpOneArrowUp:            res =  0.0;  break;
+            case SymId::accidentalDoubleFlatTwoArrowsDown:          res =  0.0;  break;
+            case SymId::accidentalFlatTwoArrowsDown:                res =  0.0;  break;
+            case SymId::accidentalNaturalTwoArrowsDown:             res =  0.0;  break;
+            case SymId::accidentalSharpTwoArrowsDown:               res =  0.0;  break;
+            case SymId::accidentalDoubleSharpTwoArrowsDown:         res =  0.0;  break;
+            case SymId::accidentalDoubleFlatTwoArrowsUp:            res =  0.0;  break;
+            case SymId::accidentalFlatTwoArrowsUp:                  res =  0.0;  break;
+            case SymId::accidentalNaturalTwoArrowsUp:               res =  0.0;  break;
+            case SymId::accidentalSharpTwoArrowsUp:                 res =  0.0;  break;
+            case SymId::accidentalDoubleSharpTwoArrowsUp:           res =  0.0;  break;
+            case SymId::accidentalDoubleFlatThreeArrowsDown:        res =  0.0;  break;
+            case SymId::accidentalFlatThreeArrowsDown:              res =  0.0;  break;
+            case SymId::accidentalNaturalThreeArrowsDown:           res =  0.0;  break;
+            case SymId::accidentalSharpThreeArrowsDown:             res =  0.0;  break;
+            case SymId::accidentalDoubleFlatThreeArrowsUp:          res =  0.0;  break;
+            case SymId::accidentalFlatThreeArrowsUp:                res =  0.0;  break;
+            case SymId::accidentalNaturalThreeArrowsUp:             res =  0.0;  break;
+            case SymId::accidentalSharpThreeArrowsUp:               res =  0.0;  break;
+            case SymId::accidentalDoubleSharpThreeArrowsUp:         res =  0.0;  break;
+            case SymId::accidentalLowerOneSeptimalComma:            res =  0.0;  break;
+            case SymId::accidentalRaiseOneSeptimalComma:            res =  0.0;  break;
+            case SymId::accidentalLowerTwoSeptimalCommas:           res =  0.0;  break;
+            case SymId::accidentalRaiseTwoSeptimalCommas:           res =  0.0;  break;
+            case SymId::accidentalLowerOneUndecimalQuartertone:     res =  0.0;  break;
+            case SymId::accidentalRaiseOneUndecimalQuartertone:     res =  0.0;  break;
+            case SymId::accidentalLowerOneTridecimalQuartertone:    res =  0.0;  break;
+            case SymId::accidentalRaiseOneTridecimalQuartertone:    res =  0.0;  break;
+            case SymId::accidentalDoubleFlatEqualTempered:          res =  0.0;  break;
+            case SymId::accidentalFlatEqualTempered:                res =  0.0;  break;
+            case SymId::accidentalNaturalEqualTempered:             res =  0.0;  break;
+            case SymId::accidentalSharpEqualTempered:               res =  0.0;  break;
+            case SymId::accidentalDoubleSharpEqualTempered:         res =  0.0;  break;
+            case SymId::accidentalQuarterFlatEqualTempered:         res =  0.0;  break;
+            case SymId::accidentalQuarterSharpEqualTempered:        res =  0.0;  break;
+            case SymId::accidentalCombiningLower17Schisma:          res = -0.07; break;
+            case SymId::accidentalCombiningRaise17Schisma:          res =  0.07; break;
+            case SymId::accidentalCombiningLower19Schisma:          res = -0.03; break;
+            case SymId::accidentalCombiningRaise19Schisma:          res = -0.03; break;
+            case SymId::accidentalCombiningLower23Limit29LimitComma:res =  0.17; break;
+            case SymId::accidentalCombiningRaise23Limit29LimitComma:res = -0.17; break;
+            case SymId::accidentalCombiningLower31Schisma:          res = -0.02; break;
+            case SymId::accidentalCombiningRaise31Schisma:          res =  0.02; break;
+            case SymId::accidentalCombiningLower53LimitComma:       res = -0.11; break;
+            case SymId::accidentalCombiningRaise53LimitComma:       res =  0.11; break;
+            //case SymId::accidentalEnharmonicAlmostEqualTo:          res =  0.0;  break;
+            //case SymId::accidentalEnharmonicEquals:                 res =  0.0;  break;
+            //case SymId::accidentalEnharmonicTilde:                  res =  0.0;  break;
+
+            // Persian
+            case SymId::accidentalSori:                            res =  0.33; break;
+            case SymId::accidentalKoron:                           res = -0.67; break;
+
+            // Wyschnegradsky
+            case SymId::accidentalWyschnegradsky10TwelfthsFlat:    res = -1.67; break;
+            case SymId::accidentalWyschnegradsky10TwelfthsSharp:   res =  1.67; break;
+            case SymId::accidentalWyschnegradsky11TwelfthsFlat:    res = -1.83; break;
+            case SymId::accidentalWyschnegradsky11TwelfthsSharp:   res =  1.83; break;
+            case SymId::accidentalWyschnegradsky1TwelfthsFlat:     res = -0.17; break;
+            case SymId::accidentalWyschnegradsky1TwelfthsSharp:    res =  0.17; break;
+            case SymId::accidentalWyschnegradsky2TwelfthsFlat:     res = -0.33; break;
+            case SymId::accidentalWyschnegradsky2TwelfthsSharp:    res =  0.33; break;
+            case SymId::accidentalWyschnegradsky3TwelfthsFlat:     res = -0.50; break;
+            case SymId::accidentalWyschnegradsky3TwelfthsSharp:    res =  0.50; break;
+            case SymId::accidentalWyschnegradsky4TwelfthsFlat:     res = -0.67; break;
+            case SymId::accidentalWyschnegradsky4TwelfthsSharp:    res =  0.67; break;
+            case SymId::accidentalWyschnegradsky5TwelfthsFlat:     res = -0.83; break;
+            case SymId::accidentalWyschnegradsky5TwelfthsSharp:    res =  0.83; break;
+            case SymId::accidentalWyschnegradsky6TwelfthsFlat:     res =    -1; break;
+            case SymId::accidentalWyschnegradsky6TwelfthsSharp:    res =     1; break;
+            case SymId::accidentalWyschnegradsky7TwelfthsFlat:     res = -1.16; break;
+            case SymId::accidentalWyschnegradsky7TwelfthsSharp:    res =  1.16; break;
+            case SymId::accidentalWyschnegradsky8TwelfthsFlat:     res = -1.33; break;
+            case SymId::accidentalWyschnegradsky8TwelfthsSharp:    res =  1.33; break;
+            case SymId::accidentalWyschnegradsky9TwelfthsFlat:     res = -1.50; break;
+            case SymId::accidentalWyschnegradsky9TwelfthsSharp:    res =  1.50; break;
+
+            // the most important (Spartan) Sagittal accidentals
+            case SymId::accSagittal5v7KleismaDown:                 res = -0.06; break;
+            case SymId::accSagittal5v7KleismaUp:                   res =  0.06; break;
+            case SymId::accSagittal5CommaDown:                     res = -0.22; break;
+            case SymId::accSagittal5CommaUp:                       res =  0.22; break;
+            case SymId::accSagittal7CommaDown:                     res = -0.27; break;
+            case SymId::accSagittal7CommaUp:                       res =  0.27; break;
+            case SymId::accSagittal25SmallDiesisDown:              res = -0.43; break;
+            case SymId::accSagittal25SmallDiesisUp:                res =  0.43; break;
+            case SymId::accSagittal35MediumDiesisDown:             res = -0.49; break;
+            case SymId::accSagittal35MediumDiesisUp:               res =  0.49; break;
+            case SymId::accSagittal11MediumDiesisDown:             res = -0.53; break;
+            case SymId::accSagittal11MediumDiesisUp:               res =  0.53; break;
+            case SymId::accSagittal11LargeDiesisDown:              res = -0.60; break;
+            case SymId::accSagittal11LargeDiesisUp:                res =  0.60; break;
+            case SymId::accSagittal35LargeDiesisDown:              res = -0.65; break;
+            case SymId::accSagittal35LargeDiesisUp:                res =  0.65; break;
+            case SymId::accSagittalFlat25SUp:                      res = -0.71; break;
+            case SymId::accSagittalSharp25SDown:                   res =  0.71; break;
+            case SymId::accSagittalFlat7CUp:                       res = -0.86; break;
+            case SymId::accSagittalSharp7CDown:                    res =  0.86; break;
+            case SymId::accSagittalFlat5CUp:                       res = -0.92; break;
+            case SymId::accSagittalSharp5CDown:                    res =  0.92; break;
+            case SymId::accSagittalFlat5v7kUp:                     res = -1.08; break;
+            case SymId::accSagittalSharp5v7kDown:                  res =  1.08; break;
+            case SymId::accSagittalFlat:                           res = -1.14; break;
+            case SymId::accSagittalSharp:                          res =  1.14; break;
+
+            // Turkish folk music accidentals
+            case SymId::accidental1CommaSharp:                     res =  0.22; break;
+            case SymId::accidental1CommaFlat:                      res = -0.22; break;
+            case SymId::accidental2CommaSharp:                     res =  0.44; break;
+            case SymId::accidental2CommaFlat:                      res = -0.44; break;
+            case SymId::accidental3CommaSharp:                     res =  0.67; break;
+            case SymId::accidental3CommaFlat:                      res = -0.67; break;
+            //case SymId::accidentalSharp:                           res =  0.89; break;
+            case SymId::accidental4CommaFlat:                      res = -0.89; break;
+            case SymId::accidental5CommaSharp:                     res =  1.11; break;
             default: qDebug("accSymId2alter: unsupported sym %s", Sym::id2name(id));
             }
       return res;
