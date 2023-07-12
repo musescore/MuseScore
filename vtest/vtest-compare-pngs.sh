@@ -24,18 +24,21 @@ HERE="$(dirname ${BASH_SOURCE[0]})"
 CURRENT_DIR="./current_pngs"
 REFERENCE_DIR="./reference_pngs"
 OUTPUT_DIR="./comparison"
+GEN_GIF=1
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -c|--current-dir) CURRENT_DIR="$2"; shift ;;
         -r|--reference-dir) REFERENCE_DIR="$2"; shift ;;
         -o|--output-dir) OUTPUT_DIR="$2"; shift ;;
+        -g|--gen-gif) GEN_GIF=$2; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
 done
 
 echo "::group::Configuration:"
+echo "PWD: $PWD"
 echo "CURRENT_DIR: $CURRENT_DIR"
 echo "REFERENCE_DIR: $REFERENCE_DIR"
 echo "OUTPUT_DIR: $OUTPUT_DIR"
@@ -43,6 +46,13 @@ echo "::endgroup::"
 
 rm -rf $OUTPUT_DIR
 mkdir $OUTPUT_DIR
+
+command -v compare >/dev/null 2>&1
+if [[ $? -ne 0 ]]; then
+    echo "ERROR: not found compare tool" 
+    echo "TO FIX, RUN: sudo apt install imagemagick"
+    exit 1
+fi
 
 PNG_REF_LIST=$(ls $REFERENCE_DIR/*.png)
 DIFF_NAME_LIST=""
@@ -65,7 +75,9 @@ for PNG_REF_FILE in $PNG_REF_LIST ; do
             cp $PNG_CUR_FILE $OUTPUT_DIR
 
             # generate comparison gif
-            convert -delay 80 -loop 0 $PNG_CUR_FILE $PNG_REF_FILE $GIF_DIFF_FILE
+            if [ $GEN_GIF -eq 1 ]; then
+                convert -delay 80 -loop 0 $PNG_CUR_FILE $PNG_REF_FILE $GIF_DIFF_FILE
+            fi    
         else
             echo "Equal: ref: $PNG_REF_FILE, current: $PNG_CUR_FILE"
             rm -f $PNG_DIFF_FILE 2>/dev/null
@@ -105,6 +117,5 @@ if [ "$VTEST_DIFF_FOUND" == "true" ]; then
     echo "  </body>" >> $HTML
     echo "</html>" >> $HTML
 
-else
-    rm -rf $OUTPUT_DIR
+    exit 1
 fi
