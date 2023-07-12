@@ -70,6 +70,7 @@
 #include "engraving/libmscore/rehearsalmark.h"
 #include "engraving/libmscore/slur.h"
 #include "engraving/libmscore/stafftext.h"
+#include "engraving/libmscore/stafftypechange.h"
 #include "engraving/libmscore/symbol.h"
 #include "engraving/libmscore/systemtext.h"
 #include "engraving/libmscore/tempotext.h"
@@ -179,6 +180,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     case ElementType::SPACER:       layout(toSpacer(item), ctx);
         break;
     case ElementType::STAFF_TEXT:   layout(toStaffText(item), ctx);
+        break;
+    case ElementType::STAFFTYPE_CHANGE: layout(toStaffTypeChange(item), ctx);
         break;
     case ElementType::SYMBOL:       layout(toSymbol(item), ctx);
         break;
@@ -1255,6 +1258,13 @@ void PaletteLayout::layout(Spacer* item, const Context&)
 void PaletteLayout::layout(StaffText* item, const Context& ctx)
 {
     layoutTextBase(item, ctx);
+}
+
+void PaletteLayout::layout(StaffTypeChange* item, const Context& ctx)
+{
+    double spatium = ctx.style().spatium();
+    item->setbbox(RectF(-item->lw() * .5, -item->lw() * .5, spatium * 2.5 + item->lw(), spatium * 2.5 + item->lw()));
+    item->setPos(0.0, 0.0);
 }
 
 void PaletteLayout::layout(Symbol* item, const Context&)
