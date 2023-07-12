@@ -2161,6 +2161,21 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
     measure->setRepeatStart(false);
     measure->setRepeatEnd(false);
 
+    /* TODO: for cutaway measures, i believe we can expect the staff to continue to be cutaway until another
+    * print-object="yes" attribute is found. Here is the code that does that, though I don't want to actually commit this until
+    * we have the exporter dealing with this sort of stuff as well.
+    *
+    * When print-object="yes" is encountered, the measure will explicitly be set to visible (see MusicXMLParserPass2::staffDetails)
+
+    MeasureBase* prevBase = measure->prev();
+    if (prevBase) {
+        Part* part = _pass1.getPart(partId);
+        staff_idx_t staffIdx = _score->staffIdx(part);
+        if (!toMeasure(prevBase)->visible(staffIdx)) {
+            measure->setStaffVisible(staffIdx, false);
+        }
+    } */
+
     Fraction mTime;   // current time stamp within measure
     Fraction prevTime;   // time stamp within measure previous chord
     Chord* prevChord = 0;         // previous chord
@@ -2394,7 +2409,7 @@ void MusicXMLParserPass2::attributes(const QString& partId, Measure* measure, co
         } else if (_e.name() == "measure-style") {
             measureStyle(measure);
         } else if (_e.name() == "staff-details") {
-            staffDetails(partId);
+            staffDetails(partId, measure);
         } else if (_e.name() == "time") {
             time(partId, measure, tick);
         } else if (_e.name() == "transpose") {
@@ -2427,7 +2442,7 @@ static void setStaffLines(Score* score, staff_idx_t staffIdx, int stafflines)
  Parse the /score-partwise/part/measure/attributes/staff-details node.
  */
 
-void MusicXMLParserPass2::staffDetails(const QString& partId)
+void MusicXMLParserPass2::staffDetails(const QString& partId, Measure* measure)
 {
     //logDebugTrace("MusicXMLParserPass2::staffDetails");
 
@@ -2452,9 +2467,29 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
 
     StringData* t = new StringData;
     QString visible = _e.attributes().value("print-object").toString();
+    QString spacing = _e.attributes().value("print-spacing").toString();
     if (visible == "no") {
-        _score->staff(staffIdx)->setVisible(false);
-    } else if (!visible.isEmpty() && visible != "yes") {
+        // EITHER:
+        //  1) this indicates an empty staff that is hidden
+        //  2) this indicates a cutaway measure. if it is a cutaway measure then print-spacing will be yes
+        if (spacing == "yes") {
+            measure->setStaffVisible(staffIdx, false);
+        } else if (measure && !measure->hasVoices(staffIdx) && measure->isOnlyRests(staffIdx * VOICES)) {
+            // measures with print-object="no" are generally exported by exporters such as dolet when empty staves are hidden.
+            // for this reason, if we see print-object="no" (and no print-spacing), we can assume that this indicates we should set
+            // the hide empty staves style.
+            _score->style().set(Sid::hideEmptyStaves, true);
+            _score->style().set(Sid::dontHideStavesInFirstSystem, false);
+        } else {
+            // this doesn't apply to a measure, so we'll assume the entire staff has to be hidden.
+            _score->staff(staffIdx)->setVisible(false);
+        }
+    } else if (visible == "yes") {
+        if (measure) {
+            _score->staff(staffIdx)->setVisible(true);
+            measure->setStaffVisible(staffIdx, true);
+        }
+    } else {
         _logger->logError(QString("print-object should be \"yes\" or \"no\""));
     }
 
