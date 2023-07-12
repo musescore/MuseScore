@@ -223,8 +223,17 @@ const
         mu::engraving::System* currentSegmentSystem = segment->measure()->system();
 
         mu::engraving::Segment* nextSegment = segment->next1MMenabled();
-        mu::engraving::System* nextSegmentSystem = nextSegment->measure()->system();
+        if (!nextSegment) {
+            RangeSection section;
+            section.system = currentSegmentSystem;
+            section.startSegment = startSegment;
+            section.endSegment = segment;
 
+            sections.push_back(section);
+            break;
+        }
+
+        mu::engraving::System* nextSegmentSystem = nextSegment->measure()->system();
         if (!nextSegmentSystem) {
             const Measure* mmr = nextSegment->measure()->coveringMMRestOrThis();
             if (mmr) {
