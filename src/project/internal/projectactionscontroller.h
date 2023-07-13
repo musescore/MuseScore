@@ -199,6 +199,7 @@ private:
     bool m_isProjectPublishing = false;
     bool m_isProjectUploading = false;
     bool m_isAudioSharing = false;
+    bool m_isProjectDownloading = false;
 
     framework::ProgressPtr m_uploadingProjectProgress = nullptr;
     framework::ProgressPtr m_uploadingAudioProgress = nullptr;
