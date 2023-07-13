@@ -88,12 +88,12 @@ public:
 
     virtual void setScore(Score* s) override;
 
-    MeasureBase* next() const { return _next; }
+    MeasureBase* next() const { return m_next; }
     MeasureBase* nextMM() const;
-    void setNext(MeasureBase* e) { _next = e; }
-    MeasureBase* prev() const { return _prev; }
+    void setNext(MeasureBase* e) { m_next = e; }
+    MeasureBase* prev() const { return m_prev; }
     MeasureBase* prevMM() const;
-    void setPrev(MeasureBase* e) { _prev = e; }
+    void setPrev(MeasureBase* e) { m_prev = e; }
     MeasureBase* top() const;
 
     Measure* nextMeasure() const;
@@ -101,8 +101,8 @@ public:
     Measure* nextMeasureMM() const;
     Measure* prevMeasureMM() const;
 
-    ElementList& el() { return _el; }
-    const ElementList& el() const { return _el; }
+    ElementList& el() { return m_el; }
+    const ElementList& el() const { return m_el; }
 
     const MeasureBase* findPotentialSectionBreak() const;
     LayoutBreak* sectionBreakElement() const;
@@ -123,10 +123,10 @@ public:
     Fraction tick() const override;
     void setTick(const Fraction& f);
 
-    Fraction ticks() const { return _len; }
-    void setTicks(const Fraction& f) { _len = f; }
+    Fraction ticks() const { return m_len; }
+    void setTicks(const Fraction& f) { m_len = f; }
 
-    Fraction endTick() const { return _tick + _len; }
+    Fraction endTick() const { return m_tick + m_len; }
 
     void triggerLayout() const override;
 
@@ -139,10 +139,10 @@ public:
     void clearElements();
     ElementList takeElements();
 
-    int no() const { return _no; }
-    void setNo(int n) { _no = n; }
-    int noOffset() const { return _noOffset; }
-    void setNoOffset(int n) { _noOffset = n; }
+    int no() const { return m_no; }
+    void setNo(int n) { m_no = n; }
+    int noOffset() const { return m_noOffset; }
+    void setNoOffset(int n) { m_noOffset = n; }
 
     bool repeatEnd() const { return flag(ElementFlag::REPEAT_END); }
     void setRepeatEnd(bool v) { setFlag(ElementFlag::REPEAT_END, v); }
@@ -184,18 +184,46 @@ protected:
     MeasureBase(const ElementType& type, System* system = 0);
     MeasureBase(const MeasureBase&);
 
-    Fraction _len  { Fraction(0, 1) };    ///< actual length of measure
+    Fraction m_len  { Fraction(0, 1) };    // actual length of measure
 
 private:
-    MeasureBase* _next    { 0 };
-    MeasureBase* _prev    { 0 };
+    MeasureBase* m_next = nullptr;
+    MeasureBase* m_prev = nullptr;
 
-    ElementList _el;                      ///< Measure(/tick) relative -elements: with defined start time
-                                          ///< but outside the staff
-    Fraction _tick         { Fraction(0, 1) };
-    int _no                { 0 };         ///< Measure number, counting from zero
-    int _noOffset          { 0 };         ///< Offset to measure number
-    double m_oldWidth       { 0 };         ///< Used to restore layout during recalculations in Score::collectSystem()
+    ElementList m_el;                     // Measure(/tick) relative -elements: with defined start time
+                                          // but outside the staff
+    Fraction m_tick         { Fraction(0, 1) };
+    int m_no = 0;                         // Measure number, counting from zero
+    int m_noOffset = 0;                   // Offset to measure number
+    double m_oldWidth = 0.0;              // Used to restore layout during recalculations in Score::collectSystem()
+};
+
+//---------------------------------------------------------
+//   MeasureBaseList
+//---------------------------------------------------------
+
+class MeasureBaseList
+{
+public:
+    MeasureBaseList();
+    MeasureBase* first() const { return m_first; }
+    MeasureBase* last()  const { return m_last; }
+    void clear() { m_first = m_last = 0; m_size = 0; }
+    void add(MeasureBase*);
+    void remove(MeasureBase*);
+    void insert(MeasureBase*, MeasureBase*);
+    void remove(MeasureBase*, MeasureBase*);
+    void change(MeasureBase* o, MeasureBase* n);
+    int size() const { return m_size; }
+    bool empty() const { return m_size == 0; }
+
+private:
+    void push_back(MeasureBase* e);
+    void push_front(MeasureBase* e);
+
+    int m_size = 0;
+    MeasureBase* m_first = nullptr;
+    MeasureBase* m_last = nullptr;
 };
 } // namespace mu::engraving
 #endif
