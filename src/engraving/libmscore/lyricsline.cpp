@@ -45,13 +45,13 @@ LyricsLine::LyricsLine(EngravingItem* parent)
     setDiagonal(false);
     setLineWidth(style().styleMM(Sid::lyricsDashLineThickness));
     setAnchor(Spanner::Anchor::SEGMENT);
-    _nextLyrics = 0;
+    m_nextLyrics = 0;
 }
 
 LyricsLine::LyricsLine(const LyricsLine& g)
     : SLine(g)
 {
-    _nextLyrics = 0;
+    m_nextLyrics = 0;
 }
 
 //---------------------------------------------------------
@@ -134,7 +134,7 @@ void LyricsLineSegment::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;
     using namespace mu::draw;
-    if (_numOfDashes < 1) {               // nothing to draw
+    if (m_numOfDashes < 1) {               // nothing to draw
         return;
     }
 
@@ -145,10 +145,10 @@ void LyricsLineSegment::draw(mu::draw::Painter* painter) const
     if (lyricsLine()->isEndMelisma()) {               // melisma
         painter->drawLine(PointF(), pos2());
     } else {                                          // dash(es)
-        double step  = pos2().x() / _numOfDashes;
-        double x     = step * .5 - _dashLength * .5;
-        for (int i = 0; i < _numOfDashes; i++, x += step) {
-            painter->drawLine(PointF(x, 0.0), PointF(x + _dashLength, 0.0));
+        double step  = pos2().x() / m_numOfDashes;
+        double x     = step * .5 - m_dashLength * .5;
+        for (int i = 0; i < m_numOfDashes; i++, x += step) {
+            painter->drawLine(PointF(x, 0.0), PointF(x + m_dashLength, 0.0));
         }
     }
 }

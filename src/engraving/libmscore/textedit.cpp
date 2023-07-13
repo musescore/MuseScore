@@ -204,7 +204,7 @@ void TextBase::endEdit(EditData& ed)
         if (isLyrics()) {
             Lyrics* prev = prevLyrics(toLyrics(this));
             if (prev) {
-                prev->setRemoveInvalidSegments();
+                prev->setIsRemoveInvalidSegments();
                 layout()->layoutItem(prev);
             }
         }
