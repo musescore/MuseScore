@@ -3546,11 +3546,12 @@ void TLayout::layout(Note* item, LayoutContext&)
             if (item->negativeFretUsed()) {
                 item->setFretString(u"-" + item->fretString());
             }
-
+            // Don't use regular less than or more than symbols
+            // they are not centered. Use these instead! ＜＞
             if (item->displayFret() == Note::DisplayFretOption::ArtificialHarmonic) {
-                item->setFretString(String(u"%1 <%2>").arg(item->fretString(), String::number(item->harmonicFret())));
+                item->setFretString(String(u"%1 ＜%2＞").arg(item->fretString(), String::number(item->harmonicFret())));
             } else if (item->displayFret() == Note::DisplayFretOption::NaturalHarmonic) {
-                item->setFretString(String(u"<%1>").arg(String::number(item->harmonicFret())));
+                item->setFretString(String(u"＜%1＞").arg(String::number(item->harmonicFret())));
             }
         }
 
