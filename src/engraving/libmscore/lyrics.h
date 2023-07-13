@@ -27,10 +27,6 @@
 #include "line.h"
 #include "textbase.h"
 
-namespace mu::engraving::layout::v0 {
-class LyricsLayout;
-}
-
 namespace mu::engraving {
 //---------------------------------------------------------
 //   Lyrics
@@ -71,24 +67,36 @@ public:
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    int subtype() const override { return _no; }
+    int subtype() const override { return m_no; }
     TranslatableString subtypeUserName() const override;
-    void setNo(int n) { _no = n; }
-    int no() const { return _no; }
-    bool isEven() const { return _no % 2; }
-    void setSyllabic(LyricsSyllabic s) { _syllabic = s; }
-    LyricsSyllabic syllabic() const { return _syllabic; }
+    void setNo(int n) { m_no = n; }
+    int no() const { return m_no; }
+    bool isEven() const { return m_no % 2; }
+    void setSyllabic(LyricsSyllabic s) { m_syllabic = s; }
+    LyricsSyllabic syllabic() const { return m_syllabic; }
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
     bool isEditAllowed(EditData&) const override;
     void endEdit(EditData&) override;
 
-    Fraction ticks() const { return _ticks; }
-    void setTicks(const Fraction& tick) { _ticks = tick; }
+    const Fraction& ticks() const { return m_ticks; }
+    void setTicks(const Fraction& tick) { m_ticks = tick; }
     Fraction endTick() const;
     void removeFromScore();
-    void setRemoveInvalidSegments() { _removeInvalidSegments = true; }
+
     void adjustPrevious();
+
+    bool isRemoveInvalidSegments() const { return m_isRemoveInvalidSegments; }
+    void setIsRemoveInvalidSegments() { m_isRemoveInvalidSegments = true; }
+    void removeInvalidSegments();
+
+    bool even() const { return m_even; }
+    void setEven(bool val) { m_even = val; }
+
+    LyricsLine* separator() const { return m_separator; }
+    void setSeparator(LyricsLine* s) { m_separator = s; }
+
+    bool isMelisma() const;
 
     using EngravingObject::undoChangeProperty;
     void paste(EditData& ed, const String& txt) override;
@@ -99,25 +107,21 @@ public:
     void triggerLayout() const override;
 
 protected:
-    int _no;                  ///< row index
-    bool _even;
+    int m_no = 0;  // row index
+    bool m_even = false;
 
 private:
 
-    friend class layout::v0::LyricsLayout;
     friend class Factory;
     Lyrics(ChordRest* parent);
     Lyrics(const Lyrics&);
 
-    bool isMelisma() const;
-    void removeInvalidSegments();
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
-    Fraction _ticks;          ///< if > 0 then draw an underline to tick() + _ticks
-                              ///< (melisma)
-    LyricsSyllabic _syllabic;
-    LyricsLine* _separator;
-    bool _removeInvalidSegments = false;
+    Fraction m_ticks;          // if > 0 then draw an underline to tick() + _ticks (melisma)
+    LyricsSyllabic m_syllabic = LyricsSyllabic::SINGLE;
+    LyricsLine* m_separator = nullptr;
+    bool m_isRemoveInvalidSegments = false;
 };
 
 //---------------------------------------------------------
@@ -141,15 +145,14 @@ public:
     void styleChanged() override;
 
     Lyrics* lyrics() const { return toLyrics(explicitParent()); }
-    Lyrics* nextLyrics() const { return _nextLyrics; }
+    Lyrics* nextLyrics() const { return m_nextLyrics; }
+    void setNextLyrics(Lyrics* l) { m_nextLyrics = l; }
     bool isEndMelisma() const { return lyrics() && lyrics()->ticks().isNotZero(); }
     bool isDash() const { return !isEndMelisma(); }
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
 
 protected:
-    friend class layout::v0::LyricsLayout;
-
-    Lyrics* _nextLyrics;
+    Lyrics* m_nextLyrics = nullptr;
 };
 
 //---------------------------------------------------------
@@ -168,14 +171,19 @@ public:
     LyricsLineSegment* clone() const override { return new LyricsLineSegment(*this); }
     void draw(mu::draw::Painter*) const override;
 
+    int numOfDashes() const { return m_numOfDashes; }
+    void setNumOfDashes(int val) { m_numOfDashes = val; }
+
+    double dashLength() const { return m_dashLength; }
+    void setDashLength(double val) { m_dashLength = val; }
+
     // helper functions
     LyricsLine* lyricsLine() const { return toLyricsLine(spanner()); }
     Lyrics* lyrics() const { return lyricsLine()->lyrics(); }
 
 protected:
-    friend class layout::v0::LyricsLayout;
-    int _numOfDashes = 0;
-    double _dashLength = 0;
+    int m_numOfDashes = 0;
+    double m_dashLength = 0.0;
 };
 } // namespace mu::engraving
 #endif
