@@ -2794,7 +2794,7 @@ Shape Chord::shape() const
     for (LedgerLine* l = _ledgerLines; l; l = l->next()) {
         shape.add(l->shape().translate(l->pos()));
     }
-    if (m_beamlet) {
+    if (m_beamlet && _stem) {
         double xPos = m_beamlet->line.p1().x() - _stem->xpos();
         if (m_beamlet->isBefore && !m_up) {
             xPos -= _stem->width();
