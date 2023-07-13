@@ -70,6 +70,8 @@ public:
 
     void setNoteWidth(double v) { m_noteWidth = v; }
     double noteWidth() const { return m_noteWidth; }
+    void setNoteHeight(double v) { m_noteHeight = v; }
+    double noteHeight() const { return m_noteHeight; }
     void setNotePos(const PointF& v) { m_notePos = v; }
     const PointF& notePos() const { return m_notePos; }
 
@@ -92,8 +94,8 @@ protected: /// TODO: bring back "private" keyword after removing StretchedBend c
     PitchValues m_points;
 
     PointF m_notePos;
-    double m_noteWidth = 0;
-    double m_noteHeight = 0;
+    double m_noteWidth = 0.0;
+    double m_noteHeight = 0.0;
 };
 } // namespace mu::engraving
 #endif
