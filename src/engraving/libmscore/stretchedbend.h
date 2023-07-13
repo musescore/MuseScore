@@ -55,7 +55,7 @@ private:
     void fillSegments(); // converting points from file to bend segments
     void stretchSegments(); // stretching until end of chord duration
 
-    void layoutDraw(const bool layoutMode, mu::draw::Painter* painter = nullptr) const; /// loop for both layout and draw logic
+    mu::RectF calculateBoundingRect() const;
 
     void setupPainter(mu::draw::Painter* painter) const;
     void fillArrows();

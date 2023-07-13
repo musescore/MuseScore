@@ -4308,27 +4308,17 @@ void TLayout::doLayout(StretchedBend* item, LayoutContext&, bool stretchedMode)
 {
     item->m_stretchedMode = stretchedMode;
 
-    // preLayout
-    {
-        Note* note = toNote(item->explicitParent());
-        item->m_notePos   = note->pos();
-        item->m_noteWidth = note->width();
-        item->m_noteHeight = note->height();
+    Note* note = toNote(item->explicitParent());
+    item->m_notePos   = note->pos();
+    item->m_noteWidth = note->width();
+    item->m_noteHeight = note->height();
 
-        item->fillArrows();
-        item->fillSegments();
-        item->stretchSegments();
-    }
+    item->fillArrows();
+    item->fillSegments();
+    item->stretchSegments();
 
-    item->layoutDraw(true);
-
-    // postLayout
-    {
-        double lw = item->lineWidth();
-        RectF& bRect = item->bbox();
-        bRect.adjust(-lw, -lw, lw, lw);
-        item->setPos(0.0, 0.0);
-    }
+    item->setbbox(item->calculateBoundingRect());
+    item->setPos(0.0, 0.0);
 }
 
 void TLayout::layoutBaseSymbol(BSymbol* item, LayoutContext& ctx)
