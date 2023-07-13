@@ -236,19 +236,6 @@ void StretchedBend::draw(mu::draw::Painter* painter) const
     TRACE_ITEM_DRAW;
 
     setupPainter(painter);
-    layoutDraw(false, painter);
-}
-
-//---------------------------------------------------------
-//   layoutDraw
-//---------------------------------------------------------
-
-void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter) const
-{
-    if (!layoutMode && !painter) {
-        return;
-    }
-
     double sp = spatium();
     RectF bRect;
     bool isTextDrawn = false;
@@ -261,23 +248,11 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
         switch (bendSegment.type) {
         case BendSegmentType::LINE_UP:
         {
-            if (layoutMode) {
-                bRect.unite(RectF(src.x(), src.y(), dest.x() - src.x(), dest.y() - src.y()));
-                bRect.unite(m_arrowUp.translated(dest).boundingRect());
-
-                mu::draw::FontMetrics fm(font(sp));
-                bRect.unite(textBoundingRect(fm, dest, text));
-                /// TODO: remove after fixing bRect
-                bRect.setHeight(bRect.height() + sp);
-                bRect.setY(bRect.y() - sp);
-            } else {
-                painter->drawLine(LineF(src, dest));
-                painter->setBrush(curColor());
-                painter->drawPolygon(m_arrowUp.translated(dest));
-                /// TODO: remove substraction after fixing bRect
-                drawText(painter, dest - PointF(0, sp * 0.5), text);
-            }
-
+            painter->drawLine(LineF(src, dest));
+            painter->setBrush(curColor());
+            painter->drawPolygon(m_arrowUp.translated(dest));
+            /// TODO: remove substraction after fixing bRect
+            drawText(painter, dest - PointF(0, sp * 0.5), text);
             break;
         }
 
@@ -290,27 +265,14 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
             PainterPath path = bendCurveFromPoints(src, PointF(dest.x(), endY));
             const auto& arrowPath = (bendUp ? m_arrowUp : m_arrowDown);
 
-            if (layoutMode) {
-                bRect.unite(path.boundingRect());
-                bRect.unite(arrowPath.translated(dest).boundingRect());
-            } else {
-                painter->setBrush(BrushStyle::NoBrush);
-                painter->drawPath(path);
-                painter->setBrush(curColor());
-                painter->drawPolygon(arrowPath.translated(dest));
-            }
+            painter->setBrush(BrushStyle::NoBrush);
+            painter->drawPath(path);
+            painter->setBrush(curColor());
+            painter->drawPolygon(arrowPath.translated(dest));
 
             if (bendUp && !isTextDrawn) {
-                if (layoutMode) {
-                    mu::draw::FontMetrics fm(font(sp));
-                    bRect.unite(textBoundingRect(fm, dest - PointF(sp, 0), text));
-                    /// TODO: remove after fixing bRect
-                    bRect.setHeight(bRect.height() + sp);
-                    bRect.setY(bRect.y() - sp);
-                } else {
-                    /// TODO: remove subtraction after fixing bRect
-                    drawText(painter, dest - PointF(0, sp * 0.5), text);
-                }
+                /// TODO: remove subtraction after fixing bRect
+                drawText(painter, dest - PointF(0, sp * 0.5), text);
                 isTextDrawn = true;
             }
 
@@ -319,17 +281,73 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
 
         case BendSegmentType::LINE_STROKED:
         {
-            if (layoutMode) {
-                bRect.unite(RectF(src.x(), src.y(), dest.x() - src.x(), dest.y() - src.y()));
-            } else {
-                PainterPath path;
-                path.moveTo(src + PointF(m_bendArrowWidth, 0));
-                path.lineTo(dest);
-                Pen p(painter->pen());
-                p.setStyle(PenStyle::DashLine);
-                painter->strokePath(path, p);
+            PainterPath path;
+            path.moveTo(src + PointF(m_bendArrowWidth, 0));
+            path.lineTo(dest);
+            Pen p(painter->pen());
+            p.setStyle(PenStyle::DashLine);
+            painter->strokePath(path, p);
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
+}
+
+mu::RectF StretchedBend::calculateBoundingRect() const
+{
+    double sp = spatium();
+    RectF bRect;
+    bool isTextDrawn = false;
+
+    for (const BendSegment& bendSegment : m_bendSegments) {
+        const PointF& src = bendSegment.src;
+        const PointF& dest = bendSegment.dest;
+        const String& text = String::fromUtf8(label[bendSegment.tone]);
+
+        switch (bendSegment.type) {
+        case BendSegmentType::LINE_UP:
+        {
+            bRect.unite(RectF(src.x(), src.y(), dest.x() - src.x(), dest.y() - src.y()));
+            bRect.unite(m_arrowUp.translated(dest).boundingRect());
+
+            mu::draw::FontMetrics fm(font(sp));
+            bRect.unite(textBoundingRect(fm, dest, text));
+            /// TODO: remove after fixing bRect
+            bRect.setHeight(bRect.height() + sp);
+            bRect.setY(bRect.y() - sp);
+            break;
+        }
+
+        case BendSegmentType::CURVE_UP:
+        case BendSegmentType::CURVE_DOWN:
+        {
+            bool bendUp = (bendSegment.type == BendSegmentType::CURVE_UP);
+            double endY = dest.y() + m_bendArrowWidth * (bendUp ? 1 : -1);
+
+            PainterPath path = bendCurveFromPoints(src, PointF(dest.x(), endY));
+            const auto& arrowPath = (bendUp ? m_arrowUp : m_arrowDown);
+
+            bRect.unite(path.boundingRect());
+            bRect.unite(arrowPath.translated(dest).boundingRect());
+
+            if (bendUp && !isTextDrawn) {
+                mu::draw::FontMetrics fm(font(sp));
+                bRect.unite(textBoundingRect(fm, dest - PointF(sp, 0), text));
+                /// TODO: remove after fixing bRect
+                bRect.setHeight(bRect.height() + sp);
+                bRect.setY(bRect.y() - sp);
+                isTextDrawn = true;
             }
 
+            break;
+        }
+
+        case BendSegmentType::LINE_STROKED:
+        {
+            bRect.unite(RectF(src.x(), src.y(), dest.x() - src.x(), dest.y() - src.y()));
             break;
         }
 
@@ -338,9 +356,10 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
         }
     }
 
-    if (layoutMode) {
-        setbbox(bRect);
-    }
+    double lw = lineWidth();
+    bRect.adjust(-lw, -lw, lw, lw);
+
+    return bRect;
 }
 
 //---------------------------------------------------------
