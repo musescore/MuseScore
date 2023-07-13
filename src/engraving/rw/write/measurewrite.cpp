@@ -41,9 +41,9 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
         const int mno = measure->no() + 1;
         xml.comment(String(u"Measure %1").arg(mno));
     }
-    if (measure->_len != measure->m_timesig) {
+    if (measure->m_len != measure->m_timesig) {
         // this is an irregular measure
-        xml.startElement(measure, { { "len", measure->_len.toString() } });
+        xml.startElement(measure, { { "len", measure->m_len.toString() } });
     } else {
         xml.startElement(measure);
     }
