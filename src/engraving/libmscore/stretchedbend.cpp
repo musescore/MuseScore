@@ -237,7 +237,6 @@ void StretchedBend::draw(mu::draw::Painter* painter) const
 
     setupPainter(painter);
     double sp = spatium();
-    RectF bRect;
     bool isTextDrawn = false;
 
     for (const BendSegment& bendSegment : m_bendSegments) {

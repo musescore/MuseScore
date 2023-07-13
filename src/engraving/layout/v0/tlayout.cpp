@@ -4306,12 +4306,12 @@ void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
 
 void TLayout::doLayout(StretchedBend* item, LayoutContext&, bool stretchedMode)
 {
-    item->m_stretchedMode = stretchedMode;
+    item->setStretchedMode(stretchedMode);
 
     Note* note = toNote(item->explicitParent());
-    item->m_notePos   = note->pos();
-    item->m_noteWidth = note->width();
-    item->m_noteHeight = note->height();
+    item->setNotePos(note->pos());
+    item->setNoteWidth(note->width());
+    item->setNoteHeight(note->height());
 
     item->fillArrows();
     item->fillSegments();
