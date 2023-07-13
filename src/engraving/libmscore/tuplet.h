@@ -29,10 +29,6 @@
 #include "property.h"
 #include "types.h"
 
-namespace mu::engraving::layout::v0 {
-class TupletLayout;
-}
-
 namespace mu::engraving {
 class Text;
 class Spanner;
@@ -91,7 +87,7 @@ public:
     Millimetre bracketWidth() const { return m_bracketWidth; }
     void setBracketWidth(Millimetre s) { m_bracketWidth = s; }
 
-    Fraction ratio() const { return m_ratio; }
+    const Fraction& ratio() const { return m_ratio; }
     void setRatio(const Fraction& r) { m_ratio = r; }
 
     void setUserPoint1(PointF p) { m_userP1 = p; }
@@ -120,13 +116,25 @@ public:
     void setDirection(DirectionV d) { m_direction = d; }
     DirectionV direction() const { return m_direction; }
     bool isUp() const { return m_isUp; }
+    void setIsUp(bool val) { m_isUp = val; }
     bool isSmall() const { return m_isSmall; }
+    void setIsSmall(bool val) { m_isSmall = val; }
     Fraction tick() const override { return m_tick; }
     Fraction rtick() const override;
     void setTick(const Fraction& v) { m_tick = v; }
     Fraction elementsDuration();
     void sortElements();
     bool cross() const;
+
+    const mu::PointF& p1() const { return m_p1; }
+    mu::PointF& p1() { return m_p1; }
+    void setP1(const mu::PointF& p) { m_p1 = p; }
+    const mu::PointF& p2() const { return m_p2; }
+    mu::PointF& p2() { return m_p2; }
+    void setP2(const mu::PointF& p) { m_p2 = p; }
+
+    const mu::PointF& userP1() const { return m_userP1; }
+    const mu::PointF& userP2() const { return m_userP2; }
 
     void setVisible(bool f) override;
 
@@ -145,19 +153,20 @@ public:
     void sanitizeTuplet();
     void addMissingElements();
 
+    bool calcHasBracket(const DurationElement* cr1, const DurationElement* cr2) const;
+
     static int computeTupletDenominator(int numerator, Fraction totalDuration);
 
+    mu::PointF bracketL[4];
+    mu::PointF bracketR[3];
 private:
 
-    friend class layout::v0::TupletLayout;
     friend class DurationElement;
 
     void addDurationElement(DurationElement* de);
     void removeDurationElement(DurationElement* de);
 
     Fraction addMissingElement(const Fraction& startTick, const Fraction& endTick);
-
-    bool calcHasBracket(const DurationElement* cr1, const DurationElement* cr2) const;
 
     // All DurationElements where `tuplet()` returns this tuplet
     std::set<DurationElement*> m_allElements;
@@ -182,12 +191,10 @@ private:
     Fraction m_tick;
 
     mu::PointF m_p1, m_p2;
-    mu::PointF m_userP1, m_userP2;         // user offset
-    mutable int m_id;          // used during read/write
+    mu::PointF m_userP1, m_userP2;      // user offset
+    mutable int m_id;                   // used during read/write
 
     Text* m_number = nullptr;
-    mu::PointF m_bracketL[4];
-    mu::PointF m_bracketR[3];
 };
 } // namespace mu::engraving
 #endif
