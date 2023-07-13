@@ -71,6 +71,7 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/capo.cpp
     ${CMAKE_CURRENT_LIST_DIR}/capo.h
     ${CMAKE_CURRENT_LIST_DIR}/cmd.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/cmd.h
     ${CMAKE_CURRENT_LIST_DIR}/connector.cpp
     ${CMAKE_CURRENT_LIST_DIR}/connector.h
     ${CMAKE_CURRENT_LIST_DIR}/deadslapped.cpp

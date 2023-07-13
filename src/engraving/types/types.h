@@ -1030,6 +1030,33 @@ struct PartAudioSettingsCompat {
 struct SettingsCompat {
     std::map<ID /*partid*/, PartAudioSettingsCompat> audioSettings;
 };
+
+//---------------------------------------------------------
+//   UpdateMode
+//    There is an implied order from least invasive update
+//    to most invasive update. LayoutAll is fallback and
+//    recreates all.
+//---------------------------------------------------------
+
+enum class UpdateMode {
+    DoNothing,
+    Update,             // do screen refresh of RectF "refresh"
+    UpdateAll,          // do complete screen refresh
+    Layout,             // do partial layout for tick range
+};
+
+//---------------------------------------------------------
+//   LayoutFlag bits
+//---------------------------------------------------------
+
+enum class LayoutFlag : char {
+    NO_FLAGS       = 0,
+    FIX_PITCH_VELO = 1,
+    PLAY_EVENTS    = 2,
+    REBUILD_MIDI_MAPPING = 4,
+};
+
+typedef Flags<LayoutFlag> LayoutFlags;
 } // mu::engraving
 
 template<>
