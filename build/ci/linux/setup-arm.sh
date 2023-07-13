@@ -131,9 +131,9 @@ DEBIAN_FRONTEND="noninteractive" TZ="Europe/London" apt-get install -y --no-inst
   "${apt_packages_runtime[@]}" \
   "${apt_packages_ffmpeg[@]}"
 
-# Add additional ppa (Qt 5.15.2 and CMake)
-wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null
-echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ bionic main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null
+# Add additional ppas (Qt 5.15.2 and Cmake)
+# Poor naming of the cmake ppa, this ppa has bionic/focal/jammy dists
+add-apt-repository --yes ppa:theofficialgman/cmake-bionic
 add-apt-repository --yes ppa:theofficialgman/opt-qt-5.15.2-bionic-arm
 apt-get update
 
