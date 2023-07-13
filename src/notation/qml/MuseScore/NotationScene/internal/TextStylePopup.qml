@@ -303,7 +303,7 @@ StyledPopupView {
                 FlatButton {
                     width: 120
 
-                    text: qsTrc("inspector", "Text Style")
+                    text: qsTrc("inspector", "Text style")
                 }
 
                 FlatButton {
