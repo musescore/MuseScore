@@ -227,6 +227,7 @@ private:
     size_t m_loadingTrackCount = 0;
 
     bool m_isExportingAudio = false;
+    bool m_isRangeSelection = false;
 };
 }
 

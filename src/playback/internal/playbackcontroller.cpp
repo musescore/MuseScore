@@ -390,13 +390,11 @@ void PlaybackController::onNotationChanged()
 
 void PlaybackController::onSelectionChanged()
 {
-    static bool isRangeSelection = false;
-
     INotationSelectionPtr selection = this->selection();
-    bool selectionTypeChanged = isRangeSelection && !selection->isRange();
-    isRangeSelection = selection->isRange();
+    bool selectionTypeChanged = m_isRangeSelection && !selection->isRange();
+    m_isRangeSelection = selection->isRange();
 
-    if (!isRangeSelection) {
+    if (!m_isRangeSelection) {
         if (selectionTypeChanged) {
             updateLoop();
             updateMuteStates();
@@ -730,6 +728,8 @@ void PlaybackController::resetCurrentSequence()
 
     m_instrumentTrackIdMap.clear();
     m_auxTrackIdMap.clear();
+
+    m_isRangeSelection = false;
 
     m_currentSequenceId = -1;
     m_currentSequenceIdChanged.notify();
