@@ -1187,9 +1187,10 @@ Fraction System::minSysTicks() const
 double System::squeezableSpace() const
 {
     double squeezableSpace = 0;
-    for (auto m : measures()) {
-        if (m->isMeasure()) {
-            squeezableSpace += toMeasure(m)->squeezableSpace();
+    for (auto mb : measures()) {
+        if (mb->isMeasure()) {
+            const Measure* m = toMeasure(mb);
+            squeezableSpace += (m->isWidthLocked() ? 0.0 : m->squeezableSpace());
         }
     }
     return squeezableSpace;

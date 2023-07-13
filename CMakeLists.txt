@@ -213,6 +213,6 @@ if (OS_IS_WIN)
 endif(OS_IS_WIN)
 
 ###########################################
-# Add VTest target
+# Add VTest
 ###########################################
 add_subdirectory(vtest)
