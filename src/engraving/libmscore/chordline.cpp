@@ -254,7 +254,10 @@ static Note::SlideType slideType(ChordLineType type)
 void ChordLine::setNote(Note* note)
 {
     m_note = note;
-    note->attachSlide(slideType(m_chordLineType));
+
+    if (note) {
+        note->attachSlide(slideType(m_chordLineType));
+    }
 }
 
 //---------------------------------------------------------
