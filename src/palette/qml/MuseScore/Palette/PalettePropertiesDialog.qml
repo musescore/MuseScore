@@ -114,11 +114,7 @@ StyledDialogView {
                         minValue: step
 
                         onValueEdited: function(newValue) {
-                            if (newValue <= 0) {
-                                repeater.setValue(model.index, step)
-                            } else if (newValue != currentValue) {
-                                repeater.setValue(model.index, newValue)
-                            }
+                            repeater.setValue(model.index, newValue)
                         }
                     }
                 }
