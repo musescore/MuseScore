@@ -115,12 +115,12 @@ public:
     PointF chordBeamAnchor(const ChordRest* chord, layout::v0::BeamTremoloLayout::ChordBeamAnchorType anchorType) const;
     double chordBeamAnchorY(const ChordRest* chord) const;
 
-    const std::vector<ChordRest*>& elements() const { return _elements; }
-    void clear() { _elements.clear(); }
-    bool empty() const { return _elements.empty(); }
+    const std::vector<ChordRest*>& elements() const { return m_elements; }
+    void clear() { m_elements.clear(); }
+    bool empty() const { return m_elements.empty(); }
     bool contains(const ChordRest* cr) const
     {
-        return std::find(_elements.begin(), _elements.end(), cr) != _elements.end();
+        return std::find(m_elements.begin(), m_elements.end(), cr) != m_elements.end();
     }
 
     void add(EngravingItem*) override;
@@ -129,13 +129,13 @@ public:
     void move(const mu::PointF&) override;
     void draw(mu::draw::Painter*) const override;
 
-    bool up() const { return _up; }
-    void setUp(bool v) { _up = v; }
-    void setId(int i) const { _id = i; }
-    int id() const { return _id; }
+    bool up() const { return m_up; }
+    void setUp(bool v) { m_up = v; }
+    void setId(int i) const { m_id = i; }
+    int id() const { return m_id; }
 
     void setBeamDirection(DirectionV d);
-    DirectionV beamDirection() const { return _direction; }
+    DirectionV beamDirection() const { return m_direction; }
 
     void calcBeamBreaks(const ChordRest* chord, const ChordRest* prevChord, int level, bool& isBroken32, bool& isBroken64) const;
 
@@ -144,10 +144,10 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
-    double growLeft() const { return _grow1; }
-    double growRight() const { return _grow2; }
-    void setGrowLeft(double val) { _grow1 = val; }
-    void setGrowRight(double val) { _grow2 = val; }
+    double growLeft() const { return m_grow1; }
+    double growRight() const { return m_grow2; }
+    void setGrowLeft(double val) { m_grow1 = val; }
+    void setGrowRight(double val) { m_grow2 = val; }
 
     bool userModified() const;
     void setUserModified(bool val);
@@ -155,20 +155,20 @@ public:
     PairF beamPos() const;
     void setBeamPos(const PairF& bp);
 
-    double beamDist() const { return _beamDist; }
+    double beamDist() const { return m_beamDist; }
 
-    bool noSlope() const { return _noSlope; }
+    bool noSlope() const { return m_noSlope; }
     void setNoSlope(bool b);
 
-    inline const mu::PointF startAnchor() const { return _startAnchor; }
-    inline const mu::PointF endAnchor() const { return _endAnchor; }
+    inline const mu::PointF startAnchor() const { return m_startAnchor; }
+    inline const mu::PointF endAnchor() const { return m_endAnchor; }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    void setIsGrace(bool val) { _isGrace = val; }
-    bool cross() const { return _cross; }
+    void setIsGrace(bool val) { m_isGrace = val; }
+    bool cross() const { return m_cross; }
 
     void addSkyline(Skyline&);
 
@@ -190,10 +190,10 @@ public:
 
     Shape shape() const override;
 
-    const std::vector<TremAnchor>& tremAnchors() const { return _tremAnchors; }
+    const std::vector<TremAnchor>& tremAnchors() const { return m_tremAnchors; }
 
-    const std::vector<BeamFragment*>& beamFragments() const { return fragments; }
-    void addBeamFragment(BeamFragment* f) { fragments.push_back(f); }
+    const std::vector<BeamFragment*>& beamFragments() const { return m_fragments; }
+    void addBeamFragment(BeamFragment* f) { m_fragments.push_back(f); }
 
 private:
 
@@ -213,41 +213,41 @@ private:
     const Chord* findChordWithCustomStemDirection() const;
     void setTremAnchors();
 
-    std::vector<ChordRest*> _elements;          // must be sorted by tick
-    std::vector<BeamSegment*> _beamSegments;
-    DirectionV _direction    { DirectionV::AUTO };
+    std::vector<ChordRest*> m_elements;          // must be sorted by tick
+    std::vector<BeamSegment*> m_beamSegments;
+    DirectionV m_direction = DirectionV::AUTO;
 
-    bool _up                { true };
+    bool m_up = true;
 
-    bool _userModified[2]   { false };                // 0: auto/down  1: up
-    bool _isGrace           { false };
-    bool _cross             { false };
+    bool m_userModified[2]{ false };    // 0: auto/down  1: up
+    bool m_isGrace = false;
+    bool m_cross = false;
 
-    double _grow1            { 1.0f };                     // define "feather" beams
-    double _grow2            { 1.0f };
-    double _beamDist         { 0.0f };
-    int _beamSpacing        { 3 }; // how far apart beams are spaced in quarter spaces
-    double _beamWidth        { 0.0f }; // how wide each beam is
-    mu::PointF _startAnchor;
-    mu::PointF _endAnchor;
-    layout::v0::BeamTremoloLayout _layoutInfo;
+    double m_grow1 = 1.0;               // define "feather" beams
+    double m_grow2 = 1.0;
+    double m_beamDist = 0.0f;
+    int m_beamSpacing = 3;              // how far apart beams are spaced in quarter spaces
+    double m_beamWidth = 0.0;           // how wide each beam is
+    mu::PointF m_startAnchor;
+    mu::PointF m_endAnchor;
+    layout::v0::BeamTremoloLayout m_layoutInfo;
 
     // for tabs
-    bool _isBesideTabStaff  { false };
-    StaffType const* _tab         { nullptr };
+    bool m_isBesideTabStaff = false;
+    const StaffType* m_tab = nullptr;
 
-    std::vector<BeamFragment*> fragments;       // beam splits across systems
+    std::vector<BeamFragment*> m_fragments; // beam splits across systems
 
-    mutable int _id         { 0 };          // used in read()/write()
+    mutable int m_id = 0;                // used in read()/write()
 
-    int _minMove             { 0 };                // set in layout1()
-    int _maxMove             { 0 };
+    int m_minMove = 0;                   // set in layout1()
+    int m_maxMove = 0;
 
-    bool _noSlope = false;
-    double _slope             { 0.0 };
+    bool m_noSlope = false;
+    double m_slope = 0.0;
 
-    std::vector<int> _notes;
-    std::vector<TremAnchor> _tremAnchors;
+    std::vector<int> m_notes;
+    std::vector<TremAnchor> m_tremAnchors;
 };
 } // namespace mu::engraving
 #endif
