@@ -216,13 +216,12 @@ void updateTableForLyrics(std::string table)
 
 std::string braille_translate(const char* table_name, std::string txt)
 {
-    //cout << "braille_translate " << table_name << " " << txt << "\n";
-    uint8_t* outputbuf;
-    size_t outlen;
+    uint8_t* outputbuf = nullptr;
+    size_t outlen = 0;
     widechar inbuf[MAXSTRING];
     widechar transbuf[MAXSTRING];
-    int inlen;
-    int translen;
+    int inlen = 0;
+    int translen = 0;
 
     inlen = _lou_extParseChars(txt.c_str(), inbuf);
 
@@ -237,9 +236,13 @@ std::string braille_translate(const char* table_name, std::string txt)
     outputbuf = u16_to_u8(transbuf, translen, NULL, &outlen);
 #endif
 
+    if (!outputbuf) {
+        return std::string();
+    }
+
     std::string ret = std::string(outputbuf, outputbuf + outlen);
     free(outputbuf);
-    //cout << " " << ret << "\n";
+
     return ret;
 }
 
