@@ -31,6 +31,8 @@
 
 #include "style/style.h"
 
+#include "layout/v0/beamtremololayout.h"
+
 #include "beam.h"
 #include "chord.h"
 #include "stem.h"
@@ -105,98 +107,24 @@ double Tremolo::minHeight() const
     return (lines() - 1) * td + sw;
 }
 
-void Tremolo::createBeamSegments()
-{
-    // TODO: This should be a style setting, to replace tremoloStrokeLengthMultiplier
-    static constexpr double stemGapSp = 1.0;
-    const bool defaultStyle = (!customStyleApplicable()) || (m_style == TremoloStyle::DEFAULT);
-
-    DeleteAll(m_beamSegments);
-    m_beamSegments.clear();
-    if (!twoNotes()) {
-        return;
-    }
-    bool _isGrace = m_chord1->isGrace();
-    PointF startAnchor = m_layoutInfo.startAnchor() - PointF(0., pagePos().y());
-    PointF endAnchor = m_layoutInfo.endAnchor() - PointF(0., pagePos().y());
-
-    // inset trem from stems for default style
-    double slope = (endAnchor.y() - startAnchor.y()) / (endAnchor.x() - startAnchor.x());
-    double gapSp = stemGapSp;
-    if (defaultStyle || m_style == TremoloStyle::TRADITIONAL_ALTERNATE) {
-        // we can eat into the stemGapSp margin if the anchorpoints are sufficiently close together
-        double widthSp = (endAnchor.x() - startAnchor.x()) / spatium() - (stemGapSp * 2);
-        if (!RealIsEqualOrMore(widthSp, 0.6)) {
-            // tremolo beam is too short; we can eat into the gap spacing a little
-            gapSp = std::max(stemGapSp - ((0.6 - widthSp) * 0.5), 0.4);
-        }
-    } else {
-        gapSp = 0.0;
-    }
-    BeamSegment* mainStroke = new BeamSegment(this);
-    PointF xOffset = PointF(gapSp * spatium(), 0);
-    PointF yOffset = PointF(0, gapSp * spatium() * slope);
-    if (m_style == TremoloStyle::TRADITIONAL_ALTERNATE) {
-        mainStroke->line = LineF(startAnchor, endAnchor);
-        startAnchor += xOffset;
-        endAnchor -= xOffset;
-        startAnchor += yOffset;
-        endAnchor -= yOffset;
-    } else {
-        startAnchor += xOffset;
-        endAnchor -= xOffset;
-        startAnchor += yOffset;
-        endAnchor -= yOffset;
-        mainStroke->line = LineF(startAnchor, endAnchor);
-    }
-    mainStroke->level = 0;
-
-    m_beamSegments.push_back(mainStroke);
-    double bboxTop = m_up ? std::min(mainStroke->line.y1(), mainStroke->line.y2()) : std::max(mainStroke->line.y1(), mainStroke->line.y2());
-    double halfWidth = style().styleMM(Sid::beamWidth).val() / 2. * (m_up ? -1. : 1.);
-    RectF bbox = RectF(mainStroke->line.x1(), bboxTop + halfWidth, mainStroke->line.x2() - mainStroke->line.x1(),
-                       std::abs(mainStroke->line.y2() - mainStroke->line.y1()) - halfWidth * 2.);
-    PointF beamOffset = PointF(0., (m_up ? 1 : -1) * spatium() * (style().styleB(Sid::useWideBeams) ? 1. : 0.75));
-    beamOffset.setY(beamOffset.y() * mag() * (_isGrace ? style().styleD(Sid::graceNoteMag) : 1.));
-    for (int i = 1; i < lines(); ++i) {
-        BeamSegment* stroke = new BeamSegment(this);
-        stroke->level = i;
-        stroke->line = LineF(startAnchor + (beamOffset * (double)i), endAnchor + (beamOffset * (double)i));
-        m_beamSegments.push_back(stroke);
-        bbox.unite(bbox.translated(0., beamOffset.y() * (double)i));
-    }
-    setbbox(bbox);
-
-    // size stems properly
-    if (m_chord1->stem() && m_chord2->stem() && !(m_chord1->beam() && m_chord1->beam() == m_chord2->beam())) {
-        // we don't need to do anything if these chords are part of the same beam--their stems are taken care of
-        // by the beam layout
-        int beamSpacing = style().styleB(Sid::useWideBeams) ? 4 : 3;
-        for (ChordRest* cr : { m_chord1, m_chord2 }) {
-            Chord* chord = toChord(cr);
-            double addition = 0.0;
-            if (cr->up() != m_up && lines() > 1) {
-                // need to adjust further for beams on the opposite side
-                addition += (lines() - 1.) * beamSpacing / 4. * spatium() * mag();
-            }
-            // calling extendStem with addition 0.0 still sizes the stem to the manually adjusted height of the trem.
-            m_layoutInfo.extendStem(chord, addition);
-        }
-    }
-}
-
 //---------------------------------------------------------
 //   chordBeamAnchor
 //---------------------------------------------------------
 
-PointF Tremolo::chordBeamAnchor(const ChordRest* chord, layout::v0::BeamTremoloLayout::ChordBeamAnchorType anchorType) const
+PointF Tremolo::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const
 {
-    return m_layoutInfo.chordBeamAnchor(chord, anchorType);
+    IF_ASSERT_FAILED(layoutInfo) {
+        return PointF();
+    }
+    return layoutInfo->chordBeamAnchor(chord, anchorType);
 }
 
 double Tremolo::beamWidth() const
 {
-    return m_layoutInfo.beamWidth();
+    IF_ASSERT_FAILED(layoutInfo) {
+        return 0.0;
+    }
+    return layoutInfo->beamWidth();
 }
 
 //---------------------------------------------------------

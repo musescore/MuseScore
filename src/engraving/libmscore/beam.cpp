@@ -78,8 +78,8 @@ Beam::Beam(const Beam& b)
     m_up              = b.m_up;
     m_userModified[0] = b.m_userModified[0];
     m_userModified[1] = b.m_userModified[1];
-    m_grow1           = b.m_grow1;
-    m_grow2           = b.m_grow2;
+    m_growLeft           = b.m_growLeft;
+    m_growRight           = b.m_growRight;
     m_beamDist        = b.m_beamDist;
     for (const BeamFragment* f : b.m_fragments) {
         m_fragments.push_back(new BeamFragment(*f));
@@ -89,7 +89,7 @@ Beam::Beam(const Beam& b)
     m_isGrace          = b.m_isGrace;
     m_cross            = b.m_cross;
     m_slope            = b.m_slope;
-    m_layoutInfo       = b.m_layoutInfo;
+    layoutInfo       = b.layoutInfo;
 }
 
 //---------------------------------------------------------
@@ -258,58 +258,6 @@ void Beam::move(const PointF& offset)
     EngravingItem::move(offset);
     for (BeamSegment* bs : m_beamSegments) {
         bs->line.translate(offset);
-    }
-}
-
-PointF Beam::chordBeamAnchor(const ChordRest* chord, layout::v0::BeamTremoloLayout::ChordBeamAnchorType anchorType) const
-{
-    return m_layoutInfo.chordBeamAnchor(chord, anchorType);
-}
-
-double Beam::chordBeamAnchorY(const ChordRest* chord) const
-{
-    return m_layoutInfo.chordBeamAnchorY(chord);
-}
-
-void Beam::setTremAnchors()
-{
-    m_tremAnchors.clear();
-    for (ChordRest* cr : m_elements) {
-        if (!cr || !cr->isChord()) {
-            continue;
-        }
-        Chord* c = toChord(cr);
-        Tremolo* t = c ? c->tremolo() : nullptr;
-        if (t && t->twoNotes() && t->chord1() == c && t->chord2()->beam() == this) {
-            // there is an inset tremolo here!
-            // figure out up / down
-            bool tremUp = t->up();
-            int fragmentIndex = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
-            if (m_userModified[fragmentIndex]) {
-                tremUp = c->up();
-            } else if (m_cross && t->chord1()->staffMove() == t->chord2()->staffMove()) {
-                tremUp = t->chord1()->staffMove() == m_maxMove;
-            }
-            TremAnchor tremAnchor;
-            tremAnchor.chord1 = c;
-            int regularBeams = c->beams(); // non-tremolo strokes
-
-            // find the left-side anchor
-            double width = m_endAnchor.x() - m_startAnchor.x();
-            double height = m_endAnchor.y() - m_startAnchor.y();
-            double x = chordBeamAnchor(c, layout::v0::BeamTremoloLayout::ChordBeamAnchorType::Middle).x();
-            double proportionAlongX = (x - m_startAnchor.x()) / width;
-            double y = m_startAnchor.y() + (proportionAlongX * height);
-            y += regularBeams * (style().styleB(Sid::useWideBeams) ? 1.0 : 0.75) * spatium() * (tremUp ? 1. : -1.);
-            tremAnchor.y1 = y;
-            // find the right-side anchor
-            x = chordBeamAnchor(t->chord2(), layout::v0::BeamTremoloLayout::ChordBeamAnchorType::Middle).x();
-            proportionAlongX = (x - m_startAnchor.x()) / width;
-            y = m_startAnchor.y() + (proportionAlongX * height);
-            y += regularBeams * (style().styleB(Sid::useWideBeams) ? 1.0 : 0.75) * spatium() * (tremUp ? 1. : -1.);
-            tremAnchor.y2 = y;
-            m_tremAnchors.push_back(tremAnchor);
-        }
     }
 }
 
