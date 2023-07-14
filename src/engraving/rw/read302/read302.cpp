@@ -62,12 +62,12 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
-            score->_audio = new Audio;
-            read400::TRead::read(score->_audio, e, ctx);
+            score->m_audio = new Audio;
+            read400::TRead::read(score->m_audio, e, ctx);
         } else if (tag == "showOmr") {
             e.skipCurrentElement();
         } else if (tag == "playMode") {
-            score->_playMode = PlayMode(e.readInt());
+            score->m_playMode = PlayMode(e.readInt());
         } else if (tag == "LayerTag") {
             e.skipCurrentElement();
         } else if (tag == "Layer") {
@@ -75,21 +75,21 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "currentLayer") {
             e.skipCurrentElement();
         } else if (tag == "Synthesizer") {
-            score->_synthesizerState.read(e);
+            score->m_synthesizerState.read(e);
         } else if (tag == "page-offset") {
-            score->_pageNumberOffset = e.readInt();
+            score->m_pageNumberOffset = e.readInt();
         } else if (tag == "Division") {
-            score->_fileDivision = e.readInt();
+            score->m_fileDivision = e.readInt();
         } else if (tag == "showInvisible") {
-            score->_showInvisible = e.readInt();
+            score->m_showInvisible = e.readInt();
         } else if (tag == "showUnprintable") {
-            score->_showUnprintable = e.readInt();
+            score->m_showUnprintable = e.readInt();
         } else if (tag == "showFrames") {
-            score->_showFrames = e.readInt();
+            score->m_showFrames = e.readInt();
         } else if (tag == "showMargins") {
-            score->_showPageborders = e.readInt();
+            score->m_showPageborders = e.readInt();
         } else if (tag == "markIrregularMeasures") {
-            score->_markIrregularMeasures = e.readInt();
+            score->m_markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
             double sp = score->style().value(Sid::spatium).toReal();
 
@@ -215,7 +215,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->connectTies();
 
-    score->_fileDivision = Constants::DIVISION;
+    score->m_fileDivision = Constants::DIVISION;
 
     if (score->mscVersion() == 302) {
         // MuseScore 3.6.x scores had some wrong instrument IDs
@@ -235,7 +235,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->setUpTempoMap();
 
-    for (Part* p : score->_parts) {
+    for (Part* p : score->m_parts) {
         p->updateHarmonyChannels(false);
     }
 

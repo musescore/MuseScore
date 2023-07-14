@@ -2807,11 +2807,11 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         } else if (tag == "playMode") {
             masterScore->setPlayMode(PlayMode(e.readInt()));
         } else if (tag == "SyntiSettings") {
-            masterScore->_synthesizerState.read(e);
+            masterScore->m_synthesizerState.read(e);
         } else if (tag == "Spatium") {
             masterScore->style().setSpatium(e.readDouble() * DPMM);
         } else if (tag == "Division") {
-            masterScore->_fileDivision = e.readInt();
+            masterScore->m_fileDivision = e.readInt();
         } else if (tag == "showInvisible") {
             masterScore->setShowInvisible(e.readInt());
         } else if (tag == "showFrames") {
@@ -3078,7 +3078,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         }
     }
 
-    masterScore->_fileDivision = Constants::DIVISION;
+    masterScore->m_fileDivision = Constants::DIVISION;
 
     //
     //    sanity check for barLineSpan and update ottavas

@@ -280,7 +280,7 @@ public:
     mu::async::Channel<EngravingItem*> elementDestroyed();
 
     void rebuildBspTree();
-    bool noStaves() const { return _staves.empty(); }
+    bool noStaves() const { return m_staves.empty(); }
     void insertPart(Part*, size_t targetPartIdx);
     void appendPart(Part*);
     void removePart(Part*);
@@ -290,11 +290,11 @@ public:
     void removeStaff(Staff*);
     void addMeasure(MeasureBase*, MeasureBase*);
     void linkMeasures(Score* score);
-    void setResetAutoplace() { _resetAutoplace = true; }
-    void setResetDefaults() { _resetDefaults = true; }
+    void setResetAutoplace() { m_resetAutoplace = true; }
+    void setResetDefaults() { m_resetDefaults = true; }
 
-    Excerpt* excerpt() { return _excerpt; }
-    void setExcerpt(Excerpt* e) { _excerpt = e; }
+    Excerpt* excerpt() { return m_excerpt; }
+    void setExcerpt(Excerpt* e) { m_excerpt = e; }
 
     // methods for resetting elements for pre-4.0 score migration
     void resetAutoplace();
@@ -358,13 +358,13 @@ public:
     bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
     bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
-    const std::vector<Staff*>& staves() const { return _staves; }
-    size_t nstaves() const { return _staves.size(); }
-    size_t ntracks() const { return _staves.size() * VOICES; }
+    const std::vector<Staff*>& staves() const { return m_staves; }
+    size_t nstaves() const { return m_staves.size(); }
+    size_t ntracks() const { return m_staves.size() * VOICES; }
 
     staff_idx_t staffIdx(const Staff*) const;
     staff_idx_t staffIdx(const Part*) const;
-    Staff* staff(size_t n) const { return (n < _staves.size()) ? _staves.at(n) : nullptr; }
+    Staff* staff(size_t n) const { return (n < m_staves.size()) ? m_staves.at(n) : nullptr; }
     Staff* staffById(const ID& staffId) const;
     Part* partById(const ID& partId) const;
 
@@ -501,14 +501,14 @@ public:
 
     void cmdToggleAutoplace(bool all);
 
-    bool playNote() const { return _updateState._playNote; }
-    void setPlayNote(bool v) { _updateState._playNote = v; }
-    bool playChord() const { return _updateState._playChord; }
-    void setPlayChord(bool v) { _updateState._playChord = v; }
-    bool selectionEmpty() const { return _selection.staffStart() == _selection.staffEnd(); }
-    bool selectionChanged() const { return _updateState._selectionChanged; }
-    void setSelectionChanged(bool val) { _updateState._selectionChanged = val; }
-    void deleteLater(EngravingObject* e) { _updateState._deleteList.push_back(e); }
+    bool playNote() const { return m_updateState._playNote; }
+    void setPlayNote(bool v) { m_updateState._playNote = v; }
+    bool playChord() const { return m_updateState._playChord; }
+    void setPlayChord(bool v) { m_updateState._playChord = v; }
+    bool selectionEmpty() const { return m_selection.staffStart() == m_selection.staffEnd(); }
+    bool selectionChanged() const { return m_updateState._selectionChanged; }
+    void setSelectionChanged(bool val) { m_updateState._selectionChanged = val; }
+    void deleteLater(EngravingObject* e) { m_updateState._deleteList.push_back(e); }
     void deletePostponed();
 
     void changeSelectedNotesVoice(voice_idx_t);
@@ -525,18 +525,18 @@ public:
     void sortSystemObjects(std::vector<staff_idx_t>& dst);
     void sortStaves(std::vector<staff_idx_t>& dst);
 
-    bool isShowInvisible() const { return _showInvisible; }
-    bool showUnprintable() const { return _showUnprintable; }
-    bool showFrames() const { return _showFrames; }
-    bool showPageborders() const { return _showPageborders; }
-    bool markIrregularMeasures() const { return _markIrregularMeasures; }
-    bool showInstrumentNames() const { return _showInstrumentNames; }
+    bool isShowInvisible() const { return m_showInvisible; }
+    bool showUnprintable() const { return m_showUnprintable; }
+    bool showFrames() const { return m_showFrames; }
+    bool showPageborders() const { return m_showPageborders; }
+    bool markIrregularMeasures() const { return m_markIrregularMeasures; }
+    bool showInstrumentNames() const { return m_showInstrumentNames; }
     void setShowInvisible(bool v);
     void setShowUnprintable(bool v);
     void setShowFrames(bool v);
     void setShowPageborders(bool v);
     void setMarkIrregularMeasures(bool v);
-    void setShowInstrumentNames(bool v) { _showInstrumentNames = v; }
+    void setShowInstrumentNames(bool v) { m_showInstrumentNames = v; }
 
     void print(mu::draw::Painter* printer, int page);
     ChordRest* getSelectedChordRest() const;
@@ -550,12 +550,12 @@ public:
     static void collectMatch(void* data, EngravingItem* e);
     static void collectNoteMatch(void* data, EngravingItem* e);
     void deselect(EngravingItem* obj);
-    void deselectAll() { _selection.deselectAll(); }
-    void updateSelection() { _selection.update(); }
-    EngravingItem* getSelectedElement() const { return _selection.element(); }
-    const Selection& selection() const { return _selection; }
-    Selection& selection() { return _selection; }
-    SelectionFilter& selectionFilter() { return _selectionFilter; }
+    void deselectAll() { m_selection.deselectAll(); }
+    void updateSelection() { m_selection.update(); }
+    EngravingItem* getSelectedElement() const { return m_selection.element(); }
+    const Selection& selection() const { return m_selection; }
+    Selection& selection() { return m_selection; }
+    SelectionFilter& selectionFilter() { return m_selectionFilter; }
     void setSelection(const Selection& s);
 
     Fraction pos();
@@ -583,14 +583,14 @@ public:
     MeasureBase* getNextPrevSectionBreak(MeasureBase*, bool) const;
     EngravingItem* getScoreElementOfMeasureBase(MeasureBase*) const;
 
-    int fileDivision(int t) const { return static_cast<int>(((int64_t)t * Constants::DIVISION + _fileDivision / 2) / _fileDivision); }
-    void setFileDivision(int t) { _fileDivision = t; }
+    int fileDivision(int t) const { return static_cast<int>(((int64_t)t * Constants::DIVISION + m_fileDivision / 2) / m_fileDivision); }
+    void setFileDivision(int t) { m_fileDivision = t; }
 
     bool dirty() const;
-    bool savedCapture() const { return _savedCapture; }
-    void setSavedCapture(bool v) { _savedCapture = v; }
-    bool printing() const { return _printing; }
-    void setPrinting(bool val) { _printing = val; }
+    bool savedCapture() const { return m_savedCapture; }
+    void setSavedCapture(bool v) { m_savedCapture = v; }
+    bool printing() const { return m_printing; }
+    void setPrinting(bool val) { m_printing = val; }
     virtual bool playlistDirty() const;
     virtual void setPlaylistDirty();
 
@@ -604,9 +604,9 @@ public:
 
     Fraction nextSeg(const Fraction& tick, int track);
 
-    ChordList* chordList() { return &_chordList; }
-    const ChordList* chordList() const { return &_chordList; }
-    void checkChordList() { _chordList.checkChordList(style()); }
+    ChordList* chordList() { return &m_chordList; }
+    const ChordList* chordList() const { return &m_chordList; }
+    void checkChordList() { m_chordList.checkChordList(style()); }
 
     MStyle& style() { return m_style; }
     const MStyle& style() const { return m_style; }
@@ -640,9 +640,9 @@ public:
     bool usingNoteEntryMethod(NoteEntryMethod m) { return inputState().usingNoteEntryMethod(m); }
     Fraction inputPos() const;
     track_idx_t inputTrack() const { return inputState().track(); }
-    const InputState& inputState() const { return _is; }
-    InputState& inputState() { return _is; }
-    void setInputState(const InputState& st) { _is = st; }
+    const InputState& inputState() const { return m_is; }
+    InputState& inputState() { return m_is; }
+    void setInputState(const InputState& st) { m_is = st; }
     void setInputTrack(int t) { inputState().setTrack(t); }
 
     void spatiumChanged(double oldValue, double newValue);
@@ -657,8 +657,8 @@ public:
 
     BeatType tick2beatType(const Fraction& tick) const;
 
-    int mscVersion() const { return _mscVersion; }
-    void setMscVersion(int v) { _mscVersion = v; }
+    int mscVersion() const { return m_mscVersion; }
+    void setMscVersion(int v) { m_mscVersion = v; }
 
     void addLyrics(const Fraction& tick, staff_idx_t staffIdx, const String&);
 
@@ -720,15 +720,15 @@ public:
     void nextInputPos(ChordRest* cr, bool);
     void cmdMirrorNoteHead();
 
-    virtual size_t npages() const { return _pages.size(); }
-    virtual page_idx_t pageIdx(const Page* page) const { return mu::indexOf(_pages, page); }
-    virtual const std::vector<Page*>& pages() const { return _pages; }
-    virtual std::vector<Page*>& pages() { return _pages; }
+    virtual size_t npages() const { return m_pages.size(); }
+    virtual page_idx_t pageIdx(const Page* page) const { return mu::indexOf(m_pages, page); }
+    virtual const std::vector<Page*>& pages() const { return m_pages; }
+    virtual std::vector<Page*>& pages() { return m_pages; }
 
-    const std::vector<System*>& systems() const { return _systems; }
-    std::vector<System*>& systems() { return _systems; }
+    const std::vector<System*>& systems() const { return m_systems; }
+    std::vector<System*>& systems() { return m_systems; }
 
-    MeasureBaseList* measures() { return &_measures; }
+    MeasureBaseList* measures() { return &m_measures; }
     bool checkHasMeasures() const;
     MeasureBase* first() const;
     MeasureBase* firstMM() const;
@@ -750,7 +750,7 @@ public:
     void connectTies(bool silent = false);
 
     void scanElementsInRange(void* data, void (* func)(void*, EngravingItem*), bool all = true);
-    int fileDivision() const { return _fileDivision; }   ///< division of current loading *.msc file
+    int fileDivision() const { return m_fileDivision; }   ///< division of current loading *.msc file
     void splitStaff(staff_idx_t staffIdx, int splitPoint);
     Lyrics* addLyrics();
     FiguredBass* addFiguredBass();
@@ -770,17 +770,17 @@ public:
     void doLayout();
     void doLayoutRange(const Fraction& st, const Fraction& et);
 
-    SynthesizerState& synthesizerState() { return _synthesizerState; }
+    SynthesizerState& synthesizerState() { return m_synthesizerState; }
     void setSynthesizerState(const SynthesizerState& s);
 
     void updateHairpin(Hairpin*);         // add/modify hairpin to pitchOffset list
 
-    MasterScore* masterScore() const { return _masterScore; }
-    void setMasterScore(MasterScore* s) { _masterScore = s; }
+    MasterScore* masterScore() const { return m_masterScore; }
+    void setMasterScore(MasterScore* s) { m_masterScore = s; }
 
-    const std::map<String, String>& metaTags() const { return _metaTags; }
-    std::map<String, String>& metaTags() { return _metaTags; }
-    void setMetaTags(const std::map<String, String>& t) { _metaTags = t; }
+    const std::map<String, String>& metaTags() const { return m_metaTags; }
+    std::map<String, String>& metaTags() { return m_metaTags; }
+    void setMetaTags(const std::map<String, String>& t) { m_metaTags = t; }
 
     //@ returns as a string the metatag named 'tag'
     String metaTag(const String& tag) const;
@@ -791,17 +791,17 @@ public:
     void splitMeasure(Segment*);
     void cmdJoinMeasure(Measure*, Measure*);
 
-    int pageNumberOffset() const { return _pageNumberOffset; }
-    void setPageNumberOffset(int v) { _pageNumberOffset = v; }
+    int pageNumberOffset() const { return m_pageNumberOffset; }
+    void setPageNumberOffset(int v) { m_pageNumberOffset = v; }
 
-    String mscoreVersion() const { return _mscoreVersion; }
-    int mscoreRevision() const { return _mscoreRevision; }
-    void setMscoreVersion(const String& val) { _mscoreVersion = val; }
-    void setMscoreRevision(int val) { _mscoreRevision = val; }
+    String mscoreVersion() const { return m_mscoreVersion; }
+    int mscoreRevision() const { return m_mscoreRevision; }
+    void setMscoreVersion(const String& val) { m_mscoreVersion = val; }
+    void setMscoreRevision(int val) { m_mscoreRevision = val; }
 
-    void addViewer(MuseScoreView* v) { viewer.push_back(v); }
-    void removeViewer(MuseScoreView* v) { viewer.remove(v); }
-    const std::list<MuseScoreView*>& getViewer() const { return viewer; }
+    void addViewer(MuseScoreView* v) { m_viewer.push_back(v); }
+    void removeViewer(MuseScoreView* v) { m_viewer.remove(v); }
+    const std::list<MuseScoreView*>& getViewer() const { return m_viewer; }
 
     //! NOTE Layout
     const LayoutOptions& layoutOptions() const { return m_layoutOptions; }
@@ -834,30 +834,30 @@ public:
     MeasureBase* insertMeasure(ElementType type, MeasureBase* beforeMeasure = nullptr,
                                const InsertMeasureOptions& options = InsertMeasureOptions());
 
-    Audio* audio() const { return _audio; }
-    void setAudio(Audio* a) { _audio = a; }
-    PlayMode playMode() const { return _playMode; }
-    void setPlayMode(PlayMode v) { _playMode = v; }
+    Audio* audio() const { return m_audio; }
+    void setAudio(Audio* a) { m_audio = a; }
+    PlayMode playMode() const { return m_playMode; }
+    void setPlayMode(PlayMode v) { m_playMode = v; }
 
     int linkId();
     void linkId(int);
-    int getLinkId() const { return _linkId; }
+    int getLinkId() const { return m_linkId; }
 
     std::list<Score*> scoreList();
 
     //@ appends to the score a number of measures
     void appendMeasures(int);
 
-    const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }
-    SpannerMap& spannerMap() { return _spanner; }
-    const SpannerMap& spannerMap() const { return _spanner; }
+    const std::multimap<int, Spanner*>& spanner() const { return m_spanner.map(); }
+    SpannerMap& spannerMap() { return m_spanner; }
+    const SpannerMap& spannerMap() const { return m_spanner; }
     bool isSpannerStartEnd(const Fraction& tick, track_idx_t track) const;
     void removeSpanner(Spanner*);
     void addSpanner(Spanner*);
     void cmdAddSpanner(Spanner* spanner, const mu::PointF& pos, bool systemStavesOnly = false);
     void cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment, Segment* endSegment);
     void checkSpanner(const Fraction& startTick, const Fraction& lastTick, bool removeOrphans = true);
-    const std::set<Spanner*>& unmanagedSpanners() const { return _unmanagedSpanner; }
+    const std::set<Spanner*>& unmanagedSpanners() const { return m_unmanagedSpanner; }
     void addUnmanagedSpanner(Spanner*);
     void removeUnmanagedSpanner(Spanner*);
 
@@ -936,25 +936,25 @@ public:
     void doTimeDelete(Segment* startSegment, Segment* endSegment);
     void doTimeDeleteForMeasure(Measure*, Segment*, const Fraction&);
 
-    Text* headerText(int index) const { return _headersText[index]; }
-    Text* footerText(int index) const { return _footersText[index]; }
-    void setHeaderText(Text* t, int index) { _headersText.at(index) = t; }
-    void setFooterText(Text* t, int index) { _footersText.at(index) = t; }
+    Text* headerText(int index) const { return m_headersText[index]; }
+    Text* footerText(int index) const { return m_footersText[index]; }
+    void setHeaderText(Text* t, int index) { m_headersText.at(index) = t; }
+    void setFooterText(Text* t, int index) { m_footersText.at(index) = t; }
 
     void cmdAddPitch(int note, bool addFlag, bool insert);
     void cmdToggleVisible();
     void forAllLyrics(std::function<void(Lyrics*)> f);
 
     void createPaddingTable();
-    const PaddingTable& paddingTable() const { return _paddingTable; }
+    const PaddingTable& paddingTable() const { return m_paddingTable; }
 
     void autoUpdateSpatium();
 
     friend class Chord;
 
 protected:
-    int _fileDivision;   ///< division of current loading *.msc file
-    SynthesizerState _synthesizerState;
+    int m_fileDivision = 0;   // division of current loading *.msc file
+    SynthesizerState m_synthesizerState;
 
     void createPlayEvents(Chord* chord, Chord* prevChord = nullptr);
     void createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& ontime, int& trailtime);
@@ -1022,63 +1022,64 @@ private:
 
     void updateStavesNumberForSystems();
 
-    int _linkId { 0 };
-    MasterScore* _masterScore { 0 };
-    std::list<MuseScoreView*> viewer;
-    Excerpt* _excerpt  { 0 };
+    int m_linkId = 0;
+    MasterScore* m_masterScore = nullptr;
+    std::list<MuseScoreView*> m_viewer;
+    Excerpt* m_excerpt = nullptr;
 
-    std::vector<Text*> _headersText;
-    std::vector<Text*> _footersText;
+    std::vector<Text*> m_headersText;
+    std::vector<Text*> m_footersText;
 
-    String _mscoreVersion;
-    int _mscoreRevision;
+    String m_mscoreVersion;
+    int m_mscoreRevision = 0;
 
     std::shared_ptr<IEngravingFont> m_engravingFont = nullptr;
-    int _pageNumberOffset { 0 };          ///< Offset for page numbers.
 
-    UpdateState _updateState;
+    int m_pageNumberOffset = 0;          // Offset for page numbers.
 
-    MeasureBaseList _measures;            // here are the notes
-    std::vector<Part*> _parts;
-    std::vector<Staff*> _staves;
+    UpdateState m_updateState;
+
+    MeasureBaseList m_measures;            // here are the notes
+    std::vector<Part*> m_parts;
+    std::vector<Staff*> m_staves;
     std::vector<Staff*> m_systemObjectStaves;
 
-    SpannerMap _spanner;
-    std::set<Spanner*> _unmanagedSpanner;
+    SpannerMap m_spanner;
+    std::set<Spanner*> m_unmanagedSpanner;
 
     //
     // objects generated by layout:
     //
-    std::vector<Page*> _pages;            // pages are build from systems
-    std::vector<System*> _systems;        // measures are accumulated to systems
+    std::vector<Page*> m_pages;            // pages are build from systems
+    std::vector<System*> m_systems;        // measures are accumulated to systems
 
-    InputState _is;
+    InputState m_is;
     MStyle m_style;
-    ChordList _chordList;
+    ChordList m_chordList;
 
-    bool _showInvisible         { true };
-    bool _showUnprintable       { true };
-    bool _showFrames            { true };
-    bool _showPageborders       { false };
-    bool _markIrregularMeasures { true };
-    bool _showInstrumentNames   { true };
-    bool _printing              { false };        ///< True if we are drawing to a printer
-    bool _savedCapture          { false };        ///< True if we saved an image capture
+    bool m_showInvisible = true;
+    bool m_showUnprintable = true;
+    bool m_showFrames = true;
+    bool m_showPageborders = false;
+    bool m_markIrregularMeasures = true;
+    bool m_showInstrumentNames = true;
+    bool m_printing = false;                // True if we are drawing to a printer
+    bool m_savedCapture = false;            // True if we saved an image capture
 
-    ScoreOrder _scoreOrder;                     ///< used for score ordering
-    bool _resetAutoplace = false;
-    bool _resetDefaults = false;
-    int _mscVersion = Constants::MSC_VERSION;     ///< version of current loading *.msc file
+    ScoreOrder m_scoreOrder;                 // used for score ordering
+    bool m_resetAutoplace = false;
+    bool m_resetDefaults = false;
+    int m_mscVersion = Constants::MSC_VERSION;     // version of current loading *.msc file
 
-    bool _isOpen { false };
-    bool _needSetUpTempoMap { true };
+    bool m_isOpen = false;
+    bool m_needSetUpTempoMap = true;
 
-    std::map<String, String> _metaTags;
+    std::map<String, String> m_metaTags;
 
-    Selection _selection;
-    SelectionFilter _selectionFilter;
-    Audio* _audio { nullptr };
-    PlayMode _playMode { PlayMode::SYNTHESIZER };
+    Selection m_selection;
+    SelectionFilter m_selectionFilter;
+    Audio* m_audio = nullptr;
+    PlayMode m_playMode = PlayMode::SYNTHESIZER;
 
     RootItem* m_rootItem = nullptr;
     LayoutOptions m_layoutOptions;
@@ -1089,10 +1090,10 @@ private:
 
     mu::async::Channel<POS, unsigned> m_posChanged;
 
-    PaddingTable _paddingTable;
-    double _minimumPaddingUnit = 0.0;
+    PaddingTable m_paddingTable;
+    double m_minimumPaddingUnit = 0.0;
 
-    bool _updatesLocked = false;
+    bool m_updatesLocked = false;
 };
 
 static inline Score* toScore(EngravingObject* e)

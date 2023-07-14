@@ -340,8 +340,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
         }
     }
 
-    if (_selection.isList()) {
-        for (EngravingItem* e : _selection.uniqueElements()) {
+    if (m_selection.isList()) {
+        for (EngravingItem* e : m_selection.uniqueElements()) {
             if (!e->staff() || e->staff()->staffType(e->tick())->group() == StaffGroup::PERCUSSION) {
                 continue;
             }
@@ -403,7 +403,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
     //--------------------------
 
     std::list<Staff*> sl;
-    for (staff_idx_t staffIdx = _selection.staffStart(); staffIdx < _selection.staffEnd(); ++staffIdx) {
+    for (staff_idx_t staffIdx = m_selection.staffStart(); staffIdx < m_selection.staffEnd(); ++staffIdx) {
         Staff* s = staff(staffIdx);
         if (s->staffType(Fraction(0, 1))->group() == StaffGroup::PERCUSSION) {        // ignore percussion staff
             continue;
@@ -433,7 +433,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
         }
     }
 
-    Segment* s1 = _selection.startSegment();
+    Segment* s1 = m_selection.startSegment();
     if (!s1) {
         return result;
     }
@@ -447,7 +447,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
     if (s1->rtick().isZero()) {
         s1 = s1->measure()->first();
     }
-    Segment* s2 = _selection.endSegment();
+    Segment* s2 = m_selection.endSegment();
     for (Segment* segment = s1; segment && segment != s2; segment = segment->next1()) {
         if (!segment->enabled()) {
             continue;

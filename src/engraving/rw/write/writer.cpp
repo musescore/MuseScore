@@ -62,9 +62,9 @@ bool Writer::writeScore(Score* score, io::IODevice* device, bool onlySelection, 
 
     if (!onlySelection) {
         //update version values for i.e. plugin access
-        score->_mscoreVersion = String::fromAscii(MUSESCORE_VERSION);
-        score->_mscoreRevision = AsciiStringView(MUSESCORE_REVISION).toInt(nullptr, 16);
-        score->_mscVersion = Constants::MSC_VERSION;
+        score->m_mscoreVersion = String::fromAscii(MUSESCORE_VERSION);
+        score->m_mscoreRevision = AsciiStringView(MUSESCORE_REVISION).toInt(nullptr, 16);
+        score->m_mscVersion = Constants::MSC_VERSION;
     }
 
     if (inout) {
@@ -83,7 +83,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
     std::list<Part*> hiddenParts;
     bool unhide = false;
     if (score->style().styleB(Sid::createMultiMeasureRests)) {
-        for (Part* part : score->_parts) {
+        for (Part* part : score->m_parts) {
             if (!part->show()) {
                 if (!unhide) {
                     score->startCmd();
@@ -124,13 +124,13 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
         xml.tag("layoutMode", "system");
     }
 
-    if (score->_audio && ctx.isMsczMode()) {
-        xml.tag("playMode", int(score->_playMode));
-        TWrite::write(score->_audio, xml, ctx);
+    if (score->m_audio && ctx.isMsczMode()) {
+        xml.tag("playMode", int(score->m_playMode));
+        TWrite::write(score->m_audio, xml, ctx);
     }
 
     if (score->isMaster() && !MScore::testMode) {
-        score->_synthesizerState.write(xml);
+        score->m_synthesizerState.write(xml);
     }
 
     if (score->pageNumberOffset()) {
@@ -141,25 +141,25 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
 
     hook.onWriteStyle302(score, xml);
 
-    xml.tag("showInvisible", score->_showInvisible);
-    xml.tag("showUnprintable", score->_showUnprintable);
-    xml.tag("showFrames", score->_showFrames);
-    xml.tag("showMargins", score->_showPageborders);
-    xml.tag("markIrregularMeasures", score->_markIrregularMeasures, true);
+    xml.tag("showInvisible", score->m_showInvisible);
+    xml.tag("showUnprintable", score->m_showUnprintable);
+    xml.tag("showFrames", score->m_showFrames);
+    xml.tag("showMargins", score->m_showPageborders);
+    xml.tag("markIrregularMeasures", score->m_markIrregularMeasures, true);
 
-    if (score->_isOpen) {
-        xml.tag("open", score->_isOpen);
+    if (score->m_isOpen) {
+        xml.tag("open", score->m_isOpen);
     }
 
-    for (const auto& t : score->_metaTags) {
+    for (const auto& t : score->m_metaTags) {
         // do not output "platform" and "creationDate" in test and save template mode
         if ((!MScore::testMode && !MScore::saveTemplateMode) || (t.first != "platform" && t.first != "creationDate")) {
             xml.tag("metaTag", { { "name", t.first.toXmlEscaped() } }, t.second);
         }
     }
 
-    if (score->_scoreOrder.isValid()) {
-        ScoreOrder order = score->_scoreOrder;
+    if (score->m_scoreOrder.isValid()) {
+        ScoreOrder order = score->m_scoreOrder;
         order.updateInstruments(score);
         order.write(xml);
     }
@@ -197,8 +197,8 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
     MeasureBase* measureEnd;
 
     if (selectionOnly) {
-        staffStart   = score->_selection.staffStart();
-        staffEnd     = score->_selection.staffEnd();
+        staffStart   = score->m_selection.staffStart();
+        staffEnd     = score->m_selection.staffEnd();
         // make sure we select full parts
         Staff* sStaff = score->staff(staffStart);
         Part* sPart = sStaff->part();
@@ -206,12 +206,12 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
         Part* ePart = eStaff->part();
         staffStart = score->staffIdx(sPart);
         staffEnd = score->staffIdx(ePart) + ePart->nstaves();
-        measureStart = score->_selection.startSegment()->measure();
+        measureStart = score->m_selection.startSegment()->measure();
         if (measureStart->isMeasure() && toMeasure(measureStart)->isMMRest()) {
             measureStart = toMeasure(measureStart)->mmRestFirst();
         }
-        if (score->_selection.endSegment()) {
-            measureEnd   = score->_selection.endSegment()->measure()->next();
+        if (score->m_selection.endSegment()) {
+            measureEnd   = score->m_selection.endSegment()->measure()->next();
         } else {
             measureEnd   = 0;
         }
@@ -224,7 +224,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
 
     // Let's decide: write midi mapping to a file or not
     score->masterScore()->checkMidiMapping();
-    for (const Part* part : score->_parts) {
+    for (const Part* part : score->m_parts) {
         if (!selectionOnly || ((score->staffIdx(part) >= staffStart) && (staffEnd >= score->staffIdx(part) + part->nstaves()))) {
             TWrite::write(part, xml, ctx);
         }

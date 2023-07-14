@@ -412,7 +412,7 @@ void CmdState::dump()
 
 void Score::update(bool resetCmdState, bool layoutAllParts)
 {
-    if (_updatesLocked) {
+    if (m_updatesLocked) {
         return;
     }
 
@@ -435,9 +435,9 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
         }
     }
 
-    if (_needSetUpTempoMap) {
+    if (m_needSetUpTempoMap) {
         setUpTempoMap();
-        _needSetUpTempoMap = false;
+        m_needSetUpTempoMap = false;
     }
 
     {
@@ -445,18 +445,18 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
         CmdState& cs = ms->cmdState();
         if (updateAll || cs.updateAll()) {
             for (Score* s : scoreList()) {
-                for (MuseScoreView* v : s->viewer) {
+                for (MuseScoreView* v : s->m_viewer) {
                     v->updateAll();
                 }
             }
         } else if (cs.updateRange()) {
             // updateRange updates only current score
             double d = style().spatium() * .5;
-            _updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
-            for (MuseScoreView* v : viewer) {
-                v->dataChanged(_updateState.refresh);
+            m_updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
+            for (MuseScoreView* v : m_viewer) {
+                v->dataChanged(m_updateState.refresh);
             }
-            _updateState.refresh = RectF();
+            m_updateState.refresh = RectF();
         }
         const InputState& is = inputState();
         if (is.noteEntryMode() && is.segment()) {
@@ -470,14 +470,14 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
         }
     }
 
-    if (_selection.isRange() && !_selection.isLocked()) {
-        _selection.updateSelectedElements();
+    if (m_selection.isRange() && !m_selection.isLocked()) {
+        m_selection.updateSelectedElements();
     }
 }
 
 void Score::lockUpdates(bool locked)
 {
-    _updatesLocked = locked;
+    m_updatesLocked = locked;
 }
 
 //---------------------------------------------------------
@@ -486,7 +486,7 @@ void Score::lockUpdates(bool locked)
 
 void Score::deletePostponed()
 {
-    for (EngravingObject* e : _updateState._deleteList) {
+    for (EngravingObject* e : m_updateState._deleteList) {
         if (e->isSystem()) {
             System* s = toSystem(e);
             std::list<SpannerSegment*> spanners = s->spannerSegments();
@@ -497,8 +497,8 @@ void Score::deletePostponed()
             }
         }
     }
-    DeleteAll(_updateState._deleteList);
-    _updateState._deleteList.clear();
+    DeleteAll(m_updateState._deleteList);
+    m_updateState._deleteList.clear();
 }
 
 //---------------------------------------------------------
@@ -645,8 +645,8 @@ void Score::expandVoice(Segment* s, track_idx_t track)
 
 void Score::expandVoice()
 {
-    Segment* s = _is.segment();
-    track_idx_t track = _is.track();
+    Segment* s = m_is.segment();
+    track_idx_t track = m_is.track();
     expandVoice(s, track);
 }
 
@@ -689,7 +689,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
         int npitch;
         int ntpc1;
         int ntpc2;
-        bool accidental = _is.noteEntryMode() && _is.accidentalType() != AccidentalType::NONE;
+        bool accidental = m_is.noteEntryMode() && m_is.accidentalType() != AccidentalType::NONE;
         bool forceAccidental = false;
         if (abs(valTmp) != 7 || accidental) {
             int line      = on->line() - valTmp;
@@ -699,7 +699,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
             Key key       = estaff->key(tick);
             int ntpc;
             if (accidental) {
-                AccidentalVal acci = Accidental::subtype2value(_is.accidentalType());
+                AccidentalVal acci = Accidental::subtype2value(m_is.accidentalType());
                 int step = absStep(line, clef);
                 int octave = step / 7;
                 npitch = step2pitch(step) + octave * 12 + int(acci);
@@ -743,7 +743,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
         undoAddElement(note);
         if (forceAccidental) {
             Accidental* a = Factory::createAccidental(note);
-            a->setAccidentalType(_is.accidentalType());
+            a->setAccidentalType(m_is.accidentalType());
             a->setRole(AccidentalRole::USER);
             a->setParent(note);
             undoAddElement(a);
@@ -772,11 +772,11 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
             select(note, SelectType::SINGLE, 0);
         }
     }
-    if (_is.noteEntryMode()) {
-        _is.setAccidentalType(AccidentalType::NONE);
+    if (m_is.noteEntryMode()) {
+        m_is.setAccidentalType(AccidentalType::NONE);
     }
     if (!shouldSelectFirstNote) {
-        _is.moveToNextInputPos();
+        m_is.moveToNextInputPos();
     }
 }
 
@@ -884,7 +884,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
                             bool forceAccidental, const std::set<SymId>& articulationIds, bool rhythmic, InputState* externalInputState)
 {
     assert(segment->segmentType() == SegmentType::ChordRest);
-    InputState& is = externalInputState ? (*externalInputState) : _is;
+    InputState& is = externalInputState ? (*externalInputState) : m_is;
 
     bool isRest   = nval.pitch == -1;
     Fraction tick = segment->tick();
@@ -1933,18 +1933,18 @@ void Score::toggleArticulation(SymId attr)
 
 void Score::toggleAccidental(AccidentalType at, const EditData& ed)
 {
-    if (_is.accidentalType() == at) {
+    if (m_is.accidentalType() == at) {
         at = AccidentalType::NONE;
     }
     if (noteEntryMode()) {
-        _is.setAccidentalType(at);
-        _is.setRest(false);
+        m_is.setAccidentalType(at);
+        m_is.setRest(false);
     } else {
         if (selection().isNone()) {
             ed.view()->startNoteEntryMode();
-            _is.setAccidentalType(at);
-            _is.setDuration(DurationType::V_QUARTER);
-            _is.setRest(false);
+            m_is.setAccidentalType(at);
+            m_is.setDuration(DurationType::V_QUARTER);
+            m_is.setRest(false);
         } else {
             changeAccidental(at);
         }
@@ -2170,8 +2170,8 @@ void Score::resetUserStretch()
     Measure* m1 = nullptr;
     Measure* m2 = nullptr;
     // retrieve span of selection
-    Segment* s1 = _selection.startSegment();
-    Segment* s2 = _selection.endSegment();
+    Segment* s1 = m_selection.startSegment();
+    Segment* s2 = m_selection.endSegment();
     // if either segment is not returned by the selection
     // (for instance, no selection) fall back to first/last measure
     if (!s1) {
@@ -2611,13 +2611,13 @@ EngravingItem* Score::move(const String& cmd)
     }
 
     EngravingItem* el = nullptr;
-    Segment* ois = noteEntryMode() ? _is.segment() : nullptr;
+    Segment* ois = noteEntryMode() ? m_is.segment() : nullptr;
     Measure* oim = ois ? ois->measure() : nullptr;
 
     if (cmd == u"next-chord" && cr) {
         // note input cursor
         if (noteEntryMode()) {
-            _is.moveToNextInputPos();
+            m_is.moveToNextInputPos();
         }
 
         // selection "cursor"
@@ -2630,7 +2630,7 @@ EngravingItem* Score::move(const String& cmd)
         if (el && noteEntryMode()) {
             // do not use if not in original or new measure (don't skip measures)
             Measure* m = toChordRest(el)->measure();
-            Segment* nis = _is.segment();
+            Segment* nis = m_is.segment();
             Measure* nim = nis ? nis->measure() : nullptr;
             if (m != oim && m != nim) {
                 el = cr;
@@ -2645,10 +2645,10 @@ EngravingItem* Score::move(const String& cmd)
         }
     } else if (cmd == u"prev-chord" && cr) {
         // note input cursor
-        if (noteEntryMode() && _is.segment()) {
-            Measure* m = _is.segment()->measure();
-            Segment* s = _is.segment()->prev1(SegmentType::ChordRest);
-            track_idx_t track = _is.track();
+        if (noteEntryMode() && m_is.segment()) {
+            Measure* m = m_is.segment()->measure();
+            Segment* s = m_is.segment()->prev1(SegmentType::ChordRest);
+            track_idx_t track = m_is.track();
             for (; s; s = s->prev1(SegmentType::ChordRest)) {
                 if (s->element(track) || (s->measure() != m && s->rtick().isZero())) {
                     if (s->element(track)) {
@@ -2659,7 +2659,7 @@ EngravingItem* Score::move(const String& cmd)
                     break;
                 }
             }
-            _is.moveInputPos(s);
+            m_is.moveInputPos(s);
         }
 
         // selection "cursor"
@@ -2672,7 +2672,7 @@ EngravingItem* Score::move(const String& cmd)
         if (el && noteEntryMode()) {
             // do not use if not in original or new measure (don't skip measures)
             Measure* m = toChordRest(el)->measure();
-            Segment* nis = _is.segment();
+            Segment* nis = m_is.segment();
             Measure* nim = nis ? nis->measure() : nullptr;
             if (m != oim && m != nim) {
                 el = cr;
@@ -2693,7 +2693,7 @@ EngravingItem* Score::move(const String& cmd)
             el = nextMeasure(cr);
         }
         if (el && noteEntryMode()) {
-            _is.moveInputPos(el);
+            m_is.moveInputPos(el);
         }
     } else if (cmd == u"prev-measure") {
         if (box && box->prevMeasure() && box->prevMeasure()->first()) {
@@ -2703,17 +2703,17 @@ EngravingItem* Score::move(const String& cmd)
             el = prevMeasure(cr);
         }
         if (el && noteEntryMode()) {
-            _is.moveInputPos(el);
+            m_is.moveInputPos(el);
         }
     } else if (cmd == u"next-system" && cr) {
         el = cmdNextPrevSystem(cr, true);
         if (noteEntryMode()) {
-            _is.moveInputPos(el);
+            m_is.moveInputPos(el);
         }
     } else if (cmd == u"prev-system" && cr) {
         el = cmdNextPrevSystem(cr, false);
         if (noteEntryMode()) {
-            _is.moveInputPos(el);
+            m_is.moveInputPos(el);
         }
     } else if (cmd == u"next-frame") {
         auto measureBase = cr ? cr->measure()->findMeasureBase() : box->findMeasureBase();
@@ -2734,17 +2734,17 @@ EngravingItem* Score::move(const String& cmd)
     } else if (cmd == u"next-track" && cr) {
         el = nextTrack(cr);
         if (noteEntryMode()) {
-            _is.moveInputPos(el);
+            m_is.moveInputPos(el);
         }
     } else if (cmd == u"prev-track" && cr) {
         el = prevTrack(cr);
         if (noteEntryMode()) {
-            _is.moveInputPos(el);
+            m_is.moveInputPos(el);
         }
     } else if (cmd == u"top-staff") {
         el = cr ? cmdTopStaff(cr) : cmdTopStaff();
         if (noteEntryMode()) {
-            _is.moveInputPos(el);
+            m_is.moveInputPos(el);
         }
     } else if (cmd == u"empty-trailing-measure") {
         const Measure* ftm = nullptr;
@@ -2761,7 +2761,7 @@ EngravingItem* Score::move(const String& cmd)
         }
         // Note: Due to the nature of this command as being preparatory for input,
         // Note-Entry is activated from within ScoreView::cmd()
-        _is.moveInputPos(el);
+        m_is.moveInputPos(el);
     }
 
     if (el) {
@@ -2772,12 +2772,12 @@ EngravingItem* Score::move(const String& cmd)
         if (noteEntryMode()) {
             // if cursor moved into a gap, selection cannot follow
             // only select & play el if it was not already selected (does not normally happen)
-            if (_is.cr() || !el->selected()) {
+            if (m_is.cr() || !el->selected()) {
                 select(el, SelectType::SINGLE, 0);
             } else {
                 setPlayNote(false);
             }
-            for (MuseScoreView* view : viewer) {
+            for (MuseScoreView* view : m_viewer) {
                 view->moveCursor();
             }
         } else {
@@ -2927,7 +2927,7 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
             --nSteps;
         }
     } else {
-        initialDuration = _is.duration();
+        initialDuration = m_is.duration();
     }
     TDuration d = (nSteps != 0) ? initialDuration.shiftRetainDots(nSteps, stepDotted) : initialDuration;
     if (!d.isValid()) {
@@ -2941,7 +2941,7 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
     } else {
         changeCRlen(cr, d);
     }
-    _is.setDuration(d);
+    m_is.setDuration(d);
     nextInputPos(cr, false);
 }
 
@@ -3605,7 +3605,7 @@ void Score::cmdSlashFill()
                 p.staffIdx = staffIdx;
                 p.line = line;
                 p.fret = INVALID_FRET_INDEX;
-                _is.setRest(false);             // needed for tab
+                m_is.setRest(false);             // needed for tab
                 nv = noteValForPosition(p, AccidentalType::NONE, error);
             }
             if (error) {
@@ -4099,7 +4099,7 @@ void Score::cmdPitchDownOctave()
 
 void Score::cmdPadNoteIncreaseTAB(const EditData& ed)
 {
-    switch (_is.duration().type()) {
+    switch (m_is.duration().type()) {
 // cycle back from longest to shortest?
 //          case TDuration::V_LONG:
 //                padToggle(Pad::NOTE128, ed);
@@ -4142,7 +4142,7 @@ void Score::cmdPadNoteIncreaseTAB(const EditData& ed)
 
 void Score::cmdPadNoteDecreaseTAB(const EditData& ed)
 {
-    switch (_is.duration().type()) {
+    switch (m_is.duration().type()) {
     case DurationType::V_LONG:
         padToggle(Pad::NOTE0, ed);
         break;
@@ -4499,17 +4499,17 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
             ClefType clef = staff(pos.staffIdx)->clef(seg->tick());
             pos.line      = relStep(step, clef);
             bool error;
-            NoteVal nval = noteValForPosition(pos, _is.accidentalType(), error);
+            NoteVal nval = noteValForPosition(pos, m_is.accidentalType(), error);
             if (error) {
                 return;
             }
             bool forceAccidental = false;
-            if (_is.accidentalType() != AccidentalType::NONE) {
+            if (m_is.accidentalType() != AccidentalType::NONE) {
                 NoteVal nval2 = noteValForPosition(pos, AccidentalType::NONE, error);
                 forceAccidental = (nval.pitch == nval2.pitch);
             }
-            addNote(chord, nval, forceAccidental, _is.articulationIds());
-            _is.setAccidentalType(AccidentalType::NONE);
+            addNote(chord, nval, forceAccidental, m_is.articulationIds());
+            m_is.setAccidentalType(AccidentalType::NONE);
             return;
         }
     }
@@ -4528,7 +4528,7 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
             putNote(pos, !addFlag);
         }
     }
-    _is.setAccidentalType(AccidentalType::NONE);
+    m_is.setAccidentalType(AccidentalType::NONE);
 }
 
 void Score::cmdToggleVisible()
