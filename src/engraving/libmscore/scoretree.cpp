@@ -488,7 +488,7 @@ EngravingObject* Accidental::scanParent() const
 
 EngravingObject* Beam::scanParent() const
 {
-    return _elements[0];
+    return m_elements[0];
 }
 
 //---------------------------------------------------------
