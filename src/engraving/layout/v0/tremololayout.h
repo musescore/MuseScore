@@ -39,6 +39,7 @@ public:
 
     static std::pair<double, double> extendedStemLenWithTwoNoteTremolo(Tremolo* tremolo, double stemLen1, double stemLen2);
 
+    static void createBeamSegments(Tremolo* item, LayoutContext& ctx);
 private:
     static void layoutOneNoteTremolo(Tremolo* item, LayoutContext& ctx, double x, double y, double h, double spatium);
     static void layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, double x, double y, double h, double spatium);

@@ -58,9 +58,6 @@ public:
 
     bool calculateAnchors(const std::vector<ChordRest*>& chordRests, const std::vector<int>& notes);
 
-    enum class ChordBeamAnchorType {
-        Start, End, Middle
-    };
     double chordBeamAnchorX(const ChordRest* chord, ChordBeamAnchorType anchorType) const;
     double chordBeamAnchorY(const ChordRest* chord) const;
     PointF chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const;

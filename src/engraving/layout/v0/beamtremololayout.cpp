@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "beamtremololayout.h"
+
 #include "../libmscore/beam.h"
 #include "../libmscore/chordrest.h"
 #include "../libmscore/note.h"

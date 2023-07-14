@@ -23,6 +23,8 @@
 #ifndef __TREMOLO_H__
 #define __TREMOLO_H__
 
+#include <memory>
+
 #include "engravingitem.h"
 
 #include "durationtype.h"
@@ -72,7 +74,7 @@ public:
     double minHeight() const;
     void reset() override;
 
-    PointF chordBeamAnchor(const ChordRest* chord, layout::v0::BeamTremoloLayout::ChordBeamAnchorType anchorType) const;
+    PointF chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const;
 
     double chordMag() const;
     double mag() const override;
@@ -153,10 +155,10 @@ public:
     mu::PointF& endAnchor() { return m_endAnchor; }
     void setEndAnchor(const mu::PointF& p) { m_endAnchor = p; }
 
-    void createBeamSegments();
+    const std::vector<BeamSegment*>& beamSegments() const { return m_beamSegments; }
+    std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
 
-    //! TODO
-    layout::v0::BeamTremoloLayout m_layoutInfo;
+    std::shared_ptr<layout::v0::BeamTremoloLayout> layoutInfo;
 
 private:
     friend class Factory;
