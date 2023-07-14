@@ -85,7 +85,6 @@ void StretchedBend::fillDrawPoints()
     }
 
     m_drawPoints.clear();
-    m_skipFirstPoint = firstPointShouldBeSkipped();
 
     for (size_t i = 0; i < m_points.size(); i++) {
         m_drawPoints.push_back(m_points[i].pitch);
@@ -114,7 +113,8 @@ void StretchedBend::fillSegments()
     PointF dest(0, 0);
 
     int lastPointPitch = m_drawPoints.back();
-    m_releasedToInitial = (0 == lastPointPitch);
+    bool releasedToInitial = (0 == lastPointPitch);
+    bool skipFirstPoint = firstPointShouldBeSkipped();
 
     double baseBendHeight = sp * 1.5;
     int prevTone = 0;
@@ -132,7 +132,7 @@ void StretchedBend::fillSegments()
             int prebendTone = bendTone(pitch);
             double minY = std::min(-m_notePos.y(), src.y());
             dest = PointF(src.x(), minY - bendHeight(prebendTone) - baseBendHeight);
-            if (!m_skipFirstPoint) {
+            if (!skipFirstPoint) {
                 m_bendSegments.push_back({ src, dest, BendSegmentType::LINE_UP, prebendTone });
             }
 
@@ -167,7 +167,7 @@ void StretchedBend::fillSegments()
                 dest.ry() = minY - bendHeight(tone) - baseBendHeight;
                 type = BendSegmentType::CURVE_UP;
             } else {
-                if (m_releasedToInitial) {
+                if (releasedToInitial) {
                     dest.ry() = 0;
                 } else {
                     dest.ry() = src.y() + bendHeight(prevTone) + baseBendHeight;
@@ -249,7 +249,7 @@ void StretchedBend::draw(mu::draw::Painter* painter) const
         {
             painter->drawLine(LineF(src, dest));
             painter->setBrush(curColor());
-            painter->drawPolygon(m_arrowUp.translated(dest));
+            painter->drawPolygon(m_arrows.up.translated(dest));
             /// TODO: remove substraction after fixing bRect
             drawText(painter, dest - PointF(0, sp * 0.5), text);
             break;
@@ -259,10 +259,10 @@ void StretchedBend::draw(mu::draw::Painter* painter) const
         case BendSegmentType::CURVE_DOWN:
         {
             bool bendUp = (bendSegment.type == BendSegmentType::CURVE_UP);
-            double endY = dest.y() + m_bendArrowWidth * (bendUp ? 1 : -1);
+            double endY = dest.y() + m_arrows.width * (bendUp ? 1 : -1);
 
             PainterPath path = bendCurveFromPoints(src, PointF(dest.x(), endY));
-            const auto& arrowPath = (bendUp ? m_arrowUp : m_arrowDown);
+            const auto& arrowPath = (bendUp ? m_arrows.up : m_arrows.down);
 
             painter->setBrush(BrushStyle::NoBrush);
             painter->drawPath(path);
@@ -281,7 +281,7 @@ void StretchedBend::draw(mu::draw::Painter* painter) const
         case BendSegmentType::LINE_STROKED:
         {
             PainterPath path;
-            path.moveTo(src + PointF(m_bendArrowWidth, 0));
+            path.moveTo(src + PointF(m_arrows.width, 0));
             path.lineTo(dest);
             Pen p(painter->pen());
             p.setStyle(PenStyle::DashLine);
@@ -310,7 +310,7 @@ mu::RectF StretchedBend::calculateBoundingRect() const
         case BendSegmentType::LINE_UP:
         {
             bRect.unite(RectF(src.x(), src.y(), dest.x() - src.x(), dest.y() - src.y()));
-            bRect.unite(m_arrowUp.translated(dest).boundingRect());
+            bRect.unite(m_arrows.up.translated(dest).boundingRect());
 
             mu::draw::FontMetrics fm(font(sp));
             bRect.unite(textBoundingRect(fm, dest, text));
@@ -324,10 +324,10 @@ mu::RectF StretchedBend::calculateBoundingRect() const
         case BendSegmentType::CURVE_DOWN:
         {
             bool bendUp = (bendSegment.type == BendSegmentType::CURVE_UP);
-            double endY = dest.y() + m_bendArrowWidth * (bendUp ? 1 : -1);
+            double endY = dest.y() + m_arrows.width * (bendUp ? 1 : -1);
 
             PainterPath path = bendCurveFromPoints(src, PointF(dest.x(), endY));
-            const auto& arrowPath = (bendUp ? m_arrowUp : m_arrowDown);
+            const auto& arrowPath = (bendUp ? m_arrows.up : m_arrows.down);
 
             bRect.unite(path.boundingRect());
             bRect.unite(arrowPath.translated(dest).boundingRect());
@@ -379,16 +379,20 @@ void StretchedBend::setupPainter(mu::draw::Painter* painter) const
 //   fillArrows
 //---------------------------------------------------------
 
-void StretchedBend::fillArrows()
+void StretchedBend::fillArrows(double width)
 {
+    if (m_arrows.width == width) {
+        return;
+    }
+
     double aw = 0;
-    m_bendArrowWidth = aw = style().styleMM(Sid::bendArrowWidth);
+    m_arrows.width = aw = width;
 
-    m_arrowUp.clear();
-    m_arrowDown.clear();
+    m_arrows.up.clear();
+    m_arrows.down.clear();
 
-    m_arrowUp << PointF(0, 0) << PointF(aw * .5, aw) << PointF(-aw * .5, aw);
-    m_arrowDown << PointF(0, 0) << PointF(aw * .5, -aw) << PointF(-aw * .5, -aw);
+    m_arrows.up << PointF(0, 0) << PointF(aw * .5, aw) << PointF(-aw * .5, aw);
+    m_arrows.down << PointF(0, 0) << PointF(aw * .5, -aw) << PointF(-aw * .5, -aw);
 }
 
 //---------------------------------------------------------

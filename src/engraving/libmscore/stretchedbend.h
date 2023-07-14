@@ -45,7 +45,7 @@ public:
     bool stretchedMode() const { return m_stretchedMode; }
     void setStretchedMode(bool val) { m_stretchedMode = val; }
 
-    void fillArrows();
+    void fillArrows(double width);
     void fillSegments();    // converting points from file to bend segments
     void stretchSegments(); // stretching until end of chord duration
 
@@ -85,14 +85,14 @@ private:
     bool m_stretchedMode = false; // layout with fixed size or stretched to next segment
 
     std::vector<int> m_drawPoints;
-    Note* m_endNote = nullptr;
     std::vector<BendSegment> m_bendSegments;
 
-    PolygonF m_arrowUp;
-    PolygonF m_arrowDown;
-    double m_bendArrowWidth = 0;
-    bool m_releasedToInitial = false;
-    bool m_skipFirstPoint = false;
+    struct Arrows
+    {
+        PolygonF up;
+        PolygonF down;
+        double width = 0;
+    } m_arrows;
 };
 }     // namespace mu::engraving
 #endif

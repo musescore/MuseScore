@@ -47,7 +47,6 @@
 #include "libmscore/spacer.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafflines.h"
-#include "libmscore/stretchedbend.h"
 #include "libmscore/system.h"
 #include "libmscore/tie.h"
 #include "libmscore/tremolo.h"

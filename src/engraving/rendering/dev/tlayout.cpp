@@ -4427,7 +4427,7 @@ void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
     doLayout(item, ctx, true);
 }
 
-void TLayout::doLayout(StretchedBend* item, LayoutContext&, bool stretchedMode)
+void TLayout::doLayout(StretchedBend* item, LayoutContext& ctx, bool stretchedMode)
 {
     item->setStretchedMode(stretchedMode);
 
@@ -4436,7 +4436,7 @@ void TLayout::doLayout(StretchedBend* item, LayoutContext&, bool stretchedMode)
     item->setNoteWidth(note->width());
     item->setNoteHeight(note->height());
 
-    item->fillArrows();
+    item->fillArrows(ctx.conf().styleMM(Sid::bendArrowWidth));
     item->fillSegments();
     item->stretchSegments();
 

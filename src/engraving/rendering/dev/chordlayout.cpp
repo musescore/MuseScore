@@ -50,6 +50,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/stem.h"
 #include "libmscore/stemslash.h"
+#include "libmscore/stretchedbend.h"
 #include "libmscore/system.h"
 #include "libmscore/tie.h"
 #include "libmscore/slur.h"
@@ -3189,6 +3190,17 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
     }
     for (staff_idx_t staffIdx : shapesToRecreate) {
         segment->createShape(staffIdx);
+    }
+}
+
+void ChordLayout::layoutStretchedBends(Chord* chord, LayoutContext& ctx)
+{
+    for (Note* note : chord->notes()) {
+        for (EngravingItem* item : note->el()) {
+            if (item && item->isStretchedBend()) {
+                layout::v0::TLayout::layoutStretched(toStretchedBend(item), ctx);
+            }
+        }
     }
 }
 
