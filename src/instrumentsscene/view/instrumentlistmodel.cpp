@@ -244,12 +244,18 @@ void InstrumentListModel::loadGroups()
     m_groups = acceptedGroups;
     emit groupsChanged();
 
-    if (m_saveCurrentGroup) {
-        emit currentGroupIndexChanged();
-        return;
+    bool currentGroupInNewGenre = false;
+    for (const InstrumentGroup* group : m_groups) {
+        if (group->id == m_currentGroupId) {
+            currentGroupInNewGenre = true;
+            break;
+        }
+    }
+    if (!currentGroupInNewGenre && !isSearching()) {
+        setCurrentGroupIndex(0);
     }
 
-    doSetCurrentGroup(NONE_GROUP_ID);
+    emit currentGroupIndexChanged();
 }
 
 void InstrumentListModel::loadInstruments()
@@ -485,6 +491,14 @@ void InstrumentListModel::updateStateBySearch()
     } else {
         loadGroups();
         loadInstruments();
+    }
+
+    if (searching && m_savedGroupId.isEmpty()) {
+        m_savedGroupId = m_currentGroupId;
+        setCurrentGroup(NONE_GROUP_ID);
+    } else if (!searching) {
+        setCurrentGroup(m_savedGroupId);
+        m_savedGroupId = "";
     }
 
     m_saveCurrentGroup = false;
