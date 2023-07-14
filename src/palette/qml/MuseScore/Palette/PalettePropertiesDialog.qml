@@ -88,16 +88,12 @@ StyledDialogView {
 
                 function setValue(index, value) {
                     if (index === 0) {
-                        propertiesModel.cellWidth = 0
                         propertiesModel.cellWidth = value
                     } else if (index === 1) {
-                        propertiesModel.cellHeight = 0
                         propertiesModel.cellHeight = value
                     } else if (index === 2) {
-                        propertiesModel.elementOffset = 0
                         propertiesModel.elementOffset = value
                     } else if (index === 3) {
-                        propertiesModel.scaleFactor = 0
                         propertiesModel.scaleFactor = value
                     }
                 }
@@ -115,6 +111,7 @@ StyledDialogView {
                         currentValue: modelData["value"]
                         measureUnitsSymbol: Boolean(modelData["measureUnit"]) ? modelData["measureUnit"] : ""
                         step: modelData["incrementStep"]
+                        minValue: step
 
                         onValueEdited: function(newValue) {
                             if (newValue <= 0) {
