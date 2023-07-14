@@ -367,7 +367,7 @@ void NavigationController::resetIfNeed(QObject* watched)
 
     auto activeCtrl = activeControl();
     if (activeCtrl && activeCtrl != m_defaultNavigationControl && watched == qApp) {
-        resetActive();
+        resetNavigation();
     }
 
     setIsHighlight(false);
@@ -429,7 +429,7 @@ void NavigationController::navigateTo(NavigationController::NavigationType type)
     setIsHighlight(true);
 }
 
-void NavigationController::resetActive()
+void NavigationController::resetNavigation()
 {
     MYLOG() << "===";
     INavigationSection* activeSec = this->activeSection();
@@ -456,6 +456,8 @@ void NavigationController::resetActive()
             m_defaultNavigationControl->setActive(true);
             m_navigationChanged.notify();
         }
+    } else {
+        doActivateFirst();
     }
 }
 
