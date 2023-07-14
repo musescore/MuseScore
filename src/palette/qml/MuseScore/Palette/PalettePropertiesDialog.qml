@@ -113,7 +113,11 @@ StyledDialogView {
                         step: modelData["incrementStep"]
 
                         onValueEdited: function(newValue) {
-                            repeater.setValue(model.index, newValue)
+                            if (newValue > 0) {
+                                repeater.setValue(model.index, newValue)
+                            } else {
+                                repeater.setValue(model.index, step)
+                            }
                         }
                     }
                 }
