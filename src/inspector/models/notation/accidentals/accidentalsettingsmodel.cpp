@@ -76,7 +76,8 @@ void AccidentalSettingsModel::updateIsSmallAvailable()
 {
     bool available = true;
     for (mu::engraving::EngravingItem* item : m_elementList) {
-        if (item && item->parent() && item->parent()->isOrnament()) {
+        mu::engraving::EngravingItem* parent = item ? item->parentItem() : nullptr;
+        if (parent && (parent->isOrnament() || parent->isTrillSegment())) {
             available = false;
             break;
         }
