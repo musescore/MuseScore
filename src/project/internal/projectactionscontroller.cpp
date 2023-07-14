@@ -163,7 +163,7 @@ Ret ProjectActionsController::openProject(const ProjectFile& file)
     //! the events (like user click) can be executed and this method can be called several times,
     //! before the end of the current call.
     //! So we ignore all subsequent calls until the current one completes.
-    if (m_isProjectProcessing) {
+    if (m_isProjectProcessing || m_isProjectDownloading) {
         return make_ret(Ret::Code::InternalError);
     }
     m_isProjectProcessing = true;
@@ -306,6 +306,18 @@ Ret ProjectActionsController::doOpenCloudProject(const io::path_t& filePath, con
 
 void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
 {
+    if (m_isProjectDownloading) {
+        return;
+    }
+    m_isProjectDownloading = true;
+
+    bool isDownloadingFinished = true;
+    DEFER {
+        if (isDownloadingFinished) {
+            m_isProjectDownloading = false;
+        }
+    };
+
     if (!scoreId) {
         // Might happen when user tries to open score that saved as a cloud score but upload did not fully succeed
         LOGE() << "invalid cloud score id";
@@ -351,7 +363,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
         m_projectBeingDownloaded = {};
         m_projectBeingDownloadedChanged.notify();
 
-        m_isProjectProcessing = false;
+        m_isProjectDownloading = false;
 
         if (!res.ret) {
             LOGE() << res.ret.toString();
@@ -363,6 +375,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
     });
 
     m_projectBeingDownloadedChanged.notify();
+    isDownloadingFinished = false;
 }
 
 const ProjectBeingDownloaded& ProjectActionsController::projectBeingDownloaded() const
@@ -416,7 +429,7 @@ void ProjectActionsController::newProject()
     //! the events (like user click) can be executed and this method can be called several times,
     //! before the end of the current call.
     //! So we ignore all subsequent calls until the current one completes.
-    if (m_isProjectProcessing) {
+    if (m_isProjectProcessing || m_isProjectDownloading) {
         return;
     }
     m_isProjectProcessing = true;

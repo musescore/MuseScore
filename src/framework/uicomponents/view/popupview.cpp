@@ -59,7 +59,6 @@ PopupView::~PopupView()
     if (m_window) {
         m_window->setOnHidden(std::function<void()>());
     }
-    m_contentItem->deleteLater();
 
     if (m_closeController) {
         delete m_closeController;
