@@ -229,7 +229,7 @@ Score::~Score()
     }
     // deselectAll();
     DeleteAll(m_systems);   // systems are layout-only objects so we delete
-                           // them prior to measures.
+                            // them prior to measures.
     for (MeasureBase* m = m_measures.first(); m;) {
         MeasureBase* nm = m->next();
         if (m->isMeasure() && toMeasure(m)->mmRest()) {
@@ -3367,9 +3367,9 @@ void Score::selectAdd(EngravingItem* e)
         Fraction tick  = m->tick();
         if (m_selection.isNone()) {
             m_selection.setRange(m->tick2segment(tick),
-                                m == lastMeasure() ? 0 : m->last(),
-                                0,
-                                nstaves());
+                                 m == lastMeasure() ? 0 : m->last(),
+                                 0,
+                                 nstaves());
             setUpdateAll();
             selState = SelState::RANGE;
             m_selection.updateSelectedElements();

@@ -563,7 +563,7 @@ MeasureBase* MeasureBase::nextMM() const
 MeasureBase* MeasureBase::prevMM() const
 {
     if (m_prev
-            && m_prev->isMeasure()
+        && m_prev->isMeasure()
         && style().styleB(Sid::createMultiMeasureRests)) {
         return const_cast<Measure*>(toMeasure(m_prev)->coveringMMRestOrThis());
     }

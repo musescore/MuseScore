@@ -87,10 +87,6 @@ namespace mu::engraving::compat {
 class WriteScoreHook;
 }
 
-namespace mu::engraving::layout::v0 {
-class ScoreLayout;
-}
-
 namespace mu::engraving {
 class Articulation;
 class Audio;
@@ -974,7 +970,6 @@ private:
     friend class read400::Read400;
     friend class read410::Read410;
     friend class write::Writer;
-    friend class layout::v0::ScoreLayout;
 
     static std::set<Score*> validScores;
 

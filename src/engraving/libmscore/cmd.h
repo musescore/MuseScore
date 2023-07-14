@@ -28,7 +28,6 @@
 #include "engravingobject.h"
 
 namespace mu::engraving {
-
 //---------------------------------------------------------
 //   UpdateState
 //---------------------------------------------------------
@@ -96,7 +95,6 @@ public:
     void dump();
 #endif
 };
-
 }
 
 #endif // MU_ENGRAVING_CMD_H
