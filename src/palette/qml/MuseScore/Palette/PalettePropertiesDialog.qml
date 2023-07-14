@@ -88,12 +88,16 @@ StyledDialogView {
 
                 function setValue(index, value) {
                     if (index === 0) {
+                        propertiesModel.cellWidth = 0
                         propertiesModel.cellWidth = value
                     } else if (index === 1) {
+                        propertiesModel.cellHeight = 0
                         propertiesModel.cellHeight = value
                     } else if (index === 2) {
+                        propertiesModel.elementOffset = 0
                         propertiesModel.elementOffset = value
                     } else if (index === 3) {
+                        propertiesModel.scaleFactor = 0
                         propertiesModel.scaleFactor = value
                     }
                 }
@@ -113,10 +117,10 @@ StyledDialogView {
                         step: modelData["incrementStep"]
 
                         onValueEdited: function(newValue) {
-                            if (newValue > 0) {
-                                repeater.setValue(model.index, newValue)
-                            } else {
+                            if (newValue <= 0) {
                                 repeater.setValue(model.index, step)
+                            } else if (newValue != currentValue) {
+                                repeater.setValue(model.index, newValue)
                             }
                         }
                     }
