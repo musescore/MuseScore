@@ -42,13 +42,10 @@ public:
 
     void draw(mu::draw::Painter*) const override;
 
-    bool stretchedMode() const { return m_stretchedMode; }
-    void setStretchedMode(bool val) { m_stretchedMode = val; }
-
     void fillArrows(double width);
     void fillSegments();    // converting points from file to bend segments
-    void stretchSegments(); // stretching until end of chord duration
 
+    void fillStretchedSegments(bool untilNextSegment);
     mu::RectF calculateBoundingRect() const;
 
     static void prepareBends(std::vector<StretchedBend*>& bends);
@@ -58,14 +55,6 @@ private:
     friend class Factory;
 
     StretchedBend(Note* parent);
-
-    void fillDrawPoints(); // filling the points which specify how bend will be drawn
-
-    void setupPainter(mu::draw::Painter* painter) const;
-
-    double nextSegmentX() const;
-    double bendHeight(int bendIdx) const;
-    bool firstPointShouldBeSkipped() const;
 
     enum class BendSegmentType {
         NO_TYPE = -1,
@@ -82,10 +71,15 @@ private:
         int tone = -1;
     };
 
-    bool m_stretchedMode = false; // layout with fixed size or stretched to next segment
+    void fillDrawPoints(); // filling the points which specify how bend will be drawn
+    void setupPainter(mu::draw::Painter* painter) const;
+    double nextSegmentX() const;
+    double bendHeight(int bendIdx) const;
+    bool firstPointShouldBeSkipped() const;
 
     std::vector<int> m_drawPoints;
-    std::vector<BendSegment> m_bendSegments;
+    std::vector<BendSegment> m_bendSegments; // filled during note layout (when all coords are not known yet)
+    mutable std::vector<BendSegment> m_bendSegmentsStretched; // filled during system layout (final coords used for drawing)
 
     struct Arrows
     {

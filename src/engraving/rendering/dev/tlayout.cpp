@@ -4419,18 +4419,6 @@ void TLayout::layout(Sticking* item, LayoutContext& ctx)
 
 void TLayout::layout(StretchedBend* item, LayoutContext& ctx)
 {
-    doLayout(item, ctx, false);
-}
-
-void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
-{
-    doLayout(item, ctx, true);
-}
-
-void TLayout::doLayout(StretchedBend* item, LayoutContext& ctx, bool stretchedMode)
-{
-    item->setStretchedMode(stretchedMode);
-
     Note* note = toNote(item->explicitParent());
     item->setNotePos(note->pos());
     item->setNoteWidth(note->width());
@@ -4438,8 +4426,15 @@ void TLayout::doLayout(StretchedBend* item, LayoutContext& ctx, bool stretchedMo
 
     item->fillArrows(ctx.conf().styleMM(Sid::bendArrowWidth));
     item->fillSegments();
-    item->stretchSegments();
+    item->fillStretchedSegments(false);
 
+    item->setbbox(item->calculateBoundingRect());
+    item->setPos(0.0, 0.0);
+}
+
+void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
+{
+    item->fillStretchedSegments(true);
     item->setbbox(item->calculateBoundingRect());
     item->setPos(0.0, 0.0);
 }

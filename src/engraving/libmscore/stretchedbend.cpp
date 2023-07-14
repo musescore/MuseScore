@@ -136,7 +136,7 @@ void StretchedBend::fillSegments()
                 m_bendSegments.push_back({ src, dest, BendSegmentType::LINE_UP, prebendTone });
             }
 
-            src.ry() = dest.y();
+            src.setY(dest.y());
         }
 
         /// PRE-BEND - - -
@@ -164,13 +164,13 @@ void StretchedBend::fillSegments()
 
             if (bendUp) {
                 double minY = std::min(-m_notePos.y(), src.y());
-                dest.ry() = minY - bendHeight(tone) - baseBendHeight;
+                dest.setY(minY - bendHeight(tone) - baseBendHeight);
                 type = BendSegmentType::CURVE_UP;
             } else {
                 if (releasedToInitial) {
-                    dest.ry() = 0;
+                    dest.setY(0);
                 } else {
-                    dest.ry() = src.y() + bendHeight(prevTone) + baseBendHeight;
+                    dest.setY(src.y() + bendHeight(prevTone) + baseBendHeight);
                 }
 
                 type = BendSegmentType::CURVE_DOWN;
@@ -192,37 +192,38 @@ void StretchedBend::fillSegments()
 }
 
 //---------------------------------------------------------
-//   stretchSegments
+//   fillStretchedSegments
 //---------------------------------------------------------
 
-void StretchedBend::stretchSegments()
+void StretchedBend::fillStretchedSegments(bool untilNextSegment)
 {
     if (m_bendSegments.empty()) {
         return;
     }
-    size_t segsSize = m_bendSegments.size();
 
     double sp = spatium();
-    double bendStart = m_bendSegments[0].src.x();
-    double bendEnd = m_stretchedMode ? nextSegmentX() : sp * 6;
+    double bendStart = m_bendSegments.at(0).src.x();
+    double bendEnd = untilNextSegment ? nextSegmentX() : sp * 6;
 
     if (bendStart > bendEnd) {
-        m_bendSegments.clear();
         return;
     }
 
-    m_bendSegments[segsSize - 1].dest.rx() = bendEnd;
+    m_bendSegmentsStretched = m_bendSegments;
+    size_t segsSize = m_bendSegmentsStretched.size();
+
+    m_bendSegmentsStretched.at(segsSize - 1).dest.setX(bendEnd);
 
     double step = (bendEnd - bendStart) / segsSize;
 
     for (auto i = segsSize - 1; i > 0; --i) {
-        auto& lastSeg = m_bendSegments[i];
-        auto& prevSeg = m_bendSegments[i - 1];
+        auto& lastSeg = m_bendSegmentsStretched.at(i);
+        auto& prevSeg = m_bendSegmentsStretched.at(i - 1);
         if (lastSeg.type != BendSegmentType::LINE_UP && prevSeg.type != BendSegmentType::LINE_UP
             && lastSeg.type != BendSegmentType::LINE_STROKED) {
             bendEnd -= step;
-            lastSeg.src.rx() = bendEnd;
-            prevSeg.dest.rx() = bendEnd;
+            lastSeg.src.setX(bendEnd);
+            prevSeg.dest.setX(bendEnd);
         }
     }
 }
@@ -239,7 +240,7 @@ void StretchedBend::draw(mu::draw::Painter* painter) const
     double sp = spatium();
     bool isTextDrawn = false;
 
-    for (const BendSegment& bendSegment : m_bendSegments) {
+    for (const BendSegment& bendSegment : m_bendSegmentsStretched) {
         const PointF& src = bendSegment.src;
         const PointF& dest = bendSegment.dest;
         const String& text = String::fromUtf8(stretchedBendlabel[bendSegment.tone]);
@@ -297,11 +298,11 @@ void StretchedBend::draw(mu::draw::Painter* painter) const
 
 mu::RectF StretchedBend::calculateBoundingRect() const
 {
-    double sp = spatium();
     RectF bRect;
+    double sp = spatium();
     bool isTextDrawn = false;
 
-    for (const BendSegment& bendSegment : m_bendSegments) {
+    for (const BendSegment& bendSegment : m_bendSegmentsStretched) {
         const PointF& src = bendSegment.src;
         const PointF& dest = bendSegment.dest;
         const String& text = String::fromUtf8(label[bendSegment.tone]);
