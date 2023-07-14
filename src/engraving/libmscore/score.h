@@ -43,6 +43,7 @@
 
 #include "layout/ilayout.h"
 #include "layout/layoutoptions.h"
+#include "layout/paddingtable.h"
 
 #include "style/style.h"
 #include "style/pagestyle.h"
@@ -208,19 +209,6 @@ enum class PlayMode : char {
     SYNTHESIZER,
     AUDIO
 };
-
-//---------------------------------------------------------
-//   PaddingTable
-//---------------------------------------------------------
-
-template<typename T>
-struct PaddingVector : std::array<T, TOT_ELEMENT_TYPES>
-{
-    T& operator [](size_t i) { return std::array<T, TOT_ELEMENT_TYPES>::operator [](i); }
-    T& operator [](ElementType et) { return std::array<T, TOT_ELEMENT_TYPES>::operator [](static_cast<size_t>(et)); }
-    const T& at(ElementType et) const { return std::array<T, TOT_ELEMENT_TYPES>::at(static_cast<size_t>(et)); }
-};
-using PaddingTable = PaddingVector<PaddingVector<double> >;
 
 //---------------------------------------------------------------------------------------
 //   @@ Score
@@ -959,7 +947,6 @@ public:
 
     void createPaddingTable();
     const PaddingTable& paddingTable() const { return _paddingTable; }
-    double minimumPaddingUnit() const { return _minimumPaddingUnit; }
 
     void autoUpdateSpatium();
 
@@ -1103,7 +1090,8 @@ private:
     mu::async::Channel<POS, unsigned> m_posChanged;
 
     PaddingTable _paddingTable;
-    double _minimumPaddingUnit = 0.0; // Maybe style setting in future
+    double _minimumPaddingUnit = 0.0;
+
     bool _updatesLocked = false;
 };
 

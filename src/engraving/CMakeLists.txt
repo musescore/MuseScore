@@ -174,6 +174,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/layout/README.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/ilayout.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutoptions.h
+    ${CMAKE_CURRENT_LIST_DIR}/layout/paddingtable.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layout/paddingtable.h
 
     ${CMAKE_CURRENT_LIST_DIR}/layout/v0/tlayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/v0/tlayout.h
