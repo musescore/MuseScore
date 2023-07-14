@@ -70,7 +70,7 @@ void Score::checkScore()
     }
 
     ChordRest* lcr = 0;
-    for (size_t staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < m_staves.size(); ++staffIdx) {
         size_t track = staffIdx * VOICES;
         Fraction tick  = Fraction(0, 1);
         Staff* st = staff(staffIdx);

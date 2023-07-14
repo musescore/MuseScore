@@ -358,7 +358,7 @@ void Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
         MScore::setError(MsError::NO_MIME);
         return;
     }
-    if ((_selection.isSingle() || _selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
+    if ((m_selection.isSingle() || m_selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
         ByteArray data = ms->data(mimeSymbolFormat);
 
         PointF dragOffset;
@@ -374,10 +374,10 @@ void Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
         }
 
         std::vector<EngravingItem*> els;
-        if (_selection.isSingle()) {
-            els.push_back(_selection.element());
+        if (m_selection.isSingle()) {
+            els.push_back(m_selection.element());
         } else {
-            els.insert(els.begin(), _selection.elements().begin(), _selection.elements().end());
+            els.insert(els.begin(), m_selection.elements().begin(), m_selection.elements().end());
         }
         EngravingItem* newEl = 0;
         for (EngravingItem* target : els) {
@@ -398,12 +398,12 @@ void Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
         if (newEl) {
             select(newEl);
         }
-    } else if ((_selection.isRange() || _selection.isList()) && ms->hasFormat(mimeStaffListFormat)) {
+    } else if ((m_selection.isRange() || m_selection.isList()) && ms->hasFormat(mimeStaffListFormat)) {
         ChordRest* cr = 0;
-        if (_selection.isRange()) {
-            cr = _selection.firstChordRest();
-        } else if (_selection.isSingle()) {
-            EngravingItem* e = _selection.element();
+        if (m_selection.isRange()) {
+            cr = m_selection.firstChordRest();
+        } else if (m_selection.isSingle()) {
+            EngravingItem* e = m_selection.element();
             if (!e->isNote() && !e->isChordRest()) {
                 LOGD("cannot paste to %s", e->typeName());
                 MScore::setError(MsError::DEST_NO_CR);
@@ -434,10 +434,10 @@ void Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
         }
     } else if (ms->hasFormat(mimeSymbolListFormat)) {
         ChordRest* cr = 0;
-        if (_selection.isRange()) {
-            cr = _selection.firstChordRest();
-        } else if (_selection.isSingle()) {
-            EngravingItem* e = _selection.element();
+        if (m_selection.isRange()) {
+            cr = m_selection.firstChordRest();
+        } else if (m_selection.isSingle()) {
+            EngravingItem* e = m_selection.element();
             if (!e->isNote() && !e->isRest() && !e->isChord()) {
                 LOGD("cannot paste to %s", e->typeName());
                 MScore::setError(MsError::DEST_NO_CR);
@@ -472,10 +472,10 @@ void Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
         image->loadFromData("dragdrop", ba);
 
         std::vector<EngravingItem*> els;
-        if (_selection.isSingle()) {
-            els.push_back(_selection.element());
+        if (m_selection.isSingle()) {
+            els.push_back(m_selection.element());
         } else {
-            els.insert(els.begin(), _selection.elements().begin(), _selection.elements().end());
+            els.insert(els.begin(), m_selection.elements().begin(), m_selection.elements().end());
         }
 
         for (EngravingItem* target : els) {
@@ -485,14 +485,14 @@ void Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
             ddata.dropElement    = nel;
             if (target->acceptDrop(ddata)) {
                 target->drop(ddata);
-                if (_selection.element()) {
-                    addRefresh(_selection.element()->abbox());
+                if (m_selection.element()) {
+                    addRefresh(m_selection.element()->abbox());
                 }
             }
         }
         delete image;
     } else {
-        LOGD("cannot paste selState %d staffList %s", int(_selection.state()), (ms->hasFormat(mimeStaffListFormat)) ? "true" : "false");
+        LOGD("cannot paste selState %d staffList %s", int(m_selection.state()), (ms->hasFormat(mimeStaffListFormat)) ? "true" : "false");
         for (const std::string& s : ms->formats()) {
             LOGD() << " format: " << s;
         }

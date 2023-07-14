@@ -359,7 +359,7 @@ void MeasureBase::scanElements(void* data, void (* func)(void*, EngravingItem*),
 
 MeasureBase* Score::first() const
 {
-    return _measures.first();
+    return m_measures.first();
 }
 
 //---------------------------------------------------------
@@ -368,7 +368,7 @@ MeasureBase* Score::first() const
 
 MeasureBase* Score::last()  const
 {
-    return _measures.last();
+    return m_measures.last();
 }
 
 //---------------------------------------------------------
