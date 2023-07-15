@@ -9,6 +9,7 @@
 #include "gpdrumsetresolver.h"
 
 #include "libmscore/arpeggio.h"
+#include "libmscore/bend.h"
 #include "libmscore/box.h"
 #include "libmscore/bracketItem.h"
 #include "libmscore/chord.h"
@@ -42,6 +43,7 @@
 #include "libmscore/spanner.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafftext.h"
+#include "libmscore/stretchedbend.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/text.h"
 #include "libmscore/tie.h"
@@ -51,7 +53,6 @@
 #include "libmscore/tripletfeel.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
-#include "libmscore/stretchedbend.h"
 
 #include "types/symid.h"
 
@@ -1920,7 +1921,6 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         return time * PitchValue::MAX_TIME / 100;
     };
 
-    Bend* bend = m_useStretchedBends ? Factory::createStretchedBend(note) : Factory::createBend(note);
     const GPNote::Bend* gpBend = gpnote->bend();
 
     bool bendHasMiddleValue = true;
@@ -1928,50 +1928,56 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         bendHasMiddleValue = false;
     }
 
-    bend->points().push_back(PitchValue(gpTimeToMuTime(0), gpBend->originValue));
+    PitchValues pitchValues;
 
-    PitchValue lastPoint = bend->points().back();
+    pitchValues.push_back(PitchValue(gpTimeToMuTime(0), gpBend->originValue));
+    PitchValue lastPoint = pitchValues.back();
 
     if (bendHasMiddleValue) {
         if (PitchValue value(gpTimeToMuTime(gpBend->middleOffset1), gpBend->middleValue);
             gpBend->middleOffset1 >= 0 && gpBend->middleOffset1 < gpBend->destinationOffset && value != lastPoint) {
-            bend->points().push_back(std::move(value));
+            pitchValues.push_back(std::move(value));
         }
 
         if (PitchValue value(gpTimeToMuTime(gpBend->middleOffset2), gpBend->middleValue);
             gpBend->middleOffset2 >= 0 && gpBend->middleOffset2 != gpBend->middleOffset1
             && gpBend->middleOffset2 < gpBend->destinationOffset
             && value != lastPoint) {
-            bend->points().push_back(std::move(value));
+            pitchValues.push_back(std::move(value));
         }
 
         if (gpBend->middleOffset1 == -1 && gpBend->middleOffset2 == -1 && gpBend->middleValue != -1) {
             //!@NOTE It seems when middle point is places exactly in the middle
             //!of bend  GP6 stores this value equal -1
             if (gpBend->destinationOffset > 50) {
-                bend->points().push_back(PitchValue(gpTimeToMuTime(50), gpBend->middleValue));
+                pitchValues.push_back(PitchValue(gpTimeToMuTime(50), gpBend->middleValue));
             }
         }
     }
 
     if (gpBend->destinationOffset <= 0) {
         PitchValue fixGpxValue = PitchValue(gpTimeToMuTime(50), gpBend->middleValue);
-        if (gpBend->middleValue > gpBend->destinationValue && bend->points().back() != fixGpxValue) {
-            bend->points().push_back(fixGpxValue);
+        if (gpBend->middleValue > gpBend->destinationValue && pitchValues.back() != fixGpxValue) {
+            pitchValues.push_back(fixGpxValue);
         }
-        bend->points().push_back(PitchValue(gpTimeToMuTime(100), gpBend->destinationValue)); //! In .gpx this value might be exist
+        pitchValues.push_back(PitchValue(gpTimeToMuTime(100), gpBend->destinationValue)); //! In .gpx this value might be exist
     } else {
         if (PitchValue value(gpTimeToMuTime(gpBend->destinationOffset), gpBend->destinationValue); value != lastPoint) {
-            bend->points().push_back(std::move(value));
+            pitchValues.push_back(std::move(value));
         }
     }
 
-    bend->setTrack(note->track());
-    note->add(bend);
-
     if (m_useStretchedBends) {
-        m_stretchedBends.push_back(toStretchedBend(bend));
+        StretchedBend* stretchedBend = Factory::createStretchedBend(note);
+        stretchedBend->setPitchValues(pitchValues);
+        stretchedBend->setTrack(note->track());
+        note->add(stretchedBend);
+        m_stretchedBends.push_back(stretchedBend);
     } else {
+        Bend* bend = Factory::createBend(note);
+        bend->setPoints(pitchValues);
+        bend->setTrack(note->track());
+        note->add(bend);
         m_bends.push_back(bend);
     }
 }

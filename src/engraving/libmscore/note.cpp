@@ -1269,7 +1269,11 @@ void Note::add(EngravingItem* e)
         break;
     case ElementType::BEND:
     case ElementType::STRETCHED_BEND:
-        m_bend = toBend(e);
+        if (e->type() == ElementType::BEND) {
+            m_bend = toBend(e);
+        } else {
+            m_stretchedBend = toStretchedBend(e);
+        }
     // fallthrough
     case ElementType::FINGERING:
     case ElementType::IMAGE:
@@ -1328,7 +1332,11 @@ void Note::remove(EngravingItem* e)
 
     case ElementType::BEND:
     case ElementType::STRETCHED_BEND:
-        m_bend = nullptr;
+        if (e->type() == ElementType::BEND) {
+            m_bend = nullptr;
+        } else {
+            m_stretchedBend = nullptr;
+        }
     // fallthrough
     case ElementType::TEXT:
     case ElementType::IMAGE:

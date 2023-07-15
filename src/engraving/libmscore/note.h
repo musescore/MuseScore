@@ -50,6 +50,7 @@ class Accidental;
 class NoteDot;
 class Spanner;
 class StaffType;
+class StretchedBend;
 class NoteEditData;
 enum class AccidentalType;
 
@@ -426,6 +427,7 @@ public:
     SlideType slideFromType() const { return m_slideFromType; }
 
     Bend* bend() const { return m_bend; }
+    StretchedBend* stretchedBend() const { return m_stretchedBend; }
 
     bool isHammerOn() const { return m_isHammerOn; }
     void setIsHammerOn(bool hammerOn) { m_isHammerOn = hammerOn; }
@@ -491,6 +493,7 @@ private:
     mutable bool m_mark = false;  // for use in sequencer
     bool m_fixed = false;         // for slash notation
     Bend* m_bend = nullptr;
+    StretchedBend* m_stretchedBend = nullptr;
     SlideType m_slideToType = SlideType::Undefined;
     SlideType m_slideFromType = SlideType::Undefined;
 

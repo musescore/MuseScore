@@ -4419,11 +4419,6 @@ void TLayout::layout(Sticking* item, LayoutContext& ctx)
 
 void TLayout::layout(StretchedBend* item, LayoutContext& ctx)
 {
-    Note* note = toNote(item->explicitParent());
-    item->setNotePos(note->pos());
-    item->setNoteWidth(note->width());
-    item->setNoteHeight(note->height());
-
     item->fillArrows(ctx.conf().styleMM(Sid::bendArrowWidth));
     item->fillSegments();
     item->fillStretchedSegments(false);

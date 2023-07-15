@@ -23,7 +23,9 @@
 #ifndef __STRETCHED_BEND_H__
 #define __STRETCHED_BEND_H__
 
-#include "bend.h"
+#include "engravingitem.h"
+#include "draw/types/font.h"
+#include "types.h"
 
 namespace mu::engraving {
 class Factory;
@@ -32,13 +34,20 @@ class Factory;
 //   @@ StretchedBend
 //---------------------------------------------------------
 
-class StretchedBend final : public Bend
+class StretchedBend final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, StretchedBend)
     DECLARE_CLASSOF(ElementType::STRETCHED_BEND)
 
+    M_PROPERTY(String,     fontFace,  setFontFace)
+    M_PROPERTY(double,     fontSize,  setFontSize)
+    M_PROPERTY(FontStyle,  fontStyle, setFontStyle)
+    M_PROPERTY(Millimetre, lineWidth, setLineWidth)
+
 public:
     StretchedBend* clone() const override { return new StretchedBend(*this); }
+
+    mu::draw::Font font(double sp) const;
 
     void draw(mu::draw::Painter*) const override;
 
@@ -49,6 +58,13 @@ public:
     mu::RectF calculateBoundingRect() const;
 
     static void prepareBends(std::vector<StretchedBend*>& bends);
+
+    void setPitchValues(const PitchValues& p) { m_pitchValues = p; }
+    const PitchValues& pitchValues() const { return m_pitchValues; }
+
+    // property methods
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
 
 private:
 
@@ -77,6 +93,7 @@ private:
     double bendHeight(int bendIdx) const;
     bool firstPointShouldBeSkipped() const;
 
+    PitchValues m_pitchValues;
     std::vector<int> m_drawPoints;
     std::vector<BendSegment> m_bendSegments; // filled during note layout (when all coords are not known yet)
     mutable std::vector<BendSegment> m_bendSegmentsStretched; // filled during system layout (final coords used for drawing)

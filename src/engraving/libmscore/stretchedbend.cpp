@@ -41,7 +41,7 @@ namespace mu::engraving {
 //   textFlags
 //---------------------------------------------------------
 
-static const char* stretchedBendlabel[] = {
+static const char* label[] = {
     "",     "\u00BC",   "\u00BD",   "\u00BE",  /// 0,   1/4, 1/2, 3/4
     "full", "1\u00BC", "1\u00BD", "1\u00BE",   /// 1, 1+1/4...
     "2",    "2\u00BC", "2\u00BD", "2\u00BE",   /// 2, ...
@@ -49,6 +49,13 @@ static const char* stretchedBendlabel[] = {
 };
 
 static int textFlags = draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip;
+
+static const ElementStyle stretchedBendStyle {
+    { Sid::bendFontFace,  Pid::FONT_FACE },
+    { Sid::bendFontSize,  Pid::FONT_SIZE },
+    { Sid::bendFontStyle, Pid::FONT_STYLE },
+    { Sid::bendLineWidth, Pid::LINE_WIDTH },
+};
 
 //---------------------------------------------------------
 //   forward declarations of static functions
@@ -70,8 +77,73 @@ static constexpr double BEND_HEIGHT_MULTIPLIER = .2; /// how much height differs
 //---------------------------------------------------------
 
 StretchedBend::StretchedBend(Note* parent)
-    : Bend(parent, ElementType::STRETCHED_BEND)
+    : EngravingItem(ElementType::STRETCHED_BEND, parent, ElementFlag::MOVABLE)
 {
+    initElementStyle(&stretchedBendStyle);
+}
+
+//---------------------------------------------------------
+//   font
+//---------------------------------------------------------
+
+mu::draw::Font StretchedBend::font(double sp) const
+{
+    mu::draw::Font f(_fontFace, Font::Type::Unknown);
+    f.setBold(_fontStyle & FontStyle::Bold);
+    f.setItalic(_fontStyle & FontStyle::Italic);
+    f.setUnderline(_fontStyle & FontStyle::Underline);
+    f.setStrike(_fontStyle & FontStyle::Strike);
+    double m = _fontSize;
+    m *= sp / SPATIUM20;
+
+    f.setPointSizeF(m);
+    return f;
+}
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+PropertyValue StretchedBend::getProperty(Pid id) const
+{
+    switch (id) {
+    case Pid::FONT_FACE:
+        return _fontFace;
+    case Pid::FONT_SIZE:
+        return _fontSize;
+    case Pid::FONT_STYLE:
+        return int(_fontStyle);
+    case Pid::LINE_WIDTH:
+        return _lineWidth;
+    default:
+        return EngravingItem::getProperty(id);
+    }
+}
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool StretchedBend::setProperty(Pid id, const PropertyValue& v)
+{
+    switch (id) {
+    case Pid::FONT_FACE:
+        _fontFace = v.value<String>();
+        break;
+    case Pid::FONT_SIZE:
+        _fontSize = v.toReal();
+        break;
+    case Pid::FONT_STYLE:
+        _fontStyle = FontStyle(v.toInt());
+        break;
+    case Pid::LINE_WIDTH:
+        _lineWidth = v.value<Millimetre>();
+        break;
+    default:
+        return EngravingItem::setProperty(id, v);
+    }
+    triggerLayout();
+    return true;
 }
 
 //---------------------------------------------------------
@@ -80,14 +152,14 @@ StretchedBend::StretchedBend(Note* parent)
 
 void StretchedBend::fillDrawPoints()
 {
-    if (m_points.size() < 2) {
+    if (m_pitchValues.size() < 2) {
         return;
     }
 
     m_drawPoints.clear();
 
-    for (size_t i = 0; i < m_points.size(); i++) {
-        m_drawPoints.push_back(m_points[i].pitch);
+    for (size_t i = 0; i < m_pitchValues.size(); i++) {
+        m_drawPoints.push_back(m_pitchValues.at(i).pitch);
     }
 }
 
@@ -104,10 +176,15 @@ void StretchedBend::fillSegments()
         return;
     }
 
+    Note* note = toNote(parent());
+    double noteWidth = note->width();
+    double noteHeight = note->height();
+    PointF notePos = note->pos();
+
     double sp = spatium();
     bool isPrevBendUp = false;
-    PointF upBendDefaultSrc = PointF(m_noteWidth + sp * .8, 0);
-    PointF downBendDefaultSrc = PointF(m_noteWidth * .5, -m_noteHeight * .5 - sp * .2);
+    PointF upBendDefaultSrc = PointF(noteWidth + sp * .8, 0);
+    PointF downBendDefaultSrc = PointF(noteWidth * .5, -noteHeight * .5 - sp * .2);
 
     PointF src = m_drawPoints.at(0) == 0 ? upBendDefaultSrc : downBendDefaultSrc;
     PointF dest(0, 0);
@@ -130,7 +207,7 @@ void StretchedBend::fillSegments()
         /// PRE-BEND (+BEND, +RELEASE)
         if (pt == 0 && pitch != 0) {
             int prebendTone = bendTone(pitch);
-            double minY = std::min(-m_notePos.y(), src.y());
+            double minY = std::min(-notePos.y(), src.y());
             dest = PointF(src.x(), minY - bendHeight(prebendTone) - baseBendHeight);
             if (!skipFirstPoint) {
                 m_bendSegments.push_back({ src, dest, BendSegmentType::LINE_UP, prebendTone });
@@ -163,7 +240,7 @@ void StretchedBend::fillSegments()
             isPrevBendUp = bendUp;
 
             if (bendUp) {
-                double minY = std::min(-m_notePos.y(), src.y());
+                double minY = std::min(-notePos.y(), src.y());
                 dest.setY(minY - bendHeight(tone) - baseBendHeight);
                 type = BendSegmentType::CURVE_UP;
             } else {
@@ -243,7 +320,7 @@ void StretchedBend::draw(mu::draw::Painter* painter) const
     for (const BendSegment& bendSegment : m_bendSegmentsStretched) {
         const PointF& src = bendSegment.src;
         const PointF& dest = bendSegment.dest;
-        const String& text = String::fromUtf8(stretchedBendlabel[bendSegment.tone]);
+        const String& text = String::fromUtf8(label[bendSegment.tone]);
 
         switch (bendSegment.type) {
         case BendSegmentType::LINE_UP:
@@ -480,12 +557,10 @@ bool StretchedBend::firstPointShouldBeSkipped() const
 {
     if (Tie* tie = toNote(parent())->tieBack()) {
         Note* backTied = tie->startNote();
-        if (Bend* lastBend = (backTied ? backTied->bend() : nullptr)) {
-            if (lastBend && lastBend->isStretchedBend()) {
-                StretchedBend* lastStretchedBend = toStretchedBend(lastBend);
-
+        if (StretchedBend* lastStretchedBend = (backTied ? backTied->stretchedBend() : nullptr)) {
+            if (lastStretchedBend) {
                 const auto& lastBendPoints = lastStretchedBend->m_drawPoints;
-                if (!lastBendPoints.empty() && lastBendPoints.back() == m_points.at(0).pitch) {
+                if (!lastBendPoints.empty() && lastBendPoints.back() == m_pitchValues.at(0).pitch) {
                     return true;
                 }
             }

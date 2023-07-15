@@ -558,7 +558,7 @@ void TWrite::write(const Bend* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const StretchedBend* item, XmlWriter& xml, WriteContext& ctx)
 {
-    write(static_cast<const Bend*>(item), xml, ctx);
+    // not implemented
 }
 
 void TWrite::write(const Box* item, XmlWriter& xml, WriteContext& ctx)
