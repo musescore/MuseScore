@@ -2864,7 +2864,12 @@ MeasureRepeat* Measure::measureRepeatElement(staff_idx_t staffIdx) const
                 }
             }
         }
-        m = m->nextMeasure();
+        Measure* nm = m->nextMeasure();
+        if (nm && nm->measureRepeatCount(staffIdx) == m->measureRepeatCount(staffIdx) + 1) {
+            m = nm;
+        } else {
+            break;
+        }
     }
     return nullptr;
 }
