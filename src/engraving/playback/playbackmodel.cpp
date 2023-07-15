@@ -417,6 +417,10 @@ void PlaybackModel::processMeasureRepeat(const int tickPositionOffset, const Mea
         return;
     }
 
+    IF_ASSERT_FAILED(referringMeasure != currentMeasure) {
+        return;
+    }
+
     int currentMeasureTick = currentMeasure->tick().ticks();
     int referringMeasureTick = referringMeasure->tick().ticks();
     int repeatPositionTickOffset = currentMeasureTick - referringMeasureTick;
