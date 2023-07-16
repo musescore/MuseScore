@@ -88,7 +88,7 @@ mu::RetVal<mu::io::path_t> ExportProjectScenario::askExportPath(const INotationP
 
     RetVal<io::path_t> exportPath;
     exportPath.val = interactive()->selectSavingFile(qtrc("project/export", "Export"), defaultPath,
-                                                     exportType.filter(), isCreatingOnlyOneFile);
+                                                     exportType.filter(), isCreatingOnlyOneFile).path;
     exportPath.ret = !exportPath.val.empty();
 
     return exportPath;

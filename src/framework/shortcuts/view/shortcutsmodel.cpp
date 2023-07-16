@@ -201,7 +201,7 @@ void ShortcutsModel::exportShortcutsToFile()
     io::path_t path = interactive()->selectSavingFile(
         qtrc("shortcuts", "Export shortcuts"),
         globalConfiguration()->homePath(),
-        shortcutsFileFilter());
+        shortcutsFileFilter()).path;
 
     if (path.empty()) {
         return;

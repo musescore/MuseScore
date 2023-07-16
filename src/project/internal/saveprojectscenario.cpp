@@ -22,6 +22,9 @@
 
 #include "saveprojectscenario.h"
 
+#include "log.h"
+#include "translation.h"
+
 #include "cloud/clouderrors.h"
 #include "engraving/infrastructure/mscio.h"
 
@@ -87,6 +90,57 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
     }
 }
 
+static io::path_t correctedPath(const IInteractive::FileDialogResult& result, bool& needRecheckExists)
+{
+    needRecheckExists = false;
+
+    if (result.selectedFilterIndex == mu::nidx) {
+        // Fallback logic: deduce selected file type from extension (not reliable, but what can we do)
+        LOGW() << "Cannot use result.selectedFilterIndex; falling back to deducing the file type from the filename extension";
+
+        std::string suffix = io::suffix(result.path);
+
+        if (suffix != engraving::MSCZ && suffix != engraving::MSCS) {
+            io::path_t dirpath = io::absoluteDirpath(result.path);
+            io::path_t filename = io::filename(result.path, /*includingExtension=*/ true);
+
+            if (suffix == engraving::MSCX) {
+                filename = io::filename(result.path, /*includingExtension=*/ false);
+                needRecheckExists = true;
+            }
+
+            return dirpath.appendingComponent(filename).appendingComponent(filename).appendingSuffix(engraving::MSCX);
+        }
+
+        return result.path;
+    }
+
+    if (result.selectedFilterIndex == 1) { // MSCX
+        io::path_t dirpath = io::absoluteDirpath(result.path);
+        io::path_t filename = io::filename(result.path, /*includingExtension=*/ true);
+        std::string suffix = io::suffix(result.path);
+
+        if (suffix == engraving::MSCZ
+            || suffix == engraving::MSCX
+            || suffix == engraving::MSCS) {
+            filename = io::filename(result.path, /*includingExtension=*/ false);
+            needRecheckExists = true;
+        }
+
+        return dirpath.appendingComponent(filename).appendingComponent(filename).appendingSuffix(engraving::MSCX);
+    }
+
+    std::string correctSuffix = result.selectedFilterIndex == 2 ? engraving::MSCS : engraving::MSCZ;
+
+    if (io::suffix(result.path) != correctSuffix) {
+        needRecheckExists = true;
+
+        return result.path.appendingSuffix(correctSuffix);
+    }
+
+    return result.path;
+}
+
 RetVal<io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
 {
     QString dialogTitle = qtrc("project/save", "Save score");
@@ -112,23 +166,57 @@ RetVal<io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project
 #endif
     };
 
-    io::path_t selectedPath = interactive()->selectSavingFile(dialogTitle, defaultPath, filter);
+    bool ok = false;
+    io::path_t selectedPath = defaultPath;
 
-    if (selectedPath.empty()) {
-        return make_ret(Ret::Code::Cancel);
+    while (!ok) {
+        // passing selectedPath as default path, so that the user doesn't need to look up the correct
+        // folder again after choosing "Cancel" in our custom "do you want to replace" dialog (see comment below)
+        IInteractive::FileDialogResult result = interactive()->selectSavingFile(dialogTitle, selectedPath, filter);
+
+        if (result.path.empty()) {
+            return make_ret(Ret::Code::Cancel);
+        }
+
+        // If the corrected path, which will be used, is different¹ from what the user specified in the file dialog,
+        // the file dialog will not have had the possibility to warn the user about replacing any existing file.
+        // So in that case, we need to do that ourselves.
+        //
+        // ¹ A simple equality check is not sufficient, since for mscx folders we should return the path to the
+        //   mscx file inside the folder, rather than the path to the folder itself, which will also cause the
+        //   corrected path to be different, but in that case we don't need to recheck.
+        bool needRecheckExists = false;
+        selectedPath = correctedPath(result, needRecheckExists);
+
+        io::path_t containerPath = engraving::containerPath(selectedPath);
+        configuration()->setLastSavedProjectsPath(io::dirpath(containerPath));
+
+        ok = true;
+        if (needRecheckExists) {
+            if (fileSystem()->exists(containerPath)) {
+                ok = askAboutReplacingExistingFile(containerPath);
+            }
+        }
     }
-
-    if (!engraving::isMuseScoreFile(io::suffix(selectedPath))) {
-        // Then it must be that the user is trying to save a mscx file.
-        // At the selected path, a folder will be created,
-        // and inside the folder, a mscx file will be created.
-        // We should return the path to the mscx file.
-        selectedPath = selectedPath.appendingComponent(io::filename(selectedPath)).appendingSuffix(engraving::MSCX);
-    }
-
-    configuration()->setLastSavedProjectsPath(io::dirpath(selectedPath));
 
     return RetVal<io::path_t>::make_ok(selectedPath);
+}
+
+bool SaveProjectScenario::askAboutReplacingExistingFile(const io::path_t& filePath) const
+{
+    static constexpr int Replace = static_cast<int>(IInteractive::Button::CustomButton) + 1;
+
+    IInteractive::Result result = interactive()->question(
+        qtrc("project/save", "“%1” already exists. Do you want to replace it?")
+        .arg(io::filename(filePath).toQString()).toStdString(),
+        qtrc("project/save", "A file or folder with the same name already exists in the folder “%1”. "
+                             "Replacing it will overwrite its current contents.")
+        .arg(io::filename(io::dirpath(filePath)).toQString()).toStdString(), {
+        interactive()->buttonData(IInteractive::Button::Cancel),
+        IInteractive::ButtonData(Replace, trc("project/save", "Replace"))
+    });
+
+    return result.button() == Replace;
 }
 
 RetVal<SaveLocationType> SaveProjectScenario::saveLocationType() const

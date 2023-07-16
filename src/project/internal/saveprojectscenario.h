@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
 #include "global/iinteractive.h"
+#include "io/ifilesystem.h"
 
 #include "cloud/musescorecom/imusescorecomservice.h"
 #include "cloud/audiocom/iaudiocomservice.h"
@@ -37,6 +38,7 @@ class SaveProjectScenario : public ISaveProjectScenario
 {
     INJECT(IProjectConfiguration, configuration)
     INJECT(framework::IInteractive, interactive)
+    INJECT(io::IFileSystem, fileSystem)
     INJECT(cloud::IMuseScoreComService, museScoreComService)
     INJECT(cloud::IAudioComService, audioComService)
 
@@ -59,6 +61,8 @@ public:
 private:
     RetVal<SaveLocationType> saveLocationType() const;
     RetVal<SaveLocationType> askSaveLocationType() const;
+
+    bool askAboutReplacingExistingFile(const io::path_t& filePath) const;
 
     /// \param isPublish:
     ///     false -> this is part of a "Save to cloud" action

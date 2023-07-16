@@ -168,19 +168,29 @@ Ret InteractiveProvider::showProgress(const std::string& title, framework::Progr
 RetVal<io::path_t> InteractiveProvider::selectOpeningFile(const std::string& title, const io::path_t& dir,
                                                           const std::vector<std::string>& filter)
 {
-    return openFileDialog(FileDialogType::SelectOpenningFile, title, dir, filter);
+    RetVal<IInteractive::FileDialogResult> rv = openFileDialog(FileDialogType::SelectOpenningFile, title, dir, filter);
+    if (!rv.ret) {
+        return rv.ret;
+    }
+
+    return RetVal<io::path_t>::make_ok(rv.val.path);
 }
 
-RetVal<io::path_t> InteractiveProvider::selectSavingFile(const std::string& title, const io::path_t& path,
-                                                         const std::vector<std::string>& filter,
-                                                         bool confirmOverwrite)
+RetVal<IInteractive::FileDialogResult> InteractiveProvider::selectSavingFile(const std::string& title, const io::path_t& path,
+                                                                             const std::vector<std::string>& filter,
+                                                                             bool confirmOverwrite)
 {
     return openFileDialog(FileDialogType::SelectSavingFile, title, path, filter, confirmOverwrite);
 }
 
 RetVal<io::path_t> InteractiveProvider::selectDirectory(const std::string& title, const io::path_t& dir)
 {
-    return openFileDialog(FileDialogType::SelectDirectory, title, dir);
+    RetVal<IInteractive::FileDialogResult> rv = openFileDialog(FileDialogType::SelectDirectory, title, dir);
+    if (!rv.ret) {
+        return rv.ret;
+    }
+
+    return RetVal<io::path_t>::make_ok(rv.val.path);
 }
 
 RetVal<Val> InteractiveProvider::open(const UriQuery& q)
@@ -657,12 +667,11 @@ RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const s
     return result;
 }
 
-RetVal<io::path_t> InteractiveProvider::openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
-                                                       const std::vector<std::string>& filter, bool confirmOverwrite)
+RetVal<IInteractive::FileDialogResult> InteractiveProvider::openFileDialog(FileDialogType type, const std::string& title,
+                                                                           const io::path_t& path, const std::vector<std::string>& filter,
+                                                                           bool confirmOverwrite)
 {
     notifyAboutCurrentUriWillBeChanged();
-
-    RetVal<io::path_t> result;
 
     QmlLaunchData* data = new QmlLaunchData();
     fillFileDialogData(data, type, title, path, filter, confirmOverwrite);
@@ -675,11 +684,23 @@ RetVal<io::path_t> InteractiveProvider::openFileDialog(FileDialogType type, cons
 
     delete data;
 
+    RetVal<IInteractive::FileDialogResult> result;
+
     if (!objectId.isEmpty()) {
         RetVal<Val> rv = m_retvals.take(objectId);
         if (rv.ret.valid()) {
             result.ret = rv.ret;
-            result.val = QUrl::fromUserInput(rv.val.toQString()).toLocalFile();
+
+            if (rv.ret) {
+                QVariantMap resultMap = rv.val.toQVariant().toMap();
+
+                QString pathString = resultMap["path"].toString();
+                int selectedFilterIndex = resultMap["selectedFilterIndex"].toInt();
+
+                io::path_t path = QUrl::fromUserInput(pathString).toLocalFile();
+
+                result.val = { path, static_cast<size_t>(selectedFilterIndex) };
+            }
         }
     }
 

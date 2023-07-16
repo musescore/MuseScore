@@ -1548,7 +1548,7 @@ mu::io::path_t NotationActionController::selectStyleFile(bool forLoad)
     std::vector<std::string> filter = { filterName + " (*.mss)" };
     return forLoad
            ? interactive()->selectOpeningFile(qtrc("notation", "Load style"), dir, filter)
-           : interactive()->selectSavingFile(qtrc("notation", "Save style"), dir, filter);
+           : interactive()->selectSavingFile(qtrc("notation", "Save style"), dir, filter).path;
 }
 
 void NotationActionController::loadStyle()

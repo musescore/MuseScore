@@ -78,8 +78,9 @@ public:
     Ret showProgress(const std::string& title, framework::Progress* progress) override;
 
     RetVal<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
-    RetVal<io::path_t> selectSavingFile(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
-                                        bool confirmOverwrite) override;
+    RetVal<framework::IInteractive::FileDialogResult> selectSavingFile(const std::string& title, const io::path_t& path,
+                                                                       const std::vector<std::string>& filter,
+                                                                       bool confirmOverwrite) override;
     RetVal<io::path_t> selectDirectory(const std::string& title, const io::path_t& dir) override;
 
     RetVal<Val> open(const UriQuery& uri) override;
@@ -155,8 +156,9 @@ private:
                                    int defBtn = int(framework::IInteractive::Button::NoButton),
                                    const framework::IInteractive::Options& options = {});
 
-    RetVal<io::path_t> openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
-                                      const std::vector<std::string>& filter = {}, bool confirmOverwrite = true);
+    RetVal<framework::IInteractive::FileDialogResult> openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
+                                                                     const std::vector<std::string>& filter = {},
+                                                                     bool confirmOverwrite = true);
 
     void closeObject(const ObjectInfo& obj);
 

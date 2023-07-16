@@ -920,7 +920,7 @@ QString PaletteProvider::getPaletteFilename(bool open, const QString& name) cons
     if (open) {
         fn = interactive()->selectOpeningFile(title, defaultPath, filter);
     } else {
-        fn = interactive()->selectSavingFile(title, defaultPath, filter);
+        fn = interactive()->selectSavingFile(title, defaultPath, filter).path;
     }
     return fn.toQString();
 }

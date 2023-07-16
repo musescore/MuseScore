@@ -53,7 +53,7 @@ void ArticulationsProfileEditorModel::requestToOpenProfile()
 bool ArticulationsProfileEditorModel::requestToCreateProfile()
 {
     std::vector<std::string> filter = { /*qtrc*/ std::string("MPE articulations profile") + " " + PROFILE_EXTENSION };
-    io::path_t path = interactive()->selectSavingFile(/*qtrc*/ QString("Save MPE articulations profile"), "", filter);
+    io::path_t path = interactive()->selectSavingFile(/*qtrc*/ QString("Save MPE articulations profile"), "", filter).path;
 
     if (path.empty()) {
         return false;

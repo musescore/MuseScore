@@ -678,7 +678,7 @@ void EditDrumsetDialog::save()
 {
     std::vector<std::string> filter = { mu::trc("palette", "MuseScore drumset file") + " (*.drm)" };
     mu::io::path_t dir = notationConfiguration()->userStylesPath();
-    mu::io::path_t fname = interactive()->selectSavingFile(mu::qtrc("palette", "Save drumset"), dir, filter);
+    mu::io::path_t fname = interactive()->selectSavingFile(mu::qtrc("palette", "Save drumset"), dir, filter).path;
 
     if (fname.empty()) {
         return;

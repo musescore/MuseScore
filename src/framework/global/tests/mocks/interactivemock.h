@@ -53,7 +53,7 @@ public:
     MOCK_METHOD(Ret, showProgress, (const std::string&, framework::Progress*), (const, override));
 
     MOCK_METHOD(io::path_t, selectOpeningFile, (const QString&, const io::path_t&, const std::vector<std::string>&), (override));
-    MOCK_METHOD(io::path_t, selectSavingFile, (const QString&, const io::path_t&, const std::vector<std::string>&, bool), (override));
+    MOCK_METHOD(FileDialogResult, selectSavingFile, (const QString&, const io::path_t&, const std::vector<std::string>&, bool), (override));
     MOCK_METHOD(io::path_t, selectDirectory, (const QString&, const io::path_t&), (override));
     MOCK_METHOD(io::paths_t, selectMultipleDirectories, (const QString&, const io::path_t&, const io::paths_t&), (override));
     MOCK_METHOD(QColor, selectColor, (const QColor&, const QString&), (override));

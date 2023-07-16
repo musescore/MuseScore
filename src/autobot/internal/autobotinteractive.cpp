@@ -113,8 +113,8 @@ io::path_t AutobotInteractive::selectOpeningFile(const QString& title, const io:
     return m_real->selectOpeningFile(title, dir, filter);
 }
 
-io::path_t AutobotInteractive::selectSavingFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter,
-                                                bool confirmOverwrite)
+IInteractive::FileDialogResult AutobotInteractive::selectSavingFile(const QString& title, const io::path_t& dir,
+                                                                    const std::vector<std::string>& filter, bool confirmOverwrite)
 {
     // return m_real->selectSavingFile(title, dir, filter, confirmOverwrite);
     QStringList filterList;
@@ -125,7 +125,10 @@ io::path_t AutobotInteractive::selectSavingFile(const QString& title, const io::
     LOGD() << title << " dir:" << dir << ", filter: " << filterList << ", confirmOverwrite: " << confirmOverwrite;
     m_real->open("musescore://autobot/selectfile?sync=true&filePath=" + dir.toStdString());
     m_selectedFilePath = dir;
-    return m_selectedFilePath;
+
+    FileDialogResult result;
+    result.path = m_selectedFilePath;
+    return result;
 }
 
 io::path_t AutobotInteractive::selectDirectory(const QString& title, const io::path_t& dir)

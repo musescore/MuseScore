@@ -188,13 +188,18 @@ mu::io::path_t Interactive::selectOpeningFile(const QString& title, const io::pa
 #endif
 }
 
-io::path_t Interactive::selectSavingFile(const QString& title, const io::path_t& path, const std::vector<std::string>& filter,
-                                         bool confirmOverwrite)
+IInteractive::FileDialogResult Interactive::selectSavingFile(const QString& title, const io::path_t& path,
+                                                             const std::vector<std::string>& filter, bool confirmOverwrite)
 {
 #ifndef Q_OS_LINUX
+    FileDialogResult result;
+
     QFileDialog::Options options;
     options.setFlag(QFileDialog::DontConfirmOverwrite, !confirmOverwrite);
-    QString result = QFileDialog::getSaveFileName(nullptr, title, path.toQString(), filterToString(filter), nullptr, options);
+    QString selectedFilter;
+    result.path = QFileDialog::getSaveFileName(nullptr, title, path.toQString(), filterToString(filter), &selectedFilter, options);
+    result.selectedFilterIndex = mu::indexOf(filter, selectedFilter.toStdString());
+
     return result;
 #else
     return provider()->selectSavingFile(title.toStdString(), path, filter, confirmOverwrite).val;

@@ -63,8 +63,9 @@ public:
 
     virtual RetVal<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir,
                                                  const std::vector<std::string>& filter) = 0;
-    virtual RetVal<io::path_t> selectSavingFile(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
-                                                bool confirmOverwrite) = 0;
+    virtual RetVal<framework::IInteractive::FileDialogResult> selectSavingFile(const std::string& title, const io::path_t& path,
+                                                                               const std::vector<std::string>& filter,
+                                                                               bool confirmOverwrite) = 0;
     virtual RetVal<io::path_t> selectDirectory(const std::string& title, const io::path_t& dir) = 0;
 
     virtual RetVal<Val> open(const UriQuery& uri) = 0;

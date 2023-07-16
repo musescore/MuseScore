@@ -51,7 +51,7 @@ mu::Ret SaveDiagnosticFilesScenario::saveDiagnosticFiles()
     io::path_t path = interactive()->selectSavingFile(
         qtrc("diagnostics", "Save diagnostic files"),
         configuration()->diagnosticFilesDefaultSavingPath(),
-        { "(*.zip)" });
+        { "(*.zip)" }).path;
 
     if (path.empty()) {
         return make_ret(Ret::Code::Cancel);
