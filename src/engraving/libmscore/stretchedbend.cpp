@@ -76,8 +76,8 @@ static constexpr double BEND_HEIGHT_MULTIPLIER = .2; /// how much height differs
 //   StretchedBend
 //---------------------------------------------------------
 
-StretchedBend::StretchedBend(Note* parent)
-    : EngravingItem(ElementType::STRETCHED_BEND, parent, ElementFlag::MOVABLE)
+StretchedBend::StretchedBend(Chord* parent)
+    : EngravingItem(ElementType::STRETCHED_BEND, parent, ElementFlag::MOVABLE), m_chord(parent)
 {
     initElementStyle(&stretchedBendStyle);
 }
@@ -169,6 +169,11 @@ void StretchedBend::fillDrawPoints()
 
 void StretchedBend::fillSegments()
 {
+    IF_ASSERT_FAILED(m_note) {
+        LOGE() << "note is not set";
+        return;
+    }
+
     m_bendSegments.clear();
 
     size_t n = m_drawPoints.size();
@@ -176,18 +181,16 @@ void StretchedBend::fillSegments()
         return;
     }
 
-    Note* note = toNote(parent());
-    double noteWidth = note->width();
-    double noteHeight = note->height();
-    PointF notePos = note->pos();
-
+    double noteWidth = m_note->width();
+    double noteHeight = m_note->height();
+    PointF notePos = m_note->pos();
     double sp = spatium();
     bool isPrevBendUp = false;
-    PointF upBendDefaultSrc = PointF(noteWidth + sp * .8, 0);
-    PointF downBendDefaultSrc = PointF(noteWidth * .5, -noteHeight * .5 - sp * .2);
+    PointF upBendDefaultSrc = PointF(noteWidth + sp * .8, 0) + notePos;
+    PointF downBendDefaultSrc = PointF(noteWidth * .5, -noteHeight * .5 - sp * .2) + notePos;
 
     PointF src = m_drawPoints.at(0) == 0 ? upBendDefaultSrc : downBendDefaultSrc;
-    PointF dest(0, 0);
+    PointF dest(notePos);
 
     int lastPointPitch = m_drawPoints.back();
     bool releasedToInitial = (0 == lastPointPitch);
@@ -207,7 +210,7 @@ void StretchedBend::fillSegments()
         /// PRE-BEND (+BEND, +RELEASE)
         if (pt == 0 && pitch != 0) {
             int prebendTone = bendTone(pitch);
-            double minY = std::min(-notePos.y(), src.y());
+            double minY = std::min(.0, src.y());
             dest = PointF(src.x(), minY - bendHeight(prebendTone) - baseBendHeight);
             if (!skipFirstPoint) {
                 m_bendSegments.push_back({ src, dest, BendSegmentType::LINE_UP, prebendTone });
@@ -240,12 +243,12 @@ void StretchedBend::fillSegments()
             isPrevBendUp = bendUp;
 
             if (bendUp) {
-                double minY = std::min(-notePos.y(), src.y());
+                double minY = std::min(.0, src.y());
                 dest.setY(minY - bendHeight(tone) - baseBendHeight);
                 type = BendSegmentType::CURVE_UP;
             } else {
                 if (releasedToInitial) {
-                    dest.setY(0);
+                    dest.setY(notePos.y());
                 } else {
                     dest.setY(src.y() + bendHeight(prevTone) + baseBendHeight);
                 }
@@ -511,7 +514,7 @@ PainterPath bendCurveFromPoints(const PointF& p1, const PointF& p2)
 
 double StretchedBend::nextSegmentX() const
 {
-    Segment* nextSeg = toNote(parent())->chord()->segment()->nextInStaff(
+    Segment* nextSeg = toChord(parent())->segment()->nextInStaff(
         staffIdx(), SegmentType::ChordRest | SegmentType::BarLine | SegmentType::EndBarLine);
     if (!nextSeg) {
         return 0;
@@ -555,7 +558,7 @@ void StretchedBend::prepareBends(std::vector<StretchedBend*>& bends)
 
 bool StretchedBend::firstPointShouldBeSkipped() const
 {
-    if (Tie* tie = toNote(parent())->tieBack()) {
+    if (Tie* tie = m_note->tieBack()) {
         Note* backTied = tie->startNote();
         if (StretchedBend* lastStretchedBend = (backTied ? backTied->stretchedBend() : nullptr)) {
             if (lastStretchedBend) {

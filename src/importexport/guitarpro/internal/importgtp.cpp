@@ -723,10 +723,13 @@ void GuitarPro::createBend(Note* note, std::vector<PitchValue>& bendData)
     bool useStretchedBends = engravingConfiguration()->guitarProImportExperimental();
 
     if (useStretchedBends) {
-        StretchedBend* stretchedBend = Factory::createStretchedBend(note);
+        Chord* chord = toChord(note->parent());
+        StretchedBend* stretchedBend = Factory::createStretchedBend(chord);
         stretchedBend->setPitchValues(bendData);
         stretchedBend->setTrack(note->track());
-        note->add(stretchedBend);
+        stretchedBend->setNote(note);
+        note->setStretchedBend(stretchedBend);
+        chord->add(stretchedBend);
         m_stretchedBends.push_back(stretchedBend);
     } else {
         Bend* bend = Factory::createBend(note);

@@ -52,6 +52,7 @@
 #include "stafftype.h"
 #include "stem.h"
 #include "stemslash.h"
+#include "stretchedbend.h"
 #include "stringdata.h"
 #include "system.h"
 #include "tie.h"
@@ -674,6 +675,9 @@ void Chord::add(EngravingItem* e)
     case ElementType::HOOK:
         m_hook = toHook(e);
         break;
+    case ElementType::STRETCHED_BEND:
+        m_stretchedBends.insert(toStretchedBend(e));
+    // fallthrough
     case ElementType::CHORDLINE:
     case ElementType::FRET_CIRCLE:
         el().push_back(e);
@@ -746,6 +750,10 @@ void Chord::remove(EngravingItem* e)
             for (Spanner* s : note->spannerFor()) {
                 note->removeSpannerFor(s);
             }
+            if (StretchedBend* stretchedBend = note->stretchedBend()) {
+                m_stretchedBends.erase(stretchedBend);
+                el().remove(stretchedBend);
+            }
         } else {
             LOGD("Chord::remove() note %p not found!", e);
         }
@@ -778,6 +786,18 @@ void Chord::remove(EngravingItem* e)
         }
         m_stemSlash = 0;
         break;
+    case ElementType::STRETCHED_BEND:
+    {
+        StretchedBend* stretchedBend = toStretchedBend(e);
+        m_stretchedBends.erase(stretchedBend);
+        auto it = std::find_if(m_notes.begin(), m_notes.end(), [stretchedBend](Note* note) {
+                return note->stretchedBend() == stretchedBend;
+            });
+        if (it != m_notes.end()) {
+            (*it)->setStretchedBend(nullptr);
+        }
+        // fallthrough
+    }
     case ElementType::CHORDLINE:
     case ElementType::FRET_CIRCLE:
         el().remove(e);

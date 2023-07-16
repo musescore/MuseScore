@@ -3195,11 +3195,9 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
 
 void ChordLayout::layoutStretchedBends(Chord* chord, LayoutContext& ctx)
 {
-    for (Note* note : chord->notes()) {
-        for (EngravingItem* item : note->el()) {
-            if (item && item->isStretchedBend()) {
-                layout::v0::TLayout::layoutStretched(toStretchedBend(item), ctx);
-            }
+    for (StretchedBend* stretchedBend : chord->stretchedBends()) {
+        if (stretchedBend) {
+            layout::v0::TLayout::layoutStretched(stretchedBend, ctx);
         }
     }
 }

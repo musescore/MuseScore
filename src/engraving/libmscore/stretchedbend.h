@@ -62,6 +62,9 @@ public:
     void setPitchValues(const PitchValues& p) { m_pitchValues = p; }
     const PitchValues& pitchValues() const { return m_pitchValues; }
 
+    void setNote(Note* note) { m_note = note; }
+    Note* note() const { return m_note; }
+
     // property methods
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -70,7 +73,7 @@ private:
 
     friend class Factory;
 
-    StretchedBend(Note* parent);
+    StretchedBend(Chord* parent);
 
     enum class BendSegmentType {
         NO_TYPE = -1,
@@ -104,6 +107,9 @@ private:
         PolygonF down;
         double width = 0;
     } m_arrows;
+
+    Note* m_note = nullptr;
+    Chord* m_chord = nullptr;
 };
 }     // namespace mu::engraving
 #endif

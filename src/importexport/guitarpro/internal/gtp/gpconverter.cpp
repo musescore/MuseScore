@@ -1968,10 +1968,14 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
     }
 
     if (m_useStretchedBends) {
-        StretchedBend* stretchedBend = Factory::createStretchedBend(note);
+        Chord* chord = toChord(note->parent());
+        StretchedBend* stretchedBend = Factory::createStretchedBend(chord);
         stretchedBend->setPitchValues(pitchValues);
         stretchedBend->setTrack(note->track());
-        note->add(stretchedBend);
+        stretchedBend->setNote(note);
+        note->setStretchedBend(stretchedBend);
+
+        chord->add(stretchedBend);
         m_stretchedBends.push_back(stretchedBend);
     } else {
         Bend* bend = Factory::createBend(note);
