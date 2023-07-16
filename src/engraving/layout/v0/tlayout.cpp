@@ -1516,9 +1516,9 @@ void TLayout::layout(Expression* item, LayoutContext& ctx)
         track_idx_t startTrack = track2staff(item->staffIdx());
         track_idx_t endTrack = startTrack + VOICES;
         for (track_idx_t track = startTrack; track < endTrack; ++track) {
-            EngravingItem* engravingItem = segment->elementAt(track);
-            if (engravingItem && engravingItem->isChord()) {
-                chordToAlign = toChord(item);
+            EngravingItem* e = segment->elementAt(track);
+            if (e && e->isChord()) {
+                chordToAlign = toChord(e);
                 break;
             }
         }
