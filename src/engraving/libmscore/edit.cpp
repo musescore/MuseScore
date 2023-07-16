@@ -4138,7 +4138,9 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                 KeySig* nks = Factory::copyKeySig(*ks);
                 Segment* s  = newMeasure->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
                 nks->setParent(s);
-                nks->setKey(nks->concertKey());  // to set correct (transposing) key
+                if (!nks->isAtonal()) {
+                    nks->setKey(nks->concertKey());  // to set correct (transposing) key
+                }
                 undoAddElement(nks);
             }
             for (Clef* clef : clefList) {
