@@ -161,6 +161,11 @@ void StretchedBend::fillDrawPoints()
     for (size_t i = 0; i < m_pitchValues.size(); i++) {
         m_drawPoints.push_back(m_pitchValues.at(i).pitch);
     }
+
+    auto maxElIt = std::max_element(m_drawPoints.begin(), m_drawPoints.end());
+    if (maxElIt != m_drawPoints.end()) {
+        m_maxDrawPointRead = *maxElIt;
+    }
 }
 
 //---------------------------------------------------------
@@ -175,6 +180,7 @@ void StretchedBend::fillSegments()
     }
 
     m_bendSegments.clear();
+    m_highestCoord = 0;
 
     size_t n = m_drawPoints.size();
     if (n < 2) {
@@ -213,16 +219,29 @@ void StretchedBend::fillSegments()
             double minY = std::min(.0, src.y());
             dest = PointF(src.x(), minY - bendHeight(prebendTone) - baseBendHeight);
             if (!skipFirstPoint) {
-                m_bendSegments.push_back({ src, dest, BendSegmentType::LINE_UP, prebendTone });
+                bool needsHeightUpdatePrebend = false;
+                if (pitch == m_maxDrawPointRead) {
+                    m_highestCoord = std::max(m_highestCoord, -dest.y());
+                    needsHeightUpdatePrebend = true;
+                }
+
+                m_bendSegments.push_back({ src, dest, BendSegmentType::LINE_UP, prebendTone, true, needsHeightUpdatePrebend });
             }
 
             src.setY(dest.y());
         }
 
+        bool visible = true;
+        bool needsHeightUpdate = false;
+
         /// PRE-BEND - - -
         if (pitch == nextPitch) {
             if (pt == 0) {
                 type = BendSegmentType::LINE_STROKED;
+                if (pitch == m_maxDrawPointRead) {
+                    m_highestCoord = std::max(m_highestCoord, -dest.y());
+                    needsHeightUpdate = true;
+                }
             }
         } else {
             bool bendUp = pitch < nextPitch;
@@ -246,7 +265,18 @@ void StretchedBend::fillSegments()
                 double minY = std::min(.0, src.y());
                 dest.setY(minY - bendHeight(tone) - baseBendHeight);
                 type = BendSegmentType::CURVE_UP;
+                if (nextPitch == m_maxDrawPointRead) {
+                    m_highestCoord = std::max(m_highestCoord, -dest.y());
+                    needsHeightUpdate = true;
+                }
             } else {
+                // skipping extra curves down of bend-release in a chord
+                if (pitch == m_maxDrawPointRead) {
+                    if (m_note != m_chord->upNote()) {
+                        visible = false;
+                    }
+                }
+
                 if (releasedToInitial) {
                     dest.setY(notePos.y());
                 } else {
@@ -262,12 +292,67 @@ void StretchedBend::fillSegments()
         }
 
         if (type != BendSegmentType::NO_TYPE) {
-            m_bendSegments.push_back({ src, dest, type, tone });
+            m_bendSegments.push_back({ src, dest, type, tone, visible, needsHeightUpdate });
         }
 
         src = dest;
         prevLineType = type;
         prevTone = tone;
+    }
+}
+
+//---------------------------------------------------------
+//   highestCoord
+//---------------------------------------------------------
+
+double StretchedBend::highestCoord() const
+{
+    return m_highestCoord;
+}
+
+//---------------------------------------------------------
+//   updateHeights
+//---------------------------------------------------------
+
+void StretchedBend::updateHeights(double newHighestCoord)
+{
+    IF_ASSERT_FAILED(!m_bendSegments.empty()) {
+        LOGE() << "invalid bend data";
+        return;
+    }
+
+    // check tied back note
+    StretchedBend* lastStretchedBend = backTiedStretchedBend();
+    if (lastStretchedBend) {
+        const auto& lastBendSegments = lastStretchedBend->m_bendSegments;
+        if (!lastBendSegments.empty()) {
+            const BendSegment& lastBendEndSegment = lastBendSegments.back();
+            BendSegment& thisBendStartSegment = m_bendSegments.at(0);
+            thisBendStartSegment.visible = lastBendEndSegment.visible;
+            if (thisBendStartSegment.type == BendSegmentType::CURVE_DOWN
+                && lastStretchedBend->m_note != lastStretchedBend->m_chord->upNote()) {
+                thisBendStartSegment.visible = false;
+            }
+
+            if (lastBendEndSegment.needsHeightUpdate) {
+                m_bendSegments.at(0).src.setY(lastBendEndSegment.dest.y());
+            }
+        }
+    }
+
+    for (size_t i = 0; i < m_bendSegments.size(); i++) {
+        BendSegment& bendSegment = m_bendSegments.at(i);
+        if (bendSegment.needsHeightUpdate) {
+            double oldHeight = bendSegment.dest.y();
+            bendSegment.dest.setY(-newHighestCoord);
+            bendSegment.tone = bendTone(m_maxDrawPointUpdated);
+            if (i < m_bendSegments.size() - 1) {
+                BendSegment& nextBendSegment = m_bendSegments.at(i + 1);
+                if (nextBendSegment.src.y() == oldHeight) {
+                    nextBendSegment.src.setY(-newHighestCoord);
+                }
+            }
+        }
     }
 }
 
@@ -321,6 +406,10 @@ void StretchedBend::draw(mu::draw::Painter* painter) const
     bool isTextDrawn = false;
 
     for (const BendSegment& bendSegment : m_bendSegmentsStretched) {
+        if (!bendSegment.visible) {
+            continue;
+        }
+
         const PointF& src = bendSegment.src;
         const PointF& dest = bendSegment.dest;
         const String& text = String::fromUtf8(label[bendSegment.tone]);
@@ -550,6 +639,31 @@ void StretchedBend::prepareBends(std::vector<StretchedBend*>& bends)
     for (StretchedBend* bend : bends) {
         bend->fillDrawPoints();
     }
+
+    auto maxDrawPointIt = std::max_element(bends.begin(), bends.end(), [](StretchedBend* b1, StretchedBend* b2) {
+        return b1->m_maxDrawPointRead < b2->m_maxDrawPointRead;
+    });
+
+    if (maxDrawPointIt != bends.end()) {
+        int maxDrawPoint = (*maxDrawPointIt)->m_maxDrawPointRead;
+        for (StretchedBend* bend: bends) {
+            bend->m_maxDrawPointUpdated = maxDrawPoint;
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   backTiedStretchedBend
+//---------------------------------------------------------
+
+StretchedBend* StretchedBend::backTiedStretchedBend() const
+{
+    if (Tie* tie = m_note->tieBack()) {
+        Note* backTied = tie->startNote();
+        return backTied ? backTied->stretchedBend() : nullptr;
+    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -558,15 +672,11 @@ void StretchedBend::prepareBends(std::vector<StretchedBend*>& bends)
 
 bool StretchedBend::firstPointShouldBeSkipped() const
 {
-    if (Tie* tie = m_note->tieBack()) {
-        Note* backTied = tie->startNote();
-        if (StretchedBend* lastStretchedBend = (backTied ? backTied->stretchedBend() : nullptr)) {
-            if (lastStretchedBend) {
-                const auto& lastBendPoints = lastStretchedBend->m_drawPoints;
-                if (!lastBendPoints.empty() && lastBendPoints.back() == m_pitchValues.at(0).pitch) {
-                    return true;
-                }
-            }
+    StretchedBend* lastStretchedBend = backTiedStretchedBend();
+    if (lastStretchedBend) {
+        const auto& lastBendPoints = lastStretchedBend->m_drawPoints;
+        if (!lastBendPoints.empty() && lastBendPoints.back() == m_drawPoints.at(0)) {
+            return true;
         }
     }
 

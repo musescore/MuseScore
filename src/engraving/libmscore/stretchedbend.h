@@ -57,6 +57,9 @@ public:
     void fillStretchedSegments(bool untilNextSegment);
     mu::RectF calculateBoundingRect() const;
 
+    double highestCoord() const;
+    void updateHeights(double newHighestCoord);
+
     static void prepareBends(std::vector<StretchedBend*>& bends);
 
     void setPitchValues(const PitchValues& p) { m_pitchValues = p; }
@@ -88,6 +91,8 @@ private:
         PointF dest;
         BendSegmentType type = BendSegmentType::NO_TYPE;
         int tone = -1;
+        bool visible = true;
+        bool needsHeightUpdate = false;
     };
 
     void fillDrawPoints(); // filling the points which specify how bend will be drawn
@@ -95,9 +100,14 @@ private:
     double nextSegmentX() const;
     double bendHeight(int bendIdx) const;
     bool firstPointShouldBeSkipped() const;
+    StretchedBend* backTiedStretchedBend() const;
 
     PitchValues m_pitchValues;
     std::vector<int> m_drawPoints;
+    int m_maxDrawPointRead = 0;
+    int m_maxDrawPointUpdated = 0;
+    double m_highestCoord = 0;
+
     std::vector<BendSegment> m_bendSegments; // filled during note layout (when all coords are not known yet)
     mutable std::vector<BendSegment> m_bendSegmentsStretched; // filled during system layout (final coords used for drawing)
 

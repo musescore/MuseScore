@@ -3195,6 +3195,19 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
 
 void ChordLayout::layoutStretchedBends(Chord* chord, LayoutContext& ctx)
 {
+    double highestCoord = 0;
+    for (StretchedBend* stretchedBend : chord->stretchedBends()) {
+        if (stretchedBend) {
+            highestCoord = std::max(highestCoord, stretchedBend->highestCoord());
+        }
+    }
+
+    for (StretchedBend* stretchedBend : chord->stretchedBends()) {
+        if (stretchedBend) {
+            stretchedBend->updateHeights(highestCoord);
+        }
+    }
+
     for (StretchedBend* stretchedBend : chord->stretchedBends()) {
         if (stretchedBend) {
             layout::v0::TLayout::layoutStretched(stretchedBend, ctx);
