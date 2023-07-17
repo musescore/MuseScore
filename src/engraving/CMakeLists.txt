@@ -23,6 +23,7 @@ set(MODULE_QRC engraving.qrc)
 
 include(${CMAKE_CURRENT_LIST_DIR}/libmscore/libmscore.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compat/midi/compatmidi.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/layout/v0/layout.cmake)
 
 set(MODULE_SRC
 
@@ -177,42 +178,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/layout/paddingtable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/paddingtable.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/tlayout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/tlayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/layout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/layout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/layoutcontext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/layoutcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/scorelayout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/scorelayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/lyricslayout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/lyricslayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/measurelayout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/measurelayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/beamlayout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/beamlayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/beamtremololayout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/beamtremololayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/chordlayout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/chordlayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/tupletlayout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/tupletlayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/verticalgapdata.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/verticalgapdata.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/systemlayout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/systemlayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/harmonylayout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/harmonylayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/tremololayout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/tremololayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/pagelayout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/pagelayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/slurtielayout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/slurtielayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/arpeggiolayout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/arpeggiolayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/horizontalspacing.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/v0/horizontalspacing.h
+    ${LAYOUT_V0_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderingcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext.cpp
