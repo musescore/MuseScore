@@ -116,6 +116,7 @@ StyledListView {
             // in search and no cell selected: apply the first found element
             const parentIndex = paletteTreeDelegateModel.modelIndex(0);
             index = paletteModel.index(0, 0, parentIndex);
+            paletteSelectionModel.select(index, ItemSelectionModel.Select);
         }
 
         paletteController.applyPaletteElement(index, Qt.NoModifier);
