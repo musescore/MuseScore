@@ -28,10 +28,6 @@
 #include "durationelement.h"
 #include "types/types.h"
 
-namespace mu::engraving::layout::v0 {
-class ChordLayout;
-}
-
 namespace mu::engraving {
 enum class CrossMeasure : signed char {
     UNKNOWN = -1,

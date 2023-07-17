@@ -23,7 +23,8 @@ set(MODULE_QRC engraving.qrc)
 
 include(${CMAKE_CURRENT_LIST_DIR}/libmscore/libmscore.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compat/midi/compatmidi.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/layout/v0/layout.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/layout/dev/layout.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/layout/stable/layout.cmake)
 
 set(MODULE_SRC
 
@@ -178,7 +179,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/layout/paddingtable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/paddingtable.h
 
-    ${LAYOUT_V0_SRC}
+    ${LAYOUT_DEV_SRC}
+    ${LAYOUT_STABLE_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderingcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext.cpp

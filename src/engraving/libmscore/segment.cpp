@@ -27,7 +27,8 @@
 #include "translation.h"
 
 #include "types/typesconv.h"
-#include "layout/v0/tlayout.h"
+
+#include "layout/dev/tlayout.h"
 
 #include "accidental.h"
 #include "barline.h"
@@ -2259,8 +2260,8 @@ void Segment::createShape(staff_idx_t staffIdx)
         setVisible(true);
         BarLine* bl = toBarLine(element(staffIdx * VOICES));
         if (bl) {
-            layout::v0::LayoutContext lctx(score());
-            RectF r = layout::v0::TLayout::layoutRect(bl, lctx);
+            layout::dev::LayoutContext lctx(score());
+            RectF r = layout::dev::TLayout::layoutRect(bl, lctx);
             s.add(r.translated(bl->pos()), bl);
         }
         s.addHorizontalSpacing(bl, 0, 0);

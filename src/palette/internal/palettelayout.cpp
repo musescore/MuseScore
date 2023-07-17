@@ -85,10 +85,10 @@
 
 #include "engraving/libmscore/utils.h"
 
-#include "engraving/layout/v0/tlayout.h"
-#include "engraving/layout/v0/tremololayout.h"
-#include "engraving/layout/v0/arpeggiolayout.h"
-#include "engraving/layout/v0/chordlayout.h"
+#include "engraving/layout/stable/tlayout.h"
+#include "engraving/layout/stable/tremololayout.h"
+#include "engraving/layout/stable/arpeggiolayout.h"
+#include "engraving/layout/stable/chordlayout.h"
 
 #include "log.h"
 
@@ -209,8 +209,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
     default:
         LOGE() << "Not handled: " << item->typeName();
         IF_ASSERT_FAILED(false) {
-            layout::v0::LayoutContext ctxv0(item->score());
-            layout::v0::TLayout::layoutItem(item, ctxv0);
+            layout::stable::LayoutContext tctx(item->score());
+            layout::stable::TLayout::layoutItem(item, tctx);
         }
         break;
     }
@@ -359,8 +359,8 @@ void PaletteLayout::layout(Ambitus* item, const Context& ctx)
 
 void PaletteLayout::layout(Arpeggio* item, const Context& ctx)
 {
-    engraving::layout::v0::LayoutContext ctxv0(ctx.dontUseScore());
-    engraving::layout::v0::ArpeggioLayout::layout(item, ctxv0);
+    engraving::layout::stable::LayoutContext tctx(ctx.dontUseScore());
+    engraving::layout::stable::ArpeggioLayout::layout(item, tctx);
 }
 
 void PaletteLayout::layout(Articulation* item, const Context&)
@@ -641,8 +641,8 @@ void PaletteLayout::layout(Capo* item, const Context& ctx)
 
 void PaletteLayout::layout(Chord* item, const Context& ctx)
 {
-    layout::v0::LayoutContext ctxv0(ctx.dontUseScore());
-    layout::v0::ChordLayout::layout(item, ctxv0);
+    layout::stable::LayoutContext tctx(ctx.dontUseScore());
+    layout::stable::ChordLayout::layout(item, tctx);
 }
 
 void PaletteLayout::layout(ChordLine* item, const Context& ctx)
@@ -1407,8 +1407,8 @@ void PaletteLayout::layout(TimeSig* item, const Context& ctx)
 void PaletteLayout::layout(Tremolo* item, const Context& ctx)
 {
     //! TODO
-    engraving::layout::v0::LayoutContext ctxv0(ctx.dontUseScore());
-    engraving::layout::v0::TremoloLayout::layout(item, ctxv0);
+    engraving::layout::stable::LayoutContext tctx(ctx.dontUseScore());
+    engraving::layout::stable::TremoloLayout::layout(item, tctx);
 }
 
 void PaletteLayout::layout(TremoloBar* item, const Context&)
