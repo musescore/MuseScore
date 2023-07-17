@@ -431,8 +431,10 @@ void NotationActionController::init()
     registerAction("toggle-hide-empty", &Interaction::execute, &mu::engraving::Score::cmdToggleHideEmpty);
 
     registerAction("mirror-note", &Interaction::execute, &mu::engraving::Score::cmdMirrorNoteHead);
-    registerAction("clef-violin", &Interaction::insertClef, mu::engraving::ClefType::G);
-    registerAction("clef-bass", &Interaction::insertClef, mu::engraving::ClefType::F);
+
+    registerAction("clef-violin", [this]() { insertClef(mu::engraving::ClefType::G); });
+    registerAction("clef-bass", [this]() { insertClef(mu::engraving::ClefType::F); });
+
     registerAction("sharp2-post", &Interaction::changeAccidental, mu::engraving::AccidentalType::SHARP2, PlayMode::PlayNote);
     registerAction("sharp-post", &Interaction::changeAccidental, mu::engraving::AccidentalType::SHARP, PlayMode::PlayNote);
     registerAction("nat-post", &Interaction::changeAccidental, mu::engraving::AccidentalType::NATURAL, PlayMode::PlayNote);
@@ -1159,6 +1161,16 @@ void NotationActionController::addFret(int num)
 
     interaction->addFret(num);
     playSelectedElement(currentNotationElements()->msScore()->playChord());
+}
+
+void NotationActionController::insertClef(mu::engraving::ClefType type)
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction || !interaction->canInsertClef(type)) {
+        return;
+    }
+
+    interaction->insertClef(type);
 }
 
 IInteractive::Result NotationActionController::showErrorMessage(const std::string& message) const
