@@ -526,9 +526,9 @@ StyledGridView {
             }
 
             onClicked: {
-                if (!paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, ui.keyboardModifiers())) {
-                    updateSelection()
-                }
+                paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, ui.keyboardModifiers())
+
+                updateSelection()
             }
 
             onDoubleClicked: {
