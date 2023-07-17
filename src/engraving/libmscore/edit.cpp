@@ -5086,6 +5086,10 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
 
 void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool forInstrumentChange)
 {
+    IF_ASSERT_FAILED(ostaff && e) {
+        return;
+    }
+
     bool moveClef = false;
     SegmentType st = SegmentType::Clef;
     if (e->isMeasure()) {

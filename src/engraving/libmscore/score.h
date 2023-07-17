@@ -604,6 +604,7 @@ public:
     void resetUserStretch();
     void cmdResetBeamMode();
     void cmdResetTextStyleOverrides();
+    bool canInsertClef(ClefType) const;
     void cmdInsertClef(ClefType);
     void removeChordRest(ChordRest* cr, bool clearSegment);
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
