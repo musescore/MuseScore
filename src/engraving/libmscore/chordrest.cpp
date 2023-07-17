@@ -26,11 +26,7 @@
 
 #include "types/typesconv.h"
 
-#include "layout/v0/tlayout.h"
-#include "layout/v0/chordlayout.h"
-
 #include "actionicon.h"
-#include "articulation.h"
 #include "barline.h"
 #include "beam.h"
 #include "breath.h"

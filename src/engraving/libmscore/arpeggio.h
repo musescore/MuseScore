@@ -25,10 +25,6 @@
 
 #include "engravingitem.h"
 
-namespace mu::engraving::layout::v0 {
-class ArpeggioLayout;
-}
-
 namespace mu::engraving {
 class Factory;
 class Chord;

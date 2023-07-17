@@ -41,10 +41,6 @@
 #include "shape.h"
 #include "editdata.h"
 
-namespace mu::engraving::layout::v0 {
-class TLayout;
-}
-
 namespace mu::engraving {
 class Factory;
 class XmlReader;

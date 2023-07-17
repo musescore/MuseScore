@@ -35,8 +35,6 @@
 #include "rw/xmlreader.h"
 #include "rw/xmlwriter.h"
 
-#include "layout/v0/tlayout.h"
-
 #include "types/symnames.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"

@@ -32,11 +32,6 @@
 
 #include "skyline.h"
 
-namespace mu::engraving::layout::v0 {
-class LayoutContext;
-class SystemLayout;
-}
-
 namespace mu::engraving {
 class Box;
 class Bracket;
