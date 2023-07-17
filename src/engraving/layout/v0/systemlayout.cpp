@@ -1557,8 +1557,14 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
                                         // (empiric compromise between looking good and not taking too many iterations)
     static constexpr double squeezeLimit = 0.3; // For some spaces, do not go below 30%
 
+    Measure* firstMeasure = system->firstMeasure();
+    if (!firstMeasure) {
+        // Happens for a system that only consists of a frame, for example a too-wide horizontal frame
+        return;
+    }
+
     // First, try to gradually reduce the duration stretch (i.e. flatten the spacing curve)
-    double stretchCoeff = system->firstMeasure()->layoutStretch() - step;
+    double stretchCoeff = firstMeasure->layoutStretch() - step;
     while (curSysWidth > targetSysWidth && RealIsEqualOrMore(stretchCoeff, 0.0)) {
         for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure()) {
