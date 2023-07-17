@@ -463,7 +463,21 @@ void DockBase::setFramePanelOrder(int order)
         return;
     }
 
-    m_dockWidget->frameVisualItem()->setProperty("titleBarNavigationPanelOrder", order);
+    auto frame = static_cast<const KDDockWidgets::FrameQuick*>(m_dockWidget->frame());
+    if (!frame) {
+        return;
+    }
+
+    if (!frame->beingDeletedLater()) {
+        return;
+    }
+
+    QQuickItem* frameVisualItem = frame->visualItem();
+    if (!frameVisualItem) {
+        return;
+    }
+
+    frameVisualItem->setProperty("titleBarNavigationPanelOrder", order);
 }
 
 void DockBase::resetToDefault()
