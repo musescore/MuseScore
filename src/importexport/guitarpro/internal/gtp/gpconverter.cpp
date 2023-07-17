@@ -1106,17 +1106,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
         part->setCapoFret(capoFret);
         auto tunning = staffProperty[0].tunning;
 
-        // gpx file don't provide us info about which accidental to use in tuning,
-        // but there are only 3 presets which uses flats by default.
-        // Hex values are representing string pitches. See gp4 import.
-        std::array<uint64_t, 3> flatPresets{ 0x3f3a36312c27, 0x3c37332e2924, 0x3f3a36312c25 };
-
-        uint64_t k = 0;
-        for (size_t i = 0; i < tunning.size(); ++i) {
-            k |= (uint64_t)tunning[i] << 8 * i;
-        }
-        bool useFlats = staffProperty[0].useFlats
-                        || std::find(flatPresets.begin(), flatPresets.end(), k) != flatPresets.end();
+        bool useFlats = staffProperty[0].useFlats;
         auto fretCount = staffProperty[0].fretCount;
 
         if (tunning.empty()) {
