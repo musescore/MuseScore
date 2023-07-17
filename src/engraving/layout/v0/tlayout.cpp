@@ -1525,8 +1525,8 @@ void TLayout::layout(Expression* item, LayoutContext& ctx)
             }
         }
 
-        if (chordToAlign) {
-            Note* note = chordToAlign->notes().at(0);
+        if (chordToAlign && !chordToAlign->notes().empty()) {
+            const Note* note = chordToAlign->notes().at(0);
             double headWidth = note->headWidth();
             bool center = item->align().horizontal == AlignH::HCENTER;
             item->movePosX(headWidth * (center ? 0.5 : 1));

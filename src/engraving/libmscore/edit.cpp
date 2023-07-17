@@ -2968,9 +2968,16 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                     continue;
                 }
 
-                if (mBeforeSel
-                    && staff(staffIdx)->timeSig(mBeforeSel->tick())->sig() == lastDeletedForThisStaff->sig()) {
-                    continue;
+                if (mBeforeSel) {
+                    const Staff* staff = this->staff(staffIdx);
+                    if (!staff) {
+                        continue;
+                    }
+
+                    const TimeSig* timeSig = staff->timeSig(mBeforeSel->tick());
+                    if (!timeSig || timeSig->sig() == lastDeletedForThisStaff->sig()) {
+                        continue;
+                    }
                 }
 
                 if (!s) {
