@@ -449,15 +449,17 @@ elseif(OS_IS_MAC)
             DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
     )
 
-    install(DIRECTORY
-            ${QT_INSTALL_QML}
-            DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
-            REGEX ".*QtWebkit.*" EXCLUDE
-            REGEX ".*QtTest.*" EXCLUDE
-            REGEX ".*QtSensors.*" EXCLUDE
-            REGEX ".*QtMultimedia.*" EXCLUDE
-            REGEX ".*QtAudioEngine.*" EXCLUDE
-            REGEX ".*_debug\\.dylib" EXCLUDE)
+    if(MUE_COMPILE_INSTALL_QTQML_FILES)
+        install(DIRECTORY
+                ${QT_INSTALL_QML}
+                DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+                REGEX ".*QtWebkit.*" EXCLUDE
+                REGEX ".*QtTest.*" EXCLUDE
+                REGEX ".*QtSensors.*" EXCLUDE
+                REGEX ".*QtMultimedia.*" EXCLUDE
+                REGEX ".*QtAudioEngine.*" EXCLUDE
+                REGEX ".*_debug\\.dylib" EXCLUDE)
+    endif()
 
 ###########################################
 # Wasm
