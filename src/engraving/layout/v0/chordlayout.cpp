@@ -1882,7 +1882,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
     for (Chord* chord : chords) {
         Ornament* ornament = chord->findOrnament();
         if (ornament && ornament->showCueNote()) {
-            TLayout::layout(ornament, ctx);
+            TLayout::layoutOrnamentCueNote(ornament, ctx);
         }
     }
 }
