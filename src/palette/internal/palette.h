@@ -86,6 +86,7 @@ public:
         Keyboard,
         Pitch,
         Harp,
+        StringTunings,
         Custom
     };
     Q_ENUM(Type)

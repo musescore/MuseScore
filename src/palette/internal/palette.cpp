@@ -585,6 +585,8 @@ Palette::Type Palette::guessType() const
         return Type::Accordion;
     case ElementType::HARP_DIAGRAM:
         return Type::Harp;
+    case ElementType::STRING_TUNINGS:
+        return Type::StringTunings;
     case ElementType::ACTION_ICON: {
         const ActionIcon* action = toActionIcon(e);
         QString actionCode = QString::fromStdString(action->actionCode());

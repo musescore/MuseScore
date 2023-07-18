@@ -521,6 +521,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                    || tag == "SystemText"
                    || tag == "PlayTechAnnotation"
                    || tag == "Capo"
+                   || tag == "StringTunings"
                    || tag == "RehearsalMark"
                    || tag == "InstrumentChange"
                    || tag == "StaffState"

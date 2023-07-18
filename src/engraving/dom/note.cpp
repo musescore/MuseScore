@@ -1584,6 +1584,7 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::STAFF_TEXT)
            || (type == ElementType::PLAYTECH_ANNOTATION)
            || (type == ElementType::CAPO)
+           || (type == ElementType::STRING_TUNINGS)
            || (type == ElementType::SYSTEM_TEXT)
            || (type == ElementType::TRIPLET_FEEL)
            || (type == ElementType::STICKING)

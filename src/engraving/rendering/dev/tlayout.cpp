@@ -123,6 +123,7 @@
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
+#include "dom/stringtunings.h"
 #include "dom/stretchedbend.h"
 #include "dom/bsymbol.h"
 #include "dom/symbol.h"
@@ -346,6 +347,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::STEM:             layout(item_cast<Stem*>(item), ctx);
         break;
     case ElementType::STEM_SLASH:       layout(item_cast<StemSlash*>(item), ctx);
+        break;
+    case ElementType::STRING_TUNINGS:   layout(item_cast<StringTunings*>(item), ctx);
         break;
     case ElementType::STICKING:         layout(item_cast<Sticking*>(item), ctx);
         break;
@@ -4738,6 +4741,12 @@ void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
     item->fillStretchedSegments(true);
     item->setbbox(item->calculateBoundingRect());
     item->setPos(0.0, 0.0);
+}
+
+void TLayout::layout(StringTunings* item, LayoutContext& ctx)
+{
+    layoutTextBase(item, ctx);
+    Autoplace::autoplaceSegmentElement(item, item->mutLayoutData());
 }
 
 static void layoutBaseSymbol(const BSymbol* item, const LayoutContext& ctx, BSymbol::LayoutData* ldata)

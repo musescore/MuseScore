@@ -133,6 +133,7 @@ class Stem;
 class StemSlash;
 class Sticking;
 class StretchedBend;
+class StringTunings;
 
 class BSymbol;
 class Symbol;
@@ -288,6 +289,7 @@ public:
     static void layout(Sticking* item, LayoutContext& ctx);
     static void layout(StretchedBend* item, LayoutContext& ctx);
     static void layoutStretched(StretchedBend* item, LayoutContext& ctx);
+    static void layout(StringTunings* item, LayoutContext& ctx);
 
     static void layout(Symbol* item, LayoutContext& ctx);
     static void layout(FSymbol* item, LayoutContext& ctx);

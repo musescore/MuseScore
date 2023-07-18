@@ -142,6 +142,7 @@ class StringData;
 class Symbol;
 class BSymbol;
 class FSymbol;
+class StringTunings;
 class System;
 class SystemDivider;
 class SystemText;
@@ -273,6 +274,7 @@ public:
     static void write(const StemSlash* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Sticking* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StringData* item, XmlWriter& xml);
+    static void write(const StringTunings* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Symbol* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const FSymbol* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const System* item, XmlWriter& xml, WriteContext& ctx);

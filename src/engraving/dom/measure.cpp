@@ -1326,6 +1326,7 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::SYMBOL:
     case ElementType::CLEF:
     case ElementType::STAFFTYPE_CHANGE:
+    case ElementType::STRING_TUNINGS:
         viewer->setDropRectangle(staffR);
         return true;
 

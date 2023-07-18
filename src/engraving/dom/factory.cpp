@@ -92,6 +92,7 @@
 #include "stemslash.h"
 #include "sticking.h"
 #include "stretchedbend.h"
+#include "stringtunings.h"
 #include "system.h"
 #include "systemdivider.h"
 #include "systemtext.h"
@@ -222,6 +223,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::STICKING:          return new Sticking(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::TRIPLET_FEEL:      return new TripletFeel(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::FRET_CIRCLE:       return new FretCircle(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::STRING_TUNINGS:      return new StringTunings(parent->isSegment() ? toSegment(parent) : dummy->segment());
 
     case ElementType::LYRICSLINE:
     case ElementType::TEXTLINE_BASE:
@@ -416,6 +418,10 @@ COPY_ITEM_IMPL(Measure)
 
 CREATE_ITEM_IMPL(MeasureRepeat, ElementType::MEASURE_REPEAT, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(MeasureRepeat)
+
+CREATE_ITEM_IMPL(StringTunings, ElementType::STRING_TUNINGS, Segment, isAccessibleEnabled)
+COPY_ITEM_IMPL(StringTunings)
+MAKE_ITEM_IMPL(StringTunings, Segment);
 
 CREATE_ITEM_IMPL(Note, ElementType::NOTE, Chord, isAccessibleEnabled)
 Note* Factory::copyNote(const Note& src, bool link)
