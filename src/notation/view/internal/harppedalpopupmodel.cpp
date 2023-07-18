@@ -132,6 +132,10 @@ QRectF HarpPedalPopupModel::staffPos() const
 {
     // Just need top & bottom y.  Don't need x pos
     Measure* measure = m_item->findMeasure();
+    if (!measure->system()) {
+        return QRectF();
+    }
+
     auto harpIdxList = m_item->part()->staveIdxList();
     std::list<engraving::StaffLines*> staves;
     for (auto idx : harpIdxList) {
