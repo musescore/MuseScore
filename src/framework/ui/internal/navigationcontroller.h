@@ -67,6 +67,8 @@ public:
 
     void setDefaultNavigationControl(INavigationControl* control) override;
 
+    void resetNavigation() override;
+
     async::Notification navigationChanged() const override;
 
     bool isHighlight() const override;
@@ -133,7 +135,6 @@ private:
     void doActivateLast();
 
     void resetIfNeed(QObject* watched);
-    void resetActive();
 
     std::set<INavigationSection*> m_sections;
     async::Notification m_navigationChanged;
