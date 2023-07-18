@@ -135,7 +135,8 @@ static const std::unordered_set<ElementType> BREAK_TYPES {
     ElementType::TRIPLET_FEEL,
     ElementType::PLAYTECH_ANNOTATION,
     ElementType::CAPO,
-    ElementType::INSTRUMENT_CHANGE
+    ElementType::INSTRUMENT_CHANGE,
+    ElementType::STRING_TUNINGS
 };
 
 static const std::unordered_set<ElementType> ALWAYS_BREAK_TYPES {
@@ -151,7 +152,8 @@ static const std::unordered_set<ElementType> CONDITIONAL_BREAK_TYPES {
     ElementType::TRIPLET_FEEL,
     ElementType::PLAYTECH_ANNOTATION,
     ElementType::CAPO,
-    ElementType::INSTRUMENT_CHANGE
+    ElementType::INSTRUMENT_CHANGE,
+    ElementType::STRING_TUNINGS
 };
 
 //---------------------------------------------------------

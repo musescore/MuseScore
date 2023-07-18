@@ -153,6 +153,7 @@ class Stem;
 class StemSlash;
 class Sticking;
 class StretchedBend;
+class StringTunings;
 class Symbol;
 class System;
 class SystemDivider;
@@ -431,6 +432,7 @@ public:
     CONVERT(Sticking,      STICKING)
     CONVERT(GraceNotesGroup, GRACE_NOTES_GROUP)
     CONVERT(FretCircle, FRET_CIRCLE)
+    CONVERT(StringTunings, STRING_TUNINGS)
 #undef CONVERT
 
     virtual bool isEngravingItem() const { return false; }   // overridden in element.h
@@ -510,7 +512,7 @@ public:
 
     bool isStaffTextBase() const
     {
-        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation() || isCapo();
+        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation() || isCapo() || isStringTunings();
     }
 
     bool isArticulationFamily() const
@@ -792,6 +794,7 @@ CONVERT(Sticking)
 CONVERT(GraceNotesGroup)
 CONVERT(FretCircle)
 CONVERT(DeadSlapped)
+CONVERT(StringTunings)
 #undef CONVERT
 }
 

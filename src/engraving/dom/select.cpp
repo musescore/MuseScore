@@ -60,6 +60,7 @@
 #include "stem.h"
 #include "stemslash.h"
 #include "sticking.h"
+#include "stringtunings.h"
 #include "tie.h"
 #include "tremolo.h"
 #include "tuplet.h"
@@ -1019,6 +1020,7 @@ ByteArray Selection::symbolListMimeData() const
             continue;
         case ElementType::PLAYTECH_ANNOTATION:
         case ElementType::CAPO:
+        case ElementType::STRING_TUNINGS:
         case ElementType::STAFF_TEXT:
             seg = toStaffTextBase(e)->segment();
             break;

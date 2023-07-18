@@ -302,6 +302,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/stretchedbend.h
     ${CMAKE_CURRENT_LIST_DIR}/stringdata.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stringdata.h
+    ${CMAKE_CURRENT_LIST_DIR}/stringtunings.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stringtunings.h
     ${CMAKE_CURRENT_LIST_DIR}/swing.cpp
     ${CMAKE_CURRENT_LIST_DIR}/swing.h
     ${CMAKE_CURRENT_LIST_DIR}/symbol.cpp

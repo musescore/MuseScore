@@ -185,6 +185,7 @@ bool Rest::acceptDrop(EditData& data) const
         || (type == ElementType::STAFF_TEXT)
         || (type == ElementType::PLAYTECH_ANNOTATION)
         || (type == ElementType::CAPO)
+        || (type == ElementType::STRING_TUNINGS)
         || (type == ElementType::BAR_LINE)
         || (type == ElementType::BREATH)
         || (type == ElementType::CHORD)
@@ -202,6 +203,7 @@ bool Rest::acceptDrop(EditData& data) const
         || (type == ElementType::SYMBOL)
         || (type == ElementType::HARP_DIAGRAM)
         || (type == ElementType::MEASURE_REPEAT && durationType().type() == DurationType::V_MEASURE)
+        || (type == ElementType::STRING_TUNINGS)
         ) {
         return true;
     }

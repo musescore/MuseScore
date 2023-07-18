@@ -71,6 +71,7 @@
 #include "dom/slur.h"
 #include "dom/stafftext.h"
 #include "dom/stafftypechange.h"
+#include "dom/stringtunings.h"
 #include "dom/symbol.h"
 #include "dom/systemtext.h"
 #include "dom/tempotext.h"
@@ -185,6 +186,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::STAFF_TEXT:   layout(toStaffText(item), ctx);
         break;
     case ElementType::STAFFTYPE_CHANGE: layout(toStaffTypeChange(item), ctx);
+        break;
+    case ElementType::STRING_TUNINGS: layout(toStringTunings(item), ctx);
         break;
     case ElementType::SYMBOL:       layout(toSymbol(item), ctx);
         break;
@@ -1390,6 +1393,11 @@ void SingleLayout::layout(StaffTypeChange* item, const Context& ctx)
     double spatium = ctx.style().spatium();
     item->setbbox(RectF(-item->lw() * .5, -item->lw() * .5, spatium * 2.5 + item->lw(), spatium * 2.5 + item->lw()));
     item->setPos(0.0, 0.0);
+}
+
+void SingleLayout::layout(StringTunings* item, const Context& ctx)
+{
+    layoutTextBase(item, ctx, item->mutldata());
 }
 
 void SingleLayout::layout(Symbol* item, const Context&)

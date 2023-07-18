@@ -595,6 +595,7 @@ void Segment::add(EngravingItem* el)
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
+    case ElementType::STRING_TUNINGS:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -775,6 +776,7 @@ void Segment::remove(EngravingItem* el)
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
+    case ElementType::STRING_TUNINGS:
     case ElementType::SYMBOL:
     case ElementType::TAB_DURATION_SYMBOL:
     case ElementType::TEMPO_TEXT:
@@ -904,6 +906,7 @@ void Segment::sortStaves(std::vector<staff_idx_t>& dst)
             ElementType::TRIPLET_FEEL,
             ElementType::PLAYTECH_ANNOTATION,
             ElementType::CAPO,
+            ElementType::STRING_TUNINGS,
             ElementType::JUMP,
             ElementType::MARKER,
             ElementType::TEMPO_TEXT,
@@ -1793,6 +1796,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
+    case ElementType::STRING_TUNINGS:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -1939,6 +1943,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
+    case ElementType::STRING_TUNINGS:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -2332,7 +2337,8 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isStaffText()
                    && !e->isHarpPedalDiagram()
                    && !e->isPlayTechAnnotation()
-                   && !e->isCapo()) {
+                   && !e->isCapo()
+                   && !e->isStringTunings()) {
             // annotations added here are candidates for collision detection
             // lyrics, ...
             s.add(e->shape().translate(e->pos()));

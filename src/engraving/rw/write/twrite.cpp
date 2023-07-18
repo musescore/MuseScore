@@ -128,6 +128,7 @@
 #include "../../dom/stemslash.h"
 #include "../../dom/sticking.h"
 #include "../../dom/stringdata.h"
+#include "../../dom/stringtunings.h"
 #include "../../dom/symbol.h"
 #include "../../dom/bsymbol.h"
 #include "../../dom/system.h"
@@ -176,7 +177,7 @@ using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Art
                                   Ornament, Ottava,
                                   Page, PalmMute, Pedal, PlayTechAnnotation,
                                   Rasgueado, RehearsalMark, Rest,
-                                  Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
+                                  Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking, StringTunings,
                                   Symbol, FSymbol, System, SystemDivider, SystemText,
                                   TempoText, Text, TextLine, Tie, TimeSig, Tremolo, TremoloBar, Trill, Tuplet,
                                   Vibrato, Volta,
@@ -2563,6 +2564,28 @@ void TWrite::write(const StringData* item, XmlWriter& xml)
     xml.endElement();
 }
 
+void TWrite::write(const StringTunings* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+//    writeProperty(item, xml, Pid::ACTIVE);
+//    writeProperty(item, xml, Pid::CAPO_FRET_POSITION);
+//    writeProperty(item, xml, Pid::CAPO_GENERATE_TEXT);
+//
+//    std::set<string_idx_t> orderedStrings;
+//    for (string_idx_t idx : item->params().ignoredStrings) {
+//        orderedStrings.insert(idx);
+//    }
+//
+//    for (string_idx_t idx : orderedStrings) {
+//        xml.startElement("string", { { "no", idx } });
+//        xml.tag("apply", false);
+//        xml.endElement();
+//    }
+
+    writeProperties(static_cast<const StaffTextBase*>(item), xml, ctx, true);
+    xml.endElement();
+}
+
 void TWrite::write(const Symbol* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
@@ -2943,6 +2966,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                         || (et == ElementType::TRIPLET_FEEL)
                         || (et == ElementType::PLAYTECH_ANNOTATION)
                         || (et == ElementType::CAPO)
+                        || (et == ElementType::STRING_TUNINGS)
                         || (et == ElementType::JUMP)
                         || (et == ElementType::MARKER)
                         || (et == ElementType::TEMPO_TEXT)

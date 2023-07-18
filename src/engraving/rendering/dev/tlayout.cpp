@@ -123,6 +123,7 @@
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
+#include "dom/stringtunings.h"
 #include "dom/stretchedbend.h"
 #include "dom/bsymbol.h"
 #include "dom/symbol.h"
@@ -366,6 +367,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::STICKING:
         layoutSticking(item_cast<const Sticking*>(item), static_cast<Sticking::LayoutData*>(ldata));
+        break;
+    case ElementType::STRING_TUNINGS:
+        layout(item_cast<StringTunings*>(item), ctx);
         break;
     case ElementType::SYMBOL:
         layoutSymbol(item_cast<const Symbol*>(item), static_cast<Symbol::LayoutData*>(ldata), ctx);
@@ -4971,6 +4975,12 @@ void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
     item->setPos(0.0, 0.0);
 }
 
+void TLayout::layout(StringTunings* item, LayoutContext& ctx)
+{
+    layoutTextBase(item, ctx);
+    Autoplace::autoplaceSegmentElement(item, item->mutldata());
+}
+
 void TLayout::layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const LayoutContext& ctx)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
@@ -5070,7 +5080,7 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
         return;
     }
     double spatium    = item->spatium();
-    double hbb, wbb, xbb, ybb;   // bbox sizes
+    double hbb, wbb, xbb, ybb;     // bbox sizes
     double xpos, ypos;           // position coords
 
     ldata->beamGrid = TabBeamGrid::NONE;
