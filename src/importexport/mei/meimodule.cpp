@@ -34,8 +34,6 @@
 using namespace mu::iex::mei;
 using namespace mu::project;
 
-static std::shared_ptr<MeiConfiguration> s_configuration = std::make_shared<MeiConfiguration>();
-
 std::string MeiModule::moduleName() const
 {
     return "iex_mei";
@@ -43,13 +41,13 @@ std::string MeiModule::moduleName() const
 
 void MeiModule::registerExports()
 {
-    modularity::ioc()->registerExport<IMeiConfiguration>(moduleName(), s_configuration);
+    m_configuration = std::make_shared<MeiConfiguration>();
+
+    modularity::ioc()->registerExport<IMeiConfiguration>(moduleName(), m_configuration);
 }
 
 void MeiModule::resolveImports()
 {
-    s_configuration->init();
-
     auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "mei" }, std::make_shared<MeiReader>());
@@ -59,4 +57,13 @@ void MeiModule::resolveImports()
     if (writers) {
         writers->reg({ "mei" }, std::make_shared<MeiWriter>());
     }
+}
+
+void MeiModule::onInit(const framework::IApplication::RunMode& mode)
+{
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
+    m_configuration->init();
 }

@@ -25,6 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::mei {
+class MeiConfiguration;
 class MeiModule : public modularity::IModuleSetup
 {
 public:
@@ -32,6 +33,10 @@ public:
     std::string moduleName() const override;
     void registerExports() override;
     void resolveImports() override;
+    void onInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<MeiConfiguration> m_configuration;
 };
 }
 
