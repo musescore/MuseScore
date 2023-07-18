@@ -3546,10 +3546,11 @@ void TLayout::layout(Note* item, LayoutContext&)
             if (item->negativeFretUsed()) {
                 item->setFretString(u"-" + item->fretString());
             }
-
             if (item->displayFret() == Note::DisplayFretOption::ArtificialHarmonic) {
                 item->setFretString(String(u"%1 <%2>").arg(item->fretString(), String::number(item->harmonicFret())));
+                item->setFretString(String(u"%1 <%2>").arg(item->fretString(), String::number(item->harmonicFret())));
             } else if (item->displayFret() == Note::DisplayFretOption::NaturalHarmonic) {
+                item->setFretString(String(u"<%1>").arg(String::number(item->harmonicFret())));
                 item->setFretString(String(u"<%1>").arg(String::number(item->harmonicFret())));
             }
         }

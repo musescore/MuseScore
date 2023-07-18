@@ -215,35 +215,52 @@ void EventMap::fixupMIDI()
     };
 
     /* track info for each channel (on the heap, 0-initialised) */
-    struct channelInfo* info = (struct channelInfo*)calloc(_highestChannel + 1, sizeof(struct channelInfo));
+    struct channelInfo* info = (struct channelInfo*)calloc(_lastIndex + 1, sizeof(struct channelInfo));
 
-    auto it = begin();
-    while (it != end()) {
-        NPlayEvent& event = it->second;
-        /* ME_NOTEOFF is never emitted, no need to check for it */
-        if (event.type() == ME_NOTEON && !event.isMuted()) {
-            unsigned short np = info[event.channel()].nowPlaying[event.pitch()];
-            if (event.velo() == 0) {
-                /* already off (should not happen) or still playing? */
-                if (np == 0 || --np > 0) {
-                    event.setDiscard(1);
+    for (auto& mm : _channels) {
+        auto it = mm.begin();
+        while (it != mm.end()) {
+            NPlayEvent& event = it->second;
+            /* ME_NOTEOFF is never emitted, no need to check for it */
+            if (event.type() == ME_NOTEON && !event.isMuted()) {
+                uint8_t np = info[event.channel()].nowPlaying[event.pitch()];
+                if (event.velo() == 0) {
+                    /* already off (should not happen) or still playing? */
+                    if (np == 0 || --np > 0) {
+                        event.setDiscard(1);
+                    } else {
+                        /* hoist NOTEOFF to same track as NOTEON */
+                        event.setOriginatingStaff(info[event.channel()].event[event.pitch()]->getOriginatingStaff());
+                    }
                 } else {
-                    /* hoist NOTEOFF to same track as NOTEON */
-                    event.setOriginatingStaff(info[event.channel()].event[event.pitch()]->getOriginatingStaff());
+                    if (++np > 1) {
+                        /* restrike, possibly on different track */
+                        event.setDiscard(info[event.channel()].event[event.pitch()]->getOriginatingStaff() + 1);
+                    }
+                    info[event.channel()].event[event.pitch()] = &event;
                 }
-            } else {
-                if (++np > 1) {
-                    /* restrike, possibly on different track */
-                    event.setDiscard(info[event.channel()].event[event.pitch()]->getOriginatingStaff() + 1);
-                }
-                info[event.channel()].event[event.pitch()] = &event;
+                info[event.channel()].nowPlaying[event.pitch()] = np;
             }
-            info[event.channel()].nowPlaying[event.pitch()] = np;
-        }
 
-        ++it;
+            ++it;
+        }
     }
 
     free((void*)info);
+}
+EventMap::events_multimap_t &EventMap::operator[](std::size_t idx)
+{
+    if (idx == size()) {
+        _channels.emplace_back();
+        return _channels[idx];
+    }
+    if (idx > size()) {
+        auto diff = idx - size();
+        do {
+            _channels.emplace_back();
+        } while (diff-- != 0);
+    }
+    _lastIndex = idx;
+    return _channels[idx];
 }
 }
