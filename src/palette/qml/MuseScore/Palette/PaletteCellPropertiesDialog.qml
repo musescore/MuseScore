@@ -110,6 +110,7 @@ StyledDialogView {
                         currentValue: modelData["value"]
                         measureUnitsSymbol: Boolean(modelData["measureUnit"]) ? modelData["measureUnit"] : ""
                         step: modelData["incrementStep"]
+                        minValue: (qsTrc("palette", "Content scale")) ? step : -999
 
                         onValueEdited: function(newValue) {
                             repeater.setValue(model.index, newValue)
