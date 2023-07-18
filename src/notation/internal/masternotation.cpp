@@ -780,7 +780,7 @@ INotationPartsPtr MasterNotation::parts() const
 
 bool MasterNotation::hasParts() const
 {
-    return m_parts ? !m_parts->partList().empty() : false;
+    return m_parts && m_parts->hasParts();
 }
 
 Notification MasterNotation::hasPartsChanged() const

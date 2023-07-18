@@ -22,6 +22,8 @@
 #ifndef MU_APPSHELL_NAVIGABLEAPPMENUMODEL_H
 #define MU_APPSHELL_NAVIGABLEAPPMENUMODEL_H
 
+#include <optional>
+
 #include <QObject>
 
 #include "appmenumodel.h"
@@ -86,6 +88,12 @@ private:
     void resetNavigation();
     void navigateToFirstMenu();
 
+    struct MUNavigationSystemState {
+        std::string sectionName;
+        std::string panelName;
+        std::string controlName;
+    };
+
     void saveMUNavigationSystemState();
     void restoreMUNavigationSystemState();
 
@@ -100,7 +108,7 @@ private:
     QString m_openedMenuId;
 
     bool m_needActivateHighlight = true;
-    ui::INavigationControl* m_lastActiveMUNavigationControl = nullptr;
+    std::optional<MUNavigationSystemState> m_lastActiveMUNavigationState;
     bool m_needActivateLastMUNavigationControl = false;
 
     QWindow* m_appWindow = nullptr;

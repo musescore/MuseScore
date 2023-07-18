@@ -105,9 +105,14 @@ bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByt
     QDataStream stream(socket);
 
     auto readPackage = [socket, &stream, onPackageRead]() {
+        static constexpr uint32_t MAX_PACKAGE_SIZE = 2048;
+
         QByteArray data;
         uint32_t remaining;
         stream >> remaining;
+        IF_ASSERT_FAILED(remaining <= MAX_PACKAGE_SIZE) {
+            return false;
+        }
         data.resize(remaining);
 
         int64_t available = socket->bytesAvailable();
