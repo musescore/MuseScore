@@ -80,10 +80,10 @@ StyledDialogView {
                 id: repeater
 
                 model: [
-                    { title: qsTrc("palette", "X"), value: propertiesModel.xOffset, incrementStep: 1,
+                    { title: qsTrc("palette", "X"), value: propertiesModel.xOffset, minValue: -999, incrementStep: 1,
                         //: Abbreviation of "spatium"
                         measureUnit: qsTrc("global", "sp") },
-                    { title: qsTrc("palette", "Y"), value: propertiesModel.yOffset, incrementStep: 1, measureUnit: qsTrc("global", "sp") },
+                    { title: qsTrc("palette", "Y"), value: propertiesModel.yOffset, minValue: -999, incrementStep: 1, measureUnit: qsTrc("global", "sp") },
                     { title: qsTrc("palette", "Content scale"), value: propertiesModel.scaleFactor, minValue: 0.1, incrementStep: 0.1 }
                 ]
 
