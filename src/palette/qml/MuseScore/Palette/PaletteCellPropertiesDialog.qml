@@ -84,7 +84,7 @@ StyledDialogView {
                         //: Abbreviation of "spatium"
                         measureUnit: qsTrc("global", "sp") },
                     { title: qsTrc("palette", "Y"), value: propertiesModel.yOffset, incrementStep: 1, measureUnit: qsTrc("global", "sp") },
-                    { title: qsTrc("palette", "Content scale"), value: propertiesModel.scaleFactor, incrementStep: 0.1 }
+                    { title: qsTrc("palette", "Content scale"), value: propertiesModel.scaleFactor, minValue: 0.1, incrementStep: 0.1 }
                 ]
 
                 function setValue(index, value) {
@@ -110,7 +110,7 @@ StyledDialogView {
                         currentValue: modelData["value"]
                         measureUnitsSymbol: Boolean(modelData["measureUnit"]) ? modelData["measureUnit"] : ""
                         step: modelData["incrementStep"]
-                        minValue: (qsTrc("palette", "Content scale")) ? step : -999
+                        minValue: modelData["minValue"]
 
                         onValueEdited: function(newValue) {
                             repeater.setValue(model.index, newValue)
