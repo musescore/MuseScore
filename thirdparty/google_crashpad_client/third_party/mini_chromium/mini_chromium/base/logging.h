@@ -8,6 +8,7 @@
 #include <assert.h>
 #include <errno.h>
 
+#include <cstdint>
 #include <limits>
 #include <sstream>
 #include <string>

@@ -4,10 +4,6 @@ project(engraving_app LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-#set(CMAKE_AUTOUIC ON)
-#set(CMAKE_AUTOMOC ON)
-#set(CMAKE_AUTORCC ON)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -23,18 +19,7 @@ set(CMAKE_MODULE_PATH
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)
 
-set(QT_MIN_VERSION    "5.15.0")
-#find_package(Qt5Core ${QT_MIN_VERSION} REQUIRED)
-#find_package(Qt5Gui ${QT_MIN_VERSION} REQUIRED)
-
-set(QT_LIBRARIES
-#    Qt5::Core
-#    Qt5::Gui
-)
-
 include_directories(
-#    ${Qt5Core_INCLUDE_DIRS}
-#    ${Qt5Gui_INCLUDE_DIRS}
     ${CMAKE_CURRENT_LIST_DIR}
     ${MU_ROOT}/thirdparty/dtl
 )
@@ -44,7 +29,14 @@ set(THIRDPARTY_DIR ${MU_ROOT}/thirdparty)
 add_definitions(
     -DNO_QT_SUPPORT
     -DGLOBAL_NO_INTERNAL
-    #-DHAW_LOGGER_QT_SUPPORT
+
+    -DMUSESCORE_REVISION="abc123"
+    -DMUSESCORE_BUILD_NUMBER="123456"
+    -DMUSESCORE_VERSION="4.0.0"
+    -DMUSESCORE_VERSION_LABEL="dev"
+    -DMUSESCORE_INSTALL_SUFFIX=""
+    -DMUSESCORE_INSTALL_PREFIX=""
+    -DMUSESCORE_INSTALL_NAME=""
 )
 
 set(GLOBAL_NO_INTERNAL ON)

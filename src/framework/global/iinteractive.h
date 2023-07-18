@@ -22,12 +22,13 @@
 #ifndef MU_FRAMEWORK_IINTERACTIVE_H
 #define MU_FRAMEWORK_IINTERACTIVE_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 #include "types/val.h"
 #include "types/retval.h"
 #include "types/uri.h"
 #include "types/flags.h"
+#include "progress.h"
 
 namespace mu::framework {
 class IInteractive : MODULE_EXPORT_INTERFACE
@@ -156,6 +157,9 @@ public:
 
     virtual Result error(const std::string& title, const Text& text, const std::string& detailedText, const ButtonDatas& buttons = {},
                          int defBtn = int(Button::NoButton), const Options& options = { WithIcon }) const = 0;
+
+    // progress
+    virtual Ret showProgress(const std::string& title, framework::Progress* progress) const = 0;
 
     // files
     virtual io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) = 0;

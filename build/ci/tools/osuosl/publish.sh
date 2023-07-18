@@ -80,8 +80,11 @@ chmod 600 $SSH_KEY
 
 FTP_PATH=${OS}/${MAJOR_VERSION}x/${BUILD_DIR}
 
-file_extension="${ARTIFACT_NAME##*.}"
-LATEST_NAME="MuseScoreNightly-latest-${PACKARCH}.${file_extension}"
+if [ "$BUILD_MODE" == "nightly_build" ]; then
+    file_extension="${ARTIFACT_NAME##*.}"
+    BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
+    LATEST_NAME="MuseScoreNightly-latest-${BUILD_BRANCH}-${PACKARCH}.${file_extension}"
+fi
 
 echo "Copy ${ARTIFACTS_DIR}/${ARTIFACT_NAME} to $FTP_PATH"
 scp -oStrictHostKeyChecking=no -C -i $SSH_KEY $ARTIFACTS_DIR/$ARTIFACT_NAME musescore-nightlies@ftp-osl.osuosl.org:~/ftp/$FTP_PATH
@@ -115,7 +118,9 @@ if [ "$BUILD_MODE" == "nightly_build" ]; then
     echo "Delete old MuseScoreNightly files"
     number_to_keep=42 # includes the one we just uploaded and the symlink to it
     if [ "$OS" == "linux" ]; then
-      ((++number_to_keep)) # one extra for the zsync file
+        ((++number_to_keep)) # one extra for the zsync file
+    elif [ "$OS" == "windows" ]; then
+        ((number_to_keep *= 2)) # two nightlies each night, namely portable and normal
     fi
     ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH; ls MuseScoreNightly* -t | tail -n +${number_to_keep} | xargs rm -f"
 fi

@@ -37,10 +37,15 @@ using namespace mu::framework;
 
 void MuseSamplerResolver::init()
 {
-    io::path_t path = configuration()->libraryPath();
-
+    io::path_t path = configuration()->userLibraryPath();
     m_libHandler = std::make_shared<MuseSamplerLibHandler>(path);
+    if (checkLibrary()) {
+        return;
+    }
 
+    // Use fallback
+    path = configuration()->fallbackLibraryPath();
+    m_libHandler = std::make_shared<MuseSamplerLibHandler>(path);
     if (!checkLibrary()) {
         m_libHandler.reset();
     }
@@ -147,19 +152,28 @@ bool MuseSamplerResolver::isInstalled() const
     return false;
 }
 
+float MuseSamplerResolver::defaultReverbLevel(const String& instrumentSoundId) const
+{
+    if (!m_libHandler || !m_libHandler->getReverbLevel || instrumentSoundId.empty()) {
+        return 0.f;
+    }
+
+    auto instrumentList = m_libHandler->getInstrumentList();
+    while (auto instrument = m_libHandler->getNextInstrument(instrumentList)) {
+        String soundId = String::fromUtf8(m_libHandler->getMpeSoundId(instrument));
+
+        if (instrumentSoundId == soundId) {
+            return m_libHandler->getReverbLevel(instrument) / 100.f;
+        }
+    }
+
+    return 0.f;
+}
+
 bool MuseSamplerResolver::checkLibrary() const
 {
     if (!m_libHandler->isValid()) {
         LOGE() << "Incompatible MuseSampler library; ignoring";
-        return false;
-    }
-
-    Version current(m_libHandler->getVersionMajor(),
-                    m_libHandler->getVersionMinor(),
-                    m_libHandler->getVersionRevision());
-    Version minimumSupported(String::fromStdString(configuration()->minimumSupportedVersion()));
-    if (current < minimumSupported) {
-        LOGE() << "MuseSampler " << version() << " is not supported; ignoring";
         return false;
     }
 

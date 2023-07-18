@@ -30,11 +30,10 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
 #include "engraving/infrastructure/paint.h"
-#include "engraving/rw/scorereader.h"
+#include "engraving/rw/mscloader.h"
 #include "engraving/libmscore/masterscore.h"
 
-#include "config.h"
-#ifdef BUILD_IMPORTEXPORT_MODULE
+#ifdef MUE_BUILD_IMPORTEXPORT_MODULE
 #include "importexport/guitarpro/internal/guitarproreader.h"
 #endif
 
@@ -85,7 +84,7 @@ Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& 
         }
 
         io::path_t scoreFile = scores.val.at(i);
-        io::path_t outFile = outDir + "/" + io::FileInfo(scoreFile).baseName() + ".json";
+        io::path_t outFile = outDir + "/" + io::FileInfo(scoreFile).completeBaseName() + ".json";
         processFile(scoreFile, outFile, opt);
     }
 
@@ -122,12 +121,12 @@ DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath, const Ge
         TRACEFUNC_C("Paint");
         Painter painter(pd, "DrawData");
         Paint::Options option;
-        option.fromPage = 0;
-        option.toPage = 0;
+        //option.fromPage = 0;
+        //option.toPage = 0;
+        option.isMultiPage = true;
         option.deviceDpi = DrawData::CANVAS_DPI;
         option.printPageBackground = true;
         option.isSetViewport = true;
-        option.isMultiPage = false;
         option.isPrinting = true;
 
         Paint::paintScore(&painter, score, option);
@@ -203,7 +202,7 @@ bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const mu::i
             return false;
         }
 
-        ScoreReader scoreReader;
+        MscLoader scoreReader;
         SettingsCompat settingsCompat;
         Ret ret = scoreReader.loadMscz(score, reader, settingsCompat, true);
         if (!ret) {
@@ -214,7 +213,7 @@ bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const mu::i
         // Import
 
         TRACEFUNC_C("Load gp");
-#ifdef BUILD_IMPORTEXPORT_MODULE
+#ifdef MUE_BUILD_IMPORTEXPORT_MODULE
         mu::iex::guitarpro::GuitarProReader reader;
         Ret ret = reader.read(score, path);
         if (!ret) {

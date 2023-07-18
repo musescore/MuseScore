@@ -39,7 +39,7 @@ done
 echo "=== Get release info ==="
 
 RELEASE_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest"
-if [ -z "$RELEASE_TAG" ]; then RELEASE_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}"; fi
+if [ ! -z "$RELEASE_TAG" ]; then RELEASE_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}"; fi
 
 RELEASE_INFO=$(curl \
   -H "Accept: application/vnd.github+json" \
@@ -49,3 +49,8 @@ RELEASE_INFO=$(curl \
 mkdir -p $ARTIFACTS_DIR
 echo $RELEASE_INFO > $ARTIFACTS_DIR/release_info.json
 cat $ARTIFACTS_DIR/release_info.json
+
+pip install markdown
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+python3 $HERE/correct_release_info.py ${ARTIFACTS_DIR}/release_info.json

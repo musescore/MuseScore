@@ -98,17 +98,17 @@ Version::Version(const mu::String& versionStr)
     setSuffix(versionStr.right(versionStr.size() - versionStr.indexOf(SUFFIX_DELIMITER) - 1));
 }
 
-int Version::major() const
+int Version::majorVersion() const
 {
     return m_major;
 }
 
-int Version::minor() const
+int Version::minorVersion() const
 {
     return m_minor;
 }
 
-int Version::patch() const
+int Version::patchVersion() const
 {
     return m_patch;
 }
@@ -135,6 +135,11 @@ void Version::setSuffix(const String& suffix)
     m_suffixVersion = versionSuffix.second;
 }
 
+bool Version::preRelease() const
+{
+    return !suffix().isEmpty();
+}
+
 mu::String Version::toString()
 {
     String res = String(u"%1.%2.%3").arg(m_major, m_minor, m_patch);
@@ -149,15 +154,15 @@ mu::String Version::toString()
 
 bool Version::operator <(const Version& other) const
 {
-    if (m_major > other.major()) {
+    if (m_major > other.majorVersion()) {
         return false;
-    } else if (m_major == other.major()) {
-        if (m_minor > other.minor()) {
+    } else if (m_major == other.majorVersion()) {
+        if (m_minor > other.minorVersion()) {
             return false;
-        } else if (m_minor == other.minor()) {
-            if (m_patch > other.patch()) {
+        } else if (m_minor == other.minorVersion()) {
+            if (m_patch > other.patchVersion()) {
                 return false;
-            } else if (m_patch == other.patch()) {
+            } else if (m_patch == other.patchVersion()) {
                 if (m_suffix.isEmpty()) {
                     return false;
                 }
@@ -204,9 +209,9 @@ bool Version::operator <(const Version& other) const
 
 bool Version::operator ==(const Version& other) const
 {
-    return m_major == other.major()
-           && m_minor == other.minor()
-           && m_patch == other.patch()
+    return m_major == other.majorVersion()
+           && m_minor == other.minorVersion()
+           && m_patch == other.patchVersion()
            && m_suffix == other.suffix()
            && m_suffixVersion == other.suffixVersion();
 }

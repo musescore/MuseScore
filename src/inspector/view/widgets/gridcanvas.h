@@ -35,7 +35,7 @@ class GridCanvas : public uicomponents::QuickPaintedView
 {
     Q_OBJECT
 
-    INJECT(inspector, mu::ui::IUiConfiguration, uiConfig)
+    INJECT(mu::ui::IUiConfiguration, uiConfig)
 
     Q_PROPERTY(QVariant pointList READ pointList WRITE setPointList NOTIFY pointListChanged)
 

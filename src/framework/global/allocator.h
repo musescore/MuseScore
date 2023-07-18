@@ -37,11 +37,11 @@ public: \
     static void* operator new(size_t sz) { \
         return ObjectAllocator::enabled() ? allocator().alloc(sz) : ::operator new(sz); \
     } \
-    static void operator delete(void* ptr, size_t sz) { \
+    static void operator delete(void* ptr) { \
         if (ObjectAllocator::enabled()) { \
-            allocator().free(ptr, sz); \
+            allocator().free(ptr); \
         } else { \
-            ::operator delete(ptr, sz); \
+            ::operator delete(ptr); \
         } \
     } \
     static void* operator new[](size_t sz) { \
@@ -50,11 +50,11 @@ public: \
     static void* operator new(size_t sz, void* ptr) { \
         return ObjectAllocator::enabled() ? allocator().not_supported("new(size_t, void*)") : ::operator new(sz, ptr); \
     } \
-    static void operator delete[](void* ptr, size_t sz) { \
+    static void operator delete[](void* ptr) { \
         if (ObjectAllocator::enabled()) { \
             allocator().not_supported("delete[]"); \
         } else { \
-            ::operator delete[](ptr, sz); \
+            ::operator delete[](ptr); \
         } \
     } \
 private:
@@ -74,7 +74,7 @@ public:
     const char* name() const;
 
     void* alloc(size_t size);
-    void free(void* ptr, size_t size);
+    void free(void* ptr);
     void cleanup();
 
     template<class T>
@@ -104,18 +104,13 @@ public:
 
     Info stateInfo() const;
 
-    static bool enabled()
-    {
-    #ifdef CUSTOM_ALLOCATOR_DISABLED
-        return false;
-    #else
-        return used;
-    #endif
-    }
+    static bool enabled() { return s_used; }
+    static void used();
+    static void unused();
 
-    static int used;
-
+    static int s_used;
 private:
+
     struct Chunk {
         /**
          * When a chunk is free, the `next` contains the

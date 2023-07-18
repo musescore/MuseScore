@@ -54,7 +54,7 @@ class Score : public mu::plugins::api::ScoreElement
 {
     Q_OBJECT
 
-    INJECT(plugins, mu::context::IGlobalContext, context)
+    INJECT(mu::context::IGlobalContext, context)
 
     /** Composer of the score, as taken from the score properties (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(QString composer READ composer)
@@ -204,14 +204,11 @@ public:
 
     Q_INVOKABLE QString extractLyrics() { return score()->extractLyrics(); }
 
-//      //@ ??
-//      Q_INVOKABLE void updateRepeatList(bool expandRepeats) { score()->updateRepeatList(); } // TODO: needed?
-
     /// \cond MS_INTERNAL
     int nmeasures() const { return static_cast<int>(score()->nmeasures()); }
     int npages() const { return static_cast<int>(score()->npages()); }
     int nstaves() const { return static_cast<int>(score()->nstaves()); }
-    int  ntracks() const { return static_cast<int>(score()->ntracks()); }
+    int ntracks() const { return static_cast<int>(score()->ntracks()); }
     /// \endcond
 
     /**

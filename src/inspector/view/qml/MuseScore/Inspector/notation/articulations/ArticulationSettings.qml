@@ -41,11 +41,11 @@ Column {
     spacing: 12
 
     function focusOnFirst() {
-        placementDropdown.focusOnFirst()
+        placementSection.focusOnFirst()
     }
 
-    DropdownPropertyView {
-        id: placementDropdown
+    PlacementSection {
+        id: placementSection
 
         titleText: qsTrc("inspector", "Placement")
         propertyItem: root.model ? root.model.placement : null
@@ -54,11 +54,9 @@ Column {
         navigationRowStart: root.navigationRowStart
 
         model: [
-            { text: qsTrc("inspector", "Above staff"), value: ArticulationTypes.TYPE_ABOVE_STAFF },
-            { text: qsTrc("inspector", "Below staff"), value: ArticulationTypes.TYPE_BELOW_STAFF },
-            { text: qsTrc("inspector", "Chord automatic"), value: ArticulationTypes.TYPE_CHORD_AUTO },
-            { text: qsTrc("inspector", "Above chord"), value: ArticulationTypes.TYPE_ABOVE_CHORD },
-            { text: qsTrc("inspector", "Below chord"), value: ArticulationTypes.TYPE_BELOW_CHORD }
+            { text: qsTrc("inspector", "Auto"), value: ArticulationTypes.TYPE_AUTO },
+            { text: qsTrc("inspector", "Above"), value: ArticulationTypes.TYPE_TOP },
+            { text: qsTrc("inspector", "Below"), value: ArticulationTypes.TYPE_BOTTOM }
         ]
     }
 }

@@ -22,11 +22,11 @@
 
 #include "letring.h"
 
-#include "rw/xml.h"
-
 #include "score.h"
 #include "stafftype.h"
 #include "system.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -63,24 +63,6 @@ LetRingSegment::LetRingSegment(LetRing* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void LetRingSegment::layout()
-{
-    const StaffType* stType = staffType();
-
-    _skipDraw = false;
-    if (stType && stType->isHiddenElementOnTab(score(), Sid::letRingShowTabCommon, Sid::letRingShowTabSimple)) {
-        _skipDraw = true;
-        return;
-    }
-
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
-}
-
-//---------------------------------------------------------
 //   LetRing
 //---------------------------------------------------------
 
@@ -96,24 +78,6 @@ LetRing::LetRing(EngravingItem* parent)
     resetProperty(Pid::CONTINUE_TEXT);
     resetProperty(Pid::END_TEXT_PLACE);
     resetProperty(Pid::END_TEXT);
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void LetRing::read(XmlReader& e)
-{
-    if (score()->mscVersion() < 301) {
-        e.context()->addSpanner(e.intAttribute("id", -1), this);
-    }
-    while (e.readNextStartElement()) {
-        if (readProperty(e.name(), e, Pid::LINE_WIDTH)) {
-            setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
-        } else if (!TextLineBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -168,27 +132,28 @@ PropertyValue LetRing::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        return score()->styleV(Sid::letRingLineWidth);
+        return style().styleV(Sid::letRingLineWidth);
 
     case Pid::ALIGN:
         return Align(AlignH::LEFT, AlignV::BASELINE);
 
     case Pid::LINE_STYLE:
-        return score()->styleV(Sid::letRingLineStyle);
+        return style().styleV(Sid::letRingLineStyle);
 
     case Pid::LINE_VISIBLE:
         return true;
 
+    case Pid::BEGIN_TEXT_OFFSET:
     case Pid::CONTINUE_TEXT_OFFSET:
     case Pid::END_TEXT_OFFSET:
         return PropertyValue::fromValue(PointF(0, 0));
 
     case Pid::BEGIN_FONT_STYLE:
-        return score()->styleV(Sid::letRingFontStyle);
+        return style().styleV(Sid::letRingFontStyle);
 
     case Pid::BEGIN_TEXT:
     case Pid::CONTINUE_TEXT:
-        return score()->styleV(Sid::letRingText);
+        return style().styleV(Sid::letRingText);
     case Pid::END_TEXT:
         return "";
 

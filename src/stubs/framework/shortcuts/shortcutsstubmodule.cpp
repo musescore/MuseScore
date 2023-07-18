@@ -38,12 +38,12 @@ static void shortcuts_init_qrc()
     Q_INIT_RESOURCE(shortcuts);
 }
 
-std::string ShortcutsStubModule::moduleName() const
+std::string ShortcutsModule::moduleName() const
 {
     return "shortcuts_stub";
 }
 
-void ShortcutsStubModule::registerExports()
+void ShortcutsModule::registerExports()
 {
     ioc()->registerExport<IShortcutsRegister>(moduleName(), new ShortcutsRegisterStub());
     ioc()->registerExport<IShortcutsController>(moduleName(), new ShortcutsControllerStub());
@@ -51,12 +51,15 @@ void ShortcutsStubModule::registerExports()
     ioc()->registerExport<IShortcutsConfiguration>(moduleName(), new ShortcutsConfigurationStub());
 }
 
-void ShortcutsStubModule::registerResources()
+void ShortcutsModule::registerResources()
 {
     shortcuts_init_qrc();
 }
 
-void ShortcutsStubModule::registerUiTypes()
+void ShortcutsModule::registerUiTypes()
 {
-    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(shortcuts_QML_IMPORT);
+    std::shared_ptr<ui::IUiEngine> ui = ioc()->resolve<ui::IUiEngine>(moduleName());
+    if (ui) {
+        ui->addSourceImportPath(shortcuts_QML_IMPORT);
+    }
 }

@@ -82,5 +82,5 @@ mu::io::path_t AutobotConfiguration::drawDataPath() const
 
 mu::io::path_t AutobotConfiguration::fileDrawDataPath(const io::path_t& filePath) const
 {
-    return drawDataPath() + "/" + io::basename(filePath) + ".json";
+    return drawDataPath() + "/" + io::completeBasename(filePath) + ".json";
 }

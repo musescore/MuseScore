@@ -129,7 +129,11 @@ Canvas {
             ctx.translate(0, root.height)
             ctx.rotate(3 * (Math.PI/2))
 
-            ctx.textAlign = "start"
+            if (ui.currentLanguageLayoutDirection() === Qt.RightToLeft) {
+                ctx.textAlign = "end"
+            } else {
+                ctx.textAlign = "start"
+            }
         }
 
         ctx.clearRect(0, 0, root.height, prv.indicatorWidth)

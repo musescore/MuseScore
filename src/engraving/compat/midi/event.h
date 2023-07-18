@@ -26,6 +26,8 @@
 #include <map>
 #include <vector>
 
+#include <compat/midi/midiinstrumenteffects.h>
+
 #include "midicoreevent.h"
 
 namespace mu::engraving {
@@ -65,12 +67,6 @@ class NPlayEvent : public PlayEvent
 {
     OBJECT_ALLOCATOR(engraving, NPlayEvent)
 
-    const Note* _note{ nullptr };
-    const Harmony* _harmony{ nullptr };
-    int _origin = -1;
-    int _discard = 0;
-    bool _portamento = false;
-
 public:
     NPlayEvent()
         : PlayEvent() {}
@@ -85,10 +81,13 @@ public:
     const Harmony* harmony() const { return _harmony; }
     void setHarmony(const Harmony* v) { _harmony = v; }
 
-    int getOriginatingStaff() const { return _origin; }
-    void setOriginatingStaff(int i) { _origin = i; }
-    void setDiscard(int d) { _discard = d; }
-    int discard() const { return _discard; }
+    void setEffect(MidiInstrumentEffect effect) { _effect = effect; }
+    MidiInstrumentEffect effect() const { return _effect; }
+
+    size_t getOriginatingStaff() const { return _origin; }
+    void setOriginatingStaff(size_t i) { _origin = i; }
+    void setDiscard(size_t d) { _discard = d; }
+    size_t discard() const { return _discard; }
     bool isMuted() const;
     void setPortamento(bool p) { _portamento = p; }
     bool portamento() const
@@ -98,6 +97,15 @@ public:
                    && (this->controller() == CTRL_PORTAMENTO || this->controller() == CTRL_PORTAMENTO_CONTROL
                        || this->controller() == CTRL_PORTAMENTO_TIME_MSB || this->controller() == CTRL_PORTAMENTO_TIME_LSB));
     }
+
+private:
+
+    const Note* _note = nullptr;
+    const Harmony* _harmony = nullptr;
+    size_t _origin = size_t(-1);
+    size_t _discard = 0;
+    bool _portamento = false;
+    MidiInstrumentEffect _effect = MidiInstrumentEffect::NONE;
 };
 
 //---------------------------------------------------------

@@ -26,6 +26,7 @@ import QtQuick.Controls 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.NotationScene 1.0
+import MuseScore.Braille 1.0
 
 import "internal"
 
@@ -41,6 +42,8 @@ FocusScope {
     property alias isMainView: notationView.isMainView
 
     property alias defaultNavigationControl: fakeNavCtrl
+
+    property NavigationPanel navigationPanel: tabPanel.navigationPanel // first panel
 
     NavigationSection {
         id: navSec
@@ -70,7 +73,8 @@ FocusScope {
             id: tabPanel
             Layout.fillWidth: true
 
-            navigationSection: navSec
+            navigationPanel.section: navSec
+            navigationPanel.order: 1
         }
 
         SeparatorLine { visible: tabPanel.visible }
@@ -91,13 +95,12 @@ FocusScope {
                     id: notationView
                     anchors.fill: parent
 
-                    NavigationPanel {
-                        id: navPanel
+                    property NavigationPanel navigationPanel: NavigationPanel {
                         name: "ScoreView"
                         section: navSec
                         enabled: notationView.enabled && notationView.visible
                         direction: NavigationPanel.Both
-                        order: 2
+                        order: tabPanel.navigationPanel.order + 1
                     }
 
                     NavigationControl {
@@ -105,14 +108,14 @@ FocusScope {
                         name: "Score"
                         enabled: notationView.enabled && notationView.visible
 
-                        panel: navPanel
+                        panel: notationView.navigationPanel
                         order: 1
 
                         onActiveChanged: {
                             if (fakeNavCtrl.active) {
                                 notationView.forceFocusIn()
 
-                                if (navPanel.highlight) {
+                                if (navigationPanel.highlight) {
                                     notationView.selectOnNavigationActive()
                                 }
                             } else {
@@ -139,6 +142,14 @@ FocusScope {
                         contextMenuLoader.close()
                     }
 
+                    onShowElementPopupRequested: function (popupType, viewPos, elemSize) {
+                        Qt.callLater(popUpLoader.show, popupType, viewPos, elemSize)
+                    }
+
+                    onHideElementPopupRequested: {
+                        popUpLoader.close()
+                    }
+
                     onViewportChanged: {
                         notationNavigator.setCursorRect(viewport)
                     }
@@ -149,6 +160,19 @@ FocusScope {
                         onHandleMenuItem: function(itemId) {
                             contextMenuModel.handleMenuItem(itemId)
                         }
+
+                        onOpened: paintView.onContextMenuIsOpenChanged(true)
+                        onClosed: paintView.onContextMenuIsOpenChanged(false)
+                    }
+
+                    ElementPopupLoader {
+                        id: popUpLoader
+
+                        notationViewNavigationSection: navSec
+                        navigationOrderStart: notationView.navigationPanel.order + 1
+
+                        onOpened: paintView.onElementPopupIsOpenChanged(true)
+                        onClosed: paintView.onElementPopupIsOpenChanged(false)
                     }
                 }
             }
@@ -172,6 +196,17 @@ FocusScope {
                         notationNavigator.item.setCursorRect(viewport)
                     }
                 }
+            }
+
+            BrailleView {
+                id: brailleView
+
+                SplitView.fillWidth: true
+                SplitView.preferredHeight: 50
+                SplitView.minimumHeight: 30
+
+                navigationPanel.section: navSec
+                navigationPanel.order: popUpLoader.navigationOrderEnd + 1
             }
 
             Component {
@@ -228,7 +263,7 @@ FocusScope {
             Layout.fillWidth: true
 
             navigationPanel.section: navSec
-            navigationPanel.order: 3
+            navigationOrderStart: brailleView.navigationPanel.order + 1
 
             onClosed: {
                 fakeNavCtrl.requestActive()

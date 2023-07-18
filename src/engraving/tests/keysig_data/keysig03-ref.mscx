@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <Spatium>1.74978</Spatium>
@@ -28,7 +26,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="2" col="2"/>
+        <bracket type="1" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="2">
@@ -57,7 +55,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>1</accidental>
+            <concertKey>1</concertKey>
             <mode>dorian</mode>
             </KeySig>
           <TimeSig>
@@ -323,7 +321,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>1</accidental>
+            <concertKey>1</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>

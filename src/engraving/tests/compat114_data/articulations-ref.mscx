@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <minSystemDistance>9.2</minSystemDistance>
@@ -32,7 +30,7 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
-        <bracket type="-1" span="1" col="0"/>
+        <bracket type="-1" span="1" col="0" visible="1"/>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument id="flute">
@@ -71,7 +69,11 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
+          <KeySig>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -251,7 +253,11 @@
             <durationType>quarter</durationType>
             <Articulation>
               <direction>down</direction>
-              <subtype>articTenutoStaccatoBelow</subtype>
+              <subtype>articStaccatoBelow</subtype>
+              </Articulation>
+            <Articulation>
+              <direction>down</direction>
+              <subtype>articTenutoBelow</subtype>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -266,7 +272,11 @@
             <durationType>quarter</durationType>
             <Articulation>
               <direction>up</direction>
-              <subtype>articTenutoStaccatoAbove</subtype>
+              <subtype>articStaccatoAbove</subtype>
+              </Articulation>
+            <Articulation>
+              <direction>up</direction>
+              <subtype>articTenutoAbove</subtype>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -311,9 +321,9 @@
         <voice>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>brassMuteClosed</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -341,9 +351,9 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>ornamentTurnInverted</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -355,9 +365,9 @@
         <voice>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>ornamentTurn</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -365,9 +375,9 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>ornamentTrill</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -375,9 +385,9 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>ornamentShortTrill</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -385,9 +395,9 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>ornamentMordent</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -402,9 +412,9 @@
         <voice>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>ornamentTremblement</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -412,9 +422,9 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>ornamentPrallMordent</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -422,9 +432,9 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>ornamentUpPrall</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -432,9 +442,9 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>ornamentPrecompMordentUpperPrefix</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -446,9 +456,9 @@
         <voice>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>ornamentUpMordent</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -456,9 +466,9 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>ornamentDownMordent</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>

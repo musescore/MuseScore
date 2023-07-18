@@ -30,6 +30,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/build
     ${CMAKE_CURRENT_LIST_DIR}/build/cmake
     ${CMAKE_MODULE_PATH}
@@ -38,115 +39,105 @@ set(CMAKE_MODULE_PATH
 ###########################################
 # Setup option and build settings
 ###########################################
+include(GetPaths)
 
-set(MUSESCORE_REVISION "" CACHE STRING "Build revision")
-set(MUSESCORE_BUILD_CONFIG "dev" CACHE STRING "Build config")
-# Possible MUSESCORE_BUILD_CONFIG values:
+set(MUSESCORE_BUILD_CONFIGURATION "app" CACHE STRING "Build configuration")
+# Possible MUSESCORE_BUILD_CONFIGURATION values:
+# - app             - for desktop app
+# - app-portable    - for desktop portable app (Windows build for PortableApps.com)
+# - vtest           - for visual tests (for CI)
+# - utest           - for unit tests (for CI)
+
+set(MUSESCORE_BUILD_MODE "dev" CACHE STRING "Build mode")
+# Possible MUSESCORE_BUILD_MODE values:
 # - dev     - for development/nightly builds
 # - testing - for testing versions (alpha, beta, RC)
 # - release - for stable release builds
 
-option(BUILD_MACOS_APPLE_SILICON "Build for Apple Silicon architecture. Only applicable on Macs with Apple Silicon, and requires suitable Qt version." OFF)
-option(BUILD_64 "Build 64 bit version of editor" ON)
-option(BUILD_PORTABLEAPPS "Windows build for PortableApps.com" OFF)
-option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
-option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
+set(MUSESCORE_REVISION "" CACHE STRING "Build revision")
 
-set(CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
-option(LOGGER_DEBUGLEVEL_ENABLED "Enable logging debug level" ON)
-
-option(BUILD_SHORTCUTS_MODULE "Build shortcuts module" ON)
-option(BUILD_NETWORK_MODULE "Build network module" ON)
-option(BUILD_LEARN_MODULE "Build learn module" ON)
-option(BUILD_WORKSPACE_MODULE "Build workspace module" ON)
-option(BUILD_CLOUD_MODULE "Build cloud module" ON)
-option(BUILD_LANGUAGES_MODULE "Build languages module" ON)
-option(BUILD_PLUGINS_MODULE "Build plugins module" ON)
-option(BUILD_PLAYBACK_MODULE "Build playback module" ON)
-option(BUILD_PALETTE_MODULE "Build palette module" ON)
-option(BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON)
-option(BUILD_INSPECTOR_MODULE "Build inspector module" ON)
-option(BUILD_AUTOBOT_MODULE "Build autobot module" ON)
-option(BUILD_MULTIINSTANCES_MODULE "Build multiinstances module" ON)
-option(BUILD_UPDATE_MODULE "Build update module" ON)
-option(BUILD_DIAGNOSTICS "Build diagnostic code" ON)
-option(BUILD_CRASHPAD_CLIENT "Build crashpad client" ON)
-option(CRASHPAD_HANDLER_PATH "Path to custom crashpad_handler executable (optional)" "")
-set(YOUTUBE_API_KEY "" CACHE STRING "YouTube API key")
-
-option(BUILD_AUDIO_MODULE "Build audio module" ON)
-option(BUILD_MUSESAMPLER_MODULE "Build MuseSampler MODULE" ON)
+# Modules framework (alphabetical order please)
+option(MUE_BUILD_ACCESSIBILITY_MODULE "Build accessibility module" ON)
+option(MUE_BUILD_AUDIO_MODULE "Build audio module" ON)
+option(MUE_ENABLE_AUDIO_EXPORT "Enable audio export" ON)
+option(MUE_BUILD_MIDI_MODULE "Build midi module" ON)
+option(MUE_BUILD_MPE_MODULE "Build mpe module" ON)
+option(MUE_BUILD_MUSESAMPLER_MODULE "Build MuseSampler module" ON)
 set(MUSESAMPLER_SRC_PATH "" CACHE PATH "Path to MuseSampler sources")
+option(MUE_BUILD_NETWORK_MODULE "Build network module" ON)
+option(MUE_BUILD_SHORTCUTS_MODULE "Build shortcuts module" ON)
+option(MUE_BUILD_UI_MODULE "Build ui module" ON)
 set(VST3_SDK_VERSION "3.7")
-option(BUILD_VST_MODULE "Build VST MODULE" OFF)
+option(MUE_BUILD_VST_MODULE "Build VST module" OFF)
 set(VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VERSION} required")
 
-if (NOT BUILD_AUDIO_MODULE)
-    set(BUILD_MUSESAMPLER_MODULE OFF)
-    set(BUILD_VST_MODULE OFF)
-endif()
+# Modules (alphabetical order please)
+option(MUE_BUILD_APPSHELL_MODULE "Build appshell module" ON)
+option(MUE_BUILD_AUTOBOT_MODULE "Build autobot module" ON)
+option(MUE_BUILD_BRAILLE_MODULE "Build braille module" ON)
+option(MUE_BUILD_CLOUD_MODULE "Build cloud module" ON)
+option(MUE_BUILD_CONVERTER_MODULE "Build converter module" ON)
+option(MUE_BUILD_DIAGNOSTICS_MODULE "Build diagnostic code" ON)
+option(MUE_BUILD_IMPORTEXPORT_MODULE "Build importexport module" ON)
+option(MUE_BUILD_VIDEOEXPORT_MODULE "Build videoexport module" OFF)
+option(MUE_BUILD_IMAGESEXPORT_MODULE "Build imagesexport module" ON)
+option(MUE_BUILD_INSPECTOR_MODULE "Build inspector module" ON)
+option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON)
+option(MUE_BUILD_LANGUAGES_MODULE "Build languages module" ON)
+option(MUE_BUILD_LEARN_MODULE "Build learn module" ON)
+set(MUE_LEARN_YOUTUBE_API_KEY "" CACHE STRING "YouTube API key")
+option(MUE_BUILD_MULTIINSTANCES_MODULE "Build multiinstances module" ON)
+option(MUE_BUILD_NOTATION_MODULE "Build notation module" ON)
+option(MUE_BUILD_PALETTE_MODULE "Build palette module" ON)
+option(MUE_BUILD_PLAYBACK_MODULE "Build playback module" ON)
+option(MUE_BUILD_PLUGINS_MODULE "Build plugins module" ON)
+option(MUE_BUILD_PROJECT_MODULE "Build project module" ON)
+option(MUE_BUILD_UPDATE_MODULE "Build update module" ON)
+option(MUE_BUILD_WORKSPACE_MODULE "Build workspace module" ON)
 
-option(BUILD_IMPORTEXPORT_MODULE "Build importexport module" ON)
-option(BUILD_VIDEOEXPORT_MODULE "Build videoexport module" OFF) # currently work only on Ubuntu 18.04 (for backend)
-if (NOT BUILD_IMPORTEXPORT_MODULE)
-    set(BUILD_VIDEOEXPORT_MODULE OFF)
-endif()
+# === Setup ===
+option(MUE_DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
 
-option(ENGRAVING_PAINT_DEBUGGER_ENABLED "Enable diagnostic engraving paint debugger" OFF)
-# Temporary flags for MU3 compatibility to make testing easier.
-option(ENGRAVING_COMPAT_WRITESTYLE_302 "Write style to score xml file" OFF)
-option(ENGRAVING_COMPAT_WRITEEXCERPTS_302 "Write excerpts to score xml file" ON)
-# -----
-
-option(UI_DISABLE_MODALITY "Disable dialogs modality for testing purpose" OFF)
-
-option(ACCESSIBILITY_LOGGING_ENABLED "Enable accessibility logging" OFF)
-
-option(SOUNDFONT3    "Ogg Vorbis compressed fonts"        ON)  # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis
-option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
-
-option(BUILD_UNIT_TESTS "Build gtest unit test" ON)
-option(PACKAGE_FILE_ASSOCIATION "File types association" OFF)
-
+# === Pack ===
 option(MUE_RUN_LRELEASE "Generate .qm files" ON)
-option(TRY_USE_CCACHE "Try use ccache" ON)
-option(BUILD_PCH "Build using precompiled headers." ON)
-option(BUILD_UNITY "Build using unity build." ON)
-option(TRY_BUILD_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" OFF)
-option(BUILD_ASAN "Enable Address Sanitizer" OFF) # if ON, then disabled custom allocator
-option(BUILD_ALLOCATOR "Enable Custom allocator (used for engraving)" OFF)
-option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
-option(TRACE_DRAW_OBJ_ENABLED "Trace draw objects" OFF)
+option(MUE_ENABLE_FILE_ASSOCIATION "File types association (using for package)" OFF)
+option(MUE_INSTALL_SOUNDFONT "Install sound font" ON)
 
-if (BUILD_ASAN)
-    set(BUILD_ALLOCATOR OFF)
-endif()
+# === Tests ===
+option(MUE_BUILD_UNIT_TESTS "Build unit tests" ON)
+set(MUE_VTEST_MSCORE_REF_BIN "${CMAKE_CURRENT_LIST_DIR}/../MU_ORIGIN/MuseScore/build.debug/install/${INSTALL_SUBDIR}/mscore" CACHE PATH "Path to mscore ref bin")
+option(MUE_BUILD_ASAN "Enable Address Sanitizer" OFF)
+option(MUE_BUILD_CRASHPAD_CLIENT "Build crashpad client" ON)
+set(MUE_CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
+option(MUE_CRASHPAD_HANDLER_PATH "Path to custom crashpad_handler executable (optional)" "")
 
-set(QT_SUPPORT ON)
+# === Tools ===
+option(MUE_ENABLE_CUSTOM_ALLOCATOR "Enable custom allocator (used for engraving)" OFF)
 
-option(USE_SYSTEM_FREETYPE "Use system FreeType" OFF) # requires freetype >= 2.5.2, does not work on win
-set(SCRIPT_INTERFACE  TRUE)
+# === Compile ===
+option(MUE_COMPILE_BUILD_64 "Build 64 bit version of editor" ON)
+option(MUE_COMPILE_BUILD_MACOS_APPLE_SILICON "Build for Apple Silicon architecture. Only applicable on Macs with Apple Silicon, and requires suitable Qt version." OFF)
+option(MUE_COMPILE_INSTALL_QTQML_FILES "Whether to bundle qml files along with the installation (relevant on MacOS only)" ON)
+option(MUE_COMPILE_USE_PCH "Use precompiled headers." ON)
+option(MUE_COMPILE_USE_UNITY "Use unity build." ON)
+option(MUE_COMPILE_USE_CCACHE "Try use ccache" ON)
+option(MUE_COMPILE_USE_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" OFF)
 
-option(ENABLE_AUDIO_EXPORT "Enable audio export" ON)
+# === Debug ===
+option(MUE_ENABLE_LOGGER_DEBUGLEVEL "Enable logging debug level" ON)
+option(MUE_ENABLE_ACCESSIBILITY_TRACE "Enable accessibility logging" OFF)
+option(MUE_ENABLE_DRAW_TRACE "Trace draw objects" ON)
+option(MUE_DISABLE_UI_MODALITY "Disable dialogs modality for testing purpose" OFF)
+option(MUE_ENABLE_LOAD_QML_FROM_SOURCE "Load qml files from source (not resource)" OFF)
+option(MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER "Enable diagnostic engraving paint debugger" OFF)
+option(MUE_ENABLE_STRING_DEBUG_HACK "Enable string debug hack (only clang)" ON)
 
-set(JACK_LONGNAME "JACK (Jack Audio Connection Kit)")
-set(JACK_MIN_VERSION "0.98.0")
-option(BUILD_JACK    "Build with support for ${JACK_LONGNAME} audio backend. JACK >= ${JACK_MIN_VERSION} will be needed." OFF)
+###########################################
+# Setup Configure
+###########################################
+include(SetupConfigure)
 
-if (BUILD_PORTABLEAPPS)
-    set(WIN_PORTABLE 1)
-endif (BUILD_PORTABLEAPPS)
-
-if (BUILD_FOR_WINSTORE)
-    set(FOR_WINSTORE 1)
-endif(BUILD_FOR_WINSTORE)
-
-set(APP_UPDATABLE 1)
-if (OS_IS_MAC OR OS_IS_WIN)
-    if (WIN_PORTABLE OR FOR_WINSTORE)
-        set(APP_UPDATABLE 0)
-    endif(WIN_PORTABLE OR FOR_WINSTORE)
-endif(OS_IS_MAC OR OS_IS_WIN)
+set(THIRDPARTY_DIR ${PROJECT_SOURCE_DIR}/thirdparty)
 
 ###########################################
 # Setup compiler and build environment
@@ -154,21 +145,10 @@ endif(OS_IS_MAC OR OS_IS_WIN)
 
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)
-if (TRY_USE_CCACHE)
+if (MUE_COMPILE_USE_CCACHE)
     include(TryUseCcache)
-endif(TRY_USE_CCACHE)
+endif(MUE_COMPILE_USE_CCACHE)
 
-###########################################
-# Setup MuseScore config
-###########################################
-
-include(${CMAKE_CURRENT_LIST_DIR}/config.cmake)
-configure_file (
-      ${PROJECT_SOURCE_DIR}/build/config.h.in
-      ${PROJECT_BINARY_DIR}/config.h
-      )
-
-set(THIRDPARTY_DIR ${PROJECT_SOURCE_DIR}/thirdparty)
 
 ###########################################
 # Setup external dependencies
@@ -183,32 +163,18 @@ if (OS_IS_WIN)
     include_directories(${PROJECT_SOURCE_DIR}/dependencies/include)
 endif(OS_IS_WIN)
 
-include(SetupFreetype)
-
 include(FindSndFile)
 
-#if(SOUNDFONT3)
-#    include(FindVorbisAndOgg)
-#endif(SOUNDFONT3)
-
-if (BUILD_JACK)
-    include(FindJack)
-endif(BUILD_JACK)
-
-if (BUILD_AUTOUPDATE)
-    include(SetupSparkle)
-endif(BUILD_AUTOUPDATE)
-
-if (DOWNLOAD_SOUNDFONT)
+if (MUE_DOWNLOAD_SOUNDFONT)
     include(DownloadSoundFont)
-endif(DOWNLOAD_SOUNDFONT)
+endif(MUE_DOWNLOAD_SOUNDFONT)
 
 
 ###########################################
 # Add source tree
 ###########################################
 
-if (BUILD_UNIT_TESTS)
+if (MUE_BUILD_UNIT_TESTS)
     enable_testing()
     message(STATUS "Enabled testing")
 
@@ -218,7 +184,7 @@ if (BUILD_UNIT_TESTS)
     )
 
     add_subdirectory(thirdparty/googletest)
-endif(BUILD_UNIT_TESTS)
+endif(MUE_BUILD_UNIT_TESTS)
 
 add_subdirectory(share)
 add_subdirectory(src/framework/global) # should be first to work pch
@@ -246,3 +212,8 @@ endif(OS_IS_LIN)
 if (OS_IS_WIN)
     include(Packaging)
 endif(OS_IS_WIN)
+
+###########################################
+# Add VTest
+###########################################
+add_subdirectory(vtest)

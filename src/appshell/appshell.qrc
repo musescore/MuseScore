@@ -11,6 +11,7 @@
         <file>qml/HomePage/PluginsPage.qml</file>
         <file>qml/DevTools/Gallery/GeneralComponentsGallery.qml</file>
         <file>qml/DevTools/CrashHandler/CrashHandlerDevTools.qml</file>
+        <file>qml/DevTools/CorruptScore/CorruptScoreDevTools.qml</file>
         <file>qml/AboutDialog.qml</file>
         <file>qml/AboutMusicXMLDialog.qml</file>
         <file>qml/resources/mu_logo.svg</file>
@@ -105,5 +106,8 @@
         <file>qml/platform/AppButtonBackground.qml</file>
         <file>qml/platform/PlatformMenuBar.qml</file>
         <file>resources/LoadingScreen.svg</file>
+        <file>qml/Preferences/BraillePreferencesPage.qml</file>
+        <file>qml/Preferences/internal/BrailleSection.qml</file>
+        <file>qml/Preferences/internal/BrailleTableSection.qml</file>
     </qresource>
 </RCC>

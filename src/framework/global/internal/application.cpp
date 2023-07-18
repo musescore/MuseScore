@@ -39,8 +39,9 @@ IApplication::RunMode Application::runMode() const
 bool Application::noGui() const
 {
     switch (m_runMode) {
-    case RunMode::Editor: return false;
-    case RunMode::Converter: return true;
+    case RunMode::GuiApp: return false;
+    case RunMode::ConsoleApp: return true;
+    case RunMode::AudioPluginRegistration: return true;
     }
     return false;
 }

@@ -266,7 +266,6 @@ public:
     virtual void changeAccidental(mu::engraving::AccidentalType) = 0;
     virtual void transposeSemitone(int) = 0;
     virtual void transposeDiatonicAlterations(mu::engraving::TransposeDirection) = 0;
-    virtual void toggleGlobalOrLocalInsert() = 0;
     virtual void toggleAutoplace(bool all) = 0;
     virtual void getLocation() = 0;
     virtual void execute(void (mu::engraving::Score::*)()) = 0;

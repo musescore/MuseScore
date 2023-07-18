@@ -22,7 +22,7 @@
 #ifndef MU_APPSHELL_IAPPSHELLCONFIGURATION_H
 #define MU_APPSHELL_IAPPSHELLCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "types/retval.h"
 
 #include "io/path.h"
@@ -50,7 +50,6 @@ public:
 
     virtual std::string handbookUrl() const = 0;
     virtual std::string askForHelpUrl() const = 0;
-    virtual std::string bugReportUrl() const = 0;
     virtual std::string museScoreUrl() const = 0;
     virtual std::string museScoreForumUrl() const = 0;
     virtual std::string museScoreContributionUrl() const = 0;

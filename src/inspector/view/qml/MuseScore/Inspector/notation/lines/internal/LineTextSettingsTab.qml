@@ -67,13 +67,34 @@ FocusableItem {
 
         SeparatorLine { anchors.margins: -12 }
 
+        SpinBoxPropertyView {
+            id: gapBetweenTextAndLineControl
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.rightMargin: 2
+
+            titleText: qsTrc("inspector", "Gap between text and line")
+            propertyItem: root.model ? root.model.gapBetweenTextAndLine : null
+
+            step: 0.1
+            maxValue: 100.0
+            minValue: 0.0
+            decimals: 2
+
+            navigationName: "GapBetweenTextAndLine"
+            navigationPanel: root.navigationPanel
+            navigationRowStart: beginningTextOffsetSection.navigationRowEnd + 1
+        }
+
+        SeparatorLine { anchors.margins: -12 }
+
         TextSection {
             id: continuousTextSection
-            titleText:  qsTrc("inspector", "Text when continuing to a new system")
+            titleText: qsTrc("inspector", "Text when continuing to a new system")
             propertyItem: root.model ? root.model.continuousText : null
 
             navigationPanel: root.navigationPanel
-            navigationRowStart: beginningTextOffsetSection.navigationRowEnd + 1
+            navigationRowStart: gapBetweenTextAndLineControl.navigationRowEnd + 1
         }
 
         OffsetSection {
@@ -85,11 +106,11 @@ FocusableItem {
             navigationRowStart: continuousTextSection.navigationRowEnd + 1
         }
 
-        SeparatorLine { anchors.margins: -12; visible: endTextSection.visible }
+        SeparatorLine { anchors.margins: -12 }
 
         TextSection {
             id: endTextSection
-            titleText:  qsTrc("inspector", "End text")
+            titleText: qsTrc("inspector", "End text")
             propertyItem: root.model ? root.model.endText : null
 
             navigationPanel: root.navigationPanel

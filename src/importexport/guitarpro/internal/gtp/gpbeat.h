@@ -1,5 +1,5 @@
-#ifndef GPBEAT_H
-#define GPBEAT_H
+#ifndef MU_IMPORTEXPORT_GPBEAT_H
+#define MU_IMPORTEXPORT_GPBEAT_H
 
 #include <map>
 #include <memory>
@@ -8,7 +8,7 @@
 #include "gpnote.h"
 #include "gprhythm.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 class GPBeat
 {
 public:
@@ -28,6 +28,9 @@ public:
         None, OnBeat, BeforeBeat
     };
     enum class VibratoWTremBar {
+        None, Slight, Wide
+    };
+    enum class VibratoLeftHand {
         None, Slight, Wide
     };
     enum class Fadding {
@@ -58,6 +61,14 @@ public:
         None, Artificial, Pinch, Tap, Semi, FeedBack
     };
 
+    struct HarmonicMarkInfo {
+        bool artificial = false;
+        bool pinch = false;
+        bool tap = false;
+        bool semi = false;
+        bool feedback = false;
+    };
+
     struct Tremolo {
         int numerator{ -1 };
         int denominator{ -1 };
@@ -81,7 +92,17 @@ public:
         BROKEN2_JOINED
     };
 
+    struct {
+        bool operator()(const std::shared_ptr<GPNote>& a, const std::shared_ptr<GPNote>& b) const
+        {
+            auto aPitch = a->midiPitch().octave * 12 + a->midiPitch().tone;
+            auto bPitch = b->midiPitch().octave * 12 + b->midiPitch().tone;
+            return aPitch > bPitch;
+        }
+    } comparePitch;
+
     void addGPNote(const std::shared_ptr<GPNote>& n) { _notes.push_back(n); }
+    void sortGPNotes();
     void addGPRhythm(const std::shared_ptr<GPRhythm>& n) { _rhythm = n; }
     void setDynamic(GPBeat::DynamicType t) { _dynamic = t; }
     void setLegatoType(GPBeat::LegatoType t) { _legato = t; }
@@ -105,8 +126,12 @@ public:
     void setTrill(bool trill) { _trill = trill; }
     bool trill() const { return _trill; }
 
-    void setHarmonicMarkType(HarmonicMarkType type) { _harmonicMarkType = type; }
-    HarmonicMarkType harmonicMarkType() const { return _harmonicMarkType; }
+    void addHarmonicMarkType(GPBeat::HarmonicMarkType type);
+    bool harmonicMarkArtificial() const { return _harmonicMarkInfo.artificial; }
+    bool harmonicMarkPinch() const { return _harmonicMarkInfo.pinch; }
+    bool harmonicMarkTap() const { return _harmonicMarkInfo.tap; }
+    bool harmonicMarkSemi() const { return _harmonicMarkInfo.semi; }
+    bool harmonicMarkFeedback() const { return _harmonicMarkInfo.feedback; }
 
     void setSlapped(bool s) { _slapped = s; }
     bool slapped() const { return _slapped; }
@@ -132,8 +157,11 @@ public:
     void setTime(int t) { _time = t; }
     int time() const { return _time; }
 
-    void setVibrato(VibratoWTremBar v) { _vibrato = v; }
-    VibratoWTremBar vibrato() const { return _vibrato; }
+    void setVibratoWTremBar(VibratoWTremBar v) { _vibratoWTremBar = v; }
+    VibratoWTremBar vibratoWTremBar() const { return _vibratoWTremBar; }
+
+    void setVibratoLeftHand(VibratoLeftHand v) { _vibratoLeftHand = v; }
+    VibratoLeftHand vibratoLeftHand() const { return _vibratoLeftHand; }
 
     void setFadding(Fadding f) { _fadding = f; }
     Fadding fadding() const { return _fadding; }
@@ -251,15 +279,16 @@ private:
     bool _letRing = false;
     bool _palmMute = false;
     bool _trill = false;
-    HarmonicMarkType _harmonicMarkType = HarmonicMarkType::None;
     bool _slapped = false;
     bool _popped = false;
+    HarmonicMarkInfo _harmonicMarkInfo;
     Arpeggio _arpeggio = Arpeggio::None;
     Brush _brush = Brush::None;
     GraceNotes _graceNotes = GraceNotes::None;
     int _time = -1;
     String _freeText;
-    VibratoWTremBar _vibrato{ VibratoWTremBar::None };
+    VibratoWTremBar _vibratoWTremBar = VibratoWTremBar::None;
+    VibratoLeftHand _vibratoLeftHand = VibratoLeftHand::None;
     Fadding _fadding = Fadding::None;
     Hairpin _hairpin = Hairpin::None;
     Rasgueado _rasgueado = Rasgueado::None;
@@ -275,6 +304,6 @@ private:
     StemOrientation m_stemOrientation;
     BeamMode m_beamMode = BeamMode::AUTO;
 };
-}
+} // namespace mu::iex::guitarpro
 
-#endif // GPBEAT_H
+#endif // MU_IMPORTEXPORT_GPBEAT_H

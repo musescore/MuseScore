@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <pageWidth>8.27007</pageWidth>
@@ -89,9 +87,6 @@
       <shortInstrumentFrameWidth>0</shortInstrumentFrameWidth>
       <partInstrumentFramePadding>0</partInstrumentFramePadding>
       <partInstrumentFrameWidth>0</partInstrumentFrameWidth>
-      <dynamicsFontStyle>0</dynamicsFontStyle>
-      <dynamicsFramePadding>0</dynamicsFramePadding>
-      <dynamicsFrameWidth>0</dynamicsFrameWidth>
       <expressionFontSize>12</expressionFontSize>
       <expressionFramePadding>0</expressionFramePadding>
       <expressionFrameWidth>0</expressionFrameWidth>

@@ -36,29 +36,19 @@ class PaletteRootModel : public QObject, public actions::Actionable, public asyn
 {
     Q_OBJECT
 
-    INJECT(palette, IPaletteProvider, paletteProvider)
-    INJECT(palette, actions::IActionsDispatcher, dispatcher)
+    INJECT(IPaletteProvider, paletteProvider)
+    INJECT(actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(mu::palette::PaletteProvider * paletteProvider READ paletteProvider_property CONSTANT)
 
-    Q_PROPERTY(bool paletteEnabled READ paletteEnabled NOTIFY paletteEnabledChanged)
-    Q_PROPERTY(bool needShowShadowOverlay READ needShowShadowOverlay NOTIFY needShowShadowOverlayChanged)
-
 public:
     explicit PaletteRootModel(QObject* parent = nullptr);
+    ~PaletteRootModel() override;
 
     PaletteProvider* paletteProvider_property() const;
 
-    bool paletteEnabled() const;
-    bool needShowShadowOverlay() const;
-
 signals:
     void paletteSearchRequested();
-    void paletteEnabledChanged();
-    void needShowShadowOverlayChanged();
-
-private:
-    bool m_needShowShadowOverlay = false;
 };
 }
 

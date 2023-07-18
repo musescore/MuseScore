@@ -23,12 +23,20 @@
 #ifndef MU_ENGRAVING_LINKSINDEXER_H
 #define MU_ENGRAVING_LINKSINDEXER_H
 
-#include "libmscore/location.h"
+#include "../libmscore/location.h"
 
 namespace mu::engraving {
 class LinksIndexer
 {
 public:
+
+    inline bool operator==(const LinksIndexer& i) const
+    {
+        return _lastLocalIndex == i._lastLocalIndex && _lastLinkedElementLoc == i._lastLinkedElementLoc;
+    }
+
+    inline bool operator!=(const LinksIndexer& i) const { return !this->operator==(i); }
+
     int assignLocalIndex(const Location& mainElementLocation)
     {
         if (_lastLinkedElementLoc == mainElementLocation) {

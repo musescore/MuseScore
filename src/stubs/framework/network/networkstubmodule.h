@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::network {
-class NetworkStubModule : public modularity::IModuleSetup
+class NetworkModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

@@ -21,11 +21,13 @@
  */
 
 #include "systemdivider.h"
-#include "rw/xml.h"
+
 #include "types/symnames.h"
 
 #include "score.h"
 #include "system.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -54,23 +56,6 @@ SystemDivider::SystemDivider(const SystemDivider& sd)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void SystemDivider::layout()
-{
-    SymId sid;
-
-    if (_dividerType == SystemDivider::Type::LEFT) {
-        sid = SymNames::symIdByName(score()->styleSt(Sid::dividerLeftSym));
-    } else {
-        sid = SymNames::symIdByName(score()->styleSt(Sid::dividerRightSym));
-    }
-    setSym(sid, score()->engravingFont());
-    Symbol::layout();
-}
-
-//---------------------------------------------------------
 //   setDividerType
 //---------------------------------------------------------
 
@@ -78,9 +63,9 @@ void SystemDivider::setDividerType(SystemDivider::Type v)
 {
     _dividerType = v;
     if (v == SystemDivider::Type::LEFT) {
-        setOffset(PointF(score()->styleD(Sid::dividerLeftX), score()->styleD(Sid::dividerLeftY)));
+        setOffset(PointF(style().styleD(Sid::dividerLeftX), style().styleD(Sid::dividerLeftY)));
     } else {
-        setOffset(PointF(score()->styleD(Sid::dividerRightX), score()->styleD(Sid::dividerRightY)));
+        setOffset(PointF(style().styleD(Sid::dividerRightX), style().styleD(Sid::dividerRightY)));
     }
 }
 
@@ -92,36 +77,5 @@ mu::RectF SystemDivider::drag(EditData& ed)
 {
     setGenerated(false);
     return Symbol::drag(ed);
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void SystemDivider::write(XmlWriter& xml) const
-{
-    xml.startElement(this, { { "type", (dividerType() == SystemDivider::Type::LEFT ? "left" : "right") } });
-    writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void SystemDivider::read(XmlReader& e)
-{
-    if (e.attribute("type") == "left") {
-        _dividerType = SystemDivider::Type::LEFT;
-        SymId sym = SymNames::symIdByName(score()->styleSt(Sid::dividerLeftSym));
-        setSym(sym, score()->engravingFont());
-        setOffset(PointF(score()->styleD(Sid::dividerLeftX), score()->styleD(Sid::dividerLeftY)));
-    } else {
-        _dividerType = SystemDivider::Type::RIGHT;
-        SymId sym = SymNames::symIdByName(score()->styleSt(Sid::dividerRightSym));
-        setSym(sym, score()->engravingFont());
-        setOffset(PointF(score()->styleD(Sid::dividerRightX), score()->styleD(Sid::dividerRightY)));
-    }
-    Symbol::read(e);
 }
 } // namespace mu::engraving

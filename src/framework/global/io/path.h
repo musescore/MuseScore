@@ -109,6 +109,8 @@ bool isAbsolute(const path_t& path);
 bool isAllowedFileName(const path_t& fn);
 path_t escapeFileName(const path_t& fn);
 
+path_t toNativeSeparators(const path_t& path);
+
 paths_t pathsFromString(const std::string& str, const std::string& delim = ";");
 std::string pathsToString(const paths_t& ps, const std::string& delim = ";");
 }

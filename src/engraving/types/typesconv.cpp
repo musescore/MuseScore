@@ -165,10 +165,13 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::MEASURE_REPEAT,       "MeasureRepeat",        TranslatableString("engraving", "Measure repeat") },
     { ElementType::TIE,                  "Tie",                  TranslatableString("engraving", "Tie") },
     { ElementType::ARTICULATION,         "Articulation",         TranslatableString("engraving", "Articulation") },
+    { ElementType::ORNAMENT,             "Ornament",             TranslatableString("engraving", "Ornament") },
     { ElementType::FERMATA,              "Fermata",              TranslatableString("engraving", "Fermata") },
     { ElementType::CHORDLINE,            "ChordLine",            TranslatableString("engraving", "Chord line") },
     { ElementType::DYNAMIC,              "Dynamic",              TranslatableString("engraving", "Dynamic") },
+    { ElementType::EXPRESSION,           "Expression",           TranslatableString("engraving", "Expression") },
     { ElementType::BEAM,                 "Beam",                 TranslatableString("engraving", "Beam") },
+    { ElementType::BEAM_SEGMENT,         "BeamSegment",          TranslatableString("engraving", "Beam segment") },
     { ElementType::HOOK,                 "Hook",                 TranslatableString("engraving", "Flag") }, // internally called "Hook", but "Flag" in SMuFL, so here externally too
     { ElementType::LYRICS,               "Lyrics",               TranslatableString("engraving", "Lyrics") },
     { ElementType::FIGURED_BASS,         "FiguredBass",          TranslatableString("engraving", "Figured bass") },
@@ -180,12 +183,14 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::STAFF_TEXT,           "StaffText",            TranslatableString("engraving", "Staff text") },
     { ElementType::SYSTEM_TEXT,          "SystemText",           TranslatableString("engraving", "System text") },
     { ElementType::PLAYTECH_ANNOTATION,  "PlayTechAnnotation",   TranslatableString("engraving", "Playing technique annotation") },
+    { ElementType::CAPO,                 "Capo",                 TranslatableString("engraving", "Capo") },
     { ElementType::TRIPLET_FEEL,         "TripletFeel",          TranslatableString("engraving", "Triplet feel") },
     { ElementType::REHEARSAL_MARK,       "RehearsalMark",        TranslatableString("engraving", "Rehearsal mark") },
     { ElementType::INSTRUMENT_CHANGE,    "InstrumentChange",     TranslatableString("engraving", "Instrument change") },
     { ElementType::STAFFTYPE_CHANGE,     "StaffTypeChange",      TranslatableString("engraving", "Staff type change") },
     { ElementType::HARMONY,              "Harmony",              TranslatableString("engraving", "Chord symbol") },
     { ElementType::FRET_DIAGRAM,         "FretDiagram",          TranslatableString("engraving", "Fretboard diagram") },
+    { ElementType::HARP_DIAGRAM,         "HarpPedalDiagram",     TranslatableString("engraving", "Harp pedal diagram") },
     { ElementType::BEND,                 "Bend",                 TranslatableString("engraving", "Bend") },
     { ElementType::STRETCHED_BEND,       "Bend",                 TranslatableString("engraving", "Bend") },
     { ElementType::TREMOLOBAR,           "TremoloBar",           TranslatableString("engraving", "Tremolo bar") },
@@ -320,6 +325,58 @@ Align TConv::fromXml(const String& str, Align def)
     a.horizontal = findTypeByXmlTag<AlignH>(ALIGN_H, sl.at(0), def.horizontal);
     a.vertical = findTypeByXmlTag<AlignV>(ALIGN_V, sl.at(1), def.vertical);
     return a;
+}
+
+static const std::vector<Item<IntervalStep> > INTERVAL_STEP = {
+    { IntervalStep::UNISON, "unison" },
+    { IntervalStep::SECOND, "second" },
+    { IntervalStep::THIRD, "third" },
+    { IntervalStep::FOURTH, "fourth" },
+    { IntervalStep::FIFTH, "fifth" },
+    { IntervalStep::SIXTH, "sixth" },
+    { IntervalStep::SEVENTH, "seventh" },
+    { IntervalStep::OCTAVE, "octave" }
+};
+
+static const std::vector<Item<IntervalType> > INTERVAL_TYPE = {
+    { IntervalType::AUTO, "auto" },
+    { IntervalType::MINOR, "minor" },
+    { IntervalType::MAJOR, "major" },
+    { IntervalType::PERFECT, "perfect" },
+    { IntervalType::DIMINISHED, "diminished" },
+    { IntervalType::AUGMENTED, "augmented" },
+};
+
+String TConv::toXml(OrnamentInterval interval)
+{
+    StringList sl;
+    sl << String::fromAscii(findXmlTagByType<IntervalStep>(INTERVAL_STEP, interval.step).ascii());
+    sl << String::fromAscii(findXmlTagByType<IntervalType>(INTERVAL_TYPE, interval.type).ascii());
+    return sl.join(u",");
+}
+
+OrnamentInterval TConv::fromXml(const String& str, OrnamentInterval def)
+{
+    StringList sl = str.split(',');
+    if (sl.size() != 2) {
+        LOGD() << "bad ornament interval value: " << str;
+        return def;
+    }
+
+    OrnamentInterval interval;
+    interval.step = findTypeByXmlTag<IntervalStep>(INTERVAL_STEP, sl.at(0), def.step);
+    interval.type = findTypeByXmlTag<IntervalType>(INTERVAL_TYPE, sl.at(1), def.type);
+    return interval;
+}
+
+IntervalStep TConv::fromXml(const AsciiStringView& tag, IntervalStep def)
+{
+    return findTypeByXmlTag<IntervalStep>(INTERVAL_STEP, tag, def);
+}
+
+IntervalType TConv::fromXml(const AsciiStringView& tag, IntervalType def)
+{
+    return findTypeByXmlTag<IntervalType>(INTERVAL_TYPE, tag, def);
 }
 
 String TConv::translatedUserName(SymId v)
@@ -492,6 +549,12 @@ static const std::vector<Item<NoteHeadGroup> > NOTEHEAD_GROUPS = {
     { NoteHeadGroup::HEAD_G_FLAT,       "g-flat-name",  TranslatableString("engraving/noteheadgroup",  "G♭ (Name)") },
     { NoteHeadGroup::HEAD_H,            "h-name",       TranslatableString("engraving/noteheadgroup",  "H (Name)") },
     { NoteHeadGroup::HEAD_H_SHARP,      "h-sharp-name", TranslatableString("engraving/noteheadgroup",  "H♯ (Name)") },
+
+    // Swiss rudiments
+    { NoteHeadGroup::HEAD_SWISS_RUDIMENTS_FLAM,   "swiss-rudiments-flam",   TranslatableString("engraving/noteheadgroup",
+                                                                                               "Swiss Rudiments Flam") },
+    { NoteHeadGroup::HEAD_SWISS_RUDIMENTS_DOUBLE, "swiss-rudiments-double", TranslatableString("engraving/noteheadgroup",
+                                                                                               "Swiss Rudiments Doublé") },
 
     { NoteHeadGroup::HEAD_CUSTOM,       "custom",       TranslatableString("engraving",  "Custom") }
 };
@@ -940,6 +1003,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::MMREST_RANGE,      "mmrest_range",         TranslatableString("engraving", "Multimeasure rest range") },
 
     { TextStyleType::TEMPO,             "tempo",                TranslatableString("engraving", "Tempo") },
+    { TextStyleType::TEMPO_CHANGE,      "tempo change",         TranslatableString("engraving", "Gradual tempo change") },
     { TextStyleType::METRONOME,         "metronome",            TranslatableString("engraving", "Metronome") },
     { TextStyleType::REPEAT_LEFT,       "repeat_left",          TranslatableString("engraving", "Repeat text left") },
     { TextStyleType::REPEAT_RIGHT,      "repeat_right",         TranslatableString("engraving", "Repeat text right") },
@@ -963,6 +1027,8 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::LH_GUITAR_FINGERING, "guitar_fingering_lh", TranslatableString("engraving", "LH guitar fingering") },
     { TextStyleType::RH_GUITAR_FINGERING, "guitar_fingering_rh", TranslatableString("engraving", "RH guitar fingering") },
     { TextStyleType::STRING_NUMBER,     "string_number",        TranslatableString("engraving", "String number") },
+    { TextStyleType::HARP_PEDAL_DIAGRAM, "harp_pedal_diagram",  TranslatableString("engraving", "Harp pedal diagram") },
+    { TextStyleType::HARP_PEDAL_TEXT_DIAGRAM, "harp_pedal_text_diagram", TranslatableString("engraving", "Harp pedal text diagram") },
 
     { TextStyleType::TEXTLINE,          "textline",             TranslatableString("engraving", "Text line") },
     { TextStyleType::VOLTA,             "volta",                TranslatableString("engraving", "Volta") },
@@ -970,8 +1036,8 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::GLISSANDO,         "glissando",            TranslatableString("engraving", "Glissando") },
     { TextStyleType::PEDAL,             "pedal",                TranslatableString("engraving", "Pedal") },
     { TextStyleType::BEND,              "bend",                 TranslatableString("engraving", "Bend") },
-    { TextStyleType::LET_RING,          "let_ring",             TranslatableString("engraving", "Let Ring") },
-    { TextStyleType::PALM_MUTE,         "palm_mute",            TranslatableString("engraving", "Palm Mute") },
+    { TextStyleType::LET_RING,          "let_ring",             TranslatableString("engraving", "Let ring") },
+    { TextStyleType::PALM_MUTE,         "palm_mute",            TranslatableString("engraving", "Palm mute") },
 
     { TextStyleType::USER1,             "user_1",               TranslatableString("engraving", "User-1") },
     { TextStyleType::USER2,             "user_2",               TranslatableString("engraving", "User-2") },
@@ -1542,8 +1608,8 @@ static const std::vector<Item<BeamMode> > BEAMMODE_TYPES = {
     { BeamMode::MID, "mid" },
     { BeamMode::END, "end" },
     { BeamMode::NONE, "no" },
+    { BeamMode::BEGIN16, "begin16" },
     { BeamMode::BEGIN32, "begin32" },
-    { BeamMode::BEGIN64, "begin64" },
     { BeamMode::INVALID, "invalid" }
 };
 
@@ -2211,8 +2277,6 @@ static const std::vector<Item<JumpType> > JUMP_TYPES = {
     { JumpType::DSS_AL_CODA,    "", TranslatableString("engraving", "Dal Segno Segno al Coda") },
     { JumpType::DSS_AL_DBLCODA, "", TranslatableString("engraving", "Dal Segno Segno al Double Coda") },
     { JumpType::DSS_AL_FINE,    "", TranslatableString("engraving", "Dal Segno Segno al Fine") },
-    { JumpType::DCODA,          "", TranslatableString("engraving", "Da Coda") },
-    { JumpType::DDBLCODA,       "", TranslatableString("engraving", "Da Double Coda") },
 
     { JumpType::USER,           "", TranslatableString("engraving", "Custom") }
 };
@@ -2227,7 +2291,7 @@ String TConv::translatedUserName(JumpType v)
     return findUserNameByType<JumpType>(JUMP_TYPES, v).translated();
 }
 
-static const std::array<Item<MarkerType>, 9> MARKER_TYPES = { {
+static const std::array<Item<MarkerType>, 11> MARKER_TYPES = { {
     { MarkerType::SEGNO,        "segno",    TranslatableString("engraving", "Segno") },
     { MarkerType::VARSEGNO,     "varsegno", TranslatableString("engraving", "Segno variation") },
     { MarkerType::CODA,         "codab",    TranslatableString("engraving", "Coda") },
@@ -2236,6 +2300,8 @@ static const std::array<Item<MarkerType>, 9> MARKER_TYPES = { {
     { MarkerType::FINE,         "fine",     TranslatableString("engraving", "Fine") },
     { MarkerType::TOCODA,       "coda",     TranslatableString("engraving", "To coda") },
     { MarkerType::TOCODASYM,    "",         TranslatableString("engraving", "To coda (symbol)") },
+    { MarkerType::DA_CODA,      "",         TranslatableString("engraving", "Da Coda") },
+    { MarkerType::DA_DBLCODA,   "",         TranslatableString("engraving", "Da Double Coda") },
     { MarkerType::USER,         "",         TranslatableString("engraving", "Custom") }
 } };
 
@@ -2362,6 +2428,90 @@ AsciiStringView TConv::toXml(VibratoType v)
 VibratoType TConv::fromXml(const AsciiStringView& tag, VibratoType def)
 {
     return findTypeByXmlTag<VibratoType>(VIBRATO_TYPES, tag, def);
+}
+
+// Note about "engraving/sym": they need to be in this context because PaletteCell::translationContext expects them there
+struct ArticulationTextTypeItem {
+    ArticulationTextType type;
+    AsciiStringView xml;
+    String text;
+    TranslatableString name;
+};
+
+const std::array<ArticulationTextTypeItem, 3> ARTICULATIONTEXT_TYPES = { {
+    { ArticulationTextType::TAP,    "Tap",  String(u"T"),  TranslatableString("engraving/sym", "Tap") },
+    { ArticulationTextType::SLAP,   "Slap", String(u"S"),  TranslatableString("engraving/sym", "Slap") },
+    { ArticulationTextType::POP,    "Pop",  String(u"P"),  TranslatableString("engraving/sym", "Pop") }
+} };
+
+const TranslatableString& TConv::userName(ArticulationTextType v)
+{
+    auto it = std::find_if(ARTICULATIONTEXT_TYPES.cbegin(), ARTICULATIONTEXT_TYPES.cend(), [v](const ArticulationTextTypeItem& i) {
+        return i.type == v;
+    });
+
+    IF_ASSERT_FAILED(it != ARTICULATIONTEXT_TYPES.cend()) {
+        static TranslatableString dummy;
+        return dummy;
+    }
+    return it->name;
+}
+
+String TConv::text(ArticulationTextType v)
+{
+    auto it = std::find_if(ARTICULATIONTEXT_TYPES.cbegin(), ARTICULATIONTEXT_TYPES.cend(), [v](const ArticulationTextTypeItem& i) {
+        return i.type == v;
+    });
+
+    IF_ASSERT_FAILED(it != ARTICULATIONTEXT_TYPES.cend()) {
+        static String dummy;
+        return dummy;
+    }
+    return it->text;
+}
+
+AsciiStringView TConv::toXml(ArticulationTextType v)
+{
+    auto it = std::find_if(ARTICULATIONTEXT_TYPES.cbegin(), ARTICULATIONTEXT_TYPES.cend(), [v](const ArticulationTextTypeItem& i) {
+        return i.type == v;
+    });
+
+    IF_ASSERT_FAILED(it != ARTICULATIONTEXT_TYPES.cend()) {
+        static AsciiStringView dummy;
+        return dummy;
+    }
+    return it->xml;
+}
+
+ArticulationTextType TConv::fromXml(const AsciiStringView& tag, ArticulationTextType def)
+{
+    auto it = std::find_if(ARTICULATIONTEXT_TYPES.cbegin(), ARTICULATIONTEXT_TYPES.cend(), [tag](const ArticulationTextTypeItem& i) {
+        return i.xml == tag;
+    });
+
+    if (it != ARTICULATIONTEXT_TYPES.cend()) {
+        return it->type;
+    }
+
+    // compatibility
+    return def;
+}
+
+const std::array<Item<LyricsSyllabic>, 4> LYRICSSYLLABIC_TYPES = { {
+    { LyricsSyllabic::SINGLE,   "single" },
+    { LyricsSyllabic::BEGIN,    "begin" },
+    { LyricsSyllabic::END,      "end" },
+    { LyricsSyllabic::MIDDLE,   "middle" }
+} };
+
+AsciiStringView TConv::toXml(LyricsSyllabic v)
+{
+    return findXmlTagByType<LyricsSyllabic>(LYRICSSYLLABIC_TYPES, v);
+}
+
+LyricsSyllabic TConv::fromXml(const AsciiStringView& tag, LyricsSyllabic def)
+{
+    return findTypeByXmlTag<LyricsSyllabic>(LYRICSSYLLABIC_TYPES, tag, def);
 }
 
 const std::array<const char*, 17> KEY_NAMES = { {

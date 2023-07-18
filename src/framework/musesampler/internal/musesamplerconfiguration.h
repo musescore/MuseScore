@@ -31,11 +31,19 @@
 namespace mu::musesampler {
 class MuseSamplerConfiguration : public IMuseSamplerConfiguration
 {
-    INJECT(musesampler, framework::IGlobalConfiguration, globalConfig)
-public:
-    io::path_t libraryPath() const override;
+    INJECT(framework::IGlobalConfiguration, globalConfig)
 
-    std::string minimumSupportedVersion() const override;
+public:
+    void init();
+
+    // Preferred local user install path; try this first.
+    io::path_t userLibraryPath() const override;
+
+    // Backup location for system-wide sampler install
+    io::path_t fallbackLibraryPath() const override;
+
+private:
+    io::path_t defaultPath() const;
 };
 }
 

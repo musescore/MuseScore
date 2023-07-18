@@ -49,9 +49,9 @@ class Notation;
 class NotationSelection;
 class NotationInteraction : public INotationInteraction, public async::Asyncable
 {
-    INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, ISelectInstrumentsScenario, selectInstrumentScenario)
-    INJECT(notation, framework::IInteractive, interactive)
+    INJECT(INotationConfiguration, configuration)
+    INJECT(ISelectInstrumentsScenario, selectInstrumentScenario)
+    INJECT(framework::IInteractive, interactive)
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
@@ -271,7 +271,6 @@ public:
     void changeAccidental(mu::engraving::AccidentalType) override;
     void transposeSemitone(int) override;
     void transposeDiatonicAlterations(mu::engraving::TransposeDirection) override;
-    void toggleGlobalOrLocalInsert() override;
     void getLocation() override;
     void execute(void (mu::engraving::Score::*)()) override;
 
@@ -287,8 +286,6 @@ private:
     void startEdit();
     void apply();
     void rollback();
-
-    void checkAndShowMScoreError() const;
 
     bool needStartEditGrip(QKeyEvent* event) const;
     bool handleKeyPress(QKeyEvent* event);

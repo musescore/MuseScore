@@ -24,7 +24,6 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 
-#include "config.h"
 #include "settings.h"
 
 #include "multiinstances/resourcelockguard.h"
@@ -44,7 +43,6 @@ static const Settings::Key STARTUP_SCORE_PATH(module_name, "application/startup/
 
 static const std::string MUSESCORE_ONLINE_HANDBOOK_URL_PATH("/handbook/4");
 static const std::string MUSESCORE_ASK_FOR_HELP_URL_PATH("/redirect/post/question");
-static const std::string MUSESCORE_BUG_REPORT_URL_PATH("/redirect/post/bug-report?locale=");
 static const std::string MUSESCORE_FORUM_URL_PATH("/forum");
 static const std::string MUSESCORE_CONTRIBUTE_URL_PATH("/contribute");
 static const std::string MUSICXML_URL("https://w3.org");
@@ -129,21 +127,6 @@ std::string AppShellConfiguration::askForHelpUrl() const
     return museScoreUrl() + MUSESCORE_ASK_FOR_HELP_URL_PATH + "?" + params.join("&").toStdString();
 }
 
-std::string AppShellConfiguration::bugReportUrl() const
-{
-    std::string utm = utmParameters(UTM_MEDIUM_MENU);
-    std::string _sha = sha();
-    std::string languageCode = currentLanguageCode();
-
-    QStringList params = {
-        "locale=" + QString::fromStdString(languageCode),
-        QString::fromStdString(utm),
-        QString::fromStdString(_sha)
-    };
-
-    return museScoreUrl() + MUSESCORE_BUG_REPORT_URL_PATH + "?" + params.join("&").toStdString();
-}
-
 std::string AppShellConfiguration::museScoreUrl() const
 {
     return globalConfiguration()->museScoreUrl();
@@ -171,7 +154,7 @@ std::string AppShellConfiguration::musicXMLLicenseDeedUrl() const
 
 std::string AppShellConfiguration::museScoreVersion() const
 {
-    return VERSION + std::string(".") + BUILD_NUMBER;
+    return MUSESCORE_VERSION + std::string(".") + MUSESCORE_BUILD_NUMBER;
 }
 
 std::string AppShellConfiguration::museScoreRevision() const
@@ -250,12 +233,7 @@ std::string AppShellConfiguration::utmParameters(const std::string& utmMedium) c
 {
     return "utm_source=desktop&utm_medium=" + utmMedium
            + "&utm_content=" + MUSESCORE_REVISION
-           + "&utm_campaign=MuseScore" + VERSION;
-}
-
-std::string AppShellConfiguration::sha() const
-{
-    return "sha=" MUSESCORE_REVISION;
+           + "&utm_campaign=MuseScore" + MUSESCORE_VERSION;
 }
 
 std::string AppShellConfiguration::currentLanguageCode() const

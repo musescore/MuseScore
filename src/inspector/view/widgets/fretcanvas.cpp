@@ -25,13 +25,6 @@
 #include <cmath>
 
 #include "libmscore/fret.h"
-#include "libmscore/measure.h"
-#include "libmscore/system.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/chord.h"
-#include "libmscore/note.h"
-#include "libmscore/segment.h"
-#include "libmscore/undo.h"
 
 using namespace mu::inspector;
 
@@ -134,7 +127,7 @@ void FretCanvas::draw(QPainter* painter)
         qreal newX2 = endString == -1 ? x2 : stringDist * endString;
 
         qreal y    = fretDist * (fret - 1) + fretDist * .5;
-        pen.setWidthF(dotd * m_diagram->score()->styleD(mu::engraving::Sid::barreLineWidth));          // don't use style barreLineWidth - why not?
+        pen.setWidthF(dotd * m_diagram->score()->style().styleD(mu::engraving::Sid::barreLineWidth));          // don't use style barreLineWidth - why not?
         pen.setCapStyle(Qt::RoundCap);
         painter->setPen(pen);
         painter->drawLine(QLineF(x1, y, newX2, y));

@@ -29,7 +29,6 @@
 #include "debugpaint.h"
 
 #include "log.h"
-#include "config.h"
 
 using namespace mu::engraving;
 
@@ -113,6 +112,8 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
             }
             firstPage = false;
 
+            painter->beginObject("page_" + std::to_string(pi));
+
             if (opt.isMultiPage) {
                 painter->translate(pagePos);
             }
@@ -125,17 +126,28 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
             }
 
             // Draw page elements
-            painter->setClipping(true);
-            painter->setClipRect(pageRect);
+            bool disableClipping = false;
+
+            if (!painter->hasClipping()) {
+                painter->setClipping(true);
+                painter->setClipRect(pageRect);
+                disableClipping = true;
+            }
+
             std::vector<EngravingItem*> elements = page->items(drawRect.translated(-pagePos));
             paintElements(*painter, elements, opt.isPrinting);
-            painter->setClipping(false);
 
-#ifdef ENGRAVING_PAINT_DEBUGGER_ENABLED
+            if (disableClipping) {
+                painter->setClipping(false);
+            }
+
+#ifdef MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER
             if (!opt.isPrinting) {
                 engraving::DebugPaint::paintPageDebug(*painter, page);
             }
 #endif
+
+            painter->endObject(); // page
 
             if (opt.isMultiPage) {
                 painter->translate(-pagePos);
@@ -152,7 +164,7 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
     }
 }
 
-SizeF Paint::pageSizeInch(Score* score)
+SizeF Paint::pageSizeInch(const Score* score)
 {
     if (!score) {
         return SizeF();
@@ -165,7 +177,7 @@ SizeF Paint::pageSizeInch(Score* score)
         return SizeF(page->bbox().width() / mu::engraving::DPI, page->bbox().height() / mu::engraving::DPI);
     }
 
-    return SizeF(score->styleD(Sid::pageWidth), score->styleD(Sid::pageHeight));
+    return SizeF(score->style().styleD(Sid::pageWidth), score->style().styleD(Sid::pageHeight));
 }
 
 void Paint::paintElement(mu::draw::Painter& painter, const EngravingItem* element)
@@ -197,7 +209,7 @@ void Paint::paintElements(mu::draw::Painter& painter, const std::vector<Engravin
         paintElement(painter, element);
     }
 
-#ifdef ENGRAVING_PAINT_DEBUGGER_ENABLED
+#ifdef MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER
     if (!isPrinting) {
         DebugPaint::paintElementsDebug(painter, sortedElements);
     }

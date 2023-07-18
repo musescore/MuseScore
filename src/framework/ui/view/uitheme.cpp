@@ -530,6 +530,15 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
 
         drawButtonBackground(painter, option->rect, styleState, accentButton, flat, background);
     } break;
+    case QStyle::PE_FrameDefaultButton: {
+        auto buttonOption = qstyleoption_cast<const QStyleOptionButton*>(option);
+        const bool flat = (buttonOption && buttonOption->features & QStyleOptionButton::Flat)
+                          && !(option->state & State_On);
+        if (flat && styleState.focused) {
+            // For other buttons, this is done in `drawButtonBackground`, but that is not called for flat buttons
+            drawRoundedRect(painter, option->rect, DEFAULT_RADIUS, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
+        }
+    } break;
 
     // Checkboxes
     case QStyle::PE_IndicatorCheckBox: {

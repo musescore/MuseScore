@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::plugins {
-class PluginsStubModule : public modularity::IModuleSetup
+class PluginsModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

@@ -22,10 +22,14 @@
 
 #include "chordlist.h"
 
-#include "io/file.h"
-#include "io/fileinfo.h"
+#include "global/io/file.h"
+#include "global/io/fileinfo.h"
 
-#include "rw/xml.h"
+#include "types/constants.h"
+
+#include "rw/xmlreader.h"
+#include "rw/xmlwriter.h"
+
 #include "style/style.h"
 
 #include "mscore.h"
@@ -1683,24 +1687,20 @@ void ChordList::read(XmlReader& e)
             while (e.readNextStartElement()) {
                 if (e.name() == "sym") {
                     ChordSymbol cs;
-                    String code;
-                    String symClass;
                     cs.fontIdx = fontIdx;
                     cs.name    = e.attribute("name");
                     cs.value   = e.attribute("value");
-                    code       = e.attribute("code");
-                    symClass   = e.attribute("class");
-                    if (code != "") {
+                    String code = e.attribute("code");
+                    String symClass = e.attribute("class");
+                    if (!code.empty()) {
                         bool ok = true;
-                        int val = code.toInt(&ok, 0);
+                        char32_t val = code.toUInt(&ok, 0);
                         if (!ok) {
                             cs.code = 0;
                             cs.value = code;
-                        } else if (val & 0xffff0000) {
+                        } else if (Char::requiresSurrogates(val)) {
                             cs.code = 0;
-                            Char high = Char::highSurrogate(val);
-                            Char low = Char::lowSurrogate(val);
-                            cs.value = String(u"%1%2").arg(high, low);
+                            cs.value = String::fromUcs4(val);
                         } else {
                             cs.code = val;
                             cs.value = String(cs.code);
@@ -1708,7 +1708,7 @@ void ChordList::read(XmlReader& e)
                     } else {
                         cs.code = 0;
                     }
-                    if (cs.value == "") {
+                    if (cs.value.empty()) {
                         cs.value = cs.name;
                     }
                     cs.name = symClass + cs.name;
@@ -1893,7 +1893,7 @@ bool ChordList::write(IODevice* device) const
 {
     XmlWriter xml(device);
     xml.startDocument();
-    xml.startElement("museScore", { { "version", MSC_VERSION } });
+    xml.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
 
     write(xml);
 

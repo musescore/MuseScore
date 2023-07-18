@@ -40,11 +40,12 @@
 #include "bracket.h"
 #include "chord.h"
 #include "clef.h"
-#include "clef.h"
+#include "capo.h"
 #include "engravingitem.h"
 #include "excerpt.h"
 #include "fret.h"
 #include "harmony.h"
+#include "harppedaldiagram.h"
 #include "input.h"
 #include "instrchange.h"
 #include "key.h"
@@ -143,6 +144,17 @@ void updateNoteLines(Segment* segment, track_idx_t track)
                 }
             }
         }
+    }
+}
+
+static void updateStaffTextCache(const StaffTextBase* text, Score* score)
+{
+    TRACEFUNC;
+
+    if (text->isCapo()) {
+        score->updateCapo();
+    } else if (text->swing()) {
+        score->updateSwing();
     }
 }
 
@@ -858,7 +870,7 @@ void AddElement::undo(EditData*)
     }
 
     if (element->isStaffTextBase()) {
-        score->updateSwing();
+        updateStaffTextCache(toStaffTextBase(element), score);
     }
 
     endUndoRedo(true);
@@ -877,7 +889,7 @@ void AddElement::redo(EditData*)
     }
 
     if (element->isStaffTextBase()) {
-        score->updateSwing();
+        updateStaffTextCache(toStaffTextBase(element), score);
     }
 
     endUndoRedo(false);
@@ -1005,10 +1017,8 @@ void RemoveElement::undo(EditData*)
     }
 
     if (element->isStaffTextBase()) {
-        score->updateSwing();
-    }
-
-    if (element->isChordRest()) {
+        updateStaffTextCache(toStaffTextBase(element), score);
+    } else if (element->isChordRest()) {
         if (element->isChord()) {
             Chord* chord = toChord(element);
             for (Note* note : chord->notes()) {
@@ -1036,10 +1046,8 @@ void RemoveElement::redo(EditData*)
     }
 
     if (element->isStaffTextBase()) {
-        score->updateSwing();
-    }
-
-    if (element->isChordRest()) {
+        updateStaffTextCache(toStaffTextBase(element), score);
+    } else if (element->isChordRest()) {
         undoRemoveTuplet(toChordRest(element));
         if (element->isChord()) {
             Chord* chord = toChord(element);
@@ -1094,40 +1102,60 @@ bool RemoveElement::isFiltered(UndoCommand::Filter f, const EngravingItem* targe
 //   InsertPart
 //---------------------------------------------------------
 
-InsertPart::InsertPart(Part* p, int i)
+InsertPart::InsertPart(Part* p, size_t targetPartIdx)
 {
-    part = p;
-    idx  = i;
+    m_part = p;
+    m_targetPartIdx = targetPartIdx;
 }
 
 void InsertPart::undo(EditData*)
 {
-    part->score()->removePart(part);
+    m_part->score()->removePart(m_part);
 }
 
 void InsertPart::redo(EditData*)
 {
-    part->score()->insertPart(part, idx);
+    m_part->score()->insertPart(m_part, m_targetPartIdx);
+}
+
+void InsertPart::cleanup(bool undo)
+{
+    if (!undo) {
+        delete m_part;
+        m_part = nullptr;
+    }
 }
 
 //---------------------------------------------------------
 //   RemovePart
 //---------------------------------------------------------
 
-RemovePart::RemovePart(Part* p, staff_idx_t i)
+RemovePart::RemovePart(Part* p, size_t partIdx)
 {
-    part = p;
-    idx  = i;
+    m_part = p;
+    m_partIdx = partIdx;
+
+    if (m_partIdx == mu::nidx) {
+        m_partIdx = mu::indexOf(m_part->score()->parts(), m_part);
+    }
 }
 
 void RemovePart::undo(EditData*)
 {
-    part->score()->insertPart(part, idx);
+    m_part->score()->insertPart(m_part, m_partIdx);
 }
 
 void RemovePart::redo(EditData*)
 {
-    part->score()->removePart(part);
+    m_part->score()->removePart(m_part);
+}
+
+void RemovePart::cleanup(bool undo)
+{
+    if (undo) {
+        delete m_part;
+        m_part = nullptr;
+    }
 }
 
 //---------------------------------------------------------
@@ -1170,6 +1198,14 @@ void InsertStaff::redo(EditData*)
     staff->score()->insertStaff(staff, ridx);
 }
 
+void InsertStaff::cleanup(bool undo)
+{
+    if (!undo) {
+        delete staff;
+        staff = nullptr;
+    }
+}
+
 //---------------------------------------------------------
 //   RemoveStaff
 //---------------------------------------------------------
@@ -1178,16 +1214,28 @@ RemoveStaff::RemoveStaff(Staff* p)
 {
     staff = p;
     ridx  = staff->rstaff();
+    wasSystemObjectStaff = staff->score()->isSystemObjectStaff(staff);
 }
 
 void RemoveStaff::undo(EditData*)
 {
     staff->score()->insertStaff(staff, ridx);
+    if (wasSystemObjectStaff) {
+        staff->score()->addSystemObjectStaff(staff);
+    }
 }
 
 void RemoveStaff::redo(EditData*)
 {
     staff->score()->removeStaff(staff);
+}
+
+void RemoveStaff::cleanup(bool undo)
+{
+    if (undo) {
+        delete staff;
+        staff = nullptr;
+    }
 }
 
 //---------------------------------------------------------
@@ -1254,47 +1302,6 @@ void SortStaves::redo(EditData*)
 void SortStaves::undo(EditData*)
 {
     score->sortStaves(rlist);
-}
-
-//---------------------------------------------------------
-//   MapExcerptTracks
-//---------------------------------------------------------
-
-MapExcerptTracks::MapExcerptTracks(Score* s, const std::vector<staff_idx_t>& l)
-{
-    score = s;
-
-    /*
-     *    In list l [x] represents the previous index of the staffIdx x.
-     *    If the a staff x is a newly added staff, l[x] = -1.
-     *    For the "undo" all staves which value -1 are *not* remapped since
-     *    it is assumed this staves are removed later.
-     */
-    staff_idx_t maxIndex = 0;
-    for (staff_idx_t i : l) {
-        maxIndex = std::max(i, maxIndex);
-    }
-
-    for (staff_idx_t i = 0; i <= maxIndex; ++i) {
-        rlist.push_back(mu::nidx);
-    }
-
-    for (staff_idx_t i = 0; i < l.size(); ++i) {
-        if (l[i] != mu::nidx) {
-            rlist[l[i]] = i;
-        }
-    }
-    list = l;
-}
-
-void MapExcerptTracks::redo(EditData*)
-{
-    score->mapExcerptTracks(list);
-}
-
-void MapExcerptTracks::undo(EditData*)
-{
-    score->mapExcerptTracks(rlist);
 }
 
 //---------------------------------------------------------
@@ -1428,7 +1435,7 @@ void ChangeElement::flip(EditData*)
     }
 
     if (newElement->isStaffTextBase()) {
-        score->updateSwing();
+        updateStaffTextCache(toStaffTextBase(newElement), score);
     }
 
     std::swap(oldElement, newElement);
@@ -1843,10 +1850,10 @@ void ChangeStyle::flip(EditData*)
 {
     MStyle tmp = score->style();
 
-    if (score->styleV(Sid::concertPitch) != style.value(Sid::concertPitch)) {
+    if (score->style().styleV(Sid::concertPitch) != style.value(Sid::concertPitch)) {
         score->cmdConcertPitchChanged(style.value(Sid::concertPitch).toBool());
     }
-    if (score->styleV(Sid::MusicalSymbolFont) != style.value(Sid::MusicalSymbolFont)) {
+    if (score->style().styleV(Sid::MusicalSymbolFont) != style.value(Sid::MusicalSymbolFont)) {
         score->setEngravingFont(engravingFonts()->fontByName(style.styleSt(Sid::MusicalSymbolFont).toStdString()));
     }
 
@@ -1867,7 +1874,7 @@ void ChangeStyle::undo(EditData* ed)
 
 void ChangeStyleVal::flip(EditData*)
 {
-    PropertyValue v = score->styleV(idx);
+    PropertyValue v = score->style().styleV(idx);
     if (v != value) {
         score->style().set(idx, value);
         switch (idx) {
@@ -1876,17 +1883,18 @@ void ChangeStyleVal::flip(EditData*)
         case Sid::chordModifierMag:
         case Sid::chordModifierAdjust:
         case Sid::chordDescriptionFile: {
+            const MStyle& style = score->style();
             score->chordList()->unload();
-            double emag = score->styleD(Sid::chordExtensionMag);
-            double eadjust = score->styleD(Sid::chordExtensionAdjust);
-            double mmag = score->styleD(Sid::chordModifierMag);
-            double madjust = score->styleD(Sid::chordModifierAdjust);
+            double emag = style.styleD(Sid::chordExtensionMag);
+            double eadjust = style.styleD(Sid::chordExtensionAdjust);
+            double mmag = style.styleD(Sid::chordModifierMag);
+            double madjust = style.styleD(Sid::chordModifierAdjust);
             score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
-            if (score->styleB(Sid::chordsXmlFile)) {
+            if (score->style().styleB(Sid::chordsXmlFile)) {
                 score->chordList()->read(u"chords.xml");
             }
-            score->chordList()->read(score->styleSt(Sid::chordDescriptionFile));
-            score->chordList()->setCustomChordList(score->styleSt(Sid::chordStyle) == "custom");
+            score->chordList()->read(style.styleSt(Sid::chordDescriptionFile));
+            score->chordList()->setCustomChordList(style.styleSt(Sid::chordStyle) == "custom");
         }
         break;
         case Sid::spatium:
@@ -2120,6 +2128,28 @@ void InsertRemoveMeasures::removeMeasures()
     Fraction tick1 = fm->tick();
     Fraction tick2 = lm->endTick();
 
+    // remove beams from chordrests in affected area, they will be rebuilt later but we need
+    // to avoid situations where notes from deleted measures remain in beams
+    // when undoing, we need to check the previous measure as well as there could be notes in there
+    // that need to have their beams recalculated (esp. when adding time signature)
+    MeasureBase* prev = fm->prev();
+    Segment* first = toMeasure(prev && prev->isMeasure() ? prev : fm)->first();
+    for (Segment* s = first; s && s != toMeasure(lm)->last(); s = s->next1()) {
+        if (!s) {
+            break;
+        }
+        if (!s->isChordRestType()) {
+            continue;
+        }
+
+        for (track_idx_t track = 0; track < score->ntracks(); ++track) {
+            EngravingItem* e = s->element(track);
+            if (e && e->isChordRest()) {
+                toChordRest(e)->removeDeleteBeam(false);
+            }
+        }
+    }
+
     std::list<System*> systemList;
     for (MeasureBase* mb = lm;; mb = mb->prev()) {
         System* system = mb->system();
@@ -2182,7 +2212,8 @@ void InsertRemoveMeasures::removeMeasures()
             clef->staff()->setClef(clef);
         }
 
-        for (Spanner* sp : score->unmanagedSpanners()) {
+        std::set<Spanner*> spannersCopy = score->unmanagedSpanners();
+        for (Spanner* sp : spannersCopy) {
             if ((sp->tick() >= tick1 && sp->tick() < tick2) || (sp->tick2() >= tick1 && sp->tick2() < tick2)) {
                 sp->removeUnmanaged();
             }
@@ -2430,7 +2461,7 @@ void ChangeClefType::flip(EditData*)
     concertClef     = ocl;
     transposingClef = otc;
     // layout the clef to align the currentClefType with the actual one immediately
-    clef->layout();
+    EngravingItem::layout()->layoutItem(clef);
 }
 
 //---------------------------------------------------------
@@ -2446,6 +2477,11 @@ void ChangeProperty::flip(EditData*)
 
     element->setProperty(id, property);
     element->setPropertyFlags(id, flags);
+
+    if (element->isStaffTextBase()) {
+        updateStaffTextCache(toStaffTextBase(element), element->score());
+    }
+
     property = v;
     flags = ps;
 }
@@ -2623,8 +2659,8 @@ void InsertTime::undo(EditData*)
 void InsertTimeUnmanagedSpanner::flip(EditData*)
 {
     for (Score* s : score->scoreList()) {
-        const auto unmanagedSpanners(s->unmanagedSpanners());
-        for (Spanner* sp : unmanagedSpanners) {
+        std::set<Spanner*> spannersCopy = s->unmanagedSpanners();
+        for (Spanner* sp : spannersCopy) {
             sp->insertTimeUnmanaged(tick, len);
         }
     }
@@ -2916,5 +2952,36 @@ void ChangeScoreOrder::flip(EditData*)
     ScoreOrder s = score->scoreOrder();
     score->setScoreOrder(order);
     order = s;
+}
+
+//---------------------------------------------------------
+//   ChangeHarpPedalState
+//---------------------------------------------------------
+
+void ChangeHarpPedalState::flip(EditData*)
+{
+    std::array<PedalPosition, HARP_STRING_NO> f_state = diagram->getPedalState();
+    if (f_state == pedalState) {
+        return;
+    }
+
+    diagram->setPedalState(pedalState);
+    pedalState = f_state;
+
+    diagram->triggerLayout();
+}
+
+void ChangeSingleHarpPedal::flip(EditData*)
+{
+    HarpStringType f_type = type;
+    PedalPosition f_pos = diagram->getPedalState()[type];
+    if (f_pos == pos) {
+        return;
+    }
+
+    diagram->setPedal(type, pos);
+    type = f_type;
+    pos = f_pos;
+    diagram->triggerLayout();
 }
 }

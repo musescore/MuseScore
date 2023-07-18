@@ -22,7 +22,7 @@
 #ifndef MU_SHORTCUTS_IMIDIREMOTE_H
 #define MU_SHORTCUTS_IMIDIREMOTE_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "midi/miditypes.h"
 #include "types/ret.h"
 #include "shortcutstypes.h"

@@ -27,16 +27,19 @@
 #include <QQuickItem>
 
 #include "async/notification.h"
+#include "async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
+#include "ui/iinteractiveprovider.h"
 
 namespace mu::uicomponents {
-class PopupViewCloseController : public QObject
+class PopupViewCloseController : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(uicomponents, ui::IMainWindow, mainWindow)
+    INJECT(ui::IMainWindow, mainWindow)
+    INJECT(ui::IInteractiveProvider, interactiveProvider)
 
 public:
     explicit PopupViewCloseController(QObject* parent = nullptr);

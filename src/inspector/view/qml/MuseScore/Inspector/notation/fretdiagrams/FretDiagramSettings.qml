@@ -65,6 +65,19 @@ Item {
 
             spacing: 12
 
+            FretCanvas {
+                id: fretCanvas
+
+                diagram: root.model ? root.model.fretDiagram : null
+                isBarreModeOn: root.model ? root.model.isBarreModeOn : false
+                isMultipleDotsModeOn: root.model ? root.model.isMultipleDotsModeOn : false
+                currentFretDotType: root.model ? root.model.currentFretDotType : false
+                visible: root.model ? root.model.areSettingsAvailable : false
+                color: ui.theme.fontPrimaryColor
+
+                width: parent.width
+            }
+
             FlatButton {
                 width: parent.width
 
@@ -78,20 +91,8 @@ Item {
 
                 onClicked: {
                     fretCanvas.clear()
+                    root.model.fretNumber.resetToDefault()
                 }
-            }
-
-            FretCanvas {
-                id: fretCanvas
-
-                diagram: root.model ? root.model.fretDiagram : null
-                isBarreModeOn: root.model ? root.model.isBarreModeOn : false
-                isMultipleDotsModeOn: root.model ? root.model.isMultipleDotsModeOn : false
-                currentFretDotType: root.model ? root.model.currentFretDotType : false
-                visible: root.model ? root.model.areSettingsAvailable : false
-                color: ui.theme.fontPrimaryColor
-
-                width: parent.width
             }
         }
     }
@@ -101,6 +102,6 @@ Item {
 
         wrapMode: Text.Wrap
         text: qsTrc("inspector", "You have multiple fretboard diagrams selected. Select a single diagram to edit its settings.")
-        visible: root.model ? !root.model.areSettingsAvailable : false
+        visible: root.model ? !root.model.areSettingsAvailable &&  fretDiagramTabPanel.isGeneralTabOpen : false
     }
 }

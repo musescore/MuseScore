@@ -135,3 +135,8 @@ async::Notification AudioConfigurationStub::synthesizerStateGroupChanged(const s
 {
     return async::Notification();
 }
+
+io::path_t AudioConfigurationStub::knownAudioPluginsFilePath() const
+{
+    return {};
+}

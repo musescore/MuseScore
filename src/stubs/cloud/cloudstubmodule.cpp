@@ -34,22 +34,25 @@ static void cloud_init_qrc()
     Q_INIT_RESOURCE(cloud);
 }
 
-std::string CloudStubModule::moduleName() const
+std::string CloudModule::moduleName() const
 {
     return "cloud_stub";
 }
 
-void CloudStubModule::registerExports()
+void CloudModule::registerExports()
 {
     ioc()->registerExport<IAuthorizationService>(moduleName(), new AuthorizationServiceStub());
 }
 
-void CloudStubModule::registerResources()
+void CloudModule::registerResources()
 {
     cloud_init_qrc();
 }
 
-void CloudStubModule::registerUiTypes()
+void CloudModule::registerUiTypes()
 {
-    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(cloud_QML_IMPORT);
+    std::shared_ptr<ui::IUiEngine> ui = ioc()->resolve<ui::IUiEngine>(moduleName());
+    if (ui) {
+        ui->addSourceImportPath(cloud_QML_IMPORT);
+    }
 }

@@ -31,6 +31,8 @@ class Chord;
 class Stem final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Stem)
+    DECLARE_CLASSOF(ElementType::STEM)
+
 public:
 
     Stem(const Stem&) = default;
@@ -38,7 +40,6 @@ public:
 
     Stem* clone() const override { return new Stem(*this); }
 
-    void layout() override;
     void draw(mu::draw::Painter*) const override;
     void spatiumChanged(double oldValue, double newValue) override;
     EngravingItem* elementBase() const override;
@@ -50,10 +51,6 @@ public:
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
-
-    void write(XmlWriter& xml) const override;
-    void read(XmlReader& e) override;
-    bool readProperties(XmlReader&) override;
 
     void reset() override;
     PropertyValue getProperty(Pid propertyId) const override;
@@ -75,28 +72,27 @@ public:
     double lineWidthMag() const { return m_lineWidth * mag(); }
     void setLineWidth(Millimetre lineWidth) { m_lineWidth = lineWidth; }
 
-    mu::PointF p2() const { return m_line.p2(); }
-    mu::PointF flagPosition() const;
+    void setLine(const LineF& l) { m_line = l; }
+    PointF p2() const { return m_line.p2(); }
+    PointF flagPosition() const;
     double length() const { return m_baseLength + m_userLength; }
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+    std::vector<PointF> gripsPositions(const EditData&) const override;
 
 private:
     friend class Factory;
     Stem(Chord* parent = 0);
 
-    mu::LineF m_line;
+    LineF m_line;
 
     Millimetre m_baseLength = Millimetre(0.0);
     Millimetre m_userLength = Millimetre(0.0);
 
     Millimetre m_lineWidth = Millimetre(0.0);
-
-    bool sameVoiceKerningLimited() const override { return true; }
 };
 }
 #endif

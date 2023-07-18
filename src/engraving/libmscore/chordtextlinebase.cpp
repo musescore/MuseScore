@@ -55,6 +55,7 @@ PointF ChordTextLineBase::linePos(Grip grip, System** sys) const
     if (grip == Grip::START) {
         ChordRest* c = toChordRest(startElement());
         if (!c) {
+            *sys = s;
             return PointF();
         }
         s = c->segment()->system();

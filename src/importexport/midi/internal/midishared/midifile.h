@@ -108,7 +108,6 @@ protected:
     int readLong();
     bool readEvent(MidiEvent*);
     bool readTrack();
-    void skip(qint64);
 
     void resetRunningStatus() { status = -1; }
 

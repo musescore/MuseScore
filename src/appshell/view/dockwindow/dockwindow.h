@@ -33,7 +33,6 @@
 #include "modularity/ioc.h"
 #include "workspace/iworkspacemanager.h"
 #include "ui/iuiconfiguration.h"
-#include "internal/istartupscenario.h"
 #include "idockwindowprovider.h"
 
 #include "idockwindow.h"
@@ -59,10 +58,9 @@ class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncabl
 
     Q_PROPERTY(QQuickWindow * window READ windowProperty NOTIFY windowPropertyChanged)
 
-    INJECT(dock, ui::IUiConfiguration, uiConfiguration)
-    INJECT(dock, workspace::IWorkspaceManager, workspaceManager)
-    INJECT(dock, IDockWindowProvider, dockWindowProvider)
-    INJECT(dock, appshell::IStartupScenario, startupScenario)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(workspace::IWorkspaceManager, workspaceManager)
+    INJECT(IDockWindowProvider, dockWindowProvider)
 
 public:
     explicit DockWindow(QQuickItem* parent = nullptr);

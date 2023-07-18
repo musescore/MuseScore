@@ -1,5 +1,5 @@
 {
-    "mscore_ref_bin": "./build.debug/install/bin/mscore",
+    "mscore_ref_bin": "./install/bin/mscore",
     "score_dir": "./vtest/scores",
     "current_data_dir": "./vtest/temp_current",
     "reference_data_dir": "./vtest/reference",

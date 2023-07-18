@@ -33,6 +33,8 @@ class SortFilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(int rowCount READ rowCount NOTIFY rowCountChanged)
+
     Q_PROPERTY(QQmlListProperty<mu::uicomponents::FilterValue> filters READ filters CONSTANT)
     Q_PROPERTY(QQmlListProperty<mu::uicomponents::SorterValue> sorters READ sorters CONSTANT)
     Q_PROPERTY(QList<int> excludeIndexes READ excludeIndexes WRITE setExcludeIndexes NOTIFY excludeIndexesChanged)
@@ -51,6 +53,8 @@ public slots:
     void setExcludeIndexes(QList<int> excludeIndexes);
 
 signals:
+    void rowCountChanged();
+
     void filtersChanged(QQmlListProperty<mu::uicomponents::FilterValue> filters);
     void excludeIndexesChanged(QList<int> excludeIndexes);
 

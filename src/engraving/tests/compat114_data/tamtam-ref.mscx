@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <frameSystemDistance>7</frameSystemDistance>
@@ -32,7 +30,7 @@
           <lines>1</lines>
           <keysig>0</keysig>
           </StaffType>
-        <bracket type="-1" span="1" col="0"/>
+        <bracket type="-1" span="1" col="0" visible="1"/>
         <barLineSpanFrom>-4</barLineSpanFrom>
         <barLineSpanTo>4</barLineSpanTo>
         </Staff>
@@ -81,7 +79,11 @@
           <Clef>
             <concertClefType>PERC</concertClefType>
             <transposingClefType>PERC</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
+          <KeySig>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>

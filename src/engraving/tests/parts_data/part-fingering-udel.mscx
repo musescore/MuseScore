@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <Spatium>1.76389</Spatium>
@@ -116,6 +114,7 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             <linkedMain/>
             </Clef>
           <TimeSig>
@@ -452,6 +451,7 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <isHeader>1</isHeader>
             <linkedMain/>
             </Clef>
           <TimeSig>
@@ -779,8 +779,6 @@
       </Staff>
     <Score>
       <initialPartId>1</initialPartId>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -855,6 +853,7 @@
             <Clef>
               <concertClefType>G</concertClefType>
               <transposingClefType>G</transposingClefType>
+              <isHeader>1</isHeader>
               <linked>
                 </linked>
               </Clef>
@@ -880,7 +879,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <offset x="0.663397" y="-1.51211"/>
+                  <offset x="0.658089" y="-1.50001"/>
                   <text>3</text>
                   </Fingering>
                 <pitch>72</pitch>
@@ -1231,8 +1230,6 @@
       </Score>
     <Score>
       <initialPartId>2</initialPartId>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -1316,6 +1313,7 @@
             <Clef>
               <concertClefType>G8vb</concertClefType>
               <transposingClefType>G8vb</transposingClefType>
+              <isHeader>1</isHeader>
               <linked>
                 </linked>
               </Clef>

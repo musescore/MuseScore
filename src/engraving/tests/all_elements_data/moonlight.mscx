@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.01">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <pageWidth>8.27</pageWidth>
@@ -34,7 +32,7 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
-        <bracket type="1" span="2" col="0"/>
+        <bracket type="1" span="2" col="0" visible="1"/>
         <barLineSpan>2</barLineSpan>
         </Staff>
       <Staff id="2">

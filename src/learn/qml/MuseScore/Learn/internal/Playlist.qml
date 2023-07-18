@@ -36,8 +36,6 @@ FocusScope {
     property alias navigation: navPanel
     property int sideMargin: 46
 
-    signal requestOpenVideo(string videoId)
-
     NavigationPanel {
         id: navPanel
         name: "Playlist"
@@ -125,7 +123,7 @@ FocusScope {
                 thumbnail: modelData.thumbnailUrl
 
                 onClicked: {
-                    root.requestOpenVideo(modelData.videoId)
+                    api.launcher.openUrl(modelData.url)
                 }
             }
         }
@@ -136,13 +134,13 @@ FocusScope {
         visible: !view.visible
 
         anchors.top: parent.top
-        anchors.topMargin: topGradient.height + Math.max(parent.height / 4 - height / 2, 0)
+        anchors.topMargin: topGradient.height + Math.max(parent.height / 3 - height / 2, 0)
         anchors.left: parent.left
         anchors.leftMargin: root.sideMargin
         anchors.right: parent.right
         anchors.rightMargin: root.sideMargin
 
-        spacing: 6
+        spacing: 16
 
         StyledTextLabel {
             width: parent.width

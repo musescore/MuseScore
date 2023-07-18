@@ -25,7 +25,6 @@
 #include <cmath>
 
 #include "containers.h"
-#include "rw/xml.h"
 
 #include "factory.h"
 #include "measure.h"
@@ -60,48 +59,6 @@ BSymbol::BSymbol(const BSymbol& s)
         ee->setParent(this);
         _leafs.push_back(ee);
     }
-}
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void BSymbol::writeProperties(XmlWriter& xml) const
-{
-    for (const EngravingItem* e : leafs()) {
-        e->write(xml);
-    }
-    EngravingItem::writeProperties(xml);
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool BSymbol::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag = e.name();
-
-    if (EngravingItem::readProperties(e)) {
-        return true;
-    } else if (tag == "systemFlag") {
-        setSystemFlag(e.readInt());
-    } else if (tag == "Symbol" || tag == "FSymbol") {
-        EngravingItem* element = Factory::createItemByName(tag, this);
-        element->read(e);
-        add(element);
-    } else if (tag == "Image") {
-        if (MScore::noImages) {
-            e.skipCurrentElement();
-        } else {
-            EngravingItem* element = Factory::createItemByName(tag, this);
-            element->read(e);
-            add(element);
-        }
-    } else {
-        return false;
-    }
-    return true;
 }
 
 //---------------------------------------------------------
@@ -176,24 +133,6 @@ EngravingItem* BSymbol::drop(EditData& data)
         delete el;
     }
     return 0;
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void BSymbol::layout()
-{
-    if (staff()) {
-        setMag(staff()->staffMag(tick()));
-    }
-    if (!explicitParent()) {
-        setOffset(.0, .0);
-        setPos(.0, .0);
-    }
-    for (EngravingItem* e : _leafs) {
-        e->layout();
-    }
 }
 
 //---------------------------------------------------------

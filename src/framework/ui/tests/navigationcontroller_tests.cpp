@@ -22,7 +22,6 @@
 #include <gtest/gtest.h>
 
 #include <vector>
-#include <map>
 
 #include <QWindow>
 #include <QQuickWindow>
@@ -30,9 +29,8 @@
 #include "ui/internal/navigationcontroller.h"
 #include "actions/internal/actionsdispatcher.h"
 
-#include "mocks/navigationmocks.h"
 #include "global/tests/mocks/applicationmock.h"
-#include "ui/tests/mocks/mainwindowprovidermock.h"
+#include "ui/tests/mocks/mainwindowmock.h"
 
 #include "ui/view/navigationcontrol.h"
 #include "ui/view/navigationpanel.h"
@@ -60,7 +58,7 @@ public:
         m_dispatcher = std::make_shared<actions::ActionsDispatcher>();
         m_controller->setdispatcher(m_dispatcher);
 
-        m_mainWindow = std::make_shared<ui::MainWindowProviderMock>();
+        m_mainWindow = std::make_shared<ui::MainWindowMock>();
         ON_CALL(*m_mainWindow, qWindow()).WillByDefault(Return(&m_window));
         m_controller->setmainWindow(m_mainWindow);
 
@@ -230,7 +228,7 @@ public:
 
     std::shared_ptr<NavigationController> m_controller;
     std::shared_ptr<actions::IActionsDispatcher> m_dispatcher;
-    std::shared_ptr<MainWindowProviderMock> m_mainWindow;
+    std::shared_ptr<MainWindowMock> m_mainWindow;
     std::shared_ptr<framework::ApplicationMock> m_applicationMock;
 
     QQuickWindow m_window;
@@ -265,7 +263,42 @@ TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextSection)
     delete sect2;
 }
 
-TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextSectionOnFocusedWindow)
+TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextPanelOnExclusiveSection)
+{
+    //! CASE Nothing active, and we call next panel (Tab)
+
+    //! [GIVEN] Two section, not active
+    Section* sect1 = make_section(1, 2, 3);
+    sect1->section->setName("sect1");
+    Section* sect2 = make_section(2, 2, 3);
+    sect2->section->setName("sect2");
+
+    m_controller->reg(sect1->section);
+    m_controller->reg(sect2->section);
+
+    //! [GIVEN] Section 2 is exclusive and active
+    sect2->section->setType(NavigationSection::QmlType::Exclusive);
+    sect2->section->requestActive();
+
+    //! [GIEN] Last panel of section 2 is active
+    sect2->panels.back()->panel->requestActive();
+
+    //! [WHEN] Send action `nav-next-panel` (usually Tab)
+    m_dispatcher->dispatch("nav-next-panel");
+
+    //! [THEN] The second section, the first panel, the first control must be activated
+    EXPECT_TRUE(sect2->section->active());
+    EXPECT_TRUE(sect2->panels[0]->panel->active());
+    EXPECT_TRUE(sect2->panels[0]->controls[0]->control->active());
+
+    //! [THEN] The first section must not be activated
+    EXPECT_FALSE(sect1->section->active());
+
+    delete sect1;
+    delete sect2;
+}
+
+TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextSectionOnExclusiveSection)
 {
     //! CASE Nothing active, and we call next section (F6)
 
@@ -276,11 +309,9 @@ TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextSectionOnFocusedWindow)
     m_controller->reg(sect1->section);
     m_controller->reg(sect2->section);
 
-    //! [GIVEN] Section 2 not on main window, but on focus window
-    QQuickWindow* sectionWindow = new QQuickWindow();
-    setComponentWindow(sect2->section, sectionWindow);
-
-    ON_CALL(*m_applicationMock, focusWindow()).WillByDefault(Return(sectionWindow));
+    //! [GIVEN] Section 2 is exclusive and active
+    sect2->section->setType(NavigationSection::QmlType::Exclusive);
+    sect2->section->requestActive();
 
     //! [WHEN] Send action `nav-next-section` (usually F6)
     m_dispatcher->dispatch("nav-next-section");
@@ -290,7 +321,7 @@ TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextSectionOnFocusedWindow)
     EXPECT_TRUE(sect2->panels[0]->panel->active());
     EXPECT_TRUE(sect2->panels[0]->controls[0]->control->active());
 
-    //! [THEN] The second section must not be activated
+    //! [THEN] The first section must not be activated
     EXPECT_FALSE(sect1->section->active());
 
     delete sect1;
@@ -308,12 +339,10 @@ TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextSectionExclusive)
     m_controller->reg(sect1->section);
     m_controller->reg(sect2->section);
 
-    //! [GIVEN] Section 2 is exclusive, not on focus window
+    //! [GIVEN] Section 2 is exclusive,
     //!         we have this behavior for menus and dropdowns
     sect2->section->setType(NavigationSection::Exclusive);
-
-    QQuickWindow* newFocusWindow = new QQuickWindow();
-    ON_CALL(*m_applicationMock, focusWindow()).WillByDefault(Return(newFocusWindow));
+    sect2->section->requestActive();
 
     //! [WHEN] Send action `nav-next-section` (usually F6)
     m_dispatcher->dispatch("nav-next-section");
@@ -323,16 +352,16 @@ TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextSectionExclusive)
     EXPECT_TRUE(sect2->panels[0]->panel->active());
     EXPECT_TRUE(sect2->panels[0]->controls[0]->control->active());
 
-    //! [THEN] The second section must not be activated
+    //! [THEN] The first section must not be activated
     EXPECT_FALSE(sect1->section->active());
 
     delete sect1;
     delete sect2;
 }
 
-TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextSectionNonMainWindow)
+TEST_F(Ui_NavigationControllerTests, FirstActiveOnPrevSectionExclusive)
 {
-    //! CASE Nothing active, and we call next section (F6)
+    //! CASE Nothing active, and we call previous section (Shift+F6)
 
     //! [GIVEN] Two section, not active
     Section* sect1 = make_section(1, 2, 3);
@@ -341,16 +370,21 @@ TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextSectionNonMainWindow)
     m_controller->reg(sect1->section);
     m_controller->reg(sect2->section);
 
+    //! [GIVEN] Section 2 is exclusive,
+    //!         we have this behavior for menus and dropdowns
+    sect2->section->setType(NavigationSection::Exclusive);
+    sect2->section->requestActive();
+
     //! [WHEN] Send action `nav-next-section` (usually F6)
-    m_dispatcher->dispatch("nav-next-section");
+    m_dispatcher->dispatch("nav-prev-section");
 
-    //! [THEN] The first section, the first panel, the first control must be activated
-    EXPECT_TRUE(sect1->section->active());
-    EXPECT_TRUE(sect1->panels[0]->panel->active());
-    EXPECT_TRUE(sect1->panels[0]->controls[0]->control->active());
+    //! [THEN] The second section, the first panel, the first control must be activated
+    EXPECT_TRUE(sect2->section->active());
+    EXPECT_TRUE(sect2->panels[0]->panel->active());
+    EXPECT_TRUE(sect2->panels[0]->controls[0]->control->active());
 
-    //! [THEN] The second section must not be activated
-    EXPECT_FALSE(sect2->section->active());
+    //! [THEN] The first section must not be activated
+    EXPECT_FALSE(sect1->section->active());
 
     delete sect1;
     delete sect2;
@@ -489,18 +523,19 @@ TEST_F(Ui_NavigationControllerTests, UserClickedOnControlOnNonMainWindow)
     Section* sect1 = make_section(1, 2, 3);
     Section* sect2 = make_section(2, 2, 3);
 
+    //! [GIVEN] Second section on non main window
+    sect2->section->setType(NavigationSection::QmlType::Exclusive);
+    QQuickWindow* controlWindow = new QQuickWindow();
+    setComponentWindow(sect2->panels[1]->controls[1]->control, controlWindow);
+
     m_controller->reg(sect1->section);
     m_controller->reg(sect2->section);
 
-    //! [GIVEN] Control not on main window
-    QQuickWindow* controlWindow = new QQuickWindow();
-    setComponentWindow(sect1->panels[1]->controls[1]->control, controlWindow);
-
-    //! [WHEN] The user has clicked on control
-    sect1->panels[1]->controls[1]->control->requestActiveByInteraction();
+    //! [WHEN] The user has clicked on control of second section
+    sect2->panels[1]->controls[1]->control->requestActiveByInteraction();
 
     //! [THEN] The control is activated
-    EXPECT_EQ(m_controller->activeControl(), sect1->panels[1]->controls[1]->control);
+    EXPECT_EQ(m_controller->activeControl(), sect2->panels[1]->controls[1]->control);
     EXPECT_FALSE(m_controller->isHighlight());
 
     delete sect1;

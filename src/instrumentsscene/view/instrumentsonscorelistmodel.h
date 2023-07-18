@@ -33,8 +33,8 @@ class InstrumentsOnScoreListModel : public uicomponents::SelectableItemListModel
 {
     Q_OBJECT
 
-    INJECT(instrumentsscene, context::IGlobalContext, context)
-    INJECT(instrumentsscene, notation::IInstrumentsRepository, repository)
+    INJECT(context::IGlobalContext, context)
+    INJECT(notation::IInstrumentsRepository, repository)
 
     Q_PROPERTY(QStringList orders READ orders NOTIFY ordersChanged)
     Q_PROPERTY(int currentOrderIndex READ currentOrderIndex WRITE setCurrentOrderIndex NOTIFY currentOrderChanged)
@@ -67,6 +67,7 @@ private:
 
     enum Roles {
         RoleName = SelectableItemListModel::UserRole + 1,
+        RoleDescription,
         RoleIsSoloist
     };
 

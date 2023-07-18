@@ -27,12 +27,12 @@
 using namespace mu::vst;
 using namespace mu::modularity;
 
-std::string VstStubModule::moduleName() const
+std::string VSTModule::moduleName() const
 {
     return "vst_stub";
 }
 
-void VstStubModule::registerExports()
+void VSTModule::registerExports()
 {
     ioc()->registerExport<IVstConfiguration>(moduleName(), new VstConfigurationStub());
 }

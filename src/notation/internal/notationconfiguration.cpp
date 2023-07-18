@@ -151,7 +151,10 @@ void NotationConfiguration::init()
     settings()->valueChanged(USER_STYLES_PATH).onReceive(nullptr, [this](const Val& val) {
         m_userStylesPathChanged.send(val.toPath());
     });
-    fileSystem()->makePath(userStylesPath());
+
+    if (!userStylesPath().empty()) {
+        fileSystem()->makePath(userStylesPath());
+    }
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(true));
@@ -545,7 +548,6 @@ bool NotationConfiguration::isPlayRepeatsEnabled() const
 void NotationConfiguration::setIsPlayRepeatsEnabled(bool enabled)
 {
     settings()->setSharedValue(IS_PLAY_REPEATS_ENABLED, Val(enabled));
-    mu::engraving::MScore::playRepeats = enabled;
     m_isPlayRepeatsChanged.notify();
 }
 
@@ -664,14 +666,14 @@ void NotationConfiguration::setNotePlayDurationMilliseconds(int durationMs)
     settings()->setSharedValue(NOTE_DEFAULT_PLAY_DURATION, Val(durationMs));
 }
 
-void NotationConfiguration::setTemplateModeEnabled(bool enabled)
+void NotationConfiguration::setTemplateModeEnabled(std::optional<bool> enabled)
 {
-    mu::engraving::MScore::saveTemplateMode = enabled;
+    mu::engraving::MScore::saveTemplateMode = enabled ? enabled.value() : false;
 }
 
-void NotationConfiguration::setTestModeEnabled(bool enabled)
+void NotationConfiguration::setTestModeEnabled(std::optional<bool> enabled)
 {
-    mu::engraving::MScore::testMode = enabled;
+    mu::engraving::MScore::testMode = enabled ? enabled.value() : false;
 }
 
 io::path_t NotationConfiguration::instrumentListPath() const

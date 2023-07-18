@@ -31,8 +31,6 @@
 #include "translation.h"
 #include "mimedatautils.h"
 
-#include "draw/types/geometry.h"
-#include "engraving/rw/xml.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/articulation.h"
 #include "engraving/libmscore/bracket.h"
@@ -41,7 +39,10 @@
 #include "engraving/libmscore/imageStore.h"
 #include "engraving/libmscore/masterscore.h"
 
+#include "palettelayout.h"
+
 #include "palettecell.h"
+#include "palettecompat.h"
 
 #include "log.h"
 
@@ -106,7 +107,7 @@ PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const QStr
 {
     if (element) {
         // layout may be important for comparing cells, e.g. filtering "More" popup content
-        element->layout();
+        PaletteLayout::layoutItem(element.get());
     }
 
     PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, offset, tag, this);
@@ -130,7 +131,7 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, q
 {
     if (element) {
         // layout may be important for comparing cells, e.g. filtering "More" popup content
-        element->layout();
+        PaletteLayout::layoutItem(element.get());
     }
 
     PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, offset, tag, this);
@@ -258,7 +259,7 @@ QSize Palette::scaledGridSize() const
     return gridSize() * configuration()->paletteScaling();
 }
 
-bool Palette::read(XmlReader& e)
+bool Palette::read(XmlReader& e, bool pasteMode)
 {
     m_name = e.attribute("name");
     m_type = Type::Unknown;
@@ -285,13 +286,13 @@ bool Palette::read(XmlReader& e)
             }
         } else if (tag == "visible") {
             m_isVisible = e.readBool();
-        } else if (e.context()->pasteMode() && tag == "expanded") {
+        } else if (pasteMode && tag == "expanded") {
             m_isExpanded = e.readBool();
         } else if (tag == "editable") {
             m_isEditable = e.readBool();
         } else if (tag == "Cell") {
             PaletteCellPtr cell = std::make_shared<PaletteCell>(this);
-            if (!cell->read(e)) {
+            if (!cell->read(e, pasteMode)) {
                 continue;
             }
 
@@ -317,6 +318,8 @@ bool Palette::read(XmlReader& e)
         m_type = guessType();
     }
 
+    PaletteCompat::addNewItemsIfNeeded(*this, gpaletteScore);
+
     return true;
 }
 
@@ -325,7 +328,7 @@ QByteArray Palette::toMimeData() const
     return ::toMimeData(this);
 }
 
-void Palette::write(XmlWriter& xml) const
+void Palette::write(XmlWriter& xml, bool pasteMode) const
 {
     xml.startElement("Palette", { { "name", m_name } });
     xml.tag("type", QMetaEnum::fromType<Type>().valueToKey(int(m_type)));
@@ -343,7 +346,7 @@ void Palette::write(XmlWriter& xml) const
     xml.tag("visible", m_isVisible, true);
     xml.tag("editable", m_isEditable, true);
 
-    if (xml.context()->clipboardmode()) {
+    if (pasteMode) {
         xml.tag("expanded", m_isExpanded, false);
     }
 
@@ -352,7 +355,7 @@ void Palette::write(XmlWriter& xml) const
             xml.tag("Cell");
             continue;
         }
-        cell->write(xml);
+        cell->write(xml, pasteMode);
     }
     xml.endElement();
 }
@@ -431,7 +434,7 @@ bool Palette::readFromFile(const QString& p)
 
             while (e.readNextStartElement()) {
                 if (e.name() == "Palette") {
-                    read(e);
+                    read(e, false);
                 } else {
                     e.unknown();
                 }
@@ -494,8 +497,8 @@ bool Palette::writeToFile(const QString& p) const
         cbuf1.open(IODevice::ReadWrite);
         XmlWriter xml1(&cbuf1);
         xml1.startDocument();
-        xml1.startElement("museScore", { { "version", MSC_VERSION } });
-        write(xml1);
+        xml1.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
+        write(xml1, false);
         xml1.endElement();
         cbuf1.close();
         f.addFile("palette.xml", cbuf1.data());
@@ -512,8 +515,8 @@ bool Palette::writeToFile(const QString& p) const
 
 void Palette::showWritingPaletteError(const QString& path) const
 {
-    std::string title = trc("palette", "Writing Palette file");
-    std::string message = qtrc("palette", "Writing Palette file\n%1\nfailed.").arg(path).toStdString();
+    std::string title = trc("palette", "Writing palette file");
+    std::string message = qtrc("palette", "Writing palette file\n%1\nfailed.").arg(path).toStdString();
     interactive()->error(title, message);
 }
 
@@ -582,6 +585,8 @@ Palette::Type Palette::guessType() const
         return Type::Layout;
     case ElementType::SYMBOL:
         return Type::Accordion;
+    case ElementType::HARP_DIAGRAM:
+        return Type::Harp;
     case ElementType::ACTION_ICON: {
         const ActionIcon* action = toActionIcon(e);
         QString actionCode = QString::fromStdString(action->actionCode());

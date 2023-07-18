@@ -45,8 +45,6 @@ private:
     void loadProperties() override;
     void resetProperties() override;
 
-    bool isTextVisible(TextType) const override;
-
     PropertyItem* m_ottavaType = nullptr;
     PropertyItem* m_showNumbersOnly = nullptr;
 };

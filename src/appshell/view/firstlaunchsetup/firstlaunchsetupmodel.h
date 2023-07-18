@@ -41,8 +41,8 @@ class FirstLaunchSetupModel : public QObject
     Q_PROPERTY(bool canGoForward READ canGoForward NOTIFY currentPageChanged)
     Q_PROPERTY(bool canFinish READ canFinish NOTIFY currentPageChanged)
 
-    INJECT(appshell, IAppShellConfiguration, configuration)
-    INJECT(appshell, framework::IInteractive, interactive)
+    INJECT(IAppShellConfiguration, configuration)
+    INJECT(framework::IInteractive, interactive)
 
 public:
     explicit FirstLaunchSetupModel(QObject* parent = nullptr);

@@ -25,7 +25,7 @@
 #include <string>
 #include <optional>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "videoexporttypes.h"
 
@@ -59,4 +59,4 @@ public:
 };
 }
 
-#endif // MU_IMPORTEXPORT_IAUDIOEXPORTCONFIGURATION_H
+#endif // MU_IMPORTEXPORT_IVIDEOEXPORTCONFIGURATION_H

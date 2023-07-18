@@ -22,7 +22,7 @@
 #ifndef MU_APPSHELL_ISESSIONSMANAGER_H
 #define MU_APPSHELL_ISESSIONSMANAGER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 namespace mu::appshell {
 class ISessionsManager : MODULE_EXPORT_INTERFACE

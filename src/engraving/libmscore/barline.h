@@ -64,33 +64,11 @@ struct BarLineTableItem {
 class BarLine final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, BarLine)
-
-    int _spanStaff          { 0 };         // span barline to next staff if true, values > 1 are used for importing from 2.x
-    int _spanFrom           { 0 };         // line number on start and end staves
-    int _spanTo             { 0 };
-    BarLineType _barLineType { BarLineType::NORMAL };
-    mutable double y1 = 0.0;
-    mutable double y2 = 0.0;
-    ElementList _el;          ///< fermata or other articulations
-
-    friend class Factory;
-    BarLine(Segment* parent);
-    BarLine(const BarLine&);
-
-    void getY() const;
-    void drawDots(mu::draw::Painter* painter, double x) const;
-    void drawTips(mu::draw::Painter* painter, bool reversed, double x) const;
-    bool isTop() const;
-    bool isBottom() const;
-    void drawEditMode(mu::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
-
-    bool neverKernable() const override { return true; }
+    DECLARE_CLASSOF(ElementType::BAR_LINE)
 
 public:
 
     virtual ~BarLine();
-
-    KerningType doComputeKerningType(const EngravingItem*) const override { return KerningType::NON_KERNING; }
 
     BarLine& operator=(const BarLine&) = delete;
 
@@ -102,13 +80,10 @@ public:
 
     BarLine* clone() const override { return new BarLine(*this); }
     Fraction playTick() const override;
-    void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
     void draw(mu::draw::Painter*) const override;
     mu::PointF canvasPos() const override;      ///< position in canvas coordinates
     mu::PointF pagePos() const override;        ///< position in page coordinates
-    void layout() override;
-    void layout2();
+
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void setTrack(track_idx_t t) override;
     void add(EngravingItem*) override;
@@ -120,13 +95,18 @@ public:
     Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
 
-    void setSpanStaff(int val) { _spanStaff = val; }
-    void setSpanFrom(int val) { _spanFrom = val; }
-    void setSpanTo(int val) { _spanTo = val; }
+    double y1() const { return m_y1; }
+    double y2() const { return m_y2; }
+    void setY1(double v) { m_y1 = v; }
+    void setY2(double v) { m_y2 = v; }
+
+    void setSpanStaff(int val) { m_spanStaff = val; }
+    void setSpanFrom(int val) { m_spanFrom = val; }
+    void setSpanTo(int val) { m_spanTo = val; }
     void setShowTips(bool val);
-    int spanStaff() const { return _spanStaff; }
-    int spanFrom() const { return _spanFrom; }
-    int spanTo() const { return _spanTo; }
+    int spanStaff() const { return m_spanStaff; }
+    int spanFrom() const { return m_spanFrom; }
+    int spanTo() const { return m_spanTo; }
     bool showTips() const;
 
     void startEdit(EditData& ed) override;
@@ -136,14 +116,17 @@ public:
     void endEditDrag(EditData&) override;
     Shape shape() const override;
 
-    const ElementList* el() const { return &_el; }
+    const ElementList* el() const { return &m_el; }
 
     static String translatedUserTypeName(BarLineType);
 
-    void setBarLineType(BarLineType i) { _barLineType = i; }
-    BarLineType barLineType() const { return _barLineType; }
+    void setBarLineType(BarLineType i) { m_barLineType = i; }
+    BarLineType barLineType() const { return m_barLineType; }
 
-    int subtype() const override { return int(_barLineType); }
+    bool isTop() const;
+    bool isBottom() const;
+
+    int subtype() const override { return int(m_barLineType); }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -151,7 +134,6 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
 
-    double layoutWidth() const;
     mu::RectF layoutRect() const;
 
     EngravingItem* nextSegmentElement() override;
@@ -167,6 +149,27 @@ public:
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
     static const std::vector<BarLineTableItem> barLineTable;
+
+    void calcY() const;
+
+private:
+
+    friend class Factory;
+    BarLine(Segment* parent);
+    BarLine(const BarLine&);
+
+    void drawDots(mu::draw::Painter* painter, double x) const;
+    void drawTips(mu::draw::Painter* painter, bool reversed, double x) const;
+
+    void drawEditMode(mu::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
+
+    int m_spanStaff = 0;         // span barline to next staff if true, values > 1 are used for importing from 2.x
+    int m_spanFrom = 0;         // line number on start and end staves
+    int m_spanTo = 0;
+    BarLineType m_barLineType = BarLineType::NORMAL;
+    mutable double m_y1 = 0.0;
+    mutable double m_y2 = 0.0;
+    ElementList m_el;          ///< fermata or other articulations
 };
 } // namespace mu::engraving
 

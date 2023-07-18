@@ -48,17 +48,16 @@ if [ -z "$BUILD_NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
 if [ -z "$BUILD_MODE" ]; then BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env); fi
 if [ -z "$YOUTUBE_API_KEY" ]; then YOUTUBE_API_KEY=""; fi
 
-MUSESCORE_BUILD_CONFIG=dev
-BUILD_UNIT_TESTS=OFF
+MUSESCORE_BUILD_MODE=dev
+
 case "${BUILD_MODE}" in
-"devel_build")   MUSESCORE_BUILD_CONFIG=dev; SUFFIX=dev;;
-"nightly_build") MUSESCORE_BUILD_CONFIG=dev; SUFFIX=nightly;;
-"testing_build") MUSESCORE_BUILD_CONFIG=testing; SUFFIX=testing;;
-"stable_build")  MUSESCORE_BUILD_CONFIG=release; SUFFIX="";;
-"mtests")        MUSESCORE_BUILD_CONFIG=dev; BUILDTYPE=installdebug; OPTIONS="USE_SYSTEM_FREETYPE=ON UPDATE_CACHE=FALSE PREFIX=$ARTIFACTS_DIR/software";;
+"devel_build")   MUSESCORE_BUILD_MODE=dev; SUFFIX=dev;;
+"nightly_build") MUSESCORE_BUILD_MODE=dev; SUFFIX=nightly;;
+"testing_build") MUSESCORE_BUILD_MODE=testing; SUFFIX=testing;;
+"stable_build")  MUSESCORE_BUILD_MODE=release; SUFFIX="";;
 esac
 
-echo "MUSESCORE_BUILD_CONFIG: $MUSESCORE_BUILD_CONFIG"
+echo "MUSESCORE_BUILD_MODE: $MUSESCORE_BUILD_MODE"
 echo "BUILD_NUMBER: $BUILD_NUMBER"
 echo "CRASH_REPORT_URL: $CRASH_REPORT_URL"
 echo "BUILD_MODE: $BUILD_MODE"
@@ -89,7 +88,7 @@ echo "=== BUILD ==="
 MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
 
 # Build portable AppImage
-MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
+MUSESCORE_BUILD_MODE=$MUSESCORE_BUILD_MODE \
 MUSESCORE_INSTALL_SUFFIX=$SUFFIX \
 MUSESCORE_BUILD_NUMBER=$BUILD_NUMBER \
 MUSESCORE_REVISION=$MUSESCORE_REVISION \
@@ -102,7 +101,7 @@ MUSESCORE_BUILD_UPDATE_MODULE=${MUSESCORE_BUILD_UPDATE_MODULE:-"ON"} \
 bash ./ninja_build.sh -t appimage
 
 
-bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_CONFIG
+bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_MODE
 bash ./build/ci/tools/make_version_env.sh $BUILD_NUMBER
 bash ./build/ci/tools/make_revision_env.sh $MUSESCORE_REVISION
 bash ./build/ci/tools/make_branch_env.sh

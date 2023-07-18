@@ -33,12 +33,16 @@
 #include "../view/interactiveprovider.h"
 #include "../view/qmlapi.h"
 
+#include "languages/ilanguagesservice.h"
+
 class QQmlEngine;
 
 namespace mu::ui {
 class UiEngine : public QObject, public IUiEngine
 {
     Q_OBJECT
+
+    INJECT(languages::ILanguagesService, languagesService)
 
     Q_PROPERTY(UiTheme * theme READ theme NOTIFY themeChanged)
     Q_PROPERTY(QmlToolTip * tooltip READ tooltip CONSTANT)
@@ -60,6 +64,7 @@ public:
     std::shared_ptr<InteractiveProvider> interactiveProvider() const;
 
     Q_INVOKABLE Qt::KeyboardModifiers keyboardModifiers() const;
+    Q_INVOKABLE Qt::LayoutDirection currentLanguageLayoutDirection() const;
 
     // IUiEngine
     void updateTheme() override;

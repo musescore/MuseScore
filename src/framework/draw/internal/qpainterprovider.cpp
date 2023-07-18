@@ -94,14 +94,15 @@ bool QPainterProvider::isActive() const
     return m_painter->isActive();
 }
 
-void QPainterProvider::beginObject(const std::string& name, const PointF& pagePos)
+void QPainterProvider::beginObject(const std::string& name)
 {
-    m_drawObjectsLogger->beginObject(name, pagePos);
+    UNUSED(name)
+    //m_drawObjectsLogger->beginObject(name);
 }
 
 void QPainterProvider::endObject()
 {
-    m_drawObjectsLogger->endObject();
+    //m_drawObjectsLogger->endObject();
 }
 
 void QPainterProvider::setAntialiasing(bool arg)
@@ -342,6 +343,11 @@ void QPainterProvider::drawPixmap(const PointF& point, const QPixmap& pm)
 void QPainterProvider::drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset)
 {
     m_painter->drawTiledPixmap(rect.toQRectF(), pm, QPointF(offset.x(), offset.y()));
+}
+
+bool QPainterProvider::hasClipping() const
+{
+    return m_painter->hasClipping();
 }
 
 void QPainterProvider::setClipRect(const RectF& rect)

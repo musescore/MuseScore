@@ -30,12 +30,12 @@
 #include "chord.h"
 #include "chordrest.h"
 #include "clef.h"
-#include "config.h"
 #include "measure.h"
 #include "note.h"
 #include "page.h"
 #include "part.h"
 #include "pitchspelling.h"
+#include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "sig.h"
@@ -1022,7 +1022,13 @@ int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalD
     ClefType clefL = staffL->clef(tickL);
     // line represents the ledger line of the staff.  0 is the top line, 1, is the space between the top 2 lines,
     //  ... 8 is the bottom line.
-    int lineL     = noteL->line();
+    int lineL = noteL->line();
+    if (lineL == INVALID_LINE) {
+        int relLine = absStep(noteL->tpc(), noteL->epitch());
+        ClefType clef = noteL->staff()->clef(noteL->tick());
+        lineL = relStep(relLine, clef);
+    }
+
     // we use line - deltastep, because lines are oriented from top to bottom, while step is oriented from bottom to top.
     int lineL2    = lineL - nominalDiatonicSteps;
     Measure* measureR = chordR->segment()->measure();
@@ -1149,5 +1155,129 @@ double yStaffDifference(const System* system1, staff_idx_t staffIdx1, const Syst
         return 0.0;
     }
     return staff1->y() - staff2->y();
+}
+
+bool allowRemoveWhenRemovingStaves(EngravingItem* item, staff_idx_t startStaff, staff_idx_t endStaff)
+{
+    // Sanity checks
+    if (!item || item->staffIdx() == mu::nidx || startStaff == mu::nidx || endStaff == mu::nidx) {
+        return false;
+    }
+
+    Score* score = item->score();
+    if (score->nstaves() == 1) {
+        return true;
+    }
+
+    if (endStaff == 0) { // Default initialized
+        endStaff = startStaff + 1;
+    }
+
+    staff_idx_t staffIdx = item->staffIdx();
+    if (staffIdx < startStaff || staffIdx >= endStaff) {
+        return false;
+    }
+
+    Staff* nextRemaining = score->staff(endStaff);
+    bool nextRemainingIsSystemObjectStaff = nextRemaining && score->isSystemObjectStaff(nextRemaining);
+    if (item->isTopSystemObject() && !nextRemainingIsSystemObjectStaff) {
+        return false;
+    }
+
+    return true;
+}
+
+bool moveDownWhenAddingStaves(EngravingItem* item, staff_idx_t startStaff, staff_idx_t endStaff)
+{
+    // Sanity checks
+    if (!item || item->staffIdx() == mu::nidx || startStaff == mu::nidx || endStaff == mu::nidx) {
+        return false;
+    }
+
+    if (item->staffIdx() < startStaff) {
+        return false;
+    }
+
+    if (endStaff == 0) { // Default initialized
+        endStaff = startStaff + 1;
+    }
+
+    Score* score = item->score();
+    Staff* nextAfterInserted = score->staff(endStaff);
+    bool nextAfterInsertedIsSystemObjectStaff = nextAfterInserted && score->isSystemObjectStaff(nextAfterInserted);
+    if (item->isTopSystemObject() && !nextAfterInsertedIsSystemObjectStaff) {
+        return false;
+    }
+
+    return true;
+}
+
+void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords, std::vector<Rest*>& rests)
+{
+    if (!segment) {
+        return;
+    }
+
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack = startTrack + VOICES;
+
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
+        EngravingItem* e = segment->elementAt(track);
+        if (!e) {
+            continue;
+        }
+        if (e->isChord() && !toChordRest(e)->staffMove()) {
+            chords.push_back(toChord(e));
+        } else if (e->isRest() && !toChordRest(e)->staffMove()) {
+            rests.push_back(toRest(e));
+        }
+    }
+}
+
+void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords)
+{
+    // Check if previous segments contain chords in other voices
+    // whose duration overlaps with rests on this segment
+
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack = startTrack + VOICES;
+
+    std::set<track_idx_t> tracksToCheck;
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
+        EngravingItem* item = segment->elementAt(track);
+        if (!item || !item->isRest()) {
+            tracksToCheck.insert(track);
+        }
+    }
+
+    Fraction curTick = segment->rtick();
+    for (Segment* prevSeg = segment->prev(); prevSeg; prevSeg = prevSeg->prev()) {
+        if (!prevSeg->isChordRestType()) {
+            continue;
+        }
+        Fraction prevSegTick = prevSeg->rtick();
+        for (track_idx_t track : tracksToCheck) {
+            EngravingItem* e = prevSeg->elementAt(track);
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            Chord* chord = toChord(e);
+            Fraction chordEndTick = prevSegTick + chord->actualTicks();
+            if (chordEndTick <= curTick) {
+                continue;
+            }
+            Measure* measure = segment->measure();
+            Segment* endSegment = measure->findSegmentR(SegmentType::ChordRest, chordEndTick);
+            if (!endSegment) {
+                continue;
+            }
+            EngravingItem* endItem = endSegment->elementAt(track);
+            if (!endItem || !endItem->isChord()) {
+                continue;
+            }
+
+            chords.push_back(chord);
+        }
+    }
 }
 }

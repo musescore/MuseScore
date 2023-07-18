@@ -31,11 +31,9 @@ class ArticulationTypes
 
 public:
     enum class Placement {
-        TYPE_ABOVE_STAFF,
-        TYPE_BELOW_STAFF,
-        TYPE_CHORD_AUTO,
-        TYPE_ABOVE_CHORD,
-        TYPE_BELOW_CHORD
+        TYPE_TOP,
+        TYPE_BOTTOM,
+        TYPE_AUTO
     };
 
     enum class Style {

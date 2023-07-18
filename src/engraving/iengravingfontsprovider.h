@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "global/modularity/imoduleexport.h"
+#include "global/modularity/imoduleinterface.h"
 #include "global/io/path.h"
 
 #include "iengravingfont.h"
@@ -11,7 +11,7 @@
 namespace mu::engraving {
 class IEngravingFontsProvider : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IEngravingFontsProvider);
+    INTERFACE_ID(IEngravingFontsProvider)
 
 public:
     virtual ~IEngravingFontsProvider() = default;

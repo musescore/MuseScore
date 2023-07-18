@@ -35,8 +35,6 @@
 using namespace mu::iex::imagesexport;
 using namespace mu::project;
 
-static std::shared_ptr<ImagesExportConfiguration> s_configuration = std::make_shared<ImagesExportConfiguration>();
-
 std::string ImagesExportModule::moduleName() const
 {
     return "iex_imagesexport";
@@ -44,7 +42,9 @@ std::string ImagesExportModule::moduleName() const
 
 void ImagesExportModule::registerExports()
 {
-    modularity::ioc()->registerExport<IImagesExportConfiguration>(moduleName(), s_configuration);
+    m_configuration = std::make_shared<ImagesExportConfiguration>();
+
+    modularity::ioc()->registerExport<IImagesExportConfiguration>(moduleName(), m_configuration);
 }
 
 void ImagesExportModule::resolveImports()
@@ -57,7 +57,11 @@ void ImagesExportModule::resolveImports()
     }
 }
 
-void ImagesExportModule::onInit(const framework::IApplication::RunMode&)
+void ImagesExportModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    s_configuration->init();
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
+    m_configuration->init();
 }

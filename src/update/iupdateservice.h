@@ -28,7 +28,7 @@
 #include "progress.h"
 #include "updatetypes.h"
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 namespace mu::update {
 class IUpdateService : MODULE_EXPORT_INTERFACE

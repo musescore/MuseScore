@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <minSystemDistance>8</minSystemDistance>
@@ -51,9 +49,10 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <KeySig>
-            <accidental>3</accidental>
+            <concertKey>3</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -92,7 +91,7 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-6</l1>
+            <l1>-4</l1>
             <l2>-10</l2>
             </Beam>
           <Chord>
@@ -131,7 +130,7 @@
           </LayoutBreak>
         <voice>
           <KeySig>
-            <accidental>4</accidental>
+            <concertKey>4</concertKey>
             </KeySig>
           <Beam>
             <l1>10</l1>
@@ -204,9 +203,10 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <KeySig>
-            <accidental>5</accidental>
+            <concertKey>5</concertKey>
             </KeySig>
           <Beam>
             <l1>10</l1>
@@ -280,7 +280,7 @@
           </LayoutBreak>
         <voice>
           <KeySig>
-            <accidental>6</accidental>
+            <concertKey>6</concertKey>
             </KeySig>
           <Beam>
             <l1>10</l1>
@@ -353,9 +353,10 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <KeySig>
-            <accidental>7</accidental>
+            <concertKey>7</concertKey>
             </KeySig>
           <Beam>
             <l1>10</l1>
@@ -429,7 +430,7 @@
           </LayoutBreak>
         <voice>
           <KeySig>
-            <accidental>-2</accidental>
+            <concertKey>-2</concertKey>
             </KeySig>
           <Beam>
             <l1>10</l1>
@@ -502,9 +503,10 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <KeySig>
-            <accidental>-3</accidental>
+            <concertKey>-3</concertKey>
             </KeySig>
           <Beam>
             <l1>10</l1>
@@ -578,7 +580,7 @@
           </LayoutBreak>
         <voice>
           <KeySig>
-            <accidental>-4</accidental>
+            <concertKey>-4</concertKey>
             </KeySig>
           <Beam>
             <l1>10</l1>
@@ -651,9 +653,10 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <KeySig>
-            <accidental>-5</accidental>
+            <concertKey>-5</concertKey>
             </KeySig>
           <Beam>
             <l1>10</l1>
@@ -727,7 +730,7 @@
           </LayoutBreak>
         <voice>
           <KeySig>
-            <accidental>-6</accidental>
+            <concertKey>-6</concertKey>
             </KeySig>
           <Beam>
             <l1>10</l1>
@@ -803,9 +806,10 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <KeySig>
-            <accidental>-7</accidental>
+            <concertKey>-7</concertKey>
             </KeySig>
           <Beam>
             <l1>10</l1>

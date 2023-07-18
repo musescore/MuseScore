@@ -1,0 +1,96 @@
+name: Bug report
+description: File a bug report
+body:
+  - type: dropdown
+    id: label
+    attributes:
+      label: Issue type
+      description: What kind of issue are you experiencing?
+      options:
+        - Choose option...
+        - File corruption
+        - Crash or freeze
+        - Engraving bug
+        - UI bug
+        - VST bug
+        - Muse Sounds bug
+        - General playback bug
+        - Cloud saving/loading issue
+        - Other type of issue
+    validations:
+      required: true
+  - type: textarea
+    id: desc
+    attributes:
+      label: Bug description
+      description: A more detailled description of the bug
+      placeholder: Context for the bug that didn't fit in the title
+    validations:
+      required: false
+  - type: textarea
+    id: str
+    attributes:
+      label: Steps to reproduce
+      description: Please provide step-by-step instructions to reproduce this bug 
+      placeholder: |
+        1. go to ...
+        2. then click on ...
+        3. then ...
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshots/Screen recordings
+      description: | 
+        Especially for longer or more complicated bugs, screen recordings are highly recommended. 
+
+        If you don't have a screen recording tool installed (OBS, Bandicam, QuickTime, etc.), you can also take a video with your phone.
+      placeholder: |
+        Click into this text box and paste your video
+    validations:
+      required: false
+  - type: input
+    id: version
+    attributes:
+      label: MuseScore Version
+      description: What version of MuseScore are you running? You can copy the info from the Help > About dialog in MuseScore.
+    validations:
+      required: true
+  - type: dropdown
+    id: regression
+    attributes:
+      label: Regression
+      description: Did this work before?
+      options:
+        - Choose option...
+        - No.
+        - I don't know
+        - Yes, this used to work in MuseScore 3.x and now is broken 
+        - Yes, this used to work in a previous version of MuseScore 4.x
+    validations: 
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      description: What OS does this bug occur on?
+      placeholder: Windows 11, macOS 13, Ubuntu 22.04, etc.
+    validations: 
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Further information which may be relevant to this bug
+      placeholder: Crash log, Screenshots, MuseScore project, build number, etc.
+  - type: markdown
+    attributes:
+      value: |
+        Useful information to include:
+        * For crashes: crash logs, system information (OS, CPU, GPU, memory, drive type, etc.)
+        * For playback issues: Is it using MS Basic, MuseSounds or VSTs?
+          * For VSTs in particular: Where did you get the VSTs from? (link)
+        * For engraving: sample score (MuseScore project), screenshots
+        * For UI issues: Screenshots, screen recordings, system information, GPU drivers
+        * For regressions: The last MuseScore version (or even better: commit) that worked well. 

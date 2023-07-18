@@ -25,10 +25,6 @@
 
 #include "playback/metaparsers/metaparserbase.h"
 
-namespace Ms {
-class Score;
-}
-
 namespace mu::engraving {
 class SpannersMetaParser : public MetaParserBase<SpannersMetaParser>
 {

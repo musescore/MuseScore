@@ -26,7 +26,7 @@ ARTIFACTS_DIR="build.artifacts" # default output dir
 
 if [ -z "$2" ]; then OUT_DIR=${ARTIFACTS_DIR}/env; fi
 
-export MUSESCORE_VERSION=$(cmake -P config.cmake | sed -n -e 's/^.*MUSESCORE_VERSION_FULL  *//p')
+export MUSESCORE_VERSION=$(cmake -P version.cmake | sed -n -e 's/^.*MUSESCORE_VERSION_FULL  *//p')
 
 MUSESCORE_VERSION_FULL=$MUSESCORE_VERSION.$BUILD_NUMBER
 

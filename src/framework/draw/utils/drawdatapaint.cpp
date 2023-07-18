@@ -26,52 +26,62 @@
 using namespace mu;
 using namespace mu::draw;
 
-void DrawDataPaint::paint(Painter* painter, const DrawDataPtr& data, const Color& overlay)
+static void drawItem(IPaintProviderPtr& provider, const DrawData::Item& item, const std::map<int, DrawData::State>& states,
+                     const Color& overlay)
 {
-    IPaintProviderPtr provider = painter->provider();
-    for (const DrawData::Object& obj : data->objects) {
-        for (const DrawData::Data& d : obj.datas) {
-            DrawData::State st = d.state;
-            if (overlay.isValid()) {
-                st.pen.setColor(overlay);
-                st.brush.setColor(overlay);
+    // first draw obj itself
+    for (const DrawData::Data& d : item.datas) {
+        DrawData::State st = states.at(d.state);
+        if (overlay.isValid()) {
+            st.pen.setColor(overlay);
+            st.brush.setColor(overlay);
+        }
+
+        provider->setPen(st.pen);
+        provider->setBrush(st.brush);
+        provider->setFont(st.font);
+        provider->setTransform(st.transform);
+        provider->setAntialiasing(st.isAntialiasing);
+        provider->setCompositionMode(st.compositionMode);
+
+        for (const DrawPath& path : d.paths) {
+            provider->setPen(path.pen);
+            provider->setBrush(path.brush);
+            provider->drawPath(path.path);
+        }
+
+        for (const DrawPolygon& pl : d.polygons) {
+            if (pl.polygon.empty()) {
+                continue;
             }
+            provider->drawPolygon(&pl.polygon[0], pl.polygon.size(), pl.mode);
+        }
 
-            provider->setPen(st.pen);
-            provider->setBrush(st.brush);
-            provider->setFont(st.font);
-            provider->setTransform(st.transform);
-            provider->setAntialiasing(st.isAntialiasing);
-            provider->setCompositionMode(st.compositionMode);
-
-            for (const DrawPath& path : d.paths) {
-                provider->setPen(path.pen);
-                provider->setBrush(path.brush);
-                provider->drawPath(path.path);
+        for (const DrawText& t : d.texts) {
+            if (t.mode == DrawText::Point) {
+                provider->drawText(t.rect.topLeft(), t.text);
+            } else {
+                provider->drawText(t.rect, t.flags, t.text);
             }
+        }
 
-            for (const DrawPolygon& pl : d.polygons) {
-                if (pl.polygon.empty()) {
-                    continue;
-                }
-                provider->drawPolygon(&pl.polygon[0], pl.polygon.size(), pl.mode);
-            }
-
-            for (const DrawText& t : d.texts) {
-                if (t.mode == DrawText::Point) {
-                    provider->drawText(t.rect.topLeft(), t.text);
-                } else {
-                    provider->drawText(t.rect, t.flags, t.text);
-                }
-            }
-
-            for (const DrawPixmap& px : d.pixmaps) {
-                if (px.mode == DrawPixmap::Single) {
-                    provider->drawPixmap(px.rect.topLeft(), px.pm);
-                } else {
-                    provider->drawTiledPixmap(px.rect, px.pm, px.offset);
-                }
+        for (const DrawPixmap& px : d.pixmaps) {
+            if (px.mode == DrawPixmap::Single) {
+                provider->drawPixmap(px.rect.topLeft(), px.pm);
+            } else {
+                provider->drawTiledPixmap(px.rect, px.pm, px.offset);
             }
         }
     }
+
+    // second draw chilren
+    for (const DrawData::Item& ch : item.chilren) {
+        drawItem(provider, ch, states, overlay);
+    }
+}
+
+void DrawDataPaint::paint(Painter* painter, const DrawDataPtr& data, const Color& overlay)
+{
+    IPaintProviderPtr provider = painter->provider();
+    drawItem(provider, data->item, data->states, overlay);
 }

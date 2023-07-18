@@ -48,13 +48,13 @@
 namespace mu::playback {
 class PlaybackController : public IPlaybackController, public actions::Actionable, public async::Asyncable
 {
-    INJECT_STATIC(playback, actions::IActionsDispatcher, dispatcher)
-    INJECT_STATIC(playback, context::IGlobalContext, globalContext)
-    INJECT_STATIC(playback, IPlaybackConfiguration, configuration)
-    INJECT_STATIC(playback, notation::INotationConfiguration, notationConfiguration)
-    INJECT_STATIC(playback, audio::IPlayback, playback)
-    INJECT_STATIC(playback, ISoundProfilesRepository, profilesRepo)
-    INJECT_STATIC(playback, framework::IInteractive, interactive)
+    INJECT_STATIC(actions::IActionsDispatcher, dispatcher)
+    INJECT_STATIC(context::IGlobalContext, globalContext)
+    INJECT_STATIC(IPlaybackConfiguration, configuration)
+    INJECT_STATIC(notation::INotationConfiguration, notationConfiguration)
+    INJECT_STATIC(audio::IPlayback, playback)
+    INJECT_STATIC(ISoundProfilesRepository, profilesRepo)
+    INJECT_STATIC(framework::IInteractive, interactive)
 
 public:
     void init();
@@ -78,9 +78,13 @@ public:
     async::Notification currentTrackSequenceIdChanged() const override;
 
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
+    const AuxTrackIdMap& auxTrackIdMap() const override;
 
-    async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackAdded() const override;
-    async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackRemoved() const override;
+    async::Channel<audio::TrackId> trackAdded() const override;
+    async::Channel<audio::TrackId> trackRemoved() const override;
+
+    std::string auxChannelName(audio::aux_channel_idx_t index) const override;
+    async::Channel<audio::aux_channel_idx_t, std::string> auxChannelNameChanged() const override;
 
     void playElements(const std::vector<const notation::EngravingItem*>& elements) override;
     void playMetronome(int tick) override;
@@ -116,6 +120,8 @@ private:
     notation::INotationSelectionPtr selection() const;
     notation::INotationSelectionRangePtr selectionRange() const;
     notation::INotationInteractionPtr interaction() const;
+
+    uint64_t notationPlaybackKey() const;
 
     void updateCurrentTempo();
 
@@ -173,13 +179,15 @@ private:
     void setupSequencePlayer();
 
     void updateMuteStates();
+    void updateAuxMuteStates();
 
     void setCurrentPlaybackTime(audio::msecs_t msecs);
 
-    using TrackAddFinished = std::function<void (const engraving::InstrumentTrackId&)>;
+    using TrackAddFinished = std::function<void ()>;
 
     void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished);
     void doAddTrack(const engraving::InstrumentTrackId& instrumentTrackId, const std::string& title, const TrackAddFinished& onFinished);
+    void addAuxTrack(audio::aux_channel_idx_t index, const TrackAddFinished& onFinished);
 
     void setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive);
     audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
@@ -207,15 +215,19 @@ private:
     midi::tick_t m_currentTick = 0;
     notation::Tempo m_currentTempo;
 
-    async::Channel<audio::TrackId, engraving::InstrumentTrackId> m_trackAdded;
-    async::Channel<audio::TrackId, engraving::InstrumentTrackId> m_trackRemoved;
+    async::Channel<audio::TrackId> m_trackAdded;
+    async::Channel<audio::TrackId> m_trackRemoved;
 
-    InstrumentTrackIdMap m_trackIdMap;
+    async::Channel<audio::aux_channel_idx_t, std::string> m_auxChannelNameChanged;
+
+    InstrumentTrackIdMap m_instrumentTrackIdMap;
+    AuxTrackIdMap m_auxTrackIdMap;
 
     framework::Progress m_loadingProgress;
-    std::list<engraving::InstrumentTrackId> m_loadingTracks;
+    size_t m_loadingTrackCount = 0;
 
     bool m_isExportingAudio = false;
+    bool m_isRangeSelection = false;
 };
 }
 

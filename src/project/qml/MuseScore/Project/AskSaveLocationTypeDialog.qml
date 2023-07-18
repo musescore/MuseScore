@@ -62,12 +62,13 @@ StyledDialogView {
         }
 
         RowLayout {
+            id: optionsRowLayout
             spacing: 24
 
             NavigationPanel {
                 id: optionsNavPanel
                 name: "SaveLocationOptionsButtons"
-                enabled: parent.enabled && parent.visible
+                enabled: optionsRowLayout.enabled && optionsRowLayout.visible
                 direction: NavigationPanel.Horizontal
                 section: root.navigationSection
                 order: 1

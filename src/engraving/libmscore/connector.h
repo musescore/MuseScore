@@ -32,8 +32,6 @@ namespace mu::engraving {
 class EngravingItem;
 class EngravingObject;
 class Score;
-class XmlReader;
-class XmlWriter;
 
 //---------------------------------------------------------
 //   @@ ConnectorInfo
@@ -101,70 +99,6 @@ public:
     bool isStart() const { return !hasPrevious() && hasNext(); }
     bool isMiddle() const { return hasPrevious() && hasNext(); }
     bool isEnd() const { return hasPrevious() && !hasNext(); }
-};
-
-//---------------------------------------------------------
-//   @@ ConnectorInfoReader
-///    Helper class for reading beams, tuplets and spanners.
-//---------------------------------------------------------
-
-class ConnectorInfoReader final : public ConnectorInfo
-{
-    OBJECT_ALLOCATOR(engraving, ConnectorInfoReader)
-
-    XmlReader* _reader;
-    EngravingItem* _connector;
-    EngravingObject* _connectorReceiver;
-
-    void readEndpointLocation(Location& l);
-
-public:
-    ConnectorInfoReader(XmlReader& e, EngravingItem* current, int track = -1);
-    ConnectorInfoReader(XmlReader& e, Score* current, int track = -1);
-
-    ConnectorInfoReader* prev() const { return static_cast<ConnectorInfoReader*>(_prev); }
-    ConnectorInfoReader* next() const { return static_cast<ConnectorInfoReader*>(_next); }
-
-    EngravingItem* connector();
-    const EngravingItem* connector() const;
-    EngravingItem* releaseConnector();   // returns connector and "forgets" it by
-    // setting an internal pointer to it to zero
-
-    bool read();
-    void update();
-    void addToScore(bool pasteMode);
-
-    static void readConnector(std::unique_ptr<ConnectorInfoReader> info, XmlReader& e);
-};
-
-//---------------------------------------------------------
-//   @@ ConnectorInfoWriter
-///    Helper class for writing connecting elements.
-///    Subclasses should fill _prevInfo and _nextInfo with
-///    the proper information on the connector's endpoints.
-//---------------------------------------------------------
-
-class ConnectorInfoWriter : public ConnectorInfo
-{
-    OBJECT_ALLOCATOR(engraving, ConnectorInfoWriter)
-
-    XmlWriter* _xml;
-
-protected:
-    const EngravingItem* _connector;
-
-    virtual const char* tagName() const = 0;
-
-public:
-    ConnectorInfoWriter(XmlWriter& xml, const EngravingItem* current, const EngravingItem* connector, int track = -1, Fraction = { -1, 1 });
-    virtual ~ConnectorInfoWriter() = default;
-
-    ConnectorInfoWriter* prev() const { return static_cast<ConnectorInfoWriter*>(_prev); }
-    ConnectorInfoWriter* next() const { return static_cast<ConnectorInfoWriter*>(_next); }
-
-    const EngravingItem* connector() const { return _connector; }
-
-    void write();
 };
 } // namespace mu::engraving
 #endif

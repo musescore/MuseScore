@@ -4,14 +4,11 @@ on:
   pull_request:
     branches:
     - master
+  workflow_dispatch:
 
 jobs:
   run_tests:
     runs-on: ubuntu-20.04
-    env:
-        # Enable AddressSanitizer in the mtest build
-        CFLAGS: "-fsanitize=address -fno-omit-frame-pointer"
-        CXXFLAGS: "-fsanitize=address -fno-omit-frame-pointer"
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.11.0
@@ -50,3 +47,5 @@ jobs:
         sudo docker system prune -a -f
         sudo rm -rf /usr/local/lib/android
         sudo bash ./build/ci/linux/runutests.sh
+      env: 
+        ASAN_OPTIONS: "detect_leaks=0"

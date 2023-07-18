@@ -23,6 +23,8 @@
 
 #include "types/val.h"
 
+#include "modelutils.h"
+
 using namespace mu::uicomponents;
 
 static const int INVALID_KEY = -1;
@@ -30,6 +32,8 @@ static const int INVALID_KEY = -1;
 SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
     : QSortFilterProxyModel(parent), m_filters(this), m_sorters(this)
 {
+    ModelUtils::connectRowCountChangedSignal(this, &SortFilterProxyModel::rowCountChanged);
+
     connect(m_filters.notifier(), &QmlListPropertyNotifier::appended, this, [this](int index) {
         connect(m_filters.at(index), &FilterValue::dataChanged, this, [this]() {
             if (sourceModel()) {

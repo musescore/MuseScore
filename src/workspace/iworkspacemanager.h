@@ -22,7 +22,7 @@
 #ifndef MU_WORKSPACE_IWORKSPACEMANAGER_H
 #define MU_WORKSPACE_IWORKSPACEMANAGER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "iworkspace.h"
 #include "types/retval.h"

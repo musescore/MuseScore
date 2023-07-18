@@ -23,7 +23,7 @@
 #ifndef MU_PLAYBACK_ISOUNDPROFILESREPOSITORY_H
 #define MU_PLAYBACK_ISOUNDPROFILESREPOSITORY_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "../playbacktypes.h"
 

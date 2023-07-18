@@ -48,11 +48,13 @@ DiagnosticAccessibleModel::~DiagnosticAccessibleModel()
 
 void DiagnosticAccessibleModel::init()
 {
+#ifdef MUE_BUILD_ACCESSIBILITY_MODULE
     AccessibilityController* accessController = dynamic_cast<AccessibilityController*>(accessibilityController().get());
     AccessibilityController::Item rootItem = accessController->findItem(accessController);
     m_accessibleRootObject = rootItem.object;
 
     accessController->eventSent().onReceive(this, [this](QAccessibleEvent* ev) { onAccessibleEvent(ev); });
+#endif
 }
 
 static void debug_dumpItem(QAccessibleInterface* item, QTextStream& stream, QString& level)
@@ -84,6 +86,7 @@ static void debug_dumpItem(QAccessibleInterface* item, QTextStream& stream, QStr
     level.chop(2);
 }
 
+#ifdef MUE_BUILD_ACCESSIBILITY_MODULE
 static void debug_dumpTree(QAccessibleInterface* item)
 {
     QString str;
@@ -97,12 +100,16 @@ static void debug_dumpTree(QAccessibleInterface* item)
     std::cout << str.toStdString() << '\n';
 }
 
+#endif
+
 void DiagnosticAccessibleModel::dumpTree()
 {
+#ifdef MUE_BUILD_ACCESSIBILITY_MODULE
     AccessibilityController* accessController = dynamic_cast<AccessibilityController*>(accessibilityController().get());
     AccessibilityController::Item rootItem = accessController->findItem(accessController);
 
     debug_dumpTree(rootItem.iface);
+#endif
 }
 
 QModelIndex DiagnosticAccessibleModel::index(int row, int column, const QModelIndex& parent) const

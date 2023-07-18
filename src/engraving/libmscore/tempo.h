@@ -31,8 +31,6 @@
 #include "types/types.h"
 
 namespace mu::engraving {
-class XmlWriter;
-
 enum class TempoType : char {
     INVALID = 0x0, PAUSE = 0x1, FIX = 0x2, RAMP = 0x4
 };

@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::languages {
-class LanguagesStubModule : public modularity::IModuleSetup
+class LanguagesModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

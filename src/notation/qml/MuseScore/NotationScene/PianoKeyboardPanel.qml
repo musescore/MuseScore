@@ -21,13 +21,22 @@
  */
 import QtQuick 2.15
 
-import MuseScore.NotationScene 1.0
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.NotationScene 1.0
 
 Item {
     id: root
 
     property alias contextMenuModel: contextMenuModel
+
+    property NavigationSection navigationSection: null
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "PianoKeyboardSection"
+        section: root.navigationSection
+        direction: NavigationPanel.Vertical
+        enabled: root.enabled && root.visible
+    }
 
     PianoKeyboardPanelContextMenuModel {
         id: contextMenuModel

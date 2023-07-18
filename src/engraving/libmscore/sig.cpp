@@ -21,7 +21,6 @@
  */
 
 #include "sig.h"
-#include "rw/xml.h"
 
 #include "log.h"
 
@@ -34,8 +33,8 @@ namespace mu::engraving {
 
 int ticks_beat(int n)
 {
-    int m = (Constants::division * 4) / n;
-    if ((Constants::division* 4) % n) {
+    int m = (Constants::DIVISION * 4) / n;
+    if ((Constants::DIVISION* 4) % n) {
         ASSERT_X(String(u"Mscore: ticks_beat(): bad divisor %1").arg(n));
     }
     return m;
@@ -47,7 +46,7 @@ int ticks_beat(int n)
 
 static int ticks_measure(const Fraction& f)
 {
-    return (Constants::division * 4 * f.numerator()) / f.denominator();
+    return (Constants::DIVISION * 4 * f.numerator()) / f.denominator();
 }
 
 //---------------------------------------------------------
@@ -389,87 +388,6 @@ int TimeSigMap::bar2tick(int bar, int beat) const
 }
 
 //---------------------------------------------------------
-//   TimeSigMap::write
-//---------------------------------------------------------
-
-void TimeSigMap::write(XmlWriter& xml) const
-{
-    xml.startElement("siglist");
-    for (auto i = begin(); i != end(); ++i) {
-        i->second.write(xml, i->first);
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   TimeSigMap::read
-//---------------------------------------------------------
-
-void TimeSigMap::read(XmlReader& e, int fileDivision)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "sig") {
-            SigEvent t;
-            int tick = t.read(e, fileDivision);
-            (*this)[tick] = t;
-        } else {
-            e.unknown();
-        }
-    }
-    normalize();
-}
-
-//---------------------------------------------------------
-//   SigEvent::write
-//---------------------------------------------------------
-
-void SigEvent::write(XmlWriter& xml, int tick) const
-{
-    xml.startElement("sig", { { "tick", tick } });
-    xml.tag("nom",   _timesig.numerator());
-    xml.tag("denom", _timesig.denominator());
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   SigEvent::read
-//---------------------------------------------------------
-
-int SigEvent::read(XmlReader& e, int fileDivision)
-{
-    int tick  = e.intAttribute("tick", 0);
-    tick      = tick * Constants::division / fileDivision;
-
-    int numerator = 1;
-    int denominator = 1;
-    int denominator2 = -1;
-    int numerator2   = -1;
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "nom") {
-            numerator = e.readInt();
-        } else if (tag == "denom") {
-            denominator = e.readInt();
-        } else if (tag == "nom2") {
-            numerator2 = e.readInt();
-        } else if (tag == "denom2") {
-            denominator2 = e.readInt();
-        } else {
-            e.unknown();
-        }
-    }
-    if ((numerator2 == -1) || (denominator2 == -1)) {
-        numerator2   = numerator;
-        denominator2 = denominator;
-    }
-    _timesig = TimeSigFrac(numerator, denominator);
-    _nominal = TimeSigFrac(numerator2, denominator2);
-    return tick;
-}
-
-//---------------------------------------------------------
 //   ticksPerMeasure
 //---------------------------------------------------------
 
@@ -578,6 +496,6 @@ void TimeSigMap::dump() const
 
 int TimeSigFrac::dUnitTicks() const
 {
-    return (4 * Constants::division) / denominator();
+    return (4 * Constants::DIVISION) / denominator();
 }
 }

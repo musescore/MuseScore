@@ -26,11 +26,13 @@
 #include "types/commontypes.h"
 #include "types/texttypes.h"
 
+#include "engraving/libmscore/dynamic.h"
 #include "engraving/libmscore/textbase.h"
 #include "engraving/types/typesconv.h"
 
 #include "translation.h"
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;
@@ -53,6 +55,7 @@ void TextSettingsModel::createProperties()
     m_fontFamily = buildPropertyItem(mu::engraving::Pid::FONT_FACE);
     m_fontStyle = buildPropertyItem(mu::engraving::Pid::FONT_STYLE);
     m_fontSize = buildPropertyItem(mu::engraving::Pid::FONT_SIZE);
+    m_textLineSpacing = buildPropertyItem(mu::engraving::Pid::TEXT_LINE_SPACING);
 
     m_horizontalAlignment = buildPropertyItem(mu::engraving::Pid::ALIGN, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QVariantList({ newValue.toInt(), m_verticalAlignment->value().toInt() }));
@@ -110,11 +113,13 @@ void TextSettingsModel::loadProperties()
     m_fontStyle->setIsEnabled(true);
 
     loadPropertyItem(m_fontSize, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toInt() == mu::engraving::TextBase::UNDEFINED_FONT_SIZE
-               ? QVariant() : elementPropertyValue.toInt();
+        return RealIsEqual(elementPropertyValue.toDouble(), mu::engraving::TextBase::UNDEFINED_FONT_SIZE)
+               ? QVariant() : elementPropertyValue.toDouble();
     });
 
     m_fontSize->setIsEnabled(true);
+
+    loadPropertyItem(m_textLineSpacing, formatDoubleFunc);
 
     loadPropertyItem(m_horizontalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
         QVariantList list = elementPropertyValue.toList();
@@ -145,6 +150,8 @@ void TextSettingsModel::loadProperties()
 
     updateFramePropertiesAvailability();
     updateStaffPropertiesAvailability();
+    updateIsDynamicSpecificSettings();
+    updateIsHorizontalAlignmentAvailable();
 }
 
 void TextSettingsModel::resetProperties()
@@ -152,6 +159,7 @@ void TextSettingsModel::resetProperties()
     m_fontFamily->resetToDefault();
     m_fontStyle->resetToDefault();
     m_fontSize->resetToDefault();
+    m_textLineSpacing->resetToDefault();
     m_isSizeSpatiumDependent->resetToDefault();
 
     m_frameType->resetToDefault();
@@ -166,7 +174,7 @@ void TextSettingsModel::resetProperties()
     m_textScriptAlignment->resetToDefault();
 }
 
-void TextSettingsModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet& changedStyleIds)
+void TextSettingsModel::onNotationChanged(const PropertyIdSet& changedProperyIds, const StyleIdSet& changedStyleIds)
 {
     for (Sid s : {
         Sid::user1Name,
@@ -188,6 +196,12 @@ void TextSettingsModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet
             return;
         }
     }
+
+    if (mu::contains(changedProperyIds, Pid::PLACEMENT)) {
+        loadPropertyItem(m_textPlacement);
+    }
+
+    updateIsHorizontalAlignmentAvailable();
 }
 
 void TextSettingsModel::insertSpecialCharacters()
@@ -213,6 +227,11 @@ PropertyItem* TextSettingsModel::fontStyle() const
 PropertyItem* TextSettingsModel::fontSize() const
 {
     return m_fontSize;
+}
+
+PropertyItem* TextSettingsModel::textLineSpacing() const
+{
+    return m_textLineSpacing;
 }
 
 PropertyItem* TextSettingsModel::horizontalAlignment() const
@@ -307,6 +326,16 @@ bool TextSettingsModel::isSpecialCharactersInsertionAvailable() const
     return m_isSpecialCharactersInsertionAvailable;
 }
 
+bool TextSettingsModel::isDynamicSpecificSettings() const
+{
+    return m_isDynamicSpecificSettings;
+}
+
+bool TextSettingsModel::isHorizontalAlignmentAvailable() const
+{
+    return m_isHorizontalAlignmentAvailable;
+}
+
 void TextSettingsModel::setAreStaffTextPropertiesAvailable(bool areStaffTextPropertiesAvailable)
 {
     if (m_areStaffTextPropertiesAvailable == areStaffTextPropertiesAvailable) {
@@ -325,6 +354,26 @@ void TextSettingsModel::setIsSpecialCharactersInsertionAvailable(bool isSpecialC
 
     m_isSpecialCharactersInsertionAvailable = isSpecialCharactersInsertionAvailable;
     emit isSpecialCharactersInsertionAvailableChanged(m_isSpecialCharactersInsertionAvailable);
+}
+
+void TextSettingsModel::setIsDynamicSpecificSettings(bool isOnlyDynamics)
+{
+    if (isOnlyDynamics == m_isDynamicSpecificSettings) {
+        return;
+    }
+
+    m_isDynamicSpecificSettings = isOnlyDynamics;
+    emit isDynamicSpecificSettingsChanged(m_isDynamicSpecificSettings);
+}
+
+void TextSettingsModel::setIsHorizontalAlignmentAvailable(bool isHorizontalAlignmentAvailable)
+{
+    if (isHorizontalAlignmentAvailable == m_isHorizontalAlignmentAvailable) {
+        return;
+    }
+
+    m_isHorizontalAlignmentAvailable = isHorizontalAlignmentAvailable;
+    emit isHorizontalAlignmentAvailableChanged(m_isHorizontalAlignmentAvailable);
 }
 
 void TextSettingsModel::updateFramePropertiesAvailability()
@@ -346,6 +395,31 @@ void TextSettingsModel::updateStaffPropertiesAvailability()
                        == TextTypes::TextType::TEXT_TYPE_STAFF;
 
     setAreStaffTextPropertiesAvailable(isAvailable && !m_textType->isUndefined());
+}
+
+void TextSettingsModel::updateIsDynamicSpecificSettings()
+{
+    bool isOnlyDynamic = true;
+    for (EngravingItem* item : m_elementList) {
+        if (!item->isDynamic()) {
+            isOnlyDynamic = false;
+            break;
+        }
+    }
+    setIsDynamicSpecificSettings(isOnlyDynamic);
+}
+
+void TextSettingsModel::updateIsHorizontalAlignmentAvailable()
+{
+    bool available = false;
+    for (EngravingItem* item : m_elementList) {
+        bool isPureAlignedDynamic = item->isDynamic() && toDynamic(item)->centerOnNotehead();
+        if (!isPureAlignedDynamic) {
+            available = true;
+            break;
+        }
+    }
+    setIsHorizontalAlignmentAvailable(available);
 }
 
 bool TextSettingsModel::isTextEditingStarted() const

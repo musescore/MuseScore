@@ -44,11 +44,6 @@ using namespace mu::workspace;
 using namespace mu::modularity;
 using namespace mu::ui;
 
-static std::shared_ptr<WorkspaceManager> s_manager = std::make_shared<WorkspaceManager>();
-static std::shared_ptr<WorkspaceConfiguration> s_configuration = std::make_shared<WorkspaceConfiguration>();
-static std::shared_ptr<WorkspaceActionController> s_actionController = std::make_shared<WorkspaceActionController>();
-static std::shared_ptr<WorkspacesDataProvider> s_provider= std::make_shared<WorkspacesDataProvider>();
-
 static void workspace_init_qrc()
 {
     Q_INIT_RESOURCE(workspace);
@@ -61,16 +56,21 @@ std::string WorkspaceModule::moduleName() const
 
 void WorkspaceModule::registerExports()
 {
-    ioc()->registerExport<IWorkspaceConfiguration>(moduleName(), s_configuration);
-    ioc()->registerExport<IWorkspaceManager>(moduleName(), s_manager);
-    ioc()->registerExport<IWorkspacesDataProvider>(moduleName(), s_provider);
+    m_manager = std::make_shared<WorkspaceManager>();
+    m_configuration = std::make_shared<WorkspaceConfiguration>();
+    m_actionController = std::make_shared<WorkspaceActionController>();
+    m_provider= std::make_shared<WorkspacesDataProvider>();
+
+    ioc()->registerExport<IWorkspaceConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<IWorkspaceManager>(moduleName(), m_manager);
+    ioc()->registerExport<IWorkspacesDataProvider>(moduleName(), m_provider);
 }
 
 void WorkspaceModule::resolveImports()
 {
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(std::make_shared<WorkspaceUiActions>(s_actionController));
+        ar->reg(std::make_shared<WorkspaceUiActions>(m_actionController));
     }
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
@@ -95,18 +95,18 @@ void WorkspaceModule::registerUiTypes()
 
 void WorkspaceModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::Converter == mode) {
+    if (mode != framework::IApplication::RunMode::GuiApp) {
         return;
     }
 
-    s_configuration->init();
-    s_manager->init();
-    s_provider->init();
-    s_actionController->init();
+    m_configuration->init();
+    m_manager->init();
+    m_provider->init();
+    m_actionController->init();
 
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        io::paths_t paths = s_configuration->workspacePaths();
+        io::paths_t paths = m_configuration->workspacePaths();
         for (const io::path_t& p : paths) {
             pr->reg("workspace", p);
         }
@@ -115,5 +115,5 @@ void WorkspaceModule::onInit(const framework::IApplication::RunMode& mode)
 
 void WorkspaceModule::onDeinit()
 {
-    s_manager->deinit();
+    m_manager->deinit();
 }

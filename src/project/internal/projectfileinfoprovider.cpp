@@ -48,6 +48,11 @@ io::path_t ProjectFileInfoProvider::absoluteDirPath() const
     return io::absoluteDirpath(path());
 }
 
+String ProjectFileInfoProvider::displayName() const
+{
+    return m_project->displayName();
+}
+
 DateTime ProjectFileInfoProvider::birthTime() const
 {
     return filesystem()->birthTime(path());

@@ -18,42 +18,48 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#add_subdirectory(global)
-add_subdirectory(draw)
-add_subdirectory(ui)
-add_subdirectory(uicomponents)
-add_subdirectory(fonts)
+if (MUE_BUILD_ACCESSIBILITY_MODULE)
+    add_subdirectory(accessibility)
+endif()
+
 add_subdirectory(actions)
-add_subdirectory(accessibility)
 
-if (BUILD_SHORTCUTS_MODULE)
-    add_subdirectory(shortcuts)
-endif (BUILD_SHORTCUTS_MODULE)
-
-if (BUILD_NETWORK_MODULE)
-    add_subdirectory(network)
-endif (BUILD_NETWORK_MODULE)
-
-if (BUILD_AUDIO_MODULE)
+if (MUE_BUILD_AUDIO_MODULE)
     add_subdirectory(audio)
-endif (BUILD_AUDIO_MODULE)
+endif ()
 
-if (BUILD_MUSESAMPLER_MODULE)
+add_subdirectory(draw)
+add_subdirectory(fonts)
+
+if (MUE_BUILD_MIDI_MODULE)
+    add_subdirectory(midi)
+endif()
+
+if (MUE_BUILD_MPE_MODULE)
+    add_subdirectory(mpe)
+endif()
+
+if (MUE_BUILD_MUSESAMPLER_MODULE)
     add_subdirectory(musesampler)
-endif(BUILD_MUSESAMPLER_MODULE)
+endif()
 
-if (BUILD_VST_MODULE)
+if (MUE_BUILD_UI_MODULE)
+    add_subdirectory(ui)
+    add_subdirectory(uicomponents)
+endif()
+
+if (MUE_BUILD_NETWORK_MODULE)
+    add_subdirectory(network)
+endif()
+
+if (MUE_BUILD_SHORTCUTS_MODULE)
+    add_subdirectory(shortcuts)
+endif()
+
+
+if (MUE_BUILD_VST_MODULE)
     add_subdirectory(vst)
-endif(BUILD_VST_MODULE)
+endif()
 
-add_subdirectory(midi)
-add_subdirectory(mpe)
 
-if (BUILD_UNIT_TESTS)
-    add_subdirectory(global/tests)
-    add_subdirectory(draw/tests)
-    add_subdirectory(mpe/tests)
-    add_subdirectory(ui/tests)
-    add_subdirectory(accessibility/tests)
-endif(BUILD_UNIT_TESTS)
 

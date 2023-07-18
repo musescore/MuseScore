@@ -24,13 +24,14 @@
 
 #include "libmscore/fret.h"
 #include "libmscore/instrument.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
+#include "libmscore/measurerepeat.h"
 #include "libmscore/part.h"
+#include "libmscore/staff.h"
 #include "libmscore/repeatlist.h"
-#include "libmscore/score.h"
 #include "libmscore/segment.h"
 #include "libmscore/tempo.h"
-#include "libmscore/measurerepeat.h"
 
 #include "log.h"
 
@@ -316,8 +317,8 @@ void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
     trackData.dynamicLevelMap = ctx.dynamicLevelMap(m_score);
 }
 
-void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& changedStaffIdSet,
-                                   ChangedTrackIdSet* trackChanges)
+void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& staffIdxSet,
+                                   bool isFirstSegmentOfMeasure, ChangedTrackIdSet* trackChanges)
 {
     int segmentStartTick = segment->tick().ticks();
 
@@ -332,7 +333,7 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
         }
 
         staff_idx_t staffIdx = item->staffIdx();
-        if (changedStaffIdSet.find(staffIdx) == changedStaffIdSet.cend()) {
+        if (staffIdxSet.find(staffIdx) == staffIdxSet.cend()) {
             continue;
         }
 
@@ -358,8 +359,7 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
         }
 
         staff_idx_t staffIdx = item->staffIdx();
-
-        if (changedStaffIdSet.find(staffIdx) == changedStaffIdSet.cend()) {
+        if (staffIdxSet.find(staffIdx) == staffIdxSet.cend()) {
             continue;
         }
 
@@ -369,21 +369,23 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
             continue;
         }
 
-        if (item->type() == ElementType::MEASURE_REPEAT) {
-            const MeasureRepeat* measureRepeat = toMeasureRepeat(item);
-            const Measure* currentMeasure = measureRepeat->measure();
-            const Measure* referringMeasure = measureRepeat->referringMeasure();
+        if (isFirstSegmentOfMeasure) {
+            if (item->isMeasureRepeat()) {
+                const MeasureRepeat* measureRepeat = toMeasureRepeat(item);
+                const Measure* currentMeasure = measureRepeat->measure();
 
-            if (!referringMeasure || !currentMeasure) {
+                processMeasureRepeat(tickPositionOffset, measureRepeat, currentMeasure, staffIdx, trackChanges);
+
                 continue;
-            }
+            } else {
+                const Measure* currentMeasure = segment->measure();
 
-            int currentMeasureTick = measureRepeat->measure()->tick().ticks();
-            int referringMeasureTick = referringMeasure->tick().ticks();
-            int repeatPositionTickOffset = currentMeasureTick - referringMeasureTick;
+                if (currentMeasure->measureRepeatCount(staffIdx) > 0) {
+                    const MeasureRepeat* measureRepeat = currentMeasure->measureRepeatElement(staffIdx);
 
-            for (Segment* seg = referringMeasure->first(); seg; seg = seg->next()) {
-                processSegment(tickPositionOffset + repeatPositionTickOffset, seg, { staffIdx }, trackChanges);
+                    processMeasureRepeat(tickPositionOffset, measureRepeat, currentMeasure, staffIdx, trackChanges);
+                    continue;
+                }
             }
         }
 
@@ -403,12 +405,42 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
     }
 }
 
+void PlaybackModel::processMeasureRepeat(const int tickPositionOffset, const MeasureRepeat* measureRepeat, const Measure* currentMeasure,
+                                         const staff_idx_t staffIdx, ChangedTrackIdSet* trackChanges)
+{
+    if (!measureRepeat || !currentMeasure) {
+        return;
+    }
+
+    const Measure* referringMeasure = measureRepeat->referringMeasure(currentMeasure);
+    if (!referringMeasure) {
+        return;
+    }
+
+    int currentMeasureTick = currentMeasure->tick().ticks();
+    int referringMeasureTick = referringMeasure->tick().ticks();
+    int repeatPositionTickOffset = currentMeasureTick - referringMeasureTick;
+
+    bool isFirstSegmentOfRepeatedMeasure = true;
+
+    for (const Segment* seg = referringMeasure->first(); seg; seg = seg->next()) {
+        if (!seg->isChordRestType()) {
+            continue;
+        }
+
+        processSegment(tickPositionOffset + repeatPositionTickOffset, seg, { staffIdx }, isFirstSegmentOfRepeatedMeasure, trackChanges);
+        isFirstSegmentOfRepeatedMeasure = false;
+    }
+}
+
 void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                                  ChangedTrackIdSet* trackChanges)
 {
     TRACEFUNC;
 
-    std::set<staff_idx_t> changedStaffIdSet = m_score->staffIdsFromRange(trackFrom, trackTo);
+    std::set<staff_idx_t> staffToProcessIdxSet = m_score->staffIdxSetFromRange(trackFrom, trackTo, [](const Staff& staff) {
+        return staff.isPrimaryStaff(); // skip linked staves
+    });
 
     for (const RepeatSegment* repeatSegment : repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
@@ -427,6 +459,8 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                 continue;
             }
 
+            bool isFirstSegmentOfMeasure = true;
+
             for (Segment* segment = measure->first(); segment; segment = segment->next()) {
                 if (!segment->isChordRestType()) {
                     continue;
@@ -439,7 +473,8 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                     continue;
                 }
 
-                processSegment(tickPositionOffset, segment, changedStaffIdSet, trackChanges);
+                processSegment(tickPositionOffset, segment, staffToProcessIdxSet, isFirstSegmentOfMeasure, trackChanges);
+                isFirstSegmentOfMeasure = false;
             }
 
             m_renderer.renderMetronome(m_score, measureStartTick, measureEndTick, tickPositionOffset,
@@ -453,6 +488,7 @@ bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) con
 {
     static const std::unordered_set<ElementType> REQUIRED_TYPES = {
         ElementType::PLAYTECH_ANNOTATION,
+        ElementType::CAPO,
         ElementType::DYNAMIC,
         ElementType::HAIRPIN,
         ElementType::HAIRPIN_SEGMENT,
@@ -476,13 +512,15 @@ bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) con
             return false;
         }
 
-        const Measure* nextToLastMeasure = measureTo->nextMeasure();
+        const Measure* nextMeasure = measureTo->nextMeasure();
 
-        if (!nextToLastMeasure) {
-            return false;
+        for (int i = 0; i < MeasureRepeat::MAX_NUM_MEASURES && nextMeasure; ++i) {
+            if (nextMeasure->containsMeasureRepeat(changesRange.staffIdxFrom, changesRange.staffIdxTo)) {
+                return true;
+            }
+
+            nextMeasure = nextMeasure->nextMeasure();
         }
-
-        return nextToLastMeasure->containsMeasureRepeat(changesRange.staffIdxFrom, changesRange.staffIdxTo);
     }
 
     return false;
@@ -605,7 +643,7 @@ void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, con
         return;
     }
 
-    for (const RepeatSegment* repeatSegment : m_score->repeatList()) {
+    for (const RepeatSegment* repeatSegment : repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
         int repeatStartTick = repeatSegment->tick;
         int repeatEndTick = repeatStartTick + repeatSegment->len();
@@ -722,6 +760,8 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChangesRa
 
 const RepeatList& PlaybackModel::repeatList() const
 {
+    m_score->masterScore()->setExpandRepeats(m_expandRepeats);
+
     return m_score->repeatList();
 }
 

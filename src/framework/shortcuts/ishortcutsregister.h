@@ -24,7 +24,7 @@
 
 #include <list>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "shortcutstypes.h"
 #include "async/notification.h"
 #include "types/ret.h"

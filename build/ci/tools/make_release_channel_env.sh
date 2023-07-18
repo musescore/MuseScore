@@ -19,21 +19,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ARTIFACTS_DIR=build.artifacts
-MUSESCORE_BUILD_CONFIG=dev
+MUSESCORE_BUILD_MODE=dev
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        -c|--build_config) MUSESCORE_BUILD_CONFIG="$2"; shift ;;
+        -c|--build-mode) MUSESCORE_BUILD_MODE="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
 done
 
-if [ -z "$MUSESCORE_BUILD_CONFIG" ]; then echo "error: not set MUSESCORE_BUILD_CONFIG"; exit 1; fi
+if [ -z "$MUSESCORE_BUILD_MODE" ]; then echo "error: not set MUSESCORE_BUILD_MODE"; exit 1; fi
 
-echo "MUSESCORE_BUILD_CONFIG: $MUSESCORE_BUILD_CONFIG" 
+echo "MUSESCORE_BUILD_MODE: $MUSESCORE_BUILD_MODE"
 
-export MSCORE_RELEASE_CHANNEL=$(cmake -DMUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG -P config.cmake | sed -n -e 's/^.*MSCORE_RELEASE_CHANNEL  *//p')
+export MUSESCORE_RELEASE_CHANNEL=$(cmake -DMUSESCORE_BUILD_MODE=$MUSESCORE_BUILD_MODE -P version.cmake | sed -n -e 's/^.*MUSESCORE_RELEASE_CHANNEL  *//p')
 
-echo ${MSCORE_RELEASE_CHANNEL} > $ARTIFACTS_DIR/env/release_channel.env
+echo ${MUSESCORE_RELEASE_CHANNEL} > $ARTIFACTS_DIR/env/release_channel.env
 cat $ARTIFACTS_DIR/env/release_channel.env

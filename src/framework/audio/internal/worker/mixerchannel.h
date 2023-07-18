@@ -34,10 +34,13 @@
 namespace mu::audio {
 class MixerChannel : public ITrackAudioOutput, public async::Asyncable
 {
-    INJECT(audio, fx::IFxResolver, fxResolver)
+    INJECT(fx::IFxResolver, fxResolver)
 
 public:
     explicit MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate);
+    explicit MixerChannel(const TrackId trackId, const unsigned int sampleRate, unsigned int audioChannelsCount);
+
+    TrackId trackId() const;
 
     const AudioOutputParams& outputParams() const override;
     void applyOutputParams(const AudioOutputParams& requiredParams) override;
@@ -60,6 +63,7 @@ private:
     TrackId m_trackId = -1;
 
     unsigned int m_sampleRate = 0;
+    unsigned int m_audioChannelsCount = 0;
     AudioOutputParams m_params;
 
     IAudioSourcePtr m_audioSource = nullptr;

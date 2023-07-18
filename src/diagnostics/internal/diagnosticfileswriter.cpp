@@ -34,9 +34,8 @@ mu::Ret DiagnosticFilesWriter::writeDiagnosticFiles(const path_t& destinationPat
 {
     TRACEFUNC;
 
-    static const std::vector<std::string> DIRS_TO_WRITE {
+    const std::vector<std::string> DIRS_TO_WRITE {
         "logs",
-        "vst",
         "plugins",
         "workspaces",
     };
@@ -61,6 +60,7 @@ mu::Ret DiagnosticFilesWriter::writeDiagnosticFiles(const path_t& destinationPat
     const std::vector<std::string> FILES_TO_WRITE {
         "shortcuts.xml",
         "midi_mappings.xml",
+        "known_audio_plugins.json",
     };
 
     for (const std::string& fileName : FILES_TO_WRITE) {

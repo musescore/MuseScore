@@ -34,7 +34,7 @@ class TimelineView : public uicomponents::WidgetView, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(context::IGlobalContext, globalContext)
 
 public:
     explicit TimelineView(QQuickItem* parent = nullptr);

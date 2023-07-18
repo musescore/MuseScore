@@ -35,7 +35,7 @@
 namespace mu::vst {
 class VstPluginsRegister : public IVstPluginsRegister, public async::Asyncable
 {
-    INJECT_STATIC(vst, audio::IAudioThreadSecurer, threadSecurer)
+    INJECT_STATIC(audio::IAudioThreadSecurer, threadSecurer)
 public:
     void registerInstrPlugin(const audio::TrackId trackId, VstPluginPtr pluginPtr) override;
     void registerFxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId, const audio::AudioFxChainOrder chainOrder,

@@ -39,7 +39,7 @@ class TransposeDialog : public QDialog, Ui::TransposeDialogBase
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, context)
+    INJECT(context::IGlobalContext, context)
 
 public:
     TransposeDialog(QWidget* parent = 0);

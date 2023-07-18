@@ -68,7 +68,7 @@ void Autobot::init()
 void Autobot::affectOnServices()
 {
     IApplication::RunMode runMode = application()->runMode();
-    if (runMode == IApplication::RunMode::Editor) {
+    if (runMode == IApplication::RunMode::GuiApp) {
         //! NOTE Move focus to main window
         mainWindow()->qWindow()->requestActivate();
 
@@ -84,7 +84,7 @@ void Autobot::affectOnServices()
         //! NOTE Change Interactive implementation
         auto realInteractive = modularity::ioc()->resolve<IInteractive>("autobot");
         m_autobotInteractive->setRealInteractive(realInteractive);
-        modularity::ioc()->unregisterExport<IInteractive>("autobot");
+        modularity::ioc()->unregister<IInteractive>("autobot");
         modularity::ioc()->registerExport<IInteractive>("autobot", m_autobotInteractive);
     }
 
@@ -95,12 +95,12 @@ void Autobot::affectOnServices()
 void Autobot::restoreAffectOnServices()
 {
     IApplication::RunMode runMode = application()->runMode();
-    if (runMode == IApplication::RunMode::Editor) {
+    if (runMode == IApplication::RunMode::GuiApp) {
         navigation()->setIsResetOnMousePress(true);
         shortcutsRegister()->reload(false);
 
         auto realInteractive = m_autobotInteractive->realInteractive();
-        modularity::ioc()->unregisterExport<IInteractive>("autobot");
+        modularity::ioc()->unregister<IInteractive>("autobot");
         modularity::ioc()->registerExport<IInteractive>("autobot", realInteractive);
     }
 

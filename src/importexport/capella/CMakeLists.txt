@@ -30,10 +30,15 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/capxml.cpp
     )
 
+add_subdirectory(${THIRDPARTY_DIR}/rtf2html rtf2html)
+
 set(MODULE_LINK
-    rtf2html    # for capella
+    rtf2html
     engraving
     )
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)
 
+if (MUE_BUILD_UNIT_TESTS)
+    add_subdirectory(tests)
+endif()

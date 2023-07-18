@@ -33,7 +33,7 @@ class QColor;
 namespace mu::notation {
 class PlaybackCursor
 {
-    INJECT(notation, INotationConfiguration, configuration)
+    INJECT(INotationConfiguration, configuration)
 
 public:
     PlaybackCursor() = default;

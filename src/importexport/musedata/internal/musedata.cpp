@@ -58,9 +58,14 @@ void MuseData::musicalAttribute(QString s, Part* part)
     QStringList al = s.mid(2).split(" ", Qt::SkipEmptyParts);
     foreach (QString item, al) {
         if (item.startsWith("K:")) {
-            int key = item.midRef(2).toInt();
+            Key key = Key(item.midRef(2).toInt());
             KeySigEvent ke;
-            ke.setKey(Key(key));
+            Interval v = part->instrument(curTick)->transpose();
+            ke.setConcertKey(key);
+            if (!v.isZero() && !score->style().styleB(Sid::concertPitch)) {
+                v.flip();
+                ke.setKey(transposeKey(key, v));
+            }
             for (Staff* staff : part->staves()) {
                 staff->setKey(curTick, ke);
             }
@@ -279,7 +284,7 @@ void MuseData::readNote(Part* part, const QString& s)
     if (pitch > 127) {
         pitch = 127;
     }
-    Fraction ticks = Fraction::fromTicks((s.midRef(5, 3).toInt() * Constants::division + _division / 2) / _division);
+    Fraction ticks = Fraction::fromTicks((s.midRef(5, 3).toInt() * Constants::DIVISION + _division / 2) / _division);
     Fraction tick  = curTick;
     curTick  += ticks;
 
@@ -479,7 +484,7 @@ QString MuseData::diacritical(QString s)
 
 void MuseData::readRest(Part* part, const QString& s)
 {
-    Fraction ticks = Fraction::fromTicks((s.midRef(5, 3).toInt() * Constants::division + _division / 2) / _division);
+    Fraction ticks = Fraction::fromTicks((s.midRef(5, 3).toInt() * Constants::DIVISION + _division / 2) / _division);
 
     Fraction tick  = curTick;
     curTick  += ticks;
@@ -523,7 +528,7 @@ void MuseData::readRest(Part* part, const QString& s)
 
 void MuseData::readBackup(const QString& s)
 {
-    Fraction ticks = Fraction::fromTicks((s.midRef(5, 3).toInt() * Constants::division + _division / 2) / _division);
+    Fraction ticks = Fraction::fromTicks((s.midRef(5, 3).toInt() * Constants::DIVISION + _division / 2) / _division);
     if (s[0] == 'b') {
         curTick  -= ticks;
     } else {

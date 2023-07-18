@@ -31,15 +31,11 @@ namespace mu::engraving {
 class EngravingProject;
 class MscReader;
 class MscWriter;
-class ScoreReader;
-class Read400;
+class MscLoader;
 }
 
 namespace mu::engraving::compat {
 class ScoreAccess;
-class Read114;
-class Read206;
-class Read302;
 class ReadStyleHook;
 }
 
@@ -81,9 +77,9 @@ class MasterScore : public Score
     UndoStack* _undoStack = nullptr;
     TimeSigMap* _sigmap;
     TempoMap* _tempomap;
-    RepeatList* _repeatList;
-    RepeatList* _repeatList2;
-    bool _expandRepeats = MScore::playRepeats;
+    RepeatList* _expandedRepeatList;
+    RepeatList* _nonExpandedRepeatList;
+    bool _expandRepeats = true;
     bool _playlistDirty = true;
     std::vector<Excerpt*> _excerpts;
     std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
@@ -120,16 +116,11 @@ class MasterScore : public Score
 
     friend class EngravingProject;
     friend class compat::ScoreAccess;
-    friend class compat::Read114;
-    friend class compat::Read206;
-    friend class compat::Read302;
-    friend class Read400;
+    friend class read114::Read114;
+    friend class read400::Read400;
 
     MasterScore(std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
     MasterScore(const MStyle&, std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
-
-    bool writeMscz(MscWriter& mscWriter, bool onlySelection = false, bool createThumbnail = true);
-    bool exportPart(MscWriter& mscWriter, Score* partScore);
 
     void initParts(Excerpt*);
 
@@ -155,12 +146,15 @@ public:
     void setPlaylistDirty() override;
     void setPlaylistClean() { _playlistDirty = false; }
 
+    /// Always call this before calling `repeatList()`
+    /// No need to set it back after use, because everyone always calls it before using `repeatList()`
     void setExpandRepeats(bool expandRepeats);
     bool expandRepeats() const { return _expandRepeats; }
+
     void updateRepeatListTempo();
     void updateRepeatList();
     const RepeatList& repeatList() const override;
-    const RepeatList& repeatList2() const override;
+    const RepeatList& repeatList(bool expandRepeats) const override;
 
     std::vector<Excerpt*>& excerpts() { return _excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return _excerpts; }
@@ -232,6 +226,8 @@ public:
     void setAutosaveDirty(bool v);
 
     String name() const override;
+
+    Ret sanityCheck();
 
     void setWidthOfSegmentCell(double val) { m_widthOfSegmentCell = val; }
     double widthOfSegmentCell() const { return m_widthOfSegmentCell; }

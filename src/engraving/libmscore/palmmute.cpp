@@ -22,14 +22,14 @@
 
 #include "palmmute.h"
 
-#include "rw/xml.h"
-
 #include "chordrest.h"
 #include "part.h"
 #include "score.h"
 #include "staff.h"
 #include "stafftype.h"
 #include "system.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -64,24 +64,6 @@ static const ElementStyle palmMuteStyle {
 PalmMuteSegment::PalmMuteSegment(PalmMute* sp, System* parent)
     : TextLineBaseSegment(ElementType::PALM_MUTE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void PalmMuteSegment::layout()
-{
-    const StaffType* stType = staffType();
-
-    _skipDraw = false;
-    if (stType && stType->isHiddenElementOnTab(score(), Sid::palmMuteShowTabCommon, Sid::palmMuteShowTabSimple)) {
-        _skipDraw = true;
-        return;
-    }
-
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
 }
 
 //---------------------------------------------------------
@@ -120,24 +102,6 @@ PalmMute::PalmMute(EngravingItem* parent)
     resetProperty(Pid::CONTINUE_TEXT);
     resetProperty(Pid::END_TEXT_PLACE);
     resetProperty(Pid::END_TEXT);
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void PalmMute::read(XmlReader& e)
-{
-    if (score()->mscVersion() < 301) {
-        e.context()->addSpanner(e.intAttribute("id", -1), this);
-    }
-    while (e.readNextStartElement()) {
-        if (readProperty(e.name(), e, Pid::LINE_WIDTH)) {
-            setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
-        } else if (!TextLineBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -192,27 +156,28 @@ PropertyValue PalmMute::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        return score()->styleV(Sid::palmMuteLineWidth);
+        return style().styleV(Sid::palmMuteLineWidth);
 
     case Pid::ALIGN:
         return Align(AlignH::LEFT, AlignV::BASELINE);
 
     case Pid::LINE_STYLE:
-        return score()->styleV(Sid::palmMuteLineStyle);
+        return style().styleV(Sid::palmMuteLineStyle);
 
     case Pid::LINE_VISIBLE:
         return true;
 
+    case Pid::BEGIN_TEXT_OFFSET:
     case Pid::CONTINUE_TEXT_OFFSET:
     case Pid::END_TEXT_OFFSET:
         return PropertyValue::fromValue(PointF(0, 0));
 
 //TODOws            case Pid::BEGIN_FONT_ITALIC:
-//                  return score()->styleV(Sid::palmMuteFontItalic);
+//                  return style().styleV(Sid::palmMuteFontItalic);
 
     case Pid::BEGIN_TEXT:
     case Pid::CONTINUE_TEXT:
-        return score()->styleV(Sid::palmMuteText);
+        return style().styleV(Sid::palmMuteText);
     case Pid::END_TEXT:
         return "";
 

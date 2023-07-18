@@ -390,6 +390,79 @@ static void fromArr(const JsonArray& arr, std::vector<T>& vals)
     }
 }
 
+static JsonObject toObj(const DrawData::Item& obj)
+{
+    //! NOTE 'a' added to the beginning of some field names for convenient sorting
+
+    JsonObject objObj;
+    objObj["a_name"] = obj.name;
+
+    JsonArray childrenArr;
+    for (const DrawData::Item& ch : obj.chilren) {
+        childrenArr.append(toObj(ch));
+    }
+    objObj["children"] = childrenArr;
+
+    JsonArray datasArr;
+    for (const DrawData::Data& data : obj.datas) {
+        if (data.empty()) {
+            continue;
+        }
+
+        JsonObject dataObj;
+        dataObj["state"] = data.state;
+        if (!data.paths.empty()) {
+            dataObj["paths"] = toArr(data.paths);
+        }
+        if (!data.polygons.empty()) {
+            dataObj["polygons"] = toArr(data.polygons);
+        }
+        if (!data.texts.empty()) {
+            dataObj["texts"] = toArr(data.texts);
+        }
+        if (!data.pixmaps.empty()) {
+            dataObj["pixmaps"] = toArr(data.pixmaps);
+        }
+
+        datasArr.append(dataObj);
+    }
+    objObj["datas"] = datasArr;
+
+    return objObj;
+}
+
+static void fromObj(const JsonObject& objObj, DrawData::Item& obj)
+{
+    obj.name = objObj.value("a_name").toString().toStdString();
+    JsonArray childrenArr = objObj["children"].toArray();
+    for (size_t j = 0; j < childrenArr.size(); ++j) {
+        DrawData::Item& ch = obj.chilren.emplace_back();
+        const JsonObject childObj = childrenArr.at(j).toObject();
+        fromObj(childObj, ch);
+    }
+
+    JsonArray datasArr = objObj["datas"].toArray();
+    for (size_t j = 0; j < datasArr.size(); ++j) {
+        const JsonObject dataObj = datasArr.at(j).toObject();
+        DrawData::Data data;
+        data.state = dataObj["state"].toInt();
+        if (dataObj.contains("paths")) {
+            fromArr(dataObj.value("paths").toArray(), data.paths);
+        }
+        if (dataObj.contains("polygons")) {
+            fromArr(dataObj.value("polygons").toArray(), data.polygons);
+        }
+        if (dataObj.contains("texts")) {
+            fromArr(dataObj.value("texts").toArray(), data.texts);
+        }
+        if (dataObj.contains("pixmaps")) {
+            fromArr(dataObj.value("pixmaps").toArray(), data.pixmaps);
+        }
+
+        obj.datas.push_back(std::move(data));
+    }
+}
+
 void DrawDataJson::toJson(JsonObject& root, const DrawDataPtr& dd)
 {
     //! NOTE 'a' added to the beginning of some field names for convenient sorting
@@ -397,65 +470,19 @@ void DrawDataJson::toJson(JsonObject& root, const DrawDataPtr& dd)
     root["a_name"] = dd->name;
     root["a_viewport"] = toArr(dd->viewport);
 
-    std::vector<DrawData::State> states;
-    // collect states
-    {
-        for (const DrawData::Object& obj : dd->objects) {
-            for (const DrawData::Data& data : obj.datas) {
-                if (mu::contains(states, data.state)) {
-                    continue;
-                }
-                states.push_back(data.state);
-            }
-        }
-    }
-
-    JsonArray objsArr;
-    for (const DrawData::Object& obj : dd->objects) {
-        JsonObject objObj;
-        objObj["a_name"] = obj.name;
-        objObj["a_pagePos"] = toArr(obj.pagePos);
-        JsonArray datasArr;
-        for (const DrawData::Data& data : obj.datas) {
-            if (data.empty()) {
-                continue;
-            }
-
-            JsonObject dataObj;
-            dataObj["state"] = static_cast<int>(mu::indexOf(states, data.state));
-            if (!data.paths.empty()) {
-                dataObj["paths"] = toArr(data.paths);
-            }
-            if (!data.polygons.empty()) {
-                dataObj["polygons"] = toArr(data.polygons);
-            }
-            if (!data.texts.empty()) {
-                dataObj["texts"] = toArr(data.texts);
-            }
-            if (!data.pixmaps.empty()) {
-                dataObj["pixmaps"] = toArr(data.pixmaps);
-            }
-
-            datasArr.append(dataObj);
-        }
-        objObj["datas"] = datasArr;
-
-        objsArr.append(objObj);
-    }
-
-    root["objects"] = objsArr;
+    // item
+    root["item"] = toObj(dd->item);
 
     // states
     JsonObject stateObj;
-    for (size_t i = 0; i < states.size(); ++i) {
-        stateObj[std::to_string(i)] = toObj(states.at(i));
+    for (auto it = dd->states.cbegin(); it != dd->states.cend(); ++it) {
+        stateObj[std::to_string(it->first)] = toObj(it->second);
     }
     root["states"] = stateObj;
 }
 
 void DrawDataJson::fromJson(const JsonObject& root, DrawDataPtr& dd)
 {
-    std::map<int, DrawData::State> states;
     // read states
     {
         const JsonObject obj = root.value("states").toObject();
@@ -463,42 +490,15 @@ void DrawDataJson::fromJson(const JsonObject& root, DrawDataPtr& dd)
         for (const std::string& k : keys) {
             DrawData::State state;
             fromObj(obj.value(k).toObject(), state);
-            states[std::stoi(k)] = state;
+            dd->states[std::stoi(k)] = state;
         }
     }
 
     dd->name = root.value("a_name").toStdString();
     fromArr(root.value("a_viewport").toArray(), dd->viewport);
 
-    JsonArray objsArr = root.value("objects").toArray();
-    for (size_t i = 0; i < objsArr.size(); ++i) {
-        const JsonObject objObj = objsArr.at(i).toObject();
-        DrawData::Object obj;
-        obj.name = objObj.value("a_name").toString().toStdString();
-        fromArr(objObj.value("a_pagePos").toArray(), obj.pagePos);
-        JsonArray datasArr = objObj["datas"].toArray();
-        for (size_t j = 0; j < datasArr.size(); ++j) {
-            const JsonObject dataObj = datasArr.at(j).toObject();
-            DrawData::Data data;
-            data.state = states.at(dataObj["state"].toInt());
-            if (dataObj.contains("paths")) {
-                fromArr(dataObj.value("paths").toArray(), data.paths);
-            }
-            if (dataObj.contains("polygons")) {
-                fromArr(dataObj.value("polygons").toArray(), data.polygons);
-            }
-            if (dataObj.contains("texts")) {
-                fromArr(dataObj.value("texts").toArray(), data.texts);
-            }
-            if (dataObj.contains("pixmaps")) {
-                fromArr(dataObj.value("pixmaps").toArray(), data.pixmaps);
-            }
-
-            obj.datas.push_back(std::move(data));
-        }
-
-        dd->objects.push_back(std::move(obj));
-    }
+    JsonObject itemObj = root.value("item").toObject();
+    fromObj(itemObj, dd->item);
 }
 
 ByteArray DrawDataJson::toJson(const DrawDataPtr& data, bool prettify)

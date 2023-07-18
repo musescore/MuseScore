@@ -36,12 +36,11 @@
 namespace mu::ui {
 class UiConfiguration : public IUiConfiguration, public async::Asyncable
 {
-    INJECT(ui, IMainWindow, mainWindow)
-    INJECT(ui, IPlatformTheme, platformTheme)
+    INJECT(IMainWindow, mainWindow)
+    INJECT(IPlatformTheme, platformTheme)
 
 public:
-    void initSettings();
-    void initThemes();
+    void init();
     void load();
     void deinit();
 
@@ -112,6 +111,7 @@ public:
     int flickableMaxVelocity() const override;
 
 private:
+    void initThemes();
     void notifyAboutCurrentThemeChanged();
     void updateCurrentTheme();
     void updateThemes();

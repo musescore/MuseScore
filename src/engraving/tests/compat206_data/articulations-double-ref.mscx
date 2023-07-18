@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <pageWidth>8.26771</pageWidth>
@@ -77,7 +75,11 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articAccentStaccatoAbove</subtype>
+              <subtype>articStaccatoAbove</subtype>
+              <linkedMain/>
+              </Articulation>
+            <Articulation>
+              <subtype>articAccentAbove</subtype>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -90,55 +92,11 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articAccentStaccatoBelow</subtype>
+              <subtype>articStaccatoBelow</subtype>
               <linkedMain/>
               </Articulation>
-            <Note>
-              <linkedMain/>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <linkedMain/>
-            <durationType>quarter</durationType>
-            <Note>
-              <linkedMain/>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <linkedMain/>
-            <durationType>quarter</durationType>
-            <Note>
-              <linkedMain/>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <linkedMain/>
-            <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articTenutoStaccatoAbove</subtype>
-              <linkedMain/>
-              </Articulation>
-            <Note>
-              <linkedMain/>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <linkedMain/>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articTenutoStaccatoBelow</subtype>
+              <subtype>articAccentBelow</subtype>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -173,7 +131,11 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articMarcatoStaccatoAbove</subtype>
+              <subtype>articStaccatoAbove</subtype>
+              <linkedMain/>
+              </Articulation>
+            <Articulation>
+              <subtype>articTenutoAbove</subtype>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -186,7 +148,67 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articMarcatoStaccatoAbove</subtype>
+              <subtype>articStaccatoBelow</subtype>
+              <linkedMain/>
+              </Articulation>
+            <Articulation>
+              <subtype>articTenutoBelow</subtype>
+              <linkedMain/>
+              </Articulation>
+            <Note>
+              <linkedMain/>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatoAbove</subtype>
+              <linkedMain/>
+              </Articulation>
+            <Articulation>
+              <subtype>articMarcatoAbove</subtype>
+              <linkedMain/>
+              </Articulation>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatoBelow</subtype>
+              <linkedMain/>
+              </Articulation>
+            <Articulation>
+              <subtype>articMarcatoAbove</subtype>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -224,7 +246,11 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articMarcatoTenutoAbove</subtype>
+              <subtype>articTenutoAbove</subtype>
+              <linkedMain/>
+              </Articulation>
+            <Articulation>
+              <subtype>articMarcatoAbove</subtype>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -237,7 +263,11 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articMarcatoTenutoAbove</subtype>
+              <subtype>articTenutoBelow</subtype>
+              <linkedMain/>
+              </Articulation>
+            <Articulation>
+              <subtype>articMarcatoAbove</subtype>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -272,7 +302,11 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articTenutoAccentAbove</subtype>
+              <subtype>articTenutoAbove</subtype>
+              <linkedMain/>
+              </Articulation>
+            <Articulation>
+              <subtype>articAccentAbove</subtype>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -285,7 +319,11 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articTenutoAccentBelow</subtype>
+              <subtype>articTenutoBelow</subtype>
+              <linkedMain/>
+              </Articulation>
+            <Articulation>
+              <subtype>articAccentBelow</subtype>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -448,9 +486,14 @@
             <durationType>quarter</durationType>
             <Articulation>
               <direction>down</direction>
-              <subtype>articAccentStaccatoBelow</subtype>
+              <subtype>articStaccatoBelow</subtype>
               <ornamentStyle>baroque</ornamentStyle>
-              <anchor>4</anchor>
+              <linkedMain/>
+              </Articulation>
+            <Articulation>
+              <direction>down</direction>
+              <subtype>articAccentBelow</subtype>
+              <ornamentStyle>baroque</ornamentStyle>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -463,7 +506,12 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articTenutoStaccatoBelow</subtype>
+              <subtype>articStaccatoBelow</subtype>
+              <linkedMain/>
+              <visible>0</visible>
+              </Articulation>
+            <Articulation>
+              <subtype>articTenutoBelow</subtype>
               <linkedMain/>
               <visible>0</visible>
               </Articulation>
@@ -477,7 +525,12 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articMarcatoStaccatoAbove</subtype>
+              <subtype>articStaccatoAbove</subtype>
+              <play>0</play>
+              <linkedMain/>
+              </Articulation>
+            <Articulation>
+              <subtype>articMarcatoAbove</subtype>
               <play>0</play>
               <linkedMain/>
               </Articulation>
@@ -491,7 +544,12 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articMarcatoTenutoAbove</subtype>
+              <subtype>articTenutoBelow</subtype>
+              <linkedMain/>
+              <color r="255" g="0" b="0" a="255"/>
+              </Articulation>
+            <Articulation>
+              <subtype>articMarcatoAbove</subtype>
               <linkedMain/>
               <color r="255" g="0" b="0" a="255"/>
               </Articulation>
@@ -1751,8 +1809,6 @@
       </Staff>
     <Score>
       <initialPartId>1</initialPartId>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <pagePrintableWidth>7.4826</pagePrintableWidth>
@@ -1825,7 +1881,12 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articAccentStaccatoAbove</subtype>
+                <subtype>articStaccatoAbove</subtype>
+                <linked>
+                  </linked>
+                </Articulation>
+              <Articulation>
+                <subtype>articAccentAbove</subtype>
                 <linked>
                   </linked>
                 </Articulation>
@@ -1841,7 +1902,12 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articAccentStaccatoBelow</subtype>
+                <subtype>articStaccatoBelow</subtype>
+                <linked>
+                  </linked>
+                </Articulation>
+              <Articulation>
+                <subtype>articAccentBelow</subtype>
                 <linked>
                   </linked>
                 </Articulation>
@@ -1883,7 +1949,12 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articTenutoStaccatoAbove</subtype>
+                <subtype>articStaccatoAbove</subtype>
+                <linked>
+                  </linked>
+                </Articulation>
+              <Articulation>
+                <subtype>articTenutoAbove</subtype>
                 <linked>
                   </linked>
                 </Articulation>
@@ -1899,7 +1970,12 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articTenutoStaccatoBelow</subtype>
+                <subtype>articStaccatoBelow</subtype>
+                <linked>
+                  </linked>
+                </Articulation>
+              <Articulation>
+                <subtype>articTenutoBelow</subtype>
                 <linked>
                   </linked>
                 </Articulation>
@@ -1941,7 +2017,12 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articMarcatoStaccatoAbove</subtype>
+                <subtype>articStaccatoAbove</subtype>
+                <linked>
+                  </linked>
+                </Articulation>
+              <Articulation>
+                <subtype>articMarcatoAbove</subtype>
                 <linked>
                   </linked>
                 </Articulation>
@@ -1957,7 +2038,12 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articMarcatoStaccatoAbove</subtype>
+                <subtype>articStaccatoBelow</subtype>
+                <linked>
+                  </linked>
+                </Articulation>
+              <Articulation>
+                <subtype>articMarcatoAbove</subtype>
                 <linked>
                   </linked>
                 </Articulation>
@@ -1999,7 +2085,12 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articMarcatoTenutoAbove</subtype>
+                <subtype>articTenutoAbove</subtype>
+                <linked>
+                  </linked>
+                </Articulation>
+              <Articulation>
+                <subtype>articMarcatoAbove</subtype>
                 <linked>
                   </linked>
                 </Articulation>
@@ -2015,7 +2106,12 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articMarcatoTenutoAbove</subtype>
+                <subtype>articTenutoBelow</subtype>
+                <linked>
+                  </linked>
+                </Articulation>
+              <Articulation>
+                <subtype>articMarcatoAbove</subtype>
                 <linked>
                   </linked>
                 </Articulation>
@@ -2057,7 +2153,12 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articTenutoAccentAbove</subtype>
+                <subtype>articTenutoAbove</subtype>
+                <linked>
+                  </linked>
+                </Articulation>
+              <Articulation>
+                <subtype>articAccentAbove</subtype>
                 <linked>
                   </linked>
                 </Articulation>
@@ -2073,106 +2174,15 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articTenutoAccentBelow</subtype>
+                <subtype>articTenutoBelow</subtype>
                 <linked>
                   </linked>
                 </Articulation>
-              <Note>
+              <Articulation>
+                <subtype>articAccentBelow</subtype>
                 <linked>
                   </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>72</pitch>
-                <tpc>14</tpc>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>72</pitch>
-                <tpc>14</tpc>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>72</pitch>
-                <tpc>14</tpc>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>72</pitch>
-                <tpc>14</tpc>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
+                </Articulation>
               <Note>
                 <linked>
                   </linked>
@@ -2256,21 +2266,125 @@
           <voice>
             <Chord>
               <linked>
-                <indexDiff>1</indexDiff>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>60</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>60</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            </voice>
+          </Measure>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>60</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>60</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            </voice>
+          </Measure>
+        <Measure>
+          <voice>
+            <StaffText>
+              <linked>
+                </linked>
+              <text>Test that articulations properties are preserved after conversion (at least if they are not contradictory)</text>
+              </StaffText>
+            <Chord>
+              <linked>
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
                 <direction>down</direction>
-                <subtype>articAccentStaccatoBelow</subtype>
+                <subtype>articStaccatoBelow</subtype>
                 <ornamentStyle>baroque</ornamentStyle>
-                <anchor>4</anchor>
                 <linked>
-                  <indexDiff>1</indexDiff>
+                  </linked>
+                </Articulation>
+              <Articulation>
+                <direction>down</direction>
+                <subtype>articAccentBelow</subtype>
+                <ornamentStyle>baroque</ornamentStyle>
+                <linked>
                   </linked>
                 </Articulation>
               <Note>
                 <linked>
-                  <indexDiff>1</indexDiff>
                   </linked>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
@@ -2281,7 +2395,13 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articTenutoStaccatoBelow</subtype>
+                <subtype>articStaccatoBelow</subtype>
+                <linked>
+                  </linked>
+                <visible>0</visible>
+                </Articulation>
+              <Articulation>
+                <subtype>articTenutoBelow</subtype>
                 <linked>
                   </linked>
                 <visible>0</visible>
@@ -2298,7 +2418,13 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articMarcatoStaccatoAbove</subtype>
+                <subtype>articStaccatoAbove</subtype>
+                <play>0</play>
+                <linked>
+                  </linked>
+                </Articulation>
+              <Articulation>
+                <subtype>articMarcatoAbove</subtype>
                 <play>0</play>
                 <linked>
                   </linked>
@@ -2315,7 +2441,13 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articMarcatoTenutoAbove</subtype>
+                <subtype>articTenutoBelow</subtype>
+                <linked>
+                  </linked>
+                <color r="255" g="0" b="0" a="255"/>
+                </Articulation>
+              <Articulation>
+                <subtype>articMarcatoAbove</subtype>
                 <linked>
                   </linked>
                 <color r="255" g="0" b="0" a="255"/>
@@ -2327,17 +2459,6 @@
                 <tpc>14</tpc>
                 </Note>
               </Chord>
-            <location>
-              <fractions>31/1</fractions>
-              </location>
-            <StaffText>
-              <linked>
-                <location>
-                  <fractions>-32/1</fractions>
-                  </location>
-                </linked>
-              <text>Test that articulations properties are preserved after conversion (at least if they are not contradictory)</text>
-              </StaffText>
             </voice>
           </Measure>
         <Measure>

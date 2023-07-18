@@ -1,5 +1,5 @@
 
-// --test-case ./../MuseScore/vtest/vtest.js --test-case-context ./../MuseScore/vtest/vtest_context.json
+// --test-case ./vtest/vtest.js --test-case-context ./vtest/vtest_context.json
 
 const THIS_SCRIPT = api.context.globalVal("script_path")
 const CONTEXT_PATH = api.context.globalVal("context_path")
@@ -26,7 +26,7 @@ var testCase = {
         {name: "Generate draw data (default)", func: function() {
             generateDrawData(DEFAULT)
         }},
-        {name: "Create pngs (default) (debug step)", skip: true, func: function() {
+        {name: "Create pngs (default) (debug step)", skip: false, func: function() {
             createDataPngs(DEFAULT)
         }},
         {name: "Compare draw data (default)", func: function() {
@@ -35,7 +35,7 @@ var testCase = {
         {name: "Generate draw data (small)", func: function() {
             generateDrawData(SMALL)
         }},
-        {name: "Create pngs (small) (debug step)", skip: true, func: function() {
+        {name: "Create pngs (small) (debug step)", skip: false, func: function() {
             createDataPngs(SMALL)
         }},
         {name: "Compare draw data (small)", func: function() {

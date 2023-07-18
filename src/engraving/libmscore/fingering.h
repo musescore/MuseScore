@@ -37,6 +37,8 @@ class Note;
 class Fingering final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, Fingering)
+    DECLARE_CLASSOF(ElementType::FINGERING)
+
 public:
     Fingering(Note* parent, TextStyleType tid, ElementFlags ef = ElementFlag::HAS_TAG);
     Fingering(Note* parent, ElementFlags ef = ElementFlag::HAS_TAG);
@@ -44,17 +46,18 @@ public:
     Fingering* clone() const override { return new Fingering(*this); }
 
     Note* note() const { return toNote(explicitParent()); }
-    ElementType layoutType();
+    ElementType layoutType() const;
     PlacementV calculatePlacement() const;
 
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
 
     bool isEditAllowed(EditData&) const override;
 
     PropertyValue propertyDefault(Pid id) const override;
 
     String accessibleInfo() const override;
+
+    bool isOnCrossBeamSide() const;
 };
 } // namespace mu::engraving
 #endif

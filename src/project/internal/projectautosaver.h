@@ -36,9 +36,9 @@
 namespace mu::project {
 class ProjectAutoSaver : public IProjectAutoSaver, public async::Asyncable
 {
-    INJECT(project, context::IGlobalContext, globalContext)
-    INJECT(project, io::IFileSystem, fileSystem)
-    INJECT(project, IProjectConfiguration, configuration)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(io::IFileSystem, fileSystem)
+    INJECT(IProjectConfiguration, configuration)
 
 public:
     ProjectAutoSaver() = default;

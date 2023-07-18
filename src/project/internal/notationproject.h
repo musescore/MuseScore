@@ -28,13 +28,13 @@
 
 #include "modularity/ioc.h"
 #include "io/ifilesystem.h"
-#include "iprojectconfiguration.h"
+#include "../iprojectconfiguration.h"
 #include "inotationreadersregister.h"
 #include "inotationwritersregister.h"
 
 #include "engraving/engravingproject.h"
 
-#include "notation/internal/masternotation.h"
+#include "notation/inotationcreator.h"
 #include "notation/inotationconfiguration.h"
 #include "projectaudiosettings.h"
 #include "iprojectmigrator.h"
@@ -47,12 +47,13 @@ class MscWriter;
 namespace mu::project {
 class NotationProject : public INotationProject, public async::Asyncable
 {
-    INJECT(project, io::IFileSystem, fileSystem)
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, mu::notation::INotationConfiguration, notationConfiguration)
-    INJECT(project, INotationReadersRegister, readers)
-    INJECT(project, INotationWritersRegister, writers)
-    INJECT(project, IProjectMigrator, migrator)
+    INJECT(io::IFileSystem, fileSystem)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(notation::INotationCreator, notationCreator)
+    INJECT(INotationReadersRegister, readers)
+    INJECT(INotationWritersRegister, writers)
+    INJECT(IProjectMigrator, migrator)
 
 public:
     ~NotationProject() override;
@@ -66,6 +67,7 @@ public:
     async::Notification pathChanged() const override;
 
     QString displayName() const override;
+    async::Notification displayNameChanged() const override;
 
     bool isCloudProject() const override;
     const CloudProjectInfo& cloudInfo() const override;
@@ -79,7 +81,7 @@ public:
     void markAsUnsaved() override;
 
     ValNt<bool> needSave() const override;
-    bool canSave() const override;
+    Ret canSave() const override;
 
     Ret save(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save) override;
     Ret writeToDevice(QIODevice* device) override;
@@ -95,7 +97,7 @@ private:
 
     Ret loadTemplate(const ProjectCreateOptions& projectOptions);
 
-    Ret doLoad(engraving::MscReader& reader, const io::path_t& stylePath, bool forceMode);
+    Ret doLoad(const io::path_t& path, const io::path_t& stylePath, bool forceMode, const std::string& format);
     Ret doImport(const io::path_t& path, const io::path_t& stylePath, bool forceMode);
 
     Ret saveScore(const io::path_t& path, const std::string& fileSuffix);
@@ -105,15 +107,19 @@ private:
     Ret makeCurrentFileAsBackup();
     Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection);
 
+    void markAsSaved(const io::path_t& path);
+
     mu::engraving::EngravingProjectPtr m_engravingProject = nullptr;
-    notation::MasterNotationPtr m_masterNotation = nullptr;
+    notation::IMasterNotationPtr m_masterNotation = nullptr;
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
     mutable CloudProjectInfo m_cloudInfo;
 
     io::path_t m_path;
     async::Notification m_pathChanged;
+    async::Notification m_displayNameChanged;
 
     async::Notification m_needSaveNotification;
+    bool m_needSaveNotificationBlocked = false;
 
     bool m_isNewlyCreated = false; /// true if the file has never been saved yet
     bool m_isImported = false;

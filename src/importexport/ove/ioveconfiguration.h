@@ -23,7 +23,7 @@
 #define MU_IMPORTEXPORT_IIMPORTEXPORTCONFIGURATION_H
 
 #include <string>
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 namespace mu::iex::ove {
 class IOveConfiguration : MODULE_EXPORT_INTERFACE

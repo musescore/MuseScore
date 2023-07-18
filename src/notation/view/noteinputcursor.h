@@ -33,8 +33,8 @@
 namespace mu::notation {
 class NoteInputCursor
 {
-    INJECT(notation, context::IGlobalContext, globalContext)
-    INJECT(notation, INotationConfiguration, configuration)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(INotationConfiguration, configuration)
 
 public:
     void paint(draw::Painter* painter);

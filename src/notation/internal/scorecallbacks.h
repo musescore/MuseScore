@@ -32,7 +32,7 @@ class INotationInteraction;
 class IGetScore;
 class ScoreCallbacks : public mu::engraving::MuseScoreView
 {
-    INJECT(notation, INotationConfiguration, configuration)
+    INJECT(INotationConfiguration, configuration)
 
 public:
     ScoreCallbacks() = default;

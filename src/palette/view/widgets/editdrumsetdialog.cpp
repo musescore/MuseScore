@@ -25,9 +25,13 @@
 #include "io/file.h"
 
 #include "engraving/infrastructure/smufl.h"
-#include "engraving/rw/xml.h"
+
+#include "engraving/types/constants.h"
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
+
+#include "engraving/rw/xmlreader.h"
+#include "engraving/rw/xmlwriter.h"
 
 #include "libmscore/chord.h"
 #include "libmscore/factory.h"
@@ -97,6 +101,8 @@ NoteHeadGroup noteHeadNames[] = {
     NoteHeadGroup::HEAD_FA,
     NoteHeadGroup::HEAD_LA,
     NoteHeadGroup::HEAD_TI,
+    NoteHeadGroup::HEAD_SWISS_RUDIMENTS_FLAM,
+    NoteHeadGroup::HEAD_SWISS_RUDIMENTS_DOUBLE,
     NoteHeadGroup::HEAD_CUSTOM
 };
 
@@ -186,7 +192,8 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     pitchList->setColumnWidth(2, 30);
 
     QStringList validNoteheadRanges
-        = { "Noteheads", "Round and square noteheads", "Slash noteheads", "Shape note noteheads", "Shape note noteheads supplement" };
+        = { "Noteheads", "Round and square noteheads", "Slash noteheads", "Shape note noteheads", "Shape note noteheads supplement",
+            "Techniques noteheads" };
     QSet<QString> excludeSym = { "noteheadParenthesisLeft", "noteheadParenthesisRight", "noteheadParenthesis", "noteheadNull" };
     QStringList primaryNoteheads = {
         "noteheadXOrnate",
@@ -603,13 +610,13 @@ void EditDrumsetDialog::updateExample()
     note->setPitch(pitch);
     note->setTpcFromPitch();
     note->setLine(line);
-    note->setPos(0.0, gpaletteScore->spatium() * .5 * line);
+    note->setPos(0.0, gpaletteScore->style().spatium() * .5 * line);
     note->setHeadType(NoteHeadType::HEAD_QUARTER);
     note->setHeadGroup(nh);
     note->setCachedNoteheadSym(SymNames::symIdByName(quarterCmb->currentData().toString()));
     chord->add(note);
     Stem* stem = Factory::createStem(chord.get());
-    stem->setBaseLength(Millimetre((up ? -3.0 : 3.0) * gpaletteScore->spatium()));
+    stem->setBaseLength(Millimetre((up ? -3.0 : 3.0) * gpaletteScore->style().spatium()));
     chord->add(stem);
     drumNote->appendElement(chord, m_editedDrumset.translatedName(pitch));
 }
@@ -637,7 +644,7 @@ void EditDrumsetDialog::load()
     m_editedDrumset.clear();
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
-            if (e.attribute("version") != MSC_VERSION) {
+            if (e.attribute("version") != Constants::MSC_VERSION_STR) {
                 auto result = interactive()->warning(
                     mu::trc("palette", "Drumset file too old"),
                     mu::trc("palette", "MuseScore may not be able to load this drumset file."), {
@@ -686,10 +693,10 @@ void EditDrumsetDialog::save()
     valueChanged();    //save last changes in name
     XmlWriter xml(&f);
     xml.startDocument();
-    xml.startElement("museScore", { { "version", MSC_VERSION } });
+    xml.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
     m_editedDrumset.save(xml);
     xml.endElement();
-    if (f.error() != File::NoError) {
+    if (f.hasError()) {
         QString s = mu::qtrc("palette", "Writing file failed: %1").arg(QString::fromStdString(f.errorString()));
         interactive()->error(mu::trc("palette", "Write drumset"), s.toStdString());
     }

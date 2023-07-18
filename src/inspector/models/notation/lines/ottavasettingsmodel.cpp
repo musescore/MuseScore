@@ -37,13 +37,15 @@ OttavaSettingsModel::OttavaSettingsModel(QObject* parent, IElementRepositoryServ
     setModelType(InspectorModelType::TYPE_OTTAVA);
     setIcon(ui::IconCode::Code::OTTAVA);
 
-    static const QList<HookTypeInfo> hookTypes {
+    setPossibleStartHookTypes({});
+
+    static const QList<HookTypeInfo> endHookTypes {
         { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
         { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, qtrc("inspector", "Hooked 90°") },
         { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, qtrc("inspector", "Hooked 45°") }
     };
 
-    setPossibleEndHookTypes(hookTypes);
+    setPossibleEndHookTypes(endHookTypes);
 
     createProperties();
 }
@@ -108,9 +110,4 @@ void OttavaSettingsModel::resetProperties()
 
     m_ottavaType->resetToDefault();
     m_showNumbersOnly->resetToDefault();
-}
-
-bool OttavaSettingsModel::isTextVisible(TextType) const
-{
-    return true;
 }

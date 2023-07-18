@@ -3,8 +3,6 @@
   <programVersion>3.3.0</programVersion>
   <programRevision>df25fbc</programRevision>
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <pageWidth>8.27</pageWidth>

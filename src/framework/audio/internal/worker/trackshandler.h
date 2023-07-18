@@ -33,17 +33,23 @@
 namespace mu::audio {
 class TracksHandler : public ITracks, public async::Asyncable
 {
-    INJECT(audio, synth::ISynthResolver, resolver)
+    INJECT(synth::ISynthResolver, resolver)
 public:
     explicit TracksHandler(IGetTrackSequence* getSequence);
     ~TracksHandler();
 
     async::Promise<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const override;
     async::Promise<TrackName> trackName(const TrackSequenceId sequenceId, const TrackId trackId) const override;
+
     async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
                                                   io::IODevice* playbackData, AudioParams&& params) override;
+
     async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
                                                   const mpe::PlaybackData& playbackData, AudioParams&& params) override;
+
+    async::Promise<TrackId, AudioOutputParams> addAuxTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                           const AudioOutputParams& outputParams) override;
+
     void removeTrack(const TrackSequenceId sequenceId, const TrackId trackId) override;
     void removeAllTracks(const TrackSequenceId sequenceId) override;
 

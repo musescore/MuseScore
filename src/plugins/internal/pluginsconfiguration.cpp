@@ -50,8 +50,10 @@ void PluginsConfiguration::init()
     settings()->valueChanged(USER_PLUGINS_PATH).onReceive(nullptr, [this](const Val& val) {
         m_userPluginsPathChanged.send(val.toString());
     });
-    fileSystem()->makePath(userPluginsPath());
 
+    if (!userPluginsPath().empty()) {
+        fileSystem()->makePath(userPluginsPath());
+    }
     fileSystem()->makePath(pluginsDataPath());
 
     if (multiInstancesProvider()) {

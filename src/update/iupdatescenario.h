@@ -22,7 +22,7 @@
 #ifndef MU_APPSHELL_IUPDATESCENARIO_H
 #define MU_APPSHELL_IUPDATESCENARIO_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 namespace mu::update {
 class IUpdateScenario : MODULE_EXPORT_INTERFACE

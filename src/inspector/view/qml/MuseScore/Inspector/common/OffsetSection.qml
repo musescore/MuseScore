@@ -30,6 +30,7 @@ InspectorPropertyView {
 
     property alias horizontalOffsetControl: horizontalOffsetControl
     property alias verticalOffsetControl: verticalOffsetControl
+    property bool isVerticalOffsetAvailable: false
 
     titleText: qsTrc("inspector", "Offset")
 
@@ -59,13 +60,15 @@ InspectorPropertyView {
             isIndeterminate: root.propertyItem && enabled ? root.propertyItem.isUndefined : false
             currentValue: root.propertyItem ? root.propertyItem.x : 0
 
-            onValueEdited: function(newValue) {
+            onValueEditingFinished: function(newValue) {
                 root.propertyItem.x = newValue
             }
         }
 
         IncrementalPropertyControl {
             id: verticalOffsetControl
+
+            enabled: root.isVerticalOffsetAvailable
 
             width: parent.width / 2 - row.spacing / 2
 
@@ -79,7 +82,7 @@ InspectorPropertyView {
             isIndeterminate: root.propertyItem && enabled ? root.propertyItem.isUndefined : false
             currentValue: root.propertyItem ? root.propertyItem.y : 0
 
-            onValueEdited: function(newValue) {
+            onValueEditingFinished: function(newValue) {
                 root.propertyItem.y = newValue
             }
         }

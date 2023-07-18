@@ -32,6 +32,7 @@
 #include "audio/iplayback.h"
 #include "context/iglobalcontext.h"
 #include "ui/view/navigationsection.h"
+#include "playback/iplaybackconfiguration.h"
 
 #include "iplaybackcontroller.h"
 #include "internal/mixerchannelitem.h"
@@ -41,23 +42,31 @@ class MixerPanelModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(playback, audio::IPlayback, playback)
-    INJECT(playback, IPlaybackController, controller)
-    INJECT(playback, context::IGlobalContext, context)
+    INJECT(audio::IPlayback, playback)
+    INJECT(IPlaybackController, controller)
+    INJECT(context::IGlobalContext, context)
+    INJECT(IPlaybackConfiguration, configuration)
+
+    Q_PROPERTY(
+        mu::ui::NavigationSection * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
 
     Q_PROPERTY(int count READ rowCount NOTIFY rowCountChanged)
 
 public:
     explicit MixerPanelModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void load(const QVariant& navigationSection);
+    Q_INVOKABLE void load();
     Q_INVOKABLE QVariantMap get(int index);
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    ui::NavigationSection* navigationSection() const;
+    void setNavigationSection(ui::NavigationSection* navigationSection);
+
 signals:
+    void navigationSectionChanged();
     void rowCountChanged();
 
 private:
@@ -66,7 +75,8 @@ private:
     };
 
     void loadItems();
-    void addItem(const audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId);
+    void onTrackAdded(const audio::TrackId& trackId);
+    void addItem(MixerChannelItem* item, int index);
     void removeItem(const audio::TrackId trackId);
     void updateItemsPanelsOrder();
     void clear();
@@ -75,12 +85,15 @@ private:
     int resolveInsertIndex(const engraving::InstrumentTrackId& instrumentTrackId) const;
     int indexOf(const audio::TrackId trackId) const;
 
-    MixerChannelItem* buildTrackChannelItem(const audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId,
-                                            bool isPrimary = true);
+    MixerChannelItem* buildInstrumentChannelItem(const audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId,
+                                                 bool isPrimary = true);
+    MixerChannelItem* buildAuxChannelItem(audio::aux_channel_idx_t index, const audio::TrackId trackId);
     MixerChannelItem* buildMasterChannelItem();
 
-    TrackMixerChannelItem* trackChannelItem(const audio::TrackId& trackId) const;
-    TrackMixerChannelItem* trackChannelItem(const engraving::InstrumentTrackId& instrumentTrackId) const;
+    MixerChannelItem* findChannelItem(const audio::TrackId& trackId) const;
+
+    void loadOutputParams(MixerChannelItem* item, audio::AudioOutputParams&& params);
+    void updateOutputResourceItemCount();
 
     project::INotationProjectPtr currentProject() const;
     project::IProjectAudioSettingsPtr audioSettings() const;
@@ -91,7 +104,7 @@ private:
     MixerChannelItem* m_masterChannelItem = nullptr;
     audio::TrackSequenceId m_currentTrackSequenceId = -1;
 
-    ui::NavigationSection* m_itemsNavigationSection = nullptr;
+    ui::NavigationSection* m_navigationSection = nullptr;
 };
 }
 

@@ -37,8 +37,8 @@ class PianoKeyboardView : public uicomponents::QuickPaintedView, public async::A
 {
     Q_OBJECT
 
-    INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
+    INJECT(INotationConfiguration, configuration)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
 
     Q_PROPERTY(int numberOfKeys READ numberOfKeys WRITE setNumberOfKeys NOTIFY numberOfKeysChanged)
     Q_PROPERTY(qreal keyWidthScaling READ keyWidthScaling WRITE setScaling NOTIFY keyWidthScalingChanged)

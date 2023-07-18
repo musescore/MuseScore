@@ -18,18 +18,30 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-if (NOT BUILD_SHORTCUTS_MODULE)
-    add_subdirectory(shortcuts)
-endif (NOT BUILD_SHORTCUTS_MODULE)
+if (NOT MUE_BUILD_ACCESSIBILITY_MODULE)
+    add_subdirectory(accessibility)
+endif()
 
-if (NOT BUILD_NETWORK_MODULE)
-add_subdirectory(network)
-endif (NOT BUILD_NETWORK_MODULE)
-
-if (NOT BUILD_AUDIO_MODULE)
+if (NOT MUE_BUILD_AUDIO_MODULE)
     add_subdirectory(audio)
-endif (NOT BUILD_AUDIO_MODULE)
+endif()
 
-if (NOT BUILD_VST_MODULE)
+if (NOT MUE_BUILD_MIDI_MODULE)
+    add_subdirectory(midi)
+endif()
+
+if (NOT MUE_BUILD_MPE_MODULE)
+    add_subdirectory(mpe)
+endif()
+
+if (NOT MUE_BUILD_NETWORK_MODULE)
+    add_subdirectory(network)
+endif()
+
+if (NOT MUE_BUILD_SHORTCUTS_MODULE)
+    add_subdirectory(shortcuts)
+endif()
+
+if (NOT MUE_BUILD_VST_MODULE)
     add_subdirectory(vst)
-endif (NOT BUILD_VST_MODULE)
+endif()

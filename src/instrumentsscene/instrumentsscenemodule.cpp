@@ -46,8 +46,6 @@ using namespace mu::modularity;
 using namespace mu::ui;
 using namespace mu::framework;
 
-static std::shared_ptr<InstrumentsActionsController> s_actionsController = std::make_shared<InstrumentsActionsController>();
-
 static void instrumentsscene_init_qrc()
 {
     Q_INIT_RESOURCE(instrumentsscene);
@@ -60,6 +58,8 @@ std::string InstrumentsSceneModule::moduleName() const
 
 void InstrumentsSceneModule::registerExports()
 {
+    m_actionsController = std::make_shared<InstrumentsActionsController>();
+
     ioc()->registerExport<notation::ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenario());
 }
 
@@ -102,9 +102,9 @@ void InstrumentsSceneModule::registerUiTypes()
 
 void InstrumentsSceneModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode != IApplication::RunMode::Editor) {
+    if (mode != IApplication::RunMode::GuiApp) {
         return;
     }
 
-    s_actionsController->init();
+    m_actionsController->init();
 }

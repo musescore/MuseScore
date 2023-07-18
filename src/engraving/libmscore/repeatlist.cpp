@@ -263,7 +263,11 @@ int RepeatList::utime2utick(double secs) const
         }
     }
 
-    ASSERT_X(String(u"time %1 not found in RepeatList").arg(secs));
+    if (!empty()) {
+        ASSERT_X(String(u"time %1 not found in RepeatList").arg(secs));
+    }
+    // else: requesting from an empty map can be expected as a valid scenario
+
     return 0;
 }
 
@@ -834,10 +838,10 @@ void RepeatList::unwind()
                     activeVolta = nullptr;
                     // Start next rs on the following measure
                     Measure const* const possibleNextMeasure = (*repeatListElementIt)->measure->nextMeasure();
-                    rs = new RepeatSegment(playbackCount);
                     if (possibleNextMeasure == nullptr) {
-                        // end of score, but will still encounter section break, notify it
+                        rs = nullptr;                   // end of score, but will still encounter section break, notify it
                     } else {
+                        rs = new RepeatSegment(playbackCount);
                         rs->addMeasure(possibleNextMeasure);
                     }
                 }
@@ -1028,14 +1032,16 @@ void RepeatList::unwind()
         }
 
         // Reached the end of this section
-        // Inform the last RepeatSegment that the Section Break pause property should be honored now
-        rs = this->back();
-        repeatListElementIt = sectionIt->cend() - 1;
-        assert((*repeatListElementIt)->repeatListElementType == RepeatListElementType::SECTION_BREAK);
+        if (!this->empty()) {
+            // Inform the last RepeatSegment that the Section Break pause property should be honored now
+            rs = this->back();
+            repeatListElementIt = sectionIt->cend() - 1;
+            assert((*repeatListElementIt)->repeatListElementType == RepeatListElementType::SECTION_BREAK);
 
-        LayoutBreak const* const layoutBreak = toMeasureBase((*repeatListElementIt)->element)->sectionBreakElement();
-        if (layoutBreak != nullptr) {
-            rs->pause = layoutBreak->pause();
+            LayoutBreak const* const layoutBreak = toMeasureBase((*repeatListElementIt)->element)->sectionBreakElement();
+            if (layoutBreak != nullptr) {
+                rs->pause = layoutBreak->pause();
+            }
         }
     }
 

@@ -62,6 +62,11 @@ const INavigation::Index& NavigationSection::index() const
     return AbstractNavigation::index();
 }
 
+void NavigationSection::setIndex(const Index& index)
+{
+    AbstractNavigation::setIndex(index);
+}
+
 mu::async::Channel<INavigation::Index> NavigationSection::indexChanged() const
 {
     return AbstractNavigation::indexChanged();
@@ -73,13 +78,6 @@ bool NavigationSection::enabled() const
         return false;
     }
 
-    QWindow* sectionWindow = window();
-    QWindow* topWindow = application()->focusWindow();
-
-    if (sectionWindow && (topWindow != sectionWindow)) {
-        return type() == INavigationSection::Type::Exclusive;
-    }
-
     bool enbl = false;
     for (INavigationPanel* p : m_panels) {
         if (p->enabled()) {
@@ -87,6 +85,7 @@ bool NavigationSection::enabled() const
             break;
         }
     }
+
     return enbl;
 }
 

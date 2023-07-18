@@ -28,7 +28,6 @@
 #include <QDir>
 #include <QQmlContext>
 
-#include "config.h"
 #include "log.h"
 
 using namespace mu::ui;
@@ -107,6 +106,7 @@ void UiEngine::setup(QQmlEngine* engine)
 
     m_engine = engine;
     m_theme->init();
+    m_tooltip->init();
     m_engine->rootContext()->setContextProperty("ui", this);
     m_engine->rootContext()->setContextProperty("api", m_api);
 
@@ -121,7 +121,7 @@ void UiEngine::setup(QQmlEngine* engine)
 
     m_engine->addImportPath(":/qml");
 
-#ifdef QML_LOAD_FROM_SOURCE
+#ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
     for (const QString& path : m_sourceImportPaths) {
         m_engine->addImportPath(path);
     }
@@ -130,7 +130,7 @@ void UiEngine::setup(QQmlEngine* engine)
 
 void UiEngine::addSourceImportPath(const QString& path)
 {
-#ifdef QML_LOAD_FROM_SOURCE
+#ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
     LOGD() << path;
     m_sourceImportPaths << path;
     if (m_engine) {
@@ -178,6 +178,11 @@ std::shared_ptr<InteractiveProvider> UiEngine::interactiveProvider() const
 Qt::KeyboardModifiers UiEngine::keyboardModifiers() const
 {
     return QGuiApplication::keyboardModifiers();
+}
+
+Qt::LayoutDirection UiEngine::currentLanguageLayoutDirection() const
+{
+    return languagesService()->currentLanguage().direction;
 }
 
 QQmlEngine* UiEngine::qmlEngine() const

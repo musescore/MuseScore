@@ -22,7 +22,6 @@
 
 #include "breath.h"
 
-#include "rw/xml.h"
 #include "types/symnames.h"
 
 #include "measure.h"
@@ -47,6 +46,7 @@ const std::vector<BreathType> Breath::breathList {
     { SymId::caesuraShort,         true,  2.0 },
     { SymId::caesuraThick,         true,  2.0 },
     { SymId::chantCaesura,         true,  2.0 },
+    { SymId::caesuraSingleStroke,  true,  2.0 },
 };
 
 //---------------------------------------------------------
@@ -75,73 +75,6 @@ bool Breath::isCaesura() const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Breath::layout()
-{
-    bool palette = (!staff() || track() == mu::nidx);
-    if (!palette) {
-        int voiceOffset = placeBelow() * (staff()->lines(tick()) - 1) * spatium();
-        if (isCaesura()) {
-            setPos(xpos(), spatium() + voiceOffset);
-        } else if ((score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler") && (symId() == SymId::breathMarkComma)) {
-            setPos(xpos(), 0.5 * spatium() + voiceOffset);
-        } else {
-            setPos(xpos(), -0.5 * spatium() + voiceOffset);
-        }
-    }
-    setbbox(symBbox(_symId));
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Breath::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    writeProperty(xml, Pid::SYMBOL);
-    writeProperty(xml, Pid::PAUSE);
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Breath::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "subtype") {                 // obsolete
-            switch (e.readInt()) {
-            case 0:
-            case 1:
-                _symId = SymId::breathMarkComma;
-                break;
-            case 2:
-                _symId = SymId::caesuraCurved;
-                break;
-            case 3:
-                _symId = SymId::caesura;
-                break;
-            }
-        } else if (tag == "symbol") {
-            _symId = SymNames::symIdByName(e.readAsciiText());
-        } else if (tag == "pause") {
-            _pause = e.readDouble();
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 
@@ -156,7 +89,7 @@ double Breath::mag() const
 
 void Breath::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     painter->setPen(curColor());
     drawSymbol(_symId, painter);
 }

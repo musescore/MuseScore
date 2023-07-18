@@ -37,17 +37,21 @@
 namespace mu::appshell {
 class StartupScenario : public IStartupScenario, public async::Asyncable
 {
-    INJECT(appshell, framework::IInteractive, interactive)
-    INJECT(appshell, actions::IActionsDispatcher, dispatcher)
-    INJECT(appshell, mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(appshell, IAppShellConfiguration, configuration)
-    INJECT(appshell, ISessionsManager, sessionsManager)
-    INJECT(appshell, project::IProjectAutoSaver, projectAutoSaver)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(IAppShellConfiguration, configuration)
+    INJECT(ISessionsManager, sessionsManager)
+    INJECT(project::IProjectAutoSaver, projectAutoSaver)
 
 public:
 
-    void setModeType(const QString& modeType) override;
-    void setStartupScorePath(const io::path_t& path) override;
+    void setStartupType(const std::optional<std::string>& type) override;
+
+    bool isStartWithNewFileAsSecondaryInstance() const override;
+
+    const project::ProjectFile& startupScoreFile() const override;
+    void setStartupScoreFile(const std::optional<project::ProjectFile>& file) override;
 
     void run() override;
     bool startupCompleted() const override;
@@ -58,13 +62,13 @@ private:
     StartupModeType resolveStartupModeType() const;
     Uri startupPageUri(StartupModeType modeType) const;
 
-    void openScore(const io::path_t& path);
+    void openScore(const project::ProjectFile& file);
 
     void restoreLastSession();
     void removeProjectsUnsavedChanges(const io::paths_t& projectsPaths);
 
-    QString m_modeTypeStr;
-    io::path_t m_startupScorePath;
+    std::string m_startupTypeStr;
+    project::ProjectFile m_startupScoreFile;
     bool m_startupCompleted = false;
 };
 }

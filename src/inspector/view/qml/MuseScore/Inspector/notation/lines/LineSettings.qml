@@ -82,6 +82,7 @@ Column {
                 case Inspector.TYPE_HAIRPIN: return hairpinStyleSettings
                 case Inspector.TYPE_VOLTA: return voltaStyleSettings
                 case Inspector.TYPE_OTTAVA: return ottavaStyleSettings
+                case Inspector.TYPE_PEDAL: return pedalStyleSettings
                 }
 
                 return commonStyleSettings
@@ -124,6 +125,17 @@ Column {
         id: ottavaStyleSettings
 
         OttavaStyleSettings {
+            model: root.model
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 1000
+        }
+    }
+
+    Component {
+        id: pedalStyleSettings
+
+        PedalStyleSettings {
             model: root.model
 
             navigationPanel: root.navigationPanel

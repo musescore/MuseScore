@@ -23,7 +23,7 @@
 #ifndef MU_VST_VSTFXEDITORVIEW_H
 #define MU_VST_VSTFXEDITORVIEW_H
 
-#include "vstieditorview.h"
+#include "abstractvsteditorview.h"
 
 namespace mu::vst {
 class VstFxEditorView : public AbstractVstEditorView

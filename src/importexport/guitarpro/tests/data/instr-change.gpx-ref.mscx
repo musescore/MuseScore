@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.10">
+  <Score>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Acoustic Guitar 1</trackName>
+      <Instrument id="cavaquinho">
+        <longName>Acoustic Guitar 1</longName>
+        <shortName>S-Gt</shortName>
+        <trackName></trackName>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+        <instrumentId>pluck.guitar</instrumentId>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <StringData>
+          <frets>24</frets>
+          <string>76</string>
+          <string>69</string>
+          <string>74</string>
+          <string>79</string>
+          <string>71</string>
+          <string>76</string>
+          </StringData>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>30</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="accent">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>144</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>169</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="25"/>
+          <controller ctrl="7" value="99"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <Text>
+          <style>title</style>
+          <text>Hey You</text>
+          </Text>
+        <Text>
+          <style>subtitle</style>
+          <text>Rock
+Pink Floyd
+The Wall</text>
+          </Text>
+        <Text>
+          <style>composer</style>
+          <text>Music by Roger Waters</text>
+          </Text>
+        <Text>
+          <style>poet</style>
+          <text>Words by Roger Waters</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <voice>
+          <KeySig>
+            <concertKey>1</concertKey>
+            </KeySig>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            </Dynamic>
+          <Tempo>
+            <tempo>1.916667</tempo>
+            <text><sym>metNoteQuarterUp</sym> = 115</text>
+            </Tempo>
+          <Beam>
+            <l1>38</l1>
+            <l2>36</l2>
+            </Beam>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>3</fret>
+              <string>4</string>
+              </Note>
+            </Chord>
+          <InstrumentChange>
+            <Instrument id="cavaquinho">
+              <trackName></trackName>
+              <transposeDiatonic>-7</transposeDiatonic>
+              <transposeChromatic>-12</transposeChromatic>
+              <instrumentId>pluck.guitar</instrumentId>
+              <StringData>
+                <frets>24</frets>
+                <string>76</string>
+                <string>69</string>
+                <string>74</string>
+                <string>79</string>
+                <string>71</string>
+                <string>76</string>
+                </StringData>
+              <Channel>
+                <program value="25"/>
+                </Channel>
+              </Instrument>
+            <text>German-APiano</text>
+            </InstrumentChange>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              <fret>3</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <InstrumentChange>
+            <Instrument id="cavaquinho">
+              <trackName></trackName>
+              <transposeDiatonic>-7</transposeDiatonic>
+              <transposeChromatic>-12</transposeChromatic>
+              <instrumentId>pluck.guitar</instrumentId>
+              <StringData>
+                <frets>24</frets>
+                <string>76</string>
+                <string>69</string>
+                <string>74</string>
+                <string>79</string>
+                <string>71</string>
+                <string>76</string>
+                </StringData>
+              <Channel>
+                <program value="25"/>
+                </Channel>
+              </Instrument>
+            <text>D-Steel</text>
+            </InstrumentChange>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>2</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <Accidental>
+                <subtype>accidentalNatural</subtype>
+                </Accidental>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <fret>1</fret>
+              <string>5</string>
+              </Note>
+            </Chord>
+          <InstrumentChange>
+            <Instrument id="cavaquinho">
+              <trackName></trackName>
+              <transposeDiatonic>-7</transposeDiatonic>
+              <transposeChromatic>-12</transposeChromatic>
+              <instrumentId>pluck.guitar</instrumentId>
+              <StringData>
+                <frets>24</frets>
+                <string>76</string>
+                <string>69</string>
+                <string>74</string>
+                <string>79</string>
+                <string>71</string>
+                <string>76</string>
+                </StringData>
+              <Channel>
+                <program value="25"/>
+                </Channel>
+              </Instrument>
+            <text>German-APiano</text>
+            </InstrumentChange>
+          <Beam>
+            <l1>24</l1>
+            <l2>22</l2>
+            </Beam>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <fret>3</fret>
+              <string>5</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              <fret>4</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <InstrumentChange>
+            <Instrument id="cavaquinho">
+              <trackName></trackName>
+              <transposeDiatonic>-7</transposeDiatonic>
+              <transposeChromatic>-12</transposeChromatic>
+              <instrumentId>pluck.guitar</instrumentId>
+              <StringData>
+                <frets>24</frets>
+                <string>76</string>
+                <string>69</string>
+                <string>74</string>
+                <string>79</string>
+                <string>71</string>
+                <string>76</string>
+                </StringData>
+              <Channel>
+                <program value="25"/>
+                </Channel>
+              </Instrument>
+            <text>D-Steel</text>
+            </InstrumentChange>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <fret>5</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <InstrumentChange>
+            <Instrument id="cavaquinho">
+              <trackName></trackName>
+              <transposeDiatonic>-7</transposeDiatonic>
+              <transposeChromatic>-12</transposeChromatic>
+              <instrumentId>pluck.guitar</instrumentId>
+              <StringData>
+                <frets>24</frets>
+                <string>76</string>
+                <string>69</string>
+                <string>74</string>
+                <string>79</string>
+                <string>71</string>
+                <string>76</string>
+                </StringData>
+              <Channel>
+                <program value="25"/>
+                </Channel>
+              </Instrument>
+            <text>German-APiano</text>
+            </InstrumentChange>
+          <Beam>
+            <l1>38</l1>
+            <l2>36</l2>
+            </Beam>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>3</fret>
+              <string>4</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              <fret>3</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>2</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
+          <InstrumentChange>
+            <Instrument id="cavaquinho">
+              <trackName></trackName>
+              <transposeDiatonic>-7</transposeDiatonic>
+              <transposeChromatic>-12</transposeChromatic>
+              <instrumentId>pluck.guitar</instrumentId>
+              <StringData>
+                <frets>24</frets>
+                <string>76</string>
+                <string>69</string>
+                <string>74</string>
+                <string>79</string>
+                <string>71</string>
+                <string>76</string>
+                </StringData>
+              <Channel>
+                <program value="25"/>
+                </Channel>
+              </Instrument>
+            <text>D-Steel</text>
+            </InstrumentChange>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <Accidental>
+                <subtype>accidentalNatural</subtype>
+                </Accidental>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <fret>1</fret>
+              <string>5</string>
+              </Note>
+            </Chord>
+          <Beam>
+            <l1>24</l1>
+            <l2>22</l2>
+            </Beam>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <fret>3</fret>
+              <string>5</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <InstrumentChange>
+            <Instrument id="cavaquinho">
+              <trackName></trackName>
+              <transposeDiatonic>-7</transposeDiatonic>
+              <transposeChromatic>-12</transposeChromatic>
+              <instrumentId>pluck.guitar</instrumentId>
+              <StringData>
+                <frets>24</frets>
+                <string>76</string>
+                <string>69</string>
+                <string>74</string>
+                <string>79</string>
+                <string>71</string>
+                <string>76</string>
+                </StringData>
+              <Channel>
+                <program value="25"/>
+                </Channel>
+              </Instrument>
+            <text>German-APiano</text>
+            </InstrumentChange>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              <fret>4</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <InstrumentChange>
+            <Instrument id="cavaquinho">
+              <trackName></trackName>
+              <transposeDiatonic>-7</transposeDiatonic>
+              <transposeChromatic>-12</transposeChromatic>
+              <instrumentId>pluck.guitar</instrumentId>
+              <StringData>
+                <frets>24</frets>
+                <string>76</string>
+                <string>69</string>
+                <string>74</string>
+                <string>79</string>
+                <string>71</string>
+                <string>76</string>
+                </StringData>
+              <Channel>
+                <program value="25"/>
+                </Channel>
+              </Instrument>
+            <text>D-Steel</text>
+            </InstrumentChange>
+          <Chord>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <fret>5</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>16th</durationType>
+            </Rest>
+          <Rest>
+            <dots>1</dots>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

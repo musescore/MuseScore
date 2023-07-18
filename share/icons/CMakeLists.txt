@@ -42,12 +42,12 @@ elseif(OS_IS_WIN)
 
 elseif(OS_IS_LIN)
     foreach(SIZE 16 24 32 48 64 96 128 512)
-        install(FILES AppIcon/MS4_AppIcon_${SIZE}x${SIZE}.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/${SIZE}x${SIZE}/apps)
+        install(FILES AppIcon/MS4_AppIcon_${SIZE}x${SIZE}.png RENAME mscore${MUSESCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/${SIZE}x${SIZE}/apps)
     endforeach()
 
-    install(FILES MsczIcon/MS4_MsczIcon.png RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}.png
+    install(FILES MsczIcon/MS4_MsczIcon.png RENAME application-x-musescore${MUSESCORE_INSTALL_SUFFIX}.png
             DESTINATION share/icons/hicolor/512x512/mimetypes)
-    install(FILES MscxIcon/MS4_MscxIcon.png RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}+xml.png
+    install(FILES MscxIcon/MS4_MscxIcon.png RENAME application-x-musescore${MUSESCORE_INSTALL_SUFFIX}+xml.png
             DESTINATION share/icons/hicolor/512x512/mimetypes)
     # Note: Must now run "gtk-update-icon-cache" to set the new icons.
 

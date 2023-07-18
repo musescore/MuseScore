@@ -29,7 +29,6 @@
 
 #include "draw/fontmetrics.h"
 #include "draw/types/color.h"
-#include "style/style.h"
 #include "iengravingfontsprovider.h"
 
 #include "engravingitem.h"
@@ -83,12 +82,13 @@ class CharFormat
     FontStyle _style          { FontStyle::Normal };
     VerticalAlignment _valign { VerticalAlignment::AlignNormal };
     double _fontSize           { 12.0 };
-    double _textLineSpacing    { 1.0 };
     String _fontFamily;
 
 public:
     CharFormat() {}
-    bool operator==(const CharFormat&) const;
+    CharFormat(const CharFormat& cf) { *this = cf; }
+    bool operator==(const CharFormat& cf) const;
+    CharFormat& operator=(const CharFormat& cf);
 
     FontStyle style() const { return _style; }
     void setStyle(FontStyle s) { _style = s; }
@@ -107,7 +107,6 @@ public:
     void setValign(VerticalAlignment val) { _valign = val; }
     void setFontSize(double val) { _fontSize = val; }
     void setFontFamily(const String& val) { _fontFamily = val; }
-    void setTextLineSpacing(double val) { _textLineSpacing = val; }
 
     FormatValue formatValue(FormatId) const;
     void setFormatValue(FormatId, const FormatValue& val);
@@ -211,7 +210,7 @@ private:
 
 class TextFragment
 {
-    INJECT_STATIC(engraving, IEngravingFontsProvider, engravingFonts)
+    INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
 public:
     mutable CharFormat format;
     mu::PointF pos;                    // y is relative to TextBlock->y()
@@ -284,72 +283,7 @@ class TextBase : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, TextBase)
 
-    INJECT(engraving, IEngravingFontsProvider, engravingFonts)
-
-    // sorted by size to allow for most compact memory layout
-    M_PROPERTY(FrameType,  frameType,              setFrameType)
-    M_PROPERTY(double,      textLineSpacing,        setTextLineSpacing)
-    M_PROPERTY(mu::draw::Color,      bgColor,                setBgColor)
-    M_PROPERTY(mu::draw::Color,      frameColor,             setFrameColor)
-    M_PROPERTY(Spatium,    frameWidth,             setFrameWidth)
-    M_PROPERTY(Spatium,    paddingWidth,           setPaddingWidth)
-    M_PROPERTY(int,        frameRound,             setFrameRound)
-
-    Align _align;
-
-    // there are two representations of text; only one
-    // might be valid and the other can be constructed from it
-
-    mutable String _text;                          // cached
-    mutable bool textInvalid      { true };
-
-    std::vector<TextBlock> _layout;
-    bool layoutInvalid            { true };
-    TextStyleType _textStyleType;           // text style id
-
-    bool _layoutToParentWidth     { false };
-
-    int hexState                 { -1 };
-    bool _primed                  { 0 };
-
-    TextCursor* _cursor           { nullptr };
-
-    void drawSelection(mu::draw::Painter*, const mu::RectF&) const;
-    void insert(TextCursor*, char32_t code);
-    void genText() const;
-    virtual int getPropertyFlagsIdx(Pid id) const override;
-    String stripText(bool, bool, bool) const;
-    Sid offsetSid() const;
-
-    static String getHtmlStartTag(double, double&, const String&, String&, FontStyle, VerticalAlignment);
-    static String getHtmlEndTag(FontStyle, VerticalAlignment);
-
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-    AccessibleItemPtr createAccessible() override;
-#endif
-
-    void notifyAboutTextCursorChanged();
-    void notifyAboutTextInserted(int startPosition, int endPosition, const String& text);
-    void notifyAboutTextRemoved(int startPosition, int endPosition, const String& text);
-
-    virtual bool alwaysKernable() const override { return true; }
-
-protected:
-    TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
-             ElementFlags = ElementFlag::NOTHING);
-    TextBase(const ElementType& type, EngravingItem* parent, ElementFlags);
-    TextBase(const TextBase&);
-
-    mu::draw::Color textColor() const;
-    mu::RectF frame;             // calculated in layout()
-    void layoutFrame();
-    void layoutEdit();
-    void createLayout();
-    void insertSym(EditData& ed, SymId id);
-    void prepareFormat(const String& token, TextCursor& cursor);
-    bool prepareFormat(const String& token, CharFormat& format);
-
-    virtual void commitText();
+    INJECT(IEngravingFontsProvider, engravingFonts)
 
 public:
 
@@ -363,8 +297,8 @@ public:
     virtual void drawEditMode(mu::draw::Painter* p, EditData& ed, double currentViewScaling) override;
     static void drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const mu::PointF& pos, const String& text);
 
-    Align align() const { return _align; }
-    void setAlign(Align a) { _align = a; }
+    Align align() const { return m_align; }
+    void setAlign(Align a) { m_align = a; }
 
     static String plainToXmlText(const String& s) { return s.toXmlEscaped(); }
     void setPlainText(const String& t) { setXmlText(plainToXmlText(t)); }
@@ -377,8 +311,6 @@ public:
 
     void insertText(EditData&, const String&);
 
-    virtual void layout() override;
-    virtual void layout1();
     double lineSpacing() const;
     double lineHeight() const;
     virtual double baseLine() const override;
@@ -394,8 +326,8 @@ public:
     void setFamily(const String& val);
     void setSize(const double& val);
 
-    bool layoutToParentWidth() const { return _layoutToParentWidth; }
-    void setLayoutToParentWidth(bool v) { _layoutToParentWidth = v; }
+    bool layoutToParentWidth() const { return m_layoutToParentWidth; }
+    void setLayoutToParentWidth(bool v) { m_layoutToParentWidth = v; }
 
     virtual void startEdit(EditData&) override;
     virtual bool isEditAllowed(EditData&) const override;
@@ -409,15 +341,8 @@ public:
 
     void selectAll(TextCursor*);
     void select(EditData&, SelectTextType);
-    bool isPrimed() const { return _primed; }
-    void setPrimed(bool primed) { _primed = primed; }
-
-    virtual void write(XmlWriter& xml) const override;
-    virtual void read(XmlReader&) override;
-    virtual void writeProperties(XmlWriter& xml) const override { writeProperties(xml, true, true); }
-    void writeProperties(XmlWriter& xml, bool writeText) const { writeProperties(xml, writeText, true); }
-    void writeProperties(XmlWriter&, bool, bool) const;
-    bool readProperties(XmlReader&) override;
+    bool isPrimed() const { return m_primed; }
+    void setPrimed(bool primed) { m_primed = primed; }
 
     virtual void paste(EditData& ed, const String& txt);
 
@@ -445,7 +370,7 @@ public:
     std::list<TextFragment> fragmentList() const;   // for MusicXML formatted export
 
     static bool validateText(String& s);
-    bool inHexState() const { return hexState >= 0; }
+    bool inHexState() const { return m_hexState >= 0; }
     void endHexState(EditData&);
 
     mu::draw::Font font() const;
@@ -460,30 +385,30 @@ public:
     void editInsertText(TextCursor*, const String&);
 
     TextCursor* cursorFromEditData(const EditData&);
-    TextCursor* cursor() const { return _cursor; }
-    const TextBlock& textBlock(int line) const { return _layout[line]; }
-    TextBlock& textBlock(int line) { return _layout[line]; }
-    std::vector<TextBlock>& textBlockList() { return _layout; }
-    size_t rows() const { return _layout.size(); }
+    TextCursor* cursor() const { return m_cursor; }
+    const TextBlock& textBlock(int line) const { return m_blocks[line]; }
+    TextBlock& textBlock(int line) { return m_blocks[line]; }
+    std::vector<TextBlock>& textBlockList() { return m_blocks; }
+    size_t rows() const { return m_blocks.size(); }
 
-    void setTextInvalid() { textInvalid = true; }
-    bool isTextInvalid() const { return textInvalid; }
-    void setLayoutInvalid() { layoutInvalid = true; }
-    bool isLayoutInvalid() const { return layoutInvalid; }
+    void setTextInvalid() { m_textInvalid = true; }
+    bool isTextInvalid() const { return m_textInvalid; }
+    void setLayoutInvalid() { m_layoutInvalid = true; }
+    bool isLayoutInvalid() const { return m_layoutInvalid; }
 
     // helper functions
     bool hasFrame() const { return _frameType != FrameType::NO_FRAME; }
     bool circle() const { return _frameType == FrameType::CIRCLE; }
     bool square() const { return _frameType == FrameType::SQUARE; }
 
-    TextStyleType textStyleType() const { return _textStyleType; }
-    void setTextStyleType(TextStyleType id) { _textStyleType = id; }
+    TextStyleType textStyleType() const { return m_textStyleType; }
+    void setTextStyleType(TextStyleType id) { m_textStyleType = id; }
     void initTextStyleType(TextStyleType id);
     void initTextStyleType(TextStyleType id, bool preserveDifferent);
     virtual void initElementStyle(const ElementStyle*) override;
 
     static const String UNDEFINED_FONT_FAMILY;
-    static const int UNDEFINED_FONT_SIZE;
+    static const double UNDEFINED_FONT_SIZE;
 
     bool bold() const { return fontStyle() & FontStyle::Bold; }
     bool italic() const { return fontStyle() & FontStyle::Italic; }
@@ -505,6 +430,73 @@ public:
 
     friend class TextCursor;
     using EngravingObject::undoChangeProperty;
+
+    bool isBlockNotCreated() const { return m_layoutInvalid; }
+    std::vector<TextBlock>& blocksRef() { return m_blocks; }
+    void createBlocks();
+    void layoutFrame();
+
+protected:
+    TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
+             ElementFlags = ElementFlag::NOTHING);
+    TextBase(const ElementType& type, EngravingItem* parent, ElementFlags);
+    TextBase(const TextBase&);
+
+    mu::draw::Color textColor() const;
+    mu::RectF m_frame;             // calculated in layout()
+
+    void insertSym(EditData& ed, SymId id);
+    void prepareFormat(const String& token, TextCursor& cursor);
+    bool prepareFormat(const String& token, CharFormat& format);
+
+    virtual void commitText();
+
+private:
+    // sorted by size to allow for most compact memory layout
+    M_PROPERTY(FrameType,       frameType,              setFrameType)
+    M_PROPERTY(double,          textLineSpacing,        setTextLineSpacing)
+    M_PROPERTY(mu::draw::Color, bgColor,                setBgColor)
+    M_PROPERTY(mu::draw::Color, frameColor,             setFrameColor)
+    M_PROPERTY(Spatium,         frameWidth,             setFrameWidth)
+    M_PROPERTY(Spatium,         paddingWidth,           setPaddingWidth)
+    M_PROPERTY(int,             frameRound,             setFrameRound)
+
+    void drawSelection(mu::draw::Painter*, const mu::RectF&) const;
+    void insert(TextCursor*, char32_t code);
+    void genText() const;
+    virtual int getPropertyFlagsIdx(Pid id) const override;
+    String stripText(bool, bool, bool) const;
+    Sid offsetSid() const;
+
+    static String getHtmlStartTag(double, double&, const String&, String&, FontStyle, VerticalAlignment);
+    static String getHtmlEndTag(FontStyle, VerticalAlignment);
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
+
+    void notifyAboutTextCursorChanged();
+    void notifyAboutTextInserted(int startPosition, int endPosition, const String& text);
+    void notifyAboutTextRemoved(int startPosition, int endPosition, const String& text);
+
+    Align m_align;
+
+    // there are two representations of text; only one
+    // might be valid and the other can be constructed from it
+
+    mutable String m_text;                          // cached
+    mutable bool m_textInvalid = true;
+
+    std::vector<TextBlock> m_blocks;
+    bool m_layoutInvalid = true;
+    TextStyleType m_textStyleType = TextStyleType::DEFAULT;           // text style id
+
+    bool m_layoutToParentWidth = false;
+
+    int m_hexState = -1;
+    bool m_primed = 0;
+
+    TextCursor* m_cursor = nullptr;
 };
 
 inline bool isTextNavigationKey(int key, KeyboardModifiers modifiers)

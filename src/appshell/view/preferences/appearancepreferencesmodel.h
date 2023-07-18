@@ -34,9 +34,9 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
-    INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
-    INJECT(appshell, engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
 
     Q_PROPERTY(bool isFollowSystemThemeAvailable READ isFollowSystemThemeAvailable CONSTANT)
     Q_PROPERTY(bool isFollowSystemTheme READ isFollowSystemTheme WRITE setFollowSystemTheme NOTIFY isFollowSystemThemeChanged)

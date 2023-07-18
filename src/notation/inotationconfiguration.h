@@ -23,8 +23,9 @@
 #define MU_NOTATION_INOTATIONCONFIGURATION_H
 
 #include <QColor>
+#include <optional>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/channel.h"
 #include "types/retval.h"
 #include "io/path.h"
@@ -151,8 +152,8 @@ public:
     virtual int notePlayDurationMilliseconds() const = 0;
     virtual void setNotePlayDurationMilliseconds(int durationMs) = 0;
 
-    virtual void setTemplateModeEnabled(bool enabled) = 0;
-    virtual void setTestModeEnabled(bool enabled) = 0;
+    virtual void setTemplateModeEnabled(std::optional<bool> enabled) = 0;
+    virtual void setTestModeEnabled(std::optional<bool> enabled) = 0;
 
     virtual io::path_t instrumentListPath() const = 0;
 

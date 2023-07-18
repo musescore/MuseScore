@@ -57,10 +57,6 @@
 using namespace mu::autobot;
 using namespace mu::api;
 
-static std::shared_ptr<AutobotConfiguration> s_configuration = {};
-static std::shared_ptr<Autobot> s_autobot = {};
-static std::shared_ptr<AutobotActionsController> s_actionsController = {};
-
 std::string AutobotModule::moduleName() const
 {
     return "autobot";
@@ -68,12 +64,12 @@ std::string AutobotModule::moduleName() const
 
 void AutobotModule::registerExports()
 {
-    s_configuration = std::make_shared<AutobotConfiguration>();
-    s_autobot = std::make_shared<Autobot>();
-    s_actionsController = std::make_shared<AutobotActionsController>();
+    m_configuration = std::make_shared<AutobotConfiguration>();
+    m_autobot = std::make_shared<Autobot>();
+    m_actionsController = std::make_shared<AutobotActionsController>();
 
-    modularity::ioc()->registerExport<IAutobot>(moduleName(), s_autobot);
-    modularity::ioc()->registerExport<IAutobotConfiguration>(moduleName(), s_configuration);
+    modularity::ioc()->registerExport<IAutobot>(moduleName(), m_autobot);
+    modularity::ioc()->registerExport<IAutobotConfiguration>(moduleName(), m_configuration);
     modularity::ioc()->registerExport<IAutobotScriptsRepository>(moduleName(), new AutobotScriptsRepository());
 
     modularity::ioc()->registerExport<IApiRegister>(moduleName(), new ApiRegister());
@@ -118,23 +114,27 @@ void AutobotModule::registerUiTypes()
     qmlRegisterType<TestCaseRunModel>("MuseScore.Autobot", 1, 0, "TestCaseRunModel");
 }
 
-void AutobotModule::onInit(const framework::IApplication::RunMode&)
+void AutobotModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    s_autobot->init();
-    s_actionsController->init();
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
+    m_autobot->init();
+    m_actionsController->init();
 
     //! --- Diagnostics ---
     auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        for (const io::path_t& p : s_configuration->scriptsDirPaths()) {
+        for (const io::path_t& p : m_configuration->scriptsDirPaths()) {
             pr->reg("autobotScriptsPath", p);
         }
-        for (const io::path_t& p : s_configuration->testingFilesDirPaths()) {
+        for (const io::path_t& p : m_configuration->testingFilesDirPaths()) {
             pr->reg("autobotTestingFilesPath", p);
         }
-        pr->reg("autobotDataPath", s_configuration->dataPath());
-        pr->reg("autobotSavingFilesPath", s_configuration->savingFilesPath());
-        pr->reg("autobotReportsPath", s_configuration->reportsPath());
-        pr->reg("autobotDrawDataPath", s_configuration->drawDataPath());
+        pr->reg("autobotDataPath", m_configuration->dataPath());
+        pr->reg("autobotSavingFilesPath", m_configuration->savingFilesPath());
+        pr->reg("autobotReportsPath", m_configuration->reportsPath());
+        pr->reg("autobotDrawDataPath", m_configuration->drawDataPath());
     }
 }

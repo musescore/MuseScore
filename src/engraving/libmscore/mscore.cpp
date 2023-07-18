@@ -31,8 +31,6 @@
 #include "stafftype.h"
 #include "volta.h"
 
-#include "config.h"
-
 using namespace mu;
 
 namespace mu::engraving {
@@ -59,8 +57,6 @@ double MScore::horizontalPageGapOdd = 50.0;
 bool MScore::warnPitchRange;
 int MScore::pedalEventsMinTicks;
 
-bool MScore::playRepeats;
-int MScore::playbackSpeedIncrement;
 double MScore::nudgeStep;
 double MScore::nudgeStep10;
 double MScore::nudgeStep50;
@@ -94,8 +90,6 @@ void MScore::init()
     defaultPlayDuration = 300;        // ms
     warnPitchRange      = true;
     pedalEventsMinTicks = 1;
-    playRepeats         = true;
-    playbackSpeedIncrement = 5;
 
     //
     //  initialize styles
@@ -121,7 +115,7 @@ void MScore::registerUiTypes()
     qRegisterMetaType<JumpType>("JumpType");
     qRegisterMetaType<MarkerType>("MarkerType");
     qRegisterMetaType<HairpinType>("HairpinType");
-    qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
+    qRegisterMetaType<LyricsSyllabic>("Syllabic");
 
 #endif
 }
@@ -153,8 +147,10 @@ std::string MScore::errorToString(MsError err)
     case MsError::DEST_TREMOLO: return "DEST_TREMOLO";
     case MsError::NO_MIME: return "NO_MIME";
     case MsError::DEST_NO_CR: return "DEST_NO_CR";
-    case MsError::CANNOT_CHANGE_LOCAL_TIMESIG: return "CANNOT_CHANGE_LOCAL_TIMESIG";
+    case MsError::CANNOT_CHANGE_LOCAL_TIMESIG_MEASURE_NOT_EMPTY: return "CANNOT_CHANGE_LOCAL_TIMESIG_MEASURE_NOT_EMPTY";
+    case MsError::CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS: return "CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS";
     case MsError::CORRUPTED_MEASURE: return "CORRUPTED_MEASURE";
+    case MsError::CANNOT_REMOVE_KEY_SIG: return "CANNOT_REMOVE_KEY_SIG";
     }
 
     return {};

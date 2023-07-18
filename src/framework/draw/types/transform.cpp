@@ -461,7 +461,7 @@ Transform& Transform::rotate(double a)
     if (RealIsNull(a)) {
         return *this;
     }
-#ifdef TRACE_DRAW_OBJ_ENABLED
+#ifdef MUE_ENABLE_DRAW_TRACE
     if (std::isnan(a)) {
         nanWarning("rotate");
         return *this;
@@ -529,7 +529,7 @@ Transform& Transform::rotate(double a)
 
 Transform& Transform::rotateRadians(double a)
 {
-#ifdef TRACE_DRAW_OBJ_ENABLED
+#ifdef MUE_ENABLE_DRAW_TRACE
     if (std::isnan(a)) {
         nanWarning("rotateRadians");
         return *this;
@@ -588,8 +588,8 @@ Transform& Transform::translate(double dx, double dy)
     if (RealIsNull(dx) && RealIsNull(dy)) {
         return *this;
     }
-#ifdef TRACE_DRAW_OBJ_ENABLED
-    if (std::isnan(dx) | std::isnan(dy)) {
+#ifdef MUE_ENABLE_DRAW_TRACE
+    if (std::isnan(dx) || std::isnan(dy)) {
         nanWarning("translate");
         return *this;
     }
@@ -627,8 +627,8 @@ Transform& Transform::scale(double sx, double sy)
     if (RealIsEqual(sx, 1) && RealIsEqual(sy, 1)) {
         return *this;
     }
-#ifdef TRACE_DRAW_OBJ_ENABLED
-    if (std::isnan(sx) | std::isnan(sy)) {
+#ifdef MUE_ENABLE_DRAW_TRACE
+    if (std::isnan(sx) || std::isnan(sy)) {
         nanWarning("scale");
         return *this;
     }
@@ -664,8 +664,8 @@ Transform& Transform::shear(double sh, double sv)
     if (RealIsNull(sh) && RealIsNull(sv)) {
         return *this;
     }
-#ifdef TRACE_DRAW_OBJ_ENABLED
-    if (std::isnan(sh) | std::isnan(sv)) {
+#ifdef MUE_ENABLE_DRAW_TRACE
+    if (std::isnan(sh) || std::isnan(sv)) {
         nanWarning("shear");
         return *this;
     }
@@ -798,7 +798,7 @@ Transform Transform::fromQTransform(const QTransform& transform)
 
 #endif
 
-#ifdef TRACE_DRAW_OBJ_ENABLED
+#ifdef MUE_ENABLE_DRAW_TRACE
 void Transform::nanWarning(const std::string& func)
 {
     LOGW() << "Transform:: " << func << " with NaN called";

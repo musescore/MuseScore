@@ -25,13 +25,11 @@
 #include <iterator>
 #include <unordered_set>
 
-#include "rw/xml.h"
 #include "style/textstyle.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "bracketItem.h"
-#include "factory.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
 #include "score.h"
@@ -276,9 +274,9 @@ bool EngravingObject::onSameScore(const EngravingObject* other) const
     return this->score() == other->score();
 }
 
-const MStyle* EngravingObject::style() const
+const MStyle& EngravingObject::style() const
 {
-    return &score()->style();
+    return score()->style();
 }
 
 //---------------------------------------------------------
@@ -422,9 +420,9 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
             if (isEngravingItem()) {
                 sp = toEngravingItem(this)->spatium();
             } else {
-                sp = score()->spatium();
+                sp = style().spatium();
             }
-            EngravingObject::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).value<PointF>() * sp);
+            setProperty(Pid::OFFSET, style().styleV(getPropertyStyle(Pid::OFFSET)).value<PointF>() * sp);
             EngravingItem* e = toEngravingItem(this);
             e->setOffsetChanged(false);
         }
@@ -438,7 +436,7 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
             if (p.sid == Sid::NOSTYLE) {
                 break;
             }
-            changeProperties(this, p.pid, score()->styleV(p.sid), PropertyFlags::STYLED);
+            changeProperties(this, p.pid, style().styleV(p.sid), PropertyFlags::STYLED);
         }
     } else if (id == Pid::OFFSET) {
         // TODO: do this in caller?
@@ -466,129 +464,6 @@ void EngravingObject::undoPushProperty(Pid id)
 }
 
 //---------------------------------------------------------
-//   readProperty
-//---------------------------------------------------------
-
-void EngravingObject::readProperty(XmlReader& e, Pid id)
-{
-    PropertyValue v = mu::engraving::readProperty(id, e);
-    switch (propertyType(id)) {
-    case P_TYPE::MILLIMETRE: //! NOTE type mm, but stored in xml as spatium
-        v = v.value<Spatium>().toMM(score()->spatium());
-        break;
-    case P_TYPE::POINT:
-        if (offsetIsSpatiumDependent()) {
-            v = v.value<PointF>() * score()->spatium();
-        } else {
-            v = v.value<PointF>() * DPMM;
-        }
-        break;
-    default:
-        break;
-    }
-    setProperty(id, v);
-    if (isStyled(id)) {
-        setPropertyFlags(id, PropertyFlags::UNSTYLED);
-    }
-}
-
-bool EngravingObject::readProperty(const AsciiStringView& s, XmlReader& e, Pid id)
-{
-    if (s == propertyName(id)) {
-        readProperty(e, id);
-        return true;
-    }
-    return false;
-}
-
-//-----------------------------------------------------------------------------
-//   writeProperty
-//
-//    - styled properties are never written
-//    - unstyled properties are always written regardless of value,
-//    - properties without style are written if different from default value
-//-----------------------------------------------------------------------------
-
-void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
-{
-    if (isStyled(pid)) {
-        return;
-    }
-    PropertyValue p = getProperty(pid);
-    if (!p.isValid()) {
-        LOGD("%s invalid property %d <%s>", typeName(), int(pid), propertyName(pid));
-        return;
-    }
-    PropertyFlags f = propertyFlags(pid);
-    PropertyValue d = (f != PropertyFlags::STYLED) ? propertyDefault(pid) : PropertyValue();
-
-    if (pid == Pid::FONT_STYLE) {
-        FontStyle ds = FontStyle(d.isValid() ? d.toInt() : 0);
-        FontStyle fs = FontStyle(p.toInt());
-        if ((fs& FontStyle::Bold) != (ds & FontStyle::Bold)) {
-            xml.tag("bold", fs & FontStyle::Bold);
-        }
-        if ((fs& FontStyle::Italic) != (ds & FontStyle::Italic)) {
-            xml.tag("italic", fs & FontStyle::Italic);
-        }
-        if ((fs& FontStyle::Underline) != (ds & FontStyle::Underline)) {
-            xml.tag("underline", fs & FontStyle::Underline);
-        }
-        if ((fs& FontStyle::Strike) != (ds & FontStyle::Strike)) {
-            xml.tag("strike", fs & FontStyle::Strike);
-        }
-        return;
-    }
-
-    P_TYPE type = propertyType(pid);
-    if (P_TYPE::MILLIMETRE == type) {
-        double f1 = p.toReal();
-        if (d.isValid() && std::abs(f1 - d.toReal()) < 0.0001) {            // fuzzy compare
-            return;
-        }
-        p = PropertyValue(Spatium::fromMM(f1, score()->spatium()));
-        d = PropertyValue();
-    } else if (P_TYPE::POINT == type) {
-        PointF p1 = p.value<PointF>();
-        if (d.isValid()) {
-            PointF p2 = d.value<PointF>();
-            if ((std::abs(p1.x() - p2.x()) < 0.0001) && (std::abs(p1.y() - p2.y()) < 0.0001)) {
-                return;
-            }
-        }
-        double q = offsetIsSpatiumDependent() ? score()->spatium() : DPMM;
-        p = PropertyValue(p1 / q);
-        d = PropertyValue();
-    }
-    xml.tagProperty(pid, p, d);
-}
-
-//---------------------------------------------------------
-//   readStyledProperty
-//---------------------------------------------------------
-
-bool EngravingObject::readStyledProperty(XmlReader& e, const AsciiStringView& tag)
-{
-    for (const StyledProperty& spp : *styledProperties()) {
-        if (readProperty(tag, e, spp.pid)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-//---------------------------------------------------------
-//   writeStyledProperties
-//---------------------------------------------------------
-
-void EngravingObject::writeStyledProperties(XmlWriter& xml) const
-{
-    for (const StyledProperty& spp : *styledProperties()) {
-        writeProperty(xml, spp.pid);
-    }
-}
-
-//---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
 
@@ -597,16 +472,6 @@ void EngravingObject::reset()
     for (const StyledProperty& spp : *styledProperties()) {
         undoResetProperty(spp.pid);
     }
-}
-
-//---------------------------------------------------------
-//   readAddConnector
-//---------------------------------------------------------
-
-void EngravingObject::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
-{
-    UNUSED(pasteMode);
-    LOGD("Cannot add connector %s to %s", info->connector()->typeName(), typeName());
 }
 
 //---------------------------------------------------------
@@ -619,16 +484,16 @@ void EngravingObject::linkTo(EngravingObject* element)
     assert(!_links);
 
     if (element->links()) {
-        _links = element->_links;
+        setLinks(element->_links);
         assert(_links->contains(element));
     } else {
         if (isStaff()) {
-            _links = new LinkedObjects(score(), -1);       // don’t use lid
+            setLinks(new LinkedObjects(score(), -1));       // don’t use lid
         } else {
-            _links = new LinkedObjects(score());
+            setLinks(new LinkedObjects(score()));
         }
         _links->push_back(element);
-        element->_links = _links;
+        element->setLinks(_links);
     }
     assert(!_links->contains(this));
     _links->push_back(this);
@@ -688,7 +553,7 @@ EngravingObject* EngravingObject::findLinkedInScore(Score* score) const
         return nullptr;
     }
     auto findElem = std::find_if(_links->begin(), _links->end(),
-                                 [score](EngravingObject* engObj) { return engObj && engObj->score() == score; });
+                                 [this, score](EngravingObject* engObj) { return engObj && engObj != this && engObj->score() == score; });
     return findElem != _links->end() ? *findElem : nullptr;
 }
 
@@ -701,6 +566,11 @@ void EngravingObject::undoUnlink()
     if (_links) {
         score()->undo(new Unlink(this));
     }
+}
+
+void EngravingObject::setLinks(LinkedObjects* le)
+{
+    _links = le;
 }
 
 //---------------------------------------------------------
@@ -826,6 +696,7 @@ bool EngravingObject::isTextBase() const
     return type() == ElementType::TEXT
            || type() == ElementType::LYRICS
            || type() == ElementType::DYNAMIC
+           || type() == ElementType::EXPRESSION
            || type() == ElementType::FINGERING
            || type() == ElementType::HARMONY
            || type() == ElementType::MARKER
@@ -834,6 +705,7 @@ bool EngravingObject::isTextBase() const
            || type() == ElementType::SYSTEM_TEXT
            || type() == ElementType::TRIPLET_FEEL
            || type() == ElementType::PLAYTECH_ANNOTATION
+           || type() == ElementType::CAPO
            || type() == ElementType::REHEARSAL_MARK
            || type() == ElementType::INSTRUMENT_CHANGE
            || type() == ElementType::FIGURED_BASS
@@ -842,6 +714,7 @@ bool EngravingObject::isTextBase() const
            || type() == ElementType::MEASURE_NUMBER
            || type() == ElementType::MMREST_RANGE
            || type() == ElementType::STICKING
+           || type() == ElementType::HARP_DIAGRAM
     ;
 }
 
@@ -853,11 +726,11 @@ PropertyValue EngravingObject::styleValue(Pid pid, Sid sid) const
 {
     switch (propertyType(pid)) {
     case P_TYPE::MILLIMETRE:
-        return score()->styleMM(sid);
+        return style().styleMM(sid);
     case P_TYPE::POINT: {
-        PointF val = score()->styleV(sid).value<PointF>();
+        PointF val = style().styleV(sid).value<PointF>();
         if (offsetIsSpatiumDependent()) {
-            val *= score()->spatium();
+            val *= style().spatium();
             if (isEngravingItem()) {
                 const EngravingItem* e = toEngravingItem(this);
                 if (e->staff() && !e->systemFlag()) {
@@ -870,7 +743,7 @@ PropertyValue EngravingObject::styleValue(Pid pid, Sid sid) const
         return val;
     }
     default:
-        return score()->styleV(sid);
+        return style().styleV(sid);
     }
 }
 }

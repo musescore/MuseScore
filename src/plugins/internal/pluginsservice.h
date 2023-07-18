@@ -41,10 +41,10 @@ class PluginsService : public QObject, public IPluginsService, public async::Asy
 {
     Q_OBJECT
 
-    INJECT(plugins, io::IFileSystem, fileSystem)
-    INJECT(plugins, shortcuts::IShortcutsRegister, shortcutsRegister)
-    INJECT(plugins, ui::IUiActionsRegister, uiActionsRegister)
-    INJECT(plugins, IPluginsConfiguration, configuration)
+    INJECT(io::IFileSystem, fileSystem)
+    INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(ui::IUiActionsRegister, uiActionsRegister)
+    INJECT(IPluginsConfiguration, configuration)
 
 public:
     void init();

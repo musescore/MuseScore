@@ -39,7 +39,7 @@ class AbstractStyleDialogModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, context)
+    INJECT(context::IGlobalContext, context)
 
 protected:
     explicit AbstractStyleDialogModel(QObject* parent, std::set<StyleId> ids);

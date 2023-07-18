@@ -28,13 +28,13 @@ if (OS_IS_MAC)
     set(PLATFORM_THEME_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.h
-        ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowprovider.mm
-        ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowprovider.h
+        ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowbridge.mm
+        ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowbridge.h
     )
     # Don't mix C++ and Objective-C++ in Unity Build
     set_source_files_properties(
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
-        ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowprovider.mm
+        ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowbridge.mm
         PROPERTIES
         SKIP_UNITY_BUILD_INCLUSION ON
         SKIP_PRECOMPILE_HEADERS ON
@@ -76,6 +76,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiengine.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mainwindow.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mainwindow.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/themeconverter.cpp
@@ -119,8 +121,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/navigationevent.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlaccessible.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlaccessible.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/mainwindowprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/mainwindowprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/mainwindowbridge.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/mainwindowbridge.h
     ${CMAKE_CURRENT_LIST_DIR}/view/focuslistener.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/focuslistener.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetnavigationfix.cpp
@@ -131,6 +133,8 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/errordetailsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/errordetailsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/progressdialogmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/progressdialogmodel.h
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.h
@@ -151,4 +155,8 @@ if (OS_IS_MAC)
     set(MODULE_LINK ${MODULE_LINK} ${AppKit})
 endif()
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)
+
+if (MUE_BUILD_UNIT_TESTS)
+    add_subdirectory(tests)
+endif()

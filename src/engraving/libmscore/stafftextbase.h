@@ -48,16 +48,14 @@ class StaffTextBase : public TextBase
     std::vector<ChannelActions> _channelActions;
     SwingParameters _swingParameters;
     bool _setAeolusStops { false };
-    int aeolusStops[4]   { 0, 0, 0, 0 };
+    int m_aeolusStops[4]   { 0, 0, 0, 0 };
     bool _swing          { false };
     int _capo            { 0 };
 
 public:
     StaffTextBase(const ElementType& type, Segment* parent, TextStyleType tid, ElementFlags = ElementFlag::NOTHING);
 
-    virtual void write(XmlWriter& xml) const override;
-    virtual void read(XmlReader&) override;
-    virtual bool readProperties(XmlReader&) override;
+    void clear();
 
     Segment* segment() const;
     String channelName(voice_idx_t voice) const { return _channelNames[voice]; }
@@ -73,7 +71,9 @@ public:
     const SwingParameters& swingParameters() const { return _swingParameters; }
     void clearAeolusStops();
     void setAeolusStop(int group, int idx, bool val);
+    void setAeolusStop(int group, int val);
     bool getAeolusStop(int group, int idx) const;
+    int aeolusStop(int group) const;
     void setSetAeolusStops(bool val) { _setAeolusStops = val; }
     void setSwing(bool checked) { _swing = checked; }
     void setCapo(int fretId) { _capo = fretId; }

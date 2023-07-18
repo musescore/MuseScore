@@ -4,47 +4,184 @@ on:
   pull_request:
     branches:
     - master
+    - 4.0.2
 
 jobs:
   setup:
-    name: "VTests workflow"
-    runs-on: ubuntu-22.04
+    name: "Setup VTests workflow"
+    runs-on: ubuntu-20.04
+    outputs:
+      do_run: ${{ steps.output_data.outputs.do_run }}
+      reference_sha: ${{ steps.output_data.outputs.reference_sha }}
+      artifact_name: ${{ steps.output_data.outputs.artifact_name }}
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.11.0
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v3  
+      uses: actions/checkout@v3
     - name: "Configure workflow"
-      env:
-        pull_request_title: ${{ github.event.pull_request.title }}
       run: |
-        bash ./build/ci/tools/make_build_number.sh
-        BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)      
-
-        ADD_INFO="_${GITHUB_REF#refs/heads/}"
-        if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"VTests_Comparison_${BUILD_NUMBER}_${ADD_INFO}")"
+        sudo bash ./build/ci/tools/make_build_number.sh
+        BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
         echo "BUILD_NUMBER: $BUILD_NUMBER"
-        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
-        echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
+    - name: Get reference commit for PR
+      if: github.event_name == 'pull_request'
+      env:
+        pull_request_title: ${{ github.event.pull_request.title }}
+      run: |
+        REFERENCE_SHA=${{ github.event.pull_request.base.sha }}
+        if [ -z "$REFERENCE_SHA" ]; then DO_RUN='false'; else DO_RUN='true'; fi
+        echo "REFERENCE_SHA=$REFERENCE_SHA" >> $GITHUB_ENV
+        echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
+        echo "PR_INFO= ${{ github.event.pull_request.number }} ${pull_request_title}" >> $GITHUB_ENV
+    - name: Get reference commit for push commit
+      if: github.event_name == 'push'
+      run: |
+        REFERENCE_SHA=$( git show -s --pretty=%P ${{ github.sha }} | head -c 10 )
+        if [ -z "$REFERENCE_SHA" ]; then DO_RUN='false'; else DO_RUN='true'; fi
+        echo "REFERENCE_SHA=$REFERENCE_SHA" >> $GITHUB_ENV
+        echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
+        echo "PR_INFO=" >> $GITHUB_ENV
+    - id: output_data
+      name: Output workflow data
+      env:
+        pr_info: ${{ env.PR_INFO }}
+      run: |
+        echo "do_run=${{ env.DO_RUN }}" >> $GITHUB_OUTPUT
+        echo "DO_RUN=${{ env.DO_RUN }}"
+        echo "reference_sha=${{ env.REFERENCE_SHA }}" >> $GITHUB_OUTPUT
+        echo "REFERENCE_SHA=${{ env.REFERENCE_SHA }}"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"VTests Comparison ${{ env.BUILD_NUMBER }}${pr_info}")"
+        echo "artifact_name=$UPLOAD_ARTIFACT_NAME"  >> $GITHUB_OUTPUT
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME"
 
+  build_current:
+    name: "Build current"
+    runs-on: ubuntu-20.04
+    needs: setup
+    if: needs.setup.outputs.do_run == 'true' # Can't use env: see https://github.com/actions/runner/issues/480
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v3
+    - name: Ccache cache files
+      uses: actions/cache@v3
+      with:
+        path: ~/.ccache
+        key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
+        restore-keys: ${{github.workflow}}-ccache- # restore ccache from either previous build on this branch or on master
+    - name: Setup ccache
+      run: |
+        bash ./build/ci/tools/setup_ccache.sh
     - name: Setup environment
       run: |
         bash ./build/ci/linux/setup.sh
-    - name: Build
+    - name: Build and Pack
       run: |
-        source $HOME/build_tools/environment.sh
-        bash ./vtest/build.sh
-    - name: Run test 
-      run: |
-        bash ./vtest/vtest.sh 
-    - name: Upload comparison
-      if: ${{ always() }}
+        bash ./build/ci/vtests/build_and_pack.sh
+    - name: Upload
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.UPLOAD_ARTIFACT_NAME }}
-        path: ./vtest/temp_comparison    
+        name: current_build
+        path: ./build.artifacts/
+
+  build_reference:
+    name: "Build reference"
+    runs-on: ubuntu-20.04
+    needs: setup
+    if: needs.setup.outputs.do_run == 'true'
+    steps:
+    - name: Clone repository and checkout reference commit
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ needs.setup.outputs.reference_sha }}
+    - name: Ccache cache files
+      uses: actions/cache@v3
+      with:
+        path: ~/.ccache
+        key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
+        restore-keys: ${{github.workflow}}-ccache- # restore ccache from either previous build on this branch or on master
+    - name: Setup ccache
+      run: |
+        bash ./build/ci/tools/setup_ccache.sh
+    - name: Setup environment
+      run: |
+        bash ./build/ci/linux/setup.sh
+    - name: Build and Pack
+      run: |
+        bash ./build/ci/vtests/build_and_pack.sh
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: reference_build
+        path: ./build.artifacts/
+
+  generate_and_compare:
+    name: "Generate and Compare"
+    runs-on: ubuntu-20.04
+    needs: [setup, build_current, build_reference]
+    if: needs.setup.outputs.do_run == 'true'
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v3
+    - name: Download current
+      uses: actions/download-artifact@v3
+      with:
+        name: current_build
+        path: ./musescore_current
+    - name: Download reference
+      uses: actions/download-artifact@v3
+      with:
+        name: reference_build
+        path: ./musescore_reference
+    - name: Generate PNGs   
+      run: |
+        xvfb-run ./build/ci/vtests/generate_pngs.sh
+      env: 
+        ASAN_OPTIONS: "detect_leaks=0"
+    - name: Compare PNGs
+      run: |
+        echo "VTEST_DIFF_FOUND=false" >> $GITHUB_ENV
+        ./vtest/vtest-compare-pngs.sh --ci 1
+    - name: Upload comparison
+      if: env.VTEST_DIFF_FOUND == 'true'
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ needs.setup.outputs.artifact_name }}
+        path: ./comparison
+    #- name: Generate ref drawdata
+    #  run: |
+    #    chmod +x ./musescore_reference/app/bin/mscore4portable
+    #    xvfb-run ./vtest/gen-ref-data.sh -m ./musescore_reference/app/bin/mscore4portable
+    #- name: DrawData VTest
+    #  run: |
+    #    chmod +x ./musescore_current/app/bin/mscore4portable
+    #    xvfb-run ./vtest/vtest.sh -m ./musescore_current/app/bin/mscore4portable
+    # - name: Skip failure signal if PR is labeled 'vtests'
+    #   if: github.event_name == 'pull_request' && contains( env.VTEST_DIFF_FOUND, 'true') && contains(github.event.pull_request.labels.*.name, 'vtests')
+    #   run: |
+    #     echo "This PR appears to change some of the visual tests."
+    #     echo "Please carefully review the new visual test results in the uploaded artifact that can be found here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+    #     echo "Failure signal skipped because 'vtests' label is applied to the PR"
+    #     export VTEST_DIFF_FOUND=false
+    #     echo "VTEST_DIFF_FOUND=$VTEST_DIFF_FOUND" >> $GITHUB_ENV
+    - name: Emit failure signal for PR if differences are found
+      if: github.event_name == 'pull_request' && contains( env.VTEST_DIFF_FOUND, 'true')
+      run: |
+        echo "This PR appears to change some of the visual tests."
+        echo "Please carefully review the new visual test results in the uploaded artifact that can be found here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        exit 1
+    - name: Comment push commit
+      if: github.event_name == 'push' && contains( env.VTEST_DIFF_FOUND, 'true')
+      uses: peter-evans/commit-comment@v1.1.0
+      with:
+        body: |
+          This is an automatic message. This commit appears to change some of the visual tests.
+          Please carefully review the new visual test results in the uploaded artifact that can be found
+          [here][1]
+
+          [1]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        token: ${{ secrets.GITHUB_TOKEN }}    

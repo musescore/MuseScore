@@ -25,7 +25,7 @@ DUMPSYMS_BIN=/c/breakpad_tools/dump_syms.exe
 ARTIFACTS_DIR=build.artifacts
 BUILD_DIR=build.release
 SYMBOLS_DIR=$ARTIFACTS_DIR/symbols
-MSCORE_BIN=$BUILD_DIR/src/main/MuseScore4.pdb
+MSCORE_BIN=$BUILD_DIR/src/app/MuseScore4.pdb
 
 echo "GEN_SCRIPT: $GEN_SCRIPT"
 echo "DUMPSYMS_BIN: $DUMPSYMS_BIN"

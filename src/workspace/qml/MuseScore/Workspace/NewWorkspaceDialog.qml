@@ -101,7 +101,7 @@ StyledDialogView {
             Layout.topMargin: 12
             Layout.fillWidth: true
 
-            horizontalAlignment: Qt.AlignLeft
+            horizontalAlignment: Text.AlignLeft
             text: workspaceModel.errorMessage
         }
 
@@ -113,7 +113,7 @@ StyledDialogView {
 
             text: qsTrc("workspace", "Select the options you want remembered in your new workspace")
 
-            horizontalAlignment: Qt.AlignLeft
+            horizontalAlignment: Text.AlignLeft
         }
 
         Grid {
@@ -123,9 +123,11 @@ StyledDialogView {
 
             columns: 2
             rowSpacing: 20
-            columnSpacing: rowSpacing * 4
+            columnSpacing: rowSpacing
 
             CheckBox {
+                width: (parent.width - parent.columnSpacing) / 2
+
                 checked: workspaceModel.useUiPreferences
 
                 text: qsTrc("workspace", "UI preferences (colors, canvas style, etc.)")
@@ -141,6 +143,8 @@ StyledDialogView {
             }
 
             CheckBox {
+                width: (parent.width - parent.columnSpacing) / 2
+
                 checked: workspaceModel.useUiArrangement
 
                 text: qsTrc("workspace", "UI arrangement")
@@ -155,6 +159,8 @@ StyledDialogView {
             }
 
             CheckBox {
+                width: (parent.width - parent.columnSpacing) / 2
+
                 checked: workspaceModel.usePalettes
 
                 text: qsTrc("workspace", "Palettes")
@@ -169,6 +175,8 @@ StyledDialogView {
             }
 
             CheckBox {
+                width: (parent.width - parent.columnSpacing) / 2
+
                 checked: workspaceModel.useToolbarCustomization
 
                 text: qsTrc("workspace", "Toolbar customizations")

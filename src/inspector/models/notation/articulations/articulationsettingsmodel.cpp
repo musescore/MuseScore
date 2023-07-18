@@ -44,20 +44,7 @@ void ArticulationSettingsModel::createProperties()
 
 void ArticulationSettingsModel::requestElements()
 {
-    m_elementList
-        = m_repository->findElementsByType(mu::engraving::ElementType::ARTICULATION, [](const mu::engraving::EngravingItem* element) -> bool {
-        IF_ASSERT_FAILED(
-            element) {
-            return false;
-        }
-
-        const mu::engraving::Articulation* articulation = mu::engraving::toArticulation(element);
-        IF_ASSERT_FAILED(articulation) {
-            return false;
-        }
-
-        return !articulation->isOrnament();
-    });
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::ARTICULATION);
 }
 
 void ArticulationSettingsModel::loadProperties()

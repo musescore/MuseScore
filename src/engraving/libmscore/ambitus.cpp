@@ -25,8 +25,6 @@
 #include "translation.h"
 
 #include "draw/types/pen.h"
-#include "rw/compat/read206.h"
-#include "rw/xml.h"
 
 #include "accidental.h"
 #include "chord.h"
@@ -45,13 +43,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static const NoteHeadGroup NOTEHEADGROUP_DEFAULT = NoteHeadGroup::HEAD_NORMAL;
-static const NoteHeadType NOTEHEADTYPE_DEFAULT  = NoteHeadType::HEAD_AUTO;
-static const DirectionH DIR_DEFAULT     = DirectionH::AUTO;
-static const bool HASLINE_DEFAULT         = true;
-static const Spatium LINEWIDTH_DEFAULT(0.12);
-static const double LINEOFFSET_DEFAULT      = 0.8;               // the distance between notehead and line
-
+const Spatium Ambitus::LINEWIDTH_DEFAULT = Spatium(0.12);
 //---------------------------------------------------------
 //   Ambitus
 //---------------------------------------------------------
@@ -167,8 +159,13 @@ void Ambitus::setTrack(track_idx_t t)
 //    setting either pitch requires to adjust the corresponding tpc
 //---------------------------------------------------------
 
-void Ambitus::setTopPitch(int val)
+void Ambitus::setTopPitch(int val, bool applyLogic)
 {
+    if (!applyLogic) {
+        _topPitch   = val;
+        return;
+    }
+
     int deltaPitch    = val - topPitch();
     // if deltaPitch is not an integer number of octaves, adjust tpc
     // (to avoid 'wild' tpc changes with octave changes)
@@ -187,8 +184,13 @@ void Ambitus::setTopPitch(int val)
     normalize();
 }
 
-void Ambitus::setBottomPitch(int val)
+void Ambitus::setBottomPitch(int val, bool applyLogic)
 {
+    if (!applyLogic) {
+        _bottomPitch = val;
+        return;
+    }
+
     int deltaPitch    = val - bottomPitch();
     // if deltaPitch is not an integer number of octaves, adjust tpc
     // (to avoid 'wild' tpc changes with octave changes)
@@ -214,8 +216,13 @@ void Ambitus::setBottomPitch(int val)
 //    (but remaining in the same octave)
 //---------------------------------------------------------
 
-void Ambitus::setTopTpc(int val)
+void Ambitus::setTopTpc(int val, bool applyLogic)
 {
+    if (!applyLogic) {
+        _topTpc = val;
+        return;
+    }
+
     int octave        = topPitch() / PITCH_DELTA_OCTAVE;
     int deltaTpc      = val - topTpc();
     // get new pitch according to tpc change
@@ -227,8 +234,13 @@ void Ambitus::setTopTpc(int val)
     normalize();
 }
 
-void Ambitus::setBottomTpc(int val)
+void Ambitus::setBottomTpc(int val, bool applyLogic)
 {
+    if (!applyLogic) {
+        _bottomTpc = val;
+        return;
+    }
+
     int octave        = bottomPitch() / PITCH_DELTA_OCTAVE;
     int deltaTpc      = val - bottomTpc();
     // get new pitch according to tpc change
@@ -241,277 +253,12 @@ void Ambitus::setBottomTpc(int val)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Ambitus::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    xml.tagProperty(Pid::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
-    xml.tagProperty(Pid::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
-    xml.tagProperty(Pid::MIRROR_HEAD, int(_dir),           int(DIR_DEFAULT));
-    xml.tag("hasLine",    _hasLine, true);
-    xml.tagProperty(Pid::LINE_WIDTH_SPATIUM, _lineWidth, LINEWIDTH_DEFAULT);
-    xml.tag("topPitch",   _topPitch);
-    xml.tag("topTpc",     _topTpc);
-    xml.tag("bottomPitch", _bottomPitch);
-    xml.tag("bottomTpc",  _bottomTpc);
-    if (_topAccid->accidentalType() != AccidentalType::NONE) {
-        xml.startElement("topAccidental");
-        _topAccid->write(xml);
-        xml.endElement();
-    }
-    if (_bottomAccid->accidentalType() != AccidentalType::NONE) {
-        xml.startElement("bottomAccidental");
-        _bottomAccid->write(xml);
-        xml.endElement();
-    }
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Ambitus::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Ambitus::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-    if (tag == "head") {
-        readProperty(e, Pid::HEAD_GROUP);
-    } else if (tag == "headType") {
-        readProperty(e, Pid::HEAD_TYPE);
-    } else if (tag == "mirror") {
-        readProperty(e, Pid::MIRROR_HEAD);
-    } else if (tag == "hasLine") {
-        setHasLine(e.readInt());
-    } else if (tag == "lineWidth") {
-        readProperty(e, Pid::LINE_WIDTH_SPATIUM);
-    } else if (tag == "topPitch") {
-        _topPitch = e.readInt();
-    } else if (tag == "bottomPitch") {
-        _bottomPitch = e.readInt();
-    } else if (tag == "topTpc") {
-        _topTpc = e.readInt();
-    } else if (tag == "bottomTpc") {
-        _bottomTpc = e.readInt();
-    } else if (tag == "topAccidental") {
-        while (e.readNextStartElement()) {
-            if (e.name() == "Accidental") {
-                if (score()->mscVersion() < 301) {
-                    compat::Read206::readAccidental206(_topAccid, e);
-                } else {
-                    _topAccid->read(e);
-                }
-            } else {
-                e.skipCurrentElement();
-            }
-        }
-    } else if (tag == "bottomAccidental") {
-        while (e.readNextStartElement()) {
-            if (e.name() == "Accidental") {
-                if (score()->mscVersion() < 301) {
-                    compat::Read206::readAccidental206(_bottomAccid, e);
-                } else {
-                    _bottomAccid->read(e);
-                }
-            } else {
-                e.skipCurrentElement();
-            }
-        }
-    } else if (EngravingItem::readProperties(e)) {
-    } else {
-        return false;
-    }
-    return true;
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Ambitus::layout()
-{
-    int bottomLine, topLine;
-    ClefType clf;
-    double headWdt     = headWidth();
-    Key key;
-    double lineDist;
-    int numOfLines;
-    Segment* segm        = segment();
-    double _spatium    = spatium();
-    Staff* stf         = nullptr;
-    if (segm && track() != mu::nidx) {
-        Fraction tick    = segm->tick();
-        stf         = score()->staff(staffIdx());
-        lineDist    = stf->lineDistance(tick) * _spatium;
-        numOfLines  = stf->lines(tick);
-        clf         = stf->clef(tick);
-    } else {                              // for use in palettes
-        lineDist    = _spatium;
-        numOfLines  = 3;
-        clf         = ClefType::G;
-    }
-
-    //
-    // NOTEHEADS Y POS
-    //
-    // if pitch == INVALID_PITCH or tpc == Tpc::TPC_INVALID, set to some default:
-    // for use in palettes and when actual range cannot be calculated (new ambitus or no notes in staff)
-    //
-    double xAccidOffTop    = 0;
-    double xAccidOffBottom = 0;
-    if (stf) {
-        key = stf->key(segm->tick());
-    } else {
-        key = Key::C;
-    }
-
-    // top notehead
-    if (_topPitch == INVALID_PITCH || _topTpc == Tpc::TPC_INVALID) {
-        _topPos.setY(0.0);    // if uninitialized, set to top staff line
-    } else {
-        topLine  = absStep(_topTpc, _topPitch);
-        topLine  = relStep(topLine, clf);
-        _topPos.setY(topLine * lineDist * 0.5);
-        // compute accidental
-        AccidentalType accidType;
-        // if (13 <= (tpc - key) <= 19) there is no accidental)
-        if (_topTpc - int(key) >= 13 && _topTpc - int(key) <= 19) {
-            accidType = AccidentalType::NONE;
-        } else {
-            AccidentalVal accidVal = tpc2alter(_topTpc);
-            accidType = Accidental::value2subtype(accidVal);
-            if (accidType == AccidentalType::NONE) {
-                accidType = AccidentalType::NATURAL;
-            }
-        }
-        _topAccid->setAccidentalType(accidType);
-        if (accidType != AccidentalType::NONE) {
-            _topAccid->layout();
-        } else {
-            _topAccid->setbbox(RectF());
-        }
-        _topAccid->setPosY(_topPos.y());
-    }
-
-    // bottom notehead
-    if (_bottomPitch == INVALID_PITCH || _bottomTpc == Tpc::TPC_INVALID) {
-        _bottomPos.setY((numOfLines - 1) * lineDist);             // if uninitialized, set to last staff line
-    } else {
-        bottomLine  = absStep(_bottomTpc, _bottomPitch);
-        bottomLine  = relStep(bottomLine, clf);
-        _bottomPos.setY(bottomLine * lineDist * 0.5);
-        // compute accidental
-        AccidentalType accidType;
-        if (_bottomTpc - int(key) >= 13 && _bottomTpc - int(key) <= 19) {
-            accidType = AccidentalType::NONE;
-        } else {
-            AccidentalVal accidVal = tpc2alter(_bottomTpc);
-            accidType = Accidental::value2subtype(accidVal);
-            if (accidType == AccidentalType::NONE) {
-                accidType = AccidentalType::NATURAL;
-            }
-        }
-        _bottomAccid->setAccidentalType(accidType);
-        if (accidType != AccidentalType::NONE) {
-            _bottomAccid->layout();
-        } else {
-            _bottomAccid->setbbox(RectF());
-        }
-        _bottomAccid->setPosY(_bottomPos.y());
-    }
-
-    //
-    // NOTEHEAD X POS
-    //
-    // Note: manages colliding accidentals
-    //
-    double accNoteDist = point(score()->styleS(Sid::accidentalNoteDistance));
-    xAccidOffTop      = _topAccid->width() + accNoteDist;
-    xAccidOffBottom   = _bottomAccid->width() + accNoteDist;
-
-    // if top accidental extends down more than bottom accidental extends up,
-    // AND ambitus is not leaning right, bottom accidental needs to be displaced
-    bool collision
-        =(_topAccid->ipos().y() + _topAccid->bbox().y() + _topAccid->height()
-          > _bottomAccid->ipos().y() + _bottomAccid->bbox().y())
-          && _dir != DirectionH::RIGHT;
-    if (collision) {
-        // displace bottom accidental (also attempting to 'undercut' flats)
-        xAccidOffBottom = xAccidOffTop
-                          + ((_bottomAccid->accidentalType() == AccidentalType::FLAT
-                              || _bottomAccid->accidentalType() == AccidentalType::FLAT2
-                              || _bottomAccid->accidentalType() == AccidentalType::NATURAL)
-                             ? _bottomAccid->width() * 0.5 : _bottomAccid->width());
-    }
-
-    switch (_dir) {
-    case DirectionH::AUTO:                       // noteheads one above the other
-        // left align noteheads and right align accidentals 'hanging' on the left
-        _topPos.setX(0.0);
-        _bottomPos.setX(0.0);
-        _topAccid->setPosX(-xAccidOffTop);
-        _bottomAccid->setPosX(-xAccidOffBottom);
-        break;
-    case DirectionH::LEFT:                       // top notehead at the left of bottom notehead
-        // place top notehead at left margin; bottom notehead at right of top head;
-        // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
-        _topPos.setX(0.0);
-        _bottomPos.setX(headWdt);
-        _topAccid->setPosX(-xAccidOffTop);
-        _bottomAccid->setPosX(collision ? -xAccidOffBottom : headWdt - xAccidOffBottom);
-        break;
-    case DirectionH::RIGHT:                      // top notehead at the right of bottom notehead
-        // bottom notehead at left margin; top notehead at right of bottomnotehead
-        // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
-        _bottomPos.setX(0.0);
-        _topPos.setX(headWdt);
-        _bottomAccid->setPosX(-xAccidOffBottom);
-        _topAccid->setPosX(headWdt - xAccidOffTop);
-        break;
-    }
-
-    // compute line from top note centre to bottom note centre
-    mu::LineF fullLine(_topPos.x() + headWdt * 0.5, _topPos.y(), _bottomPos.x() + headWdt * 0.5, _bottomPos.y());
-    // shorten line on each side by offsets
-    double yDelta = _bottomPos.y() - _topPos.y();
-    if (yDelta != 0.0) {
-        double off = _spatium * LINEOFFSET_DEFAULT;
-        mu::PointF p1 = fullLine.pointAt(off / yDelta);
-        mu::PointF p2 = fullLine.pointAt(1 - (off / yDelta));
-        _line = mu::LineF(p1, p2);
-    } else {
-        _line = fullLine;
-    }
-
-    mu::RectF headRect(0, -0.5 * _spatium, headWdt, 1 * _spatium);
-    setbbox(headRect.translated(_topPos).united(headRect.translated(_bottomPos))
-            .united(_topAccid->bbox().translated(_topAccid->ipos()))
-            .united(_bottomAccid->bbox().translated(_bottomAccid->ipos()))
-            );
-}
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
 void Ambitus::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     double _spatium = spatium();
     double lw = lineWidth().val() * _spatium;
@@ -530,8 +277,8 @@ void Ambitus::draw(mu::draw::Painter* painter) const
         int numOfLines = staff->lines(tick);
         double step     = lineDist * _spatium;
         double stepTolerance    = step * 0.1;
-        double ledgerLineLength = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
-        double ledgerLineWidth  = score()->styleS(Sid::ledgerLineWidth).val() * _spatium;
+        double ledgerLineLength = style().styleS(Sid::ledgerLineLength).val() * _spatium;
+        double ledgerLineWidth  = style().styleS(Sid::ledgerLineWidth).val() * _spatium;
         painter->setPen(Pen(curColor(), ledgerLineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
 
         if (_topPos.y() - stepTolerance <= -step) {

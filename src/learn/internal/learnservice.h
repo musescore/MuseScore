@@ -34,9 +34,9 @@ class QJsonDocument;
 namespace mu::learn {
 class LearnService : public ILearnService
 {
-    INJECT(learn, ILearnConfiguration, configuration)
-    INJECT(learn, network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(learn, framework::IInteractive, interactive)
+    INJECT(ILearnConfiguration, configuration)
+    INJECT(network::INetworkManagerCreator, networkManagerCreator)
+    INJECT(framework::IInteractive, interactive)
 
 public:
     void refreshPlaylists() override;
@@ -47,14 +47,9 @@ public:
     Playlist advancedPlaylist() const override;
     async::Channel<Playlist> advancedPlaylistChanged() const override;
 
-    void openVideo(const QString& videoId) const override;
-
 private:
     void th_requestPlaylist(const QUrl& playlistUrl, std::function<void(RetVal<Playlist>)> callBack) const;
 
-    void openUrl(const QUrl& url) const;
-
-    QStringList parsePlaylistItemsIds(const QJsonDocument& playlistDoc) const;
     Playlist parsePlaylist(const QJsonDocument& playlistDoc) const;
 
     Playlist m_startedPlaylist;

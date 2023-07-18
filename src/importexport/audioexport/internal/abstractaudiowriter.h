@@ -34,10 +34,10 @@
 namespace mu::iex::audioexport {
 class AbstractAudioWriter : public project::INotationWriter, public async::Asyncable
 {
-    INJECT(audioexport, audio::IPlayback, playback)
-    INJECT(audioexport, IAudioExportConfiguration, configuration)
-    INJECT(audioexport, context::IGlobalContext, globalContext)
-    INJECT(audioexport, playback::IPlaybackController, playbackController)
+    INJECT(audio::IPlayback, playback)
+    INJECT(IAudioExportConfiguration, configuration)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(playback::IPlaybackController, playbackController)
 
 public:
     std::vector<UnitType> supportedUnitTypes() const override;
@@ -46,8 +46,7 @@ public:
     Ret write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options& options = Options()) override;
     Ret writeList(const notation::INotationPtrList& notations, QIODevice& destinationDevice, const Options& options = Options()) override;
 
-    bool supportsProgressNotifications() const override;
-    framework::Progress progress() const override;
+    framework::Progress* progress() override;
     void abort() override;
 
 protected:

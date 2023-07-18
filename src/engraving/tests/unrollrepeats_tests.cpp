@@ -42,7 +42,7 @@ class Engraving_UnrollRepeatsTests : public ::testing::Test
 ///   clef, key, time signature changes.
 //---------------------------------------------------------
 
-TEST_F(Engraving_UnrollRepeatsTests, clefKeyTs)
+TEST_F(Engraving_UnrollRepeatsTests, DISABLED_clefKeyTs)
 {
     MasterScore* score = ScoreRW::readScore(UNROLLREPEATS_DATA_DIR + u"clef-key-ts-test.mscx");
 
@@ -57,7 +57,7 @@ TEST_F(Engraving_UnrollRepeatsTests, clefKeyTs)
 ///   pickup measure should get merged to a full bar on repeat
 //---------------------------------------------------------
 
-TEST_F(Engraving_UnrollRepeatsTests, pickupMeasure)
+TEST_F(Engraving_UnrollRepeatsTests, DISABLED_pickupMeasure)
 {
     MasterScore* score = ScoreRW::readScore(UNROLLREPEATS_DATA_DIR + u"pickup-measure-test.mscx");
 

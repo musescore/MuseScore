@@ -41,10 +41,10 @@ class EditDrumsetDialog : public QDialog, private Ui::EditDrumsetDialog
 {
     Q_OBJECT
 
-    INJECT(palette, framework::IInteractive, interactive)
-    INJECT(palette, context::IGlobalContext, globalContext)
-    INJECT(palette, notation::INotationConfiguration, notationConfiguration)
-    INJECT_STATIC(palette, engraving::IEngravingFontsProvider, engravingFonts)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT_STATIC(engraving::IEngravingFontsProvider, engravingFonts)
 
 public:
     EditDrumsetDialog(QWidget* parent = nullptr);

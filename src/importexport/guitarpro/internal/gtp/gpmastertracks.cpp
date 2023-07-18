@@ -1,4 +1,4 @@
 #include "gpmastertracks.h"
 
-namespace mu::engraving {
-}
+namespace mu::iex::guitarpro {
+} // namespace mu::iex::guitarpro

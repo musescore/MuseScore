@@ -30,6 +30,7 @@ using namespace mu::uicomponents;
 
 static const QString ALL_INSTRUMENTS_GENRE_ID("ALL_INSTRUMENTS");
 static const QString NONE_GROUP_ID("");
+static const QString FIRST_GROUP_ID("FIRST_GROUP_ID");
 static const QString INSTRUMENT_TEMPLATE_KEY("instrumentTemplate");
 
 InstrumentListModel::InstrumentListModel(QObject* parent)
@@ -62,6 +63,8 @@ QVariant InstrumentListModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case RoleName:
         return instrument.name;
+    case RoleDescription:
+        return instrument.templates[instrument.currentTemplateIndex]->description.toQString();
     case RoleTraits: {
         QStringList traits;
         for (const InstrumentTemplate* templ : instrument.templates) {
@@ -89,6 +92,7 @@ bool InstrumentListModel::setData(const QModelIndex& index, const QVariant& valu
 
     switch (role) {
     case RoleName:
+    case RoleDescription:
     case RoleTraits:
     case RoleIsSelected:
         break;
@@ -97,6 +101,7 @@ bool InstrumentListModel::setData(const QModelIndex& index, const QVariant& valu
         instrument.currentTemplateIndex = value.toInt();
         selectInstrument(index.row());
         emit dataChanged(index, index, { RoleCurrentTraitIndex });
+        emit selectionChanged();
         return true;
     }
 
@@ -112,6 +117,7 @@ QHash<int, QByteArray> InstrumentListModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
         { RoleName, "name" },
+        { RoleDescription, "description" },
         { RoleIsSelected, "isSelected" },
         { RoleTraits, "traits" },
         { RoleCurrentTraitIndex, "currentTraitIndex" }
@@ -130,10 +136,9 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     loadGroups();
 
     if (currentInstrumentId.isEmpty()) {
-        init(COMMON_GENRE_ID, NONE_GROUP_ID);
+        init(COMMON_GENRE_ID, FIRST_GROUP_ID);
     } else {
         init(COMMON_GENRE_ID, resolveInstrumentGroupId(currentInstrumentId));
-        focusOnInstrument(currentInstrumentId);
     }
 }
 
@@ -164,7 +169,13 @@ void InstrumentListModel::init(const QString& genreId, const QString& groupId)
     TRACEFUNC;
 
     setCurrentGenre(genreId);
-    setCurrentGroup(groupId);
+
+    QString newGroupId = groupId;
+    if (newGroupId == FIRST_GROUP_ID) {
+        newGroupId = !m_groups.empty() ? m_groups.first()->id.toQString() : NONE_GROUP_ID;
+    }
+
+    setCurrentGroup(newGroupId);
 
     m_instrumentsLoadingAllowed = true;
     loadInstruments();
@@ -179,21 +190,6 @@ QString InstrumentListModel::resolveInstrumentGroupId(const String& instrumentId
     }
 
     return NONE_GROUP_ID;
-}
-
-void InstrumentListModel::focusOnInstrument(const String& instrumentId)
-{
-    TRACEFUNC;
-
-    for (int i = 0; i < m_instruments.size(); ++i) {
-        for (const InstrumentTemplate* templ : m_instruments[i].templates) {
-            if (templ->id == instrumentId) {
-                selectInstrument(i);
-                emit focusRequested(currentGroupIndex(), i);
-                return;
-            }
-        }
-    }
 }
 
 void InstrumentListModel::loadGenres()

@@ -20,9 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "xml.h"
-
-#include "libmscore/score.h"
+#include "xmlreader.h"
 
 #include "log.h"
 
@@ -31,9 +29,6 @@ using namespace mu;
 namespace mu::engraving {
 XmlReader::~XmlReader()
 {
-    if (m_selfContext) {
-        delete m_context;
-    }
 }
 
 PointF XmlReader::readPoint()
@@ -236,24 +231,5 @@ String XmlReader::readXml()
         }
     }
     return s;
-}
-
-engraving::ReadContext* XmlReader::context() const
-{
-    if (!m_context) {
-        m_context = new engraving::ReadContext(nullptr);
-        m_selfContext = true;
-    }
-    return m_context;
-}
-
-void XmlReader::setContext(ReadContext* context)
-{
-    if (m_context && m_selfContext) {
-        delete m_context;
-    }
-
-    m_context = context;
-    m_selfContext = false;
 }
 }

@@ -22,10 +22,13 @@
 
 #include "textedit.h"
 
-#include "mscoreview.h"
-#include "score.h"
 #include "iengravingfont.h"
 #include "types/symnames.h"
+
+#include "mscoreview.h"
+#include "navigate.h"
+#include "score.h"
+#include "lyrics.h"
 
 #include "log.h"
 
@@ -65,8 +68,8 @@ TextCursor* TextEditData::cursor() const
 
 void TextBase::editInsertText(TextCursor* cursor, const String& s)
 {
-    assert(!layoutInvalid);
-    textInvalid = true;
+    assert(!m_layoutInvalid);
+    m_textInvalid = true;
 
     int col = 0;
     for (size_t i = 0; i < s.size(); ++i) {
@@ -74,7 +77,18 @@ void TextBase::editInsertText(TextCursor* cursor, const String& s)
             ++col;
         }
     }
-    cursor->curLine().insert(cursor, s);
+
+    TextBlock& block = m_blocks[cursor->row()];
+    const CharFormat* previousFormat = block.formatAt(std::max(int(cursor->column()) - 1, 0));
+    if (previousFormat && previousFormat->fontFamily() == "ScoreText" && s == " ") {
+        // This space would be ignored by the xml parser (see #15629)
+        // We must use the nonBreaking space character instead
+        String nonBreakingSpace = String(Char(0xa0));
+        cursor->curLine().insert(cursor, nonBreakingSpace);
+    } else {
+        cursor->curLine().insert(cursor, s);
+    }
+
     cursor->setColumn(cursor->column() + col);
     cursor->clearSelection();
 
@@ -96,8 +110,8 @@ void TextBase::startEdit(EditData& ed)
     ted->oldXmlText = xmlText();
     ted->startUndoIdx = score()->undoStack()->getCurIdx();
 
-    if (layoutInvalid) {
-        layout();
+    if (m_layoutInvalid) {
+        layout()->layoutItem(this);
     }
     if (!ted->cursor()->set(ed.startMove)) {
         resetFormatting();
@@ -187,6 +201,13 @@ void TextBase::endEdit(EditData& ed)
         }
 
         commitText();
+        if (isLyrics()) {
+            Lyrics* prev = prevLyrics(toLyrics(this));
+            if (prev) {
+                prev->setIsRemoveInvalidSegments();
+                layout()->layoutItem(prev);
+            }
+        }
         return;
     }
 
@@ -196,10 +217,15 @@ void TextBase::endEdit(EditData& ed)
         resetFormatting();
         undoChangeProperty(Pid::TEXT, actualXmlText);       // change property to set text to actual value again
                                                             // this also changes text of linked elements
-        layout1();
+        layout()->layoutText1(this);
         triggerLayout();                                    // force relayout even if text did not change
     } else {
         triggerLayout();
+    }
+    if (isLyrics()) {
+        // we must adjust previous lyrics before the call to commitText(), in order to make the adjustments
+        // part of the same undo command. there is logic above that will skip this call if the text is empty
+        toLyrics(this)->adjustPrevious();
     }
 
     static const double w = 2.0;
@@ -224,10 +250,8 @@ void TextBase::insertSym(EditData& ed, SymId id)
 
     deleteSelectedText(ed);
     String s = score()->engravingFont()->toString(id);
-    CharFormat fmt = *cursor->format();    // save format
     cursor->format()->setFontFamily(u"ScoreText");
-    score()->undo(new InsertText(_cursor, s), &ed);
-    cursor->setFormat(fmt);    // restore format
+    score()->undo(new InsertText(m_cursor, s), &ed);
 }
 
 //---------------------------------------------------------
@@ -372,6 +396,7 @@ bool TextBase::edit(EditData& ed)
         return false;
     }
     TextCursor* cursor = ted->cursor();
+    CharFormat* currentFormat = cursor->format();
 
     String s         = ed.s;
     bool ctrlPressed  = ed.modifiers & ControlModifier;
@@ -381,7 +406,7 @@ bool TextBase::edit(EditData& ed)
     TextCursor::MoveMode mm = shiftPressed ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor;
 
     bool wasHex = false;
-    if (hexState >= 0) {
+    if (m_hexState >= 0) {
         if (ed.modifiers == (ControlModifier | ShiftModifier | KeypadModifier)) {
             switch (ed.key) {
             case Key_0:
@@ -395,7 +420,7 @@ bool TextBase::edit(EditData& ed)
             case Key_8:
             case Key_9:
                 s = Char::fromAscii(ed.key);
-                ++hexState;
+                ++m_hexState;
                 wasHex = true;
                 break;
             default:
@@ -410,7 +435,7 @@ bool TextBase::edit(EditData& ed)
             case Key_E:
             case Key_F:
                 s = Char::fromAscii(ed.key);
-                ++hexState;
+                ++m_hexState;
                 wasHex = true;
                 break;
             default:
@@ -468,7 +493,7 @@ bool TextBase::edit(EditData& ed)
                 String text = cursor->selectedText();
 
                 if (!deleteSelectedText(ed)) {
-                    if (cursor->column() == 0 && _cursor->row() != 0) {
+                    if (cursor->column() == 0 && m_cursor->row() != 0) {
                         score()->undo(new JoinText(cursor), &ed);
                     } else {
                         if (!cursor->movePosition(TextCursor::MoveOperation::Left)) {
@@ -484,8 +509,8 @@ bool TextBase::edit(EditData& ed)
         }
 
         case Key_Left:
-            if (!_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::WordLeft : TextCursor::MoveOperation::Left,
-                                       mm) && type() == ElementType::LYRICS) {
+            if (!m_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::WordLeft : TextCursor::MoveOperation::Left,
+                                        mm) && type() == ElementType::LYRICS) {
                 return false;
             }
             s.clear();
@@ -495,8 +520,8 @@ bool TextBase::edit(EditData& ed)
             break;
 
         case Key_Right:
-            if (!_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::NextWord : TextCursor::MoveOperation::Right,
-                                       mm) && type() == ElementType::LYRICS) {
+            if (!m_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::NextWord : TextCursor::MoveOperation::Right,
+                                        mm) && type() == ElementType::LYRICS) {
                 return false;
             }
             s.clear();
@@ -565,8 +590,8 @@ bool TextBase::edit(EditData& ed)
             break;
 
         case Key_Space:
-            if (ed.modifiers & TextEditingControlModifier) {
-                s = String(Char(0xa0));               // non-breaking space
+            if ((ed.modifiers & TextEditingControlModifier) || currentFormat->fontFamily() == u"ScoreText") {
+                s = String(Char(0xa0)); // non-breaking space
             } else {
                 if (isFingering() && ed.view()) {
                     score()->endCmd();
@@ -617,8 +642,8 @@ bool TextBase::edit(EditData& ed)
         if (ctrlPressed && shiftPressed) {
             switch (ed.key) {
             case Key_U:
-                if (hexState == -1) {
-                    hexState = 0;
+                if (m_hexState == -1) {
+                    m_hexState = 0;
                     s = u"u";
                 }
                 break;
@@ -672,8 +697,11 @@ bool TextBase::edit(EditData& ed)
         }
     }
     if (!s.isEmpty()) {
+        if (currentFormat->fontFamily() == u"ScoreText") {
+            currentFormat->setFontFamily(propertyDefault(Pid::FONT_FACE).value<String>());
+        }
         deleteSelectedText(ed);
-        score()->undo(new InsertText(_cursor, s), &ed);
+        score()->undo(new InsertText(m_cursor, s), &ed);
 
         int startPosition = cursor->currentPosition();
         notifyAboutTextInserted(startPosition, startPosition + static_cast<int>(s.size()), s);
@@ -701,6 +729,7 @@ void TextBase::movePosition(EditData& ed, TextCursor::MoveOperation op)
 void ChangeText::insertText(EditData* ed)
 {
     TextCursor tc = _cursor;
+    tc.setFormat(format);                              // To undo TextCursor::updateCursorFormat()
     tc.text()->editInsertText(&tc, s);
     if (ed) {
         TextCursor* ttc = tc.text()->cursorFromEditData(*ed);
@@ -717,6 +746,7 @@ void ChangeText::removeText(EditData* ed)
     TextCursor tc = _cursor;
     TextBlock& l  = _cursor.curLine();
     size_t column = _cursor.column();
+    format = *l.formatAt(static_cast<int>(column + s.size()) - 1);
 
     for (size_t n = 0; n < s.size(); ++n) {
         l.remove(static_cast<int>(column), &_cursor);
@@ -810,9 +840,13 @@ EngravingItem* TextBase::drop(EditData& ed)
 
     case ElementType::FSYMBOL:
     {
-        char32_t code = static_cast<char32_t>(toFSymbol(e)->code());
-        String s = String::fromUcs4(&code, 1);
+        String s = toFSymbol(e)->toString();
         delete e;
+
+        CharFormat* currentFormat = cursor->format();
+        if (currentFormat->fontFamily() == u"ScoreText") {
+            currentFormat->setFontFamily(propertyDefault(Pid::FONT_FACE).value<String>());
+        }
 
         deleteSelectedText(ed);
         score()->undo(new InsertText(cursor, s), &ed);
@@ -863,9 +897,9 @@ void TextBase::paste(EditData& ed, const String& txt)
                         assert(i + 1 < txt.size());
                         i++;
                         Char lowSurrogate = txt.at(i);
-                        insertText(ed, String(Char::surrogateToUcs4(highSurrogate, lowSurrogate)));
+                        insertText(ed, String::fromUcs4(Char::surrogateToUcs4(highSurrogate, lowSurrogate)));
                     } else {
-                        insertText(ed, String(Char(c.unicode())));
+                        insertText(ed, String(c));
                     }
                 }
             }
@@ -924,25 +958,25 @@ void TextBase::endHexState(EditData& ed)
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
 
-    if (hexState >= 0) {
-        if (hexState > 0) {
+    if (m_hexState >= 0) {
+        if (m_hexState > 0) {
             size_t c2 = cursor->column();
-            size_t c1 = c2 - (hexState + 1);
+            size_t c1 = c2 - (m_hexState + 1);
 
-            TextBlock& t = _layout[cursor->row()];
-            String ss   = t.remove(static_cast<int>(c1), hexState + 1, cursor);
+            TextBlock& t = m_blocks[cursor->row()];
+            String ss   = t.remove(static_cast<int>(c1), m_hexState + 1, cursor);
             bool ok;
-            int code     = ss.mid(1).toInt(&ok, 16);
+            char16_t code = ss.mid(1).toInt(&ok, 16);
             cursor->setColumn(c1);
             cursor->clearSelection();
             if (ok) {
                 editInsertText(cursor, String(code));
             } else {
                 LOGD("cannot convert hex string <%s>, state %d (%zu-%zu)",
-                     muPrintable(ss.mid(1)), hexState, c1, c2);
+                     muPrintable(ss.mid(1)), m_hexState, c1, c2);
             }
         }
-        hexState = -1;
+        m_hexState = -1;
     }
 }
 
@@ -965,7 +999,7 @@ bool TextBase::deleteSelectedText(EditData& ed)
         // swap start end of selection
         r1 = cursor->row();
         c1 = cursor->column();
-        cursor->setRow(_cursor->selectLine());
+        cursor->setRow(m_cursor->selectLine());
         cursor->setColumn(cursor->selectColumn());
     }
 
@@ -978,13 +1012,11 @@ bool TextBase::deleteSelectedText(EditData& ed)
             score()->undo(new JoinText(cursor), &ed);
         } else {
             // move cursor left:
-            if (!_cursor->movePosition(TextCursor::MoveOperation::Left)) {
+            if (!m_cursor->movePosition(TextCursor::MoveOperation::Left)) {
                 break;
             }
-            TextCursor undoCursor(*_cursor);
-            // can't rely on the cursor's current format as it doesn't preserve the special font "ScoreText"
-            undoCursor.setFormat(*_layout[_cursor->row()].formatAt(static_cast<int>(_cursor->column())));
-            score()->undo(new RemoveText(&undoCursor, String(_cursor->currentCharacter())), &ed);
+            TextCursor undoCursor(*m_cursor);
+            score()->undo(new RemoveText(&undoCursor, String(m_cursor->currentCharacter())), &ed);
         }
     }
     return true;
@@ -1019,7 +1051,7 @@ void ChangeTextProperties::undo(EditData*)
     cursor().text()->resetFormatting();
     cursor().text()->setXmlText(xmlText);
     restoreSelection();
-    cursor().text()->layout1();
+    EngravingItem::layout()->layoutText1(cursor().text());
 }
 
 void ChangeTextProperties::redo(EditData*)

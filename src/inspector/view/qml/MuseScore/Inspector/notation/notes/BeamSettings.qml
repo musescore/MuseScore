@@ -26,8 +26,8 @@ import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
+import "../beams"
 import "../../common"
-import "internal"
 
 FocusableItem {
     id: root
@@ -175,7 +175,7 @@ FocusableItem {
                 visible: featheringControlsColumn.visible
             }
 
-            CheckBoxPropertyView {
+            PropertyCheckBox {
                 id: forceHorizontalButton
                 width: parent.width
 
@@ -234,7 +234,7 @@ FocusableItem {
                                 navigation.row: beamHeight.navigationRowStart + 1
                                 navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Left") + " " + currentValue
 
-                                onValueEdited: function(newValue) {
+                                onValueEditingFinished: function(newValue) {
                                     root.model.beamHeightLeft.value = newValue
                                 }
                             }
@@ -278,7 +278,7 @@ FocusableItem {
                                 navigation.row: lockButton.navigation.row + 1
                                 navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Right") + " " + currentValue
 
-                                onValueEdited: function(newValue) {
+                                onValueEditingFinished: function(newValue) {
                                     root.model.beamHeightRight.value = newValue
                                 }
                             }

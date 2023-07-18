@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 namespace mu {
 class IProcess : MODULE_EXPORT_INTERFACE

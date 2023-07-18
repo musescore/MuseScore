@@ -34,6 +34,7 @@ public:
     void init();
 
     io::path_t appBinPath() const override;
+    io::path_t appBinDirPath() const override;
     io::path_t appDataPath() const override;
     io::path_t appConfigPath() const override;
 
@@ -46,6 +47,7 @@ public:
 
     bool useFactorySettings() const override;
     bool enableExperimental() const override;
+    io::path_t genericDataPath() const override;
 
     bool devModeEnabled() const override;
     void setDevModeEnabled(bool enabled) override;

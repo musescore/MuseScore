@@ -1,5 +1,5 @@
 
-set(MODULE mscore_freetype)
+set(MODULE freetype)
 
 set(MODULE_SRC
     src/autofit/autofit.c
@@ -47,6 +47,10 @@ set(MODULE_SRC
 
 set(MODULE_DEF
     -DFT2_BUILD_LIBRARY
+    )
+
+set(MODULE_INCLUDE
+    ${CMAKE_CURRENT_LIST_DIR}/include
     )
 
 set(MODULE_USE_PCH_NONE ON)

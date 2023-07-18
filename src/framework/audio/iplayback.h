@@ -22,7 +22,7 @@
 #ifndef MU_AUDIO_ISEQUENCER_H
 #define MU_AUDIO_ISEQUENCER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/channel.h"
 #include "async/promise.h"
 
@@ -42,6 +42,7 @@ public:
 
     virtual void init() = 0;
     virtual void deinit() = 0;
+    virtual bool isInited() const = 0;
 
     // A quick guide how to playback something:
 

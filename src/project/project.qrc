@@ -3,12 +3,15 @@
         <file>qml/MuseScore/Project/qmldir</file>
         <file>qml/MuseScore/Project/NewScoreDialog.qml</file>
         <file>qml/MuseScore/Project/ScoresPage.qml</file>
+        <file>qml/MuseScore/Project/internal/ScoresPage/ScoresView.qml</file>
+        <file>qml/MuseScore/Project/internal/ScoresPage/ScoresGridView.qml</file>
+        <file>qml/MuseScore/Project/internal/ScoresPage/ScoreItem.qml</file>
+        <file>qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml</file>
+        <file>qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml</file>
+        <file>qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml</file>
         <file>qml/MuseScore/Project/AskSaveLocationTypeDialog.qml</file>
         <file>qml/MuseScore/Project/SaveToCloudDialog.qml</file>
         <file>qml/MuseScore/Project/ExportDialog.qml</file>
-        <file>qml/MuseScore/Project/ExportProgressDialog.qml</file>
-        <file>qml/MuseScore/Project/internal/RecentScoresView.qml</file>
-        <file>qml/MuseScore/Project/internal/ScoreItem.qml</file>
         <file>qml/MuseScore/Project/internal/Export/ExportScoresListView.qml</file>
         <file>qml/MuseScore/Project/internal/Export/ExportOptionsView.qml</file>
         <file>qml/MuseScore/Project/internal/Export/ExportOptionItem.qml</file>
@@ -17,6 +20,7 @@
         <file>qml/MuseScore/Project/internal/Export/PngSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/Mp3SettingsPage.qml</file>
+        <file>qml/MuseScore/Project/internal/Export/OggSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/MidiSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/MusicXmlSettingsPage.qml</file>
@@ -58,5 +62,6 @@
         <file>qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml</file>
         <file>qml/MuseScore/Project/internal/Migration/migration.png</file>
         <file>qml/MuseScore/Project/UploadProgressDialog.qml</file>
+        <file>qml/MuseScore/Project/ShareOnAudioCloudDialog.qml</file>
     </qresource>
 </RCC>

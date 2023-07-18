@@ -35,8 +35,8 @@ class ScorePreferencesModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
-    INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(audio::IAudioConfiguration, audioConfiguration)
 
 public:
     explicit ScorePreferencesModel(QObject* parent = nullptr);

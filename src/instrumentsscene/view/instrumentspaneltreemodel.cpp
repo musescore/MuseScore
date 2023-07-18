@@ -36,6 +36,8 @@
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace mu::uicomponents;
+using namespace mu::framework;
+
 using ItemType = InstrumentsTreeItemType::ItemType;
 
 static const mu::actions::ActionCode ADD_INSTRUMENTS_ACTIONCODE("instruments");
@@ -65,6 +67,7 @@ InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
 
         updateRearrangementAvailability();
         updateRemovingAvailability();
+        updateIsInstrumentSelected();
     });
 
     connect(this, &InstrumentsPanelTreeModel::rowsInserted, this, [this]() {
@@ -96,6 +99,11 @@ void InstrumentsPanelTreeModel::onNotationChanged()
 {
     m_partsNotifyReceiver->disconnectAll();
 
+    if (m_isLoadingBlocked) {
+        m_notationChangedWhileLoadingWasBlocked = true;
+        return;
+    }
+
     onBeforeChangeNotation();
     m_notation = context()->currentNotation();
 
@@ -104,6 +112,8 @@ void InstrumentsPanelTreeModel::onNotationChanged()
     } else {
         clear();
     }
+
+    m_notationChangedWhileLoadingWasBlocked = false;
 }
 
 InstrumentsPanelTreeModel::~InstrumentsPanelTreeModel()
@@ -123,13 +133,20 @@ bool InstrumentsPanelTreeModel::removeRows(int row, int count, const QModelIndex
         parentItem = m_rootItem;
     }
 
-    m_isLoadingBlocked = true;
+    if (parentItem == m_rootItem) {
+        // When removing instruments, the user needs to be warned in some cases
+        if (!warnAboutRemovingInstrumentsIfNecessary(count)) {
+            return false;
+        }
+    }
+
+    setLoadingBlocked(true);
     beginRemoveRows(parent, row, row + count - 1);
 
     parentItem->removeChildren(row, count, true);
 
     endRemoveRows();
-    m_isLoadingBlocked = false;
+    setLoadingBlocked(false);
 
     emit isEmptyChanged();
 
@@ -166,6 +183,15 @@ void InstrumentsPanelTreeModel::onBeforeChangeNotation()
     }
 
     m_sortedPartIdList[notationToKey(m_notation)] = partIdList;
+}
+
+void InstrumentsPanelTreeModel::setLoadingBlocked(bool blocked)
+{
+    m_isLoadingBlocked = blocked;
+
+    if (!m_isLoadingBlocked && m_notationChangedWhileLoadingWasBlocked) {
+        onNotationChanged();
+    }
 }
 
 void InstrumentsPanelTreeModel::setupPartsConnections()
@@ -411,7 +437,7 @@ void InstrumentsPanelTreeModel::removeSelectedRows()
 bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                                          int destinationChild)
 {
-    m_isLoadingBlocked = true;
+    setLoadingBlocked(true);
 
     AbstractInstrumentsPanelTreeItem* sourceParentItem = modelIndexToItem(sourceParent);
     AbstractInstrumentsPanelTreeItem* destinationParentItem = modelIndexToItem(destinationParent);
@@ -435,7 +461,7 @@ bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int so
 
     updateRearrangementAvailability();
 
-    m_isLoadingBlocked = false;
+    setLoadingBlocked(false);
 
     return true;
 }
@@ -573,6 +599,11 @@ bool InstrumentsPanelTreeModel::isEmpty() const
     return m_rootItem ? m_rootItem->isEmpty() : true;
 }
 
+bool InstrumentsPanelTreeModel::isInstrumentSelected() const
+{
+    return m_isInstrumentSelected;
+}
+
 QString InstrumentsPanelTreeModel::addInstrumentsKeyboardShortcut() const
 {
     const shortcuts::Shortcut& shortcut = shortcutsRegister()->shortcut(ADD_INSTRUMENTS_ACTIONCODE);
@@ -592,6 +623,16 @@ void InstrumentsPanelTreeModel::setIsRemovingAvailable(bool isRemovingAvailable)
 
     m_isRemovingAvailable = isRemovingAvailable;
     emit isRemovingAvailableChanged(m_isRemovingAvailable);
+}
+
+void InstrumentsPanelTreeModel::setIsInstrumentSelected(bool isInstrumentSelected)
+{
+    if (m_isInstrumentSelected == isInstrumentSelected) {
+        return;
+    }
+
+    m_isInstrumentSelected = isInstrumentSelected;
+    emit isInstrumentSelectedChanged(m_isInstrumentSelected);
 }
 
 void InstrumentsPanelTreeModel::updateRearrangementAvailability()
@@ -692,6 +733,23 @@ void InstrumentsPanelTreeModel::updateRemovingAvailability()
     setIsRemovingAvailable(isRemovingAvailable);
 }
 
+void InstrumentsPanelTreeModel::updateIsInstrumentSelected()
+{
+    QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
+    bool isInstrumentSelected = true;
+
+    for (const QModelIndex& index : selectedIndexes) {
+        const AbstractInstrumentsPanelTreeItem* item = modelIndexToItem(index);
+
+        if (item && static_cast<ItemType>(item->type()) == ItemType::STAFF) {
+            isInstrumentSelected = false;
+            break;
+        }
+    }
+
+    setIsInstrumentSelected(isInstrumentSelected);
+}
+
 void InstrumentsPanelTreeModel::setItemsSelected(const QModelIndexList& indexes, bool selected)
 {
     for (const QModelIndex& index : indexes) {
@@ -699,6 +757,28 @@ void InstrumentsPanelTreeModel::setItemsSelected(const QModelIndexList& indexes,
             item->setIsSelected(selected);
         }
     }
+}
+
+bool InstrumentsPanelTreeModel::warnAboutRemovingInstrumentsIfNecessary(int count)
+{
+    // Only warn if excerpts are existent
+    if (m_masterNotation->excerpts().val.empty()) {
+        return true;
+    }
+
+    return interactive()->warning(
+        //: Please omit `%n` in the translation in this case; it's only there so that you
+        //: have the possibility to provide translations with the correct numerus form,
+        //: i.e. to show "instrument" or "instruments" as appropriate.
+        trc("instruments", "Are you sure you want to delete the selected %n instrument(s)?", nullptr, count),
+
+        //: Please omit `%n` in the translation in this case; it's only there so that you
+        //: have the possibility to provide translations with the correct numerus form,
+        //: i.e. to show "instrument" or "instruments" as appropriate.
+        trc("instruments", "This will remove the %n instrument(s) from the full score and all part scores.", nullptr, count),
+
+        { IInteractive::Button::No, IInteractive::Button::Yes })
+           .standardButton() == IInteractive::Button::Yes;
 }
 
 AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::loadMasterPart(const Part* masterPart)

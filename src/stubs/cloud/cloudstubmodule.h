@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::cloud {
-class CloudStubModule : public modularity::IModuleSetup
+class CloudModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

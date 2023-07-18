@@ -31,7 +31,7 @@
 namespace mu::palette {
 class PaletteCreator
 {
-    INJECT_STATIC(palette, IPaletteConfiguration, configuration)
+    INJECT_STATIC(IPaletteConfiguration, configuration)
 
 public:
     static PalettePtr newTempoPalette(bool defaultPalette = false);
@@ -58,9 +58,10 @@ public:
     static PalettePtr newBarLinePalette(bool defaultPalette = false);
     static PalettePtr newLinesPalette(bool defaultPalette = false);
     static PalettePtr newFretboardDiagramPalette();
-    static PalettePtr newGuitarPalette();
+    static PalettePtr newGuitarPalette(bool defaultPalette = false);
     static PalettePtr newKeyboardPalette();
     static PalettePtr newPitchPalette(bool defaultPalette = false);
+    static PalettePtr newHarpPalette();
 
     static PaletteTreePtr newMasterPaletteTree();
     static PaletteTreePtr newDefaultPaletteTree();

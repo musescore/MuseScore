@@ -45,19 +45,7 @@ enum class HairpinType : signed char {
 class HairpinSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, HairpinSegment)
-
-    bool drawCircledTip;
-    mu::PointF circledTip;
-    double circledTipRadius;
-
-    void startEditDrag(EditData&) override;
-    void editDrag(EditData&) override;
-
-    void draw(mu::draw::Painter*) const override;
-    Sid getPropertyStyle(Pid) const override;
-
-    bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    DECLARE_CLASSOF(ElementType::HAIRPIN_SEGMENT)
 
 public:
     HairpinSegment(Hairpin* sp, System* parent);
@@ -68,15 +56,36 @@ public:
 
     Hairpin* hairpin() const { return (Hairpin*)spanner(); }
 
+    bool drawCircledTip() const { return m_drawCircledTip; }
+    void setDrawCircledTip(bool arg) { m_drawCircledTip = arg; }
+    double circledTipRadius() const { return m_circledTipRadius; }
+    void setCircledTipRadius(double r) { m_circledTipRadius = r; }
+    mu::PointF circledTip() const { return m_circledTip; }
+    void setCircledTip(const mu::PointF& p) { m_circledTip = p; }
+
     EngravingItem* propertyDelegate(Pid) override;
 
-    void layout() override;
     Shape shape() const override;
 
     int gripsCount() const override;
     std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
+
+private:
+
+    void startEditDrag(EditData&) override;
+    void editDrag(EditData&) override;
+
+    void draw(mu::draw::Painter*) const override;
+    Sid getPropertyStyle(Pid) const override;
+
+    bool acceptDrop(EditData&) const override;
+    EngravingItem* drop(EditData&) override;
+
+    bool m_drawCircledTip = false;
+    mu::PointF m_circledTip;
+    double m_circledTipRadius = 0.0;
 };
 
 //---------------------------------------------------------
@@ -89,6 +98,7 @@ public:
 class Hairpin final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, Hairpin)
+    DECLARE_CLASSOF(ElementType::HAIRPIN)
 
     HairpinType _hairpinType { HairpinType::INVALID };
     int _veloChange;
@@ -116,7 +126,6 @@ public:
     void setHairpinType(HairpinType val);
 
     Segment* segment() const { return (Segment*)explicitParent(); }
-    void layout() override;
     LineSegment* createLineSegment(System* parent) override;
 
     bool hairpinCircledTip() const { return _hairpinCircledTip; }
@@ -149,9 +158,6 @@ public:
     {
         return _hairpinType == HairpinType::DECRESC_HAIRPIN || _hairpinType == HairpinType::DECRESC_LINE;
     }
-
-    void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

@@ -39,10 +39,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidiwriter.h
     )
 
+add_subdirectory(${THIRDPARTY_DIR}/beatroot beatroot)
+
 set(MODULE_LINK
     beatroot
     engraving
     )
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)
+
+if (MUE_BUILD_UNIT_TESTS)
+    add_subdirectory(tests)
+endif()
 

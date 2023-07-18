@@ -23,7 +23,7 @@
 #ifndef MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
 #define MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "iaccessible.h"
 
 namespace mu::accessibility {

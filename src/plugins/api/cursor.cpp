@@ -30,7 +30,6 @@
 #include "libmscore/note.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/measure.h"
-#include "libmscore/repeatlist.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
 #include "libmscore/segment.h"

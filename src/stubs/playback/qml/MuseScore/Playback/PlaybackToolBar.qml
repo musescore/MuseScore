@@ -24,7 +24,18 @@ import QtQuick 2.15
 import MuseScore.UiComponents 1.0
 
 Rectangle {
+
+    property bool floating: false
+
+    property alias navigation: nav
+
     color: ui.theme.backgroundPrimaryColor
+
+    QtObject {
+        id: nav
+        property QtObject section: null
+        property int order: 0
+    }
 
     StyledTextLabel {
         anchors.centerIn: parent

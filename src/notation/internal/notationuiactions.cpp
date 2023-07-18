@@ -491,7 +491,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Parts"),
-             TranslatableString("action", "Parts…"),
+             TranslatableString("action", "Manage parts"),
              IconCode::Code::PAGE
              ),
     UiAction("view-mode-page",
@@ -518,7 +518,7 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("find",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
-             TranslatableString("action", "&Find / Go To"),
+             TranslatableString("action", "&Find / Go to"),
              TranslatableString("action", "Find / Go to")
              ),
     UiAction("staff-properties",
@@ -775,7 +775,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "No beam"),
              TranslatableString("action", "No beam"),
-             IconCode::Code::NOTE_HEAD_EIGHTH
+             IconCode::Code::BEAM_NONE
              ),
     UiAction("beam-break-left",
              mu::context::UiCtxNotationOpened,
@@ -1090,6 +1090,12 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "Eighth rest"),
              TranslatableString("action", "Enter rest: eighth")
+             ),
+    UiAction("rest-TAB",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_NOTE_INPUT_STAFF_TAB,
+             X_TAB.arg(TranslatableString("action", "Rest")),
+             X_TAB.arg(TranslatableString("action", "Enter rest"))
              ),
     UiAction("fret-0",
              mu::context::UiCtxNotationOpened,
@@ -1444,6 +1450,24 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "Zoom to 100%"),
              TranslatableString("action", "Zoom to 100%")
+             ),
+    UiAction("zoom-page-width",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Zoom to page width"),
+             TranslatableString("action", "Zoom to page width")
+             ),
+    UiAction("zoom-whole-page",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Zoom to whole page"),
+             TranslatableString("action", "Zoom to whole page")
+             ),
+    UiAction("zoom-two-pages",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Zoom to two pages"),
+             TranslatableString("action", "Zoom to two pages")
              ),
     UiAction("get-location",
              mu::context::UiCtxNotationOpened,
@@ -1829,13 +1853,13 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Transpose up"),
-             TranslatableString("action", "Transpose up half a step")
+             TranslatableString("action", "Transpose up a semitone")
              ),
     UiAction("transpose-down",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Transpose down"),
-             TranslatableString("action", "Transpose down half a step")
+             TranslatableString("action", "Transpose down a semitone")
              ),
     UiAction("pitch-up-diatonic-alterations",
              mu::context::UiCtxNotationOpened,
@@ -1930,7 +1954,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "Re-pitch existing notes"),
              TranslatableString("action", "Note input: toggle ‘re-pitch existing notes’ mode"),
-             IconCode::Code::RE_PITH
+             IconCode::Code::RE_PITCH
              ),
     UiAction("note-input-realtime-auto",
              mu::context::UiCtxNotationOpened,
@@ -2160,6 +2184,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Rest"),
+             TranslatableString("action", "Toggle rest"),
              IconCode::Code::REST
              ),
     UiAction("next-segment-element",
@@ -2294,6 +2319,17 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("notation-context-menu",
              mu::context::UiCtxNotationFocused,
              mu::context::CTX_NOTATION_FOCUSED
+             ),
+    UiAction("insert-staff-type-change",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Staff type change"),
+             TranslatableString("action", "Insert staff type change"),
+             IconCode::Code::STAFF_TYPE_CHANGE
+             ),
+    UiAction("notation-popup-menu",
+             mu::context::UiCtxNotationFocused,
+             mu::context::CTX_NOTATION_FOCUSED
              )
 };
 
@@ -2411,6 +2447,8 @@ void NotationUiActions::init()
                 m_actionCheckedChanged.send({ configActions.at(configType) });
             });
         }
+
+        m_actionCheckedChanged.send({ TOGGLE_CONCERT_PITCH_CODE });
         m_controller->currentNotationStyleChanged().onNotify(this, [this]() {
             m_actionCheckedChanged.send({ TOGGLE_CONCERT_PITCH_CODE });
         });

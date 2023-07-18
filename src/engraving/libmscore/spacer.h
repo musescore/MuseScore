@@ -45,6 +45,7 @@ enum class SpacerType : char {
 class Spacer final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Spacer)
+    DECLARE_CLASSOF(ElementType::SPACER)
 
     SpacerType _spacerType;
     Millimetre _gap;
@@ -55,8 +56,6 @@ class Spacer final : public EngravingItem
     Spacer(Measure* parent);
     Spacer(const Spacer&);
 
-    void layout0();
-
 public:
 
     Spacer* clone() const override { return new Spacer(*this); }
@@ -64,9 +63,6 @@ public:
 
     SpacerType spacerType() const { return _spacerType; }
     void setSpacerType(SpacerType t) { _spacerType = t; }
-
-    void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
 
     void draw(mu::draw::Painter*) const override;
 
@@ -87,6 +83,8 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
+
+    void layout0();
 };
 } // namespace mu::engraving
 #endif

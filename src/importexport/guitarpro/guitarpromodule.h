@@ -22,11 +22,12 @@
 #ifndef MU_IMPORTEXPORT_GUITARPROMODULE_H
 #define MU_IMPORTEXPORT_GUITARPROMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::guitarpro {
-class GuitarProReader;
-
+class GuitarProConfiguration;
 class GuitarProModule : public modularity::IModuleSetup
 {
 public:
@@ -34,7 +35,9 @@ public:
     std::string moduleName() const override;
     void registerExports() override;
     void resolveImports() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<GuitarProConfiguration> m_configuration;
 };
 }
 

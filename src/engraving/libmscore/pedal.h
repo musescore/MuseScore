@@ -35,6 +35,7 @@ class Pedal;
 class PedalSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, PedalSegment)
+    DECLARE_CLASSOF(ElementType::PEDAL_SEGMENT)
 
     Sid getPropertyStyle(Pid) const override;
 
@@ -43,7 +44,6 @@ public:
 
     PedalSegment* clone() const override { return new PedalSegment(*this); }
     Pedal* pedal() const { return toPedal(spanner()); }
-    void layout() override;
 
     friend class Pedal;
 };
@@ -55,6 +55,7 @@ public:
 class Pedal final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, Pedal)
+    DECLARE_CLASSOF(ElementType::PEDAL)
 
     Sid getPropertyStyle(Pid) const override;
 
@@ -68,9 +69,6 @@ public:
     Pedal(EngravingItem* parent);
 
     Pedal* clone() const override { return new Pedal(*this); }
-
-    void read(XmlReader&) override;
-    void write(XmlWriter& xml) const override;
 
     LineSegment* createLineSegment(System* parent) override;
     PropertyValue propertyDefault(Pid propertyId) const override;

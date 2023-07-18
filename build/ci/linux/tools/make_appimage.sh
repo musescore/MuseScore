@@ -102,6 +102,10 @@ mkdir -p "$qt_sql_drivers_tmp"
 mv "${qt_sql_drivers_path}/libqsqlmysql.so" "${qt_sql_drivers_tmp}/libqsqlmysql.so"
 mv "${qt_sql_drivers_path}/libqsqlpsql.so" "${qt_sql_drivers_tmp}/libqsqlpsql.so"
 
+# Semicolon-separated list of platforms to deploy in addition to `libqxcb.so`.
+# Used by linuxdeploy-plugin-qt.
+export EXTRA_PLATFORM_PLUGINS="libqoffscreen.so;libqwayland-egl.so;libqwayland-generic.so"
+
 # Colon-separated list of root directories containing QML files.
 # Needed for linuxdeploy-plugin-qt to scan for QML imports.
 # Qml files can be in different directories, the qmlimportscanner will go through everything recursively.
@@ -130,7 +134,7 @@ if [ -f ${appdir}/lib/libglib-2.0.so.0 ]; then
   rm -f ${appdir}/lib/libglib-2.0.so.0 
 fi
 
-unset QML_SOURCES_PATHS
+unset QML_SOURCES_PATHS EXTRA_PLATFORM_PLUGINS
 
 # In case this container is reused multiple times, return the moved libraries back
 mv "${qt_sql_drivers_tmp}/libqsqlmysql.so" "${qt_sql_drivers_path}/libqsqlmysql.so"
@@ -177,14 +181,20 @@ unwanted_files=(
 # List them here using paths relative to the Qt root directory. Report new
 # additions at https://github.com/linuxdeploy/linuxdeploy-plugin-qt/issues
 additional_qt_components=(
-  /plugins/printsupport/libcupsprintersupport.so
+  plugins/printsupport/libcupsprintersupport.so
+
+  # Wayland support (run with QT_QPA_PLATFORM=wayland to use)
+  plugins/wayland-decoration-client
+  plugins/wayland-graphics-integration-client
+  plugins/wayland-shell-integration
 )
 
 # ADDITIONAL LIBRARIES
 # linuxdeploy may have missed some libraries that we need
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
 additional_libraries=(
-  # none
+  libssl.so.1.1       # OpenSSL (for Save Online)
+  libcrypto.so.1.1    # OpenSSL (for Save Online)
 )
 
 # FALLBACK LIBRARIES
@@ -218,7 +228,7 @@ done
 
 for file in "${additional_qt_components[@]}"; do
   mkdir -p "${appdir}/$(dirname "${file}")"
-  cp -L "${QT_PATH}/${file}" "${appdir}/${file}"
+  cp -Lr "${QT_PATH}/${file}" "${appdir}/${file}"
 done
 
 for lib in "${additional_libraries[@]}"; do

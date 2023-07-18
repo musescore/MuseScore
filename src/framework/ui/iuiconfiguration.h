@@ -28,7 +28,7 @@
 #include "types/retval.h"
 #include "async/notification.h"
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "uitypes.h"
 

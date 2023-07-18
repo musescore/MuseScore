@@ -22,7 +22,7 @@
 #ifndef MU_UI_IQACCESSIBLEINTERFACEREGISTER_H
 #define MU_UI_IQACCESSIBLEINTERFACEREGISTER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include <QAccessibleInterface>
 

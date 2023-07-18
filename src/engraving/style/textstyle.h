@@ -56,6 +56,7 @@ typedef std::array<TextStyleProperty, TEXT_STYLE_SIZE> TextStyle;
 
 const TextStyle* textStyle(TextStyleType);
 const std::vector<TextStyleType>& allTextStyles();
+const std::vector<TextStyleType>& editableTextStyles();
 const std::vector<TextStyleType>& primaryTextStyles();
 }
 

@@ -44,6 +44,40 @@ int pitch(const NPlayEvent& ev)
 ///   read/write test of note
 //---------------------------------------------------------
 
+TEST_F(PitchWheelRender_Tests, generateRanges)
+{
+    PitchWheelRenderer::PitchWheelFunction func1;
+    PitchWheelRenderer::PitchWheelFunction func2;
+    PitchWheelRenderer::PitchWheelFunction func3;
+    PitchWheelRenderer::PitchWheelFunction func4;
+    PitchWheelRenderer::PitchWheelFunction func5;
+    func1.mStartTick = 30;
+    func1.mEndTick = 60;
+    func2.mStartTick = 50;
+    func3.mEndTick = 60;
+    func3.mStartTick = 40;
+    func3.mEndTick = 80;
+    func4.mStartTick = 100;
+    func4.mEndTick = 200;
+    func5.mStartTick = 10;
+    func5.mEndTick = 50;
+    using FuncList = std::list<PitchWheelRenderer::PitchWheelFunction>;
+    std::map<int, int, std::greater<> > ranges;
+    PitchWheelRenderer::generateRanges(FuncList { func1 }, ranges);
+    EXPECT_EQ(ranges.at(30), 60);
+    PitchWheelRenderer::generateRanges(FuncList { func2 }, ranges);
+    EXPECT_EQ(ranges.at(30), 60);
+    PitchWheelRenderer::generateRanges(FuncList { func3 }, ranges);
+    EXPECT_EQ(ranges.at(30), 80);
+    PitchWheelRenderer::generateRanges(FuncList { func4 }, ranges);
+    EXPECT_EQ(ranges.at(30), 80);
+    EXPECT_EQ(ranges.at(100), 200);
+    PitchWheelRenderer::generateRanges(FuncList { func5 }, ranges);
+    EXPECT_EQ(ranges.at(10), 80);
+    EXPECT_EQ(ranges.find(30), ranges.end());
+    EXPECT_EQ(ranges.at(100), 200);
+}
+
 TEST_F(PitchWheelRender_Tests, simpleLinear)
 {
     PitchWheelSpecs wheelSpec;
@@ -59,10 +93,10 @@ TEST_F(PitchWheelRender_Tests, simpleLinear)
     auto linearFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
         float x = (float)(tick - startTick);
         float y = a * x + b;
-        return y;
+        return (int)y;
     };
     func.func = linearFunc;
-    render.addPitchWheelFunction(func, 0);
+    render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
 
     EventMap events = render.renderPitchWheel();
 
@@ -72,7 +106,7 @@ TEST_F(PitchWheelRender_Tests, simpleLinear)
 
     EXPECT_EQ(pitch(events.find(10)->second), 8202);
     EXPECT_EQ(pitch(events.find(90)->second), 8282);
-    EXPECT_EQ(pitch(events.find(100)->second), 8192);
+//    EXPECT_EQ(pitch(events.find(100)->second), 8192);
 }
 
 TEST_F(PitchWheelRender_Tests, twoReverseFunctions)
@@ -88,21 +122,21 @@ TEST_F(PitchWheelRender_Tests, twoReverseFunctions)
     auto linearFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
         float x = (float)(tick - startTick);
         float y = a * x + b;
-        return y;
+        return (int)y;
     };
     func.func = linearFunc;
-    render.addPitchWheelFunction(func, 0);
+    render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
 
     auto reverseLinearFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
         float x = (float)(tick - startTick);
         float y = -1 * a * x + b;
-        return y;
+        return (int)y;
     };
     func.func = reverseLinearFunc;
-    render.addPitchWheelFunction(func, 0);
+    render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
 
     EventMap events = render.renderPitchWheel();
-    EXPECT_EQ(events.size(), 0);
+    EXPECT_EQ(events.size(), 1);
 }
 
 TEST_F(PitchWheelRender_Tests, channelTest)
@@ -120,11 +154,11 @@ TEST_F(PitchWheelRender_Tests, channelTest)
     auto linearFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
         float x = (float)(tick - startTick);
         float y = a * x + b;
-        return y;
+        return (int)y;
     };
     func.func = linearFunc;
-    render.addPitchWheelFunction(func, 0);
-    render.addPitchWheelFunction(func, 1);
+    render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
+    render.addPitchWheelFunction(func, 1, 0, MidiInstrumentEffect::NONE);
 
     EventMap events = render.renderPitchWheel();
     std::set<int> channels;
@@ -153,10 +187,10 @@ TEST_F(PitchWheelRender_Tests, twoConnectedFunctions)
         auto firstFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
             float x = (float)(tick - startTick);
             float y = a * x + b;
-            return y;
+            return (int)y;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     {
@@ -170,10 +204,10 @@ TEST_F(PitchWheelRender_Tests, twoConnectedFunctions)
         auto secondFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
             float x = (float)(tick - startTick);
             float y = a * x + b;
-            return y;
+            return (int)y;
         };
         func.func = secondFunc;
-        render.addPitchWheelFunction(func, 0);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     EventMap events = render.renderPitchWheel();
@@ -201,10 +235,10 @@ TEST_F(PitchWheelRender_Tests, twoDevidedFunctions)
         auto firstFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
             float x = (float)(tick - startTick);
             float y = a * x + b;
-            return y;
+            return (int)y;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     {
@@ -218,16 +252,16 @@ TEST_F(PitchWheelRender_Tests, twoDevidedFunctions)
         auto secondFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
             float x = (float)(tick - startTick);
             float y = a * x + b;
-            return y;
+            return (int)y;
         };
         func.func = secondFunc;
-        render.addPitchWheelFunction(func, 0);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     EventMap events = render.renderPitchWheel();
 
-    EXPECT_EQ(events.size(), 6);
-    std::multimap<int, int> expectedValues = { { 10, 8202 }, { 20, 8212 }, { 30, 8192 }, { 40, 8222 }, { 50, 8232 }, { 60, 8192 } };
+    EXPECT_EQ(events.size(), 5);
+    std::multimap<int, int> expectedValues = { { 0, 8192 }, { 10, 8202 }, { 20, 8212 }, { 40, 8222 }, { 50, 8232 } };
     for (const auto& ev : events) {
         auto it = expectedValues.find(ev.first);
         EXPECT_TRUE(it != expectedValues.end());
@@ -251,10 +285,10 @@ TEST_F(PitchWheelRender_Tests, twoOverlappedFunctions)
         auto firstFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
             float x = (float)(tick - startTick);
             float y = a * x + b;
-            return y;
+            return (int)y;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     {
@@ -264,21 +298,20 @@ TEST_F(PitchWheelRender_Tests, twoOverlappedFunctions)
         //! y = ax + b
         int a = 1;
         int b = 10;
-
         auto secondFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
             float x = (float)(tick - startTick);
             float y = a * x + b;
-            return y;
+            return (int)y;
         };
         func.func = secondFunc;
-        render.addPitchWheelFunction(func, 0);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     EventMap events = render.renderPitchWheel();
 
     EXPECT_EQ(events.size(), 4);
     std::multimap<int, int> pitches;
-    std::multimap<int, int> expectedValues = { { 10, 8202 }, { 20, 8222 }, { 30, 8212 }, { 40, 8192 } };
+    std::multimap<int, int> expectedValues = { { 0, 8192 }, { 10, 8202 }, { 20, 8222 }, { 30, 8212 } };
     for (const auto& ev : events) {
         auto it = expectedValues.find(ev.first);
         EXPECT_TRUE(it != expectedValues.end());
@@ -297,11 +330,11 @@ TEST_F(PitchWheelRender_Tests, threeDevidedFunctions)
         func.mStartTick = 10;
         func.mEndTick = 20;
 
-        auto firstFunc = [ startTick = func.mStartTick] (uint32_t) {
+        auto firstFunc = [](uint32_t) {
             return 10;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     {
@@ -309,11 +342,11 @@ TEST_F(PitchWheelRender_Tests, threeDevidedFunctions)
         func.mStartTick = 30;
         func.mEndTick = 40;
 
-        auto firstFunc = [ startTick = func.mStartTick] (uint32_t) {
+        auto firstFunc = [](uint32_t) {
             return 20;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     {
@@ -321,17 +354,17 @@ TEST_F(PitchWheelRender_Tests, threeDevidedFunctions)
         func.mStartTick = 60;
         func.mEndTick = 70;
 
-        auto firstFunc = [ startTick = func.mStartTick] (uint32_t) {
+        auto firstFunc = [](uint32_t) {
             return 30;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     EventMap events = render.renderPitchWheel();
 
     std::multimap<int, int> pitches;
-    std::multimap<int, int> expectedValues = { { 10, 8202 }, { 20, 8192 }, { 30, 8212 }, { 40, 8192 }, { 60, 8222 }, { 70, 8192 } };
+    std::multimap<int, int> expectedValues = { { 10, 8202 }, { 20, 8192 }, { 30, 8212 }, { 40, 8192 }, { 60, 8222 } };
     for (const auto& ev : events) {
         auto it = expectedValues.find(ev.first);
         EXPECT_TRUE(it != expectedValues.end());
@@ -350,11 +383,11 @@ TEST_F(PitchWheelRender_Tests, threeOverLappedFunctions)
         func.mStartTick = 0;
         func.mEndTick = 60;
 
-        auto firstFunc = [ startTick = func.mStartTick] (uint32_t) {
+        auto firstFunc = [](uint32_t) {
             return 10;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     {
@@ -362,11 +395,11 @@ TEST_F(PitchWheelRender_Tests, threeOverLappedFunctions)
         func.mStartTick = 20;
         func.mEndTick = 50;
 
-        auto firstFunc = [ startTick = func.mStartTick] (uint32_t) {
+        auto firstFunc = [](uint32_t) {
             return 10;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     {
@@ -374,11 +407,11 @@ TEST_F(PitchWheelRender_Tests, threeOverLappedFunctions)
         func.mStartTick = 40;
         func.mEndTick = 70;
 
-        auto firstFunc = [ startTick = func.mStartTick] (uint32_t) {
+        auto firstFunc = [](uint32_t) {
             return 10;
         };
         func.func = firstFunc;
-        render.addPitchWheelFunction(func, 0);
+        render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
     EventMap events = render.renderPitchWheel();

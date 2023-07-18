@@ -59,6 +59,8 @@ public:
     Ret saveSynthesizerState(const synth::SynthesizerState& state) override;
     async::Notification synthesizerStateChanged() const override;
     async::Notification synthesizerStateGroupChanged(const std::string& groupName) const override;
+
+    io::path_t knownAudioPluginsFilePath() const override;
 };
 }
 

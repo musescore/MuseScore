@@ -91,7 +91,7 @@ class AccessibleItem : public QObject, public QQmlParserStatus, public accessibi
 
     Q_INTERFACES(QQmlParserStatus)
 
-    INJECT(ui, accessibility::IAccessibilityController, accessibilityController)
+    INJECT(accessibility::IAccessibilityController, accessibilityController)
 
 public:
     STATE_PROPERTY(enabled, State::Enabled)

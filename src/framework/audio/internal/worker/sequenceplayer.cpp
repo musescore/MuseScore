@@ -34,15 +34,11 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock)
     : m_getTracks(getTracks), m_clock(clock)
 {
     m_clock->seekOccurred().onNotify(this, [this]() {
-        for (auto& pair : tracks()) {
-            pair.second->inputHandler->seek(m_clock->currentTime());
-        }
+        seekAllTracks(m_clock->currentTime());
     });
 
     m_clock->statusChanged().onReceive(this, [this](const PlaybackStatus status) {
-        for (auto& pair : tracks()) {
-            pair.second->inputHandler->setIsActive(status == PlaybackStatus::Running);
-        }
+        setAllTracksActive(status == PlaybackStatus::Running);
     });
 }
 
@@ -51,21 +47,16 @@ void SequencePlayer::play()
     ONLY_AUDIO_WORKER_THREAD;
 
     m_clock->start();
-
-    for (auto& pair : tracks()) {
-        pair.second->inputHandler->setIsActive(true);
-    }
+    setAllTracksActive(true);
 }
 
 void SequencePlayer::seek(const msecs_t newPositionMsecs)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_clock->seek(newPositionMsecs * 1000);
-
-    for (auto& pair : tracks()) {
-        pair.second->inputHandler->seek(newPositionMsecs * 1000);
-    }
+    msecs_t newPos = newPositionMsecs * 1000;
+    m_clock->seek(newPos);
+    seekAllTracks(newPos);
 }
 
 void SequencePlayer::stop()
@@ -73,10 +64,7 @@ void SequencePlayer::stop()
     ONLY_AUDIO_WORKER_THREAD;
 
     m_clock->stop();
-
-    for (auto& pair : tracks()) {
-        pair.second->inputHandler->setIsActive(false);
-    }
+    setAllTracksActive(false);
 }
 
 void SequencePlayer::pause()
@@ -84,10 +72,7 @@ void SequencePlayer::pause()
     ONLY_AUDIO_WORKER_THREAD;
 
     m_clock->pause();
-
-    for (auto& pair : tracks()) {
-        pair.second->inputHandler->setIsActive(false);
-    }
+    setAllTracksActive(false);
 }
 
 void SequencePlayer::resume()
@@ -95,10 +80,7 @@ void SequencePlayer::resume()
     ONLY_AUDIO_WORKER_THREAD;
 
     m_clock->resume();
-
-    for (auto& pair : tracks()) {
-        pair.second->inputHandler->setIsActive(true);
-    }
+    setAllTracksActive(true);
 }
 
 msecs_t SequencePlayer::duration() const
@@ -147,11 +129,28 @@ Channel<PlaybackStatus> SequencePlayer::playbackStatusChanged() const
     return m_clock->statusChanged();
 }
 
-TracksMap SequencePlayer::tracks() const
+void SequencePlayer::setAllTracksActive(bool active)
 {
     IF_ASSERT_FAILED(m_getTracks) {
-        return {};
+        return;
     }
 
-    return m_getTracks->allTracks();
+    for (const auto& pair : m_getTracks->allTracks()) {
+        if (pair.second->inputHandler) {
+            pair.second->inputHandler->setIsActive(active);
+        }
+    }
+}
+
+void SequencePlayer::seekAllTracks(const msecs_t newPositionMsecs)
+{
+    IF_ASSERT_FAILED(m_getTracks) {
+        return;
+    }
+
+    for (const auto& pair : m_getTracks->allTracks()) {
+        if (pair.second->inputHandler) {
+            pair.second->inputHandler->seek(newPositionMsecs);
+        }
+    }
 }

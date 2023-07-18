@@ -21,7 +21,7 @@ MuseScore is an open source and free music notation software. For support, contr
 ## More info
 - [MuseScore Homepage](https://musescore.org)
 - [MuseScore Git workflow instructions](https://musescore.org/en/developers-handbook/git-workflow)
-- [How to compile MuseScore?](https://musescore.org/en/developers-handbook/compilation)
+- [How to compile MuseScore?](https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment)
 
 ## License
 MuseScore is licensed under GPL version 3.0. See [LICENSE.GPL](https://github.com/musescore/MuseScore/blob/master/LICENSE.GPL) in the same directory.
@@ -31,7 +31,7 @@ See [Code Structure on Wiki](https://github.com/musescore/MuseScore/wiki/CodeStr
 
 
 ## Building
-**Read the developer handbook for a [complete build walkthrough](https://musescore.org/en/developers-handbook/compilation) and a list of dependencies.**
+**Read the [Compilation section](https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment) of the [MuseScore Wiki](https://github.com/musescore/MuseScore/wiki) for a complete build walkthrough and a list of dependencies.**
 
 ### Getting sources
 If using git to download repo of entire code history, type:
@@ -70,9 +70,7 @@ If you omit the `-DCMAKE_BUILD_TYPE` option entirely then `RelWithDebInfo` is
 used by default, as it provides a useful compromise between Release and Debug.
 
 ### Testing
-See [mtest/README.md](/mtest/README.md) or [the developer handbook](https://musescore.org/handbook/developers-handbook/finding-your-way-around/automated-tests) for instructions on how to run the test suite.
-
-The new [script testing facility](https://musescore.org/node/278278) is also available to create your own automated tests. Please try it out!
+See the [Unit tests section](https://github.com/musescore/MuseScore/wiki/Unit-tests) of the [MuseScore Wiki](https://github.com/musescore/MuseScore/wiki) for instructions on how to run the test suite.
 
 ### Code Formatting
 

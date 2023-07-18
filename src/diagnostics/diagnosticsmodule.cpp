@@ -53,15 +53,12 @@
 #include "view/engraving/engravingelementsmodel.h"
 
 #include "devtools/crashhandlerdevtoolsmodel.h"
+#include "devtools/corruptscoredevtoolsmodel.h"
 
 #include "log.h"
-#include "config.h"
 
 using namespace mu::diagnostics;
 using namespace mu::modularity;
-
-static std::shared_ptr<DiagnosticsConfiguration> s_configuration = {};
-static std::shared_ptr<DiagnosticsActionsController> s_actionsController = {};
 
 std::string DiagnosticsModule::moduleName() const
 {
@@ -70,13 +67,13 @@ std::string DiagnosticsModule::moduleName() const
 
 void DiagnosticsModule::registerExports()
 {
-    s_configuration = std::make_shared<DiagnosticsConfiguration>();
-    s_actionsController = std::make_shared<DiagnosticsActionsController>();
+    m_configuration = std::make_shared<DiagnosticsConfiguration>();
+    m_actionsController = std::make_shared<DiagnosticsActionsController>();
 
     ioc()->registerExport<IDiagnosticsPathsRegister>(moduleName(), new DiagnosticsPathsRegister());
     ioc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
     ioc()->registerExport<IDiagnosticDrawProvider>(moduleName(), new DiagnosticDrawProvider());
-    ioc()->registerExport<IDiagnosticsConfiguration>(moduleName(), s_configuration);
+    ioc()->registerExport<IDiagnosticsConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<ISaveDiagnosticFilesScenario>(moduleName(), new SaveDiagnosticFilesScenario());
 }
 
@@ -113,19 +110,24 @@ void DiagnosticsModule::registerUiTypes()
     qmlRegisterType<EngravingElementsModel>("MuseScore.Diagnostics", 1, 0, "EngravingElementsModel");
 
     qmlRegisterType<CrashHandlerDevToolsModel>("MuseScore.Diagnostics", 1, 0, "CrashHandlerDevToolsModel");
+    qmlRegisterType<CorruptScoreDevToolsModel>("MuseScore.Diagnostics", 1, 0, "CorruptScoreDevToolsModel");
 }
 
-void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)
+void DiagnosticsModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    s_configuration->init();
-    s_actionsController->init();
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
+    m_configuration->init();
+    m_actionsController->init();
 
     auto globalConf = modularity::ioc()->resolve<framework::IGlobalConfiguration>(moduleName());
     IF_ASSERT_FAILED(globalConf) {
         return;
     }
 
-#ifdef BUILD_CRASHPAD_CLIENT
+#ifdef MUE_BUILD_CRASHPAD_CLIENT
 
     static CrashHandler s_crashHandler;
 
@@ -135,12 +137,12 @@ void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)
     io::path_t handlerFile("crashpad_handler");
 #endif // _MSC_VER
 
-    io::path_t handlerPath = globalConf->appBinPath() + "/" + handlerFile;
+    io::path_t handlerPath = globalConf->appBinDirPath() + "/" + handlerFile;
     io::path_t dumpsDir = globalConf->userAppDataPath() + "/logs/dumps";
     fileSystem()->makePath(dumpsDir);
-    std::string serverUrl(CRASH_REPORT_URL);
+    std::string serverUrl(MUE_CRASH_REPORT_URL);
 
-    if (!s_configuration->isDumpUploadAllowed()) {
+    if (!m_configuration->isDumpUploadAllowed()) {
         serverUrl.clear();
         LOGD() << "not allowed dump upload";
     } else {
@@ -156,5 +158,5 @@ void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)
 
 #else
     LOGW() << "crash handling disabled";
-#endif // BUILD_CRASHPAD_CLIENT
+#endif // MUE_BUILD_CRASHPAD_CLIENT
 }

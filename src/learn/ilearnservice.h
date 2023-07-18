@@ -22,7 +22,7 @@
 #ifndef MU_LEARN_ILEARNSERVICE_H
 #define MU_LEARN_ILEARNSERVICE_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/channel.h"
 #include "learntypes.h"
 
@@ -41,8 +41,6 @@ public:
 
     virtual Playlist advancedPlaylist() const = 0;
     virtual async::Channel<Playlist> advancedPlaylistChanged() const = 0;
-
-    virtual void openVideo(const QString& videoId) const = 0;
 };
 }
 

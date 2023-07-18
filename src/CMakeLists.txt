@@ -18,102 +18,96 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Main
-add_subdirectory(main)
+# App (main)
+add_subdirectory(app)
 
 # Framework
 add_subdirectory(framework)
 
-# Domain model
-add_subdirectory(engraving)
-
-# AppShell
-add_subdirectory(appshell)
-
 # Modules
-add_subdirectory(context)
-add_subdirectory(notation)
-add_subdirectory(project)
-add_subdirectory(print)
-
-if (BUILD_LEARN_MODULE)
-    add_subdirectory(learn)
-endif (BUILD_LEARN_MODULE)
-
-add_subdirectory(converter)
-
-if (BUILD_WORKSPACE_MODULE)
-    add_subdirectory(workspace)
-endif (BUILD_WORKSPACE_MODULE)
-
-if (NOT OS_IS_WASM)
-    add_subdirectory(importexport)
-
-    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/beatroot beatroot) # for midi import
-    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/rtf2html rtf2html) # for capella
-
-    if (BUILD_CLOUD_MODULE)
-        add_subdirectory(cloud)
-    endif (BUILD_CLOUD_MODULE)
-
-    if (BUILD_LANGUAGES_MODULE)
-        add_subdirectory(languages)
-    endif (BUILD_LANGUAGES_MODULE)
-
-    if (BUILD_PLUGINS_MODULE)
-        add_subdirectory(plugins)
-    endif (BUILD_PLUGINS_MODULE)
+if (MUE_BUILD_APPSHELL_MODULE)
+    add_subdirectory(appshell)
 endif()
 
-# Scenes common
-add_subdirectory(commonscene)
-if (BUILD_PLAYBACK_MODULE)
-    add_subdirectory(playback)
-endif (BUILD_PLAYBACK_MODULE)
-
-# Notation
-if (BUILD_PALETTE_MODULE)
-    add_subdirectory(palette)
-endif (BUILD_PALETTE_MODULE)
-if (BUILD_INSTRUMENTSSCENE_MODULE)
-    add_subdirectory(instrumentsscene)
-endif (BUILD_INSTRUMENTSSCENE_MODULE)
-if (BUILD_INSPECTOR_MODULE)
-    add_subdirectory(inspector)
-endif (BUILD_INSPECTOR_MODULE)
-
-# Other
-if (BUILD_MULTIINSTANCES_MODULE)
-    add_subdirectory(multiinstances)
-endif()
-
-add_subdirectory(diagnostics)
-
-if (BUILD_AUTOBOT_MODULE)
+if (MUE_BUILD_AUTOBOT_MODULE)
     add_subdirectory(autobot)
 endif()
 
-if (BUILD_UPDATE_MODULE)
+if (MUE_BUILD_BRAILLE_MODULE)
+    add_subdirectory(braille)
+endif()
+
+if (MUE_BUILD_CLOUD_MODULE)
+    add_subdirectory(cloud)
+endif()
+
+add_subdirectory(commonscene)
+add_subdirectory(context)
+
+if (MUE_BUILD_CONVERTER_MODULE)
+    add_subdirectory(converter)
+endif()
+
+if (MUE_BUILD_DIAGNOSTICS_MODULE)
+    add_subdirectory(diagnostics)
+endif()
+
+add_subdirectory(engraving)
+
+add_subdirectory(importexport)
+
+if (MUE_BUILD_INSPECTOR_MODULE)
+    add_subdirectory(inspector)
+endif()
+
+if (MUE_BUILD_INSTRUMENTSSCENE_MODULE)
+    add_subdirectory(instrumentsscene)
+endif()
+
+if (MUE_BUILD_LANGUAGES_MODULE)
+    add_subdirectory(languages)
+endif()
+
+if (MUE_BUILD_LEARN_MODULE)
+    add_subdirectory(learn)
+endif()
+
+if (MUE_BUILD_MULTIINSTANCES_MODULE)
+    add_subdirectory(multiinstances)
+endif()
+
+if (MUE_BUILD_NOTATION_MODULE)
+    add_subdirectory(notation)
+endif()
+
+if (MUE_BUILD_PALETTE_MODULE)
+    add_subdirectory(palette)
+endif()
+
+if (MUE_BUILD_PLAYBACK_MODULE)
+    add_subdirectory(playback)
+endif()
+
+if (MUE_BUILD_PLUGINS_MODULE)
+    add_subdirectory(plugins)
+endif()
+
+add_subdirectory(print)
+
+if (MUE_BUILD_PROJECT_MODULE)
+    add_subdirectory(project)
+endif()
+
+if (MUE_BUILD_UPDATE_MODULE)
     add_subdirectory(update)
-endif (BUILD_UPDATE_MODULE)
+endif()
+
+if (MUE_BUILD_WORKSPACE_MODULE)
+    add_subdirectory(workspace)
+endif()
 
 # Stubs
 add_subdirectory(stubs)
-
-if (BUILD_UNIT_TESTS)
-    add_subdirectory(engraving/tests)
-
-    #add_subdirectory(notation/tests) no tests at moment
-    add_subdirectory(project/tests)
-
-    if (BUILD_PLUGINS_MODULE)
-        add_subdirectory(plugins/tests)
-    endif()
-
-    if (BUILD_DIAGNOSTICS)
-        add_subdirectory(diagnostics/tests)
-    endif()
-endif(BUILD_UNIT_TESTS)
 
 if (OS_IS_WASM)
     add_subdirectory(wasmtest)

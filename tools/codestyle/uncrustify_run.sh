@@ -24,19 +24,11 @@ cd "${BASH_SOURCE%/*}/../.."
 
 HERE="tools/codestyle" # path to dir that contains this script
 
-SRC_DIRS=(
-    # Alphabetical order please!
-    bww2mxml
-    fonttools
-    miditools
-    mtest
-    src
-)
+source "${HERE}/globals.source"
 
 START_TIME=$(date +%s)
 
-for dir in "${SRC_DIRS[@]}"
-do
+for dir in "${TIDY_DIRS[@]}"; do
     "${HERE}/uncrustify_run_dir.sh" "${dir}"
 done
 

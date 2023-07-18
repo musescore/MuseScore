@@ -23,7 +23,7 @@ echo "Setup MacOS build environment"
 trap 'echo Setup failed; exit 1' ERR
 SKIP_ERR_FLAG=true
 
-export MACOSX_DEPLOYMENT_TARGET=10.10
+export MACOSX_DEPLOYMENT_TARGET=10.14
 
 # install dependencies
 wget -c --no-check-certificate -nv -O bottles.zip https://musescore.org/sites/musescore.org/files/2020-02/bottles-MuseScore-3.0-yosemite.zip
@@ -91,15 +91,15 @@ installBottleManually libsndfile
 
 # fixing install python 3.9 error (it is a dependency for ninja)
 rm '/usr/local/bin/2to3'
-brew install ninja
+brew install ninja pkg-config
 
-
-export QT_SHORT_VERSION=5.15.2
+# Qt
+export QT_SHORT_VERSION=5.15.9
 export QT_PATH=$HOME/Qt
 export QT_MACOS=$QT_PATH/$QT_SHORT_VERSION/clang_64
 export PATH=$PATH:$QT_MACOS/bin
 echo "PATH=$PATH" >> $GITHUB_ENV
-wget -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/Qt5152_mac.zip
+wget -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/Qt5159_mac.zip
 mkdir -p $QT_MACOS
 unzip -qq qt5.zip -d $QT_MACOS
 rm qt5.zip

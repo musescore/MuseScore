@@ -22,7 +22,7 @@
 #ifndef MU_SYSTEM_IFILESYSTEM_H
 #define MU_SYSTEM_IFILESYSTEM_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "types/bytearray.h"
 #include "types/datetime.h"
 #include "types/retval.h"
@@ -60,7 +60,7 @@ public:
     virtual bool setPermissionsAllowedForAll(const io::path_t& path) const = 0;
 
     virtual RetVal<ByteArray> readFile(const io::path_t& filePath) const = 0;
-    virtual bool readFile(const io::path_t& filePath, ByteArray& data) const = 0;
+    virtual Ret readFile(const io::path_t& filePath, ByteArray& data) const = 0;
     virtual Ret writeFile(const io::path_t& filePath, const ByteArray& data) const = 0;
 
     //! NOTE File info
@@ -69,7 +69,7 @@ public:
     virtual io::path_t absoluteFilePath(const io::path_t& filePath) const = 0;
     virtual DateTime birthTime(const io::path_t& filePath) const = 0;
     virtual DateTime lastModified(const io::path_t& filePath) const = 0;
-    virtual bool isWritable(const io::path_t& filePath) const = 0;
+    virtual Ret isWritable(const io::path_t& filePath) const = 0;
 };
 }
 

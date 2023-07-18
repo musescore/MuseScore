@@ -110,7 +110,8 @@ Item {
             title: model.title
             currentPartIndex: view.currentIndex
             isSelected: model.isSelected
-            isCustom: model.isCustom
+            canReset: model.isInited
+            canDelete: model.isCustom
 
             navigation.name: model.title + model.index
             navigation.panel: view.navigationPanel
@@ -125,6 +126,10 @@ Item {
             onPartClicked: {
                 root.model.selectPart(model.index)
                 view.currentIndex = model.index
+            }
+
+            onResetPartRequested: {
+                root.model.resetPart(model.index)
             }
 
             onRemovePartRequested: {

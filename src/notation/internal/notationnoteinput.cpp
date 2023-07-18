@@ -33,6 +33,7 @@
 #include "libmscore/mscore.h"
 #include "libmscore/tuplet.h"
 
+#include "mscoreerrorscontroller.h"
 #include "scorecallbacks.h"
 
 #include "log.h"
@@ -337,6 +338,8 @@ void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
 
     notifyNoteAddedChanged();
     notifyAboutStateChanged();
+
+    MScoreErrorsController::checkAndShowMScoreError();
 }
 
 void NotationNoteInput::padNote(const Pad& pad)
@@ -350,6 +353,8 @@ void NotationNoteInput::padNote(const Pad& pad)
     apply();
 
     notifyAboutStateChanged();
+
+    MScoreErrorsController::checkAndShowMScoreError();
 }
 
 mu::Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
@@ -362,6 +367,8 @@ mu::Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
 
     notifyNoteAddedChanged();
     notifyAboutStateChanged();
+
+    MScoreErrorsController::checkAndShowMScoreError();
 
     return ret;
 }
@@ -380,6 +387,8 @@ void NotationNoteInput::removeNote(const PointF& pos)
     apply();
 
     notifyAboutStateChanged();
+
+    MScoreErrorsController::checkAndShowMScoreError();
 }
 
 Notification NotationNoteInput::noteInputStarted() const
@@ -401,6 +410,8 @@ void NotationNoteInput::setAccidental(AccidentalType accidentalType)
     score()->toggleAccidental(accidentalType, editData);
 
     notifyAboutStateChanged();
+
+    MScoreErrorsController::checkAndShowMScoreError();
 }
 
 void NotationNoteInput::setArticulation(SymbolId articulationSymbolId)
@@ -414,6 +425,8 @@ void NotationNoteInput::setArticulation(SymbolId articulationSymbolId)
     inputState.setArticulationIds(articulations);
 
     notifyAboutStateChanged();
+
+    MScoreErrorsController::checkAndShowMScoreError();
 }
 
 void NotationNoteInput::setDrumNote(int note)
@@ -521,7 +534,7 @@ mu::RectF NotationNoteInput::cursorRect() const
     double h = 0.0;
 
     const mu::engraving::StaffType* staffType = staff->staffType(inputState.tick());
-    double spatium = score()->spatium();
+    double spatium = score()->style().spatium();
     double lineDist = staffType->lineDistance().val() * spatium;
     int lines = staffType->lines();
     int inputStateStringsCount = inputState.string();
@@ -586,6 +599,8 @@ void NotationNoteInput::addTie()
     apply();
 
     notifyAboutStateChanged();
+
+    MScoreErrorsController::checkAndShowMScoreError();
 }
 
 Notification NotationNoteInput::noteAdded() const
@@ -668,6 +683,8 @@ void NotationNoteInput::doubleNoteInputDuration()
     apply();
 
     notifyAboutStateChanged();
+
+    MScoreErrorsController::checkAndShowMScoreError();
 }
 
 void NotationNoteInput::halveNoteInputDuration()
@@ -681,4 +698,6 @@ void NotationNoteInput::halveNoteInputDuration()
     apply();
 
     notifyAboutStateChanged();
+
+    MScoreErrorsController::checkAndShowMScoreError();
 }

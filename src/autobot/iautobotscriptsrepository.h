@@ -22,7 +22,7 @@
 #ifndef MU_AUTOBOT_IAUTOBOTSCRIPTSREPOSITORY_H
 #define MU_AUTOBOT_IAUTOBOTSCRIPTSREPOSITORY_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "autobottypes.h"
 #include "types/retval.h"
 

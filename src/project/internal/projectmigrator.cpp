@@ -21,6 +21,7 @@
  */
 #include "projectmigrator.h"
 
+#include "engraving/types/constants.h"
 #include "engraving/libmscore/score.h"
 #include "engraving/libmscore/excerpt.h"
 #include "engraving/libmscore/undo.h"
@@ -102,7 +103,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     }
 
     QVariantMap vals = rv.val.toQVariant().toMap();
-    out.appVersion = mu::engraving::MSCVERSION;
+    out.appVersion = mu::engraving::Constants::MSC_VERSION;
     out.isApplyMigration = vals.value("isApplyMigration").toBool();
     out.isAskAgain = vals.value("isAskAgain").toBool();
     out.isApplyLeland = vals.value("isApplyLeland").toBool();
@@ -116,7 +117,7 @@ void ProjectMigrator::resetStyleSettings(mu::engraving::MasterScore* score)
     // there are a few things that need to be updated no matter which version the score is from (#10499)
     // primarily, the differences made concerning barline thickness and distance
     // these updates take place no matter whether or not the other migration options are checked
-    qreal sp = score->spatium();
+    qreal sp = score->style().spatium();
     mu::engraving::MStyle* style = &score->style();
     style->set(mu::engraving::Sid::dynamicsFontSize, 10.0);
     qreal doubleBarDistance = style->styleMM(mu::engraving::Sid::doubleBarDistance);
@@ -158,8 +159,8 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
         ok = resetAllElementsPositions(score);
     }
 
-    if (ok && score->mscVersion() != mu::engraving::MSCVERSION) {
-        score->undo(new mu::engraving::ChangeMetaText(score, u"mscVersion", String::fromAscii(MSC_VERSION)));
+    if (ok && score->mscVersion() != mu::engraving::Constants::MSC_VERSION) {
+        score->undo(new mu::engraving::ChangeMetaText(score, u"mscVersion", String::fromAscii(mu::engraving::Constants::MSC_VERSION_STR)));
     }
 
     if (ok && m_resetStyleSettings) {

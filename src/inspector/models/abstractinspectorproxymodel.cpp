@@ -134,6 +134,15 @@ void AbstractInspectorProxyModel::setModels(const QList<AbstractInspectorModel*>
     emit modelsChanged();
 }
 
+void AbstractInspectorProxyModel::onCurrentNotationChanged()
+{
+    for (AbstractInspectorModel* model : modelList()) {
+        model->onCurrentNotationChanged();
+    }
+
+    AbstractInspectorModel::onCurrentNotationChanged();
+}
+
 void AbstractInspectorProxyModel::updateModels(const ElementKeySet& newElementKeySet)
 {
     QList<AbstractInspectorModel*> models;

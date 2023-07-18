@@ -29,9 +29,10 @@
 #include "types/string.h"
 
 namespace mu::engraving {
+class SynthesizerState;
+
 class XmlWriter;
 class XmlReader;
-class SynthesizerState;
 
 //---------------------------------------------------------
 //   IdValue

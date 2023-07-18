@@ -38,7 +38,7 @@ class DockFrameModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(dock, actions::IActionsDispatcher, dispatcher)
+    INJECT(actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(QQuickItem * frame READ frame WRITE setFrame NOTIFY frameChanged)
     Q_PROPERTY(QVariantList tabs READ tabs NOTIFY tabsChanged)

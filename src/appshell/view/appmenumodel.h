@@ -35,7 +35,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "workspace/iworkspacemanager.h"
 #include "iappshellconfiguration.h"
-#include "project/irecentprojectsprovider.h"
+#include "project/irecentfilescontroller.h"
 #include "internal/iappmenumodelhook.h"
 #include "plugins/ipluginsservice.h"
 #include "update/iupdateconfiguration.h"
@@ -46,18 +46,18 @@ class AppMenuModel : public uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
-    INJECT(appshell, ui::IMainWindow, mainWindow)
-    INJECT(appshell, ui::IUiActionsRegister, uiActionsRegister)
-    INJECT(appshell, ui::INavigationController, navigationController)
-    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
-    INJECT(appshell, actions::IActionsDispatcher, actionsDispatcher)
-    INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
-    INJECT(appshell, IAppShellConfiguration, configuration)
-    INJECT(appshell, project::IRecentProjectsProvider, recentProjectsProvider)
-    INJECT(appshell, IAppMenuModelHook, appMenuModelHook)
-    INJECT(appshell, plugins::IPluginsService, pluginsService)
-    INJECT(appshell, update::IUpdateConfiguration, updateConfiguration)
-    INJECT(appshell, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(ui::IMainWindow, mainWindow)
+    INJECT(ui::IUiActionsRegister, uiActionsRegister)
+    INJECT(ui::INavigationController, navigationController)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(actions::IActionsDispatcher, actionsDispatcher)
+    INJECT(workspace::IWorkspaceManager, workspacesManager)
+    INJECT(IAppShellConfiguration, configuration)
+    INJECT(project::IRecentFilesController, recentFilesController)
+    INJECT(IAppMenuModelHook, appMenuModelHook)
+    INJECT(plugins::IPluginsService, pluginsService)
+    INJECT(update::IUpdateConfiguration, updateConfiguration)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);

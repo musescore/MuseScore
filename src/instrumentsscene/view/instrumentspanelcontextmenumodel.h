@@ -35,9 +35,9 @@ class InstrumentsPanelContextMenuModel : public uicomponents::AbstractMenuModel,
 {
     Q_OBJECT
 
-    INJECT(instrumentsscene, context::IGlobalContext, globalContext)
-    INJECT(instrumentsscene, notation::IInstrumentsRepository, instrumentsRepository)
-    INJECT(instrumentsscene, actions::IActionsDispatcher, dispatcher)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(notation::IInstrumentsRepository, instrumentsRepository)
+    INJECT(actions::IActionsDispatcher, dispatcher)
 
 public:
     explicit InstrumentsPanelContextMenuModel(QObject* parent = nullptr);

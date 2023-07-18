@@ -42,11 +42,6 @@ using namespace mu::plugins;
 using namespace mu::modularity;
 using namespace mu::ui;
 
-static std::shared_ptr<PluginsConfiguration> s_configuration = std::make_shared<PluginsConfiguration>();
-static std::shared_ptr<PluginsService> s_pluginsService = std::make_shared<PluginsService>();
-static std::shared_ptr<PluginsUiActions> s_pluginsUiActions = std::make_shared<PluginsUiActions>(s_pluginsService);
-static std::shared_ptr<PluginsActionController> s_pluginActionController = std::make_shared<PluginsActionController>();
-
 static void plugins_init_qrc()
 {
     Q_INIT_RESOURCE(plugins);
@@ -59,15 +54,20 @@ std::string PluginsModule::moduleName() const
 
 void PluginsModule::registerExports()
 {
-    ioc()->registerExport<IPluginsService>(moduleName(), s_pluginsService);
-    ioc()->registerExport<IPluginsConfiguration>(moduleName(), s_configuration);
+    m_configuration = std::make_shared<PluginsConfiguration>();
+    m_pluginsService = std::make_shared<PluginsService>();
+    m_pluginsUiActions = std::make_shared<PluginsUiActions>(m_pluginsService);
+    m_pluginActionController = std::make_shared<PluginsActionController>();
+
+    ioc()->registerExport<IPluginsService>(moduleName(), m_pluginsService);
+    ioc()->registerExport<IPluginsConfiguration>(moduleName(), m_configuration);
 }
 
 void PluginsModule::resolveImports()
 {
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(s_pluginsUiActions);
+        ar->reg(m_pluginsUiActions);
     }
 }
 
@@ -90,27 +90,27 @@ void PluginsModule::registerUiTypes()
 
 void PluginsModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::Converter == mode) {
+    if (mode != framework::IApplication::RunMode::GuiApp) {
         return;
     }
 
-    s_configuration->init();
+    m_configuration->init();
 }
 
 void PluginsModule::onDelayedInit()
 {
     //! NOTE: Need to be registered only on delayed init because it depends on the information
     //!       that is stored in the qml and we can only access them after the qml engine has been loaded
-    s_pluginsService->init();
+    m_pluginsService->init();
 
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         //! NOTE: Re-registration of actions for new available plugins
-        ar->reg(s_pluginsUiActions);
+        ar->reg(m_pluginsUiActions);
 
         //! NOTE: Notify about plugins changed for updating actions state
-        s_pluginsService->pluginsChanged().notify();
+        m_pluginsService->pluginsChanged().notify();
     }
 
-    s_pluginActionController->init();
+    m_pluginActionController->init();
 }

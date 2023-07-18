@@ -32,7 +32,7 @@ namespace mu::inspector {
 class NoteheadGroupsModel : public QAbstractListModel
 {
     Q_OBJECT
-    INJECT(inspector, engraving::IEngravingFontsProvider, engravingFonts)
+    INJECT(engraving::IEngravingFontsProvider, engravingFonts)
 public:
     explicit NoteheadGroupsModel(QObject* parent = nullptr);
 

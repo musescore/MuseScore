@@ -23,7 +23,6 @@
 #include "instrchange.h"
 
 #include "translation.h"
-#include "rw/xml.h"
 
 #include "keysig.h"
 #include "measure.h"
@@ -33,6 +32,8 @@
 #include "segment.h"
 #include "staff.h"
 #include "undo.h"
+
+#include "log.h"
 
 using namespace mu;
 
@@ -89,7 +90,9 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         Fraction tickStart = segment()->tick();
         Part* part = staff()->part();
         Interval oldV = part->instrument(tickStart)->transpose();
-        bool concPitch = score()->styleB(Sid::concertPitch);
+        Interval oldKv = staff()->transpose(tickStart);
+        Interval v = instrument->transpose();
+        bool concPitch = style().styleB(Sid::concertPitch);
 
         // change the clef for each staff
         for (size_t i = 0; i < part->nstaves(); i++) {
@@ -106,16 +109,18 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         }
 
         // Change key signature if necessary. CAUTION: not necessary in case of octave-transposing!
-        if ((instrument->transpose().chromatic - oldV.chromatic) % 12) {
+        if ((v.chromatic - oldV.chromatic) % 12) {
             for (size_t i = 0; i < part->nstaves(); i++) {
                 if (!part->staff(i)->keySigEvent(tickStart).isAtonal()) {
                     KeySigEvent ks;
-                    ks.setForInstrumentChange(true);
-                    Key key = part->staff(i)->key(tickStart);
-                    if (!score()->styleB(Sid::concertPitch)) {
-                        key = transposeKey(key, oldV);
-                    }
-                    ks.setKey(key);
+                    // Check, if some key signature is already there, if no, mark new one "for instrument change"
+                    Segment* seg = segment()->prev1(SegmentType::KeySig);
+                    voice_idx_t voice = part->staff(i)->idx() * VOICES;
+                    KeySig* ksig = toKeySig(seg->element(voice));
+                    bool forInstChange = !(ksig && ksig->tick() == tickStart && !ksig->generated());
+                    ks.setForInstrumentChange(forInstChange);
+                    Key cKey = part->staff(i)->concertKey(tickStart);
+                    ks.setConcertKey(cKey);
                     score()->undoChangeKeySig(part->staff(i), tickStart, ks);
                 }
             }
@@ -138,7 +143,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             } else {
                 tickEnd = Fraction::fromTicks(i->first);
             }
-            score()->transpositionChanged(part, oldV, tickStart, tickEnd);
+            score()->transpositionChanged(part, oldKv, tickStart, tickEnd);
         }
 
         //: The text of an "instrument change" marking. It is an instruction to the player to switch to another instrument.
@@ -151,7 +156,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
 //   keySigs
 //---------------------------------------------------------
 
-std::vector<KeySig*> InstrumentChange::keySigs() const
+std::vector<KeySig*> InstrumentChange::keySigs(bool all) const
 {
     std::vector<KeySig*> keysigs;
     Segment* seg = segment()->prev1(SegmentType::KeySig);
@@ -161,7 +166,7 @@ std::vector<KeySig*> InstrumentChange::keySigs() const
         Fraction t = tick();
         for (voice_idx_t i = startVoice; i <= endVoice; i += VOICES) {
             KeySig* ks = toKeySig(seg->element(i));
-            if (ks && ks->forInstrumentChange() && ks->tick() == t) {
+            if (ks && (all || ks->forInstrumentChange()) && ks->tick() == t) {
                 keysigs.push_back(ks);
             }
         }
@@ -192,53 +197,6 @@ std::vector<Clef*> InstrumentChange::clefs() const
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void InstrumentChange::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    _instrument->write(xml, part());
-    if (_init) {
-        xml.tag("init", _init);
-    }
-    TextBase::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void InstrumentChange::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "Instrument") {
-            _instrument->read(e, part());
-        } else if (tag == "init") {
-            _init = e.readBool();
-        } else if (!TextBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    if (score()->mscVersion() < 206) {
-        // previous versions did not honor transposition of instrument change
-        // except in ways that it should not have
-        // notes entered before the instrument change was added would not be altered,
-        // so original transposition remained in effect
-        // notes added afterwards would be transposed by both intervals, resulting in tpc corruption
-        // here we set the instrument change to inherit the staff transposition to emulate previous versions
-        // in Note::read(), we attempt to fix the tpc corruption
-        // There is also code in read206 to try to deal with this, but it is out of date and therefore disabled
-        // What this means is, scores created in 2.1 or later should be fine, scores created in 2.0 maybe not so much
-
-        Interval v = staff() ? staff()->part()->instrument(tick())->transpose() : 0;
-        _instrument->setTranspose(v);
-    }
-}
-
-//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
@@ -250,15 +208,5 @@ engraving::PropertyValue InstrumentChange::propertyDefault(Pid propertyId) const
     default:
         return TextBase::propertyDefault(propertyId);
     }
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void InstrumentChange::layout()
-{
-    TextBase::layout();
-    autoplaceSegmentElement();
 }
 }

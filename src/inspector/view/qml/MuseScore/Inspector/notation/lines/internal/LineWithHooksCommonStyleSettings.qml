@@ -45,7 +45,7 @@ Column {
 
         spacing: 6
 
-        CheckBoxPropertyView {
+        PropertyCheckBox {
             text: qsTrc("inspector", "Show line")
             propertyItem: root.model ? root.model.isLineVisible : null
 
@@ -54,7 +54,7 @@ Column {
             navigation.row: root.navigationRowStart + 1
         }
 
-        CheckBoxPropertyView {
+        PropertyCheckBox {
             text: qsTrc("inspector", "Allow diagonal")
             propertyItem: root.model ? root.model.allowDiagonal : null
 
@@ -64,27 +64,34 @@ Column {
         }
     }
 
-    LineTypeSection {
-        id: lineTypeSection
+    HooksSection {
+        id: hooksSection
+
+        startHookType: root.model ? root.model.startHookType : null
         endHookType: root.model ? root.model.endHookType : null
-        thickness: root.model ? root.model.thickness : null
-        hookHeight: root.model ? root.model.hookHeight : null
+        startHookHeight: root.model ? root.model.startHookHeight : null
+        endHookHeight: root.model ? root.model.endHookHeight : null
+
+        possibleStartHookTypes: root.model ? root.model.possibleStartHookTypes() : null
         possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 3
     }
 
-    SeparatorLine { anchors.margins: -12 }
+    SeparatorLine { anchors.margins: -12; visible: hooksSection.visible }
 
     LineStyleSection {
         id: lineStyleSection
+
+        thickness: root.model ? root.model.thickness : null
+
         lineStyle: root.model ? root.model.lineStyle : null
         dashLineLength: root.model ? root.model.dashLineLength : null
         dashGapLength: root.model ? root.model.dashGapLength : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: lineTypeSection.navigationRowEnd + 1
+        navigationRowStart: hooksSection.navigationRowEnd + 1
     }
 
     SeparatorLine { anchors.margins: -12; visible: placementSection.visible }

@@ -83,105 +83,18 @@ PointF StaffLines::canvasPos() const
     return p;
 }
 
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void StaffLines::layout()
+RectF StaffLines::hitBBox() const
 {
-    layoutForWidth(measure()->width());
+    double clickablePadding = spatium();
+    if (m_lines.size() <= 1) {
+        return bbox().adjusted(0.0, -clickablePadding, 0.0, clickablePadding);
+    }
+    return bbox();
 }
 
-//---------------------------------------------------------
-//   layoutForWidth
-//---------------------------------------------------------
-
-void StaffLines::layoutForWidth(double w)
+Shape StaffLines::hitShape() const
 {
-    const Staff* s = staff();
-    double _spatium = spatium();
-    double dist     = _spatium;
-    setPos(PointF(0.0, 0.0));
-    int _lines;
-    if (s) {
-        setMag(s->staffMag(measure()->tick()));
-        setVisible(!s->isLinesInvisible(measure()->tick()));
-        setColor(s->color(measure()->tick()));
-        const StaffType* st = s->staffType(measure()->tick());
-        dist         *= st->lineDistance().val();
-        _lines        = st->lines();
-        setPosY(st->yoffset().val() * _spatium);
-//            if (_lines == 1)
-//                  rypos() = 2 * _spatium;
-    } else {
-        _lines = 5;
-        setColor(engravingConfiguration()->defaultColor());
-    }
-    lw       = score()->styleS(Sid::staffLineWidth).val() * _spatium;
-    double x1 = pos().x();
-    double x2 = x1 + w;
-    double y  = pos().y();
-    bbox().setRect(x1, -lw * .5 + y, w, (_lines - 1) * dist + lw);
-
-    if (_lines == 1) {
-        double extraSize = _spatium;
-        bbox().adjust(0, -extraSize, 0, extraSize);
-    } else if (_lines == 0) {
-        bbox().adjust(0, -2 * dist, 0, 2 * dist);
-    }
-
-    lines.clear();
-    for (int i = 0; i < _lines; ++i) {
-        lines.push_back(LineF(x1, y, x2, y));
-        y += dist;
-    }
-}
-
-//---------------------------------------------------------
-//   layoutPartialWidth
-///   Layout staff lines for the specified width only, aligned
-///   to the left or right of the measure
-//---------------------------------------------------------
-
-void StaffLines::layoutPartialWidth(double w, double wPartial, bool alignRight)
-{
-    const Staff* s = staff();
-    double _spatium = spatium();
-    wPartial *= spatium();
-    double dist     = _spatium;
-    setPos(PointF(0.0, 0.0));
-    int _lines;
-    if (s) {
-        setMag(s->staffMag(measure()->tick()));
-        setColor(s->color(measure()->tick()));
-        const StaffType* st = s->staffType(measure()->tick());
-        dist         *= st->lineDistance().val();
-        _lines        = st->lines();
-        setPosY(st->yoffset().val() * _spatium);
-    } else {
-        _lines = 5;
-        setColor(engravingConfiguration()->defaultColor());
-    }
-    lw       = score()->styleS(Sid::staffLineWidth).val() * _spatium;
-    double x1 = pos().x();
-    double x2 = x1 + w;
-    double y  = pos().y();
-    bbox().setRect(x1, -lw * .5 + y, w, (_lines - 1) * dist + lw);
-
-    if (_lines == 1) {
-        double extraSize = _spatium;
-        bbox().adjust(0, -extraSize, 0, extraSize);
-    }
-
-    lines.clear();
-    for (int i = 0; i < _lines; ++i) {
-        if (alignRight) {
-            lines.push_back(LineF(x2 - wPartial, y, x2, y));
-        } else {
-            lines.push_back(LineF(x1, y, x1 + wPartial, y));
-        }
-        y += dist;
-    }
+    return Shape(hitBBox(), this);
 }
 
 //---------------------------------------------------------
@@ -190,10 +103,10 @@ void StaffLines::layoutPartialWidth(double w, double wPartial, bool alignRight)
 
 void StaffLines::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
-    painter->setPen(Pen(curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
-    painter->drawLines(lines);
+    painter->setPen(Pen(curColor(), m_lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
+    painter->drawLines(m_lines);
 }
 
 //---------------------------------------------------------

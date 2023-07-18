@@ -45,27 +45,7 @@ RowLayout {
     spacing: 0
 
     FlatButton {
-        id: zoomInButton
-        icon: IconCode.ZOOM_IN
-        iconFont: ui.theme.toolbarIconsFont
-
-        width: height
-        height: 28
-        transparent: true
-
-        navigation.panel: root.navigationPanel
-        navigation.order: root.navigationOrderMin
-        accessible.name: qsTrc("notation", "Zoom in")
-
-        onClicked: {
-            root.zoomInRequested()
-        }
-    }
-
-    FlatButton {
         id: zoomOutButton
-        Layout.leftMargin: 4
-
         icon: IconCode.ZOOM_OUT
         iconFont: ui.theme.toolbarIconsFont
 
@@ -74,11 +54,31 @@ RowLayout {
         transparent: true
 
         navigation.panel: root.navigationPanel
-        navigation.order: zoomInButton.navigation.order + 1
+        navigation.order: root.navigationOrderMin
         accessible.name: qsTrc("notation", "Zoom out")
 
         onClicked: {
             root.zoomOutRequested()
+        }
+    }
+
+    FlatButton {
+        id: zoomInButton
+        Layout.leftMargin: 4
+
+        icon: IconCode.ZOOM_IN
+        iconFont: ui.theme.toolbarIconsFont
+
+        width: height
+        height: 28
+        transparent: true
+
+        navigation.panel: root.navigationPanel
+        navigation.order: zoomOutButton.navigation.order + 1
+        accessible.name: qsTrc("notation", "Zoom in")
+
+        onClicked: {
+            root.zoomInRequested()
         }
     }
 

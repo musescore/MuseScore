@@ -22,6 +22,7 @@
 #include "invoker.h"
 
 #include <QMetaObject>
+#include <QApplication>
 
 #include "log.h"
 
@@ -49,6 +50,11 @@ void Invoker::invoke(const Call& func, bool isAlwaysQueued)
         void* ptr = reinterpret_cast<void*>(f);
         QMetaObject::invokeMethod(this, name, Qt::QueuedConnection, Q_ARG(void*, ptr));
     }
+}
+
+void Invoker::invokeQueuedCalls()
+{
+    qApp->sendPostedEvents(this, QEvent::MetaCall);
 }
 
 void Invoker::doInvoke(void* ptr)

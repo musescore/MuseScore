@@ -25,36 +25,8 @@
 
 #include "renderbase.h"
 
-namespace Ms {
-class Note;
-}
-
 namespace mu::engraving {
-struct DisclosurePattern {
-    int prefixDurationTicks = 0;
-    std::vector<mpe::pitch_level_t> prefixPitchOffsets;
-
-    bool isAlterationsRepeatAllowed = false;
-    std::vector<mpe::pitch_level_t> alterationStepPitchOffsets;
-
-    int suffixDurationTicks = 0;
-    std::vector<mpe::pitch_level_t> suffixPitchOffsets;
-
-    struct DurationBoundaries {
-        float lowTempoDurationTicks = 0.f;
-        float mediumTempoDurationTicks = 0.f;
-        float highTempoDurationTicks = 0.f;
-    };
-
-    DurationBoundaries boundaries;
-
-    float subNoteDurationTicks(const double bps) const;
-    DisclosurePattern buildActualPattern(const Note* note, const double bps) const;
-
-private:
-    void updatePitchOffsets(const Note* note, std::vector<mpe::pitch_level_t>& pitchOffsets);
-};
-
+struct DisclosurePattern;
 class OrnamentsRenderer : public RenderBase<OrnamentsRenderer>
 {
 public:

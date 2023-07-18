@@ -51,8 +51,8 @@ void SpannerMap::update() const
 
     collectIntervals(regularIntervals, collisionFreeIntervals);
 
-    tree = interval_tree::IntervalTree<Spanner*>(regularIntervals);
-    collisionFreeTree = interval_tree::IntervalTree<Spanner*>(collisionFreeIntervals);
+    tree = interval_tree::IntervalTree<Spanner*>(std::move(regularIntervals));
+    collisionFreeTree = interval_tree::IntervalTree<Spanner*>(std::move(collisionFreeIntervals));
     dirty = false;
 }
 
@@ -69,9 +69,9 @@ const SpannerMap::IntervalList& SpannerMap::findContained(int start, int stop, b
     results.clear();
 
     if (excludeCollisions) {
-        collisionFreeTree.findContained(start, stop, results);
+        results = collisionFreeTree.findContained(start, stop);
     } else {
-        tree.findContained(start, stop, results);
+        results = tree.findContained(start, stop);
     }
 
     return results;
@@ -90,9 +90,9 @@ const SpannerMap::IntervalList& SpannerMap::findOverlapping(int start, int stop,
     results.clear();
 
     if (excludeCollisions) {
-        collisionFreeTree.findOverlapping(start, stop, results);
+        results = collisionFreeTree.findOverlapping(start, stop);
     } else {
-        tree.findOverlapping(start, stop, results);
+        results = tree.findOverlapping(start, stop);
     }
 
     return results;

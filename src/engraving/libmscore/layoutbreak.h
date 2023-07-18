@@ -36,6 +36,8 @@ class Factory;
 class LayoutBreak final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, LayoutBreak)
+    DECLARE_CLASSOF(ElementType::LAYOUT_BREAK)
+
 public:
 
     void setParent(MeasureBase* parent);
@@ -48,8 +50,6 @@ public:
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
-    void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
 
     MeasureBase* measure() const { return (MeasureBase*)explicitParent(); }
     double pause() const { return _pause; }
@@ -70,6 +70,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
+    void layout0();
+
 protected:
     void added() override;
     void removed() override;
@@ -81,7 +83,7 @@ private:
     LayoutBreak(const LayoutBreak&);
 
     void draw(mu::draw::Painter*) const override;
-    void layout0();
+
     void spatiumChanged(double oldValue, double newValue) override;
 
     double lw;

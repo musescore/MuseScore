@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::workspace {
-class WorkspaceStubModule : public modularity::IModuleSetup
+class WorkspaceModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

@@ -33,12 +33,12 @@
 #include "stringdata.h"
 
 namespace mu::engraving {
+class XmlWriter;
+class XmlReader;
 class Part;
 class Staff;
 class StaffType;
 struct ScoreOrder;
-
-class XmlWriter;
 
 //---------------------------------------------------------
 //   InstrumentGenre

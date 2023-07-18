@@ -35,7 +35,7 @@ class NoteFlagsTypeSelectorModel : public QObject, public async::Asyncable
 
     Q_PROPERTY(bool useStraightNoteFlags READ useStraightNoteFlags WRITE setUseStraightNoteFlags NOTIFY useStraightNoteFlagsChanged)
 
-    INJECT(notation, context::IGlobalContext, context)
+    INJECT(context::IGlobalContext, context)
 
 public:
     explicit NoteFlagsTypeSelectorModel(QObject* parent = nullptr);

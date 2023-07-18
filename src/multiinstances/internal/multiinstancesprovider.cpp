@@ -219,7 +219,7 @@ bool MultiInstancesProvider::openNewAppInstance(const QStringList& args)
         return false;
     }
 
-    QList<ID> currentApps = m_ipcChannel->instances();
+    QList<ipc::ID> currentApps = m_ipcChannel->instances();
 
     QString appPath = QCoreApplication::applicationFilePath();
     bool ok = QProcess::startDetached(appPath, args);
@@ -241,8 +241,8 @@ bool MultiInstancesProvider::openNewAppInstance(const QStringList& args)
     auto waitNewInstance = [this, sleep, currentApps](int waitMs, int count) {
         for (int i = 0; i < count; ++i) {
             sleep(waitMs);
-            QList<ID> apps = m_ipcChannel->instances();
-            for (const ID& id : apps) {
+            QList<ipc::ID> apps = m_ipcChannel->instances();
+            for (const ipc::ID& id : apps) {
                 if (!currentApps.contains(id)) {
                     LOGI() << "created new instance with ID: " << id;
                     return true;
@@ -386,8 +386,8 @@ bool MultiInstancesProvider::isMainInstance() const
 std::vector<InstanceMeta> MultiInstancesProvider::instances() const
 {
     std::vector<InstanceMeta> ret;
-    QList<ID> ints = m_ipcChannel->instances();
-    for (const ID& id : qAsConst(ints)) {
+    QList<ipc::ID> ints = m_ipcChannel->instances();
+    for (const ipc::ID& id : qAsConst(ints)) {
         InstanceMeta im;
         im.id = id.toStdString();
         ret.push_back(std::move(im));

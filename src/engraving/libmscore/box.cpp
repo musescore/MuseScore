@@ -24,17 +24,12 @@
 
 #include <cmath>
 
-#include "rw/xml.h"
-
 #include "actionicon.h"
 #include "factory.h"
-#include "fret.h"
-#include "image.h"
 #include "layoutbreak.h"
 #include "mscore.h"
 #include "score.h"
 #include "stafftext.h"
-#include "symbol.h"
 #include "system.h"
 #include "text.h"
 #include "textframe.h"
@@ -54,27 +49,9 @@ static const ElementStyle boxStyle {
 static const ElementStyle hBoxStyle {
 };
 
-//---------------------------------------------------------
-//   Box
-//---------------------------------------------------------
-
 Box::Box(const ElementType& type, System* parent)
     : MeasureBase(type, parent)
 {
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Box::layout()
-{
-    MeasureBase::layout();
-    for (EngravingItem* e : el()) {
-        if (!e->isLayoutBreak()) {
-            e->layout();
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -92,7 +69,7 @@ void HBox::computeMinWidth()
 
 void Box::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     if (score() && score()->printing()) {
         return;
     }
@@ -144,10 +121,6 @@ void Box::startEditDrag(EditData& ed)
     }
 }
 
-//---------------------------------------------------------
-//   editDrag
-//---------------------------------------------------------
-
 void Box::editDrag(EditData& ed)
 {
     if (isVBox()) {
@@ -169,16 +142,13 @@ void Box::editDrag(EditData& ed)
         }
         triggerLayout();
     }
-    layout();
-}
 
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
+    layout()->layoutItem(this);
+}
 
 void Box::endEdit(EditData&)
 {
-    layout();
+    layout()->layoutItem(this);
 }
 
 //---------------------------------------------------------
@@ -195,151 +165,6 @@ std::vector<PointF> VBox::gripsPositions(const EditData&) const
 {
     RectF r(abbox());
     return { PointF(r.x() + r.width() * .5, r.bottom()) };
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Box::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void Box::writeProperties(XmlWriter& xml) const
-{
-    for (Pid id : {
-            Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
-            Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE }) {
-        writeProperty(xml, id);
-    }
-    EngravingItem::writeProperties(xml);
-    for (const EngravingItem* e : el()) {
-        e->write(xml);
-    }
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Box::read(XmlReader& e)
-{
-    _leftMargin      = 0.0;
-    _rightMargin     = 0.0;
-    _topMargin       = 0.0;
-    _bottomMargin    = 0.0;
-    _boxHeight       = Spatium(0);       // override default set in constructor
-    _boxWidth        = Spatium(0);
-    MeasureBase::read(e);
-    if (score()->mscVersion() < 302) {
-        _isAutoSizeEnabled = false;     // disable auto-size for older scores by default.
-    }
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Box::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-    if (tag == "height") {
-        _boxHeight = Spatium(e.readDouble());
-    } else if (tag == "width") {
-        _boxWidth = Spatium(e.readDouble());
-    } else if (tag == "topGap") {
-        _topGap = e.readDouble();
-        if (score()->mscVersion() >= 206) {
-            _topGap *= score()->spatium();
-        }
-        setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
-    } else if (tag == "bottomGap") {
-        _bottomGap = e.readDouble();
-        if (score()->mscVersion() >= 206) {
-            _bottomGap *= score()->spatium();
-        }
-        setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
-    } else if (tag == "leftMargin") {
-        _leftMargin = e.readDouble();
-    } else if (tag == "rightMargin") {
-        _rightMargin = e.readDouble();
-    } else if (tag == "topMargin") {
-        _topMargin = e.readDouble();
-    } else if (tag == "bottomMargin") {
-        _bottomMargin = e.readDouble();
-    } else if (tag == "boxAutoSize") {
-        _isAutoSizeEnabled = e.readBool();
-    } else if (tag == "Text") {
-        Text* t;
-        if (isTBox()) {
-            t = toTBox(this)->text();
-            t->read(e);
-        } else {
-            t = Factory::createText(this);
-            t->read(e);
-            if (t->empty()) {
-                LOGD("read empty text");
-            } else {
-                add(t);
-            }
-        }
-    } else if (tag == "Symbol") {
-        Symbol* s = new Symbol(this);
-        s->read(e);
-        add(s);
-    } else if (tag == "Image") {
-        if (MScore::noImages) {
-            e.skipCurrentElement();
-        } else {
-            Image* image = new Image(this);
-            image->setTrack(e.context()->track());
-            image->read(e);
-            add(image);
-        }
-    } else if (tag == "FretDiagram") {
-        FretDiagram* f = Factory::createFretDiagram(this->score()->dummy()->segment());
-        f->read(e);
-        //! TODO Looks like a bug.
-        //! The FretDiagram parent must be Segment
-        //! there is a method: `Segment* segment() const { return toSegment(parent()); }`,
-        //! but when we add it to Box, the parent will be rewritten.
-        add(f);
-    } else if (tag == "HBox") {
-        // m_parent is used here (rather than system()) because explicit parent isn't set for this object
-        // until it is fully read. m_parent is nonetheless valid and using it here matches MU3 behavior.
-        // If we do not set the parent of this new box correctly, it will cause a crash on read()
-        // because it needs access to the system it is being added to. (c.r. issue #14643)
-        if (m_parent && m_parent->isSystem()) {
-            HBox* hb = new HBox(toSystem(m_parent));
-            hb->read(e);
-            //! TODO Looks like a bug.
-            //! The HBox parent must be System
-            //! there is a method: `System* system() const { return (System*)parent(); }`,
-            //! but when we add it to Box, the parent will be rewritten.
-            add(hb);
-        }
-    } else if (tag == "VBox") {
-        if (m_parent && m_parent->isSystem()) {
-            VBox* vb = new VBox(toSystem(m_parent));
-            vb->read(e);
-            //! TODO Looks like a bug.
-            //! The VBox parent must be System
-            //! there is a method: `System* system() const { return (System*)parent(); }`,
-            //! but when we add it to Box, the parent will be rewritten.
-            add(vb);
-        }
-    } else if (MeasureBase::readProperties(e)) {
-    } else {
-        return false;
-    }
-    return true;
 }
 
 //---------------------------------------------------------
@@ -450,9 +275,9 @@ PropertyValue Box::propertyDefault(Pid id) const
         return Spatium(0.0);
 
     case Pid::TOP_GAP:
-        return isHBox() ? Millimetre(0.0) : score()->styleMM(Sid::systemFrameDistance);
+        return isHBox() ? Millimetre(0.0) : style().styleMM(Sid::systemFrameDistance);
     case Pid::BOTTOM_GAP:
-        return isHBox() ? Millimetre(0.0) : score()->styleMM(Sid::frameSystemDistance);
+        return isHBox() ? Millimetre(0.0) : style().styleMM(Sid::frameSystemDistance);
 
     case Pid::LEFT_MARGIN:
     case Pid::RIGHT_MARGIN:
@@ -493,38 +318,6 @@ HBox::HBox(System* parent)
 {
     initElementStyle(&hBoxStyle);
     setBoxWidth(Spatium(5.0));
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void HBox::layout()
-{
-    if (explicitParent() && explicitParent()->isVBox()) {
-        VBox* vb = toVBox(explicitParent());
-        double x = vb->leftMargin() * DPMM;
-        double y = vb->topMargin() * DPMM;
-        double w = point(boxWidth());
-        double h = vb->height() - (vb->topMargin() + vb->bottomMargin()) * DPMM;
-        setPos(x, y);
-        bbox().setRect(0.0, 0.0, w, h);
-    } else if (system()) {
-        bbox().setRect(0.0, 0.0, point(boxWidth()), system()->height());
-    } else {
-        bbox().setRect(0.0, 0.0, 50, 50);
-    }
-    Box::layout();
-}
-
-//---------------------------------------------------------
-//   layout2
-//    height (bbox) is defined now
-//---------------------------------------------------------
-
-void HBox::layout2()
-{
-    Box::layout();
 }
 
 //---------------------------------------------------------
@@ -687,31 +480,6 @@ bool HBox::isMovable() const
 }
 
 //---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void HBox::writeProperties(XmlWriter& xml) const
-{
-    writeProperty(xml, Pid::CREATE_SYSTEM_HEADER);
-    Box::writeProperties(xml);
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool HBox::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-    if (readProperty(tag, e, Pid::CREATE_SYSTEM_HEADER)) {
-    } else if (Box::readProperties(e)) {
-    } else {
-        return false;
-    }
-    return true;
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -794,61 +562,6 @@ PropertyValue VBox::getProperty(Pid propertyId) const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void VBox::layout()
-{
-    setPos(PointF());
-
-    if (system()) {
-        bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
-    } else {
-        bbox().setRect(0.0, 0.0, 50, 50);
-    }
-
-    for (EngravingItem* e : el()) {
-        if (!e->isLayoutBreak()) {
-            e->layout();
-        }
-    }
-
-    if (getProperty(Pid::BOX_AUTOSIZE).toBool()) {
-        double contentHeight = contentRect().height();
-
-        if (contentHeight < minHeight()) {
-            contentHeight = minHeight();
-        }
-
-        setHeight(contentHeight);
-    }
-
-    MeasureBase::layout();
-
-    if (MScore::noImages) {
-        adjustLayoutWithoutImages();
-    }
-}
-
-void VBox::adjustLayoutWithoutImages()
-{
-    double calculatedVBoxHeight = 0;
-    const int padding = score()->spatium();
-    auto elementList = el();
-
-    for (auto pElement : elementList) {
-        if (pElement->isText()) {
-            Text* txt = toText(pElement);
-            txt->bbox().moveTop(0);
-            calculatedVBoxHeight += txt->height() + padding;
-        }
-    }
-
-    setHeight(calculatedVBoxHeight);
-    Box::layout();
-}
-
-//---------------------------------------------------------
 //   startEditDrag
 //---------------------------------------------------------
 
@@ -859,17 +572,6 @@ void VBox::startEditDrag(EditData& ed)
         setBoxHeight(Spatium(height() / spatium()));
     }
     Box::startEditDrag(ed);
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void FBox::layout()
-{
-//      setPos(PointF());      // !?
-    bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
-    Box::layout();
 }
 
 //---------------------------------------------------------

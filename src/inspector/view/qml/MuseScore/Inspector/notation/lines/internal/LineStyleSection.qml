@@ -32,6 +32,8 @@ import "../../../common"
 Column {
     id: root
 
+    property PropertyItem thickness: null
+
     property PropertyItem lineStyle: null
     property alias possibleLineStyles: styleSection.model
 
@@ -50,13 +52,29 @@ Column {
         styleSection.focusOnFirst()
     }
 
+    SpinBoxPropertyView {
+        id: thicknessSection
+
+        titleText: qsTrc("inspector", "Thickness")
+        propertyItem: root.thickness
+
+        step: 0.01
+        maxValue: 10.00
+        minValue: 0.01
+        decimals: 2
+
+        navigationName: "Thickness"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
+    }
+
     FlatRadioButtonGroupPropertyView {
         id: styleSection
         titleText: qsTrc("inspector", "Style")
         propertyItem: root.lineStyle
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: root.navigationRowStart
+        navigationRowStart: thicknessSection.navigationRowEnd + 1
 
         model: [
             { iconCode: IconCode.LINE_NORMAL, value: LineTypes.LINE_STYLE_SOLID, title: qsTrc("inspector", "Normal") },

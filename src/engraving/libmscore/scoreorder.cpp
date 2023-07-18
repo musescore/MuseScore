@@ -23,7 +23,9 @@
 
 #include <iostream>
 
-#include "rw/xml.h"
+#include "rw/xmlreader.h"
+#include "rw/xmlwriter.h"
+
 #include "types/translatablestring.h"
 
 #include "libmscore/bracketItem.h"
@@ -387,7 +389,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
     bool prvThnBracket { false };
     bool prvBarLineSpan { false };
     String prvSection;
-    int prvInstrument { 0 };
+    int prvInstrument { -1 };
     Staff* prvStaff { nullptr };
 
     Staff* thkBracketStaff { nullptr };
@@ -408,7 +410,10 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
         bool blockThinBracket { false };
         size_t braceSpan { 0 };
         for (Staff* staff : part->staves()) {
-            for (BracketItem* bi : staff->brackets()) {
+            // Create copy, because the original is modified while we are iterating over it
+            std::vector<BracketItem*> brackets = staff->brackets();
+
+            for (BracketItem* bi : brackets) {
                 if (bi->bracketType() == BracketType::BRACE) {
                     braceSpan = std::max(braceSpan, bi->bracketSpan() - 1);
                 }
@@ -426,7 +431,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                 if (thkBracketStaff && (thkBracketSpan > 1)) {
                     score->undoAddBracket(thkBracketStaff, 0, BracketType::NORMAL, thkBracketSpan);
                 }
-                if (sg.bracket && !staffIdx) {
+                if (!staffIdx) {
                     thkBracketStaff = sg.bracket ? staff : nullptr;
                     thkBracketSpan  = 0;
                 }
@@ -435,7 +440,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                 thkBracketSpan += static_cast<int>(part->nstaves());
             }
 
-            if (!staffIdx || (ii.instrIndex != prvInstrument)) {
+            if (prvInstrument == -1 || (ii.instrIndex != prvInstrument)) {
                 if (thnBracketStaff && (thnBracketSpan > 1)) {
                     score->undoAddBracket(thnBracketStaff, 1, BracketType::SQUARE, thnBracketSpan);
                 }

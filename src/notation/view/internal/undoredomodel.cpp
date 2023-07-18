@@ -67,6 +67,10 @@ void UndoRedoModel::load()
         });
     });
 
+    context()->currentProjectChanged().onNotify(this, [this]() {
+        emit stackChanged();
+    });
+
     emit stackChanged();
 }
 

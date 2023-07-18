@@ -23,7 +23,6 @@
 #include "actionicon.h"
 
 #include "draw/fontmetrics.h"
-#include "rw/xml.h"
 
 #include "property.h"
 
@@ -76,39 +75,9 @@ void ActionIcon::setFontSize(double size)
     m_iconFont.setPointSizeF(size);
 }
 
-void ActionIcon::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    xml.tag("subtype", int(m_actionType));
-    if (!m_actionCode.empty()) {
-        xml.tag("action", String::fromStdString(m_actionCode));
-    }
-    xml.endElement();
-}
-
-void ActionIcon::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "action") {
-            m_actionCode = e.readText().toStdString();
-        } else if (tag == "subtype") {
-            m_actionType = static_cast<ActionIconType>(e.readInt());
-        } else {
-            e.unknown();
-        }
-    }
-}
-
-void ActionIcon::layout()
-{
-    FontMetrics fontMetrics(m_iconFont);
-    setbbox(fontMetrics.boundingRect(Char(m_icon)));
-}
-
 void ActionIcon::draw(Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     painter->setFont(m_iconFont);
     painter->drawText(bbox(), draw::AlignCenter, Char(m_icon));
 }

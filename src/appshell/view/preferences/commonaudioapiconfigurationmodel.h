@@ -41,8 +41,8 @@ class CommonAudioApiConfigurationModel : public QObject, public async::Asyncable
     Q_PROPERTY(unsigned int bufferSize READ bufferSize NOTIFY bufferSizeChanged)
     Q_PROPERTY(QList<unsigned int> bufferSizeList READ bufferSizeList NOTIFY bufferSizeListChanged)
 
-    INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
-    INJECT(appshell, audio::IAudioDriver, audioDriver)
+    INJECT(audio::IAudioConfiguration, audioConfiguration)
+    INJECT(audio::IAudioDriver, audioDriver)
 
 public:
     explicit CommonAudioApiConfigurationModel(QObject* parent = nullptr);

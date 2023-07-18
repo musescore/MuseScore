@@ -26,8 +26,11 @@
 
 #include "playbacktypes.h"
 
+#include "log.h"
+
 using namespace mu::playback;
 using namespace mu::framework;
+using namespace mu::audio;
 
 static const std::string moduleName("playback");
 
@@ -66,6 +69,16 @@ static Settings::Key mixerSectionVisibleKey(MixerSectionType sectionType)
     return Settings::Key();
 }
 
+static Settings::Key auxSendVisibleKey(aux_channel_idx_t index)
+{
+    return Settings::Key(moduleName, "playback/mixer/auxSend" + std::to_string(index) + "Visible");
+}
+
+static Settings::Key auxChannelVisibleKey(aux_channel_idx_t index)
+{
+    return Settings::Key(moduleName, "playback/mixer/auxChannel" + std::to_string(index) + "Visible");
+}
+
 void PlaybackConfiguration::init()
 {
     settings()->setDefaultValue(PLAY_NOTES_WHEN_EDITING, Val(true));
@@ -79,6 +92,22 @@ void PlaybackConfiguration::init()
     }
 
     settings()->setDefaultValue(DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS, Val(fallbackSoundProfileStr().toStdString()));
+
+    for (aux_channel_idx_t idx = 0; idx < AUX_CHANNEL_NUM; ++idx) {
+        Settings::Key auxSendKey = auxSendVisibleKey(idx);
+        Settings::Key auxChannelKey = auxChannelVisibleKey(idx);
+
+        settings()->setDefaultValue(auxSendKey, Val(idx == REVERB_CHANNEL_IDX));
+        settings()->setDefaultValue(auxChannelKey, Val(false));
+
+        settings()->valueChanged(auxSendKey).onReceive(this, [this, idx](const Val& val) {
+            m_isAuxSendVisibleChanged.send(idx, val.toBool());
+        });
+
+        settings()->valueChanged(auxChannelKey).onReceive(this, [this, idx](const Val& val) {
+            m_isAuxChannelVisibleChanged.send(idx, val.toBool());
+        });
+    }
 }
 
 bool PlaybackConfiguration::playNotesWhenEditing() const
@@ -126,6 +155,55 @@ void PlaybackConfiguration::setMixerSectionVisible(MixerSectionType sectionType,
     settings()->setSharedValue(mixerSectionVisibleKey(sectionType), Val(visible));
 }
 
+bool PlaybackConfiguration::isAuxSendVisible(aux_channel_idx_t index) const
+{
+    return settings()->value(auxSendVisibleKey(index)).toBool();
+}
+
+void PlaybackConfiguration::setAuxSendVisible(aux_channel_idx_t index, bool visible)
+{
+    settings()->setSharedValue(auxSendVisibleKey(index), Val(visible));
+}
+
+mu::async::Channel<aux_channel_idx_t, bool> PlaybackConfiguration::isAuxSendVisibleChanged() const
+{
+    return m_isAuxSendVisibleChanged;
+}
+
+bool PlaybackConfiguration::isAuxChannelVisible(aux_channel_idx_t index) const
+{
+    return settings()->value(auxChannelVisibleKey(index)).toBool();
+}
+
+void PlaybackConfiguration::setAuxChannelVisible(aux_channel_idx_t index, bool visible) const
+{
+    settings()->setSharedValue(auxChannelVisibleKey(index), Val(visible));
+}
+
+mu::async::Channel<aux_channel_idx_t, bool> PlaybackConfiguration::isAuxChannelVisibleChanged() const
+{
+    return m_isAuxChannelVisibleChanged;
+}
+
+gain_t PlaybackConfiguration::defaultAuxSendValue(aux_channel_idx_t index, AudioSourceType sourceType,
+                                                  const String& instrumentSoundId) const
+{
+    TRACEFUNC;
+
+    constexpr gain_t DEFAULT_VALUE = 0.30f;
+
+    if (sourceType == AudioSourceType::MuseSampler) {
+        if (index == REVERB_CHANNEL_IDX) {
+            float lvl = musesamplerInfo()->defaultReverbLevel(instrumentSoundId);
+            return RealIsNull(lvl) ? DEFAULT_VALUE : lvl;
+        }
+    } else if (sourceType == AudioSourceType::Vsti) {
+        return 0.f;
+    }
+
+    return DEFAULT_VALUE;
+}
+
 const SoundProfileName& PlaybackConfiguration::basicSoundProfileName() const
 {
     return BASIC_PROFILE_NAME;
@@ -148,11 +226,9 @@ void PlaybackConfiguration::setDefaultProfileForNewProjects(const SoundProfileNa
 
 const SoundProfileName& PlaybackConfiguration::fallbackSoundProfileStr() const
 {
-#ifdef BUILD_MUSESAMPLER_MODULE
-    if (musesamplerInfo()->isInstalled()) {
+    if (musesamplerInfo() && musesamplerInfo()->isInstalled()) {
         return MUSE_PROFILE_NAME;
     }
-#endif
 
     return BASIC_PROFILE_NAME;
 }

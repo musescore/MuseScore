@@ -19465,7 +19465,7 @@
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="191"/>
-        <source>Lauds</source>
+        <source>Laúds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

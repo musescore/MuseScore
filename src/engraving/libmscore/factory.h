@@ -52,6 +52,9 @@ public:
     static Articulation* createArticulation(ChordRest* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Articulation> makeArticulation(ChordRest* parent);
 
+    static Ornament* createOrnament(ChordRest* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Ornament> makeOrnament(ChordRest* parent);
+
     static BarLine* createBarLine(Segment* parent, bool isAccessibleEnabled = true);
     static BarLine* copyBarLine(const BarLine& src);
     static std::shared_ptr<BarLine> makeBarLine(Segment* parent);
@@ -93,6 +96,10 @@ public:
     static FretDiagram* createFretDiagram(Segment* parent, bool isAccessibleEnabled = true);
     static FretDiagram* copyFretDiagram(const FretDiagram& src);
     static std::shared_ptr<FretDiagram> makeFretDiagram(Segment* parent);
+
+    static HarpPedalDiagram* createHarpPedalDiagram(Segment* parent, bool isAccessibleEnabled = true);
+    static HarpPedalDiagram* copyHarpPedalDiagram(const HarpPedalDiagram& src);
+    static std::shared_ptr<HarpPedalDiagram> makeHarpPedalDiagram(Segment* parent);
 
     static KeySig* createKeySig(Segment* parent, bool isAccessibleEnabled = true);
     static KeySig* copyKeySig(const KeySig& src);
@@ -149,6 +156,8 @@ public:
     static std::shared_ptr<StaffTypeChange> makeStaffTypeChange(MeasureBase* parent);
 
     static StaffText* createStaffText(Segment* parent, TextStyleType textStyleType = TextStyleType::STAFF, bool isAccessibleEnabled = true);
+
+    static Expression* createExpression(Segment* parent, bool isAccessibleEnabled = true);
 
     static RehearsalMark* createRehearsalMark(Segment* parent, bool isAccessibleEnabled = true);
 
@@ -253,8 +262,13 @@ public:
 
     static Image* createImage(EngravingItem* parent);
 
+    static Symbol* createSymbol(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static FSymbol* createFSymbol(EngravingItem* parent, bool isAccessibleEnabled = true);
+
     static PlayTechAnnotation* createPlayTechAnnotation(Segment* parent, PlayingTechniqueType techniqueType, TextStyleType styleType,
                                                         bool isAccessibleEnabled = true);
+
+    static Capo* createCapo(Segment* parent, bool isAccessibleEnabled = true);
 
 private:
     static EngravingItem* doCreateItem(ElementType type, EngravingItem* parent);

@@ -45,7 +45,7 @@ public:
     virtual void beginTarget(const std::string& name) = 0;
     virtual void beforeEndTargetHook(Painter* painter) = 0;
     virtual bool endTarget(bool endDraw = false) = 0;
-    virtual void beginObject(const std::string& name, const PointF& pagePos) = 0;
+    virtual void beginObject(const std::string& name) = 0;
     virtual void endObject() = 0;
 
     virtual void setAntialiasing(bool arg) = 0;
@@ -86,6 +86,8 @@ public:
     virtual void drawPixmap(const PointF& point, const QPixmap& pm) = 0;
     virtual void drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset = PointF()) = 0;
 #endif
+
+    virtual bool hasClipping() const = 0;
 
     virtual void setClipRect(const RectF& rect) = 0;
     virtual void setClipping(bool enable) = 0;

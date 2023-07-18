@@ -24,4 +24,4 @@ ENV_FILE=$BUILD_TOOLS/environment.sh
 
 source $ENV_FILE
 
-bash ./tools/translations/run_lupdate.sh
+bash ./tools/translations/run_lupdate.sh $@

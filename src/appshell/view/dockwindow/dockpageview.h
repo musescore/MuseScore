@@ -29,6 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "ui/inavigationcontroller.h"
+#include "ui/view/navigationsection.h"
 
 #include "internal/dockbase.h"
 #include "docktypes.h"
@@ -47,7 +48,7 @@ class DockPageView : public QQuickItem
 {
     Q_OBJECT
 
-    INJECT(dock, ui::INavigationController, navigationController)
+    INJECT(ui::INavigationController, navigationController)
 
     Q_PROPERTY(QString uri READ uri WRITE setUri NOTIFY uriChanged)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBarView> mainToolBars READ mainToolBarsProperty)
@@ -62,6 +63,7 @@ public:
     explicit DockPageView(QQuickItem* parent = nullptr);
 
     void init();
+    void deinit();
 
     QString uri() const;
 
@@ -111,6 +113,11 @@ private:
     void componentComplete() override;
 
     DockPanelView* findPanelForTab(const DockPanelView* tab) const;
+
+    void reorderSections();
+    void doReorderSections();
+    void reorderDocksNavigationSections(QList<DockBase*>& docks);
+    void reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks);
 
     QString m_uri;
     uicomponents::QmlListProperty<DockToolBarView> m_mainToolBars;

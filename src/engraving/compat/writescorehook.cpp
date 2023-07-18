@@ -21,22 +21,20 @@
  */
 #include "writescorehook.h"
 
-#include "rw/xml.h"
+#include "rw/xmlwriter.h"
+
 #include "libmscore/masterscore.h"
 #include "libmscore/excerpt.h"
 
-#include "config.h"
+#include "rw/write/writer.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::compat;
+using namespace mu::engraving::write;
 
 void WriteScoreHook::onWriteStyle302(Score* score, XmlWriter& xml)
 {
     bool isWriteStyle = false;
-    //! NOTE Write the style to the score file if the compatibility define is set
-#ifdef ENGRAVING_COMPAT_WRITESTYLE_302
-    isWriteStyle = true;
-#endif
 
     //! NOTE If not the master score, because the Excerpts (parts) have not yet been write to separate files
     if (!score->isMaster()) {
@@ -53,13 +51,9 @@ void WriteScoreHook::onWriteStyle302(Score* score, XmlWriter& xml)
     }
 }
 
-void WriteScoreHook::onWriteExcerpts302(Score* score, XmlWriter& xml, bool selectionOnly)
+void WriteScoreHook::onWriteExcerpts302(Score* score, XmlWriter& xml, WriteContext& ctx, bool selectionOnly)
 {
     bool isWriteExcerpts = false;
-    //! NOTE Write the Excerpts to the score file if the compatibility define is set
-#ifdef ENGRAVING_COMPAT_WRITEEXCERPTS_302
-    isWriteExcerpts = true;
-#endif
 
     //! NOTE If the test mode, because the tests have not yet been adapted to the new format
     if (MScore::testMode) {
@@ -72,7 +66,7 @@ void WriteScoreHook::onWriteExcerpts302(Score* score, XmlWriter& xml, bool selec
                 MasterScore* mScore = static_cast<MasterScore*>(score);
                 for (const Excerpt* excerpt : mScore->excerpts()) {
                     if (excerpt->excerptScore() != score) {
-                        excerpt->excerptScore()->write(xml, selectionOnly, *this); // recursion write
+                        write::Writer::write(excerpt->excerptScore(), xml, ctx, selectionOnly, *this); // recursion write
                     }
                 }
             }

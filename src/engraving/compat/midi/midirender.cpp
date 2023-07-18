@@ -88,6 +88,7 @@ struct CollectNoteParams {
     int graceOffsetOff = 0;
     int endLetRingTick = 0;
     bool letRingNote = false;
+    MidiInstrumentEffect effect = MidiInstrumentEffect::NONE;
     bool callAllSoundOff = false;//NoteOn silence channel
 };
 
@@ -97,8 +98,16 @@ struct PlayNoteParams {
     int velo = 0;
     int onTime = 0;
     int offTime = 0;
+    int offset = 0;
     int staffIdx = 0;
+    MidiInstrumentEffect effect = MidiInstrumentEffect::NONE;
     bool callAllSoundOff = false;//NoteOn silence channel
+};
+
+struct VibratoParams {
+    int lowPitch = 0;
+    int highPitch = 0;
+    int period = 0;
 };
 
 static bool graceNotesMerged(Chord* chord);
@@ -108,7 +117,7 @@ static bool graceNotesMerged(Chord* chord);
 //---------------------------------------------------------
 int toMilliseconds(float tempo, float midiTime)
 {
-    float ticksPerSecond = (float)Constants::division * tempo;
+    float ticksPerSecond = (float)Constants::DIVISION * tempo;
     int time = (int)((midiTime / ticksPerSecond) * 1000.0f);
     if (time > 0x7fff) { //maximum possible value
         time = 0x7fff;
@@ -129,10 +138,10 @@ bool isGlissandoFor(const Note* note)
     return false;
 }
 
-static void collectGlissando(int channel,
+static void collectGlissando(int channel, MidiInstrumentEffect effect,
                              int onTime, int offTime,
                              int pitchDelta,
-                             PitchWheelRenderer& pitchWheelRenderer)
+                             PitchWheelRenderer& pitchWheelRenderer, staff_idx_t staffIdx)
 {
     const float scale = (float)wheelSpec.mLimit / wheelSpec.mAmplitude;
 
@@ -146,14 +155,14 @@ static void collectGlissando(int channel,
     };
     func.func = linearFunc;
 
-    pitchWheelRenderer.addPitchWheelFunction(func, channel);
+    pitchWheelRenderer.addPitchWheelFunction(func, channel, staffIdx, effect);
 }
 
 static Fraction getPlayTicksForBend(const Note* note)
 {
     Tie* tie = note->tieFor();
     if (!tie) {
-        return note->chord()->ticks();
+        return note->chord()->actualTicks();
     }
 
     Fraction stick = note->chord()->tick();
@@ -187,6 +196,7 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
 
     if (params.callAllSoundOff && params.onTime != 0) {
         NPlayEvent ev1(ME_CONTROLLER, params.channel, CTRL_ALL_NOTES_OFF, 0);
+        ev1.setEffect(params.effect);
         events->insert(std::pair<int, NPlayEvent>(params.onTime - 1, ev1));
     }
 
@@ -194,10 +204,18 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
     ev.setOriginatingStaff(params.staffIdx);
     ev.setTuning(note->tuning());
     ev.setNote(note);
+    ev.setEffect(params.effect);
     if (params.offTime > 0 && params.offTime < params.onTime) {
         return;
     }
-    events->insert(std::pair<int, NPlayEvent>(params.onTime, ev));
+    // We need to set Pitch Value to initial in case previous note was with bendUp
+    if (params.onTime - params.offset - 1 > 0) {
+        PitchWheelSpecs specs;
+        NPlayEvent pwReset(ME_PITCHBEND, params.channel, specs.mLimit % 128, specs.mLimit / 128);
+        events->insert(std::pair<int, NPlayEvent>(std::max(0, params.onTime - params.offset - 1), pwReset));
+    }
+
+    events->insert(std::pair<int, NPlayEvent>(std::max(0, params.onTime - params.offset), ev));
     // adds portamento for continuous glissando
     for (Spanner* spanner : note->spannerFor()) {
         if (spanner->type() == ElementType::GLISSANDO) {
@@ -207,7 +225,8 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
                 double pitchDelta = nextNote->ppitch() - params.pitch;
                 int timeDelta = params.offTime - params.onTime;
                 if (pitchDelta != 0 && timeDelta != 0) {
-                    collectGlissando(params.channel, params.onTime, params.offTime, pitchDelta, pitchWheelRenderer);
+                    collectGlissando(params.channel, params.effect, params.onTime, params.offTime, pitchDelta, pitchWheelRenderer,
+                                     glissando->staffIdx());
                 }
             }
         }
@@ -216,16 +235,16 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
     ev.setVelo(0);
     if (!note->part()->instrument(note->tick())->useDrumset()
         && params.offTime != -1) {
-        events->insert(std::pair<int, NPlayEvent>(params.offTime, ev));
+        events->insert(std::pair<int, NPlayEvent>(std::max(0, params.offTime - params.offset), ev));
     }
 }
 
 static void collectVibrato(int channel,
                            int onTime, int offTime,
-                           int lowPitch, int highPitch,
-                           PitchWheelRenderer& pitchWheelRenderer)
+                           const VibratoParams& vibratoParams,
+                           PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect, staff_idx_t staffIdx)
 {
-    const uint16_t vibratoPeriod = Constants::division / 2;
+    const uint16_t vibratoPeriod = vibratoParams.period;
     const uint32_t duration = offTime - onTime;
     const float scale = 2 * (float)wheelSpec.mLimit / wheelSpec.mAmplitude / 100;
 
@@ -233,25 +252,26 @@ static void collectVibrato(int channel,
         return;
     }
 
-    const int pillarAmplitude = (highPitch - lowPitch);
+    const int pillarAmplitude = (vibratoParams.highPitch - vibratoParams.lowPitch);
 
     PitchWheelRenderer::PitchWheelFunction func;
     func.mStartTick = onTime;
     func.mEndTick = offTime - duration % vibratoPeriod;//removed last points to make more smooth of the end
 
+    int lowPitch = vibratoParams.lowPitch;
     auto vibratoFunc = [startTick = onTime, pillarAmplitude, vibratoPeriod, lowPitch, scale] (uint32_t tick) {
         float x = (float)(tick - startTick) / vibratoPeriod;
         return (pillarAmplitude * 2 / M_PI * asin(sin(2 * M_PI * x)) + lowPitch) * scale;
     };
     func.func = vibratoFunc;
 
-    pitchWheelRenderer.addPitchWheelFunction(func, channel);
+    pitchWheelRenderer.addPitchWheelFunction(func, channel, staffIdx, effect);
 }
 
 static void collectBend(const Bend* bend,
                         int channel,
                         int onTime, int offTime,
-                        PitchWheelRenderer& pitchWheelRenderer)
+                        PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect)
 {
     const PitchValues& points = bend->points();
     size_t pitchSize = points.size();
@@ -286,7 +306,7 @@ static void collectBend(const Bend* bend,
             return y * scale;
         };
         func.func = bendFunc;
-        pitchWheelRenderer.addPitchWheelFunction(func, channel);
+        pitchWheelRenderer.addPitchWheelFunction(func, channel, bend->staffIdx(), effect);
     }
     PitchWheelRenderer::PitchWheelFunction func;
     func.mStartTick = onTime + points[pitchSize - 1].time * duration / PitchValue::MAX_TIME;
@@ -303,14 +323,14 @@ static void collectBend(const Bend* bend,
         return releaseValue;
     };
     func.func = bendFunc;
-    pitchWheelRenderer.addPitchWheelFunction(func, channel);
+    pitchWheelRenderer.addPitchWheelFunction(func, channel, bend->staffIdx(), effect);
 }
 
 //---------------------------------------------------------
 //   collectNote
 //---------------------------------------------------------
 
-static void collectNote(EventMap* events, const Note* note, CollectNoteParams noteParams, Staff* staff,
+static void collectNote(EventMap* events, const Note* note, const CollectNoteParams& noteParams, Staff* staff,
                         PitchWheelRenderer& pitchWheelRenderer)
 {
     if (!note->play() || note->hidden()) {      // do not play overlapping notes
@@ -350,7 +370,7 @@ static void collectNote(EventMap* events, const Note* note, CollectNoteParams no
 
     NoteEventList nel = note->playEvents();
     size_t nels = nel.size();
-    for (int i = 0, pitch = note->ppitch(); i < static_cast<int>(nels); ++i) {
+    for (size_t i = 0; i < nels; ++i) {
         const NoteEvent& e = nel[i];     // we make an explicit const ref, not a const copy.  no need to copy as we won't change the original object.
 
         // skip if note has a tie into it and only one NoteEvent
@@ -361,15 +381,25 @@ static void collectNote(EventMap* events, const Note* note, CollectNoteParams no
             break;
         }
 
-        int p = std::clamp(pitch + e.pitch(), 0, 127);
-        int on  = tick1 + (ticks * e.ontime()) / 1000;
+        int p = std::clamp(note->ppitch() + e.pitch(), 0, 127);
+        int on = tick1 + (ticks * e.ontime()) / 1000;
         int off = on + (ticks * e.len()) / 1000 - 1;
-        if (tieFor && i == static_cast<int>(nels) - 1) {
-            off += tieLen;
-        }
 
-        if (noteParams.letRingNote) {
-            off = noteParams.endLetRingTick;
+        if (note->deadNote()) {
+            const double ticksPerSecond = chord->score()->tempo(chord->tick()).val * Constants::DIVISION;
+            constexpr double deadNoteDurationInSec = 0.05;
+            const double deadNoteDurationInTicks = ticksPerSecond * deadNoteDurationInSec;
+            if (off - on > deadNoteDurationInTicks) {
+                off = on + deadNoteDurationInTicks;
+            }
+        } else {
+            if (tieFor && i == nels - 1) {
+                off += tieLen;
+            }
+
+            if (noteParams.letRingNote) {
+                off = std::max(off, noteParams.endLetRingTick);
+            }
         }
 
         // Get the velocity used for this note from the staff
@@ -383,6 +413,12 @@ static void collectNote(EventMap* events, const Note* note, CollectNoteParams no
             playParams.velo = std::clamp(velo, 1, 127);
             playParams.onTime = std::max(0, on - noteParams.graceOffsetOn);
             playParams.offTime = std::max(0, off - noteParams.graceOffsetOff);
+            playParams.effect = noteParams.effect;
+
+            if (noteParams.graceOffsetOn == 0) {
+                playParams.offset = ticks * e.offset() / 1000;
+            }
+
             playParams.staffIdx = static_cast<int>(staff->idx());
             playParams.callAllSoundOff = noteParams.callAllSoundOff;
             playNote(events, note, playParams, pitchWheelRenderer);
@@ -398,7 +434,7 @@ static void collectNote(EventMap* events, const Note* note, CollectNoteParams no
         if (!bend->playBend()) {
             break;
         }
-        collectBend(bend, noteParams.channel, tick1, tick1 + getPlayTicksForBend(note).ticks(), pitchWheelRenderer);
+        collectBend(bend, noteParams.channel, tick1, tick1 + getPlayTicksForBend(note).ticks(), pitchWheelRenderer, noteParams.effect);
     }
 }
 
@@ -529,8 +565,8 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
     }
 }
 
-void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventMap* events, double veloMultiplier,
-                                                 Staff* st, int tickOffset, PitchWheelRenderer& pitchWheelRenderer)
+void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventMap* events, double veloMultiplier, Staff* st, int tickOffset,
+                                                 PitchWheelRenderer& pitchWheelRenderer,  MidiInstrumentEffect effect)
 {
     // calculate offset for grace notes here
     const auto& grChords = chord->graceNotesBefore();
@@ -552,21 +588,22 @@ void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventMap* events,
         int currentBeaforeBeatNote = 0;
         for (Chord* c : chord->graceNotesBefore()) {
             for (const Note* note : c->notes()) {
-                int channel = getChannel(chord->part()->instrument(chord->tick()), note);
+                CollectNoteParams params;
+                params.effect = effect;
+                params.velocityMultiplier = veloMultiplier;
+                params.tickOffset = tickOffset;
+
+                Instrument* instr = st->part()->instrument(chord->tick());
+                int channel = getChannel(instr, note, effect);
+                events->registerChannel(channel);
+                params.channel = channel;
+
                 if (note->noteType() == NoteType::ACCIACCATURA) {
-                    CollectNoteParams params;
-                    params.channel = channel;
-                    params.velocityMultiplier = veloMultiplier;
-                    params.tickOffset = tickOffset;
                     params.graceOffsetOn = graceTickSum - graceTickOffset * currentBeaforeBeatNote;
-                    params.graceOffsetOff = graceTickSum - graceTickOffset * (currentBeaforeBeatNote + 1) + 1;
+                    params.graceOffsetOff = graceTickSum - graceTickOffset * (currentBeaforeBeatNote + 1);
 
                     collectNote(events, note, params, st, pitchWheelRenderer);
                 } else {
-                    CollectNoteParams params;
-                    params.channel = channel;
-                    params.velocityMultiplier = veloMultiplier;
-                    params.tickOffset = tickOffset;
                     collectNote(events, note, params, st, pitchWheelRenderer);
                 }
             }
@@ -574,6 +611,29 @@ void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventMap* events,
             currentBeaforeBeatNote++;
         }
     }
+}
+
+MidiRenderer::ChordParams MidiRenderer::collectChordParams(const Chord* chord) const
+{
+    ChordParams chordParams;
+
+    int currentTick = chord->tick().ticks();
+    for (auto it : score->spannerMap().findOverlapping(currentTick + 1, currentTick + 2)) {
+        Spanner* spanner = it.value;
+        if (spanner->track() != chord->track()) {
+            continue;
+        }
+
+        if (spanner->isLetRing()) {
+            LetRing* letRing = toLetRing(spanner);
+            chordParams.letRing = true;
+            chordParams.endLetRingTick = letRing->endCR()->tick().ticks() + letRing->endCR()->ticks().ticks();
+        } else if (spanner->isPalmMute()) {
+            chordParams.palmMute = true;
+        }
+    }
+
+    return chordParams;
 }
 
 //---------------------------------------------------------
@@ -584,6 +644,11 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
                                           PitchWheelRenderer& pitchWheelRenderer)
 {
     staff_idx_t firstStaffIdx = staff->idx();
+    for (Staff* st : staff->masterScore()->staves()) {
+        if (staff->id() == st->id()) {
+            firstStaffIdx = st->idx();
+        }
+    }
     staff_idx_t nextStaffIdx  = firstStaffIdx + 1;
 
     SegmentType st = SegmentType::ChordRest;
@@ -631,7 +696,7 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
             Instrument* instr = st1->part()->instrument(tick);
 
             // Get a velocity multiplier
-            double veloMultiplier = 1;
+            double veloMultiplier = NoteEvent::DEFAULT_VELOCITY_MULTIPLIER;
             for (Articulation* a : chord->articulations()) {
                 if (a->playArticulation()) {
                     veloMultiplier *= instr->getVelocityMultiplier(a->articulationName());
@@ -641,32 +706,29 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
             //
             // Add normal note events
             //
-            collectGraceBeforeChordEvents(chord, events, veloMultiplier, st1, tickOffset, pitchWheelRenderer);
+            ChordParams chordParams = collectChordParams(chord);
 
-            bool letRingNote = false;
-            int endLetRingTick = 0;
-            int currentTick = chord->tick().ticks();
-            for (auto it : score->spannerMap().findOverlapping(currentTick + 1, currentTick + 2)) {
-                Spanner* spanner = it.value;
-                if (!spanner->isLetRing()) {
-                    continue;
-                }
-                LetRing* letRing = toLetRing(spanner);
-                if (chord->track() == letRing->track()) {
-                    letRingNote = true;
-                }
-                endLetRingTick = letRing->endCR()->tick().ticks() + letRing->endCR()->ticks().ticks();
+            MidiInstrumentEffect effect = MidiInstrumentEffect::NONE;
+            if (chordParams.palmMute) {
+                effect = MidiInstrumentEffect::PALM_MUTE;
             }
 
+            collectGraceBeforeChordEvents(chord, events, veloMultiplier, st1, tickOffset, pitchWheelRenderer, effect);
+
             for (const Note* note : chord->notes()) {
-                int channel = getChannel(instr, note);
-                events->registerChannel(channel);
                 CollectNoteParams params;
-                params.channel = channel;
                 params.velocityMultiplier = veloMultiplier;
                 params.tickOffset = tickOffset;
-                params.letRingNote = letRingNote;
-                params.endLetRingTick = endLetRingTick;
+                params.letRingNote = chordParams.letRing;
+                params.endLetRingTick = chordParams.endLetRingTick;
+                if (_context.instrumentsHaveEffects) {
+                    params.effect = effect;
+                }
+
+                int channel = getChannel(instr, note, effect);
+                events->registerChannel(channel);
+                params.channel = channel;
+
                 if (_context.eachStringHasChannel && instr->hasStrings()) {
                     params.callAllSoundOff = true;
                 }
@@ -676,12 +738,13 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
             if (!graceNotesMerged(chord)) {
                 for (Chord* c : chord->graceNotesAfter()) {
                     for (const Note* note : c->notes()) {
-                        int channel = getChannel(instr, note);
+                        int channel = getChannel(instr, note, effect);
                         events->registerChannel(channel);
                         CollectNoteParams params;
                         params.channel = channel;
                         params.velocityMultiplier = veloMultiplier;
                         params.tickOffset = tickOffset;
+                        params.effect = effect;
                         collectNote(events, note, params, st1, pitchWheelRenderer);
                     }
                 }
@@ -709,7 +772,7 @@ void MidiRenderer::collectMeasureEvents(EventMap* events, Measure const* m, cons
 }
 
 //---------------------------------------------------------
-//   renderStaffChunk
+//   renderStaff
 //---------------------------------------------------------
 
 void MidiRenderer::renderStaff(EventMap* events, const Staff* staff, PitchWheelRenderer& pitchWheelRenderer)
@@ -742,6 +805,10 @@ void MidiRenderer::renderStaff(EventMap* events, const Staff* staff, PitchWheelR
                 lastMeasure = m;
                 collectMeasureEvents(events, lastMeasure, staff, tickOffset, pitchWheelRenderer);
             }
+
+            if (m == rs->lastMeasure()) {
+                break;
+            }
         }
     }
 }
@@ -755,20 +822,108 @@ void MidiRenderer::renderSpanners(EventMap* events, PitchWheelRenderer& pitchWhe
     for (const auto& sp : score->spannerMap().map()) {
         Spanner* s = sp.second;
 
+        if (!s->staff()->isPrimaryStaff()) {
+            continue;
+        }
+
         int idx = s->staff()->channel(s->tick(), 0);
         int channel = s->part()->instrument(s->tick())->channel(idx)->channel();
         const auto& channels = _context.channels->channelsMap[channel];
         if (channels.empty()) {
-            doRenderSpanners(events, s, channel, pitchWheelRenderer);
+            doRenderSpanners(events, s, channel, pitchWheelRenderer, MidiInstrumentEffect::NONE);
         } else {
             for (const auto& channel : channels) {
-                doRenderSpanners(events, s, channel.second, pitchWheelRenderer);
+                doRenderSpanners(events, s, channel.second, pitchWheelRenderer, channel.first.effect);
             }
         }
     }
 }
 
-void MidiRenderer::doRenderSpanners(EventMap* events, Spanner* s, uint32_t channel, PitchWheelRenderer& pitchWheelRenderer)
+static std::vector<std::pair<int, int> > collectTicksForEffect(const Score* const score, track_idx_t track, int stick, int etick,
+                                                               MidiInstrumentEffect effect)
+{
+    std::vector<std::pair<int, int> > ticksForEffect;
+    int curTick = stick;
+
+    for (auto it : score->spannerMap().findOverlapping(stick, etick)) {
+        Spanner* spanner = it.value;
+
+        if (spanner->track() != track) {
+            continue;
+        }
+
+        if (spanner->isPalmMute()) {
+            int palmMuteStartTick = spanner->tick().ticks();
+            int palmMuteEndTick = spanner->tick2().ticks();
+
+            if (curTick < palmMuteStartTick) {
+                int nextTick = std::min(palmMuteStartTick, etick);
+                if (effect == MidiInstrumentEffect::NONE) {
+                    ticksForEffect.push_back({ curTick, nextTick - 1 });
+                }
+
+                curTick = nextTick;
+            }
+
+            if (palmMuteStartTick <= curTick) {
+                int nextTick = std::min(palmMuteEndTick, etick);
+                if (effect == MidiInstrumentEffect::PALM_MUTE) {
+                    ticksForEffect.push_back({ curTick, nextTick - 1 });
+                }
+
+                curTick = nextTick;
+            }
+        }
+    }
+
+    if (curTick < etick && effect == MidiInstrumentEffect::NONE) {
+        ticksForEffect.push_back({ curTick, etick - 1 });
+    }
+
+    return ticksForEffect;
+}
+
+static VibratoParams getVibratoParams(VibratoType type)
+{
+    VibratoParams params;
+
+    switch (type) {
+    case VibratoType::GUITAR_VIBRATO:
+        // guitar vibrato, up only
+        params.lowPitch = 0;
+        params.highPitch = 10;
+        params.period = Constants::DIVISION / 3;
+        break;
+
+    case VibratoType::GUITAR_VIBRATO_WIDE:
+        params.lowPitch = 0;         // 100 is a semitone
+        params.highPitch = 20;
+        params.period = Constants::DIVISION / 2.5;
+        break;
+
+    case VibratoType::VIBRATO_SAWTOOTH_WIDE:
+        // vibrato with whammy bar up and down
+        params.lowPitch = -25;         // 1/16
+        params.highPitch = 25;
+        params.period = Constants::DIVISION / 2;
+        break;
+
+    case VibratoType::VIBRATO_SAWTOOTH:
+        params.lowPitch = -12;
+        params.highPitch = 12;
+        params.period = Constants::DIVISION / 2;
+        break;
+
+    default:
+        LOGE() << "vibrato type is not handled in midi renderer";
+        break;
+    }
+
+    return params;
+}
+
+void MidiRenderer::doRenderSpanners(EventMap* events, Spanner* s, uint32_t channel, PitchWheelRenderer& pitchWheelRenderer,
+                                    MidiInstrumentEffect effect)
 {
     std::vector<std::pair<int, std::pair<bool, int> > > pedalEventList;
 
@@ -807,23 +962,13 @@ void MidiRenderer::doRenderSpanners(EventMap* events, Spanner* s, uint32_t chann
 
         // from start to end of trill, send bend events at regular interval
         Vibrato* t = toVibrato(s);
-        // guitar vibrato, up only
-        int spitch = 0;       // 1/8 (100 is a semitone)
-        int epitch = 12;
-        if (t->vibratoType() == VibratoType::GUITAR_VIBRATO_WIDE) {
-            spitch = 0;         // 1/4
-            epitch = 25;
-        }
-        // vibrato with whammy bar up and down
-        else if (t->vibratoType() == VibratoType::VIBRATO_SAWTOOTH_WIDE) {
-            spitch = -25;         // 1/16
-            epitch = 25;
-        } else if (t->vibratoType() == VibratoType::VIBRATO_SAWTOOTH) {
-            spitch = -12;
-            epitch = 12;
-        }
+        VibratoParams vibratoParams = getVibratoParams(t->vibratoType());
 
-        collectVibrato(channel, stick, etick, spitch, epitch, pitchWheelRenderer);
+        std::vector<std::pair<int, int> > vibratoTicksForEffect = collectTicksForEffect(score, s->track(), stick, etick, effect);
+
+        for (const auto& [tickStart, tickEnd] : vibratoTicksForEffect) {
+            collectVibrato(channel, tickStart, tickEnd, vibratoParams, pitchWheelRenderer, effect, s->staffIdx());
+        }
     }
 
     for (const auto& pe : pedalEventList) {
@@ -834,6 +979,7 @@ void MidiRenderer::doRenderSpanners(EventMap* events, Spanner* s, uint32_t chann
             event = NPlayEvent(ME_CONTROLLER, static_cast<uint8_t>(channel), CTRL_SUSTAIN, 0);
         }
         event.setOriginatingStaff(pe.second.second);
+        event.setEffect(effect);
         events->insert(std::pair<int, NPlayEvent>(pe.first, event));
     }
 }
@@ -879,7 +1025,7 @@ struct OrnamentExcursion {
 std::set<OrnamentStyle> baroque  = { OrnamentStyle::BAROQUE };
 std::set<OrnamentStyle> defstyle = { OrnamentStyle::DEFAULT };
 std::set<OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
-int _16th = Constants::division / 4;
+int _16th = Constants::DIVISION / 4;
 int _32nd = _16th / 2;
 
 std::vector<OrnamentExcursion> excursions = {
@@ -1035,38 +1181,44 @@ void MidiRenderer::renderScore(EventMap* events, const Context& ctx)
     }
 }
 
-uint32_t MidiRenderer::getChannel(const Instrument* instr, const Note* note)
+uint32_t MidiRenderer::getChannel(const Instrument* instr, const Note* note, MidiInstrumentEffect effect)
 {
     int subchannel = note->subchannel();
     int channel = instr->channel(subchannel)->channel();
 
-    if (!_context.eachStringHasChannel || !instr->hasStrings()) {
+    if (!_context.instrumentsHaveEffects && !_context.eachStringHasChannel) {
         return channel;
     }
 
-    return _context.channels->getChannel(channel, note->string());
-}
+    ChannelLookup::LookupData lookupData;
 
-uint32_t MidiRenderer::ChannelLookup::getChannel(uint32_t instrumentChannel, int32_t string)
-{
-    auto& channelsForString = channelsMap[instrumentChannel];
-
-    if (string == -1) {
-        auto channelIt = channelsForString.find(string);
-        if (channelIt != channelsForString.end()) {
-            return channelIt->second;
-        } else {
-            channelsForString[string] = maxChannel;
-            return maxChannel++;
-        }
+    if (_context.instrumentsHaveEffects) {
+        lookupData.effect = effect;
     }
 
-    auto channelIt = channelsForString.find(string);
-    if (channelIt != channelsForString.end()) {
+    if (_context.eachStringHasChannel && instr->hasStrings()) {
+        lookupData.string = note->string();
+        lookupData.staffIdx = note->staffIdx();
+    }
+
+    return _context.channels->getChannel(channel, lookupData);
+}
+
+uint32_t MidiRenderer::ChannelLookup::getChannel(uint32_t instrumentChannel, const LookupData& lookupData)
+{
+    auto& channelsForInstrument = channelsMap[instrumentChannel];
+
+    auto channelIt = channelsForInstrument.find(lookupData);
+    if (channelIt != channelsForInstrument.end()) {
         return channelIt->second;
     }
 
-    channelsForString.insert({ string, maxChannel });
+    channelsForInstrument.insert({ lookupData, maxChannel });
     return maxChannel++;
+}
+
+bool MidiRenderer::ChannelLookup::LookupData::operator<(const MidiRenderer::ChannelLookup::LookupData& other) const
+{
+    return std::tie(string, staffIdx, effect) < std::tie(other.string, other.staffIdx, other.effect);
 }
 }

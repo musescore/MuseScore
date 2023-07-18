@@ -22,7 +22,7 @@
 #ifndef MU_NOTATION_ISELECTINSTRUMENTSSCENARIO_H
 #define MU_NOTATION_ISELECTINSTRUMENTSSCENARIO_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "notation/notationtypes.h"
 #include "types/retval.h"
 

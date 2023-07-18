@@ -114,6 +114,8 @@ FocusScope {
             navigation.panel: navSearchPanel
             navigation.order: 1
 
+            visible: tabBar.currentIndex !== 1 // Not visible for Classes tab
+
             onSearchTextChanged: {
                 pageModel.setSearchText(searchText)
             }
@@ -210,10 +212,6 @@ FocusScope {
 
             backgroundColor: root.color
             sideMargin: prv.sideMargin
-
-            onRequestOpenVideo: function(videoId) {
-                pageModel.openVideo(videoId)
-            }
         }
 
 
@@ -231,10 +229,6 @@ FocusScope {
 
             backgroundColor: root.color
             sideMargin: prv.sideMargin
-
-            onRequestOpenVideo: function(videoId) {
-                pageModel.openVideo(videoId)
-            }
         }
         */
 
@@ -249,6 +243,7 @@ FocusScope {
             authorDescription: author.description
             authorAvatarUrl: author.avatarUrl
             authorOrganizationName: author.organizationName
+            authorOrganizationUrl: author.organizationUrl
 
             navigation.section: navSec
             navigation.order: 5
@@ -256,10 +251,6 @@ FocusScope {
             navigation.accessible.name: qsTrc("learn", "Classes") + navigation.directionInfo
 
             sideMargin: prv.sideMargin
-
-            onRequestOpenOrganizationUrl: {
-                pageModel.openUrl(author.organizationUrl)
-            }
         }
     }
 }

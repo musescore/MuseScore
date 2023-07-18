@@ -33,11 +33,12 @@ class TextSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    INJECT(inspector, actions::IActionsDispatcher, dispatcher)
+    INJECT(actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(PropertyItem * fontFamily READ fontFamily CONSTANT)
     Q_PROPERTY(PropertyItem * fontStyle READ fontStyle CONSTANT)
     Q_PROPERTY(PropertyItem * fontSize READ fontSize CONSTANT)
+    Q_PROPERTY(PropertyItem * textLineSpacing READ textLineSpacing CONSTANT)
     Q_PROPERTY(PropertyItem * horizontalAlignment READ horizontalAlignment CONSTANT)
     Q_PROPERTY(PropertyItem * verticalAlignment READ verticalAlignment CONSTANT)
 
@@ -58,6 +59,8 @@ class TextSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool areStaffTextPropertiesAvailable READ areStaffTextPropertiesAvailable NOTIFY areStaffTextPropertiesAvailableChanged)
     Q_PROPERTY(
         bool isSpecialCharactersInsertionAvailable READ isSpecialCharactersInsertionAvailable NOTIFY isSpecialCharactersInsertionAvailableChanged)
+    Q_PROPERTY(bool isDynamicSpecificSettings READ isDynamicSpecificSettings NOTIFY isDynamicSpecificSettingsChanged)
+    Q_PROPERTY(bool isHorizontalAlignmentAvailable READ isHorizontalAlignmentAvailable NOTIFY isHorizontalAlignmentAvailableChanged)
 
 public:
     explicit TextSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -76,6 +79,7 @@ public:
     PropertyItem* fontFamily() const;
     PropertyItem* fontStyle() const;
     PropertyItem* fontSize() const;
+    PropertyItem* textLineSpacing() const;
     PropertyItem* horizontalAlignment() const;
     PropertyItem* verticalAlignment() const;
 
@@ -94,18 +98,23 @@ public:
     QVariantList textStyles();
 
     bool areStaffTextPropertiesAvailable() const;
-
     bool isSpecialCharactersInsertionAvailable() const;
+    bool isDynamicSpecificSettings() const;
+    bool isHorizontalAlignmentAvailable() const;
 
 public slots:
     void setAreStaffTextPropertiesAvailable(bool areStaffTextPropertiesAvailable);
     void setIsSpecialCharactersInsertionAvailable(bool isSpecialCharactersInsertionAvailable);
+    void setIsDynamicSpecificSettings(bool isOnlyDynamics);
+    void setIsHorizontalAlignmentAvailable(bool isHorizontalAlignmentAvailable);
 
 signals:
     void textStylesChanged();
 
     void areStaffTextPropertiesAvailableChanged(bool areStaffTextPropertiesAvailable);
     void isSpecialCharactersInsertionAvailableChanged(bool isSpecialCharactersInsertionAvailable);
+    void isDynamicSpecificSettingsChanged(bool isDynamicSpecificSettings);
+    void isHorizontalAlignmentAvailableChanged(bool isHorizontalAlignmentAvailable);
 
 private:
     bool isTextEditingStarted() const;
@@ -113,10 +122,13 @@ private:
 
     void updateFramePropertiesAvailability();
     void updateStaffPropertiesAvailability();
+    void updateIsDynamicSpecificSettings();
+    void updateIsHorizontalAlignmentAvailable();
 
     PropertyItem* m_fontFamily = nullptr;
     PropertyItem* m_fontStyle = nullptr;
     PropertyItem* m_fontSize = nullptr;
+    PropertyItem* m_textLineSpacing = nullptr;
     PropertyItem* m_horizontalAlignment = nullptr;
     PropertyItem* m_verticalAlignment = nullptr;
 
@@ -136,6 +148,8 @@ private:
 
     bool m_areStaffTextPropertiesAvailable = false;
     bool m_isSpecialCharactersInsertionAvailable = false;
+    bool m_isDynamicSpecificSettings = false;
+    bool m_isHorizontalAlignmentAvailable = true;
 };
 }
 

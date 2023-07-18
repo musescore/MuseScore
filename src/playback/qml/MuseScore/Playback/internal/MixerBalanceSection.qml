@@ -48,8 +48,11 @@ MixerPanelSection {
             KnobControl {
                 id: balanceKnob
 
+                from: -100
+                to: 100
                 value: channelItem.balance
                 stepSize: 1
+                isBalanceKnob: true
 
                 navigation.panel: channelItem.panel
                 navigation.row: root.navigationRowStart
@@ -62,14 +65,6 @@ MixerPanelSection {
 
                 onNewValueRequested: function(newValue) {
                     channelItem.balance = newValue
-                }
-
-                onIncreaseRequested: {
-                    channelItem.balance += stepSize
-                }
-
-                onDecreaseRequested: {
-                    channelItem.balance -= stepSize
                 }
             }
 

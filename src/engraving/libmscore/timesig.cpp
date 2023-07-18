@@ -22,7 +22,6 @@
 
 #include "timesig.h"
 
-#include "rw/xml.h"
 #include "style/style.h"
 #include "translation.h"
 #include "iengravingfont.h"
@@ -56,11 +55,11 @@ TimeSig::TimeSig(Segment* parent)
 {
     initElementStyle(&timesigStyle);
 
-    _showCourtesySig = true;
-    _stretch.set(1, 1);
-    _sig.set(0, 1);                 // initialize to invalid
-    _timeSigType      = TimeSigType::NORMAL;
-    _largeParentheses = false;
+    m_showCourtesySig = true;
+    m_stretch.set(1, 1);
+    m_sig.set(0, 1);                 // initialize to invalid
+    m_timeSigType      = TimeSigType::NORMAL;
+    m_largeParentheses = false;
 }
 
 void TimeSig::setParent(Segment* parent)
@@ -84,11 +83,11 @@ double TimeSig::mag() const
 
 void TimeSig::setSig(const Fraction& f, TimeSigType st)
 {
-    _sig              = f;
-    _timeSigType      = st;
-    _largeParentheses = false;
-    _numeratorString.clear();
-    _denominatorString.clear();
+    m_sig              = f;
+    m_timeSigType      = st;
+    m_largeParentheses = false;
+    m_numeratorString.clear();
+    m_denominatorString.clear();
 }
 
 //---------------------------------------------------------
@@ -125,8 +124,8 @@ EngravingItem* TimeSig::drop(EditData& data)
 
 void TimeSig::setNumeratorString(const String& a)
 {
-    if (_timeSigType == TimeSigType::NORMAL) {
-        _numeratorString = a;
+    if (m_timeSigType == TimeSigType::NORMAL) {
+        m_numeratorString = a;
     }
 }
 
@@ -137,246 +136,8 @@ void TimeSig::setNumeratorString(const String& a)
 
 void TimeSig::setDenominatorString(const String& a)
 {
-    if (_timeSigType == TimeSigType::NORMAL) {
-        _denominatorString = a;
-    }
-}
-
-//---------------------------------------------------------
-//   write TimeSig
-//---------------------------------------------------------
-
-void TimeSig::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    writeProperty(xml, Pid::TIMESIG_TYPE);
-    EngravingItem::writeProperties(xml);
-
-    xml.tag("sigN",  _sig.numerator());
-    xml.tag("sigD",  _sig.denominator());
-    if (stretch() != Fraction(1, 1)) {
-        xml.tag("stretchN", stretch().numerator());
-        xml.tag("stretchD", stretch().denominator());
-    }
-    writeProperty(xml, Pid::NUMERATOR_STRING);
-    writeProperty(xml, Pid::DENOMINATOR_STRING);
-    if (!_groups.empty()) {
-        _groups.write(xml);
-    }
-    writeProperty(xml, Pid::SHOW_COURTESY);
-    writeProperty(xml, Pid::SCALE);
-
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   TimeSig::read
-//---------------------------------------------------------
-
-void TimeSig::read(XmlReader& e)
-{
-    int n=0, z1=0, z2=0, z3=0, z4=0;
-    bool old = false;
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-
-        if (tag == "den") {
-            old = true;
-            n = e.readInt();
-        } else if (tag == "nom1") {
-            old = true;
-            z1 = e.readInt();
-        } else if (tag == "nom2") {
-            old = true;
-            z2 = e.readInt();
-        } else if (tag == "nom3") {
-            old = true;
-            z3 = e.readInt();
-        } else if (tag == "nom4") {
-            old = true;
-            z4 = e.readInt();
-        } else if (tag == "subtype") {
-            int i = e.readInt();
-            if (score()->mscVersion() <= 114) {
-                if (i == 0x40000104) {
-                    _timeSigType = TimeSigType::FOUR_FOUR;
-                } else if (i == 0x40002084) {
-                    _timeSigType = TimeSigType::ALLA_BREVE;
-                } else {
-                    _timeSigType = TimeSigType::NORMAL;
-                }
-            } else {
-                _timeSigType = TimeSigType(i);
-            }
-        } else if (tag == "showCourtesySig") {
-            _showCourtesySig = e.readInt();
-        } else if (tag == "sigN") {
-            _sig.setNumerator(e.readInt());
-        } else if (tag == "sigD") {
-            _sig.setDenominator(e.readInt());
-        } else if (tag == "stretchN") {
-            _stretch.setNumerator(e.readInt());
-        } else if (tag == "stretchD") {
-            _stretch.setDenominator(e.readInt());
-        } else if (tag == "textN") {
-            setNumeratorString(e.readText());
-        } else if (tag == "textD") {
-            setDenominatorString(e.readText());
-        } else if (tag == "Groups") {
-            _groups.read(e);
-        } else if (readStyledProperty(e, tag)) {
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    if (old) {
-        _sig.set(z1 + z2 + z3 + z4, n);
-    }
-    _stretch.reduce();
-
-    // HACK: handle time signatures from scores before 3.5 differently on some special occasions.
-    // See https://musescore.org/node/308139.
-    String version = score()->mscoreVersion();
-    if (!version.isEmpty() && (version >= u"3.0") && (version < u"3.5")) {
-        if ((_timeSigType == TimeSigType::NORMAL) && !_numeratorString.isEmpty() && _denominatorString.isEmpty()) {
-            if (_numeratorString == String::number(_sig.numerator())) {
-                _numeratorString.clear();
-            } else {
-                setDenominatorString(String::number(_sig.denominator()));
-            }
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void TimeSig::layout()
-{
-    setPos(0.0, 0.0);
-    double _spatium = spatium();
-
-    setbbox(RectF());                    // prepare for an empty time signature
-    pointLargeLeftParen = PointF();
-    pz = PointF();
-    pn = PointF();
-    pointLargeRightParen = PointF();
-
-    double lineDist;
-    int numOfLines;
-    TimeSigType sigType = timeSigType();
-    const Staff* _staff       = staff();
-
-    if (_staff) {
-        // if staff is without time sig, format as if no text at all
-        if (!_staff->staffTypeForElement(this)->genTimesig()) {
-            // reset position and box sizes to 0
-            // LOGD("staff: no time sig");
-            pointLargeLeftParen.rx() = 0.0;
-            pn.rx() = 0.0;
-            pz.rx() = 0.0;
-            pointLargeRightParen.rx() = 0.0;
-            setbbox(RectF());
-            // leave everything else as it is:
-            // draw() will anyway skip any drawing if staff type has no time sigs
-            return;
-        }
-        numOfLines  = _staff->lines(tick());
-        lineDist    = _staff->lineDistance(tick());
-    } else {
-        // assume dimensions of a standard staff
-        lineDist = 1.0;
-        numOfLines = 5;
-    }
-
-    // if some symbol
-    // compute vert. displacement to center in the staff height
-    // determine middle staff position:
-
-    double yoff = _spatium * (numOfLines - 1) * .5 * lineDist;
-
-    // C and Ccut are placed at the middle of the staff: use yoff directly
-    IEngravingFontPtr font = score()->engravingFont();
-    SizeF mag(magS() * _scale);
-
-    if (sigType == TimeSigType::FOUR_FOUR) {
-        pz = PointF(0.0, yoff);
-        RectF bbox = font->bbox(SymId::timeSigCommon, mag);
-        setbbox(bbox.translated(pz));
-        ns.clear();
-        ns.push_back(SymId::timeSigCommon);
-        ds.clear();
-    } else if (sigType == TimeSigType::ALLA_BREVE) {
-        pz = PointF(0.0, yoff);
-        RectF bbox = font->bbox(SymId::timeSigCutCommon, mag);
-        setbbox(bbox.translated(pz));
-        ns.clear();
-        ns.push_back(SymId::timeSigCutCommon);
-        ds.clear();
-    } else if (sigType == TimeSigType::CUT_BACH) {
-        pz = PointF(0.0, yoff);
-        RectF bbox = font->bbox(SymId::timeSigCut2, mag);
-        setbbox(bbox.translated(pz));
-        ns.clear();
-        ns.push_back(SymId::timeSigCut2);
-        ds.clear();
-    } else if (sigType == TimeSigType::CUT_TRIPLE) {
-        pz = PointF(0.0, yoff);
-        RectF bbox = font->bbox(SymId::timeSigCut3, mag);
-        setbbox(bbox.translated(pz));
-        ns.clear();
-        ns.push_back(SymId::timeSigCut3);
-        ds.clear();
-    } else {
-        if (_numeratorString.isEmpty()) {
-            ns = timeSigSymIdsFromString(_numeratorString.isEmpty() ? String::number(_sig.numerator()) : _numeratorString);
-            ds = timeSigSymIdsFromString(_denominatorString.isEmpty() ? String::number(_sig.denominator()) : _denominatorString);
-        } else {
-            ns = timeSigSymIdsFromString(_numeratorString);
-            ds = timeSigSymIdsFromString(_denominatorString);
-        }
-
-        RectF numRect = font->bbox(ns, mag);
-        RectF denRect = font->bbox(ds, mag);
-
-        // position numerator and denominator; vertical displacement:
-        // number of lines is odd: 0.0 (strings are directly above and below the middle line)
-        // number of lines even:   0.05 (strings are moved up/down to leave 1/10sp between them)
-
-        double displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
-
-        //align on the wider
-        double pzY = yoff - (denRect.width() < 0.01 ? 0.0 : (displ + numRect.height() * .5));
-        double pnY = yoff + displ + denRect.height() * .5;
-
-        if (numRect.width() >= denRect.width()) {
-            // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-            pz = PointF(0.0, pzY);
-            // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-            pn = PointF((numRect.width() - denRect.width()) * .5, pnY);
-        } else {
-            // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-            pz = PointF((denRect.width() - numRect.width()) * .5, pzY);
-            // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-            pn = PointF(0.0, pnY);
-        }
-
-        // centering of parenthesis so the middle of the parenthesis is at the divisor marking level
-        int centerY = yoff / 2 + _spatium;
-        int widestPortion = numRect.width() > denRect.width() ? numRect.width() : denRect.width();
-        pointLargeLeftParen = PointF(-_spatium, centerY);
-        pointLargeRightParen = PointF(widestPortion + _spatium, centerY);
-
-        setbbox(numRect.translated(pz));       // translate bounding boxes to actual string positions
-        addbbox(denRect.translated(pn));
-        if (_largeParentheses) {
-            addbbox(RectF(pointLargeLeftParen.x(), pointLargeLeftParen.y() - denRect.height(), _spatium / 2,
-                          numRect.height() + denRect.height()));
-            addbbox(RectF(pointLargeRightParen.x(), pointLargeRightParen.y() - denRect.height(),  _spatium / 2,
-                          numRect.height() + denRect.height()));
-        }
+    if (m_timeSigType == TimeSigType::NORMAL) {
+        m_denominatorString = a;
     }
 }
 
@@ -386,18 +147,18 @@ void TimeSig::layout()
 
 void TimeSig::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     if (staff() && !const_cast<const Staff*>(staff())->staffType(tick())->genTimesig()) {
         return;
     }
     painter->setPen(curColor());
 
-    drawSymbols(ns, painter, pz, _scale);
-    drawSymbols(ds, painter, pn, _scale);
+    drawSymbols(m_drawArgs.ns, painter, m_drawArgs.pz, m_scale);
+    drawSymbols(m_drawArgs.ds, painter, m_drawArgs.pn, m_scale);
 
-    if (_largeParentheses) {
-        drawSymbol(SymId::timeSigParensLeft,  painter, pointLargeLeftParen,  _scale.width());
-        drawSymbol(SymId::timeSigParensRight, painter, pointLargeRightParen, _scale.width());
+    if (m_largeParentheses) {
+        drawSymbol(SymId::timeSigParensLeft,  painter, m_drawArgs.pointLargeLeftParen,  m_scale.width());
+        drawSymbol(SymId::timeSigParensRight, painter, m_drawArgs.pointLargeRightParen, m_scale.width());
     }
 }
 
@@ -407,11 +168,11 @@ void TimeSig::draw(mu::draw::Painter* painter) const
 
 void TimeSig::setFrom(const TimeSig* ts)
 {
-    _timeSigType       = ts->timeSigType();
-    _numeratorString   = ts->_numeratorString;
-    _denominatorString = ts->_denominatorString;
-    _sig               = ts->_sig;
-    _stretch           = ts->_stretch;
+    m_timeSigType       = ts->timeSigType();
+    m_numeratorString   = ts->m_numeratorString;
+    m_denominatorString = ts->m_denominatorString;
+    m_sig               = ts->m_sig;
+    m_stretch           = ts->m_stretch;
 }
 
 //---------------------------------------------------------
@@ -420,7 +181,7 @@ void TimeSig::setFrom(const TimeSig* ts)
 
 String TimeSig::ssig() const
 {
-    return String(u"%1/%2").arg(_sig.numerator()).arg(_sig.denominator());
+    return String(u"%1/%2").arg(m_sig.numerator()).arg(m_sig.denominator());
 }
 
 //---------------------------------------------------------
@@ -431,8 +192,8 @@ void TimeSig::setSSig(const String& s)
 {
     StringList sl = s.split(u'/');
     if (sl.size() == 2) {
-        _sig.setNumerator(sl[0].toInt());
-        _sig.setDenominator(sl[1].toInt());
+        m_sig.setNumerator(sl[0].toInt());
+        m_sig.setDenominator(sl[1].toInt());
     }
 }
 
@@ -452,15 +213,15 @@ PropertyValue TimeSig::getProperty(Pid propertyId) const
     case Pid::GROUP_NODES:
         return groups().nodes();
     case Pid::TIMESIG:
-        return PropertyValue::fromValue(_sig);
+        return PropertyValue::fromValue(m_sig);
     case Pid::TIMESIG_GLOBAL:
         return PropertyValue::fromValue(globalSig());
     case Pid::TIMESIG_STRETCH:
         return PropertyValue::fromValue(stretch());
     case Pid::TIMESIG_TYPE:
-        return int(_timeSigType);
+        return int(m_timeSigType);
     case Pid::SCALE:
-        return _scale;
+        return m_scale;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -498,10 +259,10 @@ bool TimeSig::setProperty(Pid propertyId, const PropertyValue& v)
         setStretch(v.value<Fraction>());
         break;
     case Pid::TIMESIG_TYPE:
-        _timeSigType = (TimeSigType)(v.toInt());
+        m_timeSigType = (TimeSigType)(v.toInt());
         break;
     case Pid::SCALE:
-        _scale = v.value<ScaleF>();
+        m_scale = v.value<ScaleF>();
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
@@ -534,7 +295,7 @@ PropertyValue TimeSig::propertyDefault(Pid id) const
     case Pid::TIMESIG_TYPE:
         return int(TimeSigType::NORMAL);
     case Pid::SCALE:
-        return score()->styleV(Sid::timesigScale);
+        return style().styleV(Sid::timesigScale);
     default:
         return EngravingItem::propertyDefault(id);
     }
@@ -594,8 +355,8 @@ bool TimeSig::operator==(const TimeSig& ts) const
            && (sig().identical(ts.sig()))
            && (stretch() == ts.stretch())
            && (groups() == ts.groups())
-           && (_numeratorString == ts._numeratorString)
-           && (_denominatorString == ts._denominatorString)
+           && (m_numeratorString == ts.m_numeratorString)
+           && (m_denominatorString == ts.m_denominatorString)
     ;
 }
 

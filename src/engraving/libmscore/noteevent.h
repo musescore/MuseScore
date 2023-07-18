@@ -29,9 +29,6 @@
 #include "global/allocator.h"
 
 namespace mu::engraving {
-class XmlWriter;
-class XmlReader;
-
 //---------------------------------------------------------
 //    NoteEvent
 //---------------------------------------------------------
@@ -43,25 +40,23 @@ public:
     constexpr static double GLISSANDO_VELOCITY_MULTIPLIER = 0.7;
     constexpr static double GHOST_VELOCITY_MULTIPLIER = 0.6;
     constexpr static double DEFAULT_VELOCITY_MULTIPLIER = 1.0;
+    constexpr static int SLIDE_AMOUNT = 3;
 
     NoteEvent() {}
-    NoteEvent(int a, int b, int c, double d = 1.0, double play = true)
-        : m_pitch(a), m_ontime(b), m_len(c), m_velocityMultiplier(d), m_play(play) {}
+    NoteEvent(int a, int b, int c, double d = 1.0, double play = true, int offset = 0)
+        : m_pitch(a), m_ontime(b), m_len(c), m_velocityMultiplier(d), m_play(play), m_offset(offset) {}
 
-    void read(XmlReader&);
-    void write(XmlWriter&) const;
-
-    int  pitch() const { return m_pitch; }
+    int pitch() const { return m_pitch; }
     int ontime() const { return m_ontime; }
     int offtime() const { return m_ontime + m_len; }
     int len() const { return m_len; }
     double velocityMultiplier() const { return m_velocityMultiplier; }
     bool play() const { return m_play; }
+    int offset() const { return m_offset; }
     void setPitch(int v) { m_pitch = v; }
     void setOntime(int v) { m_ontime = v; }
     void setLen(int v) { m_len = v; }
-    void setVelocityMultiplier(double velocityMultiplier) { m_velocityMultiplier = velocityMultiplier; }
-    void setPlay(bool play) { m_play = play; }
+    void setOffset(int v) { m_offset = v; }
 
     bool operator==(const NoteEvent&) const;
 
@@ -71,6 +66,7 @@ private:
     int m_len = NOTE_LENGTH;       // one unit is 1/1000 of nominal note len
     double m_velocityMultiplier = DEFAULT_VELOCITY_MULTIPLIER; // can be used to lower sound (0-1)
     bool m_play = true; // when 'false', note event is used only for length calculation
+    int m_offset = 0;
 };
 
 //---------------------------------------------------------

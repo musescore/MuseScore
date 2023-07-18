@@ -35,8 +35,8 @@
 namespace mu::playback {
 class SoundProfilesRepository : public ISoundProfilesRepository, public async::Asyncable
 {
-    INJECT_STATIC(playback, audio::IPlayback, playback)
-    INJECT_STATIC(playback, IPlaybackConfiguration, config)
+    INJECT_STATIC(audio::IPlayback, playback)
+    INJECT_STATIC(IPlaybackConfiguration, config)
 public:
     SoundProfilesRepository() = default;
 

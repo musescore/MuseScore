@@ -28,6 +28,9 @@ import MuseScore.Ui 1.0
 Rectangle {
     id: root
 
+    property int navigationOrderStart: 0
+    property int navigationOrderEnd: navigationPanel.order
+
     visible: false
     height: 50
 
@@ -39,7 +42,7 @@ Rectangle {
         name: "SearchPopup"
         enabled: root.visible
         direction: NavigationPanel.Horizontal
-        order: 3
+        order: root.navigationOrderStart
         accessible.name: titleLabel.text
     }
 

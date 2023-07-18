@@ -27,4 +27,3 @@ set(MODULE_TEST_SRC
 set(MODULE_TEST_LINK draw)
 
 include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
-

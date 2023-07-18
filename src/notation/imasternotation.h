@@ -22,9 +22,7 @@
 #ifndef MU_NOTATION_IMASTERNOTATION_H
 #define MU_NOTATION_IMASTERNOTATION_H
 
-#include "modularity/imoduleexport.h"
 #include "types/retval.h"
-#include "io/path.h"
 
 #include "inotation.h"
 #include "iexcerptnotation.h"
@@ -36,9 +34,15 @@ using ExcerptNotationList = std::vector<IExcerptNotationPtr>;
 class IMasterNotation
 {
 public:
+
+    virtual Ret setupNewScore(engraving::MasterScore* score, const ScoreCreateOptions& options) = 0;
+    virtual void applyOptions(engraving::MasterScore* score, const ScoreCreateOptions& options, bool createdFromTemplate = false) = 0;
+    virtual engraving::MasterScore* masterScore() const = 0;
+    virtual void setMasterScore(engraving::MasterScore* masterScore) = 0;
+
     virtual INotationPtr notation() = 0;
 
-    virtual ValNt<bool> needSave() const = 0;
+    virtual int mscVersion() const = 0;
 
     virtual IExcerptNotationPtr createEmptyExcerpt(const QString& name = QString()) const = 0;
 
@@ -48,6 +52,7 @@ public:
     virtual void initExcerpts(const ExcerptNotationList& excerpts) = 0;
     virtual void addExcerpts(const ExcerptNotationList& excerpts) = 0;
     virtual void removeExcerpts(const ExcerptNotationList& excerpts) = 0;
+    virtual void resetExcerpt(IExcerptNotationPtr excerpt) = 0;
     virtual void sortExcerpts(ExcerptNotationList& excerpts) = 0;
 
     virtual void setExcerptIsOpen(const INotationPtr excerptNotation, bool opened) = 0;
@@ -57,6 +62,9 @@ public:
     virtual async::Notification hasPartsChanged() const = 0;
 
     virtual INotationPlaybackPtr playback() const = 0;
+
+    virtual void setSaved(bool arg) = 0;
+    virtual ValNt<bool> needSave() const = 0;
 };
 
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;

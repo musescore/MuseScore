@@ -27,6 +27,7 @@
 
 #include <set>
 #include <cmath>
+#include <tuple>
 
 #include "compat/midi/event.h"
 #include "compat/midi/midirender.h"
@@ -67,8 +68,8 @@
 #include "trill.h"
 #include "undo.h"
 #include "utils.h"
-#include "vibrato.h"
 #include "volta.h"
+#include "capo.h"
 
 #include "log.h"
 
@@ -82,7 +83,7 @@ namespace mu::engraving {
 
 void Score::updateSwing()
 {
-    for (Staff* s : _staves) {
+    for (Staff* s : m_staves) {
         s->clearSwingList();
     }
     Measure* fm = firstMeasure();
@@ -106,7 +107,7 @@ void Score::updateSwing()
             sp.swingRatio = st->swingParameters().swingRatio;
             sp.swingUnit = st->swingParameters().swingUnit;
             if (st->systemFlag()) {
-                for (Staff* sta : _staves) {
+                for (Staff* sta : m_staves) {
                     sta->insertIntoSwingList(s->tick(), sp);
                 }
             } else {
@@ -122,30 +123,30 @@ void Score::updateSwing()
 
 void Score::updateCapo()
 {
-    for (Staff* s : _staves) {
-        s->clearCapoList();
+    for (Staff* s : m_staves) {
+        s->clearCapoParams();
     }
+
     Measure* fm = firstMeasure();
     if (!fm) {
         return;
     }
+
     for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+        Fraction segmentTick = s->tick();
+
         for (EngravingItem* e : s->annotations()) {
             if (e->isHarmony()) {
                 toHarmony(e)->realizedHarmony().setDirty(true);
             }
-            if (!e->isStaffTextBase()) {
+
+            if (!e->isCapo()) {
                 continue;
             }
-            const StaffTextBase* st = toStaffTextBase(e);
-            if (st->xmlText().isEmpty()) {
-                continue;
+
+            for (Staff* staff : e->staff()->staffList()) {
+                staff->insertCapoParams(segmentTick, toCapo(e)->params());
             }
-            Staff* staff = st->staff();
-            if (st->capo() == 0) {
-                continue;
-            }
-            staff->insertIntoCapoList(s->tick(), st->capo());
         }
     }
 }
@@ -263,7 +264,7 @@ void Score::updateHairpin(Hairpin* h)
         }
         break;
     case DynamicRange::SYSTEM:
-        for (Staff* s : _staves) {
+        for (Staff* s : m_staves) {
             s->velocities().addRamp(tick, tick2, veloChange, method, direction);
         }
         break;
@@ -284,7 +285,7 @@ void Score::updateVelo()
         return;
     }
 
-    for (Staff* st : _staves) {
+    for (Staff* st : m_staves) {
         st->velocities().clear();
         st->velocityMultiplications().clear();
     }
@@ -394,7 +395,7 @@ void Score::updateVelo()
             }
         }
 
-        for (const auto& sp : _spanner.map()) {
+        for (const auto& sp : m_spanner.map()) {
             Spanner* s = sp.second;
             if (s->type() != ElementType::HAIRPIN || sp.second->staffIdx() != staffIdx) {
                 continue;
@@ -404,7 +405,7 @@ void Score::updateVelo()
         }
     }
 
-    for (Staff* st : _staves) {
+    for (Staff* st : m_staves) {
         st->velocities().cleanup();
         st->velocityMultiplications().cleanup();
     }
@@ -432,7 +433,7 @@ const Drumset* getDrumset(const Chord* chord)
 //   renderTremolo
 //---------------------------------------------------------
 
-void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell)
+static void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell, int& ontime, double tremoloPartOfChord = 1.0)
 {
     Segment* seg = chord->segment();
     Tremolo* tremolo = chord->tremolo();
@@ -456,7 +457,7 @@ void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell)
 
     // render tremolo with multiple events
     if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
-        int t = Constants::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
+        int t = Constants::DIVISION / (1 << (tremolo->lines() + chord->durationType().hooks()));
         if (t == 0) {   // avoid crash on very short tremolo
             t = 1;
         }
@@ -532,17 +533,23 @@ void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell)
             events->clear();
         }
     } else if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {
-        int t = Constants::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
+        int t = Constants::DIVISION / (1 << (tremolo->lines() + chord->durationType().hooks()));
         if (t == 0) {   // avoid crash on very short tremolo
             t = 1;
         }
-        int n = chord->ticks().ticks() / t;
-        int l = 1000 / n;
+
+        int tremoloEventsSize = chord->ticks().ticks() / t * tremoloPartOfChord;
+
+        constexpr int fullEventTime = 1000;
+        int tremoloTime = fullEventTime * tremoloPartOfChord;
+        int tremoloEventStep = tremoloTime / tremoloEventsSize;
+        ontime += tremoloTime;
+
         for (int k = 0; k < notes; ++k) {
             NoteEventList* events = &(ell)[k];
             events->clear();
-            for (int i = 0; i < n; ++i) {
-                events->push_back(NoteEvent(0, l * i, l));
+            for (int i = 0; i < tremoloEventsSize; i++) {
+                events->push_back(NoteEvent(0, tremoloEventStep * i, tremoloEventStep));
             }
         }
     }
@@ -552,7 +559,7 @@ void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell)
 //   renderArpeggio
 //---------------------------------------------------------
 
-void renderArpeggio(Chord* chord, std::vector<NoteEventList>& ell)
+void renderArpeggio(Chord* chord, std::vector<NoteEventList>& ell, int ontime)
 {
     int notes = int(chord->notes().size());
     int l = 64;
@@ -575,9 +582,10 @@ void renderArpeggio(Chord* chord, std::vector<NoteEventList>& ell)
         NoteEventList* events = &(ell)[i];
         events->clear();
 
-        auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick().ticks()).val / Constants::defaultTempo.val;
+        auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
         int ot = (l * j * 1000) / chord->upNote()->playTicks()
                  * tempoRatio * chord->arpeggio()->Stretch();
+        ot = std::clamp(ot + ontime, ot, 1000);
 
         events->push_back(NoteEvent(0, ot, 1000 - ot));
         j++;
@@ -630,9 +638,12 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
                                    const std::vector<int>& prefix, const std::vector<int>& body,
                                    bool repeatp, bool sustainp, const std::vector<int>& suffix,
                                    int fastestFreq = 64, int slowestFreq = 8, // 64 Hz and 8 Hz
-                                   double graceOnBeatProportion = 0)
+                                   double graceOnBeatProportion = 0, bool tremoloBefore = false)
 {
-    events->clear();
+    if (!tremoloBefore) {
+        events->clear();
+    }
+
     Chord* chord = note->chord();
     int maxticks = totalTiedNoteTicks(note);
     int space = 1000 * maxticks;
@@ -656,7 +667,7 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
 
     Fraction tick = chord->tick();
     BeatsPerSecond tempo = chord->score()->tempo(tick);
-    int ticksPerSecond = tempo.val * Constants::division;
+    int ticksPerSecond = tempo.val * Constants::DIVISION;
 
     int minTicksPerNote = int(ticksPerSecond / fastestFreq);
     int maxTicksPerNote = (0 == slowestFreq) ? 0 : int(ticksPerSecond / slowestFreq);
@@ -722,7 +733,8 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
     //   the given chromatic relative pitch.
     //   RETURNS the new ontime value.  The caller is expected to assign this value.
     auto makeEvent
-        = [note, chord, chromatic, events](int pitch, int ontime, int duration, double velocityMultiplier = 1.0, bool play = true) {
+        = [note, chord, chromatic, events](int pitch, int ontime, int duration,
+                                           double velocityMultiplier = NoteEvent::DEFAULT_VELOCITY_MULTIPLIER, bool play = true) {
         if (note->ghost()) {
             velocityMultiplier *= NoteEvent::GHOST_VELOCITY_MULTIPLIER;
         }
@@ -788,8 +800,10 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
 
                 // shifting glissando sounds to the second half of glissando duration
                 int totalDuration = millespernote * b;
-                int glissandoDuration = totalDuration * (1 - graceOnBeatProportion) / 2;
+
+                int glissandoDuration = tremoloBefore ? totalDuration / 2 : totalDuration * (1 - graceOnBeatProportion) / 2;
                 easeInOut.timeList(b, glissandoDuration, &onTimes);
+
                 if (!onTimes.empty()) {
                     onTimes[0] += graceOnBeatProportion * totalDuration;
                 }
@@ -816,7 +830,10 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
                 makeEvent(body[j], onTimes[j], onTimes[j + 1] - onTimes[j],
                           glissandoVelocityMultiplier);
             }
-            makeEvent(body[b - 1], onTimes[b - 1], (millespernote * b - onTimes[b - 1]) + sustain, glissandoVelocityMultiplier);
+
+            if (b > 1) {
+                makeEvent(body[b - 1], onTimes[b - 1], (millespernote * b - onTimes[b - 1]) + sustain, glissandoVelocityMultiplier);
+            }
         } else {
             // render the body, but not the final repetition
             for (int r = 0; r < numrepeat - 1; r++) {
@@ -883,7 +900,7 @@ namespace {
 std::set<OrnamentStyle> baroque  = { OrnamentStyle::BAROQUE };
 std::set<OrnamentStyle> defstyle = { OrnamentStyle::DEFAULT };
 std::set<OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
-int _16th = Constants::division / 4;
+int _16th = Constants::DIVISION / 4;
 int _32nd = _16th / 2;
 
 std::vector<OrnamentExcursion> excursions = {
@@ -908,7 +925,11 @@ std::vector<OrnamentExcursion> excursions = {
     { SymId::ornamentDownMordent,         any, _16th, { 1, 1, 1, 0 }, { 1, 0 },    true,  true, { -1, 0 } },// p136 Cadence Appuyee + mordent [1] [2]
     { SymId::ornamentPrallUp,             any, _16th, { 1, 0 }, { 1, 0 },        true,  true, { -1, 0 } },// p136 Double Cadence [1]
     { SymId::ornamentPrallDown,           any, _16th, { 1, 0 }, { 1, 0 },        true,  true, { -1, 0, 0, 0 } },// p144 ex 153 [1]
-    { SymId::ornamentPrecompSlide,        any, _32nd, {},    { 0 },          false, true, {} }
+    { SymId::ornamentPrecompSlide,        any, _32nd, {},    { 0 },          false, true, {} },
+    { SymId::ornamentShake3,              any, _32nd, { 1, 0 }, { 1, 0 },    true,  true, {} },
+    { SymId::ornamentShakeMuffat1,        any, _32nd, { 1, 0 }, { 1, 0 },    true,  true, {} },
+    { SymId::ornamentTremblementCouperin, any, _32nd, { 1, 1 }, { 0, 1 },        true, true, { 0, 0 } },
+    { SymId::ornamentPinceCouperin,       any, _32nd, { 0 },    { 0, -1 },       true, true, { 0, 0 } }
 
     // [1] Some of the articulations/ornaments in the excursions table above come from
     // Baroque Music, Style and Performance A Handbook, by Robert Donington,(c) 1982
@@ -963,7 +984,7 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
 //   renderGlissando
 //---------------------------------------------------------
 
-static void renderGlissando(NoteEventList* events, Note* notestart, double graceOnBeatProportion)
+static void renderGlissando(NoteEventList* events, Note* notestart, double graceOnBeatProportion, bool tremoloBefore = false)
 {
     std::vector<int> empty = {};
     std::vector<int> body;
@@ -971,8 +992,8 @@ static void renderGlissando(NoteEventList* events, Note* notestart, double grace
         if (spanner->type() == ElementType::GLISSANDO
             && toGlissando(spanner)->playGlissando()
             && Glissando::pitchSteps(spanner, body)) {
-            renderNoteArticulation(events, notestart, true, Constants::division, empty, body, false, true, empty, 16, 0,
-                                   graceOnBeatProportion);
+            renderNoteArticulation(events, notestart, true, Constants::DIVISION, empty, body, false, true, empty, 16, 0,
+                                   graceOnBeatProportion, tremoloBefore);
         }
     }
 }
@@ -1028,7 +1049,8 @@ static bool graceNotesMerged(Chord* chord)
 //   renderChordArticulation
 //---------------------------------------------------------
 
-static void renderChordArticulation(Chord* chord, std::vector<NoteEventList>& ell, int& gateTime, double graceOnBeatProportion)
+static void renderChordArticulation(Chord* chord, std::vector<NoteEventList>& ell, int& gateTime, double graceOnBeatProportion,
+                                    bool tremoloBefore = false)
 {
     Segment* seg = chord->segment();
     Instrument* instr = chord->part()->instrument(seg->tick());
@@ -1040,7 +1062,7 @@ static void renderChordArticulation(Chord* chord, std::vector<NoteEventList>& el
         Trill* trill;
 
         if (noteHasGlissando(note)) {
-            renderGlissando(events, note, graceOnBeatProportion);
+            renderGlissando(events, note, graceOnBeatProportion, tremoloBefore);
         } else if (chord->staff()->isPitchedStaff(chord->tick()) && (trill = findFirstTrill(chord)) != nullptr) {
             renderNoteArticulation(events, note, false, trill->trillType(), trill->ornamentStyle());
         } else {
@@ -1103,21 +1125,46 @@ static std::set<size_t> getNotesIndexesToRender(Chord* chord)
     return notesIndexesToRender;
 }
 
-static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onTime, int& trailtime)
+static void createSlideInNotePlayEvents(Note* note, int prevChordTicks, NoteEventList* el)
 {
-    if (!note->isSlideOutNote()) {
+    if (!note->hasSlideToNote()) {
         return;
     }
 
-    const int slideNotes = 3;
-    const int slideDuration = 45;
-    trailtime += slideNotes * slideDuration;
-    int slideOn = 1000 - trailtime;
+    const int slideNotes = NoteEvent::SLIDE_AMOUNT;
+    const int currentTicks = note->chord()->ticks().ticks();
+    // if previous chord exists, slide takes its half length, otherwise - current chord's half length
+    const int slideTicks = (prevChordTicks == 0 ? currentTicks : prevChordTicks) / 2;
+    const int totalSlideDuration = NoteEvent::NOTE_LENGTH * slideTicks / currentTicks;
+    const int slideDuration = totalSlideDuration / slideNotes;
+
+    int slideOn = 0;
+    int pitchOffset = note->slideToType() == Note::SlideType::UpToNote ? 1 : -1;
+    int pitch = pitchOffset * slideNotes;
+    for (int i = 0; i < slideNotes; ++i) {
+        el->push_back(NoteEvent(pitch, 0, slideDuration, NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER, true, totalSlideDuration - slideOn));
+        slideOn += slideDuration;
+        pitch -= pitchOffset;
+    }
+}
+
+static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int onTime, bool hasTremolo)
+{
+    if (!note->hasSlideFromNote()) {
+        return;
+    }
+
+    const int slideNotes = NoteEvent::SLIDE_AMOUNT;
+    const int allSlidesDuration = NoteEvent::NOTE_LENGTH / 2;
+    const int slideDuration = allSlidesDuration / slideNotes;
+    int slideOn = NoteEvent::NOTE_LENGTH - allSlidesDuration;
     double velocity = !note->ghost() ? NoteEvent::DEFAULT_VELOCITY_MULTIPLIER : NoteEvent::GHOST_VELOCITY_MULTIPLIER;
-    el->push_back(NoteEvent(0, onTime, slideOn, velocity, !note->tieBack()));
+    if (!hasTremolo) {
+        el->push_back(NoteEvent(0, onTime, slideOn, velocity, !note->tieBack()));
+    }
 
     int pitch = 0;
-    int pitchOffset = note->slide().is(Note::SlideType::Doit) ? 1 : -1;
+    int pitchOffset = note->slideFromType() == Note::SlideType::UpFromNote ? 1 : -1;
     for (int i = 0; i < slideNotes; ++i) {
         pitch += pitchOffset;
         el->push_back(NoteEvent(pitch, slideOn, slideDuration, velocity * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER));
@@ -1132,33 +1179,42 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onT
 //    trailtime signifies how much gap to leave after the note to allow for graceNotesAfter to be rendered
 //---------------------------------------------------------
 
-static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, int trailtime)
+static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, int gateTime, int ontime, int trailtime)
 {
-    if (chord->notes().empty()) {
+    const std::vector<Note*>& notes = chord->notes();
+    if (notes.empty()) {
         return std::vector<NoteEventList>();
     }
 
-    std::vector<NoteEventList> ell(chord->notes().size(), NoteEventList());
+    std::vector<NoteEventList> ell(notes.size(), NoteEventList());
 
     bool arpeggio = false;
-    if (chord->tremolo()) {
-        renderTremolo(chord, ell);
-    } else if (chord->arpeggio() && chord->arpeggio()->playArpeggio()) {
-        renderArpeggio(chord, ell);
+
+    /// when note has glissando or slide from note, half of chord is played tremolo, second half - glissando
+    bool shouldShortenTremolo = std::any_of(notes.begin(), notes.end(), [] (Note* note) {
+        return noteHasGlissando(note) || note->hasSlideFromNote();
+    });
+
+    bool tremolo = false;
+
+    if (chord->arpeggio() && chord->arpeggio()->playArpeggio()) {
+        renderArpeggio(chord, ell, ontime);
         arpeggio = true;
     } else {
-        renderChordArticulation(chord, ell, gateTime, (double)ontime / 1000);
+        if (chord->tremolo()) {
+            renderTremolo(chord, ell, ontime, shouldShortenTremolo ? 0.5 : 1);
+            tremolo = true;
+        }
+
+        renderChordArticulation(chord, ell, gateTime, (double)ontime / 1000, tremolo);
     }
 
     // Check each note and apply gateTime
     for (size_t i : getNotesIndexesToRender(chord)) {
         Note* note = chord->notes()[i];
         NoteEventList* el = &ell[i];
-        const double ticksPerSecond = chord->score()->tempo(chord->tick()).val * Constants::division;
-        constexpr double deadNoteDurationInSec = 0.05;
-        const double deadNoteDurationInTicks = ticksPerSecond * deadNoteDurationInSec;
 
-        createSlideOutNotePlayEvents(note, el, ontime, trailtime);
+        createSlideOutNotePlayEvents(note, el, ontime, tremolo);
         if (arpeggio) {
             continue;       // don't add extra events and apply gateTime to arpeggio
         }
@@ -1169,8 +1225,10 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
                                     !note->ghost() ? NoteEvent::DEFAULT_VELOCITY_MULTIPLIER : NoteEvent::GHOST_VELOCITY_MULTIPLIER));
         }
 
+        createSlideInNotePlayEvents(note, prevChord ? prevChord->ticks().ticks() : 0, el);
+
         for (NoteEvent& e : *el) {
-            e.setLen(note->deadNote() ? deadNoteDurationInTicks : e.len() * gateTime / 100);
+            e.setLen(e.len() * gateTime / 100);
         }
     }
     return ell;
@@ -1208,7 +1266,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
 
     int graceDuration = 0;
     bool drumset = (getDrumset(chord) != nullptr);
-    const double ticksPerSecond = tempo(tick).val * Constants::division;
+    const double ticksPerSecond = tempo(tick).val * Constants::DIVISION;
     const double chordTimeMS = (chord->actualTicks().ticks() / ticksPerSecond) * 1000;
     if (drumset) {
         int flamDuration = 15;     //ms
@@ -1290,13 +1348,13 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
 //    create default play events
 //---------------------------------------------------------
 
-void Score::createPlayEvents(Chord* chord)
+void Score::createPlayEvents(Chord* chord, Chord* prevChord)
 {
     int gateTime = 100;
 
     Fraction tick = chord->tick();
     Slur* slur = 0;
-    for (auto sp : _spanner.map()) {
+    for (auto sp : m_spanner.map()) {
         if (!sp.second->isSlur() || sp.second->staffIdx() != chord->staffIdx()) {
             continue;
         }
@@ -1324,7 +1382,7 @@ void Score::createPlayEvents(Chord* chord)
     //
     //    render normal (and articulated) chords
     //
-    std::vector<NoteEventList> el = renderChord(chord, gateTime, ontime, trailtime);
+    std::vector<NoteEventList> el = renderChord(chord, prevChord, gateTime, ontime, trailtime);
     if (chord->playEventType() == PlayEventType::Auto) {
         chord->setNoteEventLists(el);
     }
@@ -1333,39 +1391,72 @@ void Score::createPlayEvents(Chord* chord)
 
 static void adjustPreviousChordLength(Chord* currentChord, Chord* prevChord)
 {
+    if (!prevChord) {
+        return;
+    }
+
     const std::vector<Chord*>& graceBeforeChords = currentChord->graceNotesBefore();
     std::vector<Chord*> graceNotesBeforeBar;
     std::copy_if(graceBeforeChords.begin(), graceBeforeChords.end(), std::back_inserter(graceNotesBeforeBar), [](Chord* ch) {
         return ch->noteType() == NoteType::ACCIACCATURA;
     });
 
-    if (prevChord && !graceNotesBeforeBar.empty()) {
-        int reducedTicks = graceNotesBeforeBar[0]->ticks().ticks();
-        int prevTicks = prevChord->ticks().ticks();
-        if (reducedTicks < prevTicks) {
-            double lengthMultiply = std::min(1.f, (float)(prevTicks - reducedTicks) / (float)prevTicks);
+    int prevTicks = prevChord->ticks().ticks();
 
-            for (size_t i = 0; i < prevChord->notes().size(); i++) {
-                Note* prevChordNote = prevChord->notes()[i];
-                NoteEventList evList;
-                const auto& prevEvents = prevChordNote->playEvents();
+    int reducedTicks = 0;
 
-                int curPos = prevEvents.front().ontime();
+    const auto& notes = currentChord->notes();
+    bool anySlidesIn = std::any_of(notes.begin(), notes.end(), [](const Note* note) { return note->hasSlideToNote(); });
 
-                for (size_t i = 0; i < prevEvents.size(); i++) {
-                    NoteEvent event;
-                    const NoteEvent& prevEvent = prevEvents[i];
-                    event.setOntime(curPos);
-                    event.setPitch(prevEvent.pitch());
-                    int newEventLength = prevEvent.len() * lengthMultiply;
-                    event.setLen(newEventLength);
-                    evList.push_back(event);
-                    curPos += newEventLength;
-                }
-
-                prevChordNote->setPlayEvents(evList);
-            }
+    if (!graceNotesBeforeBar.empty()) {
+        reducedTicks = graceNotesBeforeBar[0]->ticks().ticks();
+        if (reducedTicks >= prevTicks) {
+            return;
         }
+    } else if (anySlidesIn) {
+        reducedTicks = prevTicks / 2;
+    } else {
+        return;
+    }
+
+    double lengthMultiply = std::min(1.0, (double)(prevTicks - reducedTicks) / prevTicks);
+
+    for (size_t i = 0; i < prevChord->notes().size(); i++) {
+        Note* prevChordNote = prevChord->notes()[i];
+        NoteEventList evList;
+        NoteEventList prevEvents = prevChordNote->playEvents();
+        std::sort(prevEvents.begin(), prevEvents.end(), [](const NoteEvent& left, const NoteEvent& right) {
+            int l1 = left.ontime();
+            int l2 = -left.offset();
+            int r1 = right.ontime();
+            int r2 = -right.offset();
+
+            return std::tie(l1, l2) < std::tie(r1, r2);
+        });
+
+        int curPos = prevEvents.front().ontime();
+
+        for (size_t i = 0; i < prevEvents.size(); i++) {
+            NoteEvent event;
+            const NoteEvent& prevEvent = prevEvents[i];
+            event.setOntime(curPos);
+            event.setPitch(prevEvent.pitch());
+            event.setOffset(prevEvent.offset());
+            int prevLen = prevEvent.len();
+
+            // not shortening events before beat
+            if (prevEvent.offset() == 0) {
+                int newEventLength = prevLen * lengthMultiply;
+                event.setLen(newEventLength);
+                curPos += newEventLength;
+            } else {
+                event.setLen(prevLen);
+            }
+
+            evList.push_back(event);
+        }
+
+        prevChordNote->setPlayEvents(evList);
     }
 }
 
@@ -1410,13 +1501,17 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
             }
             for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
                 EngravingItem* e = seg->element(track);
-                if (e == 0 || !e->isChord()) {
+                if (e == 0) {
+                    continue;
+                }
+
+                if (!e->isChord()) {
                     prevChord = nullptr;
                     continue;
                 }
 
                 Chord* chord = toChord(e);
-                createPlayEvents(chord);
+                createPlayEvents(chord, prevChord);
                 adjustPreviousChordLength(chord, prevChord);
                 prevChord = chord;
             }
@@ -1426,9 +1521,7 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
 
 void Score::renderMidi(EventMap* events, const MidiRenderer::Context& ctx, bool expandRepeats)
 {
-    bool expandRepeatsBackup = masterScore()->expandRepeats();
     masterScore()->setExpandRepeats(expandRepeats);
     MidiRenderer(this).renderScore(events, ctx);
-    masterScore()->setExpandRepeats(expandRepeatsBackup);
 }
 }

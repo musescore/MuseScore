@@ -23,7 +23,7 @@
 #ifndef MU_MUSESAMPLER_IMUSESAMPLERCONFIGURATION_H
 #define MU_MUSESAMPLER_IMUSESAMPLERCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "io/path.h"
 
@@ -35,9 +35,8 @@ class IMuseSamplerConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMuseSamplerConfiguration() = default;
 
-    virtual mu::io::path_t libraryPath() const = 0;
-
-    virtual std::string minimumSupportedVersion() const = 0;
+    virtual mu::io::path_t userLibraryPath() const = 0;
+    virtual mu::io::path_t fallbackLibraryPath() const = 0;
 };
 }
 

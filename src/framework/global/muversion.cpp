@@ -23,14 +23,11 @@
 
 #include "types/version.h"
 
-#include "config.h"
-#include "log.h"
-
 using namespace mu::framework;
 
 bool MUVersion::unstable()
 {
-#ifdef MSCORE_UNSTABLE
+#ifdef MUSESCORE_UNSTABLE
     return true;
 #else
     return false;
@@ -39,14 +36,14 @@ bool MUVersion::unstable()
 
 mu::String MUVersion::version()
 {
-    return String::fromStdString(VERSION);
+    return String::fromStdString(MUSESCORE_VERSION);
 }
 
 mu::String MUVersion::fullVersion()
 {
     Version res(version());
 
-    String versionLabel = String::fromStdString(VERSION_LABEL);
+    String versionLabel = String::fromStdString(MUSESCORE_VERSION_LABEL);
     if (!versionLabel.isEmpty()) {
         res.setSuffix(versionLabel);
     }
@@ -61,15 +58,15 @@ mu::String MUVersion::revision()
 
 int MUVersion::majorVersion()
 {
-    return Version(version()).major();
+    return Version(version()).majorVersion();
 }
 
 int MUVersion::minorVersion()
 {
-    return Version(version()).minor();
+    return Version(version()).minorVersion();
 }
 
 int MUVersion::patchVersion()
 {
-    return Version(version()).patch();
+    return Version(version()).patchVersion();
 }

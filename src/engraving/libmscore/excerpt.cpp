@@ -27,7 +27,6 @@
 #include "containers.h"
 
 #include "style/style.h"
-#include "rw/xml.h"
 
 #include "barline.h"
 #include "beam.h"
@@ -66,13 +65,16 @@
 using namespace mu;
 using namespace mu::engraving;
 
-Excerpt::Excerpt(const Excerpt& ex, bool copyPartScore)
-    : m_masterScore(ex.m_masterScore), m_name(ex.m_name), m_parts(ex.m_parts), m_tracksMapping(ex.m_tracksMapping)
+Excerpt::Excerpt(const Excerpt& ex, bool copyContents)
+    : m_masterScore(ex.m_masterScore), m_name(ex.m_name), m_parts(ex.m_parts), m_initialPartId(ex.m_initialPartId)
 {
-    m_excerptScore = (copyPartScore && ex.m_excerptScore) ? ex.m_excerptScore->clone() : nullptr;
+    if (copyContents) {
+        m_tracksMapping = ex.m_tracksMapping;
+        m_excerptScore = ex.m_excerptScore ? ex.m_excerptScore->clone() : nullptr;
 
-    if (m_excerptScore) {
-        m_excerptScore->setExcerpt(this);
+        if (m_excerptScore) {
+            m_excerptScore->setExcerpt(this);
+        }
     }
 }
 
@@ -89,6 +91,16 @@ bool Excerpt::inited() const
 void Excerpt::setInited(bool inited)
 {
     m_inited = inited;
+}
+
+bool Excerpt::custom() const
+{
+    return !m_initialPartId.isValid();
+}
+
+void Excerpt::markAsCustom()
+{
+    setInitialPartId(ID());
 }
 
 const ID& Excerpt::initialPartId() const
@@ -166,7 +178,7 @@ void Excerpt::removePart(const ID& id)
         return;
     }
 
-    excerptScore()->undoRemovePart(excerptScore()->parts().at(index));
+    excerptScore()->undoRemovePart(excerptScore()->parts().at(index), index);
 }
 
 size_t Excerpt::nstaves() const
@@ -183,7 +195,7 @@ bool Excerpt::isEmpty() const
     return excerptScore() ? excerptScore()->parts().empty() : true;
 }
 
-TracksMap& Excerpt::tracksMapping()
+const TracksMap& Excerpt::tracksMapping()
 {
     updateTracksMapping();
 
@@ -198,45 +210,50 @@ void Excerpt::setTracksMapping(const TracksMap& tracksMapping)
 
     m_tracksMapping = tracksMapping;
 
-    for (Staff* staff : excerptScore()->staves()) {
-        Staff* masterStaff = m_masterScore->staffById(staff->id());
+    const Score* score = excerptScore();
+    if (!score) {
+        return;
+    }
+
+    for (Staff* staff : score->staves()) {
+        const Staff* masterStaff = m_masterScore->staffById(staff->id());
         if (!masterStaff) {
             continue;
         }
+
         staff->updateVisibilityVoices(masterStaff, m_tracksMapping);
     }
 }
 
-void Excerpt::updateTracksMapping(bool voicesVisibilityChanged)
+void Excerpt::updateTracksMapping()
 {
-    Score* score = excerptScore();
+    const Score* score = excerptScore();
     if (!score) {
         return;
     }
 
     TracksMap tracks;
 
-    if (m_cachedStaves == score->staves() && !voicesVisibilityChanged) {
-        return;
-    }
-
     TRACEFUNC;
 
-    m_cachedStaves = score->staves();
-
-    for (Staff* staff : m_cachedStaves) {
-        Staff* masterStaff = masterScore()->staffById(staff->id());
+    for (const Staff* staff : score->staves()) {
+        const Staff* masterStaff = masterScore()->staffById(staff->id());
         if (!masterStaff) {
             continue;
         }
 
+        staff_idx_t masterStaffIdx = masterStaff->idx();
+        staff_idx_t staffIdx = staff->idx();
+
         voice_idx_t voice = 0;
-        for (voice_idx_t i = 0; i < VOICES; i++) {
-            if (!staff->isVoiceVisible(i)) {
+        const std::array<bool, VOICES>& voicesVisibility = staff->visibilityVoices();
+
+        for (voice_idx_t i = 0; i < VOICES; ++i) {
+            if (!voicesVisibility[i]) {
                 continue;
             }
 
-            tracks.insert({ masterStaff->idx() * VOICES + i % VOICES, staff->idx() * VOICES + voice % VOICES });
+            tracks.insert({ masterStaffIdx* VOICES + i % VOICES, staffIdx * VOICES + voice % VOICES });
             voice++;
         }
     }
@@ -244,7 +261,7 @@ void Excerpt::updateTracksMapping(bool voicesVisibilityChanged)
     setTracksMapping(tracks);
 }
 
-void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
+void Excerpt::setVoiceVisible(Staff* staff, voice_idx_t voiceIndex, bool visible)
 {
     TRACEFUNC;
 
@@ -257,48 +274,36 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
         return;
     }
 
-    staff_idx_t staffIndex = staff->idx();
-    Fraction startTick = staff->score()->firstMeasure()->tick();
-    Fraction endTick = staff->score()->lastMeasure()->tick();
+    bool wasVisible = staff->isVoiceVisible(voiceIndex);
+    if (visible == wasVisible) {
+        return;
+    }
 
-    // update tracks
+    // update tracks (temporarily modify the old staff)
     staff->setVoiceVisible(voiceIndex, visible);
-    updateTracksMapping(true /*voicesVisibilityChanged*/);
+    updateTracksMapping();
 
-    // clone staff
-    Staff* staffCopy = Factory::createStaff(staff->part());
-    staffCopy->setId(staff->id());
-    staffCopy->init(staff);
+    // create new staff
+    Staff* newStaff = Factory::createStaff(staff->part());
+    newStaff->setId(staff->id());
+    newStaff->init(staff);
 
-    // remove current staff, insert cloned
-    excerptScore()->undoRemoveStaff(staff);
+    // revert changes to old staff, to make undo work properly
+    staff->setVoiceVisible(voiceIndex, wasVisible);
+
+    // remove old staff, insert new
+    staff_idx_t staffIndex = staff->idx();
     staff_idx_t partStaffIndex = staffIndex - excerptScore()->staffIdx(staff->part());
-    excerptScore()->undoInsertStaff(staffCopy, partStaffIndex);
+    excerptScore()->undoRemoveStaff(staff);
+    excerptScore()->undoInsertStaff(newStaff, partStaffIndex);
 
-    // clone master staff to current with mapped tracks
-    cloneStaff2(masterStaff, staffCopy, startTick, endTick);
+    // clone master staff to new staff with mapped tracks
+    Fraction startTick = staff->score()->firstMeasure()->tick();
+    Fraction endTick = staff->score()->lastMeasure()->endTick();
+    cloneStaff2(masterStaff, newStaff, startTick, endTick);
 
     // link master staff to cloned
-    Staff* newStaff = excerptScore()->staffById(masterStaff->id());
     excerptScore()->undo(new Link(newStaff, masterStaff));
-}
-
-void Excerpt::read(XmlReader& e)
-{
-    const std::vector<Part*>& pl = m_masterScore->parts();
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag = e.name();
-        if (tag == "name" || tag == "title") {
-            m_name = e.readText().trimmed();
-        } else if (tag == "part") {
-            size_t partIdx = static_cast<size_t>(e.readInt());
-            if (partIdx >= pl.size()) {
-                LOGD("Excerpt::read: bad part index");
-            } else {
-                m_parts.push_back(pl.at(partIdx));
-            }
-        }
-    }
 }
 
 void Excerpt::createExcerpt(Excerpt* excerpt)
@@ -309,17 +314,6 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     std::vector<Part*>& parts = excerpt->parts();
     std::vector<staff_idx_t> srcStaves;
 
-    // clone layer:
-    for (int i = 0; i < 32; ++i) {
-        score->layerTags()[i] = masterScore->layerTags()[i];
-        score->layerTagComments()[i] = masterScore->layerTagComments()[i];
-    }
-    score->setCurrentLayer(masterScore->currentLayer());
-    score->layer().clear();
-    for (const Layer& l : masterScore->layer()) {
-        score->layer().push_back(l);
-    }
-
     score->setPageNumberOffset(masterScore->pageNumberOffset());
 
     // Set instruments and create linked staves
@@ -328,6 +322,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
         p->setId(part->id());
         p->setInstrument(*part->instrument());
         p->setPartName(part->partName());
+        p->setPreferSharpFlat(part->preferSharpFlat());
 
         for (Staff* staff : part->staves()) {
             Staff* s = Factory::createStaff(p);
@@ -386,7 +381,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     score->doLayout();
 
     // handle transposing instruments
-    if (masterScore->styleB(Sid::concertPitch) != score->styleB(Sid::concertPitch)) {
+    if (masterScore->style().styleB(Sid::concertPitch) != score->style().styleB(Sid::concertPitch)) {
         for (const Staff* staff : score->staves()) {
             if (staff->staffType(Fraction(0, 1))->group() == StaffGroup::PERCUSSION) {
                 continue;
@@ -398,7 +393,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                 continue;
             }
             bool flip = false;
-            if (masterScore->styleB(Sid::concertPitch)) {
+            if (masterScore->style().styleB(Sid::concertPitch)) {
                 interval.flip();          // flip the transposition for the original instrument
                 flip = true;              // transposeKeys() will flip transposition for each instrument change
             }
@@ -411,15 +406,15 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             if (score->lastSegment()) {
                 endTick = score->lastSegment()->tick();
             }
-            score->transposeKeys(staffIdx, staffIdx + 1, Fraction(0, 1), endTick, interval, true, flip);
+            score->transposeKeys(staffIdx, staffIdx + 1, Fraction(0, 1), endTick, flip);
 
             for (auto segment = score->firstSegmentMM(SegmentType::ChordRest); segment;
                  segment = segment->next1MM(SegmentType::ChordRest)) {
-                interval = staff->part()->instrument(segment->tick())->transpose();
+                interval = staff->transpose(segment->tick());
                 if (interval.isZero()) {
                     continue;
                 }
-                if (masterScore->styleB(Sid::concertPitch)) {
+                if (masterScore->style().styleB(Sid::concertPitch)) {
                     interval.flip();
                 }
 
@@ -447,8 +442,8 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     }
 
     // update style values if spatium different for part
-    if (masterScore->spatium() != score->spatium()) {
-        //score->spatiumChanged(oscore->spatium(), score->spatium());
+    if (masterScore->style().spatium() != score->style().spatium()) {
+        score->spatiumChanged(masterScore->style().spatium(), score->style().spatium());
         score->styleChanged();
     }
 
@@ -621,7 +616,7 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
 
     Spanner* ns = toSpanner(s->linkedClone());
     ns->setScore(score);
-    ns->resetExplicitParent();
+    ns->moveToDummy();
     ns->setTrack(dstTrack);
     ns->setTrack2(dstTrack2);
 
@@ -661,6 +656,12 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
         }
         if (!ns->endElement()) {
             LOGD("clone Slur: no end element");
+        }
+    } else if (ns->isTrill()) {
+        EngravingItem* startElement = (EngravingItem*)s->startElement()->findLinkedInScore(score);
+        if (startElement && startElement->isChord()) {
+            ns->setStartElement(startElement);
+            toChord(startElement)->addStartingSpanner(ns);
         }
     }
 
@@ -993,6 +994,9 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
         if (e->track() != mu::nidx) {
             // try to map track
             track = mu::value(trackList, e->track(), mu::nidx);
+            if (e->systemFlag() && !e->isTopSystemObject()) {
+                continue;
+            }
             if (track == mu::nidx) {
                 // even if track not in excerpt, we need to clone system elements
                 if (e->systemFlag() && e->track() == 0) {
@@ -1203,6 +1207,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                         case ElementType::SYSTEM_TEXT:
                         case ElementType::TRIPLET_FEEL:
                         case ElementType::PLAYTECH_ANNOTATION:
+                        case ElementType::CAPO:
                         case ElementType::FRET_DIAGRAM:
                         case ElementType::HARMONY:
                         case ElementType::FIGURED_BASS:
@@ -1392,6 +1397,15 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         score->undoAddElement(element, false /*addToLinkedStaves*/);
     };
 
+    auto updateSpatium = [](void* oldElement, EngravingItem* newElement)
+    {
+        double oldSpatium = static_cast<EngravingItem*>(oldElement)->spatium();
+        double newSpatium = newElement->spatium();
+        if (!RealIsEqual(oldSpatium, newSpatium)) {
+            newElement->spatiumChanged(oldSpatium, newSpatium);
+        }
+    };
+
     for (Measure* m = m1; m && (m != m2); m = m->nextMeasure()) {
         Measure* nm = score->tick2measure(m->tick());
         nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
@@ -1413,8 +1427,27 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         ne->setParent(ns);
                         ne->setScore(score);
                         ne->styleChanged();
+                        ne->scanElements(oef, updateSpatium);
                         addElement(ne);
                     }
+                }
+
+                for (EngravingItem* e : oseg->annotations()) {
+                    if (e->generated()) {
+                        continue;
+                    }
+                    bool systemObject = e->systemFlag() && e->track() == 0;
+                    bool alreadyCloned = bool(e->findLinkedInScore(score));
+                    bool cloneAnnotation = e->track() == srcTrack || (systemObject && !alreadyCloned);
+                    if (!cloneAnnotation) {
+                        continue;
+                    }
+                    EngravingItem* ne1 = e->linkedClone();
+                    ne1->setTrack(dstTrack);
+                    ne1->setParent(ns);
+                    ne1->setScore(score);
+                    ne1->styleChanged();
+                    addElement(ne1);
                 }
 
                 EngravingItem* oe = oseg->element(srcTrack);
@@ -1427,6 +1460,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 ne->setParent(ns);
                 ne->setScore(score);
                 ne->styleChanged();
+                ne->scanElements(oe, updateSpatium);
                 addElement(ne);
                 if (oe->isChordRest()) {
                     ChordRest* ocr = toChordRest(oe);
@@ -1441,25 +1475,11 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                             nt->setTrack(dstTrack);
                             nt->setParent(nm);
                             nt->styleChanged();
+                            nt->scanElements(ot, updateSpatium);
                             tupletMap.add(ot, nt);
                         }
                         ncr->setTuplet(nt);
                         nt->add(ncr);
-                    }
-
-                    for (EngravingItem* e : oseg->annotations()) {
-                        if (e->generated()
-                            || (e->track() != srcTrack && !(e->systemFlag() && e->track() == 0)) // system items must be cloned even if they are on different tracks
-                            || (e->track() != srcTrack && e->systemFlag() && e->findLinkedInScore(score))) { // ...but only once!
-                            continue;
-                        }
-
-                        EngravingItem* ne1 = e->linkedClone();
-                        ne1->setTrack(dstTrack);
-                        ne1->setParent(ns);
-                        ne1->setScore(score);
-                        ne1->styleChanged();
-                        addElement(ne1);
                     }
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);
@@ -1525,6 +1545,23 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
         cloneSpanner(s, score, dstTrack, dstTrack2);
     }
+
+    bool oscoreConcertPitch = oscore->style().styleB(Sid::concertPitch);
+    bool scoreConcertPitch = score->style().styleB(Sid::concertPitch);
+
+    if ((oscoreConcertPitch && !scoreConcertPitch)
+        || (!oscoreConcertPitch && scoreConcertPitch)) {
+        Interval interval = srcStaff->part()->instrument()->transpose();
+        if (interval.isZero() && srcStaff->part()->instruments().size() == 1) {
+            return;
+        }
+
+        if (!scoreConcertPitch) {
+            interval.flip();
+        }
+
+        score->transposeKeys(dstStaffIdx, dstStaffIdx + 1, startTick, endTick, !scoreConcertPitch);
+    }
 }
 
 std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>& parts)
@@ -1536,7 +1573,7 @@ std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>&
         excerpt->parts().push_back(part);
 
         for (track_idx_t i = part->startTrack(), j = 0; i < part->endTrack(); ++i, ++j) {
-            excerpt->tracksMapping().insert({ i, j });
+            excerpt->m_tracksMapping.insert({ i, j });
         }
 
         String name = formatName(part->partName(), result);

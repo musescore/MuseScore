@@ -22,21 +22,16 @@
 #ifndef MU_PLAYBACK_PLAYBACKCONFIGURATION_H
 #define MU_PLAYBACK_PLAYBACKCONFIGURATION_H
 
-#include "config.h"
+#include "../iplaybackconfiguration.h"
+#include "async/asyncable.h"
 
-#ifdef BUILD_MUSESAMPLER_MODULE
 #include "modularity/ioc.h"
 #include "musesampler/imusesamplerinfo.h"
-#endif
-
-#include "../iplaybackconfiguration.h"
 
 namespace mu::playback {
-class PlaybackConfiguration : public IPlaybackConfiguration
+class PlaybackConfiguration : public IPlaybackConfiguration, public async::Asyncable
 {
-#ifdef BUILD_MUSESAMPLER_MODULE
-    INJECT(playback, musesampler::IMuseSamplerInfo, musesamplerInfo)
-#endif
+    INJECT(musesampler::IMuseSamplerInfo, musesamplerInfo)
 
 public:
     void init();
@@ -55,12 +50,27 @@ public:
     bool isMixerSectionVisible(MixerSectionType sectionType) const override;
     void setMixerSectionVisible(MixerSectionType sectionType, bool visible) override;
 
+    bool isAuxSendVisible(audio::aux_channel_idx_t index) const override;
+    void setAuxSendVisible(audio::aux_channel_idx_t index, bool visible) override;
+    async::Channel<audio::aux_channel_idx_t, bool> isAuxSendVisibleChanged() const override;
+
+    bool isAuxChannelVisible(audio::aux_channel_idx_t index) const override;
+    void setAuxChannelVisible(audio::aux_channel_idx_t index, bool visible) const override;
+    async::Channel<audio::aux_channel_idx_t, bool> isAuxChannelVisibleChanged() const override;
+
+    audio::gain_t defaultAuxSendValue(audio::aux_channel_idx_t index, audio::AudioSourceType sourceType,
+                                      const String& instrumentSoundId) const override;
+
     const SoundProfileName& basicSoundProfileName() const override;
     const SoundProfileName& museSoundProfileName() const override;
     SoundProfileName defaultProfileForNewProjects() const override;
     void setDefaultProfileForNewProjects(const SoundProfileName& name) override;
+
 private:
     const SoundProfileName& fallbackSoundProfileStr() const;
+
+    async::Channel<audio::aux_channel_idx_t, bool> m_isAuxSendVisibleChanged;
+    async::Channel<audio::aux_channel_idx_t, bool> m_isAuxChannelVisibleChanged;
 };
 }
 

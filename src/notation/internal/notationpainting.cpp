@@ -94,7 +94,7 @@ SizeF NotationPainting::pageSizeInch() const
         return SizeF(page->bbox().width() / mu::engraving::DPI, page->bbox().height() / mu::engraving::DPI);
     }
 
-    return SizeF(score()->styleD(mu::engraving::Sid::pageWidth), score()->styleD(mu::engraving::Sid::pageHeight));
+    return SizeF(score()->style().styleD(mu::engraving::Sid::pageWidth), score()->style().styleD(mu::engraving::Sid::pageHeight));
 }
 
 bool NotationPainting::isPaintPageBorder() const

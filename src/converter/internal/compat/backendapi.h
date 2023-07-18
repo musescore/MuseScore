@@ -39,9 +39,9 @@ namespace mu::converter {
 class BackendJsonWriter;
 class BackendApi
 {
-    INJECT_STATIC(converter, io::IFileSystem, fileSystem)
-    INJECT_STATIC(converter, project::IProjectCreator, notationCreator)
-    INJECT_STATIC(converter, project::INotationWritersRegister, writers)
+    INJECT_STATIC(io::IFileSystem, fileSystem)
+    INJECT_STATIC(project::IProjectCreator, notationCreator)
+    INJECT_STATIC(project::INotationWritersRegister, writers)
 
 public:
     static Ret exportScoreMedia(const io::path_t& in, const io::path_t& out, const io::path_t& highlightConfigPath,
@@ -67,8 +67,9 @@ private:
     static Ret exportScorePngs(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
     static Ret exportScoreSvgs(const notation::INotationPtr notation, const io::path_t& highlightConfigPath, BackendJsonWriter& jsonWriter,
                                bool addSeparator = false);
-    static Ret exportScoreElementsPositions(const std::string& elementsPositionsWriterName, const notation::INotationPtr notation,
-                                            BackendJsonWriter& jsonWriter, bool addSeparator = false);
+    static Ret exportScoreElementsPositions(const std::string& elementsPositionsWriterName, const std::string& elementsPositionsTagName,
+                                            const notation::INotationPtr notation, BackendJsonWriter& jsonWriter,
+                                            bool addSeparator = false);
     static Ret exportScorePdf(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
     static Ret exportScorePdf(const notation::INotationPtr notation, QIODevice& destinationDevice);
     static Ret exportScoreMidi(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
@@ -80,7 +81,7 @@ private:
     static mu::RetVal<QByteArray> processWriter(const std::string& writerName, const notation::INotationPtrList notations,
                                                 const project::INotationWriter::Options& options);
 
-    static Ret doExportScoreParts(const notation::INotationPtr notation, QIODevice& destinationDevice);
+    static Ret doExportScoreParts(const notation::IMasterNotationPtr notation, QIODevice& destinationDevice);
     static Ret doExportScorePartsPdfs(const notation::IMasterNotationPtr notation, QIODevice& destinationDevice,
                                       const std::string& scoreFileName);
     static Ret doExportScoreTranspose(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
@@ -89,6 +90,12 @@ private:
 
     static RetVal<notation::TransposeOptions> parseTransposeOptions(const std::string& optionsJson);
     static Ret applyTranspose(const notation::INotationPtr notation, const std::string& optionsJson);
+
+    static void switchToPageView(notation::IMasterNotationPtr masterNotation);
+    static void renderExcerptsContents(notation::IMasterNotationPtr masterNotation);
+
+    static notation::ExcerptNotationList allExcerpts(notation::IMasterNotationPtr masterNotation);
+    static void initPotentialExcerpts(notation::IMasterNotationPtr masterNotation);
 };
 }
 

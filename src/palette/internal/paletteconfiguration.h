@@ -32,8 +32,8 @@
 namespace mu::palette {
 class PaletteConfiguration : public IPaletteConfiguration, public async::Asyncable
 {
-    INJECT(palette, ui::IUiConfiguration, uiConfiguration)
-    INJECT(palette, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     void init();

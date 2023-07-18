@@ -70,6 +70,9 @@ bool BracketItem::setProperty(Pid id, const PropertyValue& v)
     case Pid::BRACKET_SPAN:
         _bracketSpan = static_cast<size_t>(v.toInt());
         break;
+    case Pid::VISIBLE:
+        setVisible(v.toBool());
+        break;
     default:
         return EngravingItem::setProperty(id, v);
     }

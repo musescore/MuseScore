@@ -57,6 +57,9 @@ import "measurerepeats"
 import "tuplets"
 import "instrumentname"
 import "lyrics"
+import "rests"
+import "dynamics"
+import "expressions"
 
 Loader {
     id: root
@@ -95,9 +98,9 @@ Loader {
             case Inspector.TYPE_KEYSIGNATURE: return keySignatureComp
             case Inspector.TYPE_ACCIDENTAL: return accidentalComp
             case Inspector.TYPE_FRET_DIAGRAM: return fretDiagramComp
-            case Inspector.TYPE_PEDAL: return pedalComp
             case Inspector.TYPE_SPACER: return spacerComp
             case Inspector.TYPE_CLEF: return clefComp
+            case Inspector.TYPE_PEDAL:
             case Inspector.TYPE_HAIRPIN:
             case Inspector.TYPE_CRESCENDO:
             case Inspector.TYPE_DIMINUENDO:
@@ -126,6 +129,10 @@ Loader {
             case Inspector.TYPE_TUPLET: return tupletComp
             case Inspector.TYPE_INSTRUMENT_NAME: return instrumentNameComp
             case Inspector.TYPE_LYRICS: return lyricsComp
+            case Inspector.TYPE_REST: return restComp
+            case Inspector.TYPE_REST_BEAM: return restComp
+            case Inspector.TYPE_DYNAMIC: return dynamicComp
+            case Inspector.TYPE_EXPRESSION: return expressionComp
             }
 
             return null
@@ -203,11 +210,6 @@ Loader {
     Component {
         id: fretDiagramComp
         FretDiagramSettings { }
-    }
-
-    Component {
-        id: pedalComp
-        PedalSettings { }
     }
 
     Component {
@@ -318,5 +320,20 @@ Loader {
     Component {
         id: lyricsComp
         LyricsSettings {}
+    }
+
+    Component {
+        id: restComp
+        RestSettings {}
+    }
+
+    Component {
+        id: dynamicComp
+        DynamicsSettings {}
+    }
+
+    Component {
+        id: expressionComp
+        ExpressionsSettings {}
     }
 }

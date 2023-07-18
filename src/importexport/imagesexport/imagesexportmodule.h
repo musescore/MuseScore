@@ -22,9 +22,12 @@
 #ifndef MU_IMPORTEXPORT_IMAGESEXPORTMODULE_H
 #define MU_IMPORTEXPORT_IMAGESEXPORTMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::imagesexport {
+class ImagesExportConfiguration;
 class ImagesExportModule : public modularity::IModuleSetup
 {
 public:
@@ -33,6 +36,9 @@ public:
     void registerExports() override;
     void resolveImports() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<ImagesExportConfiguration> m_configuration;
 };
 }
 

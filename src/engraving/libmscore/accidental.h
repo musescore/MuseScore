@@ -71,16 +71,7 @@ struct SymElement {
 class Accidental final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Accidental)
-
-    std::vector<SymElement> el;
-    AccidentalType _accidentalType { AccidentalType::NONE };
-    bool m_isSmall                    { false };
-    AccidentalBracket _bracket     { AccidentalBracket::NONE };
-    AccidentalRole _role           { AccidentalRole::AUTO };
-
-    friend class Factory;
-
-    Accidental(EngravingItem* parent);
+    DECLARE_CLASSOF(ElementType::ACCIDENTAL)
 
 public:
 
@@ -98,20 +89,23 @@ public:
 
     int subtype() const override { return (int)_accidentalType; }
 
+    const std::vector<SymElement>& elements() const { return el; }
+    void clearElements() { el.clear(); }
+    void addElement(const SymElement& e) { el.push_back(e); }
+
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
-    void layout() override;
-    void layoutMultiGlyphAccidental();
-    void layoutSingleGlyphAccidental();
+
     void draw(mu::draw::Painter*) const override;
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override { setGenerated(false); }
 
-    SymId symbol() const;
+    SymId symId() const;
     Note* note() const { return (explicitParent() && explicitParent()->isNote()) ? toNote(explicitParent()) : 0; }
 
     AccidentalBracket bracket() const { return _bracket; }
     void setBracket(AccidentalBracket val) { _bracket = val; }
+    bool parentNoteHasParentheses() const;
 
     void setRole(AccidentalRole r) { _role = r; }
 
@@ -119,9 +113,6 @@ public:
     void setSmall(bool val) { m_isSmall = val; }
 
     void undoSetSmall(bool val);
-
-    void read(XmlReader&) override;
-    void write(XmlWriter& xml) const override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -133,8 +124,23 @@ public:
     static AccidentalType value2subtype(AccidentalVal);
     static AccidentalType name2subtype(const mu::AsciiStringView&);
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
+    static double subtype2centOffset(AccidentalType);
 
     String accessibleInfo() const override;
+
+    void computeMag();
+
+private:
+
+    friend class Factory;
+
+    Accidental(EngravingItem* parent);
+
+    std::vector<SymElement> el;
+    AccidentalType _accidentalType { AccidentalType::NONE };
+    bool m_isSmall                    { false };
+    AccidentalBracket _bracket     { AccidentalBracket::NONE };
+    AccidentalRole _role           { AccidentalRole::AUTO };
 };
 
 extern AccidentalVal sym2accidentalVal(SymId id);

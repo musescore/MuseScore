@@ -86,7 +86,7 @@ findFirstChordInRange(const std::multimap<ReducedFraction, MidiChord>& chords,
 
 const ReducedFraction& minAllowedDuration()
 {
-    const static auto minDuration = ReducedFraction::fromTicks(engraving::Constants::division) / 32;
+    const static auto minDuration = ReducedFraction::fromTicks(engraving::Constants::DIVISION) / 32;
     return minDuration;
 }
 

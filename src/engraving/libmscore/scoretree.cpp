@@ -129,7 +129,7 @@ EngravingObjectList System::scanChildren() const
         children.push_back(dividerRight);
     }
 
-    for (SysStaff* staff : _staves) {
+    for (SysStaff* staff : m_staves) {
         for (InstrumentName* instrName : staff->instrumentNames) {
             children.push_back(instrName);
         }
@@ -173,7 +173,7 @@ EngravingObject* Measure::scanParent() const
     if (isMMRest()) {  // this is MMR
         return system();
     } else if (m_mmRestCount < 0) {  // this is part of MMR
-        return const_cast<Measure*>(mmRest1());
+        return const_cast<Measure*>(coveringMMRestOrThis());
     }
     // for a normal measure
     return system();
@@ -316,7 +316,7 @@ EngravingObjectList ChordRest::scanChildren() const
         children.push_back(_b);
     }
 
-    for (Lyrics* lyrics : _lyrics) {
+    for (Lyrics* lyrics : m_lyrics) {
         children.push_back(lyrics);
     }
 
@@ -326,11 +326,11 @@ EngravingObjectList ChordRest::scanChildren() const
         de = de->tuplet();
     }
 
-    if (auto tabDuration = _tabDur) {
+    if (auto tabDuration = m_tabDur) {
         children.push_back(tabDuration);
     }
 
-    for (EngravingItem* element : _el) {
+    for (EngravingItem* element : m_el) {
         children.push_back(element);
     }
 
@@ -369,12 +369,12 @@ EngravingObjectList Chord::scanChildren() const
         children.push_back(note);
     }
 
-    if (_arpeggio) {
-        children.push_back(_arpeggio);
+    if (m_arpeggio) {
+        children.push_back(m_arpeggio);
     }
 
-    if (_tremolo && _tremolo->chord1() == this) {
-        children.push_back(_tremolo);
+    if (m_tremolo && m_tremolo->chord1() == this) {
+        children.push_back(m_tremolo);
     }
 
     for (Chord* chord : graceNotes()) {
@@ -385,19 +385,19 @@ EngravingObjectList Chord::scanChildren() const
         children.push_back(art);
     }
 
-    if (_stem) {
-        children.push_back(_stem);
+    if (m_stem) {
+        children.push_back(m_stem);
     }
 
-    if (_hook) {
-        children.push_back(_hook);
+    if (m_hook) {
+        children.push_back(m_hook);
     }
 
-    if (_stemSlash) {
-        children.push_back(_stemSlash);
+    if (m_stemSlash) {
+        children.push_back(m_stemSlash);
     }
 
-    LedgerLine* ledgerLines = _ledgerLines;
+    LedgerLine* ledgerLines = m_ledgerLines;
     while (ledgerLines) {
         children.push_back(ledgerLines);
         ledgerLines = ledgerLines->next();
@@ -447,16 +447,16 @@ EngravingObjectList Note::scanChildren() const
 {
     EngravingObjectList children;
 
-    if (_accidental) {
-        children.push_back(_accidental);
+    if (m_accidental) {
+        children.push_back(m_accidental);
     }
 
-    for (NoteDot* noteDot : _dots) {
+    for (NoteDot* noteDot : m_dots) {
         children.push_back(noteDot);
     }
 
-    if (_tieFor) {
-        children.push_back(_tieFor);
+    if (m_tieFor) {
+        children.push_back(m_tieFor);
     }
 
     for (EngravingItem* element : el()) {
@@ -488,7 +488,7 @@ EngravingObject* Accidental::scanParent() const
 
 EngravingObject* Beam::scanParent() const
 {
-    return _elements[0];
+    return m_elements[0];
 }
 
 //---------------------------------------------------------
@@ -530,8 +530,8 @@ EngravingObjectList FretDiagram::scanChildren() const
 {
     EngravingObjectList children;
 
-    if (_harmony) {
-        children.push_back(_harmony);
+    if (m_harmony) {
+        children.push_back(m_harmony);
     }
 
     return children;
@@ -610,8 +610,8 @@ EngravingObjectList Tuplet::scanChildren() const
 {
     EngravingObjectList children;
 
-    if (_number) {
-        children.push_back(_number);
+    if (m_number) {
+        children.push_back(m_number);
     }
 
     return children;
@@ -630,7 +630,7 @@ EngravingObjectList BarLine::scanChildren() const
 {
     EngravingObjectList children;
 
-    for (EngravingItem* element : _el) {
+    for (EngravingItem* element : m_el) {
         children.push_back(element);
     }
 

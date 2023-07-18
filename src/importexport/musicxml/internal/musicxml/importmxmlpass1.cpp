@@ -777,7 +777,7 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
         if (mustAddWordToVbox(w->type)) {
             const auto align = alignForCreditWords(w, pageSize.width());
             const auto tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : TextStyleType::DEFAULT;
-            double yoffs = (maxy - w->defaultY) * score->spatium() / 10;
+            double yoffs = (maxy - w->defaultY) * score->style().spatium() / 10;
             if (!vbox) {
                 vbox = createAndAddVBoxForCreditWords(score, miny, maxy);
             }
@@ -1099,7 +1099,11 @@ void MusicXMLParserPass1::scorePartwise()
             staff->setBracketSpan(pg->column, stavesSpan);
         }
         if (pg->barlineSpan) {
-            staff->setBarLineSpan(pg->span);
+            // set setBarLineSpan to 1 for all staves in the part except the last staff
+            auto idx = staff->idx();
+            for (auto i = idx; i < idx + stavesSpan - 1; ++i) {
+                _score->staff(i)->setBarLineSpan(1);
+            }
         }
     }
 
@@ -1415,6 +1419,19 @@ static bool isTitleFrameStyle(const TextStyleType tid)
 }
 
 //---------------------------------------------------------
+//   isHarpDiagramStyle
+//---------------------------------------------------------
+
+/**
+ Determine if tid is a style type used in a harp pedal diagram
+ */
+
+static bool isHarpPedalStyle(const TextStyleType tid)
+{
+    return tid == TextStyleType::HARP_PEDAL_DIAGRAM || tid == TextStyleType::HARP_PEDAL_TEXT_DIAGRAM;
+}
+
+//---------------------------------------------------------
 //   updateStyles
 //---------------------------------------------------------
 
@@ -1439,13 +1456,14 @@ static void updateStyles(Score* score,
         // the word-font setting applies. Setting all sizes to the size specified
         // gives bad results, so a selection is made:
         // exclude lyrics odd and even lines (handled separately),
-        // Roman numeral analysis (special case, leave untouched)
+        // Roman numeral analysis and harp pedal diagrams (special case, leave untouched)
         // and text types used in the title frame
         // Some further tweaking may still be required.
 
         if (tid == TextStyleType::LYRICS_ODD || tid == TextStyleType::LYRICS_EVEN
             || tid == TextStyleType::HARMONY_ROMAN
-            || isTitleFrameStyle(tid)) {
+            || isTitleFrameStyle(tid)
+            || isHarpPedalStyle(tid)) {
             continue;
         }
         const TextStyle* ts = textStyle(tid);
@@ -1500,7 +1518,7 @@ void MusicXMLParserPass1::defaults()
 {
     //_logger->logDebugTrace("MusicXMLParserPass1::defaults", &_e);
 
-    double millimeter = _score->spatium() / 10.0;
+    double millimeter = _score->style().spatium() / 10.0;
     double tenths = 1.0;
     QString lyricFontFamily;
     QString lyricFontSize;
@@ -1524,7 +1542,7 @@ void MusicXMLParserPass1::defaults()
             }
             double _spatium = DPMM * (millimeter * 10.0 / tenths);
             if (isImportLayout) {
-                _score->setSpatium(_spatium);
+                _score->style().setSpatium(_spatium);
             }
         } else if (_e.name() == "page-layout") {
             PageFormat pf;

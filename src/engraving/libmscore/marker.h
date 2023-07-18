@@ -36,9 +36,7 @@ namespace mu::engraving {
 class Marker final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, Marker)
-private:
-    MarkerType _markerType;
-    String _label;                 ///< referenced from Jump() element
+    DECLARE_CLASSOF(ElementType::MARKER)
 
 public:
     Marker(EngravingItem* parent);
@@ -54,10 +52,6 @@ public:
 
     Measure* measure() const { return (Measure*)explicitParent(); }
 
-    void layout() override;
-    void read(XmlReader&) override;
-    void write(XmlWriter& xml) const override;
-
     String label() const { return _label; }
     void setLabel(const String& s) { _label = s; }
     void undoSetLabel(const String& s);
@@ -72,6 +66,10 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
+
+private:
+    MarkerType _markerType;
+    String _label;                 ///< referenced from Jump() element
 };
 } // namespace mu::engraving
 

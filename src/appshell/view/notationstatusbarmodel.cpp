@@ -228,6 +228,7 @@ void NotationStatusBarModel::onCurrentNotationChanged()
     notation()->notationChanged().onNotify(this, [this]() {
         emit currentViewModeChanged();
         emit availableViewModeListChanged();
+        emit concertPitchActionChanged();
     });
 
     notation()->viewState()->zoomPercentage().ch.onReceive(this, [this](int) {
@@ -354,7 +355,7 @@ void NotationStatusBarModel::setCurrentZoom(const QString& zoomId)
 
 int NotationStatusBarModel::minZoomPercentage() const
 {
-    return possibleZoomPercentageList().first();
+    return 5;
 }
 
 int NotationStatusBarModel::maxZoomPercentage() const

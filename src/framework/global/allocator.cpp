@@ -30,7 +30,7 @@
 
 using namespace mu;
 
-int ObjectAllocator::used = 0;
+int ObjectAllocator::s_used = 0;
 size_t ObjectAllocator::DEFAULT_BLOCK_SIZE(1024 * 256); // 256 kB
 
 static inline size_t align(size_t n)
@@ -41,6 +41,20 @@ static inline size_t align(size_t n)
 // ============================================
 // ObjectAllocator
 // ============================================
+void ObjectAllocator::used()
+{
+#ifdef MUE_ENABLE_CUSTOM_ALLOCATOR
+    s_used++;
+#endif
+}
+
+void ObjectAllocator::unused()
+{
+#ifdef MUE_ENABLE_CUSTOM_ALLOCATOR
+    s_used--;
+#endif
+}
+
 ObjectAllocator::ObjectAllocator(const char* module, const char* name, destroyer_t dtor)
     : m_module(module), m_name(name), m_dtor(dtor)
 {
@@ -93,13 +107,8 @@ void* ObjectAllocator::alloc(size_t size)
     return freeChunk;
 }
 
-void ObjectAllocator::free(void* chunk, size_t size)
+void ObjectAllocator::free(void* chunk)
 {
-#ifdef NDEBUG
-    UNUSED(size);
-#endif
-    assert(m_chunkSize == size);
-
     // The freed chunk's next pointer points to the
     // current allocation pointer:
     reinterpret_cast<Chunk*>(chunk)->next = m_free;

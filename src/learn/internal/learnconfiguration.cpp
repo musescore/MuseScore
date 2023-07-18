@@ -21,17 +21,19 @@
  */
 #include "learnconfiguration.h"
 
-#include <QString>
-
-#include "config.h"
+#include "settings.h"
 
 using namespace mu::learn;
 using namespace mu::network;
+using namespace mu::framework;
 
-static const QString API_KEY(YOUTUBE_API_KEY);
-static const QString GET_STARTED_PLAYLIST_ID("PLTYuWi2LmaPEhcwZJwFZqoyQ2xXx_maPa");
-static const QString ADVANCED_PLAYLIST_ID("PL24C760637A625BB6");
-static const int MAX_NUMBER_OF_RESULT_ITEMS(100);
+static const std::string module_name("learn");
+static const Settings::Key GET_PLAYLISTS_TESTING_MODE_KEY(module_name, "learn/getPlaylistsTestingMode");
+
+void LearnConfiguration::init()
+{
+    settings()->setDefaultValue(GET_PLAYLISTS_TESTING_MODE_KEY, Val(false));
+}
 
 RequestHeaders LearnConfiguration::headers() const
 {
@@ -40,56 +42,19 @@ RequestHeaders LearnConfiguration::headers() const
     return headers;
 }
 
-QUrl mu::learn::LearnConfiguration::startedPlaylistUrl() const
+QUrl LearnConfiguration::startedPlaylistUrl() const
 {
-    return QUrl(apiRootUrl() + "/playlistItems?" + playlistItemsParams(GET_STARTED_PLAYLIST_ID));
+    return !isTestingMode() ? QUrl("https://s3.amazonaws.com/extensions.musescore.org/4.0/learn/started_playlist.json")
+           : QUrl("https://s3.amazonaws.com/extensions.musescore.org/4.0/learn/started_playlist.test.json");
 }
 
 QUrl LearnConfiguration::advancedPlaylistUrl() const
 {
-    return QUrl(apiRootUrl() + "/playlistItems?" + playlistItemsParams(ADVANCED_PLAYLIST_ID));
+    return !isTestingMode() ? QUrl("https://s3.amazonaws.com/extensions.musescore.org/4.0/learn/advanced_playlist.json")
+           : QUrl("https://s3.amazonaws.com/extensions.musescore.org/4.0/learn/advanced_playlist.test.json");
 }
 
-QUrl LearnConfiguration::videosInfoUrl(const QStringList& videosIds) const
+bool LearnConfiguration::isTestingMode() const
 {
-    return QUrl(apiRootUrl() + "/videos?" + videosParams(videosIds));
-}
-
-QUrl LearnConfiguration::videoOpenUrl(const QString& videoId) const
-{
-    return QUrl("https://www.youtube.com/watch?v=" + videoId);
-}
-
-QString LearnConfiguration::apiRootUrl() const
-{
-    return "https://youtube.googleapis.com/youtube/v3";
-}
-
-QString LearnConfiguration::playlistItemsParams(const QString& playlistId) const
-{
-    QStringList params {
-        "part=snippet",
-        "playlistId=" + playlistId,
-        "key=" + API_KEY,
-        "maxResults=" + QString::number(MAX_NUMBER_OF_RESULT_ITEMS)
-    };
-
-    return params.join('&');
-}
-
-QString LearnConfiguration::videosParams(const QStringList& videosIds) const
-{
-    QStringList params {
-        "part=snippet,contentDetails",
-        "key=" + API_KEY,
-        "maxResults=" + QString::number(MAX_NUMBER_OF_RESULT_ITEMS)
-    };
-
-    params.reserve(params.size() + videosIds.size());
-
-    for (const QString& videoId : videosIds) {
-        params << "id=" + videoId;
-    }
-
-    return params.join('&');
+    return settings()->value(GET_PLAYLISTS_TESTING_MODE_KEY).toBool();
 }

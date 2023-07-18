@@ -52,6 +52,7 @@ enum class ActionIconType {
     HFRAME,
     TFRAME,
     FFRAME,
+    STAFF_TYPE_CHANGE,
     MEASURE,
 
     PARENTHESES,
@@ -62,6 +63,8 @@ enum class ActionIconType {
 class ActionIcon final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, ActionIcon)
+    DECLARE_CLASSOF(ElementType::ACTION_ICON)
+
 public:
     ActionIcon(EngravingItem* score);
     ~ActionIcon() override = default;
@@ -74,13 +77,13 @@ public:
     void setActionType(ActionIconType val);
     void setAction(const std::string& actionCode, char16_t icon);
 
+    char16_t icon() const { return m_icon; }
+
+    const mu::draw::Font& iconFont() const { return m_iconFont; }
     double fontSize() const;
     void setFontSize(double size);
 
-    void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;

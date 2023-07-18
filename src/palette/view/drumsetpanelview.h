@@ -37,10 +37,10 @@ class DrumsetPanelView : public uicomponents::WidgetView, public async::Asyncabl
 {
     Q_OBJECT
 
-    INJECT(palette, context::IGlobalContext, globalContext)
-    INJECT(palette, actions::IActionsDispatcher, dispatcher)
-    INJECT(palette, notation::INotationConfiguration, notationConfiguration)
-    INJECT(palette, engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
 
     Q_PROPERTY(QString pitchName READ pitchName NOTIFY pitchNameChanged)
 

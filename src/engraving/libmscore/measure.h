@@ -32,8 +32,16 @@
 
 #include "segmentlist.h"
 
-namespace mu::engraving::rw {
-class MeasureRW;
+namespace mu::engraving::read400 {
+class MeasureRead;
+}
+
+namespace mu::engraving::read410 {
+class MeasureRead;
+}
+
+namespace mu::engraving::write {
+class MeasureWrite;
 }
 
 namespace mu::engraving {
@@ -50,8 +58,6 @@ class Spacer;
 class Staff;
 class System;
 class TieMap;
-
-class XmlWriter;
 
 //---------------------------------------------------------
 //   MeasureNumberMode
@@ -110,19 +116,19 @@ public:
     void setMeasureRepeatCount(int n) { m_measureRepeatCount = n; }
 
 private:
-    MeasureNumber* m_noText { nullptr };      ///< Measure number text object
-    MMRestRange* m_mmRangeText { nullptr };    ///< Multi measure rest range text object
-    StaffLines* m_lines     { nullptr };
-    Spacer* m_vspacerUp     { nullptr };
-    Spacer* m_vspacerDown   { nullptr };
-    bool m_hasVoices        { false };  ///< indicates that MStaff contains more than one voice,
-                                        ///< this changes some layout rules
-    bool m_visible          { true };
-    bool m_stemless         { false };
+    MeasureNumber* m_noText = nullptr;      // Measure number text object
+    MMRestRange* m_mmRangeText = nullptr;   // Multi measure rest range text object
+    StaffLines* m_lines = nullptr;
+    Spacer* m_vspacerUp = nullptr;
+    Spacer* m_vspacerDown = nullptr;
+    bool m_hasVoices = false;               // indicates that MStaff contains more than one voice,
+                                            // this changes some layout rules
+    bool m_visible = true;
+    bool m_stemless = false;
 #ifndef NDEBUG
-    bool m_corrupted        { false };
+    bool m_corrupted = false;
 #endif
-    int m_measureRepeatCount { 0 };
+    int m_measureRepeatCount = 0;
 };
 
 //---------------------------------------------------------
@@ -136,6 +142,8 @@ private:
 class Measure final : public MeasureBase
 {
     OBJECT_ALLOCATOR(engraving, Measure)
+    DECLARE_CLASSOF(ElementType::MEASURE)
+
 public:
 
     ~Measure();
@@ -150,12 +158,6 @@ public:
     EngravingObject* scanParent() const override;
     EngravingObjectList scanChildren() const override;
 
-    void read(XmlReader& d) override;
-    void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
-    void write(XmlWriter& xml) const override { EngravingItem::write(xml); }
-    void write(XmlWriter&, staff_idx_t, bool writeSystemElements, bool forceTimeSig) const override;
-    void writeBox(XmlWriter&) const;
-    void readBox(XmlReader&);
     bool isEditable() const override { return false; }
     void checkMeasure(staff_idx_t idx, bool useGapRests = true);
 
@@ -181,6 +183,9 @@ public:
     MeasureNumber* noText(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->noText(); }
     void setNoText(staff_idx_t staffIdx, MeasureNumber* t) { m_mstaves[staffIdx]->setNoText(t); }
 
+    const std::vector<MStaff*>& mstaves() const { return m_mstaves; }
+    std::vector<MStaff*>& mstaves() { return m_mstaves; }
+
     void setMMRangeText(staff_idx_t staffIdx, MMRestRange*);
     MMRestRange* mmRangeText(staff_idx_t staffIdx) const;
 
@@ -193,7 +198,7 @@ public:
     void setTimesig(const Fraction& f) { m_timesig = f; }
 
     Fraction stretchedLen(Staff*) const;
-    bool isIrregular() const { return m_timesig != _len; }
+    bool isIrregular() const { return m_timesig != m_len; }
 
     int size() const { return m_segments.size(); }
     Segment* first() const { return m_segments.first(); }
@@ -211,17 +216,12 @@ public:
     void setLayoutStretch(double stretchCoeff) { m_layoutStretch = stretchCoeff; }
     double layoutStretch() const { return m_layoutStretch; }
 
-    void layoutMeasureElements();
     Fraction computeTicks();
     Fraction shortestChordRest() const;
     Fraction maxTicks() const;
-    void layout2();
-    void layoutCrossStaff() override;
 
     bool showsMeasureNumber();
     bool showsMeasureNumberInAutoMode();
-    void layoutMeasureNumber();
-    void layoutMMRestRange();
 
     Chord* findChord(Fraction tick, track_idx_t track);
     ChordRest* findChordRest(Fraction tick, track_idx_t track);
@@ -265,11 +265,7 @@ public:
 
     void connectTremolo();
 
-    double createEndBarLines(bool);
-    void barLinesSetSpan(Segment*);
     void setEndBarLineType(BarLineType val, track_idx_t track, bool visible = true, mu::draw::Color color = mu::draw::Color());
-
-    void createSystemBeginBarLine();
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void createVoice(int track);
@@ -307,7 +303,7 @@ public:
     bool hasMMRest() const { return m_mmRest != 0; }
     bool isMMRest() const { return m_mmRestCount > 0; }
     Measure* mmRest() const { return m_mmRest; }
-    const Measure* mmRest1() const;
+    const Measure* coveringMMRestOrThis() const;
     void setMMRest(Measure* m) { m_mmRest = m; }
     int mmRestCount() const { return m_mmRestCount; }            // number of measures m_mmRest spans
     void setMMRestCount(int n) { m_mmRestCount = n; }
@@ -336,27 +332,20 @@ public:
     AccessibleItemPtr createAccessible() override;
 #endif
 
-    void addSystemHeader(bool firstSystem);
-    void addSystemTrailer(Measure* nm);
-    void removeSystemHeader();
-    void removeSystemTrailer();
-
     const BarLine* endBarLine() const;
     BarLineType endBarLineType() const;
     bool endBarLineVisible() const;
     void triggerLayout() const override;
     double basicStretch() const;
     double basicWidth() const;
-    void computeWidth(Fraction minTicks, Fraction maxTicks, double stretchCoeff);
     void stretchToTargetWidth(double targetWidth);
     void checkHeader();
     void checkTrailer();
-    void layoutStaffLines();
 
-    bool isWidthLocked() const { return _isWidthLocked; }
+    bool isWidthLocked() const { return m_isWidthLocked; }
     // A measure is widthLocked if its width has been locked by the minMeasureWidth (or minMMRestWidth)
     // parameter, meaning it can't be any narrower than it currently is.
-    void setWidthLocked(bool b) { _isWidthLocked = b; }
+    void setWidthLocked(bool b) { m_isWidthLocked = b; }
 
     //! puts segments on the positions according to their length
     void layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts);
@@ -369,15 +358,19 @@ public:
 
     Fraction quantumOfSegmentCell() const;
 
-    void stretchMeasureInPracticeMode(double stretch);
-    double squeezableSpace() const { return _isWidthLocked ? 0.0 : _squeezableSpace; }
+    double squeezableSpace() const { return m_squeezableSpace; }
+    void setSqueezableSpace(double val) { m_squeezableSpace = val; }
 
     void respaceSegments();
 
+    void spaceRightAlignedSegments();
+
 private:
-    double _squeezableSpace = 0;
+
     friend class Factory;
-    friend class rw::MeasureRW;
+    friend class read400::MeasureRead;
+    friend class read410::MeasureRead;
+    friend class write::MeasureWrite;
 
     Measure(System* parent = 0);
     Measure(const Measure&);
@@ -386,35 +379,35 @@ private:
     void push_front(Segment* e);
 
     void fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests = true);
-    void computeWidth(Segment* s, double x, bool isSystemHeader, Fraction minTicks, Fraction maxTicks, double stretchCoeff);
-    double computeMinMeasureWidth() const;
 
     MStaff* mstaff(staff_idx_t staffIndex) const;
 
+    double m_squeezableSpace = 0.0;
+
     std::vector<MStaff*> m_mstaves;
     SegmentList m_segments;
-    Measure* m_mmRest;         // multi measure rest which replaces a measure range
+    Measure* m_mmRest = nullptr; // multi measure rest which replaces a measure range
 
-    double m_userStretch;
+    double m_userStretch = 0.0;
 
     Fraction m_timesig;
 
-    int m_mmRestCount;         // > 0 if this is a multimeasure rest
-                               // 0 if this is the start of am mmrest (m_mmRest != 0)
-                               // < 0 if this measure is covered by an mmrest
+    int m_mmRestCount = 0;      // > 0 if this is a multimeasure rest
+                                // 0 if this is the start of am mmrest (m_mmRest != 0)
+                                // < 0 if this measure is covered by an mmrest
 
     int m_playbackCount = 0;    // temp. value used in RepeatList
                                 // counts how many times this measure was already played
 
-    int m_repeatCount;          ///< end repeat marker and repeat count
+    int m_repeatCount = 0;      // end repeat marker and repeat count
 
-    MeasureNumberMode m_noMode;
-    bool m_breakMultiMeasureRest;
+    MeasureNumberMode m_noMode = MeasureNumberMode::AUTO;
+    bool m_breakMultiMeasureRest = false;
 
     Fraction m_quantumOfSegmentCell = { 1, 16 };
 
     double m_layoutStretch = 1.0;
-    bool _isWidthLocked = false;
+    bool m_isWidthLocked = false;
 };
 } // namespace mu::engraving
 #endif

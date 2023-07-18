@@ -26,6 +26,7 @@
 #include <cstdint>
 
 namespace mu::engraving {
+struct OrnamentInterval;
 //---------------------------------------------------------
 //   Interval
 //---------------------------------------------------------
@@ -37,10 +38,13 @@ struct Interval {
     Interval();
     Interval(int a, int b);
     Interval(int _chromatic);
+
     void flip();
     bool isZero() const;
     bool operator!=(const Interval& a) const { return diatonic != a.diatonic || chromatic != a.chromatic; }
     bool operator==(const Interval& a) const { return diatonic == a.diatonic && chromatic == a.chromatic; }
+
+    static Interval fromOrnamentInterval(OrnamentInterval ornInt);
 };
 } // namespace mu::engraving
 #endif

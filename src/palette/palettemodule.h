@@ -22,9 +22,16 @@
 #ifndef MU_PALETTE_PALETTEMODULE_H
 #define MU_PALETTE_PALETTEMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::palette {
+class PaletteProvider;
+class PaletteActionsController;
+class PaletteUiActions;
+class PaletteConfiguration;
+class PaletteWorkspaceSetup;
 class PaletteModule : public modularity::IModuleSetup
 {
 public:
@@ -39,6 +46,14 @@ public:
     void onInit(const framework::IApplication::RunMode& mode) override;
     void onAllInited(const framework::IApplication::RunMode& mode) override;
     void onDeinit() override;
+
+private:
+
+    std::shared_ptr<PaletteProvider> m_paletteProvider;
+    std::shared_ptr<PaletteActionsController> m_actionsController;
+    std::shared_ptr<PaletteUiActions> m_paletteUiActions;
+    std::shared_ptr<PaletteConfiguration> m_configuration;
+    std::shared_ptr<PaletteWorkspaceSetup> m_paletteWorkspaceSetup;
 };
 }
 

@@ -41,10 +41,10 @@ class XmlWriter;
 namespace mu::shortcuts {
 class MidiRemote : public IMidiRemote, public async::Asyncable
 {
-    INJECT(shortcuts, io::IFileSystem, fileSystem)
-    INJECT(shortcuts, mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(shortcuts, actions::IActionsDispatcher, dispatcher)
-    INJECT(shortcuts, IShortcutsConfiguration, configuration)
+    INJECT(io::IFileSystem, fileSystem)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(IShortcutsConfiguration, configuration)
 
 public:
     MidiRemote() = default;

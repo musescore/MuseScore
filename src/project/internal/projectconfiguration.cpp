@@ -27,7 +27,6 @@
 #include <QJsonArray>
 
 #include "settings.h"
-#include "async/async.h"
 
 #include "engraving/infrastructure/mscio.h"
 
@@ -40,9 +39,8 @@ using namespace mu::notation;
 
 static const std::string module_name("project");
 
-static const Settings::Key RECENT_PROJECTS_PATHS(module_name, "project/recentList");
+static const Settings::Key COMPAT_RECENT_FILES_DATA(module_name, "project/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
-static const Settings::Key DEFAULT_PROJECTS_PATH(module_name, "application/paths/defaultProjectsPath");
 static const Settings::Key LAST_OPENED_PROJECTS_PATH(module_name, "application/paths/lastOpenedProjectsPath");
 static const Settings::Key LAST_SAVED_PROJECTS_PATH(module_name, "application/paths/lastSavedProjectsPath");
 static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/myScores");
@@ -71,15 +69,10 @@ void ProjectConfiguration::init()
         m_userTemplatesPathChanged.send(val.toPath());
     });
 
-    settings()->setDefaultValue(DEFAULT_PROJECTS_PATH, Val(globalConfiguration()->userDataPath() + "/Scores"));
+    settings()->setDefaultValue(USER_PROJECTS_PATH, Val(globalConfiguration()->userDataPath() + "/Scores"));
 
     settings()->valueChanged(USER_PROJECTS_PATH).onReceive(nullptr, [this](const Val& val) {
         m_userScoresPathChanged.send(val.toPath());
-    });
-
-    settings()->valueChanged(RECENT_PROJECTS_PATHS).onReceive(nullptr, [this](const Val& val) {
-        io::paths_t paths = parseRecentProjectsPaths(val);
-        m_recentProjectPathsChanged.send(paths);
     });
 
     Val preferredScoreCreationMode = Val(PreferredScoreCreationMode::FromInstruments);
@@ -108,101 +101,27 @@ void ProjectConfiguration::init()
     settings()->setDefaultValue(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY, Val(10));
     settings()->setDefaultValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(true));
 
-    fileSystem()->makePath(userTemplatesPath());
-    fileSystem()->makePath(defaultProjectsPath());
+    if (!userTemplatesPath().empty()) {
+        fileSystem()->makePath(userTemplatesPath());
+    }
+
+    if (!userProjectsPath().empty()) {
+        fileSystem()->makePath(userProjectsPath());
+    }
+
     fileSystem()->makePath(cloudProjectsPath());
 }
 
-io::paths_t ProjectConfiguration::recentProjectPaths() const
+io::path_t ProjectConfiguration::recentFilesJsonPath() const
 {
-    TRACEFUNC;
-
-    io::paths_t allPaths = parseRecentProjectsPaths(settings()->value(RECENT_PROJECTS_PATHS));
-    if (allPaths.empty()) {
-        allPaths = scanCloudProjects();
-    }
-
-    io::paths_t actualPaths;
-
-    for (const io::path_t& path: allPaths) {
-        if (fileSystem()->exists(path)) {
-            actualPaths.push_back(path);
-        }
-    }
-
-    //! NOTE Save actual recent project paths
-    if (allPaths != actualPaths) {
-        ProjectConfiguration* self = const_cast<ProjectConfiguration*>(this);
-        async::Async::call(nullptr, [self, actualPaths]() {
-            self->setRecentProjectPaths(actualPaths);
-        });
-    }
-
-    return actualPaths;
+    return globalConfiguration()->userAppDataPath().appendingComponent("recent_files.json");
 }
 
-void ProjectConfiguration::setRecentProjectPaths(const io::paths_t& recentScorePaths)
+ByteArray ProjectConfiguration::compatRecentFilesData() const
 {
-    TRACEFUNC;
+    std::string data = settings()->value(COMPAT_RECENT_FILES_DATA).toString();
 
-    QJsonArray jsonArray;
-    for (const io::path_t& path : recentScorePaths) {
-        jsonArray << path.toQString();
-    }
-
-    QJsonDocument jsonDoc(jsonArray);
-
-    Val value(jsonDoc.toJson(QJsonDocument::Compact).constData());
-    settings()->setSharedValue(RECENT_PROJECTS_PATHS, value);
-}
-
-async::Channel<io::paths_t> ProjectConfiguration::recentProjectPathsChanged() const
-{
-    return m_recentProjectPathsChanged;
-}
-
-io::paths_t ProjectConfiguration::parseRecentProjectsPaths(const Val& value) const
-{
-    TRACEFUNC;
-    io::paths_t result;
-
-    if (value.isNull()) {
-        return result;
-    }
-
-    QByteArray json = value.toQString().toUtf8();
-    if (json.isEmpty()) {
-        return result;
-    }
-
-    QJsonParseError err;
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(json, &err);
-    if (err.error != QJsonParseError::NoError) {
-        return result;
-    }
-
-    if (!jsonDoc.isArray()) {
-        return result;
-    }
-
-    for (const QJsonValue val : jsonDoc.array()) {
-        result.push_back(val.toString());
-    }
-
-    return result;
-}
-
-io::paths_t ProjectConfiguration::scanCloudProjects() const
-{
-    TRACEFUNC;
-
-    RetVal<io::paths_t> paths = fileSystem()->scanFiles(cloudProjectsPath(), { DEFAULT_FILE_FILTER }, io::ScanMode::FilesInCurrentDir);
-
-    if (!paths.ret) {
-        LOGE() << paths.ret.toString();
-    }
-
-    return paths.val;
+    return ByteArray(data.data(), data.size());
 }
 
 io::path_t ProjectConfiguration::myFirstProjectPath() const
@@ -250,16 +169,6 @@ async::Channel<io::path_t> ProjectConfiguration::userTemplatesPathChanged() cons
     return m_userTemplatesPathChanged;
 }
 
-io::path_t ProjectConfiguration::defaultProjectsPath() const
-{
-    return settings()->value(DEFAULT_PROJECTS_PATH).toPath();
-}
-
-void ProjectConfiguration::setDefaultProjectsPath(const io::path_t& path)
-{
-    settings()->setSharedValue(DEFAULT_PROJECTS_PATH, Val(path));
-}
-
 io::path_t ProjectConfiguration::lastOpenedProjectsPath() const
 {
     return settings()->value(LAST_OPENED_PROJECTS_PATH).toPath();
@@ -295,6 +204,11 @@ async::Channel<io::path_t> ProjectConfiguration::userProjectsPathChanged() const
     return m_userScoresPathChanged;
 }
 
+io::path_t ProjectConfiguration::defaultUserProjectsPath() const
+{
+    return settings()->defaultValue(USER_PROJECTS_PATH).toPath();
+}
+
 bool ProjectConfiguration::shouldAskSaveLocationType() const
 {
     return settings()->value(SHOULD_ASK_SAVE_LOCATION_TYPE).toBool();
@@ -305,41 +219,53 @@ void ProjectConfiguration::setShouldAskSaveLocationType(bool shouldAsk)
     settings()->setSharedValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(shouldAsk));
 }
 
-bool ProjectConfiguration::isCloudProject(const io::path_t& projectPath) const
+io::path_t ProjectConfiguration::legacyCloudProjectsPath() const
 {
-    return io::dirpath(projectPath) == cloudProjectsPath();
-}
-
-io::path_t ProjectConfiguration::cloudProjectSavingFilePath(const io::path_t& projectName) const
-{
-    io::path_t savingPathWithoutSuffix = cloudProjectsPath() + '/' + projectName;
-
-    auto makeSavingPath = [savingPathWithoutSuffix](size_t num = 0) {
-        std::string numPart = num > 0 ? ' ' + std::to_string(num) : "";
-        return savingPathWithoutSuffix + numPart + DEFAULT_FILE_SUFFIX;
-    };
-
-    io::paths_t cloudProjectPaths = scanCloudProjects();
-    io::path_t savingPath = makeSavingPath();
-
-    if (!mu::contains(cloudProjectPaths, savingPath)) {
-        return savingPath;
-    }
-
-    for (size_t i = 0; i < cloudProjectPaths.size(); ++i) {
-        savingPath = makeSavingPath(i + 2);
-
-        if (!mu::contains(cloudProjectPaths, savingPath)) {
-            return savingPath;
-        }
-    }
-
-    return makeSavingPath(cloudProjectPaths.size() + 2);
+    return globalConfiguration()->userDataPath() + "/Cloud Scores";
 }
 
 io::path_t ProjectConfiguration::cloudProjectsPath() const
 {
-    return globalConfiguration()->userDataPath() + "/Cloud Scores";
+    return globalConfiguration()->userAppDataPath() + "/cloud_scores";
+}
+
+bool ProjectConfiguration::isCloudProject(const io::path_t& projectPath) const
+{
+    io::path_t dirpath = io::dirpath(projectPath);
+    return dirpath == legacyCloudProjectsPath() || dirpath == cloudProjectsPath();
+}
+
+bool ProjectConfiguration::isLegacyCloudProject(const io::path_t& projectPath) const
+{
+    return io::dirpath(projectPath) == legacyCloudProjectsPath();
+}
+
+io::path_t ProjectConfiguration::cloudProjectPath(int scoreId) const
+{
+    return cloudProjectsPath().appendingComponent(QString::number(scoreId)).appendingSuffix(DEFAULT_FILE_SUFFIX);
+}
+
+int ProjectConfiguration::cloudScoreIdFromPath(const io::path_t& projectPath) const
+{
+    return io::filename(projectPath, false).toQString().toInt();
+}
+
+io::path_t ProjectConfiguration::cloudProjectSavingPath(int scoreId) const
+{
+    if (scoreId != 0) {
+        return cloudProjectPath(scoreId);
+    }
+
+    io::path_t path;
+    int counter = 0;
+
+    do {
+        path = cloudProjectsPath()
+               .appendingComponent(QStringLiteral("not_uploaded_") + QString::number(counter++))
+               .appendingSuffix(DEFAULT_FILE_SUFFIX);
+    } while (fileSystem()->exists(path));
+
+    return path;
 }
 
 io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition,
@@ -379,7 +305,7 @@ io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr proje
     }
 
     if (folderPath.empty()) {
-        folderPath = defaultProjectsPath();
+        folderPath = defaultUserProjectsPath();
     }
 
     if (filename.empty()) {
@@ -427,6 +353,16 @@ bool ProjectConfiguration::shouldWarnBeforeSavingPubliclyToCloud() const
 void ProjectConfiguration::setShouldWarnBeforeSavingPubliclyToCloud(bool shouldWarn)
 {
     settings()->setSharedValue(SHOULD_WARN_BEFORE_SAVING_PUBLICLY_TO_CLOUD, Val(shouldWarn));
+}
+
+int ProjectConfiguration::homeScoresPageTabIndex() const
+{
+    return m_homeScoresPageTabIndex;
+}
+
+void ProjectConfiguration::setHomeScoresPageTabIndex(int index)
+{
+    m_homeScoresPageTabIndex = index;
 }
 
 QColor ProjectConfiguration::templatePreviewBackgroundColor() const
@@ -592,11 +528,6 @@ bool ProjectConfiguration::shouldDestinationFolderBeOpenedOnExport() const
 void ProjectConfiguration::setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport)
 {
     settings()->setSharedValue(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT, Val(shouldDestinationFolderBeOpenedOnExport));
-}
-
-QUrl ProjectConfiguration::scoreManagerUrl() const
-{
-    return cloudConfiguration()->scoreManagerUrl();
 }
 
 QUrl ProjectConfiguration::supportForumUrl() const

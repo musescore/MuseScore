@@ -26,8 +26,6 @@
 #include <QUrl>
 #include <QVersionNumber>
 
-#include "io/path.h"
-
 namespace mu::plugins {
 using CodeKey = QString;
 using CodeKeyList = QList<CodeKey>;
@@ -41,6 +39,7 @@ struct PluginInfo
     QString name;
     QString description;
     QString categoryCode;
+    bool requiresScore = true;
     bool enabled = false;
     bool hasUpdate = false;
     QVersionNumber version;

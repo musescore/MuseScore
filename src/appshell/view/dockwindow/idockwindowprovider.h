@@ -22,7 +22,7 @@
 #ifndef MU_DOCK_IDOCKWINDOWPROVIDER_H
 #define MU_DOCK_IDOCKWINDOWPROVIDER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/notification.h"
 
 namespace mu::dock {

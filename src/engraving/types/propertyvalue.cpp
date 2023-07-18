@@ -114,6 +114,11 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::SYMID:       return static_cast<int>(value<SymId>());
     case P_TYPE::COLOR:       return value<draw::Color>().toQColor();
     case P_TYPE::ORNAMENT_STYLE: return static_cast<int>(value<OrnamentStyle>());
+    case P_TYPE::ORNAMENT_INTERVAL: {
+        OrnamentInterval interval = value<OrnamentInterval>();
+        return QVariantList({ static_cast<int>(interval.step), static_cast<int>(interval.type) });
+    } break;
+    case P_TYPE::ORNAMENT_SHOW_ACCIDENTAL: return static_cast<int>(value<OrnamentShowAccidental>());
     case P_TYPE::GLISS_STYLE: return static_cast<int>(value<GlissandoStyle>());
 
     // Layout
@@ -148,6 +153,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::NOTEHEAD_SCHEME:  return static_cast<int>(value<NoteHeadScheme>());
     case P_TYPE::NOTEHEAD_GROUP:   return static_cast<int>(value<NoteHeadGroup>());
     case P_TYPE::CLEF_TYPE:        return static_cast<int>(value<ClefType>());
+    case P_TYPE::CLEF_TO_BARLINE_POS: return static_cast<int>(value<ClefToBarlinePosition>());
     case P_TYPE::DYNAMIC_TYPE:     return static_cast<int>(value<DynamicType>());
     case P_TYPE::DYNAMIC_RANGE:    return static_cast<int>(value<DynamicRange>());
     case P_TYPE::DYNAMIC_SPEED:    return static_cast<int>(value<DynamicSpeed>());
@@ -202,6 +208,14 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::SYMID:         return PropertyValue(SymId(v.toInt()));
     case P_TYPE::COLOR:         return PropertyValue(Color::fromQColor(v.value<QColor>()));
     case P_TYPE::ORNAMENT_STYLE: return PropertyValue(OrnamentStyle(v.toInt()));
+    case P_TYPE::ORNAMENT_INTERVAL: {
+        QVariantList l = v.toList();
+        IF_ASSERT_FAILED(l.size() == 2) {
+            return PropertyValue();
+        }
+        return PropertyValue(OrnamentInterval(IntervalStep(l.at(0).toInt()), IntervalType(l.at(1).toInt())));
+    } break;
+    case P_TYPE::ORNAMENT_SHOW_ACCIDENTAL: return PropertyValue(OrnamentShowAccidental(v.toInt()));
     case P_TYPE::GLISS_STYLE:   return PropertyValue(GlissandoStyle(v.toInt()));
 
     // Layout
@@ -239,6 +253,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::NOTEHEAD_SCHEME:  return PropertyValue(NoteHeadScheme(v.toInt()));
     case P_TYPE::NOTEHEAD_GROUP:   return PropertyValue(NoteHeadGroup(v.toInt()));
     case P_TYPE::CLEF_TYPE:        return PropertyValue(ClefType(v.toInt()));
+    case P_TYPE::CLEF_TO_BARLINE_POS: return PropertyValue(ClefToBarlinePosition(v.toInt()));
     case P_TYPE::DYNAMIC_TYPE:     return PropertyValue(DynamicType(v.toInt()));
     case P_TYPE::DYNAMIC_RANGE:    return PropertyValue(DynamicRange(v.toInt()));
     case P_TYPE::DYNAMIC_SPEED:    return PropertyValue(DynamicSpeed(v.toInt()));

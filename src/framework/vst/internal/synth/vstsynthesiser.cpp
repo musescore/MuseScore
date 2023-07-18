@@ -28,6 +28,7 @@
 using namespace mu;
 using namespace mu::vst;
 using namespace mu::audio::synth;
+using namespace mu::audio;
 
 static const std::set<Steinberg::Vst::CtrlNumber> SUPPORTED_CONTROLLERS = {
     Steinberg::Vst::kCtrlVolume,
@@ -45,7 +46,7 @@ Ret VstSynthesiser::init()
 {
     m_samplesPerChannel = config()->driverBufferSize();
 
-    m_vstAudioClient->init(VstPluginType::Instrument, m_pluginPtr);
+    m_vstAudioClient->init(AudioPluginType::Instrument, m_pluginPtr);
 
     auto load = [this]() {
         m_pluginPtr->updatePluginConfig(m_params.configuration);

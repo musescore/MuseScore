@@ -53,7 +53,7 @@ QVariantList ImportPreferencesModel::charsets() const
 
 QVariantList ImportPreferencesModel::shortestNotes() const
 {
-    constexpr int division =  engraving::Constants::division;
+    constexpr int division =  engraving::Constants::DIVISION;
 
     QVariantList result = {
         QVariantMap { { "title", qtrc("appshell/preferences", "Quarter") }, { "value", division } },

@@ -6,24 +6,24 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
     #     qt libraries as we used at compile time
     #
 
-    if (MSCORE_UNSTABLE)
+    if (MUSESCORE_UNSTABLE)
         # Use short name to avoid truncation by GNOME launcher. Save room for
         # a suffix in case multiple dev/nightly builds are installed.
         set(DESKTOP_LAUNCHER_NAME "MU ${MUSESCORE_VERSION}") # MU X.Y
-    else (MSCORE_UNSTABLE)
+    else (MUSESCORE_UNSTABLE)
         # Use full name for stable releases
         set(DESKTOP_LAUNCHER_NAME "${MUSESCORE_NAME} ${MUSESCORE_VERSION}") # MuseScore X.Y
-    endif(MSCORE_UNSTABLE)
+    endif(MUSESCORE_UNSTABLE)
 
-    if (${MSCORE_INSTALL_SUFFIX} MATCHES "dev")
+    if (${MUSESCORE_INSTALL_SUFFIX} MATCHES "dev")
         set(DESKTOP_LAUNCHER_NAME "${DESKTOP_LAUNCHER_NAME} Dev")
-    elseif (${MSCORE_INSTALL_SUFFIX} MATCHES "nightly")
+    elseif (${MUSESCORE_INSTALL_SUFFIX} MATCHES "nightly")
         set(DESKTOP_LAUNCHER_NAME "${DESKTOP_LAUNCHER_NAME} Nightly")
-    elseif (${MSCORE_INSTALL_SUFFIX} MATCHES "testing")
+    elseif (${MUSESCORE_INSTALL_SUFFIX} MATCHES "testing")
         set(DESKTOP_LAUNCHER_NAME "${DESKTOP_LAUNCHER_NAME} Testing")
-    endif(${MSCORE_INSTALL_SUFFIX} MATCHES "dev")
+    endif(${MUSESCORE_INSTALL_SUFFIX} MATCHES "dev")
 
-    if (${MSCORE_INSTALL_SUFFIX} MATCHES "portable") # Note: "portableanything" would match
+    if (${MUSESCORE_INSTALL_SUFFIX} MATCHES "portable") # Note: "portableanything" would match
       set(DESKTOP_LAUNCHER_NAME "${DESKTOP_LAUNCHER_NAME} Portable") # distinguish our build from distro packages
       # Build portable AppImage as per https://github.com/probonopd/AppImageKit
       add_subdirectory(build/Linux+BSD/portable)
@@ -32,9 +32,9 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
       endif (NOT DEFINED ARCH)
       get_filename_component(PORTABLE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX} PATH)# Get path (dirname)
       get_filename_component(PORTABLE_INSTALL_NAME ${CMAKE_INSTALL_PREFIX} NAME)# Strip path (basename)
-      if (NOT MSCORE_UNSTABLE)
+      if (NOT MUSESCORE_UNSTABLE)
         set(PORTABLE_INSTALL_NAME "${PORTABLE_INSTALL_NAME}-${MUSESCORE_VERSION_FULL}") # Append version info.
-      endif (NOT MSCORE_UNSTABLE)
+      endif (NOT MUSESCORE_UNSTABLE)
       set(PORTABLE_INSTALL_NAME "${PORTABLE_INSTALL_NAME}-${ARCH}") # Append system architecture.
       set(CMAKE_INSTALL_PREFIX ${PORTABLE_INSTALL_PATH}/${PORTABLE_INSTALL_NAME}.AppDir) # E.g. "MuseScore-X.Y.Z-x86_64.AppDir"
       execute_process(COMMAND echo ${CMAKE_INSTALL_PREFIX} OUTPUT_FILE PREFIX.txt)
@@ -46,41 +46,41 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
                        build/Linux+BSD/portable/ldd-recursive
                        build/rm-empty-dirs              DESTINATION bin COMPONENT portable)
       install(FILES    build/Linux+BSD/portable/qt.conf DESTINATION bin COMPONENT portable)
-    else (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
+    else (${MUSESCORE_INSTALL_SUFFIX} MATCHES "portable")
       set(MAN_PORTABLE ".\\\"") # comment out lines in man page that are only relevant to the portable version
-    endif (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
+    endif (${MUSESCORE_INSTALL_SUFFIX} MATCHES "portable")
 
     # Identify MuseScore's main window so that it receives the correct name
     # and icon in the OS dock / taskbar. Run `xprop WM_CLASS` and click on
     # MuseScore's main window to find out what string to use here.
-    if (MSCORE_UNSTABLE)
+    if (MUSESCORE_UNSTABLE)
         set(WINDOW_MANAGER_CLASS "MuseScore4Development")
-    else (MSCORE_UNSTABLE)
+    else (MUSESCORE_UNSTABLE)
         set(WINDOW_MANAGER_CLASS "MuseScore4")
-    endif(MSCORE_UNSTABLE)
+    endif(MUSESCORE_UNSTABLE)
 
     # Install desktop file (perform variable substitution first)
-    configure_file(build/Linux+BSD/org.musescore.MuseScore.desktop.in org.musescore.MuseScore${MSCORE_INSTALL_SUFFIX}.desktop)
-    install( FILES ${PROJECT_BINARY_DIR}/org.musescore.MuseScore${MSCORE_INSTALL_SUFFIX}.desktop DESTINATION share/applications)
+    configure_file(build/Linux+BSD/org.musescore.MuseScore.desktop.in org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.desktop)
+    install( FILES ${PROJECT_BINARY_DIR}/org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.desktop DESTINATION share/applications)
     # Install appdata file (perform variable substitution first)
-    if ("${MSCORE_INSTALL_SUFFIX}" MATCHES "-")
+    if ("${MUSESCORE_INSTALL_SUFFIX}" MATCHES "-")
         message(FATAL_ERROR
-            "MSCORE_INSTALL_SUFFIX='${MSCORE_INSTALL_SUFFIX}'\n"
-            "MSCORE_INSTALL_SUFFIX must not contain hyphen characters. It will be used "
+            "MUSESCORE_INSTALL_SUFFIX='${MUSESCORE_INSTALL_SUFFIX}'\n"
+            "MUSESCORE_INSTALL_SUFFIX must not contain hyphen characters. It will be used "
             "inside the <id> tag in *.appdata.xml and hyphens are discouraged there."
         )
-    endif ("${MSCORE_INSTALL_SUFFIX}" MATCHES "-")
-    configure_file(build/Linux+BSD/org.musescore.MuseScore.appdata.xml.in org.musescore.MuseScore${MSCORE_INSTALL_SUFFIX}.appdata.xml)
-    install( FILES ${PROJECT_BINARY_DIR}/org.musescore.MuseScore${MSCORE_INSTALL_SUFFIX}.appdata.xml DESTINATION share/metainfo)
+    endif ("${MUSESCORE_INSTALL_SUFFIX}" MATCHES "-")
+    configure_file(build/Linux+BSD/org.musescore.MuseScore.appdata.xml.in org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.appdata.xml)
+    install( FILES ${PROJECT_BINARY_DIR}/org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.appdata.xml DESTINATION share/metainfo)
     # Substitute variables within man pages
     set(MAN_NAME mscore)
     set(MAN_ALIAS musescore)
     set(MAN_EXTENSION .1)
-    set(MAN_FULL_NAME ${MAN_NAME}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
-    set(MAN_FULL_ALIAS ${MAN_ALIAS}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
+    set(MAN_FULL_NAME ${MAN_NAME}${MUSESCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
+    set(MAN_FULL_ALIAS ${MAN_ALIAS}${MUSESCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
     set(MAN_TARGET ${PROJECT_SOURCE_DIR}/build/Linux+BSD/${MAN_NAME}${MAN_EXTENSION}.in)
     set(MAN_BUILD ${PROJECT_BINARY_DIR}/${MAN_FULL_NAME})
-    string(TOUPPER "mscore${MSCORE_INSTALL_SUFFIX}" MAN_MSCORE_UPPER) # Command name shown in uppercase in man pages by convention
+    string(TOUPPER "mscore${MUSESCORE_INSTALL_SUFFIX}" MAN_MSCORE_UPPER) # Command name shown in uppercase in man pages by convention
     configure_file(${MAN_TARGET} ${MAN_BUILD})
     # Compress man pages if gzip is installed (don't on OpenBSD)
     # Note: Compressing man pages is normal on Linux but not OpenBSD
@@ -89,8 +89,8 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
         message(STATUS "Found 'gzip'. Man pages will be compressed.")
         set(MAN_TARGET ${MAN_BUILD})
         set(MAN_EXTENSION ${MAN_EXTENSION}.gz)
-        set(MAN_FULL_NAME ${MAN_NAME}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
-        set(MAN_FULL_ALIAS ${MAN_ALIAS}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
+        set(MAN_FULL_NAME ${MAN_NAME}${MUSESCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
+        set(MAN_FULL_ALIAS ${MAN_ALIAS}${MUSESCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
         set(MAN_BUILD ${PROJECT_BINARY_DIR}/${MAN_FULL_NAME})
         add_custom_command(
             OUTPUT ${MAN_BUILD}
@@ -130,7 +130,7 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
          message(STATUS "'ln' not found (it is optional). No symlink aliases will be created.")
      endif (LN_EXECUTABLE)
     # Add .MSCZ, .MSCX and .MSCS to MIME database (informs system that filetypes .MSCZ, .MSCX and .MSCS are MuseScore files)
-    configure_file(build/Linux+BSD/musescore.xml.in musescore${MSCORE_INSTALL_SUFFIX}.xml)
-    install( FILES ${PROJECT_BINARY_DIR}/musescore${MSCORE_INSTALL_SUFFIX}.xml DESTINATION share/mime/packages COMPONENT doc)
+    configure_file(build/Linux+BSD/musescore.xml.in musescore${MUSESCORE_INSTALL_SUFFIX}.xml)
+    install( FILES ${PROJECT_BINARY_DIR}/musescore${MUSESCORE_INSTALL_SUFFIX}.xml DESTINATION share/mime/packages COMPONENT doc)
     # Note: Must now run "update-mime-database" to apply changes.
 endif (NOT MINGW AND NOT MSVC AND NOT APPLE)

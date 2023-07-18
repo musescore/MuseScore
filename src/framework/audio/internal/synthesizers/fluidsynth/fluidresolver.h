@@ -35,7 +35,7 @@
 namespace mu::audio::synth {
 class FluidResolver : public ISynthResolver::IResolver, public async::Asyncable
 {
-    INJECT(audio, ISoundFontRepository, soundFontRepository)
+    INJECT(ISoundFontRepository, soundFontRepository)
 public:
     explicit FluidResolver();
 

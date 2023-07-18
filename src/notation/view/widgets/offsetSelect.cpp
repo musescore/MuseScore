@@ -31,6 +31,8 @@ OffsetSelect::OffsetSelect(QWidget* parent)
 {
     setupUi(this);
 
+    setFocusProxy(xVal);
+
     connect(xVal, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &OffsetSelect::_offsetChanged);
     connect(yVal, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &OffsetSelect::_offsetChanged);
 }

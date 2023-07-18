@@ -28,6 +28,7 @@
 #include "pitchspelling.h"
 
 #include "types/types.h"
+#include "types/dimension.h"
 
 namespace mu::engraving {
 class Accidental;
@@ -40,30 +41,17 @@ class Factory;
 class Ambitus final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Ambitus)
-
-    NoteHeadGroup _noteHeadGroup;
-    NoteHeadType _noteHeadType;
-    DirectionH _dir;
-    bool _hasLine;
-    Spatium _lineWidth;
-    Accidental* _topAccid = nullptr;
-    Accidental* _bottomAccid = nullptr;
-    int _topPitch, _bottomPitch;
-    int _topTpc, _bottomTpc;
-
-    // internally managed, to optimize layout / drawing
-    mu::PointF _topPos;       // position of top note symbol
-    mu::PointF _bottomPos;    // position of bottom note symbol
-    mu::LineF _line;          // the drawn line
-
-    friend class Factory;
-    Ambitus(Segment* parent);
-    Ambitus(const Ambitus& a);
-
-    void normalize();
+    DECLARE_CLASSOF(ElementType::AMBITUS)
 
 public:
     ~Ambitus();
+
+    static constexpr NoteHeadGroup NOTEHEADGROUP_DEFAULT = NoteHeadGroup::HEAD_NORMAL;
+    static constexpr NoteHeadType NOTEHEADTYPE_DEFAULT = NoteHeadType::HEAD_AUTO;
+    static constexpr DirectionH DIR_DEFAULT = DirectionH::AUTO;
+    static constexpr bool HASLINE_DEFAULT = true;
+    static const Spatium LINEWIDTH_DEFAULT;
+    static constexpr double LINEOFFSET_DEFAULT = 0.8;               // the distance between notehead and line
 
     Ambitus* clone() const override { return new Ambitus(*this); }
 
@@ -88,15 +76,31 @@ public:
     int topTpc() const { return _topTpc; }
     int bottomTpc() const { return _bottomTpc; }
 
+    PointF topPos() const { return _topPos; }
+    void setTopPos(const PointF& p) { _topPos = p; }
+    void setTopPosX(double p) { _topPos.setX(p); }
+    void setTopPosY(double p) { _topPos.setY(p); }
+
+    PointF bottomPos() const { return _bottomPos; }
+    void setBottomPos(const PointF& p) { _bottomPos = p; }
+    void setBottomPosX(double p) { _bottomPos.setX(p); }
+    void setBottomPosY(double p) { _bottomPos.setY(p); }
+
+    LineF line() const { return _line; }
+    void setLine(const LineF& l) { _line = l; }
+
+    Accidental* topAccidental() const { return _topAccid; }
+    Accidental* bottomAccidental() const { return _bottomAccid; }
+
     void setNoteHeadGroup(NoteHeadGroup val) { _noteHeadGroup = val; }
     void setNoteHeadType(NoteHeadType val) { _noteHeadType  = val; }
     void setDirection(DirectionH val) { _dir = val; }
     void setHasLine(bool val) { _hasLine = val; }
     void setLineWidth(Spatium val) { _lineWidth = val; }
-    void setTopPitch(int val);
-    void setBottomPitch(int val);
-    void setTopTpc(int val);
-    void setBottomTpc(int val);
+    void setTopPitch(int val, bool applyLogic = true);
+    void setBottomPitch(int val, bool applyLogic = true);
+    void setTopTpc(int val, bool applyLogic = true);
+    void setBottomTpc(int val, bool applyLogic = true);
 
     // some utility functions
     Segment* segment() const { return (Segment*)explicitParent(); }
@@ -105,13 +109,11 @@ public:
 
     // re-implemented virtual functions
     void      draw(mu::draw::Painter* painter) const override;
-    void      layout() override;
+
     mu::PointF pagePos() const override;        ///< position in page coordinates
-    void      read(XmlReader&) override;
     void      scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void      setTrack(track_idx_t val) override;
-    void      write(XmlWriter&) const override;
-    bool      readProperties(XmlReader&) override;
+
     String    accessibleInfo() const override;
 
     void remove(EngravingItem*) override;
@@ -126,6 +128,12 @@ public:
 
 private:
 
+    friend class Factory;
+    Ambitus(Segment* parent);
+    Ambitus(const Ambitus& a);
+
+    void normalize();
+
     struct Ranges {
         int topTpc = Tpc::TPC_INVALID;
         int bottomTpc = Tpc::TPC_INVALID;
@@ -134,6 +142,21 @@ private:
     };
 
     Ranges estimateRanges() const;                // scan staff up to next section break and update range pitches
+
+    NoteHeadGroup _noteHeadGroup;
+    NoteHeadType _noteHeadType;
+    DirectionH _dir;
+    bool _hasLine;
+    Spatium _lineWidth;
+    Accidental* _topAccid = nullptr;
+    Accidental* _bottomAccid = nullptr;
+    int _topPitch, _bottomPitch;
+    int _topTpc, _bottomTpc;
+
+    // internally managed, to optimize layout / drawing
+    PointF _topPos;       // position of top note symbol
+    PointF _bottomPos;    // position of bottom note symbol
+    LineF _line;          // the drawn line
 };
 } // namespace mu::engraving
 

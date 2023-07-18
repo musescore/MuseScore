@@ -43,19 +43,14 @@ EngravingItem* Hook::elementBase() const
 
 void Hook::setHookType(int i)
 {
-    bool straight = score()->styleB(Sid::useStraightNoteFlags);
+    bool straight = style().styleB(Sid::useStraightNoteFlags);
     _hookType = i;
     setSym(symIdForHookIndex(i, straight));
 }
 
-void Hook::layout()
-{
-    setbbox(symBbox(_sym));
-}
-
 void Hook::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     // hide if belonging to the second chord of a cross-measure pair
     if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND) {
         return;

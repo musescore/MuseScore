@@ -30,8 +30,8 @@ class UpdateConfigurationStub : public IUpdateConfiguration
 public:
     bool isAppUpdatable() const override;
 
-    bool isTestingMode() const override;
-    void setIsTestingMode(bool isTesting) override;
+    bool allowUpdateOnPreRelease() const override;
+    void setAllowUpdateOnPreRelease(bool allow) override;
 
     bool needCheckForUpdate() const override;
     void setNeedCheckForUpdate(bool needCheck) override;

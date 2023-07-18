@@ -26,6 +26,9 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::musesampler {
+class MuseSamplerConfiguration;
+class MuseSamplerActionController;
+class MuseSamplerResolver;
 class MuseSamplerModule : public modularity::IModuleSetup
 {
 public:
@@ -33,6 +36,12 @@ public:
     void registerExports() override;
     void resolveImports() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+
+    std::shared_ptr<MuseSamplerConfiguration> m_configuration;
+    std::shared_ptr<MuseSamplerActionController> m_actionController;
+    std::shared_ptr<MuseSamplerResolver> m_resolver;
 };
 }
 

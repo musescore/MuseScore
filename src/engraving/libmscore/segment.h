@@ -62,10 +62,12 @@ struct CrossBeamType
 {
     bool upDown = false; // This chord is stem-up, next chord is stem-down
     bool downUp = false; // This chord is stem-down, next chord is stem-up
+    bool canBeAdjusted = true;
     void reset()
     {
         upDown = false;
         downUp = false;
+        canBeAdjusted = true;
     }
 };
 
@@ -82,6 +84,7 @@ struct Spring
 class Segment final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Segment)
+    DECLARE_CLASSOF(ElementType::SEGMENT)
 
     SegmentType _segmentType { SegmentType::Invalid };
     Fraction _tick;    // { Fraction(0, 1) };
@@ -230,9 +233,6 @@ public:
     Spatium extraLeadingSpace() const { return _extraLeadingSpace; }
     void setExtraLeadingSpace(Spatium v) { _extraLeadingSpace = v; }
 
-    void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
-
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
@@ -316,6 +316,7 @@ public:
     bool isEndBarLineType() const { return _segmentType == SegmentType::EndBarLine; }
     bool isKeySigAnnounceType() const { return _segmentType == SegmentType::KeySigAnnounce; }
     bool isTimeSigAnnounceType() const { return _segmentType == SegmentType::TimeSigAnnounce; }
+    bool isRightAligned() const { return isClefType() || isBreathType(); }
 
     Fraction shortestChordRest() const;
     void computeCrossBeamType(Segment* nextSeg);
@@ -326,7 +327,9 @@ public:
     EngravingItem* preAppendedItem(int track) { return _preAppendedItems[track]; }
     void preAppend(EngravingItem* item, int track) { _preAppendedItems[track] = item; }
     void clearPreAppended(int track) { _preAppendedItems[track] = nullptr; }
-    void addPreAppendedToShape(int staffIdx, Shape& s);
+    void addPreAppendedToShape();
+
+    bool goesBefore(const Segment* nextSegment) const;
 
     static constexpr SegmentType durationSegmentsMask = SegmentType::ChordRest;   // segment types which may have non-zero tick length
 };

@@ -230,8 +230,9 @@ Item {
                 }
 
                 contentItem: StyledTextLabel {
-                    height: root.height
+                    // To do: this causes a binding loop warning
                     width: titleLoader.width - 8 // 4px padding on each side
+                    height: root.height
 
                     text: root.title
                 }

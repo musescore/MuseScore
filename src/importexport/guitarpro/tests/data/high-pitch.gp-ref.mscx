@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
@@ -73,7 +71,7 @@ Puki Kuki</text>
             </Clef>
           <KeySig>
             <linkedMain/>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <linkedMain/>
@@ -354,7 +352,7 @@ Puki Kuki</text>
             <KeySig>
               <linked>
                 </linked>
-              <accidental>0</accidental>
+              <concertKey>0</concertKey>
               </KeySig>
             <TimeSig>
               <linked>
@@ -573,7 +571,7 @@ Puki Kuki</text>
               <linked>
                 <indexDiff>4</indexDiff>
                 </linked>
-              <accidental>0</accidental>
+              <concertKey>0</concertKey>
               </KeySig>
             <Chord>
               <linked>

@@ -43,8 +43,8 @@ class KeyCanvas : public QFrame
 {
     Q_OBJECT
 
-    INJECT(palette, IPaletteConfiguration, configuration)
-    INJECT(palette, engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(IPaletteConfiguration, configuration)
+    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
 
     engraving::Accidental* dragElement = nullptr;
     engraving::Accidental* moveElement = nullptr;

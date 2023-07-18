@@ -42,8 +42,8 @@ class NoteInputBarCustomiseModel : public uicomponents::SelectableItemListModel,
 {
     Q_OBJECT
 
-    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
-    INJECT(notation, ui::IUiActionsRegister, actionsRegister)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(ui::IUiActionsRegister, actionsRegister)
 
     Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
     Q_PROPERTY(bool isAddSeparatorAvailable READ isAddSeparatorAvailable NOTIFY isAddSeparatorAvailableChanged)

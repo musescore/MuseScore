@@ -33,6 +33,8 @@ namespace mu::engraving {
 class MeasureNumber : public MeasureNumberBase
 {
     OBJECT_ALLOCATOR(engraving, MeasureNumber)
+    DECLARE_CLASSOF(ElementType::MEASURE_NUMBER)
+
 public:
     MeasureNumber(Measure* parent = nullptr, TextStyleType tid = TextStyleType::MEASURE_NUMBER);
     MeasureNumber(const MeasureNumber& other);

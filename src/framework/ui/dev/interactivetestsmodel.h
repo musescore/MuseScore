@@ -33,7 +33,7 @@ class InteractiveTestsModel : public QObject, async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(ui, framework::IInteractive, interactive)
+    INJECT(framework::IInteractive, interactive)
 
     Q_PROPERTY(QString currentUri READ currentUri NOTIFY currentUriChanged)
 

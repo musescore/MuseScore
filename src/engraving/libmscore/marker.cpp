@@ -22,7 +22,6 @@
 
 #include "marker.h"
 
-#include "rw/xml.h"
 #include "types/typesconv.h"
 
 #include "measure.h"
@@ -112,6 +111,18 @@ void Marker::setMarkerType(MarkerType t)
         setLabel(u"coda");
         break;
 
+    case MarkerType::DA_CODA:
+        txt = "Da Coda";
+        initTextStyleType(TextStyleType::REPEAT_RIGHT, true);
+        setLabel(u"coda");
+        break;
+
+    case MarkerType::DA_DBLCODA:
+        txt = "Da Double Coda";
+        initTextStyleType(TextStyleType::REPEAT_RIGHT, true);
+        setLabel(u"coda");
+        break;
+
     case MarkerType::USER:
         break;
 
@@ -141,57 +152,6 @@ void Marker::styleChanged()
 {
     setMarkerType(_markerType);
     TextBase::styleChanged();
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Marker::layout()
-{
-    TextBase::layout();
-
-    // although normally laid out to parent (measure) width,
-    // force to center over barline if left-aligned
-
-    if (!score()->isPaletteScore() && layoutToParentWidth() && align() == AlignH::LEFT) {
-        movePosX(-width() * 0.5);
-    }
-
-    autoplaceMeasureElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Marker::read(XmlReader& e)
-{
-    MarkerType mt = MarkerType::SEGNO;
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "label") {
-            AsciiStringView s(e.readAsciiText());
-            setLabel(String::fromAscii(s.ascii()));
-            mt = TConv::fromXml(s, MarkerType::USER);
-        } else if (!TextBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    setMarkerType(mt);
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Marker::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    TextBase::writeProperties(xml);
-    xml.tag("label", _label);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

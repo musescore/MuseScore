@@ -20,6 +20,11 @@ public:
     // Dummy struct, with the purpose to enforce that the body
     // of a Promise resolves OR rejects exactly once
     struct Result {
+        static Result unchecked()
+        {
+            return {};
+        }
+
     private:
         Result() = default;
 
@@ -59,7 +64,30 @@ public:
         mutable Promise<T...> p;
     };
 
+    enum class AsynchronyType {
+        ProvidedByPromise,
+        ProvidedByBody
+    };
+
     using Body = std::function<Result(Resolve, Reject)>;
+
+    Promise(Body body, AsynchronyType type)
+    {
+        Resolve res(*this);
+        Reject rej(*this);
+
+        switch (type) {
+        case AsynchronyType::ProvidedByPromise:
+            Async::call(nullptr, [res, rej](Body body) mutable {
+                body(res, rej);
+            }, body);
+            break;
+
+        case AsynchronyType::ProvidedByBody:
+            body(res, rej);
+            break;
+        }
+    }
 
     Promise(Body body, const std::thread::id& th = std::this_thread::get_id())
     {
@@ -101,6 +129,7 @@ public:
     }
 
 private:
+    Promise() = default;
 
     void resolve(const T& ... d)
     {

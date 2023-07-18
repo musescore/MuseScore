@@ -31,6 +31,7 @@ import MuseScore.Mpe 1.0
 import "./Gallery"
 import "./Interactive"
 import "./CrashHandler"
+import "./CorruptScore"
 import "./KeyNav"
 import "./Preferences"
 
@@ -48,6 +49,7 @@ DockPage {
         case "gallery": root.central = galleryComp; break
         case "interactive": root.central = interactiveComp; break
         case "crashhandler": root.central = crashhandlerComp; break
+        case "corruptscore": root.central = corruptScoreComp; break
         case "mpe": root.central = mpeComponent; break
         case "navigation": root.central = keynavComp; break
         }
@@ -78,6 +80,7 @@ DockPage {
                         { "name": "gallery", "title": "UI Gallery" },
                         { "name": "interactive", "title": "Interactive" },
                         { "name": "crashhandler", "title": "Crash handler" },
+                        { "name": "corruptscore", "title": "Corrupt score" },
                         { "name": "mpe", "title": "MPE" },
                         { "name": "navigation", "title": "KeyNav" }
                     ]
@@ -114,6 +117,12 @@ DockPage {
         id: crashhandlerComp
 
         CrashHandlerDevTools {}
+    }
+
+    Component {
+        id: corruptScoreComp
+
+        CorruptScoreDevTools {}
     }
 
     Component {

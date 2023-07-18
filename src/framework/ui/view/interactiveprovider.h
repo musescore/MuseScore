@@ -52,8 +52,8 @@ class InteractiveProvider : public QObject, public IInteractiveProvider
 {
     Q_OBJECT
 
-    INJECT(ui, IInteractiveUriRegister, uriRegister)
-    INJECT(ui, IMainWindow, mainWindow)
+    INJECT(IInteractiveUriRegister, uriRegister)
+    INJECT(IMainWindow, mainWindow)
 
 public:
     explicit InteractiveProvider();
@@ -75,6 +75,8 @@ public:
                       const framework::IInteractive::ButtonDatas& buttons = {}, int defBtn = int(framework::IInteractive::Button::NoButton),
                       const framework::IInteractive::Options& options = {}) override;
 
+    Ret showProgress(const std::string& title, framework::Progress* progress) override;
+
     RetVal<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
     RetVal<io::path_t> selectSavingFile(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
                                         bool confirmOverwrite) override;
@@ -92,6 +94,7 @@ public:
     void closeAllDialogs() override;
 
     ValCh<Uri> currentUri() const override;
+    async::Notification currentUriAboutToBeChanged() const override;
     std::vector<Uri> stack() const override;
 
     Q_INVOKABLE QWindow* topWindow() const override;
@@ -109,6 +112,7 @@ signals:
 
     void fireOpenStandardDialog(mu::ui::QmlLaunchData* data);
     void fireOpenFileDialog(mu::ui::QmlLaunchData* data);
+    void fireOpenProgressDialog(mu::ui::QmlLaunchData* data);
 
 private:
     struct OpenData
@@ -162,6 +166,7 @@ private:
     std::vector<ObjectInfo> allOpenObjects() const;
 
     void notifyAboutCurrentUriChanged();
+    void notifyAboutCurrentUriWillBeChanged();
 
     UriQuery m_openingUriQuery;
 
@@ -169,6 +174,7 @@ private:
     std::vector<ObjectInfo> m_floatingObjects;
 
     async::Channel<Uri> m_currentUriChanged;
+    async::Notification m_currentUriAboutToBeChanged;
     QMap<QString, RetVal<Val> > m_retvals;
     async::Channel<Uri> m_opened;
 

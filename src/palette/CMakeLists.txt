@@ -43,6 +43,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/paletteuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/paletteactionscontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/paletteactionscontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/palettelayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/palettelayout.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/ipaletteprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/paletteprovider.cpp
@@ -58,6 +60,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/palettecelliconengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/palettecelliconengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mimedatautils.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/palettecompat.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/palettecompat.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/view/paletterootmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/paletterootmodel.h

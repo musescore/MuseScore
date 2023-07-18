@@ -101,10 +101,12 @@ void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& c
             mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
             mpe::timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
 
-            int pitch = pitchIndex(noteEvent.pitchCtx().nominalPitchLevel);
+            int pitch{};
+            int centsOffset{};
+            pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, pitch, centsOffset);
             ms_NoteArticulation articulationFlag = noteArticulationTypes(noteEvent);
 
-            ms_AuditionStartNoteEvent noteOn = { pitch, articulationFlag, 0.5 };
+            ms_AuditionStartNoteEvent_2 noteOn = { pitch, centsOffset, articulationFlag, 0.5 };
             m_offStreamEvents[timestampFrom].emplace(std::move(noteOn));
 
             ms_AuditionStopNoteEvent noteOff = { pitch };
@@ -167,7 +169,7 @@ void MuseSamplerSequencer::loadNoteEvents(const mpe::PlaybackEventsMap& changes)
 void MuseSamplerSequencer::loadDynamicEvents(const mpe::DynamicLevelMap& changes)
 {
     for (const auto& pair : changes) {
-        m_samplerLib->addDynamicsEvent(m_sampler, m_track, { static_cast<long>(pair.first), dynamicLevelRatio(pair.second) });
+        m_samplerLib->addDynamicsEvent(m_sampler, m_track, pair.first, dynamicLevelRatio(pair.second));
     }
 }
 
@@ -177,30 +179,22 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         return;
     }
 
-    ms_NoteEvent event{};
-    event._voice = noteEvent.arrangementCtx().voiceLayerIndex;
-    event._location_us = noteEvent.arrangementCtx().nominalTimestamp;
-    event._duration_us = noteEvent.arrangementCtx().nominalDuration;
-    event._pitch = pitchIndex(noteEvent.pitchCtx().nominalPitchLevel);
-    // API expects BPM
-    event._tempo = noteEvent.arrangementCtx().bps * 60.0;
-    event._articulation = noteArticulationTypes(noteEvent);
+    auto voice = noteEvent.arrangementCtx().voiceLayerIndex;
 
     for (auto& art : noteEvent.expressionCtx().articulations) {
         auto ms_art = convertArticulationType(art.first);
 
         if (art.first == mpe::ArticulationType::Pedal) {
-            ms_PedalEvent pedalOnEvent { static_cast<long>(art.second.meta.timestamp), 1.0 };
-            m_samplerLib->addPedalEvent(m_sampler, m_track, std::move(pedalOnEvent));
-
-            ms_PedalEvent pedalOffEvent { static_cast<long>(art.second.meta.timestamp + art.second.meta.overallDuration), 0.0 };
-            m_samplerLib->addPedalEvent(m_sampler, m_track, std::move(pedalOffEvent));
+            // Pedal on:
+            m_samplerLib->addPedalEvent(m_sampler, m_track, art.second.meta.timestamp, 1.0);
+            // Pedal off:
+            m_samplerLib->addPedalEvent(m_sampler, m_track, art.second.meta.timestamp + art.second.meta.overallDuration, 0.0);
         }
 
         if (m_samplerLib->isRangedArticulation(ms_art)) {
             // If this starts an articulation range, indicate the start
             if (art.second.occupiedFrom == 0 && art.second.occupiedTo != mpe::HUNDRED_PERCENT) {
-                if (m_samplerLib->addTrackEventRangeStart(m_sampler, m_track, event._voice, ms_art) != ms_Result_OK) {
+                if (m_samplerLib->addTrackEventRangeStart(m_sampler, m_track, voice, ms_art) != ms_Result_OK) {
                     LOGE() << "Unable to add ranged articulation range start";
                 } else {
                     LOGN() << "added start range for: " << static_cast<int>(ms_art);
@@ -209,13 +203,25 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         }
     }
 
-    if (m_samplerLib->addNoteEvent(m_sampler, m_track, event) != ms_Result_OK) {
+    int pitch{};
+    int centsOffset{};
+    pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, pitch, centsOffset);
+    if (!m_samplerLib->addNoteEvent(
+            m_sampler,
+            m_track,
+            voice,
+            noteEvent.arrangementCtx().nominalTimestamp,
+            noteEvent.arrangementCtx().nominalDuration,
+            pitch,
+            noteEvent.arrangementCtx().bps * 60.0, // API expects BPM
+            centsOffset,
+            noteArticulationTypes(noteEvent))) {
         LOGE() << "Unable to add event for track";
     } else {
-        LOGN() << "Successfully added note event, pitch: " << event._pitch
-               << ", timestamp: " << event._location_us
-               << ", duration: " << event._duration_us
-               << ", articulations flag: " << event._articulation;
+        LOGN() << "Successfully added note event, pitch: " << pitch
+               << ", timestamp: " << noteEvent.arrangementCtx().nominalTimestamp
+               << ", duration: " << noteEvent.arrangementCtx().nominalDuration
+               << ", articulations flag: " << noteArticulationTypes(noteEvent);
     }
 
     for (auto& art : noteEvent.expressionCtx().articulations) {
@@ -224,7 +230,7 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
             // If this ends an articulation range, indicate the end
             LOGN() << "range: " << art.second.occupiedFrom << " to " << art.second.occupiedTo;
             if (art.second.occupiedFrom != 0 && art.second.occupiedTo == mpe::HUNDRED_PERCENT) {
-                if (m_samplerLib->addTrackEventRangeEnd(m_sampler, m_track, event._voice, ms_art) != ms_Result_OK) {
+                if (m_samplerLib->addTrackEventRangeEnd(m_sampler, m_track, voice, ms_art) != ms_Result_OK) {
                     LOGE() << "Unable to add ranged articulation range end";
                 } else {
                     LOGN() << "added end range for: " << static_cast<int>(ms_art);
@@ -234,24 +240,34 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     }
 }
 
-int MuseSamplerSequencer::pitchIndex(const mpe::pitch_level_t pitchLevel) const
+void MuseSamplerSequencer::pitchAndTuning(const mpe::pitch_level_t nominalPitch, int& pitch, int& centsOffset) const
 {
     static constexpr mpe::pitch_level_t MIN_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 0);
     static constexpr int MIN_SUPPORTED_NOTE = 12; // equivalent for C0
     static constexpr mpe::pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 8);
     static constexpr int MAX_SUPPORTED_NOTE = 108; // equivalent for C8
 
-    if (pitchLevel <= MIN_SUPPORTED_PITCH_LEVEL) {
-        return MIN_SUPPORTED_NOTE;
+    if (nominalPitch <= MIN_SUPPORTED_PITCH_LEVEL) {
+        pitch = MIN_SUPPORTED_NOTE;
+        centsOffset = 0;
+        return;
     }
 
-    if (pitchLevel >= MAX_SUPPORTED_PITCH_LEVEL) {
-        return MAX_SUPPORTED_NOTE;
+    if (nominalPitch >= MAX_SUPPORTED_PITCH_LEVEL) {
+        pitch = MAX_SUPPORTED_NOTE;
+        centsOffset = 0;
+        return;
     }
 
-    float stepCount = MIN_SUPPORTED_NOTE + ((pitchLevel - MIN_SUPPORTED_PITCH_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
+    // Get midi pitch
+    float stepCount = MIN_SUPPORTED_NOTE + ((nominalPitch - MIN_SUPPORTED_PITCH_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
+    pitch = RealRound(stepCount, 0);
 
-    return RealRound(stepCount, 0);
+    // Get tuning offset
+    int semitonesCount = pitch - MIN_SUPPORTED_NOTE;
+    mpe::pitch_level_t tuningPitchLevel = nominalPitch - (semitonesCount * mpe::PITCH_LEVEL_STEP);
+    static constexpr float convertToCents = (100.f / static_cast<float>(mpe::PITCH_LEVEL_STEP));
+    centsOffset = tuningPitchLevel * convertToCents;
 }
 
 double MuseSamplerSequencer::dynamicLevelRatio(const mpe::dynamic_level_t level) const

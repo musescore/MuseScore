@@ -33,13 +33,12 @@ class GradualTempoChangeSegment;
 class GradualTempoChange : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, GradualTempoChange)
+    DECLARE_CLASSOF(ElementType::GRADUAL_TEMPO_CHANGE)
+
 public:
     GradualTempoChange(EngravingItem* parent);
 
     GradualTempoChange* clone() const override;
-
-    void read(XmlReader& reader) override;
-    void write(XmlWriter& writer) const override;
 
     LineSegment* createLineSegment(System* parent) override;
 
@@ -71,6 +70,8 @@ private:
 class GradualTempoChangeSegment : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, GradualTempoChangeSegment)
+    DECLARE_CLASSOF(ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT)
+
 public:
     GradualTempoChangeSegment(GradualTempoChange* annotation, System* parent);
 
@@ -78,7 +79,6 @@ public:
 
     GradualTempoChange* tempoChange() const;
 
-    void layout() override;
     void endEdit(EditData& editData) override;
     void added() override;
     void removed() override;

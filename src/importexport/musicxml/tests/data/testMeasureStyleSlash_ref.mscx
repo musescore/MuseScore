@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <lyricsOddFontSize>11</lyricsOddFontSize>
@@ -15,6 +13,7 @@
       <stringNumberFontSize>10</stringNumberFontSize>
       <partInstrumentFontSize>10</partInstrumentFontSize>
       <tempoFontSize>10</tempoFontSize>
+      <tempoChangeFontSize>10</tempoChangeFontSize>
       <metronomeFontSize>10</metronomeFontSize>
       <measureNumberFontSize>10</measureNumberFontSize>
       <mmRestRangeFontSize>10</mmRestRangeFontSize>
@@ -119,6 +118,7 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <TimeSig>
             <sigN>4</sigN>

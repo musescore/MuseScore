@@ -34,6 +34,7 @@ namespace mu::engraving {
 class MMRestRange : public MeasureNumberBase
 {
     OBJECT_ALLOCATOR(engraving, MMRestRange)
+    DECLARE_CLASSOF(ElementType::MMREST_RANGE)
 
     /// Bracketing: [18-24], (18-24) or 18-24
     M_PROPERTY(MMRestRangeBracketType, bracketType, setBracketType)
@@ -47,8 +48,6 @@ public:
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid id, const PropertyValue& val) override;
     PropertyValue propertyDefault(Pid id) const override;
-
-    bool readProperties(XmlReader&) override;
 
     void setXmlText(const String&) override;
 };

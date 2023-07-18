@@ -50,6 +50,10 @@ NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementReposito
         models << inspectorModelCreator()->newInspectorModel(modelType, this, repository);
     }
 
+    for (AbstractInspectorModel* model : models) {
+        model->init();
+    }
+
     setModels(models);
 
     connect(m_repository->getQObject(), SIGNAL(elementsUpdated(const QList<mu::engraving::EngravingItem*>&)), this,

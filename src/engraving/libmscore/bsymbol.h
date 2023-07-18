@@ -51,11 +51,7 @@ public:
     void remove(EngravingItem*) override;
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
-    void layout() override;
     mu::RectF drag(EditData&) override;
-
-    void writeProperties(XmlWriter& xml) const override;
-    bool readProperties(XmlReader&) override;
 
     Align align() const { return _align; }
     void setAlign(Align a) { _align = a; }

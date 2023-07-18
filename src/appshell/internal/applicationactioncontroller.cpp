@@ -21,7 +21,6 @@
  */
 #include "applicationactioncontroller.h"
 
-#include <QCoreApplication>
 #include <QApplication>
 #include <QCloseEvent>
 #include <QFileOpenEvent>
@@ -31,6 +30,7 @@
 #include "async/async.h"
 #include "audio/synthtypes.h"
 
+#include "defer.h"
 #include "translation.h"
 #include "log.h"
 
@@ -57,12 +57,11 @@ void ApplicationActionController::init()
 
     dispatcher()->reg(this, "fullscreen", this, &ApplicationActionController::toggleFullScreen);
 
-    dispatcher()->reg(this, "about", this, &ApplicationActionController::openAboutDialog);
+    dispatcher()->reg(this, "about-musescore", this, &ApplicationActionController::openAboutDialog);
     dispatcher()->reg(this, "about-qt", this, &ApplicationActionController::openAboutQtDialog);
     dispatcher()->reg(this, "about-musicxml", this, &ApplicationActionController::openAboutMusicXMLDialog);
     dispatcher()->reg(this, "online-handbook", this, &ApplicationActionController::openOnlineHandbookPage);
     dispatcher()->reg(this, "ask-help", this, &ApplicationActionController::openAskForHelpPage);
-    dispatcher()->reg(this, "report-bug", this, &ApplicationActionController::openBugReportPage);
     dispatcher()->reg(this, "preference-dialog", this, &ApplicationActionController::openPreferencesDialog);
 
     dispatcher()->reg(this, "revert-factory", this, &ApplicationActionController::revertToFactorySettings);
@@ -141,7 +140,7 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
         if (startupScenario()->startupCompleted()) {
             dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path_t>(filePath));
         } else {
-            startupScenario()->setStartupScorePath(filePath);
+            startupScenario()->setStartupScoreFile(project::ProjectFile { filePath });
         }
 
         return true;
@@ -150,17 +149,17 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
     return QObject::eventFilter(watched, event);
 }
 
-mu::ValCh<bool> ApplicationActionController::isFullScreen() const
-{
-    ValCh<bool> result;
-    result.ch = m_fullScreenChannel;
-    result.val = mainWindow()->isFullScreen();
-
-    return result;
-}
-
 bool ApplicationActionController::quit(bool isAllInstances, const io::path_t& installerPath)
 {
+    if (m_quiting) {
+        return false;
+    }
+
+    m_quiting = true;
+    DEFER {
+        m_quiting = false;
+    };
+
     if (!projectFilesController()->closeOpenedProject()) {
         return false;
     }
@@ -201,8 +200,6 @@ void ApplicationActionController::restart()
 void ApplicationActionController::toggleFullScreen()
 {
     mainWindow()->toggleFullScreen();
-    bool isFullScreen = mainWindow()->isFullScreen();
-    m_fullScreenChannel.send(isFullScreen);
 }
 
 void ApplicationActionController::openAboutDialog()
@@ -230,12 +227,6 @@ void ApplicationActionController::openAskForHelpPage()
 {
     std::string askForHelpUrl = configuration()->askForHelpUrl();
     interactive()->openUrl(askForHelpUrl);
-}
-
-void ApplicationActionController::openBugReportPage()
-{
-    std::string bugReportUrl = configuration()->bugReportUrl();
-    interactive()->openUrl(bugReportUrl);
 }
 
 void ApplicationActionController::openPreferencesDialog()
@@ -283,11 +274,4 @@ void ApplicationActionController::revertToFactorySettings()
     }
 
     restart();
-}
-
-bool ApplicationActionController::canReceiveAction(const mu::actions::ActionCode& code) const
-{
-    Q_UNUSED(code);
-    auto focus = QGuiApplication::focusWindow();
-    return !focus || focus->modality() == Qt::WindowModality::NonModal;
 }

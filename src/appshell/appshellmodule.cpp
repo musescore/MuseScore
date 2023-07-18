@@ -56,6 +56,7 @@
 #include "view/preferences/importpreferencesmodel.h"
 #include "view/preferences/iopreferencesmodel.h"
 #include "view/preferences/commonaudioapiconfigurationmodel.h"
+#include "view/preferences/braillepreferencesmodel.h"
 #include "view/framelesswindow/framelesswindowmodel.h"
 #include "view/publish/publishtoolbarmodel.h"
 #include "view/windowdroparea.h"
@@ -77,15 +78,6 @@ using namespace mu::modularity;
 using namespace mu::ui;
 using namespace mu::dock;
 
-static std::shared_ptr<ApplicationActionController> s_applicationActionController = std::make_shared<ApplicationActionController>();
-static std::shared_ptr<ApplicationUiActions> s_applicationUiActions = std::make_shared<ApplicationUiActions>(s_applicationActionController);
-static std::shared_ptr<AppShellConfiguration> s_appShellConfiguration = std::make_shared<AppShellConfiguration>();
-static std::shared_ptr<SessionsManager> s_sessionsManager = std::make_shared<SessionsManager>();
-
-#ifdef Q_OS_MAC
-static std::shared_ptr<MacOSScrollingHook> s_scrollingHook = std::make_shared<MacOSScrollingHook>();
-#endif
-
 static void appshell_init_qrc()
 {
     Q_INIT_RESOURCE(appshell);
@@ -102,12 +94,21 @@ std::string AppShellModule::moduleName() const
 
 void AppShellModule::registerExports()
 {
+    m_applicationActionController = std::make_shared<ApplicationActionController>();
+    m_applicationUiActions = std::make_shared<ApplicationUiActions>(m_applicationActionController);
+    m_appShellConfiguration = std::make_shared<AppShellConfiguration>();
+    m_sessionsManager = std::make_shared<SessionsManager>();
+
+    #ifdef Q_OS_MAC
+    m_scrollingHook = std::make_shared<MacOSScrollingHook>();
+    #endif
+
     DockSetup::registerExports();
 
-    ioc()->registerExport<IAppShellConfiguration>(moduleName(), s_appShellConfiguration);
-    ioc()->registerExport<IApplicationActionController>(moduleName(), s_applicationActionController);
+    ioc()->registerExport<IAppShellConfiguration>(moduleName(), m_appShellConfiguration);
+    ioc()->registerExport<IApplicationActionController>(moduleName(), m_applicationActionController);
     ioc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario());
-    ioc()->registerExport<ISessionsManager>(moduleName(), s_sessionsManager);
+    ioc()->registerExport<ISessionsManager>(moduleName(), m_sessionsManager);
 
 #ifdef Q_OS_MAC
     ioc()->registerExport<IAppMenuModelHook>(moduleName(), std::make_shared<MacOSAppMenuModelHook>());
@@ -120,7 +121,7 @@ void AppShellModule::resolveImports()
 {
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(s_applicationUiActions);
+        ar->reg(m_applicationUiActions);
     }
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
@@ -161,10 +162,11 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<ImportPreferencesModel>("MuseScore.Preferences", 1, 0, "ImportPreferencesModel");
     qmlRegisterType<IOPreferencesModel>("MuseScore.Preferences", 1, 0, "IOPreferencesModel");
     qmlRegisterType<CommonAudioApiConfigurationModel>("MuseScore.Preferences", 1, 0, "CommonAudioApiConfigurationModel");
+    qmlRegisterType<BraillePreferencesModel>("MuseScore.Preferences", 1, 0, "BraillePreferencesModel");
 
 #if defined(Q_OS_MACOS)
     qmlRegisterType<AppMenuModel>("MuseScore.AppShell", 1, 0, "PlatformAppMenuModel");
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     qmlRegisterType<AppMenuModel>("MuseScore.AppShell", 1, 0, "PlatformAppMenuModel");
     qmlRegisterType<NavigableAppMenuModel>("MuseScore.AppShell", 1, 0, "AppMenuModel");
 #else
@@ -184,27 +186,39 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<WindowDropArea>("MuseScore.Ui", 1, 0, "WindowDropArea");
 }
 
-void AppShellModule::onPreInit(const framework::IApplication::RunMode&)
+void AppShellModule::onPreInit(const framework::IApplication::RunMode& mode)
 {
-    s_applicationActionController->preInit();
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
+    m_applicationActionController->preInit();
 }
 
-void AppShellModule::onInit(const IApplication::RunMode&)
+void AppShellModule::onInit(const IApplication::RunMode& mode)
 {
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
     DockSetup::onInit();
 
-    s_appShellConfiguration->init();
-    s_applicationActionController->init();
-    s_applicationUiActions->init();
-    s_sessionsManager->init();
+    m_appShellConfiguration->init();
+    m_applicationActionController->init();
+    m_applicationUiActions->init();
+    m_sessionsManager->init();
 
 #ifdef Q_OS_MAC
-    s_scrollingHook->init();
+    m_scrollingHook->init();
 #endif
 }
 
-void AppShellModule::onAllInited(const framework::IApplication::RunMode&)
+void AppShellModule::onAllInited(const framework::IApplication::RunMode& mode)
 {
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
     //! NOTE: process QEvent::FileOpen as early as possible if it was postponed
 #ifdef Q_OS_MACOS
     qApp->processEvents();
@@ -213,5 +227,5 @@ void AppShellModule::onAllInited(const framework::IApplication::RunMode&)
 
 void AppShellModule::onDeinit()
 {
-    s_sessionsManager->deinit();
+    m_sessionsManager->deinit();
 }

@@ -22,9 +22,15 @@
 #ifndef MU_UPDATE_UPDATEMODULE_H
 #define MU_UPDATE_UPDATEMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::update {
+class UpdateScenario;
+class UpdateService;
+class UpdateConfiguration;
+class UpdateActionController;
 class UpdateModule : public modularity::IModuleSetup
 {
 public:
@@ -35,6 +41,12 @@ public:
     void registerResources() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
     void onDelayedInit() override;
+
+private:
+    std::shared_ptr<UpdateScenario> m_scenario;
+    std::shared_ptr<UpdateService> m_service;
+    std::shared_ptr<UpdateConfiguration> m_configuration;
+    std::shared_ptr<UpdateActionController> m_actionController;
 };
 }
 

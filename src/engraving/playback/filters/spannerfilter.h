@@ -25,10 +25,6 @@
 
 #include "filterbase.h"
 
-namespace Ms {
-class Spanner;
-}
-
 namespace mu::engraving {
 class SpannerFilter : public FilterBase<SpannerFilter>
 {

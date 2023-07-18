@@ -23,7 +23,7 @@
 #define BEAMSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
-#include "internal/beammodesmodel.h"
+#include "models/notation/beams/beammodesmodel.h"
 #include "types/beamtypes.h"
 
 namespace mu::inspector {
@@ -31,7 +31,7 @@ class BeamSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QObject * beamModesModel READ beamModesModel NOTIFY beamModesModelChanged)
+    Q_PROPERTY(QObject * beamModesModel READ beamModesModel CONSTANT)
 
     Q_PROPERTY(PropertyItem * featheringHeightLeft READ featheringHeightLeft CONSTANT)
     Q_PROPERTY(PropertyItem * featheringHeightRight READ featheringHeightRight CONSTANT)
@@ -72,12 +72,10 @@ public:
 public slots:
     void setIsBeamHeightLocked(bool isBeamHeightLocked);
     void setFeatheringMode(BeamTypes::FeatheringMode featheringMode);
-    void setBeamModesModel(BeamModesModel* beamModesModel);
 
 signals:
     void isBeamHeightLockedChanged(bool isBeamHeightLocked);
     void featheringModeChanged(BeamTypes::FeatheringMode featheringMode);
-    void beamModesModelChanged(QObject* beamModesModel);
 
 private:
     void createProperties() override;
@@ -95,6 +93,8 @@ private:
     void setBeamHeight(const qreal left, const qreal right);
 
     void updateFeatheringMode(const qreal left, const qreal right);
+
+    void onCurrentNotationChanged() override;
 
     BeamModesModel* m_beamModesModel = nullptr;
 

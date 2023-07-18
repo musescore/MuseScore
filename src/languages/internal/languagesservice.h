@@ -36,10 +36,10 @@ class QTranslator;
 namespace mu::languages {
 class LanguagesService : public ILanguagesService, public async::Asyncable
 {
-    INJECT(languages, ILanguagesConfiguration, configuration)
-    INJECT(languages, network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(languages, io::IFileSystem, fileSystem)
-    INJECT(languages, mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(ILanguagesConfiguration, configuration)
+    INJECT(network::INetworkManagerCreator, networkManagerCreator)
+    INJECT(io::IFileSystem, fileSystem)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     void init();
