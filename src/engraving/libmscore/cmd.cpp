@@ -3051,9 +3051,17 @@ void Score::realtimeAdvance()
     return;
 }
 
-//---------------------------------------------------------
-//   cmdInsertClef
-//---------------------------------------------------------
+bool Score::canInsertClef(ClefType type) const
+{
+    if (type == ClefType::INVALID) {
+        return false;
+    }
+
+    const Staff* staff = this->staff(inputTrack() / VOICES);
+    const ChordRest* cr = inputState().cr();
+
+    return staff && cr;
+}
 
 void Score::cmdInsertClef(ClefType type)
 {

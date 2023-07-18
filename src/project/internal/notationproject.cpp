@@ -234,6 +234,8 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
     // Load audio settings
     ret = m_projectAudioSettings->read(reader);
     if (!ret) {
+        m_projectAudioSettings->makeDefault();
+
         // Apply compat audio settings
         if (!settingsCompat.audioSettings.empty()) {
             for (const auto& audioCompat : settingsCompat.audioSettings) {

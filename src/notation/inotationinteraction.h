@@ -261,8 +261,10 @@ public:
     virtual void toggleUnderline() = 0;
     virtual void toggleStrike() = 0;
 
-    virtual void toggleArticulation(mu::engraving::SymId) = 0;
+    virtual bool canInsertClef(mu::engraving::ClefType) const = 0;
     virtual void insertClef(mu::engraving::ClefType) = 0;
+
+    virtual void toggleArticulation(mu::engraving::SymId) = 0;
     virtual void changeAccidental(mu::engraving::AccidentalType) = 0;
     virtual void transposeSemitone(int) = 0;
     virtual void transposeDiatonicAlterations(mu::engraving::TransposeDirection) = 0;

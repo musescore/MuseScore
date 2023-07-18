@@ -267,7 +267,9 @@ public:
     void toggleArticulation(mu::engraving::SymId) override;
     void toggleAutoplace(bool) override;
 
+    bool canInsertClef(mu::engraving::ClefType) const override;
     void insertClef(mu::engraving::ClefType) override;
+
     void changeAccidental(mu::engraving::AccidentalType) override;
     void transposeSemitone(int) override;
     void transposeDiatonicAlterations(mu::engraving::TransposeDirection) override;

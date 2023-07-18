@@ -110,6 +110,8 @@ private:
     void addSlur();
     void addFret(int num);
 
+    void insertClef(mu::engraving::ClefType type);
+
     framework::IInteractive::Result showErrorMessage(const std::string& message) const;
 
     bool isElementsSelected(const std::vector<ElementType>& elementsTypes) const;
