@@ -163,7 +163,7 @@ Ret ProjectActionsController::openProject(const ProjectFile& file)
     //! the events (like user click) can be executed and this method can be called several times,
     //! before the end of the current call.
     //! So we ignore all subsequent calls until the current one completes.
-    if (m_isProjectProcessing) {
+    if (m_isProjectProcessing || m_isProjectDownloading) {
         return make_ret(Ret::Code::InternalError);
     }
     m_isProjectProcessing = true;
@@ -238,7 +238,7 @@ RetVal<INotationProjectPtr> ProjectActionsController::loadProject(const io::path
             return ret;
         }
 
-        if (checkCanIgnoreError(ret, io::filename(loadPath).toString())) {
+        if (checkCanIgnoreError(ret, loadPath)) {
             ret = project->load(loadPath, "" /*stylePath*/, true /*forceMode*/, format);
         }
 
@@ -306,6 +306,18 @@ Ret ProjectActionsController::doOpenCloudProject(const io::path_t& filePath, con
 
 void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
 {
+    if (m_isProjectDownloading) {
+        return;
+    }
+    m_isProjectDownloading = true;
+
+    bool isDownloadingFinished = true;
+    DEFER {
+        if (isDownloadingFinished) {
+            m_isProjectDownloading = false;
+        }
+    };
+
     if (!scoreId) {
         // Might happen when user tries to open score that saved as a cloud score but upload did not fully succeed
         LOGE() << "invalid cloud score id";
@@ -351,7 +363,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
         m_projectBeingDownloaded = {};
         m_projectBeingDownloadedChanged.notify();
 
-        m_isProjectProcessing = false;
+        m_isProjectDownloading = false;
 
         if (!res.ret) {
             LOGE() << res.ret.toString();
@@ -363,6 +375,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
     });
 
     m_projectBeingDownloadedChanged.notify();
+    isDownloadingFinished = false;
 }
 
 const ProjectBeingDownloaded& ProjectActionsController::projectBeingDownloaded() const
@@ -416,7 +429,7 @@ void ProjectActionsController::newProject()
     //! the events (like user click) can be executed and this method can be called several times,
     //! before the end of the current call.
     //! So we ignore all subsequent calls until the current one completes.
-    if (m_isProjectProcessing) {
+    if (m_isProjectProcessing || m_isProjectDownloading) {
         return;
     }
     m_isProjectProcessing = true;
@@ -701,6 +714,7 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, Sa
     Ret ret = project->save(filePath, saveMode);
     if (!ret) {
         LOGE() << ret.toString();
+        warnScoreCouldnotBeSaved(ret);
         return false;
     }
 
@@ -1134,14 +1148,9 @@ void ProjectActionsController::warnCloudIsNotAvailable()
 
 bool ProjectActionsController::askIfUserAgreesToSaveProjectWithErrors(const Ret& ret, const SaveLocation& location)
 {
-    auto masterNotation = currentMasterNotation();
-    if (!masterNotation) {
-        return false;
-    }
-
     switch (static_cast<Err>(ret.code())) {
     case Err::NoPartsError:
-        warnScoreWithoutPartsCannotBeSaved();
+        warnScoreCouldnotBeSaved(trc("project/save", "Please add at least one instrument to enable saving."));
         return false;
     case Err::CorruptionUponOpenningError:
         return askIfUserAgreesToSaveCorruptedScoreUponOpenning(location, ret.text());
@@ -1152,12 +1161,6 @@ bool ProjectActionsController::askIfUserAgreesToSaveProjectWithErrors(const Ret&
     default:
         return false;
     }
-}
-
-void ProjectActionsController::warnScoreWithoutPartsCannotBeSaved()
-{
-    interactive()->warning(trc("project/save", "Your score could not be saved"),
-                           trc("project/save", "Please add at least one instrument to enable saving."));
 }
 
 bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScore(const SaveLocation& location, const std::string& errorText,
@@ -1280,6 +1283,21 @@ void ProjectActionsController::showErrCorruptedScoreCannotBeSaved(const SaveLoca
     }
 }
 
+void ProjectActionsController::warnScoreCouldnotBeSaved(const Ret& ret)
+{
+    std::string message = ret.text();
+    if (message.empty()) {
+        message = trc("project/save", "An unknown error occurred while saving this file.");
+    }
+
+    warnScoreCouldnotBeSaved(message);
+}
+
+void ProjectActionsController::warnScoreCouldnotBeSaved(const std::string& errorText)
+{
+    interactive()->warning(trc("project/save", "Your score could not be saved"), errorText);
+}
+
 void ProjectActionsController::revertCorruptedScoreToLastSaved()
 {
     TRACEFUNC;
@@ -1370,7 +1388,7 @@ void ProjectActionsController::showScoreDownloadError(const Ret& ret)
     interactive()->warning(title, message);
 }
 
-bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const String& projectName)
+bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path_t& filepath)
 {
     if (ret) {
         return true;
@@ -1378,15 +1396,22 @@ bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const String&
 
     switch (static_cast<engraving::Err>(ret.code())) {
     case engraving::Err::FileTooOld:
-    case engraving::Err::FileTooNew:
     case engraving::Err::FileOld300Format:
         return askIfUserAgreesToOpenProjectWithIncompatibleVersion(ret.text());
-    case engraving::Err::FileCorrupted:
-        return askIfUserAgreesToOpenCorruptedProject(projectName, ret.text());
-    default:
-        warnProjectCannotBeOpened(projectName, ret.text());
+    case engraving::Err::FileTooNew:
+        warnFileTooNew(filepath);
         return false;
+    case engraving::Err::FileCorrupted:
+        return askIfUserAgreesToOpenCorruptedProject(io::filename(filepath).toString(), ret.text());
+    case engraving::Err::FileCriticallyCorrupted:
+        warnProjectCriticallyCorrupted(io::filename(filepath).toString(), ret.text());
+        return false;
+    default:
+        break;
     }
+
+    warnProjectCannotBeOpened(ret, filepath);
+    return false;
 }
 
 bool ProjectActionsController::askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText)
@@ -1399,6 +1424,13 @@ bool ProjectActionsController::askIfUserAgreesToOpenProjectWithIncompatibleVersi
     }, openAnywayBtn.btn).button();
 
     return btn == openAnywayBtn.btn;
+}
+
+void ProjectActionsController::warnFileTooNew(const io::path_t& filepath)
+{
+    interactive()->error(qtrc("project", "Cannot read file %1").arg(io::toNativeSeparators(filepath).toQString()).toStdString(),
+                         trc("project", "This file was saved using a newer version of MuseScore. "
+                                        "Please visit <a href=\"https://musescore.org\">musescore.org</a> to obtain the latest version."));
 }
 
 bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const String& projectName, const std::string& errorText)
@@ -1416,7 +1448,7 @@ bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const Strin
     return btn == openAnywayBtn.btn;
 }
 
-void ProjectActionsController::warnProjectCannotBeOpened(const String& projectName, const std::string& errorText)
+void ProjectActionsController::warnProjectCriticallyCorrupted(const String& projectName, const std::string& errorText)
 {
     std::string title = mtrc("project", "File “%1” is corrupted and cannot be opened").arg(projectName).toStdString();
     std::string body = trc("project", "Get help for this issue on musescore.org.");
@@ -1431,6 +1463,29 @@ void ProjectActionsController::warnProjectCannotBeOpened(const String& projectNa
     if (btn == getHelpBtn.btn) {
         interactive()->openUrl(configuration()->supportForumUrl());
     }
+}
+
+void ProjectActionsController::warnProjectCannotBeOpened(const Ret& ret, const io::path_t& filepath)
+{
+    std::string title = mtrc("project", "Cannot read file %1").arg(io::toNativeSeparators(filepath).toString()).toStdString();
+    std::string body;
+
+    switch (ret.code()) {
+    case int(engraving::Err::FileNotFound):
+        body = trc("project", "This file does not exist or cannot be accessed at the moment.");
+        break;
+    case int(engraving::Err::FileOpenError):
+        body = trc("project", "This file could not be opened. Please make sure that MuseScore has permission to read this file.");
+        break;
+    default:
+        if (!ret.text().empty()) {
+            body = ret.text();
+        } else {
+            body = trc("project", "An error occurred while reading this file.");
+        }
+    }
+
+    interactive()->error(title, body);
 }
 
 void ProjectActionsController::importPdf()

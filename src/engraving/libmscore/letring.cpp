@@ -143,6 +143,7 @@ PropertyValue LetRing::propertyDefault(Pid propertyId) const
     case Pid::LINE_VISIBLE:
         return true;
 
+    case Pid::BEGIN_TEXT_OFFSET:
     case Pid::CONTINUE_TEXT_OFFSET:
     case Pid::END_TEXT_OFFSET:
         return PropertyValue::fromValue(PointF(0, 0));

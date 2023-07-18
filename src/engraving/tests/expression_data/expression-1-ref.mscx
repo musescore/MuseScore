@@ -113,6 +113,8 @@
         <voice>
           <Expression>
             <placement>above</placement>
+            <snapToDynamics>0</snapToDynamics>
+            <offset x="0" y="2.5"/>
             <text>expr text</text>
             </Expression>
           <Chord>

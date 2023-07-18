@@ -1698,7 +1698,7 @@ static double parseNumProperty(const String& s)
 //    create layout from text
 //---------------------------------------------------------
 
-void TextBase::createLayout()
+void TextBase::createBlocks()
 {
     // reset all previous formatting information
     m_blocks.clear();
@@ -2298,6 +2298,45 @@ void TextBase::resetFormatting()
 }
 
 //---------------------------------------------------------
+//   fragmentList
+//---------------------------------------------------------
+
+/*
+ Return the text as a single list of TextFragment
+ Used by the MusicXML formatted export to avoid parsing the xml text format
+ */
+
+std::list<TextFragment> TextBase::fragmentList() const
+{
+    std::list<TextFragment> res;
+
+    const TextBase* text = this;
+    std::unique_ptr<TextBase> tmpText;
+    if (m_layoutInvalid) {
+        // Create temporary text object to avoid side effects
+        // of createLayout() call.
+        tmpText.reset(toTextBase(this->clone()));
+        tmpText->createBlocks();
+        text = tmpText.get();
+    }
+
+    for (const TextBlock& block : text->m_blocks) {
+        for (const TextFragment& f : block.fragments()) {
+            /* TODO TBD
+            if (f.text.empty())                     // skip empty fragments, not to
+                  continue;                           // insert extra HTML formatting
+             */
+            res.push_back(f);
+            if (block.eol()) {
+                // simply append a newline
+                res.back().text += u"\n";
+            }
+        }
+    }
+    return res;
+}
+
+//---------------------------------------------------------
 //   plainText
 //    return plain text with symbols
 //---------------------------------------------------------
@@ -2312,7 +2351,7 @@ String TextBase::plainText() const
         // Create temporary text object to avoid side effects
         // of createLayout() call.
         tmpText.reset(toTextBase(this->clone()));
-        tmpText->createLayout();
+        tmpText->createBlocks();
         text = tmpText.get();
     }
 
@@ -2446,34 +2485,6 @@ int TextBase::subtype() const
 TranslatableString TextBase::subtypeUserName() const
 {
     return score() ? score()->getTextStyleUserName(textStyleType()) : TConv::userName(textStyleType());
-}
-
-//---------------------------------------------------------
-//   fragmentList
-//---------------------------------------------------------
-
-/*
- Return the text as a single list of TextFragment
- Used by the MusicXML formatted export to avoid parsing the xml text format
- */
-
-std::list<TextFragment> TextBase::fragmentList() const
-{
-    std::list<TextFragment> res;
-    for (const TextBlock& block : m_blocks) {
-        for (const TextFragment& f : block.fragments()) {
-            /* TODO TBD
-            if (f.text.empty())                     // skip empty fragments, not to
-                  continue;                           // insert extra HTML formatting
-             */
-            res.push_back(f);
-            if (block.eol()) {
-                // simply append a newline
-                res.back().text += u"\n";
-            }
-        }
-    }
-    return res;
 }
 
 //---------------------------------------------------------
@@ -2755,6 +2766,8 @@ Sid TextBase::offsetSid() const
     switch (textStyleType()) {
     case TextStyleType::DYNAMICS:
         return above ? Sid::dynamicsPosAbove : Sid::dynamicsPosBelow;
+    case TextStyleType::EXPRESSION:
+        return above ? Sid::expressionPosAbove : Sid::expressionPosBelow;
     case TextStyleType::LYRICS_ODD:
     case TextStyleType::LYRICS_EVEN:
         return above ? Sid::lyricsPosAbove : Sid::lyricsPosBelow;
@@ -3010,11 +3023,12 @@ void TextBase::editCut(EditData& ed)
 void TextBase::editCopy(EditData& ed)
 {
     //
-    // store selection as plain text
+    // store selection as rich and plain text
     //
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
     ted->selectedText = cursor->selectedText(true);
+    ted->selectedPlainText = cursor->selectedText(false);
 }
 
 //---------------------------------------------------------

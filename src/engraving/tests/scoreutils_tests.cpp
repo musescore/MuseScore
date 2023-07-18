@@ -59,7 +59,7 @@ TEST_F(Engraving_ScoreUtilsTests, StaffIdxSetFromRange)
     std::set<staff_idx_t> actualStaffIdxSet = score->staffIdxSetFromRange(4, 19);
 
     // [THEN] The staves have been filtered by the track range
-    std::set<staff_idx_t> expectedStaffIdxSet = { 1, 2, 3, 4 };
+    std::set<staff_idx_t> expectedStaffIdxSet = { 0, 1, 2, 3, 4, 5, 6 };
     EXPECT_EQ(actualStaffIdxSet, expectedStaffIdxSet);
 
     // [WHEN] Request staves from track 4 to 19, and also filter out the linked staves
@@ -68,14 +68,14 @@ TEST_F(Engraving_ScoreUtilsTests, StaffIdxSetFromRange)
     });
 
     // [THEN] The linked staves have been filtered out
-    expectedStaffIdxSet = { 1, 2, 4 };
+    expectedStaffIdxSet = { 0, 1, 2, 4, 5, 6 };
     EXPECT_EQ(actualStaffIdxSet, expectedStaffIdxSet);
 
     // [WHEN] Request for more staves than exist
     actualStaffIdxSet = score->staffIdxSetFromRange(4, 9999);
 
     // [THEN] The set is correct
-    expectedStaffIdxSet = { 1, 2, 3, 4, 5, 6 };
+    expectedStaffIdxSet = { 0, 1, 2, 3, 4, 5, 6 };
     EXPECT_EQ(actualStaffIdxSet, expectedStaffIdxSet);
 
     delete score;

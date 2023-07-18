@@ -201,7 +201,7 @@ Measure::Measure(const Measure& m)
 {
     m_segments    = m.m_segments.clone();
     m_timesig     = m.m_timesig;
-    _len          = m._len;
+    m_len          = m.m_len;
     m_repeatCount = m.m_repeatCount;
     m_noMode      = m.m_noMode;
     m_userStretch = m.m_userStretch;
@@ -2410,7 +2410,7 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
 {
     Measure* m      = new Measure(sc->dummy()->system());
     m->m_timesig    = m_timesig;
-    m->_len         = _len;
+    m->m_len         = m_len;
     m->m_repeatCount = m_repeatCount;
 
     assert(sc->staves().size() >= m_mstaves.size());   // destination score we're cloning into must have at least as many staves as measure being cloned
@@ -2624,7 +2624,7 @@ PropertyValue Measure::getProperty(Pid propertyId) const
     case Pid::TIMESIG_NOMINAL:
         return PropertyValue::fromValue(m_timesig);
     case Pid::TIMESIG_ACTUAL:
-        return PropertyValue::fromValue(_len);
+        return PropertyValue::fromValue(m_len);
     case Pid::MEASURE_NUMBER_MODE:
         return int(measureNumberMode());
     case Pid::BREAK_MMR:
@@ -2649,7 +2649,7 @@ bool Measure::setProperty(Pid propertyId, const PropertyValue& value)
         m_timesig = value.value<Fraction>();
         break;
     case Pid::TIMESIG_ACTUAL:
-        _len = value.value<Fraction>();
+        m_len = value.value<Fraction>();
         break;
     case Pid::MEASURE_NUMBER_MODE:
         setMeasureNumberMode(MeasureNumberMode(value.toInt()));

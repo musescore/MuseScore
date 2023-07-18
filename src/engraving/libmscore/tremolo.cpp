@@ -29,9 +29,12 @@
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
+#include "style/style.h"
+
+#include "layout/v0/beamtremololayout.h"
+
 #include "beam.h"
 #include "chord.h"
-#include "score.h"
 #include "stem.h"
 #include "system.h"
 #include "stafftype.h"
@@ -65,9 +68,9 @@ Tremolo::Tremolo(const Tremolo& t)
     : EngravingItem(t)
 {
     setTremoloType(t.tremoloType());
-    _chord1       = t.chord1();
-    _chord2       = t.chord2();
-    _durationType = t._durationType;
+    m_chord1       = t.chord1();
+    m_chord2       = t.chord2();
+    m_durationType = t.m_durationType;
 }
 
 void Tremolo::setParent(Chord* ch)
@@ -104,88 +107,24 @@ double Tremolo::minHeight() const
     return (lines() - 1) * td + sw;
 }
 
-void Tremolo::createBeamSegments()
-{
-    // TODO: This should be a style setting, to replace tremoloStrokeLengthMultiplier
-    static constexpr double stemGapSp = 1.0;
-    const bool defaultStyle = (!customStyleApplicable()) || (_style == TremoloStyle::DEFAULT);
-
-    DeleteAll(_beamSegments);
-    _beamSegments.clear();
-    if (!twoNotes()) {
-        return;
-    }
-    bool _isGrace = _chord1->isGrace();
-    PointF startAnchor = _layoutInfo.startAnchor() - PointF(0., pagePos().y());
-    PointF endAnchor = _layoutInfo.endAnchor() - PointF(0., pagePos().y());
-
-    // inset trem from stems for default style
-    double slope = (endAnchor.y() - startAnchor.y()) / (endAnchor.x() - startAnchor.x());
-    double gapSp = stemGapSp;
-    if (defaultStyle) {
-        // we can eat into the stemGapSp margin if the anchorpoints are sufficiently close together
-        double widthSp = (endAnchor.x() - startAnchor.x()) / spatium() - (stemGapSp * 2);
-        if (!RealIsEqualOrMore(widthSp, 0.6)) {
-            // tremolo beam is too short; we can eat into the gap spacing a little
-            gapSp = std::max(stemGapSp - ((0.6 - widthSp) * 0.5), 0.4);
-        }
-    } else {
-        gapSp = 0.0;
-    }
-    double offset = gapSp * spatium();
-    startAnchor.rx() += offset;
-    endAnchor.rx() -= offset;
-    startAnchor.ry() += offset * slope;
-    endAnchor.ry() -= offset * slope;
-    BeamSegment* mainStroke = new BeamSegment(this);
-    mainStroke->level = 0;
-    mainStroke->line = LineF(startAnchor, endAnchor);
-    _beamSegments.push_back(mainStroke);
-    double bboxTop = _up ? std::min(mainStroke->line.y1(), mainStroke->line.y2()) : std::max(mainStroke->line.y1(), mainStroke->line.y2());
-    double halfWidth = style().styleMM(Sid::beamWidth).val() / 2. * (_up ? -1. : 1.);
-    RectF bbox = RectF(mainStroke->line.x1(), bboxTop + halfWidth, mainStroke->line.x2() - mainStroke->line.x1(),
-                       std::abs(mainStroke->line.y2() - mainStroke->line.y1()) - halfWidth * 2.);
-    PointF beamOffset = PointF(0., (_up ? 1 : -1) * spatium() * (style().styleB(Sid::useWideBeams) ? 1. : 0.75));
-    beamOffset.setY(beamOffset.y() * mag() * (_isGrace ? style().styleD(Sid::graceNoteMag) : 1.));
-    for (int i = 1; i < lines(); ++i) {
-        BeamSegment* stroke = new BeamSegment(this);
-        stroke->level = i;
-        stroke->line = LineF(startAnchor + (beamOffset * (double)i), endAnchor + (beamOffset * (double)i));
-        _beamSegments.push_back(stroke);
-        bbox.unite(bbox.translated(0., beamOffset.y() * (double)i));
-    }
-    setbbox(bbox);
-
-    // size stems properly
-    if (_chord1->stem() && _chord2->stem() && !(_chord1->beam() && _chord1->beam() == _chord2->beam())) {
-        // we don't need to do anything if these chords are part of the same beam--their stems are taken care of
-        // by the beam layout
-        int beamSpacing = style().styleB(Sid::useWideBeams) ? 4 : 3;
-        for (ChordRest* cr : { _chord1, _chord2 }) {
-            Chord* chord = toChord(cr);
-            double addition = 0.0;
-            if (cr->up() != _up && lines() > 1) {
-                // need to adjust further for beams on the opposite side
-                addition += (lines() - 1.) * beamSpacing / 4. * spatium() * mag();
-            }
-            // calling extendStem with addition 0.0 still sizes the stem to the manually adjusted height of the trem.
-            _layoutInfo.extendStem(chord, addition);
-        }
-    }
-}
-
 //---------------------------------------------------------
 //   chordBeamAnchor
 //---------------------------------------------------------
 
-PointF Tremolo::chordBeamAnchor(const ChordRest* chord, layout::v0::BeamTremoloLayout::ChordBeamAnchorType anchorType) const
+PointF Tremolo::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const
 {
-    return _layoutInfo.chordBeamAnchor(chord, anchorType);
+    IF_ASSERT_FAILED(layoutInfo) {
+        return PointF();
+    }
+    return layoutInfo->chordBeamAnchor(chord, anchorType);
 }
 
 double Tremolo::beamWidth() const
 {
-    return _layoutInfo.beamWidth();
+    IF_ASSERT_FAILED(layoutInfo) {
+        return 0.0;
+    }
+    return layoutInfo->beamWidth();
 }
 
 //---------------------------------------------------------
@@ -197,11 +136,11 @@ RectF Tremolo::drag(EditData& ed)
     if (!twoNotes()) {
         return EngravingItem::drag(ed);
     }
-    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
     double dy = ed.pos.y() - ed.lastPos.y();
 
-    double y1 = _beamFragment.py1[idx];
-    double y2 = _beamFragment.py2[idx];
+    double y1 = m_beamFragment.py1[idx];
+    double y2 = m_beamFragment.py2[idx];
 
     y1 += dy;
     y2 += dy;
@@ -232,21 +171,21 @@ void Tremolo::draw(mu::draw::Painter* painter) const
     } else if (!twoNotes() || !explicitParent()) {
         painter->setBrush(Brush(curColor()));
         painter->setNoPen();
-        painter->drawPath(path);
-    } else if (twoNotes() && !_beamSegments.empty()) {
+        painter->drawPath(m_path);
+    } else if (twoNotes() && !m_beamSegments.empty()) {
         // two-note trems act like beams
 
         // make beam thickness independent of slant
         // (expression can be simplified?)
-        const LineF bs = _beamSegments.front()->line;
+        const LineF bs = m_beamSegments.front()->line;
         double d = (std::abs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
-        if (_beamSegments.size() > 1 && d > M_PI / 6.0) {
+        if (m_beamSegments.size() > 1 && d > M_PI / 6.0) {
             d = M_PI / 6.0;
         }
         double ww = (style().styleMM(Sid::beamWidth).val() / 2.0) / sin(M_PI_2 - atan(d));
         painter->setBrush(Brush(curColor()));
         painter->setNoPen();
-        for (const BeamSegment* bs1 : _beamSegments) {
+        for (const BeamSegment* bs1 : m_beamSegments) {
             painter->drawPolygon(
                 PolygonF({
                     PointF(bs1->line.x1(), bs1->line.y1() - ww),
@@ -266,7 +205,7 @@ void Tremolo::draw(mu::draw::Painter* painter) const
         if (isBuzzRoll()) {
             painter->drawLine(LineF(x, -sp, x, bbox().bottom() + sp));
         } else {
-            painter->drawLine(LineF(x, -sp * .5, x, path.boundingRect().height() + sp));
+            painter->drawLine(LineF(x, -sp * .5, x, m_path.boundingRect().height() + sp));
         }
     }
 }
@@ -277,22 +216,22 @@ void Tremolo::draw(mu::draw::Painter* painter) const
 
 void Tremolo::setTremoloType(TremoloType t)
 {
-    _tremoloType = t;
+    m_tremoloType = t;
     switch (tremoloType()) {
     case TremoloType::R16:
     case TremoloType::C16:
-        _lines = 2;
+        m_lines = 2;
         break;
     case TremoloType::R32:
     case TremoloType::C32:
-        _lines = 3;
+        m_lines = 3;
         break;
     case TremoloType::R64:
     case TremoloType::C64:
-        _lines = 4;
+        m_lines = 4;
         break;
     default:
-        _lines = 1;
+        m_lines = 1;
         break;
     }
 
@@ -340,7 +279,7 @@ PainterPath Tremolo::basePath(double stretch) const
     if (isBuzzRoll()) {
         return PainterPath();
     }
-    bool tradAlternate = twoNotes() && _style == TremoloStyle::TRADITIONAL_ALTERNATE;
+    bool tradAlternate = twoNotes() && m_style == TremoloStyle::TRADITIONAL_ALTERNATE;
     if (tradAlternate && RealIsEqual(stretch, 0.)) {
         // this shape will have to be constructed after the stretch
         // is known
@@ -364,10 +303,10 @@ PainterPath Tremolo::basePath(double stretch) const
     double ty = td;
 
     // other lines
-    for (int i = 1; i < _lines; i++) {
+    for (int i = 1; i < m_lines; i++) {
         if (tradAlternate) {
-            double stemWidth1 = _chord1->stem()->lineWidthMag() / stretch;
-            double stemWidth2 = _chord2->stem()->lineWidthMag() / stretch;
+            double stemWidth1 = m_chord1->stem()->lineWidthMag() / stretch;
+            double stemWidth2 = m_chord2->stem()->lineWidthMag() / stretch;
             double inset = (stemGapSp * spatium()) / stretch;
 
             ppath.addRect(-w2 + inset + stemWidth1, ty,
@@ -400,8 +339,8 @@ void Tremolo::computeShape()
     if (isBuzzRoll()) {
         setbbox(symBbox(SymId::buzzRoll));
     } else {
-        path = basePath();
-        setbbox(path.boundingRect());
+        m_path = basePath();
+        setbbox(m_path.boundingRect());
     }
 }
 
@@ -444,21 +383,21 @@ PointF Tremolo::pagePos() const
 
 void Tremolo::setBeamDirection(DirectionV d)
 {
-    if (_direction == d) {
+    if (m_direction == d) {
         return;
     }
 
-    _direction = d;
+    m_direction = d;
 
     if (d != DirectionV::AUTO) {
-        _up = d == DirectionV::UP;
+        m_up = d == DirectionV::UP;
     }
     if (twoNotes()) {
-        if (_chord1) {
-            _chord1->setStemDirection(d);
+        if (m_chord1) {
+            m_chord1->setStemDirection(d);
         }
-        if (_chord2) {
-            _chord2->setStemDirection(d);
+        if (m_chord2) {
+            m_chord2->setStemDirection(d);
         }
     } else {
         chord()->setStemDirection(d);
@@ -476,37 +415,37 @@ bool Tremolo::crossStaffBeamBetween() const
         return false;
     }
 
-    return ((_chord1->staffMove() > _chord2->staffMove()) && _chord1->up() && !_chord2->up())
-           || ((_chord1->staffMove() < _chord2->staffMove()) && !_chord1->up() && _chord2->up());
+    return ((m_chord1->staffMove() > m_chord2->staffMove()) && m_chord1->up() && !m_chord2->up())
+           || ((m_chord1->staffMove() < m_chord2->staffMove()) && !m_chord1->up() && m_chord2->up());
 }
 
 void Tremolo::setUserModified(DirectionV d, bool val)
 {
     switch (d) {
     case DirectionV::AUTO:
-        _userModified[0] = val;
+        m_userModified[0] = val;
         break;
     case DirectionV::DOWN:
-        _userModified[0] = val;
+        m_userModified[0] = val;
         break;
     case DirectionV::UP:
-        _userModified[1] = val;
+        m_userModified[1] = val;
         break;
     }
 }
 
 TDuration Tremolo::durationType() const
 {
-    return _durationType;
+    return m_durationType;
 }
 
 void Tremolo::setDurationType(TDuration d)
 {
-    if (_durationType == d) {
+    if (m_durationType == d) {
         return;
     }
 
-    _durationType = d;
+    m_durationType = d;
     styleChanged();
 }
 
@@ -536,13 +475,13 @@ Fraction Tremolo::tremoloLen() const
 
 void Tremolo::setBeamPos(const PairF& bp)
 {
-    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-    _userModified[idx] = true;
+    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    m_userModified[idx] = true;
     setGenerated(false);
 
     double _spatium = spatium();
-    _beamFragment.py1[idx] = bp.first * _spatium;
-    _beamFragment.py2[idx] = bp.second * _spatium;
+    m_beamFragment.py1[idx] = bp.first * _spatium;
+    m_beamFragment.py2[idx] = bp.second * _spatium;
 }
 
 //---------------------------------------------------------
@@ -551,9 +490,9 @@ void Tremolo::setBeamPos(const PairF& bp)
 
 PairF Tremolo::beamPos() const
 {
-    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
     double _spatium = spatium();
-    return PairF(_beamFragment.py1[idx] / _spatium, _beamFragment.py2[idx] / _spatium);
+    return PairF(m_beamFragment.py1[idx] / _spatium, m_beamFragment.py2[idx] / _spatium);
 }
 
 //---------------------------------------------------------
@@ -562,8 +501,8 @@ PairF Tremolo::beamPos() const
 
 bool Tremolo::userModified() const
 {
-    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-    return _userModified[idx];
+    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    return m_userModified[idx];
 }
 
 //---------------------------------------------------------
@@ -572,8 +511,8 @@ bool Tremolo::userModified() const
 
 void Tremolo::setUserModified(bool val)
 {
-    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-    _userModified[idx] = val;
+    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    m_userModified[idx] = val;
 }
 
 //---------------------------------------------------------
@@ -582,12 +521,32 @@ void Tremolo::setUserModified(bool val)
 
 void Tremolo::triggerLayout() const
 {
-    if (twoNotes() && _chord1 && _chord2) {
-        toChordRest(_chord1)->triggerLayout();
-        toChordRest(_chord2)->triggerLayout();
+    if (twoNotes() && m_chord1 && m_chord2) {
+        toChordRest(m_chord1)->triggerLayout();
+        toChordRest(m_chord2)->triggerLayout();
     } else {
         EngravingItem::triggerLayout();
     }
+}
+
+bool Tremolo::needStartEditingAfterSelecting() const
+{
+    return twoNotes();
+}
+
+int Tremolo::gripsCount() const
+{
+    return twoNotes() ? 3 : 0;
+}
+
+Grip Tremolo::initialEditModeGrip() const
+{
+    return twoNotes() ? Grip::END : Grip::NO_GRIP;
+}
+
+Grip Tremolo::defaultGrip() const
+{
+    return twoNotes() ? Grip::MIDDLE : Grip::NO_GRIP;
 }
 
 //---------------------------------------------------------
@@ -596,21 +555,21 @@ void Tremolo::triggerLayout() const
 
 std::vector<PointF> Tremolo::gripsPositions(const EditData&) const
 {
-    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
 
     if (!twoNotes()) {
         return std::vector<PointF>();
     }
 
     int y = pagePos().y();
-    double beamStartX = _startAnchor.x() + _chord1->pageX();
-    double beamEndX = _endAnchor.x() + _chord1->pageX(); // intentional--chord1 is start x
+    double beamStartX = m_startAnchor.x() + m_chord1->pageX();
+    double beamEndX = m_endAnchor.x() + m_chord1->pageX(); // intentional--chord1 is start x
     double middleX = (beamStartX + beamEndX) / 2;
-    double middleY = (_beamFragment.py1[idx] + y + _beamFragment.py2[idx] + y) / 2;
+    double middleY = (m_beamFragment.py1[idx] + y + m_beamFragment.py2[idx] + y) / 2;
 
     return {
-        PointF(beamStartX, _beamFragment.py1[idx] + y),
-        PointF(beamEndX, _beamFragment.py2[idx] + y),
+        PointF(beamStartX, m_beamFragment.py1[idx] + y),
+        PointF(beamEndX, m_beamFragment.py2[idx] + y),
         PointF(middleX, middleY)
     };
 }
@@ -630,10 +589,10 @@ void Tremolo::endEdit(EditData& ed)
 
 void Tremolo::editDrag(EditData& ed)
 {
-    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
     double dy = ed.delta.y();
-    double y1 = _beamFragment.py1[idx];
-    double y2 = _beamFragment.py2[idx];
+    double y1 = m_beamFragment.py1[idx];
+    double y2 = m_beamFragment.py2[idx];
 
     if (ed.curGrip == Grip::MIDDLE) {
         y1 += dy;
@@ -691,9 +650,9 @@ PropertyValue Tremolo::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TREMOLO_TYPE:
-        return int(_tremoloType);
+        return int(m_tremoloType);
     case Pid::TREMOLO_STYLE:
-        return int(_style);
+        return int(m_style);
     default:
         break;
     }

@@ -39,6 +39,8 @@ set(CMAKE_MODULE_PATH
 ###########################################
 # Setup option and build settings
 ###########################################
+include(GetPaths)
+
 set(MUSESCORE_BUILD_CONFIGURATION "app" CACHE STRING "Build configuration")
 # Possible MUSESCORE_BUILD_CONFIGURATION values:
 # - app             - for desktop app
@@ -103,6 +105,7 @@ option(MUE_INSTALL_SOUNDFONT "Install sound font" ON)
 
 # === Tests ===
 option(MUE_BUILD_UNIT_TESTS "Build unit tests" ON)
+set(MUE_VTEST_MSCORE_REF_BIN "${CMAKE_CURRENT_LIST_DIR}/../MU_ORIGIN/MuseScore/build.debug/install/${INSTALL_SUBDIR}/mscore" CACHE PATH "Path to mscore ref bin")
 option(MUE_BUILD_ASAN "Enable Address Sanitizer" OFF)
 option(MUE_BUILD_CRASHPAD_CLIENT "Build crashpad client" ON)
 set(MUE_CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
@@ -114,6 +117,7 @@ option(MUE_ENABLE_CUSTOM_ALLOCATOR "Enable custom allocator (used for engraving)
 # === Compile ===
 option(MUE_COMPILE_BUILD_64 "Build 64 bit version of editor" ON)
 option(MUE_COMPILE_BUILD_MACOS_APPLE_SILICON "Build for Apple Silicon architecture. Only applicable on Macs with Apple Silicon, and requires suitable Qt version." OFF)
+option(MUE_COMPILE_INSTALL_QTQML_FILES "Whether to bundle qml files along with the installation (relevant on MacOS only)" ON)
 option(MUE_COMPILE_USE_PCH "Use precompiled headers." ON)
 option(MUE_COMPILE_USE_UNITY "Use unity build." ON)
 option(MUE_COMPILE_USE_CCACHE "Try use ccache" ON)
@@ -208,3 +212,8 @@ endif(OS_IS_LIN)
 if (OS_IS_WIN)
     include(Packaging)
 endif(OS_IS_WIN)
+
+###########################################
+# Add VTest
+###########################################
+add_subdirectory(vtest)

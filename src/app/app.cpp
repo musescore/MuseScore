@@ -169,10 +169,18 @@ int App::run(int argc, char** argv)
         if (multiInstancesProvider()->isMainInstance()) {
             splashScreen = new SplashScreen(SplashScreen::Default);
         } else {
-            QString fileName = startupScenario()->startupScoreFile().displayName(true /* includingExtension */);
-            splashScreen = new SplashScreen(SplashScreen::ForNewInstance, fileName);
+            project::ProjectFile file = startupScenario()->startupScoreFile();
+            if (file.isValid()) {
+                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, file.displayName(true /* includingExtension */));
+            } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
+                splashScreen = new SplashScreen(SplashScreen::ForNewInstance);
+            } else {
+                splashScreen = new SplashScreen(SplashScreen::Default);
+            }
         }
+    }
 
+    if (splashScreen) {
         splashScreen->show();
     }
 #endif

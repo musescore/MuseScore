@@ -518,7 +518,7 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("find",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
-             TranslatableString("action", "&Find / Go To"),
+             TranslatableString("action", "&Find / Go to"),
              TranslatableString("action", "Find / Go to")
              ),
     UiAction("staff-properties",
@@ -775,7 +775,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "No beam"),
              TranslatableString("action", "No beam"),
-             IconCode::Code::NOTE_HEAD_EIGHTH
+             IconCode::Code::BEAM_NONE
              ),
     UiAction("beam-break-left",
              mu::context::UiCtxNotationOpened,

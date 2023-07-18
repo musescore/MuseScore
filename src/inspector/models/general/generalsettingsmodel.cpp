@@ -33,8 +33,12 @@ GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositorySe
 
     setTitle(qtrc("inspector", "General"));
     setSectionType(InspectorSectionType::SECTION_GENERAL);
-    setPlaybackProxyModel(new PlaybackProxyModel(this, repository));
-    setAppearanceSettingsModel(new AppearanceSettingsModel(this, repository));
+
+    m_playbackProxyModel = new PlaybackProxyModel(this, repository);
+    m_playbackProxyModel->init();
+
+    m_appearanceSettingsModel = new AppearanceSettingsModel(this, repository);
+    m_appearanceSettingsModel->init();
 }
 
 void GeneralSettingsModel::createProperties()
@@ -124,6 +128,14 @@ void GeneralSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& pr
     }
 }
 
+void GeneralSettingsModel::onCurrentNotationChanged()
+{
+    AbstractInspectorModel::onCurrentNotationChanged();
+
+    m_appearanceSettingsModel->onCurrentNotationChanged();
+    m_playbackProxyModel->onCurrentNotationChanged();
+}
+
 void GeneralSettingsModel::onVisibleChanged(bool visible)
 {
     beginCommand();
@@ -166,16 +178,4 @@ QObject* GeneralSettingsModel::playbackProxyModel() const
 QObject* GeneralSettingsModel::appearanceSettingsModel() const
 {
     return m_appearanceSettingsModel;
-}
-
-void GeneralSettingsModel::setPlaybackProxyModel(PlaybackProxyModel* playbackProxyModel)
-{
-    m_playbackProxyModel = playbackProxyModel;
-    emit playbackProxyModelChanged(m_playbackProxyModel);
-}
-
-void GeneralSettingsModel::setAppearanceSettingsModel(AppearanceSettingsModel* appearanceSettingsModel)
-{
-    m_appearanceSettingsModel = appearanceSettingsModel;
-    emit appearanceSettingsModelChanged(m_appearanceSettingsModel);
 }

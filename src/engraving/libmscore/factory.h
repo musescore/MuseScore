@@ -268,6 +268,8 @@ public:
     static PlayTechAnnotation* createPlayTechAnnotation(Segment* parent, PlayingTechniqueType techniqueType, TextStyleType styleType,
                                                         bool isAccessibleEnabled = true);
 
+    static Capo* createCapo(Segment* parent, bool isAccessibleEnabled = true);
+
 private:
     static EngravingItem* doCreateItem(ElementType type, EngravingItem* parent);
 };

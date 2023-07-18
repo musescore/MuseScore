@@ -87,17 +87,17 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
     if (e.hasAttribute("len")) {
         StringList sl = e.attribute("len").split(u'/');
         if (sl.size() == 2) {
-            measure->_len = Fraction(sl.at(0).toInt(), sl.at(1).toInt());
+            measure->m_len = Fraction(sl.at(0).toInt(), sl.at(1).toInt());
         } else {
             LOGD("illegal measure size <%s>", muPrintable(e.attribute("len")));
         }
         irregular = true;
-        if (measure->_len.numerator() <= 0 || measure->_len.denominator() <= 0 || measure->_len.denominator() > 128) {
+        if (measure->m_len.numerator() <= 0 || measure->m_len.denominator() <= 0 || measure->m_len.denominator() > 128) {
             e.raiseError(mtrc("engraving",
-                              "MSCX error at line %1: invalid measure length: %2").arg(e.lineNumber()).arg(measure->_len.toString()));
+                              "MSCX error at line %1: invalid measure length: %2").arg(e.lineNumber()).arg(measure->m_len.toString()));
             return;
         }
-        ctx.compatTimeSigMap()->add(measure->tick().ticks(), SigEvent(measure->_len, measure->m_timesig));
+        ctx.compatTimeSigMap()->add(measure->tick().ticks(), SigEvent(measure->m_len, measure->m_timesig));
         ctx.compatTimeSigMap()->add((measure->tick() + measure->ticks()).ticks(), SigEvent(measure->m_timesig));
     } else {
         irregular = false;
@@ -406,7 +406,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 measure->m_timesig = ts->sig() / timeStretch;
 
                 if (!irregular) {
-                    measure->_len = measure->m_timesig;
+                    measure->m_len = measure->m_timesig;
                 }
             }
         } else if (tag == "KeySig") {

@@ -855,7 +855,7 @@ bool SlurSegment::isEndPointsEdited() const
 Slur::Slur(const Slur& s)
     : SlurTie(s)
 {
-    _sourceStemArrangement = s._sourceStemArrangement;
+    m_sourceStemArrangement = s.m_sourceStemArrangement;
 }
 
 //---------------------------------------------------------
@@ -871,7 +871,7 @@ void Slur::slurPosChord(SlurPos* sp)
     if (startChord()->isGraceAfter()) {      // grace notes after, coming in reverse order
         stChord = endChord();
         enChord = startChord();
-        _up = false;
+        m_up = false;
     } else {
         stChord = startChord();
         enChord = endChord();
@@ -879,7 +879,7 @@ void Slur::slurPosChord(SlurPos* sp)
     Note* _startNote = stChord->downNote();
     Note* _endNote   = enChord->downNote();
     double hw         = _startNote->bboxRightPos();
-    double __up       = _up ? -1.0 : 1.0;
+    double __up       = m_up ? -1.0 : 1.0;
     double _spatium = spatium();
 
     Measure* measure = endChord()->measure();
@@ -896,7 +896,7 @@ void Slur::slurPosChord(SlurPos* sp)
     double yo;
 
     //------p1
-    if (_up) {
+    if (m_up) {
         xo = _startNote->x() + hw * 1.12;
         yo = _startNote->pos().y() + hw * .3 * __up;
     } else {
@@ -906,7 +906,7 @@ void Slur::slurPosChord(SlurPos* sp)
     sp->p1 = stChord->pagePos() - pp + PointF(xo, yo);
 
     //------p2
-    if ((enChord->notes().size() > 1) || (enChord->stem() && !enChord->up() && !_up)) {
+    if ((enChord->notes().size() > 1) || (enChord->stem() && !enChord->up() && !m_up)) {
         xo = _endNote->x() - hw * 0.12;
         yo = _endNote->pos().y() + hw * .3 * __up;
     } else {

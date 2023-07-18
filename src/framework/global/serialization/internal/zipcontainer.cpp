@@ -385,6 +385,8 @@ struct ZipContainer::Impl {
     };
 
     void addEntry(EntryType type, const std::string& fileName, const ByteArray& contents);
+    bool writeToDevice(const uint8_t* data, size_t len);
+    bool writeToDevice(const ByteArray& data);
 
     Impl(IODevice* d)
         : device(d) {}
@@ -649,12 +651,29 @@ void ZipContainer::Impl::addEntry(EntryType type, const std::string& fileName, c
 
     fileHeaders.push_back(header);
 
+    bool ok = true;
+
     LocalFileHeader h = header.h.toLocalHeader();
-    device->write((const uint8_t*)&h, sizeof(LocalFileHeader));
-    device->write(header.file_name);
-    device->write(data);
+    ok &= writeToDevice((const uint8_t*)&h, sizeof(LocalFileHeader));
+    ok &= writeToDevice(header.file_name);
+    ok &= writeToDevice(data);
+
     start_of_directory = (uint)device->pos();
     dirtyFileTree = true;
+
+    if (!ok) {
+        status = ZipContainer::FileWriteError;
+    }
+}
+
+bool ZipContainer::Impl::writeToDevice(const uint8_t* data, size_t len)
+{
+    return device->write(data, len) == len;
+}
+
+bool ZipContainer::Impl::writeToDevice(const ByteArray& data)
+{
+    return device->write(data) == data.size();
 }
 
 ZipContainer::ZipContainer(IODevice* device)
@@ -820,15 +839,17 @@ void ZipContainer::close()
         return;
     }
 
+    bool ok = true;
+
     //qDebug("Zip::close writing directory, %d entries", p->fileHeaders.size());
     p->device->seek(p->start_of_directory);
     // write new directory
     for (size_t i = 0; i < p->fileHeaders.size(); ++i) {
         const FileHeader& header = p->fileHeaders.at(i);
-        p->device->write((const uint8_t*)&header.h, sizeof(CentralFileHeader));
-        p->device->write(header.file_name);
-        p->device->write(header.extra_field);
-        p->device->write(header.file_comment);
+        ok &= p->writeToDevice((const uint8_t*)&header.h, sizeof(CentralFileHeader));
+        ok &= p->writeToDevice(header.file_name);
+        ok &= p->writeToDevice(header.extra_field);
+        ok &= p->writeToDevice(header.file_comment);
     }
     int dir_size = (int)p->device->pos() - (int)p->start_of_directory;
     // write end of directory
@@ -843,8 +864,12 @@ void ZipContainer::close()
     writeUInt(eod.dir_start_offset, p->start_of_directory);
     writeUShort(eod.comment_length, (ushort)p->comment.size());
 
-    p->device->write((const uint8_t*)&eod, sizeof(EndOfDirectory));
-    p->device->write(p->comment);
+    ok &= p->writeToDevice((const uint8_t*)&eod, sizeof(EndOfDirectory));
+    ok &= p->writeToDevice(p->comment);
     p->device->close();
+
+    if (!ok) {
+        p->status = ZipContainer::FileWriteError;
+    }
 }
 }

@@ -86,7 +86,7 @@ FocusScope {
             height: width
             radius: width / 2
 
-            color: ui.theme.textFieldColor
+            color: "#FFFFFF"
         }
 
         StyledDropShadow {

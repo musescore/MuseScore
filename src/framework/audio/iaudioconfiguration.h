@@ -70,7 +70,7 @@ public:
     virtual async::Notification synthesizerStateChanged() const = 0;
     virtual async::Notification synthesizerStateGroupChanged(const std::string& groupName) const = 0;
 
-    virtual io::path_t knownAudioPluginsDir() const = 0;
+    virtual io::path_t knownAudioPluginsFilePath() const = 0;
 };
 }
 

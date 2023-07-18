@@ -322,31 +322,23 @@ InspectorSectionView {
             }
         }
 
-        PopupViewButton {
-            id: textAdvancedSettingsButton
+        ExpandableBlank {
+            id: showItem
+            isExpanded: false
 
-            width: contentColumn.width
-            anchorItem: root.anchorItem
+            title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
+
+            visible: root.model ? !root.model.isEmpty : false
+            width: parent.width
 
             navigation.panel: root.navigationPanel
             navigation.name: "TextAdvancedSettings"
             navigation.row: insertSpecCharactersButton.navigation.row + 1
 
-            text: qsTrc("inspector", "More…")
-            visible: root.model ? !root.model.isEmpty : false
-
-            popupContent: TextSettings {
+            contentItemComponent: TextSettings {
                 model: root.model
-
-                navigationPanel: textAdvancedSettingsButton.popupNavigationPanel
-            }
-
-            onEnsureContentVisibleRequested: function(invisibleContentHeight) {
-                root.ensureContentVisibleRequested(invisibleContentHeight)
-            }
-
-            onPopupOpened: {
-                root.popupOpened(popup, control)
+                navigationPanel: root.navigationPanel
+                navigationRowStart: showItem.navigation.row + 1
             }
         }
     }

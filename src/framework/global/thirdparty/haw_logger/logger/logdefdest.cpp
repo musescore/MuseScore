@@ -2,12 +2,25 @@
 
 #include <iostream>
 #include <cassert>
+#include <unordered_map>
 
 #ifdef _WIN32
 #include <Windows.h>
 #endif
 
 using namespace haw::logger;
+
+static const std::unordered_map<Color, std::string> COLOR_CODES = {
+    { None,    "\033[0m" },
+    { Black,   "\033[1;30m" },
+    { Red,     "\033[1;31m" },
+    { Green,   "\033[1;32m" },
+    { Yellow,  "\033[1;33m" },
+    { Blue,    "\033[1;34m" },
+    { Magenta, "\033[1;35m" },
+    { Cyan,    "\033[1;36m" },
+    { White,   "\033[1;37m" }
+};
 
 MemLogDest::MemLogDest(const LogLayout& l)
     : LogDest(l)
@@ -75,12 +88,16 @@ std::string ConsoleLogDest::name() const
 
 void ConsoleLogDest::write(const LogMsg& logMsg)
 {
+    std::string msg;
+    msg.reserve(100);
+    msg.append(COLOR_CODES.at(logMsg.color));
+    msg.append(m_layout.output(logMsg));
+    msg.append("\033[0m");
     #ifdef _WIN32
-    std::string stemp = m_layout.output(logMsg);
-    std::wstring temp = std::wstring(stemp.begin(), stemp.end());
+    std::wstring temp = std::wstring(msg.begin(), msg.end());
     OutputDebugString(temp.c_str());
     OutputDebugString(L"\n");
     #else
-    std::cout << m_layout.output(logMsg) << std::endl;
+    std::cout << msg << std::endl;
     #endif
 }

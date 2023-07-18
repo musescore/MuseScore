@@ -83,7 +83,7 @@ namespace mu::engraving {
 
 void Score::updateSwing()
 {
-    for (Staff* s : _staves) {
+    for (Staff* s : m_staves) {
         s->clearSwingList();
     }
     Measure* fm = firstMeasure();
@@ -107,7 +107,7 @@ void Score::updateSwing()
             sp.swingRatio = st->swingParameters().swingRatio;
             sp.swingUnit = st->swingParameters().swingUnit;
             if (st->systemFlag()) {
-                for (Staff* sta : _staves) {
+                for (Staff* sta : m_staves) {
                     sta->insertIntoSwingList(s->tick(), sp);
                 }
             } else {
@@ -123,7 +123,7 @@ void Score::updateSwing()
 
 void Score::updateCapo()
 {
-    for (Staff* s : _staves) {
+    for (Staff* s : m_staves) {
         s->clearCapoParams();
     }
 
@@ -264,7 +264,7 @@ void Score::updateHairpin(Hairpin* h)
         }
         break;
     case DynamicRange::SYSTEM:
-        for (Staff* s : _staves) {
+        for (Staff* s : m_staves) {
             s->velocities().addRamp(tick, tick2, veloChange, method, direction);
         }
         break;
@@ -285,7 +285,7 @@ void Score::updateVelo()
         return;
     }
 
-    for (Staff* st : _staves) {
+    for (Staff* st : m_staves) {
         st->velocities().clear();
         st->velocityMultiplications().clear();
     }
@@ -395,7 +395,7 @@ void Score::updateVelo()
             }
         }
 
-        for (const auto& sp : _spanner.map()) {
+        for (const auto& sp : m_spanner.map()) {
             Spanner* s = sp.second;
             if (s->type() != ElementType::HAIRPIN || sp.second->staffIdx() != staffIdx) {
                 continue;
@@ -405,7 +405,7 @@ void Score::updateVelo()
         }
     }
 
-    for (Staff* st : _staves) {
+    for (Staff* st : m_staves) {
         st->velocities().cleanup();
         st->velocityMultiplications().cleanup();
     }
@@ -559,7 +559,7 @@ static void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell, int& on
 //   renderArpeggio
 //---------------------------------------------------------
 
-void renderArpeggio(Chord* chord, std::vector<NoteEventList>& ell)
+void renderArpeggio(Chord* chord, std::vector<NoteEventList>& ell, int ontime)
 {
     int notes = int(chord->notes().size());
     int l = 64;
@@ -585,6 +585,7 @@ void renderArpeggio(Chord* chord, std::vector<NoteEventList>& ell)
         auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
         int ot = (l * j * 1000) / chord->upNote()->playTicks()
                  * tempoRatio * chord->arpeggio()->Stretch();
+        ot = std::clamp(ot + ontime, ot, 1000);
 
         events->push_back(NoteEvent(0, ot, 1000 - ot));
         j++;
@@ -1197,7 +1198,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, in
     bool tremolo = false;
 
     if (chord->arpeggio() && chord->arpeggio()->playArpeggio()) {
-        renderArpeggio(chord, ell);
+        renderArpeggio(chord, ell, ontime);
         arpeggio = true;
     } else {
         if (chord->tremolo()) {
@@ -1353,7 +1354,7 @@ void Score::createPlayEvents(Chord* chord, Chord* prevChord)
 
     Fraction tick = chord->tick();
     Slur* slur = 0;
-    for (auto sp : _spanner.map()) {
+    for (auto sp : m_spanner.map()) {
         if (!sp.second->isSlur() || sp.second->staffIdx() != chord->staffIdx()) {
             continue;
         }

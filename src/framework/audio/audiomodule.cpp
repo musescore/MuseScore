@@ -191,8 +191,13 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
 
     // Init configuration
     m_configuration->init();
-    m_soundFontRepository->init();
     m_registerAudioPluginsScenario->init();
+
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
+    m_soundFontRepository->init();
 
     m_audioBuffer->init(m_configuration->audioChannelsCount(),
                         m_configuration->renderStep());
@@ -209,7 +214,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
         for (const io::path_t& p : paths) {
             pr->reg("soundfonts", p);
         }
-        pr->reg("audio_plugins", m_configuration->knownAudioPluginsDir());
+        pr->reg("known_audio_plugins", m_configuration->knownAudioPluginsFilePath());
     }
 }
 

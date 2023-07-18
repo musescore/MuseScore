@@ -23,10 +23,10 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Gtr 2</trackName>
+      <trackName>Electric Guitar</trackName>
       <Instrument id="electric-guitar">
-        <longName>Gtr 2</longName>
-        <shortName>od.guit.</shortName>
+        <longName>Electric Guitar</longName>
+        <shortName>jz.guit.</shortName>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
@@ -70,9 +70,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="29"/>
-          <controller ctrl="7" value="55"/>
-          <controller ctrl="10" value="32"/>
+          <program value="26"/>
+          <controller ctrl="7" value="101"/>
           </Channel>
         </Instrument>
       </Part>
@@ -86,86 +85,78 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            </Dynamic>
           <Tempo>
-            <tempo>1.2</tempo>
-            <text><sym>metNoteQuarterUp</sym> = 72</text>
+            <tempo>2</tempo>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
+          <Spanner type="LetRing">
+            <LetRing>
+              </LetRing>
+            <next>
+              <location>
+                <measures>1</measures>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>5</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>5</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
           <Rest>
             <durationType>half</durationType>
             </Rest>
-          <Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
             <durationType>quarter</durationType>
-            </Rest>
-          <Tuplet>
-            <normalNotes>2</normalNotes>
-            <actualNotes>3</actualNotes>
-            <baseNote>eighth</baseNote>
-            <Number>
-              <style>tuplet</style>
-              <text>3</text>
-              </Number>
-            </Tuplet>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>0</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>0</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Spanner type="LetRing">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Rest>
-            <durationType>16th</durationType>
+            <durationType>half</durationType>
             </Rest>
-          <Dynamic>
-            <subtype>f</subtype>
-            <velocity>96</velocity>
-            </Dynamic>
-          <Beam>
-            <l1>24</l1>
-            <l2>22</l2>
-            </Beam>
-          <Chord>
-            <durationType>16th</durationType>
-            <Note>
-              <Spanner type="Tie">
-                <Tie>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/24</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              <fret>8</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>eighth</durationType>
-            <Note>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/24</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              <fret>8</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>eighth</durationType>
-            <Note>
-              <Accidental>
-                <subtype>accidentalSharp</subtype>
-                </Accidental>
-              <pitch>75</pitch>
-              <tpc>23</tpc>
-              <fret>16</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <endTuplet/>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>

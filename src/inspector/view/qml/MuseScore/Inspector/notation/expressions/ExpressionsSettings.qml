@@ -72,7 +72,7 @@ Column {
             anchors.left: root.left
             height: childrenRect.height
 
-            CheckBoxPropertyView {
+            PropertyCheckBox {
                 id: snapExpression
 
                 navigation.name: "SnapExpressionCheckBox"

@@ -131,7 +131,7 @@ Column {
         }
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         text: qsTrc("inspector", "Show courtesy time signature on previous system")
         propertyItem: root.model ? root.model.shouldShowCourtesy : null
 

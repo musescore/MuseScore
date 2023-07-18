@@ -29,29 +29,30 @@
 #include "libmscore/measure.h"
 
 #include "chordlayout.h"
+#include "beamtremololayout.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::layout::v0;
 
 void TremoloLayout::layout(Tremolo* item, LayoutContext& ctx)
 {
-    item->path = item->basePath();
+    item->setPath(item->basePath());
 
-    item->_chord1 = toChord(item->explicitParent());
-    if (!item->_chord1) {
+    item->setChord1(toChord(item->explicitParent()));
+    if (!item->chord1()) {
         // palette
         if (!item->isBuzzRoll()) {
-            const RectF box = item->path.boundingRect();
+            const RectF box = item->path().boundingRect();
             item->addbbox(RectF(box.x(), box.bottom(), box.width(), item->spatium()));
         }
         return;
     }
 
-    Note* anchor1 = item->_chord1->up() ? item->_chord1->upNote() : item->_chord1->downNote();
-    Stem* stem    = item->_chord1->stem();
+    Note* anchor1 = item->chord1()->up() ? item->chord1()->upNote() : item->chord1()->downNote();
+    Stem* stem    = item->chord1()->stem();
     double x, y, h;
     if (stem) {
-        x = stem->pos().x() + stem->width() / 2 * (item->_chord1->up() ? -1.0 : 1.0);
+        x = stem->pos().x() + stem->width() / 2 * (item->chord1()->up() ? -1.0 : 1.0);
         y = stem->pos().y();
         h = stem->length();
     } else {
@@ -59,18 +60,18 @@ void TremoloLayout::layout(Tremolo* item, LayoutContext& ctx)
         x = anchor1->x() + anchor1->headWidth() * 0.5;
         if (!item->twoNotes()) {
             bool hasMirroredNote = false;
-            for (Note* n : item->_chord1->notes()) {
+            for (Note* n : item->chord1()->notes()) {
                 if (n->mirror()) {
                     hasMirroredNote = true;
                     break;
                 }
             }
             if (hasMirroredNote) {
-                x = item->_chord1->stemPosX();
+                x = item->chord1()->stemPosX();
             }
         }
         y = anchor1->y();
-        h = (ctx.conf().styleMM(Sid::tremoloNoteSidePadding).val() + item->bbox().height()) * item->_chord1->intrinsicMag();
+        h = (ctx.conf().styleMM(Sid::tremoloNoteSidePadding).val() + item->bbox().height()) * item->chord1()->intrinsicMag();
     }
 
     if (item->twoNotes()) {
@@ -142,58 +143,58 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, dou
 
     // make sure both stems are in the same direction
     int up = 0;
-    bool isUp = item->_up;
-    if (item->_chord1->beam() && item->_chord1->beam() == item->_chord2->beam()) {
-        Beam* beam = item->_chord1->beam();
-        item->_up = beam->up();
-        item->_direction = beam->beamDirection();
+    bool isUp = item->up();
+    if (item->chord1()->beam() && item->chord1()->beam() == item->chord2()->beam()) {
+        Beam* beam = item->chord1()->beam();
+        item->setUp(beam->up());
+        item->setDirection(beam->beamDirection());
         // stem stuff is already taken care of by the beams
     } else if (!item->userModified()) {
         // user modified trems will be dealt with later
-        bool hasVoices = item->_chord1->measure()->hasVoices(item->_chord1->staffIdx(), item->_chord1->tick(),
-                                                             item->_chord2->tick() - item->_chord1->tick());
-        if (item->_chord1->stemDirection() == DirectionV::AUTO
-            && item->_chord2->stemDirection() == DirectionV::AUTO
-            && item->_chord1->staffMove() == item->_chord2->staffMove()
+        bool hasVoices = item->chord1()->measure()->hasVoices(item->chord1()->staffIdx(), item->chord1()->tick(),
+                                                              item->chord2()->tick() - item->chord1()->tick());
+        if (item->chord1()->stemDirection() == DirectionV::AUTO
+            && item->chord2()->stemDirection() == DirectionV::AUTO
+            && item->chord1()->staffMove() == item->chord2()->staffMove()
             && !hasVoices) {
             std::vector<int> noteDistances;
-            for (int distance : item->_chord1->noteDistances()) {
+            for (int distance : item->chord1()->noteDistances()) {
                 noteDistances.push_back(distance);
             }
-            for (int distance : item->_chord2->noteDistances()) {
+            for (int distance : item->chord2()->noteDistances()) {
                 noteDistances.push_back(distance);
             }
             std::sort(noteDistances.begin(), noteDistances.end());
             up = ChordLayout::computeAutoStemDirection(noteDistances);
             isUp = up > 0;
-        } else if (item->_chord1->stemDirection() != DirectionV::AUTO) {
-            isUp = item->_chord1->stemDirection() == DirectionV::UP;
-        } else if (item->_chord2->stemDirection() != DirectionV::AUTO) {
-            isUp = item->_chord2->stemDirection() == DirectionV::UP;
-        } else if (item->_chord1->staffMove() > 0 || item->_chord2->staffMove() > 0) {
+        } else if (item->chord1()->stemDirection() != DirectionV::AUTO) {
+            isUp = item->chord1()->stemDirection() == DirectionV::UP;
+        } else if (item->chord2()->stemDirection() != DirectionV::AUTO) {
+            isUp = item->chord2()->stemDirection() == DirectionV::UP;
+        } else if (item->chord1()->staffMove() > 0 || item->chord2()->staffMove() > 0) {
             isUp = false;
-        } else if (item->_chord1->staffMove() < 0 || item->_chord2->staffMove() < 0) {
+        } else if (item->chord1()->staffMove() < 0 || item->chord2()->staffMove() < 0) {
             isUp = true;
         } else if (hasVoices) {
-            isUp = item->_chord1->track() % 2 == 0;
+            isUp = item->chord1()->track() % 2 == 0;
         }
-        item->_up = isUp;
-        item->_chord1->setUp(item->_chord1->staffMove() == 0 ? isUp : !isUp); // if on a different staff, flip stem dir
-        item->_chord2->setUp(item->_chord2->staffMove() == 0 ? isUp : !isUp);
+        item->setUp(isUp);
+        item->chord1()->setUp(item->chord1()->staffMove() == 0 ? isUp : !isUp); // if on a different staff, flip stem dir
+        item->chord2()->setUp(item->chord2()->staffMove() == 0 ? isUp : !isUp);
 
-        ChordLayout::layoutStem(item->_chord1, ctx);
-        ChordLayout::layoutStem(item->_chord2, ctx);
+        ChordLayout::layoutStem(item->chord1(), ctx);
+        ChordLayout::layoutStem(item->chord2(), ctx);
     }
 
-    item->_layoutInfo = BeamTremoloLayout(item);
-    item->_startAnchor = item->_layoutInfo.chordBeamAnchor(item->_chord1, BeamTremoloLayout::ChordBeamAnchorType::Start);
-    item->_endAnchor = item->_layoutInfo.chordBeamAnchor(item->_chord2, BeamTremoloLayout::ChordBeamAnchorType::End);
+    item->layoutInfo = std::make_shared<BeamTremoloLayout>(item);
+    item->setStartAnchor(item->layoutInfo->chordBeamAnchor(item->chord1(), ChordBeamAnchorType::Start));
+    item->setEndAnchor(item->layoutInfo->chordBeamAnchor(item->chord2(), ChordBeamAnchorType::End));
     // deal with manual adjustments here and return
     PropertyValue val = item->getProperty(Pid::PLACEMENT);
     if (item->userModified()) {
-        int idx = (item->_direction == DirectionV::AUTO || item->_direction == DirectionV::DOWN) ? 0 : 1;
-        double startY = item->_beamFragment.py1[idx];
-        double endY = item->_beamFragment.py2[idx];
+        int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
+        double startY = item->beamFragment().py1[idx];
+        double endY = item->beamFragment().py2[idx];
         if (ctx.conf().styleB(Sid::snapCustomBeamsToGrid)) {
             const double quarterSpace = item->EngravingItem::spatium() / 4;
             startY = round(startY / quarterSpace) * quarterSpace;
@@ -201,14 +202,14 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, dou
         }
         startY += item->pagePos().y();
         endY += item->pagePos().y();
-        item->_startAnchor.setY(startY);
-        item->_endAnchor.setY(endY);
-        item->_layoutInfo.setAnchors(item->_startAnchor, item->_endAnchor);
+        item->startAnchor().setY(startY);
+        item->endAnchor().setY(endY);
+        item->layoutInfo->setAnchors(item->startAnchor(), item->endAnchor());
 
-        ChordLayout::layoutStem(item->_chord1, ctx);
-        ChordLayout::layoutStem(item->_chord2, ctx);
+        ChordLayout::layoutStem(item->chord1(), ctx);
+        ChordLayout::layoutStem(item->chord2(), ctx);
 
-        item->createBeamSegments();
+        createBeamSegments(item, ctx);
         return;
     }
     item->setPosY(0.);
@@ -234,13 +235,13 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, dou
 
     std::sort(notes.begin(), notes.end());
     item->setMag(mag);
-    item->_layoutInfo.calculateAnchors(chordRests, notes);
-    item->_startAnchor = item->_layoutInfo.startAnchor();
-    item->_endAnchor = item->_layoutInfo.endAnchor();
-    int idx = (item->_direction == DirectionV::AUTO || item->_direction == DirectionV::DOWN) ? 0 : 1;
-    item->_beamFragment.py1[idx] = item->_startAnchor.y() - item->pagePos().y();
-    item->_beamFragment.py2[idx] = item->_endAnchor.y() - item->pagePos().y();
-    item->createBeamSegments();
+    item->layoutInfo->calculateAnchors(chordRests, notes);
+    item->setStartAnchor(item->layoutInfo->startAnchor());
+    item->setEndAnchor(item->layoutInfo->endAnchor());
+    int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
+    item->beamFragment().py1[idx] = item->startAnchor().y() - item->pagePos().y();
+    item->beamFragment().py2[idx] = item->endAnchor().y() - item->pagePos().y();
+    createBeamSegments(item, ctx);
 }
 
 //---------------------------------------------------------
@@ -274,4 +275,93 @@ std::pair<double, double> TremoloLayout::extendedStemLenWithTwoNoteTremolo(Tremo
     }
 
     return { stemLen1, stemLen2 };
+}
+
+void TremoloLayout::createBeamSegments(Tremolo* item, LayoutContext& ctx)
+{
+    // TODO: This should be a style setting, to replace tremoloStrokeLengthMultiplier
+    static constexpr double stemGapSp = 1.0;
+    const bool defaultStyle = (!item->customStyleApplicable()) || (item->tremoloStyle() == TremoloStyle::DEFAULT);
+
+    IF_ASSERT_FAILED(item->layoutInfo) {
+        return;
+    }
+
+    DeleteAll(item->beamSegments());
+    item->beamSegments().clear();
+    if (!item->twoNotes()) {
+        return;
+    }
+    bool _isGrace = item->chord1()->isGrace();
+    PointF startAnchor = item->layoutInfo->startAnchor() - PointF(0., item->pagePos().y());
+    PointF endAnchor = item->layoutInfo->endAnchor() - PointF(0., item->pagePos().y());
+
+    // inset trem from stems for default style
+    double slope = (endAnchor.y() - startAnchor.y()) / (endAnchor.x() - startAnchor.x());
+    double gapSp = stemGapSp;
+    if (defaultStyle || item->tremoloStyle() == TremoloStyle::TRADITIONAL_ALTERNATE) {
+        // we can eat into the stemGapSp margin if the anchorpoints are sufficiently close together
+        double widthSp = (endAnchor.x() - startAnchor.x()) / item->spatium() - (stemGapSp * 2);
+        if (!RealIsEqualOrMore(widthSp, 0.6)) {
+            // tremolo beam is too short; we can eat into the gap spacing a little
+            gapSp = std::max(stemGapSp - ((0.6 - widthSp) * 0.5), 0.4);
+        }
+    } else {
+        gapSp = 0.0;
+    }
+    BeamSegment* mainStroke = new BeamSegment(item);
+    PointF xOffset = PointF(gapSp * item->spatium(), 0);
+    PointF yOffset = PointF(0, gapSp * item->spatium() * slope);
+    if (item->tremoloStyle() == TremoloStyle::TRADITIONAL_ALTERNATE) {
+        mainStroke->line = LineF(startAnchor, endAnchor);
+        startAnchor += xOffset;
+        endAnchor -= xOffset;
+        startAnchor += yOffset;
+        endAnchor -= yOffset;
+    } else {
+        startAnchor += xOffset;
+        endAnchor -= xOffset;
+        startAnchor += yOffset;
+        endAnchor -= yOffset;
+        mainStroke->line = LineF(startAnchor, endAnchor);
+    }
+    mainStroke->level = 0;
+
+    item->beamSegments().push_back(mainStroke);
+    double bboxTop = item->up()
+                     ? std::min(mainStroke->line.y1(), mainStroke->line.y2())
+                     : std::max(mainStroke->line.y1(), mainStroke->line.y2());
+    double halfWidth = ctx.conf().styleMM(Sid::beamWidth).val() / 2. * (item->up() ? -1. : 1.);
+
+    RectF bbox = RectF(mainStroke->line.x1(), bboxTop + halfWidth, mainStroke->line.x2() - mainStroke->line.x1(),
+                       std::abs(mainStroke->line.y2() - mainStroke->line.y1()) - halfWidth * 2.);
+
+    PointF beamOffset = PointF(0., (item->up() ? 1 : -1) * item->spatium() * (ctx.conf().styleB(Sid::useWideBeams) ? 1. : 0.75));
+    beamOffset.setY(beamOffset.y() * item->mag() * (_isGrace ? ctx.conf().styleD(Sid::graceNoteMag) : 1.));
+    for (int i = 1; i < item->lines(); ++i) {
+        BeamSegment* stroke = new BeamSegment(item);
+        stroke->level = i;
+        stroke->line = LineF(startAnchor + (beamOffset * (double)i), endAnchor + (beamOffset * (double)i));
+        item->beamSegments().push_back(stroke);
+        bbox.unite(bbox.translated(0., beamOffset.y() * (double)i));
+    }
+    item->setbbox(bbox);
+
+    // size stems properly
+    if (item->chord1()->stem() && item->chord2()->stem()
+        && !(item->chord1()->beam() && item->chord1()->beam() == item->chord2()->beam())) {
+        // we don't need to do anything if these chords are part of the same beam--their stems are taken care of
+        // by the beam layout
+        int beamSpacing = ctx.conf().styleB(Sid::useWideBeams) ? 4 : 3;
+        for (ChordRest* cr : { item->chord1(), item->chord2() }) {
+            Chord* chord = toChord(cr);
+            double addition = 0.0;
+            if (cr->up() != item->up() && item->lines() > 1) {
+                // need to adjust further for beams on the opposite side
+                addition += (item->lines() - 1.) * beamSpacing / 4. * item->spatium() * item->mag();
+            }
+            // calling extendStem with addition 0.0 still sizes the stem to the manually adjusted height of the trem.
+            item->layoutInfo->extendStem(chord, addition);
+        }
+    }
 }

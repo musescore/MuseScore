@@ -144,6 +144,7 @@ PaletteTreePtr PaletteCreator::newMasterPaletteTree()
     tree->append(newNoteHeadsPalette());
     tree->append(newArpeggioPalette());
     tree->append(newTremoloPalette());
+    tree->append(newHarpPalette());
     tree->append(newGuitarPalette());
     tree->append(newFingeringPalette());
     tree->append(newFretboardDiagramPalette());
@@ -151,7 +152,6 @@ PaletteTreePtr PaletteCreator::newMasterPaletteTree()
     tree->append(newBagpipeEmbellishmentPalette());
     tree->append(newBeamPalette());
     tree->append(newLinesPalette());
-    tree->append(newHarpPalette());
 
     return tree;
 }
@@ -180,6 +180,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newNoteHeadsPalette());
     defaultPalette->append(newArpeggioPalette());
     defaultPalette->append(newTremoloPalette());
+    defaultPalette->append(newHarpPalette());
     defaultPalette->append(newGuitarPalette(true));
     defaultPalette->append(newFingeringPalette(true));
     defaultPalette->append(newFretboardDiagramPalette());
@@ -187,7 +188,6 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newBagpipeEmbellishmentPalette());
     defaultPalette->append(newBeamPalette());
     defaultPalette->append(newLinesPalette(true));
-    defaultPalette->append(newHarpPalette());
 
     return defaultPalette;
 }
@@ -1258,15 +1258,20 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     auto pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setBeginText(Pedal::PEDAL_SYMBOL);
+    pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
     pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
+    pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
     pedal->setEndHookType(HookType::HOOK_90);
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and line)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setBeginText(Pedal::PEDAL_SYMBOL);
+    pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
     pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
+    pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
     pedal->setEndText(Pedal::STAR_SYMBOL);
+    pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
     pedal->setLineVisible(false);
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and asterisk)"));
 
@@ -1931,15 +1936,20 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     auto pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setBeginText(Pedal::PEDAL_SYMBOL);
+    pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
     pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
+    pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
     pedal->setEndText(Pedal::STAR_SYMBOL);
+    pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
     pedal->setLineVisible(false);
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and asterisk)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
     pedal->setBeginText(Pedal::PEDAL_SYMBOL);
+    pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
     pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
+    pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
     pedal->setEndHookType(HookType::HOOK_90);
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and line)"));
 
@@ -2030,10 +2040,10 @@ PalettePtr PaletteCreator::newPitchPalette(bool defaultPalette)
 PalettePtr PaletteCreator::newHarpPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Harp);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Harp notation"));
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Harp"));
     sp->setGridSize(90, 30);
     sp->setDrawGrid(true);
-    sp->setVisible(true);
+    sp->setVisible(false);
 
     auto pedalDiagram = Factory::makeHarpPedalDiagram(gpaletteScore->dummy()->segment());
     sp->appendElement(pedalDiagram, QT_TRANSLATE_NOOP("palette", "Harp pedal diagram"));

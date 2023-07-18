@@ -28,6 +28,8 @@
 
 #include "layoutcontext.h"
 
+#include "libmscore/beam.h"
+
 namespace mu::engraving {
 class Beam;
 class Chord;
@@ -54,6 +56,10 @@ public:
     static void breakCrossMeasureBeams(Measure* measure, LayoutContext& ctx);
     static void layoutNonCrossBeams(Segment* s, LayoutContext& ctx);
     static void verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext& ctx);
+
+    static PointF chordBeamAnchor(const Beam* item, const ChordRest* chord, ChordBeamAnchorType anchorType);
+    static double chordBeamAnchorY(const Beam* item, const ChordRest* chord);
+    static void setTremAnchors(Beam* item, LayoutContext& ctx);
 
 private:
     static void beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after);

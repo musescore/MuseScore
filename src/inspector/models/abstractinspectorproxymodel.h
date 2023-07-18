@@ -63,6 +63,8 @@ public:
 
     void updateModels(const ElementKeySet& newElementKeySet);
 
+    void onCurrentNotationChanged() override;
+
 public slots:
     void setDefaultSubModelType(mu::inspector::InspectorModelType modelType);
 

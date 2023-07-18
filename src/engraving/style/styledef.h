@@ -297,6 +297,9 @@ enum class Sid {
     pedalFrameRound,
     pedalFrameFgColor,
     pedalFrameBgColor,
+    pedalText,
+    pedalContinueText,
+    pedalEndText,
 
     trillPlacement,
     trillPosAbove,
@@ -927,6 +930,8 @@ enum class Sid {
     expressionAlign,
     expressionPlacement,
     expressionOffset,
+    expressionPosAbove,
+    expressionPosBelow,
     expressionFrameType,
     expressionFramePadding,
     expressionFrameWidth,

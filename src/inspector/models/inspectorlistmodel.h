@@ -72,6 +72,8 @@ private:
 
     AbstractInspectorModel* modelBySectionType(InspectorSectionType sectionType) const;
 
+    void notifyModelsAboutNotationChanged();
+
     QList<AbstractInspectorModel*> m_modelList;
 
     IElementRepositoryService* m_repository = nullptr;

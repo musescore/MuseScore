@@ -95,7 +95,8 @@ public:
 
     bool isConnectingEqualArticulations() const;
 
-    bool isInside() const { return _isInside; }
+    bool isInside() const { return m_isInside; }
+    void setIsInside(bool val) { m_isInside = val; }
 
     void calculateDirection();
 
@@ -110,9 +111,7 @@ public:
 
 private:
 
-    friend class layout::v0::SlurTieLayout;
-
-    bool _isInside = false;
+    bool m_isInside = false;
 };
 } // namespace mu::engraving
 #endif

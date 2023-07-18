@@ -117,14 +117,14 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     }
 
     bool styleDidChange = false;
-    if (item->isEven() && !item->_even) {
+    if (item->isEven() && !item->even()) {
         item->initTextStyleType(TextStyleType::LYRICS_EVEN, /* preserveDifferent */ true);
-        item->_even = true;
+        item->setEven(true);
         styleDidChange = true;
     }
-    if (!item->isEven() && item->_even) {
+    if (!item->isEven() && item->even()) {
         item->initTextStyleType(TextStyleType::LYRICS_ODD, /* preserveDifferent */ true);
-        item->_even = false;
+        item->setEven(false);
         styleDidChange = true;
     }
 
@@ -133,29 +133,31 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     }
 
     ChordRest* cr = item->chordRest();
-    if (item->_removeInvalidSegments) {
+    if (item->isRemoveInvalidSegments()) {
         item->removeInvalidSegments();
-    } else if (item->_ticks > Fraction(0, 1) || item->_syllabic == LyricsSyllabic::BEGIN || item->_syllabic == LyricsSyllabic::MIDDLE) {
-        if (!item->_separator) {
-            item->_separator = new LyricsLine(ctx.mutDom().dummyParent());
-            item->_separator->setTick(cr->tick());
-            ctx.mutDom().addUnmanagedSpanner(item->_separator);
+    }
+    if (item->ticks() > Fraction(0, 1) || item->syllabic() == LyricsSyllabic::BEGIN || item->syllabic() == LyricsSyllabic::MIDDLE) {
+        if (!item->separator()) {
+            LyricsLine* separator = new LyricsLine(ctx.mutDom().dummyParent());
+            separator->setTick(cr->tick());
+            item->setSeparator(separator);
+            ctx.mutDom().addUnmanagedSpanner(item->separator());
         }
-        item->_separator->setParent(item);
-        item->_separator->setTick(cr->tick());
+        item->separator()->setParent(item);
+        item->separator()->setTick(cr->tick());
         // HACK separator should have non-zero length to get its layout
         // always triggered. A proper ticks length will be set later on the
         // separator layout.
-        item->_separator->setTicks(Fraction::fromTicks(1));
-        item->_separator->setTrack(item->track());
-        item->_separator->setTrack2(item->track());
-        item->_separator->setVisible(item->visible());
+        item->separator()->setTicks(Fraction::fromTicks(1));
+        item->separator()->setTrack(item->track());
+        item->separator()->setTrack2(item->track());
+        item->separator()->setVisible(item->visible());
         // bbox().setWidth(bbox().width());  // ??
     } else {
-        if (item->_separator) {
-            item->_separator->removeUnmanaged();
-            delete item->_separator;
-            item->_separator = 0;
+        if (item->separator()) {
+            item->separator()->removeUnmanaged();
+            delete item->separator();
+            item->setSeparator(nullptr);
         }
     }
 
@@ -215,7 +217,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
 
     item->setPosX(x);
 
-    if (item->_ticks.isNotZero()) {
+    if (item->ticks().isNotZero()) {
         // set melisma end
         ChordRest* ecr = ctx.mutDom().findCR(item->endTick(), item->track());
         if (ecr) {
@@ -279,13 +281,15 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
                 ps = ps->prev1(SegmentType::ChordRest);
             }
             if (!ps || ps == lyricsSegment) {
-                // no valid previous CR, so try to lengthen melisma instead
+                // either there is no valid previous CR, or the previous CR is the one the lyric starts on
+                // we don't want to make the melisma longer arbitrarily, but there is a possibility that the next
+                // CR won't extend the melisma, so let's check it
                 ps = ns;
                 s = ps->nextCR(lyricsTrack, true);
                 EngravingItem* e = s ? s->element(lyricsTrack) : nullptr;
                 // check to make sure we have a chord
-                if (!e || e->type() != ElementType::CHORD) {
-                    // nothing to do but set ticks to 0
+                if (!e || e->type() != ElementType::CHORD || ps->tick() > item->tick() + item->ticks()) {
+                    // nope, nothing to do but set ticks to 0
                     // this will result in melisma being deleted later
                     item->lyrics()->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(0));
                     item->setTicks(Fraction(0, 1));
@@ -300,13 +304,13 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
             item->setTicks(s->tick() - lyricsStartTick);
         }
     } else {                                    // dash(es)
-        item->_nextLyrics = searchNextLyrics(item->lyrics()->segment(),
+        item->setNextLyrics(searchNextLyrics(item->lyrics()->segment(),
                                              item->staffIdx(),
                                              item->lyrics()->no(),
                                              item->lyrics()->placement()
-                                             );
+                                             ));
 
-        item->setTick2(item->_nextLyrics ? item->_nextLyrics->segment()->tick() : item->tick());
+        item->setTick2(item->nextLyrics() ? item->nextLyrics()->segment()->tick() : item->tick());
     }
     if (item->ticks().isNotZero()) {                  // only do layout if some time span
         // do layout with non-0 duration
@@ -330,7 +334,7 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
     System* sys;
 
     if (item->lyricsLine()->ticks() <= Fraction(0, 1)) {     // if no span,
-        item->_numOfDashes = 0;                 // nothing to draw
+        item->setNumOfDashes(0);                 // nothing to draw
         return;                           // and do nothing
     }
 
@@ -394,9 +398,9 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
     double len = item->pos2().rx();
     if (isEndMelisma) {                   // melisma
         if (len < minMelismaLen) { // Omit the extender line if too short
-            item->_numOfDashes = 0;
+            item->setNumOfDashes(0);
         } else {
-            item->_numOfDashes = 1;
+            item->setNumOfDashes(1);
         }
         item->movePosY(-item->lyricsLine()->lineWidth() * .5);     // let the line 'sit on' the base line
         // if not final segment, shorten it (why? -AS)
@@ -408,26 +412,26 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
     } else {                              // dash(es)
         // set conventional dash Y pos
         item->movePosY(-lyr->fontMetrics().xHeight() * ctx.conf().styleD(Sid::lyricsDashYposRatio));
-        item->_dashLength = ctx.conf().styleMM(Sid::lyricsDashMaxLength) * item->mag();      // and dash length
+        item->setDashLength(ctx.conf().styleMM(Sid::lyricsDashMaxLength) * item->mag());      // and dash length
         if (len < minDashLen) {                                               // if no room for a dash
             // if at end of system or dash is forced
             if (endOfSystem || ctx.conf().styleB(Sid::lyricsDashForce)) {
-                item->rxpos2()          = minDashLen;                               //     draw minimal dash
-                item->_numOfDashes      = 1;
-                item->_dashLength       = minDashLen;
+                item->rxpos2() = minDashLen;                               //     draw minimal dash
+                item->setNumOfDashes(1);
+                item->setDashLength(minDashLen);
             } else {                                                          //   if within system or dash not forced
-                item->_numOfDashes = 0;                                             //     draw no dash
+                item->setNumOfDashes(0);                                             //     draw no dash
             }
         } else if (len < (maxDashDist * 1.5)) {                               // if no room for two dashes
-            item->_numOfDashes = 1;                                                 //    draw one dash
-            if (item->_dashLength > len) {                                          // if no room for a full dash
-                item->_dashLength = len;                                            //    shorten it
+            item->setNumOfDashes(1);                                                 //    draw one dash
+            if (item->dashLength() > len) {                                          // if no room for a full dash
+                item->setDashLength(len);                                            //    shorten it
             }
         } else {
-            item->_numOfDashes = len / maxDashDist + 1;                             // draw several dashes
+            item->setNumOfDashes(len / maxDashDist + 1);                             // draw several dashes
         }
         // adjust next lyrics horiz. position if too little a space forced to skip the dash
-        if (item->_numOfDashes == 0 && nextLyr != nullptr && len > 0) {
+        if (item->numOfDashes() == 0 && nextLyr != nullptr && len > 0) {
             nextLyr->movePosX(-(toX - fromX));
         }
     }

@@ -790,9 +790,11 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
     INotationNoteInputPtr noteInput = interaction->noteInput();
     const EngravingItem* hitElement = hitElementContext().element;
 
-    if (!hitElement && !m_isCanvasDragged && !interaction->isGripEditStarted()
-        && !interaction->isDragStarted() && !noteInput->isNoteInputMode()) {
-        interaction->clearSelection();
+    if (event->modifiers() != Qt::ControlModifier && event->modifiers() != Qt::ShiftModifier) {
+        if (!hitElement && !m_isCanvasDragged && !interaction->isGripEditStarted()
+            && !interaction->isDragStarted() && !noteInput->isNoteInputMode()) {
+            interaction->clearSelection();
+        }
     }
 
     if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier) {

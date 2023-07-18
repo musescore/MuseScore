@@ -115,9 +115,6 @@
         </Measure>
       <Measure>
         <voice>
-          <location>
-            <fractions>3/4</fractions>
-            </location>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -126,9 +123,6 @@
         </Measure>
       <Measure>
         <voice>
-          <location>
-            <fractions>3/4</fractions>
-            </location>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -158,9 +152,6 @@
               <string>0</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>

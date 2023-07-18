@@ -322,6 +322,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
         p->setId(part->id());
         p->setInstrument(*part->instrument());
         p->setPartName(part->partName());
+        p->setPreferSharpFlat(part->preferSharpFlat());
 
         for (Staff* staff : part->staves()) {
             Staff* s = Factory::createStaff(p);

@@ -344,13 +344,6 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
     // glueing line segment elements separated with rests
     m_continiousElementsBuilder->addElementsToScore();
 
-    // fixing last measure barline
-    if (_lastMeasure) {
-        for (size_t staffIdx = 0; staffIdx < _score->staves().size(); staffIdx++) {
-            _lastMeasure->setEndBarLineType(mu::engraving::BarLineType::FINAL, staffIdx * VOICES);
-        }
-    }
-
     addTempoMap();
     addInstrumentChanges();
     StretchedBend::prepareBends(m_stretchedBends);
@@ -363,24 +356,14 @@ void GPConverter::convertMasterBar(const GPMasterBar* mB, Context ctx)
     Measure* measure = addMeasure(mB);
 
     addTimeSig(mB, measure);
-
     addKeySig(mB, measure);
-
-    addBarline(mB, measure);
-
+    addBarline(mB, measure, ctx.masterBarIndex);
     addRepeat(mB, measure);
-
     collectFermatas(mB, measure);
-
     convertBars(mB->bars(), ctx);
-
     addTripletFeel(mB, measure);
-
     addSection(mB, measure);
-
     addDirection(mB, measure);
-
-    _lastMeasure = measure;
 
     fixEmptyMeasures();
 }
@@ -391,10 +374,11 @@ void GPConverter::fixEmptyMeasures()
     // Also store root Segment ptr will need it later to delete some rest elems
     std::map<track_idx_t, std::vector<std::pair<Segment*, EngravingItem*> > > elems;
 
-    auto ntracks = _score->ntracks();
-    auto type = SegmentType::ChordRest;
+    size_t ntracks = _score->ntracks();
+    SegmentType type = SegmentType::ChordRest;
+    Measure* lastMeasure = _score->lastMeasure();
 
-    for (Segment* s = _lastMeasure->segments().first(type); s; s = s->next(type)) {
+    for (Segment* s = lastMeasure->segments().first(type); s; s = s->next(type)) {
         for (track_idx_t i = 0; i < ntracks; ++i) {
             auto e = s->element(i);
             if (!e) {
@@ -406,7 +390,7 @@ void GPConverter::fixEmptyMeasures()
 
     for (const auto& [staffIdx, segItemPairs] : elems) {
         bool shouldClear = true;
-        for (auto p : segItemPairs) {
+        for (const auto& p : segItemPairs) {
             // Don't need to do anything if there is not "rest" elem on a staff
             if (!p.second->isRest()) {
                 shouldClear = false;
@@ -417,15 +401,15 @@ void GPConverter::fixEmptyMeasures()
             // Keep only one rest element in a bar and make its duration V_MEASURE
             // that way layout can recognize this bar as "empty"
             // and properly render mmrests
-            size_t lastIndex = segItemPairs.size() - 1;
             if (segItemPairs.empty()) {
                 continue;
             }
-            for (size_t i = 0; i < lastIndex; ++i) {
+            for (size_t i = 1; i < segItemPairs.size(); ++i) {
                 segItemPairs.at(i).first->remove(segItemPairs.at(i).second);
             }
-            Rest* rest = toRest(segItemPairs.at(lastIndex).second);
-            rest->setTicks(_lastMeasure->ticks());
+
+            Rest* rest = toRest(segItemPairs.at(0).second);
+            rest->setTicks(lastMeasure->ticks());
             rest->setDurationType(DurationType::V_MEASURE);
         }
     }
@@ -435,6 +419,8 @@ void GPConverter::convertBars(const std::vector<std::unique_ptr<GPBar> >& bars, 
 {
     ctx.curTrack = 0;
     for (const auto& bar : bars) {
+        m_chordExistsInBar = false;
+        m_chordExistsForVoice.fill(false);
         convertBar(bar.get(), ctx);
         ctx.curTrack += VOICES;
     }
@@ -449,18 +435,16 @@ void GPConverter::convertBar(const GPBar* bar, Context ctx)
     }
 
     convertVoices(bar->voices(), ctx);
-
-    for (track_idx_t i = ctx.curTrack; i < ctx.curTrack + VOICES; i++) {
-        hideRestsInEmptyMeasures(i);
-    }
+    hideRestsInEmptyMeasures(ctx.curTrack, ctx.curTrack + VOICES);
 }
 
-void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
+void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure, int32_t masterBarIndex)
 {
     static bool insideFreeTime = false;
     size_t staves = _score->staves().size();
+    bool lastMeasure = (masterBarIndex == _gpDom->masterBars().size() - 1);
 
-    if (mB->barlineType() == GPMasterBar::BarlineType::DOUBLE) {
+    if (!lastMeasure && mB->barlineType() == GPMasterBar::BarlineType::DOUBLE) {
         for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
             measure->setEndBarLineType(mu::engraving::BarLineType::DOUBLE, staffIdx * VOICES);
         }
@@ -470,7 +454,7 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
     auto scoreTimeSig = Fraction(sig.numerator, sig.denominator);
 
     if (mB->freeTime()) {
-        if (mB->barlineType() != GPMasterBar::BarlineType::DOUBLE) {
+        if (!lastMeasure && mB->barlineType() != GPMasterBar::BarlineType::DOUBLE) {
             for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
                 measure->setEndBarLineType(mu::engraving::BarLineType::BROKEN, staffIdx * VOICES);
             }
@@ -570,11 +554,11 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
         curSegment->add(cr);
 
         if (cr->isChord()) {
-            m_chordsInMeasureByVoice[lastMeasure][cr->voice()]++;
-            m_chordsInMeasure[lastMeasure]++;
+            m_chordExistsForVoice[ctx.curTrack % VOICES] = true;
+            m_chordExistsInBar = true;
 
             if (beat->stemOrientationUserDefined()) {
-                static_cast<Chord*>(cr)->setStemDirection(beat->stemOrientationUp() ? DirectionV::UP : DirectionV::DOWN);
+                toChord(cr)->setStemDirection(beat->stemOrientationUp() ? DirectionV::UP : DirectionV::DOWN);
             }
 
             setBeamMode(beat, cr, lastMeasure, ctx.curTick);
@@ -1120,8 +1104,8 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
 
         part->staff(0)->insertCapoParams({ 0, 1 }, params);
         part->setCapoFret(capoFret);
-
         auto tunning = staffProperty[0].tunning;
+
         bool useFlats = staffProperty[0].useFlats;
         auto fretCount = staffProperty[0].fretCount;
 
@@ -1178,17 +1162,29 @@ void GPConverter::fillUncompletedMeasure(const Context& ctx)
     }
 }
 
-void GPConverter::hideRestsInEmptyMeasures(track_idx_t track)
+void GPConverter::hideRestsInEmptyMeasures(track_idx_t startTrack, track_idx_t endTrack)
 {
-    Measure* lastMeasure = _score->lastMeasure();
-    for (Segment* segment = lastMeasure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
-        EngravingItem* element = segment->element(track);
-        if (element && element->isRest()) {
-            if (m_chordsInMeasureByVoice[lastMeasure][element->voice()] == 0) {
-                bool measureHasChords = m_chordsInMeasure[lastMeasure] != 0;
-                if (measureHasChords || (!measureHasChords && element->voice() != 0)) {
-                    toRest(element)->setGap(true);
-                }
+    for (Segment* segment = _score->lastMeasure()->first(SegmentType::ChordRest); segment;
+         segment = segment->next(SegmentType::ChordRest)) {
+        for (track_idx_t trackIdx = startTrack; trackIdx < endTrack; trackIdx++) {
+            EngravingItem* element = segment->element(trackIdx);
+            if (!element || !element->isRest()) {
+                continue;
+            }
+
+            Rest* rest = toRest(element);
+            size_t voice = trackIdx % VOICES;
+            bool mainVoice = (voice == 0);
+
+            // hiding rests in secondary voices for measures without any chords
+            if (!m_chordExistsInBar) {
+                rest->setGap(!mainVoice);
+                continue;
+            }
+
+            // hiding rests in voices without chords
+            if (!m_chordExistsForVoice[voice]) {
+                rest->setGap(true);
             }
         }
     }
@@ -2863,13 +2859,7 @@ void GPConverter::setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measur
         }
     }
 
-    cr->setBeamMode(beamMode);
-
-    /// last chord of the measure has always type BeamMode::AUTO, which makes layout incorrect
-    if (measure != _lastMeasure) {
-        cr->setBeamMode(m_previousBeamMode);
-    }
-
+    cr->setBeamMode(m_previousBeamMode);
     m_previousBeamMode = beamMode;
 }
 } // namespace mu::iex::guitarpro

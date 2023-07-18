@@ -857,7 +857,10 @@ void TWrite::write(const ChordLine* item, XmlWriter& xml, WriteContext& ctx)
         xml.startElement("Path");
         for (size_t i = 0; i < n; ++i) {
             const PainterPath::Element& e = path.elementAt(i);
-            xml.tag("Element", { { "type", int(e.type) }, { "x", e.x }, { "y", e.y } });
+            double spatium = item->spatium();
+            double x = e.x / spatium;
+            double y = e.y / spatium;
+            xml.tag("Element", { { "type", int(e.type) }, { "x", x }, { "y", y } });
         }
         xml.endElement();
     }
@@ -2128,9 +2131,6 @@ void TWrite::write(const Pedal* item, XmlWriter& xml, WriteContext& ctx)
 
     for (auto i : {
         Pid::END_HOOK_TYPE,
-        Pid::BEGIN_TEXT,
-        Pid::CONTINUE_TEXT,
-        Pid::END_TEXT,
         Pid::LINE_VISIBLE,
         Pid::BEGIN_HOOK_TYPE
     }) {

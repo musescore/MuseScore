@@ -30,6 +30,7 @@ using namespace mu::uicomponents;
 
 static const QString ALL_INSTRUMENTS_GENRE_ID("ALL_INSTRUMENTS");
 static const QString NONE_GROUP_ID("");
+static const QString FIRST_GROUP_ID("FIRST_GROUP_ID");
 static const QString INSTRUMENT_TEMPLATE_KEY("instrumentTemplate");
 
 InstrumentListModel::InstrumentListModel(QObject* parent)
@@ -135,7 +136,7 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     loadGroups();
 
     if (currentInstrumentId.isEmpty()) {
-        init(COMMON_GENRE_ID, NONE_GROUP_ID);
+        init(COMMON_GENRE_ID, FIRST_GROUP_ID);
     } else {
         init(COMMON_GENRE_ID, resolveInstrumentGroupId(currentInstrumentId));
     }
@@ -168,7 +169,13 @@ void InstrumentListModel::init(const QString& genreId, const QString& groupId)
     TRACEFUNC;
 
     setCurrentGenre(genreId);
-    setCurrentGroup(groupId);
+
+    QString newGroupId = groupId;
+    if (newGroupId == FIRST_GROUP_ID) {
+        newGroupId = !m_groups.empty() ? m_groups.first()->id.toQString() : NONE_GROUP_ID;
+    }
+
+    setCurrentGroup(newGroupId);
 
     m_instrumentsLoadingAllowed = true;
     loadInstruments();

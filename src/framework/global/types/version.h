@@ -34,10 +34,12 @@ public:
     int majorVersion() const;
     int minorVersion() const;
     int patchVersion() const;
+
     String suffix() const;
     int suffixVersion() const;
-
     void setSuffix(const String& suffix);
+
+    bool preRelease() const;
 
     String toString();
 

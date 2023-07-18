@@ -227,10 +227,15 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
         skip(17);
         String name;
         {
-            readUInt8();
+            uint8_t charsCount = readUInt8();
             char c[21];
             f->read((uint8_t*)(c), 21);
-            c[20] = 0;
+            // Just in case
+            if (charsCount <= 20) {
+                c[charsCount] = '\0';
+            } else {
+                c[20] = '\0';
+            }
             name = String::fromUtf8(c);
         }
         skip(4);
@@ -458,6 +463,7 @@ void GuitarPro5::readMeasure(Measure* measure, int staffIdx, Tuplet** tuplets, b
         }
         if (measureLen < measure->ticks()) {
             score->setRest(tick, staffIdx * VOICES + voice, measure->ticks() - measureLen, false, nullptr, false);
+            m_continiousElementsBuilder->notifyUncompletedMeasure();
         }
     }
 }
@@ -575,8 +581,8 @@ bool GuitarPro5::readTracks()
         for (int k = 0; k < strings; ++k) {
             tuning2[strings - k - 1] = tuning[k];
         }
-        StringData stringData(frets, strings, &tuning2[0]);
-        createTuningString(strings, &tuning2[0]);
+        bool useFlats = createTuningString(strings, &tuning2[0]);
+        StringData stringData(frets, strings, &tuning2[0], useFlats);
         Instrument* instr = part->instrument();
         instr->setStringData(stringData);
         instr->setSingleNoteDynamics(false);
@@ -1068,9 +1074,15 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
         int fret = readUInt8();                // grace fret
         /*int dynamic =*/ readUInt8();                // grace dynamic
         int transition = readUInt8();                // grace transition
-        /*int duration =*/ readUInt8();                // grace duration
+        int duration = readUInt8();                // grace duration
         int gflags = readUInt8();
 
+        int grace_len = Constants::DIVISION / 8;
+        if (duration == 2) {
+            grace_len = Constants::DIVISION / 6;       //24th
+        } else if (duration == 3) {
+            grace_len = Constants::DIVISION / 4;       //16th
+        }
         NoteType note_type = NoteType::ACCIACCATURA;
 
         if (gflags & NOTE_APPOGIATURA) {   //on beat
@@ -1078,8 +1090,14 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
         }
 
         int grace_pitch = note->staff()->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr);
-        auto gnote = score->setGraceNote(note->chord(), grace_pitch, note_type, Constants::DIVISION / 2);
+
+        auto gnote = score->setGraceNote(note->chord(), grace_pitch, note_type, grace_len);
         score->deselect(gnote);
+
+        // gp5 not supports more than one grace note,
+        // so it's always should be shown as eight note
+        gnote->chord()->setDurationType(Fraction { 1, 8 });
+
         gnote->setString(note->string());
         auto sd = note->part()->instrument()->stringData();
         gnote->setFret(grace_pitch - sd->stringList().at(sd->stringList().size() - note->string() - 1).pitch);

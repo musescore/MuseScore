@@ -309,7 +309,7 @@ protected:
     void addTap(Note*);
     void addSlap(Note*);
     void addPop(Note*);
-    void createTuningString(int strings, int tuning[]);
+    bool createTuningString(int strings, int tuning[]); // returns useFlats
     virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const { return nullptr; }
     void initDynamics(size_t stavesNum);
 

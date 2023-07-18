@@ -69,27 +69,27 @@ Beam::Beam(System* parent)
 Beam::Beam(const Beam& b)
     : EngravingItem(b)
 {
-    _elements     = b._elements;
-    _id           = b._id;
-    for (const BeamSegment* bs : b._beamSegments) {
-        _beamSegments.push_back(new BeamSegment(*bs));
+    m_elements     = b.m_elements;
+    m_id           = b.m_id;
+    for (const BeamSegment* bs : b.m_beamSegments) {
+        m_beamSegments.push_back(new BeamSegment(*bs));
     }
-    _direction       = b._direction;
-    _up              = b._up;
-    _userModified[0] = b._userModified[0];
-    _userModified[1] = b._userModified[1];
-    _grow1           = b._grow1;
-    _grow2           = b._grow2;
-    _beamDist        = b._beamDist;
-    for (const BeamFragment* f : b.fragments) {
-        fragments.push_back(new BeamFragment(*f));
+    m_direction       = b.m_direction;
+    m_up              = b.m_up;
+    m_userModified[0] = b.m_userModified[0];
+    m_userModified[1] = b.m_userModified[1];
+    m_growLeft           = b.m_growLeft;
+    m_growRight           = b.m_growRight;
+    m_beamDist        = b.m_beamDist;
+    for (const BeamFragment* f : b.m_fragments) {
+        m_fragments.push_back(new BeamFragment(*f));
     }
-    _minMove          = b._minMove;
-    _maxMove          = b._maxMove;
-    _isGrace          = b._isGrace;
-    _cross            = b._cross;
-    _slope            = b._slope;
-    _layoutInfo       = b._layoutInfo;
+    m_minMove          = b.m_minMove;
+    m_maxMove          = b.m_maxMove;
+    m_isGrace          = b.m_isGrace;
+    m_cross            = b.m_cross;
+    m_slope            = b.m_slope;
+    layoutInfo       = b.layoutInfo;
 }
 
 //---------------------------------------------------------
@@ -101,11 +101,11 @@ Beam::~Beam()
     //
     // delete all references from chords
     //
-    for (ChordRest* cr : _elements) {
+    for (ChordRest* cr : m_elements) {
         cr->setBeam(0);
     }
-    DeleteAll(_beamSegments);
-    DeleteAll(fragments);
+    DeleteAll(m_beamSegments);
+    DeleteAll(m_fragments);
 }
 
 //---------------------------------------------------------
@@ -166,23 +166,23 @@ void Beam::remove(EngravingItem* e)
 void Beam::addChordRest(ChordRest* a)
 {
     a->setBeam(this);
-    if (!mu::contains(_elements, a)) {
+    if (!mu::contains(m_elements, a)) {
         //
         // insert element in same order as it appears
         // in the score
         //
-        if (a->segment() && !_elements.empty()) {
-            for (size_t i = 0; i < _elements.size(); ++i) {
-                Segment* s = _elements[i]->segment();
+        if (a->segment() && !m_elements.empty()) {
+            for (size_t i = 0; i < m_elements.size(); ++i) {
+                Segment* s = m_elements[i]->segment();
                 if ((s->tick() > a->segment()->tick())
                     || ((s->tick() == a->segment()->tick()) && (a->segment()->next(SegmentType::ChordRest) == s))
                     ) {
-                    _elements.insert(_elements.begin() + i, a);
+                    m_elements.insert(m_elements.begin() + i, a);
                     return;
                 }
             }
         }
-        _elements.push_back(a);
+        m_elements.push_back(a);
     }
 }
 
@@ -192,7 +192,7 @@ void Beam::addChordRest(ChordRest* a)
 
 void Beam::removeChordRest(ChordRest* a)
 {
-    if (!mu::remove(_elements, a)) {
+    if (!mu::remove(m_elements, a)) {
         LOGD("Beam::remove(): cannot find ChordRest");
     }
     a->setBeam(0);
@@ -221,7 +221,7 @@ const Chord* Beam::findChordWithCustomStemDirection() const
 void Beam::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;
-    if (_beamSegments.empty()) {
+    if (m_beamSegments.empty()) {
         return;
     }
     painter->setBrush(mu::draw::Brush(curColor()));
@@ -230,14 +230,14 @@ void Beam::draw(mu::draw::Painter* painter) const
     // make beam thickness independent of slant
     // (expression can be simplified?)
 
-    const LineF bs = _beamSegments.front()->line;
+    const LineF bs = m_beamSegments.front()->line;
     double d  = (std::abs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
-    if (_beamSegments.size() > 1 && d > M_PI / 6.0) {
+    if (m_beamSegments.size() > 1 && d > M_PI / 6.0) {
         d = M_PI / 6.0;
     }
-    double ww = (_beamWidth / 2.0) / sin(M_PI_2 - atan(d));
+    double ww = (m_beamWidth / 2.0) / sin(M_PI_2 - atan(d));
 
-    for (const BeamSegment* bs1 : _beamSegments) {
+    for (const BeamSegment* bs1 : m_beamSegments) {
         painter->drawPolygon(
             PolygonF({
                 PointF(bs1->line.x1(), bs1->line.y1() - ww),
@@ -256,60 +256,8 @@ void Beam::draw(mu::draw::Painter* painter) const
 void Beam::move(const PointF& offset)
 {
     EngravingItem::move(offset);
-    for (BeamSegment* bs : _beamSegments) {
+    for (BeamSegment* bs : m_beamSegments) {
         bs->line.translate(offset);
-    }
-}
-
-PointF Beam::chordBeamAnchor(const ChordRest* chord, layout::v0::BeamTremoloLayout::ChordBeamAnchorType anchorType) const
-{
-    return _layoutInfo.chordBeamAnchor(chord, anchorType);
-}
-
-double Beam::chordBeamAnchorY(const ChordRest* chord) const
-{
-    return _layoutInfo.chordBeamAnchorY(chord);
-}
-
-void Beam::setTremAnchors()
-{
-    _tremAnchors.clear();
-    for (ChordRest* cr : _elements) {
-        if (!cr || !cr->isChord()) {
-            continue;
-        }
-        Chord* c = toChord(cr);
-        Tremolo* t = c ? c->tremolo() : nullptr;
-        if (t && t->twoNotes() && t->chord1() == c && t->chord2()->beam() == this) {
-            // there is an inset tremolo here!
-            // figure out up / down
-            bool tremUp = t->up();
-            int fragmentIndex = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-            if (_userModified[fragmentIndex]) {
-                tremUp = c->up();
-            } else if (_cross && t->chord1()->staffMove() == t->chord2()->staffMove()) {
-                tremUp = t->chord1()->staffMove() == _maxMove;
-            }
-            TremAnchor tremAnchor;
-            tremAnchor.chord1 = c;
-            int regularBeams = c->beams(); // non-tremolo strokes
-
-            // find the left-side anchor
-            double width = _endAnchor.x() - _startAnchor.x();
-            double height = _endAnchor.y() - _startAnchor.y();
-            double x = chordBeamAnchor(c, layout::v0::BeamTremoloLayout::ChordBeamAnchorType::Middle).x();
-            double proportionAlongX = (x - _startAnchor.x()) / width;
-            double y = _startAnchor.y() + (proportionAlongX * height);
-            y += regularBeams * (style().styleB(Sid::useWideBeams) ? 1.0 : 0.75) * spatium() * (tremUp ? 1. : -1.);
-            tremAnchor.y1 = y;
-            // find the right-side anchor
-            x = chordBeamAnchor(t->chord2(), layout::v0::BeamTremoloLayout::ChordBeamAnchorType::Middle).x();
-            proportionAlongX = (x - _startAnchor.x()) / width;
-            y = _startAnchor.y() + (proportionAlongX * height);
-            y += regularBeams * (style().styleB(Sid::useWideBeams) ? 1.0 : 0.75) * spatium() * (tremUp ? 1. : -1.);
-            tremAnchor.y2 = y;
-            _tremAnchors.push_back(tremAnchor);
-        }
     }
 }
 
@@ -376,10 +324,10 @@ void Beam::calcBeamBreaks(const ChordRest* cr, const ChordRest* prevCr, int leve
 
 void Beam::spatiumChanged(double oldValue, double newValue)
 {
-    int idx = (!_up) ? 0 : 1;
-    if (_userModified[idx]) {
+    int idx = (!m_up) ? 0 : 1;
+    if (m_userModified[idx]) {
         double diff = newValue / oldValue;
-        for (BeamFragment* f : fragments) {
+        for (BeamFragment* f : m_fragments) {
             f->py1[idx] = f->py1[idx] * diff;
             f->py2[idx] = f->py2[idx] * diff;
         }
@@ -404,10 +352,10 @@ public:
 
 void Beam::editDrag(EditData& ed)
 {
-    int idx  = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
+    int idx  = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
     double dy = ed.delta.y();
     BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this).get());
-    BeamFragment* f = fragments[bed->editFragment];
+    BeamFragment* f = m_fragments[bed->editFragment];
     double y1 = f->py1[idx];
     double y2 = f->py2[idx];
 
@@ -436,21 +384,21 @@ void Beam::editDrag(EditData& ed)
 
 std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
 {
-    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
     BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this).get());
-    BeamFragment* f = fragments[bed->editFragment];
+    BeamFragment* f = m_fragments[bed->editFragment];
 
     ChordRest* c1 = nullptr;
     ChordRest* c2 = nullptr;
-    size_t n = _elements.size();
+    size_t n = m_elements.size();
 
     if (n == 0) {
         return std::vector<PointF>();
     }
 
     for (size_t i = 0; i < n; ++i) {
-        if (_elements[i]->isChordRest()) {
-            c1 = toChordRest(_elements[i]);
+        if (m_elements[i]->isChordRest()) {
+            c1 = toChordRest(m_elements[i]);
             break;
         }
     }
@@ -458,8 +406,8 @@ std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
         return {}; // just ignore the requested operation
     }
     for (int i = static_cast<int>(n) - 1; i >= 0; --i) {
-        if (_elements[i]->isChordRest()) {
-            c2 = toChordRest(_elements[i]);
+        if (m_elements[i]->isChordRest()) {
+            c2 = toChordRest(m_elements[i]);
             break;
         }
     }
@@ -468,8 +416,8 @@ std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
     }
 
     int y = pagePos().y();
-    double beamStartX = _startAnchor.x() + (system() ? system()->x() : 0);
-    double beamEndX = _endAnchor.x() + (system() ? system()->x() : 0);
+    double beamStartX = m_startAnchor.x() + (system() ? system()->x() : 0);
+    double beamEndX = m_endAnchor.x() + (system() ? system()->x() : 0);
     double middleX = (beamStartX + beamEndX) / 2;
     double middleY = (f->py1[idx] + y + f->py2[idx] + y) / 2;
 
@@ -486,14 +434,14 @@ std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
 
 void Beam::setBeamDirection(DirectionV d)
 {
-    if (_direction == d || _cross) {
+    if (m_direction == d || m_cross) {
         return;
     }
 
-    _direction = d;
+    m_direction = d;
 
     if (d != DirectionV::AUTO) {
-        _up = d == DirectionV::UP;
+        m_up = d == DirectionV::UP;
     }
 
     for (ChordRest* e : elements()) {
@@ -559,9 +507,9 @@ void Beam::endEdit(EditData& ed)
 
 void Beam::triggerLayout() const
 {
-    if (!_elements.empty()) {
-        _elements.front()->triggerLayout();
-        _elements.back()->triggerLayout();
+    if (!m_elements.empty()) {
+        m_elements.front()->triggerLayout();
+        m_elements.back()->triggerLayout();
     }
 }
 
@@ -609,11 +557,11 @@ EngravingItem* Beam::drop(EditData& data)
 
 PairF Beam::beamPos() const
 {
-    if (fragments.empty()) {
+    if (m_fragments.empty()) {
         return PairF(0.0, 0.0);
     }
-    BeamFragment* f = fragments.back();
-    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
+    BeamFragment* f = m_fragments.back();
+    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
     double _spatium = spatium();
     return PairF(f->py1[idx] / _spatium, f->py2[idx] / _spatium);
 }
@@ -624,12 +572,12 @@ PairF Beam::beamPos() const
 
 void Beam::setBeamPos(const PairF& bp)
 {
-    if (fragments.empty()) {
-        fragments.push_back(new BeamFragment);
+    if (m_fragments.empty()) {
+        m_fragments.push_back(new BeamFragment);
     }
-    BeamFragment* f = fragments.back();
-    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-    _userModified[idx] = true;
+    BeamFragment* f = m_fragments.back();
+    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    m_userModified[idx] = true;
     setGenerated(false);
 
     double _spatium = spatium();
@@ -643,13 +591,13 @@ void Beam::setBeamPos(const PairF& bp)
 
 void Beam::setNoSlope(bool b)
 {
-    _noSlope = b;
+    m_noSlope = b;
 
     // Make flat if usermodified
-    if (_noSlope) {
-        int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-        if (_userModified[idx]) {
-            BeamFragment* f = fragments.back();
+    if (m_noSlope) {
+        int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+        if (m_userModified[idx]) {
+            BeamFragment* f = m_fragments.back();
             f->py1[idx] = f->py2[idx] = (f->py1[idx] + f->py2[idx]) * 0.5;
         }
     }
@@ -661,8 +609,8 @@ void Beam::setNoSlope(bool b)
 
 bool Beam::userModified() const
 {
-    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-    return _userModified[idx];
+    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    return m_userModified[idx];
 }
 
 //---------------------------------------------------------
@@ -671,8 +619,8 @@ bool Beam::userModified() const
 
 void Beam::setUserModified(bool val)
 {
-    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-    _userModified[idx] = val;
+    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    m_userModified[idx] = val;
 }
 
 //---------------------------------------------------------
@@ -755,19 +703,19 @@ PropertyValue Beam::propertyDefault(Pid id) const
 
 void Beam::addSkyline(Skyline& sk)
 {
-    if (_beamSegments.empty() || !addToSkyline()) {
+    if (m_beamSegments.empty() || !addToSkyline()) {
         return;
     }
     double lw2 = point(style().styleS(Sid::beamWidth)) * .5 * mag();
-    const LineF bs = _beamSegments.front()->line;
+    const LineF bs = m_beamSegments.front()->line;
     double d  = (std::abs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
-    if (_beamSegments.size() > 1 && d > M_PI / 6.0) {
+    if (m_beamSegments.size() > 1 && d > M_PI / 6.0) {
         d = M_PI / 6.0;
     }
     double ww      = lw2 / sin(M_PI_2 - atan(d));
     double _spatium = spatium();
 
-    for (const BeamSegment* beamSegment : _beamSegments) {
+    for (const BeamSegment* beamSegment : m_beamSegments) {
         double x = beamSegment->line.x1();
         double y = beamSegment->line.y1();
         double w = beamSegment->line.x2() - x;
@@ -799,7 +747,7 @@ void Beam::addSkyline(Skyline& sk)
 
 Fraction Beam::tick() const
 {
-    return _elements.empty() ? Fraction(0, 1) : _elements.front()->segment()->tick();
+    return m_elements.empty() ? Fraction(0, 1) : m_elements.front()->segment()->tick();
 }
 
 //---------------------------------------------------------
@@ -808,7 +756,7 @@ Fraction Beam::tick() const
 
 Fraction Beam::rtick() const
 {
-    return _elements.empty() ? Fraction(0, 1) : _elements.front()->segment()->rtick();
+    return m_elements.empty() ? Fraction(0, 1) : m_elements.front()->segment()->rtick();
 }
 
 //---------------------------------------------------------
@@ -819,7 +767,7 @@ Fraction Beam::rtick() const
 Fraction Beam::ticks() const
 {
     Fraction ticks = Fraction(0, 1);
-    for (ChordRest* cr : _elements) {
+    for (ChordRest* cr : m_elements) {
         ticks += cr->actualTicks();
     }
     return ticks;
@@ -856,10 +804,10 @@ ActionIconType Beam::actionIconTypeForBeamMode(BeamMode mode)
 
 RectF Beam::drag(EditData& ed)
 {
-    int idx  = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
+    int idx  = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
     double dy = ed.pos.y() - ed.lastPos.y();
     BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this).get());
-    BeamFragment* f = fragments[bed->editFragment];
+    BeamFragment* f = m_fragments[bed->editFragment];
 
     double y1 = f->py1[idx];
     double y2 = f->py2[idx];
@@ -899,9 +847,9 @@ void Beam::initBeamEditData(EditData& ed)
 
     PointF pt(ed.normalizedStartMove - pagePos());
     double ydiff = 100000000.0;
-    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
     int i = 0;
-    for (BeamFragment* f : fragments) {
+    for (BeamFragment* f : m_fragments) {
         double d = fabs(f->py1[idx] - pt.y());
         if (d < ydiff) {
             ydiff = d;
@@ -925,7 +873,7 @@ void Beam::startDrag(EditData& editData)
 //---------------------------------------------------------
 bool Beam::hasAllRests()
 {
-    for (ChordRest* cr : _elements) {
+    for (ChordRest* cr : m_elements) {
         if (cr && cr->isChord()) {
             return false;
         }
@@ -936,7 +884,7 @@ bool Beam::hasAllRests()
 Shape Beam::shape() const
 {
     Shape shape;
-    for (BeamSegment* beamSegment : _beamSegments) {
+    for (BeamSegment* beamSegment : m_beamSegments) {
         shape.add(beamSegment->shape());
     }
     return shape;
@@ -951,7 +899,7 @@ Shape BeamSegment::shape() const
     Shape shape;
     PointF startPoint = line.p1();
     PointF endPoint = line.p2();
-    double _beamWidth = parentElement->isBeam() ? toBeam(parentElement)->_beamWidth : toTremolo(parentElement)->beamWidth();
+    double _beamWidth = parentElement->isBeam() ? toBeam(parentElement)->m_beamWidth : toTremolo(parentElement)->beamWidth();
     // This is the case of right-beamlets
     if (startPoint.x() > endPoint.x()) {
         std::swap(startPoint, endPoint);

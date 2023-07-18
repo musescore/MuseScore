@@ -37,6 +37,8 @@ public:
     async::NotifyList<const Part*> partList() const override;
     async::NotifyList<const Staff*> staffList(const ID& partId) const override;
 
+    bool hasParts() const override;
+
     const Part* part(const ID& partId) const override;
     bool partExists(const ID& partId) const override;
 

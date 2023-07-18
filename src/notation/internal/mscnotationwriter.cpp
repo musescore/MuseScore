@@ -85,6 +85,11 @@ mu::Ret MscNotationWriter::write(INotationPtr notation, QIODevice& destinationDe
 
     msczWriter.close();
 
+    if (msczWriter.hasError()) {
+        LOGE() << "MscWriter has error";
+        return Ret(Ret::Code::UnknownError);
+    }
+
     if (m_mode != MscIoMode::Dir) {
         buf.open(io::IODevice::ReadOnly);
         ByteArray ba = buf.readAll();

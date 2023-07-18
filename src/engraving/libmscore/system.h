@@ -52,40 +52,42 @@ class SpannerSegment;
 
 class SysStaff
 {
-    mu::RectF _bbox;                   // Bbox of StaffLines.
-    Skyline _skyline;
-    double _yOff   { 0.0 };          // offset of top staff line within bbox
-    double _yPos   { 0.0 };          // y position of bbox after System::layout2
-    double _height { 0.0 };          // height of bbox after System::layout2
-    double _continuousDist { -1.0 }; // distance for continuous mode
-    bool _show  { true };           // derived from Staff or false if empty
-                                    // staff is hidden
 public:
+    SysStaff() {}
+    ~SysStaff();
+
     //int idx     { 0    };
     std::vector<InstrumentName*> instrumentNames;
 
-    const mu::RectF& bbox() const { return _bbox; }
-    mu::RectF& bbox() { return _bbox; }
-    void setbbox(const mu::RectF& r) { _bbox = r; }
-    double y() const { return _bbox.y() + _yOff; }
-    void setYOff(double offset) { _yOff = offset; }
-    double yOffset() const { return _yOff; }
+    const mu::RectF& bbox() const { return m_bbox; }
+    mu::RectF& bbox() { return m_bbox; }
+    void setbbox(const mu::RectF& r) { m_bbox = r; }
+    double y() const { return m_bbox.y() + m_yOff; }
+    void setYOff(double offset) { m_yOff = offset; }
+    double yOffset() const { return m_yOff; }
     double yBottom() const;
 
     void saveLayout();
     void restoreLayout();
 
-    double continuousDist() const { return _continuousDist; }
-    void setContinuousDist(double val) { _continuousDist = val; }
+    double continuousDist() const { return m_continuousDist; }
+    void setContinuousDist(double val) { m_continuousDist = val; }
 
-    bool show() const { return _show; }
-    void setShow(bool v) { _show = v; }
+    bool show() const { return m_show; }
+    void setShow(bool v) { m_show = v; }
 
-    const Skyline& skyline() const { return _skyline; }
-    Skyline& skyline() { return _skyline; }
+    const Skyline& skyline() const { return m_skyline; }
+    Skyline& skyline() { return m_skyline; }
 
-    SysStaff() {}
-    ~SysStaff();
+private:
+    mu::RectF m_bbox;               // Bbox of StaffLines.
+    Skyline m_skyline;
+    double m_yOff = 0.0;            // offset of top staff line within bbox
+    double m_yPos = 0.0;            // y position of bbox after System::layout2
+    double m_height = 0.0;          // height of bbox after System::layout2
+    double m_continuousDist = -1.0; // distance for continuous mode
+    bool m_show = true;             // derived from Staff or false if empty
+                                    // staff is hidden
 };
 
 //---------------------------------------------------------
@@ -124,9 +126,9 @@ public:
 
     void clear(); ///< Clear measure list.
 
-    mu::RectF bboxStaff(int staff) const { return _staves[staff]->bbox(); }
-    std::vector<SysStaff*>& staves() { return _staves; }
-    const std::vector<SysStaff*>& staves() const { return _staves; }
+    mu::RectF bboxStaff(int staff) const { return m_staves[staff]->bbox(); }
+    std::vector<SysStaff*>& staves() { return m_staves; }
+    const std::vector<SysStaff*>& staves() const { return m_staves; }
     double staffYpage(staff_idx_t staffIdx) const;
     double staffCanvasYpage(staff_idx_t staffIdx) const;
     SysStaff* staff(size_t staffIdx) const;
@@ -142,25 +144,32 @@ public:
     Fraction snap(const Fraction& tick, const mu::PointF p) const;
     Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
 
-    const std::vector<MeasureBase*>& measures() const { return ml; }
+    const std::vector<MeasureBase*>& measures() const { return m_ml; }
+    std::vector<MeasureBase*>& measures() { return m_ml; }
 
-    MeasureBase* measure(int idx) { return ml[idx]; }
+    MeasureBase* measure(int idx) { return m_ml[idx]; }
     Measure* firstMeasure() const;
     Measure* lastMeasure() const;
     Fraction endTick() const;
 
     MeasureBase* nextMeasure(const MeasureBase*) const;
 
-    double leftMargin() const { return _leftMargin; }
+    double leftMargin() const { return m_leftMargin; }
+    void setLeftMargin(double val) { m_leftMargin = val; }
+
+    double systemHeight() const { return m_systemHeight; }
+    void setSystemHeight(double h) { m_systemHeight = h; }
+
     Box* vbox() const;
 
-    const std::vector<Bracket*>& brackets() const { return _brackets; }
+    const std::vector<Bracket*>& brackets() const { return m_brackets; }
+    std::vector<Bracket*>& brackets() { return m_brackets; }
 
-    std::list<SpannerSegment*>& spannerSegments() { return _spannerSegments; }
-    const std::list<SpannerSegment*>& spannerSegments() const { return _spannerSegments; }
+    std::list<SpannerSegment*>& spannerSegments() { return m_spannerSegments; }
+    const std::list<SpannerSegment*>& spannerSegments() const { return m_spannerSegments; }
 
-    SystemDivider* systemDividerLeft() const { return _systemDividerLeft; }
-    SystemDivider* systemDividerRight() const { return _systemDividerRight; }
+    SystemDivider* systemDividerLeft() const { return m_systemDividerLeft; }
+    SystemDivider* systemDividerRight() const { return m_systemDividerRight; }
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
@@ -178,11 +187,13 @@ public:
     ChordRest* lastChordRest(track_idx_t track);
     ChordRest* firstChordRest(track_idx_t track);
 
-    bool hasFixedDownDistance() const { return fixedDownDistance; }
+    bool hasFixedDownDistance() const { return m_fixedDownDistance; }
+    void setFixedDownDistance(bool val) const { m_fixedDownDistance = val; }
+
     staff_idx_t firstVisibleStaff() const;
     staff_idx_t nextVisibleStaff(staff_idx_t) const;
-    double distance() const { return _distance; }
-    void setDistance(double d) { _distance = d; }
+    double distance() const { return m_distance; }
+    void setDistance(double d) { m_distance = d; }
 
     staff_idx_t firstSysStaffOfPart(const Part* part) const;
     staff_idx_t firstVisibleSysStaffOfPart(const Part* part) const;
@@ -199,9 +210,12 @@ public:
     AccessibleItemPtr createAccessible() override;
 #endif
 
+    void setBracketsXPosition(const double xOffset);
+    size_t getBracketsColumnsCount();
+
 private:
     friend class Factory;
-    friend class layout::v0::SystemLayout;
+
     System(Page* parent);
 
     staff_idx_t firstVisibleSysStaff() const;
@@ -209,21 +223,18 @@ private:
 
     staff_idx_t firstVisibleStaffFrom(staff_idx_t startStaffIdx) const;
 
-    size_t getBracketsColumnsCount();
-    void setBracketsXPosition(const double xOffset);
+    SystemDivider* m_systemDividerLeft = nullptr;       // to the next system
+    SystemDivider* m_systemDividerRight = nullptr;
 
-    SystemDivider* _systemDividerLeft    { nullptr };       // to the next system
-    SystemDivider* _systemDividerRight   { nullptr };
+    std::vector<MeasureBase*> m_ml;
+    std::vector<SysStaff*> m_staves;
+    std::vector<Bracket*> m_brackets;
+    std::list<SpannerSegment*> m_spannerSegments;
 
-    std::vector<MeasureBase*> ml;
-    std::vector<SysStaff*> _staves;
-    std::vector<Bracket*> _brackets;
-    std::list<SpannerSegment*> _spannerSegments;
-
-    double _leftMargin              { 0.0 };     ///< left margin for instrument name, brackets etc.
-    mutable bool fixedDownDistance { false };
-    double _distance                { 0.0 };     /// temp. variable used during layout
-    double _systemHeight            { 0.0 };
+    double m_leftMargin = 0.0;      // left margin for instrument name, brackets etc.
+    mutable bool m_fixedDownDistance = false;
+    double m_distance = 0.0;        // temp. variable used during layout
+    double m_systemHeight = 0.0;
 };
 
 typedef std::vector<System*>::iterator iSystem;

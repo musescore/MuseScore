@@ -45,8 +45,8 @@ private:
     using TieMap = std::unordered_map<track_idx_t, std::vector<mu::engraving::Tie*> >;
 
     struct Context {
-        int32_t masterBarIndex{ 0 };
-        track_idx_t curTrack{ 0 };
+        int32_t masterBarIndex = 0;
+        track_idx_t curTrack = 0;
         Fraction curTick;
     };
 
@@ -83,7 +83,7 @@ private:
     void doAddVolta(const GPMasterBar* mB, Measure* measure);
     void addClef(const GPBar* bar, int curTrack);
     bool addSimileMark(const GPBar* bar, int curTrack);
-    void addBarline(const GPMasterBar* mB, Measure* measure);
+    void addBarline(const GPMasterBar* mB, Measure* measure, int32_t masterBarIndex);
 
     void addTie(const GPNote* gpnote, Note* note, TieMap& ties);
     void addFretDiagram(const GPBeat* gpnote, ChordRest* note, const Context& ctx, bool asHarmony = true);
@@ -145,7 +145,7 @@ private:
     void addTempoMap();
     void addInstrumentChanges();
     void fillUncompletedMeasure(const Context& ctx);
-    void hideRestsInEmptyMeasures(track_idx_t track);
+    void hideRestsInEmptyMeasures(track_idx_t startTrack, track_idx_t endTrack);
     int getStringNumberFor(Note* pNote, int pitch) const;
     void fillTuplet();
     bool tupletParamsChanged(const GPBeat* beat, const ChordRest* cr);
@@ -201,10 +201,11 @@ private:
 
     static constexpr mu::engraving::voice_idx_t VOICES = 4;
 
-    Measure* _lastMeasure = nullptr;
     bool m_showCapo = true; // TODO-gp : settings
-    std::unordered_map<Measure*, std::array<int, VOICES> > m_chordsInMeasureByVoice; /// if measure has any chord for specific voice, rests are hidden
-    std::unordered_map<Measure*, size_t> m_chordsInMeasure;
+
+    bool m_chordExistsInBar = false;
+    std::array<bool, VOICES> m_chordExistsForVoice;
+
     mu::engraving::BeamMode m_previousBeamMode = mu::engraving::BeamMode::AUTO;
 
     std::unique_ptr<GPDrumSetResolver> _drumResolver;

@@ -147,9 +147,6 @@
               <timeStretch>0.985417</timeStretch>
               </Arpeggio>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>

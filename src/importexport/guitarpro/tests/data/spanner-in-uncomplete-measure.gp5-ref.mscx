@@ -22,24 +22,22 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Gtr 2</trackName>
+      <trackName>Electric Guitar</trackName>
       <Instrument id="electric-guitar">
-        <longName>Gtr 2</longName>
-        <shortName>E-Gt</shortName>
+        <longName>Electric Guitar</longName>
         <trackName></trackName>
-        <transposeDiatonic>-7</transposeDiatonic>
-        <transposeChromatic>-12</transposeChromatic>
         <instrumentId>pluck.guitar.electric</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
-          <frets>24</frets>
-          <string>52</string>
-          <string>57</string>
-          <string>62</string>
-          <string>67</string>
-          <string>71</string>
-          <string>76</string>
+          <frets>30</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
           </StringData>
         <Articulation name="staccatissimo">
           <velocity>100</velocity>
@@ -70,11 +68,9 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="29"/>
-          <controller ctrl="7" value="81"/>
-          <controller ctrl="10" value="32"/>
-          <midiPort>0</midiPort>
-          <midiChannel>15</midiChannel>
+          <program value="26"/>
+          <controller ctrl="7" value="119"/>
+          <controller ctrl="10" value="63"/>
           </Channel>
         </Instrument>
       </Part>
@@ -88,86 +84,78 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            </Dynamic>
           <Tempo>
-            <tempo>1.2</tempo>
-            <text><sym>metNoteQuarterUp</sym> = 72</text>
+            <tempo>2</tempo>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
+          <Spanner type="LetRing">
+            <LetRing>
+              </LetRing>
+            <next>
+              <location>
+                <measures>1</measures>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>5</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>5</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
           <Rest>
             <durationType>half</durationType>
             </Rest>
-          <Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
             <durationType>quarter</durationType>
-            </Rest>
-          <Tuplet>
-            <normalNotes>2</normalNotes>
-            <actualNotes>3</actualNotes>
-            <baseNote>eighth</baseNote>
-            <Number>
-              <style>tuplet</style>
-              <text>3</text>
-              </Number>
-            </Tuplet>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>0</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>0</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Spanner type="LetRing">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Rest>
-            <durationType>16th</durationType>
+            <durationType>half</durationType>
             </Rest>
-          <Dynamic>
-            <subtype>f</subtype>
-            <velocity>96</velocity>
-            </Dynamic>
-          <Beam>
-            <l1>24</l1>
-            <l2>22</l2>
-            </Beam>
-          <Chord>
-            <durationType>16th</durationType>
-            <Note>
-              <Spanner type="Tie">
-                <Tie>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/24</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              <fret>8</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>eighth</durationType>
-            <Note>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/24</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              <fret>8</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>eighth</durationType>
-            <Note>
-              <Accidental>
-                <subtype>accidentalFlat</subtype>
-                </Accidental>
-              <pitch>75</pitch>
-              <tpc>11</tpc>
-              <fret>16</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <endTuplet/>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>

@@ -90,7 +90,7 @@ FocusableItem {
 
         TextSection {
             id: continuousTextSection
-            titleText:  qsTrc("inspector", "Text when continuing to a new system")
+            titleText: qsTrc("inspector", "Text when continuing to a new system")
             propertyItem: root.model ? root.model.continuousText : null
 
             navigationPanel: root.navigationPanel
@@ -106,11 +106,11 @@ FocusableItem {
             navigationRowStart: continuousTextSection.navigationRowEnd + 1
         }
 
-        SeparatorLine { anchors.margins: -12; visible: endTextSection.visible }
+        SeparatorLine { anchors.margins: -12 }
 
         TextSection {
             id: endTextSection
-            titleText:  qsTrc("inspector", "End text")
+            titleText: qsTrc("inspector", "End text")
             propertyItem: root.model ? root.model.endText : null
 
             navigationPanel: root.navigationPanel

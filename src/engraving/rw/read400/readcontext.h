@@ -178,6 +178,7 @@ public:
     void addConnectorInfoLater(std::shared_ptr<read400::ConnectorInfoReader> c);   // add connector info to be checked after calling checkConnectors()
     void checkConnectors();
     void reconnectBrokenConnectors();
+    void clearOrphanedConnectors();
 
 private:
 

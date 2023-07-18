@@ -74,11 +74,11 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
 
     switch (staffGroup) {
     case StaffGroup::PERCUSSION: {
-        if (_is.rest()) {
+        if (m_is.rest()) {
             break;
         }
         const Drumset* ds = instr->drumset();
-        nval.pitch        = _is.drumNote();
+        nval.pitch        = m_is.drumNote();
         if (nval.pitch < 0) {
             error = true;
             return nval;
@@ -91,7 +91,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
         break;
     }
     case StaffGroup::TAB: {
-        if (_is.rest()) {
+        if (m_is.rest()) {
             return nval;
         }
         stringData = instr->stringData();
@@ -105,7 +105,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
         if (pos.fret != INVALID_FRET_INDEX) {                  // if a fret is given, use it
             nval.fret = pos.fret;
         } else {                                      // if no fret, use 0 as default
-            _is.setString(line);
+            m_is.setString(line);
             nval.fret = 0;
         }
         // reduce within fret limit
@@ -154,7 +154,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
 
 Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputState)
 {
-    InputState& is = externalInputState ? (*externalInputState) : _is;
+    InputState& is = externalInputState ? (*externalInputState) : m_is;
 
     if (addFlag) {
         ChordRest* c = toChordRest(is.lastSegment()->element(is.track()));
@@ -352,7 +352,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
 Ret Score::putNote(const PointF& pos, bool replace, bool insert)
 {
     Position p;
-    if (!getPosition(&p, pos, _is.voice())) {
+    if (!getPosition(&p, pos, m_is.voice())) {
         LOGD("cannot put note here, get position failed");
         return make_ret(Ret::Code::UnknownError);
     }
@@ -384,27 +384,27 @@ Ret Score::putNote(const Position& p, bool replace)
     Staff* st   = staff(p.staffIdx);
     Segment* s  = p.segment;
 
-    _is.setTrack(p.staffIdx * VOICES + _is.voice());
-    _is.setSegment(s);
+    m_is.setTrack(p.staffIdx * VOICES + m_is.voice());
+    m_is.setSegment(s);
 
     if (mu::engraving::Excerpt* excerpt = score()->excerpt()) {
         const TracksMap& tracks = excerpt->tracksMapping();
 
-        if (!tracks.empty() && mu::key(tracks, _is.track(), mu::nidx) == mu::nidx) {
+        if (!tracks.empty() && mu::key(tracks, m_is.track(), mu::nidx) == mu::nidx) {
             return make_ret(Ret::Code::UnknownError);
         }
     }
 
     DirectionV stemDirection = DirectionV::AUTO;
     bool error = false;
-    NoteVal nval = noteValForPosition(p, _is.accidentalType(), error);
+    NoteVal nval = noteValForPosition(p, m_is.accidentalType(), error);
     if (error) {
         return make_ret(Ret::Code::UnknownError);
     }
 
     // warn and delete MeasureRepeat if necessary
-    Measure* m = _is.segment()->measure();
-    staff_idx_t staffIdx = track2staff(_is.track());
+    Measure* m = m_is.segment()->measure();
+    staff_idx_t staffIdx = track2staff(m_is.track());
     if (m->isMeasureRepeatGroup(staffIdx)) {
         auto b = MessageBox::warning(trc("engraving", "Note input will remove measure repeat"),
                                      trc("engraving", "This measure contains a measure repeat."
@@ -433,19 +433,19 @@ Ret Score::putNote(const Position& p, bool replace)
     }
     case StaffGroup::TAB:
         stringData = st->part()->instrument(s->tick())->stringData();
-        _is.setDrumNote(-1);
+        m_is.setDrumNote(-1);
         break;
     case StaffGroup::STANDARD:
-        _is.setDrumNote(-1);
+        m_is.setDrumNote(-1);
         break;
     }
 
     expandVoice();
 
-    ChordRest* cr = _is.cr();
+    ChordRest* cr = m_is.cr();
 
     auto checkTied = [&](){
-        if (!cr->isChord()) {
+        if (!cr || !cr->isChord()) {
             return false;
         }
         auto ch = toChord(cr);
@@ -461,9 +461,9 @@ Ret Score::putNote(const Position& p, bool replace)
         // if not in replace mode AND chord duration == input duration AND not rest input
         // we need to add to current chord (otherwise, we will need to replace it or create a new one)
         if (!replace
-            && ((d == _is.duration()) || shouldAddAsTied)
+            && ((d == m_is.duration()) || shouldAddAsTied)
             && cr->isChord()
-            && !_is.rest()) {
+            && !m_is.rest()) {
             if (st->isTabStaff(cr->tick())) {            // TAB
                 // if a note on same string already exists, update to new pitch/fret
                 for (Note* note : toChord(cr)->notes()) {
@@ -502,7 +502,7 @@ Ret Score::putNote(const Position& p, bool replace)
         }
     }
     bool forceAccidental = false;
-    if (_is.accidentalType() != AccidentalType::NONE) {
+    if (m_is.accidentalType() != AccidentalType::NONE) {
         NoteVal nval2 = noteValForPosition(p, AccidentalType::NONE, error);
         forceAccidental = (nval.pitch == nval2.pitch);
     }
@@ -513,38 +513,38 @@ Ret Score::putNote(const Position& p, bool replace)
         // if adding, add!
         Chord* chord = toChord(cr);
         if (shouldAddAsTied) {
-            Note* n = addNoteToTiedChord(chord, nval, forceAccidental, _is.articulationIds());
+            Note* n = addNoteToTiedChord(chord, nval, forceAccidental, m_is.articulationIds());
             if (!n) {
                 ret = make_ret(Ret::Code::UnknownError);
             }
 
-            _is.setAccidentalType(AccidentalType::NONE);
+            m_is.setAccidentalType(AccidentalType::NONE);
             return ret;
         }
-        Note* note = addNote(chord, nval, forceAccidental, _is.articulationIds());
+        Note* note = addNote(chord, nval, forceAccidental, m_is.articulationIds());
         if (!note) {
             ret = make_ret(Ret::Code::UnknownError);
         }
 
-        _is.setAccidentalType(AccidentalType::NONE);
+        m_is.setAccidentalType(AccidentalType::NONE);
         return ret;
     } else {
         // if not adding, replace current chord (or create a new one)
-        if (_is.rest()) {
+        if (m_is.rest()) {
             nval.pitch = -1;
         }
 
-        Segment* seg = setNoteRest(_is.segment(), _is.track(), nval,
-                                   _is.duration().fraction(), stemDirection, forceAccidental, _is.articulationIds());
+        Segment* seg = setNoteRest(m_is.segment(), m_is.track(), nval,
+                                   m_is.duration().fraction(), stemDirection, forceAccidental, m_is.articulationIds());
         if (!seg) {
             ret = make_ret(Ret::Code::UnknownError);
         }
 
-        _is.setAccidentalType(AccidentalType::NONE);
+        m_is.setAccidentalType(AccidentalType::NONE);
     }
 
     if (cr && !st->isTabStaff(cr->tick())) {
-        _is.moveToNextInputPos();
+        m_is.moveToNextInputPos();
     }
 
     return ret;
@@ -563,9 +563,9 @@ Ret Score::repitchNote(const Position& p, bool replace)
 
     NoteVal nval;
     bool error = false;
-    AccidentalType at = _is.accidentalType();
-    if (_is.drumset() && _is.drumNote() != -1) {
-        nval.pitch = _is.drumNote();
+    AccidentalType at = m_is.accidentalType();
+    if (m_is.drumset() && m_is.drumNote() != -1) {
+        nval.pitch = m_is.drumNote();
     } else {
         AccidentalVal acci
             = (at == AccidentalType::NONE ? s->measure()->findAccidental(s, p.staffIdx, p.line, error) : Accidental::subtype2value(at));
@@ -585,14 +585,14 @@ Ret Score::repitchNote(const Position& p, bool replace)
         }
     }
 
-    if (!_is.segment()) {
+    if (!m_is.segment()) {
         return make_ret(Ret::Code::UnknownError);
     }
 
     Chord* chord;
-    ChordRest* cr = _is.cr();
+    ChordRest* cr = m_is.cr();
     if (!cr) {
-        cr = _is.segment()->nextChordRest(_is.track());
+        cr = m_is.segment()->nextChordRest(m_is.track());
         if (!cr) {
             return make_ret(Ret::Code::UnknownError);
         }
@@ -603,7 +603,7 @@ Ret Score::repitchNote(const Position& p, bool replace)
             next = nextChordRest(next);
         }
         if (next) {
-            _is.moveInputPos(next->segment());
+            m_is.moveInputPos(next->segment());
         }
         return make_ok();
     } else {
@@ -659,7 +659,7 @@ Ret Score::repitchNote(const Position& p, bool replace)
     // add new note to chord
     undoAddElement(note);
     bool forceAccidental = false;
-    if (_is.accidentalType() != AccidentalType::NONE) {
+    if (m_is.accidentalType() != AccidentalType::NONE) {
         NoteVal nval2 = noteValForPosition(p, AccidentalType::NONE, error);
         forceAccidental = (nval.pitch == nval2.pitch);
     }
@@ -693,7 +693,7 @@ Ret Score::repitchNote(const Position& p, bool replace)
         next = nextChordRest(next);
     }
     if (next) {
-        _is.moveInputPos(next->segment());
+        m_is.moveInputPos(next->segment());
     }
 
     return make_ok();
@@ -722,7 +722,21 @@ Ret Score::insertChordByInsertingTime(const Position& pos)
         return make_ret(Ret::Code::UnknownError);
     }
 
-    const TDuration duration = _is.duration();
+    // remove all two-note tremolos that end on this tick
+    for (EngravingItem* e : seg->_elist) {
+        if (!e || !e->isChord()) {
+            continue;
+        }
+        Chord* c = toChord(e);
+        Tremolo* t = c->tremolo();
+        if (t && t->twoNotes() && t->chord2() == c) {
+            // we have to remove this tremolo because we are adding time in the middle of it
+            // (if c is chord1 then we're inserting before the trem so it's fine)
+            undoRemoveElement(t);
+        }
+    }
+
+    const TDuration duration = m_is.duration();
     const Fraction fraction  = duration.fraction();
     const Fraction len       = fraction;
     Fraction tick            = seg->tick();

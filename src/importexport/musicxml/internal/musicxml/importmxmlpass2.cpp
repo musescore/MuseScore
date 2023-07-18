@@ -2161,6 +2161,21 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
     measure->setRepeatStart(false);
     measure->setRepeatEnd(false);
 
+    /* TODO: for cutaway measures, i believe we can expect the staff to continue to be cutaway until another
+    * print-object="yes" attribute is found. Here is the code that does that, though I don't want to actually commit this until
+    * we have the exporter dealing with this sort of stuff as well.
+    *
+    * When print-object="yes" is encountered, the measure will explicitly be set to visible (see MusicXMLParserPass2::staffDetails)
+
+    MeasureBase* prevBase = measure->prev();
+    if (prevBase) {
+        Part* part = _pass1.getPart(partId);
+        staff_idx_t staffIdx = _score->staffIdx(part);
+        if (!toMeasure(prevBase)->visible(staffIdx)) {
+            measure->setStaffVisible(staffIdx, false);
+        }
+    } */
+
     Fraction mTime;   // current time stamp within measure
     Fraction prevTime;   // time stamp within measure previous chord
     Chord* prevChord = 0;         // previous chord
@@ -2394,7 +2409,7 @@ void MusicXMLParserPass2::attributes(const QString& partId, Measure* measure, co
         } else if (_e.name() == "measure-style") {
             measureStyle(measure);
         } else if (_e.name() == "staff-details") {
-            staffDetails(partId);
+            staffDetails(partId, measure);
         } else if (_e.name() == "time") {
             time(partId, measure, tick);
         } else if (_e.name() == "transpose") {
@@ -2427,7 +2442,7 @@ static void setStaffLines(Score* score, staff_idx_t staffIdx, int stafflines)
  Parse the /score-partwise/part/measure/attributes/staff-details node.
  */
 
-void MusicXMLParserPass2::staffDetails(const QString& partId)
+void MusicXMLParserPass2::staffDetails(const QString& partId, Measure* measure)
 {
     //logDebugTrace("MusicXMLParserPass2::staffDetails");
 
@@ -2452,9 +2467,29 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
 
     StringData* t = new StringData;
     QString visible = _e.attributes().value("print-object").toString();
+    QString spacing = _e.attributes().value("print-spacing").toString();
     if (visible == "no") {
-        _score->staff(staffIdx)->setVisible(false);
-    } else if (!visible.isEmpty() && visible != "yes") {
+        // EITHER:
+        //  1) this indicates an empty staff that is hidden
+        //  2) this indicates a cutaway measure. if it is a cutaway measure then print-spacing will be yes
+        if (spacing == "yes") {
+            measure->setStaffVisible(staffIdx, false);
+        } else if (measure && !measure->hasVoices(staffIdx) && measure->isOnlyRests(staffIdx * VOICES)) {
+            // measures with print-object="no" are generally exported by exporters such as dolet when empty staves are hidden.
+            // for this reason, if we see print-object="no" (and no print-spacing), we can assume that this indicates we should set
+            // the hide empty staves style.
+            _score->style().set(Sid::hideEmptyStaves, true);
+            _score->style().set(Sid::dontHideStavesInFirstSystem, false);
+        } else {
+            // this doesn't apply to a measure, so we'll assume the entire staff has to be hidden.
+            _score->staff(staffIdx)->setVisible(false);
+        }
+    } else if (visible == "yes") {
+        if (measure) {
+            _score->staff(staffIdx)->setVisible(true);
+            measure->setStaffVisible(staffIdx, true);
+        }
+    } else {
         _logger->logError(QString("print-object should be \"yes\" or \"no\""));
     }
 
@@ -3701,18 +3736,24 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure, cons
  Add a symbol defined as key-step \a step , -alter \a alter and -accidental \a accid to \a sig.
  */
 
-static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& alter, const QString& accid)
+static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& alter, const QString& accid,
+                        const QString& smufl)
 {
     //LOGD("addSymToSig(step '%s' alt '%s' acc '%s')",
     //       qPrintable(step), qPrintable(alter), qPrintable(accid));
 
-    SymId id = mxmlString2accSymId(accid);
+    SymId id = mxmlString2accSymId(accid, smufl);
+
     if (id == SymId::noSym) {
         bool ok;
         double d;
         d = alter.toDouble(&ok);
         AccidentalType accTpAlter = ok ? microtonalGuess(d) : AccidentalType::NONE;
-        id = mxmlString2accSymId(accidentalType2MxmlString(accTpAlter));
+        QString s = accidentalType2MxmlString(accTpAlter);
+        if (s == "other") {
+            s = accidentalType2SmuflMxmlString(accTpAlter);
+        }
+        id = mxmlString2accSymId(s);
     }
 
     if (step.size() == 1 && id != SymId::noSym) {
@@ -3762,7 +3803,7 @@ static void addKey(const KeySigEvent key, const bool printObj, Score* score, Mea
  Clear key-step, -alter, -accidental.
  */
 
-static void flushAlteredTone(KeySigEvent& kse, QString& step, QString& alt, QString& acc)
+static void flushAlteredTone(KeySigEvent& kse, QString& step, QString& alt, QString& acc, QString& smufl)
 {
     //LOGD("flushAlteredTone(step '%s' alt '%s' acc '%s')",
     //       qPrintable(step), qPrintable(alt), qPrintable(acc));
@@ -3772,7 +3813,7 @@ static void flushAlteredTone(KeySigEvent& kse, QString& step, QString& alt, QStr
     }
     // step and alt are required, but also accept step and acc
     if (step != "" && (alt != "" || acc != "")) {
-        addSymToSig(kse, step, alt, acc);
+        addSymToSig(kse, step, alt, acc, smufl);
     } else {
         LOGD("flushAlteredTone invalid combination of step '%s' alt '%s' acc '%s')",
              qPrintable(step), qPrintable(alt), qPrintable(acc));       // TODO
@@ -3818,6 +3859,7 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
     QString keyStep;
     QString keyAlter;
     QString keyAccidental;
+    QString smufl;
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "fifths") {
@@ -3826,6 +3868,11 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
             Interval v = _pass1.getPart(partId)->instrument()->transpose();
             if (!v.isZero() && !_score->style().styleB(Sid::concertPitch)) {
                 cKey = transposeKey(tKey, v);
+                // if there are more than 6 accidentals in transposing key, it cannot be PreferSharpFlat::AUTO
+                Part* part = _pass1.getPart(partId);
+                if ((tKey > 6 || tKey < -6) && part->preferSharpFlat() == PreferSharpFlat::AUTO) {
+                    part->setPreferSharpFlat(PreferSharpFlat::NONE);
+                }
             }
             key.setConcertKey(cKey);
             key.setKey(tKey);
@@ -3858,17 +3905,18 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
         } else if (_e.name() == "cancel") {
             skipLogCurrElem();        // TODO ??
         } else if (_e.name() == "key-step") {
-            flushAlteredTone(key, keyStep, keyAlter, keyAccidental);
+            flushAlteredTone(key, keyStep, keyAlter, keyAccidental, smufl);
             keyStep = _e.readElementText();
         } else if (_e.name() == "key-alter") {
             keyAlter = _e.readElementText();
         } else if (_e.name() == "key-accidental") {
+            smufl = _e.attributes().value("smufl").toString();
             keyAccidental = _e.readElementText();
         } else {
             skipLogCurrElem();
         }
     }
-    flushAlteredTone(key, keyStep, keyAlter, keyAccidental);
+    flushAlteredTone(key, keyStep, keyAlter, keyAccidental, smufl);
 
     size_t nstaves = _pass1.getPart(partId)->nstaves();
     staff_idx_t staffIdx = _pass1.trackForPart(partId) / VOICES;

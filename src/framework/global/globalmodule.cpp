@@ -90,13 +90,27 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     io::path_t logPath = m_configuration->userAppDataPath() + "/logs";
     fileSystem()->makePath(logPath);
 
-    //! Remove old logs
-    LogRemover::removeLogs(logPath, 7, u"MuseScore_yyMMdd_HHmmss.log");
+    io::path_t logFilePath = logPath;
+    String logFileNamePattern;
 
-    //! File, this creates a file named "data/logs/MuseScore_yyMMdd_HHmmss.log"
-    io::path_t logFilePath = logPath + "/MuseScore_"
-                             + QDateTime::currentDateTime().toString("yyMMdd_HHmmss")
-                             + ".log";
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
+        logFileNamePattern = u"audiopluginregistration_yyMMdd.log";
+
+        //! This creates a file named "data/logs/audiopluginregistration_yyMMdd.log"
+        logFilePath += "/audiopluginregistration_"
+                       + QDateTime::currentDateTime().toString("yyMMdd")
+                       + ".log";
+    } else {
+        logFileNamePattern = u"MuseScore_yyMMdd_HHmmss.log";
+
+        //! This creates a file named "data/logs/MuseScore_yyMMdd_HHmmss.log"
+        logFilePath += "/MuseScore_"
+                       + QDateTime::currentDateTime().toString("yyMMdd_HHmmss")
+                       + ".log";
+    }
+
+    //! Remove old logs
+    LogRemover::removeLogs(logPath, 7, logFileNamePattern);
 
     FileLogDest* logFile = new FileLogDest(logFilePath.toStdString(),
                                            LogLayout("${datetime} | ${type|5} | ${thread} | ${tag|10} | ${message}"));
@@ -120,8 +134,8 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     using namespace haw::profiler;
     struct MyPrinter : public Profiler::Printer
     {
-        void printDebug(const std::string& str) override { LOG_STREAM(Logger::DEBG, "Profiler", "")() << str; }
-        void printInfo(const std::string& str) override { LOG_STREAM(Logger::INFO, "Profiler", "")() << str; }
+        void printDebug(const std::string& str) override { LOG_STREAM(Logger::DEBG, "Profiler", "", Color::Magenta)() << str; }
+        void printInfo(const std::string& str) override { LOG_STREAM(Logger::INFO, "Profiler", "", Color::Magenta)() << str; }
     };
 
     Profiler::Options profOpt;

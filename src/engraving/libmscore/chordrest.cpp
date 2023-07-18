@@ -400,6 +400,7 @@ EngravingItem* ChordRest::drop(EditData& data)
             delete ks;
         } else {
             // apply to all staves, at the beginning of the measure
+            data.pos = canvasPos(); // measure->drop() expects to receive canvas pos
             return m->drop(data);
         }
     }
@@ -923,6 +924,7 @@ EngravingItem* ChordRest::nextElement()
     }
     switch (e->type()) {
     case ElementType::ARTICULATION:
+    case ElementType::ORNAMENT:
     case ElementType::LYRICS: {
         EngravingItem* next = nextArticulationOrLyric(e);
         if (next) {
@@ -957,6 +959,7 @@ EngravingItem* ChordRest::prevElement()
     }
     switch (e->type()) {
     case ElementType::ARTICULATION:
+    case ElementType::ORNAMENT:
     case ElementType::LYRICS: {
         EngravingItem* prev = prevArticulationOrLyric(e);
         if (prev) {
@@ -973,7 +976,14 @@ EngravingItem* ChordRest::prevElement()
     }
     }
     staff_idx_t staffId = e->staffIdx();
-    return segment()->prevElement(staffId);
+    EngravingItem* prevItem = segment()->prevElement(staffId);
+    if (prevItem && prevItem->isNote()) {
+        const Chord* prevChord = toNote(prevItem)->chord();
+        if (prevChord && !prevChord->articulations().empty()) {
+            return prevChord->articulations().back();
+        }
+    }
+    return prevItem;
 }
 
 //---------------------------------------------------------

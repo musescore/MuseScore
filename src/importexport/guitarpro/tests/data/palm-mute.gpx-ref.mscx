@@ -94,7 +94,6 @@
             </Tempo>
           <Spanner type="PalmMute">
             <PalmMute>
-              <beginTextOffset x="0" y="0"/>
               </PalmMute>
             <next>
               <location>
@@ -145,9 +144,6 @@
               <string>2</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>

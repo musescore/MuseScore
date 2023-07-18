@@ -40,5 +40,9 @@ BarlineSettingsProxyModel::BarlineSettingsProxyModel(QObject* parent, IElementRe
         new StaffSettingsModel(this, repository)
     };
 
+    for (AbstractInspectorModel* model : models) {
+        model->init();
+    }
+
     setModels(models);
 }

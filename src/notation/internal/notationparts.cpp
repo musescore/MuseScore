@@ -116,6 +116,16 @@ NotifyList<const Staff*> NotationParts::staffList(const ID& partId) const
     return result;
 }
 
+bool NotationParts::hasParts() const
+{
+    const Score* score = this->score();
+    if (!score) {
+        return false;
+    }
+
+    return !score->parts().empty();
+}
+
 const Part* NotationParts::part(const ID& partId) const
 {
     return partModifiable(partId);

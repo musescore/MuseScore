@@ -51,8 +51,8 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
 
     if (!score->last() || (ctx.conf().isLinearMode() && !score->firstMeasure())) {
         LOGD("empty score");
-        DeleteAll(score->_systems);
-        score->_systems.clear();
+        DeleteAll(score->systems());
+        score->systems().clear();
         DeleteAll(score->pages());
         score->pages().clear();
         PageLayout::getNextPage(ctx);
@@ -115,23 +115,23 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
 
     if (!layoutAll && m->system()) {
         System* system = m->system();
-        system_idx_t systemIndex = mu::indexOf(score->_systems, system);
+        system_idx_t systemIndex = mu::indexOf(score->systems(), system);
         ctx.mutState().setPage(system->page());
         ctx.mutState().setPageIdx(score->pageIdx(ctx.state().page()));
         if (ctx.state().pageIdx() == mu::nidx) {
             ctx.mutState().setPageIdx(0);
         }
         ctx.mutState().setCurSystem(system);
-        ctx.mutState().setSystemList(mu::mid(score->_systems, systemIndex));
+        ctx.mutState().setSystemList(mu::mid(score->systems(), systemIndex));
 
         if (systemIndex == 0) {
             ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? score->first() : score->firstMeasure());
         } else {
-            System* prevSystem = score->_systems[systemIndex - 1];
+            System* prevSystem = score->systems()[systemIndex - 1];
             ctx.mutState().setNextMeasure(prevSystem->measures().back()->next());
         }
 
-        score->_systems.erase(score->_systems.begin() + systemIndex, score->_systems.end());
+        score->systems().erase(score->systems().begin() + systemIndex, score->systems().end());
         if (!ctx.state().nextMeasure()->prevMeasure()) {
             ctx.mutState().setMeasureNo(0);
             ctx.mutState().setTick(Fraction(0, 1));
@@ -153,11 +153,11 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
             ctx.mutState().setTick(ctx.state().nextMeasure()->tick());
         }
     } else {
-        for (System* s : score->_systems) {
+        for (System* s : score->systems()) {
             for (Bracket* b : s->brackets()) {
                 if (b->selected()) {
                     bool selected = b->selected();
-                    score->_selection.remove(b);
+                    score->selection().remove(b);
                     BracketItem* item = b->bracketItem();
                     item->setSelected(selected);
                     score->setSelectionChanged(true);
@@ -171,8 +171,8 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
                 toMeasure(mb)->mmRest()->moveToDummy();
             }
         }
-        DeleteAll(score->_systems);
-        score->_systems.clear();
+        DeleteAll(score->systems());
+        score->systems().clear();
 
         DeleteAll(score->pages());
         score->pages().clear();

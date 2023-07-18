@@ -161,7 +161,7 @@ bool Score::saveStyle(const String& name)
 
 void Score::print(mu::draw::Painter* painter, int pageNo)
 {
-    _printing  = true;
+    m_printing  = true;
     MScore::pdfPrinting = true;
     Page* page = pages().at(pageNo);
     RectF fr  = page->abbox();
@@ -178,6 +178,6 @@ void Score::print(mu::draw::Painter* painter, int pageNo)
         painter->restore();
     }
     MScore::pdfPrinting = false;
-    _printing = false;
+    m_printing = false;
 }
 }

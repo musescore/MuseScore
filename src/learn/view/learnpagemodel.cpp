@@ -86,7 +86,7 @@ QVariantMap LearnPageModel::classesAuthor() const
                                           "or are a power user eager to explore advanced engraving and playback techniques, "
                                           "my flagship online course Mastering MuseScore "
                                           "covers everything you need to know to get the most out of MuseScore. "
-                                          "In addition, Mastering MuseScore features a supportive community of musicians, "
+                                          "\n\nIn addition, Mastering MuseScore features a supportive community of musicians, "
                                           "with discussion spaces, live streams, "
                                           "and other related courses and services to help you create your best music. "
                                           "Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!");

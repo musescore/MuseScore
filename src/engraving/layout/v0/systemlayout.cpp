@@ -1557,8 +1557,14 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
                                         // (empiric compromise between looking good and not taking too many iterations)
     static constexpr double squeezeLimit = 0.3; // For some spaces, do not go below 30%
 
+    Measure* firstMeasure = system->firstMeasure();
+    if (!firstMeasure) {
+        // Happens for a system that only consists of a frame, for example a too-wide horizontal frame
+        return;
+    }
+
     // First, try to gradually reduce the duration stretch (i.e. flatten the spacing curve)
-    double stretchCoeff = system->firstMeasure()->layoutStretch() - step;
+    double stretchCoeff = firstMeasure->layoutStretch() - step;
     while (curSysWidth > targetSysWidth && RealIsEqualOrMore(stretchCoeff, 0.0)) {
         for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure()) {
@@ -1651,7 +1657,7 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
 
 void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, const bool isFirstSystem, bool firstSystemIndent)
 {
-    if (system->_staves.empty()) {                 // ignore vbox
+    if (system->staves().empty()) {                 // ignore vbox
         return;
     }
 
@@ -1678,7 +1684,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
     textSizeScaling = std::max(textSizeScaling, 1.0);
     instrumentNameOffset *= textSizeScaling;
 
-    size_t nstaves  = system->_staves.size();
+    size_t nstaves = system->staves().size();
 
     //---------------------------------------------------
     //  find x position of staves
@@ -1696,16 +1702,16 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
 
     if (RealIsNull(indent)) {
         if (ctx.conf().styleB(Sid::alignSystemToMargin)) {
-            system->_leftMargin = 0.0;
+            system->setLeftMargin(0.0);
         } else {
-            system->_leftMargin = maxBracketsWidth;
+            system->setLeftMargin(maxBracketsWidth);
         }
     } else {
-        system->_leftMargin = indent + maxBracketsWidth;
+        system->setLeftMargin(indent + maxBracketsWidth);
     }
 
     for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        SysStaff* s  = system->_staves[staffIdx];
+        SysStaff* s = system->staves().at(staffIdx);
         const Staff* staff = ctx.dom().staff(staffIdx);
         if (!staff->show() || !s->show()) {
             s->setbbox(RectF());
@@ -1716,11 +1722,11 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
         int staffLines = staff->lines(Fraction(0, 1));
         if (staffLines <= 1) {
             double h = staff->lineDistance(Fraction(0, 1)) * staffMag * system->spatium();
-            s->bbox().setRect(system->_leftMargin + xo1, -h, 0.0, 2 * h);
+            s->bbox().setRect(system->leftMargin() + xo1, -h, 0.0, 2 * h);
         } else {
             double h = (staffLines - 1) * staff->lineDistance(Fraction(0, 1));
             h = h * staffMag * system->spatium();
-            s->bbox().setRect(system->_leftMargin + xo1, 0.0, 0.0, h);
+            s->bbox().setRect(system->leftMargin() + xo1, 0.0, 0.0, h);
         }
     }
 
@@ -1728,7 +1734,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
     //  layout brackets
     //---------------------------------------------------
 
-    system->setBracketsXPosition(xo1 + system->_leftMargin);
+    system->setBracketsXPosition(xo1 + system->leftMargin());
 
     //---------------------------------------------------
     //  layout instrument names x position
@@ -1736,7 +1742,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
     //     be hidden, so layout all instrument names
     //---------------------------------------------------
 
-    for (SysStaff* s : system->_staves) {
+    for (const SysStaff* s : system->staves()) {
         for (InstrumentName* t : s->instrumentNames) {
             TLayout::layout(t, ctx);
 
@@ -1858,7 +1864,7 @@ double SystemLayout::totalBracketOffset(LayoutContext& ctx)
 
 double SystemLayout::layoutBrackets(System* system, LayoutContext& ctx)
 {
-    size_t nstaves = system->_staves.size();
+    size_t nstaves = system->staves().size();
     size_t columns = system->getBracketsColumnsCount();
 
 #if (!defined (_MSCVER) && !defined (_MSC_VER))
@@ -1873,7 +1879,7 @@ double SystemLayout::layoutBrackets(System* system, LayoutContext& ctx)
     }
 
     std::vector<Bracket*> bl;
-    bl.swap(system->_brackets);
+    bl.swap(system->brackets());
 
     for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         const Staff* s = ctx.dom().staff(staffIdx);
@@ -1896,7 +1902,7 @@ double SystemLayout::layoutBrackets(System* system, LayoutContext& ctx)
 
     double totalBracketWidth = 0.0;
 
-    if (!system->_brackets.empty()) {
+    if (!system->brackets().empty()) {
         for (double w : bracketWidth) {
             totalBracketWidth += w;
         }
@@ -1907,11 +1913,11 @@ double SystemLayout::layoutBrackets(System* system, LayoutContext& ctx)
 
 void SystemLayout::addBrackets(System* system, Measure* measure, LayoutContext& ctx)
 {
-    if (system->_staves.empty()) {                 // ignore vbox
+    if (system->staves().empty()) {                 // ignore vbox
         return;
     }
 
-    size_t nstaves = system->_staves.size();
+    size_t nstaves = system->staves().size();
 
     //---------------------------------------------------
     //  find x position of staves
@@ -1921,7 +1927,7 @@ void SystemLayout::addBrackets(System* system, Measure* measure, LayoutContext& 
     size_t columns = system->getBracketsColumnsCount();
 
     std::vector<Bracket*> bl;
-    bl.swap(system->_brackets);
+    bl.swap(system->brackets());
 
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         const Staff* s = ctx.dom().staff(staffIdx);
@@ -1944,7 +1950,7 @@ void SystemLayout::addBrackets(System* system, Measure* measure, LayoutContext& 
 
     system->setBracketsXPosition(measure->x());
 
-    mu::join(system->_brackets, bl);
+    mu::join(system->brackets(), bl);
 }
 
 //---------------------------------------------------------
@@ -1958,7 +1964,7 @@ Bracket* SystemLayout::createBracket(System* system, LayoutContext& ctx, Bracket
                                      std::vector<Bracket*>& bl,
                                      Measure* measure)
 {
-    size_t nstaves = system->_staves.size();
+    size_t nstaves = system->staves().size();
     staff_idx_t firstStaff = staffIdx;
     staff_idx_t lastStaff = staffIdx + bi->bracketSpan() - 1;
     if (lastStaff >= nstaves) {
@@ -2049,9 +2055,9 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     system->setPos(0.0, 0.0);
     std::list<std::pair<size_t, SysStaff*> > visibleStaves;
 
-    for (size_t i = 0; i < system->_staves.size(); ++i) {
+    for (size_t i = 0; i < system->staves().size(); ++i) {
         const Staff* s  = ctx.dom().staff(i);
-        SysStaff* ss = system->_staves[i];
+        SysStaff* ss = system->staves().at(i);
         if (s->show() && ss->show()) {
             visibleStaves.push_back(std::pair<size_t, SysStaff*>(i, ss));
         } else {
@@ -2091,7 +2097,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
         }
         if (ni == visibleStaves.end()) {
             ss->setYOff(yOffset);
-            ss->bbox().setRect(system->_leftMargin, y - yOffset, system->width() - system->_leftMargin, h);
+            ss->bbox().setRect(system->leftMargin(), y - yOffset, system->width() - system->leftMargin(), h);
             ss->saveLayout();
             break;
         }
@@ -2108,11 +2114,11 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
         }
         dist += staff2->userDist();
         bool fixedSpace = false;
-        for (MeasureBase* mb : system->ml) {
+        for (const MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure()) {
                 continue;
             }
-            Measure* m = toMeasure(mb);
+            const Measure* m = toMeasure(mb);
             Spacer* sp = m->vspacerDown(si1);
             if (sp) {
                 if (sp->spacerType() == SpacerType::FIXED) {
@@ -2150,15 +2156,15 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             dist = std::max(dist, d + minVerticalDistance);
         }
         ss->setYOff(yOffset);
-        ss->bbox().setRect(system->_leftMargin, y - yOffset, system->width() - system->_leftMargin, h);
+        ss->bbox().setRect(system->leftMargin(), y - yOffset, system->width() - system->leftMargin(), h);
         ss->saveLayout();
         y += dist;
     }
 
-    system->_systemHeight = system->staff(visibleStaves.back().first)->bbox().bottom();
-    system->setHeight(system->_systemHeight);
+    system->setSystemHeight(system->staff(visibleStaves.back().first)->bbox().bottom());
+    system->setHeight(system->systemHeight());
 
-    SystemLayout::setMeasureHeight(system, system->_systemHeight, ctx);
+    SystemLayout::setMeasureHeight(system, system->systemHeight(), ctx);
 
     //---------------------------------------------------
     //  layout brackets vertical position
@@ -2202,18 +2208,18 @@ void SystemLayout::restoreLayout2(System* system, LayoutContext& ctx)
         return;
     }
 
-    for (SysStaff* s : system->_staves) {
+    for (SysStaff* s : system->staves()) {
         s->restoreLayout();
     }
 
-    system->setHeight(system->_systemHeight);
-    SystemLayout::setMeasureHeight(system, system->_systemHeight, ctx);
+    system->setHeight(system->systemHeight());
+    SystemLayout::setMeasureHeight(system, system->systemHeight(), ctx);
 }
 
 void SystemLayout::setMeasureHeight(System* system, double height, LayoutContext& ctx)
 {
     double _spatium = system->spatium();
-    for (MeasureBase* m : system->ml) {
+    for (MeasureBase* m : system->measures()) {
         if (m->isMeasure()) {
             // note that the factor 2 * _spatium must be corrected for when exporting
             // system distance in MusicXML (issue #24733)
@@ -2231,17 +2237,17 @@ void SystemLayout::setMeasureHeight(System* system, double height, LayoutContext
 
 void SystemLayout::layoutBracketsVertical(System* system, LayoutContext& ctx)
 {
-    for (Bracket* b : system->_brackets) {
+    for (Bracket* b : system->brackets()) {
         int staffIdx1 = static_cast<int>(b->firstStaff());
         int staffIdx2 = static_cast<int>(b->lastStaff());
         double sy = 0;                           // assume bracket not visible
         double ey = 0;
         // if start staff not visible, try next staff
-        while (staffIdx1 <= staffIdx2 && !system->_staves[staffIdx1]->show()) {
+        while (staffIdx1 <= staffIdx2 && !system->staves().at(staffIdx1)->show()) {
             ++staffIdx1;
         }
         // if end staff not visible, try prev staff
-        while (staffIdx1 <= staffIdx2 && !system->_staves[staffIdx2]->show()) {
+        while (staffIdx1 <= staffIdx2 && !system->staves().at(staffIdx2)->show()) {
             --staffIdx2;
         }
         // if the score doesn't have "alwaysShowBracketsWhenEmptyStavesAreHidden" as true,
@@ -2252,8 +2258,8 @@ void SystemLayout::layoutBracketsVertical(System* system, LayoutContext& ctx)
         bool notHidden = ctx.conf().styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden)
                          ? (staffIdx1 <= staffIdx2) : (staffIdx1 < staffIdx2) || (b->span() == 1 && staffIdx1 == staffIdx2);
         if (notHidden) {                        // set vert. pos. and height to visible spanned staves
-            sy = system->_staves[staffIdx1]->bbox().top();
-            ey = system->_staves[staffIdx2]->bbox().bottom();
+            sy = system->staves().at(staffIdx1)->bbox().top();
+            ey = system->staves().at(staffIdx2)->bbox().bottom();
         }
         b->setPosY(sy);
         b->setHeight(ey - sy);
@@ -2344,7 +2350,7 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
     }
     if (!ctx.conf().isShowInstrumentNames()
         || (ctx.conf().styleB(Sid::hideInstrumentNameIfOneInstrument) && ctx.dom().visiblePartCount() <= 1)) {
-        for (SysStaff* staff : system->_staves) {
+        for (SysStaff* staff : system->staves()) {
             for (InstrumentName* t : staff->instrumentNames) {
                 ctx.mutDom().removeElement(t);
             }
@@ -2353,7 +2359,7 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
     }
 
     int staffIdx = 0;
-    for (SysStaff* staff : system->_staves) {
+    for (SysStaff* staff : system->staves()) {
         const Staff* s = ctx.dom().staff(staffIdx);
         Part* part = s->part();
 
@@ -2442,16 +2448,16 @@ double SystemLayout::minDistance(const System* top, const System* bottom, Layout
     const Staff* staff = ctx.dom().staff(firstStaff);
     double userDist = staff ? staff->userDist() : 0.0;
     dist = std::max(dist, userDist);
-    top->fixedDownDistance = false;
+    top->setFixedDownDistance(false);
 
-    for (MeasureBase* mb1 : top->ml) {
+    for (const MeasureBase* mb1 : top->measures()) {
         if (mb1->isMeasure()) {
-            Measure* m = toMeasure(mb1);
+            const Measure* m = toMeasure(mb1);
             Spacer* sp = m->vspacerDown(lastStaff);
             if (sp) {
                 if (sp->spacerType() == SpacerType::FIXED) {
                     dist = sp->gap();
-                    top->fixedDownDistance = true;
+                    top->setFixedDownDistance(true);
                     break;
                 } else {
                     dist = std::max(dist, sp->gap().val());
@@ -2459,7 +2465,7 @@ double SystemLayout::minDistance(const System* top, const System* bottom, Layout
             }
         }
     }
-    if (!top->fixedDownDistance) {
+    if (!top->hasFixedDownDistance()) {
         for (const MeasureBase* mb2 : bottom->measures()) {
             if (mb2->isMeasure()) {
                 const Measure* m = toMeasure(mb2);

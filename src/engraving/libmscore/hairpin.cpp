@@ -504,21 +504,23 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
 
     case Pid::BEGIN_TEXT:
         if (_hairpinType == HairpinType::CRESC_LINE) {
-            return String(u"cresc.");
+            return style().styleV(Sid::hairpinCrescText);
         }
         if (_hairpinType == HairpinType::DECRESC_LINE) {
-            return String(u"dim.");
+            return style().styleV(Sid::hairpinDecrescText);
         }
         return String();
 
     case Pid::CONTINUE_TEXT:
-    case Pid::END_TEXT:
         if (_hairpinType == HairpinType::CRESC_LINE) {
-            return String(u"(cresc.)");
+            return style().styleV(Sid::hairpinCrescContText);
         }
         if (_hairpinType == HairpinType::DECRESC_LINE) {
-            return String(u"(dim.)");
+            return style().styleV(Sid::hairpinDecrescContText);
         }
+        return String();
+
+    case Pid::END_TEXT:
         return String();
 
     case Pid::BEGIN_TEXT_PLACE:

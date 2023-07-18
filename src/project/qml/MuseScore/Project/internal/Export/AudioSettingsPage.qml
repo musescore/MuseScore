@@ -30,9 +30,11 @@ ExportSettingsPage {
     id: root
 
     property bool showBitRateControl: false
+    property bool showSampleRateControl: true
 
     ExportOptionItem {
         id: sampleRateLabel
+        visible: root.showSampleRateControl
         text: qsTrc("project/export", "Sample rate:")
 
         StyledDropdown {

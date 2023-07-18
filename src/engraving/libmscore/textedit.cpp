@@ -204,7 +204,7 @@ void TextBase::endEdit(EditData& ed)
         if (isLyrics()) {
             Lyrics* prev = prevLyrics(toLyrics(this));
             if (prev) {
-                prev->setRemoveInvalidSegments();
+                prev->setIsRemoveInvalidSegments();
                 layout()->layoutItem(prev);
             }
         }
@@ -221,6 +221,11 @@ void TextBase::endEdit(EditData& ed)
         triggerLayout();                                    // force relayout even if text did not change
     } else {
         triggerLayout();
+    }
+    if (isLyrics()) {
+        // we must adjust previous lyrics before the call to commitText(), in order to make the adjustments
+        // part of the same undo command. there is logic above that will skip this call if the text is empty
+        toLyrics(this)->adjustPrevious();
     }
 
     static const double w = 2.0;
@@ -837,6 +842,11 @@ EngravingItem* TextBase::drop(EditData& ed)
     {
         String s = toFSymbol(e)->toString();
         delete e;
+
+        CharFormat* currentFormat = cursor->format();
+        if (currentFormat->fontFamily() == u"ScoreText") {
+            currentFormat->setFontFamily(propertyDefault(Pid::FONT_FACE).value<String>());
+        }
 
         deleteSelectedText(ed);
         score()->undo(new InsertText(cursor, s), &ed);

@@ -217,6 +217,12 @@ inline bool contains(const std::map<K, V>& m, const K& k)
 }
 
 template<typename K, typename V>
+inline bool contains(const std::multimap<K, V>& m, const K& k)
+{
+    return m.find(k) != m.cend();
+}
+
+template<typename K, typename V>
 inline bool contains(const std::unordered_map<K, V>& m, const K& k)
 {
     return m.find(k) != m.cend();

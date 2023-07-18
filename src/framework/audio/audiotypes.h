@@ -161,17 +161,6 @@ using AudioResourceMetaSet = std::set<AudioResourceMeta>;
 
 static const AudioResourceId MUSE_REVERB_ID("Muse Reverb");
 
-inline AudioResourceMeta makeReverbMeta()
-{
-    AudioResourceMeta meta;
-    meta.id = MUSE_REVERB_ID;
-    meta.type = AudioResourceType::MusePlugin;
-    meta.vendor = "Muse";
-    meta.hasNativeEditorSupport = true;
-
-    return meta;
-}
-
 enum class AudioPluginType {
     Undefined = -1,
     Instrument,
@@ -185,22 +174,6 @@ struct AudioPluginInfo {
     bool enabled = false;
     int errorCode = 0;
 };
-
-inline AudioPluginType audioPluginTypeFromCategoriesString(const std::string& categoriesStr)
-{
-    static const std::map<std::string, AudioPluginType> STRING_TO_PLUGIN_TYPE_MAP = {
-        { "Fx", AudioPluginType::Fx },
-        { "Instrument", AudioPluginType::Instrument },
-    };
-
-    for (auto it = STRING_TO_PLUGIN_TYPE_MAP.cbegin(); it != STRING_TO_PLUGIN_TYPE_MAP.cend(); ++it) {
-        if (categoriesStr.find(it->first) != std::string::npos) {
-            return it->second;
-        }
-    }
-
-    return AudioPluginType::Undefined;
-}
 
 enum class AudioFxType {
     Undefined = -1,

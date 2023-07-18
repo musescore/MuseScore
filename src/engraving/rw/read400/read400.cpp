@@ -96,6 +96,8 @@ Err Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
         ex->setTracksMapping(ctx.tracks());
     }
 
+    ctx.clearOrphanedConnectors();
+
     if (data) {
         data->links = ctx.readLinks();
         data->settingsCompat = ctx.settingCompat();
@@ -115,12 +117,12 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
-            score->_audio = new Audio;
-            TRead::read(score->_audio, e, ctx);
+            score->m_audio = new Audio;
+            TRead::read(score->m_audio, e, ctx);
         } else if (tag == "showOmr") {
             e.skipCurrentElement();
         } else if (tag == "playMode") {
-            score->_playMode = PlayMode(e.readInt());
+            score->m_playMode = PlayMode(e.readInt());
         } else if (tag == "LayerTag") {
             e.skipCurrentElement();
         } else if (tag == "Layer") {
@@ -128,23 +130,23 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "currentLayer") {
             e.skipCurrentElement();
         } else if (tag == "Synthesizer") {
-            score->_synthesizerState.read(e);
+            score->m_synthesizerState.read(e);
         } else if (tag == "page-offset") {
-            score->_pageNumberOffset = e.readInt();
+            score->m_pageNumberOffset = e.readInt();
         } else if (tag == "Division") {
-            score->_fileDivision = e.readInt();
+            score->m_fileDivision = e.readInt();
         } else if (tag == "open") {
-            score->_isOpen = e.readBool();
+            score->m_isOpen = e.readBool();
         } else if (tag == "showInvisible") {
-            score->_showInvisible = e.readInt();
+            score->m_showInvisible = e.readInt();
         } else if (tag == "showUnprintable") {
-            score->_showUnprintable = e.readInt();
+            score->m_showUnprintable = e.readInt();
         } else if (tag == "showFrames") {
-            score->_showFrames = e.readInt();
+            score->m_showFrames = e.readInt();
         } else if (tag == "showMargins") {
-            score->_showPageborders = e.readInt();
+            score->m_showPageborders = e.readInt();
         } else if (tag == "markIrregularMeasures") {
-            score->_markIrregularMeasures = e.readInt();
+            score->m_markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
             // Since version 400, the style is stored in a separate file
             e.skipCurrentElement();
@@ -248,7 +250,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->connectTies();
 
-    score->_fileDivision = Constants::DIVISION;
+    score->m_fileDivision = Constants::DIVISION;
 
     // Make sure every instrument has an instrumentId set.
     for (Part* part : score->parts()) {
@@ -259,7 +261,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->setUpTempoMap();
 
-    for (Part* p : score->_parts) {
+    for (Part* p : score->m_parts) {
         p->updateHarmonyChannels(false);
     }
 
@@ -709,7 +711,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 m->checkMeasure(i, false);
             }
         }
-        score->_selection.setRangeTicks(dstTick, dstTick + tickLen, dstStaff, endStaff);
+        score->m_selection.setRangeTicks(dstTick, dstTick + tickLen, dstStaff, endStaff);
 
         //finding the first element that has a track
         //the canvas position will be set to this element
@@ -731,11 +733,11 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
             s = s->next1MM();
         }
 
-        for (MuseScoreView* v : score->viewer) {
+        for (MuseScoreView* v : score->m_viewer) {
             v->adjustCanvasPosition(el);
         }
         if (!score->selection().isRange()) {
-            score->_selection.setState(SelState::RANGE);
+            score->m_selection.setState(SelState::RANGE);
         }
     }
     return true;

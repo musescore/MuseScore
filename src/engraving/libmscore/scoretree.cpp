@@ -129,7 +129,7 @@ EngravingObjectList System::scanChildren() const
         children.push_back(dividerRight);
     }
 
-    for (SysStaff* staff : _staves) {
+    for (SysStaff* staff : m_staves) {
         for (InstrumentName* instrName : staff->instrumentNames) {
             children.push_back(instrName);
         }
@@ -369,12 +369,12 @@ EngravingObjectList Chord::scanChildren() const
         children.push_back(note);
     }
 
-    if (_arpeggio) {
-        children.push_back(_arpeggio);
+    if (m_arpeggio) {
+        children.push_back(m_arpeggio);
     }
 
-    if (_tremolo && _tremolo->chord1() == this) {
-        children.push_back(_tremolo);
+    if (m_tremolo && m_tremolo->chord1() == this) {
+        children.push_back(m_tremolo);
     }
 
     for (Chord* chord : graceNotes()) {
@@ -385,19 +385,19 @@ EngravingObjectList Chord::scanChildren() const
         children.push_back(art);
     }
 
-    if (_stem) {
-        children.push_back(_stem);
+    if (m_stem) {
+        children.push_back(m_stem);
     }
 
-    if (_hook) {
-        children.push_back(_hook);
+    if (m_hook) {
+        children.push_back(m_hook);
     }
 
-    if (_stemSlash) {
-        children.push_back(_stemSlash);
+    if (m_stemSlash) {
+        children.push_back(m_stemSlash);
     }
 
-    LedgerLine* ledgerLines = _ledgerLines;
+    LedgerLine* ledgerLines = m_ledgerLines;
     while (ledgerLines) {
         children.push_back(ledgerLines);
         ledgerLines = ledgerLines->next();
@@ -488,7 +488,7 @@ EngravingObject* Accidental::scanParent() const
 
 EngravingObject* Beam::scanParent() const
 {
-    return _elements[0];
+    return m_elements[0];
 }
 
 //---------------------------------------------------------
@@ -610,8 +610,8 @@ EngravingObjectList Tuplet::scanChildren() const
 {
     EngravingObjectList children;
 
-    if (_number) {
-        children.push_back(_number);
+    if (m_number) {
+        children.push_back(m_number);
     }
 
     return children;

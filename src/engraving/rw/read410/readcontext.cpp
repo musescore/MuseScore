@@ -506,6 +506,56 @@ void ReadContext::reconnectBrokenConnectors()
     doReconnectBrokenConnectors();
 }
 
+void ReadContext::clearOrphanedConnectors()
+{
+    if (_connectors.empty() && _pendingConnectors.empty()) {
+        return;
+    }
+
+    LOGD("XmlReader::~XmlReader: there are unpaired connectors left");
+
+    std::set<LinkedObjects*> deletedLinks;
+
+    auto deleteConnectors = [&deletedLinks](std::shared_ptr<ConnectorInfoReader> c) {
+        EngravingItem* conn = c ? c->releaseConnector() : nullptr;
+        if (!conn) {
+            return;
+        }
+
+        LinkedObjects* links = conn->links();
+        bool linksWillBeDeleted = links && links->size() == 1;
+
+        if (!conn->isTuplet()) {     // tuplets are added to score even when not finished
+            if (linksWillBeDeleted) {
+                deletedLinks.insert(links);
+            }
+
+            delete conn;
+        }
+    };
+
+    if (!_connectors.empty()) {
+        for (auto& c : _connectors) {
+            deleteConnectors(c);
+        }
+        _connectors.clear();
+    }
+
+    if (!_pendingConnectors.empty()) {
+        for (auto& c : _pendingConnectors) {
+            deleteConnectors(c);
+        }
+        _pendingConnectors.clear();
+    }
+
+    for (auto& it : m_staffLinkedElements) {
+        std::vector<std::pair<LinkedObjects*, Location> >& vector = it.second;
+        mu::remove_if(vector, [&deletedLinks](std::pair<LinkedObjects*, Location>& pair){
+            return deletedLinks.count(pair.first);
+        });
+    }
+}
+
 void ReadContext::doReconnectBrokenConnectors()
 {
     if (_connectors.empty()) {

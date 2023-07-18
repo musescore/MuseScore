@@ -20,6 +20,7 @@
         <file>qml/MuseScore/Project/internal/Export/PngSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/Mp3SettingsPage.qml</file>
+        <file>qml/MuseScore/Project/internal/Export/OggSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/MidiSettingsPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/MusicXmlSettingsPage.qml</file>

@@ -22,7 +22,6 @@
 #include "restbeamsettingsmodel.h"
 
 #include "translation.h"
-#include "dataformatter.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;
@@ -32,7 +31,11 @@ RestBeamSettingsModel::RestBeamSettingsModel(QObject* parent, IElementRepository
 {
     setModelType(InspectorModelType::TYPE_BEAM);
     setTitle(qtrc("inspector", "Beam"));
-    setBeamModesModel(new BeamModesModel(this, repository));
+
+    m_beamModesModel = new BeamModesModel(this, repository);
+    m_beamModesModel->init();
+
+    connect(m_beamModesModel->mode(), &PropertyItem::propertyModified, this, &AbstractInspectorModel::requestReloadPropertyItems);
 }
 
 QObject* RestBeamSettingsModel::beamModesModel() const
@@ -40,16 +43,14 @@ QObject* RestBeamSettingsModel::beamModesModel() const
     return m_beamModesModel;
 }
 
-void RestBeamSettingsModel::setBeamModesModel(BeamModesModel* beamModesModel)
-{
-    m_beamModesModel = beamModesModel;
-
-    connect(m_beamModesModel->mode(), &PropertyItem::propertyModified, this, &AbstractInspectorModel::requestReloadPropertyItems);
-
-    emit beamModesModelChanged(m_beamModesModel);
-}
-
 void RestBeamSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::REST);
+}
+
+void RestBeamSettingsModel::onCurrentNotationChanged()
+{
+    AbstractInspectorModel::onCurrentNotationChanged();
+
+    m_beamModesModel->onCurrentNotationChanged();
 }

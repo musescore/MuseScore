@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,25 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
-CheckBox {
+InspectorPropertyView {
     id: root
 
-    required property PropertyItem propertyItem
+    navigationName: "CheckBoxPropertyView"
+    buttonNavigationRow: navigationRowStart + 1
 
-    width: parent.width
+    titleLabelComponent: PropertyCheckBox {
+        propertyItem: root.propertyItem
+        text: root.titleText
 
-    visible: propertyItem && propertyItem.isVisible
-    enabled: propertyItem && propertyItem.isEnabled
-
-    isIndeterminate: propertyItem && propertyItem.isUndefined
-    checked: !isIndeterminate && propertyItem && Boolean(propertyItem.value)
-    onClicked: {
-        if (propertyItem) {
-            propertyItem.value = !checked
-        }
+        navigation.name: root.navigationName + " CheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart
     }
 }

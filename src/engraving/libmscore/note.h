@@ -332,6 +332,8 @@ public:
 
     DirectionV userDotPosition() const { return m_userDotPosition; }
     void setUserDotPosition(DirectionV d) { m_userDotPosition = d; }
+    DirectionV dotPosition() const { return m_dotPosition; }
+    void setDotPosition(DirectionV d) { m_dotPosition = d; }
     bool dotIsUp() const;                 // actual dot position
 
     void reset() override;
@@ -387,7 +389,7 @@ public:
     bool mark() const { return m_mark; }
     void setMark(bool v) const { m_mark = v; }
     void setScore(Score* s) override;
-    void setDotY(DirectionV);
+    void setDotRelativeLine(int);
 
     void setHeadHasParentheses(bool hasParentheses);
     bool headHasParentheses() const { return m_hasHeadParentheses; }
@@ -492,8 +494,9 @@ private:
     SlideType m_slideToType = SlideType::Undefined;
     SlideType m_slideFromType = SlideType::Undefined;
 
-    DirectionH m_userMirror = DirectionH::AUTO;        // user override of mirror
-    DirectionV m_userDotPosition = DirectionV::AUTO;   // user override of dot position
+    DirectionH m_userMirror = DirectionH::AUTO;        ///< user override of mirror
+    DirectionV m_userDotPosition = DirectionV::AUTO;   ///< user override of dot position
+    DirectionV m_dotPosition = DirectionV::AUTO;       // used as an intermediate step when resolving dot conflicts
 
     NoteHeadScheme m_headScheme = NoteHeadScheme::HEAD_AUTO;
     NoteHeadGroup m_headGroup = NoteHeadGroup::HEAD_NORMAL;

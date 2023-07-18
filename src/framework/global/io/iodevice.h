@@ -24,6 +24,8 @@
 #define MU_IO_IODEVICE_H
 
 #include <cstdint>
+#include <string>
+
 #include "types/bytearray.h"
 
 namespace mu::io {
@@ -64,6 +66,10 @@ public:
     size_t write(const QByteArray& ba);
 #endif
 
+    bool hasError() const;
+    int error() const;
+    std::string errorString() const;
+
 protected:
 
     virtual bool doOpen(OpenMode m) = 0;
@@ -75,12 +81,17 @@ protected:
     bool isOpenModeReadable() const;
     bool isOpenModeWriteable() const;
 
+    void setError(int error, const std::string& errorString);
+
 private:
 
     const uint8_t* cdataOffsetted() const;
 
     OpenMode m_mode = OpenMode::Unknown;
     size_t m_pos = 0;
+
+    int m_error = 0;
+    std::string m_errorString;
 };
 }
 

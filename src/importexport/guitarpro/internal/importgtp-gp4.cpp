@@ -735,8 +735,8 @@ bool GuitarPro4::read(IODevice* io)
         for (int k = 0; k < strings; ++k) {
             tuning2[strings - k - 1] = tuning[k];
         }
-        StringData stringData(frets, strings, &tuning2[0]);
-        createTuningString(strings, &tuning2[0]);
+        bool useFlats = createTuningString(strings, &tuning2[0]);
+        StringData stringData(frets, strings, &tuning2[0], useFlats);
         Part* part = score->staff(i)->part();
         Instrument* instr = part->instrument();
         instr->setStringData(stringData);
@@ -1103,6 +1103,7 @@ bool GuitarPro4::read(IODevice* io)
             }
             if (measureLen < measure->ticks()) {
                 score->setRest(tick, track, measure->ticks() - measureLen, false, nullptr, false);
+                m_continiousElementsBuilder->notifyUncompletedMeasure();
             }
         }
 

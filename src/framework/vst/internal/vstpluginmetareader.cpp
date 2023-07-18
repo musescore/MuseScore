@@ -64,13 +64,18 @@ mu::RetVal<AudioResourceMetaList> VstPluginMetaReader::readMeta(const io::path_t
         }
 
         audio::AudioResourceMeta meta;
-        meta.id = classInfo.name();
+        meta.id = io::completeBasename(pluginPath).toStdString();
         meta.type = audio::AudioResourceType::VstPlugin;
-        meta.attributes.insert({ audio::CATEGORIES_ATTRIBUTE, String::fromStdString(classInfo.subCategoriesString()) });
+        meta.attributes.emplace(audio::CATEGORIES_ATTRIBUTE, String::fromStdString(classInfo.subCategoriesString()));
         meta.vendor = classInfo.vendor();
         meta.hasNativeEditorSupport = hasNativeEditorSupport();
 
-        result.push_back(meta);
+        result.emplace_back(std::move(meta));
+        break;
+    }
+
+    if (result.empty()) {
+        return make_ret(Err::NoAudioEffect);
     }
 
     return RetVal<AudioResourceMetaList>::make_ok(result);

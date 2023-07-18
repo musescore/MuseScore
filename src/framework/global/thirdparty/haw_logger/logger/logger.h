@@ -24,6 +24,18 @@ enum Level {
     Full    = 3
 };
 
+enum Color {
+    None,
+    Black,
+    Red,
+    Green,
+    Yellow,
+    Blue,
+    Magenta,
+    Cyan,
+    White
+};
+
 struct Date
 {
     int day = 0;
@@ -65,6 +77,10 @@ public:
         : type(l), tag(t), datetime(DateTime::now()),
         thread(std::this_thread::get_id()) {}
 
+    LogMsg(const Type& l, const std::string& t, const Color& color)
+        : type(l), tag(t), datetime(DateTime::now()),
+        thread(std::this_thread::get_id()), color(color) {}
+
     LogMsg(const Type& l, const std::string& t, const std::string& m)
         : type(l), tag(t), message(m), datetime(DateTime::now()),
         thread(std::this_thread::get_id()) {}
@@ -74,6 +90,7 @@ public:
     std::string message;
     DateTime datetime;
     std::thread::id thread;
+    Color color = None;
 };
 
 //! Layout ---------------------------------
@@ -139,6 +156,8 @@ public:
     static const Type INFO;
     static const Type DEBG;
 
+    static Color colorForType(const Type& type);
+
     void setupDefault();
 
     void setLevel(Level level);
@@ -181,7 +200,7 @@ private:
 class LogInput
 {
 public:
-    explicit LogInput(const Type& type, const std::string& tag, const std::string& funcInfo);
+    explicit LogInput(const Type& type, const std::string& tag, const std::string& funcInfo, const Color& color);
     ~LogInput();
 
     Stream& stream();

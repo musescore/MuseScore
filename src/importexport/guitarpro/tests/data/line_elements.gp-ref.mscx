@@ -283,7 +283,6 @@
             </Tempo>
           <Spanner type="LetRing">
             <LetRing>
-              <beginTextOffset x="0" y="0"/>
               </LetRing>
             <next>
               <location>
@@ -342,7 +341,6 @@
             </Rest>
           <Spanner type="PalmMute">
             <PalmMute>
-              <beginTextOffset x="0" y="0"/>
               </PalmMute>
             <next>
               <location>
@@ -496,9 +494,6 @@
               <string>1</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -552,7 +547,6 @@
             </Chord>
           <Spanner type="LetRing">
             <LetRing>
-              <beginTextOffset x="0" y="0"/>
               </LetRing>
             <next>
               <location>
@@ -616,9 +610,6 @@
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -850,10 +841,6 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -1075,10 +1062,6 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -1310,9 +1293,6 @@
               <string>1</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           <Spanner type="HarmonicMark">
             <prev>
               <location>

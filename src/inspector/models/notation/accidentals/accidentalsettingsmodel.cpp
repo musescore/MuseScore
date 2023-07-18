@@ -49,6 +49,7 @@ void AccidentalSettingsModel::loadProperties()
 {
     loadPropertyItem(m_bracketType);
     loadPropertyItem(m_isSmall);
+    updateIsSmallAvailable();
 }
 
 void AccidentalSettingsModel::resetProperties()
@@ -64,4 +65,32 @@ PropertyItem* AccidentalSettingsModel::bracketType() const
 PropertyItem* AccidentalSettingsModel::isSmall() const
 {
     return m_isSmall;
+}
+
+bool AccidentalSettingsModel::isSmallAvailable() const
+{
+    return m_isSmallAvailable;
+}
+
+void AccidentalSettingsModel::updateIsSmallAvailable()
+{
+    bool available = true;
+    for (mu::engraving::EngravingItem* item : m_elementList) {
+        mu::engraving::EngravingItem* parent = item ? item->parentItem() : nullptr;
+        if (parent && (parent->isOrnament() || parent->isTrillSegment())) {
+            available = false;
+            break;
+        }
+    }
+    setIsSmallAvailable(available);
+}
+
+void AccidentalSettingsModel::setIsSmallAvailable(bool available)
+{
+    if (m_isSmallAvailable == available) {
+        return;
+    }
+
+    m_isSmallAvailable = available;
+    emit isSmallAvailableChanged(m_isSmallAvailable);
 }

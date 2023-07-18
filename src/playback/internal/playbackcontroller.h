@@ -179,6 +179,7 @@ private:
     void setupSequencePlayer();
 
     void updateMuteStates();
+    void updateAuxMuteStates();
 
     void setCurrentPlaybackTime(audio::msecs_t msecs);
 
@@ -226,6 +227,7 @@ private:
     size_t m_loadingTrackCount = 0;
 
     bool m_isExportingAudio = false;
+    bool m_isRangeSelection = false;
 };
 }
 

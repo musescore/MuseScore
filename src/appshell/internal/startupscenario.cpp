@@ -60,6 +60,19 @@ void StartupScenario::setStartupType(const std::optional<std::string>& type)
     m_startupTypeStr = type ? type.value() : "";
 }
 
+bool StartupScenario::isStartWithNewFileAsSecondaryInstance() const
+{
+    if (m_startupScoreFile.isValid()) {
+        return false;
+    }
+
+    if (!m_startupTypeStr.empty()) {
+        return modeTypeTromString(m_startupTypeStr) == StartupModeType::StartWithNewScore;
+    }
+
+    return false;
+}
+
 const mu::project::ProjectFile& StartupScenario::startupScoreFile() const
 {
     return m_startupScoreFile;

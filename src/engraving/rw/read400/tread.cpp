@@ -209,7 +209,7 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
     case P_TYPE::ORNAMENT_STYLE:
         return PropertyValue::fromValue(TConv::fromXml(e.readAsciiText(), OrnamentStyle::DEFAULT));
     case P_TYPE::ORNAMENT_INTERVAL:
-        return PropertyValue(TConv::fromXml(e.readText(), OrnamentInterval()));
+        return PropertyValue(TConv::fromXml(e.readText(), DEFAULT_ORNAMENT_INTERVAL));
     case P_TYPE::POINT:
         return PropertyValue::fromValue(e.readPoint());
     case P_TYPE::SCALE:
@@ -1278,6 +1278,11 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
     }
     if (sig.custom() && sig.customKeyDefs().empty()) {
         sig.setMode(KeyMode::NONE);
+    }
+    // if there are more than 6 accidentals in transposing key, it cannot be PreferSharpFlat::AUTO
+    if (p && !s->concertPitch() && (sig.key() > 6 || sig.key() < -6)
+        && p->preferSharpFlat() == PreferSharpFlat::AUTO && !p->instrument(s->tick())->transpose().isZero()) {
+        p->setPreferSharpFlat(PreferSharpFlat::NONE);
     }
 
     s->setKeySigEvent(sig);
@@ -2536,6 +2541,9 @@ void TRead::read(ChordLine* l, XmlReader& e, ReadContext& ctx)
                     int type = e.intAttribute("type");
                     double x  = e.doubleAttribute("x");
                     double y  = e.doubleAttribute("y");
+                    double spatium = ctx.spatium();
+                    x *= spatium;
+                    y *= spatium;
                     switch (PainterPath::ElementType(type)) {
                     case PainterPath::ElementType::MoveToElement:
                         path.moveTo(x, y);

@@ -1677,22 +1677,18 @@ EngravingItem* Segment::prevElementOfSegment(Segment* s, EngravingItem* e, staff
 
 EngravingItem* Segment::lastElementOfSegment(Segment* s, staff_idx_t activeStaff)
 {
-    std::vector<EngravingItem*> elements = s->elist();
-    for (auto i = --elements.end(); i != elements.begin(); --i) {
-        if (*i && (*i)->staffIdx() == activeStaff) {
-            if ((*i)->isChord()) {
-                return toChord(*i)->notes().front();
-            } else {
-                return *i;
+    const std::vector<EngravingItem*>& elements = s->elist();
+    for (auto it = elements.rbegin(); it != elements.rend(); ++it) {
+        EngravingItem* item = *it;
+        if (item && item->staffIdx() == activeStaff) {
+            if (item->isChord()) {
+                const std::vector<Articulation*>& articulations = toChord(item)->articulations();
+                if (!articulations.empty()) {
+                    return articulations.back();
+                }
+                return toChord(item)->upNote();
             }
-        }
-    }
-    auto i = elements.begin();
-    if (*i && (*i)->staffIdx() == activeStaff) {
-        if ((*i)->type() == ElementType::CHORD) {
-            return toChord(*i)->notes().front();
-        } else {
-            return *i;
+            return item;
         }
     }
     return nullptr;
