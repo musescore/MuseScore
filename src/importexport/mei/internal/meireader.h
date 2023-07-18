@@ -23,12 +23,17 @@
 #define MU_IMPORTEXPORT_MEIREADER_H
 
 #include "project/inotationreader.h"
+#include "iinteractive.h"
 
 namespace mu::iex::mei {
 class MeiReader : public project::INotationReader
 {
+    INJECT(framework::IInteractive, interactive)
+
 public:
     Ret read(mu::engraving::MasterScore* score, const io::path_t& path, const Options& options = Options()) override;
+private:
+    bool askToLoadDespiteWarnings(QString text, QString detailedText);
 };
 } // namespace
 

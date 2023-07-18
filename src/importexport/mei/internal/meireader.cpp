@@ -37,23 +37,6 @@ using namespace mu::engraving;
 //   MeiImportErrorDialog
 //---------------------------------------------------------
 
-/**
- Show a dialog displaying the MEI import error(s).
- */
-
-static int meiImportErrorDialog(QString text, QString detailedText)
-{
-    QMessageBox errorDialog;
-    errorDialog.setIcon(QMessageBox::Warning);
-    errorDialog.setTextFormat(Qt::AutoText);
-    errorDialog.setText(text);
-    errorDialog.setInformativeText(mu::qtrc("iex_mei", "Do you want to try to load this MEI file anyway?"));
-    errorDialog.setDetailedText(detailedText);
-    errorDialog.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    errorDialog.setDefaultButton(QMessageBox::No);
-    return errorDialog.exec();
-}
-
 mu::Ret MeiReader::read(MasterScore* score, const io::path_t& path, const Options& options)
 {
     if (!QFileInfo::exists(path.toQString())) {
@@ -75,4 +58,18 @@ mu::Ret MeiReader::read(MasterScore* score, const io::path_t& path, const Option
     UNUSED(forceMode);
 
     return make_ok();
+}
+
+/**
+ Show a dialog displaying the MEI import problem(s) and ask whether to load or cancel.
+ */
+bool MeiReader::askToLoadDespiteWarnings(QString text, QString detailedText)
+{
+    IInteractive::Button btn = interactive()->warning(
+        text.toStdString(), "Do you want to try to load this MEI file anyway?", detailedText.toStdString(), {
+        interactive()->buttonData(IInteractive::Button::Cancel),
+        interactive()->buttonData(IInteractive::Button::Yes)
+    }, (int)IInteractive::Button::Yes).standardButton();
+
+    return btn == IInteractive::Button::Yes;
 }
