@@ -651,6 +651,9 @@ void Spanner::computeStartElement()
             m_startElement = startSegment();
         } else {
             Segment* seg = score()->tick2segmentMM(tick(), false, SegmentType::ChordRest);
+            if (!seg || seg->empty()) {
+                seg = score()->tick2segment(tick(), false, SegmentType::ChordRest);
+            }
             track_idx_t strack = (track() / VOICES) * VOICES;
             track_idx_t etrack = strack + VOICES;
             m_startElement = 0;
