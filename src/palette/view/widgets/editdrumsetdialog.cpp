@@ -375,11 +375,14 @@ void EditDrumsetDialog::shortcutChanged()
     }
 
     int pitch = item->data(Column::PITCH, Qt::UserRole).toInt();
+    int index = shortcut->currentIndex();
+    bool invalidIndex = index < 0 || index >= 7;
     int sc;
-    if (shortcut->currentIndex() == 7) {
+
+    if (invalidIndex) {
         sc = 0;
     } else {
-        sc = "ABCDEFG"[shortcut->currentIndex()];
+        sc = "ABCDEFG"[index];
     }
 
     if (QString(QChar(m_editedDrumset.drum(pitch).shortcut)) != shortcut->currentText()) {
@@ -395,7 +398,7 @@ void EditDrumsetDialog::shortcutChanged()
             }
         }
         m_editedDrumset.drum(pitch).shortcut = sc;
-        if (shortcut->currentIndex() == 7) {
+        if (invalidIndex) {
             item->setText(Column::SHORTCUT, "");
         } else {
             item->setText(Column::SHORTCUT, shortcut->currentText());
@@ -493,10 +496,12 @@ void EditDrumsetDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* p
 
         m_editedDrumset.drum(pitch).line          = staffLine->value();
         m_editedDrumset.drum(pitch).voice         = voice->currentIndex();
-        if (shortcut->currentIndex() == 7) {
+        int index = shortcut->currentIndex();
+
+        if (index < 0 || index >= 7) {
             m_editedDrumset.drum(pitch).shortcut = 0;
         } else {
-            m_editedDrumset.drum(pitch).shortcut = "ABCDEFG"[shortcut->currentIndex()];
+            m_editedDrumset.drum(pitch).shortcut = "ABCDEFG"[index];
         }
         m_editedDrumset.drum(pitch).stemDirection = DirectionV(stemDirection->currentIndex());
         previous->setText(Column::NAME, m_editedDrumset.translatedName(pitch));
