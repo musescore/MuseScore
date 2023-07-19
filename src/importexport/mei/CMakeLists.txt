@@ -20,9 +20,11 @@
 
 set(MODULE iex_mei)
 
-include_directories(${CMAKE_CURRENT_LIST_DIR}/internal/)
-include_directories(${CMAKE_CURRENT_LIST_DIR}/thirdparty/)
-include_directories(${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/)
+set(MODULE_INCLUDE
+    ${CMAKE_CURRENT_LIST_DIR}/internal/
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/
+    )
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/imeiconfiguration.h
