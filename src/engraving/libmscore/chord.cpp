@@ -357,6 +357,19 @@ Chord::Chord(const Chord& c, bool link)
             if (link) {
                 score()->undo(new Link(ncl, cl));
             }
+        } else if (e->isStretchedBend()) {
+            StretchedBend* sb = toStretchedBend(e);
+            StretchedBend* nsb = Factory::copyStretchedBend(*sb);
+            add(nsb);
+            if (Note* originalNote = sb->note()) {
+                for (Note* note : notes()) {
+                    if (note->pitch() == originalNote->pitch() && note->string() == originalNote->string()) {
+                        nsb->setNote(note);
+                        note->setStretchedBend(nsb);
+                        break;
+                    }
+                }
+            }
         }
     }
 }
@@ -676,8 +689,6 @@ void Chord::add(EngravingItem* e)
         m_hook = toHook(e);
         break;
     case ElementType::STRETCHED_BEND:
-        m_stretchedBends.insert(toStretchedBend(e));
-    // fallthrough
     case ElementType::CHORDLINE:
     case ElementType::FRET_CIRCLE:
         el().push_back(e);
@@ -751,7 +762,6 @@ void Chord::remove(EngravingItem* e)
                 note->removeSpannerFor(s);
             }
             if (StretchedBend* stretchedBend = note->stretchedBend()) {
-                m_stretchedBends.erase(stretchedBend);
                 el().remove(stretchedBend);
             }
         } else {
@@ -789,7 +799,6 @@ void Chord::remove(EngravingItem* e)
     case ElementType::STRETCHED_BEND:
     {
         StretchedBend* stretchedBend = toStretchedBend(e);
-        m_stretchedBends.erase(stretchedBend);
         auto it = std::find_if(m_notes.begin(), m_notes.end(), [stretchedBend](Note* note) {
                 return note->stretchedBend() == stretchedBend;
             });

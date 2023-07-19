@@ -170,9 +170,13 @@ static Fraction getPlayTicksForBend(const Note* note)
     while (tie) {
         nextNote = tie->endNote();
         for (EngravingItem* e : nextNote->el()) {
-            if (e && (e->type() == ElementType::BEND || e->type() == ElementType::STRETCHED_BEND)) {
+            if (e && (e->type() == ElementType::BEND)) {
                 return nextNote->chord()->tick() - stick;
             }
+        }
+
+        if (nextNote->stretchedBend()) {
+            return nextNote->chord()->tick() - stick;
         }
 
         tie = nextNote->tieFor();
@@ -426,28 +430,21 @@ static void collectNote(EventMap* events, const Note* note, const CollectNotePar
 
     // Bends
     for (EngravingItem* e : note->el()) {
-        if (!e || (e->type() != ElementType::BEND && e->type() != ElementType::STRETCHED_BEND)) {
+        if (!e || (e->type() != ElementType::BEND)) {
             continue;
         }
 
-        PitchValues playData;
-        staff_idx_t staffIdx;
-
-        if (e->type() == ElementType::BEND) {
-            Bend* bend = toBend(e);
-            if (!bend->playBend()) {
-                break;
-            }
-
-            playData = bend->points();
-            staffIdx = bend->staffIdx();
-        } else if (e->type() == ElementType::STRETCHED_BEND) {
-            StretchedBend* stretchedBend = toStretchedBend(e);
-            playData = stretchedBend->pitchValues();
-            staffIdx = stretchedBend->staffIdx();
+        Bend* bend = toBend(e);
+        if (!bend->playBend()) {
+            break;
         }
 
-        collectBend(playData, staffIdx, noteParams.channel, tick1, tick1 + getPlayTicksForBend(
+        collectBend(bend->points(), bend->staffIdx(), noteParams.channel, tick1, tick1 + getPlayTicksForBend(
+                        note).ticks(), pitchWheelRenderer, noteParams.effect);
+    }
+
+    if (StretchedBend* stretchedBend = note->stretchedBend()) {
+        collectBend(stretchedBend->pitchValues(), stretchedBend->staffIdx(), noteParams.channel, tick1, tick1 + getPlayTicksForBend(
                         note).ticks(), pitchWheelRenderer, noteParams.effect);
     }
 }

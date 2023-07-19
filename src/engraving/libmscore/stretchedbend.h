@@ -101,6 +101,7 @@ private:
     double bendHeight(int bendIdx) const;
     bool firstPointShouldBeSkipped() const;
     StretchedBend* backTiedStretchedBend() const;
+    bool bendSegmentShouldBeHidden(StretchedBend* bendSegment) const;
 
     PitchValues m_pitchValues;
     std::vector<int> m_drawPoints;

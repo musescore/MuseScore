@@ -3195,22 +3195,26 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
 
 void ChordLayout::layoutStretchedBends(Chord* chord, LayoutContext& ctx)
 {
+    if (!Note::engravingConfiguration()->guitarProImportExperimental()) {
+        return;
+    }
+
     double highestCoord = 0;
-    for (StretchedBend* stretchedBend : chord->stretchedBends()) {
-        if (stretchedBend) {
-            highestCoord = std::max(highestCoord, stretchedBend->highestCoord());
+    for (EngravingItem* item : chord->el()) {
+        if (item && item->isStretchedBend()) {
+            highestCoord = std::max(highestCoord, toStretchedBend(item)->highestCoord());
         }
     }
 
-    for (StretchedBend* stretchedBend : chord->stretchedBends()) {
-        if (stretchedBend) {
-            stretchedBend->updateHeights(highestCoord);
+    for (EngravingItem* item : chord->el()) {
+        if (item && item->isStretchedBend()) {
+            toStretchedBend(item)->updateHeights(highestCoord);
         }
     }
 
-    for (StretchedBend* stretchedBend : chord->stretchedBends()) {
-        if (stretchedBend) {
-            layout::v0::TLayout::layoutStretched(stretchedBend, ctx);
+    for (EngravingItem* item : chord->el()) {
+        if (item && item->isStretchedBend()) {
+            layout::dev::TLayout::layoutStretched(toStretchedBend(item), ctx);
         }
     }
 }

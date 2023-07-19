@@ -867,13 +867,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             ChordLayout::layoutArticulations(c, ctx);
             ChordLayout::layoutArticulations2(c, ctx);
             ChordLayout::layoutChordBaseFingering(c, system, ctx);
-            for (Note* note : c->notes()) {
-                for (EngravingItem* item : note->el()) {
-                    if (item && item->isStretchedBend()) {
-                        rendering::dev::TLayout::layoutStretched(toStretchedBend(item), ctx);
-                    }
-                }
-            }
+            ChordLayout::layoutStretchedBends(c, ctx);
         }
     }
 

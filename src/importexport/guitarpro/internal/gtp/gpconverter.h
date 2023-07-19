@@ -195,9 +195,7 @@ private:
     // Index is the number of sharps. Using sharp keysigs for signatures with double flats
     std::vector<int> m_sharpsToFlatKeysConverter{ 0, 1, 2, 3, 4, -7, -6, -5, -4, -3, -2, -1 };
 
-    std::vector<mu::engraving::Bend*> m_bends;
-    std::vector<mu::engraving::StretchedBend*> m_stretchedBends;
-    bool m_useStretchedBends = false;
+    std::unordered_map<mu::engraving::Chord*, std::vector<mu::engraving::StretchedBend*>> m_stretchedBends;
 
     static constexpr mu::engraving::voice_idx_t VOICES = 4;
 

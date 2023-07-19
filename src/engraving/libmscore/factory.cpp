@@ -341,16 +341,9 @@ std::shared_ptr<Beam> Factory::makeBeam(System* parent)
     return std::shared_ptr<Beam>(createBeam(parent));
 }
 
-//CREATE_ITEM_IMPL(Bend, ElementType::BEND, Note, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Bend, ElementType::BEND, Note, isAccessibleEnabled)
 CREATE_ITEM_IMPL(StretchedBend, ElementType::STRETCHED_BEND, Chord, isAccessibleEnabled)
-
-Bend* Factory::createBend(Note * parent, bool isAccessibleEnabled)
-{
-    Bend* b = new Bend(parent);
-    b->setAccessibleEnabled(isAccessibleEnabled);
-
-    return b;
-}
+COPY_ITEM_IMPL(StretchedBend)
 
 MAKE_ITEM_IMPL(Bend, Note)
 

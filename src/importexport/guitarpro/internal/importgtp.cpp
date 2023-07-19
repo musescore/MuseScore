@@ -730,13 +730,12 @@ void GuitarPro::createBend(Note* note, std::vector<PitchValue>& bendData)
         stretchedBend->setNote(note);
         note->setStretchedBend(stretchedBend);
         chord->add(stretchedBend);
-        m_stretchedBends.push_back(stretchedBend);
+        m_stretchedBends[chord].push_back(stretchedBend);
     } else {
         Bend* bend = Factory::createBend(note);
         bend->setPoints(bendData);
         bend->setTrack(note->track());
         note->add(bend);
-        m_bends.push_back(bend);
     }
 }
 
@@ -2728,7 +2727,10 @@ bool GuitarPro3::read(IODevice* io)
     }
 
     m_continiousElementsBuilder->addElementsToScore();
-    StretchedBend::prepareBends(m_stretchedBends);
+    for (auto&[chord, bends] : m_stretchedBends) {
+        StretchedBend::prepareBends(bends);
+    }
+
     return true;
 }
 

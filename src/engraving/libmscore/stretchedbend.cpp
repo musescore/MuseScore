@@ -163,9 +163,7 @@ void StretchedBend::fillDrawPoints()
     }
 
     auto maxElIt = std::max_element(m_drawPoints.begin(), m_drawPoints.end());
-    if (maxElIt != m_drawPoints.end()) {
-        m_maxDrawPointRead = *maxElIt;
-    }
+    m_maxDrawPointRead = *maxElIt;
 }
 
 //---------------------------------------------------------
@@ -196,7 +194,7 @@ void StretchedBend::fillSegments()
     PointF downBendDefaultSrc = PointF(noteWidth * .5, -noteHeight * .5 - sp * .2) + notePos;
 
     PointF src = m_drawPoints.at(0) == 0 ? upBendDefaultSrc : downBendDefaultSrc;
-    PointF dest(notePos);
+    PointF dest(src);
 
     int lastPointPitch = m_drawPoints.back();
     bool releasedToInitial = (0 == lastPointPitch);
@@ -272,7 +270,7 @@ void StretchedBend::fillSegments()
             } else {
                 // skipping extra curves down of bend-release in a chord
                 if (pitch == m_maxDrawPointRead) {
-                    if (m_note != m_chord->upNote()) {
+                    if (bendSegmentShouldBeHidden(this)) {
                         visible = false;
                     }
                 }
@@ -321,31 +319,19 @@ void StretchedBend::updateHeights(double newHighestCoord)
         return;
     }
 
-    // check tied back note
-    StretchedBend* lastStretchedBend = backTiedStretchedBend();
-    if (lastStretchedBend) {
-        const auto& lastBendSegments = lastStretchedBend->m_bendSegments;
-        if (!lastBendSegments.empty()) {
-            const BendSegment& lastBendEndSegment = lastBendSegments.back();
-            BendSegment& thisBendStartSegment = m_bendSegments.at(0);
-            thisBendStartSegment.visible = lastBendEndSegment.visible;
-            if (thisBendStartSegment.type == BendSegmentType::CURVE_DOWN
-                && lastStretchedBend->m_note != lastStretchedBend->m_chord->upNote()) {
-                thisBendStartSegment.visible = false;
-            }
-
-            if (lastBendEndSegment.needsHeightUpdate) {
-                m_bendSegments.at(0).src.setY(lastBendEndSegment.dest.y());
-            }
-        }
-    }
-
     for (size_t i = 0; i < m_bendSegments.size(); i++) {
         BendSegment& bendSegment = m_bendSegments.at(i);
         if (bendSegment.needsHeightUpdate) {
             double oldHeight = bendSegment.dest.y();
             bendSegment.dest.setY(-newHighestCoord);
             bendSegment.tone = bendTone(m_maxDrawPointUpdated);
+
+            /// fixing the 'hold' bend coordinates on tied note
+            if (bendSegment.type == BendSegmentType::LINE_STROKED) {
+                bendSegment.src.setY(-newHighestCoord);
+            }
+
+            /// fixing the bend segments connection points coordinates
             if (i < m_bendSegments.size() - 1) {
                 BendSegment& nextBendSegment = m_bendSegments.at(i + 1);
                 if (nextBendSegment.src.y() == oldHeight) {
@@ -369,6 +355,11 @@ void StretchedBend::fillStretchedSegments(bool untilNextSegment)
     double sp = spatium();
     double bendStart = m_bendSegments.at(0).src.x();
     double bendEnd = untilNextSegment ? nextSegmentX() : sp * 6;
+
+    double upNotePos = m_chord->upNote()->pageX() + m_chord->upNote()->width();
+    double curNotePos = m_note->pageX() + m_note->width();
+
+    bendEnd += upNotePos - curNotePos;
 
     if (bendStart > bendEnd) {
         return;
@@ -463,6 +454,14 @@ void StretchedBend::draw(mu::draw::Painter* painter) const
             break;
         }
     }
+}
+
+bool StretchedBend::bendSegmentShouldBeHidden(StretchedBend* bendSegment) const
+{
+    /// TODO: если пофикшу определение верхней ноты, возможно уйдет необходимость доп фиксов
+    Note* currentNote = bendSegment->m_note;
+    Note* upNote = bendSegment->m_chord->upNote();
+    return (currentNote->pitch() != upNote->pitch()) || (currentNote->string() != upNote->string());
 }
 
 mu::RectF StretchedBend::calculateBoundingRect() const

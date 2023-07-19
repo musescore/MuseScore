@@ -254,7 +254,6 @@ GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
     _drumResolver = std::make_unique<GPDrumSetResolver>();
     _drumResolver->initGPDrum();
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(_score);
-    m_useStretchedBends = engravingConfiguration()->guitarProImportExperimental();
 }
 
 const std::unique_ptr<GPDomModel>& GPConverter::gpDom() const
@@ -347,7 +346,11 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
 
     addTempoMap();
     addInstrumentChanges();
-    StretchedBend::prepareBends(m_stretchedBends);
+
+    for (auto&[chord, bends] : m_stretchedBends) {
+        StretchedBend::prepareBends(bends);
+    }
+
     addFermatas();
     addContinuousSlideHammerOn();
 }
@@ -1967,7 +1970,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         }
     }
 
-    if (m_useStretchedBends) {
+    if (engravingConfiguration()->guitarProImportExperimental()) {
         Chord* chord = toChord(note->parent());
         StretchedBend* stretchedBend = Factory::createStretchedBend(chord);
         stretchedBend->setPitchValues(pitchValues);
@@ -1976,13 +1979,12 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         note->setStretchedBend(stretchedBend);
 
         chord->add(stretchedBend);
-        m_stretchedBends.push_back(stretchedBend);
+        m_stretchedBends[chord].push_back(stretchedBend);
     } else {
         Bend* bend = Factory::createBend(note);
         bend->setPoints(pitchValues);
         bend->setTrack(note->track());
         note->add(bend);
-        m_bends.push_back(bend);
     }
 }
 

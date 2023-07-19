@@ -238,8 +238,6 @@ public:
     void updateArticulations(const std::set<SymId>& newArticulationIds,
                              ArticulationsUpdateMode replaceMode = ArticulationsUpdateMode::Insert);
 
-    const std::set<StretchedBend*>& stretchedBends() const { return m_stretchedBends; }
-
     void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -370,7 +368,6 @@ private:
     bool m_allowKerningBelow = true;
 
     std::vector<Articulation*> m_articulations;
-    std::set<StretchedBend*> m_stretchedBends;
 };
 } // namespace mu::engraving
 #endif
