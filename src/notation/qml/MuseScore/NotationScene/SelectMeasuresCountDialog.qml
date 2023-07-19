@@ -48,7 +48,7 @@ StyledDialogView {
             NavigationPanel {
                 id: measuresCountNavigationPanel
                 name: "MeasuresCountNavigationPanel"
-                enabled: parent.enabled && parent.visible
+                enabled: parent && parent.enabled && parent.visible
                 section: root.navigationSection
                 order: 1
                 direction: NavigationPanel.Horizontal
@@ -94,7 +94,7 @@ StyledDialogView {
             NavigationPanel {
                 id: buttonsNavigationPanel
                 name: "ButtonsNavigationPanel"
-                enabled: parent.enabled && parent.visible
+                enabled: parent && parent.enabled && parent.visible
                 section: root.navigationSection
                 order: 2
                 direction: NavigationPanel.Horizontal
