@@ -96,31 +96,31 @@ void ExcerptNotation::fillWithDefaultInfo()
         topVerticalFrame->undoUnlink();
     }
 
-    auto setText = [&score](TextStyleType textType, const QString& text) {
+    auto setText = [&score](TextStyleType textType, const String& xmlText) {
         TextBase* textItem = score->getText(textType);
 
-        if (!textItem) {
+        if (!textItem && !xmlText.isEmpty()) {
             textItem = score->addText(textType, nullptr /*destinationElement*/, false /*addToAllScores*/);
         }
 
         if (textItem) {
             textItem->undoUnlink();
-            textItem->setPlainText(text);
+            textItem->setXmlText(xmlText);
         }
     };
 
-    auto getText = [&score](TextStyleType textType, const QString& defaultText) {
+    auto getText = [&score](TextStyleType textType) {
         if (mu::engraving::Text* t = score->getText(textType)) {
-            return t->plainText().toQString();
-        } else {
-            return defaultText;
+            return t->xmlText();
         }
+
+        return String();
     };
 
-    setText(TextStyleType::TITLE, getText(TextStyleType::TITLE, ""));
-    setText(TextStyleType::COMPOSER, getText(TextStyleType::COMPOSER, ""));
-    setText(TextStyleType::SUBTITLE, getText(TextStyleType::SUBTITLE, ""));
-    setText(TextStyleType::POET, getText(TextStyleType::POET, ""));
+    setText(TextStyleType::TITLE, getText(TextStyleType::TITLE));
+    setText(TextStyleType::SUBTITLE, getText(TextStyleType::SUBTITLE));
+    setText(TextStyleType::COMPOSER, getText(TextStyleType::COMPOSER));
+    setText(TextStyleType::POET, getText(TextStyleType::POET));
 }
 
 mu::engraving::Excerpt* ExcerptNotation::excerpt() const
