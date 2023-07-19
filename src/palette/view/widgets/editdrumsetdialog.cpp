@@ -52,6 +52,7 @@ using namespace mu::notation;
 using namespace mu::engraving;
 
 static const QString EDIT_DRUMSET_DIALOG_NAME("EditDrumsetDialog");
+static const std::string_view POSSIBLE_SHORTCUTS("ABCDEFG");
 
 enum Column : char {
     PITCH, NOTE, SHORTCUT, NAME
@@ -375,11 +376,14 @@ void EditDrumsetDialog::shortcutChanged()
     }
 
     int pitch = item->data(Column::PITCH, Qt::UserRole).toInt();
+    int index = shortcut->currentIndex();
+    bool invalidIndex = index < 0 || index >= static_cast<int>(POSSIBLE_SHORTCUTS.size());
     int sc;
-    if (shortcut->currentIndex() == 7) {
+
+    if (invalidIndex) {
         sc = 0;
     } else {
-        sc = "ABCDEFG"[shortcut->currentIndex()];
+        sc = POSSIBLE_SHORTCUTS[index];
     }
 
     if (QString(QChar(m_editedDrumset.drum(pitch).shortcut)) != shortcut->currentText()) {
@@ -395,7 +399,7 @@ void EditDrumsetDialog::shortcutChanged()
             }
         }
         m_editedDrumset.drum(pitch).shortcut = sc;
-        if (shortcut->currentIndex() == 7) {
+        if (invalidIndex) {
             item->setText(Column::SHORTCUT, "");
         } else {
             item->setText(Column::SHORTCUT, shortcut->currentText());
@@ -493,10 +497,12 @@ void EditDrumsetDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* p
 
         m_editedDrumset.drum(pitch).line          = staffLine->value();
         m_editedDrumset.drum(pitch).voice         = voice->currentIndex();
-        if (shortcut->currentIndex() == 7) {
+        int index = shortcut->currentIndex();
+
+        if (index < 0 || index >= static_cast<int>(POSSIBLE_SHORTCUTS.size())) {
             m_editedDrumset.drum(pitch).shortcut = 0;
         } else {
-            m_editedDrumset.drum(pitch).shortcut = "ABCDEFG"[shortcut->currentIndex()];
+            m_editedDrumset.drum(pitch).shortcut = POSSIBLE_SHORTCUTS[index];
         }
         m_editedDrumset.drum(pitch).stemDirection = DirectionV(stemDirection->currentIndex());
         previous->setText(Column::NAME, m_editedDrumset.translatedName(pitch));
