@@ -56,10 +56,8 @@ public:
     bool read(const String&);
     void convert();
 
-    engraving::Score* m_score = nullptr;
-
 private:
-    //
+    engraving::Score* m_score = nullptr;
 };
 } // namespace
 
