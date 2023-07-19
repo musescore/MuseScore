@@ -54,6 +54,7 @@ class Expression;
 class Fermata;
 class Fingering;
 class FretDiagram;
+class FSymbol;
 
 class Glissando;
 class GlissandoSegment;
@@ -169,6 +170,7 @@ public:
     static void layout(engraving::Fermata* item, const Context& ctx);
     static void layout(engraving::Fingering* item, const Context& ctx);
     static void layout(engraving::FretDiagram* item, const Context& ctx);
+    static void layout(engraving::FSymbol* item, const Context& ctx);
 
     static void layout(engraving::Glissando* item, const Context& ctx);
     static void layout(engraving::GradualTempoChange* item, const Context& ctx);
