@@ -95,7 +95,11 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      qtrc("project/export", "MusicXML")),
         ExportType::makeWithSuffixes({ "brf" },
                                      qtrc("project/export", "Braille"),
-                                     qtrc("project/export", "Braille files"))
+                                     qtrc("project/export", "Braille files")),
+        ExportType::makeWithSuffixes({ "mei" },
+                                     qtrc("project/export", "MEI"),
+                                     qtrc("project/export", "MEI files"),
+                                     "MeiSettingsPage.qml")
     };
 
     ExportInfo info = exportProjectScenario()->exportInfo();
@@ -499,6 +503,21 @@ void ExportDialogModel::setMidiExportRpns(bool exportRpns)
 
     midiImportExportConfiguration()->setIsMidiExportRpns(exportRpns);
     emit midiExportRpnsChanged(exportRpns);
+}
+
+bool ExportDialogModel::meiExportLayout() const
+{
+    return meiConfiguration()->meiExportLayout();
+}
+
+void ExportDialogModel::setMeiExportLayout(bool exportLayout)
+{
+    if (exportLayout == meiExportLayout()) {
+        return;
+    }
+
+    meiConfiguration()->setMeiExportLayout(exportLayout);
+    emit meiExportLayoutChanged(exportLayout);
 }
 
 QVariantList ExportDialogModel::musicXmlLayoutTypes() const

@@ -32,6 +32,7 @@
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
 #include "importexport/audioexport/iaudioexportconfiguration.h"
+#include "importexport/mei/imeiconfiguration.h"
 
 #include "projecttypes.h"
 #include "iprojectconfiguration.h"
@@ -55,6 +56,7 @@ class ExportDialogModel : public QAbstractListModel, public async::Asyncable
     INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
     INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
     INJECT(iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
+    INJECT(iex::mei::IMeiConfiguration, meiConfiguration)
     INJECT(IExportProjectScenario, exportProjectScenario)
 
     Q_PROPERTY(int selectionLength READ selectionLength NOTIFY selectionChanged)
@@ -76,6 +78,8 @@ class ExportDialogModel : public QAbstractListModel, public async::Asyncable
     Q_PROPERTY(bool midiExportRpns READ midiExportRpns WRITE setMidiExportRpns NOTIFY midiExportRpnsChanged)
 
     Q_PROPERTY(MusicXmlLayoutType musicXmlLayoutType READ musicXmlLayoutType WRITE setMusicXmlLayoutType NOTIFY musicXmlLayoutTypeChanged)
+
+    Q_PROPERTY(int meiExportLayout READ meiExportLayout WRITE setMeiExportLayout NOTIFY meiExportLayoutChanged)
 
     Q_PROPERTY(bool shouldDestinationFolderBeOpenedOnExport READ shouldDestinationFolderBeOpenedOnExport
                WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
@@ -130,6 +134,9 @@ public:
     bool midiExportRpns() const;
     void setMidiExportRpns(bool exportRpns);
 
+    bool meiExportLayout() const;
+    void setMeiExportLayout(bool exportLayout);
+
     enum class MusicXmlLayoutType {
         AllLayout,
         AllBreaks,
@@ -166,6 +173,8 @@ signals:
     void midiExportRpnsChanged(bool exportRpns);
 
     void musicXmlLayoutTypeChanged(MusicXmlLayoutType layoutType);
+
+    void meiExportLayoutChanged(bool exportLayout);
 
     void shouldDestinationFolderBeOpenedOnExportChanged(bool shouldDestinationFolderBeOpenedOnExport);
 

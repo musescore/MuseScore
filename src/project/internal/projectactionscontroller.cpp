@@ -1528,7 +1528,7 @@ void ProjectActionsController::printScore()
 io::path_t ProjectActionsController::selectScoreOpeningFile()
 {
     std::string allExt = "*.mscz *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx "
-                         "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscx *.mscs *.mscz~";
+                         "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mei *.mscx *.mscs *.mscz~";
 
     std::vector<std::string> filter { trc("project", "All supported files") + " (" + allExt + ")",
                                       trc("project", "MuseScore files") + " (*.mscz)",
@@ -1540,6 +1540,7 @@ io::path_t ProjectActionsController::selectScoreOpeningFile()
                                       trc("project", "Overture / Score Writer files (experimental)") + " (*.ove *.scw)",
                                       trc("project", "Bagpipe Music Writer files (experimental)") + " (*.bmw *.bww)",
                                       trc("project", "Guitar Pro files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)",
+                                      trc("project", "MEI files") + " (*.mei)",
                                       trc("project", "Power Tab Editor files (experimental)") + " (*.ptb)",
                                       trc("project", "Uncompressed MuseScore folders (experimental)") + " (*.mscx)",
                                       trc("project", "MuseScore developer files") + " (*.mscs)",
