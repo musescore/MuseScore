@@ -1540,8 +1540,8 @@ io::path_t ProjectActionsController::selectScoreOpeningFile()
                                       trc("project", "Overture / Score Writer files (experimental)") + " (*.ove *.scw)",
                                       trc("project", "Bagpipe Music Writer files (experimental)") + " (*.bmw *.bww)",
                                       trc("project", "Guitar Pro files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)",
-                                      trc("project", "MEI files") + " (*.mei)",
                                       trc("project", "Power Tab Editor files (experimental)") + " (*.ptb)",
+                                      trc("project", "MEI files") + " (*.mei)",
                                       trc("project", "Uncompressed MuseScore folders (experimental)") + " (*.mscx)",
                                       trc("project", "MuseScore developer files") + " (*.mscs)",
                                       trc("project", "MuseScore backup files") + " (*.mscz~)" };
