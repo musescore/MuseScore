@@ -21,7 +21,6 @@
  */
 
 #include <QFileInfo>
-#include <QMessageBox>
 
 #include "meireader.h"
 
