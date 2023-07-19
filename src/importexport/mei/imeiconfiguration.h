@@ -22,7 +22,7 @@
 #ifndef MU_IMPORTEXPORT_IMEICONFIGURATION_H
 #define MU_IMPORTEXPORT_IMEICONFIGURATION_H
 
-#include "modularity/imoduleinterface"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 
 namespace mu::iex::mei {
