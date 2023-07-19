@@ -47,6 +47,9 @@
 #include "libmscore/timesig.h"
 #include "libmscore/tuplet.h"
 
+#include "io/file.h"
+
+using namespace mu;
 using namespace mu::iex::mei;
 using namespace mu::engraving;
 
@@ -59,14 +62,14 @@ using namespace mu::engraving;
  * Return false on error.
  */
 
-bool MeiImporter::read(const QString& name)
+bool MeiImporter::read(const String& name)
 {
-    QFile fp(name);
-    if (!fp.open(QIODevice::ReadOnly)) {
+    io::File fp(name);
+    if (!fp.open(io::IODevice::ReadOnly)) {
         LOGD("Cannot open file <%s>", qPrintable(name));
         return false;
     }
-    QByteArray byteArray = fp.readAll();
+    ByteArray byteArray = fp.readAll();
 
     bool success = true;
 

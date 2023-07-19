@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QFileInfo>
-
 #include "meireader.h"
 
 #include "meiimporter.h"
@@ -34,7 +32,7 @@ using namespace mu::engraving;
 
 mu::Ret MeiReader::read(MasterScore* score, const io::path_t& path, const Options& options)
 {
-    if (!QFileInfo::exists(path.toQString())) {
+    if (!fileSystem()->exists(path)) {
         return make_ret(Err::FileNotFound, path);
     }
 
@@ -58,7 +56,7 @@ mu::Ret MeiReader::read(MasterScore* score, const io::path_t& path, const Option
 /**
  * Show a dialog displaying the MEI import problem(s) and ask whether to load or cancel.
  */
-bool MeiReader::askToLoadDespiteWarnings(QString text, QString detailedText)
+bool MeiReader::askToLoadDespiteWarnings(const String& text, const String& detailedText)
 {
     IInteractive::Button btn = interactive()->warning(
         text.toStdString(), "Do you want to try to load this MEI file anyway?", detailedText.toStdString(), {

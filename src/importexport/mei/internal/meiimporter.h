@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "imeiconfiguration.h"
+#include "io/ifilesystem.h"
 
 namespace mu::engraving {
 class Fraction;
@@ -48,10 +49,11 @@ enum GraceReading {
 class MeiImporter
 {
     INJECT_STATIC(mu::iex::mei::IMeiConfiguration, configuration)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     MeiImporter(engraving::Score* s) { m_score = s; }
-    bool read(const QString&);
+    bool read(const String&);
     void convert();
 
     engraving::Score* m_score = nullptr;

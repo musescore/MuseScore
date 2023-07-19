@@ -24,16 +24,18 @@
 
 #include "project/inotationreader.h"
 #include "iinteractive.h"
+#include "io/ifilesystem.h"
 
 namespace mu::iex::mei {
 class MeiReader : public project::INotationReader
 {
     INJECT(framework::IInteractive, interactive)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     Ret read(mu::engraving::MasterScore* score, const io::path_t& path, const Options& options = Options()) override;
 private:
-    bool askToLoadDespiteWarnings(QString text, QString detailedText);
+    bool askToLoadDespiteWarnings(const String& text, const String& detailedText);
 };
 } // namespace
 
