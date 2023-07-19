@@ -62,11 +62,11 @@ using namespace mu::engraving;
  * Return false on error.
  */
 
-bool MeiImporter::read(const String& name)
+bool MeiImporter::read(const io::path_t& path)
 {
-    io::File fp(name);
+    io::File fp(path);
     if (!fp.open(io::IODevice::ReadOnly)) {
-        LOGD("Cannot open file <%s>", qPrintable(name));
+        LOGD("Cannot open file <%s>", qPrintable(path.toString()));
         return false;
     }
     ByteArray byteArray = fp.readAll();

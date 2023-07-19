@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "imeiconfiguration.h"
 #include "io/ifilesystem.h"
+#include "io/path.h"
 
 namespace mu::engraving {
 class Fraction;
@@ -53,7 +54,7 @@ class MeiImporter
 
 public:
     MeiImporter(engraving::Score* s) { m_score = s; }
-    bool read(const String&);
+    bool read(const io::path_t& path);
     void convert();
 
 private:
