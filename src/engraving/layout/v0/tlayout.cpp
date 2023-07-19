@@ -3605,24 +3605,24 @@ void TLayout::layout(Ornament* item, LayoutContext& ctx)
     double vertMargin = 0.35 * _spatium;
     static constexpr double ornamentAccidentalMag = 0.6; // TODO: style?
 
-    if (!item->showCueNote()) {
-        for (size_t i = 0; i < item->accidentalsAboveAndBelow().size(); ++i) {
-            bool above = (i == 0);
-            Accidental* accidental = item->accidentalsAboveAndBelow()[i];
-            if (!accidental) {
-                continue;
-            }
-            accidental->computeMag();
-            accidental->setMag(accidental->mag() * ornamentAccidentalMag);
-            layout(accidental, ctx);
-            Shape accidentalShape = accidental->shape();
-            double minVertDist = above ? accidentalShape.minVerticalDistance(item->bbox()) : Shape(item->bbox()).minVerticalDistance(
-                accidentalShape);
-            accidental->setPos(-0.5 * accidental->width(), above ? (-minVertDist - vertMargin) : (minVertDist + vertMargin));
+    for (size_t i = 0; i < item->accidentalsAboveAndBelow().size(); ++i) {
+        bool above = (i == 0);
+        Accidental* accidental = item->accidentalsAboveAndBelow()[i];
+        if (!accidental) {
+            continue;
         }
-        return;
+        accidental->computeMag();
+        accidental->setMag(accidental->mag() * ornamentAccidentalMag);
+        layout(accidental, ctx);
+        Shape accidentalShape = accidental->shape();
+        double minVertDist = above ? accidentalShape.minVerticalDistance(item->bbox()) : Shape(item->bbox()).minVerticalDistance(
+            accidentalShape);
+        accidental->setPos(-0.5 * accidental->width(), above ? (-minVertDist - vertMargin) : (minVertDist + vertMargin));
     }
+}
 
+void TLayout::layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx)
+{
     if (!item->explicitParent()) {
         return;
     }
@@ -3634,9 +3634,16 @@ void TLayout::layout(Ornament* item, LayoutContext& ctx)
         return;
     }
 
-    Note* cueNote = cueNoteChord->notes().front();
+    const std::vector<Note*>& notes = cueNoteChord->notes();
+    Note* cueNote = notes.empty() ? nullptr : notes.front();
+
+    if (!cueNote) {
+        return;
+    }
+
     ChordLayout::layoutChords3(ctx.conf().style(), { cueNoteChord }, { cueNote }, item->staff(), ctx);
     layout(cueNoteChord, ctx);
+
     Shape noteShape = cueNoteChord->shape();
     Shape parentChordShape = parentChord->shape();
     double minDist = parentChordShape.minHorizontalDistance(noteShape);

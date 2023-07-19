@@ -258,6 +258,7 @@ public:
     static void layout(NoteDot* item, LayoutContext& ctx);
 
     static void layout(Ornament* item, LayoutContext& ctx);
+    static void layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx);
 
     static void layout(Ottava* item, LayoutContext& ctx);
     static void layout(OttavaSegment* item, LayoutContext& ctx);
