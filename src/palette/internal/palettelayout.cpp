@@ -137,6 +137,8 @@ void PaletteLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::FRET_DIAGRAM: layout(toFretDiagram(item), ctx);
         break;
+    case ElementType::FSYMBOL:      layout(toFSymbol(item), ctx);
+        break;
     case ElementType::GLISSANDO:    layout(toGlissando(item), ctx);
         break;
     case ElementType::GRADUAL_TEMPO_CHANGE: layout(toGradualTempoChange(item), ctx);
@@ -790,6 +792,13 @@ void PaletteLayout::layout(FretDiagram* item, const Context& ctx)
     }
 
     item->bbox().setRect(x, y, w, h);
+}
+
+void PaletteLayout::layout(FSymbol* item, const Context& ctx)
+{
+    item->setbbox(draw::FontMetrics::boundingRect(item->font(), item->toString()));
+    item->setOffset(0.0, 0.0);
+    item->setPos(0.0, 0.0);
 }
 
 void PaletteLayout::layout(Dynamic* item, const Context& ctx)
