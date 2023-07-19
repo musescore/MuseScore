@@ -38,7 +38,7 @@ mu::Ret MeiReader::read(MasterScore* score, const io::path_t& path, const Option
     }
 
     MeiImporter importer(score);
-    if (!importer.read(path.toQString())) {
+    if (!importer.read(path)) {
         return make_ret(Err::FileCriticallyCorrupted, path);
     }
 
