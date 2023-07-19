@@ -26,6 +26,7 @@
 
 #include "libmscore/masterscore.h"
 #include "engraving/engravingerrors.h"
+#include "translation.h"
 
 using namespace mu::iex::mei;
 using namespace mu::engraving;
@@ -59,7 +60,7 @@ mu::Ret MeiReader::read(MasterScore* score, const io::path_t& path, const Option
 bool MeiReader::askToLoadDespiteWarnings(const String& text, const String& detailedText)
 {
     IInteractive::Button btn = interactive()->warning(
-        text.toStdString(), "Do you want to try to load this MEI file anyway?", detailedText.toStdString(), {
+        text.toStdString(), trc("mei", "Do you want to try to load this MEI file anyway?"), detailedText.toStdString(), {
         interactive()->buttonData(IInteractive::Button::Cancel),
         interactive()->buttonData(IInteractive::Button::Yes)
     }, (int)IInteractive::Button::Yes).standardButton();
