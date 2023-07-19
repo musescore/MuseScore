@@ -57,7 +57,11 @@ SelectDialog::SelectDialog(QWidget* parent)
 
     sameSubtype->setEnabled(m_element->subtype() != -1);
     subtype->setEnabled(m_element->subtype() != -1);
-    inSelection->setEnabled(!m_element->score()->selection().isSingle());
+
+    const auto isSingleSelection = m_element->score()->selection().isSingle();
+    inSelection->setCheckState(isSingleSelection ? Qt::CheckState::Unchecked : Qt::CheckState::Checked);
+    inSelection->setEnabled(!isSingleSelection);
+
     sameDuration->setEnabled(m_element->isRest());
 
     connect(buttonBox, &QDialogButtonBox::clicked, this, &SelectDialog::buttonClicked);
