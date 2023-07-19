@@ -33,10 +33,6 @@
 using namespace mu::iex::mei;
 using namespace mu::engraving;
 
-//---------------------------------------------------------
-//   MeiImportErrorDialog
-//---------------------------------------------------------
-
 mu::Ret MeiReader::read(MasterScore* score, const io::path_t& path, const Options& options)
 {
     if (!QFileInfo::exists(path.toQString())) {
@@ -61,7 +57,7 @@ mu::Ret MeiReader::read(MasterScore* score, const io::path_t& path, const Option
 }
 
 /**
- Show a dialog displaying the MEI import problem(s) and ask whether to load or cancel.
+ * Show a dialog displaying the MEI import problem(s) and ask whether to load or cancel.
  */
 bool MeiReader::askToLoadDespiteWarnings(QString text, QString detailedText)
 {
