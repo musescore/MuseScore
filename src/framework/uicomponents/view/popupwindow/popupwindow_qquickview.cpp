@@ -122,8 +122,17 @@ void PopupWindow_QQuickView::setContent(QQmlComponent* component, QQuickItem* it
 
 void PopupWindow_QQuickView::forceActiveFocus()
 {
-    if (!m_view->rootObject()->hasActiveFocus()) {
-        m_view->rootObject()->forceActiveFocus();
+    if (!m_view) {
+        return;
+    }
+
+    QQuickItem* rootObject = m_view->rootObject();
+    if (!rootObject) {
+        return;
+    }
+
+    if (!rootObject->hasActiveFocus()) {
+        rootObject->forceActiveFocus();
     }
 }
 

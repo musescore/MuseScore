@@ -124,7 +124,7 @@
       <fret value="15" letter="1">q</fret>
       <fret value="16" letter="1">r</fret>
       <mark value="x">X</mark>
-      <mark value="ghost">⨯</mark>
+      <mark value="ghost">×</mark>
       <mark value="slash" number="1">/</mark>
       <mark value="slash" number="2">//</mark>
       <mark value="slash" number="3">///</mark>
@@ -254,7 +254,7 @@
       <fret value="15" letter="1">q</fret>
       <fret value="16" letter="1">r</fret>
       <mark value="x">X</mark>
-      <mark value="ghost">⨯</mark>
+      <mark value="ghost">×</mark>
       <mark value="slash" number="1">/</mark>
       <mark value="slash" number="2">//</mark>
       <mark value="slash" number="3">///</mark>

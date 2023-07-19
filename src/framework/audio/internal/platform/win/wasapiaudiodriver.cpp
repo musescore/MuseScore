@@ -295,5 +295,13 @@ AudioDeviceID WasapiAudioDriver::defaultDeviceId() const
 {
     using namespace winrt::Windows::Media::Devices;
 
-    return to_string(MediaDevice::GetDefaultAudioRenderId(AudioDeviceRole::Default));
+    AudioDeviceID result;
+
+    try {
+        result = to_string(MediaDevice::GetDefaultAudioRenderId(AudioDeviceRole::Default));
+    } catch (...) {
+        LOGE() << to_string(hresult_error(to_hresult()).message());
+    }
+
+    return result;
 }

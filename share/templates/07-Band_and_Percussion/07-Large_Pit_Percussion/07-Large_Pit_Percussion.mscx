@@ -1999,7 +1999,7 @@
         <barLineSpan>3</barLineSpan>
         </Staff>
       <trackName>Snare Drum</trackName>
-      <Instrument id="snare-drum">
+      <Instrument id="marching-snare">
         <longName>Snare Drum</longName>
         <shortName>S.D.</shortName>
         <trackName>Snare Drum</trackName>

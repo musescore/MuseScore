@@ -5444,9 +5444,15 @@ void NotationInteraction::toggleAutoplace(bool all)
     execute(&mu::engraving::Score::cmdToggleAutoplace, all);
 }
 
-void NotationInteraction::insertClef(mu::engraving::ClefType clef)
+bool NotationInteraction::canInsertClef(ClefType type) const
 {
-    execute(&mu::engraving::Score::cmdInsertClef, clef);
+    const Score* score = this->score();
+    return score && score->canInsertClef(type);
+}
+
+void NotationInteraction::insertClef(ClefType type)
+{
+    execute(&mu::engraving::Score::cmdInsertClef, type);
 }
 
 void NotationInteraction::changeAccidental(mu::engraving::AccidentalType accidental)
