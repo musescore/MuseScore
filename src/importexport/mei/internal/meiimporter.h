@@ -35,16 +35,15 @@ class Score;
 }
 
 namespace mu::iex::mei {
-//---------------------------------------------------------
-//   MEI
-//    used importing MEI files
-//---------------------------------------------------------
-
 enum GraceReading {
     GraceNone = 0,
     GraceAsGrp,
     GraceAsNote
 };
+
+/**
+ * Class of importing Music Encoding Initiative (MEI) files
+ */
 
 class MeiImporter
 {

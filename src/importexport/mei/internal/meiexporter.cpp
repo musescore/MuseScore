@@ -60,13 +60,9 @@ using namespace mu::engraving;
 // Number of spaces for the XML indentation. Set to 0 for tabs
 #define MEI_INDENT 3
 
-//---------------------------------------------------------
-//   read
-//    return false on error
-//---------------------------------------------------------
-
 /**
  * Write the Score to the destination file.
+ * Return false on error.
  */
 
 bool MeiExporter::write(QIODevice& destinationDevice)

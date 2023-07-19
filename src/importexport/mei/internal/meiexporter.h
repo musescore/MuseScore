@@ -36,10 +36,9 @@ class Staff;
 }
 
 namespace mu::iex::mei {
-//---------------------------------------------------------
-//   MEI
-//    used importing MEI files
-//---------------------------------------------------------
+/**
+ * Class of exporting Music Encoding Initiative (MEI) files
+ */
 
 class MeiExporter
 {

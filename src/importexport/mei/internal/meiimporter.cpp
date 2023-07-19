@@ -54,13 +54,9 @@ using namespace mu::engraving;
 
 #define MEI_BASIC_VERSION "5.0.0-dev+basic"
 
-//---------------------------------------------------------
-//   read
-//    return false on error
-//---------------------------------------------------------
-
 /**
  * Read the Score from the file.
+ * Return false on error.
  */
 
 bool MeiImporter::read(const QString& name)
