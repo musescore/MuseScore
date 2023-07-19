@@ -45,7 +45,11 @@ int FluidSequencer::currentExpressionLevel() const
 void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
 {
     m_offStreamEvents.clear();
-    m_offStreamFlushed.notify();
+
+    if (m_onOffStreamFlushed) {
+        m_onOffStreamFlushed();
+    }
+
     updatePlaybackEvents(m_offStreamEvents, changes);
     updateOffSequenceIterator();
 }
@@ -53,7 +57,11 @@ void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes
 void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& changes)
 {
     m_mainStreamEvents.clear();
-    m_mainStreamFlushed.notify();
+
+    if (m_onMainStreamFlushed) {
+        m_onMainStreamFlushed();
+    }
+
     updatePlaybackEvents(m_mainStreamEvents, changes);
     updateMainSequenceIterator();
 }

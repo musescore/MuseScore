@@ -88,7 +88,10 @@ void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSamp
 void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
 {
     m_offStreamEvents.clear();
-    m_offStreamFlushed.notify();
+
+    if (m_onOffStreamFlushed) {
+        m_onOffStreamFlushed();
+    }
 
     for (const auto& pair : changes) {
         for (const auto& event : pair.second) {

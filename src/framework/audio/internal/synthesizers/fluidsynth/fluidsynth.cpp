@@ -132,7 +132,7 @@ Ret FluidSynth::init()
 
     createFluidInstance();
 
-    m_sequencer.flushedOffStreamEvents().onNotify(this, [this]() {
+    m_sequencer.setOnOffStreamFlushed([this]() {
         revokePlayingNotes();
     });
 

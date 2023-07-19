@@ -41,7 +41,7 @@ MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, cons
 
     m_samplerLib->initLib();
 
-    m_sequencer.flushedOffStreamEvents().onNotify(this, [this]() {
+    m_sequencer.setOnOffStreamFlushed([this]() {
         revokePlayingNotes();
     });
 }

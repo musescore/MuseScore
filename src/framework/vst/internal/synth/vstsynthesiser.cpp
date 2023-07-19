@@ -69,11 +69,7 @@ Ret VstSynthesiser::init()
         m_paramsChanges.send(m_params);
     });
 
-    m_sequencer.flushedOffStreamEvents().onNotify(this, [this]() {
-        if (!m_vstAudioClient) {
-            return;
-        }
-
+    m_sequencer.setOnOffStreamFlushed([this]() {
         revokePlayingNotes();
     });
 
@@ -116,7 +112,9 @@ std::string VstSynthesiser::name() const
 
 void VstSynthesiser::revokePlayingNotes()
 {
-    m_vstAudioClient->flush();
+    if (m_vstAudioClient) {
+        m_vstAudioClient->flush();
+    }
 }
 
 void VstSynthesiser::flushSound()
