@@ -33,8 +33,8 @@ StyledPopupView {
     HarpPedalPopupModel {
         id: harpModel
 
-        onIsDiagramChanged: {
-            updatePosition(harpModel.itemRect)
+        onItemRectChanged: function(rect) {
+            updatePosition(rect)
         }
     }
 
