@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import QtQuick 2.15
 
-#ifndef MU_NOTATION_TEXTSTYLEPOPUPMODEL_H
-#define MU_NOTATION_TEXTSTYLEPOPUPMODEL_H
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 
-#include "abstractelementpopupmodel.h"
+Column {
+    id: root
 
-namespace mu::notation {
-class TextStylePopupModel : public AbstractElementPopupModel
-{
-    Q_OBJECT
+    property QtObject model: null
 
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    width: parent.width
 
-public:
-    explicit TextStylePopupModel(QObject* parent = nullptr);
-
-    Q_INVOKABLE void insertSpecialCharacters();
-
-    Q_INVOKABLE void init() override;
-};
+    //TODO
 }
-
-#endif // MU_NOTATION_TEXTSTYLEPOPUPMODEL_H

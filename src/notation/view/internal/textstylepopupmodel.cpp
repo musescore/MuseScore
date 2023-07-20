@@ -33,3 +33,8 @@ void TextStylePopupModel::init()
 {
     AbstractElementPopupModel::init();
 }
+
+void TextStylePopupModel::insertSpecialCharacters()
+{
+    dispatcher()->dispatch("show-keys");
+}
