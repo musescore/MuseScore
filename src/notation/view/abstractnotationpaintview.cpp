@@ -493,21 +493,13 @@ void AbstractNotationPaintView::hideContextMenu()
     }
 }
 
-void AbstractNotationPaintView::showElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size)
+void AbstractNotationPaintView::showElementPopup(const ElementType& elementType, const RectF& elementRect)
 {
     TRACEFUNC;
 
-    QPointF _pos = pos;
-    if (_pos.isNull()) {
-        _pos = QPointF(width() / 2, height() / 2);
-    }
-
-    RectF elemRect = fromLogical(size);
-    QPointF elemSize = QPointF(elemRect.width(), elemRect.height());
-
     PopupModelType modelType = AbstractElementPopupModel::modelTypeFromElement(elementType);
 
-    emit showElementPopupRequested(modelType, pos, elemSize);
+    emit showElementPopupRequested(modelType, fromLogical(elementRect).toQRectF());
 }
 
 void AbstractNotationPaintView::hideElementPopup()
@@ -519,14 +511,14 @@ void AbstractNotationPaintView::hideElementPopup()
     }
 }
 
-void AbstractNotationPaintView::toggleElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size)
+void AbstractNotationPaintView::toggleElementPopup(const ElementType& elementType, const RectF& elementRect)
 {
     if (m_isPopupOpen) {
         hideElementPopup();
         return;
     }
 
-    showElementPopup(elementType, pos, size);
+    showElementPopup(elementType, elementRect);
 }
 
 void AbstractNotationPaintView::paint(QPainter* qp)

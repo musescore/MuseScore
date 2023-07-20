@@ -119,9 +119,9 @@ public:
     void showContextMenu(const ElementType& elementType, const QPointF& pos) override;
     void hideContextMenu() override;
 
-    void showElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size) override;
+    void showElementPopup(const ElementType& elementType, const RectF& elementRect) override;
     void hideElementPopup() override;
-    void toggleElementPopup(const ElementType& elementType, const QPointF& pos, const RectF& size) override;
+    void toggleElementPopup(const ElementType& elementType, const RectF& elementRect) override;
 
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
@@ -147,7 +147,7 @@ signals:
     void showContextMenuRequested(int elementType, const QPointF& viewPos);
     void hideContextMenuRequested();
 
-    void showElementPopupRequested(mu::notation::PopupModelType modelType, const QPointF& viewPos, const QPointF& elemSize);
+    void showElementPopupRequested(mu::notation::PopupModelType modelType, const QRectF& elementRect);
     void hideElementPopupRequested();
     void isPopupOpenChanged(bool isPopupOpen);
 

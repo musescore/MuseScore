@@ -142,8 +142,8 @@ FocusScope {
                         contextMenuLoader.close()
                     }
 
-                    onShowElementPopupRequested: function (popupType, viewPos, elemSize) {
-                        Qt.callLater(popUpLoader.show, popupType, viewPos, elemSize)
+                    onShowElementPopupRequested: function (popupType, elementRect) {
+                        Qt.callLater(popUpLoader.show, popupType, elementRect)
                     }
 
                     onHideElementPopupRequested: {

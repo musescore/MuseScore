@@ -34,8 +34,7 @@ StyledPopupView {
         id: harpModel
 
         onIsDiagramChanged: {
-            var rect = harpModel.itemRect
-            updatePosition(Qt.point(rect.x, rect.y), Qt.point(rect.width, rect.height))
+            updatePosition(harpModel.itemRect)
         }
     }
 
@@ -48,23 +47,21 @@ StyledPopupView {
     property int navigationOrderEnd: isDiagramNavPanel.order
 
     contentWidth: menuItems.width
-
     contentHeight: menuItems.height
 
     margins: 0
 
     showArrow: false
 
-    function updatePosition(pos, size) {
-
+    function updatePosition(elementRect) {
         // Default: open above position of diagram
         setOpensUpward(true)
-        root.x = (pos.x + size.x / 2) - contentWidth / 2
-        root.y = pos.y - size.y - contentHeight
+        root.x = (elementRect.x + elementRect.width / 2) - contentWidth / 2
+        root.y = elementRect.y - elementRect.height - contentHeight
 
         // For diagrams below stave, position above stave to not obscure it
         if (harpModel.belowStave) {
-            root.y = harpModel.staffPos.y - size.y - contentHeight
+            root.y = harpModel.staffPos.y - elementRect.height - contentHeight
         }
 
         // not enough room on window to open above so open below stave
@@ -76,7 +73,7 @@ StyledPopupView {
 
         // not enough room below stave to open so open above
         if (root.y > ui.rootItem.height) {
-            root.y = pos.y - size.y
+            root.y = elementRect.y - elementRect.height
         }
     }
 
