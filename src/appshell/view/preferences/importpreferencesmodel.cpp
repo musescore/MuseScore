@@ -120,6 +120,11 @@ bool ImportPreferencesModel::needAskAboutApplyingNewStyle() const
     return musicXmlConfiguration()->needAskAboutApplyingNewStyle();
 }
 
+bool ImportPreferencesModel::meiImportLayout() const
+{
+    return meiConfiguration()->meiImportLayout();
+}
+
 void ImportPreferencesModel::setStyleFileImportPath(QString path)
 {
     if (path == styleFileImportPath()) {
@@ -188,4 +193,14 @@ void ImportPreferencesModel::setNeedAskAboutApplyingNewStyle(bool value)
 
     musicXmlConfiguration()->setNeedAskAboutApplyingNewStyle(value);
     emit needAskAboutApplyingNewStyleChanged(value);
+}
+
+void ImportPreferencesModel::setMeiImportLayout(bool import)
+{
+    if (import == meiImportLayout()) {
+        return;
+    }
+
+    meiConfiguration()->setMeiImportLayout(import);
+    emit meiImportLayoutChanged(import);
 }

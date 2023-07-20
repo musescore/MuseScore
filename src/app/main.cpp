@@ -125,6 +125,7 @@
 #include "importexport/ove/ovemodule.h"
 #include "importexport/audioexport/audioexportmodule.h"
 #include "importexport/imagesexport/imagesexportmodule.h"
+#include "importexport/mei/meimodule.h"
 #ifdef MUE_BUILD_VIDEOEXPORT_MODULE
 #include "importexport/videoexport/videoexportmodule.h"
 #endif
@@ -280,6 +281,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::iex::ove::OveModule());
     app.addModule(new mu::iex::audioexport::AudioExportModule());
     app.addModule(new mu::iex::imagesexport::ImagesExportModule());
+    app.addModule(new mu::iex::mei::MeiModule());
 #ifdef MUE_BUILD_VIDEOEXPORT_MODULE
     app.addModule(new mu::iex::videoexport::VideoExportModule());
 #endif
