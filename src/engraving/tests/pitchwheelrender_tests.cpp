@@ -135,7 +135,7 @@ TEST_F(PitchWheelRender_Tests, twoReverseFunctions)
     render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
 
     EventMap events = render.renderPitchWheel();
-    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 1);
 }
 
 TEST_F(PitchWheelRender_Tests, channelTest)
@@ -161,7 +161,7 @@ TEST_F(PitchWheelRender_Tests, channelTest)
 
     EventMap events = render.renderPitchWheel();
 
-    EXPECT_EQ(events.size(), 2);
+    EXPECT_EQ(events[0].size(), 3);
     EXPECT_EQ(events[0].count(0), 1);
     EXPECT_EQ(events[1].count(0), 1);
 }

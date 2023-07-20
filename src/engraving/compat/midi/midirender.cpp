@@ -212,12 +212,6 @@ static void playNote(EventMap& events, const Note* note, PlayNoteParams params, 
     if (params.offTime > 0 && params.offTime < params.onTime) {
         return;
     }
-    // We need to set Pitch Value to initial in case previous note was with bendUp
-    if (params.onTime - params.offset - 1 > 0) {
-        PitchWheelSpecs specs;
-        NPlayEvent pwReset(ME_PITCHBEND, params.channel, specs.mLimit % 128, specs.mLimit / 128);
-        events[params.channel].insert(std::pair<int, NPlayEvent>(std::max(0, params.onTime - params.offset - 1), pwReset));
-    }
 
     events[params.channel].insert(std::pair<int, NPlayEvent>(std::max(0, params.onTime - params.offset), ev));
     // adds portamento for continuous glissando
@@ -545,7 +539,6 @@ static void renderHarmony(EventMap& events, Measure const* m, Harmony* h, int ti
         return;
     }
 
-//    events.registerChannel(channel->channel());
     if (!staff->isPrimaryStaff()) {
         return;
     }
@@ -606,7 +599,6 @@ void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventMap& events,
 
                 Instrument* instr = st->part()->instrument(chord->tick());
                 int channel = getChannel(instr, note, effect);
-//                events.registerChannel(channel);
                 params.channel = channel;
 
                 if (note->noteType() == NoteType::ACCIACCATURA) {
@@ -737,7 +729,6 @@ void MidiRenderer::doCollectMeasureEvents(EventMap& events, Measure const* m, co
                 }
 
                 int channel = getChannel(instr, note, effect);
-//                events.registerChannel(channel);
                 params.channel = channel;
 
                 if (_context.eachStringHasChannel && instr->hasStrings()) {
@@ -750,7 +741,6 @@ void MidiRenderer::doCollectMeasureEvents(EventMap& events, Measure const* m, co
                 for (Chord* c : chord->graceNotesAfter()) {
                     for (const Note* note : c->notes()) {
                         int channel = getChannel(instr, note, effect);
-//                        events.registerChannel(channel);
                         CollectNoteParams params;
                         params.channel = channel;
                         params.velocityMultiplier = veloMultiplier;
@@ -1184,7 +1174,8 @@ void MidiRenderer::renderScore(EventMap& events, const Context& ctx)
     // create sustain pedal events
     renderSpanners(events, pitchWheelRender);
 
-//    EventMap pitchWheelEvents = pitchWheelRender.renderPitchWheel();
+    EventMap pitchWheelEvents = pitchWheelRender.renderPitchWheel();
+    events.mergePitchWheelEvents(pitchWheelEvents);
 //    events->merge(pitchWheelEvents);
 
     if (ctx.metronome) {
