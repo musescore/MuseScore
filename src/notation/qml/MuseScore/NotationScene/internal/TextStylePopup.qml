@@ -33,7 +33,7 @@ StyledPopupView {
     id: root
 
     property NavigationSection notationViewNavigationSection: null
-    property QtObject model: null
+    property QtObject model: textStyleModel
     property int navigationOrderStart: 0
     property int navigationOrderEnd: 0
 
@@ -46,8 +46,8 @@ StyledPopupView {
     showArrow: false
 
     function updatePosition(pos, size) {
-        var h = 150
-        root.x = pos.x + size.x + 12
+        var h = contentRow.height + 120
+        root.x = pos.x + size.x / 4
         root.y = pos.y - h / 2
     }
 
@@ -171,6 +171,8 @@ StyledPopupView {
                         toolTipTitle: modelData.title
                         toolTipDescription: modelData.description
 
+                        transparent: true
+
                         iconCode: modelData.iconRole
 
                         checked: false //currentTextHAlign(/*TODO*/)
@@ -263,7 +265,9 @@ StyledPopupView {
                     delegate: FlatRadioButton {
                         width: 30
 
-                        transparent: false
+                        toolTipTitle: modelData.titleRole
+
+                        transparent: true
 
                         iconCode: modelData["iconRole"]
                         checked: false //currentSubscriptOption(/*TODO*)
@@ -294,22 +298,27 @@ StyledPopupView {
 
         RowLayout {
             FlatButton {
+                Layout.preferredWidth: 90
                 Layout.fillHeight: true
 
                 icon: IconCode.FLAT
                 text: qsTrc("inspector", "Add symbols")
+
+                onClicked: {
+                    root.model.insertSpecialCharacters()
+                }
             }
 
             ColumnLayout {
-                FlatButton {
-                    width: 120
+                Layout.preferredWidth: 90
 
+                FlatButton {
+                    Layout.fillWidth: true
                     text: qsTrc("inspector", "Text style")
                 }
 
                 FlatButton {
-                    width: 120
-
+                    Layout.fillWidth: true
                     text: qsTrc("inspector", "Frame")
                 }
             }
