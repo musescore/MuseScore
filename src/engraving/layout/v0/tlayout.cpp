@@ -5052,6 +5052,14 @@ void TLayout::layout(TremoloBar* item, LayoutContext&)
 
 void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
 {
+    EngravingItem* startItem = item->trill()->startElement();
+    Chord* startChord = startItem && startItem->isChord() ? toChord(startItem) : nullptr;
+    if (startChord) {
+        // Semi-hack: spanners don't have staffMove property, so we change
+        // the staffIdx itself to follow cross-staff chords if needed
+        item->setStaffIdx(startChord->vStaffIdx());
+    }
+
     if (item->staff()) {
         item->setMag(item->staff()->staffMag(item->tick()));
     }

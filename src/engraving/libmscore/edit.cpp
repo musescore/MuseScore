@@ -3746,7 +3746,7 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
     if (ocr->tuplet()) {
         tuplet->setTuplet(ocr->tuplet());
     }
-    undoRemoveElement(ocr);
+    removeChordRest(ocr, false);
 
     ChordRest* cr;
     if (ocr->isChord()) {
@@ -3892,6 +3892,13 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
             delete beam;
         } else {
             undoRemoveElement(beam);
+        }
+    }
+    if (cr->isChord()) {
+        for (Spanner* spanner : toChord(cr)->startingSpanners()) {
+            if (spanner->isTrill()) {
+                undo(new RemoveElement(spanner));
+            }
         }
     }
 }

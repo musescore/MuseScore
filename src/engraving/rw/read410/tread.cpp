@@ -2492,9 +2492,7 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
         ch->setDots(e.readInt());
     } else if (tag == "staffMove") {
         ch->setStaffMove(e.readInt());
-        if (ch->vStaffIdx() < ch->part()->staves().front()->idx() || ch->vStaffIdx() > ch->part()->staves().back()->idx()) {
-            ch->setStaffMove(0);
-        }
+        ch->checkStaffMoveValidity();
     } else if (tag == "Spanner") {
         readSpanner(e, ctx, ch, ch->track());
     } else if (tag == "Lyrics") {

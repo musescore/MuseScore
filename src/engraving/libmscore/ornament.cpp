@@ -384,6 +384,7 @@ void Ornament::updateCueNote()
     }
     _cueNoteChord->setTrack(track());
     _cueNoteChord->setParent(parentChord->segment());
+    _cueNoteChord->setStaffMove(parentChord->staffMove());
     cueNote->updateLine();
     cueNote->setIsTrillCueNote(true);
 }
