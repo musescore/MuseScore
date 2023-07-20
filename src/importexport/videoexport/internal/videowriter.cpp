@@ -135,24 +135,24 @@ mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, con
     score->setShowUnprintable(false);
     score->setShowVBox(false);
 
-    score->setStyleValue(engraving::Sid::pageHeight, config.height / CANVAS_DPI);
-    score->setStyleValue(engraving::Sid::pageWidth, config.width / CANVAS_DPI);
-    score->setStyleValue(engraving::Sid::pagePrintableWidth, score->styleD(engraving::Sid::pageWidth)
-                         - score->styleD(engraving::Sid::pageOddLeftMargin)
-                         - score->styleD(engraving::Sid::pageEvenLeftMargin));
+    score->style().set(engraving::Sid::pageHeight, config.height / CANVAS_DPI);
+    score->style().set(engraving::Sid::pageWidth, config.width / CANVAS_DPI);
+    score->style().set(engraving::Sid::pagePrintableWidth, score->style().styleD(engraving::Sid::pageWidth)
+                       - score->style().styleD(engraving::Sid::pageOddLeftMargin)
+                       - score->style().styleD(engraving::Sid::pageEvenLeftMargin));
 
-    score->setStyleValue(engraving::Sid::pageEvenTopMargin, 0.0);
-    score->setStyleValue(engraving::Sid::pageEvenBottomMargin, 0.0);
-    score->setStyleValue(engraving::Sid::pageOddTopMargin, 0.0);
-    score->setStyleValue(engraving::Sid::pageOddBottomMargin, 0.0);
-    score->setStyleValue(engraving::Sid::pageTwosided, false);
-    score->setStyleValue(engraving::Sid::showHeader, false);
-    score->setStyleValue(engraving::Sid::showFooter, false);
+    score->style().set(engraving::Sid::pageEvenTopMargin, 0.0);
+    score->style().set(engraving::Sid::pageEvenBottomMargin, 0.0);
+    score->style().set(engraving::Sid::pageOddTopMargin, 0.0);
+    score->style().set(engraving::Sid::pageOddBottomMargin, 0.0);
+    score->style().set(engraving::Sid::pageTwosided, false);
+    score->style().set(engraving::Sid::showHeader, false);
+    score->style().set(engraving::Sid::showFooter, false);
 
-    score->setStyleValue(engraving::Sid::minSystemDistance, engraving::Spatium(10));
-    score->setStyleValue(engraving::Sid::maxSystemDistance, engraving::Spatium(10));
-    score->setStyleValue(engraving::Sid::staffLowerBorder, engraving::Spatium(5));
-    score->setStyleValue(engraving::Sid::staffUpperBorder, engraving::Spatium(7));
+    score->style().set(engraving::Sid::minSystemDistance, engraving::Spatium(10));
+    score->style().set(engraving::Sid::maxSystemDistance, engraving::Spatium(10));
+    score->style().set(engraving::Sid::staffLowerBorder, engraving::Spatium(5));
+    score->style().set(engraving::Sid::staffUpperBorder, engraving::Spatium(7));
 
     score->setLayoutAll();
     score->update();
