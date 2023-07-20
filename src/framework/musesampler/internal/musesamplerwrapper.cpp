@@ -279,7 +279,8 @@ void MuseSamplerWrapper::setIsActive(bool arg)
     m_samplerLib->setPlaying(m_sampler, arg);
 
     if (!isActive()) {
-        setCurrentPosition(m_currentPosition);
+        //! NOTE: restore the current position because setPlaying(m_sampler, false) resets it
+        m_samplerLib->setPosition(m_sampler, m_currentPosition);
     }
 
     LOGD() << "Toggled playing status, isPlaying: " << arg;
@@ -305,6 +306,10 @@ void MuseSamplerWrapper::handleAuditionEvents(const MuseSamplerSequencer::EventT
 void MuseSamplerWrapper::setCurrentPosition(const audio::samples_t samples)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
+        return;
+    }
+
+    if (m_currentPosition == samples) {
         return;
     }
 
