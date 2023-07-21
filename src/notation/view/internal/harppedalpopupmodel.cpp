@@ -119,15 +119,6 @@ bool HarpPedalPopupModel::isDiagram() const
     return m_isDiagram;
 }
 
-bool HarpPedalPopupModel::belowStave() const
-{
-    if (!m_item) {
-        return false;
-    }
-
-    return m_item->getProperty(mu::engraving::Pid::PLACEMENT) == mu::engraving::PlacementV::BELOW;
-}
-
 QRectF HarpPedalPopupModel::staffPos() const
 {
     // Just need top & bottom y.  Don't need x pos

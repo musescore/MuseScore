@@ -54,27 +54,31 @@ StyledPopupView {
     showArrow: false
 
     function updatePosition(elementRect) {
-        // Default: open above position of diagram
-        setOpensUpward(true)
-        root.x = (elementRect.x + elementRect.width / 2) - contentWidth / 2
-        root.y = elementRect.y - elementRect.height - contentHeight
+        root.x = elementRect.x + (elementRect.width - contentWidth) / 2
 
-        // For diagrams below stave, position above stave to not obscure it
-        if (harpModel.belowStave) {
-            root.y = harpModel.staffPos.y - elementRect.height - contentHeight
-        }
+        const marginFromElement = 12
+
+        // Above diagram
+        let yUp = Math.min(elementRect.y - contentHeight - marginFromElement,
+                           harpModel.staffPos.y - contentHeight - marginFromElement)
+        let yDown = Math.max(elementRect.y + elementRect.height + marginFromElement,
+                             harpModel.staffPos.y + harpModel.staffPos.height + marginFromElement)
 
         // not enough room on window to open above so open below stave
-        var globPos = mapToItem(ui.rootItem, Qt.point(root.x, root.y))
+        let opensUp = true
+        let globPos = root.parent.mapToItem(ui.rootItem, Qt.point(root.x, yUp))
         if (globPos.y < 0) {
-            setOpensUpward(false)
-            root.y = harpModel.staffPos.y + harpModel.staffPos.height + 10
+            opensUp = false;
+            globPos = root.parent.mapToItem(ui.rootItem, Qt.point(root.x, yDown))
         }
 
         // not enough room below stave to open so open above
-        if (root.y > ui.rootItem.height) {
-            root.y = elementRect.y - elementRect.height
+        if (globPos + contentHeight > ui.rootItem.height) {
+            opensUp = true;
         }
+
+        setOpensUpward(opensUp)
+        root.y = opensUp ? yUp : yDown
     }
 
     function checkPedalState(string, state) {
