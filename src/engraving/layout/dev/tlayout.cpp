@@ -4533,7 +4533,7 @@ void TLayout::layout1TextBase(TextBase* item, LayoutContext& ctx)
         if (item->layoutToParentWidth()) {
             if (item->explicitParent()->isTBox()) {
                 // hack: vertical alignment is always TOP
-                item->setAlign(AlignV::TOP);
+                item->setAlign({ item->align().horizontal, AlignV::TOP });
             } else if (item->explicitParent()->isBox()) {
                 // consider inner margins of frame
                 Box* b = toBox(item->explicitParent());
