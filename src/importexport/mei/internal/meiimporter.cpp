@@ -49,6 +49,11 @@
 
 #include "io/file.h"
 
+#include "thirdparty/libmei/cmn.h"
+#include "thirdparty/libmei/shared.h"
+
+#include "thirdparty/pugixml.hpp"
+
 using namespace mu;
 using namespace mu::iex::mei;
 using namespace mu::engraving;
@@ -64,16 +69,26 @@ using namespace mu::engraving;
 
 bool MeiImporter::read(const io::path_t& path)
 {
-    io::File fp(path);
-    if (!fp.open(io::IODevice::ReadOnly)) {
+    pugi::xml_document doc;
+    pugi::xml_parse_result result = doc.load_file(
+        path.toStdString().c_str(), (pugi::parse_comments | pugi::parse_default) & ~pugi::parse_eol);
+
+    if (!result) {
         LOGD("Cannot open file <%s>", qPrintable(path.toString()));
         return false;
     }
-    ByteArray byteArray = fp.readAll();
+
+    pugi::xml_node root = doc.first_child();
+
+    pugi::xml_attribute meiVersion = root.attribute("meiversion");
+    if (!meiVersion || String(meiVersion.value()) != String(MEI_BASIC_VERSION)) {
+        // Temporary commented
+        // Convert::logs.push_back(String("The MEI file does not seem to be a MEI basic version '%1' file").arg(String(MEI_BASIC_VERSION)));
+    }
 
     bool success = true;
 
-    fp.close();
+    // TODO: actual import
 
     return success;
 }
