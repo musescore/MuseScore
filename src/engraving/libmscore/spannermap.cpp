@@ -111,26 +111,30 @@ void SpannerMap::collectIntervals(IntervalList& regularIntervals, IntervalList& 
     constexpr int collidingSpannersPadding = 1;
 
     for (const auto& pair : *this) {
-        int newSpannerStartTick = pair.second->tick().ticks();
-        int newSpannerEndTick = pair.second->tick2().ticks();
+        Spanner* spanner = pair.second;
 
-        IntervalsByType& intervalsByType = intervalsByPart[pair.second->part()->id()];
-        IntervalList& intervalList = intervalsByType[pair.second->type()];
+        int newSpannerStartTick = spanner->tick().ticks();
+        int newSpannerEndTick = spanner->tick2().ticks();
+
+        IntervalsByType& intervalsByType = intervalsByPart[spanner->part()->id()];
+        IntervalList& intervalList = intervalsByType[spanner->type()];
 
         if (!intervalList.empty()) {
             auto lastIntervalIt = intervalList.rbegin();
             if (lastIntervalIt->stop >= newSpannerStartTick) {
-                lastIntervalIt->stop = newSpannerStartTick - collidingSpannersPadding;
+                if (!lastIntervalIt->value->isLinked(spanner)) {
+                    lastIntervalIt->stop = newSpannerStartTick - collidingSpannersPadding;
+                }
             }
         }
 
         intervalList.emplace_back(interval_tree::Interval<Spanner*>(newSpannerStartTick,
                                                                     newSpannerEndTick,
-                                                                    pair.second));
+                                                                    spanner));
 
         regularIntervals.push_back(interval_tree::Interval(newSpannerStartTick,
                                                            newSpannerEndTick,
-                                                           pair.second));
+                                                           spanner));
     }
 
     for (const auto& pair : intervalsByPart) {
