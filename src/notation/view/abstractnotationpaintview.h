@@ -230,6 +230,7 @@ private:
     qreal verticalScrollableSize() const;
 
     bool adjustCanvasPosition(const RectF& logicRect, bool adjustVertically = true);
+    bool adjustCanvasPositionSmoothPan(const RectF& cursorRect);
 
     void onNoteInputStateChanged();
 

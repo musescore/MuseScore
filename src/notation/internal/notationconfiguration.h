@@ -122,6 +122,9 @@ public:
     bool isAutomaticallyPanEnabled() const override;
     void setIsAutomaticallyPanEnabled(bool enabled) override;
 
+    bool isSmoothPanning() const override;
+    void setIsSmoothPanning(bool value) override;
+
     bool isPlayRepeatsEnabled() const override;
     void setIsPlayRepeatsEnabled(bool enabled) override;
     async::Notification isPlayRepeatsChanged() const override;
