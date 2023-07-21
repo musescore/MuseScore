@@ -54,6 +54,9 @@
 
 #include "log.h"
 
+#include "thirdparty/libmei/cmn.h"
+#include "thirdparty/libmei/shared.h"
+
 using namespace mu::iex::mei;
 using namespace mu::engraving;
 
@@ -67,9 +70,51 @@ using namespace mu::engraving;
 
 bool MeiExporter::write(QIODevice& destinationDevice)
 {
+    // Still using QTextStream since we have a QIODevice
     QTextStream out(&destinationDevice);
 
-    out << "<mei>Hello World!</mei>";
+    try {
+        pugi::xml_document meiDoc;
+
+        pugi::xml_node decl = meiDoc.prepend_child(pugi::node_declaration);
+        decl.append_attribute("version") = "1.0";
+        decl.append_attribute("encoding") = "UTF-8";
+
+        // schema processing instruction
+        std::string schema = "https://music-encoding.org/schema/dev/mei-basic.rng";
+        decl = meiDoc.append_child(pugi::node_declaration);
+        decl.set_name("xml-model");
+        decl.append_attribute("href") = schema.c_str();
+        decl.append_attribute("type") = "application/xml";
+        decl.append_attribute("schematypens") = "http://relaxng.org/ns/structure/1.0";
+
+        decl = meiDoc.append_child(pugi::node_declaration);
+        decl.set_name("xml-model");
+        decl.append_attribute("href") = schema.c_str();
+        decl.append_attribute("type") = "application/xml";
+        decl.append_attribute("schematypens") = "http://purl.oclc.org/dsdl/schematron";
+
+        m_mei = meiDoc.append_child("mei");
+        m_mei.append_attribute("xmlns") = "http://www.music-encoding.org/ns/mei";
+
+        libmei::AttConverter converter;
+        libmei::meiVersion_MEIVERSION meiVersion = libmei::meiVersion_MEIVERSION_5_0_0_devplusbasic;
+        m_mei.append_attribute("meiversion") = (converter.MeiVersionMeiversionToStr(meiVersion)).c_str();
+
+        // TODO: actual export
+
+        unsigned int output_flags = pugi::format_default;
+
+        // Tabulation of MEI_INDENT * spaces (tabs if 0)
+        std::string indent = MEI_INDENT ? std::string(MEI_INDENT, ' ') : "\t";
+        std::stringstream strStream;
+        meiDoc.save(strStream, indent.c_str(), output_flags);
+        out << String::fromStdString(strStream.str());
+    }
+    catch (char* str) {
+        // Do something with the error message
+        return false;
+    }
 
     out.flush();
     return true;
