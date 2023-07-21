@@ -2292,10 +2292,11 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
     int prevSubtype = 0;
     int prevLine = std::numeric_limits<int>::min();
 
+    bool isTab = staff->isTabStaff(tick);
     for (int i = nNotes - 1; i >= 0; --i) {
         Note* note     = notes[i];
         Accidental* ac = note->accidental();
-        if (ac && ac->subtype() == prevSubtype && note->line() == prevLine) {
+        if (ac && (isTab || (ac->subtype() == prevSubtype && note->line() == prevLine))) { // TODO: probably this function shouldn't be called at all for tab staves
             // we shouldn't have two of the same accidental on the same line.
             // if we find one that is identical to the one before it, don't lay it out
             ac->setbbox(RectF());
