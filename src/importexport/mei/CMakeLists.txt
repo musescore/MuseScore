@@ -40,6 +40,42 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/meireader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/meiwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/meiwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/libmei.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml.hpp
+
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/att.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/att.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/attalternates.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/attdef.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/element.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/attconverter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/attconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_cmn.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_cmn.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_cmnornaments.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_cmnornaments.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_externalsymbols.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_externalsymbols.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_gestural.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_gestural.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_midi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_midi.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_shared.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_shared.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_stringtab.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_stringtab.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_visual.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_visual.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/cmn.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/cmn.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/midi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/midi.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/shared.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/shared.h
     )
 
 set(MODULE_LINK
