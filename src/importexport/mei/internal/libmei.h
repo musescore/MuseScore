@@ -11,7 +11,6 @@
 #define DEFINITION_FACTOR 1
 
 namespace libmei {
-
 #define STRING_FORMAT_MAX_LEN 2048
 
 /**

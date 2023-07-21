@@ -28,6 +28,8 @@
 #include "modularity/ioc.h"
 #include "imeiconfiguration.h"
 
+#include "thirdparty/pugixml.hpp"
+
 namespace mu::engraving {
 class Fraction;
 class Measure;
@@ -49,7 +51,11 @@ public:
     bool write(QIODevice& destinationDevice);
 
 private:
+    /** The Score pointer */
     engraving::Score* m_score = nullptr;
+
+    /** MEI xml element */
+    pugi::xml_node m_mei;
 };
 } // namespace
 
