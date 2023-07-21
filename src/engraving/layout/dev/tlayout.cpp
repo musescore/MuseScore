@@ -158,55 +158,208 @@
 
 using namespace mu::draw;
 using namespace mu::engraving;
+using namespace mu::engraving::rtti;
 using namespace mu::engraving::layout::dev;
-
-using LayoutTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
-                                   BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,
-                                   HBox, VBox, FBox, TBox, Bracket, Breath,
-                                   Chord, ChordLine, Clef, Capo,
-                                   DeadSlapped, Dynamic, Expression,
-                                   Fermata, FiguredBass, Fingering, FretDiagram,
-                                   Glissando, GlissandoSegment, GradualTempoChange, GradualTempoChangeSegment,
-                                   Hairpin, HairpinSegment, HarpPedalDiagram, Harmony, HarmonicMarkSegment, Hook,
-                                   Image, InstrumentChange,
-                                   Jump,
-                                   KeySig,
-                                   LayoutBreak, LetRing, LetRingSegment, LedgerLine, Lyrics, LyricsLineSegment,
-                                   Marker, MeasureNumber, MeasureRepeat, MMRest, MMRestRange,
-                                   Note, NoteDot, NoteHead,
-                                   Ornament,
-                                   Ottava, OttavaSegment,
-                                   PalmMute, PalmMuteSegment, Pedal, PedalSegment, PlayTechAnnotation,
-                                   RasgueadoSegment, RehearsalMark, Rest,
-                                   ShadowNote, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
-                                   Symbol, FSymbol, SystemDivider, SystemText,
-                                   TempoText, Text, TextLine, TextLineSegment, Tie, TimeSig,
-                                   Tremolo, TremoloBar, Trill, TrillSegment, TripletFeel, Tuplet,
-                                   Vibrato, VibratoSegment, Volta, VoltaSegment,
-                                   WhammyBarSegment>;
-
-class LayoutVisitor : public rtti::Visitor<LayoutVisitor>
-{
-public:
-    template<typename T>
-    static bool doVisit(EngravingItem* item, LayoutContext& ctx)
-    {
-        if (T::classof(item)) {
-            TLayout::layout(static_cast<T*>(item), ctx);
-            return true;
-        }
-        return false;
-    }
-};
 
 void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
 {
     //DO_ASSERT(!ctx.conf().isPaletteMode());
-
-    bool found = LayoutVisitor::visit(LayoutTypes {}, item, ctx);
-    if (!found) {
+    switch (item->type()) {
+    case ElementType::ACCIDENTAL:       layout(item_cast<Accidental*>(item), ctx);
+        break;
+    case ElementType::ACTION_ICON:      layout(item_cast<ActionIcon*>(item), ctx);
+        break;
+    case ElementType::AMBITUS:          layout(item_cast<Ambitus*>(item), ctx);
+        break;
+    case ElementType::ARPEGGIO:         layout(item_cast<Arpeggio*>(item), ctx);
+        break;
+    case ElementType::ARTICULATION:     layout(item_cast<Articulation*>(item), ctx);
+        break;
+    case ElementType::BAGPIPE_EMBELLISHMENT: layout(item_cast<BagpipeEmbellishment*>(item), ctx);
+        break;
+    case ElementType::BAR_LINE:         layout(item_cast<BarLine*>(item), ctx);
+        break;
+    case ElementType::BEAM:             layout(item_cast<Beam*>(item), ctx);
+        break;
+    case ElementType::BEND:             layout(item_cast<Bend*>(item), ctx);
+        break;
+    case ElementType::STRETCHED_BEND:   layout(item_cast<StretchedBend*>(item), ctx);
+        break;
+    case ElementType::HBOX:             layout(item_cast<HBox*>(item), ctx);
+        break;
+    case ElementType::VBOX:             layout(item_cast<VBox*>(item), ctx);
+        break;
+    case ElementType::FBOX:             layout(item_cast<FBox*>(item), ctx);
+        break;
+    case ElementType::TBOX:             layout(item_cast<TBox*>(item), ctx);
+        break;
+    case ElementType::BRACKET:          layout(item_cast<Bracket*>(item), ctx);
+        break;
+    case ElementType::BREATH:           layout(item_cast<Breath*>(item), ctx);
+        break;
+    case ElementType::CHORD:            layout(item_cast<Chord*>(item), ctx);
+        break;
+    case ElementType::CHORDLINE:        layout(item_cast<ChordLine*>(item), ctx);
+        break;
+    case ElementType::CLEF:             layout(item_cast<Clef*>(item), ctx);
+        break;
+    case ElementType::CAPO:             layout(item_cast<Capo*>(item), ctx);
+        break;
+    case ElementType::DEAD_SLAPPED:     layout(item_cast<DeadSlapped*>(item), ctx);
+        break;
+    case ElementType::DYNAMIC:          layout(item_cast<Dynamic*>(item), ctx);
+        break;
+    case ElementType::EXPRESSION:       layout(item_cast<Expression*>(item), ctx);
+        break;
+    case ElementType::FERMATA:          layout(item_cast<Fermata*>(item), ctx);
+        break;
+    case ElementType::FIGURED_BASS:     layout(item_cast<FiguredBass*>(item), ctx);
+        break;
+    case ElementType::FINGERING:        layout(item_cast<Fingering*>(item), ctx);
+        break;
+    case ElementType::FRET_DIAGRAM:     layout(item_cast<FretDiagram*>(item), ctx);
+        break;
+    case ElementType::GLISSANDO:        layout(item_cast<Glissando*>(item), ctx);
+        break;
+    case ElementType::GLISSANDO_SEGMENT: layout(item_cast<GlissandoSegment*>(item), ctx);
+        break;
+    case ElementType::GRADUAL_TEMPO_CHANGE: layout(item_cast<GradualTempoChange*>(item), ctx);
+        break;
+    case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT: layout(item_cast<GradualTempoChangeSegment*>(item), ctx);
+        break;
+    case ElementType::HAIRPIN:          layout(item_cast<Hairpin*>(item), ctx);
+        break;
+    case ElementType::HAIRPIN_SEGMENT:  layout(item_cast<HairpinSegment*>(item), ctx);
+        break;
+    case ElementType::HARP_DIAGRAM:     layout(item_cast<HarpPedalDiagram*>(item), ctx);
+        break;
+    case ElementType::HARMONY:          layout(item_cast<Harmony*>(item), ctx);
+        break;
+    case ElementType::HARMONIC_MARK_SEGMENT: layout(item_cast<HarmonicMarkSegment*>(item), ctx);
+        break;
+    case ElementType::HOOK:             layout(item_cast<Hook*>(item), ctx);
+        break;
+    case ElementType::IMAGE:            layout(item_cast<Image*>(item), ctx);
+        break;
+    case ElementType::INSTRUMENT_CHANGE: layout(item_cast<InstrumentChange*>(item), ctx);
+        break;
+    case ElementType::JUMP:             layout(item_cast<Jump*>(item), ctx);
+        break;
+    case ElementType::KEYSIG:           layout(item_cast<KeySig*>(item), ctx);
+        break;
+    case ElementType::LAYOUT_BREAK:     layout(item_cast<LayoutBreak*>(item), ctx);
+        break;
+    case ElementType::LET_RING:         layout(item_cast<LetRing*>(item), ctx);
+        break;
+    case ElementType::LET_RING_SEGMENT: layout(item_cast<LetRingSegment*>(item), ctx);
+        break;
+    case ElementType::LEDGER_LINE:      layout(item_cast<LedgerLine*>(item), ctx);
+        break;
+    case ElementType::LYRICS:           layout(item_cast<Lyrics*>(item), ctx);
+        break;
+    case ElementType::LYRICSLINE_SEGMENT: layout(item_cast<LyricsLineSegment*>(item), ctx);
+        break;
+    case ElementType::MARKER:           layout(item_cast<Marker*>(item), ctx);
+        break;
+    case ElementType::MEASURE_NUMBER:   layout(item_cast<MeasureNumber*>(item), ctx);
+        break;
+    case ElementType::MEASURE_REPEAT:   layout(item_cast<MeasureRepeat*>(item), ctx);
+        break;
+    case ElementType::MMREST:           layout(item_cast<MMRest*>(item), ctx);
+        break;
+    case ElementType::MMREST_RANGE:     layout(item_cast<MMRestRange*>(item), ctx);
+        break;
+    case ElementType::NOTE:             layout(item_cast<Note*>(item), ctx);
+        break;
+    case ElementType::NOTEDOT:          layout(item_cast<NoteDot*>(item), ctx);
+        break;
+    case ElementType::NOTEHEAD:         layout(item_cast<NoteHead*>(item), ctx);
+        break;
+    case ElementType::ORNAMENT:         layout(item_cast<Ornament*>(item), ctx);
+        break;
+    case ElementType::OTTAVA:           layout(item_cast<Ottava*>(item), ctx);
+        break;
+    case ElementType::OTTAVA_SEGMENT:   layout(item_cast<OttavaSegment*>(item), ctx);
+        break;
+    case ElementType::PALM_MUTE:        layout(item_cast<PalmMute*>(item), ctx);
+        break;
+    case ElementType::PALM_MUTE_SEGMENT: layout(item_cast<PalmMuteSegment*>(item), ctx);
+        break;
+    case ElementType::PEDAL:            layout(item_cast<Pedal*>(item), ctx);
+        break;
+    case ElementType::PEDAL_SEGMENT:    layout(item_cast<PedalSegment*>(item), ctx);
+        break;
+    case ElementType::PLAYTECH_ANNOTATION: layout(item_cast<PlayTechAnnotation*>(item), ctx);
+        break;
+    case ElementType::RASGUEADO_SEGMENT: layout(item_cast<RasgueadoSegment*>(item), ctx);
+        break;
+    case ElementType::REHEARSAL_MARK:   layout(item_cast<RehearsalMark*>(item), ctx);
+        break;
+    case ElementType::REST:             layout(item_cast<Rest*>(item), ctx);
+        break;
+    case ElementType::SHADOW_NOTE:      layout(item_cast<ShadowNote*>(item), ctx);
+        break;
+    case ElementType::SLUR:             layout(item_cast<Slur*>(item), ctx);
+        break;
+    case ElementType::SPACER:           layout(item_cast<Spacer*>(item), ctx);
+        break;
+    case ElementType::STAFF_STATE:      layout(item_cast<StaffState*>(item), ctx);
+        break;
+    case ElementType::STAFF_TEXT:       layout(item_cast<StaffText*>(item), ctx);
+        break;
+    case ElementType::STAFFTYPE_CHANGE: layout(item_cast<StaffTypeChange*>(item), ctx);
+        break;
+    case ElementType::STEM:             layout(item_cast<Stem*>(item), ctx);
+        break;
+    case ElementType::STEM_SLASH:       layout(item_cast<StemSlash*>(item), ctx);
+        break;
+    case ElementType::STICKING:         layout(item_cast<Sticking*>(item), ctx);
+        break;
+    case ElementType::SYMBOL:           layout(item_cast<Symbol*>(item), ctx);
+        break;
+    case ElementType::FSYMBOL:          layout(item_cast<FSymbol*>(item), ctx);
+        break;
+    case ElementType::SYSTEM_DIVIDER:   layout(item_cast<SystemDivider*>(item), ctx);
+        break;
+    case ElementType::SYSTEM_TEXT:      layout(item_cast<SystemText*>(item), ctx);
+        break;
+    case ElementType::TEMPO_TEXT:       layout(item_cast<TempoText*>(item), ctx);
+        break;
+    case ElementType::TEXT:             layout(item_cast<Text*>(item), ctx);
+        break;
+    case ElementType::TEXTLINE:         layout(item_cast<TextLine*>(item), ctx);
+        break;
+    case ElementType::TEXTLINE_SEGMENT: layout(item_cast<TextLineSegment*>(item), ctx);
+        break;
+    case ElementType::TIE:              layout(item_cast<Tie*>(item), ctx);
+        break;
+    case ElementType::TIMESIG:          layout(item_cast<TimeSig*>(item), ctx);
+        break;
+    case ElementType::TREMOLO:          layout(item_cast<Tremolo*>(item), ctx);
+        break;
+    case ElementType::TREMOLOBAR:       layout(item_cast<TremoloBar*>(item), ctx);
+        break;
+    case ElementType::TRILL:            layout(item_cast<Trill*>(item), ctx);
+        break;
+    case ElementType::TRILL_SEGMENT:    layout(item_cast<TrillSegment*>(item), ctx);
+        break;
+    case ElementType::TRIPLET_FEEL:     layout(item_cast<TripletFeel*>(item), ctx);
+        break;
+    case ElementType::TUPLET:           layout(item_cast<Tuplet*>(item), ctx);
+        break;
+    case ElementType::VIBRATO:          layout(item_cast<Vibrato*>(item), ctx);
+        break;
+    case ElementType::VIBRATO_SEGMENT:  layout(item_cast<VibratoSegment*>(item), ctx);
+        break;
+    case ElementType::VOLTA:            layout(item_cast<Volta*>(item), ctx);
+        break;
+    case ElementType::VOLTA_SEGMENT:    layout(item_cast<VoltaSegment*>(item), ctx);
+        break;
+    case ElementType::WHAMMY_BAR_SEGMENT: layout(item_cast<WhammyBarSegment*>(item), ctx);
+        break;
+    default:
         LOGE() << "not found in layout types item: " << item->typeName();
-        DO_ASSERT(found);
+        DO_ASSERT(false);
     }
 }
 

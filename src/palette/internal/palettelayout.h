@@ -98,6 +98,7 @@ class RehearsalMark;
 class Slur;
 class Spacer;
 class StaffText;
+class StaffTypeChange;
 class Symbol;
 class SystemText;
 

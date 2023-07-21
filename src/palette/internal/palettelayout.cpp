@@ -794,7 +794,7 @@ void PaletteLayout::layout(FretDiagram* item, const Context& ctx)
     item->bbox().setRect(x, y, w, h);
 }
 
-void PaletteLayout::layout(FSymbol* item, const Context& ctx)
+void PaletteLayout::layout(FSymbol* item, const Context&)
 {
     item->setbbox(draw::FontMetrics::boundingRect(item->font(), item->toString()));
     item->setOffset(0.0, 0.0);
