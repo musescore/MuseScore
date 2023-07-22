@@ -42,7 +42,7 @@ bool SpannerFilter::isPlayable(const EngravingItem* item, const RenderingContext
     int spannerTo = spannerFrom + spannerDurationTicks;
 
     if (spannerDurationTicks == 0
-        || spannerTo < ctx.nominalPositionStartTick
+        || spannerTo <= ctx.nominalPositionStartTick
         || spannerFrom >= ctx.nominalPositionEndTick) {
         return false;
     }
@@ -54,13 +54,6 @@ int SpannerFilter::spannerActualDurationTicks(const Spanner* spanner, const int 
 {
     if (spanner->type() == ElementType::TRILL) {
         return spanner->endSegment()->tick().ticks() - spanner->tick().ticks() - 1;
-    }
-
-    if (spanner->type() == ElementType::PEDAL) {
-        const Pedal* pedal = toPedal(spanner);
-        if (pedal->endHookType() == HookType::HOOK_45) {
-            return nominalDurationTicks - Constants::DIVISION / 4;
-        }
     }
 
     if (spanner->type() == ElementType::SLUR) {
