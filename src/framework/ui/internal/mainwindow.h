@@ -47,8 +47,8 @@ public:
 
     bool isFullScreen() const override;
     async::Notification isFullScreenChanged() const override;
-
     void toggleFullScreen() override;
+
     QScreen* screen() const override;
 
 private:

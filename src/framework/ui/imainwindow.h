@@ -47,9 +47,10 @@ public:
     virtual void requestShowOnFront() = 0;
 
     virtual bool isFullScreen() const = 0;
-    virtual void toggleFullScreen() = 0;
-    virtual QScreen* screen() const = 0;
     virtual async::Notification isFullScreenChanged() const = 0;
+    virtual void toggleFullScreen() = 0;
+
+    virtual QScreen* screen() const = 0;
 };
 }
 
