@@ -10870,6 +10870,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <source>Braille table for lyrics:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/MeiSection.qml" line="30"/>
+        <source>MEI</source>
+        <extracomment>MEI refers to a file format that can be imported and exported in MuseScore. It stands for Music Encoding Initiative.</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/MeiSection.qml" line="40"/>
+        <source>Import MEI layout</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>audio</name>
@@ -11048,97 +11059,97 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="486"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="482"/>
         <source>Duplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="489"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="485"/>
         <source>Triplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="492"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="488"/>
         <source>Quadruplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="495"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="491"/>
         <source>Quintuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="498"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="494"/>
         <source>Sextuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="501"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="497"/>
         <source>Septuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="504"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="500"/>
         <source>Octuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="507"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="503"/>
         <source>Nonuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="511"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="507"/>
         <source>%1 note tuplet</source>
         <extracomment>%1 is tuplet ratio numerator (i.e. the number of notes in the tuplet)</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="521"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="517"/>
         <location filename="../../src/engraving/libmscore/tempotext.cpp" line="403"/>
         <source>Dotted %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="524"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="520"/>
         <location filename="../../src/engraving/libmscore/tempotext.cpp" line="405"/>
         <source>Double dotted %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="527"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="523"/>
         <location filename="../../src/engraving/libmscore/tempotext.cpp" line="407"/>
         <source>Triple dotted %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="530"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="526"/>
         <location filename="../../src/engraving/libmscore/tempotext.cpp" line="409"/>
         <source>Quadruple dotted %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1086"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1082"/>
         <source>Start and end of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/cmd.cpp" line="3191"/>
+        <location filename="../../src/engraving/libmscore/cmd.cpp" line="3199"/>
         <source>Current contents of measures will be replaced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/cmd.cpp" line="3192"/>
+        <location filename="../../src/engraving/libmscore/cmd.cpp" line="3200"/>
         <source>Continue with inserting measure repeat?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/engravingitem.cpp" line="2421"/>
+        <location filename="../../src/engraving/libmscore/engravingitem.cpp" line="2412"/>
         <source>Measure: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/engravingitem.cpp" line="2424"/>
+        <location filename="../../src/engraving/libmscore/engravingitem.cpp" line="2415"/>
         <source>Beat: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11431,37 +11442,37 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/segment.cpp" line="2179"/>
+        <location filename="../../src/engraving/libmscore/segment.cpp" line="2180"/>
         <source>Annotations:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/barline.cpp" line="1379"/>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1077"/>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1088"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1073"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1084"/>
         <location filename="../../src/engraving/libmscore/note.cpp" line="3098"/>
         <location filename="../../src/engraving/libmscore/note.cpp" line="3110"/>
-        <location filename="../../src/engraving/libmscore/segment.cpp" line="2205"/>
+        <location filename="../../src/engraving/libmscore/segment.cpp" line="2206"/>
         <source>Start of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/engraving/libmscore/barline.cpp" line="1382"/>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1080"/>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1090"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1076"/>
+        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1086"/>
         <location filename="../../src/engraving/libmscore/note.cpp" line="3102"/>
         <location filename="../../src/engraving/libmscore/note.cpp" line="3118"/>
-        <location filename="../../src/engraving/libmscore/segment.cpp" line="2220"/>
+        <location filename="../../src/engraving/libmscore/segment.cpp" line="2221"/>
         <source>End of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/spanner.cpp" line="1469"/>
+        <location filename="../../src/engraving/libmscore/spanner.cpp" line="1472"/>
         <source>Start measure: %1; Start beat: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/spanner.cpp" line="1476"/>
+        <location filename="../../src/engraving/libmscore/spanner.cpp" line="1479"/>
         <source>End measure: %1; End beat: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17345,7 +17356,7 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="61"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="100"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="101"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml" line="57"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="67"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="69"/>
@@ -17367,7 +17378,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="53"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="69"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="61"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="100"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="101"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2198"/>
         <source>mm</source>
         <translation type="unfinished"></translation>
@@ -17535,6 +17546,14 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1035"/>
         <source>Words by %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>iex_mei</name>
+    <message>
+        <location filename="../../src/importexport/mei/internal/meireader.cpp" line="63"/>
+        <source>Do you want to try to load this MEI file anyway?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -18645,23 +18664,23 @@ pickup measure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="81"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="82"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="258"/>
         <source>Lock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="95"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="96"/>
         <source>Image width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="110"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="111"/>
         <source>Scale to frame size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="120"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="121"/>
         <source>Use staff space units</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20797,93 +20816,93 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="668"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="670"/>
         <source>Note input mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="668"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="670"/>
         <source>Normal mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="833"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="835"/>
         <source>Cannot create tuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="833"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="835"/>
         <source>Note value is too short</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1219"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1231"/>
         <source>All Supported Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1220"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1232"/>
         <source>Scalable Vector Graphics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1221"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1233"/>
         <source>JPEG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1222"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1234"/>
         <source>PNG Bitmap Graphic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1224"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1236"/>
         <source>Insert Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1546"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1558"/>
         <source>MuseScore style files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1547"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1559"/>
         <source>MuseScore style file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1550"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1562"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1861"/>
         <source>Load style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1551"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1563"/>
         <source>Save style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1561"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1573"/>
         <source>The style file could not be loaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1566"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1578"/>
         <source>Since this style file is from a different version of MuseScore, your score is not guaranteed to display correctly.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1568"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1580"/>
         <source>Click OK to load anyway.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1582"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1594"/>
         <source>The style file could not be saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1583"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1595"/>
         <source>An error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23382,50 +23401,50 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="630"/>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="679"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="636"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="685"/>
         <source>MuseScore drumset file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="632"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="638"/>
         <source>Load drumset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="649"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="655"/>
         <source>Drumset file too old</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="650"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="656"/>
         <source>MuseScore may not be able to load this drumset file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="681"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="687"/>
         <source>Save drumset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="689"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="695"/>
         <source>Opening file
 %1
 failed: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="690"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="696"/>
         <source>Open file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="700"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="706"/>
         <source>Writing file failed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="701"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="707"/>
         <source>Write drumset</source>
         <translation type="unfinished"></translation>
     </message>
@@ -25613,21 +25632,26 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1544"/>
-        <source>Uncompressed MuseScore folders (experimental)</source>
+        <source>MEI files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1545"/>
-        <source>MuseScore developer files</source>
+        <source>Uncompressed MuseScore folders (experimental)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1546"/>
+        <source>MuseScore developer files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1547"/>
         <source>MuseScore backup files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1558"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1559"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -26059,40 +26083,50 @@ failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="296"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="100"/>
+        <source>MEI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="101"/>
+        <source>MEI files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="300"/>
         <source>Each page to a separate file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="297"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="301"/>
         <source>Each part to a separate file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="298"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="302"/>
         <source>All parts combined in one file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="508"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="527"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="510"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="529"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="512"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="531"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="514"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="533"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation type="unfinished"></translation>
@@ -26100,6 +26134,11 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportScoresListView.qml" line="72"/>
         <source>Main score</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml" line="31"/>
+        <source>Include page and system breaks</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
