@@ -1503,6 +1503,13 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
     aTempoTxt->setRestorePrevious();
     sp->appendElement(aTempoTxt, aTempoStr, 1.3);
 
+    const char* tempoPrimoStr = QT_TRANSLATE_NOOP("palette", "tempo primo");
+    auto tempoPrimoTxt = makeElement<TempoText>(gpaletteScore);
+    tempoPrimoTxt->setFollowText(true);
+    tempoPrimoTxt->setXmlText(tempoPrimoStr);
+    tempoPrimoTxt->setRestorePrimo();
+    sp->appendElement(tempoPrimoTxt, tempoPrimoStr, 1.3);
+
     auto stxt = makeElement<SystemText>(gpaletteScore);
     stxt->setTextStyleType(TextStyleType::TEMPO);
     stxt->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Swing")));

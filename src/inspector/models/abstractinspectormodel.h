@@ -78,6 +78,7 @@ public:
         TYPE_FERMATA,
         TYPE_TEMPO,
         TYPE_TEMPO_RESTORE_PREVIOUS,
+        TYPE_TEMPO_RESTORE_PRIMO,
         TYPE_GLISSANDO,
         TYPE_BARLINE,
         TYPE_BREATH,

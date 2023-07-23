@@ -121,6 +121,7 @@ static QMap<mu::engraving::LayoutBreakType, InspectorModelType> LAYOUT_BREAK_ELE
 static QMap<mu::engraving::TempoTextType, InspectorModelType> TEMPO_TEXT_ELEMENT_MODEL_TYPES = {
     { mu::engraving::TempoTextType::NORMAL, InspectorModelType::TYPE_TEMPO },
     { mu::engraving::TempoTextType::RESTORE_PREVIOUS, InspectorModelType::TYPE_TEMPO_RESTORE_PREVIOUS },
+    { mu::engraving::TempoTextType::RESTORE_PRIMO, InspectorModelType::TYPE_TEMPO_RESTORE_PRIMO },
 };
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository,

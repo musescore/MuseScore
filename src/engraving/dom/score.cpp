@@ -410,6 +410,8 @@ void Score::setUpTempoMap()
         sigmap()->add(0, SigEvent(fm->ticks(),  fm->timesig(), 0));
     }
 
+    m_masterScore->resetTempoPrimo();
+
     for (MeasureBase* mb = first(); mb; mb = mb->next()) {
         if (mb->type() != ElementType::MEASURE) {
             mb->setTick(tick);
@@ -539,16 +541,23 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                     stretch = std::max(stretch, toFermata(e)->timeStretch());
                 } else if (e->isTempoText()) {
                     TempoText* tt = toTempoText(e);
-                    if (tt->isRelative()) {
+
+                    if (tt->isNormal() && !tt->isRelative() && !m_masterScore->tempoPrimoSet()) {
+                        m_masterScore->setTempoPrimo(tt->tempo());
+                    } else if (tt->isRelative()) {
                         tt->updateRelative();
                     }
 
                     int ticks = tt->segment()->tick().ticks();
-                    BeatsPerSecond tempo = tt->isRestorePrevious() && tt->followText()
-                                           ? tempomap()->tempo(ticks)
-                                           : tt->tempo();
-
-                    tempomap()->setTempo(ticks, tempo);
+                    if (tt->isRestorePrevious() && tt->followText()) {
+                        // this will effectively reset the tempo to the previous one
+                        // when a progressive change was active
+                        tempomap()->setTempo(ticks, tempomap()->tempo(ticks));
+                    } else if (tt->isRestorePrimo() && tt->followText()) {
+                        tempomap()->setTempo(ticks, m_masterScore->tempoPrimo());
+                    } else {
+                        tempomap()->setTempo(ticks, tt->tempo());
+                    }
                 }
             }
             if (stretch != 0.0 && stretch != 1.0) {
@@ -5982,6 +5991,7 @@ const RepeatList& Score::repeatList()  const { return m_masterScore->repeatList(
 const RepeatList& Score::repeatList(bool expandRepeats)  const { return m_masterScore->repeatList(expandRepeats); }
 TempoMap* Score::tempomap() const { return m_masterScore->tempomap(); }
 TimeSigMap* Score::sigmap() const { return m_masterScore->sigmap(); }
+BeatsPerSecond Score::tempoPrimo() const { return m_masterScore->tempoPrimo(); }
 //QQueue<MidiInputEvent>* Score::midiInputQueue() { return _masterScore->midiInputQueue(); }
 std::list<MidiInputEvent>& Score::activeMidiPitches() { return m_masterScore->activeMidiPitches(); }
 async::Channel<ScoreChangesRange> Score::changesChannel() const { return m_masterScore->changesChannel(); }

@@ -77,6 +77,8 @@ class MasterScore : public Score
     UndoStack* _undoStack = nullptr;
     TimeSigMap* _sigmap;
     TempoMap* _tempomap;
+    BeatsPerSecond _tempoPrimo;
+    bool _tempoPrimoSet = false;
     RepeatList* _expandedRepeatList;
     RepeatList* _nonExpandedRepeatList;
     bool _expandRepeats = true;
@@ -140,6 +142,11 @@ public:
     TimeSigMap* sigmap() const override { return _sigmap; }
     TempoMap* tempomap() const override { return _tempomap; }
     async::Channel<ScoreChangesRange> changesChannel() const override { return m_changesRangeChannel; }
+
+    BeatsPerSecond tempoPrimo() const override { return _tempoPrimo; }
+    void resetTempoPrimo() { _tempoPrimo = Constants::DEFAULT_TEMPO; _tempoPrimoSet = false; }
+    void setTempoPrimo(BeatsPerSecond tempoPrimo) { _tempoPrimo = tempoPrimo; _tempoPrimoSet = true; }
+    bool tempoPrimoSet() const { return _tempoPrimoSet; }
 
     bool playlistDirty() const override { return _playlistDirty; }
     void setPlaylistDirty() override;

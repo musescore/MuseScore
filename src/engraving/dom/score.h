@@ -677,6 +677,7 @@ public:
     void setTempo(const Fraction& tick, BeatsPerSecond bps);
     void removeTempo(const Fraction& tick);
     void setPause(const Fraction& tick, double seconds);
+    virtual BeatsPerSecond tempoPrimo() const;
     BeatsPerSecond tempo(const Fraction& tick) const;
 
     Text* getText(TextStyleType subtype) const;

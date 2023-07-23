@@ -30,14 +30,25 @@ using namespace mu::inspector;
 TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryService* repository, InspectorModelType modelType)
     : AbstractInspectorModel(parent, repository)
 {
-    Q_ASSERT(modelType == InspectorModelType::TYPE_TEMPO || modelType == InspectorModelType::TYPE_TEMPO_RESTORE_PREVIOUS);
+    Q_ASSERT(modelType == InspectorModelType::TYPE_TEMPO
+             || modelType == InspectorModelType::TYPE_TEMPO_RESTORE_PREVIOUS
+             || modelType == InspectorModelType::TYPE_TEMPO_RESTORE_PRIMO
+             );
 
     setModelType(modelType);
 
-    if (modelType == InspectorModelType::TYPE_TEMPO) {
+    switch (modelType) {
+    case InspectorModelType::TYPE_TEMPO:
         setTitle(qtrc("inspector", "Tempo"));
-    } else {
-        setTitle(qtrc("inspector", "Restore previous tempo (a tempo)"));
+        break;
+    case InspectorModelType::TYPE_TEMPO_RESTORE_PREVIOUS:
+        setTitle(qtrc("inspector", "Restore previous tempo"));
+        break;
+    case InspectorModelType::TYPE_TEMPO_RESTORE_PRIMO:
+        setTitle(qtrc("inspector", "Restore initial tempo"));
+        break;
+    default:
+        break;
     }
 
     setIcon(ui::IconCode::Code::METRONOME);

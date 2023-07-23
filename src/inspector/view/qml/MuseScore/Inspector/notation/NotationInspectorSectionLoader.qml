@@ -93,6 +93,7 @@ Loader {
             case Inspector.TYPE_TIE: return slurAndTieComp
             case Inspector.TYPE_TEMPO: return tempoComp
             case Inspector.TYPE_TEMPO_RESTORE_PREVIOUS: return tempoRestorePreviousComp
+            case Inspector.TYPE_TEMPO_RESTORE_PRIMO: return tempoRestorePrimoComp
             case Inspector.TYPE_BARLINE: return barlineComp
             case Inspector.TYPE_SECTIONBREAK: return sectionBreakComp
             case Inspector.TYPE_MARKER: return markerComp
@@ -182,6 +183,11 @@ Loader {
 
     Component {
         id: tempoRestorePreviousComp
+        TempoRestorePreviousSettings { }
+    }
+
+    Component {
+        id: tempoRestorePrimoComp
         TempoRestorePreviousSettings { }
     }
 

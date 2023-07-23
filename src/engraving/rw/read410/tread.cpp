@@ -487,8 +487,17 @@ void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
             t->setTempo(TConv::fromXml(e.readAsciiText(), Constants::DEFAULT_TEMPO));
         } else if (tag == "followText") {
             t->setFollowText(e.readInt());
-        } else if (tag == "restorePrevious") {
-            t->setTempoTextType(e.readInt() ? TempoTextType::RESTORE_PREVIOUS : TempoTextType::NORMAL);
+        } else if (tag == "type") {
+            auto type = e.readAsciiText();
+            if (type == "restorePrevious") {
+                t->setTempoTextType(TempoTextType::RESTORE_PREVIOUS);
+            } else if (type == "restorePrimo") {
+                t->setTempoTextType(TempoTextType::RESTORE_PRIMO);
+            } else if (type == "normal") {
+                t->setTempoTextType(TempoTextType::NORMAL);
+            } else {
+                e.unknown();
+            }
         } else if (!readProperties(static_cast<TextBase*>(t), e, ctx)) {
             e.unknown();
         }

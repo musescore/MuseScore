@@ -2655,7 +2655,10 @@ void TWrite::write(const TempoText* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("followText", item->followText());
     }
     if (item->isRestorePrevious()) {
-        xml.tag("restorePrevious", true);
+        xml.tag("type", "restorePrevious");
+    }
+    if (item->isRestorePrimo()) {
+        xml.tag("type", "restorePrimo");
     }
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();
