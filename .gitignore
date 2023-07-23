@@ -10,6 +10,7 @@
 build.release
 build.debug
 build.install
+build.tooldata
 build.qtc
 build-*
 win32build
