@@ -21,6 +21,7 @@
  */
 #include "pagesettings.h"
 
+#include <QKeyEvent>
 #include <QPageSize>
 
 #include "engraving/libmscore/page.h"

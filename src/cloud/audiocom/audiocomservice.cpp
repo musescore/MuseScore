@@ -35,6 +35,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::cloud;
 using namespace mu::network;
 using namespace mu::framework;
 

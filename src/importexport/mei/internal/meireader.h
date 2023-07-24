@@ -22,6 +22,7 @@
 #ifndef MU_IMPORTEXPORT_MEIREADER_H
 #define MU_IMPORTEXPORT_MEIREADER_H
 
+#include "modularity/ioc.h"
 #include "project/inotationreader.h"
 #include "iinteractive.h"
 #include "io/ifilesystem.h"
