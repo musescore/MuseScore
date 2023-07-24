@@ -1,5 +1,0 @@
-# Mandatory parameters (uncomment and edit)
-#SOUND_FONT=@DEFAULT_SOUNDFONT@
-
-# Additional optional parameters (may be useful, see 'man fluidsynth' for further info)
-#OTHER_OPTS='-a alsa -m alsa_seq -p FluidSynth\ GM -r 48000'

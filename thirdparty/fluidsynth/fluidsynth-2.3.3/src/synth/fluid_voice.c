@@ -197,7 +197,11 @@ static void fluid_voice_initialize_rvoice(fluid_voice_t *voice, fluid_real_t out
     fluid_voice_update_modenv(voice, FALSE, FLUID_VOICE_ENVFINISHED,
                               0xffffffff, 0.0f, 0.0f, -1.0f, 1.0f);
 
+#ifdef ENABLE_DEFAULT_COMPRESSION
     param[0].i = FLUID_IIR_LOWPASS;
+#else
+    param[0].i = FLUID_IIR_DISABLED;
+#endif
     param[1].i = 0;
     fluid_iir_filter_init(&voice->rvoice->resonant_filter, param);
 
