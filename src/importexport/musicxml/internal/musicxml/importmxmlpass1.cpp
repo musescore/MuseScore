@@ -29,6 +29,7 @@
 #include "engraving/libmscore/page.h"
 #include "engraving/libmscore/part.h"
 #include "engraving/libmscore/score.h"
+#include "engraving/libmscore/sig.h"
 #include "engraving/libmscore/staff.h"
 #include "engraving/libmscore/text.h"
 #include "engraving/libmscore/timesig.h"
@@ -45,6 +46,8 @@
 
 #include "modularity/ioc.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
+
+#include "tools/miditools/xmlwriter.h"
 
 #include "log.h"
 

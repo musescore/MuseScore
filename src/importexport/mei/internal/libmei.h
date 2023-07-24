@@ -8,6 +8,10 @@
 #ifndef __LIBMEI_H__
 #define __LIBMEI_H__
 
+#include "meiconverter.h"
+
+#include "framework/global/types/string.h"
+
 #define DEFINITION_FACTOR 1
 
 namespace libmei {
@@ -17,7 +21,7 @@ namespace libmei {
  * Implement the namespace level libmei function.
  */
 
-void LogWarning(const char* fmt, ...)
+inline void LogWarning(const char* fmt, ...)
 {
     std::string str(STRING_FORMAT_MAX_LEN, 0);
     va_list args;
@@ -25,14 +29,14 @@ void LogWarning(const char* fmt, ...)
     vsnprintf(&str[0], STRING_FORMAT_MAX_LEN, fmt, args);
     va_end(args);
     str.resize(strlen(str.data()));
-    mu::iex::mei::Convert::logs.push_back(String::fromStdString(str));
+    mu::iex::mei::Convert::logs.push_back(mu::String::fromStdString(str));
 }
 
 /**
  * Implement the namespace level libmei function.
  */
 
-std::string StringFormat(const char* fmt, ...)
+inline std::string StringFormat(const char* fmt, ...)
 {
     std::string str(STRING_FORMAT_MAX_LEN, 0);
     va_list args;

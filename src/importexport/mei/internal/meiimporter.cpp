@@ -22,6 +22,8 @@
 
 #include "meiimporter.h"
 
+#include "meiconverter.h"
+
 #include "libmscore/articulation.h"
 #include "libmscore/barline.h"
 #include "libmscore/bracket.h"

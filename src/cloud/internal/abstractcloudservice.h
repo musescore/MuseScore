@@ -39,6 +39,17 @@ class QOAuth2AuthorizationCodeFlow;
 #include "iauthorizationservice.h"
 
 namespace mu::cloud {
+extern const QString ACCESS_TOKEN_KEY;
+extern const QString REFRESH_TOKEN_KEY;
+
+static constexpr int USER_UNAUTHORIZED_STATUS_CODE = 401;
+static constexpr int FORBIDDEN_CODE = 403;
+static constexpr int NOT_FOUND_STATUS_CODE = 404;
+static constexpr int CONFLICT_STATUS_CODE = 409;
+
+QString userAgent();
+int generateFileNameNumber();
+
 class OAuthHttpServerReplyHandler;
 
 class AbstractCloudService : public QObject, public IAuthorizationService, public async::Asyncable

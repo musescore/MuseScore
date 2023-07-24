@@ -23,6 +23,7 @@
 
 #include "engraving/libmscore/mscore.h"
 
+using namespace mu::engraving;
 using namespace mu::notation;
 using namespace mu::framework;
 
