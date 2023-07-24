@@ -29,17 +29,15 @@
 #ifndef _FLUIDSYNTH_PRIV_H
 #define _FLUIDSYNTH_PRIV_H
 
+#include "fluidsynthconfig.h"
+
 #ifndef NO_GLIB
 #include <glib.h>
 #endif
 
-#include "fluidsynthconfig.h"
-
 #if HAVE_MATH_H
 #include <math.h> // M_PI, MLN2, M_LN10
 #endif
-
-#include <glib.h>
 
 #if HAVE_STDLIB_H
 #include <stdlib.h> // malloc, free
