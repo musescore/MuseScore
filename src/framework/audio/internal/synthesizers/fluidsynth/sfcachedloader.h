@@ -90,12 +90,12 @@ void* openSoundFont(const char* filename)
     return stream;
 }
 
-int readSoundFont(void* buf, int count, void* handle)
+int readSoundFont(void* buf, fluid_long_long_t count, void* handle)
 {
     return static_cast<int>(std::fread(buf, count, 1, static_cast<std::FILE*>(handle)));
 }
 
-int seekSoundFont(void* handle, long offset, int origin)
+int seekSoundFont(void* handle, fluid_long_long_t offset, int origin)
 {
     return std::fseek(static_cast<std::FILE*>(handle), offset, origin);
 }
@@ -109,7 +109,7 @@ int closeSoundFont(void* /*handle*/)
     return FLUID_OK;
 }
 
-long tellSoundFont(void* handle)
+fluid_long_long_t tellSoundFont(void* handle)
 {
     return std::ftell(static_cast<std::FILE*>(handle));
 }
