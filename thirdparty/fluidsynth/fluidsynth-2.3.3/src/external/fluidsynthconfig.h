@@ -224,7 +224,7 @@
 /* #undef WITH_PROFILING */
 
 /* Define to use the readline library for line editing */
-/* #undef WITH_READLINE */
+/* #undef READLINE_SUPPORT */
 
 /* Define if the compiler supports VLA */ 
 /* #undef SUPPORTS_VLA */

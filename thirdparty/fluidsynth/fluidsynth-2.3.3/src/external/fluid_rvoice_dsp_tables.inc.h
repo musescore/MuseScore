@@ -1,7 +1,5 @@
 /* THIS FILE HAS BEEN AUTOMATICALLY GENERATED. DO NOT EDIT. */
 
-#include "fluidsynth_priv.h"
-
 static const fluid_real_t interp_coeff_linear[256][2] = {
     {
     1.000000000000000e+00,    /* 0 */
