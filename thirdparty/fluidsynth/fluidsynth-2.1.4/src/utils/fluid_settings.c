@@ -328,9 +328,7 @@ fluid_settings_init(fluid_settings_t *settings)
     fluid_return_if_fail(settings != NULL);
 
     fluid_synth_settings(settings);
-#ifndef NO_GLIB
     fluid_shell_settings(settings);
-#endif
     fluid_player_settings(settings);
     fluid_file_renderer_settings(settings);
     fluid_audio_driver_settings(settings);

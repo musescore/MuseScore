@@ -1,0 +1,13 @@
+
+task:
+    name: FreeBSD
+    freebsd_instance:
+        matrix:
+            # There isn't a stable 13.0 image yet (2019-09)
+            image_family: freebsd-13-0-snap
+            image_family: freebsd-12-1
+
+    install_script: pwd && ls -la && pkg update --force && pkg install -y cmake glib alsa-lib ladspa portaudio pulseaudio pkgconf sdl2
+    
+    compile_script: pwd && ls -la && mkdir $HOME/fluidsynth_install/ && mkdir build && cd build && cmake -Werror=dev -DCMAKE_INSTALL_PREFIX=$HOME/fluidsynth_install -Denable-portaudio=1 -Denable-ladspa=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_VERBOSE_MAKEFILE=0  -DNO_GUI=1 .. && make -j4 && make check && make install
+

@@ -1,0 +1,15 @@
+[Unit]
+Description=FluidSynth Daemon
+Documentation=man:fluidsynth(1)
+After=sound.target
+
+[Service]
+Type=notify
+NotifyAccess=main
+EnvironmentFile=@FLUID_DAEMON_ENV_FILE@
+EnvironmentFile=-%h/.config/fluidsynth
+ExecStart=@CMAKE_INSTALL_PREFIX@/@BIN_INSTALL_DIR@/fluidsynth -is $OTHER_OPTS $SOUND_FONT
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: FluidSynth
+Description: Software SoundFont synth
+Version: @VERSION@
+Libs: -L${libdir} -lfluidsynth
+Cflags: -I${includedir}

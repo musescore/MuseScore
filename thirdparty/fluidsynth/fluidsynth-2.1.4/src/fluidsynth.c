@@ -32,10 +32,7 @@
 #ifdef LIBINSTPATCH_SUPPORT
 #include <libinstpatch/libinstpatch.h>
 #endif
-
-#ifdef HAVE_LASH
 #include "fluid_lash.h"
-#endif
 
 #ifdef SYSTEMD_SUPPORT
 #include <systemd/sd-daemon.h>
