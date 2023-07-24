@@ -408,7 +408,7 @@ EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Mea
         }
 
         // If no @tstamp (invalid), put it on 1.0;
-        double tstampValue = timestampLogAtt->HasTstamp() ? : 1.0;
+        double tstampValue = timestampLogAtt->HasTstamp() ? timestampLogAtt->GetTstamp() : 1.0;
         Fraction tstampFraction = Convert::tstampToFraction(tstampValue, measure->timesig());
         int staffIdx = (staffIdentAtt->HasStaff() && staffIdentAtt->GetStaff().size() > 0) ? this->getStaffIndex(
             staffIdentAtt->GetStaff().at(0)) : 0;
