@@ -304,60 +304,14 @@ char *fluid_strtok(char **str, char *delim)
     return token;
 }
 
-#if defined(NO_GLIB) && !defined(_MSC_VER)
-#include <unistd.h> // for usleep()
-#endif
 /**
  * Suspend the execution of the current thread for the specified amount of time.
  * @param milliseconds to wait.
  */
 void fluid_msleep(unsigned int msecs)
 {
-#ifndef NO_GLIB
     g_usleep(msecs * 1000);
-#else // NO_GLIB
-#ifdef _MSC_VER
-    Sleep(msecs);
-#else
-    usleep(msecs * 1000);
-#endif
-#endif //NO_GLIB
 }
-
-#ifdef _MSC_VER
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include <stdint.h> // portable: uint64_t   MSVC: __int64
-
-// MSVC defines this in winsock2.h!?
-//typedef struct timeval {
-//    long tv_sec;
-//    long tv_usec;
-//} timeval;
-
-int gettimeofday(struct timeval * tp, struct timezone * tzp)
-{
-    // Note: some broken versions only have 8 trailing zero's, the correct epoch has 9 trailing zero's
-    // This magic number is the number of 100 nanosecond intervals since January 1, 1601 (UTC)
-    // until 00:00:00 January 1, 1970
-    static const uint64_t EPOCH = ((uint64_t) 116444736000000000ULL);
-
-    SYSTEMTIME  system_time;
-    FILETIME    file_time;
-    uint64_t    time;
-
-    GetSystemTime( &system_time );
-    SystemTimeToFileTime( &system_time, &file_time );
-    time =  ((uint64_t)file_time.dwLowDateTime )      ;
-    time += ((uint64_t)file_time.dwHighDateTime) << 32;
-
-    tp->tv_sec  = (long) ((time - EPOCH) / 10000000L);
-    tp->tv_usec = (long) (system_time.wMilliseconds * 1000);
-    return 0;
-}
-#else
-#include <sys/time.h>
-#endif
 
 /**
  * Get time in milliseconds to be used in relative timing operations.
@@ -390,7 +344,7 @@ double
 fluid_utime(void)
 {
     double utime;
-#ifndef NO_GLIB
+
 #if GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION >= 28
     /* use high precision monotonic clock if available (g_monotonic_time().
      * For Winfdows, if this clock is actually implemented as low prec. clock
@@ -420,12 +374,6 @@ fluid_utime(void)
     GTimeVal timeval;
     g_get_current_time(&timeval);
     utime = (timeval.tv_sec * 1000000.0 + timeval.tv_usec);
-#endif
-
-#else // NO_GLIB
-    struct timeval t;
-    gettimeofday(&t, NULL);
-    utime = (t.tv_sec * 1000000.0 + t.tv_usec);
 #endif
 
     return utime;
@@ -976,7 +924,7 @@ void fluid_profile_start_stop(unsigned int end_ticks, short clear_data)
  *               Threads
  *
  */
-#ifndef NO_THREADS
+
 #if OLD_GLIB_THREAD_API
 
 /* Rather than inline this one, we just declare it as a function, to prevent
@@ -1109,7 +1057,7 @@ fluid_thread_join(fluid_thread_t *thread)
 
     return FLUID_OK;
 }
-#endif // NO_THREADS
+
 
 static fluid_thread_return_t
 fluid_timer_run(void *data)
@@ -1178,7 +1126,6 @@ new_fluid_timer(int msec, fluid_timer_callback_t callback, void *data,
     timer->thread = NULL;
     timer->auto_destroy = auto_destroy;
 
-#ifndef NO_GLIB
     if(new_thread)
     {
         timer->thread = new_fluid_thread("timer", fluid_timer_run, timer, high_priority
@@ -1191,7 +1138,6 @@ new_fluid_timer(int msec, fluid_timer_callback_t callback, void *data,
         }
     }
     else
-#endif
     {
         fluid_timer_run(timer);   /* Run directly, instead of as a separate thread */
 
@@ -1227,7 +1173,6 @@ delete_fluid_timer(fluid_timer_t *timer)
 int
 fluid_timer_join(fluid_timer_t *timer)
 {
-#ifndef NO_GLIB
     int auto_destroy;
 
     if(timer->thread)
@@ -1240,7 +1185,6 @@ fluid_timer_join(fluid_timer_t *timer)
             timer->thread = NULL;
         }
     }
-#endif
 
     return FLUID_OK;
 }
@@ -1701,7 +1645,7 @@ FILE* fluid_file_open(const char* path, const char** errMsg)
     static const char ErrNull[] = "File does not exists or insufficient permissions to open it.";
     
     FILE* handle = NULL;
-#ifndef NO_GLIB
+    
     if(!g_file_test(path, G_FILE_TEST_EXISTS))
     {
         if(errMsg != NULL)
@@ -1716,9 +1660,7 @@ FILE* fluid_file_open(const char* path, const char** errMsg)
             *errMsg = ErrRegular;
         }
     }
-    else
-#endif // NO_GLIB
-    if((handle = FLUID_FOPEN(path, "rb")) == NULL)
+    else if((handle = FLUID_FOPEN(path, "rb")) == NULL)
     {
         if(errMsg != NULL)
         {
@@ -1728,4 +1670,3 @@ FILE* fluid_file_open(const char* path, const char** errMsg)
     
     return handle;
 }
-

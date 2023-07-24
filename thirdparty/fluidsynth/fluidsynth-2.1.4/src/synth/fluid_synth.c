@@ -479,7 +479,7 @@ static FLUID_INLINE unsigned int fluid_synth_get_ticks(fluid_synth_t *synth)
 
 static FLUID_INLINE void fluid_synth_add_ticks(fluid_synth_t *synth, int val)
 {
-    fluid_atomic_uint_add(&synth->ticks_since_start, val);
+    fluid_atomic_int_add(&synth->ticks_since_start, val);
 }
 
 

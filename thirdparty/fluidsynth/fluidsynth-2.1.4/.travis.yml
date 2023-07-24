@@ -1,0 +1,75 @@
+language: c
+sudo: false
+os: linux
+dist: bionic
+addons:
+  apt:
+    update: true
+    sources:
+    - ubuntu-toolchain-r-test
+    - llvm-toolchain-bionic-7
+    - llvm-toolchain-bionic-8
+    - llvm-toolchain-bionic-9
+    packages:
+    - cmake-data
+    - cmake
+    - libglib2.0-0
+    - libsndfile-dev
+    - libasound2-dev
+    - libjack-dev
+    - portaudio19-dev
+    - libpulse-dev
+    - libdbus-glib-1-dev
+    - ladspa-sdk
+    - libsdl2-dev
+env:
+    - CMAKE_FLAGS="-Denable-profiling=1"
+    - CMAKE_FLAGS="-Denable-floats=1 -Denable-profiling=1"
+    - CMAKE_FLAGS="-Denable-floats=1"
+    - CMAKE_FLAGS="-Denable-trap-on-fpe=1"
+    - CMAKE_FLAGS="-Denable-fpe-check=1"
+    - CMAKE_FLAGS="-Denable-ipv6=0"
+    - CMAKE_FLAGS="-Denable-network=0"
+    - CMAKE_FLAGS="-Denable-aufile=0"
+    - CMAKE_FLAGS="-DBUILD_SHARED_LIBS=0"
+    - CMAKE_FLAGS="-Denable-ubsan=1"
+
+matrix:
+  include:
+    - arch: arm64
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7 && sudo apt-get install gcc-7"
+
+    - env:
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8 && sudo apt-get install gcc-8"
+        - CMAKE_FLAGS="-Denable-debug=1 -DCMAKE_C_FLAGS_DEBUG=-fuse-ld=gold"
+
+    - env:
+        - MATRIX_EVAL="CC=clang-7 && CXX=clang++-7 && sudo apt-get install clang-7"
+
+    - env:
+        - MATRIX_EVAL="CC=clang-8 && CXX=clang++-8 && sudo rm -f /usr/local/clang-7.0.0/bin/clang-tidy && sudo ln -s /usr/bin/clang-tidy-8 /usr/bin/clang-tidy && sudo apt-get install clang-8 clang-tidy-8"
+        - CMAKE_FLAGS="-Denable-profiling=1 -DCMAKE_C_FLAGS_DEBUG=-fuse-ld=gold"
+
+    - env:
+        - MATRIX_EVAL="CC=clang-9 && CXX=clang++-9 && sudo apt-get install clang-9"
+
+    - os: linux-ppc64le
+      env:
+        - CMAKE_FLAGS=""
+
+before_install:
+    - eval "${MATRIX_EVAL}"
+    - which clang-tidy || true
+    - ls -la `which clang-tidy` || true
+    - echo $PATH
+
+before_script:
+    - mkdir $HOME/fluidsynth_install/
+    - mkdir build && cd build
+
+script:
+    - cmake -Werror=dev -DCMAKE_INSTALL_PREFIX=$HOME/fluidsynth_install ${CMAKE_FLAGS} -Denable-portaudio=1 -Denable-ladspa=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_VERBOSE_MAKEFILE=1 -DNO_GUI=1 ..
+    - make -j4
+    - make check
+    - make install # install only on linux, as CMAKE_INSTALL_PREFIX is ignored for frameworks on macosx and I cant tell whether that's correct or a bug.

@@ -157,9 +157,7 @@ typedef gintptr  intptr_t;
 #include <gmodule.h>
 #endif
 
-#ifndef NO_GLIB
 #include <glib/gstdio.h>
-#endif
 
 /**
  * Macro used for safely accessing a message from a GError and using a default
@@ -175,37 +173,23 @@ typedef gintptr  intptr_t;
 #define FLUID_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 /* Integer<->pointer conversion */
-#ifndef NO_GLIB
-#define FLUID_POINTER_TO_UINT     GPOINTER_TO_UINT
-#define FLUID_UINT_TO_POINTER     GUINT_TO_POINTER
-#define FLUID_POINTER_TO_INT      GPOINTER_TO_INT
-#define FLUID_INT_TO_POINTER      GINT_TO_POINTER
+#define FLUID_POINTER_TO_UINT(x)  ((unsigned int)(uintptr_t)(x))
+#define FLUID_UINT_TO_POINTER(x)  ((void *)(uintptr_t)(x))
+#define FLUID_POINTER_TO_INT(x)   ((signed int)(intptr_t)(x))
+#define FLUID_INT_TO_POINTER(x)   ((void *)(intptr_t)(x))
+
+/* Endian detection */
 #define FLUID_IS_BIG_ENDIAN       (G_BYTE_ORDER == G_BIG_ENDIAN)
 
 #define FLUID_LE32TOH(x)          GINT32_FROM_LE(x)
 #define FLUID_LE16TOH(x)          GINT16_FROM_LE(x)
-
-#else
-
-#include <portable_endian.h>
-
-#define FLUID_POINTER_TO_UINT(p)  ((unsigned int)(uintptr_t)(p))
-#define FLUID_UINT_TO_POINTER(u)  ((void *)(uintptr_t)(u))
-#define FLUID_POINTER_TO_INT(p)   ((int)(intptr_t)(p))
-#define FLUID_INT_TO_POINTER(i)   ((void *)(intptr_t)(i))
-#define FLUID_IS_BIG_ENDIAN       (__BYTE_ORDER == __BIG_ENDIAN)
-
-#define FLUID_LE32TOH(x) le32toh(x)
-#define FLUID_LE16TOH(x) le16toh(x)
-
-#endif
 
 #if FLUID_IS_BIG_ENDIAN
 #define FLUID_FOURCC(_a, _b, _c, _d) \
     (uint32_t)(((uint32_t)(_a) << 24) | ((uint32_t)(_b) << 16) | ((uint32_t)(_c) << 8) | (uint32_t)(_d))
 #else
 #define FLUID_FOURCC(_a, _b, _c, _d) \
-    (uint32_t)(((uint32_t)(_d) << 24) | ((uint32_t)(_c) << 16) | ((uint32_t)(_b) << 8) | (uint32_t)(_a))
+    (uint32_t)(((uint32_t)(_d) << 24) | ((uint32_t)(_c) << 16) | ((uint32_t)(_b) << 8) | (uint32_t)(_a)) 
 #endif
 
 /*
@@ -254,7 +238,7 @@ int fluid_timer_stop(fluid_timer_t *timer);
 #define OLD_GLIB_THREAD_API  !GLIB_CHECK_VERSION(2,32,0)
 
 /* Muteces */
-#ifndef NO_THREADS
+
 #if NEW_GLIB_THREAD_API
 
 /* glib 2.32 and newer */
@@ -458,100 +442,6 @@ void delete_fluid_thread(fluid_thread_t *thread);
 void fluid_thread_self_set_prio(int prio_level);
 int fluid_thread_join(fluid_thread_t *thread);
 
-#else // NO_THREADS
-
-typedef int fluid_mutex_t;
-typedef int fluid_rec_mutex_t;
-typedef void *fluid_thread_return_t;
-typedef fluid_thread_return_t (*fluid_thread_func_t)(void *data);
-typedef int fluid_thread_t;
-#define FLUID_THREAD_RETURN_VALUE (NULL)
-#define FLUID_MUTEX_INIT          { 0 }
-
-#define fluid_mutex_init(_m)
-#define fluid_mutex_destroy(_m)
-#define fluid_mutex_lock(_m)
-#define fluid_mutex_unlock(_m)
-
-#define fluid_rec_mutex_init(_m)
-#define fluid_rec_mutex_destroy(_m)
-#define fluid_rec_mutex_lock(_m)
-#define fluid_rec_mutex_unlock(_m)
-
-#define fluid_atomic_int_inc(_pi) ((void)((*(_pi))++))
-#define fluid_atomic_int_get(_pi) (*(_pi))
-#define fluid_atomic_int_set(_pi, _val) ((void)(*(_pi) = (_val)))
-#define fluid_atomic_int_dec_and_test(_pi) (--*(_pi) == 0)
-
-static FLUID_INLINE int fluid_atomic_int_compare_and_exchange(volatile int *_pi, int _old, int _new)
-{
-    if (*_pi == _old)
-    {
-        *_pi = _new;
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
-    }
-}
-
-static FLUID_INLINE int fluid_atomic_int_exchange_and_add(volatile fluid_atomic_int_t *_pi, int _add)
-{
-    fluid_atomic_int_t tmp = *_pi;
-    *_pi += _add;
-    return tmp;
-}
-#define fluid_atomic_int_add(_pi, _add) fluid_atomic_int_exchange_and_add(_pi, _add)
-
-static FLUID_INLINE int fluid_atomic_uint_exchange_and_add(volatile fluid_atomic_uint_t *_pi, int _add)
-{
-    fluid_atomic_uint_t tmp = *_pi;
-    *_pi += _add;
-    return tmp;
-}
-#define fluid_atomic_uint_add(_pi, _add) fluid_atomic_uint_exchange_and_add(_pi, _add)
-
-#define fluid_atomic_pointer_get(_pp) (*(_pp))
-#define fluid_atomic_pointer_set(_pp, val) ((void)(*(_pp) = val))
-static FLUID_INLINE int fluid_atomic_pointer_compare_and_exchange(volatile void **_pp, void *_old, void *_new)
-{
-    if (*_pp == _old)
-    {
-        *_pp = _new;
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
-    }
-}
-
-static FLUID_INLINE void fluid_atomic_float_set(volatile float *fptr, float val)
-{
-    int32_t ival;
-    memcpy(&ival, &val, 4);
-    fluid_atomic_int_set((volatile int *)fptr, ival);
-}
-
-static FLUID_INLINE float fluid_atomic_float_get(volatile float *fptr)
-{
-    int32_t ival;
-    float fval;
-    ival = fluid_atomic_int_get((volatile int *)fptr);
-    memcpy(&fval, &ival, 4);
-    return fval;
-}
-
-/* Thread private data */
-typedef void **fluid_private_t;
-#define fluid_private_get(_priv)                   (*(_priv))
-#define fluid_private_set(_priv, _data)            ((void)((*(_priv) = (_data)), 0))
-#define fluid_private_free(_priv)                  free((_priv))
-#define fluid_private_init(_priv)                  ((void)((_priv = (fluid_private_t) malloc(sizeof(void*))), 0))
-
-#endif //NO_THREADS
-
 /* Dynamic Module Loading, currently only used by LADSPA subsystem */
 #ifdef LADSPA
 
@@ -589,32 +479,24 @@ fluid_istream_t fluid_socket_get_istream(fluid_socket_t sock);
 fluid_ostream_t fluid_socket_get_ostream(fluid_socket_t sock);
 
 /* File access */
-#ifndef NO_GLIB
-#if !GLIB_CHECK_VERSION(2, 26, 0)
-#define HAVE_GSTAT
-#endif
-#endif
-
-#ifndef HAVE_GSTAT
-/* GStatBuf has not been introduced yet, manually typedef to what they had at that time:
- * https://github.com/GNOME/glib/blob/e7763678b56e3be073cc55d707a6e92fc2055ee0/glib/gstdio.h#L98-L115
- */
-#if defined(WIN32) || HAVE_WINDOWS_H // somehow reliably mock G_OS_WIN32??
-    // Any effort from our side to reliably mock GStatBuf on Windows is in vain. E.g. glib-2.16 is broken as it uses struct stat rather than struct _stat32 on Win x86.
-    // Disable it (the user has been warned by cmake).
-    #undef fluid_stat
-    #define fluid_stat(_filename, _statbuf)  (-1)
-    typedef struct _fluid_stat_buf_t{int st_mtime;} fluid_stat_buf_t;
-#else
-    /* posix, OS/2, etc. */
-    typedef struct stat fluid_stat_buf_t;
-    #undef fluid_stat
-    #define fluid_stat(_filename, _statbuf) stat((_filename), (_statbuf))
-#endif
-#else //HAVE_GSTAT
 #define fluid_stat(_filename, _statbuf)   g_stat((_filename), (_statbuf))
+#if !GLIB_CHECK_VERSION(2, 26, 0)
+    /* GStatBuf has not been introduced yet, manually typedef to what they had at that time:
+     * https://github.com/GNOME/glib/blob/e7763678b56e3be073cc55d707a6e92fc2055ee0/glib/gstdio.h#L98-L115
+     */
+    #if defined(WIN32) || HAVE_WINDOWS_H // somehow reliably mock G_OS_WIN32??
+        // Any effort from our side to reliably mock GStatBuf on Windows is in vain. E.g. glib-2.16 is broken as it uses struct stat rather than struct _stat32 on Win x86.
+        // Disable it (the user has been warned by cmake).
+        #undef fluid_stat
+        #define fluid_stat(_filename, _statbuf)  (-1)
+        typedef struct _fluid_stat_buf_t{int st_mtime;} fluid_stat_buf_t;
+    #else
+        /* posix, OS/2, etc. */
+        typedef struct stat fluid_stat_buf_t;
+    #endif
+#else
 typedef GStatBuf fluid_stat_buf_t;
-#endif //HAVE_GSTAT
+#endif
 
 FILE* fluid_file_open(const char* filename, const char** errMsg);
 
@@ -712,7 +594,7 @@ enum
     PROFILE_STOP,    /* command to stop a profiling measure */
     PROFILE_START,   /* command to start a profile measure */
     PROFILE_READY,   /* status to signal that a profiling measure has finished
-                        and ready to be printed */
+	                    and ready to be printed */
     /*- State returned by fluid_profile_get_status() -*/
     /* between profiling commands and internal profiling API */
     PROFILE_RUNNING, /* a profiling measure is running */
@@ -758,27 +640,27 @@ enum
 /* local macro : acquiere data */
 #define fluid_profile_data(_num, _ref, voices, samples)\
 {\
-    double _now = fluid_utime();\
-    double _delta = _now - _ref;\
-    fluid_profile_data[_num].min = _delta < fluid_profile_data[_num].min ?\
+	double _now = fluid_utime();\
+	double _delta = _now - _ref;\
+	fluid_profile_data[_num].min = _delta < fluid_profile_data[_num].min ?\
                                    _delta : fluid_profile_data[_num].min; \
-    fluid_profile_data[_num].max = _delta > fluid_profile_data[_num].max ?\
+	fluid_profile_data[_num].max = _delta > fluid_profile_data[_num].max ?\
                                    _delta : fluid_profile_data[_num].max;\
-    fluid_profile_data[_num].total += _delta;\
-    fluid_profile_data[_num].count++;\
-    fluid_profile_data[_num].n_voices += voices;\
-    fluid_profile_data[_num].n_samples += samples;\
-    _ref = _now;\
+	fluid_profile_data[_num].total += _delta;\
+	fluid_profile_data[_num].count++;\
+	fluid_profile_data[_num].n_voices += voices;\
+	fluid_profile_data[_num].n_samples += samples;\
+	_ref = _now;\
 }
 
 /** Macro to collect data, called from inner functions inside audio
     rendering API */
 #define fluid_profile(_num, _ref, voices, samples)\
 {\
-    if ( fluid_profile_status == PROFILE_START)\
-    {	/* acquires data */\
-        fluid_profile_data(_num, _ref, voices, samples)\
-    }\
+	if ( fluid_profile_status == PROFILE_START)\
+	{	/* acquires data */\
+		fluid_profile_data(_num, _ref, voices, samples)\
+	}\
 }
 
 /** Macro to collect data, called from audio rendering API (fluid_write_xxxx()).
@@ -786,18 +668,18 @@ enum
 */
 #define fluid_profile_write(_num, _ref, voices, samples)\
 {\
-    if (fluid_profile_status == PROFILE_START)\
-    {\
-        /* acquires data first: must be done before checking that profile is
+	if (fluid_profile_status == PROFILE_START)\
+	{\
+		/* acquires data first: must be done before checking that profile is
            finished to ensure at least one valid data sample.
-        */\
-        fluid_profile_data(_num, _ref, voices, samples)\
-        if (fluid_synth_get_ticks(synth) >= fluid_profile_end_ticks)\
-        {\
-            /* profiling is finished */\
-            fluid_profile_status = PROFILE_READY;\
-        }\
-    }\
+		*/\
+		fluid_profile_data(_num, _ref, voices, samples)\
+		if (fluid_synth_get_ticks(synth) >= fluid_profile_end_ticks)\
+		{\
+			/* profiling is finished */\
+			fluid_profile_status = PROFILE_READY;\
+		}\
+	}\
 }
 
 #else

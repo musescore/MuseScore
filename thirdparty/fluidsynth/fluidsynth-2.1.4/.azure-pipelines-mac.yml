@@ -1,0 +1,26 @@
+# C/C++ with GCC
+# Build your C/C++ project with GCC using make.
+# Add steps that publish test results, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/c-cpp/gcc
+
+jobs:
+- job: macOS
+  pool:
+    vmImage: 'macOS-10.14'
+# recommended by https://github.com/Homebrew/brew/issues/2491#issuecomment-294207661
+  steps:
+    - script: |
+        brew update || brew update
+        brew upgrade
+        brew install glib gobject-introspection libsndfile pkg-config jack dbus-glib pulseaudio portaudio sdl2
+      displayName: 'Prerequisites'
+    - script: |
+        mkdir build && cd build
+        export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig"
+        cmake -Werror=dev -DCMAKE_INSTALL_PREFIX=$(Build.ArtifactStagingDirectory) -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=1 -DNO_GUI=1 ..
+        make
+      displayName: 'Compile fluidsynth'
+    - script: |
+        cd build || exit -1
+        make check || exit -1
+      displayName: 'Execute Unittests'

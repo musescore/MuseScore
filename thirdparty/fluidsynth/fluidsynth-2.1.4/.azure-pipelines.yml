@@ -1,0 +1,203 @@
+# C/C++ with GCC
+# Build your C/C++ project with GCC using make.
+# Add steps that publish test results, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/c-cpp/gcc
+
+jobs:
+- job: Windows
+  strategy:
+    matrix:
+      XP_x86:
+        platform: Win32
+        toolset: v141_xp
+        gtk-bundle: $(gtk-bundle-x86)
+        libsndfile-url: $(libsndfile-url-x86)
+        artifact-prefix: "fluidsynth"
+        imageName: 'vs2017-win2016'
+      XP_x64:
+        platform: x64
+        toolset: v141_xp
+        gtk-bundle: $(gtk-bundle-x64)
+        libsndfile-url: $(libsndfile-url-x64)
+        artifact-prefix: "fluidsynth"
+        imageName: 'vs2017-win2016'
+  pool:
+    vmImage: $(imageName)
+  steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: specific
+        # https://dev.azure.com/tommbrt/_apis/projects?api-version=5.0
+        project: 'd3638885-de4a-4ce7-afe7-f237ae461c07'
+        pipeline: 1
+        artifactName: libinstpatch-$(platform)
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
+      displayName: 'Get libinstpatch'
+    - script: |
+        @ECHO ON
+        mkdir d:\deps || exit -1
+        cd d:\deps || exit -1
+        curl -LfsS -o gtk-bundle-dev.zip $(gtk-bundle) || exit -1
+        curl -LfsS -o libsndfile-dev.zip $(libsndfile-url) || exit -1
+        7z x -aos -- gtk-bundle-dev.zip > NUL || exit -1
+        7z x -aos -- libsndfile-dev.zip > NUL || exit -1
+        REM need to fix the naming of libsndfile otherwise the linker won't find it
+        mv lib\libsndfile-1.lib lib\sndfile.lib || exit -1
+        mv lib\libsndfile-1.def lib\sndfile.def || exit -1
+        cd $(Build.ArtifactStagingDirectory)\libinstpatch-$(platform)
+        cp -rf * d:\deps\
+        mv -f * ..
+        cd ..
+        rmdir $(Build.ArtifactStagingDirectory)\libinstpatch-$(platform)\
+      displayName: 'Prerequisites'
+    - script: |
+        @ECHO ON
+        SET "PATH=d:\deps\bin;%PATH%"
+        pkg-config --list-all
+        mkdir build && cd build || exit -1
+        cmake -Werror=dev -A $(platform) -T $(toolset) -DCMAKE_INSTALL_PREFIX=$(Build.ArtifactStagingDirectory) -Denable-readline=0 -Denable-floats=1 -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=1 -DNO_GUI=1 .. || exit -1
+        cmake --build . --config Release || exit -1
+      displayName: 'Compile fluidsynth'
+    - script: |
+        @ECHO ON
+        SET "PATH=d:\deps\bin;%PATH%"
+        cd build || exit -1
+        cmake --build . --config Release --target check || exit -1
+      displayName: 'Execute Unittests'
+    - script: |
+        @ECHO ON
+        cd build
+        cmake --build . --config Release --target install || exit -1
+        del $(Build.ArtifactStagingDirectory)\bin\concrt*.dll
+        del $(Build.ArtifactStagingDirectory)\bin\vcruntime*.dll
+        del $(Build.ArtifactStagingDirectory)\bin\msvcp*.dll
+        del $(Build.ArtifactStagingDirectory)\lib\instpatch*.lib
+        del $(Build.ArtifactStagingDirectory)\lib\pkgconfig\libinstpatch*.pc
+        rd $(Build.ArtifactStagingDirectory)\include\libinstpatch-2 /s /q
+      displayName: 'Copy Artifacts'
+    - task: PublishBuildArtifacts@1
+      inputs:
+          pathtoPublish: $(Build.ArtifactStagingDirectory)
+          artifactName: $(artifact-prefix)-$(platform)
+
+- job: WindowsCI
+  strategy:
+    matrix:
+      default:
+        CMAKE_FLAGS: 
+        CMAKE_CONFIG: Release
+        gtk-bundle: $(gtk-bundle-x64)
+        libsndfile-url: $(libsndfile-url-x64)
+      debug_prof:
+        CMAKE_FLAGS: -Denable-profiling=1 -Denable-trap-on-fpe=1 -Denable-fpe-check=1
+        CMAKE_CONFIG: Debug
+        gtk-bundle: $(gtk-bundle-x64)
+        libsndfile-url: $(libsndfile-url-x64)
+      no_network:
+        CMAKE_FLAGS: -Denable-network=0
+        CMAKE_CONFIG: Release
+        gtk-bundle: $(gtk-bundle-x64)
+        libsndfile-url: $(libsndfile-url-x64)
+      static_lib:
+        CMAKE_FLAGS: -DBUILD_SHARED_LIBS=0
+        CMAKE_CONFIG: Release
+        gtk-bundle: $(gtk-bundle-x64)
+        libsndfile-url: $(libsndfile-url-x64)
+      minimal:
+        CMAKE_FLAGS: -Denable-ipv6=0 -Denable-network=0 -Denable-aufile=0 -Denable-dbus=0 -Denable-threads=0 -Denable-winmidi=0 -Denable-waveout=0 -Denable-dsound=0 -Denable-libsndfile=0 -Denable-floats=1
+        CMAKE_CONFIG: Release
+        gtk-bundle: $(gtk-bundle-x64)
+        libsndfile-url: $(libsndfile-url-x64)
+  pool:
+    vmImage: 'windows-2019'
+  steps:
+    - script: |
+        @ECHO ON
+        mkdir d:\deps || exit -1
+        cd d:\deps || exit -1
+        curl -LfsS -o gtk-bundle-dev.zip $(gtk-bundle) || exit -1
+        curl -LfsS -o libsndfile-dev.zip $(libsndfile-url) || exit -1
+        7z x -aos -- gtk-bundle-dev.zip > NUL || exit -1
+        7z x -aos -- libsndfile-dev.zip > NUL || exit -1
+        REM need to fix the naming of libsndfile otherwise the linker won't find it
+        mv lib\libsndfile-1.lib lib\sndfile.lib || exit -1
+        mv lib\libsndfile-1.def lib\sndfile.def || exit -1
+      displayName: 'Prerequisites'
+    - script: |
+        @ECHO ON
+        SET "PATH=d:\deps\bin;%PATH%"
+        mkdir build && cd build || exit -1
+        cmake -Werror=dev -A x64 -DCMAKE_BUILD_TYPE=$(CMAKE_CONFIG) -DCMAKE_VERBOSE_MAKEFILE=1 $(CMAKE_FLAGS) -DNO_GUI=1 .. || exit -1
+        cmake --build . --config $(CMAKE_CONFIG) || exit -1
+      displayName: 'Compile fluidsynth'
+    - script: |
+        @ECHO ON
+        SET "PATH=d:\deps\bin;%PATH%"
+        cd build || exit -1
+        cmake --build . --config $(CMAKE_CONFIG) --target check || exit -1
+      displayName: 'Execute Unittests'
+
+- job: WindowsMinGW
+  strategy:
+    matrix:
+      x86:
+        CMAKE_FLAGS: -DCMAKE_C_FLAGS="-m32"
+        platform: Win32
+        gtk-bundle: $(gtk-bundle-x86)
+        libsndfile-url: $(libsndfile-url-x86)
+        mingw-url: $(mingw-url-x86)
+      x64:
+        CMAKE_FLAGS: 
+        platform: x64
+        gtk-bundle: $(gtk-bundle-x64)
+        libsndfile-url: $(libsndfile-url-x64)
+        mingw-url: $(mingw-url-x64)
+  pool:
+    vmImage: 'vs2017-win2016'
+  steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: specific
+        # https://dev.azure.com/tommbrt/_apis/projects?api-version=5.0
+        project: 'd3638885-de4a-4ce7-afe7-f237ae461c07'
+        pipeline: 1
+        artifactName: libinstpatch-$(platform)
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
+      displayName: 'Get libinstpatch'
+    - script: |
+        @ECHO ON
+        mkdir d:\deps || exit -1
+        cd d:\deps || exit -1
+        curl -LfsS -o gtk-bundle-dev.zip $(gtk-bundle) || exit -1
+        curl -LfsS -o libsndfile-dev.zip $(libsndfile-url) || exit -1
+        curl -LfsS -o mingw.zip $(mingw-url) || exit -1
+        7z x -aos -- gtk-bundle-dev.zip > NUL || exit -1
+        7z x -aos -- libsndfile-dev.zip > NUL || exit -1
+        7z x -aos -- mingw.zip > NUL || exit -1
+        rm *.zip
+        REM need to fix the naming of libsndfile otherwise the linker won't find it
+        mv lib\libsndfile-1.lib lib\sndfile.lib || exit -1
+        mv lib\libsndfile-1.def lib\sndfile.def || exit -1
+        cd mingw*\ && cp -rf * .. && cd .. && rm -rf mingw* || exit -1
+        cd $(Build.ArtifactStagingDirectory)\libinstpatch-$(platform) && cp -rf * d:\deps\ && mv -f * .. && cd .. &&  rmdir $(Build.ArtifactStagingDirectory)\libinstpatch-$(platform)\ || exit -1
+      displayName: 'Prerequisites'
+    - script: |
+        @ECHO ON
+        SET "PATH=d:\deps\bin;%PATH%"
+        REM remove that path from PATH to make sure sh.exe is not found (cmake will complain otherwise)
+        set PATH=%PATH:C:\Program Files\Git\bin;=%
+        set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
+        pkg-config --list-all
+        mkdir build && cd build || exit -1
+        cmake -Werror=dev -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=$(Build.ArtifactStagingDirectory) $(CMAKE_FLAGS) -Denable-readline=0 -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=1 -DNO_GUI=1 .. || exit -1
+        mingw32-make.exe all || exit -1
+      displayName: 'Compile fluidsynth'
+    - script: |
+        @ECHO ON
+        SET "PATH=d:\deps\bin;%PATH%"
+        REM remove that path from PATH to make sure sh.exe is not found (cmake will complain otherwise)
+        set PATH=%PATH:C:\Program Files\Git\bin;=%
+        set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
+        cd build || exit -1
+        mingw32-make.exe check || exit -1
+      displayName: 'Execute Unittests'
