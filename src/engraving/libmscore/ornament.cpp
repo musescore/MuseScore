@@ -249,6 +249,10 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
 
         if (!note) {
             note = mainNote->clone();
+            Tie* tie = note->tieFor();
+            if (tie) {
+                score()->undoRemoveElement((EngravingItem*)tie);
+            }
         } else {
             note->setTpc1(mainNote->tpc1());
             note->setTpc2(mainNote->tpc2());
