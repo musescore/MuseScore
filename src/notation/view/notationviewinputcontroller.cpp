@@ -112,8 +112,7 @@ void NotationViewInputController::onNotationChanged()
         m_view->hideElementPopup();
 
         if (AbstractElementPopupModel::supportsPopup(type)) {
-            m_view->showElementPopup(type, m_view->fromLogical(selectedItem->canvasPos()).toQPointF(),
-                                     selectedItem->canvasBoundingRect());
+            m_view->showElementPopup(type, selectedItem->canvasBoundingRect());
         }
     });
 }
@@ -1116,6 +1115,6 @@ void NotationViewInputController::togglePopupForItemIfSupports(const EngravingIt
     ElementType type = item->type();
 
     if (AbstractElementPopupModel::supportsPopup(type)) {
-        m_view->toggleElementPopup(type, m_view->fromLogical(item->canvasPos()).toQPointF(), item->canvasBoundingRect());
+        m_view->toggleElementPopup(type, item->canvasBoundingRect());
     }
 }

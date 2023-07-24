@@ -33,9 +33,8 @@ StyledPopupView {
     HarpPedalPopupModel {
         id: harpModel
 
-        onIsDiagramChanged: {
-            var rect = harpModel.itemRect
-            updatePosition(Qt.point(rect.x, rect.y), Qt.point(rect.width, rect.height))
+        onItemRectChanged: function(rect) {
+            updatePosition(rect)
         }
     }
 
@@ -48,36 +47,38 @@ StyledPopupView {
     property int navigationOrderEnd: isDiagramNavPanel.order
 
     contentWidth: menuItems.width
-
     contentHeight: menuItems.height
 
     margins: 0
 
     showArrow: false
 
-    function updatePosition(pos, size) {
+    function updatePosition(elementRect) {
+        root.x = elementRect.x + (elementRect.width - contentWidth) / 2
 
-        // Default: open above position of diagram
-        setOpensUpward(true)
-        root.x = (pos.x + size.x / 2) - contentWidth / 2
-        root.y = pos.y - size.y - contentHeight
+        const marginFromElement = 12
 
-        // For diagrams below stave, position above stave to not obscure it
-        if (harpModel.belowStave) {
-            root.y = harpModel.staffPos.y - size.y - contentHeight
-        }
+        // Above diagram
+        let yUp = Math.min(elementRect.y - contentHeight - marginFromElement,
+                           harpModel.staffPos.y - contentHeight - marginFromElement)
+        let yDown = Math.max(elementRect.y + elementRect.height + marginFromElement,
+                             harpModel.staffPos.y + harpModel.staffPos.height + marginFromElement)
 
         // not enough room on window to open above so open below stave
-        var globPos = mapToItem(ui.rootItem, Qt.point(root.x, root.y))
+        let opensUp = true
+        let globPos = root.parent.mapToItem(ui.rootItem, Qt.point(root.x, yUp))
         if (globPos.y < 0) {
-            setOpensUpward(false)
-            root.y = harpModel.staffPos.y + harpModel.staffPos.height + 10
+            opensUp = false;
+            globPos = root.parent.mapToItem(ui.rootItem, Qt.point(root.x, yDown))
         }
 
         // not enough room below stave to open so open above
-        if (root.y > ui.rootItem.height) {
-            root.y = pos.y - size.y
+        if (globPos + contentHeight > ui.rootItem.height) {
+            opensUp = true;
         }
+
+        setOpensUpward(opensUp)
+        root.y = opensUp ? yUp : yDown
     }
 
     function checkPedalState(string, state) {

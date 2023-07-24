@@ -40,7 +40,6 @@ class HarpPedalPopupModel : public AbstractElementPopupModel
     Q_PROPERTY(
         QVector<mu::notation::HarpPedalPopupModel::Position> pedalState READ pedalState WRITE setDiagramPedalState NOTIFY pedalStateChanged)
     Q_PROPERTY(QRectF staffPos READ staffPos CONSTANT)
-    Q_PROPERTY(bool belowStave READ belowStave CONSTANT)
 
 public:
     enum class Position {
@@ -57,8 +56,6 @@ public:
     bool isDiagram() const;
 
     QRectF staffPos() const;
-
-    bool belowStave() const;
 
     QVector<Position> pedalState() const;
 

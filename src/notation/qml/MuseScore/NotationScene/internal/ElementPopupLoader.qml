@@ -79,12 +79,12 @@ Item {
         }
     }
 
-    function show(elementType, viewPos, size) {
+    function show(elementType, elementRect) {
         if (isPopupOpened) {
             prv.closeOpenedPopup()
         }
         opened()
-        var popup = loader.createPopup(prv.componentByType(elementType), viewPos, size)
+        var popup = loader.createPopup(prv.componentByType(elementType), elementRect)
         prv.openPopup(popup)
     }
 
@@ -96,10 +96,10 @@ Item {
     Loader {
         id: loader
 
-        function createPopup(comp, pos, size) {
+        function createPopup(comp, elementRect) {
             loader.sourceComponent = comp
             loader.item.parent = container
-            loader.item.updatePosition(pos, size)
+            loader.item.updatePosition(elementRect)
 
             //! NOTE: All navigation panels in popups must be in the notation view section.
             //        This is necessary so that popups do not activate navigation in the new section,
