@@ -329,7 +329,8 @@ bool MeiImporter::addGraceNotesToChord(engraving::ChordRest* chordRest, bool isA
                 case (DurationType::V_32ND): noteType = NoteType::GRACE32_AFTER;
                     break;
                 default:
-                    LOGD() << "MeiImporter::addGraceNotesToChord unsupported grace duration type " << int(graceChord->durationType().type());
+                    LOGD() << "MeiImporter::addGraceNotesToChord unsupported grace duration type " <<
+                    int(graceChord->durationType().type());
                     break;
                 }
                 graceChord->setNoteType(noteType);
