@@ -26,7 +26,6 @@
 #include "fluid_ladspa.h"
 #include "fluid_synth.h"
 
-
 // If less than x voices, the thread overhead is larger than the gain,
 // so don't activate the thread(s).
 #define VOICES_PER_THREAD 8
