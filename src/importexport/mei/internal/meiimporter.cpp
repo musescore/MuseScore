@@ -74,7 +74,7 @@ bool MeiImporter::read(const io::path_t& path)
         path.toStdString().c_str(), (pugi::parse_comments | pugi::parse_default) & ~pugi::parse_eol);
 
     if (!result) {
-        LOGD("Cannot open file <%s>", qPrintable(path.toString()));
+        LOGD() << "Cannot open file <%s>", qPrintable(path.toString());
         return false;
     }
 

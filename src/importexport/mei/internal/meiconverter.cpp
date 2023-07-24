@@ -176,7 +176,7 @@ libmei::data_BARRENDITION Convert::barlineToMEI(const engraving::BarLineType bar
     case (engraving::BarLineType::HEAVY): return libmei::BARRENDITION_heavy;
     case (engraving::BarLineType::DOUBLE_HEAVY): return libmei::BARRENDITION_dblheavy;
     case (engraving::BarLineType::REVERSE_END):
-        LOGD("Unsupported engraving::BarLineType::REVERSE_END");
+        LOGD() << "Unsupported engraving::BarLineType::REVERSE_END";
         return libmei::BARRENDITION_dbl;
     default:
         return libmei::BARRENDITION_single;
@@ -500,7 +500,7 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
         meiClef.SetShape(libmei::CLEFSHAPE_GG);
         break;
     default:
-        LOGD("Unsupported clef shape");
+        LOGD() << "Unsupported clef shape";
         meiClef.SetShape(libmei::CLEFSHAPE_F);
     }
 
