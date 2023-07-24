@@ -1,0 +1,4 @@
+debian/tmp/usr/include/*
+debian/tmp/usr/lib/*/*.so
+debian/tmp/usr/lib/*/pkgconfig/*.pc
+debian/tmp/usr/lib/*/cmake/fluidsynth/*.cmake
