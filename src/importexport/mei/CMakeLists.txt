@@ -63,6 +63,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_externalsymbols.h
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_gestural.cpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_gestural.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_harmony.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_harmony.h
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_midi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_midi.h
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_shared.cpp
@@ -74,6 +76,8 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/cmn.cpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/cmn.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/harmony.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/harmony.h
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/midi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/midi.h
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/shared.cpp
