@@ -636,7 +636,9 @@ void Convert::dynamFromMEI(engraving::Dynamic* dynamic, const StringList& meiLin
         { 'n', engraving::SymId::dynamicNiente },
     };
 
-    assert(dynamic);
+    IF_ASSERT_FAILED(dynamic) {
+        return;
+    }
 
     warning = false;
 
@@ -746,7 +748,9 @@ libmei::Dynam Convert::dynamToMEI(const engraving::Dynamic* dynamic, StringList&
 
 void Convert::endingFromMEI(engraving::Volta* volta, const libmei::Ending& meiEnding, bool& warning)
 {
-    assert(volta);
+    IF_ASSERT_FAILED(volta) {
+        return;
+    }
 
     warning = false;
     // @type used for storing endings
@@ -931,7 +935,9 @@ std::pair<libmei::graceGrpLog_ATTACH, libmei::data_GRACE> Convert::gracegrpToMEI
 
 void Convert::harmFromMEI(engraving::Harmony* harmony, const StringList& meiLines, const libmei::Harm& meiHarm, bool& warning)
 {
-    assert(harmony);
+    IF_ASSERT_FAILED(harmony) {
+        return;
+    }
 
     warning = false;
 
@@ -1379,7 +1385,12 @@ Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const li
 std::pair<libmei::Note, libmei::Accid> Convert::pitchToMEI(const engraving::Note* note, const engraving::Accidental* accid,
                                                            const engraving::Interval& interval)
 {
-    assert(note);
+    libmei::Note meiNote;
+    libmei::Accid meiAccid;
+
+    IF_ASSERT_FAILED(note) {
+        return { meiNote, meiAccid };
+    }
 
     Convert::PitchStruct pitch;
     pitch.pitch = note->pitch();
@@ -1391,9 +1402,6 @@ std::pair<libmei::Note, libmei::Accid> Convert::pitchToMEI(const engraving::Note
         // Not needed because relying on accidType
         // pitch.accidRole = accid->role();
     }
-
-    libmei::Note meiNote;
-    libmei::Accid meiAccid;
 
     meiNote.SetPname(static_cast<libmei::data_PITCHNAME>(engraving::tpc2step(pitch.tpc2) + 1));
 
@@ -1453,9 +1461,12 @@ Convert::StaffStruct Convert::staffFromMEI(const libmei::StaffDef& meiStaffDef, 
 
 libmei::StaffDef Convert::staffToMEI(const engraving::Staff* staff)
 {
-    assert(staff);
-
     libmei::StaffDef meiStaffDef;
+
+    IF_ASSERT_FAILED(staff) {
+        return;
+    }
+
     // @n
     meiStaffDef.SetN(static_cast<int>(staff->idx() + 1));
     // @trans.*
@@ -1516,7 +1527,9 @@ std::pair<libmei::data_STEMDIRECTION, double> Convert::stemToMEI(const engraving
 
 void Convert::tempoFromMEI(engraving::TempoText* tempoText, const StringList& meiLines, const libmei::Tempo& meiTempo, bool& warning)
 {
-    assert(tempoText);
+    IF_ASSERT_FAILED(tempoText) {
+        return;
+    }
 
     warning = false;
 
@@ -1706,7 +1719,9 @@ void Convert::textToMEI(textWithSmufl& textBlocks, const String& text)
 
 void Convert::tupletFromMEI(engraving::Tuplet* tuplet, const libmei::Tuplet& meiTuplet, bool& warning)
 {
-    assert(tuplet);
+    IF_ASSERT_FAILED(tuplet) {
+        return;
+    }
 
     warning = false;
     if (!meiTuplet.HasNum() || !meiTuplet.HasNumbase()) {
