@@ -46,6 +46,7 @@ echo "echo 'Setup MuseScore build environment'" >> $ENV_FILE
 # These are installed by default on Travis CI, but not on Docker
 apt_packages_basic=(
   # Alphabetical order please!
+  desktop-file-utils
   file
   git
   pkg-config
