@@ -44,13 +44,14 @@ function download_appimage_release()
   local -r github_repo_slug="$1" binary_name="$2" tag="$3"
   local -r appimage="${binary_name}-x86_64.AppImage"
   download_github_release "${github_repo_slug}" "${tag}" "${appimage}"
-  extract_appimage "${appimage}" "${binary_name}"
+  # extract_appimage "${appimage}" "${binary_name}"
+  mv "${appimage}" "${binary_name}"
 }
 
 if [[ ! -d $BUILD_TOOLS/appimagetool ]]; then
   mkdir $BUILD_TOOLS/appimagetool
   cd $BUILD_TOOLS/appimagetool
-  download_appimage_release AppImage/AppImageKit appimagetool continuous
+  download_appimage_release AppImage/appimagetool appimagetool continuous
   cd $ORIGIN_DIR
 fi
 export PATH="$BUILD_TOOLS/appimagetool:$PATH"
