@@ -860,6 +860,18 @@ bool AbstractNotationPaintView::adjustCanvasPosition(const RectF& logicRect, boo
     return moveCanvasToPosition(pos);
 }
 
+bool AbstractNotationPaintView::adjustCanvasPositionSmoothPan(const RectF& cursorRect)
+{
+    RectF viewRect = viewport();
+    PointF pos(cursorRect.x() - (viewRect.width() / 2), viewRect.y());
+
+    if (!viewport().intersects(cursorRect)) {
+        pos.setY(cursorRect.y() - (viewRect.height() / 2));
+    }
+
+    return moveCanvasToPosition(pos);
+}
+
 bool AbstractNotationPaintView::ensureViewportInsideScrollableArea()
 {
     TRACEFUNC;
@@ -1284,11 +1296,16 @@ void AbstractNotationPaintView::movePlaybackCursor(midi::tick_t tick)
         return;
     }
 
-    if (configuration()->isAutomaticallyPanEnabled() && m_autoScrollEnabled) {
-        bool adjustVertically = needAdjustCanvasVerticallyWhilePlayback(newCursorRect);
-
-        if (adjustCanvasPosition(newCursorRect, adjustVertically)) {
+    if (configuration()->isAutomaticallyPanEnabled()) {
+        if (configuration()->isSmoothPanning() && adjustCanvasPositionSmoothPan(newCursorRect)) {
             return;
+        }
+
+        if (m_autoScrollEnabled) {
+            bool adjustVertically = needAdjustCanvasVerticallyWhilePlayback(newCursorRect);
+            if (adjustCanvasPosition(newCursorRect, adjustVertically)) {
+                return;
+            }
         }
     }
 
