@@ -626,7 +626,7 @@ libmei::data_DURATION Convert::durToMEI(const engraving::DurationType duration)
 void Convert::dynamFromMEI(engraving::Dynamic* dynamic, const StringList& meiLines, const libmei::Dynam& meiDynam, bool& warning)
 {
     // The letters in the MEI to be mapped to SMuFL symbols in the xmlText
-    static std::map<Char, engraving::SymId> dynMap = {
+    static const std::map<Char, engraving::SymId> DYN_MAP = {
         { 'p', engraving::SymId::dynamicPiano },
         { 'm', engraving::SymId::dynamicMezzo },
         { 'f', engraving::SymId::dynamicForte },
@@ -670,7 +670,7 @@ void Convert::dynamFromMEI(engraving::Dynamic* dynamic, const StringList& meiLin
             // If the word is only dynamic letters, convert them to SMuFL symbols one by one
             if (word.toStdString().find_first_not_of("fpmrszn") == std::string::npos) {
                 for (size_t i = 0; i < word.size(); i++) {
-                    line += u"<sym>" + String::fromAscii(engraving::SymNames::nameForSymId(dynMap.at(word.at(i))).ascii()) + u"</sym>";
+                    line += u"<sym>" + String::fromAscii(engraving::SymNames::nameForSymId(DYN_MAP.at(word.at(i))).ascii()) + u"</sym>";
                 }
             }
             // Otherwise keep it as is
@@ -689,7 +689,7 @@ void Convert::dynamFromMEI(engraving::Dynamic* dynamic, const StringList& meiLin
 libmei::Dynam Convert::dynamToMEI(const engraving::Dynamic* dynamic, StringList& meiLines)
 {
     // The SMuFL unicode points in the plainText to be mapped to letters in the MEI
-    static std::map<char16_t, Char> dynMap = {
+    static const std::map<char16_t, Char> DYN_MAP = {
         { u'\uE520', 'p' },
         { u'\uE521', 'm' },
         { u'\uE522', 'f' },
@@ -716,11 +716,11 @@ libmei::Dynam Convert::dynamToMEI(const engraving::Dynamic* dynamic, StringList&
     String plainText = dynamic->plainText();
     for (size_t i = 0; i < plainText.size(); i++) {
         char16_t c = plainText.at(i).unicode();
-        if (c < u'\uE000' || c > u'\uF8FF' || !dynMap.count(c)) {
+        if (c < u'\uE000' || c > u'\uF8FF' || !DYN_MAP.count(c)) {
             meiText += c;
             continue;
         }
-        meiText += dynMap.at(c);
+        meiText += DYN_MAP.at(c);
 
         /*
         char16_t c = plainText.at(i).unicode();
