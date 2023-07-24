@@ -1,0 +1,23 @@
+fluidsynth (1.1.8-1) unstable; urgency=low
+
+ - Update to version 1.1.8:
+  * fix build against glib < 2.30 (#202)
+  * fix dsound audio driver on windows (#215)
+  * fix a bug around `synth.audio-groups` setting, which caused improper multi-channel rendering (#225)
+  * cmake 3.0.2 is now required
+  * compilation with clang is now possible
+  * build fixes on OS/2 (thanks to @komh)
+
+ -- Tom Moebert <tom.mbrt@googlemail.com>  Fri, 13 Oct 2017 15:53:00 +0000
+
+fluidsynth (1.1.7-1) unstable; urgency=low
+
+  * OBS snapshot.
+
+ -- Rui Nuno Capela <rncbc@rncbc.org>  Tue,  5 Sep 2017 20:00:00 +0000
+
+fluidsynth (1.1.6-1) unstable; urgency=low
+
+  * OBS snapshot.
+
+ -- Rui Nuno Capela <rncbc@rncbc.org>  Sun, 19 Aug 2012 23:45:01 +0000

@@ -1,0 +1,155 @@
+name: FluidSynth Linux
+
+on:
+  pull_request:
+  push:
+    paths-ignore:
+      - '.azure/**'
+      - '.circleci/**'
+      - '.github/workflows/sonarcloud.yml'
+      - '.cirrus.yml'
+      - 'README.md'
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: RelWithDebInfo
+  INSTALL_LOCATION: ${{github.workspace}}/fluidsynth_install
+
+# Use a bash shell so we can use the same syntax for environment variable
+# access regardless of the host operating system
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        CC: [""]
+        CXX: [""]
+        CMAKE_FLAGS: ["-Denable-profiling=1","-Denable-floats=1 -Denable-profiling=1","-Denable-floats=1","-Denable-trap-on-fpe=1","-Denable-fpe-check=1","-Denable-ipv6=0","-Denable-network=0","-Denable-aufile=0","-DBUILD_SHARED_LIBS=0","-Denable-ubsan=1 -Denable-debug=1", "-Denable-debug=1 -DCMAKE_C_FLAGS_DEBUG=-fuse-ld=gold"]
+        include:
+          - CC: "clang-7"
+            CXX: "clang++-7"
+            CMAKE_FLAGS: ""
+          - CC: "clang-8"
+            CXX: "clang++-8"
+            CMAKE_FLAGS: ""
+          - CC: "clang-10"
+            CXX: "clang++-10"
+            CMAKE_FLAGS: ""
+          - CC: "clang-12"
+            CXX: "clang++-12"
+            CMAKE_FLAGS: ""
+          - CC: "clang-10"
+            CXX: "clang++-10"
+            CMAKE_FLAGS: "-DBUILD_SHARED_LIBS=0"
+# clang9 is covered by openSUSE Leap 15.2
+# clang11 is covered by openSUSE Leap 15.3
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Add apt-get repositories
+      run: sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+
+    - name: Update apt
+      run: sudo apt-get update -y
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get -yq --no-install-suggests --no-install-recommends install \
+          clang-7 \
+          clang-8 \
+          clang-10 \
+          clang-12 \
+          clang-tidy \
+          cmake \
+          cmake-data \
+          g++-7 \
+          g++-8 \
+          ladspa-sdk \
+          libasound2-dev \
+          libdbus-1-dev \
+          libglib2.0-dev \
+          libinstpatch-dev \
+          libjack-dev \
+          libpulse-dev \
+          libreadline-dev \
+          libsdl2-dev \
+          libsndfile-dev \
+          libsystemd-dev \
+          ninja-build \
+          libomp-dev \
+          portaudio19-dev
+
+    - name: Configure CMake
+      run: |
+        export CC=${{ matrix.CC }}
+        export CXX=${{ matrix.CXX }}
+        cmake -S . \
+          -B build \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
+          -DCMAKE_VERBOSE_MAKEFILE=1 \
+          -DCMAKE_POSITION_INDEPENDENT_CODE=1 \
+          -Werror=dev \
+          -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION \
+          -Denable-portaudio=1 \
+          -Denable-ladspa=1 \
+          -DNO_GUI=1 \
+          ${{ matrix.CMAKE_FLAGS }}
+
+    - name: Build
+      run: cmake --build build
+
+    - name: Test
+      run: cmake --build build --target check
+
+    - name: Demo
+      run: cmake --build build --target demo
+
+    - name: Install
+      run: cmake --install build && ls -la $INSTALL_LOCATION
+
+    - name: Consume from pkg-config
+      if: ${{ contains(matrix.CMAKE_FLAGS, 'BUILD_SHARED_LIBS=0') }}
+      run: |
+        set -e
+        cat << EOF > static-link-test.c
+        #include <fluidsynth.h>
+        int main() { fluid_synth_process(0,0,0,0,0,0); return 0; }
+        EOF
+        export PKG_CONFIG_PATH=$INSTALL_LOCATION/lib/pkgconfig
+        set -x
+        gcc -fPIE -o static-link-test static-link-test.c $(pkg-config --cflags --static fluidsynth) $(pkg-config --libs --static fluidsynth)
+        ./static-link-test
+        echo $?
+
+    - name: Consume from build
+      run: |
+        set -e
+        export CC=${{ matrix.CC }}
+        export CXX=${{ matrix.CXX }}
+        cmake -S test/cmake \
+          -B consume-build \
+          -G Ninja \
+          -DFluidSynth_DIR="${{github.workspace}}/build" \
+          -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        cmake --build consume-build
+
+    - name: Consume from install
+      run: |
+        set -e
+        export CC=${{ matrix.CC }}
+        export CXX=${{ matrix.CXX }}
+        cmake -S test/cmake -B consume-install \
+          -G Ninja \
+          -DFluidSynth_DIR="$INSTALL_LOCATION/lib/cmake/fluidsynth" \
+          -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        cmake --build consume-install
