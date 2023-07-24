@@ -31,6 +31,7 @@
 #include "iengravingfontsprovider.h"
 
 #include "thirdparty/libmei/cmn.h"
+#include "thirdparty/libmei/harmony.h"
 #include "thirdparty/libmei/shared.h"
 
 namespace mu::iex::mei {
@@ -53,6 +54,8 @@ enum TextCell {
 #define BEAM_ELEMENT_TYPE "mscore-beam"
 // The @type attribute prefix for volta repeat ending in <ending>
 #define ENDING_REPEAT_TYPE "mscore-ending-"
+// The @type attribute prefix for harmony type in <harm>
+#define HARMONY_TYPE "mscore-"
 // The @type attribute prefix for jump type in <repeatMark>
 #define JUMP_TYPE "mscore-jump-"
 // The @type attribute prefix for measure repeat cound in <measure>
@@ -126,6 +129,9 @@ public:
     static std::pair<bool, engraving::NoteType> gracegrpFromMEI(const libmei::graceGrpLog_ATTACH meiAttach,
                                                                 const libmei::data_GRACE meiGrace, bool& warning);
     static std::pair<libmei::graceGrpLog_ATTACH, libmei::data_GRACE> gracegrpToMEI(bool isAfter, engraving::NoteType noteType);
+
+    static void harmFromMEI(engraving::Harmony* harmony, const StringList& meiLines, const libmei::Harm& meiHarm, bool& warning);
+    static libmei::Harm harmToMEI(const engraving::Harmony* harmony, StringList& meiLines);
 
     static void jumpFromMEI(engraving::Jump* jump, const libmei::RepeatMark& meiRepeatMark, bool& warning);
     static libmei::RepeatMark jumpToMEI(const engraving::Jump* jump, String& text);

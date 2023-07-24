@@ -27,6 +27,7 @@
 #include "libmscore/dynamic.h"
 #include "libmscore/jump.h"
 #include "libmscore/fermata.h"
+#include "libmscore/harmony.h"
 #include "libmscore/marker.h"
 #include "libmscore/pitchspelling.h"
 #include "libmscore/utils.h"
@@ -921,6 +922,63 @@ std::pair<libmei::graceGrpLog_ATTACH, libmei::data_GRACE> Convert::gracegrpToMEI
     }
 
     return { meiAttach, meiGrace };
+}
+
+void Convert::harmFromMEI(engraving::Harmony* harmony, const StringList& meiLines, const libmei::Harm& meiHarm, bool& warning)
+{
+    assert(harmony);
+
+    warning = false;
+
+    // @place
+    /*
+    if (meiHarm.HasPlace()) {
+        harmony->setPlacement(meiHarm.GetPlace() == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
+        harmony->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
+    }
+    */
+
+    // @type
+    engraving::HarmonyType harmonyType = engraving::HarmonyType::STANDARD;
+    if (Convert::hasTypeValue(meiHarm.GetType(), std::string(HARMONY_TYPE) + "roman")) {
+        harmonyType = engraving::HarmonyType::ROMAN;
+    }
+
+    // text content
+    harmony->setHarmonyType(harmonyType);
+    harmony->setHarmony(meiLines.join(u"\n"));
+    harmony->setPlainText(harmony->harmonyName());
+
+    return;
+}
+
+libmei::Harm Convert::harmToMEI(const engraving::Harmony* harmony, StringList& meiLines)
+{
+    libmei::Harm meiHarm;
+
+    // @place
+    if (harmony->propertyFlags(engraving::Pid::PLACEMENT) == engraving::PropertyFlags::UNSTYLED) {
+        //meiHarm.SetPlace(Convert::placeToMEI(harmony->placement()));
+    }
+
+    // @type
+    if (harmony->harmonyType() != engraving::HarmonyType::STANDARD) {
+        std::string harmonyType = HARMONY_TYPE;
+
+        switch (harmony->harmonyType()) {
+        case (engraving::HarmonyType::ROMAN):
+            harmonyType = std::string(HARMONY_TYPE) + "roman";
+            break;
+        default: break;
+        }
+        meiHarm.SetType(harmonyType);
+    }
+
+    // content
+    String plainText = harmony->plainText();
+    meiLines = plainText.split(u"\n");
+
+    return meiHarm;
 }
 
 void Convert::jumpFromMEI(engraving::Jump* jump, const libmei::RepeatMark& meiRepeatMark, bool& warning)
