@@ -1464,7 +1464,7 @@ libmei::StaffDef Convert::staffToMEI(const engraving::Staff* staff)
     libmei::StaffDef meiStaffDef;
 
     IF_ASSERT_FAILED(staff) {
-        return;
+        return meiStaffDef;
     }
 
     // @n
