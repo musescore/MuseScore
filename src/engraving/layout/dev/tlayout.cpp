@@ -363,124 +363,96 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     }
 }
 
-void TLayout::layout(Accidental* item, LayoutContext& ctx)
+static SymId accidentalSingleSym(const Accidental* item)
 {
-    item->clearElements();
-
-    // TODO: remove Accidental in layout
-    // don't show accidentals for tab or slash notation
-    if (item->onTabStaff() || (item->note() && item->note()->fixed())) {
-        item->setbbox(RectF());
-        return;
-    }
-
     // if the accidental is standard (doubleflat, flat, natural, sharp or double sharp)
     // and it has either no bracket or parentheses, then we have glyphs straight from smufl.
-    if (item->bracket() == AccidentalBracket::NONE
-        || (item->bracket() == AccidentalBracket::PARENTHESIS
-            && (item->accidentalType() == AccidentalType::FLAT
-                || item->accidentalType() == AccidentalType::NATURAL
-                || item->accidentalType() == AccidentalType::SHARP
-                || item->accidentalType() == AccidentalType::SHARP2
-                || item->accidentalType() == AccidentalType::FLAT2))) {
-        layoutSingleGlyphAccidental(item, ctx);
-    } else {
-        layoutMultiGlyphAccidental(item, ctx);
-    }
-}
 
-void TLayout::layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx)
-{
-    RectF r;
-
-    SymId s = item->symId();
     if (item->bracket() == AccidentalBracket::PARENTHESIS && !item->parentNoteHasParentheses()) {
         switch (item->accidentalType()) {
-        case AccidentalType::FLAT2:
-            s = SymId::accidentalDoubleFlatParens;
-            break;
-        case AccidentalType::FLAT:
-            s = SymId::accidentalFlatParens;
-            break;
-        case AccidentalType::NATURAL:
-            s = SymId::accidentalNaturalParens;
-            break;
-        case AccidentalType::SHARP:
-            s = SymId::accidentalSharpParens;
-            break;
-        case AccidentalType::SHARP2:
-            s = SymId::accidentalDoubleSharpParens;
-            break;
+        case AccidentalType::FLAT:      return SymId::accidentalFlatParens;
+        case AccidentalType::FLAT2:     return SymId::accidentalDoubleFlatParens;
+        case AccidentalType::NATURAL:   return SymId::accidentalNaturalParens;
+        case AccidentalType::SHARP:     return SymId::accidentalSharpParens;
+        case AccidentalType::SHARP2:    return SymId::accidentalDoubleSharpParens;
         default:
             break;
         }
-        if (!ctx.engravingFont()->isValid(s)) {
-            layoutMultiGlyphAccidental(item, ctx);
-            return;
-        }
     }
-
-    SymElement e(s, 0.0, 0.0);
-    item->addElement(e);
-    r.unite(item->symBbox(s));
-    item->setbbox(r);
+    return SymId::noSym;
 }
 
-void TLayout::layoutMultiGlyphAccidental(Accidental* item, LayoutContext& ctx)
+static std::pair<SymId, SymId> accidentalBracketSyms(AccidentalBracket type)
 {
-    double margin = ctx.conf().styleMM(Sid::bracketedAccidentalPadding);
-    RectF r;
-    double x = 0.0;
+    switch (type) {
+    case AccidentalBracket::PARENTHESIS: return { SymId::accidentalParensLeft, SymId::accidentalParensRight };
+    case AccidentalBracket::BRACKET: return { SymId::accidentalBracketLeft, SymId::accidentalBracketRight };
+    case AccidentalBracket::BRACE: return { SymId::accidentalCombiningOpenCurlyBrace, SymId::accidentalCombiningCloseCurlyBrace };
+    case AccidentalBracket::NONE: return { SymId::noSym, SymId::noSym };
+    }
+    return { SymId::noSym, SymId::noSym };
+}
 
-    // should always be true
-    if (item->bracket() != AccidentalBracket::NONE && !item->parentNoteHasParentheses()) {
-        SymId id = SymId::noSym;
-        switch (item->bracket()) {
-        case AccidentalBracket::PARENTHESIS:
-            id = SymId::accidentalParensLeft;
-            break;
-        case AccidentalBracket::BRACKET:
-            id = SymId::accidentalBracketLeft;
-            break;
-        case AccidentalBracket::BRACE:
-            id = SymId::accidentalCombiningOpenCurlyBrace;
-            break;
-        case AccidentalBracket::NONE: // can't happen
-            break;
-        }
-        SymElement se(id, 0.0, item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
-        item->addElement(se);
-        r.unite(item->symBbox(id));
-        x += item->symAdvance(id) + margin;
+static void layoutAccidental(const Accidental* item, const LayoutContext& ctx, Accidental::LayoutData& data)
+{
+    // TODO: remove Accidental in layout
+    // don't show accidentals for tab or slash notation
+    if (item->onTabStaff() || (item->note() && item->note()->fixed())) {
+        return;
     }
 
-    SymId s = item->symId();
-    SymElement e(s, x, 0.0);
-    item->addElement(e);
-    r.unite(item->symBbox(s).translated(x, 0.0));
+    // Single?
+    SymId singleSym = accidentalSingleSym(item);
+    if (singleSym != SymId::noSym && ctx.engravingFont()->isValid(singleSym)) {
+        Accidental::LayoutData::Sym s(singleSym, 0.0, 0.0);
+        data.syms.push_back(s);
 
-    // should always be true
-    if (item->bracket() != AccidentalBracket::NONE && !item->parentNoteHasParentheses()) {
-        x += item->symAdvance(s) + margin;
-        SymId id = SymId::noSym;
-        switch (item->bracket()) {
-        case AccidentalBracket::PARENTHESIS:
-            id = SymId::accidentalParensRight;
-            break;
-        case AccidentalBracket::BRACKET:
-            id = SymId::accidentalBracketRight;
-            break;
-        case AccidentalBracket::BRACE:
-            id = SymId::accidentalCombiningCloseCurlyBrace;
-            break;
-        case AccidentalBracket::NONE: // can't happen
-            break;
-        }
-        SymElement se(id, x, item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
-        item->addElement(se);
-        r.unite(item->symBbox(id).translated(x, 0.0));
+        data.bbox.unite(item->symBbox(singleSym));
     }
-    item->setbbox(r);
+    // Multi
+    else {
+        double margin = ctx.conf().styleMM(Sid::bracketedAccidentalPadding);
+        double x = 0.0;
+
+        std::pair<SymId, SymId> bracketSyms;
+        bool isNeedBracket = item->bracket() != AccidentalBracket::NONE && !item->parentNoteHasParentheses();
+        if (isNeedBracket) {
+            bracketSyms = accidentalBracketSyms(item->bracket());
+        }
+
+        // Left
+        if (bracketSyms.first != SymId::noSym) {
+            Accidental::LayoutData::Sym ls(bracketSyms.first, 0.0,
+                                           item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
+            data.syms.push_back(ls);
+            data.bbox.unite(item->symBbox(bracketSyms.first));
+
+            x += item->symAdvance(bracketSyms.first) + margin;
+        }
+
+        // Main
+        SymId mainSym = item->symId();
+        Accidental::LayoutData::Sym ms(mainSym, x, 0.0);
+        data.syms.push_back(ms);
+        data.bbox.unite(item->symBbox(mainSym).translated(x, 0.0));
+
+        // Right
+        if (bracketSyms.second != SymId::noSym) {
+            x += item->symAdvance(mainSym) + margin;
+
+            Accidental::LayoutData::Sym rs(bracketSyms.second, x,
+                                           item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
+            data.syms.push_back(rs);
+            data.bbox.unite(item->symBbox(bracketSyms.second).translated(x, 0.0));
+        }
+    }
+}
+
+void TLayout::layout(Accidental* item, LayoutContext& ctx)
+{
+    Accidental::LayoutData data;
+    layoutAccidental(item, ctx, data);
+    item->setLayoutData(data);
 }
 
 void TLayout::layout(ActionIcon* item, LayoutContext&)

@@ -264,14 +264,14 @@ compat::DummyElement* PaletteLayout::Context::dummyParent() const
 
 void PaletteLayout::layout(Accidental* item, const Context&)
 {
-    SymId s = item->symId();
-    if (item->syms().empty()) {
-        SymElement e(s, 0.0, 0.0);
-        item->addElement(e);
+    if (!item->layoutData().isValid()) {
+        Accidental::LayoutData data;
+        SymId symId = item->symId();
+        Accidental::LayoutData::Sym s(symId, 0.0, 0.0);
+        data.syms.push_back(s);
+        data.bbox = item->symBbox(symId);
+        item->setLayoutData(data);
     }
-
-    RectF bbox = item->symBbox(s);
-    item->setbbox(bbox);
 }
 
 void PaletteLayout::layout(ActionIcon* item, const Context&)

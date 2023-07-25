@@ -51,18 +51,6 @@ enum class AccidentalBracket : char {
 };
 
 //---------------------------------------------------------
-//   SymElement
-//---------------------------------------------------------
-
-struct SymElement {
-    SymId sym;
-    double x;
-    double y;
-    SymElement(SymId _sym, double _x, double _y)
-        : sym(_sym), x(_x), y(_y) {}
-};
-
-//---------------------------------------------------------
 //   @@ Accidental
 //   @P role        enum  (Accidental.AUTO, .USER) (read only)
 //   @P isSmall     bool
@@ -100,9 +88,6 @@ public:
     void setSmall(bool val) { m_isSmall = val; }
 
     SymId symId() const;
-    const std::vector<SymElement>& syms() const { return m_syms; }
-    void clearElements() { m_syms.clear(); }
-    void addElement(const SymElement& e) { m_syms.push_back(e); }
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
@@ -129,17 +114,42 @@ public:
 
     void computeMag();
 
+    struct LayoutData {
+        struct Sym {
+            SymId sym;
+            double x;
+            double y;
+            Sym(SymId _sym, double _x, double _y)
+                : sym(_sym), x(_x), y(_y) {}
+        };
+
+        std::vector<Sym> syms;
+        RectF bbox;
+
+        bool isValid() const { return !syms.empty(); }
+        void invalidate() { syms.clear(); }
+    };
+
+    const LayoutData& layoutData() const { return m_layoutData; }
+    void setLayoutData(const LayoutData& data);
+
+    //! -- Old interface --
+    void clearElements() { m_layoutData.syms.clear(); }
+    void addElement(const LayoutData::Sym& s) { m_layoutData.syms.push_back(s); }
+    //! -----------
+
 private:
 
     friend class Factory;
 
     Accidental(EngravingItem* parent);
 
-    std::vector<SymElement> m_syms;
     AccidentalType m_accidentalType = AccidentalType::NONE;
     AccidentalBracket m_bracket = AccidentalBracket::NONE;
     AccidentalRole m_role = AccidentalRole::AUTO;
     bool m_isSmall = false;
+
+    LayoutData m_layoutData;
 };
 
 extern AccidentalVal sym2accidentalVal(SymId id);

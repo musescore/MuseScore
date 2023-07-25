@@ -339,9 +339,6 @@ private:
 
     friend class SlurTieLayout;
 
-    static void layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx);
-    static void layoutMultiGlyphAccidental(Accidental* item, LayoutContext& ctx);
-
     static double layoutWidth(const BarLine* item, LayoutContext& ctx);
 
     static void adjustLayoutWithoutImages(VBox* item, LayoutContext& ctx);

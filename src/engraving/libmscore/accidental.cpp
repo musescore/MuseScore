@@ -368,9 +368,11 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
     return AccidentalType::NONE;
 }
 
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
+void Accidental::setLayoutData(const LayoutData& data)
+{
+    m_layoutData = data;
+    setbbox(data.bbox);
+}
 
 void Accidental::draw(mu::draw::Painter* painter) const
 {
@@ -381,7 +383,7 @@ void Accidental::draw(mu::draw::Painter* painter) const
     }
 
     painter->setPen(curColor());
-    for (const SymElement& e : m_syms) {
+    for (const LayoutData::Sym& e : m_layoutData.syms) {
         score()->engravingFont()->draw(e.sym, painter, magS(), PointF(e.x, e.y));
     }
 }
