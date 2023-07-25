@@ -114,6 +114,7 @@ private:
     bool writeHarm(const engraving::Harmony* harmony, const std::string& startid);
     bool writeRepeatMark(const engraving::Jump* jump, const engraving::Measure* measure);
     bool writeRepeatMark(const engraving::Marker* marker, const engraving::Measure* measure);
+    bool writeSlur(const engraving::Slur* slur, const std::string& startid);
     bool writeTempo(const engraving::TempoText* tempoText, const std::string& startid);
 
     /**
@@ -136,6 +137,7 @@ private:
     std::pair<libmei::xsdPositiveInteger_List, double> findTstampFor(const engraving::EngravingItem* item);
     bool isNode(pugi::xml_node node, const String& name);
     pugi::xml_node getLastChordRest(pugi::xml_node node);
+    void addEndidToControlEvents();
 
     /**
      * Methods for generating @xml:ids
@@ -175,7 +177,9 @@ private:
     bool m_hasSections;
 
     std::map<const engraving::EngravingItem*, std::string> m_startingControlEventMap;
+    std::map<const engraving::EngravingItem*, std::string> m_endingControlEventMap;
     std::map<const engraving::EngravingItem*, std::pair<libmei::xsdPositiveInteger_List, double> > m_tstampControlEventMap;
+    std::map<const engraving::EngravingItem*, pugi::xml_node> m_openControlEventMap;
 
     std::list<MeiExporter::RepeatMark> m_repeatMarks;
 
