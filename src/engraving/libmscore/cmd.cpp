@@ -658,8 +658,14 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
 {
     // Prepare note selection in case there are not selected tied notes and sort them
     std::vector<Note*> tmpnl;
-    bool shouldSelectFirstNote = nl.size() == 1 && nl[0]->tieFor();
-    for (auto n : nl) {
+    std::vector<Note*> _nl = nl;
+    bool shouldSelectFirstNote = _nl.size() == 1 && _nl[0]->tieFor();
+
+    std::sort(_nl.begin(), _nl.end(), [](const Note* a, const Note* b) -> bool {
+        return a->tick() < b->tick();
+    });
+
+    for (auto n : _nl) {
         if (std::find(tmpnl.begin(), tmpnl.end(), n) != tmpnl.end()) {
             continue;
         }
@@ -754,6 +760,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
             tie->setTick2(note->tick());
             note->setTieBack(tie);
             undoAddElement(tie);
+            prevTied = nullptr;
         }
         if (on->tieFor()) {
             Tie* tie = Factory::createTie(this->dummy());
