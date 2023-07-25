@@ -42,7 +42,6 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace mu::engraving {
 const Spatium Ambitus::LINEWIDTH_DEFAULT = Spatium(0.12);
 //---------------------------------------------------------
 //   Ambitus
@@ -81,10 +80,6 @@ Ambitus::Ambitus(const Ambitus& a)
     m_topTpc = a.m_topTpc;
     m_bottomPitch = a.m_bottomPitch;
     m_bottomTpc = a.m_bottomTpc;
-
-    m_topPos = a.m_topPos;
-    m_bottomPos = a.m_bottomPos;
-    m_line = a.m_line;
 }
 
 Ambitus::~Ambitus()
@@ -110,7 +105,7 @@ void Ambitus::initFrom(Ambitus* a)
 {
     m_noteHeadGroup   = a->m_noteHeadGroup;
     m_noteHeadType    = a->m_noteHeadType;
-    m_direction             = a->m_direction;
+    m_direction       = a->m_direction;
     m_hasLine         = a->m_hasLine;
     m_lineWidth       = a->m_lineWidth;
     m_topPitch        = a->m_topPitch;
@@ -162,15 +157,15 @@ void Ambitus::setTrack(track_idx_t t)
 void Ambitus::setTopPitch(int val, bool applyLogic)
 {
     if (!applyLogic) {
-        m_topPitch   = val;
+        m_topPitch = val;
         return;
     }
 
-    int deltaPitch    = val - topPitch();
+    int deltaPitch = val - topPitch();
     // if deltaPitch is not an integer number of octaves, adjust tpc
     // (to avoid 'wild' tpc changes with octave changes)
     if (deltaPitch % PITCH_DELTA_OCTAVE != 0) {
-        int newTpc        = topTpc() + deltaPitch * TPC_DELTA_SEMITONE;
+        int newTpc = topTpc() + deltaPitch * TPC_DELTA_SEMITONE;
         // reduce newTpc into acceptable range via enharmonic
         while (newTpc < Tpc::TPC_MIN) {
             newTpc += TPC_DELTA_ENHARMONIC;
@@ -178,9 +173,9 @@ void Ambitus::setTopPitch(int val, bool applyLogic)
         while (newTpc > Tpc::TPC_MAX) {
             newTpc -= TPC_DELTA_ENHARMONIC;
         }
-        m_topTpc     = newTpc;
+        m_topTpc = newTpc;
     }
-    m_topPitch   = val;
+    m_topPitch = val;
     normalize();
 }
 
@@ -191,11 +186,11 @@ void Ambitus::setBottomPitch(int val, bool applyLogic)
         return;
     }
 
-    int deltaPitch    = val - bottomPitch();
+    int deltaPitch = val - bottomPitch();
     // if deltaPitch is not an integer number of octaves, adjust tpc
     // (to avoid 'wild' tpc changes with octave changes)
     if (deltaPitch % PITCH_DELTA_OCTAVE != 0) {
-        int newTpc        = bottomTpc() + deltaPitch * TPC_DELTA_SEMITONE;
+        int newTpc = bottomTpc() + deltaPitch * TPC_DELTA_SEMITONE;
         // reduce newTpc into acceptable range via enharmonic
         while (newTpc < Tpc::TPC_MIN) {
             newTpc += TPC_DELTA_ENHARMONIC;
@@ -203,9 +198,9 @@ void Ambitus::setBottomPitch(int val, bool applyLogic)
         while (newTpc > Tpc::TPC_MAX) {
             newTpc -= TPC_DELTA_ENHARMONIC;
         }
-        m_bottomTpc  = newTpc;
+        m_bottomTpc = newTpc;
     }
-    m_bottomPitch= val;
+    m_bottomPitch = val;
     normalize();
 }
 
@@ -223,14 +218,14 @@ void Ambitus::setTopTpc(int val, bool applyLogic)
         return;
     }
 
-    int octave        = topPitch() / PITCH_DELTA_OCTAVE;
-    int deltaTpc      = val - topTpc();
+    int octave = topPitch() / PITCH_DELTA_OCTAVE;
+    int deltaTpc = val - topTpc();
     // get new pitch according to tpc change
-    int newPitch      = topPitch() + deltaTpc * TPC_DELTA_SEMITONE;
+    int newPitch = topPitch() + deltaTpc * TPC_DELTA_SEMITONE;
     // reduce pitch to the same octave as original pitch
-    newPitch          = (octave * PITCH_DELTA_OCTAVE) + (newPitch % PITCH_DELTA_OCTAVE);
-    m_topPitch   = newPitch;
-    m_topTpc     = val;
+    newPitch = (octave * PITCH_DELTA_OCTAVE) + (newPitch % PITCH_DELTA_OCTAVE);
+    m_topPitch = newPitch;
+    m_topTpc = val;
     normalize();
 }
 
@@ -241,14 +236,14 @@ void Ambitus::setBottomTpc(int val, bool applyLogic)
         return;
     }
 
-    int octave        = bottomPitch() / PITCH_DELTA_OCTAVE;
-    int deltaTpc      = val - bottomTpc();
+    int octave = bottomPitch() / PITCH_DELTA_OCTAVE;
+    int deltaTpc = val - bottomTpc();
     // get new pitch according to tpc change
-    int newPitch      = bottomPitch() + deltaTpc * TPC_DELTA_SEMITONE;
+    int newPitch = bottomPitch() + deltaTpc * TPC_DELTA_SEMITONE;
     // reduce pitch to the same octave as original pitch
-    newPitch          = (octave * PITCH_DELTA_OCTAVE) + (newPitch % PITCH_DELTA_OCTAVE);
-    m_bottomPitch= newPitch;
-    m_bottomTpc  = val;
+    newPitch = (octave * PITCH_DELTA_OCTAVE) + (newPitch % PITCH_DELTA_OCTAVE);
+    m_bottomPitch = newPitch;
+    m_bottomTpc = val;
     normalize();
 }
 
@@ -263,36 +258,36 @@ void Ambitus::draw(mu::draw::Painter* painter) const
     double _spatium = spatium();
     double lw = lineWidth().val() * _spatium;
     painter->setPen(Pen(curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
-    drawSymbol(noteHead(), painter, m_topPos);
-    drawSymbol(noteHead(), painter, m_bottomPos);
+    drawSymbol(noteHead(), painter, m_layoutData.topPos);
+    drawSymbol(noteHead(), painter, m_layoutData.bottomPos);
     if (m_hasLine) {
-        painter->drawLine(m_line);
+        painter->drawLine(m_layoutData.line);
     }
 
     // draw ledger lines (if not in a palette)
     if (segment() && track() != mu::nidx) {
-        Fraction tick  = segment()->tick();
-        Staff* staff   = score()->staff(staffIdx());
+        Fraction tick = segment()->tick();
+        Staff* staff = score()->staff(staffIdx());
         double lineDist = staff->lineDistance(tick);
         int numOfLines = staff->lines(tick);
-        double step     = lineDist * _spatium;
-        double stepTolerance    = step * 0.1;
+        double step = lineDist * _spatium;
+        double stepTolerance = step * 0.1;
         double ledgerLineLength = style().styleS(Sid::ledgerLineLength).val() * _spatium;
-        double ledgerLineWidth  = style().styleS(Sid::ledgerLineWidth).val() * _spatium;
+        double ledgerLineWidth = style().styleS(Sid::ledgerLineWidth).val() * _spatium;
         painter->setPen(Pen(curColor(), ledgerLineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
 
-        if (m_topPos.y() - stepTolerance <= -step) {
-            double xMin = m_topPos.x() - ledgerLineLength;
-            double xMax = m_topPos.x() + headWidth() + ledgerLineLength;
-            for (double y = -step; y >= m_topPos.y() - stepTolerance; y -= step) {
+        if (m_layoutData.topPos.y() - stepTolerance <= -step) {
+            double xMin = m_layoutData.topPos.x() - ledgerLineLength;
+            double xMax = m_layoutData.topPos.x() + headWidth() + ledgerLineLength;
+            for (double y = -step; y >= m_layoutData.topPos.y() - stepTolerance; y -= step) {
                 painter->drawLine(mu::PointF(xMin, y), mu::PointF(xMax, y));
             }
         }
 
-        if (m_bottomPos.y() + stepTolerance >= numOfLines * step) {
-            double xMin = m_bottomPos.x() - ledgerLineLength;
-            double xMax = m_bottomPos.x() + headWidth() + ledgerLineLength;
-            for (double y = numOfLines * step; y <= m_bottomPos.y() + stepTolerance; y += step) {
+        if (m_layoutData.bottomPos.y() + stepTolerance >= numOfLines * step) {
+            double xMin = m_layoutData.bottomPos.x() - ledgerLineLength;
+            double xMax = m_layoutData.bottomPos.x() + headWidth() + ledgerLineLength;
+            for (double y = numOfLines * step; y <= m_layoutData.bottomPos.y() + stepTolerance; y += step) {
                 painter->drawLine(mu::PointF(xMin, y), mu::PointF(xMax, y));
             }
         }
@@ -371,18 +366,14 @@ mu::PointF Ambitus::pagePos() const
 //---------------------------------------------------------
 //   normalize
 //
-//    makes sure _topPitch is not < _bottomPitch
+//    makes sure topPitch is not < bottomPitch
 //---------------------------------------------------------
 
 void Ambitus::normalize()
 {
     if (m_topPitch < m_bottomPitch) {
-        int temp    = m_topPitch;
-        m_topPitch   = m_bottomPitch;
-        m_bottomPitch= temp;
-        temp        = m_topTpc;
-        m_topTpc     = m_bottomTpc;
-        m_bottomTpc  = temp;
+        std::swap(m_topPitch, m_bottomPitch);
+        std::swap(m_topTpc, m_bottomTpc);
     }
 }
 
@@ -612,4 +603,37 @@ String Ambitus::accessibleInfo() const
            .arg(tpc2name(topTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false) + String::number(topOctave()),
                 tpc2name(bottomTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false) + String::number(bottomOctave()));
 }
+
+AccidentalType Ambitus::accidentalType(int tpc, Key key)
+{
+    AccidentalType accidType = AccidentalType::NONE;
+    // if (13 <= (tpc - key) <= 19) there is no accidental)
+    if (tpc - int(key) >= 13 && tpc - int(key) <= 19) {
+        accidType = AccidentalType::NONE;
+    } else {
+        AccidentalVal accidVal = tpc2alter(tpc);
+        accidType = Accidental::value2subtype(accidVal);
+        if (accidType == AccidentalType::NONE) {
+            accidType = AccidentalType::NATURAL;
+        }
+    }
+
+    return accidType;
+}
+
+//! TODO Seems to need to be moved to utilities
+int Ambitus::staffLine(int tpc, int pitch, ClefType clf)
+{
+    int line = absStep(tpc, pitch);
+    line = relStep(line, clf);
+    return line;
+}
+
+void Ambitus::setLayoutData(const LayoutData& data)
+{
+    m_layoutData = data;
+    setbbox(data.bbox);
+
+    m_topAccidental->setLayoutData(data.topAcc);
+    m_bottomAccidental->setLayoutData(data.bottomAcc);
 }

@@ -125,6 +125,7 @@ public:
 
         std::vector<Sym> syms;
         RectF bbox;
+        PointF pos;
 
         bool isValid() const { return !syms.empty(); }
     };

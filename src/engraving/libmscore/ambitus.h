@@ -28,10 +28,12 @@
 #include "pitchspelling.h"
 
 #include "types/types.h"
+#include "libmscore/types.h"
 #include "types/dimension.h"
 
+#include "accidental.h"
+
 namespace mu::engraving {
-class Accidental;
 class Factory;
 
 //---------------------------------------------------------
@@ -76,19 +78,6 @@ public:
     int topTpc() const { return m_topTpc; }
     int bottomTpc() const { return m_bottomTpc; }
 
-    PointF topPos() const { return m_topPos; }
-    void setTopPos(const PointF& p) { m_topPos = p; }
-    void setTopPosX(double p) { m_topPos.setX(p); }
-    void setTopPosY(double p) { m_topPos.setY(p); }
-
-    PointF bottomPos() const { return m_bottomPos; }
-    void setBottomPos(const PointF& p) { m_bottomPos = p; }
-    void setBottomPosX(double p) { m_bottomPos.setX(p); }
-    void setBottomPosY(double p) { m_bottomPos.setY(p); }
-
-    LineF line() const { return m_line; }
-    void setLine(const LineF& l) { m_line = l; }
-
     Accidental* topAccidental() const { return m_topAccidental; }
     Accidental* bottomAccidental() const { return m_bottomAccidental; }
 
@@ -126,6 +115,38 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
 
+    static AccidentalType accidentalType(int tpc, Key key);
+    static int staffLine(int tpc, int pitch, ClefType clf);
+
+    struct LayoutData {
+        Accidental::LayoutData topAcc;
+        Accidental::LayoutData bottomAcc;
+
+        PointF topPos;          // position of top note symbol
+        PointF bottomPos;       // position of bottom note symbol
+        LineF line;             // the drawn line
+
+        RectF bbox;
+    };
+
+    const LayoutData& layoutData() const { return m_layoutData; }
+    void setLayoutData(const LayoutData& data);
+
+    //! -- Old interface --
+    PointF topPos() const { return m_layoutData.topPos; }
+    void setTopPos(const PointF& p) { m_layoutData.topPos = p; }
+    void setTopPosX(double p) { m_layoutData.topPos.setX(p); }
+    void setTopPosY(double p) { m_layoutData.topPos.setY(p); }
+
+    PointF bottomPos() const { return m_layoutData.bottomPos; }
+    void setBottomPos(const PointF& p) { m_layoutData.bottomPos = p; }
+    void setBottomPosX(double p) { m_layoutData.bottomPos.setX(p); }
+    void setBottomPosY(double p) { m_layoutData.bottomPos.setY(p); }
+
+    LineF line() const { return m_layoutData.line; }
+    void setLine(const LineF& l) { m_layoutData.line = l; }
+    //! -------------------
+
 private:
 
     friend class Factory;
@@ -154,9 +175,7 @@ private:
     int m_topTpc = Tpc::TPC_INVALID, m_bottomTpc = Tpc::TPC_INVALID;
 
     // internally managed, to optimize layout / drawing
-    PointF m_topPos;       // position of top note symbol
-    PointF m_bottomPos;    // position of bottom note symbol
-    LineF m_line;          // the drawn line
+    LayoutData m_layoutData;
 };
 } // namespace mu::engraving
 
