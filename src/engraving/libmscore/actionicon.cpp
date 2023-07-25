@@ -22,16 +22,14 @@
 
 #include "actionicon.h"
 
-#include "draw/fontmetrics.h"
-
 #include "property.h"
 
 #include "log.h"
 
 using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 
-namespace mu::engraving {
 ActionIcon::ActionIcon(EngravingItem* score)
     : EngravingItem(ElementType::ACTION_ICON, score)
 {
@@ -63,6 +61,7 @@ void ActionIcon::setAction(const std::string& actionCode, char16_t icon)
 {
     m_actionCode = actionCode;
     m_icon = icon;
+    m_layoutData.invalidate();
 }
 
 double ActionIcon::fontSize() const
@@ -105,4 +104,9 @@ bool ActionIcon::setProperty(Pid pid, const PropertyValue& v)
     }
     return true;
 }
+
+void ActionIcon::setLayoutData(const LayoutData& data)
+{
+    m_layoutData = data;
+    setbbox(data.bbox);
 }

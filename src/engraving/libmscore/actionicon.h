@@ -90,11 +90,23 @@ public:
 
     static constexpr double DEFAULT_FONT_SIZE = 16.0;
 
+    struct LayoutData {
+        RectF bbox;
+
+        bool isValid() const { return bbox.isValid(); }
+        void invalidate() { bbox = RectF(); }
+    };
+
+    const LayoutData& layoutData() const { return m_layoutData; }
+    void setLayoutData(const LayoutData& data);
+
 private:
-    ActionIconType m_actionType { ActionIconType::UNDEFINED };
+    ActionIconType m_actionType = ActionIconType::UNDEFINED;
     std::string m_actionCode;
     char16_t m_icon = 0;
     mu::draw::Font m_iconFont;
+
+    LayoutData m_layoutData;
 };
 }
 
