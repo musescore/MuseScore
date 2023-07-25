@@ -267,7 +267,7 @@ void TLayout::layoutSingleGlyphAccidental(Accidental* item, LayoutContext& ctx)
         }
     }
 
-    SymElement e(s, 0.0, 0.0);
+    Accidental::LayoutData::Sym e(s, 0.0, 0.0);
     item->addElement(e);
     r.unite(item->symBbox(s));
     item->setbbox(r);
@@ -295,14 +295,14 @@ void TLayout::layoutMultiGlyphAccidental(Accidental* item, LayoutContext& ctx)
         case AccidentalBracket::NONE: // can't happen
             break;
         }
-        SymElement se(id, 0.0, item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
+        Accidental::LayoutData::Sym se(id, 0.0, item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
         item->addElement(se);
         r.unite(item->symBbox(id));
         x += item->symAdvance(id) + margin;
     }
 
     SymId s = item->symId();
-    SymElement e(s, x, 0.0);
+    Accidental::LayoutData::Sym e(s, x, 0.0);
     item->addElement(e);
     r.unite(item->symBbox(s).translated(x, 0.0));
 
@@ -323,7 +323,7 @@ void TLayout::layoutMultiGlyphAccidental(Accidental* item, LayoutContext& ctx)
         case AccidentalBracket::NONE: // can't happen
             break;
         }
-        SymElement se(id, x, item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
+        Accidental::LayoutData::Sym se(id, x, item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
         item->addElement(se);
         r.unite(item->symBbox(id).translated(x, 0.0));
     }
