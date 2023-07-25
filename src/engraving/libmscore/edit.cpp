@@ -2407,9 +2407,10 @@ void Score::deleteItem(EngravingItem* el)
         undoRemoveElement(k);
         if (ic) {
             Staff* staff = el->staff();
+            bool drumBefore = staff->isDrumStaff(tick - Fraction::eps());
             KeySigEvent ke = k->keySigEvent();
             ke.setForInstrumentChange(true);
-            Key cKey = staff->keySigEvent(tick).concertKey();
+            Key cKey = drumBefore ? score()->keyList().key(tick.ticks()).concertKey() : staff->keySigEvent(tick).concertKey();
             Key tKey = cKey;
             if (!style().styleB(Sid::concertPitch)) {
                 Interval v = part->instrument(tick)->transpose();
@@ -3441,6 +3442,8 @@ void Score::cmdDeleteSelection()
         // so we don't try to delete them twice if they are also in selection
         std::set<Spanner*> deletedSpanners;
 
+        std::map<int, std::set<Staff*>> needUpdateInstrumentChanges; // <ticks, staves>
+
         for (EngravingItem* e : el) {
             // these are the linked elements we are about to delete
             std::list<EngravingObject*> links;
@@ -3501,6 +3504,33 @@ void Score::cmdDeleteSelection()
                     }
                     continue;
                 }
+                // check, wheather "global key signature" is selected (all keysigs at segment)
+                // in case, some instruments are unpitched at tick
+                // so we would need trigger updateInstrumentChangeTranspositions on these staves
+                Fraction tick = e->tick();
+                // loop thru the staves only once
+                if ((needUpdateInstrumentChanges.find(tick.ticks()) == needUpdateInstrumentChanges.end()) && e->explicitParent()
+                    && e->explicitParent()->isSegment()) {
+                    Segment* keySeg = toSegment(e->explicitParent());
+                    std::set<Staff*> staffList;
+                    for (Staff* staff : score()->staves()) {
+                        track_idx_t track = staff->idx() * VOICES;
+                        EngravingItem* key = keySeg->element(track);
+
+                        // check, if key is in selection list
+                        // if no, add empty staffList
+                        if (key && (std::find(el.begin(), el.end(), key) == std::end(el))){
+                            staffList.clear();
+                            break;
+                        }
+
+                        // if there are subsequent instrument changes in staff, add it to staffList
+                        if (staff->isDrumStaff(tick) && !(staff->part()->instruments().upper_bound(tick.ticks()) == staff->part()->instruments().end())) {
+                            staffList.insert(staff);
+                        }
+                    }
+                    needUpdateInstrumentChanges.emplace(tick.ticks(), staffList);
+                }
             }
 
             // Don't allow deleting the trill cue note
@@ -3540,6 +3570,13 @@ void Score::cmdDeleteSelection()
             // add these linked elements to list of already-deleted elements
             for (EngravingObject* se : links) {
                 deletedElements.insert(se);
+            }
+        }
+        // trigger updateInstrumentChangeTranspositions for unpitched staves
+        for (const auto& item : needUpdateInstrumentChanges) {
+            for (Staff* staff : item.second) {
+                KeySigEvent key = score()->keyList().key(item.first);
+                updateInstrumentChangeTranspositions(key, staff, Fraction::fromTicks(item.first));
             }
         }
     }
