@@ -96,80 +96,63 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
 
         Interval oldV = part->instrument(tickStart)->transpose();
         Interval oldKv = staff()->transpose(tickStart);
-        Interval v = instrument->transpose();
-        Interval vBeforeIc = part->instrument(tickBeforeIc)->transpose();
 
-        bool isPitchedOld = !part->instrument(tickStart)->useDrumset();
         bool isPitchedNew = !instrument->useDrumset();
-        bool pitchedChanged = isPitchedNew != isPitchedOld;
         bool isPitchedBeforeIc = !part->instrument(tickBeforeIc)->useDrumset();
 
         // change the clef for each staff
         for (size_t i = 0; i < part->nstaves(); i++) {
-            if (part->instrument(tickStart)->clefType(i) != instrument->clefType(i)) {
-                ClefTypeList clefType = instrument->clefType(i);
-                // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
-                EngravingItem* element = rtick().isZero() ? toEngravingItem(findMeasure()) : toEngravingItem(this);
-                score()->undoChangeClef(part->staff(i), element, clefType._concertClef, clefType._transposingClef, true);
-            }
+            ClefTypeList clefType = instrument->clefType(i);
+            // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
+            EngravingItem* element = rtick().isZero() ? toEngravingItem(findMeasure()) : toEngravingItem(this);
+            score()->undoChangeClef(part->staff(i), element, clefType._concertClef, clefType._transposingClef, true);
         }
 
-        // Change key signature if necessary. CAUTION: not necessary in case of octave-transposing!
-        if (((v.chromatic - oldV.chromatic) % 12) || pitchedChanged) {
-            for (size_t i = 0; i < part->nstaves(); i++) {
-                KeySigEvent oldKeyEvent = isPitchedBeforeIc ? part->staff(i)->keySigEvent(tickStart) : score()->keyList().key(tickStart.ticks());
-                if (!oldKeyEvent.isAtonal() || pitchedChanged) {
-                    // Check, if some key change is there, if no, mark new one "for instrument change"
-                    bool forInstChange = false;
-                    KeySig* ksig = nullptr;
-                    Segment* seg = segment()->prev(SegmentType::KeySig);
-                    if (seg) {
-                        track_idx_t track = part->staff(i)->idx() * VOICES;
-                        ksig = toKeySig(seg->element(track));
-                    }
-                    if (ksig) {
-                        if (ksig->generated() || ksig->forInstrumentChange()) {
-                            forInstChange = true;
-                        }
-                    } else {
-                        // no "global key signature" on tick
-                        if (!isPitchedBeforeIc && score()->keyList().currentKeyTick(tickStart.ticks()) != tickStart.ticks()) {
-                            forInstChange = true;
-                        }
-                    }
+        // change key signature
+        for (size_t i = 0; i < part->nstaves(); i++) {
+            KeySigEvent oldKeyEvent = isPitchedBeforeIc ? part->staff(i)->keySigEvent(tickStart) : score()->keyList().key(tickStart.ticks());
 
-                    // Check, if we need keysig (if instrument change transposition differs from the one before instrument change)
-                    if (((v.chromatic - vBeforeIc.chromatic) % 12) || (isPitchedNew != isPitchedBeforeIc)) {
-                        KeySigEvent ks;
-                        if (isPitchedNew) {
-                            ks.setForInstrumentChange(forInstChange);
-                            Key cKey = oldKeyEvent.concertKey();
-                            ks.setConcertKey(cKey);
-                        } else { // add Atonal Key Signature for unpitched instrument
-                            ks.setForInstrumentChange(true);
-                            ks.setConcertKey(Key::C);
-                            ks.setMode(KeyMode::NONE);
-                        }
-                        score()->undoChangeKeySig(part->staff(i), tickStart, ks);
-                    } else if (ksig && ksig->forInstrumentChange()) {
-                        score()->undoRemoveElement(ksig);
-                    }
+            bool forInstChange = true;
+            if (isPitchedNew) {
+                // check, if key signature is already there
+                KeySig* ksig = nullptr;
+                Segment* seg = segment()->prev(SegmentType::KeySig);
+                if (seg) {
+                    track_idx_t track = part->staff(i)->idx() * VOICES;
+                    ksig = toKeySig(seg->element(track));
+                }
+                    // key signature is there
+                if ((ksig && !ksig->generated() && !ksig->forInstrumentChange())
+                    // or on unpitched staff, global key signature is there
+                    || (!isPitchedBeforeIc && (score()->keyList().currentKeyTick(tickStart.ticks()) == tickStart.ticks()))) {
+
+                    forInstChange = false;
                 }
             }
+
+            KeySigEvent ks;
+            if (isPitchedNew) {
+                ks.setForInstrumentChange(forInstChange);
+                Key cKey = oldKeyEvent.concertKey();
+                ks.setConcertKey(cKey);
+            } else { // add Atonal Key Signature for unpitched instrument
+                ks.setForInstrumentChange(true);
+                ks.setConcertKey(Key::C);
+                ks.setMode(KeyMode::NONE);
+            }
+            score()->undoChangeKeySig(part->staff(i), tickStart, ks);
         }
 
         // add staff type change
-        if (isPitchedBeforeIc != isPitchedNew) {
-            for(Staff* staff : part->staves()) {
-                track_idx_t track = staff->idx() * VOICES;
-                Measure* m = findMeasure();
-                StaffTypeChange* stc = Factory::createStaffTypeChange(m);
-                stc->setParent(m);
-                stc->setTrack(track);
-                score()->undoAddElement(stc);
-                // properties can be changed only after element is added to score
-                stc->setProperty(Pid::STAFF_GEN_KEYSIG, isPitchedNew);
-            }
+        for(Staff* staff : part->staves()) {
+            track_idx_t track = staff->idx() * VOICES;
+            Measure* m = findMeasure();
+            StaffTypeChange* stc = Factory::createStaffTypeChange(m);
+            stc->setParent(m);
+            stc->setTrack(track);
+            score()->undoAddElement(stc);
+            // properties can be changed only after element is added to score
+            stc->setProperty(Pid::STAFF_GEN_KEYSIG, isPitchedNew);
         }
 
         // change instrument in all linked scores
