@@ -188,17 +188,17 @@ ChordRest* MeiImporter::addChordRest(pugi::xml_node node, Measure* measure, int 
 
     bool warning = false;
 
-    libmei::AttAugmentDots const* augmentDotsAtt = dynamic_cast<libmei::AttAugmentDots const*>(&meiElement);
-    libmei::AttDurationLog const* durationLogAtt = dynamic_cast<libmei::AttDurationLog const*>(&meiElement);
-    libmei::AttStaffIdent const* staffIdentAtt = dynamic_cast<libmei::AttStaffIdent const*>(&meiElement);
-    libmei::AttTyped const* typedAtt = dynamic_cast<libmei::AttTyped const*>(&meiElement);
+    const libmei::AttAugmentDots* augmentDotsAtt = dynamic_cast<const libmei::AttAugmentDots*>(&meiElement);
+    const libmei::AttDurationLog* durationLogAtt = dynamic_cast<const libmei::AttDurationLog*>(&meiElement);
+    const libmei::AttStaffIdent* staffIdentAtt = dynamic_cast<const libmei::AttStaffIdent*>(&meiElement);
+    const libmei::AttTyped* typedAtt = dynamic_cast<const libmei::AttTyped*>(&meiElement);
 
     IF_ASSERT_FAILED(augmentDotsAtt && durationLogAtt && staffIdentAtt && typedAtt) {
         return nullptr;
     }
 
     // No assert because att.beam.secondary is not available on MEI `<space>`
-    libmei::AttBeamSecondary const* beamSecondaryAtt = dynamic_cast<libmei::AttBeamSecondary const*>(&meiElement);
+    const libmei::AttBeamSecondary* beamSecondaryAtt = dynamic_cast<const libmei::AttBeamSecondary*>(&meiElement);
 
     TDuration duration;
     duration.setType(Convert::durFromMEI(durationLogAtt->GetDur(), warning));
@@ -376,7 +376,7 @@ bool MeiImporter::addGraceNotesToChord(engraving::ChordRest* chordRest, bool isA
 
 EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Measure* measure)
 {
-    libmei::AttStartId const* startIdAtt = dynamic_cast<libmei::AttStartId const*>(&meiElement);
+    const libmei::AttStartId *startIdAtt = dynamic_cast<const libmei::AttStartId*>(&meiElement);
     IF_ASSERT_FAILED(measure && startIdAtt) {
         return nullptr;
     }
@@ -399,9 +399,9 @@ EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Mea
         chordRest = m_startIdChordRests.at(startId);
     } else {
         // No @startid, try a lookup based on the @tstamp. This is only for files not written via MuseScore
-        libmei::AttTimestampLog const* timestampLogAtt = dynamic_cast<libmei::AttTimestampLog const*>(&meiElement);
-        libmei::AttStaffIdent const* staffIdentAtt = dynamic_cast<libmei::AttStaffIdent const*>(&meiElement);
-        libmei::AttLayerIdent const* layerIdentAtt = dynamic_cast<libmei::AttLayerIdent const*>(&meiElement);
+        const libmei::AttTimestampLog *timestampLogAtt = dynamic_cast<const libmei::AttTimestampLog *>(&meiElement);
+        const libmei::AttStaffIdent *staffIdentAtt = dynamic_cast<const libmei::AttStaffIdent *>(&meiElement);
+        const libmei::AttLayerIdent *layerIdentAtt = dynamic_cast<const libmei::AttLayerIdent *>(&meiElement);
 
         IF_ASSERT_FAILED(timestampLogAtt && staffIdentAtt && layerIdentAtt) {
             return nullptr;
