@@ -362,7 +362,7 @@ void ScoreLayout::collectLinearSystem(LayoutContext& ctx)
                 pos.rx() += system->leftMargin();
                 firstMeasure = false;
             } else if (m->header()) {
-                MeasureLayout::removeSystemHeader(m);
+                MeasureLayout::removeSystemHeader(m, ctx);
             }
             if (m->trailer()) {
                 MeasureLayout::removeSystemTrailer(m, ctx);

@@ -1691,7 +1691,7 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
     m->checkHeader();
 }
 
-void MeasureLayout::removeSystemHeader(Measure* m)
+void MeasureLayout::removeSystemHeader(Measure* m, LayoutContext& ctx)
 {
     if (!m->header()) {
         return;
@@ -1700,24 +1700,25 @@ void MeasureLayout::removeSystemHeader(Measure* m)
         if (!seg->header()) {
             break;
         }
+        // remove all "generated" key signatures
+        if (seg->isKeySigType() && seg->tick() == m->tick()) {
+            for (EngravingItem* e : seg->elist()) {
+                if (e) {
+                    if (e->generated()) {
+                        seg->elist().at(e->track()) = nullptr;
+                        e->score()->undoRemoveElement(e);
+                    } else {
+                        KeySig* keysig = toKeySig(e);
+                        if (keysig->forInstrumentChange()) {
+                            TLayout::layout(keysig, ctx);
+                        }
+                    }
+                }
+            }
+        }
         seg->setEnabled(false);
     }
     m->setHeader(false);
-
-    // remove all "generated" key signatures
-    Segment* kSeg = m->findFirstR(SegmentType::KeySig, Fraction(0, 1));
-    if (!kSeg) {
-        return;
-    }
-    for (EngravingItem* e : kSeg->elist()) {
-        if (e && e->generated()) {
-            kSeg->elist().at(e->track()) = 0;
-        }
-    }
-    kSeg->checkEmpty();
-    if (kSeg->empty()) {
-        m->remove(kSeg);
-    }
 }
 
 void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx)

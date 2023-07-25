@@ -1422,6 +1422,17 @@ void TLayout::layout(Clef* item, LayoutContext&)
             }
         }
 
+        // check, if clef is needed for instrument change
+        if (item->forInstrumentChange() && !item->generated()) {
+            bool concertPitch = item->concertPitch();
+            ClefType ct = concertPitch ? item->clefTypeList()._concertClef : item->clefTypeList()._transposingClef;
+            ClefType prevCt = item->staff()->clef(tick - Fraction::eps());
+            Measure* m = item->measure();
+            if (ct == prevCt && !(m && m->system() && m->isFirstInSystem() && item->rtick().isZero())) {
+                show = false;
+            }
+        }
+
         // if clef not to show or not compatible with staff group
         if (!show) {
             item->setbbox(RectF());
@@ -3049,7 +3060,19 @@ void TLayout::layout(KeySig* item, LayoutContext& ctx)
 
     item->keySymbols().clear();
     if (item->staff() && !item->staff()->staffType(item->tick())->genKeysig()) {
-        return;
+        if (!item->forInstrumentChange()) {
+            return;
+        }
+    }
+
+    // draw instrument change key signatures only if needed
+    if (item->staff() && item->forInstrumentChange() && !item->generated()) {
+        Key key = item->key();
+        Key prevKey = item->staff()->key(item->tick() - Fraction::eps());
+        Measure* m = item->measure();
+        if (key == prevKey && !(m && m->system() && m->isFirstInSystem())) {
+            return;
+        }
     }
 
     // determine current clef for this staff
@@ -4270,6 +4293,10 @@ void TLayout::layout(StaffText* item, LayoutContext& ctx)
 
 void TLayout::layout(StaffTypeChange* item, LayoutContext& ctx)
 {
+    if(item->forInstrumentChange()) {
+        item->setbbox(RectF());
+        return;
+    }
     double _spatium = ctx.conf().spatium();
     item->setbbox(RectF(-item->lw() * .5, -item->lw() * .5, _spatium * 2.5 + item->lw(), _spatium * 2.5 + item->lw()));
     if (item->measure()) {

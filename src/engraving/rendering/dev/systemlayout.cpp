@@ -189,7 +189,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                     MeasureLayout::addSystemHeader(m, false, ctx);
                     createHeader = false;
                 } else if (m->header()) {
-                    MeasureLayout::removeSystemHeader(m);
+                    MeasureLayout::removeSystemHeader(m, ctx);
                 }
             }
 
@@ -376,7 +376,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 if (curHeader) {
                     MeasureLayout::addSystemHeader(m, localFirstSystem, ctx);
                 } else {
-                    MeasureLayout::removeSystemHeader(m);
+                    MeasureLayout::removeSystemHeader(m, ctx);
                 }
                 for (;;) {
                     // TODO: what if the nobreak group takes the entire system - is this correct?
