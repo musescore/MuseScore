@@ -45,17 +45,16 @@ StyledPopupView {
 
     showArrow: false
 
-    function updatePosition(pos, size) {
-        var h = contentRow.height + 120
-        root.x = pos.x + size.x / 4
-        root.y = pos.y - h / 2
+    function updatePosition(elementRect) {
+        root.x = elementRect.x + elementRect.width / 5
+        root.y = elementRect.y - root.contentHeight - 30
     }
 
     TextStylePopupModel {
         id: textStyleModel
 
         onItemRectChanged: function(rect) {
-            updatePosition(Qt.point(rect.x, rect.y), Qt.point(rect.width, rect.height))
+            updatePosition(rect)
         }
     }
 
