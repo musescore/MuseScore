@@ -5186,7 +5186,9 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
                     Key ckey = key.concertKey();
                     Key nkey = transposeKey(ckey, transposeInterval, staff->part()->preferSharpFlat());
                     e.setConcertKey(ckey);
-                    e.setKey(nkey);
+                    if (!score()->style().styleB(Sid::concertPitch)) {
+                        e.setKey(nkey);
+                    }
                 }
                 KeySig* keySig = nullptr;
                 EngravingItem* keySigElem = s ? s->element(track) : nullptr;
