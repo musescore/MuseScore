@@ -3533,9 +3533,20 @@ void Score::cmdDeleteSelection()
 
             bool needFindCR = !crSelectedAfterDeletion && tick >= Fraction(0, 1) && track != mu::nidx;
 
+            // Instrument change elements, namely key signatures, clefs and staff type changes are undeletable.
+            // Allert user, when try to delete them
+            if ((e->isKeySig() && toKeySig(e)->forInstrumentChange()) || (e->isClef() && toClef(e)->forInstrumentChange())
+                || (e->isStaffTypeChange() && toStaffTypeChange(e)->forInstrumentChange())) {
+
+                MScore::setError(MsError::CANNOT_REMOVE_FOR_IC_ELEMENT);
+                if (needFindCR) {
+                    crSelectedAfterDeletion = findCR(tick, track);
+                }
+                continue;
+            }
+
             // We should not allow deleting the very first keySig of the piece, because it is
             // logically incorrect and leads to a state of undefined key/transposition.
-            // Also instrument change key signatures should be undeletable.
             // The correct action is for the user to set an atonal/custom keySig as needed.
             if (e->isKeySig()) {
                 if (e->tick() == Fraction(0, 1) || toKeySig(e)->forInstrumentChange()) {

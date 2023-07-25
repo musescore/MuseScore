@@ -145,6 +145,10 @@ void MScoreErrorsController::checkAndShowMScoreError()
         title = trc("notation", "This key signature cannot be deleted");
         message = trc("notation", "Please replace it with a key signature from the palettes instead.");
         break;
+    case MsError::CANNOT_REMOVE_FOR_IC_ELEMENT:
+        title = trc("notation", "This element belongs to instrument change and cannot be deleted");
+        message = trc("notation", "Please replace it with one from the palettes instead.");
+        break;
     }
 
     IInteractive::Result result
