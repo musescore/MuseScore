@@ -2828,6 +2828,47 @@ void Score::deleteItem(EngravingItem* el)
         for (StaffTypeChange* stc : ic->staffTypeChanges()) {
             deleteItem(stc);
         }
+        // remove key signatures and clefs on unpitched instrument at tick, and subsequent until next instrument change
+        if (part->instrument(tickStart)->useDrumset()) {
+            Fraction tickEnd;
+            auto i = part->instruments().upper_bound(tickStart.ticks());
+            if (i != part->instruments().end()) {   // next instrumentChange is there
+                tickEnd = Fraction::fromTicks(i->first);
+            } else {
+                tickEnd = endTick();
+            }
+
+            Segment* kSeg = tick2segment(tickStart, false, SegmentType::KeySig, true);
+            //no KeySegment at tick - look for next one
+            if(!kSeg) {
+                kSeg = tick2segment(tickStart)->next1(SegmentType::KeySig);
+            }
+            while (kSeg && (kSeg->tick() < tickEnd)) {
+                for (Staff* staff : part->staves()) {
+                    track_idx_t track = staff->idx() * VOICES;
+                    EngravingItem* ksItem = kSeg->element(track);
+                    if (ksItem && !ksItem->generated()) {
+                        deleteItem(ksItem);
+                    }
+                }
+                kSeg = kSeg->next1(SegmentType::KeySig);
+            }
+
+            Segment* cSeg = tick2segment(tickStart, false, SegmentType::Clef, true);
+            if(!cSeg) {
+                cSeg = tick2segment(tickStart)->next1(SegmentType::Clef);
+            }
+            while (cSeg && (cSeg->tick() < tickEnd)) {
+                for (Staff* staff : part->staves()) {
+                    track_idx_t track = staff->idx() * VOICES;
+                    EngravingItem* cItem = cSeg->element(track);
+                    if (cItem && !cItem->generated()) {
+                        deleteItem(cItem);
+                    }
+                }
+                cSeg = cSeg->next1(SegmentType::Clef);
+            }
+        }
         if (part->staff(0)->transpose(tickStart) != oldV) {
             auto i = part->instruments().upper_bound(tickStart.ticks());
             Fraction tickEnd;
