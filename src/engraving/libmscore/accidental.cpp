@@ -372,6 +372,7 @@ void Accidental::setLayoutData(const LayoutData& data)
 {
     m_layoutData = data;
     setbbox(data.bbox);
+    setPos(data.pos);
 }
 
 void Accidental::draw(mu::draw::Painter* painter) const
