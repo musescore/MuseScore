@@ -468,46 +468,29 @@ void TLayout::layout(ActionIcon* item, LayoutContext&)
 void TLayout::layout(Ambitus* item, LayoutContext& ctx)
 {
     int bottomLine, topLine;
-    ClefType clf;
-    double headWdt = item->headWidth();
-    Key key;
-    double lineDist;
-    int numOfLines;
-    Segment* segm = item->segment();
-    double _spatium = item->spatium();
-    const Staff* stf = nullptr;
-    if (segm && item->track() != mu::nidx) {
-        Fraction tick    = segm->tick();
-        stf         = ctx.dom().staff(item->staffIdx());
-        lineDist    = stf->lineDistance(tick) * _spatium;
-        numOfLines  = stf->lines(tick);
-        clf         = stf->clef(tick);
-    } else {                              // for use in palettes
-        lineDist    = _spatium;
-        numOfLines  = 3;
-        clf         = ClefType::G;
-    }
+
+    const double headWdt = item->headWidth();
+    const double spatium = item->spatium();
+    const Fraction tick = item->segment()->tick();
+    const Staff* stf = ctx.dom().staff(item->staffIdx());
+    const double lineDist = stf->lineDistance(tick) * spatium;
+    const int numOfLines = stf->lines(tick);
+    const ClefType clf = stf->clef(tick);
+    const Key key = stf->key(tick);
 
     //
     // NOTEHEADS Y POS
     //
-    // if pitch == INVALID_PITCH or tpc == Tpc::TPC_INVALID, set to some default:
-    // for use in palettes and when actual range cannot be calculated (new ambitus or no notes in staff)
-    //
+
     double xAccidOffTop    = 0;
     double xAccidOffBottom = 0;
-    if (stf) {
-        key = stf->key(segm->tick());
-    } else {
-        key = Key::C;
-    }
 
     // top notehead
     if (item->topPitch() == INVALID_PITCH || item->topTpc() == Tpc::TPC_INVALID) {
         item->setTopPosY(0.0);  // if uninitialized, set to top staff line
     } else {
-        topLine  = absStep(item->topTpc(), item->topPitch());
-        topLine  = relStep(topLine, clf);
+        topLine = absStep(item->topTpc(), item->topPitch());
+        topLine = relStep(topLine, clf);
         item->setTopPosY(topLine * lineDist * 0.5);
         // compute accidental
         AccidentalType accidType;
@@ -615,7 +598,7 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
     // shorten line on each side by offsets
     double yDelta = item->bottomPos().y() - item->topPos().y();
     if (yDelta != 0.0) {
-        double off = _spatium * Ambitus::LINEOFFSET_DEFAULT;
+        double off = spatium * Ambitus::LINEOFFSET_DEFAULT;
         PointF p1 = fullLine.pointAt(off / yDelta);
         PointF p2 = fullLine.pointAt(1 - (off / yDelta));
         item->setLine(LineF(p1, p2));
@@ -623,7 +606,7 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
         item->setLine(fullLine);
     }
 
-    RectF headRect(0, -0.5 * _spatium, headWdt, 1 * _spatium);
+    RectF headRect(0, -0.5 * spatium, headWdt, 1 * spatium);
     item->setbbox(headRect.translated(item->topPos()).united(headRect.translated(item->bottomPos()))
                   .united(item->topAccidental()->bbox().translated(item->topAccidental()->ipos()))
                   .united(item->bottomAccidental()->bbox().translated(item->bottomAccidental()->ipos()))

@@ -504,12 +504,12 @@ EngravingObjectList Ambitus::scanChildren() const
 {
     EngravingObjectList children;
 
-    Accidental* topAccid = const_cast<Accidental*>(_topAccid);
+    Accidental* topAccid = const_cast<Accidental*>(m_topAccidental);
     if (topAccid && topAccid->accidentalType() != AccidentalType::NONE) {
         children.push_back(topAccid);
     }
 
-    Accidental* bottomAccid = const_cast<Accidental*>(_bottomAccid);
+    Accidental* bottomAccid = const_cast<Accidental*>(m_bottomAccidental);
     if (bottomAccid && bottomAccid->accidentalType() != AccidentalType::NONE) {
         children.push_back(bottomAccid);
     }
