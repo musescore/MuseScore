@@ -489,17 +489,12 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             } else if (e->isKeySig() && trKeys && mode != TransposeMode::DIATONICALLY) {
                 KeySig* ks = toKeySig(e);
                 Fraction tick = segment->tick();
-                bool startKey = tick == s1->tick();
-                bool addKey = ks->isChange();
-                if ((startKey || addKey) && !ks->isAtonal()) {
+                if (!ks->generated() && !ks->isAtonal() && !ks->forInstrumentChange()) {
                     Staff* staff = ks->staff();
                     Key oKey = ks->concertKey();
                     Key nKey = transposeKey(oKey, interval);
                     KeySigEvent ke = ks->keySigEvent();
-                    // don't transpose instrument change KS, was automagically translated when precedent KS was changed
-                    if (!ke.forInstrumentChange() || startKey) {
-                        ke.setConcertKey(nKey);
-                    }
+                    ke.setConcertKey(nKey);
                     // undoChangeKey handles linked staves/parts and generating new keysigs as needed
                     // it always sets the keysig non-generated
                     // so only call it when needed
