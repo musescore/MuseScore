@@ -5221,6 +5221,10 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType cCt, ClefTy
         return;
     }
 
+    if (ostaff->isDrumStaff(e->tick())) {
+        return;
+    }
+
     if (tCt == ClefType::INVALID) {
         tCt = cCt;
     }
