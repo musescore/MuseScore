@@ -24,6 +24,7 @@
 
 #include "translation.h"
 
+#include "factory.h"
 #include "keysig.h"
 #include "measure.h"
 #include "mscore.h"
@@ -31,6 +32,7 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
+#include "stafftypechange.h"
 #include "undo.h"
 
 #include "log.h"
@@ -153,6 +155,20 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
                         score()->undoRemoveElement(ksig);
                     }
                 }
+            }
+        }
+
+        // add staff type change
+        if (isPitchedBeforeIc != isPitchedNew) {
+            for(Staff* staff : part->staves()) {
+                track_idx_t track = staff->idx() * VOICES;
+                Measure* m = findMeasure();
+                StaffTypeChange* stc = Factory::createStaffTypeChange(m);
+                stc->setParent(m);
+                stc->setTrack(track);
+                score()->undoAddElement(stc);
+                // properties can be changed only after element is added to score
+                stc->setProperty(Pid::STAFF_GEN_KEYSIG, isPitchedNew);
             }
         }
 
