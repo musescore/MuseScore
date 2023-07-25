@@ -457,8 +457,12 @@ void TLayout::layout(Accidental* item, LayoutContext& ctx)
 
 void TLayout::layout(ActionIcon* item, LayoutContext&)
 {
-    FontMetrics fontMetrics(item->iconFont());
-    item->setbbox(fontMetrics.boundingRect(Char(item->icon())));
+    if (!item->layoutData().isValid()) {
+        ActionIcon::LayoutData data;
+        FontMetrics fontMetrics(item->iconFont());
+        data.bbox = fontMetrics.boundingRect(Char(item->icon()));
+        item->setLayoutData(data);
+    }
 }
 
 void TLayout::layout(Ambitus* item, LayoutContext& ctx)

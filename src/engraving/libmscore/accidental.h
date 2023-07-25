@@ -127,7 +127,6 @@ public:
         RectF bbox;
 
         bool isValid() const { return !syms.empty(); }
-        void invalidate() { syms.clear(); }
     };
 
     const LayoutData& layoutData() const { return m_layoutData; }
