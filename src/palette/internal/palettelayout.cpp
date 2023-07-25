@@ -265,7 +265,7 @@ compat::DummyElement* PaletteLayout::Context::dummyParent() const
 void PaletteLayout::layout(Accidental* item, const Context&)
 {
     SymId s = item->symId();
-    if (item->elements().empty()) {
+    if (item->syms().empty()) {
         SymElement e(s, 0.0, 0.0);
         item->addElement(e);
     }

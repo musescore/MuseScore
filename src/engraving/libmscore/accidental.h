@@ -77,21 +77,32 @@ public:
 
     Accidental* clone() const override { return new Accidental(*this); }
 
+    Note* note() const { return (explicitParent() && explicitParent()->isNote()) ? toNote(explicitParent()) : 0; }
+
     // Score Tree functions
     EngravingObject* scanParent() const override;
 
     TranslatableString subtypeUserName() const override;
     void setSubtype(const AsciiStringView& s);
-    void setAccidentalType(AccidentalType t) { _accidentalType = t; }
+    int subtype() const override { return (int)m_accidentalType; }
 
-    AccidentalType accidentalType() const { return _accidentalType; }
-    AccidentalRole role() const { return _role; }
+    void setAccidentalType(AccidentalType t) { m_accidentalType = t; }
+    AccidentalType accidentalType() const { return m_accidentalType; }
 
-    int subtype() const override { return (int)_accidentalType; }
+    void setRole(AccidentalRole r) { m_role = r; }
+    AccidentalRole role() const { return m_role; }
 
-    const std::vector<SymElement>& elements() const { return el; }
-    void clearElements() { el.clear(); }
-    void addElement(const SymElement& e) { el.push_back(e); }
+    AccidentalBracket bracket() const { return m_bracket; }
+    void setBracket(AccidentalBracket val) { m_bracket = val; }
+    bool parentNoteHasParentheses() const;
+
+    bool isSmall() const { return m_isSmall; }
+    void setSmall(bool val) { m_isSmall = val; }
+
+    SymId symId() const;
+    const std::vector<SymElement>& syms() const { return m_syms; }
+    void clearElements() { m_syms.clear(); }
+    void addElement(const SymElement& e) { m_syms.push_back(e); }
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
@@ -99,18 +110,6 @@ public:
     void draw(mu::draw::Painter*) const override;
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override { setGenerated(false); }
-
-    SymId symId() const;
-    Note* note() const { return (explicitParent() && explicitParent()->isNote()) ? toNote(explicitParent()) : 0; }
-
-    AccidentalBracket bracket() const { return _bracket; }
-    void setBracket(AccidentalBracket val) { _bracket = val; }
-    bool parentNoteHasParentheses() const;
-
-    void setRole(AccidentalRole r) { _role = r; }
-
-    bool isSmall() const { return m_isSmall; }
-    void setSmall(bool val) { m_isSmall = val; }
 
     void undoSetSmall(bool val);
 
@@ -136,11 +135,11 @@ private:
 
     Accidental(EngravingItem* parent);
 
-    std::vector<SymElement> el;
-    AccidentalType _accidentalType { AccidentalType::NONE };
-    bool m_isSmall                    { false };
-    AccidentalBracket _bracket     { AccidentalBracket::NONE };
-    AccidentalRole _role           { AccidentalRole::AUTO };
+    std::vector<SymElement> m_syms;
+    AccidentalType m_accidentalType = AccidentalType::NONE;
+    AccidentalBracket m_bracket = AccidentalBracket::NONE;
+    AccidentalRole m_role = AccidentalRole::AUTO;
+    bool m_isSmall = false;
 };
 
 extern AccidentalVal sym2accidentalVal(SymId id);
