@@ -392,7 +392,7 @@ public:
     void undoChangeVisible(EngravingItem* item, bool visible);
     void undoChangeTuning(Note*, double);
     void undoChangeUserMirror(Note*, DirectionH);
-    void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
+    void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent, bool forInstrumentChange = false);
     void undoChangeClef(Staff* ostaff, EngravingItem*, ClefType cCt, ClefType tCt = ClefType::INVALID, bool forInstrumentChange = false);
     bool undoPropertyChanged(EngravingItem* e, Pid t, const PropertyValue& st, PropertyFlags ps = PropertyFlags::NOSTYLE);
     void undoPropertyChanged(EngravingObject*, Pid, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE);

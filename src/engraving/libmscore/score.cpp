@@ -2663,18 +2663,22 @@ KeyList Score::keyList() const
             auto currKey = km->begin();
             KeyList kl;
             for (auto key : tmpKeymap) {
+                bool pitched = !s->isDrumStaff(Fraction::fromTicks(key.first));
                 if (key.first < (*currKey).first) {
                     continue;
                 }
                 while ((*currKey).first < key.first && currKey != km->end()) {
                     currKey++;
                 }
-                if (currKey == km->end()) {
+                if (currKey == km->end() && pitched) {
                     break;
                 }
-                if (key.first == (*currKey).first) {
+                if ((key.first == (*currKey).first) || !pitched) {
                     // there is a matching key sig on this staff
-                    ++currKey;
+                    // (if there is unpitched instrument on tick, take it as matching too)
+                    if (pitched) {
+                        ++currKey;
+                    }
                     kl.insert(key);
                     if (currKey == km->end()) {
                         break;

@@ -88,10 +88,19 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
 {
     if (_init) {
         Fraction tickStart = segment()->tick();
+        Fraction tickBeforeIc = tickStart - Fraction::eps();
+
         Part* part = staff()->part();
+
         Interval oldV = part->instrument(tickStart)->transpose();
         Interval oldKv = staff()->transpose(tickStart);
         Interval v = instrument->transpose();
+        Interval vBeforeIc = part->instrument(tickBeforeIc)->transpose();
+
+        bool isPitchedOld = !part->instrument(tickStart)->useDrumset();
+        bool isPitchedNew = !instrument->useDrumset();
+        bool pitchedChanged = isPitchedNew != isPitchedOld;
+        bool isPitchedBeforeIc = !part->instrument(tickBeforeIc)->useDrumset();
 
         // change the clef for each staff
         for (size_t i = 0; i < part->nstaves(); i++) {
@@ -104,19 +113,45 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         }
 
         // Change key signature if necessary. CAUTION: not necessary in case of octave-transposing!
-        if ((v.chromatic - oldV.chromatic) % 12) {
+        if (((v.chromatic - oldV.chromatic) % 12) || pitchedChanged) {
             for (size_t i = 0; i < part->nstaves(); i++) {
-                if (!part->staff(i)->keySigEvent(tickStart).isAtonal()) {
-                    KeySigEvent ks;
-                    // Check, if some key signature is already there, if no, mark new one "for instrument change"
-                    Segment* seg = segment()->prev1(SegmentType::KeySig);
-                    voice_idx_t voice = part->staff(i)->idx() * VOICES;
-                    KeySig* ksig = toKeySig(seg->element(voice));
-                    bool forInstChange = !(ksig && ksig->tick() == tickStart && !ksig->generated());
-                    ks.setForInstrumentChange(forInstChange);
-                    Key cKey = part->staff(i)->concertKey(tickStart);
-                    ks.setConcertKey(cKey);
-                    score()->undoChangeKeySig(part->staff(i), tickStart, ks);
+                KeySigEvent oldKeyEvent = isPitchedBeforeIc ? part->staff(i)->keySigEvent(tickStart) : score()->keyList().key(tickStart.ticks());
+                if (!oldKeyEvent.isAtonal() || pitchedChanged) {
+                    // Check, if some key change is there, if no, mark new one "for instrument change"
+                    bool forInstChange = false;
+                    KeySig* ksig = nullptr;
+                    Segment* seg = segment()->prev(SegmentType::KeySig);
+                    if (seg) {
+                        track_idx_t track = part->staff(i)->idx() * VOICES;
+                        ksig = toKeySig(seg->element(track));
+                    }
+                    if (ksig) {
+                        if (ksig->generated() || ksig->forInstrumentChange()) {
+                            forInstChange = true;
+                        }
+                    } else {
+                        // no "global key signature" on tick
+                        if (!isPitchedBeforeIc && score()->keyList().currentKeyTick(tickStart.ticks()) != tickStart.ticks()) {
+                            forInstChange = true;
+                        }
+                    }
+
+                    // Check, if we need keysig (if instrument change transposition differs from the one before instrument change)
+                    if (((v.chromatic - vBeforeIc.chromatic) % 12) || (isPitchedNew != isPitchedBeforeIc)) {
+                        KeySigEvent ks;
+                        if (isPitchedNew) {
+                            ks.setForInstrumentChange(forInstChange);
+                            Key cKey = oldKeyEvent.concertKey();
+                            ks.setConcertKey(cKey);
+                        } else { // add Atonal Key Signature for unpitched instrument
+                            ks.setForInstrumentChange(true);
+                            ks.setConcertKey(Key::C);
+                            ks.setMode(KeyMode::NONE);
+                        }
+                        score()->undoChangeKeySig(part->staff(i), tickStart, ks);
+                    } else if (ksig && ksig->forInstrumentChange()) {
+                        score()->undoRemoveElement(ksig);
+                    }
                 }
             }
         }

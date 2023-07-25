@@ -2398,28 +2398,30 @@ void Score::deleteItem(EngravingItem* el)
 
     case ElementType::KEYSIG:
     {
+        Fraction tick = el->tick();
+        Part* part = el->part();
         KeySig* k = toKeySig(el);
         bool ic = k->segment()->next(SegmentType::ChordRest)->findAnnotation(ElementType::INSTRUMENT_CHANGE,
-                                                                             el->part()->startTrack(), el->part()->endTrack() - 1);
+                                                                             part->startTrack(), part->endTrack() - 1);
         undoRemoveElement(k);
         if (ic) {
+            Staff* staff = el->staff();
             KeySigEvent ke = k->keySigEvent();
             ke.setForInstrumentChange(true);
-            Key cKey = k->staff()->keySigEvent(k->tick()).concertKey();
+            Key cKey = staff->keySigEvent(tick).concertKey();
             Key tKey = cKey;
             if (!style().styleB(Sid::concertPitch)) {
-                Interval v = k->part()->instrument(k->tick())->transpose();
+                Interval v = part->instrument(tick)->transpose();
                 v.flip();
-                tKey = transposeKey(cKey, v, k->part()->preferSharpFlat());
+                tKey = transposeKey(cKey, v, part->preferSharpFlat());
             }
             ke.setConcertKey(cKey);
             ke.setKey(tKey);
-            undoChangeKeySig(k->staff(), k->tick(), ke);
+            undoChangeKeySig(staff, tick, ke, true);
         }
-        for (size_t i = 0; i < k->part()->nstaves(); i++) {
-            Staff* staff = k->part()->staff(i);
-            KeySigEvent e = staff->keySigEvent(k->tick());
-            updateInstrumentChangeTranspositions(e, staff, k->tick());
+        for (Staff* staff : part->staves()) {
+            KeySigEvent e = staff->keySigEvent(tick);
+            updateInstrumentChangeTranspositions(e, staff, tick);
         }
     }
     break;
@@ -4113,7 +4115,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                             if (ic) {
                                 KeySigEvent ke = ks->keySigEvent();
                                 ke.setForInstrumentChange(true);
-                                undoChangeKeySig(ks->staff(), e->tick(), ke);
+                                undoChangeKeySig(ks->staff(), e->tick(), ke, true);
                             } else {
                                 ee = e;
                             }
@@ -4997,13 +4999,14 @@ void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int 
 //   undoChangeKeySig
 //---------------------------------------------------------
 
-void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent key)
+void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent key, bool forInstrumentChange)
 {
     KeySig* lks = 0;
     bool needsUpdate = false;
 
     for (Staff* staff : ostaff->staffList()) {
-        if (staff->isDrumStaff(tick)) {
+        if (staff->isDrumStaff(tick) && !(key.forInstrumentChange() || forInstrumentChange)) {
+            updateInstrumentChangeTranspositions(key, staff, tick);
             continue;
         }
 
@@ -5065,11 +5068,12 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
 
         while (nextTick != -1) {
             KeySigEvent e = kl->key(nextTick);
-            if (e.forInstrumentChange()) {
+            bool pitched = !staff->isDrumStaff(Fraction::fromTicks(nextTick));
+            if (e.forInstrumentChange() && !e.isAtonal()) {
                 Measure* m = tick2measure(Fraction::fromTicks(nextTick));
                 Segment* s = m->tick2segment(Fraction::fromTicks(nextTick), SegmentType::KeySig);
                 track_idx_t track = staff->idx() * VOICES;
-                if (key.isAtonal() && !e.isAtonal()) {
+                if (key.isAtonal()) {
                     e.setMode(KeyMode::NONE);
                     e.setConcertKey(Key::C);
                 } else {
@@ -5089,6 +5093,8 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
                 if (keySig) {
                     undo(new ChangeKeySig(keySig, e, keySig->showCourtesy()));
                 }
+                nextTick = kl->nextKeyTick(nextTick);
+            } else if (!pitched) {
                 nextTick = kl->nextKeyTick(nextTick);
             } else {
                 nextTick = -1;
