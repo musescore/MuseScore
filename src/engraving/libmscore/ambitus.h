@@ -48,7 +48,7 @@ public:
 
     static constexpr NoteHeadGroup NOTEHEADGROUP_DEFAULT = NoteHeadGroup::HEAD_NORMAL;
     static constexpr NoteHeadType NOTEHEADTYPE_DEFAULT = NoteHeadType::HEAD_AUTO;
-    static constexpr DirectionH DIR_DEFAULT = DirectionH::AUTO;
+    static constexpr DirectionH DIRECTION_DEFAULT = DirectionH::AUTO;
     static constexpr bool HASLINE_DEFAULT = true;
     static const Spatium LINEWIDTH_DEFAULT;
     static constexpr double LINEOFFSET_DEFAULT = 0.8;               // the distance between notehead and line
@@ -64,39 +64,39 @@ public:
     void initFrom(Ambitus* a);
 
     // getters and setters
-    NoteHeadGroup noteHeadGroup() const { return _noteHeadGroup; }
-    NoteHeadType noteHeadType() const { return _noteHeadType; }
-    DirectionH direction() const { return _dir; }
-    bool hasLine() const { return _hasLine; }
-    Spatium lineWidth() const { return _lineWidth; }
-    int topOctave() const { return (_topPitch / 12) - 1; }
-    int bottomOctave() const { return (_bottomPitch / 12) - 1; }
-    int topPitch() const { return _topPitch; }
-    int bottomPitch() const { return _bottomPitch; }
-    int topTpc() const { return _topTpc; }
-    int bottomTpc() const { return _bottomTpc; }
+    NoteHeadGroup noteHeadGroup() const { return m_noteHeadGroup; }
+    NoteHeadType noteHeadType() const { return m_noteHeadType; }
+    DirectionH direction() const { return m_direction; }
+    bool hasLine() const { return m_hasLine; }
+    Spatium lineWidth() const { return m_lineWidth; }
+    int topOctave() const { return (m_topPitch / 12) - 1; }
+    int bottomOctave() const { return (m_bottomPitch / 12) - 1; }
+    int topPitch() const { return m_topPitch; }
+    int bottomPitch() const { return m_bottomPitch; }
+    int topTpc() const { return m_topTpc; }
+    int bottomTpc() const { return m_bottomTpc; }
 
-    PointF topPos() const { return _topPos; }
-    void setTopPos(const PointF& p) { _topPos = p; }
-    void setTopPosX(double p) { _topPos.setX(p); }
-    void setTopPosY(double p) { _topPos.setY(p); }
+    PointF topPos() const { return m_topPos; }
+    void setTopPos(const PointF& p) { m_topPos = p; }
+    void setTopPosX(double p) { m_topPos.setX(p); }
+    void setTopPosY(double p) { m_topPos.setY(p); }
 
-    PointF bottomPos() const { return _bottomPos; }
-    void setBottomPos(const PointF& p) { _bottomPos = p; }
-    void setBottomPosX(double p) { _bottomPos.setX(p); }
-    void setBottomPosY(double p) { _bottomPos.setY(p); }
+    PointF bottomPos() const { return m_bottomPos; }
+    void setBottomPos(const PointF& p) { m_bottomPos = p; }
+    void setBottomPosX(double p) { m_bottomPos.setX(p); }
+    void setBottomPosY(double p) { m_bottomPos.setY(p); }
 
-    LineF line() const { return _line; }
-    void setLine(const LineF& l) { _line = l; }
+    LineF line() const { return m_line; }
+    void setLine(const LineF& l) { m_line = l; }
 
-    Accidental* topAccidental() const { return _topAccid; }
-    Accidental* bottomAccidental() const { return _bottomAccid; }
+    Accidental* topAccidental() const { return m_topAccidental; }
+    Accidental* bottomAccidental() const { return m_bottomAccidental; }
 
-    void setNoteHeadGroup(NoteHeadGroup val) { _noteHeadGroup = val; }
-    void setNoteHeadType(NoteHeadType val) { _noteHeadType  = val; }
-    void setDirection(DirectionH val) { _dir = val; }
-    void setHasLine(bool val) { _hasLine = val; }
-    void setLineWidth(Spatium val) { _lineWidth = val; }
+    void setNoteHeadGroup(NoteHeadGroup val) { m_noteHeadGroup = val; }
+    void setNoteHeadType(NoteHeadType val) { m_noteHeadType  = val; }
+    void setDirection(DirectionH val) { m_direction = val; }
+    void setHasLine(bool val) { m_hasLine = val; }
+    void setLineWidth(Spatium val) { m_lineWidth = val; }
     void setTopPitch(int val, bool applyLogic = true);
     void setBottomPitch(int val, bool applyLogic = true);
     void setTopTpc(int val, bool applyLogic = true);
@@ -108,13 +108,13 @@ public:
     double headWidth() const;
 
     // re-implemented virtual functions
-    void      draw(mu::draw::Painter* painter) const override;
+    void draw(mu::draw::Painter* painter) const override;
 
-    mu::PointF pagePos() const override;        ///< position in page coordinates
-    void      scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
-    void      setTrack(track_idx_t val) override;
+    mu::PointF pagePos() const override;        // position in page coordinates
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    void setTrack(track_idx_t val) override;
 
-    String    accessibleInfo() const override;
+    String accessibleInfo() const override;
 
     void remove(EngravingItem*) override;
 
@@ -143,20 +143,20 @@ private:
 
     Ranges estimateRanges() const;                // scan staff up to next section break and update range pitches
 
-    NoteHeadGroup _noteHeadGroup;
-    NoteHeadType _noteHeadType;
-    DirectionH _dir;
-    bool _hasLine;
-    Spatium _lineWidth;
-    Accidental* _topAccid = nullptr;
-    Accidental* _bottomAccid = nullptr;
-    int _topPitch, _bottomPitch;
-    int _topTpc, _bottomTpc;
+    NoteHeadGroup m_noteHeadGroup = NOTEHEADGROUP_DEFAULT;
+    NoteHeadType m_noteHeadType = NOTEHEADTYPE_DEFAULT;
+    DirectionH m_direction = DIRECTION_DEFAULT;
+    bool m_hasLine = HASLINE_DEFAULT;
+    Spatium m_lineWidth;
+    Accidental* m_topAccidental = nullptr;
+    Accidental* m_bottomAccidental = nullptr;
+    int m_topPitch = INVALID_PITCH, m_bottomPitch = INVALID_PITCH;
+    int m_topTpc = Tpc::TPC_INVALID, m_bottomTpc = Tpc::TPC_INVALID;
 
     // internally managed, to optimize layout / drawing
-    PointF _topPos;       // position of top note symbol
-    PointF _bottomPos;    // position of bottom note symbol
-    LineF _line;          // the drawn line
+    PointF m_topPos;       // position of top note symbol
+    PointF m_bottomPos;    // position of bottom note symbol
+    LineF m_line;          // the drawn line
 };
 } // namespace mu::engraving
 
