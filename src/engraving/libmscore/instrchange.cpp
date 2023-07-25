@@ -92,19 +92,14 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         Interval oldV = part->instrument(tickStart)->transpose();
         Interval oldKv = staff()->transpose(tickStart);
         Interval v = instrument->transpose();
-        bool concPitch = style().styleB(Sid::concertPitch);
 
         // change the clef for each staff
         for (size_t i = 0; i < part->nstaves(); i++) {
-            ClefType oldClefType = concPitch ? part->instrument(tickStart)->clefType(i)._concertClef
-                                   : part->instrument(tickStart)->clefType(i)._transposingClef;
-            ClefType newClefType = concPitch ? instrument->clefType(i)._concertClef
-                                   : instrument->clefType(i)._transposingClef;
-            // Introduce cleff change only if the new clef *symbol* is different from the old one
-            if (ClefInfo::symId(oldClefType) != ClefInfo::symId(newClefType)) {
+            if (part->instrument(tickStart)->clefType(i) != instrument->clefType(i)) {
+                ClefTypeList clefType = instrument->clefType(i);
                 // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
                 EngravingItem* element = rtick().isZero() ? toEngravingItem(findMeasure()) : toEngravingItem(this);
-                score()->undoChangeClef(part->staff(i), element, newClefType, true);
+                score()->undoChangeClef(part->staff(i), element, clefType._concertClef, clefType._transposingClef, true);
             }
         }
 

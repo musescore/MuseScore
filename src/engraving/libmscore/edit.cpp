@@ -5104,12 +5104,15 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
 //    create a clef before element e
 //---------------------------------------------------------
 
-void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool forInstrumentChange)
+void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType cCt, ClefType tCt, bool forInstrumentChange)
 {
     IF_ASSERT_FAILED(ostaff && e) {
         return;
     }
 
+    if (tCt == ClefType::INVALID) {
+        tCt = cCt;
+    }
     bool moveClef = false;
     SegmentType st = SegmentType::Clef;
     if (e->isMeasure()) {
@@ -5174,17 +5177,17 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
             //
             Instrument* i = staff->part()->instrument(tick);
             ClefType cp, tp;
-            if (i->transpose().isZero()) {
-                cp = ct;
-                tp = ct;
+            if (forInstrumentChange || i->transpose().isZero()) {
+                cp = cCt;
+                tp = tCt;
             } else {
                 bool concertPitch = clef->concertPitch();
                 if (concertPitch) {
-                    cp = ct;
+                    cp = cCt;
                     tp = clef->transposingClef();
                 } else {
                     cp = clef->concertClef();
-                    tp = ct;
+                    tp = tCt;
                 }
             }
             clef->setGenerated(false);
@@ -5213,7 +5216,12 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
                 gclef = clef;
             }
             clef->setTrack(track);
-            clef->setClefType(ct);
+            if (forInstrumentChange) {
+                clef->setConcertClef(cCt);
+                clef->setTransposingClef(tCt);
+            } else {
+                clef->setClefType(cCt);
+            }
             clef->setParent(destSeg);
             clef->setIsHeader(st == SegmentType::HeaderClef);
             score->undo(new AddElement(clef));
