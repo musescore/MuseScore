@@ -69,6 +69,7 @@
 #include "slur.h"
 #include "staff.h"
 #include "stafftext.h"
+#include "stafftypechange.h"
 #include "stem.h"
 #include "sticking.h"
 #include "system.h"
@@ -2822,6 +2823,9 @@ void Score::deleteItem(EngravingItem* el)
         }
         for (Clef* clef : ic->clefs()) {
             deleteItem(clef);
+        }
+        for (StaffTypeChange* stc : ic->staffTypeChanges()) {
+            deleteItem(stc);
         }
         if (part->staff(0)->transpose(tickStart) != oldV) {
             auto i = part->instruments().upper_bound(tickStart.ticks());
