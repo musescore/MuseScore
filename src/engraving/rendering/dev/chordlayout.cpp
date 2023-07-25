@@ -3199,16 +3199,9 @@ void ChordLayout::layoutStretchedBends(Chord* chord, LayoutContext& ctx)
         return;
     }
 
-    double highestCoord = 0;
     for (EngravingItem* item : chord->el()) {
         if (item && item->isStretchedBend()) {
-            highestCoord = std::max(highestCoord, toStretchedBend(item)->highestCoord());
-        }
-    }
-
-    for (EngravingItem* item : chord->el()) {
-        if (item && item->isStretchedBend()) {
-            toStretchedBend(item)->updateHeights(highestCoord);
+            toStretchedBend(item)->updateHeights();
         }
     }
 

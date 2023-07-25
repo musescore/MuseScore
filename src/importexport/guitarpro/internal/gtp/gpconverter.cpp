@@ -346,10 +346,7 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
 
     addTempoMap();
     addInstrumentChanges();
-
-    for (auto&[chord, bends] : m_stretchedBends) {
-        StretchedBend::prepareBends(bends);
-    }
+    StretchedBend::prepareBends(m_stretchedBends);
 
     addFermatas();
     addContinuousSlideHammerOn();
@@ -1979,7 +1976,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         note->setStretchedBend(stretchedBend);
 
         chord->add(stretchedBend);
-        m_stretchedBends[chord].push_back(stretchedBend);
+        m_stretchedBends.push_back(stretchedBend);
     } else {
         Bend* bend = Factory::createBend(note);
         bend->setPoints(pitchValues);
