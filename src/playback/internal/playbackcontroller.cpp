@@ -63,9 +63,9 @@ static AudioOutputParams makeReverbOutputParams()
     return result;
 }
 
-static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutputParams& params)
+static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutputParams& params, bool considerFx = true)
 {
-    if (params.fxChain.size() == 1) {
+    if (considerFx && params.fxChain.size() == 1) {
         const AudioResourceMeta& meta = params.fxChain.cbegin()->second.resourceMeta;
         if (meta.id == MUSE_REVERB_ID) {
             return mu::trc("playback", "Reverb");
@@ -859,7 +859,7 @@ void PlaybackController::addAuxTrack(aux_channel_idx_t index, const TrackAddFini
         outParams = makeReverbOutputParams();
     }
 
-    std::string title = resolveAuxTrackTitle(index, outParams);
+    std::string title = resolveAuxTrackTitle(index, outParams, false);
     uint64_t playbackKey = notationPlaybackKey();
 
     playback()->tracks()->addAuxTrack(m_currentSequenceId, title, outParams)
