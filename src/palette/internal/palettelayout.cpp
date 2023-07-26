@@ -1201,6 +1201,7 @@ void PaletteLayout::layout(Ottava* item, const Context& ctx)
 void PaletteLayout::layout(OttavaSegment* item, const Context& ctx)
 {
     layoutTextLineBaseSegment(item, ctx);
+    item->setOffset(PointF());
 }
 
 void PaletteLayout::layout(PalmMute* item, const Context& ctx)
