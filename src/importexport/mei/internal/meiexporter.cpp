@@ -1547,7 +1547,6 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const engraving:
         m_startingControlEventMap[breath] = "#" + xmlId;
     }
     // Slurs
-    std::vector<Slur*> result;
     SpannerMap& smap = m_score->spannerMap();
     auto spanners = smap.findOverlapping(chordRest->tick().ticks(), chordRest->tick().ticks());
     for (auto interval : spanners) {
