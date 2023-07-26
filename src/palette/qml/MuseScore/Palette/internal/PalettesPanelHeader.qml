@@ -190,5 +190,7 @@ Item {
         visible: root.isSearchOpened
 
         Keys.onEscapePressed: root.endSearch()
+
+        onAccepted: applyCurrentPaletteElement()
     }
 }

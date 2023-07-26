@@ -49,6 +49,7 @@ public:
 
 signals:
     void paletteSearchRequested();
+    void applyCurrentPaletteElementRequested();
 };
 }
 

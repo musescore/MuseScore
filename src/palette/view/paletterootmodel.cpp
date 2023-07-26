@@ -29,6 +29,9 @@ PaletteRootModel::PaletteRootModel(QObject* parent)
     dispatcher()->reg(this, "palette-search", [this]() {
         emit paletteSearchRequested();
     });
+    dispatcher()->reg(this, "apply-current-palette-element", [this]() {
+        emit applyCurrentPaletteElementRequested();
+    });
 }
 
 PaletteRootModel::~PaletteRootModel()
