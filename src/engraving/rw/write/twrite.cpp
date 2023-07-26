@@ -2509,6 +2509,9 @@ void TWrite::write(const StaffTypeChange* item, XmlWriter& xml, WriteContext& ct
     if (item->staffType()) {
         write(item->staffType(), xml, ctx);
     }
+    if (item->forInstrumentChange()) {
+        xml.tag("forInstrumentChange", true);
+    }
     writeItemProperties(item, xml, ctx);
     xml.endElement();
 }

@@ -58,6 +58,7 @@ public:
 
     std::vector<KeySig*> keySigs(bool all=false) const;
     std::vector<Clef*> clefs() const;
+    std::vector<StaffTypeChange*> staffTypeChanges() const;
 
     bool init() const { return _init; }
     void setInit(bool init) { _init = init; }

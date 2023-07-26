@@ -94,7 +94,9 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
 
         Part* part = staff()->part();
 
-        Interval oldV = part->instrument(tickStart)->transpose();
+        Instrument* oldInstrument = part->instrument(tickStart);
+
+        Interval oldV = oldInstrument->transpose();
         Interval oldKv = staff()->transpose(tickStart);
 
         bool isPitchedNew = !instrument->useDrumset();
@@ -143,16 +145,32 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             score()->undoChangeKeySig(part->staff(i), tickStart, ks);
         }
 
-        // add staff type change
+        // change staff type
         for(Staff* staff : part->staves()) {
             track_idx_t track = staff->idx() * VOICES;
-            Measure* m = findMeasure();
-            StaffTypeChange* stc = Factory::createStaffTypeChange(m);
+            Measure* m = segment()->measure(); //findMeasure();
+            StaffType staffType = instrument->defaultStaffType();
+            StaffTypeChange* stc = nullptr;
+            // if staffTypeChange already there, change it, only if deafaults differ
+            if (staff->isStaffTypeStartFrom(tickStart)) {
+                StaffType oldStafftype = oldInstrument->defaultStaffType();
+                if (!(staffType == oldStafftype)) {
+                    for (EngravingItem* e : m->el()) {
+                        if (e->isStaffTypeChange() && e->track() == track) {
+                            score()->deleteItem(e);
+                        }
+                    }
+                } else {
+                    break;
+                }
+            }
+            StaffType* tmpStaffType = new StaffType(staffType);
+            stc = Factory::createStaffTypeChange(m);
             stc->setParent(m);
             stc->setTrack(track);
+            stc->setForInstrumentChange(true);
+            stc->setStaffType(tmpStaffType, true);
             score()->undoAddElement(stc);
-            // properties can be changed only after element is added to score
-            stc->setProperty(Pid::STAFF_GEN_KEYSIG, isPitchedNew);
         }
 
         // change instrument in all linked scores
@@ -223,6 +241,28 @@ std::vector<Clef*> InstrumentChange::clefs() const
         }
     }
     return clefs;
+}
+
+//---------------------------------------------------------
+//   staffTypeChanges
+//---------------------------------------------------------
+
+std::vector<StaffTypeChange*> InstrumentChange::staffTypeChanges() const
+{
+    std::vector<StaffTypeChange*> staffTypeChanges;
+    const MeasureBase* mb = findMeasureBase();
+    if (mb) {
+        track_idx_t startTrack = part()->staff(0)->idx() * VOICES;
+        track_idx_t endTrack = part()->staff(part()->nstaves() - 1)->idx() * VOICES;
+        ElementList els = mb->el();
+        for(EngravingItem* e : els) {
+            track_idx_t eTrack = e->track();
+            if (eTrack >= startTrack && eTrack <= endTrack && e->isType(ElementType::STAFFTYPE_CHANGE) && toStaffTypeChange(e)->forInstrumentChange()) {
+                staffTypeChanges.push_back(toStaffTypeChange(e));
+            }
+        }
+    }
+    return staffTypeChanges;
 }
 
 //---------------------------------------------------------

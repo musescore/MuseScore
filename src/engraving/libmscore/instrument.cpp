@@ -25,6 +25,7 @@
 #include "drumset.h"
 #include "instrtemplate.h"
 #include "masterscore.h"
+#include "stafftype.h"
 #include "stringdata.h"
 #include "textbase.h"
 
@@ -1204,6 +1205,21 @@ void Instrument::updateInstrumentId()
     if (_id.isEmpty()) {
         _id = recognizeId();
     }
+}
+
+StaffType Instrument::defaultStaffType() const
+{
+    StaffType staffType;
+    InstrumentTemplate* instrumentTemplate = searchTemplate(id());
+    if (instrumentTemplate) {
+        const StaffType* staffTempl = instrumentTemplate->staffTypePreset;
+        if (staffTempl) {
+            staffType = *staffTempl;
+        } else {
+            staffType = *StaffType::getDefaultPreset(instrumentTemplate->staffGroup);
+        }
+    }
+    return staffType;
 }
 
 //---------------------------------------------------------

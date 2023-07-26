@@ -47,6 +47,9 @@ public:
 
     double lw() const { return m_lw; }
 
+    void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
+    bool forInstrumentChange() const { return _forInstrumentChange; }
+
     Measure* measure() const { return toMeasure(explicitParent()); }
 
     PropertyValue getProperty(Pid propertyId) const override;
@@ -64,6 +67,7 @@ private:
     StaffType* m_staffType = nullptr;
     bool m_ownsStaffType = false;
     double m_lw = 0.0;
+    bool _forInstrumentChange = false;
 };
 } // namespace mu::engraving
 

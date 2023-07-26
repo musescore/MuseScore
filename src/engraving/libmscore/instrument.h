@@ -431,6 +431,8 @@ public:
     void setSingleNoteDynamicsFromTemplate();
     bool getSingleNoteDynamicsFromTemplate() const;
     void switchExpressive(MasterScore* score, Synthesizer* synth, bool expressive, bool force = false);
+
+    StaffType defaultStaffType() const;
 };
 
 //---------------------------------------------------------
