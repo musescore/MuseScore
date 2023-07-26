@@ -3304,10 +3304,12 @@ ChordRest* Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, trac
                         tick = s->tick();
                     }
                     currentTuplet = cr1->tuplet();
-                    if (currentTuplet && ((currentTuplet->tick()) >= stick1) && ((currentTuplet->tick() + currentTuplet->actualTicks()) <= tick2)) {
+                    if (currentTuplet && ((currentTuplet->tick()) >= stick1)
+                        && ((currentTuplet->tick() + currentTuplet->actualTicks()) <= tick2)) {
                         // Find highest-level complete tuplet contained in range
                         Tuplet* t = cr1->tuplet();
-                        while (t->tuplet() && ((t->tuplet()->tick()) >= stick1) && ((t->tuplet()->tick() + t->tuplet()->actualTicks()) <= tick2)) {
+                        while (t->tuplet() && ((t->tuplet()->tick()) >= stick1)
+                               && ((t->tuplet()->tick() + t->tuplet()->actualTicks()) <= tick2)) {
                             t = t->tuplet();
                         }
                         cmdDeleteTuplet(t, false);
@@ -3328,7 +3330,8 @@ ChordRest* Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, trac
                     Tuplet* t = cr1->tuplet();
                     if (t && ((t->tick()) >= stick1) && (((t->tick() + t->actualTicks()) <= tick2) || fullMeasure)) { // If deleting a complete tuplet
                         // Find highest-level complete tuplet contained in range
-                        while (t->tuplet() && ((t->tuplet()->tick()) >= stick1) && ((t->tuplet()->tick() + t->tuplet()->actualTicks()) <= tick2)) {
+                        while (t->tuplet() && ((t->tuplet()->tick()) >= stick1)
+                               && ((t->tuplet()->tick() + t->tuplet()->actualTicks()) <= tick2)) {
                             t = t->tuplet();
                         }
                         cmdDeleteTuplet(t, false);
