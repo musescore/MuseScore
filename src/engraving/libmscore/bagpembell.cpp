@@ -35,7 +35,7 @@ using namespace mu;
 
 namespace mu::engraving {
 // Staff line and pitch for every bagpipe note
-BagpipeNoteInfo BagpipeEmbellishment::BagpipeNoteInfoList[] = {
+const BagpipeNoteInfo BagpipeEmbellishment::BAGPIPE_NOTEINFO_LIST[] = {
     { "LG",  6,  65 },
     { "LA",  5,  67 },
     { "B",   4,  69 },
@@ -48,20 +48,20 @@ BagpipeNoteInfo BagpipeEmbellishment::BagpipeNoteInfoList[] = {
 };
 
 //---------------------------------------------------------
-//   getNoteList
+//   resolveNoteList
 //     return notes as list of indices in BagpipeNoteInfoList
 //---------------------------------------------------------
 
-noteList BagpipeEmbellishment::getNoteList() const
+BagpipeNoteList BagpipeEmbellishment::resolveNoteList() const
 {
-    noteList nl;
+    BagpipeNoteList nl;
 
-    StringList notes = TConv::embellishmentNotes(_embelType);
-    int noteInfoSize = sizeof(BagpipeNoteInfoList) / sizeof(*BagpipeNoteInfoList);
+    StringList notes = TConv::embellishmentNotes(m_embelType);
+    int noteInfoSize = sizeof(BAGPIPE_NOTEINFO_LIST) / sizeof(*BAGPIPE_NOTEINFO_LIST);
     for (const String& note : notes) {
         // search for note in BagpipeNoteInfoList
         for (int i = 0; i < noteInfoSize; ++i) {
-            if (String::fromAscii(BagpipeNoteInfoList[i].name.ascii()) == note) {
+            if (String::fromAscii(BAGPIPE_NOTEINFO_LIST[i].name.ascii()) == note) {
                 // found it, append to list
                 nl.push_back(i);
                 break;
@@ -194,7 +194,7 @@ void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
     SymId headsym = SymId::noteheadBlack;
     SymId flagsym = SymId::flag32ndUp;
 
-    noteList nl = getNoteList();
+    BagpipeNoteList nl = resolveNoteList();
     BEDrawingDataX dx(headsym, flagsym, magS(), style().spatium(), static_cast<int>(nl.size()));
 
     Pen pen(curColor(), dx.lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
@@ -206,7 +206,7 @@ void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
     // draw the notes including stem, (optional) flag and (optional) ledger line
     double x = dx.xl;
     for (int note : nl) {
-        int line = BagpipeNoteInfoList[note].line;
+        int line = BAGPIPE_NOTEINFO_LIST[note].line;
         BEDrawingDataY dy(line, style().spatium());
         drawGraceNote(painter, dx, dy, flagsym, x, drawFlag);
 
