@@ -24,7 +24,7 @@
 
 #include "io/path.h"
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 namespace mu::project {
 class IProjectAutoSaver : MODULE_EXPORT_INTERFACE

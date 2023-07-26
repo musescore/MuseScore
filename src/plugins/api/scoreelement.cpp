@@ -73,7 +73,7 @@ QString ScoreElement::userName() const
 
 qreal ScoreElement::spatium() const
 {
-    return e->isEngravingItem() ? toEngravingItem(e)->spatium() : e->score()->spatium();
+    return e->isEngravingItem() ? toEngravingItem(e)->spatium() : e->score()->style().spatium();
 }
 
 //---------------------------------------------------------

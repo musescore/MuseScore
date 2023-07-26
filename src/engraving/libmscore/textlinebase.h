@@ -34,9 +34,6 @@ class EngravingItem;
 class Text;
 class TextLineBase;
 
-class XmlReader;
-class XmlWriter;
-
 //---------------------------------------------------------
 //   @@ TextLineBaseSegment
 //---------------------------------------------------------
@@ -44,13 +41,6 @@ class XmlWriter;
 class TextLineBaseSegment : public LineSegment
 {
     OBJECT_ALLOCATOR(engraving, TextLineBaseSegment)
-protected:
-    Text* _text;
-    Text* _endText;
-    mu::PointF points[6];
-    int npoints = 0;
-    double lineLength = 0;
-    bool twoLines = false;
 
 public:
     TextLineBaseSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::NOTHING);
@@ -60,7 +50,6 @@ public:
     TextLineBase* textLineBase() const { return (TextLineBase*)spanner(); }
     void draw(mu::draw::Painter*) const override;
 
-    void layout() override;
     void setSelected(bool f) override;
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
@@ -70,6 +59,31 @@ public:
     Shape shape() const override;
 
     bool setProperty(Pid id, const PropertyValue& v) override;
+
+    bool twoLines() const { return m_twoLines; }
+    void setTwoLines(bool val) { m_twoLines = val; }
+
+    Text* text() const { return m_text; }
+    Text* endText() const { return m_endText; }
+
+    mu::PointF* pointsRef() { return &m_points[0]; }
+    mu::PolygonF& polygonRef() { return m_joinedHairpin; }
+    int& npointsRef() { return m_npoints; }
+
+    double lineLength() const { return m_lineLength; }
+    void setLineLength(double l) { m_lineLength = l; }
+
+    static RectF boundingBoxOfLine(const PointF& p1, const PointF& p2, double lw2, bool isDottedLine);
+
+protected:
+
+    Text* m_text = nullptr;
+    Text* m_endText = nullptr;
+    mu::PointF m_points[6];
+    mu::PolygonF m_joinedHairpin;
+    int m_npoints = 0;
+    double m_lineLength = 0;
+    bool m_twoLines = false;
 };
 
 //---------------------------------------------------------
@@ -85,6 +99,7 @@ class TextLineBase : public SLine
     M_PROPERTY2(HookType,  endHookType,           setEndHookType,       HookType::NONE)
     M_PROPERTY(Spatium,    beginHookHeight,       setBeginHookHeight)
     M_PROPERTY(Spatium,    endHookHeight,         setEndHookHeight)
+    M_PROPERTY(Spatium,    gapBetweenTextAndLine,  setGapBetweenTextAndLine)
 
     M_PROPERTY2(TextPlace, beginTextPlace,        setBeginTextPlace,    TextPlace::AUTO)
     M_PROPERTY(String,     beginText,             setBeginText)
@@ -114,18 +129,13 @@ class TextLineBase : public SLine
 public:
     TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
 
-    void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
-
-    void writeProperties(XmlWriter& xml) const override;
-    bool readProperties(XmlReader& node) override;
-
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
-    static const std::array<Pid, 26>& textLineBasePropertyIds();
+    static const std::array<Pid, 27>& textLineBasePropertyIds();
 
 protected:
     friend class TextLineBaseSegment;

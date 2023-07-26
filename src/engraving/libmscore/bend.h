@@ -47,6 +47,7 @@ enum class BendType {
 class Bend : public EngravingItem // TODO: bring back "final" keyword
 {
     OBJECT_ALLOCATOR(engraving, Bend)
+    DECLARE_CLASSOF(ElementType::BEND)
 
     M_PROPERTY(String,     fontFace,  setFontFace)
     M_PROPERTY(double,      fontSize,  setFontSize)
@@ -56,16 +57,25 @@ class Bend : public EngravingItem // TODO: bring back "final" keyword
 public:
     Bend* clone() const override { return new Bend(*this); }
 
-    void layout() override;
+    static const char* label[13];
+
     void draw(mu::draw::Painter*) const override;
-    void write(XmlWriter&) const override;
-    void read(XmlReader& e) override;
+
     PitchValues& points() { return m_points; }
     const PitchValues& points() const { return m_points; }
     void addPoint(const PitchValue& pv) { m_points.push_back(pv); }
     void setPoints(const PitchValues& p) { m_points = p; }
     bool playBend() const { return m_playBend; }
     void setPlayBend(bool v) { m_playBend = v; }
+
+    void setNoteWidth(double v) { m_noteWidth = v; }
+    double noteWidth() const { return m_noteWidth; }
+    void setNoteHeight(double v) { m_noteHeight = v; }
+    double noteHeight() const { return m_noteHeight; }
+    void setNotePos(const PointF& v) { m_notePos = v; }
+    const PointF& notePos() const { return m_notePos; }
+
+    mu::draw::Font font(double) const;
 
     // property methods
     PropertyValue getProperty(Pid propertyId) const override;
@@ -74,18 +84,18 @@ public:
 
 protected: /// TODO: bring back "private" keyword after removing StretchedBend class
     friend class Factory;
+
     Bend(Note* parent, ElementType type = ElementType::BEND);
 
-    mu::draw::Font font(double) const;
     BendType parseBendTypeFromCurve() const;
     void updatePointsByBendType(const BendType bendType);
 
     bool m_playBend = true;
     PitchValues m_points;
 
-    mu::PointF m_notePos;
-    double m_noteWidth = 0;
-    double m_noteHeight = 0;
+    PointF m_notePos;
+    double m_noteWidth = 0.0;
+    double m_noteHeight = 0.0;
 };
 } // namespace mu::engraving
 #endif

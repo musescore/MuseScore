@@ -35,14 +35,14 @@ class WhammyBar;
 class WhammyBarSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, WhammyBarSegment)
+    DECLARE_CLASSOF(ElementType::WHAMMY_BAR_SEGMENT)
+
 public:
     WhammyBarSegment(WhammyBar* sp, System* parent);
 
     WhammyBarSegment* clone() const override { return new WhammyBarSegment(*this); }
 
     WhammyBar* whammyBar() const { return (WhammyBar*)spanner(); }
-
-    void layout() override;
 
     friend class WhammyBar;
 };
@@ -54,6 +54,8 @@ public:
 class WhammyBar final : public ChordTextLineBase
 {
     OBJECT_ALLOCATOR(engraving, WhammyBar)
+    DECLARE_CLASSOF(ElementType::WHAMMY_BAR)
+
 public:
     WhammyBar(EngravingItem* parent);
 

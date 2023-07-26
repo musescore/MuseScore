@@ -32,7 +32,7 @@ class PlaybackLoadingModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(playback, IPlaybackController, playbackController)
+    INJECT(IPlaybackController, playbackController)
 
     Q_PROPERTY(int currentProgress READ currentProgress NOTIFY currentProgressChanged)
     Q_PROPERTY(int totalProgress READ totalProgress NOTIFY totalProgressChanged)

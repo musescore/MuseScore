@@ -22,9 +22,13 @@
 #ifndef MU_AUTOBOT_AUTOBOTMODULE_H
 #define MU_AUTOBOT_AUTOBOTMODULE_H
 
+#include <memory>
 #include "modularity/imodulesetup.h"
 
 namespace mu::autobot {
+class AutobotConfiguration;
+class Autobot;
+class AutobotActionsController;
 class AutobotModule : public modularity::IModuleSetup
 {
 public:
@@ -34,6 +38,12 @@ public:
     void resolveImports() override;
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+
+    std::shared_ptr<AutobotConfiguration> m_configuration;
+    std::shared_ptr<Autobot> m_autobot;
+    std::shared_ptr<AutobotActionsController> m_actionsController;
 };
 }
 

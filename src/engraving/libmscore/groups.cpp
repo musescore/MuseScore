@@ -22,9 +22,6 @@
 
 #include "groups.h"
 
-#include "rw/xml.h"
-#include "rw/400/tread.h"
-
 #include "chordrest.h"
 #include "durationtype.h"
 #include "staff.h"
@@ -176,7 +173,7 @@ BeamMode Groups::beamMode(int tick, DurationType d) const
     default:
         return BeamMode::AUTO;
     }
-    const int dm = Constants::division / 8;
+    const int dm = Constants::DIVISION / 8;
     for (const GroupNode& e : m_nodes) {
         if (e.pos * dm < tick) {
             continue;
@@ -189,8 +186,8 @@ BeamMode Groups::beamMode(int tick, DurationType d) const
         switch (action) {
         case 0: return BeamMode::AUTO;
         case 1: return BeamMode::BEGIN;
-        case 2: return BeamMode::BEGIN32;
-        case 3: return BeamMode::BEGIN64;
+        case 2: return BeamMode::BEGIN16;
+        case 3: return BeamMode::BEGIN32;
         default:
             LOGD("   Groups::beamMode: bad action %d", action);
             return BeamMode::AUTO;
@@ -238,28 +235,6 @@ const Groups& Groups::endings(const Fraction& f)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Groups::write(XmlWriter& xml) const
-{
-    xml.startElement("Groups");
-    for (const GroupNode& n : m_nodes) {
-        xml.tag("Node", { { "pos", n.pos }, { "action", n.action } });
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Groups::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
-}
-
-//---------------------------------------------------------
 //   addStop
 //---------------------------------------------------------
 
@@ -279,9 +254,9 @@ void Groups::addStop(int pos, DurationType d, BeamMode bm)
     int action;
     if (bm == BeamMode::BEGIN) {
         action = 1;
-    } else if (bm == BeamMode::BEGIN32) {
+    } else if (bm == BeamMode::BEGIN16) {
         action = 2;
-    } else if (bm == BeamMode::BEGIN64) {
+    } else if (bm == BeamMode::BEGIN32) {
         action = 3;
     } else {
         return;

@@ -59,6 +59,7 @@ static const QString COMPOSER_TAG("composer");
 static const QString LYRICIST_TAG("lyricist");
 static const QString POET_TAG("poet");
 static const QString SOURCE_TAG("source");
+static const QString SOURCE_REVISION_ID_TAG("sourceRevisionId");
 static const QString COPYRIGHT_TAG("copyright");
 static const QString TRANSLATOR_TAG("translator");
 static const QString ARRANGER_TAG("arranger");
@@ -183,15 +184,16 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
     }
 
     MscReader reader(params);
-    if (!reader.open()) {
-        return make_ret(engraving::Err::FileOpenError);
+    Ret ret = reader.open();
+    if (!ret) {
+        return ret;
     }
 
     // Load engraving project
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
 
     SettingsCompat settingsCompat;
-    Ret ret = m_engravingProject->loadMscz(reader, settingsCompat, forceMode);
+    ret = m_engravingProject->loadMscz(reader, settingsCompat, forceMode);
     if (!ret) {
         return ret;
     }
@@ -214,10 +216,12 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
 
     // Migration
     if (migrator()) {
+        masterScore->lockUpdates(false); // because migration needs a second layout
         ret = migrator()->migrateEngravingProjectIfNeed(m_engravingProject);
         if (!ret) {
             return ret;
         }
+        masterScore->lockUpdates(true);
     }
 
     // Load style if present
@@ -229,15 +233,27 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
     masterScore->setLayoutAll();
     masterScore->update();
 
-    // Load other stuff from the project file
+    // Load audio settings
     ret = m_projectAudioSettings->read(reader);
     if (!ret) {
-        //applyed compat audio settings
+        m_projectAudioSettings->makeDefault();
+
+        // Apply compat audio settings
         if (!settingsCompat.audioSettings.empty()) {
             for (const auto& audioCompat : settingsCompat.audioSettings) {
                 IProjectAudioSettings::SoloMuteState state = { audioCompat.second.mute, audioCompat.second.solo };
-                m_projectAudioSettings->setSoloMuteState(audioCompat.second.instrumentId, state);
+                m_projectAudioSettings->setTrackSoloMuteState(audioCompat.second.instrumentId, state);
             }
+        }
+    }
+
+    // Load cloud info
+    {
+        m_cloudInfo.sourceUrl = masterScore->metaTags()[SOURCE_TAG].toQString();
+        m_cloudInfo.revisionId = masterScore->metaTags()[SOURCE_REVISION_ID_TAG].toInt();
+
+        if (configuration()->isLegacyCloudProject(path)) {
+            m_cloudInfo.name = io::filename(path, false).toQString();
         }
     }
 
@@ -344,7 +360,7 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
         excerpt->notation()->viewState()->makeDefault();
     }
 
-    masterScore->setSaved(true);
+    masterScore->setSaved(false);
 
     m_isNewlyCreated = true;
 
@@ -388,6 +404,7 @@ void NotationProject::setPath(const io::path_t& path)
 
     m_path = path;
     m_pathChanged.notify();
+    m_displayNameChanged.notify();
 }
 
 async::Notification NotationProject::pathChanged() const
@@ -409,11 +426,16 @@ QString NotationProject::displayName() const
     }
 
     if (isCloudProject()) {
-        // TODO(save-to-cloud)
+        return m_cloudInfo.name;
     }
 
     bool isSuffixInteresting = io::suffix(m_path) != engraving::MSCZ;
     return io::filename(m_path, isSuffixInteresting).toQString();
+}
+
+async::Notification NotationProject::displayNameChanged() const
+{
+    return m_displayNameChanged;
 }
 
 bool NotationProject::isCloudProject() const
@@ -423,11 +445,6 @@ bool NotationProject::isCloudProject() const
 
 const CloudProjectInfo& NotationProject::cloudInfo() const
 {
-    if (!m_cloudInfo.isValid()) {
-        m_cloudInfo.name = io::filename(m_path, false).toQString();
-        m_cloudInfo.sourceUrl = m_masterNotation->masterScore()->metaTags()[SOURCE_TAG].toQString();
-    }
-
     return m_cloudInfo;
 }
 
@@ -435,6 +452,9 @@ void NotationProject::setCloudInfo(const CloudProjectInfo& info)
 {
     m_cloudInfo = info;
     m_masterNotation->masterScore()->setMetaTag(SOURCE_TAG, info.sourceUrl.toString());
+    m_masterNotation->masterScore()->setMetaTag(SOURCE_REVISION_ID_TAG, String::number(info.revisionId));
+
+    m_displayNameChanged.notify();
 }
 
 mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)
@@ -504,9 +524,18 @@ mu::Ret NotationProject::writeToDevice(QIODevice* device)
     msczWriter.close();
 
     if (ret) {
+        if (msczWriter.hasError()) {
+            LOGE() << "MSCZ writer has error";
+            return make_ret(Ret::Code::UnknownError);
+        }
+
         buf.open(IODevice::OpenMode::ReadOnly);
         ByteArray ba = buf.readAll();
-        device->write(ba.toQByteArrayNoCopy());
+
+        if ((size_t)device->write(ba.toQByteArrayNoCopy()) != ba.size()) {
+            LOGE() << "Error writing to device";
+            return make_ret(Ret::Code::UnknownError);
+        }
     }
 
     return ret;
@@ -532,8 +561,7 @@ mu::Ret NotationProject::doSave(const io::path_t& path, bool generateBackup, eng
 
     // Step 1: check writable
     {
-        QFileInfo fi(savePath);
-        if (fi.exists() && !QFileInfo(savePath).isWritable()) {
+        if (fileSystem()->exists(savePath) && !fileSystem()->isWritable(savePath)) {
             LOGE() << "failed save, not writable path: " << savePath;
             return make_ret(notation::Err::UnknownError);
         }
@@ -559,12 +587,17 @@ mu::Ret NotationProject::doSave(const io::path_t& path, bool generateBackup, eng
 
         MscWriter msczWriter(params);
         Ret ret = writeProject(msczWriter, false);
+        msczWriter.close();
+
         if (!ret) {
             LOGE() << "failed write project to buffer";
             return ret;
         }
 
-        msczWriter.close();
+        if (msczWriter.hasError()) {
+            LOGE() << "MscWriter has error after writing project";
+            return make_ret(Ret::Code::UnknownError);
+        }
     }
 
     // Step 3: create backup if need
@@ -660,21 +693,21 @@ mu::Ret NotationProject::makeCurrentFileAsBackup()
 mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection)
 {
     // Create MsczWriter
-    bool ok = msczWriter.open();
-    if (!ok) {
+    Ret ret = msczWriter.open();
+    if (!ret) {
         LOGE() << "failed open writer";
-        return make_ret(engraving::Err::FileOpenError);
+        return ret;
     }
 
     // Write engraving project
-    ok = m_engravingProject->writeMscz(msczWriter, onlySelection, true);
-    if (!ok) {
+    ret = m_engravingProject->writeMscz(msczWriter, onlySelection, true);
+    if (!ret) {
         LOGE() << "failed write engraving project to mscz";
         return make_ret(notation::Err::UnknownError);
     }
 
     // Write audio settings
-    Ret ret = m_projectAudioSettings->write(msczWriter);
+    ret = m_projectAudioSettings->write(msczWriter);
     if (!ret) {
         LOGE() << "failed write project audio settings, err: " << ret.toString();
         return ret;
@@ -700,14 +733,13 @@ mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path_t& path)
         return make_ret(notation::Err::EmptySelection);
     }
     // Check writable
-    QFileInfo info(path.toQString());
-    if (info.exists() && !info.isWritable()) {
-        LOGE() << "failed save, not writable path: " << info.filePath();
+    if (fileSystem()->exists(path) && !fileSystem()->isWritable(path)) {
+        LOGE() << "failed save, not writable path: " << path;
         return make_ret(notation::Err::UnknownError);
     }
 
     // Write project
-    std::string suffix = io::suffix(info.fileName());
+    std::string suffix = io::suffix(path);
     MscWriter::Params params;
     params.filePath = path.toQString();
     params.mode = mscIoModeBySuffix(suffix);
@@ -719,10 +751,10 @@ mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path_t& path)
     Ret ret = writeProject(msczWriter, true);
 
     if (ret) {
-        QFile::setPermissions(info.filePath(),
+        QFile::setPermissions(path.toQString(),
                               QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
     }
-    LOGI() << "success save file: " << info.filePath();
+    LOGI() << "success save file: " << path;
     return ret;
 }
 

@@ -51,9 +51,6 @@ struct BagpipeNoteInfo {
     int pitch;
 };
 
-struct BEDrawingDataX;
-struct BEDrawingDataY;
-
 //---------------------------------------------------------
 //   BagpipeEmbellishment
 //    dummy element, used for drag&drop
@@ -62,9 +59,7 @@ struct BEDrawingDataY;
 class BagpipeEmbellishment final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, BagpipeEmbellishment)
-
-    EmbellishmentType _embelType;
-    void drawGraceNote(mu::draw::Painter*, const BEDrawingDataX&, const BEDrawingDataY&, SymId, const double x, const bool drawFlag) const;
+    DECLARE_CLASSOF(ElementType::BAGPIPE_EMBELLISHMENT)
 
 public:
     BagpipeEmbellishment(EngravingItem* parent)
@@ -75,12 +70,52 @@ public:
     EmbellishmentType embelType() const { return _embelType; }
     void setEmbelType(EmbellishmentType val) { _embelType = val; }
     double mag() const override;
-    void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
-    void layout() override;
+
     void draw(mu::draw::Painter*) const override;
     static BagpipeNoteInfo BagpipeNoteInfoList[];
     noteList getNoteList() const;
+
+    //---------------------------------------------------------
+    //   BEDrawingDataX
+    //      BagpipeEmbellishment drawing data in the x direction
+    //      shared between ::draw() and ::layout()
+    //---------------------------------------------------------
+
+    struct BEDrawingDataX {
+        const SymId headsym;      // grace note head symbol
+        const SymId flagsym;      // grace note flag symbol
+        const double mags;         // grace head magnification
+        double headw;              // grace head width
+        double headp;              // horizontal head pitch
+        const double spatium;      // spatium
+        const double lw;           // line width for stem
+        double xl;                 // calc x for stem of leftmost note
+        const double xcorr;        // correction to align flag with top of stem
+
+        BEDrawingDataX(SymId hs, SymId fs, const double m, const double s, const int nn);
+    };
+
+    //---------------------------------------------------------
+    //   BEDrawingDataY
+    //      BagpipeEmbellishment drawing data in the y direction
+    //      shared between ::draw() and ::layout()
+    //---------------------------------------------------------
+
+    struct BEDrawingDataY {
+        const double y1b;          // top of all stems for beamed notes
+        const double y1f;          // top of stem for note with flag
+        const double y2;           // bottom of stem
+        const double ycorr;        // correction to align flag with top of stem
+        const double bw;           // line width for beam
+
+        BEDrawingDataY(const int l, const double s);
+    };
+
+private:
+
+    EmbellishmentType _embelType;
+    void drawGraceNote(mu::draw::Painter*, const BagpipeEmbellishment::BEDrawingDataX&, const BagpipeEmbellishment::BEDrawingDataY&, SymId,
+                       const double x, const bool drawFlag) const;
 };
 } // namespace mu::engraving
 

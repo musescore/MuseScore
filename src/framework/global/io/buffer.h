@@ -33,6 +33,7 @@ public:
     Buffer(size_t size);
     Buffer(const uint8_t* data, size_t size);
     Buffer(ByteArray* ba);
+    Buffer(ByteArray&& ba);
 
     const ByteArray& data() const;
 

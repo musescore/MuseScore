@@ -39,7 +39,7 @@ class DiagnosticAccessibleModel : public QAbstractItemModel, public async::Async
     Q_OBJECT
     Q_PROPERTY(bool isAutoRefresh READ isAutoRefresh WRITE setIsAutoRefresh NOTIFY isAutoRefreshChanged)
 
-    INJECT_STATIC(diagnostics, accessibility::IAccessibilityController, accessibilityController)
+    INJECT_STATIC(accessibility::IAccessibilityController, accessibilityController)
 
 public:
     explicit DiagnosticAccessibleModel(QObject* parent = nullptr);

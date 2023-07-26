@@ -214,6 +214,40 @@ const TextStyle stringNumberTextStyle { {
     { TextStylePropertyType::FrameFillColor,       Sid::stringNumberFrameBgColor,               Pid::FRAME_BG_COLOR },
 } };
 
+const TextStyle harpPedalDiagramTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::harpPedalDiagramFontFace,               Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::harpPedalDiagramFontSize,               Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::harpPedalDiagramLineSpacing,            Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::harpPedalDiagramFontSpatiumDependent,   Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::harpPedalDiagramFontStyle,              Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::harpPedalDiagramColor,                  Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::harpPedalDiagramAlign,                  Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::harpPedalDiagramOffset,                 Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::harpPedalDiagramFrameType,              Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::harpPedalDiagramFramePadding,           Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::harpPedalDiagramFrameWidth,             Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::harpPedalDiagramFrameRound,             Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::harpPedalDiagramFrameFgColor,           Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::harpPedalDiagramFrameBgColor,           Pid::FRAME_BG_COLOR },
+} };
+
+const TextStyle harpPedalTextDiagramTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::harpPedalTextDiagramFontFace,               Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::harpPedalTextDiagramFontSize,               Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::harpPedalTextDiagramLineSpacing,            Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::harpPedalTextDiagramFontSpatiumDependent,   Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::harpPedalTextDiagramFontStyle,              Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::harpPedalTextDiagramColor,                  Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::harpPedalTextDiagramAlign,                  Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::harpPedalTextDiagramOffset,                 Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::harpPedalTextDiagramFrameType,              Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::harpPedalTextDiagramFramePadding,           Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::harpPedalTextDiagramFrameWidth,             Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::harpPedalTextDiagramFrameRound,             Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::harpPedalTextDiagramFrameFgColor,           Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::harpPedalTextDiagramFrameBgColor,           Pid::FRAME_BG_COLOR },
+} };
+
 const TextStyle longInstrumentTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::longInstrumentFontFace,                 Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::longInstrumentFontSize,                 Pid::FONT_SIZE },
@@ -265,21 +299,22 @@ const TextStyle partInstrumentTextStyle { {
     { TextStylePropertyType::FrameFillColor,       Sid::partInstrumentFrameBgColor,             Pid::FRAME_BG_COLOR },
 } };
 
+// With the single exception of text alignment, after 4.1 Dynamics use Expression text style
 const TextStyle dynamicsTextStyle { {
-    { TextStylePropertyType::FontFace,             Sid::dynamicsFontFace,                       Pid::FONT_FACE },
-    { TextStylePropertyType::FontSize,             Sid::dynamicsFontSize,                       Pid::FONT_SIZE },
-    { TextStylePropertyType::LineSpacing,          Sid::dynamicsLineSpacing,                    Pid::TEXT_LINE_SPACING },
-    { TextStylePropertyType::SizeSpatiumDependent, Sid::dynamicsFontSpatiumDependent,           Pid::SIZE_SPATIUM_DEPENDENT },
-    { TextStylePropertyType::FontStyle,            Sid::dynamicsFontStyle,                      Pid::FONT_STYLE },
-    { TextStylePropertyType::Color,                Sid::dynamicsColor,                          Pid::COLOR },
+    { TextStylePropertyType::FontFace,             Sid::expressionFontFace,                     Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::expressionFontSize,                     Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::expressionLineSpacing,                  Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::expressionFontSpatiumDependent,         Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::expressionFontStyle,                    Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::expressionColor,                        Pid::COLOR },
     { TextStylePropertyType::TextAlign,            Sid::dynamicsAlign,                          Pid::ALIGN },
-    { TextStylePropertyType::Offset,               Sid::dynamicsPosBelow,                       Pid::OFFSET },
-    { TextStylePropertyType::FrameType,            Sid::dynamicsFrameType,                      Pid::FRAME_TYPE },
-    { TextStylePropertyType::FramePadding,         Sid::dynamicsFramePadding,                   Pid::FRAME_PADDING },
-    { TextStylePropertyType::FrameWidth,           Sid::dynamicsFrameWidth,                     Pid::FRAME_WIDTH },
-    { TextStylePropertyType::FrameRound,           Sid::dynamicsFrameRound,                     Pid::FRAME_ROUND },
-    { TextStylePropertyType::FrameBorderColor,     Sid::dynamicsFrameFgColor,                   Pid::FRAME_FG_COLOR },
-    { TextStylePropertyType::FrameFillColor,       Sid::dynamicsFrameBgColor,                   Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::Offset,               Sid::expressionOffset,                       Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::expressionFrameType,                    Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::expressionFramePadding,                 Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::expressionFrameWidth,                   Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::expressionFrameRound,                   Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::expressionFrameFgColor,                 Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::expressionFrameBgColor,                 Pid::FRAME_BG_COLOR },
 } };
 
 const TextStyle expressionTextStyle { {
@@ -1058,6 +1093,8 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::LH_GUITAR_FINGERING: return &lhGuitarFingeringTextStyle;
     case TextStyleType::RH_GUITAR_FINGERING: return &rhGuitarFingeringTextStyle;
     case TextStyleType::STRING_NUMBER: return &stringNumberTextStyle;
+    case TextStyleType::HARP_PEDAL_DIAGRAM: return &harpPedalDiagramTextStyle;
+    case TextStyleType::HARP_PEDAL_TEXT_DIAGRAM: return &harpPedalTextDiagramTextStyle;
 
     case TextStyleType::TEXTLINE: return &textLineTextStyle;
     case TextStyleType::VOLTA: return &voltaTextStyle;
@@ -1156,5 +1193,16 @@ const std::vector<TextStyleType>& allTextStyles()
 const std::vector<TextStyleType>& primaryTextStyles()
 {
     return _primaryTextStyles;
+}
+
+static std::vector<TextStyleType> _editableTextStyles;
+
+const std::vector<TextStyleType>& editableTextStyles()
+{
+    if (_editableTextStyles.empty()) {
+        _editableTextStyles = allTextStyles();
+        mu::remove(_editableTextStyles, TextStyleType::DYNAMICS);
+    }
+    return _editableTextStyles;
 }
 }

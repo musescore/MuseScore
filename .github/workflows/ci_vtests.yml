@@ -140,10 +140,12 @@ jobs:
     - name: Generate PNGs   
       run: |
         xvfb-run ./build/ci/vtests/generate_pngs.sh
+      env: 
+        ASAN_OPTIONS: "detect_leaks=0"
     - name: Compare PNGs
       run: |
         echo "VTEST_DIFF_FOUND=false" >> $GITHUB_ENV
-        ./vtest/vtest-compare-pngs.sh
+        ./vtest/vtest-compare-pngs.sh --ci 1
     - name: Upload comparison
       if: env.VTEST_DIFF_FOUND == 'true'
       uses: actions/upload-artifact@v3
@@ -183,4 +185,3 @@ jobs:
 
           [1]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         token: ${{ secrets.GITHUB_TOKEN }}    
-

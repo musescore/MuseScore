@@ -22,9 +22,15 @@
 #ifndef MU_PROJECT_PROJECTMODULE_H
 #define MU_PROJECT_PROJECTMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::project {
+class ProjectConfiguration;
+class ProjectActionsController;
+class RecentFilesController;
+class ProjectAutoSaver;
 class ProjectModule : public modularity::IModuleSetup
 {
 public:
@@ -35,6 +41,12 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<ProjectConfiguration> m_configuration;
+    std::shared_ptr<ProjectActionsController> m_actionsController;
+    std::shared_ptr<RecentFilesController> m_recentFilesController;
+    std::shared_ptr<ProjectAutoSaver> m_projectAutoSaver;
 };
 }
 

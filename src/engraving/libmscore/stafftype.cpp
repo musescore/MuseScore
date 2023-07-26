@@ -26,8 +26,7 @@
 #include "io/file.h"
 #include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
-#include "rw/xml.h"
-#include "rw/400/tread.h"
+#include "rw/xmlreader.h"
 #include "types/typesconv.h"
 
 #include "chord.h"
@@ -44,7 +43,6 @@ using namespace mu::io;
 using namespace mu::engraving;
 
 #define TAB_DEFAULT_LINE_SP   (1.5)
-#define TAB_RESTSYMBDISPL     2.0
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -237,9 +235,13 @@ StaffTypes StaffType::type() const
 
         { u"tab7StrCommon", StaffTypes::TAB_7COMMON },
         { u"tab8StrCommon", StaffTypes::TAB_8COMMON },
+        { u"tab9StrCommon", StaffTypes::TAB_9COMMON },
+        { u"tab10StrCommon", StaffTypes::TAB_10COMMON },
 
         { u"tab7StrSimple", StaffTypes::TAB_7SIMPLE },
         { u"tab8StrSimple", StaffTypes::TAB_8SIMPLE },
+        { u"tab9StrSimple", StaffTypes::TAB_9SIMPLE },
+        { u"tab10StrSimple", StaffTypes::TAB_10SIMPLE },
     };
 
     return mu::value(xmlNameToType, _xmlName, StaffTypes::STANDARD);
@@ -285,104 +287,9 @@ bool StaffType::isCommonTabStaff() const
 //   isHiddenElementOnTab
 //---------------------------------------------------------
 
-bool StaffType::isHiddenElementOnTab(const Score* score, Sid commonTabStyle, Sid simpleTabStyle) const
+bool StaffType::isHiddenElementOnTab(const MStyle& style, Sid commonTabStyle, Sid simpleTabStyle) const
 {
-    return (isCommonTabStaff() && !score->styleB(commonTabStyle)) || (isSimpleTabStaff() && !score->styleB(simpleTabStyle));
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void StaffType::write(XmlWriter& xml) const
-{
-    xml.startElement("StaffType", { { "group", TConv::toXml(_group) } });
-    if (!_xmlName.isEmpty()) {
-        xml.tag("name", _xmlName);
-    }
-    if (_lines != 5) {
-        xml.tag("lines", _lines);
-    }
-    if (_lineDistance.val() != 1.0) {
-        xml.tag("lineDistance", _lineDistance.val());
-    }
-    if (_yoffset.val() != 0.0) {
-        xml.tag("yoffset", _yoffset.val());
-    }
-    if (_userMag != 1.0) {
-        xml.tag("mag", _userMag);
-    }
-    if (_small) {
-        xml.tag("small", _small);
-    }
-    if (_stepOffset) {
-        xml.tag("stepOffset", _stepOffset);
-    }
-    if (!_genClef) {
-        xml.tag("clef", _genClef);
-    }
-    if (_stemless) {
-        xml.tag("slashStyle", _stemless);     // for backwards compatibility
-        xml.tag("stemless", _stemless);
-    }
-    if (!_showBarlines) {
-        xml.tag("barlines", _showBarlines);
-    }
-    if (!_genTimesig) {
-        xml.tag("timesig", _genTimesig);
-    }
-    if (_invisible) {
-        xml.tag("invisible", _invisible);
-    }
-    if (_color != engravingConfiguration()->defaultColor()) {
-        xml.tag("color", _color.toString().c_str());
-    }
-    if (_group == StaffGroup::STANDARD) {
-        xml.tag("noteheadScheme", TConv::toXml(_noteHeadScheme), TConv::toXml(NoteHeadScheme::HEAD_NORMAL));
-    }
-    if (_group == StaffGroup::STANDARD || _group == StaffGroup::PERCUSSION) {
-        if (!_genKeysig) {
-            xml.tag("keysig", _genKeysig);
-        }
-        if (!_showLedgerLines) {
-            xml.tag("ledgerlines", _showLedgerLines);
-        }
-    } else {
-        xml.tag("durations",        _genDurations);
-        xml.tag("durationFontName", _durationFonts[_durationFontIdx].displayName);     // write font names anyway for backward compatibility
-        xml.tag("durationFontSize", _durationFontSize);
-        xml.tag("durationFontY",    _durationFontUserY);
-        xml.tag("fretFontName",     _fretFonts[_fretFontIdx].displayName);
-        xml.tag("fretFontSize",     _fretFontSize);
-        xml.tag("fretFontY",        _fretFontUserY);
-        if (_symRepeat != TablatureSymbolRepeat::NEVER) {
-            xml.tag("symbolRepeat", int(_symRepeat));
-        }
-        xml.tag("linesThrough",     _linesThrough);
-        xml.tag("minimStyle",       int(_minimStyle));
-        xml.tag("onLines",          _onLines);
-        xml.tag("showRests",        _showRests);
-        xml.tag("stemsDown",        _stemsDown);
-        xml.tag("stemsThrough",     _stemsThrough);
-        xml.tag("upsideDown",       _upsideDown);
-        xml.tag("showTabFingering", _showTabFingering, false);
-        xml.tag("useNumbers",       _useNumbers);
-        // only output "showBackTied" if different from !"stemless"
-        // to match the behaviour in 2.0.2 scores (or older)
-        if (_showBackTied != !_stemless) {
-            xml.tag("showBackTied",  _showBackTied);
-        }
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void StaffType::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
+    return (isCommonTabStaff() && !style.styleB(commonTabStyle)) || (isSimpleTabStaff() && !style.styleB(simpleTabStyle));
 }
 
 //---------------------------------------------------------
@@ -655,7 +562,7 @@ double StaffType::chordStemLength(const Chord* chord) const
     else {
         bool shrt = (minimStyle() == TablatureMinimStyle::SHORTER) && (chord->durationType().type() == DurationType::V_HALF);
         stemLen = (stemsDown() ? STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : STAFFTYPE_TAB_DEFAULTSTEMLEN_UP)
-                  * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0) * (chord->score()->styleB(Sid::useWideBeams) ? 1.25 : 1.0);
+                  * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0) * (chord->style().styleB(Sid::useWideBeams) ? 1.25 : 1.0);
     }
     // scale length by scale of parent chord, but relative to scale of context staff
     return stemLen * chord->mag() / chord->staff()->staffMag(chord->tick());
@@ -891,87 +798,26 @@ TabDurationSymbol::TabDurationSymbol(ChordRest* parent)
     : EngravingItem(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
-    _beamGrid   = TabBeamGrid::NONE;
-    _beamLength = 0.0;
-    _tab        = 0;
-    _text       = String();
+    m_beamGrid   = TabBeamGrid::NONE;
+    m_beamLength = 0.0;
+    m_tab        = 0;
+    m_text       = String();
 }
 
 TabDurationSymbol::TabDurationSymbol(ChordRest* parent, const StaffType* tab, DurationType type, int dots)
     : EngravingItem(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
-    _beamGrid   = TabBeamGrid::NONE;
-    _beamLength = 0.0;
+    m_beamGrid   = TabBeamGrid::NONE;
+    m_beamLength = 0.0;
     setDuration(type, dots, tab);
 }
 
 TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
     : EngravingItem(e)
 {
-    _tab = e._tab;
-    _text = e._text;
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void TabDurationSymbol::layout()
-{
-    if (!_tab) {
-        setbbox(RectF());
-        return;
-    }
-    double _spatium    = spatium();
-    double hbb, wbb, xbb, ybb;       // bbox sizes
-    double xpos, ypos;               // position coords
-
-    _beamGrid = TabBeamGrid::NONE;
-    Chord* chord = explicitParent() && explicitParent()->isChord() ? toChord(explicitParent()) : nullptr;
-    // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
-    if (!chord || !chord->isChord()
-        || (chord->beamMode() != BeamMode::BEGIN && chord->beamMode() != BeamMode::MID
-            && chord->beamMode() != BeamMode::END)) {
-        mu::draw::FontMetrics fm(_tab->durationFont());
-        hbb   = _tab->durationBoxH();
-        wbb   = fm.width(_text);
-        xbb   = 0.0;
-        xpos  = 0.0;
-        ypos  = _tab->durationFontYOffset();
-        ybb   = _tab->durationBoxY() - ypos;
-        // with rests, move symbol down by half its displacement from staff
-        if (explicitParent() && explicitParent()->isRest()) {
-            ybb  += TAB_RESTSYMBDISPL * _spatium;
-            ypos += TAB_RESTSYMBDISPL * _spatium;
-        }
-    }
-    // if on a chord with special beam mode, layout an 'English'-style duration grid
-    else {
-        TablatureDurationFont font = _tab->_durationFonts[_tab->_durationFontIdx];
-        hbb   = font.gridStemHeight * _spatium;             // bbox height is stem height
-        wbb   = font.gridStemWidth * _spatium;              // bbox width is stem width
-        xbb   = -wbb * 0.5;                                 // bbox is half at left and half at right of stem centre
-        ybb   = -hbb;                                       // bbox top is at top of stem height
-        xpos  = 0.75 * _spatium;                            // conventional centring of stem on fret marks
-        ypos  = _tab->durationGridYOffset();                // stem start is at bottom
-        if (chord->beamMode() == BeamMode::BEGIN) {
-            _beamGrid   = TabBeamGrid::INITIAL;
-            _beamLength = 0.0;
-        } else if (chord->beamMode() == BeamMode::MID || chord->beamMode() == BeamMode::END) {
-            _beamLevel  = static_cast<int>(chord->durationType().type()) - static_cast<int>(font.zeroBeamLevel);
-            _beamGrid   = (_beamLevel < 1 ? TabBeamGrid::INITIAL : TabBeamGrid::MEDIALFINAL);
-            // _beamLength and bbox x and width will be set in layout2(),
-            // once horiz. positions of chords are known
-        }
-    }
-    // set this' mag from parent chord mag (include staff mag)
-    double mag = chord != nullptr ? chord->mag() : 1.0;
-    setMag(mag);
-    mag = magS();             // local mag * score mag
-    // set magnified bbox and position
-    bbox().setRect(xbb * mag, ybb * mag, wbb * mag, hbb * mag);
-    setPos(xpos * mag, ypos * mag);
+    m_tab = e.m_tab;
+    m_text = e.m_text;
 }
 
 //---------------------------------------------------------
@@ -984,7 +830,7 @@ void TabDurationSymbol::layout()
 void TabDurationSymbol::layout2()
 {
     // if not within a TAB or not a MEDIALFINAL grid element, do nothing
-    if (!_tab || _beamGrid != TabBeamGrid::MEDIALFINAL) {
+    if (!m_tab || m_beamGrid != TabBeamGrid::MEDIALFINAL) {
         return;
     }
 
@@ -998,11 +844,11 @@ void TabDurationSymbol::layout2()
     double beamLen     = prevChord->pagePos().x() - chord->pagePos().x();            // negative
     // page pos. difference already includes any magnification in effect:
     // scale it down, as it will be magnified again during drawing
-    _beamLength = beamLen / mags;
+    m_beamLength = beamLen / mags;
     // update bbox x and w, but keep current y and h
     bbox().setLeft(beamLen);
     // set bbox width to half a stem width (magnified) plus beam length (already magnified)
-    bbox().setWidth(_tab->_durationFonts[_tab->_durationFontIdx].gridStemWidth * spatium() * 0.5 * mags - beamLen);
+    bbox().setWidth(m_tab->_durationFonts[m_tab->_durationFontIdx].gridStemWidth * spatium() * 0.5 * mags - beamLen);
 }
 
 //---------------------------------------------------------
@@ -1013,11 +859,11 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;
     using namespace mu::draw;
-    if (!_tab) {
+    if (!m_tab) {
         return;
     }
 
-    if (_repeat && (_tab->symRepeat() == TablatureSymbolRepeat::SYSTEM)) {
+    if (m_repeat && (m_tab->symRepeat() == TablatureSymbolRepeat::SYSTEM)) {
         Chord* chord = toChord(explicitParent());
         ChordRest* prevCR = prevChordRest(chord);
         if (prevCR && (chord->measure()->system() == prevCR->measure()->system())) {
@@ -1031,15 +877,15 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
     Pen pen(curColor());
     painter->setPen(pen);
     painter->scale(mag, mag);
-    if (_beamGrid == TabBeamGrid::NONE) {
+    if (m_beamGrid == TabBeamGrid::NONE) {
         // if no beam grid, draw symbol
-        mu::draw::Font f(_tab->durationFont());
+        mu::draw::Font f(m_tab->durationFont());
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
         painter->setFont(f);
-        painter->drawText(PointF(0.0, 0.0), _text);
+        painter->drawText(PointF(0.0, 0.0), m_text);
     } else {
         // if beam grid, draw stem line
-        TablatureDurationFont& font = _tab->_durationFonts[_tab->_durationFontIdx];
+        TablatureDurationFont& font = m_tab->_durationFonts[m_tab->_durationFontIdx];
         double _spatium = spatium();
         pen.setCapStyle(PenCapStyle::FlatCap);
         pen.setWidthF(font.gridStemWidth * _spatium);
@@ -1049,7 +895,7 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
         painter->drawLine(PointF(0.0, h), PointF(0.0, 0.0));
         // if beam grid is medial/final, draw beam lines too: lines go from mid of
         // previous stem (delta x stored in _beamLength) to mid of this' stem (0.0)
-        if (_beamGrid == TabBeamGrid::MEDIALFINAL) {
+        if (m_beamGrid == TabBeamGrid::MEDIALFINAL) {
             pen.setWidthF(font.gridBeamWidth * _spatium);
             painter->setPen(pen);
             // lower height available to beams by half a beam width,
@@ -1057,10 +903,10 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
             h += (font.gridBeamWidth * _spatium) * 0.5;
             // draw beams equally spaced within the stem height (this is
             // different from modern engraving, but common in historic prints)
-            double step  = -h / _beamLevel;
+            double step  = -h / m_beamLevel;
             double y     = h;
-            for (int i = 0; i < _beamLevel; i++, y += step) {
-                painter->drawLine(PointF(_beamLength, y), PointF(0.0, y));
+            for (int i = 0; i < m_beamLevel; i++, y += step) {
+                painter->drawLine(PointF(m_beamLength, y), PointF(0.0, y));
             }
         }
     }
@@ -1426,8 +1272,12 @@ void StaffType::initStaffTypes()
         StaffType(StaffGroup::TAB, u"tab6StrFrench", mtrc("engraving", "Tab. 6-str. French"), 6, 0,     1.5, false, true, true,  true, false,  engravingConfiguration()->defaultColor(),  u"MuseScore Tab French", 15, 0, true,  u"MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   false, false, false, false, false, false, false, false),
         StaffType(StaffGroup::TAB, u"tab7StrCommon", mtrc("engraving", "Tab. 7-str. common"), 7, 0,     1.5, true,  true, false, true, false,  engravingConfiguration()->defaultColor(), u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true, true,  false, false, true, true, true),
         StaffType(StaffGroup::TAB, u"tab8StrCommon", mtrc("engraving", "Tab. 8-str. common"), 8, 0,     1.5, true,  true, false, true, false,  engravingConfiguration()->defaultColor(), u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true, true,  false, false, true, true, true),
+        StaffType(StaffGroup::TAB, u"tab9StrCommon", mtrc("engraving", "Tab. 9-str. common"), 9, 0,     1.5, true,  true, false, true, false,  engravingConfiguration()->defaultColor(), u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true, true,  false, false, true, true, true),
+        StaffType(StaffGroup::TAB, u"tab10StrCommon", mtrc("engraving", "Tab. 10-str. common"), 10, 0,     1.5, true,  true, false, true, false,  engravingConfiguration()->defaultColor(), u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true, true,  false, false, true, true, true),
         StaffType(StaffGroup::TAB, u"tab7StrSimple", mtrc("engraving", "Tab. 7-str. simple"), 7, 0,     1.5, true,  true, true, false, false,  engravingConfiguration()->defaultColor(), u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,true,  false, true,  false, false, false, true, false),
         StaffType(StaffGroup::TAB, u"tab8StrSimple", mtrc("engraving", "Tab. 8-str. simple"), 8, 0,     1.5, true,  true, true, false, false,  engravingConfiguration()->defaultColor(), u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,true,  false, true,  false, false, false, true, false),
+        StaffType(StaffGroup::TAB, u"tab9StrSimple", mtrc("engraving", "Tab. 9-str. simple"), 9, 0,     1.5, true,  true, true, false, false,  engravingConfiguration()->defaultColor(), u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,true,  false, true,  false, false, false, true, false),
+        StaffType(StaffGroup::TAB, u"tab10StrSimple", mtrc("engraving", "Tab. 10-str. simple"), 10, 0,     1.5, true,  true, true, false, false,  engravingConfiguration()->defaultColor(), u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,true,  false, true,  false, false, false, true, false),
     };
 }
 /* *INDENT-ON* */
@@ -1435,8 +1285,8 @@ void StaffType::initStaffTypes()
 //   spatium
 //---------------------------------------------------------
 
-double StaffType::spatium(Score* score) const
+double StaffType::spatium(const MStyle& style) const
 {
-    return score->spatium() * (isSmall() ? score->styleD(Sid::smallStaffMag) : 1.0) * userMag();
+    return style.spatium() * (isSmall() ? style.styleD(Sid::smallStaffMag) : 1.0) * userMag();
 }
 } // namespace mu::engraving

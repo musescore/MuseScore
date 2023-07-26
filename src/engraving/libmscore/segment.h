@@ -84,6 +84,7 @@ struct Spring
 class Segment final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Segment)
+    DECLARE_CLASSOF(ElementType::SEGMENT)
 
     SegmentType _segmentType { SegmentType::Invalid };
     Fraction _tick;    // { Fraction(0, 1) };
@@ -232,9 +233,6 @@ public:
     Spatium extraLeadingSpace() const { return _extraLeadingSpace; }
     void setExtraLeadingSpace(Spatium v) { _extraLeadingSpace = v; }
 
-    void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
-
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
@@ -330,6 +328,8 @@ public:
     void preAppend(EngravingItem* item, int track) { _preAppendedItems[track] = item; }
     void clearPreAppended(int track) { _preAppendedItems[track] = nullptr; }
     void addPreAppendedToShape();
+
+    bool goesBefore(const Segment* nextSegment) const;
 
     static constexpr SegmentType durationSegmentsMask = SegmentType::ChordRest;   // segment types which may have non-zero tick length
 };

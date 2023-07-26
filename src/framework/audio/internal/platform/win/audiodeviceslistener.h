@@ -47,7 +47,7 @@ private:
     STDMETHOD(OnPropertyValueChanged)(LPCWSTR device_id, const PROPERTYKEY key);
 
     winrt::com_ptr<IMMDeviceEnumerator> m_deviceEnumerator;
-    winrt::hstring m_previousIdString;
+    winrt::hstring m_previousDefaultDeviceId;
 
     async::Notification m_devicesChanged;
     async::Notification m_defaultDeviceChanged;

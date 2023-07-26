@@ -19,7 +19,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 set(MODULE_TEST audio_test)
-
+if(OS_IS_FBSD)
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /usr/local/lib/libasound.so")
+endif()
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/audioconfigurationmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/knownaudiopluginsregistermock.h
@@ -30,6 +32,7 @@ set(MODULE_TEST_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/knownaudiopluginsregistertest.cpp
     ${CMAKE_CURRENT_LIST_DIR}/registeraudiopluginsscenariotest.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/audioutilstest.cpp
 )
 
 set(MODULE_TEST_LINK audio)

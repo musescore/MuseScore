@@ -8,10 +8,12 @@ PitchWheelRenderer::PitchWheelRenderer(PitchWheelSpecs wheelSpec)
     : _wheelSpec(wheelSpec)
 {}
 
-void PitchWheelRenderer::addPitchWheelFunction(const PitchWheelFunction& function, uint32_t channel, MidiInstrumentEffect effect)
+void PitchWheelRenderer::addPitchWheelFunction(const PitchWheelFunction& function, uint32_t channel, staff_idx_t staffIdx,
+                                               MidiInstrumentEffect effect)
 {
     PitchWheelFunctions& functions =  _functions[channel];
     _effectByChannel[channel] = effect;
+    _staffIdxByChannel[channel] = staffIdx;
 
     if (function.mStartTick < functions.startTick) {
         functions.startTick = function.mStartTick;
@@ -49,77 +51,67 @@ void PitchWheelRenderer::renderChannelPitchWheel(EventMap& pitchWheelEvents,
         effect = _effectByChannel.at(channel);
     }
 
-    int32_t tick = functions.startTick;
-    int prevPitchValue = _wheelSpec.mLimit;
+    bool staffInfoValid = false;
+    staff_idx_t staffIdx = 0;
 
-    PitchWheelFunctions unProcessedFunctions = functions;
-
-    for (; tick <= functions.endTick;) {
-        int pitchValue = _wheelSpec.mLimit;
-
-        PitchWheelFunctions processingFunctions;
-        for (const auto& func : unProcessedFunctions.functions) {
-            if (tick >= func.mStartTick) {
-                processingFunctions.functions.push_back(func);
-            }
-        }
-
-        if (processingFunctions.functions.empty()) {
-            //find next tick
-            tick = findNextStartTick(unProcessedFunctions.functions);
-            continue;
-        }
-
-        auto iterBegin = unProcessedFunctions.functions.begin();
-        auto iterEnd = unProcessedFunctions.functions.end();
-        auto funcIter = iterBegin;
-        while (funcIter != iterEnd) {
-            if (tick > funcIter->mEndTick) {
-                funcIter = unProcessedFunctions.functions.erase(funcIter);
-            }
-
-            pitchValue = calculatePitchBend(unProcessedFunctions.functions, tick);
-
-            ++funcIter;
-        }
-
-        if (pitchValue != prevPitchValue) {
-            NPlayEvent evb(ME_PITCHBEND, channel, pitchValue % 128, pitchValue / 128);
-            evb.setEffect(effect);
-            pitchWheelEvents.emplace_hint(pitchWheelEvents.end(), std::make_pair(tick, evb));
-        }
-
-        prevPitchValue = pitchValue;
-        tick += _wheelSpec.mStep;
+    if (_staffIdxByChannel.find(channel) != _staffIdxByChannel.end()) {
+        staffInfoValid = true;
+        staffIdx = _staffIdxByChannel.at(channel);
     }
 
-    //!@NOTE handling end of each function. endTick usually
-    //! means end of note and starting of next note.
-    //! But endTick can fall on the segment between two points.
-    //! So next note can start with  pitch value of previous note.
-    for (const auto& endFunc : functions.functions) {
-        int pitchValue = _wheelSpec.mLimit;
-        int32_t endFuncTick = endFunc.mEndTick;
-        if (endFuncTick % _wheelSpec.mStep == 0) {
-            //!already proccessed
-            continue;
-        }
+    std::map<int, int, std::greater<> > ranges;
+    generateRanges(functions.functions, ranges);
 
+    for (auto rit = ranges.crbegin(); rit != ranges.crend(); ++rit) {
+        int32_t start = rit->first;
+        int32_t end = rit->second;
+        int32_t tick = start;
+
+        std::list<PitchWheelFunction> functionsToProcess;
         for (const auto& func : functions.functions) {
-            if (endFuncTick < func.mStartTick || endFuncTick > func.mEndTick || &func == &endFunc) {
-                continue;
+            if (func.mEndTick <= end) {
+                functionsToProcess.insert(functionsToProcess.end(), func);
+            }
+        }
+        std::vector<int> pitches;
+        for (size_t i = 0; i < functionsToProcess.size(); ++i) {
+            pitches.push_back(0);
+        }
+        int prevPitch = _wheelSpec.mLimit;
+        while (tick < end) {
+            auto funcIt = functionsToProcess.begin();
+            for (size_t i = 0; i < functionsToProcess.size(); ++i) {
+                if (tick >= funcIt->mEndTick) {
+                    // Function exceeds its max range
+                    // don't need its value anymore
+                    pitches.at(i) = 0;
+                    ++funcIt;
+                    continue;
+                }
+                if (tick < funcIt->mStartTick) {
+                    ++funcIt;
+                    continue;
+                }
+                int pitch = funcIt->func(tick);
+                pitches.at(i) = pitch;
+                ++funcIt;
+            }
+            int finalPitch = _wheelSpec.mLimit;
+            for (const auto& pitch : pitches) {
+                finalPitch += pitch;
+            }
+            if (finalPitch != prevPitch || tick == start) {
+                NPlayEvent evb(ME_PITCHBEND, channel, finalPitch % 128, finalPitch / 128);
+                evb.setEffect(effect);
+                if (staffInfoValid) {
+                    evb.setOriginatingStaff(staffIdx);
+                }
+                pitchWheelEvents.emplace_hint(pitchWheelEvents.end(), std::make_pair(tick, evb));
             }
 
-            pitchValue += func.func(endFuncTick);
+            prevPitch = finalPitch;
+            tick += _wheelSpec.mStep;
         }
-
-        if (endFuncTick == functions.endTick) {
-            pitchValue = _wheelSpec.mLimit;
-        }
-
-        NPlayEvent evb(ME_PITCHBEND, channel, pitchValue % 128, pitchValue / 128);
-        evb.setEffect(effect);
-        pitchWheelEvents.emplace_hint(pitchWheelEvents.end(), std::make_pair(endFuncTick, evb));
     }
 }
 
@@ -146,4 +138,47 @@ int32_t PitchWheelRenderer::calculatePitchBend(const std::list<PitchWheelFunctio
     }
 
     return pitchValue;
+}
+
+// 1                |------|
+// 2                   |-----------| handleStartTick();
+// result           |--------------|
+// 3           |--------|            handleEndTick();
+// result      |-------------------|
+void PitchWheelRenderer::generateRanges(const std::list<PitchWheelFunction>& functions, std::map<int, int, std::greater<> >& ranges)
+{
+    // !NOTE ranges map is reversed. Use reverse iterators
+    auto handleEndTick = [&](const PitchWheelFunction& func) {
+        auto lowerRange = ranges.upper_bound(func.mEndTick);
+        if (lowerRange == ranges.end()) {
+            return false;
+        }
+        ranges.insert({ func.mStartTick, lowerRange->second });
+        ranges.erase(lowerRange);
+        return true;
+    };
+
+    auto handleStartTick = [&](const PitchWheelFunction& func) {
+        auto lowerRange = ranges.upper_bound(func.mStartTick);
+        if (lowerRange == ranges.end()) {
+            // We are getting PW events sorted by startTick
+            // So in ideal world handleEndTick always return false
+            return handleEndTick(func);
+        }
+        if (lowerRange->second >= func.mStartTick) {
+            lowerRange->second = std::max(lowerRange->second, func.mEndTick);
+            return true;
+        }
+        return false;
+    };
+
+    for (const auto& func : functions) {
+        if (auto key = ranges.find(func.mStartTick); key != ranges.end()) {
+            key->second = std::max(key->second, func.mEndTick);
+            continue;
+        }
+        if (!handleStartTick(func)) {
+            ranges.insert({ func.mStartTick, func.mEndTick });
+        }
+    }
 }

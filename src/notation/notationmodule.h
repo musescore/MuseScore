@@ -22,9 +22,16 @@
 #ifndef MU_NOTATION_NOTATIONMODULE_H
 #define MU_NOTATION_NOTATIONMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::notation {
+class NotationConfiguration;
+class NotationActionController;
+class NotationUiActions;
+class MidiInputOutputController;
+class InstrumentsRepository;
 class NotationModule : public modularity::IModuleSetup
 {
 public:
@@ -35,6 +42,13 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<NotationConfiguration> m_configuration;
+    std::shared_ptr<NotationActionController> m_actionController;
+    std::shared_ptr<NotationUiActions> m_notationUiActions;
+    std::shared_ptr<MidiInputOutputController> m_midiInputOutputController;
+    std::shared_ptr<InstrumentsRepository> m_instrumentsRepository;
 };
 }
 

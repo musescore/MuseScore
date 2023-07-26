@@ -29,12 +29,11 @@
 #include "instrument.h"
 #include "types/types.h"
 
-namespace mu::engraving::compat {
+namespace mu::engraving::read206 {
 class Read206;
 }
 
 namespace mu::engraving {
-class XmlWriter;
 class Staff;
 class Score;
 class InstrumentTemplate;
@@ -44,7 +43,7 @@ class InstrumentTemplate;
 //---------------------------------------------------------
 
 enum class PreferSharpFlat : char {
-    DEFAULT, SHARPS, FLATS
+    NONE, SHARPS, FLATS, AUTO
 };
 
 //---------------------------------------------------------
@@ -70,24 +69,11 @@ enum class PreferSharpFlat : char {
 class Part final : public EngravingObject
 {
     OBJECT_ALLOCATOR(engraving, Part)
-
-    String _partName;              ///< used in tracklist (mixer)
-    InstrumentList _instruments;
-    std::vector<Staff*> _staves;
-    ID _id = INVALID_ID;             ///< used for MusicXml import
-    bool _show = false;              ///< show part in partitur if true
-    bool _soloist = false;           ///< used in score ordering
-    int _capoFret = 0;
-
-    static const int DEFAULT_COLOR = 0x3399ff;
-    int _color = 0;                  ///User specified color for helping to label parts
-
-    PreferSharpFlat _preferSharpFlat = PreferSharpFlat::DEFAULT;
-
-    friend class compat::Read206;
+    DECLARE_CLASSOF(ElementType::PART)
 
 public:
     static const Fraction MAIN_INSTRUMENT_TICK;
+    static const int DEFAULT_COLOR = 0x3399ff;
 
     Part(Score* score = nullptr);
     void initFromInstrTemplate(const InstrumentTemplate*);
@@ -99,7 +85,6 @@ public:
 
     void read(XmlReader&);
     bool readProperties(XmlReader&);
-    void write(XmlWriter& xml) const;
 
     size_t nstaves() const;
     const std::vector<Staff*>& staves() const;
@@ -165,6 +150,14 @@ public:
 
     void insertTime(const Fraction& tick, const Fraction& len);
 
+    void addHarpDiagram(HarpPedalDiagram*);
+    void removeHarpDiagram(HarpPedalDiagram*);
+    void clearHarpDiagrams();
+    HarpPedalDiagram* currentHarpDiagram(const Fraction&) const;
+    HarpPedalDiagram* nextHarpDiagram(const Fraction&) const;
+    HarpPedalDiagram* prevHarpDiagram(const Fraction&) const;
+    Fraction currentHarpDiagramTick(const Fraction&) const;
+
     String partName() const { return _partName; }
     void setPartName(const String& s) { _partName = s; }
     int color() const { return _color; }
@@ -194,6 +187,23 @@ public:
     // Allows not reading the same instrument twice on importing 2.X scores.
     // TODO: do we need instruments info in parts at all?
     friend void readPart206(Part*, XmlReader&);
+
+    std::map<int, HarpPedalDiagram*> harpDiagrams;
+
+private:
+    friend class read206::Read206;
+
+    String _partName;              ///< used in tracklist (mixer)
+    InstrumentList _instruments;
+    std::vector<Staff*> _staves;
+    ID _id = INVALID_ID;             ///< used for MusicXml import
+    bool _show = false;              ///< show part in partitur if true
+    bool _soloist = false;           ///< used in score ordering
+    int _capoFret = 0;
+
+    int _color = 0;                  ///User specified color for helping to label parts
+
+    PreferSharpFlat _preferSharpFlat = PreferSharpFlat::AUTO;
 };
 } // namespace mu::engraving
 #endif

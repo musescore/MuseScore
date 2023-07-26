@@ -14,6 +14,8 @@ class Painter;
 }
 
 namespace mu::engraving {
+class Shape;
+
 class IEngravingFont
 {
 public:
@@ -41,6 +43,8 @@ public:
     virtual RectF bbox(SymId id, const mu::SizeF&) const = 0;
     virtual RectF bbox(const SymIdList& sl, double mag) const = 0;
     virtual RectF bbox(const SymIdList& s, const mu::SizeF& mag) const = 0;
+    virtual Shape shape(const SymIdList& s, double mag) const = 0;
+    virtual Shape shape(const SymIdList& s, const mu::SizeF& mag) const = 0;
 
     virtual PointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) const = 0;
 

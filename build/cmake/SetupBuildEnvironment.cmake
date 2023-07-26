@@ -18,7 +18,9 @@ if (CC_IS_GCC)
     endif()
 
     if (MUE_BUILD_ASAN)
-        string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address -fno-omit-frame-pointer")
+        add_compile_options("-fsanitize=address")
+        add_compile_options("-fno-omit-frame-pointer")
+        link_libraries("-fsanitize=address")
     endif()
 
 elseif(CC_IS_MSVC)
@@ -67,10 +69,14 @@ elseif(CC_IS_CLANG)
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
     if (MUE_BUILD_ASAN)
-        string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address -fno-omit-frame-pointer")
+        add_compile_options("-fsanitize=address")
+        add_compile_options("-fno-omit-frame-pointer")
+        link_libraries("-fsanitize=address")
     endif()
 
-    if (BUILD_IS_DEBUG)
+    # On MacOS with clang there are problems with debugging
+    # - the value of the std::u16string is not visible.
+    if (BUILD_IS_DEBUG AND MUE_ENABLE_STRING_DEBUG_HACK)
         add_definitions(-DSTRING_DEBUG_HACK)
     endif()
 

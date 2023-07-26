@@ -30,8 +30,8 @@
 namespace mu::audio {
 class AudioConfiguration : public IAudioConfiguration
 {
-    INJECT(audio, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(audio, io::IFileSystem, fileSystem)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(io::IFileSystem, fileSystem)
 public:
     AudioConfiguration() = default;
 
@@ -70,7 +70,7 @@ public:
     async::Notification synthesizerStateChanged() const override;
     async::Notification synthesizerStateGroupChanged(const std::string& groupName) const override;
 
-    io::path_t knownAudioPluginsDir() const override;
+    io::path_t knownAudioPluginsFilePath() const override;
 
 private:
     async::Channel<io::paths_t> m_soundFontDirsChanged;

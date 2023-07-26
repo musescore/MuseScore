@@ -36,35 +36,48 @@
 namespace mu::project {
 class ExportProjectScenario : public IExportProjectScenario, public async::Asyncable
 {
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, framework::IInteractive, interactive)
-    INJECT(project, INotationWritersRegister, writers)
-    INJECT(project, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
-    INJECT(project, context::IGlobalContext, context)
-    INJECT(project, io::IFileSystem, fileSystem)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(INotationWritersRegister, writers)
+    INJECT(iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
+    INJECT(context::IGlobalContext, context)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     std::vector<INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;
 
     RetVal<io::path_t> askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
-                                     INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART) const override;
+                                     INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                                     io::path_t defaultPath = "") const override;
 
-    bool exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
+    bool exportScores(const notation::INotationPtrList& notations, const io::path_t destinationPath,
                       INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                       bool openDestinationFolderOnExport = false) const override;
 
+    const ExportInfo& exportInfo() const override;
+    void setExportInfo(const ExportInfo& exportInfo) override;
+
 private:
+    ExportInfo m_exportInfo;
+
     enum class FileConflictPolicy {
         Undefined,
         SkipAll,
         ReplaceAll
     };
 
+    /// When the user is trying to export a part that is a "potential excerpt", the corresponding score
+    /// is not initialized yet, so we can't be certain about the page count. We should not initialize
+    /// these scores either, until the user really starts the export, because initializing these scores
+    /// means making changes to the file, which can't be done without the user's consent.
+    bool guessIsCreatingOnlyOneFile(const notation::INotationPtrList& notations, INotationWriter::UnitType unitType) const;
     size_t exportFileCount(const notation::INotationPtrList& notations, INotationWriter::UnitType unitType) const;
 
     bool isMainNotation(notation::INotationPtr notation) const;
+    notation::IMasterNotationPtr masterNotation() const;
 
-    io::path_t completeExportPath(const io::path_t& basePath, notation::INotationPtr notation, bool isMain, int pageIndex = -1) const;
+    io::path_t completeExportPath(const io::path_t& basePath, notation::INotationPtr notation, bool isMain, bool isExportingOnlyOneScore,
+                                  int pageIndex = -1) const;
 
     bool shouldReplaceFile(const QString& filename) const;
     bool askForRetry(const QString& filename) const;

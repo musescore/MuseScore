@@ -82,7 +82,7 @@ FocusableItem {
                 step: 1
                 decimals: 0
                 maxValue: 12
-                minValue: 4
+                minValue: 1
 
                 navigationName: "Strings"
                 navigationPanel: root.navigationPanel
@@ -106,7 +106,7 @@ FocusableItem {
                 step: 1
                 decimals: 0
                 maxValue: 6
-                minValue: 3
+                minValue: 1
 
                 navigationName: "VisibleFrets"
                 navigationPanel: root.navigationPanel
@@ -133,7 +133,7 @@ FocusableItem {
             }
         }
 
-        CheckBoxPropertyView {
+        PropertyCheckBox {
             id: multipleDotsCheckbox
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter

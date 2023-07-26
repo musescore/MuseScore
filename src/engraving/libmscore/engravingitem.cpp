@@ -36,10 +36,9 @@
 
 #include "draw/types/pen.h"
 #include "iengravingfont.h"
-#include "style/style.h"
-#include "rw/xml.h"
-#include "rw/400/tread.h"
-#include "rw/400/writecontext.h"
+
+#include "rw/rwregister.h"
+
 #include "types/typesconv.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -49,14 +48,12 @@
 
 #include "chord.h"
 #include "factory.h"
-#include "fret.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
 #include "measure.h"
 #include "mscore.h"
 #include "note.h"
 #include "page.h"
-#include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "shape.h"
@@ -88,7 +85,6 @@ EngravingItem::EngravingItem(const ElementType& type, EngravingObject* se, Eleme
     _flags         = f;
     _color         = engravingConfiguration()->defaultColor();
     _mag           = 1.0;
-    _tag           = 1;
     _z             = -1;
     _offsetChanged = OffsetChange::NONE;
     _minDistance   = Spatium(0.0);
@@ -104,7 +100,6 @@ EngravingItem::EngravingItem(const EngravingItem& e)
     _track      = e._track;
     _flags      = e._flags;
     setFlag(ElementFlag::SELECTED, false);
-    _tag        = e._tag;
     _z          = e._z;
     _color      = e._color;
     _offsetChanged = e._offsetChanged;
@@ -223,15 +218,15 @@ void EngravingItem::localSpatiumChanged(double oldValue, double newValue)
 double EngravingItem::spatium() const
 {
     if (systemFlag() || (explicitParent() && parentItem()->systemFlag())) {
-        return score()->spatium();
+        return style().spatium();
     }
     Staff* s = staff();
-    return s ? s->spatium(this) : score()->spatium();
+    return s ? s->spatium(this) : style().spatium();
 }
 
 bool EngravingItem::isInteractionAvailable() const
 {
-    if (!visible() && (score()->printing() || !score()->showInvisible())) {
+    if (!visible() && (score()->printing() || !score()->isShowInvisible())) {
         return false;
     }
 
@@ -253,7 +248,7 @@ bool EngravingItem::offsetIsSpatiumDependent() const
 
 double EngravingItem::magS() const
 {
-    return mag() * (score()->spatium() / SPATIUM20);
+    return mag() * (style().spatium() / SPATIUM20);
 }
 
 //---------------------------------------------------------
@@ -305,7 +300,7 @@ void EngravingItem::deleteLater()
 void EngravingItem::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     if (scanChildren().size() == 0) {
-        if (all || visible() || score()->showInvisible()) {
+        if (all || visible() || score()->isShowInvisible()) {
             func(data, this);
         }
     } else {
@@ -812,131 +807,6 @@ bool EngravingItem::hitShapeIntersects(const RectF& rr) const
 }
 
 //---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void EngravingItem::writeProperties(XmlWriter& xml) const
-{
-    bool autoplaceEnabled = score()->styleB(Sid::autoplaceEnabled);
-    if (!autoplaceEnabled) {
-        score()->setStyleValue(Sid::autoplaceEnabled, true);
-        writeProperty(xml, Pid::AUTOPLACE);
-        score()->setStyleValue(Sid::autoplaceEnabled, autoplaceEnabled);
-    } else {
-        writeProperty(xml, Pid::AUTOPLACE);
-    }
-
-    // copy paste should not keep links
-    if (_links && (_links->size() > 1) && !xml.context()->clipboardmode()) {
-        WriteContext* ctx = xml.context();
-        IF_ASSERT_FAILED(ctx) {
-            return;
-        }
-
-        if (MScore::debugMode) {
-            xml.tag("lid", _links->lid());
-        }
-
-        EngravingItem* me = static_cast<EngravingItem*>(_links->mainElement());
-        assert(type() == me->type());
-        Staff* s = staff();
-        if (!s) {
-            s = score()->staff(xml.context()->curTrack() / VOICES);
-            if (!s) {
-                LOGW("EngravingItem::writeProperties: linked element's staff not found (%s)", typeName());
-            }
-        }
-        Location loc = Location::positionForElement(this);
-        if (me == this) {
-            xml.tag("linkedMain");
-            int index = ctx->assignLocalIndex(loc);
-            ctx->setLidLocalIndex(_links->lid(), index);
-        } else {
-            if (s && s->links()) {
-                Staff* linkedStaff = toStaff(s->links()->mainElement());
-                loc.setStaff(static_cast<int>(linkedStaff->idx()));
-            }
-            xml.startElement("linked");
-            if (!me->score()->isMaster()) {
-                if (me->score() == score()) {
-                    xml.tag("score", "same");
-                } else {
-                    LOGW(
-                        "EngravingItem::writeProperties: linked elements belong to different scores but none of them is master score: (%s lid=%d)",
-                        typeName(), _links->lid());
-                }
-            }
-
-            Location mainLoc = Location::positionForElement(me);
-            const int guessedLocalIndex = ctx->assignLocalIndex(mainLoc);
-            if (loc != mainLoc) {
-                mainLoc.toRelative(loc);
-                mainLoc.write(xml);
-            }
-            const int indexDiff = ctx->lidLocalIndex(_links->lid()) - guessedLocalIndex;
-            xml.tag("indexDiff", indexDiff, 0);
-            xml.endElement();       // </linked>
-        }
-    }
-    if ((xml.context()->writeTrack() || track() != xml.context()->curTrack())
-        && (track() != mu::nidx) && !isBeam()) {
-        // Writing track number for beams is redundant as it is calculated
-        // during layout.
-        int t = static_cast<int>(track()) + xml.context()->trackDiff();
-        xml.tag("track", t);
-    }
-    if (xml.context()->writePosition()) {
-        xml.tagProperty(Pid::POSITION, rtick());
-    }
-    if (_tag != 0x1) {
-        for (int i = 1; i < MAX_TAGS; i++) {
-            if (_tag == ((unsigned)1 << i)) {
-                xml.tag("tag", score()->layerTags()[i]);
-                break;
-            }
-        }
-    }
-    for (Pid pid : { Pid::OFFSET, Pid::COLOR, Pid::VISIBLE, Pid::Z, Pid::PLACEMENT }) {
-        if (propertyFlags(pid) == PropertyFlags::NOSTYLE) {
-            writeProperty(xml, pid);
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool EngravingItem::readProperties(XmlReader& e)
-{
-    return rw400::TRead::readItemProperties(this, e, *e.context());
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void EngravingItem::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void EngravingItem::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   remove
 ///   Remove \a el from the list. Return true on success.
 //---------------------------------------------------------
@@ -963,17 +833,6 @@ void ElementList::replace(EngravingItem* o, EngravingItem* n)
         return;
     }
     *i = n;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void ElementList::write(XmlWriter& xml) const
-{
-    for (const EngravingItem* e : *this) {
-        e->write(xml);
-    }
 }
 
 //---------------------------------------------------------
@@ -1029,12 +888,8 @@ void Compound::addElement(EngravingItem* e, double x, double y)
 
 void Compound::layout()
 {
+    UNREACHABLE;
     setbbox(RectF());
-    for (auto i = elements.begin(); i != elements.end(); ++i) {
-        EngravingItem* e = *i;
-        e->layout();
-        addbbox(e->bbox().translated(e->pos()));
-    }
 }
 
 //---------------------------------------------------------
@@ -1101,7 +956,7 @@ ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    xml.context()->setClipboardmode(true);
+
     xml.startElement("EngravingItem");
     if (isNote()) {
         xml.tagFraction("duration", toNote(this)->chord()->ticks());
@@ -1109,7 +964,9 @@ ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
     if (!dragOffset.isNull()) {
         xml.tagPoint("dragOffset", dragOffset);
     }
-    write(xml);
+
+    rw::RWRegister::writer()->writeItem(this, xml);
+
     xml.endElement();
     buffer.close();
     return buffer.data();
@@ -1120,8 +977,7 @@ ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
 //    return new position of QDomElement in e
 //---------------------------------------------------------
 
-ElementType EngravingItem::readType(XmlReader& e, PointF* dragOffset,
-                                    Fraction* duration)
+ElementType EngravingItem::readType(XmlReader& e, PointF* dragOffset, Fraction* duration)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "EngravingItem") {
@@ -1153,10 +1009,8 @@ ElementType EngravingItem::readType(XmlReader& e, PointF* dragOffset,
 EngravingItem* EngravingItem::readMimeData(Score* score, const ByteArray& data, PointF* dragOffset, Fraction* duration)
 {
     XmlReader e(data);
-    const ElementType type = EngravingItem::readType(e, dragOffset, duration);
-    e.context()->setScore(score);
-    e.context()->setPasteMode(true);
 
+    const ElementType type = EngravingItem::readType(e, dragOffset, duration);
     if (type == ElementType::INVALID) {
         LOGD("cannot read type");
         return nullptr;
@@ -1164,7 +1018,7 @@ EngravingItem* EngravingItem::readMimeData(Score* score, const ByteArray& data, 
 
     EngravingItem* el = Factory::createItem(type, score->dummy(), false);
     if (el) {
-        el->read(e);
+        rw::RWRegister::reader()->readItem(el, e);
     }
 
     return el;
@@ -1230,7 +1084,7 @@ void collectElements(void* data, EngravingItem* e)
 
 bool EngravingItem::autoplace() const
 {
-    if (!score() || !score()->styleB(Sid::autoplaceEnabled)) {
+    if (!score() || !style().styleB(Sid::autoplaceEnabled)) {
         return false;
     }
     return !flag(ElementFlag::NO_AUTOPLACE);
@@ -1645,7 +1499,7 @@ bool EngravingItem::symIsValid(SymId id) const
 
 bool EngravingItem::concertPitch() const
 {
-    return score()->styleB(Sid::concertPitch);
+    return style().styleB(Sid::concertPitch);
 }
 
 //---------------------------------------------------------
@@ -2206,7 +2060,7 @@ void EngravingItem::endEdit(EditData&)
 
 double EngravingItem::styleP(Sid idx) const
 {
-    return score()->styleMM(idx);
+    return style().styleMM(idx);
 }
 
 bool EngravingItem::colorsInversionEnabled() const
@@ -2388,7 +2242,7 @@ void EngravingItem::autoplaceSegmentElement(bool above, bool add)
         Segment* s = toSegment(explicitParent());
         Measure* m = s->measure();
 
-        double sp = score()->spatium();
+        double sp = style().spatium();
         staff_idx_t si = staffIdxOrNextVisible();
 
         // if there's no good staff for this object, obliterate it
@@ -2467,7 +2321,7 @@ void EngravingItem::autoplaceMeasureElement(bool above, bool add)
             return;
         }
 
-        double sp = score()->spatium();
+        double sp = style().spatium();
         double minDistance = _minDistance.val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
@@ -2549,21 +2403,6 @@ void EngravingItem::doInitAccessible()
 
 #endif // ENGRAVING_NO_ACCESSIBILITY
 
-KerningType EngravingItem::computeKerningType(const EngravingItem* nextItem) const
-{
-    if (_userSetKerning != KerningType::NOT_SET) {
-        return _userSetKerning;
-    }
-    if (sameVoiceKerningLimited() && nextItem->sameVoiceKerningLimited() && track() == nextItem->track()) {
-        return KerningType::NON_KERNING;
-    }
-    if ((neverKernable() || nextItem->neverKernable())
-        && !(alwaysKernable() || nextItem->alwaysKernable())) {
-        return KerningType::NON_KERNING;
-    }
-    return doComputeKerningType(nextItem);
-}
-
 String EngravingItem::formatBarsAndBeats() const
 {
     String result;
@@ -2578,23 +2417,5 @@ String EngravingItem::formatBarsAndBeats() const
     }
 
     return result;
-}
-
-double EngravingItem::computePadding(const EngravingItem* nextItem) const
-{
-    double scaling = (mag() + nextItem->mag()) / 2;
-    double padding = score()->paddingTable().at(type()).at(nextItem->type());
-    padding *= scaling;
-    if (!isLedgerLine() && nextItem->isRest()) {
-        const Rest* rest = toRest(nextItem);
-        SymId symbol = rest->sym();
-        if (symbol == SymId::restWholeLegerLine
-            || symbol == SymId::restDoubleWholeLegerLine
-            || symbol == SymId::restHalfLegerLine) {
-            // In this case the ledgerLine is included in the glyph itself, so we must ignore it
-            padding += rest->bbox().left();
-        }
-    }
-    return padding;
 }
 }

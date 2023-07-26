@@ -21,9 +21,12 @@
  */
 #include "readstyle.h"
 
+#include "types/constants.h"
+
 #include "style/defaultstyle.h"
 #include "style/style.h"
-#include "rw/xml.h"
+
+#include "rw/xmlreader.h"
 
 #include "libmscore/masterscore.h"
 
@@ -57,12 +60,13 @@ ReadStyleHook::ReadStyleHook(Score* score, const ByteArray& scoreData, const Str
 
 int ReadStyleHook::styleDefaultByMscVersion(const int mscVer)
 {
+    constexpr int LEGACY_MSC_VERSION_V400 = 400;
     constexpr int LEGACY_MSC_VERSION_V302 = 302;
     constexpr int LEGACY_MSC_VERSION_V3 = 301;
     constexpr int LEGACY_MSC_VERSION_V2 = 206;
     constexpr int LEGACY_MSC_VERSION_V1 = 114;
 
-    if (mscVer > LEGACY_MSC_VERSION_V3 && mscVer < MSCVERSION) {
+    if (mscVer > LEGACY_MSC_VERSION_V3 && mscVer < LEGACY_MSC_VERSION_V400) {
         return LEGACY_MSC_VERSION_V302;
     }
     if (mscVer > LEGACY_MSC_VERSION_V2 && mscVer <= LEGACY_MSC_VERSION_V3) {
@@ -77,7 +81,7 @@ int ReadStyleHook::styleDefaultByMscVersion(const int mscVer)
         return LEGACY_MSC_VERSION_V1;
     }
 
-    return MSCVERSION;
+    return Constants::MSC_VERSION;
 }
 
 void ReadStyleHook::setupDefaultStyle()

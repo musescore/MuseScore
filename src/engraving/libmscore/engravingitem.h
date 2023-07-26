@@ -32,6 +32,7 @@
 
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
+#include "layout/ilayout.h"
 
 #include "types/fraction.h"
 #include "types/symid.h"
@@ -42,6 +43,7 @@
 
 namespace mu::engraving {
 class Factory;
+class XmlReader;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 class AccessibleItem;
@@ -50,8 +52,6 @@ typedef std::shared_ptr<AccessibleItem> AccessibleItemPtr;
 
 enum class Pid;
 class StaffType;
-class XmlReader;
-class XmlWriter;
 
 //---------------------------------------------------------
 //   OffsetChange
@@ -134,7 +134,8 @@ public:
 
 class EngravingItem : public EngravingObject
 {
-    INJECT_STATIC(engraving, IEngravingConfiguration, engravingConfiguration)
+    INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
+    INJECT_STATIC(layout::ILayout, layout)
 
     mutable mu::RectF _bbox;  ///< Bounding box relative to _pos + _offset
     double _mag;                     ///< standard magnification (derived value)
@@ -146,17 +147,8 @@ class EngravingItem : public EngravingObject
     track_idx_t _track = mu::nidx; ///< staffIdx * VOICES + voice
     mutable ElementFlags _flags;
     ///< valid after call to layout()
-    unsigned int _tag;                    ///< tag bitmask
 
     bool m_colorsInversionEnabled = true;
-
-    virtual bool sameVoiceKerningLimited() const { return false; }
-    virtual bool neverKernable() const { return false; }
-    virtual bool alwaysKernable() const { return false; }
-    KerningType _userSetKerning = KerningType::NOT_SET;
-
-    std::vector<Spanner*> _startingSpanners; ///< spanners starting on this item
-    std::vector<Spanner*> _endingSpanners; ///< spanners ending on this item
 
 protected:
     mutable int _z;
@@ -172,14 +164,9 @@ protected:
     void notifyAboutNameChanged();
 #endif
 
-    virtual KerningType doComputeKerningType(const EngravingItem*) const { return KerningType::KERNING; }
-
 public:
 
     virtual ~EngravingItem();
-
-    KerningType computeKerningType(const EngravingItem* nextItem) const;
-    virtual double computePadding(const EngravingItem* nextItem) const;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     virtual void setupAccessible();
@@ -280,6 +267,7 @@ public:
     double ypos() { return _pos.y(); }
     virtual void move(const PointF& s) { _pos += s; }
     bool skipDraw() const { return _skipDraw; }
+    void setSkipDraw(bool val) { _skipDraw = val; }
 
     virtual PointF pagePos() const;            ///< position in page coordinates
     virtual PointF canvasPos() const;          ///< position in canvas coordinates
@@ -330,12 +318,6 @@ public:
 
     virtual void draw(mu::draw::Painter*) const {}
     void drawAt(mu::draw::Painter* p, const PointF& pt) const { p->translate(pt); draw(p); p->translate(-pt); }
-
-    virtual void writeProperties(XmlWriter& xml) const;
-    virtual bool readProperties(XmlReader&);
-
-    virtual void write(XmlWriter&) const;
-    virtual void read(XmlReader&);
 
 //       virtual ElementGroup getElementGroup() { return SingleElementGroup(this); }
     virtual std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> /*isDragged*/)
@@ -412,7 +394,6 @@ public:
     virtual void removed() {}
     virtual void change(EngravingItem* o, EngravingItem* n);
 
-    virtual void layout() {}
     virtual void spatiumChanged(double /*oldValue*/, double /*newValue*/);
     virtual void localSpatiumChanged(double /*oldValue*/, double /*newValue*/);
 
@@ -498,9 +479,6 @@ public:
     bool enabled() const { return flag(ElementFlag::ENABLED); }
     void setEnabled(bool val) { setFlag(ElementFlag::ENABLED, val); }
 
-    unsigned int tag() const { return _tag; }
-    void setTag(unsigned int val) { _tag = val; }
-
     bool autoplace() const;
     virtual void setAutoplace(bool v) { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
     bool addToSkyline() const { return !(_flags & (ElementFlag::INVISIBLE | ElementFlag::NO_AUTOPLACE)); }
@@ -566,9 +544,6 @@ public:
 
     std::pair<int, float> barbeat() const;
 
-    std::vector<Spanner*>& startingSpanners() { return _startingSpanners; }
-    std::vector<Spanner*>& endingSpanners() { return _endingSpanners; }
-
 private:
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     void doInitAccessible();
@@ -631,8 +606,6 @@ public:
     ElementList() {}
     bool remove(EngravingItem*);
     void replace(EngravingItem* old, EngravingItem* n);
-    void write(XmlWriter&) const;
-    void write(XmlWriter&, const char* name) const;
 };
 
 //---------------------------------------------------------

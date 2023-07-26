@@ -24,11 +24,12 @@
 
 #include "containers.h"
 #include "style/style.h"
-#include "rw/xml.h"
+#include "rw/xmlwriter.h"
 
 #include "chordrest.h"
 #include "factory.h"
 #include "fret.h"
+#include "harppedaldiagram.h"
 #include "instrtemplate.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
@@ -54,7 +55,7 @@ Part::Part(Score* s)
     _show    = true;
     _soloist = false;
     _instruments.setInstrument(new Instrument, -1);     // default instrument
-    _preferSharpFlat = PreferSharpFlat::DEFAULT;
+    _preferSharpFlat = PreferSharpFlat::AUTO;
 }
 
 //---------------------------------------------------------
@@ -143,98 +144,6 @@ Part* Part::masterPart()
     return const_cast<Part*>(const_cast<const Part*>(this)->masterPart());
 }
 
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Part::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-    if (tag == "id") {
-        _id = e.readInt();
-    } else if (tag == "Staff") {
-        Staff* staff = Factory::createStaff(this);
-        score()->appendStaff(staff);
-        staff->read(e);
-    } else if (tag == "Instrument") {
-        Instrument* instr = new Instrument;
-        instr->read(e, this);
-        setInstrument(instr, Fraction(-1, 1));
-    } else if (tag == "name") {
-        instrument()->setLongName(e.readText());
-    } else if (tag == "color") {
-        _color = e.readInt();
-    } else if (tag == "shortName") {
-        instrument()->setShortName(e.readText());
-    } else if (tag == "trackName") {
-        _partName = e.readText();
-    } else if (tag == "show") {
-        _show = e.readInt();
-    } else if (tag == "soloist") {
-        _soloist = e.readInt();
-    } else if (tag == "preferSharpFlat") {
-        _preferSharpFlat
-            =e.readText() == "sharps" ? PreferSharpFlat::SHARPS : PreferSharpFlat::FLATS;
-    } else {
-        return false;
-    }
-    return true;
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Part::read(XmlReader& e)
-{
-    _id = e.intAttribute("id", 0);
-
-    while (e.readNextStartElement()) {
-        if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
-    if (_partName.isEmpty()) {
-        _partName = instrument()->trackName();
-    }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Part::write(XmlWriter& xml) const
-{
-    xml.startElement(this, { { "id", _id.toUint64() } });
-
-    for (const Staff* staff : _staves) {
-        staff->write(xml);
-    }
-
-    if (!_show) {
-        xml.tag("show", _show);
-    }
-
-    if (_soloist) {
-        xml.tag("soloist", _soloist);
-    }
-
-    xml.tag("trackName", _partName);
-
-    if (_color != DEFAULT_COLOR) {
-        xml.tag("color", _color);
-    }
-
-    if (_preferSharpFlat != PreferSharpFlat::DEFAULT) {
-        xml.tag("preferSharpFlat",
-                _preferSharpFlat == PreferSharpFlat::SHARPS ? "sharps" : "flats");
-    }
-
-    instrument()->write(xml, this);
-
-    xml.endElement();
-}
-
 size_t Part::nstaves() const
 {
     return _staves.size();
@@ -276,12 +185,12 @@ void Part::clearStaves()
 
 void Part::setLongNames(std::list<StaffName>& name, const Fraction& tick)
 {
-    instrument(tick)->longNames() = name;
+    instrument(tick)->setLongNames(StaffNameList(name));
 }
 
 void Part::setShortNames(std::list<StaffName>& name, const Fraction& tick)
 {
-    instrument(tick)->shortNames() = name;
+    instrument(tick)->setShortNames(StaffNameList(name));
 }
 
 //---------------------------------------------------------
@@ -674,9 +583,13 @@ void Part::insertTime(const Fraction& tick, const Fraction& len)
         auto si = _instruments.lower_bound(tick.ticks());
         auto ei = _instruments.lower_bound((tick - len).ticks());
         _instruments.erase(si, ei);
+
+        // remove harp pedal diagrams between tickpo >= tick
+        harpDiagrams.erase(harpDiagrams.lower_bound(tick.ticks()), harpDiagrams.lower_bound((tick - len).ticks()));
     }
 
     InstrumentList il;
+
     for (auto i = _instruments.lower_bound(tick.ticks()); i != _instruments.end();) {
         Instrument* instrument = i->second;
         int t = i->first;
@@ -684,6 +597,103 @@ void Part::insertTime(const Fraction& tick, const Fraction& len)
         il[t + len.ticks()] = instrument;
     }
     _instruments.insert(il.begin(), il.end());
+
+    std::map<int, HarpPedalDiagram*> hd2;
+    for (auto h = harpDiagrams.lower_bound(tick.ticks()); h != harpDiagrams.end();) {
+        HarpPedalDiagram* diagram = h->second;
+        int t = h->first;
+        harpDiagrams.erase(h++);
+        hd2[t + len.ticks()] = diagram;
+    }
+    harpDiagrams.insert(hd2.begin(), hd2.end());
+}
+
+//---------------------------------------------------------
+//   addHarpDiagram
+//---------------------------------------------------------
+
+void Part::addHarpDiagram(HarpPedalDiagram* harpDiagram)
+{
+    harpDiagrams[harpDiagram->segment()->tick().ticks()] = harpDiagram;
+}
+
+//---------------------------------------------------------
+//   removeHarpDiagram
+//---------------------------------------------------------
+
+void Part::removeHarpDiagram(HarpPedalDiagram* harpDiagram)
+{
+    if (harpDiagrams[harpDiagram->segment()->tick().ticks()] == harpDiagram) {
+        harpDiagrams.erase(harpDiagram->segment()->tick().ticks());
+    }
+}
+
+//---------------------------------------------------------
+//   clearHarpDiagrams
+//---------------------------------------------------------
+
+void Part::clearHarpDiagrams()
+{
+    harpDiagrams.clear();
+}
+
+//---------------------------------------------------------
+//   currentHarpDiagram
+//---------------------------------------------------------
+
+HarpPedalDiagram* Part::currentHarpDiagram(const Fraction& tick) const
+{
+    auto i = harpDiagrams.upper_bound(tick.ticks());
+    if (i != harpDiagrams.begin()) {
+        --i;
+    }
+    if (i == harpDiagrams.end()) {
+        return nullptr;
+    } else if (tick < Fraction::fromTicks(i->first)) {
+        return nullptr;
+    }
+    return i->second;
+}
+
+//---------------------------------------------------------
+//   nextHarpDiagram
+//---------------------------------------------------------
+
+HarpPedalDiagram* Part::nextHarpDiagram(const Fraction& tick) const
+{
+    auto i = harpDiagrams.lower_bound(tick.ticks());
+    return (i == harpDiagrams.end()) ? nullptr : i->second;
+}
+
+//---------------------------------------------------------
+//   prevHarpDiagram
+//---------------------------------------------------------
+
+HarpPedalDiagram* Part::prevHarpDiagram(const Fraction& tick) const
+{
+    auto i = harpDiagrams.lower_bound(tick.ticks());
+    if (i == harpDiagrams.begin()) {
+        return nullptr;
+    }
+    i--;
+    return i->second;
+}
+
+//---------------------------------------------------------
+//   currentHarpDiagramTick
+//---------------------------------------------------------
+
+Fraction Part::currentHarpDiagramTick(const Fraction& tick) const
+{
+    if (harpDiagrams.empty()) {
+        return Fraction(0, 1);
+    }
+    auto i = harpDiagrams.upper_bound(tick.ticks());
+    if (i == harpDiagrams.begin()) {
+        return Fraction(0, 1);
+    }
+    --i;
+    return Fraction::fromTicks(i->first);
 }
 
 bool Part::isVisible() const

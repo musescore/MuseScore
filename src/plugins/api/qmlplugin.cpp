@@ -139,7 +139,7 @@ bool QmlPlugin::requiresScore() const
 
 int QmlPlugin::division() const
 {
-    return engraving::Constants::division;
+    return engraving::Constants::DIVISION;
 }
 
 int QmlPlugin::mscoreVersion() const

@@ -41,6 +41,7 @@ public:
 
     virtual int pageCount() const = 0;
     virtual SizeF pageSizeInch() const = 0;
+    virtual SizeF pageSizeInch(const Options& opt) const = 0;
 
     virtual void paintView(draw::Painter* painter, const RectF& frameRect, bool isPrinting) = 0;
     virtual void paintPdf(draw::Painter* painter, const Options& opt) = 0;

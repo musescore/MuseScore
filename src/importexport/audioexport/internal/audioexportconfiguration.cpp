@@ -28,22 +28,27 @@ using namespace mu::iex::audioexport;
 using namespace mu::framework;
 
 static const Settings::Key EXPORT_SAMPLE_RATE_KEY("iex_audioexport", "export/audio/sampleRate");
-
-static constexpr int DEFAULT_BITRATE = 128;
+static const Settings::Key EXPORT_MP3_BITRATE("iex_audioexport", "export/audio/mp3Bitrate");
 
 void AudioExportConfiguration::init()
 {
     settings()->setDefaultValue(EXPORT_SAMPLE_RATE_KEY, Val(44100));
+    settings()->setDefaultValue(EXPORT_MP3_BITRATE, Val(128));
 }
 
 int AudioExportConfiguration::exportMp3Bitrate() const
 {
-    return m_exportMp3Bitrate ? m_exportMp3Bitrate.value() : DEFAULT_BITRATE;
+    return m_exportMp3BitrateOverride ? m_exportMp3BitrateOverride.value() : settings()->value(EXPORT_MP3_BITRATE).toInt();
 }
 
-void AudioExportConfiguration::setExportMp3Bitrate(std::optional<int> bitrate)
+void AudioExportConfiguration::setExportMp3Bitrate(int bitrate)
 {
-    m_exportMp3Bitrate = bitrate;
+    settings()->setSharedValue(EXPORT_MP3_BITRATE, Val(bitrate));
+}
+
+void AudioExportConfiguration::setExportMp3BitrateOverride(std::optional<int> bitrate)
+{
+    m_exportMp3BitrateOverride = bitrate;
 }
 
 const std::vector<int>& AudioExportConfiguration::availableMp3BitRates() const

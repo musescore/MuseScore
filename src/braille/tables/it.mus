@@ -1,0 +1,27 @@
+#Italian letters definitions used to translate music text in SMB
+
+lowercase \x00F3 346
+lowercase \x0105 16
+lowercase \x0107 146
+lowercase \x0119 156
+lowercase \x0142 126
+lowercase \x0144 1456
+lowercase \x00E0 12356				# a with grave
+lowercase \x00E8 2346				# e with grave
+lowercase \x00E9 123456				# e with acute
+lowercase \x00EC 34				# i with grave above
+lowercase \x00F2 346			# o with grave above
+lowercase \x00F9 23456			# u with grave above
+# Uppercase letters
+base uppercase \x0104 \x0105
+base uppercase \x0106 \x0107
+base uppercase \x0118 \x0119
+base uppercase \x0141 \x0142
+base uppercase \x0143 \x0144
+base uppercase \x00C0 \x00E0				# a with grave
+base uppercase \x00C8 \x00E8				# e with grave
+base uppercase \x00C9 \x00E9				# e with acute
+base uppercase \x00CC \x00EC				# i with grave above
+base uppercase \x00D2 \x00F2			# o with grave above
+base uppercase \x00D9 \x00F9			# u with grave above
+base uppercase \x00D3 \x00F3

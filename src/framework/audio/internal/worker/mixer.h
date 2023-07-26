@@ -33,12 +33,14 @@
 #include "mixerchannel.h"
 #include "internal/dsp/limiter.h"
 #include "ifxresolver.h"
+#include "iaudioconfiguration.h"
 #include "iclock.h"
 
 namespace mu::audio {
 class Mixer : public AbstractAudioSource, public std::enable_shared_from_this<Mixer>, public async::Asyncable
 {
-    INJECT(audio, fx::IFxResolver, fxResolver)
+    INJECT(fx::IFxResolver, fxResolver)
+    INJECT(IAudioConfiguration, configuration)
 public:
     Mixer();
     ~Mixer();
@@ -46,7 +48,8 @@ public:
     IAudioSourcePtr mixedSource();
 
     RetVal<MixerChannelPtr> addChannel(const TrackId trackId, IAudioSourcePtr source);
-    Ret removeChannel(const TrackId id);
+    RetVal<MixerChannelPtr> addAuxChannel(const TrackId trackId);
+    Ret removeChannel(const TrackId trackId);
 
     void setAudioChannelsCount(const audioch_t count);
 
@@ -67,8 +70,11 @@ public:
     void setIsActive(bool arg) override;
 
 private:
-    void mixOutputFromChannel(float* outBuffer, float* inBuffer, unsigned int samplesCount);
-    void completeOutput(float* buffer, const samples_t& samplesPerChannel);
+    void mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount, bool& outBufferIsSilent);
+    void prepareAuxBuffers(size_t outBufferSize);
+    void writeTrackToAuxBuffers(const float* trackBuffer, const AuxSendsParams& auxSends, samples_t samplesPerChannel);
+    void processAuxChannels(float* buffer, samples_t samplesPerChannel);
+    void completeOutput(float* buffer, samples_t samplesPerChannel);
     void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
 
     std::vector<float> m_writeCacheBuff;
@@ -77,13 +83,24 @@ private:
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
     std::vector<IFxProcessorPtr> m_masterFxProcessors = {};
 
-    std::map<TrackId, MixerChannelPtr> m_mixerChannels = {};
+    std::map<TrackId, MixerChannelPtr> m_trackChannels = {};
+
+    struct AuxChannelInfo {
+        MixerChannelPtr channel;
+        std::vector<float> buffer;
+        bool receivedAudioSignal = false;
+    };
+
+    std::vector<AuxChannelInfo> m_auxChannelInfoList;
+
     dsp::LimiterPtr m_limiter = nullptr;
 
     std::set<IClockPtr> m_clocks;
     audioch_t m_audioChannelsCount = 0;
 
     mutable AudioSignalsNotifier m_audioSignalNotifier;
+
+    bool m_isSilence = false;
 };
 
 using MixerPtr = std::shared_ptr<Mixer>;

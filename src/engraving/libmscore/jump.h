@@ -42,11 +42,7 @@ namespace mu::engraving {
 class Jump final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, Jump)
-
-    String _jumpTo;
-    String _playUntil;
-    String _continueAt;
-    bool _playRepeats;
+    DECLARE_CLASSOF(ElementType::JUMP)
 
 public:
 
@@ -61,11 +57,6 @@ public:
     int subtype() const override { return int(jumpType()); }
 
     Measure* measure() const { return toMeasure(explicitParent()); }
-
-    void read(XmlReader&) override;
-    void write(XmlWriter& xml) const override;
-
-    void layout() override;
 
     String jumpTo() const { return _jumpTo; }
     String playUntil() const { return _playUntil; }
@@ -86,6 +77,12 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
+
+private:
+    String _jumpTo;
+    String _playUntil;
+    String _continueAt;
+    bool _playRepeats;
 };
 
 struct JumpTypeTableItem {

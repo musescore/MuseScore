@@ -22,13 +22,11 @@
 
 #include "gradualtempochange.h"
 
-#include "rw/xml.h"
-#include "rw/400/tread.h"
-#include "log.h"
-
 #include "measure.h"
 #include "score.h"
 #include "segment.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -105,22 +103,6 @@ GradualTempoChange* GradualTempoChange::clone() const
     return new GradualTempoChange(*this);
 }
 
-void GradualTempoChange::read(XmlReader& xml)
-{
-    rw400::TRead::read(this, xml, *xml.context());
-}
-
-void GradualTempoChange::write(XmlWriter& writer) const
-{
-    writer.startElement(this);
-    writeProperty(writer, Pid::TEMPO_CHANGE_TYPE);
-    writeProperty(writer, Pid::TEMPO_EASING_METHOD);
-    writeProperty(writer, Pid::TEMPO_CHANGE_FACTOR);
-    writeProperty(writer, Pid::PLACEMENT);
-    TextLineBase::writeProperties(writer);
-    writer.endElement();
-}
-
 LineSegment* GradualTempoChange::createLineSegment(System* parent)
 {
     GradualTempoChangeSegment* lineSegment = new GradualTempoChangeSegment(this, parent);
@@ -193,12 +175,12 @@ PropertyValue GradualTempoChange::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::ALIGN:
-        return score()->styleV(Sid::tempoChangeAlign);
+        return style().styleV(Sid::tempoChangeAlign);
 
     case Pid::LINE_WIDTH:
-        return score()->styleV(Sid::tempoChangeLineWidth);
+        return style().styleV(Sid::tempoChangeLineWidth);
     case Pid::LINE_STYLE:
-        return score()->styleV(Sid::tempoChangeLineStyle);
+        return style().styleV(Sid::tempoChangeLineStyle);
     case Pid::LINE_VISIBLE:
         return true;
 
@@ -207,7 +189,7 @@ PropertyValue GradualTempoChange::propertyDefault(Pid propertyId) const
         return PropertyValue::fromValue(PointF(0, 0));
 
     case Pid::BEGIN_FONT_STYLE:
-        return score()->styleV(Sid::tempoChangeFontStyle);
+        return style().styleV(Sid::tempoChangeFontStyle);
 
     case Pid::BEGIN_TEXT:
     case Pid::CONTINUE_TEXT:
@@ -315,15 +297,6 @@ Sid GradualTempoChangeSegment::getPropertyStyle(Pid id) const
         }
     }
     return TextLineBaseSegment::getPropertyStyle(id);
-}
-
-void GradualTempoChangeSegment::layout()
-{
-    TextLineBaseSegment::layout();
-    if (isStyled(Pid::OFFSET)) {
-        roffset() = tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
-    autoplaceSpannerSegment();
 }
 
 void GradualTempoChangeSegment::endEdit(EditData& editData)

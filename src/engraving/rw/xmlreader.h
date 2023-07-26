@@ -32,8 +32,6 @@
 #include "types/fraction.h"
 
 namespace mu::engraving {
-class ReadContext;
-
 class XmlReader : public XmlStreamReader
 {
 public:
@@ -74,17 +72,12 @@ public:
     // for reading old files (< 3.01)
     void setOffsetLines(int64_t val) { m_offsetLines = val; }
 
-    ReadContext* context() const;
-    void setContext(ReadContext* context);
-
 private:
 
     void htmlToString(int level, String*);
 
     String m_docName;    // used for error reporting
     int64_t m_offsetLines = 0;
-    mutable ReadContext* m_context = nullptr;
-    mutable bool m_selfContext = false;
 };
 }
 

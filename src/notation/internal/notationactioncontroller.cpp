@@ -377,8 +377,8 @@ void NotationActionController::init()
     registerAction("beam-auto", &Interaction::addBeamToSelectedChordRests, BeamMode::AUTO);
     registerAction("beam-none", &Interaction::addBeamToSelectedChordRests, BeamMode::NONE);
     registerAction("beam-break-left", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN);
-    registerAction("beam-break-inner-8th", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN32);
-    registerAction("beam-break-inner-16th", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN64);
+    registerAction("beam-break-inner-8th", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN16);
+    registerAction("beam-break-inner-16th", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN32);
     registerAction("beam-join", &Interaction::addBeamToSelectedChordRests, BeamMode::MID);
 
     registerAction("add-brackets", &Interaction::addBracketsToSelection, BracketsType::Brackets);
@@ -424,15 +424,17 @@ void NotationActionController::init()
     registerAction("add-down-bow", &Interaction::toggleArticulation, mu::engraving::SymId::stringsDownBow);
     registerAction("transpose-up", &Interaction::transposeSemitone, 1, PlayMode::PlayNote);
     registerAction("transpose-down", &Interaction::transposeSemitone, -1, PlayMode::PlayNote);
-    registerAction("toggle-insert-mode", &Interaction::toggleGlobalOrLocalInsert);
+    //registerAction("toggle-insert-mode", );
 
     registerAction("get-location", &Interaction::getLocation, &Controller::isNotationPage);
     registerAction("toggle-mmrest", &Interaction::execute, &mu::engraving::Score::cmdToggleMmrest);
     registerAction("toggle-hide-empty", &Interaction::execute, &mu::engraving::Score::cmdToggleHideEmpty);
 
     registerAction("mirror-note", &Interaction::execute, &mu::engraving::Score::cmdMirrorNoteHead);
-    registerAction("clef-violin", &Interaction::insertClef, mu::engraving::ClefType::G);
-    registerAction("clef-bass", &Interaction::insertClef, mu::engraving::ClefType::F);
+
+    registerAction("clef-violin", [this]() { insertClef(mu::engraving::ClefType::G); });
+    registerAction("clef-bass", [this]() { insertClef(mu::engraving::ClefType::F); });
+
     registerAction("sharp2-post", &Interaction::changeAccidental, mu::engraving::AccidentalType::SHARP2, PlayMode::PlayNote);
     registerAction("sharp-post", &Interaction::changeAccidental, mu::engraving::AccidentalType::SHARP, PlayMode::PlayNote);
     registerAction("nat-post", &Interaction::changeAccidental, mu::engraving::AccidentalType::NATURAL, PlayMode::PlayNote);
@@ -450,7 +452,7 @@ void NotationActionController::init()
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
-            registerAction("interval" + std::to_string(i), &Interaction::addIntervalToSelectedNotes, i);
+            registerAction("interval" + std::to_string(i), &Interaction::addIntervalToSelectedNotes, i, PlayMode::PlayChord);
         }
     }
 
@@ -472,6 +474,7 @@ void NotationActionController::init()
     registerTabPadNoteAction("pad-note-256-TAB", Pad::NOTE256);
     registerTabPadNoteAction("pad-note-512-TAB", Pad::NOTE512);
     registerTabPadNoteAction("pad-note-1024-TAB", Pad::NOTE1024);
+    registerAction("rest-TAB", &Interaction::putRestToSelection);
 
     for (int i = 0; i < MAX_FRET; ++i) {
         registerAction("fret-" + std::to_string(i), [i, this]() { addFret(i); }, &Controller::isTablatureStaff);
@@ -714,6 +717,9 @@ void NotationActionController::padNote(const Pad& pad)
     startNoteInputIfNeed();
 
     noteInput->padNote(pad);
+    if (currentNotationElements()->msScore()->inputState().usingNoteEntryMethod(engraving::NoteEntryMethod::RHYTHM)) {
+        playSelectedElement();
+    }
 }
 
 void NotationActionController::putNote(const actions::ActionData& args)
@@ -845,6 +851,13 @@ void NotationActionController::putTuplet(int tupletCount)
     options.ratio.setNumerator(tupletCount);
     options.ratio.setDenominator(2);
     options.autoBaseLen = true;
+    // get the bracket type from score style settings
+    if (INotationStylePtr style = currentNotationStyle()) {
+        int bracketType = style->styleValue(StyleId::tupletBracketType).toInt();
+        options.bracketType = static_cast<TupletBracketType>(bracketType);
+        int numberType = style->styleValue(StyleId::tupletNumberType).toInt();
+        options.numberType = static_cast<TupletNumberType>(numberType);
+    }
 
     putTuplet(options);
 }
@@ -929,10 +942,13 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
     case MoveDirection::Down:
         if (!quickly && selectedElement && selectedElement->isLyrics()) {
             interaction->moveLyrics(direction);
-        } else if (selectedElement && (selectedElement->isTextBase() || selectedElement->isArticulation())) {
+        } else if (selectedElement && (selectedElement->isTextBase() || selectedElement->isArticulationFamily())) {
             interaction->nudge(direction, quickly);
         } else if (interaction->noteInput()->isNoteInputMode()
                    && interaction->noteInput()->state().staffGroup == mu::engraving::StaffGroup::TAB) {
+            if (quickly) {
+                interaction->movePitch(direction, PitchMode::OCTAVE);
+            }
             interaction->moveSelection(direction, MoveSelectionType::String);
             return;
         } else if (interaction->selection()->isNone()) {
@@ -1150,6 +1166,16 @@ void NotationActionController::addFret(int num)
     playSelectedElement(currentNotationElements()->msScore()->playChord());
 }
 
+void NotationActionController::insertClef(mu::engraving::ClefType type)
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction || !interaction->canInsertClef(type)) {
+        return;
+    }
+
+    interaction->insertClef(type);
+}
+
 IInteractive::Result NotationActionController::showErrorMessage(const std::string& message) const
 {
     return interactive()->info(message,
@@ -1343,6 +1369,11 @@ void NotationActionController::startEditSelectedElement(const ActionData& args)
 
     if (element->isInstrumentName()) {
         openStaffProperties();
+        return;
+    }
+
+    if (elementHasPopup(element)) {
+        dispatcher()->dispatch("notation-popup-menu");
         return;
     }
 
@@ -1771,27 +1802,27 @@ bool NotationActionController::isNotNoteInputMode() const
 
 void NotationActionController::openTupletOtherDialog()
 {
-    interactive()->open("musescore://notation/othertupletdialog");
+    interactive()->open("musescore://notation/othertupletdialog?sync=false");
 }
 
 void NotationActionController::openStaffTextPropertiesDialog()
 {
-    interactive()->open("musescore://notation/stafftextproperties");
+    interactive()->open("musescore://notation/stafftextproperties?sync=false");
 }
 
 void NotationActionController::openMeasurePropertiesDialog()
 {
-    interactive()->open("musescore://notation/measureproperties");
+    interactive()->open("musescore://notation/measureproperties?sync=false");
 }
 
 void NotationActionController::openEditGridSizeDialog()
 {
-    interactive()->open("musescore://notation/editgridsize");
+    interactive()->open("musescore://notation/editgridsize?sync=false");
 }
 
 void NotationActionController::openRealizeChordSymbolsDialog()
 {
-    interactive()->open("musescore://notation/realizechordsymbols");
+    interactive()->open("musescore://notation/realizechordsymbols?sync=false");
 }
 
 void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
@@ -1923,6 +1954,15 @@ const mu::engraving::Harmony* NotationActionController::editedChordSymbol() cons
     }
 
     return toHarmony(text);
+}
+
+bool NotationActionController::elementHasPopup(EngravingItem* e)
+{
+    if (e->isHarpPedalDiagram()) {
+        return true;
+    }
+
+    return false;
 }
 
 bool NotationActionController::canUndo() const

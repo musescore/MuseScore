@@ -34,7 +34,7 @@ class DispatcherApi : public ApiObject
 {
     Q_OBJECT
 
-    INJECT(api, actions::IActionsDispatcher, dispatcher)
+    INJECT(actions::IActionsDispatcher, dispatcher)
 
 public:
     explicit DispatcherApi(IApiEngine* e);

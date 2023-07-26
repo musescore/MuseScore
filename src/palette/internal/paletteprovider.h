@@ -46,8 +46,8 @@ class PaletteElementEditor : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(palette, framework::IInteractive, interactive)
-    INJECT(palette, IPaletteProvider, paletteProvider)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(IPaletteProvider, paletteProvider)
 
     Q_PROPERTY(bool valid READ valid CONSTANT)
     Q_PROPERTY(QString actionName READ actionName CONSTANT) // TODO: make NOTIFY instead of CONSTANT for retranslations
@@ -136,9 +136,9 @@ class UserPaletteController : public AbstractPaletteController, public async::As
 {
     Q_OBJECT
 
-    INJECT(palette, context::IGlobalContext, globalContext)
-    INJECT(palette, framework::IInteractive, interactive)
-    INJECT(palette, IPaletteConfiguration, configuration)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(IPaletteConfiguration, configuration)
 
     QAbstractItemModel* _model;
     PaletteTreeModel* _userPalette;
@@ -203,8 +203,8 @@ class PaletteProvider : public QObject, public IPaletteProvider, public async::A
 {
     Q_OBJECT
 
-    INJECT(palette, IPaletteConfiguration, configuration)
-    INJECT(palette, framework::IInteractive, interactive)
+    INJECT(IPaletteConfiguration, configuration)
+    INJECT(framework::IInteractive, interactive)
 
     Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel NOTIFY mainPaletteChanged)
     Q_PROPERTY(mu::palette::AbstractPaletteController * mainPaletteController READ mainPaletteController NOTIFY mainPaletteChanged)
@@ -247,8 +247,8 @@ public:
 
     bool paletteChanged() const { return m_userPaletteModel->paletteTreeChanged(); }
 
-    void write(engraving::XmlWriter&) const;
-    bool read(engraving::XmlReader&);
+    void write(engraving::XmlWriter&, bool pasteMode) const;
+    bool read(engraving::XmlReader&, bool pasteMode);
 
     void updateCellsState(const engraving::Selection& sel) { m_userPaletteModel->updateCellsState(sel); }
     void retranslate()

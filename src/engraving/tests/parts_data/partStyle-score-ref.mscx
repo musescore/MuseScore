@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <frameSystemDistance>21</frameSystemDistance>
@@ -112,16 +110,16 @@
         </VBox>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <linkedMain/>
-            </Clef>
           <TimeSig>
             <linkedMain/>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <linkedMain/>
+            </Clef>
           <Chord>
             <linkedMain/>
             <durationType>whole</durationType>
@@ -228,16 +226,16 @@
     <Staff id="2">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <linkedMain/>
-            </Clef>
           <TimeSig>
             <linkedMain/>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <linkedMain/>
+            </Clef>
           <Rest>
             <linkedMain/>
             <durationType>measure</durationType>
@@ -310,8 +308,6 @@
         </Measure>
       </Staff>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -375,18 +371,18 @@
           </VBox>
         <Measure>
           <voice>
-            <Clef>
-              <concertClefType>G</concertClefType>
-              <transposingClefType>G</transposingClefType>
-              <linked>
-                </linked>
-              </Clef>
             <TimeSig>
               <linked>
                 </linked>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
             <Chord>
               <linked>
                 </linked>
@@ -509,8 +505,6 @@
       <name>Flute</name>
       </Score>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -581,18 +575,18 @@
           </VBox>
         <Measure>
           <voice>
-            <Clef>
-              <concertClefType>G</concertClefType>
-              <transposingClefType>G</transposingClefType>
-              <linked>
-                </linked>
-              </Clef>
             <TimeSig>
               <linked>
                 </linked>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
             <Rest>
               <linked>
                 </linked>

@@ -22,7 +22,6 @@
 #include "beamsettingsmodel.h"
 
 #include "translation.h"
-#include "dataformatter.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;
@@ -32,7 +31,18 @@ BeamSettingsModel::BeamSettingsModel(QObject* parent, IElementRepositoryService*
 {
     setModelType(InspectorModelType::TYPE_BEAM);
     setTitle(qtrc("inspector", "Beam"));
-    setBeamModesModel(new BeamModesModel(this, repository));
+
+    m_beamModesModel = new BeamModesModel(this, repository);
+    m_beamModesModel->init();
+
+    connect(m_beamModesModel->isFeatheringAvailable(), &PropertyItem::propertyModified,
+            this, [this](const mu::engraving::Pid, const QVariant& newValue) {
+        if (!newValue.toBool()) {
+            setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
+        }
+    });
+
+    connect(m_beamModesModel->mode(), &PropertyItem::propertyModified, this, &AbstractInspectorModel::requestReloadPropertyItems);
 
     createProperties();
 }
@@ -193,11 +203,16 @@ void BeamSettingsModel::setBeamHeight(const qreal left, const qreal right)
 
 void BeamSettingsModel::updateFeatheringMode(const qreal left, const qreal right)
 {
+    BeamTypes::FeatheringMode newFeathering = BeamTypes::FeatheringMode::FEATHERING_NONE;
     if (left != right) {
-        setFeatheringMode(left > right ? BeamTypes::FeatheringMode::FEATHERED_DECELERATE
-                          : BeamTypes::FeatheringMode::FEATHERED_ACCELERATE);
+        newFeathering = left > right ? BeamTypes::FeatheringMode::FEATHERED_DECELERATE
+                        : BeamTypes::FeatheringMode::FEATHERED_ACCELERATE;
     } else {
-        setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
+        newFeathering = BeamTypes::FeatheringMode::FEATHERING_NONE;
+    }
+    if (newFeathering != m_featheringMode) {
+        m_featheringMode = newFeathering;
+        emit featheringModeChanged(m_featheringMode);
     }
 }
 
@@ -282,18 +297,9 @@ void BeamSettingsModel::setFeatheringMode(BeamTypes::FeatheringMode featheringMo
     emit featheringModeChanged(featheringMode);
 }
 
-void BeamSettingsModel::setBeamModesModel(BeamModesModel* beamModesModel)
+void BeamSettingsModel::onCurrentNotationChanged()
 {
-    m_beamModesModel = beamModesModel;
+    AbstractInspectorModel::onCurrentNotationChanged();
 
-    connect(m_beamModesModel->isFeatheringAvailable(), &PropertyItem::propertyModified,
-            this, [this](const mu::engraving::Pid, const QVariant& newValue) {
-        if (!newValue.toBool()) {
-            setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
-        }
-    });
-
-    connect(m_beamModesModel->mode(), &PropertyItem::propertyModified, this, &AbstractInspectorModel::requestReloadPropertyItems);
-
-    emit beamModesModelChanged(m_beamModesModel);
+    m_beamModesModel->onCurrentNotationChanged();
 }

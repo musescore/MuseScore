@@ -23,6 +23,7 @@
 #include "topleveldialog.h"
 
 #include <QApplication>
+#include <QKeyEvent>
 #include <QWindow>
 
 using namespace mu::uicomponents;
@@ -71,6 +72,15 @@ bool TopLevelDialog::event(QEvent* e)
         windowHandle()->setTransientParent(mainWindow()->qWindow());
     }
 #endif
+
+    if (e->type() == QEvent::ShortcutOverride) {
+        if (QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(e)) {
+            if (keyEvent->key() == Qt::Key_Escape && keyEvent->modifiers() == Qt::NoModifier) {
+                close();
+                return true;
+            }
+        }
+    }
 
     return QDialog::event(e);
 }

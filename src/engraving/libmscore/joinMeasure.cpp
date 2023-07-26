@@ -65,7 +65,7 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
     Fraction tick1 = m1->tick();
     Fraction tick2 = m2->endTick();
 
-    auto spanners = _spanner.findContained(tick1.ticks(), tick2.ticks());
+    auto spanners = m_spanner.findContained(tick1.ticks(), tick2.ticks());
     for (auto i : spanners) {
         undo(new RemoveElement(i.value));
     }

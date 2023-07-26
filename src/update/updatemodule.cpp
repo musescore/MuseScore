@@ -43,11 +43,6 @@ using namespace mu::update;
 using namespace mu::modularity;
 using namespace mu::ui;
 
-static std::shared_ptr<UpdateScenario> s_scenario = std::make_shared<UpdateScenario>();
-static std::shared_ptr<UpdateService> s_service = std::make_shared<UpdateService>();
-static std::shared_ptr<UpdateConfiguration> s_configuration = std::make_shared<UpdateConfiguration>();
-static std::shared_ptr<UpdateActionController> s_actionController = std::make_shared<UpdateActionController>();
-
 static void update_init_qrc()
 {
     Q_INIT_RESOURCE(update);
@@ -60,16 +55,21 @@ std::string UpdateModule::moduleName() const
 
 void UpdateModule::registerExports()
 {
-    ioc()->registerExport<IUpdateScenario>(moduleName(), s_scenario);
-    ioc()->registerExport<IUpdateService>(moduleName(), s_service);
-    ioc()->registerExport<IUpdateConfiguration>(moduleName(), s_configuration);
+    m_scenario = std::make_shared<UpdateScenario>();
+    m_service = std::make_shared<UpdateService>();
+    m_configuration = std::make_shared<UpdateConfiguration>();
+    m_actionController = std::make_shared<UpdateActionController>();
+
+    ioc()->registerExport<IUpdateScenario>(moduleName(), m_scenario);
+    ioc()->registerExport<IUpdateService>(moduleName(), m_service);
+    ioc()->registerExport<IUpdateConfiguration>(moduleName(), m_configuration);
 }
 
 void UpdateModule::resolveImports()
 {
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(std::make_shared<UpdateUiActions>(s_actionController));
+        ar->reg(std::make_shared<UpdateUiActions>(m_actionController));
     }
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
@@ -97,11 +97,11 @@ void UpdateModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
-    s_configuration->init();
-    s_actionController->init();
+    m_configuration->init();
+    m_actionController->init();
 }
 
 void UpdateModule::onDelayedInit()
 {
-    s_scenario->delayedInit();
+    m_scenario->delayedInit();
 }

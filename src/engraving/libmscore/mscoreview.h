@@ -60,9 +60,6 @@ public:
     virtual void setDropTarget(const EngravingItem*) {}
 
     virtual void textTab(bool /*back*/) {}
-    virtual void lyricsTab(bool /*back*/, bool /*end*/, bool /*moveOnly*/) {}
-    virtual void lyricsMinus() {}
-    virtual void lyricsUnderscore() {}
 
     virtual const mu::Rect geometry() const = 0;
 

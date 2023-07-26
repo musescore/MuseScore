@@ -36,7 +36,7 @@ class MQZipWriter;
 namespace mu::workspace {
 class WorkspaceFile
 {
-    INJECT(workspace, io::IFileSystem, fileSystem)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     WorkspaceFile(const io::path_t& filePath);

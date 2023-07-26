@@ -38,9 +38,9 @@ class InstrumentSettingsModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(instruments, notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
-    INJECT(instruments, context::IGlobalContext, context)
-    INJECT(instruments, framework::IInteractive, interactive)
+    INJECT(notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
+    INJECT(context::IGlobalContext, context)
+    INJECT(framework::IInteractive, interactive)
 
     Q_PROPERTY(QString instrumentName READ instrumentName WRITE setInstrumentName NOTIFY dataChanged)
     Q_PROPERTY(QString abbreviature READ abbreviature WRITE setAbbreviature NOTIFY dataChanged)

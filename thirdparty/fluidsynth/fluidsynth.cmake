@@ -1,30 +1,29 @@
 
-set (FLUIDSYNTH_DIR ${CMAKE_CURRENT_LIST_DIR}/fluidsynth-2.1.4)
+set(FLUIDSYNTH_DIR ${CMAKE_CURRENT_LIST_DIR}/fluidsynth-2.3.3)
 
-set (FLUIDSYNTH_INC
+set(FLUIDSYNTH_INC
     ${FLUIDSYNTH_DIR}/include
     ${FLUIDSYNTH_DIR}/src
+    ${FLUIDSYNTH_DIR}/src/bindings
+    ${FLUIDSYNTH_DIR}/src/drivers
     ${FLUIDSYNTH_DIR}/src/external
-    ${FLUIDSYNTH_DIR}/src/utils
     ${FLUIDSYNTH_DIR}/src/midi
     ${FLUIDSYNTH_DIR}/src/rvoice
     ${FLUIDSYNTH_DIR}/src/sfloader
-    ${FLUIDSYNTH_DIR}/src/bindings
     ${FLUIDSYNTH_DIR}/src/synth
-    ${FLUIDSYNTH_DIR}/src/drivers
+    ${FLUIDSYNTH_DIR}/src/utils
     )
 
-set (FLUIDSYNTH_DEF
+set(FLUIDSYNTH_DEF
     -DNO_GLIB
     -DNO_THREADS
     )
 
-set (FLUIDSYNTH_SRC
-    #${FLUIDSYNTH_DIR}/src/fluidsynth.c
-
+set(FLUIDSYNTH_SRC
+    # ${FLUIDSYNTH_DIR}/src/fluidsynth.c
     ${FLUIDSYNTH_DIR}/src/external/fluidsynthconfig.h
-    ${FLUIDSYNTH_DIR}/src/external/fluid_conv_tables.c
-    ${FLUIDSYNTH_DIR}/src/external/fluid_rvoice_dsp_tables.c
+    ${FLUIDSYNTH_DIR}/src/external/fluid_conv_tables.inc.h
+    ${FLUIDSYNTH_DIR}/src/external/fluid_rvoice_dsp_tables.inc.h
     ${FLUIDSYNTH_DIR}/src/external/portable_endian.h
 
     ${FLUIDSYNTH_DIR}/src/synth/fluid_chan.c
@@ -60,8 +59,8 @@ set (FLUIDSYNTH_SRC
 
     ${FLUIDSYNTH_DIR}/src/sfloader/fluid_defsfont.c
     ${FLUIDSYNTH_DIR}/src/sfloader/fluid_defsfont.h
-#    ${FLUIDSYNTH_DIR}/src/sfloader/fluid_instpatch.c
-#    ${FLUIDSYNTH_DIR}/src/sfloader/fluid_instpatch.h
+    # ${FLUIDSYNTH_DIR}/src/sfloader/fluid_instpatch.c
+    # ${FLUIDSYNTH_DIR}/src/sfloader/fluid_instpatch.h
     ${FLUIDSYNTH_DIR}/src/sfloader/fluid_samplecache.c
     ${FLUIDSYNTH_DIR}/src/sfloader/fluid_samplecache.h
     ${FLUIDSYNTH_DIR}/src/sfloader/fluid_sffile.c
@@ -89,12 +88,16 @@ set (FLUIDSYNTH_SRC
     ${FLUIDSYNTH_DIR}/src/rvoice/fluid_rvoice_mixer.c
     ${FLUIDSYNTH_DIR}/src/rvoice/fluid_rvoice_mixer.h
 
-    ${FLUIDSYNTH_DIR}/src/midi/fluid_midi.c
-    ${FLUIDSYNTH_DIR}/src/midi/fluid_midi.h
     ${FLUIDSYNTH_DIR}/src/midi/fluid_midi_router.c
     ${FLUIDSYNTH_DIR}/src/midi/fluid_midi_router.h
-    ${FLUIDSYNTH_DIR}/src/midi/fluid_seqbind.c
+    ${FLUIDSYNTH_DIR}/src/midi/fluid_midi.c
+    ${FLUIDSYNTH_DIR}/src/midi/fluid_midi.h
     ${FLUIDSYNTH_DIR}/src/midi/fluid_seq.c
+    ${FLUIDSYNTH_DIR}/src/midi/fluid_seq_queue.cpp
+    ${FLUIDSYNTH_DIR}/src/midi/fluid_seq_queue.h
+    ${FLUIDSYNTH_DIR}/src/midi/fluid_seqbind.c
+    ${FLUIDSYNTH_DIR}/src/midi/fluid_seqbind_notes.cpp
+    ${FLUIDSYNTH_DIR}/src/midi/fluid_seqbind_notes.h
 
     ${FLUIDSYNTH_DIR}/src/bindings/fluid_filerenderer.c
 
@@ -102,7 +105,6 @@ set (FLUIDSYNTH_SRC
     ${FLUIDSYNTH_DIR}/src/drivers/fluid_adriver.c
     ${FLUIDSYNTH_DIR}/src/drivers/fluid_mdriver.h
     ${FLUIDSYNTH_DIR}/src/drivers/fluid_mdriver.c
-
     )
 
 if (NOT MSVC)

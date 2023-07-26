@@ -38,13 +38,12 @@ namespace mu::engraving {
 class TempoText final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, TempoText)
+    DECLARE_CLASSOF(ElementType::TEMPO_TEXT)
+
 public:
     TempoText(Segment* parent);
 
     TempoText* clone() const override { return new TempoText(*this); }
-
-    void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
 
     Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
@@ -60,8 +59,6 @@ public:
     void setFollowText(bool v) { _followText = v; }
     void undoSetFollowText(bool v);
     void updateRelative();
-
-    void layout() override;
 
     TDuration duration() const;
 

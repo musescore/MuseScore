@@ -82,6 +82,8 @@ void TextLineSettingsModel::createProperties()
     m_startHookHeight = buildPropertyItem(Pid::BEGIN_HOOK_HEIGHT);
     m_endHookHeight = buildPropertyItem(Pid::END_HOOK_HEIGHT);
 
+    m_gapBetweenTextAndLine = buildPropertyItem(Pid::GAP_BETWEEN_TEXT_AND_LINE, applyPropertyValueAndUpdateAvailability);
+
     m_thickness = buildPropertyItem(Pid::LINE_WIDTH);
     m_dashLineLength = buildPropertyItem(Pid::DASH_LINE_LEN);
     m_dashGapLength = buildPropertyItem(Pid::DASH_GAP_LEN);
@@ -89,20 +91,14 @@ void TextLineSettingsModel::createProperties()
     m_placement = buildPropertyItem(Pid::PLACEMENT);
     m_placement->setIsVisible(false);
 
-    if (isTextVisible(BeginningText)) {
-        m_beginningText = buildPropertyItem(Pid::BEGIN_TEXT);
-        m_beginningTextOffset = buildPointFPropertyItem(Pid::BEGIN_TEXT_OFFSET);
-    }
+    m_beginningText = buildPropertyItem(Pid::BEGIN_TEXT);
+    m_beginningTextOffset = buildPointFPropertyItem(Pid::BEGIN_TEXT_OFFSET);
 
-    if (isTextVisible(ContinuousText)) {
-        m_continuousText = buildPropertyItem(Pid::CONTINUE_TEXT);
-        m_continuousTextOffset = buildPointFPropertyItem(Pid::CONTINUE_TEXT_OFFSET);
-    }
+    m_continuousText = buildPropertyItem(Pid::CONTINUE_TEXT);
+    m_continuousTextOffset = buildPointFPropertyItem(Pid::CONTINUE_TEXT_OFFSET);
 
-    if (isTextVisible(EndText)) {
-        m_endText = buildPropertyItem(Pid::END_TEXT);
-        m_endTextOffset = buildPointFPropertyItem(Pid::END_TEXT_OFFSET);
-    }
+    m_endText = buildPropertyItem(Pid::END_TEXT);
+    m_endTextOffset = buildPointFPropertyItem(Pid::END_TEXT_OFFSET);
 }
 
 void TextLineSettingsModel::loadProperties()
@@ -118,6 +114,7 @@ void TextLineSettingsModel::loadProperties()
         Pid::DASH_GAP_LEN,
         Pid::END_HOOK_HEIGHT,
         Pid::BEGIN_HOOK_HEIGHT,
+        Pid::GAP_BETWEEN_TEXT_AND_LINE,
         Pid::PLACEMENT,
         Pid::BEGIN_TEXT,
         Pid::BEGIN_TEXT_OFFSET,
@@ -143,6 +140,7 @@ void TextLineSettingsModel::resetProperties()
         m_endHookType,
         m_startHookHeight,
         m_endHookHeight,
+        m_gapBetweenTextAndLine,
         m_placement,
         m_beginningText,
         m_beginningTextOffset,
@@ -207,6 +205,11 @@ PropertyItem* TextLineSettingsModel::startHookHeight() const
 PropertyItem* TextLineSettingsModel::endHookHeight() const
 {
     return m_endHookHeight;
+}
+
+PropertyItem* TextLineSettingsModel::gapBetweenTextAndLine() const
+{
+    return m_gapBetweenTextAndLine;
 }
 
 PropertyItem* TextLineSettingsModel::placement() const
@@ -287,17 +290,13 @@ void TextLineSettingsModel::onUpdateLinePropertiesAvailability()
     m_lineStyle->setIsEnabled(isLineAvailable);
     m_thickness->setIsEnabled(isLineAvailable);
 
+    m_gapBetweenTextAndLine->setIsEnabled(isLineAvailable);
+
     auto currentStyle = static_cast<LineTypes::LineStyle>(m_lineStyle->value().toInt());
     bool areDashPropertiesAvailable = currentStyle == LineTypes::LineStyle::LINE_STYLE_DASHED;
 
     m_dashLineLength->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
     m_dashGapLength->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
-}
-
-bool TextLineSettingsModel::isTextVisible(TextType type) const
-{
-    //! NOTE: the end text is hidden for most lines by default
-    return type != TextType::EndText;
 }
 
 void TextLineSettingsModel::setPossibleStartHookTypes(const QList<HookTypeInfo>& types)
@@ -355,6 +354,10 @@ void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 
     if (mu::contains(propertyIdSet, Pid::END_HOOK_HEIGHT)) {
         loadPropertyItem(m_endHookHeight);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::GAP_BETWEEN_TEXT_AND_LINE)) {
+        loadPropertyItem(m_gapBetweenTextAndLine);
     }
 
     if (mu::contains(propertyIdSet, Pid::PLACEMENT)) {

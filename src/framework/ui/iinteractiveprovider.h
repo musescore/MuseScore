@@ -22,7 +22,7 @@
 #ifndef MU_UI_IINTERACTIVEPROVIDER_H
 #define MU_UI_IINTERACTIVEPROVIDER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "types/uri.h"
 #include "types/retval.h"
 #include "progress.h"
@@ -79,6 +79,7 @@ public:
     virtual void closeAllDialogs() = 0;
 
     virtual ValCh<Uri> currentUri() const = 0;
+    virtual async::Notification currentUriAboutToBeChanged() const = 0;
     virtual std::vector<Uri> stack() const = 0;
 
     virtual QWindow* topWindow() const = 0;

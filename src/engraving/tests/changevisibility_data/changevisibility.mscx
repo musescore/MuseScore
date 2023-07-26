@@ -3,8 +3,6 @@
   <programVersion>4.1.0</programVersion>
   <programRevision></programRevision>
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -303,6 +301,60 @@
           <Rest>
             <durationType>half</durationType>
             </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Ornament>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <placement>above</placement>
+                </Accidental>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                </Accidental>
+              <intervalAbove>second,major</intervalAbove>
+              <intervalBelow>second,minor</intervalBelow>
+              <subtype>ornamentTurn</subtype>
+              </Ornament>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Ornament>
+              <Chord>
+                <small>1</small>
+                <Note>
+                  <Accidental>
+                    <subtype>accidentalSharp</subtype>
+                    </Accidental>
+                  <Symbol>
+                    <name>noteheadParenthesisLeft</name>
+                    </Symbol>
+                  <Symbol>
+                    <name>noteheadParenthesisRight</name>
+                    </Symbol>
+                  <pitch>78</pitch>
+                  <tpc>20</tpc>
+                  <headType>quarter</headType>
+                  </Note>
+                </Chord>
+              <intervalAbove>fourth,augmented</intervalAbove>
+              <subtype>ornamentTrill</subtype>
+              </Ornament>
+            <Note>
+              <Accidental>
+                <subtype>accidentalNatural</subtype>
+                </Accidental>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       </Staff>

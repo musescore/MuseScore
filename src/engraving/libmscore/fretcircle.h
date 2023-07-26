@@ -31,34 +31,40 @@ class Chord;
 class FretCircle final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, FretCircle)
-public:
-
-    double offsetFromUpNote() const { return _offsetFromUpNote; }
-    double sideOffset() const { return _sideOffset; }
-
-private:
-
-    Chord* m_chord = nullptr;
-    static constexpr double circleWidth = 0.15;
-    mu::RectF m_rect;
-    friend class Factory;
-    FretCircle(Chord* ch = 0);
-    FretCircle* clone() const override { return new FretCircle(*this); }
-
-    RectF ellipseRect() const;
-
-    bool tabEllipseEnabled() const;
 
 public:
+
+    static constexpr double CIRCLE_WIDTH = 0.15;
 
     ~FretCircle();
 
-    void layout() override;
-
     void draw(mu::draw::Painter*) const override;
 
-    double _offsetFromUpNote = 0;
-    double _sideOffset = 0;
+    double offsetFromUpNote() const { return m_offsetFromUpNote; }
+    void setOffsetFromUpNote(double o) { m_offsetFromUpNote = o; }
+    double sideOffset() const { return m_sideOffset; }
+    void setSideOffset(double o) { m_sideOffset = o; }
+
+    const mu::RectF& rect() const { return m_rect; }
+    void setRect(const mu::RectF& r) { m_rect = r; }
+
+    Chord* chord() const { return m_chord; }
+
+    bool tabEllipseEnabled() const;
+    RectF ellipseRect() const;
+
+private:
+
+    friend class Factory;
+
+    FretCircle(Chord* ch = 0);
+    FretCircle* clone() const override { return new FretCircle(*this); }
+
+    Chord* m_chord = nullptr;
+    mu::RectF m_rect;
+
+    double m_offsetFromUpNote = 0;
+    double m_sideOffset = 0;
 };
 } // namespace mu::engraving
 #endif

@@ -22,7 +22,7 @@
 #ifndef MU_INSPECTOR_IINSPECTORMODELCREATOR_H
 #define MU_INSPECTOR_IINSPECTORMODELCREATOR_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "abstractinspectormodel.h"
 

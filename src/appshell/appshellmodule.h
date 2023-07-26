@@ -23,9 +23,17 @@
 #ifndef MU_APPSHELL_APPSHELLMODULE_H
 #define MU_APPSHELL_APPSHELLMODULE_H
 
+#include <memory>
 #include "modularity/imodulesetup.h"
 
 namespace mu::appshell {
+class ApplicationActionController;
+class ApplicationUiActions;
+class AppShellConfiguration;
+class SessionsManager;
+#ifdef Q_OS_MAC
+class MacOSScrollingHook;
+ #endif
 class AppShellModule : public modularity::IModuleSetup
 {
 public:
@@ -43,6 +51,16 @@ public:
     void onInit(const framework::IApplication::RunMode& mode) override;
     void onAllInited(const framework::IApplication::RunMode& mode) override;
     void onDeinit() override;
+
+private:
+    std::shared_ptr<ApplicationActionController> m_applicationActionController;
+    std::shared_ptr<ApplicationUiActions> m_applicationUiActions;
+    std::shared_ptr<AppShellConfiguration> m_appShellConfiguration;
+    std::shared_ptr<SessionsManager> m_sessionsManager;
+
+    #ifdef Q_OS_MAC
+    std::shared_ptr<MacOSScrollingHook> m_scrollingHook;
+    #endif
 };
 }
 

@@ -23,10 +23,10 @@
 #include "tremolobar.h"
 
 #include "draw/types/pen.h"
-#include "rw/xml.h"
-#include "rw/400/tread.h"
 
 #include "score.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -71,39 +71,6 @@ TremoloBar::TremoloBar(EngravingItem* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void TremoloBar::layout()
-{
-    double _spatium = spatium();
-    if (explicitParent()) {
-        setPos(0.0, -_spatium * 3.0);
-    } else {
-        setPos(PointF());
-    }
-
-    /* we place the tremolo bars starting slightly before the
-     *  notehead, and end it slightly after, drawing above the
-     *  note. The values specified in Guitar Pro are very large, too
-     *  large for the scale used in Musescore. We used the
-     *  timeFactor and pitchFactor below to reduce these values down
-     *  consistently to values that make sense to draw with the
-     *  Musescore scale. */
-
-    double timeFactor  = m_userMag / 1.0;
-    double pitchFactor = -_spatium * .02;
-
-    m_polygon.clear();
-    for (auto v : m_points) {
-        m_polygon << PointF(v.time * timeFactor, v.pitch * pitchFactor);
-    }
-
-    double w = m_lw.val();
-    setbbox(m_polygon.boundingRect().adjusted(-w, -w, w, w));
-}
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -114,27 +81,6 @@ void TremoloBar::draw(mu::draw::Painter* painter) const
     Pen pen(curColor(), m_lw.val(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->drawPolyline(m_polygon);
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void TremoloBar::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    writeProperty(xml, Pid::MAG);
-    writeProperty(xml, Pid::LINE_WIDTH);
-    writeProperty(xml, Pid::PLAY);
-    for (const PitchValue& v : m_points) {
-        xml.tag("point", { { "time", v.time }, { "pitch", v.pitch }, { "vibrato", v.vibrato } });
-    }
-    xml.endElement();
-}
-
-void TremoloBar::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
@@ -208,9 +154,9 @@ PropertyValue TremoloBar::propertyDefault(Pid pid) const
         for (const StyledProperty& p : *styledProperties()) {
             if (p.pid == pid) {
                 if (propertyType(pid) == P_TYPE::MILLIMETRE) {
-                    return score()->styleMM(p.sid);
+                    return style().styleMM(p.sid);
                 }
-                return score()->styleV(p.sid);
+                return style().styleV(p.sid);
             }
         }
         return EngravingItem::propertyDefault(pid);

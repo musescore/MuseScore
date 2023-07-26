@@ -31,6 +31,7 @@
 #include "importexport/guitarpro/iguitarproconfiguration.h"
 #include "importexport/ove/ioveconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
+#include "importexport/mei/imeiconfiguration.h"
 #include "notation/inotationconfiguration.h"
 
 namespace mu::appshell {
@@ -38,11 +39,12 @@ class ImportPreferencesModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(appshell, iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
-    INJECT(appshell, iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
-    INJECT(appshell, iex::ove::IOveConfiguration, oveConfiguration)
-    INJECT(appshell, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
-    INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
+    INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
+    INJECT(iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
+    INJECT(iex::ove::IOveConfiguration, oveConfiguration)
+    INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
+    INJECT(iex::mei::IMeiConfiguration, meiConfiguration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
 
     Q_PROPERTY(QString styleFileImportPath READ styleFileImportPath WRITE setStyleFileImportPath NOTIFY styleFileImportPathChanged)
 
@@ -52,6 +54,8 @@ class ImportPreferencesModel : public QObject, public async::Asyncable
     Q_PROPERTY(bool importLayout READ importLayout WRITE setImportLayout NOTIFY importLayoutChanged)
     Q_PROPERTY(bool importBreaks READ importBreaks WRITE setImportBreaks NOTIFY importBreaksChanged)
     Q_PROPERTY(bool needUseDefaultFont READ needUseDefaultFont WRITE setNeedUseDefaultFont NOTIFY needUseDefaultFontChanged)
+
+    Q_PROPERTY(bool meiImportLayout READ meiImportLayout WRITE setMeiImportLayout NOTIFY meiImportLayoutChanged)
 
     Q_PROPERTY(int currentShortestNote READ currentShortestNote WRITE setCurrentShortestNote NOTIFY currentShortestNoteChanged)
 
@@ -80,6 +84,8 @@ public:
 
     bool needAskAboutApplyingNewStyle() const;
 
+    bool meiImportLayout() const;
+
 public slots:
     void setStyleFileImportPath(QString path);
     void setCurrentOvertureCharset(QString charset);
@@ -92,6 +98,8 @@ public slots:
 
     void setNeedAskAboutApplyingNewStyle(bool value);
 
+    void setMeiImportLayout(bool import);
+
 signals:
     void styleFileImportPathChanged(QString styleFileImportPath);
     void currentOvertureCharsetChanged(QString currentOvertureCharset);
@@ -100,6 +108,7 @@ signals:
     void needUseDefaultFontChanged(bool needUseDefaultFont);
     void currentShortestNoteChanged(int currentShortestNote);
     void needAskAboutApplyingNewStyleChanged(bool needAskAboutApplyingNewStyle);
+    void meiImportLayoutChanged(bool importLayout);
 };
 }
 

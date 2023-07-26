@@ -26,9 +26,6 @@
 #include "engravingitem.h"
 #include "durationtype.h"
 
-#include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
-
 namespace mu::engraving {
 //---------------------------------------------------------
 //   ShadowNote
@@ -42,17 +39,7 @@ namespace mu::engraving {
 class ShadowNote final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, ShadowNote)
-
-    INJECT(notation, IEngravingConfiguration, engravingConfiguration)
-
-    Fraction m_tick;
-    int m_lineIndex;
-    SymId m_noteheadSymbol;
-    TDuration m_duration;
-    bool m_isRest;
-
-    double m_segmentSkylineTopY = 0;
-    double m_segmentSkylineBottomY = 0;
+    DECLARE_CLASSOF(ElementType::SHADOW_NOTE)
 
 public:
     ShadowNote(Score*);
@@ -67,9 +54,11 @@ public:
     int lineIndex() const { return m_lineIndex; }
     void setLineIndex(int n) { m_lineIndex = n; }
 
-    void setState(SymId noteSymbol, TDuration duration, bool isRest, double segmentSkylineTopY, double segmentSkylineBottomY);
+    bool isRest() const { return m_isRest; }
 
-    void layout() override;
+    const TDuration& duration() const { return m_duration; }
+
+    void setState(SymId noteSymbol, TDuration duration, bool isRest, double segmentSkylineTopY, double segmentSkylineBottomY);
 
     void draw(mu::draw::Painter*) const override;
     void drawArticulations(mu::draw::Painter* painter) const;
@@ -81,6 +70,17 @@ public:
     bool hasStem() const;
     bool hasFlag() const;
     SymId flagSym() const;
+
+private:
+
+    Fraction m_tick;
+    int m_lineIndex = -1;
+    SymId m_noteheadSymbol = SymId::noSym;
+    TDuration m_duration;
+    bool m_isRest = false;
+
+    double m_segmentSkylineTopY = 0.0;
+    double m_segmentSkylineBottomY = 0.0;
 };
 } // namespace mu::engraving
 #endif

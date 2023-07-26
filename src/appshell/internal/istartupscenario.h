@@ -22,9 +22,9 @@
 #ifndef MU_APPSHELL_ISTARTUPSCENARIO_H
 #define MU_APPSHELL_ISTARTUPSCENARIO_H
 
-#include "modularity/ioc.h"
-#include "io/path.h"
-#include "types/uri.h"
+#include "modularity/imoduleinterface.h"
+
+#include "project/projecttypes.h"
 
 namespace mu::appshell {
 class IStartupScenario : MODULE_EXPORT_INTERFACE
@@ -35,7 +35,11 @@ public:
     virtual ~IStartupScenario() = default;
 
     virtual void setStartupType(const std::optional<std::string>& type) = 0;
-    virtual void setStartupScorePath(const std::optional<io::path_t>& path) = 0;
+
+    virtual bool isStartWithNewFileAsSecondaryInstance() const = 0;
+
+    virtual const project::ProjectFile& startupScoreFile() const = 0;
+    virtual void setStartupScoreFile(const std::optional<project::ProjectFile>& file) = 0;
 
     virtual void run() = 0;
     virtual bool startupCompleted() const = 0;

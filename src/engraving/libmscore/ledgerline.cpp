@@ -22,14 +22,11 @@
 
 #include "ledgerline.h"
 
-#include "rw/xml.h"
-#include "rw/400/tread.h"
-
 #include "chord.h"
 #include "measure.h"
-#include "score.h"
-#include "staff.h"
 #include "system.h"
+
+#include "log.h"
 
 using namespace mu;
 
@@ -38,7 +35,7 @@ namespace mu::engraving {
 //   LedgerLine
 //---------------------------------------------------------
 
-LedgerLine::LedgerLine(Score* s)
+LedgerLine::LedgerLine(EngravingItem* s)
     : EngravingItem(ElementType::LEDGER_LINE, s)
 {
     setSelectable(false);
@@ -75,30 +72,6 @@ double LedgerLine::measureXPos() const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void LedgerLine::layout()
-{
-    setLineWidth(score()->styleMM(Sid::ledgerLineWidth) * chord()->mag());
-    if (staff()) {
-        setColor(staff()->staffType(tick())->color());
-    }
-    double w2 = _width * .5;
-
-    //Adjust Y position to staffType offset
-    if (staffType()) {
-        movePosY(staffType()->yoffset().val() * spatium());
-    }
-
-    if (m_vertical) {
-        bbox().setRect(-w2, 0, w2, _len);
-    } else {
-        bbox().setRect(0, -w2, _len, w2);
-    }
-}
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -125,28 +98,6 @@ void LedgerLine::spatiumChanged(double oldValue, double newValue)
 {
     _width = (_width / oldValue) * newValue;
     _len   = (_len / oldValue) * newValue;
-    layout();
-}
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void LedgerLine::writeProperties(XmlWriter& xml) const
-{
-    xml.tag("lineWidth", _width / spatium());
-    xml.tag("lineLen", _len / spatium());
-    if (!m_vertical) {
-        xml.tag("vertical", m_vertical);
-    }
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool LedgerLine::readProperties(XmlReader& e)
-{
-    return rw400::TRead::readProperties(this, e, *e.context());
+    layout()->layoutItem(this);
 }
 }

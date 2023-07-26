@@ -22,9 +22,6 @@
 
 #include "location.h"
 
-#include "rw/xml.h"
-#include "rw/400/tread.h"
-
 #include "chord.h"
 #include "engravingitem.h"
 #include "measure.h"
@@ -38,7 +35,6 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 static constexpr Location absDefaults = Location::absolute();
-static constexpr Location relDefaults = Location::relative();
 
 //---------------------------------------------------------
 //   Location::track
@@ -60,33 +56,6 @@ void Location::setTrack(int track)
 {
     _staff = track / VOICES;
     _voice = track % VOICES;
-}
-
-//---------------------------------------------------------
-//   Location::write
-//    Only relative locations should be written
-//---------------------------------------------------------
-
-void Location::write(XmlWriter& xml) const
-{
-    assert(isRelative());
-    xml.startElement("location");
-    xml.tag("staves", _staff, relDefaults._staff);
-    xml.tag("voices", _voice, relDefaults._voice);
-    xml.tag("measures", _measure, relDefaults._measure);
-    xml.tagFraction("fractions", _frac.reduced(), relDefaults._frac);
-    xml.tag("grace", _graceIndex, relDefaults._graceIndex);
-    xml.tag("notes", _note, relDefaults._note);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   Location::read
-//---------------------------------------------------------
-
-void Location::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

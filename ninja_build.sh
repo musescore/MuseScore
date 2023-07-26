@@ -135,6 +135,36 @@ case $TARGET in
     clean)
         rm -rf build.debug build.release
         ;; 
+    
+    compile_commands)
+        # Generate compile_commands.json file (https://clang.llvm.org/docs/JSONCompilationDatabase.html)
+        mkdir -p build.tooldata
+        cd build.tooldata
+        cmake .. -GNinja \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=1 \
+            -DMUE_COMPILE_USE_UNITY=OFF \
+            -DCMAKE_BUILD_TYPE="Debug" \
+            -DCMAKE_INSTALL_PREFIX="${MUSESCORE_INSTALL_DIR}" \
+            -DMUSESCORE_INSTALL_SUFFIX="${MUSESCORE_INSTALL_SUFFIX}" \
+            -DMUSESCORE_BUILD_CONFIGURATION="${MUSESCORE_BUILD_CONFIGURATION}" \
+            -DMUSESCORE_BUILD_MODE="${MUSESCORE_BUILD_MODE}" \
+            -DCMAKE_BUILD_NUMBER="${MUSESCORE_BUILD_NUMBER}" \
+            -DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
+            -DMUE_RUN_LRELEASE="${MUSESCORE_RUN_LRELEASE}" \
+            -DMUE_BUILD_VST_MODULE="${MUSESCORE_BUILD_VST_MODULE}" \
+            -DMUE_BUILD_VIDEOEXPORT_MODULE="${MUSESCORE_BUILD_VIDEOEXPORT_MODULE}" \
+            -DMUE_LEARN_YOUTUBE_API_KEY="${MUSESCORE_YOUTUBE_API_KEY}" \
+            -DMUE_BUILD_UPDATE_MODULE="${MUSESCORE_BUILD_UPDATE_MODULE}" \
+            -DMUE_DOWNLOAD_SOUNDFONT="${MUSESCORE_DOWNLOAD_SOUNDFONT}" \
+            -DMUE_BUILD_UNIT_TESTS="${MUSESCORE_BUILD_UNIT_TESTS}" \
+            -DMUE_BUILD_CRASHPAD_CLIENT="${MUSESCORE_BUILD_CRASHPAD_CLIENT}" \
+            -DMUE_CRASH_REPORT_URL="${MUSESCORE_CRASHREPORT_URL}" \
+            -DMUE_LOGGER_DEBUGLEVEL_ENABLED="${MUSESCORE_DEBUGLEVEL_ENABLED}" \
+            -DVST3_SDK_PATH="${MUSESCORE_VST3_SDK_PATH}" \
+            -DCMAKE_SKIP_RPATH="${MUSESCORE_NO_RPATH}" \
+
+
+        ;;
 
     revision)
 	    git rev-parse --short=7 HEAD | tr -d '\n' > local_build_revision.env

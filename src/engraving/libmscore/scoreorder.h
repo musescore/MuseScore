@@ -28,11 +28,10 @@
 #include "types/translatablestring.h"
 
 namespace mu::engraving {
+class XmlWriter;
+class XmlReader;
 class InstrumentTemplate;
 class Score;
-
-class XmlReader;
-class XmlWriter;
 
 //---------------------------------------------------------
 //   ScoreGroup

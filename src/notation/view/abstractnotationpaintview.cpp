@@ -81,6 +81,8 @@ AbstractNotationPaintView::~AbstractNotationPaintView()
         m_notation->accessibility()->setMapToScreenFunc(nullptr);
         m_notation->interaction()->setGetViewRectFunc(nullptr);
     }
+
+    clear();
 }
 
 void AbstractNotationPaintView::load()
@@ -101,6 +103,8 @@ void AbstractNotationPaintView::load()
         emit verticalScrollChanged();
         emit viewportChanged();
     });
+
+    redraw();
 }
 
 void AbstractNotationPaintView::initBackground()
@@ -203,11 +207,7 @@ void AbstractNotationPaintView::onCurrentNotationChanged()
         onUnloadNotation(m_notation);
     }
 
-    m_notation = globalContext()->currentNotation();
-    m_continuousPanel->setNotation(m_notation);
-    m_playbackCursor->setNotation(m_notation);
-    m_loopInMarker->setNotation(m_notation);
-    m_loopOutMarker->setNotation(m_notation);
+    setNotation(globalContext()->currentNotation());
 
     if (!m_notation) {
         return;
@@ -472,7 +472,7 @@ void AbstractNotationPaintView::showShadowNote(const PointF& pos)
     redraw();
 }
 
-void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos, bool activateFocus)
+void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos)
 {
     TRACEFUNC;
 
@@ -482,16 +482,43 @@ void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, 
     }
 
     emit showContextMenuRequested(static_cast<int>(elementType), pos);
-
-    if (activateFocus) {
-        dispatcher()->dispatch("nav-first-control");
-    }
 }
 
 void AbstractNotationPaintView::hideContextMenu()
 {
     TRACEFUNC;
-    emit hideContextMenuRequested();
+
+    if (m_isContextMenuOpen) {
+        emit hideContextMenuRequested();
+    }
+}
+
+void AbstractNotationPaintView::showElementPopup(const ElementType& elementType, const RectF& elementRect)
+{
+    TRACEFUNC;
+
+    PopupModelType modelType = AbstractElementPopupModel::modelTypeFromElement(elementType);
+
+    emit showElementPopupRequested(modelType, fromLogical(elementRect).toQRectF());
+}
+
+void AbstractNotationPaintView::hideElementPopup()
+{
+    TRACEFUNC;
+
+    if (m_isPopupOpen) {
+        emit hideElementPopupRequested();
+    }
+}
+
+void AbstractNotationPaintView::toggleElementPopup(const ElementType& elementType, const RectF& elementRect)
+{
+    if (m_isPopupOpen) {
+        hideElementPopup();
+        return;
+    }
+
+    showElementPopup(elementType, elementRect);
 }
 
 void AbstractNotationPaintView::paint(QPainter* qp)
@@ -825,6 +852,18 @@ bool AbstractNotationPaintView::adjustCanvasPosition(const RectF& logicRect, boo
     return moveCanvasToPosition(pos);
 }
 
+bool AbstractNotationPaintView::adjustCanvasPositionSmoothPan(const RectF& cursorRect)
+{
+    RectF viewRect = viewport();
+    PointF pos(cursorRect.x() - (viewRect.width() / 2), viewRect.y());
+
+    if (!viewport().intersects(cursorRect)) {
+        pos.setY(cursorRect.y() - (viewRect.height() / 2));
+    }
+
+    return moveCanvasToPosition(pos);
+}
+
 bool AbstractNotationPaintView::ensureViewportInsideScrollableArea()
 {
     TRACEFUNC;
@@ -867,6 +906,8 @@ bool AbstractNotationPaintView::moveCanvas(qreal dx, qreal dy)
 
         m_autoScrollEnabled = false;
         m_enableAutoScrollTimer.start(2000);
+
+        hideElementPopup();
     }
 
     return moved;
@@ -929,6 +970,8 @@ void AbstractNotationPaintView::setScaling(qreal scaling, const PointF& pos, boo
     if (!m_notation) {
         return;
     }
+
+    hideElementPopup();
 
     qreal currentScaling = this->currentScaling();
 
@@ -995,6 +1038,16 @@ void AbstractNotationPaintView::forceFocusIn()
     setFocus(true);
     emit activeFocusRequested();
     forceActiveFocus();
+}
+
+void AbstractNotationPaintView::onContextMenuIsOpenChanged(bool open)
+{
+    m_isContextMenuOpen = open;
+}
+
+void AbstractNotationPaintView::onElementPopupIsOpenChanged(bool open)
+{
+    m_isPopupOpen = open;
 }
 
 void AbstractNotationPaintView::mousePressEvent(QMouseEvent* event)
@@ -1072,7 +1125,7 @@ bool AbstractNotationPaintView::event(QEvent* event)
 
     if (isContextMenuEvent) {
         showContextMenu(m_inputController->selectionType(),
-                        fromLogical(m_inputController->selectionElementPos()).toQPointF(), true);
+                        fromLogical(m_inputController->selectionElementPos()).toQPointF());
     } else if (eventType == QEvent::Type::ShortcutOverride) {
         bool shouldOverrideShortcut = shortcutOverride(keyEvent);
 
@@ -1132,9 +1185,11 @@ void AbstractNotationPaintView::dropEvent(QDropEvent* event)
 
 void AbstractNotationPaintView::setNotation(INotationPtr notation)
 {
-    clear();
     m_notation = notation;
-    redraw();
+    m_continuousPanel->setNotation(m_notation);
+    m_playbackCursor->setNotation(m_notation);
+    m_loopInMarker->setNotation(m_notation);
+    m_loopOutMarker->setNotation(m_notation);
 }
 
 void AbstractNotationPaintView::setReadonly(bool readonly)
@@ -1233,11 +1288,16 @@ void AbstractNotationPaintView::movePlaybackCursor(midi::tick_t tick)
         return;
     }
 
-    if (configuration()->isAutomaticallyPanEnabled() && m_autoScrollEnabled) {
-        bool adjustVertically = needAdjustCanvasVerticallyWhilePlayback(newCursorRect);
-
-        if (adjustCanvasPosition(newCursorRect, adjustVertically)) {
+    if (configuration()->isAutomaticallyPanEnabled()) {
+        if (configuration()->isSmoothPanning() && adjustCanvasPositionSmoothPan(newCursorRect)) {
             return;
+        }
+
+        if (m_autoScrollEnabled) {
+            bool adjustVertically = needAdjustCanvasVerticallyWhilePlayback(newCursorRect);
+            if (adjustCanvasPosition(newCursorRect, adjustVertically)) {
+                return;
+            }
         }
     }
 

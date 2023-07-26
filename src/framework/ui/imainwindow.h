@@ -22,7 +22,8 @@
 #ifndef MU_UI_IMAINWINDOW_H
 #define MU_UI_IMAINWINDOW_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
+#include "async/notification.h"
 
 class QWindow;
 class QScreen;
@@ -48,6 +49,7 @@ public:
     virtual bool isFullScreen() const = 0;
     virtual void toggleFullScreen() = 0;
     virtual QScreen* screen() const = 0;
+    virtual async::Notification isFullScreenChanged() const = 0;
 };
 }
 

@@ -172,7 +172,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     }
 
     // set dlg controls
-    spinExtraDistance->setValue(s->userDist() / score->spatium());
+    spinExtraDistance->setValue(s->userDist() / score->style().spatium());
     invisible->setChecked(stt->invisible());
     isSmallCheckbox->setChecked(stt->isSmall());
     color->setColor(stt->color().toQColor());
@@ -498,7 +498,7 @@ void EditStaff::applyStaffProperties()
     StaffConfig config;
     config.visible = m_orgStaff->visible();
 
-    config.userDistance = spinExtraDistance->value() * m_orgStaff->score()->spatium();
+    config.userDistance = spinExtraDistance->value() * m_orgStaff->style().spatium();
     config.cutaway = cutaway->isChecked();
     config.showIfEmpty = showIfEmpty->isChecked();
     config.hideSystemBarline = hideSystemBarLine->isChecked();
@@ -543,15 +543,17 @@ void EditStaff::applyPartProperties()
     m_instrument.setMinPitchP(m_minPitchP);
     m_instrument.setMaxPitchP(m_maxPitchP);
 
-    m_instrument.shortNames().clear();
+    StaffNameList shortNames;
     if (sn.length() > 0) {
-        m_instrument.shortNames().push_back(mu::engraving::StaffName(sn, 0));
+        shortNames.push_back(mu::engraving::StaffName(sn, 0));
     }
+    m_instrument.setShortNames(shortNames);
 
-    m_instrument.longNames().clear();
+    StaffNameList longNames;
     if (ln.length() > 0) {
-        m_instrument.longNames().push_back(mu::engraving::StaffName(ln, 0));
+        longNames.push_back(mu::engraving::StaffName(ln, 0));
     }
+    m_instrument.setLongNames(longNames);
 
     if (m_instrument.id() != m_orgInstrument.id()) {
         masterNotationParts()->replaceInstrument(m_instrumentKey, m_instrument);
@@ -562,7 +564,7 @@ void EditStaff::applyPartProperties()
     SharpFlat newSharpFlat = SharpFlat(preferSharpFlat->currentIndex());
     if ((iList->currentIndex() == 0) || (iList->currentIndex() == 25)) {
         // instrument becomes non/octave-transposing, preferSharpFlat isn't useful anymore
-        newSharpFlat = SharpFlat::DEFAULT;
+        newSharpFlat = SharpFlat::NONE;
     }
 
     if (part->preferSharpFlat() != newSharpFlat) {

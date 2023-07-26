@@ -48,6 +48,8 @@ static std::string platformFileSuffix()
     return "dmg";
 #elif defined(Q_OS_LINUX)
     return "appimage";
+#else
+    return "";
 #endif
 }
 
@@ -81,6 +83,14 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
 
     Version current(MUVersion::fullVersion());
     Version update(String::fromStdString(releaseInfo.val.version));
+
+    bool allowUpdateOnPreRelease = configuration()->allowUpdateOnPreRelease();
+    bool isPreRelease = update.preRelease();
+
+    if (!allowUpdateOnPreRelease && isPreRelease) {
+        return result;
+    }
+
     if (update <= current) {
         return result;
     }
@@ -151,11 +161,12 @@ mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) cons
     result.ret = make_ok();
 
     QJsonObject release = jsonDoc.object();
-    result.val.title = release.value("name").toString().toStdString();
-    result.val.notes = release.value("body").toString().toStdString();
 
     QString tagName = release.value("tag_name").toString();
-    result.val.version = tagName.replace("v", "").toStdString();
+    QString version = tagName.replace("v", "");
+    result.val.version = version.toStdString();
+
+    result.val.notes = release.value("bodyMarkdown").toString().toStdString();
 
     std::string fileSuffix = platformFileSuffix();
 

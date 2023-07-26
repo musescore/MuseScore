@@ -45,8 +45,3 @@ MasterScore* ScoreAccess::createMasterScore(const MStyle& style)
 {
     return new MasterScore(style);
 }
-
-bool ScoreAccess::exportPart(MscWriter& mscWriter, Score* partScore)
-{
-    return partScore->masterScore()->exportPart(mscWriter, partScore);
-}

@@ -20,18 +20,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "palettecell.h"
+#include "palettecompat.h"
 
 #include "mimedatautils.h"
 
-#include "engraving/rw/xml.h"
+#include "engraving/rw/rwregister.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/fret.h"
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/textbase.h"
 #include "engraving/libmscore/factory.h"
-
-#include "engraving/accessibility/accessibleitem.h"
 
 #include "view/widgets/palettewidget.h"
 
@@ -116,6 +115,7 @@ const char* PaletteCell::translationContext() const
     case ElementType::BREATH:
     case ElementType::FERMATA:
     case ElementType::MEASURE_REPEAT:
+    case ElementType::ORNAMENT:
     case ElementType::SYMBOL:
         return "engraving/sym";
     case ElementType::TIMESIG:
@@ -166,8 +166,10 @@ void PaletteCell::setElementTranslated(bool translate)
     }
 }
 
-bool PaletteCell::read(XmlReader& e)
+bool PaletteCell::read(XmlReader& e, bool pasteMode)
 {
+    UNUSED(pasteMode);
+
     bool add = true;
     name = e.attribute("name");
 
@@ -202,7 +204,8 @@ bool PaletteCell::read(XmlReader& e)
             if (!element) {
                 e.unknown();
             } else {
-                element->read(e);
+                rw::RWRegister::reader()->readItem(element.get(), e);
+                PaletteCompat::migrateOldPaletteItemIfNeeded(element, gpaletteScore);
                 element->styleChanged();
 
                 if (element->type() == ElementType::ACTION_ICON) {
@@ -223,8 +226,10 @@ bool PaletteCell::read(XmlReader& e)
     return add && element;
 }
 
-void PaletteCell::write(XmlWriter& xml) const
+void PaletteCell::write(XmlWriter& xml, bool pasteMode) const
 {
+    UNUSED(pasteMode);
+
     if (!element) {
         xml.tag("Cell");
         return;
@@ -266,9 +271,9 @@ void PaletteCell::write(XmlWriter& xml) const
     }
 
     if (untranslatedElement) {
-        untranslatedElement->write(xml);
+        rw::RWRegister::writer()->writeItem(untranslatedElement.get(), xml);
     } else {
-        element->write(xml);
+        rw::RWRegister::writer()->writeItem(element.get(), xml);
     }
     xml.endElement();
 }

@@ -51,8 +51,8 @@ void SpannerMap::update() const
 
     collectIntervals(regularIntervals, collisionFreeIntervals);
 
-    tree = interval_tree::IntervalTree<Spanner*>(regularIntervals);
-    collisionFreeTree = interval_tree::IntervalTree<Spanner*>(collisionFreeIntervals);
+    tree = interval_tree::IntervalTree<Spanner*>(std::move(regularIntervals));
+    collisionFreeTree = interval_tree::IntervalTree<Spanner*>(std::move(collisionFreeIntervals));
     dirty = false;
 }
 
@@ -69,9 +69,9 @@ const SpannerMap::IntervalList& SpannerMap::findContained(int start, int stop, b
     results.clear();
 
     if (excludeCollisions) {
-        collisionFreeTree.findContained(start, stop, results);
+        results = collisionFreeTree.findContained(start, stop);
     } else {
-        tree.findContained(start, stop, results);
+        results = tree.findContained(start, stop);
     }
 
     return results;
@@ -90,9 +90,9 @@ const SpannerMap::IntervalList& SpannerMap::findOverlapping(int start, int stop,
     results.clear();
 
     if (excludeCollisions) {
-        collisionFreeTree.findOverlapping(start, stop, results);
+        results = collisionFreeTree.findOverlapping(start, stop);
     } else {
-        tree.findOverlapping(start, stop, results);
+        results = tree.findOverlapping(start, stop);
     }
 
     return results;
@@ -111,26 +111,30 @@ void SpannerMap::collectIntervals(IntervalList& regularIntervals, IntervalList& 
     constexpr int collidingSpannersPadding = 1;
 
     for (const auto& pair : *this) {
-        int newSpannerStartTick = pair.second->tick().ticks();
-        int newSpannerEndTick = pair.second->tick2().ticks();
+        Spanner* spanner = pair.second;
 
-        IntervalsByType& intervalsByType = intervalsByPart[pair.second->part()->id()];
-        IntervalList& intervalList = intervalsByType[pair.second->type()];
+        int newSpannerStartTick = spanner->tick().ticks();
+        int newSpannerEndTick = spanner->tick2().ticks();
+
+        IntervalsByType& intervalsByType = intervalsByPart[spanner->part()->id()];
+        IntervalList& intervalList = intervalsByType[spanner->type()];
 
         if (!intervalList.empty()) {
             auto lastIntervalIt = intervalList.rbegin();
             if (lastIntervalIt->stop >= newSpannerStartTick) {
-                lastIntervalIt->stop = newSpannerStartTick - collidingSpannersPadding;
+                if (!lastIntervalIt->value->isLinked(spanner)) {
+                    lastIntervalIt->stop = newSpannerStartTick - collidingSpannersPadding;
+                }
             }
         }
 
         intervalList.emplace_back(interval_tree::Interval<Spanner*>(newSpannerStartTick,
                                                                     newSpannerEndTick,
-                                                                    pair.second));
+                                                                    spanner));
 
         regularIntervals.push_back(interval_tree::Interval(newSpannerStartTick,
                                                            newSpannerEndTick,
-                                                           pair.second));
+                                                           spanner));
     }
 
     for (const auto& pair : intervalsByPart) {

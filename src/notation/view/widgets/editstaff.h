@@ -40,9 +40,9 @@ class EditStaff : public QDialog, private Ui::EditStaffBase
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, globalContext)
-    INJECT(notation, framework::IInteractive, interactive)
-    INJECT(notation, ISelectInstrumentsScenario, selectInstrumentsScenario)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(ISelectInstrumentsScenario, selectInstrumentsScenario)
 
 public:
     EditStaff(QWidget* parent = nullptr);

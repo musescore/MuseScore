@@ -22,9 +22,9 @@
 
 #include "shape.h"
 
-#include "score.h"
-
 #include "draw/painter.h"
+
+#include "engravingitem.h"
 
 #include "log.h"
 
@@ -104,10 +104,16 @@ double Shape::minHorizontalDistance(const Shape& a) const
     double absoluteMinPadding = 0.1 * _spatium * _squeezeFactor;
     double verticalClearance = 0.2 * _spatium * _squeezeFactor;
     for (const ShapeElement& r2 : a) {
+        if (r2.isNull()) {
+            continue;
+        }
         const EngravingItem* item2 = r2.toItem;
         double by1 = r2.top();
         double by2 = r2.bottom();
         for (const ShapeElement& r1 : *this) {
+            if (r1.isNull()) {
+                continue;
+            }
             const EngravingItem* item1 = r1.toItem;
             double ay1 = r1.top();
             double ay2 = r1.bottom();
@@ -115,14 +121,14 @@ double Shape::minHorizontalDistance(const Shape& a) const
             double padding = 0;
             KerningType kerningType = KerningType::NON_KERNING;
             if (item1 && item2) {
-                padding = item1->computePadding(item2);
+                padding = EngravingItem::layout()->computePadding(item1, item2);
                 padding *= _squeezeFactor;
                 padding = std::max(padding, absoluteMinPadding);
-                kerningType = item1->computeKerningType(item2);
+                kerningType = EngravingItem::layout()->computeKerning(item1, item2);
             }
             if ((intersection && kerningType != KerningType::ALLOW_COLLISION)
-                || (r1.width() == 0 || r2.width() == 0) // Temporary hack: shapes of zero-width are assumed to collide with everyghin
-                || (!item1 && item2 && item2->isLyrics()) // Temporary hack: avoids collision with melisma line
+                || (r1.width() == 0 || r2.width() == 0)  // Temporary hack: shapes of zero-width are assumed to collide with everyghin
+                || (!item1 && item2 && item2->isLyrics())  // Temporary hack: avoids collision with melisma line
                 || kerningType == KerningType::NON_KERNING) {
                 dist = std::max(dist, r1.right() - r2.left() + padding);
             }
@@ -230,7 +236,7 @@ bool Shape::clearsVertically(const Shape& a) const
 
 double Shape::left() const
 {
-    double dist = 0.0;
+    double dist = 10000.0;
     for (const ShapeElement& r : *this) {
         if (r.height() != 0.0 && !(r.toItem && r.toItem->isTextBase()) && r.left() < dist) {
             // if (r.left() < dist)
@@ -247,7 +253,7 @@ double Shape::left() const
 
 double Shape::right() const
 {
-    double dist = 0.0;
+    double dist = -10000.0;
     for (const RectF& r : *this) {
         if (r.right() > dist) {
             dist = r.right();
@@ -366,6 +372,13 @@ void Shape::remove(const Shape& s)
     for (const RectF& r : s) {
         remove(r);
     }
+}
+
+void Shape::removeInvisibles()
+{
+    mu::remove_if(*this, [](ShapeElement& shapeElement) {
+        return !shapeElement.toItem || !shapeElement.toItem->visible();
+    });
 }
 
 //---------------------------------------------------------

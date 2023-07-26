@@ -47,15 +47,13 @@ enum class TremoloBarType {
 class TremoloBar final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, TremoloBar)
+    DECLARE_CLASSOF(ElementType::TREMOLOBAR)
+
 public:
 
     TremoloBar* clone() const override { return new TremoloBar(*this); }
 
-    void layout() override;
     void draw(mu::draw::Painter*) const override;
-
-    void write(XmlWriter&) const override;
-    void read(XmlReader& e) override;
 
     PitchValues& points() { return m_points; }
     const PitchValues& points() const { return m_points; }
@@ -74,6 +72,9 @@ public:
     bool play() const { return m_play; }
     void setPlay(bool val) { m_play = val; }
 
+    const mu::PolygonF& polygon() const { return m_polygon; }
+    void setPolygon(const mu::PolygonF& p) { m_polygon = p; }
+
 private:
 
     friend class Factory;
@@ -87,7 +88,6 @@ private:
     bool m_play = true;
 
     PitchValues m_points;
-
     mu::PolygonF m_polygon;                    // computed by layout
 };
 } // namespace mu::engraving

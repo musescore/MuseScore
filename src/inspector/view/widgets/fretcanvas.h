@@ -33,7 +33,7 @@
 namespace mu::inspector {
 class FretCanvas : public uicomponents::QuickPaintedView
 {
-    INJECT(instruments, context::IGlobalContext, globalContext)
+    INJECT(context::IGlobalContext, globalContext)
 
     Q_OBJECT
 

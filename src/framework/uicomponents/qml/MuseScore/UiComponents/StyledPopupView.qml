@@ -53,7 +53,9 @@ PopupView {
     y: root.parent.height
 
     onOpened: {
-        content.navigationSection.requestActive()
+        if (openPolicy !== PopupView.NoActivateFocus && content.navigationSection) {
+            content.navigationSection.requestActive()
+        }
     }
 
     onClosed: {

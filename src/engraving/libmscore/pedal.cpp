@@ -22,17 +22,20 @@
 
 #include "pedal.h"
 
-#include "rw/xml.h"
-
 #include "chordrest.h"
 #include "measure.h"
 #include "score.h"
 #include "system.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace mu::engraving {
 static const ElementStyle pedalStyle {
+    { Sid::pedalText,                          Pid::BEGIN_TEXT },
+    { Sid::pedalContinueText,                  Pid::CONTINUE_TEXT },
+    { Sid::pedalEndText,                       Pid::END_TEXT },
     { Sid::pedalFontFace,                      Pid::BEGIN_FONT_FACE },
     { Sid::pedalFontFace,                      Pid::CONTINUE_FONT_FACE },
     { Sid::pedalFontFace,                      Pid::END_FONT_FACE },
@@ -64,19 +67,6 @@ PedalSegment::PedalSegment(Pedal* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void PedalSegment::layout()
-{
-    TextLineBaseSegment::layout();
-    if (isStyled(Pid::OFFSET)) {
-        roffset() = pedal()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
-    autoplaceSpannerSegment();
-}
-
-//---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
 
@@ -105,9 +95,6 @@ Pedal::Pedal(EngravingItem* parent)
 {
     initElementStyle(&pedalStyle);
     setLineVisible(true);
-    resetProperty(Pid::BEGIN_TEXT);
-    resetProperty(Pid::CONTINUE_TEXT);
-    resetProperty(Pid::END_TEXT);
 
     resetProperty(Pid::LINE_WIDTH);
     resetProperty(Pid::LINE_STYLE);
@@ -117,53 +104,6 @@ Pedal::Pedal(EngravingItem* parent)
 
     resetProperty(Pid::BEGIN_TEXT_PLACE);
     resetProperty(Pid::LINE_VISIBLE);
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Pedal::read(XmlReader& e)
-{
-    if (score()->mscVersion() < 301) {
-        e.context()->addSpanner(e.intAttribute("id", -1), this);
-    }
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (readStyledProperty(e, tag)) {
-        } else if (!TextLineBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Pedal::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-
-    for (auto i : {
-            Pid::END_HOOK_TYPE,
-            Pid::BEGIN_TEXT,
-            Pid::CONTINUE_TEXT,
-            Pid::END_TEXT,
-            Pid::LINE_VISIBLE,
-            Pid::BEGIN_HOOK_TYPE
-        }) {
-        writeProperty(xml, i);
-    }
-    for (const StyledProperty& spp : *styledProperties()) {
-        writeProperty(xml, spp.pid);
-    }
-
-    SLine::writeProperties(xml);
-    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -191,20 +131,29 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        return score()->styleMM(Sid::pedalLineWidth);              // return point, not spatium
+        return style().styleMM(Sid::pedalLineWidth);              // return point, not spatium
 
     case Pid::LINE_STYLE:
-        return score()->styleV(Sid::pedalLineStyle);
+        return style().styleV(Sid::pedalLineStyle);
 
     case Pid::BEGIN_TEXT:
+        return style().styleV(Sid::pedalText);
+
     case Pid::CONTINUE_TEXT:
+        return style().styleV(Sid::pedalContinueText);
+
     case Pid::END_TEXT:
-        return "";
+        return style().styleV(Sid::pedalEndText);
 
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
         return TextPlace::LEFT;
+
+    case Pid::BEGIN_TEXT_OFFSET:
+    case Pid::CONTINUE_TEXT_OFFSET:
+    case Pid::END_TEXT_OFFSET:
+        return PropertyValue::fromValue(PointF(0, 0));
 
     case Pid::BEGIN_HOOK_TYPE:
     case Pid::END_HOOK_TYPE:
@@ -214,7 +163,7 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
         return true;
 
     case Pid::PLACEMENT:
-        return score()->styleV(Sid::pedalPlacement);
+        return style().styleV(Sid::pedalPlacement);
 
     default:
         return TextLineBase::propertyDefault(propertyId);

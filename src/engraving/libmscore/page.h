@@ -34,7 +34,7 @@ class Factory;
 class System;
 class Text;
 class Measure;
-class XmlWriter;
+
 class Score;
 class MeasureBase;
 
@@ -46,6 +46,7 @@ class MeasureBase;
 class Page final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Page)
+    DECLARE_CLASSOF(ElementType::PAGE)
 
     std::vector<System*> _systems;
     page_idx_t _no;                        // page number
@@ -71,9 +72,7 @@ public:
     const std::vector<System*>& systems() const { return _systems; }
     std::vector<System*>& systems() { return _systems; }
     System* system(int idx) { return _systems[idx]; }
-
-    void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
+    const System* system(int idx) const { return _systems.at(idx); }
 
     void appendSystem(System* s);
 
@@ -95,7 +94,7 @@ public:
     void invalidateBspTree() { bspTreeValid = false; }
     mu::PointF pagePos() const override { return mu::PointF(); }       ///< position in page coordinates
     std::vector<EngravingItem*> elements() const;              ///< list of visible elements
-    mu::RectF tbbox();                             // tight bounding box, excluding white space
+    mu::RectF tbbox() const;                             // tight bounding box, excluding white space
     Fraction endTick() const;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY

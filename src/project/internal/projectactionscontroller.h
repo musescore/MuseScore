@@ -32,42 +32,43 @@
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
 #include "multiinstances/imultiinstancesprovider.h"
-#include "cloud/icloudprojectsservice.h"
-#include "cloud/iauthorizationservice.h"
+#include "cloud/musescorecom/imusescorecomservice.h"
+#include "cloud/audiocom/iaudiocomservice.h"
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
 #include "inotationreadersregister.h"
 #include "isaveprojectscenario.h"
 #include "io/ifilesystem.h"
 #include "internal/iexportprojectscenario.h"
+#include "notation/inotationconfiguration.h"
 
 #include "async/asyncable.h"
 
 #include "iprojectconfiguration.h"
 #include "iprojectcreator.h"
-#include "iplatformrecentfilescontroller.h"
+#include "irecentfilescontroller.h"
 #include "iprojectautosaver.h"
 
 namespace mu::project {
 class ProjectActionsController : public IProjectFilesController, public QObject, public actions::Actionable, public async::Asyncable
 {
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, INotationReadersRegister, readers)
-    INJECT(project, IProjectCreator, projectCreator)
-    INJECT(project, IPlatformRecentFilesController, platformRecentFilesController)
-    INJECT(project, IProjectAutoSaver, projectAutoSaver)
-    INJECT(project, ISaveProjectScenario, saveProjectScenario)
-    INJECT(project, IExportProjectScenario, exportProjectScenario)
-
-    INJECT(project, actions::IActionsDispatcher, dispatcher)
-    INJECT(project, framework::IInteractive, interactive)
-    INJECT(project, context::IGlobalContext, globalContext)
-    INJECT(project, mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(project, cloud::IAuthorizationService, authorizationService)
-    INJECT(project, cloud::ICloudProjectsService, cloudProjectsService)
-    INJECT(project, playback::IPlaybackController, playbackController)
-    INJECT(project, print::IPrintProvider, printProvider)
-    INJECT(project, io::IFileSystem, fileSystem)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(INotationReadersRegister, readers)
+    INJECT(IProjectCreator, projectCreator)
+    INJECT(IRecentFilesController, recentFilesController)
+    INJECT(IProjectAutoSaver, projectAutoSaver)
+    INJECT(ISaveProjectScenario, saveProjectScenario)
+    INJECT(IExportProjectScenario, exportProjectScenario)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(cloud::IMuseScoreComService, museScoreComService)
+    INJECT(cloud::IAudioComService, audioComService)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(playback::IPlaybackController, playbackController)
+    INJECT(print::IPrintProvider, printProvider)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     void init();
@@ -75,11 +76,15 @@ public:
     bool canReceiveAction(const actions::ActionCode& code) const override;
 
     bool isFileSupported(const io::path_t& path) const override;
-    Ret openProject(const io::path_t& projectPath) override;
+    Ret openProject(const io::path_t& path) override;
+    Ret openProject(const ProjectFile& file) override;
     bool closeOpenedProject(bool quitApp = false) override;
     bool isProjectOpened(const io::path_t& scorePath) const override;
     bool isAnyProjectOpened() const override;
     bool saveProject(const io::path_t& path = io::path_t()) override;
+
+    const ProjectBeingDownloaded& projectBeingDownloaded() const override;
+    async::Notification projectBeingDownloadedChanged() const override;
 
 private:
     void setupConnections();
@@ -90,13 +95,20 @@ private:
     notation::INotationInteractionPtr currentInteraction() const;
     notation::INotationSelectionPtr currentNotationSelection() const;
 
-    void openProject(const actions::ActionData& args);
     void newProject();
 
-    bool checkCanIgnoreError(const Ret& ret, const String& projectName);
+    void openProject(const actions::ActionData& args);
+    void doOpenProject(const io::path_t& path, int scoreId);
+    void downloadAndOpenCloudProject(int scoreId);
+
+    void showScoreDownloadError(const Ret& ret);
+
+    bool checkCanIgnoreError(const Ret& ret, const io::path_t& filepath);
     bool askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText);
+    void warnFileTooNew(const io::path_t& filepath);
     bool askIfUserAgreesToOpenCorruptedProject(const String& projectName, const std::string& errorText);
-    void warnProjectCannotBeOpened(const String& projectName, const std::string& errorText);
+    void warnProjectCriticallyCorrupted(const String& projectName, const std::string& errorText);
+    void warnProjectCannotBeOpened(const Ret& ret, const io::path_t& filepath);
 
     framework::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
 
@@ -104,6 +116,7 @@ private:
     bool saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
 
     void publish();
+    void shareAudio();
 
     bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
     bool saveProjectLocally(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save);
@@ -132,10 +145,12 @@ private:
     void uploadAudio(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen, bool isFirstSave);
 
     void onProjectSuccessfullyUploaded(const QUrl& urlToOpen = QUrl(), bool isFirstSave = true);
-    void onProjectUploadFailed(const Ret& ret, bool publishMode);
+    void onProjectUploadFailed(const Ret& ret, const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode);
+
+    void onAudioSuccessfullyUploaded(const QUrl& urlToOpen);
+    void onAudioUploadFailed(const Ret& ret);
 
     void warnCloudIsNotAvailable();
-    void warnPublishIsNotAvailable();
 
     bool askIfUserAgreesToSaveProjectWithErrors(const Ret& ret, const SaveLocation& location);
     void warnScoreWithoutPartsCannotBeSaved();
@@ -145,7 +160,14 @@ private:
     bool askIfUserAgreesToSaveCorruptedScoreUponOpenning(const SaveLocation& location, const std::string& errorText);
     void showErrCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText);
 
+    void warnScoreCouldnotBeSaved(const Ret& ret);
+    void warnScoreCouldnotBeSaved(const std::string& errorText);
+
     void revertCorruptedScoreToLastSaved();
+
+    ProjectFile makeRecentFile(INotationProjectPtr project);
+
+    void moveProject(INotationProjectPtr project, const io::path_t& newPath, bool replace);
 
     void importPdf();
 
@@ -158,28 +180,34 @@ private:
     io::path_t selectScoreOpeningFile();
     io::path_t selectScoreSavingFile(const io::path_t& defaultFilePath, const QString& saveTitle);
 
+    RetVal<INotationProjectPtr> loadProject(const io::path_t& filePath);
     Ret doOpenProject(const io::path_t& filePath);
+    Ret doOpenCloudProject(const io::path_t& filePath, const CloudProjectInfo& info);
 
     Ret openPageIfNeed(Uri pageUri);
 
     void exportScore();
     void printScore();
 
-    void prependToRecentScoreList(const io::path_t& filePath);
-    void removeFromRecentScoreList(const io::path_t& filePath);
-
     bool hasSelection() const;
+
+    QUrl scoreManagerUrl() const;
 
     bool m_isProjectSaving = false;
     bool m_isProjectClosing = false;
     bool m_isProjectProcessing = false;
     bool m_isProjectPublishing = false;
     bool m_isProjectUploading = false;
+    bool m_isAudioSharing = false;
+    bool m_isProjectDownloading = false;
 
     framework::ProgressPtr m_uploadingProjectProgress = nullptr;
     framework::ProgressPtr m_uploadingAudioProgress = nullptr;
 
     int m_numberOfSavesToCloud = 0;
+
+    ProjectBeingDownloaded m_projectBeingDownloaded;
+    async::Notification m_projectBeingDownloadedChanged;
 };
 }
 

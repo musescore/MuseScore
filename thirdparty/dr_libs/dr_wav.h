@@ -2769,9 +2769,11 @@ static drwav_result drwav_result_from_errno(int e)
     #ifdef ENOTUNIQ
         case ENOTUNIQ: return DRWAV_NOT_UNIQUE;
     #endif
+#ifndef __FreeBSD__
     #ifdef EBADFD
         case EBADFD: return DRWAV_ERROR;
     #endif
+#endif
     #ifdef EREMCHG
         case EREMCHG: return DRWAV_ERROR;
     #endif
@@ -2796,9 +2798,11 @@ static drwav_result drwav_result_from_errno(int e)
     #ifdef ERESTART
         case ERESTART: return DRWAV_ERROR;
     #endif
+#ifndef __FreeBSD__
     #ifdef ESTRPIPE
         case ESTRPIPE: return DRWAV_ERROR;
     #endif
+#endif
     #ifdef EUSERS
         case EUSERS: return DRWAV_ERROR;
     #endif

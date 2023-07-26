@@ -30,32 +30,16 @@
 namespace mu::cloud {
 class CloudConfiguration : public ICloudConfiguration
 {
-    INJECT(cloud, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     void init();
 
-    network::RequestHeaders headers() const override;
+    std::string clientId() const override;
+
     QByteArray uploadingLicense() const override;
 
-    QUrl cloudUrl() const override;
-    QUrl authorizationUrl() const override;
-    QUrl signUpUrl() const override;
-    QUrl signInSuccessUrl() const override;
-    QUrl scoreManagerUrl() const override;
-    QUrl accessTokenUrl() const override;
-
-    QUrl refreshApiUrl() const override;
-    QUrl userInfoApiUrl() const override;
-    QUrl logoutApiUrl() const override;
-    QUrl scoreInfoApiUrl() const override;
-    QUrl uploadScoreApiUrl() const override;
-    QUrl uploadAudioApiUrl() const override;
-
-    io::path_t tokensFilePath() const override;
-
-private:
-    QString apiRootUrl() const;
+    io::path_t tokensFilePath(const std::string& cloudName) const override;
 };
 }
 

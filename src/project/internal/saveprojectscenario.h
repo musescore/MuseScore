@@ -28,14 +28,17 @@
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
 #include "global/iinteractive.h"
-#include "cloud/iauthorizationservice.h"
+
+#include "cloud/musescorecom/imusescorecomservice.h"
+#include "cloud/audiocom/iaudiocomservice.h"
 
 namespace mu::project {
 class SaveProjectScenario : public ISaveProjectScenario
 {
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, framework::IInteractive, interactive)
-    INJECT(project, cloud::IAuthorizationService, authorizationService)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(cloud::IMuseScoreComService, museScoreComService)
+    INJECT(cloud::IAudioComService, audioComService)
 
 public:
     SaveProjectScenario() = default;
@@ -46,8 +49,12 @@ public:
     RetVal<io::path_t> askLocalPath(INotationProjectPtr project, SaveMode mode) const override;
     RetVal<CloudProjectInfo> askCloudLocation(INotationProjectPtr project, SaveMode mode) const override;
     RetVal<CloudProjectInfo> askPublishLocation(INotationProjectPtr project) const override;
+    RetVal<CloudAudioInfo> askShareAudioLocation(INotationProjectPtr project) const override;
 
     bool warnBeforeSavingToExistingPubliclyVisibleCloudProject() const override;
+
+    Ret showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool isPublish, bool alreadyAttempted) const override;
+    Ret showAudioCloudShareError(const Ret& ret) const override;
 
 private:
     RetVal<SaveLocationType> saveLocationType() const;
@@ -59,6 +66,9 @@ private:
     RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublish) const;
 
     bool warnBeforePublishing(bool isPublish, cloud::Visibility visibility) const;
+
+    Ret warnCloudIsNotAvailable(bool isPublish) const;
+    Ret warnAudioCloudIsNotAvailable() const;
 };
 
 class QMLSaveLocationType
@@ -80,8 +90,9 @@ class QMLCloudVisibility
 
 public:
     enum CloudVisibility {
-        Private = int(cloud::Visibility::Private),
-        Public = int(cloud::Visibility::Public)
+        Public = int(cloud::Visibility::Public),
+        Unlisted = int(cloud::Visibility::Unlisted),
+        Private = int(cloud::Visibility::Private)
     };
     Q_ENUM(CloudVisibility);
 };

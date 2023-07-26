@@ -22,7 +22,7 @@
 #ifndef MU_FRAMEWORK_IINTERACTIVE_H
 #define MU_FRAMEWORK_IINTERACTIVE_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 #include "types/val.h"
 #include "types/retval.h"

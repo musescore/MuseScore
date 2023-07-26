@@ -23,7 +23,7 @@
 #ifndef MU_AUDIO_IAUDIOPLUGINMETAREADERREGISTER_H
 #define MU_AUDIO_IAUDIOPLUGINMETAREADERREGISTER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "iaudiopluginmetareader.h"
 

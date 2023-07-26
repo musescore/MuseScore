@@ -24,6 +24,7 @@
 
 #include <QApplication>
 
+#include "audioutils.h"
 #include "audioerrors.h"
 #include "translation.h"
 #include "log.h"
@@ -35,10 +36,8 @@ void RegisterAudioPluginsScenario::init()
 {
     TRACEFUNC;
 
-    m_progress.finished.onReceive(this, [this](const ProgressResult& res) {
-        if (res.ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-            m_aborted = true;
-        }
+    m_progress.cancelRequested.onNotify(this, [this]() {
+        m_aborted = true;
     });
 
     Ret ret = knownPluginsRegister()->load();
@@ -131,7 +130,7 @@ mu::Ret RegisterAudioPluginsScenario::registerPlugin(const io::path_t& pluginPat
 
     for (const AudioResourceMeta& meta : metaList.val) {
         AudioPluginInfo info;
-        info.type = audioPluginTypeFromCategoriesString(meta.attributeVal(audio::CATEGORIES_ATTRIBUTE).toStdString());
+        info.type = audioPluginTypeFromCategoriesString(meta.attributeVal(audio::CATEGORIES_ATTRIBUTE));
         info.meta = meta;
         info.path = pluginPath;
         info.enabled = true;
@@ -154,7 +153,13 @@ mu::Ret RegisterAudioPluginsScenario::registerFailedPlugin(const io::path_t& plu
     }
 
     AudioPluginInfo info;
-    info.meta.id = io::filename(pluginPath).toStdString();
+    info.meta.id = io::completeBasename(pluginPath).toStdString();
+
+    std::string ext = io::suffix(pluginPath);
+    if (ext.find("vst") != std::string::npos) {
+        info.meta.type = AudioResourceType::VstPlugin;
+    }
+
     info.path = pluginPath;
     info.enabled = false;
     info.errorCode = failCode;

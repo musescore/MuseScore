@@ -36,7 +36,7 @@ class InstrumentListModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(instruments, notation::IInstrumentsRepository, repository)
+    INJECT(notation::IInstrumentsRepository, repository)
 
     Q_PROPERTY(QStringList genres READ genres NOTIFY genresChanged)
     Q_PROPERTY(QStringList groups READ groups NOTIFY groupsChanged)
@@ -113,7 +113,6 @@ private:
     void init(const QString& genreId, const QString& groupId);
 
     QString resolveInstrumentGroupId(const String& instrumentId) const;
-    void focusOnInstrument(const String& instrumentId);
 
     void loadGenres();
     void loadGroups();

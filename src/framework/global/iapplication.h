@@ -22,7 +22,7 @@
 #ifndef MU_FRAMEWORK_IAPPLICATION_H
 #define MU_FRAMEWORK_IAPPLICATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 class QObject;
 class QEvent;

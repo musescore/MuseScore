@@ -38,7 +38,7 @@ class TestCaseRunModel : public QObject, public async::Asyncable
     Q_PROPERTY(QString status READ status NOTIFY statusChanged)
     Q_PROPERTY(QVariantList steps READ steps NOTIFY stepsChanged)
 
-    INJECT(autobot, IAutobot, autobot)
+    INJECT(IAutobot, autobot)
 
 public:
     TestCaseRunModel(QObject* parent = nullptr);

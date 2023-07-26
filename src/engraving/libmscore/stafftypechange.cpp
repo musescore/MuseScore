@@ -21,12 +21,13 @@
  */
 
 #include "stafftypechange.h"
-#include "rw/xml.h"
-#include "rw/400/tread.h"
+
 #include "score.h"
 #include "measure.h"
 #include "system.h"
 #include "staff.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -39,13 +40,13 @@ namespace mu::engraving {
 StaffTypeChange::StaffTypeChange(MeasureBase* parent)
     : EngravingItem(ElementType::STAFFTYPE_CHANGE, parent, ElementFlag::HAS_TAG)
 {
-    lw = spatium() * 0.3;
+    m_lw = spatium() * 0.3;
 }
 
 StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb)
     : EngravingItem(lb)
 {
-    lw = lb.lw;
+    m_lw = lb.m_lw;
     m_ownsStaffType = lb.m_ownsStaffType;
     if (lb.m_ownsStaffType && lb.m_staffType) {
         m_staffType = new StaffType(*lb.m_staffType);
@@ -59,29 +60,6 @@ StaffTypeChange::~StaffTypeChange()
     if (m_staffType && m_ownsStaffType) {
         delete m_staffType;
     }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void StaffTypeChange::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    if (m_staffType) {
-        m_staffType->write(xml);
-    }
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void StaffTypeChange::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 void StaffTypeChange::setStaffType(StaffType* st, bool owned)
@@ -100,23 +78,7 @@ void StaffTypeChange::setStaffType(StaffType* st, bool owned)
 
 void StaffTypeChange::spatiumChanged(double, double)
 {
-    lw = spatium() * 0.3;
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void StaffTypeChange::layout()
-{
-    double _spatium = score()->spatium();
-    setbbox(RectF(-lw * .5, -lw * .5, _spatium * 2.5 + lw, _spatium * 2.5 + lw));
-    if (measure()) {
-        double y = -1.5 * _spatium - height() + measure()->system()->staff(staffIdx())->y();
-        setPos(_spatium * .8, y);
-    } else {
-        setPos(0.0, 0.0);
-    }
+    m_lw = spatium() * 0.3;
 }
 
 //---------------------------------------------------------
@@ -130,13 +92,13 @@ void StaffTypeChange::draw(mu::draw::Painter* painter) const
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }
-    double _spatium = score()->spatium();
+    double _spatium = style().spatium();
     double h  = _spatium * 2.5;
     double w  = _spatium * 2.5;
     double lineDist = 0.35;           // line distance for the icon 'staff lines'
     // draw icon rectangle
     painter->setPen(Pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
-                        lw, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
+                        m_lw, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawRect(0, 0, w, h);
 

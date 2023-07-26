@@ -56,7 +56,7 @@ mu::Ret NotationMidiWriter::write(INotationPtr notation, QIODevice& destinationD
 
     ExportMidi exportMidi(score);
 
-    bool isPlayRepeatsEnabled = notationConfiguration()->isPlayRepeatsEnabled();
+    bool isPlayRepeatsEnabled = midiImportExportConfiguration()->isExpandRepeats();
     bool isMidiExportRpns = midiImportExportConfiguration()->isMidiExportRpns();
     SynthesizerState synthesizerState = score->synthesizerState();
 

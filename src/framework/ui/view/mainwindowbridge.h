@@ -29,6 +29,7 @@
 #include "modularity/ioc.h"
 
 #include "framework/ui/imainwindow.h"
+#include "async/notification.h"
 
 namespace mu::ui {
 class MainWindowBridge : public QObject
@@ -39,7 +40,7 @@ class MainWindowBridge : public QObject
     Q_PROPERTY(QString filePath READ filePath WRITE setFilePath NOTIFY filePathChanged)
     Q_PROPERTY(bool fileModified READ fileModified WRITE setFileModified NOTIFY fileModifiedChanged)
 
-    INJECT(ui, IMainWindow, mainWindow)
+    INJECT(IMainWindow, mainWindow)
 
 public:
     explicit MainWindowBridge(QObject* parent = nullptr);
@@ -54,6 +55,7 @@ public:
     void showOnFront();
 
     bool isFullScreen() const;
+    async::Notification isFullScreenChanged() const;
     void toggleFullScreen();
     QScreen* screen() const;
 
@@ -75,6 +77,9 @@ private slots: // Should only be used from QML
     void setWindow(QWindow* window);
     void setFilePath(const QString& filePath);
     virtual void setFileModified(bool modified);
+
+private:
+    async::Notification m_isFullScreenChanged;
 };
 }
 

@@ -52,39 +52,10 @@ void FretCircle::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;
     painter->save();
-    painter->setPen(mu::draw::Pen(curColor(), spatium() * circleWidth));
+    painter->setPen(mu::draw::Pen(curColor(), spatium() * FretCircle::CIRCLE_WIDTH));
     painter->setBrush(mu::draw::BrushStyle::NoBrush);
     painter->drawEllipse(m_rect);
     painter->restore();
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void FretCircle::layout()
-{
-    _skipDraw = false;
-    if (!tabEllipseEnabled()) {
-        _skipDraw = true;
-        setbbox(RectF());
-        return;
-    }
-
-    double lw = spatium() * circleWidth / 2;
-    m_rect = ellipseRect();
-
-    RectF chordRect;
-    double minWidth = m_chord->upNote()->width();
-    for (const Note* note : m_chord->notes()) {
-        chordRect |= note->bbox();
-        minWidth = std::min(minWidth, note->width());
-    }
-
-    _offsetFromUpNote = (m_rect.height() - chordRect.height() - (m_chord->downNote()->pos().y() - m_chord->upNote()->pos().y())) / 2;
-    _sideOffset = (m_rect.width() - minWidth) / 2;
-
-    setbbox(m_rect.adjusted(-lw, -lw, lw, lw));
 }
 
 //---------------------------------------------------------

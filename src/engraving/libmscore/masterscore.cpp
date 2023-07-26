@@ -21,21 +21,21 @@
  */
 #include "masterscore.h"
 
-#include "types/datetime.h"
 #include "io/buffer.h"
 
 #include "compat/writescorehook.h"
 #include "infrastructure/mscwriter.h"
+
 #include "rw/mscloader.h"
-#include "rw/xml.h"
+#include "rw/xmlreader.h"
+#include "rw/rwregister.h"
+
 #include "style/defaultstyle.h"
 
 #include "engravingproject.h"
 
 #include "audio.h"
 #include "excerpt.h"
-#include "imageStore.h"
-#include "part.h"
 #include "repeatlist.h"
 #include "sig.h"
 #include "tempo.h"
@@ -58,8 +58,8 @@ MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
     _undoStack   = new UndoStack();
     _tempomap    = new TempoMap;
     _sigmap      = new TimeSigMap();
-    _repeatList  = new RepeatList(this);
-    _repeatList2 = new RepeatList(this);
+    _expandedRepeatList  = new RepeatList(this);
+    _nonExpandedRepeatList = new RepeatList(this);
     setMasterScore(this);
 
     _pos[int(POS::CURRENT)] = Fraction(0, 1);
@@ -101,8 +101,8 @@ MasterScore::~MasterScore()
         m_project.lock()->m_masterScore = nullptr;
     }
 
-    delete _repeatList;
-    delete _repeatList2;
+    delete _expandedRepeatList;
+    delete _nonExpandedRepeatList;
     delete _sigmap;
     delete _tempomap;
     delete _undoStack;
@@ -155,7 +155,7 @@ void MasterScore::setAutosaveDirty(bool v)
 
 String MasterScore::name() const
 {
-    return fileInfo()->fileName(false).toString();
+    return fileInfo()->displayName();
 }
 
 //---------------------------------------------------------
@@ -165,8 +165,8 @@ String MasterScore::name() const
 void MasterScore::setPlaylistDirty()
 {
     _playlistDirty = true;
-    _repeatList->setScoreChanged();
-    _repeatList2->setScoreChanged();
+    _expandedRepeatList->setScoreChanged();
+    _nonExpandedRepeatList->setScoreChanged();
 }
 
 //---------------------------------------------------------
@@ -189,14 +189,14 @@ void MasterScore::setExpandRepeats(bool expand)
 
 void MasterScore::updateRepeatListTempo()
 {
-    _repeatList->updateTempo();
-    _repeatList2->updateTempo();
+    _expandedRepeatList->updateTempo();
+    _nonExpandedRepeatList->updateTempo();
 }
 
 void MasterScore::updateRepeatList()
 {
-    _repeatList->update(MScore::playRepeats);
-    _repeatList2->update(false);
+    _expandedRepeatList->update(true);
+    _nonExpandedRepeatList->update(false);
 }
 
 //---------------------------------------------------------
@@ -205,167 +205,24 @@ void MasterScore::updateRepeatList()
 
 const RepeatList& MasterScore::repeatList() const
 {
-    _repeatList->update(MScore::playRepeats);
-    return *_repeatList;
+    if (_expandRepeats) {
+        _expandedRepeatList->update(true);
+        return *_expandedRepeatList;
+    }
+
+    _nonExpandedRepeatList->update(false);
+    return *_nonExpandedRepeatList;
 }
 
-//---------------------------------------------------------
-//   repeatList2
-//---------------------------------------------------------
-
-const RepeatList& MasterScore::repeatList2() const
+const RepeatList& MasterScore::repeatList(bool expandRepeats) const
 {
-    _repeatList2->update(false);
-    return *_repeatList2;
-}
-
-bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCreateThumbnail)
-{
-    IF_ASSERT_FAILED(mscWriter.isOpened()) {
-        return false;
+    if (expandRepeats) {
+        _expandedRepeatList->update(true);
+        return *_expandedRepeatList;
     }
 
-    // Write style of MasterScore
-    {
-        //! NOTE The style is writing to a separate file only for the master score.
-        //! At the moment, the style for the parts is still writing to the score file.
-        ByteArray styleData;
-        Buffer styleBuf(&styleData);
-        styleBuf.open(IODevice::WriteOnly);
-        style().write(&styleBuf);
-        mscWriter.writeStyleFile(styleData);
-    }
-
-    WriteContext ctx;
-
-    // Write MasterScore
-    {
-        ByteArray scoreData;
-        Buffer scoreBuf(&scoreData);
-        scoreBuf.open(IODevice::ReadWrite);
-
-        compat::WriteScoreHook hook;
-        Score::writeScore(&scoreBuf, false, onlySelection, hook, ctx);
-
-        mscWriter.writeScoreFile(scoreData);
-    }
-
-    // Write Excerpts
-    {
-        if (!onlySelection) {
-            for (const Excerpt* excerpt : this->excerpts()) {
-                Score* partScore = excerpt->excerptScore();
-                if (partScore != this) {
-                    // Write excerpt style
-                    {
-                        ByteArray excerptStyleData;
-                        Buffer styleStyleBuf(&excerptStyleData);
-                        styleStyleBuf.open(IODevice::WriteOnly);
-                        partScore->style().write(&styleStyleBuf);
-
-                        mscWriter.addExcerptStyleFile(excerpt->name(), excerptStyleData);
-                    }
-
-                    // Write excerpt
-                    {
-                        ByteArray excerptData;
-                        Buffer excerptBuf(&excerptData);
-                        excerptBuf.open(IODevice::ReadWrite);
-
-                        compat::WriteScoreHook hook;
-                        excerpt->excerptScore()->writeScore(&excerptBuf, false, onlySelection, hook, ctx);
-
-                        mscWriter.addExcerptFile(excerpt->name(), excerptData);
-                    }
-                }
-            }
-        }
-    }
-
-    // Write ChordList
-    {
-        ChordList* chordList = this->chordList();
-        if (chordList->customChordList() && !chordList->empty()) {
-            ByteArray chlData;
-            Buffer chlBuf(&chlData);
-            chlBuf.open(IODevice::WriteOnly);
-            chordList->write(&chlBuf);
-            mscWriter.writeChordListFile(chlData);
-        }
-    }
-
-    // Write images
-    {
-        for (ImageStoreItem* ip : imageStore) {
-            if (!ip->isUsed(this)) {
-                continue;
-            }
-            ByteArray data = ip->buffer();
-            mscWriter.addImageFile(ip->hashName(), data);
-        }
-    }
-
-    // Write thumbnail
-    {
-        if (doCreateThumbnail && !pages().empty()) {
-            auto pixmap = createThumbnail();
-
-            ByteArray ba;
-            Buffer b(&ba);
-            b.open(IODevice::WriteOnly);
-            imageProvider()->saveAsPng(pixmap, &b);
-            mscWriter.writeThumbnailFile(ba);
-        }
-    }
-
-    // Write audio
-    {
-        if (_audio) {
-            mscWriter.writeAudioFile(_audio->data());
-        }
-    }
-
-    return true;
-}
-
-bool MasterScore::exportPart(MscWriter& mscWriter, Score* partScore)
-{
-    // Write excerpt style as main
-    {
-        ByteArray excerptStyleData;
-        Buffer styleStyleBuf(&excerptStyleData);
-        styleStyleBuf.open(IODevice::WriteOnly);
-        partScore->style().write(&styleStyleBuf);
-
-        mscWriter.writeStyleFile(excerptStyleData);
-    }
-
-    // Write excerpt as main score
-    {
-        ByteArray excerptData;
-        Buffer excerptBuf(&excerptData);
-        excerptBuf.open(IODevice::WriteOnly);
-
-        compat::WriteScoreHook hook;
-        partScore->writeScore(&excerptBuf, false, false, hook);
-
-        mscWriter.writeScoreFile(excerptData);
-    }
-
-    // Write thumbnail
-    {
-        if (!partScore->pages().empty()) {
-            auto pixmap = partScore->createThumbnail();
-
-            ByteArray ba;
-            Buffer b(&ba);
-            b.open(IODevice::WriteOnly);
-            imageProvider()->saveAsPng(pixmap, &b);
-            mscWriter.writeThumbnailFile(ba);
-        }
-    }
-
-    return true;
+    _nonExpandedRepeatList->update(false);
+    return *_nonExpandedRepeatList;
 }
 
 //---------------------------------------------------------
@@ -405,16 +262,7 @@ MasterScore* MasterScore::clone()
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
 
-    WriteContext writeCtx;
-    XmlWriter xml(&buffer);
-    xml.setContext(&writeCtx);
-    xml.startDocument();
-
-    xml.startElement("museScore", { { "version", MSC_VERSION } });
-
-    compat::WriteScoreHook hook;
-    write(xml, false, hook);
-    xml.endElement();
+    rw::RWRegister::writer()->writeScore(this, &buffer, false);
 
     buffer.close();
 
@@ -422,7 +270,7 @@ MasterScore* MasterScore::clone()
     MasterScore* score = new MasterScore(style(), m_project);
 
     XmlReader r(scoreData);
-    MscLoader().read(score, r, true);
+    MscLoader().readMasterScore(score, r, true);
 
     score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();

@@ -34,13 +34,15 @@ Column {
     property string navigationName: "InspectorPropertyView"
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
+    property int buttonNavigationRow: navigationRowStart
 
     // Normally, this is just the reset or menu button (navigationRowStart + 0),
     // and one control (navigationRowStart + 1)
     property int navigationRowEnd: navigationRowStart + 1
 
-    property alias titleText: titleLabel.text
-    property alias showTitle: titleLabel.visible
+    property string titleText: ""
+    property Component titleLabelComponent: null
+    property alias showTitle: titleLabelLoader.visible
     property alias showButton: buttonLoader.visible
 
     readonly property bool isStyled: propertyItem ? propertyItem.isStyled : false
@@ -69,7 +71,7 @@ Column {
         }
     }
 
-    onRequestResetToDefault:  {
+    onRequestResetToDefault: {
         root.propertyItem.resetToDefault()
     }
 
@@ -85,14 +87,27 @@ Column {
 
         spacing: 4
 
-        StyledTextLabel {
-            id: titleLabel
+        Loader {
+            id: titleLabelLoader
 
-            visible: !isEmpty
             Layout.alignment: Qt.AlignLeft
             Layout.fillWidth: true
 
-            horizontalAlignment: Text.AlignLeft
+            visible: Boolean(root.titleText)
+
+            sourceComponent: root.titleLabelComponent ? root.titleLabelComponent : defaultTitleLabel
+
+            Component {
+                id: defaultTitleLabel
+
+                StyledTextLabel {
+                    width: parent.width
+                    visible: !isEmpty
+
+                    text: root.titleText
+                    horizontalAlignment: Text.AlignLeft
+                }
+            }
         }
 
         Loader {
@@ -100,6 +115,7 @@ Column {
 
             active: visible
             sourceComponent: root.isStyled ? menuButtonComponent : resetButtonComponent
+            Layout.alignment: Qt.AlignRight
 
             Component {
                 id: resetButtonComponent
@@ -110,8 +126,9 @@ Column {
 
                     navigation.name: root.navigationName + "Reset"
                     navigation.panel: root.navigationPanel
-                    navigation.row: root.navigationRowStart
-                    navigation.accessible.name: qsTrc("inspector", "Reset \"%1\" to default value").arg(root.titleText)
+                    navigation.row: root.buttonNavigationRow
+                    navigation.accessible.name: root.titleText ? qsTrc("inspector", "Reset \"%1\" to default value").arg(root.titleText)
+                                                               : qsTrc("inspector", "Reset property to default value")
 
                     icon: IconCode.UNDO
                     toolTipTitle: qsTrc("inspector", "Reset")
@@ -133,7 +150,7 @@ Column {
 
                     navigation.name: root.navigationName + " Menu Button"
                     navigation.panel: root.navigationPanel
-                    navigation.row: root.navigationRowStart
+                    navigation.row: root.buttonNavigationRow
                     navigation.accessible.name: root.titleText + " " + qsTrc("inspector", "Menu")
 
                     menuModel: {
@@ -142,7 +159,7 @@ Column {
                         result.push({ title: qsTrc("inspector", "Reset"), enabled: root.isModified, icon: IconCode.UNDO, id: "reset" })
 
                         if (root.isModified) {
-                            result.push({ title: qsTrc("inspector", "Save as default style for this score"), enabled: true, icon: IconCode.SAVE, id: "save" })
+                            result.push({ title: qsTrc("inspector", "Save as default style for this score"), enabled: !root.propertyItem.isUndefined, icon: IconCode.SAVE, id: "save" })
                         } else {
                             result.push({ title: qsTrc("inspector", "This is set as the default style for this score"), enabled: false, icon: IconCode.TICK_RIGHT_ANGLE })
                         }

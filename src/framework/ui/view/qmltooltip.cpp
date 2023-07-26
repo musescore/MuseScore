@@ -80,6 +80,14 @@ void QmlToolTip::hide(QQuickItem* item, bool force)
     m_closeTimer.start(INTERVAL);
 }
 
+void QmlToolTip::init()
+{
+    interactiveProvider()->currentUriAboutToBeChanged().onNotify(this, [this]() {
+        m_shouldBeClosed = true;
+        doHide();
+    });
+}
+
 void QmlToolTip::doShow()
 {
     m_openTimer.stop();

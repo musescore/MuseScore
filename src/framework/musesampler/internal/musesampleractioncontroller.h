@@ -33,9 +33,9 @@
 namespace mu::musesampler {
 class MuseSamplerActionController : public actions::Actionable, public async::Asyncable
 {
-    INJECT(musesampler, actions::IActionsDispatcher, dispatcher)
-    INJECT(musesampler, framework::IInteractive, interactive)
-    INJECT(musesampler, IMuseSamplerInfo, museSamplerInfo)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(IMuseSamplerInfo, museSamplerInfo)
 
 public:
     void init();

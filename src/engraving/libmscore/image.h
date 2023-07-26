@@ -47,8 +47,9 @@ enum class ImageType : char {
 class Image final : public BSymbol
 {
     OBJECT_ALLOCATOR(engraving, Image)
+    DECLARE_CLASSOF(ElementType::IMAGE)
 
-    INJECT(engraving, mu::draw::IImageProvider, imageProvider)
+    INJECT(mu::draw::IImageProvider, imageProvider)
 
 public:
     Image(EngravingItem* parent = 0);
@@ -57,34 +58,35 @@ public:
 
     Image* clone() const override { return new Image(*this); }
 
-    void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
     bool load(); // after set paths
     bool load(const io::path_t& s);
     bool loadFromData(const io::path_t& name, const mu::ByteArray&);
-    void layout() override;
+
     void draw(mu::draw::Painter*) const override;
+
+    void init();
 
     bool isImageFramed() const;
     double imageAspectRatio() const;
-    void setSize(const mu::SizeF& s) { _size = s; }
-    mu::SizeF size() const { return _size; }
+    void setSize(const mu::SizeF& s) { m_size = s; }
+    mu::SizeF size() const { return m_size; }
     void updateImageHeight(const double& height);
     void updateImageWidth(const double& width);
     double imageHeight() const;
     double imageWidth() const;
-    bool lockAspectRatio() const { return _lockAspectRatio; }
-    void setLockAspectRatio(bool v) { _lockAspectRatio = v; }
-    bool autoScale() const { return _autoScale; }
-    void setAutoScale(bool v) { _autoScale = v; }
-    ImageStoreItem* storeItem() const { return _storeItem; }
-    bool sizeIsSpatium() const { return _sizeIsSpatium; }
-    void setSizeIsSpatium(bool val) { _sizeIsSpatium = val; }
+    bool lockAspectRatio() const { return m_lockAspectRatio; }
+    void setLockAspectRatio(bool v) { m_lockAspectRatio = v; }
+    bool autoScale() const { return m_autoScale; }
+    void setAutoScale(bool v) { m_autoScale = v; }
+    ImageStoreItem* storeItem() const { return m_storeItem; }
+    bool sizeIsSpatium() const { return m_sizeIsSpatium; }
+    void setSizeIsSpatium(bool val) { m_sizeIsSpatium = val; }
 
-    String storePath() const { return _storePath; }
-    void setStorePath(const String& p) { _storePath = p; }
-    String linkPath() const { return _linkPath; }
-    void setLinkPath(const String& p) { _linkPath = p; }
+    String storePath() const { return m_storePath; }
+    void setStorePath(const String& p) { m_storePath = p; }
+    String linkPath() const { return m_linkPath; }
+    void setLinkPath(const String& p) { m_linkPath = p; }
+    bool linkIsValid() const { return m_linkIsValid; }
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -93,8 +95,8 @@ public:
     mu::SizeF imageSize() const;
 
     void setImageType(ImageType);
-    ImageType getImageType() const { return imageType; }
-    bool isValid() const { return rasterDoc || svgDoc; }
+    ImageType getImageType() const { return m_imageType; }
+    bool isValid() const { return m_rasterDoc || m_svgDoc; }
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 2; }
@@ -102,31 +104,31 @@ public:
     Grip defaultGrip() const override { return Grip(1); }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
-protected:
-    ImageStoreItem* _storeItem;
-    String _storePath;             // the path of the img in the ImageStore
-    String _linkPath;              // the path of an external linked img
-    bool _linkIsValid;              // whether _linkPath file exists or not
-    mutable mu::draw::Pixmap buffer;         ///< cached rendering
-    mu::SizeF _size;                   // in mm or spatium units
-    bool _lockAspectRatio;
-    bool _autoScale;                ///< fill parent frame
-    bool _sizeIsSpatium;
-    mutable bool _dirty;
+    mu::SizeF pixel2size(const mu::SizeF& s) const;
+    mu::SizeF size2pixel(const mu::SizeF& s) const;
+
+private:
 
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData& ed) override;
     std::vector<mu::LineF> gripAnchorLines(Grip) const override { return std::vector<mu::LineF>(); }
 
-private:
-    mu::SizeF pixel2size(const mu::SizeF& s) const;
-    mu::SizeF size2pixel(const mu::SizeF& s) const;
+    ImageStoreItem* m_storeItem = nullptr;
+    String m_storePath;                 // the path of the img in the ImageStore
+    String m_linkPath;                  // the path of an external linked img
+    bool m_linkIsValid = false;         // whether _linkPath file exists or not
+    mutable mu::draw::Pixmap m_buffer;  // cached rendering
+    mu::SizeF m_size;                   // in mm or spatium units
+    bool m_lockAspectRatio = false;
+    bool m_autoScale = false;           // fill parent frame
+    bool m_sizeIsSpatium = false;
+    mutable bool m_dirty = false;
 
-    std::shared_ptr<mu::draw::Pixmap> rasterDoc;
-    mu::draw::SvgRenderer* svgDoc = nullptr;
+    std::shared_ptr<mu::draw::Pixmap> m_rasterDoc;
+    mu::draw::SvgRenderer* m_svgDoc = nullptr;
 
-    ImageType imageType = ImageType::NONE;
+    ImageType m_imageType = ImageType::NONE;
 };
 } // namespace mu::engraving
 #endif

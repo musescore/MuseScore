@@ -24,7 +24,7 @@
 
 #include <string>
 #include <optional>
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 namespace mu::iex::imagesexport {
 class IImagesExportConfiguration : MODULE_EXPORT_INTERFACE
@@ -40,9 +40,10 @@ public:
 
     // Png
     virtual float exportPngDpiResolution() const = 0;
+    virtual void setExportPngDpiResolution(float dpi) = 0;
 
     //! NOTE Maybe set from command line
-    virtual void setExportPngDpiResolution(std::optional<float> dpi) = 0;
+    virtual void setExportPngDpiResolutionOverride(std::optional<float> dpi) = 0;
 
     virtual bool exportPngWithTransparentBackground() const = 0;
     virtual void setExportPngWithTransparentBackground(bool transparent) = 0;

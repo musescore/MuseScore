@@ -40,14 +40,10 @@ class Chord;
 class LedgerLine final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, LedgerLine)
-
-    double _width;
-    double _len;
-    LedgerLine* _next;
-    bool m_vertical = false;
+    DECLARE_CLASSOF(ElementType::LEDGER_LINE)
 
 public:
-    LedgerLine(Score*);
+    LedgerLine(EngravingItem*);
     ~LedgerLine();
     LedgerLine& operator=(const LedgerLine&) = delete;
 
@@ -63,16 +59,19 @@ public:
     void setVertical(bool v) { m_vertical = v; }
     bool vertical() const { return m_vertical; }
 
-    void layout() override;
     void draw(mu::draw::Painter*) const override;
 
     double measureXPos() const;
     LedgerLine* next() const { return _next; }
     void setNext(LedgerLine* l) { _next = l; }
 
-    void writeProperties(XmlWriter& xml) const override;
-    bool readProperties(XmlReader&) override;
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
+
+private:
+    double _width;
+    double _len;
+    LedgerLine* _next;
+    bool m_vertical = false;
 };
 } // namespace mu::engraving
 #endif

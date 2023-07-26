@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <pageWidth>8.27</pageWidth>
@@ -86,7 +84,7 @@
       <Measure len="70/8">
         <voice>
           <KeySig>
-            <accidental>3</accidental>
+            <concertKey>3</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>

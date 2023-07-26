@@ -25,7 +25,7 @@
 #include <vector>
 #include <QJSValue>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 #include "async/channel.h"
 #include "autobottypes.h"

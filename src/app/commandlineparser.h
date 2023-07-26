@@ -26,8 +26,12 @@
 #include <QStringList>
 #include <optional>
 
+#include "thirdparty/haw_logger/logger/logger.h"
+
 #include "global/iapplication.h"
 #include "io/path.h"
+
+class QCoreApplication;
 
 namespace mu::app {
 class CommandLineParser
@@ -78,11 +82,13 @@ public:
 
         struct {
             std::optional<bool> revertToFactorySettings;
+            std::optional<haw::logger::Level> loggerLevel;
         } app;
 
         struct {
             std::optional<std::string> type;
             std::optional<io::path_t> scorePath;
+            std::optional<QString> scoreDisplayNameOverride;
         } startup;
     };
 
@@ -148,6 +154,7 @@ public:
 
     void init();
     void parse(int argc, char** argv);
+    void processBuiltinArgs(const QCoreApplication& app);
 
     framework::IApplication::RunMode runMode() const;
 

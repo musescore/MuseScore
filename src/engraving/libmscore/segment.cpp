@@ -22,9 +22,13 @@
 
 #include "segment.h"
 
+#include <climits>
+
 #include "translation.h"
-#include "rw/xml.h"
+
 #include "types/typesconv.h"
+
+#include "layout/dev/tlayout.h"
 
 #include "accidental.h"
 #include "barline.h"
@@ -32,16 +36,17 @@
 #include "chord.h"
 #include "clef.h"
 #include "engravingitem.h"
-#include "factory.h"
+#include "glissando.h"
 #include "harmony.h"
+#include "harppedaldiagram.h"
 #include "hook.h"
 #include "instrchange.h"
 #include "keysig.h"
 #include "masterscore.h"
 #include "measure.h"
-#include "mmrest.h"
 #include "mscore.h"
 #include "note.h"
+#include "ornament.h"
 #include "part.h"
 #include "rest.h"
 #include "score.h"
@@ -583,6 +588,7 @@ void Segment::add(EngravingItem* el)
 
     case ElementType::TEMPO_TEXT:
     case ElementType::DYNAMIC:
+    case ElementType::EXPRESSION:
     case ElementType::HARMONY:
     case ElementType::SYMBOL:
     case ElementType::FRET_DIAGRAM:
@@ -590,6 +596,7 @@ void Segment::add(EngravingItem* el)
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -618,6 +625,15 @@ void Segment::add(EngravingItem* el)
         _annotations.push_back(el);
         break;
     }
+
+    case ElementType::HARP_DIAGRAM:
+        // already a diagram in this segment
+        if (el->part()->harpDiagrams.count(toHarpPedalDiagram(el)->segment()->tick().ticks()) > 0) {
+            break;
+        }
+        el->part()->addHarpDiagram(toHarpPedalDiagram(el));
+        _annotations.push_back(el);
+        break;
 
     case ElementType::CLEF:
         assert(_segmentType == SegmentType::Clef || _segmentType == SegmentType::HeaderClef);
@@ -749,6 +765,7 @@ void Segment::remove(EngravingItem* el)
         break;
 
     case ElementType::DYNAMIC:
+    case ElementType::EXPRESSION:
     case ElementType::FIGURED_BASS:
     case ElementType::FRET_DIAGRAM:
     case ElementType::HARMONY:
@@ -759,6 +776,7 @@ void Segment::remove(EngravingItem* el)
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
     case ElementType::SYMBOL:
     case ElementType::TAB_DURATION_SYMBOL:
     case ElementType::TEMPO_TEXT:
@@ -783,6 +801,11 @@ void Segment::remove(EngravingItem* el)
         Part* part = is->part();
         part->removeInstrument(tick());
     }
+        removeAnnotation(el);
+        break;
+
+    case ElementType::HARP_DIAGRAM:
+        el->part()->removeHarpDiagram(toHarpPedalDiagram(el));
         removeAnnotation(el);
         break;
 
@@ -882,6 +905,7 @@ void Segment::sortStaves(std::vector<staff_idx_t>& dst)
             ElementType::SYSTEM_TEXT,
             ElementType::TRIPLET_FEEL,
             ElementType::PLAYTECH_ANNOTATION,
+            ElementType::CAPO,
             ElementType::JUMP,
             ElementType::MARKER,
             ElementType::TEMPO_TEXT,
@@ -944,45 +968,6 @@ void Segment::swapElements(track_idx_t i1, track_idx_t i2)
         _elist[i2]->setTrack(i2);
     }
     triggerLayout();
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Segment::write(XmlWriter& xml) const
-{
-    if (written()) {
-        return;
-    }
-    setWritten(true);
-    if (_extraLeadingSpace.isZero()) {
-        return;
-    }
-    xml.startElement(this);
-    xml.tag("leadingSpace", _extraLeadingSpace.val());
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Segment::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-
-        if (tag == "subtype") {
-            e.skipCurrentElement();
-        } else if (tag == "leadingSpace") {
-            _extraLeadingSpace = Spatium(e.readDouble());
-        } else if (tag == "trailingSpace") {          // obsolete
-            e.readDouble();
-        } else {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -1693,22 +1678,18 @@ EngravingItem* Segment::prevElementOfSegment(Segment* s, EngravingItem* e, staff
 
 EngravingItem* Segment::lastElementOfSegment(Segment* s, staff_idx_t activeStaff)
 {
-    std::vector<EngravingItem*> elements = s->elist();
-    for (auto i = --elements.end(); i != elements.begin(); --i) {
-        if (*i && (*i)->staffIdx() == activeStaff) {
-            if ((*i)->isChord()) {
-                return toChord(*i)->notes().front();
-            } else {
-                return *i;
+    const std::vector<EngravingItem*>& elements = s->elist();
+    for (auto it = elements.rbegin(); it != elements.rend(); ++it) {
+        EngravingItem* item = *it;
+        if (item && item->staffIdx() == activeStaff) {
+            if (item->isChord()) {
+                const std::vector<Articulation*>& articulations = toChord(item)->articulations();
+                if (!articulations.empty()) {
+                    return articulations.back();
+                }
+                return toChord(item)->upNote();
             }
-        }
-    }
-    auto i = elements.begin();
-    if (*i && (*i)->staffIdx() == activeStaff) {
-        if ((*i)->type() == ElementType::CHORD) {
-            return toChord(*i)->notes().front();
-        } else {
-            return *i;
+            return item;
         }
     }
     return nullptr;
@@ -1804,6 +1785,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     switch (e->type()) {
     case ElementType::DYNAMIC:
     case ElementType::HARMONY:
+    case ElementType::EXPRESSION:
     case ElementType::SYMBOL:
     case ElementType::FERMATA:
     case ElementType::FRET_DIAGRAM:
@@ -1812,6 +1794,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -1821,6 +1804,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::FIGURED_BASS:
     case ElementType::STAFF_STATE:
     case ElementType::INSTRUMENT_CHANGE:
+    case ElementType::HARP_DIAGRAM:
     case ElementType::STICKING: {
         EngravingItem* next = nullptr;
         if (e->explicitParent() == this) {
@@ -1946,6 +1930,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     }
     switch (e->type()) {
     case ElementType::DYNAMIC:
+    case ElementType::EXPRESSION:
     case ElementType::HARMONY:
     case ElementType::SYMBOL:
     case ElementType::FERMATA:
@@ -1955,6 +1940,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -1964,6 +1950,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::FIGURED_BASS:
     case ElementType::STAFF_STATE:
     case ElementType::INSTRUMENT_CHANGE:
+    case ElementType::HARP_DIAGRAM:
     case ElementType::STICKING: {
         EngravingItem* prev = nullptr;
         if (e->explicitParent() == this) {
@@ -2273,7 +2260,8 @@ void Segment::createShape(staff_idx_t staffIdx)
         setVisible(true);
         BarLine* bl = toBarLine(element(staffIdx * VOICES));
         if (bl) {
-            RectF r = bl->layoutRect();
+            layout::dev::LayoutContext lctx(score());
+            RectF r = layout::dev::TLayout::layoutRect(bl, lctx);
             s.add(r.translated(bl->pos()), bl);
         }
         s.addHorizontalSpacing(bl, 0, 0);
@@ -2303,6 +2291,14 @@ void Segment::createShape(staff_idx_t staffIdx)
             if (e->addToSkyline()) {
                 s.add(e->shape().translate(e->isClef() ? e->ipos() : e->pos()));
             }
+            // Non-standard trills display a cue note that we must add to shape here
+            if (e->isChord()) {
+                Ornament* orn = toChord(e)->findOrnament();
+                Chord* cueNoteChord = orn ? orn->cueNoteChord() : nullptr;
+                if (cueNoteChord && cueNoteChord->upNote()->visible()) {
+                    s.add(cueNoteChord->shape().translate(cueNoteChord->pos()));
+                }
+            }
         }
     }
 
@@ -2317,7 +2313,8 @@ void Segment::createShape(staff_idx_t staffIdx)
 
         if (e->isHarmony()) {
             // use same spacing calculation as for chordrest
-            toHarmony(e)->layout();
+            layout()->layoutItem(toHarmony(e));
+
             double x1 = e->bbox().x() + e->pos().x();
             double x2 = e->bbox().x() + e->bbox().width() + e->pos().x();
             s.addHorizontalSpacing(e, x1, x2);
@@ -2326,16 +2323,19 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isHarmony()
                    && !e->isTempoText()
                    && !e->isDynamic()
+                   && !e->isExpression()
                    && !e->isFiguredBass()
                    && !e->isSymbol()
                    && !e->isFSymbol()
                    && !e->isSystemText()
                    && !e->isTripletFeel()
                    && !e->isInstrumentChange()
-                   && !e->isArticulation()
+                   && !e->isArticulationFamily()
                    && !e->isFermata()
                    && !e->isStaffText()
-                   && !e->isPlayTechAnnotation()) {
+                   && !e->isHarpPedalDiagram()
+                   && !e->isPlayTechAnnotation()
+                   && !e->isCapo()) {
             // annotations added here are candidates for collision detection
             // lyrics, ...
             s.add(e->shape().translate(e->pos()));
@@ -2372,10 +2372,10 @@ double Segment::minRight() const
         distance = std::max(distance, sh.right());
     }
     if (isClefType()) {
-        distance += score()->styleMM(Sid::clefBarlineDistance);
+        distance += style().styleMM(Sid::clefBarlineDistance);
     }
     if (trailer()) {
-        distance += score()->styleMM(Sid::systemTrailerRightMargin);
+        distance += style().styleMM(Sid::systemTrailerRightMargin);
     }
     return distance;
 }
@@ -2419,7 +2419,7 @@ std::pair<double, double> Segment::computeCellWidth(const std::vector<int>& visi
     auto calculateWidth = [measure = measure(), sc = score()->masterScore()](ChordRest* cr) {
         auto quantum = measure->quantumOfSegmentCell();
         return sc->widthOfSegmentCell()
-               * sc->spatium()
+               * sc->style().spatium()
                * cr->globalTicks().numerator() / cr->globalTicks().denominator()
                * quantum.denominator() / quantum.numerator();
     };
@@ -2532,6 +2532,10 @@ double Segment::spacing() const
 
 double Segment::minHorizontalCollidingDistance(Segment* ns) const
 {
+    if (isBeginBarLineType() && ns->isStartRepeatBarLineType()) {
+        return 0.0;
+    }
+
     double w = -100000.0; // This can remain negative in some cases (for instance, mid-system clefs)
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
         double d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx));
@@ -2613,6 +2617,10 @@ double Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
 
 double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
 {
+    if (isBeginBarLineType() && ns->isStartRepeatBarLineType()) {
+        return 0.0;
+    }
+
     double ww = -1000000.0;          // can remain negative
     double d = 0.0;
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
@@ -2630,13 +2638,13 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
     double absoluteMinHeaderDist = 1.5 * spatium();
     if (systemHeaderGap) {
         if (isTimeSigType()) {
-            w = std::max(w, minRight() + score()->styleMM(Sid::systemHeaderTimeSigDistance));
+            w = std::max(w, minRight() + style().styleMM(Sid::systemHeaderTimeSigDistance));
         } else {
-            w = std::max(w, minRight() + score()->styleMM(Sid::systemHeaderDistance));
+            w = std::max(w, minRight() + style().styleMM(Sid::systemHeaderDistance));
         }
         if (ns && ns->isStartRepeatBarLineType()) {
             // Align the thin barline of the start repeat to the header
-            w -= score()->styleMM(Sid::endBarWidth) + score()->styleMM(Sid::endBarDistance);
+            w -= style().styleMM(Sid::endBarWidth) + style().styleMM(Sid::endBarDistance);
         }
         double diff = w - minRight() - ns->minLeft();
         if (diff < absoluteMinHeaderDist) {
@@ -2657,31 +2665,41 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
             }
             w = std::max(w, minDist);
         } else if (isChordRestType()) {
-            double minWidth = score()->styleMM(Sid::minMMRestWidth).val();
-            if (!score()->styleB(Sid::oldStyleMultiMeasureRests)) {
-                minWidth += score()->styleMM(Sid::multiMeasureRestMargin).val();
+            double minWidth = style().styleMM(Sid::minMMRestWidth).val();
+            if (!style().styleB(Sid::oldStyleMultiMeasureRests)) {
+                minWidth += style().styleMM(Sid::multiMeasureRestMargin).val();
             }
             w = std::max(w, minWidth);
         }
     }
 
-    // Allocate space to ensure minimum length of "dangling" ties at start of system
+    // Allocate space to ensure minimum length of "dangling" ties or gliss at start of system
     if (systemHeaderGap && ns && ns->isChordRestType()) {
         for (EngravingItem* e : ns->elist()) {
             if (!e || !e->isChord()) {
                 continue;
             }
-            double headerTieMargin = score()->styleMM(Sid::HeaderToLineStartDistance);
+            double headerTieMargin = style().styleMM(Sid::HeaderToLineStartDistance);
             for (Note* note : toChord(e)->notes()) {
-                if (!note->tieBack() || note->lineAttachPoints().empty()) {
+                bool tieOrGlissBack = note->spannerBack().size() || note->tieBack();
+                if (!tieOrGlissBack || note->lineAttachPoints().empty()) {
                     continue;
+                }
+                const EngravingItem* attachedLine = note->lineAttachPoints().front().line();
+                double minLength = 0.0;
+                if (attachedLine->isTie()) {
+                    minLength = style().styleMM(Sid::MinTieLength);
+                } else if (attachedLine->isGlissando()) {
+                    bool straight = toGlissando(attachedLine)->glissandoType() == GlissandoType::STRAIGHT;
+                    minLength = straight ? style().styleMM(Sid::MinStraightGlissandoLength)
+                                : style().styleMM(Sid::MinWigglyGlissandoLength);
                 }
                 double tieStartPointX = minRight() + headerTieMargin;
                 double notePosX = w + note->pos().x() + toChord(e)->pos().x() + note->headWidth() / 2;
                 double tieEndPointX = notePosX + note->lineAttachPoints().at(0).pos().x();
                 double tieLength = tieEndPointX - tieStartPointX;
-                if (tieLength < score()->styleMM(Sid::MinTieLength)) {
-                    w += score()->styleMM(Sid::MinTieLength) - tieLength;
+                if (tieLength < minLength) {
+                    w += minLength - tieLength;
                 }
             }
         }
@@ -2837,7 +2855,7 @@ double Segment::computeDurationStretch(Segment* prevSeg, Fraction minTicks, Frac
 {
     auto doComputeDurationStretch = [&] (Fraction curTicks) -> double
     {
-        double slope = score()->styleD(Sid::measureSpacing);
+        double slope = style().styleD(Sid::measureSpacing);
 
         static constexpr double longNoteThreshold = Fraction(1, 16).toDouble();
 
@@ -2894,5 +2912,37 @@ double Segment::computeDurationStretch(Segment* prevSeg, Fraction minTicks, Frac
     }
 
     return durStretch;
+}
+
+bool Segment::goesBefore(const Segment* nextSegment) const
+{
+    bool thisIsClef = isClefType();
+    bool nextIsClef = nextSegment->isClefType();
+    bool thisIsBarline = isType(SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine);
+    bool nextIsBarline = nextSegment->isType(SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine);
+
+    if (thisIsClef && nextIsBarline) {
+        ClefToBarlinePosition clefPos = ClefToBarlinePosition::AUTO;
+        for (EngravingItem* item : elist()) {
+            if (item && item->isClef()) {
+                clefPos = toClef(item)->clefToBarlinePosition();
+                break;
+            }
+        }
+        return clefPos != ClefToBarlinePosition::AFTER;
+    }
+
+    if (thisIsBarline && nextIsClef) {
+        ClefToBarlinePosition clefPos = ClefToBarlinePosition::AUTO;
+        for (EngravingItem* item : nextSegment->elist()) {
+            if (item && item->isClef()) {
+                clefPos = toClef(item)->clefToBarlinePosition();
+                break;
+            }
+        }
+        return clefPos == ClefToBarlinePosition::AFTER;
+    }
+
+    return segmentType() < nextSegment->segmentType();
 }
 } // namespace mu::engraving

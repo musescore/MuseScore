@@ -22,7 +22,7 @@
 #ifndef MU_APPSHELL_IAPPMENUMODELHOOK_H
 #define MU_APPSHELL_IAPPMENUMODELHOOK_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 namespace mu::appshell {
 class IAppMenuModelHook : MODULE_EXPORT_INTERFACE

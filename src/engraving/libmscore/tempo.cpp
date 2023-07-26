@@ -24,8 +24,6 @@
 
 #include <cmath>
 
-#include "rw/xml.h"
-
 #include "log.h"
 
 using namespace mu;
@@ -124,7 +122,7 @@ void TempoMap::normalize()
             e->second.tempo = tempo;
         }
         int delta = e->first - tick;
-        time += double(delta) / (Constants::division * tempo.val * _tempoMultiplier.val);
+        time += double(delta) / (Constants::DIVISION * tempo.val * _tempoMultiplier.val);
         time += e->second.pause;
         e->second.time = time;
         tick  = e->first;
@@ -313,7 +311,7 @@ double TempoMap::tick2time(int tick, int* sn) const
     if (sn) {
         *sn = _tempoSN;
     }
-    time += delta / (Constants::division * tempo.val * _tempoMultiplier.val);
+    time += delta / (Constants::DIVISION * tempo.val * _tempoMultiplier.val);
     return time;
 }
 
@@ -343,7 +341,7 @@ int TempoMap::time2tick(double time, int* sn) const
         tempo = e->second.tempo;
     }
     delta = time - delta;
-    tick += lrint(delta * _tempoMultiplier.val * Constants::division * tempo.val);
+    tick += lrint(delta * _tempoMultiplier.val * Constants::DIVISION * tempo.val);
     if (sn) {
         *sn = _tempoSN;
     }

@@ -45,7 +45,7 @@ class ThemesPageModel : public QObject, public async::Asyncable
     Q_PROPERTY(QString currentThemeCode READ currentThemeCode WRITE setCurrentThemeCode NOTIFY themesChanged)
     Q_PROPERTY(int currentAccentColorIndex READ currentAccentColorIndex WRITE setCurrentAccentColorIndex NOTIFY themesChanged)
 
-    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
 
 public:
     explicit ThemesPageModel(QObject* parent = nullptr);

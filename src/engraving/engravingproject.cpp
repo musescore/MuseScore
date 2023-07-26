@@ -25,6 +25,7 @@
 
 #include "style/defaultstyle.h"
 #include "rw/mscloader.h"
+#include "rw/mscsaver.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/part.h"
 
@@ -150,7 +151,8 @@ Ret EngravingProject::loadMscz(const MscReader& msc, SettingsCompat& settingsCom
 bool EngravingProject::writeMscz(MscWriter& writer, bool onlySelection, bool createThumbnail)
 {
     TRACEFUNC;
-    bool ok = m_masterScore->writeMscz(writer, onlySelection, createThumbnail);
+    MscSaver saver;
+    bool ok = saver.writeMscz(m_masterScore, writer, onlySelection, createThumbnail);
     if (ok && !onlySelection) {
         m_masterScore->update();
     }

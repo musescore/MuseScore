@@ -53,6 +53,8 @@ using TrackId = int32_t;
 using TrackIdList = std::vector<TrackId>;
 using TrackName = std::string;
 
+using aux_channel_idx_t = uint8_t;
+
 using PlaybackData = std::variant<mpe::PlaybackData, io::IODevice*>;
 using PlaybackSetupData = mpe::PlaybackSetupData;
 
@@ -102,6 +104,7 @@ enum class AudioResourceType {
     Undefined = -1,
     FluidSoundfont,
     VstPlugin,
+    MusePlugin,
     MuseSamplerSoundPack,
     SoundTrack,
 };
@@ -156,6 +159,8 @@ struct AudioResourceMeta {
 using AudioResourceMetaList = std::vector<AudioResourceMeta>;
 using AudioResourceMetaSet = std::set<AudioResourceMeta>;
 
+static const AudioResourceId MUSE_REVERB_ID("Muse Reverb");
+
 enum class AudioPluginType {
     Undefined = -1,
     Instrument,
@@ -170,25 +175,10 @@ struct AudioPluginInfo {
     int errorCode = 0;
 };
 
-inline AudioPluginType audioPluginTypeFromCategoriesString(const std::string& categoriesStr)
-{
-    static const std::map<std::string, AudioPluginType> STRING_TO_PLUGIN_TYPE_MAP = {
-        { "Fx", AudioPluginType::Fx },
-        { "Instrument", AudioPluginType::Instrument },
-    };
-
-    for (auto it = STRING_TO_PLUGIN_TYPE_MAP.cbegin(); it != STRING_TO_PLUGIN_TYPE_MAP.cend(); ++it) {
-        if (categoriesStr.find(it->first) != std::string::npos) {
-            return it->second;
-        }
-    }
-
-    return AudioPluginType::Undefined;
-}
-
 enum class AudioFxType {
     Undefined = -1,
-    VstFx
+    VstFx,
+    MuseFx,
 };
 
 enum class AudioFxCategory {
@@ -217,8 +207,14 @@ struct AudioFxParams {
     {
         switch (resourceMeta.type) {
         case AudioResourceType::VstPlugin: return AudioFxType::VstFx;
-        default: return AudioFxType::Undefined;
+        case AudioResourceType::MusePlugin: return AudioFxType::MuseFx;
+        case AudioResourceType::FluidSoundfont:
+        case AudioResourceType::MuseSamplerSoundPack:
+        case AudioResourceType::SoundTrack:
+        case AudioResourceType::Undefined: break;
         }
+
+        return AudioFxType::Undefined;
     }
 
     AudioFxCategories categories;
@@ -255,17 +251,31 @@ struct AudioFxParams {
 
 using AudioFxChain = std::map<AudioFxChainOrder, AudioFxParams>;
 
+struct AuxSendParams {
+    gain_t signalAmount = 0.f; // [0; 1]
+    bool active = false;
+
+    bool operator ==(const AuxSendParams& other) const
+    {
+        return RealIsEqual(signalAmount, other.signalAmount) && active == other.active;
+    }
+};
+
+using AuxSendsParams = std::vector<AuxSendParams>;
+
 struct AudioOutputParams {
     AudioFxChain fxChain;
     volume_db_t volume = 0.f;
     balance_t balance = 0.f;
+    AuxSendsParams auxSends;
     bool muted = false;
 
     bool operator ==(const AudioOutputParams& other) const
     {
         return fxChain == other.fxChain
-               && volume == other.volume
-               && balance == other.balance
+               && RealIsEqual(volume, other.volume)
+               && RealIsEqual(balance, other.balance)
+               && auxSends == other.auxSends
                && muted == other.muted;
     }
 };

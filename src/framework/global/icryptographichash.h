@@ -22,7 +22,7 @@
 #ifndef MU_GLOBAL_ICRYPTOGRAPHICHASH_H
 #define MU_GLOBAL_ICRYPTOGRAPHICHASH_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "types/bytearray.h"
 
 namespace mu {

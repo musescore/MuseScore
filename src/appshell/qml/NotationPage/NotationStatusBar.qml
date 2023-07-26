@@ -43,8 +43,7 @@ Item {
         order: 8
     }
 
-    NavigationPanel {
-        id: navPanel
+    property NavigationPanel navigationPanel: NavigationPanel {
         name: "NotationStatusBar"
         enabled: root.enabled && root.visible
         order: 0
@@ -113,7 +112,7 @@ Item {
             transparent: true
             visible: statusBarRow.remainingSpace > width + concertPitchControl.width
 
-            navigation.panel: navPanel
+            navigation.panel: root.navigationPanel
             navigation.order: 1
 
             onClicked: {
@@ -134,7 +133,7 @@ Item {
             enabled: model.concertPitchItem.enabled
             visible: statusBarRow.remainingSpace > width
 
-            navigation.panel: navPanel
+            navigation.panel: root.navigationPanel
             navigation.order: 2
 
             onToggleConcertPitchRequested: {
@@ -152,7 +151,7 @@ Item {
             currentViewMode: model.currentViewMode
             availableViewModeList: model.availableViewModeList
 
-            navigation.panel: navPanel
+            navigation.panel: root.navigationPanel
             navigation.order: 3
 
             onChangeCurrentViewModeRequested: function(newViewMode) {
@@ -171,7 +170,7 @@ Item {
             maxZoomPercentage: model.maxZoomPercentage()
             availableZoomList: model.availableZoomList
 
-            navigationPanel: navPanel
+            navigationPanel: root.navigationPanel
             navigationOrderMin: 4
 
             onChangeZoomPercentageRequested: function(newZoomPercentage) {
@@ -201,7 +200,7 @@ Item {
             visible: !concertPitchControl.visible ||
                      !workspaceControl.visible
 
-            navigation.panel: navPanel
+            navigation.panel: root.navigationPanel
             navigation.order: zoomControl.navigationOrderMax + 1
 
             menuModel: {

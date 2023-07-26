@@ -232,17 +232,19 @@ void MidiDeviceMappingModel::clearAllActions()
 
 QVariant MidiDeviceMappingModel::currentAction() const
 {
-    if (m_selection.size() != 1) {
+    QModelIndexList indexes = m_selection.indexes();
+    if (indexes.empty()) {
         return QVariant();
     }
 
-    MidiControlsMapping midiMapping = m_midiMappings[m_selection.indexes().first().row()];
+    MidiControlsMapping midiMapping = m_midiMappings[indexes.first().row()];
     return midiMappingToObject(midiMapping);
 }
 
 void MidiDeviceMappingModel::mapCurrentActionToMidiEvent(const QVariant& event)
 {
-    if (m_selection.size() != 1) {
+    QModelIndexList indexes = m_selection.indexes();
+    if (indexes.empty()) {
         return;
     }
 
@@ -250,6 +252,8 @@ void MidiDeviceMappingModel::mapCurrentActionToMidiEvent(const QVariant& event)
     RemoteEventType type = static_cast<RemoteEventType>(eventMap["type"].toInt());
     int value = eventMap["value"].toInt();
 
-    m_midiMappings[m_selection.indexes().first().row()].event = RemoteEvent(type, value);
-    emit dataChanged(m_selection.indexes().first(), m_selection.indexes().first());
+    QModelIndex first = indexes.first();
+
+    m_midiMappings[first.row()].event = RemoteEvent(type, value);
+    emit dataChanged(first, first);
 }

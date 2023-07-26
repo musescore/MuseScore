@@ -1260,6 +1260,10 @@ void SvgPaintEngine::drawPolygon(const QPointF* points, int pointCount,
     }
 
     if (mode == PolylineMode) {
+        // fixes draw polyline
+        painter()->setBrush(Qt::NoBrush);
+        updateState(*this->state);
+
         stream() << SVG_POLYLINE << stateString
                  << SVG_POINTS;
         for (int i = 0; i < pointCount; ++i) {

@@ -36,7 +36,7 @@ class UiTheme : public QProxyStyle, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(ui, IUiConfiguration, configuration)
+    INJECT(IUiConfiguration, configuration)
 
     Q_PROPERTY(bool isDark READ isDark NOTIFY themeChanged)
 

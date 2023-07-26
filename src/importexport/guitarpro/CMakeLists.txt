@@ -35,6 +35,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importptb.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importptb.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/continiouselementsbuilder.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/continiouselementsbuilder.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp6dombuilder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp6dombuilder.h
@@ -42,8 +44,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp7dombuilder.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp67dombuilder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp67dombuilder.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpaudiotrack.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpaudiotrack.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpbar.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpbar.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpbeat.cpp

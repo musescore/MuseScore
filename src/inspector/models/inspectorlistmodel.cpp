@@ -44,15 +44,19 @@ InspectorListModel::InspectorListModel(QObject* parent)
     listenSelectionChanged();
     context()->currentNotationChanged().onNotify(this, [this]() {
         listenSelectionChanged();
+
+        notifyModelsAboutNotationChanged();
     });
 }
 
-void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection)
+void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection,
+                                                        const QList<mu::engraving::EngravingItem*>& selectedElementList)
 {
     removeUnusedModels(selectedElementKeySet, isRangeSelection);
 
     InspectorSectionTypeSet buildingSectionTypeSet = AbstractInspectorModel::sectionTypesByElementKeys(selectedElementKeySet,
-                                                                                                       isRangeSelection);
+                                                                                                       isRangeSelection,
+                                                                                                       selectedElementList);
 
     createModelsBySectionType(buildingSectionTypeSet.values(), selectedElementKeySet);
 
@@ -61,6 +65,11 @@ void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& sel
 
 void InspectorListModel::buildModelsForEmptySelection()
 {
+    if (context()->currentNotation() == nullptr) {
+        removeUnusedModels({}, false /*isRangeSelection*/);
+        return;
+    }
+
     static const QList<InspectorSectionType> persistentSectionList {
         InspectorSectionType::SECTION_SCORE_DISPLAY,
         InspectorSectionType::SECTION_SCORE_APPEARANCE
@@ -76,6 +85,10 @@ void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem
     TRACEFUNC;
 
     if (!m_modelList.isEmpty()) {
+        if (context()->currentNotation() == nullptr) {
+            buildModelsForEmptySelection();
+        }
+
         if (!m_repository->needUpdateElementList(selectedElementList, selectionState)) {
             return;
         }
@@ -90,7 +103,7 @@ void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem
             newElementKeySet << ElementKey(element->type(), element->subtype());
         }
 
-        buildModelsForSelectedElements(newElementKeySet, selectionState == SelectionState::RANGE);
+        buildModelsForSelectedElements(newElementKeySet, selectionState == SelectionState::RANGE, selectedElementList);
     }
 
     m_repository->updateElementList(selectedElementList, selectionState);
@@ -146,27 +159,34 @@ void InspectorListModel::createModelsBySectionType(const QList<InspectorSectionT
 
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
+        AbstractInspectorModel* newModel = nullptr;
+
         switch (sectionType) {
         case InspectorSectionType::SECTION_GENERAL:
-            m_modelList << new GeneralSettingsModel(this, m_repository);
+            newModel = new GeneralSettingsModel(this, m_repository);
             break;
         case InspectorSectionType::SECTION_MEASURES:
-            m_modelList << new MeasuresSettingsModel(this, m_repository);
+            newModel = new MeasuresSettingsModel(this, m_repository);
             break;
         case InspectorSectionType::SECTION_NOTATION:
-            m_modelList << new NotationSettingsProxyModel(this, m_repository, selectedElementKeySet);
+            newModel = new NotationSettingsProxyModel(this, m_repository, selectedElementKeySet);
             break;
         case InspectorSectionType::SECTION_TEXT:
-            m_modelList << new TextSettingsModel(this, m_repository);
+            newModel = new TextSettingsModel(this, m_repository);
             break;
         case InspectorSectionType::SECTION_SCORE_DISPLAY:
-            m_modelList << new ScoreSettingsModel(this, m_repository);
+            newModel = new ScoreSettingsModel(this, m_repository);
             break;
         case InspectorSectionType::SECTION_SCORE_APPEARANCE:
-            m_modelList << new ScoreAppearanceSettingsModel(this, m_repository);
+            newModel = new ScoreAppearanceSettingsModel(this, m_repository);
             break;
         case AbstractInspectorModel::InspectorSectionType::SECTION_UNDEFINED:
             break;
+        }
+
+        if (newModel) {
+            newModel->init();
+            m_modelList << newModel;
         }
 
         endInsertRows();
@@ -259,6 +279,15 @@ AbstractInspectorModel* InspectorListModel::modelBySectionType(InspectorSectionT
     }
 
     return nullptr;
+}
+
+void InspectorListModel::notifyModelsAboutNotationChanged()
+{
+    TRACEFUNC;
+
+    for (AbstractInspectorModel* model : m_modelList) {
+        model->onCurrentNotationChanged();
+    }
 }
 
 void InspectorListModel::listenSelectionChanged()

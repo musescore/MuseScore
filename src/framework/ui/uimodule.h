@@ -26,6 +26,21 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::ui {
+class UiConfiguration;
+class UiActionsRegister;
+class NavigationController;
+class NavigationUiActions;
+
+#ifdef Q_OS_MAC
+class MacOSPlatformTheme;
+#elif defined(Q_OS_WIN)
+class WindowsPlatformTheme;
+#elif defined(Q_OS_LINUX)
+class LinuxPlatformTheme;
+#else
+class StubPlatformTheme;
+#endif
+
 class UiModule : public modularity::IModuleSetup
 {
 public:
@@ -39,6 +54,22 @@ public:
     void onInit(const framework::IApplication::RunMode& mode) override;
     void onAllInited(const framework::IApplication::RunMode& mode) override;
     void onDeinit() override;
+
+private:
+    std::shared_ptr<UiConfiguration> m_configuration;
+    std::shared_ptr<UiActionsRegister> m_uiactionsRegister;
+    std::shared_ptr<NavigationController> m_keyNavigationController;
+    std::shared_ptr<NavigationUiActions> m_keyNavigationUiActions;
+
+    #ifdef Q_OS_MAC
+    std::shared_ptr<MacOSPlatformTheme> m_platformTheme;
+    #elif defined(Q_OS_WIN)
+    std::shared_ptr<WindowsPlatformTheme> m_platformTheme;
+    #elif defined(Q_OS_LINUX)
+    std::shared_ptr<LinuxPlatformTheme> m_platformTheme;
+    #else
+    std::shared_ptr<StubPlatformTheme> m_platformTheme;
+    #endif
 };
 }
 

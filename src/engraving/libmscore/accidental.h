@@ -51,18 +51,6 @@ enum class AccidentalBracket : char {
 };
 
 //---------------------------------------------------------
-//   SymElement
-//---------------------------------------------------------
-
-struct SymElement {
-    SymId sym;
-    double x;
-    double y;
-    SymElement(SymId _sym, double _x, double _y)
-        : sym(_sym), x(_x), y(_y) {}
-};
-
-//---------------------------------------------------------
 //   @@ Accidental
 //   @P role        enum  (Accidental.AUTO, .USER) (read only)
 //   @P isSmall     bool
@@ -71,57 +59,44 @@ struct SymElement {
 class Accidental final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Accidental)
-
-    std::vector<SymElement> el;
-    AccidentalType _accidentalType { AccidentalType::NONE };
-    bool m_isSmall                    { false };
-    AccidentalBracket _bracket     { AccidentalBracket::NONE };
-    AccidentalRole _role           { AccidentalRole::AUTO };
-
-    friend class Factory;
-
-    Accidental(EngravingItem* parent);
+    DECLARE_CLASSOF(ElementType::ACCIDENTAL)
 
 public:
 
     Accidental* clone() const override { return new Accidental(*this); }
+
+    Note* note() const { return (explicitParent() && explicitParent()->isNote()) ? toNote(explicitParent()) : 0; }
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
 
     TranslatableString subtypeUserName() const override;
     void setSubtype(const AsciiStringView& s);
-    void setAccidentalType(AccidentalType t) { _accidentalType = t; }
+    int subtype() const override { return (int)m_accidentalType; }
 
-    AccidentalType accidentalType() const { return _accidentalType; }
-    AccidentalRole role() const { return _role; }
+    void setAccidentalType(AccidentalType t) { m_accidentalType = t; }
+    AccidentalType accidentalType() const { return m_accidentalType; }
 
-    int subtype() const override { return (int)_accidentalType; }
+    void setRole(AccidentalRole r) { m_role = r; }
+    AccidentalRole role() const { return m_role; }
 
-    bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
-    void layout() override;
-    void layoutMultiGlyphAccidental();
-    void layoutSingleGlyphAccidental();
-    void draw(mu::draw::Painter*) const override;
-    bool isEditable() const override { return true; }
-    void startEdit(EditData&) override { setGenerated(false); }
-
-    SymId symbol() const;
-    Note* note() const { return (explicitParent() && explicitParent()->isNote()) ? toNote(explicitParent()) : 0; }
-
-    AccidentalBracket bracket() const { return _bracket; }
-    void setBracket(AccidentalBracket val) { _bracket = val; }
-
-    void setRole(AccidentalRole r) { _role = r; }
+    AccidentalBracket bracket() const { return m_bracket; }
+    void setBracket(AccidentalBracket val) { m_bracket = val; }
+    bool parentNoteHasParentheses() const;
 
     bool isSmall() const { return m_isSmall; }
     void setSmall(bool val) { m_isSmall = val; }
 
-    void undoSetSmall(bool val);
+    SymId symId() const;
 
-    void read(XmlReader&) override;
-    void write(XmlWriter& xml) const override;
+    bool acceptDrop(EditData&) const override;
+    EngravingItem* drop(EditData&) override;
+
+    void draw(mu::draw::Painter*) const override;
+    bool isEditable() const override { return true; }
+    void startEdit(EditData&) override { setGenerated(false); }
+
+    void undoSetSmall(bool val);
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -133,8 +108,48 @@ public:
     static AccidentalType value2subtype(AccidentalVal);
     static AccidentalType name2subtype(const mu::AsciiStringView&);
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
+    static double subtype2centOffset(AccidentalType);
 
     String accessibleInfo() const override;
+
+    void computeMag();
+
+    struct LayoutData {
+        struct Sym {
+            SymId sym;
+            double x;
+            double y;
+            Sym(SymId _sym, double _x, double _y)
+                : sym(_sym), x(_x), y(_y) {}
+        };
+
+        std::vector<Sym> syms;
+        RectF bbox;
+        PointF pos;
+
+        bool isValid() const { return !syms.empty(); }
+    };
+
+    const LayoutData& layoutData() const { return m_layoutData; }
+    void setLayoutData(const LayoutData& data);
+
+    //! -- Old interface --
+    void clearElements() { m_layoutData.syms.clear(); }
+    void addElement(const LayoutData::Sym& s) { m_layoutData.syms.push_back(s); }
+    //! -----------
+
+private:
+
+    friend class Factory;
+
+    Accidental(EngravingItem* parent);
+
+    AccidentalType m_accidentalType = AccidentalType::NONE;
+    AccidentalBracket m_bracket = AccidentalBracket::NONE;
+    AccidentalRole m_role = AccidentalRole::AUTO;
+    bool m_isSmall = false;
+
+    LayoutData m_layoutData;
 };
 
 extern AccidentalVal sym2accidentalVal(SymId id);

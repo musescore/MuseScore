@@ -35,6 +35,7 @@ enum class Err {
 
     AccessTokenIsEmpty,
     AccountNotActivated,
+    Conflict,
     NetworkError, /// < use cloudNetworkErrorUserDescription to retrieve user-readable description
     CouldNotReceiveSourceUrl,
 };
@@ -49,6 +50,7 @@ inline Ret make_ret(Err e)
     case Err::UnknownError: return Ret(retCode);
     case Err::AccessTokenIsEmpty: return Ret(retCode, "Access token is empty");
     case Err::AccountNotActivated: return Ret(retCode, "Account not activated");
+    case Err::Conflict: return Ret(retCode, "Conflict");
     case Err::NetworkError: return Ret(retCode, "Network error");
     case Err::CouldNotReceiveSourceUrl: return Ret(retCode, "Could not receive source url");
     }

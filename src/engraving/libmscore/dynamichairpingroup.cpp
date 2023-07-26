@@ -23,9 +23,11 @@
 #include "dynamichairpingroup.h"
 
 #include "dynamic.h"
+#include "expression.h"
 #include "hairpin.h"
 #include "score.h"
 #include "segment.h"
+#include "undo.h"
 
 using namespace mu;
 
@@ -216,5 +218,66 @@ void DynamicNearHairpinsDragGroup::endDrag(EditData& ed)
 {
     dynamic->endDrag(ed);
     dynamic->triggerLayout();
+}
+
+//-------------------------------------------------------
+// DynamicExpressionDragGroup
+//-------------------------------------------------------
+
+std::unique_ptr<ElementGroup> DynamicExpressionDragGroup::detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged)
+{
+    Segment* segment = d->segment();
+    Expression* expression = segment ? toExpression(segment->findAnnotation(ElementType::EXPRESSION, d->track(), d->track())) : nullptr;
+    if (expression && !isDragged(expression) && expression->snapToDynamics()) {
+        return std::unique_ptr<DynamicExpressionDragGroup>(new DynamicExpressionDragGroup(d, expression));
+    }
+    return nullptr;
+}
+
+std::unique_ptr<ElementGroup> DynamicExpressionDragGroup::detectFor(Expression* e, std::function<bool(const EngravingItem*)> isDragged)
+{
+    if (!e->snapToDynamics()) {
+        return nullptr;
+    }
+    Segment* segment = e->explicitParent() ? toSegment(e->explicitParent()) : nullptr;
+    Dynamic* dynamic = segment ? toDynamic(segment->findAnnotation(ElementType::DYNAMIC, e->track(), e->track())) : nullptr;
+    if (dynamic && !isDragged(dynamic)) {
+        return std::unique_ptr<DynamicExpressionDragGroup>(new DynamicExpressionDragGroup(dynamic, e));
+    }
+    return nullptr;
+}
+
+void DynamicExpressionDragGroup::startDrag(EditData& ed)
+{
+    dynamic->startDrag(ed);
+    expression->startDrag(ed);
+}
+
+RectF DynamicExpressionDragGroup::drag(EditData& ed)
+{
+    RectF r = static_cast<EngravingItem*>(dynamic)->drag(ed);
+
+    // Dynamic may snap to a different segment upon dragging,
+    // in which case move the expression with it
+    Segment* newSegment = dynamic->segment();
+    Segment* oldSegment = toSegment(expression->explicitParent());
+    if (newSegment != oldSegment) {
+        Score* score = newSegment->score();
+        staff_idx_t staffIdx = expression->staffIdx();
+        score->undo(new ChangeParent(expression, newSegment, staffIdx));
+    }
+
+    dynamic->triggerLayout();
+    expression->triggerLayout();
+
+    return r;
+}
+
+void DynamicExpressionDragGroup::endDrag(EditData& ed)
+{
+    dynamic->endDrag(ed);
+    dynamic->triggerLayout();
+    expression->endDrag(ed);
+    expression->triggerLayout();
 }
 } // namespace mu::engraving

@@ -47,13 +47,13 @@ class MscWriter;
 namespace mu::project {
 class NotationProject : public INotationProject, public async::Asyncable
 {
-    INJECT(project, io::IFileSystem, fileSystem)
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, notation::INotationConfiguration, notationConfiguration)
-    INJECT(project, notation::INotationCreator, notationCreator)
-    INJECT(project, INotationReadersRegister, readers)
-    INJECT(project, INotationWritersRegister, writers)
-    INJECT(project, IProjectMigrator, migrator)
+    INJECT(io::IFileSystem, fileSystem)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(notation::INotationCreator, notationCreator)
+    INJECT(INotationReadersRegister, readers)
+    INJECT(INotationWritersRegister, writers)
+    INJECT(IProjectMigrator, migrator)
 
 public:
     ~NotationProject() override;
@@ -67,6 +67,7 @@ public:
     async::Notification pathChanged() const override;
 
     QString displayName() const override;
+    async::Notification displayNameChanged() const override;
 
     bool isCloudProject() const override;
     const CloudProjectInfo& cloudInfo() const override;
@@ -115,6 +116,7 @@ private:
 
     io::path_t m_path;
     async::Notification m_pathChanged;
+    async::Notification m_displayNameChanged;
 
     async::Notification m_needSaveNotification;
     bool m_needSaveNotificationBlocked = false;

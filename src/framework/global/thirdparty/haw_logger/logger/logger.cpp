@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdarg>
+#include <map>
 
 #include "logdefdest.h"
 #include "helpful.h"
@@ -15,6 +16,13 @@ const Type Logger::ERRR("ERROR");
 const Type Logger::WARN("WARN");
 const Type Logger::INFO("INFO");
 const Type Logger::DEBG("DEBUG");
+
+static const std::map<Type, Color> TYPES_COLOR = {
+    { Logger::ERRR, Color::Red },
+    { Logger::WARN, Color::Yellow },
+    { Logger::INFO, Color::Green },
+    { Logger::DEBG, Color::None },
+};
 
 // Layout ---------------------------------
 
@@ -273,6 +281,15 @@ LogLayout LogDest::layout() const
 
 // Logger ---------------------------------
 
+Color Logger::colorForType(const Type& type)
+{
+    auto it = TYPES_COLOR.find(type);
+    if (it != TYPES_COLOR.end()) {
+        return it->second;
+    }
+    return Color::None;
+}
+
 Logger* Logger::instance()
 {
     static Logger l;
@@ -401,6 +418,7 @@ void Logger::logMsgHandler(QtMsgType type, const QMessageLogContext& ctx, const 
     }
 
     LogMsg logMsg(qtMsgTypeToString(type), Qt, msg);
+    logMsg.color = Logger::colorForType(logMsg.type);
 
     Logger::instance()->write(logMsg);
 }
@@ -424,8 +442,8 @@ void Logger::setIsCatchQtMsg(bool arg)
 
 #endif
 
-LogInput::LogInput(const Type& type, const std::string& tag, const std::string& funcInfo)
-    : m_msg(type, tag), m_funcInfo(funcInfo)
+LogInput::LogInput(const Type& type, const std::string& tag, const std::string& funcInfo, const Color& color)
+    : m_msg(type, tag, color), m_funcInfo(funcInfo)
 {
 }
 

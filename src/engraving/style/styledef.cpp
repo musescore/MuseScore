@@ -23,7 +23,8 @@
 #include "styledef.h"
 
 #include "draw/types/geometry.h"
-#include "rw/xml.h"
+
+#include "types/constants.h"
 
 #include "libmscore/articulation.h"
 #include "libmscore/mscore.h"
@@ -179,8 +180,6 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::stemLengthSmall,         "stemLengthSmall",         PropertyValue(2.25) },
     { Sid::shortStemStartLocation,  "shortStemStartLocation",  1 },
     { Sid::shortestStem,            "shortestStem",            PropertyValue(2.5) },
-    { Sid::minStaffSizeForAutoStems, "minStaffSizeForAutoStems", 4 },
-    { Sid::smallStaffStemDirection, "smallStaffStemDirection", DirectionV::UP },
     { Sid::beginRepeatLeftMargin,   "beginRepeatLeftMargin",   Spatium(1.0) },
     { Sid::minNoteDistance,         "minNoteDistance",         Spatium(0.5) },
     { Sid::barNoteDistance,         "barNoteDistance",         Spatium(1.3) },     // was 1.2
@@ -223,16 +222,18 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::articulationMag,         "articulationMag",         PropertyValue(1.0) },
     { Sid::articulationPosAbove,    "articulationPosAbove",    PointF(0.0, 0.0) },
-    { Sid::articulationAnchorDefault, "articulationAnchorDefault", int(ArticulationAnchor::CHORD) },
-    { Sid::articulationAnchorLuteFingering, "articulationAnchorLuteFingering", int(ArticulationAnchor::BOTTOM_CHORD) },
-    { Sid::articulationAnchorOther, "articulationAnchorOther", int(ArticulationAnchor::TOP_STAFF) },
+    { Sid::articulationAnchorDefault, "articulationAnchorDefault", int(ArticulationAnchor::AUTO) },
+    { Sid::articulationAnchorLuteFingering, "articulationAnchorLuteFingering", int(ArticulationAnchor::BOTTOM) },
+    { Sid::articulationAnchorOther, "articulationAnchorOther", int(ArticulationAnchor::TOP) },
+    { Sid::articulationStemHAlign,  "articulationStemHAlign",  int(ArticulationStemSideAlign::AVERAGE) },
+    { Sid::articulationKeepTogether, "articulationKeepTogether", true },
     { Sid::lastSystemFillLimit,     "lastSystemFillLimit",     PropertyValue(0.3) },
 
     { Sid::hairpinPlacement,        "hairpinPlacement",        PlacementV::BELOW },
     { Sid::hairpinPosAbove,         "hairpinPosAbove",         PointF(0.0, -2.0) },
     { Sid::hairpinPosBelow,         "hairpinPosBelow",         PointF(.0, 2) },
-    { Sid::hairpinLinePosAbove,     "hairpinLinePosAbove",     PointF(0.0, -3.0) },
-    { Sid::hairpinLinePosBelow,     "hairpinLinePosBelow",     PointF(.0, 4.0) },
+    { Sid::hairpinLinePosAbove,     "hairpinLinePosAbove",     PointF(0.0, -1.5) },
+    { Sid::hairpinLinePosBelow,     "hairpinLinePosBelow",     PointF(.0, 2.5) },
     { Sid::hairpinHeight,           "hairpinHeight",           Spatium(1.15) },
     { Sid::hairpinContHeight,       "hairpinContHeight",       Spatium(0.5) },
     { Sid::hairpinLineWidth,        "hairpinWidth",            Spatium(0.12) },
@@ -265,7 +266,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::pedalPosAbove,           "pedalPosAbove",           PointF(.0, -1) },
     { Sid::pedalPosBelow,           "pedalPosBelow",           PointF(.0, 2.5) },
     { Sid::pedalLineWidth,          "pedalLineWidth",          Spatium(0.11) },
-    { Sid::pedalLineStyle,          "pedalListStyle",          PropertyValue(LineType::SOLID) },
+    { Sid::pedalLineStyle,          "pedalLineStyle",          PropertyValue(LineType::SOLID) },
     { Sid::pedalDashLineLen,        "pedalDashLineLen",        4.0 },
     { Sid::pedalDashGapLen,         "pedalDashGapLen",         4.0 },
     { Sid::pedalHookHeight,         "pedalHookHeight",         Spatium(-1.2) },
@@ -282,6 +283,9 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::pedalFrameRound,         "pedalFrameRound",         0 },
     { Sid::pedalFrameFgColor,       "pedalFrameFgColor",       Color::BLACK },
     { Sid::pedalFrameBgColor,       "pedalFrameBgColor",       Color::transparent },
+    { Sid::pedalText,               "pedalText",               String() },
+    { Sid::pedalContinueText,       "pedalContinueText",       String() },
+    { Sid::pedalEndText,            "pedalEndText",            String() },
 
     { Sid::trillPlacement,          "trillPlacement",          PlacementV::ABOVE },
     { Sid::trillPosAbove,           "trillPosAbove",           PointF(.0, -0.5) },
@@ -470,6 +474,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::SlurMidWidth,            "slurMidWidth",            Spatium(.21) },
     { Sid::SlurDottedWidth,         "slurDottedWidth",         Spatium(.10) },
     { Sid::MinTieLength,            "minTieLength",            Spatium(1.0) },
+    { Sid::MinStraightGlissandoLength, "minStraightGlissandoLength", Spatium(1.2) },
+    { Sid::MinWigglyGlissandoLength, "minWigglyGlissandoLength", Spatium(2.0) },
     { Sid::SlurMinDistance,         "slurMinDistance",         Spatium(0.5) },
     { Sid::HeaderToLineStartDistance,   "headerSlurTieDistance",   Spatium(1.0) },
 
@@ -627,10 +633,15 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::autoplaceHairpinDynamicsDistance, "autoplaceHairpinDynamicsDistance", Spatium(0.5) },
 
+    { Sid::dynamicsOverrideFont,    "dynamicsOverrideFont",    false },
+    { Sid::dynamicsFont,            "dynamicsFont",            PropertyValue(String(u"Leland")) },
+    { Sid::dynamicsSize,            "dynamicsSize",            1.0 }, // percentage of the standard size
     { Sid::dynamicsPlacement,       "dynamicsPlacement",       PlacementV::BELOW },
     { Sid::dynamicsPosAbove,        "dynamicsPosAbove",        PointF(.0, -1.5) },
     { Sid::dynamicsPosBelow,        "dynamicsPosBelow",        PointF(.0, 2.5) },
-
+    { Sid::avoidBarLines,           "avoidBarLines",           true },
+    { Sid::snapToDynamics,          "snapToDynamics",          true },
+    { Sid::centerOnNotehead,        "centerOnNotehead",        true },
     { Sid::dynamicsMinDistance,         "dynamicsMinDistance",               Spatium(0.5) },
     { Sid::autoplaceVerticalAlignRange, "autoplaceVerticalAlignRange",     int(VerticalAlignRange::SYSTEM) },
 
@@ -799,6 +810,47 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::stringNumberFrameFgColor,      "stringNumberFrameFgColor",      PropertyValue::fromValue(Color::BLACK) },
     { Sid::stringNumberFrameBgColor,      "stringNumberFrameBgColor",      PropertyValue::fromValue(Color::transparent) },
     { Sid::stringNumberOffset,            "stringNumberOffset",            PointF(0.0, 0.0) },
+    { Sid::preferSameStringForTranspose,  "preferSameStringForTranspose",  false },
+
+    { Sid::harpPedalDiagramFontFace,          "harpPedalDiagramFontFace",          "Edwin" },
+    { Sid::harpPedalDiagramFontSize,          "harpPedalDiagramFontSize",          10.0 },
+    { Sid::harpPedalDiagramLineSpacing,       "harpPedalDiagramLineSpacing",       1.0 },
+    { Sid::harpPedalDiagramFontSpatiumDependent, "harpPedalDiagramFontSpatiumDependent", true },
+    { Sid::harpPedalDiagramFontStyle,         "harpPedalDiagramFontStyle",         int(FontStyle::Normal) },
+    { Sid::harpPedalDiagramColor,             "harpPedalDiagramColor",             PropertyValue::fromValue(Color::BLACK) },
+    { Sid::harpPedalDiagramAlign,             "harpPedalDiagramAlign",             Align(AlignH::HCENTER, AlignV::VCENTER) },
+    { Sid::harpPedalDiagramFrameType,         "harpPedalDiagramFrameType",         int(FrameType::NO_FRAME) },
+    { Sid::harpPedalDiagramFramePadding,      "harpPedalDiagramFramePadding",      0.2 },
+    { Sid::harpPedalDiagramFrameWidth,        "harpPedalDiagramFrameWidth",        0.1 },
+    { Sid::harpPedalDiagramFrameRound,        "harpPedalDiagramFrameRound",        0 },
+    { Sid::harpPedalDiagramFrameFgColor,      "harpPedalDiagramFrameFgColor",      PropertyValue::fromValue(Color::BLACK) },
+    { Sid::harpPedalDiagramFrameBgColor,      "harpPedalDiagramFrameBgColor",
+      PropertyValue::fromValue(draw::Color::transparent) },
+    { Sid::harpPedalDiagramOffset,            "harpPedalDiagramOffset",            PointF() },
+    { Sid::harpPedalDiagramPlacement,         "harpPedalDiagramPlacement",         PlacementV::ABOVE },
+    { Sid::harpPedalDiagramPosAbove,          "harpPedalDiagramPosAbove",          PointF(.0, -1.0) },
+    { Sid::harpPedalDiagramPosBelow,          "harpPedalDiagramPosBelow",          PointF(.0, 2.5) },
+    { Sid::harpPedalDiagramMinDistance,       "harpPedalDiagramMinDistance",       Spatium(.5) },
+
+    { Sid::harpPedalTextDiagramFontFace,          "harpPedalTextDiagramFontFace",          "Edwin" },
+    { Sid::harpPedalTextDiagramFontSize,          "harpPedalTextDiagramFontSize",          8.0 },
+    { Sid::harpPedalTextDiagramLineSpacing,       "harpPedalTextDiagramLineSpacing",       1.0 },
+    { Sid::harpPedalTextDiagramFontSpatiumDependent, "harpPedalTextDiagramFontSpatiumDependent", true },
+    { Sid::harpPedalTextDiagramFontStyle,         "harpPedalTextDiagramFontStyle",         int(FontStyle::Normal) },
+    { Sid::harpPedalTextDiagramColor,             "harpPedalTextDiagramColor",             PropertyValue::fromValue(Color::BLACK) },
+    { Sid::harpPedalTextDiagramAlign,             "harpPedalTextDiagramAlign",             Align(AlignH::LEFT, AlignV::BASELINE) },
+    { Sid::harpPedalTextDiagramFrameType,         "harpPedalTextDiagramFrameType",         int(FrameType::NO_FRAME) },
+    { Sid::harpPedalTextDiagramFramePadding,      "harpPedalTextDiagramFramePadding",      0.2 },
+    { Sid::harpPedalTextDiagramFrameWidth,        "harpPedalTextDiagramFrameWidth",        0.1 },
+    { Sid::harpPedalTextDiagramFrameRound,        "harpPedalTextDiagramFrameRound",        0 },
+    { Sid::harpPedalTextDiagramFrameFgColor,      "harpPedalTextDiagramFrameFgColor",      PropertyValue::fromValue(Color::BLACK) },
+    { Sid::harpPedalTextDiagramFrameBgColor,      "harpPedalTextDiagramFrameBgColor",
+      PropertyValue::fromValue(draw::Color::transparent) },
+    { Sid::harpPedalTextDiagramOffset,            "harpPedalTextDiagramOffset",            PointF() },
+    { Sid::harpPedalTextDiagramPlacement,         "harpPedalTextDiagramPlacement",         PlacementV::BELOW },
+    { Sid::harpPedalTextDiagramPosAbove,          "harpPedalTextDiagramPosAbove",          PointF(.0, -1.5) },
+    { Sid::harpPedalTextDiagramPosBelow,          "harpPedalTextDiagramPosBelow",          PointF(.0, 2.5) },
+    { Sid::harpPedalTextDiagramMinDistance,       "harpPedalTextDiagramMinDistance",       Spatium(.5) },
 
     { Sid::longInstrumentFontFace,        "longInstrumentFontFace",       "Edwin" },
     { Sid::longInstrumentFontSize,        "longInstrumentFontSize",       10.0 },
@@ -845,6 +897,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::partInstrumentFrameFgColor,    "partInstrumentFrameFgColor",   PropertyValue::fromValue(Color::BLACK) },
     { Sid::partInstrumentFrameBgColor,    "partInstrumentFrameBgColor",   PropertyValue::fromValue(Color::transparent) },
 
+    // OBSOLETE after version 4.1. Dynamic text now takes its setting from expression.
     { Sid::dynamicsFontFace,              "dynamicsFontFace",             "Edwin" },
     { Sid::dynamicsFontSize,              "dynamicsFontSize",             10.0 },
     { Sid::dynamicsLineSpacing,           "dynamicsLineSpacing",          1.0 },
@@ -868,12 +921,15 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::expressionAlign,               "expressionAlign",              Align(AlignH::LEFT, AlignV::BASELINE) },
     { Sid::expressionPlacement,           "expressionPlacement",          PlacementV::BELOW },
     { Sid::expressionOffset,              "expressionOffset",             PointF(.0, 2.5) },
+    { Sid::expressionPosAbove,            "expressionPosAbove",           PointF(.0, -1.5) },
+    { Sid::expressionPosBelow,            "expressionPosBelow",           PointF(.0, 2.5) },
     { Sid::expressionFrameType,           "expressionFrameType",          int(FrameType::NO_FRAME) },
     { Sid::expressionFramePadding,        "expressionFramePadding",       0.2 },
     { Sid::expressionFrameWidth,          "expressionFrameWidth",         0.1 },
     { Sid::expressionFrameRound,          "expressionFrameRound",         0 },
     { Sid::expressionFrameFgColor,        "expressionFrameFgColor",       PropertyValue::fromValue(Color::BLACK) },
     { Sid::expressionFrameBgColor,        "expressionFrameBgColor",       PropertyValue::fromValue(Color::transparent) },
+    { Sid::expressionMinDistance,         "expressionMinDistance",        Spatium(.5) },
 
     { Sid::tempoFontFace,                 "tempoFontFace",                "Edwin" },
     { Sid::tempoFontSize,                 "tempoFontSize",                12.0 },
@@ -1524,5 +1580,5 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::chordlineThickness, "chordlineThickness", Spatium(0.16) },
 
     { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
-    { Sid::defaultsVersion,               "defaultsVersion",               MSCVERSION }
+    { Sid::defaultsVersion,               "defaultsVersion",               Constants::MSC_VERSION }
 } };

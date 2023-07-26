@@ -35,13 +35,13 @@ class TieSegment final : public SlurTieSegment
 {
     OBJECT_ALLOCATOR(engraving, TieSegment)
 
-    mu::PointF autoAdjustOffset;
+    PointF autoAdjustOffset;
     double shoulderHeightMin = 0.4;
     double shoulderHeightMax = 1.3;
 
-    void setAutoAdjust(const mu::PointF& offset);
-    void setAutoAdjust(double x, double y) { setAutoAdjust(mu::PointF(x, y)); }
-    mu::PointF getAutoAdjust() const { return autoAdjustOffset; }
+    void setAutoAdjust(const PointF& offset);
+    void setAutoAdjust(double x, double y) { setAutoAdjust(PointF(x, y)); }
+    PointF getAutoAdjust() const { return autoAdjustOffset; }
 
 protected:
     void changeAnchor(EditData&, EngravingItem*) override;
@@ -55,7 +55,7 @@ public:
     int subtype() const override { return static_cast<int>(spanner()->type()); }
     void draw(mu::draw::Painter*) const override;
 
-    void adjustY(const mu::PointF& p1, const mu::PointF& p2);
+    void adjustY(const PointF& p1, const PointF& p2);
     void adjustX();
     void finalizeSegment();
 
@@ -66,7 +66,7 @@ public:
 
     Tie* tie() const { return (Tie*)spanner(); }
 
-    void computeBezier(mu::PointF so = mu::PointF()) override;
+    void computeBezier(PointF so = PointF()) override;
     void addLineAttachPoints();
 };
 
@@ -78,12 +78,10 @@ public:
 class Tie final : public SlurTie
 {
     OBJECT_ALLOCATOR(engraving, Tie)
+    DECLARE_CLASSOF(ElementType::TIE)
 
     static Note* editStartNote;
     static Note* editEndNote;
-
-private:
-    bool _isInside{ false };
 
 public:
     Tie(EngravingItem* parent = 0);
@@ -97,14 +95,10 @@ public:
 
     bool isConnectingEqualArticulations() const;
 
-    bool isInside() const { return _isInside; }
+    bool isInside() const { return m_isInside; }
+    void setIsInside(bool val) { m_isInside = val; }
 
     void calculateDirection();
-    void write(XmlWriter& xml) const override;
-    void slurPos(SlurPos*) override;
-
-    TieSegment* layoutFor(System*);
-    TieSegment* layoutBack(System*);
 
     TieSegment* frontSegment() { return toTieSegment(Spanner::frontSegment()); }
     const TieSegment* frontSegment() const { return toTieSegment(Spanner::frontSegment()); }
@@ -114,6 +108,10 @@ public:
     const TieSegment* segmentAt(int n) const { return toTieSegment(Spanner::segmentAt(n)); }
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new TieSegment(parent); }
+
+private:
+
+    bool m_isInside = false;
 };
 } // namespace mu::engraving
 #endif

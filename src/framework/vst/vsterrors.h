@@ -35,7 +35,8 @@ enum class Err {
     NoPluginFactory = 1402,
     NoPluginProvider = 1403,
     NoPluginController = 1404,
-    NoPluginWithId = 1405
+    NoPluginWithId = 1405,
+    NoAudioEffect = 1406,
 };
 
 inline Ret make_ret(Err e)
@@ -45,11 +46,12 @@ inline Ret make_ret(Err e)
     switch (e) {
     case Err::Undefined: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
-    case Err::NoPluginModule: return Ret(retCode, trc("vst", "Could not create VstModule"));
-    case Err::NoPluginFactory: return Ret(retCode, trc("vst", "Could not get Vst Plugin Factory from file"));
-    case Err::NoPluginProvider: return Ret(retCode, trc("vst", "No VST3 Audio Module Class found"));
-    case Err::NoPluginController: return Ret(retCode, trc("vst", "No VST3 Editor Controller Class found"));
-    case Err::NoPluginWithId: return Ret(retCode, trc("vst", "VST3 plugin is not found"));
+    case Err::NoPluginModule: return Ret(retCode, "Could not create VstModule");
+    case Err::NoPluginFactory: return Ret(retCode, "Could not get VST plugin factory from file");
+    case Err::NoPluginProvider: return Ret(retCode, "No VST3 audio module class found");
+    case Err::NoPluginController: return Ret(retCode, "No VST3 editor controller class found");
+    case Err::NoPluginWithId: return Ret(retCode, "VST3 plugin is not found");
+    case Err::NoAudioEffect: return Ret(retCode, "VST3 file contains no audio effect");
     }
 
     return Ret(retCode);

@@ -25,8 +25,6 @@
 #include <cmath>
 
 #include "containers.h"
-#include "rw/xml.h"
-#include "rw/400/tread.h"
 
 #include "factory.h"
 #include "measure.h"
@@ -61,23 +59,6 @@ BSymbol::BSymbol(const BSymbol& s)
         ee->setParent(this);
         _leafs.push_back(ee);
     }
-}
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void BSymbol::writeProperties(XmlWriter& xml) const
-{
-    for (const EngravingItem* e : leafs()) {
-        e->write(xml);
-    }
-    EngravingItem::writeProperties(xml);
-}
-
-bool BSymbol::readProperties(XmlReader& e)
-{
-    return rw400::TRead::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------
@@ -152,24 +133,6 @@ EngravingItem* BSymbol::drop(EditData& data)
         delete el;
     }
     return 0;
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void BSymbol::layout()
-{
-    if (staff()) {
-        setMag(staff()->staffMag(tick()));
-    }
-    if (!explicitParent()) {
-        setOffset(.0, .0);
-        setPos(.0, .0);
-    }
-    for (EngravingItem* e : _leafs) {
-        e->layout();
-    }
 }
 
 //---------------------------------------------------------

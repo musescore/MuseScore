@@ -41,11 +41,11 @@ class ShortcutsModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(shortcuts, IShortcutsRegister, shortcutsRegister)
-    INJECT(shortcuts, ui::IUiActionsRegister, uiactionsRegister)
-    INJECT(shortcuts, framework::IInteractive, interactive)
-    INJECT(shortcuts, IShortcutsConfiguration, configuration)
-    INJECT(shortcuts, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(IShortcutsRegister, shortcutsRegister)
+    INJECT(ui::IUiActionsRegister, uiactionsRegister)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(IShortcutsConfiguration, configuration)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
 
     Q_PROPERTY(QItemSelection selection READ selection WRITE setSelection NOTIFY selectionChanged)
     Q_PROPERTY(QVariant currentShortcut READ currentShortcut NOTIFY selectionChanged)

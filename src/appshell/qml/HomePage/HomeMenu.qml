@@ -73,10 +73,6 @@ Item {
             onToggled: {
                 root.selected("account")
             }
-
-            onUserAuthorizedChanged: {
-                root.selected("scores")
-            }
         }
 
         RadioButtonGroup {

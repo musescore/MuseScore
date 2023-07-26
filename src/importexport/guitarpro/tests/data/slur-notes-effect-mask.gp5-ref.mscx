@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -55,12 +53,16 @@
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Articulation name="marcato">
+        <Articulation name="accent">
           <velocity>120</velocity>
           <gateTime>67</gateTime>
           </Articulation>
+        <Articulation name="marcato">
+          <velocity>144</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
         <Articulation name="sforzato">
-          <velocity>120</velocity>
+          <velocity>169</velocity>
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
@@ -74,7 +76,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>

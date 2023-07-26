@@ -34,7 +34,7 @@ class PalettePropertiesModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(palette, IPaletteConfiguration, configuration)
+    INJECT(IPaletteConfiguration, configuration)
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY propertiesChanged)
     Q_PROPERTY(int cellWidth READ cellWidth WRITE setCellWidth NOTIFY propertiesChanged)

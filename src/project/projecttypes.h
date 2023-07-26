@@ -28,10 +28,13 @@
 #include <QUrl>
 
 #include "io/path.h"
+#include "progress.h"
 #include "log.h"
 
 #include "cloud/cloudtypes.h"
+#include "notation/inotation.h"
 #include "notation/notationtypes.h"
+#include "inotationwriter.h"
 
 namespace mu::project {
 struct ProjectCreateOptions
@@ -78,6 +81,18 @@ enum class SaveLocationType
 
 struct CloudProjectInfo {
     QUrl sourceUrl;
+    int revisionId = 0;
+    QString name;
+
+    cloud::Visibility visibility = cloud::Visibility::Private;
+
+    bool isValid() const
+    {
+        return !sourceUrl.isEmpty();
+    }
+};
+
+struct CloudAudioInfo {
     QString name;
 
     cloud::Visibility visibility = cloud::Visibility::Private;
@@ -85,6 +100,28 @@ struct CloudProjectInfo {
     bool isValid() const
     {
         return !name.isEmpty();
+    }
+};
+
+struct ExportInfo {
+    QString id;
+    io::path_t projectPath;
+    io::path_t exportPath;
+    INotationWriter::UnitType unitType;
+    std::vector<notation::INotationPtr> notations;
+
+    bool operator==(const ExportInfo& other) const
+    {
+        return id == other.id
+               && projectPath == other.projectPath
+               && exportPath == other.exportPath
+               && unitType == other.unitType
+               && notations == other.notations;
+    }
+
+    bool operator!=(const ExportInfo other) const
+    {
+        return !(*this == other);
     }
 };
 
@@ -142,6 +179,43 @@ struct SaveLocation
     SaveLocation(const CloudProjectInfo& cloudInfo)
         : type(SaveLocationType::Cloud), data(cloudInfo) {}
 };
+
+struct ProjectFile {
+    io::path_t path;
+    QString displayNameOverride = {};
+
+    ProjectFile() = default;
+
+    ProjectFile(const io::path_t& path, const QString& displayNameOverride = {})
+        : path(path), displayNameOverride(displayNameOverride) {}
+
+    QString displayName(bool includingExtension) const
+    {
+        if (!displayNameOverride.isEmpty()) {
+            return displayNameOverride;
+        }
+
+        return io::filename(path, includingExtension).toQString();
+    }
+
+    bool isValid() const
+    {
+        return !path.empty();
+    }
+
+    bool operator ==(const ProjectFile& other) const
+    {
+        return path == other.path
+               && displayNameOverride == other.displayNameOverride;
+    }
+
+    bool operator !=(const ProjectFile& other) const
+    {
+        return !(*this == other);
+    }
+};
+
+using ProjectFilesList = std::vector<ProjectFile>;
 
 struct ProjectMeta
 {
@@ -208,6 +282,11 @@ struct Template
 };
 
 using Templates = QList<Template>;
+
+struct ProjectBeingDownloaded {
+    int scoreId = 0;
+    framework::ProgressPtr progress;
+};
 
 class GenerateAudioTimePeriod
 {

@@ -40,7 +40,7 @@ class MeasurePropertiesDialog : public QDialog, private Ui::MeasurePropertiesBas
 {
     Q_OBJECT
 
-    INJECT(notation, mu::context::IGlobalContext, context)
+    INJECT(mu::context::IGlobalContext, context)
 
 public:
     MeasurePropertiesDialog(QWidget* parent = nullptr);

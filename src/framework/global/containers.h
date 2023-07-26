@@ -217,6 +217,12 @@ inline bool contains(const std::map<K, V>& m, const K& k)
 }
 
 template<typename K, typename V>
+inline bool contains(const std::multimap<K, V>& m, const K& k)
+{
+    return m.find(k) != m.cend();
+}
+
+template<typename K, typename V>
 inline bool contains(const std::unordered_map<K, V>& m, const K& k)
 {
     return m.find(k) != m.cend();
@@ -341,6 +347,51 @@ inline typename C::const_iterator findLessOrEqual(const C& c, const typename C::
     auto it = c.upper_bound(k);
     if (it == c.cbegin()) {
         return c.cend();
+    }
+
+    return std::prev(it);
+}
+
+template<typename C>
+inline typename C::iterator findLessOrEqual(C& c, const typename C::key_type& k)
+{
+    if (c.empty()) {
+        return c.end();
+    }
+
+    auto it = c.upper_bound(k);
+    if (it == c.begin()) {
+        return c.end();
+    }
+
+    return std::prev(it);
+}
+
+template<typename C>
+inline typename C::const_iterator findLess(const C& c, const typename C::key_type& k)
+{
+    if (c.empty()) {
+        return c.cend();
+    }
+
+    auto it = c.lower_bound(k);
+    if (it == c.cbegin()) {
+        return c.cend();
+    }
+
+    return std::prev(it);
+}
+
+template<typename C>
+inline typename C::iterator findLess(C& c, const typename C::key_type& k)
+{
+    if (c.empty()) {
+        return c.end();
+    }
+
+    auto it = c.lower_bound(k);
+    if (it == c.begin()) {
+        return c.end();
     }
 
     return std::prev(it);

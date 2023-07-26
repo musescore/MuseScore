@@ -25,8 +25,6 @@
 #include <algorithm>
 #include <vector>
 
-#include "rw/xml.h"
-#include "rw/400/tread.h"
 #include "types/typesconv.h"
 
 #include "changeMap.h"
@@ -75,16 +73,6 @@ static const ElementStyle voltaStyle {
 VoltaSegment::VoltaSegment(Volta* sp, System* parent)
     : TextLineBaseSegment(ElementType::VOLTA_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void VoltaSegment::layout()
-{
-    TextLineBaseSegment::layout();
-    autoplaceSpannerSegment();
 }
 
 //---------------------------------------------------------
@@ -149,46 +137,6 @@ void Volta::setText(const String& s)
 String Volta::text() const
 {
     return beginText();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Volta::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Volta::readProperties(XmlReader& e)
-{
-    if (!TextLineBase::readProperties(e)) {
-        return false;
-    }
-
-    if (anchor() != VOLTA_ANCHOR) {
-        // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
-        LOGW("Correcting volta anchor type from %d to %d", int(anchor()), int(VOLTA_ANCHOR));
-        setAnchor(VOLTA_ANCHOR);
-    }
-
-    return true;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Volta::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    TextLineBase::writeProperties(xml);
-    xml.tag("endings", TConv::toXml(_endings));
-    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -313,21 +261,6 @@ PropertyValue Volta::propertyDefault(Pid propertyId) const
     default:
         return TextLineBase::propertyDefault(propertyId);
     }
-}
-
-//---------------------------------------------------------
-//   layoutSystem
-//---------------------------------------------------------
-
-SpannerSegment* Volta::layoutSystem(System* system)
-{
-    SpannerSegment* voltaSegment = TextLineBase::layoutSystem(system);
-
-    // we need set tempo in layout because all tempos of score is set in layout
-    // so fermata in seconda volta works correct because fermata apply itself tempo during layouting
-    setTempo();
-
-    return voltaSegment;
 }
 
 //---------------------------------------------------------

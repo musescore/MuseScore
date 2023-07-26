@@ -24,8 +24,9 @@
  MusicXML font handling support.
  */
 
-#include "engraving/rw/xml.h"
 #include "musicxmlfonthandler.h"
+
+#include "engraving/rw/xmlwriter.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -193,7 +194,6 @@ bool MScoreTextToMXML::split(const std::list<TextFragment>& in, const int pos, c
 
 void MScoreTextToMXML::writeTextFragments(const std::list<TextFragment>& fr, XmlWriter& xml)
 {
-    //LOGD("MScoreTextToMXML::writeTextFragments defFmt %s", qPrintable(charFormat2QString(oldFormat)));
     //dumpText(fr);
     bool firstTime = true;   // write additional attributes only the first time characters are written
     for (const TextFragment& f : fr) {

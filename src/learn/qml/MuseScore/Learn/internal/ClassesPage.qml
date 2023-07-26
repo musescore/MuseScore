@@ -27,7 +27,7 @@ import QtGraphicalEffects 1.0
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-FocusScope {
+StyledFlickable {
     id: root
 
     property string authorName: ""
@@ -36,10 +36,13 @@ FocusScope {
     property string authorDescription: ""
     property string authorOrganizationName: ""
     property string authorAvatarUrl: ""
-    property string authorArganizationUrl: ""
+    property string authorOrganizationUrl: ""
 
     property alias navigation: navPanel
     property int sideMargin: 46
+
+    contentWidth: parent.width
+    contentHeight: authorInfo.height + sideMargin
 
     NavigationPanel {
         id: navPanel
@@ -61,13 +64,11 @@ FocusScope {
     }
 
     Rectangle {
-        anchors.top: parent.top
         anchors.left: parent.left
         anchors.leftMargin: root.sideMargin
-        anchors.right: parent.right
-        anchors.rightMargin: root.sideMargin
 
         height: authorInfo.height
+        width: Math.min(1000, parent.width - 2 * root.sideMargin)
 
         radius: 12
 
@@ -78,7 +79,8 @@ FocusScope {
 
             anchors.left: parent.left
             anchors.leftMargin: 36
-            anchors.right: parent.horizontalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: 36
             anchors.top: parent.top
             anchors.topMargin: 36
 
@@ -194,7 +196,7 @@ FocusScope {
                 }
 
                 onClicked: {
-                    api.launcher.openUrl(root.authorArganizationUrl)
+                    api.launcher.openUrl(root.authorOrganizationUrl)
                 }
             }
         }

@@ -66,7 +66,7 @@ private:
 class PaletteCell : public QObject
 {
     Q_OBJECT
-    INJECT_STATIC(palette, mu::ui::IUiActionsRegister, actionsRegister)
+    INJECT_STATIC(mu::ui::IUiActionsRegister, actionsRegister)
 
 public:
     explicit PaletteCell(QObject* parent = nullptr);
@@ -83,8 +83,8 @@ public:
     void retranslate();
     void setElementTranslated(bool translate);
 
-    void write(mu::engraving::XmlWriter& xml) const;
-    bool read(mu::engraving::XmlReader&);
+    void write(mu::engraving::XmlWriter& xml, bool pasteMode) const;
+    bool read(mu::engraving::XmlReader&, bool pasteMode);
     QByteArray toMimeData() const;
 
     static PaletteCellPtr fromMimeData(const QByteArray& data);

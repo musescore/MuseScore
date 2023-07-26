@@ -22,7 +22,7 @@
 #ifndef MU_AUDIO_IAUDIOCONFIGURATION_H
 #define MU_AUDIO_IAUDIOCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 #include "types/ret.h"
 #include "async/channel.h"
@@ -70,7 +70,7 @@ public:
     virtual async::Notification synthesizerStateChanged() const = 0;
     virtual async::Notification synthesizerStateGroupChanged(const std::string& groupName) const = 0;
 
-    virtual io::path_t knownAudioPluginsDir() const = 0;
+    virtual io::path_t knownAudioPluginsFilePath() const = 0;
 };
 }
 

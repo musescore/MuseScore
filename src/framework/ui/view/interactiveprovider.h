@@ -52,8 +52,8 @@ class InteractiveProvider : public QObject, public IInteractiveProvider
 {
     Q_OBJECT
 
-    INJECT(ui, IInteractiveUriRegister, uriRegister)
-    INJECT(ui, IMainWindow, mainWindow)
+    INJECT(IInteractiveUriRegister, uriRegister)
+    INJECT(IMainWindow, mainWindow)
 
 public:
     explicit InteractiveProvider();
@@ -94,6 +94,7 @@ public:
     void closeAllDialogs() override;
 
     ValCh<Uri> currentUri() const override;
+    async::Notification currentUriAboutToBeChanged() const override;
     std::vector<Uri> stack() const override;
 
     Q_INVOKABLE QWindow* topWindow() const override;
@@ -165,6 +166,7 @@ private:
     std::vector<ObjectInfo> allOpenObjects() const;
 
     void notifyAboutCurrentUriChanged();
+    void notifyAboutCurrentUriWillBeChanged();
 
     UriQuery m_openingUriQuery;
 
@@ -172,6 +174,7 @@ private:
     std::vector<ObjectInfo> m_floatingObjects;
 
     async::Channel<Uri> m_currentUriChanged;
+    async::Notification m_currentUriAboutToBeChanged;
     QMap<QString, RetVal<Val> > m_retvals;
     async::Channel<Uri> m_opened;
 

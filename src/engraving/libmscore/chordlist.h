@@ -40,8 +40,8 @@ class ReadChordListHook;
 namespace mu::engraving {
 class ChordList;
 class MStyle;
-class XmlReader;
 class XmlWriter;
+class XmlReader;
 
 //---------------------------------------------------------
 //   class HDegree
@@ -268,7 +268,7 @@ class ChordList : public std::map<int, ChordDescription>
 {
     OBJECT_ALLOCATOR(engraving, ChordList)
 
-    INJECT(engraving, IEngravingConfiguration, configuration)
+    INJECT(IEngravingConfiguration, configuration)
 
     std::map<String, ChordSymbol> symbols;
     bool _autoAdjust = false;

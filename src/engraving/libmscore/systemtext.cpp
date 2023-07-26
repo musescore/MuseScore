@@ -57,14 +57,4 @@ engraving::PropertyValue SystemText::propertyDefault(Pid id) const
         return TextBase::propertyDefault(id);
     }
 }
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void SystemText::layout()
-{
-    TextBase::layout();
-    autoplaceSegmentElement();
-}
 } // namespace mu::engraving

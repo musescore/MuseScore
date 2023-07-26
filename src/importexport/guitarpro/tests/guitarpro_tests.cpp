@@ -38,9 +38,8 @@ using namespace mu::engraving;
 
 static const String GUITARPRO_DIR(u"data/");
 
-namespace mu::engraving {
-extern Err importGTP(MasterScore*, mu::io::IODevice* io, bool createLinkedTabForce = false);
-}
+namespace mu::iex::guitarpro {
+extern Err importGTP(MasterScore*, mu::io::IODevice* io, bool createLinkedTabForce = false, bool experimental = false);
 
 class GuitarPro_Tests : public ::testing::Test
 {
@@ -54,7 +53,7 @@ void GuitarPro_Tests::gpReadTest(const char* file, const char* ext)
 
     auto importFunc = [](MasterScore* score, const io::path_t& path) -> Err {
         mu::io::File file(path);
-        return mu::engraving::importGTP(score, &file);
+        return importGTP(score, &file);
     };
 
     MasterScore* score = ScoreRW::readScore(GUITARPRO_DIR + fileName, false, importFunc);
@@ -63,15 +62,6 @@ void GuitarPro_Tests::gpReadTest(const char* file, const char* ext)
     delete score;
 }
 
-TEST_F(GuitarPro_Tests, gpTestIrrTuplet) {
-    gpReadTest("testIrrTuplet", "gp");
-}
-TEST_F(GuitarPro_Tests, gpxTestIrrTuplet) {
-    gpReadTest("testIrrTuplet", "gpx");
-}
-TEST_F(GuitarPro_Tests, gp4TestIrrTuplet) {
-    gpReadTest("testIrrTuplet", "gp4");
-}
 TEST_F(GuitarPro_Tests, gpSforzato) {
     gpReadTest("sforzato", "gp");
 }
@@ -107,6 +97,12 @@ TEST_F(GuitarPro_Tests, gpxTrill) {
 }
 TEST_F(GuitarPro_Tests, gp4Trill) {
     gpReadTest("trill", "gp4");
+}
+TEST_F(GuitarPro_Tests, gpChordWithTiedHarmonics) {
+    gpReadTest("chord_with_tied_harmonics", "gp");
+}
+TEST_F(GuitarPro_Tests, gp5ChordWithTiedHarmonics) {
+    gpReadTest("chord_with_tied_harmonics", "gp5");
 }
 TEST_F(GuitarPro_Tests, gpDynamic) {
     gpReadTest("dynamic", "gp");
@@ -194,6 +190,12 @@ TEST_F(GuitarPro_Tests, gp4Bend) {
 }
 TEST_F(GuitarPro_Tests, gp3Bend) {
     gpReadTest("bend", "gp3");
+}
+TEST_F(GuitarPro_Tests, gpBendAndHarmonic) {
+    gpReadTest("bend_and_harmonic", "gp");
+}
+TEST_F(GuitarPro_Tests, gp5BendAndHarmonic) {
+    gpReadTest("bend_and_harmonic", "gp5");
 }
 TEST_F(GuitarPro_Tests, gpKeysig) {
     gpReadTest("keysig", "gp");
@@ -716,4 +718,35 @@ TEST_F(GuitarPro_Tests, gpInstrumentChange1beat) {
 }
 TEST_F(GuitarPro_Tests, gpxInstrumentChange1beat) {
     gpReadTest("instr-change-1-beat", "gpx");
+}
+TEST_F(GuitarPro_Tests, gpFixEmptyMeasures) {
+    gpReadTest("mmrest", "gp");
+}
+TEST_F(GuitarPro_Tests, gpLineElements) {
+    gpReadTest("line_elements", "gp");
+}
+TEST_F(GuitarPro_Tests, gp5LineElements) {
+    gpReadTest("line_elements", "gp5");
+}
+TEST_F(GuitarPro_Tests, gp5LetRingTied) {
+    gpReadTest("let-ring-tied", "gp5");
+}
+TEST_F(GuitarPro_Tests, gpPercussionBeams) {
+    gpReadTest("percussion-beams", "gp");
+}
+TEST_F(GuitarPro_Tests, gpSpannerInUncompleteMeasure) {
+    gpReadTest("spanner-in-uncomplete-measure", "gp");
+}
+TEST_F(GuitarPro_Tests, gp5SpannerInUncompleteMeasure) {
+    gpReadTest("spanner-in-uncomplete-measure", "gp5");
+}
+TEST_F(GuitarPro_Tests, gpBarlineLastMeasure) {
+    gpReadTest("barline-last-measure", "gp");
+}
+TEST_F(GuitarPro_Tests, gpBeamModes) {
+    gpReadTest("beam-modes", "gp");
+}
+TEST_F(GuitarPro_Tests, gpHideRests) {
+    gpReadTest("hide-rests", "gp");
+}
 }

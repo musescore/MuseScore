@@ -40,9 +40,9 @@
 namespace mu::vst {
 class VstSynthesiser : public audio::synth::AbstractSynthesizer
 {
-    INJECT(vst, IVstPluginsRegister, pluginsRegister)
-    INJECT(vst, IVstModulesRepository, modulesRepo)
-    INJECT(vst, audio::IAudioConfiguration, config)
+    INJECT(IVstPluginsRegister, pluginsRegister)
+    INJECT(IVstModulesRepository, modulesRepo)
+    INJECT(audio::IAudioConfiguration, config)
 
 public:
     explicit VstSynthesiser(VstPluginPtr&& pluginPtr, const audio::AudioInputParams& params);

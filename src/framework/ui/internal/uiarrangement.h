@@ -37,7 +37,7 @@
 namespace mu::ui {
 class UiArrangement : public async::Asyncable
 {
-    INJECT(ui, workspace::IWorkspacesDataProvider, workspacesDataProvider)
+    INJECT(workspace::IWorkspacesDataProvider, workspacesDataProvider)
 public:
     UiArrangement() = default;
 

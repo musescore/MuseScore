@@ -35,6 +35,7 @@
 #include "page.h"
 #include "part.h"
 #include "pitchspelling.h"
+#include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "sig.h"
@@ -1021,7 +1022,13 @@ int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalD
     ClefType clefL = staffL->clef(tickL);
     // line represents the ledger line of the staff.  0 is the top line, 1, is the space between the top 2 lines,
     //  ... 8 is the bottom line.
-    int lineL     = noteL->line();
+    int lineL = noteL->line();
+    if (lineL == INVALID_LINE) {
+        int relLine = absStep(noteL->tpc(), noteL->epitch());
+        ClefType clef = noteL->staff()->clef(noteL->tick());
+        lineL = relStep(relLine, clef);
+    }
+
     // we use line - deltastep, because lines are oriented from top to bottom, while step is oriented from bottom to top.
     int lineL2    = lineL - nominalDiatonicSteps;
     Measure* measureR = chordR->segment()->measure();
@@ -1223,6 +1230,53 @@ void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Ch
             chords.push_back(toChord(e));
         } else if (e->isRest() && !toChordRest(e)->staffMove()) {
             rests.push_back(toRest(e));
+        }
+    }
+}
+
+void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords)
+{
+    // Check if previous segments contain chords in other voices
+    // whose duration overlaps with rests on this segment
+
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack = startTrack + VOICES;
+
+    std::set<track_idx_t> tracksToCheck;
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
+        EngravingItem* item = segment->elementAt(track);
+        if (!item || !item->isRest()) {
+            tracksToCheck.insert(track);
+        }
+    }
+
+    Fraction curTick = segment->rtick();
+    for (Segment* prevSeg = segment->prev(); prevSeg; prevSeg = prevSeg->prev()) {
+        if (!prevSeg->isChordRestType()) {
+            continue;
+        }
+        Fraction prevSegTick = prevSeg->rtick();
+        for (track_idx_t track : tracksToCheck) {
+            EngravingItem* e = prevSeg->elementAt(track);
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            Chord* chord = toChord(e);
+            Fraction chordEndTick = prevSegTick + chord->actualTicks();
+            if (chordEndTick <= curTick) {
+                continue;
+            }
+            Measure* measure = segment->measure();
+            Segment* endSegment = measure->findSegmentR(SegmentType::ChordRest, chordEndTick);
+            if (!endSegment) {
+                continue;
+            }
+            EngravingItem* endItem = endSegment->elementAt(track);
+            if (!endItem || !endItem->isChord()) {
+                continue;
+            }
+
+            chords.push_back(chord);
         }
     }
 }

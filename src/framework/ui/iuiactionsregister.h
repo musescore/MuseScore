@@ -23,7 +23,7 @@
 #define MU_UI_IUIACTIONSREGISTER_H
 
 #include <memory>
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "iuiactionsmodule.h"
 #include "uitypes.h"
 #include "async/channel.h"

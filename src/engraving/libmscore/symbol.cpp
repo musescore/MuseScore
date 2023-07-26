@@ -24,8 +24,7 @@
 
 #include "draw/fontmetrics.h"
 #include "iengravingfont.h"
-#include "rw/xml.h"
-#include "rw/400/tread.h"
+
 #include "types/symnames.h"
 
 #include "image.h"
@@ -78,35 +77,6 @@ String Symbol::accessibleInfo() const
 }
 
 //---------------------------------------------------------
-//   layout
-//    height() and width() should return sensible
-//    values when calling this method
-//---------------------------------------------------------
-
-void Symbol::layout()
-{
-    // foreach(EngravingItem* e, leafs())     done in BSymbol::layout() ?
-    //      e->layout();
-    setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
-    double w = width();
-    PointF p;
-    if (align() == AlignV::BOTTOM) {
-        p.setY(-height());
-    } else if (align() == AlignV::VCENTER) {
-        p.setY((-height()) * .5);
-    } else if (align() == AlignV::BASELINE) {
-        p.setY(-baseLine());
-    }
-    if (align() == AlignH::RIGHT) {
-        p.setX(-w);
-    } else if (align() == AlignH::HCENTER) {
-        p.setX(-(w * .5));
-    }
-    setPos(p);
-    BSymbol::layout();
-}
-
-//---------------------------------------------------------
 //   Symbol::draw
 //---------------------------------------------------------
 
@@ -121,26 +91,6 @@ void Symbol::draw(mu::draw::Painter* painter) const
             drawSymbol(_sym, painter);
         }
     }
-}
-
-//---------------------------------------------------------
-//   Symbol::write
-//---------------------------------------------------------
-
-void Symbol::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    xml.tag("name", SymNames::nameForSymId(_sym));
-    if (_scoreFont) {
-        xml.tag("font", _scoreFont->name());
-    }
-    BSymbol::writeProperties(xml);
-    xml.endElement();
-}
-
-void Symbol::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
@@ -227,30 +177,6 @@ void FSymbol::draw(mu::draw::Painter* painter) const
     painter->setFont(f);
     painter->setPen(curColor());
     painter->drawText(PointF(0, 0), toString());
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void FSymbol::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    xml.tag("font",     _font.family());
-    xml.tag("fontsize", _font.pointSizeF());
-    xml.tag("code",     _code);
-    BSymbol::writeProperties(xml);
-    xml.endElement();
-}
-
-void FSymbol::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
-}
-
-void FSymbol::layout()
-{
-    setbbox(mu::draw::FontMetrics::boundingRect(_font, toString()));
 }
 
 //---------------------------------------------------------

@@ -23,8 +23,7 @@
 #include "accidental.h"
 
 #include "iengravingfont.h"
-#include "rw/xml.h"
-#include "rw/400/tread.h"
+
 #include "types/symnames.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
@@ -52,7 +51,7 @@ struct Acc {
 };
 
 // NOTE: keep this in sync with AccidentalType enum in types.h, watch out for isMicrotonal()
-static Acc accList[] = {
+static const Acc ACC_LIST[] = {
     Acc(AccidentalVal::NATURAL,    0,   SymId::noSym),                  // NONE
     Acc(AccidentalVal::FLAT,       0,   SymId::accidentalFlat),         // FLAT
     Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalNatural),      // NATURAL
@@ -233,7 +232,7 @@ static Acc accList[] = {
 
 AccidentalVal sym2accidentalVal(SymId id)
 {
-    for (const Acc& a : accList) {
+    for (const Acc& a : ACC_LIST) {
         if (a.sym == id) {
             return a.offset;
         }
@@ -250,42 +249,27 @@ Accidental::Accidental(EngravingItem* parent)
 {
 }
 
-void Accidental::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Accidental::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    writeProperty(xml, Pid::ACCIDENTAL_BRACKET);
-    writeProperty(xml, Pid::ACCIDENTAL_ROLE);
-    writeProperty(xml, Pid::SMALL);
-    writeProperty(xml, Pid::ACCIDENTAL_TYPE);
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
-}
-
 //---------------------------------------------------------
 //   subTypeUserName
 //---------------------------------------------------------
 
 TranslatableString Accidental::subtypeUserName() const
 {
-    return TranslatableString("engraving/sym", SymNames::userNameForSymId(symbol()));
+    return TranslatableString("engraving/sym", SymNames::userNameForSymId(symId()));
 }
 
 //---------------------------------------------------------
 //   symbol
 //---------------------------------------------------------
 
-SymId Accidental::symbol() const
+SymId Accidental::symId() const
 {
-    return accList[int(accidentalType())].sym;
+    return ACC_LIST[int(accidentalType())].sym;
+}
+
+bool Accidental::parentNoteHasParentheses() const
+{
+    return explicitParent() && parentItem()->isNote() ? toNote(parentItem())->headHasParentheses() : false;
 }
 
 //---------------------------------------------------------
@@ -295,7 +279,7 @@ SymId Accidental::symbol() const
 
 AccidentalVal Accidental::subtype2value(AccidentalType st)
 {
-    return accList[int(st)].offset;
+    return ACC_LIST[int(st)].offset;
 }
 
 //---------------------------------------------------------
@@ -304,7 +288,7 @@ AccidentalVal Accidental::subtype2value(AccidentalType st)
 
 AsciiStringView Accidental::subtype2name(AccidentalType st)
 {
-    return SymNames::nameForSymId(accList[int(st)].sym);
+    return SymNames::nameForSymId(ACC_LIST[int(st)].sym);
 }
 
 //---------------------------------------------------------
@@ -313,7 +297,16 @@ AsciiStringView Accidental::subtype2name(AccidentalType st)
 
 SymId Accidental::subtype2symbol(AccidentalType st)
 {
-    return accList[int(st)].sym;
+    return ACC_LIST[int(st)].sym;
+}
+
+//---------------------------------------------------------
+//   subtype2centoffset
+//---------------------------------------------------------
+
+double Accidental::subtype2centOffset(AccidentalType st)
+{
+    return ACC_LIST[int(st)].centOffset;
 }
 
 //---------------------------------------------------------
@@ -327,7 +320,7 @@ AccidentalType Accidental::name2subtype(const AsciiStringView& tag)
         // LOGD("no symbol found");
     } else {
         int i = 0;
-        for (const Acc& acc : accList) {
+        for (const Acc& acc : ACC_LIST) {
             if (acc.sym == symId) {
                 return AccidentalType(i);
             }
@@ -346,134 +339,13 @@ void Accidental::setSubtype(const AsciiStringView& tag)
     setAccidentalType(name2subtype(tag));
 }
 
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Accidental::layout()
+void Accidental::computeMag()
 {
-    el.clear();
-
-    // TODO: remove Accidental in layout()
-    // don't show accidentals for tab or slash notation
-    if (onTabStaff() || (note() && note()->fixed())) {
-        setbbox(RectF());
-        return;
-    }
-
     double m = explicitParent() ? parentItem()->mag() : 1.0;
-    if (m_isSmall) {
-        m *= score()->styleD(Sid::smallNoteMag);
+    if (isSmall()) {
+        m *= style().styleD(Sid::smallNoteMag);
     }
     setMag(m);
-
-    // if the accidental is standard (doubleflat, flat, natural, sharp or double sharp)
-    // and it has either no bracket or parentheses, then we have glyphs straight from smufl.
-    if (_bracket == AccidentalBracket::NONE
-        || (_bracket == AccidentalBracket::PARENTHESIS
-            && (_accidentalType == AccidentalType::FLAT
-                || _accidentalType == AccidentalType::NATURAL
-                || _accidentalType == AccidentalType::SHARP
-                || _accidentalType == AccidentalType::SHARP2
-                || _accidentalType == AccidentalType::FLAT2))) {
-        layoutSingleGlyphAccidental();
-    } else {
-        layoutMultiGlyphAccidental();
-    }
-}
-
-void Accidental::layoutSingleGlyphAccidental()
-{
-    RectF r;
-
-    SymId s = symbol();
-    if (_bracket == AccidentalBracket::PARENTHESIS) {
-        switch (_accidentalType) {
-        case AccidentalType::FLAT2:
-            s = SymId::accidentalDoubleFlatParens;
-            break;
-        case AccidentalType::FLAT:
-            s = SymId::accidentalFlatParens;
-            break;
-        case AccidentalType::NATURAL:
-            s = SymId::accidentalNaturalParens;
-            break;
-        case AccidentalType::SHARP:
-            s = SymId::accidentalSharpParens;
-            break;
-        case AccidentalType::SHARP2:
-            s = SymId::accidentalDoubleSharpParens;
-            break;
-        default:
-            break;
-        }
-        if (!score()->engravingFont()->isValid(s)) {
-            layoutMultiGlyphAccidental();
-            return;
-        }
-    }
-
-    SymElement e(s, 0.0, 0.0);
-    el.push_back(e);
-    r.unite(symBbox(s));
-    setbbox(r);
-}
-
-void Accidental::layoutMultiGlyphAccidental()
-{
-    double margin = score()->styleMM(Sid::bracketedAccidentalPadding);
-    RectF r;
-    double x = 0.0;
-
-    // should always be true
-    if (_bracket != AccidentalBracket::NONE) {
-        SymId id = SymId::noSym;
-        switch (_bracket) {
-        case AccidentalBracket::PARENTHESIS:
-            id = SymId::accidentalParensLeft;
-            break;
-        case AccidentalBracket::BRACKET:
-            id = SymId::accidentalBracketLeft;
-            break;
-        case AccidentalBracket::BRACE:
-            id = SymId::accidentalCombiningOpenCurlyBrace;
-            break;
-        case AccidentalBracket::NONE: // can't happen
-            break;
-        }
-        SymElement se(id, 0.0, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
-        el.push_back(se);
-        r.unite(symBbox(id));
-        x += symAdvance(id) + margin;
-    }
-
-    SymId s = symbol();
-    SymElement e(s, x, 0.0);
-    el.push_back(e);
-    r.unite(symBbox(s).translated(x, 0.0));
-
-    // should always be true
-    if (_bracket != AccidentalBracket::NONE) {
-        x += symAdvance(s) + margin;
-        SymId id = SymId::noSym;
-        switch (_bracket) {
-        case AccidentalBracket::PARENTHESIS:
-            id = SymId::accidentalParensRight;
-            break;
-        case AccidentalBracket::BRACKET:
-            id = SymId::accidentalBracketRight;
-            break;
-        case AccidentalBracket::BRACE:
-            id = SymId::accidentalCombiningCloseCurlyBrace;
-            break;
-        case AccidentalBracket::NONE: // can't happen
-            break;
-        }
-        SymElement se(id, x, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
-        el.push_back(se);
-        r.unite(symBbox(id).translated(x, 0.0));
-    }
-    setbbox(r);
 }
 
 //---------------------------------------------------------
@@ -496,9 +368,12 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
     return AccidentalType::NONE;
 }
 
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
+void Accidental::setLayoutData(const LayoutData& data)
+{
+    m_layoutData = data;
+    setbbox(data.bbox);
+    setPos(data.pos);
+}
 
 void Accidental::draw(mu::draw::Painter* painter) const
 {
@@ -509,7 +384,7 @@ void Accidental::draw(mu::draw::Painter* painter) const
     }
 
     painter->setPen(curColor());
-    for (const SymElement& e : el) {
+    for (const LayoutData::Sym& e : m_layoutData.syms) {
         score()->engravingFont()->draw(e.sym, painter, magS(), PointF(e.x, e.y));
     }
 }
@@ -521,6 +396,10 @@ void Accidental::draw(mu::draw::Painter* painter) const
 bool Accidental::acceptDrop(EditData& data) const
 {
     EngravingItem* e = data.dropElement;
+
+    if (e->type() == ElementType::ACCIDENTAL) {
+        return true;
+    }
 
     if (e->isActionIcon()) {
         ActionIconType type = toActionIcon(e)->actionType();
@@ -539,6 +418,9 @@ EngravingItem* Accidental::drop(EditData& data)
 {
     EngravingItem* e = data.dropElement;
     switch (e->type()) {
+    case ElementType::ACCIDENTAL:
+        score()->changeAccidental(note(), toAccidental(e)->accidentalType());
+        break;
     case ElementType::ACTION_ICON:
         switch (toActionIcon(e)->actionType()) {
         case ActionIconType::PARENTHESES:
@@ -575,7 +457,7 @@ void Accidental::undoSetSmall(bool val)
 PropertyValue Accidental::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::ACCIDENTAL_TYPE:    return int(_accidentalType);
+    case Pid::ACCIDENTAL_TYPE:    return int(m_accidentalType);
     case Pid::SMALL:              return m_isSmall;
     case Pid::ACCIDENTAL_BRACKET: return int(bracket());
     case Pid::ACCIDENTAL_ROLE:    return role();
@@ -614,10 +496,10 @@ bool Accidental::setProperty(Pid propertyId, const PropertyValue& v)
         m_isSmall = v.toBool();
         break;
     case Pid::ACCIDENTAL_BRACKET:
-        _bracket = AccidentalBracket(v.toInt());
+        m_bracket = AccidentalBracket(v.toInt());
         break;
     case Pid::ACCIDENTAL_ROLE:
-        _role = v.value<AccidentalRole>();
+        m_role = v.value<AccidentalRole>();
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);

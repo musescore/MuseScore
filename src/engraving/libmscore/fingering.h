@@ -37,6 +37,8 @@ class Note;
 class Fingering final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, Fingering)
+    DECLARE_CLASSOF(ElementType::FINGERING)
+
 public:
     Fingering(Note* parent, TextStyleType tid, ElementFlags ef = ElementFlag::HAS_TAG);
     Fingering(Note* parent, ElementFlags ef = ElementFlag::HAS_TAG);
@@ -48,7 +50,6 @@ public:
     PlacementV calculatePlacement() const;
 
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
 
     bool isEditAllowed(EditData&) const override;
 

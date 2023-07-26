@@ -46,7 +46,7 @@ Item {
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
 
-        titleText: qsTrc("inspector", "Top margin")
+        titleText: qsTrc("inspector", "Top padding")
         propertyItem: root.frameTopMargin
 
         icon: IconCode.TOP_MARGIN
@@ -62,7 +62,7 @@ Item {
         anchors.leftMargin: 4
         anchors.right: parent.right
 
-        titleText: qsTrc("inspector", "Bottom margin")
+        titleText: qsTrc("inspector", "Bottom padding")
         propertyItem: root.frameBottomMargin
 
         icon: IconCode.BOTTOM_MARGIN

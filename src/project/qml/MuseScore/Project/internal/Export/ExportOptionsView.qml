@@ -35,6 +35,10 @@ Column {
 
     spacing: 12
 
+    Component.onCompleted: {
+        pageLoader.refresh()
+    }
+
     NavigationPanel {
         id: navPanel
         name: "ExportOptions"
@@ -122,21 +126,25 @@ Column {
         id: pageLoader
         width: parent.width
 
+        function refresh() {
+            if (!root.exportModel.selectedExportType.settingsPagePath) {
+                setSource("")
+            }
+
+            var properties = {
+                model: Qt.binding(() => root.exportModel),
+                navigationPanel: root.navPanel,
+                navigationOrder: 3
+            }
+
+            setSource(root.exportModel.selectedExportType.settingsPagePath, properties)
+        }
+
         Connections {
             target: root.exportModel
 
             function onSelectedExportTypeChanged() {
-                if (!root.exportModel.selectedExportType.settingsPagePath) {
-                    pageLoader.setSource("")
-                }
-
-                var properties = {
-                    model: Qt.binding(() => root.exportModel),
-                    navigationPanel: navPanel,
-                    navigationOrder: 3
-                }
-
-                pageLoader.setSource(root.exportModel.selectedExportType.settingsPagePath, properties)
+                pageLoader.refresh()
             }
         }
     }

@@ -44,7 +44,7 @@ class ExampleView : public QFrame, public engraving::MuseScoreView
 {
     Q_OBJECT
 
-    INJECT(notation, notation::INotationConfiguration, notationConfiguration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
 
 public:
     ExampleView(QWidget* parent = 0);

@@ -117,7 +117,7 @@ static bool graceNotesMerged(Chord* chord);
 //---------------------------------------------------------
 int toMilliseconds(float tempo, float midiTime)
 {
-    float ticksPerSecond = (float)Constants::division * tempo;
+    float ticksPerSecond = (float)Constants::DIVISION * tempo;
     int time = (int)((midiTime / ticksPerSecond) * 1000.0f);
     if (time > 0x7fff) { //maximum possible value
         time = 0x7fff;
@@ -141,7 +141,7 @@ bool isGlissandoFor(const Note* note)
 static void collectGlissando(int channel, MidiInstrumentEffect effect,
                              int onTime, int offTime,
                              int pitchDelta,
-                             PitchWheelRenderer& pitchWheelRenderer)
+                             PitchWheelRenderer& pitchWheelRenderer, staff_idx_t staffIdx)
 {
     const float scale = (float)wheelSpec.mLimit / wheelSpec.mAmplitude;
 
@@ -155,7 +155,7 @@ static void collectGlissando(int channel, MidiInstrumentEffect effect,
     };
     func.func = linearFunc;
 
-    pitchWheelRenderer.addPitchWheelFunction(func, channel, effect);
+    pitchWheelRenderer.addPitchWheelFunction(func, channel, staffIdx, effect);
 }
 
 static Fraction getPlayTicksForBend(const Note* note)
@@ -208,6 +208,13 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
     if (params.offTime > 0 && params.offTime < params.onTime) {
         return;
     }
+    // We need to set Pitch Value to initial in case previous note was with bendUp
+    if (params.onTime - params.offset - 1 > 0) {
+        PitchWheelSpecs specs;
+        NPlayEvent pwReset(ME_PITCHBEND, params.channel, specs.mLimit % 128, specs.mLimit / 128);
+        events->insert(std::pair<int, NPlayEvent>(std::max(0, params.onTime - params.offset - 1), pwReset));
+    }
+
     events->insert(std::pair<int, NPlayEvent>(std::max(0, params.onTime - params.offset), ev));
     // adds portamento for continuous glissando
     for (Spanner* spanner : note->spannerFor()) {
@@ -218,7 +225,8 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
                 double pitchDelta = nextNote->ppitch() - params.pitch;
                 int timeDelta = params.offTime - params.onTime;
                 if (pitchDelta != 0 && timeDelta != 0) {
-                    collectGlissando(params.channel, params.effect, params.onTime, params.offTime, pitchDelta, pitchWheelRenderer);
+                    collectGlissando(params.channel, params.effect, params.onTime, params.offTime, pitchDelta, pitchWheelRenderer,
+                                     glissando->staffIdx());
                 }
             }
         }
@@ -234,7 +242,7 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
 static void collectVibrato(int channel,
                            int onTime, int offTime,
                            const VibratoParams& vibratoParams,
-                           PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect)
+                           PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect, staff_idx_t staffIdx)
 {
     const uint16_t vibratoPeriod = vibratoParams.period;
     const uint32_t duration = offTime - onTime;
@@ -257,7 +265,7 @@ static void collectVibrato(int channel,
     };
     func.func = vibratoFunc;
 
-    pitchWheelRenderer.addPitchWheelFunction(func, channel, effect);
+    pitchWheelRenderer.addPitchWheelFunction(func, channel, staffIdx, effect);
 }
 
 static void collectBend(const Bend* bend,
@@ -298,7 +306,7 @@ static void collectBend(const Bend* bend,
             return y * scale;
         };
         func.func = bendFunc;
-        pitchWheelRenderer.addPitchWheelFunction(func, channel, effect);
+        pitchWheelRenderer.addPitchWheelFunction(func, channel, bend->staffIdx(), effect);
     }
     PitchWheelRenderer::PitchWheelFunction func;
     func.mStartTick = onTime + points[pitchSize - 1].time * duration / PitchValue::MAX_TIME;
@@ -315,7 +323,7 @@ static void collectBend(const Bend* bend,
         return releaseValue;
     };
     func.func = bendFunc;
-    pitchWheelRenderer.addPitchWheelFunction(func, channel, effect);
+    pitchWheelRenderer.addPitchWheelFunction(func, channel, bend->staffIdx(), effect);
 }
 
 //---------------------------------------------------------
@@ -378,7 +386,7 @@ static void collectNote(EventMap* events, const Note* note, const CollectNotePar
         int off = on + (ticks * e.len()) / 1000 - 1;
 
         if (note->deadNote()) {
-            const double ticksPerSecond = chord->score()->tempo(chord->tick()).val * Constants::division;
+            const double ticksPerSecond = chord->score()->tempo(chord->tick()).val * Constants::DIVISION;
             constexpr double deadNoteDurationInSec = 0.05;
             const double deadNoteDurationInTicks = ticksPerSecond * deadNoteDurationInSec;
             if (off - on > deadNoteDurationInTicks) {
@@ -636,6 +644,11 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
                                           PitchWheelRenderer& pitchWheelRenderer)
 {
     staff_idx_t firstStaffIdx = staff->idx();
+    for (Staff* st : staff->masterScore()->staves()) {
+        if (staff->id() == st->id()) {
+            firstStaffIdx = st->idx();
+        }
+    }
     staff_idx_t nextStaffIdx  = firstStaffIdx + 1;
 
     SegmentType st = SegmentType::ChordRest;
@@ -792,6 +805,10 @@ void MidiRenderer::renderStaff(EventMap* events, const Staff* staff, PitchWheelR
                 lastMeasure = m;
                 collectMeasureEvents(events, lastMeasure, staff, tickOffset, pitchWheelRenderer);
             }
+
+            if (m == rs->lastMeasure()) {
+                break;
+            }
         }
     }
 }
@@ -875,26 +892,26 @@ static VibratoParams getVibratoParams(VibratoType type)
         // guitar vibrato, up only
         params.lowPitch = 0;
         params.highPitch = 10;
-        params.period = Constants::division / 3;
+        params.period = Constants::DIVISION / 3;
         break;
 
     case VibratoType::GUITAR_VIBRATO_WIDE:
         params.lowPitch = 0;         // 100 is a semitone
         params.highPitch = 20;
-        params.period = Constants::division / 2.5;
+        params.period = Constants::DIVISION / 2.5;
         break;
 
     case VibratoType::VIBRATO_SAWTOOTH_WIDE:
         // vibrato with whammy bar up and down
         params.lowPitch = -25;         // 1/16
         params.highPitch = 25;
-        params.period = Constants::division / 2;
+        params.period = Constants::DIVISION / 2;
         break;
 
     case VibratoType::VIBRATO_SAWTOOTH:
         params.lowPitch = -12;
         params.highPitch = 12;
-        params.period = Constants::division / 2;
+        params.period = Constants::DIVISION / 2;
         break;
 
     default:
@@ -950,7 +967,7 @@ void MidiRenderer::doRenderSpanners(EventMap* events, Spanner* s, uint32_t chann
         std::vector<std::pair<int, int> > vibratoTicksForEffect = collectTicksForEffect(score, s->track(), stick, etick, effect);
 
         for (const auto& [tickStart, tickEnd] : vibratoTicksForEffect) {
-            collectVibrato(channel, tickStart, tickEnd, vibratoParams, pitchWheelRenderer, effect);
+            collectVibrato(channel, tickStart, tickEnd, vibratoParams, pitchWheelRenderer, effect, s->staffIdx());
         }
     }
 
@@ -1008,7 +1025,7 @@ struct OrnamentExcursion {
 std::set<OrnamentStyle> baroque  = { OrnamentStyle::BAROQUE };
 std::set<OrnamentStyle> defstyle = { OrnamentStyle::DEFAULT };
 std::set<OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
-int _16th = Constants::division / 4;
+int _16th = Constants::DIVISION / 4;
 int _32nd = _16th / 2;
 
 std::vector<OrnamentExcursion> excursions = {
@@ -1181,6 +1198,7 @@ uint32_t MidiRenderer::getChannel(const Instrument* instr, const Note* note, Mid
 
     if (_context.eachStringHasChannel && instr->hasStrings()) {
         lookupData.string = note->string();
+        lookupData.staffIdx = note->staffIdx();
     }
 
     return _context.channels->getChannel(channel, lookupData);
@@ -1201,6 +1219,6 @@ uint32_t MidiRenderer::ChannelLookup::getChannel(uint32_t instrumentChannel, con
 
 bool MidiRenderer::ChannelLookup::LookupData::operator<(const MidiRenderer::ChannelLookup::LookupData& other) const
 {
-    return std::tie(string, effect) < std::tie(other.string, other.effect);
+    return std::tie(string, staffIdx, effect) < std::tie(other.string, other.staffIdx, other.effect);
 }
 }

@@ -28,13 +28,7 @@
 #include "system.h"
 
 #include "style/style.h"
-#include "style/defaultstyle.h"
-#include "rw/xml.h"
-#include "rw/400/tread.h"
-#include "layout/layoutcontext.h"
-#include "realfn.h"
 
-#include "barline.h"
 #include "beam.h"
 #include "box.h"
 #include "bracket.h"
@@ -67,6 +61,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::layout::dev;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -84,7 +79,7 @@ SysStaff::~SysStaff()
 
 double SysStaff::yBottom() const
 {
-    return skyline().south().valid() ? skyline().south().max() : _height;
+    return skyline().south().valid() ? skyline().south().max() : m_height;
 }
 
 //---------------------------------------------------------
@@ -93,8 +88,8 @@ double SysStaff::yBottom() const
 
 void SysStaff::saveLayout()
 {
-    _height =  bbox().height();
-    _yPos = bbox().y();
+    m_height =  bbox().height();
+    m_yPos = bbox().y();
 }
 
 //---------------------------------------------------------
@@ -103,8 +98,8 @@ void SysStaff::saveLayout()
 
 void SysStaff::restoreLayout()
 {
-    bbox().setTop(_yPos);
-    bbox().setHeight(_height);
+    bbox().setTop(m_yPos);
+    bbox().setHeight(m_height);
 }
 
 //---------------------------------------------------------
@@ -132,10 +127,10 @@ System::~System()
             mb->resetExplicitParent();
         }
     }
-    DeleteAll(_staves);
-    DeleteAll(_brackets);
-    delete _systemDividerLeft;
-    delete _systemDividerRight;
+    DeleteAll(m_staves);
+    DeleteAll(m_brackets);
+    delete m_systemDividerLeft;
+    delete m_systemDividerRight;
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -163,13 +158,13 @@ void System::clear()
             mb->resetExplicitParent();
         }
     }
-    ml.clear();
-    for (SpannerSegment* ss : _spannerSegments) {
+    m_ml.clear();
+    for (SpannerSegment* ss : m_spannerSegments) {
         if (ss->system() == this) {
             ss->resetExplicitParent();             // assume parent() is System
         }
     }
-    _spannerSegments.clear();
+    m_spannerSegments.clear();
     // _systemDividers are reused
 }
 
@@ -179,9 +174,9 @@ void System::clear()
 
 void System::appendMeasure(MeasureBase* mb)
 {
-    assert(!mb->isMeasure() || !(score()->styleB(Sid::createMultiMeasureRests) && toMeasure(mb)->hasMMRest()));
+    assert(!mb->isMeasure() || !(style().styleB(Sid::createMultiMeasureRests) && toMeasure(mb)->hasMMRest()));
     mb->setParent(this);
-    ml.push_back(mb);
+    m_ml.push_back(mb);
 }
 
 //---------------------------------------------------------
@@ -190,7 +185,7 @@ void System::appendMeasure(MeasureBase* mb)
 
 void System::removeMeasure(MeasureBase* mb)
 {
-    ml.erase(std::remove(ml.begin(), ml.end(), mb), ml.end());
+    m_ml.erase(std::remove(m_ml.begin(), m_ml.end(), mb), m_ml.end());
     if (mb->system() == this) {
         mb->resetExplicitParent();
     }
@@ -202,11 +197,11 @@ void System::removeMeasure(MeasureBase* mb)
 
 void System::removeLastMeasure()
 {
-    if (ml.empty()) {
+    if (m_ml.empty()) {
         return;
     }
-    MeasureBase* mb = ml.back();
-    ml.pop_back();
+    MeasureBase* mb = m_ml.back();
+    m_ml.pop_back();
     if (mb->system() == this) {
         mb->resetExplicitParent();
     }
@@ -219,9 +214,9 @@ void System::removeLastMeasure()
 
 Box* System::vbox() const
 {
-    if (!ml.empty()) {
-        if (ml[0]->isVBox() || ml[0]->isTBox()) {
-            return toBox(ml[0]);
+    if (!m_ml.empty()) {
+        if (m_ml[0]->isVBox() || m_ml[0]->isTBox()) {
+            return toBox(m_ml[0]);
         }
     }
     return 0;
@@ -236,9 +231,9 @@ SysStaff* System::insertStaff(int idx)
     SysStaff* staff = new SysStaff;
     if (idx) {
         // HACK: guess position
-        staff->bbox().setTop(_staves[idx - 1]->y() + 6 * spatium());
+        staff->bbox().setTop(m_staves[idx - 1]->y() + 6 * spatium());
     }
-    _staves.insert(_staves.begin() + idx, staff);
+    m_staves.insert(m_staves.begin() + idx, staff);
     return staff;
 }
 
@@ -248,7 +243,7 @@ SysStaff* System::insertStaff(int idx)
 
 void System::removeStaff(int idx)
 {
-    _staves.erase(_staves.begin() + idx);
+    m_staves.erase(m_staves.begin() + idx);
 }
 
 //---------------------------------------------------------
@@ -257,552 +252,13 @@ void System::removeStaff(int idx)
 
 void System::adjustStavesNumber(size_t nstaves)
 {
-    for (size_t i = _staves.size(); i < nstaves; ++i) {
+    for (size_t i = m_staves.size(); i < nstaves; ++i) {
         insertStaff(static_cast<int>(i));
     }
-    const size_t dn = _staves.size() - nstaves;
+    const size_t dn = m_staves.size() - nstaves;
     for (size_t i = 0; i < dn; ++i) {
-        removeStaff(static_cast<int>(_staves.size()) - 1);
+        removeStaff(static_cast<int>(m_staves.size()) - 1);
     }
-}
-
-//---------------------------------------------------------
-//   instrumentNamesWidth
-//---------------------------------------------------------
-
-double System::instrumentNamesWidth()
-{
-    double namesWidth = 0.0;
-
-    for (staff_idx_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-        const SysStaff* staff = this->staff(staffIdx);
-        if (!staff) {
-            continue;
-        }
-
-        for (InstrumentName* name : staff->instrumentNames) {
-            name->layout();
-            namesWidth = std::max(namesWidth, name->width());
-        }
-    }
-
-    return namesWidth;
-}
-
-//---------------------------------------------------------
-//   layoutBrackets
-//---------------------------------------------------------
-
-double System::layoutBrackets(const LayoutContext& ctx)
-{
-    size_t nstaves  = _staves.size();
-    size_t columns = getBracketsColumnsCount();
-
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-    double bracketWidth[columns];
-#else
-    // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-    //    heap allocation is slow, an optimization might be used.
-    std::vector<double> bracketWidth(columns);
-#endif
-    for (size_t i = 0; i < columns; ++i) {
-        bracketWidth[i] = 0.0;
-    }
-
-    std::vector<Bracket*> bl;
-    bl.swap(_brackets);
-
-    for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        Staff* s = score()->staff(staffIdx);
-        for (size_t i = 0; i < columns; ++i) {
-            for (auto bi : s->brackets()) {
-                if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
-                    continue;
-                }
-                Bracket* b = createBracket(ctx, bi, i, static_cast<int>(staffIdx), bl, this->firstMeasure());
-                if (b != nullptr) {
-                    bracketWidth[i] = std::max(bracketWidth[i], b->width());
-                }
-            }
-        }
-    }
-
-    for (Bracket* b : bl) {
-        delete b;
-    }
-
-    double totalBracketWidth = 0.0;
-
-    if (!_brackets.empty()) {
-        for (double w : bracketWidth) {
-            totalBracketWidth += w;
-        }
-    }
-
-    return totalBracketWidth;
-}
-
-//---------------------------------------------------------
-//   totalBracketOffset
-//---------------------------------------------------------
-
-/// Calculates the total width of all brackets together that
-/// would be visible when all staves are visible.
-/// The logic in this method is closely related to the logic in
-/// System::layoutBrackets and System::createBracket.
-double System::totalBracketOffset(LayoutContext& ctx)
-{
-    if (ctx.totalBracketsWidth >= 0) {
-        return ctx.totalBracketsWidth;
-    }
-
-    size_t columns = 0;
-    for (const Staff* staff : ctx.score()->staves()) {
-        for (auto bi : staff->brackets()) {
-            columns = std::max(columns, bi->column() + 1);
-        }
-    }
-
-    size_t nstaves = ctx.score()->nstaves();
-    std::vector < double > bracketWidth(nstaves, 0.0);
-    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        const Staff* staff = ctx.score()->staff(staffIdx);
-        for (auto bi : staff->brackets()) {
-            if (bi->bracketType() == BracketType::NO_BRACKET || !bi->visible()) {
-                continue;
-            }
-
-            //! This logic is partially copied from System::createBracket.
-            //! Of course, we don't need to worry about invisible staves,
-            //! but we do need to worry about brackets that span past the
-            //! last staff.
-            staff_idx_t firstStaff = staffIdx;
-            staff_idx_t lastStaff = staffIdx + bi->bracketSpan() - 1;
-            if (lastStaff >= nstaves) {
-                lastStaff = nstaves - 1;
-            }
-
-            for (; firstStaff <= lastStaff; ++firstStaff) {
-                if (ctx.score()->staff(firstStaff)->show()) {
-                    break;
-                }
-            }
-            for (; lastStaff >= firstStaff; --lastStaff) {
-                if (ctx.score()->staff(lastStaff)->show()) {
-                    break;
-                }
-            }
-
-            size_t span = lastStaff - firstStaff + 1;
-            if (span > 1
-                || (bi->bracketSpan() == span)
-                || (span == 1 && ctx.score()->styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden))) {
-                Bracket* dummyBr = Factory::createBracket(ctx.score()->dummy(), /*isAccessibleEnabled=*/ false);
-                dummyBr->setBracketItem(bi);
-                dummyBr->setStaffSpan(firstStaff, lastStaff);
-                dummyBr->layout();
-                for (staff_idx_t stfIdx = firstStaff; stfIdx <= lastStaff; ++stfIdx) {
-                    bracketWidth[stfIdx] += dummyBr->width();
-                }
-                delete dummyBr;
-            }
-        }
-    }
-
-    double totalBracketsWidth = 0.0;
-    for (double w : bracketWidth) {
-        totalBracketsWidth = std::max(totalBracketsWidth, w);
-    }
-    ctx.totalBracketsWidth = totalBracketsWidth;
-
-    return ctx.totalBracketsWidth;
-}
-
-//---------------------------------------------------------
-//   layoutSystem
-///   Layout the System
-//---------------------------------------------------------
-
-void System::layoutSystem(LayoutContext& ctx, double xo1, const bool isFirstSystem, bool firstSystemIndent)
-{
-    if (_staves.empty()) {                 // ignore vbox
-        return;
-    }
-
-    // Get standard instrument name distance
-    double instrumentNameOffset = score()->styleMM(Sid::instrumentNameOffset);
-    // Now scale it depending on the text size (which also may not follow staff scaling)
-    double textSizeScaling = 1.0;
-    double actualSize = 0.0;
-    double defaultSize = 0.0;
-    bool followStaffSize = true;
-    if (ctx.startWithLongNames) {
-        actualSize = score()->styleD(Sid::longInstrumentFontSize);
-        defaultSize = DefaultStyle::defaultStyle().value(Sid::longInstrumentFontSize).toDouble();
-        followStaffSize = score()->styleB(Sid::longInstrumentFontSpatiumDependent);
-    } else {
-        actualSize = score()->styleD(Sid::shortInstrumentFontSize);
-        defaultSize = DefaultStyle::defaultStyle().value(Sid::shortInstrumentFontSize).toDouble();
-        followStaffSize = score()->styleB(Sid::shortInstrumentFontSpatiumDependent);
-    }
-    textSizeScaling = actualSize / defaultSize;
-    if (!followStaffSize) {
-        textSizeScaling *= DefaultStyle::defaultStyle().value(Sid::spatium).toDouble() / score()->styleD(Sid::spatium);
-    }
-    textSizeScaling = std::max(textSizeScaling, 1.0);
-    instrumentNameOffset *= textSizeScaling;
-
-    size_t nstaves  = _staves.size();
-
-    //---------------------------------------------------
-    //  find x position of staves
-    //---------------------------------------------------
-    layoutBrackets(ctx);
-    double maxBracketsWidth = totalBracketOffset(ctx);
-
-    double maxNamesWidth = instrumentNamesWidth();
-
-    double indent = maxNamesWidth > 0 ? maxNamesWidth + instrumentNameOffset : 0.0;
-    if (isFirstSystem && firstSystemIndent) {
-        indent = std::max(indent, styleP(Sid::firstSystemIndentationValue) * mag() - maxBracketsWidth);
-        maxNamesWidth = indent - instrumentNameOffset;
-    }
-
-    if (RealIsNull(indent)) {
-        if (score()->styleB(Sid::alignSystemToMargin)) {
-            _leftMargin = 0.0;
-        } else {
-            _leftMargin = maxBracketsWidth;
-        }
-    } else {
-        _leftMargin = indent + maxBracketsWidth;
-    }
-
-    int nVisible = 0;
-    for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        SysStaff* s  = _staves[staffIdx];
-        Staff* staff = score()->staff(staffIdx);
-        if (!staff->show() || !s->show()) {
-            s->setbbox(RectF());
-            continue;
-        }
-        ++nVisible;
-        double staffMag = staff->staffMag(Fraction(0, 1));         // ??? TODO
-        int staffLines = staff->lines(Fraction(0, 1));
-        if (staffLines <= 1) {
-            double h = staff->lineDistance(Fraction(0, 1)) * staffMag * spatium();
-            s->bbox().setRect(_leftMargin + xo1, -h, 0.0, 2 * h);
-        } else {
-            double h = (staffLines - 1) * staff->lineDistance(Fraction(0, 1));
-            h = h * staffMag * spatium();
-            s->bbox().setRect(_leftMargin + xo1, 0.0, 0.0, h);
-        }
-    }
-
-    //---------------------------------------------------
-    //  layout brackets
-    //---------------------------------------------------
-
-    setBracketsXPosition(xo1 + _leftMargin);
-
-    //---------------------------------------------------
-    //  layout instrument names x position
-    //     at this point it is not clear which staves will
-    //     be hidden, so layout all instrument names
-    //---------------------------------------------------
-
-    for (SysStaff* s : _staves) {
-        for (InstrumentName* t : s->instrumentNames) {
-            t->layout();
-
-            switch (t->align().horizontal) {
-            case AlignH::LEFT:
-                t->setPosX(0);
-                break;
-            case AlignH::HCENTER:
-                t->setPosX(maxNamesWidth * .5);
-                break;
-            case AlignH::RIGHT:
-                t->setPosX(maxNamesWidth);
-                break;
-            }
-        }
-    }
-
-    for (MeasureBase* mb : measures()) {
-        if (!mb->isMeasure()) {
-            continue;
-        }
-        Measure* m = toMeasure(mb);
-        if (m == measures().front() || (m->prev() && m->prev()->isHBox())) {
-            m->createSystemBeginBarLine();
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   setMeasureHeight
-//---------------------------------------------------------
-
-void System::setMeasureHeight(double height)
-{
-    double _spatium { spatium() };
-    for (MeasureBase* m : ml) {
-        if (m->isMeasure()) {
-            // note that the factor 2 * _spatium must be corrected for when exporting
-            // system distance in MusicXML (issue #24733)
-            m->bbox().setRect(0.0, -_spatium, m->width(), height + 2.0 * _spatium);
-        } else if (m->isHBox()) {
-            m->bbox().setRect(0.0, 0.0, m->width(), height);
-            toHBox(m)->layout2();
-        } else if (m->isTBox()) {
-            toTBox(m)->layout();
-        } else {
-            LOGD("unhandled measure type %s", m->typeName());
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   layoutBracketsVertical
-//---------------------------------------------------------
-
-void System::layoutBracketsVertical()
-{
-    for (Bracket* b : _brackets) {
-        int staffIdx1 = static_cast<int>(b->firstStaff());
-        int staffIdx2 = static_cast<int>(b->lastStaff());
-        double sy = 0;                           // assume bracket not visible
-        double ey = 0;
-        // if start staff not visible, try next staff
-        while (staffIdx1 <= staffIdx2 && !_staves[staffIdx1]->show()) {
-            ++staffIdx1;
-        }
-        // if end staff not visible, try prev staff
-        while (staffIdx1 <= staffIdx2 && !_staves[staffIdx2]->show()) {
-            --staffIdx2;
-        }
-        // if the score doesn't have "alwaysShowBracketsWhenEmptyStavesAreHidden" as true,
-        // the bracket will be shown IF:
-        // it spans at least 2 visible staves (staffIdx1 < staffIdx2) OR
-        // it spans just one visible staff (staffIdx1 == staffIdx2) but it is required to do so
-        // (the second case happens at least when the bracket is initially dropped)
-        bool notHidden = score()->styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden)
-                         ? (staffIdx1 <= staffIdx2) : (staffIdx1 < staffIdx2) || (b->span() == 1 && staffIdx1 == staffIdx2);
-        if (notHidden) {                        // set vert. pos. and height to visible spanned staves
-            sy = _staves[staffIdx1]->bbox().top();
-            ey = _staves[staffIdx2]->bbox().bottom();
-        }
-        b->setPosY(sy);
-        b->setHeight(ey - sy);
-        b->layout();
-    }
-}
-
-//---------------------------------------------------------
-//   layoutInstrumentNames
-//---------------------------------------------------------
-
-void System::layoutInstrumentNames()
-{
-    staff_idx_t staffIdx = 0;
-
-    for (Part* p : score()->parts()) {
-        SysStaff* s = staff(staffIdx);
-        SysStaff* s2;
-        size_t nstaves = p->nstaves();
-
-        staff_idx_t visible = firstVisibleSysStaffOfPart(p);
-        if (visible != mu::nidx) {
-            // The top staff might be invisible but this top staff contains the instrument names.
-            // To make sure these instrument name are drawn, even when the top staff is invisible,
-            // move the InstrumentName elements to the first visible staff of the part.
-            if (visible != staffIdx) {
-                SysStaff* vs = staff(visible);
-                for (InstrumentName* t : s->instrumentNames) {
-                    t->setTrack(visible * VOICES);
-                    t->setSysStaff(vs);
-                    vs->instrumentNames.push_back(t);
-                }
-                s->instrumentNames.clear();
-                s = vs;
-            }
-
-            for (InstrumentName* t : s->instrumentNames) {
-                //
-                // override Text->layout()
-                //
-                double y1, y2;
-                switch (t->layoutPos()) {
-                default:
-                case 0:                         // center at part
-                    y1 = s->bbox().top();
-                    s2 = staff(staffIdx);
-                    for (int i = static_cast<int>(staffIdx + nstaves - 1); i > 0; --i) {
-                        SysStaff* s3 = staff(i);
-                        if (s3->show()) {
-                            s2 = s3;
-                            break;
-                        }
-                    }
-                    y2 = s2->bbox().bottom();
-                    break;
-                case 1:                         // center at first staff
-                    y1 = s->bbox().top();
-                    y2 = s->bbox().bottom();
-                    break;
-                case 2:                         // center between first and second staff
-                    y1 = s->bbox().top();
-                    y2 = staff(staffIdx + 1)->bbox().bottom();
-                    break;
-                case 3:                         // center at second staff
-                    y1 = staff(staffIdx + 1)->bbox().top();
-                    y2 = staff(staffIdx + 1)->bbox().bottom();
-                    break;
-                case 4:                         // center between first and second staff
-                    y1 = staff(staffIdx + 1)->bbox().top();
-                    y2 = staff(staffIdx + 2)->bbox().bottom();
-                    break;
-                case 5:                         // center at third staff
-                    y1 = staff(staffIdx + 2)->bbox().top();
-                    y2 = staff(staffIdx + 2)->bbox().bottom();
-                    break;
-                }
-                t->setPosY(y1 + (y2 - y1) * .5 + t->offset().y());
-            }
-        }
-        staffIdx += nstaves;
-    }
-}
-
-//---------------------------------------------------------
-//   addBrackets
-//   Add brackets in front of this measure, typically behind a HBox
-//---------------------------------------------------------
-
-void System::addBrackets(const LayoutContext& ctx, Measure* measure)
-{
-    if (_staves.empty()) {                 // ignore vbox
-        return;
-    }
-
-    size_t nstaves = _staves.size();
-
-    //---------------------------------------------------
-    //  find x position of staves
-    //    create brackets
-    //---------------------------------------------------
-
-    size_t columns = getBracketsColumnsCount();
-
-    std::vector<Bracket*> bl;
-    bl.swap(_brackets);
-
-    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        Staff* s = score()->staff(staffIdx);
-        for (size_t i = 0; i < columns; ++i) {
-            for (auto bi : s->brackets()) {
-                if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
-                    continue;
-                }
-                createBracket(ctx, bi, i, staffIdx, bl, measure);
-            }
-        }
-        if (!staff(staffIdx)->show()) {
-            continue;
-        }
-    }
-
-    //---------------------------------------------------
-    //  layout brackets
-    //---------------------------------------------------
-
-    setBracketsXPosition(measure->x());
-
-    mu::join(_brackets, bl);
-}
-
-//---------------------------------------------------------
-//   createBracket
-//   Create a bracket if it spans more then one visible system
-//   If measure is NULL adds the bracket in front of the system, else in front of the measure.
-//   Returns the bracket if it got created, else NULL
-//---------------------------------------------------------
-
-Bracket* System::createBracket(const LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
-                               std::vector<Bracket*>& bl,
-                               Measure* measure)
-{
-    size_t nstaves = _staves.size();
-    staff_idx_t firstStaff = staffIdx;
-    staff_idx_t lastStaff = staffIdx + bi->bracketSpan() - 1;
-    if (lastStaff >= nstaves) {
-        lastStaff = nstaves - 1;
-    }
-
-    for (; firstStaff <= lastStaff; ++firstStaff) {
-        if (staff(firstStaff)->show()) {
-            break;
-        }
-    }
-    for (; lastStaff >= firstStaff; --lastStaff) {
-        if (staff(lastStaff)->show()) {
-            break;
-        }
-    }
-    size_t span = lastStaff - firstStaff + 1;
-    //
-    // do not show bracket if it only spans one
-    // system due to some invisible staves
-    //
-    if (span > 1
-        || (bi->bracketSpan() == span)
-        || (span == 1 && score()->styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden) && bi->bracketType() != BracketType::SQUARE)
-        || (span == 1 && score()->styleB(Sid::alwaysShowSquareBracketsWhenEmptyStavesAreHidden)
-            && bi->bracketType() == BracketType::SQUARE)) {
-        //
-        // this bracket is visible
-        //
-        Bracket* b = 0;
-        track_idx_t track = staffIdx * VOICES;
-        for (size_t k = 0; k < bl.size(); ++k) {
-            if (bl[k]->track() == track && bl[k]->column() == column && bl[k]->bracketType() == bi->bracketType()
-                && bl[k]->measure() == measure) {
-                b = mu::takeAt(bl, k);
-                break;
-            }
-        }
-        if (b == 0) {
-            b = Factory::createBracket(ctx.score()->dummy());
-            b->setBracketItem(bi);
-            b->setGenerated(true);
-            b->setTrack(track);
-            b->setMeasure(measure);
-        }
-        add(b);
-
-        if (bi->selected()) {
-            bool needSelect = true;
-
-            std::vector<EngravingItem*> brackets = score()->selection().elements(ElementType::BRACKET);
-            for (const EngravingItem* element : brackets) {
-                if (toBracket(element)->bracketItem() == bi) {
-                    needSelect = false;
-                    break;
-                }
-            }
-
-            if (needSelect) {
-                score()->select(b, SelectType::ADD);
-            }
-        }
-
-        b->setStaffSpan(firstStaff, lastStaff);
-
-        return b;
-    }
-
-    return nullptr;
 }
 
 size_t System::getBracketsColumnsCount()
@@ -818,16 +274,16 @@ size_t System::getBracketsColumnsCount()
 
 void System::setBracketsXPosition(const double xPosition)
 {
-    for (Bracket* b1 : _brackets) {
+    for (Bracket* b1 : m_brackets) {
         BracketType bracketType = b1->bracketType();
         // For brackets that are drawn, we must correct for half line width
         double lineWidthCorrection = 0.0;
         if (bracketType == BracketType::NORMAL || bracketType == BracketType::LINE) {
-            lineWidthCorrection = score()->styleMM(Sid::bracketWidth) / 2;
+            lineWidthCorrection = style().styleMM(Sid::bracketWidth) / 2;
         }
         // Compute offset cause by other stacked brackets
         double xOffset = 0;
-        for (const Bracket* b2 : _brackets) {
+        for (const Bracket* b2 : m_brackets) {
             if (!b2->bracketItem()->visible()) {
                 continue;
             }
@@ -849,9 +305,9 @@ void System::setBracketsXPosition(const double xPosition)
 
 staff_idx_t System::firstVisibleStaffFrom(staff_idx_t startStaffIdx) const
 {
-    for (staff_idx_t i = startStaffIdx; i < _staves.size(); ++i) {
+    for (staff_idx_t i = startStaffIdx; i < m_staves.size(); ++i) {
         Staff* s  = score()->staff(i);
-        SysStaff* ss = _staves[i];
+        SysStaff* ss = m_staves[i];
 
         if (s->show() && ss->show()) {
             return i;
@@ -876,259 +332,6 @@ staff_idx_t System::firstVisibleStaff() const
 }
 
 //---------------------------------------------------------
-//   layout2
-//    called after measure layout
-//    adjusts staff distance
-//---------------------------------------------------------
-
-void System::layout2(const LayoutContext& ctx)
-{
-    Box* vb = vbox();
-    if (vb) {
-        vb->layout();
-        setbbox(vb->bbox());
-        return;
-    }
-
-    setPos(0.0, 0.0);
-    std::list<std::pair<size_t, SysStaff*> > visibleStaves;
-
-    for (size_t i = 0; i < _staves.size(); ++i) {
-        Staff* s  = score()->staff(i);
-        SysStaff* ss = _staves[i];
-        if (s->show() && ss->show()) {
-            visibleStaves.push_back(std::pair<size_t, SysStaff*>(i, ss));
-        } else {
-            ss->setbbox(RectF());        // already done in layout() ?
-        }
-    }
-
-    double _spatium            = spatium();
-    double y                   = 0.0;
-    double minVerticalDistance = score()->styleMM(Sid::minVerticalDistance);
-    double staffDistance       = score()->styleMM(Sid::staffDistance);
-    double akkoladeDistance    = score()->styleMM(Sid::akkoladeDistance);
-    if (score()->enableVerticalSpread()) {
-        staffDistance       = score()->styleMM(Sid::minStaffSpread);
-        akkoladeDistance    = score()->styleMM(Sid::minStaffSpread);
-    }
-
-    if (visibleStaves.empty()) {
-        return;
-    }
-
-    for (auto i = visibleStaves.begin();; ++i) {
-        SysStaff* ss  = i->second;
-        staff_idx_t si1 = i->first;
-        Staff* staff  = score()->staff(si1);
-        auto ni       = std::next(i);
-
-        double dist = staff->height();
-        double yOffset;
-        double h;
-        if (staff->lines(Fraction(0, 1)) == 1) {
-            yOffset = _spatium * BARLINE_SPAN_1LINESTAFF_TO * 0.5;
-            h = _spatium * (BARLINE_SPAN_1LINESTAFF_TO - BARLINE_SPAN_1LINESTAFF_FROM) * 0.5;
-        } else {
-            yOffset = 0.0;
-            h = staff->height();
-        }
-        if (ni == visibleStaves.end()) {
-            ss->setYOff(yOffset);
-            ss->bbox().setRect(_leftMargin, y - yOffset, width() - _leftMargin, h);
-            ss->saveLayout();
-            break;
-        }
-
-        staff_idx_t si2 = ni->first;
-        Staff* staff2  = score()->staff(si2);
-
-        if (staff->part() == staff2->part()) {
-            Measure* m = firstMeasure();
-            double mag = m ? staff->staffMag(m->tick()) : 1.0;
-            dist += akkoladeDistance * mag;
-        } else {
-            dist += staffDistance;
-        }
-        dist += staff2->userDist();
-        bool fixedSpace = false;
-        for (MeasureBase* mb : ml) {
-            if (!mb->isMeasure()) {
-                continue;
-            }
-            Measure* m = toMeasure(mb);
-            Spacer* sp = m->vspacerDown(si1);
-            if (sp) {
-                if (sp->spacerType() == SpacerType::FIXED) {
-                    dist = staff->height() + sp->gap();
-                    fixedSpace = true;
-                    break;
-                } else {
-                    dist = std::max(dist, staff->height() + sp->gap());
-                }
-            }
-            sp = m->vspacerUp(si2);
-            if (sp) {
-                dist = std::max(dist, sp->gap() + staff->height());
-            }
-        }
-        if (!fixedSpace) {
-            // check minimum distance to next staff
-            // note that in continuous view, we normally only have a partial skyline for the system
-            // a full one is only built when triggering a full layout
-            // therefore, we don't know the value we get from minDistance will actually be enough
-            // so we remember the value between layouts and increase it when necessary
-            // (the first layout on switching to continuous view gives us good initial values)
-            // the result is space is good to start and grows as needed
-            // it does not, however, shrink when possible - only by trigger a full layout
-            // (such as by toggling to page view and back)
-            double d = ss->skyline().minDistance(System::staff(si2)->skyline());
-            if (score()->lineMode()) {
-                double previousDist = ss->continuousDist();
-                if (d > previousDist) {
-                    ss->setContinuousDist(d);
-                } else {
-                    d = previousDist;
-                }
-            }
-            dist = std::max(dist, d + minVerticalDistance);
-        }
-        ss->setYOff(yOffset);
-        ss->bbox().setRect(_leftMargin, y - yOffset, width() - _leftMargin, h);
-        ss->saveLayout();
-        y += dist;
-    }
-
-    _systemHeight = staff(visibleStaves.back().first)->bbox().bottom();
-    setHeight(_systemHeight);
-
-    setMeasureHeight(_systemHeight);
-
-    //---------------------------------------------------
-    //  layout brackets vertical position
-    //---------------------------------------------------
-
-    layoutBracketsVertical();
-
-    //---------------------------------------------------
-    //  layout instrument names
-    //---------------------------------------------------
-
-    layoutInstrumentNames();
-
-    //---------------------------------------------------
-    //  layout cross-staff slurs and ties
-    //---------------------------------------------------
-
-    Fraction stick = measures().front()->tick();
-    Fraction etick = measures().back()->endTick();
-    auto spanners = ctx.score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks());
-
-    std::vector<Spanner*> spanner;
-    for (auto interval : spanners) {
-        Spanner* sp = interval.value;
-        if (sp->tick() < etick && sp->tick2() >= stick) {
-            if (sp->isSlur()) {
-                ChordRest* scr = sp->startCR();
-                ChordRest* ecr = sp->endCR();
-                staff_idx_t idx = sp->vStaffIdx();
-                if (scr && ecr && (scr->vStaffIdx() != idx || ecr->vStaffIdx() != idx)) {
-                    sp->layoutSystem(this);
-                }
-            }
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   restoreLayout2
-//---------------------------------------------------------
-
-void System::restoreLayout2()
-{
-    if (vbox()) {
-        return;
-    }
-
-    for (SysStaff* s : _staves) {
-        s->restoreLayout();
-    }
-
-    setHeight(_systemHeight);
-    setMeasureHeight(_systemHeight);
-}
-
-//---------------------------------------------------------
-//   setInstrumentNames
-//---------------------------------------------------------
-
-void System::setInstrumentNames(const LayoutContext& ctx, bool longName, Fraction tick)
-{
-    //
-    // remark: add/remove instrument names is not undo/redoable
-    //         as add/remove of systems is not undoable
-    //
-    if (vbox()) {                 // ignore vbox
-        return;
-    }
-    if (!score()->showInstrumentNames()
-        || (style()->styleB(Sid::hideInstrumentNameIfOneInstrument) && score()->visiblePartCount() <= 1)) {
-        for (SysStaff* staff : _staves) {
-            for (InstrumentName* t : staff->instrumentNames) {
-                ctx.score()->removeElement(t);
-            }
-        }
-        return;
-    }
-
-    int staffIdx = 0;
-    for (SysStaff* staff : _staves) {
-        Staff* s = score()->staff(staffIdx);
-        Part* part = s->part();
-
-        bool atLeastOneVisibleStaff = false;
-        for (Staff* partStaff : part->staves()) {
-            if (partStaff->show()) {
-                atLeastOneVisibleStaff = true;
-                break;
-            }
-        }
-
-        bool showName = part->show() && atLeastOneVisibleStaff;
-        if (!s->isTop() || !showName) {
-            for (InstrumentName* t : staff->instrumentNames) {
-                ctx.score()->removeElement(t);
-            }
-            ++staffIdx;
-            continue;
-        }
-
-        const std::list<StaffName>& names = longName ? part->longNames(tick) : part->shortNames(tick);
-
-        size_t idx = 0;
-        for (const StaffName& sn : names) {
-            InstrumentName* iname = mu::value(staff->instrumentNames, idx);
-            if (iname == 0) {
-                iname = new InstrumentName(this);
-                // iname->setGenerated(true);
-                iname->setParent(this);
-                iname->setSysStaff(staff);
-                iname->setTrack(staffIdx * VOICES);
-                iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
-                iname->setLayoutPos(sn.pos());
-                ctx.score()->addElement(iname);
-            }
-            iname->setXmlText(sn.name());
-            ++idx;
-        }
-        for (; idx < staff->instrumentNames.size(); ++idx) {
-            ctx.score()->removeElement(staff->instrumentNames[idx]);
-        }
-        ++staffIdx;
-    }
-}
-
-//---------------------------------------------------------
 //   y2staff
 //---------------------------------------------------------
 
@@ -1145,7 +348,7 @@ int System::y2staff(double y) const
     y -= pos().y();
     int idx = 0;
     double margin = spatium() * 2;
-    for (SysStaff* s : _staves) {
+    for (SysStaff* s : m_staves) {
         double y1 = s->bbox().top() - margin;
         double y2 = s->bbox().bottom() + margin;
         if (y >= y1 && y < y2) {
@@ -1224,8 +427,8 @@ void System::add(EngravingItem* el)
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
 // LOGD("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());
-        _staves[el->staffIdx()]->instrumentNames.push_back(toInstrumentName(el));
-        toInstrumentName(el)->setSysStaff(_staves[el->staffIdx()]);
+        m_staves[el->staffIdx()]->instrumentNames.push_back(toInstrumentName(el));
+        toInstrumentName(el)->setSysStaff(m_staves[el->staffIdx()]);
         break;
 
     case ElementType::BEAM:
@@ -1234,7 +437,7 @@ void System::add(EngravingItem* el)
 
     case ElementType::BRACKET: {
         Bracket* b   = toBracket(el);
-        _brackets.push_back(b);
+        m_brackets.push_back(b);
     }
     break;
 
@@ -1266,11 +469,11 @@ void System::add(EngravingItem* el)
     {
         SpannerSegment* ss = toSpannerSegment(el);
 #ifndef NDEBUG
-        if (mu::contains(_spannerSegments, ss)) {
+        if (mu::contains(m_spannerSegments, ss)) {
             LOGD("System::add() %s %p already there", ss->typeName(), ss);
         } else
 #endif
-        _spannerSegments.push_back(ss);
+        m_spannerSegments.push_back(ss);
     }
     break;
 
@@ -1278,9 +481,9 @@ void System::add(EngravingItem* el)
     {
         SystemDivider* sd = toSystemDivider(el);
         if (sd->dividerType() == SystemDivider::Type::LEFT) {
-            _systemDividerLeft = sd;
+            m_systemDividerLeft = sd;
         } else {
-            _systemDividerRight = sd;
+            m_systemDividerRight = sd;
         }
     }
     break;
@@ -1301,7 +504,7 @@ void System::remove(EngravingItem* el)
 {
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
-        mu::remove(_staves[el->staffIdx()]->instrumentNames, toInstrumentName(el));
+        mu::remove(m_staves[el->staffIdx()]->instrumentNames, toInstrumentName(el));
         toInstrumentName(el)->setSysStaff(0);
         break;
     case ElementType::BEAM:
@@ -1310,7 +513,7 @@ void System::remove(EngravingItem* el)
     case ElementType::BRACKET:
     {
         Bracket* b = toBracket(el);
-        if (!mu::remove(_brackets, b)) {
+        if (!mu::remove(m_brackets, b)) {
             LOGD("System::remove: bracket not found");
         }
     }
@@ -1334,17 +537,17 @@ void System::remove(EngravingItem* el)
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
-        if (!mu::remove(_spannerSegments, toSpannerSegment(el))) {
+        if (!mu::remove(m_spannerSegments, toSpannerSegment(el))) {
             LOGD("System::remove: %p(%s) not found, score %p", el, el->typeName(), score());
             assert(score() == el->score());
         }
         break;
     case ElementType::SYSTEM_DIVIDER:
-        if (el == _systemDividerLeft) {
-            _systemDividerLeft = 0;
+        if (el == m_systemDividerLeft) {
+            m_systemDividerLeft = 0;
         } else {
-            assert(_systemDividerRight == el);
-            _systemDividerRight = 0;
+            assert(m_systemDividerRight == el);
+            m_systemDividerRight = 0;
         }
         break;
 
@@ -1372,12 +575,12 @@ void System::change(EngravingItem* o, EngravingItem* n)
 
 Fraction System::snap(const Fraction& tick, const PointF p) const
 {
-    for (const MeasureBase* m : ml) {
+    for (const MeasureBase* m : m_ml) {
         if (p.x() < m->x() + m->width()) {
             return toMeasure(m)->snap(tick, p - m->pos());       //TODO: MeasureBase
         }
     }
-    return toMeasure(ml.back())->snap(tick, p - pos());          //TODO: MeasureBase
+    return toMeasure(m_ml.back())->snap(tick, p - pos());          //TODO: MeasureBase
 }
 
 //---------------------------------------------------------
@@ -1386,12 +589,12 @@ Fraction System::snap(const Fraction& tick, const PointF p) const
 
 Fraction System::snapNote(const Fraction& tick, const PointF p, int staff) const
 {
-    for (const MeasureBase* m : ml) {
+    for (const MeasureBase* m : m_ml) {
         if (p.x() < m->x() + m->width()) {
             return toMeasure(m)->snapNote(tick, p - m->pos(), staff);        //TODO: MeasureBase
         }
     }
-    return toMeasure(ml.back())->snap(tick, p - pos());          // TODO: MeasureBase
+    return toMeasure(m_ml.back())->snap(tick, p - pos());          // TODO: MeasureBase
 }
 
 //---------------------------------------------------------
@@ -1400,8 +603,8 @@ Fraction System::snapNote(const Fraction& tick, const PointF p, int staff) const
 
 Measure* System::firstMeasure() const
 {
-    auto i = std::find_if(ml.begin(), ml.end(), [](MeasureBase* mb) { return mb->isMeasure(); });
-    return i != ml.end() ? toMeasure(*i) : 0;
+    auto i = std::find_if(m_ml.begin(), m_ml.end(), [](MeasureBase* mb) { return mb->isMeasure(); });
+    return i != m_ml.end() ? toMeasure(*i) : 0;
 }
 
 //---------------------------------------------------------
@@ -1410,8 +613,8 @@ Measure* System::firstMeasure() const
 
 Measure* System::lastMeasure() const
 {
-    auto i = std::find_if(ml.rbegin(), ml.rend(), [](MeasureBase* mb) { return mb->isMeasure(); });
-    return i != ml.rend() ? toMeasure(*i) : 0;
+    auto i = std::find_if(m_ml.rbegin(), m_ml.rend(), [](MeasureBase* mb) { return mb->isMeasure(); });
+    return i != m_ml.rend() ? toMeasure(*i) : 0;
 }
 
 //---------------------------------------------------------
@@ -1420,11 +623,11 @@ Measure* System::lastMeasure() const
 
 MeasureBase* System::nextMeasure(const MeasureBase* m) const
 {
-    if (m == ml.back()) {
+    if (m == m_ml.back()) {
         return 0;
     }
     MeasureBase* nm = m->next();
-    if (nm->isMeasure() && score()->styleB(Sid::createMultiMeasureRests) && toMeasure(nm)->hasMMRest()) {
+    if (nm->isMeasure() && style().styleB(Sid::createMultiMeasureRests) && toMeasure(nm)->hasMMRest()) {
         nm = toMeasure(nm)->mmRest();
     }
     return nm;
@@ -1439,27 +642,25 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
     if (vbox()) {
         return;
     }
-    for (Bracket* b : _brackets) {
+    for (Bracket* b : m_brackets) {
         func(data, b);
     }
 
-    if (_systemDividerLeft) {
-        func(data, _systemDividerLeft);
+    if (m_systemDividerLeft) {
+        func(data, m_systemDividerLeft);
     }
-    if (_systemDividerRight) {
-        func(data, _systemDividerRight);
+    if (m_systemDividerRight) {
+        func(data, m_systemDividerRight);
     }
 
-    int idx = 0;
-    for (const SysStaff* st : _staves) {
+    for (const SysStaff* st : m_staves) {
         if (all || st->show()) {
             for (InstrumentName* t : st->instrumentNames) {
                 func(data, t);
             }
         }
-        ++idx;
     }
-    for (SpannerSegment* ss : _spannerSegments) {
+    for (SpannerSegment* ss : m_spannerSegments) {
         staff_idx_t staffIdx = ss->spanner()->staffIdx();
         if (staffIdx == mu::nidx) {
             LOGD("System::scanElements: staffIDx == -1: %s %p", ss->spanner()->typeName(), ss->spanner());
@@ -1484,7 +685,7 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
             }
             v = v1 || v2;       // hide spanner if both chords are hidden
         }
-        if (all || (score()->staff(staffIdx)->show() && _staves[staffIdx]->show() && v) || spanner->isVolta() || spanner->systemFlag()) {
+        if (all || (score()->staff(staffIdx)->show() && m_staves[staffIdx]->show() && v) || spanner->isVolta() || spanner->systemFlag()) {
             ss->scanElements(data, func, all);
         }
     }
@@ -1497,11 +698,11 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 
 double System::staffYpage(staff_idx_t staffIdx) const
 {
-    if (staffIdx >= _staves.size()) {
+    if (staffIdx >= m_staves.size()) {
         return pagePos().y();
     }
 
-    return _staves[staffIdx]->y() + y();
+    return m_staves[staffIdx]->y() + y();
 }
 
 //---------------------------------------------------------
@@ -1511,41 +712,16 @@ double System::staffYpage(staff_idx_t staffIdx) const
 
 double System::staffCanvasYpage(staff_idx_t staffIdx) const
 {
-    return _staves[staffIdx]->y() + y() + page()->canvasPos().y();
+    return m_staves[staffIdx]->y() + y() + page()->canvasPos().y();
 }
 
 SysStaff* System::staff(size_t staffIdx) const
 {
-    if (staffIdx < _staves.size()) {
-        return _staves[staffIdx];
+    if (staffIdx < m_staves.size()) {
+        return m_staves[staffIdx];
     }
 
     return nullptr;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void System::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    if (_systemDividerLeft && _systemDividerLeft->isUserModified()) {
-        _systemDividerLeft->write(xml);
-    }
-    if (_systemDividerRight && _systemDividerRight->isUserModified()) {
-        _systemDividerRight->write(xml);
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void System::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
@@ -1570,98 +746,23 @@ EngravingItem* System::nextSegmentElement()
 
 EngravingItem* System::prevSegmentElement()
 {
-    Segment* seg = firstMeasure()->first();
     EngravingItem* re = 0;
-    while (!re) {
-        seg = seg->prev1MM();
-        if (!seg) {
-            return score()->firstElement();
-        }
+    Measure* m = firstMeasure();
+    if (m) {
+        Segment* seg = m->first();
+        while (!re) {
+            seg = seg->prev1MM();
+            if (!seg) {
+                return score()->firstElement();
+            }
 
-        if (seg->segmentType() == SegmentType::EndBarLine) {
-            score()->inputState().setTrack((score()->staves().size() - 1) * VOICES);       //correction
+            if (seg->segmentType() == SegmentType::EndBarLine) {
+                score()->inputState().setTrack((score()->staves().size() - 1) * VOICES);       //correction
+            }
+            re = seg->lastElement(score()->staves().size() - 1);
         }
-        re = seg->lastElement(score()->staves().size() - 1);
     }
     return re;
-}
-
-//---------------------------------------------------------
-//   minDistance
-//    Return the minimum distance between this system and s2
-//    without any element collisions.
-//
-//    this - top system
-//    s2   - bottom system
-//---------------------------------------------------------
-
-double System::minDistance(System* s2) const
-{
-    if (vbox() && !s2->vbox()) {
-        return std::max(double(vbox()->bottomGap()), s2->minTop());
-    } else if (!vbox() && s2->vbox()) {
-        return std::max(double(s2->vbox()->topGap()), minBottom());
-    } else if (vbox() && s2->vbox()) {
-        return double(s2->vbox()->topGap() + vbox()->bottomGap());
-    }
-
-    if (_staves.empty() || s2->staves().empty()) {
-        return 0.0;
-    }
-
-    double minVerticalDistance = score()->styleMM(Sid::minVerticalDistance);
-    double dist = score()->enableVerticalSpread() ? styleP(Sid::minSystemSpread) : styleP(Sid::minSystemDistance);
-    size_t firstStaff = 0;
-    size_t lastStaff = 0;
-
-    for (firstStaff = 0; firstStaff < _staves.size() - 1; ++firstStaff) {
-        if (score()->staff(firstStaff)->show() && s2->staff(firstStaff)->show()) {
-            break;
-        }
-    }
-    for (lastStaff = _staves.size() - 1; lastStaff > 0; --lastStaff) {
-        if (score()->staff(lastStaff)->show() && staff(lastStaff)->show()) {
-            break;
-        }
-    }
-
-    Staff* staff = score()->staff(firstStaff);
-    double userDist = staff ? staff->userDist() : 0.0;
-    dist = std::max(dist, userDist);
-    fixedDownDistance = false;
-
-    for (MeasureBase* mb1 : ml) {
-        if (mb1->isMeasure()) {
-            Measure* m = toMeasure(mb1);
-            Spacer* sp = m->vspacerDown(lastStaff);
-            if (sp) {
-                if (sp->spacerType() == SpacerType::FIXED) {
-                    dist = sp->gap();
-                    fixedDownDistance = true;
-                    break;
-                } else {
-                    dist = std::max(dist, sp->gap().val());
-                }
-            }
-        }
-    }
-    if (!fixedDownDistance) {
-        for (MeasureBase* mb2 : s2->ml) {
-            if (mb2->isMeasure()) {
-                Measure* m = toMeasure(mb2);
-                Spacer* sp = m->vspacerUp(firstStaff);
-                if (sp) {
-                    dist = std::max(dist, sp->gap().val());
-                }
-            }
-        }
-
-        SysStaff* sysStaff = this->staff(lastStaff);
-        double sld = sysStaff ? sysStaff->skyline().minDistance(s2->staff(firstStaff)->skyline()) : 0;
-        sld -= sysStaff ? sysStaff->bbox().height() - minVerticalDistance : 0;
-        dist = std::max(dist, sld);
-    }
-    return dist;
 }
 
 //---------------------------------------------------------
@@ -1704,9 +805,9 @@ double System::bottomDistance(staff_idx_t staffIdx, const SkylineLine& s) const
 
 staff_idx_t System::firstVisibleSysStaff() const
 {
-    size_t nstaves = _staves.size();
+    size_t nstaves = m_staves.size();
     for (staff_idx_t i = 0; i < nstaves; ++i) {
-        if (_staves[i]->show()) {
+        if (m_staves[i]->show()) {
             return i;
         }
     }
@@ -1719,9 +820,9 @@ staff_idx_t System::firstVisibleSysStaff() const
 
 staff_idx_t System::lastVisibleSysStaff() const
 {
-    int nstaves = static_cast<int>(_staves.size());
+    int nstaves = static_cast<int>(m_staves.size());
     for (int i = nstaves - 1; i >= 0; --i) {
-        if (_staves[i]->show()) {
+        if (m_staves[i]->show()) {
             return static_cast<staff_idx_t>(i);
         }
     }
@@ -1861,7 +962,7 @@ Spacer* System::downSpacer(staff_idx_t staffIdx) const
 
 double System::firstNoteRestSegmentX(bool leading)
 {
-    double margin = score()->styleMM(Sid::HeaderToLineStartDistance);
+    double margin = style().styleMM(Sid::HeaderToLineStartDistance);
     for (const MeasureBase* mb : measures()) {
         if (mb->isMeasure()) {
             const Measure* measure = static_cast<const Measure*>(mb);
@@ -1903,42 +1004,30 @@ double System::firstNoteRestSegmentX(bool leading)
 }
 
 //---------------------------------------------------------
-//   lastNoteRestSegmentX
-//    in System() coordinates
-//    returns the position of the last note or rest,
-//    or the position just before the first non-chordrest segment
+//   endingXForOpenEndedLines
+//    in System() coordinates returns the end point for
+//    open ended (i.e. cross-system) lines
 //---------------------------------------------------------
 
-double System::lastNoteRestSegmentX(bool trailing)
+double System::endingXForOpenEndedLines() const
 {
-    double margin = score()->spatium() / 4;  // TODO: this can be parameterizable
-    //for (const MeasureBase* mb : measures()) {
-    for (auto measureBaseIter = measures().rbegin(); measureBaseIter != measures().rend(); measureBaseIter++) {
-        if ((*measureBaseIter)->isMeasure()) {
-            const Measure* measure = static_cast<const Measure*>(*measureBaseIter);
-            for (const Segment* seg = measure->last(); seg; seg = seg->prev()) {
-                if (seg->isChordRestType()) {
-                    double noteRestPos = seg->measure()->pos().x() + seg->pos().x();
-                    if (!trailing) {
-                        return noteRestPos;
-                    }
+    double margin = style().spatium() / 4;  // TODO: this can be parameterizable
+    double systemEndX = bbox().width();
 
-                    // last CR found; find next segment after this one
-                    seg = seg->nextActive();
-                    while (seg && seg->allElementsInvisible()) {
-                        seg = seg->nextActive();
-                    }
-                    if (seg) {
-                        return std::max(seg->measure()->pos().x() + seg->pos().x() - margin, noteRestPos);
-                    } else {
-                        return bbox().x() - margin;
-                    }
-                }
-            }
-        }
+    Measure* lastMeas = lastMeasure();
+    if (!lastMeas) {
+        return systemEndX - margin;
     }
-    LOGD("lastNoteRestSegmentX: did not find segment");
-    return margin;
+
+    Segment* lastSeg = lastMeas->last();
+    while (lastSeg && !lastSeg->isType(SegmentType::BarLineType)) {
+        lastSeg = lastSeg->prevEnabled();
+    }
+    if (!lastSeg) {
+        return systemEndX - margin;
+    }
+
+    return lastSeg->x() + lastMeas->x() - margin;
 }
 
 //---------------------------------------------------------
@@ -1994,7 +1083,7 @@ ChordRest* System::firstChordRest(track_idx_t track)
 
 bool System::pageBreak() const
 {
-    return ml.empty() ? false : ml.back()->pageBreak();
+    return m_ml.empty() ? false : m_ml.back()->pageBreak();
 }
 
 //---------------------------------------------------------
@@ -2097,9 +1186,10 @@ Fraction System::minSysTicks() const
 double System::squeezableSpace() const
 {
     double squeezableSpace = 0;
-    for (auto m : measures()) {
-        if (m->isMeasure()) {
-            squeezableSpace += toMeasure(m)->squeezableSpace();
+    for (auto mb : measures()) {
+        if (mb->isMeasure()) {
+            const Measure* m = toMeasure(mb);
+            squeezableSpace += (m->isWidthLocked() ? 0.0 : m->squeezableSpace());
         }
     }
     return squeezableSpace;

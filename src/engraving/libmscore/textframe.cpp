@@ -22,8 +22,6 @@
 #include "textframe.h"
 
 #include "draw/fontmetrics.h"
-#include "rw/xml.h"
-#include "rw/400/tread.h"
 
 #include "box.h"
 #include "factory.h"
@@ -59,49 +57,6 @@ TBox::TBox(const TBox& tbox)
 TBox::~TBox()
 {
     delete m_text;
-}
-
-//---------------------------------------------------------
-//   layout
-///   The text box layout() adjusts the frame height to text
-///   height.
-//---------------------------------------------------------
-
-void TBox::layout()
-{
-    setPos(PointF());        // !?
-    bbox().setRect(0.0, 0.0, system()->width(), 0);
-    m_text->layout();
-
-    double h = 0.;
-    if (m_text->empty()) {
-        h = mu::draw::FontMetrics::ascent(m_text->font());
-    } else {
-        h = m_text->height();
-    }
-    double y = topMargin() * DPMM;
-    m_text->setPos(leftMargin() * DPMM, y);
-    h += topMargin() * DPMM + bottomMargin() * DPMM;
-    bbox().setRect(0.0, 0.0, system()->width(), h);
-
-    MeasureBase::layout();    // layout LayoutBreak's
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void TBox::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    Box::writeProperties(xml);
-    m_text->write(xml);
-    xml.endElement();
-}
-
-void TBox::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

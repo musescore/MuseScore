@@ -34,7 +34,7 @@ class XmlReader;
 namespace mu::project {
 class MscMetaReader : public IMscMetaReader
 {
-    INJECT(project, io::IFileSystem, fileSystem)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     RetVal<ProjectMeta> readMeta(const io::path_t& filePath) const;

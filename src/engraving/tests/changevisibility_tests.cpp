@@ -22,9 +22,11 @@
 
 #include <gtest/gtest.h>
 
+#include "libmscore/accidental.h"
 #include "libmscore/measure.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
+#include "libmscore/ornament.h"
 #include "libmscore/rest.h"
 #include "libmscore/stem.h"
 #include "libmscore/hook.h"
@@ -459,6 +461,64 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_ChordsConnectedWithBea
                 EXPECT_TRUE(child->visible());
             }
         }
+    }
+}
+
+TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_Ornaments)
+{
+    ASSERT_TRUE(m_score);
+
+    Measure* measure = m_score->tick2measure(Fraction(3, 1));
+    ASSERT_TRUE(measure);
+
+    Chord* chord = toChord(measure->first()->elementAt(0));
+    ASSERT_TRUE(chord);
+    Note* note = chord->upNote();
+    ASSERT_TRUE(note);
+    Ornament* ornament = toOrnament(chord->articulations().front());
+    ASSERT_TRUE(ornament);
+    Accidental* accidental = ornament->accidentalAbove();
+    ASSERT_TRUE(accidental);
+
+    // NOTE invisible makes ORNAMENT invisible
+    m_score->undoChangeVisible(note, false);
+    ASSERT_FALSE(ornament->visible());
+
+    // ORNAMENT visible, but note stays invisible
+    m_score->undoChangeVisible(ornament, true);
+    ASSERT_TRUE(ornament->visible());
+    ASSERT_FALSE(note->visible());
+
+    // Ornament accidental invisible, but ornament stays visible
+    m_score->undoChangeVisible(accidental, false);
+    ASSERT_FALSE(accidental->visible());
+    ASSERT_TRUE(ornament->visible());
+
+    chord = toChord(chord->segment()->next()->elementAt(0));
+    ASSERT_TRUE(chord);
+    note = chord->upNote();
+    ASSERT_TRUE(note);
+    ornament = toOrnament(chord->articulations().front());
+    ASSERT_TRUE(ornament);
+    Chord* cueNoteChord = ornament->cueNoteChord();
+    ASSERT_TRUE(cueNoteChord);
+    Note* cueNote = cueNoteChord->upNote();
+    ASSERT_TRUE(cueNote);
+
+    // ORNAMENT invisible, cue note also becomes invisible
+    m_score->undoChangeVisible(ornament, false);
+    ASSERT_FALSE(ornament->visible());
+    ASSERT_FALSE(cueNote->visible());
+    for (EngravingItem* el : cueNote->el()) {
+        ASSERT_FALSE(el->visible());
+    }
+
+    // CUE NOTE visible, but ornament stays invisible
+    m_score->undoChangeVisible(cueNote, true);
+    ASSERT_FALSE(ornament->visible());
+    ASSERT_TRUE(cueNote->visible());
+    for (EngravingItem* el : cueNote->el()) {
+        ASSERT_TRUE(el->visible());
     }
 }
 

@@ -25,15 +25,18 @@
 #include <cmath>
 
 #include "types/typesconv.h"
-#include "rw/xml.h"
-#include "rw/400/tread.h"
+
 #include "iengravingfont.h"
 
 #include "accidental.h"
+#include "chord.h"
 #include "factory.h"
+#include "note.h"
+#include "ornament.h"
 #include "score.h"
 #include "staff.h"
 #include "system.h"
+#include "undo.h"
 
 #include "log.h"
 
@@ -72,20 +75,6 @@ void TrillSegment::draw(mu::draw::Painter* painter) const
 }
 
 //---------------------------------------------------------
-//   add
-//---------------------------------------------------------
-
-void TrillSegment::add(EngravingItem* e)
-{
-    e->setParent(this);
-    if (e->type() == ElementType::ACCIDENTAL) {
-        // accidental is part of trill
-        trill()->setAccidental(toAccidental(e));
-        e->added();
-    }
-}
-
-//---------------------------------------------------------
 //   remove
 //---------------------------------------------------------
 
@@ -104,7 +93,7 @@ void TrillSegment::remove(EngravingItem* e)
 
 void TrillSegment::symbolLine(SymId start, SymId fill)
 {
-    double x1 = 0;
+    double x1 = 0.0;
     double x2 = pos2().x();
     double w   = x2 - x1;
     double mag = magS();
@@ -124,7 +113,7 @@ void TrillSegment::symbolLine(SymId start, SymId fill)
 
 void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
 {
-    double x1 = 0;
+    double x1 = 0.0;
     double x2 = pos2().x();
     double w   = x2 - x1;
     double mag = magS();
@@ -145,93 +134,18 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void TrillSegment::layout()
-{
-    if (staff()) {
-        setMag(staff()->staffMag(tick()));
-    }
-    if (spanner()->placeBelow()) {
-        setPosY(staff() ? staff()->height() : 0.0);
-    }
-
-    if (isSingleType() || isBeginType()) {
-        Accidental* a = trill()->accidental();
-        if (a) {
-            a->layout();
-            a->setMag(a->mag() * .6);
-            double _spatium = spatium();
-            a->setPos(_spatium * 1.3, -2.2 * _spatium);
-            a->setParent(this);
-        }
-        switch (trill()->trillType()) {
-        case TrillType::TRILL_LINE:
-            symbolLine(SymId::ornamentTrill, SymId::wiggleTrill);
-            break;
-        case TrillType::PRALLPRALL_LINE:
-            symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
-            break;
-        case TrillType::UPPRALL_LINE:
-            symbolLine(SymId::ornamentBottomLeftConcaveStroke,
-                       SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
-            break;
-        case TrillType::DOWNPRALL_LINE:
-            symbolLine(SymId::ornamentLeftVerticalStroke,
-                       SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
-            break;
-        }
-    } else {
-        symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
-    }
-    if (isStyled(Pid::OFFSET)) {
-        roffset() = trill()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
-
-    autoplaceSpannerSegment();
-}
-
-//---------------------------------------------------------
 //   shape
 //---------------------------------------------------------
 
 Shape TrillSegment::shape() const
 {
-    return Shape(bbox());
-}
-
-//---------------------------------------------------------
-//   acceptDrop
-//---------------------------------------------------------
-
-bool TrillSegment::acceptDrop(EditData& data) const
-{
-    if (data.dropElement->isAccidental()) {
-        return true;
+    IEngravingFontPtr font = score()->engravingFont();
+    Shape s = font->shape(_symbols, _mag);
+    Accidental* accidental = trill()->accidental();
+    if (accidental && accidental->visible() && isSingleBeginType()) {
+        s.add(accidental->shape().translate(accidental->pos()));
     }
-    return false;
-}
-
-//---------------------------------------------------------
-//   drop
-//---------------------------------------------------------
-
-EngravingItem* TrillSegment::drop(EditData& data)
-{
-    EngravingItem* e = data.dropElement;
-    switch (e->type()) {
-    case ElementType::ACCIDENTAL:
-        e->setParent(trill());
-        score()->undoAddElement(e);
-        break;
-
-    default:
-        delete e;
-        e = 0;
-        break;
-    }
-    return e;
+    return s;
 }
 
 //---------------------------------------------------------
@@ -245,6 +159,10 @@ void TrillSegment::scanElements(void* data, void (* func)(void*, EngravingItem*)
         Accidental* a = trill()->accidental();
         if (a) {
             func(data, a);
+        }
+        Chord* cueNoteChord = trill()->cueNoteChord();
+        if (cueNoteChord) {
+            cueNoteChord->scanElements(data, func);
         }
     }
 }
@@ -289,7 +207,9 @@ Trill::Trill(EngravingItem* parent)
     : SLine(ElementType::TRILL, parent)
 {
     _trillType     = TrillType::TRILL_LINE;
-    _accidental    = 0;
+    _ornament = nullptr;
+    _accidental = nullptr;
+    _cueNoteChord = nullptr;
     _ornamentStyle = OrnamentStyle::DEFAULT;
     setPlayArticulation(true);
     initElementStyle(&trillStyle);
@@ -299,30 +219,25 @@ Trill::Trill(const Trill& t)
     : SLine(t)
 {
     _trillType = t._trillType;
-    _accidental = t._accidental ? t._accidental->clone() : nullptr;
+    _ornament = t._ornament ? t._ornament->clone() : nullptr;
     _ornamentStyle = t._ornamentStyle;
     _playArticulation = t._playArticulation;
     initElementStyle(&trillStyle);
 }
 
-Trill::~Trill()
+EngravingItem* Trill::linkedClone()
 {
-    delete _accidental;
+    Trill* linkedTrill = clone();
+    Ornament* linkedOrnament = toOrnament(_ornament->linkedClone());
+    linkedTrill->setOrnament(linkedOrnament);
+    linkedTrill->setAutoplace(true);
+    score()->undo(new Link(linkedTrill, this));
+    return linkedTrill;
 }
 
-//---------------------------------------------------------
-//   add
-//---------------------------------------------------------
-
-void Trill::add(EngravingItem* e)
+Trill::~Trill()
 {
-    if (e->type() == ElementType::ACCIDENTAL) {
-        e->setParent(this);
-        _accidental = toAccidental(e);
-        e->added();
-    } else {
-        SLine::add(e);
-    }
+    delete _ornament;
 }
 
 //---------------------------------------------------------
@@ -337,26 +252,28 @@ void Trill::remove(EngravingItem* e)
     }
 }
 
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Trill::layout()
+void Trill::setTrack(track_idx_t n)
 {
-    SLine::layout();
-    if (score()->isPaletteScore()) {
-        return;
+    EngravingItem::setTrack(n);
+
+    for (SpannerSegment* ss : spannerSegments()) {
+        ss->setTrack(n);
     }
-    if (spannerSegments().empty()) {
-        return;
+
+    if (_ornament) {
+        _ornament->setTrack(n);
     }
-    TrillSegment* ls = toTrillSegment(frontSegment());
-    if (spannerSegments().empty()) {
-        LOGD("Trill: no segments");
+}
+
+void Trill::setTrillType(TrillType tt)
+{
+    _trillType = tt;
+    if (!_ornament) {
+        // ornament parent will be explicitely set at layout stage
+        _ornament = Factory::createOrnament((ChordRest*)score()->dummy()->chord());
     }
-    if (_accidental) {
-        _accidental->setParent(ls);
-    }
+    _ornament->setTrack(track());
+    _ornament->setSymId(Ornament::fromTrillType(tt));
 }
 
 //---------------------------------------------------------
@@ -375,36 +292,6 @@ LineSegment* Trill::createLineSegment(System* parent)
     seg->setColor(color());
     seg->initElementStyle(&trillSegmentStyle);
     return seg;
-}
-
-//---------------------------------------------------------
-//   Trill::write
-//---------------------------------------------------------
-
-void Trill::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    xml.tag("subtype", TConv::toXml(trillType()));
-    writeProperty(xml, Pid::PLAY);
-    writeProperty(xml, Pid::ORNAMENT_STYLE);
-    writeProperty(xml, Pid::PLACEMENT);
-    SLine::writeProperties(xml);
-    if (_accidental) {
-        _accidental->write(xml);
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   Trill::read
-//---------------------------------------------------------
-
-void Trill::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
@@ -478,7 +365,7 @@ PropertyValue Trill::propertyDefault(Pid propertyId) const
     case Pid::PLAY:
         return true;
     case Pid::PLACEMENT:
-        return score()->styleV(Sid::trillPlacement);
+        return style().styleV(Sid::trillPlacement);
 
     default:
         return SLine::propertyDefault(propertyId);

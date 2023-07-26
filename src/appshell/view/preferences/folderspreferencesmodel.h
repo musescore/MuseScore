@@ -38,12 +38,12 @@ class FoldersPreferencesModel : public QAbstractListModel, public async::Asyncab
 {
     Q_OBJECT
 
-    INJECT(appshell, project::IProjectConfiguration, projectConfiguration)
-    INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
-    INJECT(appshell, plugins::IPluginsConfiguration, pluginsConfiguration)
-    INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
-    INJECT(appshell, vst::IVstConfiguration, vstConfiguration)
-    INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(project::IProjectConfiguration, projectConfiguration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(plugins::IPluginsConfiguration, pluginsConfiguration)
+    INJECT(audio::IAudioConfiguration, audioConfiguration)
+    INJECT(vst::IVstConfiguration, vstConfiguration)
+    INJECT(IAppShellConfiguration, configuration)
 
 public:
     explicit FoldersPreferencesModel(QObject* parent = nullptr);

@@ -13,7 +13,7 @@ add_subdirectory(${OPUS_LIB_DIR} opus)
 
 aux_source_directory(${OPUSENC_DIR}/src SOURCE_LIB)
 
-configure_file(${OPUSENC_DIR}/config.h.in ${OPUSENC_DIR}/config.h)
+configure_file(${OPUSENC_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set(MODULE_DEF
     -DOUTSIDE_SPEEX

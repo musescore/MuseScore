@@ -83,6 +83,19 @@ TEST_F(Engraving_MeasureTests, DISABLED_insertMeasureEnd) // TODO: verify progra
     delete score;
 }
 
+TEST_F(Engraving_MeasureTests, insertAtBeginning)
+{
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-insert_beginning.mscx");
+    EXPECT_TRUE(score);
+    Measure* m = score->firstMeasure();
+    score->startCmd();
+    score->insertMeasure(ElementType::MEASURE, m);
+    score->endCmd();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_beginning.mscx",
+                                            MEASURE_DATA_DIR + u"measure-insert_beginning-ref.mscx"));
+    delete score;
+}
+
 TEST_F(Engraving_MeasureTests, insertBfClefChange)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-insert_bf_clef.mscx");
@@ -133,7 +146,8 @@ TEST_F(Engraving_MeasureTests, insertBfKeyChange)
     score->undoRedo(true, 0);
 
     EXPECT_TRUE(score->checkKeys());
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key_undo.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_key.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key_undo.mscx",
+                                            MEASURE_DATA_DIR + u"measure-insert_bf_key_undo-ref.mscx"));
 
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd();
@@ -146,7 +160,8 @@ TEST_F(Engraving_MeasureTests, insertBfKeyChange)
     score->undoRedo(true, 0);
 
     EXPECT_TRUE(score->checkKeys());
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key_undo.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_key.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key_undo.mscx",
+                                            MEASURE_DATA_DIR + u"measure-insert_bf_key_undo-ref.mscx"));
     delete score;
 }
 
@@ -208,7 +223,7 @@ TEST_F(Engraving_MeasureTests, spanner_A)
 
     score->select(score->firstMeasure());
     score->startCmd();
-    score->localTimeDelete();
+    score->cmdTimeDelete();
     score->endCmd();
     score->doLayout();
 
@@ -232,7 +247,7 @@ TEST_F(Engraving_MeasureTests, spanner_B)
     Measure* m = score->firstMeasure()->nextMeasure();
     score->select(m);
     score->startCmd();
-    score->localTimeDelete();
+    score->cmdTimeDelete();
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-7.mscx", MEASURE_DATA_DIR + u"measure-7-ref.mscx"));
@@ -255,7 +270,7 @@ TEST_F(Engraving_MeasureTests, spanner_C)
     Measure* m = score->firstMeasure()->nextMeasure();
     score->select(m);
     score->startCmd();
-    score->localTimeDelete();
+    score->cmdTimeDelete();
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-8.mscx", MEASURE_DATA_DIR + u"measure-8-ref.mscx"));
@@ -278,7 +293,7 @@ TEST_F(Engraving_MeasureTests, spanner_D)
     Measure* m = score->firstMeasure()->nextMeasure();
     score->select(m);
     score->startCmd();
-    score->localTimeDelete();
+    score->cmdTimeDelete();
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-9.mscx", MEASURE_DATA_DIR + u"measure-9-ref.mscx"));
@@ -297,7 +312,7 @@ TEST_F(Engraving_MeasureTests, deleteLast)
     Measure* m = score->lastMeasure();
     score->select(m);
     score->startCmd();
-    score->localTimeDelete();
+    score->cmdTimeDelete();
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-10.mscx", MEASURE_DATA_DIR + u"measure-10-ref.mscx"));

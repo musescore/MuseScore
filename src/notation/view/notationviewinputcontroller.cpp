@@ -29,6 +29,7 @@
 
 #include "log.h"
 #include "commonscene/commonscenetypes.h"
+#include "internal/abstractelementpopupmodel.h"
 
 using namespace mu;
 using namespace mu::notation;
@@ -76,9 +77,44 @@ void NotationViewInputController::init()
         dispatcher()->reg(this, "page-end", this, &NotationViewInputController::endOfScore);
 
         dispatcher()->reg(this, "notation-context-menu", [this]() {
-            m_view->showContextMenu(selectionType(), m_view->fromLogical(selectionElementPos()).toQPointF(), true);
+            m_view->showContextMenu(selectionType(), m_view->fromLogical(selectionElementPos()).toQPointF());
+        });
+
+        dispatcher()->reg(this, "notation-popup-menu", [this]() {
+            if (auto selection = viewInteraction()->selection()) {
+                togglePopupForItemIfSupports(selection->element());
+            }
+        });
+
+        onNotationChanged();
+        globalContext()->currentNotationChanged().onNotify(this, [this]() {
+            onNotationChanged();
         });
     }
+}
+
+void NotationViewInputController::onNotationChanged()
+{
+    INotationPtr notation = currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    notation->interaction()->selectionChanged().onNotify(this, [this, notation]() {
+        const EngravingItem* selectedItem = notation->interaction()->selection()->element();
+        ElementType type = selectedItem ? selectedItem->type() : ElementType::INVALID;
+
+        if (selectedItem && selectedItem == m_prevHitElement) {
+            return;
+        }
+
+        m_view->hideContextMenu();
+        m_view->hideElementPopup();
+
+        if (AbstractElementPopupModel::supportsPopup(type)) {
+            m_view->showElementPopup(type, selectedItem->canvasBoundingRect());
+        }
+    });
 }
 
 void NotationViewInputController::initZoom()
@@ -430,9 +466,8 @@ void NotationViewInputController::endOfScore()
     auto lmRect = lastMeasure->canvasBoundingRect();
     auto scale = m_view->currentScaling();
     qreal desiredX = std::max(-notationScreenPadding, lmRect.right() + notationScreenPadding - m_view->width() / scale);
-    qreal desiredY
-        = std::max(-notationScreenPadding, lmRect.bottom() + lastMeasure->score()->styleD(
-                       mu::engraving::Sid::spatium) * 5 - m_view->height() / scale);
+    qreal desiredY = std::max(-notationScreenPadding, lmRect.bottom()
+                              + lastMeasure->score()->style().styleD(mu::engraving::Sid::spatium) * 5 - m_view->height() / scale);
     auto offset = m_view->toLogical(QPoint());
     m_view->moveCanvas(offset.x() - desiredX, offset.y() - desiredY);
 }
@@ -560,6 +595,8 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     ctx.isHitGrip = viewInteraction()->isHitGrip(logicPos);
     ctx.event = event;
 
+    m_shouldTogglePopupOnLeftClickRelease = hitElement && hitElement->selected();
+
     if (needSelect(ctx)) {
         SelectType selectType = SelectType::SINGLE;
         if (keyState == Qt::NoModifier) {
@@ -608,8 +645,6 @@ bool NotationViewInputController::needSelect(const ClickContext& ctx) const
 
 void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
 {
-    m_view->hideContextMenu();
-
     if (ctx.isHitGrip) {
         viewInteraction()->startEditGrip(ctx.logicClickPos);
         return;
@@ -754,9 +789,11 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
     INotationNoteInputPtr noteInput = interaction->noteInput();
     const EngravingItem* hitElement = hitElementContext().element;
 
-    if (!hitElement && !m_isCanvasDragged && !interaction->isGripEditStarted()
-        && !interaction->isDragStarted() && !noteInput->isNoteInputMode()) {
-        interaction->clearSelection();
+    if (event->modifiers() != Qt::ControlModifier && event->modifiers() != Qt::ShiftModifier) {
+        if (!hitElement && !m_isCanvasDragged && !interaction->isGripEditStarted()
+            && !interaction->isDragStarted() && !noteInput->isNoteInputMode()) {
+            interaction->clearSelection();
+        }
     }
 
     if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier) {
@@ -798,6 +835,10 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
     if (ctx.element && ctx.element->needStartEditingAfterSelecting()) {
         viewInteraction()->startEditElement(ctx.element);
         return;
+    }
+
+    if (m_shouldTogglePopupOnLeftClickRelease) {
+        togglePopupForItemIfSupports(ctx.element);
     }
 
     if (ctx.element != m_prevHitElement) {
@@ -1063,4 +1104,17 @@ mu::PointF NotationViewInputController::selectionElementPos() const
     }
 
     return mu::PointF();
+}
+
+void NotationViewInputController::togglePopupForItemIfSupports(const EngravingItem* item)
+{
+    if (!item) {
+        return;
+    }
+
+    ElementType type = item->type();
+
+    if (AbstractElementPopupModel::supportsPopup(type)) {
+        m_view->toggleElementPopup(type, item->canvasBoundingRect());
+    }
 }

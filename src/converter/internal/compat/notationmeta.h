@@ -26,6 +26,7 @@
 
 namespace mu::engraving {
 class Score;
+class MStyle;
 }
 
 namespace mu::converter {
@@ -42,7 +43,7 @@ private:
     static QString timesig(const mu::engraving::Score* score);
     static std::pair<int, QString> tempo(const mu::engraving::Score* score);
     static QJsonArray partsJsonArray(const mu::engraving::Score* score);
-    static QJsonObject pageFormatJson(const mu::engraving::Score* score);
+    static QJsonObject pageFormatJson(const mu::engraving::MStyle& style);
     static QJsonObject typeDataJson(mu::engraving::Score* score);
 };
 }

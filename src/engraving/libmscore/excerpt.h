@@ -37,7 +37,6 @@ class Part;
 class Score;
 class Staff;
 class Spanner;
-class XmlReader;
 
 class Excerpt
 {
@@ -77,9 +76,7 @@ public:
     const TracksMap& tracksMapping();
     void setTracksMapping(const TracksMap& tracksMapping);
 
-    void setVoiceVisible(Staff* staff, int voiceIndex, bool visible);
-
-    void read(XmlReader&);
+    void setVoiceVisible(Staff* staff, voice_idx_t voiceIndex, bool visible);
 
     static std::vector<Excerpt*> createExcerptsFromParts(const std::vector<Part*>& parts);
     static Excerpt* createExcerptFromPart(Part* part);

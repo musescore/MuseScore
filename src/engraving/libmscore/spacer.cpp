@@ -23,11 +23,11 @@
 #include "spacer.h"
 
 #include "draw/types/pen.h"
-#include "rw/xml.h"
-#include "rw/400/tread.h"
 
 #include "measure.h"
 #include "score.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -63,8 +63,12 @@ void Spacer::draw(mu::draw::Painter* painter) const
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }
-    Pen pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
-            spatium() * 0.3);
+
+    Pen pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(), spatium() * 0.3);
+    if (score()->isPaletteScore()) {
+        pen.setColor(engravingConfiguration()->fontPrimaryColor());
+    }
+
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawPath(path);
@@ -188,28 +192,6 @@ std::vector<mu::PointF> Spacer::gripsPositions(const EditData&) const
         break;
     }
     return { pagePos() + p };
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Spacer::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    xml.tag("subtype", int(_spacerType));
-    EngravingItem::writeProperties(xml);
-    xml.tag("space", _gap.val() / spatium());
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Spacer::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

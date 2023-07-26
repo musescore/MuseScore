@@ -22,9 +22,15 @@
 #ifndef MU_PLAYBACK_PLAYBACKMODULE_H
 #define MU_PLAYBACK_PLAYBACKMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::playback {
+class PlaybackConfiguration;
+class PlaybackController;
+class PlaybackUiActions;
+class SoundProfilesRepository;
 class PlaybackModule : public modularity::IModuleSetup
 {
 public:
@@ -36,6 +42,12 @@ public:
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
     void onAllInited(const framework::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<PlaybackConfiguration> m_configuration;
+    std::shared_ptr<PlaybackController> m_playbackController;
+    std::shared_ptr<PlaybackUiActions> m_playbackUiActions;
+    std::shared_ptr<SoundProfilesRepository> m_soundProfileRepo;
 };
 }
 

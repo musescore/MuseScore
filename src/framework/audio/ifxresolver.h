@@ -25,7 +25,7 @@
 
 #include <memory>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/promise.h"
 
 #include "ifxprocessor.h"

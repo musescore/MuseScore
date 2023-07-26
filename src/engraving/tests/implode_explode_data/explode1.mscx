@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="2.06">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0</lastSystemFillLimit>
@@ -726,8 +724,6 @@
         </Measure>
       </Staff>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
@@ -1179,8 +1175,6 @@
       <name>Trombone</name>
       </Score>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
@@ -1314,8 +1308,6 @@
       <name>Trombone-1</name>
       </Score>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
@@ -1441,8 +1433,6 @@
       <name>Trombone-2</name>
       </Score>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>

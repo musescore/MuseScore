@@ -35,6 +35,7 @@ class Note;
 class NoteLine final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, NoteLine)
+    DECLARE_CLASSOF(ElementType::NOTELINE)
 
     Note* _startNote;
     Note* _endNote;

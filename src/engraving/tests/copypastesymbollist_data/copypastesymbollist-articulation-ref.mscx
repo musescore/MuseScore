@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <Spatium>1.76389</Spatium>
@@ -63,6 +61,7 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <TimeSig>
             <sigN>4</sigN>
@@ -142,9 +141,9 @@
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>ornamentMordent</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -186,9 +185,9 @@
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
-            <Articulation>
+            <Ornament>
               <subtype>ornamentTurnInverted</subtype>
-              </Articulation>
+              </Ornament>
             <Note>
               <pitch>79</pitch>
               <tpc>15</tpc>
@@ -312,9 +311,6 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>ornamentMordent</subtype>
-              </Articulation>
             <Note>
               <pitch>76</pitch>
               <tpc>18</tpc>
@@ -356,9 +352,6 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>ornamentTurnInverted</subtype>
-              </Articulation>
             <Note>
               <pitch>76</pitch>
               <tpc>18</tpc>

@@ -21,12 +21,11 @@
  */
 #include "textline.h"
 
-#include "rw/xml.h"
-#include "rw/400/tread.h"
-
 #include "score.h"
 #include "system.h"
 #include "undo.h"
+
+#include "log.h"
 
 using namespace mu;
 
@@ -122,19 +121,6 @@ EngravingItem* TextLineSegment::propertyDelegate(Pid pid)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void TextLineSegment::layout()
-{
-    TextLineBaseSegment::layout();
-    if (isStyled(Pid::OFFSET)) {
-        roffset() = textLine()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
-    autoplaceSpannerSegment();
-}
-
-//---------------------------------------------------------
 //   TextLine
 //---------------------------------------------------------
 
@@ -157,6 +143,7 @@ TextLine::TextLine(EngravingItem* parent, bool system)
     setEndHookType(HookType::NONE);
     setBeginHookHeight(Spatium(1.5));
     setEndHookHeight(Spatium(1.5));
+    setGapBetweenTextAndLine(Spatium(0.5));
 
     initElementStyle(&textLineStyle);
 
@@ -181,36 +168,6 @@ void TextLine::initStyle()
     } else {
         initElementStyle(&textLineStyle);
     }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void TextLine::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    if (systemFlag()) {
-        xml.startElement(this, { { "system", "1" } });
-    } else {
-        xml.startElement(this);
-    }
-    // other styled properties are included in TextLineBase pids list
-    writeProperty(xml, Pid::PLACEMENT);
-    writeProperty(xml, Pid::OFFSET);
-    TextLineBase::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void TextLine::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
@@ -294,9 +251,9 @@ engraving::PropertyValue TextLine::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::PLACEMENT:
         if (systemFlag()) {
-            return score()->styleV(Sid::textLinePlacement);
+            return style().styleV(Sid::textLinePlacement);
         } else {
-            return score()->styleV(Sid::systemTextLinePlacement);
+            return style().styleV(Sid::systemTextLinePlacement);
         }
     case Pid::BEGIN_TEXT:
     case Pid::CONTINUE_TEXT:

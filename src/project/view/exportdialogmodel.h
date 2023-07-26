@@ -32,6 +32,7 @@
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
 #include "importexport/audioexport/iaudioexportconfiguration.h"
+#include "importexport/mei/imeiconfiguration.h"
 
 #include "projecttypes.h"
 #include "iprojectconfiguration.h"
@@ -47,15 +48,16 @@ class ExportDialogModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(project, framework::IInteractive, interactive)
-    INJECT(project, context::IGlobalContext, context)
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, INotationWritersRegister, writers)
-    INJECT(project, iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
-    INJECT(project, iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
-    INJECT(project, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
-    INJECT(project, iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
-    INJECT(project, IExportProjectScenario, exportProjectScenario)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(context::IGlobalContext, context)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(INotationWritersRegister, writers)
+    INJECT(iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
+    INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
+    INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
+    INJECT(iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
+    INJECT(iex::mei::IMeiConfiguration, meiConfiguration)
+    INJECT(IExportProjectScenario, exportProjectScenario)
 
     Q_PROPERTY(int selectionLength READ selectionLength NOTIFY selectionChanged)
 
@@ -76,6 +78,8 @@ class ExportDialogModel : public QAbstractListModel, public async::Asyncable
     Q_PROPERTY(bool midiExportRpns READ midiExportRpns WRITE setMidiExportRpns NOTIFY midiExportRpnsChanged)
 
     Q_PROPERTY(MusicXmlLayoutType musicXmlLayoutType READ musicXmlLayoutType WRITE setMusicXmlLayoutType NOTIFY musicXmlLayoutTypeChanged)
+
+    Q_PROPERTY(int meiExportLayout READ meiExportLayout WRITE setMeiExportLayout NOTIFY meiExportLayoutChanged)
 
     Q_PROPERTY(bool shouldDestinationFolderBeOpenedOnExport READ shouldDestinationFolderBeOpenedOnExport
                WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
@@ -130,6 +134,9 @@ public:
     bool midiExportRpns() const;
     void setMidiExportRpns(bool exportRpns);
 
+    bool meiExportLayout() const;
+    void setMeiExportLayout(bool exportLayout);
+
     enum class MusicXmlLayoutType {
         AllLayout,
         AllBreaks,
@@ -144,6 +151,8 @@ public:
 
     bool shouldDestinationFolderBeOpenedOnExport() const;
     void setShouldDestinationFolderBeOpenedOnExport(bool enabled);
+
+    Q_INVOKABLE void updateExportInfo();
 
 signals:
     void selectionChanged();
@@ -165,6 +174,8 @@ signals:
 
     void musicXmlLayoutTypeChanged(MusicXmlLayoutType layoutType);
 
+    void meiExportLayoutChanged(bool exportLayout);
+
     void shouldDestinationFolderBeOpenedOnExportChanged(bool shouldDestinationFolderBeOpenedOnExport);
 
 private:
@@ -179,11 +190,14 @@ private:
     bool isMainNotation(notation::INotationPtr notation) const;
     notation::IMasterNotationPtr masterNotation() const;
 
+    void selectSavedNotations();
+
     QList<notation::INotationPtr> m_notations {};
     QItemSelectionModel* m_selectionModel = nullptr;
 
     ExportTypeList m_exportTypeList {};
     ExportType m_selectedExportType = ExportType();
+    io::path_t m_exportPath;
     project::INotationWriter::UnitType m_selectedUnitType = project::INotationWriter::UnitType::PER_PART;
 };
 }

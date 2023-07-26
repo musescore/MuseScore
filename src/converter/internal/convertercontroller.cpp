@@ -27,8 +27,10 @@
 #include <QJsonArray>
 #include <QJsonParseError>
 
-#include "convertercodes.h"
+#include "io/dir.h"
 #include "stringutils.h"
+
+#include "convertercodes.h"
 #include "compat/backendapi.h"
 
 #include "log.h"
@@ -151,12 +153,16 @@ mu::RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(con
 
     QJsonArray arr = doc.array();
 
+    auto correctUserInputPath = [](const QString& path) -> QString {
+        return io::Dir::fromNativeSeparators(path).toQString();
+    };
+
     for (const QJsonValue v : arr) {
         QJsonObject obj = v.toObject();
 
         Job job;
-        job.in = obj["in"].toString();
-        job.out = obj["out"].toString();
+        job.in = correctUserInputPath(obj["in"].toString());
+        job.out = correctUserInputPath(obj["out"].toString());
 
         if (!job.in.empty() && !job.out.empty()) {
             rv.val.push_back(std::move(job));

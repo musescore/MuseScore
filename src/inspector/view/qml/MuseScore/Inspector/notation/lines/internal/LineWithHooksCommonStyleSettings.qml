@@ -45,7 +45,7 @@ Column {
 
         spacing: 6
 
-        CheckBoxPropertyView {
+        PropertyCheckBox {
             text: qsTrc("inspector", "Show line")
             propertyItem: root.model ? root.model.isLineVisible : null
 
@@ -54,7 +54,7 @@ Column {
             navigation.row: root.navigationRowStart + 1
         }
 
-        CheckBoxPropertyView {
+        PropertyCheckBox {
             text: qsTrc("inspector", "Allow diagonal")
             propertyItem: root.model ? root.model.allowDiagonal : null
 

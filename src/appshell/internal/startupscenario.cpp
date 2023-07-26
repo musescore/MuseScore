@@ -60,9 +60,27 @@ void StartupScenario::setStartupType(const std::optional<std::string>& type)
     m_startupTypeStr = type ? type.value() : "";
 }
 
-void StartupScenario::setStartupScorePath(const std::optional<io::path_t>& path)
+bool StartupScenario::isStartWithNewFileAsSecondaryInstance() const
 {
-    m_startupScorePath = path ? path.value() : "";
+    if (m_startupScoreFile.isValid()) {
+        return false;
+    }
+
+    if (!m_startupTypeStr.empty()) {
+        return modeTypeTromString(m_startupTypeStr) == StartupModeType::StartWithNewScore;
+    }
+
+    return false;
+}
+
+const mu::project::ProjectFile& StartupScenario::startupScoreFile() const
+{
+    return m_startupScoreFile;
+}
+
+void StartupScenario::setStartupScoreFile(const std::optional<project::ProjectFile>& file)
+{
+    m_startupScoreFile = file ? file.value() : project::ProjectFile();
 }
 
 void StartupScenario::run()
@@ -108,7 +126,7 @@ bool StartupScenario::startupCompleted() const
 
 StartupModeType StartupScenario::resolveStartupModeType() const
 {
-    if (!m_startupScorePath.empty()) {
+    if (m_startupScoreFile.isValid()) {
         return StartupModeType::StartWithScore;
     }
 
@@ -133,9 +151,9 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
         restoreLastSession();
         break;
     case StartupModeType::StartWithScore: {
-        io::path_t path = m_startupScorePath.empty() ? configuration()->startupScorePath()
-                          : m_startupScorePath;
-        openScore(path);
+        project::ProjectFile file
+            = m_startupScoreFile.isValid() ? m_startupScoreFile : project::ProjectFile(configuration()->startupScorePath());
+        openScore(file);
     } break;
     }
 
@@ -159,9 +177,9 @@ mu::Uri StartupScenario::startupPageUri(StartupModeType modeType) const
     return HOME_URI;
 }
 
-void StartupScenario::openScore(const io::path_t& path)
+void StartupScenario::openScore(const project::ProjectFile& file)
 {
-    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path_t>(path));
+    dispatcher()->dispatch("file-open", ActionData::make_arg2<io::path_t, QString>(file.path, file.displayNameOverride));
 }
 
 void StartupScenario::restoreLastSession()

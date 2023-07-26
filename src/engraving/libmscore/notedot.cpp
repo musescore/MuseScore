@@ -22,14 +22,13 @@
 
 #include "notedot.h"
 
-#include "rw/xml.h"
-#include "rw/400/tread.h"
-
 #include "chord.h"
 #include "note.h"
 #include "rest.h"
 #include "score.h"
 #include "staff.h"
+
+#include "log.h"
 
 using namespace mu;
 
@@ -75,15 +74,6 @@ void NoteDot::draw(mu::draw::Painter* painter) const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void NoteDot::layout()
-{
-    setbbox(symBbox(SymId::augmentationDot));
-}
-
-//---------------------------------------------------------
 //   elementBase
 //---------------------------------------------------------
 
@@ -92,17 +82,12 @@ EngravingItem* NoteDot::elementBase() const
     return parentItem();
 }
 
-void NoteDot::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
-}
-
 //---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 
 double NoteDot::mag() const
 {
-    return parentItem()->mag() * score()->styleD(Sid::dotMag);
+    return parentItem()->mag() * style().styleD(Sid::dotMag);
 }
 }

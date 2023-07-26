@@ -31,8 +31,8 @@
 namespace mu::update {
 class UpdateActionController : public actions::Actionable
 {
-    INJECT(update, actions::IActionsDispatcher, dispatcher)
-    INJECT(update, IUpdateScenario, updateScenario)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(IUpdateScenario, updateScenario)
 
 public:
     void init();

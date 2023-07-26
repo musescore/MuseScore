@@ -25,14 +25,14 @@
 
 using namespace mu::project;
 
-void MacOSRecentFilesController::addRecentFile(const io::path_t& path)
+void MacOSRecentFilesController::prependPlatformRecentFile(const io::path_t& path)
 {
     NSString* string = path.toQString().toNSString();
     NSURL* url = [NSURL fileURLWithPath:string];
     [[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:url];
 }
 
-void MacOSRecentFilesController::clearRecentFiles()
+void MacOSRecentFilesController::clearPlatformRecentFiles()
 {
     [[NSDocumentController sharedDocumentController] clearRecentDocuments:nil];
 }

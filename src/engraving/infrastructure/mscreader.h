@@ -22,6 +22,7 @@
 #ifndef MU_ENGRAVING_MSCREADER_H
 #define MU_ENGRAVING_MSCREADER_H
 
+#include "types/ret.h"
 #include "types/string.h"
 #include "io/path.h"
 #include "io/iodevice.h"
@@ -51,7 +52,7 @@ public:
     void setParams(const Params& params);
     const Params& params() const;
 
-    bool open();
+    Ret open();
     void close();
     bool isOpened() const;
 
@@ -77,7 +78,7 @@ private:
     struct IReader {
         virtual ~IReader() = default;
 
-        virtual bool open(io::IODevice* device, const io::path_t& filePath) = 0;
+        virtual Ret open(io::IODevice* device, const io::path_t& filePath) = 0;
         virtual void close() = 0;
         virtual bool isOpened() const = 0;
         //! NOTE In the case of reading from a directory,
@@ -92,7 +93,7 @@ private:
     struct ZipFileReader : public IReader
     {
         ~ZipFileReader() override;
-        bool open(io::IODevice* device, const io::path_t& filePath) override;
+        Ret open(io::IODevice* device, const io::path_t& filePath) override;
         void close() override;
         bool isOpened() const override;
         bool isContainer() const override;
@@ -107,7 +108,7 @@ private:
 
     struct DirReader : public IReader
     {
-        bool open(io::IODevice* device, const io::path_t& filePath) override;
+        Ret open(io::IODevice* device, const io::path_t& filePath) override;
         void close() override;
         bool isOpened() const override;
         bool isContainer() const override;
@@ -120,7 +121,7 @@ private:
 
     struct XmlFileReader : public IReader
     {
-        bool open(io::IODevice* device, const io::path_t& filePath) override;
+        Ret open(io::IODevice* device, const io::path_t& filePath) override;
         void close() override;
         bool isOpened() const override;
         bool isContainer() const override;

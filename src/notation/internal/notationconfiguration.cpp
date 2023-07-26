@@ -59,6 +59,7 @@ static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/mySt
 
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
 static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
+static const Settings::Key PLAYBACK_SMOOTH_PANNING(module_name, "application/playback/smoothPan");
 static const Settings::Key IS_PLAY_REPEATS_ENABLED(module_name, "application/playback/playRepeats");
 static const Settings::Key IS_PLAY_CHORD_SYMBOLS_ENABLED(module_name, "application/playback/playChordSymbols");
 static const Settings::Key IS_METRONOME_ENABLED(module_name, "application/playback/metronomeEnabled");
@@ -151,7 +152,10 @@ void NotationConfiguration::init()
     settings()->valueChanged(USER_STYLES_PATH).onReceive(nullptr, [this](const Val& val) {
         m_userStylesPathChanged.send(val.toPath());
     });
-    fileSystem()->makePath(userStylesPath());
+
+    if (!userStylesPath().empty()) {
+        fileSystem()->makePath(userStylesPath());
+    }
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(true));
@@ -160,6 +164,10 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(IS_PLAY_CHORD_SYMBOLS_ENABLED, Val(true));
     settings()->setDefaultValue(IS_METRONOME_ENABLED, Val(false));
     settings()->setDefaultValue(IS_COUNT_IN_ENABLED, Val(false));
+
+    settings()->setDefaultValue(PLAYBACK_SMOOTH_PANNING, Val(false));
+    settings()->setDescription(PLAYBACK_SMOOTH_PANNING, trc("notation", "Smooth panning"));
+    settings()->setCanBeManuallyEdited(PLAYBACK_SMOOTH_PANNING, true);
 
     settings()->valueChanged(IS_PLAY_CHORD_SYMBOLS_ENABLED).onReceive(nullptr, [this](const Val&) {
         m_isPlayChordSymbolsChanged.notify();
@@ -537,6 +545,16 @@ void NotationConfiguration::setIsAutomaticallyPanEnabled(bool enabled)
     settings()->setSharedValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(enabled));
 }
 
+bool NotationConfiguration::isSmoothPanning() const
+{
+    return settings()->value(PLAYBACK_SMOOTH_PANNING).toBool();
+}
+
+void NotationConfiguration::setIsSmoothPanning(bool value)
+{
+    settings()->setSharedValue(PLAYBACK_SMOOTH_PANNING, Val(value));
+}
+
 bool NotationConfiguration::isPlayRepeatsEnabled() const
 {
     return settings()->value(IS_PLAY_REPEATS_ENABLED).toBool();
@@ -545,7 +563,6 @@ bool NotationConfiguration::isPlayRepeatsEnabled() const
 void NotationConfiguration::setIsPlayRepeatsEnabled(bool enabled)
 {
     settings()->setSharedValue(IS_PLAY_REPEATS_ENABLED, Val(enabled));
-    mu::engraving::MScore::playRepeats = enabled;
     m_isPlayRepeatsChanged.notify();
 }
 

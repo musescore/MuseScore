@@ -210,6 +210,7 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
         savePageState(m_currentPage->objectName());
         clearRegistry();
         m_currentPage->setVisible(false);
+        m_currentPage->deinit();
     }
 
     bool ok = doLoadPage(uri, params);
@@ -619,6 +620,7 @@ void DockWindow::initDocks(DockPageView* page)
     }
 
     if (page) {
+        page->setParentItem(this);
         page->init();
     }
 

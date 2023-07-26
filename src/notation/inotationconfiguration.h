@@ -25,7 +25,7 @@
 #include <QColor>
 #include <optional>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/channel.h"
 #include "types/retval.h"
 #include "io/path.h"
@@ -118,6 +118,9 @@ public:
 
     virtual bool isAutomaticallyPanEnabled() const = 0;
     virtual void setIsAutomaticallyPanEnabled(bool enabled) = 0;
+
+    virtual bool isSmoothPanning() const = 0;
+    virtual void setIsSmoothPanning(bool value) = 0;
 
     virtual bool isPlayRepeatsEnabled() const = 0;
     virtual void setIsPlayRepeatsEnabled(bool enabled) = 0;

@@ -25,7 +25,7 @@
 #include <vector>
 
 #include "io/path.h"
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/channel.h"
 
 namespace mu::workspace {

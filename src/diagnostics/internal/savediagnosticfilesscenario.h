@@ -31,8 +31,8 @@
 namespace mu::diagnostics {
 class SaveDiagnosticFilesScenario : public ISaveDiagnosticFilesScenario
 {
-    INJECT(diagnostics, diagnostics::IDiagnosticsConfiguration, configuration)
-    INJECT(diagnostics, framework::IInteractive, interactive)
+    INJECT(diagnostics::IDiagnosticsConfiguration, configuration)
+    INJECT(framework::IInteractive, interactive)
 
 public:
     Ret saveDiagnosticFiles() override;

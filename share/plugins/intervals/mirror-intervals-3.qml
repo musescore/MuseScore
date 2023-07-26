@@ -189,8 +189,7 @@ MuseScore {
         return tpcMap[pivot][tpc + 1] - 1;
     }
 
-    Rectangle {
-        color: "transparent"
+    Item {
         anchors.fill: parent
 
         GridLayout {

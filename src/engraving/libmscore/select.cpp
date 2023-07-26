@@ -25,10 +25,12 @@
  Implementation of class Selection plus other selection related functions.
 */
 
-#include "containers.h"
-#include "io/buffer.h"
-#include "rw/xml.h"
-#include "rw/400/writecontext.h"
+#include "global/containers.h"
+#include "global/io/buffer.h"
+
+#include "types/types.h"
+
+#include "rw/rwregister.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -39,6 +41,7 @@
 #include "engravingitem.h"
 #include "figuredbass.h"
 #include "hairpin.h"
+#include "harppedaldiagram.h"
 #include "hook.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
@@ -112,10 +115,10 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
     if (e->isHairpin()) {
         return isFiltered(SelectionFilterType::HAIRPIN);
     }
-    if ((e->isArticulation() && !toArticulation(e)->isOrnament()) || e->isVibrato() || e->isFermata()) {
+    if ((e->isArticulationFamily() && !toArticulation(e)->isOrnament()) || e->isVibrato() || e->isFermata()) {
         return isFiltered(SelectionFilterType::ARTICULATION);
     }
-    if ((e->isArticulation() && toArticulation(e)->isOrnament()) || e->isTrill()) {
+    if ((e->isArticulationFamily() && toArticulation(e)->isOrnament()) || e->isTrill()) {
         return isFiltered(SelectionFilterType::ORNAMENT);
     }
     if (e->type() == ElementType::LYRICS) {
@@ -508,7 +511,7 @@ void Selection::appendChord(Chord* chord)
             if (note->tieFor()->endElement()->isNote()) {
                 Note* endNote = toNote(note->tieFor()->endElement());
                 Segment* s = endNote->chord()->segment();
-                if (s->tick() < tickEnd()) {
+                if (!s || s->tick() < tickEnd()) {
                     _el.push_back(note->tieFor());
                 }
             }
@@ -517,7 +520,7 @@ void Selection::appendChord(Chord* chord)
             if (sp->endElement()->isNote()) {
                 Note* endNote = toNote(sp->endElement());
                 Segment* s = endNote->chord()->segment();
-                if (s->tick() < tickEnd()) {
+                if (!s || s->tick() < tickEnd()) {
                     _el.push_back(sp);
                 }
             }
@@ -538,24 +541,31 @@ void Selection::updateSelectedElements()
     if (_state == SelState::RANGE && _plannedTick1 != Fraction(-1, 1) && _plannedTick2 != Fraction(-1, 1)) {
         const staff_idx_t staffStart = _staffStart;
         const staff_idx_t staffEnd = _staffEnd;
+
         deselectAll();
+
         Segment* s1 = _score->tick2segmentMM(_plannedTick1);
-        Segment* s2 = _score->tick2segmentMM(_plannedTick2, /* first */ true);
+        Segment* s2 = _score->tick2segmentMM(_plannedTick2, /* first */ true /* HACK */);
         if (s2 && s2->measure()->isMMRest()) {
-            s2 = s2->prev1MM();       // HACK both this and the previous "true"
+            s2 = s2->prev1MM(); // HACK
         }
-        // are needed to prevent bug #173381.
-        // This should exclude any segments belonging
-        // to MM-rest range from the selection.
+        // These hacks are needed to prevent https://musescore.org/node/173381.
+        // This should exclude any segments belonging to MM-rest range from the selection.
         if (s1 && s2 && s1->tick() + s1->ticks() > s2->tick()) {
-            // can happen with MM rests as tick2measure returns only
-            // the first segment for them.
+            // can happen with MM rests as tick2measure returns only the first segment for them.
+
+            _plannedTick1 = Fraction(-1, 1);
+            _plannedTick2 = Fraction(-1, 1);
             return;
         }
-        if (s2 && s2 == s2->measure()->first() && !(s2->measure()->prevMeasure() && s2->measure()->prevMeasure()->mmRest1())) {
-            s2 = s2->prev1();         // we want the last segment of the previous measure (unless it's part of a MMrest)
+
+        if (s2 && s2 == s2->measure()->first() && !(s2->measure()->prevMeasure() && s2->measure()->prevMeasure()->coveringMMRestOrThis())) {
+            // we want the last segment of the previous measure (unless it's part of a MMrest)
+            s2 = s2->prev1();
         }
+
         setRange(s1, s2, staffStart, staffEnd);
+
         _plannedTick1 = Fraction(-1, 1);
         _plannedTick2 = Fraction(-1, 1);
     }
@@ -833,14 +843,16 @@ ByteArray Selection::staffMimeData() const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
+
     xml.startDocument();
-    xml.context()->setClipboardmode(true);
-    xml.context()->setFilter(selectionFilter());
+
+    SelectionFilter filter = selectionFilter();
+    Fraction curTick;
 
     Fraction ticks  = tickEnd() - tickStart();
     int staves = static_cast<int>(staffEnd() - staffStart());
 
-    xml.startElement("StaffList", { { "version", (MScore::testMode ? "2.00" : MSC_VERSION) },
+    xml.startElement("StaffList", { { "version", (MScore::testMode ? "2.00" : Constants::MSC_VERSION_STR) },
                          { "tick", tickStart().toString() },
                          { "len", ticks.toString() },
                          { "staff", staffStart() },
@@ -866,15 +878,14 @@ ByteArray Selection::staffMimeData() const
         }
         xml.startElement("voiceOffset");
         for (voice_idx_t voice = 0; voice < VOICES; voice++) {
-            if (hasElementInTrack(seg1, seg2, startTrack + voice)
-                && xml.context()->canWriteVoice(voice)) {
+            if (hasElementInTrack(seg1, seg2, startTrack + voice) && filter.canSelectVoice(voice)) {
                 Fraction offset = firstElementInTrack(seg1, seg2, startTrack + voice) - tickStart();
                 xml.tag("voice", { { "id", voice } }, offset.ticks());
             }
         }
         xml.endElement();     // </voiceOffset>
-        xml.context()->setCurTrack(startTrack);
-        _score->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, false);
+
+        rw::RWRegister::writer()->writeSegments(xml, &filter, startTrack, endTrack, seg1, seg2, false, false, curTick);
         xml.endElement();
     }
 
@@ -892,8 +903,8 @@ ByteArray Selection::symbolListMimeData() const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
+
     xml.startDocument();
-    xml.context()->setClipboardmode(true);
 
     track_idx_t topTrack    = 1000000;
     track_idx_t bottomTrack = 0;
@@ -1007,6 +1018,7 @@ ByteArray Selection::symbolListMimeData() const
             }
             continue;
         case ElementType::PLAYTECH_ANNOTATION:
+        case ElementType::CAPO:
         case ElementType::STAFF_TEXT:
             seg = toStaffTextBase(e)->segment();
             break;
@@ -1036,6 +1048,9 @@ ByteArray Selection::symbolListMimeData() const
         case ElementType::HAIRPIN:
             seg = toHairpin(e)->startSegment();
             break;
+        case ElementType::HARP_DIAGRAM:
+            seg = toHarpPedalDiagram(e)->segment();
+            break;
         default:
             continue;
         }
@@ -1055,7 +1070,7 @@ ByteArray Selection::symbolListMimeData() const
         map.insert(std::pair<int64_t, MapData>(((int64_t)track << 32) + seg->tick().ticks(), mapData));
     }
 
-    xml.startElement("SymbolList", { { "version", MSC_VERSION },
+    xml.startElement("SymbolList", { { "version", Constants::MSC_VERSION_STR },
                          { "fromtrack", topTrack },
                          { "totrack", bottomTrack } });
 
@@ -1111,7 +1126,7 @@ ByteArray Selection::symbolListMimeData() const
             }
         }
         xml.tag("segDelta", numSegs);
-        iter->second.e->write(xml);
+        rw::RWRegister::writer()->writeItem(iter->second.e, xml);
     }
 
     xml.endElement();

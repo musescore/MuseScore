@@ -30,7 +30,7 @@
 namespace mu::workspace {
 class WorkspaceConfiguration : public IWorkspaceConfiguration, public async::Asyncable
 {
-    INJECT(workspace, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     void init();

@@ -38,10 +38,10 @@ class SoundProfilesModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    INJECT_STATIC(playback, ISoundProfilesRepository, profilesRepo)
-    INJECT_STATIC(playback, context::IGlobalContext, context)
-    INJECT_STATIC(playback, IPlaybackConfiguration, config)
-    INJECT_STATIC(playback, IPlaybackController, controller)
+    INJECT_STATIC(ISoundProfilesRepository, profilesRepo)
+    INJECT_STATIC(context::IGlobalContext, context)
+    INJECT_STATIC(IPlaybackConfiguration, config)
+    INJECT_STATIC(IPlaybackController, controller)
 
     Q_PROPERTY(QString activeProfile READ activeProfile WRITE setActiveProfile NOTIFY activeProfileChanged)
     Q_PROPERTY(

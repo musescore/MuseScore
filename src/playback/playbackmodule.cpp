@@ -45,11 +45,6 @@ using namespace mu::modularity;
 using namespace mu::ui;
 using namespace mu::actions;
 
-static std::shared_ptr<PlaybackConfiguration> s_configuration = std::make_shared<PlaybackConfiguration>();
-static std::shared_ptr<PlaybackController> s_playbackController = std::make_shared<PlaybackController>();
-static std::shared_ptr<PlaybackUiActions> s_playbackUiActions = std::make_shared<PlaybackUiActions>(s_playbackController);
-static std::shared_ptr<SoundProfilesRepository> s_soundProfileRepo = std::make_shared<SoundProfilesRepository>();
-
 static void playback_init_qrc()
 {
     Q_INIT_RESOURCE(playback);
@@ -62,16 +57,21 @@ std::string PlaybackModule::moduleName() const
 
 void PlaybackModule::registerExports()
 {
-    ioc()->registerExport<IPlaybackController>(moduleName(), s_playbackController);
-    ioc()->registerExport<IPlaybackConfiguration>(moduleName(), s_configuration);
-    ioc()->registerExport<ISoundProfilesRepository>(moduleName(), s_soundProfileRepo);
+    m_configuration = std::make_shared<PlaybackConfiguration>();
+    m_playbackController = std::make_shared<PlaybackController>();
+    m_playbackUiActions = std::make_shared<PlaybackUiActions>(m_playbackController);
+    m_soundProfileRepo = std::make_shared<SoundProfilesRepository>();
+
+    ioc()->registerExport<IPlaybackController>(moduleName(), m_playbackController);
+    ioc()->registerExport<IPlaybackConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<ISoundProfilesRepository>(moduleName(), m_soundProfileRepo);
 }
 
 void PlaybackModule::resolveImports()
 {
     auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(s_playbackUiActions);
+        ar->reg(m_playbackUiActions);
     }
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
@@ -94,6 +94,8 @@ void PlaybackModule::registerUiTypes()
     qmlRegisterType<MixerPanelContextMenuModel>("MuseScore.Playback", 1, 0, "MixerPanelContextMenuModel");
     qmlRegisterType<SoundProfilesModel>("MuseScore.Playback", 1, 0, "SoundProfilesModel");
 
+    qmlRegisterUncreatableType<MixerChannelItem>("MuseScore.Playback", 1, 0, "MixerChannelItem", "Cannot create a MixerChannelItem");
+
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(playback_QML_IMPORT);
 }
 
@@ -103,14 +105,14 @@ void PlaybackModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
-    s_configuration->init();
-    s_playbackController->init();
+    m_configuration->init();
+    m_playbackController->init();
 
     if (mode != framework::IApplication::RunMode::GuiApp) {
         return;
     }
 
-    s_playbackUiActions->init();
+    m_playbackUiActions->init();
 }
 
 void PlaybackModule::onAllInited(const framework::IApplication::RunMode& mode)
@@ -119,5 +121,5 @@ void PlaybackModule::onAllInited(const framework::IApplication::RunMode& mode)
         return;
     }
 
-    s_soundProfileRepo->refresh();
+    m_soundProfileRepo->refresh();
 }

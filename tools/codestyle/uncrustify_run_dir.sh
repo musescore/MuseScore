@@ -21,7 +21,8 @@
 HERE="$(dirname ${BASH_SOURCE[0]})"
 DIR="${1-.}" # use $1 or "." (current dir) if $1 is not defined
 
-IGNORE_FILE=.untidy
+source "${HERE}/globals.source"
+
 SCAN_BIN_DIR=""
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -42,8 +43,8 @@ SCAN_BIN=$HERE/scan_files/bin/${SCAN_BIN_DIR}/scan_files
 
 START_TIME=$(date +%s)
 
-$SCAN_BIN -d $DIR -i $IGNORE_FILE -e cpp,c,cc,hpp,h | xargs -n 1 -P 16 uncrustify -c "${HERE}/uncrustify_musescore.cfg" --no-backup -l CPP
-$SCAN_BIN -d $DIR -i $IGNORE_FILE -e mm | xargs -n 1 -P 16 uncrustify -c "${HERE}/uncrustify_musescore.cfg" --no-backup -l OC+
+$SCAN_BIN -d $DIR -i $UNTIDY_FILE -e cpp,c,cc,hpp,h | xargs -n 1 -P 16 uncrustify -c "${HERE}/uncrustify_musescore.cfg" --no-backup -l CPP
+$SCAN_BIN -d $DIR -i $UNTIDY_FILE -e mm | xargs -n 1 -P 16 uncrustify -c "${HERE}/uncrustify_musescore.cfg" --no-backup -l OC+
 
 END_TIME=$(date +%s)
 DIFF_TIME=$(( $END_TIME - $START_TIME ))

@@ -81,8 +81,7 @@ inline Ret make_ret(Err err, const io::path_t& filePath = "")
         break;
     case Err::FileTooNew:
         text = mtrc("engraving", "This file was saved using a newer version of MuseScore. "
-                                 "Visit the <a href=\"%1\">MuseScore website</a> to obtain the latest version.")
-               .arg(u"https://musescore.org");
+                                 "Please visit <a href=\"https://musescore.org\">musescore.org</a> to obtain the latest version.");
         break;
     case Err::FileOld300Format:
         text = mtrc("engraving", "This file was last saved in a development version of 3.0.");

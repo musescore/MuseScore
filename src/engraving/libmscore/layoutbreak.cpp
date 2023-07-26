@@ -22,9 +22,6 @@
 
 #include "log.h"
 
-#include "rw/xml.h"
-#include "rw/400/tread.h"
-
 #include "layoutbreak.h"
 #include "measurebase.h"
 #include "score.h"
@@ -82,32 +79,6 @@ void LayoutBreak::setParent(MeasureBase* parent)
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void LayoutBreak::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    EngravingItem::writeProperties(xml);
-
-    for (auto id :
-         { Pid::LAYOUT_BREAK, Pid::PAUSE, Pid::START_WITH_LONG_NAMES, Pid::START_WITH_MEASURE_ONE, Pid::FIRST_SYSTEM_INDENTATION }) {
-        writeProperty(xml, id);
-    }
-
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void LayoutBreak::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
-}
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -119,8 +90,10 @@ void LayoutBreak::draw(mu::draw::Painter* painter) const
         return;
     }
 
-    Pen pen;
-    pen.setColor(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor());
+    Pen pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor());
+    if (score()->isPaletteScore()) {
+        pen.setColor(engravingConfiguration()->fontPrimaryColor());
+    }
     pen.setWidthF(lw / 2);
     pen.setJoinStyle(PenJoinStyle::MiterJoin);
     pen.setCapStyle(PenCapStyle::SquareCap);
@@ -315,7 +288,7 @@ PropertyValue LayoutBreak::propertyDefault(Pid id) const
     case Pid::LAYOUT_BREAK:
         return PropertyValue();           // LAYOUT_BREAK_LINE;
     case Pid::PAUSE:
-        return score()->styleD(Sid::SectionPause);
+        return style().styleD(Sid::SectionPause);
     case Pid::START_WITH_LONG_NAMES:
         return true;
     case Pid::START_WITH_MEASURE_ONE:

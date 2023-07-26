@@ -22,8 +22,6 @@
 
 #include "breath.h"
 
-#include "rw/xml.h"
-#include "rw/400/tread.h"
 #include "types/symnames.h"
 
 #include "measure.h"
@@ -48,6 +46,7 @@ const std::vector<BreathType> Breath::breathList {
     { SymId::caesuraShort,         true,  2.0 },
     { SymId::caesuraThick,         true,  2.0 },
     { SymId::chantCaesura,         true,  2.0 },
+    { SymId::caesuraSingleStroke,  true,  2.0 },
 };
 
 //---------------------------------------------------------
@@ -73,47 +72,6 @@ bool Breath::isCaesura() const
         }
     }
     return false;
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Breath::layout()
-{
-    bool palette = (!staff() || track() == mu::nidx);
-    if (!palette) {
-        int voiceOffset = placeBelow() * (staff()->lines(tick()) - 1) * spatium();
-        if (isCaesura()) {
-            setPos(xpos(), spatium() + voiceOffset);
-        } else if ((score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler") && (symId() == SymId::breathMarkComma)) {
-            setPos(xpos(), 0.5 * spatium() + voiceOffset);
-        } else {
-            setPos(xpos(), -0.5 * spatium() + voiceOffset);
-        }
-    }
-    setbbox(symBbox(_symId));
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Breath::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    writeProperty(xml, Pid::SYMBOL);
-    writeProperty(xml, Pid::PAUSE);
-    EngravingItem::writeProperties(xml);
-    xml.endElement();
-}
-
-void Breath::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

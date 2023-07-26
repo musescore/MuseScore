@@ -45,8 +45,8 @@ class AbstractInspectorModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(inspector, context::IGlobalContext, context)
-    INJECT(inspector, actions::IActionsDispatcher, dispatcher)
+    INJECT(context::IGlobalContext, context)
+    INJECT(actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(int icon READ icon CONSTANT)
@@ -117,6 +117,7 @@ public:
         TYPE_TREMOLO,
         TYPE_MEASURE_REPEAT,
         TYPE_DYNAMIC,
+        TYPE_EXPRESSION,
         TYPE_TUPLET,
         TYPE_TEXT_LINE,
         TYPE_GRADUAL_TEMPO_CHANGE,
@@ -130,6 +131,8 @@ public:
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr,
                                     mu::engraving::ElementType elementType = mu::engraving::ElementType::INVALID);
 
+    void init();
+
     Q_INVOKABLE virtual void requestResetToDefaults();
 
     QString title() const;
@@ -139,7 +142,8 @@ public:
 
     static InspectorModelType modelTypeByElementKey(const ElementKey& elementKey);
     static QSet<InspectorModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
-    static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange);
+    static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,
+                                                                const QList<mu::engraving::EngravingItem*>& selectedElementList = {});
 
     virtual bool isEmpty() const;
 
@@ -148,6 +152,8 @@ public:
     virtual void resetProperties() = 0;
 
     virtual void requestElements();
+
+    virtual void onCurrentNotationChanged();
 
 public slots:
     void setTitle(QString title);
@@ -199,7 +205,6 @@ protected:
 
     notation::INotationSelectionPtr selection() const;
 
-    virtual void onCurrentNotationChanged();
     virtual void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
                                    const mu::engraving::StyleIdSet& changedStyleIdSet);
 
@@ -213,8 +218,6 @@ protected slots:
     void updateProperties();
 
 private:
-    void setupCurrentNotationChangedConnection();
-
     void initPropertyItem(PropertyItem* propertyItem, std::function<void(const mu::engraving::Pid propertyId,
                                                                          const QVariant& newValue)> onPropertyChangedCallBack = nullptr,
                           std::function<void(const mu::engraving::Sid styleId,

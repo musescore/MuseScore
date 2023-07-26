@@ -47,7 +47,6 @@ FocusScope {
     property bool animationEnabled: false
 
     property bool closeOnEscape: true
-    property alias navigationSection: navSec
 
     width: contentContainer.width + padding * 2
     height: contentContainer.height + padding * 2
@@ -60,15 +59,14 @@ FocusScope {
     signal closeRequested()
 
     //! NOTE: must to be inside QQuickItem to define a window by parent
-    NavigationSection {
-        id: navSec
+    property NavigationSection navigationSection: NavigationSection {
         name: root.objectName !== "" ? root.objectName : "StyledPopupView" // todo
         type: NavigationSection.Exclusive
         enabled: root.isOpened
         order: 1
 
         onActiveChanged: {
-            if (navSec.active) {
+            if (navigationSection.active) {
                 root.forceActiveFocus()
             }
         }

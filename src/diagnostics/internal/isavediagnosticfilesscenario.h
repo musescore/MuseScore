@@ -22,7 +22,7 @@
 #ifndef MU_DIAGNOSTICS_ISAVEDIAGNOSTICFILESSCENARIO_H
 #define MU_DIAGNOSTICS_ISAVEDIAGNOSTICFILESSCENARIO_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "types/ret.h"
 

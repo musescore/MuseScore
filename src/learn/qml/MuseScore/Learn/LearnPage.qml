@@ -114,6 +114,8 @@ FocusScope {
             navigation.panel: navSearchPanel
             navigation.order: 1
 
+            visible: tabBar.currentIndex !== 1 // Not visible for Classes tab
+
             onSearchTextChanged: {
                 pageModel.setSearchText(searchText)
             }
@@ -241,6 +243,7 @@ FocusScope {
             authorDescription: author.description
             authorAvatarUrl: author.avatarUrl
             authorOrganizationName: author.organizationName
+            authorOrganizationUrl: author.organizationUrl
 
             navigation.section: navSec
             navigation.order: 5

@@ -37,8 +37,8 @@ class EditMidiMappingModel : public QObject, public async::Asyncable
 
     Q_PROPERTY(QString mappingTitle READ mappingTitle NOTIFY mappingTitleChanged)
 
-    INJECT(shortcuts, IMidiRemote, midiRemote)
-    INJECT(shortcuts, midi::IMidiInPort, midiInPort)
+    INJECT(IMidiRemote, midiRemote)
+    INJECT(midi::IMidiInPort, midiInPort)
 
 public:
     explicit EditMidiMappingModel(QObject* parent = nullptr);

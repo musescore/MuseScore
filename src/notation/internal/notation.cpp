@@ -123,8 +123,6 @@ void Notation::init()
 {
     bool isVertical = configuration()->canvasOrientation().val == framework::Orientation::Vertical;
     mu::engraving::MScore::setVerticalOrientation(isVertical);
-
-    mu::engraving::MScore::playRepeats = configuration()->isPlayRepeatsEnabled();
 }
 
 void Notation::setScore(mu::engraving::Score* score)

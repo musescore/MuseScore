@@ -33,7 +33,7 @@ class QPdfWriter;
 namespace mu::iex::imagesexport {
 class PdfWriter : public AbstractImageWriter
 {
-    INJECT(iex_imagesexport, IImagesExportConfiguration, configuration)
+    INJECT(IImagesExportConfiguration, configuration)
 
 public:
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;

@@ -3,8 +3,6 @@
   <programVersion>2.3.2</programVersion>
   <programRevision>4592407</programRevision>
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Synthesizer>
       </Synthesizer>
     <Division>480</Division>
@@ -405,8 +403,6 @@
         </Measure>
       </Staff>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Synthesizer>
         </Synthesizer>
       <Division>480</Division>
@@ -650,8 +646,6 @@
       <name>Piano</name>
       </Score>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Synthesizer>
         </Synthesizer>
       <Division>480</Division>
@@ -896,8 +890,6 @@
       <name>Flute 1</name>
       </Score>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Synthesizer>
         </Synthesizer>
       <Division>480</Division>

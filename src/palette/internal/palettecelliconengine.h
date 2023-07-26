@@ -36,7 +36,7 @@ class Painter;
 namespace mu::palette {
 class PaletteCellIconEngine : public QIconEngine
 {
-    INJECT_STATIC(palette, IPaletteConfiguration, configuration)
+    INJECT_STATIC(IPaletteConfiguration, configuration)
 
 public:
     explicit PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag = 1.0);

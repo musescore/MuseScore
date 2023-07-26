@@ -241,7 +241,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
         painter.setPen(Pen(Color::RED, 4.0));
         painter.setBrush(BrushStyle::NoBrush);
 
-        double _spatium = score->spatium();
+        double _spatium = score->style().spatium();
 
         for (const System* system : page->systems()) {
             for (const MeasureBase* mb : system->measures()) {

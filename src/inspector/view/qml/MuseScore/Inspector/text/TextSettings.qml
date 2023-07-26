@@ -47,7 +47,7 @@ Column {
         height: childrenRect.height
         width: parent.width
 
-        CheckBoxPropertyView {
+        PropertyCheckBox {
             id: matchStaffSize
             anchors.left: parent.left
             anchors.right: subscriptOptionsButtonList.left
@@ -99,128 +99,20 @@ Column {
         }
     }
 
-    FlatRadioButtonGroupPropertyView {
-        id: frameSection
-        titleText: qsTrc("inspector", "Frame")
-        propertyItem: root.model ? root.model.frameType : null
+    FrameSettings {
+        id: frameSettings
+        visible: root.model ? !root.model.isDynamicSpecificSettings : false
+        height: visible ? implicitHeight : 0
 
-        navigationName: "FrameMenu"
         navigationPanel: root.navigationPanel
         navigationRowStart: subscriptOptionsButtonList.navigationRowEnd + 1
 
-        model: [
-            { text: qsTrc("inspector", "None"), value: TextTypes.FRAME_TYPE_NONE, titleRole: qsTrc("inspector", "None") },
-            { iconCode: IconCode.FRAME_SQUARE, value: TextTypes.FRAME_TYPE_SQUARE, titleRole: qsTrc("inspector", "Rectangle") },
-            { iconCode: IconCode.FRAME_CIRCLE, value: TextTypes.FRAME_TYPE_CIRCLE, titleRole: qsTrc("inspector", "Circle") }
-        ]
-    }
-
-    Item {
-        height: childrenRect.height
-        width: parent.width
-
-        ColorSection {
-            id: borderColorSection
-            anchors.left: parent.left
-            anchors.right: parent.horizontalCenter
-            anchors.rightMargin: 2
-
-            navigationName: "BorderColorMenu"
-            navigationPanel: root.navigationPanel
-            navigationRowStart: frameSection.navigationRowEnd + 1
-
-            visible: root.model ? root.model.frameBorderColor.isEnabled : false
-            height: visible ? implicitHeight : 0
-
-            titleText: qsTrc("inspector", "Border")
-            propertyItem: root.model ? root.model.frameBorderColor : null
-        }
-
-        ColorSection {
-            id: highlightColorSection
-            anchors.left: parent.horizontalCenter
-            anchors.leftMargin: 2
-            anchors.right: parent.right
-
-            navigationName: "HighlightColorMenu"
-            navigationPanel: root.navigationPanel
-            navigationRowStart: borderColorSection.navigationRowEnd + 1
-
-            visible: root.model ? root.model.frameFillColor.isEnabled : false
-            height: visible ? implicitHeight : 0
-
-            titleText: qsTrc("inspector", "Fill color")
-            propertyItem: root.model ? root.model.frameFillColor : null
-        }
-    }
-
-    Item {
-        height: childrenRect.height
-        width: parent.width
-
-        SpinBoxPropertyView {
-            id: thicknessSection
-            anchors.left: parent.left
-            anchors.right: parent.horizontalCenter
-            anchors.rightMargin: 2
-
-            navigationName: "Thickness"
-            navigationPanel: root.navigationPanel
-            navigationRowStart: highlightColorSection.navigationRowEnd + 1
-
-            visible: root.model ? root.model.frameThickness.isEnabled : false
-            height: visible ? implicitHeight : 0
-
-            titleText: qsTrc("inspector", "Thickness")
-            propertyItem: root.model ? root.model.frameThickness : null
-
-            step: 0.1
-            minValue: 0
-            maxValue: 5
-        }
-
-        SpinBoxPropertyView {
-            id: marginSection
-            anchors.left: parent.horizontalCenter
-            anchors.leftMargin: 2
-            anchors.right: parent.right
-
-            navigationName: "Margin"
-            navigationPanel: root.navigationPanel
-            navigationRowStart: thicknessSection.navigationRowEnd + 1
-
-            visible: root.model ? root.model.frameMargin.isEnabled : false
-            height: visible ? implicitHeight : 0
-
-            titleText: qsTrc("inspector", "Margin")
-            propertyItem: root.model ? root.model.frameMargin : null
-
-            step: 0.1
-            minValue: 0
-            maxValue: 5
-        }
-    }
-
-    SpinBoxPropertyView {
-        id: cornerRadiusSection
-        anchors.left: parent.left
-        anchors.right: parent.horizontalCenter
-        anchors.rightMargin: 2
-
-        navigationName: "Corner radius"
-        navigationPanel: root.navigationPanel
-        navigationRowStart: marginSection.navigationRowEnd + 1
-
-        visible: root.model ? root.model.frameCornerRadius.isEnabled : false
-        height: visible ? implicitHeight : 0
-
-        titleText: qsTrc("inspector", "Corner radius")
-        propertyItem: root.model ? root.model.frameCornerRadius : null
-
-        step: 1
-        decimals: 2
-        minValue: 0
-        maxValue: 100
+        frameTypePropertyItem: root.model ? root.model.frameType : null
+        frameBorderColorPropertyItem: root.model ? root.model.frameBorderColor : null
+        frameFillColorPropertyItem: root.model ? root.model.frameFillColor : null
+        frameThicknessPropertyItem: root.model ? root.model.frameThickness : null
+        frameMarginPropertyItem: root.model ? root.model.frameMargin : null
+        frameCornerRadiusPropertyItem: root.model ? root.model.frameCornerRadius : null
     }
 
     SeparatorLine { anchors.margins: -12 }
@@ -233,7 +125,7 @@ Column {
 
         navigationName: "Line Spacing"
         navigationPanel: root.navigationPanel
-        navigationRowStart: cornerRadiusSection.navigationRowEnd + 1
+        navigationRowStart: frameSettings.navigationRowEnd + 1
 
         titleText: qsTrc("inspector", "Line spacing")
         //: Stands for "Lines". Used for text line spacing controls, for example.
@@ -246,7 +138,10 @@ Column {
         maxValue: 10
     }
 
-    SeparatorLine { anchors.margins: -12 }
+    SeparatorLine {
+        visible: root.model ? !root.model.isDynamicSpecificSettings : false
+        anchors.margins: -12
+    }
 
     DropdownPropertyView {
         id: textStyleSection
@@ -257,12 +152,18 @@ Column {
         navigationPanel: root.navigationPanel
         navigationRowStart: textLineSpacingSection.navigationRowEnd + 1
 
+        visible: root.model ? !root.model.isDynamicSpecificSettings : false
+        height: visible ? implicitHeight : 0
+
         model: root.model ? root.model.textStyles : []
     }
 
     PlacementSection {
         id: textPlacementSection
         propertyItem: root.model ? root.model.textPlacement : null
+
+        visible: root.model ? !root.model.isDynamicSpecificSettings : false
+        height: visible ? implicitHeight : 0
 
         navigationPanel: root.navigationPanel
         navigationRowStart: textStyleSection.navigationRowEnd + 1

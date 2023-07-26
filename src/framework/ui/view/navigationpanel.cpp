@@ -54,6 +54,11 @@ const INavigation::Index& NavigationPanel::index() const
     return AbstractNavigation::index();
 }
 
+void NavigationPanel::setIndex(const Index& index)
+{
+    AbstractNavigation::setIndex(index);
+}
+
 mu::async::Channel<INavigation::Index> NavigationPanel::indexChanged() const
 {
     return AbstractNavigation::indexChanged();

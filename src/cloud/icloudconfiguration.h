@@ -22,7 +22,7 @@
 #ifndef MU_CLOUD_ICLOUDCONFIGURATION_H
 #define MU_CLOUD_ICLOUDCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 #include "network/networktypes.h"
 
@@ -34,24 +34,11 @@ class ICloudConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ICloudConfiguration() = default;
 
-    virtual network::RequestHeaders headers() const = 0;
+    virtual std::string clientId() const = 0;
+
     virtual QByteArray uploadingLicense() const = 0;
 
-    virtual QUrl cloudUrl() const = 0;
-    virtual QUrl authorizationUrl() const = 0;
-    virtual QUrl signUpUrl() const = 0;
-    virtual QUrl signInSuccessUrl() const = 0;
-    virtual QUrl scoreManagerUrl() const = 0;
-    virtual QUrl accessTokenUrl() const = 0;
-
-    virtual QUrl refreshApiUrl() const = 0;
-    virtual QUrl userInfoApiUrl() const = 0;
-    virtual QUrl logoutApiUrl() const = 0;
-    virtual QUrl scoreInfoApiUrl() const = 0;
-    virtual QUrl uploadScoreApiUrl() const = 0;
-    virtual QUrl uploadAudioApiUrl() const = 0;
-
-    virtual io::path_t tokensFilePath() const = 0;
+    virtual io::path_t tokensFilePath(const std::string& cloudName) const = 0;
 };
 }
 

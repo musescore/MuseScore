@@ -42,19 +42,7 @@ enum class StaffStateType : char {
 class StaffState final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, StaffState)
-
-    StaffStateType _staffStateType { StaffStateType::INVISIBLE };
-    double lw { 0.0 };
-    mu::draw::PainterPath path;
-
-    Instrument* _instrument { nullptr };
-
-    friend class Factory;
-    StaffState(EngravingItem* parent);
-    StaffState(const StaffState&);
-
-    void draw(mu::draw::Painter*) const override;
-    void layout() override;
+    DECLARE_CLASSOF(ElementType::STAFF_STATE)
 
 public:
 
@@ -63,20 +51,36 @@ public:
     StaffState* clone() const override { return new StaffState(*this); }
 
     void setStaffStateType(const String&);
-    void setStaffStateType(StaffStateType st) { _staffStateType = st; }
-    StaffStateType staffStateType() const { return _staffStateType; }
+    void setStaffStateType(StaffStateType st) { m_staffStateType = st; }
+    StaffStateType staffStateType() const { return m_staffStateType; }
     String staffStateTypeName() const;
+
+    const mu::draw::PainterPath& path() const { return m_path; }
+    void setPath(const mu::draw::PainterPath& p) { m_path = p; }
+
+    double lw() const { return m_lw; }
+    void setLw(double w) { m_lw = w; }
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
-    void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
-
-    Instrument* instrument() const { return _instrument; }
-    void setInstrument(const Instrument* i) { *_instrument = *i; }
-    void setInstrument(const Instrument&& i) { *_instrument = i; }
+    Instrument* instrument() const { return m_instrument; }
+    void setInstrument(const Instrument* i) { *m_instrument = *i; }
+    void setInstrument(const Instrument&& i) { *m_instrument = i; }
     Segment* segment() { return (Segment*)explicitParent(); }
+
+private:
+
+    friend class Factory;
+    StaffState(EngravingItem* parent);
+    StaffState(const StaffState&);
+
+    void draw(mu::draw::Painter*) const override;
+
+    StaffStateType m_staffStateType = StaffStateType::INVISIBLE;
+    double m_lw = 0.0;
+    mu::draw::PainterPath m_path;
+    Instrument* m_instrument = nullptr;
 };
 } // namespace mu::engraving
 #endif

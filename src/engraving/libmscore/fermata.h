@@ -42,16 +42,7 @@ class System;
 class Fermata final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Fermata)
-
-    SymId _symId;
-    double _timeStretch = -1.0;
-    bool _play;
-
-    friend class Factory;
-    Fermata(EngravingItem* parent);
-
-    void draw(mu::draw::Painter*) const override;
-    Sid getPropertyStyle(Pid) const override;
+    DECLARE_CLASSOF(ElementType::FERMATA)
 
 public:
 
@@ -62,17 +53,12 @@ public:
 
     double mag() const override;
 
-    SymId symId() const { return _symId; }
-    void setSymId(SymId id);
+    SymId symId() const { return m_symId; }
+    void setSymId(SymId id) { m_symId = id; }
+    void setSymIdAndTimeStretch(SymId id);
     FermataType fermataType() const;
     int subtype() const override;
     TranslatableString typeUserName() const override;
-
-    void layout() override;
-
-    void read(XmlReader&) override;
-    void write(XmlWriter& xml) const override;
-    bool readProperties(XmlReader&) override;
 
     std::vector<mu::LineF> dragAnchorLines() const override;
 
@@ -87,17 +73,29 @@ public:
     System* system() const;
     Page* page() const;
 
-    double timeStretch() const { return _timeStretch; }
-    void setTimeStretch(double val) { _timeStretch = val; }
+    double timeStretch() const { return m_timeStretch; }
+    void setTimeStretch(double val) { m_timeStretch = val; }
 
-    bool play() const { return _play; }
-    void setPlay(bool val) { _play = val; }
+    bool play() const { return m_play; }
+    void setPlay(bool val) { m_play = val; }
 
     String accessibleInfo() const override;
 
 protected:
     void added() override;
     void removed() override;
+
+private:
+
+    friend class Factory;
+    Fermata(EngravingItem* parent);
+
+    void draw(mu::draw::Painter*) const override;
+    Sid getPropertyStyle(Pid) const override;
+
+    SymId m_symId = SymId::noSym;
+    double m_timeStretch = -1.0;
+    bool m_play = true;
 };
 } // namespace mu::engraving
 #endif

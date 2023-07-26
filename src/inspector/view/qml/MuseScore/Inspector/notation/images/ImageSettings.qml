@@ -68,10 +68,11 @@ Column {
             id: lockButton
 
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: heightControl.verticalCenter
 
             height: 20
             width: 20
+
+            y: heightControl.spinBox.y + (heightControl.spinBox.height - height) / 2
 
             icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
 
@@ -106,7 +107,7 @@ Column {
 
     SeparatorLine { anchors.margins: -12 }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         text: qsTrc("inspector", "Scale to frame size")
         propertyItem: root.model ? root.model.shouldScaleToFrameSize : null
 
@@ -115,7 +116,7 @@ Column {
         navigation.row: imageWidthSection.navigationRowEnd + 1
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         id: staffSpaceUnitsCheckbox
         text: qsTrc("inspector", "Use staff space units")
         propertyItem: root.model ? root.model.isSizeInSpatiums : null

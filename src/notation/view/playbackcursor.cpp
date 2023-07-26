@@ -106,7 +106,7 @@ mu::RectF PlaybackCursor::resolveCursorRectByTick(midi::tick_t _tick) const
     }
 
     double y = system->staffYpage(0) + system->page()->pos().y();
-    double _spatium = score->spatium();
+    double _spatium = score->style().spatium();
 
     double w  = 8;
     double h  = 6 * _spatium;

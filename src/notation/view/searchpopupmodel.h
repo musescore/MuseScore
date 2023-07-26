@@ -34,8 +34,8 @@ class SearchPopupModel : public QObject, public actions::Actionable
 {
     Q_OBJECT
 
-    INJECT(notation, actions::IActionsDispatcher, dispatcher)
-    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(context::IGlobalContext, globalContext)
 
 public:
     Q_INVOKABLE void load();

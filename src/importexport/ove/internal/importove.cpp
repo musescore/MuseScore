@@ -737,7 +737,7 @@ void OveToMScore::convertTrackElements(int track)
                     }
 
                     if (y_off != 0) {
-                        ottava->setOffset(mu::PointF(0, y_off * m_score->spatium()));
+                        ottava->setOffset(mu::PointF(0, y_off * m_score->style().spatium()));
                     }
 
                     ottava->setTick(Fraction::fromTicks(absTick));
@@ -823,6 +823,7 @@ void OveToMScore::convertSignatures()
         int partStaffCount = m_ove->getStaffCount(i);
 
         for (j = 0; j < partStaffCount; ++j) {
+            Staff& staff = *m_score->staff(staffCount + j);
             for (k = 0; k < m_ove->getMeasureCount(); ++k) {
                 ovebase::MeasureData* measureData = m_ove->getMeasureData(i, j, k);
 
@@ -830,15 +831,26 @@ void OveToMScore::convertSignatures()
                     ovebase::Key* keyPtr = measureData->getKey();
 
                     if (k == 0 || keyPtr->getKey() != keyPtr->getPreviousKey()) {
-                        int tick = m_mtt->getTick(k, 0);
+                        Fraction tick = Fraction::fromTicks(m_mtt->getTick(k, 0));
                         int keyValue = keyPtr->getKey();
-                        Measure* measure = m_score->tick2measure(Fraction::fromTicks(tick));
+                        Measure* measure = m_score->tick2measure(tick);
                         if (measure) {
                             KeySigEvent ke;
-                            ke.setKey(Key(keyValue));
-                            m_score->staff(staffCount + j)->setKey(Fraction::fromTicks(tick), ke);
+                            Key key = Key(keyValue);
+                            Key cKey = key;
+                            Interval v = staff.part()->instrument(tick)->transpose();
+                            if (!v.isZero() && !m_score->style().styleB(Sid::concertPitch)) {
+                                cKey = transposeKey(key, v);
+                                // if there are more than 6 accidentals in transposing key, it cannot be PreferSharpFlat::AUTO
+                                if ((key > 6 || key < -6) && staff.part()->preferSharpFlat() == PreferSharpFlat::AUTO) {
+                                    staff.part()->setPreferSharpFlat(PreferSharpFlat::NONE);
+                                }
+                            }
+                            ke.setConcertKey(cKey);
+                            ke.setKey(key);
+                            staff.setKey(tick, ke);
 
-                            Segment* s = measure->getSegment(SegmentType::KeySig, Fraction::fromTicks(tick));
+                            Segment* s = measure->getSegment(SegmentType::KeySig, tick);
                             KeySig* keysig = Factory::createKeySig(s);
                             keysig->setTrack((staffCount + j) * VOICES);
                             keysig->setKeySigEvent(ke);
@@ -1422,7 +1434,6 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
 // beam in grace
 int getGraceLevel(const QList<ovebase::NoteContainer*>& containers, int tick, int unit)
 {
-    int graceCount = 0;
     int level = 0; // normal chord rest
 
     for (int i = 0; i < containers.size(); ++i) {
@@ -1431,12 +1442,9 @@ int getGraceLevel(const QList<ovebase::NoteContainer*>& containers, int tick, in
             break;
         }
 
-        if (container->getIsGrace() && container->getTick() == tick) {
-            ++graceCount;
-
-            if (unit <= container->start()->getOffset()) {
-                ++level;
-            }
+        if (container->getIsGrace() && container->getTick() == tick
+            && unit <= container->start()->getOffset()) {
+            ++level;
         }
     }
 
@@ -1542,7 +1550,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     int stepOffset = cr->staff()->staffType(cr->tick())->stepOffset();
                     int lineOffset = static_cast<mu::engraving::Rest*>(cr)->computeVoiceOffset(5);
                     yOffset -= qreal(lineOffset + stepOffset);
-                    yOffset *= m_score->spatium() / 2.0;
+                    yOffset *= m_score->style().spatium() / 2.0;
                     cr->ryoffset() = yOffset;
                     cr->setAutoplace(false);
                 }

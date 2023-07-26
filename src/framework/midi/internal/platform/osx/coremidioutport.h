@@ -32,7 +32,7 @@
 namespace mu::midi {
 class CoreMidiOutPort : public IMidiOutPort
 {
-    INJECT(midi, IMidiConfiguration, configuration)
+    INJECT(IMidiConfiguration, configuration)
 
 public:
     CoreMidiOutPort();

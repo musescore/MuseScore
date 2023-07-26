@@ -126,8 +126,6 @@
     <stemLengthSmall>2.25</stemLengthSmall>
     <shortStemStartLocation>1</shortStemStartLocation>
     <shortestStem>2.5</shortestStem>
-    <minStaffSizeForAutoStems>4</minStaffSizeForAutoStems>
-    <smallStaffStemDirection>1</smallStaffStemDirection>
     <beginRepeatLeftMargin>1</beginRepeatLeftMargin>
     <minNoteDistance>0.5</minNoteDistance>
     <barNoteDistance>1.3</barNoteDistance>

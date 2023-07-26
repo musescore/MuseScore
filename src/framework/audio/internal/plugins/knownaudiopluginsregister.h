@@ -32,8 +32,8 @@
 namespace mu::audio {
 class KnownAudioPluginsRegister : public IKnownAudioPluginsRegister
 {
-    INJECT(audio, IAudioConfiguration, configuration)
-    INJECT(audio, io::IFileSystem, fileSystem)
+    INJECT(IAudioConfiguration, configuration)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     Ret load() override;
@@ -48,9 +48,10 @@ public:
     Ret unregisterPlugin(const AudioResourceId& resourceId) override;
 
 private:
-    mu::io::path_t pluginInfoPath(const AudioResourceVendor& vendor, const AudioResourceId& resourceId) const;
+    Ret writePluginsInfo();
 
-    std::unordered_map<AudioResourceId, AudioPluginInfo> m_pluginInfoMap;
+    bool m_loaded = false;
+    std::multimap<AudioResourceId, AudioPluginInfo> m_pluginInfoMap;
     std::set<io::path_t> m_pluginPaths;
 };
 }

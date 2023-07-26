@@ -21,6 +21,7 @@
  */
 #include "commandlineparser.h"
 
+#include "global/io/dir.h"
 #include "global/muversion.h"
 
 #include "log.h"
@@ -45,6 +46,14 @@ static QStringList prepareArguments(int argc, char** argv)
     }
 
     return args;
+}
+
+template<typename ... Args>
+QCommandLineOption internalCommandLineOption(Args&& ... args)
+{
+    QCommandLineOption option(std::forward<Args>(args)...);
+    option.setFlags(QCommandLineOption::HiddenFromHelp);
+    return option;
 }
 
 void CommandLineParser::init()
@@ -135,12 +144,16 @@ void CommandLineParser::init()
     m_parser.addOption(QCommandLineOption("register-audio-plugin",
                                           "Check an audio plugin for compatibility with the application and register it", "path"));
     m_parser.addOption(QCommandLineOption("register-failed-audio-plugin", "Register an incompatible audio plugin", "path"));
+
+    // Internal
+    m_parser.addOption(internalCommandLineOption("score-display-name-override",
+                                                 "Display name to be shown in splash screen for the score that is being opened", "name"));
 }
 
 void CommandLineParser::parse(int argc, char** argv)
 {
     QStringList args = prepareArguments(argc, argv);
-    m_parser.process(args);
+    m_parser.parse(args);
 
     auto floatValue = [this](const QString& name) -> std::optional<float> {
         bool ok = true;
@@ -169,7 +182,14 @@ void CommandLineParser::parse(int argc, char** argv)
         return std::nullopt;
     };
 
-    QStringList scorefiles = m_parser.positionalArguments();
+    auto fromUserInputPath = [](const QString& path) -> QString {
+        return io::Dir::fromNativeSeparators(path).toQString();
+    };
+
+    QStringList scorefiles;
+    for (const QString& arg : m_parser.positionalArguments()) {
+        scorefiles << fromUserInputPath(arg);
+    }
 
     if (m_parser.isSet("long-version")) {
         printLongVersion();
@@ -177,7 +197,7 @@ void CommandLineParser::parse(int argc, char** argv)
     }
 
     if (m_parser.isSet("d")) {
-        haw::logger::Logger::instance()->setLevel(haw::logger::Debug);
+        m_options.app.loggerLevel = haw::logger::Debug;
     }
 
     if (m_parser.isSet("D")) {
@@ -199,7 +219,7 @@ void CommandLineParser::parse(int argc, char** argv)
     }
 
     if (m_parser.isSet("M")) {
-        m_options.importMidi.operationsFile = m_parser.value("M").toStdString();
+        m_options.importMidi.operationsFile = fromUserInputPath(m_parser.value("M"));
     }
 
     if (m_parser.isSet("b")) {
@@ -225,14 +245,14 @@ void CommandLineParser::parse(int argc, char** argv)
 
     if (m_parser.isSet("register-audio-plugin")) {
         m_runMode = IApplication::RunMode::AudioPluginRegistration;
-        m_audioPluginRegistration.pluginPath = m_parser.value("register-audio-plugin");
+        m_audioPluginRegistration.pluginPath = fromUserInputPath(m_parser.value("register-audio-plugin"));
         m_audioPluginRegistration.failedPlugin = false;
     }
 
     if (m_parser.isSet("register-failed-audio-plugin")) {
         QStringList args1 = m_parser.positionalArguments();
         m_runMode = IApplication::RunMode::AudioPluginRegistration;
-        m_audioPluginRegistration.pluginPath = m_parser.value("register-failed-audio-plugin");
+        m_audioPluginRegistration.pluginPath = fromUserInputPath(m_parser.value("register-failed-audio-plugin"));
         m_audioPluginRegistration.failedPlugin = true;
         m_audioPluginRegistration.failCode = !args1.empty() ? args1[0].toInt() : -1;
     }
@@ -257,7 +277,7 @@ void CommandLineParser::parse(int argc, char** argv)
                 LOGW() << "Option: -o multiple input files specified; processing only the first one";
             }
             m_converterTask.inputFile = scorefiles[0];
-            m_converterTask.outputFile = m_parser.value("o");
+            m_converterTask.outputFile = fromUserInputPath(m_parser.value("o"));
         }
     }
 
@@ -272,7 +292,7 @@ void CommandLineParser::parse(int argc, char** argv)
     if (m_parser.isSet("j")) {
         m_runMode = IApplication::RunMode::ConsoleApp;
         m_converterTask.type = ConvertType::Batch;
-        m_converterTask.inputFile = m_parser.value("j");
+        m_converterTask.inputFile = fromUserInputPath(m_parser.value("j"));
     }
 
     if (m_parser.isSet("score-media")) {
@@ -280,7 +300,8 @@ void CommandLineParser::parse(int argc, char** argv)
         m_converterTask.type = ConvertType::ExportScoreMedia;
         m_converterTask.inputFile = scorefiles[0];
         if (m_parser.isSet("highlight-config")) {
-            m_converterTask.params[CommandLineParser::ParamKey::HighlightConfigPath] = m_parser.value("highlight-config");
+            m_converterTask.params[CommandLineParser::ParamKey::HighlightConfigPath]
+                = fromUserInputPath(m_parser.value("highlight-config"));
         }
     }
 
@@ -314,7 +335,7 @@ void CommandLineParser::parse(int argc, char** argv)
 
         m_runMode = IApplication::RunMode::ConsoleApp;
         m_converterTask.type = ConvertType::SourceUpdate;
-        m_converterTask.inputFile = args2[0];
+        m_converterTask.inputFile = fromUserInputPath(args2[0]);
 
         if (args2.size() >= 2) {
             m_converterTask.params[CommandLineParser::ParamKey::ScoreSource] = args2[1];
@@ -324,11 +345,12 @@ void CommandLineParser::parse(int argc, char** argv)
     }
 
     // Video
+#ifdef MUE_BUILD_VIDEOEXPORT_MODULE
     if (m_parser.isSet("score-video")) {
         m_runMode = IApplication::RunMode::ConsoleApp;
         m_converterTask.type = ConvertType::ExportScoreVideo;
         m_converterTask.inputFile = scorefiles[0];
-        m_converterTask.outputFile = m_parser.value("o");
+        m_converterTask.outputFile = fromUserInputPath(m_parser.value("o"));
 
         if (m_parser.isSet("view-mode")) {
             NOT_IMPLEMENTED;
@@ -358,6 +380,7 @@ void CommandLineParser::parse(int argc, char** argv)
             m_options.exportVideo.trailingSec = doubleValue("ts");
         }
     }
+#endif
 
     if (m_parser.isSet("F") || m_parser.isSet("R")) {
         m_options.app.revertToFactorySettings = true;
@@ -368,7 +391,7 @@ void CommandLineParser::parse(int argc, char** argv)
     }
 
     if (m_parser.isSet("S")) {
-        m_converterTask.params[CommandLineParser::ParamKey::StylePath] = m_parser.value("S");
+        m_converterTask.params[CommandLineParser::ParamKey::StylePath] = fromUserInputPath(m_parser.value("S"));
     }
 
     if (m_parser.isSet("gp-linked")) {
@@ -418,11 +441,11 @@ void CommandLineParser::parse(int argc, char** argv)
     // Autobot
     if (m_parser.isSet("test-case")) {
         m_runMode = IApplication::RunMode::ConsoleApp;
-        m_autobot.testCaseNameOrFile = m_parser.value("test-case");
+        m_autobot.testCaseNameOrFile = fromUserInputPath(m_parser.value("test-case"));
     }
 
     if (m_parser.isSet("test-case-context")) {
-        m_autobot.testCaseContextNameOrFile = m_parser.value("test-case-context");
+        m_autobot.testCaseContextNameOrFile = fromUserInputPath(m_parser.value("test-case-context"));
     }
 
     if (m_parser.isSet("test-case-context-value")) {
@@ -442,7 +465,17 @@ void CommandLineParser::parse(int argc, char** argv)
         if (!scorefiles.isEmpty()) {
             m_options.startup.scorePath = scorefiles[0].toStdString();
         }
+
+        if (m_parser.isSet("score-display-name-override")) {
+            m_options.startup.scoreDisplayNameOverride = m_parser.value("score-display-name-override");
+        }
     }
+}
+
+void CommandLineParser::processBuiltinArgs(const QCoreApplication& app)
+{
+    //! NOTE: some options require an instance of QCoreApplication
+    m_parser.process(app);
 }
 
 mu::framework::IApplication::RunMode CommandLineParser::runMode() const

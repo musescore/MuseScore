@@ -20,7 +20,7 @@
 
 if (MUE_BUILD_IMPORTEXPORT_MODULE)
     add_subdirectory(bb)
-    add_subdirectory(braille)
+
     add_subdirectory(bww)
     add_subdirectory(capella)
     add_subdirectory(midi)
@@ -30,6 +30,7 @@ if (MUE_BUILD_IMPORTEXPORT_MODULE)
     add_subdirectory(audioexport)
     add_subdirectory(imagesexport)
     add_subdirectory(guitarpro)
+    add_subdirectory(mei)
 
     if (MUE_BUILD_VIDEOEXPORT_MODULE)
         add_subdirectory(videoexport)

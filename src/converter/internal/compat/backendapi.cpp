@@ -35,6 +35,7 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/infrastructure/mscwriter.h"
 #include "engraving/libmscore/excerpt.h"
+#include "engraving/rw/mscsaver.h"
 
 #include "backendjsonwriter.h"
 #include "notationmeta.h"
@@ -51,8 +52,10 @@ using namespace mu::io;
 
 static const std::string PNG_WRITER_NAME = "png";
 static const std::string SVG_WRITER_NAME = "svg";
-static const std::string SEGMENTS_POSITIONS_WRITER_NAME = "sposXML";
-static const std::string MEASURES_POSITIONS_WRITER_NAME = "mposXML";
+static const std::string SEGMENTS_POSITIONS_WRITER_NAME = "spos";
+static const std::string SEGMENTS_POSITIONS_TAG_NAME = "sposXML";
+static const std::string MEASURES_POSITIONS_WRITER_NAME = "mpos";
+static const std::string MEASURES_POSITIONS_TAG_NAME = "mposXML";
 static const std::string PDF_WRITER_NAME = "pdf";
 static const std::string MIDI_WRITER_NAME = "midi";
 static const std::string MUSICXML_WRITER_NAME = "mxl";
@@ -85,8 +88,10 @@ Ret BackendApi::exportScoreMedia(const io::path_t& in, const io::path_t& out, co
 
     result &= exportScorePngs(notation, jsonWriter, ADD_SEPARATOR);
     result &= exportScoreSvgs(notation, highlightConfigPath, jsonWriter, ADD_SEPARATOR);
-    result &= exportScoreElementsPositions(SEGMENTS_POSITIONS_WRITER_NAME, notation, jsonWriter, ADD_SEPARATOR);
-    result &= exportScoreElementsPositions(MEASURES_POSITIONS_WRITER_NAME, notation, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreElementsPositions(SEGMENTS_POSITIONS_WRITER_NAME, SEGMENTS_POSITIONS_TAG_NAME,
+                                           notation, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreElementsPositions(MEASURES_POSITIONS_WRITER_NAME, MEASURES_POSITIONS_TAG_NAME,
+                                           notation, jsonWriter, ADD_SEPARATOR);
     result &= exportScorePdf(notation, jsonWriter, ADD_SEPARATOR);
     result &= exportScoreMidi(notation, jsonWriter, ADD_SEPARATOR);
     result &= exportScoreMusicXML(notation, jsonWriter, ADD_SEPARATOR);
@@ -126,12 +131,10 @@ Ret BackendApi::exportScoreParts(const io::path_t& in, const io::path_t& out, co
         return prj.ret;
     }
 
-    INotationPtr notation = prj.val->masterNotation()->notation();
-
     QFile outputFile;
     openOutputFile(outputFile, out);
 
-    Ret ret = doExportScoreParts(notation, outputFile);
+    Ret ret = doExportScoreParts(prj.val->masterNotation(), outputFile);
 
     outputFile.close();
 
@@ -217,15 +220,18 @@ RetVal<project::INotationProjectPtr> BackendApi::openProject(const io::path_t& p
         return make_ret(Ret::Code::InternalError);
     }
 
-    INotationPtr notation = notationProject->masterNotation()->notation();
+    IMasterNotationPtr masterNotation = notationProject->masterNotation();
+    if (!masterNotation) {
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    INotationPtr notation = masterNotation->notation();
     if (!notation) {
         return make_ret(Ret::Code::InternalError);
     }
 
-    notation->setViewMode(ViewMode::PAGE);
-    for (IExcerptNotationPtr excerpt : notationProject->masterNotation()->excerpts().val) {
-        excerpt->notation()->setViewMode(ViewMode::PAGE);
-    }
+    switchToPageView(masterNotation);
+    renderExcerptsContents(masterNotation);
 
     return RetVal<INotationProjectPtr>::make_ok(notationProject);
 }
@@ -358,8 +364,8 @@ Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const io::path_t& h
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreElementsPositions(const std::string& elementsPositionsWriterName, const INotationPtr notation,
-                                             BackendJsonWriter& jsonWriter, bool addSeparator)
+Ret BackendApi::exportScoreElementsPositions(const std::string& elementsPositionsWriterName, const std::string& elementsPositionsTagName,
+                                             const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     TRACEFUNC
 
@@ -368,7 +374,7 @@ Ret BackendApi::exportScoreElementsPositions(const std::string& elementsPosition
         return writerRetVal.ret;
     }
 
-    jsonWriter.addKey(elementsPositionsWriterName.c_str());
+    jsonWriter.addKey(elementsPositionsTagName.c_str());
     jsonWriter.addValue(writerRetVal.val, addSeparator, false);
 
     return make_ret(Ret::Code::Ok);
@@ -521,16 +527,16 @@ mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, 
     return result;
 }
 
-Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, QIODevice& destinationDevice)
+Ret BackendApi::doExportScoreParts(const IMasterNotationPtr masterNotation, QIODevice& destinationDevice)
 {
-    mu::engraving::MasterScore* score = notation->elements()->msScore()->masterScore();
-
     QJsonArray partsObjList;
     QJsonArray partsMetaList;
     QJsonArray partsTitles;
 
-    for (const mu::engraving::Excerpt* excerpt : score->excerpts()) {
-        mu::engraving::Score* part = excerpt->excerptScore();
+    ExcerptNotationList excerpts = allExcerpts(masterNotation);
+
+    for (IExcerptNotationPtr excerpt : excerpts) {
+        mu::engraving::Score* part = excerpt->notation()->elements()->msScore();
         std::map<String, String> partMetaTags = part->metaTags();
 
         QJsonValue partTitle(part->name());
@@ -573,7 +579,10 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
 
     QJsonArray partsArray;
     QJsonArray partsNamesArray;
-    for (IExcerptNotationPtr e : masterNotation->excerpts().val) {
+
+    ExcerptNotationList excerpts = allExcerpts(masterNotation);
+
+    for (IExcerptNotationPtr e : excerpts) {
         QJsonValue partNameVal(e->name());
         partsNamesArray.append(partNameVal);
 
@@ -635,11 +644,16 @@ RetVal<QByteArray> BackendApi::scorePartJson(mu::engraving::Score* score, const 
     MscWriter mscWriter(params);
     mscWriter.open();
 
-    bool ok = compat::ScoreAccess::exportPart(mscWriter, score);
+    bool ok = MscSaver().exportPart(score, mscWriter);
     if (!ok) {
         LOGW() << "Error save mscz file";
     }
+
     mscWriter.close();
+    if (mscWriter.hasError()) {
+        ok = false;
+        LOGW() << "Error write mscz file";
+    }
 
     QByteArray ba = QByteArray::fromRawData(reinterpret_cast<const char*>(scoreData.constData()), static_cast<int>(scoreData.size()));
 
@@ -736,6 +750,48 @@ Ret BackendApi::applyTranspose(const INotationPtr notation, const std::string& o
     }
 
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
+}
+
+void BackendApi::switchToPageView(IMasterNotationPtr masterNotation)
+{
+    //! NOTE: All operations must be done in page view mode
+    masterNotation->notation()->setViewMode(ViewMode::PAGE);
+    for (IExcerptNotationPtr excerpt : masterNotation->excerpts().val) {
+        excerpt->notation()->setViewMode(ViewMode::PAGE);
+    }
+}
+
+void BackendApi::renderExcerptsContents(IMasterNotationPtr masterNotation)
+{
+    //! NOTE: Due to optimization, only the master score is layouted
+    //!       Let's layout all the scores of the excerpts
+    for (IExcerptNotationPtr excerpt : masterNotation->excerpts().val) {
+        Score* score = excerpt->notation()->elements()->msScore();
+        if (!score->autoLayoutEnabled()) {
+            score->doLayout();
+        }
+    }
+}
+
+ExcerptNotationList BackendApi::allExcerpts(notation::IMasterNotationPtr masterNotation)
+{
+    initPotentialExcerpts(masterNotation);
+
+    ExcerptNotationList excerpts = masterNotation->excerpts().val;
+    ExcerptNotationList potentialExcerpts = masterNotation->potentialExcerpts();
+    excerpts.insert(excerpts.end(), potentialExcerpts.begin(), potentialExcerpts.end());
+
+    masterNotation->sortExcerpts(excerpts);
+
+    return excerpts;
+}
+
+void BackendApi::initPotentialExcerpts(notation::IMasterNotationPtr masterNotation)
+{
+    ExcerptNotationList potentialExcerpts = masterNotation->potentialExcerpts();
+
+    masterNotation->initExcerpts(potentialExcerpts);
+    renderExcerptsContents(masterNotation);
 }
 
 Ret BackendApi::updateSource(const io::path_t& in, const std::string& newSource, bool forceMode)

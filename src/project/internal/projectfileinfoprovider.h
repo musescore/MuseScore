@@ -31,13 +31,15 @@ namespace mu::project {
 class NotationProject;
 class ProjectFileInfoProvider : public engraving::IFileInfoProvider
 {
-    INJECT(project, io::IFileSystem, filesystem)
+    INJECT(io::IFileSystem, filesystem)
 public:
     explicit ProjectFileInfoProvider(NotationProject* project);
 
     io::path_t path() const override;
     io::path_t fileName(bool includingExtension = true) const override;
     io::path_t absoluteDirPath() const override;
+
+    String displayName() const override;
 
     DateTime birthTime() const override;
     DateTime lastModified() const override;

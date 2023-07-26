@@ -38,8 +38,6 @@ namespace mu::engraving {
 class Chord;
 class ChordRest;
 class Staff;
-class XmlReader;
-class XmlWriter;
 
 // all in spatium units
 #define STAFFTYPE_TAB_DEFAULTSTEMLEN_UP   3.0
@@ -176,8 +174,8 @@ enum class StaffTypes : signed char {
     TAB_5SIMPLE, TAB_5COMMON, TAB_5FULL,
     TAB_UKULELE, TAB_BALALAJKA, TAB_DULCIMER,
     TAB_ITALIAN, TAB_FRENCH,
-    TAB_7COMMON, TAB_8COMMON,
-    TAB_7SIMPLE, TAB_8SIMPLE,
+    TAB_7COMMON, TAB_8COMMON, TAB_9COMMON, TAB_10COMMON,
+    TAB_7SIMPLE, TAB_8SIMPLE, TAB_9SIMPLE, TAB_10SIMPLE,
     STAFF_TYPES,
     // some useful shorthands:
     PERC_DEFAULT = StaffTypes::PERC_5LINE,
@@ -190,7 +188,7 @@ enum class StaffTypes : signed char {
 
 class StaffType
 {
-    INJECT_STATIC(engraving, IEngravingConfiguration, engravingConfiguration)
+    INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
 
     friend class TabDurationSymbol;
 
@@ -323,10 +321,7 @@ public:
     void setColor(const mu::draw::Color& val) { _color = val; }
     Spatium yoffset() const { return _yoffset; }
     void setYoffset(Spatium val) { _yoffset = val; }
-    double spatium(Score*) const;
-
-    void write(XmlWriter& xml) const;
-    void read(XmlReader&);
+    double spatium(const MStyle& style) const;
 
     void setStemless(bool val) { _stemless = val; }
     bool stemless() const { return _stemless; }
@@ -425,7 +420,7 @@ public:
 
     bool isSimpleTabStaff() const;
     bool isCommonTabStaff() const;
-    bool isHiddenElementOnTab(const Score* score, Sid commonTabStyle, Sid simpleTabStyle) const;
+    bool isHiddenElementOnTab(const MStyle& style, Sid commonTabStyle, Sid simpleTabStyle) const;
 
     // static functions for font config files
     static std::vector<String> fontNames(bool bDuration);
@@ -451,13 +446,6 @@ class TabDurationSymbol final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, TabDurationSymbol)
 
-    double _beamLength { 0.0 };              // if _grid==MEDIALFINAL, length of the beam toward previous grid element
-    int _beamLevel  { 0 };                 // if _grid==MEDIALFINAL, the number of beams
-    TabBeamGrid _beamGrid   { TabBeamGrid::NONE };          // value for special 'English' grid display
-    const StaffType* _tab  { nullptr };
-    String _text;
-    bool _repeat     { false };
-
 public:
     TabDurationSymbol(ChordRest* parent);
     TabDurationSymbol(ChordRest* parent, const StaffType* tab, DurationType type, int dots);
@@ -465,18 +453,36 @@ public:
     TabDurationSymbol* clone() const override { return new TabDurationSymbol(*this); }
     void draw(mu::draw::Painter*) const override;
     bool isEditable() const override { return false; }
-    void layout() override;
 
-    TabBeamGrid beamGrid() { return _beamGrid; }
+    TabBeamGrid beamGrid() { return m_beamGrid; }
+    void setBeamGrid(TabBeamGrid g) { m_beamGrid = g; }
+
+    double beamLength() const { return m_beamLength; }
+    void setBeamLength(double l) { m_beamLength = l; }
+    int beamLevel() const { return m_beamLevel; }
+    void setBeamLevel(int l) { m_beamLevel = l; }
+
     void layout2();                 // second step of layout: after horiz. pos. are defined, compute width of 'grid beams'
+
+    const StaffType* tab() const { return m_tab; }
+    const String& text() const { return m_text; }
     void setDuration(DurationType type, int dots, const StaffType* tab)
     {
-        _tab = tab;
-        _text = tab->durationString(type, dots);
+        m_tab = tab;
+        m_text = tab->durationString(type, dots);
     }
 
-    bool isRepeat() const { return _repeat; }
-    void setRepeat(bool val) { _repeat = val; }
+    bool isRepeat() const { return m_repeat; }
+    void setRepeat(bool val) { m_repeat = val; }
+
+private:
+
+    double m_beamLength = 0.0;                      // if _grid==MEDIALFINAL, length of the beam toward previous grid element
+    int m_beamLevel = 0;                            // if _grid==MEDIALFINAL, the number of beams
+    TabBeamGrid m_beamGrid = TabBeamGrid::NONE;     // value for special 'English' grid display
+    const StaffType* m_tab = nullptr;
+    String m_text;
+    bool m_repeat = false;
 };
 } // namespace mu::engraving
 #endif

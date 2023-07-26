@@ -1,0 +1,510 @@
+#-index-name: Standard Music Font Layout Braille
+#-display-name: Standard Music Font Layout Braille
+#
+#+locale: en-us
+#+type: music
+#+contraction: no
+#+grade: 0
+#+dots: 6
+#+direction: forward
+#+system: English
+#+description: This table is originally designed for Sao Mai Braille (SMB) software to get Braille output for music SMUFL  symbols parsed from MusicXML file. Braille definitions are based on Music Braille Code 2015 (MBC) and it might be useful to have more users to contribute more definitions. In addition, screen readers might use it to show correct Braille for music symbols in text  document.
+#
+#-copyright: Sao Mai Center for the Blind <www.saomaicenter.org/en>
+#-license: LGPLv2.1
+#
+#  Copyright (C) 2021 by Sao Mai Center for the Blind <www.saomaicenter.org/en>
+#
+#  This file is part of liblouis.
+#
+#  liblouis is free software: you can redistribute it and/or modify it
+#  under the terms of the GNU Lesser General Public License as
+#  published by the Free Software Foundation, either version 2.1 of the
+#  License, or (at your option) any later version.
+#
+#  liblouis is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+#  Lesser General Public License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public
+#  License along with liblouis. If not, see
+#  <http://www.gnu.org/licenses/>.
+#
+# Created and maintained by: Dang Hoai Phúc <danghoaiphuc@gmail.com>
+#
+#-author: Dang Hoai Phúc <danghoaiphuc@gmail.com> and Haipeng Hu <hhpcomposer@gmail.com>
+#-maintainer-name: Dang Hoai Phúc
+#-maintainer-email: danghoaiphuc@gmail.com
+#
+#-updated: 2021-10-5
+#
+# Based on <http://www.brailleauthority.org/music/Music_Braille_Code_2015.pdf> and <https://www.smufl.org/>
+
+#sign Codepoint Braille
+sign \xE8CC 126-12
+sign \xE8CB 126-3
+sign \xE26C 6-3
+sign \xE26D 6-3
+sign \xE264 126-126
+sign \xE263 146-146
+sign \xE260 126
+sign \xE47D 146-146
+sign \xE261 16
+sign \xE26A 6-3
+sign \xE26B 6-3
+sign \xE47F 4-126
+sign \xE270 4-126
+sign \xE273 4-126
+sign \xE478 4-126
+sign \xE280 4-126
+sign \xE488 4-126
+sign \xE47E 4-146
+sign \xE275 4-146
+sign \xE472 4-146
+sign \xE272 4-146
+sign \xE282 4-146
+sign \xE475 4-146
+sign \xE262 146
+sign \xE269 146-146
+sign \xE271 456-126
+sign \xE278 456-126
+sign \xE489 456-126
+sign \xE486 456-126
+sign \xE487 456-126
+sign \xE281 456-126
+sign \xE277 456-146
+sign \xE274 456-146
+sign \xE474 456-146
+sign \xE283 456-146
+sign \xED5A 456-146
+sign \xE266 126-126-126
+sign \xE265 146-146-146
+sign \xE86A 345-14-125-3
+sign \xE863 5-23
+sign \xE86B 345-125-1235-3
+sign \xE860 345-125-3
+sign \xE869 345-24-3
+sign \xE861 345-1345-3
+sign \xE862 56-2
+sign \xE864 345-2345-3
+sign \xE868 345-2345-2-3
+sign \xE867 345-2345-24-3
+sign \xE865 345-2345-1235-3
+sign \xE866 345-2345-1235-24-3
+sign \xE635 345-13-13
+sign \xE634 345-13
+sign \xE4A0 46-236
+sign \xE4A1 46-236
+sign \xE4B0 236-46-236
+sign \xE4B1 236-46-236
+sign \xE4BA 56-14
+sign \xE4BB 56-14
+sign \xE4AC 56-236
+sign \xE4AD 56-236
+sign \xE4AE 236-56-236
+sign \xE4AF 236-56-236
+sign \xE4BC 56-236-456-236
+sign \xE4BD 56-236-456-236
+sign \xED40 34-123456-16
+sign \xED41 34-123456-16
+sign \xED42 34-123456-16
+sign \xED43 34-123456-16
+sign \xED44 34-123456-16
+sign \xED45 34-123456-16
+sign \xED46 34-123456-16
+sign \xED47 34-123456-16
+sign \xE4A6 6-236
+sign \xE4A7 6-236
+sign \xE4AA 34-123456-16
+sign \xE4AB 34-123456-16
+sign \xE4A8 6-236-4-236
+sign \xE4A9 6-236-4-236
+sign \xE4A2 236
+sign \xE4A3 236
+sign \xE4B6 34-123456-16
+sign \xE4B7 34-123456-16
+sign \xE4A4 456-236
+sign \xE4B4 46-236-456-236
+sign \xE4B5 46-236-456-236
+sign \xE4A5 456-236
+sign \xE4B2 5-236
+sign \xE4B3 5-236
+sign \xE4B8 34-123456-16
+sign \xE4B9 34-123456-16
+sign \xE036 0-13-0
+sign \xE037 0-13-0
+sign \xE031 126-13-3
+sign \xE032 126-13
+sign \xE034 123
+sign \xE035 34-123456-16
+sign \xE033 34-123456-16
+sign \xE038 0
+sign \xE030 0
+sign \xE039 0
+sign \xE4CE 345-2
+sign \xE4D5 345-2
+sign \xE4CF 345-2
+sign \xE4D0 345-2
+sign \xE22A 45-2
+sign \xE05C 345-346-123
+sign \xE05D 345-346-123-3456-236
+sign \xE4D1 6-34
+sign \xE4D4 6-34
+sign \xE4D3 6-34
+sign \xE4D2 6-34
+sign \xE07E 3456-1-15 for above- 3456-2-26 for below
+sign \xE07D 3456-125 for above- 3456-236 for below
+sign \xE048 346-123
+sign \xE049 346-123
+sign \xED64 126-126
+sign \xED63 146-146
+sign \xED60 126
+sign \xED61 16
+sign \xED62 146
+sign \xED66 126-126-126
+sign \xED65 146-146-146
+sign \xE872 346
+sign \xE877 56-3
+sign \xE878 6-23
+sign \xE87C 3456-34
+sign \xE870 256
+sign \xE871 256-3
+sign \xE873 6-134-3456-1245
+sign \xE874 134
+sign \xE875 2356
+sign \xE879 2356
+sign \xE876 2356
+sign \xE87A 2356
+sign \xE046 345-145-3-14-3
+sign \xE045 345-145-3-234-3
+sign \xE546 25
+sign \xE547 36
+sign \xE549 34
+sign \xE548 0
+sign \xE53E 14
+sign \xE53F 145
+sign \xE52F 124-124
+sign \xE530 124-124-124
+sign \xE531 124-124-124-124
+sign \xE532 124-124-124-124-124
+sign \xE533 124-124-124-124-124-124
+sign \xE522 124
+sign \xE534 124-1234
+sign \xE535 124-1356
+sign \xE544 56-3
+sign \xE545 6-23
+sign \xE542 6-3
+sign \xE543 6-3
+sign \xE52D 134-124
+sign \xE52C 134-1234
+sign \xE540 16-3
+sign \xE521 134
+sign \xE526 1345
+sign \xE52E 1234-124
+sign \xE52B 1234-1234
+sign \xE52A 1234-1234-1234
+sign \xE529 1234-1234-1234-1234
+sign \xE528 1234-1234-1234-1234-1234
+sign \xE527 1234-1234-1234-1234-1234-1234
+sign \xE520 1234
+sign \xE523 1235
+sign \xE53C 1235-124
+sign \xE53D 1235-124-1356
+sign \xE524 234
+sign \xE536 234-124
+sign \xE538 234-124-1234-1234
+sign \xE537 234-124-1234
+sign \xE539 234-124-1356
+sign \xE53B 234-124-124-1356
+sign \xE53A 234-124-1356-1234
+sign \xE525 1356
+sign \xE062 345-3456-123
+sign \xE066 345-3456-123-3456-1-15
+sign \xE063 345-3456-123-3456-2-26
+sign \xE065 345-3456-123-3456-125
+sign \xE064 345-3456-123-3456-236
+sign \xE4C0 126-123
+sign \xE4C1 126-123
+sign \xE4C6 45-126-123
+sign \xE4C7 45-126-123
+sign \xE4C4 34-123456-16
+sign \xE4C5 34-123456-16
+sign \xE4C8 45-126-123
+sign \xE4C9 45-126-123
+sign \xE4C2 34-123456-16
+sign \xE4C3 34-123456-16
+sign \xED10 13
+sign \xED80 13
+sign \xED11 1
+sign \xED81 1
+sign \xED12 12
+sign \xED82 12
+sign \xED13 123
+sign \xED83 123
+sign \xED14 2
+sign \xED84 2
+sign \xED15 13
+sign \xED85 13
+sign \xED24 34-123456-16
+sign \xED86 34-123456-16
+sign \xED25 34-123456-16
+sign \xED87 34-123456-16
+sign \xED26 34-123456-16
+sign \xED88 34-123456-16
+sign \xED27 34-123456-16
+sign \xED89 34-123456-16
+sign \xED1B 1
+sign \xED1C 13
+sign \xED1E 15
+sign \xED19 24
+sign \xED2A 56-3
+sign \xED8C 56-3
+sign \xED28 6-3
+sign \xED8A 6-3
+sign \xED1A 134
+sign \xED23 34-123456-16
+sign \xED1F 135
+sign \xED17 1234
+sign \xED2B 6-23
+sign \xED8D 6-23
+sign \xED29 6-3
+sign \xED8B 6-3
+sign \xED2C 34-123456-16
+sign \xED2D 34-123456-16
+sign \xED2E 34-123456-16
+sign \xED20 34-123456-16
+sign \xED21 34-123456-16
+sign \xED22 14
+sign \xED18 2345
+sign \xED16 2345
+sign \xED1D 1346
+sign \xE050 345-34-123
+sign \xE054 345-34-123-3456-1-15
+sign \xE051 345-34-123-3456-2-26
+sign \xE053 345-34-123-3456-125
+sign \xE052 345-34-123-3456-236
+sign \xE056 345-34-123-3456-236-345-346-123
+sign \xE055 345-34-123-3456-236
+sign \xE057 345-34-123-6-3-3456-236-6-3
+sign \xE668 4-236-236
+sign \xE669 4-236-236
+sign \xE66A 4-236-236-236
+sign \xE66B 4-236-236-236
+sign \xE66C 4-236-236-236-236
+sign \xE66D 4-236-236-236-236
+sign \xE650 126-14
+sign \xE655 16-14
+sign \xE56D 5-235
+sign \xE587 4-123
+sign \xE566 235
+sign \xE567 256
+sign \xE568 256-123
+sign \xE500 2356
+sign \xE501 3456-12
+sign \xE502 3456-145
+sign \xE040 126-2356
+sign \xE041 126-23
+sign \xE042 126-23-0-126-2356
+sign \xE04D 126-23
+sign \xE047 346
+sign \xE610 126-12
+sign \xE624 16-13
+sign \xE612 126-3
+sign \xEC80 6-2356
+sign \xEC82 6-2356
+sign \xEC81 2356-3
+sign \xEC83 2356-3
+sign \xE08A 46-14
+sign \xEC85 456-14
+sign \xE08B 456-14
+sign \xE08F 123456
+sign \xE098 3456-1-34-12
+sign \xE09A 3456-1-34-14
+sign \xE097 3456-1-34-145
+sign \xE099 3456-14-34-145
+sign \xE09B 3456-12-34-14
+sign \xE08E 34
+sign \xE090 36
+sign \xE091 16
+sign \xE094 2356
+sign \xE092 2356
+sign \xE095 2356
+sign \xE093 2356
+sign \xE08C 346
+sign \xE08D 346
+sign \xEC84 34
+sign \xE22C 45-2
+sign \xE22D 45-2
+sign \xE680 12
+sign \xE681 2
+sign \xE682 23
+sign \xE683 123
+sign \xE551 4-14
+sign \x035C 4-14
+sign \xECB0 145 #c 128th
+sign \xECAF 145
+sign \xECB2 13456 #c 256th note
+sign \xECB1 13456
+sign \xECAE 1456 #c 64th
+sign \xECAD 1456
+sign \xECAC 1345 #c 32nd
+sign \xECAB 1345
+sign \xECAA 13456 #c 16th
+sign \xECA9 13456
+sign \xECA8 145 #c 8th
+sign \xECA7 145
+sign \xECA6 1456 #c quarter
+sign \xECA5 1456
+sign \xECA4 1345 #half note
+sign \xECA3 1345
+sign \xECA2 13456 #c whole
+sign \xECA0 13456-45-14-13456 #c breve
+sign \xECB7 3 #dotted sign
+sign \xE1E7 3
+sign \xE1E2 13456
+sign \xE1E1 13456
+sign \xE1E0 145
+sign \xE1DF 145
+sign \xE1DE 1456
+sign \xE1DD 1456
+sign \xE1DC 1345
+sign \xE1DB 1345
+sign \xE1DA 13456
+sign \xE1D9 13456
+sign \xE1D8 145
+sign \xE1D7 145
+sign \xE1D6 1456
+sign \xE1D5 1456
+sign \xE1D4 1345
+sign \xE1D3 1345
+sign \xE1D2 13456
+sign \xE1D0 13456-45-14-13456
+sign \xE1D1 13456-45-14-13456
+sign \xEA63 126-126
+sign \xEA67 146-146
+sign \xEA64 126
+sign \xEA65 16
+sign \xEA66 146
+
+# SMUFL alternate codes will be converted into standard codepoint before translated.
+noback correct "\x1D12B" "\xE264"
+noback correct "\x1D12A" "\xE263"
+noback correct "\x266D" "\xE260"
+noback correct "\x266E" "\xE261"
+noback correct "\x1D133" "\xE47F"
+noback correct "\x1D12C" "\xE270"
+noback correct "\x1D12F" "\xE273"
+noback correct "\x1D132" "\xE47E"
+noback correct "\x1D131" "\xE275"
+noback correct "\x1D12E" "\xE272"
+noback correct "\x266F" "\xE262"
+noback correct "\x1D12D" "\xE271"
+noback correct "\x1D130" "\xE274"
+noback correct "\x1D1A8" "\xE863"
+noback correct "\x1D1A6" "\xE860"
+noback correct "\x1D1A7" "\xE861"
+noback correct "\x1D184" "\xE635"
+noback correct "\x1D183" "\xE634"
+noback correct "\x1D17B" "\xE4A0"
+noback correct "\x1D181" "\xE4B0"
+noback correct "\x1D17F" "\xE4AC"
+noback correct "\x1D180" "\xE4AE"
+noback correct "\x1D17E" "\xE4A6"
+noback correct "\x1D17C" "\xE4A2"
+noback correct "\x1D17D" "\xE4A4"
+noback correct "\x1D182" "\xE4B2"
+noback correct "\x1D104" "\xE036"
+noback correct "\x1D101" "\xE031"
+noback correct "\x1D102" "\xE032"
+noback correct "\x1D103" "\xE033"
+noback correct "\x1D105" "\xE038"
+noback correct "\x1D100" "\xE030"
+noback correct "\x1D112" "\xE4CE"
+noback correct "\x1D121" "\xE05C"
+noback correct "\x1D113" "\xE4D1"
+noback correct "\x1D10C" "\xE048"
+noback correct "\x1D1A9" "\xE870"
+noback correct "\x1D10A" "\xE046"
+noback correct "\x1D109" "\xE045"
+noback correct "\x1D192" "\xE53E"
+noback correct "\x1D193" "\xE53F"
+noback correct "\x1D191" "\xE522"
+noback correct "\x1D190" "\xE521"
+noback correct "\x1D18F" "\xE520"
+noback correct "\x1D18C" "\xE523"
+noback correct "\x1D18D" "\xE524"
+noback correct "\x1D18E" "\xE525"
+noback correct "\x1D122" "\xE062"
+noback correct "\x1D123" "\xE065"
+noback correct "\x1D124" "\xE064"
+noback correct "\x1D110" "\xE4C0"
+noback correct "\x1D111" "\xE4C1"
+noback correct "\x1D11E" "\xE050"
+noback correct "\x1D11F" "\xE053"
+noback correct "\x1D120" "\xE052"
+noback correct "\x1D1AE" "\xE650"
+noback correct "\x1D1AF" "\xE655"
+noback correct "\x1D196" "\xE566"
+noback correct "\x1D197" "\xE567"
+noback correct "\x1D198" "\xE568"
+noback correct "\x1D10E" "\xE500"
+noback correct "\x1D10F" "\xE501"
+noback correct "\x1D106" "\xE040"
+noback correct "\x1D107" "\xE041"
+noback correct "\x1D10B" "\xE047"
+noback correct "\x1D1AA" "\xE610"
+noback correct "\x1D1AB" "\xE612"
+noback correct "\x1D134" "\xE08A"
+noback correct "\x1D135" "\xE08B"
+noback correct "\x1D164" "\xE1DF"
+noback correct "\x1D163" "\xE1DD"
+noback correct "\x1D162" "\xE1DB"
+noback correct "\x1D161" "\xE1D9"
+noback correct "\x1D160" "\xE1D7"
+noback correct "\x1D15F" "\xE1D5"
+noback correct "\x1D15E" "\xE1D3"
+noback correct "\x1D15D" "\xE1D2"
+noback correct "\x1D15C" "\xE1D0"
+
+#Below are created specifically for SMB software to send SMUFL symbols based on different cases such as SMUFL symbols in phrase, in single and of different music types.
+#define classes of different element types
+#attribute smuflAccidental \xE260\xE261\xE262
+attribute smuflAccidental \xE26C\xE26D\xE264\xE263\xE260\xE47D\xE261\xE26A\xE26B\xE47F\xE270\xE273\xE478\xE280\xE488\xE47E\xE275\xE472\xE272\xE282\xE475\xE262\xE269\xE271\xE278\xE489\xE486\xE487\xE281\xE277\xE274\xE474\xE283\xED5A\xE266\xE265
+#attribute smuflArtic \xE4A0\xE4A1\xE4B0\xE4B1
+attribute smuflArtic \xE4A0\xE4A1\xE4B0\xE4B1\xE4BA\xE4BB\xE4AC\xE4AD\xE4AE\xE4AF\xE4BC\xE4BD\xED40\xED41\xED42\xED43\xED44\xED45\xED46\xED47\xE4A6\xE4A7\xE4AA\xE4AB\xE4A8\xE4A9\xE4A2\xE4A3\xE4B6\xE4B7\xE4A4\xE4B4\xE4B5\xE4A5\xE4B2\xE4B3\xE4B8\xE4B9
+#attribute smuflDynamic \xE52F\xE522\xE520
+attribute smuflDynamic \xE546\xE547\xE549\xE548\xE53E\xE53F\xE52F\xE530\xE531\xE532\xE533\xE522\xE534\xE535\xE544\xE545\xE542\xE543\xE52D\xE52C\xE540\xE521\xE526\xE52E\xE52B\xE52A\xE529\xE528\xE527\xE520\xE523\xE53C\xE53D\xE524\xE536\xE538\xE537\xE539\xE53B\xE53A\xE525
+attribute smuflHarppedal \xE680\xE681\xE682\xE683
+attribute smuflText \xE048\xE049\xE046\xE045\xE047
+
+#for symbols in phrase:
+#handle harp pedal diagram
+noback context ["(||"]%smuflHarppedal @345-36
+noback context %smuflHarppedal["||)"] @3-345
+#dynamic in phrase will  be added dot 3 after the symbol and has no music indicator
+noback context ["(||"]%smuflDynamic ?
+noback context %smuflDynamic["||)"] @3
+#for music text marked with dots 123456
+noback context ["(||"]%smuflText @123456
+noback context %smuflText["||)"] @123456
+#by default, all in-phrase SMUFL symbols are placed between music indicator 6-3. The rule should be placed at the end of this block.
+noback context ["(||"] @6-3
+noback context ["||)"] @6-3
+
+#Stand-alone: only SMUFL symbol, punctuations and/or space; without any text separated with space between the symbol, in case of alternate codes.
+#dynamic symbols: translated exactly as dynamics direction tag.
+#segno, coda, dacapo, dalsegno symbols: translated as <segno>, <coda>, <words> with d.c. and with d.s.
+#handle harp pedal diagram
+noback context ["(|"]%smuflHarppedal @345-36
+noback context %smuflHarppedal["|)"] @3-345-0
+#for accidentals and articulations, just leave the signs
+noback context ["(|"]%smuflAccidental ?
+noback context %smuflAccidental["|)"] ?
+noback context ["(|"]%smuflArtic ?
+noback context %smuflArtic["|)"] ?
+
+#by default, will surround the symbol with dots 6-123456 and 123456-3
+noback context ["(|"] @6-123456
+noback context ["|)"] @123456-3
+

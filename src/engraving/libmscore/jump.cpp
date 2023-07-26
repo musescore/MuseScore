@@ -22,12 +22,12 @@
 
 #include "jump.h"
 
-#include "rw/xml.h"
-#include "rw/400/tread.h"
 #include "types/typesconv.h"
 
 #include "measure.h"
 #include "score.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -60,8 +60,6 @@ const std::vector<JumpTypeTableItem> jumpTypeTable {
     { JumpType::DSS_AL_CODA,    "D.S.S. al Coda",        "varsegno", "coda",  "codab" },
     { JumpType::DSS_AL_DBLCODA, "D.S.S. al Double Coda", "varsegno", "varcoda", "codab" },
     { JumpType::DSS_AL_FINE,    "D.S.S. al Fine",        "varsegno", "fine",  "" },
-    { JumpType::DCODA,          "Da Coda",               "coda", "end",  "" },
-    { JumpType::DDBLCODA,       "Da Double Coda",        "varcoda", "end",  "" }
 };
 
 //---------------------------------------------------------
@@ -111,40 +109,6 @@ JumpType Jump::jumpType() const
 String Jump::jumpTypeUserName() const
 {
     return TConv::translatedUserName(jumpType());
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Jump::layout()
-{
-    TextBase::layout();
-    autoplaceMeasureElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Jump::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Jump::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    TextBase::writeProperties(xml);
-    xml.tag("jumpTo", _jumpTo);
-    xml.tag("playUntil", _playUntil);
-    xml.tag("continueAt", _continueAt);
-    writeProperty(xml, Pid::PLAY_REPEATS);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

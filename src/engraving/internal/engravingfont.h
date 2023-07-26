@@ -25,7 +25,6 @@
 #include <unordered_map>
 
 #include "iengravingfont.h"
-
 #include "modularity/ioc.h"
 #include "draw/ifontprovider.h"
 #include "draw/types/geometry.h"
@@ -47,10 +46,12 @@ class Painter;
 }
 
 namespace mu::engraving {
+class Shape;
+
 class EngravingFont : public IEngravingFont
 {
-    INJECT_STATIC(score, mu::draw::IFontProvider, fontProvider)
-    INJECT_STATIC(score, IEngravingFontsProvider, engravingFonts)
+    INJECT_STATIC(mu::draw::IFontProvider, fontProvider)
+    INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
 public:
     EngravingFont(const std::string& name, const std::string& family, const io::path_t& filePath);
     EngravingFont(const EngravingFont& other);
@@ -71,6 +72,8 @@ public:
     RectF bbox(SymId id, const mu::SizeF&) const override;
     RectF bbox(const SymIdList& s, double mag) const override;
     RectF bbox(const SymIdList& s, const mu::SizeF& mag) const override;
+    Shape shape(const SymIdList& s, double mag) const override;
+    Shape shape(const SymIdList& s, const mu::SizeF& mag) const override;
 
     double width(SymId id, double mag) const override;
     double width(const SymIdList&, double mag) const override;

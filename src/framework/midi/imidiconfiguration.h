@@ -22,7 +22,7 @@
 #ifndef MU_MIDI_IMIDICONFIGURATION_H
 #define MU_MIDI_IMIDICONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "miditypes.h"
 
 //! NOTE There used to be synthesizer settings here, now nothing

@@ -38,8 +38,8 @@ class ArticulationsProfileEditorModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(mpe, framework::IInteractive, interactive)
-    INJECT(mpe, IArticulationProfilesRepository, profilesRepository)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(IArticulationProfilesRepository, profilesRepository)
 
     Q_PROPERTY(QString currentPath READ currentPath WRITE setCurrentPath NOTIFY currentPathChanged)
     Q_PROPERTY(ArticulationPatternItem * selectedItem READ selectedItem WRITE setSelectedItem NOTIFY selectedItemChanged)

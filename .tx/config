@@ -1,5 +1,5 @@
 [main]
-host = https://www.transifex.com
+host = https://app.transifex.com
 
 [o:musescore:p:musescore:r:musescore]
 file_filter = share/locale/musescore_<lang>.ts

@@ -31,7 +31,7 @@ class AppearanceSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    INJECT(inspector, notation::INotationConfiguration, notationConfiguration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
 
     Q_PROPERTY(PropertyItem * leadingSpace READ leadingSpace CONSTANT)
     Q_PROPERTY(PropertyItem * measureWidth READ measureWidth CONSTANT)
@@ -40,6 +40,7 @@ class AppearanceSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * arrangeOrder READ arrangeOrder CONSTANT)
     Q_PROPERTY(PropertyItem * offset READ offset CONSTANT)
     Q_PROPERTY(bool isSnappedToGrid READ isSnappedToGrid WRITE setIsSnappedToGrid NOTIFY isSnappedToGridChanged)
+    Q_PROPERTY(bool isVerticalOffsetAvailable READ isVerticalOffsetAvailable NOTIFY isVerticalOffsetAvailableChanged)
 
 public:
     explicit AppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -65,16 +66,22 @@ public:
 
     bool isSnappedToGrid() const;
 
+    bool isVerticalOffsetAvailable() const;
+
 public slots:
     void setIsSnappedToGrid(bool isSnapped);
+    void setIsVerticalOffsetAvailable(bool isAvailable);
 
 signals:
     void isSnappedToGridChanged(bool isSnappedToGrid);
+    void isVerticalOffsetAvailableChanged(bool isVerticalOffsetAvailable);
 
 private:
     void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
                            const mu::engraving::StyleIdSet& changedStyleIdSet) override;
     void loadProperties(const mu::engraving::PropertyIdSet& allowedPropertyIdSet);
+
+    void updateIsVerticalOffsetAvailable();
 
     mu::engraving::Page* page() const;
     std::vector<mu::engraving::EngravingItem*> allElementsInPage() const;
@@ -86,6 +93,8 @@ private:
     PropertyItem* m_color = nullptr;
     PropertyItem* m_arrangeOrder = nullptr;
     PointFPropertyItem* m_offset = nullptr;
+
+    bool m_isVerticalOffsetAvailable = true;
 
     QList<engraving::EngravingItem*> m_elementsForOffsetProperty;
 };

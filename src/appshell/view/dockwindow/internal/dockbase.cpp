@@ -131,6 +131,20 @@ Location DockBase::location() const
     return m_properties.location;
 }
 
+QPoint DockBase::globalPosition() const
+{
+    if (!m_dockWidget) {
+        return QPoint();
+    }
+
+    auto frame = static_cast<const KDDockWidgets::FrameQuick*>(m_dockWidget->frame());
+    if (!frame) {
+        return QPoint();
+    }
+
+    return frame->mapToGlobal(QPoint(0, 0));
+}
+
 QVariantList DockBase::dropDestinationsProperty() const
 {
     return m_dropDestinations;
@@ -341,6 +355,16 @@ void DockBase::setFloating(bool floating)
     m_dockWidget->setFloating(floating);
 }
 
+void DockBase::setContentNavigationPanel(mu::ui::NavigationPanel* panel)
+{
+    if (m_contentNavigationPanel == panel) {
+        return;
+    }
+
+    m_contentNavigationPanel = panel;
+    emit contentNavigationPanelChanged();
+}
+
 void DockBase::init()
 {
     IF_ASSERT_FAILED(m_dockWidget) {
@@ -417,6 +441,45 @@ QRect DockBase::frameGeometry() const
     return QRect();
 }
 
+bool DockBase::isInSameFrame(const DockBase* other) const
+{
+    IF_ASSERT_FAILED(other) {
+        return false;
+    }
+
+    auto frame = static_cast<const KDDockWidgets::FrameQuick*>(m_dockWidget->frame());
+    auto otherFrame = static_cast<const KDDockWidgets::FrameQuick*>(other->dockWidget()->frame());
+
+    if (!frame || !otherFrame) {
+        return false;
+    }
+
+    return frame && otherFrame && frame == otherFrame;
+}
+
+void DockBase::setFramePanelOrder(int order)
+{
+    if (!m_dockWidget) {
+        return;
+    }
+
+    auto frame = static_cast<const KDDockWidgets::FrameQuick*>(m_dockWidget->frame());
+    if (!frame) {
+        return;
+    }
+
+    if (!frame->beingDeletedLater()) {
+        return;
+    }
+
+    QQuickItem* frameVisualItem = frame->visualItem();
+    if (!frameVisualItem) {
+        return;
+    }
+
+    frameVisualItem->setProperty("titleBarNavigationPanelOrder", order);
+}
+
 void DockBase::resetToDefault()
 {
     setVisible(m_defaultVisibility);
@@ -476,6 +539,11 @@ void DockBase::resize(int width, int height)
     applySizeConstraints();
 }
 
+mu::ui::NavigationPanel* DockBase::contentNavigationPanel() const
+{
+    return m_contentNavigationPanel;
+}
+
 void DockBase::componentComplete()
 {
     TRACEFUNC;
@@ -517,6 +585,10 @@ void DockBase::componentComplete()
 
     connect(this, &DockBase::minimumSizeChanged, this, &DockBase::applySizeConstraints);
     connect(this, &DockBase::maximumSizeChanged, this, &DockBase::applySizeConstraints);
+
+    connect(this, &DockBase::visibleChanged, [this](){
+        emit reorderNavigationRequested();
+    });
 
     m_defaultVisibility = isVisible();
 }

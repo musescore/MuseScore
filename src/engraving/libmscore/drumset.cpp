@@ -24,9 +24,11 @@
 
 #include "translation.h"
 
-#include "rw/xml.h"
 #include "types/typesconv.h"
 #include "types/symnames.h"
+
+#include "rw/xmlwriter.h"
+#include "rw/xmlreader.h"
 
 #include "articulation.h"
 #include "tremolo.h"

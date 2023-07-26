@@ -41,6 +41,7 @@
 #include "chord.h"
 #include "drumset.h"
 #include "fret.h"
+#include "harppedaldiagram.h"
 #include "input.h"
 #include "instrchange.h"
 #include "instrument.h"
@@ -71,6 +72,7 @@ class EditData;
 class EngravingItem;
 class Excerpt;
 class Harmony;
+class HarpPedalDiagram;
 class InstrChannel;
 class Instrument;
 class InstrumentChange;
@@ -236,34 +238,36 @@ class InsertPart : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertPart)
 
-    Part* part = nullptr;
-    int idx = 0;
+    Part* m_part = nullptr;
+    size_t m_targetPartIdx = 0;
 
 public:
-    InsertPart(Part* p, int i);
+    InsertPart(Part* p, size_t targetPartIdx);
     void undo(EditData*) override;
     void redo(EditData*) override;
+    void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::InsertPart)
     UNDO_NAME("InsertPart")
-    UNDO_CHANGED_OBJECTS({ part })
+    UNDO_CHANGED_OBJECTS({ m_part })
 };
 
 class RemovePart : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, RemovePart)
 
-    Part* part = nullptr;
-    staff_idx_t idx = mu::nidx;
+    Part* m_part = nullptr;
+    size_t m_partIdx = mu::nidx;
 
 public:
-    RemovePart(Part*, staff_idx_t idx);
+    RemovePart(Part*, size_t partIdx);
     void undo(EditData*) override;
     void redo(EditData*) override;
+    void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::RemovePart)
     UNDO_NAME("RemovePart")
-    UNDO_CHANGED_OBJECTS({ part })
+    UNDO_CHANGED_OBJECTS({ m_part })
 };
 
 class SetSoloist : public UndoCommand
@@ -294,6 +298,7 @@ public:
     InsertStaff(Staff*, staff_idx_t idx);
     void undo(EditData*) override;
     void redo(EditData*) override;
+    void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::InsertStaff)
     UNDO_NAME("InsertStaff")
@@ -312,6 +317,7 @@ public:
     RemoveStaff(Staff*);
     void undo(EditData*) override;
     void redo(EditData*) override;
+    void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::RemoveStaff)
     UNDO_NAME("RemoveStaff")
@@ -748,7 +754,7 @@ class ChangeStyle : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeStyle)
 
-    INJECT_STATIC(engraving, IEngravingFontsProvider, engravingFonts)
+    INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
 
     Score* score = nullptr;
     MStyle style;
@@ -1179,7 +1185,7 @@ class AddBracket : public UndoCommand
     OBJECT_ALLOCATOR(engraving, AddBracket)
 
     Staff* staff = nullptr;
-    int level = 0;
+    size_t level = 0;
     BracketType bracketType = BracketType::NORMAL;
     size_t span = 0;
 
@@ -1187,7 +1193,7 @@ class AddBracket : public UndoCommand
     void redo(EditData*) override;
 
 public:
-    AddBracket(Staff* s, int l, BracketType t, size_t sp)
+    AddBracket(Staff* s, size_t l, BracketType t, size_t sp)
         : staff(s), level(l), bracketType(t), span(sp) {}
 
     UNDO_TYPE(CommandType::AddBracket)
@@ -1551,6 +1557,46 @@ public:
     UNDO_TYPE(CommandType::ChangeScoreOrder)
     UNDO_NAME("ChangeScoreOrder")
     UNDO_CHANGED_OBJECTS({ score })
+};
+
+//---------------------------------------------------------
+//   ChangeHarpPedalState
+//---------------------------------------------------------
+
+class ChangeHarpPedalState : public UndoCommand
+{
+    HarpPedalDiagram* diagram;
+    std::array<PedalPosition, HARP_STRING_NO> pedalState;
+
+public:
+    ChangeHarpPedalState(HarpPedalDiagram* _diagram, std::array<PedalPosition, HARP_STRING_NO> _pedalState)
+        : diagram(_diagram), pedalState(_pedalState) {}
+    void flip(EditData*) override;
+    UNDO_NAME("ChangeHarpPedalState")
+    UNDO_CHANGED_OBJECTS({ diagram });
+};
+
+//---------------------------------------------------------
+//   ChangeSingleHarpPedal
+//---------------------------------------------------------
+
+class ChangeSingleHarpPedal : public UndoCommand
+{
+    HarpPedalDiagram* diagram;
+    HarpStringType type;
+    PedalPosition pos;
+
+public:
+    ChangeSingleHarpPedal(HarpPedalDiagram* _diagram, HarpStringType _type, PedalPosition _pos)
+        : diagram(_diagram),
+        type(_type),
+        pos(_pos)
+    {
+    }
+
+    void flip(EditData*) override;
+    UNDO_NAME("ChangeSingleHarpPedal")
+    UNDO_CHANGED_OBJECTS({ diagram });
 };
 } // namespace mu::engraving
 #endif

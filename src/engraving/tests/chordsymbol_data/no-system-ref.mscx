@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <Spatium>1.76389</Spatium>
@@ -107,6 +105,7 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             <linkedMain/>
             </Clef>
           <TimeSig>
@@ -149,11 +148,13 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             <linkedMain/>
             </Clef>
           <KeySig>
             <linkedMain/>
-            <accidental>3</accidental>
+            <concertKey>0</concertKey>
+            <actualKey>3</actualKey>
             </KeySig>
           <TimeSig>
             <linkedMain/>
@@ -196,8 +197,6 @@
         </Measure>
       </Staff>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
@@ -259,6 +258,7 @@
             <Clef>
               <concertClefType>G</concertClefType>
               <transposingClefType>G</transposingClefType>
+              <isHeader>1</isHeader>
               <linked>
                 </linked>
               </Clef>
@@ -305,8 +305,6 @@
       <name>Flute</name>
       </Score>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
@@ -373,13 +371,15 @@
             <Clef>
               <concertClefType>G</concertClefType>
               <transposingClefType>G</transposingClefType>
+              <isHeader>1</isHeader>
               <linked>
                 </linked>
               </Clef>
             <KeySig>
               <linked>
                 </linked>
-              <accidental>3</accidental>
+              <concertKey>0</concertKey>
+              <actualKey>3</actualKey>
               </KeySig>
             <TimeSig>
               <linked>

@@ -32,7 +32,7 @@
 namespace mu::notation {
 class PianoKeyboardController : public async::Asyncable
 {
-    INJECT(notation, context::IGlobalContext, context)
+    INJECT(context::IGlobalContext, context)
 
 public:
     PianoKeyboardController() = default;

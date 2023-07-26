@@ -31,8 +31,8 @@
 namespace mu::autobot {
 class AutobotScriptsRepository : public IAutobotScriptsRepository
 {
-    INJECT(autobot, IAutobotConfiguration, configuration)
-    INJECT(autobot, io::IFileSystem, fileSystem)
+    INJECT(IAutobotConfiguration, configuration)
+    INJECT(io::IFileSystem, fileSystem)
 public:
     AutobotScriptsRepository() = default;
 

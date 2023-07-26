@@ -39,7 +39,7 @@ namespace mu::autobot {
 class JsModuleLoader;
 class ScriptEngine : public api::IApiEngine
 {
-    INJECT(autobot, io::IFileSystem, fileSystem)
+    INJECT(io::IFileSystem, fileSystem)
 public:
     ScriptEngine();
     ~ScriptEngine();

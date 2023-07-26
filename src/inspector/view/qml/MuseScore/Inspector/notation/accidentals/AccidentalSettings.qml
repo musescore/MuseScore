@@ -58,4 +58,16 @@ Column {
             { iconCode: IconCode.BRACKET_PARENTHESES_SQUARE, value: AccidentalTypes.BRACKET_TYPE_SQUARE, title: qsTrc("inspector", "Brackets") }
         ]
     }
+
+    PropertyCheckBox {
+        id: smallAccidentalCheckBox
+        enabled: root.model ? root.model.isSmallAvailable : false
+
+        text: qsTrc("inspector", "Small accidental")
+        propertyItem: root.model ? root.model.isSmall : null
+
+        navigation.name: "SmallAccidentalBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: bracketType.navigation.row + 1
+    }
 }

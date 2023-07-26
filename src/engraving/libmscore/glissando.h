@@ -43,6 +43,8 @@ enum class GlissandoType;
 class GlissandoSegment final : public LineSegment
 {
     OBJECT_ALLOCATOR(engraving, GlissandoSegment)
+    DECLARE_CLASSOF(ElementType::GLISSANDO_SEGMENT)
+
 public:
     GlissandoSegment(Glissando* sp, System* parent);
 
@@ -50,7 +52,6 @@ public:
 
     GlissandoSegment* clone() const override { return new GlissandoSegment(*this); }
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
 
     EngravingItem* propertyDelegate(Pid) override;
 };
@@ -62,6 +63,7 @@ public:
 class Glissando final : public SLine
 {
     OBJECT_ALLOCATOR(engraving, Glissando)
+    DECLARE_CLASSOF(ElementType::GLISSANDO)
 
     M_PROPERTY(String, text, setText)
     M_PROPERTY(GlissandoType, glissandoType, setGlissandoType)
@@ -75,6 +77,9 @@ class Glissando final : public SLine
     M_PROPERTY(int, easeOut, setEaseOut)
 
 public:
+    static constexpr double GLISS_PALETTE_WIDTH = 4.0;
+    static constexpr double GLISS_PALETTE_HEIGHT = 4.0;
+
     Glissando(EngravingItem* parent);
     Glissando(const Glissando&);
 
@@ -87,10 +92,6 @@ public:
     Glissando* clone() const override { return new Glissando(*this); }
 
     LineSegment* createLineSegment(System* parent) override;
-
-    void layout() override;
-    void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
 
     // property/style methods
     PropertyValue getProperty(Pid propertyId) const override;

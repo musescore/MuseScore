@@ -30,21 +30,25 @@ import "internal"
 PageTabButton {
     id: root
 
-    property string userName: accountModel.accountInfo.userName
-    property string avatarUrl: accountModel.accountInfo.avatarUrl
+    property var cloudInfo: Boolean(cloudsModel.userAuthorized) ? cloudsModel.firstAuthorizedCloudInfo() : null
 
     signal userAuthorizedChanged()
 
     orientation: Qt.Horizontal
 
-    spacing: Boolean(avatarUrl) ? 18 : 30
+    spacing: 22
     leftPadding: spacing
 
-    title: Boolean(userName) ? userName : qsTrc("cloud", "My account")
-    iconComponent: Boolean(avatarUrl) ? avatarComp : stubAvatarComp
+    title: Boolean(root.cloudInfo) ? root.cloudInfo.userName : qsTrc("cloud", "My accounts")
+    iconComponent: AccountAvatar {
+        url: Boolean(root.cloudInfo) ? root.cloudInfo.userAvatarUrl : null
+        side: 32
 
-    AccountModel {
-        id: accountModel
+        withBackground: false
+    }
+
+    CloudsModel {
+        id: cloudsModel
 
         onUserAuthorizedChanged: {
             root.userAuthorizedChanged()
@@ -52,24 +56,6 @@ PageTabButton {
     }
 
     Component.onCompleted: {
-        accountModel.load()
-    }
-
-    Component {
-        id: stubAvatarComp
-        StyledIconLabel {
-            anchors.verticalCenter: parent.verticalCenter
-            height: root.height
-            iconCode: IconCode.ACCOUNT
-            visible: !Boolean(root.avatarUrl)
-        }
-    }
-
-    Component {
-        id: avatarComp
-        AccountAvatar {
-            url: root.avatarUrl
-            side: 40
-        }
+        cloudsModel.load()
     }
 }

@@ -30,8 +30,7 @@
 #include <assert.h>
 
 #include "draw/types/brush.h"
-#include "rw/xml.h"
-#include "rw/400/tread.h"
+
 #include "translation.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
@@ -40,11 +39,15 @@
 #include "accidental.h"
 #include "actionicon.h"
 #include "articulation.h"
+
 #include "bagpembell.h"
 #include "beam.h"
 #include "bend.h"
+
+#include "connector.h"
 #include "chord.h"
 #include "chordline.h"
+
 #include "drumset.h"
 #include "factory.h"
 #include "fingering.h"
@@ -62,6 +65,7 @@
 #include "spanner.h"
 #include "staff.h"
 #include "stafftype.h"
+#include "stretchedbend.h"
 #include "stringdata.h"
 #include "tie.h"
 #include "tremolo.h"
@@ -196,7 +200,10 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHea
         { SymId::noteGWhole,       SymId::noteGHalf,       SymId::noteGBlack,       SymId::noSym },
         { SymId::noteGFlatWhole,   SymId::noteGFlatHalf,   SymId::noteGFlatBlack,   SymId::noSym },
         { SymId::noteHWhole,       SymId::noteHHalf,       SymId::noteHBlack,       SymId::noSym },
-        { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym }
+        { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym },
+
+        { SymId::noSym, SymId::swissRudimentsNoteheadHalfFlam,   SymId::swissRudimentsNoteheadBlackFlam,   SymId::noSym },
+        { SymId::noSym, SymId::swissRudimentsNoteheadHalfDouble, SymId::swissRudimentsNoteheadBlackDouble, SymId::noSym }
     },
     {    // up stem
         { SymId::noteheadWhole,               SymId::noteheadHalf,                SymId::noteheadBlack,
@@ -310,7 +317,10 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHea
         { SymId::noteGWhole,       SymId::noteGHalf,       SymId::noteGBlack,       SymId::noSym },
         { SymId::noteGFlatWhole,   SymId::noteGFlatHalf,   SymId::noteGFlatBlack,   SymId::noSym },
         { SymId::noteHWhole,       SymId::noteHHalf,       SymId::noteHBlack,       SymId::noSym },
-        { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym }
+        { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym },
+
+        { SymId::noSym, SymId::swissRudimentsNoteheadHalfFlam,   SymId::swissRudimentsNoteheadBlackFlam,   SymId::noSym },
+        { SymId::noSym, SymId::swissRudimentsNoteheadHalfDouble, SymId::swissRudimentsNoteheadBlackDouble, SymId::noSym }
     }
 };
 
@@ -556,23 +566,23 @@ NoteHeadGroup NoteHead::headGroup() const
 Note::Note(Chord* ch)
     : EngravingItem(ElementType::NOTE, ch, ElementFlag::MOVABLE)
 {
-    _playEvents.push_back(NoteEvent());      // add default play event
-    _cachedNoteheadSym = SymId::noSym;
-    _cachedSymNull = SymId::noSym;
+    m_playEvents.push_back(NoteEvent());      // add default play event
+    m_cachedNoteheadSym = SymId::noSym;
+    m_cachedSymNull = SymId::noSym;
 }
 
 Note::~Note()
 {
-    delete _accidental;
-    DeleteAll(_el);
+    delete m_accidental;
+    DeleteAll(m_el);
 
-    if (_tieFor && _tieFor->parent() == this) {
-        delete _tieFor;
+    if (m_tieFor && m_tieFor->parent() == this) {
+        delete m_tieFor;
     }
 
-    DeleteAll(_dots);
-    _leftParenthesis = nullptr;
-    _rightParenthesis = nullptr;
+    DeleteAll(m_dots);
+    m_leftParenthesis = nullptr;
+    m_rightParenthesis = nullptr;
 }
 
 std::vector<const Note*> Note::compoundNotes() const
@@ -586,10 +596,10 @@ std::vector<const Note*> Note::compoundNotes() const
         elements.push_back(note);
     }
 
-    for (Spanner* e : _spannerFor) {
+    for (Spanner* e : m_spannerFor) {
         elements.push_back(toNote(e->endElement()));
     }
-    for (Spanner* e : _spannerBack) {
+    for (Spanner* e : m_spannerBack) {
         elements.push_back(toNote(e->startElement()));
     }
 
@@ -611,47 +621,47 @@ Note::Note(const Note& n, bool link)
     if (link) {
         score()->undo(new Link(this, const_cast<Note*>(&n)));
     }
-    _subchannel        = n._subchannel;
-    _line              = n._line;
-    _fret              = n._fret;
+    m_subchannel        = n.m_subchannel;
+    m_line              = n.m_line;
+    m_fret              = n.m_fret;
     m_harmonicFret     = n.m_harmonicFret;
     m_displayFret      = n.m_displayFret;
-    _string            = n._string;
-    _fretConflict      = n._fretConflict;
-    _ghost             = n._ghost;
-    _deadNote          = n._deadNote;
-    dragMode           = n.dragMode;
-    _pitch             = n._pitch;
-    _tpc[0]            = n._tpc[0];
-    _tpc[1]            = n._tpc[1];
-    _dotsHidden        = n._dotsHidden;
-    _hidden            = n._hidden;
-    _play              = n._play;
-    _tuning            = n._tuning;
-    _veloType          = n._veloType;
-    _userVelocity      = n._userVelocity;
-    _headScheme        = n._headScheme;
-    _headGroup         = n._headGroup;
-    _headType          = n._headType;
-    _mirror            = n._mirror;
-    _userMirror        = n._userMirror;
+    m_string            = n.m_string;
+    m_fretConflict      = n.m_fretConflict;
+    m_ghost             = n.m_ghost;
+    m_deadNote          = n.m_deadNote;
+    m_dragMode           = n.m_dragMode;
+    m_pitch             = n.m_pitch;
+    m_tpc[0]            = n.m_tpc[0];
+    m_tpc[1]            = n.m_tpc[1];
+    m_dotsHidden        = n.m_dotsHidden;
+    m_hidden            = n.m_hidden;
+    m_play              = n.m_play;
+    m_tuning            = n.m_tuning;
+    m_veloType          = n.m_veloType;
+    m_userVelocity      = n.m_userVelocity;
+    m_headScheme        = n.m_headScheme;
+    m_headGroup         = n.m_headGroup;
+    m_headType          = n.m_headType;
+    m_mirror            = n.m_mirror;
+    m_userMirror        = n.m_userMirror;
     m_isSmall          = n.m_isSmall;
-    _userDotPosition   = n._userDotPosition;
-    _fixed             = n._fixed;
-    _fixedLine         = n._fixedLine;
-    _accidental        = 0;
-    _harmonic          = n._harmonic;
-    _cachedNoteheadSym = n._cachedNoteheadSym;
-    _cachedSymNull     = n._cachedSymNull;
+    m_userDotPosition   = n.m_userDotPosition;
+    m_fixed             = n.m_fixed;
+    m_fixedLine         = n.m_fixedLine;
+    m_accidental        = 0;
+    m_harmonic          = n.m_harmonic;
+    m_cachedNoteheadSym = n.m_cachedNoteheadSym;
+    m_cachedSymNull     = n.m_cachedSymNull;
 
-    if (n._accidental) {
-        add(new Accidental(*(n._accidental)));
+    if (n.m_accidental) {
+        add(new Accidental(*(n.m_accidental)));
     }
 
     // types in _el: SYMBOL, IMAGE, FINGERING, TEXT, BEND
     const Staff* stf = staff();
     bool tabFingering = stf ? stf->staffTypeForElement(this)->showTabFingering() : false;
-    for (EngravingItem* e : n._el) {
+    for (EngravingItem* e : n.m_el) {
         if (e->isFingering() && staff()->isTabStaff(tick()) && !tabFingering) {      // tablature has no fingering
             continue;
         }
@@ -662,21 +672,21 @@ Note::Note(const Note& n, bool link)
         }
     }
 
-    _playEvents = n._playEvents;
+    m_playEvents = n.m_playEvents;
 
-    if (n._tieFor) {
-        _tieFor = Factory::copyTie(*n._tieFor);
-        _tieFor->setStartNote(this);
-        _tieFor->setTick(_tieFor->startNote()->tick());
-        _tieFor->setEndNote(0);
+    if (n.m_tieFor) {
+        m_tieFor = Factory::copyTie(*n.m_tieFor);
+        m_tieFor->setStartNote(this);
+        m_tieFor->setTick(m_tieFor->startNote()->tick());
+        m_tieFor->setEndNote(0);
     } else {
-        _tieFor = 0;
+        m_tieFor = 0;
     }
-    _tieBack  = 0;
-    for (NoteDot* dot : n._dots) {
+    m_tieBack  = 0;
+    for (NoteDot* dot : n.m_dots) {
         add(Factory::copyNoteDot(*dot));
     }
-    _mark      = n._mark;
+    m_mark      = n.m_mark;
 
     setDropTarget(false);
 }
@@ -702,8 +712,8 @@ inline int Note::concertPitchIdx() const
 void Note::setPitch(int val, bool notifyAboutChanged)
 {
     assert(pitchIsValid(val));
-    if (_pitch != val) {
-        _pitch = val;
+    if (m_pitch != val) {
+        m_pitch = val;
 
         if (notifyAboutChanged) {
             score()->setPlaylistDirty();
@@ -719,8 +729,8 @@ void Note::setPitch(int pitch, int tpc1, int tpc2)
 {
     assert(tpcIsValid(tpc1));
     assert(tpcIsValid(tpc2));
-    _tpc[0] = tpc1;
-    _tpc[1] = tpc2;
+    m_tpc[0] = tpc1;
+    m_tpc[1] = tpc2;
     setPitch(pitch);
 }
 
@@ -733,14 +743,7 @@ int Note::tpc1default(int p) const
     Key key = Key::C;
     if (staff() && chord()) {
         Fraction tick = chord()->tick();
-        key = staff()->key(tick);
-        if (!concertPitch()) {
-            Interval interval = part()->instrument(tick)->transpose();
-            if (!interval.isZero()) {
-                interval.flip();
-                key = transposeKey(key, interval);
-            }
-        }
+        key = staff()->concertKey(tick);
     }
     return pitch2tpc(p, key, Prefer::NEAREST);
 }
@@ -758,6 +761,7 @@ int Note::tpc2default(int p) const
         if (concertPitch()) {
             Interval interval = part()->instrument(tick)->transpose();
             if (!interval.isZero()) {
+                interval.flip();
                 key = transposeKey(key, interval);
             }
         }
@@ -773,23 +777,19 @@ void Note::setTpcFromPitch()
 {
     // works best if note is already added to score, otherwise we can't determine transposition or key
     Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
-    Interval v = staff() ? part()->instrument(tick)->transpose() : Interval();
-    Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
-    // convert key to concert pitch
-    if (!concertPitch() && !v.isZero()) {
-        key = transposeKey(key, v);
-    }
+    Interval v = staff() ? staff()->transpose(tick) : Interval();
+    Key cKey = (staff() && chord()) ? staff()->concertKey(chord()->tick()) : Key::C;
     // set concert pitch tpc
-    _tpc[0] = pitch2tpc(_pitch, key, Prefer::NEAREST);
+    m_tpc[0] = pitch2tpc(m_pitch, cKey, Prefer::NEAREST);
     // set transposed tpc
     if (v.isZero()) {
-        _tpc[1] = _tpc[0];
+        m_tpc[1] = m_tpc[0];
     } else {
         v.flip();
-        _tpc[1] = mu::engraving::transposeTpc(_tpc[0], v, true);
+        m_tpc[1] = mu::engraving::transposeTpc(m_tpc[0], v, true);
     }
-    assert(tpcIsValid(_tpc[0]));
-    assert(tpcIsValid(_tpc[1]));
+    assert(tpcIsValid(m_tpc[0]));
+    assert(tpcIsValid(m_tpc[1]));
 }
 
 //---------------------------------------------------------
@@ -801,7 +801,7 @@ void Note::setTpc(int v)
     IF_ASSERT_FAILED(tpcIsValid(v)) {
         return;
     }
-    _tpc[concertPitchIdx()] = v;
+    m_tpc[concertPitchIdx()] = v;
 }
 
 //---------------------------------------------------------
@@ -828,7 +828,7 @@ void Note::undoSetTpc(int v)
 
 int Note::tpc() const
 {
-    return _tpc[concertPitchIdx()];
+    return m_tpc[concertPitchIdx()];
 }
 
 //---------------------------------------------------------
@@ -873,8 +873,9 @@ String Note::tpcUserName(const bool explicitAccidental, bool full) const
 
     String pitchOffset;
     if (tuning() != 0) {
-        char buffer[50];
-        sprintf(buffer, "%+.3f", tuning());
+        static constexpr size_t bufferSize = 50;
+        char buffer[bufferSize];
+        snprintf(buffer, bufferSize, "%+.3f", tuning());
         pitchOffset = String::fromAscii(buffer);
     }
 
@@ -895,7 +896,7 @@ String Note::tpcUserName(const bool explicitAccidental, bool full) const
 int Note::transposeTpc(int tpc) const
 {
     Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
-    Interval v = part()->instrument(tick)->transpose();
+    Interval v = staff()->transpose(tick);
     if (v.isZero()) {
         return tpc;
     }
@@ -909,11 +910,23 @@ int Note::transposeTpc(int tpc) const
 
 int Note::playingTpc() const
 {
+    int result = tpc();
+
     if (!concertPitch() && transposition()) {
-        return transposeTpc(tpc());
+        int tpc1 = this->tpc1();
+        if (tpc1 == Tpc::TPC_INVALID) {
+            result = transposeTpc(result);
+        } else {
+            result = tpc1;
+        }
     }
 
-    return tpc();
+    int steps = ottaveCapoFret();
+    if (steps != 0) {
+        result = mu::engraving::transposeTpc(result, Interval(steps), true);
+    }
+
+    return result;
 }
 
 //---------------------------------------------------------
@@ -931,32 +944,32 @@ SymId Note::noteHead() const
         up = 1;
         ht = NoteHeadType::HEAD_QUARTER;
     }
-    if (_headType != NoteHeadType::HEAD_AUTO) {
-        ht = _headType;
+    if (m_headType != NoteHeadType::HEAD_AUTO) {
+        ht = m_headType;
     }
 
     const Staff* st = chord() ? chord()->staff() : nullptr;
 
-    if (_headGroup == NoteHeadGroup::HEAD_CUSTOM) {
+    if (m_headGroup == NoteHeadGroup::HEAD_CUSTOM) {
         if (st) {
             if (st->staffTypeForElement(chord())->isDrumStaff()) {
                 Fraction t = chord()->tick();
                 Instrument* inst = st->part()->instrument(t);
                 Drumset* d = inst->drumset();
                 if (d) {
-                    return d->noteHeads(_pitch, ht);
+                    return d->noteHeads(m_pitch, ht);
                 } else {
                     LOGD("no drumset");
                     return noteHead(up, NoteHeadGroup::HEAD_NORMAL, ht);
                 }
             }
         } else {
-            return _cachedNoteheadSym;
+            return m_cachedNoteheadSym;
         }
     }
 
     Key key = Key::C;
-    NoteHeadScheme scheme = _headScheme;
+    NoteHeadScheme scheme = m_headScheme;
     if (st) {
         Fraction tick = chord()->tick();
         if (tick >= Fraction(0, 1)) {
@@ -969,9 +982,9 @@ SymId Note::noteHead() const
     if (scheme == NoteHeadScheme::HEAD_AUTO) {
         scheme = NoteHeadScheme::HEAD_NORMAL;
     }
-    SymId t = noteHead(up, _headGroup, ht, tpc(), key, scheme);
+    SymId t = noteHead(up, m_headGroup, ht, tpc(), key, scheme);
     if (t == SymId::noSym) {
-        LOGD("invalid notehead %d/%d", int(_headGroup), int(ht));
+        LOGD("invalid notehead %d/%d", int(m_headGroup), int(ht));
         t = noteHead(up, NoteHeadGroup::HEAD_NORMAL, ht);
     }
     return t;
@@ -1012,7 +1025,7 @@ double Note::outsideTieAttachX(bool up) const
         return x() + ((width() / 2) * mag());
     }
     // special cases:
-    if (_headGroup == NoteHeadGroup::HEAD_SLASH) {
+    if (m_headGroup == NoteHeadGroup::HEAD_SLASH) {
         xo = (up ? headWidth() * 0.75 : headWidth() * 0.25);
         if (chord()->durationType().hasStem()) {
             // for quarters and halves, we can safely move a little bit outwards
@@ -1020,7 +1033,7 @@ double Note::outsideTieAttachX(bool up) const
         }
         return x() + xo;
     }
-    if (_headGroup == NoteHeadGroup::HEAD_SLASHED1 || _headGroup == NoteHeadGroup::HEAD_SLASHED2) {
+    if (m_headGroup == NoteHeadGroup::HEAD_SLASHED1 || m_headGroup == NoteHeadGroup::HEAD_SLASHED2) {
         // just use the very center of the notehead
         return x() + ((headBodyWidth() / 2) * mag());
     }
@@ -1064,7 +1077,7 @@ void Note::updateHeadGroup(const NoteHeadGroup headGroup)
         group = NoteHeadGroup::HEAD_NORMAL;
     }
 
-    if (group == _headGroup) {
+    if (group == m_headGroup) {
         return;
     }
 
@@ -1122,10 +1135,10 @@ double Note::noteheadCenterX() const
 double Note::tabHeadWidth(const StaffType* tab) const
 {
     double val;
-    if (tab && tab->isTabStaff() && _fret != INVALID_FRET_INDEX && _string != INVALID_STRING_INDEX) {
+    if (tab && tab->isTabStaff() && m_fret != INVALID_FRET_INDEX && m_string != INVALID_STRING_INDEX) {
         mu::draw::Font f    = tab->fretFont();
         f.setPointSizeF(tab->fretFontSize());
-        val  = mu::draw::FontMetrics::width(f, _fretString) * magS();
+        val  = mu::draw::FontMetrics::width(f, m_fretString) * magS();
     } else {
         val = headWidth();
     }
@@ -1150,7 +1163,7 @@ double Note::headHeight() const
 
 double Note::tabHeadHeight(const StaffType* tab) const
 {
-    if (tab && _fret != INVALID_FRET_INDEX && _string != INVALID_STRING_INDEX) {
+    if (tab && m_fret != INVALID_FRET_INDEX && m_string != INVALID_STRING_INDEX) {
         return tab->fretBoxH() * magS();
     }
     return headHeight();
@@ -1191,7 +1204,7 @@ int Note::playTicks() const
 
 Fraction Note::playTicksFraction() const
 {
-    if (!_tieBack && !_tieFor && chord()) {
+    if (!m_tieBack && !m_tieFor && chord()) {
         return chord()->actualTicks();
     }
 
@@ -1252,28 +1265,28 @@ void Note::add(EngravingItem* e)
 
     switch (e->type()) {
     case ElementType::NOTEDOT:
-        _dots.push_back(toNoteDot(e));
+        m_dots.push_back(toNoteDot(e));
         break;
+    case ElementType::BEND:
     case ElementType::STRETCHED_BEND:
-        m_bend = toStretchedBend(e);
+        m_bend = toBend(e);
     // fallthrough
     case ElementType::FINGERING:
     case ElementType::IMAGE:
     case ElementType::TEXT:
-    case ElementType::BEND:
-        _el.push_back(e);
+        m_el.push_back(e);
         break;
     case ElementType::SYMBOL: {
         Symbol* s = toSymbol(e);
         SymId symbolId = toSymbol(e)->sym();
 
         if (symbolId == SymId::noteheadParenthesisLeft) {
-            _leftParenthesis = s;
+            m_leftParenthesis = s;
         } else if (symbolId == SymId::noteheadParenthesisRight) {
-            _rightParenthesis = s;
+            m_rightParenthesis = s;
         }
-        _hasHeadParentheses = _leftParenthesis && _rightParenthesis;
-        _el.push_back(e);
+        m_hasHeadParentheses = m_leftParenthesis && m_rightParenthesis;
+        m_el.push_back(e);
     } break;
     case ElementType::TIE: {
         Tie* tie = toTie(e);
@@ -1287,7 +1300,7 @@ void Note::add(EngravingItem* e)
     }
     break;
     case ElementType::ACCIDENTAL:
-        _accidental = toAccidental(e);
+        m_accidental = toAccidental(e);
         break;
     case ElementType::TEXTLINE:
     case ElementType::GLISSANDO:
@@ -1310,36 +1323,37 @@ void Note::remove(EngravingItem* e)
 {
     switch (e->type()) {
     case ElementType::NOTEDOT:
-        _dots.pop_back();
+        m_dots.pop_back();
         break;
 
+    case ElementType::BEND:
     case ElementType::STRETCHED_BEND:
         m_bend = nullptr;
     // fallthrough
     case ElementType::TEXT:
     case ElementType::IMAGE:
     case ElementType::FINGERING:
-    case ElementType::BEND:
-        if (!_el.remove(e)) {
+        if (!m_el.remove(e)) {
             LOGD("Note::remove(): cannot find %s", e->typeName());
         }
         break;
     case ElementType::SYMBOL:
-        if (e == _leftParenthesis) {
-            _leftParenthesis = nullptr;
+        if (e == m_leftParenthesis) {
+            m_leftParenthesis = nullptr;
         }
-        if (e == _rightParenthesis) {
-            _rightParenthesis = nullptr;
+        if (e == m_rightParenthesis) {
+            m_rightParenthesis = nullptr;
         }
-        _hasHeadParentheses = _leftParenthesis && _rightParenthesis;
+        m_hasHeadParentheses = m_leftParenthesis && m_rightParenthesis;
 
-        if (!_el.remove(e)) {
+        if (!m_el.remove(e)) {
             LOGD("Note::remove(): cannot find %s", e->typeName());
         }
         break;
 
     case ElementType::TIE: {
         Tie* tie = toTie(e);
+        assert(tie->startNote() == this);
         setTieFor(0);
         if (tie->endNote()) {
             tie->endNote()->setTieBack(0);
@@ -1348,7 +1362,7 @@ void Note::remove(EngravingItem* e)
     break;
 
     case ElementType::ACCIDENTAL:
-        _accidental = 0;
+        m_accidental = 0;
         break;
 
     case ElementType::TEXTLINE:
@@ -1372,7 +1386,7 @@ bool Note::isNoteName() const
 {
     if (chord() && chord()->staff()) {
         const Staff* st = staff();
-        NoteHeadScheme s = _headScheme;
+        NoteHeadScheme s = m_headScheme;
         if (s == NoteHeadScheme::HEAD_AUTO) {
             s = st->staffTypeForElement(this)->noteHeadScheme();
         }
@@ -1389,7 +1403,7 @@ bool Note::isNoteName() const
 void Note::draw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;
-    if (_hidden) {
+    if (m_hidden) {
         return;
     }
 
@@ -1439,11 +1453,11 @@ void Note::draw(mu::draw::Painter* painter) const
         painter->setFont(f);
         painter->setPen(c);
         double startPosX = bbox().x();
-        if (_ghost && engravingConfiguration()->tablatureParenthesesZIndexWorkaround()) {
+        if (m_ghost && engravingConfiguration()->tablatureParenthesesZIndexWorkaround()) {
             startPosX += symWidth(SymId::noteheadParenthesisLeft);
         }
 
-        painter->drawText(PointF(startPosX, tab->fretFontYOffset() * magS()), _fretString);
+        painter->drawText(PointF(startPosX, tab->fretFontYOffset() * magS()), m_fretString);
     }
     // NOT tablature
     else {
@@ -1463,116 +1477,53 @@ void Note::draw(mu::draw::Painter* painter) const
                 painter->setPen(selected() ? engravingConfiguration()->warningSelectedColor() : engravingConfiguration()->warningColor());
             }
         }
+        // Warn if notes are unplayable based on previous harp diagram setting
+        if (chord() && chord()->segment() && staff() && !score()->printing() && !staff()->isDrumStaff(chord()->tick())) {
+            HarpPedalDiagram* prevDiagram = part()->currentHarpDiagram(chord()->segment()->tick());
+            if (prevDiagram && !prevDiagram->isPitchPlayable(ppitch())) {
+                painter->setPen(selected() ? engravingConfiguration()->criticalSelectedColor() : engravingConfiguration()->criticalColor());
+            }
+        }
         // draw blank notehead to avoid staff and ledger lines
-        if (_cachedSymNull != SymId::noSym) {
+        if (m_cachedSymNull != SymId::noSym) {
             painter->save();
             painter->setPen(engravingConfiguration()->noteBackgroundColor());
-            drawSymbol(_cachedSymNull, painter);
+            drawSymbol(m_cachedSymNull, painter);
             painter->restore();
         }
-        drawSymbol(_cachedNoteheadSym, painter);
+        drawSymbol(m_cachedNoteheadSym, painter);
     }
-}
-
-//--------------------------------------------------
-//   Note::write
-//---------------------------------------------------------
-
-void Note::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    EngravingItem::writeProperties(xml);
-
-    if (_accidental) {
-        _accidental->write(xml);
-    }
-    _el.write(xml);
-    bool write_dots = false;
-    for (NoteDot* dot : _dots) {
-        if (!dot->offset().isNull() || !dot->visible() || dot->color() != engravingConfiguration()->defaultColor()
-            || dot->visible() != visible()) {
-            write_dots = true;
-            break;
-        }
-    }
-    if (write_dots) {
-        for (NoteDot* dot : _dots) {
-            dot->write(xml);
-        }
-    }
-    if (_tieFor) {
-        _tieFor->writeSpannerStart(xml, this, track());
-    }
-    if (_tieBack) {
-        _tieBack->writeSpannerEnd(xml, this, track());
-    }
-    if ((chord() == 0 || chord()->playEventType() != PlayEventType::Auto) && !_playEvents.empty()) {
-        xml.startElement("Events");
-        for (const NoteEvent& e : _playEvents) {
-            e.write(xml);
-        }
-        xml.endElement();
-    }
-    for (Pid id : { Pid::PITCH, Pid::TPC1, Pid::TPC2, Pid::SMALL, Pid::MIRROR_HEAD, Pid::DOT_POSITION,
-                    Pid::HEAD_SCHEME, Pid::HEAD_GROUP, Pid::USER_VELOCITY, Pid::PLAY, Pid::TUNING, Pid::FRET, Pid::STRING,
-                    Pid::GHOST, Pid::DEAD, Pid::HEAD_TYPE, Pid::FIXED, Pid::FIXED_LINE }) {
-        writeProperty(xml, id);
-    }
-
-    for (Spanner* e : _spannerFor) {
-        e->writeSpannerStart(xml, this, track());
-    }
-    for (Spanner* e : _spannerBack) {
-        e->writeSpannerEnd(xml, this, track());
-    }
-
-    for (EngravingItem* e : chord()->el()) {
-        if (e->isChordLine() && toChordLine(e)->note() && toChordLine(e)->note() == this) {
-            toChordLine(e)->write(xml);
-        }
-    }
-
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   Note::read
-//---------------------------------------------------------
-
-void Note::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
 }
 
 void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
 {
     // ensure sane values:
-    _pitch = std::clamp(_pitch, 0, 127);
+    m_pitch = std::clamp(m_pitch, 0, 127);
 
-    if (!tpcIsValid(_tpc[0]) && !tpcIsValid(_tpc[1])) {
+    if (!tpcIsValid(m_tpc[0]) && !tpcIsValid(m_tpc[1])) {
         Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
-        int tpc = pitch2tpc(_pitch, key, Prefer::NEAREST);
+        int tpc = pitch2tpc(m_pitch, key, Prefer::NEAREST);
         if (concertPitch()) {
-            _tpc[0] = tpc;
+            m_tpc[0] = tpc;
         } else {
-            _tpc[1] = tpc;
+            m_tpc[1] = tpc;
         }
     }
-    if (!(tpcIsValid(_tpc[0]) && tpcIsValid(_tpc[1]))) {
+    if (!(tpcIsValid(m_tpc[0]) && tpcIsValid(m_tpc[1]))) {
         Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
-        Interval v = staff() ? part()->instrument(tick)->transpose() : Interval();
-        if (tpcIsValid(_tpc[0])) {
+        Interval v = staff() ? staff()->transpose(tick) : Interval();
+        if (tpcIsValid(m_tpc[0])) {
             v.flip();
             if (v.isZero()) {
-                _tpc[1] = _tpc[0];
+                m_tpc[1] = m_tpc[0];
             } else {
-                _tpc[1] = mu::engraving::transposeTpc(_tpc[0], v, true);
+                m_tpc[1] = mu::engraving::transposeTpc(m_tpc[0], v, true);
             }
         } else {
             if (v.isZero()) {
-                _tpc[0] = _tpc[1];
+                m_tpc[0] = m_tpc[1];
             } else {
-                _tpc[0] = mu::engraving::transposeTpc(_tpc[1], v, true);
+                m_tpc[0] = mu::engraving::transposeTpc(m_tpc[1], v, true);
             }
         }
     }
@@ -1584,34 +1535,34 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
     // we will attempt to fix some problems here regardless of version
 
     if (staff() && !staff()->isDrumStaff(ctxTick) && !pasteMode && !MScore::testMode) {
-        int tpc1Pitch = (tpc2pitch(_tpc[0]) + 12) % 12;
-        int tpc2Pitch = (tpc2pitch(_tpc[1]) + 12) % 12;
-        int soundingPitch = _pitch % 12;
+        int tpc1Pitch = (tpc2pitch(m_tpc[0]) + 12) % 12;
+        int tpc2Pitch = (tpc2pitch(m_tpc[1]) + 12) % 12;
+        int soundingPitch = m_pitch % 12;
         if (tpc1Pitch != soundingPitch) {
             LOGD("bad tpc1 - soundingPitch = %d, tpc1 = %d", soundingPitch, tpc1Pitch);
-            _pitch += tpc1Pitch - soundingPitch;
+            m_pitch += tpc1Pitch - soundingPitch;
         }
         if (staff()) {
-            Interval v = staff()->part()->instrument(ctxTick)->transpose();
-            int writtenPitch = (_pitch - v.chromatic) % 12;
+            Interval v = staff()->transpose(ctxTick);
+            int writtenPitch = (m_pitch - v.chromatic) % 12;
             if (tpc2Pitch != writtenPitch) {
                 LOGD("bad tpc2 - writtenPitch = %d, tpc2 = %d", writtenPitch, tpc2Pitch);
                 if (concertPitch()) {
                     // assume we want to keep sounding pitch
                     // so fix written pitch (tpc only)
                     v.flip();
-                    _tpc[1] = mu::engraving::transposeTpc(_tpc[0], v, true);
+                    m_tpc[1] = mu::engraving::transposeTpc(m_tpc[0], v, true);
                 } else {
                     // assume we want to keep written pitch
                     // so fix sounding pitch (both tpc and pitch)
-                    _tpc[0] = mu::engraving::transposeTpc(_tpc[1], v, true);
-                    _pitch += tpc2Pitch - writtenPitch;
+                    m_tpc[0] = mu::engraving::transposeTpc(m_tpc[1], v, true);
+                    m_pitch += tpc2Pitch - writtenPitch;
                 }
             }
         }
     }
 
-    for (EngravingItem* item : _el) {
+    for (EngravingItem* item : m_el) {
         if (!item->isSymbol()) {
             continue;
         }
@@ -1620,81 +1571,14 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
         SymId symbolId = symbol->sym();
 
         if (symbolId == SymId::noteheadParenthesisLeft) {
-            _leftParenthesis = symbol;
+            m_leftParenthesis = symbol;
         } else if (symbolId == SymId::noteheadParenthesisRight) {
-            _rightParenthesis = symbol;
+            m_rightParenthesis = symbol;
         }
     }
 
-    if (_leftParenthesis && _rightParenthesis) {
-        _hasHeadParentheses = true;
-    }
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Note::readProperties(XmlReader& e)
-{
-    return rw400::TRead::readProperties(this, e, *e.context());
-}
-
-//---------------------------------------------------------
-//   Note::readAddConnector
-//---------------------------------------------------------
-
-void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
-{
-    const ElementType type = info->type();
-    const Location& l = info->location();
-    switch (type) {
-    case ElementType::TIE:
-    case ElementType::TEXTLINE:
-    case ElementType::GLISSANDO:
-    {
-        Spanner* sp = toSpanner(info->connector());
-        if (info->isStart()) {
-            sp->setTrack(l.track());
-            sp->setTick(tick());
-            if (sp->isTie()) {
-                Note* n = this;
-                while (n->tieFor()) {
-                    n = n->tieFor()->endNote();
-                }
-                Tie* tie = toTie(sp);
-                tie->setParent(n);
-                tie->setStartNote(n);
-                n->_tieFor = tie;
-            } else {
-                sp->setAnchor(Spanner::Anchor::NOTE);
-                sp->setStartElement(this);
-                addSpannerFor(sp);
-                sp->setParent(this);
-            }
-        } else if (info->isEnd()) {
-            sp->setTrack2(l.track());
-            sp->setTick2(tick());
-            sp->setEndElement(this);
-            if (sp->isTie()) {
-                _tieBack = toTie(sp);
-            } else {
-                if (sp->isGlissando() && explicitParent() && explicitParent()->isChord()) {
-                    toChord(explicitParent())->setEndsGlissando(true);
-                }
-                addSpannerBack(sp);
-            }
-
-            // As spanners get added after being fully read, they
-            // do not get cloned with the note when pasting to
-            // linked staves. So add this spanner explicitly.
-            if (pasteMode) {
-                score()->undoAddElement(sp);
-            }
-        }
-    }
-    default:
-        break;
+    if (m_leftParenthesis && m_rightParenthesis) {
+        m_hasHeadParentheses = true;
     }
 }
 
@@ -1763,7 +1647,7 @@ bool Note::acceptDrop(EditData& data) const
     EngravingItem* e = data.dropElement;
     ElementType type = e->type();
     if (type == ElementType::GLISSANDO) {
-        for (auto ee : _spannerFor) {
+        for (auto ee : m_spannerFor) {
             if (ee->isGlissando()) {
                 return false;
             }
@@ -1774,6 +1658,7 @@ bool Note::acceptDrop(EditData& data) const
     bool isTablature  = st->isTabStaff(tick());
     bool tabFingering = st->staffTypeForElement(this)->showTabFingering();
     return type == ElementType::ARTICULATION
+           || type == ElementType::ORNAMENT
            || type == ElementType::FERMATA
            || type == ElementType::CHORDLINE
            || type == ElementType::TEXT
@@ -1791,6 +1676,7 @@ bool Note::acceptDrop(EditData& data) const
            || type == ElementType::CHORD
            || type == ElementType::HARMONY
            || type == ElementType::DYNAMIC
+           || type == ElementType::EXPRESSION
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::ACCIACCATURA)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::APPOGGIATURA)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE4)
@@ -1814,6 +1700,7 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::BAR_LINE)
            || (type == ElementType::STAFF_TEXT)
            || (type == ElementType::PLAYTECH_ANNOTATION)
+           || (type == ElementType::CAPO)
            || (type == ElementType::SYSTEM_TEXT)
            || (type == ElementType::TRIPLET_FEEL)
            || (type == ElementType::STICKING)
@@ -1823,6 +1710,7 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::FRET_DIAGRAM)
            || (type == ElementType::FIGURED_BASS)
            || (type == ElementType::LYRICS)
+           || (type == ElementType::HARP_DIAGRAM)
            || (type != ElementType::TIE && e->isSpanner());
 }
 
@@ -1885,7 +1773,7 @@ EngravingItem* Note::drop(EditData& data)
         }
         delete s;
 
-        if (group != _headGroup) {
+        if (group != m_headGroup) {
             if (links()) {
                 for (EngravingObject* se : *links()) {
                     se->undoChangeProperty(Pid::HEAD_GROUP, int(group));
@@ -1908,28 +1796,28 @@ EngravingItem* Note::drop(EditData& data)
     {
         switch (toActionIcon(e)->actionType()) {
         case ActionIconType::ACCIACCATURA:
-            score()->setGraceNote(ch, pitch(), NoteType::ACCIACCATURA, Constants::division / 2);
+            score()->setGraceNote(ch, pitch(), NoteType::ACCIACCATURA, Constants::DIVISION / 2);
             break;
         case ActionIconType::APPOGGIATURA:
-            score()->setGraceNote(ch, pitch(), NoteType::APPOGGIATURA, Constants::division / 2);
+            score()->setGraceNote(ch, pitch(), NoteType::APPOGGIATURA, Constants::DIVISION / 2);
             break;
         case ActionIconType::GRACE4:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE4, Constants::division);
+            score()->setGraceNote(ch, pitch(), NoteType::GRACE4, Constants::DIVISION);
             break;
         case ActionIconType::GRACE16:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE16,  Constants::division / 4);
+            score()->setGraceNote(ch, pitch(), NoteType::GRACE16,  Constants::DIVISION / 4);
             break;
         case ActionIconType::GRACE32:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE32, Constants::division / 8);
+            score()->setGraceNote(ch, pitch(), NoteType::GRACE32, Constants::DIVISION / 8);
             break;
         case ActionIconType::GRACE8_AFTER:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE8_AFTER, Constants::division / 2);
+            score()->setGraceNote(ch, pitch(), NoteType::GRACE8_AFTER, Constants::DIVISION / 2);
             break;
         case ActionIconType::GRACE16_AFTER:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE16_AFTER, Constants::division / 4);
+            score()->setGraceNote(ch, pitch(), NoteType::GRACE16_AFTER, Constants::DIVISION / 4);
             break;
         case ActionIconType::GRACE32_AFTER:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE32_AFTER, Constants::division / 8);
+            score()->setGraceNote(ch, pitch(), NoteType::GRACE32_AFTER, Constants::DIVISION / 8);
             break;
         case ActionIconType::BEAM_AUTO:
         case ActionIconType::BEAM_NONE:
@@ -1957,7 +1845,7 @@ EngravingItem* Note::drop(EditData& data)
         // before the current note
         for (int i = static_cast<int>(nl.size()) - 1; i >= 0; --i) {
             int p = BagpipeEmbellishment::BagpipeNoteInfoList[nl.at(i)].pitch;
-            score()->setGraceNote(ch, p, NoteType::GRACE32, Constants::division / 8);
+            score()->setGraceNote(ch, p, NoteType::GRACE32, Constants::DIVISION / 8);
         }
     }
         delete e;
@@ -1967,7 +1855,7 @@ EngravingItem* Note::drop(EditData& data)
     {
         // calculate correct transposed tpc
         Note* n = toNote(e);
-        Interval v = part()->instrument(ch->tick())->transpose();
+        Interval v = staff()->transpose(ch->tick());
         v.flip();
         n->setTpc2(mu::engraving::transposeTpc(n->tpc1(), v, true));
         // replace this note with new note
@@ -1984,7 +1872,7 @@ EngravingItem* Note::drop(EditData& data)
 
     case ElementType::GLISSANDO:
     {
-        for (auto ee : _spannerFor) {
+        for (auto ee : m_spannerFor) {
             if (ee->type() == ElementType::GLISSANDO) {
                 LOGD("there is already a glissando");
                 delete e;
@@ -2069,106 +1957,43 @@ EngravingItem* Note::drop(EditData& data)
 
 void Note::setHeadHasParentheses(bool hasParentheses)
 {
-    if (hasParentheses == _hasHeadParentheses) {
+    if (hasParentheses == m_hasHeadParentheses) {
         return;
     }
 
-    _hasHeadParentheses = hasParentheses;
+    m_hasHeadParentheses = hasParentheses;
 
     if (hasParentheses) {
-        if (!_leftParenthesis) {
-            _leftParenthesis = new Symbol(this);
-            _leftParenthesis->setSym(SymId::noteheadParenthesisLeft);
-            _leftParenthesis->setParent(this);
-            score()->undoAddElement(_leftParenthesis);
+        if (!m_leftParenthesis) {
+            m_leftParenthesis = new Symbol(this);
+            m_leftParenthesis->setSym(SymId::noteheadParenthesisLeft);
+            m_leftParenthesis->setParent(this);
+            score()->undoAddElement(m_leftParenthesis);
         }
 
-        if (!_rightParenthesis) {
-            _rightParenthesis = new Symbol(this);
-            _rightParenthesis->setSym(SymId::noteheadParenthesisRight);
-            _rightParenthesis->setParent(this);
-            score()->undoAddElement(_rightParenthesis);
+        if (!m_rightParenthesis) {
+            m_rightParenthesis = new Symbol(this);
+            m_rightParenthesis->setSym(SymId::noteheadParenthesisRight);
+            m_rightParenthesis->setParent(this);
+            score()->undoAddElement(m_rightParenthesis);
         }
     } else {
-        score()->undoRemoveElement(_leftParenthesis);
-        score()->undoRemoveElement(_rightParenthesis);
-        assert(_leftParenthesis == nullptr);
-        assert(_rightParenthesis == nullptr);
+        score()->undoRemoveElement(m_leftParenthesis);
+        score()->undoRemoveElement(m_rightParenthesis);
+        assert(m_leftParenthesis == nullptr);
+        assert(m_rightParenthesis == nullptr);
     }
-}
-
-//---------------------------------------------------------
-//   getNoteListForDots
-//      This method populates three lists: one for chord notes that need to be checked from the top down,
-//      one for chords from the bottom up, and one for spaces (where the dot will be in that space)
-//---------------------------------------------------------
-
-void Note::getNoteListForDots(std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes, std::vector<int>& anchoredDots)
-{
-    Chord* c = chord();
-    bool hasVoices = c->measure()->hasVoices(c->staffIdx(), c->tick(), c->ticks());
-    if (!hasVoices) {
-        // only this voice, so topDownNotes is just the notes in the chord
-        for (Note* note : c->notes()) {
-            if (note->line() & 1) {
-                int newOffset = 0;
-                bool adjustDown = (c->voice() & 1) && !c->up();
-                if (!anchoredDots.empty() && anchoredDots.back() == note->line()) {
-                    if (anchoredDots.size() >= 1 && anchoredDots[anchoredDots.size() - 2] == note->line() + adjustDown ? 2 : -2) {
-                        newOffset = adjustDown ? -2 : 2;
-                    } else {
-                        newOffset = adjustDown ? 2 : -2;
-                    }
-                }
-                anchoredDots.push_back(note->line() + newOffset);
-            } else {
-                topDownNotes.push_back(note);
-            }
-        }
-    } else {
-        // Get a list of notes in this staff that adjust dots from top down,
-        // bottom up, and also start our locked-in dot list by adding all lines where dots are
-        // guaranteed
-        Measure* m = c->measure();
-        size_t firstVoice = c->track() - c->voice();
-        for (size_t i = firstVoice; i < firstVoice + VOICES; ++i) {
-            if (Chord* voiceChord = m->findChord(c->tick(), i)) {
-                bool startFromTop = !((voiceChord->voice() & 1) && !voiceChord->up());
-                if (startFromTop) {
-                    for (Note* note : voiceChord->notes()) {
-                        if (note->line() & 1) {
-                            anchoredDots.push_back(note->line());
-                        } else {
-                            topDownNotes.push_back(note);
-                        }
-                    }
-                } else {
-                    for (Note* note : voiceChord->notes()) {
-                        if (note->line() & 1) {
-                            anchoredDots.push_back(note->line());
-                        } else {
-                            bottomUpNotes.push_back(note);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    // our two lists now contain only notes that are on lines
-    std::sort(topDownNotes.begin(), topDownNotes.end(),
-              [](Note* n1, Note* n2) { return n1->line() < n2->line(); });
-    std::sort(bottomUpNotes.begin(), bottomUpNotes.end(),
-              [](Note* n1, Note* n2) { return n1->line() > n2->line(); });
 }
 
 //---------------------------------------------------------
 //   setDotY
+//    dotMove is number of staff spaces/lines to move from the note's
+//    space or line
 //---------------------------------------------------------
 
-void Note::setDotY(DirectionV pos)
+void Note::setDotRelativeLine(int dotMove)
 {
-    double y = 0;
-    bool onLine = !(line() & 1);
+    double y = dotMove / 2.0;
     if (staff()->isTabStaff(chord()->tick())) {
         // with TAB's, dotPosX is not set:
         // get dot X from width of fret text and use TAB default spacing
@@ -2180,11 +2005,9 @@ void Note::setDotY(DirectionV pos)
                 // if fret marks above lines, raise the dots by half line distance
                 y = -0.5;
             }
-            if (pos == DirectionV::AUTO) {
+            if (dotMove == 0) {
                 bool oddVoice = voice() & 1;
                 y = oddVoice ? 0.5 : -0.5;
-            } else if (pos == DirectionV::UP) {
-                y = -0.5;
             } else {
                 y = 0.5;
             }
@@ -2193,62 +2016,13 @@ void Note::setDotY(DirectionV pos)
         else {
             return;
         }
-    } else if (onLine) {
-        // NON-TAB
-        std::vector<Note*> topDownNotes;
-        std::vector<Note*> bottomUpNotes;
-        std::vector<int> anchoredDots;
-
-        // construct combined chords using the notes from overlapping chords
-        getNoteListForDots(topDownNotes, bottomUpNotes, anchoredDots);
-
-        bool finished = false;
-        for (Note* note : topDownNotes) {
-            int dotMove = -1;
-            if (mu::contains(anchoredDots, note->line() + dotMove)) {
-                dotMove = 1; // if the desired space is taken, adjust downwards
-            }
-            if (note == this) {
-                y = dotMove / 2.0;
-                finished = true;
-                break;
-            }
-            anchoredDots.push_back(note->line() + dotMove);
-        }
-        if (!finished) {
-            for (Note* note : bottomUpNotes) {
-                int dotMove = 1;
-                if (mu::contains(anchoredDots, note->line() + dotMove)) {
-                    dotMove = -1; // if the desired space is taken, adjust upwards
-                }
-                if (note == this) {
-                    y = dotMove / 2.0;
-                    finished = true;
-                    break;
-                }
-                anchoredDots.push_back(note->line() + dotMove);
-            }
-        }
-    } else {
-        // on a space; usually this means the dot is on this same line, but there is an exception
-        // for a unison within the same chord.
-        for (Note* note : chord()->notes()) {
-            if (note == this) {
-                break;
-            }
-            if (note->line() == _line) {
-                bool adjustDown = (chord()->voice() & 1) && !chord()->up();
-                y = adjustDown ? 1.0 : -1.0;
-            }
-        }
     }
-
     y *= spatium() * staff()->lineDistance(tick());
 
     // apply to dots
 
     int cdots = static_cast<int>(chord()->dots());
-    int ndots = static_cast<int>(_dots.size());
+    int ndots = static_cast<int>(m_dots.size());
 
     int n = cdots - ndots;
     for (int i = 0; i < n; ++i) {
@@ -2260,190 +2034,13 @@ void Note::setDotY(DirectionV pos)
     }
     if (n < 0) {
         for (int i = 0; i < -n; ++i) {
-            score()->undoRemoveElement(_dots.back());
+            score()->undoRemoveElement(m_dots.back());
         }
     }
-    for (NoteDot* dot : _dots) {
-        dot->layout();
+
+    for (NoteDot* dot : m_dots) {
+        layout()->layoutItem(dot);
         dot->setPosY(y);
-    }
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Note::layout()
-{
-    bool useTablature = staff() && staff()->isTabStaff(chord()->tick());
-    if (useTablature) {
-        if (m_displayFret == DisplayFretOption::Hide) {
-            return;
-        }
-
-        const Staff* st = staff();
-        const StaffType* tab = st->staffTypeForElement(this);
-        double mags = magS();
-        // not complete but we need systems to be laid out to add parenthesis
-        if (_fixed) {
-            _fretString = u"/";
-        } else {
-            _fretString = tab->fretString(fabs(_fret), _string, _deadNote);
-
-            if (negativeFretUsed()) {
-                _fretString = u"-" + _fretString;
-            }
-
-            if (m_displayFret == DisplayFretOption::ArtificialHarmonic) {
-                _fretString = String(u"%1 <%2>").arg(_fretString, String::number(m_harmonicFret));
-            } else if (m_displayFret == DisplayFretOption::NaturalHarmonic) {
-                _fretString = String(u"<%1>").arg(String::number(m_harmonicFret));
-            }
-        }
-
-        if ((_ghost && !engravingConfiguration()->tablatureParenthesesZIndexWorkaround())) {
-            _fretString = String(u"(%1)").arg(_fretString);
-        }
-
-        double w = tabHeadWidth(tab);     // !! use _fretString
-        bbox().setRect(0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
-
-        if (_ghost && engravingConfiguration()->tablatureParenthesesZIndexWorkaround()) {
-            bbox().setWidth(w + symWidth(SymId::noteheadParenthesisLeft) + symWidth(SymId::noteheadParenthesisRight));
-        } else {
-            bbox().setWidth(w);
-        }
-    } else {
-        if (_deadNote) {
-            setHeadGroup(NoteHeadGroup::HEAD_CROSS);
-        } else if (_harmonic) {
-            setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
-        }
-        SymId nh = noteHead();
-        if (engravingConfiguration()->crossNoteHeadAlwaysBlack() && ((nh == SymId::noteheadXHalf) || (nh == SymId::noteheadXWhole))) {
-            nh = SymId::noteheadXBlack;
-        }
-
-        _cachedNoteheadSym = nh;
-
-        if (isNoteName()) {
-            _cachedSymNull = SymId::noteEmptyBlack;
-            NoteHeadType ht = _headType == NoteHeadType::HEAD_AUTO ? chord()->durationType().headType() : _headType;
-            if (ht == NoteHeadType::HEAD_WHOLE) {
-                _cachedSymNull = SymId::noteEmptyWhole;
-            } else if (ht == NoteHeadType::HEAD_HALF) {
-                _cachedSymNull = SymId::noteEmptyHalf;
-            }
-        } else {
-            _cachedSymNull = SymId::noSym;
-        }
-        setbbox(symBbox(nh));
-    }
-}
-
-//---------------------------------------------------------
-//   layout2
-//    called after final position of note is set
-//---------------------------------------------------------
-
-void Note::layout2()
-{
-    const StaffType* staffType = staff()->staffTypeForElement(this);
-    // for standard staves this is done in Score::layoutChords3()
-    // so that the results are available there
-    bool isTabStaff = staffType && staffType->isTabStaff();
-    // First, for tab staves that have show back-tied fret marks option, we add parentheses to the tied note if
-    // the tie spans a system boundary. This can't be done in layout() as the system of each note is not decided yet
-    bool useParens = isTabStaff && !staffType->showBackTied() && !_fixed;
-    if (useParens && tieBack() && (chord()->measure()->system() != tieBack()->startNote()->chord()->measure()->system() || !el().empty())) {
-        _fretString = String(u"(%1)").arg(_fretString);
-        double w = tabHeadWidth(staffType);     // !! use _fretString
-        bbox().setRect(0, staffType->fretBoxY() * magS(), w, staffType->fretBoxH() * magS());
-    }
-    int dots = chord()->dots();
-    if (dots && !_dots.empty()) {
-        // if chords have notes with different mag, dots must still  align
-        double correctMag = chord()->notes().size() > 1 ? chord()->mag() : mag();
-        double d  = score()->point(score()->styleS(Sid::dotNoteDistance)) * correctMag;
-        double dd = score()->point(score()->styleS(Sid::dotDotDistance)) * correctMag;
-        double x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
-        // in case of dots with different size, center-align them
-        if (mag() != chord()->mag() && chord()->notes().size() > 1) {
-            double relativeMag = mag() / chord()->mag();
-            double centerAlignOffset = dot(0)->width() * (1 / relativeMag - 1) / 2;
-            x += centerAlignOffset;
-        }
-        // adjust dot distance for hooks
-        if (chord()->hook() && chord()->up()) {
-            double hookRight = chord()->hook()->width() + chord()->hook()->x() + chord()->pos().x();
-            double hookBottom = chord()->hook()->height() + chord()->hook()->y() + chord()->pos().y() + (0.25 * spatium());
-            // the top dot in the chord, not the dot for this particular note:
-            double dotY = chord()->notes().back()->y() + chord()->notes().back()->dots().front()->pos().y();
-            if (chord()->dotPosX() < hookRight && dotY < hookBottom) {
-                d = chord()->hook()->width();
-            }
-        }
-        // if TAB and stems through staff
-        if (isTabStaff && staffType->stemThrough()) {
-            // with TAB's, dot Y is not calculated during layoutChords3(),
-            // as layoutChords3() is not even called for TAB's;
-            // setDotY() actually also manages creation/deletion of NoteDot's
-            setDotY(DirectionV::AUTO);
-
-            // use TAB default note-to-dot spacing
-            dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * spatium();
-            d = dd * 0.5;
-        }
-        // apply to dots
-        double xx = x + d;
-        for (NoteDot* dot : _dots) {
-            dot->setPosX(xx);
-            xx += dd;
-        }
-    }
-
-    // layout elements attached to note
-    for (EngravingItem* e : _el) {
-        if (!score()->tagIsValid(e->tag())) {
-            continue;
-        }
-        if (e->isSymbol()) {
-            e->setMag(mag());
-            double w = headWidth();
-            Symbol* sym = toSymbol(e);
-            e->layout();
-            if (sym->sym() == SymId::noteheadParenthesisRight) {
-                if (isTabStaff) {
-                    const Staff* st = staff();
-                    const StaffType* tab = st->staffTypeForElement(this);
-                    w = tabHeadWidth(tab);
-                }
-
-                if (engravingConfiguration()->tablatureParenthesesZIndexWorkaround() && staff()->isTabStaff(e->tick())) {
-                    e->movePosX(w + symWidth(SymId::noteheadParenthesisRight));
-                } else {
-                    e->movePosX(w);
-                }
-            } else if (sym->sym() == SymId::noteheadParenthesisLeft) {
-                if (!engravingConfiguration()->tablatureParenthesesZIndexWorkaround() || !staff()->isTabStaff(e->tick())) {
-                    e->movePosX(-symWidth(SymId::noteheadParenthesisLeft));
-                }
-            }
-        } else if (e->isFingering()) {
-            // don't set mag; fingerings should not scale with note
-            Fingering* f = toFingering(e);
-            if (f->propertyFlags(Pid::PLACEMENT) == PropertyFlags::STYLED) {
-                f->setPlacement(f->calculatePlacement());
-            }
-            // layout fingerings that are placed relative to notehead
-            // fingerings placed relative to chord will be laid out later
-            if (f->layoutType() == ElementType::NOTE) {
-                f->layout();
-            }
-        } else {
-            e->setMag(mag());
-            e->layout();
-        }
     }
 }
 
@@ -2453,13 +2050,13 @@ void Note::layout2()
 
 bool Note::dotIsUp() const
 {
-    if (_dots.empty()) {
+    if (m_dots.empty()) {
         return true;
     }
-    if (_userDotPosition == DirectionV::AUTO) {
-        return _dots[0]->y() < spatium() * .1;
+    if (m_userDotPosition == DirectionV::AUTO) {
+        return m_dots[0]->y() < spatium() * .1;
     } else {
-        return _userDotPosition == DirectionV::UP;
+        return m_userDotPosition == DirectionV::UP;
     }
 }
 
@@ -2484,23 +2081,23 @@ void Note::updateAccidental(AccidentalState* as)
 
     // don't touch accidentals that don't concern tpc such as
     // quarter tones
-    if (!(_accidental && Accidental::isMicrotonal(_accidental->accidentalType()))) {
+    if (!(m_accidental && Accidental::isMicrotonal(m_accidental->accidentalType()))) {
         // calculate accidental
         AccidentalType acci = AccidentalType::NONE;
 
         AccidentalVal accVal = tpc2alter(tpc());
         bool error = false;
-        int eRelLine = absStep(tpc(), epitch() + ottaveCapoFret());
+        int eRelLine = absStep(tpc(), epitch());
         AccidentalVal relLineAccVal = as->accidentalVal(eRelLine, error);
         if (error) {
             LOGD("error accidentalVal()");
             return;
         }
-        if ((accVal != relLineAccVal) || hidden() || as->tieContext(eRelLine)) {
-            as->setAccidentalVal(eRelLine, accVal, _tieBack != 0 && _accidental == 0);
+        if ((accVal != relLineAccVal) || hidden() || as->tieContext(eRelLine) || as->forceRestateAccidental(eRelLine)) {
+            as->setAccidentalVal(eRelLine, accVal, m_tieBack != 0 && m_accidental == 0);
             acci = Accidental::value2subtype(accVal);
             // if previous tied note has same tpc, don't show accidental
-            if (_tieBack && _tieBack->startNote()->tpc1() == tpc1()) {
+            if (m_tieBack && m_tieBack->startNote()->tpc1() == tpc1()) {
                 acci = AccidentalType::NONE;
             } else if (acci == AccidentalType::NONE) {
                 acci = AccidentalType::NATURAL;
@@ -2510,34 +2107,34 @@ void Note::updateAccidental(AccidentalState* as)
                 acci = AccidentalType::NATURAL;
             }
         }
-        if (acci != AccidentalType::NONE && !_hidden) {
-            if (_accidental == 0) {
+        if (acci != AccidentalType::NONE && !m_hidden) {
+            if (m_accidental == 0) {
                 Accidental* a = Factory::createAccidental(this);
                 a->setParent(this);
                 a->setAccidentalType(acci);
                 score()->undoAddElement(a);
-            } else if (_accidental->accidentalType() != acci) {
-                Accidental* a = _accidental->clone();
+            } else if (m_accidental->accidentalType() != acci) {
+                Accidental* a = m_accidental->clone();
                 a->setParent(this);
                 a->setAccidentalType(acci);
-                score()->undoChangeElement(_accidental, a);
+                score()->undoChangeElement(m_accidental, a);
             }
         } else {
-            if (_accidental) {
+            if (m_accidental) {
                 // remove this if it was AUTO:
-                if (_accidental->role() == AccidentalRole::AUTO) {
-                    score()->undoRemoveElement(_accidental);
+                if (m_accidental->role() == AccidentalRole::AUTO) {
+                    score()->undoRemoveElement(m_accidental);
                 } else {
                     // keep it, but update type if needed
                     acci = Accidental::value2subtype(accVal);
                     if (acci == AccidentalType::NONE) {
                         acci = AccidentalType::NATURAL;
                     }
-                    if (_accidental->accidentalType() != acci) {
-                        Accidental* a = _accidental->clone();
+                    if (m_accidental->accidentalType() != acci) {
+                        Accidental* a = m_accidental->clone();
                         a->setParent(this);
                         a->setAccidentalType(acci);
-                        score()->undoChangeElement(_accidental, a);
+                        score()->undoChangeElement(m_accidental, a);
                     }
                 }
             }
@@ -2548,10 +2145,11 @@ void Note::updateAccidental(AccidentalState* as)
         // ultimately, they should probably get their own state
         // for now, at least change state to natural, so subsequent notes playback as might be expected
         // this is an incompatible change, but better to break it for 2.0 than wait until later
-        AccidentalVal accVal = Accidental::subtype2value(_accidental->accidentalType());
-        as->setAccidentalVal(relLine, accVal, _tieBack != 0 && _accidental == 0);
+        AccidentalVal accVal = Accidental::subtype2value(m_accidental->accidentalType());
+        as->setAccidentalVal(relLine, accVal, m_tieBack != 0 && m_accidental == 0);
     }
 
+    as->setForceRestateAccidental(relLine, false);
     updateRelLine(relLine, true);
 }
 
@@ -2598,19 +2196,17 @@ void Note::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
     // tie segments are collected from System
     //      if (_tieFor && !staff()->isTabStaff(chord->tick()))  // no ties in tablature
     //            _tieFor->scanElements(data, func, all);
-    for (EngravingItem* e : _el) {
-        if (score()->tagIsValid(e->tag())) {
-            e->scanElements(data, func, all);
-        }
+    for (EngravingItem* e : m_el) {
+        e->scanElements(data, func, all);
     }
-    for (Spanner* sp : _spannerFor) {
+    for (Spanner* sp : m_spannerFor) {
         sp->scanElements(data, func, all);
     }
 
-    if (!dragMode && _accidental) {
-        func(data, _accidental);
+    if (!m_dragMode && m_accidental) {
+        func(data, m_accidental);
     }
-    for (NoteDot* dot : _dots) {
+    for (NoteDot* dot : m_dots) {
         func(data, dot);
     }
 
@@ -2628,28 +2224,28 @@ void Note::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
 void Note::setTrack(track_idx_t val)
 {
     EngravingItem::setTrack(val);
-    if (_tieFor) {
-        _tieFor->setTrack(val);
-        for (SpannerSegment* seg : _tieFor->spannerSegments()) {
+    if (m_tieFor) {
+        m_tieFor->setTrack(val);
+        for (SpannerSegment* seg : m_tieFor->spannerSegments()) {
             seg->setTrack(val);
         }
     }
-    for (Spanner* s : _spannerFor) {
+    for (Spanner* s : m_spannerFor) {
         s->setTrack(val);
     }
-    for (Spanner* s : _spannerBack) {
+    for (Spanner* s : m_spannerBack) {
         s->setTrack2(val);
     }
-    for (EngravingItem* e : _el) {
+    for (EngravingItem* e : m_el) {
         e->setTrack(val);
     }
-    if (_accidental) {
-        _accidental->setTrack(val);
+    if (m_accidental) {
+        m_accidental->setTrack(val);
     }
     if (!chord()) {     // if note is dragged with shift+ctrl
         return;
     }
-    for (NoteDot* dot : _dots) {
+    for (NoteDot* dot : m_dots) {
         dot->setTrack(val);
     }
 }
@@ -2667,7 +2263,7 @@ void Note::reset()
 
 float Note::userVelocityFraction() const
 {
-    return _userVelocity / 127.f;
+    return m_userVelocity / 127.f;
 }
 
 //---------------------------------------------------------
@@ -2678,7 +2274,7 @@ double Note::mag() const
 {
     double m = chord() ? chord()->mag() : 1.0;
     if (m_isSmall) {
-        m *= score()->styleD(Sid::smallNoteMag);
+        m *= style().styleD(Sid::smallNoteMag);
     }
     return m;
 }
@@ -2706,7 +2302,7 @@ void Note::setSmall(bool val)
 
 int Note::line() const
 {
-    return fixed() ? _fixedLine : _line;
+    return fixed() ? m_fixedLine : m_line;
 }
 
 //---------------------------------------------------------
@@ -2715,8 +2311,8 @@ int Note::line() const
 
 void Note::setString(int val)
 {
-    _string = val;
-    setPosY(_string * spatium() * 1.5);
+    m_string = val;
+    setPosY(m_string * spatium() * 1.5);
 }
 
 //---------------------------------------------------------
@@ -2728,7 +2324,7 @@ void Note::setHeadScheme(NoteHeadScheme val)
     IF_ASSERT_FAILED(int(val) >= -1 && int(val) < int(NoteHeadScheme::HEAD_SCHEMES)) {
         val = NoteHeadScheme::HEAD_AUTO;
     }
-    _headScheme = val;
+    m_headScheme = val;
 }
 
 //---------------------------------------------------------
@@ -2738,7 +2334,7 @@ void Note::setHeadScheme(NoteHeadScheme val)
 void Note::setHeadGroup(NoteHeadGroup val)
 {
     assert(int(val) >= 0 && int(val) < int(NoteHeadGroup::HEAD_GROUPS));
-    _headGroup = val;
+    m_headGroup = val;
 }
 
 //---------------------------------------------------------
@@ -2748,13 +2344,19 @@ void Note::setHeadGroup(NoteHeadGroup val)
 
 int Note::ottaveCapoFret() const
 {
-    Chord* ch = chord();
-    int capoFretId = staff()->capo(ch->segment()->tick());
-    if (capoFretId != 0) {
-        capoFretId -= 1;
+    const Chord* ch = chord();
+    Fraction segmentTick = ch->segment()->tick();
+
+    const CapoParams& capo = staff()->capo(segmentTick);
+    int capoFret = 0;
+
+    if (capo.active) {
+        if (capo.ignoredStrings.empty() || !mu::contains(capo.ignoredStrings, static_cast<string_idx_t>(m_string))) {
+            capoFret = capo.fretPosition;
+        }
     }
 
-    return staff()->pitchOffset(ch->segment()->tick()) + capoFretId;
+    return staff()->pitchOffset(segmentTick) + capoFret;
 }
 
 //---------------------------------------------------------
@@ -2770,14 +2372,14 @@ int Note::ppitch() const
     if (play() && ch && ch->staff() && ch->staff()->isDrumStaff(ch->tick())) {
         const Drumset* ds = ch->staff()->part()->instrument(ch->tick())->drumset();
         if (ds) {
-            DrumInstrumentVariant div = ds->findVariant(_pitch, ch->articulations(), ch->tremolo());
+            DrumInstrumentVariant div = ds->findVariant(m_pitch, ch->articulations(), ch->tremolo());
             if (div.pitch != INVALID_PITCH) {
                 return div.pitch;
             }
         }
     }
 
-    return _pitch + ottaveCapoFret();
+    return m_pitch + ottaveCapoFret();
 }
 
 //---------------------------------------------------------
@@ -2789,7 +2391,7 @@ int Note::ppitch() const
 
 int Note::epitch() const
 {
-    return _pitch - (concertPitch() ? 0 : transposition());
+    return m_pitch - (concertPitch() ? 0 : transposition());
 }
 
 //---------------------------------------------------------
@@ -2817,9 +2419,9 @@ int Note::playingOctave() const
 
 int Note::customizeVelocity(int velo) const
 {
-    if (_veloType == VeloType::OFFSET_VAL) {
+    if (m_veloType == VeloType::OFFSET_VAL) {
         velo = velo + (velo * userVelocity()) / 100;
-    } else if (_veloType == VeloType::USER_VAL) {
+    } else if (m_veloType == VeloType::USER_VAL) {
         velo = userVelocity();
     }
     return std::clamp(velo, 1, 127);
@@ -2833,8 +2435,8 @@ void Note::startDrag(EditData& ed)
 {
     std::shared_ptr<NoteEditData> ned = std::make_shared<NoteEditData>();
     ned->e      = this;
-    ned->line   = _line;
-    ned->string = _string;
+    ned->line   = m_line;
+    ned->string = m_string;
     ned->pushProperty(Pid::PITCH);
     ned->pushProperty(Pid::TPC1);
     ned->pushProperty(Pid::TPC2);
@@ -2938,7 +2540,7 @@ void Note::verticalDrag(EditData& ed)
     if (tab) {
         const StringData* strData = staff()->part()->instrument(_tick)->stringData();
         int nString = ned->string + (st->upsideDown() ? -lineOffset : lineOffset);
-        int nFret   = strData->fret(_pitch, nString, staff());
+        int nFret   = strData->fret(m_pitch, nString, staff());
 
         if (nFret >= 0) {                        // no fret?
             if (fret() != nFret || string() != nString) {
@@ -2952,15 +2554,19 @@ void Note::verticalDrag(EditData& ed)
         }
     } else {
         Key key = staff()->key(_tick);
+        Key cKey = staff()->concertKey(_tick);
         staff_idx_t idx = chord()->vStaffIdx();
+        Interval interval = staff()->part()->instrument(_tick)->transpose();
         int newPitch = line2pitch(ned->line + lineOffset, score()->staff(idx)->clef(_tick), key);
 
         if (!concertPitch()) {
-            Interval interval = staff()->part()->instrument(_tick)->transpose();
             newPitch += interval.chromatic;
+        } else {
+            interval.flip();
+            key = transposeKey(cKey, interval, staff()->part()->preferSharpFlat());
         }
 
-        int newTpc1 = pitch2tpc(newPitch, key, Prefer::NEAREST);
+        int newTpc1 = pitch2tpc(newPitch, cKey, Prefer::NEAREST);
         int newTpc2 = pitch2tpc(newPitch - transposition(), key, Prefer::NEAREST);
         for (Note* nn : tiedNotes()) {
             nn->setPitch(newPitch, newTpc1, newTpc2);
@@ -2990,7 +2596,7 @@ void Note::normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned)
     } else {
         Measure* measure = seg->measure();
 
-        double minDist = score()->styleMM(Sid::barNoteDistance);
+        double minDist = style().styleMM(Sid::barNoteDistance);
 
         double diff = (ed.pos.x()) - (measure->pageX() + minDist);
 
@@ -3045,11 +2651,14 @@ void Note::updateRelLine(int relLine, bool undoable)
 
     const Staff* staff  = score()->staff(idx);
     const StaffType* st = staff->staffTypeForElement(this);
-
+    if (st->isTabStaff()) {
+        // tab staff is already correct, and the following relStep method doesn't apply whatsoever to tab staves
+        return;
+    }
     ClefType clef = staff->clef(chord()->tick());
     int line      = relStep(relLine, clef);
 
-    if (undoable && (_line != INVALID_LINE) && (line != _line)) {
+    if (undoable && (m_line != INVALID_LINE) && (line != m_line)) {
         undoChangeProperty(Pid::LINE, line);
     } else {
         setLine(line);
@@ -3057,7 +2666,7 @@ void Note::updateRelLine(int relLine, bool undoable)
 
     int off  = st->stepOffset();
     double ld = st->lineDistance().val();
-    setPosY((_line + off * 2.0) * spatium() * .5 * ld);
+    setPosY((m_line + off * 2.0) * spatium() * .5 * ld);
 }
 
 //---------------------------------------------------------
@@ -3078,33 +2687,30 @@ void Note::updateLine()
 void Note::setNval(const NoteVal& nval, Fraction tick)
 {
     setPitch(nval.pitch);
-    _fret   = nval.fret;
-    _string = nval.string;
+    m_fret   = nval.fret;
+    m_string = nval.string;
 
-    _tpc[0] = nval.tpc1;
-    _tpc[1] = nval.tpc2;
+    m_tpc[0] = nval.tpc1;
+    m_tpc[1] = nval.tpc2;
 
     if (tick == Fraction(-1, 1) && chord()) {
         tick = chord()->tick();
     }
-    Interval v = part()->instrument(tick)->transpose();
+    Interval v = staff()->transpose(tick);
     if (nval.tpc1 == Tpc::TPC_INVALID) {
-        Key key = staff()->key(tick);
-        if (!concertPitch() && !v.isZero()) {
-            key = transposeKey(key, v);
-        }
-        _tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+        Key key = staff()->concertKey(tick);
+        m_tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
     }
     if (nval.tpc2 == Tpc::TPC_INVALID) {
         if (v.isZero()) {
-            _tpc[1] = _tpc[0];
+            m_tpc[1] = m_tpc[0];
         } else {
             v.flip();
-            _tpc[1] = mu::engraving::transposeTpc(_tpc[0], v, true);
+            m_tpc[1] = mu::engraving::transposeTpc(m_tpc[0], v, true);
         }
     }
 
-    _headGroup = NoteHeadGroup(nval.headGroup);
+    m_headGroup = NoteHeadGroup(nval.headGroup);
 }
 
 //---------------------------------------------------------
@@ -3137,15 +2743,15 @@ PropertyValue Note::getProperty(Pid propertyId) const
     case Pid::PITCH:
         return pitch();
     case Pid::TPC1:
-        return _tpc[0];
+        return m_tpc[0];
     case Pid::TPC2:
-        return _tpc[1];
+        return m_tpc[1];
     case Pid::SMALL:
         return isSmall();
     case Pid::MIRROR_HEAD:
         return userMirror();
     case Pid::HEAD_HAS_PARENTHESES:
-        return _hasHeadParentheses;
+        return m_hasHeadParentheses;
     case Pid::DOT_POSITION:
         return PropertyValue::fromValue<DirectionV>(userDotPosition());
     case Pid::HEAD_SCHEME:
@@ -3167,11 +2773,11 @@ PropertyValue Note::getProperty(Pid propertyId) const
     case Pid::HEAD_TYPE:
         return headType();
     case Pid::VELO_TYPE:
-        return _veloType;
+        return m_veloType;
     case Pid::PLAY:
         return play();
     case Pid::LINE:
-        return _line;
+        return m_line;
     case Pid::FIXED:
         return fixed();
     case Pid::FIXED_LINE:
@@ -3195,10 +2801,10 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         score()->setPlaylistDirty();
         break;
     case Pid::TPC1:
-        _tpc[0] = v.toInt();
+        m_tpc[0] = v.toInt();
         break;
     case Pid::TPC2:
-        _tpc[1] = v.toInt();
+        m_tpc[1] = v.toInt();
         break;
     case Pid::LINE:
         setLine(v.toInt());
@@ -3224,12 +2830,12 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         if (links()) {
             for (EngravingObject* scoreElement : *links()) {
                 Note* note = toNote(scoreElement);
-                note->setDeadNote(staff() && !staff()->isDrumStaff(tick()) && _headGroup == NoteHeadGroup::HEAD_CROSS);
-                note->setHeadGroup(_headGroup);
+                note->setDeadNote(staff() && !staff()->isDrumStaff(tick()) && m_headGroup == NoteHeadGroup::HEAD_CROSS);
+                note->setHeadGroup(m_headGroup);
             }
         } else {
-            setDeadNote(staff() && !staff()->isDrumStaff(tick()) && _headGroup == NoteHeadGroup::HEAD_CROSS);
-            setHeadGroup(_headGroup);
+            setDeadNote(staff() && !staff()->isDrumStaff(tick()) && m_headGroup == NoteHeadGroup::HEAD_CROSS);
+            setHeadGroup(m_headGroup);
         }
         break;
     case Pid::USER_VELOCITY:
@@ -3256,7 +2862,7 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         setHeadType(v.value<NoteHeadType>());
         break;
     case Pid::VELO_TYPE:
-        _veloType = v.value<VeloType>();
+        m_veloType = v.value<VeloType>();
         score()->setPlaylistDirty();
         break;
     case Pid::VISIBLE: {
@@ -3341,7 +2947,7 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
 
 void Note::setHeadType(NoteHeadType t)
 {
-    _headType = t;
+    m_headType = t;
 }
 
 //---------------------------------------------------------
@@ -3350,7 +2956,7 @@ void Note::setHeadType(NoteHeadType t)
 
 void Note::setOnTimeOffset(int val)
 {
-    _playEvents[0].setOntime(val);
+    m_playEvents[0].setOntime(val);
     chord()->setPlayEventType(PlayEventType::User);
 }
 
@@ -3360,7 +2966,7 @@ void Note::setOnTimeOffset(int val)
 
 void Note::setOffTimeOffset(int val)
 {
-    _playEvents[0].setLen(val - _playEvents[0].ontime());
+    m_playEvents[0].setLen(val - m_playEvents[0].ontime());
     chord()->setPlayEventType(PlayEventType::User);
 }
 
@@ -3371,16 +2977,16 @@ void Note::setOffTimeOffset(int val)
 void Note::setScore(Score* s)
 {
     EngravingItem::setScore(s);
-    if (_tieFor) {
-        _tieFor->setScore(s);
+    if (m_tieFor) {
+        m_tieFor->setScore(s);
     }
-    if (_accidental) {
-        _accidental->setScore(s);
+    if (m_accidental) {
+        m_accidental->setScore(s);
     }
-    for (NoteDot* dot : _dots) {
+    for (NoteDot* dot : m_dots) {
         dot->setScore(s);
     }
-    for (EngravingItem* el : _el) {
+    for (EngravingItem* el : m_el) {
         el->setScore(s);
     }
 }
@@ -3399,11 +3005,12 @@ String Note::accessibleInfo() const
     String voice = mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1);
     String pitchName;
     String onofftime;
-    if (!_playEvents.empty()) {
-        int on = _playEvents[0].ontime();
-        int off = _playEvents[0].offtime();
+    if (!m_playEvents.empty()) {
+        int on = m_playEvents[0].ontime();
+        int off = m_playEvents[0].offtime();
         if (on != 0 || off != NoteEvent::NOTE_LENGTH) {
-            onofftime = mtrc("engraving", " (on %1‰ off %2‰)").arg(on, off);
+            //: Note-on and note-off times relative to note duration, expressed in thousandths (per mille)
+            onofftime = u" " + mtrc("engraving", "(on %1‰ off %2‰)").arg(on, off);
         }
     }
 
@@ -3445,7 +3052,7 @@ String Note::screenReaderInfo() const
         pitchName = mtrc("engraving", "%1; String: %2; Fret: %3")
                     .arg(tpcUserName(true, true), String::number(string() + 1), String::number(fret()));
     } else {
-        pitchName = _headGroup == NoteHeadGroup::HEAD_NORMAL
+        pitchName = m_headGroup == NoteHeadGroup::HEAD_NORMAL
                     ? tpcUserName(true, true)
                     //: head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).
                     : mtrc("engraving", "%1 head %2").arg(translatedSubtypeUserName()).arg(tpcUserName(true));
@@ -3544,7 +3151,7 @@ NoteVal Note::noteVal() const
 
 int Note::qmlDotsCount()
 {
-    return static_cast<int>(_dots.size());
+    return static_cast<int>(m_dots.size());
 }
 
 //---------------------------------------------------------
@@ -3553,7 +3160,7 @@ int Note::qmlDotsCount()
 
 TranslatableString Note::subtypeUserName() const
 {
-    return TConv::userName(_headGroup);
+    return TConv::userName(m_headGroup);
 }
 
 //---------------------------------------------------------
@@ -3563,11 +3170,11 @@ TranslatableString Note::subtypeUserName() const
 
 EngravingItem* Note::nextInEl(EngravingItem* e)
 {
-    if (e == _el.back()) {
+    if (e == m_el.back()) {
         return nullptr;
     }
-    auto i = std::find(_el.begin(), _el.end(), e);
-    if (i == _el.end()) {
+    auto i = std::find(m_el.begin(), m_el.end(), e);
+    if (i == m_el.end()) {
         return nullptr;
     }
     return *(i + 1);
@@ -3580,11 +3187,11 @@ EngravingItem* Note::nextInEl(EngravingItem* e)
 
 EngravingItem* Note::prevInEl(EngravingItem* e)
 {
-    if (e == _el.front()) {
+    if (e == m_el.front()) {
         return nullptr;
     }
-    auto i = std::find(_el.begin(), _el.end(), e);
-    if (i == _el.end()) {
+    auto i = std::find(m_el.begin(), m_el.end(), e);
+    if (i == m_el.end()) {
         return nullptr;
     }
     return *(i - 1);
@@ -3617,10 +3224,10 @@ EngravingItem* Note::nextElement()
         EngravingItem* next = nextInEl(e);           // return next element in _el
         if (next) {
             return next;
-        } else if (tieValid(_tieFor)) {
-            return _tieFor->frontSegment();
-        } else if (!_spannerFor.empty()) {
-            for (auto i : _spannerFor) {
+        } else if (tieValid(m_tieFor)) {
+            return m_tieFor->frontSegment();
+        } else if (!m_spannerFor.empty()) {
+            for (auto i : m_spannerFor) {
                 if (i->type() == ElementType::GLISSANDO) {
                     return i->spannerSegments().front();
                 }
@@ -3630,8 +3237,8 @@ EngravingItem* Note::nextElement()
     }
 
     case ElementType::TIE_SEGMENT:
-        if (!_spannerFor.empty()) {
-            for (auto i : _spannerFor) {
+        if (!m_spannerFor.empty()) {
+            for (auto i : m_spannerFor) {
                 if (i->type() == ElementType::GLISSANDO) {
                     return i->spannerSegments().front();
                 }
@@ -3643,14 +3250,14 @@ EngravingItem* Note::nextElement()
         return chord()->nextElement();
 
     case ElementType::ACCIDENTAL:
-        if (!_el.empty()) {
-            return _el[0];
+        if (!m_el.empty()) {
+            return m_el[0];
         }
-        if (tieValid(_tieFor)) {
-            return _tieFor->frontSegment();
+        if (tieValid(m_tieFor)) {
+            return m_tieFor->frontSegment();
         }
-        if (!_spannerFor.empty()) {
-            for (auto i : _spannerFor) {
+        if (!m_spannerFor.empty()) {
+            for (auto i : m_spannerFor) {
                 if (i->isGlissando()) {
                     return i->spannerSegments().front();
                 }
@@ -3659,14 +3266,14 @@ EngravingItem* Note::nextElement()
         return nullptr;
 
     case ElementType::NOTE:
-        if (!_el.empty()) {
-            return _el[0];
+        if (!m_el.empty()) {
+            return m_el[0];
         }
-        if (tieValid(_tieFor)) {
-            return _tieFor->frontSegment();
+        if (tieValid(m_tieFor)) {
+            return m_tieFor->frontSegment();
         }
-        if (!_spannerFor.empty()) {
-            for (auto i : _spannerFor) {
+        if (!m_spannerFor.empty()) {
+            for (auto i : m_spannerFor) {
                 if (i->isGlissando()) {
                     return i->spannerSegments().front();
                 }
@@ -3705,15 +3312,15 @@ EngravingItem* Note::prevElement()
     }
         return this;
     case ElementType::TIE_SEGMENT:
-        if (!_el.empty()) {
-            return _el.back();
+        if (!m_el.empty()) {
+            return m_el.back();
         }
         return this;
     case ElementType::GLISSANDO_SEGMENT:
-        if (tieValid(_tieFor)) {
-            return _tieFor->frontSegment();
-        } else if (!_el.empty()) {
-            return _el.back();
+        if (tieValid(m_tieFor)) {
+            return m_tieFor->frontSegment();
+        } else if (!m_el.empty()) {
+            return m_el.back();
         }
         return this;
     case ElementType::ACCIDENTAL:
@@ -3729,18 +3336,18 @@ EngravingItem* Note::prevElement()
 
 EngravingItem* Note::lastElementBeforeSegment()
 {
-    if (!_spannerFor.empty()) {
-        for (auto i : _spannerFor) {
+    if (!m_spannerFor.empty()) {
+        for (auto i : m_spannerFor) {
             if (i->type() == ElementType::GLISSANDO) {
                 return i->spannerSegments().front();
             }
         }
     }
-    if (tieValid(_tieFor)) {
-        return _tieFor->frontSegment();
+    if (tieValid(m_tieFor)) {
+        return m_tieFor->frontSegment();
     }
-    if (!_el.empty()) {
-        return _el.back();
+    if (!m_el.empty()) {
+        return m_el.back();
     }
     return this;
 }
@@ -3901,7 +3508,7 @@ void Note::connectTiedNotes()
 
 AccidentalType Note::accidentalType() const
 {
-    return _accidental ? _accidental->accidentalType() : AccidentalType::NONE;
+    return m_accidental ? m_accidental->accidentalType() : AccidentalType::NONE;
 }
 
 //---------------------------------------------------------
@@ -3924,13 +3531,13 @@ Shape Note::shape() const
     RectF r(bbox());
 
     Shape shape(r, this);
-    for (NoteDot* dot : _dots) {
+    for (NoteDot* dot : m_dots) {
         shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
     }
-    if (_accidental && _accidental->addToSkyline()) {
-        shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental);
+    if (m_accidental && m_accidental->addToSkyline()) {
+        shape.add(m_accidental->bbox().translated(m_accidental->pos()), m_accidental);
     }
-    for (auto e : _el) {
+    for (auto e : m_el) {
         if (e->addToSkyline()) {
             if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
                 continue;
@@ -3948,7 +3555,7 @@ Shape Note::shape() const
 void Note::undoUnlink()
 {
     EngravingItem::undoUnlink();
-    for (EngravingItem* e : _el) {
+    for (EngravingItem* e : m_el) {
         e->undoUnlink();
     }
 }
@@ -3957,110 +3564,33 @@ void Note::undoUnlink()
 //   slides
 //---------------------------------------------------------
 
-bool Note::isSlideToNote() const
+static bool isSlideTo(Note::SlideType slideType)
 {
-    if (!_attachedSlide.isValid()) {
-        return false;
-    }
-
-    if (_attachedSlide.is(Note::SlideType::Lift)
-        || _attachedSlide.is(Note::SlideType::Plop)) {
-        return true;
-    }
-
-    return false;
+    return slideType == Note::SlideType::UpToNote || slideType == Note::SlideType::DownToNote;
 }
 
-bool Note::isSlideOutNote() const
+static bool isSlideFrom(Note::SlideType slideType)
 {
-    if (!_attachedSlide.isValid()) {
-        return false;
-    }
-
-    if (_attachedSlide.is(Note::SlideType::Doit)
-        || _attachedSlide.is(Note::SlideType::Fall)) {
-        return true;
-    }
-
-    return false;
+    return slideType == Note::SlideType::UpFromNote || slideType == Note::SlideType::DownFromNote;
 }
 
-bool Note::isSlideStart() const
+void Note::attachSlide(SlideType slideType)
 {
-    return _attachedSlide.isValid() && _attachedSlide.startNote == this;
+    if (isSlideTo(slideType)) {
+        m_slideToType = slideType;
+    } else if (isSlideFrom(slideType)) {
+        m_slideFromType = slideType;
+    }
 }
 
-bool Note::isSlideEnd() const
+bool Note::hasSlideToNote() const
 {
-    return (_attachedSlide.isValid() && _attachedSlide.endNote == this)
-           || (_relatedSlide && _relatedSlide->endNote == this);
+    return m_slideToType != SlideType::Undefined;
 }
 
-double Note::computePadding(const EngravingItem* nextItem) const
+bool Note::hasSlideFromNote() const
 {
-    double scaling = (mag() + nextItem->mag()) / 2;
-    double padding = score()->paddingTable().at(type()).at(nextItem->type());
-
-    if ((nextItem->isNote() || nextItem->isStem()) && track() == nextItem->track()
-        && (shape().translate(pos())).intersects(nextItem->shape().translate(nextItem->pos()))) {
-        padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::minNoteDistance)));
-    }
-
-    padding *= scaling;
-
-    // Grace-to-grace
-    if (isGrace() && nextItem->isNote() && toNote(nextItem)->isGrace()) {
-        padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::graceToGraceNoteDist)));
-    }
-    // Grace-to-main
-    if (isGrace() && (nextItem->isRest() || (nextItem->isNote() && !toNote(nextItem)->isGrace()))) {
-        padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::graceToMainNoteDist)));
-    }
-    // Main-to-grace
-    if (!isGrace() && nextItem->isNote() && toNote(nextItem)->isGrace()) {
-        padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::graceToMainNoteDist)));
-    }
-
-    if (nextItem->isNote() && !(_lineAttachPoints.empty() || toNote(nextItem)->lineAttachPoints().empty())) {
-        // This is where space for minTieLength and minGlissandoLength is allocated by making sure
-        // there is enough distance between the attach points
-        double minEndPointsDistance = 0.0;
-        const double minGlissandoLength = 1.2 * spatium(); // TODO: style settings
-        for (LineAttachPoint thisLAP : lineAttachPoints()) {
-            for (LineAttachPoint nextLAP : toNote(nextItem)->lineAttachPoints()) {
-                if (thisLAP.line() != nextLAP.line()) {
-                    continue;
-                }
-                if (thisLAP.line()->isTie()) {
-                    minEndPointsDistance = score()->styleMM(Sid::MinTieLength);
-                }
-                if (thisLAP.line()->isGlissando()) {
-                    minEndPointsDistance = minGlissandoLength;
-                }
-                double lapPadding = (thisLAP.pos().x() - headWidth()) + minEndPointsDistance - nextLAP.pos().x();
-                lapPadding *= scaling;
-                padding = std::max(padding, lapPadding);
-            }
-        }
-    }
-
-    return padding;
-}
-
-KerningType Note::doComputeKerningType(const EngravingItem* nextItem) const
-{
-    Chord* c = chord();
-    if (!c || (c->allowKerningAbove() && c->allowKerningBelow())) {
-        return KerningType::KERNING;
-    }
-    bool kerningAbove = nextItem->canvasPos().y() < canvasPos().y();
-    if (kerningAbove && !c->allowKerningAbove()) {
-        return KerningType::NON_KERNING;
-    }
-    if (!kerningAbove && !c->allowKerningBelow()) {
-        return KerningType::NON_KERNING;
-    }
-    return KerningType::KERNING;
+    return m_slideFromType != SlideType::Undefined;
 }
 
 mu::PointF Note::posInStaffCoordinates()
@@ -4074,11 +3604,11 @@ void Note::addLineAttachPoint(PointF point, EngravingItem* line)
     // IMPORTANT: the point is expected in *staff* coordinates
     // We transform into note coordinates by subtracting the note position in staff coordinates
     point -= posInStaffCoordinates();
-    _lineAttachPoints.push_back(LineAttachPoint(line, point.x(), point.y()));
+    m_lineAttachPoints.push_back(LineAttachPoint(line, point.x(), point.y()));
 }
 
 bool Note::negativeFretUsed() const
 {
-    return engravingConfiguration()->negativeFretsAllowed() && _fret < 0;
+    return engravingConfiguration()->negativeFretsAllowed() && m_fret < 0;
 }
 }

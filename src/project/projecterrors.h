@@ -23,7 +23,6 @@
 #define MU_PROJECT_PROJECTERRORS_H
 
 #include "types/ret.h"
-#include "translation.h"
 
 namespace mu::project {
 enum class Err {
@@ -34,7 +33,10 @@ enum class Err {
     NoProjectError,
     NoPartsError,
     CorruptionError,
-    CorruptionUponOpenningError
+    CorruptionUponOpenningError,
+
+    FileOpenError,
+    InvalidCloudScoreId
 };
 
 inline Ret make_ret(Err e)

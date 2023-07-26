@@ -33,8 +33,6 @@
 namespace mu::engraving {
 class Factory;
 class Segment;
-class XmlReader;
-class XmlWriter;
 
 static const int NO_CLEF = -1000;
 
@@ -91,18 +89,7 @@ public:
 class Clef final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Clef)
-
-    SymId symId;
-    bool _showCourtesy = true;
-    bool m_isSmall = false;
-    bool _forInstrumentChange = false;
-
-    ClefTypeList _clefTypes { ClefType::INVALID };
-
-    friend class Factory;
-    Clef(Segment* parent);
-
-    bool neverKernable() const override { return true; }
+    DECLARE_CLASSOF(ElementType::CLEF)
 
 public:
 
@@ -114,12 +101,13 @@ public:
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
-    void layout() override;
+
     void draw(mu::draw::Painter*) const override;
-    void read(XmlReader&) override;
-    void write(XmlWriter&) const override;
 
     bool isEditable() const override { return false; }
+
+    SymId symId() const { return m_symId; }
+    void setSymId(SymId s) { m_symId = s; }
 
     bool isSmall() const { return m_isSmall; }
     void setSmall(bool val);
@@ -151,6 +139,25 @@ public:
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
     void clear();
+
+    void changeClefToBarlinePos(ClefToBarlinePosition newPos);
+
+    void undoChangeProperty(Pid id, const PropertyValue& v) { EngravingObject::undoChangeProperty(id, v); }
+    void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
+
+private:
+
+    friend class Factory;
+    Clef(Segment* parent);
+
+    SymId m_symId;
+    bool _showCourtesy = true;
+    bool m_isSmall = false;
+    bool _forInstrumentChange = false;
+    M_PROPERTY(ClefToBarlinePosition, clefToBarlinePosition, setClefToBarlinePosition)
+    M_PROPERTY(bool, isHeader, setIsHeader)
+
+    ClefTypeList _clefTypes { ClefType::INVALID };
 };
 } // namespace mu::engraving
 #endif

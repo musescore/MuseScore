@@ -38,10 +38,10 @@ class XmlWriter;
 namespace mu::shortcuts {
 class ShortcutsRegister : public IShortcutsRegister, public async::Asyncable
 {
-    INJECT(shortcuts, IShortcutsConfiguration, configuration)
-    INJECT(shortcuts, io::IFileSystem, fileSystem)
-    INJECT(shortcuts, mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(shortcuts, ui::IUiActionsRegister, uiactionsRegister)
+    INJECT(IShortcutsConfiguration, configuration)
+    INJECT(io::IFileSystem, fileSystem)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(ui::IUiActionsRegister, uiactionsRegister)
 
 public:
     ShortcutsRegister() = default;

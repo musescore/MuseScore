@@ -48,6 +48,7 @@ void ScoreSettingsModel::onCurrentNotationChanged()
 
 void ScoreSettingsModel::createProperties()
 {
+    updateAll();
 }
 
 void ScoreSettingsModel::requestElements()

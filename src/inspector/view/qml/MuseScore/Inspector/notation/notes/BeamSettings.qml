@@ -175,7 +175,7 @@ FocusableItem {
                 visible: featheringControlsColumn.visible
             }
 
-            CheckBoxPropertyView {
+            PropertyCheckBox {
                 id: forceHorizontalButton
                 width: parent.width
 

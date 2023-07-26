@@ -29,11 +29,6 @@
 #include "async/asyncable.h"
 #include "async/notification.h"
 
-namespace Ms {
-class Score;
-class Selection;
-}
-
 namespace mu::notation {
 class IGetScore;
 class Notation;

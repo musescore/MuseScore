@@ -22,15 +22,18 @@
 #ifndef MU_DIAGNOSTICS_DIAGNOSTICSMODULE_H
 #define MU_DIAGNOSTICS_DIAGNOSTICSMODULE_H
 
+#include <memory>
 #include "modularity/imodulesetup.h"
 
 #include "modularity/ioc.h"
 #include "io/ifilesystem.h"
 
 namespace mu::diagnostics {
+class DiagnosticsConfiguration;
+class DiagnosticsActionsController;
 class DiagnosticsModule : public modularity::IModuleSetup
 {
-    INJECT(diagnostics, io::IFileSystem, fileSystem)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     std::string moduleName() const override;
@@ -38,6 +41,10 @@ public:
     void resolveImports() override;
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<DiagnosticsConfiguration> m_configuration;
+    std::shared_ptr<DiagnosticsActionsController> m_actionsController;
 };
 }
 

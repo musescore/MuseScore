@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <pagePrintableWidth>7.4826</pagePrintableWidth>
@@ -510,7 +508,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -586,7 +584,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -662,7 +660,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -737,7 +735,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -811,7 +809,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -884,7 +882,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -955,7 +953,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>

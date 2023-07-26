@@ -23,8 +23,6 @@
 
 #include <cmath>
 
-#include "rw/xml.h"
-#include "rw/400/tread.h"
 #include "draw/types/brush.h"
 
 #include "beam.h"
@@ -35,6 +33,8 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "tremolo.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -66,80 +66,16 @@ bool Stem::up() const
     return chord() ? chord()->up() : true;
 }
 
-void Stem::layout()
-{
-    const bool up = this->up();
-    const double _up = up ? -1.0 : 1.0;
-
-    double y1 = 0.0; // vertical displacement to match note attach point
-    double y2 = _up * (m_baseLength + m_userLength);
-
-    bool isTabStaff = false;
-    if (chord()) {
-        setMag(chord()->mag());
-
-        const Staff* staff = this->staff();
-        const StaffType* staffType = staff ? staff->staffTypeForElement(chord()) : nullptr;
-        isTabStaff = staffType && staffType->isTabStaff();
-
-        if (isTabStaff) {
-            if (staffType->stemThrough()) {
-                // if stems through staves, gets Y pos. of stem-side note relative to chord other side
-                const double staffLinesDistance = staffType->lineDistance().val() * spatium();
-                y1 = (chord()->downString() - chord()->upString()) * _up * staffLinesDistance;
-
-                // if fret marks above lines, raise stem beginning by 1/2 line distance
-                if (!staffType->onLines()) {
-                    y1 -= staffLinesDistance * 0.5;
-                }
-
-                // shorten stem by 1/2 lineDist to clear the note and a little more to keep 'air' between stem and note
-                y1 += _up * staffLinesDistance * 0.7;
-            }
-            // in other TAB types, no correction
-        } else { // non-TAB
-            // move stem start to note attach point
-            Note* note = up ? chord()->downNote() : chord()->upNote();
-            if ((up && !note->mirror()) || (!up && note->mirror())) {
-                y1 = note->stemUpSE().y();
-            } else {
-                y1 = note->stemDownNW().y();
-            }
-
-            setPosY(note->ypos());
-        }
-
-        if (chord()->hook() && !chord()->beam()) {
-            y2 += chord()->hook()->smuflAnchor().y();
-        }
-
-        if (chord()->beam()) {
-            y2 -= _up * point(score()->styleS(Sid::beamWidth)) * .5 * chord()->beam()->mag();
-        }
-    }
-
-    double lineWidthCorrection = lineWidthMag() * 0.5;
-    double lineX = isTabStaff ? 0.0 : _up * lineWidthCorrection;
-    m_line.setLine(lineX, y1, lineX, y2);
-
-    // HACK: if there is a beam, extend the bounding box of the stem (NOT the stem itself) by half beam width.
-    // This way the bbox of the stem covers also the beam position. Hugely helps with all the collision checks.
-    double beamCorrection = (chord() && chord()->beam()) ? _up * score()->styleMM(Sid::beamWidth) * mag() / 2 : 0.0;
-    // compute line and bounding rectangle
-    RectF rect(m_line.p1(), m_line.p2() + PointF(0.0, beamCorrection));
-    setbbox(rect.normalized().adjusted(-lineWidthCorrection, 0, lineWidthCorrection, 0));
-}
-
 void Stem::setBaseLength(Millimetre baseLength)
 {
     m_baseLength = Millimetre(std::abs(baseLength.val()));
-    layout();
+    layout()->layoutItem(this);
 }
 
 void Stem::spatiumChanged(double oldValue, double newValue)
 {
     m_userLength = (m_userLength / oldValue) * newValue;
-    layout();
+    layout()->layoutItem(this);
 }
 
 //! In chord coordinates
@@ -213,30 +149,11 @@ void Stem::draw(mu::draw::Painter* painter) const
     if (nDots > 0 && !staffType->stemThrough()) {
         double x     = chord()->dotPosX();
         double y     = ((STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (isUp ? -1.0 : 1.0);
-        double step  = score()->styleS(Sid::dotDotDistance).val() * sp;
+        double step  = style().styleS(Sid::dotDotDistance).val() * sp;
         for (int dot = 0; dot < nDots; dot++, x += step) {
             drawSymbol(SymId::augmentationDot, painter, PointF(x, y));
         }
     }
-}
-
-void Stem::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    EngravingItem::writeProperties(xml);
-    writeProperty(xml, Pid::USER_LEN);
-    writeProperty(xml, Pid::LINE_WIDTH);
-    xml.endElement();
-}
-
-void Stem::read(XmlReader& e)
-{
-    rw400::TRead::read(this, e, *e.context());
-}
-
-bool Stem::readProperties(XmlReader& e)
-{
-    return rw400::TRead::readProperties(this, e, *e.context());
 }
 
 std::vector<mu::PointF> Stem::gripsPositions(const EditData&) const
@@ -262,7 +179,7 @@ void Stem::editDrag(EditData& ed)
 {
     double yDelta = ed.delta.y();
     m_userLength += up() ? Millimetre(-yDelta) : Millimetre(yDelta);
-    layout();
+    layout()->layoutItem(this);
     Chord* c = chord();
     if (c->hook()) {
         c->hook()->move(PointF(0.0, yDelta));

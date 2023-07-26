@@ -23,9 +23,12 @@
 #ifndef MU_MPE_MPEMODULE_H
 #define MU_MPE_MPEMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::mpe {
+class ArticulationProfilesRepository;
 class MpeModule : public modularity::IModuleSetup
 {
 public:
@@ -33,6 +36,9 @@ public:
     void registerExports() override;
     void registerUiTypes() override;
     void registerResources() override;
+
+private:
+    std::shared_ptr<ArticulationProfilesRepository> m_profilesRepository;
 };
 }
 

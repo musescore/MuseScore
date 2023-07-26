@@ -132,93 +132,95 @@ public:
         NUMOF
     };
 
-private:
-
-    static const Char normParenthToChar[int(Parenthesis::NUMOF)];
-
-    String _displayText;                        // the constructed display text (read-only)
-    int ord;                                    // the line ordinal of this element in the FB stack
-    // the parts making a FiguredBassItem up
-    Modifier _prefix;                           // the accidental coming before the body
-    int _digit;                                 // the main digit (if present)
-    Modifier _suffix;                           // the accidental coming after the body
-    ContLine _contLine;                         // whether the item has continuation line or not
-    Parenthesis parenth[5];                     // each of the parenthesis: before, between and after parts
-    double textWidth;                            // the text width (in raster units), set during layout()
-                                                 //    used by draw()
-    friend class FiguredBass;
-    FiguredBassItem(FiguredBass* parent = 0, int line = 0);
-    FiguredBassItem(const FiguredBassItem&);
-
-    // part parsing
-    int               parseDigit(String& str);
-    int               parseParenthesis(String& str, int parenthIdx);
-    int               parsePrefixSuffix(String& str, bool bPrefix);
-
-    void              setDisplayText(const String& s) { _displayText = s; }
-    // read / write MusicXML support
-    String            Modifier2MusicXML(FiguredBassItem::Modifier prefix) const;
-
-public:
-
     ~FiguredBassItem();
 
     FiguredBassItem& operator=(const FiguredBassItem&) = delete;
 
-    FiguredBassItem::Modifier MusicXML2Modifier(const String prefix) const;
-
     // standard re-implemented virtual functions
     FiguredBassItem* clone() const override { return new FiguredBassItem(*this); }
 
-    void              draw(mu::draw::Painter* painter) const override;
-    void              layout() override;
-    void              read(XmlReader&) override;
-    void              write(XmlWriter& xml) const override;
+    void draw(mu::draw::Painter* painter) const override;
 
-    // read / write MusicXML
-    void              writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const;
-    bool              startsWithParenthesis() const;
+    bool startsWithParenthesis() const;
 
     // specific API
     const FiguredBass* figuredBass() const { return (FiguredBass*)(explicitParent()); }
-    bool              parse(String& text);
+    bool parse(String& text);
 
     // getters / setters
-    Modifier          prefix() const { return _prefix; }
-    void              setPrefix(const Modifier& v) { _prefix = v; }
-    void              undoSetPrefix(Modifier pref);
-    int               digit() const { return _digit; }
-    void              setDigit(int val) { _digit = val; }
-    void              undoSetDigit(int digit);
-    Modifier          suffix() const { return _suffix; }
-    void              setSuffix(const Modifier& v) { _suffix = v; }
-    void              undoSetSuffix(Modifier suff);
-    ContLine          contLine() const { return _contLine; }
-    void              setContLine(const ContLine& v) { _contLine = v; }
-    void              undoSetContLine(ContLine val);
-    Parenthesis       parenth1() { return parenth[0]; }
-    Parenthesis       parenth2() { return parenth[1]; }
-    Parenthesis       parenth3() { return parenth[2]; }
-    Parenthesis       parenth4() { return parenth[3]; }
-    Parenthesis       parenth5() { return parenth[4]; }
+    int ord() const { return m_ord; }
 
-    void              setParenth1(Parenthesis v) { parenth[0] = v; }
-    void              setParenth2(Parenthesis v) { parenth[1] = v; }
-    void              setParenth3(Parenthesis v) { parenth[2] = v; }
-    void              setParenth4(Parenthesis v) { parenth[3] = v; }
-    void              setParenth5(Parenthesis v) { parenth[4] = v; }
+    Modifier prefix() const { return m_prefix; }
+    void setPrefix(const Modifier& v) { m_prefix = v; }
+    void undoSetPrefix(Modifier pref);
 
-    void              undoSetParenth1(Parenthesis par);
-    void              undoSetParenth2(Parenthesis par);
-    void              undoSetParenth3(Parenthesis par);
-    void              undoSetParenth4(Parenthesis par);
-    void              undoSetParenth5(Parenthesis par);
-    String            normalizedText() const;
-    String            displayText() const { return _displayText; }
+    int digit() const { return m_digit; }
+    void setDigit(int val) { m_digit = val; }
+    void undoSetDigit(int digit);
 
-    PropertyValue  getProperty(Pid propertyId) const override;
+    Modifier suffix() const { return m_suffix; }
+    void setSuffix(const Modifier& v) { m_suffix = v; }
+    void undoSetSuffix(Modifier suff);
+
+    ContLine contLine() const { return m_contLine; }
+    void setContLine(const ContLine& v) { m_contLine = v; }
+    void undoSetContLine(ContLine val);
+
+    double textWidth() const { return m_textWidth; }
+    void setTextWidth(double w) { m_textWidth = w; }
+
+    Parenthesis parenth1() const { return m_parenth[0]; }
+    Parenthesis parenth2() const { return m_parenth[1]; }
+    Parenthesis parenth3() const { return m_parenth[2]; }
+    Parenthesis parenth4() const { return m_parenth[3]; }
+    Parenthesis parenth5() const { return m_parenth[4]; }
+
+    void setParenth1(Parenthesis v) { m_parenth[0] = v; }
+    void setParenth2(Parenthesis v) { m_parenth[1] = v; }
+    void setParenth3(Parenthesis v) { m_parenth[2] = v; }
+    void setParenth4(Parenthesis v) { m_parenth[3] = v; }
+    void setParenth5(Parenthesis v) { m_parenth[4] = v; }
+
+    void undoSetParenth1(Parenthesis par);
+    void undoSetParenth2(Parenthesis par);
+    void undoSetParenth3(Parenthesis par);
+    void undoSetParenth4(Parenthesis par);
+    void undoSetParenth5(Parenthesis par);
+    String normalizedText() const;
+
+    String displayText() const { return m_displayText; }
+    void setDisplayText(const String& s) { m_displayText = s; }
+
+    PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
-    PropertyValue  propertyDefault(Pid) const override;
+    PropertyValue propertyDefault(Pid) const override;
+
+private:
+
+    friend class FiguredBass;
+
+    FiguredBassItem(FiguredBass* parent = 0, int line = 0);
+    FiguredBassItem(const FiguredBassItem&);
+
+    // part parsing
+    int parseDigit(String& str);
+    int parseParenthesis(String& str, int parenthIdx);
+    int parsePrefixSuffix(String& str, bool bPrefix);
+
+    void regenerateDisplayText();
+
+    static const Char NORM_PARENTH_TO_CHAR[int(Parenthesis::NUMOF)];
+
+    String m_displayText;                       // the constructed display text (read-only)
+    int m_ord = 0;                              // the line ordinal of this element in the FB stack
+                                                // the parts making a FiguredBassItem up
+    Modifier m_prefix = Modifier::NONE;         // the accidental coming before the body
+    int m_digit = 0;                            // the main digit (if present)
+    Modifier m_suffix = Modifier::NONE;         // the accidental coming after the body
+    ContLine m_contLine = ContLine::NONE;       // whether the item has continuation line or not
+    Parenthesis m_parenth[5];                   // each of the parenthesis: before, between and after parts
+    double m_textWidth = 0.0;                   // the text width (in raster units), set during layout()
+                                                //    used by draw()
 };
 
 //---------------------------------------------------------
@@ -248,22 +250,7 @@ struct FiguredBassFont {
 class FiguredBass final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, FiguredBass)
-
-    std::vector<FiguredBassItem*> m_items;        // the individual lines of the F.B.
-    std::vector<double> _lineLengths;                // lengths of duration indicator lines (in raster units)
-    bool _onNote;                               // true if this element is on a staff note | false if it is between notes
-    Fraction _ticks;                            // the duration (used for cont. lines and for multiple F.B.
-                                                // under the same note)
-    double _printedLineLength;                   // the length of lines actually printed (i.e. continuation lines)
-
-    friend class Factory;
-    FiguredBass(Segment* parent = 0);
-    FiguredBass(const FiguredBass&);
-
-    void              layoutLines();
-    bool              hasParentheses() const;   // read / write MusicXML support
-
-    Sid getPropertyStyle(Pid) const override;
+    DECLARE_CLASSOF(ElementType::FIGURED_BASS)
 
 public:
 
@@ -273,9 +260,9 @@ public:
     static FiguredBass* addFiguredBassToSegment(Segment* seg, track_idx_t track, const Fraction& extTicks, bool* pNew);
 
     // static functions for font config files
-    static bool       readConfigFile(const String& fileName);
+    static bool readConfigFile(const String& fileName);
     static std::list<String> fontNames();
-    static bool       fontData(int nIdx, String* pFamily, String* pDisplayName, double* pSize, double* pLineHeight);
+    static bool fontData(int nIdx, String* pFamily, String* pDisplayName, double* pSize, double* pLineHeight);
 
     // standard re-implemented virtual functions
     FiguredBass* clone() const override { return new FiguredBass(*this); }
@@ -283,44 +270,62 @@ public:
     FiguredBassItem* createItem(int line) { return new FiguredBassItem(this, line); }
 
     void draw(mu::draw::Painter* painter) const override;
-    void layout() override;
-    void read(XmlReader&) override;
+
     void setSelected(bool f) override;
     void setVisible(bool f) override;
     void startEdit(EditData&) override;
     bool isEditAllowed(EditData&) const override;
     void endEdit(EditData&) override;
-    void write(XmlWriter& xml) const override;
 
-    // read / write MusicXML
-    void writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;
-
+    void setLineLengths(const std::vector<double>& ll) { m_lineLengths = ll; }
+    const std::vector<double>& lineLengths() const { return m_lineLengths; }
     double lineLength(size_t idx) const
     {
-        if (idx < _lineLengths.size()) {
-            return _lineLengths.at(idx);
+        if (idx < m_lineLengths.size()) {
+            return m_lineLengths.at(idx);
         }
         return 0;
     }
 
-    double             printedLineLength() const { return _printedLineLength; }
-    bool              onNote() const { return _onNote; }
-    size_t            numOfItems() const { return m_items.size(); }
-    void              setOnNote(bool val) { _onNote = val; }
-    Segment* segment() const { return (Segment*)(explicitParent()); }
-    Fraction          ticks() const { return _ticks; }
-    void              setTicks(const Fraction& v) { _ticks = v; }
+    void setPrintedLineLength(double l) { m_printedLineLength = l; }
+    double printedLineLength() const { return m_printedLineLength; }
 
-    double             additionalContLineX(double pagePosY) const;  // returns the X coord (in page coord) of cont. line at pagePosY, if any
+    bool onNote() const { return m_onNote; }
+    void setOnNote(bool val) { m_onNote = val; }
+    Segment* segment() const { return (Segment*)(explicitParent()); }
+    const Fraction& ticks() const { return m_ticks; }
+    void setTicks(const Fraction& v) { m_ticks = v; }
+
+    double additionalContLineX(double pagePosY) const;  // returns the X coord (in page coord) of cont. line at pagePosY, if any
     FiguredBass* nextFiguredBass() const;                         // returns next *adjacent* f.b. item, if any
 
-    PropertyValue  getProperty(Pid propertyId) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
-    PropertyValue  propertyDefault(Pid) const override;
+    PropertyValue propertyDefault(Pid) const override;
 
+    size_t itemsCount() const { return m_items.size(); }
     void appendItem(FiguredBassItem* item) { m_items.push_back(item); }
+    const std::vector<FiguredBassItem*>& items() const { return m_items; }
 
-    std::vector<FiguredBassItem*> items() const { return m_items; }
+    // the array of configured fonts
+    static const std::vector<FiguredBassFont>& FBFonts();
+
+    bool hasParentheses() const;       // read / write MusicXML support
+
+private:
+
+    friend class Factory;
+    FiguredBass(Segment* parent = 0);
+    FiguredBass(const FiguredBass&);
+
+    Sid getPropertyStyle(Pid) const override;
+
+    std::vector<FiguredBassItem*> m_items;       // the individual lines of the F.B.
+    std::vector<double> m_lineLengths;           // lengths of duration indicator lines (in raster units)
+    bool m_onNote = true;                        // true if this element is on a staff note | false if it is between notes
+    Fraction m_ticks;                            // the duration (used for cont. lines and for multiple F.B.
+                                                 // under the same note)
+    double m_printedLineLength = 0.0;            // the length of lines actually printed (i.e. continuation lines)
 };
 } // namespace mu::engraving
 

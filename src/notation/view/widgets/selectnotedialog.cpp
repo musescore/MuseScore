@@ -88,7 +88,9 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
     name->setText(tpc2name(m_note->tpc(), mu::engraving::NoteSpellingType::STANDARD, mu::engraving::NoteCaseType::AUTO, false));
     sameName->setAccessibleName(sameName->text() + name->text());
 
-    inSelection->setEnabled(!m_note->score()->selection().isSingle());
+    const auto isSingleSelection = m_note->score()->selection().isSingle();
+    inSelection->setCheckState(isSingleSelection ? Qt::CheckState::Unchecked : Qt::CheckState::Checked);
+    inSelection->setEnabled(!isSingleSelection);
 
     connect(buttonBox, &QDialogButtonBox::clicked, this, &SelectNoteDialog::buttonClicked);
 

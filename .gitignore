@@ -4,11 +4,13 @@
 *.autosave
 .qped
 .directory
+.idea
 /builds
 /build_overrides.cmake
 build.release
 build.debug
 build.install
+build.tooldata
 build.qtc
 build-*
 win32build

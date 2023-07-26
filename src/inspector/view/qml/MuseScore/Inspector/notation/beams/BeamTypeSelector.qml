@@ -58,7 +58,7 @@ InspectorPropertyView {
 
             model: [
                 { value: Beam.MODE_AUTO, iconCode: IconCode.AUTO_TEXT, hint: qsTrc("inspector", "Auto") },
-                { value: Beam.MODE_NONE, iconCode: IconCode.NOTE_HEAD_EIGHTH, hint: qsTrc("inspector", "No beam") },
+                { value: Beam.MODE_NONE, iconCode: IconCode.BEAM_NONE, hint: qsTrc("inspector", "No beam") },
                 { value: Beam.MODE_BEGIN, iconCode: IconCode.BEAM_BREAK_LEFT, hint: qsTrc("inspector", "Break beam left") },
                 { value: Beam.MODE_BEGIN32, iconCode: IconCode.BEAM_BREAK_INNER_8TH, hint: qsTrc("inspector", "Break inner beams (8th)") },
                 { value: Beam.MODE_BEGIN64, iconCode: IconCode.BEAM_BREAK_INNER_16TH, hint: qsTrc("inspector", "Break inner beams (16th)") },
