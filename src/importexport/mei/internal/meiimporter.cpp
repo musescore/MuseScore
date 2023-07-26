@@ -228,6 +228,9 @@ ChordRest* MeiImporter::addChordRest(pugi::xml_node node, Measure* measure, int 
     if (m_startIdChordRests.count(meiElement.m_xmlId)) {
         m_startIdChordRests[meiElement.m_xmlId] = chordRest;
     }
+    if (m_endIdChordRests.count(meiElement.m_xmlId)) {
+        m_endIdChordRests[meiElement.m_xmlId] = chordRest;
+    }
 
     // Handle cross-staff notation
     if (staffIdentAtt->HasStaff()) {
@@ -368,57 +371,15 @@ bool MeiImporter::addGraceNotesToChord(engraving::ChordRest* chordRest, bool isA
 
 /**
  * Create a annotation (MEI control event with @startid).
- * Do a lookup in the m_startIdChordRests map with the @startid value to retrieve the ChordRest to which the annotation points to.
- * If there is not @startid but a @tstamp (MEI not written by MuseScore), try to find the corresponding ChordRest
  * Create the EngravingItem according to the MEI element name (e.g., "dynam", "fermata")
  * Return nullptr if the lookup fails.
  */
 
 EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Measure* measure)
 {
-    const libmei::AttStartId *startIdAtt = dynamic_cast<const libmei::AttStartId*>(&meiElement);
-    IF_ASSERT_FAILED(measure && startIdAtt) {
+    const ChordRest* chordRest = this->findStart(meiElement, measure);
+    if (!chordRest) {
         return nullptr;
-    }
-
-    ChordRest* chordRest = nullptr;
-    if (startIdAtt->HasStartid()) {
-        std::string startId = startIdAtt->GetStartid();
-        // Basic check for the @stardid validity
-        if (startId.size() < 1 || startId.at(0) != '#') {
-            Convert::logs.push_back(String("Could not find element for @startid '%1'").arg(String::fromStdString(startIdAtt->GetStartid())));
-            return nullptr;
-        }
-        startId.erase(0, 1);
-
-        // The startid corresponding ChordRest should have been added to the m_startIdChordRests previously
-        if (!m_startIdChordRests.count(startId) || !m_startIdChordRests.at(startId)) {
-            Convert::logs.push_back(String("Could not find element for @startid '%1'").arg(String::fromStdString(startIdAtt->GetStartid())));
-            return nullptr;
-        }
-        chordRest = m_startIdChordRests.at(startId);
-    } else {
-        // No @startid, try a lookup based on the @tstamp. This is only for files not written via MuseScore
-        const libmei::AttTimestampLog *timestampLogAtt = dynamic_cast<const libmei::AttTimestampLog *>(&meiElement);
-        const libmei::AttStaffIdent *staffIdentAtt = dynamic_cast<const libmei::AttStaffIdent *>(&meiElement);
-        const libmei::AttLayerIdent *layerIdentAtt = dynamic_cast<const libmei::AttLayerIdent *>(&meiElement);
-
-        IF_ASSERT_FAILED(timestampLogAtt && staffIdentAtt && layerIdentAtt) {
-            return nullptr;
-        }
-
-        // If no @tstamp (invalid), put it on 1.0;
-        double tstampValue = timestampLogAtt->HasTstamp() ? timestampLogAtt->GetTstamp() : 1.0;
-        Fraction tstampFraction = Convert::tstampToFraction(tstampValue, measure->timesig());
-        int staffIdx = (staffIdentAtt->HasStaff() && staffIdentAtt->GetStaff().size() > 0) ? this->getStaffIndex(
-            staffIdentAtt->GetStaff().at(0)) : 0;
-        int layer = (layerIdentAtt->HasLayer()) ? this->getVoiceIndex(staffIdx, layerIdentAtt->GetLayer()) : 0;
-
-        chordRest = measure->findChordRest(measure->tick() + tstampFraction, staffIdx * VOICES + layer);
-        if (!chordRest) {
-            Convert::logs.push_back(String("Could not find element corresponding to @tstamp '%1'").arg(timestampLogAtt->GetTstamp()));
-            return nullptr;
-        }
     }
 
     Segment* segment = chordRest->segment();
@@ -442,6 +403,118 @@ EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Mea
     segment->add(item);
 
     return item;
+}
+
+/**
+ * Look for the ChordRest for an MEI element with @startid.
+ * Do a lookup in the m_startIdChordRests map with the @startid value to retrieve the ChordRest to which the annotation points to.
+ * If there is not @startid but a @tstamp (MEI not written by MuseScore), try to find the corresponding ChordRest
+ */
+
+ChordRest* MeiImporter::findStart(const libmei::Element& meiElement, Measure* measure)
+{
+    const libmei::AttStartId* startIdAtt = dynamic_cast<const libmei::AttStartId*>(&meiElement);
+    IF_ASSERT_FAILED(measure && startIdAtt) {
+        return nullptr;
+    }
+
+    ChordRest* chordRest = nullptr;
+    if (startIdAtt->HasStartid()) {
+        std::string startId = startIdAtt->GetStartid();
+        // Basic check for the @stardid validity
+        if (startId.size() < 1 || startId.at(0) != '#') {
+            Convert::logs.push_back(String("Could not find element for @startid '%1'").arg(String::fromStdString(startIdAtt->GetStartid())));
+            return nullptr;
+        }
+        startId.erase(0, 1);
+
+        // The startid corresponding ChordRest should have been added to the m_startIdChordRests previously
+        if (!m_startIdChordRests.count(startId) || !m_startIdChordRests.at(startId)) {
+            Convert::logs.push_back(String("Could not find element for @startid '%1'").arg(String::fromStdString(startIdAtt->GetStartid())));
+            return nullptr;
+        }
+        chordRest = m_startIdChordRests.at(startId);
+    } else {
+        // No @startid, try a lookup based on the @tstamp. This is only for files not written via MuseScore
+        const libmei::AttTimestampLog* timestampLogAtt = dynamic_cast<const libmei::AttTimestampLog*>(&meiElement);
+        const libmei::AttStaffIdent* staffIdentAtt = dynamic_cast<const libmei::AttStaffIdent*>(&meiElement);
+        const libmei::AttLayerIdent* layerIdentAtt = dynamic_cast<const libmei::AttLayerIdent*>(&meiElement);
+
+        IF_ASSERT_FAILED(timestampLogAtt && staffIdentAtt && layerIdentAtt) {
+            return nullptr;
+        }
+
+        // If no @tstamp (invalid), put it on 1.0;
+        double tstampValue = timestampLogAtt->HasTstamp() ? timestampLogAtt->GetTstamp() : 1.0;
+        Fraction tstampFraction = Convert::tstampToFraction(tstampValue, measure->timesig());
+        int staffIdx = (staffIdentAtt->HasStaff() && staffIdentAtt->GetStaff().size() > 0) ? this->getStaffIndex(
+            staffIdentAtt->GetStaff().at(0)) : 0;
+        int layer = (layerIdentAtt->HasLayer()) ? this->getVoiceIndex(staffIdx, layerIdentAtt->GetLayer()) : 0;
+
+        chordRest = measure->findChordRest(measure->tick() + tstampFraction, staffIdx * VOICES + layer);
+        if (!chordRest) {
+            Convert::logs.push_back(String("Could not find element corresponding to @tstamp '%1'").arg(timestampLogAtt->GetTstamp()));
+            return nullptr;
+        }
+    }
+
+    return chordRest;
+}
+
+/**
+ * Look for the ChordRest for an MEI element with @endid.
+ * Do a lookup in the m_startIdChordRests map with the @endid value to retrieve the ChordRest to which the annotation points to.
+ * If there is not @endid but a @tstamp2 (MEI not written by MuseScore), try to find the corresponding ChordRest
+ */
+
+ChordRest* MeiImporter::findEnd(pugi::xml_node controlNode, Measure *startMeasure)
+{
+    libmei::InstStartEndId startEndIdAtt;
+    startEndIdAtt.ReadStartEndId(controlNode);
+
+    ChordRest* chordRest = nullptr;
+    if (startEndIdAtt.HasEndid()) {
+        std::string endId = startEndIdAtt.GetEndid();
+        // Basic check for the @stardid validity
+        if (endId.size() < 1 || endId.at(0) != '#') {
+            Convert::logs.push_back(String("Could not find element for @endid '%1'").arg(String::fromStdString(startEndIdAtt.GetEndid())));
+            return nullptr;
+        }
+        endId.erase(0, 1);
+
+        // The startid corresponding ChordRest should have been added to the m_startIdChordRests previously
+        if (!m_endIdChordRests.count(endId) || !m_endIdChordRests.at(endId)) {
+            Convert::logs.push_back(String("Could not find element for @endid '%1'").arg(String::fromStdString(startEndIdAtt.GetEndid())));
+            return nullptr;
+        }
+        chordRest = m_endIdChordRests.at(endId);
+    } else {
+        /*
+        // No @end, try a lookup based on the @tstamp2. This is only for files not written via MuseScore
+        const libmei::AttTimestamp2Log* timestamp2LogAtt = dynamic_cast<const libmei::AttTimestamp2Log*>(&meiElement);
+        const libmei::AttStaffIdent* staffIdentAtt = dynamic_cast<const libmei::AttStaffIdent*>(&meiElement);
+        const libmei::AttLayerIdent* layerIdentAtt = dynamic_cast<const libmei::AttLayerIdent*>(&meiElement);
+
+        IF_ASSERT_FAILED(timestamp2LogAtt && staffIdentAtt && layerIdentAtt) {
+            return nullptr;
+        }
+
+        // If no @tstamp (invalid), put it on 1.0;
+        double tstampValue = timestamp2LogAtt->HasTstamp2() ? timestamp2LogAtt->GetTstamp2() : 1.0;
+        Fraction tstampFraction = Convert::tstampToFraction(tstampValue, measure->timesig());
+        int staffIdx = (staffIdentAtt->HasStaff() && staffIdentAtt->GetStaff().size() > 0) ? this->getStaffIndex(
+                                                                                                                 staffIdentAtt->GetStaff().at(0)) : 0;
+        int layer = (layerIdentAtt->HasLayer()) ? this->getVoiceIndex(staffIdx, layerIdentAtt->GetLayer()) : 0;
+
+        chordRest = measure->findChordRest(measure->tick() + tstampFraction, staffIdx * VOICES + layer);
+        if (!chordRest) {
+            Convert::logs.push_back(String("Could not find element corresponding to @tstamp '%1'").arg(timestampLogAtt->GetTstamp()));
+            return nullptr;
+        }
+        */
+    }
+
+    return chordRest;
 }
 
 /**
@@ -542,6 +615,8 @@ bool MeiImporter::readScore(pugi::xml_node root)
     for (pugi::xpath_node xpathNode : sections) {
         success = success && this->readSectionElements(xpathNode.node());
     }
+
+    this->addSpannerEnds();
 
     return success;
 }
@@ -1450,6 +1525,8 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
             success = success && this->readHarm(xpathNode.node(), measure);
         } else if (elementName == "repeatMark") {
             success = success && this->readRepeatMark(xpathNode.node(), measure);
+        } else if (elementName == "slur") {
+            success = success && this->readSlur(xpathNode.node(), measure);
         } else if (elementName == "tempo") {
             success = success && this->readTempo(xpathNode.node(), measure);
         }
@@ -1635,6 +1712,41 @@ bool MeiImporter::readRepeatMark(pugi::xml_node repeatMarkNode, engraving::Measu
 }
 
 /**
+ * Read a slur.
+ */
+
+bool MeiImporter::readSlur(pugi::xml_node slurNode, engraving::Measure* measure)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Slur meiSlur;
+    meiSlur.Read(slurNode);
+
+    ChordRest* chordRest = this->findStart(meiSlur, measure);
+    if (!chordRest) {
+        return true;
+    }
+
+    Slur* slur = Factory::createSlur(chordRest->segment());
+
+    m_score->addElement(slur);
+
+    slur->setTick(chordRest->tick());
+    slur->setStartElement(chordRest);
+    slur->setTrack(chordRest->track());
+
+    // Add it to the map for setting slur end in MeiImporter::addSpannerEnds
+    m_openSpannerMap[slur] = slurNode;
+
+    //Convert::tempoFromMEI(tempoText, meiLines, meiSlur, warning);
+
+    return true;
+}
+
+/**
  * Read a tempo.
  */
 
@@ -1730,6 +1842,16 @@ bool MeiImporter::buildIdMap(pugi::xml_node scoreNode)
             continue;
         }
         m_startIdChordRests[id.erase(0, 1)] = nullptr;
+    }
+
+    pugi::xpath_node_set nodesWithEndid = scoreNode.select_nodes("//@endid");
+
+    for (pugi::xpath_node elementXpathNode : nodesWithEndid) {
+        std::string id = elementXpathNode.attribute().value();
+        if (id.size() < 1 || id.at(0) != '#') {
+            continue;
+        }
+        m_endIdChordRests[id.erase(0, 1)] = nullptr;
     }
 
     return true;
@@ -1962,5 +2084,23 @@ void MeiImporter::addTextToTitleFrame(VBox*& vBox, const String& str, TextStyleT
         Text* text = Factory::createText(vBox, textStyleType);
         text->setPlainText(str);
         vBox->add(text);
+    }
+}
+
+/**
+ * Add the end element / tick / track for spanner ends.
+ * This is happening at the end of the import because we need to make sure spanning ends have been read.
+ */
+
+void MeiImporter::addSpannerEnds()
+{
+    for (auto spanner : m_openSpannerMap) {
+        ChordRest* chordRest = this->findEnd(spanner.second, spanner.first->startMeasure());
+        if (!chordRest) {
+            continue;
+        }
+        spanner.first->setTick2(chordRest->tick());
+        spanner.first->setEndElement(chordRest);
+        spanner.first->setTrack2(chordRest->track());
     }
 }
