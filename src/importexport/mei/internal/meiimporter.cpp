@@ -2095,7 +2095,7 @@ void MeiImporter::addTextToTitleFrame(VBox*& vBox, const String& str, TextStyleT
 void MeiImporter::addSpannerEnds()
 {
     for (auto spanner : m_openSpannerMap) {
-        ChordRest* chordRest = this->findEnd(spanner.second, spanner.first->startMeasure());
+        ChordRest* chordRest = this->findEnd(spanner.second, nullptr);
         if (!chordRest) {
             continue;
         }
