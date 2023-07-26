@@ -72,9 +72,43 @@ public:
     double mag() const override;
 
     void draw(mu::draw::Painter*) const override;
+
     static const BagpipeNoteInfo BAGPIPE_NOTEINFO_LIST[];
     BagpipeNoteList resolveNoteList() const;
 
+    struct LayoutData {
+        struct NoteData {
+            PointF headXY;
+            LineF stemLine;
+            PointF flagXY;
+            LineF ledgerLine;
+        };
+
+        struct BeamData {
+            double width = 0.0;         // line width for beam
+            double y = 0.0;
+            double x1 = 0.0;
+            double x2 = 0.0;
+        };
+
+        bool isDrawBeam = false;
+        bool isDrawFlag = false;
+        double spatium = 1.0;           // spatium
+        SymId headsym = SymId::noSym;   // grace note head symbol
+        SymId flagsym = SymId::noSym;   // grace note flag symbol
+        double stemLineW = 0.0;         // line width for stem
+        std::map<int /*note*/, NoteData> notesData;
+        BeamData beamData;
+
+        RectF bbox;
+
+        bool isValid() const { return bbox.isValid(); }
+    };
+
+    const LayoutData& layoutData() const { return m_layoutData; }
+    void setLayoutData(const LayoutData& data);
+
+    //! -- Old interface --
     //---------------------------------------------------------
     //   BEDrawingDataX
     //      BagpipeEmbellishment drawing data in the x direction
@@ -111,11 +145,15 @@ public:
         BEDrawingDataY(const int l, const double s);
     };
 
+    void oldDraw(mu::draw::Painter* painter) const;
+    void drawGraceNote(mu::draw::Painter* painter, const BEDrawingDataX& dx, const BEDrawingDataY& dy, SymId flagsym, const double x,
+                       const bool drawFlag) const;
+    //! -------------------
+
 private:
 
     EmbellishmentType m_embelType;
-    void drawGraceNote(mu::draw::Painter*, const BagpipeEmbellishment::BEDrawingDataX&, const BagpipeEmbellishment::BEDrawingDataY&, SymId,
-                       const double x, const bool drawFlag) const;
+    LayoutData m_layoutData;
 };
 } // namespace mu::engraving
 

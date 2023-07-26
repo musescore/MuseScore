@@ -169,6 +169,8 @@ public:
     inline LineX(T x1, T y1, T x2, T y2)
         : m_p1(PointX<T>(x1, y1)), m_p2(PointX<T>(x2, y2)) {}
 
+    inline bool isNull() const { return m_p1.isNull() && m_p2.isNull(); }
+
     inline const PointX<T>& p1() const { return m_p1; }
     inline const PointX<T>& p2() const { return m_p2; }
 
