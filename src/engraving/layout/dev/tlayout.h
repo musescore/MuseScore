@@ -177,7 +177,8 @@ public:
     static void layout(ActionIcon* item, LayoutContext& ctx);
     static void layout(Ambitus* item, LayoutContext& ctx);
     static void layout(Arpeggio* item, LayoutContext& ctx);
-    static void layout(Articulation* item, LayoutContext& ctx);
+    static void layout(Articulation* item, LayoutContext& ctx);  // factory
+    static void layoutArticulation(Articulation* item, LayoutContext& ctx); // base class
 
     static void layout(BagpipeEmbellishment* item, LayoutContext& ctx);
     static void layout(BarLine* item, LayoutContext& ctx);

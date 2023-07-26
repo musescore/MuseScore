@@ -613,23 +613,34 @@ void TLayout::layout(Articulation* item, LayoutContext& ctx)
         return;
     }
 
+    if (item->isOrnament()) {
+        layout(toOrnament(item), ctx);
+    } else {
+        layoutArticulation(item, ctx);
+    }
+}
+
+static void doLayoutArticulation(const Articulation* item, Articulation::LayoutData& data)
+{
     RectF bRect;
 
-    if (item->textType() != ArticulationTextType::NO_TEXT) {
+    if (item->textType() == ArticulationTextType::NO_TEXT) {
+        bRect = item->symBbox(item->symId());
+    } else {
         mu::draw::Font scaledFont(item->font());
         scaledFont.setPointSizeF(item->font().pointSizeF() * item->magS());
         mu::draw::FontMetrics fm(scaledFont);
-
         bRect = fm.boundingRect(scaledFont, TConv::text(item->textType()));
-    } else {
-        bRect = item->symBbox(item->symId());
     }
 
-    item->setbbox(bRect.translated(-0.5 * bRect.width(), 0.0));
+    data.bbox = bRect.translated(-0.5 * bRect.width(), 0.0);
+}
 
-    if (item->isOrnament()) {
-        layout(toOrnament(item), ctx);
-    }
+void TLayout::layoutArticulation(Articulation* item, LayoutContext&)
+{
+    Articulation::LayoutData data;
+    doLayoutArticulation(item, data);
+    item->setLayoutData(data);
 }
 
 void TLayout::layout(BagpipeEmbellishment* item, LayoutContext& ctx)
@@ -3700,6 +3711,8 @@ void TLayout::layout(NoteDot* item, LayoutContext&)
 
 void TLayout::layout(Ornament* item, LayoutContext& ctx)
 {
+    layoutArticulation(item, ctx);
+
     double _spatium = item->spatium();
     double vertMargin = 0.35 * _spatium;
     static constexpr double ornamentAccidentalMag = 0.6; // TODO: style?
