@@ -315,6 +315,13 @@ EngravingItem* ChordRest::drop(EditData& data)
             LOGD() << "InstrumentChange already exists at tick = " << tick().ticks();
             delete e;
             return nullptr;
+        } else if (rtick().isNotZero()) {
+            // Force instrument change to start at begining of measure.
+            // it is needed, because instrument change comes along with staffTypeChange,
+            // which is measure - based only at the moment
+            // Same have to be also in Score::addText (in edit.cpp)
+            ChordRest* cr = m->findChordRest(Fraction(0, 0), track());
+            return cr->drop(data);
         } else {
             InstrumentChange* ic = toInstrumentChange(e);
             ic->setParent(segment());

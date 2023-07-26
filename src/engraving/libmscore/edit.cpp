@@ -747,6 +747,14 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement, 
         if (!chordRest) {
             break;
         }
+        // Force instrument change to start at begining of measure.
+        // It is needed, because instrument change comes along with staffTypeChange,
+        // which is measure - based only at the moment.
+        // Same have to be also in ChordRest::drop
+        if (chordRest->rtick().isNotZero()) {
+            Measure* m = chordRest->measure();
+            chordRest = m->findChordRest(Fraction(0, 0), chordRest->track());
+        }
         textBox = Factory::createInstrumentChange(dummy()->segment());
         chordRest->undoAddAnnotation(textBox);
         break;
