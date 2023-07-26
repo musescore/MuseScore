@@ -51,18 +51,18 @@ namespace mu::engraving {
 Arpeggio::Arpeggio(Chord* parent)
     : EngravingItem(ElementType::ARPEGGIO, parent, ElementFlag::MOVABLE)
 {
-    _arpeggioType = ArpeggioType::NORMAL;
+    m_arpeggioType = ArpeggioType::NORMAL;
     setHeight(spatium() * 4);        // for use in palettes
-    _span     = 1;
-    _userLen1 = 0.0;
-    _userLen2 = 0.0;
-    _playArpeggio = true;
-    _stretch = 1.0;
+    m_span     = 1;
+    m_userLen1 = 0.0;
+    m_userLen2 = 0.0;
+    m_playArpeggio = true;
+    m_stretch = 1.0;
 }
 
 const TranslatableString& Arpeggio::arpeggioTypeName() const
 {
-    return TConv::userName(_arpeggioType);
+    return TConv::userName(m_arpeggioType);
 }
 
 //---------------------------------------------------------
@@ -71,7 +71,7 @@ const TranslatableString& Arpeggio::arpeggioTypeName() const
 
 void Arpeggio::setHeight(double h)
 {
-    _height = h;
+    m_height = h;
 }
 
 //---------------------------------------------------------
@@ -164,9 +164,9 @@ void Arpeggio::editDrag(EditData& ed)
 {
     double d = ed.delta.y();
     if (ed.curGrip == Grip::START) {
-        _userLen1 -= d;
+        m_userLen1 -= d;
     } else if (ed.curGrip == Grip::END) {
-        _userLen2 += d;
+        m_userLen2 += d;
     }
 
     layout()->layoutItem(this);
@@ -209,7 +209,7 @@ std::vector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
         result.push_back(LineF(_chord->upNote()->canvasPos(), gripCanvasPos));
     } else if (grip == Grip::END) {
         Note* downNote = _chord->downNote();
-        track_idx_t btrack  = track() + (_span - 1) * VOICES;
+        track_idx_t btrack  = track() + (m_span - 1) * VOICES;
         EngravingItem* e = _chord->segment()->element(btrack);
         if (e && e->isChord()) {
             downNote = toChord(e)->downNote();
@@ -256,13 +256,13 @@ bool Arpeggio::edit(EditData& ed)
         size_t n = part->nstaves();
         staff_idx_t ridx = mu::indexOf(part->staves(), s);
         if (ridx != mu::nidx) {
-            if (_span + ridx < n) {
-                ++_span;
+            if (m_span + ridx < n) {
+                ++m_span;
             }
         }
     } else if (ed.key == Key_Up) {
-        if (_span > 1) {
-            --_span;
+        if (m_span > 1) {
+            --m_span;
         }
     }
 
@@ -277,8 +277,8 @@ bool Arpeggio::edit(EditData& ed)
 
 void Arpeggio::spatiumChanged(double oldValue, double newValue)
 {
-    _userLen1 *= (newValue / oldValue);
-    _userLen2 *= (newValue / oldValue);
+    m_userLen1 *= (newValue / oldValue);
+    m_userLen2 *= (newValue / oldValue);
 }
 
 //---------------------------------------------------------
@@ -485,7 +485,7 @@ engraving::PropertyValue Arpeggio::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::ARPEGGIO_TYPE:
-        return int(_arpeggioType);
+        return int(m_arpeggioType);
     case Pid::TIME_STRETCH:
         return Stretch();
     case Pid::ARP_USER_LEN1:
@@ -493,7 +493,7 @@ engraving::PropertyValue Arpeggio::getProperty(Pid propertyId) const
     case Pid::ARP_USER_LEN2:
         return userLen2();
     case Pid::PLAY:
-        return _playArpeggio;
+        return m_playArpeggio;
     default:
         break;
     }
